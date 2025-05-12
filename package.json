@@ -1,6 +1,17 @@
 {
-  "name": "@helpwave/common",
-  "version": "1.0.0",
+  "name": "@helpwave/current",
+  "description": "helpwave's component and theming library",
+  "author": {
+    "name": "helpwave",
+    "url": "https://helpwave.de",
+    "email": "support@helpwave.de"
+  },
+  "homepage": "https://helpwave.de",
+  "repository": {
+    "url": "https://github.com/helpwave/current"
+  },
+  "license": "MPL-2.0",
+  "version": "0.0.1",
   "main": "index.ts",
   "type": "module",
   "scripts": {
@@ -34,6 +45,7 @@
     "@babel/preset-env": "7.26.0",
     "@babel/preset-react": "7.26.3",
     "@babel/preset-typescript": "7.26.0",
+    "@helpwave/eslint-config": "^1.29.0",
     "@storybook/addon-essentials": "^8.6.12",
     "@storybook/addon-interactions": "^8.6.12",
     "@storybook/addon-links": "^8.6.12",

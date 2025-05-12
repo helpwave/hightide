@@ -1,5 +1,3 @@
-// TODO import this later
-// import config from '@helpwave/eslint'
+import config from '@helpwave/eslint-config'
 
-// export default config.recommended
-export default []
+export default config.recommended
