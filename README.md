@@ -1,4 +1,4 @@
-# helpwave current
+# helpwave hightide
 This repository contains all components and themes employed by helpwave's web application
 
 ## Theming

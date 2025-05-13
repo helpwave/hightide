@@ -1,5 +1,5 @@
 {
-  "name": "@helpwave/current",
+  "name": "@helpwave/hightide",
   "description": "helpwave's component and theming library",
   "author": {
     "name": "helpwave",
@@ -8,7 +8,7 @@
   },
   "homepage": "https://helpwave.de",
   "repository": {
-    "url": "https://github.com/helpwave/current"
+    "url": "https://github.com/helpwave/hightide"
   },
   "license": "MPL-2.0",
   "version": "0.0.1",
