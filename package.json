@@ -1,14 +1,10 @@
 {
   "name": "@helpwave/hightide",
   "description": "helpwave's component and theming library",
-  "author": {
-    "name": "helpwave",
-    "url": "https://helpwave.de",
-    "email": "support@helpwave.de"
-  },
+  "author": "helpwave <support@helpwave.de> (https://helpwave.de)",
   "homepage": "https://helpwave.de",
   "repository": {
-    "url": "https://github.com/helpwave/hightide"
+    "url": "git+https://github.com/helpwave/hightide.git"
   },
   "license": "MPL-2.0",
   "version": "0.0.1",
@@ -62,5 +58,14 @@
   "peerDependencies": {
     "react": "18.3.1",
     "react-dom": "18.3.1"
+  },
+  "keywords": [
+    "react",
+    "tailwindcss",
+    "component-library",
+    "typscript"
+  ],
+  "bugs": {
+    "url": "https://github.com/helpwave/hightide/issues"
   }
 }
