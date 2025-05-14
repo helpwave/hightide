@@ -1,0 +1,29 @@
+name: Dry Run Publish
+
+on:
+  push:
+
+jobs:
+  publish:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v3
+        with:
+          node-version: "20"
+      - run: npm ci
+      - name: Dry Run Publish
+        uses: JS-DevTools/npm-publish@v3
+        id: publish
+        with:
+          token: ${{ secrets.NPM_TOKEN }}
+          dry-run: true
+      - name: Test print
+        if: ${{ steps.publish.outputs.type == '' }}
+        run: |
+          echo "❌ No version change detected. Refusing to publish."
+          exit 1
+
+      - name: Report new version
+        if: ${{ steps.publish.outputs.type != '' }}
+        run: echo "✅ Version changed to ${{ steps.publish.outputs.version }}"
