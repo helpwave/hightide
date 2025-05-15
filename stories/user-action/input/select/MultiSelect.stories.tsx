@@ -1,5 +1,5 @@
 import type { Meta, StoryObj } from '@storybook/react'
-import { MultiSelectExample } from '../../../../components/examples/MultiSelectExample'
+import { MultiSelectExample } from '../../../../src/components/examples/MultiSelectExample'
 import { action } from '@storybook/addon-actions'
 
 const meta = {

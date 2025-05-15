@@ -1,4 +1,4 @@
-@import 'tailwindcss';
+@import '../../node_modules/tailwindcss/dist/lib.d.mts';
 
 /* variants */
 @custom-variant dark (&:where([data-theme=dark], [data-theme=dark] *));

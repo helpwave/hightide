@@ -1,5 +1,5 @@
 import type { Meta, StoryObj } from '@storybook/react'
-import { TextImage } from '../../components/TextImage'
+import { TextImage } from '../../src/components/TextImage'
 
 const meta = {
   title: 'Layout/TextImage',

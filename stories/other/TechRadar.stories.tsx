@@ -1,5 +1,5 @@
 import type { Meta, StoryObj } from '@storybook/react'
-import { TechRadar } from '../../components/TechRadar'
+import { TechRadar } from '../../src/components/TechRadar'
 
 const meta = {
   title: 'Other/TechRadar',

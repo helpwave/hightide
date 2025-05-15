@@ -1,5 +1,5 @@
 import type { Meta, StoryObj } from '@storybook/react'
-import { SolidButton } from '../../../components/Button'
+import { SolidButton } from '../../../src/components/Button'
 import { action } from '@storybook/addon-actions'
 
 const meta = {

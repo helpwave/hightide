@@ -1,6 +1,6 @@
 import type { StoryFn } from '@storybook/react'
-import { FAQSection } from '../../components/layout/FAQSection'
-import { Helpwave } from '../../components/icons/Helpwave'
+import { FAQSection } from '../../src/components/layout/FAQSection'
+import { Helpwave } from '../../src/components/icons/Helpwave'
 
 const meta = {
   title: 'Layout',
