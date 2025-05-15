@@ -1,5 +1,5 @@
 import type { Meta, StoryObj } from '@storybook/react'
-import { Helpwave } from '../../components/icons/Helpwave'
+import { Helpwave } from '../../src/components/icons/Helpwave'
 
 const meta = {
   title: 'Other/Spinner',

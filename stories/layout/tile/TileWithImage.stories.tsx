@@ -1,5 +1,5 @@
 import type { Meta, StoryObj } from '@storybook/react'
-import { TileWithImage } from '../../../components/layout/Tile'
+import { TileWithImage } from '../../../src/components/layout/Tile'
 
 const meta = {
   title: 'Layout/Tile',

@@ -1,5 +1,5 @@
 import type { Meta, StoryObj } from '@storybook/react'
-import { SingleSelectPropertyExample } from '../../../components/examples/properties/SelectPropertyExample'
+import { SingleSelectPropertyExample } from '../../../src/components/examples/properties/SelectPropertyExample'
 
 const meta = {
   title: 'User-Action/Property',

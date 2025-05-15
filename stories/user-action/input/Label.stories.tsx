@@ -1,5 +1,5 @@
 import type { Meta, StoryObj } from '@storybook/react'
-import { Label } from '../../../components/user-input/Label'
+import { Label } from '../../../src/components/user-input/Label'
 
 const meta = {
   title: 'User-Action/Input',

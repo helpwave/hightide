@@ -7,21 +7,20 @@
     "url": "git+https://github.com/helpwave/hightide.git"
   },
   "license": "MPL-2.0",
-  "version": "0.0.9",
-  "main": "index.ts",
+  "version": "0.0.11",
   "type": "module",
+  "main": "dist/index.js",
+  "types": "dist/index.d.ts",
   "scripts": {
+    "clean": "rm -rf dist",
+    "copy-css": "cp -R src/css dist/css",
+    "build": "npm run clean && tsc && npm run copy-css",
     "storybook": "storybook dev -p 6006",
     "build-storybook": "storybook build",
     "lint": "tsc --noEmit && eslint ."
   },
   "files": [
-    "index.ts",
-    "globals.css",
-    "coloring/",
-    "components/",
-    "hooks/",
-    "util/"
+    "dist"
   ],
   "dependencies": {
     "@headlessui/react": "1.7.19",

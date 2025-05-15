@@ -1,10 +1,10 @@
 import type { Preview } from '@storybook/react'
-import { ProvideLanguage } from '../hooks/useLanguage'
-import { ModalRegister } from '../components/modals/ModalRegister'
-import { modalRootName } from '../components/modals/Modal'
-import '../globals.css'
-import type { ThemeType } from '../hooks/useTheme'
-import { ThemeProvider } from '../hooks/useTheme'
+import { ProvideLanguage } from '../src/hooks/useLanguage'
+import { ModalRegister } from '../src/components/modals/ModalRegister'
+import { modalRootName } from '../src/components/modals/Modal'
+import '../src/css/globals.css'
+import type { ThemeType } from '../src/hooks/useTheme'
+import { ThemeProvider } from '../src/hooks/useTheme'
 
 const colorToHex: Record<ThemeType, string> = {
   dark: '#1A1A1A',

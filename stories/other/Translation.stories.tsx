@@ -1,7 +1,7 @@
 import type { Meta, StoryObj } from '@storybook/react'
-import type { Languages } from '../../hooks/useLanguage'
-import type { PropsForTranslation } from '../../hooks/useTranslation'
-import { useTranslation } from '../../hooks/useTranslation'
+import type { Languages } from '../../src/hooks/useLanguage'
+import type { PropsForTranslation } from '../../src/hooks/useTranslation'
+import { useTranslation } from '../../src/hooks/useTranslation'
 
 type TranslationExampleTranslation = {
   welcome: string,

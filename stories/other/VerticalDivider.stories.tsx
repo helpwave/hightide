@@ -1,5 +1,5 @@
 import type { Meta, StoryObj } from '@storybook/react'
-import { VerticalDivider } from '../../components/VerticalDivider'
+import { VerticalDivider } from '../../src/components/VerticalDivider'
 
 const meta = {
   title: 'Other/VerticalDivider',

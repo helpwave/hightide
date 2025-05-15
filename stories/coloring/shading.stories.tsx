@@ -1,7 +1,7 @@
 import type { Meta, StoryObj } from '@storybook/react'
-import type { ShadedColors } from '../../coloring/types'
-import { shadingColorValues } from '../../coloring/types'
-import { generateShadingColors } from '../../coloring/shading'
+import type { ShadedColors } from '../../src/coloring/types'
+import { shadingColorValues } from '../../src/coloring/types'
+import { generateShadingColors } from '../../src/coloring/shading'
 
 type StripeProps = {
   shading: Partial<ShadedColors>,

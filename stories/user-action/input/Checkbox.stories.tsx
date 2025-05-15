@@ -1,5 +1,5 @@
 import type { Meta, StoryObj } from '@storybook/react'
-import { UncontrolledCheckbox } from '../../../components/user-input/Checkbox'
+import { UncontrolledCheckbox } from '../../../src/components/user-input/Checkbox'
 
 const meta = {
   title: 'User-Action/Checkbox',

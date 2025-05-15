@@ -1,5 +1,5 @@
 import type { Meta, StoryObj } from '@storybook/react'
-import { DatePropertyExample } from '../../../components/examples/properties/DatePropertyExample'
+import { DatePropertyExample } from '../../../src/components/examples/properties/DatePropertyExample'
 
 const meta = {
   title: 'User-Action/Property',

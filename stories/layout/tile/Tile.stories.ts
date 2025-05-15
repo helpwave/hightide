@@ -1,5 +1,5 @@
 import type { Meta, StoryObj } from '@storybook/react'
-import { TileExample } from '../../../components/examples/TileExample'
+import { TileExample } from '../../../src/components/examples/TileExample'
 
 const meta = {
   title: 'Layout/Tile',
