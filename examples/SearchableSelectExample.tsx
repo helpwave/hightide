@@ -1,6 +1,6 @@
 import { useEffect, useState } from 'react'
-import type { SearchableSelectProps } from '../user-input/SearchableSelect'
-import { SearchableSelect } from '../user-input/SearchableSelect'
+import type { SearchableSelectProps } from '../src/components/user-input/SearchableSelect'
+import { SearchableSelect } from '../src/components/user-input/SearchableSelect'
 
 export type SearchableSelectExampleProps = Omit<SearchableSelectProps<string>, 'searchMapping'|'additionalItems'>
 

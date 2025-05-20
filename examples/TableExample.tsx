@@ -1,15 +1,15 @@
 import { useEffect, useState } from 'react'
-import type { TableProps, TableSortingFunctionType, TableSortingType, TableState } from '../Table'
+import type { TableProps, TableSortingFunctionType, TableSortingType, TableState } from '../src/components/Table'
 import {
   addElementToTable,
   defaultTableStatePagination,
   defaultTableStateSelection,
   removeFromTableSelection,
   Table
-} from '../Table'
-import { Input } from '../user-input/Input'
-import { SolidButton, TextButton } from '../Button'
-import { SortButton } from '../SortButton'
+} from '../src/components/Table'
+import { Input } from '../src/components/user-input/Input'
+import { SolidButton, TextButton } from '../src/components/Button'
+import { SortButton } from '../src/components/SortButton'
 
 export type DataType = {
   id: string,

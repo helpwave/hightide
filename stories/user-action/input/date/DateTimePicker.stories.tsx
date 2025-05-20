@@ -1,5 +1,5 @@
 import type { Meta, StoryObj } from '@storybook/react'
-import { DateTimePickerExample } from '../../../../src/components/examples/date/DateTimePickerExample'
+import { DateTimePickerExample } from '../../../../examples/date/DateTimePickerExample'
 import { addDuration, subtractDuration } from '../../../../src/util/date'
 
 const meta = {

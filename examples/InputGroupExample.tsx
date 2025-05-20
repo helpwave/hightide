@@ -1,9 +1,9 @@
 import { useState } from 'react'
-import type { InputGroupProps } from '../InputGroup'
-import { InputGroup } from '../InputGroup'
-import { Select } from '../user-input/Select'
-import { Input } from '../user-input/Input'
-import { Textarea } from '../user-input/Textarea'
+import type { InputGroupProps } from '../src/components/InputGroup'
+import { InputGroup } from '../src/components/InputGroup'
+import { Select } from '../src/components/user-input/Select'
+import { Input } from '../src/components/user-input/Input'
+import { Textarea } from '../src/components/user-input/Textarea'
 
 export type InputGroupExampleProps = Omit<InputGroupProps, 'inputs' | 'onChange'>
 

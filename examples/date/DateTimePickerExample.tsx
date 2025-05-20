@@ -1,11 +1,11 @@
 import { useEffect, useState } from 'react'
-import type { DateTimePickerProps } from '../../user-input/DateAndTimePicker'
-import { DateTimePicker } from '../../user-input/DateAndTimePicker'
-import { noop } from '../../../util/noop'
-import type { DatePickerProps } from '../../date/DatePicker'
-import type { TimePickerProps } from '../../date/TimePicker'
-import type { YearMonthPickerProps } from '../../date/YearMonthPicker'
-import type { DayPickerProps } from '../../date/DayPicker'
+import type { DateTimePickerProps } from '../../src/components/user-input/DateAndTimePicker'
+import { DateTimePicker } from '../../src/components/user-input/DateAndTimePicker'
+import { noop } from '../../src/util/noop'
+import type { DatePickerProps } from '../../src/components/date/DatePicker'
+import type { TimePickerProps } from '../../src/components/date/TimePicker'
+import type { YearMonthPickerProps } from '../../src/components/date/YearMonthPicker'
+import type { DayPickerProps } from '../../src/components/date/DayPicker'
 
 export type DateTimePickerExampleProps = Omit<DateTimePickerProps, 'datePickerProps' | 'timePickerProps'> &
   Pick<DatePickerProps, 'initialDisplay'> & Pick<TimePickerProps, 'is24HourFormat' | 'minuteIncrement'> &

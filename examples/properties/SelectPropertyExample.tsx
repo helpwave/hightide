@@ -1,6 +1,6 @@
 import { useEffect, useState } from 'react'
-import type { SingleSelectPropertyProps } from '../../properties/SelectProperty'
-import { SingleSelectProperty } from '../../properties/SelectProperty'
+import type { SingleSelectPropertyProps } from '../../src/components/properties/SelectProperty'
+import { SingleSelectProperty } from '../../src/components/properties/SelectProperty'
 
 export type SingleSelectPropertyExample = Omit<SingleSelectPropertyProps<string>, 'onChange' | 'onRemove'|'searchMapping'>
 

@@ -1,6 +1,6 @@
 import { useEffect, useState } from 'react'
-import type { NumberPropertyProps } from '../../properties/NumberProperty'
-import { NumberProperty } from '../../properties/NumberProperty'
+import type { NumberPropertyProps } from '../../src/components/properties/NumberProperty'
+import { NumberProperty } from '../../src/components/properties/NumberProperty'
 
 export type NumberPropertyExampleProps = Omit<NumberPropertyProps, 'onChange' | 'onRemove'>
 

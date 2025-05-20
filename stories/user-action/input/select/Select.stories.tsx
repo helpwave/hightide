@@ -1,5 +1,5 @@
 import type { Meta, StoryObj } from '@storybook/react'
-import { SelectExample } from '../../../../src/components/examples/SelectExample'
+import { SelectExample } from '../../../../examples/SelectExample'
 
 const meta = {
   title: 'User-Action/Input/Select',

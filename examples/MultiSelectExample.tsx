@@ -1,7 +1,7 @@
 import { useEffect, useState } from 'react'
-import type { MultiSelectProps } from '../user-input/MultiSelect'
-import { MultiSelect } from '../user-input/MultiSelect'
-import { ChipList } from '../ChipList'
+import type { MultiSelectProps } from '../src/components/user-input/MultiSelect'
+import { MultiSelect } from '../src/components/user-input/MultiSelect'
+import { ChipList } from '../src/components/ChipList'
 
 type MultiSelectExampleProps = Omit<MultiSelectProps<string>, 'search' | 'selectedDisplay'> & {
   enableSearch: boolean,

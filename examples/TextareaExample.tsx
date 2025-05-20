@@ -1,6 +1,6 @@
 import { useState } from 'react'
-import type { TextareaProps } from '../user-input/Textarea'
-import { Textarea } from '../user-input/Textarea'
+import type { TextareaProps } from '../src/components/user-input/Textarea'
+import { Textarea } from '../src/components/user-input/Textarea'
 
 export type TextareaExampleProps = Omit<TextareaProps, 'onChange'|'onEditCompleted'>
 
