@@ -7,17 +7,23 @@
     "url": "git+https://github.com/helpwave/hightide.git"
   },
   "license": "MPL-2.0",
-  "version": "0.0.13",
-  "main": "dist/index.js",
+  "version": "0.0.15",
+  "main": "dist/index.cjs",
+  "module": "dist/index.js",
+  "exports": {
+    ".": {
+      "require": "./dist/index.cjs",
+      "import": "./dist/index.js"
+    }
+  },
   "types": "dist/index.d.ts",
-  "type": "module",
   "scripts": {
     "clean": "rm -rf dist",
     "build-css": "npx @tailwindcss/cli -i ./src/css/globals.css -o ./dist/css/globals.css",
-    "build": "npm run clean && tsc && npm run build-css && cp -R ./src/css/. ./dist/css/uncompiled/",
+    "build": "npm run clean && tsup && npm run build-css && cp -R ./src/css/. ./dist/css/uncompiled/",
     "storybook": "storybook dev -p 6006",
     "build-storybook": "storybook build",
-    "lint": "tsc --noEmit && eslint ."
+    "lint": "tsup && eslint ."
   },
   "files": [
     "dist"
@@ -58,7 +64,8 @@
     "@types/tinycolor2": "^1.4.6",
     "eslint": "^9.0.0",
     "storybook": "^8.6.12",
-    "typescript": "5.7.2",
+    "tsup": "^8.5.0",
+    "typescript": "^5.7.2",
     "webpack": "5.97.1"
   },
   "peerDependencies": {
