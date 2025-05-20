@@ -7,7 +7,7 @@ import React, {
   type InputHTMLAttributes, forwardRef
 } from 'react'
 import clsx from 'clsx'
-import useSaveDelay from '../../hooks/useSaveDelay'
+import { useSaveDelay } from '../../hooks/useSaveDelay'
 import { noop } from '../../util/noop'
 import type { LabelProps } from './Label'
 import { Label } from './Label'
