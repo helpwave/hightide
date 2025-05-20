@@ -1,5 +1,5 @@
 import { useEffect, useState } from 'react'
-import { Select, type SelectProps } from '../user-input/Select'
+import { Select, type SelectProps } from '../src/components/user-input/Select'
 
 type SelectExampleProps<T> = Omit<SelectProps<T>, 'onChange' | 'additionalItems' | 'selectedDisplayOverwrite'>
 

@@ -1,8 +1,8 @@
 import { useState } from 'react'
-import { ModalRegister } from '../modals/ModalRegister'
-import { ConfirmDialog } from '../modals/ConfirmDialog'
-import { SolidButton } from '../Button'
-import { modalRootName } from '../modals/Modal'
+import { ModalRegister } from '../src/components/modals/ModalRegister'
+import { ConfirmDialog } from '../src/components/modals/ConfirmDialog'
+import { SolidButton } from '../src/components/Button'
+import { modalRootName } from '../src/components/modals/Modal'
 
 /**
  * An Example Component for Stacking Modals

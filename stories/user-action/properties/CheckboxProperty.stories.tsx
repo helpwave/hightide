@@ -1,5 +1,5 @@
 import type { Meta, StoryObj } from '@storybook/react'
-import { CheckboxPropertyExample } from '../../../src/components/examples/properties/CheckboxPropertyExample'
+import { CheckboxPropertyExample } from '../../../examples/properties/CheckboxPropertyExample'
 
 const meta = {
   title: 'User-Action/Property',

@@ -1,6 +1,6 @@
 import { useEffect, useState } from 'react'
-import type { TextPropertyProps } from '../../properties/TextProperty'
-import { TextProperty } from '../../properties/TextProperty'
+import type { TextPropertyProps } from '../../src/components/properties/TextProperty'
+import { TextProperty } from '../../src/components/properties/TextProperty'
 
 export type TextPropertyExampleProps = Omit<TextPropertyProps, 'onChange' | 'onRemove'> & {
   readOnly: boolean,

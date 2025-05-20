@@ -1,5 +1,5 @@
 import type { Meta, StoryObj } from '@storybook/react'
-import { TextareaExample } from '../../../src/components/examples/TextareaExample'
+import { TextareaExample } from '../../../examples/TextareaExample'
 
 const meta = {
   title: 'User-Action/Input',

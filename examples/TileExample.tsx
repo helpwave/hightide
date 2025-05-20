@@ -1,6 +1,6 @@
 import { Info, X } from 'lucide-react'
-import type { TileProps } from '../layout/Tile'
-import { Tile } from '../layout/Tile'
+import type { TileProps } from '../src/components/layout/Tile'
+import { Tile } from '../src/components/layout/Tile'
 
 export type TileExampleProps = Omit<TileProps, 'prefix' | 'suffix'> & {
   prefix: boolean,

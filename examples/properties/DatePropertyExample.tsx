@@ -1,7 +1,7 @@
 import { useEffect, useState } from 'react'
-import type { DatePropertyProps } from '../../properties/DateProperty'
-import { DateProperty } from '../../properties/DateProperty'
-import { noop } from '../../../util/noop'
+import type { DatePropertyProps } from '../../src/components/properties/DateProperty'
+import { DateProperty } from '../../src/components/properties/DateProperty'
+import { noop } from '../../src/util/noop'
 
 export type DatePropertyExampleProps = DatePropertyProps & {
   readOnly: boolean,

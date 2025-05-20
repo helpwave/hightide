@@ -1,6 +1,6 @@
 import { useEffect, useState } from 'react'
-import type { CheckboxPropertyProps } from '../../properties/CheckboxProperty'
-import { CheckboxProperty } from '../../properties/CheckboxProperty'
+import type { CheckboxPropertyProps } from '../../src/components/properties/CheckboxProperty'
+import { CheckboxProperty } from '../../src/components/properties/CheckboxProperty'
 
 export type CheckboxPropertyExampleProps = Omit<CheckboxPropertyProps, 'onChange' | 'onRemove'> & {
   readOnly: boolean,

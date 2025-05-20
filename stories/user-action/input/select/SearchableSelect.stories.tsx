@@ -1,5 +1,5 @@
 import type { Meta, StoryObj } from '@storybook/react'
-import { SearchableSelectExample } from '../../../../src/components/examples/SearchableSelectExample'
+import { SearchableSelectExample } from '../../../../examples/SearchableSelectExample'
 import { action } from '@storybook/addon-actions'
 
 const meta = {

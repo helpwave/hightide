@@ -1,7 +1,7 @@
 import { useEffect, useState } from 'react'
-import type { MultiSelectOption } from '../../user-input/MultiSelect'
-import type { MultiSelectPropertyProps } from '../../properties/MultiSelectProperty'
-import { MultiSelectProperty } from '../../properties/MultiSelectProperty'
+import type { MultiSelectOption } from '../../src/components/user-input/MultiSelect'
+import type { MultiSelectPropertyProps } from '../../src/components/properties/MultiSelectProperty'
+import { MultiSelectProperty } from '../../src/components/properties/MultiSelectProperty'
 
 export type MultiSelectPropertyExample = Omit<MultiSelectPropertyProps<string>, 'onChange' | 'onRemove' | 'search' | 'selectedDisplay' > & {
   enableSearch: boolean,

@@ -1,5 +1,5 @@
 import type { Meta, StoryObj } from '@storybook/react'
-import { StackingModals } from '../../src/components/examples/StackingModals'
+import { StackingModals } from '../../examples/StackingModals'
 
 const meta: Meta = {
   title: 'Other/StackingModals',
