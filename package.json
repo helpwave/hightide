@@ -23,7 +23,7 @@
     "build": "npm run clean && tsup && npm run build-css && cp -R ./src/css/. ./dist/css/uncompiled/",
     "storybook": "storybook dev -p 6006",
     "build-storybook": "storybook build",
-    "lint": "tsup --noEmit && eslint ."
+    "lint": "tsup && eslint ."
   },
   "files": [
     "dist"
