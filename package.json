@@ -8,13 +8,18 @@
   },
   "license": "MPL-2.0",
   "version": "0.0.16",
+  "files": [
+    "dist"
+  ],
   "main": "dist/index.cjs",
   "module": "dist/index.js",
   "exports": {
     ".": {
       "require": "./dist/index.cjs",
       "import": "./dist/index.js"
-    }
+    },
+    "./css/globals.css": "./dist/css/globals.css",
+    "./css/uncompiled/globals.css": "./dist/css/uncompiled/globals.css"
   },
   "types": "dist/index.d.ts",
   "scripts": {
@@ -26,9 +31,6 @@
     "lint": "tsup && eslint .",
     "generate-barrels": "barrelsby -c ./barrelsby-config.json -S -q"
   },
-  "files": [
-    "dist"
-  ],
   "dependencies": {
     "@headlessui/react": "1.7.19",
     "@radix-ui/react-checkbox": "1.1.3",
