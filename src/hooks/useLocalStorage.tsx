@@ -3,7 +3,7 @@ import { useCallback, useEffect, useState } from 'react'
 import { LocalStorageService } from '../util/storage'
 
 type SetValue<T> = Dispatch<SetStateAction<T>>
-const useLocalStorage = <T, >(key: string, initValue: T): [T, SetValue<T>] => {
+export const useLocalStorage = <T, >(key: string, initValue: T): [T, SetValue<T>] => {
   const get = useCallback((): T => {
     if (typeof window === 'undefined') {
       return initValue
@@ -29,5 +29,3 @@ const useLocalStorage = <T, >(key: string, initValue: T): [T, SetValue<T>] => {
 
   return [storedValue, setValue]
 }
-
-export default useLocalStorage

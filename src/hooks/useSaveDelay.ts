@@ -1,6 +1,6 @@
 import { useEffect, useState } from 'react'
 
-function useSaveDelay(setNotificationStatus: (isShowing: boolean) => void, delay: number) {
+export function useSaveDelay(setNotificationStatus: (isShowing: boolean) => void, delay: number) {
   const [updateTimer, setUpdateTimer] = useState<NodeJS.Timeout | undefined>(undefined)
   const [notificationTimer, setNotificationTimer] = useState<NodeJS.Timeout | undefined>(undefined)
 
@@ -42,5 +42,3 @@ function useSaveDelay(setNotificationStatus: (isShowing: boolean) => void, delay
 
   return { restartTimer, clearUpdateTimer }
 }
-
-export default useSaveDelay

@@ -2,7 +2,7 @@ import { useState } from 'react'
 import type { HTMLInputTypeAttribute, InputHTMLAttributes } from 'react'
 import { Pencil } from 'lucide-react'
 import clsx from 'clsx'
-import useSaveDelay from '../../hooks/useSaveDelay'
+import { useSaveDelay } from '../../hooks/useSaveDelay'
 import { noop } from '../../util/noop'
 
 type InputProps = {
