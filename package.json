@@ -7,10 +7,9 @@
     "url": "git+https://github.com/helpwave/hightide.git"
   },
   "license": "MPL-2.0",
-  "version": "0.0.13",
+  "version": "0.0.14",
   "main": "dist/index.js",
   "types": "dist/index.d.ts",
-  "type": "module",
   "scripts": {
     "clean": "rm -rf dist",
     "build-css": "npx @tailwindcss/cli -i ./src/css/globals.css -o ./dist/css/globals.css",
