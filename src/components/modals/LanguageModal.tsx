@@ -4,7 +4,7 @@ import { useTranslation } from '../../hooks/useTranslation'
 import { Select } from '../user-input/Select'
 import type { Languages } from '../../hooks/useLanguage'
 import { useLanguage } from '../../hooks/useLanguage'
-import { SolidButton } from '../Button'
+import { SolidButton } from '../user-input/Button'
 import { Modal, type ModalProps } from './Modal'
 
 const languageDetails = {

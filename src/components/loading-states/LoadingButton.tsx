@@ -1,9 +1,9 @@
 import clsx from 'clsx'
-import { Helpwave } from './icons/Helpwave'
-import type { SolidButtonProps } from './Button'
-import { ButtonSizePaddings } from './Button'
-import { SolidButton } from './Button'
-import { noop } from '../util/noop'
+import { Helpwave } from '../icons/Helpwave'
+import type { SolidButtonProps } from '../user-input/Button'
+import { ButtonSizePaddings } from '../user-input/Button'
+import { SolidButton } from '../user-input/Button'
+import { noop } from '../../util/noop'
 
 type LoadingButtonProps = {
   isLoading?: boolean,

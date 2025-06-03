@@ -1,6 +1,6 @@
 import type { Meta, StoryObj } from '@storybook/react'
-import type { TooltipProps } from '../../../src/components/Tooltip'
-import { Tooltip } from '../../../src/components/Tooltip'
+import type { TooltipProps } from '../../../src/components/utility/Tooltip'
+import { Tooltip } from '../../../src/components/utility/Tooltip'
 
 type TooltipExampleProps = Omit<TooltipProps, 'children' | 'tooltip'> & { tooltipText: string }
 

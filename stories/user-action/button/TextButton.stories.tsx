@@ -1,5 +1,5 @@
 import type { Meta, StoryObj } from '@storybook/react'
-import { TextButton } from '../../../src/components/Button'
+import { TextButton } from '../../../src/components/user-input/Button'
 import { action } from '@storybook/addon-actions'
 
 const meta = {

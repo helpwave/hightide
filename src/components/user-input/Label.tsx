@@ -1,6 +1,7 @@
 import type { LabelHTMLAttributes } from 'react'
 
 export type LabelType = 'labelSmall' | 'labelMedium' | 'labelBig'
+
 const styleMapping: Record<LabelType, string> = {
   labelSmall: 'textstyle-label-sm',
   labelMedium: 'textstyle-label-md',

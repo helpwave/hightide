@@ -3,7 +3,7 @@ import { Scrollbars } from 'react-custom-scrollbars-2'
 import { noop } from '../../util/noop'
 import { equalSizeGroups, range } from '../../util/array'
 import clsx from 'clsx'
-import { Expandable } from '../Expandable'
+import { Expandable } from '../layout-and-navigation/Expandable'
 import { addDuration, monthsList, subtractDuration } from '../../util/date'
 import { useLocale } from '../../hooks/useLanguage'
 

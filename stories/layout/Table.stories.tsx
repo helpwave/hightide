@@ -1,5 +1,5 @@
 import type { Meta, StoryObj } from '@storybook/react'
-import { Table } from '../../src/components/Table'
+import { Table } from '../../src/components/layout-and-navigation/Table'
 import type { DataType } from '../../examples/TableExample'
 import TableExample, { exampleData } from '../../examples/TableExample'
 

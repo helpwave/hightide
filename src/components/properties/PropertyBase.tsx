@@ -2,7 +2,7 @@ import type { ReactNode } from 'react'
 import { AlertTriangle } from 'lucide-react'
 import clsx from 'clsx'
 import type { Languages } from '../../hooks/useLanguage'
-import { TextButton } from '../Button'
+import { TextButton } from '../user-input/Button'
 import type { PropsForTranslation } from '../../hooks/useTranslation'
 import { useTranslation } from '../../hooks/useTranslation'
 

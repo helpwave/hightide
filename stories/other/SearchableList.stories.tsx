@@ -1,5 +1,5 @@
 import type { Meta, StoryObj } from '@storybook/react'
-import { SearchableList } from '../../src/components/SearchableList'
+import { SearchableList } from '../../src/components/layout-and-navigation/SearchableList'
 
 const meta = {
   title: 'Other/SearchableList',

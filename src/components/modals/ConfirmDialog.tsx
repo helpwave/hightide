@@ -1,6 +1,6 @@
 import type { PropsWithChildren } from 'react'
-import type { SolidButtonColor } from '../Button'
-import { SolidButton } from '../Button'
+import type { SolidButtonColor } from '../user-input/Button'
+import { SolidButton } from '../user-input/Button'
 import type { PropsForTranslation } from '../../hooks/useTranslation'
 import { useTranslation } from '../../hooks/useTranslation'
 import { Modal, type ModalProps } from './Modal'

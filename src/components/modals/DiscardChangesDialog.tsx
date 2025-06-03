@@ -1,5 +1,5 @@
 import type { PropsWithChildren } from 'react'
-import { SolidButton } from '../Button'
+import { SolidButton } from '../user-input/Button'
 import type { PropsForTranslation } from '../../hooks/useTranslation'
 import { useTranslation } from '../../hooks/useTranslation'
 import { Modal, type ModalProps } from './Modal'

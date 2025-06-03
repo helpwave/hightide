@@ -2,11 +2,11 @@ import type { ReactNode } from 'react'
 import { useEffect, useMemo, useState } from 'react'
 import { Search } from 'lucide-react'
 import clsx from 'clsx'
-import type { Languages } from '../hooks/useLanguage'
-import { useTranslation } from '../hooks/useTranslation'
-import type { PropsForTranslation } from '../hooks/useTranslation'
-import { MultiSearchWithMapping } from '../util/simpleSearch'
-import { Input } from './user-input/Input'
+import type { Languages } from '../../hooks/useLanguage'
+import { useTranslation } from '../../hooks/useTranslation'
+import type { PropsForTranslation } from '../../hooks/useTranslation'
+import { MultiSearchWithMapping } from '../../util/simpleSearch'
+import { Input } from '../user-input/Input'
 
 type SearchableListTranslation = {
   search: string,

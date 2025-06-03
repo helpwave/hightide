@@ -1,6 +1,6 @@
-import type { Languages } from '../hooks/useLanguage'
-import type { PropsForTranslation } from '../hooks/useTranslation'
-import { useTranslation } from '../hooks/useTranslation'
+import type { Languages } from '../../hooks/useLanguage'
+import type { PropsForTranslation } from '../../hooks/useTranslation'
+import { useTranslation } from '../../hooks/useTranslation'
 
 type TimeDisplayTranslation = {
   today: string,

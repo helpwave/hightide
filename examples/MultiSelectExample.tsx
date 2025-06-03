@@ -1,7 +1,7 @@
 import { useEffect, useState } from 'react'
 import type { MultiSelectProps } from '../src/components/user-input/MultiSelect'
 import { MultiSelect } from '../src/components/user-input/MultiSelect'
-import { ChipList } from '../src/components/ChipList'
+import { Chip } from '../src/components/layout-and-navigation/Chip'
 
 type MultiSelectExampleProps = Omit<MultiSelectProps<string>, 'search' | 'selectedDisplay'> & {
   enableSearch: boolean,
@@ -46,7 +46,7 @@ export const MultiSelectExample = ({
               return (<span>Select</span>)
             }
             return (
-            <ChipList
+            <Chip
               list={selected.map(value => ({ children: value.label }))}
             />
             )

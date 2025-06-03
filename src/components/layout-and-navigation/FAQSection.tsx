@@ -1,9 +1,9 @@
 import type { ReactNode } from 'react'
 import clsx from 'clsx'
 import { ChevronDown, ChevronUp } from 'lucide-react'
-import type { ExpandableProps } from '../Expandable'
-import { Expandable } from '../Expandable'
-import { MarkdownInterpreter } from '../MarkdownInterpreter'
+import type { ExpandableProps } from './Expandable'
+import { Expandable } from './Expandable'
+import { MarkdownInterpreter } from './MarkdownInterpreter'
 
 type ContentType = {
   type: 'markdown',

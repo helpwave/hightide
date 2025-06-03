@@ -1,8 +1,8 @@
 import type { Meta, StoryObj } from '@storybook/react'
-import { Profile } from '../../src/components/Profile'
+import { Profile } from '../../src/components/branding/Profile'
 import { Helpwave } from '../../src/components/icons/Helpwave'
-import { MarkdownInterpreter } from '../../src/components/MarkdownInterpreter'
-import { Chip } from '../../src/components/ChipList'
+import { MarkdownInterpreter } from '../../src/components/layout-and-navigation/MarkdownInterpreter'
+import { Chip } from '../../src/components/layout-and-navigation/Chip'
 
 const meta = {
   title: 'Other/Profile',

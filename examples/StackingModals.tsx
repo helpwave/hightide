@@ -1,7 +1,7 @@
 import { useState } from 'react'
 import { ModalRegister } from '../src/components/modals/ModalRegister'
 import { ConfirmDialog } from '../src/components/modals/ConfirmDialog'
-import { SolidButton } from '../src/components/Button'
+import { SolidButton } from '../src/components/user-input/Button'
 import { modalRootName } from '../src/components/modals/Modal'
 
 /**

@@ -1,7 +1,7 @@
 import { AlertOctagon } from 'lucide-react'
-import type { Languages } from '../hooks/useLanguage'
-import type { PropsForTranslation } from '../hooks/useTranslation'
-import { useTranslation } from '../hooks/useTranslation'
+import type { Languages } from '../../hooks/useLanguage'
+import type { PropsForTranslation } from '../../hooks/useTranslation'
+import { useTranslation } from '../../hooks/useTranslation'
 import clsx from 'clsx'
 
 type ErrorComponentTranslation = {

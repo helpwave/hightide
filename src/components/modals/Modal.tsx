@@ -5,7 +5,7 @@ import clsx from 'clsx'
 import type { Languages } from '../../hooks/useLanguage'
 import type { PropsForTranslation } from '../../hooks/useTranslation'
 import { useTranslation } from '../../hooks/useTranslation'
-import { Tooltip } from '../Tooltip'
+import { Tooltip } from '../utility/Tooltip'
 import { ModalContext } from './ModalRegister'
 
 type ModalHeaderTranslation = {

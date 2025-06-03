@@ -5,7 +5,7 @@ import type { PropsForTranslation } from '../../hooks/useTranslation'
 import { useTranslation } from '../../hooks/useTranslation'
 import type { MultiSelectProps } from '../user-input/MultiSelect'
 import { MultiSelect } from '../user-input/MultiSelect'
-import { ChipList } from '../ChipList'
+import { Chip } from '../layout-and-navigation/Chip'
 import type { PropertyBaseProps } from './PropertyBase'
 import { PropertyBase } from './PropertyBase'
 
@@ -66,7 +66,7 @@ export const MultiSelectProperty = <T, >({
                 return (<span>Select</span>)
               }
               return (
-                <ChipList
+                <Chip
                   list={selected.map(value => ({ children: value.label }))}
                 />
               )

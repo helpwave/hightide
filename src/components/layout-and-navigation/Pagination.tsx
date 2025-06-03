@@ -1,8 +1,8 @@
 import { ChevronLast, ChevronLeft, ChevronFirst, ChevronRight } from 'lucide-react'
 import clsx from 'clsx'
-import type { PropsForTranslation } from '../hooks/useTranslation'
-import { useTranslation } from '../hooks/useTranslation'
-import type { Languages } from '../hooks/useLanguage'
+import type { PropsForTranslation } from '../../hooks/useTranslation'
+import { useTranslation } from '../../hooks/useTranslation'
+import type { Languages } from '../../hooks/useLanguage'
 
 type PaginationTranslation = {
   of: string,

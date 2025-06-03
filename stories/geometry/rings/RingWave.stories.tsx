@@ -1,5 +1,5 @@
 import type { Meta, StoryObj } from '@storybook/react'
-import { RingWave } from '../../../src/components/Ring'
+import { RingWave } from '../../../src/components/icons-and-geometry/Ring'
 
 const meta = {
   title: 'Geometry/Rings',

@@ -3,8 +3,8 @@ import clsx from 'clsx'
 import Image from 'next/image'
 import Link from 'next/link'
 import { Github, Globe, Linkedin, Mail } from 'lucide-react'
-import { Helpwave } from './icons/Helpwave'
-import { Chip } from './ChipList'
+import { Chip } from '../layout-and-navigation/Chip'
+import { Helpwave } from '../icons-and-geometry/Helpwave'
 
 type SocialType = 'mail' | 'github' | 'linkedin' | 'website' | 'medium'
 

@@ -1,9 +1,9 @@
 import { Check, ChevronLeft, ChevronRight } from 'lucide-react'
-import type { Languages } from '../hooks/useLanguage'
-import type { PropsForTranslation } from '../hooks/useTranslation'
-import { useTranslation } from '../hooks/useTranslation'
-import { range } from '../util/array'
-import { SolidButton } from './Button'
+import type { Languages } from '../../hooks/useLanguage'
+import type { PropsForTranslation } from '../../hooks/useTranslation'
+import { useTranslation } from '../../hooks/useTranslation'
+import { range } from '../../util/array'
+import { SolidButton } from '../user-input/Button'
 import clsx from 'clsx'
 
 type StepperBarTranslation = {
