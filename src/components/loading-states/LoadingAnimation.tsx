@@ -1,6 +1,6 @@
-import type { Languages } from '../../hooks/useLanguage'
-import type { PropsForTranslation } from '../../hooks/useTranslation'
-import { useTranslation } from '../../hooks/useTranslation'
+import type { Language } from '../../localization/LanguageProvider'
+import type { PropsForTranslation } from '../../localization/useTranslation'
+import { useTranslation } from '../../localization/useTranslation'
 import { Helpwave } from '../icons/Helpwave'
 import clsx from 'clsx'
 
@@ -8,7 +8,7 @@ type LoadingAnimationTranslation = {
   loading: string,
 }
 
-const defaultLoadingAnimationTranslation: Record<Languages, LoadingAnimationTranslation> = {
+const defaultLoadingAnimationTranslation: Record<Language, LoadingAnimationTranslation> = {
   en: {
     loading: 'Loading data'
   },

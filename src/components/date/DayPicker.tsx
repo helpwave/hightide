@@ -3,7 +3,7 @@ import { isInTimeSpan } from '../../util/date'
 import { equalDate, getWeeksForCalenderMonth } from '../../util/date'
 import { noop } from '../../util/noop'
 import clsx from 'clsx'
-import { useLocale } from '../../hooks/useLanguage'
+import { useLocale } from '../../localization/LanguageProvider'
 import { useEffect, useState } from 'react'
 
 export type DayPickerProps = {

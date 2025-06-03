@@ -1,6 +1,6 @@
-import type { Languages } from '../../hooks/useLanguage'
-import type { PropsForTranslation } from '../../hooks/useTranslation'
-import { useTranslation } from '../../hooks/useTranslation'
+import type { Language } from '../../localization/util'
+import type { PropsForTranslation } from '../../localization/useTranslation'
+import { useTranslation } from '../../localization/useTranslation'
 import clsx from 'clsx'
 
 type TextImageColor = 'primary' | 'secondary' | 'dark'
@@ -9,7 +9,7 @@ type TextImageTranslation = {
   showMore: string,
 }
 
-const defaultTextImageTranslation: Record<Languages, TextImageTranslation> = {
+const defaultTextImageTranslation: Record<Language, TextImageTranslation> = {
   de: {
     showMore: 'Mehr anzeigen'
   },

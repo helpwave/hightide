@@ -1,7 +1,7 @@
 import type { Meta, StoryObj } from '@storybook/react'
-import type { Languages } from '../../src/hooks/useLanguage'
-import type { PropsForTranslation } from '../../src/hooks/useTranslation'
-import { useTranslation } from '../../src/hooks/useTranslation'
+import type { Language } from '../../src/localization/util'
+import type { PropsForTranslation } from '../../src/localization/useTranslation'
+import { useTranslation } from '../../src/localization/useTranslation'
 
 type TranslationExampleTranslation = {
   welcome: string,
@@ -9,7 +9,7 @@ type TranslationExampleTranslation = {
   page: (page: number) => string,
 }
 
-const defaultTranslationExampleTranslations: Record<Languages, TranslationExampleTranslation> = {
+const defaultTranslationExampleTranslations: Record<Language, TranslationExampleTranslation> = {
   en: {
     welcome: 'Welcome',
     goodToSeeYou: 'Good to see you',
@@ -49,7 +49,7 @@ const meta = {
 export default meta
 type Story = StoryObj<typeof meta>;
 
-export const TranslationStory: Story = {
+export const translationExample: Story = {
   args: {
     name: 'Name'
   }

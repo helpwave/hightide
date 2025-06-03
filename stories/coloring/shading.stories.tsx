@@ -37,7 +37,7 @@ const meta = {
 export default meta
 type Story = StoryObj<typeof meta>;
 
-export const ShadingWithFixedValues: Story = {
+export const colorStripe: Story = {
   args: {
     shading: {
       100: '#F5E2FD',

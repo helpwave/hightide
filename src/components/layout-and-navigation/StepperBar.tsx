@@ -1,9 +1,9 @@
 import { Check, ChevronLeft, ChevronRight } from 'lucide-react'
-import type { Languages } from '../../hooks/useLanguage'
-import type { PropsForTranslation } from '../../hooks/useTranslation'
-import { useTranslation } from '../../hooks/useTranslation'
+import type { Language } from '../../localization/LanguageProvider'
+import type { PropsForTranslation } from '../../localization/useTranslation'
+import { useTranslation } from '../../localization/useTranslation'
 import { range } from '../../util/array'
-import { SolidButton } from '../user-input/Button'
+import { SolidButton } from '../user-action/Button'
 import clsx from 'clsx'
 
 type StepperBarTranslation = {
@@ -12,7 +12,7 @@ type StepperBarTranslation = {
   confirm: string,
 }
 
-const defaultStepperBarTranslation: Record<Languages, StepperBarTranslation> = {
+const defaultStepperBarTranslation: Record<Language, StepperBarTranslation> = {
   en: {
     back: 'Back',
     next: 'Next Step',

@@ -1,10 +1,10 @@
 import { type PropsWithChildren } from 'react'
-import type { PropsForTranslation } from '../../hooks/useTranslation'
-import { useTranslation } from '../../hooks/useTranslation'
-import { Select } from '../user-input/Select'
-import type { Languages } from '../../hooks/useLanguage'
-import { useLanguage } from '../../hooks/useLanguage'
-import { SolidButton } from '../user-input/Button'
+import type { PropsForTranslation } from '../../localization/useTranslation'
+import { useTranslation } from '../../localization/useTranslation'
+import { Select } from '../user-action/Select'
+import type { Language } from '../../localization/LanguageProvider'
+import { useLanguage } from '../../localization/LanguageProvider'
+import { SolidButton } from '../user-action/Button'
 import { Modal, type ModalProps } from './Modal'
 
 const languageDetails = {
@@ -63,7 +63,7 @@ export const LanguageModal = ({
             className="mt-2"
             value={language}
             options={Object.entries(languageDetails).map(([tag, name]) => ({ label: name, value: tag }))}
-            onChange={(language: string) => setLanguage(language as Languages)}
+            onChange={(language: string) => setLanguage(language as Language)}
           />
           <div className="row mt-3 gap-x-4 justify-end">
             <SolidButton autoFocus color="positive" onClick={onDone}>

@@ -1,5 +1,5 @@
-import { Input } from '../user-input/Input'
-import type { InputProps } from '../user-input/Input'
+import { Input } from '../user-action/Input'
+import type { InputProps } from '../user-action/Input'
 import type { ConfirmDialogProps } from './ConfirmDialog'
 import { ConfirmDialog } from './ConfirmDialog'
 

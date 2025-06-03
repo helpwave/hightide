@@ -1,16 +1,16 @@
 import type { Meta, StoryObj } from '@storybook/react'
-import { SolidButton } from '../../../src/components/user-input/Button'
+import { SolidButton } from '../../../src/components/user-action/Button'
 import { action } from '@storybook/addon-actions'
 
 const meta = {
-  title: 'User-Action/Button',
+  title: 'User Action/Button',
   component: SolidButton,
 } satisfies Meta<typeof SolidButton>
 
 export default meta
 type Story = StoryObj<typeof meta>;
 
-export const SolidButtonVariation: Story = {
+export const solidButton: Story = {
   args: {
     children: 'Test',
     color: 'primary',

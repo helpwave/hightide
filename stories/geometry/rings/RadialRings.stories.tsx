@@ -2,14 +2,14 @@ import type { Meta, StoryObj } from '@storybook/react'
 import { RadialRings } from '../../../src/components/icons-and-geometry/Ring'
 
 const meta = {
-  title: 'Geometry/Rings',
+  title: 'Geometry/Ring',
   component: RadialRings,
 } satisfies Meta<typeof RadialRings>
 
 export default meta
 type Story = StoryObj<typeof meta>;
 
-export const RadialRingsVariation: Story = {
+export const radialRings: Story = {
   args: {
     waveWidth: 10,
     sizeCircle1: 100,

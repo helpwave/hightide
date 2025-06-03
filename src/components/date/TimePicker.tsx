@@ -146,7 +146,7 @@ export const TimePicker = ({
   )
 }
 
-export const ControlledTimePicker = ({
+export const TimePickerControlled = ({
                                     time,
                                     onChange = noop,
                                     ...props

@@ -1,6 +1,6 @@
-import type { Languages } from '../../hooks/useLanguage'
-import type { PropsForTranslation } from '../../hooks/useTranslation'
-import { useTranslation } from '../../hooks/useTranslation'
+import type { Language } from '../../localization/LanguageProvider'
+import type { PropsForTranslation } from '../../localization/useTranslation'
+import { useTranslation } from '../../localization/useTranslation'
 
 type TimeDisplayTranslation = {
   today: string,
@@ -22,7 +22,7 @@ type TimeDisplayTranslation = {
   december: string,
 }
 
-const defaultTimeDisplayTranslations: Record<Languages, TimeDisplayTranslation> = {
+const defaultTimeDisplayTranslations: Record<Language, TimeDisplayTranslation> = {
   en: {
     today: 'today',
     yesterday: 'yesterday',

@@ -1,16 +1,16 @@
 import type { ReactNode } from 'react'
 import { AlertTriangle } from 'lucide-react'
 import clsx from 'clsx'
-import type { Languages } from '../../hooks/useLanguage'
-import { TextButton } from '../user-input/Button'
-import type { PropsForTranslation } from '../../hooks/useTranslation'
-import { useTranslation } from '../../hooks/useTranslation'
+import type { Language } from '../../localization/LanguageProvider'
+import { TextButton } from '../user-action/Button'
+import type { PropsForTranslation } from '../../localization/useTranslation'
+import { useTranslation } from '../../localization/useTranslation'
 
 type PropertyBaseTranslation = {
   remove: string,
 }
 
-const defaultPropertyBaseTranslation: Record<Languages, PropertyBaseTranslation> = {
+const defaultPropertyBaseTranslation: Record<Language, PropertyBaseTranslation> = {
   en: {
     remove: 'Remove'
   },

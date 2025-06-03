@@ -6,3 +6,11 @@ Theming is achieved through an extensive [tailwindcss](https://tailwindcss.com) 
 
 ## Storybook
 We use [storybook](https://storybook.js.org/) for easily testing and showcasing our component library
+
+### Publishing a new version
+- Run the barreling script
+```bash
+npm run generate-barrels
+```
+- Increase the version number in the [package.json](package.json)
+- Update the [CHANGELOG.md](CHANGELOG.md)

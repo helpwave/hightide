@@ -1,10 +1,10 @@
 import type { Preview } from '@storybook/react'
-import { ProvideLanguage } from '../src/hooks/useLanguage'
+import { LanguageProvider } from '../src/localization/LanguageProvider'
 import { ModalRegister } from '../src/components/modals/ModalRegister'
 import { modalRootName } from '../src/components/modals/Modal'
 import '../src/css/globals.css'
-import type { ThemeType } from '../src/hooks/useTheme'
-import { ThemeProvider } from '../src/hooks/useTheme'
+import type { ThemeType } from '../src/theming/useTheme'
+import { ThemeProvider } from '../src/theming/useTheme'
 
 const colorToHex: Record<ThemeType, string> = {
   dark: '#1A1A1A',
@@ -50,13 +50,13 @@ const preview: Preview = {
       return (
         <main data-theme={theme}>
           <ThemeProvider initialTheme={theme}>
-            <ProvideLanguage initialLanguage={language}>
+            <LanguageProvider initialLanguage={language}>
               <ModalRegister>
                 <div id={modalRootName}>
                   <App />
                 </div>
               </ModalRegister>
-            </ProvideLanguage>
+            </LanguageProvider>
           </ThemeProvider>
         </main>
       )

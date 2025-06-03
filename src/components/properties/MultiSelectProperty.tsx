@@ -1,10 +1,10 @@
 import { List } from 'lucide-react'
 import clsx from 'clsx'
-import type { Languages } from '../../hooks/useLanguage'
-import type { PropsForTranslation } from '../../hooks/useTranslation'
-import { useTranslation } from '../../hooks/useTranslation'
-import type { MultiSelectProps } from '../user-input/MultiSelect'
-import { MultiSelect } from '../user-input/MultiSelect'
+import type { Language } from '../../localization/LanguageProvider'
+import type { PropsForTranslation } from '../../localization/useTranslation'
+import { useTranslation } from '../../localization/useTranslation'
+import type { MultiSelectProps } from '../user-action/MultiSelect'
+import { MultiSelect } from '../user-action/MultiSelect'
 import { Chip } from '../layout-and-navigation/Chip'
 import type { PropertyBaseProps } from './PropertyBase'
 import { PropertyBase } from './PropertyBase'
@@ -13,7 +13,7 @@ type MultiSelectPropertyTranslation = {
   select: string,
 }
 
-const defaultMultiSelectPropertyTranslation: Record<Languages, MultiSelectPropertyTranslation> = {
+const defaultMultiSelectPropertyTranslation: Record<Language, MultiSelectPropertyTranslation> = {
   en: {
     select: 'Select'
   },

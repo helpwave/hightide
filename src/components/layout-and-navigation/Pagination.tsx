@@ -1,13 +1,13 @@
 import { ChevronLast, ChevronLeft, ChevronFirst, ChevronRight } from 'lucide-react'
 import clsx from 'clsx'
-import type { PropsForTranslation } from '../../hooks/useTranslation'
-import { useTranslation } from '../../hooks/useTranslation'
-import type { Languages } from '../../hooks/useLanguage'
+import type { PropsForTranslation } from '../../localization/useTranslation'
+import { useTranslation } from '../../localization/useTranslation'
+import type { Language } from '../../localization/LanguageProvider'
 
 type PaginationTranslation = {
   of: string,
 }
-const defaultPaginationTranslations: Record<Languages, PaginationTranslation> = {
+const defaultPaginationTranslations: Record<Language, PaginationTranslation> = {
   en: {
     of: 'of'
   },

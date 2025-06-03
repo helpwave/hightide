@@ -1,15 +1,15 @@
 import type { Meta, StoryObj } from '@storybook/react'
-import { Chip } from '../../../src/components/layout-and-navigation/Chip'
+import { ChipList } from '../../../src/components/layout-and-navigation/Chip'
 
 const meta = {
   title: 'Layout/Chip',
-  component: Chip,
-} satisfies Meta<typeof Chip>
+  component: ChipList,
+} satisfies Meta<typeof ChipList>
 
 export default meta
 type Story = StoryObj<typeof meta>;
 
-export const ChipListVariation: Story = {
+export const chipList: Story = {
   args: {
     list: [
       { children: 'Chip 1' },

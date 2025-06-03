@@ -5,7 +5,7 @@ import { equalSizeGroups, range } from '../../util/array'
 import clsx from 'clsx'
 import { Expandable } from '../layout-and-navigation/Expandable'
 import { addDuration, monthsList, subtractDuration } from '../../util/date'
-import { useLocale } from '../../hooks/useLanguage'
+import { useLocale } from '../../localization/LanguageProvider'
 
 export type YearMonthPickerProps = {
   displayedYearMonth?: Date,
@@ -108,7 +108,7 @@ export const YearMonthPicker = ({
   )
 }
 
-export const ControlledYearMonthPicker = ({
+export const YearMonthPickerControlled = ({
                                          displayedYearMonth = new Date(),
                                          onChange = noop,
                                          ...props

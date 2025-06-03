@@ -9,7 +9,7 @@ const meta = {
 export default meta
 type Story = StoryObj<typeof meta>;
 
-export const ChipVariation: Story = {
+export const chip: Story = {
   args: {
     children: 'Label',
     className: '',

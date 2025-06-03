@@ -1,5 +1,5 @@
 import type { Meta, StoryObj } from '@storybook/react'
-import { TileWithImage } from '../../../src/components/layout/Tile'
+import { TileWithImage } from '../../../src/components/layout-and-navigation/Tile'
 
 const meta = {
   title: 'Layout/Tile',
@@ -9,7 +9,7 @@ const meta = {
 export default meta
 type Story = StoryObj<typeof meta>;
 
-export const TileWithImageVariation: Story = {
+export const tileWithImage: Story = {
   args: {
     title: { value: 'About helpwave', className: 'textstyle-title-lg' },
     description: {

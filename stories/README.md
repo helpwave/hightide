@@ -13,7 +13,7 @@ const meta = {
 export default meta
 type Story = StoryObj<typeof meta>;
 
-export const CircleVariation: Story = {
+export const Circle: Story = {
   args: {
     radius: 40,
     color: 'primary',

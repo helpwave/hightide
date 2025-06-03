@@ -1,0 +1,19 @@
+import type { Meta, StoryObj } from '@storybook/react'
+import { Helpwave } from '../../src/components/icons-and-geometry/Helpwave'
+
+const meta = {
+  title: 'Branding/Logo',
+  component: Helpwave,
+} satisfies Meta<typeof Helpwave>
+
+export default meta
+type Story = StoryObj<typeof meta>;
+
+export const helpwaveLoadingAnimation: Story = {
+  args: {
+    color: 'currentColor',
+    animate: 'loading',
+    width: 128,
+    height: 128,
+  },
+}

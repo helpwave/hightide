@@ -1,10 +1,10 @@
 import { Binary } from 'lucide-react'
 import clsx from 'clsx'
 import { noop } from '../../util/noop'
-import { Input } from '../user-input/Input'
-import type { Languages } from '../../hooks/useLanguage'
-import type { PropsForTranslation } from '../../hooks/useTranslation'
-import { useTranslation } from '../../hooks/useTranslation'
+import { Input } from '../user-action/Input'
+import type { Language } from '../../localization/LanguageProvider'
+import type { PropsForTranslation } from '../../localization/useTranslation'
+import { useTranslation } from '../../localization/useTranslation'
 import type { PropertyBaseProps } from './PropertyBase'
 import { PropertyBase } from './PropertyBase'
 
@@ -12,7 +12,7 @@ type NumberPropertyTranslation = {
   value: string,
 }
 
-const defaultNumberPropertyTranslation: Record<Languages, NumberPropertyTranslation> = {
+const defaultNumberPropertyTranslation: Record<Language, NumberPropertyTranslation> = {
   en: {
     value: 'Value'
   },

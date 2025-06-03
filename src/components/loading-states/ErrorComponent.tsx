@@ -1,14 +1,14 @@
 import { AlertOctagon } from 'lucide-react'
-import type { Languages } from '../../hooks/useLanguage'
-import type { PropsForTranslation } from '../../hooks/useTranslation'
-import { useTranslation } from '../../hooks/useTranslation'
+import type { Language } from '../../localization/LanguageProvider'
+import type { PropsForTranslation } from '../../localization/useTranslation'
+import { useTranslation } from '../../localization/useTranslation'
 import clsx from 'clsx'
 
 type ErrorComponentTranslation = {
   errorOccurred: string,
 }
 
-const defaultErrorComponentTranslation: Record<Languages, ErrorComponentTranslation> = {
+const defaultErrorComponentTranslation: Record<Language, ErrorComponentTranslation> = {
   en: {
     errorOccurred: 'An error occurred'
   },

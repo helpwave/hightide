@@ -1,9 +1,9 @@
 import { Check } from 'lucide-react'
 import { noop } from '../../util/noop'
-import { Checkbox } from '../user-input/Checkbox'
-import type { Languages } from '../../hooks/useLanguage'
-import type { PropsForTranslation } from '../../hooks/useTranslation'
-import { useTranslation } from '../../hooks/useTranslation'
+import { Checkbox } from '../user-action/Checkbox'
+import type { Language } from '../../localization/LanguageProvider'
+import type { PropsForTranslation } from '../../localization/useTranslation'
+import { useTranslation } from '../../localization/useTranslation'
 import type { PropertyBaseProps } from './PropertyBase'
 import { PropertyBase } from './PropertyBase'
 
@@ -12,7 +12,7 @@ type CheckboxPropertyTranslation = {
   no: string,
 }
 
-const defaultCheckboxPropertyTranslation: Record<Languages, CheckboxPropertyTranslation> = {
+const defaultCheckboxPropertyTranslation: Record<Language, CheckboxPropertyTranslation> = {
   en: {
     yes: 'Yes',
     no: 'No'

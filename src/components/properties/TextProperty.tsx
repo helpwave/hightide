@@ -1,9 +1,9 @@
 import { Text } from 'lucide-react'
 import clsx from 'clsx'
-import type { Languages } from '../../hooks/useLanguage'
-import type { PropsForTranslation } from '../../hooks/useTranslation'
-import { useTranslation } from '../../hooks/useTranslation'
-import { Textarea } from '../user-input/Textarea'
+import type { Language } from '../../localization/LanguageProvider'
+import type { PropsForTranslation } from '../../localization/useTranslation'
+import { useTranslation } from '../../localization/useTranslation'
+import { Textarea } from '../user-action/Textarea'
 import { noop } from '../../util/noop'
 import type { PropertyBaseProps } from './PropertyBase'
 import { PropertyBase } from './PropertyBase'
@@ -12,7 +12,7 @@ type TextPropertyTranslation = {
   value: string,
 }
 
-const defaultTextPropertyTranslation: Record<Languages, TextPropertyTranslation> = {
+const defaultTextPropertyTranslation: Record<Language, TextPropertyTranslation> = {
   en: {
     value: 'Text'
   },

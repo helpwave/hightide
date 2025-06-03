@@ -1,7 +1,7 @@
 import type { PropsWithChildren } from 'react'
-import { SolidButton } from '../user-input/Button'
-import type { PropsForTranslation } from '../../hooks/useTranslation'
-import { useTranslation } from '../../hooks/useTranslation'
+import { SolidButton } from '../user-action/Button'
+import type { PropsForTranslation } from '../../localization/useTranslation'
+import { useTranslation } from '../../localization/useTranslation'
 import { Modal, type ModalProps } from './Modal'
 
 type DiscardChangesDialogTranslation = {

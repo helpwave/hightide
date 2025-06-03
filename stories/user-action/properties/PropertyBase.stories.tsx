@@ -3,14 +3,14 @@ import clsx from 'clsx'
 import { PropertyBase } from '../../../src/components/properties/PropertyBase'
 
 const meta = {
-  title: 'User-Action/Property',
+  title: 'User Action/Property',
   component: PropertyBase,
 } satisfies Meta<typeof PropertyBase>
 
 export default meta
 type Story = StoryObj<typeof meta>;
 
-export const PropertyBaseVariation: Story = {
+export const propertyBase: Story = {
   args: {
     name: 'Property',
     softRequired: false,

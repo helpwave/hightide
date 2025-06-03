@@ -2,18 +2,18 @@ import type { ReactNode } from 'react'
 import { useEffect, useMemo, useState } from 'react'
 import { Search } from 'lucide-react'
 import clsx from 'clsx'
-import type { Languages } from '../../hooks/useLanguage'
-import { useTranslation } from '../../hooks/useTranslation'
-import type { PropsForTranslation } from '../../hooks/useTranslation'
+import type { Language } from '../../localization/LanguageProvider'
+import { useTranslation } from '../../localization/useTranslation'
+import type { PropsForTranslation } from '../../localization/useTranslation'
 import { MultiSearchWithMapping } from '../../util/simpleSearch'
-import { Input } from '../user-input/Input'
+import { Input } from '../user-action/Input'
 
 type SearchableListTranslation = {
   search: string,
   nothingFound: string,
 }
 
-const defaultSearchableListTranslation: Record<Languages, SearchableListTranslation> = {
+const defaultSearchableListTranslation: Record<Language, SearchableListTranslation> = {
   en: {
     search: 'Search',
     nothingFound: 'Nothing found'

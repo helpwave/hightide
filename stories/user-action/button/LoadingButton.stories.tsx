@@ -2,14 +2,14 @@ import type { Meta, StoryObj } from '@storybook/react'
 import { LoadingButton } from '../../../src/components/loading-states/LoadingButton'
 
 const meta = {
-  title: 'User-Action/Button',
+  title: 'User Action/Button',
   component: LoadingButton,
 } satisfies Meta<typeof LoadingButton>
 
 export default meta
 type Story = StoryObj<typeof meta>;
 
-export const LoadingButtonVariation: Story = {
+export const loadingButton: Story = {
   args: {
     children: 'Modify my `isLoading` properties',
     color: 'primary',
