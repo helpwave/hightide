@@ -1,5 +1,5 @@
 import type { Meta, StoryObj } from '@storybook/react'
-import { HelpwaveBadge } from '../../src/components/branding/HelpwaveBadge'
+import { HelpwaveBadge } from '../../src'
 
 const meta = {
   title: 'Branding/Logo',

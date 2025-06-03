@@ -1,5 +1,5 @@
 import type { Meta, StoryObj } from '@storybook/react'
-import { BreadCrumb } from '../../src/components/layout-and-navigation/BreadCrumb'
+import { BreadCrumb } from '../../src'
 
 const meta = {
   title: 'Layout',

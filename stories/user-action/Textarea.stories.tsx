@@ -1,5 +1,5 @@
 import type { Meta, StoryObj } from '@storybook/react'
-import { TextareaUncontrolled } from '../../src/components/user-action/Textarea'
+import { TextareaUncontrolled } from '../../src'
 
 const meta = {
   title: 'User Action',

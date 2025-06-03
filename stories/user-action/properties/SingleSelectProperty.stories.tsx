@@ -3,17 +3,17 @@ import { useEffect, useState } from 'react'
 import type { SingleSelectPropertyProps } from '../../../src/components/properties/SelectProperty'
 import { SingleSelectProperty } from '../../../src/components/properties/SelectProperty'
 
-type SingleSelectPropertyExample = Omit<SingleSelectPropertyProps<string>, 'onChange' | 'onRemove'|'searchMapping'>
+type SingleSelectPropertyExample = Omit<SingleSelectPropertyProps<string>, 'onChange' | 'onRemove' | 'searchMapping'>
 
 /**
  * Example for using the SingleSelectProperty
  */
 const SingleSelectPropertyExample = ({
-                                              value,
-                                              options,
-                                              hintText,
-                                              ...restProps
-                                            }: SingleSelectPropertyExample) => {
+                                       value,
+                                       options,
+                                       hintText,
+                                       ...restProps
+                                     }: SingleSelectPropertyExample) => {
   const [usedValue, setUsedValue] = useState<string | undefined>(value)
 
   useEffect(() => {
@@ -27,15 +27,15 @@ const SingleSelectPropertyExample = ({
   }, [value, options])
 
   return (
-      <SingleSelectProperty
-          {...restProps}
-          value={usedValue}
-          options={options}
-          searchMapping={value1 => [value1.value]}
-          onChange={setUsedValue}
-          onRemove={() => setUsedValue(undefined)}
-          hintText={hintText}
-      />
+    <SingleSelectProperty
+      {...restProps}
+      value={usedValue}
+      options={options}
+      searchMapping={value1 => [value1.value]}
+      onChange={setUsedValue}
+      onRemove={() => setUsedValue(undefined)}
+      hintText={hintText}
+    />
   )
 }
 

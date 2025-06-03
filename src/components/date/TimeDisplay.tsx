@@ -1,6 +1,6 @@
-import type { Language } from '../../localization/LanguageProvider'
-import type { PropsForTranslation } from '../../localization/useTranslation'
-import { useTranslation } from '../../localization/useTranslation'
+import type { Language } from '@/localization/util'
+import type { PropsForTranslation } from '@/localization/useTranslation'
+import { useTranslation } from '@/localization/useTranslation'
 
 type TimeDisplayTranslation = {
   today: string,
@@ -74,10 +74,10 @@ type TimeDisplayProps = {
  * A Component for displaying time and dates in a unified fashion
  */
 export const TimeDisplay = ({
-  overwriteTranslation,
-  date,
-  mode = 'daysFromToday'
-}: PropsForTranslation<TimeDisplayTranslation, TimeDisplayProps>) => {
+                              overwriteTranslation,
+                              date,
+                              mode = 'daysFromToday'
+                            }: PropsForTranslation<TimeDisplayTranslation, TimeDisplayProps>) => {
   const translation = useTranslation(defaultTimeDisplayTranslations, overwriteTranslation)
   const difference = new Date().setHours(0, 0, 0, 0).valueOf() - new Date(date).setHours(0, 0, 0, 0).valueOf()
   const isBefore = difference > 0

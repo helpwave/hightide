@@ -14,12 +14,12 @@ export type TileProps = {
  * A component for creating a tile similar to the flutter ListTile
  */
 export const Tile = ({
-  title,
-  description,
-  prefix,
-  suffix,
-  className
-}: TileProps) => {
+                       title,
+                       description,
+                       prefix,
+                       suffix,
+                       className
+                     }: TileProps) => {
   return (
     <div className={clsx('row gap-x-4 w-full items-center', className)}>
       {prefix}
@@ -50,12 +50,12 @@ export type TileWithImageProps = Omit<TileProps, 'suffix' | 'prefix'> & {
  * A Tile with an image as prefix or suffix
  */
 export const TileWithImage = ({
-  url,
-  imageLocation = 'prefix',
-  imageSize = { width: 24, height: 24 },
-  imageClassName = '',
-  ...tileProps
-}: TileWithImageProps) => {
+                                url,
+                                imageLocation = 'prefix',
+                                imageSize = { width: 24, height: 24 },
+                                imageClassName = '',
+                                ...tileProps
+                              }: TileWithImageProps) => {
   const image = <Image src={url} alt="" {...imageSize} className={clsx(imageClassName)}/>
   return (
     <Tile

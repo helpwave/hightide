@@ -1,10 +1,11 @@
 import React, {
+  type ChangeEvent,
+  forwardRef,
+  type HTMLInputTypeAttribute,
+  type InputHTMLAttributes,
   useEffect,
   useRef,
-  useState,
-  type ChangeEvent,
-  type HTMLInputTypeAttribute,
-  type InputHTMLAttributes, forwardRef
+  useState
 } from 'react'
 import clsx from 'clsx'
 import { useSaveDelay } from '../../hooks/useSaveDelay'
@@ -167,7 +168,7 @@ const FormInput = forwardRef<HTMLInputElement, FormInputProps>(function FormInpu
           'focus:border-negative focus:ring-negative text-negative': !!errorText,
         },
         className
-        )}
+      )}
     />
   )
 

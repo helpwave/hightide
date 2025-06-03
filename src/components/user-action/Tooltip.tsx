@@ -84,7 +84,7 @@ export const Tooltip = ({
           <div
             className={clsx(`absolute w-0 h-0`, triangleClasses[position])}
             style={{ ...triangleStyle[position], zIndex }}
-           />
+          />
         </div>
       )}
     </div>

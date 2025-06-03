@@ -1,6 +1,6 @@
 import type { ReactNode } from 'react'
 import clsx from 'clsx'
-import type { Language } from '../../localization/LanguageProvider'
+import type { Language } from '../../localization/util'
 import type { PropsForTranslation } from '../../localization/useTranslation'
 import { useTranslation } from '../../localization/useTranslation'
 import { noop } from '../../util/noop'
@@ -90,17 +90,17 @@ export type DateTimePickerProps = {
  * A Component for picking a Date and Time
  */
 export const DateTimePicker = ({
-  overwriteTranslation,
-  value = new Date(),
-  start = subtractDuration(new Date(), { years: 50 }),
-  end = addDuration(new Date(), { years: 50 }),
-  mode = 'dateTime',
-  onFinish = noop,
-  onChange = noop,
-  onRemove = noop,
-  timePickerProps,
-  datePickerProps,
-}: PropsForTranslation<TimeTranslation, DateTimePickerProps>) => {
+                                 overwriteTranslation,
+                                 value = new Date(),
+                                 start = subtractDuration(new Date(), { years: 50 }),
+                                 end = addDuration(new Date(), { years: 50 }),
+                                 mode = 'dateTime',
+                                 onFinish = noop,
+                                 onChange = noop,
+                                 onRemove = noop,
+                                 timePickerProps,
+                                 datePickerProps,
+                               }: PropsForTranslation<TimeTranslation, DateTimePickerProps>) => {
   const translation = useTranslation(defaultTimeTranslation, overwriteTranslation)
 
   const useDate = mode === 'dateTime' || mode === 'date'

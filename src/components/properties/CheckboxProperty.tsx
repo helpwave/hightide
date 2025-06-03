@@ -1,7 +1,7 @@
 import { Check } from 'lucide-react'
 import { noop } from '../../util/noop'
 import { Checkbox } from '../user-action/Checkbox'
-import type { Language } from '../../localization/LanguageProvider'
+import type { Language } from '../../localization/util'
 import type { PropsForTranslation } from '../../localization/useTranslation'
 import { useTranslation } from '../../localization/useTranslation'
 import type { PropertyBaseProps } from './PropertyBase'

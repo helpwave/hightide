@@ -1,6 +1,6 @@
 import type { ReactElement } from 'react'
-import { Scrollbars } from 'react-custom-scrollbars-2'
 import { useEffect, useRef, useState } from 'react'
+import { Scrollbars } from 'react-custom-scrollbars-2'
 import { noop } from '../../util/noop'
 import { Checkbox } from '../user-action/Checkbox'
 import { Pagination } from './Pagination'
@@ -10,180 +10,180 @@ import { TextButton } from '../user-action/Button'
 import { ChevronDown, ChevronsUpDown, ChevronUp } from 'lucide-react'
 
 export type TableStatePagination = {
-    currentPage: number,
-    entriesPerPage: number,
+  currentPage: number,
+  entriesPerPage: number,
 }
 export const defaultTableStatePagination = {
-    currentPage: 0,
-    entriesPerPage: 5
+  currentPage: 0,
+  entriesPerPage: 5
 }
 
 export type TableStateSelection<T> = {
-    currentSelection: T[],
-    hasSelectedAll: boolean,
-    hasSelectedSome: boolean,
-    hasSelectedNone: boolean,
+  currentSelection: T[],
+  hasSelectedAll: boolean,
+  hasSelectedSome: boolean,
+  hasSelectedNone: boolean,
 }
 
 export const defaultTableStateSelection = {
-    currentSelection: [],
-    hasSelectedAll: false,
-    hasSelectedSome: false,
-    hasSelectedNone: true
+  currentSelection: [],
+  hasSelectedAll: false,
+  hasSelectedSome: false,
+  hasSelectedNone: true
 }
 
 export type TableState = {
-    pagination?: TableStatePagination,
-    selection?: {
-        /**
-         * The mapped ids of the dataType
-         */
-        currentSelection: string[],
-        hasSelectedAll: boolean,
-        hasSelectedSome: boolean,
-        hasSelectedNone: boolean,
-    },
+  pagination?: TableStatePagination,
+  selection?: {
+    /**
+     * The mapped ids of the dataType
+     */
+    currentSelection: string[],
+    hasSelectedAll: boolean,
+    hasSelectedSome: boolean,
+    hasSelectedNone: boolean,
+  },
 }
 
 type IdentifierMapping<T> = (dataObject: T) => string
 
 export const isDataObjectSelected = <T, >(tableState: TableState, dataObject: T, identifierMapping: IdentifierMapping<T>) => {
-    if (!tableState.selection) {
-        return false
-    }
+  if (!tableState.selection) {
+    return false
+  }
 
-    return !!tableState.selection.currentSelection.find(value => value.localeCompare(identifierMapping(dataObject)) === 0)
+  return !!tableState.selection.currentSelection.find(value => value.localeCompare(identifierMapping(dataObject)) === 0)
 }
 
 export const pageForItem = <T, >(data: T[], item: T, entriesPerPage: number, identifierMapping: IdentifierMapping<T>) => {
-    const index = data.findIndex(value => identifierMapping(value) === identifierMapping(item))
-    if (index !== -1) {
-        return Math.floor(index / entriesPerPage)
-    }
-    console.warn("item doesn't exist on data", item, data)
-    return 0
+  const index = data.findIndex(value => identifierMapping(value) === identifierMapping(item))
+  if (index !== -1) {
+    return Math.floor(index / entriesPerPage)
+  }
+  console.warn("item doesn't exist on data", item, data)
+  return 0
 }
 
 export const updatePagination = (pagination: TableStatePagination, dataLength: number): TableStatePagination => ({
-    ...pagination,
-    currentPage: Math.min(Math.max(Math.ceil(dataLength / pagination.entriesPerPage) - 1, 0), pagination.currentPage)
+  ...pagination,
+  currentPage: Math.min(Math.max(Math.ceil(dataLength / pagination.entriesPerPage) - 1, 0), pagination.currentPage)
 })
 
 export const addElementToTable = <T, >(tableState: TableState, data: T[], dataObject: T, identifierMapping: IdentifierMapping<T>) => {
-    return {
-        ...tableState,
-        pagination: tableState.pagination ? {
-            ...tableState.pagination,
-            currentPage: pageForItem(data, dataObject, tableState.pagination.entriesPerPage, identifierMapping)
-        } : undefined,
-        selection: tableState.selection ? {
-            ...tableState.selection,
-            hasSelectedAll: false,
-            hasSelectedSome: tableState.selection.hasSelectedAll || tableState.selection.hasSelectedSome
-        } : undefined
-    }
+  return {
+    ...tableState,
+    pagination: tableState.pagination ? {
+      ...tableState.pagination,
+      currentPage: pageForItem(data, dataObject, tableState.pagination.entriesPerPage, identifierMapping)
+    } : undefined,
+    selection: tableState.selection ? {
+      ...tableState.selection,
+      hasSelectedAll: false,
+      hasSelectedSome: tableState.selection.hasSelectedAll || tableState.selection.hasSelectedSome
+    } : undefined
+  }
 }
 
 /**
  * data length before delete
  */
 export const removeFromTableSelection = <T, >(tableState: TableState, deletedObjects: T[], dataLength: number, identifierMapping: IdentifierMapping<T>): TableState => {
-    if (!tableState.selection) {
-        return tableState
-    }
+  if (!tableState.selection) {
+    return tableState
+  }
 
-    const deletedObjectIds = deletedObjects.map(identifierMapping)
-    const elementsBefore = tableState.selection.currentSelection.length
-    const currentSelection = tableState.selection.currentSelection.filter((value) => !deletedObjectIds.includes(value))
-    dataLength -= elementsBefore - currentSelection.length
+  const deletedObjectIds = deletedObjects.map(identifierMapping)
+  const elementsBefore = tableState.selection.currentSelection.length
+  const currentSelection = tableState.selection.currentSelection.filter((value) => !deletedObjectIds.includes(value))
+  dataLength -= elementsBefore - currentSelection.length
 
-    return {
-        ...tableState,
-        selection: {
-            currentSelection,
-            hasSelectedAll: currentSelection.length === dataLength && dataLength !== 0,
-            hasSelectedSome: currentSelection.length > 0 && currentSelection.length !== dataLength,
-            hasSelectedNone: currentSelection.length === 0,
-        },
-        pagination: tableState.pagination ? updatePagination(tableState.pagination, dataLength) : undefined
-    }
+  return {
+    ...tableState,
+    selection: {
+      currentSelection,
+      hasSelectedAll: currentSelection.length === dataLength && dataLength !== 0,
+      hasSelectedSome: currentSelection.length > 0 && currentSelection.length !== dataLength,
+      hasSelectedNone: currentSelection.length === 0,
+    },
+    pagination: tableState.pagination ? updatePagination(tableState.pagination, dataLength) : undefined
+  }
 }
 
 export const changeTableSelectionSingle = <T, >(tableState: TableState, dataObject: T, dataLength: number, identifierMapping: IdentifierMapping<T>) => {
-    if (!tableState.selection) {
-        return tableState
-    }
+  if (!tableState.selection) {
+    return tableState
+  }
 
-    const hasSelectedObject = isDataObjectSelected(tableState, dataObject, identifierMapping)
-    let currentSelection = [...tableState.selection.currentSelection, identifierMapping(dataObject)] // case !hasSelectedObject
-    if (hasSelectedObject) {
-        currentSelection = tableState.selection.currentSelection.filter(value => value.localeCompare(identifierMapping(dataObject)) !== 0)
-    }
+  const hasSelectedObject = isDataObjectSelected(tableState, dataObject, identifierMapping)
+  let currentSelection = [...tableState.selection.currentSelection, identifierMapping(dataObject)] // case !hasSelectedObject
+  if (hasSelectedObject) {
+    currentSelection = tableState.selection.currentSelection.filter(value => value.localeCompare(identifierMapping(dataObject)) !== 0)
+  }
 
-    return {
-        ...tableState,
-        selection: {
-            currentSelection,
-            hasSelectedAll: currentSelection.length === dataLength,
-            hasSelectedSome: currentSelection.length > 0 && currentSelection.length !== dataLength,
-            hasSelectedNone: currentSelection.length === 0,
-        }
+  return {
+    ...tableState,
+    selection: {
+      currentSelection,
+      hasSelectedAll: currentSelection.length === dataLength,
+      hasSelectedSome: currentSelection.length > 0 && currentSelection.length !== dataLength,
+      hasSelectedNone: currentSelection.length === 0,
     }
+  }
 }
 
 const changeTableSelectionAll = <T, >(tableState: TableState, data: T[], identifierMapping: IdentifierMapping<T>) => {
-    if (!tableState.selection) {
-        return tableState
-    }
+  if (!tableState.selection) {
+    return tableState
+  }
 
-    if (data.length === 0) {
-        return {
-            ...tableState,
-            selection: {
-                currentSelection: [],
-                hasSelectedAll: false,
-                hasSelectedSome: false,
-                hasSelectedNone: true
-            }
-        }
-    }
-
-    const hasSelectedAll = !(tableState.selection.hasSelectedSome || tableState.selection.hasSelectedAll)
+  if (data.length === 0) {
     return {
-        ...tableState,
-        selection: {
-            currentSelection: hasSelectedAll ? data.map(identifierMapping) : [],
-            hasSelectedAll,
-            hasSelectedSome: false,
-            hasSelectedNone: !hasSelectedAll
-        }
+      ...tableState,
+      selection: {
+        currentSelection: [],
+        hasSelectedAll: false,
+        hasSelectedSome: false,
+        hasSelectedNone: true
+      }
     }
+  }
+
+  const hasSelectedAll = !(tableState.selection.hasSelectedSome || tableState.selection.hasSelectedAll)
+  return {
+    ...tableState,
+    selection: {
+      currentSelection: hasSelectedAll ? data.map(identifierMapping) : [],
+      hasSelectedAll,
+      hasSelectedSome: false,
+      hasSelectedNone: !hasSelectedAll
+    }
+  }
 }
 
 export type TableSortingType = 'ascending' | 'descending'
 export type TableSortingFunctionType<T> = (t1: T, t2: T) => number
 
 export type TableProps<T> = {
-    data: T[],
-    /**
-     * When using selection or pagination
-     */
-    stateManagement?: [TableState, (tableState: TableState) => void],
-    identifierMapping: IdentifierMapping<T>,
-    /**
-     * Only the cell itself no boilerplate <tr> or <th> required
-     */
-    header?: ReactElement[],
-    /**
-     * Only the cells of the row no boilerplate <tr> or <td> required
-     */
-    rowMappingToCells: (dataObject: T) => ReactElement[],
-    sorting?: [TableSortingFunctionType<T>, TableSortingType],
-    /**
-     * Always go to the page of this element
-     */
-    focusElement?: T,
-    className?: string,
+  data: T[],
+  /**
+   * When using selection or pagination
+   */
+  stateManagement?: [TableState, (tableState: TableState) => void],
+  identifierMapping: IdentifierMapping<T>,
+  /**
+   * Only the cell itself no boilerplate <tr> or <th> required
+   */
+  header?: ReactElement[],
+  /**
+   * Only the cells of the row no boilerplate <tr> or <td> required
+   */
+  rowMappingToCells: (dataObject: T) => ReactElement[],
+  sorting?: [TableSortingFunctionType<T>, TableSortingType],
+  /**
+   * Always go to the page of this element
+   */
+  focusElement?: T,
+  className?: string,
 }
 
 /*  Possible extension for better customization
@@ -197,168 +197,168 @@ export type TableProps<T> = {
  * The state must be handled and saved with the updateTableState method
  */
 export const Table = <T, >({
-                               data,
-                               stateManagement = [{}, noop],
-                               identifierMapping,
-                               header,
-                               rowMappingToCells,
-                               sorting,
-                               focusElement,
-                               className
+                             data,
+                             stateManagement = [{}, noop],
+                             identifierMapping,
+                             header,
+                             rowMappingToCells,
+                             sorting,
+                             focusElement,
+                             className
                            }: TableProps<T>) => {
-    const sortedData = [...data]
-    if (sorting) {
-        const [sortingFunction, sortingType] = sorting
-        sortedData.sort((a, b) => sortingFunction(a, b) * (sortingType === 'ascending' ? 1 : -1))
+  const sortedData = [...data]
+  if (sorting) {
+    const [sortingFunction, sortingType] = sorting
+    sortedData.sort((a, b) => sortingFunction(a, b) * (sortingType === 'ascending' ? 1 : -1))
+  }
+  let currentPage = 0
+  let pageCount = 1
+  let entriesPerPage = 5
+  const [tableState, updateTableState] = stateManagement
+
+  let shownElements = sortedData
+
+  if (tableState?.pagination) {
+    if (tableState.pagination.entriesPerPage < 1) {
+      console.error('tableState.pagination.entriesPerPage must be >= 1', tableState.pagination.entriesPerPage)
     }
-    let currentPage = 0
-    let pageCount = 1
-    let entriesPerPage = 5
-    const [tableState, updateTableState] = stateManagement
+    entriesPerPage = Math.max(1, tableState.pagination.entriesPerPage)
+    pageCount = Math.ceil(sortedData.length / entriesPerPage)
 
-    let shownElements = sortedData
-
-    if (tableState?.pagination) {
-        if (tableState.pagination.entriesPerPage < 1) {
-            console.error('tableState.pagination.entriesPerPage must be >= 1', tableState.pagination.entriesPerPage)
-        }
-        entriesPerPage = Math.max(1, tableState.pagination.entriesPerPage)
-        pageCount = Math.ceil(sortedData.length / entriesPerPage)
-
-        if (tableState.pagination.currentPage < 0 || (tableState.pagination.currentPage >= pageCount && pageCount !== 0)) {
-            console.error('tableState.pagination.currentPage < 0 || (tableState.pagination.currentPage >= pageCount && pageCount !== 0) must be fullfilled',
-                [`pageCount: ${pageCount}`, `tableState.pagination.currentPage: ${tableState.pagination.currentPage}`])
-        } else {
-            currentPage = tableState.pagination.currentPage
-        }
-
-        if (focusElement) {
-            currentPage = pageForItem(sortedData, focusElement, entriesPerPage, identifierMapping)
-        }
-
-        shownElements = sortedData.slice(currentPage * entriesPerPage, Math.min(sortedData.length, (currentPage + 1) * entriesPerPage))
+    if (tableState.pagination.currentPage < 0 || (tableState.pagination.currentPage >= pageCount && pageCount !== 0)) {
+      console.error('tableState.pagination.currentPage < 0 || (tableState.pagination.currentPage >= pageCount && pageCount !== 0) must be fullfilled',
+        [`pageCount: ${pageCount}`, `tableState.pagination.currentPage: ${tableState.pagination.currentPage}`])
     } else {
-        currentPage = 0
+      currentPage = tableState.pagination.currentPage
     }
 
-    const headerRow = 'border-b-2 border-gray-300'
-    const headerPaddingHead = 'pb-2'
-    const headerPaddingBody = 'pt-2'
-    const cellPadding = 'py-1 px-2'
-
-    const [scrollbarsAutoHeightMin, setScrollbarsAutoHeightMin] = useState(0)
-    const tableRef = useRef<HTMLTableElement>(null)
-
-    const calculateHeight = () => {
-        if (tableRef.current) {
-            const tableHeight = tableRef.current.offsetHeight
-            const offset = 25
-            setScrollbarsAutoHeightMin(tableHeight + offset)
-        }
+    if (focusElement) {
+      currentPage = pageForItem(sortedData, focusElement, entriesPerPage, identifierMapping)
     }
 
-    useEffect(() => {
-        calculateHeight()
+    shownElements = sortedData.slice(currentPage * entriesPerPage, Math.min(sortedData.length, (currentPage + 1) * entriesPerPage))
+  } else {
+    currentPage = 0
+  }
 
-        // New function to unbind properly
-        const handleResize = () => {
-            calculateHeight()
-        }
+  const headerRow = 'border-b-2 border-gray-300'
+  const headerPaddingHead = 'pb-2'
+  const headerPaddingBody = 'pt-2'
+  const cellPadding = 'py-1 px-2'
 
-        window.addEventListener('resize', handleResize)
+  const [scrollbarsAutoHeightMin, setScrollbarsAutoHeightMin] = useState(0)
+  const tableRef = useRef<HTMLTableElement>(null)
 
-        return () => {
-            window.removeEventListener('resize', handleResize)
-        }
-    }, [data, currentPage])
+  const calculateHeight = () => {
+    if (tableRef.current) {
+      const tableHeight = tableRef.current.offsetHeight
+      const offset = 25
+      setScrollbarsAutoHeightMin(tableHeight + offset)
+    }
+  }
 
-    return (
-        <div className={clsx('col gap-y-4 overflow-hidden', className)}>
-            <div>
-                <Scrollbars autoHeight autoHeightMin={scrollbarsAutoHeightMin}>
-                    <table ref={tableRef} className="w-full mb-[12px]">
-                        <thead>
-                        <tr className={headerRow}>
-                            {header && tableState.selection && (
-                                <th className={headerPaddingHead}>
-                                    <Checkbox
-                                        checked={tableState.selection.hasSelectedSome ? 'indeterminate' : tableState.selection.hasSelectedAll}
-                                        onChange={() => updateTableState(changeTableSelectionAll(tableState, data, identifierMapping))}
-                                    />
-                                </th>
-                            )}
-                            {header && header.map((value, index) => (
-                                <th key={`tableHeader${index}`} className={headerPaddingHead}>
-                                    <div className="row justify-start px-2">
-                                        {value}
-                                    </div>
-                                </th>
-                            ))}
-                        </tr>
-                        </thead>
-                        <tbody>
-                        {shownElements.map((value, rowIndex) => (
-                            <tr key={identifierMapping(value)}>
-                                {tableState.selection && (
-                                    <td className={clsx(cellPadding, { [headerPaddingBody]: rowIndex === 0 })}>
-                                        <Checkbox
-                                            checked={isDataObjectSelected(tableState, value, identifierMapping)}
-                                            onChange={() => {
-                                                updateTableState(changeTableSelectionSingle(tableState, value, data.length, identifierMapping))
-                                            }}
-                                        />
-                                    </td>
-                                )}
-                                {rowMappingToCells(value).map((value1, index) => (
-                                    <td key={index}
-                                        className={clsx(cellPadding, { [headerPaddingBody]: rowIndex === 0 })}>
-                                        {value1}
-                                    </td>
-                                ))}
-                            </tr>
-                        ))}
-                        </tbody>
-                    </table>
-                </Scrollbars>
-            </div>
-            <div className="row justify-center">
-                {tableState.pagination && (
-                    <Pagination page={currentPage} numberOfPages={pageCount} onPageChanged={page => updateTableState({
-                        ...tableState,
-                        pagination: { entriesPerPage, currentPage: page }
-                    })}/>
+  useEffect(() => {
+    calculateHeight()
+
+    // New function to unbind properly
+    const handleResize = () => {
+      calculateHeight()
+    }
+
+    window.addEventListener('resize', handleResize)
+
+    return () => {
+      window.removeEventListener('resize', handleResize)
+    }
+  }, [data, currentPage])
+
+  return (
+    <div className={clsx('col gap-y-4 overflow-hidden', className)}>
+      <div>
+        <Scrollbars autoHeight autoHeightMin={scrollbarsAutoHeightMin}>
+          <table ref={tableRef} className="w-full mb-[12px]">
+            <thead>
+            <tr className={headerRow}>
+              {header && tableState.selection && (
+                <th className={headerPaddingHead}>
+                  <Checkbox
+                    checked={tableState.selection.hasSelectedSome ? 'indeterminate' : tableState.selection.hasSelectedAll}
+                    onChange={() => updateTableState(changeTableSelectionAll(tableState, data, identifierMapping))}
+                  />
+                </th>
+              )}
+              {header && header.map((value, index) => (
+                <th key={`tableHeader${index}`} className={headerPaddingHead}>
+                  <div className="row justify-start px-2">
+                    {value}
+                  </div>
+                </th>
+              ))}
+            </tr>
+            </thead>
+            <tbody>
+            {shownElements.map((value, rowIndex) => (
+              <tr key={identifierMapping(value)}>
+                {tableState.selection && (
+                  <td className={clsx(cellPadding, { [headerPaddingBody]: rowIndex === 0 })}>
+                    <Checkbox
+                      checked={isDataObjectSelected(tableState, value, identifierMapping)}
+                      onChange={() => {
+                        updateTableState(changeTableSelectionSingle(tableState, value, data.length, identifierMapping))
+                      }}
+                    />
+                  </td>
                 )}
-            </div>
-        </div>
-    )
+                {rowMappingToCells(value).map((value1, index) => (
+                  <td key={index}
+                      className={clsx(cellPadding, { [headerPaddingBody]: rowIndex === 0 })}>
+                    {value1}
+                  </td>
+                ))}
+              </tr>
+            ))}
+            </tbody>
+          </table>
+        </Scrollbars>
+      </div>
+      <div className="row justify-center">
+        {tableState.pagination && (
+          <Pagination page={currentPage} numberOfPages={pageCount} onPageChanged={page => updateTableState({
+            ...tableState,
+            pagination: { entriesPerPage, currentPage: page }
+          })}/>
+        )}
+      </div>
+    </div>
+  )
 }
 
 export type SortButtonProps = Omit<TextButtonProps, 'onClick'> & {
-    ascending?: TableSortingType,
-    onClick: (newTableSorting: TableSortingType) => void,
+  ascending?: TableSortingType,
+  onClick: (newTableSorting: TableSortingType) => void,
 }
 
 /**
  * A Extension of the normal button that displays the sorting state right of the content
  */
 export const SortButton = ({
-                               children,
-                               ascending,
-                               color,
-                               onClick,
-                               ...buttonProps
+                             children,
+                             ascending,
+                             color,
+                             onClick,
+                             ...buttonProps
                            }: SortButtonProps) => {
-    return (
-        <TextButton
-            color={color}
-            onClick={() => onClick(ascending === 'descending' ? 'ascending' : 'descending')}
-            {...buttonProps}
-        >
-            <div className="row gap-x-2">
-                {children}
-                {ascending === 'ascending' ? <ChevronUp/> : (!ascending ? <ChevronsUpDown/> : <ChevronDown/>)}
-            </div>
-        </TextButton>
-    )
+  return (
+    <TextButton
+      color={color}
+      onClick={() => onClick(ascending === 'descending' ? 'ascending' : 'descending')}
+      {...buttonProps}
+    >
+      <div className="row gap-x-2">
+        {children}
+        {ascending === 'ascending' ? <ChevronUp/> : (!ascending ? <ChevronsUpDown/> : <ChevronDown/>)}
+      </div>
+    </TextButton>
+  )
 }
 

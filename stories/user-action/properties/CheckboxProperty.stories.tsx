@@ -11,9 +11,9 @@ type CheckboxPropertyExampleProps = Omit<CheckboxPropertyProps, 'onChange' | 'on
  * Example for using the CheckboxProperty
  */
 const CheckboxPropertyExample = ({
-                                          value = false,
-                                          ...restProps
-                                        }: CheckboxPropertyExampleProps) => {
+                                   value = false,
+                                   ...restProps
+                                 }: CheckboxPropertyExampleProps) => {
   const [usedValue, setUsedValue] = useState<boolean>(value)
 
   useEffect(() => {
@@ -21,11 +21,11 @@ const CheckboxPropertyExample = ({
   }, [value])
 
   return (
-      <CheckboxProperty
-          {...restProps}
-          onChange={setUsedValue}
-          value={usedValue}
-      />
+    <CheckboxProperty
+      {...restProps}
+      onChange={setUsedValue}
+      value={usedValue}
+    />
   )
 }
 

@@ -2,9 +2,9 @@ import type { ReactNode } from 'react'
 import { useEffect, useMemo, useState } from 'react'
 import { Search } from 'lucide-react'
 import clsx from 'clsx'
-import type { Language } from '../../localization/LanguageProvider'
-import { useTranslation } from '../../localization/useTranslation'
+import type { Language } from '../../localization/util'
 import type { PropsForTranslation } from '../../localization/useTranslation'
+import { useTranslation } from '../../localization/useTranslation'
 import { MultiSearchWithMapping } from '../../util/simpleSearch'
 import { Input } from '../user-action/Input'
 
@@ -36,13 +36,13 @@ export type SearchableListProps<T> = {
  * A component for searching a list
  */
 export const SearchableList = <T, >({
-  overwriteTranslation,
-  list,
-  initialSearch = '',
-  searchMapping,
-  itemMapper,
-  className
-}: PropsForTranslation<SearchableListTranslation, SearchableListProps<T>>) => {
+                                      overwriteTranslation,
+                                      list,
+                                      initialSearch = '',
+                                      searchMapping,
+                                      itemMapper,
+                                      className
+                                    }: PropsForTranslation<SearchableListTranslation, SearchableListProps<T>>) => {
   const translation = useTranslation(defaultSearchableListTranslation, overwriteTranslation)
   const [search, setSearch] = useState<string>(initialSearch)
 

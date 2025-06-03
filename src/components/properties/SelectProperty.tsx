@@ -1,6 +1,6 @@
 import { List } from 'lucide-react'
 import clsx from 'clsx'
-import type { Language } from '../../localization/LanguageProvider'
+import type { Language } from '../../localization/util'
 import type { PropsForTranslation } from '../../localization/useTranslation'
 import { useTranslation } from '../../localization/useTranslation'
 import type { SearchableSelectProps } from '../user-action/SearchableSelect'
@@ -28,15 +28,15 @@ export type SingleSelectPropertyProps<T> =
  * An Input for SingleSelect properties
  */
 export const SingleSelectProperty = <T, >({
-  overwriteTranslation,
-  value,
-  options,
-  name,
-  readOnly = false,
-  softRequired,
-  onRemove,
-  ...multiSelectProps
-}: PropsForTranslation<SingleSelectPropertyTranslation, SingleSelectPropertyProps<T>>) => {
+                                            overwriteTranslation,
+                                            value,
+                                            options,
+                                            name,
+                                            readOnly = false,
+                                            softRequired,
+                                            onRemove,
+                                            ...multiSelectProps
+                                          }: PropsForTranslation<SingleSelectPropertyTranslation, SingleSelectPropertyProps<T>>) => {
   const translation = useTranslation(defaultSingleSelectPropertyTranslation, overwriteTranslation)
   const hasValue = value !== undefined
 

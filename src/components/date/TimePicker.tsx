@@ -1,7 +1,7 @@
 import { useEffect, useRef, useState } from 'react'
 import { Scrollbars } from 'react-custom-scrollbars-2'
-import { noop } from '../../util/noop'
-import { closestMatch, range } from '../../util/array'
+import { noop } from '@/util/noop'
+import { closestMatch, range } from '@/util/array'
 import clsx from 'clsx'
 
 type MinuteIncrement = '1min' | '5min' | '10min' | '15min' | '30min'
@@ -16,13 +16,13 @@ export type TimePickerProps = {
 }
 
 export const TimePicker = ({
-  time = new Date(),
-  onChange = noop,
-  is24HourFormat = true,
-  minuteIncrement = '5min',
-  maxHeight = 300,
-  className = ''
-}: TimePickerProps) => {
+                             time = new Date(),
+                             onChange = noop,
+                             is24HourFormat = true,
+                             minuteIncrement = '5min',
+                             maxHeight = 300,
+                             className = ''
+                           }: TimePickerProps) => {
   const minuteRef = useRef<HTMLButtonElement>(null)
   const hourRef = useRef<HTMLButtonElement>(null)
 
@@ -147,10 +147,10 @@ export const TimePicker = ({
 }
 
 export const TimePickerControlled = ({
-                                    time,
-                                    onChange = noop,
-                                    ...props
-                                  }: TimePickerProps) => {
+                                       time,
+                                       onChange = noop,
+                                       ...props
+                                     }: TimePickerProps) => {
   const [value, setValue] = useState(time)
   useEffect(() => setValue(time), [time])
 

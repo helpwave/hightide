@@ -1,5 +1,5 @@
 import type { Meta, StoryObj } from '@storybook/react'
-import { Label } from '../../src/components/user-action/Label'
+import { Label } from '../../src'
 
 const meta = {
   title: 'User Action',

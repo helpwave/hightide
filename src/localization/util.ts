@@ -12,8 +12,8 @@ export type Language = typeof languages[number]
  * The supported languages' names in their respective language
  */
 const languagesLocalNames: Record<Language, string> = {
-    en: 'English',
-    de: 'Deutsch',
+  en: 'English',
+  de: 'Deutsch',
 }
 
 /**
@@ -25,6 +25,6 @@ const DEFAULT_LANGUAGE: Language = 'en'
  * A constant definition for holding data regarding languages
  */
 export const LanguageUtil = {
-    DEFAULT_LANGUAGE,
-    languagesLocalNames,
+  DEFAULT_LANGUAGE,
+  languagesLocalNames,
 }

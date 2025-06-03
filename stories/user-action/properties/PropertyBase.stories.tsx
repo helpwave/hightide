@@ -1,6 +1,6 @@
 import type { Meta, StoryObj } from '@storybook/react'
 import clsx from 'clsx'
-import { PropertyBase } from '../../../src/components/properties/PropertyBase'
+import { PropertyBase } from '../../../src'
 
 const meta = {
   title: 'User Action/Property',

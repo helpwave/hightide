@@ -1,5 +1,5 @@
 import type { Meta, StoryObj } from '@storybook/react'
-import { Helpwave } from '../../src/components/icons-and-geometry/Helpwave'
+import { Helpwave } from '../../src'
 
 const meta = {
   title: 'Branding/Logo',

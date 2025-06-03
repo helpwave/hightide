@@ -1,6 +1,5 @@
 import type { Meta, StoryObj } from '@storybook/react'
-import { addDuration, subtractDuration } from '../../../src/util/date'
-import { ControlledDatePicker } from '../../../src/components/date/DatePicker'
+import { addDuration, ControlledDatePicker, subtractDuration } from '../../../src'
 
 const meta = {
   title: 'User Action/Date',

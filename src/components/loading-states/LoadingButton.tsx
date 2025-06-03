@@ -1,7 +1,6 @@
 import clsx from 'clsx'
 import type { SolidButtonProps } from '../user-action/Button'
-import { ButtonSizePaddings } from '../user-action/Button'
-import { SolidButton } from '../user-action/Button'
+import { ButtonSizePaddings, SolidButton } from '../user-action/Button'
 import { noop } from '../../util/noop'
 import { Helpwave } from '../icons-and-geometry/Helpwave'
 
@@ -21,7 +20,7 @@ export const LoadingButton = ({ isLoading = false, size = 'medium', onClick, ...
           </div>
         )
       }
-      <SolidButton {...rest} disabled={rest.disabled} onClick={isLoading ? noop: onClick}/>
+      <SolidButton {...rest} disabled={rest.disabled} onClick={isLoading ? noop : onClick}/>
     </div>
   )
 }

@@ -1,7 +1,6 @@
 import type { ReactNode } from 'react'
-import React from 'react'
+import React, { useCallback, useEffect, useMemo, useRef, useState } from 'react'
 import clsx from 'clsx'
-import { useCallback, useEffect, useMemo, useRef, useState } from 'react'
 import { ChevronLeft, ChevronRight } from 'lucide-react'
 import { createLoopingListWithIndex, range } from '../../util/array'
 import { clamp } from '../../util/math'
@@ -61,21 +60,21 @@ type CarouselInformation = {
 }
 
 export const Carousel = ({
-  children,
-  animationTime = 200,
-  isLooping = false,
-  isAutoLooping = false,
-  autoLoopingTimeOut = 5000,
-  autoLoopAnimationTime = 500,
-  hintNext = false,
-  arrows = false,
-  dots = true,
-  overScrollThreshold = 0.1,
-  blurColor = 'from-white',
-  className = '',
-  heightClassName = 'h-[24rem]',
-  widthClassName = 'w-[70%] desktop:w-1/2',
-}: CarouselProps) => {
+                           children,
+                           animationTime = 200,
+                           isLooping = false,
+                           isAutoLooping = false,
+                           autoLoopingTimeOut = 5000,
+                           autoLoopAnimationTime = 500,
+                           hintNext = false,
+                           arrows = false,
+                           dots = true,
+                           overScrollThreshold = 0.1,
+                           blurColor = 'from-white',
+                           className = '',
+                           heightClassName = 'h-[24rem]',
+                           widthClassName = 'w-[70%] desktop:w-1/2',
+                         }: CarouselProps) => {
   if (isAutoLooping && !isLooping) {
     console.error('When isAutoLooping is true, isLooping should also be true')
     isLooping = true

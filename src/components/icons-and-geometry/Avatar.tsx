@@ -75,29 +75,29 @@ export const AvatarGroup = ({
   const notDisplayedProfiles = avatars.length - maxShownProfiles
   const avatarGroupWidth = diameter * (stackingOverlap * (displayedProfiles.length - 1) + 1)
   return (
-      <div className="row relative" style={{ height: diameter + 'px' }}>
-        <div style={{ width: avatarGroupWidth + 'px' }}>
-          {displayedProfiles.map((avatar, index) => (
-              <div
-                  key={index}
-                  className="absolute"
-                  style={{ left: (index * diameter * stackingOverlap) + 'px', zIndex: maxShownProfiles - index }}
-              >
-                <Avatar avatarUrl={avatar.avatarUrl} alt={avatar.alt} size={size}/>
-              </div>
-          ))}
-        </div>
-        {
-            notDisplayedProfiles > 0 && (
-                <div
-                    className="truncate row items-center"
-                    style={{ fontSize: (diameter / 2) + 'px', marginLeft: (1 + diameter / 16) + 'px' }}
-                >
-                  <span>+ {notDisplayedProfiles}</span>
-                </div>
-            )
-        }
+    <div className="row relative" style={{ height: diameter + 'px' }}>
+      <div style={{ width: avatarGroupWidth + 'px' }}>
+        {displayedProfiles.map((avatar, index) => (
+          <div
+            key={index}
+            className="absolute"
+            style={{ left: (index * diameter * stackingOverlap) + 'px', zIndex: maxShownProfiles - index }}
+          >
+            <Avatar avatarUrl={avatar.avatarUrl} alt={avatar.alt} size={size}/>
+          </div>
+        ))}
       </div>
+      {
+        notDisplayedProfiles > 0 && (
+          <div
+            className="truncate row items-center"
+            style={{ fontSize: (diameter / 2) + 'px', marginLeft: (1 + diameter / 16) + 'px' }}
+          >
+            <span>+ {notDisplayedProfiles}</span>
+          </div>
+        )
+      }
+    </div>
   )
 }
 

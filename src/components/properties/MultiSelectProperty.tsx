@@ -1,11 +1,11 @@
 import { List } from 'lucide-react'
 import clsx from 'clsx'
-import type { Language } from '../../localization/LanguageProvider'
+import type { Language } from '../../localization/util'
 import type { PropsForTranslation } from '../../localization/useTranslation'
 import { useTranslation } from '../../localization/useTranslation'
 import type { MultiSelectProps } from '../user-action/MultiSelect'
 import { MultiSelect } from '../user-action/MultiSelect'
-import { Chip } from '../layout-and-navigation/Chip'
+import { ChipList } from '../layout-and-navigation/Chip'
 import type { PropertyBaseProps } from './PropertyBase'
 import { PropertyBase } from './PropertyBase'
 
@@ -29,14 +29,14 @@ export type MultiSelectPropertyProps<T> =
  * An Input for MultiSelect properties
  */
 export const MultiSelectProperty = <T, >({
-  overwriteTranslation,
-  options,
-  name,
-  readOnly = false,
-  softRequired,
-  onRemove,
-  ...multiSelectProps
-}: PropsForTranslation<MultiSelectPropertyTranslation, MultiSelectPropertyProps<T>>) => {
+                                           overwriteTranslation,
+                                           options,
+                                           name,
+                                           readOnly = false,
+                                           softRequired,
+                                           onRemove,
+                                           ...multiSelectProps
+                                         }: PropsForTranslation<MultiSelectPropertyTranslation, MultiSelectPropertyProps<T>>) => {
   const translation = useTranslation(defaultMultiSelectPropertyTranslation, overwriteTranslation)
   const hasValue = options.some(value => value.selected)
   let triggerClassName: string
@@ -66,9 +66,7 @@ export const MultiSelectProperty = <T, >({
                 return (<span>Select</span>)
               }
               return (
-                <Chip
-                  list={selected.map(value => ({ children: value.label }))}
-                />
+                <ChipList list={selected.map(value => ({ children: value.label }))}/>
               )
             }}
             options={options}

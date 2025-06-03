@@ -43,11 +43,11 @@ export const ASTNodeInterpreter = ({
       return (<span className="font-bold font-space no-underline">helpwave</span>)
     case 'none':
       return isRoot ? (
-<span className={className}>{node.children.map((value, index) => (
-<ASTNodeInterpreter key={index}
-                                                                                                           node={value}/>
-))}</span>
-) :
+          <span className={className}>{node.children.map((value, index) => (
+            <ASTNodeInterpreter key={index}
+                                node={value}/>
+          ))}</span>
+        ) :
         <>{node.children.map((value, index) => <ASTNodeInterpreter key={index} node={value}/>)}</>
     case 'bold':
       return <b>{node.children.map((value, index) => <ASTNodeInterpreter key={index} node={value}/>)}</b>

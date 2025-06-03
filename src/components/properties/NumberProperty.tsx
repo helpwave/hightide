@@ -2,7 +2,7 @@ import { Binary } from 'lucide-react'
 import clsx from 'clsx'
 import { noop } from '../../util/noop'
 import { Input } from '../user-action/Input'
-import type { Language } from '../../localization/LanguageProvider'
+import type { Language } from '../../localization/util'
 import type { PropsForTranslation } from '../../localization/useTranslation'
 import { useTranslation } from '../../localization/useTranslation'
 import type { PropertyBaseProps } from './PropertyBase'
@@ -32,15 +32,15 @@ export type NumberPropertyProps = Omit<PropertyBaseProps, 'icon' | 'input' | 'ha
  * An Input for number properties
  */
 export const NumberProperty = ({
-  overwriteTranslation,
-  value,
-  onChange = noop,
-  onRemove = noop,
-  onEditComplete = noop,
-  readOnly,
-  suffix,
-  ...baseProps
-}: PropsForTranslation<NumberPropertyTranslation, NumberPropertyProps>) => {
+                                 overwriteTranslation,
+                                 value,
+                                 onChange = noop,
+                                 onRemove = noop,
+                                 onEditComplete = noop,
+                                 readOnly,
+                                 suffix,
+                                 ...baseProps
+                               }: PropsForTranslation<NumberPropertyTranslation, NumberPropertyProps>) => {
   const translation = useTranslation(defaultNumberPropertyTranslation, overwriteTranslation)
   const hasValue = value !== undefined
 

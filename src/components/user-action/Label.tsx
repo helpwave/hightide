@@ -20,11 +20,11 @@ export type LabelProps = {
  * A Label component
  */
 export const Label = ({
-  children,
-  name,
-  labelType = 'labelSmall',
-  ...props
-}: LabelProps) => {
+                        children,
+                        name,
+                        labelType = 'labelSmall',
+                        ...props
+                      }: LabelProps) => {
   return (
     <label {...props}>
       {children ? children : (<span className={styleMapping[labelType]}>{name}</span>)}

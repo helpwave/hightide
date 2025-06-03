@@ -1,5 +1,5 @@
 import { Check, ChevronLeft, ChevronRight } from 'lucide-react'
-import type { Language } from '../../localization/LanguageProvider'
+import type { Language } from '../../localization/util'
 import type { PropsForTranslation } from '../../localization/useTranslation'
 import { useTranslation } from '../../localization/useTranslation'
 import { range } from '../../util/array'
@@ -43,13 +43,13 @@ export type StepperBarProps = {
  * A Component for stepping
  */
 export const StepperBar = ({
-  overwriteTranslation,
-  stepper,
-  onChange,
-  onFinish,
-  showDots = true,
-  className = '',
-}: PropsForTranslation<StepperBarTranslation, StepperBarProps>) => {
+                             overwriteTranslation,
+                             stepper,
+                             onChange,
+                             onFinish,
+                             showDots = true,
+                             className = '',
+                           }: PropsForTranslation<StepperBarTranslation, StepperBarProps>) => {
   const translation = useTranslation(defaultStepperBarTranslation, overwriteTranslation)
   const dots = range(0, stepper.lastStep)
   const { step, seenSteps, lastStep } = stepper
@@ -83,14 +83,14 @@ export const StepperBar = ({
               key={index}
               onClick={() => seen && update(index)}
               className={clsx('rounded-full w-4 h-4', {
-                'bg-primary hover:brightness-75': index === step && seen,
-                'bg-primary/40 hover:bg-primary': index !== step && seen,
-                'bg-gray-200 outline-transparent': !seen,
-              },
-              {
-                'cursor-pointer': seen,
-                'cursor-not-allowed': !seen,
-              })}
+                  'bg-primary hover:brightness-75': index === step && seen,
+                  'bg-primary/40 hover:bg-primary': index !== step && seen,
+                  'bg-gray-200 outline-transparent': !seen,
+                },
+                {
+                  'cursor-pointer': seen,
+                  'cursor-not-allowed': !seen,
+                })}
             />
           )
         })}

@@ -1,6 +1,5 @@
 import type { Dispatch, PropsWithChildren, SetStateAction } from 'react'
-import { useEffect, useState } from 'react'
-import { createContext, useContext } from 'react'
+import { createContext, useContext, useEffect, useState } from 'react'
 import { useLocalStorage } from '../hooks/useLocalStorage'
 import type { Language } from './util'
 import { languages, LanguageUtil } from './util'
@@ -10,7 +9,10 @@ export type LanguageContextValue = {
   setLanguage: Dispatch<SetStateAction<Language>>,
 }
 
-export const LanguageContext = createContext<LanguageContextValue>({ language: LanguageUtil.DEFAULT_LANGUAGE, setLanguage: (v) => v })
+export const LanguageContext = createContext<LanguageContextValue>({
+  language: LanguageUtil.DEFAULT_LANGUAGE,
+  setLanguage: (v) => v
+})
 
 export const useLanguage = () => useContext(LanguageContext)
 
@@ -32,7 +34,7 @@ export const LanguageProvider = ({ initialLanguage, children }: PropsWithChildre
   const [storedLanguage, setStoredLanguage] = useLocalStorage<Language>('language', initialLanguage ?? LanguageUtil.DEFAULT_LANGUAGE)
 
   useEffect(() => {
-    if(language !== initialLanguage && initialLanguage){
+    if (language !== initialLanguage && initialLanguage) {
       console.warn('LanguageProvider initial state changed: Prefer using languageProvider\'s setLanguage instead')
       setLanguage(initialLanguage)
     }
@@ -52,8 +54,8 @@ export const LanguageProvider = ({ initialLanguage, children }: PropsWithChildre
     const LanguageToTestAgainst = Object.values(languages)
 
     const matchingBrowserLanguage = window.navigator.languages
-        .map(language => LanguageToTestAgainst.find((test) => language === test || language.split('-')[0] === test))
-        .filter(entry => entry !== undefined)
+      .map(language => LanguageToTestAgainst.find((test) => language === test || language.split('-')[0] === test))
+      .filter(entry => entry !== undefined)
 
     if (matchingBrowserLanguage.length === 0) return
 
@@ -62,11 +64,11 @@ export const LanguageProvider = ({ initialLanguage, children }: PropsWithChildre
   }, []) // eslint-disable-line react-hooks/exhaustive-deps
 
   return (
-      <LanguageContext.Provider value={{
-        language,
-        setLanguage
-      }}>
-        {children}
-      </LanguageContext.Provider>
+    <LanguageContext.Provider value={{
+      language,
+      setLanguage
+    }}>
+      {children}
+    </LanguageContext.Provider>
   )
 }

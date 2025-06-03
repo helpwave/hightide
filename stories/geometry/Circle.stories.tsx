@@ -1,5 +1,5 @@
 import type { Meta, StoryObj } from '@storybook/react'
-import { Circle } from '../../src/components/icons-and-geometry/Circle'
+import { Circle } from '../../src'
 
 const meta = {
   title: 'Geometry/Circle',

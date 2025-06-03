@@ -31,7 +31,7 @@ export type PropsForTranslation<
 export const useTranslation = <Translation extends Record<string, unknown>>(
   defaults: Record<Language, Translation>,
   translationOverwrite: OverwriteTranslationType<Translation> = {}
-) : Translation => {
+): Translation => {
   const { language: languageProp, translation: overwrite } = translationOverwrite
   const { language: inferredLanguage } = useLanguage()
   const usedLanguage = languageProp ?? inferredLanguage

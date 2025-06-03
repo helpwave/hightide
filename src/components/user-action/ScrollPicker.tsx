@@ -184,7 +184,7 @@ export const ScrollPicker = <T, >({
     }
 
     // TODO this is not the right value for the bottom entry
-    return clamp(1- (opacityValue / max))
+    return clamp(1 - (opacityValue / max))
   }
 
   return (

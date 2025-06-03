@@ -4,7 +4,9 @@ import type { MultiSelectOption } from '../../../src/components/user-action/Mult
 import type { MultiSelectPropertyProps } from '../../../src/components/properties/MultiSelectProperty'
 import { MultiSelectProperty } from '../../../src/components/properties/MultiSelectProperty'
 
-type MultiSelectPropertyExample = Omit<MultiSelectPropertyProps<string>, 'onChange' | 'onRemove' | 'search' | 'selectedDisplay' > & {
+type MultiSelectPropertyExample =
+  Omit<MultiSelectPropertyProps<string>, 'onChange' | 'onRemove' | 'search' | 'selectedDisplay'>
+  & {
   enableSearch: boolean,
 }
 
@@ -12,11 +14,11 @@ type MultiSelectPropertyExample = Omit<MultiSelectPropertyProps<string>, 'onChan
  * Example for using the MultiSelectProperty
  */
 const MultiSelectPropertyExample = ({
-                                             options,
-                                             hintText,
-                                             enableSearch,
-                                             ...restProps
-                                           }: MultiSelectPropertyExample) => {
+                                      options,
+                                      hintText,
+                                      enableSearch,
+                                      ...restProps
+                                    }: MultiSelectPropertyExample) => {
   const [usedOptions, setUsedOptions] = useState<MultiSelectOption<string>[]>(options)
 
   useEffect(() => {
@@ -28,14 +30,14 @@ const MultiSelectPropertyExample = ({
   }, [hintText, options])
 
   return (
-      <MultiSelectProperty
-          {...restProps}
-          options={usedOptions}
-          search={enableSearch ? { initialSearch: '', searchMapping: value => [value.label] } : undefined}
-          onChange={setUsedOptions}
-          onRemove={() => setUsedOptions(usedOptions.map(value => ({ ...value, selected: false })))}
-          hintText={hintText}
-      />
+    <MultiSelectProperty
+      {...restProps}
+      options={usedOptions}
+      search={enableSearch ? { initialSearch: '', searchMapping: value => [value.label] } : undefined}
+      onChange={setUsedOptions}
+      onRemove={() => setUsedOptions(usedOptions.map(value => ({ ...value, selected: false })))}
+      hintText={hintText}
+    />
   )
 }
 

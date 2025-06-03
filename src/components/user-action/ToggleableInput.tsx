@@ -1,5 +1,5 @@
-import { useState } from 'react'
 import type { HTMLInputTypeAttribute, InputHTMLAttributes } from 'react'
+import { useState } from 'react'
 import { Pencil } from 'lucide-react'
 import clsx from 'clsx'
 import { useSaveDelay } from '../../hooks/useSaveDelay'
@@ -36,18 +36,18 @@ type InputProps = {
  * The State is managed by the parent
  */
 export const ToggleableInput = ({
-  id,
-  type = 'text',
-  value,
-  onChange = noop,
-  labelClassName = '',
-  initialState = 'display',
-  size = 20,
-  disclaimer,
-  onBlur,
-  onEditCompleted = noop,
-  ...restProps
-}: InputProps) => {
+                                  id,
+                                  type = 'text',
+                                  value,
+                                  onChange = noop,
+                                  labelClassName = '',
+                                  initialState = 'display',
+                                  size = 20,
+                                  disclaimer,
+                                  onBlur,
+                                  onEditCompleted = noop,
+                                  ...restProps
+                                }: InputProps) => {
   const [isEditing, setIsEditing] = useState(initialState !== 'display')
   const { restartTimer, clearUpdateTimer } = useSaveDelay(() => undefined, 3000)
 
@@ -103,7 +103,7 @@ export const ToggleableInput = ({
         </span>
           )}
         </div>
-        <Pencil className={clsx(`min-w-[${size}px] cursor-pointer`, { 'text-transparent': isEditing })} size={size} />
+        <Pencil className={clsx(`min-w-[${size}px] cursor-pointer`, { 'text-transparent': isEditing })} size={size}/>
       </div>
       {(isEditing && disclaimer) && (
         <label className="text-negative">

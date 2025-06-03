@@ -1,4 +1,4 @@
-import { useRef, type PropsWithChildren, type ReactNode, type RefObject } from 'react'
+import { type PropsWithChildren, type ReactNode, type RefObject, useRef } from 'react'
 import clsx from 'clsx'
 import { useOutsideClick } from '../../hooks/useOutsideClick'
 import { useHoverState } from '../../hooks/useHoverState'
@@ -19,11 +19,11 @@ export type MenuItemProps = {
   className?: string,
 }
 const MenuItem = ({
-  children,
-  onClick,
-  alignment = 'left',
-  className
-}: PropsWithChildren<MenuItemProps>) => (
+                    children,
+                    onClick,
+                    alignment = 'left',
+                    className
+                  }: PropsWithChildren<MenuItemProps>) => (
   <div
     className={clsx('block px-3 py-1 bg-menu-background text-menu-text hover:brightness-90', {
       'text-right': alignment === 'right',
@@ -40,12 +40,12 @@ const MenuItem = ({
  * A Menu Component to allow the user to see different functions
  */
 const Menu = <T extends HTMLElement>({
-  trigger,
-  children,
-  alignment = 'tl',
-  showOnHover = false,
-  menuClassName = '',
-}: MenuProps<T>) => {
+                                       trigger,
+                                       children,
+                                       alignment = 'tl',
+                                       showOnHover = false,
+                                       menuClassName = '',
+                                     }: MenuProps<T>) => {
   const { isHovered: isOpen, setIsHovered: setIsOpen, handlers } = useHoverState({ isDisabled: !showOnHover })
   const triggerRef = useRef<T>(null)
   const menuRef = useRef<HTMLDivElement>(null)

@@ -1,7 +1,7 @@
-import type { PropsWithChildren, ButtonHTMLAttributes, ReactNode } from 'react'
+import type { ButtonHTMLAttributes, PropsWithChildren, ReactNode } from 'react'
 import clsx from 'clsx'
 
-export type SolidButtonColor = 'primary' | 'secondary' | 'tertiary' | 'positive' | 'warning'| 'negative'
+export type SolidButtonColor = 'primary' | 'secondary' | 'tertiary' | 'positive' | 'warning' | 'negative'
 export type OutlineButtonColor = 'primary'
 export type TextButtonColor = 'negative' | 'neutral'
 

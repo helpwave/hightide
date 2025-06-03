@@ -4,17 +4,17 @@ import { useEffect, useState } from 'react'
 import type { SearchableSelectProps } from '../../../src/components/user-action/SearchableSelect'
 import { SearchableSelect } from '../../../src/components/user-action/SearchableSelect'
 
-type SearchableSelectExampleProps = Omit<SearchableSelectProps<string>, 'searchMapping'|'additionalItems'>
+type SearchableSelectExampleProps = Omit<SearchableSelectProps<string>, 'searchMapping' | 'additionalItems'>
 
 /**
  * Example for a Searchable select
  */
 const SearchableSelectExample = ({
-                                          value,
-                                          options,
-                                          onChange,
-                                          ...props
-                                        }: SearchableSelectExampleProps) => {
+                                   value,
+                                   options,
+                                   onChange,
+                                   ...props
+                                 }: SearchableSelectExampleProps) => {
   const [selected, setSelected] = useState<string | undefined>(value)
 
   useEffect(() => {
@@ -22,19 +22,18 @@ const SearchableSelectExample = ({
   }, [options, value])
 
   return (
-      <SearchableSelect
-          {...props}
-          value={selected}
-          options={options}
-          onChange={value => {
-            setSelected(value)
-            onChange(value)
-          }}
-          searchMapping={value1 => [value1.value]}
-      />
+    <SearchableSelect
+      {...props}
+      value={selected}
+      options={options}
+      onChange={value => {
+        setSelected(value)
+        onChange(value)
+      }}
+      searchMapping={value1 => [value1.value]}
+    />
   )
 }
-
 
 
 const meta = {

@@ -1,6 +1,6 @@
 import { Text } from 'lucide-react'
 import clsx from 'clsx'
-import type { Language } from '../../localization/LanguageProvider'
+import type { Language } from '../../localization/util'
 import type { PropsForTranslation } from '../../localization/useTranslation'
 import { useTranslation } from '../../localization/useTranslation'
 import { Textarea } from '../user-action/Textarea'
@@ -31,14 +31,14 @@ export type TextPropertyProps = Omit<PropertyBaseProps, 'icon' | 'input' | 'hasV
  * An Input for Text properties
  */
 export const TextProperty = ({
-  overwriteTranslation,
-  value,
-  readOnly,
-  onChange = noop,
-  onRemove = noop,
-  onEditComplete = noop,
-  ...baseProps
-}: PropsForTranslation<TextPropertyTranslation, TextPropertyProps>) => {
+                               overwriteTranslation,
+                               value,
+                               readOnly,
+                               onChange = noop,
+                               onRemove = noop,
+                               onEditComplete = noop,
+                               ...baseProps
+                             }: PropsForTranslation<TextPropertyTranslation, TextPropertyProps>) => {
   const translation = useTranslation(defaultTextPropertyTranslation, overwriteTranslation)
   const hasValue = value !== undefined
 
@@ -47,7 +47,7 @@ export const TextProperty = ({
       {...baseProps}
       onRemove={onRemove}
       hasValue={hasValue}
-      icon={<Text size={16} />}
+      icon={<Text size={16}/>}
       input={({ softRequired }) => (
         <div
           className={clsx('row grow pt-2 pb-1 px-4 cursor-pointer', { 'text-warning': softRequired && !hasValue })}

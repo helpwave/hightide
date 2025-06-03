@@ -1,9 +1,8 @@
-import type { WeekDay } from '../../util/date'
-import { isInTimeSpan } from '../../util/date'
-import { equalDate, getWeeksForCalenderMonth } from '../../util/date'
-import { noop } from '../../util/noop'
+import type { WeekDay } from '@/util/date'
+import { equalDate, getWeeksForCalenderMonth, isInTimeSpan } from '@/util/date'
+import { noop } from '@/util/noop'
 import clsx from 'clsx'
-import { useLocale } from '../../localization/LanguageProvider'
+import { useLocale } from '@/localization/LanguageProvider'
 import { useEffect, useState } from 'react'
 
 export type DayPickerProps = {
@@ -21,7 +20,7 @@ export type DayPickerProps = {
  * A component for selecting a day of a month
  */
 export const DayPicker = ({
-  displayedMonth,
+                            displayedMonth,
                             selected,
                             start,
                             end,

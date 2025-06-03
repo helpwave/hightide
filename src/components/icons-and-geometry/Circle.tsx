@@ -7,11 +7,11 @@ export type CircleProps = Omit<HTMLAttributes<HTMLDivElement>, 'children' | 'col
 }
 
 export const Circle = ({
-  radius = 20,
-  className = 'bg-primary',
-  style,
-  ...restProps
-}: CircleProps) => {
+                         radius = 20,
+                         className = 'bg-primary',
+                         style,
+                         ...restProps
+                       }: CircleProps) => {
   const size = radius * 2
   return (
     <div

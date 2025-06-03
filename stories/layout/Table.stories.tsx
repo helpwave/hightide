@@ -1,13 +1,18 @@
 import type { Meta, StoryObj } from '@storybook/react'
 import { useEffect, useState } from 'react'
-import type { TableProps, TableSortingFunctionType, TableSortingType, TableState } from '../../src/components/layout-and-navigation/Table'
+import type {
+  TableProps,
+  TableSortingFunctionType,
+  TableSortingType,
+  TableState
+} from '../../src/components/layout-and-navigation/Table'
 import {
   addElementToTable,
   defaultTableStatePagination,
   defaultTableStateSelection,
   removeFromTableSelection,
-  Table,
-  SortButton
+  SortButton,
+  Table
 } from '../../src/components/layout-and-navigation/Table'
 import { Input } from '../../src/components/user-action/Input'
 import { SolidButton, TextButton } from '../../src/components/user-action/Button'
@@ -62,102 +67,102 @@ const TableExample = ({ data: initialData }: Pick<TableProps<DataType>, 'data'>)
   }
 
   return (
-      <div className="col gap-y-12 items-center">
-        <Table
-            stateManagement={[tableState, (newTableState) => {
-              setTableState(newTableState)
-              setData(data)
-            }]}
-            data={data}
-            identifierMapping={idMapping}
-            rowMappingToCells={dataObject => [
-              <span key="id"
-                    className="textstyle-title-md w-[100px] text-ellipsis overflow-hidden block">{dataObject.id}</span>,
-              <Input key="name" value={dataObject.name} onChange={text => {
-                setData(data.map(value => value.id === dataObject.id ? { ...dataObject, name: text } : value))
-                setSorting(undefined)
-              }}/>,
-              <Input key="age" type="number" value={dataObject.age.toString()} onChange={text => {
-                setData(data.map(value => value.id === dataObject.id ? {
-                  ...dataObject,
-                  age: parseInt(text)
-                } : value))
-                setSorting(undefined)
-              }}/>,
-              <TextButton
-                  key="delete"
-                  color="negative"
-                  onClick={() => {
-                    const newData = data.filter(value => value.id !== dataObject.id)
-                    setData(newData)
-                    setTableState(removeFromTableSelection(tableState, [dataObject], data.length, idMapping))
-                  }}
-              >Delete</TextButton>
-            ]}
-            header={[
-              <SortButton
-                  key="headerId"
-                  ascending={sortingKey === 'id' ? ascending : undefined}
-                  onClick={newTableSorting => {
-                    setSorting(['id', newTableSorting])
-                    setData(data.sort(sortingFunctions.id[newTableSorting]))
-                  }}
-              >
-                <span className="textstyle-table-header">Id</span>
-              </SortButton>,
-              <SortButton
-                  key="name"
-                  ascending={sortingKey === 'name' ? ascending : undefined}
-                  onClick={newTableSorting => {
-                    setSorting(['name', newTableSorting])
-                    setData(data.sort(sortingFunctions.name[newTableSorting]))
-                  }}
-              >
-                <span className="textstyle-table-header">Name</span>
-              </SortButton>,
-              <SortButton
-                  key="name"
-                  ascending={sortingKey === 'age' ? ascending : undefined}
-                  onClick={newTableSorting => {
-                    setSorting(['age', newTableSorting])
-                    setData(data.sort(sortingFunctions.age[newTableSorting]))
-                  }}
-              >
-                <span key="age" className="textstyle-table-header">age</span>
-              </SortButton>,
-              <></>
-            ]}
-        />
-        <div className="row gap-x-2">
-          <SolidButton
-              className="w-auto"
-              onClick={() => {
-                const newData = {
-                  id: Math.random().toString(),
-                  name: 'Name ' + data.length,
-                  age: Math.ceil(Math.random() * 100)
-                }
-                const withNewData = [...data, newData]
-                const sorted = sortingKey ? withNewData.sort(sortingFunctions[sortingKey][ascending]) : withNewData
-                setData(sorted)
-                setTableState(addElementToTable(tableState, sorted, newData, idMapping))
-              }}
-          >
-            {'Add Data'}
-          </SolidButton>
+    <div className="col gap-y-12 items-center">
+      <Table
+        stateManagement={[tableState, (newTableState) => {
+          setTableState(newTableState)
+          setData(data)
+        }]}
+        data={data}
+        identifierMapping={idMapping}
+        rowMappingToCells={dataObject => [
+          <span key="id"
+                className="textstyle-title-md w-[100px] text-ellipsis overflow-hidden block">{dataObject.id}</span>,
+          <Input key="name" value={dataObject.name} onChange={text => {
+            setData(data.map(value => value.id === dataObject.id ? { ...dataObject, name: text } : value))
+            setSorting(undefined)
+          }}/>,
+          <Input key="age" type="number" value={dataObject.age.toString()} onChange={text => {
+            setData(data.map(value => value.id === dataObject.id ? {
+              ...dataObject,
+              age: parseInt(text)
+            } : value))
+            setSorting(undefined)
+          }}/>,
           <TextButton
-              color="negative"
-              onClick={() => {
-                const selectedData = data.filter((d) => tableState.selection?.currentSelection.includes(idMapping(d)))
-                const unselectedData = data.filter((d) => !tableState.selection?.currentSelection.includes(idMapping(d)))
-                setData(unselectedData)
-                setTableState(removeFromTableSelection(tableState, selectedData, data.length, idMapping))
-              }}
+            key="delete"
+            color="negative"
+            onClick={() => {
+              const newData = data.filter(value => value.id !== dataObject.id)
+              setData(newData)
+              setTableState(removeFromTableSelection(tableState, [dataObject], data.length, idMapping))
+            }}
+          >Delete</TextButton>
+        ]}
+        header={[
+          <SortButton
+            key="headerId"
+            ascending={sortingKey === 'id' ? ascending : undefined}
+            onClick={newTableSorting => {
+              setSorting(['id', newTableSorting])
+              setData(data.sort(sortingFunctions.id[newTableSorting]))
+            }}
           >
-            {'Remove all selected'}
-          </TextButton>
-        </div>
+            <span className="textstyle-table-header">Id</span>
+          </SortButton>,
+          <SortButton
+            key="name"
+            ascending={sortingKey === 'name' ? ascending : undefined}
+            onClick={newTableSorting => {
+              setSorting(['name', newTableSorting])
+              setData(data.sort(sortingFunctions.name[newTableSorting]))
+            }}
+          >
+            <span className="textstyle-table-header">Name</span>
+          </SortButton>,
+          <SortButton
+            key="name"
+            ascending={sortingKey === 'age' ? ascending : undefined}
+            onClick={newTableSorting => {
+              setSorting(['age', newTableSorting])
+              setData(data.sort(sortingFunctions.age[newTableSorting]))
+            }}
+          >
+            <span key="age" className="textstyle-table-header">age</span>
+          </SortButton>,
+          <></>
+        ]}
+      />
+      <div className="row gap-x-2">
+        <SolidButton
+          className="w-auto"
+          onClick={() => {
+            const newData = {
+              id: Math.random().toString(),
+              name: 'Name ' + data.length,
+              age: Math.ceil(Math.random() * 100)
+            }
+            const withNewData = [...data, newData]
+            const sorted = sortingKey ? withNewData.sort(sortingFunctions[sortingKey][ascending]) : withNewData
+            setData(sorted)
+            setTableState(addElementToTable(tableState, sorted, newData, idMapping))
+          }}
+        >
+          {'Add Data'}
+        </SolidButton>
+        <TextButton
+          color="negative"
+          onClick={() => {
+            const selectedData = data.filter((d) => tableState.selection?.currentSelection.includes(idMapping(d)))
+            const unselectedData = data.filter((d) => !tableState.selection?.currentSelection.includes(idMapping(d)))
+            setData(unselectedData)
+            setTableState(removeFromTableSelection(tableState, selectedData, data.length, idMapping))
+          }}
+        >
+          {'Remove all selected'}
+        </TextButton>
       </div>
+    </div>
   )
 }
 

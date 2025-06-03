@@ -1,5 +1,5 @@
 import { AlertOctagon } from 'lucide-react'
-import type { Language } from '../../localization/LanguageProvider'
+import type { Language } from '../../localization/util'
 import type { PropsForTranslation } from '../../localization/useTranslation'
 import { useTranslation } from '../../localization/useTranslation'
 import clsx from 'clsx'
@@ -26,10 +26,10 @@ export type ErrorComponentProps = {
  * The Component to show when an error occurred
  */
 export const ErrorComponent = ({
-  overwriteTranslation,
-  errorText,
-  classname
-}: PropsForTranslation<ErrorComponentTranslation, ErrorComponentProps>) => {
+                                 overwriteTranslation,
+                                 errorText,
+                                 classname
+                               }: PropsForTranslation<ErrorComponentTranslation, ErrorComponentProps>) => {
   const translation = useTranslation(defaultErrorComponentTranslation, overwriteTranslation)
   return (
     <div className={clsx('col items-center justify-center gap-y-4 w-full h-24', classname)}>

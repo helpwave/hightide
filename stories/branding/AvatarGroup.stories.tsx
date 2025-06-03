@@ -1,5 +1,5 @@
 import type { Meta, StoryObj } from '@storybook/react'
-import { AvatarGroup } from '../../src/components/icons-and-geometry/Avatar'
+import { AvatarGroup } from '../../src'
 
 const meta = {
   title: 'Branding/Avatar',

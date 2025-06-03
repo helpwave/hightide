@@ -1,5 +1,5 @@
 import type { Meta, StoryObj } from '@storybook/react'
-import { OutlineButton } from '../../../src/components/user-action/Button'
+import { OutlineButton } from '../../../src'
 import { action } from '@storybook/addon-actions'
 
 const meta = {

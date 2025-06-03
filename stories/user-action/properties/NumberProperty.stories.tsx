@@ -9,9 +9,9 @@ type NumberPropertyExampleProps = Omit<NumberPropertyProps, 'onChange' | 'onRemo
  * Example for using the NumberProperty
  */
 const NumberPropertyExample = ({
-                                        value,
-                                        ...restProps
-                                      }: NumberPropertyExampleProps) => {
+                                 value,
+                                 ...restProps
+                               }: NumberPropertyExampleProps) => {
   const [usedValue, setUsedValue] = useState<number | undefined>(value)
 
   useEffect(() => {
@@ -19,12 +19,12 @@ const NumberPropertyExample = ({
   }, [value])
 
   return (
-      <NumberProperty
-          {...restProps}
-          onChange={setUsedValue}
-          onRemove={() => setUsedValue(undefined)}
-          value={usedValue}
-      />
+    <NumberProperty
+      {...restProps}
+      onChange={setUsedValue}
+      onRemove={() => setUsedValue(undefined)}
+      value={usedValue}
+    />
   )
 }
 

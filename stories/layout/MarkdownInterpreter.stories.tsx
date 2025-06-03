@@ -1,5 +1,5 @@
 import type { Meta, StoryObj } from '@storybook/react'
-import { MarkdownInterpreter } from '../../src/components/layout-and-navigation/MarkdownInterpreter'
+import { MarkdownInterpreter } from '../../src'
 
 const meta = {
   title: 'Layout',

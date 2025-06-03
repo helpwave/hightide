@@ -1,8 +1,8 @@
-import { ChevronLast, ChevronLeft, ChevronFirst, ChevronRight } from 'lucide-react'
+import { ChevronFirst, ChevronLast, ChevronLeft, ChevronRight } from 'lucide-react'
 import clsx from 'clsx'
 import type { PropsForTranslation } from '../../localization/useTranslation'
 import { useTranslation } from '../../localization/useTranslation'
-import type { Language } from '../../localization/LanguageProvider'
+import type { Language } from '../../localization/util'
 
 type PaginationTranslation = {
   of: string,
@@ -26,14 +26,14 @@ export type PaginationProps = {
  * A Component showing the pagination allowing first, before, next and last page navigation
  */
 export const Pagination = ({
-  overwriteTranslation,
-  page,
-  numberOfPages,
-  onPageChanged
-}: PropsForTranslation<PaginationTranslation, PaginationProps>) => {
+                             overwriteTranslation,
+                             page,
+                             numberOfPages,
+                             onPageChanged
+                           }: PropsForTranslation<PaginationTranslation, PaginationProps>) => {
   const translation = useTranslation(defaultPaginationTranslations, overwriteTranslation)
 
-  const changePage = (page:number) => {
+  const changePage = (page: number) => {
     onPageChanged(page)
   }
 

@@ -1,13 +1,13 @@
 import { useEffect, useState } from 'react'
 import { ArrowDown, ArrowUp, ChevronDown } from 'lucide-react'
-import type { Language } from '../../localization/LanguageProvider'
-import type { PropsForTranslation } from '../../localization/useTranslation'
-import { useTranslation } from '../../localization/useTranslation'
-import { noop } from '../../util/noop'
-import { addDuration, isInTimeSpan, subtractDuration } from '../../util/date'
+import type { Language } from '@/localization/util'
+import { useLocale } from '@/localization/LanguageProvider'
+import type { PropsForTranslation } from '@/localization/useTranslation'
+import { useTranslation } from '@/localization/useTranslation'
+import { noop } from '@/util/noop'
+import { addDuration, isInTimeSpan, subtractDuration } from '@/util/date'
 import clsx from 'clsx'
 import { SolidButton, TextButton } from '../user-action/Button'
-import { useLocale } from '../../localization/LanguageProvider'
 import type { YearMonthPickerProps } from './YearMonthPicker'
 import { YearMonthPicker } from './YearMonthPicker'
 import type { DayPickerProps } from './DayPicker'
@@ -143,10 +143,10 @@ export const DatePicker = ({
  * Example for the Date Picker
  */
 export const ControlledDatePicker = ({
-                                    value = new Date(),
-                                    onChange = noop,
-                                    ...props
-                                  }: DatePickerProps) => {
+                                       value = new Date(),
+                                       onChange = noop,
+                                       ...props
+                                     }: DatePickerProps) => {
   const [date, setDate] = useState<Date>(value)
 
   useEffect(() => setDate(value), [value])

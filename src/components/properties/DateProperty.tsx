@@ -17,13 +17,13 @@ export type DatePropertyProps = Omit<PropertyBaseProps, 'icon' | 'input' | 'hasV
  * An Input for date properties
  */
 export const DateProperty = ({
-  value,
-  onChange = noop,
-  onEditComplete = noop,
-  readOnly,
-  type = 'dateTime',
-  ...baseProps
-}: DatePropertyProps) => {
+                               value,
+                               onChange = noop,
+                               onEditComplete = noop,
+                               readOnly,
+                               type = 'dateTime',
+                               ...baseProps
+                             }: DatePropertyProps) => {
   const hasValue = !!value
 
   const dateText = value ? (type === 'dateTime' ? formatDateTime(value) : formatDate(value)) : ''

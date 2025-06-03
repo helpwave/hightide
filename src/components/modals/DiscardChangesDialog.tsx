@@ -38,15 +38,15 @@ type DiscardChangesDialogProps = ModalProps & {
 }
 
 export const DiscardChangesDialog = ({
-  overwriteTranslation,
-  children,
-  title,
-  description,
-  onCancel,
-  onSave,
-  onDontSave,
-  ...modalProps
-}: PropsForTranslation<DiscardChangesDialogTranslation, PropsWithChildren<DiscardChangesDialogProps>>) => {
+                                       overwriteTranslation,
+                                       children,
+                                       title,
+                                       description,
+                                       onCancel,
+                                       onSave,
+                                       onDontSave,
+                                       ...modalProps
+                                     }: PropsForTranslation<DiscardChangesDialogTranslation, PropsWithChildren<DiscardChangesDialogProps>>) => {
   const translation = useTranslation(defaultDiscardChangesDialogTranslation, overwriteTranslation)
   return (
     <Modal

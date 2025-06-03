@@ -1,7 +1,6 @@
 import type { Meta, StoryObj } from '@storybook/react'
-import type { Language } from '../../src/localization/util'
-import type { PropsForTranslation } from '../../src/localization/useTranslation'
-import { useTranslation } from '../../src/localization/useTranslation'
+import type { Language, PropsForTranslation } from '../../src'
+import { useTranslation } from '../../src'
 
 type TranslationExampleTranslation = {
   welcome: string,
@@ -29,7 +28,10 @@ type TranslationExampleProps = {
 /**
  * Simple TranslationExample component to demonstrate some translations
  */
-const TranslationExample = ({ overwriteTranslation, name }:PropsForTranslation<TranslationExampleTranslation, TranslationExampleProps>) => {
+const TranslationExample = ({
+                              overwriteTranslation,
+                              name
+                            }: PropsForTranslation<TranslationExampleTranslation, TranslationExampleProps>) => {
   const translation = useTranslation(defaultTranslationExampleTranslations, overwriteTranslation)
   return (
     <p className="rounded bg-surface text-on-surface p-1 px-2">

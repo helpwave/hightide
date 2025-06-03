@@ -12,11 +12,11 @@ export type DividerInserterProps = Omit<HTMLAttributes<HTMLDivElement>, 'childre
  *  undefined elements are removed
  */
 export const DividerInserter = ({
-  children,
-  divider,
-  className,
-  ...restProps
-}: DividerInserterProps) => {
+                                  children,
+                                  divider,
+                                  className,
+                                  ...restProps
+                                }: DividerInserterProps) => {
   const nodes: ReactNode[] = []
 
   for (let index = 0; index < children.length; index++) {

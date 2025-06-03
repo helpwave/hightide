@@ -12,12 +12,12 @@ type DatePropertyExampleProps = DatePropertyProps & {
  * Example for using the DateProperty
  */
 const DatePropertyExample = ({
-                                      value,
-                                      onChange = noop,
-                                      onRemove = noop,
-                                      onEditComplete = noop,
-                                      ...restProps
-                                    }: DatePropertyExampleProps) => {
+                               value,
+                               onChange = noop,
+                               onRemove = noop,
+                               onEditComplete = noop,
+                               ...restProps
+                             }: DatePropertyExampleProps) => {
   const [usedDate, setUsedDate] = useState<Date | undefined>(value)
 
   useEffect(() => {
@@ -25,22 +25,22 @@ const DatePropertyExample = ({
   }, [value])
 
   return (
-      <DateProperty
-          {...restProps}
-          onChange={date => {
-            setUsedDate(date)
-            onChange(date)
-          }}
-          onEditComplete={date => {
-            setUsedDate(date)
-            onEditComplete(date)
-          }}
-          onRemove={() => {
-            setUsedDate(undefined)
-            onRemove()
-          }}
-          value={usedDate}
-      />
+    <DateProperty
+      {...restProps}
+      onChange={date => {
+        setUsedDate(date)
+        onChange(date)
+      }}
+      onEditComplete={date => {
+        setUsedDate(date)
+        onEditComplete(date)
+      }}
+      onRemove={() => {
+        setUsedDate(undefined)
+        onRemove()
+      }}
+      value={usedDate}
+    />
   )
 }
 

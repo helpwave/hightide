@@ -13,7 +13,7 @@ type ContentType = {
   value: ReactNode,
 }
 
-export type FAQItem = Pick<ExpandableProps, 'initialExpansion'| 'className'> & {
+export type FAQItem = Pick<ExpandableProps, 'initialExpansion' | 'className'> & {
   id: string,
   title: string,
   content: ContentType,
@@ -28,9 +28,9 @@ export type FAQSectionProps = {
  * Description
  */
 export const FAQSection = ({
-  entries,
-  expandableClassName
-}: FAQSectionProps) => {
+                             entries,
+                             expandableClassName
+                           }: FAQSectionProps) => {
   const chevronSize = 28
   return (
     <div className="col gap-y-4">
@@ -41,8 +41,8 @@ export const FAQSection = ({
           label={(<h3 id={id} className="textstyle-title-md">{title}</h3>)}
           clickOnlyOnHeader={false}
           icon={(expanded) => expanded ?
-              (<ChevronUp size={chevronSize} className="text-primary" style={{ minWidth: `${chevronSize}px` }}/>) :
-              (<ChevronDown size={chevronSize} className="text-primary"/>)
+            (<ChevronUp size={chevronSize} className="text-primary" style={{ minWidth: `${chevronSize}px` }}/>) :
+            (<ChevronDown size={chevronSize} className="text-primary"/>)
           }
           className={clsx('rounded-xl', expandableClassName)}
           headerClassName="px-6 py-4"

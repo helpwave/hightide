@@ -11,9 +11,9 @@ type TextPropertyExampleProps = Omit<TextPropertyProps, 'onChange' | 'onRemove'>
  * Example for using the TextProperty
  */
 const TextPropertyExample = ({
-                                      value,
-                                      ...restProps
-                                    }: TextPropertyExampleProps) => {
+                               value,
+                               ...restProps
+                             }: TextPropertyExampleProps) => {
   const [usedValue, setUsedValue] = useState<string | undefined>(value)
 
   useEffect(() => {
@@ -21,12 +21,12 @@ const TextPropertyExample = ({
   }, [value])
 
   return (
-      <TextProperty
-          {...restProps}
-          onChange={setUsedValue}
-          onRemove={() => setUsedValue(undefined)}
-          value={usedValue}
-      />
+    <TextProperty
+      {...restProps}
+      onChange={setUsedValue}
+      onRemove={() => setUsedValue(undefined)}
+      value={usedValue}
+    />
   )
 }
 

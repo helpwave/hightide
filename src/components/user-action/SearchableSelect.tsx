@@ -13,11 +13,11 @@ export type SearchableSelectProps<T> = SelectProps<T> & {
  * A Select where items can be searched
  */
 export const SearchableSelect = <T, >({
-  value,
-  options,
-  searchMapping,
-  ...selectProps
-}: SearchableSelectProps<T>) => {
+                                        value,
+                                        options,
+                                        searchMapping,
+                                        ...selectProps
+                                      }: SearchableSelectProps<T>) => {
   const [search, setSearch] = useState<string>('')
   const filteredOptions = MultiSearchWithMapping(search, options, searchMapping)
   return (
@@ -26,7 +26,7 @@ export const SearchableSelect = <T, >({
       options={filteredOptions}
       additionalItems={[(
         <div key="selectSearch" className="row gap-x-2 items-center">
-          <Input autoFocus={true} value={search} onChange={setSearch} />
+          <Input autoFocus={true} value={search} onChange={setSearch}/>
           <Search/>
         </div>
       )]}

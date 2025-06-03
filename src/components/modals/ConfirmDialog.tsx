@@ -51,15 +51,15 @@ export type ConfirmDialogProps = ModalProps & {
  * To require an answer omit the onBackgroundClick
  */
 export const ConfirmDialog = ({
-  overwriteTranslation,
-  children,
-  onCancel,
-  onConfirm,
-  onDecline,
-  confirmType = 'positive',
-  buttonOverwrites,
-  ...restProps
-}: PropsForTranslation<ConfirmDialogTranslation, PropsWithChildren<ConfirmDialogProps>>) => {
+                                overwriteTranslation,
+                                children,
+                                onCancel,
+                                onConfirm,
+                                onDecline,
+                                confirmType = 'positive',
+                                buttonOverwrites,
+                                ...restProps
+                              }: PropsForTranslation<ConfirmDialogTranslation, PropsWithChildren<ConfirmDialogProps>>) => {
   const translation = useTranslation(defaultConfirmDialogTranslation, overwriteTranslation)
 
   const mapping: Record<ConfirmDialogType, SolidButtonColor> = {

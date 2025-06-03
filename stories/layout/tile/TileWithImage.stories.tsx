@@ -1,5 +1,5 @@
 import type { Meta, StoryObj } from '@storybook/react'
-import { TileWithImage } from '../../../src/components/layout-and-navigation/Tile'
+import { TileWithImage } from '../../../src'
 
 const meta = {
   title: 'Layout/Tile',
@@ -14,7 +14,7 @@ export const tileWithImage: Story = {
     title: { value: 'About helpwave', className: 'textstyle-title-lg' },
     description: {
       value: 'Regulatory burdens and high barriers to entry make it difficult for small companies to enter the market,' +
-          ' leading to a lack of competition. helpwave is here to change that. We offer a platform that brings everyone to' +
+        ' leading to a lack of competition. helpwave is here to change that. We offer a platform that brings everyone to' +
         ' the table, not just the big companies.',
       className: '!text-gray-200'
     },
