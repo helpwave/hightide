@@ -1,7 +1,9 @@
 name: Dry Run Publish
 
 on:
-  push:
+  pull_request:
+    branches:
+      - main
 
 jobs:
   publish:

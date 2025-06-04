@@ -1,6 +1,6 @@
 import { z } from 'zod'
-import type { Languages } from '../hooks/useLanguage'
-import { languages } from '../hooks/useLanguage'
+import type { Language } from '../localization/util'
+import { languages } from '../localization/util'
 
 export type News = {
   title: string,
@@ -10,7 +10,7 @@ export type News = {
   keys: string[],
 }
 
-export type LocalizedNews = Record<Languages, News[]>
+export type LocalizedNews = Record<Language, News[]>
 
 export const newsSchema = z.object({
   title: z.string(),

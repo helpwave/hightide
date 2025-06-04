@@ -136,12 +136,12 @@ export const getBetweenDuration = (startDate: Date, endDate: Date): Duration => 
  * An undefined value for startDate or endDate means no bound for the start or end respectively
  */
 export const isInTimeSpan = (value: Date, startDate?: Date, endDate?: Date): boolean => {
-  if(startDate && endDate) {
+  if (startDate && endDate) {
     console.assert(startDate <= endDate)
     return startDate <= value && value <= endDate
   } else if (startDate) {
     return startDate <= value
-  } else if(endDate) {
+  } else if (endDate) {
     return endDate >= value
   } else {
     return true

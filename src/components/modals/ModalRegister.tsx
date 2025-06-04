@@ -17,8 +17,8 @@ export const ModalContext = createContext<ModalContextType>({
  * A Simple Wrapper for the context
  */
 export const ModalRegister = ({
-  children
-}: PropsWithChildren) => {
+                                children
+                              }: PropsWithChildren) => {
   const [register, setRegister] = useState<string[]>([])
 
   const inRegister = (id: string) => {

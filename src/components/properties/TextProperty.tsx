@@ -1,10 +1,10 @@
 import { Text } from 'lucide-react'
 import clsx from 'clsx'
-import type { Languages } from '../../hooks/useLanguage'
-import type { PropsForTranslation } from '../../hooks/useTranslation'
-import { useTranslation } from '../../hooks/useTranslation'
-import { Textarea } from '../user-input/Textarea'
-import { noop } from '../../util/noop'
+import type { Language } from '@/localization/util'
+import type { PropsForTranslation } from '@/localization/useTranslation'
+import { useTranslation } from '@/localization/useTranslation'
+import { Textarea } from '../user-action/Textarea'
+import { noop } from '@/util/noop'
 import type { PropertyBaseProps } from './PropertyBase'
 import { PropertyBase } from './PropertyBase'
 
@@ -12,7 +12,7 @@ type TextPropertyTranslation = {
   value: string,
 }
 
-const defaultTextPropertyTranslation: Record<Languages, TextPropertyTranslation> = {
+const defaultTextPropertyTranslation: Record<Language, TextPropertyTranslation> = {
   en: {
     value: 'Text'
   },
@@ -31,14 +31,14 @@ export type TextPropertyProps = Omit<PropertyBaseProps, 'icon' | 'input' | 'hasV
  * An Input for Text properties
  */
 export const TextProperty = ({
-  overwriteTranslation,
-  value,
-  readOnly,
-  onChange = noop,
-  onRemove = noop,
-  onEditComplete = noop,
-  ...baseProps
-}: PropsForTranslation<TextPropertyTranslation, TextPropertyProps>) => {
+                               overwriteTranslation,
+                               value,
+                               readOnly,
+                               onChange = noop,
+                               onRemove = noop,
+                               onEditComplete = noop,
+                               ...baseProps
+                             }: PropsForTranslation<TextPropertyTranslation, TextPropertyProps>) => {
   const translation = useTranslation(defaultTextPropertyTranslation, overwriteTranslation)
   const hasValue = value !== undefined
 
@@ -47,19 +47,19 @@ export const TextProperty = ({
       {...baseProps}
       onRemove={onRemove}
       hasValue={hasValue}
-      icon={<Text size={16} />}
+      icon={<Text size={16}/>}
       input={({ softRequired }) => (
         <div
           className={clsx('row grow pt-2 pb-1 px-4 cursor-pointer', { 'text-warning': softRequired && !hasValue })}
         >
           <Textarea
-            className={clsx('!ring-0 !border-0 !outline-0 !p-0 !m-0 !shadow-none !rounded-none', { 'bg-surface-warning placeholder-warning': softRequired && !hasValue })}
+            className={clsx('ring-0 border-0 outline-0 p-0 m-0 shadow-none rounded-none', { 'bg-surface-warning placeholder-warning': softRequired && !hasValue })}
             rows={5}
             defaultStyle={false}
             value={value ?? ''}
             readOnly={readOnly}
             placeholder={`${translation.value}...`}
-            onChange={(value) => {
+            onChangeText={(value) => {
               if (!value) {
                 onRemove()
               } else {

@@ -1,5 +1,5 @@
 import type { Meta, StoryObj } from '@storybook/react'
-import { Chip } from '../../../src/components/ChipList'
+import { Chip } from '../../../src'
 
 const meta = {
   title: 'Layout/Chip',
@@ -9,7 +9,7 @@ const meta = {
 export default meta
 type Story = StoryObj<typeof meta>;
 
-export const ChipVariation: Story = {
+export const chip: Story = {
   args: {
     children: 'Label',
     className: '',

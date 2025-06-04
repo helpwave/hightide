@@ -1,16 +1,16 @@
 import type { ReactNode } from 'react'
 import { AlertTriangle } from 'lucide-react'
 import clsx from 'clsx'
-import type { Languages } from '../../hooks/useLanguage'
-import { TextButton } from '../Button'
-import type { PropsForTranslation } from '../../hooks/useTranslation'
-import { useTranslation } from '../../hooks/useTranslation'
+import type { Language } from '../../localization/util'
+import { TextButton } from '../user-action/Button'
+import type { PropsForTranslation } from '../../localization/useTranslation'
+import { useTranslation } from '../../localization/useTranslation'
 
 type PropertyBaseTranslation = {
   remove: string,
 }
 
-const defaultPropertyBaseTranslation: Record<Languages, PropertyBaseTranslation> = {
+const defaultPropertyBaseTranslation: Record<Language, PropertyBaseTranslation> = {
   en: {
     remove: 'Remove'
   },
@@ -34,16 +34,16 @@ export type PropertyBaseProps = {
  * A component for showing a properties with uniform styling
  */
 export const PropertyBase = ({
-  overwriteTranslation,
-  name,
-  input,
-  softRequired = false,
-  hasValue,
-  icon,
-  readOnly,
-  onRemove,
-  className = '',
-}: PropsForTranslation<PropertyBaseTranslation, PropertyBaseProps>) => {
+                               overwriteTranslation,
+                               name,
+                               input,
+                               softRequired = false,
+                               hasValue,
+                               icon,
+                               readOnly,
+                               onRemove,
+                               className = '',
+                             }: PropsForTranslation<PropertyBaseTranslation, PropertyBaseProps>) => {
   const translation = useTranslation(defaultPropertyBaseTranslation, overwriteTranslation)
   const requiredAndNoValue = softRequired && !hasValue
   return (

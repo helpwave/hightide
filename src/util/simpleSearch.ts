@@ -10,7 +10,7 @@
  *
  *  @return The list of objects that match all search strings
  */
-export const MultiSubjectSearchWithMapping = <T>(search: string[], objects: T[], mapping: (value:T) => (string| undefined)[]) => {
+export const MultiSubjectSearchWithMapping = <T>(search: string[], objects: T[], mapping: (value: T) => (string | undefined)[]) => {
   return objects.filter(object => {
     const mappedSearchKeywords = mapping(object).map(value => value ? value.toLowerCase().trim() : undefined)
     return search.every(searchValue => !!mappedSearchKeywords.find(value => !!value && value.includes(searchValue.toLowerCase().trim())))
@@ -29,7 +29,7 @@ export const MultiSubjectSearchWithMapping = <T>(search: string[], objects: T[],
  *
  *  @return The list of objects that match the search string
  */
-export const MultiSearchWithMapping = <T>(search: string, objects: T[], mapping: (value:T) => string[]) => {
+export const MultiSearchWithMapping = <T>(search: string, objects: T[], mapping: (value: T) => string[]) => {
   return objects.filter(object => {
     const mappedSearchKeywords = mapping(object).map(value => value.toLowerCase().trim())
     return !!mappedSearchKeywords.find(value => value.includes(search.toLowerCase().trim()))
@@ -47,7 +47,7 @@ export const MultiSearchWithMapping = <T>(search: string, objects: T[], mapping:
  *
  *  @return The list of objects that match the search string
  */
-export const SimpleSearchWithMapping = <T>(search: string, objects: T[], mapping: (value:T) => string) => {
+export const SimpleSearchWithMapping = <T>(search: string, objects: T[], mapping: (value: T) => string) => {
   return MultiSearchWithMapping(search, objects, value => [mapping(value)])
 }
 
