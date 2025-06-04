@@ -1,5 +1,5 @@
-import { Input } from '../user-input/Input'
-import type { InputProps } from '../user-input/Input'
+import type { InputProps } from '../user-action/Input'
+import { Input } from '../user-action/Input'
 import type { ConfirmDialogProps } from './ConfirmDialog'
 import { ConfirmDialog } from './ConfirmDialog'
 
@@ -11,10 +11,10 @@ export type InputModalProps = ConfirmDialogProps & {
  * A modal for receiving multiple inputs
  */
 export const InputModal = ({
-  inputs,
-  buttonOverwrites,
-  ...restProps
-}: InputModalProps) => {
+                             inputs,
+                             buttonOverwrites,
+                             ...restProps
+                           }: InputModalProps) => {
   return (
     <ConfirmDialog
       buttonOverwrites={buttonOverwrites}

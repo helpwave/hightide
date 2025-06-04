@@ -1,7 +1,7 @@
 ## Adding a Story
 
-You can use the `title` to change the displayed _hierarchy_. 
-**Make sure** that this _hierarchy_ is the **same as the path** 
+You can use the `title` to change the displayed _hierarchy_.
+**Make sure** that this _hierarchy_ is the **same as the path**
 in which you have saved the story.
 
 ```typescript
@@ -13,7 +13,7 @@ const meta = {
 export default meta
 type Story = StoryObj<typeof meta>;
 
-export const CircleVariation: Story = {
+export const Circle: Story = {
   args: {
     radius: 40,
     color: 'primary',

@@ -1,18 +1,18 @@
-import { useContext, useEffect, type MouseEventHandler, type PropsWithChildren, type ReactNode } from 'react'
+import { type MouseEventHandler, type PropsWithChildren, type ReactNode, useContext, useEffect } from 'react'
 import ReactDOM from 'react-dom'
 import { X } from 'lucide-react'
 import clsx from 'clsx'
-import type { Languages } from '../../hooks/useLanguage'
-import type { PropsForTranslation } from '../../hooks/useTranslation'
-import { useTranslation } from '../../hooks/useTranslation'
-import { Tooltip } from '../Tooltip'
+import type { Language } from '../../localization/util'
+import type { PropsForTranslation } from '../../localization/useTranslation'
+import { useTranslation } from '../../localization/useTranslation'
+import { Tooltip } from '../user-action/Tooltip'
 import { ModalContext } from './ModalRegister'
 
 type ModalHeaderTranslation = {
   close: string,
 }
 
-const defaultModalHeaderTranslation: Record<Languages, ModalHeaderTranslation> = {
+const defaultModalHeaderTranslation: Record<Language, ModalHeaderTranslation> = {
   en: {
     close: 'Close'
   },

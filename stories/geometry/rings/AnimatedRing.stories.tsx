@@ -1,15 +1,15 @@
 import type { Meta, StoryObj } from '@storybook/react'
-import { AnimatedRing } from '../../../src/components/Ring'
+import { AnimatedRing } from '../../../src'
 
 const meta = {
-  title: 'Geometry/Rings',
+  title: 'Geometry/Ring',
   component: AnimatedRing,
 } satisfies Meta<typeof AnimatedRing>
 
 export default meta
 type Story = StoryObj<typeof meta>;
 
-export const AnimatedRingVariation: Story = {
+export const animatedRing: Story = {
   args: {
     innerSize: 40,
     width: 10,

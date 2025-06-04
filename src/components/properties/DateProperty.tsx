@@ -1,8 +1,8 @@
 import { CalendarDays } from 'lucide-react'
 import clsx from 'clsx'
-import { formatDate, formatDateTime } from '../../util/date'
-import { noop } from '../../util/noop'
-import { Input } from '../user-input/Input'
+import { formatDate, formatDateTime } from '@/util/date'
+import { noop } from '@/util/noop'
+import { Input } from '../user-action/Input'
 import type { PropertyBaseProps } from './PropertyBase'
 import { PropertyBase } from './PropertyBase'
 
@@ -17,13 +17,13 @@ export type DatePropertyProps = Omit<PropertyBaseProps, 'icon' | 'input' | 'hasV
  * An Input for date properties
  */
 export const DateProperty = ({
-  value,
-  onChange = noop,
-  onEditComplete = noop,
-  readOnly,
-  type = 'dateTime',
-  ...baseProps
-}: DatePropertyProps) => {
+                               value,
+                               onChange = noop,
+                               onEditComplete = noop,
+                               readOnly,
+                               type = 'dateTime',
+                               ...baseProps
+                             }: DatePropertyProps) => {
   const hasValue = !!value
 
   const dateText = value ? (type === 'dateTime' ? formatDateTime(value) : formatDate(value)) : ''
@@ -41,8 +41,9 @@ export const DateProperty = ({
             value={dateText}
             type={type === 'dateTime' ? 'datetime-local' : 'date'}
             readOnly={readOnly}
-            onChange={(value, event) => {
-              if (!event.target.value) {
+            onChange={(event) => {
+              const value = event.target.value
+              if (!value) {
                 event.preventDefault()
                 return
               }

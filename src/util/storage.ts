@@ -1,7 +1,8 @@
 class StorageService {
   // this seems to be a bug in eslint as 'paramter-properties' is a special syntax of typescript
 
-  constructor(private storage: Storage) {}
+  constructor(private storage: Storage) {
+  }
 
   public get<T>(key: string): T | null {
     const value = this.storage.getItem(key)

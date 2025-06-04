@@ -1,11 +1,11 @@
 import { useEffect, useRef, useState } from 'react'
 import { Scrollbars } from 'react-custom-scrollbars-2'
-import { noop } from '../../util/noop'
-import { equalSizeGroups, range } from '../../util/array'
+import { noop } from '@/util/noop'
+import { equalSizeGroups, range } from '@/util/array'
 import clsx from 'clsx'
-import { Expandable } from '../Expandable'
-import { addDuration, monthsList, subtractDuration } from '../../util/date'
-import { useLocale } from '../../hooks/useLanguage'
+import { Expandable } from '@/components/layout-and-navigation/Expandable'
+import { addDuration, monthsList, subtractDuration } from '@/util/date'
+import { useLocale } from '@/localization/LanguageProvider'
 
 export type YearMonthPickerProps = {
   displayedYearMonth?: Date,
@@ -108,11 +108,11 @@ export const YearMonthPicker = ({
   )
 }
 
-export const ControlledYearMonthPicker = ({
-                                         displayedYearMonth = new Date(),
-                                         onChange = noop,
-                                         ...props
-                                       }: YearMonthPickerProps) => {
+export const YearMonthPickerUncontrolled = ({
+                                            displayedYearMonth = new Date(),
+                                            onChange = noop,
+                                            ...props
+                                          }: YearMonthPickerProps) => {
   const [yearMonth, setYearMonth] = useState<Date>(displayedYearMonth)
 
   useEffect(() => setYearMonth(displayedYearMonth), [displayedYearMonth])

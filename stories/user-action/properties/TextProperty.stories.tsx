@@ -1,15 +1,44 @@
 import type { Meta, StoryObj } from '@storybook/react'
-import { TextPropertyExample } from '../../../examples/properties/TextPropertyExample'
+import { useEffect, useState } from 'react'
+import type { TextPropertyProps } from '../../../src/components/properties/TextProperty'
+import { TextProperty } from '../../../src/components/properties/TextProperty'
+
+type TextPropertyExampleProps = Omit<TextPropertyProps, 'onChange' | 'onRemove'> & {
+  readOnly: boolean,
+}
+
+/**
+ * Example for using the TextProperty
+ */
+const TextPropertyExample = ({
+                               value,
+                               ...restProps
+                             }: TextPropertyExampleProps) => {
+  const [usedValue, setUsedValue] = useState<string | undefined>(value)
+
+  useEffect(() => {
+    setUsedValue(value)
+  }, [value])
+
+  return (
+    <TextProperty
+      {...restProps}
+      onChange={setUsedValue}
+      onRemove={() => setUsedValue(undefined)}
+      value={usedValue}
+    />
+  )
+}
 
 const meta = {
-  title: 'User-Action/Property',
+  title: 'User Action/Property',
   component: TextPropertyExample,
 } satisfies Meta<typeof TextPropertyExample>
 
 export default meta
 type Story = StoryObj<typeof meta>;
 
-export const TextPropertyVariation: Story = {
+export const textProperty: Story = {
   args: {
     name: 'Property',
     softRequired: false,

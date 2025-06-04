@@ -1,13 +1,13 @@
 import { useEffect, useState } from 'react'
 import { ArrowDown, ArrowUp, ChevronDown } from 'lucide-react'
-import type { Languages } from '../../hooks/useLanguage'
-import type { PropsForTranslation } from '../../hooks/useTranslation'
-import { useTranslation } from '../../hooks/useTranslation'
-import { noop } from '../../util/noop'
-import { addDuration, isInTimeSpan, subtractDuration } from '../../util/date'
+import type { Language } from '@/localization/util'
+import { useLocale } from '@/localization/LanguageProvider'
+import type { PropsForTranslation } from '@/localization/useTranslation'
+import { useTranslation } from '@/localization/useTranslation'
+import { noop } from '@/util/noop'
+import { addDuration, isInTimeSpan, subtractDuration } from '@/util/date'
 import clsx from 'clsx'
-import { SolidButton, TextButton } from '../Button'
-import { useLocale } from '../../hooks/useLanguage'
+import { SolidButton, TextButton } from '../user-action/Button'
 import type { YearMonthPickerProps } from './YearMonthPicker'
 import { YearMonthPicker } from './YearMonthPicker'
 import type { DayPickerProps } from './DayPicker'
@@ -17,7 +17,7 @@ type DatePickerTranslation = {
   today: string,
 }
 
-const defaultDatePickerTranslation: Record<Languages, DatePickerTranslation> = {
+const defaultDatePickerTranslation: Record<Language, DatePickerTranslation> = {
   en: {
     today: 'Today',
   },
@@ -142,11 +142,11 @@ export const DatePicker = ({
 /**
  * Example for the Date Picker
  */
-export const ControlledDatePicker = ({
-                                    value = new Date(),
-                                    onChange = noop,
-                                    ...props
-                                  }: DatePickerProps) => {
+export const DatePickerUncontrolled = ({
+                                       value = new Date(),
+                                       onChange = noop,
+                                       ...props
+                                     }: DatePickerProps) => {
   const [date, setDate] = useState<Date>(value)
 
   useEffect(() => setDate(value), [value])

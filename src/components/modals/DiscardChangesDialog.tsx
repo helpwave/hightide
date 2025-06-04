@@ -1,7 +1,7 @@
 import type { PropsWithChildren } from 'react'
-import { SolidButton } from '../Button'
-import type { PropsForTranslation } from '../../hooks/useTranslation'
-import { useTranslation } from '../../hooks/useTranslation'
+import { SolidButton } from '../user-action/Button'
+import type { PropsForTranslation } from '../../localization/useTranslation'
+import { useTranslation } from '../../localization/useTranslation'
 import { Modal, type ModalProps } from './Modal'
 
 type DiscardChangesDialogTranslation = {
@@ -38,15 +38,15 @@ type DiscardChangesDialogProps = ModalProps & {
 }
 
 export const DiscardChangesDialog = ({
-  overwriteTranslation,
-  children,
-  title,
-  description,
-  onCancel,
-  onSave,
-  onDontSave,
-  ...modalProps
-}: PropsForTranslation<DiscardChangesDialogTranslation, PropsWithChildren<DiscardChangesDialogProps>>) => {
+                                       overwriteTranslation,
+                                       children,
+                                       title,
+                                       description,
+                                       onCancel,
+                                       onSave,
+                                       onDontSave,
+                                       ...modalProps
+                                     }: PropsForTranslation<DiscardChangesDialogTranslation, PropsWithChildren<DiscardChangesDialogProps>>) => {
   const translation = useTranslation(defaultDiscardChangesDialogTranslation, overwriteTranslation)
   return (
     <Modal

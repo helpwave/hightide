@@ -1,10 +1,10 @@
 import { List } from 'lucide-react'
 import clsx from 'clsx'
-import type { Languages } from '../../hooks/useLanguage'
-import type { PropsForTranslation } from '../../hooks/useTranslation'
-import { useTranslation } from '../../hooks/useTranslation'
-import type { SearchableSelectProps } from '../user-input/SearchableSelect'
-import { SearchableSelect } from '../user-input/SearchableSelect'
+import type { Language } from '@/localization/util'
+import type { PropsForTranslation } from '@/localization/useTranslation'
+import { useTranslation } from '@/localization/useTranslation'
+import type { SearchableSelectProps } from '../user-action/Select'
+import { SearchableSelect } from '../user-action/Select'
 import type { PropertyBaseProps } from './PropertyBase'
 import { PropertyBase } from './PropertyBase'
 
@@ -12,7 +12,7 @@ type SingleSelectPropertyTranslation = {
   select: string,
 }
 
-const defaultSingleSelectPropertyTranslation: Record<Languages, SingleSelectPropertyTranslation> = {
+const defaultSingleSelectPropertyTranslation: Record<Language, SingleSelectPropertyTranslation> = {
   en: {
     select: 'Select'
   },
@@ -28,15 +28,15 @@ export type SingleSelectPropertyProps<T> =
  * An Input for SingleSelect properties
  */
 export const SingleSelectProperty = <T, >({
-  overwriteTranslation,
-  value,
-  options,
-  name,
-  readOnly = false,
-  softRequired,
-  onRemove,
-  ...multiSelectProps
-}: PropsForTranslation<SingleSelectPropertyTranslation, SingleSelectPropertyProps<T>>) => {
+                                            overwriteTranslation,
+                                            value,
+                                            options,
+                                            name,
+                                            readOnly = false,
+                                            softRequired,
+                                            onRemove,
+                                            ...multiSelectProps
+                                          }: PropsForTranslation<SingleSelectPropertyTranslation, SingleSelectPropertyProps<T>>) => {
   const translation = useTranslation(defaultSingleSelectPropertyTranslation, overwriteTranslation)
   const hasValue = value !== undefined
 
