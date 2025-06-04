@@ -1,8 +1,8 @@
 import { useCallback, useEffect, useState } from 'react'
 import clsx from 'clsx'
-import { noop } from '../../util/noop'
-import { getNeighbours, range } from '../../util/array'
-import { clamp } from '../../util/math'
+import { noop } from '@/util/noop'
+import { getNeighbours, range } from '@/util/array'
+import { clamp } from '@/util/math'
 
 export type ScrollPickerProps<T> = {
   options: T[],

@@ -1,9 +1,9 @@
 import type { Meta, StoryObj } from '@storybook/react'
 import { action } from '@storybook/addon-actions'
 import { useEffect, useState } from 'react'
-import type { MultiSelectProps } from '../../../src/components/user-action/MultiSelect'
-import { MultiSelect } from '../../../src/components/user-action/MultiSelect'
-import { ChipList } from '../../../src/components/layout-and-navigation/Chip'
+import type { MultiSelectProps } from '../../../src'
+import { MultiSelect } from '../../../src'
+import { ChipList } from '../../../src'
 
 type MultiSelectExampleProps = Omit<MultiSelectProps<string>, 'search' | 'selectedDisplay'> & {
   enableSearch: boolean,
@@ -19,10 +19,6 @@ const MultiSelectExample = ({
                               ...props
                             }: MultiSelectExampleProps) => {
   const [usedOptions, setUsedOptions] = useState(options)
-
-  useEffect(() => {
-    setUsedOptions(options)
-  }, [options])
 
   useEffect(() => {
     setUsedOptions(options)
@@ -48,9 +44,7 @@ const MultiSelectExample = ({
             return (<span>Select</span>)
           }
           return (
-            <ChipList
-              list={selected.map(value => ({ children: value.label }))}
-            />
+            <ChipList list={selected.map(value => ({ children: value.label }))}/>
           )
         } : undefined}
       {...props}

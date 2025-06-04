@@ -1,15 +1,7 @@
-import React, {
-  type ChangeEvent,
-  forwardRef,
-  type HTMLInputTypeAttribute,
-  type InputHTMLAttributes,
-  useEffect,
-  useRef,
-  useState
-} from 'react'
+import React, { forwardRef, type InputHTMLAttributes, useEffect, useRef, useState } from 'react'
 import clsx from 'clsx'
-import { useSaveDelay } from '../../hooks/useSaveDelay'
-import { noop } from '../../util/noop'
+import { useSaveDelay } from '@/hooks/useSaveDelay'
+import { noop } from '@/util/noop'
 import type { LabelProps } from './Label'
 import { Label } from './Label'
 
@@ -17,46 +9,40 @@ export type InputProps = {
   /**
    * used for the label's `for` attribute
    */
-  id?: string,
-  value: string,
   label?: Omit<LabelProps, 'id'>,
-  /**
-   * @default 'text'
-   */
-  type?: HTMLInputTypeAttribute,
   /**
    * Callback for when the input's value changes
    * This is pretty much required but made optional for the rare cases where it actually isn't need such as when used with disabled
    * That could be enforced through a union type but that seems a bit overkill
    * @default noop
    */
-  onChange?: (text: string, event: ChangeEvent<HTMLInputElement>) => void,
-  onChangeEvent?: (event: ChangeEvent<HTMLInputElement>) => void,
+  onChangeText?: (text: string) => void,
   className?: string,
-  onEditCompleted?: (text: string, event: ChangeEvent<HTMLInputElement>) => void,
+  onEditCompleted?: (text: string) => void,
   expanded?: boolean,
   containerClassName?: string,
-} & Omit<InputHTMLAttributes<HTMLInputElement>, 'id' | 'value' | 'label' | 'type' | 'onChange' | 'crossOrigin'>
+} & Omit<InputHTMLAttributes<HTMLInputElement>, 'label'>
 
 /**
  * A Component for inputting text or other information
  *
  * Its state is managed must be managed by the parent
  */
-const ControlledInput = ({
-                           id,
-                           type = 'text',
-                           value,
-                           label,
-                           onChange = noop,
-                           onChangeEvent = noop,
-                           className = '',
-                           onEditCompleted,
-                           expanded = true,
-                           onBlur,
-                           containerClassName,
-                           ...restProps
-                         }: InputProps) => {
+const Input = ({
+                 id,
+                 type = 'text',
+                 value,
+                 label,
+                 onChange = noop,
+                 onChangeText = noop,
+                 onEditCompleted,
+                 className = '',
+                 expanded = true,
+                 autoFocus,
+                 onBlur,
+                 containerClassName,
+                 ...restProps
+               }: InputProps) => {
   const {
     restartTimer,
     clearUpdateTimer
@@ -64,10 +50,11 @@ const ControlledInput = ({
   const ref = useRef<HTMLInputElement>(null)
 
   useEffect(() => {
-    if (restProps.autoFocus) {
+    if(autoFocus) {
       ref.current?.focus()
     }
-  }, [restProps.autoFocus])
+  }, [autoFocus])
+
   return (
     <div className={clsx({ 'w-full': expanded }, containerClassName)}>
       {label && <Label {...label} htmlFor={id} className={clsx('mb-1', label.className)}/>}
@@ -76,13 +63,13 @@ const ControlledInput = ({
         value={value}
         id={id}
         type={type}
-        className={clsx('block bg-surface text-on-surface px-3 py-2 rounded-md w-full border-2 border-gray-200 hover:border-primary focus:outline-none focus:border-primary focus:ring-primary', className)}
+        className={className}
         onBlur={event => {
           if (onBlur) {
             onBlur(event)
           }
           if (onEditCompleted) {
-            onEditCompleted(event.target.value, event)
+            onEditCompleted(event.target.value)
             clearUpdateTimer()
           }
         }}
@@ -90,12 +77,12 @@ const ControlledInput = ({
           const value = e.target.value
           if (onEditCompleted) {
             restartTimer(() => {
-              onEditCompleted(value, e)
+              onEditCompleted(value)
               clearUpdateTimer()
             })
           }
-          onChange(value, e)
-          onChangeEvent(e)
+          onChange(e)
+          onChangeText(value)
         }}
         {...restProps}
       />
@@ -103,7 +90,7 @@ const ControlledInput = ({
   )
 }
 
-type UncontrolledInputProps = Omit<InputProps, 'value'> & {
+type InputUncontrolledProps = Omit<InputProps, 'value'> & {
   /**
    * @default ''
    */
@@ -115,23 +102,21 @@ type UncontrolledInputProps = Omit<InputProps, 'value'> & {
  *
  * Its state is managed by the component itself
  */
-const UncontrolledInput = ({
+const InputUncontrolled = ({
                              defaultValue = '',
-                             onChange = noop,
+                             onChangeText = noop,
                              ...props
-                           }: UncontrolledInputProps) => {
+                           }: InputUncontrolledProps) => {
   const [value, setValue] = useState(defaultValue)
 
-  const handleChange = (text: string, event: ChangeEvent<HTMLInputElement>) => {
-    setValue(text)
-    onChange(text, event)
-  }
-
   return (
-    <ControlledInput
+    <Input
       {...props}
       value={value}
-      onChange={handleChange}
+      onChangeText={text => {
+        setValue(text)
+        onChangeText(text)
+      }}
     />
   )
 }
@@ -162,7 +147,6 @@ const FormInput = forwardRef<HTMLInputElement, FormInputProps>(function FormInpu
       id={id}
       {...restProps}
       className={clsx(
-        'block bg-surface text-on-surface px-3 py-2 rounded-md w-full border-2 border-gray-200 hover:border-primary focus:outline-none focus:border-primary focus:ring-primary',
         {
           'focus:border-primary focus:ring-primary': !errorText,
           'focus:border-negative focus:ring-negative text-negative': !!errorText,
@@ -187,7 +171,7 @@ const FormInput = forwardRef<HTMLInputElement, FormInputProps>(function FormInpu
 })
 
 export {
-  UncontrolledInput,
-  ControlledInput as Input,
+  InputUncontrolled,
+  Input,
   FormInput
 }

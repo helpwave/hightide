@@ -1,10 +1,10 @@
 import type { ReactNode } from 'react'
 import { useState } from 'react'
 import { Search } from 'lucide-react'
-import type { PropsForTranslation } from '../../localization/useTranslation'
-import { useTranslation } from '../../localization/useTranslation'
-import type { Language } from '../../localization/util'
-import { MultiSearchWithMapping } from '../../util/simpleSearch'
+import type { PropsForTranslation } from '@/localization/useTranslation'
+import { useTranslation } from '@/localization/useTranslation'
+import type { Language } from '@/localization/util'
+import { MultiSearchWithMapping } from '@/util/simpleSearch'
 import clsx from 'clsx'
 import { Menu, MenuItem } from './Menu'
 import { Input } from './Input'
@@ -126,7 +126,7 @@ export const MultiSelect = <T, >({
       >
         {enableSearch && (
           <div key="selectSearch" className="row gap-x-2 items-center px-2 py-2">
-            <Input autoFocus={true} value={searchText} onChange={setSearchText}/>
+            <Input autoFocus={true} className="w-full" value={searchText} onChangeText={setSearchText}/>
             <Search/>
           </div>
         )}

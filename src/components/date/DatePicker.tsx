@@ -142,7 +142,7 @@ export const DatePicker = ({
 /**
  * Example for the Date Picker
  */
-export const ControlledDatePicker = ({
+export const DatePickerUncontrolled = ({
                                        value = new Date(),
                                        onChange = noop,
                                        ...props

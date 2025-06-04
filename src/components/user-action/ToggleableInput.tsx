@@ -1,9 +1,10 @@
 import type { HTMLInputTypeAttribute, InputHTMLAttributes } from 'react'
+import { useEffect, useRef } from 'react'
 import { useState } from 'react'
 import { Pencil } from 'lucide-react'
 import clsx from 'clsx'
-import { useSaveDelay } from '../../hooks/useSaveDelay'
-import { noop } from '../../util/noop'
+import { useSaveDelay } from '@/hooks/useSaveDelay'
+import { noop } from '@/util/noop'
 
 type InputProps = {
   /**
@@ -50,11 +51,18 @@ export const ToggleableInput = ({
                                 }: InputProps) => {
   const [isEditing, setIsEditing] = useState(initialState !== 'display')
   const { restartTimer, clearUpdateTimer } = useSaveDelay(() => undefined, 3000)
+  const ref = useRef<HTMLInputElement>(null)
 
   const onEditCompletedWrapper = (text: string) => {
     onEditCompleted(text)
     clearUpdateTimer()
   }
+
+  useEffect(() => {
+    if(isEditing) {
+      ref.current?.focus()
+    }
+  }, [isEditing])
 
   return (
     <div>
@@ -65,8 +73,8 @@ export const ToggleableInput = ({
         <div className={clsx('row overflow-hidden', { 'flex-1': isEditing })}>
           {isEditing ? (
             <input
-              autoFocus
               {...restProps}
+              ref={ref}
               value={value}
               type={type}
               id={id}

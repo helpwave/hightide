@@ -1,10 +1,22 @@
 import type { ButtonHTMLAttributes, PropsWithChildren, ReactNode } from 'react'
 import clsx from 'clsx'
 
+/**
+ * The allowed colors for the SolidButton
+ */
 export type SolidButtonColor = 'primary' | 'secondary' | 'tertiary' | 'positive' | 'warning' | 'negative'
+/**
+ * The allowed colors for the OutlineButton
+ */
 export type OutlineButtonColor = 'primary'
+/**
+ * The allowed colors for the TextButton
+ */
 export type TextButtonColor = 'negative' | 'neutral'
 
+/**
+ * The different sizes for a button
+ */
 type ButtonSizes = 'small' | 'medium' | 'large'
 
 /**
@@ -17,10 +29,14 @@ export type ButtonProps = PropsWithChildren<{
   size?: ButtonSizes,
 }> & ButtonHTMLAttributes<Element>
 
-export const ButtonSizePaddings: Record<ButtonSizes, string> = {
+const paddingMapping: Record<ButtonSizes, string> = {
   small: 'btn-sm',
   medium: 'btn-md',
   large: 'btn-lg'
+}
+
+export const ButtonUtil = {
+  paddingMapping
 }
 
 type ButtonWithIconsProps = ButtonProps & {
@@ -82,7 +98,7 @@ const SolidButton = ({
           'text-disabled-text bg-disabled-background': disabled,
           [clsx(colorClasses, 'hover:brightness-90')]: !disabled
         },
-        ButtonSizePaddings[size]
+        ButtonUtil.paddingMapping[size]
       )}
       {...restProps}
     >
@@ -141,7 +157,7 @@ const OutlineButton = ({
           'text-disabled-text border-disabled-outline)': disabled,
           [clsx(colorClasses, 'hover:brightness-80')]: !disabled,
         },
-        ButtonSizePaddings[size]
+        ButtonUtil.paddingMapping[size]
       )}
       {...restProps}
     >
@@ -202,7 +218,7 @@ const TextButton = ({
           'text-disabled-text': disabled,
           [clsx(colorClasses, 'hover:bg-button-text-hover-background rounded-full')]: !disabled,
         },
-        ButtonSizePaddings[size]
+        ButtonUtil.paddingMapping[size]
       )}
       {...restProps}
     >

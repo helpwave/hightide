@@ -1,7 +1,7 @@
 import clsx from 'clsx'
 import type { SolidButtonProps } from '../user-action/Button'
-import { ButtonSizePaddings, SolidButton } from '../user-action/Button'
-import { noop } from '../../util/noop'
+import { ButtonUtil, SolidButton } from '../user-action/Button'
+import { noop } from '@/util/noop'
 import { Helpwave } from '../icons-and-geometry/Helpwave'
 
 type LoadingButtonProps = {
@@ -9,7 +9,7 @@ type LoadingButtonProps = {
 } & SolidButtonProps
 
 export const LoadingButton = ({ isLoading = false, size = 'medium', onClick, ...rest }: LoadingButtonProps) => {
-  const paddingClass = ButtonSizePaddings[size]
+  const paddingClass = ButtonUtil.paddingMapping[size]
 
   return (
     <div className="inline-block relative">

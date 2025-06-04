@@ -1,7 +1,7 @@
 import { type PropsWithChildren, type ReactNode, type RefObject, useRef } from 'react'
 import clsx from 'clsx'
-import { useOutsideClick } from '../../hooks/useOutsideClick'
-import { useHoverState } from '../../hooks/useHoverState'
+import { useOutsideClick } from '@/hooks/useOutsideClick'
+import { useHoverState } from '@/hooks/useHoverState'
 
 type MenuProps<T> = PropsWithChildren<{
   trigger: (onClick: () => void, ref: RefObject<T>) => ReactNode,
@@ -35,7 +35,6 @@ const MenuItem = ({
   </div>
 )
 
-// TODO: it is quite annoying that the type for the ref has to be specified manually, is there some solution around this?
 /**
  * A Menu Component to allow the user to see different functions
  */

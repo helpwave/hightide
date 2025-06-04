@@ -14,7 +14,11 @@ and adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 ### Changed
 
 - Update README.md to hold more information on publishing
-- Update Controllable Components to also offer a uncontrolled version (controlled stays the default)
+- Update controllable Components to also offer an uncontrolled version (controlled stays the default)
 - Update file structure
+- Update imports to allow for absolute imports with `@`
+
+### Removed
+- examples which are now part of their corresponding story
 
 ## [Unreleased]

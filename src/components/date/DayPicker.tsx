@@ -76,7 +76,7 @@ export const DayPicker = ({
   )
 }
 
-export const DayPickerControlled = ({ displayedMonth, onChange = noop, ...restProps }: DayPickerProps) => {
+export const DayPickerUncontrolled = ({ displayedMonth, onChange = noop, ...restProps }: DayPickerProps) => {
   const [date, setDate] = useState(displayedMonth)
 
   useEffect(() => setDate(displayedMonth), [displayedMonth])

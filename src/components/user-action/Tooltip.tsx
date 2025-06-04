@@ -1,5 +1,5 @@
 import type { CSSProperties, PropsWithChildren, ReactNode } from 'react'
-import { useHoverState } from '../../hooks/useHoverState'
+import { useHoverState } from '@/hooks/useHoverState'
 import { clsx } from 'clsx'
 
 type Position = 'top' | 'bottom' | 'left' | 'right'
@@ -76,7 +76,7 @@ export const Tooltip = ({
       {children}
       {isHovered && (
         <div
-          className={clsx(`opacity-0 absolute text-black text-xs font-semibold text-gray-600 px-2 py-1 rounded whitespace-nowrap border-2 border-gray-600
+          className={clsx(`opacity-0 absolute text-xs font-semibold text-gray-600 px-2 py-1 rounded whitespace-nowrap border-1 border-gray-600
            animate-tooltip-fade-in shadow-lg bg-gray-100`, positionClasses[position], tooltipClassName)}
           style={{ zIndex, animationDelay: animationDelay + 'ms' }}
         >

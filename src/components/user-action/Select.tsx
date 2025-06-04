@@ -1,10 +1,12 @@
 import { Menu } from '@headlessui/react'
-import { ChevronDown, ChevronUp } from 'lucide-react'
+import { ChevronDown, ChevronUp, Search } from 'lucide-react'
 import type { ReactNode } from 'react'
 import { useEffect, useState } from 'react'
 import clsx from 'clsx'
 import type { LabelProps } from './Label'
 import { Label } from './Label'
+import { MultiSearchWithMapping } from '@/util/simpleSearch'
+import { Input } from '@/components/user-action/Input'
 
 export type SelectOption<T> = {
   label: ReactNode,
@@ -157,4 +159,35 @@ export const SelectUncontrolled = <T, >({
   )
 }
 
-export default { Select, SelectUncontrolled }
+export type SearchableSelectProps<T> = SelectProps<T> & {
+  searchMapping: (value: SelectOption<T>) => string[],
+}
+
+/**
+ * A Select where items can be searched
+ */
+export const SearchableSelect = <T, >({
+                                        value,
+                                        options,
+                                        searchMapping,
+                                        ...selectProps
+                                      }: SearchableSelectProps<T>) => {
+  const [search, setSearch] = useState<string>('')
+  const filteredOptions = MultiSearchWithMapping(search, options, searchMapping)
+
+  return (
+    <Select
+      value={value}
+      options={filteredOptions}
+      additionalItems={[(
+        <div key="selectSearch" className="row gap-x-2 items-center">
+          <Input autoFocus={true} value={search} onChangeText={setSearch}/>
+          <Search/>
+        </div>
+      )]}
+      {...selectProps}
+    />
+  )
+}
+
+export default { Select, SelectUncontrolled, SearchableSelect }

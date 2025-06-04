@@ -108,7 +108,7 @@ export const YearMonthPicker = ({
   )
 }
 
-export const YearMonthPickerControlled = ({
+export const YearMonthPickerUncontrolled = ({
                                             displayedYearMonth = new Date(),
                                             onChange = noop,
                                             ...props

@@ -1,8 +1,8 @@
 import type { Meta, StoryObj } from '@storybook/react'
 import { action } from '@storybook/addon-actions'
 import { useEffect, useState } from 'react'
-import type { SearchableSelectProps } from '../../../src/components/user-action/SearchableSelect'
-import { SearchableSelect } from '../../../src/components/user-action/SearchableSelect'
+import type { SearchableSelectProps } from '../../../src'
+import { SearchableSelect } from '../../../src'
 
 type SearchableSelectExampleProps = Omit<SearchableSelectProps<string>, 'searchMapping' | 'additionalItems'>
 
