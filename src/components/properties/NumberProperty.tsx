@@ -1,10 +1,10 @@
 import { Binary } from 'lucide-react'
 import clsx from 'clsx'
-import { noop } from '../../util/noop'
+import { noop } from '@/util/noop'
 import { Input } from '../user-action/Input'
-import type { Language } from '../../localization/util'
-import type { PropsForTranslation } from '../../localization/useTranslation'
-import { useTranslation } from '../../localization/useTranslation'
+import type { Language } from '@/localization/util'
+import type { PropsForTranslation } from '@/localization/useTranslation'
+import { useTranslation } from '@/localization/useTranslation'
 import type { PropertyBaseProps } from './PropertyBase'
 import { PropertyBase } from './PropertyBase'
 
@@ -61,7 +61,7 @@ export const NumberProperty = ({
             type="number"
             readOnly={readOnly}
             placeholder={`${translation.value}...`}
-            onChange={(value) => {
+            onChangeText={(value) => {
               const numberValue = parseFloat(value)
               if (isNaN(numberValue)) {
                 onRemove()

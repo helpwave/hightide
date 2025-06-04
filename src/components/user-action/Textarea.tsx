@@ -1,8 +1,8 @@
 import type { TextareaHTMLAttributes } from 'react'
 import { useEffect, useState } from 'react'
 import clsx from 'clsx'
-import { useSaveDelay } from '../../hooks/useSaveDelay'
-import { noop } from '../../util/noop'
+import { useSaveDelay } from '@/hooks/useSaveDelay'
+import { noop } from '@/util/noop'
 import type { LabelProps } from './Label'
 import { Label } from './Label'
 
@@ -11,14 +11,13 @@ export type TextareaProps = {
   label?: Omit<LabelProps, 'id'>,
   /** Inside the area */
   headline?: string,
-  id?: string,
   value?: string,
   resizable?: boolean,
-  onChange?: (text: string) => void,
+  onChangeText?: (text: string) => void,
   disclaimer?: string,
   onEditCompleted?: (text: string) => void,
   defaultStyle?: boolean,
-} & Omit<TextareaHTMLAttributes<HTMLTextAreaElement>, 'id' | 'onChange' | 'value'>
+} & Omit<TextareaHTMLAttributes<HTMLTextAreaElement>, 'value'>
 
 /**
  * A Textarea component for inputting longer texts
@@ -31,6 +30,7 @@ export const Textarea = ({
                            id,
                            resizable = false,
                            onChange = noop,
+                           onChangeText = noop,
                            disclaimer,
                            onBlur = noop,
                            onEditCompleted = noop,
@@ -71,7 +71,8 @@ export const Textarea = ({
             restartTimer(() => {
               onEditCompletedWrapper(value)
             })
-            onChange(value)
+            onChange(event)
+            onChangeText(value)
           }}
           onFocus={() => {
             setHasFocus(true)
@@ -99,8 +100,7 @@ export const Textarea = ({
  */
 export const TextareaUncontrolled = ({
                                        value = '',
-                                       onChange = noop,
-                                       onEditCompleted = noop,
+                                       onChangeText = noop,
                                        ...props
                                      }: TextareaProps) => {
   const [text, setText] = useState<string>(value)
@@ -113,13 +113,9 @@ export const TextareaUncontrolled = ({
     <Textarea
       {...props}
       value={text}
-      onChange={text => {
-        onChange(text)
+      onChangeText={text => {
         setText(text)
-      }}
-      onEditCompleted={text => {
-        onEditCompleted(text)
-        setText(text)
+        onChangeText(text)
       }}
     />
   )

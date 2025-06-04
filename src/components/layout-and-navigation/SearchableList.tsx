@@ -2,10 +2,10 @@ import type { ReactNode } from 'react'
 import { useEffect, useMemo, useState } from 'react'
 import { Search } from 'lucide-react'
 import clsx from 'clsx'
-import type { Language } from '../../localization/util'
-import type { PropsForTranslation } from '../../localization/useTranslation'
-import { useTranslation } from '../../localization/useTranslation'
-import { MultiSearchWithMapping } from '../../util/simpleSearch'
+import type { Language } from '@/localization/util'
+import type { PropsForTranslation } from '@/localization/useTranslation'
+import { useTranslation } from '@/localization/useTranslation'
+import { MultiSearchWithMapping } from '@/util/simpleSearch'
 import { Input } from '../user-action/Input'
 
 type SearchableListTranslation = {
@@ -54,7 +54,7 @@ export const SearchableList = <T, >({
     <div className={clsx('col gap-y-2', className)}>
       <div className="row justify-between gap-x-2 items-center">
         <div className="flex-1">
-          <Input value={search} onChange={setSearch} placeholder={translation.search}/>
+          <Input value={search} onChangeText={setSearch} placeholder={translation.search}/>
         </div>
         <Search size={20}/>
       </div>

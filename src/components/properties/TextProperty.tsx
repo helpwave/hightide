@@ -1,10 +1,10 @@
 import { Text } from 'lucide-react'
 import clsx from 'clsx'
-import type { Language } from '../../localization/util'
-import type { PropsForTranslation } from '../../localization/useTranslation'
-import { useTranslation } from '../../localization/useTranslation'
+import type { Language } from '@/localization/util'
+import type { PropsForTranslation } from '@/localization/useTranslation'
+import { useTranslation } from '@/localization/useTranslation'
 import { Textarea } from '../user-action/Textarea'
-import { noop } from '../../util/noop'
+import { noop } from '@/util/noop'
 import type { PropertyBaseProps } from './PropertyBase'
 import { PropertyBase } from './PropertyBase'
 
@@ -53,13 +53,13 @@ export const TextProperty = ({
           className={clsx('row grow pt-2 pb-1 px-4 cursor-pointer', { 'text-warning': softRequired && !hasValue })}
         >
           <Textarea
-            className={clsx('!ring-0 !border-0 !outline-0 !p-0 !m-0 !shadow-none !rounded-none', { 'bg-surface-warning placeholder-warning': softRequired && !hasValue })}
+            className={clsx('ring-0 border-0 outline-0 p-0 m-0 shadow-none rounded-none', { 'bg-surface-warning placeholder-warning': softRequired && !hasValue })}
             rows={5}
             defaultStyle={false}
             value={value ?? ''}
             readOnly={readOnly}
             placeholder={`${translation.value}...`}
-            onChange={(value) => {
+            onChangeText={(value) => {
               if (!value) {
                 onRemove()
               } else {
