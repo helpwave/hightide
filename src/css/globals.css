@@ -276,6 +276,8 @@
   --color-button-text-neutral-icon: #333333;
   --color-button-text-negative-text: var(--color-negative);
   --color-button-text-negative-icon: var(--color-negative);
+  --color-button-text-primary-text: var(--color-primary);
+  --color-button-text-primary-icon: var(--color-primary);
 
   --color-menu-background: #FFFFFF;
   --color-menu-text: #1A1A1A;

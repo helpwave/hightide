@@ -1,10 +1,16 @@
-import type { Meta, StoryObj } from '@storybook/react'
+import type { Meta, StoryObj } from '@storybook/nextjs'
 import { TextButton } from '../../../src'
-import { action } from '@storybook/addon-actions'
+import { action } from 'storybook/actions'
 
 const meta = {
   title: 'User Action/Button',
   component: TextButton,
+  argTypes: {
+    color: {
+      control: 'select',
+      options: ['primary', 'negative', 'neutral']
+    }
+  },
 } satisfies Meta<typeof TextButton>
 
 export default meta

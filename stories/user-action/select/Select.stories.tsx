@@ -1,6 +1,6 @@
-import type { Meta, StoryObj } from '@storybook/react'
-import { action } from '@storybook/addon-actions'
-import { SelectUncontrolled } from '../../../src/components/user-action/Select'
+import type { Meta, StoryObj } from '@storybook/nextjs'
+import { action } from 'storybook/actions'
+import { SelectUncontrolled } from '../../../src'
 
 const meta = {
   title: 'User Action/Select',

@@ -1,8 +1,8 @@
-import type { Meta, StoryObj } from '@storybook/react'
+import type { Meta, StoryObj } from '@storybook/nextjs'
 import { useEffect, useState } from 'react'
-import type { DatePropertyProps } from '../../../src/components/properties/DateProperty'
-import { DateProperty } from '../../../src/components/properties/DateProperty'
-import { noop } from '../../../src/util/noop'
+import type { DatePropertyProps } from '../../../src'
+import { DateProperty } from '../../../src'
+import { noop } from '../../../src'
 
 type DatePropertyExampleProps = DatePropertyProps & {
   readOnly: boolean,

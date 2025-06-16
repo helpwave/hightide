@@ -12,7 +12,7 @@ export type OutlineButtonColor = 'primary'
 /**
  * The allowed colors for the TextButton
  */
-export type TextButtonColor = 'negative' | 'neutral'
+export type TextButtonColor = 'primary' | 'negative' | 'neutral'
 
 /**
  * The different sizes for a button
@@ -212,11 +212,13 @@ const TextButton = ({
                       ...restProps
                     }: TextButtonProps) => {
   const colorClasses = {
+    primary: 'bg-transparent text-button-text-primary-text',
     negative: 'bg-transparent text-button-text-negative-text',
     neutral: 'bg-transparent text-button-text-neutral-text',
   }[color]
 
   const iconColorClasses = {
+    primary: 'text-button-text-primary-icon',
     negative: 'text-button-text-negative-icon',
     neutral: 'text-button-text-neutral-icon',
   }[color]

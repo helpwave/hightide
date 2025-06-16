@@ -1,7 +1,7 @@
-import type { Meta, StoryObj } from '@storybook/react'
+import type { Meta, StoryObj } from '@storybook/nextjs'
 import { Info, X } from 'lucide-react'
-import type { TileProps } from '../../../src/components/layout-and-navigation/Tile'
-import { Tile } from '../../../src/components/layout-and-navigation/Tile'
+import type { TileProps } from '../../../src'
+import { Tile } from '../../../src'
 
 type TileExampleProps = Omit<TileProps, 'prefix' | 'suffix'> & {
   prefix: boolean,
