@@ -1,11 +1,11 @@
-import type { Meta, StoryObj } from '@storybook/react'
+import type { Meta, StoryObj } from '@storybook/nextjs'
 import { useEffect, useState } from 'react'
 import type {
   TableProps,
   TableSortingFunctionType,
   TableSortingType,
   TableState
-} from '../../src/components/layout-and-navigation/Table'
+} from '../../src'
 import {
   addElementToTable,
   defaultTableStatePagination,
@@ -13,9 +13,9 @@ import {
   removeFromTableSelection,
   SortButton,
   Table
-} from '../../src/components/layout-and-navigation/Table'
-import { Input } from '../../src/components/user-action/Input'
-import { SolidButton, TextButton } from '../../src/components/user-action/Button'
+} from '../../src'
+import { Input } from '../../src'
+import { SolidButton, TextButton } from '../../src'
 
 type DataType = {
   id: string,
@@ -78,11 +78,11 @@ const TableExample = ({ data: initialData }: Pick<TableProps<DataType>, 'data'>)
         rowMappingToCells={dataObject => [
           <span key="id"
                 className="textstyle-title-md w-[100px] text-ellipsis overflow-hidden block">{dataObject.id}</span>,
-          <Input key="name" value={dataObject.name} onChange={text => {
+          <Input key="name" value={dataObject.name} onChangeText={text => {
             setData(data.map(value => value.id === dataObject.id ? { ...dataObject, name: text } : value))
             setSorting(undefined)
           }}/>,
-          <Input key="age" type="number" value={dataObject.age.toString()} onChange={text => {
+          <Input key="age" type="number" value={dataObject.age.toString()} onChangeText={text => {
             setData(data.map(value => value.id === dataObject.id ? {
               ...dataObject,
               age: parseInt(text)

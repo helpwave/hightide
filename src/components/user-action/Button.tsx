@@ -2,7 +2,7 @@ import type { ButtonHTMLAttributes, PropsWithChildren, ReactNode } from 'react'
 import clsx from 'clsx'
 
 /**
- * The allowed colors for the SolidButton
+ * The allowed colors for the SolidButton and IconButton
  */
 export type SolidButtonColor = 'primary' | 'secondary' | 'tertiary' | 'positive' | 'warning' | 'negative'
 /**
@@ -12,7 +12,7 @@ export type OutlineButtonColor = 'primary'
 /**
  * The allowed colors for the TextButton
  */
-export type TextButtonColor = 'negative' | 'neutral'
+export type TextButtonColor = 'primary' | 'negative' | 'neutral'
 
 /**
  * The different sizes for a button
@@ -35,8 +35,15 @@ const paddingMapping: Record<ButtonSizes, string> = {
   large: 'btn-lg'
 }
 
+const iconPaddingMapping: Record<ButtonSizes, string> = {
+  small: 'icon-btn-sm',
+  medium: 'icon-btn-md',
+  large: 'icon-btn-lg'
+}
+
 export const ButtonUtil = {
-  paddingMapping
+  paddingMapping,
+  iconPaddingMapping
 }
 
 type ButtonWithIconsProps = ButtonProps & {
@@ -54,6 +61,10 @@ export type OutlineButtonProps = ButtonWithIconsProps & {
 
 export type TextButtonProps = ButtonWithIconsProps & {
   color?: TextButtonColor,
+}
+
+export type IconButtonProps = ButtonProps & {
+  color?: SolidButtonColor,
 }
 
 /**
@@ -154,7 +165,7 @@ const OutlineButton = ({
       disabled={disabled || onClick === undefined}
       className={clsx(
         className, {
-          'text-disabled-text border-disabled-outline)': disabled,
+          'text-disabled-text border-disabled-outline': disabled,
           [clsx(colorClasses, 'hover:brightness-80')]: !disabled,
         },
         ButtonUtil.paddingMapping[size]
@@ -201,11 +212,13 @@ const TextButton = ({
                       ...restProps
                     }: TextButtonProps) => {
   const colorClasses = {
+    primary: 'bg-transparent text-button-text-primary-text',
     negative: 'bg-transparent text-button-text-negative-text',
     neutral: 'bg-transparent text-button-text-neutral-text',
   }[color]
 
   const iconColorClasses = {
+    primary: 'text-button-text-primary-icon',
     negative: 'text-button-text-negative-icon',
     neutral: 'text-button-text-neutral-icon',
   }[color]
@@ -247,6 +260,45 @@ const TextButton = ({
   )
 }
 
-// TODO Icon button
 
-export { SolidButton, OutlineButton, TextButton }
+/**
+ * A button for icons with a solid background and different sizes
+ */
+const IconButton = ({
+                       children,
+                       disabled = false,
+                       color = 'primary',
+                       size = 'medium',
+                       onClick,
+                       className,
+                       ...restProps
+                     }: IconButtonProps) => {
+  const colorClasses = {
+    primary: 'bg-button-solid-primary-background text-button-solid-primary-text',
+    secondary: 'bg-button-solid-secondary-background text-button-solid-secondary-text',
+    tertiary: 'bg-button-solid-tertiary-background text-button-solid-tertiary-text',
+    positive: 'bg-button-solid-positive-background text-button-solid-positive-text',
+    warning: 'bg-button-solid-warning-background text-button-solid-warning-text',
+    negative: 'bg-button-solid-negative-background text-button-solid-negative-text',
+  }[color]
+
+  return (
+    <button
+      onClick={disabled ? undefined : onClick}
+      disabled={disabled || onClick === undefined}
+      className={clsx(
+        className,
+        {
+          'text-disabled-text bg-disabled-background': disabled,
+          [clsx(colorClasses, 'hover:brightness-90')]: !disabled
+        },
+        ButtonUtil.iconPaddingMapping[size]
+      )}
+      {...restProps}
+    >
+      {children}
+    </button>
+  )
+}
+
+export { SolidButton, OutlineButton, TextButton, IconButton }

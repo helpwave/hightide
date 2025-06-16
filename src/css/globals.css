@@ -248,33 +248,36 @@
   --color-disabled-icon: #555555;
   --color-disabled-outline: #555555;
 
-  --color-button-solid-primary-background: var(--color-purple-500);
-  --color-button-solid-primary-text: #FFFFFF;
-  --color-button-solid-primary-icon: #FFFFFF;
-  --color-button-solid-secondary-background: #EFE6FD;
-  --color-button-solid-secondary-text: var(--color-purple-500);
-  --color-button-solid-secondary-icon: var(--color-purple-500);
+  --color-button-solid-primary-background: var(--color-primary);
+  --color-button-solid-primary-text: var(--color-on-primary);
+  --color-button-solid-primary-icon: var(--color-on-primary);
+  --color-button-solid-secondary-background: var(--color-purple-50);
+  --color-button-solid-secondary-text: var(--color-primary);
+  --color-button-solid-secondary-icon: var(--color-primary);
   --color-button-solid-tertiary-background: #F2F2F2;
   --color-button-solid-tertiary-icon: #888888;
   --color-button-solid-tertiary-text: #888888;
-  --color-button-outline-primary-outline: var(--color-purple-500);
-  --color-button-outline-primary-icon: var(--color-purple-500);
-  --color-button-outline-primary-text: var(--color-purple-500);
-  --color-button-solid-positive-background: #69CB81;
-  --color-button-solid-positive-icon: #FFFFFF;
-  --color-button-solid-positive-text: #FFFFFF;
-  --color-button-solid-warning-background: #EA9E40;
-  --color-button-solid-warning-icon: #FFFFFF;
-  --color-button-solid-warning-text: #FFFFFF;
-  --color-button-solid-negative-background: #DC576D;
-  --color-button-solid-negative-icon: #FFFFFF;
-  --color-button-solid-negative-text: #FFFFFF;
+  --color-button-solid-positive-background: var(--color-positive);
+  --color-button-solid-positive-icon: var(--color-on-positive);
+  --color-button-solid-positive-text: var(--color-on-positive);
+  --color-button-solid-warning-background: var(--color-warning);
+  --color-button-solid-warning-icon: var(--color-on-warning);
+  --color-button-solid-warning-text: var(--color-on-warning);
+  --color-button-solid-negative-background: var(--color-negative);
+  --color-button-solid-negative-icon: var(--color-on-negative);
+  --color-button-solid-negative-text: var(--color-on-negative);
 
-  --color-button-text-hover-background: #E1E1E1;
+  --color-button-outline-primary-outline: var(--color-primary);
+  --color-button-outline-primary-icon: var(--color-primary);
+  --color-button-outline-primary-text: var(--color-primary);
+
+  --color-button-text-hover-background: #77777733;
   --color-button-text-neutral-text: #333333;
   --color-button-text-neutral-icon: #333333;
-  --color-button-text-negative-text: #DC576D;
-  --color-button-text-negative-icon: #DC576D;
+  --color-button-text-negative-text: var(--color-negative);
+  --color-button-text-negative-icon: var(--color-negative);
+  --color-button-text-primary-text: var(--color-primary);
+  --color-button-text-primary-icon: var(--color-primary);
 
   --color-menu-background: #FFFFFF;
   --color-menu-text: #1A1A1A;
@@ -304,8 +307,8 @@
 
   --color-tabel-header-background: #F6FAFF;
 
-  --color-text-image-primary-background: var(--color-purple-500);
-  --color-text-image-primary-text: #FFFFFF;
+  --color-text-image-primary-background: var(--color-primary);
+  --color-text-image-primary-text: var(--color-on-primary);
   --color-text-image-secondary-background: #3171DE;
   --color-text-image-secondary-text: #FFFFFF;
   --color-text-image-dark-background: #11243E;
@@ -365,15 +368,27 @@
 /* Styles that can be overwritten by utils */
 @layer components {
   .btn-sm {
-    @apply row items-center justify-center gap-x-1 px-[0.625rem] py-[0.25rem] rounded-[0.375rem];
+    @apply row items-center justify-center gap-x-1 px-[0.625rem] py-[0.25rem] rounded-[0.375rem] h-8;
   }
 
   .btn-md {
-    @apply row items-center justify-center gap-x-2 px-[0.75rem] py-[0.5rem] rounded-[0.375rem];
+    @apply row items-center justify-center gap-x-2 px-[0.75rem] py-[0.5rem] rounded-[0.375rem] h-10;
   }
 
   .btn-lg {
-    @apply row items-center justify-center gap-x-2 px-[1rem] py-[0.675rem] rounded-[0.375rem];
+    @apply row items-center justify-center gap-x-2 px-[1rem] py-[0.675rem] rounded-[0.375rem] h-12;
+  }
+
+  .icon-btn-sm {
+    @apply row items-center justify-center gap-x-1 p-[0.375rem] rounded-[0.375rem] h-8;
+  }
+
+  .icon-btn-md {
+    @apply row items-center justify-center gap-x-2 p-[0.5rem] rounded-[0.375rem] h-10;
+  }
+
+  .icon-btn-lg {
+    @apply row items-center justify-center gap-x-2 p-[0.75rem] rounded-[0.375rem] h-12;
   }
 
   .card-sm {

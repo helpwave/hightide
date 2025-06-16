@@ -10,6 +10,7 @@ and adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 ### Added
 
 - .editorconfig
+- `IconButton`
 
 ### Changed
 
@@ -17,6 +18,7 @@ and adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 - Update controllable Components to also offer an uncontrolled version (controlled stays the default)
 - Update file structure
 - Update imports to allow for absolute imports with `@`
+- Update Storybook to version `9.0.10`
 
 ### Removed
 - examples which are now part of their corresponding story

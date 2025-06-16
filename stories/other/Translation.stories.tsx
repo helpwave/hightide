@@ -1,4 +1,4 @@
-import type { Meta, StoryObj } from '@storybook/react'
+import type { Meta, StoryObj } from '@storybook/nextjs'
 import type { Language, PropsForTranslation } from '../../src'
 import { useTranslation } from '../../src'
 

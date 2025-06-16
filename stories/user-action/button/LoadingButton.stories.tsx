@@ -1,4 +1,4 @@
-import type { Meta, StoryObj } from '@storybook/react'
+import type { Meta, StoryObj } from '@storybook/nextjs'
 import { LoadingButton } from '../../../src'
 
 const meta = {
@@ -15,7 +15,6 @@ export const loadingButton: Story = {
     color: 'primary',
     size: 'medium',
     disabled: false,
-    className: 'rounded',
     isLoading: false,
   },
 }

@@ -1,10 +1,16 @@
-import type { Meta, StoryObj } from '@storybook/react'
+import type { Meta, StoryObj } from '@storybook/nextjs'
 import { SolidButton } from '../../../src'
-import { action } from '@storybook/addon-actions'
+import { action } from 'storybook/actions'
 
 const meta = {
   title: 'User Action/Button',
   component: SolidButton,
+  argTypes: {
+    color: {
+      control: 'select',
+      options: ['primary', 'secondary', 'tertiary', 'positive', 'warning', 'negative']
+    }
+  },
 } satisfies Meta<typeof SolidButton>
 
 export default meta
@@ -16,7 +22,6 @@ export const solidButton: Story = {
     color: 'primary',
     size: 'medium',
     disabled: false,
-    className: 'rounded',
     onClick: action('Clicked'),
   },
 }
