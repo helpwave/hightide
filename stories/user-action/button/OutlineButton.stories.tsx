@@ -1,5 +1,5 @@
 import type { Meta, StoryObj } from '@storybook/nextjs'
-import { OutlineButton } from '../../../src'
+import { ButtonColorUtil, OutlineButton } from '../../../src'
 import { action } from 'storybook/actions'
 
 const meta = {
@@ -8,7 +8,7 @@ const meta = {
   argTypes: {
     color: {
       control: 'select',
-      options: ['primary']
+      options: ButtonColorUtil.outline,
     }
   },
 } satisfies Meta<typeof OutlineButton>

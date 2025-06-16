@@ -1,9 +1,15 @@
 import type { Meta, StoryObj } from '@storybook/nextjs'
-import { LoadingButton } from '../../../src'
+import { ButtonColorUtil, LoadingButton } from '../../../src'
 
 const meta = {
   title: 'User Action/Button',
   component: LoadingButton,
+  argTypes: {
+    color: {
+      control: 'select',
+      options: ButtonColorUtil.solid,
+    }
+  },
 } satisfies Meta<typeof LoadingButton>
 
 export default meta

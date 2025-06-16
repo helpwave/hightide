@@ -14,11 +14,12 @@ and adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
 ### Changed
 
-- Update README.md to hold more information on publishing
+- Update [README.md](README.md) to hold more information on publishing
 - Update controllable Components to also offer an uncontrolled version (controlled stays the default)
 - Update file structure
 - Update imports to allow for absolute imports with `@`
 - Update Storybook to version `9.0.10`
+- Differentiate `Overlays`, `Modals` and `Dialogs`
 
 ### Removed
 - examples which are now part of their corresponding story

@@ -1,10 +1,10 @@
 import type { PropsWithChildren } from 'react'
 import { SolidButton } from '../user-action/Button'
-import type { PropsForTranslation } from '../../localization/useTranslation'
-import { useTranslation } from '../../localization/useTranslation'
-import { Modal, type ModalProps } from './Modal'
+import type { PropsForTranslation } from '@/localization/useTranslation'
+import { useTranslation } from '@/localization/useTranslation'
+import { Modal, type ModalProps } from '../layout-and-navigation/Overlay'
 
-type DiscardChangesDialogTranslation = {
+type DiscardChangesModalTranslation = {
   save: string,
   cancel: string,
   dontSave: string,
@@ -12,7 +12,7 @@ type DiscardChangesDialogTranslation = {
   description: string,
 }
 
-const defaultDiscardChangesDialogTranslation = {
+const defaultDiscardChangesModalTranslation = {
   en: {
     save: 'Save',
     cancel: 'Cancel',
@@ -29,7 +29,7 @@ const defaultDiscardChangesDialogTranslation = {
   }
 }
 
-type DiscardChangesDialogProps = ModalProps & {
+type DiscardChangesModalProps = ModalProps & {
   isShowingDecline?: boolean,
   requireAnswer?: boolean,
   onCancel: () => void,
@@ -37,21 +37,23 @@ type DiscardChangesDialogProps = ModalProps & {
   onDontSave: () => void,
 }
 
-export const DiscardChangesDialog = ({
+export const DiscardChangesModal = ({
                                        overwriteTranslation,
                                        children,
-                                       title,
-                                       description,
                                        onCancel,
                                        onSave,
                                        onDontSave,
+                                       headerProps,
                                        ...modalProps
-                                     }: PropsForTranslation<DiscardChangesDialogTranslation, PropsWithChildren<DiscardChangesDialogProps>>) => {
-  const translation = useTranslation(defaultDiscardChangesDialogTranslation, overwriteTranslation)
+                                     }: PropsForTranslation<DiscardChangesModalTranslation, PropsWithChildren<DiscardChangesModalProps>>) => {
+  const translation = useTranslation(defaultDiscardChangesModalTranslation, overwriteTranslation)
   return (
     <Modal
-      title={title ?? translation.title}
-      description={description ?? translation.description}
+      headerProps={{
+        ...headerProps,
+        titleText: headerProps?.titleText ?? translation.title,
+        descriptionText: headerProps?.descriptionText ?? translation.description,
+      }}
       {...modalProps}
     >
       {children}

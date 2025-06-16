@@ -257,6 +257,9 @@
   --color-button-solid-tertiary-background: #F2F2F2;
   --color-button-solid-tertiary-icon: #888888;
   --color-button-solid-tertiary-text: #888888;
+  --color-button-solid-neutral-background: #D6D6D6;
+  --color-button-solid-neutral-icon: #1A1A1A;
+  --color-button-solid-neutral-text: #1A1A1A;
   --color-button-solid-positive-background: var(--color-positive);
   --color-button-solid-positive-icon: var(--color-on-positive);
   --color-button-solid-positive-text: var(--color-on-positive);
@@ -314,6 +317,9 @@
   --color-text-image-dark-background: #11243E;
   --color-text-image-dark-text: #FFFFFF;
 
+  --color-overlay-background: #FFFFFF;
+  --color-overlay-text: #1A1A1A;
+
   /* breakpoints */
   --breakpoint-tablet: 48rem; /* 768px for 16px font-size */
   --breakpoint-desktop: 64rem; /* 1024px for 16px font-size*/
@@ -353,7 +359,12 @@
     --color-disabled-background: #555555;
     --color-disabled-text: #888888;
 
-    --color-button-text-hover-background: #383838;
+
+    --color-button-solid-neutral-background: #3F3F3F;
+    --color-button-solid-neutral-icon: #EEEEEE;
+    --color-button-solid-neutral-text: #EEEEEE;
+
+    --color-button-text-hover-background: #3F3F3F;
     --color-button-text-neutral-text: #EEEEEE;
     --color-button-text-neutral-icon: #EEEEEE;
 
@@ -362,6 +373,9 @@
     --color-menu-border: #999999;
 
     --color-tabel-header-background: #F6FAFF;
+
+    --color-overlay-background: #222222;
+    --color-overlay-text: #FFFFFF;
   }
 }
 
