@@ -1,9 +1,11 @@
 import type { PropsWithChildren } from 'react'
 import type { SolidButtonColor } from '../user-action/Button'
 import { SolidButton } from '../user-action/Button'
-import type { PropsForTranslation } from '../../localization/useTranslation'
-import { useTranslation } from '../../localization/useTranslation'
-import { Modal, type ModalProps } from './Modal'
+import type { PropsForTranslation } from '@/localization/useTranslation'
+import { useTranslation } from '@/localization/useTranslation'
+import clsx from 'clsx'
+import type { DialogProps } from '@/components/layout-and-navigation/Overlay'
+import { Dialog } from '@/components/layout-and-navigation/Overlay'
 
 type ConfirmDialogTranslation = {
   confirm: string,
@@ -32,7 +34,7 @@ export type ButtonOverwriteType = {
   disabled?: boolean,
 }
 
-export type ConfirmDialogProps = ModalProps & {
+export type ConfirmDialogProps = DialogProps & {
   isShowingDecline?: boolean,
   requireAnswer?: boolean,
   onCancel?: () => void,
@@ -58,6 +60,7 @@ export const ConfirmDialog = ({
                                 onDecline,
                                 confirmType = 'positive',
                                 buttonOverwrites,
+                                className,
                                 ...restProps
                               }: PropsForTranslation<ConfirmDialogTranslation, PropsWithChildren<ConfirmDialogProps>>) => {
   const translation = useTranslation(defaultConfirmDialogTranslation, overwriteTranslation)
@@ -69,8 +72,10 @@ export const ConfirmDialog = ({
   }
 
   return (
-    <Modal {...restProps}>
-      {children}
+    <Dialog {...restProps} className={clsx('justify-between', className)}>
+      <div className="col grow">
+        {children}
+      </div>
       <div className="row mt-3 gap-x-4 justify-end">
         {onCancel && (
           <SolidButton
@@ -100,6 +105,6 @@ export const ConfirmDialog = ({
           {buttonOverwrites?.[2].text ?? translation.confirm}
         </SolidButton>
       </div>
-    </Modal>
+    </Dialog>
   )
 }

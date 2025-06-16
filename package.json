@@ -80,8 +80,5 @@
   ],
   "bugs": {
     "url": "https://github.com/helpwave/hightide/issues"
-  },
-  "overrides": {
-    "storybook": "$storybook"
   }
 }

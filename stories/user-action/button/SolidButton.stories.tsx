@@ -8,7 +8,7 @@ const meta = {
   argTypes: {
     color: {
       control: 'select',
-      options: ['primary', 'secondary', 'tertiary', 'positive', 'warning', 'negative']
+      options: ['primary', 'secondary', 'tertiary', 'positive', 'warning', 'negative', 'neutral'],
     }
   },
 } satisfies Meta<typeof SolidButton>

@@ -1,6 +1,6 @@
 import type { Preview } from '@storybook/nextjs'
 import type { ThemeType } from '../src'
-import { LanguageProvider, ModalRegister, modalRootName, ThemeProvider } from '../src'
+import { LanguageProvider, ThemeProvider } from '../src'
 import '../src/css/globals.css'
 
 const colorToHex: Record<ThemeType, string> = {
@@ -8,21 +8,17 @@ const colorToHex: Record<ThemeType, string> = {
   light: '#EEE',
 }
 
-const colorToHexReverse: Record<string, ThemeType> = {
-  '#1A1A1A': 'dark',
-  '#EEE': 'light',
-  'transparent': 'light',
-}
-
 const preview: Preview = {
   parameters: {
     backgrounds: {
-      values: [
-        { name: 'Dark', value: colorToHex.dark },
-        { name: 'Light', value: colorToHex.light },
-      ],
-      default: 'Light',
+      options: {
+        dark: { name: 'Dark', value: colorToHex.dark },
+        light: { name: 'Light', value: colorToHex.light },
+      }
     },
+  },
+  initialGlobals: {
+    backgrounds: { value: 'light' },
   },
   globalTypes: {
     language: {
@@ -41,18 +37,14 @@ const preview: Preview = {
   decorators: [
     (Story, context) => {
       const App = Story
-      const theme = colorToHexReverse[context.globals.backgrounds?.value ?? colorToHex.light]
+      const theme = context.globals.backgrounds?.value ?? 'light'
       const language = context.globals.language
 
       return (
         <main data-theme={theme}>
           <ThemeProvider initialTheme={theme}>
             <LanguageProvider initialLanguage={language}>
-              <ModalRegister>
-                <div id={modalRootName}>
-                  <App/>
-                </div>
-              </ModalRegister>
+              <App/>
             </LanguageProvider>
           </ThemeProvider>
         </main>

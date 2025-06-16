@@ -1,6 +1,6 @@
-import type { Meta, StoryObj } from '@storybook/react'
-import { ToggleableInputUncontrolled } from '../../../src'
-import { action } from '@storybook/addon-actions'
+import { action } from 'storybook/actions'
+import { ToggleableInputUncontrolled } from '../../src'
+import type { Meta, StoryObj } from '@storybook/nextjs'
 
 const meta = {
     title: 'User-Action/Input',

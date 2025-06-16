@@ -1,18 +1,26 @@
 import type { ButtonHTMLAttributes, PropsWithChildren, ReactNode } from 'react'
 import clsx from 'clsx'
 
+
+export const ButtonColorUtil = {
+  solid: ['primary', 'secondary', 'tertiary', 'positive', 'warning', 'negative', 'neutral'] as const,
+  text: ['primary', 'negative', 'neutral'] as const,
+  outline: ['primary'] as const,
+}
+
+
 /**
  * The allowed colors for the SolidButton and IconButton
  */
-export type SolidButtonColor = 'primary' | 'secondary' | 'tertiary' | 'positive' | 'warning' | 'negative'
+export type SolidButtonColor = typeof ButtonColorUtil.solid[number]
 /**
  * The allowed colors for the OutlineButton
  */
-export type OutlineButtonColor = 'primary'
+export type OutlineButtonColor = typeof ButtonColorUtil.outline[number]
 /**
  * The allowed colors for the TextButton
  */
-export type TextButtonColor = 'primary' | 'negative' | 'neutral'
+export type TextButtonColor = typeof ButtonColorUtil.text[number]
 
 /**
  * The different sizes for a button
@@ -88,6 +96,7 @@ const SolidButton = ({
     positive: 'bg-button-solid-positive-background text-button-solid-positive-text',
     warning: 'bg-button-solid-warning-background text-button-solid-warning-text',
     negative: 'bg-button-solid-negative-background text-button-solid-negative-text',
+    neutral: 'bg-button-solid-neutral-background text-button-solid-neutral-text',
   }[color]
 
   const iconColorClasses = {
@@ -97,6 +106,7 @@ const SolidButton = ({
     positive: 'text-button-solid-positive-icon',
     warning: 'text-button-solid-warning-icon',
     negative: 'text-button-solid-negative-icon',
+    neutral: 'text-button-solid-neutral-icon',
   }[color]
 
   return (
@@ -265,14 +275,14 @@ const TextButton = ({
  * A button for icons with a solid background and different sizes
  */
 const IconButton = ({
-                       children,
-                       disabled = false,
-                       color = 'primary',
-                       size = 'medium',
-                       onClick,
-                       className,
-                       ...restProps
-                     }: IconButtonProps) => {
+                      children,
+                      disabled = false,
+                      color = 'primary',
+                      size = 'medium',
+                      onClick,
+                      className,
+                      ...restProps
+                    }: IconButtonProps) => {
   const colorClasses = {
     primary: 'bg-button-solid-primary-background text-button-solid-primary-text',
     secondary: 'bg-button-solid-secondary-background text-button-solid-secondary-text',
@@ -280,6 +290,7 @@ const IconButton = ({
     positive: 'bg-button-solid-positive-background text-button-solid-positive-text',
     warning: 'bg-button-solid-warning-background text-button-solid-warning-text',
     negative: 'bg-button-solid-negative-background text-button-solid-negative-text',
+    neutral: 'bg-button-solid-neutral-background text-button-solid-neutral-text',
   }[color]
 
   return (
