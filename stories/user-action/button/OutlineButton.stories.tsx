@@ -16,7 +16,6 @@ export const outlineButton: Story = {
     color: 'primary',
     size: 'medium',
     disabled: false,
-    className: 'rounded',
     onClick: action('Clicked'),
   },
 }

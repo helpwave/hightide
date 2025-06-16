@@ -15,7 +15,6 @@ export const loadingButton: Story = {
     color: 'primary',
     size: 'medium',
     disabled: false,
-    className: 'rounded',
     isLoading: false,
   },
 }
