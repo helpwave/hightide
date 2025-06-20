@@ -33,14 +33,14 @@ const StackedDialog = () => {
 }
 
 const meta: Meta = {
-  title: 'Layout/Dialog',
+  title: 'Layout',
   component: StackedDialog,
 }
 
 export default meta
 type Story = StoryObj<typeof meta>;
 
-export const stackingDialogs: Story = {
+export const dialog: Story = {
   render: () => <StackedDialog/>,
   args: {}
 }

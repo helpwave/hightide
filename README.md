@@ -11,6 +11,10 @@ the [globals.css](src/css/globals.css)
 
 We use [storybook](https://storybook.js.org/) for easily testing and showcasing our component library
 
+```bash
+npm run storybook
+```
+
 ### Publishing a new version
 
 - Run the barreling script

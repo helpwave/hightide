@@ -167,14 +167,14 @@ const TableExample = ({ data: initialData }: Pick<TableProps<DataType>, 'data'>)
 }
 
 const meta: Meta<typeof Table<DataType>> = {
-  title: 'Layout/Table',
+  title: 'Layout',
   component: Table,
 }
 
 export default meta
 type Story = StoryObj<typeof meta>;
 
-export const tableExample: Story = {
+export const table: Story = {
   render: (args) => <TableExample data={args['data']}/>,
   args: {
     data: exampleData,

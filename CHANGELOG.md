@@ -20,6 +20,7 @@ and adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 - Update imports to allow for absolute imports with `@`
 - Update Storybook to version `9.0.10`
 - Differentiate `Overlays`, `Modals` and `Dialogs`
+- Update the `Tooltip` appearance
 
 ### Removed
 - examples which are now part of their corresponding story

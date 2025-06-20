@@ -48,14 +48,14 @@ const StackingModals = () => {
 }
 
 const meta: Meta = {
-  title: 'Layout/Modal',
+  title: 'Layout',
   component: StackingModals,
 }
 
 export default meta
 type Story = StoryObj<typeof meta>;
 
-export const stackingModal: Story = {
+export const modal: Story = {
   render: () => <StackingModals/>,
   args: {}
 }

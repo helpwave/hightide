@@ -55,10 +55,10 @@ export const Tooltip = ({
 
   const triangleSize = 6
   const triangleClasses = {
-    top: `top-full left-1/2 -translate-x-1/2 border-t-gray-600 border-l-transparent border-r-transparent`,
-    bottom: `bottom-full left-1/2 -translate-x-1/2 border-b-gray-600 border-l-transparent border-r-transparent`,
-    left: `left-full top-1/2 -translate-y-1/2 border-l-gray-600 border-t-transparent border-b-transparent`,
-    right: `right-full top-1/2 -translate-y-1/2 border-r-gray-600 border-t-transparent border-b-transparent`
+    top: `top-full left-1/2 -translate-x-1/2 border-t-tooltip-background border-l-transparent border-r-transparent`,
+    bottom: `bottom-full left-1/2 -translate-x-1/2 border-b-tooltip-background border-l-transparent border-r-transparent`,
+    left: `left-full top-1/2 -translate-y-1/2 border-l-tooltip-background border-t-transparent border-b-transparent`,
+    right: `right-full top-1/2 -translate-y-1/2 border-r-tooltip-background border-t-transparent border-b-transparent`
   }
 
   const triangleStyle: Record<Position, CSSProperties> = {
@@ -76,8 +76,11 @@ export const Tooltip = ({
       {children}
       {isHovered && (
         <div
-          className={clsx(`opacity-0 absolute text-xs font-semibold text-gray-600 px-2 py-1 rounded whitespace-nowrap border-1 border-gray-600
-           animate-tooltip-fade-in shadow-lg bg-gray-100`, positionClasses[position], tooltipClassName)}
+          className={clsx(
+            `opacity-0 absolute text-xs font-semibold text-tooltip-text px-2 py-1 rounded whitespace-nowrap
+           animate-tooltip-fade-in shadow-lg bg-tooltip-background`,
+            positionClasses[position], tooltipClassName
+          )}
           style={{ zIndex, animationDelay: animationDelay + 'ms' }}
         >
           {tooltip}
