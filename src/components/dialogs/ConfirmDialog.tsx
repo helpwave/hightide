@@ -26,7 +26,7 @@ const defaultConfirmDialogTranslation = {
   }
 }
 
-export type ButtonOverwriteType = {
+type ButtonOverwriteType = {
   text?: string,
   color?: SolidButtonColor,
   disabled?: boolean,
@@ -39,9 +39,9 @@ export type ConfirmDialogProps = DialogProps & {
   onDecline?: () => void,
   confirmType?: ConfirmDialogType,
   /**
-   * Order: Cancel, Decline, Confirm
+   * Order: Decline, Confirm
    */
-  buttonOverwrites?: [ButtonOverwriteType, ButtonOverwriteType, ButtonOverwriteType],
+  buttonOverwrites?: [ButtonOverwriteType, ButtonOverwriteType],
 }
 
 /**
@@ -76,21 +76,21 @@ export const ConfirmDialog = ({
       <div className="row mt-3 gap-x-4 justify-end">
         {onDecline && (
           <SolidButton
-            color={buttonOverwrites?.[1].color ?? 'negative'}
+            color={buttonOverwrites?.[0].color ?? 'negative'}
             onClick={onDecline}
 
-            disabled={buttonOverwrites?.[1].disabled ?? false}
+            disabled={buttonOverwrites?.[0].disabled ?? false}
           >
-            {buttonOverwrites?.[1].text ?? translation.decline}
+            {buttonOverwrites?.[0].text ?? translation.decline}
           </SolidButton>
         )}
         <SolidButton
           autoFocus
-          color={buttonOverwrites?.[2].color ?? mapping[confirmType]}
+          color={buttonOverwrites?.[1].color ?? mapping[confirmType]}
           onClick={onConfirm}
-          disabled={buttonOverwrites?.[2].disabled ?? false}
+          disabled={buttonOverwrites?.[1].disabled ?? false}
         >
-          {buttonOverwrites?.[2].text ?? translation.confirm}
+          {buttonOverwrites?.[1].text ?? translation.confirm}
         </SolidButton>
       </div>
     </Dialog>

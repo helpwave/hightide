@@ -28,7 +28,7 @@ const defaultConfirmDialogTranslation = {
   }
 }
 
-export type ButtonOverwriteType = {
+type ButtonOverwriteType = {
   text?: string,
   color?: SolidButtonColor,
   disabled?: boolean,
