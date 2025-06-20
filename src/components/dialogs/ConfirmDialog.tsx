@@ -13,17 +13,15 @@ type ConfirmDialogTranslation = {
   decline: string,
 }
 
-export type ConfirmDialogType = 'positive' | 'negative' | 'neutral'
+export type ConfirmDialogType = 'positive' | 'negative' | 'neutral' | 'primary'
 
 const defaultConfirmDialogTranslation = {
   en: {
     confirm: 'Confirm',
-    cancel: 'Cancel',
     decline: 'Decline'
   },
   de: {
     confirm: 'Bestätigen',
-    cancel: 'Abbrechen',
     decline: 'Ablehnen'
   }
 }
@@ -37,7 +35,6 @@ export type ButtonOverwriteType = {
 export type ConfirmDialogProps = DialogProps & {
   isShowingDecline?: boolean,
   requireAnswer?: boolean,
-  onCancel?: () => void,
   onConfirm: () => void,
   onDecline?: () => void,
   confirmType?: ConfirmDialogType,
@@ -48,14 +45,13 @@ export type ConfirmDialogProps = DialogProps & {
 }
 
 /**
- * A Dialog for asking the user for Confirmation
+ * A Dialog for demanding the user for confirmation
  *
- * To require an answer omit the onBackgroundClick
+ * To allow for background closing, prefer using a ConfirmModal
  */
 export const ConfirmDialog = ({
                                 overwriteTranslation,
                                 children,
-                                onCancel,
                                 onConfirm,
                                 onDecline,
                                 confirmType = 'positive',
@@ -68,7 +64,8 @@ export const ConfirmDialog = ({
   const mapping: Record<ConfirmDialogType, SolidButtonColor> = {
     neutral: 'primary',
     negative: 'negative',
-    positive: 'positive'
+    positive: 'positive',
+    primary: 'primary',
   }
 
   return (
@@ -77,15 +74,6 @@ export const ConfirmDialog = ({
         {children}
       </div>
       <div className="row mt-3 gap-x-4 justify-end">
-        {onCancel && (
-          <SolidButton
-            color={buttonOverwrites?.[0].color ?? 'primary'}
-            onClick={onCancel}
-            disabled={buttonOverwrites?.[0].disabled ?? false}
-          >
-            {buttonOverwrites?.[0].text ?? translation.cancel}
-          </SolidButton>
-        )}
         {onDecline && (
           <SolidButton
             color={buttonOverwrites?.[1].color ?? 'negative'}
