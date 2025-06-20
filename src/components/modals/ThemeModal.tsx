@@ -2,48 +2,48 @@ import { type PropsWithChildren } from 'react'
 import type { PropsForTranslation, Translation } from '@/localization/useTranslation'
 import { useTranslation } from '@/localization/useTranslation'
 import { Select } from '../user-action/Select'
-import type { Language } from '@/localization/util'
-import { LanguageUtil } from '@/localization/util'
-import { useLanguage } from '@/localization/LanguageProvider'
 import { SolidButton } from '../user-action/Button'
 import { Modal, type ModalProps } from '../layout-and-navigation/Overlay'
+import type { ThemeType, ThemeTypeTranslation } from '@/theming/useTheme'
+import { useTheme } from '@/theming/useTheme'
+import { ThemeUtil } from '@/theming/useTheme'
 
-type LanguageModalTranslation = {
+type ThemeModalTranslation = {
   title: string,
   message: string,
   done: string,
-} & Record<Language, string>
+} & ThemeTypeTranslation
 
-const defaultLanguageModalTranslation: Translation<LanguageModalTranslation> = {
+const defaultConfirmDialogTranslation: Translation<ThemeModalTranslation> = {
   en: {
-    title: 'Language',
-    message: 'Choose your language',
+    title: 'Theme',
+    message: 'Choose your preferred theme',
     done: 'Done',
-    ...LanguageUtil.languagesLocalNames
+    ...ThemeUtil.translation.en
   },
   de: {
-    title: 'Sprache',
-    message: 'Wähle deine bevorzugte Sprache',
+    title: 'Farbschema',
+    message: 'Wähle dein bevorzugtes Farbschema',
     done: 'Fertig',
-    ...LanguageUtil.languagesLocalNames
+    ...ThemeUtil.translation.en
   }
 }
 
-type LanguageModalProps = ModalProps
+type ThemeModalProps = ModalProps
 
 /**
- * A Modal for selecting the Language
+ * A Modal for selecting the Theme
  *
  * The State of open needs to be managed by the parent
  */
-export const LanguageModal = ({
+export const ThemeModal = ({
                                 overwriteTranslation,
                                 headerProps,
                                 onClose,
                                 ...modalProps
-                              }: PropsForTranslation<LanguageModalTranslation, PropsWithChildren<LanguageModalProps>>) => {
-  const { language, setLanguage } = useLanguage()
-  const translation = useTranslation(defaultLanguageModalTranslation, overwriteTranslation)
+                              }: PropsForTranslation<ThemeModalTranslation, PropsWithChildren<ThemeModalProps>>) => {
+  const { theme, setTheme } = useTheme()
+  const translation = useTranslation(defaultConfirmDialogTranslation, overwriteTranslation)
 
   return (
     <Modal
@@ -58,9 +58,9 @@ export const LanguageModal = ({
       <div className="w-64">
         <Select
           className="mt-2"
-          value={language}
-          options={LanguageUtil.languages.map((language) => ({ label: translation[language], value: language }))}
-          onChange={(language: string) => setLanguage(language as Language)}
+          value={theme}
+          options={ThemeUtil.themes.map((theme) => ({ label: translation[theme], value: theme }))}
+          onChange={(theme: string) => setTheme(theme as ThemeType)}
         />
         <div className="row mt-3 gap-x-4 justify-end">
           <SolidButton autoFocus color="positive" onClick={onClose}>

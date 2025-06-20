@@ -89,7 +89,7 @@ export type ModalHeaderProps = {
 }
 
 /**
- * A default Header to be used by modals to have a uniform design
+ * A default Header to be used by modal to have a uniform design
  */
 export const ModalHeader = ({
                               overwriteTranslation,

@@ -1,12 +1,15 @@
 import type { Dispatch, PropsWithChildren, SetStateAction } from 'react'
 import { createContext, useContext, useEffect, useState } from 'react'
-import type { Translation } from '../localization/useTranslation'
-import { noop } from '../util/noop'
+import type { Translation } from '@/localization/useTranslation'
+import { noop } from '@/util/noop'
 
-export type ThemeType = 'light' | 'dark'
+const themes = ['light', 'dark'] as const
+
+export type ThemeType = typeof themes[number]
 
 export type ThemeTypeTranslation = Record<ThemeType, string>
-export const defaultThemeTypeTranslation: Translation<ThemeTypeTranslation> = {
+
+const defaultThemeTypeTranslation: Translation<ThemeTypeTranslation> = {
   en: {
     dark: 'Dark',
     light: 'Light'
@@ -15,6 +18,11 @@ export const defaultThemeTypeTranslation: Translation<ThemeTypeTranslation> = {
     dark: 'Dunkel',
     light: 'Hell'
   }
+}
+
+export const ThemeUtil = {
+  themes,
+  translation: defaultThemeTypeTranslation,
 }
 
 type ThemeContextType = {

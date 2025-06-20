@@ -2,6 +2,7 @@ import type { Preview } from '@storybook/nextjs'
 import type { ThemeType } from '../src'
 import { LanguageProvider, ThemeProvider } from '../src'
 import '../src/css/globals.css'
+import './storybookStyleOverrides.css'
 
 const colorToHex: Record<ThemeType, string> = {
   dark: '#1A1A1A',
