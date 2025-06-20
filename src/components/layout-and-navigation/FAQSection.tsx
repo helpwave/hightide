@@ -45,9 +45,8 @@ export const FAQSection = ({
             (<ChevronDown size={chevronSize} className="text-primary"/>)
           }
           className={clsx('rounded-xl', expandableClassName)}
-          headerClassName="px-6 py-4"
         >
-          <div className="mt-2 px-6 pb-4">
+          <div className="mt-2">
             {content.type === 'markdown' ? (<MarkdownInterpreter text={content.value}/>) : content.value}
           </div>
         </Expandable>

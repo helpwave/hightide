@@ -13,6 +13,7 @@ export type ExpandableProps = PropsWithChildren<{
    * Whether the expansion should only happen when the header is clicked or on the entire component
    */
   clickOnlyOnHeader?: boolean,
+  disabled?: boolean,
   className?: string,
   headerClassName?: string,
 }>
@@ -30,6 +31,7 @@ export const Expandable = forwardRef<HTMLDivElement, ExpandableProps>(({
                                                                          icon,
                                                                          initialExpansion = false,
                                                                          clickOnlyOnHeader = true,
+                                                                         disabled = false,
                                                                          className = '',
                                                                          headerClassName = ''
                                                                        }, ref) => {
@@ -39,18 +41,26 @@ export const Expandable = forwardRef<HTMLDivElement, ExpandableProps>(({
   return (
     <div
       ref={ref}
-      className={clsx('col bg-surface text-on-surface group rounded-lg shadow-sm', { 'cursor-pointer': !clickOnlyOnHeader }, className)}
-      onClick={() => !clickOnlyOnHeader && setIsExpanded(!isExpanded)}
+      className={clsx('col gap-y-0 bg-surface text-on-surface group rounded-lg shadow-sm', { 'cursor-pointer': !clickOnlyOnHeader && !disabled }, className)}
+      onClick={() => !clickOnlyOnHeader && !disabled && setIsExpanded(!isExpanded)}
     >
-      <button
-        className={clsx('btn-md rounded-lg justify-between items-center bg-surface text-on-surface', { 'group-hover:brightness-95': !isExpanded }, headerClassName)}
-        onClick={() => clickOnlyOnHeader && setIsExpanded(!isExpanded)}
+      <div
+        className={clsx(
+          'row py-2 px-4 rounded-lg justify-between items-center bg-surface text-on-surface select-none',
+          {
+            'group-hover:brightness-95': !isExpanded,
+            'hover:brightness-95': isExpanded && !disabled,
+            'cursor-pointer': clickOnlyOnHeader && !disabled,
+          },
+          headerClassName
+        )}
+        onClick={() => clickOnlyOnHeader && !disabled && setIsExpanded(!isExpanded)}
       >
         {label}
         {icon(isExpanded)}
-      </button>
+      </div>
       {isExpanded && (
-        <div className="col">
+        <div className="col px-4 pb-2">
           {children}
         </div>
       )}
