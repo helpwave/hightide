@@ -1,6 +1,6 @@
 import { z } from 'zod'
-import type { Language } from '../localization/util'
-import { languages } from '../localization/util'
+import type { Language } from '@/localization/util'
+import { LanguageUtil } from '@/localization/util'
 
 export type News = {
   title: string,
@@ -36,7 +36,7 @@ export const newsSchema = z.object({
 
 export const newsListSchema = z.array(newsSchema)
 
-export const localizedNewsSchema = z.record(z.enum(languages), newsListSchema)
+export const localizedNewsSchema = z.record(z.enum(LanguageUtil.languages), newsListSchema)
 
 export const filterNews = (localizedNews: News[], requiredKeys: string[]) => {
   return localizedNews.filter(news => requiredKeys.every(value => news.keys.includes(value)))

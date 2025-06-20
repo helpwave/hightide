@@ -32,7 +32,7 @@ export type TooltipProps = PropsWithChildren<{
  * @param tooltipClassName Additional ClassNames for the Container of the tooltip
  * @param containerClassName Additional ClassNames for the Container holding the content
  * @param position The direction of the tooltip relative to the Container
- * @param zIndex The z Index of the tooltip (you may require this when stacking modals)
+ * @param zIndex The z Index of the tooltip (you may require this when stacking modal)
  * @constructor
  */
 export const Tooltip = ({

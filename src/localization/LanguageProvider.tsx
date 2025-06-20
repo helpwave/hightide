@@ -1,8 +1,8 @@
 import type { Dispatch, PropsWithChildren, SetStateAction } from 'react'
 import { createContext, useContext, useEffect, useState } from 'react'
-import { useLocalStorage } from '../hooks/useLocalStorage'
+import { useLocalStorage } from '@/hooks/useLocalStorage'
 import type { Language } from './util'
-import { languages, LanguageUtil } from './util'
+import { LanguageUtil } from './util'
 
 export type LanguageContextValue = {
   language: Language,
@@ -51,7 +51,7 @@ export const LanguageProvider = ({ initialLanguage, children }: PropsWithChildre
       return
     }
 
-    const LanguageToTestAgainst = Object.values(languages)
+    const LanguageToTestAgainst = Object.values(LanguageUtil.languages)
 
     const matchingBrowserLanguage = window.navigator.languages
       .map(language => LanguageToTestAgainst.find((test) => language === test || language.split('-')[0] === test))

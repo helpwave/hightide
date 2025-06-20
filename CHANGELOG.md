@@ -11,6 +11,8 @@ and adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
 - .editorconfig
 - `IconButton`
+- `ThemeModal`
+- [`storybookThemeOverride.css`](./.storybook/storybookStyleOverrides.css)
 
 ### Changed
 
@@ -19,7 +21,7 @@ and adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 - Update file structure
 - Update imports to allow for absolute imports with `@`
 - Update Storybook to version `9.0.10`
-- Differentiate `Overlays`, `Modals` and `Dialogs`
+- Differentiate `Overlay`, `Modal` and `Dialog`
 - Update the `Tooltip` appearance
 
 ### Removed
