@@ -320,6 +320,9 @@
   --color-overlay-background: #FFFFFF;
   --color-overlay-text: #1A1A1A;
 
+  --color-tooltip-background: var(--color-overlay-background);
+  --color-tooltip-text: var(--color-description);
+
   /* breakpoints */
   --breakpoint-tablet: 48rem; /* 768px for 16px font-size */
   --breakpoint-desktop: 64rem; /* 1024px for 16px font-size*/
