@@ -1,5 +1,5 @@
-import type { Meta, StoryObj } from '@storybook/react'
-import { ChipList } from '../../../src/components/ChipList'
+import type { Meta, StoryObj } from '@storybook/nextjs'
+import { ChipList } from '../../../src'
 
 const meta = {
   title: 'Layout/Chip',
@@ -9,7 +9,7 @@ const meta = {
 export default meta
 type Story = StoryObj<typeof meta>;
 
-export const ChipListVariation: Story = {
+export const chipList: Story = {
   args: {
     list: [
       { children: 'Chip 1' },

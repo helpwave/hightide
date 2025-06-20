@@ -1,0 +1,73 @@
+import type { PropsWithChildren } from 'react'
+import { SolidButton } from '../user-action/Button'
+import type { PropsForTranslation } from '@/localization/useTranslation'
+import { useTranslation } from '@/localization/useTranslation'
+import { Modal, type ModalProps } from '../layout-and-navigation/Overlay'
+
+type DiscardChangesModalTranslation = {
+  save: string,
+  cancel: string,
+  dontSave: string,
+  title: string,
+  description: string,
+}
+
+const defaultDiscardChangesModalTranslation = {
+  en: {
+    save: 'Save',
+    cancel: 'Cancel',
+    dontSave: 'Don\'t save',
+    title: 'Unsaved Changes',
+    description: 'Do you want to save your changes?'
+  },
+  de: {
+    save: 'Speichern',
+    cancel: 'Abbrechen',
+    dontSave: 'Nicht Speichern',
+    title: 'Ungespeicherte Änderungen',
+    description: 'Möchtest du die Änderungen speichern?'
+  }
+}
+
+type DiscardChangesModalProps = ModalProps & {
+  isShowingDecline?: boolean,
+  requireAnswer?: boolean,
+  onCancel: () => void,
+  onSave: () => void,
+  onDontSave: () => void,
+}
+
+export const DiscardChangesModal = ({
+                                       overwriteTranslation,
+                                       children,
+                                       onCancel,
+                                       onSave,
+                                       onDontSave,
+                                       headerProps,
+                                       ...modalProps
+                                     }: PropsForTranslation<DiscardChangesModalTranslation, PropsWithChildren<DiscardChangesModalProps>>) => {
+  const translation = useTranslation(defaultDiscardChangesModalTranslation, overwriteTranslation)
+  return (
+    <Modal
+      headerProps={{
+        ...headerProps,
+        titleText: headerProps?.titleText ?? translation.title,
+        descriptionText: headerProps?.descriptionText ?? translation.description,
+      }}
+      {...modalProps}
+    >
+      {children}
+      <div className="row mt-3 gap-x-4 justify-end">
+        <SolidButton color="positive" onClick={onSave}>
+          {translation.save}
+        </SolidButton>
+        <SolidButton color="negative" onClick={onDontSave}>
+          {translation.dontSave}
+        </SolidButton>
+        <SolidButton autoFocus color="primary" onClick={onCancel}>
+          {translation.cancel}
+        </SolidButton>
+      </div>
+    </Modal>
+  )
+}

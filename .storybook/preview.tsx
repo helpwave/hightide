@@ -1,31 +1,25 @@
-import type { Preview } from '@storybook/react'
-import { ProvideLanguage } from '../src/hooks/useLanguage'
-import { ModalRegister } from '../src/components/modals/ModalRegister'
-import { modalRootName } from '../src/components/modals/Modal'
+import type { Preview } from '@storybook/nextjs'
+import type { ThemeType } from '../src'
+import { LanguageProvider, ThemeProvider } from '../src'
 import '../src/css/globals.css'
-import type { ThemeType } from '../src/hooks/useTheme'
-import { ThemeProvider } from '../src/hooks/useTheme'
+import './storybookStyleOverrides.css'
 
 const colorToHex: Record<ThemeType, string> = {
   dark: '#1A1A1A',
   light: '#EEE',
 }
 
-const colorToHexReverse: Record<string, ThemeType> = {
-  '#1A1A1A': 'dark',
-  '#EEE': 'light',
-  'transparent': 'light',
-}
-
 const preview: Preview = {
   parameters: {
     backgrounds: {
-      values: [
-        { name: 'Dark', value: colorToHex.dark },
-        { name: 'Light', value: colorToHex.light },
-      ],
-      default: 'Light',
+      options: {
+        dark: { name: 'Dark', value: colorToHex.dark },
+        light: { name: 'Light', value: colorToHex.light },
+      }
     },
+  },
+  initialGlobals: {
+    backgrounds: { value: 'light' },
   },
   globalTypes: {
     language: {
@@ -44,19 +38,15 @@ const preview: Preview = {
   decorators: [
     (Story, context) => {
       const App = Story
-      const theme = colorToHexReverse[context.globals.backgrounds?.value ?? colorToHex.light]
+      const theme = context.globals.backgrounds?.value ?? 'light'
       const language = context.globals.language
 
       return (
         <main data-theme={theme}>
           <ThemeProvider initialTheme={theme}>
-            <ProvideLanguage initialLanguage={language}>
-              <ModalRegister>
-                <div id={modalRootName}>
-                  <App />
-                </div>
-              </ModalRegister>
-            </ProvideLanguage>
+            <LanguageProvider initialLanguage={language}>
+              <App/>
+            </LanguageProvider>
           </ThemeProvider>
         </main>
       )

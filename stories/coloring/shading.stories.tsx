@@ -1,7 +1,6 @@
-import type { Meta, StoryObj } from '@storybook/react'
-import type { ShadedColors } from '../../src/coloring/types'
-import { shadingColorValues } from '../../src/coloring/types'
-import { generateShadingColors } from '../../src/coloring/shading'
+import type { Meta, StoryObj } from '@storybook/nextjs'
+import type { ShadedColors } from '../../src'
+import { generateShadingColors, shadingColorValues } from '../../src'
 
 type StripeProps = {
   shading: Partial<ShadedColors>,
@@ -22,7 +21,10 @@ const ColorStripe = ({ shading }: StripeProps) => {
               height: 60,
             }}
           />
-          <span style={{ position: 'absolute', bottom: index % 2 === 0 ? '-24px' : '-48px' }}>{shades[shade].toUpperCase()}</span>
+          <span style={{
+            position: 'absolute',
+            bottom: index % 2 === 0 ? '-24px' : '-48px'
+          }}>{shades[shade].toUpperCase()}</span>
         </div>
       ))}
     </div>
@@ -37,7 +39,7 @@ const meta = {
 export default meta
 type Story = StoryObj<typeof meta>;
 
-export const ShadingWithFixedValues: Story = {
+export const colorStripe: Story = {
   args: {
     shading: {
       100: '#F5E2FD',

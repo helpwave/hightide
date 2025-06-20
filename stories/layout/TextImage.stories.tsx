@@ -1,15 +1,15 @@
-import type { Meta, StoryObj } from '@storybook/react'
-import { TextImage } from '../../src/components/TextImage'
+import type { Meta, StoryObj } from '@storybook/nextjs'
+import { TextImage } from '../../src'
 
 const meta = {
-  title: 'Layout/TextImage',
+  title: 'Layout',
   component: TextImage,
 } satisfies Meta<typeof TextImage>
 
 export default meta
 type Story = StoryObj<typeof meta>;
 
-export const TextImageVariation: Story = {
+export const textImage: Story = {
   args: {
     title: 'This is the title',
     description: 'Lorem ipsum dolor sit amet, consectetur adipiscing elit. Cras magna lorem, eleifend at mi nec, ' +

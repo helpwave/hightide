@@ -1,5 +1,5 @@
-import type { Meta, StoryObj } from '@storybook/react'
-import { Circle } from '../../src/components/Circle'
+import type { Meta, StoryObj } from '@storybook/nextjs'
+import { Circle } from '../../src'
 
 const meta = {
   title: 'Geometry/Circle',
@@ -9,7 +9,7 @@ const meta = {
 export default meta
 type Story = StoryObj<typeof meta>;
 
-export const CircleVariation: Story = {
+export const circle: Story = {
   args: {
     radius: 40,
   },

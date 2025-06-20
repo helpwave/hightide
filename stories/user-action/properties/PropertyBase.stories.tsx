@@ -1,16 +1,16 @@
-import type { Meta, StoryObj } from '@storybook/react'
+import type { Meta, StoryObj } from '@storybook/nextjs'
 import clsx from 'clsx'
-import { PropertyBase } from '../../../src/components/properties/PropertyBase'
+import { PropertyBase } from '../../../src'
 
 const meta = {
-  title: 'User-Action/Property',
+  title: 'User Action/Property',
   component: PropertyBase,
 } satisfies Meta<typeof PropertyBase>
 
 export default meta
 type Story = StoryObj<typeof meta>;
 
-export const PropertyBaseVariation: Story = {
+export const propertyBase: Story = {
   args: {
     name: 'Property',
     softRequired: false,

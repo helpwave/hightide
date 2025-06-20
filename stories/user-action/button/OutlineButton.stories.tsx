@@ -1,22 +1,27 @@
-import type { Meta, StoryObj } from '@storybook/react'
-import { OutlineButton } from '../../../src/components/Button'
-import { action } from '@storybook/addon-actions'
+import type { Meta, StoryObj } from '@storybook/nextjs'
+import { ButtonColorUtil, OutlineButton } from '../../../src'
+import { action } from 'storybook/actions'
 
 const meta = {
-  title: 'User-Action/Button',
+  title: 'User Action/Button',
   component: OutlineButton,
+  argTypes: {
+    color: {
+      control: 'select',
+      options: ButtonColorUtil.outline,
+    }
+  },
 } satisfies Meta<typeof OutlineButton>
 
 export default meta
 type Story = StoryObj<typeof meta>;
 
-export const OutlineButtonVariation: Story = {
+export const outlineButton: Story = {
   args: {
     children: 'Test',
     color: 'primary',
     size: 'medium',
     disabled: false,
-    className: 'rounded',
     onClick: action('Clicked'),
   },
 }
