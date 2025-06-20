@@ -1,6 +1,6 @@
 import type { Meta, StoryObj } from '@storybook/nextjs'
 import { useState } from 'react'
-import { Modal, SolidButton } from '../../src'
+import { Modal, SolidButton } from '../../../src'
 
 
 /**
@@ -48,7 +48,7 @@ const StackingModals = () => {
 }
 
 const meta: Meta = {
-  title: 'Layout',
+  title: 'Layout/Modal',
   component: StackingModals,
 }
 

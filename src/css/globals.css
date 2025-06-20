@@ -173,6 +173,7 @@
 
   --color-green-100: #D1EFD8;
   --color-green-500: #69CB81;
+  --color-green-700: #53a567;
   --color-green-900: #2C5536;
 
   --color-orange-100: #FBECD9;
@@ -236,6 +237,7 @@
   --color-text-secondary: #666666;
   --color-text-tertiary: #B3B3B3;
   --color-text-highlight: #3272DF;
+  --color-text-label: #4D4D4D;
   --color-icon-primary: #1A1A1A;
   --color-icon-secondary: #666666;
   --color-icon-highlight: #3272DF;
@@ -336,11 +338,13 @@
   /* Here are overrides for the light theme */
   @variant dark {
     --color-primary: var(--color-purple-400);
+    --color-positive: var(--color-green-700);
 
     --color-surface: #333333;
     --color-on-surface: #EEEEEE;
     --color-surface-variant: #494949;
     --color-surface-warning: #FBECD9;
+    --color-text-label: #CFCFCF;
     --color-highlight: #3272DF;
     --color-background: #1A1A1A;
     --color-on-background: #EEEEEE;
@@ -362,8 +366,7 @@
     --color-disabled-background: #555555;
     --color-disabled-text: #888888;
 
-
-    --color-button-solid-neutral-background: #3F3F3F;
+    --color-button-solid-neutral-background: #424242;
     --color-button-solid-neutral-icon: #EEEEEE;
     --color-button-solid-neutral-text: #EEEEEE;
 
@@ -491,15 +494,15 @@
   }
 
   .textstyle-label-lg {
-    @apply text-gray-700 text-lg font-semibold;
+    @apply text-text-label text-lg font-semibold;
   }
 
   .textstyle-label-md {
-    @apply text-gray-700 font-semibold;
+    @apply text-text-label font-semibold;
   }
 
   .textstyle-label-sm {
-    @apply text-sm text-gray-700 font-semibold;
+    @apply text-sm text-text-label font-semibold;
   }
 
   .textstyle-table-name {

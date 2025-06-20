@@ -7,7 +7,7 @@
     "url": "git+https://github.com/helpwave/hightide.git"
   },
   "license": "MPL-2.0",
-  "version": "0.1.0",
+  "version": "0.1.1",
   "files": [
     "dist"
   ],
@@ -56,9 +56,9 @@
     "@babel/preset-react": "7.26.3",
     "@babel/preset-typescript": "7.26.0",
     "@helpwave/eslint-config": "0.0.7",
-    "@storybook/addon-docs": "^9.0.10",
-    "@storybook/addon-links": "^9.0.10",
-    "@storybook/nextjs": "^9.0.10",
+    "@storybook/addon-docs": "^9.0.12",
+    "@storybook/addon-links": "^9.0.12",
+    "@storybook/nextjs": "^9.0.12",
     "@tailwindcss/postcss": "^4.0.17",
     "@types/node": "20.17.10",
     "@types/react": "18.3.17",
@@ -66,8 +66,8 @@
     "@types/tinycolor2": "^1.4.6",
     "barrelsby": "^2.8.1",
     "eslint": "^9.0.0",
-    "eslint-plugin-storybook": "^9.0.10",
-    "storybook": "^9.0.10",
+    "eslint-plugin-storybook": "^9.0.12",
+    "storybook": "^9.0.12",
     "tsup": "^8.5.0",
     "typescript": "^5.7.2",
     "webpack": "5.97.1"

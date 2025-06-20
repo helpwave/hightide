@@ -76,8 +76,11 @@ const defaultModalHeaderTranslation: Record<Language, ModalHeaderTranslation> = 
   }
 }
 
-export type ModalHeaderProps = {
-  onCloseClick?: () => void,
+export type OverlayHeaderProps = {
+  /**
+   * Callback when the close button is clicked. If omitted or undefined, the button is hidden
+   */
+  onClose?: () => void,
   /** The title of the Modal. If you want to only set the text use `titleText` instead */
   title?: ReactNode,
   /** The title text of the Modal. If you want to set a custom title use `title` instead */
@@ -89,18 +92,18 @@ export type ModalHeaderProps = {
 }
 
 /**
- * A default Header to be used by modal to have a uniform design
+ * A header that should be in an Overlay
  */
-export const ModalHeader = ({
-                              overwriteTranslation,
-                              onCloseClick,
-                              title,
-                              titleText = '',
-                              description,
-                              descriptionText = ''
-                            }: PropsForTranslation<ModalHeaderTranslation, ModalHeaderProps>) => {
+export const OverlayHeader = ({
+                                overwriteTranslation,
+                                onClose,
+                                title,
+                                titleText = '',
+                                description,
+                                descriptionText = ''
+                              }: PropsForTranslation<ModalHeaderTranslation, OverlayHeaderProps>) => {
   const translation = useTranslation(defaultModalHeaderTranslation, overwriteTranslation)
-  const hasTitleRow = !!title || !!titleText || !!onCloseClick
+  const hasTitleRow = !!title || !!titleText || !!onClose
   const titleRow = (
     <div className="row justify-between items-start gap-x-8">
       {title ?? (
@@ -112,9 +115,9 @@ export const ModalHeader = ({
           {titleText}
         </h2>
       )}
-      {!!onCloseClick && (
+      {!!onClose && (
         <Tooltip tooltip={translation.close}>
-          <IconButton color="neutral" size="small" onClick={onCloseClick}>
+          <IconButton color="neutral" size="small" onClick={onClose}>
             <X className="w-full h-full"/>
           </IconButton>
         </Tooltip>
@@ -135,7 +138,7 @@ export type ModalProps = {
   onClose: () => void,
   className?: string,
   backgroundClassName?: string,
-  headerProps?: Omit<ModalHeaderProps, 'onCloseClick'>,
+  headerProps?: Omit<OverlayHeaderProps, 'onClose'>,
 }
 
 /**
@@ -214,7 +217,7 @@ export const Modal = ({
         role="dialog"
         aria-modal={true}
       >
-        <ModalHeader {...headerProps} onCloseClick={onClose}/>
+        <OverlayHeader {...headerProps} onClose={onClose}/>
         {children}
       </div>
     </Overlay>
@@ -224,12 +227,11 @@ export const Modal = ({
 // --- Dialog ---
 
 export type DialogProps = Omit<OverlayProps, 'onBackgroundClick'> & {
-  title?: ReactNode,
-  titleText?: string,
+  headerProps?: Omit<OverlayHeaderProps, 'onClose'>,
   className?: string,
 }
 
-/*
+/**
  * A Generic Dialog Window
  */
 export const Dialog = ({
@@ -237,8 +239,7 @@ export const Dialog = ({
                          isOpen,
                          className,
                          backgroundClassName,
-                         title,
-                         titleText
+                         headerProps,
                        }: PropsWithChildren<DialogProps>) => {
   const ref = useRef<HTMLDivElement>(null)
 
@@ -303,13 +304,7 @@ export const Dialog = ({
         role="dialog"
         aria-modal={true}
       >
-        {title ?? (
-          <h2
-            className={clsx('textstyle-title-lg')}
-          >
-            {titleText}
-          </h2>
-        )}
+        {!!headerProps && (<OverlayHeader {...headerProps}/>)}
         {children}
       </div>
     </Overlay>
