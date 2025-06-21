@@ -21,7 +21,7 @@ export const BreadCrumb = ({ crumbs, linkClassName, containerClassName }: BreadC
   const color = 'text-description'
 
   return (
-    <div className={clsx('row', containerClassName)}>
+    <div className={clsx('row gap-x-0', containerClassName)}>
       {crumbs.map((crumb, index) => (
         <div key={index}>
           <Link href={crumb.link}
