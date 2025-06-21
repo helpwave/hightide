@@ -11,6 +11,7 @@ and adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
 - `InputModal` is now a modal and not a dialog
 - Button now have the not-allowed cursor when disabled
+- Removed gap in `BreadCrumb` components
 
 ## [0.1.2] - 2025-06-20
 
