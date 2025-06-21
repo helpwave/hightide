@@ -114,12 +114,12 @@ const SolidButton = ({
       onClick={disabled ? undefined : onClick}
       disabled={disabled || onClick === undefined}
       className={clsx(
-        className,
         {
-          'text-disabled-text bg-disabled-background': disabled,
+          'text-disabled-text bg-disabled-background cursor-not-allowed': disabled,
           [clsx(colorClasses, 'hover:brightness-90')]: !disabled
         },
-        ButtonUtil.paddingMapping[size]
+        ButtonUtil.paddingMapping[size],
+        className
       )}
       {...restProps}
     >
@@ -174,11 +174,12 @@ const OutlineButton = ({
       onClick={disabled ? undefined : onClick}
       disabled={disabled || onClick === undefined}
       className={clsx(
-        className, {
-          'text-disabled-text border-disabled-outline': disabled,
+        {
+          'text-disabled-text border-disabled-outline cursor-not-allowed': disabled,
           [clsx(colorClasses, 'hover:brightness-80')]: !disabled,
         },
-        ButtonUtil.paddingMapping[size]
+        ButtonUtil.paddingMapping[size],
+        className
       )}
       {...restProps}
     >
@@ -237,11 +238,12 @@ const TextButton = ({
       onClick={disabled ? undefined : onClick}
       disabled={disabled || onClick === undefined}
       className={clsx(
-        className, {
-          'text-disabled-text': disabled,
+        {
+          'text-disabled-text cursor-not-allowed': disabled,
           [clsx(colorClasses, 'hover:bg-button-text-hover-background rounded-full')]: !disabled,
         },
-        ButtonUtil.paddingMapping[size]
+        ButtonUtil.paddingMapping[size],
+        className
       )}
       {...restProps}
     >
@@ -298,12 +300,12 @@ const IconButton = ({
       onClick={disabled ? undefined : onClick}
       disabled={disabled || onClick === undefined}
       className={clsx(
-        className,
         {
-          'text-disabled-text bg-disabled-background': disabled,
+          'text-disabled-text bg-disabled-background cursor-not-allowed': disabled,
           [clsx(colorClasses, 'hover:brightness-90')]: !disabled
         },
-        ButtonUtil.iconPaddingMapping[size]
+        ButtonUtil.iconPaddingMapping[size],
+        className
       )}
       {...restProps}
     >
