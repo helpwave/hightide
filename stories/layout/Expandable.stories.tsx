@@ -1,17 +1,19 @@
 import type { Meta, StoryObj } from '@storybook/nextjs'
-import { Expandable, Tile } from '../../src'
+import { ExpandableUncontrolled, Tile } from '../../src'
+import { action } from 'storybook/actions'
 
 const meta = {
   title: 'Layout',
-  component: Expandable,
-} satisfies Meta<typeof Expandable>
+  component: ExpandableUncontrolled,
+} satisfies Meta<typeof ExpandableUncontrolled>
 
 export default meta
 type Story = StoryObj<typeof meta>;
 
 export const expandable: Story = {
   args: {
-    initialExpansion: false,
+    isExpanded: false,
+    onChange: action('onChange'),
     disabled: false,
     clickOnlyOnHeader: true,
     label: (<h3 className="textstyle-label-lg">Label</h3>),

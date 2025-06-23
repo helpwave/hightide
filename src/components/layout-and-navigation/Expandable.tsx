@@ -1,14 +1,16 @@
 import type { PropsWithChildren, ReactNode } from 'react'
-import { forwardRef, useState } from 'react'
+import { forwardRef, useEffect, useState } from 'react'
 import { ChevronDown, ChevronUp } from 'lucide-react'
 import clsx from 'clsx'
+import { noop } from '@/util/noop'
 
 type IconBuilder = (expanded: boolean) => ReactNode
 
 export type ExpandableProps = PropsWithChildren<{
   label: ReactNode,
   icon?: IconBuilder,
-  initialExpansion?: boolean,
+  isExpanded?: boolean,
+  onChange?: (isExpanded: boolean) => void,
   /**
    * Whether the expansion should only happen when the header is clicked or on the entire component
    */
@@ -22,27 +24,28 @@ const DefaultIcon: IconBuilder = (expanded) => expanded ?
   (<ChevronUp size={16} className="min-w-[16px]"/>)
   : (<ChevronDown size={16} className="min-w-[16px]"/>)
 
+
 /**
  * A Component for showing and hiding content
  */
-export const Expandable = forwardRef<HTMLDivElement, ExpandableProps>(({
-                                                                         children,
-                                                                         label,
-                                                                         icon,
-                                                                         initialExpansion = false,
-                                                                         clickOnlyOnHeader = true,
-                                                                         disabled = false,
-                                                                         className = '',
-                                                                         headerClassName = ''
-                                                                       }, ref) => {
-  const [isExpanded, setIsExpanded] = useState(initialExpansion)
+export const Expandable = forwardRef<HTMLDivElement, ExpandableProps>(function Expandable({
+                                                                                            children,
+                                                                                            label,
+                                                                                            icon,
+                                                                                            isExpanded = false,
+                                                                                            onChange = noop,
+                                                                                            clickOnlyOnHeader = true,
+                                                                                            disabled = false,
+                                                                                            className = '',
+                                                                                            headerClassName = ''
+                                                                                          }, ref) {
   icon ??= DefaultIcon
 
   return (
     <div
       ref={ref}
       className={clsx('col gap-y-0 bg-surface text-on-surface group rounded-lg shadow-sm', { 'cursor-pointer': !clickOnlyOnHeader && !disabled }, className)}
-      onClick={() => !clickOnlyOnHeader && !disabled && setIsExpanded(!isExpanded)}
+      onClick={() => !clickOnlyOnHeader && !disabled && onChange(!isExpanded)}
     >
       <div
         className={clsx(
@@ -54,7 +57,7 @@ export const Expandable = forwardRef<HTMLDivElement, ExpandableProps>(({
           },
           headerClassName
         )}
-        onClick={() => clickOnlyOnHeader && !disabled && setIsExpanded(!isExpanded)}
+        onClick={() => clickOnlyOnHeader && !disabled && onChange(!isExpanded)}
       >
         {label}
         {icon(isExpanded)}
@@ -68,4 +71,27 @@ export const Expandable = forwardRef<HTMLDivElement, ExpandableProps>(({
   )
 })
 
-Expandable.displayName = 'Expandable'
+export const ExpandableUncontrolled = forwardRef<HTMLDivElement, ExpandableProps>(function ExpandableUncontrolled({
+                                                                                                                    isExpanded,
+                                                                                                                    onChange = noop,
+                                                                                                                    ...props
+                                                                                                                  },
+                                                                                                                  ref) {
+  const [usedIsExpanded, setUsedIsExpanded] = useState(isExpanded)
+
+  useEffect(() => {
+    setUsedIsExpanded(isExpanded)
+  }, [isExpanded])
+
+  return (
+    <Expandable
+      {...props}
+      ref={ref}
+      isExpanded={usedIsExpanded}
+      onChange={value => {
+        onChange(value)
+        setUsedIsExpanded(value)
+      }}
+    />
+  )
+})

@@ -2,7 +2,7 @@ import type { ReactNode } from 'react'
 import clsx from 'clsx'
 import { ChevronDown, ChevronUp } from 'lucide-react'
 import type { ExpandableProps } from './Expandable'
-import { Expandable } from './Expandable'
+import { ExpandableUncontrolled } from './Expandable'
 import { MarkdownInterpreter } from './MarkdownInterpreter'
 
 type ContentType = {
@@ -13,7 +13,7 @@ type ContentType = {
   value: ReactNode,
 }
 
-export type FAQItem = Pick<ExpandableProps, 'initialExpansion' | 'className'> & {
+export type FAQItem = Pick<ExpandableProps, 'isExpanded' | 'className'> & {
   id: string,
   title: string,
   content: ContentType,
@@ -35,7 +35,7 @@ export const FAQSection = ({
   return (
     <div className="col gap-y-4">
       {entries.map(({ id, title, content, ...restProps }) => (
-        <Expandable
+        <ExpandableUncontrolled
           key={id}
           {...restProps}
           label={(<h3 id={id} className="textstyle-title-md">{title}</h3>)}
@@ -49,7 +49,7 @@ export const FAQSection = ({
           <div className="mt-2">
             {content.type === 'markdown' ? (<MarkdownInterpreter text={content.value}/>) : content.value}
           </div>
-        </Expandable>
+        </ExpandableUncontrolled>
       ))}
     </div>
   )

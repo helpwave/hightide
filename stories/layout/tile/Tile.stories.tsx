@@ -35,7 +35,7 @@ type Story = StoryObj<typeof meta>;
 
 export const tile: Story = {
   args: {
-    title: { value: 'Title', className: '' },
+    title: { value: 'Title' },
     description: { value: 'Description Text', className: 'textstyle-description' },
     prefix: true,
     suffix: true,

@@ -3,7 +3,7 @@ import { Scrollbars } from 'react-custom-scrollbars-2'
 import { noop } from '@/util/noop'
 import { equalSizeGroups, range } from '@/util/array'
 import clsx from 'clsx'
-import { Expandable } from '@/components/layout-and-navigation/Expandable'
+import { ExpandableUncontrolled } from '@/components/layout-and-navigation/Expandable'
 import { addDuration, monthsList, subtractDuration } from '@/util/date'
 import { useLocale } from '@/localization/LanguageProvider'
 
@@ -57,11 +57,11 @@ export const YearMonthPicker = ({
           {years.map(year => {
             const selectedYear = displayedYearMonth.getFullYear() === year
             return (
-              <Expandable
+              <ExpandableUncontrolled
                 key={year}
                 ref={(displayedYearMonth.getFullYear() ?? new Date().getFullYear()) === year ? ref : undefined}
                 label={<span className={clsx({ 'text-primary font-bold': selectedYear })}>{year}</span>}
-                initialExpansion={showValueOpen && selectedYear}
+                isExpanded={showValueOpen && selectedYear}
               >
                 <div className="col gap-y-1 px-2 pb-2">
                   {equalSizeGroups([...monthsList], 3).map((monthList, index) => (
@@ -99,7 +99,7 @@ export const YearMonthPicker = ({
                     </div>
                   ))}
                 </div>
-              </Expandable>
+              </ExpandableUncontrolled>
             )
           })}
         </div>
