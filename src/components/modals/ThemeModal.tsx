@@ -1,12 +1,12 @@
 import { type PropsWithChildren } from 'react'
-import type { PropsForTranslation, Translation } from '@/localization/useTranslation'
-import { useTranslation } from '@/localization/useTranslation'
+import type { PropsForTranslation, Translation } from '../../localization/useTranslation'
+import { useTranslation } from '../../localization/useTranslation'
 import { Select } from '../user-action/Select'
 import { SolidButton } from '../user-action/Button'
 import { Modal, type ModalProps } from '../layout-and-navigation/Overlay'
-import type { ThemeType, ThemeTypeTranslation } from '@/theming/useTheme'
-import { useTheme } from '@/theming/useTheme'
-import { ThemeUtil } from '@/theming/useTheme'
+import type { ThemeType, ThemeTypeTranslation } from '../../theming/useTheme'
+import { useTheme } from '../../theming/useTheme'
+import { ThemeUtil } from '../../theming/useTheme'
 
 type ThemeModalTranslation = {
   title: string,

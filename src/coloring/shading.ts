@@ -1,6 +1,6 @@
 import tinycolor from 'tinycolor2'
-import type { ShadedColors } from '@/index'
-import { shadingColorValues } from '@/index'
+import type { ShadedColors } from './types'
+import { shadingColorValues } from './types'
 
 // Function to generate a full shading of several colors
 export const generateShadingColors = (partialShading: Omit<Partial<ShadedColors>, '0' | '1000'>): ShadedColors => {

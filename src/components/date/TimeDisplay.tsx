@@ -1,6 +1,6 @@
-import type { Language } from '@/localization/util'
-import type { PropsForTranslation } from '@/localization/useTranslation'
-import { useTranslation } from '@/localization/useTranslation'
+import type { Language } from '../../localization/util'
+import type { PropsForTranslation } from '../../localization/useTranslation'
+import { useTranslation } from '../../localization/useTranslation'
 
 type TimeDisplayTranslation = {
   today: string,

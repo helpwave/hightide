@@ -2,12 +2,12 @@ import type { PropsWithChildren, ReactNode } from 'react'
 import { useEffect, useRef, useState } from 'react'
 import ReactDOM from 'react-dom'
 import clsx from 'clsx'
-import { Tooltip } from '@/components/user-action/Tooltip'
+import { Tooltip } from '../user-action/Tooltip'
 import { X } from 'lucide-react'
-import { IconButton } from '@/components/user-action/Button'
-import type { PropsForTranslation } from '@/localization/useTranslation'
-import { useTranslation } from '@/localization/useTranslation'
-import type { Language } from '@/localization/util'
+import { IconButton } from '../user-action/Button'
+import type { PropsForTranslation } from '../../localization/useTranslation'
+import { useTranslation } from '../../localization/useTranslation'
+import type { Language } from '../../localization/util'
 
 export type OverlayProps = PropsWithChildren<{
   /**

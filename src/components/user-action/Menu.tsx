@@ -1,7 +1,7 @@
 import { type PropsWithChildren, type ReactNode, type RefObject, useRef } from 'react'
 import clsx from 'clsx'
-import { useOutsideClick } from '@/hooks/useOutsideClick'
-import { useHoverState } from '@/hooks/useHoverState'
+import { useOutsideClick } from '../../hooks/useOutsideClick'
+import { useHoverState } from '../../hooks/useHoverState'
 
 type MenuProps<T> = PropsWithChildren<{
   trigger: (onClick: () => void, ref: RefObject<T>) => ReactNode,

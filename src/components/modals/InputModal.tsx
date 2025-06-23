@@ -1,7 +1,7 @@
 import type { InputProps } from '../user-action/Input'
 import { Input } from '../user-action/Input'
-import type { ConfirmModalProps } from '@/components/modals/ConfirmModal'
-import { ConfirmModal } from '@/components/modals/ConfirmModal'
+import type { ConfirmModalProps } from './ConfirmModal'
+import { ConfirmModal } from './ConfirmModal'
 
 export type InputModalProps = ConfirmModalProps & {
   inputs: InputProps[],

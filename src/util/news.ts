@@ -1,6 +1,6 @@
 import { z } from 'zod'
-import type { Language } from '@/localization/util'
-import { LanguageUtil } from '@/localization/util'
+import type { Language } from '../localization/util'
+import { LanguageUtil } from '../localization/util'
 
 export type News = {
   title: string,

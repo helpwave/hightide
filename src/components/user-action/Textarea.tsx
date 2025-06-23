@@ -1,8 +1,8 @@
 import type { TextareaHTMLAttributes } from 'react'
 import { useEffect, useState } from 'react'
 import clsx from 'clsx'
-import { useSaveDelay } from '@/hooks/useSaveDelay'
-import { noop } from '@/util/noop'
+import { useSaveDelay } from '../../hooks/useSaveDelay'
+import { noop } from '../../util/noop'
 import type { LabelProps } from './Label'
 import { Label } from './Label'
 
