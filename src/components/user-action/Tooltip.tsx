@@ -1,5 +1,5 @@
 import type { CSSProperties, PropsWithChildren, ReactNode } from 'react'
-import { useHoverState } from '@/hooks/useHoverState'
+import { useHoverState } from '../../hooks/useHoverState'
 import { clsx } from 'clsx'
 
 type Position = 'top' | 'bottom' | 'left' | 'right'

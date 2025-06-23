@@ -10,5 +10,4 @@ export default defineConfig({
   splitting: false,
   minify: false,
   target: 'es2022',
-  config: './tsconfig.json',
 })

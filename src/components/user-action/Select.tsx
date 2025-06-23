@@ -5,8 +5,8 @@ import { useEffect, useState } from 'react'
 import clsx from 'clsx'
 import type { LabelProps } from './Label'
 import { Label } from './Label'
-import { MultiSearchWithMapping } from '@/util/simpleSearch'
-import { Input } from '@/components/user-action/Input'
+import { MultiSearchWithMapping } from '../../util/simpleSearch'
+import { Input } from './Input'
 
 export type SelectOption<T> = {
   label: ReactNode,

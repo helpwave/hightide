@@ -1,8 +1,8 @@
 import type { PropsWithChildren } from 'react'
-import type { PropsForTranslation } from '@/localization/useTranslation'
-import { useTranslation } from '@/localization/useTranslation'
-import type { ConfirmModalProps } from '@/components/modals/ConfirmModal'
-import { ConfirmModal } from '@/components/modals/ConfirmModal'
+import type { PropsForTranslation } from '../../localization/useTranslation'
+import { useTranslation } from '../../localization/useTranslation'
+import type { ConfirmModalProps } from './ConfirmModal'
+import { ConfirmModal } from './ConfirmModal'
 
 type DiscardChangesModalTranslation = {
   save: string,

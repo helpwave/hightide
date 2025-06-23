@@ -1,7 +1,7 @@
 import { useEffect, useRef, useState } from 'react'
 import { Scrollbars } from 'react-custom-scrollbars-2'
-import { noop } from '@/util/noop'
-import { closestMatch, range } from '@/util/array'
+import { noop } from '../../util/noop'
+import { closestMatch, range } from '../../util/array'
 import clsx from 'clsx'
 
 type MinuteIncrement = '1min' | '5min' | '10min' | '15min' | '30min'

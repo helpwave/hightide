@@ -1,8 +1,8 @@
-import type { WeekDay } from '@/util/date'
-import { equalDate, getWeeksForCalenderMonth, isInTimeSpan } from '@/util/date'
-import { noop } from '@/util/noop'
+import type { WeekDay } from '../../util/date'
+import { equalDate, getWeeksForCalenderMonth, isInTimeSpan } from '../../util/date'
+import { noop } from '../../util/noop'
 import clsx from 'clsx'
-import { useLocale } from '@/localization/LanguageProvider'
+import { useLocale } from '../../localization/LanguageProvider'
 import { useEffect, useState } from 'react'
 
 export type DayPickerProps = {

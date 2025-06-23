@@ -1,11 +1,11 @@
 import type { PropsWithChildren } from 'react'
 import type { SolidButtonColor } from '../user-action/Button'
 import { SolidButton } from '../user-action/Button'
-import type { PropsForTranslation } from '@/localization/useTranslation'
-import { useTranslation } from '@/localization/useTranslation'
+import type { PropsForTranslation } from '../../localization/useTranslation'
+import { useTranslation } from '../../localization/useTranslation'
 import clsx from 'clsx'
-import type { ModalProps } from '@/components/layout-and-navigation/Overlay'
-import { Modal } from '@/components/layout-and-navigation/Overlay'
+import type { ModalProps } from '../layout-and-navigation/Overlay'
+import { Modal } from '../layout-and-navigation/Overlay'
 
 type ConfirmModalTranslation = {
   confirm: string,

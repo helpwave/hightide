@@ -1,7 +1,7 @@
 import type { Dispatch, PropsWithChildren, SetStateAction } from 'react'
 import { createContext, useContext, useEffect, useState } from 'react'
-import type { Translation } from '@/localization/useTranslation'
-import { noop } from '@/util/noop'
+import type { Translation } from '../localization/useTranslation'
+import { noop } from '../util/noop'
 
 const themes = ['light', 'dark'] as const
 

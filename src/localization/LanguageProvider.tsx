@@ -1,6 +1,6 @@
 import type { Dispatch, PropsWithChildren, SetStateAction } from 'react'
 import { createContext, useContext, useEffect, useState } from 'react'
-import { useLocalStorage } from '@/hooks/useLocalStorage'
+import { useLocalStorage } from '../hooks/useLocalStorage'
 import type { Language } from './util'
 import { LanguageUtil } from './util'
 
