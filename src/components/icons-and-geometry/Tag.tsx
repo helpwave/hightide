@@ -1,7 +1,7 @@
-import type { ImageProps } from 'next/image'
-import Image from 'next/image'
-
-export type TagProps = Omit<ImageProps, 'src' | 'alt'>
+export type TagProps = {
+  size?: number,
+  className?: string,
+}
 
 /**
  * Tag icon from flaticon
@@ -12,15 +12,13 @@ export type TagProps = Omit<ImageProps, 'src' | 'alt'>
  */
 export const TagIcon = ({
                           className,
-                          width = 16,
-                          height = 16,
-                          ...props
+                          size = 16,
                         }: TagProps) => {
   return (
-    <Image
-      {...props}
-      width={width}
-      height={height}
+    <img
+      style={{ width: `${size}px`, height: `${size}px`, minWidth: `${size}px`, minHeight: `${size}px` }}
+      width={size}
+      height={size}
       alt=""
       src="https://cdn.helpwave.de/icons/label.png"
       className={className}

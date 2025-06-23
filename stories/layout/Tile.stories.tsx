@@ -1,7 +1,7 @@
 import type { Meta, StoryObj } from '@storybook/nextjs'
 import { Info, X } from 'lucide-react'
-import type { TileProps } from '../../../src'
-import { Tile } from '../../../src'
+import type { TileProps } from '../../src'
+import { Tile } from '../../src'
 
 type TileExampleProps = Omit<TileProps, 'prefix' | 'suffix'> & {
   prefix: boolean,
@@ -26,7 +26,7 @@ const TileExample = ({
 }
 
 const meta = {
-  title: 'Layout/Tile',
+  title: 'Layout',
   component: TileExample,
 } satisfies Meta<typeof TileExample>
 

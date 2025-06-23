@@ -1,4 +1,3 @@
-import Image from 'next/image'
 import clsx from 'clsx'
 
 export const avtarSizeList = ['tiny', 'small', 'medium', 'large'] as const
@@ -43,7 +42,7 @@ export const Avatar = ({ avatarUrl, alt, size = 'medium', className = '' }: Avat
   return (
     // TODO transparent or white background later
     <div className={clsx(`rounded-full bg-primary`, className)} style={style}>
-      <Image
+      <img
         className="rounded-full border border-gray-200"
         style={style}
         src={avatarUrl}

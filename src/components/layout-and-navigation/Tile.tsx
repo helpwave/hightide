@@ -1,5 +1,4 @@
 import type { ReactNode } from 'react'
-import Image from 'next/image'
 import clsx from 'clsx'
 
 export type TileProps = {
@@ -44,24 +43,4 @@ export type TileWithImageProps = Omit<TileProps, 'suffix' | 'prefix'> & {
   imageLocation?: ImageLocation,
   imageSize?: ImageSize,
   imageClassName?: string,
-}
-
-/**
- * A Tile with an image as prefix or suffix
- */
-export const TileWithImage = ({
-                                url,
-                                imageLocation = 'prefix',
-                                imageSize = { width: 24, height: 24 },
-                                imageClassName = '',
-                                ...tileProps
-                              }: TileWithImageProps) => {
-  const image = <Image src={url} alt="" {...imageSize} className={clsx(imageClassName)}/>
-  return (
-    <Tile
-      {...tileProps}
-      prefix={imageLocation === 'prefix' ? image : undefined}
-      suffix={imageLocation === 'suffix' ? image : undefined}
-    />
-  )
 }
