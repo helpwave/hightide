@@ -5,13 +5,18 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/)
 and adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [0.1.5] - 2025-06-23
+
+### Removed
+
+- removed default exports
 
 ## [0.1.5] - 2025-06-23
 
 ### Removed
 
-- remove next from dependencies and replace next image with img
-- remove `TileWithImage` for `TextImage`
+- removed next from dependencies and replace next image with img
+- removed `TileWithImage` for `TextImage`
 
 ## [0.1.4] - 2025-06-23
 

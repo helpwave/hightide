@@ -189,5 +189,3 @@ export const SearchableSelect = <T, >({
     />
   )
 }
-
-export default { Select, SelectUncontrolled, SearchableSelect }
