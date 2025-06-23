@@ -7,7 +7,7 @@
     "url": "git+https://github.com/helpwave/hightide.git"
   },
   "license": "MPL-2.0",
-  "version": "0.1.4",
+  "version": "0.1.5",
   "files": [
     "dist"
   ],
@@ -38,7 +38,6 @@
     "@tailwindcss/cli": "^4.1.7",
     "clsx": "^2.1.1",
     "lucide-react": "0.468.0",
-    "next": "15.2.4",
     "postcss": "^8.5.3",
     "prop-types": "15.8.1",
     "react": "18.3.1",
