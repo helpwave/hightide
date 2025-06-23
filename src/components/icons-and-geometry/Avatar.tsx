@@ -99,5 +99,3 @@ export const AvatarGroup = ({
     </div>
   )
 }
-
-export default { Avatar, AvatarGroup }
