@@ -201,7 +201,7 @@ export const ScrollPicker = <T, >({
     >
       <div className="absolute top-1/2 -translate-y-1/2 -translate-x-1/2 left-1/2">
         <div
-          className="absolute z-[1] top-1/2 -translate-y-1/2 -translate-x-1/2 left-1/2 w-full min-w-[40px] border border-y-2 border-x-0 border-[#00000033]"
+          className="absolute z-[1] top-1/2 -translate-y-1/2 -translate-x-1/2 left-1/2 w-full min-w-[40px] border border-divider/30 border-y-2 border-x-0 "
           style={{ height: `${itemHeight}px` }}
         />
         <div

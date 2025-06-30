@@ -111,7 +111,7 @@ export const MultiSelect = <T, >({
           <div ref={ref} onClick={disabled ? undefined : onClick}
                className={clsx(borderColor, 'bg-menu-background text-menu-text inline-w-full justify-between items-center rounded-lg border-2 px-4 py-2 font-medium',
                  {
-                   'hover:brightness-90 hover:border-primary cursor-pointer': !disabled,
+                   'hover:border-primary cursor-pointer': !disabled,
                    'bg-disabled-background text-disabled cursor-not-allowed': disabled
                  },
                  triggerClassName)}

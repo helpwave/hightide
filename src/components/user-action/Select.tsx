@@ -50,7 +50,6 @@ export const Select = <T, >({
                               isDisabled,
                               className,
                               textColor = 'text-menu-text',
-                              hoverColor = 'hover:brightness-90',
                               additionalItems,
                               selectedDisplayOverwrite,
                             }: SelectProps<T>) => {
@@ -82,7 +81,7 @@ export const Select = <T, >({
                 textColor, borderColor,
                 {
                   'rounded-b-lg': !open,
-                  [hoverColor]: !isDisabled,
+                  'hover:border-primary': !isDisabled,
                   'bg-disabled-background cursor-not-allowed text-disabled': isDisabled
                 }
               )}
@@ -181,8 +180,8 @@ export const SearchableSelect = <T, >({
       options={filteredOptions}
       additionalItems={[(
         <div key="selectSearch" className="row gap-x-2 items-center">
-          <Input autoFocus={true} value={search} onChangeText={setSearch}/>
-          <Search/>
+          <Input autoFocus={true} value={search} onChangeText={setSearch} className="w-full"/>
+          <Search className="min-w-[1.5rem] min-h-[1.5rem]"/>
         </div>
       )]}
       {...selectProps}

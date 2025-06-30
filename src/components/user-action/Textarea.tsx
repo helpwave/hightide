@@ -53,9 +53,9 @@ export const Textarea = ({
                labelType={label.labelType ?? 'labelSmall'}/>
       )}
       <div
-        className={`${clsx(' bg-surface text-on-surface focus-within:border-primary relative', { 'shadow border-2 border-gray-300 hover:border-primary rounded-lg': defaultStyle })}`}>
+        className={`${clsx(' bg-surface text-on-surface focus-within:border-primary relative', { 'shadow border-2 hover:border-primary rounded-lg': defaultStyle })}`}>
         {headline && (
-          <span className="mx-3 mt-3 block text-gray-700 font-bold">
+          <span className="mx-3 mt-3 block textstyle-label-md">
             {headline}
           </span>
         )}

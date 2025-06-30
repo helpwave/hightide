@@ -10,6 +10,7 @@ and adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 ### Changed
 
 - Changed `StepperBar` to have a simplified state and more options
+- Update colors and adapt borders to dark-mode for `Select`-based components
 
 ## [0.1.6] - 2025-06-23
 

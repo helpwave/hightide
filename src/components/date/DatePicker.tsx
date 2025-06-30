@@ -124,6 +124,7 @@ export const DatePicker = ({
           />
           <div className="mt-2">
             <TextButton
+              color="primary"
               onClick={() => {
                 const newDate = new Date()
                 newDate.setHours(value.getHours(), value.getMinutes())
