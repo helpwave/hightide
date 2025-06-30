@@ -9,8 +9,13 @@ and adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
 ### Changed
 
-- Changed `Select` and `MultiSelct` to have an inbuild search
-- 
+- `Menu` story
+
+### Changed
+
+- Changed `Select` and `MultiSelct` to have an inbuild search and close when clicked outside
+- Changed `Menu` to have no negative margin
+
 ### Removed
 
 - Removed `SearchableSelect` -> now inbuild in `Select`

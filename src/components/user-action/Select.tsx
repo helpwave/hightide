@@ -1,11 +1,12 @@
 import { ChevronDown, ChevronUp } from 'lucide-react'
 import type { ReactNode } from 'react'
-import { useEffect, useState } from 'react'
+import { useEffect, useRef, useState } from 'react'
 import clsx from 'clsx'
 import type { LabelProps } from './Label'
 import { Label } from './Label'
 import { SearchableList } from '../layout-and-navigation/SearchableList'
 import { Tile } from '../layout-and-navigation/Tile'
+import { useOutsideClick } from '../../hooks/useOutsideClick'
 
 export type SelectOption<T> = {
   label: ReactNode,
@@ -43,7 +44,10 @@ export const Select = <T, >({
                               className,
                               selectedDisplayOverwrite,
                             }: SelectProps<T>) => {
-  const [isOpen, setOpen] = useState(false)
+  const triggerRef = useRef<HTMLButtonElement>(null)
+  const menuRef = useRef<HTMLDivElement>(null)
+  const [isOpen, setIsOpen] = useState(false)
+  useOutsideClick([triggerRef, menuRef], () => setIsOpen(false))
   const selectedOption = options.find(option => option.value === value)
   if (value !== undefined && selectedOption === undefined && selectedDisplayOverwrite === undefined) {
     console.warn('The selected value is not found in the options list. This might be an error on your part or' +
@@ -60,6 +64,7 @@ export const Select = <T, >({
       )}
       <div className="relative">
         <button
+          ref={triggerRef}
           className={clsx(
             'btn-md justify-between w-full border-2',
             {
@@ -68,16 +73,19 @@ export const Select = <T, >({
               'bg-disabled-background text-disabled-text border-disabled-background cursor-not-allowed': isDisabled
             }
           )}
-          onClick={() => setOpen(!isOpen)}
+          onClick={() => setIsOpen(!isOpen)}
           disabled={isDisabled}
         >
-          {!isShowingHint && <span className="font-semibold text-menu-text">{selectedDisplayOverwrite ?? selectedOption?.label}</span>}
+          {!isShowingHint &&
+            <span className="font-semibold text-menu-text">{selectedDisplayOverwrite ?? selectedOption?.label}</span>}
           {isShowingHint && (<span className="textstyle-description">{hintText}</span>)}
           {isOpen ? <ChevronUp/> : <ChevronDown/>}
         </button>
         {isOpen && (
           <div
-            className="absolute w-full z-10 rounded-lg mt-0.5 bg-menu-background text-menu-text shadow-lg max-h-[500px] overflow-y-auto p-2">
+            ref={menuRef}
+            className="absolute w-full z-10 rounded-lg mt-0.5 bg-menu-background text-menu-text shadow-lg max-h-[500px] overflow-y-auto p-2"
+          >
             <SearchableList
               list={options}
               minimumItemsForSearch={isSearchEnabled ? undefined : options.length}
@@ -91,7 +99,7 @@ export const Select = <T, >({
                   title={{ value: option.label, className: 'font-semibold' }}
                   onClick={() => {
                     onChange(option.value)
-                    setOpen(false)
+                    setIsOpen(false)
                   }}
                   isDisabled={option.disabled}
                 />

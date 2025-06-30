@@ -1,5 +1,5 @@
 import type { ReactNode } from 'react'
-import { useEffect, useState } from 'react'
+import { useEffect, useRef, useState } from 'react'
 import { ChevronDown, ChevronUp } from 'lucide-react'
 import type { PropsForTranslation } from '../../localization/useTranslation'
 import { useTranslation } from '../../localization/useTranslation'
@@ -12,6 +12,7 @@ import { SearchableList } from '../layout-and-navigation/SearchableList'
 import { Tile } from '../layout-and-navigation/Tile'
 import { SolidButton } from './Button'
 import { ChipList } from '../layout-and-navigation/Chip'
+import { useOutsideClick } from '../../hooks/useOutsideClick'
 
 type MultiSelectTranslation = {
   select: string,
@@ -71,7 +72,10 @@ export const MultiSelect = <T, >({
                                  PropsForTranslation<MultiSelectTranslation, MultiSelectProps<T>>
 ) => {
   const translation = useTranslation(defaultMultiSelectTranslation, overwriteTranslation)
-  const [isOpen, setOpen] = useState(false)
+  const triggerRef = useRef<HTMLButtonElement>(null)
+  const menuRef = useRef<HTMLDivElement>(null)
+  const [isOpen, setIsOpen] = useState(false)
+  useOutsideClick([triggerRef, menuRef], () => setIsOpen(false))
 
   const selectedItems = options.filter(value => value.selected)
 
@@ -85,6 +89,7 @@ export const MultiSelect = <T, >({
       )}
       <div className="relative">
         <button
+          ref={triggerRef}
           className={clsx(
             'btn-md justify-between w-full border-2 h-auto',
             {
@@ -93,7 +98,7 @@ export const MultiSelect = <T, >({
               'bg-disabled-background text-disabled-text border-disabled-background cursor-not-allowed': isDisabled
             }
           )}
-          onClick={() => setOpen(!isOpen)}
+          onClick={() => setIsOpen(!isOpen)}
           disabled={isDisabled}
         >
           {!isShowingHint && (
@@ -109,7 +114,9 @@ export const MultiSelect = <T, >({
         </button>
         {isOpen && (
           <div
-            className="absolute w-full z-10 rounded-lg mt-0.5 bg-menu-background text-menu-text shadow-lg max-h-[500px] overflow-y-auto p-2">
+            ref={menuRef}
+            className="absolute w-full z-10 rounded-lg mt-0.5 bg-menu-background text-menu-text shadow-lg max-h-[500px] overflow-y-auto p-2"
+          >
             <SearchableList
               list={options}
               minimumItemsForSearch={isSearchEnabled ? undefined : options.length}
@@ -159,7 +166,7 @@ export const MultiSelect = <T, >({
                   None
                 </SolidButton>
               </div>
-              <SolidButton size="small" onClick={() => setOpen(false)}>Done</SolidButton>
+              <SolidButton size="small" onClick={() => setIsOpen(false)}>Done</SolidButton>
             </div>
           </div>
         )}
