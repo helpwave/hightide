@@ -34,7 +34,7 @@ export type StepperState = {
 export type StepperBarProps = {
   state?: StepperState,
   numberOfSteps: number,
-  disabledSteps: Set<number>,
+  disabledSteps?: Set<number>,
   onChange: (state: StepperState) => void,
   onFinish: () => void,
   finishText?: string,
