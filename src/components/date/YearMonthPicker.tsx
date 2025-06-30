@@ -63,42 +63,40 @@ export const YearMonthPicker = ({
                 label={<span className={clsx({ 'text-primary font-bold': selectedYear })}>{year}</span>}
                 isExpanded={showValueOpen && selectedYear}
               >
-                <div className="col gap-y-1 px-2 pb-2">
-                  {equalSizeGroups([...monthsList], 3).map((monthList, index) => (
-                    <div key={index} className="row">
-                      {monthList.map(month => {
-                        const monthIndex = monthsList.indexOf(month)
-                        const newDate = new Date(year, monthIndex)
+                {equalSizeGroups([...monthsList], 3).map((monthList, index) => (
+                  <div key={index} className="row">
+                    {monthList.map(month => {
+                      const monthIndex = monthsList.indexOf(month)
+                      const newDate = new Date(year, monthIndex)
 
-                        const selectedMonth = selectedYear && monthIndex === displayedYearMonth.getMonth()
-                        const firstOfMonth = new Date(year, monthIndex, 1)
-                        const lastOfMonth = new Date(year, monthIndex, 1)
-                        const isAfterStart = start === undefined || start <= addDuration(subtractDuration(lastOfMonth, { days: 1 }), { months: 1 })
-                        const isBeforeEnd = end === undefined || firstOfMonth <= end
-                        const isValid = isAfterStart && isBeforeEnd
-                        return (
-                          <button
-                            key={month}
-                            disabled={!isValid}
-                            className={clsx(
-                              'chip hover:brightness-95 flex-1',
-                              {
-                                'bg-gray-50 text-black': !selectedMonth && isValid,
-                                'bg-primary text-on-primary': selectedMonth && isValid,
-                                'bg-disabled-background text-disabled-text': !isValid
-                              }
-                            )}
-                            onClick={() => {
-                              onChange(newDate)
-                            }}
-                          >
-                            {new Intl.DateTimeFormat(locale, { month: 'short' }).format(newDate)}
-                          </button>
-                        )
-                      })}
-                    </div>
-                  ))}
-                </div>
+                      const selectedMonth = selectedYear && monthIndex === displayedYearMonth.getMonth()
+                      const firstOfMonth = new Date(year, monthIndex, 1)
+                      const lastOfMonth = new Date(year, monthIndex, 1)
+                      const isAfterStart = start === undefined || start <= addDuration(subtractDuration(lastOfMonth, { days: 1 }), { months: 1 })
+                      const isBeforeEnd = end === undefined || firstOfMonth <= end
+                      const isValid = isAfterStart && isBeforeEnd
+                      return (
+                        <button
+                          key={month}
+                          disabled={!isValid}
+                          className={clsx(
+                            'chip hover:brightness-95 flex-1',
+                            {
+                              'bg-gray-50 text-black': !selectedMonth && isValid,
+                              'bg-primary text-on-primary': selectedMonth && isValid,
+                              'bg-disabled-background text-disabled-text': !isValid
+                            }
+                          )}
+                          onClick={() => {
+                            onChange(newDate)
+                          }}
+                        >
+                          {new Intl.DateTimeFormat(locale, { month: 'short' }).format(newDate)}
+                        </button>
+                      )
+                    })}
+                  </div>
+                ))}
               </ExpandableUncontrolled>
             )
           })}
@@ -109,10 +107,10 @@ export const YearMonthPicker = ({
 }
 
 export const YearMonthPickerUncontrolled = ({
-                                            displayedYearMonth = new Date(),
-                                            onChange = noop,
-                                            ...props
-                                          }: YearMonthPickerProps) => {
+                                              displayedYearMonth = new Date(),
+                                              onChange = noop,
+                                              ...props
+                                            }: YearMonthPickerProps) => {
   const [yearMonth, setYearMonth] = useState<Date>(displayedYearMonth)
 
   useEffect(() => setYearMonth(displayedYearMonth), [displayedYearMonth])
