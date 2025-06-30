@@ -3,10 +3,10 @@ import clsx from 'clsx'
 import type { Language } from '../../localization/util'
 import type { PropsForTranslation } from '../../localization/useTranslation'
 import { useTranslation } from '../../localization/useTranslation'
-import type { SearchableSelectProps } from '../user-action/Select'
-import { SearchableSelect } from '../user-action/Select'
 import type { PropertyBaseProps } from './PropertyBase'
 import { PropertyBase } from './PropertyBase'
+import type { SelectProps } from '../user-action/Select'
+import { Select } from '../user-action/Select'
 
 type SingleSelectPropertyTranslation = {
   select: string,
@@ -22,7 +22,7 @@ const defaultSingleSelectPropertyTranslation: Record<Language, SingleSelectPrope
 }
 
 export type SingleSelectPropertyProps<T> =
-  Omit<PropertyBaseProps & SearchableSelectProps<T>, 'icon' | 'input' | 'hasValue' | 'className' | 'disabled' | 'label' | 'labelClassName' | 'additionalItems'>
+  Omit<PropertyBaseProps & SelectProps<T>, 'icon' | 'input' | 'hasValue' | 'className' | 'disabled' | 'label' | 'labelClassName' | 'additionalItems'>
 
 /**
  * An Input for SingleSelect properties
@@ -35,7 +35,7 @@ export const SingleSelectProperty = <T, >({
                                             readOnly = false,
                                             softRequired,
                                             onRemove,
-                                            ...multiSelectProps
+                                            ...selectProps
                                           }: PropsForTranslation<SingleSelectPropertyTranslation, SingleSelectPropertyProps<T>>) => {
   const translation = useTranslation(defaultSingleSelectPropertyTranslation, overwriteTranslation)
   const hasValue = value !== undefined
@@ -52,8 +52,8 @@ export const SingleSelectProperty = <T, >({
         <div
           className={clsx('row grow py-2 px-4 cursor-pointer', { 'text-warning': softRequired && !hasValue })}
         >
-          <SearchableSelect
-            {...multiSelectProps}
+          <Select
+            {...selectProps}
             value={value}
             options={options}
             isDisabled={readOnly}

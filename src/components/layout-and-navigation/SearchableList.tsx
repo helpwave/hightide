@@ -1,12 +1,13 @@
 import type { ReactNode } from 'react'
-import { useEffect, useMemo, useState } from 'react'
 import { Search } from 'lucide-react'
 import clsx from 'clsx'
 import type { Language } from '../../localization/util'
 import type { PropsForTranslation } from '../../localization/useTranslation'
 import { useTranslation } from '../../localization/useTranslation'
-import { MultiSearchWithMapping } from '../../util/simpleSearch'
 import { Input } from '../user-action/Input'
+import { IconButton } from '../user-action/Button'
+import type { UseSearchProps } from '../../hooks/useSearch'
+import { useSearch } from '../../hooks/useSearch'
 
 type SearchableListTranslation = {
   search: string,
@@ -24,12 +25,12 @@ const defaultSearchableListTranslation: Record<Language, SearchableListTranslati
   }
 }
 
-export type SearchableListProps<T> = {
-  list: T[],
-  initialSearch?: string,
-  searchMapping: (value: T) => string[],
-  itemMapper: (value: T) => ReactNode,
+export type SearchableListProps<T> = UseSearchProps<T> & {
+  autoFocus?: boolean,
+  minimumItemsForSearch?: number,
+  itemMapper: (value: T, index: number) => ReactNode,
   className?: string,
+  resultListClassName?: string,
 }
 
 /**
@@ -40,30 +41,38 @@ export const SearchableList = <T, >({
                                       list,
                                       initialSearch = '',
                                       searchMapping,
+                                      autoFocus,
+                                      minimumItemsForSearch = 6,
                                       itemMapper,
-                                      className
+                                      className,
+                                      resultListClassName
                                     }: PropsForTranslation<SearchableListTranslation, SearchableListProps<T>>) => {
   const translation = useTranslation(defaultSearchableListTranslation, overwriteTranslation)
-  const [search, setSearch] = useState<string>(initialSearch)
-
-  useEffect(() => setSearch(initialSearch), [initialSearch])
-
-  const filteredEntries = useMemo(() => MultiSearchWithMapping(search, list, searchMapping), [search, list, searchMapping])
+  const { result, hasResult, search, setSearch } = useSearch<T>({ list, initialSearch, searchMapping })
 
   return (
     <div className={clsx('col gap-y-2', className)}>
-      <div className="row justify-between gap-x-2 items-center">
-        <div className="flex-1">
-          <Input value={search} onChangeText={setSearch} placeholder={translation.search}/>
-        </div>
-        <Search size={20}/>
-      </div>
-      {filteredEntries.length > 0 && (
-        <div className="col gap-y-1">
-          {filteredEntries.map(itemMapper)}
+      {list.length > minimumItemsForSearch && (
+        <div className="row justify-between gap-x-4 items-center">
+          <Input
+            value={search}
+            onChangeText={setSearch}
+            placeholder={translation.search}
+            autoFocus={autoFocus}
+            className="w-full"
+          />
+          <IconButton color="neutral" disabled={search.length === 0}>
+            <Search className="w-full h-full"/>
+          </IconButton>
         </div>
       )}
-      {!filteredEntries.length && <div className="row justify-center">{translation.nothingFound}</div>}
+      {hasResult ? (
+        <div className={clsx('col gap-y-1', resultListClassName)}>
+          {result.map(itemMapper)}
+        </div>
+      ) : (
+        <div className="row text-description py-2 px-2">{translation.nothingFound}</div>
+      )}
     </div>
   )
 }

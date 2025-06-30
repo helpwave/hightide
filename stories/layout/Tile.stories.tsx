@@ -2,10 +2,12 @@ import type { Meta, StoryObj } from '@storybook/nextjs'
 import { Info, X } from 'lucide-react'
 import type { TileProps } from '../../src'
 import { Tile } from '../../src'
+import { action } from 'storybook/actions'
 
-type TileExampleProps = Omit<TileProps, 'prefix' | 'suffix'> & {
+type TileExampleProps = Omit<TileProps, 'prefix' | 'suffix' | 'onClick'> & {
   prefix: boolean,
   suffix: boolean,
+  isClickable: boolean,
 }
 
 /**
@@ -14,13 +16,15 @@ type TileExampleProps = Omit<TileProps, 'prefix' | 'suffix'> & {
 const TileExample = ({
                        prefix,
                        suffix,
+                       isClickable,
                        ...restProps
                      }: TileExampleProps) => {
   return (
     <Tile
       {...restProps}
-      prefix={prefix ? <Info size={20}/> : undefined}
-      suffix={suffix ? <X size={20}/> : undefined}
+      prefix={prefix ? <Info size={24}/> : undefined}
+      suffix={suffix ? <X size={24}/> : undefined}
+      onClick={!isClickable ? undefined : action('Click')}
     />
   )
 }
@@ -37,8 +41,11 @@ export const tile: Story = {
   args: {
     title: { value: 'Title' },
     description: { value: 'Description Text', className: 'textstyle-description' },
-    prefix: true,
-    suffix: true,
-    className: ''
+    isClickable: true,
+    isDisabled: false,
+    isSelected: false,
+    prefix: false,
+    suffix: false,
+    className: 'p-2 rounded-md'
   },
 }
