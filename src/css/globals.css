@@ -249,6 +249,7 @@
   --color-disabled-text: #555555;
   --color-disabled-icon: #555555;
   --color-disabled-outline: #555555;
+  --color-border: #CCCCCC;
 
   --color-button-solid-primary-background: var(--color-primary);
   --color-button-solid-primary-text: var(--color-on-primary);
@@ -284,9 +285,12 @@
   --color-button-text-primary-text: var(--color-primary);
   --color-button-text-primary-icon: var(--color-primary);
 
-  --color-menu-background: #FFFFFF;
-  --color-menu-text: #1A1A1A;
-  --color-menu-border: #999999;
+  --color-menu-background: var(--color-surface);
+  --color-menu-text: var(--color-on-surface);
+  --color-menu-border: var(--color-border);
+
+  --color-property-title-background: #E6E6E6;
+  --color-property-title-text: var(--color-on-surface);
 
   --color-tag-default-background: #F6FAFF;
   --color-tag-default-text: #1A4080;
@@ -348,6 +352,7 @@
     --color-highlight: #3272DF;
     --color-background: #1A1A1A;
     --color-on-background: #EEEEEE;
+    --color-border: #444444;
 
     --color-neutral: #4D4D4D;
     --color-neutral-outline: #B3B3B3;
@@ -364,7 +369,7 @@
     --color-description: #999999;
 
     --color-disabled-background: #555555;
-    --color-disabled-text: #888888;
+    --color-disabled-text: #999999;
 
     --color-button-solid-neutral-background: #424242;
     --color-button-solid-neutral-icon: #EEEEEE;
@@ -376,12 +381,15 @@
 
     --color-menu-background: #333333;
     --color-menu-text: #EEEEEE;
-    --color-menu-border: #999999;
+    --color-menu-border: var(--color-border);
 
-    --color-tabel-header-background: #F6FAFF;
+    --color-property-title-background: #393939;
+    --color-property-title-text: var(--color-on-surface);
 
     --color-overlay-background: #222222;
     --color-overlay-text: #FFFFFF;
+
+    --color-tabel-header-background: #F6FAFF;
   }
 }
 
@@ -445,6 +453,10 @@
 }
 
 @layer components {
+  * {
+    @apply border-border;
+  }
+
   html, main {
     @apply bg-background text-on-background;
   }
@@ -454,7 +466,7 @@
   }
 
   input {
-    @apply block bg-surface text-on-surface px-3 py-2 rounded-md border-2 border-gray-200 hover:border-primary focus:outline-none focus:border-primary focus:ring-primary;
+    @apply block bg-surface text-on-surface px-3 py-2 rounded-md border-2 hover:border-primary focus:outline-none focus:border-primary focus:ring-primary;
   }
 
   .textstyle-title-3xl {
