@@ -1,12 +1,19 @@
 import type { ReactNode } from 'react'
 import clsx from 'clsx'
+import { Check } from 'lucide-react'
 
 export type TileProps = {
-  title: { value: string, className?: string },
-  description?: { value: string, className?: string },
+  title: { value: ReactNode, className?: string },
+  description?: { value: ReactNode, className?: string },
+  onClick?: () => void,
+  isDisabled?: boolean,
+  isSelected?: boolean,
   prefix?: ReactNode,
   suffix?: ReactNode,
   className?: string,
+  normalClassName?: string,
+  selectedClassName?: string,
+  disabledClassName?: string,
 }
 
 /**
@@ -15,13 +22,30 @@ export type TileProps = {
 export const Tile = ({
                        title,
                        description,
+                       onClick,
+                       isSelected = false,
+                       isDisabled = false,
                        prefix,
                        suffix,
+                       normalClassName = 'hover:bg-primary/40 cursor-pointer',
+                       selectedClassName = ' bg-primary/20',
+                       disabledClassName = 'text-disabled-text bg-disabled-background cursor-not-allowed',
                        className
                      }: TileProps) => {
   return (
-    <div className={clsx('row gap-x-4 w-full items-center', className)}>
-      {prefix}
+    <div
+      className={clsx(
+        'row gap-x-2 w-full items-center',
+        {
+          [normalClassName]: !!onClick && !isDisabled,
+          [selectedClassName]: isSelected && !isDisabled,
+          [disabledClassName]: isDisabled,
+        },
+        className
+      )}
+      onClick={isDisabled ? undefined : onClick}
+    >
+      {prefix ?? (isSelected ? (<Check size={24}/>) : undefined)}
       <div className="col gap-y-0 w-full">
         <h4 className={clsx(title.className ?? 'textstyle-title-normal')}>{title.value}</h4>
         {!!description &&
@@ -30,17 +54,4 @@ export const Tile = ({
       {suffix}
     </div>
   )
-}
-
-type ImageLocation = 'prefix' | 'suffix'
-type ImageSize = {
-  width: number,
-  height: number,
-}
-
-export type TileWithImageProps = Omit<TileProps, 'suffix' | 'prefix'> & {
-  url: string,
-  imageLocation?: ImageLocation,
-  imageSize?: ImageSize,
-  imageClassName?: string,
 }

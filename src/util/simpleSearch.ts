@@ -25,13 +25,16 @@ export const MultiSubjectSearchWithMapping = <T>(search: string[], objects: T[],
  *
  *  @param objects The list of objects to be searched in
  *
- *  @param mapping The mapping of objects to the string properties they fulfil
+ *  @param mapping The mapping of objects to the string properties they fulfil, if undefined it is always fulfilled
  *
  *  @return The list of objects that match the search string
  */
-export const MultiSearchWithMapping = <T>(search: string, objects: T[], mapping: (value: T) => string[]) => {
+export const MultiSearchWithMapping = <T>(search: string, objects: T[], mapping: (value: T) => (string[] | undefined)) => {
   return objects.filter(object => {
-    const mappedSearchKeywords = mapping(object).map(value => value.toLowerCase().trim())
+    const mappedSearchKeywords = mapping(object)?.map(value => value.toLowerCase().trim())
+    if(!mappedSearchKeywords) {
+      return true
+    }
     return !!mappedSearchKeywords.find(value => value.includes(search.toLowerCase().trim()))
   })
 }

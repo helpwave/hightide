@@ -32,7 +32,6 @@
     "generate-barrels": "barrelsby -c ./barrelsby-config.json -S -q"
   },
   "dependencies": {
-    "@headlessui/react": "1.7.19",
     "@radix-ui/react-checkbox": "1.1.3",
     "@tailwindcss/cli": "^4.1.7",
     "clsx": "^2.1.1",

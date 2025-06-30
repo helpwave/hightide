@@ -1,16 +1,18 @@
 import type { ReactNode } from 'react'
-import { useState } from 'react'
-import { Search } from 'lucide-react'
+import { useEffect, useRef, useState } from 'react'
+import { ChevronDown, ChevronUp } from 'lucide-react'
 import type { PropsForTranslation } from '../../localization/useTranslation'
 import { useTranslation } from '../../localization/useTranslation'
 import type { Language } from '../../localization/util'
-import { MultiSearchWithMapping } from '../../util/simpleSearch'
 import clsx from 'clsx'
-import { Menu, MenuItem } from './Menu'
-import { Input } from './Input'
-import { Checkbox } from './Checkbox'
 import type { LabelProps } from './Label'
 import { Label } from './Label'
+import type { SelectOption } from './Select'
+import { SearchableList } from '../layout-and-navigation/SearchableList'
+import { Tile } from '../layout-and-navigation/Tile'
+import { SolidButton } from './Button'
+import { ChipList } from '../layout-and-navigation/Chip'
+import { useOutsideClick } from '../../hooks/useOutsideClick'
 
 type MultiSelectTranslation = {
   select: string,
@@ -31,13 +33,8 @@ const defaultMultiSelectTranslation: Record<Language, MultiSelectTranslation> = 
   }
 }
 
-// TODO maybe add custom item builder here
-export type MultiSelectOption<T> = {
-  label: string,
-  value: T,
+export type MultiSelectOption<T> = SelectOption<T> & {
   selected: boolean,
-  disabled?: boolean,
-  className?: string,
 }
 
 export type SearchProps<T> = {
@@ -47,18 +44,14 @@ export type SearchProps<T> = {
 
 export type MultiSelectProps<T> = {
   options: MultiSelectOption<T>[],
-  onChange: (options: MultiSelectOption<T>[]) => void,
-  search?: SearchProps<T>,
-  disabled?: boolean,
-  selectedDisplay?: (props: {
-    items: MultiSelectOption<T>[],
-    disabled: boolean,
-  }) => ReactNode,
   label?: LabelProps,
+  onChange: (options: MultiSelectOption<T>[]) => void,
   hintText?: string,
-  showDisabledOptions?: boolean,
+  isDisabled?: boolean,
+  isSearchEnabled?: boolean,
   className?: string,
-  triggerClassName?: string,
+  useChipDisplay: boolean,
+  selectedDisplayOverwrite?: ReactNode,
 }
 
 /**
@@ -67,37 +60,26 @@ export type MultiSelectProps<T> = {
 export const MultiSelect = <T, >({
                                    overwriteTranslation,
                                    options,
-                                   onChange,
-                                   search,
-                                   disabled = false,
-                                   selectedDisplay,
                                    label,
+                                   onChange,
                                    hintText,
-                                   showDisabledOptions = true,
+                                   isDisabled = false,
+                                   isSearchEnabled = false,
+                                   selectedDisplayOverwrite,
+                                   useChipDisplay = false,
                                    className = '',
-                                   triggerClassName = '',
-                                 }: PropsForTranslation<MultiSelectTranslation, MultiSelectProps<T>>) => {
+                                 }:
+                                 PropsForTranslation<MultiSelectTranslation, MultiSelectProps<T>>
+) => {
   const translation = useTranslation(defaultMultiSelectTranslation, overwriteTranslation)
-  const [searchText, setSearchText] = useState<string>(search?.initialSearch ?? '')
-  let filteredOptions: MultiSelectOption<T>[] = options
-  const enableSearch = !!search
-  if (enableSearch && !!searchText) {
-    filteredOptions = MultiSearchWithMapping<MultiSelectOption<T>>(
-      searchText,
-      filteredOptions,
-      value => search.searchMapping(value)
-    )
-  }
-  if (!showDisabledOptions) {
-    filteredOptions = filteredOptions.filter(value => !value.disabled)
-  }
+  const triggerRef = useRef<HTMLButtonElement>(null)
+  const menuRef = useRef<HTMLDivElement>(null)
+  const [isOpen, setIsOpen] = useState(false)
+  useOutsideClick([triggerRef, menuRef], () => setIsOpen(false))
 
   const selectedItems = options.filter(value => value.selected)
-  const menuButtonText = selectedItems.length === 0 ?
-    hintText ?? translation.select
-    : <span>{`${selectedItems.length} ${translation.selected}`}</span>
 
-  const borderColor = 'border-menu-border'
+  const isShowingHint = !selectedDisplayOverwrite && selectedItems.length === 0
 
   return (
     <div className={clsx(className)}>
@@ -105,54 +87,114 @@ export const MultiSelect = <T, >({
         <Label {...label} htmlFor={label.name} className={clsx(' mb-1', label.className)}
                labelType={label.labelType ?? 'labelBig'}/>
       )}
-      <Menu<HTMLDivElement>
-        alignment="t_"
-        trigger={(onClick, ref) => (
-          <div ref={ref} onClick={disabled ? undefined : onClick}
-               className={clsx(borderColor, 'bg-menu-background text-menu-text inline-w-full justify-between items-center rounded-lg border-2 px-4 py-2 font-medium',
-                 {
-                   'hover:border-primary cursor-pointer': !disabled,
-                   'bg-disabled-background text-disabled cursor-not-allowed': disabled
-                 },
-                 triggerClassName)}
+      <div className="relative">
+        <button
+          ref={triggerRef}
+          className={clsx(
+            'btn-md justify-between w-full border-2 h-auto',
+            {
+              'rounded-b-lg': !open,
+              'bg-menu-background border-menu-border hover:border-primary': !isDisabled,
+              'bg-disabled-background text-disabled-text border-disabled-background cursor-not-allowed': isDisabled
+            }
+          )}
+          onClick={() => setIsOpen(!isOpen)}
+          disabled={isDisabled}
+        >
+          {!isShowingHint && (
+            <span className="font-semibold text-menu-text">
+              {selectedDisplayOverwrite ?? (useChipDisplay && selectedItems ?
+                  (<ChipList list={selectedItems.map(value => ({ children: value.label }))}/>) :
+                  `${selectedItems.length} ${translation.selected}`
+              )}
+            </span>
+          )}
+          {isShowingHint && (<span className="textstyle-description">{hintText ?? translation.select}</span>)}
+          {isOpen ? <ChevronUp size={24} className="min-w-6"/> : <ChevronDown className="min-w-6"/>}
+        </button>
+        {isOpen && (
+          <div
+            ref={menuRef}
+            className="absolute w-full z-10 rounded-lg mt-0.5 bg-menu-background text-menu-text shadow-lg max-h-[500px] overflow-y-auto p-2"
           >
-            {selectedDisplay ? selectedDisplay({ items: options, disabled }) : menuButtonText}
-          </div>
-        )}
-        menuClassName={clsx(
-          '!rounded-lg !shadow-lg !max-h-[500px] !min-w-[400px] !max-w-[70vh] !overflow-y-auto !border !border-2', borderColor,
-          { '!py-0': !enableSearch, '!pb-0': enableSearch }
-        )}
-      >
-        {enableSearch && (
-          <div key="selectSearch" className="row gap-x-2 items-center px-2 py-2">
-            <Input autoFocus={true} className="w-full" value={searchText} onChangeText={setSearchText}/>
-            <Search/>
-          </div>
-        )}
-        {filteredOptions.map((option, index) => (
-          <MenuItem key={`item${index}`} className={clsx({
-            'cursor-not-allowed !bg-disabled-background !text-disabled-text hover:brightness-100': !!option.disabled,
-            'cursor-pointer': !option.disabled,
-          })}
-          >
-            <div
-              className={clsx('overflow-hidden whitespace-nowrap text-ellipsis row items-center gap-x-2', option.className)}
-              onClick={() => {
-                if (!option.disabled) {
-                  onChange(options.map(value => value.value === option.value ? ({
-                    ...option,
-                    selected: !value.selected
-                  }) : value))
-                }
-              }}
-            >
-              <Checkbox checked={option.selected} disabled={option.disabled} size="small"/>
-              {option.label}
+            <SearchableList
+              list={options}
+              minimumItemsForSearch={isSearchEnabled ? undefined : options.length}
+              searchMapping={item => item.searchTags}
+              itemMapper={(option, index) => (
+                <Tile
+                  key={index}
+                  isSelected={option.selected}
+                  className="px-2 py-1 rounded-md"
+                  disabledClassName="text-disabled-text cursor-not-allowed"
+                  title={{ value: option.label, className: 'font-semibold' }}
+                  onClick={() => {
+                    onChange(options.map(value => value.value === option.value ? ({
+                      ...option,
+                      selected: !value.selected
+                    }) : value))
+                  }}
+                  isDisabled={option.disabled}
+                />
+              )}
+            />
+            <div className="row justify-between mt-2">
+              <div className="row gap-x-2">
+                <SolidButton
+                  color="neutral"
+                  size="small"
+                  onClick={() => {
+                    onChange(options.map(option => ({
+                      ...option,
+                      selected: !option.disabled
+                    })))
+                  }}
+                  disabled={options.every(value => value.selected || value.disabled)}
+                >
+                  All
+                </SolidButton>
+                <SolidButton
+                  color="neutral"
+                  size="small"
+                  onClick={() => {
+                    onChange(options.map(option => ({
+                      ...option,
+                      selected: false
+                    })))
+                  }}
+                >
+                  None
+                </SolidButton>
+              </div>
+              <SolidButton size="small" onClick={() => setIsOpen(false)}>Done</SolidButton>
             </div>
-          </MenuItem>
-        ))}
-      </Menu>
+          </div>
+        )}
+      </div>
     </div>
+  )
+}
+
+export const MultiSelectUncontrolled = <T, >({
+                                               options,
+                                               onChange,
+                                               ...props
+                                             }:
+                                             PropsForTranslation<MultiSelectTranslation, MultiSelectProps<T>>) => {
+  const [usedOptions, setUsedOptions] = useState<MultiSelectOption<T>[]>(options)
+
+  useEffect(() => {
+    setUsedOptions(options)
+  }, [options])
+
+  return (
+    <MultiSelect
+      {...props}
+      options={usedOptions}
+      onChange={options => {
+        setUsedOptions(options)
+        onChange(options)
+      }}
+    />
   )
 }
