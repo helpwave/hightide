@@ -155,7 +155,14 @@
 
 /* The theme variables */
 @theme {
-  /* Colors for with default values of the light theme */
+  /*
+   * Default light theme colors and initial definitions
+   */
+
+
+  /*
+   * Basic Colors
+   */
   --color-white: #FFFFFF;
   --color-black: #000000;
   --color-gray-25: #F8F8F8;
@@ -200,47 +207,55 @@
   --color-red-500: #DC576D;
   --color-red-900: #5C252E;
 
+
+  /*
+   * Semantic Colors
+   */
+  --color-text-dark: #1A1A1A;
+  --color-text-light: #E6E6E6;
+  --color-text-default: var(--color-text-dark);
+
   --color-primary: var(--color-purple-500);
-  --color-on-primary: #FFFFFF;
+  --color-on-primary: var(--color-text-light);
   --color-secondary: #11243E;
-  --color-on-secondary: #FFFFFF;
-  --color-warning: #EA9E40;
-  --color-on-warning: #FFFFFF;
-  --color-positive: #69CB81;
-  --color-on-positive: #FFFFFF;
-  --color-negative: #DC576D;
-  --color-on-negative: #FFFFFF;
+  --color-on-secondary: var(--color-text-light);
+  --color-warning: var(--color-yellow-500);
+  --color-on-warning: var(--color-text-light);
+  --color-positive: var(--color-green-500);
+  --color-on-positive: var(--color-text-light);
+  --color-negative: var(--color-red-500);
+  --color-on-negative: var(--color-text-light);
   --color-surface: #FFFFFF;
-  --color-on-surface: #1A1A1A;
+  --color-on-surface: var(--color-text-dark);
   --color-surface-variant: #F8F8F8;
   --color-surface-warning: #FBECD9;
   --color-highlight: #3272DF;
   --color-background: #EEEEEE;
-  --color-on-background: #1A1A1A;
+  --color-on-background: var(--color-text-dark);
 
-  --color-female: #E3798A;
-  --color-female-outline: #F4A3A7;
-  --color-female-surface: #FBE0E2;
-  --color-female-background: #FFF9F9;
+  --color-female: var(--color-red-400);
+  --color-female-outline: var(--color-red-300);
+  --color-female-surface: var(--color-red-100);
+  --color-female-background: var(--color-red-50);
 
-  --color-male: #3272DF;
-  --color-male-outline: #99B9EF;
-  --color-male-surface: #D6E3F9;
-  --color-male-background: #F6FAFF;
+  --color-male: var(--color-blue-400);
+  --color-male-outline: var(--color-blue-300);
+  --color-male-surface: var(--color-blue-100);
+  --color-male-background: var(--color-blue-50);
 
   --color-neutral: #4D4D4D;
   --color-neutral-outline: #B3B3B3;
   --color-neutral-surface: #E6E6E6;
   --color-neutral-background: #F8F8F8;
 
-  --color-text-primary: #1A1A1A;
+  --color-text-primary: var(--color-text-default);
   --color-text-secondary: #666666;
   --color-text-tertiary: #B3B3B3;
   --color-text-highlight: #3272DF;
   --color-text-label: #4D4D4D;
-  --color-icon-primary: #1A1A1A;
-  --color-icon-secondary: #666666;
-  --color-icon-highlight: #3272DF;
+  --color-icon-primary: var(--color-text-primary);
+  --color-icon-secondary: var(--color-text-secondary);
+  --color-icon-highlight: var(--color-text-highlight);
   --color-divider: #E6E6E6;
   --color-description: #555555;
   --color-outline: #E6E6E6;
@@ -251,6 +266,17 @@
   --color-disabled-outline: #555555;
   --color-border: #CCCCCC;
 
+
+  /*
+   * Component Colors
+   */
+
+  /* Button Outline */
+  --color-button-outline-primary-outline: var(--color-primary);
+  --color-button-outline-primary-icon: var(--color-primary);
+  --color-button-outline-primary-text: var(--color-primary);
+
+  /* Button Solid */
   --color-button-solid-primary-background: var(--color-primary);
   --color-button-solid-primary-text: var(--color-on-primary);
   --color-button-solid-primary-icon: var(--color-on-primary);
@@ -273,10 +299,7 @@
   --color-button-solid-negative-icon: var(--color-on-negative);
   --color-button-solid-negative-text: var(--color-on-negative);
 
-  --color-button-outline-primary-outline: var(--color-primary);
-  --color-button-outline-primary-icon: var(--color-primary);
-  --color-button-outline-primary-text: var(--color-primary);
-
+  /* Button Text */
   --color-button-text-hover-background: #77777733;
   --color-button-text-neutral-text: #333333;
   --color-button-text-neutral-icon: #333333;
@@ -285,19 +308,39 @@
   --color-button-text-primary-text: var(--color-primary);
   --color-button-text-primary-icon: var(--color-primary);
 
+  /* Carousel */
+  --color-carousel-dot-active: var(--color-primary);
+  --color-carousel-dot-disabled: var(--color-disabled-background);
+
+  /* Menu */
   --color-menu-background: var(--color-surface);
   --color-menu-text: var(--color-on-surface);
   --color-menu-border: var(--color-border);
 
-  --color-property-title-background: #E6E6E6;
-  --color-property-title-text: var(--color-on-surface);
+  /* Overlay */
+  --color-overlay-background: #FFFFFF;
+  --color-overlay-text: var(--color-text-dark);
 
-  --color-tag-default-background: #F6FAFF;
-  --color-tag-default-text: #1A4080;
-  --color-tag-default-icon: #1A4080;
+  /* ProgressIndicator */
+  --color-progress-indicator-fill: var(--color-primary);
+  --color-progress-indicator-background: var(--color-gray-300);
+
+  /* Property */
+  --color-property-title-background: #E6E6E6;
+  --color-property-title-text: var(--color-text-default);
+
+  /* Stepper Bar */
+  --color-stepperbar-dot-active: var(--color-primary);
+  --color-stepperbar-dot-normal: var(--color-purple-100);
+  --color-stepperbar-dot-disabled: var(--color-disabled-background);
+
+  /* Table */
+  --color-tabel-header-background: #F6FAFF;
+
+  /* Tag */
   --color-tag-dark-background: #333333;
-  --color-tag-dark-text: #FFFFFF;
-  --color-tag-dark-icon: #FFFFFF;
+  --color-tag-dark-text: var(--color-text-light);
+  --color-tag-dark-icon: var(--color-text-light);
   --color-tag-green-background: #E2E9DB;
   --color-tag-green-text: #7A977E;
   --color-tag-green-icon: #7A977E;
@@ -307,51 +350,62 @@
   --color-tag-red-background: #FEE0DD;
   --color-tag-red-text: #D67268;
   --color-tag-red-icon: #D67268;
-  --color-tag-blue-background: #F6FAFF;
-  --color-tag-blue-text: #1A4080;
-  --color-tag-blue-icon: #1A4080;
+  --color-tag-blue-background: var(--color-blue-50);
+  --color-tag-blue-text: var(--color-blue-800);
+  --color-tag-blue-icon: var(--color-blue-800);
   --color-tag-pink-background: #CEA3B8;
   --color-tag-pink-text: #CE75A0;
   --color-tag-pink-icon: #CE75A0;
 
-  --color-tabel-header-background: #F6FAFF;
-
+  /* TextImage */
   --color-text-image-primary-background: var(--color-primary);
   --color-text-image-primary-text: var(--color-on-primary);
   --color-text-image-secondary-background: #3171DE;
-  --color-text-image-secondary-text: #FFFFFF;
+  --color-text-image-secondary-text: var(--color-text-light);
   --color-text-image-dark-background: #11243E;
-  --color-text-image-dark-text: #FFFFFF;
+  --color-text-image-dark-text: var(--color-text-light);
 
-  --color-overlay-background: #FFFFFF;
-  --color-overlay-text: #1A1A1A;
-
+  /* Tooltip */
   --color-tooltip-background: var(--color-overlay-background);
   --color-tooltip-text: var(--color-description);
 
-  /* breakpoints */
+  /*
+   * breakpoints
+   */
   --breakpoint-tablet: 48rem; /* 768px for 16px font-size */
   --breakpoint-desktop: 64rem; /* 1024px for 16px font-size*/
-  /* fonts */
+
+  /*
+   * fonts
+   */
   --font-inter: 'Inter', sans-serif;
   --font-space: 'Space Grotesk', sans-serif;
 }
 
-/* Overrides of the dark theme */
+/* Overrides of the base theme */
 @layer base {
-  /* Here are overrides for the light theme */
+  /* dark theme overrides */
   @variant dark {
+    /*
+     * Basic Colors
+     */
     --color-primary: var(--color-purple-400);
     --color-positive: var(--color-green-700);
+    --color-negative: var(--color-red-700);
+
+    /*
+     * Semantic Colors
+     */
+    --color-text-default: var(--color-text-light);
 
     --color-surface: #333333;
-    --color-on-surface: #EEEEEE;
+    --color-on-surface: var(--color-text-light);
     --color-surface-variant: #494949;
     --color-surface-warning: #FBECD9;
     --color-text-label: #CFCFCF;
     --color-highlight: #3272DF;
-    --color-background: #1A1A1A;
-    --color-on-background: #EEEEEE;
+    --color-background: #222222;
+    --color-on-background: var(--color-text-light);
     --color-border: #444444;
 
     --color-neutral: #4D4D4D;
@@ -359,36 +413,46 @@
     --color-neutral-surface: #E6E6E6;
     --color-neutral-background: #F8F8F8;
 
-    --color-text-primary: #EEEEEE;
+    --color-text-primary: var(--color-text-light);
     --color-text-secondary: #666666;
     --color-text-tertiary: #B3B3B3;
     --color-text-highlight: #3272DF;
-    --color-icon-primary: #EEEEEE;
-    --color-icon-secondary: #666666;
-    --color-icon-highlight: #3272DF;
     --color-description: #999999;
 
     --color-disabled-background: #555555;
     --color-disabled-text: #999999;
 
+    /*
+     * Component Colors
+     */
+
+    /* Button Solid */
     --color-button-solid-neutral-background: #424242;
-    --color-button-solid-neutral-icon: #EEEEEE;
-    --color-button-solid-neutral-text: #EEEEEE;
+    --color-button-solid-neutral-icon: var(--color-text-light);
+    --color-button-solid-neutral-text: var(--color-text-light);
 
+    /* Button Text */
     --color-button-text-hover-background: #3F3F3F;
-    --color-button-text-neutral-text: #EEEEEE;
-    --color-button-text-neutral-icon: #EEEEEE;
+    --color-button-text-neutral-text: var(--color-text-light);
+    --color-button-text-neutral-icon: var(--color-text-light);
 
+    /* Menu */
     --color-menu-background: #333333;
-    --color-menu-text: #EEEEEE;
+    --color-menu-text: var(--color-text-light);
     --color-menu-border: var(--color-border);
 
+    /* Property */
     --color-property-title-background: #393939;
     --color-property-title-text: var(--color-on-surface);
 
-    --color-overlay-background: #222222;
-    --color-overlay-text: #FFFFFF;
+    /* ProgressIndicator */
+    --color-progress-indicator-background: var(--color-gray-700);
 
+    /* Overlay */
+    --color-overlay-background: #2A2A2A;
+    --color-overlay-text: var(--color-text-light);
+
+    /* Table */
     --color-tabel-header-background: #F6FAFF;
   }
 }
@@ -462,7 +526,7 @@
   }
 
   button {
-    @apply cursor-pointer;
+    @apply cursor-pointer text-nowrap;
   }
 
   input {
@@ -498,7 +562,7 @@
   }
 
   .textstyle-accent {
-    @apply text-sm text-gray-600 font-bold;
+    @apply text-sm text-text-label font-bold;
   }
 
   .textstyle-description {
@@ -522,7 +586,7 @@
   }
 
   .textstyle-table-header {
-    @apply text-gray-600 font-bold;
+    @apply text-text-label font-bold;
   }
 
   .textstyle-navigation-item {
@@ -534,6 +598,6 @@
   }
 
   .textstyle-form-description {
-    @apply text-gray-500 text-sm;
+    @apply text-description text-sm;
   }
 }

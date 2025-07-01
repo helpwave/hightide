@@ -48,10 +48,10 @@ export const ProgressIndicator = ({
       }}
     >
       <circle cx={center} cy={center} r={radius} fill="transparent" strokeWidth={strokeWidth}
-              className="stroke-primary"
+              className="stroke-progress-indicator-fill"
       />
       <circle cx={center} cy={center} r={radius} fill="transparent" strokeWidth={strokeWidth}
-              strokeDasharray={arcLength} strokeDashoffset={arcOffset} className="stroke-gray-300"
+              strokeDasharray={arcLength} strokeDashoffset={arcOffset} className="stroke-progress-indicator-background"
       />
     </svg>
   )

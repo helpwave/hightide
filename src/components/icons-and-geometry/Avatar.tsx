@@ -41,9 +41,9 @@ export const Avatar = ({ avatarUrl, alt, size = 'medium', className = '' }: Avat
 
   return (
     // TODO transparent or white background later
-    <div className={clsx(`rounded-full bg-primary`, className)} style={style}>
+    <div className={clsx(`rounded-full bg-primary shadow`, className)} style={style}>
       <img
-        className="rounded-full border border-gray-200"
+        className="rounded-full"
         style={style}
         src={avatarUrl}
         alt={alt}

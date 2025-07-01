@@ -6,6 +6,7 @@ import clsx from 'clsx'
 import { ExpandableUncontrolled } from '../layout-and-navigation/Expandable'
 import { addDuration, monthsList, subtractDuration } from '../../util/date'
 import { useLocale } from '../../localization/LanguageProvider'
+import { SolidButton } from '../user-action/Button'
 
 export type YearMonthPickerProps = {
   displayedYearMonth?: Date,
@@ -62,9 +63,10 @@ export const YearMonthPicker = ({
                 ref={(displayedYearMonth.getFullYear() ?? new Date().getFullYear()) === year ? ref : undefined}
                 label={<span className={clsx({ 'text-primary font-bold': selectedYear })}>{year}</span>}
                 isExpanded={showValueOpen && selectedYear}
+                contentClassName="gap-y-1"
               >
                 {equalSizeGroups([...monthsList], 3).map((monthList, index) => (
-                  <div key={index} className="row">
+                  <div key={index} className="row gap-x-1">
                     {monthList.map(month => {
                       const monthIndex = monthsList.indexOf(month)
                       const newDate = new Date(year, monthIndex)
@@ -76,23 +78,18 @@ export const YearMonthPicker = ({
                       const isBeforeEnd = end === undefined || firstOfMonth <= end
                       const isValid = isAfterStart && isBeforeEnd
                       return (
-                        <button
+                        <SolidButton
                           key={month}
                           disabled={!isValid}
-                          className={clsx(
-                            'chip hover:brightness-95 flex-1',
-                            {
-                              'bg-gray-50 text-black': !selectedMonth && isValid,
-                              'bg-primary text-on-primary': selectedMonth && isValid,
-                              'bg-disabled-background text-disabled-text': !isValid
-                            }
-                          )}
+                          color={selectedMonth && isValid ? 'primary' : 'neutral'}
+                          className="flex-1"
+                          size="small"
                           onClick={() => {
                             onChange(newDate)
                           }}
                         >
                           {new Intl.DateTimeFormat(locale, { month: 'short' }).format(newDate)}
-                        </button>
+                        </SolidButton>
                       )
                     })}
                   </div>
@@ -107,11 +104,11 @@ export const YearMonthPicker = ({
 }
 
 export const YearMonthPickerUncontrolled = ({
-                                              displayedYearMonth = new Date(),
+                                              displayedYearMonth,
                                               onChange = noop,
                                               ...props
                                             }: YearMonthPickerProps) => {
-  const [yearMonth, setYearMonth] = useState<Date>(displayedYearMonth)
+  const [yearMonth, setYearMonth] = useState<Date>(displayedYearMonth ?? new Date())
 
   useEffect(() => setYearMonth(displayedYearMonth), [displayedYearMonth])
 
