@@ -7,14 +7,16 @@ and adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
 ## [0.1.8] - 2025-06-30
 
-### Changed
+### Added
 
 - `Menu` story
+- `Carousel` story
 
 ### Changed
 
 - Changed `Select` and `MultiSelct` to have an inbuild search and close when clicked outside
 - Changed `Menu` to have no negative margin
+- Changed css to reduce duplications and instead use variable
 
 ### Removed
 

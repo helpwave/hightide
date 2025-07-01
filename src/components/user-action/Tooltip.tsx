@@ -78,7 +78,7 @@ export const Tooltip = ({
         <div
           className={clsx(
             `opacity-0 absolute text-xs font-semibold text-tooltip-text px-2 py-1 rounded whitespace-nowrap
-           animate-tooltip-fade-in shadow-lg bg-tooltip-background`,
+           animate-tooltip-fade-in shadow-around-md bg-tooltip-background`,
             positionClasses[position], tooltipClassName
           )}
           style={{ zIndex, animationDelay: animationDelay + 'ms' }}
@@ -86,7 +86,7 @@ export const Tooltip = ({
           {tooltip}
           <div
             className={clsx(`absolute w-0 h-0`, triangleClasses[position])}
-            style={{ ...triangleStyle[position], zIndex }}
+            style={{ ...triangleStyle[position], zIndex: zIndex + 1 }}
           />
         </div>
       )}
