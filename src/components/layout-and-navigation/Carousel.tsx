@@ -7,9 +7,10 @@ import { clamp } from '../../util/math'
 import { EaseFunctions } from '../../util/easeFunctions'
 import type { Direction } from '../../util/loopingArray'
 import { LoopingArrayCalculator } from '../../util/loopingArray'
+import { IconButton } from '../user-action/Button'
 
 
-type CarouselProps = {
+export type CarouselProps = {
   children: ReactNode[],
   animationTime?: number,
   isLooping?: boolean,
@@ -70,7 +71,7 @@ export const Carousel = ({
                            arrows = false,
                            dots = true,
                            overScrollThreshold = 0.1,
-                           blurColor = 'from-white',
+                           blurColor = 'from-background',
                            className = '',
                            heightClassName = 'h-[24rem]',
                            widthClassName = 'w-[70%] desktop:w-1/2',
@@ -330,18 +331,22 @@ export const Carousel = ({
       <div className={clsx(`relative w-full overflow-hidden`, heightClassName, className)}>
         {arrows && (
           <>
-            <div
-              className={clsx('absolute z-10 left-0 top-1/2 -translate-y-1/2 bg-gray-200 hover:bg-gray-300 rounded-lg cursor-pointer border-black border-2', { hidden: !canGoLeft() })}
+            <IconButton
+              color="neutral"
+              className={clsx('absolute z-10 left-0 top-1/2 -translate-y-1/2 shadow-md', { hidden: !canGoLeft() })}
+              disabled={!canGoLeft()}
               onClick={() => left()}
             >
-              <ChevronLeft size={32}/>
-            </div>
-            <div
-              className={clsx('absolute z-10 right-0 top-1/2 -translate-y-1/2 bg-gray-200 hover:bg-gray-300 rounded-lg cursor-pointer border-black border-2', { hidden: !canGoRight() })}
+              <ChevronLeft size={24}/>
+            </IconButton>
+            <IconButton
+              color="neutral"
+              className={clsx('absolute z-10 right-0 top-1/2 -translate-y-1/2 shadow-md', { hidden: !canGoRight() })}
+              disabled={!canGoRight()}
               onClick={() => right()}
             >
-              <ChevronRight size={32}/>
-            </div>
+              <ChevronRight size={24}/>
+            </IconButton>
           </>
         )}
         {hintNext ? (
@@ -381,9 +386,9 @@ export const Carousel = ({
           {range(0, length - 1).map(index => (
             <button
               key={index}
-              className={clsx('w-[2rem] min-w-[2rem] h-[0.75rem] min-h-[0.75rem] hover:bg-primary hover:brightness-90 first:rounded-l-md last:rounded-r-md', {
-                'bg-gray-200': currentIndex !== index,
-                'bg-primary': currentIndex === index
+              className={clsx('w-[2rem] min-w-[2rem] h-[0.75rem] min-h-[0.75rem] first:rounded-l-md last:rounded-r-md', {
+                'bg-carousel-dot-disabled hover:bg-carousel-dot-active': currentIndex !== index,
+                'bg-carousel-dot-active hover:brightness-90': currentIndex === index
               })}
               onClick={() => startAnimation(index)}
             />

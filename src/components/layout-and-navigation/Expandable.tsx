@@ -18,6 +18,7 @@ export type ExpandableProps = PropsWithChildren<{
   disabled?: boolean,
   className?: string,
   headerClassName?: string,
+  contentClassName?: string,
 }>
 
 const DefaultIcon: IconBuilder = (expanded) => expanded ?
@@ -36,8 +37,9 @@ export const Expandable = forwardRef<HTMLDivElement, ExpandableProps>(function E
                                                                                             onChange = noop,
                                                                                             clickOnlyOnHeader = true,
                                                                                             disabled = false,
-                                                                                            className = '',
-                                                                                            headerClassName = ''
+                                                                                            className,
+                                                                                            headerClassName,
+                                                                                            contentClassName,
                                                                                           }, ref) {
   icon ??= DefaultIcon
 
@@ -63,7 +65,7 @@ export const Expandable = forwardRef<HTMLDivElement, ExpandableProps>(function E
         {icon(isExpanded)}
       </div>
       {isExpanded && (
-        <div className="col px-4 pb-2">
+        <div className={clsx('col px-4 pb-2', contentClassName)}>
           {children}
         </div>
       )}

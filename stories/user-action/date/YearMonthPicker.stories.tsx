@@ -1,5 +1,6 @@
 import type { Meta, StoryObj } from '@storybook/nextjs'
 import { addDuration, subtractDuration, YearMonthPickerUncontrolled } from '../../../src'
+import { action } from 'storybook/actions'
 
 const meta = {
   title: 'User Action/Date',
@@ -13,7 +14,8 @@ export const yearMonthPicker: Story = {
   args: {
     start: subtractDuration(new Date(), { years: 50 }),
     end: addDuration(new Date(), { years: 50 }),
-    className: 'max-w-[200px]',
+    onChange: action('onChange'),
+    className: 'max-w-64',
     maxHeight: 300,
     showValueOpen: false
   },

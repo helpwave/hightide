@@ -5,7 +5,7 @@ import '../src/css/globals.css'
 import './storybookStyleOverrides.css'
 
 const colorToHex: Record<ThemeType, string> = {
-  dark: '#1A1A1A',
+  dark: '#222',
   light: '#EEE',
 }
 
