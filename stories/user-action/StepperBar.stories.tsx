@@ -12,11 +12,11 @@ type Story = StoryObj<typeof meta>;
 
 export const stepperBar: Story = {
   args: {
-    disabledSteps: new Set(),
     showDots: true,
     numberOfSteps: 5,
     finishText: 'Done',
     onFinish: action('onFinish'),
     onChange: action('onChange'),
+    disabledSteps: new Set(),
   },
 }

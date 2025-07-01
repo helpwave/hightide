@@ -1,6 +1,5 @@
 import { AlertOctagon } from 'lucide-react'
-import type { Language } from '../../localization/util'
-import type { PropsForTranslation } from '../../localization/useTranslation'
+import type { PropsForTranslation, Translation } from '../../localization/useTranslation'
 import { useTranslation } from '../../localization/useTranslation'
 import clsx from 'clsx'
 
@@ -8,7 +7,7 @@ type ErrorComponentTranslation = {
   errorOccurred: string,
 }
 
-const defaultErrorComponentTranslation: Record<Language, ErrorComponentTranslation> = {
+const defaultErrorComponentTranslation: Translation<ErrorComponentTranslation> = {
   en: {
     errorOccurred: 'An error occurred'
   },
@@ -30,11 +29,11 @@ export const ErrorComponent = ({
                                  errorText,
                                  classname
                                }: PropsForTranslation<ErrorComponentTranslation, ErrorComponentProps>) => {
-  const translation = useTranslation(defaultErrorComponentTranslation, overwriteTranslation)
+  const translation = useTranslation([defaultErrorComponentTranslation], overwriteTranslation)
   return (
     <div className={clsx('col items-center justify-center gap-y-4 w-full h-24', classname)}>
       <AlertOctagon size={64} className="text-warning"/>
-      {errorText ?? `${translation.errorOccurred} :(`}
+      {errorText ?? `${translation('errorOccurred')} :(`}
     </div>
   )
 }

@@ -1,25 +1,15 @@
 import { List } from 'lucide-react'
 import clsx from 'clsx'
-import type { Language } from '../../localization/util'
 import type { PropsForTranslation } from '../../localization/useTranslation'
 import { useTranslation } from '../../localization/useTranslation'
 import type { PropertyBaseProps } from './PropertyBase'
 import { PropertyBase } from './PropertyBase'
 import type { SelectProps } from '../user-action/Select'
 import { Select } from '../user-action/Select'
+import type { FormTranslationType } from '../../localization/defaults/form'
+import { formTranslation } from '../../localization/defaults/form'
 
-type SingleSelectPropertyTranslation = {
-  select: string,
-}
-
-const defaultSingleSelectPropertyTranslation: Record<Language, SingleSelectPropertyTranslation> = {
-  en: {
-    select: 'Select'
-  },
-  de: {
-    select: 'Auswählen'
-  }
-}
+type SingleSelectPropertyTranslation = FormTranslationType
 
 export type SingleSelectPropertyProps<T> =
   Omit<PropertyBaseProps & SelectProps<T>, 'icon' | 'input' | 'hasValue' | 'className' | 'disabled' | 'label' | 'labelClassName' | 'additionalItems'>
@@ -37,7 +27,7 @@ export const SingleSelectProperty = <T, >({
                                             onRemove,
                                             ...selectProps
                                           }: PropsForTranslation<SingleSelectPropertyTranslation, SingleSelectPropertyProps<T>>) => {
-  const translation = useTranslation(defaultSingleSelectPropertyTranslation, overwriteTranslation)
+  const translation = useTranslation([formTranslation], overwriteTranslation)
   const hasValue = value !== undefined
 
   return (
@@ -58,7 +48,7 @@ export const SingleSelectProperty = <T, >({
             options={options}
             isDisabled={readOnly}
             className={clsx('w-full', { 'bg-surface-warning': softRequired && !hasValue })}
-            hintText={`${translation.select}...`}
+            hintText={`${translation('select')}...`}
           />
         </div>
       )}

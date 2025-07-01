@@ -1,9 +1,8 @@
 import type { ReactNode } from 'react'
 import { useEffect, useRef, useState } from 'react'
 import { ChevronDown, ChevronUp } from 'lucide-react'
-import type { PropsForTranslation } from '../../localization/useTranslation'
+import type { PropsForTranslation, Translation } from '../../localization/useTranslation'
 import { useTranslation } from '../../localization/useTranslation'
-import type { Language } from '../../localization/util'
 import clsx from 'clsx'
 import type { LabelProps } from './Label'
 import { Label } from './Label'
@@ -13,33 +12,26 @@ import { Tile } from '../layout-and-navigation/Tile'
 import { SolidButton } from './Button'
 import { ChipList } from '../layout-and-navigation/Chip'
 import { useOutsideClick } from '../../hooks/useOutsideClick'
+import type { FormTranslationType } from '../../localization/defaults/form'
+import { formTranslation } from '../../localization/defaults/form'
 
-type MultiSelectTranslation = {
-  select: string,
-  search: string,
+type MultiSelectAddonTranslation = {
   selected: string,
 }
 
-const defaultMultiSelectTranslation: Record<Language, MultiSelectTranslation> = {
+type MultiSelectTranslation = MultiSelectAddonTranslation & FormTranslationType
+
+const defaultMultiSelectTranslation: Translation<MultiSelectAddonTranslation> = {
   en: {
-    select: 'Select',
-    search: 'Search',
-    selected: 'selected'
+    selected: `{{amount}} selected`
   },
   de: {
-    select: 'Auswählen',
-    search: 'Suche',
-    selected: 'ausgewählt'
+    selected: `{{amount}} ausgewählt`
   }
 }
 
 export type MultiSelectOption<T> = SelectOption<T> & {
   selected: boolean,
-}
-
-export type SearchProps<T> = {
-  initialSearch?: string,
-  searchMapping: (value: MultiSelectOption<T>) => string[],
 }
 
 export type MultiSelectProps<T> = {
@@ -71,7 +63,7 @@ export const MultiSelect = <T, >({
                                  }:
                                  PropsForTranslation<MultiSelectTranslation, MultiSelectProps<T>>
 ) => {
-  const translation = useTranslation(defaultMultiSelectTranslation, overwriteTranslation)
+  const translation = useTranslation([formTranslation, defaultMultiSelectTranslation], overwriteTranslation)
   const triggerRef = useRef<HTMLButtonElement>(null)
   const menuRef = useRef<HTMLDivElement>(null)
   const [isOpen, setIsOpen] = useState(false)
@@ -84,8 +76,12 @@ export const MultiSelect = <T, >({
   return (
     <div className={clsx(className)}>
       {label && (
-        <Label {...label} htmlFor={label.name} className={clsx(' mb-1', label.className)}
-               labelType={label.labelType ?? 'labelBig'}/>
+        <Label
+          {...label}
+          htmlFor={label.name}
+          className={clsx(' mb-1', label.className)}
+          labelType={label.labelType ?? 'labelBig'}
+        />
       )}
       <div className="relative">
         <button
@@ -105,11 +101,11 @@ export const MultiSelect = <T, >({
             <span className="font-semibold text-menu-text">
               {selectedDisplayOverwrite ?? (useChipDisplay && selectedItems ?
                   (<ChipList list={selectedItems.map(value => ({ children: value.label }))}/>) :
-                  `${selectedItems.length} ${translation.selected}`
+                  translation('selected', { replacements: { amount: selectedItems.length.toString() } })
               )}
             </span>
           )}
-          {isShowingHint && (<span className="textstyle-description">{hintText ?? translation.select}</span>)}
+          {isShowingHint && (<span className="textstyle-description">{hintText ?? translation('select')}</span>)}
           {isOpen ? <ChevronUp size={24} className="min-w-6"/> : <ChevronDown className="min-w-6"/>}
         </button>
         {isOpen && (
@@ -151,7 +147,7 @@ export const MultiSelect = <T, >({
                   }}
                   disabled={options.every(value => value.selected || value.disabled)}
                 >
-                  All
+                  {translation('all')}
                 </SolidButton>
                 <SolidButton
                   color="neutral"
@@ -163,7 +159,7 @@ export const MultiSelect = <T, >({
                     })))
                   }}
                 >
-                  None
+                  {translation('none')}
                 </SolidButton>
               </div>
               <SolidButton size="small" onClick={() => setIsOpen(false)}>Done</SolidButton>

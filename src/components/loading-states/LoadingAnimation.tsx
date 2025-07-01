@@ -1,21 +1,11 @@
-import type { Language } from '../../localization/util'
 import type { PropsForTranslation } from '../../localization/useTranslation'
 import { useTranslation } from '../../localization/useTranslation'
 import clsx from 'clsx'
 import { Helpwave } from '../icons-and-geometry/Helpwave'
+import type { FormTranslationType } from '../../localization/defaults/form'
+import { formTranslation } from '../../localization/defaults/form'
 
-type LoadingAnimationTranslation = {
-  loading: string,
-}
-
-const defaultLoadingAnimationTranslation: Record<Language, LoadingAnimationTranslation> = {
-  en: {
-    loading: 'Loading data'
-  },
-  de: {
-    loading: 'Lade Daten'
-  }
-}
+type LoadingAnimationTranslation = FormTranslationType
 
 export type LoadingAnimationProps = {
   loadingText?: string,
@@ -30,11 +20,11 @@ export const LoadingAnimation = ({
                                    loadingText,
                                    classname
                                  }: PropsForTranslation<LoadingAnimationTranslation, LoadingAnimationProps>) => {
-  const translation = useTranslation(defaultLoadingAnimationTranslation, overwriteTranslation)
+  const translation = useTranslation([formTranslation], overwriteTranslation)
   return (
     <div className={clsx('col items-center justify-center w-full h-24', classname)}>
       <Helpwave animate="loading"/>
-      {loadingText ?? `${translation.loading}...`}
+      {loadingText ?? `${translation('loading')}...`}
     </div>
   )
 }

@@ -31,6 +31,12 @@ type Story = StoryObj<typeof meta>;
 export const multiSelect: Story = {
   args: {
     label: { name: 'Your favourite fruit' },
+    isDisabled: false,
+    hintText: undefined,
+    isSearchEnabled: true,
+    useChipDisplay: true,
+    className: '',
+    onChange: action('onChange'),
     options: [
       { value: 'apple', selected: false, label: 'Apple', searchTags: ['Apple'] },
       { value: 'banana', selected: false, label: 'Banana', disabled: true, searchTags: ['Banana'] },
@@ -51,11 +57,5 @@ export const multiSelect: Story = {
       { value: 'kiwifruit', selected: false, label: 'Kiwifruit', searchTags: ['Kiwifruit'] },
       { value: 'lemon', selected: false, label: 'Lemon', disabled: true, searchTags: ['Lemon'] }
     ],
-    isDisabled: false,
-    hintText: undefined,
-    isSearchEnabled: true,
-    useChipDisplay: true,
-    className: '',
-    onChange: action('onChange'),
   },
 }

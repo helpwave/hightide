@@ -1,26 +1,26 @@
 import type { ReactNode } from 'react'
 import { Search } from 'lucide-react'
 import clsx from 'clsx'
-import type { Language } from '../../localization/util'
-import type { PropsForTranslation } from '../../localization/useTranslation'
+import type { PropsForTranslation, Translation } from '../../localization/useTranslation'
 import { useTranslation } from '../../localization/useTranslation'
 import { Input } from '../user-action/Input'
 import { IconButton } from '../user-action/Button'
 import type { UseSearchProps } from '../../hooks/useSearch'
 import { useSearch } from '../../hooks/useSearch'
+import type { FormTranslationType } from '../../localization/defaults/form'
+import { formTranslation } from '../../localization/defaults/form'
 
-type SearchableListTranslation = {
-  search: string,
+type SearchableListAddonTranslation = {
   nothingFound: string,
 }
 
-const defaultSearchableListTranslation: Record<Language, SearchableListTranslation> = {
+type SearchableListTranslation = SearchableListAddonTranslation & FormTranslationType
+
+const defaultSearchableListTranslation: Translation<SearchableListAddonTranslation> = {
   en: {
-    search: 'Search',
     nothingFound: 'Nothing found'
   },
   de: {
-    search: 'Suche',
     nothingFound: 'Nichts gefunden'
   }
 }
@@ -47,7 +47,7 @@ export const SearchableList = <T, >({
                                       className,
                                       resultListClassName
                                     }: PropsForTranslation<SearchableListTranslation, SearchableListProps<T>>) => {
-  const translation = useTranslation(defaultSearchableListTranslation, overwriteTranslation)
+  const translation = useTranslation([defaultSearchableListTranslation, formTranslation], overwriteTranslation)
   const { result, hasResult, search, setSearch } = useSearch<T>({ list, initialSearch, searchMapping })
 
   return (
@@ -57,7 +57,7 @@ export const SearchableList = <T, >({
           <Input
             value={search}
             onChangeText={setSearch}
-            placeholder={translation.search}
+            placeholder={translation('search')}
             autoFocus={autoFocus}
             className="w-full"
           />
@@ -71,7 +71,7 @@ export const SearchableList = <T, >({
           {result.map(itemMapper)}
         </div>
       ) : (
-        <div className="row text-description py-2 px-2">{translation.nothingFound}</div>
+        <div className="row text-description py-2 px-2">{translation('nothingFound')}</div>
       )}
     </div>
   )

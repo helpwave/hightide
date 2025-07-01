@@ -1,22 +1,32 @@
 import type { Dispatch, PropsWithChildren, SetStateAction } from 'react'
 import { createContext, useContext, useEffect, useState } from 'react'
-import type { Translation } from '../localization/useTranslation'
+import type { Translation, TranslationPlural } from '../localization/useTranslation'
 import { noop } from '../util/noop'
 
 const themes = ['light', 'dark'] as const
 
 export type ThemeType = typeof themes[number]
 
-export type ThemeTypeTranslation = Record<ThemeType, string>
+export type ThemeTypeTranslation = Record<ThemeType, string> & {
+  theme: TranslationPlural,
+}
 
 const defaultThemeTypeTranslation: Translation<ThemeTypeTranslation> = {
   en: {
     dark: 'Dark',
-    light: 'Light'
+    light: 'Light',
+    theme: {
+      one: 'Theme',
+      other: 'Themes'
+    }
   },
   de: {
     dark: 'Dunkel',
-    light: 'Hell'
+    light: 'Hell',
+    theme: {
+      one: 'Farbschema',
+      other: 'Farbschemas'
+    }
   }
 }
 
