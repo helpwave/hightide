@@ -13,7 +13,7 @@ const StackedDialog = () => {
   return (
     <>
       <div className="row items-center justify-center min-h-[400px]">
-        <SolidButton onClick={() => setModal1(true)}>Open Modal</SolidButton>
+        <SolidButton onClick={() => setModal1(true)}>Open Dialog</SolidButton>
       </div>
 
       <Dialog headerProps={{ titleText: 'Dialog 1' }} isOpen={modal1} className="w-[300px]">
