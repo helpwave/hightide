@@ -59,7 +59,7 @@ export const PropertyBase = ({
         {name}
       </div>
       <div className={
-        clsx('row grow justify-between items-center rounded-r-xl border-2 border-l-0', {
+        clsx('row gap-x-0 grow justify-between items-center rounded-r-xl border-2 border-l-0', {
           'bg-surface group-hover:border-primary': !requiredAndNoValue,
           'bg-surface-warning group-hover:border-warning border-warning/90': requiredAndNoValue,
         }, className)}

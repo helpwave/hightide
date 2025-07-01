@@ -4,7 +4,7 @@ import { ConfirmDialog, SolidButton } from '../../../src'
 import { action } from 'storybook/actions'
 
 
-type ConfirmModalExampleProps = {
+type ConfirmDialogExampleProps = {
   onDecline: () => void,
   onConfirm: () => void,
 }
@@ -12,10 +12,10 @@ type ConfirmModalExampleProps = {
 /**
  * An Example Component for the ConfirmModal
  */
-const ConfirmModalExample = ({
+const ConfirmDialogExample = ({
                                onDecline,
                                onConfirm,
-                             }: ConfirmModalExampleProps) => {
+                             }: ConfirmDialogExampleProps) => {
   const [isOpen, setIsOpen] = useState(false)
 
   return (
@@ -41,13 +41,13 @@ const ConfirmModalExample = ({
 
 const meta: Meta = {
   title: 'Layout/Dialog',
-  component: ConfirmModalExample,
-} satisfies Meta<typeof ConfirmModalExample>
+  component: ConfirmDialogExample,
+} satisfies Meta<typeof ConfirmDialogExample>
 
 export default meta
 type Story = StoryObj<typeof meta>;
 
-export const confirmModal: Story = {
+export const confirmDialog: Story = {
   args: {
     onDecline: action('onDecline'),
     onConfirm: action('onConfirm'),

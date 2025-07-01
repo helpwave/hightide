@@ -54,14 +54,15 @@ export const DayPicker = ({
                 disabled={!isDayValid}
                 key={date.getDate()}
                 className={clsx(
-                  'flex-1 rounded-full border-2 border-transparent shadow-sm',
+                  'flex-1 rounded-full border-2',
                   {
-                    'text-gray-700 bg-gray-100': !isSameMonth && isDayValid,
-                    'text-black bg-white': !isSelected && isSameMonth && isDayValid,
-                    'text-on-primary bg-primary': isSelected,
-                    'border-black': isToday && markToday,
-                    'hover:brightness-90 hover:bg-primary hover:text-on-primary': isDayValid,
-                    'text-disabled-text bg-disabled-background': !isDayValid
+                    'text-description': !isSameMonth && !isSelected && isDayValid,
+                    'text-button-solid-neutral-text bg-button-solid-neutral-background': !isSelected && isSameMonth && isDayValid,
+                    'text-button-solid-primary-text bg-button-solid-primary-background': isSelected && isDayValid,
+                    'hover:brightness-90 hover:bg-button-solid-primary-background hover:text-button-solid-primary-text': isDayValid,
+                    'text-disabled-text bg-disabled-background cursor-not-allowed': !isDayValid,
+                    'border-secondary': isToday && markToday,
+                    'border-transparent': !isToday || !markToday,
                   }
                 )}
                 onClick={() => onChange(date)}
@@ -76,16 +77,27 @@ export const DayPicker = ({
   )
 }
 
-export const DayPickerUncontrolled = ({ displayedMonth, onChange = noop, ...restProps }: DayPickerProps) => {
-  const [date, setDate] = useState(displayedMonth)
+export const DayPickerUncontrolled = ({
+                                        displayedMonth,
+                                        selected,
+                                        onChange = noop,
+                                        ...restProps
+                                      }: DayPickerProps) => {
+  const [date, setDate] = useState(selected)
+  const [usedDisplayedMonth, setUsedDDisplayedMonth] = useState(displayedMonth)
 
-  useEffect(() => setDate(displayedMonth), [displayedMonth])
+  useEffect(() => {
+    setDate(selected)
+    setUsedDDisplayedMonth(selected)
+  }, [selected])
 
   return (
     <DayPicker
-      displayedMonth={date}
+      displayedMonth={usedDisplayedMonth}
+      selected={date}
       onChange={newDate => {
         setDate(newDate)
+        setUsedDDisplayedMonth(newDate)
         onChange(newDate)
       }}
       {...restProps}

@@ -1,16 +1,17 @@
-import { Menu } from '@headlessui/react'
-import { ChevronDown, ChevronUp, Search } from 'lucide-react'
+import { ChevronDown, ChevronUp } from 'lucide-react'
 import type { ReactNode } from 'react'
-import { useEffect, useState } from 'react'
+import { useEffect, useRef, useState } from 'react'
 import clsx from 'clsx'
 import type { LabelProps } from './Label'
 import { Label } from './Label'
-import { MultiSearchWithMapping } from '../../util/simpleSearch'
-import { Input } from './Input'
+import { SearchableList } from '../layout-and-navigation/SearchableList'
+import { Tile } from '../layout-and-navigation/Tile'
+import { useOutsideClick } from '../../hooks/useOutsideClick'
 
 export type SelectOption<T> = {
   label: ReactNode,
   value: T,
+  searchTags?: string[],
   disabled?: boolean,
   className?: string,
 }
@@ -20,18 +21,11 @@ export type SelectProps<T> = {
   label?: LabelProps,
   options: SelectOption<T>[],
   onChange: (value: T) => void,
-  isHidingCurrentValue?: boolean,
   hintText?: string,
-  showDisabledOptions?: boolean,
-  className?: string,
   isDisabled?: boolean,
-  textColor?: string,
-  hoverColor?: string,
-  /**
-   * The items will be at the start of the select and aren't selectable
-   */
-  additionalItems?: ReactNode[],
+  isSearchEnabled?: boolean,
   selectedDisplayOverwrite?: ReactNode,
+  className?: string,
 };
 
 /**
@@ -44,20 +38,16 @@ export const Select = <T, >({
                               label,
                               options,
                               onChange,
-                              isHidingCurrentValue = true,
                               hintText = '',
-                              showDisabledOptions = true,
                               isDisabled,
+                              isSearchEnabled = false,
                               className,
-                              textColor = 'text-menu-text',
-                              additionalItems,
                               selectedDisplayOverwrite,
                             }: SelectProps<T>) => {
-  // Notice: for more complex types this check here might need an additional compare method
-  let filteredOptions = isHidingCurrentValue ? options.filter(option => option.value !== value) : options
-  if (!showDisabledOptions) {
-    filteredOptions = filteredOptions.filter(value => !value.disabled)
-  }
+  const triggerRef = useRef<HTMLButtonElement>(null)
+  const menuRef = useRef<HTMLDivElement>(null)
+  const [isOpen, setIsOpen] = useState(false)
+  useOutsideClick([triggerRef, menuRef], () => setIsOpen(false))
   const selectedOption = options.find(option => option.value === value)
   if (value !== undefined && selectedOption === undefined && selectedDisplayOverwrite === undefined) {
     console.warn('The selected value is not found in the options list. This might be an error on your part or' +
@@ -65,70 +55,59 @@ export const Select = <T, >({
       ' use selectedDisplayOverwrite to set your selected text or component')
   }
 
-  const borderColor = 'border-menu-border'
+  const isShowingHint = !selectedDisplayOverwrite && !selectedOption?.label
 
   return (
     <div className={clsx(className)}>
       {label && (
         <Label {...label} labelType={label.labelType ?? 'labelBig'} className={clsx('mb-1', label.className)}/>
       )}
-      <Menu as="div" className="relative text-menu-text">
-        {({ open }) => (
-          <>
-            <Menu.Button
-              className={clsx(
-                'inline-flex w-full justify-between items-center rounded-t-lg border-2 px-4 py-2 font-medium bg-menu-background text-menu-text',
-                textColor, borderColor,
-                {
-                  'rounded-b-lg': !open,
-                  'hover:border-primary': !isDisabled,
-                  'bg-disabled-background cursor-not-allowed text-disabled': isDisabled
-                }
+      <div className="relative">
+        <button
+          ref={triggerRef}
+          className={clsx(
+            'btn-md justify-between w-full border-2',
+            {
+              'rounded-b-lg': !open,
+              'bg-menu-background border-menu-border hover:border-primary': !isDisabled,
+              'bg-disabled-background text-disabled-text border-disabled-background cursor-not-allowed': isDisabled
+            }
+          )}
+          onClick={() => setIsOpen(!isOpen)}
+          disabled={isDisabled}
+        >
+          {!isShowingHint &&
+            <span className="font-semibold text-menu-text">{selectedDisplayOverwrite ?? selectedOption?.label}</span>}
+          {isShowingHint && (<span className="textstyle-description">{hintText}</span>)}
+          {isOpen ? <ChevronUp/> : <ChevronDown/>}
+        </button>
+        {isOpen && (
+          <div
+            ref={menuRef}
+            className="absolute w-full z-10 rounded-lg mt-0.5 bg-menu-background text-menu-text shadow-around-md max-h-[500px] overflow-y-auto p-2"
+          >
+            <SearchableList
+              list={options}
+              minimumItemsForSearch={isSearchEnabled ? undefined : options.length}
+              searchMapping={item => item.searchTags}
+              itemMapper={(option, index) => (
+                <Tile
+                  key={index}
+                  isSelected={selectedOption?.value === option.value}
+                  className="px-2 py-1 rounded-md"
+                  disabledClassName="text-disabled-text cursor-not-allowed"
+                  title={{ value: option.label, className: 'font-semibold' }}
+                  onClick={() => {
+                    onChange(option.value)
+                    setIsOpen(false)
+                  }}
+                  isDisabled={option.disabled}
+                />
               )}
-              disabled={isDisabled}
-            >
-              <span>{selectedDisplayOverwrite ?? selectedOption?.label ?? hintText}</span>
-              {open ? <ChevronUp/> : <ChevronDown/>}
-            </Menu.Button>
-            <Menu.Items
-              className="absolute w-full z-10 rounded-b-lg bg-menu-background text-menu-text shadow-lg max-h-[500px] overflow-y-auto"
-            >
-              {(additionalItems ?? []).map((item, index) => (
-                <div key={`additionalItems${index}`}
-                     className={clsx(borderColor, 'px-4 py-2 overflow-hidden whitespace-nowrap text-ellipsis border-2 border-t-0', {
-                       'border-b-0 rounded-b-lg': filteredOptions.length === 0 && index === (additionalItems?.length ?? 1) - 1,
-                     })}
-                >
-                  {item}
-                </div>
-              ))}
-              {filteredOptions.map((option, index) => (
-                <Menu.Item key={`item${index}`}>
-                  {
-                    <div
-                      className={clsx('px-4 py-2 overflow-hidden whitespace-nowrap text-ellipsis border-2 border-t-0 cursor-pointer',
-                        option.className, borderColor, {
-                          'brightness-90': option.value === value,
-                          'brightness-95': index % 2 === 1,
-                          'text-disabled bg-disabled-background cursor-not-allowed': !!option.disabled,
-                          'bg-menu-background text-menu-text hover:brightness-90 cursor-pointer': !option.disabled,
-                          'rounded-b-lg': index === filteredOptions.length - 1,
-                        })}
-                      onClick={() => {
-                        if (!option.disabled) {
-                          onChange(option.value)
-                        }
-                      }}
-                    >
-                      {option.label}
-                    </div>
-                  }
-                </Menu.Item>
-              ))}
-            </Menu.Items>
-          </>
+            />
+          </div>
         )}
-      </Menu>
+      </div>
     </div>
   )
 }
@@ -154,37 +133,6 @@ export const SelectUncontrolled = <T, >({
       }}
       hintText={hintText}
       {...props}
-    />
-  )
-}
-
-export type SearchableSelectProps<T> = SelectProps<T> & {
-  searchMapping: (value: SelectOption<T>) => string[],
-}
-
-/**
- * A Select where items can be searched
- */
-export const SearchableSelect = <T, >({
-                                        value,
-                                        options,
-                                        searchMapping,
-                                        ...selectProps
-                                      }: SearchableSelectProps<T>) => {
-  const [search, setSearch] = useState<string>('')
-  const filteredOptions = MultiSearchWithMapping(search, options, searchMapping)
-
-  return (
-    <Select
-      value={value}
-      options={filteredOptions}
-      additionalItems={[(
-        <div key="selectSearch" className="row gap-x-2 items-center">
-          <Input autoFocus={true} value={search} onChangeText={setSearch} className="w-full"/>
-          <Search className="min-w-[1.5rem] min-h-[1.5rem]"/>
-        </div>
-      )]}
-      {...selectProps}
     />
   )
 }

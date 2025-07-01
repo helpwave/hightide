@@ -5,7 +5,6 @@ import type { PropsForTranslation } from '../../localization/useTranslation'
 import { useTranslation } from '../../localization/useTranslation'
 import type { MultiSelectProps } from '../user-action/MultiSelect'
 import { MultiSelect } from '../user-action/MultiSelect'
-import { ChipList } from '../layout-and-navigation/Chip'
 import type { PropertyBaseProps } from './PropertyBase'
 import { PropertyBase } from './PropertyBase'
 
@@ -39,10 +38,6 @@ export const MultiSelectProperty = <T, >({
                                          }: PropsForTranslation<MultiSelectPropertyTranslation, MultiSelectPropertyProps<T>>) => {
   const translation = useTranslation(defaultMultiSelectPropertyTranslation, overwriteTranslation)
   const hasValue = options.some(value => value.selected)
-  let triggerClassName: string
-  if (softRequired && !hasValue) {
-    triggerClassName = 'border-warning hover:brightness-90'
-  }
 
   return (
     <PropertyBase
@@ -59,18 +54,9 @@ export const MultiSelectProperty = <T, >({
           <MultiSelect
             {...multiSelectProps}
             className={clsx('w-full', { 'bg-surface-warning': softRequired && !hasValue })}
-            triggerClassName={triggerClassName}
-            selectedDisplay={({ items }) => {
-              const selected = items.filter(value => value.selected)
-              if (selected.length === 0) {
-                return (<span>Select</span>)
-              }
-              return (
-                <ChipList list={selected.map(value => ({ children: value.label }))}/>
-              )
-            }}
             options={options}
-            disabled={readOnly}
+            isDisabled={readOnly}
+            useChipDisplay={true}
             hintText={`${translation.select}...`}
           />
         </div>

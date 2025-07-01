@@ -16,13 +16,13 @@ type StepperBarTranslation = {
 const defaultStepperBarTranslation: Record<Language, StepperBarTranslation> = {
   en: {
     back: 'Back',
-    next: 'Next Step',
+    next: 'Next',
     confirm: 'Create'
   },
   de: {
     back: 'Zurück',
-    next: 'Nächster Schritt',
-    confirm: 'Erstellen'
+    next: 'Nächster',
+    confirm: 'Fertig'
   }
 }
 
@@ -94,9 +94,9 @@ export const StepperBar = ({
               key={index}
               onClick={() => seen && update(index)}
               className={clsx('rounded-full w-4 h-4', {
-                  'bg-primary hover:brightness-75': index === currentStep && seen && !disabledSteps.has(currentStep),
-                  'bg-primary/40 hover:bg-primary': index !== currentStep && seen && !disabledSteps.has(currentStep),
-                  'bg-gray-200 outline-transparent': !seen || disabledSteps.has(currentStep),
+                  'bg-stepperbar-dot-active hover:brightness-75': index === currentStep && seen && !disabledSteps.has(currentStep),
+                  'bg-stepperbar-dot-normal hover:bg-stepperbar-dot-active': index !== currentStep && seen && !disabledSteps.has(currentStep),
+                  'bg-stepperbar-dot-disabled': !seen || disabledSteps.has(currentStep),
                 },
                 {
                   'cursor-pointer': seen,

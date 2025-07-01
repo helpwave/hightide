@@ -10,23 +10,20 @@ const meta = {
 export default meta
 type Story = StoryObj<typeof meta>;
 
-export const SelectVariations: Story = {
+export const select: Story = {
   args: {
-    label: { name: 'Select-Label', labelType: 'labelMedium' },
-    value: undefined,
+    label: { name: 'Your favourite fruit' },
     options: [
-      { value: '1', label: 'Entry 1' },
-      { value: '2', label: 'Entry 2', disabled: true },
-      { value: '3', label: 'Entry 3' },
-      { value: '4', label: <span className="!text-red-400">Custom styled</span> },
-      { value: '5', label: 'Entry 5' },
-      { value: '6', label: 'Entry 6', disabled: true }
+      { value: '1', label: 'Apple' },
+      { value: '2', label: 'Pear', disabled: true },
+      { value: '3', label: 'Strawberry' },
+      { value: '4', label: 'Pineapple-styled' },
+      { value: '5', label: 'Blackberry' },
+      { value: '6', label: 'Blueberry', disabled: true }
     ],
     onChange: action('updated'),
     isDisabled: false,
-    hintText: 'Hinttext',
-    isHidingCurrentValue: false,
-    showDisabledOptions: true,
+    hintText: 'Select something',
     className: '',
   },
 }

@@ -241,7 +241,7 @@ export const Table = <T, >({
     currentPage = 0
   }
 
-  const headerRow = 'border-b-2 border-gray-300'
+  const headerRow = 'border-b-2'
   const headerPaddingHead = 'pb-2'
   const headerPaddingBody = 'pt-2'
   const cellPadding = 'py-1 px-2'

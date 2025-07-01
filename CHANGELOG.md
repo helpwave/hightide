@@ -5,6 +5,23 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/)
 and adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [0.1.8] - 2025-06-30
+
+### Added
+
+- `Menu` story
+- `Carousel` story
+
+### Changed
+
+- Changed `Select` and `MultiSelct` to have an inbuild search and close when clicked outside
+- Changed `Menu` to have no negative margin
+- Changed css to reduce duplications and instead use variable
+
+### Removed
+
+- Removed `SearchableSelect` -> now inbuild in `Select`
+
 ## [0.1.7] - 2025-06-30
 
 ### Changed
