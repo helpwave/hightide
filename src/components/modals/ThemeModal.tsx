@@ -7,25 +7,21 @@ import { Modal, type ModalProps } from '../layout-and-navigation/Overlay'
 import type { ThemeType, ThemeTypeTranslation } from '../../theming/useTheme'
 import { useTheme } from '../../theming/useTheme'
 import { ThemeUtil } from '../../theming/useTheme'
+import type { FormTranslationType } from '../../localization/defaults/form'
+import { formTranslation } from '../../localization/defaults/form'
 
-type ThemeModalTranslation = {
-  title: string,
-  message: string,
-  done: string,
-} & ThemeTypeTranslation
+type ThemeModalTranslationAddon = {
+  chooseTheme: string,
+}
 
-const defaultConfirmDialogTranslation: Translation<ThemeModalTranslation> = {
+type ThemeModalTranslation = ThemeModalTranslationAddon & ThemeTypeTranslation & FormTranslationType
+
+const defaultConfirmDialogTranslation: Translation<ThemeModalTranslationAddon> = {
   en: {
-    title: 'Theme',
-    message: 'Choose your preferred theme',
-    done: 'Done',
-    ...ThemeUtil.translation.en
+    chooseTheme: 'Choose your preferred theme',
   },
   de: {
-    title: 'Farbschema',
-    message: 'Wähle dein bevorzugtes Farbschema',
-    done: 'Fertig',
-    ...ThemeUtil.translation.en
+    chooseTheme: 'Wähle dein bevorzugtes Farbschema',
   }
 }
 
@@ -43,14 +39,14 @@ export const ThemeModal = ({
                                 ...modalProps
                               }: PropsForTranslation<ThemeModalTranslation, PropsWithChildren<ThemeModalProps>>) => {
   const { theme, setTheme } = useTheme()
-  const translation = useTranslation(defaultConfirmDialogTranslation, overwriteTranslation)
+  const translation = useTranslation([defaultConfirmDialogTranslation, formTranslation, ThemeUtil.translation], overwriteTranslation)
 
   return (
     <Modal
       headerProps={{
         ...headerProps,
-        titleText: headerProps?.titleText ?? translation.title,
-        descriptionText: headerProps?.descriptionText ?? translation.message,
+        titleText: headerProps?.titleText ?? translation('theme'),
+        descriptionText: headerProps?.descriptionText ?? translation('chooseTheme'),
       }}
       onClose={onClose}
       {...modalProps}
@@ -64,7 +60,7 @@ export const ThemeModal = ({
         />
         <div className="row mt-3 gap-x-4 justify-end">
           <SolidButton autoFocus color="positive" onClick={onClose}>
-            {translation.done}
+            {translation('done')}
           </SolidButton>
         </div>
       </div>

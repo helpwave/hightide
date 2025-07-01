@@ -1,6 +1,5 @@
 import { useEffect, useState } from 'react'
 import { ArrowDown, ArrowUp, ChevronDown } from 'lucide-react'
-import type { Language } from '../../localization/util'
 import { useLocale } from '../../localization/LanguageProvider'
 import type { PropsForTranslation } from '../../localization/useTranslation'
 import { useTranslation } from '../../localization/useTranslation'
@@ -12,19 +11,10 @@ import type { YearMonthPickerProps } from './YearMonthPicker'
 import { YearMonthPicker } from './YearMonthPicker'
 import type { DayPickerProps } from './DayPicker'
 import { DayPicker } from './DayPicker'
+import type { TimeTranslationType } from '../../localization/defaults/time'
+import { timeTranslation } from '../../localization/defaults/time'
 
-type DatePickerTranslation = {
-  today: string,
-}
-
-const defaultDatePickerTranslation: Record<Language, DatePickerTranslation> = {
-  en: {
-    today: 'Today',
-  },
-  de: {
-    today: 'Heute',
-  }
-}
+type DatePickerTranslationType = TimeTranslationType
 
 type DisplayMode = 'yearMonth' | 'day'
 
@@ -52,9 +42,9 @@ export const DatePicker = ({
                              yearMonthPickerProps,
                              dayPickerProps,
                              className = ''
-                           }: PropsForTranslation<DatePickerTranslation, DatePickerProps>) => {
+                           }: PropsForTranslation<DatePickerTranslationType, DatePickerProps>) => {
   const locale = useLocale()
-  const translation = useTranslation(defaultDatePickerTranslation, overwriteTranslation)
+  const translation = useTranslation([timeTranslation], overwriteTranslation)
   const [displayedMonth, setDisplayedMonth] = useState<Date>(value)
   const [displayMode, setDisplayMode] = useState<DisplayMode>(initialDisplay)
 
@@ -131,7 +121,7 @@ export const DatePicker = ({
                 onChange(newDate)
               }}
             >
-              {translation.today}
+              {translation('today')}
             </TextButton>
           </div>
         </div>

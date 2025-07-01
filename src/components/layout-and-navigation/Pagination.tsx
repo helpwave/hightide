@@ -2,19 +2,10 @@ import { ChevronFirst, ChevronLast, ChevronLeft, ChevronRight } from 'lucide-rea
 import clsx from 'clsx'
 import type { PropsForTranslation } from '../../localization/useTranslation'
 import { useTranslation } from '../../localization/useTranslation'
-import type { Language } from '../../localization/util'
+import type { FormTranslationType } from '../../localization/defaults/form'
+import { formTranslation } from '../../localization/defaults/form'
 
-type PaginationTranslation = {
-  of: string,
-}
-const defaultPaginationTranslations: Record<Language, PaginationTranslation> = {
-  en: {
-    of: 'of'
-  },
-  de: {
-    of: 'von'
-  }
-}
+type PaginationTranslation = FormTranslationType
 
 export type PaginationProps = {
   page: number, // starts with 0
@@ -31,7 +22,7 @@ export const Pagination = ({
                              numberOfPages,
                              onPageChanged
                            }: PropsForTranslation<PaginationTranslation, PaginationProps>) => {
-  const translation = useTranslation(defaultPaginationTranslations, overwriteTranslation)
+  const translation = useTranslation([formTranslation], overwriteTranslation)
 
   const changePage = (page: number) => {
     onPageChanged(page)
@@ -51,7 +42,7 @@ export const Pagination = ({
       </button>
       <div className="min-w-[80px] justify-center mx-2">
         <span className="select-none text-right flex-1">{noPages ? 0 : page + 1}</span>
-        <span className="select-none mx-2">{translation.of}</span>
+        <span className="select-none mx-2">{translation('of')}</span>
         <span className="select-none text-left flex-1">{numberOfPages}</span>
       </div>
       <button onClick={() => changePage(page + 1)} disabled={onLastPage || noPages}>

@@ -6,25 +6,12 @@ import { useTranslation } from '../../localization/useTranslation'
 import clsx from 'clsx'
 import type { DialogProps } from '../layout-and-navigation/Overlay'
 import { Dialog } from '../layout-and-navigation/Overlay'
+import type { FormTranslationType } from '../../localization/defaults/form'
+import { formTranslation } from '../../localization/defaults/form'
 
-type ConfirmDialogTranslation = {
-  confirm: string,
-  cancel: string,
-  decline: string,
-}
+type ConfirmDialogTranslation = FormTranslationType
 
 export type ConfirmDialogType = 'positive' | 'negative' | 'neutral' | 'primary'
-
-const defaultConfirmDialogTranslation = {
-  en: {
-    confirm: 'Confirm',
-    decline: 'Decline'
-  },
-  de: {
-    confirm: 'Bestätigen',
-    decline: 'Ablehnen'
-  }
-}
 
 type ButtonOverwriteType = {
   text?: string,
@@ -59,7 +46,7 @@ export const ConfirmDialog = ({
                                 className,
                                 ...restProps
                               }: PropsForTranslation<ConfirmDialogTranslation, PropsWithChildren<ConfirmDialogProps>>) => {
-  const translation = useTranslation(defaultConfirmDialogTranslation, overwriteTranslation)
+  const translation = useTranslation([formTranslation], overwriteTranslation)
 
   const mapping: Record<ConfirmDialogType, SolidButtonColor> = {
     neutral: 'primary',
@@ -81,7 +68,7 @@ export const ConfirmDialog = ({
 
             disabled={buttonOverwrites?.[0].disabled ?? false}
           >
-            {buttonOverwrites?.[0].text ?? translation.decline}
+            {buttonOverwrites?.[0].text ?? translation('decline')}
           </SolidButton>
         )}
         <SolidButton
@@ -90,7 +77,7 @@ export const ConfirmDialog = ({
           onClick={onConfirm}
           disabled={buttonOverwrites?.[1].disabled ?? false}
         >
-          {buttonOverwrites?.[1].text ?? translation.confirm}
+          {buttonOverwrites?.[1].text ?? translation('confirm')}
         </SolidButton>
       </div>
     </Dialog>

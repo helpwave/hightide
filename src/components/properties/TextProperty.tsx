@@ -1,7 +1,6 @@
 import { Text } from 'lucide-react'
 import clsx from 'clsx'
-import type { Language } from '../../localization/util'
-import type { PropsForTranslation } from '../../localization/useTranslation'
+import type { PropsForTranslation, Translation } from '../../localization/useTranslation'
 import { useTranslation } from '../../localization/useTranslation'
 import { Textarea } from '../user-action/Textarea'
 import { noop } from '../../util/noop'
@@ -9,15 +8,15 @@ import type { PropertyBaseProps } from './PropertyBase'
 import { PropertyBase } from './PropertyBase'
 
 type TextPropertyTranslation = {
-  value: string,
+  text: string,
 }
 
-const defaultTextPropertyTranslation: Record<Language, TextPropertyTranslation> = {
+const defaultTextPropertyTranslation: Translation<TextPropertyTranslation> = {
   en: {
-    value: 'Text'
+    text: 'Text'
   },
   de: {
-    value: 'Text'
+    text: 'Text'
   }
 }
 
@@ -39,7 +38,7 @@ export const TextProperty = ({
                                onEditComplete = noop,
                                ...baseProps
                              }: PropsForTranslation<TextPropertyTranslation, TextPropertyProps>) => {
-  const translation = useTranslation(defaultTextPropertyTranslation, overwriteTranslation)
+  const translation = useTranslation([defaultTextPropertyTranslation], overwriteTranslation)
   const hasValue = value !== undefined
 
   return (
@@ -58,7 +57,7 @@ export const TextProperty = ({
             defaultStyle={false}
             value={value ?? ''}
             readOnly={readOnly}
-            placeholder={`${translation.value}...`}
+            placeholder={`${translation('text')}...`}
             onChangeText={(value) => {
               if (!value) {
                 onRemove()

@@ -3,31 +3,11 @@ import type { PropsForTranslation } from '../../localization/useTranslation'
 import { useTranslation } from '../../localization/useTranslation'
 import type { ConfirmModalProps } from './ConfirmModal'
 import { ConfirmModal } from './ConfirmModal'
+import type { FormTranslationType } from '../../localization/defaults/form'
+import { formTranslation } from '../../localization/defaults/form'
 
-type DiscardChangesModalTranslation = {
-  save: string,
-  cancel: string,
-  dontSave: string,
-  title: string,
-  description: string,
-}
 
-const defaultDiscardChangesModalTranslation = {
-  en: {
-    save: 'Save',
-    cancel: 'Cancel',
-    dontSave: 'Don\'t save',
-    title: 'Unsaved Changes',
-    description: 'Do you want to save your changes?'
-  },
-  de: {
-    save: 'Speichern',
-    cancel: 'Abbrechen',
-    dontSave: 'Nicht Speichern',
-    title: 'Ungespeicherte Änderungen',
-    description: 'Möchtest du die Änderungen speichern?'
-  }
-}
+type DiscardChangesModalTranslation = FormTranslationType
 
 type DiscardChangesModalProps = Omit<ConfirmModalProps, 'onDecline' | 'onConfirm' | 'buttonOverwrites'> & {
   isShowingDecline?: boolean,
@@ -46,18 +26,18 @@ export const DiscardChangesModal = ({
                                        headerProps,
                                        ...modalProps
                                      }: PropsForTranslation<DiscardChangesModalTranslation, PropsWithChildren<DiscardChangesModalProps>>) => {
-  const translation = useTranslation(defaultDiscardChangesModalTranslation, overwriteTranslation)
+  const translation = useTranslation([formTranslation], overwriteTranslation)
   return (
     <ConfirmModal
       headerProps={{
         ...headerProps,
-        titleText: headerProps?.titleText ?? translation.title,
-        descriptionText: headerProps?.descriptionText ?? translation.description,
+        titleText: headerProps?.titleText ?? translation('unsavedChanges'),
+        descriptionText: headerProps?.descriptionText ?? translation('unsavedChangesSaveQuestion'),
       }}
       onConfirm={onSave}
       onCancel={onCancel}
       onDecline={onDontSave}
-      buttonOverwrites={[{ text: translation.cancel }, { text: translation.dontSave }, { text: translation.save }]}
+      buttonOverwrites={[{ text: translation('cancel') }, { text: translation('discardChanges') }, { text: translation('save') }]}
       {...modalProps}
     >
       {children}

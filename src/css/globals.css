@@ -359,11 +359,11 @@
 
   /* TextImage */
   --color-text-image-primary-background: var(--color-primary);
-  --color-text-image-primary-text: var(--color-on-primary);
+  --color-text-image-primary-text: var(--color-white);
   --color-text-image-secondary-background: #3171DE;
-  --color-text-image-secondary-text: var(--color-text-light);
+  --color-text-image-secondary-text: var(--color-white);
   --color-text-image-dark-background: #11243E;
-  --color-text-image-dark-text: var(--color-text-light);
+  --color-text-image-dark-text: var(--color-white);
 
   /* Tooltip */
   --color-tooltip-background: var(--color-overlay-background);
@@ -521,7 +521,7 @@
     @apply border-border;
   }
 
-  html, main {
+  html {
     @apply bg-background text-on-background;
   }
 

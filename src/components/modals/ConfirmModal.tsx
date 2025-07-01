@@ -6,27 +6,12 @@ import { useTranslation } from '../../localization/useTranslation'
 import clsx from 'clsx'
 import type { ModalProps } from '../layout-and-navigation/Overlay'
 import { Modal } from '../layout-and-navigation/Overlay'
+import type { FormTranslationType } from '../../localization/defaults/form'
+import { formTranslation } from '../../localization/defaults/form'
 
-type ConfirmModalTranslation = {
-  confirm: string,
-  cancel: string,
-  decline: string,
-}
+type ConfirmModalTranslation = FormTranslationType
 
 export type ConfirmModalType = 'positive' | 'negative' | 'neutral' | 'primary'
-
-const defaultConfirmDialogTranslation = {
-  en: {
-    confirm: 'Confirm',
-    cancel: 'Cancel',
-    decline: 'Decline'
-  },
-  de: {
-    confirm: 'Bestätigen',
-    cancel: 'Abbrechen',
-    decline: 'Ablehnen'
-  }
-}
 
 type ButtonOverwriteType = {
   text?: string,
@@ -61,7 +46,7 @@ export const ConfirmModal = ({
                                 className,
                                 ...restProps
                               }: PropsForTranslation<ConfirmModalTranslation, PropsWithChildren<ConfirmModalProps>>) => {
-  const translation = useTranslation(defaultConfirmDialogTranslation, overwriteTranslation)
+  const translation = useTranslation([formTranslation], overwriteTranslation)
 
   const mapping: Record<ConfirmModalType, SolidButtonColor> = {
     neutral: 'neutral',
@@ -82,7 +67,7 @@ export const ConfirmModal = ({
             onClick={onCancel}
             disabled={buttonOverwrites?.[0].disabled ?? false}
           >
-            {buttonOverwrites?.[0].text ?? translation.cancel}
+            {buttonOverwrites?.[0].text ?? translation('cancel')}
           </SolidButton>
         )}
         {onDecline && (
@@ -92,7 +77,7 @@ export const ConfirmModal = ({
 
             disabled={buttonOverwrites?.[1].disabled ?? false}
           >
-            {buttonOverwrites?.[1].text ?? translation.decline}
+            {buttonOverwrites?.[1].text ?? translation('decline')}
           </SolidButton>
         )}
         <SolidButton
@@ -101,7 +86,7 @@ export const ConfirmModal = ({
           onClick={onConfirm}
           disabled={buttonOverwrites?.[2].disabled ?? false}
         >
-          {buttonOverwrites?.[2].text ?? translation.confirm}
+          {buttonOverwrites?.[2].text ?? translation('confirm')}
         </SolidButton>
       </div>
     </Modal>

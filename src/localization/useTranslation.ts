@@ -1,11 +1,31 @@
 import { useLanguage } from './LanguageProvider'
 import type { Language } from './util'
 
-export type Translation<T> = Record<Language, T>
+/**
+ * A type describing the pluralization of a word
+ */
+export type TranslationPlural = {
+  zero?: string,
+  one?: string,
+  two?: string,
+  few?: string,
+  many?: string,
+  other: string,
+}
 
-type OverwriteTranslationType<Translation extends Record<string, unknown>> = {
+/**
+ * The type describing all values of a translation
+ */
+export type TranslationType = Record<string, string | TranslationPlural>
+
+/**
+ * The type of translations
+ */
+export type Translation<T extends TranslationType> = Record<Language, T>
+
+type OverwriteTranslationType<T extends TranslationType> = {
   language?: Language,
-  translation?: Partial<Record<Language, Partial<Translation>>>,
+  translation?: Translation<Partial<T>>,
 }
 
 /**
@@ -22,22 +42,74 @@ type OverwriteTranslationType<Translation extends Record<string, unknown>> = {
  *              works properly
  */
 export type PropsForTranslation<
-  Translation extends Record<string, unknown>,
+  Translation extends TranslationType,
   Props = Record<string, never>
 > = Props & {
   overwriteTranslation?: OverwriteTranslationType<Translation>,
 };
 
-export const useTranslation = <Translation extends Record<string, unknown>>(
-  defaults: Record<Language, Translation>,
-  translationOverwrite: OverwriteTranslationType<Translation> = {}
-): Translation => {
-  const { language: languageProp, translation: overwrite } = translationOverwrite
+type StringKeys<T> = Extract<keyof T, string>;
+
+type TranslationFunctionOptions = {
+  replacements?: Record<string, string>,
+  count?: number,
+}
+type TranslationFunction<T extends TranslationType> = (key: StringKeys<T>, options?: TranslationFunctionOptions) => string
+
+
+export const useTranslation = <T extends TranslationType>(
+  translations: Translation<Partial<TranslationType>>[],
+  overwriteTranslation: OverwriteTranslationType<T> = {}
+): TranslationFunction<T> => {
+  const { language: languageProp, translation: overwrite } = overwriteTranslation
   const { language: inferredLanguage } = useLanguage()
   const usedLanguage = languageProp ?? inferredLanguage
-  let defaultValues: Translation = defaults[usedLanguage]
-  if (overwrite && overwrite[usedLanguage]) {
-    defaultValues = { ...defaultValues, ...overwrite[usedLanguage] }
+  const usedTranslations = [...translations]
+  if (overwrite) {
+    usedTranslations.push(overwrite)
   }
-  return defaultValues
+
+  return (key: StringKeys<T>, options?: TranslationFunctionOptions): string => {
+    const { count, replacements } = { ...{ count: 0, replacements: {} }, ...options }
+
+    try {
+      for (let i = translations.length - 1; i >= 0; i--) {
+        const translation = translations[i]
+        const localizedTranslation = translation[usedLanguage]
+        if (!localizedTranslation) {
+          continue
+        }
+        const value = localizedTranslation[key]
+        if(!value) {
+          continue
+        }
+
+        let forProcessing: string
+        if (typeof value !== 'string') {
+          if (count <= 0 && value?.zero) {
+            forProcessing = value.zero
+          } else if (count === 1 && value?.one) {
+            forProcessing = value.one
+          } else if (count === 2 && value?.two) {
+            forProcessing = value.two
+          } else if (count <= 10 && value?.few) {
+            forProcessing = value.few
+          } else if (count > 10 && value?.many) {
+            forProcessing = value.many
+          } else {
+            forProcessing = value.other
+          }
+        } else {
+          forProcessing = value
+        }
+        forProcessing = forProcessing.replace(/\{\{(\w+)}}/g, (_, placeholder) => {
+          return replacements[placeholder] ?? `{{${placeholder}}}` // fallback if key is missing
+        })
+        return forProcessing
+      }
+    } catch (e) {
+      console.error(e)
+    }
+    return `{{${usedLanguage}:${key}}}`
+  }
 }

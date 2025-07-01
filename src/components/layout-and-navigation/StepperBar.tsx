@@ -1,30 +1,14 @@
 import { Check, ChevronLeft, ChevronRight } from 'lucide-react'
-import type { Language } from '../../localization/util'
 import type { PropsForTranslation } from '../../localization/useTranslation'
 import { useTranslation } from '../../localization/useTranslation'
 import { range } from '../../util/array'
 import { SolidButton } from '../user-action/Button'
 import clsx from 'clsx'
 import { useEffect, useState } from 'react'
+import type { FormTranslationType } from '../../localization/defaults/form'
+import { formTranslation } from '../../localization/defaults/form'
 
-type StepperBarTranslation = {
-  back: string,
-  next: string,
-  confirm: string,
-}
-
-const defaultStepperBarTranslation: Record<Language, StepperBarTranslation> = {
-  en: {
-    back: 'Back',
-    next: 'Next',
-    confirm: 'Create'
-  },
-  de: {
-    back: 'Zurück',
-    next: 'Nächster',
-    confirm: 'Fertig'
-  }
-}
+type StepperBarTranslation = FormTranslationType
 
 export type StepperState = {
   currentStep: number,
@@ -61,7 +45,7 @@ export const StepperBar = ({
                              showDots = true,
                              className = '',
                            }: PropsForTranslation<StepperBarTranslation, StepperBarProps>) => {
-  const translation = useTranslation(defaultStepperBarTranslation, overwriteTranslation)
+  const translation = useTranslation([formTranslation], overwriteTranslation)
   const dots = range(0, numberOfSteps)
   const { currentStep, seenSteps } = state ?? defaultState
 
@@ -83,7 +67,7 @@ export const StepperBar = ({
           className="row gap-x-1 items-center justify-center"
         >
           <ChevronLeft size={14}/>
-          {translation.back}
+          {translation('back')}
         </SolidButton>
       </div>
       <div className="row flex-[5] gap-x-2 justify-center items-center">
@@ -113,7 +97,7 @@ export const StepperBar = ({
             className="row gap-x-1 items-center justify-center"
             disabled={disabledSteps.has(currentStep)}
           >
-            {translation.next}
+            {translation('next')}
             <ChevronRight size={14}/>
           </SolidButton>
         </div>
@@ -126,7 +110,7 @@ export const StepperBar = ({
             className="row gap-x-1 items-center justify-center"
           >
             <Check size={14}/>
-            {finishText ?? translation.confirm}
+            {finishText ?? translation('confirm')}
           </SolidButton>
         </div>
       )}
