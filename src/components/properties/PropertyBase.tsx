@@ -1,23 +1,13 @@
 import type { ReactNode } from 'react'
 import { AlertTriangle } from 'lucide-react'
 import clsx from 'clsx'
-import type { Language } from '../../localization/util'
 import { TextButton } from '../user-action/Button'
 import type { PropsForTranslation } from '../../localization/useTranslation'
 import { useTranslation } from '../../localization/useTranslation'
+import type { FormTranslationType } from '../../localization/defaults/form'
+import { formTranslation } from '../../localization/defaults/form'
 
-type PropertyBaseTranslation = {
-  remove: string,
-}
-
-const defaultPropertyBaseTranslation: Record<Language, PropertyBaseTranslation> = {
-  en: {
-    remove: 'Remove'
-  },
-  de: {
-    remove: 'Entfernen'
-  }
-}
+type PropertyBaseTranslation = FormTranslationType
 
 export type PropertyBaseProps = {
   name: string,
@@ -44,7 +34,7 @@ export const PropertyBase = ({
                                onRemove,
                                className = '',
                              }: PropsForTranslation<PropertyBaseTranslation, PropertyBaseProps>) => {
-  const translation = useTranslation(defaultPropertyBaseTranslation, overwriteTranslation)
+  const translation = useTranslation([formTranslation], overwriteTranslation)
   const requiredAndNoValue = softRequired && !hasValue
   return (
     <div className={clsx('row gap-x-0 group', className)}>
@@ -75,7 +65,7 @@ export const PropertyBase = ({
             className={clsx('pr-4 items-center', { '!text-transparent': !hasValue || readOnly })}
             disabled={!hasValue || readOnly}
           >
-            {translation.remove}
+            {translation('remove')}
           </TextButton>
         )}
       </div>

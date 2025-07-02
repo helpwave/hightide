@@ -5,9 +5,10 @@ import clsx from 'clsx'
 import { Tooltip } from '../user-action/Tooltip'
 import { X } from 'lucide-react'
 import { IconButton } from '../user-action/Button'
-import type { PropsForTranslation } from '../../localization/useTranslation'
+import type { PropsForTranslation, Translation } from '../../localization/useTranslation'
 import { useTranslation } from '../../localization/useTranslation'
-import type { Language } from '../../localization/util'
+import type { FormTranslationType } from '../../localization/defaults/form'
+import { formTranslation } from '../../localization/defaults/form'
 
 export type OverlayProps = PropsWithChildren<{
   /**
@@ -63,16 +64,14 @@ let overlayStack: HTMLDivElement[] = []
 
 // --- Modal ---
 
-type ModalHeaderTranslation = {
-  close: string,
-}
+type ModalHeaderTranslation = FormTranslationType
 
-const defaultModalHeaderTranslation: Record<Language, ModalHeaderTranslation> = {
+const defaultModalHeaderTranslation: Translation<FormTranslationType> = {
   en: {
-    close: 'Close'
+    ...formTranslation.en
   },
   de: {
-    close: 'Schließen'
+    ...formTranslation.de
   }
 }
 
@@ -102,7 +101,7 @@ export const OverlayHeader = ({
                                 description,
                                 descriptionText = ''
                               }: PropsForTranslation<ModalHeaderTranslation, OverlayHeaderProps>) => {
-  const translation = useTranslation(defaultModalHeaderTranslation, overwriteTranslation)
+  const translation = useTranslation([defaultModalHeaderTranslation], overwriteTranslation)
   const hasTitleRow = !!title || !!titleText || !!onClose
   const titleRow = (
     <div className="row justify-between items-start gap-x-8">
@@ -116,7 +115,7 @@ export const OverlayHeader = ({
         </h2>
       )}
       {!!onClose && (
-        <Tooltip tooltip={translation.close}>
+        <Tooltip tooltip={translation('close')}>
           <IconButton color="neutral" size="small" onClick={onClose}>
             <X className="w-full h-full"/>
           </IconButton>

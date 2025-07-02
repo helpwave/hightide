@@ -1,6 +1,5 @@
 import type { ReactNode } from 'react'
 import clsx from 'clsx'
-import type { Language } from '../../localization/util'
 import type { PropsForTranslation } from '../../localization/useTranslation'
 import { useTranslation } from '../../localization/useTranslation'
 import { noop } from '../../util/noop'
@@ -10,67 +9,12 @@ import type { TimePickerProps } from '../date/TimePicker'
 import { TimePicker } from '../date/TimePicker'
 import type { DatePickerProps } from '../date/DatePicker'
 import { DatePicker } from '../date/DatePicker'
+import type { FormTranslationType } from '../../localization/defaults/form'
+import { formTranslation } from '../../localization/defaults/form'
+import type { TimeTranslationType } from '../../localization/defaults/time'
+import { timeTranslation } from '../../localization/defaults/time'
 
-type TimeTranslation = {
-  clear: string,
-  change: string,
-  year: string,
-  month: string,
-  day: string,
-  january: string,
-  february: string,
-  march: string,
-  april: string,
-  may: string,
-  june: string,
-  july: string,
-  august: string,
-  september: string,
-  october: string,
-  november: string,
-  december: string,
-}
-
-const defaultTimeTranslation: Record<Language, TimeTranslation> = {
-  en: {
-    clear: 'Clear',
-    change: 'Change',
-    year: 'Year',
-    month: 'Month',
-    day: 'Day',
-    january: 'January',
-    february: 'Febuary',
-    march: 'March',
-    april: 'April',
-    may: 'May',
-    june: 'June',
-    july: 'July',
-    august: 'August',
-    september: 'September',
-    october: 'October',
-    november: 'November',
-    december: 'December',
-  },
-  de: {
-    clear: 'Entfernen',
-    change: 'Ändern',
-    year: 'Jahr',
-    month: 'Monat',
-    day: 'Tag',
-    january: 'Januar',
-    february: 'Febuar',
-    march: 'März',
-    april: 'April',
-    may: 'Mai',
-    june: 'Juni',
-    july: 'Juli',
-    august: 'August',
-    september: 'September',
-    october: 'October',
-    november: 'November',
-    december: 'December',
-  }
-}
+type DateAndTimePickerTranslationType = FormTranslationType & TimeTranslationType
 
 export type DateTimePickerMode = 'date' | 'time' | 'dateTime'
 
@@ -100,8 +44,8 @@ export const DateTimePicker = ({
                                  onRemove = noop,
                                  timePickerProps,
                                  datePickerProps,
-                               }: PropsForTranslation<TimeTranslation, DateTimePickerProps>) => {
-  const translation = useTranslation(defaultTimeTranslation, overwriteTranslation)
+                               }: PropsForTranslation<DateAndTimePickerTranslationType, DateTimePickerProps>) => {
+  const translation = useTranslation([formTranslation, timeTranslation], overwriteTranslation)
 
   const useDate = mode === 'dateTime' || mode === 'date'
   const useTime = mode === 'dateTime' || mode === 'time'
@@ -142,12 +86,12 @@ export const DateTimePicker = ({
       </div>
       <div className="row justify-end">
         <div className="row gap-x-2 mt-1">
-          <SolidButton size="medium" color="negative" onClick={onRemove}>{translation.clear}</SolidButton>
+          <SolidButton size="medium" color="negative" onClick={onRemove}>{translation('clear')}</SolidButton>
           <SolidButton
             size="medium"
             onClick={() => onFinish(value)}
           >
-            {translation.change}
+            {translation('change')}
           </SolidButton>
         </div>
       </div>

@@ -9,21 +9,21 @@ import { SolidButton } from '../user-action/Button'
 import { Modal, type ModalProps } from '../layout-and-navigation/Overlay'
 
 type LanguageModalTranslation = {
-  title: string,
-  message: string,
+  language: string,
+  chooseLanguage: string,
   done: string,
 } & Record<Language, string>
 
 const defaultLanguageModalTranslation: Translation<LanguageModalTranslation> = {
   en: {
-    title: 'Language',
-    message: 'Choose your language',
+    language: 'Language',
+    chooseLanguage: 'Choose your language',
     done: 'Done',
     ...LanguageUtil.languagesLocalNames
   },
   de: {
-    title: 'Sprache',
-    message: 'Wähle deine bevorzugte Sprache',
+    language: 'Sprache',
+    chooseLanguage: 'Wähle deine bevorzugte Sprache',
     done: 'Fertig',
     ...LanguageUtil.languagesLocalNames
   }
@@ -43,14 +43,14 @@ export const LanguageModal = ({
                                 ...modalProps
                               }: PropsForTranslation<LanguageModalTranslation, PropsWithChildren<LanguageModalProps>>) => {
   const { language, setLanguage } = useLanguage()
-  const translation = useTranslation(defaultLanguageModalTranslation, overwriteTranslation)
+  const translation = useTranslation([defaultLanguageModalTranslation], overwriteTranslation)
 
   return (
     <Modal
       headerProps={{
         ...headerProps,
-        titleText: headerProps?.titleText ?? translation.title,
-        descriptionText: headerProps?.descriptionText ?? translation.message,
+        titleText: headerProps?.titleText ?? translation('language'),
+        descriptionText: headerProps?.descriptionText ?? translation('chooseLanguage'),
       }}
       onClose={onClose}
       {...modalProps}
@@ -64,7 +64,7 @@ export const LanguageModal = ({
         />
         <div className="row mt-3 gap-x-4 justify-end">
           <SolidButton autoFocus color="positive" onClick={onClose}>
-            {translation.done}
+            {translation('done')}
           </SolidButton>
         </div>
       </div>

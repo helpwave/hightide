@@ -5,6 +5,16 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/)
 and adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [0.1.9] - 2025-07-01
+
+### Changed
+
+- Changed localization
+  - added separate localization packages
+  - added a `TranslationPlural` object to make pluralization easy
+  - make every translation a function
+  - added formatting
+
 ## [0.1.8] - 2025-06-30
 
 ### Added

@@ -2,8 +2,7 @@ import { Binary } from 'lucide-react'
 import clsx from 'clsx'
 import { noop } from '../../util/noop'
 import { Input } from '../user-action/Input'
-import type { Language } from '../../localization/util'
-import type { PropsForTranslation } from '../../localization/useTranslation'
+import type { PropsForTranslation, Translation } from '../../localization/useTranslation'
 import { useTranslation } from '../../localization/useTranslation'
 import type { PropertyBaseProps } from './PropertyBase'
 import { PropertyBase } from './PropertyBase'
@@ -12,7 +11,7 @@ type NumberPropertyTranslation = {
   value: string,
 }
 
-const defaultNumberPropertyTranslation: Record<Language, NumberPropertyTranslation> = {
+const defaultNumberPropertyTranslation: Translation<NumberPropertyTranslation> = {
   en: {
     value: 'Value'
   },
@@ -41,7 +40,7 @@ export const NumberProperty = ({
                                  suffix,
                                  ...baseProps
                                }: PropsForTranslation<NumberPropertyTranslation, NumberPropertyProps>) => {
-  const translation = useTranslation(defaultNumberPropertyTranslation, overwriteTranslation)
+  const translation = useTranslation([defaultNumberPropertyTranslation], overwriteTranslation)
   const hasValue = value !== undefined
 
   return (
@@ -60,7 +59,7 @@ export const NumberProperty = ({
             value={value?.toString() ?? ''}
             type="number"
             readOnly={readOnly}
-            placeholder={`${translation.value}...`}
+            placeholder={`${translation('value')}...`}
             onChangeText={(value) => {
               const numberValue = parseFloat(value)
               if (isNaN(numberValue)) {

@@ -1,28 +1,20 @@
 import { List } from 'lucide-react'
 import clsx from 'clsx'
-import type { Language } from '../../localization/util'
 import type { PropsForTranslation } from '../../localization/useTranslation'
 import { useTranslation } from '../../localization/useTranslation'
 import type { MultiSelectProps } from '../user-action/MultiSelect'
 import { MultiSelect } from '../user-action/MultiSelect'
 import type { PropertyBaseProps } from './PropertyBase'
 import { PropertyBase } from './PropertyBase'
+import type { FormTranslationType } from '../../localization/defaults/form'
+import { formTranslation } from '../../localization/defaults/form'
 
-type MultiSelectPropertyTranslation = {
-  select: string,
-}
-
-const defaultMultiSelectPropertyTranslation: Record<Language, MultiSelectPropertyTranslation> = {
-  en: {
-    select: 'Select'
-  },
-  de: {
-    select: 'Auswählen'
-  }
-}
+type MultiSelectPropertyTranslation = FormTranslationType
 
 export type MultiSelectPropertyProps<T> =
-  Omit<PropertyBaseProps & MultiSelectProps<T>, 'icon' | 'input' | 'hasValue' | 'className' | 'disabled' | 'label' | 'triggerClassName'>
+  Omit<PropertyBaseProps
+    & MultiSelectProps<T>, 'icon' | 'input' | 'hasValue' | 'className' | 'disabled' | 'label' | 'triggerClassName'>
+    & PropsForTranslation<MultiSelectPropertyTranslation>
 
 /**
  * An Input for MultiSelect properties
@@ -35,8 +27,8 @@ export const MultiSelectProperty = <T, >({
                                            softRequired,
                                            onRemove,
                                            ...multiSelectProps
-                                         }: PropsForTranslation<MultiSelectPropertyTranslation, MultiSelectPropertyProps<T>>) => {
-  const translation = useTranslation(defaultMultiSelectPropertyTranslation, overwriteTranslation)
+                                         }: MultiSelectPropertyProps<T>) => {
+  const translation = useTranslation([formTranslation], overwriteTranslation)
   const hasValue = options.some(value => value.selected)
 
   return (
@@ -57,7 +49,7 @@ export const MultiSelectProperty = <T, >({
             options={options}
             isDisabled={readOnly}
             useChipDisplay={true}
-            hintText={`${translation.select}...`}
+            hintText={`${translation('select')}...`}
           />
         </div>
       )}
