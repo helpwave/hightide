@@ -84,7 +84,7 @@ export const Select = <T, >({
         {isOpen && (
           <div
             ref={menuRef}
-            className="absolute w-full z-10 rounded-lg mt-0.5 bg-menu-background text-menu-text shadow-around-md max-h-[500px] overflow-y-auto p-2"
+            className="absolute w-full z-10 rounded-lg mt-0.5 bg-menu-background text-menu-text shadow-around-lg max-h-[500px] overflow-y-auto p-2"
           >
             <SearchableList
               list={options}

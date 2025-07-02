@@ -1,5 +1,6 @@
 import { useLanguage } from './LanguageProvider'
 import type { Language } from './util'
+import {PropsWithChildren} from "react"
 
 /**
  * A type describing the pluralization of a word
@@ -43,7 +44,7 @@ type OverwriteTranslationType<T extends TranslationType> = {
  */
 export type PropsForTranslation<
   Translation extends TranslationType,
-  Props = Record<string, never>
+  Props
 > = Props & {
   overwriteTranslation?: OverwriteTranslationType<Translation>,
 };
@@ -55,6 +56,15 @@ type TranslationFunctionOptions = {
   count?: number,
 }
 type TranslationFunction<T extends TranslationType> = (key: StringKeys<T>, options?: TranslationFunctionOptions) => string
+
+export const TranslationPluralCount = {
+  zero: 0,
+  one: 1,
+  two: 2,
+  few: 3,
+  many: 11,
+  other: -1,
+}
 
 
 export const useTranslation = <T extends TranslationType>(
@@ -86,15 +96,15 @@ export const useTranslation = <T extends TranslationType>(
 
         let forProcessing: string
         if (typeof value !== 'string') {
-          if (count <= 0 && value?.zero) {
+          if (count === TranslationPluralCount.zero && value?.zero) {
             forProcessing = value.zero
-          } else if (count === 1 && value?.one) {
+          } else if (count === TranslationPluralCount.one && value?.one) {
             forProcessing = value.one
-          } else if (count === 2 && value?.two) {
+          } else if (count === TranslationPluralCount.two && value?.two) {
             forProcessing = value.two
-          } else if (count <= 10 && value?.few) {
+          } else if (TranslationPluralCount.few <= count && count < TranslationPluralCount.many && value?.few) {
             forProcessing = value.few
-          } else if (count > 10 && value?.many) {
+          } else if (count > TranslationPluralCount.many && value?.many) {
             forProcessing = value.many
           } else {
             forProcessing = value.other
@@ -103,7 +113,7 @@ export const useTranslation = <T extends TranslationType>(
           forProcessing = value
         }
         forProcessing = forProcessing.replace(/\{\{(\w+)}}/g, (_, placeholder) => {
-          return replacements[placeholder] ?? `{{${placeholder}}}` // fallback if key is missing
+          return replacements[placeholder] ?? `{{key:${placeholder}}}` // fallback if key is missing
         })
         return forProcessing
       }

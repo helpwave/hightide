@@ -74,7 +74,7 @@ export const Menu = <T extends HTMLElement>({
         ref={menuRef}
         onClick={e => e.stopPropagation()}
         className={clsx(
-          'absolute top-full mt-1 min-w-40 rounded-lg bg-menu-background text-menu-text shadow-around-md z-10',
+          'absolute top-full mt-1 min-w-40 rounded-lg bg-menu-background text-menu-text shadow-around-lg z-10',
           {
             'top-0': alignment[0] === 't',
             'bottom-0': alignment[0] === 'b',
