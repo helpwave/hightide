@@ -5,6 +5,18 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/)
 and adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [0.1.11] - 2025-07-02
+
+### Changed
+
+- change negative color in dark mode
+- `Select` component selection indicator to the suffix rather than prefix
+- changed `Select` component stories to display them with less width
+
+### Fixed
+
+- fixed `LanguageModal` and `ThemeModal` not displaying their text in the Select
+
 ## [0.1.10] - 2025-07-02
 
 ### Changed

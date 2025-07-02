@@ -1,6 +1,6 @@
-import type { ReactNode } from 'react'
+import type {ReactNode} from 'react'
 import clsx from 'clsx'
-import { Check } from 'lucide-react'
+import {Check} from 'lucide-react'
 
 export type TileProps = {
   title: { value: ReactNode, className?: string },
@@ -45,13 +45,13 @@ export const Tile = ({
       )}
       onClick={isDisabled ? undefined : onClick}
     >
-      {prefix ?? (isSelected ? (<Check size={24}/>) : undefined)}
+      {prefix}
       <div className="col gap-y-0 w-full">
         <h4 className={clsx(title.className ?? 'textstyle-title-normal')}>{title.value}</h4>
         {!!description &&
           <span className={clsx(description.className ?? 'textstyle-description')}>{description.value}</span>}
       </div>
-      {suffix}
+      {suffix ?? (isSelected ? (<Check size={24}/>) : undefined)}
     </div>
   )
 }
