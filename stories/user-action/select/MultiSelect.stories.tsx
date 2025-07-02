@@ -13,7 +13,7 @@ const MultiSelectExample = ({
     <MultiSelectUncontrolled
       {...props}
       hintText={hintText}
-      className={"max-w-128"}
+      className="max-w-128"
     />
   )
 }

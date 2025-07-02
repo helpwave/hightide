@@ -1,6 +1,6 @@
-import type {ReactNode} from 'react'
+import type { ReactNode } from 'react'
 import clsx from 'clsx'
-import {Check} from 'lucide-react'
+import { Check } from 'lucide-react'
 
 export type TileProps = {
   title: { value: ReactNode, className?: string },
