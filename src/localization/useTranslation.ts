@@ -1,6 +1,5 @@
 import { useLanguage } from './LanguageProvider'
 import type { Language } from './util'
-import {PropsWithChildren} from "react"
 
 /**
  * A type describing the pluralization of a word
@@ -44,10 +43,10 @@ type OverwriteTranslationType<T extends TranslationType> = {
  */
 export type PropsForTranslation<
   Translation extends TranslationType,
-  Props
+  Props = unknown
 > = Props & {
   overwriteTranslation?: OverwriteTranslationType<Translation>,
-};
+}
 
 type StringKeys<T> = Extract<keyof T, string>;
 
