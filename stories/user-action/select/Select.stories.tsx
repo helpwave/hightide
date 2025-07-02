@@ -24,6 +24,6 @@ export const select: Story = {
     onChange: action('updated'),
     isDisabled: false,
     hintText: 'Select something',
-    className: '',
+    className: 'max-w-96',
   },
 }

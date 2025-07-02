@@ -55,7 +55,7 @@ export const ThemeModal = ({
         <Select
           className="mt-2"
           value={theme}
-          options={ThemeUtil.themes.map((theme) => ({ label: translation[theme], value: theme }))}
+          options={ThemeUtil.themes.map((theme) => ({ label: translation(theme), value: theme }))}
           onChange={(theme: string) => setTheme(theme as ThemeType)}
         />
         <div className="row mt-3 gap-x-4 justify-end">

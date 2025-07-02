@@ -26,6 +26,6 @@ export const searchableSelect: Story = {
     isSearchEnabled: true,
     isDisabled: false,
     hintText: 'Hinttext',
-    className: '',
+    className: 'max-w-128',
   },
 }
