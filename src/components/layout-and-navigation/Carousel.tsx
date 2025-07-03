@@ -73,7 +73,7 @@ export const Carousel = ({
                            overScrollThreshold = 0.1,
                            blurColor = 'from-background',
                            className = '',
-                           heightClassName = 'h-[24rem]',
+                           heightClassName = 'h-96',
                            widthClassName = 'w-[70%] desktop:w-1/2',
                          }: CarouselProps) => {
   if (isAutoLooping && !isLooping) {
@@ -386,7 +386,7 @@ export const Carousel = ({
           {range(0, length - 1).map(index => (
             <button
               key={index}
-              className={clsx('w-[2rem] min-w-[2rem] h-[0.75rem] min-h-[0.75rem] first:rounded-l-md last:rounded-r-md', {
+              className={clsx('w-8 min-w-8 h-3 min-h-3 first:rounded-l-md last:rounded-r-md', {
                 'bg-carousel-dot-disabled hover:bg-carousel-dot-active': currentIndex !== index,
                 'bg-carousel-dot-active hover:brightness-90': currentIndex === index
               })}

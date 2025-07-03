@@ -76,11 +76,12 @@ const Checkbox = ({
         checked={checked}
         disabled={disabled}
         id={id}
-        className={clsx(usedSizeClass, `items-center border-2 rounded outline-none focus:border-primary`, {
-          'text-disabled-text border-disabled-text bg-disabled-background': disabled,
+        className={clsx(usedSizeClass, `items-center border-2 rounded outline-none `, {
+          'text-disabled-text border-disabled-outline bg-disabled-background cursor-not-allowed': disabled,
+          'focus:border-primary': !disabled,
           'bg-surface': !disabled && !checked,
-          'bg-primary/30 border-primary text-primary': checked === true || checked === 'indeterminate',
-          'hover:border-primary focus:hover:border-primary': !checked
+          'bg-primary/30 border-primary text-primary':  !disabled && checked === true || checked === 'indeterminate',
+          'hover:border-primary focus:hover:border-primary': !disabled && !checked
         }, className)}
       >
         <CheckboxPrimitive.Indicator>

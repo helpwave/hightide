@@ -5,6 +5,26 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/)
 and adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [0.1.12] - 2025-07-02
+
+### Added
+
+- Added filtering, resizing and filler rows for the `Table`
+- Added transparent background option for `IconButtons`
+- tailwind utilities for spacing scalable rounding
+- Added a page input to the pagination component
+- Added a `resolveSetState` function to easily get the value that result from a `SetState` in a `Dispatch`
+- Added `useRerender` hook to allow for easy rerendering
+
+### Changed
+
+- Changed hardcoded `px`, or `rem` value in components to spacing scalable alternatives
+
+### Fixed
+
+- Fixed `CheckBox` disabled state
+
+
 ## [0.1.11] - 2025-07-02
 
 ### Changed

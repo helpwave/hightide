@@ -1,364 +1,536 @@
-import type { ReactElement } from 'react'
-import { useEffect, useRef, useState } from 'react'
-import { Scrollbars } from 'react-custom-scrollbars-2'
-import { noop } from '../../util/noop'
-import { Checkbox } from '../user-action/Checkbox'
+import type { Dispatch, ReactNode, SetStateAction } from 'react'
+import { useEffect, useMemo, useRef, useState } from 'react'
 import { Pagination } from './Pagination'
 import clsx from 'clsx'
-import type { TextButtonProps } from '../user-action/Button'
-import { TextButton } from '../user-action/Button'
+import type {
+  ColumnDef,
+  ColumnSizingInfoState,
+  ColumnSizingState,
+  InitialTableState,
+  RowSelectionState,
+  SortDirection,
+  TableMeta,
+  TableOptions,
+  TableState
+} from '@tanstack/react-table'
+import {
+  flexRender,
+  getCoreRowModel,
+  getFilteredRowModel,
+  getPaginationRowModel,
+  getSortedRowModel,
+  useReactTable
+} from '@tanstack/react-table'
+import { resolveSetState } from '../../util/resolveSetState'
+import { range } from '../../util/array'
+import type { IconButtonProps } from '../user-action/Button'
+import { IconButton } from '../user-action/Button'
 import { ChevronDown, ChevronsUpDown, ChevronUp } from 'lucide-react'
+import { Scrollbars } from 'react-custom-scrollbars-2'
+import { useRerender } from '../../hooks/useRerender'
+import { Checkbox } from '../user-action/Checkbox'
+import { clamp } from '../../util/math'
 
-export type TableStatePagination = {
-  currentPage: number,
-  entriesPerPage: number,
-}
-export const defaultTableStatePagination = {
-  currentPage: 0,
-  entriesPerPage: 5
-}
-
-export type TableStateSelection<T> = {
-  currentSelection: T[],
-  hasSelectedAll: boolean,
-  hasSelectedSome: boolean,
-  hasSelectedNone: boolean,
+interface CustomTableMeta<T> extends TableMeta<T> {
+  columnClassNames?: Record<string, string>,
 }
 
-export const defaultTableStateSelection = {
-  currentSelection: [],
-  hasSelectedAll: false,
-  hasSelectedSome: false,
-  hasSelectedNone: true
-}
+/*
+ * SortButton
+ */
 
-export type TableState = {
-  pagination?: TableStatePagination,
-  selection?: {
-    /**
-     * The mapped ids of the dataType
-     */
-    currentSelection: string[],
-    hasSelectedAll: boolean,
-    hasSelectedSome: boolean,
-    hasSelectedNone: boolean,
-  },
-}
-
-type IdentifierMapping<T> = (dataObject: T) => string
-
-export const isDataObjectSelected = <T, >(tableState: TableState, dataObject: T, identifierMapping: IdentifierMapping<T>) => {
-  if (!tableState.selection) {
-    return false
-  }
-
-  return !!tableState.selection.currentSelection.find(value => value.localeCompare(identifierMapping(dataObject)) === 0)
-}
-
-export const pageForItem = <T, >(data: T[], item: T, entriesPerPage: number, identifierMapping: IdentifierMapping<T>) => {
-  const index = data.findIndex(value => identifierMapping(value) === identifierMapping(item))
-  if (index !== -1) {
-    return Math.floor(index / entriesPerPage)
-  }
-  console.warn("item doesn't exist on data", item, data)
-  return 0
-}
-
-export const updatePagination = (pagination: TableStatePagination, dataLength: number): TableStatePagination => ({
-  ...pagination,
-  currentPage: Math.min(Math.max(Math.ceil(dataLength / pagination.entriesPerPage) - 1, 0), pagination.currentPage)
-})
-
-export const addElementToTable = <T, >(tableState: TableState, data: T[], dataObject: T, identifierMapping: IdentifierMapping<T>) => {
-  return {
-    ...tableState,
-    pagination: tableState.pagination ? {
-      ...tableState.pagination,
-      currentPage: pageForItem(data, dataObject, tableState.pagination.entriesPerPage, identifierMapping)
-    } : undefined,
-    selection: tableState.selection ? {
-      ...tableState.selection,
-      hasSelectedAll: false,
-      hasSelectedSome: tableState.selection.hasSelectedAll || tableState.selection.hasSelectedSome
-    } : undefined
-  }
+export type SortButtonProps = IconButtonProps & {
+  sortDirection: SortDirection | false,
+  invert?: boolean,
 }
 
 /**
- * data length before delete
+ * An Extension of the normal button that displays the sorting state right of the content
  */
-export const removeFromTableSelection = <T, >(tableState: TableState, deletedObjects: T[], dataLength: number, identifierMapping: IdentifierMapping<T>): TableState => {
-  if (!tableState.selection) {
-    return tableState
+export const SortButton = ({
+                             sortDirection,
+                             invert = false,
+                             color = 'neutral',
+                             className,
+                             ...buttonProps
+                           }: SortButtonProps) => {
+  let icon = <ChevronsUpDown className="w-full h-full"/>
+  if (sortDirection) {
+    let usedSortDirection = sortDirection
+    if (invert) {
+      usedSortDirection = usedSortDirection === 'desc' ? 'asc' : 'desc'
+    }
+    icon = usedSortDirection === 'asc' ? (<ChevronUp className="w-full h-full"/>) : (
+      <ChevronDown className="w-full h-full"/>)
   }
 
-  const deletedObjectIds = deletedObjects.map(identifierMapping)
-  const elementsBefore = tableState.selection.currentSelection.length
-  const currentSelection = tableState.selection.currentSelection.filter((value) => !deletedObjectIds.includes(value))
-  dataLength -= elementsBefore - currentSelection.length
-
-  return {
-    ...tableState,
-    selection: {
-      currentSelection,
-      hasSelectedAll: currentSelection.length === dataLength && dataLength !== 0,
-      hasSelectedSome: currentSelection.length > 0 && currentSelection.length !== dataLength,
-      hasSelectedNone: currentSelection.length === 0,
-    },
-    pagination: tableState.pagination ? updatePagination(tableState.pagination, dataLength) : undefined
-  }
+  return (
+    <IconButton
+      size="tiny"
+      color={color}
+      className={clsx(className)}
+      {...buttonProps}
+    >
+      {icon}
+    </IconButton>
+  )
 }
 
-export const changeTableSelectionSingle = <T, >(tableState: TableState, dataObject: T, dataLength: number, identifierMapping: IdentifierMapping<T>) => {
-  if (!tableState.selection) {
-    return tableState
-  }
+/*
+ * FillerRowElement
+ */
 
-  const hasSelectedObject = isDataObjectSelected(tableState, dataObject, identifierMapping)
-  let currentSelection = [...tableState.selection.currentSelection, identifierMapping(dataObject)] // case !hasSelectedObject
-  if (hasSelectedObject) {
-    currentSelection = tableState.selection.currentSelection.filter(value => value.localeCompare(identifierMapping(dataObject)) !== 0)
-  }
-
-  return {
-    ...tableState,
-    selection: {
-      currentSelection,
-      hasSelectedAll: currentSelection.length === dataLength,
-      hasSelectedSome: currentSelection.length > 0 && currentSelection.length !== dataLength,
-      hasSelectedNone: currentSelection.length === 0,
-    }
-  }
+export type FillerRowElementProps = {
+  className?: string,
+}
+export const FillerRowElement = ({
+                                   className
+                                 }: FillerRowElementProps) => {
+  return (
+    <div className={clsx('flex flex-row items-center w-1/2 h-4 text-disabled-text font-bold', className)}>
+      -
+    </div>
+  )
 }
 
-const changeTableSelectionAll = <T, >(tableState: TableState, data: T[], identifierMapping: IdentifierMapping<T>) => {
-  if (!tableState.selection) {
-    return tableState
-  }
-
-  if (data.length === 0) {
-    return {
-      ...tableState,
-      selection: {
-        currentSelection: [],
-        hasSelectedAll: false,
-        hasSelectedSome: false,
-        hasSelectedNone: true
-      }
-    }
-  }
-
-  const hasSelectedAll = !(tableState.selection.hasSelectedSome || tableState.selection.hasSelectedAll)
-  return {
-    ...tableState,
-    selection: {
-      currentSelection: hasSelectedAll ? data.map(identifierMapping) : [],
-      hasSelectedAll,
-      hasSelectedSome: false,
-      hasSelectedNone: !hasSelectedAll
-    }
-  }
-}
-
-export type TableSortingType = 'ascending' | 'descending'
-export type TableSortingFunctionType<T> = (t1: T, t2: T) => number
+/*
+ * Table
+ */
 
 export type TableProps<T> = {
   data: T[],
-  /**
-   * When using selection or pagination
-   */
-  stateManagement?: [TableState, (tableState: TableState) => void],
-  identifierMapping: IdentifierMapping<T>,
-  /**
-   * Only the cell itself no boilerplate <tr> or <th> required
-   */
-  header?: ReactElement[],
-  /**
-   * Only the cells of the row no boilerplate <tr> or <td> required
-   */
-  rowMappingToCells: (dataObject: T) => ReactElement[],
-  sorting?: [TableSortingFunctionType<T>, TableSortingType],
-  /**
-   * Always go to the page of this element
-   */
-  focusElement?: T,
+  setData: Dispatch<SetStateAction<T[]>>,
+  columns: ColumnDef<T>[],
+  fillerRow?: (columnId: string, table: Table<T>) => ReactNode,
+  initialState?: Omit<InitialTableState, 'columnSizing' | 'columnSizingInfo'>,
+  allowResizing?: boolean,
   className?: string,
-}
-
-/*  Possible extension for better customization
-    * Map each element to the displayed row
-    * make sure to wrap it in the <tr> and <td> you require
-    rowMappingToHTMLRow?: (dataObject: T) => ReactElement
- */
+  state: Omit<TableState, 'columnSizing' | 'columnSizingInfo'>,
+  tableClassName?: string,
+} & Partial<TableOptions<T>>
 
 /**
- * A Basic stateless reusable table
- * The state must be handled and saved with the updateTableState method
+ * The standard table
  */
 export const Table = <T, >({
-                             data,
-                             stateManagement = [{}, noop],
-                             identifierMapping,
-                             header,
-                             rowMappingToCells,
-                             sorting,
-                             focusElement,
-                             className
+                             setData,
+                             fillerRow,
+                             initialState,
+                             allowResizing = false,
+                             className,
+                             tableClassName,
+                             defaultColumn,
+                             meta,
+                             state,
+                             columns,
+                             ...tableOptions
                            }: TableProps<T>) => {
-  const sortedData = [...data]
-  if (sorting) {
-    const [sortingFunction, sortingType] = sorting
-    sortedData.sort((a, b) => sortingFunction(a, b) * (sortingType === 'ascending' ? 1 : -1))
-  }
-  let currentPage = 0
-  let pageCount = 1
-  let entriesPerPage = 5
-  const [tableState, updateTableState] = stateManagement
+  const rerender = useRerender()
+  const ref = useRef<HTMLDivElement>(null)
 
-  let shownElements = sortedData
-
-  if (tableState?.pagination) {
-    if (tableState.pagination.entriesPerPage < 1) {
-      console.error('tableState.pagination.entriesPerPage must be >= 1', tableState.pagination.entriesPerPage)
+  const [columnSizing, setColumnSizing] = useState<ColumnSizingState>(columns.reduce((previousValue, currentValue) => {
+    return {
+      ...previousValue,
+      [currentValue.id]: currentValue.minSize ?? defaultColumn.minSize,
     }
-    entriesPerPage = Math.max(1, tableState.pagination.entriesPerPage)
-    pageCount = Math.ceil(sortedData.length / entriesPerPage)
+  }, {}))
+  const [columnSizingInfo, setColumnSizingInfo] = useState<ColumnSizingInfoState>()
 
-    if (tableState.pagination.currentPage < 0 || (tableState.pagination.currentPage >= pageCount && pageCount !== 0)) {
-      console.error('tableState.pagination.currentPage < 0 || (tableState.pagination.currentPage >= pageCount && pageCount !== 0) must be fullfilled',
-        [`pageCount: ${pageCount}`, `tableState.pagination.currentPage: ${tableState.pagination.currentPage}`])
-    } else {
-      currentPage = tableState.pagination.currentPage
+  const computedColumnMinWidths = useMemo(() => {
+    return columns.reduce((previousValue, column) => {
+      return {
+        ...previousValue,
+        // every column is at least 12px wide
+        [column.id]: (column.minSize ?? defaultColumn?.minSize ?? 12)
+      }
+    }, {})
+  }, [columns, defaultColumn])
+
+  const computedColumnMaxWidths = useMemo(() => {
+    return columns.reduce((previousValue, column) => {
+      return {
+        ...previousValue,
+        [column.id]: (column.maxSize ?? defaultColumn?.maxSize)
+      }
+    }, {})
+  }, [columns, defaultColumn])
+
+  const tableMinWidth = useMemo(() => {
+    return columns.reduce((sum, column) => {
+      return sum + computedColumnMinWidths[column.id]
+    }, 0)
+  }, [columns, computedColumnMinWidths])
+
+  const updateColumnSizes = useMemo(() => {
+    return (previous: ColumnSizingState) => {
+      const updateSizing = {
+        ...previous
+      }
+
+      const containerWidth = ref.current.offsetWidth
+
+      // enforce min and max constraints
+      columns.forEach((column) => {
+        updateSizing[column.id] = clamp(updateSizing[column.id], computedColumnMinWidths[column.id], computedColumnMaxWidths[column.id] ?? containerWidth)
+      })
+
+      // table width of the current sizing
+      const width = columns
+        .reduce((previousValue, currentValue) => previousValue + updateSizing[currentValue.id], 0)
+
+      if (width > containerWidth) {
+        if (tableMinWidth >= containerWidth) {
+          return columns.reduce((previousValue, currentValue) => ({
+            ...previousValue,
+            [currentValue.id]: computedColumnMinWidths[currentValue.id]
+          }), {})
+        }
+
+        let reduceableColumns = columns
+          .map(value => value.id)
+          .filter(id => updateSizing[id] - computedColumnMinWidths[id] > 0)
+
+        let spaceToReduce = width - containerWidth
+
+        while (spaceToReduce > 0 && reduceableColumns.length > 0) {
+          let maxReduceAmount = reduceableColumns.reduce((previousValue, id) => Math.max(previousValue, updateSizing[id] - computedColumnMinWidths[id]), 0)
+          if (maxReduceAmount * reduceableColumns.length > spaceToReduce) {
+            maxReduceAmount = spaceToReduce / reduceableColumns.length
+          }
+
+          reduceableColumns.forEach(id => {
+            updateSizing[id] -= maxReduceAmount
+          })
+
+          spaceToReduce -= maxReduceAmount * reduceableColumns.length
+          reduceableColumns = reduceableColumns.filter(id => updateSizing[id] - computedColumnMinWidths[id] > 0)
+        }
+      } else if (width <= containerWidth) {
+        let distributableWidth = containerWidth - width
+
+        // check max width violations
+        const violatingColumns = columns.filter(value =>
+          computedColumnMaxWidths[value.id] && (updateSizing[value.id] > computedColumnMaxWidths[value.id]))
+
+        const violationColumnsAmount = violatingColumns.reduce(
+          (previousValue, column) => previousValue + updateSizing[column.id] - computedColumnMaxWidths[column.id], 0
+        )
+        distributableWidth += violationColumnsAmount
+
+        let enlargeableColumns = columns
+          .filter(col => !computedColumnMaxWidths[col.id] || updateSizing[col.id] < computedColumnMaxWidths[col.id])
+          .map(value => value.id)
+
+        while (distributableWidth > 0 && enlargeableColumns.length > 0) {
+          let minEnlargeableAmount = enlargeableColumns.reduce((previousValue, id) => Math.min(previousValue, computedColumnMaxWidths[id] ? computedColumnMaxWidths[id] - updateSizing[id] : distributableWidth), distributableWidth)
+          if (minEnlargeableAmount * enlargeableColumns.length > distributableWidth) {
+            minEnlargeableAmount = distributableWidth / enlargeableColumns.length
+          }
+
+          enlargeableColumns.forEach(id => {
+            updateSizing[id] += minEnlargeableAmount
+          })
+
+          distributableWidth -= minEnlargeableAmount * enlargeableColumns.length
+          enlargeableColumns = enlargeableColumns.filter(id => !computedColumnMaxWidths[id] || updateSizing[id] < computedColumnMaxWidths[id])
+        }
+
+        if (distributableWidth > 0) {
+          updateSizing[columns[columns.length - 1].id] += distributableWidth
+        }
+      }
+      return updateSizing
     }
+  }, [columns, computedColumnMaxWidths, computedColumnMinWidths, tableMinWidth])
 
-    if (focusElement) {
-      currentPage = pageForItem(sortedData, focusElement, entriesPerPage, identifierMapping)
+  const table = useReactTable({
+    getCoreRowModel: getCoreRowModel(),
+    getFilteredRowModel: getFilteredRowModel(),
+    getSortedRowModel: getSortedRowModel(),
+    getPaginationRowModel: getPaginationRowModel(),
+    initialState: initialState,
+    defaultColumn: {
+      minSize: 60,
+      maxSize: 700,
+      ...defaultColumn,
+    },
+    columns,
+    state: {
+      columnSizing,
+      columnSizingInfo,
+      ...state
+    },
+    onColumnSizingInfoChange: setColumnSizingInfo,
+    onColumnSizingChange: updaterOrValue => {
+      setColumnSizing(previous => {
+        const newSizing = typeof updaterOrValue === 'function' ? updaterOrValue(previous) : updaterOrValue
+        return updateColumnSizes(newSizing)
+      })
+    },
+    enableColumnResizing: allowResizing,
+    columnResizeMode: 'onChange',
+    meta: {
+      updateData: (rowIndex, columnId, value) => {
+        setData(old =>
+          old.map((row, index) => {
+            if (index === rowIndex) {
+              return {
+                ...old[rowIndex]!,
+                [columnId]: value,
+              }
+            }
+            return row
+          }))
+      },
+      ...meta,
+    },
+    ...tableOptions,
+  })
+
+  const [hasInitializedSizing, setHasInitializedSizing] = useState(false)
+  useEffect(() => {
+    if (!hasInitializedSizing && ref.current) {
+      setHasInitializedSizing(true)
+      setColumnSizing(updateColumnSizes(columnSizing))
     }
-
-    shownElements = sortedData.slice(currentPage * entriesPerPage, Math.min(sortedData.length, (currentPage + 1) * entriesPerPage))
-  } else {
-    currentPage = 0
-  }
-
-  const headerRow = 'border-b-2'
-  const headerPaddingHead = 'pb-2'
-  const headerPaddingBody = 'pt-2'
-  const cellPadding = 'py-1 px-2'
-
-  const [scrollbarsAutoHeightMin, setScrollbarsAutoHeightMin] = useState(0)
-  const tableRef = useRef<HTMLTableElement>(null)
-
-  const calculateHeight = () => {
-    if (tableRef.current) {
-      const tableHeight = tableRef.current.offsetHeight
-      const offset = 25
-      setScrollbarsAutoHeightMin(tableHeight + offset)
-    }
-  }
+  }, [columnSizing, hasInitializedSizing])
 
   useEffect(() => {
-    calculateHeight()
-
-    // New function to unbind properly
-    const handleResize = () => {
-      calculateHeight()
-    }
-
-    window.addEventListener('resize', handleResize)
+    window.addEventListener('resize', rerender)
 
     return () => {
-      window.removeEventListener('resize', handleResize)
+      window.removeEventListener('resize', rerender)
     }
-  }, [data, currentPage])
+  }, [])
+
+  const columnSizeVars = useMemo(() => {
+    const headers = table.getFlatHeaders()
+    const colSizes: { [key: string]: number } = {}
+    for (let i = 0; i < headers.length; i++) {
+      const header = headers[i]!
+      colSizes[`--header-${header.id}-size`] = header.getSize()
+      colSizes[`--col-${header.column.id}-size`] = header.column.getSize()
+    }
+
+    return colSizes
+  }, [table.getState().columnSizingInfo, table.getState().columnSizing])
 
   return (
-    <div className={clsx('col gap-y-4 overflow-hidden', className)}>
-      <div>
-        <Scrollbars autoHeight autoHeightMin={scrollbarsAutoHeightMin}>
-          <table ref={tableRef} className="w-full mb-[12px]">
-            <thead>
-            <tr className={headerRow}>
-              {header && tableState.selection && (
-                <th className={headerPaddingHead}>
-                  <Checkbox
-                    checked={tableState.selection.hasSelectedSome ? 'indeterminate' : tableState.selection.hasSelectedAll}
-                    onChange={() => updateTableState(changeTableSelectionAll(tableState, data, identifierMapping))}
-                  />
-                </th>
-              )}
-              {header && header.map((value, index) => (
-                <th key={`tableHeader${index}`} className={headerPaddingHead}>
-                  <div className="row justify-start px-2">
-                    {value}
-                  </div>
-                </th>
+    <div ref={ref} className={clsx('col gap-y-4', className)}>
+      <Scrollbars autoHeight={true} autoHide={true}>
+        <table
+          className={clsx(
+            'table-fixed border-collapse mb-1',
+            tableClassName
+          )}
+          style={{
+            ...columnSizeVars,
+            width: Math.max(table.getTotalSize(), ref.current?.offsetWidth ?? table.getTotalSize()),
+          }}
+        >
+          {table.getHeaderGroups().map((headerGroup) => (
+            <colgroup key={headerGroup.id}>
+              {headerGroup.headers.map(header => (
+                <col
+                  key={header.id}
+                  style={{
+                    width: `calc(var(--header-${header?.id}-size) * 1px)`,
+                    minWidth: header.column.columnDef.minSize,
+                    maxWidth: header.column.columnDef.maxSize,
+                  }}
+                />
               ))}
+            </colgroup>
+          ))}
+          <thead>
+          {table.getHeaderGroups().map(headerGroup => (
+            <tr key={headerGroup.id}>
+              {headerGroup.headers.map(header => {
+                return (
+                  <th
+                    key={header.id}
+                    colSpan={header.colSpan}
+                    className={clsx('relative group', (table.options.meta as CustomTableMeta<T>)?.columnClassNames?.[header.id])}
+                  >
+                    <div className="row w-full">
+                      {header.isPlaceholder ? null : (
+                        <div className="row gap-x-1 items-center mb-2 pb-2 border-b-2 w-full">
+                          {header.column.getCanSort() && (
+                            <SortButton
+                              sortDirection={header.column.getIsSorted()}
+                              onClick={() => header.column.toggleSorting()}
+                            />
+                          )}
+                          {flexRender(
+                            header.column.columnDef.header,
+                            header.getContext()
+                          )}
+                          {header.column.getCanFilter() ? (
+                            <div>
+                              Filter
+                              { /* <Filter column={header.column} table={table}/> */}
+                            </div>
+                          ) : null}
+                        </div>
+                      )}
+                      {header.column.getCanResize() && (
+                        <div
+                          onMouseDown={header.getResizeHandler()}
+                          onTouchStart={header.getResizeHandler()}
+                          onDoubleClick={() => header.column.resetSize()}
+                          className="absolute top-0 bottom-4 right-1 w-2 rounded bg-primary cursor-col-resize select-none touch-none opacity-0 group-hover:opacity-100 transition-opacity"
+                        />
+                      )}
+                    </div>
+                  </th>
+                )
+              })}
             </tr>
-            </thead>
-            <tbody>
-            {shownElements.map((value, rowIndex) => (
-              <tr key={identifierMapping(value)}>
-                {tableState.selection && (
-                  <td className={clsx(cellPadding, { [headerPaddingBody]: rowIndex === 0 })}>
-                    <Checkbox
-                      checked={isDataObjectSelected(tableState, value, identifierMapping)}
-                      onChange={() => {
-                        updateTableState(changeTableSelectionSingle(tableState, value, data.length, identifierMapping))
-                      }}
-                    />
-                  </td>
-                )}
-                {rowMappingToCells(value).map((value1, index) => (
-                  <td key={index}
-                      className={clsx(cellPadding, { [headerPaddingBody]: rowIndex === 0 })}>
-                    {value1}
-                  </td>
-                ))}
+          ))}
+          </thead>
+          <tbody>
+          {table.getRowModel().rows.map(row => {
+            return (
+              <tr key={row.id}>
+                {row.getVisibleCells().map(cell => {
+                  return (
+                    <td key={cell.id} className="not-last:pr-2 py-1">
+                      {flexRender(
+                        cell.column.columnDef.cell,
+                        cell.getContext()
+                      )}
+                    </td>
+                  )
+                })}
               </tr>
-            ))}
-            </tbody>
-          </table>
-        </Scrollbars>
-      </div>
+            )
+          })}
+          {range(0, table.getState().pagination.pageSize - table.getRowModel().rows.length - 1, true).map((row, index) => {
+            return (
+              <tr key={'filler-' + index}>
+                {columns.map((column) => {
+                  return (
+                    <td key={column.id} className="not-last:pr-2 py-1">
+                      {fillerRow ? fillerRow(column.id, table) : (<FillerRowElement/>)}
+                    </td>
+                  )
+                })}
+              </tr>
+            )
+          })}
+          </tbody>
+        </table>
+      </Scrollbars>
       <div className="row justify-center">
-        {tableState.pagination && (
-          <Pagination page={currentPage} numberOfPages={pageCount} onPageChanged={page => updateTableState({
-            ...tableState,
-            pagination: { entriesPerPage, currentPage: page }
-          })}/>
-        )}
+        <Pagination
+          pageIndex={table.getState().pagination.pageIndex}
+          pageCount={table.getPageCount()}
+          onPageChanged={page => table.setPageIndex(page)}
+        />
       </div>
     </div>
   )
 }
 
-export type SortButtonProps = Omit<TextButtonProps, 'onClick'> & {
-  ascending?: TableSortingType,
-  onClick: (newTableSorting: TableSortingType) => void,
+export type FilterButtonProps = {}
+
+export const FilterButton = ({})
+
+
+export type TableUncontrolledProps<T> = Omit<TableProps<T>, 'setDate'> & {
+  onChange: (value: T[]) => void,
 }
 
-/**
- * A Extension of the normal button that displays the sorting state right of the content
- */
-export const SortButton = ({
-                             children,
-                             ascending,
-                             color,
-                             onClick,
-                             ...buttonProps
-                           }: SortButtonProps) => {
+export const TableUncontrolled = <T, >({ data, onChange, ...props }: TableUncontrolledProps<T>) => {
+  const [usedDate, setUsedData] = useState<T[]>(data)
+
+  useEffect(() => {
+    setUsedData(data)
+  }, [data])
+
   return (
-    <TextButton
-      color={color}
-      onClick={() => onClick(ascending === 'descending' ? 'ascending' : 'descending')}
-      {...buttonProps}
-    >
-      <div className="row gap-x-2">
-        {children}
-        {ascending === 'ascending' ? <ChevronUp/> : (!ascending ? <ChevronsUpDown/> : <ChevronDown/>)}
-      </div>
-    </TextButton>
+    <Table
+      {...props}
+      data={usedDate}
+      setData={value => {
+        setUsedData(value)
+        onChange(resolveSetState(value, usedDate))
+      }}
+    />
   )
 }
 
+
+export type TableWithSelectionProps<T> = TableProps<T> & {
+  rowSelection: RowSelectionState,
+  selectionRowId?: string,
+}
+
+export const TableWithSelection = <T, >({
+                                          columns,
+                                          state,
+                                          fillerRow,
+                                          rowSelection,
+                                          meta,
+                                          selectionRowId = 'selection',
+                                          ...props
+                                        }: TableWithSelectionProps<T>) => {
+  const columnsWithSelection = useMemo<ColumnDef<T>[]>(() => {
+    return [
+      {
+        id: selectionRowId,
+        header: ({ table }) => {
+          return (
+            <Checkbox
+              checked={table.getIsSomeRowsSelected() ? 'indeterminate' : table.getIsAllRowsSelected()}
+              onChangeTristate={value => {
+                const newValue = !!value
+                table.toggleAllRowsSelected(newValue)
+              }}
+              containerClassName="max-w-6"
+            />
+          )
+        },
+        cell: ({ row }) => {
+          return (
+            <Checkbox
+              disabled={!row.getCanSelect()}
+              checked={row.getIsSelected()}
+              onChange={row.getToggleSelectedHandler()}
+              containerClassName="max-w-6"
+            />
+          )
+        },
+        size: 40,
+        minSize: 40,
+        maxSize: 40,
+        enableResizing: false,
+        enableSorting: false,
+      },
+      ...columns,
+    ]
+  }, [columns])
+
+  return (
+    <Table
+      columns={columnsWithSelection}
+      fillerRow={(columnId, table) => {
+        if(columnId === selectionRowId) {
+          return (<Checkbox checked={false} disabled={true} containerClassName="max-w-6"/>)
+        }
+        return fillerRow ? fillerRow(columnId, table) : (<FillerRowElement/>)
+      }}
+      state={{
+        rowSelection,
+        ...state
+      }}
+      meta={{
+        columnClassNames: {
+          selection: 'overflow-hidden',
+        },
+        ...meta,
+      }}
+      {...props}
+    />
+  )
+}

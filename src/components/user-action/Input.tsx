@@ -90,31 +90,28 @@ const Input = ({
   )
 }
 
-type InputUncontrolledProps = Omit<InputProps, 'value'> & {
-  /**
-   * @default ''
-   */
-  defaultValue?: string,
-}
-
 /**
  * A Component for inputting text or other information
  *
  * Its state is managed by the component itself
  */
 const InputUncontrolled = ({
-                             defaultValue = '',
+                             value = '',
                              onChangeText = noop,
                              ...props
-                           }: InputUncontrolledProps) => {
-  const [value, setValue] = useState(defaultValue)
+                           }: InputProps) => {
+  const [usedValue, setUsedValue] = useState(value)
+
+  useEffect(() => {
+    setUsedValue(value)
+  }, [value])
 
   return (
     <Input
       {...props}
-      value={value}
+      value={usedValue}
       onChangeText={text => {
-        setValue(text)
+        setUsedValue(text)
         onChangeText(text)
       }}
     />

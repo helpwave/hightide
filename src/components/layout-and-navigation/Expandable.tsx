@@ -22,8 +22,8 @@ export type ExpandableProps = PropsWithChildren<{
 }>
 
 const DefaultIcon: IconBuilder = (expanded) => expanded ?
-  (<ChevronUp size={16} className="min-w-[16px]"/>)
-  : (<ChevronDown size={16} className="min-w-[16px]"/>)
+  (<ChevronUp className="min-w-4 w-4"/>)
+  : (<ChevronDown className="min-w-4 w-4"/>)
 
 
 /**

@@ -14,7 +14,7 @@ const CarouselExample = ({
     <Carousel
       {...props}
       blurColor={hasBlur ? 'from-background !block' : 'from-transparent'}
-      heightClassName="h-[16rem]"
+      heightClassName="h-64"
     >
       <div className="row justify-center items-center h-full bg-positive rounded-2xl mx-4">
         <img src="https://helpwave.de/favicon.ico" alt=""/>
