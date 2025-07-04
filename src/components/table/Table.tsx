@@ -36,6 +36,7 @@ import { TableSortButton } from './TableSortButton'
 import { FillerRowElement } from './FillerRowElement'
 import { TableFilters } from './Filter'
 import { useResizeCallbackWrapper } from '../../hooks/useResizeCallbackWrapper'
+import { TableCell } from './TableCell'
 
 declare module '@tanstack/react-table' {
   // eslint-disable-next-line @typescript-eslint/no-unused-vars
@@ -64,9 +65,9 @@ export type TableProps<T> = {
   initialState?: Omit<InitialTableState, 'columnSizing' | 'columnSizingInfo'>,
   className?: string,
   onRowClick?: (row: Row<T>, table: ReactTable<T>) => void,
-  state: Omit<TableState, 'columnSizing' | 'columnSizingInfo'>,
+  state?: Omit<TableState, 'columnSizing' | 'columnSizingInfo'>,
   tableClassName?: string,
-} & Partial<TableOptions<T>>
+} & TableOptions<T>
 
 /**
  * The standard table
@@ -218,6 +219,9 @@ export const Table = <T, >({
     defaultColumn: {
       minSize: 60,
       maxSize: 700,
+      cell: ({ cell }) => {
+        return (<TableCell>{cell.getValue() as string}</TableCell>)
+      },
       ...defaultColumn,
     },
     columns,
