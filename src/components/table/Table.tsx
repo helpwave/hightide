@@ -7,7 +7,7 @@ import type {
   ColumnFiltersState,
   ColumnSizingInfoState,
   ColumnSizingState,
-  FilterFn,
+  FilterFn, FilterFns,
   InitialTableState,
   PaginationState,
   Row,
@@ -37,6 +37,7 @@ import { FillerRowElement } from './FillerRowElement'
 import { TableFilters } from './Filter'
 import { useResizeCallbackWrapper } from '../../hooks/useResizeCallbackWrapper'
 import { TableCell } from './TableCell'
+import type { RowModel } from '@tanstack/table-core/src/types'
 
 declare module '@tanstack/react-table' {
   // eslint-disable-next-line @typescript-eslint/no-unused-vars
@@ -67,6 +68,8 @@ export type TableProps<T> = {
   onRowClick?: (row: Row<T>, table: ReactTable<T>) => void,
   state?: Omit<TableState, 'columnSizing' | 'columnSizingInfo'>,
   tableClassName?: string,
+  filters?: FilterFns,
+  getCoreRowModel?: (table: ReactTable<T>) => () => RowModel<T>,
 } & TableOptions<T>
 
 /**
