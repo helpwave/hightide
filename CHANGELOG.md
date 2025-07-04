@@ -19,6 +19,7 @@ and adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 ### Changed
 
 - Changed hardcoded `px`, or `rem` value in components to spacing scalable alternatives
+- Split uncompiled CSS into many different files for easier readability
 
 ### Fixed
 

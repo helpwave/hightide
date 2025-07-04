@@ -1,0 +1,29 @@
+@layer utilities {
+  .shadow-around {
+    box-shadow: 0 2px 2px 0 rgba(0, 0, 0, 0.02),
+    0 -2px 2px 0 rgba(0, 0, 0, 0.02),
+    2px 0 2px 0 rgba(0, 0, 0, 0.02),
+    -2px 0 2px 0 rgba(0, 0, 0, 0.02);
+  }
+
+  .shadow-around-md {
+    box-shadow: 0 5px 5px 0 rgba(0, 0, 0, 0.02),
+    0 -5px 5px 0 rgba(0, 0, 0, 0.02),
+    5px 0 5px 0 rgba(0, 0, 0, 0.02),
+    -5px 0 5px 0 rgba(0, 0, 0, 0.02);
+  }
+
+  .shadow-around-lg {
+    box-shadow: 0 10px 10px 0 rgba(0, 0, 0, 0.02),
+    0 -10px 10px 0 rgba(0, 0, 0, 0.02),
+    10px 0 10px 0 rgba(0, 0, 0, 0.02),
+    -10px 0 10px 0 rgba(0, 0, 0, 0.02);
+  }
+
+  .shadow-around-xl {
+    box-shadow: 0 20px 20px 0 rgba(0, 0, 0, 0.02),
+    0 -20px 20px 0 rgba(0, 0, 0, 0.02),
+    20px 0 20px 0 rgba(0, 0, 0, 0.02),
+    -20px 0 20px 0 rgba(0, 0, 0, 0.02);
+  }
+}
