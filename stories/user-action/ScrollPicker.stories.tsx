@@ -11,7 +11,7 @@ type Story = StoryObj<typeof meta>;
 
 export const scrollPicker: Story = {
   args: {
-    options: range(0, 59),
+    options: range(60),
     mapping: (value) => value.toString(),
     selected: 55,
     disabled: false

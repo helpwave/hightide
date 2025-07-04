@@ -46,7 +46,7 @@ export const StepperBar = ({
                              className = '',
                            }: PropsForTranslation<StepperBarTranslation, StepperBarProps>) => {
   const translation = useTranslation([formTranslation], overwriteTranslation)
-  const dots = range(0, numberOfSteps)
+  const dots = range(numberOfSteps + 1) // +1 for last finish step
   const { currentStep, seenSteps } = state ?? defaultState
 
   const update = (newStep: number) => {

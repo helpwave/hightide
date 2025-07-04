@@ -59,7 +59,7 @@ export const ScrollPicker = <T, >({
   })
 
   const itemsShownCount = 5
-  const shownItems = getNeighbours(range(0, items.length - 1), currentIndex).map(index => ({
+  const shownItems = getNeighbours(range(items.length), currentIndex).map(index => ({
     name: mapping(items[index]!), index
   }))
 

@@ -11,19 +11,49 @@ export const equalSizeGroups = <T>(array: T[], groupSize: number): T[][] => {
   return groups
 }
 
+export type RangeOptions = {
+  /**  Whether the range can be defined empty via end < start without a warning */
+  allowEmptyRange: boolean,
+  stepSize: number,
+  exclusiveStart: boolean,
+  exclusiveEnd: boolean,
+}
+
+const defaultRangeOptions: RangeOptions = {
+  allowEmptyRange: false,
+  stepSize: 1,
+  exclusiveStart: false,
+  exclusiveEnd: true,
+}
+
 /**
- * @param start
- * @param end inclusive
- * @param allowEmptyRange Whether the range can be defined empty via end < start
+ * @param endOrRange The end value or a range [start, end], end is exclusive
+ * @param options the options for defining the range
  */
-export const range = (start: number, end: number, allowEmptyRange: boolean = false): number[] => {
-  if (end < start) {
+export const range = (endOrRange: number | [number, number], options?: Partial<RangeOptions>): number[] => {
+  const { allowEmptyRange, stepSize, exclusiveStart, exclusiveEnd } = { ...defaultRangeOptions, ...options }
+  let start = 0
+  let end: number
+  if (typeof endOrRange === 'number') {
+    end = endOrRange
+  } else {
+    start = endOrRange[0]
+    end = endOrRange[1]
+  }
+  if (!exclusiveEnd) {
+    end -= 1
+  }
+  if (exclusiveStart) {
+    start += 1
+  }
+
+  if (end - 1 < start) {
     if (!allowEmptyRange) {
-      console.warn(`range: end (${end}) < start (${start}) should be allowed explicitly, set allowEmptyRange to true`)
+      console.warn(`range: end (${end}) < start (${start}) should be allowed explicitly, set options.allowEmptyRange to true`)
     }
     return []
   }
-  return Array.from({ length: end - start + 1 }, (_, index) => index + start)
+  return Array.from({ length: end - start }, (_, index) => index * stepSize + start)
 }
 
 /** Finds the closest match

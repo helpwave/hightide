@@ -383,7 +383,7 @@ export const Carousel = ({
       {dots && (
         <div
           className="row items-center justify-center w-full my-2">
-          {range(0, length - 1).map(index => (
+          {range(length).map(index => (
             <button
               key={index}
               className={clsx('w-8 min-w-8 h-3 min-h-3 first:rounded-l-md last:rounded-r-md', {

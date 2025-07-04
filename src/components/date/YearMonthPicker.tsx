@@ -49,7 +49,7 @@ export const YearMonthPicker = ({
     return null
   }
 
-  const years = range(start.getFullYear(), end.getFullYear())
+  const years = range([start.getFullYear(), end.getFullYear()], { exclusiveEnd: false })
 
   return (
     <div className={clsx('col select-none', className)}>
