@@ -10,6 +10,7 @@ type DataType = {
   name: string,
   age: number,
   street: string,
+  entryDate: Date,
 }
 
 const createRandomDataType = (): DataType => {
@@ -18,16 +19,18 @@ const createRandomDataType = (): DataType => {
     name: faker.person.fullName(),
     street: faker.location.streetAddress(),
     age: faker.number.int(100),
+    entryDate: faker.date.past({ years: 20 })
   }
 }
 
-const exampleData: DataType[] = range(0, 500).map(() => createRandomDataType())
+const exampleData: DataType[] = range(100).map(() => createRandomDataType())
 
 type TranslationType = {
   id: string,
   name: string,
   age: string,
   street: string,
+  entryDate: string,
 }
 
 const defaultTranslation: Translation<TranslationType> = {
@@ -36,12 +39,14 @@ const defaultTranslation: Translation<TranslationType> = {
     name: 'Name',
     age: 'Age',
     street: 'Street',
+    entryDate: 'Entry Date'
   },
   de: {
     id: 'ID',
     name: 'Name',
     age: 'Alter',
     street: 'Straße',
+    entryDate: 'Eintragsdatum'
   }
 }
 
@@ -76,47 +81,93 @@ const TableExample = ({ ...props }: TableExampleProps) => {
       minSize: 200,
       size: 250,
       maxSize: 300,
+      meta: {
+        filterType: 'text'
+      },
     },
     {
       id: 'name',
       header: translation('name'),
+      cell: ({ cell }) => (
+        <span className="block max-w-full overflow-ellipsis truncate">
+            {cell.getValue() as string}
+        </span>
+      ),
       footer: props => props.column.id,
       accessorKey: 'name',
       sortingFn: 'textCaseSensitive',
       minSize: 150,
       size: 200,
       maxSize: 400,
+      meta: {
+        filterType: 'text'
+      },
     },
     {
       id: 'age',
       header: translation('age'),
+      cell: ({ cell }) => (
+        <span className="block max-w-full overflow-ellipsis truncate">
+            {cell.getValue() as string}
+        </span>
+      ),
       footer: props => props.column.id,
       accessorKey: 'age',
       sortingFn: 'alphanumeric',
       minSize: 140,
       size: 160,
       maxSize: 250,
+      meta: {
+        filterType: 'range'
+      },
     },
     {
       id: 'street',
       header: translation('street'),
+      cell: ({ cell }) => (
+        <span className="block max-w-full overflow-ellipsis truncate">
+            {cell.getValue() as string}
+        </span>
+      ),
       footer: props => props.column.id,
       accessorKey: 'street',
       sortingFn: 'text',
       minSize: 250,
       size: 250,
-      maxSize: 600,
+      maxSize: 400,
+      meta: {
+        filterType: 'text'
+      },
+    },
+    {
+      id: 'entryDate',
+      header: translation('entryDate'),
+      cell: ({ cell }) => (
+        <span className="block max-w-full overflow-ellipsis truncate">
+            {(cell.getValue() as Date).toLocaleDateString()}
+        </span>
+      ),
+      footer: props => props.column.id,
+      accessorKey: 'entryDate',
+      sortingFn: 'datetime',
+      minSize: 250,
+      size: 250,
+      maxSize: 400,
+      filterFn: 'dateRange',
+      meta: {
+        filterType: 'dateRange'
+      },
     },
   ], [translation])
 
   return (
-    <div className="col gap-y-2">
+    <div className="col gap-y-3">
       <div className="row justify-between items-center">
-        <h2 className="textstyle-title-md h-10">Address book</h2>
+        <h2 className="textstyle-title-md">Address book</h2>
         <div className="row items-center">
           {Object.keys(selection).length > 0 && (
             <SolidButton size="small" color="negative" onClick={() => {
-              setData(prevState => prevState.filter((_, index) => !!selection[index]))
+              setData(prevState => prevState.filter((_, index) => !selection[index]))
               setSelection({})
             }}>
               Delete
@@ -128,18 +179,23 @@ const TableExample = ({ ...props }: TableExampleProps) => {
           >
             Add Item
           </SolidButton>
+          <SolidButton
+            size="small"
+            onClick={() => setData(data => [...data, ...range(1000).map(_ => createRandomDataType())])}
+          >
+            Add 1000 Items
+          </SolidButton>
         </div>
       </div>
       <TableWithSelection
         {...props}
         data={data}
-        setData={setData}
         columns={columns}
         rowSelection={selection}
         onRowSelectionChange={setSelection}
         initialState={{
           pagination: {
-            pageSize: 5,
+            pageSize: 10,
           },
         }}
       />

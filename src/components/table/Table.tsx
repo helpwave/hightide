@@ -1,15 +1,19 @@
-import type { Dispatch, ReactNode, SetStateAction } from 'react'
-import { useEffect, useMemo, useRef, useState } from 'react'
-import { Pagination } from './Pagination'
+import type { ReactNode } from 'react'
+import { useCallback, useEffect, useMemo, useRef, useState } from 'react'
+import { Pagination } from '../layout-and-navigation/Pagination'
 import clsx from 'clsx'
 import type {
   ColumnDef,
+  ColumnFiltersState,
   ColumnSizingInfoState,
   ColumnSizingState,
+  FilterFn,
   InitialTableState,
+  PaginationState,
+  Row,
+  RowData,
   RowSelectionState,
-  SortDirection,
-  TableMeta,
+  Table as ReactTable,
   TableOptions,
   TableState
 } from '@tanstack/react-table'
@@ -21,90 +25,45 @@ import {
   getSortedRowModel,
   useReactTable
 } from '@tanstack/react-table'
-import { resolveSetState } from '../../util/resolveSetState'
 import { range } from '../../util/array'
-import type { IconButtonProps } from '../user-action/Button'
-import { IconButton } from '../user-action/Button'
-import { ChevronDown, ChevronsUpDown, ChevronUp } from 'lucide-react'
 import { Scrollbars } from 'react-custom-scrollbars-2'
-import { useRerender } from '../../hooks/useRerender'
 import { Checkbox } from '../user-action/Checkbox'
 import { clamp } from '../../util/math'
+import { noop } from '../../util/noop'
+import type { TableFilterType } from './TableFilterButton'
+import { TableFilterButton } from './TableFilterButton'
+import { TableSortButton } from './TableSortButton'
+import { FillerRowElement } from './FillerRowElement'
+import { TableFilters } from './Filter'
+import { useResizeCallbackWrapper } from '../../hooks/useResizeCallbackWrapper'
 
-interface CustomTableMeta<T> extends TableMeta<T> {
-  columnClassNames?: Record<string, string>,
-}
-
-/*
- * SortButton
- */
-
-export type SortButtonProps = IconButtonProps & {
-  sortDirection: SortDirection | false,
-  invert?: boolean,
-}
-
-/**
- * An Extension of the normal button that displays the sorting state right of the content
- */
-export const SortButton = ({
-                             sortDirection,
-                             invert = false,
-                             color = 'neutral',
-                             className,
-                             ...buttonProps
-                           }: SortButtonProps) => {
-  let icon = <ChevronsUpDown className="w-full h-full"/>
-  if (sortDirection) {
-    let usedSortDirection = sortDirection
-    if (invert) {
-      usedSortDirection = usedSortDirection === 'desc' ? 'asc' : 'desc'
-    }
-    icon = usedSortDirection === 'asc' ? (<ChevronUp className="w-full h-full"/>) : (
-      <ChevronDown className="w-full h-full"/>)
+declare module '@tanstack/react-table' {
+  // eslint-disable-next-line @typescript-eslint/no-unused-vars
+  interface ColumnMeta<TData extends RowData, TValue> {
+    className?: string,
+    filterType?: TableFilterType,
   }
 
-  return (
-    <IconButton
-      size="tiny"
-      color={color}
-      className={clsx(className)}
-      {...buttonProps}
-    >
-      {icon}
-    </IconButton>
-  )
-}
 
-/*
- * FillerRowElement
- */
+  // eslint-disable-next-line @typescript-eslint/no-unused-vars
+  interface TableMeta<TData> {
+    headerRowClassName?: TableFilterType,
+    bodyRowClassName?: string,
+  }
 
-export type FillerRowElementProps = {
-  className?: string,
-}
-export const FillerRowElement = ({
-                                   className
-                                 }: FillerRowElementProps) => {
-  return (
-    <div className={clsx('flex flex-row items-center w-1/2 h-4 text-disabled-text font-bold', className)}>
-      -
-    </div>
-  )
-}
 
-/*
- * Table
- */
+  interface FilterFns {
+    dateRange: FilterFn<unknown>,
+  }
+}
 
 export type TableProps<T> = {
   data: T[],
-  setData: Dispatch<SetStateAction<T[]>>,
   columns: ColumnDef<T>[],
-  fillerRow?: (columnId: string, table: Table<T>) => ReactNode,
+  fillerRow?: (columnId: string, table: ReactTable<T>) => ReactNode,
   initialState?: Omit<InitialTableState, 'columnSizing' | 'columnSizingInfo'>,
-  allowResizing?: boolean,
   className?: string,
+  onRowClick?: (row: Row<T>, table: ReactTable<T>) => void,
   state: Omit<TableState, 'columnSizing' | 'columnSizingInfo'>,
   tableClassName?: string,
 } & Partial<TableOptions<T>>
@@ -113,20 +72,19 @@ export type TableProps<T> = {
  * The standard table
  */
 export const Table = <T, >({
-                             setData,
+                             data,
                              fillerRow,
                              initialState,
-                             allowResizing = false,
+                             onRowClick = noop,
                              className,
                              tableClassName,
                              defaultColumn,
-                             meta,
                              state,
                              columns,
                              ...tableOptions
                            }: TableProps<T>) => {
-  const rerender = useRerender()
   const ref = useRef<HTMLDivElement>(null)
+  const tableRef = useRef<HTMLTableElement>(null)
 
   const [columnSizing, setColumnSizing] = useState<ColumnSizingState>(columns.reduce((previousValue, currentValue) => {
     return {
@@ -135,6 +93,12 @@ export const Table = <T, >({
     }
   }, {}))
   const [columnSizingInfo, setColumnSizingInfo] = useState<ColumnSizingInfoState>()
+  const [pagination, setPagination] = useState<PaginationState>({
+    pageSize: 10,
+    pageIndex: 0,
+    ...initialState?.pagination
+  })
+  const [columnFilters, setColumnFilters] = useState<ColumnFiltersState>(initialState?.columnFilters)
 
   const computedColumnMinWidths = useMemo(() => {
     return columns.reduce((previousValue, column) => {
@@ -164,6 +128,7 @@ export const Table = <T, >({
   const updateColumnSizes = useMemo(() => {
     return (previous: ColumnSizingState) => {
       const updateSizing = {
+        ...columnSizing,
         ...previous
       }
 
@@ -241,9 +206,10 @@ export const Table = <T, >({
       }
       return updateSizing
     }
-  }, [columns, computedColumnMaxWidths, computedColumnMinWidths, tableMinWidth])
+  }, [columns, computedColumnMaxWidths, computedColumnMinWidths, tableMinWidth]) // eslint-disable-line react-hooks/exhaustive-deps
 
   const table = useReactTable({
+    data,
     getCoreRowModel: getCoreRowModel(),
     getFilteredRowModel: getFilteredRowModel(),
     getSortedRowModel: getSortedRowModel(),
@@ -258,32 +224,44 @@ export const Table = <T, >({
     state: {
       columnSizing,
       columnSizingInfo,
+      pagination,
+      columnFilters,
       ...state
     },
-    onColumnSizingInfoChange: setColumnSizingInfo,
+    filterFns: {
+      ...tableOptions?.filterFns,
+      dateRange: TableFilters.dateRange,
+    },
+    onColumnSizingInfoChange: updaterOrValue => {
+      setColumnSizingInfo(updaterOrValue)
+      if (tableOptions.onColumnSizingInfoChange) {
+        tableOptions?.onColumnSizingInfoChange(updaterOrValue)
+      }
+    },
     onColumnSizingChange: updaterOrValue => {
       setColumnSizing(previous => {
         const newSizing = typeof updaterOrValue === 'function' ? updaterOrValue(previous) : updaterOrValue
         return updateColumnSizes(newSizing)
       })
+      if (tableOptions.onColumnSizingChange) {
+        tableOptions.onColumnSizingChange(updaterOrValue)
+      }
     },
-    enableColumnResizing: allowResizing,
+    onPaginationChange: updaterOrValue => {
+      setPagination(updaterOrValue)
+      if (tableOptions.onPaginationChange) {
+        tableOptions.onPaginationChange(updaterOrValue)
+      }
+    },
+    onColumnFiltersChange: updaterOrValue => {
+      setColumnFilters(updaterOrValue)
+      table.toggleAllRowsSelected(false)
+      if (tableOptions.onColumnFiltersChange) {
+        tableOptions.onColumnFiltersChange(updaterOrValue)
+      }
+    },
+    autoResetPageIndex: false,
     columnResizeMode: 'onChange',
-    meta: {
-      updateData: (rowIndex, columnId, value) => {
-        setData(old =>
-          old.map((row, index) => {
-            if (index === rowIndex) {
-              return {
-                ...old[rowIndex]!,
-                [columnId]: value,
-              }
-            }
-            return row
-          }))
-      },
-      ...meta,
-    },
     ...tableOptions,
   })
 
@@ -291,17 +269,31 @@ export const Table = <T, >({
   useEffect(() => {
     if (!hasInitializedSizing && ref.current) {
       setHasInitializedSizing(true)
-      setColumnSizing(updateColumnSizes(columnSizing))
+      table.setColumnSizing(updateColumnSizes(columnSizing))
     }
-  }, [columnSizing, hasInitializedSizing])
+  }, [columnSizing, hasInitializedSizing]) // eslint-disable-line react-hooks/exhaustive-deps
 
+  useResizeCallbackWrapper(useCallback(() => {
+    table.setColumnSizing(updateColumnSizes)
+  }, [updateColumnSizes])) // eslint-disable-line react-hooks/exhaustive-deps
+
+  const pageCount = table.getPageCount()
   useEffect(() => {
-    window.addEventListener('resize', rerender)
-
-    return () => {
-      window.removeEventListener('resize', rerender)
+    const totalPages = pageCount
+    if (totalPages === 0) {
+      if (pagination.pageIndex !== 0) {
+        table.setPagination(prevState => ({
+          ...prevState,
+          pageIndex: 0,
+        }))
+      }
+    } else if (pagination.pageIndex >= totalPages) {
+      table.setPagination((prev) => ({
+        ...prev,
+        pageIndex: totalPages - 1,
+      }))
     }
-  }, [])
+  }, [data, pageCount, pagination.pageSize, pagination.pageIndex]) // eslint-disable-line react-hooks/exhaustive-deps
 
   const columnSizeVars = useMemo(() => {
     const headers = table.getFlatHeaders()
@@ -313,16 +305,14 @@ export const Table = <T, >({
     }
 
     return colSizes
-  }, [table.getState().columnSizingInfo, table.getState().columnSizing])
+  }, [table.getState().columnSizingInfo, table.getState().columnSizing]) // eslint-disable-line react-hooks/exhaustive-deps
 
   return (
     <div ref={ref} className={clsx('col gap-y-4', className)}>
-      <Scrollbars autoHeight={true} autoHide={true}>
+      <Scrollbars autoHeight={true} autoHeightMax={tableRef.current?.offsetHeight} autoHide={true}>
         <table
-          className={clsx(
-            'table-fixed border-collapse mb-1',
-            tableClassName
-          )}
+          ref={tableRef}
+          className={clsx(tableClassName)}
           style={{
             ...columnSizeVars,
             width: Math.max(table.getTotalSize(), ref.current?.offsetWidth ?? table.getTotalSize()),
@@ -344,44 +334,52 @@ export const Table = <T, >({
           ))}
           <thead>
           {table.getHeaderGroups().map(headerGroup => (
-            <tr key={headerGroup.id}>
+            <tr key={headerGroup.id} className={table.options.meta?.headerRowClassName}>
               {headerGroup.headers.map(header => {
                 return (
                   <th
                     key={header.id}
                     colSpan={header.colSpan}
-                    className={clsx('relative group', (table.options.meta as CustomTableMeta<T>)?.columnClassNames?.[header.id])}
+                    className={clsx('relative group', header.column.columnDef.meta?.className)}
                   >
                     <div className="row w-full">
                       {header.isPlaceholder ? null : (
-                        <div className="row gap-x-1 items-center mb-2 pb-2 border-b-2 w-full">
+                        <div className="row gap-x-1 items-center">
                           {header.column.getCanSort() && (
-                            <SortButton
+                            <TableSortButton
                               sortDirection={header.column.getIsSorted()}
                               onClick={() => header.column.toggleSorting()}
                             />
                           )}
+                          {header.column.getCanFilter() && header.column.columnDef.meta?.filterType ? (
+                            <TableFilterButton
+                              column={header.column}
+                              filterType={header.column.columnDef.meta.filterType}
+                            />
+                          ) : null}
                           {flexRender(
                             header.column.columnDef.header,
                             header.getContext()
                           )}
-                          {header.column.getCanFilter() ? (
-                            <div>
-                              Filter
-                              { /* <Filter column={header.column} table={table}/> */}
-                            </div>
-                          ) : null}
                         </div>
                       )}
-                      {header.column.getCanResize() && (
-                        <div
-                          onMouseDown={header.getResizeHandler()}
-                          onTouchStart={header.getResizeHandler()}
-                          onDoubleClick={() => header.column.resetSize()}
-                          className="absolute top-0 bottom-4 right-1 w-2 rounded bg-primary cursor-col-resize select-none touch-none opacity-0 group-hover:opacity-100 transition-opacity"
-                        />
-                      )}
                     </div>
+                    {header.column.getCanResize() && (
+                      <div
+                        onMouseDown={header.getResizeHandler()}
+                        onTouchStart={header.getResizeHandler()}
+                        onDoubleClick={() => {
+                          header.column.resetSize()
+                        }}
+                        className="table-resize-indicator w-2 rounded bg-primary cursor-col-resize select-none touch-none opacity-0 group-hover:opacity-100 transition-opacity"
+                        style={{
+                          opacity: !columnSizingInfo?.columnSizingStart ?
+                            undefined : (columnSizingInfo?.columnSizingStart?.findIndex(([id, _]) => id === header.column.id) !== -1 ?
+                              1 : (columnSizingInfo?.columnSizingStart?.length !== 0 ?
+                                0 : undefined)),
+                        }}
+                      />
+                    )}
                   </th>
                 )
               })}
@@ -391,10 +389,10 @@ export const Table = <T, >({
           <tbody>
           {table.getRowModel().rows.map(row => {
             return (
-              <tr key={row.id}>
+              <tr key={row.id} onClick={() => onRowClick(row, table)} className={table.options.meta?.bodyRowClassName}>
                 {row.getVisibleCells().map(cell => {
                   return (
-                    <td key={cell.id} className="not-last:pr-2 py-1">
+                    <td key={cell.id}>
                       {flexRender(
                         cell.column.columnDef.cell,
                         cell.getContext()
@@ -405,12 +403,12 @@ export const Table = <T, >({
               </tr>
             )
           })}
-          {range(0, table.getState().pagination.pageSize - table.getRowModel().rows.length - 1, true).map((row, index) => {
+          {range(table.getState().pagination.pageSize - table.getRowModel().rows.length, { allowEmptyRange: true }).map((row, index) => {
             return (
-              <tr key={'filler-' + index}>
+              <tr key={'filler-row-' + index}>
                 {columns.map((column) => {
                   return (
-                    <td key={column.id} className="not-last:pr-2 py-1">
+                    <td key={column.id}>
                       {fillerRow ? fillerRow(column.id, table) : (<FillerRowElement/>)}
                     </td>
                   )
@@ -432,16 +430,10 @@ export const Table = <T, >({
   )
 }
 
-export type FilterButtonProps = {}
 
-export const FilterButton = ({})
+export type TableUncontrolledProps<T> = TableProps<T>
 
-
-export type TableUncontrolledProps<T> = Omit<TableProps<T>, 'setDate'> & {
-  onChange: (value: T[]) => void,
-}
-
-export const TableUncontrolled = <T, >({ data, onChange, ...props }: TableUncontrolledProps<T>) => {
+export const TableUncontrolled = <T, >({ data, ...props }: TableUncontrolledProps<T>) => {
   const [usedDate, setUsedData] = useState<T[]>(data)
 
   useEffect(() => {
@@ -452,10 +444,6 @@ export const TableUncontrolled = <T, >({ data, onChange, ...props }: TableUncont
     <Table
       {...props}
       data={usedDate}
-      setData={value => {
-        setUsedData(value)
-        onChange(resolveSetState(value, usedDate))
-      }}
     />
   )
 }
@@ -471,8 +459,9 @@ export const TableWithSelection = <T, >({
                                           state,
                                           fillerRow,
                                           rowSelection,
-                                          meta,
                                           selectionRowId = 'selection',
+                                          onRowClick = noop,
+                                          meta,
                                           ...props
                                         }: TableWithSelectionProps<T>) => {
   const columnsWithSelection = useMemo<ColumnDef<T>[]>(() => {
@@ -501,21 +490,21 @@ export const TableWithSelection = <T, >({
             />
           )
         },
-        size: 40,
-        minSize: 40,
-        maxSize: 40,
+        size: 60,
+        minSize: 60,
+        maxSize: 60,
         enableResizing: false,
         enableSorting: false,
       },
       ...columns,
     ]
-  }, [columns])
+  }, [columns, selectionRowId])
 
   return (
     <Table
       columns={columnsWithSelection}
       fillerRow={(columnId, table) => {
-        if(columnId === selectionRowId) {
+        if (columnId === selectionRowId) {
           return (<Checkbox checked={false} disabled={true} containerClassName="max-w-6"/>)
         }
         return fillerRow ? fillerRow(columnId, table) : (<FillerRowElement/>)
@@ -524,10 +513,12 @@ export const TableWithSelection = <T, >({
         rowSelection,
         ...state
       }}
+      onRowClick={(row, table) => {
+        row.toggleSelected()
+        onRowClick(row, table)
+      }}
       meta={{
-        columnClassNames: {
-          selection: 'overflow-hidden',
-        },
+        bodyRowClassName: 'cursor-pointer',
         ...meta,
       }}
       {...props}

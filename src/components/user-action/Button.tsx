@@ -322,9 +322,9 @@ const IconButton = ({
       className={clsx(
         {
           'text-disabled-text bg-disabled-background cursor-not-allowed': disabled && color !== 'transparent',
-          'text-disabled-text cursor-not-allowed': disabled && color === 'transparent',
-          [clsx(colorClasses, 'hover:brightness-90')]: !disabled,
+          'text-disabled-text cursor-not-allowed opacity-70': disabled && color === 'transparent',
           'hover:bg-button-text-hover-background': !disabled && color === 'transparent',
+          [clsx(colorClasses, 'hover:brightness-90')]: !disabled,
         },
         ButtonUtil.iconPaddingMapping[size],
         className
