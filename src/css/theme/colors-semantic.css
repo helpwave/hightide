@@ -1,0 +1,99 @@
+@import './variants.css';
+@import './colors-basic.css';
+
+/*
+ * default light-theme sematic colors
+ */
+@theme {
+  --color-text-dark: #1A1A1A;
+  --color-text-light: #E6E6E6;
+  --color-text-default: var(--color-text-dark);
+
+  --color-primary: var(--color-purple-500);
+  --color-on-primary: var(--color-text-light);
+  --color-secondary: #11243E;
+  --color-on-secondary: var(--color-text-light);
+  --color-warning: var(--color-yellow-500);
+  --color-on-warning: var(--color-text-light);
+  --color-positive: var(--color-green-500);
+  --color-on-positive: var(--color-text-light);
+  --color-negative: var(--color-red-500);
+  --color-on-negative: var(--color-text-light);
+  --color-negative-border: var(--color-negative);
+  --color-negative-border-hover: var(--color-red-700);
+  --color-surface: #FFFFFF;
+  --color-on-surface: var(--color-text-dark);
+  --color-surface-variant: #F8F8F8;
+  --color-surface-warning: #FBECD9;
+  --color-highlight: #3272DF;
+  --color-background: #EEEEEE;
+  --color-on-background: var(--color-text-dark);
+
+  --color-female: var(--color-red-400);
+  --color-female-outline: var(--color-red-300);
+  --color-female-surface: var(--color-red-100);
+  --color-female-background: var(--color-red-50);
+
+  --color-male: var(--color-blue-400);
+  --color-male-outline: var(--color-blue-300);
+  --color-male-surface: var(--color-blue-100);
+  --color-male-background: var(--color-blue-50);
+
+  --color-neutral: #4D4D4D;
+  --color-neutral-outline: #B3B3B3;
+  --color-neutral-surface: #E6E6E6;
+  --color-neutral-background: #F8F8F8;
+
+  --color-text-primary: var(--color-text-default);
+  --color-text-secondary: #666666;
+  --color-text-tertiary: #B3B3B3;
+  --color-text-highlight: #3272DF;
+  --color-text-label: #4D4D4D;
+  --color-icon-primary: var(--color-text-primary);
+  --color-icon-secondary: var(--color-text-secondary);
+  --color-icon-highlight: var(--color-text-highlight);
+  --color-divider: #E6E6E6;
+  --color-description: #555555;
+  --color-outline: #E6E6E6;
+  --color-outline-variant: #CCCCCC;
+  --color-disabled-background: #BBBBBB;
+  --color-disabled-text: #555555;
+  --color-disabled-icon: #555555;
+  --color-disabled-border: #999999;
+  --color-disabled-outline: #999999;
+  --color-border: #CCCCCC;
+
+  --color-focus: var(--color-purple-400);
+}
+
+/* non light-theme overrides */
+@layer base {
+  /* dark theme */
+  @variant dark {
+    --color-text-default: var(--color-text-light);
+
+    --color-surface: #333333;
+    --color-on-surface: var(--color-text-light);
+    --color-surface-variant: #494949;
+    --color-surface-warning: #FBECD9;
+    --color-text-label: #CFCFCF;
+    --color-highlight: #3272DF;
+    --color-background: #222222;
+    --color-on-background: var(--color-text-light);
+    --color-border: #444444;
+
+    --color-neutral: #4D4D4D;
+    --color-neutral-outline: #B3B3B3;
+    --color-neutral-surface: #E6E6E6;
+    --color-neutral-background: #F8F8F8;
+
+    --color-text-primary: var(--color-text-light);
+    --color-text-secondary: #666666;
+    --color-text-tertiary: #B3B3B3;
+    --color-text-highlight: #3272DF;
+    --color-description: #999999;
+
+    --color-disabled-background: #555555;
+    --color-disabled-text: #999999;
+  }
+}

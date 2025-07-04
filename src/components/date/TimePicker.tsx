@@ -27,8 +27,8 @@ export const TimePicker = ({
   const hourRef = useRef<HTMLButtonElement>(null)
 
   const isPM = time.getHours() >= 11
-  const hours = is24HourFormat ? range(0, 23) : range(1, 12)
-  let minutes = range(0, 59)
+  const hours = is24HourFormat ? range(24) : range([1, 12], { exclusiveEnd: false })
+  let minutes = range(60)
 
   useEffect(() => {
     const scrollToItem = () => {

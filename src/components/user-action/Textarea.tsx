@@ -1,7 +1,7 @@
 import type { TextareaHTMLAttributes } from 'react'
 import { useEffect, useState } from 'react'
 import clsx from 'clsx'
-import { useSaveDelay } from '../../hooks/useSaveDelay'
+import { useDelay, type UseDelayOptions } from '../../hooks/useDelay'
 import { noop } from '../../util/noop'
 import type { LabelProps } from './Label'
 import { Label } from './Label'
@@ -16,6 +16,7 @@ export type TextareaProps = {
   onChangeText?: (text: string) => void,
   disclaimer?: string,
   onEditCompleted?: (text: string) => void,
+  saveDelayOptions?: UseDelayOptions,
   defaultStyle?: boolean,
 } & Omit<TextareaHTMLAttributes<HTMLTextAreaElement>, 'value'>
 
@@ -34,16 +35,17 @@ export const Textarea = ({
                            disclaimer,
                            onBlur = noop,
                            onEditCompleted = noop,
+                           saveDelayOptions,
                            defaultStyle = true,
                            className,
                            ...props
                          }: TextareaProps) => {
   const [hasFocus, setHasFocus] = useState(false)
-  const { restartTimer, clearUpdateTimer } = useSaveDelay(() => undefined, 3000)
+  const { restartTimer, clearTimer } = useDelay(saveDelayOptions)
 
   const onEditCompletedWrapper = (text: string) => {
     onEditCompleted(text)
-    clearUpdateTimer()
+    clearTimer()
   }
 
   return (

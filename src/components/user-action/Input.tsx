@@ -1,9 +1,40 @@
-import React, { forwardRef, type InputHTMLAttributes, useEffect, useRef, useState } from 'react'
+import React, { forwardRef, type InputHTMLAttributes, useEffect, useImperativeHandle, useRef, useState } from 'react'
 import clsx from 'clsx'
-import { useSaveDelay } from '../../hooks/useSaveDelay'
+import type { UseDelayOptionsResolved } from '../../hooks/useDelay'
+import { useDelay } from '../../hooks/useDelay'
 import { noop } from '../../util/noop'
 import type { LabelProps } from './Label'
 import { Label } from './Label'
+import { useFocusManagement } from '../../hooks/useFocusManagement'
+import { useFocusOnceVisible } from '../../hooks/useFocusOnceVisible'
+
+type GetInputClassNameProps = {
+  disabled?: boolean,
+  hasError?: boolean,
+}
+const getInputClassName = ({ disabled = false, hasError = false }: GetInputClassNameProps) => {
+  return clsx(
+    'px-2 py-1.5 rounded-md border-2',
+    {
+      'bg-surface text-on-surface hover:border-primary focus:border-primary': !disabled && !hasError,
+      'bg-on-negative text-negative border-negative-border hover:border-negative-border-hover': !disabled && hasError,
+      'bg-disabled-background text-disabled-text border-disabled-border': disabled,
+    }
+  )
+}
+
+export type EditCompleteOptionsResolved = {
+  onBlur: boolean,
+  afterDelay: boolean,
+} & Omit<UseDelayOptionsResolved, 'disabled'>
+
+export type EditCompleteOptions = Partial<EditCompleteOptionsResolved>
+
+const defaultEditCompleteOptions: EditCompleteOptionsResolved = {
+  onBlur: true,
+  afterDelay: true,
+  delay: 2500
+}
 
 export type InputProps = {
   /**
@@ -19,8 +50,10 @@ export type InputProps = {
   onChangeText?: (text: string) => void,
   className?: string,
   onEditCompleted?: (text: string) => void,
+  allowEnterComplete?: boolean,
   expanded?: boolean,
   containerClassName?: string,
+  editCompleteOptions?: EditCompleteOptions,
 } & Omit<InputHTMLAttributes<HTMLInputElement>, 'label'>
 
 /**
@@ -28,74 +61,86 @@ export type InputProps = {
  *
  * Its state is managed must be managed by the parent
  */
-const Input = ({
-                 id,
-                 type = 'text',
-                 value,
-                 label,
-                 onChange = noop,
-                 onChangeText = noop,
-                 onEditCompleted,
-                 className = '',
-                 expanded = true,
-                 autoFocus,
-                 onBlur,
-                 containerClassName,
-                 ...restProps
-               }: InputProps) => {
+const Input = forwardRef<HTMLInputElement, InputProps>(function Input({
+                                                          id,
+                                                          type = 'text',
+                                                          value,
+                                                          label,
+                                                          onChange = noop,
+                                                          onChangeText = noop,
+                                                          onEditCompleted,
+                                                          className = '',
+                                                          allowEnterComplete = true,
+                                                          expanded = true,
+                                                          autoFocus = false,
+                                                          onBlur,
+                                                          editCompleteOptions,
+                                                          containerClassName,
+                                                          disabled,
+                                                          ...restProps
+                                                        }, forwardedRef) {
+  const { onBlur: allowEditCompleteOnBlur, afterDelay, delay } = { ...defaultEditCompleteOptions, ...editCompleteOptions }
+
   const {
     restartTimer,
-    clearUpdateTimer
-  } = useSaveDelay(() => undefined, 3000)
-  const ref = useRef<HTMLInputElement>(null)
+    clearTimer
+  } = useDelay({ delay, disabled: !afterDelay })
 
-  useEffect(() => {
-    if(autoFocus) {
-      ref.current?.focus()
+  const innerRef = useRef<HTMLInputElement>(null)
+  const { focusNext } = useFocusManagement()
+
+  useFocusOnceVisible(innerRef, !autoFocus)
+  useImperativeHandle(forwardedRef, () => innerRef.current)
+
+  const handleKeyDown = (e: React.KeyboardEvent<HTMLInputElement>) => {
+    if (e.key === 'Enter' && !e.shiftKey) {
+      e.preventDefault()
+      innerRef.current?.blur()
+      focusNext()
     }
-  }, [autoFocus])
+  }
 
   return (
     <div className={clsx({ 'w-full': expanded }, containerClassName)}>
-      {label && <Label {...label} htmlFor={id} className={clsx('mb-1', label.className)}/>}
+      {label && <Label {...label} htmlFor={id} className={clsx('mb-1', label.className)} />}
       <input
-        ref={ref}
+        {...restProps}
+        ref={innerRef}
         value={value}
         id={id}
         type={type}
-        className={className}
+        disabled={disabled}
+        className={clsx(getInputClassName({ disabled }), className)}
+        onKeyDown={allowEnterComplete ? handleKeyDown : undefined}
         onBlur={event => {
-          if (onBlur) {
-            onBlur(event)
-          }
-          if (onEditCompleted) {
+          onBlur?.(event)
+          if (onEditCompleted && allowEditCompleteOnBlur) {
             onEditCompleted(event.target.value)
-            clearUpdateTimer()
+            clearTimer()
           }
         }}
         onChange={e => {
           const value = e.target.value
           if (onEditCompleted) {
             restartTimer(() => {
-              onEditCompleted(value)
-              clearUpdateTimer()
+              if(innerRef.current){
+                innerRef.current.blur()
+                if(!allowEditCompleteOnBlur) {
+                  onEditCompleted(value)
+                }
+              } else {
+                onEditCompleted(value)
+              }
             })
           }
           onChange(e)
           onChangeText(value)
         }}
-        {...restProps}
       />
     </div>
   )
-}
+})
 
-type InputUncontrolledProps = Omit<InputProps, 'value'> & {
-  /**
-   * @default ''
-   */
-  defaultValue?: string,
-}
 
 /**
  * A Component for inputting text or other information
@@ -103,18 +148,22 @@ type InputUncontrolledProps = Omit<InputProps, 'value'> & {
  * Its state is managed by the component itself
  */
 const InputUncontrolled = ({
-                             defaultValue = '',
+                             value = '',
                              onChangeText = noop,
                              ...props
-                           }: InputUncontrolledProps) => {
-  const [value, setValue] = useState(defaultValue)
+                           }: InputProps) => {
+  const [usedValue, setUsedValue] = useState(value)
+
+  useEffect(() => {
+    setUsedValue(value)
+  }, [value])
 
   return (
     <Input
       {...props}
-      value={value}
+      value={usedValue}
       onChangeText={text => {
-        setValue(text)
+        setUsedValue(text)
         onChangeText(text)
       }}
     />
@@ -139,18 +188,17 @@ const FormInput = forwardRef<HTMLInputElement, FormInputProps>(function FormInpu
                                                                                     errorClassName,
                                                                                     containerClassName,
                                                                                     required,
+                                                                                    disabled,
                                                                                     ...restProps
                                                                                   }, ref) {
   const input = (
     <input
+      {...restProps}
       ref={ref}
       id={id}
-      {...restProps}
+      disabled={disabled}
       className={clsx(
-        {
-          'focus:border-primary focus:ring-primary': !errorText,
-          'focus:border-negative focus:ring-negative text-negative': !!errorText,
-        },
+        getInputClassName({ disabled, hasError: !!errorText }),
         className
       )}
     />

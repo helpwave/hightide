@@ -7,7 +7,7 @@
     "url": "git+https://github.com/helpwave/hightide.git"
   },
   "license": "MPL-2.0",
-  "version": "0.1.11",
+  "version": "0.1.12",
   "files": [
     "dist"
   ],
@@ -25,7 +25,7 @@
   "scripts": {
     "clean": "rm -rf dist",
     "build-css": "npx @tailwindcss/cli -i ./src/css/globals.css -o ./dist/css/globals.css",
-    "build": "npm run clean && npm run generate-barrels && tsup && npm run build-css && cp -R ./src/css/. ./dist/css/uncompiled/",
+    "build": "npm run clean && npm run generate-barrels && tsup && npm run build-css && cp -R ./src/css/ ./dist/css/uncompiled/",
     "storybook": "storybook dev -p 6006",
     "build-storybook": "storybook build",
     "lint": "eslint .",
@@ -34,6 +34,7 @@
   "dependencies": {
     "@radix-ui/react-checkbox": "1.1.3",
     "@tailwindcss/cli": "^4.1.7",
+    "@tanstack/react-table": "^8.21.3",
     "clsx": "^2.1.1",
     "lucide-react": "0.468.0",
     "postcss": "^8.5.3",
@@ -52,6 +53,7 @@
     "@babel/preset-env": "7.26.0",
     "@babel/preset-react": "7.26.3",
     "@babel/preset-typescript": "7.26.0",
+    "@faker-js/faker": "^9.9.0",
     "@helpwave/eslint-config": "0.0.7",
     "@storybook/addon-docs": "^9.0.12",
     "@storybook/addon-links": "^9.0.12",

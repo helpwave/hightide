@@ -2,6 +2,7 @@ import type { Translation } from '../useTranslation'
 
 export type FormTranslationType = {
   all: string,
+  apply: string,
   back: string,
   cancel: string,
   change: string,
@@ -52,6 +53,7 @@ export type FormTranslationType = {
 export const formTranslation: Translation<FormTranslationType> = {
   en: {
     all: 'All',
+    apply: 'Apply',
     back: 'Back',
     cancel: 'Cancel',
     change: 'Change',
@@ -100,6 +102,7 @@ export const formTranslation: Translation<FormTranslationType> = {
   },
   de: {
     all: 'Alle',
+    apply: 'Anwenden',
     back: 'Zurück',
     cancel: 'Abbrechen',
     change: 'Ändern',

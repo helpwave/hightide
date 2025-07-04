@@ -1,374 +1,16 @@
 @import 'tailwindcss';
 
-/* variants */
-@custom-variant dark (&:where([data-theme=dark], [data-theme=dark] *));
-@custom-variant light (&:where([data-theme=light], [data-theme=light] *));
-
 /* utilities */
-@utility col {
-  @apply flex flex-col gap-y-2;
-}
+@import './utitlity/index.css';
 
-@utility row {
-  @apply flex flex-row gap-x-2;
-}
+/* theme */
+@import './theme/index.css';
 
-@layer utilities {
-  .animation-delay-0 {
-    animation-delay: 0ms;
-  }
-
-  .animation-delay-100 {
-    animation-delay: 100ms;
-  }
-
-  .animation-delay-200 {
-    animation-delay: 200ms;
-  }
-
-  .animation-delay-300 {
-    animation-delay: 300ms;
-  }
-
-  .animation-delay-400 {
-    animation-delay: 400ms;
-  }
-
-  .animation-delay-500 {
-    animation-delay: 500ms;
-  }
-
-  .animation-delay-1000 {
-    animation-delay: 1000ms;
-  }
-
-  @keyframes fade-in {
-    0% {
-      opacity: 0;
-    }
-    100% {
-      opacity: 1;
-    }
-  }
-
-  @keyframes fade-out {
-    0% {
-      opacity: 1;
-    }
-    100% {
-      opacity: 0;
-    }
-  }
-
-  @keyframes bigLeftUp {
-    0%, 25% {
-      stroke-dashoffset: 1000;
-    }
-    50%, 75%, 100% {
-      stroke-dashoffset: 0;
-    }
-  }
-
-  @keyframes bigRightDown {
-    0%, 25%, 50% {
-      stroke-dashoffset: 0;
-    }
-    75%, 100% {
-      stroke-dashoffset: -1000;
-    }
-  }
-
-  @keyframes smallLeftUp {
-    0%, 25%, 50% {
-      stroke-dashoffset: 1000;
-    }
-    75%, 100% {
-      stroke-dashoffset: 0;
-    }
-  }
-
-  @keyframes smallRightDown {
-    0%, 25% {
-      stroke-dashoffset: 0;
-    }
-    50%, 75%, 100% {
-      stroke-dashoffset: -1000;
-    }
-  }
-
-  .animate-fade {
-    animation: fade-out 3s ease-in-out;
-  }
-
-  .animate-wave-big-left-up {
-    animation: bigLeftUp 1.7s ease-in infinite normal;
-  }
-
-  .animate-wave-big-right-down {
-    animation: bigRightDown 1.7s ease-in infinite reverse;
-  }
-
-  .animate-wave-small-left-up {
-    animation: smallLeftUp 1.7s ease-in infinite normal;
-  }
-
-  .animate-wave-small-right-down {
-    animation: smallRightDown 1.7s ease-in infinite reverse;
-  }
-
-  .animate-tooltip-fade-in {
-    animation: fade-in 0.2s ease-in-out forwards;
-  }
-
-  .animate-tooltip-fade-out {
-    animation: fade-in 0.2s ease-in-out forwards;
-  }
-
-  .shadow-around {
-    box-shadow: 0 2px 2px 0 rgba(0, 0, 0, 0.02),
-    0 -2px 2px 0 rgba(0, 0, 0, 0.02),
-    2px 0 2px 0 rgba(0, 0, 0, 0.02),
-    -2px 0 2px 0 rgba(0, 0, 0, 0.02);
-  }
-
-  .shadow-around-md {
-    box-shadow: 0 5px 5px 0 rgba(0, 0, 0, 0.02),
-    0 -5px 5px 0 rgba(0, 0, 0, 0.02),
-    5px 0 5px 0 rgba(0, 0, 0, 0.02),
-    -5px 0 5px 0 rgba(0, 0, 0, 0.02);
-  }
-
-  .shadow-around-lg {
-    box-shadow: 0 10px 10px 0 rgba(0, 0, 0, 0.02),
-    0 -10px 10px 0 rgba(0, 0, 0, 0.02),
-    10px 0 10px 0 rgba(0, 0, 0, 0.02),
-    -10px 0 10px 0 rgba(0, 0, 0, 0.02);
-  }
-
-  .shadow-around-xl {
-    box-shadow: 0 20px 20px 0 rgba(0, 0, 0, 0.02),
-    0 -20px 20px 0 rgba(0, 0, 0, 0.02),
-    20px 0 20px 0 rgba(0, 0, 0, 0.02),
-    -20px 0 20px 0 rgba(0, 0, 0, 0.02);
-  }
-}
+/* components */
+@import './textstyles.css';
 
 /* The theme variables */
 @theme {
-  /*
-   * Default light theme colors and initial definitions
-   */
-
-
-  /*
-   * Basic Colors
-   */
-  --color-white: #FFFFFF;
-  --color-black: #000000;
-  --color-gray-25: #F8F8F8;
-  --color-gray-50: #F2F2F2;
-  --color-gray-100: #E6E6E6;
-  --color-gray-200: #CCCCCC;
-  --color-gray-300: #B3B3B3;
-  --color-gray-400: #999999;
-  --color-gray-500: #888888;
-  --color-gray-600: #666666;
-  --color-gray-700: #4D4D4D;
-  --color-gray-800: #333333;
-  --color-gray-900: #1A1A1A;
-  --color-gray-950: #0D0D0D;
-
-  --color-green-100: #D1EFD8;
-  --color-green-500: #69CB81;
-  --color-green-700: #53a567;
-  --color-green-900: #2C5536;
-
-  --color-orange-100: #FBECD9;
-  --color-orange-200: #F7D8B3;
-  --color-orange-500: #EA9E40;
-
-  --color-purple-50: #EFE6FD;
-  --color-purple-100: #CEB0FA;
-  --color-purple-400: #8470c5;
-  --color-purple-500: #694BB4;
-
-  --color-blue-50: #F6FAFF;
-  --color-blue-100: #D6E3F9;
-  --color-blue-200: #99B9EF;
-  --color-blue-500: #3272DF;
-  --color-blue-600: #285BB2;
-  --color-blue-800: #1A4080;
-
-  --color-red-50: #FFF9F9;
-  --color-red-100: #FBE0E2;
-  --color-red-200: #F7C2C5;
-  --color-red-300: #F4A3A7;
-  --color-red-400: #E3798A;
-  --color-red-500: #DC576D;
-  --color-red-900: #5C252E;
-
-
-  /*
-   * Semantic Colors
-   */
-  --color-text-dark: #1A1A1A;
-  --color-text-light: #E6E6E6;
-  --color-text-default: var(--color-text-dark);
-
-  --color-primary: var(--color-purple-500);
-  --color-on-primary: var(--color-text-light);
-  --color-secondary: #11243E;
-  --color-on-secondary: var(--color-text-light);
-  --color-warning: var(--color-yellow-500);
-  --color-on-warning: var(--color-text-light);
-  --color-positive: var(--color-green-500);
-  --color-on-positive: var(--color-text-light);
-  --color-negative: var(--color-red-500);
-  --color-on-negative: var(--color-text-light);
-  --color-surface: #FFFFFF;
-  --color-on-surface: var(--color-text-dark);
-  --color-surface-variant: #F8F8F8;
-  --color-surface-warning: #FBECD9;
-  --color-highlight: #3272DF;
-  --color-background: #EEEEEE;
-  --color-on-background: var(--color-text-dark);
-
-  --color-female: var(--color-red-400);
-  --color-female-outline: var(--color-red-300);
-  --color-female-surface: var(--color-red-100);
-  --color-female-background: var(--color-red-50);
-
-  --color-male: var(--color-blue-400);
-  --color-male-outline: var(--color-blue-300);
-  --color-male-surface: var(--color-blue-100);
-  --color-male-background: var(--color-blue-50);
-
-  --color-neutral: #4D4D4D;
-  --color-neutral-outline: #B3B3B3;
-  --color-neutral-surface: #E6E6E6;
-  --color-neutral-background: #F8F8F8;
-
-  --color-text-primary: var(--color-text-default);
-  --color-text-secondary: #666666;
-  --color-text-tertiary: #B3B3B3;
-  --color-text-highlight: #3272DF;
-  --color-text-label: #4D4D4D;
-  --color-icon-primary: var(--color-text-primary);
-  --color-icon-secondary: var(--color-text-secondary);
-  --color-icon-highlight: var(--color-text-highlight);
-  --color-divider: #E6E6E6;
-  --color-description: #555555;
-  --color-outline: #E6E6E6;
-  --color-outline-variant: #CCCCCC;
-  --color-disabled-background: #BBBBBB;
-  --color-disabled-text: #555555;
-  --color-disabled-icon: #555555;
-  --color-disabled-outline: #555555;
-  --color-border: #CCCCCC;
-
-
-  /*
-   * Component Colors
-   */
-
-  /* Button Outline */
-  --color-button-outline-primary-outline: var(--color-primary);
-  --color-button-outline-primary-icon: var(--color-primary);
-  --color-button-outline-primary-text: var(--color-primary);
-
-  /* Button Solid */
-  --color-button-solid-primary-background: var(--color-primary);
-  --color-button-solid-primary-text: var(--color-on-primary);
-  --color-button-solid-primary-icon: var(--color-on-primary);
-  --color-button-solid-secondary-background: var(--color-purple-50);
-  --color-button-solid-secondary-text: var(--color-primary);
-  --color-button-solid-secondary-icon: var(--color-primary);
-  --color-button-solid-tertiary-background: #F2F2F2;
-  --color-button-solid-tertiary-icon: #888888;
-  --color-button-solid-tertiary-text: #888888;
-  --color-button-solid-neutral-background: #D6D6D6;
-  --color-button-solid-neutral-icon: #1A1A1A;
-  --color-button-solid-neutral-text: #1A1A1A;
-  --color-button-solid-positive-background: var(--color-positive);
-  --color-button-solid-positive-icon: var(--color-on-positive);
-  --color-button-solid-positive-text: var(--color-on-positive);
-  --color-button-solid-warning-background: var(--color-warning);
-  --color-button-solid-warning-icon: var(--color-on-warning);
-  --color-button-solid-warning-text: var(--color-on-warning);
-  --color-button-solid-negative-background: var(--color-negative);
-  --color-button-solid-negative-icon: var(--color-on-negative);
-  --color-button-solid-negative-text: var(--color-on-negative);
-
-  /* Button Text */
-  --color-button-text-hover-background: #77777733;
-  --color-button-text-neutral-text: #333333;
-  --color-button-text-neutral-icon: #333333;
-  --color-button-text-negative-text: var(--color-negative);
-  --color-button-text-negative-icon: var(--color-negative);
-  --color-button-text-primary-text: var(--color-primary);
-  --color-button-text-primary-icon: var(--color-primary);
-
-  /* Carousel */
-  --color-carousel-dot-active: var(--color-primary);
-  --color-carousel-dot-disabled: var(--color-disabled-background);
-
-  /* Menu */
-  --color-menu-background: var(--color-surface);
-  --color-menu-text: var(--color-on-surface);
-  --color-menu-border: var(--color-border);
-
-  /* Overlay */
-  --color-overlay-background: #FFFFFF;
-  --color-overlay-text: var(--color-text-dark);
-
-  /* ProgressIndicator */
-  --color-progress-indicator-fill: var(--color-primary);
-  --color-progress-indicator-background: var(--color-gray-300);
-
-  /* Property */
-  --color-property-title-background: #E6E6E6;
-  --color-property-title-text: var(--color-text-default);
-
-  /* Stepper Bar */
-  --color-stepperbar-dot-active: var(--color-primary);
-  --color-stepperbar-dot-normal: var(--color-purple-100);
-  --color-stepperbar-dot-disabled: var(--color-disabled-background);
-
-  /* Table */
-  --color-tabel-header-background: #F6FAFF;
-
-  /* Tag */
-  --color-tag-dark-background: #333333;
-  --color-tag-dark-text: var(--color-text-light);
-  --color-tag-dark-icon: var(--color-text-light);
-  --color-tag-green-background: #E2E9DB;
-  --color-tag-green-text: #7A977E;
-  --color-tag-green-icon: #7A977E;
-  --color-tag-yellow-background: #FEEACB;
-  --color-tag-yellow-text: #C79345;
-  --color-tag-yellow-icon: #C79345;
-  --color-tag-red-background: #FEE0DD;
-  --color-tag-red-text: #D67268;
-  --color-tag-red-icon: #D67268;
-  --color-tag-blue-background: var(--color-blue-50);
-  --color-tag-blue-text: var(--color-blue-800);
-  --color-tag-blue-icon: var(--color-blue-800);
-  --color-tag-pink-background: #CEA3B8;
-  --color-tag-pink-text: #CE75A0;
-  --color-tag-pink-icon: #CE75A0;
-
-  /* TextImage */
-  --color-text-image-primary-background: var(--color-primary);
-  --color-text-image-primary-text: var(--color-white);
-  --color-text-image-secondary-background: #3171DE;
-  --color-text-image-secondary-text: var(--color-white);
-  --color-text-image-dark-background: #11243E;
-  --color-text-image-dark-text: var(--color-white);
-
-  /* Tooltip */
-  --color-tooltip-background: var(--color-overlay-background);
-  --color-tooltip-text: var(--color-description);
-
   /*
    * breakpoints
    */
@@ -382,105 +24,34 @@
   --font-space: 'Space Grotesk', sans-serif;
 }
 
-/* Overrides of the base theme */
-@layer base {
-  /* dark theme overrides */
-  @variant dark {
-    /*
-     * Basic Colors
-     */
-    --color-primary: var(--color-purple-400);
-    --color-positive: var(--color-green-700);
-    --color-negative: var(--color-red-500);
-
-    /*
-     * Semantic Colors
-     */
-    --color-text-default: var(--color-text-light);
-
-    --color-surface: #333333;
-    --color-on-surface: var(--color-text-light);
-    --color-surface-variant: #494949;
-    --color-surface-warning: #FBECD9;
-    --color-text-label: #CFCFCF;
-    --color-highlight: #3272DF;
-    --color-background: #222222;
-    --color-on-background: var(--color-text-light);
-    --color-border: #444444;
-
-    --color-neutral: #4D4D4D;
-    --color-neutral-outline: #B3B3B3;
-    --color-neutral-surface: #E6E6E6;
-    --color-neutral-background: #F8F8F8;
-
-    --color-text-primary: var(--color-text-light);
-    --color-text-secondary: #666666;
-    --color-text-tertiary: #B3B3B3;
-    --color-text-highlight: #3272DF;
-    --color-description: #999999;
-
-    --color-disabled-background: #555555;
-    --color-disabled-text: #999999;
-
-    /*
-     * Component Colors
-     */
-
-    /* Button Solid */
-    --color-button-solid-neutral-background: #424242;
-    --color-button-solid-neutral-icon: var(--color-text-light);
-    --color-button-solid-neutral-text: var(--color-text-light);
-
-    /* Button Text */
-    --color-button-text-hover-background: #3F3F3F;
-    --color-button-text-neutral-text: var(--color-text-light);
-    --color-button-text-neutral-icon: var(--color-text-light);
-
-    /* Menu */
-    --color-menu-background: #333333;
-    --color-menu-text: var(--color-text-light);
-    --color-menu-border: var(--color-border);
-
-    /* Property */
-    --color-property-title-background: #393939;
-    --color-property-title-text: var(--color-on-surface);
-
-    /* ProgressIndicator */
-    --color-progress-indicator-background: var(--color-gray-700);
-
-    /* Overlay */
-    --color-overlay-background: #2A2A2A;
-    --color-overlay-text: var(--color-text-light);
-
-    /* Table */
-    --color-tabel-header-background: #F6FAFF;
-  }
-}
-
 /* Styles that can be overwritten by utils */
 @layer components {
   .btn-sm {
-    @apply row items-center justify-center gap-x-1 px-[0.625rem] py-[0.25rem] rounded-[0.375rem] h-8 min-h-8;
+    @apply row items-center justify-center gap-x-1 px-1.5 py-1 rounded-1.5 h-8 min-h-8;
   }
 
   .btn-md {
-    @apply row items-center justify-center gap-x-2 px-[0.75rem] py-[0.5rem] rounded-[0.375rem] h-10 min-h-10;
+    @apply row items-center justify-center gap-x-2 px-3 py-2 rounded-1.5 h-10 min-h-10;
   }
 
   .btn-lg {
-    @apply row items-center justify-center gap-x-2 px-[1rem] py-[0.675rem] rounded-[0.375rem] h-12 min-h-12;
+    @apply row items-center justify-center gap-x-2 px-4 py-2.5 rounded-1.5 h-12 min-h-12;
+  }
+
+  .icon-btn-xs {
+    @apply row items-center justify-center gap-x-1 p-1 rounded-1 h-6 min-h-6 w-6 min-w-6;
   }
 
   .icon-btn-sm {
-    @apply row items-center justify-center gap-x-1 p-[0.375rem] rounded-[0.375rem] h-8 min-h-8 w-8 min-w-8;
+    @apply row items-center justify-center gap-x-1 p-1.5 rounded-1.5 h-8 min-h-8 w-8 min-w-8;
   }
 
   .icon-btn-md {
-    @apply row items-center justify-center gap-x-2 p-[0.5rem] rounded-[0.375rem] h-10 min-h-10 w-10 min-w-10;
+    @apply row items-center justify-center gap-x-2 p-2 rounded-1.5 h-10 min-h-10 w-10 min-w-10;
   }
 
   .icon-btn-lg {
-    @apply row items-center justify-center gap-x-2 p-[0.75rem] rounded-[0.375rem] h-12 min-h-12 w-12 min-w-12;
+    @apply row items-center justify-center gap-x-2 p-3 rounded-1.5 h-12 min-h-12 w-12 min-w-12;
   }
 
   .card-sm {
@@ -530,74 +101,46 @@
   }
 
   input {
-    @apply block bg-surface text-on-surface px-2 py-[0.375rem] rounded-md border-2 hover:border-primary focus:outline-none focus:border-primary focus:ring-primary;
+    @apply block;
   }
 
-  .textstyle-title-3xl {
-    @apply text-5xl font-space font-bold;
+  *:disabled {
+    @apply cursor-not-allowed;
   }
 
-  .textstyle-title-2xl {
-    @apply text-4xl font-space font-bold;
+  *:focus {
+    @apply outline-none ring-0;
   }
 
-  .textstyle-title-xl {
-    @apply text-3xl font-space font-bold;
+  *:focus-visible {
+    @apply ring-2 ring-focus;
   }
 
-  .textstyle-title-lg {
-    @apply text-2xl font-space font-bold;
+  table {
+    @apply table-fixed border-separate border-spacing-0;
   }
 
-  .textstyle-title-md {
-    @apply text-xl font-space font-bold;
+  th {
+    @apply px-3 first:pl-6 last:pr-6 py-2.5 border-y-1 first:border-l-1 last:border-r-1 first:rounded-tl-lg last:rounded-tr-lg bg-tabel-header-background text-text-label font-bold;
   }
 
-  .textstyle-title-normal {
-    @apply text-lg font-semibold;
+  tbody > tr {
+    @apply hover:bg-table-row-hover-background hover:text-table-row-hover-text;
   }
 
-  .textstyle-title-sm {
-    @apply font-space font-bold;
+  td {
+    @apply px-3 first:pl-6 last:pr-6 py-2.5 border-b-1 first:border-l-1 last:border-r-1 [nth-last-child(1)]:first:rounded-bl-lg [nth-last-child(1)]:last:rounded-br-lg;
   }
 
-  .textstyle-accent {
-    @apply text-sm text-text-label font-bold;
+  tbody > tr:last-child > td {
+    @apply first:rounded-bl-lg last:rounded-br-lg;
   }
 
-  .textstyle-description {
-    @apply text-description;
+  .table-resize-indicator {
+    @apply absolute top-2 bottom-2 right-0;
   }
 
-  .textstyle-label-lg {
-    @apply text-text-label text-lg font-semibold;
-  }
-
-  .textstyle-label-md {
-    @apply text-text-label font-semibold;
-  }
-
-  .textstyle-label-sm {
-    @apply text-sm text-text-label font-semibold;
-  }
-
-  .textstyle-table-name {
-    @apply text-lg font-space font-medium;
-  }
-
-  .textstyle-table-header {
-    @apply text-text-label font-bold;
-  }
-
-  .textstyle-navigation-item {
-    @apply font-bold font-space;
-  }
-
-  .textstyle-form-error {
-    @apply text-negative text-sm;
-  }
-
-  .textstyle-form-description {
-    @apply text-description text-sm;
+  th:last-child > .table-resize-indicator {
+    @apply right-6;
   }
 }

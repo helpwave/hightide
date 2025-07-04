@@ -2,7 +2,8 @@ import type { HTMLInputTypeAttribute, InputHTMLAttributes } from 'react'
 import { useEffect, useRef, useState } from 'react'
 import { Pencil } from 'lucide-react'
 import clsx from 'clsx'
-import { useSaveDelay } from '../../hooks/useSaveDelay'
+import type { UseDelayOptions } from '../../hooks/useDelay'
+import { useDelay } from '../../hooks/useDelay'
 import { noop } from '../../util/noop'
 
 type InputProps = {
@@ -26,6 +27,7 @@ type InputProps = {
   initialState?: 'editing' | 'display',
   size?: number,
   disclaimer?: string,
+  saveDelayOptions?: UseDelayOptions,
 } & Omit<InputHTMLAttributes<HTMLInputElement>, 'value' | 'label' | 'type' | 'crossOrigin'>
 
 /**
@@ -45,15 +47,16 @@ export const ToggleableInput = ({
                                   size = 16,
                                   disclaimer,
                                   onBlur,
+                                  saveDelayOptions,
                                   ...restProps
                                 }: InputProps) => {
   const [isEditing, setIsEditing] = useState(initialState !== 'display')
-  const { restartTimer, clearUpdateTimer } = useSaveDelay(() => undefined, 3000)
+  const { restartTimer, clearTimer } = useDelay(saveDelayOptions)
   const ref = useRef<HTMLInputElement>(null)
 
   const onEditCompletedWrapper = (text: string) => {
     onEditCompleted(text)
-    clearUpdateTimer()
+    clearTimer()
   }
 
   useEffect(() => {

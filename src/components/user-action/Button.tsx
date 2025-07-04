@@ -8,6 +8,10 @@ export const ButtonColorUtil = {
   outline: ['primary'] as const,
 }
 
+export const IconButtonUtil = {
+  icon: [...ButtonColorUtil.solid, 'transparent'] as const,
+}
+
 
 /**
  * The allowed colors for the SolidButton and IconButton
@@ -21,11 +25,18 @@ export type OutlineButtonColor = typeof ButtonColorUtil.outline[number]
  * The allowed colors for the TextButton
  */
 export type TextButtonColor = typeof ButtonColorUtil.text[number]
+/**
+ * The allowed colors for the IconButton
+ */
+export type IconButtonColor = typeof IconButtonUtil.icon[number]
+
 
 /**
  * The different sizes for a button
  */
 type ButtonSizes = 'small' | 'medium' | 'large'
+
+type IconButtonSize = 'tiny' | 'small' | 'medium' | 'large'
 
 /**
  * The shard properties between all button types
@@ -43,7 +54,8 @@ const paddingMapping: Record<ButtonSizes, string> = {
   large: 'btn-lg'
 }
 
-const iconPaddingMapping: Record<ButtonSizes, string> = {
+const iconPaddingMapping: Record<IconButtonSize, string> = {
+  tiny: 'icon-btn-xs',
   small: 'icon-btn-sm',
   medium: 'icon-btn-md',
   large: 'icon-btn-lg'
@@ -71,9 +83,16 @@ export type TextButtonProps = ButtonWithIconsProps & {
   color?: TextButtonColor,
 }
 
-export type IconButtonProps = ButtonProps & {
-  color?: SolidButtonColor,
-}
+/**
+ * The shard properties between all button types
+ */
+export type IconButtonProps = PropsWithChildren<{
+  /**
+   * @default 'medium'
+   */
+  size?: IconButtonSize,
+  color?: IconButtonColor,
+}> & ButtonHTMLAttributes<Element>
 
 /**
  * A button with a solid background and different sizes
@@ -240,7 +259,7 @@ const TextButton = ({
       className={clsx(
         {
           'text-disabled-text cursor-not-allowed': disabled,
-          [clsx(colorClasses, 'hover:bg-button-text-hover-background rounded-full')]: !disabled,
+          [clsx(colorClasses, 'hover:bg-button-text-hover-background')]: !disabled,
         },
         ButtonUtil.paddingMapping[size],
         className
@@ -293,6 +312,7 @@ const IconButton = ({
     warning: 'bg-button-solid-warning-background text-button-solid-warning-text',
     negative: 'bg-button-solid-negative-background text-button-solid-negative-text',
     neutral: 'bg-button-solid-neutral-background text-button-solid-neutral-text',
+    transparent: 'bg-transparent',
   }[color]
 
   return (
@@ -301,8 +321,10 @@ const IconButton = ({
       disabled={disabled || onClick === undefined}
       className={clsx(
         {
-          'text-disabled-text bg-disabled-background cursor-not-allowed': disabled,
-          [clsx(colorClasses, 'hover:brightness-90')]: !disabled
+          'text-disabled-text bg-disabled-background cursor-not-allowed': disabled && color !== 'transparent',
+          'text-disabled-text cursor-not-allowed opacity-70': disabled && color === 'transparent',
+          'hover:bg-button-text-hover-background': !disabled && color === 'transparent',
+          [clsx(colorClasses, 'hover:brightness-90')]: !disabled,
         },
         ButtonUtil.iconPaddingMapping[size],
         className
