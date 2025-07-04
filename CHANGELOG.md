@@ -15,6 +15,7 @@ and adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 - Added a page input to the pagination component
 - Added a `resolveSetState` function to easily get the value that result from a `SetState` in a `Dispatch`
 - Added `useRerender` hook to allow for easy rerendering
+- Added `useFocusMangement`, `useFocusOnceVisible`. `useResizeCallbackWrapper` 
 
 ### Changed
 
