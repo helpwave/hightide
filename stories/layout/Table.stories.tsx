@@ -4,6 +4,7 @@ import type { TableProps, Translation } from '../../src'
 import { range, SolidButton, TableWithSelection, useTranslation } from '../../src'
 import type { ColumnDef, RowSelectionState } from '@tanstack/react-table'
 import { faker } from '@faker-js/faker'
+import { TableCell } from '../../src/components/table/TableCell'
 
 type DataType = {
   id: string,
@@ -71,12 +72,6 @@ const TableExample = ({ ...props }: TableExampleProps) => {
     {
       id: 'id',
       header: translation('id'),
-      cell: ({ cell }) => (
-        <span className="block max-w-full overflow-ellipsis truncate">
-            {cell.getValue() as string}
-        </span>
-      ),
-      footer: props => props.column.id,
       accessorKey: 'id',
       minSize: 200,
       size: 250,
@@ -88,12 +83,6 @@ const TableExample = ({ ...props }: TableExampleProps) => {
     {
       id: 'name',
       header: translation('name'),
-      cell: ({ cell }) => (
-        <span className="block max-w-full overflow-ellipsis truncate">
-            {cell.getValue() as string}
-        </span>
-      ),
-      footer: props => props.column.id,
       accessorKey: 'name',
       sortingFn: 'textCaseSensitive',
       minSize: 150,
@@ -106,12 +95,6 @@ const TableExample = ({ ...props }: TableExampleProps) => {
     {
       id: 'age',
       header: translation('age'),
-      cell: ({ cell }) => (
-        <span className="block max-w-full overflow-ellipsis truncate">
-            {cell.getValue() as string}
-        </span>
-      ),
-      footer: props => props.column.id,
       accessorKey: 'age',
       sortingFn: 'alphanumeric',
       minSize: 140,
@@ -124,12 +107,6 @@ const TableExample = ({ ...props }: TableExampleProps) => {
     {
       id: 'street',
       header: translation('street'),
-      cell: ({ cell }) => (
-        <span className="block max-w-full overflow-ellipsis truncate">
-            {cell.getValue() as string}
-        </span>
-      ),
-      footer: props => props.column.id,
       accessorKey: 'street',
       sortingFn: 'text',
       minSize: 250,
@@ -143,9 +120,9 @@ const TableExample = ({ ...props }: TableExampleProps) => {
       id: 'entryDate',
       header: translation('entryDate'),
       cell: ({ cell }) => (
-        <span className="block max-w-full overflow-ellipsis truncate">
+        <TableCell>
             {(cell.getValue() as Date).toLocaleDateString()}
-        </span>
+        </TableCell>
       ),
       footer: props => props.column.id,
       accessorKey: 'entryDate',
@@ -213,7 +190,7 @@ type Story = StoryObj<typeof meta>;
 
 export const table: Story = {
   args: {
-    allowResizing: true,
+    enableColumnResizing: true,
     className: '',
   }
 }
