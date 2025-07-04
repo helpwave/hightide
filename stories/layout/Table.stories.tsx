@@ -1,10 +1,10 @@
 import type { Meta, StoryObj } from '@storybook/nextjs'
 import { useMemo, useState } from 'react'
 import type { TableProps, Translation } from '../../src'
-import { range, SolidButton, TableWithSelection, useTranslation } from '../../src'
+import { TableWithSelection } from '../../src'
+import { range, SolidButton, TableCell, useTranslation } from '../../src'
 import type { ColumnDef, RowSelectionState } from '@tanstack/react-table'
 import { faker } from '@faker-js/faker'
-import { TableCell } from '../../src/components/table/TableCell'
 
 type DataType = {
   id: string,
@@ -121,7 +121,7 @@ const TableExample = ({ ...props }: TableExampleProps) => {
       header: translation('entryDate'),
       cell: ({ cell }) => (
         <TableCell>
-            {(cell.getValue() as Date).toLocaleDateString()}
+          {(cell.getValue() as Date).toLocaleDateString()}
         </TableCell>
       ),
       footer: props => props.column.id,
