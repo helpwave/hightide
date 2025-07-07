@@ -529,7 +529,7 @@ export const TableWithSelection = <T, >({
         ...meta,
         bodyRowClassName: clsx(
           { 'cursor-pointer': !disableClickRowClickSelection },
-          meta.bodyRowClassName
+          meta?.bodyRowClassName
         )
       }}
       {...props}
