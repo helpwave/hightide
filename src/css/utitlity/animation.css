@@ -1,32 +1,8 @@
+@utility animation-delay-* {
+  animation-delay: calc(--value(number) * 1ms);
+}
+
 @layer utilities {
-  .animation-delay-0 {
-    animation-delay: 0ms;
-  }
-
-  .animation-delay-100 {
-    animation-delay: 100ms;
-  }
-
-  .animation-delay-200 {
-    animation-delay: 200ms;
-  }
-
-  .animation-delay-300 {
-    animation-delay: 300ms;
-  }
-
-  .animation-delay-400 {
-    animation-delay: 400ms;
-  }
-
-  .animation-delay-500 {
-    animation-delay: 500ms;
-  }
-
-  .animation-delay-1000 {
-    animation-delay: 1000ms;
-  }
-
   @keyframes fade-in {
     0% {
       opacity: 0;

@@ -5,7 +5,7 @@ import { clsx } from 'clsx'
 type Position = 'top' | 'bottom' | 'left' | 'right'
 
 export type TooltipProps = PropsWithChildren<{
-  tooltip: string | ReactNode,
+  tooltip: ReactNode,
   /**
    * Number of milliseconds until the tooltip appears
    *

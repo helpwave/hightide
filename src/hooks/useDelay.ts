@@ -19,6 +19,11 @@ export function useDelay(options?: UseDelayOptions) {
     ...options
   }
 
+  const clearTimer = () => {
+    clearTimeout(timer)
+    setTimer(undefined)
+  }
+
   const restartTimer = (onDelayFinish: () => void) => {
     if(disabled) {
       return
@@ -26,11 +31,8 @@ export function useDelay(options?: UseDelayOptions) {
     clearTimeout(timer)
     setTimer(setTimeout(() => {
       onDelayFinish()
+      setTimer(undefined)
     }, delay))
-  }
-
-  const clearTimer = () => {
-    clearTimeout(timer)
   }
 
   useEffect(() => {
@@ -42,8 +44,11 @@ export function useDelay(options?: UseDelayOptions) {
   useEffect(() => {
     if(disabled){
       clearTimeout(timer)
+      setTimer(undefined)
     }
   }, [disabled, timer])
 
-  return { restartTimer, clearTimer }
+  console.log(timer)
+
+  return { restartTimer, clearTimer, hasActiveTimer: !!timer }
 }
