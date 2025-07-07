@@ -455,6 +455,7 @@ export const TableUncontrolled = <T, >({ data, ...props }: TableUncontrolledProp
 
 export type TableWithSelectionProps<T> = TableProps<T> & {
   rowSelection: RowSelectionState,
+  disableClickRowClickSelection?: boolean,
   selectionRowId?: string,
 }
 
@@ -463,6 +464,7 @@ export const TableWithSelection = <T, >({
                                           state,
                                           fillerRow,
                                           rowSelection,
+                                          disableClickRowClickSelection = false,
                                           selectionRowId = 'selection',
                                           onRowClick = noop,
                                           meta,
@@ -518,12 +520,17 @@ export const TableWithSelection = <T, >({
         ...state
       }}
       onRowClick={(row, table) => {
-        row.toggleSelected()
+        if(!disableClickRowClickSelection){
+          row.toggleSelected()
+        }
         onRowClick(row, table)
       }}
       meta={{
-        bodyRowClassName: 'cursor-pointer',
         ...meta,
+        bodyRowClassName: clsx(
+          { 'cursor-pointer': !disableClickRowClickSelection },
+          meta.bodyRowClassName
+        )
       }}
       {...props}
     />
