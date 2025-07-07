@@ -48,7 +48,5 @@ export function useDelay(options?: UseDelayOptions) {
     }
   }, [disabled, timer])
 
-  console.log(timer)
-
   return { restartTimer, clearTimer, hasActiveTimer: !!timer }
 }
