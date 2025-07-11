@@ -11,6 +11,15 @@ export default meta
 type Story = StoryObj<typeof meta>;
 
 export const select: Story = {
+  decorators: [
+    (Story) => (
+      <div className="flex-row-0 rounded-lg h-32 w-64 bg-warning/20 overflow-auto">
+        <div className="min-w-96 h-full">
+          <Story/>
+        </div>
+      </div>
+    )
+  ],
   args: {
     label: { name: 'Your favourite fruit' },
     options: [

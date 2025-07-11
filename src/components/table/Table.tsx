@@ -304,8 +304,8 @@ export const Table = <T, >({
     const colSizes: { [key: string]: number } = {}
     for (let i = 0; i < headers.length; i++) {
       const header = headers[i]!
-      colSizes[`--header-${header.id}-size`] = header.getSize()
-      colSizes[`--col-${header.column.id}-size`] = header.column.getSize()
+      colSizes[`--header-${header.id}-size`] = Math.floor(header.getSize())
+      colSizes[`--col-${header.column.id}-size`] = Math.floor(header.column.getSize())
     }
 
     return colSizes
@@ -313,13 +313,17 @@ export const Table = <T, >({
 
   return (
     <div ref={ref} className={clsx('col gap-y-4', className)}>
-      <Scrollbars autoHeight={true} autoHeightMax={tableRef.current?.offsetHeight} autoHide={true}>
+      <Scrollbars
+        autoHeight={true}
+        autoHeightMax={tableRef.current?.offsetHeight + 2}
+        autoHide={true}
+      >
         <table
           ref={tableRef}
           className={clsx(tableClassName)}
           style={{
             ...columnSizeVars,
-            width: Math.max(table.getTotalSize(), ref.current?.offsetWidth ?? table.getTotalSize()),
+            width: Math.floor(Math.max(table.getTotalSize() - columns.length, ref.current?.offsetWidth ?? table.getTotalSize())),
           }}
         >
           {table.getHeaderGroups().map((headerGroup) => (
@@ -520,7 +524,7 @@ export const TableWithSelection = <T, >({
         ...state
       }}
       onRowClick={(row, table) => {
-        if(!disableClickRowClickSelection){
+        if (!disableClickRowClickSelection) {
           row.toggleSelected()
         }
         onRowClick(row, table)

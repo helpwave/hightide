@@ -1,4 +1,5 @@
 import type { ButtonHTMLAttributes, PropsWithChildren, ReactNode } from 'react'
+import { forwardRef } from 'react'
 import clsx from 'clsx'
 
 
@@ -97,7 +98,7 @@ export type IconButtonProps = PropsWithChildren<{
 /**
  * A button with a solid background and different sizes
  */
-const SolidButton = ({
+const SolidButton = forwardRef(function SolidButton({
                        children,
                        disabled = false,
                        color = 'primary',
@@ -107,7 +108,7 @@ const SolidButton = ({
                        onClick,
                        className,
                        ...restProps
-                     }: SolidButtonProps) => {
+                     }: SolidButtonProps) {
   const colorClasses = {
     primary: 'bg-button-solid-primary-background text-button-solid-primary-text',
     secondary: 'bg-button-solid-secondary-background text-button-solid-secondary-text',
@@ -165,7 +166,7 @@ const SolidButton = ({
       )}
     </button>
   )
-}
+})
 
 /**
  * A button with an outline border and different sizes

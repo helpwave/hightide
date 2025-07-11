@@ -8,6 +8,7 @@ import type { TileProps } from '../layout-and-navigation/Tile'
 import { Tile } from '../layout-and-navigation/Tile'
 import { useOutsideClick } from '../../hooks/useOutsideClick'
 import { ExpansionIcon } from '../layout-and-navigation/Expandable'
+import { createPortal } from 'react-dom'
 
 export type SelectTileProps = TileProps
 
@@ -76,12 +77,55 @@ export const Select = <T, >({
 
   const isShowingHint = !selectedDisplayOverwrite && !selectedOption?.label
 
-  return (
-    <div className={clsx(className)}>
-      {label && (
-        <Label {...label} labelType={label.labelType ?? 'labelBig'} className={clsx('mb-1', label.className)}/>
+  useEffect(() => {
+    window.addEventListener('scroll', () => {
+      setIsOpen(false)
+    })
+  }, [])
+
+  const menu = isOpen ? (
+    <div
+      ref={menuRef}
+      style={{
+        position: 'absolute',
+        top: triggerRef.current?.getBoundingClientRect().bottom + window.scrollY,
+        left: triggerRef.current?.getBoundingClientRect().left + window.scrollX,
+        zIndex: 50
+      }}
+      className={clsx(
+        'rounded-lg mt-0.5 bg-menu-background text-menu-text shadow-around-lg p-2',
+        {
+          'max-h-96 opacity-100 pb-2 overflow-y-auto transition-all duration-300 ease-in-out': isOpen,
+          'max-h-0 opacity-0 overflow-hidden': !isOpen,
+        }
       )}
-      <div className="relative">
+    >
+      <SearchableList
+        list={options}
+        minimumItemsForSearch={isSearchEnabled ? 0 : options.length}
+        searchMapping={item => item.searchTags}
+        itemMapper={(option, index) => (
+          <SelectTile
+            key={index}
+            isSelected={selectedOption?.value === option.value}
+            title={{ value: option.label }}
+            onClick={() => {
+              onChange(option.value)
+              setIsOpen(false)
+            }}
+            isDisabled={option.disabled}
+          />
+        )}
+      />
+    </div>
+  ) : null
+
+  return (
+    <>
+      <div className={clsx(className)}>
+        {label && (
+          <Label {...label} labelType={label.labelType ?? 'labelBig'} className={clsx('mb-1', label.className)}/>
+        )}
         <button
           ref={triggerRef}
           className={clsx(
@@ -100,36 +144,9 @@ export const Select = <T, >({
           {isShowingHint && (<span className="textstyle-description">{hintText}</span>)}
           <ExpansionIcon isExpanded={isOpen}/>
         </button>
-        <div
-          ref={menuRef}
-          className={clsx(
-            'absolute w-full z-10 rounded-lg mt-0.5 bg-menu-background text-menu-text shadow-around-lg p-2',
-            {
-              'max-h-96 opacity-100 pb-2 overflow-y-auto transition-all duration-300 ease-in-out': isOpen,
-              'max-h-0 opacity-0 overflow-hidden': !isOpen,
-            }
-          )}
-        >
-          <SearchableList
-            list={options}
-            minimumItemsForSearch={isSearchEnabled ? 0 : options.length}
-            searchMapping={item => item.searchTags}
-            itemMapper={(option, index) => (
-              <SelectTile
-                key={index}
-                isSelected={selectedOption?.value === option.value}
-                title={{ value: option.label }}
-                onClick={() => {
-                  onChange(option.value)
-                  setIsOpen(false)
-                }}
-                isDisabled={option.disabled}
-              />
-            )}
-          />
-        </div>
       </div>
-    </div>
+      {createPortal(menu, document.body)}
+    </>
   )
 }
 

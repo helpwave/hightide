@@ -40,9 +40,10 @@ type MenuBag = {
 export type MenuProps<T> = PropsWithBagFunctionOrChildren<MenuBag> & {
   trigger: (onClick: () => void, ref: RefObject<T>) => ReactNode,
   /**
-   * @default 'tl'
+   * @default 'l'
    */
-  alignment?: 'tl' | 'tr' | 'bl' | 'br' | '_l' | '_r' | 't_' | 'b_',
+  alignmentHorizontal?: 'w' | 'e' | 'l' | 'r' | 'c',
+  alignmentVertical?: 'n' | 's' | 't' | 'b' | 'c',
   showOnHover?: boolean,
   menuClassName?: string,
 }
@@ -53,7 +54,8 @@ export type MenuProps<T> = PropsWithBagFunctionOrChildren<MenuBag> & {
 export const Menu = <T extends HTMLElement>({
                                               trigger,
                                               children,
-                                              alignment = 'tl',
+                                              alignmentHorizontal,
+                                              alignmentVertical,
                                               showOnHover = false,
                                               menuClassName = '',
                                             }: MenuProps<T>) => {
@@ -66,7 +68,7 @@ export const Menu = <T extends HTMLElement>({
 
   return (
     <div
-      className="relative"
+      className="relative max-w-min"
       {...handlers}
     >
       {trigger(() => setIsOpen(!isOpen), triggerRef)}
@@ -74,12 +76,18 @@ export const Menu = <T extends HTMLElement>({
         ref={menuRef}
         onClick={e => e.stopPropagation()}
         className={clsx(
-          'absolute top-full mt-1 min-w-40 rounded-lg bg-menu-background text-menu-text shadow-around-lg z-10',
+          'absolute rounded-md bg-menu-background text-menu-text shadow-around-lg z-10',
           {
-            'top-0': alignment[0] === 't',
-            'bottom-0': alignment[0] === 'b',
-            'left-0': alignment[1] === 'l',
-            'right-0': alignment[1] === 'r',
+            'right-full': alignmentHorizontal === 'l',
+            'left-full': alignmentHorizontal === 'r',
+            'right-0': alignmentHorizontal === 'w',
+            'left-0': alignmentHorizontal === 'e',
+            'left-1/2 -translate-x-1/2': alignmentHorizontal === 'c',
+            'bottom-full': alignmentVertical === 't',
+            'top-full': alignmentVertical === 'b',
+            'bottom-0': alignmentVertical === 'n',
+            'top-0': alignmentVertical === 's',
+            'top-1/2 -translate-y-1/2': alignmentVertical === 'c',
             'hidden': !isOpen,
           },
           menuClassName
@@ -90,3 +98,4 @@ export const Menu = <T extends HTMLElement>({
     </div>
   )
 }
+

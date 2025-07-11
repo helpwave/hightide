@@ -48,12 +48,12 @@ export const SearchableList = <T, >({
                                       resultListClassName
                                     }: PropsForTranslation<SearchableListTranslation, SearchableListProps<T>>) => {
   const translation = useTranslation([defaultSearchableListTranslation, formTranslation], overwriteTranslation)
-  const { result, hasResult, search, setSearch } = useSearch<T>({ list, initialSearch, searchMapping })
+  const { result, hasResult, search, setSearch, updateSearch } = useSearch<T>({ list, initialSearch, searchMapping })
 
   return (
     <div className={clsx('col gap-y-2', className)}>
       {list.length > minimumItemsForSearch && (
-        <div className="sticky row gap-x-2 justify-between items-center">
+        <div className="flex-row-2 justify-between items-center">
           <Input
             value={search}
             onChangeText={setSearch}
@@ -61,13 +61,13 @@ export const SearchableList = <T, >({
             autoFocus={autoFocus}
             className="w-full"
           />
-          <IconButton color="neutral" disabled={search.length === 0}>
+          <IconButton color="neutral" onClick={() => updateSearch()}>
             <Search className="w-full h-full"/>
           </IconButton>
         </div>
       )}
       {hasResult ? (
-        <div className={clsx('col gap-y-1', resultListClassName)}>
+        <div className={clsx('col gap-y-1 overflow-y-auto', resultListClassName)}>
           {result.map(itemMapper)}
         </div>
       ) : (

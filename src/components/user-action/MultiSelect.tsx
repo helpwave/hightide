@@ -119,6 +119,7 @@ export const MultiSelect = <T, >({
           )}
         >
           <SearchableList
+            autoFocus={true}
             list={options}
             minimumItemsForSearch={isSearchEnabled ? undefined : options.length}
             searchMapping={item => item.searchTags}
