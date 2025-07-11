@@ -130,8 +130,8 @@ const SolidButton = ({
 
   return (
     <button
-      onClick={disabled ? undefined : onClick}
-      disabled={disabled || onClick === undefined}
+      onClick={onClick}
+      disabled={disabled}
       className={clsx(
         {
           'text-disabled-text bg-disabled-background cursor-not-allowed': disabled,
@@ -190,8 +190,8 @@ const OutlineButton = ({
   }[color]
   return (
     <button
-      onClick={disabled ? undefined : onClick}
-      disabled={disabled || onClick === undefined}
+      onClick={onClick}
+      disabled={disabled}
       className={clsx(
         {
           'text-disabled-text border-disabled-outline cursor-not-allowed': disabled,
@@ -254,8 +254,8 @@ const TextButton = ({
   }[color]
   return (
     <button
-      onClick={disabled ? undefined : onClick}
-      disabled={disabled || onClick === undefined}
+      onClick={onClick}
+      disabled={disabled}
       className={clsx(
         {
           'text-disabled-text cursor-not-allowed': disabled,
@@ -317,8 +317,8 @@ const IconButton = ({
 
   return (
     <button
-      onClick={disabled ? undefined : onClick}
-      disabled={disabled || onClick === undefined}
+      onClick={onClick}
+      disabled={disabled}
       className={clsx(
         {
           'text-disabled-text bg-disabled-background cursor-not-allowed': disabled && color !== 'transparent',

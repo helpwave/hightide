@@ -53,7 +53,7 @@ export const SearchableList = <T, >({
   return (
     <div className={clsx('col gap-y-2', className)}>
       {list.length > minimumItemsForSearch && (
-        <div className="row justify-between gap-x-4 items-center">
+        <div className="sticky row gap-x-2 justify-between items-center">
           <Input
             value={search}
             onChangeText={setSearch}

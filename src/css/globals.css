@@ -116,6 +116,12 @@
     @apply ring-2 ring-focus;
   }
 
+  @media (prefers-reduced-motion: reduce) {
+    * {
+      @apply !transition-none !animate-none;
+    }
+  }
+
   table {
     @apply table-fixed border-separate border-spacing-0;
   }

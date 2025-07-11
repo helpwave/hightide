@@ -1,6 +1,6 @@
 import type { PropsWithChildren, ReactNode } from 'react'
-import { forwardRef, useEffect, useState } from 'react'
-import { ChevronDown, ChevronUp } from 'lucide-react'
+import { forwardRef, useCallback, useEffect, useState } from 'react'
+import { ChevronDown } from 'lucide-react'
 import clsx from 'clsx'
 import { noop } from '../../util/noop'
 
@@ -21,9 +21,23 @@ export type ExpandableProps = PropsWithChildren<{
   contentClassName?: string,
 }>
 
-const DefaultIcon: IconBuilder = (expanded) => expanded ?
-  (<ChevronUp className="min-w-4 w-4"/>)
-  : (<ChevronDown className="min-w-4 w-4"/>)
+
+export type ExpansionIconProps = {
+  isExpanded: boolean,
+  className?: string,
+}
+
+export const ExpansionIcon = ({ isExpanded, className }: ExpansionIconProps) => {
+  return (
+    <ChevronDown
+      className={clsx(
+        'min-w-4 w-4 min-h-4 h-4 transition-transform duration-200 ease-in-out',
+        { 'rotate-180': isExpanded },
+        className
+      )}
+    />
+  )
+}
 
 
 /**
@@ -41,7 +55,8 @@ export const Expandable = forwardRef<HTMLDivElement, ExpandableProps>(function E
                                                                                             headerClassName,
                                                                                             contentClassName,
                                                                                           }, ref) {
-  icon ??= DefaultIcon
+  const defaultIcon = useCallback((expanded: boolean) => <ExpansionIcon isExpanded={expanded}/>, [])
+  icon ??= defaultIcon
 
   return (
     <div
@@ -64,11 +79,18 @@ export const Expandable = forwardRef<HTMLDivElement, ExpandableProps>(function E
         {label}
         {icon(isExpanded)}
       </div>
-      {isExpanded && (
-        <div className={clsx('col px-4 pb-2', contentClassName)}>
-          {children}
-        </div>
-      )}
+      <div
+        className={clsx(
+          'col px-4 transition-all duration-300 ease-in-out',
+          {
+            'max-h-96 opacity-100 pb-2': isExpanded,
+            'max-h-0 opacity-0 overflow-hidden': !isExpanded,
+          },
+          contentClassName
+        )}
+      >
+        {children}
+      </div>
     </div>
   )
 })

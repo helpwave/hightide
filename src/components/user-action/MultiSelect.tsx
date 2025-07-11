@@ -7,8 +7,8 @@ import clsx from 'clsx'
 import type { LabelProps } from './Label'
 import { Label } from './Label'
 import type { SelectOption } from './Select'
+import { SelectTile } from './Select'
 import { SearchableList } from '../layout-and-navigation/SearchableList'
-import { Tile } from '../layout-and-navigation/Tile'
 import { SolidButton } from './Button'
 import { ChipList } from '../layout-and-navigation/Chip'
 import { useOutsideClick } from '../../hooks/useOutsideClick'
@@ -108,64 +108,66 @@ export const MultiSelect = <T, >({
           {isShowingHint && (<span className="textstyle-description">{hintText ?? translation('select')}</span>)}
           {isOpen ? <ChevronUp size={24} className="min-w-6"/> : <ChevronDown className="min-w-6"/>}
         </button>
-        {isOpen && (
-          <div
-            ref={menuRef}
-            className="absolute w-full z-10 rounded-lg mt-0.5 bg-menu-background text-menu-text shadow-around-lg max-h-[500px] overflow-y-auto p-2"
-          >
-            <SearchableList
-              list={options}
-              minimumItemsForSearch={isSearchEnabled ? undefined : options.length}
-              searchMapping={item => item.searchTags}
-              itemMapper={(option, index) => (
-                <Tile
-                  key={index}
-                  isSelected={option.selected}
-                  className="px-2 py-1 rounded-md"
-                  disabledClassName="text-disabled-text cursor-not-allowed"
-                  title={{ value: option.label, className: 'font-semibold' }}
-                  onClick={() => {
-                    onChange(options.map(value => value.value === option.value ? ({
-                      ...option,
-                      selected: !value.selected
-                    }) : value))
-                  }}
-                  isDisabled={option.disabled}
-                />
-              )}
-            />
-            <div className="row justify-between mt-2">
-              <div className="row gap-x-2">
-                <SolidButton
-                  color="neutral"
-                  size="small"
-                  onClick={() => {
-                    onChange(options.map(option => ({
-                      ...option,
-                      selected: !option.disabled
-                    })))
-                  }}
-                  disabled={options.every(value => value.selected || value.disabled)}
-                >
-                  {translation('all')}
-                </SolidButton>
-                <SolidButton
-                  color="neutral"
-                  size="small"
-                  onClick={() => {
-                    onChange(options.map(option => ({
-                      ...option,
-                      selected: false
-                    })))
-                  }}
-                >
-                  {translation('none')}
-                </SolidButton>
-              </div>
-              <SolidButton size="small" onClick={() => setIsOpen(false)}>Done</SolidButton>
+        <div
+          ref={menuRef}
+          className={clsx(
+            'absolute w-full z-10 rounded-lg mt-0.5 bg-menu-background text-menu-text shadow-around-lg overflow-y-auto p-2',
+            {
+              'max-h-96 opacity-100 pb-2 overflow-y-auto transition-all duration-300 ease-in-out': isOpen,
+              'max-h-0 opacity-0 overflow-hidden': !isOpen,
+            }
+          )}
+        >
+          <SearchableList
+            list={options}
+            minimumItemsForSearch={isSearchEnabled ? undefined : options.length}
+            searchMapping={item => item.searchTags}
+            itemMapper={(option, index) => (
+              <SelectTile
+                key={index}
+                isSelected={option.selected}
+                title={{ value: option.label }}
+                onClick={() => {
+                  onChange(options.map(value => value.value === option.value ? ({
+                    ...option,
+                    selected: !value.selected
+                  }) : value))
+                }}
+                isDisabled={option.disabled}
+              />
+            )}
+          />
+          <div className="row justify-between mt-2">
+            <div className="row gap-x-2">
+              <SolidButton
+                color="neutral"
+                size="small"
+                onClick={() => {
+                  onChange(options.map(option => ({
+                    ...option,
+                    selected: !option.disabled
+                  })))
+                }}
+                disabled={options.every(value => value.selected || value.disabled)}
+              >
+                {translation('all')}
+              </SolidButton>
+              <SolidButton
+                color="neutral"
+                size="small"
+                onClick={() => {
+                  onChange(options.map(option => ({
+                    ...option,
+                    selected: false
+                  })))
+                }}
+              >
+                {translation('none')}
+              </SolidButton>
             </div>
+            <SolidButton size="small" onClick={() => setIsOpen(false)}>Done</SolidButton>
           </div>
-        )}
+        </div>
       </div>
     </div>
   )

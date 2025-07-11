@@ -1,12 +1,31 @@
-import { ChevronDown, ChevronUp } from 'lucide-react'
 import type { ReactNode } from 'react'
 import { useEffect, useRef, useState } from 'react'
 import clsx from 'clsx'
 import type { LabelProps } from './Label'
 import { Label } from './Label'
 import { SearchableList } from '../layout-and-navigation/SearchableList'
+import type { TileProps } from '../layout-and-navigation/Tile'
 import { Tile } from '../layout-and-navigation/Tile'
 import { useOutsideClick } from '../../hooks/useOutsideClick'
+import { ExpansionIcon } from '../layout-and-navigation/Expandable'
+
+export type SelectTileProps = TileProps
+
+export const SelectTile = ({
+                             className,
+                             disabledClassName,
+                             title,
+                             ...restProps
+                           }: SelectTileProps) => {
+  return (
+    <Tile
+      {...restProps}
+      className={clsx('px-2 py-1 rounded-md', className)}
+      disabledClassName={disabledClassName ?? 'text-disabled-text cursor-not-allowed'}
+      title={{ ...title, className: title.className ?? 'font-semibold' }}
+    />
+  )
+}
 
 export type SelectOption<T> = {
   label: ReactNode,
@@ -79,34 +98,36 @@ export const Select = <T, >({
           {!isShowingHint &&
             <span className="font-semibold text-menu-text">{selectedDisplayOverwrite ?? selectedOption?.label}</span>}
           {isShowingHint && (<span className="textstyle-description">{hintText}</span>)}
-          {isOpen ? <ChevronUp/> : <ChevronDown/>}
+          <ExpansionIcon isExpanded={isOpen}/>
         </button>
-        {isOpen && (
-          <div
-            ref={menuRef}
-            className="absolute w-full z-10 rounded-lg mt-0.5 bg-menu-background text-menu-text shadow-around-lg max-h-[500px] overflow-y-auto p-2"
-          >
-            <SearchableList
-              list={options}
-              minimumItemsForSearch={isSearchEnabled ? undefined : options.length}
-              searchMapping={item => item.searchTags}
-              itemMapper={(option, index) => (
-                <Tile
-                  key={index}
-                  isSelected={selectedOption?.value === option.value}
-                  className="px-2 py-1 rounded-md"
-                  disabledClassName="text-disabled-text cursor-not-allowed"
-                  title={{ value: option.label, className: 'font-semibold' }}
-                  onClick={() => {
-                    onChange(option.value)
-                    setIsOpen(false)
-                  }}
-                  isDisabled={option.disabled}
-                />
-              )}
-            />
-          </div>
-        )}
+        <div
+          ref={menuRef}
+          className={clsx(
+            'absolute w-full z-10 rounded-lg mt-0.5 bg-menu-background text-menu-text shadow-around-lg p-2',
+            {
+              'max-h-96 opacity-100 pb-2 overflow-y-auto transition-all duration-300 ease-in-out': isOpen,
+              'max-h-0 opacity-0 overflow-hidden': !isOpen,
+            }
+          )}
+        >
+          <SearchableList
+            list={options}
+            minimumItemsForSearch={isSearchEnabled ? 0 : options.length}
+            searchMapping={item => item.searchTags}
+            itemMapper={(option, index) => (
+              <SelectTile
+                key={index}
+                isSelected={selectedOption?.value === option.value}
+                title={{ value: option.label }}
+                onClick={() => {
+                  onChange(option.value)
+                  setIsOpen(false)
+                }}
+                isDisabled={option.disabled}
+              />
+            )}
+          />
+        </div>
       </div>
     </div>
   )

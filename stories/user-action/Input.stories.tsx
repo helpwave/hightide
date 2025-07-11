@@ -12,11 +12,14 @@ type Story = StoryObj<typeof meta>;
 
 export const input: Story = {
   args: {
+    type: 'text',
+    label: { name: 'Label' },
+    placeholder: 'Placeholder',
+    disabled: false,
+    allowEnterComplete: true,
+    className: '',
     onChange: action('onChange'),
     onChangeText: action('onChangeText'),
     onEditCompleted: action('onEditCompleted'),
-    type: 'text',
-    label: { name: 'Label' },
-    className: '',
   },
 }

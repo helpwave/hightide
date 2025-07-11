@@ -54,6 +54,7 @@
   /* Overlay */
   --color-overlay-background: #FFFFFF;
   --color-overlay-text: var(--color-text-dark);
+  --color-overlay-shadow: #00000039;
 
   /* ProgressIndicator */
   --color-progress-indicator-fill: var(--color-primary);
@@ -102,7 +103,7 @@
   --color-text-image-dark-text: var(--color-white);
 
   /* Tooltip */
-  --color-tooltip-background: var(--color-overlay-background);
+  --color-tooltip-background: #D9D9D9;
   --color-tooltip-text: var(--color-description);
 }
 
@@ -135,9 +136,14 @@
     /* Overlay */
     --color-overlay-background: #2A2A2A;
     --color-overlay-text: var(--color-text-light);
+    --color-overlay-shadow: #00000055;
 
     /* Table */
     --color-tabel-header-background: #2F2F2F;
     --color-table-row-hover-background: #2f2841;
+
+    /* Tooltip */
+    --color-tooltip-background: #555555;
+    --color-tooltip-text: var(--color-description);
   }
 }
