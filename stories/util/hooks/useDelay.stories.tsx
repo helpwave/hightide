@@ -11,7 +11,7 @@ const UseDelayExample = ({ delay, timerCallback }: UseDelayExampleProps) => {
   const { clearTimer, restartTimer, hasActiveTimer } = useDelay({ delay })
 
   return (
-    <div className="col items-center justify-center">
+    <div className="flex-col-2 items-center justify-center">
       <SolidButton onClick={() => restartTimer(timerCallback)}>
         {'Press me'}
       </SolidButton>

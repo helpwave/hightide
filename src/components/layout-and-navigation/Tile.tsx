@@ -35,7 +35,7 @@ export const Tile = ({
   return (
     <div
       className={clsx(
-        'row gap-x-2 w-full items-center',
+        'flex-row-2 w-full items-center',
         {
           [normalClassName]: !!onClick && !isDisabled,
           [selectedClassName]: isSelected && !isDisabled,
@@ -46,7 +46,7 @@ export const Tile = ({
       onClick={isDisabled ? undefined : onClick}
     >
       {prefix}
-      <div className="col gap-y-0 w-full">
+      <div className="flex-col-0 w-full">
         <h4 className={clsx(title.className ?? 'textstyle-title-normal')}>{title.value}</h4>
         {!!description &&
           <span className={clsx(description.className ?? 'textstyle-description')}>{description.value}</span>}

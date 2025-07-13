@@ -15,7 +15,7 @@ const LanguageModalExample = () => {
         isOpen={isOpen}
         onClose={() => setIsOpen(false)}
       />
-      <div className="row items-center justify-center min-h-[400px]">
+      <div className="flex-row-2 items-center justify-center min-h-[400px]">
         <SolidButton onClick={() => setIsOpen(true)}>Show Modal</SolidButton>
       </div>
     </>

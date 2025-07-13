@@ -41,7 +41,7 @@ export const MultiSelectProperty = <T, >({
       icon={<List size={16}/>}
       input={({ softRequired }) => (
         <div
-          className={clsx('row grow py-2 px-4 cursor-pointer', { 'text-warning': softRequired && !hasValue })}
+          className={clsx('flex-row-2 grow py-2 px-4 cursor-pointer', { 'text-warning': softRequired && !hasValue })}
         >
           <MultiSelect
             {...multiSelectProps}

@@ -1,14 +1,16 @@
 import type { ReactNode } from 'react'
+import { useCallback } from 'react'
 import { useEffect, useState } from 'react'
 import clsx from 'clsx'
 import type { LabelProps } from './Label'
 import { Label } from './Label'
-import { SearchableList } from '../layout-and-navigation/SearchableList'
 import type { TileProps } from '../layout-and-navigation/Tile'
 import { Tile } from '../layout-and-navigation/Tile'
 import { ExpansionIcon } from '../layout-and-navigation/Expandable'
 import type { MenuProps } from './Menu'
 import { Menu } from './Menu'
+import { SearchBar } from './SearchBar'
+import { useSearch } from '../../hooks/useSearch'
 
 export type SelectTileProps = TileProps
 
@@ -72,6 +74,18 @@ export const Select = <T, >({
 
   const isShowingHint = !selectedDisplayOverwrite && !selectedOption?.label
 
+  const { result, search, setSearch } = useSearch<SelectOption<T>>({
+    ...options,
+    list: options,
+    searchMapping: useCallback((item: SelectOption<T>) => item.searchTags, [])
+  })
+
+  useEffect(() => {
+    if (!isSearchEnabled) {
+      setSearch('')
+    }
+  }, [isSearchEnabled, setSearch])
+
   return (
     <div className={clsx(className)}>
       {label && (
@@ -99,26 +113,32 @@ export const Select = <T, >({
             <ExpansionIcon isExpanded={isOpen}/>
           </button>
         )}
-        menuClassName={clsx('flex-col-0 p-2 max-h-96', menuProps.menuClassName)}
+        menuClassName={clsx('flex-col-2 p-2 max-h-96 overflow-hidden', menuProps.menuClassName)}
       >
         {({ close }) => (
-          <SearchableList
-            list={options}
-            minimumItemsForSearch={isSearchEnabled ? 0 : options.length}
-            searchMapping={item => item.searchTags}
-            itemMapper={(option, index) => (
-              <SelectTile
-                key={index}
-                isSelected={selectedOption?.value === option.value}
-                title={{ value: option.label }}
-                onClick={() => {
-                  onChange(option.value)
-                  close()
-                }}
-                isDisabled={option.disabled}
+          <>
+            {isSearchEnabled && (
+              <SearchBar
+                value={search}
+                onChangeText={setSearch}
+                autoFocus={true}
               />
             )}
-          />
+            <div className="flex-col-2 overflow-y-auto">
+              {result.map((option, index) => (
+                <SelectTile
+                  key={index}
+                  isSelected={option === selectedOption}
+                  title={{ value: option.label }}
+                  onClick={() => {
+                    onChange(option.value)
+                    close()
+                  }}
+                  isDisabled={option.disabled}
+                />
+              ))}
+            </div>
+          </>
         )}
       </Menu>
     </div>

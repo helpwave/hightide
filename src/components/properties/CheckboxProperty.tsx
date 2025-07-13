@@ -34,7 +34,7 @@ export const CheckboxProperty = ({
       readOnly={readOnly}
       icon={<Check size={16}/>}
       input={() => (
-        <div className="row py-2 px-4 items-center">
+        <div className="flex-row-2 py-2 px-4 items-center">
           <Checkbox
             checked={value ?? true}
             disabled={readOnly}

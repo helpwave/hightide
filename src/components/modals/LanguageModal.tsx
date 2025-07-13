@@ -62,7 +62,7 @@ export const LanguageModal = ({
           options={LanguageUtil.languages.map((language) => ({ label: translation(language), value: language }))}
           onChange={(language: string) => setLanguage(language as Language)}
         />
-        <div className="row mt-3 gap-x-4 justify-end">
+        <div className="flex-row-4 mt-3 justify-end">
           <SolidButton autoFocus color="positive" onClick={onClose}>
             {translation('done')}
           </SolidButton>

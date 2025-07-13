@@ -40,13 +40,13 @@ export const SingleSelectProperty = <T, >({
       icon={<List size={16}/>}
       input={({ softRequired }) => (
         <div
-          className={clsx('row grow py-2 px-4 cursor-pointer', { 'text-warning': softRequired && !hasValue })}
+          className={clsx('flex-row-2 grow py-2 px-4 cursor-pointer', { 'text-warning': softRequired && !hasValue })}
         >
           <Select
             {...selectProps}
             value={value}
             options={options}
-            isDisabled={readOnly}
+            disabled={readOnly}
             className={clsx('w-full', { 'bg-surface-warning': softRequired && !hasValue })}
             hintText={`${translation('select')}...`}
           />

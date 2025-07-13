@@ -70,7 +70,7 @@ const Checkbox = ({
   }
 
   return (
-    <div className={clsx('row justify-center items-center', containerClassName)}>
+    <div className={clsx('flex-row-2 justify-center items-center', containerClassName)}>
       <CheckboxPrimitive.Root
         onCheckedChange={propagateChange}
         checked={checked}

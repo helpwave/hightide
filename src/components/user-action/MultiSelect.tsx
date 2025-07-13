@@ -1,6 +1,6 @@
 import type { ReactNode } from 'react'
+import { useCallback } from 'react'
 import { useEffect, useState } from 'react'
-import { ChevronDown, ChevronUp } from 'lucide-react'
 import type { PropsForTranslation, Translation } from '../../localization/useTranslation'
 import { useTranslation } from '../../localization/useTranslation'
 import clsx from 'clsx'
@@ -8,13 +8,16 @@ import type { LabelProps } from './Label'
 import { Label } from './Label'
 import type { SelectOption } from './Select'
 import { SelectTile } from './Select'
-import { SearchableList } from '../layout-and-navigation/SearchableList'
 import { SolidButton } from './Button'
 import { ChipList } from '../layout-and-navigation/Chip'
 import type { FormTranslationType } from '../../localization/defaults/form'
 import { formTranslation } from '../../localization/defaults/form'
 import type { MenuProps } from './Menu'
 import { Menu } from './Menu'
+import { ExpansionIcon } from '../layout-and-navigation/Expandable'
+import { SearchBar } from './SearchBar'
+import type { UseSearchProps } from '../../hooks/useSearch'
+import { useSearch } from '../../hooks/useSearch'
 
 type MultiSelectAddonTranslation = {
   selected: string,
@@ -45,6 +48,7 @@ export type MultiSelectProps<T> = Omit<MenuProps<HTMLButtonElement>, 'trigger' |
   className?: string,
   useChipDisplay?: boolean,
   selectedDisplayOverwrite?: ReactNode,
+  searchOptions?: Omit<UseSearchProps<SelectOption<T>>, 'list' | 'searchMapping'>,
 }
 
 /**
@@ -60,15 +64,27 @@ export const MultiSelect = <T, >({
                                    selectedDisplayOverwrite,
                                    useChipDisplay = false,
                                    className = '',
+                                   searchOptions,
                                    ...menuProps
                                  }:
                                  PropsForTranslation<MultiSelectTranslation, MultiSelectProps<T>>
 ) => {
   const translation = useTranslation([formTranslation, defaultMultiSelectTranslation], overwriteTranslation)
+  const { result, search, setSearch } = useSearch<MultiSelectOption<T>>({
+    ...searchOptions,
+    list: options,
+    searchMapping: useCallback((item: MultiSelectOption<T>) => item.searchTags, [])
+  })
 
   const selectedItems = options.filter(value => value.selected)
 
   const isShowingHint = !selectedDisplayOverwrite && selectedItems.length === 0
+
+  useEffect(() => {
+    if (!isSearchEnabled) {
+      setSearch('')
+    }
+  }, [isSearchEnabled, setSearch])
 
   return (
     <div className={clsx(className)}>
@@ -105,19 +121,22 @@ export const MultiSelect = <T, >({
             </span>
             )}
             {isShowingHint && (<span className="textstyle-description">{hintText ?? translation('select')}</span>)}
-            {isOpen ? <ChevronUp size={24} className="min-w-6"/> : <ChevronDown className="min-w-6"/>}
+            <ExpansionIcon isExpanded={isOpen}/>
           </button>
         )}
-        menuClassName={clsx('flex-col-2 p-2 max-h-96', menuProps.menuClassName)}
+        menuClassName={clsx('flex-col-2 p-2 max-h-96 overflow-hidden', menuProps.menuClassName)}
       >
         {({ close }) => (
           <>
-            <SearchableList
-              autoFocus={true}
-              list={options}
-              minimumItemsForSearch={isSearchEnabled ? undefined : options.length}
-              searchMapping={item => item.searchTags}
-              itemMapper={(option, index) => (
+            {isSearchEnabled && (
+              <SearchBar
+                value={search}
+                onChangeText={setSearch}
+                autoFocus={true}
+              />
+            )}
+            <div className="flex-col-2 overflow-y-auto">
+              {result.map((option, index) => (
                 <SelectTile
                   key={index}
                   isSelected={option.selected}
@@ -130,10 +149,10 @@ export const MultiSelect = <T, >({
                   }}
                   isDisabled={option.disabled}
                 />
-              )}
-            />
-            <div className="row justify-between mt-2">
-              <div className="row gap-x-2">
+              ))}
+            </div>
+            <div className="flex-row-2 justify-between">
+              <div className="flex-row-2">
                 <SolidButton
                   color="neutral"
                   size="small"

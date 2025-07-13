@@ -12,7 +12,7 @@ const StackedDialog = () => {
   const [modal3, setModal3] = useState(false)
   return (
     <>
-      <div className="row items-center justify-center min-h-[400px]">
+      <div className="flex-row-2 items-center justify-center min-h-[400px]">
         <SolidButton onClick={() => setModal1(true)}>Open Dialog</SolidButton>
       </div>
 

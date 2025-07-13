@@ -34,7 +34,7 @@ export const DateProperty = ({
       icon={<CalendarDays size={16}/>}
       input={({ softRequired }) => (
         <div
-          className={clsx('row grow py-2 px-4 cursor-pointer', { 'text-warning': softRequired && !hasValue })}
+          className={clsx('flex-row-2 grow py-2 px-4 cursor-pointer', { 'text-warning': softRequired && !hasValue })}
         >
           <Input
             className={clsx('!ring-0 !border-0 !outline-0 !p-0 !m-0 !shadow-none !w-fit !rounded-none', { 'bg-surface-warning': softRequired && !hasValue })}

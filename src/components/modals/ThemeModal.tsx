@@ -58,7 +58,7 @@ export const ThemeModal = ({
           options={ThemeUtil.themes.map((theme) => ({ label: translation(theme), value: theme }))}
           onChange={(theme: string) => setTheme(theme as ThemeType)}
         />
-        <div className="row mt-3 gap-x-4 justify-end">
+        <div className="flex-row-4 mt-3 justify-end">
           <SolidButton autoFocus color="positive" onClick={onClose}>
             {translation('done')}
           </SolidButton>

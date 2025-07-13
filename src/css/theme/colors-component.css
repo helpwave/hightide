@@ -142,6 +142,9 @@
     --color-tabel-header-background: #2F2F2F;
     --color-table-row-hover-background: #2f2841;
 
+    /* Tag */
+    --color-tag-dark-background: #1A1A1A;
+
     /* Tooltip */
     --color-tooltip-background: #555555;
     --color-tooltip-text: var(--color-description);

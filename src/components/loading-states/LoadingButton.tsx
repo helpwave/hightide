@@ -15,7 +15,7 @@ export const LoadingButton = ({ isLoading = false, size = 'medium', onClick, ...
     <div className="inline-block relative">
       {
         isLoading && (
-          <div className={clsx('absolute inset-0 row items-center justify-center bg-white/40', paddingClass)}>
+          <div className={clsx('flex-row-2 absolute inset-0 items-center justify-center bg-white/40', paddingClass)}>
             <Helpwave animate="loading" className="text-white"/>
           </div>
         )

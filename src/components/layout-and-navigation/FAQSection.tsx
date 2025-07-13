@@ -1,7 +1,7 @@
 import type { ReactNode } from 'react'
 import clsx from 'clsx'
-import { ChevronDown, ChevronUp } from 'lucide-react'
 import type { ExpandableProps } from './Expandable'
+import { ExpansionIcon } from './Expandable'
 import { ExpandableUncontrolled } from './Expandable'
 import { MarkdownInterpreter } from './MarkdownInterpreter'
 
@@ -31,19 +31,15 @@ export const FAQSection = ({
                              entries,
                              expandableClassName
                            }: FAQSectionProps) => {
-  const chevronSize = 28
   return (
-    <div className="col gap-y-4">
+    <div className="flex-col-4">
       {entries.map(({ id, title, content, ...restProps }) => (
         <ExpandableUncontrolled
           key={id}
           {...restProps}
           label={(<h3 id={id} className="textstyle-title-md">{title}</h3>)}
           clickOnlyOnHeader={false}
-          icon={(expanded) => expanded ?
-            (<ChevronUp size={chevronSize} className="text-primary" style={{ minWidth: `${chevronSize}px` }}/>) :
-            (<ChevronDown size={chevronSize} className="text-primary"/>)
-          }
+          icon={(expanded) => (<ExpansionIcon isExpanded={expanded} className="text-primary"/>)}
           className={clsx('rounded-xl', expandableClassName)}
         >
           <div className="mt-2">

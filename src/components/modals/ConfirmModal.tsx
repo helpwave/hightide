@@ -57,10 +57,10 @@ export const ConfirmModal = ({
 
   return (
     <Modal {...restProps} onClose={onCancel} className={clsx('justify-between', className)}>
-      <div className="col grow">
+      <div className="flex-col-2 grow">
         {children}
       </div>
-      <div className="row mt-3 gap-x-4 justify-end">
+      <div className="flex-row-4 mt-3 justify-end">
         {onCancel && (
           <SolidButton
             color={buttonOverwrites?.[0].color ?? 'neutral'}

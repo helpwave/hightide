@@ -37,10 +37,10 @@ export const PropertyBase = ({
   const translation = useTranslation([formTranslation], overwriteTranslation)
   const requiredAndNoValue = softRequired && !hasValue
   return (
-    <div className={clsx('row gap-x-0 group', className)}>
+    <div className={clsx('flex-row-0 group', className)}>
       <div
         className={
-          clsx('row gap-x-2 !w-[200px] px-4 py-2 items-center rounded-l-xl border-2 border-r-0', {
+          clsx('flex-row-2 !w-[200px] px-4 py-2 items-center rounded-l-xl border-2 border-r-0', {
             'bg-property-title-background property-title-text group-hover:border-primary': !requiredAndNoValue,
             'bg-warning text-surface-warning group-hover:border-warning border-warning/90': requiredAndNoValue,
           }, className)}
@@ -49,7 +49,7 @@ export const PropertyBase = ({
         {name}
       </div>
       <div className={
-        clsx('row gap-x-0 grow justify-between items-center rounded-r-xl border-2 border-l-0', {
+        clsx('flex-row-0 grow justify-between items-center rounded-r-xl border-2 border-l-0', {
           'bg-surface group-hover:border-primary': !requiredAndNoValue,
           'bg-surface-warning group-hover:border-warning border-warning/90': requiredAndNoValue,
         }, className)}

@@ -16,7 +16,7 @@ export const useSearch = <T>({
                                additionalSearchTags,
                                isSearchInstant = true,
                              }: UseSearchProps<T>) => {
-  const [search, setSearch] = useState<string>(initialSearch)
+  const [search, setSearch] = useState<string>(initialSearch ?? '')
   const [result, setResult] = useState<T[]>(list)
   const searchTags = useMemo(() => additionalSearchTags ?? [], [additionalSearchTags])
 

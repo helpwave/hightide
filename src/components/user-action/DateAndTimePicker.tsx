@@ -79,13 +79,13 @@ export const DateTimePicker = ({
   }
 
   return (
-    <div className="col w-fit">
-      <div className="row gap-x-4">
+    <div className="flex-col-2 w-fit">
+      <div className="flex-row-4">
         {dateDisplay}
         {timeDisplay}
       </div>
-      <div className="row justify-end">
-        <div className="row gap-x-2 mt-1">
+      <div className="flex-row-2 justify-end">
+        <div className="flex-row-2 mt-1">
           <SolidButton size="medium" color="negative" onClick={onRemove}>{translation('clear')}</SolidButton>
           <SolidButton
             size="medium"

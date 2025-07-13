@@ -31,7 +31,6 @@ const SingleSelectPropertyExample = ({
       {...restProps}
       value={usedValue}
       options={options}
-      searchMapping={value1 => [value1.value]}
       onChange={setUsedValue}
       onRemove={() => setUsedValue(undefined)}
       hintText={hintText}
@@ -53,6 +52,8 @@ export const singleSelectProperty: Story = {
     value: undefined,
     name: 'Fruits',
     softRequired: false,
+    readOnly: false,
+    hintText: 'Select',
     options: [
       { value: 'apple', label: 'Apple' },
       { value: 'pear', label: 'Pear' },
@@ -65,10 +66,5 @@ export const singleSelectProperty: Story = {
       { value: 'kiwi', label: 'Kiwi' },
       { value: 'watermelon', label: 'Watermelon' },
     ],
-    readOnly: false,
-    hintText: 'Select',
-    showDisabledOptions: true,
-    isDisabled: false,
-    isHidingCurrentValue: true
   },
 }
