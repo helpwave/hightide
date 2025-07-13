@@ -7,6 +7,9 @@ and adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
 ## [0.1.20] - 2025-07-14
 
+### Added
+- Added `LoadingContainer` for showing a loading animation
+
 ### Changed
 - Changed `Expandable` to allow for styling the expansion container
 
