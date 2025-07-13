@@ -31,7 +31,7 @@ export const ErrorComponent = ({
                                }: PropsForTranslation<ErrorComponentTranslation, ErrorComponentProps>) => {
   const translation = useTranslation([defaultErrorComponentTranslation], overwriteTranslation)
   return (
-    <div className={clsx('col items-center justify-center gap-y-4 w-full h-24', classname)}>
+    <div className={clsx('flex-col-4 items-center justify-center w-full h-24', classname)}>
       <AlertOctagon size={64} className="text-warning"/>
       {errorText ?? `${translation('errorOccurred')} :(`}
     </div>

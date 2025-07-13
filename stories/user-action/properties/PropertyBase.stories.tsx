@@ -17,7 +17,7 @@ export const propertyBase: Story = {
     hasValue: true,
     input: ({ softRequired, hasValue }) => (
       <div
-        className={clsx('row grow py-2 px-4', { 'text-warning': softRequired && !hasValue })}
+        className={clsx('flex-row-2 grow py-2 px-4', { 'text-warning': softRequired && !hasValue })}
       >
         Value
       </div>

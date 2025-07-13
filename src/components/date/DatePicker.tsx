@@ -53,10 +53,10 @@ export const DatePicker = ({
   }, [value])
 
   return (
-    <div className={clsx('col gap-y-4', className)}>
-      <div className="row items-center justify-between h-7">
+    <div className={clsx('flex-col-4', className)}>
+      <div className="flex-row-2 items-center justify-between h-7">
         <TextButton
-          className={clsx('row gap-x-1 items-center cursor-pointer select-none', {
+          className={clsx('flex-row-1 items-center cursor-pointer select-none', {
             'text-disabled-text': displayMode !== 'day',
           })}
           onClick={() => setDisplayMode(displayMode === 'day' ? 'yearMonth' : 'day')}
@@ -65,7 +65,7 @@ export const DatePicker = ({
           <ChevronDown size={16}/>
         </TextButton>
         {displayMode === 'day' && (
-          <div className="row justify-end">
+          <div className="flex-row-2 justify-end">
             <SolidButton
               size="small"
               color="primary"

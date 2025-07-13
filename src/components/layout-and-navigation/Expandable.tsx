@@ -1,6 +1,6 @@
 import type { PropsWithChildren, ReactNode } from 'react'
-import { forwardRef, useEffect, useState } from 'react'
-import { ChevronDown, ChevronUp } from 'lucide-react'
+import { forwardRef, useCallback, useEffect, useState } from 'react'
+import { ChevronDown } from 'lucide-react'
 import clsx from 'clsx'
 import { noop } from '../../util/noop'
 
@@ -21,9 +21,23 @@ export type ExpandableProps = PropsWithChildren<{
   contentClassName?: string,
 }>
 
-const DefaultIcon: IconBuilder = (expanded) => expanded ?
-  (<ChevronUp className="min-w-4 w-4"/>)
-  : (<ChevronDown className="min-w-4 w-4"/>)
+
+export type ExpansionIconProps = {
+  isExpanded: boolean,
+  className?: string,
+}
+
+export const ExpansionIcon = ({ isExpanded, className }: ExpansionIconProps) => {
+  return (
+    <ChevronDown
+      className={clsx(
+        'min-w-6 w-6 min-h-6 h-6 transition-transform duration-200 ease-in-out',
+        { 'rotate-180': isExpanded },
+        className
+      )}
+    />
+  )
+}
 
 
 /**
@@ -41,20 +55,21 @@ export const Expandable = forwardRef<HTMLDivElement, ExpandableProps>(function E
                                                                                             headerClassName,
                                                                                             contentClassName,
                                                                                           }, ref) {
-  icon ??= DefaultIcon
+  const defaultIcon = useCallback((expanded: boolean) => <ExpansionIcon isExpanded={expanded}/>, [])
+  icon ??= defaultIcon
 
   return (
     <div
       ref={ref}
-      className={clsx('col gap-y-0 bg-surface text-on-surface group rounded-lg shadow-sm', { 'cursor-pointer': !clickOnlyOnHeader && !disabled }, className)}
+      className={clsx('flex-col-0 bg-surface text-on-surface group rounded-lg shadow-sm', { 'cursor-pointer': !clickOnlyOnHeader && !disabled }, className)}
       onClick={() => !clickOnlyOnHeader && !disabled && onChange(!isExpanded)}
     >
       <div
         className={clsx(
-          'row py-2 px-4 rounded-lg justify-between items-center bg-surface text-on-surface select-none',
+          'flex-row-2 py-2 px-4 rounded-lg justify-between items-center bg-surface text-on-surface select-none',
           {
-            'group-hover:brightness-95': !isExpanded,
-            'hover:brightness-95': isExpanded && !disabled,
+            'group-hover:brightness-97': !isExpanded,
+            'hover:brightness-97': isExpanded && !disabled,
             'cursor-pointer': clickOnlyOnHeader && !disabled,
           },
           headerClassName
@@ -64,11 +79,18 @@ export const Expandable = forwardRef<HTMLDivElement, ExpandableProps>(function E
         {label}
         {icon(isExpanded)}
       </div>
-      {isExpanded && (
-        <div className={clsx('col px-4 pb-2', contentClassName)}>
-          {children}
-        </div>
-      )}
+      <div
+        className={clsx(
+          'flex-col-2 px-4 transition-all duration-300 ease-in-out',
+          {
+            'max-h-96 opacity-100 pb-2': isExpanded,
+            'max-h-0 opacity-0 overflow-hidden': !isExpanded,
+          },
+          contentClassName
+        )}
+      >
+        {children}
+      </div>
     </div>
   )
 })

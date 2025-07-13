@@ -54,14 +54,15 @@
   /* Overlay */
   --color-overlay-background: #FFFFFF;
   --color-overlay-text: var(--color-text-dark);
+  --color-overlay-shadow: #00000039;
 
   /* ProgressIndicator */
   --color-progress-indicator-fill: var(--color-primary);
   --color-progress-indicator-background: var(--color-gray-300);
 
   /* Property */
-  --color-property-title-background: #E6E6E6;
-  --color-property-title-text: var(--color-text-default);
+  --color-property-title-background: #EDEDED;
+  --color-property-title-text: var(--color-text-secondary);
 
   /* Stepper Bar */
   --color-stepperbar-dot-active: var(--color-primary);
@@ -102,7 +103,7 @@
   --color-text-image-dark-text: var(--color-white);
 
   /* Tooltip */
-  --color-tooltip-background: var(--color-overlay-background);
+  --color-tooltip-background: #D9D9D9;
   --color-tooltip-text: var(--color-description);
 }
 
@@ -135,9 +136,17 @@
     /* Overlay */
     --color-overlay-background: #2A2A2A;
     --color-overlay-text: var(--color-text-light);
+    --color-overlay-shadow: #00000055;
 
     /* Table */
     --color-tabel-header-background: #2F2F2F;
     --color-table-row-hover-background: #2f2841;
+
+    /* Tag */
+    --color-tag-dark-background: #1A1A1A;
+
+    /* Tooltip */
+    --color-tooltip-background: #555555;
+    --color-tooltip-text: var(--color-description);
   }
 }

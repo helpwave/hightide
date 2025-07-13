@@ -68,10 +68,10 @@ export const ToggleableInput = ({
   return (
     <div>
       <div
-        className={clsx('row items-center w-full gap-x-2 overflow-hidden', { 'cursor-pointer': !isEditing })}
+        className={clsx('flex-row-2 items-center w-full overflow-hidden', { 'cursor-pointer': !isEditing })}
         onClick={() => !isEditing ? setIsEditing(!isEditing) : undefined}
       >
-        <div className={clsx('row overflow-hidden', { 'flex-1': isEditing })}>
+        <div className={clsx('flex-row-2 overflow-hidden', { 'flex-1': isEditing })}>
           {isEditing ? (
             <input
               ref={ref}

@@ -5,10 +5,26 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/)
 and adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [0.1.19] - 2025-07-11
+
+### Added
+- Add animations for `Expandable`, `Select`, `MultiSelect`, `Menu`, `Modal`, `Dialog`
+- Add utility for defining a flex-column or flex-row with its gap directly 
+- Add hook `usePopoverPosition` to easily define the position of a popover based on a trigger element
+
+### Changed
+- Changed the disabled color for dark and light mode
+- Changed overlay background color to be configurable
+- Changed `Select` and `MultiSelect` to now be variants of `Menu`
+- Made `Select` and `MultiSelect` scrollable
+- Menu now allows for defining the direction in which the PopOver is openend
+- Changed the design of `SingleSelectProperty` and `MultiSelectProperty`
+
 ## [0.1.18] - 2025-07-07
 
 ### Fix
 - fix console logging in `useDelay`
+- fix helpwave icon animation for safari
 
 ## [0.1.17] - 2025-07-07
 

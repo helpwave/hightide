@@ -21,6 +21,14 @@
     }
   }
 
+  @-webkit-keyframes bigLeftUp {
+    0%, 25% {
+      stroke-dashoffset: 1000;
+    }
+    50%, 75%, 100% {
+      stroke-dashoffset: 0;
+    }
+  }
   @keyframes bigLeftUp {
     0%, 25% {
       stroke-dashoffset: 1000;
@@ -30,6 +38,14 @@
     }
   }
 
+  @-webkit-keyframes bigRightDown {
+    0%, 25%, 50% {
+      stroke-dashoffset: 0;
+    }
+    75%, 100% {
+      stroke-dashoffset: -1000;
+    }
+  }
   @keyframes bigRightDown {
     0%, 25%, 50% {
       stroke-dashoffset: 0;
@@ -39,6 +55,14 @@
     }
   }
 
+  @-webkit-keyframes smallLeftUp {
+    0%, 25%, 50% {
+      stroke-dashoffset: 1000;
+    }
+    75%, 100% {
+      stroke-dashoffset: 0;
+    }
+  }
   @keyframes smallLeftUp {
     0%, 25%, 50% {
       stroke-dashoffset: 1000;
@@ -48,6 +72,14 @@
     }
   }
 
+  @-webkit-keyframes smallRightDown {
+    0%, 25% {
+      stroke-dashoffset: 0;
+    }
+    50%, 75%, 100% {
+      stroke-dashoffset: -1000;
+    }
+  }
   @keyframes smallRightDown {
     0%, 25% {
       stroke-dashoffset: 0;
@@ -57,31 +89,68 @@
     }
   }
 
+  @keyframes pop-in {
+    0% {
+      opacity: 0;
+      scale: 80%;
+    }
+    100% {
+      opacity: 1;
+      scale: 100%;
+    }
+  }
+
+  @keyframes pop-out {
+    0% {
+      opacity: 1;
+      scale: 100%;
+    }
+    100% {
+      opacity: 0;
+      scale: 80%;
+    }
+  }
+
+  .animate-pop-in {
+    animation: pop-in 0.2s ease-in-out;
+  }
+
+  .animate-pop-out {
+    animation: pop-out 0.2s ease-in-out forwards;
+  }
+
   .animate-fade {
     animation: fade-out 3s ease-in-out;
   }
 
   .animate-wave-big-left-up {
     animation: bigLeftUp 1.7s ease-in infinite normal;
+    -webkit-animation: bigLeftUp 1.7s ease-in infinite normal;
   }
 
   .animate-wave-big-right-down {
     animation: bigRightDown 1.7s ease-in infinite reverse;
+    -webkit-animation: bigRightDown 1.7s ease-in infinite reverse;
   }
 
   .animate-wave-small-left-up {
     animation: smallLeftUp 1.7s ease-in infinite normal;
+    -webkit-animation: smallLeftUp 1.7s ease-in infinite normal;
   }
 
   .animate-wave-small-right-down {
     animation: smallRightDown 1.7s ease-in infinite reverse;
+    -webkit-animation: smallRightDown 1.7s ease-in infinite reverse;
   }
 
   .animate-tooltip-fade-in {
     animation: fade-in 0.2s ease-in-out forwards;
+    -webkit-animation: fade-in 0.2s ease-in-out forwards;
   }
 
   .animate-tooltip-fade-out {
     animation: fade-in 0.2s ease-in-out forwards;
+    -webkit-animation: fade-in 0.2s ease-in-out forwards;
   }
 }
+

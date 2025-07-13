@@ -205,7 +205,7 @@ export const ScrollPicker = <T, >({
           style={{ height: `${itemHeight}px` }}
         />
         <div
-          className="col select-none"
+          className="flex-col-2 select-none"
           style={{
             transform: `translateY(${-transition * (distance + itemHeight)}px)`,
             columnGap: `${distance}px`,
@@ -215,7 +215,7 @@ export const ScrollPicker = <T, >({
             <div
               key={index}
               className={clsx(
-                `col items-center justify-center rounded-md`,
+                `flex-col-2 items-center justify-center rounded-md`,
                 {
                   'text-primary font-bold': currentIndex === index,
                   'text-on-background': currentIndex === index,

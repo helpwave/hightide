@@ -18,7 +18,7 @@ export const expandable: Story = {
     clickOnlyOnHeader: true,
     label: (<h3 className="textstyle-label-lg">Label</h3>),
     children: (
-      <div className="col">
+      <div className="flex-col-2">
         <Tile title={{ value: 'Item 1' }}/>
         <Tile title={{ value: 'Item 2' }}/>
         <Tile title={{ value: 'Item 3' }}/>

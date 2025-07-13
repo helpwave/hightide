@@ -304,22 +304,26 @@ export const Table = <T, >({
     const colSizes: { [key: string]: number } = {}
     for (let i = 0; i < headers.length; i++) {
       const header = headers[i]!
-      colSizes[`--header-${header.id}-size`] = header.getSize()
-      colSizes[`--col-${header.column.id}-size`] = header.column.getSize()
+      colSizes[`--header-${header.id}-size`] = Math.floor(header.getSize())
+      colSizes[`--col-${header.column.id}-size`] = Math.floor(header.column.getSize())
     }
 
     return colSizes
   }, [table.getState().columnSizingInfo, table.getState().columnSizing]) // eslint-disable-line react-hooks/exhaustive-deps
 
   return (
-    <div ref={ref} className={clsx('col gap-y-4', className)}>
-      <Scrollbars autoHeight={true} autoHeightMax={tableRef.current?.offsetHeight} autoHide={true}>
+    <div ref={ref} className={clsx('flex-col-4', className)}>
+      <Scrollbars
+        autoHeight={true}
+        autoHeightMax={tableRef.current?.offsetHeight + 2}
+        autoHide={true}
+      >
         <table
           ref={tableRef}
           className={clsx(tableClassName)}
           style={{
             ...columnSizeVars,
-            width: Math.max(table.getTotalSize(), ref.current?.offsetWidth ?? table.getTotalSize()),
+            width: Math.floor(Math.max(table.getTotalSize() - columns.length, ref.current?.offsetWidth ?? table.getTotalSize())),
           }}
         >
           {table.getHeaderGroups().map((headerGroup) => (
@@ -346,9 +350,9 @@ export const Table = <T, >({
                     colSpan={header.colSpan}
                     className={clsx('relative group', header.column.columnDef.meta?.className)}
                   >
-                    <div className="row w-full">
+                    <div className="flex-row-2 w-full">
                       {header.isPlaceholder ? null : (
-                        <div className="row gap-x-1 items-center">
+                        <div className="flex-row-1 items-center">
                           {header.column.getCanSort() && (
                             <TableSortButton
                               sortDirection={header.column.getIsSorted()}
@@ -423,7 +427,7 @@ export const Table = <T, >({
           </tbody>
         </table>
       </Scrollbars>
-      <div className="row justify-center">
+      <div className="flex-row-2 justify-center">
         <Pagination
           pageIndex={table.getState().pagination.pageIndex}
           pageCount={table.getPageCount()}
@@ -520,7 +524,7 @@ export const TableWithSelection = <T, >({
         ...state
       }}
       onRowClick={(row, table) => {
-        if(!disableClickRowClickSelection){
+        if (!disableClickRowClickSelection) {
           row.toggleSelected()
         }
         onRowClick(row, table)

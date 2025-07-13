@@ -71,7 +71,7 @@ export const AnimatedRing = ({
 
   return (
     <div
-      className="row items-center justify-center"
+      className="flex-row-2 items-center justify-center"
       style={{
         width: `${innerSize + 2 * width}px`,
         height: `${innerSize + 2 * width}px`,
@@ -135,7 +135,7 @@ export const RingWave = ({
 
   return (
     <div
-      className="row items-center justify-center"
+      className="flex-row-2 items-center justify-center"
       style={{
         width: `${endInnerSize + 2 * width}px`,
         height: `${endInnerSize + 2 * width}px`,

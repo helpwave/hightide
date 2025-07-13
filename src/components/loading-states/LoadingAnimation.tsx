@@ -22,7 +22,7 @@ export const LoadingAnimation = ({
                                  }: PropsForTranslation<LoadingAnimationTranslation, LoadingAnimationProps>) => {
   const translation = useTranslation([formTranslation], overwriteTranslation)
   return (
-    <div className={clsx('col items-center justify-center w-full h-24', classname)}>
+    <div className={clsx('flex-col-2 items-center justify-center w-full h-24', classname)}>
       <Helpwave animate="loading"/>
       {loadingText ?? `${translation('loading')}...`}
     </div>

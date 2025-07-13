@@ -73,7 +73,7 @@ export const ChipList = ({
                            className = ''
                          }: ChipListProps) => {
   return (
-    <div className={clsx('flex flex-wrap gap-x-4 gap-y-2', className)}>
+    <div className={clsx('flex flex-wrap gap-x-2 gap-y-2', className)}>
       {list.map((value, index) => (
         <Chip
           key={index}

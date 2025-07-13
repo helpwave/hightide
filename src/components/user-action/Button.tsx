@@ -1,4 +1,5 @@
 import type { ButtonHTMLAttributes, PropsWithChildren, ReactNode } from 'react'
+import { forwardRef } from 'react'
 import clsx from 'clsx'
 
 
@@ -97,7 +98,7 @@ export type IconButtonProps = PropsWithChildren<{
 /**
  * A button with a solid background and different sizes
  */
-const SolidButton = ({
+const SolidButton = forwardRef<HTMLButtonElement, SolidButtonProps>(function SolidButton({
                        children,
                        disabled = false,
                        color = 'primary',
@@ -107,7 +108,7 @@ const SolidButton = ({
                        onClick,
                        className,
                        ...restProps
-                     }: SolidButtonProps) => {
+                     }, ref) {
   const colorClasses = {
     primary: 'bg-button-solid-primary-background text-button-solid-primary-text',
     secondary: 'bg-button-solid-secondary-background text-button-solid-secondary-text',
@@ -130,8 +131,9 @@ const SolidButton = ({
 
   return (
     <button
-      onClick={disabled ? undefined : onClick}
-      disabled={disabled || onClick === undefined}
+      ref={ref}
+      onClick={onClick}
+      disabled={disabled}
       className={clsx(
         {
           'text-disabled-text bg-disabled-background cursor-not-allowed': disabled,
@@ -165,7 +167,7 @@ const SolidButton = ({
       )}
     </button>
   )
-}
+})
 
 /**
  * A button with an outline border and different sizes
@@ -190,8 +192,8 @@ const OutlineButton = ({
   }[color]
   return (
     <button
-      onClick={disabled ? undefined : onClick}
-      disabled={disabled || onClick === undefined}
+      onClick={onClick}
+      disabled={disabled}
       className={clsx(
         {
           'text-disabled-text border-disabled-outline cursor-not-allowed': disabled,
@@ -254,8 +256,8 @@ const TextButton = ({
   }[color]
   return (
     <button
-      onClick={disabled ? undefined : onClick}
-      disabled={disabled || onClick === undefined}
+      onClick={onClick}
+      disabled={disabled}
       className={clsx(
         {
           'text-disabled-text cursor-not-allowed': disabled,
@@ -300,7 +302,6 @@ const IconButton = ({
                       disabled = false,
                       color = 'primary',
                       size = 'medium',
-                      onClick,
                       className,
                       ...restProps
                     }: IconButtonProps) => {
@@ -317,8 +318,7 @@ const IconButton = ({
 
   return (
     <button
-      onClick={disabled ? undefined : onClick}
-      disabled={disabled || onClick === undefined}
+      disabled={disabled}
       className={clsx(
         {
           'text-disabled-text bg-disabled-background cursor-not-allowed': disabled && color !== 'transparent',

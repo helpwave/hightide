@@ -37,6 +37,7 @@ export const Textarea = ({
                            onEditCompleted = noop,
                            saveDelayOptions,
                            defaultStyle = true,
+                           disabled = false,
                            className,
                            ...props
                          }: TextareaProps) => {
@@ -55,7 +56,13 @@ export const Textarea = ({
                labelType={label.labelType ?? 'labelSmall'}/>
       )}
       <div
-        className={`${clsx(' bg-surface text-on-surface focus-within:border-primary relative', { 'shadow border-2 hover:border-primary rounded-lg': defaultStyle })}`}>
+        className={clsx('bg-surface text-on-surface relative',
+          {
+            'shadow border-2 rounded-lg': defaultStyle,
+            'hover:border-primary focus-within:border-primary': defaultStyle && !disabled,
+            'border-disabled-border cursor-not-allowed': defaultStyle && !disabled,
+          })}
+      >
         {headline && (
           <span className="mx-3 mt-3 block textstyle-label-md">
             {headline}
@@ -63,10 +70,11 @@ export const Textarea = ({
         )}
         <textarea
           id={id}
-          className={clsx('pt-0 px-3 border-transparent focus:border-transparent focus:ring-0 appearance-none border w-full leading-tight focus:outline-none', {
+          className={clsx('pt-0 px-3 border-transparent appearance-none w-full leading-tight focus:ring-0 focus:outline-none', {
             'resize-none': !resizable,
             'h-32': defaultStyle,
-            'mt-3': !headline
+            'mt-3': !headline,
+            'text-disabled-text': disabled,
           }, className)}
           onChange={(event) => {
             const value = event.target.value
@@ -84,6 +92,7 @@ export const Textarea = ({
             onEditCompletedWrapper(event.target.value)
             setHasFocus(false)
           }}
+          disabled={disabled}
           {...props}
         >
       </textarea>

@@ -46,34 +46,30 @@ export const TextProperty = ({
       {...baseProps}
       onRemove={onRemove}
       hasValue={hasValue}
-      icon={<Text size={16}/>}
+      icon={<Text size={24}/>}
       input={({ softRequired }) => (
-        <div
-          className={clsx('row grow pt-2 pb-1 px-4 cursor-pointer', { 'text-warning': softRequired && !hasValue })}
-        >
-          <Textarea
-            className={clsx('ring-0 border-0 outline-0 p-0 m-0 shadow-none rounded-none', { 'bg-surface-warning placeholder-warning': softRequired && !hasValue })}
-            rows={5}
-            defaultStyle={false}
-            value={value ?? ''}
-            readOnly={readOnly}
-            placeholder={`${translation('text')}...`}
-            onChangeText={(value) => {
-              if (!value) {
-                onRemove()
-              } else {
-                onChange(value)
-              }
-            }}
-            onEditCompleted={(value) => {
-              if (!value) {
-                onRemove()
-              } else {
-                onEditComplete(value)
-              }
-            }}
-          />
-        </div>
+        <Textarea
+          className={clsx('ring-0 border-0 outline-0 !px-0 p-0 m-0 shadow-none rounded-none', { 'bg-surface-warning placeholder-warning': softRequired && !hasValue })}
+          rows={5}
+          defaultStyle={false}
+          value={value ?? ''}
+          readOnly={readOnly}
+          placeholder={`${translation('text')}...`}
+          onChangeText={(value) => {
+            if (!value) {
+              onRemove()
+            } else {
+              onChange(value)
+            }
+          }}
+          onEditCompleted={(value) => {
+            if (!value) {
+              onRemove()
+            } else {
+              onEditComplete(value)
+            }
+          }}
+        />
       )}
     />
   )

@@ -58,9 +58,9 @@ export const TableFilterButton = <T, >({
 
   return (
     <Menu<HTMLDivElement>
-      trigger={(onClick, ref) => (
+      trigger={({ toggleOpen }, ref) => (
         <div ref={ref} className="relative">
-          <IconButton color="neutral" size="tiny" onClick={onClick}>
+          <IconButton color="neutral" size="tiny" onClick={toggleOpen}>
             <FilterIcon/>
           </IconButton>
           {hasFilter && (
@@ -73,7 +73,7 @@ export const TableFilterButton = <T, >({
       )}
     >
       {({ close }) => (
-        <div className="col gap-y-1 p-2 items-start font-normal text-menu-text">
+        <div className="flex-col-1 p-2 items-start font-normal text-menu-text">
           <h4 className="textstyle-title-sm">{translation('filter')}</h4>
           {filterType === 'text' && (
             <Input
@@ -85,7 +85,7 @@ export const TableFilterButton = <T, >({
             />
           )}
           {filterType === 'range' && (
-            <div className="row gap-x-2 items-center">
+            <div className="flex-row-2 items-center">
               <Input
                 value={(filterValue as [number, number])?.[0] ?? ''}
                 type="number"
@@ -133,7 +133,7 @@ export const TableFilterButton = <T, >({
               />
             </>
           )}
-          <div className="row justify-end w-full">
+          <div className="flex-row-2 justify-end w-full">
             {hasFilter && (
               <SolidButton color="negative" size="small" onClick={() => {
                 column.setFilterValue(undefined)

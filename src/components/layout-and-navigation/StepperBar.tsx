@@ -56,21 +56,21 @@ export const StepperBar = ({
 
   return (
     <div
-      className={clsx('row justify-between',className)}
+      className={clsx('flex-row-2 justify-between',className)}
     >
-      <div className="row flex-[2] justify-start">
+      <div className="flex-row-2 flex-[2] justify-start">
         <SolidButton
           disabled={currentStep === 0 || disabledSteps.has(currentStep)}
           onClick={() => {
             update(currentStep - 1)
           }}
-          className="row gap-x-1 items-center justify-center"
+          className="flex-row-1 items-center justify-center"
         >
           <ChevronLeft size={14}/>
           {translation('back')}
         </SolidButton>
       </div>
-      <div className="row flex-[5] gap-x-2 justify-center items-center">
+      <div className="flex-row-2 flex-[5] justify-center items-center">
         {showDots && dots.map((value, index) => {
           const seen = seenSteps.has(index)
           return (
@@ -91,10 +91,10 @@ export const StepperBar = ({
         })}
       </div>
       {currentStep !== numberOfSteps && (
-        <div className="row flex-[2] justify-end">
+        <div className="flex-row-2 flex-[2] justify-end">
           <SolidButton
             onClick={() => update(currentStep + 1)}
-            className="row gap-x-1 items-center justify-center"
+            className="flex-row-1 items-center justify-center"
             disabled={disabledSteps.has(currentStep)}
           >
             {translation('next')}
@@ -103,11 +103,11 @@ export const StepperBar = ({
         </div>
       )}
       {currentStep === numberOfSteps && (
-        <div className="row flex-[2] justify-end">
+        <div className="flex-row-2 flex-[2] justify-end">
           <SolidButton
             disabled={disabledSteps.has(currentStep)}
             onClick={onFinish}
-            className="row gap-x-1 items-center justify-center"
+            className="flex-row-1 items-center justify-center"
           >
             <Check size={14}/>
             {finishText ?? translation('confirm')}

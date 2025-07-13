@@ -10,9 +10,12 @@
  *
  *  @return The list of objects that match all search strings
  */
-export const MultiSubjectSearchWithMapping = <T>(search: string[], objects: T[], mapping: (value: T) => (string | undefined)[]) => {
+export const MultiSubjectSearchWithMapping = <T>(search: string[], objects: T[], mapping: (value: T) => (string[] | undefined)) => {
   return objects.filter(object => {
-    const mappedSearchKeywords = mapping(object).map(value => value ? value.toLowerCase().trim() : undefined)
+    const mappedSearchKeywords = mapping(object)?.map(value => value.toLowerCase().trim())
+    if(!mappedSearchKeywords) {
+      return true
+    }
     return search.every(searchValue => !!mappedSearchKeywords.find(value => !!value && value.includes(searchValue.toLowerCase().trim())))
   })
 }

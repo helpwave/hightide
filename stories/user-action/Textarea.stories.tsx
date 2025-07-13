@@ -13,7 +13,7 @@ export const textarea: Story = {
   args: {
     value: 'Text',
     label: { name: 'Label' },
-    id: 'text',
+    disabled: false,
     headline: '',
     disclaimer: '',
     resizable: false,

@@ -138,10 +138,10 @@ const TableExample = ({ ...props }: TableExampleProps) => {
   ], [translation])
 
   return (
-    <div className="col gap-y-3">
-      <div className="row justify-between items-center">
+    <div className="flex-col-3">
+      <div className="flex-row-2 justify-between items-center">
         <h2 className="textstyle-title-md">Address book</h2>
-        <div className="row items-center">
+        <div className="flex-row-2 items-center">
           {Object.keys(selection).length > 0 && (
             <SolidButton size="small" color="negative" onClick={() => {
               setData(prevState => prevState.filter((_, index) => !selection[index]))

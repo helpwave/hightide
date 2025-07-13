@@ -1,9 +1,18 @@
-import { type PropsWithChildren, type ReactNode, type RefObject, useRef } from 'react'
+import {
+  type PropsWithChildren,
+  type ReactNode,
+  type RefObject,
+  useEffect,
+  useRef, useState
+} from 'react'
 import clsx from 'clsx'
 import { useOutsideClick } from '../../hooks/useOutsideClick'
 import { useHoverState } from '../../hooks/useHoverState'
 import type { PropsWithBagFunctionOrChildren } from '../../util/PropsWithFunctionChildren'
 import { BagFunctionUtil } from '../../util/PropsWithFunctionChildren'
+import type { PopoverHorizontalAlignment, PopoverVerticalAlignment } from '../../hooks/usePopoverPosition'
+import { usePopoverPosition } from '../../hooks/usePopoverPosition'
+import { createPortal } from 'react-dom'
 
 export type MenuItemProps = {
   onClick?: () => void,
@@ -19,7 +28,7 @@ export const MenuItem = ({
                            className
                          }: PropsWithChildren<MenuItemProps>) => (
   <div
-    className={clsx('block px-3 py-1.5 bg-menu-background first:rounded-t-lg last:rounded-b-lg text-sm font-semibold', {
+    className={clsx('block px-3 py-1.5 first:rounded-t-md last:rounded-b-md text-sm font-semibold', {
       'text-right': alignment === 'right',
       'text-left': alignment === 'left',
       'text-disabled-text cursor-not-allowed': isDisabled,
@@ -32,19 +41,33 @@ export const MenuItem = ({
   </div>
 )
 
-type MenuBag = {
+function getScrollableParents(element) {
+  const scrollables = []
+  let parent = element.parentElement
+  while (parent) {
+    scrollables.push(parent)
+    parent = parent.parentElement
+  }
+  return scrollables
+}
+
+export type MenuBag = {
   isOpen: boolean,
+  disabled: boolean,
+  toggleOpen: () => void,
   close: () => void,
 }
 
 export type MenuProps<T> = PropsWithBagFunctionOrChildren<MenuBag> & {
-  trigger: (onClick: () => void, ref: RefObject<T>) => ReactNode,
+  trigger: (bag: MenuBag, ref: RefObject<T>) => ReactNode,
   /**
-   * @default 'tl'
+   * @default 'l'
    */
-  alignment?: 'tl' | 'tr' | 'bl' | 'br' | '_l' | '_r' | 't_' | 'b_',
+  alignmentHorizontal?: PopoverHorizontalAlignment,
+  alignmentVertical?: PopoverVerticalAlignment,
   showOnHover?: boolean,
   menuClassName?: string,
+  disabled?: boolean,
 }
 
 /**
@@ -53,40 +76,85 @@ export type MenuProps<T> = PropsWithBagFunctionOrChildren<MenuBag> & {
 export const Menu = <T extends HTMLElement>({
                                               trigger,
                                               children,
-                                              alignment = 'tl',
+                                              alignmentHorizontal = 'leftInside',
+                                              alignmentVertical = 'bottomOutside',
                                               showOnHover = false,
+                                              disabled = false,
                                               menuClassName = '',
                                             }: MenuProps<T>) => {
-  const { isHovered: isOpen, setIsHovered: setIsOpen, handlers } = useHoverState({ isDisabled: !showOnHover })
+  const { isHovered: isOpen, setIsHovered: setIsOpen } = useHoverState({ isDisabled: !showOnHover || disabled })
   const triggerRef = useRef<T>(null)
   const menuRef = useRef<HTMLDivElement>(null)
   useOutsideClick([triggerRef, menuRef], () => setIsOpen(false))
 
-  const bag: MenuBag = { isOpen, close: () => setIsOpen(false) }
+  const [isHidden, setIsHidden] = useState<boolean>(true)
+  const bag: MenuBag = {
+    isOpen,
+    close: () => setIsOpen(false),
+    toggleOpen: () => setIsOpen(prevState => !prevState),
+    disabled,
+  }
+
+  const menuPosition = usePopoverPosition(
+    triggerRef.current?.getBoundingClientRect(),
+    { verticalAlignment: alignmentVertical, horizontalAlignment: alignmentHorizontal, disabled }
+  )
+
+  useEffect(() => {
+    if (!isOpen) return
+
+    const triggerEl = triggerRef.current
+    if (!triggerEl) return
+
+    const scrollableParents = getScrollableParents(triggerEl)
+
+    const close = () => setIsOpen(false)
+    scrollableParents.forEach((parent) => {
+      parent.addEventListener('scroll', close)
+    })
+    window.addEventListener('resize', close)
+
+    return () => {
+      scrollableParents.forEach((parent) => {
+        parent.removeEventListener('scroll', close)
+      })
+      window.removeEventListener('resize', close)
+    }
+  }, [isOpen, setIsOpen])
+
+  useEffect(() => {
+    if (isOpen) {
+      setIsHidden(false)
+    }
+  }, [isOpen])
 
   return (
-    <div
-      className="relative"
-      {...handlers}
-    >
-      {trigger(() => setIsOpen(!isOpen), triggerRef)}
-      <div
+    <>
+      {trigger(bag, triggerRef)}
+      {createPortal((<div
         ref={menuRef}
         onClick={e => e.stopPropagation()}
         className={clsx(
-          'absolute top-full mt-1 min-w-40 rounded-lg bg-menu-background text-menu-text shadow-around-lg z-10',
+          'absolute rounded-md bg-menu-background text-menu-text shadow-around-lg z-10',
           {
-            'top-0': alignment[0] === 't',
-            'bottom-0': alignment[0] === 'b',
-            'left-0': alignment[1] === 'l',
-            'right-0': alignment[1] === 'r',
-            'hidden': !isOpen,
+            'animate-pop-in': isOpen,
+            'animate-pop-out': !isOpen,
+            'hidden': isHidden,
           },
           menuClassName
         )}
+        onAnimationEnd={() => {
+          if (!isOpen) {
+            setIsHidden(true)
+          }
+        }}
+        style={{
+          ...menuPosition
+        }}
       >
         {BagFunctionUtil.resolve<MenuBag>(children, bag)}
-      </div>
-    </div>
+      </div>), document.body)}
+    </>
   )
 }
+
