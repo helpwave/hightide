@@ -5,6 +5,11 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/)
 and adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [0.1.20] - 2025-07-14
+
+### Changed
+- Changed `Expandable` to allow for styling the expansion container
+
 ## [0.1.19] - 2025-07-11
 
 ### Add

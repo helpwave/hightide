@@ -19,6 +19,7 @@ export type ExpandableProps = PropsWithChildren<{
   className?: string,
   headerClassName?: string,
   contentClassName?: string,
+  contentExpandedClassName?: string,
 }>
 
 
@@ -54,6 +55,7 @@ export const Expandable = forwardRef<HTMLDivElement, ExpandableProps>(function E
                                                                                             className,
                                                                                             headerClassName,
                                                                                             contentClassName,
+                                                                                            contentExpandedClassName,
                                                                                           }, ref) {
   const defaultIcon = useCallback((expanded: boolean) => <ExpansionIcon isExpanded={expanded}/>, [])
   icon ??= defaultIcon
@@ -81,9 +83,9 @@ export const Expandable = forwardRef<HTMLDivElement, ExpandableProps>(function E
       </div>
       <div
         className={clsx(
-          'col px-4 transition-all duration-300 ease-in-out',
+          'flex-col-2 px-4 transition-all duration-300 ease-in-out',
           {
-            'max-h-96 opacity-100 pb-2': isExpanded,
+            [clsx('max-h-96 opacity-100 pb-2 overflow-y-auto', contentExpandedClassName)]: isExpanded,
             'max-h-0 opacity-0 overflow-hidden': !isExpanded,
           },
           contentClassName
