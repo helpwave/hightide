@@ -13,6 +13,13 @@ type Story = StoryObj<typeof meta>;
 export const searchableSelect: Story = {
   args: {
     label: { name: 'Your favourite fruit' },
+    isSearchEnabled: true,
+    disabled: false,
+    hintText: 'Hinttext',
+    alignmentVertical: 'bottomOutside',
+    alignmentHorizontal: 'leftInside',
+    className: 'max-w-128',
+    onChange: action('updated'),
     options: [
       { value: 'Apple', label: 'Apple', searchTags: ['Apple'] },
       { value: 'Pear', label: 'Pear', searchTags: ['Pear'], disabled: true },
@@ -22,10 +29,5 @@ export const searchableSelect: Story = {
       { value: 'Blueberry', label: 'Blueberry', searchTags: ['Blueberry'], disabled: true },
       { value: 'Tomato', label: 'Tomato', searchTags: ['Tomato'], disabled: true }
     ],
-    onChange: action('updated'),
-    isSearchEnabled: true,
-    isDisabled: false,
-    hintText: 'Hinttext',
-    className: 'max-w-128',
   },
 }

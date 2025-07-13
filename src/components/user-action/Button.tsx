@@ -98,7 +98,7 @@ export type IconButtonProps = PropsWithChildren<{
 /**
  * A button with a solid background and different sizes
  */
-const SolidButton = forwardRef(function SolidButton({
+const SolidButton = forwardRef<HTMLButtonElement, SolidButtonProps>(function SolidButton({
                        children,
                        disabled = false,
                        color = 'primary',
@@ -108,7 +108,7 @@ const SolidButton = forwardRef(function SolidButton({
                        onClick,
                        className,
                        ...restProps
-                     }: SolidButtonProps) {
+                     }, ref) {
   const colorClasses = {
     primary: 'bg-button-solid-primary-background text-button-solid-primary-text',
     secondary: 'bg-button-solid-secondary-background text-button-solid-secondary-text',
@@ -131,6 +131,7 @@ const SolidButton = forwardRef(function SolidButton({
 
   return (
     <button
+      ref={ref}
       onClick={onClick}
       disabled={disabled}
       className={clsx(

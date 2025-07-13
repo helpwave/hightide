@@ -22,6 +22,12 @@ export const select: Story = {
   ],
   args: {
     label: { name: 'Your favourite fruit' },
+    disabled: false,
+    hintText: 'Select something',
+    alignmentVertical: 'bottomOutside',
+    alignmentHorizontal: 'leftInside',
+    className: 'max-w-96',
+    onChange: action('updated'),
     options: [
       { value: '1', label: 'Apple' },
       { value: '2', label: 'Pear', disabled: true },
@@ -30,9 +36,5 @@ export const select: Story = {
       { value: '5', label: 'Blackberry' },
       { value: '6', label: 'Blueberry', disabled: true }
     ],
-    onChange: action('updated'),
-    isDisabled: false,
-    hintText: 'Select something',
-    className: 'max-w-96',
   },
 }

@@ -1,6 +1,8 @@
 import type { Meta, StoryObj } from '@storybook/nextjs'
 import type { MenuProps } from '../../src'
+import { range } from '../../src'
 import { Menu, MenuItem, SolidButton } from '../../src'
+import { action } from 'storybook/actions'
 
 type MenuExampleProps = Omit<MenuProps<HTMLDivElement>, 'trigger'>
 
@@ -9,22 +11,27 @@ const MenuExample = ({
                      }: MenuExampleProps) => {
 
   return (
-    <Menu<HTMLDivElement>
-      {...props}
-      trigger={(onClick, ref) => {
-        return (
-          <SolidButton ref={ref} onClick={onClick}>
-            Open Menu
-          </SolidButton>
-        )
-      }}
-    >
-      <MenuItem>Item 1</MenuItem>
-      <MenuItem>Item 2</MenuItem>
-      <MenuItem>Item 3</MenuItem>
-      <MenuItem>Item 4</MenuItem>
-      <MenuItem>Item 5</MenuItem>
-    </Menu>
+    <div className="flex-row-0 justify-center items-center min-h-60">
+      <Menu<HTMLButtonElement>
+        {...props}
+        trigger={(onClick, ref) => {
+          return (
+            <SolidButton ref={ref} onClick={onClick}>
+              Open Menu
+            </SolidButton>
+          )
+        }}
+      >
+        {({ close }) =>
+          range([1, 6]).map((index) => (
+            <MenuItem key={index} onClick={() => {
+              close()
+              action(`Clicked Item  ${index}`)()
+            }}>{`Item ${index}`}</MenuItem>
+          ))
+        }
+      </Menu>
+    </div>
   )
 }
 
@@ -38,7 +45,7 @@ type Story = StoryObj<typeof meta>;
 
 export const menu: Story = {
   args: {
-    alignmentHorizontal: 'e',
-    alignmentVertical: 'b'
+    alignmentHorizontal: 'leftInside',
+    alignmentVertical: 'bottomOutside',
   },
 }

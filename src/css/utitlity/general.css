@@ -21,3 +21,7 @@
 @utility input-indicator-hidden {
   @apply appearance-none [&::-webkit-inner-spin-button]:appearance-none [&::-webkit-outer-spin-button]:appearance-none [-moz-appearance:textfield];
 }
+
+@utility fake-hidden {
+  @apply invisible pointer-events-none touch-none opacity-0;
+}

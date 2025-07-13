@@ -8,12 +8,14 @@ and adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 ## [0.1.19] - 2025-07-11
 
 ### Add
-- Add animations for `Expandable`, `Select`, `MultiSelect`
+- Add animations for `Expandable`, `Select`, `MultiSelect`, `Menu`, `Modal`, `Dialog`
 - Add utility for defining a flex-column or flex-row with its gap directly 
+- Add hook `usePopoverPosition` to easily define the position of a popover based on a trigger element
 
 ### Changed
 - Changed the disabled color for dark and light mode
 - Changed overlay background color to be configurable
+- Changed `Select` and `MultiSelect` to now be variants of `Menu`
 
 ## [0.1.18] - 2025-07-07
 
