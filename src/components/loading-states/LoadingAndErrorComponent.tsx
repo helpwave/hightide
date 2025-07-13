@@ -1,19 +1,18 @@
-import type { PropsWithChildren } from 'react'
+import type { PropsWithChildren, ReactNode } from 'react'
 import { useState } from 'react'
-import type { LoadingAnimationProps } from './LoadingAnimation'
-import { LoadingAnimation } from './LoadingAnimation'
-import type { ErrorComponentProps } from './ErrorComponent'
-import { ErrorComponent } from './ErrorComponent'
+import { LoadingContainer } from './LoadingContainer'
+import { clsx } from 'clsx'
 
 export type LoadingAndErrorComponentProps = PropsWithChildren<{
   isLoading?: boolean,
   hasError?: boolean,
-  loadingProps?: LoadingAnimationProps,
-  errorProps?: ErrorComponentProps,
+  loadingComponent?: ReactNode,
+  errorComponent?: ReactNode,
   /**
    * in milliseconds
    */
   minimumLoadingDuration?: number,
+  className?: string,
 }>
 
 /**
@@ -23,9 +22,10 @@ export const LoadingAndErrorComponent = ({
                                            children,
                                            isLoading = false,
                                            hasError = false,
-                                           errorProps,
-                                           loadingProps,
-                                           minimumLoadingDuration
+                                           loadingComponent,
+                                           errorComponent,
+                                           minimumLoadingDuration,
+                                           className
                                          }: LoadingAndErrorComponentProps) => {
   const [isInMinimumLoading, setIsInMinimumLoading] = useState(false)
   const [hasUsedMinimumLoading, setHasUsedMinimumLoading] = useState(false)
@@ -38,10 +38,10 @@ export const LoadingAndErrorComponent = ({
   }
 
   if (isLoading || (minimumLoadingDuration && isInMinimumLoading)) {
-    return <LoadingAnimation {...loadingProps}/>
+    return (loadingComponent ?? <LoadingContainer className={clsx(className)}/>)
   }
   if (hasError) {
-    return <ErrorComponent {...errorProps}/>
+    return (errorComponent ?? <LoadingContainer className={clsx('bg-negative', className)}/>)
   }
   return children
 }

@@ -1,5 +1,5 @@
 import type { Meta, StoryObj } from '@storybook/nextjs'
-import { ExpandableUncontrolled, Tile } from '../../src'
+import { ExpandableUncontrolled, range, Tile } from '../../src'
 import { action } from 'storybook/actions'
 
 const meta = {
@@ -17,11 +17,10 @@ export const expandable: Story = {
     disabled: false,
     clickOnlyOnHeader: true,
     label: (<h3 className="textstyle-label-lg">Label</h3>),
+    contentExpandedClassName: 'overflow-y-hidden',
     children: (
-      <div className="flex-col-2">
-        <Tile title={{ value: 'Item 1' }}/>
-        <Tile title={{ value: 'Item 2' }}/>
-        <Tile title={{ value: 'Item 3' }}/>
+      <div className="flex-col-2 overflow-y-auto">
+        {range(20).map(value => (<Tile key={value} title={{ value: `Item ${value}` }}/>))}
       </div>
     )
   },
