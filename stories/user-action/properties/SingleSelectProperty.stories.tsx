@@ -1,20 +1,35 @@
 import type { Meta, StoryObj } from '@storybook/nextjs'
 import { useEffect, useState } from 'react'
-import type { SingleSelectPropertyProps } from '../../../src'
+import type { SelectOption, SingleSelectPropertyProps } from '../../../src'
 import { SingleSelectProperty } from '../../../src'
+import { action } from 'storybook/actions'
 
-type SingleSelectPropertyExample = Omit<SingleSelectPropertyProps<string>, 'onChange' | 'onRemove' | 'searchMapping'>
+type SingleSelectPropertyExample = Omit<SingleSelectPropertyProps, 'onChange' | 'onRemove' | 'searchMapping' | 'options'>
 
 /**
  * Example for using the SingleSelectProperty
  */
 const SingleSelectPropertyExample = ({
                                        value,
-                                       options,
                                        hintText,
                                        ...restProps
                                      }: SingleSelectPropertyExample) => {
   const [usedValue, setUsedValue] = useState<string | undefined>(value)
+  const [options, setOptions] = useState<SelectOption<string>[]>(
+    [
+      { value: 'apple', label: 'Apple' },
+      { value: 'pear', label: 'Pear' },
+      { value: 'plum', label: 'Plum' },
+      { value: 'strawberry', label: 'Strawberry', disabled: true },
+      { value: 'orange', label: 'Orange' },
+      { value: 'maracuja', label: 'Maracuja' },
+      { value: 'lemon', label: 'Lemon' },
+      { value: 'pineapple', label: 'Pineapple' },
+      { value: 'kiwi', label: 'Kiwi' },
+      { value: 'watermelon', label: 'Watermelon' },
+    ].map<SelectOption<string>>(value => ({ ...value, searchTags: [value.label] }))
+  )
+
 
   useEffect(() => {
     setUsedValue(undefined)
@@ -31,8 +46,22 @@ const SingleSelectPropertyExample = ({
       {...restProps}
       value={usedValue}
       options={options}
-      onChange={setUsedValue}
-      onRemove={() => setUsedValue(undefined)}
+      onChange={value => {
+        action('onChange')(value)
+        setUsedValue(value)
+      }}
+      onRemove={() => {
+        action('onRemove')()
+        setUsedValue(undefined)
+      }}
+      onAddNew={(value) => {
+        setOptions(prevState => [...prevState, {
+          value,
+          label: value,
+          searchTags: [value],
+        }])
+        setUsedValue(value)
+      }}
       hintText={hintText}
     />
   )
@@ -54,17 +83,5 @@ export const singleSelectProperty: Story = {
     softRequired: false,
     readOnly: false,
     hintText: 'Select',
-    options: [
-      { value: 'apple', label: 'Apple' },
-      { value: 'pear', label: 'Pear' },
-      { value: 'plum', label: 'Plum' },
-      { value: 'strawberry', label: 'Strawberry', disabled: true },
-      { value: 'orange', label: 'Orange' },
-      { value: 'maracuja', label: 'Maracuja' },
-      { value: 'lemon', label: 'Lemon' },
-      { value: 'pineapple', label: 'Pineapple' },
-      { value: 'kiwi', label: 'Kiwi' },
-      { value: 'watermelon', label: 'Watermelon' },
-    ],
   },
 }

@@ -8,16 +8,18 @@ import type { LabelProps } from './Label'
 import { Label } from './Label'
 import type { SelectOption } from './Select'
 import { SelectTile } from './Select'
-import { SolidButton } from './Button'
+import { IconButton, SolidButton } from './Button'
 import { ChipList } from '../layout-and-navigation/Chip'
 import type { FormTranslationType } from '../../localization/defaults/form'
 import { formTranslation } from '../../localization/defaults/form'
-import type { MenuProps } from './Menu'
+import type { MenuBag, MenuProps } from './Menu'
 import { Menu } from './Menu'
 import { ExpansionIcon } from '../layout-and-navigation/Expandable'
 import { SearchBar } from './SearchBar'
 import type { UseSearchProps } from '../../hooks/useSearch'
 import { useSearch } from '../../hooks/useSearch'
+import { Checkbox } from './Checkbox'
+import { Plus } from 'lucide-react'
 
 type MultiSelectAddonTranslation = {
   selected: string,
@@ -38,17 +40,23 @@ export type MultiSelectOption<T> = SelectOption<T> & {
   selected: boolean,
 }
 
+export type MultiSelectBag = MenuBag & {
+  search: string,
+}
+
+
 export type MultiSelectProps<T> = Omit<MenuProps<HTMLButtonElement>, 'trigger' | 'children'> & {
   options: MultiSelectOption<T>[],
   label?: LabelProps,
   onChange: (options: MultiSelectOption<T>[]) => void,
   hintText?: string,
-  isDisabled?: boolean,
-  isSearchEnabled?: boolean,
-  className?: string,
-  useChipDisplay?: boolean,
   selectedDisplayOverwrite?: ReactNode,
   searchOptions?: Omit<UseSearchProps<SelectOption<T>>, 'list' | 'searchMapping'>,
+  additionalItems?: (bag: MultiSelectBag) => ReactNode,
+  useChipDisplay?: boolean,
+  className?: string,
+  triggerClassName?: string,
+  hintTextClassName?: string,
 }
 
 /**
@@ -56,35 +64,31 @@ export type MultiSelectProps<T> = Omit<MenuProps<HTMLButtonElement>, 'trigger' |
  */
 export const MultiSelect = <T, >({
                                    overwriteTranslation,
-                                   options,
                                    label,
+                                   options,
                                    onChange,
                                    hintText,
-                                   isSearchEnabled = false,
                                    selectedDisplayOverwrite,
-                                   useChipDisplay = false,
-                                   className = '',
                                    searchOptions,
+                                   additionalItems,
+                                   useChipDisplay = false,
+                                   className,
+                                   triggerClassName,
+                                   hintTextClassName,
                                    ...menuProps
                                  }:
                                  PropsForTranslation<MultiSelectTranslation, MultiSelectProps<T>>
 ) => {
   const translation = useTranslation([formTranslation, defaultMultiSelectTranslation], overwriteTranslation)
   const { result, search, setSearch } = useSearch<MultiSelectOption<T>>({
-    ...searchOptions,
     list: options,
-    searchMapping: useCallback((item: MultiSelectOption<T>) => item.searchTags, [])
+    searchMapping: useCallback((item: MultiSelectOption<T>) => item.searchTags, []),
+    ...searchOptions,
   })
 
   const selectedItems = options.filter(value => value.selected)
 
   const isShowingHint = !selectedDisplayOverwrite && selectedItems.length === 0
-
-  useEffect(() => {
-    if (!isSearchEnabled) {
-      setSearch('')
-    }
-  }, [isSearchEnabled, setSearch])
 
   return (
     <div className={clsx(className)}>
@@ -104,85 +108,111 @@ export const MultiSelect = <T, >({
             className={clsx(
               'btn-md justify-between w-full border-2 h-auto',
               {
-                'rounded-b-lg': !open,
+                'min-h-14': useChipDisplay,
                 'bg-menu-background text-menu-text border-menu-border hover:border-primary': !disabled,
                 'bg-disabled-background text-disabled-text border-disabled-background cursor-not-allowed': disabled
-              }
+              },
+              triggerClassName
             )}
             onClick={toggleOpen}
             disabled={disabled}
           >
-            {!isShowingHint && (
-              <span className="font-semibold">
-              {selectedDisplayOverwrite ?? (useChipDisplay && selectedItems ?
-                  (<ChipList list={selectedItems.map(value => ({ children: value.label }))}/>) :
-                  translation('selected', { replacements: { amount: selectedItems.length.toString() } })
-              )}
-            </span>
+            {useChipDisplay ? (
+              <>
+                {isShowingHint ? (
+                  <IconButton disabled={disabled} size="small" color="neutral">
+                    <Plus/>
+                  </IconButton>
+                ) : (
+                  <ChipList list={selectedItems.map(value => ({ children: value.label }))}/>
+                )}
+              </>
+            ) : (
+              <>
+                {!isShowingHint && (
+                  <span className="font-semibold">
+                    {selectedDisplayOverwrite ?? translation('selected', { replacements: { amount: selectedItems.length.toString() } })}
+                  </span>
+                )}
+                {isShowingHint && (
+                  <span className={clsx('textstyle-description', hintTextClassName)}>
+                    {hintText ?? translation('select')}
+                  </span>
+                )}
+                <ExpansionIcon isExpanded={isOpen}/>
+              </>
             )}
-            {isShowingHint && (<span className="textstyle-description">{hintText ?? translation('select')}</span>)}
-            <ExpansionIcon isExpanded={isOpen}/>
           </button>
         )}
         menuClassName={clsx('flex-col-2 p-2 max-h-96 overflow-hidden', menuProps.menuClassName)}
       >
-        {({ close }) => (
-          <>
-            {isSearchEnabled && (
-              <SearchBar
-                value={search}
-                onChangeText={setSearch}
-                autoFocus={true}
-              />
-            )}
-            <div className="flex-col-2 overflow-y-auto">
-              {result.map((option, index) => (
-                <SelectTile
-                  key={index}
-                  isSelected={option.selected}
-                  title={{ value: option.label }}
-                  onClick={() => {
+        {(bag) => {
+          const { close } = bag
+          return (
+            <>
+              {!searchOptions?.disabled && (
+                <SearchBar
+                  value={search}
+                  onChangeText={setSearch}
+                  autoFocus={true}
+                />
+              )}
+              <div className="flex-col-2 overflow-y-auto">
+                {result.map((option, index) => {
+                  const update = () => {
                     onChange(options.map(value => value.value === option.value ? ({
                       ...option,
                       selected: !value.selected
                     }) : value))
-                  }}
-                  isDisabled={option.disabled}
-                />
-              ))}
-            </div>
-            <div className="flex-row-2 justify-between">
-              <div className="flex-row-2">
-                <SolidButton
-                  color="neutral"
-                  size="small"
-                  onClick={() => {
-                    onChange(options.map(option => ({
-                      ...option,
-                      selected: !option.disabled
-                    })))
-                  }}
-                  disabled={options.every(value => value.selected || value.disabled)}
-                >
-                  {translation('all')}
-                </SolidButton>
-                <SolidButton
-                  color="neutral"
-                  size="small"
-                  onClick={() => {
-                    onChange(options.map(option => ({
-                      ...option,
-                      selected: false
-                    })))
-                  }}
-                >
-                  {translation('none')}
-                </SolidButton>
+                  }
+                  return (
+                    <SelectTile
+                      key={index}
+                      prefix={(
+                        <Checkbox checked={option.selected} onChange={update} size="small"
+                                  disabled={option.disabled}/>
+                      )}
+                      title={{ value: option.label }}
+                      onClick={update}
+                      disabled={option.disabled}
+                    />
+                  )
+                })}
+                {additionalItems && additionalItems({ ...bag, search })}
               </div>
-              <SolidButton size="small" onClick={close}>Done</SolidButton>
-            </div>
-          </>
-        )}
+              <div className="flex-row-2 justify-between">
+                <div className="flex-row-2">
+                  <SolidButton
+                    color="neutral"
+                    size="small"
+                    onClick={() => {
+                      onChange(options.map(option => ({
+                        ...option,
+                        selected: !option.disabled
+                      })))
+                    }}
+                    disabled={options.every(value => value.selected || value.disabled)}
+                  >
+                    {translation('all')}
+                  </SolidButton>
+                  <SolidButton
+                    color="neutral"
+                    size="small"
+                    onClick={() => {
+                      onChange(options.map(option => ({
+                        ...option,
+                        selected: false
+                      })))
+                    }}
+                  >
+                    {translation('none')}
+                  </SolidButton>
+                </div>
+                <SolidButton size="small" onClick={close}>Done</SolidButton>
+              </div>
+            </>
+          )
+        }}
       </Menu>
     </div>
   )

@@ -48,10 +48,10 @@ export const NumberProperty = ({
       {...baseProps}
       onRemove={onRemove}
       hasValue={hasValue}
-      icon={<Binary size={16}/>}
+      icon={<Binary size={24}/>}
       input={({ softRequired }) => (
         <div
-          className={clsx('flex-row-2 grow py-2 px-4 cursor-pointer', { 'text-warning': softRequired && !hasValue })}
+          className={clsx('flex-row-2 grow', { 'text-warning': softRequired && !hasValue })}
         >
           <Input
             expanded={false}

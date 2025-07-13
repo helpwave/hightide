@@ -302,7 +302,6 @@ const IconButton = ({
                       disabled = false,
                       color = 'primary',
                       size = 'medium',
-                      onClick,
                       className,
                       ...restProps
                     }: IconButtonProps) => {
@@ -319,7 +318,6 @@ const IconButton = ({
 
   return (
     <button
-      onClick={onClick}
       disabled={disabled}
       className={clsx(
         {

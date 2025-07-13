@@ -9,13 +9,13 @@ import { Label } from './Label'
 type CheckBoxSize = 'small' | 'medium' | 'large'
 
 const checkboxSizeMapping: Record<CheckBoxSize, string> = {
-  small: 'size-4',
+  small: 'size-5',
   medium: 'size-6',
   large: 'size-8',
 }
 
 const checkboxIconSizeMapping: Record<CheckBoxSize, string> = {
-  small: 'size-3',
+  small: 'size-4',
   medium: 'size-5',
   large: 'size-7',
 }
@@ -70,7 +70,7 @@ const Checkbox = ({
   }
 
   return (
-    <div className={clsx('flex-row-2 justify-center items-center', containerClassName)}>
+    <div className={clsx('group flex-row-2 items-center cursor-pointer', containerClassName)} onClick={changeValue}>
       <CheckboxPrimitive.Root
         onCheckedChange={propagateChange}
         checked={checked}
@@ -78,10 +78,9 @@ const Checkbox = ({
         id={id}
         className={clsx(usedSizeClass, `items-center border-2 rounded outline-none `, {
           'text-disabled-text border-disabled-outline bg-disabled-background cursor-not-allowed': disabled,
-          'focus:border-primary': !disabled,
+          'focus:border-primary group-hover:border-primary ': !disabled,
           'bg-surface': !disabled && !checked,
           'bg-primary/30 border-primary text-primary':  !disabled && checked === true || checked === 'indeterminate',
-          'hover:border-primary focus:hover:border-primary': !disabled && !checked
         }, className)}
       >
         <CheckboxPrimitive.Indicator>
@@ -90,8 +89,7 @@ const Checkbox = ({
         </CheckboxPrimitive.Indicator>
       </CheckboxPrimitive.Root>
       {label && (
-        <Label {...label} className={clsx('cursor-pointer', label.className)} htmlFor={id}
-               onClick={changeValue}/>
+        <Label {...label} className={clsx(label.className)} htmlFor={id}/>
       )}
     </div>
   )

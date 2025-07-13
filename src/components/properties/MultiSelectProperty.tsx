@@ -1,4 +1,4 @@
-import { List } from 'lucide-react'
+import { List, Plus } from 'lucide-react'
 import clsx from 'clsx'
 import type { PropsForTranslation } from '../../localization/useTranslation'
 import { useTranslation } from '../../localization/useTranslation'
@@ -8,26 +8,28 @@ import type { PropertyBaseProps } from './PropertyBase'
 import { PropertyBase } from './PropertyBase'
 import type { FormTranslationType } from '../../localization/defaults/form'
 import { formTranslation } from '../../localization/defaults/form'
+import { SelectTile } from '../user-action/Select'
 
-type MultiSelectPropertyTranslation = FormTranslationType
+type TranslationType = FormTranslationType
 
-export type MultiSelectPropertyProps<T> =
-  Omit<PropertyBaseProps
-    & MultiSelectProps<T>, 'icon' | 'input' | 'hasValue' | 'className' | 'disabled' | 'label' | 'triggerClassName'>
-    & PropsForTranslation<MultiSelectPropertyTranslation>
+export type MultiSelectPropertyProps = Omit<PropertyBaseProps, 'icon' | 'input' | 'hasValue' | 'className'> &
+  Omit<MultiSelectProps<string>, 'className' | 'disabled' | 'label'> & {
+  onAddNew?: (value: string) => void,
+}
 
 /**
  * An Input for MultiSelect properties
  */
-export const MultiSelectProperty = <T, >({
-                                           overwriteTranslation,
-                                           options,
-                                           name,
-                                           readOnly = false,
-                                           softRequired,
-                                           onRemove,
-                                           ...multiSelectProps
-                                         }: MultiSelectPropertyProps<T>) => {
+export const MultiSelectProperty = ({
+                                      overwriteTranslation,
+                                      options,
+                                      name,
+                                      readOnly = false,
+                                      softRequired,
+                                      onRemove,
+                                      onAddNew,
+                                      ...multiSelectProps
+                                    }: PropsForTranslation<TranslationType, MultiSelectPropertyProps>) => {
   const translation = useTranslation([formTranslation], overwriteTranslation)
   const hasValue = options.some(value => value.selected)
 
@@ -38,20 +40,43 @@ export const MultiSelectProperty = <T, >({
       readOnly={readOnly}
       softRequired={softRequired}
       hasValue={hasValue}
-      icon={<List size={16}/>}
+      icon={<List size={24}/>}
       input={({ softRequired }) => (
-        <div
-          className={clsx('flex-row-2 grow py-2 px-4 cursor-pointer', { 'text-warning': softRequired && !hasValue })}
-        >
-          <MultiSelect
-            {...multiSelectProps}
-            className={clsx('w-full', { 'bg-surface-warning': softRequired && !hasValue })}
-            options={options}
-            isDisabled={readOnly}
-            useChipDisplay={true}
-            hintText={`${translation('select')}...`}
-          />
-        </div>
+        <MultiSelect
+          {...multiSelectProps}
+          className={clsx('w-full', { 'bg-surface-warning': softRequired && !hasValue })}
+          options={options}
+          disabled={readOnly}
+          useChipDisplay={true}
+          hintText={`${translation('select')}...`}
+          searchOptions={{
+            sortingFunction: (a, b) => a.value.localeCompare(b.value),
+            ...multiSelectProps?.searchOptions
+          }}
+          additionalItems={({ close, search }) => {
+            if (!onAddNew && !search.trim()) {
+              return undefined
+            }
+            return (
+              <SelectTile
+                prefix={(<Plus/>)}
+                title={{ value: `${translation('add')} ${search.trim()}` }}
+                onClick={() => {
+                  onAddNew(search)
+                  close()
+                }}
+                disabled={options.some(value => value.value === search.trim())}
+              />
+            )
+          }}
+          triggerClassName={clsx(
+            '!border-none !p-0 !min-h-10',
+            {
+              '!bg-warning !text-surface-warning': softRequired && !hasValue,
+              '': !softRequired || hasValue,
+            }
+          )}
+        />
       )}
     />
   )

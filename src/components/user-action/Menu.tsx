@@ -10,9 +10,9 @@ import { useOutsideClick } from '../../hooks/useOutsideClick'
 import { useHoverState } from '../../hooks/useHoverState'
 import type { PropsWithBagFunctionOrChildren } from '../../util/PropsWithFunctionChildren'
 import { BagFunctionUtil } from '../../util/PropsWithFunctionChildren'
-import { PopOver } from '../layout-and-navigation/PopOver'
 import type { PopoverHorizontalAlignment, PopoverVerticalAlignment } from '../../hooks/usePopoverPosition'
 import { usePopoverPosition } from '../../hooks/usePopoverPosition'
+import { createPortal } from 'react-dom'
 
 export type MenuItemProps = {
   onClick?: () => void,
@@ -45,18 +45,13 @@ function getScrollableParents(element) {
   const scrollables = []
   let parent = element.parentElement
   while (parent) {
-    const style = window.getComputedStyle(parent)
-    const overflowY = style.overflowY
-    if (overflowY === 'auto' || overflowY === 'scroll' || overflowY === 'overlay') {
-      scrollables.push(parent)
-    }
+    scrollables.push(parent)
     parent = parent.parentElement
   }
-  scrollables.push(window) // Always listen on window as fallback
   return scrollables
 }
 
-type MenuBag = {
+export type MenuBag = {
   isOpen: boolean,
   disabled: boolean,
   toggleOpen: () => void,
@@ -136,11 +131,11 @@ export const Menu = <T extends HTMLElement>({
   return (
     <>
       {trigger(bag, triggerRef)}
-      <PopOver
+      {createPortal((<div
         ref={menuRef}
         onClick={e => e.stopPropagation()}
         className={clsx(
-          'rounded-md bg-menu-background text-menu-text shadow-around-lg z-10',
+          'absolute rounded-md bg-menu-background text-menu-text shadow-around-lg z-10',
           {
             'animate-pop-in': isOpen,
             'animate-pop-out': !isOpen,
@@ -149,7 +144,7 @@ export const Menu = <T extends HTMLElement>({
           menuClassName
         )}
         onAnimationEnd={() => {
-          if(!isOpen) {
+          if (!isOpen) {
             setIsHidden(true)
           }
         }}
@@ -158,7 +153,7 @@ export const Menu = <T extends HTMLElement>({
         }}
       >
         {BagFunctionUtil.resolve<MenuBag>(children, bag)}
-      </PopOver>
+      </div>), document.body)}
     </>
   )
 }

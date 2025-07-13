@@ -14,9 +14,9 @@ const MenuExample = ({
     <div className="flex-row-0 justify-center items-center min-h-60">
       <Menu<HTMLButtonElement>
         {...props}
-        trigger={(onClick, ref) => {
+        trigger={({ toggleOpen, disabled }, ref) => {
           return (
-            <SolidButton ref={ref} onClick={onClick}>
+            <SolidButton ref={ref} onClick={toggleOpen} disabled={disabled}>
               Open Menu
             </SolidButton>
           )

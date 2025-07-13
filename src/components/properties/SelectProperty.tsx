@@ -1,32 +1,36 @@
-import { List } from 'lucide-react'
+import { List, Plus } from 'lucide-react'
 import clsx from 'clsx'
 import type { PropsForTranslation } from '../../localization/useTranslation'
 import { useTranslation } from '../../localization/useTranslation'
 import type { PropertyBaseProps } from './PropertyBase'
 import { PropertyBase } from './PropertyBase'
 import type { SelectProps } from '../user-action/Select'
+import { SelectTile } from '../user-action/Select'
 import { Select } from '../user-action/Select'
 import type { FormTranslationType } from '../../localization/defaults/form'
 import { formTranslation } from '../../localization/defaults/form'
 
 type SingleSelectPropertyTranslation = FormTranslationType
 
-export type SingleSelectPropertyProps<T> =
-  Omit<PropertyBaseProps & SelectProps<T>, 'icon' | 'input' | 'hasValue' | 'className' | 'disabled' | 'label' | 'labelClassName' | 'additionalItems'>
+export type SingleSelectPropertyProps = Omit<PropertyBaseProps, 'icon' | 'input' | 'hasValue' | 'className'> &
+  Omit<SelectProps<string>, 'className' | 'disabled' | 'label'> & {
+  onAddNew?: (value: string) => void,
+}
 
 /**
  * An Input for SingleSelect properties
  */
-export const SingleSelectProperty = <T, >({
-                                            overwriteTranslation,
-                                            value,
-                                            options,
-                                            name,
-                                            readOnly = false,
-                                            softRequired,
-                                            onRemove,
-                                            ...selectProps
-                                          }: PropsForTranslation<SingleSelectPropertyTranslation, SingleSelectPropertyProps<T>>) => {
+export const SingleSelectProperty = ({
+                                       overwriteTranslation,
+                                       value,
+                                       options,
+                                       name,
+                                       readOnly = false,
+                                       softRequired,
+                                       onRemove,
+                                       onAddNew,
+                                       ...selectProps
+                                     }: PropsForTranslation<SingleSelectPropertyTranslation, SingleSelectPropertyProps>) => {
   const translation = useTranslation([formTranslation], overwriteTranslation)
   const hasValue = value !== undefined
 
@@ -37,20 +41,44 @@ export const SingleSelectProperty = <T, >({
       readOnly={readOnly}
       softRequired={softRequired}
       hasValue={hasValue}
-      icon={<List size={16}/>}
+      icon={<List size={24}/>}
       input={({ softRequired }) => (
-        <div
-          className={clsx('flex-row-2 grow py-2 px-4 cursor-pointer', { 'text-warning': softRequired && !hasValue })}
-        >
-          <Select
-            {...selectProps}
-            value={value}
-            options={options}
-            disabled={readOnly}
-            className={clsx('w-full', { 'bg-surface-warning': softRequired && !hasValue })}
-            hintText={`${translation('select')}...`}
-          />
-        </div>
+        <Select
+          {...selectProps}
+          value={value}
+          options={options}
+          disabled={readOnly}
+          className={clsx('w-full')}
+          hintText={`${translation('select')}...`}
+          searchOptions={{
+            sortingFunction: (a, b) => a.value.localeCompare(b.value),
+            ...selectProps?.searchOptions
+          }}
+          additionalItems={({ close, search }) => {
+            if (!onAddNew && !search.trim()) {
+              return undefined
+            }
+            return (
+              <SelectTile
+                prefix={(<Plus/>)}
+                title={{ value: `${translation('add')} ${search.trim()}` }}
+                onClick={() => {
+                  onAddNew(search)
+                  close()
+                }}
+                disabled={options.some(value => value.value === search.trim())}
+              />
+            )
+          }}
+          triggerClassName={clsx(
+            '!border-none',
+            {
+              '!bg-warning !text-surface-warning': softRequired && !hasValue,
+              '!bg-property-title-background': !softRequired || hasValue,
+            }
+          )}
+          hintTextClassName={(softRequired && !hasValue) ? 'text-surface-warning' : undefined}
+        />
       )}
     />
   )

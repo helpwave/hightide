@@ -31,28 +31,24 @@ export const DateProperty = ({
     <PropertyBase
       {...baseProps}
       hasValue={hasValue}
-      icon={<CalendarDays size={16}/>}
+      icon={<CalendarDays size={24}/>}
       input={({ softRequired }) => (
-        <div
-          className={clsx('flex-row-2 grow py-2 px-4 cursor-pointer', { 'text-warning': softRequired && !hasValue })}
-        >
-          <Input
-            className={clsx('!ring-0 !border-0 !outline-0 !p-0 !m-0 !shadow-none !w-fit !rounded-none', { 'bg-surface-warning': softRequired && !hasValue })}
-            value={dateText}
-            type={type === 'dateTime' ? 'datetime-local' : 'date'}
-            readOnly={readOnly}
-            onChange={(event) => {
-              const value = event.target.value
-              if (!value) {
-                event.preventDefault()
-                return
-              }
-              const dueDate = new Date(value)
-              onChange(dueDate)
-            }}
-            onEditCompleted={(value) => onEditComplete(new Date(value))}
-          />
-        </div>
+        <Input
+          className={clsx('!ring-0 !border-0 !outline-0 !p-0 !m-0 !shadow-none !w-fit !rounded-none', { 'bg-surface-warning': softRequired && !hasValue })}
+          value={dateText}
+          type={type === 'dateTime' ? 'datetime-local' : 'date'}
+          readOnly={readOnly}
+          onChange={(event) => {
+            const value = event.target.value
+            if (!value) {
+              event.preventDefault()
+              return
+            }
+            const dueDate = new Date(value)
+            onChange(dueDate)
+          }}
+          onEditCompleted={(value) => onEditComplete(new Date(value))}
+        />
       )}
     />
   )

@@ -17,6 +17,8 @@ and adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 - Changed overlay background color to be configurable
 - Changed `Select` and `MultiSelect` to now be variants of `Menu`
 - Made `Select` and `MultiSelect` scrollable
+- Menu now allows for defining the direction in which the PopOver is openend
+- Changed the design of `SingleSelectProperty` and `MultiSelectProperty`
 
 ## [0.1.18] - 2025-07-07
 

@@ -7,9 +7,10 @@ import { Label } from './Label'
 import type { TileProps } from '../layout-and-navigation/Tile'
 import { Tile } from '../layout-and-navigation/Tile'
 import { ExpansionIcon } from '../layout-and-navigation/Expandable'
-import type { MenuProps } from './Menu'
+import type { MenuBag, MenuProps } from './Menu'
 import { Menu } from './Menu'
 import { SearchBar } from './SearchBar'
+import type { UseSearchProps } from '../../hooks/useSearch'
 import { useSearch } from '../../hooks/useSearch'
 
 export type SelectTileProps = TileProps
@@ -38,15 +39,23 @@ export type SelectOption<T> = {
   className?: string,
 }
 
+export type SelectBag<T> = MenuBag & {
+  selected?: T,
+  search: string,
+}
+
 export type SelectProps<T> = Omit<MenuProps<HTMLButtonElement>, 'trigger' | 'children'> & {
   value?: T,
   label?: LabelProps,
   options: SelectOption<T>[],
   onChange: (value: T) => void,
   hintText?: string,
-  isSearchEnabled?: boolean,
   selectedDisplayOverwrite?: ReactNode,
+  searchOptions?: Omit<UseSearchProps<SelectOption<T>>, 'list' | 'searchMapping'>,
+  additionalItems?: (bag: SelectBag<T>) => ReactNode,
   className?: string,
+  triggerClassName?: string,
+  hintTextClassName?: string,
 };
 
 /**
@@ -60,9 +69,12 @@ export const Select = <T, >({
                               options,
                               onChange,
                               hintText = '',
-                              isSearchEnabled = false,
-                              className,
                               selectedDisplayOverwrite,
+                              searchOptions,
+                              additionalItems,
+                              className,
+                              triggerClassName,
+                              hintTextClassName,
                               ...menuProps
                             }: SelectProps<T>) => {
   const selectedOption = options.find(option => option.value === value)
@@ -75,16 +87,10 @@ export const Select = <T, >({
   const isShowingHint = !selectedDisplayOverwrite && !selectedOption?.label
 
   const { result, search, setSearch } = useSearch<SelectOption<T>>({
-    ...options,
     list: options,
-    searchMapping: useCallback((item: SelectOption<T>) => item.searchTags, [])
+    searchMapping: useCallback((item: SelectOption<T>) => item.searchTags, []),
+    ...searchOptions
   })
-
-  useEffect(() => {
-    if (!isSearchEnabled) {
-      setSearch('')
-    }
-  }, [isSearchEnabled, setSearch])
 
   return (
     <div className={clsx(className)}>
@@ -102,44 +108,53 @@ export const Select = <T, >({
                 'rounded-b-lg': !open,
                 'bg-menu-background text-menu-text border-menu-border hover:border-primary': !disabled,
                 'bg-disabled-background text-disabled-text border-disabled-background cursor-not-allowed': disabled
-              }
+              },
+              triggerClassName
             )}
             onClick={toggleOpen}
             disabled={disabled}
           >
             {!isShowingHint &&
               <span className="font-semibold">{selectedDisplayOverwrite ?? selectedOption?.label}</span>}
-            {isShowingHint && (<span className="textstyle-description">{hintText}</span>)}
+            {isShowingHint && (
+              <span className={clsx('textstyle-description', hintTextClassName)}>
+                {hintText}
+              </span>
+            )}
             <ExpansionIcon isExpanded={isOpen}/>
           </button>
         )}
         menuClassName={clsx('flex-col-2 p-2 max-h-96 overflow-hidden', menuProps.menuClassName)}
       >
-        {({ close }) => (
-          <>
-            {isSearchEnabled && (
-              <SearchBar
-                value={search}
-                onChangeText={setSearch}
-                autoFocus={true}
-              />
-            )}
-            <div className="flex-col-2 overflow-y-auto">
-              {result.map((option, index) => (
-                <SelectTile
-                  key={index}
-                  isSelected={option === selectedOption}
-                  title={{ value: option.label }}
-                  onClick={() => {
-                    onChange(option.value)
-                    close()
-                  }}
-                  isDisabled={option.disabled}
+        {(bag) => {
+          const { close } = bag
+          return (
+            <>
+              {!searchOptions?.disabled && (
+                <SearchBar
+                  value={search}
+                  onChangeText={setSearch}
+                  autoFocus={true}
                 />
-              ))}
-            </div>
-          </>
-        )}
+              )}
+              <div className="flex-col-2 overflow-y-auto">
+                {result.map((option, index) => (
+                  <SelectTile
+                    key={index}
+                    isSelected={option === selectedOption}
+                    title={{ value: option.label }}
+                    onClick={() => {
+                      onChange(option.value)
+                      close()
+                    }}
+                    disabled={option.disabled}
+                  />
+                ))}
+                {additionalItems && additionalItems({ ...bag, search, selected: value })}
+              </div>
+            </>
+          )
+        }}
       </Menu>
     </div>
   )

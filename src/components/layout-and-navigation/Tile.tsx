@@ -6,7 +6,7 @@ export type TileProps = {
   title: { value: ReactNode, className?: string },
   description?: { value: ReactNode, className?: string },
   onClick?: () => void,
-  isDisabled?: boolean,
+  disabled?: boolean,
   isSelected?: boolean,
   prefix?: ReactNode,
   suffix?: ReactNode,
@@ -24,7 +24,7 @@ export const Tile = ({
                        description,
                        onClick,
                        isSelected = false,
-                       isDisabled = false,
+                       disabled = false,
                        prefix,
                        suffix,
                        normalClassName = 'hover:bg-primary/40 cursor-pointer',
@@ -37,13 +37,13 @@ export const Tile = ({
       className={clsx(
         'flex-row-2 w-full items-center',
         {
-          [normalClassName]: !!onClick && !isDisabled,
-          [selectedClassName]: isSelected && !isDisabled,
-          [disabledClassName]: isDisabled,
+          [normalClassName]: !!onClick && !disabled,
+          [selectedClassName]: isSelected && !disabled,
+          [disabledClassName]: disabled,
         },
         className
       )}
-      onClick={isDisabled ? undefined : onClick}
+      onClick={disabled ? undefined : onClick}
     >
       {prefix}
       <div className="flex-col-0 w-full">
