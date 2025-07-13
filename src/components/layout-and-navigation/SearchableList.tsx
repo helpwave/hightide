@@ -51,7 +51,7 @@ export const SearchableList = <T, >({
   const { result, hasResult, search, setSearch, updateSearch } = useSearch<T>({ list, initialSearch, searchMapping })
 
   return (
-    <div className={clsx('col gap-y-2', className)}>
+    <div className={clsx('flex-col-2', className)}>
       {list.length > minimumItemsForSearch && (
         <div className="flex-row-2 justify-between items-center">
           <Input
@@ -67,11 +67,11 @@ export const SearchableList = <T, >({
         </div>
       )}
       {hasResult ? (
-        <div className={clsx('col gap-y-1 overflow-y-auto', resultListClassName)}>
+        <div className={clsx('flex-col-1 overflow-y-auto', resultListClassName)}>
           {result.map(itemMapper)}
         </div>
       ) : (
-        <div className="row text-description py-2 px-2">{translation('nothingFound')}</div>
+        <div className="flex-row-2 text-description py-2 px-2">{translation('nothingFound')}</div>
       )}
     </div>
   )

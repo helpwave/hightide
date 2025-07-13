@@ -7,6 +7,9 @@ export type UseSearchProps<T> = {
   initialSearch?: string,
   additionalSearchTags?: string[],
   isSearchInstant?: boolean,
+  sortingFunction?: (a: T, b: T) => number,
+  filter?: (item: T) => boolean,
+  disabled?: boolean,
 }
 
 export const useSearch = <T>({
@@ -15,8 +18,11 @@ export const useSearch = <T>({
                                searchMapping,
                                additionalSearchTags,
                                isSearchInstant = true,
+                               sortingFunction,
+                               filter,
+                               disabled = false,
                              }: UseSearchProps<T>) => {
-  const [search, setSearch] = useState<string>(initialSearch)
+  const [search, setSearch] = useState<string>(initialSearch ?? '')
   const [result, setResult] = useState<T[]>(list)
   const searchTags = useMemo(() => additionalSearchTags ?? [], [additionalSearchTags])
 
@@ -34,9 +40,30 @@ export const useSearch = <T>({
     }
   }, [searchTags, isSearchInstant, list, search, searchMapping, additionalSearchTags])
 
+  const filteredResult: T[] = useMemo(() => {
+    if (!filter) {
+      return result
+    }
+    return result.filter(filter)
+  }, [result, filter])
+
+  const sortedAndFilteredResult: T[] = useMemo(() => {
+    if (!sortingFunction) {
+      return filteredResult
+    }
+    return filteredResult.sort(sortingFunction)
+  }, [filteredResult, sortingFunction])
+
+  const usedResult = useMemo(() => {
+    if (!disabled) {
+      return sortedAndFilteredResult
+    }
+    return list
+  }, [disabled, list, sortedAndFilteredResult])
+
   return {
-    result,
-    hasResult: result.length > 0,
+    result: usedResult,
+    hasResult: usedResult.length > 0,
     allItems: list,
     updateSearch,
     search,

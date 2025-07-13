@@ -51,14 +51,14 @@ export const Pagination = ({
   }
 
   return (
-    <div className={clsx('row gap-x-1', className)} style={style}>
+    <div className={clsx('flex-row-1', className)} style={style}>
       <IconButton color="transparent" onClick={() => changePage(0)} disabled={onFirstPage || noPages}>
         <ChevronFirst/>
       </IconButton>
       <IconButton color="transparent" onClick={() => changePage(pageIndex - 1)} disabled={onFirstPage || noPages}>
         <ChevronLeft/>
       </IconButton>
-      <div className="row min-w-56 gap-x-2 items-center justify-center mx-2 text-center">
+      <div className="flex-row-2 min-w-56 items-center justify-center mx-2 text-center">
         <Input
           value={value}
           containerClassName="flex flex-1 h-10"
@@ -83,7 +83,7 @@ export const Pagination = ({
         />
         <span className="select-none w-10">{translation('of')}</span>
         <span
-          className="row flex-1 items-center justify-center select-none h-10 bg-surface text-on-surface rounded-md font-bold">{pageCount}</span>
+          className="flex-row-2 flex-1 items-center justify-center select-none h-10 bg-surface text-on-surface rounded-md font-bold">{pageCount}</span>
       </div>
       <IconButton color="transparent" onClick={() => changePage(pageIndex + 1)} disabled={onLastPage || noPages}>
         <ChevronRight/>

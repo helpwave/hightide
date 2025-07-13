@@ -1,6 +1,7 @@
 import type { Translation } from '../useTranslation'
 
 export type FormTranslationType = {
+  add: string,
   all: string,
   apply: string,
   back: string,
@@ -13,6 +14,7 @@ export type FormTranslationType = {
   confirm: string,
   copy: string,
   copied: string,
+  create: string,
   decline: string,
   delete: string,
   discard: string,
@@ -57,6 +59,7 @@ export type FormTranslationType = {
 
 export const formTranslation: Translation<FormTranslationType> = {
   en: {
+    add: 'Add',
     all: 'All',
     apply: 'Apply',
     back: 'Back',
@@ -69,6 +72,7 @@ export const formTranslation: Translation<FormTranslationType> = {
     confirm: 'Confirm',
     copy: 'Copy',
     copied: 'Copied',
+    create: 'Create',
     decline: 'Decline',
     delete: 'Delete',
     discard: 'Discard',
@@ -111,6 +115,7 @@ export const formTranslation: Translation<FormTranslationType> = {
     yes: 'Yes',
   },
   de: {
+    add: 'Hinzufügen',
     all: 'Alle',
     apply: 'Anwenden',
     back: 'Zurück',
@@ -123,6 +128,7 @@ export const formTranslation: Translation<FormTranslationType> = {
     confirm: 'Bestätigen',
     copy: 'Kopieren',
     copied: 'Kopiert',
+    create: 'Erstellen',
     decline: 'Ablehnen',
     delete: 'Löschen',
     discard: 'Verwerfen',

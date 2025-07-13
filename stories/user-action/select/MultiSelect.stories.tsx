@@ -31,10 +31,12 @@ type Story = StoryObj<typeof meta>;
 export const multiSelect: Story = {
   args: {
     label: { name: 'Your favourite fruit' },
-    isDisabled: false,
+    disabled: false,
     hintText: undefined,
     isSearchEnabled: true,
     useChipDisplay: true,
+    alignmentVertical: 'bottomOutside',
+    alignmentHorizontal: 'leftInside',
     className: '',
     onChange: action('onChange'),
     options: [

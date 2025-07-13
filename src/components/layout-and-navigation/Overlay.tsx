@@ -45,7 +45,6 @@ export const Overlay = ({
 
   if (!root || !isOpen) return null
 
-
   return ReactDOM.createPortal(
     <div className={clsx('fixed inset-0 z-[9999]')}>
       <div
@@ -104,7 +103,7 @@ export const OverlayHeader = ({
   const translation = useTranslation([defaultModalHeaderTranslation], overwriteTranslation)
   const hasTitleRow = !!title || !!titleText || !!onClose
   const titleRow = (
-    <div className="row justify-between items-start gap-x-8">
+    <div className="flex-row-8 justify-between items-start">
       {title ?? (
         <h2
           className={clsx('textstyle-title-lg', {
@@ -125,7 +124,7 @@ export const OverlayHeader = ({
   )
 
   return (
-    <div className="col">
+    <div className="flex-col-2">
       {hasTitleRow && (titleRow)}
       {description ?? (descriptionText && (<span className="textstyle-description">{descriptionText}</span>))}
     </div>
@@ -210,7 +209,7 @@ export const Modal = ({
         ref={ref}
         tabIndex={-1}
         className={clsx(
-          'fixed left-1/2 top-1/2 -translate-y-1/2 -translate-x-1/2 col p-4 bg-overlay-background text-overlay-text rounded-xl shadow-xl',
+          'flex-col-2 fixed left-1/2 top-1/2 -translate-y-1/2 -translate-x-1/2 p-4 bg-overlay-background text-overlay-text rounded-xl shadow-xl animate-pop-in',
           className
         )}
         role="dialog"
@@ -297,7 +296,7 @@ export const Dialog = ({
         ref={ref}
         tabIndex={-1}
         className={clsx(
-          'fixed left-1/2 top-1/2 -translate-y-1/2 -translate-x-1/2 col p-4 bg-overlay-background text-overlay-text rounded-xl shadow-xl',
+          'flex-col-2 fixed left-1/2 top-1/2 -translate-y-1/2 -translate-x-1/2 p-4 bg-overlay-background text-overlay-text rounded-xl shadow-xl animate-pop-in',
           className
         )}
         role="dialog"

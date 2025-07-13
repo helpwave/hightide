@@ -32,7 +32,7 @@ export const ExpansionIcon = ({ isExpanded, className }: ExpansionIconProps) => 
   return (
     <ChevronDown
       className={clsx(
-        'min-w-4 w-4 min-h-4 h-4 transition-transform duration-200 ease-in-out',
+        'min-w-6 w-6 min-h-6 h-6 transition-transform duration-200 ease-in-out',
         { 'rotate-180': isExpanded },
         className
       )}
@@ -63,15 +63,15 @@ export const Expandable = forwardRef<HTMLDivElement, ExpandableProps>(function E
   return (
     <div
       ref={ref}
-      className={clsx('col gap-y-0 bg-surface text-on-surface group rounded-lg shadow-sm', { 'cursor-pointer': !clickOnlyOnHeader && !disabled }, className)}
+      className={clsx('flex-col-0 bg-surface text-on-surface group rounded-lg shadow-sm', { 'cursor-pointer': !clickOnlyOnHeader && !disabled }, className)}
       onClick={() => !clickOnlyOnHeader && !disabled && onChange(!isExpanded)}
     >
       <div
         className={clsx(
-          'row py-2 px-4 rounded-lg justify-between items-center bg-surface text-on-surface select-none',
+          'flex-row-2 py-2 px-4 rounded-lg justify-between items-center bg-surface text-on-surface select-none',
           {
-            'group-hover:brightness-95': !isExpanded,
-            'hover:brightness-95': isExpanded && !disabled,
+            'group-hover:brightness-97': !isExpanded,
+            'hover:brightness-97': isExpanded && !disabled,
             'cursor-pointer': clickOnlyOnHeader && !disabled,
           },
           headerClassName

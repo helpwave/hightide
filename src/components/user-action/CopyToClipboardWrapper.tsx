@@ -100,13 +100,13 @@ export const CopyToClipboardWrapper = ({
         }}
       >
         {isShowingConfirmation && (
-          <div className="row gap-x-1">
+          <div className="flex-row-1">
             <CheckIcon size={16} className="text-positive"/>
             {translation('copied')}
           </div>
         )}
         {isShowingIndication && (
-          <div className="row gap-x-1 text-description">
+          <div className="flex-row-1 text-description">
             <Copy size={16}/>
             {translation('clickToCopy')}
           </div>

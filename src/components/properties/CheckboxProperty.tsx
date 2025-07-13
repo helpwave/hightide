@@ -32,16 +32,15 @@ export const CheckboxProperty = ({
       {...baseProps}
       hasValue={true}
       readOnly={readOnly}
-      icon={<Check size={16}/>}
+      icon={<Check size={24}/>}
       input={() => (
-        <div className="row py-2 px-4 items-center">
-          <Checkbox
-            checked={value ?? true}
-            disabled={readOnly}
-            onChange={onChange}
-            label={{ name: `${translation('yes')}/${translation('no')}`, labelType: 'labelMedium' }}
-          />
-        </div>
+        <Checkbox
+          checked={value ?? true}
+          disabled={readOnly}
+          onChange={onChange}
+          label={{ name: `${translation('yes')}/${translation('no')}`, labelType: 'labelMedium' }}
+          containerClassName="w-full"
+        />
       )}
     />
   )

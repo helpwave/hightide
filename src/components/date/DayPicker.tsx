@@ -34,8 +34,8 @@ export const DayPicker = ({
   const weeks = getWeeksForCalenderMonth(displayedMonth, weekStart)
 
   return (
-    <div className={clsx('col gap-y-1 min-w-[220px] select-none', className)}>
-      <div className="row text-center">
+    <div className={clsx('flex-col-1 min-w-[220px] select-none', className)}>
+      <div className="flex-row-2 text-center">
         {weeks[0]!.map((weekDay, index) => (
           <div key={index} className="flex-1 font-semibold">
             {new Intl.DateTimeFormat(locale, { weekday: 'long' }).format(weekDay).substring(0, 2)}
@@ -43,7 +43,7 @@ export const DayPicker = ({
         ))}
       </div>
       {weeks.map((week, index) => (
-        <div key={index} className="row text-center">
+        <div key={index} className="flex-row-2 text-center">
           {week.map((date) => {
             const isSelected = !!selected && equalDate(selected, date)
             const isToday = equalDate(new Date(), date)

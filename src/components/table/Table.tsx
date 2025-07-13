@@ -312,7 +312,7 @@ export const Table = <T, >({
   }, [table.getState().columnSizingInfo, table.getState().columnSizing]) // eslint-disable-line react-hooks/exhaustive-deps
 
   return (
-    <div ref={ref} className={clsx('col gap-y-4', className)}>
+    <div ref={ref} className={clsx('flex-col-4', className)}>
       <Scrollbars
         autoHeight={true}
         autoHeightMax={tableRef.current?.offsetHeight + 2}
@@ -350,9 +350,9 @@ export const Table = <T, >({
                     colSpan={header.colSpan}
                     className={clsx('relative group', header.column.columnDef.meta?.className)}
                   >
-                    <div className="row w-full">
+                    <div className="flex-row-2 w-full">
                       {header.isPlaceholder ? null : (
-                        <div className="row gap-x-1 items-center">
+                        <div className="flex-row-1 items-center">
                           {header.column.getCanSort() && (
                             <TableSortButton
                               sortDirection={header.column.getIsSorted()}
@@ -427,7 +427,7 @@ export const Table = <T, >({
           </tbody>
         </table>
       </Scrollbars>
-      <div className="row justify-center">
+      <div className="flex-row-2 justify-center">
         <Pagination
           pageIndex={table.getState().pagination.pageIndex}
           pageCount={table.getPageCount()}

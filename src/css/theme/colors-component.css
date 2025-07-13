@@ -61,8 +61,8 @@
   --color-progress-indicator-background: var(--color-gray-300);
 
   /* Property */
-  --color-property-title-background: #E6E6E6;
-  --color-property-title-text: var(--color-text-default);
+  --color-property-title-background: #EDEDED;
+  --color-property-title-text: var(--color-text-secondary);
 
   /* Stepper Bar */
   --color-stepperbar-dot-active: var(--color-primary);
@@ -141,6 +141,9 @@
     /* Table */
     --color-tabel-header-background: #2F2F2F;
     --color-table-row-hover-background: #2f2841;
+
+    /* Tag */
+    --color-tag-dark-background: #1A1A1A;
 
     /* Tooltip */
     --color-tooltip-background: #555555;

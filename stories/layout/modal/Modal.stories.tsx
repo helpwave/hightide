@@ -40,7 +40,7 @@ const StackingModals = () => {
       >
         {'This is Modal 3!'}
       </Modal>
-      <div className="row items-center justify-center min-h-[400px]">
+      <div className="flex-row-2 items-center justify-center min-h-[400px]">
         <SolidButton onClick={() => setModal1(true)}>Open Modal 1</SolidButton>
       </div>
     </>
