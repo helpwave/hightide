@@ -46,7 +46,7 @@ export const Overlay = ({
   if (!root || !isOpen) return null
 
   return ReactDOM.createPortal(
-    <div className={clsx('fixed inset-0 z-[9999]')}>
+    <div className={clsx('fixed inset-0 z-[200]')}>
       <div
         className={clsx('fixed inset-0 h-screen w-screen bg-overlay-shadow', backgroundClassName)}
         onClick={onBackgroundClick}

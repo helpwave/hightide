@@ -1,7 +1,6 @@
-import type { Meta, StoryObj } from '@storybook/nextjs'
+import type { Meta, StoryObj  } from '@storybook/nextjs'
 import { useState } from 'react'
 import { ThemeModal, SolidButton } from '../../../src'
-
 
 /**
  * An implementation of the ThemeModal

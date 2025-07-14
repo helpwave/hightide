@@ -2,6 +2,7 @@ import type { Dispatch, PropsWithChildren, SetStateAction } from 'react'
 import { createContext, useContext, useEffect, useState } from 'react'
 import type { Translation, TranslationPlural } from '../localization/useTranslation'
 import { noop } from '../util/noop'
+import { useLocalStorage } from '../hooks/useLocalStorage'
 
 const themes = ['light', 'dark'] as const
 
@@ -51,6 +52,7 @@ type ThemeProviderProps = {
 
 export const ThemeProvider = ({ children, initialTheme = 'light' }: PropsWithChildren<ThemeProviderProps>) => {
   const [theme, setTheme] = useState<ThemeType>(initialTheme)
+  const [storedTheme, setStoredTheme] = useLocalStorage<ThemeType>('theme', initialTheme)
 
   useEffect(() => {
     if (theme !== initialTheme) {
@@ -61,7 +63,18 @@ export const ThemeProvider = ({ children, initialTheme = 'light' }: PropsWithChi
 
   useEffect(() => {
     document.documentElement.setAttribute('data-theme', theme)
-  }, [theme])
+    setStoredTheme(theme)
+  }, [theme]) // eslint-disable-line react-hooks/exhaustive-deps
+
+  useEffect(() => {
+    if (storedTheme !== null) {
+      setTheme(storedTheme)
+      return
+    }
+
+    const prefersDark = window.matchMedia('(prefers-color-scheme: dark)').matches
+    setTheme(prefersDark ? 'dark' : 'light')
+  }, []) // eslint-disable-line react-hooks/exhaustive-deps
 
   return (
     <ThemeContext.Provider value={{ theme, setTheme }}>

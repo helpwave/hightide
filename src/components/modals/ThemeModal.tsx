@@ -57,6 +57,7 @@ export const ThemeModal = ({
           value={theme}
           options={ThemeUtil.themes.map((theme) => ({ label: translation(theme), value: theme }))}
           onChange={(theme: string) => setTheme(theme as ThemeType)}
+          searchOptions={{ disabled: true }}
         />
         <div className="flex-row-4 mt-3 justify-end">
           <SolidButton autoFocus color="positive" onClick={onClose}>

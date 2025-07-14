@@ -10,15 +10,15 @@
   --color-text-default: var(--color-text-dark);
 
   --color-primary: var(--color-purple-500);
-  --color-on-primary: var(--color-text-light);
+  --color-on-primary: #FFFFFF;
   --color-secondary: #11243E;
-  --color-on-secondary: var(--color-text-light);
+  --color-on-secondary: #FFFFFF;
   --color-warning: var(--color-yellow-500);
-  --color-on-warning: var(--color-text-light);
+  --color-on-warning: #FFFFFF;
   --color-positive: var(--color-green-500);
-  --color-on-positive: var(--color-text-light);
+  --color-on-positive: #FFFFFF;
   --color-negative: var(--color-red-500);
-  --color-on-negative: var(--color-text-light);
+  --color-on-negative: #FFFFFF;
   --color-negative-border: var(--color-negative);
   --color-negative-border-hover: var(--color-red-700);
   --color-surface: #FFFFFF;
