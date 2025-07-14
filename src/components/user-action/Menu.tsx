@@ -135,7 +135,7 @@ export const Menu = <T extends HTMLElement>({
         ref={menuRef}
         onClick={e => e.stopPropagation()}
         className={clsx(
-          'absolute rounded-md bg-menu-background text-menu-text shadow-around-lg z-10',
+          'absolute rounded-md bg-menu-background text-menu-text shadow-around-lg z-[300]',
           {
             'animate-pop-in': isOpen,
             'animate-pop-out': !isOpen,

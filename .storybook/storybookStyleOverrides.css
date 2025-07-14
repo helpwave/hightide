@@ -1,3 +1,4 @@
-html, body, main {
+html, body {
   background: inherit;
+  padding: 0 !important;
 }

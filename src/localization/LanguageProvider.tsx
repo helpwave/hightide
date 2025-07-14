@@ -41,9 +41,9 @@ export const LanguageProvider = ({ initialLanguage, children }: PropsWithChildre
   }, [initialLanguage]) // eslint-disable-line react-hooks/exhaustive-deps
 
   useEffect(() => {
-    // TODO set locale of html tag here as well
+    document.documentElement.setAttribute('lang', language)
     setStoredLanguage(language)
-  }, [language, setStoredLanguage])
+  }, [language])  // eslint-disable-line react-hooks/exhaustive-deps
 
   useEffect(() => {
     if (storedLanguage !== null) {

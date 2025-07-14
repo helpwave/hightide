@@ -61,6 +61,7 @@ export const LanguageModal = ({
           value={language}
           options={LanguageUtil.languages.map((language) => ({ label: translation(language), value: language }))}
           onChange={(language: string) => setLanguage(language as Language)}
+          searchOptions={{ disabled: true }}
         />
         <div className="flex-row-4 mt-3 justify-end">
           <SolidButton autoFocus color="positive" onClick={onClose}>
