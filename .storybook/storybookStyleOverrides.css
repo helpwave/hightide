@@ -1,4 +1,14 @@
-html, body {
-  background: inherit;
-  padding: 0 !important;
+html, body, main {
+  @apply transition-colors duration-300;
+  color: var(--color-on-background) !important;
+  background-color: var(--color-background) !important;
+}
+
+.sb-show-main {
+  color: var(--color-on-background) !important;
+  background-color: var(--color-background) !important;
+}
+
+.sb-show-main.sb-main-padded {
+  padding: 0;
 }

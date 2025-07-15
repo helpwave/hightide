@@ -47,13 +47,13 @@
   --color-carousel-dot-disabled: var(--color-disabled-background);
 
   /* Menu */
-  --color-menu-background: var(--color-surface);
-  --color-menu-text: var(--color-on-surface);
+  --color-menu-background: #F2F2F2;
+  --color-menu-text: var(--color-text-default);
   --color-menu-border: var(--color-border);
 
-  /* Overlay */
-  --color-overlay-background: #FFFFFF;
-  --color-overlay-text: var(--color-text-dark);
+  /* Overlay, Dialog, Modal */
+  --color-overlay-background: #FAFAFA;
+  --color-overlay-text: var(--color-text-default);
   --color-overlay-shadow: #00000039;
 
   /* ProgressIndicator */
@@ -67,7 +67,7 @@
   /* Stepper Bar */
   --color-stepperbar-dot-active: var(--color-primary);
   --color-stepperbar-dot-normal: var(--color-purple-100);
-  --color-stepperbar-dot-disabled: var(--color-disabled-background);
+  --color-stepperbar-dot-disabled: var(--color-description);
 
   /* Table */
   --color-tabel-header-background: #F6FAFF;
@@ -103,7 +103,7 @@
   --color-text-image-dark-text: var(--color-white);
 
   /* Tooltip */
-  --color-tooltip-background: #D9D9D9;
+  --color-tooltip-background: var(--color-menu-background);
   --color-tooltip-text: var(--color-description);
 }
 
@@ -133,10 +133,10 @@
     /* ProgressIndicator */
     --color-progress-indicator-background: var(--color-gray-700);
 
-    /* Overlay */
+    /* Overlay, Dialog, Modal */
     --color-overlay-background: #2A2A2A;
     --color-overlay-text: var(--color-text-light);
-    --color-overlay-shadow: #00000055;
+    --color-overlay-shadow: #00000060;
 
     /* Table */
     --color-tabel-header-background: #2F2F2F;
@@ -144,9 +144,5 @@
 
     /* Tag */
     --color-tag-dark-background: #1A1A1A;
-
-    /* Tooltip */
-    --color-tooltip-background: #555555;
-    --color-tooltip-text: var(--color-description);
   }
 }

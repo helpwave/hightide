@@ -1,26 +1,54 @@
 import type { Meta, StoryObj } from '@storybook/nextjs'
-import { AvatarGroup } from '../../src'
+import type { AvatarGroupProps, AvatarProps } from '../../src'
+import { AvatarGroup, range } from '../../src'
+import { faker } from '@faker-js/faker'
+
+type AvatarGroupExampleProps = Omit<AvatarGroupProps, 'avatars'> & {
+  useImage?: boolean,
+  useName?: boolean,
+}
+
+const avatars: AvatarProps[] = range(10).map(() => ({
+  name: faker.person.fullName(),
+  image: {
+    avatarUrl: 'https://cdn.helpwave.de/test-avatar.svg',
+    alt: 'profile picture'
+  },
+}))
+
+const AvatarGroupExample = ({
+                              useImage,
+                              useName,
+                              ...props
+                            }: AvatarGroupExampleProps) => {
+  return (
+    <AvatarGroup
+      {...props}
+      avatars={avatars.map(value => {
+        return {
+          image: useImage ? value.image : undefined,
+          name: useName ? value.name : undefined
+        }
+      })}
+    />
+  )
+}
 
 const meta = {
   title: 'Branding/Avatar',
-  component: AvatarGroup,
-} satisfies Meta<typeof AvatarGroup>
+  component: AvatarGroupExample,
+} satisfies Meta<typeof AvatarGroupExample>
 
 export default meta
 type Story = StoryObj<typeof meta>;
 
 export const avatarGroup: Story = {
   args: {
-    avatars: [
-      { alt: 'altText', avatarUrl: 'https://helpwave.de/favicon.ico' },
-      { alt: 'altText', avatarUrl: 'https://helpwave.de/favicon.ico' },
-      { alt: 'altText', avatarUrl: 'https://helpwave.de/favicon.ico' },
-      { alt: 'altText', avatarUrl: 'https://helpwave.de/favicon.ico' },
-      { alt: 'altText', avatarUrl: 'https://helpwave.de/favicon.ico' },
-      { alt: 'altText', avatarUrl: 'https://helpwave.de/favicon.ico' },
-      { alt: 'altText', avatarUrl: 'https://helpwave.de/favicon.ico' },
-    ],
+    useImage: true,
+    useName: false,
+    size: 'md',
+    fullyRounded: true,
     maxShownProfiles: 5,
-    size: 'tiny'
+    showTotalNumber: false,
   },
 }

@@ -209,7 +209,7 @@ export const Modal = ({
         ref={ref}
         tabIndex={-1}
         className={clsx(
-          'flex-col-2 fixed left-1/2 top-1/2 -translate-y-1/2 -translate-x-1/2 p-4 bg-overlay-background text-overlay-text rounded-xl shadow-xl animate-pop-in',
+          'flex-col-2 fixed left-1/2 top-1/2 -translate-y-1/2 -translate-x-1/2 p-4 bg-overlay-background text-overlay-text rounded-xl shadow-around-lg shadow-strong animate-pop-in',
           className
         )}
         role="dialog"
@@ -296,7 +296,7 @@ export const Dialog = ({
         ref={ref}
         tabIndex={-1}
         className={clsx(
-          'flex-col-2 fixed left-1/2 top-1/2 -translate-y-1/2 -translate-x-1/2 p-4 bg-overlay-background text-overlay-text rounded-xl shadow-xl animate-pop-in',
+          'flex-col-2 fixed left-1/2 top-1/2 -translate-y-1/2 -translate-x-1/2 p-4 bg-overlay-background text-overlay-text rounded-xl shadow-around-lg shadow-strong animate-pop-in',
           className
         )}
         role="dialog"

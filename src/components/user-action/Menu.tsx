@@ -1,10 +1,4 @@
-import {
-  type PropsWithChildren,
-  type ReactNode,
-  type RefObject,
-  useEffect,
-  useRef, useState
-} from 'react'
+import { type PropsWithChildren, type ReactNode, type RefObject, useEffect, useRef, useState } from 'react'
 import clsx from 'clsx'
 import { useOutsideClick } from '../../hooks/useOutsideClick'
 import { useHoverState } from '../../hooks/useHoverState'
@@ -28,7 +22,7 @@ export const MenuItem = ({
                            className
                          }: PropsWithChildren<MenuItemProps>) => (
   <div
-    className={clsx('block px-3 py-1.5 first:rounded-t-md last:rounded-b-md text-sm font-semibold', {
+    className={clsx('block px-3 py-1.5 first:rounded-t-md last:rounded-b-md text-sm font-semibold text-nowrap', {
       'text-right': alignment === 'right',
       'text-left': alignment === 'left',
       'text-disabled-text cursor-not-allowed': isDisabled,
@@ -131,29 +125,31 @@ export const Menu = <T extends HTMLElement>({
   return (
     <>
       {trigger(bag, triggerRef)}
-      {createPortal((<div
-        ref={menuRef}
-        onClick={e => e.stopPropagation()}
-        className={clsx(
-          'absolute rounded-md bg-menu-background text-menu-text shadow-around-lg z-[300]',
-          {
-            'animate-pop-in': isOpen,
-            'animate-pop-out': !isOpen,
-            'hidden': isHidden,
-          },
-          menuClassName
-        )}
-        onAnimationEnd={() => {
-          if (!isOpen) {
-            setIsHidden(true)
-          }
-        }}
-        style={{
-          ...menuPosition
-        }}
-      >
-        {BagFunctionUtil.resolve<MenuBag>(children, bag)}
-      </div>), document.body)}
+      {createPortal((
+        <div
+          ref={menuRef}
+          onClick={e => e.stopPropagation()}
+          className={clsx(
+            'absolute rounded-md bg-menu-background text-menu-text shadow-around-lg shadow-strong z-[300]',
+            {
+              'animate-pop-in': isOpen,
+              'animate-pop-out': !isOpen,
+              'hidden': isHidden,
+            },
+            menuClassName
+          )}
+          onAnimationEnd={() => {
+            if (!isOpen) {
+              setIsHidden(true)
+            }
+          }}
+          style={{
+            ...menuPosition
+          }}
+        >
+          {BagFunctionUtil.resolve<MenuBag>(children, bag)}
+        </div>
+      ), document.body)}
     </>
   )
 }

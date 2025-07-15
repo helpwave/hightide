@@ -1,6 +1,7 @@
 import type { Dispatch, SetStateAction } from 'react'
 import { useCallback, useEffect, useState } from 'react'
 import { LocalStorageService } from '../util/storage'
+import { resolveSetState } from '../util/resolveSetState'
 
 type SetValue<T> = Dispatch<SetStateAction<T>>
 export const useLocalStorage = <T>(key: string, initValue: T): [T, SetValue<T>] => {
@@ -15,10 +16,10 @@ export const useLocalStorage = <T>(key: string, initValue: T): [T, SetValue<T>] 
 
   const [storedValue, setStoredValue] = useState<T>(get)
 
-  const setValue: SetValue<T> = useCallback(value => {
-    const newValue = value instanceof Function ? value(storedValue) : value
+  const setValue: SetValue<T> = useCallback(action => {
+    const newValue = resolveSetState(action, storedValue)
     const storageService = new LocalStorageService()
-    storageService.set(key, value)
+    storageService.set(key, newValue)
 
     setStoredValue(newValue)
   }, [storedValue, setStoredValue, key])

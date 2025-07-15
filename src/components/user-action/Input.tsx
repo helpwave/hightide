@@ -16,7 +16,7 @@ const getInputClassName = ({ disabled = false, hasError = false }: GetInputClass
   return clsx(
     'px-2 py-1.5 rounded-md border-2',
     {
-      'bg-surface text-on-surface hover:border-primary focus:border-primary': !disabled && !hasError,
+      'bg-input-background text-input-text hover:border-primary focus:border-primary': !disabled && !hasError,
       'bg-on-negative text-negative border-negative-border hover:border-negative-border-hover': !disabled && hasError,
       'bg-disabled-background text-disabled-text border-disabled-border': disabled,
     }

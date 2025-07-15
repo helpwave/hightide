@@ -83,7 +83,10 @@ export const Pagination = ({
         />
         <span className="select-none w-10">{translation('of')}</span>
         <span
-          className="flex-row-2 flex-1 items-center justify-center select-none h-10 bg-surface text-on-surface rounded-md font-bold">{pageCount}</span>
+          className="flex-row-2 flex-1 items-center justify-center select-none h-10 bg-input-background text-input-text rounded-md font-bold"
+        >
+          {pageCount}
+        </span>
       </div>
       <IconButton color="transparent" onClick={() => changePage(pageIndex + 1)} disabled={onLastPage || noPages}>
         <ChevronRight/>

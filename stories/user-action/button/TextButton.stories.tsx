@@ -22,6 +22,7 @@ export const textButton: Story = {
     color: 'negative',
     size: 'medium',
     disabled: false,
+    coloredHoverBackground: true,
     className: 'rounded',
     onClick: action('Clicked'),
   },

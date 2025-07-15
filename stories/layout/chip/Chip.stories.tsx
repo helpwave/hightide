@@ -1,9 +1,15 @@
 import type { Meta, StoryObj } from '@storybook/nextjs'
-import { Chip } from '../../../src'
+import { Chip, ChipUtil } from '../../../src'
 
 const meta = {
   title: 'Layout/Chip',
   component: Chip,
+  argTypes: {
+    color: {
+      control: 'select',
+      options: ChipUtil.colors,
+    }
+  },
 } satisfies Meta<typeof Chip>
 
 export default meta

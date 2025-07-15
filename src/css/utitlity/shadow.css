@@ -1,29 +1,58 @@
+@import "tailwindcss";
+
+@utility shadow-side {
+  box-shadow: var(--shadow-right, 0 0 0 transparent),
+    var(--shadow-left, 0 0 0 transparent),
+    var(--shadow-top, 0 0 0 transparent),
+    var(--shadow-bottom, 0 0 0 transparent);
+}
+
+@utility shadow-r-* {
+  --shadow-right: calc(--value(number) * 1px) 0 calc(--value(number) * 1px) 0 var(--tw-shadow-color, rgb(0 0 0 / 2%));
+}
+
+@utility shadow-l-* {
+  --shadow-left: calc(--value(number) * -1px) 0 calc(--value(number) * 1px) 0 var(--tw-shadow-color, rgb(0 0 0 / 2%));
+}
+
+@utility shadow-t-* {
+  --shadow-top: 0 calc(--value(number) * -1px) calc(--value(number) * 1px) 0 var(--tw-shadow-color, rgb(0 0 0 / 2%));
+}
+
+@utility shadow-b-* {
+  --shadow-bottom: 0 calc(--value(number) * 1px) calc(--value(number) * 1px) 0 var(--tw-shadow-color, rgb(0 0 0 / 2%));
+}
+
+@utility shadow-around-* {
+  --shadow-right: calc(--value(number) * 1px) 0 calc(--value(number) * 1px) 0 var(--tw-shadow-color, rgb(0 0 0 / 2%));
+  --shadow-left: calc(--value(number) * -1px) 0 calc(--value(number) * 1px) 0 var(--tw-shadow-color, rgb(0 0 0 / 2%));
+  --shadow-top: 0 calc(--value(number) * -1px) calc(--value(number) * 1px) 0 var(--tw-shadow-color, rgb(0 0 0 / 2%));
+  --shadow-bottom: 0 calc(--value(number) * 1px) calc(--value(number) * 1px) 0 var(--tw-shadow-color, rgb(0 0 0 / 2%));
+  @apply shadow-side;
+}
+
+@utility shadow-strong {
+  --tw-shadow-color: rgba(0, 0, 0, 0.06);
+}
+
+@utility shadow-hard {
+  --tw-shadow-color: rgba(0, 0, 0, 0.10);
+}
+
 @layer utilities {
   .shadow-around {
-    box-shadow: 0 2px 2px 0 rgba(0, 0, 0, 0.02),
-    0 -2px 2px 0 rgba(0, 0, 0, 0.02),
-    2px 0 2px 0 rgba(0, 0, 0, 0.02),
-    -2px 0 2px 0 rgba(0, 0, 0, 0.02);
+    @apply shadow-around-2;
   }
 
   .shadow-around-md {
-    box-shadow: 0 5px 5px 0 rgba(0, 0, 0, 0.02),
-    0 -5px 5px 0 rgba(0, 0, 0, 0.02),
-    5px 0 5px 0 rgba(0, 0, 0, 0.02),
-    -5px 0 5px 0 rgba(0, 0, 0, 0.02);
+    @apply shadow-around-5;
   }
 
   .shadow-around-lg {
-    box-shadow: 0 10px 10px 0 rgba(0, 0, 0, 0.02),
-    0 -10px 10px 0 rgba(0, 0, 0, 0.02),
-    10px 0 10px 0 rgba(0, 0, 0, 0.02),
-    -10px 0 10px 0 rgba(0, 0, 0, 0.02);
+    @apply shadow-around-10;
   }
 
   .shadow-around-xl {
-    box-shadow: 0 20px 20px 0 rgba(0, 0, 0, 0.02),
-    0 -20px 20px 0 rgba(0, 0, 0, 0.02),
-    20px 0 20px 0 rgba(0, 0, 0, 0.02),
-    -20px 0 20px 0 rgba(0, 0, 0, 0.02);
+    @apply shadow-around-20;
   }
 }

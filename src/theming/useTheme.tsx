@@ -1,10 +1,11 @@
 import type { Dispatch, PropsWithChildren, SetStateAction } from 'react'
+import { useMemo } from 'react'
 import { createContext, useContext, useEffect, useState } from 'react'
 import type { Translation, TranslationPlural } from '../localization/useTranslation'
 import { noop } from '../util/noop'
 import { useLocalStorage } from '../hooks/useLocalStorage'
 
-const themes = ['light', 'dark'] as const
+const themes = ['light', 'dark', 'system'] as const
 
 export type ThemeType = typeof themes[number]
 
@@ -16,6 +17,7 @@ const defaultThemeTypeTranslation: Translation<ThemeTypeTranslation> = {
   en: {
     dark: 'Dark',
     light: 'Light',
+    system: 'System',
     theme: {
       one: 'Theme',
       other: 'Themes'
@@ -24,6 +26,7 @@ const defaultThemeTypeTranslation: Translation<ThemeTypeTranslation> = {
   de: {
     dark: 'Dunkel',
     light: 'Hell',
+    system: 'System',
     theme: {
       one: 'Farbschema',
       other: 'Farbschemas'
@@ -50,34 +53,30 @@ type ThemeProviderProps = {
   initialTheme?: ThemeType,
 }
 
-export const ThemeProvider = ({ children, initialTheme = 'light' }: PropsWithChildren<ThemeProviderProps>) => {
-  const [theme, setTheme] = useState<ThemeType>(initialTheme)
+export const ThemeProvider = ({ children, initialTheme = 'system' }: PropsWithChildren<ThemeProviderProps>) => {
   const [storedTheme, setStoredTheme] = useLocalStorage<ThemeType>('theme', initialTheme)
+  const [userTheme, setUserTheme] = useState<ThemeType>()
 
   useEffect(() => {
-    if (theme !== initialTheme) {
+    if (storedTheme !== initialTheme) {
       console.warn('ThemeProvider initial state changed: Prefer using useTheme\'s setTheme instead')
-      setTheme(initialTheme)
+      setStoredTheme(initialTheme)
     }
   }, [initialTheme]) // eslint-disable-line react-hooks/exhaustive-deps
 
-  useEffect(() => {
-    document.documentElement.setAttribute('data-theme', theme)
-    setStoredTheme(theme)
-  }, [theme]) // eslint-disable-line react-hooks/exhaustive-deps
+  const usedTheme = useMemo(() => storedTheme !== 'system' ? storedTheme : userTheme, [storedTheme, userTheme])
 
   useEffect(() => {
-    if (storedTheme !== null) {
-      setTheme(storedTheme)
-      return
-    }
+    document.documentElement.setAttribute('data-theme', usedTheme)
+  }, [usedTheme])
 
+  useEffect(() => {
     const prefersDark = window.matchMedia('(prefers-color-scheme: dark)').matches
-    setTheme(prefersDark ? 'dark' : 'light')
-  }, []) // eslint-disable-line react-hooks/exhaustive-deps
+    setUserTheme(prefersDark ? 'dark' : 'light')
+  }, [])
 
   return (
-    <ThemeContext.Provider value={{ theme, setTheme }}>
+    <ThemeContext.Provider value={{ theme: storedTheme, setTheme: setStoredTheme }}>
       {children}
     </ThemeContext.Provider>
   )
