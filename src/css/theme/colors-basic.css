@@ -64,7 +64,7 @@
   @variant dark {
     --color-primary: var(--color-purple-400);
     --color-positive: var(--color-green-700);
-    --color-negative: var(--color-red-700);
+    --color-negative: var(--color-red-500);
     --color-negative-border-hover: var(--color-red-600);
 
     --color-focus: var(--color-purple-500);

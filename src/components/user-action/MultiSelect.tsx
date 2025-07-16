@@ -8,7 +8,7 @@ import type { LabelProps } from './Label'
 import { Label } from './Label'
 import type { SelectOption } from './Select'
 import { SelectTile } from './Select'
-import { IconButton, SolidButton } from './Button'
+import { SolidButton } from './Button'
 import { ChipList } from '../layout-and-navigation/Chip'
 import type { FormTranslationType } from '../../localization/defaults/form'
 import { formTranslation } from '../../localization/defaults/form'
@@ -106,10 +106,10 @@ export const MultiSelect = <T, >({
           <button
             ref={ref}
             className={clsx(
-              'btn-md justify-between w-full border-2 h-auto',
+              'group btn-md justify-between w-full border-2 h-auto',
               {
                 'min-h-14': useChipDisplay,
-                'bg-menu-background text-menu-text border-menu-border hover:border-primary': !disabled,
+                'bg-input-background text-input-text hover:border-primary': !disabled,
                 'bg-disabled-background text-disabled-text border-disabled-background cursor-not-allowed': disabled
               },
               triggerClassName
@@ -120,9 +120,9 @@ export const MultiSelect = <T, >({
             {useChipDisplay ? (
               <>
                 {isShowingHint ? (
-                  <IconButton disabled={disabled} size="small" color="neutral">
+                  <div className="icon-btn-sm bg-button-solid-neutral-background text-button-solid-neutral-text hover:brightness-90 group-hover:brightness-90">
                     <Plus/>
-                  </IconButton>
+                  </div>
                 ) : (
                   <ChipList list={selectedItems.map(value => ({ children: value.label }))}/>
                 )}

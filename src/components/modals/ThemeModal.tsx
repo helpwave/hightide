@@ -4,7 +4,7 @@ import { useTranslation } from '../../localization/useTranslation'
 import { Select } from '../user-action/Select'
 import { SolidButton } from '../user-action/Button'
 import { Modal, type ModalProps } from '../layout-and-navigation/Overlay'
-import type { ThemeType, ThemeTypeTranslation } from '../../theming/useTheme'
+import type { ThemeTypeTranslation } from '../../theming/useTheme'
 import { useTheme } from '../../theming/useTheme'
 import { ThemeUtil } from '../../theming/useTheme'
 import type { FormTranslationType } from '../../localization/defaults/form'
@@ -56,7 +56,7 @@ export const ThemeModal = ({
           className="mt-2"
           value={theme}
           options={ThemeUtil.themes.map((theme) => ({ label: translation(theme), value: theme }))}
-          onChange={(theme: string) => setTheme(theme as ThemeType)}
+          onChange={(theme) => setTheme(theme)}
           searchOptions={{ disabled: true }}
         />
         <div className="flex-row-4 mt-3 justify-end">

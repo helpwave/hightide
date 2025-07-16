@@ -82,6 +82,7 @@ export type OutlineButtonProps = ButtonWithIconsProps & {
 
 export type TextButtonProps = ButtonWithIconsProps & {
   color?: TextButtonColor,
+  coloredHoverBackground?: boolean,
 }
 
 /**
@@ -135,6 +136,7 @@ const SolidButton = forwardRef<HTMLButtonElement, SolidButtonProps>(function Sol
       onClick={onClick}
       disabled={disabled}
       className={clsx(
+        'font-semibold',
         {
           'text-disabled-text bg-disabled-background cursor-not-allowed': disabled,
           [clsx(colorClasses, 'hover:brightness-90')]: !disabled
@@ -195,6 +197,7 @@ const OutlineButton = ({
       onClick={onClick}
       disabled={disabled}
       className={clsx(
+        'font-semibold',
         {
           'text-disabled-text border-disabled-outline cursor-not-allowed': disabled,
           [clsx(colorClasses, 'hover:brightness-80')]: !disabled,
@@ -240,6 +243,7 @@ const TextButton = ({
                       startIcon,
                       endIcon,
                       onClick,
+                      coloredHoverBackground = true,
                       className,
                       ...restProps
                     }: TextButtonProps) => {
@@ -249,19 +253,29 @@ const TextButton = ({
     neutral: 'bg-transparent text-button-text-neutral-text',
   }[color]
 
+  const backgroundColor = {
+    primary: 'hover:bg-button-text-primary-text/20',
+    negative: 'hover:bg-button-text-negative-text/20',
+    neutral: 'hover:bg-button-text-neutral-text/20',
+  }[color]
+
   const iconColorClasses = {
     primary: 'text-button-text-primary-icon',
     negative: 'text-button-text-negative-icon',
     neutral: 'text-button-text-neutral-icon',
   }[color]
+
   return (
     <button
       onClick={onClick}
       disabled={disabled}
       className={clsx(
+        'font-semibold',
         {
           'text-disabled-text cursor-not-allowed': disabled,
-          [clsx(colorClasses, 'hover:bg-button-text-hover-background')]: !disabled,
+          [colorClasses]: !disabled,
+          [backgroundColor]: !disabled && coloredHoverBackground,
+          'hover:bg-button-text-hover-background': !disabled && !coloredHoverBackground,
         },
         ButtonUtil.paddingMapping[size],
         className

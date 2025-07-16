@@ -106,7 +106,7 @@ export const Select = <T, >({
               'btn-md justify-between w-full border-2',
               {
                 'rounded-b-lg': !open,
-                'bg-menu-background text-menu-text border-menu-border hover:border-primary': !disabled,
+                'bg-input-background text-input-text hover:border-primary': !disabled,
                 'bg-disabled-background text-disabled-text border-disabled-background cursor-not-allowed': disabled
               },
               triggerClassName

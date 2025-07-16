@@ -315,7 +315,7 @@ export const Table = <T, >({
     <div ref={ref} className={clsx('flex-col-4', className)}>
       <Scrollbars
         autoHeight={true}
-        autoHeightMax={tableRef.current?.offsetHeight + 2}
+        autoHeightMax={tableRef.current?.offsetHeight ? (tableRef.current?.offsetHeight + 2) : undefined}
         autoHide={true}
       >
         <table

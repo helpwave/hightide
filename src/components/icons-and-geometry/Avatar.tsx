@@ -1,63 +1,111 @@
 import clsx from 'clsx'
+import { useLogOnce } from '../../hooks/useLogOnce'
+import type { CSSProperties } from 'react'
+import { useMemo } from 'react'
 
-export const avtarSizeList = ['tiny', 'small', 'medium', 'large'] as const
+const avtarSizeList = ['sm', 'md', 'lg', 'xl'] as const
 export type AvatarSize = typeof avtarSizeList[number]
-export const avatarSizeMapping: Record<AvatarSize, number> = {
-  tiny: 24,
-  small: 32,
-  medium: 48,
-  large: 64
+const avatarSizeMapping: Record<AvatarSize, number> = {
+  sm: 18,
+  md: 24,
+  lg: 32,
+  xl: 48
+}
+const textClassNameMapping: Record<AvatarSize, string> = {
+  sm: 'text-xs font-semibold',
+  md: 'text-sm font-semibold',
+  lg: 'text-lg font-semibold',
+  xl: 'text-2xl font-bold',
 }
 
-export type AvatarProps = {
+export const AvatarUtil = {
+  avatarSizeMapping,
+  sizes: avtarSizeList
+}
+
+
+type ImageConfig = {
   avatarUrl: string,
   alt: string,
+}
+
+
+export type AvatarProps = {
+  image?: ImageConfig,
+  name?: string,
   size?: AvatarSize,
+  fullyRounded?: boolean,
   className?: string,
 }
 
 /**
  * A component for showing a profile picture
  */
-export const Avatar = ({ avatarUrl, alt, size = 'medium', className = '' }: AvatarProps) => {
-  // TODO remove later
-  avatarUrl = 'https://cdn.helpwave.de/boringavatar.svg'
+export const Avatar = ({ image, name, size = 'md', fullyRounded, className = '' }: AvatarProps) => {
+  const pixels = avatarSizeMapping[size]
 
-  const avtarSize = {
-    tiny: 24,
-    small: 32,
-    medium: 48,
-    large: 64,
-  }[size]
+  const sizeStyle: CSSProperties = {
+    minWidth: pixels,
+    maxWidth: pixels,
+    minHeight: pixels,
+    maxHeight: pixels,
+  }
 
-  const style = {
-    width: avtarSize + 'px',
-    height: avtarSize + 'px',
-    maxWidth: avtarSize + 'px',
-    maxHeight: avtarSize + 'px',
-    minWidth: avtarSize + 'px',
-    minHeight: avtarSize + 'px',
+  const textClassName = textClassNameMapping[size]
+
+  useLogOnce({ message: 'Either set image or name in Avatar', condition: !image && !name, type: 'warning' })
+
+  const displayName = useMemo(() => {
+    const maxLetters = size === 'sm' ? 1 : 2
+    return (name ?? '')
+      .split(' ')
+      .filter((_, index) => index < maxLetters)
+      .map(value => value[0])
+      .join('')
+      .toUpperCase()
+  }, [name, size])
+
+  const rounding = {
+    'rounded-full': fullyRounded,
+    'rounded-lg': !fullyRounded && !(size === 'sm' || size === 'md'),
+    'rounded-sm': !fullyRounded && (size === 'sm' || size === 'md'),
   }
 
   return (
-    // TODO transparent or white background later
-    <div className={clsx(`rounded-full bg-primary shadow`, className)} style={style}>
-      <img
-        className="rounded-full"
-        style={style}
-        src={avatarUrl}
-        alt={alt}
-        width={avtarSize}
-        height={avtarSize}
-      />
+    <div
+      className={clsx(
+        `relative bg-primary text-on-primary`,
+        rounding,
+        className
+      )}
+      style={sizeStyle}
+    >
+      {name && !image && (
+        <span className={clsx(textClassName, 'absolute left-1/2 top-1/2 -translate-x-1/2 -translate-y-1/2')}>
+          {displayName}
+        </span>
+      )}
+      {image && (
+        <img
+          className={clsx(
+            'absolute left-1/2 top-1/2 -translate-x-1/2 -translate-y-1/2',
+            rounding
+          )}
+          src={image.avatarUrl}
+          alt={image.alt}
+          style={sizeStyle}
+        />
+      )}
     </div>
   )
 }
 
 export type AvatarGroupProps = {
-  avatars: Omit<AvatarProps, 'size'>[],
+  avatars: Omit<AvatarProps, 'size' | 'fullyRounded'>[],
   maxShownProfiles?: number,
+  showTotalNumber?: boolean,
   size?: AvatarSize,
+  fullyRounded?: boolean,
 }
 
 /**
@@ -66,7 +114,9 @@ export type AvatarGroupProps = {
 export const AvatarGroup = ({
                               avatars,
                               maxShownProfiles = 5,
-                              size = 'tiny'
+                              showTotalNumber = true,
+                              size = 'md',
+                              fullyRounded
                             }: AvatarGroupProps) => {
   const displayedProfiles = avatars.length < maxShownProfiles ? avatars : avatars.slice(0, maxShownProfiles)
   const diameter = avatarSizeMapping[size]
@@ -82,15 +132,15 @@ export const AvatarGroup = ({
             className="absolute"
             style={{ left: (index * diameter * stackingOverlap) + 'px', zIndex: maxShownProfiles - index }}
           >
-            <Avatar avatarUrl={avatar.avatarUrl} alt={avatar.alt} size={size}/>
+            <Avatar {...avatar} size={size} fullyRounded={fullyRounded}
+                    className={clsx('shadow-side shadow-r-4 shadow-hard', avatar.className)}/>
           </div>
         ))}
       </div>
       {
-        notDisplayedProfiles > 0 && (
+        showTotalNumber && notDisplayedProfiles > 0 && (
           <div
-            className="flex-row-2 truncate items-center"
-            style={{ fontSize: (diameter / 2) + 'px', marginLeft: (1 + diameter / 16) + 'px' }}
+            className={clsx(textClassNameMapping[size], 'flex-row-2 truncate items-center')}
           >
             <span>+ {notDisplayedProfiles}</span>
           </div>

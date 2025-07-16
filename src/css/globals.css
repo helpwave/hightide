@@ -113,7 +113,7 @@
   }
 
   *:focus-visible {
-    @apply ring-1 ring-focus;
+    @apply ring-2 ring-focus;
   }
 
   @media (prefers-reduced-motion: reduce) {
@@ -135,7 +135,7 @@
   }
 
   td {
-    @apply px-3 first:pl-6 last:pr-6 py-2.5 border-b-1 first:border-l-1 last:border-r-2 [nth-last-child(1)]:first:rounded-bl-lg [nth-last-child(1)]:last:rounded-br-lg;
+    @apply px-3 first:pl-6 last:pr-6 py-2.5 border-b-1 first:border-l-1 last:border-r-1 [nth-last-child(1)]:first:rounded-bl-lg [nth-last-child(1)]:last:rounded-br-lg;
   }
 
   tbody > tr:last-child > td {

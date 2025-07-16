@@ -56,11 +56,11 @@ export const Textarea = ({
                labelType={label.labelType ?? 'labelSmall'}/>
       )}
       <div
-        className={clsx('bg-surface text-on-surface relative',
+        className={clsx('bg-input-background text-input-text relative',
           {
-            'shadow border-2 rounded-lg': defaultStyle,
+            'border-2 rounded-lg': defaultStyle,
             'hover:border-primary focus-within:border-primary': defaultStyle && !disabled,
-            'border-disabled-border cursor-not-allowed': defaultStyle && !disabled,
+            'border-disabled-border cursor-not-allowed': defaultStyle && disabled,
           })}
       >
         {headline && (

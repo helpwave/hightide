@@ -1,21 +1,16 @@
 import type { Preview } from '@storybook/nextjs'
-import type { ThemeType } from '../src'
 import { LanguageProvider, ThemeProvider, useTheme } from '../src'
 import '../src/css/globals.css'
 import './storybookStyleOverrides.css'
 import { useEffect } from 'react'
 
-const colorToHex: Record<ThemeType, string> = {
-  dark: '#222',
-  light: '#EEE',
-}
-
 const preview: Preview = {
   parameters: {
     backgrounds: {
       options: {
-        dark: { name: 'Dark', value: colorToHex.dark },
-        light: { name: 'Light', value: colorToHex.light },
+        dark: { name: 'Dark', value: '#000000' },
+        light: { name: 'Light', value: '#FFFFFF' },
+        system: { name: 'System', value: '#FFFFFF' },
       }
     },
   },
@@ -52,8 +47,8 @@ const preview: Preview = {
       const language = context.globals.language
 
       return (
-        <main className="bg-background text-background transition-colors duration-300 p-4 h-screen w-screen">
-          <ThemeProvider>
+        <main className="p-4">
+          <ThemeProvider initialTheme={theme}>
             <LanguageProvider initialLanguage={language}>
               <App/>
             </LanguageProvider>
