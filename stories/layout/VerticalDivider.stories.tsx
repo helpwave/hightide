@@ -11,7 +11,7 @@ type Story = StoryObj<typeof meta>;
 
 export const verticalDivider: Story = {
   args: {
-    width: 1,
+    width: 3,
     height: 100,
     strokeWidth: 4,
     dashLength: 6,

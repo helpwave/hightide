@@ -51,7 +51,7 @@ export const Chip = ({
     <div
       {...restProps}
       className={clsx(
-        `row w-fit px-2 py-1`,
+        `row w-fit px-2 py-1 font-semibold`,
         colorMapping,
         {
           'rounded-md': variant === 'normal',
@@ -84,7 +84,7 @@ export const ChipList = ({
         <Chip
           key={index}
           {...value}
-          color={value.color ?? 'dark'}
+          color={value.color ?? 'default'}
           variant={value.variant ?? 'normal'}
         >
           {value.children}

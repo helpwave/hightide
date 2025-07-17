@@ -21,7 +21,7 @@ const StackedDialog = () => {
         <SolidButton color="negative" onClick={() => setModal1(false)}>Close</SolidButton>
       </Dialog>
 
-      <Dialog headerProps={{ titleText: 'Dialog 2' }} isOpen={modal2} className="w-[400px] bg-green-300 text-black">
+      <Dialog headerProps={{ titleText: 'Dialog 2' }} isOpen={modal2} className="w-[400px] bg-positive text-on-positive">
         <SolidButton onClick={() => setModal3(true)}>Open 3</SolidButton>
         <SolidButton color="negative" onClick={() => setModal2(false)}>Close</SolidButton>
       </Dialog>

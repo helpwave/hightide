@@ -26,7 +26,7 @@ const StackingModals = () => {
         isOpen={modal2}
         onClose={() => setModal2(false)}
         headerProps={{ titleText: 'Modal 2' }}
-        className="min-w-[300px] !bg-green-200 !text-black"
+        className="min-w-[300px] !bg-positive !text-on-positive"
       >
         {'The next layer of Modals!'}
         {'This is Modal 2'}
@@ -36,7 +36,7 @@ const StackingModals = () => {
         isOpen={modal3}
         onClose={() => setModal3(false)}
         headerProps={{ titleText: 'Modal 3' }}
-        className="!bg-yellow-200 !text-black"
+        className="!bg-warning !text-on-warning"
       >
         {'This is Modal 3!'}
       </Modal>

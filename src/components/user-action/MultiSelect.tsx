@@ -121,7 +121,12 @@ export const MultiSelect = <T, >({
               <>
                 {isShowingHint ? (
                   <div
-                    className="icon-btn-sm bg-button-solid-neutral-background text-button-solid-neutral-text hover:brightness-90 group-hover:brightness-90">
+                    className={clsx('icon-btn-sm ',
+                      {
+                        'bg-button-solid-neutral-background text-button-solid-neutral-text hover:brightness-90 group-hover:brightness-90': !disabled,
+                        'bg-disabled-background text-disabled-text': disabled,
+                      })}
+                  >
                     <Plus/>
                   </div>
                 ) : (

@@ -1,8 +1,10 @@
 import Link from 'next/link'
 import clsx from 'clsx'
+import type { ReactNode } from 'react'
+import { Fragment } from 'react'
 
 export type Crumb = {
-  display: string,
+  display: ReactNode,
   link: string,
 }
 
@@ -25,16 +27,15 @@ export const BreadCrumb = ({ crumbs, linkClassName, containerClassName }: BreadC
       {crumbs.map((crumb, index) => {
         const isLast = index === crumbs.length - 1
         return (
-          <>
+          <Fragment key={index}>
             <Link
-              key={'breadcrumb-'+ index}
               href={crumb.link}
               className={clsx('btn-sm hover:bg-description/20', linkClassName, { [color]: !isLast })}
             >
               {crumb.display}
             </Link>
-            {!isLast && <span key={'breadcrumb-slash-'+ index} className={clsx(`px-1`, color)}>/</span>}
-          </>
+            {!isLast && <span className={clsx(`px-1`, color)}>/</span>}
+          </Fragment>
         )
       })}
     </div>
