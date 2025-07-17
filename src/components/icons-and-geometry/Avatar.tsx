@@ -1,7 +1,9 @@
 import clsx from 'clsx'
-import { useLogOnce } from '../../hooks/useLogOnce'
 import type { CSSProperties } from 'react'
+import { useState } from 'react'
 import { useMemo } from 'react'
+import { UserIcon } from 'lucide-react'
+import Image from 'next/image'
 
 const avtarSizeList = ['sm', 'md', 'lg', 'xl'] as const
 export type AvatarSize = typeof avtarSizeList[number]
@@ -43,6 +45,7 @@ export type AvatarProps = {
  */
 export const Avatar = ({ image, name, size = 'md', fullyRounded, className = '' }: AvatarProps) => {
   const pixels = avatarSizeMapping[size]
+  const [hasImageError, setHasImageError] = useState<boolean>(false)
 
   const sizeStyle: CSSProperties = {
     minWidth: pixels,
@@ -52,8 +55,6 @@ export const Avatar = ({ image, name, size = 'md', fullyRounded, className = '' 
   }
 
   const textClassName = textClassNameMapping[size]
-
-  useLogOnce({ message: 'Either set image or name in Avatar', condition: !image && !name, type: 'warning' })
 
   const displayName = useMemo(() => {
     const maxLetters = size === 'sm' ? 1 : 2
@@ -80,20 +81,28 @@ export const Avatar = ({ image, name, size = 'md', fullyRounded, className = '' 
       )}
       style={sizeStyle}
     >
-      {name && !image && (
-        <span className={clsx(textClassName, 'absolute left-1/2 top-1/2 -translate-x-1/2 -translate-y-1/2')}>
+      {name && (!image || hasImageError) && (
+        <span className={clsx(textClassName, 'absolute z-[1] left-1/2 top-1/2 -translate-x-1/2 -translate-y-1/2')}>
           {displayName}
         </span>
       )}
-      {image && (
-        <img
+      {!name && (
+        <div className={clsx('absolute z-[1] left-1/2 top-1/2 -translate-x-1/2 -translate-y-1/2')}>
+          <UserIcon size={Math.round(pixels * 3 / 4)}/>
+        </div>
+      )}
+      {image && !hasImageError && (
+        <Image
           className={clsx(
-            'absolute left-1/2 top-1/2 -translate-x-1/2 -translate-y-1/2',
+            'absolute z-[2] left-1/2 top-1/2 -translate-x-1/2 -translate-y-1/2',
             rounding
           )}
           src={image.avatarUrl}
           alt={image.alt}
           style={sizeStyle}
+          width={pixels}
+          height={pixels}
+          onError={() => setHasImageError(true)}
         />
       )}
     </div>

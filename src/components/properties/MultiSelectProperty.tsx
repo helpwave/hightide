@@ -8,7 +8,7 @@ import type { PropertyBaseProps } from './PropertyBase'
 import { PropertyBase } from './PropertyBase'
 import type { FormTranslationType } from '../../localization/defaults/form'
 import { formTranslation } from '../../localization/defaults/form'
-import { SelectTile } from '../user-action/Select'
+import { ListTile } from '../layout-and-navigation/Tile'
 
 type TranslationType = FormTranslationType
 
@@ -58,9 +58,9 @@ export const MultiSelectProperty = ({
               return undefined
             }
             return (
-              <SelectTile
+              <ListTile
                 prefix={(<Plus/>)}
-                title={{ value: `${translation('add')} ${search.trim()}` }}
+                title={`${translation('add')} ${search.trim()}`}
                 onClick={() => {
                   onAddNew(search)
                   close()

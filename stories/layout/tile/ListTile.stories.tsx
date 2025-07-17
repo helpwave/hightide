@@ -1,10 +1,10 @@
 import type { Meta, StoryObj } from '@storybook/nextjs'
 import { Info, X } from 'lucide-react'
-import type { TileProps } from '../../src'
-import { Tile } from '../../src'
+import type { ListTileProps } from '../../../src'
+import { ListTile } from '../../../src'
 import { action } from 'storybook/actions'
 
-type TileExampleProps = Omit<TileProps, 'prefix' | 'suffix' | 'onClick'> & {
+type ListTileExampleProps = Omit<ListTileProps, 'prefix' | 'suffix' | 'onClick'> & {
   prefix: boolean,
   suffix: boolean,
   isClickable: boolean,
@@ -13,14 +13,14 @@ type TileExampleProps = Omit<TileProps, 'prefix' | 'suffix' | 'onClick'> & {
 /**
  * An Example for using the tile
  */
-const TileExample = ({
+const ListTileExample = ({
                        prefix,
                        suffix,
                        isClickable,
                        ...restProps
-                     }: TileExampleProps) => {
+                     }: ListTileExampleProps) => {
   return (
-    <Tile
+    <ListTile
       {...restProps}
       prefix={prefix ? <Info size={24}/> : undefined}
       suffix={suffix ? <X size={24}/> : undefined}
@@ -30,22 +30,21 @@ const TileExample = ({
 }
 
 const meta = {
-  title: 'Layout',
-  component: TileExample,
-} satisfies Meta<typeof TileExample>
+  title: 'Layout/Tile',
+  component: ListTileExample,
+} satisfies Meta<typeof ListTileExample>
 
 export default meta
 type Story = StoryObj<typeof meta>;
 
-export const tile: Story = {
+export const listTile: Story = {
   args: {
-    title: { value: 'Title' },
-    description: { value: 'Description Text', className: 'textstyle-description' },
+    title: 'Title',
+    description: 'Description Text',
     isClickable: true,
-    isDisabled: false,
+    disabled: false,
     isSelected: false,
     prefix: false,
     suffix: false,
-    className: 'p-2 rounded-md'
   },
 }

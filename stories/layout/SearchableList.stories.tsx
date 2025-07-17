@@ -1,5 +1,5 @@
 import type { Meta, StoryObj } from '@storybook/nextjs'
-import { SearchableList, Tile } from '../../src'
+import { ListTile, SearchableList } from '../../src'
 import { action } from 'storybook/actions'
 
 const meta = {
@@ -16,7 +16,7 @@ export const searchableList: Story = {
     initialSearch: '',
     searchMapping: value => [value],
     itemMapper: value => (
-      <Tile title={{ value }} onClick={() => action(`Clicked on ${value}`)}/>
+      <ListTile title={value} onClick={action(`Clicked on ${value}`)}/>
     ),
     minimumItemsForSearch: 5,
     overwriteTranslation: {},
