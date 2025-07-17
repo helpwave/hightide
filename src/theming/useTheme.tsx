@@ -53,12 +53,12 @@ type ThemeProviderProps = {
   initialTheme?: ThemeType,
 }
 
-export const ThemeProvider = ({ children, initialTheme = 'system' }: PropsWithChildren<ThemeProviderProps>) => {
-  const [storedTheme, setStoredTheme] = useLocalStorage<ThemeType>('theme', initialTheme)
+export const ThemeProvider = ({ children, initialTheme }: PropsWithChildren<ThemeProviderProps>) => {
+  const [storedTheme, setStoredTheme] = useLocalStorage<ThemeType>('theme', initialTheme ?? 'system')
   const [userTheme, setUserTheme] = useState<ThemeType>()
 
   useEffect(() => {
-    if (storedTheme !== initialTheme) {
+    if (!!initialTheme && storedTheme !== initialTheme) {
       console.warn('ThemeProvider initial state changed: Prefer using useTheme\'s setTheme instead')
       setStoredTheme(initialTheme)
     }
@@ -76,7 +76,7 @@ export const ThemeProvider = ({ children, initialTheme = 'system' }: PropsWithCh
   }, [])
 
   return (
-    <ThemeContext.Provider value={{ theme: storedTheme, setTheme: setStoredTheme }}>
+    <ThemeContext.Provider value={{ theme: usedTheme, setTheme: setStoredTheme }}>
       {children}
     </ThemeContext.Provider>
   )

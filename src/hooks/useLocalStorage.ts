@@ -1,5 +1,7 @@
+'use client'
+
 import type { Dispatch, SetStateAction } from 'react'
-import { useCallback, useEffect, useState } from 'react'
+import { useCallback, useState } from 'react'
 import { LocalStorageService } from '../util/storage'
 import { resolveSetState } from '../util/resolveSetState'
 
@@ -23,10 +25,6 @@ export const useLocalStorage = <T>(key: string, initValue: T): [T, SetValue<T>] 
 
     setStoredValue(newValue)
   }, [storedValue, setStoredValue, key])
-
-  useEffect(() => {
-    setStoredValue(get())
-  }, []) // eslint-disable-line react-hooks/exhaustive-deps
 
   return [storedValue, setValue]
 }

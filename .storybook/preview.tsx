@@ -14,9 +14,6 @@ const preview: Preview = {
       }
     },
   },
-  initialGlobals: {
-    backgrounds: { value: 'light' },
-  },
   globalTypes: {
     language: {
       name: 'Language',
