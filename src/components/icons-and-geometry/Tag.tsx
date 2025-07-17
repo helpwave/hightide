@@ -1,3 +1,5 @@
+import Image from 'next/image'
+
 export type TagProps = {
   size?: number,
   className?: string,
@@ -15,7 +17,7 @@ export const TagIcon = ({
                           size = 16,
                         }: TagProps) => {
   return (
-    <img
+    <Image
       style={{ width: `${size}px`, height: `${size}px`, minWidth: `${size}px`, minHeight: `${size}px` }}
       width={size}
       height={size}

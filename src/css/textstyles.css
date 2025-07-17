@@ -28,7 +28,7 @@
   }
 
   .textstyle-accent {
-    @apply text-sm text-text-label font-bold;
+    @apply text-sm text-label font-bold;
   }
 
   .textstyle-description {
@@ -36,15 +36,15 @@
   }
 
   .textstyle-label-lg {
-    @apply text-text-label text-lg font-semibold;
+    @apply text-label text-lg font-semibold;
   }
 
   .textstyle-label-md {
-    @apply text-text-label font-semibold;
+    @apply text-label font-semibold;
   }
 
   .textstyle-label-sm {
-    @apply text-sm text-text-label font-semibold;
+    @apply text-sm text-label font-semibold;
   }
 
   .textstyle-table-name {
@@ -52,7 +52,7 @@
   }
 
   .textstyle-table-header {
-    @apply text-text-label font-bold;
+    @apply text-label font-bold;
   }
 
   .textstyle-navigation-item {

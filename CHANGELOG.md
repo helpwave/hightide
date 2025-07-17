@@ -5,6 +5,16 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/)
 and adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [0.1.23] - 2025-07-17
+
+### Changed
+- Changed `Avatar` to show backup icon when no name or image supplied
+- Changed component to use next `Image` and `Link`
+- Changed CSS to use referential values
+- Changed `LoadingAndErrorComponent` to have a minimum loading time
+- Changed design of `BreadCrumb`s
+- Update multiple storybook stories
+
 ## [0.1.22] - 2025-07-16
 
 ### Added

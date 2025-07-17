@@ -4,32 +4,13 @@ import { useEffect, useState } from 'react'
 import clsx from 'clsx'
 import type { LabelProps } from './Label'
 import { Label } from './Label'
-import type { TileProps } from '../layout-and-navigation/Tile'
-import { Tile } from '../layout-and-navigation/Tile'
+import { ListTile } from '../layout-and-navigation/Tile'
 import { ExpansionIcon } from '../layout-and-navigation/Expandable'
 import type { MenuBag, MenuProps } from './Menu'
 import { Menu } from './Menu'
 import { SearchBar } from './SearchBar'
 import type { UseSearchProps } from '../../hooks/useSearch'
 import { useSearch } from '../../hooks/useSearch'
-
-export type SelectTileProps = TileProps
-
-export const SelectTile = ({
-                             className,
-                             disabledClassName,
-                             title,
-                             ...restProps
-                           }: SelectTileProps) => {
-  return (
-    <Tile
-      {...restProps}
-      className={clsx('px-2 py-1 rounded-md', className)}
-      disabledClassName={disabledClassName ?? 'text-disabled-text cursor-not-allowed'}
-      title={{ ...title, className: title.className ?? 'font-semibold' }}
-    />
-  )
-}
 
 export type SelectOption<T> = {
   label: ReactNode,
@@ -139,10 +120,10 @@ export const Select = <T, >({
               )}
               <div className="flex-col-2 overflow-y-auto">
                 {result.map((option, index) => (
-                  <SelectTile
+                  <ListTile
                     key={index}
                     isSelected={option === selectedOption}
-                    title={{ value: option.label }}
+                    title={option.label}
                     onClick={() => {
                       onChange(option.value)
                       close()

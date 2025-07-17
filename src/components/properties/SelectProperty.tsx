@@ -5,10 +5,10 @@ import { useTranslation } from '../../localization/useTranslation'
 import type { PropertyBaseProps } from './PropertyBase'
 import { PropertyBase } from './PropertyBase'
 import type { SelectProps } from '../user-action/Select'
-import { SelectTile } from '../user-action/Select'
 import { Select } from '../user-action/Select'
 import type { FormTranslationType } from '../../localization/defaults/form'
 import { formTranslation } from '../../localization/defaults/form'
+import { ListTile } from '../layout-and-navigation/Tile'
 
 type SingleSelectPropertyTranslation = FormTranslationType
 
@@ -59,9 +59,9 @@ export const SingleSelectProperty = ({
               return undefined
             }
             return (
-              <SelectTile
+              <ListTile
                 prefix={(<Plus/>)}
-                title={{ value: `${translation('add')} ${search.trim()}` }}
+                title={`${translation('add')} ${search.trim()}`}
                 onClick={() => {
                   onAddNew(search)
                   close()

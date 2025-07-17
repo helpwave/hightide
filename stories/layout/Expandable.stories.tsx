@@ -20,7 +20,7 @@ export const expandable: Story = {
     contentExpandedClassName: 'overflow-y-hidden',
     children: (
       <div className="flex-col-2 overflow-y-auto">
-        {range(20).map(value => (<Tile key={value} title={{ value: `Item ${value}` }}/>))}
+        {range(20).map(value => (<Tile key={value} title={`Item ${value}`}/>))}
       </div>
     )
   },

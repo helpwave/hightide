@@ -1,6 +1,9 @@
 import type { Meta, StoryObj } from '@storybook/nextjs'
 import type { CarouselProps } from '../../src'
+import { range } from '../../src'
 import { Carousel } from '../../src'
+import Image from 'next/image'
+import { clsx } from 'clsx'
 
 type CarouselExampleProps = Omit<CarouselProps, 'blurColor' | 'children'> & {
   hasBlur?: boolean,
@@ -16,21 +19,14 @@ const CarouselExample = ({
       blurColor={hasBlur ? 'from-background !block' : 'from-transparent'}
       heightClassName="h-64"
     >
-      <div className="flex-row-0 justify-center items-center h-full bg-positive rounded-2xl mx-4">
-        <img src="https://helpwave.de/favicon.ico" alt=""/>
-      </div>
-      <div className="flex-row-0 justify-center items-center h-full bg-negative rounded-2xl mx-4">
-        <img src="https://helpwave.de/favicon.ico" alt=""/>
-      </div>
-      <div className="flex-row-0 justify-center items-center h-full bg-primary rounded-2xl mx-4">
-        <img src="https://helpwave.de/favicon.ico" alt=""/>
-      </div>
-      <div className="flex-row-0 justify-center items-center h-full bg-neutral rounded-2xl mx-4">
-        <img src="https://helpwave.de/favicon.ico" alt=""/>
-      </div>
-      <div className="flex-row-0 justify-center items-center h-full bg-warning rounded-2xl mx-4">
-        <img src="https://helpwave.de/favicon.ico" alt=""/>
-      </div>
+      {range(5).map(index => {
+        const color = ['bg-positive', 'bg-negative', 'bg-primary', 'bg-secondary', 'bg-warning'][index]
+        return (
+          <div key={index} className={clsx('flex-row-0 justify-center items-center h-full  rounded-2xl mx-4', color)}>
+            <Image src="https://helpwave.de/favicon.ico" alt="" width={256} height={256}/>
+          </div>
+        )
+      })}
     </Carousel>
   )
 }

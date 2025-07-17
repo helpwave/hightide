@@ -24,4 +24,9 @@ npm run generate-barrels
 ```
 
 - Increase the version number in the [package.json](package.json)
+
+```bash
+npm run build
+```
+
 - Update the [CHANGELOG.md](CHANGELOG.md)

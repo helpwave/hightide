@@ -7,7 +7,6 @@ import clsx from 'clsx'
 import type { LabelProps } from './Label'
 import { Label } from './Label'
 import type { SelectOption } from './Select'
-import { SelectTile } from './Select'
 import { SolidButton } from './Button'
 import { ChipList } from '../layout-and-navigation/Chip'
 import type { FormTranslationType } from '../../localization/defaults/form'
@@ -20,6 +19,7 @@ import type { UseSearchProps } from '../../hooks/useSearch'
 import { useSearch } from '../../hooks/useSearch'
 import { Checkbox } from './Checkbox'
 import { Plus } from 'lucide-react'
+import { ListTile } from '../layout-and-navigation/Tile'
 
 type MultiSelectAddonTranslation = {
   selected: string,
@@ -120,7 +120,13 @@ export const MultiSelect = <T, >({
             {useChipDisplay ? (
               <>
                 {isShowingHint ? (
-                  <div className="icon-btn-sm bg-button-solid-neutral-background text-button-solid-neutral-text hover:brightness-90 group-hover:brightness-90">
+                  <div
+                    className={clsx('icon-btn-sm ',
+                      {
+                        'bg-button-solid-neutral-background text-button-solid-neutral-text hover:brightness-90 group-hover:brightness-90': !disabled,
+                        'bg-disabled-background text-disabled-text': disabled,
+                      })}
+                  >
                     <Plus/>
                   </div>
                 ) : (
@@ -166,13 +172,16 @@ export const MultiSelect = <T, >({
                     }) : value))
                   }
                   return (
-                    <SelectTile
+                    <ListTile
                       key={index}
                       prefix={(
-                        <Checkbox checked={option.selected} onChange={update} size="small"
-                                  disabled={option.disabled}/>
+                        <Checkbox
+                          checked={option.selected}
+                          onChange={update} size="small"
+                          disabled={option.disabled}
+                        />
                       )}
-                      title={{ value: option.label }}
+                      title={option.label}
                       onClick={update}
                       disabled={option.disabled}
                     />

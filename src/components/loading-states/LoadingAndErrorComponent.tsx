@@ -24,7 +24,7 @@ export const LoadingAndErrorComponent = ({
                                            hasError = false,
                                            loadingComponent,
                                            errorComponent,
-                                           minimumLoadingDuration,
+                                           minimumLoadingDuration = 200,
                                            className
                                          }: LoadingAndErrorComponentProps) => {
   const [isInMinimumLoading, setIsInMinimumLoading] = useState(false)

@@ -46,7 +46,7 @@ export const PropertyBase = ({
           }, className
         )}
       >
-        <div className="max-w-6 min-w-6 text-text-default">{icon}</div>
+        <div className="max-w-6 min-w-6 text-text-primary">{icon}</div>
         <span className="font-semibold">{name}</span>
       </div>
       <div

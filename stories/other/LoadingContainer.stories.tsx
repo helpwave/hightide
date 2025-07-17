@@ -1,5 +1,5 @@
 import type { Meta, StoryObj } from '@storybook/nextjs'
-import { LoadingContainer } from '../../src/components/loading-states/LoadingContainer'
+import { LoadingContainer } from '../../src'
 
 const meta = {
   title: 'Other/Loading',
@@ -9,7 +9,7 @@ const meta = {
 export default meta
 type Story = StoryObj<typeof meta>;
 
-export const loadingContainerStories: Story = {
+export const loadingContainer: Story = {
   args: {
     className: 'min-w-20 max-w-20 min-h-8 max-h-8'
   }

@@ -5,6 +5,11 @@
  * default light-theme component colors
  */
 @theme {
+  /* Icon */
+  --color-icon-primary: var(--color-text-primary);
+  --color-icon-secondary: var(--color-text-secondary);
+  --color-icon-highlight: var(--color-highlight);
+
   /* Button Outline */
   --color-button-outline-primary-outline: var(--color-primary);
   --color-button-outline-primary-icon: var(--color-primary);
@@ -17,12 +22,12 @@
   --color-button-solid-secondary-background: var(--color-purple-50);
   --color-button-solid-secondary-text: var(--color-primary);
   --color-button-solid-secondary-icon: var(--color-primary);
-  --color-button-solid-tertiary-background: #F2F2F2;
-  --color-button-solid-tertiary-icon: #888888;
-  --color-button-solid-tertiary-text: #888888;
-  --color-button-solid-neutral-background: #D6D6D6;
-  --color-button-solid-neutral-icon: #1A1A1A;
-  --color-button-solid-neutral-text: #1A1A1A;
+  --color-button-solid-tertiary-background: var(--color-gray-50);
+  --color-button-solid-tertiary-icon: var(--color-gray-500);
+  --color-button-solid-tertiary-text: var(--color-gray-500);
+  --color-button-solid-neutral-background: var(--color-gray-150);
+  --color-button-solid-neutral-icon: var(--color-text-primary);
+  --color-button-solid-neutral-text: var(--color-text-primary);
   --color-button-solid-positive-background: var(--color-positive);
   --color-button-solid-positive-icon: var(--color-on-positive);
   --color-button-solid-positive-text: var(--color-on-positive);
@@ -35,8 +40,8 @@
 
   /* Button Text */
   --color-button-text-hover-background: #77777733;
-  --color-button-text-neutral-text: #333333;
-  --color-button-text-neutral-icon: #333333;
+  --color-button-text-neutral-text: var(--color-gray-800);
+  --color-button-text-neutral-icon: var(--color-gray-800);
   --color-button-text-negative-text: var(--color-negative);
   --color-button-text-negative-icon: var(--color-negative);
   --color-button-text-primary-text: var(--color-primary);
@@ -46,14 +51,18 @@
   --color-carousel-dot-active: var(--color-primary);
   --color-carousel-dot-disabled: var(--color-disabled-background);
 
+  /* Input */
+  --color-input-background: var(--color-surface);
+  --color-input-text: var(--color-on-surface);
+
   /* Menu */
-  --color-menu-background: #F2F2F2;
-  --color-menu-text: var(--color-text-default);
+  --color-menu-background: var(--color-surface-variant);
+  --color-menu-text: var(--color-on-surface);
   --color-menu-border: var(--color-border);
 
   /* Overlay, Dialog, Modal */
-  --color-overlay-background: #FAFAFA;
-  --color-overlay-text: var(--color-text-default);
+  --color-overlay-background: var(--color-surface);
+  --color-overlay-text: var(--color-on-surface);
   --color-overlay-shadow: #00000039;
 
   /* ProgressIndicator */
@@ -61,7 +70,7 @@
   --color-progress-indicator-background: var(--color-gray-300);
 
   /* Property */
-  --color-property-title-background: #EDEDED;
+  --color-property-title-background: var(--color-gray-100);
   --color-property-title-text: var(--color-text-secondary);
 
   /* Stepper Bar */
@@ -70,14 +79,18 @@
   --color-stepperbar-dot-disabled: var(--color-description);
 
   /* Table */
-  --color-tabel-header-background: #F6FAFF;
-  --color-table-row-hover-background: var(--color-purple-50);
-  --color-table-row-hover-text: var(--color-text-default);
+  --color-table-background: var(--color-surface);
+  --color-table-text: var(--color-on-surface);
+  --color-table-header-background: color-mix(in srgb, var(--color-blue-500) 15%, var(--color-surface));
+  --color-table-row-hover-background: color-mix(in srgb, var(--color-purple-500) 15%, var(--color-surface));
 
   /* Tag */
-  --color-tag-dark-background: #333333;
-  --color-tag-dark-text: var(--color-text-light);
-  --color-tag-dark-icon: var(--color-text-light);
+  --color-tag-dark-background: var(--color-gray-800);
+  --color-tag-dark-text: var(--color-gray-100);
+  --color-tag-dark-icon: var(--color-gray-100);
+  --color-tag-default-background: #50687C;
+  --color-tag-default-text: var(--color-gray-100);
+  --color-tag-default-icon: var(--color-gray-100);
   --color-tag-green-background: #E2E9DB;
   --color-tag-green-text: #7A977E;
   --color-tag-green-icon: #7A977E;
@@ -97,14 +110,21 @@
   /* TextImage */
   --color-text-image-primary-background: var(--color-primary);
   --color-text-image-primary-text: var(--color-white);
-  --color-text-image-secondary-background: #3171DE;
+  --color-text-image-secondary-background: var(--color-blue-500);
   --color-text-image-secondary-text: var(--color-white);
-  --color-text-image-dark-background: #11243E;
+  --color-text-image-dark-background: var(--color-blue-900);
   --color-text-image-dark-text: var(--color-white);
 
   /* Tooltip */
   --color-tooltip-background: var(--color-menu-background);
   --color-tooltip-text: var(--color-description);
+
+  /* Other */
+  --color-border: var(--color-gray-200);
+  --color-divider: var(--color-gray-100);
+  --color-focus: var(--color-purple-400);
+  --color-outline: var(--color-gray-100);
+  --color-outline-variant: var(--color-gray-200);
 }
 
 /* non light-theme overrides */
@@ -112,37 +132,32 @@
   /* dark theme */
   @variant dark {
     /* Button Solid */
-    --color-button-solid-neutral-background: #424242;
-    --color-button-solid-neutral-icon: var(--color-text-light);
-    --color-button-solid-neutral-text: var(--color-text-light);
+    --color-button-solid-neutral-background: var(--color-gray-750);
+    --color-button-solid-neutral-icon: var(--color-gray-100);
+    --color-button-solid-neutral-text: var(--color-gray-100);
 
     /* Button Text */
-    --color-button-text-hover-background: #3F3F3F;
-    --color-button-text-neutral-text: var(--color-text-light);
-    --color-button-text-neutral-icon: var(--color-text-light);
-
-    /* Menu */
-    --color-menu-background: #333333;
-    --color-menu-text: var(--color-text-light);
-    --color-menu-border: var(--color-border);
+    --color-button-text-hover-background: #3F3F3F33;
+    --color-button-text-neutral-text: var(--color-gray-100);
+    --color-button-text-neutral-icon: var(--color-gray-100);
 
     /* Property */
-    --color-property-title-background: #393939;
-    --color-property-title-text: var(--color-on-surface);
+    --color-property-title-background: var(--color-gray-750);
 
     /* ProgressIndicator */
     --color-progress-indicator-background: var(--color-gray-700);
 
     /* Overlay, Dialog, Modal */
-    --color-overlay-background: #2A2A2A;
-    --color-overlay-text: var(--color-text-light);
     --color-overlay-shadow: #00000060;
 
-    /* Table */
-    --color-tabel-header-background: #2F2F2F;
-    --color-table-row-hover-background: #2f2841;
-
     /* Tag */
-    --color-tag-dark-background: #1A1A1A;
+    --color-tag-dark-background: var(--color-gray-900);
+
+    /* Other */
+    --color-border: var(--color-gray-600);
+    --color-divider: var(--color-gray-700);
+    --color-focus: var(--color-purple-500);
+    --color-outline: var(--color-gray-700);
+    --color-outline-variant: var(--color-gray-600);
   }
 }
