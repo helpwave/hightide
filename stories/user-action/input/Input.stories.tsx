@@ -1,9 +1,9 @@
 import type { Meta, StoryObj } from '@storybook/nextjs'
-import { InputUncontrolled } from '../../src'
+import { InputUncontrolled } from '../../../src'
 import { action } from 'storybook/actions'
 
 const meta = {
-  title: 'User Action',
+  title: 'User Action/Input',
   component: InputUncontrolled,
 } satisfies Meta<typeof InputUncontrolled>
 

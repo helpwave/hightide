@@ -65,12 +65,21 @@ const Checkbox = ({
   }
 
   const changeValue = () => {
+    if (disabled) {
+      return
+    }
     const newValue = checked === 'indeterminate' ? false : !checked
     propagateChange(newValue)
   }
 
   return (
-    <div className={clsx('group flex-row-2 items-center cursor-pointer', containerClassName)} onClick={changeValue}>
+    <div
+      className={clsx('group flex-row-2 items-center', {
+        'cursor-pointer': !disabled,
+        'cursor-not-allowed': disabled,
+      }, containerClassName)}
+      onClick={changeValue}
+    >
       <CheckboxPrimitive.Root
         onCheckedChange={propagateChange}
         checked={checked}
@@ -80,7 +89,7 @@ const Checkbox = ({
           'text-disabled-text border-disabled-outline bg-disabled-background cursor-not-allowed': disabled,
           'focus:border-primary group-hover:border-primary ': !disabled,
           'bg-input-background': !disabled && !checked,
-          'bg-primary/30 border-primary text-primary':  !disabled && checked === true || checked === 'indeterminate',
+          'bg-primary/30 border-primary text-primary': !disabled && checked === true || checked === 'indeterminate',
         }, className)}
       >
         <CheckboxPrimitive.Indicator>
@@ -89,7 +98,17 @@ const Checkbox = ({
         </CheckboxPrimitive.Indicator>
       </CheckboxPrimitive.Root>
       {label && (
-        <Label {...label} className={clsx(label.className)} htmlFor={id}/>
+        <Label
+          {...label}
+          className={clsx(
+            label.className,
+            {
+              'cursor-pointer': !disabled,
+              'cursor-not-allowed': disabled,
+            }
+          )}
+          htmlFor={id}
+        />
       )}
     </div>
   )
