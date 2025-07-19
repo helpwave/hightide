@@ -1,6 +1,6 @@
 import type { Meta, StoryObj } from '@storybook/nextjs'
 import { action } from 'storybook/actions'
-// @ts-ignore
+// @ts-expect-error The StorybookHelperSelectType, StorybookHelper should not be exported
 import type { StorybookHelperSelectType } from '../../helper'
 import { StorybookHelper } from '../../helper'
 import type { MultiSelectOption } from '../../../src'
