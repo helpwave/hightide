@@ -1,6 +1,8 @@
 import type { Meta, StoryObj } from '@storybook/nextjs'
 import { SolidButton } from '../../../src'
 import { action } from 'storybook/actions'
+// @ts-ignore
+import { StorybookHelper } from '../../helper'
 
 const meta = {
   title: 'User Action/Button',
@@ -9,7 +11,9 @@ const meta = {
     color: {
       control: 'select',
       options: ['primary', 'secondary', 'tertiary', 'positive', 'warning', 'negative', 'neutral'],
-    }
+    },
+    startIcon: StorybookHelper.iconSelect,
+    endIcon: StorybookHelper.iconSelect,
   },
 } satisfies Meta<typeof SolidButton>
 

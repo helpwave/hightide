@@ -100,47 +100,44 @@ export type IconButtonProps = PropsWithChildren<{
  * A button with a solid background and different sizes
  */
 const SolidButton = forwardRef<HTMLButtonElement, SolidButtonProps>(function SolidButton({
-                       children,
-                       disabled = false,
-                       color = 'primary',
-                       size = 'medium',
-                       startIcon,
-                       endIcon,
-                       onClick,
-                       className,
-                       ...restProps
-                     }, ref) {
+                                                                                           children,
+                                                                                           color = 'primary',
+                                                                                           size = 'medium',
+                                                                                           startIcon,
+                                                                                           endIcon,
+                                                                                           onClick,
+                                                                                           className,
+                                                                                           ...restProps
+                                                                                         }, ref) {
   const colorClasses = {
-    primary: 'bg-button-solid-primary-background text-button-solid-primary-text',
-    secondary: 'bg-button-solid-secondary-background text-button-solid-secondary-text',
-    tertiary: 'bg-button-solid-tertiary-background text-button-solid-tertiary-text',
-    positive: 'bg-button-solid-positive-background text-button-solid-positive-text',
-    warning: 'bg-button-solid-warning-background text-button-solid-warning-text',
-    negative: 'bg-button-solid-negative-background text-button-solid-negative-text',
-    neutral: 'bg-button-solid-neutral-background text-button-solid-neutral-text',
+    primary: 'not-disabled:bg-button-solid-primary-background not-disabled:text-button-solid-primary-text',
+    secondary: 'not-disabled:bg-button-solid-secondary-background not-disabled:text-button-solid-secondary-text',
+    tertiary: 'not-disabled:bg-button-solid-tertiary-background not-disabled:text-button-solid-tertiary-text',
+    positive: 'not-disabled:bg-button-solid-positive-background not-disabled:text-button-solid-positive-text',
+    warning: 'not-disabled:bg-button-solid-warning-background not-disabled:text-button-solid-warning-text',
+    negative: 'not-disabled:bg-button-solid-negative-background not-disabled:text-button-solid-negative-text',
+    neutral: 'not-disabled:bg-button-solid-neutral-background not-disabled:text-button-solid-neutral-text',
   }[color]
 
   const iconColorClasses = {
-    primary: 'text-button-solid-primary-icon',
-    secondary: 'text-button-solid-secondary-icon',
-    tertiary: 'text-button-solid-tertiary-icon',
-    positive: 'text-button-solid-positive-icon',
-    warning: 'text-button-solid-warning-icon',
-    negative: 'text-button-solid-negative-icon',
-    neutral: 'text-button-solid-neutral-icon',
+    primary: 'not-group-disabled:text-button-solid-primary-icon',
+    secondary: 'not-group-disabled:text-button-solid-secondary-icon',
+    tertiary: 'not-group-disabled:text-button-solid-tertiary-icon',
+    positive: 'not-group-disabled:text-button-solid-positive-icon',
+    warning: 'not-group-disabled:text-button-solid-warning-icon',
+    negative: 'not-group-disabled:text-button-solid-negative-icon',
+    neutral: 'not-group-disabled:text-button-solid-neutral-icon',
   }[color]
 
   return (
     <button
       ref={ref}
       onClick={onClick}
-      disabled={disabled}
       className={clsx(
-        'font-semibold',
-        {
-          'text-disabled-text bg-disabled-background cursor-not-allowed': disabled,
-          [clsx(colorClasses, 'hover:brightness-90')]: !disabled
-        },
+        'group font-semibold',
+        colorClasses,
+        'not-disabled:hover:brightness-90',
+        'disabled:text-disabled-text disabled:bg-disabled-background',
         ButtonUtil.paddingMapping[size],
         className
       )}
@@ -148,24 +145,24 @@ const SolidButton = forwardRef<HTMLButtonElement, SolidButtonProps>(function Sol
     >
       {startIcon && (
         <span
-          className={clsx({
-            [iconColorClasses]: !disabled,
-            [`text-disabled-icon`]: disabled
-          })}
+          className={clsx(
+            iconColorClasses,
+            'group-disabled:text-disabled-icon'
+          )}
         >
-        {startIcon}
-      </span>
+          {startIcon}
+        </span>
       )}
       {children}
       {endIcon && (
         <span
-          className={clsx({
-            [iconColorClasses]: !disabled,
-            [`text-disabled-icon`]: disabled
-          })}
+          className={clsx(
+            iconColorClasses,
+            'group-disabled:text-disabled-icon'
+          )}
         >
-        {endIcon}
-      </span>
+          {endIcon}
+        </span>
       )}
     </button>
   )
@@ -176,7 +173,6 @@ const SolidButton = forwardRef<HTMLButtonElement, SolidButtonProps>(function Sol
  */
 const OutlineButton = ({
                          children,
-                         disabled = false,
                          color = 'primary',
                          size = 'medium',
                          startIcon,
@@ -186,22 +182,20 @@ const OutlineButton = ({
                          ...restProps
                        }: OutlineButtonProps) => {
   const colorClasses = {
-    primary: 'bg-transparent border-2 border-button-outline-primary-text text-button-outline-primary-text',
+    primary: 'not-disabled:border-button-outline-primary-text not-disabled:text-button-outline-primary-text',
   }[color]
 
   const iconColorClasses = {
-    primary: 'text-button-outline-primary-icon',
+    primary: 'not-group-disabled:text-button-outline-primary-icon',
   }[color]
   return (
     <button
       onClick={onClick}
-      disabled={disabled}
       className={clsx(
-        'font-semibold',
-        {
-          'text-disabled-text border-disabled-outline cursor-not-allowed': disabled,
-          [clsx(colorClasses, 'hover:brightness-80')]: !disabled,
-        },
+        'group font-semibold bg-transparent border-2 ',
+        'not-disabled:hover:brightness-80',
+        colorClasses,
+        'disabled:text-disabled-text disabled:border-disabled-outline',
         ButtonUtil.paddingMapping[size],
         className
       )}
@@ -209,24 +203,24 @@ const OutlineButton = ({
     >
       {startIcon && (
         <span
-          className={clsx({
-            [iconColorClasses]: !disabled,
-            [`text-disabled-icon`]: disabled
-          })}
+          className={clsx(
+            iconColorClasses,
+            'group-disabled:text-disabled-icon'
+          )}
         >
-        {startIcon}
-      </span>
+          {startIcon}
+        </span>
       )}
       {children}
       {endIcon && (
         <span
-          className={clsx({
-            [iconColorClasses]: !disabled,
-            [`text-disabled-icon`]: disabled
-          })}
+          className={clsx(
+            iconColorClasses,
+            'group-disabled:text-disabled-icon'
+          )}
         >
-        {endIcon}
-      </span>
+          {endIcon}
+        </span>
       )}
     </button>
   )
@@ -237,7 +231,6 @@ const OutlineButton = ({
  */
 const TextButton = ({
                       children,
-                      disabled = false,
                       color = 'neutral',
                       size = 'medium',
                       startIcon,
@@ -248,34 +241,33 @@ const TextButton = ({
                       ...restProps
                     }: TextButtonProps) => {
   const colorClasses = {
-    primary: 'bg-transparent text-button-text-primary-text',
-    negative: 'bg-transparent text-button-text-negative-text',
-    neutral: 'bg-transparent text-button-text-neutral-text',
+    primary: 'not-disabled:bg-transparent not-disabled:text-button-text-primary-text',
+    negative: 'not-disabled:bg-transparent not-disabled:text-button-text-negative-text',
+    neutral: 'not-disabled:bg-transparent not-disabled:text-button-text-neutral-text',
   }[color]
 
   const backgroundColor = {
-    primary: 'hover:bg-button-text-primary-text/20',
-    negative: 'hover:bg-button-text-negative-text/20',
-    neutral: 'hover:bg-button-text-neutral-text/20',
+    primary: 'not-disabled:hover:bg-button-text-primary-text/20',
+    negative: 'not-disabled:hover:bg-button-text-negative-text/20',
+    neutral: 'not-disabled:hover:bg-button-text-neutral-text/20',
   }[color]
 
   const iconColorClasses = {
-    primary: 'text-button-text-primary-icon',
-    negative: 'text-button-text-negative-icon',
-    neutral: 'text-button-text-neutral-icon',
+    primary: 'not-group-disabled:text-button-text-primary-icon',
+    negative: 'not-group-disabled:text-button-text-negative-icon',
+    neutral: 'not-group-disabled:text-button-text-neutral-icon',
   }[color]
 
   return (
     <button
       onClick={onClick}
-      disabled={disabled}
       className={clsx(
-        'font-semibold',
+        'group font-semibold',
+        'disabled:text-disabled-text',
+        colorClasses,
         {
-          'text-disabled-text cursor-not-allowed': disabled,
-          [colorClasses]: !disabled,
-          [backgroundColor]: !disabled && coloredHoverBackground,
-          'hover:bg-button-text-hover-background': !disabled && !coloredHoverBackground,
+          [backgroundColor]: coloredHoverBackground,
+          'not-disabled:hover:bg-button-text-hover-background': !coloredHoverBackground,
         },
         ButtonUtil.paddingMapping[size],
         className
@@ -284,24 +276,24 @@ const TextButton = ({
     >
       {startIcon && (
         <span
-          className={clsx({
-            [iconColorClasses]: !disabled,
-            [`text-disabled-icon`]: disabled
-          })}
+          className={clsx(
+            iconColorClasses,
+            'group-disabled:text-disabled-icon'
+          )}
         >
-        {startIcon}
-      </span>
+          {startIcon}
+        </span>
       )}
       {children}
       {endIcon && (
         <span
-          className={clsx({
-            [iconColorClasses]: !disabled,
-            [`text-disabled-icon`]: disabled
-          })}
+          className={clsx(
+            iconColorClasses,
+            'group-disabled:text-disabled-icon'
+          )}
         >
-        {endIcon}
-      </span>
+          {endIcon}
+        </span>
       )}
     </button>
   )
@@ -313,32 +305,32 @@ const TextButton = ({
  */
 const IconButton = ({
                       children,
-                      disabled = false,
                       color = 'primary',
                       size = 'medium',
                       className,
                       ...restProps
                     }: IconButtonProps) => {
   const colorClasses = {
-    primary: 'bg-button-solid-primary-background text-button-solid-primary-text',
-    secondary: 'bg-button-solid-secondary-background text-button-solid-secondary-text',
-    tertiary: 'bg-button-solid-tertiary-background text-button-solid-tertiary-text',
-    positive: 'bg-button-solid-positive-background text-button-solid-positive-text',
-    warning: 'bg-button-solid-warning-background text-button-solid-warning-text',
-    negative: 'bg-button-solid-negative-background text-button-solid-negative-text',
-    neutral: 'bg-button-solid-neutral-background text-button-solid-neutral-text',
-    transparent: 'bg-transparent',
+    primary: 'not-disabled:bg-button-solid-primary-background not-disabled:text-button-solid-primary-text',
+    secondary: 'not-disabled:bg-button-solid-secondary-background not-disabled:text-button-solid-secondary-text',
+    tertiary: 'not-disabled:bg-button-solid-tertiary-background not-disabled:text-button-solid-tertiary-text',
+    positive: 'not-disabled:bg-button-solid-positive-background not-disabled:text-button-solid-positive-text',
+    warning: 'not-disabled:bg-button-solid-warning-background not-disabled:text-button-solid-warning-text',
+    negative: 'not-disabled:bg-button-solid-negative-background not-disabled:text-button-solid-negative-text',
+    neutral: 'not-disabled:bg-button-solid-neutral-background not-disabled:text-button-solid-neutral-text',
+    transparent: 'not-disabled:bg-transparent',
   }[color]
 
   return (
     <button
-      disabled={disabled}
       className={clsx(
+        colorClasses,
+        'not-disabled:hover:brightness-90',
+        'disabled:text-disabled-text',
         {
-          'text-disabled-text bg-disabled-background cursor-not-allowed': disabled && color !== 'transparent',
-          'text-disabled-text cursor-not-allowed opacity-70': disabled && color === 'transparent',
-          'hover:bg-button-text-hover-background': !disabled && color === 'transparent',
-          [clsx(colorClasses, 'hover:brightness-90')]: !disabled,
+          'disabled:bg-disabled-background': color !== 'transparent',
+          'disabled:opacity-70': color === 'transparent',
+          'not-disabled:hover:bg-button-text-hover-background': color === 'transparent',
         },
         ButtonUtil.iconPaddingMapping[size],
         className

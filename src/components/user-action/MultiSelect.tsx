@@ -97,7 +97,7 @@ export const MultiSelect = <T, >({
           {...label}
           htmlFor={label.name}
           className={clsx(' mb-1', label.className)}
-          labelType={label.labelType ?? 'labelBig'}
+          labelType={label.labelType ?? 'labelSmall'}
         />
       )}
       <Menu<HTMLButtonElement>
@@ -107,10 +107,10 @@ export const MultiSelect = <T, >({
             ref={ref}
             className={clsx(
               'group btn-md justify-between w-full border-2 h-auto',
+              'not-disabled:bg-input-background not-disabled:text-input-text not-disabled:hover:border-primary',
+              'disabled:bg-disabled-background disabled:text-disabled-text disabled:border-disabled-border',
               {
                 'min-h-14': useChipDisplay,
-                'bg-input-background text-input-text hover:border-primary': !disabled,
-                'bg-disabled-background text-disabled-text border-disabled-background cursor-not-allowed': disabled
               },
               triggerClassName
             )}

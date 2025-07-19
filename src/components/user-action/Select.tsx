@@ -76,7 +76,7 @@ export const Select = <T, >({
   return (
     <div className={clsx(className)}>
       {label && (
-        <Label {...label} labelType={label.labelType ?? 'labelBig'} className={clsx('mb-1', label.className)}/>
+        <Label {...label} labelType={label.labelType ?? 'labelSmall'} className={clsx('mb-1', label.className)}/>
       )}
       <Menu<HTMLButtonElement>
         {...menuProps}
@@ -85,11 +85,8 @@ export const Select = <T, >({
             ref={ref}
             className={clsx(
               'btn-md justify-between w-full border-2',
-              {
-                'rounded-b-lg': !open,
-                'bg-input-background text-input-text hover:border-primary': !disabled,
-                'bg-disabled-background text-disabled-text border-disabled-background cursor-not-allowed': disabled
-              },
+              'not-disabled:bg-input-background not-disabled:text-input-text not-disabled:hover:border-primary',
+              'disabled:bg-disabled-background disabled:text-disabled-text disabled:border-disabled-border',
               triggerClassName
             )}
             onClick={toggleOpen}

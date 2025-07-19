@@ -1,5 +1,5 @@
 import { action } from 'storybook/actions'
-import { ToggleableInputUncontrolled } from '../../src'
+import { ToggleableInputUncontrolled } from '../../../src'
 import type { Meta, StoryObj } from '@storybook/nextjs'
 
 const meta = {
