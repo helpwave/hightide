@@ -3,7 +3,7 @@ import clsx from 'clsx'
 import type { PropsForTranslation, Translation } from '../../localization/useTranslation'
 import { useTranslation } from '../../localization/useTranslation'
 import { Textarea } from '../user-action/Textarea'
-import { noop } from '../../util/noop'
+import { noop } from '@/src/utils/noop'
 import type { PropertyBaseProps } from './PropertyBase'
 import { PropertyBase } from './PropertyBase'
 

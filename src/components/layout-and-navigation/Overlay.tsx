@@ -106,7 +106,7 @@ export const OverlayHeader = ({
     <div className="flex-row-8 justify-between items-start">
       {title ?? (
         <h2
-          className={clsx('textstyle-title-lg', {
+          className={clsx('typography-title-lg', {
             'mb-1': description || descriptionText,
           })}
         >
@@ -126,7 +126,7 @@ export const OverlayHeader = ({
   return (
     <div className="flex-col-2">
       {hasTitleRow && (titleRow)}
-      {description ?? (descriptionText && (<span className="textstyle-description">{descriptionText}</span>))}
+      {description ?? (descriptionText && (<span className="text-description">{descriptionText}</span>))}
     </div>
   )
 }

@@ -1,0 +1,95 @@
+@theme {
+  /*
+   * text
+   */
+  --text-xs: calc(12 / 16 * 1rem);
+  --text-xs--line-height: calc(15 / 12);
+  --text-sm: calc(14 / 16 * 1rem);
+  --text-sm--line-height: calc(17 / 14);
+  --text-base: 1rem;
+  --text-base--line-height: calc(19 / 16);
+  --text-lg: calc(18 / 16 * 1rem);
+  --text-lg--line-height: calc(23 / 18);
+  --text-xl: calc(20 / 16 * 1rem);
+  --text-xl--line-height: calc(26 / 20);
+  --text-2xl: 1.5rem;
+  --text-2xl--line-height: calc(2 / 1.5);
+  --text-3xl: 1.875rem;
+  --text-3xl--line-height: calc(2.25 / 1.875);
+  --text-4xl: 2.25rem;
+  --text-4xl--line-height: calc(2.5 / 2.25);
+  --text-5xl: 3rem;
+  --text-5xl--line-height: 1;
+  --text-6xl: 3.75rem;
+  --text-6xl--line-height: 1;
+  --text-7xl: 4.5rem;
+  --text-7xl--line-height: 1;
+  --text-8xl: 6rem;
+  --text-8xl--line-height: 1;
+  --text-9xl: 8rem;
+  --text-9xl--line-height: 1;
+
+  /*
+   * fonts
+   */
+  --font-inter: 'Inter', sans-serif;
+  --font-space: 'Space Grotesk', sans-serif;
+}
+
+@layer components {
+  /* Headline */
+  .typography-headline-sm {
+    @apply text-lg font-space font-bold;
+  }
+
+  .typography-headline-md {
+    @apply text-xl font-space font-bold;
+  }
+
+  /* Title */
+  .typography-title-lg {
+    @apply text-base font-bold;
+  }
+
+  .typography-title-md {
+    @apply text-sm font-semibold;
+  }
+
+  .typography-title-xs-bold {
+    @apply text-xs font-semibold;
+  }
+
+  .typography-title-xs {
+    @apply text-xs font-medium;
+  }
+
+  /* Label */
+  .typography-label-lg {
+    @apply text-base font-normal;
+  }
+
+  .typography-label-md-semibold {
+    @apply text-sm font-semibold;
+  }
+
+  .typography-label-md {
+    @apply text-sm font-medium;
+  }
+
+  .typography-label-xs-semibold {
+    @apply text-xs font-semibold;
+  }
+
+  .typography-label-xs {
+    @apply text-xs font-medium;
+  }
+
+  /* Label */
+  .typography-body-sm {
+    @apply text-sm font-medium;
+  }
+
+  .typography-body-xs {
+    @apply text-xs font-medium;
+  }
+}

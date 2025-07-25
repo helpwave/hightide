@@ -1,6 +1,6 @@
 import type { CSSProperties } from 'react'
 import { useCallback, useEffect, useState } from 'react'
-import { noop } from '../../util/noop'
+import { noop } from '@/src/utils/noop'
 import { Circle } from './Circle'
 import clsx from 'clsx'
 

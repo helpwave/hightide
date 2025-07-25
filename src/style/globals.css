@@ -7,7 +7,7 @@
 @import './theme/index.css';
 
 /* components */
-@import './textstyles.css';
+@import './typography.css';
 
 /* The theme variables */
 @theme {
@@ -16,12 +16,6 @@
    */
   --breakpoint-tablet: 48rem; /* 768px for 16px font-size */
   --breakpoint-desktop: 64rem; /* 1024px for 16px font-size*/
-
-  /*
-   * fonts
-   */
-  --font-inter: 'Inter', sans-serif;
-  --font-space: 'Space Grotesk', sans-serif;
 }
 
 /* Styles that can be overwritten by utils */
@@ -122,6 +116,10 @@
     }
   }
 
+  /**
+   * Table
+   */
+
   table {
     @apply table-fixed border-separate border-spacing-0 bg-table-background text-table-text;
   }
@@ -149,4 +147,8 @@
   th:last-child > .table-resize-indicator {
     @apply right-6;
   }
+
+  /**
+   * Scrollbar
+   */
 }

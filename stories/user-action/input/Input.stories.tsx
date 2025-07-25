@@ -12,12 +12,16 @@ type Story = StoryObj<typeof meta>;
 
 export const input: Story = {
   args: {
-    type: 'text',
-    label: { name: 'Label' },
-    placeholder: 'Placeholder',
+    value: '',
     disabled: false,
-    allowEnterComplete: true,
-    className: '',
+    invalid: false,
+    placeholder: 'Placeholder',
+    editCompleteOptions: {
+      allowEnterComplete: true,
+      onBlur: true,
+      afterDelay: true,
+      delay: 2500
+    },
     onChange: action('onChange'),
     onChangeText: action('onChangeText'),
     onEditCompleted: action('onEditCompleted'),

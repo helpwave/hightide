@@ -2,9 +2,9 @@ import type { HTMLInputTypeAttribute, InputHTMLAttributes } from 'react'
 import { useEffect, useRef, useState } from 'react'
 import { Pencil } from 'lucide-react'
 import clsx from 'clsx'
-import type { UseDelayOptions } from '../../hooks/useDelay'
-import { useDelay } from '../../hooks/useDelay'
-import { noop } from '../../util/noop'
+import type { UseDelayOptions } from '@/src'
+import { useDelay } from '@/src'
+import { noop } from '@/src/utils/noop'
 
 type InputProps = {
   /**

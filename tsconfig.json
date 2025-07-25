@@ -10,8 +10,15 @@
     "jsx": "react-jsx",
     "esModuleInterop": true,
     "skipLibCheck": true,
+    "baseUrl": ".",
+    "paths": {
+      "@/*": ["./*"]
+    }
   },
   "include": [
     "src"
+  ],
+  "exclude": [
+    "src/storybook"
   ]
 }

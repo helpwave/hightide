@@ -2,8 +2,6 @@ import type { ReactNode } from 'react'
 import { useCallback } from 'react'
 import { useEffect, useState } from 'react'
 import clsx from 'clsx'
-import type { LabelProps } from './Label'
-import { Label } from './Label'
 import { ListTile } from '../layout-and-navigation/Tile'
 import { ExpansionIcon } from '../layout-and-navigation/Expandable'
 import type { MenuBag, MenuProps } from './Menu'
@@ -27,14 +25,12 @@ export type SelectBag<T> = MenuBag & {
 
 export type SelectProps<T> = Omit<MenuProps<HTMLButtonElement>, 'trigger' | 'children'> & {
   value?: T,
-  label?: LabelProps,
   options: SelectOption<T>[],
   onChange: (value: T) => void,
   hintText?: string,
   selectedDisplayOverwrite?: ReactNode,
   searchOptions?: Omit<UseSearchProps<SelectOption<T>>, 'list' | 'searchMapping'>,
   additionalItems?: (bag: SelectBag<T>) => ReactNode,
-  className?: string,
   triggerClassName?: string,
   hintTextClassName?: string,
 };
@@ -46,14 +42,12 @@ export type SelectProps<T> = Omit<MenuProps<HTMLButtonElement>, 'trigger' | 'chi
  */
 export const Select = <T, >({
                               value,
-                              label,
                               options,
                               onChange,
                               hintText = '',
                               selectedDisplayOverwrite,
                               searchOptions,
                               additionalItems,
-                              className,
                               triggerClassName,
                               hintTextClassName,
                               ...menuProps
@@ -74,10 +68,7 @@ export const Select = <T, >({
   })
 
   return (
-    <div className={clsx(className)}>
-      {label && (
-        <Label {...label} labelType={label.labelType ?? 'labelSmall'} className={clsx('mb-1', label.className)}/>
-      )}
+    <>
       <Menu<HTMLButtonElement>
         {...menuProps}
         trigger={({ toggleOpen, isOpen, disabled }, ref) => (
@@ -134,7 +125,7 @@ export const Select = <T, >({
           )
         }}
       </Menu>
-    </div>
+    </>
   )
 }
 

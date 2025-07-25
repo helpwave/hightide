@@ -1,34 +1,30 @@
-import type { LabelHTMLAttributes } from 'react'
 import clsx from 'clsx'
+import type { LabelHTMLAttributes } from 'react'
 
-export type LabelType = 'labelSmall' | 'labelMedium' | 'labelBig'
+export type LabelType = 'sm' | 'md'
 
 const styleMapping: Record<LabelType, string> = {
-  labelSmall: 'textstyle-label-sm',
-  labelMedium: 'textstyle-label-md',
-  labelBig: 'textstyle-label-lg',
+  sm: 'typography-label-xs color-label-text',
+  md: 'typography-label-md color-label-text',
 }
 
-export type LabelProps = {
-  /** The text for the label */
-  name?: string,
-  /** The styling for the label */
-  labelType?: LabelType,
-} & LabelHTMLAttributes<HTMLLabelElement>
+export type LabelProps = LabelHTMLAttributes<HTMLLabelElement> & {
+  /** The size of the label */
+  size?: LabelType,
+}
 
 /**
  * A Label component
  */
 export const Label = ({
                         children,
-                        name,
-                        labelType = 'labelSmall',
+                        size = 'md',
                         className,
                         ...props
                       }: LabelProps) => {
   return (
-    <label {...props} className={clsx(styleMapping[labelType], className)}>
-      {children ? children : name}
+    <label {...props} className={clsx(styleMapping[size], className)}>
+      {children}
     </label>
   )
 }

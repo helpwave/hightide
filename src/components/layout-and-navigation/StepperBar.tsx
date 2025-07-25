@@ -1,7 +1,7 @@
 import { Check, ChevronLeft, ChevronRight } from 'lucide-react'
 import type { PropsForTranslation } from '../../localization/useTranslation'
 import { useTranslation } from '../../localization/useTranslation'
-import { range } from '../../util/array'
+import { range } from '@/src/utils/array'
 import { SolidButton } from '../user-action/Button'
 import clsx from 'clsx'
 import { useEffect, useState } from 'react'

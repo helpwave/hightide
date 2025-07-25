@@ -16,7 +16,7 @@ export const expandable: Story = {
     onChange: action('onChange'),
     disabled: false,
     clickOnlyOnHeader: true,
-    label: (<h3 className="textstyle-label-lg">Label</h3>),
+    label: (<h3 className="typography-label-lg">Label</h3>),
     contentExpandedClassName: 'overflow-y-hidden',
     children: (
       <div className="flex-col-2 overflow-y-auto">

@@ -1,8 +1,7 @@
 import type { Meta, StoryObj } from '@storybook/nextjs'
 import { SolidButton } from '../../../src'
 import { action } from 'storybook/actions'
-// @ts-expect-error The StorybookHelper should not be exported
-import { StorybookHelper } from '../../helper'
+import { StorybookHelper } from '../../../src/storybook/helper'
 
 const meta = {
   title: 'User Action/Button',

@@ -1,17 +1,19 @@
-import type { HTMLProps, PropsWithChildren, ReactNode } from 'react'
+import type { HTMLAttributes, PropsWithChildren, ReactNode } from 'react'
 import clsx from 'clsx'
 
-const chipColors = ['default', 'dark', 'red', 'yellow', 'green', 'blue', 'pink'] as const
+const chipColors = ['default', 'dark', 'red', 'yellow', 'green', 'blue', 'pink', 'orange'] as const
 export type ChipColor = typeof chipColors[number]
 
 type ChipVariant = 'normal' | 'fullyRounded'
+type ChipSize = 'sm' | 'md' | 'lg'
 
 export const ChipUtil = {
   colors: chipColors,
 }
 
-export type ChipProps = HTMLProps<HTMLDivElement> & PropsWithChildren<{
+export type ChipProps = HTMLAttributes<HTMLDivElement> & PropsWithChildren<{
   color?: ChipColor,
+  size?: ChipSize,
   variant?: ChipVariant,
   trailingIcon?: ReactNode,
 }>
@@ -23,6 +25,7 @@ export const Chip = ({
                        children,
                        trailingIcon,
                        color = 'default',
+                       size = 'md',
                        variant = 'normal',
                        className = '',
                        ...restProps
@@ -35,6 +38,7 @@ export const Chip = ({
     green: 'text-tag-green-text bg-tag-green-background',
     blue: 'text-tag-blue-text bg-tag-blue-background',
     pink: 'text-tag-pink-text bg-tag-pink-background',
+    orange: 'text-tag-orange-text bg-tag-orange-background',
   }[color]
 
   const colorMappingIcon: string = {
@@ -45,14 +49,20 @@ export const Chip = ({
     green: 'text-tag-green-icon',
     blue: 'text-tag-blue-icon',
     pink: 'text-tag-pink-icon',
+    orange: 'text-tag-orange-icon',
   }[color]
 
   return (
     <div
       {...restProps}
       className={clsx(
-        `row w-fit px-2 py-1 font-semibold`,
+        `flex-row-0 w-fit font-semibold`,
         colorMapping,
+        {
+          'px-1 py-0.5': size === 'sm',
+          'px-2 py-1': size === 'md',
+          'px-4 py-2': size === 'lg',
+        },
         {
           'rounded-md': variant === 'normal',
           'rounded-full': variant === 'fullyRounded',

@@ -12,11 +12,8 @@ type Story = StoryObj<typeof meta>;
 export const textarea: Story = {
   args: {
     value: 'Text',
-    label: { name: 'Label' },
     disabled: false,
-    headline: '',
-    disclaimer: '',
-    resizable: false,
+    invalid: false,
     className: '',
   },
 }

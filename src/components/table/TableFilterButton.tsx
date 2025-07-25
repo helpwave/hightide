@@ -74,7 +74,7 @@ export const TableFilterButton = <T, >({
     >
       {({ close }) => (
         <div className="flex-col-1 p-2 items-start font-normal text-menu-text">
-          <h4 className="textstyle-title-sm">{translation('filter')}</h4>
+          <h4 className="typography-label-md-semibold">{translation('filter')}</h4>
           {filterType === 'text' && (
             <Input
               value={(filterValue ?? '') as string}

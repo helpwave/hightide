@@ -52,9 +52,9 @@ export const Tile = ({
     >
       {prefix}
       <div className="flex-col-0 w-full">
-        <span className={clsx(titleClassName ?? ('textstyle-title-normal'))}>{title}</span>
+        <span className={clsx(titleClassName ?? ('typography-title-md'))}>{title}</span>
         {!!description &&
-          <span className={clsx(descriptionClassName ?? 'textstyle-description')}>{description}</span>}
+          <span className={clsx(descriptionClassName ?? 'text-description')}>{description}</span>}
       </div>
       {suffix ?? (isSelected ? (<Check size={24}/>) : undefined)}
     </div>

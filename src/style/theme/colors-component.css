@@ -60,6 +60,9 @@
   --color-menu-text: var(--color-on-surface);
   --color-menu-border: var(--color-border);
 
+  /* Label */
+  --color-label-text: var(--color-text-secondary);
+
   /* Overlay, Dialog, Modal */
   --color-overlay-background: var(--color-surface);
   --color-overlay-text: var(--color-on-surface);
@@ -100,12 +103,15 @@
   --color-tag-red-background: #FEE0DD;
   --color-tag-red-text: #D67268;
   --color-tag-red-icon: #D67268;
-  --color-tag-blue-background: var(--color-blue-50);
-  --color-tag-blue-text: var(--color-blue-800);
-  --color-tag-blue-icon: var(--color-blue-800);
-  --color-tag-pink-background: #CEA3B8;
+  --color-tag-blue-background: #DBE2F3;
+  --color-tag-blue-text: #758ECE;
+  --color-tag-blue-icon: #758ECE;
+  --color-tag-pink-background: #F3DBE7;
   --color-tag-pink-text: #CE75A0;
   --color-tag-pink-icon: #CE75A0;
+  --color-tag-orange-background: #FEEACB;
+  --color-tag-orange-text: #EA8E00;
+  --color-tag-orange-icon: #EA8E00;
 
   /* TextImage */
   --color-text-image-primary-background: var(--color-primary);

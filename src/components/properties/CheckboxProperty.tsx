@@ -1,5 +1,5 @@
 import { Check } from 'lucide-react'
-import { noop } from '../../util/noop'
+import { noop } from '@/src/utils/noop'
 import { Checkbox } from '../user-action/Checkbox'
 import type { PropsForTranslation } from '../../localization/useTranslation'
 import { useTranslation } from '../../localization/useTranslation'

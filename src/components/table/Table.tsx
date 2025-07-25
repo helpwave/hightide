@@ -1,6 +1,6 @@
 import type { ReactNode } from 'react'
 import { useCallback, useEffect, useMemo, useRef, useState } from 'react'
-import { Pagination } from '../layout-and-navigation/Pagination'
+import { Pagination } from '@/src'
 import clsx from 'clsx'
 import type {
   ColumnDef,
@@ -25,18 +25,18 @@ import {
   getSortedRowModel,
   useReactTable
 } from '@tanstack/react-table'
-import { range } from '../../util/array'
+import { range } from '@/src/utils/array'
 import { Scrollbars } from 'react-custom-scrollbars-2'
-import { Checkbox } from '../user-action/Checkbox'
-import { clamp } from '../../util/math'
-import { noop } from '../../util/noop'
-import type { TableFilterType } from './TableFilterButton'
-import { TableFilterButton } from './TableFilterButton'
-import { TableSortButton } from './TableSortButton'
-import { FillerRowElement } from './FillerRowElement'
-import { TableFilters } from './Filter'
-import { useResizeCallbackWrapper } from '../../hooks/useResizeCallbackWrapper'
-import { TableCell } from './TableCell'
+import { Checkbox } from '@/src'
+import { clamp } from '@/src/utils/math'
+import { noop } from '@/src/utils/noop'
+import type { TableFilterType } from '@/src'
+import { TableFilterButton } from '@/src'
+import { TableSortButton } from '@/src'
+import { FillerRowElement } from '@/src'
+import { TableFilters } from '@/src'
+import { useResizeCallbackWrapper } from '@/src'
+import { TableCell } from '@/src'
 
 declare module '@tanstack/react-table' {
   // eslint-disable-next-line @typescript-eslint/no-unused-vars
@@ -481,12 +481,12 @@ export const TableWithSelection = <T, >({
         header: ({ table }) => {
           return (
             <Checkbox
-              checked={table.getIsSomeRowsSelected() ? 'indeterminate' : table.getIsAllRowsSelected()}
-              onChangeTristate={value => {
+              checked={table.getIsAllRowsSelected()}
+              indeterminate={table.getIsSomeRowsSelected()}
+              onChange={value => {
                 const newValue = !!value
                 table.toggleAllRowsSelected(newValue)
               }}
-              containerClassName="max-w-6"
             />
           )
         },
@@ -496,7 +496,6 @@ export const TableWithSelection = <T, >({
               disabled={!row.getCanSelect()}
               checked={row.getIsSelected()}
               onChange={row.getToggleSelectedHandler()}
-              containerClassName="max-w-6"
             />
           )
         },
@@ -515,7 +514,7 @@ export const TableWithSelection = <T, >({
       columns={columnsWithSelection}
       fillerRow={(columnId, table) => {
         if (columnId === selectionRowId) {
-          return (<Checkbox checked={false} disabled={true} containerClassName="max-w-6"/>)
+          return (<Checkbox checked={false} disabled={true} className="max-w-6"/>)
         }
         return fillerRow ? fillerRow(columnId, table) : (<FillerRowElement/>)
       }}

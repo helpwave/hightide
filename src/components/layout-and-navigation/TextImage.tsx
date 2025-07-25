@@ -63,7 +63,7 @@ export const TextImage = ({
           </div>
         )}
         <div className="flex-col-1 overflow-hidden">
-          <span className="textstyle-title-xl">{title}</span>
+          <span className="typography-title-lg">{title}</span>
           <span className="text-ellipsis overflow-hidden">{description}</span>
         </div>
         {onShowMoreClicked && (

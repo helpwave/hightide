@@ -17,9 +17,10 @@ type Story = StoryObj<typeof meta>;
 
 export const chip: Story = {
   args: {
+    variant: 'normal',
+    color: 'default',
+    size: 'md',
     children: 'Label',
     className: '',
-    variant: 'normal',
-    color: 'default'
   },
 }

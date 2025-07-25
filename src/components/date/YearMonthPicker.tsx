@@ -1,10 +1,10 @@
 import { useEffect, useRef, useState } from 'react'
 import { Scrollbars } from 'react-custom-scrollbars-2'
-import { noop } from '../../util/noop'
-import { equalSizeGroups, range } from '../../util/array'
+import { noop } from '@/src/utils/noop'
+import { equalSizeGroups, range } from '@/src/utils/array'
 import clsx from 'clsx'
 import { ExpandableUncontrolled } from '../layout-and-navigation/Expandable'
-import { addDuration, monthsList, subtractDuration } from '../../util/date'
+import { addDuration, monthsList, subtractDuration } from '@/src/utils/date'
 import { useLocale } from '../../localization/LanguageProvider'
 import { SolidButton } from '../user-action/Button'
 

@@ -1,14 +1,11 @@
 import type { Meta, StoryObj } from '@storybook/nextjs'
 import { action } from 'storybook/actions'
-// @ts-expect-error The StorybookHelperSelectType, StorybookHelper should not be exported
-import type { StorybookHelperSelectType } from '../../helper'
-import { StorybookHelper } from '../../helper'
+import type { StorybookHelperSelectType } from '../../../src/storybook/helper'
+import { StorybookHelper } from '../../../src/storybook/helper'
 import type { MultiSelectOption } from '../../../src'
-import { MultiSelect } from '../../../src'
-import { Select } from '../../../src'
-import { Textarea } from '../../../src'
+import { FormElementWrapper, MultiSelect, Select, Textarea } from '../../../src'
 import { useState } from 'react'
-import { Input } from '../../../src'
+import { Input } from '@/src'
 
 type FormValue = {
   name: string,
@@ -23,9 +20,9 @@ type FormExampleProps = {
 }
 
 const FormExample = ({
-  disabled,
-  onChange,
-}: FormExampleProps) => {
+                       disabled,
+                       onChange,
+                     }: FormExampleProps) => {
   const [state, setState] = useState<FormValue>({
     name: 'John Doe',
     favouriteFruit: 'Strawberry',
@@ -43,38 +40,94 @@ const FormExample = ({
     setState(prevState => ({ ...prevState, ...value }))
   }
 
+  const requiredValidator = (value: any) => {
+    if (!value) {
+      return 'This field is required'
+    }
+    return undefined
+  }
+
+  const lengthValidator = (value: string | undefined, length: [number | undefined, number | undefined]) => {
+    const [min, max] = length
+
+    if (min !== undefined && (!value || value.length < min)) {
+      return `Must be at least ${min} characters long.`
+    }
+
+    if (max !== undefined && value && value.length > max) {
+      return `Must be at most ${max} characters long.`
+    }
+
+    return undefined
+  }
+
+
   return (
-    <div className="flex-col-2 w-full">
-      <h4 className="textstyle-title-lg">{'Fruit Salad Form'}</h4>
-      <Input
-        value={state.name}
-        onChangeText={name => setStatePropagator({ name })}
+    <div className="flex-col-4 w-full">
+      <h4 className="typography-title-lg">{'Fruit Salad Form'}</h4>
+      <FormElementWrapper
         disabled={disabled}
-        label={{ name: 'Your name' }}
-      />
-      <Select<StorybookHelperSelectType>
-        value={state.favouriteFruit}
-        options={StorybookHelper.selectValues.map(value => ({
-          value,
-          label: value,
-          searchTags: [value]
-        }))}
-        onChange={favouriteFruit => setStatePropagator({ favouriteFruit })}
+        required={true}
+        error={requiredValidator(state.name) ?? lengthValidator(state.name, [4, 32])}
+        description="Your name will not be visible to others."
+        label="Your name"
+      >
+        {(bag) => (
+          <Input
+            {...bag}
+            value={state.name}
+            onChangeText={name => setStatePropagator({ name })}
+          />
+        )}
+      </FormElementWrapper>
+      <FormElementWrapper
         disabled={disabled}
-        label={{ name: 'Your favourite Fruit' }}
-      />
-      <MultiSelect<StorybookHelperSelectType>
-        options={state.allergies}
-        onChange={allergies => setStatePropagator({ allergies })}
+        required={true}
+        error={requiredValidator(state.favouriteFruit)}
+        description="We will use this to include as many likes as possible."
+        label="Your favourite Fruit"
+      >
+        {(bag) => (
+          <Select<StorybookHelperSelectType>
+            {...bag}
+            value={state.favouriteFruit}
+            options={StorybookHelper.selectValues.map(value => ({
+              value,
+              label: value,
+              searchTags: [value]
+            }))}
+            onChange={favouriteFruit => setStatePropagator({ favouriteFruit })}
+          />
+        )}
+      </FormElementWrapper>
+      <FormElementWrapper
         disabled={disabled}
-        label={{ name: 'Allergies' }}
-      />
-      <Textarea
-        value={state.notes}
-        onChangeText={notes => setStatePropagator({ notes })}
+        required={false}
+        description="The ingredients you are allergic to."
+        label="Allergies"
+      >
+        {(bag) => (
+          <MultiSelect<StorybookHelperSelectType>
+            {...bag}
+            options={state.allergies}
+            onChange={allergies => setStatePropagator({ allergies })}
+          />
+        )}
+      </FormElementWrapper>
+      <FormElementWrapper
         disabled={disabled}
-        label={{ name: 'Addtional Notes' }}
-      />
+        required={false}
+        description="Anything else we should be aware of."
+        label="Notes"
+      >
+        {(bag) => (
+          <Textarea
+            {...bag}
+            value={state.notes}
+            onChangeText={notes => setStatePropagator({ notes })}
+          />
+        )}
+      </FormElementWrapper>
     </div>
   )
 }

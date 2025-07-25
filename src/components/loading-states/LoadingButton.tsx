@@ -1,7 +1,7 @@
 import clsx from 'clsx'
 import type { SolidButtonProps } from '../user-action/Button'
 import { ButtonUtil, SolidButton } from '../user-action/Button'
-import { noop } from '../../util/noop'
+import { noop } from '@/src/utils/noop'
 import { Helpwave } from '../icons-and-geometry/Helpwave'
 
 type LoadingButtonProps = {

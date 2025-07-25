@@ -2,7 +2,7 @@ import type { PropsWithChildren, ReactNode } from 'react'
 import { forwardRef, useCallback, useEffect, useState } from 'react'
 import { ChevronDown } from 'lucide-react'
 import clsx from 'clsx'
-import { noop } from '../../util/noop'
+import { noop } from '@/src/utils/noop'
 
 type IconBuilder = (expanded: boolean) => ReactNode
 

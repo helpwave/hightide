@@ -1,5 +1,6 @@
 import type { Meta, StoryObj } from '@storybook/nextjs'
 import { CheckboxUncontrolled } from '../../src'
+import { action } from 'storybook/actions'
 
 const meta = {
   title: 'User Action/Checkbox',
@@ -11,10 +12,10 @@ type Story = StoryObj<typeof meta>;
 
 export const checkbox: Story = {
   args: {
-    defaultValue: true,
+    checked: true,
+    indeterminate: false,
     disabled: false,
-    id: 'checkbox1',
-    size: 'medium',
-    label: { name: 'Click me ^^', labelType: 'labelMedium', className: '' },
+    size: 'md',
+    onChange: action('onChange')
   },
 }
