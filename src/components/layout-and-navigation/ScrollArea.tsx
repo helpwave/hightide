@@ -13,7 +13,7 @@ export const ScrollArea = ({
     <ScrollAreaPrimitive.Root
       {...props}
       className={clsx(
-        'overflow-hidden w-128 h-20 rounded-md',
+        'group overflow-hidden w-128 h-20 rounded-md',
         className
       )}
       style={{
@@ -26,7 +26,7 @@ export const ScrollArea = ({
         {children}
       </ScrollAreaPrimitive.Viewport>
       <ScrollAreaPrimitive.Scrollbar orientation="horizontal" className="flex-col-0 height-[var(--scrollbar-size)] p-0.5 select-none touch-none bg-black/10">
-        <ScrollAreaPrimitive.Thumb className="flex relative rounded-full bg-gray-300 min-h-2"/>
+        <ScrollAreaPrimitive.Thumb className="flex relative rounded-full bg-gray-300 min-h-2 group-focus:ring-2 ring-focus"/>
       </ScrollAreaPrimitive.Scrollbar>
       <ScrollAreaPrimitive.Scrollbar orientation="vertical" className="flex-row-0 flex width-[var(--scrollbar-size)] p-0.5 select-none touch-none bg-black/10">
         <ScrollAreaPrimitive.Thumb className="flex relative rounded-full bg-gray-300 min-w-2"/>

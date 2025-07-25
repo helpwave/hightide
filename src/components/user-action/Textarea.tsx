@@ -45,8 +45,8 @@ export const Textarea = forwardRef<HTMLTextAreaElement, TextareaProps>(function 
       ref={ref}
       id={id}
       className={clsx(
-        'resize-none w-full h-20 overflow-y-scroll',
-        'py-2 px-3 rounded-lg border-1',
+        'resize-none w-full h-32 overflow-y-scroll',
+        'py-2 px-3 rounded-md border-1',
         {
           'bg-input-background text-input-text hover:border-primary focus-within:border-primary focus-within:ring-2 ring-focus': !disabled && !invalid,
           'bg-on-negative text-negative border-negative-border hover:border-negative-border-hover focus-visible:ring-negative-border': invalid && !disabled && defaultStyle,
@@ -54,10 +54,6 @@ export const Textarea = forwardRef<HTMLTextAreaElement, TextareaProps>(function 
         },
         className
       )}
-      style={{
-        ['::--webkit-scrollbar-track' as unknown]: 'var(--rounded-lg)',
-        ...props.style
-      }}
       onChange={(event) => {
         const value = event.target.value
         restartTimer(() => {
