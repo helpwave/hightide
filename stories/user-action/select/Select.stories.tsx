@@ -21,12 +21,10 @@ export const select: Story = {
     )
   ],
   args: {
-    label: { name: 'Your favourite fruit' },
     disabled: false,
     hintText: 'Select something',
     alignmentVertical: 'bottomOutside',
     alignmentHorizontal: 'leftInside',
-    className: 'max-w-96',
     onChange: action('updated'),
     options: [
       { value: '1', label: 'Apple' },

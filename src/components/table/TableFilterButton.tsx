@@ -1,5 +1,5 @@
 import { IconButton, SolidButton } from '../user-action/Button'
-import { Input } from '../user-action/Input'
+import { Input } from '../user-action/input/Input'
 import { FilterIcon } from 'lucide-react'
 import { Menu } from '../user-action/Menu'
 import type { Translation } from '../../localization/useTranslation'

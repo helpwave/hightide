@@ -1,0 +1,29 @@
+@utility h-force-* {
+  height: calc(var(--spacing) * --value(number));
+  min-height: calc(var(--spacing) * --value(number));
+  max-height: calc(var(--spacing) * --value(number));
+}
+
+@utility w-force-* {
+  width: calc(var(--spacing) * --value(number));
+  min-width: calc(var(--spacing) * --value(number));
+  max-width: calc(var(--spacing) * --value(number));
+}
+
+@utility size-force-* {
+  height: calc(var(--spacing) * --value(number));
+  min-height: calc(var(--spacing) * --value(number));
+  max-height: calc(var(--spacing) * --value(number));
+  width: calc(var(--spacing) * --value(number));
+  min-width: calc(var(--spacing) * --value(number));
+  max-width: calc(var(--spacing) * --value(number));
+}
+
+@utility size-force-nonscaling-* {
+  height: calc(--value(number));
+  width: calc(--value(number));
+  min-height: calc(--value(number));
+  min-width: calc(--value(number));
+  max-height: calc(--value(number));
+  max-width: calc(--value(number));
+}

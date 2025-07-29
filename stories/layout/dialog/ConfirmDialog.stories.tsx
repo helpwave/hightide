@@ -1,22 +1,25 @@
 import type { Meta, StoryObj } from '@storybook/nextjs'
-import { useState } from 'react'
-import { ConfirmDialog, SolidButton } from '../../../src'
+import type { ConfirmDialogProps } from '../../../src'
+import { SolidButton } from '../../../src'
+import { ConfirmDialog } from '../../../src'
 import { action } from 'storybook/actions'
+import { useEffect, useState } from 'react'
 
-
-type ConfirmDialogExampleProps = {
-  onDecline: () => void,
-  onConfirm: () => void,
-}
 
 /**
  * An Example Component for the ConfirmModal
  */
 const ConfirmDialogExample = ({
-                               onDecline,
-                               onConfirm,
-                             }: ConfirmDialogExampleProps) => {
-  const [isOpen, setIsOpen] = useState(false)
+                                isOpen: initialIsOpen,
+                                onDecline,
+                                onConfirm,
+                                ...props
+                              }: ConfirmDialogProps) => {
+  const [isOpen, setIsOpen] = useState(true)
+
+  useEffect(() => {
+    setIsOpen(initialIsOpen)
+  }, [initialIsOpen])
 
   return (
     <>
@@ -30,7 +33,11 @@ const ConfirmDialogExample = ({
           onDecline()
           setIsOpen(false)
         }}
-        headerProps={{ titleText: 'Confirmation Required' }}
+        onClose={() => {
+          props.onClose?.()
+          setIsOpen(false)
+        }}
+        {...props}
       />
       <div className="flex-row-2 items-center justify-center min-h-[400px]">
         <SolidButton onClick={() => setIsOpen(true)}>Show Dialog</SolidButton>
@@ -49,6 +56,10 @@ type Story = StoryObj<typeof meta>;
 
 export const confirmDialog: Story = {
   args: {
+    isOpen: true,
+    isModal: true,
+    title: 'Do you want to confirm this?',
+    description: 'Whatever you click only closes the Dialog',
     onDecline: action('onDecline'),
     onConfirm: action('onConfirm'),
   }

@@ -76,6 +76,10 @@
   --color-property-title-background: var(--color-gray-100);
   --color-property-title-text: var(--color-text-secondary);
 
+  /* Scrollbar */
+  --color-scrollbar-track: #00000033;
+  --color-scrollbar-thumb: var(--color-gray-600);
+
   /* Stepper Bar */
   --color-stepperbar-dot-active: var(--color-primary);
   --color-stepperbar-dot-normal: var(--color-purple-100);
@@ -155,6 +159,10 @@
 
     /* Overlay, Dialog, Modal */
     --color-overlay-shadow: #00000060;
+
+    /* Scrollbar */
+    --color-scrollbar-track: #FFFFFF33;
+    --color-scrollbar-thumb: var(--color-gray-300);
 
     /* Tag */
     --color-tag-dark-background: var(--color-gray-900);

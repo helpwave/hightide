@@ -3,7 +3,6 @@ import React, { forwardRef, useEffect, useImperativeHandle, useRef, useState } f
 import clsx from 'clsx'
 import type { UseDelayOptionsResolved } from '@/src'
 import { useDelay, useFocusManagement } from '@/src'
-import { noop } from '@/src/utils/noop'
 
 export type EditCompleteOptionsResolved = {
   onBlur: boolean,
@@ -25,6 +24,7 @@ export type InputProps = InputHTMLAttributes<HTMLInputElement> & {
   onChangeText?: (text: string) => void,
   onEditCompleted?: (text: string) => void,
   editCompleteOptions?: EditCompleteOptions,
+  defaultStyle?: boolean,
 }
 
 /**
@@ -34,15 +34,14 @@ export type InputProps = InputHTMLAttributes<HTMLInputElement> & {
  */
 export const Input = forwardRef<HTMLInputElement, InputProps>(function Input({
                                                                                value,
-                                                                               onChange = noop,
-                                                                               onChangeText = noop,
+                                                                               onChange,
+                                                                               onChangeText,
                                                                                onEditCompleted,
                                                                                editCompleteOptions,
-                                                                               onBlur,
-                                                                               onKeyDown,
                                                                                disabled = false,
                                                                                invalid = false,
-                                                                               className = '',
+                                                                               defaultStyle = true,
+                                                                               className,
                                                                                ...props
                                                                              }, forwardedRef) {
   const {
@@ -58,9 +57,9 @@ export const Input = forwardRef<HTMLInputElement, InputProps>(function Input({
   } = useDelay({ delay, disabled: !afterDelay })
 
   const innerRef = useRef<HTMLInputElement>(null)
-  const { focusNext } = useFocusManagement()
-
   useImperativeHandle(forwardedRef, () => innerRef.current)
+
+  const { focusNext } = useFocusManagement()
 
   return (
     <input
@@ -68,53 +67,41 @@ export const Input = forwardRef<HTMLInputElement, InputProps>(function Input({
       ref={innerRef}
       value={value}
       disabled={disabled}
-      className={clsx(
+      className={defaultStyle ? clsx(
         'px-2.5 py-1.75 rounded-md border-1 text-sm',
         {
           'bg-input-background text-input-text hover:border-primary focus:border-primary': !disabled && !invalid,
           'bg-on-negative text-negative border-negative-border hover:border-negative-border-hover focus-visible:ring-negative-border': !disabled && invalid,
           'bg-disabled-background text-disabled-text border-disabled-border': disabled,
         }, className
-      )}
+      ) : className}
       onKeyDown={event => {
-        onKeyDown?.(event)
+        props.onKeyDown?.(event)
         if (!allowEnterComplete) {
           return
         }
         if (event.key === 'Enter' && !event.shiftKey) {
           event.preventDefault()
           innerRef.current?.blur()
-          try {
-            onEditCompleted(value as string)
-          } catch (e) {
-            console.warn(e)
-          }
+          onEditCompleted?.((event.target as HTMLInputElement).value)
           focusNext()
         }
       }}
       onBlur={event => {
-        onBlur?.(event)
-        if (onEditCompleted && allowEditCompleteOnBlur) {
-          onEditCompleted(event.target.value)
+        props.onBlur?.(event)
+        if (allowEditCompleteOnBlur) {
+          onEditCompleted?.(event.target.value)
           clearTimer()
         }
       }}
-      onChange={e => {
-        const value = e.target.value
-        if (onEditCompleted) {
-          restartTimer(() => {
-            if (innerRef.current) {
-              innerRef.current.blur()
-              if (!allowEditCompleteOnBlur) {
-                onEditCompleted(value)
-              }
-            } else {
-              onEditCompleted(value)
-            }
-          })
-        }
-        onChange(e)
-        onChangeText(value)
+      onChange={event => {
+        onChange?.(event)
+        const value = event.target.value
+        restartTimer(() => {
+          innerRef.current?.blur()
+          onEditCompleted?.(value)
+        })
+        onChangeText?.(value)
       }}
 
       aria-invalid={props['aria-invalid'] ?? invalid}
@@ -131,7 +118,7 @@ export const Input = forwardRef<HTMLInputElement, InputProps>(function Input({
  */
 export const InputUncontrolled = ({
                                     value = '',
-                                    onChangeText = noop,
+                                    onChangeText,
                                     ...props
                                   }: InputProps) => {
   const [usedValue, setUsedValue] = useState(value)
@@ -145,8 +132,8 @@ export const InputUncontrolled = ({
       {...props}
       value={usedValue}
       onChangeText={text => {
+        onChangeText?.(text)
         setUsedValue(text)
-        onChangeText(text)
       }}
     />
   )

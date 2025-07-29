@@ -11,7 +11,7 @@ type SingleSelectPropertyExample = Omit<SingleSelectPropertyProps, 'onChange' | 
  */
 const SingleSelectPropertyExample = ({
                                        value,
-                                       hintText,
+                                       placeholder,
                                        ...restProps
                                      }: SingleSelectPropertyExample) => {
   const [usedValue, setUsedValue] = useState<string | undefined>(value)
@@ -33,7 +33,7 @@ const SingleSelectPropertyExample = ({
 
   useEffect(() => {
     setUsedValue(undefined)
-  }, [hintText])
+  }, [placeholder])
 
   useEffect(() => {
     if (options.find(value1 => value1.value === value)) {
@@ -62,7 +62,7 @@ const SingleSelectPropertyExample = ({
         }])
         setUsedValue(value)
       }}
-      hintText={hintText}
+      placeholder={placeholder}
     />
   )
 }

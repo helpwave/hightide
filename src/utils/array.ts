@@ -126,6 +126,23 @@ export const createLoopingList = <T>(list: T[], startIndex: number = 0, length: 
   return createLoopingListWithIndex(list, startIndex, length, forwards).map(([_, item]) => item)
 }
 
+/**
+ * @param list The list to be changed
+ * @param move The shifting applied to the array (can be negative)
+ */
+const moveItems = <T>(list: T[], move: number = 0) => {
+  const result = []
+  let start = move
+  if (start < 0) {
+    start = list.length - move
+  }
+  start = start % list.length
+  for (let i = 0; i < list.length; i++) {
+    result[i] = list[(i + start) % list.length]
+  }
+  return result
+}
+
 export const ArrayUtil = {
   unique: <T>(list: T[]): T[] => {
     const seen = new Set<T>()
@@ -137,9 +154,9 @@ export const ArrayUtil = {
       return true
     })
   },
-
   difference: <T>(list: T[], removeList: T[]): T[] => {
     const remove = new Set<T>(removeList)
     return list.filter((item) => !remove.has(item))
-  }
+  },
+  moveItems,
 }

@@ -32,11 +32,15 @@
 }
 
 @utility shadow-strong {
-  --tw-shadow-color: rgba(0, 0, 0, 0.06);
+  --tw-shadow-color: rgba(0, 0, 0, 0.05);
 }
 
 @utility shadow-hard {
   --tw-shadow-color: rgba(0, 0, 0, 0.10);
+}
+
+@utility shadow-hw-bottom {
+  --shadow-bottom: 0 calc(1rem/16) calc(20rem/16) 0 var(--tw-shadow-color, rgb(0 0 0 / 2%));
 }
 
 @layer utilities {

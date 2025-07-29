@@ -1,4 +1,4 @@
-import type { ButtonHTMLAttributes, PropsWithChildren, ReactNode } from 'react'
+import type { ButtonHTMLAttributes, ReactNode } from 'react'
 import { forwardRef } from 'react'
 import clsx from 'clsx'
 
@@ -42,12 +42,12 @@ type IconButtonSize = 'tiny' | 'small' | 'medium' | 'large'
 /**
  * The shard properties between all button types
  */
-export type ButtonProps = PropsWithChildren<{
+export type ButtonProps = ButtonHTMLAttributes<HTMLButtonElement> & {
   /**
    * @default 'medium'
    */
   size?: ButtonSizes,
-}> & ButtonHTMLAttributes<Element>
+}
 
 const paddingMapping: Record<ButtonSizes, string> = {
   small: 'btn-sm',
@@ -88,18 +88,18 @@ export type TextButtonProps = ButtonWithIconsProps & {
 /**
  * The shard properties between all button types
  */
-export type IconButtonProps = PropsWithChildren<{
+export type IconButtonProps = ButtonHTMLAttributes<HTMLButtonElement> & {
   /**
    * @default 'medium'
    */
   size?: IconButtonSize,
   color?: IconButtonColor,
-}> & ButtonHTMLAttributes<Element>
+}
 
 /**
  * A button with a solid background and different sizes
  */
-const SolidButton = forwardRef<HTMLButtonElement, SolidButtonProps>(function SolidButton({
+export const SolidButton = forwardRef<HTMLButtonElement, SolidButtonProps>(function SolidButton({
                                                                                            children,
                                                                                            color = 'primary',
                                                                                            size = 'medium',
@@ -171,7 +171,7 @@ const SolidButton = forwardRef<HTMLButtonElement, SolidButtonProps>(function Sol
 /**
  * A button with an outline border and different sizes
  */
-const OutlineButton = ({
+export const OutlineButton = ({
                          children,
                          color = 'primary',
                          size = 'medium',
@@ -229,7 +229,7 @@ const OutlineButton = ({
 /**
  * A text that is a button that can have different sizes
  */
-const TextButton = ({
+export const TextButton = ({
                       children,
                       color = 'neutral',
                       size = 'medium',
@@ -303,13 +303,14 @@ const TextButton = ({
 /**
  * A button for icons with a solid background and different sizes
  */
-const IconButton = ({
-                      children,
-                      color = 'primary',
-                      size = 'medium',
-                      className,
-                      ...restProps
-                    }: IconButtonProps) => {
+export const IconButton = forwardRef<HTMLButtonElement, IconButtonProps>(function IconButton({
+                                                                                        children,
+                                                                                        color = 'primary',
+                                                                                        size = 'medium',
+                                                                                        className,
+                                                                                        ...restProps
+                                                                                      }, ref)
+{
   const colorClasses = {
     primary: 'not-disabled:bg-button-solid-primary-background not-disabled:text-button-solid-primary-text',
     secondary: 'not-disabled:bg-button-solid-secondary-background not-disabled:text-button-solid-secondary-text',
@@ -323,6 +324,7 @@ const IconButton = ({
 
   return (
     <button
+      ref={ref}
       className={clsx(
         colorClasses,
         'not-disabled:hover:brightness-90',
@@ -340,6 +342,4 @@ const IconButton = ({
       {children}
     </button>
   )
-}
-
-export { SolidButton, OutlineButton, TextButton, IconButton }
+})

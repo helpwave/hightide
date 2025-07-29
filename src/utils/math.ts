@@ -1,3 +1,4 @@
-export const clamp = (value: number, min: number = 0, max: number = 1): number => {
+export const clamp = (value: number, range: [number, number] = [0, 1]): number => {
+  const [min, max] = range
   return Math.min(Math.max(value, min), max)
 }

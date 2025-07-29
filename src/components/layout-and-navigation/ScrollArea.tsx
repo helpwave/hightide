@@ -2,36 +2,106 @@ import * as ScrollAreaPrimitive from '@radix-ui/react-scroll-area'
 import type { PropsWithChildren } from 'react'
 import { clsx } from 'clsx'
 
-export type ScrollbarAreaProps = ScrollAreaPrimitive.ScrollAreaProps & PropsWithChildren
+export type ScrollBarSize = 'sm' | 'md'
+export type ScrollBarType = 'auto' | 'always' | 'scroll' | 'hover'
+export type ScrollBarAxis = 'horizontal' | 'vertical' | 'both' | 'none'
+
+export type ScrollAreaProps = Omit<ScrollAreaPrimitive.ScrollAreaProps, 'type'> & PropsWithChildren & {
+  scrollbarSize?: ScrollBarSize,
+  scrollbarType?: ScrollBarType,
+  scrollbarAxis?: ScrollBarAxis,
+}
+
 
 export const ScrollArea = ({
-                            children,
-                            className,
-                            ...props
-                          }: ScrollbarAreaProps) => {
+                             children,
+                             scrollbarSize = 'md',
+                             scrollbarType = 'auto',
+                             scrollbarAxis = 'both',
+                             className,
+                             ...props
+                           }: ScrollAreaProps) => {
+  const scrollbarStyle = {
+    sm: { '--scrollbar-size': 'calc(4px + var(--spacing))' },
+    md: { '--scrollbar-size': 'calc(6px + var(--spacing))' },
+  }[scrollbarSize]
+
+  const hasHorizontalScrollBar = scrollbarAxis === 'horizontal' || scrollbarAxis === 'both'
+  const hasVerticalScrollBar = scrollbarAxis === 'vertical' || scrollbarAxis === 'both'
+
   return (
     <ScrollAreaPrimitive.Root
       {...props}
       className={clsx(
-        'group overflow-hidden w-128 h-20 rounded-md',
+        'overflow-hidden',
         className
       )}
       style={{
-        // This gets around the React CSSProperties limitations
-        ['--scrollbar-size' as never]: '12px',
+        ...scrollbarStyle,
         ...props.style
       }}
+      type={scrollbarType}
     >
-      <ScrollAreaPrimitive.Viewport className="w-full h-full border-inherit">
+      {hasHorizontalScrollBar && (
+        <ScrollAreaPrimitive.Scrollbar
+          orientation="horizontal"
+          className={clsx(
+            'peer/horizontal group/scrollbar flex-col-0 rounded-full select-none touch-none bg-scrollbar-track/50 hover:bg-scrollbar-track',
+            {
+              'h-[var(--scrollbar-size)]': scrollbarType === 'always',
+              'data-[state=visible]:h-[var(--scrollbar-size)]': scrollbarType !== 'always',
+            }
+          )}
+        >
+          <ScrollAreaPrimitive.Thumb
+            className={clsx(
+              'flex relative rounded-full bg-scrollbar-thumb group-hover/scrollbar:bg-primary',
+              {
+                'min-h-[var(--scrollbar-size)]': scrollbarType === 'always',
+                'data-[state=visible]:min-h-[var(--scrollbar-size)]': scrollbarType !== 'always',
+              }
+            )}
+          />
+        </ScrollAreaPrimitive.Scrollbar>
+      )}
+      {hasVerticalScrollBar && (
+        <ScrollAreaPrimitive.Scrollbar
+          orientation="vertical"
+          className={clsx(
+            'peer/vertical group/scrollbar flex-col-0 rounded-full select-none touch-none bg-scrollbar-track/50 hover:bg-scrollbar-track',
+            {
+              'w-[var(--scrollbar-size)]': scrollbarType === 'always',
+              'data-[state=visible]:w-[var(--scrollbar-size)]': scrollbarType !== 'always',
+            }
+          )}>
+          <ScrollAreaPrimitive.Thumb
+            className={clsx(
+              'flex relative rounded-full bg-scrollbar-thumb group-hover/scrollbar:bg-primary',
+              {
+                'min-w-[var(--scrollbar-size)]': scrollbarType === 'always',
+                'data-[state=visible]:min-w-[var(--scrollbar-size)]': scrollbarType !== 'always',
+              }
+            )}
+          />
+        </ScrollAreaPrimitive.Scrollbar>
+      )}
+      <ScrollAreaPrimitive.Viewport
+        className={clsx(
+          'border-inherit',
+          {
+            'w-[calc(100%_-_var(--scrollbar-size))] h-[calc(100%_-_var(--scrollbar-size))]': scrollbarType === 'always',
+            'h-full w-full': scrollbarType === 'scroll' || scrollbarType === 'hover' || scrollbarType === 'auto',
+            'peer-[&:where([data-state=visible])]/horizontal:h-[calc(100%_-_var(--scrollbar-size))] peer-[&:where([data-state=visible])]/vertical:w-[calc(100%_-_var(--scrollbar-size))]': scrollbarType === 'auto',
+          }
+        )}
+      >
         {children}
       </ScrollAreaPrimitive.Viewport>
-      <ScrollAreaPrimitive.Scrollbar orientation="horizontal" className="flex-col-0 height-[var(--scrollbar-size)] p-0.5 select-none touch-none bg-black/10">
-        <ScrollAreaPrimitive.Thumb className="flex relative rounded-full bg-gray-300 min-h-2 group-focus:ring-2 ring-focus"/>
-      </ScrollAreaPrimitive.Scrollbar>
-      <ScrollAreaPrimitive.Scrollbar orientation="vertical" className="flex-row-0 flex width-[var(--scrollbar-size)] p-0.5 select-none touch-none bg-black/10">
-        <ScrollAreaPrimitive.Thumb className="flex relative rounded-full bg-gray-300 min-w-2"/>
-      </ScrollAreaPrimitive.Scrollbar>
-      <ScrollAreaPrimitive.Corner/>
+      <ScrollAreaPrimitive.Corner
+        className={clsx(
+          'bg-scrollbar-track rounded-full'
+        )}
+      />
     </ScrollAreaPrimitive.Root>
   )
 }

@@ -3,7 +3,7 @@ import type { PropsForTranslation, Translation } from '../../localization/useTra
 import { useTranslation } from '../../localization/useTranslation'
 import { Select } from '../user-action/Select'
 import { SolidButton } from '../user-action/Button'
-import { Modal, type ModalProps } from '../layout-and-navigation/Overlay'
+import { Modal, type ModalProps } from '../layout-and-navigation/Dialog'
 import type { ThemeTypeTranslation } from '../../theming/useTheme'
 import { useTheme } from '../../theming/useTheme'
 import { ThemeUtil } from '../../theming/useTheme'

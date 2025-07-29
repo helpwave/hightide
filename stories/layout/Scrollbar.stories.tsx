@@ -1,13 +1,43 @@
 import type { Meta, StoryObj } from '@storybook/nextjs'
 import { ScrollArea } from '@/src/components/layout-and-navigation/ScrollArea'
+import { range } from '../../src'
+import { action } from 'storybook/actions'
+import type { ScrollAreaProps } from '../../src/components/layout-and-navigation/ScrollArea'
 
-const ScrollbarExample = ({ width, height }: { width: number, height: number }) => {
+const ScrollbarExample = ({
+                            ...props
+                          }: ScrollAreaProps) => {
   return (
-    <ScrollArea
-      className="overflow-auto max-w-40 max-h-32"
-    >
-      <div className="bg-gray-300 rounded-lg" style={{ width, height }}/>
-    </ScrollArea>
+    <div className="flex-row-4">
+      <ScrollArea
+        {...props}
+        className="overflow-auto max-w-60 min-w-40 max-h-32"
+      >
+        <div className="flex-col-1">
+          {range(500).map((index) => (
+            <button
+              key={index}
+              onClick={action(`Clicked Item ${index}`)}
+              className="hover:bg-primary/20 focus:bg-primary/20 rounded-md mx-1 first:mt-1 mb-1"
+            >
+              {`Item ${index}`}
+            </button>
+          ))}
+        </div>
+      </ScrollArea>
+      <ScrollArea
+        {...props}
+        className="overflow-auto max-w-40 max-h-32"
+      >
+        <div className="flex-row-2 p-2">
+          {range(20).map((index) => (
+            <button key={index} onClick={action(`Clicked Item ${index}`)}>
+              {`Item ${index}`}
+            </button>
+          ))}
+        </div>
+      </ScrollArea>
+    </div>
   )
 }
 
@@ -21,7 +51,8 @@ type Story = StoryObj<typeof meta>;
 
 export const scrollbar: Story = {
   args: {
-    width: 500,
-    height: 300,
+    scrollbarSize: 'md',
+    scrollbarType: 'auto',
+    scrollbarAxis: 'both',
   },
 }

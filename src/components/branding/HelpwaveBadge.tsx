@@ -24,7 +24,7 @@ export const HelpwaveBadge = ({
     <Tile
       prefix={(<Helpwave size={iconSize}/>)}
       title={title}
-      titleClassName={size === 'small' ? 'typography-title-md' : 'typography-title-lg'}
+      titleClassName={size === 'small' ? 'typography-title-md-semibold' : 'typography-title-lg-semibold'}
       className={clsx(
         {
           'px-2 py-1 rounded-md': size === 'small',

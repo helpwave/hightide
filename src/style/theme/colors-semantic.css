@@ -37,11 +37,8 @@
   --color-negative-border: var(--color-negative);
   --color-negative-border-hover: var(--color-red-700);
 
-  --color-disabled-background: var(--color-gray-200);
-  --color-disabled-text: var(--color-gray-400);
-  --color-disabled-icon: var(--color-disabled-text);
-  --color-disabled-border: var(--color-gray-300);
-  --color-disabled-outline: var(--color-disabled-border);
+  --color-disabled: var(--color-gray-300);
+  --color-disabled-background: var(--color-gray-100);
 
   /* Surface */
   --color-surface:  var(--color-white);
@@ -78,10 +75,6 @@
 
     --color-negative: var(--color-red-500);
     --color-negative-border-hover: var(--color-red-600);
-
-    --color-disabled-background: var(--color-gray-800);
-    --color-disabled-text: var(--color-gray-600);
-    --color-disabled-border: var(--color-gray-850);
 
     /* Surface */
     --color-surface: var(--color-gray-800);

@@ -32,7 +32,6 @@
     "generate-barrels": "barrelsby -c ./barrelsby-config.json -S -q"
   },
   "dependencies": {
-    "@headlessui/react": "^2.2.5",
     "@tailwindcss/cli": "^4.1.7",
     "@tanstack/react-table": "^8.21.3",
     "clsx": "^2.1.1",

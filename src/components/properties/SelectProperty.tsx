@@ -49,7 +49,7 @@ export const SingleSelectProperty = ({
           options={options}
           disabled={readOnly}
           className={clsx('w-full')}
-          hintText={`${translation('select')}...`}
+          placeholder={`${translation('select')}...`}
           searchOptions={{
             sortingFunction: (a, b) => a.value.localeCompare(b.value),
             ...selectProps?.searchOptions

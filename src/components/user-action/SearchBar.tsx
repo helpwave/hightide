@@ -1,5 +1,5 @@
-import type { InputProps } from './Input'
-import { Input } from './Input'
+import type { InputProps } from './input/Input'
+import { Input } from './input/Input'
 import { useTranslation } from '../../localization/useTranslation'
 import type { FormTranslationType } from '../../localization/defaults/form'
 import { formTranslation } from '../../localization/defaults/form'

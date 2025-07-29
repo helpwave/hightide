@@ -2,6 +2,56 @@
   animation-delay: calc(--value(number) * 1ms);
 }
 
+@utility animate-pop-in {
+  animation: pop-in 0.2s ease-in-out;
+}
+
+@utility animate-pop-out {
+  animation: pop-out 0.2s ease-in-out forwards;
+}
+
+@utility animate-fade-in {
+  animation: fade-in 0.2s ease-in-out;
+}
+
+@utility animate-fade-out {
+  animation: fade-out 0.2s ease-in-out;
+}
+
+@utility animate-fade {
+  animation: fade-out 3s ease-in-out;
+}
+
+@utility animate-wave-big-left-up {
+  animation: bigLeftUp 1.7s ease-in infinite normal;
+  -webkit-animation: bigLeftUp 1.7s ease-in infinite normal;
+}
+
+@utility animate-wave-big-right-down {
+  animation: bigRightDown 1.7s ease-in infinite reverse;
+  -webkit-animation: bigRightDown 1.7s ease-in infinite reverse;
+}
+
+@utility animate-wave-small-left-up {
+  animation: smallLeftUp 1.7s ease-in infinite normal;
+  -webkit-animation: smallLeftUp 1.7s ease-in infinite normal;
+}
+
+@utility animate-wave-small-right-down {
+  animation: smallRightDown 1.7s ease-in infinite reverse;
+  -webkit-animation: smallRightDown 1.7s ease-in infinite reverse;
+}
+
+@utility animate-tooltip-fade-in {
+  animation: fade-in 0.2s ease-in-out forwards;
+  -webkit-animation: fade-in 0.2s ease-in-out forwards;
+}
+
+@utility animate-tooltip-fade-out {
+  animation: fade-in 0.2s ease-in-out forwards;
+  -webkit-animation: fade-in 0.2s ease-in-out forwards;
+}
+
 @layer utilities {
   @keyframes fade-in {
     0% {
@@ -120,14 +170,6 @@
     }
   }
 
-  .animate-pop-in {
-    animation: pop-in 0.2s ease-in-out;
-  }
-
-  .animate-pop-out {
-    animation: pop-out 0.2s ease-in-out forwards;
-  }
-
   .shimmer::before {
     content: '';
     position: absolute;
@@ -144,39 +186,5 @@
       transparent 100%
     );
     animation: shimmer 2s infinite;
-  }
-
-  .animate-fade {
-    animation: fade-out 3s ease-in-out;
-  }
-
-  .animate-wave-big-left-up {
-    animation: bigLeftUp 1.7s ease-in infinite normal;
-    -webkit-animation: bigLeftUp 1.7s ease-in infinite normal;
-  }
-
-  .animate-wave-big-right-down {
-    animation: bigRightDown 1.7s ease-in infinite reverse;
-    -webkit-animation: bigRightDown 1.7s ease-in infinite reverse;
-  }
-
-  .animate-wave-small-left-up {
-    animation: smallLeftUp 1.7s ease-in infinite normal;
-    -webkit-animation: smallLeftUp 1.7s ease-in infinite normal;
-  }
-
-  .animate-wave-small-right-down {
-    animation: smallRightDown 1.7s ease-in infinite reverse;
-    -webkit-animation: smallRightDown 1.7s ease-in infinite reverse;
-  }
-
-  .animate-tooltip-fade-in {
-    animation: fade-in 0.2s ease-in-out forwards;
-    -webkit-animation: fade-in 0.2s ease-in-out forwards;
-  }
-
-  .animate-tooltip-fade-out {
-    animation: fade-in 0.2s ease-in-out forwards;
-    -webkit-animation: fade-in 0.2s ease-in-out forwards;
   }
 }

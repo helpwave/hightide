@@ -6,7 +6,7 @@ import type { Language } from '../../localization/util'
 import { LanguageUtil } from '../../localization/util'
 import { useLanguage } from '../../localization/LanguageProvider'
 import { SolidButton } from '../user-action/Button'
-import { Modal, type ModalProps } from '../layout-and-navigation/Overlay'
+import { Modal, type ModalProps } from '../layout-and-navigation/Dialog'
 
 type LanguageModalTranslation = {
   language: string,

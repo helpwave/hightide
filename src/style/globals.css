@@ -112,7 +112,7 @@
 
   @media (prefers-reduced-motion: reduce) {
     * {
-      @apply !transition-none !animate-none;
+      @apply transition-none animate-none;
     }
   }
 
@@ -156,6 +156,7 @@
   }
 
   /* Otherwise, use `::-webkit-scrollbar-*` pseudo-elements */
+  /*
   @supports selector(::-webkit-scrollbar) {
     :root{
       --scrollbar-width: 10px;
@@ -198,4 +199,5 @@
       background: transparent;
     }
   }
+   */
 }

@@ -64,7 +64,7 @@ const FormExample = ({
 
   return (
     <div className="flex-col-4 w-full">
-      <h4 className="typography-title-lg">{'Fruit Salad Form'}</h4>
+      <span className="typography-title-sm">{'Fruit Salad Form'}</span>
       <FormElementWrapper
         disabled={disabled}
         required={true}
