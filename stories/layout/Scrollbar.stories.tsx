@@ -1,8 +1,8 @@
 import type { Meta, StoryObj } from '@storybook/nextjs'
 import { ScrollArea } from '@/src/components/layout-and-navigation/ScrollArea'
-import { range } from '../../src'
 import { action } from 'storybook/actions'
 import type { ScrollAreaProps } from '../../src/components/layout-and-navigation/ScrollArea'
+import { range } from '../../src/utils/array'
 
 const ScrollbarExample = ({
                             ...props

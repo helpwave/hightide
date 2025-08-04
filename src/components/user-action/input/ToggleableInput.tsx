@@ -1,8 +1,8 @@
 import { forwardRef, useEffect, useImperativeHandle, useRef, useState } from 'react'
 import { Pencil } from 'lucide-react'
 import clsx from 'clsx'
-import type { EditCompleteOptions, InputProps } from '@/src'
-import { Input } from '@/src'
+import type { EditCompleteOptions, InputProps } from '@/src/components/user-action/input/Input'
+import { Input } from '@/src/components/user-action/input/Input'
 
 type ToggleableInputProps = Omit<InputProps, 'defaultStyle'> & {
   initialState?: 'editing' | 'display',

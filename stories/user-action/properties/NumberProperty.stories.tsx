@@ -1,7 +1,7 @@
 import type { Meta, StoryObj } from '@storybook/nextjs'
 import { useEffect, useState } from 'react'
-import type { NumberPropertyProps } from '../../../src'
-import { NumberProperty } from '../../../src'
+import type { NumberPropertyProps } from '../../../src/components/properties/NumberProperty'
+import { NumberProperty } from '../../../src/components/properties/NumberProperty'
 
 type NumberPropertyExampleProps = Omit<NumberPropertyProps, 'onChange' | 'onRemove'>
 

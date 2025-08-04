@@ -1,26 +1,26 @@
 import type { InputProps } from '../user-action/input/Input'
 import { Input } from '../user-action/input/Input'
-import type { ConfirmModalProps } from './ConfirmModal'
-import { ConfirmModal } from './ConfirmModal'
+import type { ConfirmDialogProps } from '@/src/components/dialog/ConfirmDialog'
+import { ConfirmDialog } from '@/src/components/dialog/ConfirmDialog'
 
-export type InputModalProps = ConfirmModalProps & {
+export type InputModalProps = ConfirmDialogProps & {
   inputs: InputProps[],
 }
 
 /**
  * A modal for receiving multiple inputs
  */
-export const InputModal = ({
+export const InputDialog = ({
                              inputs,
                              buttonOverwrites,
-                             ...restProps
+                             ...props
                            }: InputModalProps) => {
   return (
-    <ConfirmModal
+    <ConfirmDialog
       buttonOverwrites={buttonOverwrites}
-      {...restProps}
+      {...props}
     >
       {inputs.map((inputProps, index) => <Input key={`input ${index}`} {...inputProps}/>)}
-    </ConfirmModal>
+    </ConfirmDialog>
   )
 }

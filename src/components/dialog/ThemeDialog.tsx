@@ -1,22 +1,23 @@
-import { type PropsWithChildren } from 'react'
+import { type PropsWithChildren, type ReactNode } from 'react'
 import type { PropsForTranslation, Translation } from '../../localization/useTranslation'
 import { useTranslation } from '../../localization/useTranslation'
 import { Select } from '../user-action/Select'
 import { SolidButton } from '../user-action/Button'
-import { Modal, type ModalProps } from '../layout-and-navigation/Dialog'
 import type { ThemeTypeTranslation } from '../../theming/useTheme'
 import { useTheme } from '../../theming/useTheme'
 import { ThemeUtil } from '../../theming/useTheme'
 import type { FormTranslationType } from '../../localization/defaults/form'
 import { formTranslation } from '../../localization/defaults/form'
+import type { DialogProps } from '@/src/components/dialog/Dialog'
+import { Dialog } from '@/src/components/dialog/Dialog'
 
-type ThemeModalTranslationAddon = {
+type ThemeDialogTranslationAddon = {
   chooseTheme: string,
 }
 
-type ThemeModalTranslation = ThemeModalTranslationAddon & ThemeTypeTranslation & FormTranslationType
+type ThemeDialogTranslation = ThemeDialogTranslationAddon & ThemeTypeTranslation & FormTranslationType
 
-const defaultConfirmDialogTranslation: Translation<ThemeModalTranslationAddon> = {
+const defaultConfirmDialogTranslation: Translation<ThemeDialogTranslationAddon> = {
   en: {
     chooseTheme: 'Choose your preferred theme',
   },
@@ -25,35 +26,35 @@ const defaultConfirmDialogTranslation: Translation<ThemeModalTranslationAddon> =
   }
 }
 
-type ThemeModalProps = ModalProps
+type ThemeDialogProps = Omit<DialogProps, 'title' | 'description'> & {
+  titleOverwrite?: ReactNode,
+  descriptionOverwrite?: ReactNode,
+}
 
 /**
- * A Modal for selecting the Theme
+ * A Dialog for selecting the Theme
  *
  * The State of open needs to be managed by the parent
  */
-export const ThemeModal = ({
-                                overwriteTranslation,
-                                headerProps,
-                                onClose,
-                                ...modalProps
-                              }: PropsForTranslation<ThemeModalTranslation, PropsWithChildren<ThemeModalProps>>) => {
+export const ThemeDialog = ({
+                              overwriteTranslation,
+                              onClose,
+                              titleOverwrite,
+                              descriptionOverwrite,
+                              ...props
+                            }: PropsForTranslation<ThemeDialogTranslation, PropsWithChildren<ThemeDialogProps>>) => {
   const { theme, setTheme } = useTheme()
   const translation = useTranslation([defaultConfirmDialogTranslation, formTranslation, ThemeUtil.translation], overwriteTranslation)
 
   return (
-    <Modal
-      headerProps={{
-        ...headerProps,
-        titleText: headerProps?.titleText ?? translation('theme'),
-        descriptionText: headerProps?.descriptionText ?? translation('chooseTheme'),
-      }}
+    <Dialog
+      title={titleOverwrite ?? translation('theme')}
+      description={descriptionOverwrite ?? translation('chooseTheme')}
       onClose={onClose}
-      {...modalProps}
+      {...props}
     >
       <div className="w-64">
         <Select
-          className="mt-2"
           value={theme}
           options={ThemeUtil.themes.map((theme) => ({ label: translation(theme), value: theme }))}
           onChange={(theme) => setTheme(theme)}
@@ -65,6 +66,6 @@ export const ThemeModal = ({
           </SolidButton>
         </div>
       </div>
-    </Modal>
+    </Dialog>
   )
 }

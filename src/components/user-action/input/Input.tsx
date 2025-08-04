@@ -1,8 +1,9 @@
 import type { InputHTMLAttributes } from 'react'
 import React, { forwardRef, useEffect, useImperativeHandle, useRef, useState } from 'react'
 import clsx from 'clsx'
-import type { UseDelayOptionsResolved } from '@/src'
-import { useDelay, useFocusManagement } from '@/src'
+import type { UseDelayOptionsResolved } from '@/src/hooks/useDelay'
+import { useDelay  } from '@/src/hooks/useDelay'
+import { useFocusManagement } from '@/src/hooks/focus/useFocusManagement'
 
 export type EditCompleteOptionsResolved = {
   onBlur: boolean,

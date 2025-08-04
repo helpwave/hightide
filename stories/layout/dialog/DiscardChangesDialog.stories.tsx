@@ -1,28 +1,29 @@
 import type { Meta, StoryObj } from '@storybook/nextjs'
 import { useState } from 'react'
-import { DiscardChangesModal, SolidButton } from '../../../src'
 import { action } from 'storybook/actions'
+import { DiscardChangesDialog } from '../../../src/components/dialog'
+import { SolidButton } from '../../../src/components/user-action/Button'
 
 
-type DiscardChangesModalExampleProps = {
+type DiscardChangesDialogExampleProps = {
   onDontSave: () => void,
   onSave: () => void,
   onCancel: () => void,
 }
 
 /**
- * An Example Component for the DiscardChangesModal
+ * An Example Component for the DiscardChangesDialog
  */
-const DiscardChangesModalExample = ({
+const DiscardChangesDialogExample = ({
                                       onDontSave,
                                       onSave,
                                       onCancel,
-                                    }: DiscardChangesModalExampleProps) => {
+                                    }: DiscardChangesDialogExampleProps) => {
   const [isOpen, setIsOpen] = useState(false)
 
   return (
     <>
-      <DiscardChangesModal
+      <DiscardChangesDialog
         isOpen={isOpen}
         onCancel={() => {
           onCancel()
@@ -38,21 +39,21 @@ const DiscardChangesModalExample = ({
         }}
       />
       <div className="flex-row-2 items-center justify-center min-h-[400px]">
-        <SolidButton onClick={() => setIsOpen(true)}>Show Modal</SolidButton>
+        <SolidButton onClick={() => setIsOpen(true)}>Show Dialog</SolidButton>
       </div>
     </>
   )
 }
 
 const meta: Meta = {
-  title: 'Layout/Modal',
-  component: DiscardChangesModalExample,
-} satisfies Meta<typeof DiscardChangesModalExample>
+  title: 'Layout/Dialog',
+  component: DiscardChangesDialogExample,
+} satisfies Meta<typeof DiscardChangesDialogExample>
 
 export default meta
 type Story = StoryObj<typeof meta>;
 
-export const discardChangesModal: Story = {
+export const discardChangesDialog: Story = {
   args: {
     onDontSave: action('onDontSave'),
     onSave: action('onSave'),

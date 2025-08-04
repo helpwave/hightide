@@ -1,5 +1,5 @@
 import type { Meta, StoryObj } from '@storybook/nextjs'
-import { Circle } from '../../src'
+import { Circle } from '@/src/components/icons-and-geometry/Circle'
 
 const meta = {
   title: 'Geometry/Circle',

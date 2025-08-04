@@ -1,6 +1,6 @@
 import { action } from 'storybook/actions'
-import { ToggleableInputUncontrolled } from '../../../src'
 import type { Meta, StoryObj } from '@storybook/nextjs'
+import { ToggleableInputUncontrolled } from '../../../src/components/user-action/input/ToggleableInput'
 
 const meta = {
   title: 'User-Action/Input',

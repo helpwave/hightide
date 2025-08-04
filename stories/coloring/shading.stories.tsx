@@ -1,6 +1,7 @@
 import type { Meta, StoryObj } from '@storybook/nextjs'
-import type { ShadedColors } from '../../src'
-import { generateShadingColors, shadingColorValues } from '../../src'
+import type { ShadedColors } from '@/src/coloring/types'
+import { shadingColorValues } from '@/src/coloring/types'
+import { generateShadingColors } from '@/src/coloring/shading'
 
 type StripeProps = {
   shading: Partial<ShadedColors>,

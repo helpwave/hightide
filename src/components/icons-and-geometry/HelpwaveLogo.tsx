@@ -4,16 +4,14 @@ import { clsx } from 'clsx'
 export type HelpwaveProps = SVGProps<SVGSVGElement> & {
   color?: string,
   animate?: 'none' | 'loading' | 'pulse' | 'bounce',
-  size?: number,
 }
 
 /**
  * The helpwave loading spinner based on the svg logo.
  */
-export const Helpwave = ({
+export const HelpwaveLogo = ({
                            color = 'currentColor',
                            animate = 'none',
-                           size = 64,
                            ...props
                          }: HelpwaveProps) => {
   const isLoadingAnimation = animate === 'loading'
@@ -25,15 +23,8 @@ export const Helpwave = ({
     svgAnimationKey = 'animate-bounce'
   }
 
-  if (size < 0) {
-    console.error('size cannot be less than 0')
-    size = 64
-  }
-
   return (
     <svg
-      width={size}
-      height={size}
       viewBox="0 0 888 888"
       fill="none"
       strokeLinecap="round"

@@ -1,6 +1,5 @@
 import type { ReactNode } from 'react'
 import { useCallback, useEffect, useMemo, useRef, useState } from 'react'
-import { Pagination } from '@/src'
 import clsx from 'clsx'
 import type {
   ColumnDef,
@@ -27,16 +26,17 @@ import {
 } from '@tanstack/react-table'
 import { range } from '@/src/utils/array'
 import { Scrollbars } from 'react-custom-scrollbars-2'
-import { Checkbox } from '@/src'
 import { clamp } from '@/src/utils/math'
 import { noop } from '@/src/utils/noop'
-import type { TableFilterType } from '@/src'
-import { TableFilterButton } from '@/src'
-import { TableSortButton } from '@/src'
-import { FillerRowElement } from '@/src'
-import { TableFilters } from '@/src'
-import { useResizeCallbackWrapper } from '@/src'
-import { TableCell } from '@/src'
+import { TableCell } from '@/src/components/table/TableCell'
+import { TableFilters } from '@/src/components/table/Filter'
+import { useResizeCallbackWrapper } from '@/src/hooks/useResizeCallbackWrapper'
+import { TableSortButton } from '@/src/components/table/TableSortButton'
+import type { TableFilterType } from '@/src/components/table/TableFilterButton'
+import { TableFilterButton } from '@/src/components/table/TableFilterButton'
+import { FillerRowElement } from '@/src/components/table/FillerRowElement'
+import { Pagination } from '@/src/components/layout-and-navigation/Pagination'
+import { Checkbox } from '@/src/components/user-action/Checkbox'
 
 declare module '@tanstack/react-table' {
   // eslint-disable-next-line @typescript-eslint/no-unused-vars
@@ -137,7 +137,7 @@ export const Table = <T, >({
 
       // enforce min and max constraints
       columns.forEach((column) => {
-        updateSizing[column.id] = clamp(updateSizing[column.id], computedColumnMinWidths[column.id], computedColumnMaxWidths[column.id] ?? containerWidth)
+        updateSizing[column.id] = clamp(updateSizing[column.id], [computedColumnMinWidths[column.id], computedColumnMaxWidths[column.id] ?? containerWidth])
       })
 
       // table width of the current sizing

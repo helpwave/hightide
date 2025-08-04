@@ -18,8 +18,8 @@ export const insideLabelInput: Story = {
       <span
         className={clsx(
           'text-description',
-          'data-[display=small]:text-sm',
-          'data-[display=full]:text-lg'
+          'data-[display=small]:typography-caption-sm-regular',
+          'data-[display=full]:typography-body-md-regular'
         )}
       >
         Input Label

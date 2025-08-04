@@ -1,6 +1,11 @@
 import type { Meta, StoryObj } from '@storybook/nextjs'
-import type { PropsForTranslation, Translation, TranslationPlural } from '../../src'
-import { useTranslation } from '../../src'
+import type {
+  PropsForTranslation,
+  Translation,
+  TranslationPlural } from '@/src/localization/useTranslation'
+import {
+  useTranslation
+} from '@/src/localization/useTranslation'
 
 type TranslationExampleTranslation = {
   welcome: string,

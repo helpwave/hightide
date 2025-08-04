@@ -1,13 +1,20 @@
 import type { ReactNode } from 'react'
 import { useCallback, useEffect, useState } from 'react'
-import type { FormTranslationType, MenuBag, MenuProps, PropsForTranslation, SelectOption, Translation } from '@/src'
-import { ChipList, ExpansionIcon, formTranslation, Menu, SearchBar, SolidButton, useTranslation } from '@/src'
 import clsx from 'clsx'
 import type { UseSearchProps } from '../../hooks/useSearch'
 import { useSearch } from '../../hooks/useSearch'
-import { Checkbox } from './Checkbox'
-import { Plus } from 'lucide-react'
-import { ListTile } from '../layout-and-navigation/Tile'
+import { CheckIcon, Plus } from 'lucide-react'
+import type { PropsForTranslation, Translation } from '@/src/localization/useTranslation'
+import { useTranslation } from '@/src/localization/useTranslation'
+import type { FormTranslationType } from '@/src/localization/defaults/form'
+import { formTranslation } from '@/src/localization/defaults/form'
+import type { SelectOption } from '@/src/components/user-action/Select'
+import type { MenuBag, MenuProps } from '@/src/components/user-action/Menu'
+import { ChipList } from '@/src/components/layout-and-navigation/Chip'
+import { ExpansionIcon } from '@/src/components/layout-and-navigation/Expandable'
+import { SearchBar } from '@/src/components/user-action/SearchBar'
+import { SolidButton } from '@/src/components/user-action/Button'
+import { Menu } from '@/src/components/user-action/Menu'
 
 type MultiSelectAddonTranslation = {
   selected: string,
@@ -147,19 +154,21 @@ export const MultiSelect = <T, >({
                   }) : value))
                 }
                 return (
-                  <ListTile
+                  <button
                     key={index}
-                    prefix={(
-                      <Checkbox
-                        checked={option.selected}
-                        onChange={update} size="sm"
-                        disabled={option.disabled}
-                      />
-                    )}
-                    title={option.label}
-                    onClick={update}
                     disabled={option.disabled}
-                  />
+                    className={clsx(
+                      'flex-row-2 items-center', {
+                        'text-disabled': option.disabled,
+                      }, option.className
+                    )}
+                    onClick={update}
+                  >
+                    <div aria-hidden={true} className="size-force-4">
+                      {option.selected ? (<CheckIcon/>) : undefined}
+                    </div>
+                    <span>{option.label}</span>
+                  </button>
                 )
               })}
               {additionalItems && additionalItems({ ...bag, search })}

@@ -4,14 +4,14 @@ import { SolidButton } from '../user-action/Button'
 import type { PropsForTranslation } from '../../localization/useTranslation'
 import { useTranslation } from '../../localization/useTranslation'
 import clsx from 'clsx'
-import type { ModalProps } from '../layout-and-navigation/Dialog'
-import { Modal } from '../layout-and-navigation/Dialog'
+import type { DialogProps } from './Dialog'
+import { Dialog } from './Dialog'
 import type { FormTranslationType } from '../../localization/defaults/form'
 import { formTranslation } from '../../localization/defaults/form'
 
-type ConfirmModalTranslation = FormTranslationType
+type ConfirmDialogTranslation = FormTranslationType
 
-export type ConfirmModalType = 'positive' | 'negative' | 'neutral' | 'primary'
+export type ConfirmDialogType = 'positive' | 'negative' | 'neutral' | 'primary'
 
 type ButtonOverwriteType = {
   text?: string,
@@ -19,13 +19,13 @@ type ButtonOverwriteType = {
   disabled?: boolean,
 }
 
-export type ConfirmModalProps = Omit<ModalProps, 'onClose'> & {
+export type ConfirmDialogProps = DialogProps & {
   isShowingDecline?: boolean,
   requireAnswer?: boolean,
   onCancel: () => void,
   onConfirm: () => void,
   onDecline?: () => void,
-  confirmType?: ConfirmModalType,
+  confirmType?: ConfirmDialogType,
   /**
    * Order: Cancel, Decline, Confirm
    */
@@ -33,9 +33,9 @@ export type ConfirmModalProps = Omit<ModalProps, 'onClose'> & {
 }
 
 /**
- * A Modal for asking the user for confirmation
+ * A Dialog for asking the user for confirmation
  */
-export const ConfirmModal = ({
+export const ConfirmDialog = ({
                                 overwriteTranslation,
                                 children,
                                 onCancel,
@@ -45,10 +45,10 @@ export const ConfirmModal = ({
                                 buttonOverwrites,
                                 className,
                                 ...restProps
-                              }: PropsForTranslation<ConfirmModalTranslation, PropsWithChildren<ConfirmModalProps>>) => {
+                              }: PropsForTranslation<ConfirmDialogTranslation, PropsWithChildren<ConfirmDialogProps>>) => {
   const translation = useTranslation([formTranslation], overwriteTranslation)
 
-  const mapping: Record<ConfirmModalType, SolidButtonColor> = {
+  const mapping: Record<ConfirmDialogType, SolidButtonColor> = {
     neutral: 'neutral',
     negative: 'negative',
     positive: 'positive',
@@ -56,7 +56,7 @@ export const ConfirmModal = ({
   }
 
   return (
-    <Modal {...restProps} onClose={onCancel} className={clsx('justify-between', className)}>
+    <Dialog {...restProps} onClose={onCancel} className={clsx('justify-between', className)}>
       <div className="flex-col-2 grow">
         {children}
       </div>
@@ -89,6 +89,6 @@ export const ConfirmModal = ({
           {buttonOverwrites?.[2].text ?? translation('confirm')}
         </SolidButton>
       </div>
-    </Modal>
+    </Dialog>
   )
 }

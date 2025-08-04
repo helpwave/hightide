@@ -1,9 +1,9 @@
 import type { Meta, StoryObj } from '@storybook/nextjs'
 import { useEffect, useState } from 'react'
-import type { MultiSelectOption } from '../../../src'
-import type { MultiSelectPropertyProps } from '../../../src'
-import { MultiSelectProperty } from '../../../src'
 import { action } from 'storybook/actions'
+import type { MultiSelectPropertyProps } from '../../../src/components/properties/MultiSelectProperty'
+import { MultiSelectProperty } from '../../../src/components/properties/MultiSelectProperty'
+import type { MultiSelectOption } from '../../../src/components/user-action/MultiSelect'
 
 type MultiSelectPropertyExample =
   Omit<MultiSelectPropertyProps, 'onChange' | 'onRemove' | 'search' | 'selectedDisplay' | 'options'>

@@ -152,7 +152,7 @@
    * Scrollbar
    */
   @supports (scrollbar-color: auto) {
-    /* Maybe consider later */
+    scrollbar-color: var(--color-gray-500) transparent;
   }
 
   /* Otherwise, use `::-webkit-scrollbar-*` pseudo-elements */

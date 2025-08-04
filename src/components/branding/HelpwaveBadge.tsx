@@ -1,8 +1,7 @@
 import clsx from 'clsx'
-import { Tile } from '../layout-and-navigation/Tile'
-import { Helpwave } from '../icons-and-geometry/Helpwave'
+import { HelpwaveLogo } from '../icons-and-geometry/HelpwaveLogo'
 
-type Size = 'small' | 'large'
+type Size = 'sm' | 'md' | 'lg'
 
 export type HelpwaveBadgeProps = {
   size?: Size,
@@ -14,23 +13,23 @@ export type HelpwaveBadgeProps = {
  * A Badge with the helpwave logo and the helpwave name
  */
 export const HelpwaveBadge = ({
-                                size = 'small',
+                                size = 'sm',
                                 title = 'helpwave',
                                 className = ''
                               }: HelpwaveBadgeProps) => {
-  const iconSize: number = size === 'small' ? 24 : 64
-
   return (
-    <Tile
-      prefix={(<Helpwave size={iconSize}/>)}
+    <span>
+      <HelpwaveLogo className={clsx({
+
+      },className)} />
       title={title}
-      titleClassName={size === 'small' ? 'typography-title-md-semibold' : 'typography-title-lg-semibold'}
+      titleClassName={size === 'sm' ? 'typography-title-md-semibold' : 'typography-title-lg-semibold'}
       className={clsx(
-        {
-          'px-2 py-1 rounded-md': size === 'small',
-          'px-4 py-1 rounded-md': size === 'large',
-        }, className
-      )}
-    />
+      {
+        'px-2 py-1 rounded-md': size === 'sm',
+        'px-4 py-1 rounded-md': size === 'lg',
+      }, className
+    )}
+    </span>
   )
 }

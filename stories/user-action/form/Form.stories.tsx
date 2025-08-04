@@ -2,10 +2,13 @@ import type { Meta, StoryObj } from '@storybook/nextjs'
 import { action } from 'storybook/actions'
 import type { StorybookHelperSelectType } from '../../../src/storybook/helper'
 import { StorybookHelper } from '../../../src/storybook/helper'
-import type { MultiSelectOption } from '../../../src'
-import { FormElementWrapper, MultiSelect, Select, Textarea } from '../../../src'
 import { useState } from 'react'
-import { Input } from '@/src'
+import type { MultiSelectOption } from '../../../src/components/user-action/MultiSelect'
+import { MultiSelect } from '../../../src/components/user-action/MultiSelect'
+import { FormElementWrapper } from '../../../src/components/form/FormElementWrapper'
+import { Input } from '../../../src/components/user-action/input/Input'
+import { Select } from '../../../src/components/user-action/Select'
+import { Textarea } from '../../../src/components/user-action/Textarea'
 
 type FormValue = {
   name: string,
@@ -40,7 +43,7 @@ const FormExample = ({
     setState(prevState => ({ ...prevState, ...value }))
   }
 
-  const requiredValidator = (value: any) => {
+  const requiredValidator = (value: string) => {
     if (!value) {
       return 'This field is required'
     }

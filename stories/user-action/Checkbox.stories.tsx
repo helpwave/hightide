@@ -1,5 +1,5 @@
 import type { Meta, StoryObj } from '@storybook/nextjs'
-import { CheckboxUncontrolled } from '../../src'
+import { CheckboxUncontrolled } from '../../src/components/user-action/Checkbox'
 import { action } from 'storybook/actions'
 
 const meta = {

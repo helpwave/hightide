@@ -1,7 +1,7 @@
 import type { Meta, StoryObj } from '@storybook/nextjs'
 import { useEffect, useState } from 'react'
-import type { TextPropertyProps } from '../../../src'
-import { TextProperty } from '../../../src'
+import type { TextPropertyProps } from '../../../src/components/properties/TextProperty'
+import { TextProperty } from '../../../src/components/properties/TextProperty'
 
 type TextPropertyExampleProps = Omit<TextPropertyProps, 'onChange' | 'onRemove'> & {
   readOnly: boolean,

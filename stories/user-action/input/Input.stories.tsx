@@ -1,6 +1,6 @@
 import type { Meta, StoryObj } from '@storybook/nextjs'
-import { InputUncontrolled } from '../../../src'
 import { action } from 'storybook/actions'
+import { InputUncontrolled } from '../../../src/components/user-action/input/Input'
 
 const meta = {
   title: 'User Action/Input',

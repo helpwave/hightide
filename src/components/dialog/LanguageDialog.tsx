@@ -1,4 +1,4 @@
-import { type PropsWithChildren } from 'react'
+import type { ReactNode, PropsWithChildren } from 'react'
 import type { PropsForTranslation, Translation } from '../../localization/useTranslation'
 import { useTranslation } from '../../localization/useTranslation'
 import { Select } from '../user-action/Select'
@@ -6,15 +6,16 @@ import type { Language } from '../../localization/util'
 import { LanguageUtil } from '../../localization/util'
 import { useLanguage } from '../../localization/LanguageProvider'
 import { SolidButton } from '../user-action/Button'
-import { Modal, type ModalProps } from '../layout-and-navigation/Dialog'
+import type { DialogProps } from '@/src/components/dialog/Dialog'
+import { Dialog } from '@/src/components/dialog/Dialog'
 
-type LanguageModalTranslation = {
+type LanguageDialogTranslation = {
   language: string,
   chooseLanguage: string,
   done: string,
 } & Record<Language, string>
 
-const defaultLanguageModalTranslation: Translation<LanguageModalTranslation> = {
+const defaultLanguageDialogTranslation: Translation<LanguageDialogTranslation> = {
   en: {
     language: 'Language',
     chooseLanguage: 'Choose your language',
@@ -29,35 +30,35 @@ const defaultLanguageModalTranslation: Translation<LanguageModalTranslation> = {
   }
 }
 
-type LanguageModalProps = ModalProps
+type LanguageDialogProps = Omit<DialogProps, 'title' | 'description'> & {
+  titleOverwrite?: ReactNode,
+  descriptionOverwrite?: ReactNode,
+}
 
 /**
- * A Modal for selecting the Language
+ * A Dialog for selecting the Language
  *
  * The State of open needs to be managed by the parent
  */
-export const LanguageModal = ({
-                                overwriteTranslation,
-                                headerProps,
-                                onClose,
-                                ...modalProps
-                              }: PropsForTranslation<LanguageModalTranslation, PropsWithChildren<LanguageModalProps>>) => {
+export const LanguageDialog = ({
+                                 overwriteTranslation,
+                                 onClose,
+                                 titleOverwrite,
+                                 descriptionOverwrite,
+                                 ...props
+                               }: PropsForTranslation<LanguageDialogTranslation, PropsWithChildren<LanguageDialogProps>>) => {
   const { language, setLanguage } = useLanguage()
-  const translation = useTranslation([defaultLanguageModalTranslation], overwriteTranslation)
+  const translation = useTranslation([defaultLanguageDialogTranslation], overwriteTranslation)
 
   return (
-    <Modal
-      headerProps={{
-        ...headerProps,
-        titleText: headerProps?.titleText ?? translation('language'),
-        descriptionText: headerProps?.descriptionText ?? translation('chooseLanguage'),
-      }}
+    <Dialog
+      title={titleOverwrite ?? translation('language')}
+      description={descriptionOverwrite ?? translation('chooseLanguage')}
       onClose={onClose}
-      {...modalProps}
+      {...props}
     >
       <div className="w-64">
         <Select
-          className="mt-2"
           value={language}
           options={LanguageUtil.languages.map((language) => ({ label: translation(language), value: language }))}
           onChange={(language: string) => setLanguage(language as Language)}
@@ -69,6 +70,6 @@ export const LanguageModal = ({
           </SolidButton>
         </div>
       </div>
-    </Modal>
+    </Dialog>
   )
 }

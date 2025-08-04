@@ -1,10 +1,14 @@
 import type { Meta, StoryObj } from '@storybook/nextjs'
 import { useMemo, useState } from 'react'
-import type { TableProps, Translation } from '../../src'
-import { TableWithSelection } from '../../src'
-import { range, SolidButton, TableCell, useTranslation } from '../../src'
 import type { ColumnDef, RowSelectionState } from '@tanstack/react-table'
 import { faker } from '@faker-js/faker'
+import { range } from '../../src/utils/array'
+import type { TableProps } from '../../src/components/table/Table'
+import { TableWithSelection } from '../../src/components/table/Table'
+import type { Translation } from '../../src/localization/useTranslation'
+import { useTranslation } from '../../src/localization/useTranslation'
+import { TableCell } from '../../src/components/table/TableCell'
+import { SolidButton } from '../../src/components/user-action/Button'
 
 type DataType = {
   id: string,

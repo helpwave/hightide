@@ -1,6 +1,6 @@
 import type { Meta, StoryObj } from '@storybook/nextjs'
-import type { TooltipProps } from '../../../src'
-import { Tooltip } from '../../../src'
+import type { TooltipProps } from '../../../src/components/user-action/Tooltip'
+import { Tooltip } from '../../../src/components/user-action/Tooltip'
 
 type TooltipStackExampleProps = Omit<TooltipProps, 'children' | 'tooltip'>
 

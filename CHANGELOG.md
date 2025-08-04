@@ -168,7 +168,7 @@ and adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
 ### Fixed
 
-- fixed `LanguageModal` and `ThemeModal` not displaying their text in the Select
+- fixed `LanguageModal` and `ThemeDialog` not displaying their text in the Select
 
 ## [0.1.10] - 2025-07-02
 
@@ -241,7 +241,7 @@ and adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
 ### Fixed
 
-- `InputModal` is now a modal and not a dialog
+- `InputDialog` is now a modal and not a dialog
 - Button now have the not-allowed cursor when disabled
 - Removed gap in `BreadCrumb` components
 
@@ -272,7 +272,7 @@ and adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
 - .editorconfig
 - `IconButton`
-- `ThemeModal`
+- `ThemeDialog`
 - [`storybookThemeOverride.css`](./.storybook/storybookStyleOverrides.css)
 
 ### Changed

@@ -1,6 +1,6 @@
 import type { Meta, StoryObj } from '@storybook/nextjs'
-import { ListTile, SearchableList } from '../../src'
 import { action } from 'storybook/actions'
+import { SearchableList } from '../../src/components/layout-and-navigation/SearchableList'
 
 const meta = {
   title: 'Layout/SearchableList',
@@ -16,7 +16,9 @@ export const searchableList: Story = {
     initialSearch: '',
     searchMapping: value => [value],
     itemMapper: value => (
-      <ListTile title={value} onClick={action(`Clicked on ${value}`)}/>
+      <div key={value.index} onClick={action(`Clicked on ${value}`)}>
+        {value.value}
+      </div>
     ),
     minimumItemsForSearch: 5,
     overwriteTranslation: {},

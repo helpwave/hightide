@@ -25,16 +25,16 @@
   "scripts": {
     "clean": "rm -rf dist",
     "build-css": "npx @tailwindcss/cli -i src/style/globals.css -o ./dist/style/globals.css",
-    "build": "npm run clean && npm run generate-barrels && tsup && npm run build-css && cp -R src/style/ ./dist/style/uncompiled/",
+    "build": "npm run clean && tsup && npm run build-css && cp -R src/style/ ./dist/style/uncompiled/",
     "storybook": "storybook dev -p 6006",
     "build-storybook": "storybook build",
-    "lint": "eslint .",
-    "generate-barrels": "barrelsby -c ./barrelsby-config.json -S -q"
+    "lint": "eslint ."
   },
   "dependencies": {
     "@tailwindcss/cli": "^4.1.7",
     "@tanstack/react-table": "^8.21.3",
     "clsx": "^2.1.1",
+    "cmdk": "^1.1.1",
     "lucide-react": "0.468.0",
     "postcss": "^8.5.3",
     "prop-types": "15.8.1",

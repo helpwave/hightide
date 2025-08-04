@@ -1,8 +1,9 @@
 import type { ReactNode, TextareaHTMLAttributes } from 'react'
 import { forwardRef, useEffect, useId, useState } from 'react'
 import clsx from 'clsx'
-import type { LabelProps } from '@/src'
-import { Label, useDelay, type UseDelayOptions } from '@/src'
+import type { LabelProps } from '@/src/components/user-action/Label'
+import { Label } from '@/src/components/user-action/Label'
+import { useDelay, type UseDelayOptions } from '@/src/hooks/useDelay'
 import { noop } from '@/src/utils/noop'
 
 export type TextareaProps = Omit<TextareaHTMLAttributes<HTMLTextAreaElement>, 'value'> & {

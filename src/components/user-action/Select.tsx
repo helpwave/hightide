@@ -2,13 +2,13 @@ import type { ReactNode } from 'react'
 import { useCallback } from 'react'
 import { useEffect, useState } from 'react'
 import clsx from 'clsx'
-import { ListTile } from '../layout-and-navigation/Tile'
 import { ExpansionIcon } from '../layout-and-navigation/Expandable'
 import type { MenuBag, MenuProps } from './Menu'
 import { Menu } from './Menu'
 import { SearchBar } from './SearchBar'
 import type { UseSearchProps } from '../../hooks/useSearch'
 import { useSearch } from '../../hooks/useSearch'
+import { CheckIcon } from 'lucide-react'
 
 export type SelectOption<T> = {
   label: ReactNode,
@@ -106,21 +106,30 @@ export const Select = <T, >({
                   autoFocus={true}
                 />
               )}
-              <div className="flex-col-2 overflow-y-auto">
-                {result.map((option, index) => (
-                  <ListTile
-                    key={index}
-                    isSelected={option === selectedOption}
-                    title={option.label}
-                    onClick={() => {
-                      onChange(option.value)
-                      close()
-                    }}
-                    disabled={option.disabled}
-                  />
-                ))}
-                {additionalItems && additionalItems({ ...bag, search, selected: value })}
-              </div>
+                <div className="flex-col-2 overflow-y-auto">
+                  {result.map((option, index) => (
+                    <button
+                      key={index}
+                      disabled={option.disabled}
+                      className={clsx(
+                        'flex-row-1 items-center px-2 py-1 rounded-md', {
+                          'text-disabled': option.disabled,
+                          'hover:bg-primary/20': !option.disabled
+                        }, option.className
+                      )}
+                      onClick={() => {
+                        onChange(option.value)
+                        close()
+                      }}
+                    >
+                      <div aria-hidden={true} className="size-force-4">
+                        {option === selectedOption ? (<CheckIcon className="w-full h-full"/>) : undefined}
+                      </div>
+                      <span>{option.label}</span>
+                    </button>
+                  ))}
+                  {additionalItems && additionalItems({ ...bag, search, selected: value })}
+                </div>
             </>
           )
         }}

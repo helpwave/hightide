@@ -1,6 +1,6 @@
 import { useEffect, useState } from 'react'
-import type { PropsWithBagFunctionOrChildren } from '@/src'
-import { BagFunctionUtil } from '@/src'
+import type { PropsWithBagFunctionOrChildren } from '@/src/utils/bagFunctions'
+import { BagFunctionUtil } from '@/src/utils/bagFunctions'
 
 type TransitionBag = {
   isOpen: boolean,

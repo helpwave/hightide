@@ -1,5 +1,5 @@
 import type { Meta, StoryObj } from '@storybook/nextjs'
-import { SolidButton } from '../../../src'
+import { SolidButton } from '../../../src/components/user-action/Button'
 import { action } from 'storybook/actions'
 import { StorybookHelper } from '../../../src/storybook/helper'
 

@@ -2,7 +2,9 @@ import type { PropsWithChildren, ReactNode } from 'react'
 import clsx from 'clsx'
 import * as DialogPrimitive from '@radix-ui/react-dialog'
 import { X } from 'lucide-react'
-import { formTranslation, IconButton, useTranslation } from '@/src'
+import { useTranslation } from '@/src/localization/useTranslation'
+import { formTranslation } from '@/src/localization/defaults/form'
+import { IconButton } from '@/src/components/user-action/Button'
 
 export type DialogProps = PropsWithChildren<{
   /** Whether the dialog is currently open */
@@ -85,7 +87,7 @@ export const Dialog = ({
           {isModal && (
             <DialogPrimitive.Close asChild={true}>
               <IconButton
-                className="absolute top-4 right-4"
+                className="absolute top-2 right-2"
                 color="neutral"
                 size="tiny"
                 aria-label={translation('close')}

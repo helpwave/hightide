@@ -1,5 +1,5 @@
 import type { Meta, StoryObj } from '@storybook/nextjs'
-import { RingWave } from '../../../src'
+import { RingWave } from '@/src/components/icons-and-geometry/Ring'
 
 const meta = {
   title: 'Geometry/Ring',

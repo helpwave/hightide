@@ -1,5 +1,5 @@
 import type { Meta, StoryObj } from '@storybook/nextjs'
-import { AnimatedRing } from '../../../src'
+import { AnimatedRing } from '@/src/components/icons-and-geometry/Ring'
 
 const meta = {
   title: 'Geometry/Ring',

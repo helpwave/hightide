@@ -1,5 +1,5 @@
 import type { Meta, StoryObj } from '@storybook/nextjs'
-import { TextareaUncontrolled } from '../../src'
+import { TextareaUncontrolled } from '../../src/components/user-action/Textarea'
 
 const meta = {
   title: 'User Action',

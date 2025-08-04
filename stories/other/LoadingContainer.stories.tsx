@@ -1,5 +1,5 @@
 import type { Meta, StoryObj } from '@storybook/nextjs'
-import { LoadingContainer } from '../../src'
+import { LoadingContainer } from '@/src/components/loading-states/LoadingContainer'
 
 const meta = {
   title: 'Other/Loading',

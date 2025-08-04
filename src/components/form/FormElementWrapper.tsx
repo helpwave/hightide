@@ -1,8 +1,9 @@
 import type { HTMLAttributes, ReactNode } from 'react'
 import { useId } from 'react'
-import type { BagFunction, LabelProps } from '@/src'
-import { Label } from '@/src'
 import { clsx } from 'clsx'
+import type { BagFunction } from '@/src/utils/bagFunctions'
+import type { LabelProps } from '@/src/components/user-action/Label'
+import { Label } from '@/src/components/user-action/Label'
 
 type FormElementWrapperBag = {
   'invalid': boolean,

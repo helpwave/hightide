@@ -1,16 +1,18 @@
-import type { Meta, StoryObj  } from '@storybook/nextjs'
+import type { Meta, StoryObj } from '@storybook/nextjs'
 import { useState } from 'react'
-import { ThemeModal, SolidButton } from '../../../src'
+import { LanguageDialog } from '../../../src/components/dialog'
+import { SolidButton } from '../../../src/components/user-action/Button'
+
 
 /**
- * An implementation of the ThemeModal
+ * An implementation of the LanguageModal
  */
-const ThemeModalExample = () => {
+const LanguageModalExample = () => {
   const [isOpen, setIsOpen] = useState(false)
 
   return (
     <>
-      <ThemeModal
+      <LanguageDialog
         isOpen={isOpen}
         onClose={() => setIsOpen(false)}
       />
@@ -23,13 +25,13 @@ const ThemeModalExample = () => {
 
 const meta: Meta = {
   title: 'Util/Modal',
-  component: ThemeModalExample,
+  component: LanguageModalExample,
 }
 
 export default meta
 type Story = StoryObj<typeof meta>;
 
-export const themeModal: Story = {
-  render: () => <ThemeModalExample/>,
+export const languageModal: Story = {
+  render: () => <LanguageModalExample/>,
   args: {}
 }

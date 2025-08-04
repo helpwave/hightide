@@ -1,9 +1,9 @@
 import clsx from 'clsx'
 import type { CSSProperties } from 'react'
-import { useState } from 'react'
 import { useMemo } from 'react'
 import { UserIcon } from 'lucide-react'
 import Image from 'next/image'
+import * as AvatarPrimitive from '@radix-ui/react-avatar'
 
 const avtarSizeList = ['sm', 'md', 'lg', 'xl'] as const
 export type AvatarSize = typeof avtarSizeList[number]
@@ -45,7 +45,6 @@ export type AvatarProps = {
  */
 export const Avatar = ({ image, name, size = 'md', fullyRounded, className = '' }: AvatarProps) => {
   const pixels = avatarSizeMapping[size]
-  const [hasImageError, setHasImageError] = useState<boolean>(false)
 
   const sizeStyle: CSSProperties = {
     minWidth: pixels,
@@ -73,39 +72,29 @@ export const Avatar = ({ image, name, size = 'md', fullyRounded, className = '' 
   }
 
   return (
-    <div
+    <AvatarPrimitive.Root
       className={clsx(
-        `relative bg-primary text-on-primary`,
+        `flex-row-0 items-center justify-center bg-primary text-on-primary`,
         rounding,
         className
       )}
       style={sizeStyle}
     >
-      {name && (!image || hasImageError) && (
-        <span className={clsx(textClassName, 'absolute z-[1] left-1/2 top-1/2 -translate-x-1/2 -translate-y-1/2')}>
-          {displayName}
-        </span>
-      )}
-      {!name && (
-        <div className={clsx('absolute z-[1] left-1/2 top-1/2 -translate-x-1/2 -translate-y-1/2')}>
+      <AvatarPrimitive.Image
+        src={image?.avatarUrl}
+        alt={image?.alt}
+        className={clsx(rounding)}
+      />
+      <AvatarPrimitive.Fallback asChild>
+        {name ? (
+          <span className={textClassName}>
+            {displayName}
+          </span>
+        ) : (
           <UserIcon size={Math.round(pixels * 3 / 4)}/>
-        </div>
-      )}
-      {image && !hasImageError && (
-        <Image
-          className={clsx(
-            'absolute z-[2] left-1/2 top-1/2 -translate-x-1/2 -translate-y-1/2',
-            rounding
-          )}
-          src={image.avatarUrl}
-          alt={image.alt}
-          style={sizeStyle}
-          width={pixels}
-          height={pixels}
-          onError={() => setHasImageError(true)}
-        />
-      )}
-    </div>
+        )}
+      </AvatarPrimitive.Fallback>
+    </AvatarPrimitive.Root>
   )
 }
 

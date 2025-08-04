@@ -8,7 +8,6 @@ import type { SelectProps } from '../user-action/Select'
 import { Select } from '../user-action/Select'
 import type { FormTranslationType } from '../../localization/defaults/form'
 import { formTranslation } from '../../localization/defaults/form'
-import { ListTile } from '../layout-and-navigation/Tile'
 
 type SingleSelectPropertyTranslation = FormTranslationType
 
@@ -48,8 +47,6 @@ export const SingleSelectProperty = ({
           value={value}
           options={options}
           disabled={readOnly}
-          className={clsx('w-full')}
-          placeholder={`${translation('select')}...`}
           searchOptions={{
             sortingFunction: (a, b) => a.value.localeCompare(b.value),
             ...selectProps?.searchOptions
@@ -58,16 +55,26 @@ export const SingleSelectProperty = ({
             if (!onAddNew && !search.trim()) {
               return undefined
             }
+            const disabled = options.some(value => value.value === search.trim())
             return (
-              <ListTile
-                prefix={(<Plus/>)}
-                title={`${translation('add')} ${search.trim()}`}
+              <button
+                key="add new"
+                disabled={disabled}
+                className={clsx(
+                  'flex-row-2 items-center', {
+                    'text-disabled': disabled,
+                  }
+                )}
                 onClick={() => {
                   onAddNew(search)
                   close()
                 }}
-                disabled={options.some(value => value.value === search.trim())}
-              />
+              >
+                <div aria-hidden={true} className="size-force-4">
+                  <Plus/>
+                </div>
+                <span>{`${translation('add')} ${search.trim()}`}</span>
+              </button>
             )
           }}
           triggerClassName={clsx(

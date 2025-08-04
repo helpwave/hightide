@@ -1,4 +1,4 @@
-import { List, Plus } from 'lucide-react'
+import { CheckIcon, List, Plus } from 'lucide-react'
 import clsx from 'clsx'
 import type { PropsForTranslation } from '../../localization/useTranslation'
 import { useTranslation } from '../../localization/useTranslation'
@@ -8,7 +8,6 @@ import type { PropertyBaseProps } from './PropertyBase'
 import { PropertyBase } from './PropertyBase'
 import type { FormTranslationType } from '../../localization/defaults/form'
 import { formTranslation } from '../../localization/defaults/form'
-import { ListTile } from '../layout-and-navigation/Tile'
 
 type TranslationType = FormTranslationType
 
@@ -44,7 +43,6 @@ export const MultiSelectProperty = ({
       input={({ softRequired }) => (
         <MultiSelect
           {...multiSelectProps}
-          className={clsx('w-full', { 'bg-surface-warning': softRequired && !hasValue })}
           options={options}
           disabled={readOnly}
           useChipDisplay={true}
@@ -57,16 +55,26 @@ export const MultiSelectProperty = ({
             if (!onAddNew && !search.trim()) {
               return undefined
             }
+            const disabled = options.some(value => value.value === search.trim())
             return (
-              <ListTile
-                prefix={(<Plus/>)}
-                title={`${translation('add')} ${search.trim()}`}
+              <button
+                key="add new"
+                disabled={disabled}
+                className={clsx(
+                  'flex-row-2 items-center', {
+                    'text-disabled': disabled,
+                  }
+                )}
                 onClick={() => {
                   onAddNew(search)
                   close()
                 }}
-                disabled={options.some(value => value.value === search.trim())}
-              />
+              >
+                <div aria-hidden={true} className="size-force-4">
+                  <Plus/>
+                </div>
+                <span>{`${translation('add')} ${search.trim()}`}</span>
+              </button>
             )
           }}
           triggerClassName={clsx(

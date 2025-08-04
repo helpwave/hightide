@@ -1,7 +1,7 @@
 import type { PropsForTranslation } from '../../localization/useTranslation'
 import { useTranslation } from '../../localization/useTranslation'
 import clsx from 'clsx'
-import { Helpwave } from '../icons-and-geometry/Helpwave'
+import { HelpwaveLogo } from '../icons-and-geometry/HelpwaveLogo'
 import type { FormTranslationType } from '../../localization/defaults/form'
 import { formTranslation } from '../../localization/defaults/form'
 
@@ -23,7 +23,7 @@ export const LoadingAnimation = ({
   const translation = useTranslation([formTranslation], overwriteTranslation)
   return (
     <div className={clsx('flex-col-2 items-center justify-center w-full h-24', classname)}>
-      <Helpwave animate="loading"/>
+      <HelpwaveLogo animate="loading"/>
       {loadingText ?? `${translation('loading')}...`}
     </div>
   )

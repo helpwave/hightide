@@ -1,8 +1,9 @@
 import type { Meta, StoryObj } from '@storybook/nextjs'
 import { useEffect, useState } from 'react'
-import type { SelectOption, SingleSelectPropertyProps } from '../../../src'
-import { SingleSelectProperty } from '../../../src'
 import { action } from 'storybook/actions'
+import type { SingleSelectPropertyProps } from '../../../src/components/properties/SelectProperty'
+import { SingleSelectProperty } from '../../../src/components/properties/SelectProperty'
+import type { SelectOption } from '../../../src/components/user-action/Select'
 
 type SingleSelectPropertyExample = Omit<SingleSelectPropertyProps, 'onChange' | 'onRemove' | 'searchMapping' | 'options'>
 
@@ -11,7 +12,6 @@ type SingleSelectPropertyExample = Omit<SingleSelectPropertyProps, 'onChange' | 
  */
 const SingleSelectPropertyExample = ({
                                        value,
-                                       placeholder,
                                        ...restProps
                                      }: SingleSelectPropertyExample) => {
   const [usedValue, setUsedValue] = useState<string | undefined>(value)
@@ -30,10 +30,6 @@ const SingleSelectPropertyExample = ({
     ].map<SelectOption<string>>(value => ({ ...value, searchTags: [value.label] }))
   )
 
-
-  useEffect(() => {
-    setUsedValue(undefined)
-  }, [placeholder])
 
   useEffect(() => {
     if (options.find(value1 => value1.value === value)) {
@@ -62,7 +58,6 @@ const SingleSelectPropertyExample = ({
         }])
         setUsedValue(value)
       }}
-      placeholder={placeholder}
     />
   )
 }

@@ -1,6 +1,7 @@
 import type { Meta, StoryObj } from '@storybook/nextjs'
 import { useState } from 'react'
-import { Dialog, SolidButton } from '../../../src'
+import { Dialog } from '../../../src/components/dialog/Dialog'
+import { SolidButton } from '../../../src/components/user-action/Button'
 
 
 /**
@@ -16,17 +17,17 @@ const StackedDialog = () => {
         <SolidButton onClick={() => setModal1(true)}>Open Dialog</SolidButton>
       </div>
 
-      <Dialog headerProps={{ titleText: 'Dialog 1' }} isOpen={modal1} className="w-[300px]">
+      <Dialog title="Dialog 1" description="This is the first Dialog" isOpen={modal1} className="w-[300px]">
         <SolidButton onClick={() => setModal2(true)}>Open 2</SolidButton>
         <SolidButton color="negative" onClick={() => setModal1(false)}>Close</SolidButton>
       </Dialog>
 
-      <Dialog headerProps={{ titleText: 'Dialog 2' }} isOpen={modal2} className="w-[400px] bg-positive text-on-positive">
+      <Dialog title="Dialog 2" description="This is the second Dialog" isOpen={modal2} className="w-[400px] bg-positive text-on-positive">
         <SolidButton onClick={() => setModal3(true)}>Open 3</SolidButton>
         <SolidButton color="negative" onClick={() => setModal2(false)}>Close</SolidButton>
       </Dialog>
 
-      <Dialog headerProps={{ titleText: 'Dialog 3' }} isOpen={modal3}>
+      <Dialog title="Dialog 3" description="This is the third Dialog. Click below to close it." isOpen={modal3}>
         <SolidButton color="negative" onClick={() => setModal3(false)}>Close 3</SolidButton>
       </Dialog>
     </>

@@ -1,6 +1,6 @@
 import type { Meta, StoryObj } from '@storybook/nextjs'
-import type { AvatarProps } from '../../src'
-import { Avatar } from '../../src'
+import { Avatar } from '@/src/components/icons-and-geometry/Avatar'
+import type { AvatarProps } from '@/src/components/icons-and-geometry/Avatar'
 
 type AvatarExampleProps = Omit<AvatarProps, 'image'> & {
   useImage?: boolean,

@@ -1,5 +1,6 @@
 import type { Meta, StoryObj } from '@storybook/nextjs'
-import { ButtonColorUtil, LoadingButton } from '../../../src'
+import { ButtonColorUtil } from '../../../src/components/user-action/Button'
+import { LoadingButton } from '../../../src/components/loading-states/LoadingButton'
 
 const meta = {
   title: 'User Action/Button',

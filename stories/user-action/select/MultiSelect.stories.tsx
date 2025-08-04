@@ -1,6 +1,6 @@
 import { action } from 'storybook/actions'
-import type { MultiSelectProps } from '../../../src'
-import { MultiSelectUncontrolled } from '../../../src'
+import type { MultiSelectProps } from '../../../src/components/user-action/MultiSelect'
+import { MultiSelectUncontrolled } from '../../../src/components/user-action/MultiSelect'
 import type { Meta, StoryObj } from '@storybook/nextjs'
 
 type MultiSelectExampleProps = Omit<MultiSelectProps<string>, 'selectedDisplayOverwrite'>
@@ -13,7 +13,6 @@ const MultiSelectExample = ({
     <MultiSelectUncontrolled
       {...props}
       hintText={hintText}
-      className="max-w-128"
     />
   )
 }
@@ -30,14 +29,11 @@ type Story = StoryObj<typeof meta>;
 
 export const multiSelect: Story = {
   args: {
-    label: { name: 'Your favourite fruit' },
     disabled: false,
     hintText: undefined,
-    isSearchEnabled: true,
     useChipDisplay: true,
     alignmentVertical: 'bottomOutside',
     alignmentHorizontal: 'leftInside',
-    className: '',
     onChange: action('onChange'),
     options: [
       { value: 'apple', selected: false, label: 'Apple', searchTags: ['Apple'] },

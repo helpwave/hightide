@@ -11,9 +11,10 @@ import type { UseSearchProps } from '../../hooks/useSearch'
 import { useSearch } from '../../hooks/useSearch'
 import type { FormTranslationType } from '../../localization/defaults/form'
 import { formTranslation } from '../../localization/defaults/form'
-import type { BagFunction } from '@/src'
-import { clamp } from '@/src'
-import { ArrayUtil, ScrollArea } from '@/src'
+import { clamp } from '@/src/utils/math'
+import { ArrayUtil } from '@/src/utils/array'
+import { ScrollArea } from '@/src/components/layout-and-navigation/ScrollArea'
+import type { BagFunction } from '@/src/utils/bagFunctions'
 
 type SelectableListItemType = {
   id: string,
