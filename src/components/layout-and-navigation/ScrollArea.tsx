@@ -90,7 +90,7 @@ export const ScrollArea = ({
           'border-inherit',
           {
             'w-[calc(100%_-_var(--scrollbar-size))] h-[calc(100%_-_var(--scrollbar-size))]': scrollbarType === 'always',
-            'h-full w-full': scrollbarType === 'scroll' || scrollbarType === 'hover' || scrollbarType === 'auto',
+            'w-full h-full': scrollbarType === 'scroll' || scrollbarType === 'hover' || scrollbarType === 'auto',
             'peer-[&:where([data-state=visible])]/horizontal:h-[calc(100%_-_var(--scrollbar-size))] peer-[&:where([data-state=visible])]/vertical:w-[calc(100%_-_var(--scrollbar-size))]': scrollbarType === 'auto',
           }
         )}

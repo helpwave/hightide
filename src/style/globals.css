@@ -110,6 +110,10 @@
     @apply ring-2 ring-focus;
   }
 
+  .no-focus-style:focus-visible {
+    @apply ring-0;
+  }
+
   @media (prefers-reduced-motion: reduce) {
     * {
       @apply transition-none animate-none;
@@ -152,12 +156,17 @@
    * Scrollbar
    */
   @supports (scrollbar-color: auto) {
-    scrollbar-color: var(--color-gray-500) transparent;
+    * {
+      scrollbar-color: var(--color-gray-500) transparent;
+    }
   }
 
   /* Otherwise, use `::-webkit-scrollbar-*` pseudo-elements */
-  /*
   @supports selector(::-webkit-scrollbar) {
+    * {
+      scrollbar-color: initial;
+    }
+
     :root{
       --scrollbar-width: 10px;
       --scrollbar-padding: 1px;
@@ -199,5 +208,4 @@
       background: transparent;
     }
   }
-   */
 }

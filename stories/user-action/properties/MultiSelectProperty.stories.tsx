@@ -3,7 +3,7 @@ import { useEffect, useState } from 'react'
 import { action } from 'storybook/actions'
 import type { MultiSelectPropertyProps } from '../../../src/components/properties/MultiSelectProperty'
 import { MultiSelectProperty } from '../../../src/components/properties/MultiSelectProperty'
-import type { MultiSelectOption } from '../../../src/components/user-action/MultiSelect'
+import type { MultiSelectOption } from '../../../src/components/user-action/select/MultiSelect'
 
 type MultiSelectPropertyExample =
   Omit<MultiSelectPropertyProps, 'onChange' | 'onRemove' | 'search' | 'selectedDisplay' | 'options'>

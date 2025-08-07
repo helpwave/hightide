@@ -1,7 +1,8 @@
+'use client'
+
 import type { MutableRefObject } from 'react'
 import { useEffect, useRef } from 'react'
 import { useIsMounted } from '@/src/hooks/focus/useIsMounted'
-import { useFocusGuards } from '@/src/hooks/focus/useFocusGuards'
 
 export type UseFocusTrapProps = {
   container: MutableRefObject<HTMLElement>,
@@ -17,13 +18,12 @@ export const useFocusTrap = ({
   const lastFocusRef = useRef<HTMLElement | null>(null)
   const isMounted = useIsMounted()
 
-  useFocusGuards()
-
   useEffect(() => {
     if (active && isMounted) {
+      lastFocusRef.current = document.activeElement as HTMLElement
       function onFocusIn(event: FocusEvent) {
-        console.log('active')
-        if (!container.current?.contains(event.target as HTMLElement)) {
+        if (!container?.current.contains(event.target as HTMLElement)) {
+          console.log('noContained')
           if (initialFocus?.current) {
             initialFocus.current.focus()
           } else {
@@ -38,7 +38,10 @@ export const useFocusTrap = ({
       }
 
       document.addEventListener('focusin', onFocusIn)
-      return () => document.removeEventListener('focusin', onFocusIn)
+      return () => {
+        lastFocusRef.current?.focus()
+        document.removeEventListener('focusin', onFocusIn)
+      }
     }
-  }, [active, container, initialFocus, isMounted])
+  }, [active, isMounted])
 }

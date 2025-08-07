@@ -3,7 +3,7 @@ import { useEffect, useState } from 'react'
 import { action } from 'storybook/actions'
 import type { SingleSelectPropertyProps } from '../../../src/components/properties/SelectProperty'
 import { SingleSelectProperty } from '../../../src/components/properties/SelectProperty'
-import type { SelectOption } from '../../../src/components/user-action/Select'
+import type { SelectOption } from '../../../src/components/user-action/select/Select'
 
 type SingleSelectPropertyExample = Omit<SingleSelectPropertyProps, 'onChange' | 'onRemove' | 'searchMapping' | 'options'>
 
@@ -27,12 +27,12 @@ const SingleSelectPropertyExample = ({
       { value: 'pineapple', label: 'Pineapple' },
       { value: 'kiwi', label: 'Kiwi' },
       { value: 'watermelon', label: 'Watermelon' },
-    ].map<SelectOption<string>>(value => ({ ...value, searchTags: [value.label] }))
+    ].map<SelectOption<string>>(value => ({ ...value, keywords: [value.label] }))
   )
 
 
   useEffect(() => {
-    if (options.find(value1 => value1.value === value)) {
+    if (options.find(value1 => value1.id === value)) {
       setUsedValue(value)
     }
   }, [value, options])
@@ -52,9 +52,9 @@ const SingleSelectPropertyExample = ({
       }}
       onAddNew={(value) => {
         setOptions(prevState => [...prevState, {
-          value,
+          id: value,
           label: value,
-          searchTags: [value],
+          keywords: [value],
         }])
         setUsedValue(value)
       }}

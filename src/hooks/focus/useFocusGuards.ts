@@ -1,3 +1,5 @@
+import { useEffect } from 'react'
+
 const selectorName = 'data-hw-focus-guard'
 
 function FocusGuard() {
@@ -44,8 +46,10 @@ class FocusGuardsService {
 }
 
 export const useFocusGuards = () => {
-  FocusGuardsService.getInstance().add()
-  return () => {
-    FocusGuardsService.getInstance().remove()
-  }
+  useEffect(() => {
+    FocusGuardsService.getInstance().add()
+    return () => {
+      FocusGuardsService.getInstance().remove()
+    }
+  }, [])
 }

@@ -1,28 +1,11 @@
 import { action } from 'storybook/actions'
-import type { MultiSelectProps } from '../../../src/components/user-action/MultiSelect'
-import { MultiSelectUncontrolled } from '../../../src/components/user-action/MultiSelect'
+import { MultiSelectUncontrolled } from '../../../src/components/user-action/select/MultiSelect'
 import type { Meta, StoryObj } from '@storybook/nextjs'
-
-type MultiSelectExampleProps = Omit<MultiSelectProps<string>, 'selectedDisplayOverwrite'>
-
-const MultiSelectExample = ({
-                              hintText,
-                              ...props
-                            }: MultiSelectExampleProps) => {
-  return (
-    <MultiSelectUncontrolled
-      {...props}
-      hintText={hintText}
-    />
-  )
-}
-
 
 const meta = {
   title: 'User Action/Select',
-  component: MultiSelectExample,
-} satisfies Meta<
-  typeof MultiSelectExample>
+  component: MultiSelectUncontrolled,
+} satisfies Meta<typeof MultiSelectUncontrolled>
 
 export default meta
 type Story = StoryObj<typeof meta>;
@@ -30,30 +13,22 @@ type Story = StoryObj<typeof meta>;
 export const multiSelect: Story = {
   args: {
     disabled: false,
-    hintText: undefined,
     useChipDisplay: true,
-    alignmentVertical: 'bottomOutside',
-    alignmentHorizontal: 'leftInside',
     onChange: action('onChange'),
+    value: ['Apple', 'Cherry'],
     options: [
-      { value: 'apple', selected: false, label: 'Apple', searchTags: ['Apple'] },
-      { value: 'banana', selected: false, label: 'Banana', disabled: true, searchTags: ['Banana'] },
-      { value: 'cherry', selected: false, label: 'Cherry', searchTags: ['Cherry'] },
-      {
-        value: 'dragonfruit',
-        selected: false,
-        label: 'Dragonfruit',
-        className: '!text-red-400',
-        searchTags: ['Dragonfruit']
-      },
-      { value: 'elderberry', selected: false, label: 'Elderberry', searchTags: ['Elderberry'] },
-      { value: 'fig', selected: false, label: 'Fig', disabled: true, searchTags: ['Fig'] },
-      { value: 'grapefruit', selected: false, label: 'Grapefruit', searchTags: ['Grapefruit'] },
-      { value: 'honeydew', selected: false, label: 'Honeydew', searchTags: ['Honeydew'] },
-      { value: 'indianfig', selected: false, label: 'Indian Fig', searchTags: ['Indian Fig'] },
-      { value: 'jackfruit', selected: false, label: 'Jackfruit', searchTags: ['Jackfruit'] },
-      { value: 'kiwifruit', selected: false, label: 'Kiwifruit', searchTags: ['Kiwifruit'] },
-      { value: 'lemon', selected: false, label: 'Lemon', disabled: true, searchTags: ['Lemon'] }
+      { value: 'Apple' },
+      { value: 'Banana', disabled: true },
+      { value: 'Cherry' },
+      { value: 'Dragonfruit', className: '!text-red-400' },
+      { value: 'Elderberry' },
+      { value: 'Fig' },
+      { value: 'Grapefruit' },
+      { value: 'Honeydew' },
+      { value: 'Indianfig' },
+      { value: 'Jackfruit' },
+      { value: 'Kiwifruit' },
+      { value: 'Lemon', disabled: true }
     ],
   },
 }

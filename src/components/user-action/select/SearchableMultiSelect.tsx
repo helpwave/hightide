@@ -1,20 +1,18 @@
 import type { ReactNode } from 'react'
 import { useCallback, useEffect, useState } from 'react'
 import clsx from 'clsx'
-import type { UseSearchProps } from '../../hooks/useSearch'
-import { useSearch } from '../../hooks/useSearch'
+import { useSearch } from '@/src/hooks/useSearch'
 import { CheckIcon, Plus } from 'lucide-react'
 import type { PropsForTranslation, Translation } from '@/src/localization/useTranslation'
 import { useTranslation } from '@/src/localization/useTranslation'
 import type { FormTranslationType } from '@/src/localization/defaults/form'
 import { formTranslation } from '@/src/localization/defaults/form'
-import type { SelectOption } from '@/src/components/user-action/Select'
-import type { MenuBag, MenuProps } from '@/src/components/user-action/Menu'
 import { ChipList } from '@/src/components/layout-and-navigation/Chip'
 import { ExpansionIcon } from '@/src/components/layout-and-navigation/Expandable'
 import { SearchBar } from '@/src/components/user-action/SearchBar'
 import { SolidButton } from '@/src/components/user-action/Button'
 import { Menu } from '@/src/components/user-action/Menu'
+import type { SearchableSelectOption } from '@/src/components/user-action/select/SearchableSelect'
 
 type MultiSelectAddonTranslation = {
   selected: string,
@@ -31,21 +29,18 @@ const defaultMultiSelectTranslation: Translation<MultiSelectAddonTranslation> = 
   }
 }
 
-export type MultiSelectOption<T> = SelectOption<T> & {
-  selected: boolean,
-}
+export type MultiSelectOption = SearchableSelectOption
 
-export type MultiSelectBag = MenuBag & {
+export type MultiSelectBag = {
   search: string,
 }
 
 
-export type MultiSelectProps<T> = Omit<MenuProps<HTMLButtonElement>, 'trigger' | 'children'> & {
-  options: MultiSelectOption<T>[],
-  onChange: (options: MultiSelectOption<T>[]) => void,
+export type MultiSelectProps = Omit<MenuProps<HTMLButtonElement>, 'trigger' | 'children'> & {
+  options: MultiSelectOption[],
+  onChange: (options: MultiSelectOption[]) => void,
   hintText?: string,
   selectedDisplayOverwrite?: ReactNode,
-  searchOptions?: Omit<UseSearchProps<SelectOption<T>>, 'list' | 'searchMapping'>,
   additionalItems?: (bag: MultiSelectBag) => ReactNode,
   useChipDisplay?: boolean,
   triggerClassName?: string,
@@ -73,7 +68,7 @@ export const MultiSelect = <T, >({
   const translation = useTranslation([formTranslation, defaultMultiSelectTranslation], overwriteTranslation)
   const { result, search, setSearch } = useSearch<MultiSelectOption<T>>({
     list: options,
-    searchMapping: useCallback((item: MultiSelectOption<T>) => item.searchTags, []),
+    searchMapping: useCallback((item: MultiSelectOption<T>) => item.keywords, []),
     ...searchOptions,
   })
 
@@ -148,7 +143,7 @@ export const MultiSelect = <T, >({
             <div className="flex-col-2 overflow-y-auto">
               {result.map((option, index) => {
                 const update = () => {
-                  onChange(options.map(value => value.value === option.value ? ({
+                  onChange(options.map(value => value.id === option.id ? ({
                     ...option,
                     selected: !value.selected
                   }) : value))

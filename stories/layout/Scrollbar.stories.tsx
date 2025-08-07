@@ -11,7 +11,7 @@ const ScrollbarExample = ({
     <div className="flex-row-4">
       <ScrollArea
         {...props}
-        className="overflow-auto max-w-60 min-w-40 max-h-32"
+        className="max-w-60 min-w-40 max-h-32"
       >
         <div className="flex-col-1">
           {range(500).map((index) => (
@@ -27,7 +27,7 @@ const ScrollbarExample = ({
       </ScrollArea>
       <ScrollArea
         {...props}
-        className="overflow-auto max-w-40 max-h-32"
+        className="max-w-40 max-h-32"
       >
         <div className="flex-row-2 p-2">
           {range(20).map((index) => (

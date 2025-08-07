@@ -31,8 +31,9 @@ export type ExpansionIconProps = {
 export const ExpansionIcon = ({ isExpanded, className }: ExpansionIconProps) => {
   return (
     <ChevronDown
+      aria-hidden={true}
       className={clsx(
-        'min-w-6 w-6 min-h-6 h-6 transition-transform duration-200 ease-in-out',
+        'min-w-6 w-6 min-h-6 h-6 transition-transform motion-safe:duration-200 motion-reduce:duration-0 ease-in-out',
         { 'rotate-180': isExpanded },
         className
       )}

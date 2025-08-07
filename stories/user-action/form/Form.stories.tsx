@@ -3,11 +3,11 @@ import { action } from 'storybook/actions'
 import type { StorybookHelperSelectType } from '../../../src/storybook/helper'
 import { StorybookHelper } from '../../../src/storybook/helper'
 import { useState } from 'react'
-import type { MultiSelectOption } from '../../../src/components/user-action/MultiSelect'
-import { MultiSelect } from '../../../src/components/user-action/MultiSelect'
+import type { MultiSelectOption } from '../../../src/components/user-action/select/MultiSelect'
+import { MultiSelect } from '../../../src/components/user-action/select/MultiSelect'
 import { FormElementWrapper } from '../../../src/components/form/FormElementWrapper'
 import { Input } from '../../../src/components/user-action/input/Input'
-import { Select } from '../../../src/components/user-action/Select'
+import { Select } from '../../../src/components/user-action/select/Select'
 import { Textarea } from '../../../src/components/user-action/Textarea'
 
 type FormValue = {
@@ -30,9 +30,9 @@ const FormExample = ({
     name: 'John Doe',
     favouriteFruit: 'Strawberry',
     allergies: StorybookHelper.selectValues.map(value => ({
-      value,
+      id: value,
       label: value,
-      searchTags: [value],
+      keywords: [value],
       selected: value === 'Mango'
     })),
     notes: 'I don\'t like pineapple',
@@ -95,9 +95,9 @@ const FormExample = ({
             {...bag}
             value={state.favouriteFruit}
             options={StorybookHelper.selectValues.map(value => ({
-              value,
+              id: value,
               label: value,
-              searchTags: [value]
+              keywords: [value]
             }))}
             onChange={favouriteFruit => setStatePropagator({ favouriteFruit })}
           />

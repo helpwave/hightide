@@ -1,7 +1,7 @@
 import type { ReactNode, PropsWithChildren } from 'react'
 import type { PropsForTranslation, Translation } from '../../localization/useTranslation'
 import { useTranslation } from '../../localization/useTranslation'
-import { Select } from '../user-action/Select'
+import { Select } from '../user-action/select/Select'
 import type { Language } from '../../localization/util'
 import { LanguageUtil } from '../../localization/util'
 import { useLanguage } from '../../localization/LanguageProvider'
@@ -60,7 +60,7 @@ export const LanguageDialog = ({
       <div className="w-64">
         <Select
           value={language}
-          options={LanguageUtil.languages.map((language) => ({ label: translation(language), value: language }))}
+          options={LanguageUtil.languages.map((language) => ({ label: translation(language), id: language }))}
           onChange={(language: string) => setLanguage(language as Language)}
           searchOptions={{ disabled: true }}
         />

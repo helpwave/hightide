@@ -1,7 +1,7 @@
 import { type PropsWithChildren, type ReactNode } from 'react'
 import type { PropsForTranslation, Translation } from '../../localization/useTranslation'
 import { useTranslation } from '../../localization/useTranslation'
-import { Select } from '../user-action/Select'
+import { Select } from '../user-action/select/Select'
 import { SolidButton } from '../user-action/Button'
 import type { ThemeTypeTranslation } from '../../theming/useTheme'
 import { useTheme } from '../../theming/useTheme'
@@ -56,7 +56,7 @@ export const ThemeDialog = ({
       <div className="w-64">
         <Select
           value={theme}
-          options={ThemeUtil.themes.map((theme) => ({ label: translation(theme), value: theme }))}
+          options={ThemeUtil.themes.map((theme) => ({ label: translation(theme), id: theme }))}
           onChange={(theme) => setTheme(theme)}
           searchOptions={{ disabled: true }}
         />

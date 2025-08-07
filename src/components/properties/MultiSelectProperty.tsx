@@ -1,9 +1,9 @@
-import { CheckIcon, List, Plus } from 'lucide-react'
+import { List, Plus } from 'lucide-react'
 import clsx from 'clsx'
 import type { PropsForTranslation } from '../../localization/useTranslation'
 import { useTranslation } from '../../localization/useTranslation'
-import type { MultiSelectProps } from '../user-action/MultiSelect'
-import { MultiSelect } from '../user-action/MultiSelect'
+import type { MultiSelectProps } from '../user-action/select/MultiSelect'
+import { MultiSelect } from '../user-action/select/MultiSelect'
 import type { PropertyBaseProps } from './PropertyBase'
 import { PropertyBase } from './PropertyBase'
 import type { FormTranslationType } from '../../localization/defaults/form'
@@ -12,7 +12,7 @@ import { formTranslation } from '../../localization/defaults/form'
 type TranslationType = FormTranslationType
 
 export type MultiSelectPropertyProps = Omit<PropertyBaseProps, 'icon' | 'input' | 'hasValue' | 'className'> &
-  Omit<MultiSelectProps<string>, 'className' | 'disabled' | 'label'> & {
+  Omit<MultiSelectProps, 'className' | 'disabled' | 'label'> & {
   onAddNew?: (value: string) => void,
 }
 
@@ -48,14 +48,14 @@ export const MultiSelectProperty = ({
           useChipDisplay={true}
           hintText={`${translation('select')}...`}
           searchOptions={{
-            sortingFunction: (a, b) => a.value.localeCompare(b.value),
+            sortingFunction: (a, b) => a.id.localeCompare(b.id),
             ...multiSelectProps?.searchOptions
           }}
           additionalItems={({ close, search }) => {
             if (!onAddNew && !search.trim()) {
               return undefined
             }
-            const disabled = options.some(value => value.value === search.trim())
+            const disabled = options.some(value => value.id === search.trim())
             return (
               <button
                 key="add new"

@@ -4,8 +4,8 @@ import type { PropsForTranslation } from '../../localization/useTranslation'
 import { useTranslation } from '../../localization/useTranslation'
 import type { PropertyBaseProps } from './PropertyBase'
 import { PropertyBase } from './PropertyBase'
-import type { SelectProps } from '../user-action/Select'
-import { Select } from '../user-action/Select'
+import type { SelectProps } from '../user-action/select/Select'
+import { Select } from '../user-action/select/Select'
 import type { FormTranslationType } from '../../localization/defaults/form'
 import { formTranslation } from '../../localization/defaults/form'
 
@@ -55,7 +55,7 @@ export const SingleSelectProperty = ({
             if (!onAddNew && !search.trim()) {
               return undefined
             }
-            const disabled = options.some(value => value.value === search.trim())
+            const disabled = options.some(value => value.id === search.trim())
             return (
               <button
                 key="add new"
