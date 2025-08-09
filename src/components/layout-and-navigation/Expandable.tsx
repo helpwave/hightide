@@ -24,7 +24,7 @@ export type ExpandableProps = PropsWithChildren<{
 
 
 export type ExpansionIconProps = {
-  isExpanded: boolean,
+  isExpanded?: boolean,
   className?: string,
 }
 

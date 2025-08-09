@@ -60,9 +60,9 @@ export const LanguageDialog = ({
       <div className="w-64">
         <Select
           value={language}
-          options={LanguageUtil.languages.map((language) => ({ label: translation(language), id: language }))}
+          options={LanguageUtil.languages.map((language) => ({ value: language, label: translation(language) }))}
           onChange={(language: string) => setLanguage(language as Language)}
-          searchOptions={{ disabled: true }}
+          contentClassName="z-100"
         />
         <div className="flex-row-4 mt-3 justify-end">
           <SolidButton autoFocus color="positive" onClick={onClose}>

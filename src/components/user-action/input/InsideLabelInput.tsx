@@ -1,4 +1,5 @@
 import type { ReactNode } from 'react'
+import { useId } from 'react'
 import { forwardRef, useEffect, useState } from 'react'
 import clsx from 'clsx'
 import type { InputProps } from '@/src/components/user-action/input/Input'
@@ -14,37 +15,52 @@ type InsideLabelInputProps = Omit<InputProps, 'aria-label' | 'aria-labelledby' |
  * The State is managed by the parent
  */
 export const InsideLabelInput = forwardRef<HTMLInputElement, InsideLabelInputProps>(function InsideLabelInput({
+                                                                                                                id: customId,
                                                                                                                 label,
                                                                                                                 ...props
                                                                                                               }, forwardedRef) {
   const { value } = props
+  const [isFocused, setIsFocused] = useState(false)
+  const generatedId = useId()
+  const id = customId ?? generatedId
 
   return (
     <div className={clsx('relative')}>
       <Input
         {...props}
-        className={clsx('h-15 px-4 pb-2 py-6.5', props.className)}
+        id={id}
+        className={clsx('h-14 px-4 pb-2 py-6.5', props.className)}
         ref={forwardedRef}
+        aria-labelledby={id+ '-label'}
+        onFocus={event => {
+          props.onFocus?.(event)
+          setIsFocused(true)
+        }}
+        onBlur={event => {
+          props.onBlur?.(event)
+          setIsFocused(false)
+        }}
       />
-      <div
+      <label
+        id={id+ '-label'}
         aria-hidden={true}
-        data-display={value ? 'small' : 'full'}
+        data-display={isFocused || !!value ? 'small' : 'full'}
         className={clsx(
-          'absolute left-4 top-2 transition-all',
-          'data-[display=small]:top-2 h-force-4.5 overflow-y-hidden1',
-          'data-[display=full]:top-1/2 data-[display=full]:-translate-y-1/2'
+          'absolute left-4 top-2 transition-all pointer-events-none touch-none',
+          'data-[display=small]:top-2 data-[display=small]:h-force-4.5 data-[display=small]:typography-caption-sm-regular data-[display=small]:overflow-y-hidden',
+          'data-[display=full]:top-1/2 data-[display=full]:-translate-y-1/2 data-[display=full]:typography-body-md-regular'
         )}
       >
         {label}
-      </div>
+      </label>
     </div>
   )
 })
 
 export const InsideLabelInputUncontrolled = ({
-                                              value: initialValue,
-                                              ...props
-                                            }: InsideLabelInputProps) => {
+                                               value: initialValue,
+                                               ...props
+                                             }: InsideLabelInputProps) => {
   const [value, setValue] = useState(initialValue)
 
   useEffect(() => {
@@ -53,13 +69,12 @@ export const InsideLabelInputUncontrolled = ({
 
   return (
     <InsideLabelInput
+      {...props}
       value={value}
       onChangeText={text => {
-        console.log(text)
         props.onChangeText?.(text)
         setValue(text)
       }}
-      {...props}
     />
   )
 }

@@ -23,7 +23,7 @@ const FocusGuard = () => {
 }
 
 export type FocusTrapProps = HTMLAttributes<HTMLDivElement> & {
-  active: boolean,
+  active?: boolean,
   initialFocus?: MutableRefObject<HTMLElement>,
 }
 
@@ -35,7 +35,7 @@ export const FocusTrap = forwardRef<HTMLDivElement, FocusTrapProps>(function Foc
   const innerRef = useRef<HTMLInputElement>(null)
   useImperativeHandle(forwardedRef, () => innerRef.current)
 
-  useFocusTrap({ innerRef, active, initialFocus })
+  useFocusTrap({ container: innerRef, active, initialFocus })
 
   return (
     <>
