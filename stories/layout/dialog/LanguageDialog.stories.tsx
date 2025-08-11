@@ -24,7 +24,7 @@ const LanguageModalExample = () => {
 }
 
 const meta: Meta = {
-  title: 'Util/Modal',
+  title: 'Util/Dialog',
   component: LanguageModalExample,
 }
 

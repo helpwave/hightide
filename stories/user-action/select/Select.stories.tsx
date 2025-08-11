@@ -28,7 +28,7 @@ export const select: Story = {
       { value: 'Wildberry', disabled: true },
       { value: 'Watermelon' },
       { value: 'Honeymelon' },
-      { value: 'Papja', disabled: true }
+      { value: 'Papja' }
     ],
   },
 }

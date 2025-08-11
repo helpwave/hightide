@@ -162,6 +162,7 @@
   }
 
   /* Otherwise, use `::-webkit-scrollbar-*` pseudo-elements */
+
   @supports selector(::-webkit-scrollbar) {
     * {
       scrollbar-color: initial;
@@ -179,7 +180,7 @@
 
     *::-webkit-scrollbar-track {
       border-radius: 9999px;
-      background: #88888822;
+      background: transparent;
       cursor: default;
     }
 
@@ -193,7 +194,7 @@
     }
 
     *::-webkit-scrollbar-thumb:active {
-      background-color: var(--color-primary);
+      background-color: var(--color-gray-600);
     }
 
     *::-webkit-scrollbar-thumb:vertical {

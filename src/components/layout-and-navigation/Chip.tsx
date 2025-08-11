@@ -14,6 +14,7 @@ export const ChipUtil = {
 export type ChipProps = HTMLAttributes<HTMLDivElement> & PropsWithChildren<{
   color?: ChipColor,
   size?: ChipSize,
+  icon?: boolean,
   variant?: ChipVariant,
   trailingIcon?: ReactNode,
 }>
@@ -26,6 +27,7 @@ export const Chip = ({
                        trailingIcon,
                        color = 'default',
                        size = 'md',
+                       icon = false,
                        variant = 'normal',
                        className = '',
                        ...restProps
@@ -58,10 +60,14 @@ export const Chip = ({
       className={clsx(
         `flex-row-0 w-fit font-semibold`,
         colorMapping,
-        {
+        !icon ? {
           'px-1 py-0.5': size === 'sm',
           'px-2 py-1': size === 'md',
           'px-4 py-2': size === 'lg',
+        } : {
+          'p-0.5': size === 'sm',
+          'p-1': size === 'md',
+          'p-2': size === 'lg',
         },
         {
           'rounded-md': variant === 'normal',

@@ -55,7 +55,6 @@ export const Dialog = ({
       }}
     >
       <DialogPrimitive.Overlay
-        forceMount={true}
         className={clsx(
           'fixed inset-0 h-screen w-screen bg-overlay-shadow',
           {
