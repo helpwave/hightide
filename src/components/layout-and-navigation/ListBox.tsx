@@ -1,255 +1,286 @@
-import type { HTMLAttributes } from 'react'
-import { createContext, useContext, useEffect, useId, useRef, useState } from 'react'
-import { useLogOnce } from '@/src/hooks/useLogOnce'
+import type { HTMLAttributes, ReactNode } from 'react'
+import { forwardRef, useEffect, useRef, useState } from 'react'
 import { clsx } from 'clsx'
-
-/*
- * Context
- */
-export interface ListBoxContextType {
-  id: string,
-  numberOfItems: number,
-  registerItem: (id: string, ref: HTMLLIElement | null) => void,
-  unregisterItem: (id: string) => void,
-  highlightedId?: string,
-  setHighlightedId: (id: string) => void,
-  onItemClicked: (id: string) => void,
-}
-
-export const ListBoxContext = createContext<ListBoxContextType | undefined>(undefined)
-
-export const useListBoxContext = () => {
-  const context = useContext(ListBoxContext)
-  if (!context) {
-    throw new Error('ListBoxItem must be used within a ListBox')
-  }
-  return context
-}
-
+import { CheckIcon } from 'lucide-react'
 
 /*
  * ListBoxItem
  */
 interface ListBoxItemProps extends HTMLAttributes<HTMLLIElement> {
   value: string,
+  disabled?: boolean,
+  isHighlighted?: boolean,
+  isSelected?: boolean,
+  hasSelectIcon?: boolean,
 }
 
-export const ListBoxItem = ({
-                              item,
-                              ...props,
-                            }: ListBoxItemProps) => {
-  const ref = useRef<HTMLLIElement>(null)
-  const { registerItem, unregisterItem, highlightedId, setHighlightedId, numberOfItems } = useListBoxContext()
-
-  useEffect(() => {
-    registerItem(item.value, ref.current)
-    return () => unregisterItem(item.value)
-  }, [item.value, registerItem, unregisterItem])
-
+export const ListBoxItem = forwardRef<HTMLLIElement, ListBoxItemProps>(function ListBoxItem({
+                                                                                              children,
+                                                                                              value,
+                                                                                              isHighlighted = false,
+                                                                                              isSelected = false,
+                                                                                              disabled = false,
+                                                                                              hasSelectIcon = false,
+                                                                                              className,
+                                                                                              ...props
+                                                                                            }, ref) {
   return (
     <li
-      id={item.value}
       ref={ref}
+      id={value}
       role="option"
-      aria-selected={highlightedId === item.value}
-      aria-posinset={index + 1}
-      aria-setsize={numberOfItems}
+
+      aria-disabled={disabled}
+      aria-selected={isSelected}
+
       data-highlighted={isHighlighted ? '' : undefined}
-      data-disabled={item.disabled ? '' : undefined}
-      onMouseEnter={(event) => {
-        props.onMouseEnter?.(event)
-        if (!item.disabled) setHighlighted({ index, item })
-      }}
-      onClick={(event) => {
-        props.onClick?.(event)
-        if (!item.disabled) {
-          onItemClick?.(item)
-          setHighlighted({ index, item })
-        }
-      }}
+      data-selected={isSelected ? '' : undefined}
+      data-disabled={disabled ? '' : undefined}
+
       className={clsx(
         'flex-row-1 items-center px-2 py-1 rounded-md',
         'data-highlighted:bg-primary/20',
         'data-disabled:text-disabled data-disabled:cursor-not-allowed',
         'not-data-disabled:cursor-pointer',
-        props.className
+        className
       )}
       {...props}
     >
-      {item.label ?? item.value}
+      {hasSelectIcon && (
+        <CheckIcon
+          size={18}
+          className={clsx('size-force-4.5', {
+            'opacity-0': !isSelected,
+          })}
+          aria-hidden="true"
+        />
+      )}
+      {children ?? value}
     </li>
   )
-}
+})
 
-/*
- * ListBox
- */
-export interface ListBoxItem {
+export type ListBoxItemType = {
   value: string,
-  label?: ReactNode,
+  display?: ReactNode,
   disabled?: boolean,
 }
 
-export interface HighlightedState {
-  index: number,
-  item: ListBoxItem,
+/*
+ * ListBoxPrimitive
+ */
+export type ListBoxPrimitiveProps = HTMLAttributes<HTMLUListElement> & {
+  value?: string[],
+  options: ListBoxItemType[],
+  onItemClicked?: (value: string) => void,
+  onSelectionChanged?: (value: string[]) => void,
+  /**
+   * Whether the ListBox should manage a selection state
+   */
+  isSelection?: boolean,
+  isMultiple?: boolean,
 }
 
-export type ListBoxProps = HTMLAttributes<HTMLUListElement> & {
-  options: ListBoxItem[],
-  onItemClick?: (item: ListBoxItem) => void,
-  initialState?: HighlightedState,
-}
+export const ListBoxPrimitive = ({
+                                   value,
+                                   options,
+                                   onItemClicked,
+                                   onSelectionChanged,
+                                   isSelection,
+                                   isMultiple = false,
+                                   ...restProps
+                                 }: ListBoxPrimitiveProps) => {
+  const [highlightedIndex, setHighlightedIndex] = useState<number>()
+  const itemRefsMap = useRef(new Map<number, HTMLLIElement | null>())
+  const [isKeyboardNavigating, setIsKeyboardNavigating] = useState(false)
 
-export const ListBox = ({
-                          id: providedId,
-                          options,
-                          onItemClick,
-                          initialState,
-                          ...restProps
-                        }: ListBoxProps) => {
-  const generateId = useId()
-  const id = providedId ?? generateId
-  const listRef = useRef<HTMLUListElement | null>(null)
-  const itemRefsMap = useRef(new Map<string, HTMLLIElement | null>())
-
-  const registerItem = (id: string, ref: HTMLLIElement | null) => {
-    itemRefsMap.current.set(id, ref)
-  }
-
-  const unregisterItem = (id: string) => {
-    itemRefsMap.current.delete(id)
-  }
-
-  useLogOnce(
-    'ListBox requires at least one option',
-    options.length === 0,
-    { type: 'error' }
-  )
-  const [highlighted, setHighlighted] = useState<HighlightedState | undefined>(initialState ?? {
-    index: 0,
-    item: options[0],
-  })
+  // TODO add type ahead support
 
   useEffect(() => {
-    if (highlighted === undefined) {
-      listRef.current.focus()
-    } else if (itemRefs.current[highlighted.index]) {
-      itemRefs.current[highlighted.index].scrollIntoView({ block: 'nearest' })
+    if (highlightedIndex !== undefined) {
+      itemRefsMap.current[highlightedIndex].scrollIntoView({ block: 'nearest' })
     }
-  }, [highlighted])
+  }, [highlightedIndex])
+
+  const clickWrapper = (clickedItem: ListBoxItemType) => {
+    onItemClicked(clickedItem.value)
+    if (isSelection) {
+      if(!isMultiple) {
+        onSelectionChanged([clickedItem.value])
+        return
+      }
+
+      if (!value) {
+        onSelectionChanged([clickedItem.value])
+      } else {
+        const selected = value.find(selected => selected === clickedItem.value) !== undefined
+        if (selected) {
+          onSelectionChanged(value.filter(selected => selected !== clickedItem.value))
+        } else {
+          onSelectionChanged([...value, clickedItem.value])
+        }
+      }
+    }
+  }
 
   return (
-    <ListBoxContext.Provider
-      value={{
-        id: id,
-        registerItem,
-        unregisterItem,
-        highlightedId: highlighted?.item.value,
-        setHighlightedId:
+    <ul
+      {...restProps}
+
+      className={clsx(
+        'flex-col-1 max-h-128 overflow-y-scroll',
+        restProps.className
+      )}
+      onFocus={() => {
+        if (isSelection && value) {
+          const firstSelected = options.findIndex(option => !value.findIndex(selected => selected === option.value) && !option.disabled)
+          setHighlightedIndex(firstSelected !== -1 ? firstSelected : 0)
+        } else {
+          setHighlightedIndex(0)
+        }
       }}
-    >
-      <ul
-        {...restProps}
-        id={`${id}-listbox`}
-        className={clsx(
-          'flex-col-1 max-h-128 overflow-y-scroll'
-        )}
-        onKeyDown={(e) => {
-          let newIndex: number | undefined
-          switch (e.key) {
-            case 'ArrowDown': {
-              const startIndex = (highlighted?.index ?? -1) + 1
-              for (let i = 0; i < options.length; i++) {
-                const index = (startIndex + i) % options.length
-                if (!options[index].disabled) {
-                  newIndex = index
-                  break
-                }
+      onKeyDown={(e) => {
+        switch (e.key) {
+          case 'ArrowDown': {
+            const startIndex = (highlightedIndex ?? -1) + 1
+            for (let i = 0; i < options.length; i++) {
+              const index = (startIndex + i) % options.length
+              if (!options[index].disabled) {
+                setHighlightedIndex(index)
+                break
               }
-              break
             }
-            case 'ArrowUp': {
-              const startIndex = (highlighted?.index ?? 0) - 1
-              for (let i = 0; i < options.length; i++) {
-                const index = (startIndex + options.length - i) % options.length
-                if (!options[index].disabled) {
-                  newIndex = index
-                  break
-                }
-              }
-              break
-            }
-            case 'Home':
-              newIndex = 0
-              break
-            case 'End':
-              newIndex = options.length - 1
-              break
-            case 'Enter':
-            case ' ':
-              if (highlighted) {
-                e.preventDefault()
-                onItemClick(highlighted.item)
-              }
-              break
-            default:
-              break
-          }
-          if (newIndex !== undefined) {
+            setIsKeyboardNavigating(true)
             e.preventDefault()
-            if (options.length === 0) {
-              setHighlighted(undefined)
-            } else {
-              setHighlighted({ index: newIndex, item: options[newIndex] })
-            }
+            break
           }
-        }}
+          case 'ArrowUp': {
+            const startIndex = (highlightedIndex ?? 0) - 1
+            for (let i = 0; i < options.length; i++) {
+              const index = (startIndex + options.length - i) % options.length
+              if (!options[index].disabled) {
+                setHighlightedIndex(index)
+                break
+              }
+            }
+            setIsKeyboardNavigating(true)
+            e.preventDefault()
+            break
+          }
+          case 'Home':
+            setHighlightedIndex(0)
+            setIsKeyboardNavigating(true)
+            e.preventDefault()
+            break
+          case 'End':
+            setHighlightedIndex(options.length - 1)
+            setIsKeyboardNavigating(true)
+            e.preventDefault()
+            break
+          case 'Enter': // fall through
+          case ' ':
+            if (highlightedIndex) {
+              e.preventDefault()
+              clickWrapper(options[highlightedIndex])
+            }
+            break
+          default:
+            break
+        }
+      }}
+      onMouseMove={() => {
+        setIsKeyboardNavigating(false)
+      }}
 
-        role="listbox"
-      >
-        {options.map((item, index) => {
-          return (
-            <li
-              id={item.value}
-              key={item.value}
-              ref={(el) => {
-                itemRefs.current[index] = el
-              }}
+      role="listbox"
+      tabIndex={0}
 
-              onMouseEnter={() => {
-                if (!item.disabled) {
-                  setHighlighted({ index, item })
-                }
-              }}
-              onClick={(e) => {
-                if (!item.disabled) {
-                  onItemClick(item)
-                  setHighlighted({ index, item })
-                }
-                e.preventDefault()
-                e.stopPropagation()
-                inputRef.current.focus()
-              }}
+      aria-multiselectable={isSelection ? isMultiple : undefined}
+      aria-activedescendant={options[highlightedIndex]?.value}
+    >
+      {options.map((option, index) => (
+        <ListBoxItem
+          key={index}
+          ref={instance => {
+            itemRefsMap.current[index] = instance
+          }}
+          value={option.value}
+          disabled={option.disabled}
+          isSelected={isSelection && (value ?? []).find(selected => selected === option.value) !== undefined}
+          isHighlighted={highlightedIndex === index}
+          onClick={() => {
+            if(option.disabled) return
+            setHighlightedIndex(index)
+            clickWrapper(option)
+          }}
+          onMouseEnter={() => {
+            if(option.disabled || isKeyboardNavigating) return
+            setHighlightedIndex(index)
+          }}
+          onMouseMove={() => {
+            if(!isKeyboardNavigating) {
+              setIsKeyboardNavigating(false)
+              if(option.disabled || isKeyboardNavigating) return
+              setHighlightedIndex(index)
+            }
+          }}
+          hasSelectIcon={isSelection}
+        >
+          {option.display}
+        </ListBoxItem>
+      ))}
+    </ul>
+  )
+}
 
-              role="option"
-              aria-posinset={index}
-              aria-setsize={options.length}
+export type ListBoxMultipleProps = Omit<ListBoxPrimitiveProps, 'isMultiple'>
+export const ListBoxMultiple = ({ ...props }: ListBoxMultipleProps) => {
+  return (
+    <ListBoxPrimitive {...props}/>
+  )
+}
 
-              data-highlighted={index === highlighted?.index ? '' : undefined}
-              data-disabled={item.disabled ? '' : undefined}
-              className={clsx(
-                'flex-row-1 items-center px-2 py-1 rounded-md',
-                'data-highlighted:bg-primary/20',
-                'data-disabled:text-disabled data-disabled:cursor-not-allowed',
-                'not-data-disabled:cursor-pointer'
-              )}
-            >
-              {item.value}
-            </li>
-          )
-        })}
-      </ul>
-    </ListBoxContext.Provider>
+export type ListBoxProps = Omit<ListBoxPrimitiveProps, 'isMultiple' | 'value' | 'onSelectionChanged'> & {
+  value?: string,
+  onSelectionChanged?: (value: string) => void,
+}
+export const ListBox = ({
+                          value,
+                          onSelectionChanged,
+                          ...props
+                        }: ListBoxProps) => {
+  return (
+    <ListBoxPrimitive
+      value={value !== undefined ? [value] : undefined}
+      onSelectionChanged={(newValue) => {
+        onSelectionChanged(newValue[0] ?? value)
+      }}
+      isMultiple={false}
+      {...props}
+    />
+  )
+}
+
+export type ListBoxUncontrolledProps = ListBoxProps
+export const ListBoxUncontrolled = ({
+                                      value: initialValue,
+                                      onSelectionChanged,
+                                      ...props
+                                    }: ListBoxProps) => {
+  const [value, setValue] = useState(initialValue)
+
+  useEffect(() => {
+    setValue(initialValue)
+  }, [initialValue])
+
+  return (
+    <ListBox
+      {...props}
+      value={value}
+      onSelectionChanged={(newValue) => {
+        setValue(newValue)
+        onSelectionChanged?.(newValue)
+      }}
+    />
   )
 }

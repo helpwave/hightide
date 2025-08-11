@@ -1,18 +1,21 @@
 import type { Meta, StoryObj } from '@storybook/nextjs'
 import { action } from 'storybook/actions'
-import { ListBox } from '../../src/components/layout-and-navigation/ListBox'
+import { ListBoxUncontrolled } from '../../src/components/layout-and-navigation/ListBox'
 
 
 const meta = {
   title: 'User Action',
-  component: ListBox,
-} satisfies Meta<typeof ListBox>
+  component: ListBoxUncontrolled,
+} satisfies Meta<typeof ListBoxUncontrolled>
 
 export default meta
 type Story = StoryObj<typeof meta>;
 
 export const listBox: Story = {
   args: {
+    isSelection: true,
+    onItemClicked: action('onItemClick'),
+    onSelectionChanged: action('onSelectionChanged'),
     options: [
       { value: 'Apple' },
       { value: 'Banana', disabled: true },
@@ -40,7 +43,6 @@ export const listBox: Story = {
       { value: 'Blackberry' },
       { value: 'Tangerine' },
       { value: 'Dragonfruit' }
-    ],
-    onItemClick: action('onItemClick')
+    ].sort((a, b) => a.value.localeCompare(b.value)),
   },
 }
