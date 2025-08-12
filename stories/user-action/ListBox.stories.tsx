@@ -16,6 +16,7 @@ export const listBox: Story = {
     isSelection: true,
     onItemClicked: action('onItemClick'),
     onSelectionChanged: action('onSelectionChanged'),
+    direction: 'vertical',
     options: [
       { value: 'Apple' },
       { value: 'Banana', disabled: true },
