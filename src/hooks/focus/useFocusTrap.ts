@@ -1,10 +1,24 @@
 'use client'
 
 import type { MutableRefObject } from 'react'
-import { useId } from 'react'
-import { useState } from 'react'
-import { useEffect, useRef } from 'react'
+import { useEffect, useId, useRef, useState } from 'react'
 import { useIsMounted } from '@/src/hooks/focus/useIsMounted'
+
+const createFocusGuard = () => {
+  const div = document.createElement('div')
+  Object.assign(div.style, {
+    opacity: '0',
+    outline: 'none',
+    boxShadow: 'none',
+    position: 'fixed',
+    pointerEvents: 'none',
+    touchAction: 'none',
+  })
+  div.tabIndex = 0
+  div.setAttribute('data-hw-focus-guard', '')
+  document.body.appendChild(div)
+  return div
+}
 
 type TrapCallback = (activeId?: string) => void
 
@@ -22,8 +36,20 @@ class FocusTrapService {
     this.listeners.forEach(({ callback }) => callback(active?.id))
   }
 
+  private removeGuards() {
+    document.querySelectorAll('[data-hw-focus-guard]').forEach((node) => node.remove())
+  }
+
+  private addGuards() {
+    document.body.insertAdjacentElement('afterbegin', createFocusGuard())
+    document.body.insertAdjacentElement('beforeend', createFocusGuard())
+  }
+
   register(id: string, callback: TrapCallback) {
     this.listeners.push({ id, callback })
+    if (this.listeners.length === 1) {
+      this.addGuards()
+    }
     this.notify()
   }
 
@@ -33,7 +59,11 @@ class FocusTrapService {
       const isActive = index === this.listeners.length - 1
       this.listeners.splice(index, 1)
       if (isActive) {
+        this.removeGuards()
         this.notify()
+        if (this.listeners.length > 0) {
+          this.addGuards()
+        }
       }
     } else {
       console.warn(`Unable to unregister id ${id}: not found`)
@@ -47,12 +77,19 @@ export type UseFocusTrapProps = {
   container: MutableRefObject<HTMLElement>,
   active?: boolean,
   initialFocus?: MutableRefObject<HTMLElement>,
+  /**
+   * Whether to focus the first element when the initialFocus isn't provided
+   *
+   * Focuses the container instead
+   */
+  focusFirst?: boolean,
 }
 
 export const useFocusTrap = ({
                                container,
                                active = true,
-                               initialFocus
+                               initialFocus,
+                               focusFirst = true,
                              }: UseFocusTrapProps) => {
   const lastFocusRef = useRef<HTMLElement | null>(null)
   const [paused, setPaused] = useState(false)
@@ -62,7 +99,6 @@ export const useFocusTrap = ({
   useEffect(() => {
     if (active) {
       function callback(activeId?: string) {
-        console.log(activeId)
         setPaused(activeId !== id)
       }
 
@@ -71,11 +107,9 @@ export const useFocusTrap = ({
     }
   }, [active, id])
 
-
-
   useEffect(() => {
     if (active && !paused && isMounted) {
-      if(!lastFocusRef.current) {
+      if (!lastFocusRef.current) {
         lastFocusRef.current = document.activeElement as HTMLElement
       }
       const containerElement = container.current
@@ -123,13 +157,13 @@ export const useFocusTrap = ({
 
       // Try in the following order
       // 1. Focus the initial element
-      // 2. Focus the first focusable element in the container
-      // 3. Focus the container
+      // 2. Focus the first focusable element in the container (if focusFirst)
+      // 2. Focus the container
       if (initialFocus?.current) {
         initialFocus.current.focus()
       } else {
         const elements = containerElement?.querySelectorAll('button, [href], input, select, textarea, [tabindex]:not([tabindex="-1"])')
-        if (elements && elements.length > 0) {
+        if (focusFirst && elements && elements.length > 0) {
           const first = elements.item(0) as HTMLElement
           first.focus()
         } else {
@@ -141,11 +175,11 @@ export const useFocusTrap = ({
       containerElement.addEventListener('keydown', onKeyDown)
       document.addEventListener('focusin', onFocusIn)
       return () => {
+        containerElement.removeEventListener('keydown', onKeyDown)
+        document.removeEventListener('focusin', onFocusIn)
         if (!paused) {
           lastFocusRef.current?.focus()
         }
-        containerElement.removeEventListener('keydown', onKeyDown)
-        document.removeEventListener('focusin', onFocusIn)
       }
     }
   }, [active, paused, isMounted, container, initialFocus])

@@ -12,7 +12,6 @@ type Story = StoryObj<typeof meta>;
 
 export const select: Story = {
   args: {
-    value: '',
     disabled: false,
     onChange: action('updated'),
     options: [
@@ -29,6 +28,6 @@ export const select: Story = {
       { value: 'Watermelon' },
       { value: 'Honeymelon' },
       { value: 'Papja' }
-    ],
+    ].sort((a,b) => a.value.localeCompare(b.value)),
   },
 }

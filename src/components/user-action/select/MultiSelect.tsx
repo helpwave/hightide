@@ -1,14 +1,14 @@
-import { useEffect, useState } from 'react'
+import { type ReactNode, useEffect, useState } from 'react'
 import clsx from 'clsx'
 import { CheckIcon, Plus } from 'lucide-react'
 import type { PropsForTranslation, Translation } from '@/src/localization/useTranslation'
 import { useTranslation } from '@/src/localization/useTranslation'
 import type { FormTranslationType } from '@/src/localization/defaults/form'
 import { formTranslation } from '@/src/localization/defaults/form'
-import type { SelectOption } from '@/src/components/user-action/select/Select'
 import { ExpansionIcon } from '@/src/components/layout-and-navigation/Expandable'
-import { Listbox, ListboxButton, ListboxOption, ListboxOptions } from '@headlessui/react'
 import { Chip } from '@/src/components/layout-and-navigation/Chip'
+import type { ListBoxMultipleProps } from '@/src/components/layout-and-navigation/ListBox'
+import type { FloatingContainerProps } from '@/src/components/layout-and-navigation/FloatingContainer'
 
 type MultiSelectAddonTranslation = {
   selected: string,
@@ -25,18 +25,18 @@ const defaultMultiSelectTranslation: Translation<MultiSelectAddonTranslation> = 
   }
 }
 
-export type MultiSelectOption = SelectOption
-
-export type MultiSelectProps = {
-  value?: string[],
-  options: SelectOption[],
-  onChange?: (value: string[]) => void,
-  disabled?: boolean,
-  placeholder?: string,
-  useChipDisplay?: boolean,
-  triggerClassName?: string,
-  contentClassName?: string,
-}
+export type MultiSelectProps = Omit<ListBoxMultipleProps, 'onSelectionChanged' | 'onChange'> &
+  Pick<FloatingContainerProps, 'gap' | 'horizontalAlignment' | 'verticalAlignment'> &
+  {
+    value?: string,
+    disabled?: boolean,
+    onChange?: (value: string[]) => void,
+    invalid?: boolean,
+    placeholder?: ReactNode,
+    useChipDisplay?: boolean,
+    triggerClassName?: string,
+    contentClassName?: string,
+  };
 
 /**
  * A Component for multi selection

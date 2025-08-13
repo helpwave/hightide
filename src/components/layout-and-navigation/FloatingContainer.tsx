@@ -5,6 +5,7 @@ import { useIsMounted } from '@/src/hooks/focus/useIsMounted'
 import { match } from '@/src/utils/match'
 import { clamp } from '@/src/utils/math'
 import { clsx } from 'clsx'
+import { FocusTrap } from '@/src/components/utils/FocusTrap'
 
 type Position = {
   left: number,
@@ -23,11 +24,13 @@ export type FloatingContainerProps = HTMLAttributes<HTMLDivElement> & {
    * Use sparingly
    */
   reactToAnchorScrolling?: boolean,
-  verticalAlignment: Alignment,
-  horizontalAlignment: Alignment,
+  verticalAlignment?: Alignment,
+  horizontalAlignment?: Alignment,
   screenPadding?: number,
   gap?: number,
   backgroundOverlay?: ReactNode,
+  isFocusTrap?: boolean,
+  isFocusingFirst?: boolean,
 }
 
 export const FloatingContainer = forwardRef<HTMLDivElement, FloatingContainerProps>(function FloatingContainer({
@@ -39,6 +42,8 @@ export const FloatingContainer = forwardRef<HTMLDivElement, FloatingContainerPro
                                                                                                                  horizontalAlignment,
                                                                                                                  screenPadding = 16,
                                                                                                                  gap = 4,
+                                                                                                                 isFocusTrap = false,
+                                                                                                                 isFocusingFirst = false,
                                                                                                                  ...props
                                                                                                                }, forwardRef) {
   const innerRef = useRef<HTMLDivElement>(null)
@@ -99,11 +104,11 @@ export const FloatingContainer = forwardRef<HTMLDivElement, FloatingContainerPro
 
     window.addEventListener('resize', calculatePosition)
     let timeout: NodeJS.Timeout
-    if(reactToAnchorScrolling) {
+    if (reactToAnchorScrolling) {
       timeout = setInterval(calculatePosition, pollingRate)
     }
     return () => {
-      if(timeout) {
+      if (timeout) {
         clearInterval(timeout)
       }
       window.removeEventListener('resize', calculatePosition)
@@ -113,7 +118,8 @@ export const FloatingContainer = forwardRef<HTMLDivElement, FloatingContainerPro
   return createPortal(
     <>
       {backgroundOverlay}
-      <div
+      <FocusTrap
+        active={isFocusTrap}
         {...props}
         ref={innerRef}
         style={{
@@ -125,9 +131,10 @@ export const FloatingContainer = forwardRef<HTMLDivElement, FloatingContainerPro
           ...props.style
         }}
         className={clsx('motion-safe:duration-100 motion-reduce:duration-0', props.className)}
+        focusFirst={isFocusingFirst}
       >
         {children}
-      </div>
+      </FocusTrap>
     </>,
     document.body
   )

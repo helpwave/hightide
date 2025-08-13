@@ -101,31 +101,31 @@ export type ListBoxPrimitiveProps = HTMLAttributes<HTMLUListElement> & {
   direction?: ListBoxDirection,
 }
 
-export const ListBoxPrimitive = ({
-                                   value,
-                                   options,
-                                   onItemClicked,
-                                   onSelectionChanged,
-                                   isSelection,
-                                   isMultiple = false,
-                                   startIndex,
-                                   direction = 'vertical',
-                                   ...restProps
-                                 }: ListBoxPrimitiveProps) => {
+export const ListBoxPrimitive = forwardRef<HTMLUListElement, ListBoxPrimitiveProps>(function ListBoxPrimitive({
+                                                                                                                value,
+                                                                                                                options,
+                                                                                                                onItemClicked,
+                                                                                                                onSelectionChanged,
+                                                                                                                isSelection,
+                                                                                                                isMultiple = false,
+                                                                                                                startIndex,
+                                                                                                                direction = 'vertical',
+                                                                                                                ...restProps
+                                                                                                              }, ref) {
   const [highlightedIndex, setHighlightedIndex] = useState<number>()
   const itemRefsMap = useRef(new Map<number, HTMLLIElement | null>())
-  const [isKeyboardNavigating, setIsKeyboardNavigating] = useState(false)
+  const [isKeyboardNavigating, setIsKeyboardNavigating] = useState(true)
 
   // TODO add type ahead support
 
   useEffect(() => {
     if (highlightedIndex !== undefined) {
-      itemRefsMap.current[highlightedIndex].scrollIntoView({ block: 'nearest' })
+      itemRefsMap.current[highlightedIndex].scrollIntoView({ behavior: 'auto' })
     }
   }, [highlightedIndex])
 
   const clickWrapper = (clickedItem: ListBoxItemType) => {
-    onItemClicked(clickedItem.value)
+    onItemClicked?.(clickedItem.value)
     if (isSelection) {
       if (!isMultiple) {
         onSelectionChanged([clickedItem.value])
@@ -147,16 +147,17 @@ export const ListBoxPrimitive = ({
 
   return (
     <ul
+      ref={ref}
       {...restProps}
       className={clsx(
         'max-h-128',
         {
-          'flex-col-0 overflow-y-scroll': direction === 'vertical',
-          'flex-row-0 overflow-x-scroll': direction === 'horizontal',
+          'flex-col-0': direction === 'vertical',
+          'flex-row-0': direction === 'horizontal',
         },
         restProps.className
       )}
-      onFocus={() => {
+      onFocus={event => {
         if (startIndex !== undefined) {
           setHighlightedIndex(startIndex)
           return
@@ -167,12 +168,14 @@ export const ListBoxPrimitive = ({
         } else {
           setHighlightedIndex(0)
         }
+        restProps.onFocus?.(event)
       }}
-      onBlur={() => {
+      onBlur={(event) => {
         setHighlightedIndex(undefined)
+        restProps.onBlur?.(event)
       }}
-      onKeyDown={(e) => {
-        switch (e.key) {
+      onKeyDown={(event) => {
+        switch (event.key) {
           case match(direction, {
             horizontal: 'ArrowRight',
             vertical: 'ArrowDown',
@@ -188,7 +191,7 @@ export const ListBoxPrimitive = ({
               }
             }
             setIsKeyboardNavigating(true)
-            e.preventDefault()
+            event.preventDefault()
             break
           }
           case match(direction, {
@@ -206,38 +209,41 @@ export const ListBoxPrimitive = ({
               }
             }
             setIsKeyboardNavigating(true)
-            e.preventDefault()
+            event.preventDefault()
             break
           }
           case 'Home':
             setHighlightedIndex(0)
             setIsKeyboardNavigating(true)
-            e.preventDefault()
+            event.preventDefault()
             break
           case 'End':
             setHighlightedIndex(options.length - 1)
             setIsKeyboardNavigating(true)
-            e.preventDefault()
+            event.preventDefault()
             break
           case 'Enter': // fall through
           case ' ':
             if (highlightedIndex !== undefined) {
-              e.preventDefault()
+              event.preventDefault()
               clickWrapper(options[highlightedIndex])
             }
             break
           default:
             break
         }
+        restProps.onKeyDown?.(event)
       }}
-      onMouseMove={() => {
+      onMouseMove={event => {
         setIsKeyboardNavigating(false)
+        restProps.onMouseMove?.(event)
       }}
 
       role="listbox"
       tabIndex={0}
 
       aria-multiselectable={isSelection ? isMultiple : undefined}
+      aria-orientation={direction.startsWith('horizontal') ? 'horizontal' : 'vertical'}
       aria-activedescendant={options[highlightedIndex]?.value}
     >
       {options.map((option, index) => (
@@ -273,7 +279,7 @@ export const ListBoxPrimitive = ({
       ))}
     </ul>
   )
-}
+})
 
 /*
  * ListBoxMultiple
@@ -313,13 +319,14 @@ export type ListBoxProps = Omit<ListBoxPrimitiveProps, 'isMultiple' | 'value' | 
   value?: string,
   onSelectionChanged?: (value: string) => void,
 }
-export const ListBox = ({
-                          value,
-                          onSelectionChanged,
-                          ...props
-                        }: ListBoxProps) => {
+export const ListBox = forwardRef<HTMLUListElement, ListBoxProps>(function ListBox({
+                                                                                     value,
+                                                                                     onSelectionChanged,
+                                                                                     ...props
+                                                                                   }, ref) {
   return (
     <ListBoxPrimitive
+      ref={ref}
       value={value !== undefined ? [value] : undefined}
       onSelectionChanged={(newValue) => {
         onSelectionChanged(newValue[0] ?? value)
@@ -328,7 +335,7 @@ export const ListBox = ({
       {...props}
     />
   )
-}
+})
 
 export type ListBoxUncontrolledProps = ListBoxProps
 export const ListBoxUncontrolled = ({

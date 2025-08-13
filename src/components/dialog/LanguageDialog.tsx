@@ -52,7 +52,7 @@ export const LanguageDialog = ({
 
   return (
     <Dialog
-      title={titleOverwrite ?? translation('language')}
+      titleEl={titleOverwrite ?? translation('language')}
       description={descriptionOverwrite ?? translation('chooseLanguage')}
       onClose={onClose}
       {...props}
@@ -60,12 +60,12 @@ export const LanguageDialog = ({
       <div className="w-64">
         <Select
           value={language}
-          options={LanguageUtil.languages.map((language) => ({ value: language, label: translation(language) }))}
+          options={LanguageUtil.languages.map((language) => ({ value: language, display: translation(language) }))}
           onChange={(language: string) => setLanguage(language as Language)}
           contentClassName="z-100"
         />
         <div className="flex-row-4 mt-3 justify-end">
-          <SolidButton autoFocus color="positive" onClick={onClose}>
+          <SolidButton color="positive" onClick={onClose}>
             {translation('done')}
           </SolidButton>
         </div>

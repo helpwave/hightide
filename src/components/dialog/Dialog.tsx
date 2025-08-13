@@ -1,16 +1,17 @@
 import type { PropsWithChildren, ReactNode } from 'react'
 import clsx from 'clsx'
-import * as DialogPrimitive from '@radix-ui/react-dialog'
 import { X } from 'lucide-react'
 import { useTranslation } from '@/src/localization/useTranslation'
 import { formTranslation } from '@/src/localization/defaults/form'
 import { IconButton } from '@/src/components/user-action/Button'
+import type { FloatingContainerProps } from '@/src/components/layout-and-navigation/FloatingContainer'
+import { FloatingContainer } from '@/src/components/layout-and-navigation/FloatingContainer'
 
-export type DialogProps = PropsWithChildren<{
+export type DialogProps = Omit<FloatingContainerProps, 'backgroundOverlay'> & {
   /** Whether the dialog is currently open */
   isOpen: boolean,
   /** Title of the Dialog used for accessibility */
-  title: ReactNode,
+  titleEl: ReactNode,
   /** Description of the Dialog used for accessibility */
   description: ReactNode,
   /** Callback when the dialog tries to close */
@@ -21,7 +22,7 @@ export type DialogProps = PropsWithChildren<{
   className?: string,
   /** If true shows a close button and sends onClose on background clicks */
   isModal?: boolean,
-}>
+}
 
 /**
  * A generic dialog window which is managed by its parent
@@ -29,10 +30,12 @@ export type DialogProps = PropsWithChildren<{
 export const Dialog = ({
                          children,
                          isOpen,
-                         title,
+                         titleEl,
                          description,
                          isModal = true,
                          onClose,
+                         horizontalAlignment = 'center',
+                         verticalAlignment = 'center',
                          className,
                          backgroundClassName,
                        }: PropsWithChildren<DialogProps>) => {
@@ -43,62 +46,60 @@ export const Dialog = ({
     onClose?.()
   }
 
+  if (!isOpen) {
+    return undefined
+  }
+
   return (
-    <DialogPrimitive.Root
-      open={isOpen}
-      defaultOpen={false}
-      modal={isModal}
-      onOpenChange={(isOpen) => {
-        if (!isOpen) {
+    <FloatingContainer
+      isFocusTrap={true}
+      onKeyDown={event => {
+        if (event.key === 'Escape') {
           onCloseWrapper()
         }
       }}
-    >
-      <DialogPrimitive.Overlay
-        className={clsx(
-          'fixed inset-0 h-screen w-screen bg-overlay-shadow',
-          {
-            'motion-safe:animate-fade-in': isOpen,
-            'motion-safe:animate-fade-out': !isOpen,
-          },
-          backgroundClassName
-        )}
-      />
-      <DialogPrimitive.Portal>
-        <DialogPrimitive.Content
-          onEscapeKeyDown={onCloseWrapper}
+      horizontalAlignment={horizontalAlignment}
+      verticalAlignment={verticalAlignment}
+      backgroundOverlay={(
+        <div
           className={clsx(
-            'fixed top-1/2 left-1/2 -translate-1/2',
-            'flex-col-2 p-4 bg-overlay-background text-overlay-text rounded-xl shadow-hw-bottom',
+            'fixed inset-0 h-screen w-screen bg-overlay-shadow',
             {
-              'motion-safe:animate-pop-in': isOpen,
-              'motion-safe:animate-pop-out': !isOpen,
+              'motion-safe:animate-fade-in': isOpen,
+              'motion-safe:animate-fade-out': !isOpen,
             },
-            className
+            backgroundClassName
           )}
+          onClick={onCloseWrapper}
+        />
+      )}
+      className={clsx(
+        'flex-col-2 p-4 bg-overlay-background text-overlay-text rounded-xl shadow-hw-bottom',
+        {
+          'motion-safe:animate-pop-in': isOpen,
+          'motion-safe:animate-pop-out': !isOpen,
+        },
+        className
+      )}
+    >
+      <div className="typography-title-lg-semibold mr-8">
+        {titleEl}
+      </div>
+      <div className="text-description">
+        {description}
+      </div>
+      {isModal && (
+        <IconButton
+          className="absolute top-2 right-2"
+          color="neutral"
+          size="tiny"
+          aria-label={translation('close')}
+          onClick={onCloseWrapper}
         >
-          <DialogPrimitive.Title className="typography-title-lg-semibold mr-8">
-            {title}
-          </DialogPrimitive.Title>
-          <DialogPrimitive.Description className="text-description">
-            {description}
-          </DialogPrimitive.Description>
-          {isModal && (
-            <DialogPrimitive.Close asChild={true}>
-              <IconButton
-                className="absolute top-2 right-2"
-                color="neutral"
-                size="tiny"
-                aria-label={translation('close')}
-                onClick={onCloseWrapper}
-              >
-                <X/>
-              </IconButton>
-            </DialogPrimitive.Close>
-          )}
-          {children}
-        </DialogPrimitive.Content>
-      </DialogPrimitive.Portal>
-    </DialogPrimitive.Root>
+          <X/>
+        </IconButton>
+      )}
+      {children}
+    </FloatingContainer>
   )
 }

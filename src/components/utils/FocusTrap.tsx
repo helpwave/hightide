@@ -6,42 +6,32 @@ import { useImperativeHandle } from 'react'
 import { forwardRef } from 'react'
 import { useFocusTrap } from '@/src/hooks/focus/useFocusTrap'
 
-const FocusGuard = () => {
-  return (
-    <div
-      tabIndex={0}
-      style={{
-        boxShadow: 'none',
-        outline: 'none',
-        opacity: 0,
-        position: 'fixed',
-        pointerEvents: 'none',
-        touchAction: 'none',
-      }}
-    />
-  )
-}
-
 export type FocusTrapProps = HTMLAttributes<HTMLDivElement> & {
   active?: boolean,
   initialFocus?: MutableRefObject<HTMLElement>,
+  /**
+   * Whether to focus the first element when the initialFocus isn't provided
+   *
+   * Focuses the container instead
+   */
+  focusFirst?: boolean,
 }
 
+/**
+ * A wrapper for the useFocusTrap hook that directly renders it to a div
+ */
 export const FocusTrap = forwardRef<HTMLDivElement, FocusTrapProps>(function FocusTrap({
                                                                                          active = true,
                                                                                          initialFocus,
+                                                                                         focusFirst = false,
                                                                                          ...props
                                                                                        }, forwardedRef) {
-  const innerRef = useRef<HTMLInputElement>(null)
+  const innerRef = useRef<HTMLDivElement>(null)
   useImperativeHandle(forwardedRef, () => innerRef.current)
 
-  useFocusTrap({ container: innerRef, active, initialFocus })
+  useFocusTrap({ container: innerRef, active, initialFocus, focusFirst })
 
   return (
-    <>
-      {active && (<FocusGuard/>)}
-      <div ref={innerRef} {...props}/>
-      {active && (<FocusGuard/>)}
-    </>
+    <div ref={innerRef} {...props}/>
   )
 })

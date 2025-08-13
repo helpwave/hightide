@@ -1,59 +1,59 @@
-import type { ReactNode } from 'react'
+import type { HtmlHTMLAttributes, ReactNode } from 'react'
+import { forwardRef, useId, useImperativeHandle } from 'react'
+import { useRef } from 'react'
 import { useEffect, useState } from 'react'
 import clsx from 'clsx'
 import { formTranslation } from '@/src/localization/defaults/form'
 import { useTranslation } from '@/src/localization/useTranslation'
 import { useLogOnce } from '@/src/hooks/useLogOnce'
-import type {
-  ListboxOptionsProps } from '@headlessui/react'
-import {
-  Listbox,
-  ListboxButton,
-  ListboxOption,
-  ListboxOptions
-} from '@headlessui/react'
 import { ExpansionIcon } from '@/src/components/layout-and-navigation/Expandable'
-import { CheckIcon } from 'lucide-react'
+import type { ListBoxProps } from '@/src/components/layout-and-navigation/ListBox'
+import { ListBox } from '@/src/components/layout-and-navigation/ListBox'
+import type { FloatingContainerProps } from '@/src/components/layout-and-navigation/FloatingContainer'
+import { FloatingContainer } from '@/src/components/layout-and-navigation/FloatingContainer'
 
-export type SelectOption = {
-  /**
-   * The value of the option
-   *
-   * Must be unique among all options.
-   */
-  value: string,
-  /**
-   * The visualization representation of the value, if omitted the value is used directly
-   */
-  label?: ReactNode,
-  disabled?: boolean,
-  className?: string,
+export type SelectProps = Omit<HtmlHTMLAttributes<HTMLButtonElement>, 'onChange'> &
+  Pick<FloatingContainerProps, 'gap' | 'horizontalAlignment' | 'verticalAlignment' | 'className'> &
+  Pick<ListBoxProps, 'value' | 'options' | 'direction'> &
+  {
+    disabled?: boolean,
+    onChange?: (value: string) => void,
+    invalid?: boolean,
+    placeholder?: ReactNode,
+    contentClassName?: string,
+  };
+
+type OpenState = {
+  open: boolean,
+  startIndex?: number,
 }
-
-export type SelectProps = Pick<ListboxOptionsProps, 'anchor'> & {
-  value?: string,
-  options: SelectOption[],
-  onChange?: (value: string) => void,
-  disabled?: boolean,
-  placeholder?: string,
-  triggerClassName?: string,
-  contentClassName?: string,
-};
 
 /**
  * A Select Component for selecting form a list of options
  *
  * The State is managed by the parent
  */
-export const Select = ({
-                         value,
-                         options,
-                         onChange,
-                         placeholder,
-                         triggerClassName,
-                         contentClassName,
-                       }: SelectProps) => {
+export const Select = forwardRef<HTMLButtonElement, SelectProps>(function Select({
+                                                                                   id: userId,
+                                                                                   value,
+                                                                                   options,
+                                                                                   onChange,
+                                                                                   placeholder,
+                                                                                   contentClassName,
+                                                                                   horizontalAlignment = 'center',
+                                                                                   verticalAlignment = 'afterEnd',
+                                                                                   gap,
+                                                                                   direction,
+                                                                                   ...props
+                                                                                 }, forwardRef) {
   const translation = useTranslation([formTranslation])
+  const [openState, setOpenState] = useState<OpenState>({ open: false })
+  const triggerRef = useRef<HTMLButtonElement>(null)
+  useImperativeHandle(forwardRef, () => triggerRef.current)
+  const listBoxRef = useRef<HTMLUListElement | null>(null)
+
+  const generatedId = useId()
+  const id = generatedId ?? userId
 
   const selectedOption = options.find(option => option.value === value)
   useLogOnce(
@@ -61,59 +61,74 @@ export const Select = ({
     value !== undefined && selectedOption === undefined
   )
 
+
   return (
-    <Listbox value={value} onChange={onChange}>
-      <ListboxButton
+    <>
+      <button
+        id={id}
+        ref={triggerRef}
+        {...props}
         className={clsx(
-          'group flex-row-4 items-center justify-between bg-input-background text-input-text rounded-md px-2.5 py-2.5',
+          'flex-row-4 items-center justify-between bg-input-background text-input-text rounded-md px-2.5 py-2.5',
           'data-placeholder:text-description',
-          triggerClassName
+          props.className
         )}
         data-placeholder={!value ? '' : undefined}
+        onClick={() => setOpenState(({ open }) => ({ open: !open }))}
+        onKeyDown={event => {
+          switch (event.key) {
+            case 'ArrowDown':
+              setOpenState({ open: true, startIndex: 0 })
+              break
+            case 'ArrowUp':
+              setOpenState({ open: true, startIndex: options.length - 1 })
+          }
+        }}
+
+        aria-haspopup="listbox"
+        aria-expanded={openState.open}
+        aria-controls={openState.open ? `${id}-listbox` : undefined}
       >
-        {selectedOption?.label ?? selectedOption?.value ?? placeholder ?? `${translation('select')}...`}
-        <ExpansionIcon className="group-data-[open]:rotate-180"/>
-      </ListboxButton>
-      <ListboxOptions
-        anchor="bottom"
-        className={clsx(
-          'flex-col-0 bg-menu-background text-menu-text rounded-md shadow-hw-bottom py-2 !overflow-y-hidden [--anchor-gap:8px]',
-          contentClassName
-        )}
-      >
-        <div className="flex-col-1 max-h-64 overflow-y-auto px-2">
-          {options.map((option) => (
-            <ListboxOption
-              key={option.value}
-              value={option.value}
-              disabled={option.disabled}
-              className={clsx(
-                'flex-row-1 items-center px-2 py-1 rounded-md no-focus-style',
-                {
-                  'text-disabled cursor-not-allowed': option.disabled,
-                  'data-focus:bg-primary/20 cursor-pointer': !option.disabled,
-                },
-                option.className
-              )}
-            >
-              <CheckIcon
-                className={clsx(
-                  'size-force-4.5',
-                  {
-                    'opacity-100': option.value === value,
-                    'opacity-0': option.value !== value,
-                  }
-                )}
-                aria-hidden={true}
-              />
-              {option.label ?? option.value}
-            </ListboxOption>
-          ))}
-        </div>
-      </ListboxOptions>
-    </Listbox>
+        {selectedOption?.display ?? selectedOption?.value ?? placeholder ?? `${translation('select')}...`}
+        <ExpansionIcon isExpanded={openState.open}/>
+      </button>
+      {openState.open && (
+        <FloatingContainer
+          id={`${id}-listbox`}
+          verticalAlignment={verticalAlignment}
+          horizontalAlignment={horizontalAlignment}
+          gap={gap}
+          isFocusTrap={true}
+          anchor={triggerRef}
+          className={clsx('flex-col-0 py-2 bg-menu-background text-menu-text rounded-md shadow-hw-bottom', contentClassName)}
+          isFocusingFirst={true}
+        >
+          <ListBox
+            ref={listBoxRef}
+            value={value}
+            options={options}
+            startIndex={openState.startIndex}
+            onSelectionChanged={value => {
+              onChange?.(value)
+              setOpenState({ open: false })
+            }}
+            isSelection={true}
+            onKeyDown={event => {
+              switch (event.key) {
+                case 'Escape':
+                  setOpenState({ open: false })
+              }
+            }}
+            direction={direction}
+            className="focus-visible:ring-0 px-2 overflow-auto"
+
+            aria-labelledby={id}
+          />
+        </FloatingContainer>
+      )}
+    </>
   )
-}
+})
 
 export const SelectUncontrolled = ({
                                      options, onChange, value: initialValue, ...props
@@ -128,7 +143,7 @@ export const SelectUncontrolled = ({
     <Select
       value={value}
       options={options}
-      onChange={value => {
+      onChange={(value) => {
         onChange?.(value)
         setValue(value)
       }}
