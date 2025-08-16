@@ -99,7 +99,7 @@ export const MultiSelect = ({
                 value={option.value}
                 disabled={option.disabled}
                 className={clsx(
-                  'flex-row-1 items-center px-2 py-1 rounded-md no-focus-style',
+                  'flex-row-1 items-center px-2 py-1 rounded-md focus-style-none',
                   {
                     'text-disabled cursor-not-allowed': option.disabled,
                     'data-focus:bg-primary/20 cursor-pointer': !option.disabled,

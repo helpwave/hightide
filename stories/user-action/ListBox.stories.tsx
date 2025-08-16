@@ -1,6 +1,6 @@
 import type { Meta, StoryObj } from '@storybook/nextjs'
 import { action } from 'storybook/actions'
-import { ListBoxUncontrolled } from '../../src/components/layout-and-navigation/ListBox'
+import { ListBoxItem, ListBoxUncontrolled } from '../../src/components/layout-and-navigation/ListBox'
 
 
 const meta = {
@@ -17,7 +17,7 @@ export const listBox: Story = {
     onItemClicked: action('onItemClick'),
     onSelectionChanged: action('onSelectionChanged'),
     direction: 'vertical',
-    options: [
+    children: [
       { value: 'Apple' },
       { value: 'Banana', disabled: true },
       { value: 'Kiwi' },
@@ -44,6 +44,9 @@ export const listBox: Story = {
       { value: 'Blackberry' },
       { value: 'Tangerine' },
       { value: 'Dragonfruit' }
-    ].sort((a, b) => a.value.localeCompare(b.value)),
+    ].sort((a, b) => a.value.localeCompare(b.value))
+      .map((value, index) => (
+          <ListBoxItem key={index} {...value}/>
+        )),
   },
 }

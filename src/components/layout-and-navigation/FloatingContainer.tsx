@@ -5,7 +5,6 @@ import { useIsMounted } from '@/src/hooks/focus/useIsMounted'
 import { match } from '@/src/utils/match'
 import { clamp } from '@/src/utils/math'
 import { clsx } from 'clsx'
-import { FocusTrap } from '@/src/components/utils/FocusTrap'
 
 type Position = {
   left: number,
@@ -29,8 +28,6 @@ export type FloatingContainerProps = HTMLAttributes<HTMLDivElement> & {
   screenPadding?: number,
   gap?: number,
   backgroundOverlay?: ReactNode,
-  isFocusTrap?: boolean,
-  isFocusingFirst?: boolean,
 }
 
 export const FloatingContainer = forwardRef<HTMLDivElement, FloatingContainerProps>(function FloatingContainer({
@@ -42,8 +39,6 @@ export const FloatingContainer = forwardRef<HTMLDivElement, FloatingContainerPro
                                                                                                                  horizontalAlignment,
                                                                                                                  screenPadding = 16,
                                                                                                                  gap = 4,
-                                                                                                                 isFocusTrap = false,
-                                                                                                                 isFocusingFirst = false,
                                                                                                                  ...props
                                                                                                                }, forwardRef) {
   const innerRef = useRef<HTMLDivElement>(null)
@@ -118,8 +113,7 @@ export const FloatingContainer = forwardRef<HTMLDivElement, FloatingContainerPro
   return createPortal(
     <>
       {backgroundOverlay}
-      <FocusTrap
-        active={isFocusTrap}
+      <div
         {...props}
         ref={innerRef}
         style={{
@@ -131,10 +125,9 @@ export const FloatingContainer = forwardRef<HTMLDivElement, FloatingContainerPro
           ...props.style
         }}
         className={clsx('motion-safe:duration-100 motion-reduce:duration-0', props.className)}
-        focusFirst={isFocusingFirst}
       >
         {children}
-      </FocusTrap>
+      </div>
     </>,
     document.body
   )

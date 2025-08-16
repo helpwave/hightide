@@ -1,6 +1,6 @@
 import type { Meta, StoryObj } from '@storybook/nextjs'
 import { action } from 'storybook/actions'
-import { SelectUncontrolled } from '../../../src/components/user-action/select/Select'
+import { SelectOption, SelectUncontrolled } from '../../../src/components/user-action/select/Select'
 
 const meta = {
   title: 'User Action/Select',
@@ -14,7 +14,7 @@ export const select: Story = {
   args: {
     disabled: false,
     onChange: action('updated'),
-    options: [
+    children: [
       { value: 'Apple' },
       { value: 'Pear', disabled: true },
       { value: 'Strawberry' },
@@ -28,6 +28,7 @@ export const select: Story = {
       { value: 'Watermelon' },
       { value: 'Honeymelon' },
       { value: 'Papja' }
-    ].sort((a,b) => a.value.localeCompare(b.value)),
+    ].sort((a,b) => a.value.localeCompare(b.value))
+      .map((value, index) => (<SelectOption key={index} {...value} />)),
   },
 }
