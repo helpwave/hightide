@@ -162,7 +162,7 @@ export const useFocusTrap = ({
       if (initialFocus?.current) {
         initialFocus.current.focus()
       } else {
-        const elements = containerElement?.querySelectorAll('button, [href], input, select, textarea, [tabindex]:not([tabindex="-1"])')
+        const elements = containerElement.querySelectorAll('button, [href], input, select, textarea, [tabindex]:not([tabindex="-1"])')
         if (focusFirst && elements && elements.length > 0) {
           const first = elements.item(0) as HTMLElement
           first.focus()
@@ -182,5 +182,5 @@ export const useFocusTrap = ({
         }
       }
     }
-  }, [active, paused, isMounted, container, initialFocus])
+  }, [active, paused, isMounted, container, initialFocus, focusFirst])
 }

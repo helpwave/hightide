@@ -1,90 +1,52 @@
-import { List, Plus } from 'lucide-react'
+import { List } from 'lucide-react'
 import clsx from 'clsx'
 import type { PropsForTranslation } from '../../localization/useTranslation'
-import { useTranslation } from '../../localization/useTranslation'
-import type { MultiSelectProps } from '../user-action/select/MultiSelect'
-import { MultiSelect } from '../user-action/select/MultiSelect'
+import { MultiSelectChipDisplay, SelectOption } from '../user-action/select/Select'
 import type { PropertyBaseProps } from './PropertyBase'
 import { PropertyBase } from './PropertyBase'
 import type { FormTranslationType } from '../../localization/defaults/form'
-import { formTranslation } from '../../localization/defaults/form'
 
 type TranslationType = FormTranslationType
 
-export type MultiSelectPropertyProps = Omit<PropertyBaseProps, 'icon' | 'input' | 'hasValue' | 'className'> &
-  Omit<MultiSelectProps, 'className' | 'disabled' | 'label'> & {
-  onAddNew?: (value: string) => void,
+export type MultiSelectPropertyProps = Omit<PropertyBaseProps, 'icon' | 'input' | 'hasValue' | 'className'> & {
+  values: string[],
+  options: string[],
+  onValuesChanged?: (value: string[]) => void,
 }
 
 /**
  * An Input for MultiSelect properties
  */
 export const MultiSelectProperty = ({
-                                      overwriteTranslation,
+                                      values,
                                       options,
-                                      name,
-                                      readOnly = false,
-                                      softRequired,
-                                      onRemove,
-                                      onAddNew,
-                                      ...multiSelectProps
+                                      onValuesChanged,
+                                      ...props
                                     }: PropsForTranslation<TranslationType, MultiSelectPropertyProps>) => {
-  const translation = useTranslation([formTranslation], overwriteTranslation)
-  const hasValue = options.some(value => value.selected)
+  const hasValue = values.length > 0
 
   return (
     <PropertyBase
-      name={name}
-      onRemove={onRemove}
-      readOnly={readOnly}
-      softRequired={softRequired}
+      {...props}
       hasValue={hasValue}
       icon={<List size={24}/>}
       input={({ softRequired }) => (
-        <MultiSelect
-          {...multiSelectProps}
-          options={options}
-          disabled={readOnly}
-          useChipDisplay={true}
-          hintText={`${translation('select')}...`}
-          searchOptions={{
-            sortingFunction: (a, b) => a.id.localeCompare(b.id),
-            ...multiSelectProps?.searchOptions
-          }}
-          additionalItems={({ close, search }) => {
-            if (!onAddNew && !search.trim()) {
-              return undefined
-            }
-            const disabled = options.some(value => value.id === search.trim())
-            return (
-              <button
-                key="add new"
-                disabled={disabled}
-                className={clsx(
-                  'flex-row-2 items-center', {
-                    'text-disabled': disabled,
-                  }
-                )}
-                onClick={() => {
-                  onAddNew(search)
-                  close()
-                }}
-              >
-                <div aria-hidden={true} className="size-force-4">
-                  <Plus/>
-                </div>
-                <span>{`${translation('add')} ${search.trim()}`}</span>
-              </button>
+        <MultiSelectChipDisplay
+          values={values}
+          onValuesChanged={onValuesChanged}
+          disabled={props.readOnly}
+          contentPanelProps={{
+            className: clsx(
+              '!border-none !p-0 !min-h-10',
+              {
+                '!bg-warning !text-surface-warning': softRequired && !hasValue,
+                '': !softRequired || hasValue,
+              }
             )
           }}
-          triggerClassName={clsx(
-            '!border-none !p-0 !min-h-10',
-            {
-              '!bg-warning !text-surface-warning': softRequired && !hasValue,
-              '': !softRequired || hasValue,
-            }
-          )}
-        />
+        >
+          {options.map(value => (<SelectOption key={value} value={value}/>))}
+        </MultiSelectChipDisplay>
       )}
     />
   )

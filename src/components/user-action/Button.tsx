@@ -241,15 +241,15 @@ export const TextButton = ({
                       ...restProps
                     }: TextButtonProps) => {
   const colorClasses = {
-    primary: 'not-disabled:bg-transparent not-disabled:text-button-text-primary-text',
-    negative: 'not-disabled:bg-transparent not-disabled:text-button-text-negative-text',
-    neutral: 'not-disabled:bg-transparent not-disabled:text-button-text-neutral-text',
+    primary: 'not-disabled:bg-transparent not-disabled:text-button-text-primary-text focus-style-none focus-visible:ring-2 not-disabled:focus-visible:ring-button-text-primary-text',
+    negative: 'not-disabled:bg-transparent not-disabled:text-button-text-negative-text focus-style-none focus-visible:ring-2 not-disabled:focus-visible:ring-button-text-negative-text',
+    neutral: 'not-disabled:bg-transparent not-disabled:text-button-text-neutral-text focus-style-none focus-visible:ring-2 not-disabled:focus-visible:ring-button-text-neutral-text',
   }[color]
 
   const backgroundColor = {
-    primary: 'not-disabled:hover:bg-button-text-primary-text/20',
-    negative: 'not-disabled:hover:bg-button-text-negative-text/20',
-    neutral: 'not-disabled:hover:bg-button-text-neutral-text/20',
+    primary: 'not-disabled:hover:bg-button-text-primary-text/20 not-disabled:focus-visible:bg-button-text-primary-text/20',
+    negative: 'not-disabled:hover:bg-button-text-negative-text/20 not-disabled:focus-visible:bg-button-text-negative-text/20',
+    neutral: 'not-disabled:hover:bg-button-text-neutral-text/20 not-disabled:focus-visible:bg-button-text-neutral-text/20',
   }[color]
 
   const iconColorClasses = {

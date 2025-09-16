@@ -35,8 +35,8 @@ export const FloatingContainer = forwardRef<HTMLDivElement, FloatingContainerPro
                                                                                                                  backgroundOverlay,
                                                                                                                  anchor,
                                                                                                                  reactToAnchorScrolling = false,
-                                                                                                                 verticalAlignment,
-                                                                                                                 horizontalAlignment,
+                                                                                                                 verticalAlignment = 'afterEnd',
+                                                                                                                 horizontalAlignment = 'afterStart',
                                                                                                                  screenPadding = 16,
                                                                                                                  gap = 4,
                                                                                                                  ...props
@@ -54,6 +54,11 @@ export const FloatingContainer = forwardRef<HTMLDivElement, FloatingContainerPro
       const windowHeight = window.innerHeight
       const windowWidth = window.innerWidth
       const anchorElement = anchor?.current
+
+      if(anchor && !anchorElement) {
+        console.warn('FloatingContainer anchor provided, but its value is undefined')
+      }
+
       const anchorBoundingRect = anchorElement?.getBoundingClientRect() ?? {
         top: 0,
         bottom: windowHeight,
@@ -62,6 +67,7 @@ export const FloatingContainer = forwardRef<HTMLDivElement, FloatingContainerPro
         width: windowWidth,
         height: windowHeight,
       }
+
       const maxWidth = windowWidth - 2 * screenPadding
       const maxHeight = windowHeight - 2 * screenPadding
 

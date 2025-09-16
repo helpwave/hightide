@@ -1,7 +1,4 @@
-import type {
-  HTMLAttributes,
-  HtmlHTMLAttributes,
-  ReactNode } from 'react'
+import type { ButtonHTMLAttributes, HTMLAttributes, PropsWithChildren, ReactNode } from 'react'
 import React, {
   createContext,
   forwardRef,
@@ -10,48 +7,69 @@ import React, {
   useEffect,
   useId,
   useImperativeHandle,
-  useMemo,
   useRef,
   useState
 } from 'react'
 import clsx from 'clsx'
-import { formTranslation } from '@/src/localization/defaults/form'
+import type { Translation } from '@/src/localization/useTranslation'
 import { useTranslation } from '@/src/localization/useTranslation'
-import { useLogOnce } from '@/src/hooks/useLogOnce'
 import { ExpansionIcon } from '@/src/components/layout-and-navigation/Expandable'
 import type { FloatingContainerProps } from '@/src/components/layout-and-navigation/FloatingContainer'
 import { FloatingContainer } from '@/src/components/layout-and-navigation/FloatingContainer'
 import { useFocusTrap } from '@/src/hooks/focus/useFocusTrap'
 import { match } from '@/src/utils/match'
+import { CheckIcon, Plus, XIcon } from 'lucide-react'
+import { Chip } from '@/src/components/layout-and-navigation/Chip'
+import { useOutsideClick } from '@/src/hooks/useOutsideClick'
+import { IconButton } from '@/src/components/user-action/Button'
 
 //
 // Context
 //
 type RegisteredOption = {
-  type: 'option',
-  id: string,
   value: string,
   disabled: boolean,
   ref: React.RefObject<HTMLLIElement>,
 }
 
-type RegisteredSelectedDisplay = {
-  type: 'selectedDisplay',
-  id: string,
+type HighlightPosition = 'first' | 'last'
+
+type InternalSelectContextState = {
+  isOpen: boolean,
+  highlightedValue?: string,
 }
 
-type RegisteredSelectItem = RegisteredOption | RegisteredSelectedDisplay
+type SelectContextState = InternalSelectContextState & {
+  id: string,
+  value: string[],
+  disabled: boolean,
+  invalid: boolean,
+  isMultiSelect: boolean,
+}
+
+type ToggleOpenOptions = {
+  highlightStartPosition?: HighlightPosition,
+}
+
+const defaultToggleOpenOptions: ToggleOpenOptions = {
+  highlightStartPosition: 'first',
+}
 
 type SelectContextType = {
-  registerItem: (item: RegisteredSelectItem) => void,
-  unregisterItem: (id: string) => void,
-
-  isHighlighted: (id: string) => boolean,
-  highlightedId?: string,
-  setHighlightedId: (id: string) => void,
-
-  onItemClick: (id: string) => void,
-  isSelected: (value: string) => boolean,
+  state: SelectContextState,
+  item: {
+    register: (item: RegisteredOption) => void,
+    unregister: (value: string) => void,
+    toggleSelection: (value: string, isSelected?: boolean) => void,
+    highlightItem: (value: string) => void,
+    moveHighlightedIndex: (delta: number) => void,
+  },
+  trigger: {
+    ref: React.RefObject<HTMLElement>,
+    register: (element: React.RefObject<HTMLElement>) => void,
+    unregister: () => void,
+    toggleOpen: (isOpen?: boolean, options?: ToggleOpenOptions) => void,
+  },
 }
 
 const SelectContext = createContext<SelectContextType | null>(null)
@@ -66,6 +84,196 @@ function useSelectContext() {
 
 
 //
+// SelectRoot
+//
+export type SelectRootProps = PropsWithChildren<{
+  id?: string,
+  value?: string,
+  onValueChanged?: (value: string) => void,
+  values?: string[],
+  onValuesChanged?: (value: string[]) => void,
+  isOpen?: boolean,
+  disabled?: boolean,
+  invalid?: boolean,
+  isMultiSelect?: boolean,
+}>
+
+export const SelectRoot = ({
+                             children,
+                             id,
+                             value,
+                             onValueChanged,
+                             values,
+                             onValuesChanged,
+                             isOpen = false,
+                             disabled = false,
+                             invalid = false,
+                             isMultiSelect = false,
+                           }: SelectRootProps) => {
+  const optionsRef = useRef<RegisteredOption[]>([])
+  const triggerRef = useRef<HTMLElement>(null)
+  const generatedId = useId()
+  const usedId = id ?? generatedId
+
+  const [internalState, setInternalState] = useState<InternalSelectContextState>({
+    isOpen,
+  })
+
+  const state: SelectContextState = {
+    ...internalState,
+    id: usedId,
+    disabled,
+    invalid,
+    value: isMultiSelect ? (values ?? []) : [value].filter(Boolean),
+    isMultiSelect,
+  }
+
+  const registerItem = useCallback((item: RegisteredOption) => {
+    optionsRef.current.push(item)
+    optionsRef.current.sort((a, b) => {
+      const aEl = a.ref.current
+      const bEl = b.ref.current
+      if (!aEl || !bEl) return 0
+      return aEl.compareDocumentPosition(bEl) & Node.DOCUMENT_POSITION_FOLLOWING ? -1 : 1
+    })
+  }, [])
+
+  const unregisterItem = useCallback((value: string) => {
+    optionsRef.current = optionsRef.current.filter(i => i.value !== value)
+  }, [])
+
+  const toggleSelection = (value: string, isSelected?: boolean) => {
+    if (disabled) {
+      return
+    }
+    const option = optionsRef.current.find(i => i.value === value)
+    if (!option) {
+      console.error(`SelectOption with value: ${value} not found`)
+      return
+    }
+    const isSelectedBefore = state.value.includes(value)
+    const isSelectedAfter = isSelected ?? !isSelectedBefore
+    if (isSelectedAfter === isSelectedBefore) {
+      return
+    }
+
+    let newValue: string[]
+    if (!isSelectedAfter) {
+      newValue = state.value.filter(v => v !== value)
+    } else {
+      if (isMultiSelect) {
+        newValue = [...state.value, value]
+      } else {
+        newValue = [value]
+      }
+    }
+
+    if (!isMultiSelect) {
+      onValueChanged?.(newValue[0])
+    } else {
+      onValuesChanged?.(newValue)
+    }
+
+    setInternalState(prevState => ({
+      ...prevState,
+      highlightedValue: value,
+    }))
+  }
+
+  const highlightItem = (value: string) => {
+    if (disabled) {
+      return
+    }
+    setInternalState(prevState => ({
+      ...prevState,
+      highlightedValue: value,
+    }))
+  }
+
+  const registerTrigger = useCallback((ref: React.RefObject<HTMLElement>) => {
+    triggerRef.current = ref.current
+  }, [])
+
+  const unregisterTrigger = useCallback(() => {
+    triggerRef.current = null
+  }, [])
+
+  const toggleOpen = (isOpen?: boolean, options?: ToggleOpenOptions) => {
+    const { highlightStartPosition } = { ...defaultToggleOpenOptions, ...options }
+    let highlightedIndex: number
+    if (highlightStartPosition === 'first') {
+      highlightedIndex = optionsRef.current.findIndex(option => !option.disabled)
+    } else {
+      highlightedIndex = optionsRef.current.length -1 - [...optionsRef.current].reverse().findIndex(option => !option.disabled)
+    }
+    if (highlightedIndex === -1 || highlightedIndex === optionsRef.current.length) {
+      highlightedIndex = 0
+    }
+    setInternalState(prevState => ({
+      ...prevState,
+      isOpen: isOpen ?? !prevState.isOpen,
+      highlightedValue: optionsRef.current[highlightedIndex].value,
+    }))
+  }
+
+  const moveHighlightedIndex = (delta: number) => {
+    let highlightedIndex = optionsRef.current.findIndex(value => value.value === internalState.highlightedValue)
+    if (highlightedIndex === -1) {
+      highlightedIndex = 0
+    }
+    const optionLength = optionsRef.current.length
+    const startIndex = (highlightedIndex + (delta % optionLength) + optionLength) % optionLength
+    const isForward = delta >= 0
+    let highlightedValue = optionsRef.current[startIndex].value
+    for (let i = 0; i < optionsRef.current.length; i++) {
+      const index = (startIndex + (isForward ? i : -i) + optionLength) % optionLength
+      if (!optionsRef.current[index].disabled) {
+        highlightedValue = optionsRef.current[index].value
+        break
+      }
+    }
+
+    setInternalState(prevState => ({
+      ...prevState,
+      highlightedValue,
+    }))
+  }
+
+  useEffect(() => {
+    if (!internalState.highlightedValue) return
+    const highlighted = optionsRef.current.find(value => value.value === internalState.highlightedValue)
+    if (highlighted) {
+      highlighted.ref.current.scrollIntoView({ behavior: 'instant', block: 'nearest' })
+    } else {
+      console.error(`SelectRoot: Could not find highlighted value (${internalState.highlightedValue})`)
+    }
+  }, [internalState.highlightedValue])
+
+  const contextValue: SelectContextType = {
+    state,
+    item: {
+      register: registerItem,
+      unregister: unregisterItem,
+      toggleSelection,
+      highlightItem,
+      moveHighlightedIndex,
+    },
+    trigger: {
+      ref: triggerRef,
+      register: registerTrigger,
+      unregister: unregisterTrigger,
+      toggleOpen,
+    },
+  }
+
+  return (
+    <SelectContext.Provider value={contextValue}>
+      {children}
+    </SelectContext.Provider>
+  )
+}
+
+//
 // SelectOption
 //
 export type SelectOptionProps = Omit<HTMLAttributes<HTMLLIElement>, 'children'> & {
@@ -75,61 +283,325 @@ export type SelectOptionProps = Omit<HTMLAttributes<HTMLLIElement>, 'children'> 
 }
 
 export const SelectOption = forwardRef<HTMLLIElement, SelectOptionProps>(
-  function SelectOption({ value, disabled = false, children, className, ...rest }, ref) {
-    const {
-      registerItem,
-      unregisterItem,
-      isHighlighted,
-      setHighlightedId,
-      onItemClick,
-      isSelected,
-    } = useSelectContext()
-
+  function SelectOption({ value, disabled = false, children, className, ...restProps }, ref) {
+    const { state, item, trigger } = useSelectContext()
+    const { register, unregister, toggleSelection, highlightItem } = item
     const itemRef = useRef<HTMLLIElement>(null)
-    const id = React.useId()
 
     // Register with parent
     useEffect(() => {
-      registerItem({ type: 'option', id, value, disabled, ref: itemRef })
-      return () => unregisterItem(id)
-    }, [id, value, disabled, registerItem, unregisterItem])
+      register({ value, disabled, ref: itemRef })
+      return () => unregister(value)
+    }, [value, disabled, register, unregister])
 
-    const highlighted = isHighlighted(id)
-    const selected = isSelected(value)
+    const isHighlighted = state.highlightedValue === value
+    const isSelected = state.value.includes(value)
 
     return (
       <li
+        {...restProps}
         ref={(node) => {
           itemRef.current = node
           if (typeof ref === 'function') ref(node)
           else if (ref) (ref as React.MutableRefObject<HTMLLIElement | null>).current = node
         }}
-        id={id}
+        id={value}
         role="option"
         aria-disabled={disabled}
-        aria-selected={selected}
-        data-highlighted={highlighted ? '' : undefined}
-        data-selected={selected ? '' : undefined}
+        aria-selected={isSelected}
+        data-highlighted={isHighlighted ? '' : undefined}
+        data-selected={isSelected ? '' : undefined}
         data-disabled={disabled ? '' : undefined}
         className={clsx(
           'flex-row-1 items-center px-2 py-1 rounded-md',
           'data-highlighted:bg-primary/20',
           'data-disabled:text-disabled data-disabled:cursor-not-allowed',
           'not-data-disabled:cursor-pointer',
+          'group',
           className
         )}
-        onClick={() => {
-          if (!disabled) onItemClick(id)
-        }}
-        onMouseEnter={() => {
+        onClick={(event) => {
           if (!disabled) {
-            setHighlightedId(id)
+            toggleSelection(value)
+            if (!state.isMultiSelect) {
+              trigger.toggleOpen(false)
+            }
+            restProps.onClick?.(event)
           }
         }}
-        {...rest}
+        onMouseEnter={(event) => {
+          if (!disabled) {
+            highlightItem(value)
+            restProps.onMouseEnter?.(event)
+          }
+        }}
       >
+        <CheckIcon
+          className={clsx('w-4 h-4', { 'opacity-0': !isSelected || disabled })}
+          aria-hidden={true}
+        />
         {children ?? value}
       </li>
+    )
+  }
+)
+
+///
+/// SelectButton
+///
+type SelectButtonTranslationType = {
+  clickToSelect: string,
+}
+
+const defaultSelectButtonTranslation: Translation<SelectButtonTranslationType> = {
+  en: {
+    clickToSelect: 'Click to select',
+
+  },
+  de: {
+    clickToSelect: 'Zum auswählen drücken'
+  }
+}
+
+type SelectButtonProps = ButtonHTMLAttributes<HTMLButtonElement> & {
+  placeholder?: ReactNode,
+}
+
+export const SelectButton = forwardRef<HTMLButtonElement, SelectButtonProps>(function SelectButton(
+  { placeholder, ...props }, ref
+) {
+  const translation = useTranslation([defaultSelectButtonTranslation])
+  const { state, trigger } = useSelectContext()
+  const { register, unregister, toggleOpen } = trigger
+
+  const innerRef = useRef<HTMLButtonElement>(null)
+  useImperativeHandle(ref, () => innerRef.current)
+
+  useEffect(() => {
+    register(innerRef)
+    return () => unregister()
+  }, [register, unregister])
+
+  const disabled = !!props?.disabled || !!state.disabled
+  const invalid = state.invalid
+  const hasValue = state.value.length > 0
+
+  return (
+    <button
+      {...props}
+      ref={innerRef}
+      id={state.id} // TODO allow for a custom id here
+      className={clsx(
+        'flex-row-2 items-center justify-between bg-input-background text-input-text rounded-md px-2.5 py-2.5',
+        'data-placeholder:text-description',
+        props.className
+      )}
+      onClick={() => toggleOpen(!state.isOpen)}
+      onKeyDown={event   => {
+        switch (event.key) {
+          case 'ArrowDown':
+            toggleOpen(true, { highlightStartPosition: 'first' })
+            break
+          case 'ArrowUp':
+            toggleOpen(true, { highlightStartPosition: 'last' })
+            break
+        }
+      }}
+
+      data-placeholder={!hasValue ? '' : undefined}
+      data-disabled={disabled ? '' : undefined}
+      data-invalid={invalid ? '' : undefined}
+
+      aria-invalid={invalid}
+      aria-disabled={disabled}
+      aria-haspopup="listbox"
+      aria-expanded={state.isOpen}
+      aria-controls={state.isOpen ? `${state.id}-listbox` : undefined}
+    >
+      {hasValue ? (state.value.join(', ')) : placeholder ?? translation('clickToSelect')}
+      <ExpansionIcon isExpanded={state.isOpen}/>
+    </button>
+  )
+})
+
+///
+/// SelectChipDisplay
+///
+type SelectChipDisplayProps = HTMLAttributes<HTMLDivElement> & {
+  disabled?: boolean,
+  placeholder?: ReactNode,
+}
+
+export const SelectChipDisplay = forwardRef<HTMLDivElement, SelectChipDisplayProps>(function SelectChipDisplay(
+  { ...props }, ref
+) {
+  const { state, trigger, item } = useSelectContext()
+  const { register, unregister, toggleOpen } = trigger
+
+  const innerRef = useRef<HTMLDivElement>(null)
+  useImperativeHandle(ref, () => innerRef.current)
+
+  useEffect(() => {
+    register(innerRef)
+    return () => unregister()
+  }, [register, unregister])
+
+  const disabled = !!props?.disabled || !!state.disabled
+  const invalid = state.invalid
+
+  return (
+    <div
+      {...props}
+      ref={innerRef}
+      className={clsx(
+        'flex flex-wrap flex-row gap-2 items-center bg-input-background text-input-text rounded-md px-2.5 py-2.5',
+        props.className
+      )}
+      data-disabled={disabled ? '' : undefined}
+      data-invalid={invalid ? '' : undefined}
+
+      aria-invalid={invalid}
+      aria-disabled={disabled}
+    >
+      {state.value.map((value) => (
+        <Chip key={value} className="gap-x-2">
+          {value}
+          <button
+            // TODO add label to indicate purpose to screen reader
+            onClick={() => {
+              item.toggleSelection(value, false)
+            }}
+            className="focus-within:text-negative hover:bg-negative/20 hover:text-negative rounded-md focus-style-none focus-visible:ring-2 focus-visible:ring-negative focus-visible:bg-negative/20"
+          >
+            <XIcon/>
+          </button>
+        </Chip>
+      ))}
+      <IconButton
+        id={state.id} // TODO allow for a custom id here
+        onClick={() => toggleOpen()}
+        onKeyDown={event => {
+          switch (event.key) {
+            case 'ArrowDown':
+              toggleOpen(true, { highlightStartPosition: 'first' })
+              break
+            case 'ArrowUp':
+              toggleOpen(true, { highlightStartPosition: 'last' })
+          }
+        }}
+        size="small"
+        color="neutral"
+
+        aria-invalid={invalid}
+        aria-disabled={disabled}
+        aria-haspopup="listbox"
+        aria-expanded={state.isOpen}
+        aria-controls={state.isOpen ? `${state.id}-listbox` : undefined}
+      >
+        <Plus/>
+      </IconButton>
+    </div>
+  )
+})
+
+
+///
+/// SelectContent
+///
+type Orientation = 'vertical' | 'horizontal'
+
+export type SelectContentProps = HTMLAttributes<HTMLUListElement> &
+  Pick<FloatingContainerProps, 'gap' | 'horizontalAlignment' | 'verticalAlignment'> & {
+  orientation?: Orientation,
+}
+
+export const SelectContent = forwardRef<HTMLUListElement, SelectContentProps>(
+  function SelectContent({
+                           gap,
+                           horizontalAlignment,
+                           verticalAlignment,
+                           orientation = 'vertical',
+                           ...props
+                         }, ref) {
+    const innerRef = useRef<HTMLUListElement | null>(null)
+    useImperativeHandle(ref, () => innerRef.current)
+
+    const { trigger, state, item } = useSelectContext()
+
+    useFocusTrap({
+      container: innerRef,
+      active: state.isOpen,
+      focusFirst: true,
+    })
+
+    useOutsideClick([innerRef], () => {
+      trigger.toggleOpen(false)
+    })
+
+    return (
+      <FloatingContainer
+        id={`${state.id}-listbox`}
+        verticalAlignment={verticalAlignment}
+        horizontalAlignment={horizontalAlignment}
+        gap={gap}
+        anchor={trigger.ref}
+        hidden={!state.isOpen}
+        className={clsx('flex-col-0 p-2 bg-menu-background text-menu-text rounded-md shadow-hw-bottom focus-style-within')}
+      >
+        <ul
+          ref={innerRef}
+          {...props}
+          onKeyDown={(event) => {
+            switch (event.key) {
+              case 'Escape':
+                trigger.toggleOpen(false)
+                event.preventDefault()
+                break
+              case match(orientation, {
+                vertical: 'ArrowDown',
+                horizontal: 'ArrowUp'
+              }):
+                item.moveHighlightedIndex(1)
+                event.preventDefault()
+                break
+              case match(orientation, {
+                vertical: 'ArrowUp',
+                horizontal: 'ArrowDown'
+              }):
+                item.moveHighlightedIndex(-1)
+                event.preventDefault()
+                break
+              case 'Home':
+                // TODO support later by selecting the first not disabled entry
+                event.preventDefault()
+                break
+              case 'End':
+                // TODO support later by selecting the last not disabled entry
+                event.preventDefault()
+                break
+              case 'Enter': // Fall through
+              case ' ':
+                if (state.highlightedValue) {
+                  item.toggleSelection(state.highlightedValue)
+                  if(!state.isMultiSelect) {
+                    trigger.toggleOpen(false)
+                  }
+                  event.preventDefault()
+                }
+                break
+            }
+          }}
+
+          className={clsx('focus-style-none', props.className)}
+
+          role="listbox"
+          aria-multiselectable={state.isMultiSelect}
+          aria-orientation={orientation}
+          tabIndex={0}
+        >
+          {props.children}
+        </ul>
+      </FloatingContainer>
     )
   }
 )
@@ -137,295 +609,22 @@ export const SelectOption = forwardRef<HTMLLIElement, SelectOptionProps>(
 //
 // Select
 //
-type OpenState = {
-  open: boolean,
-  startIndex?: number,
-}
-
-type Orientation = 'vertical' | 'horizontal'
-
-export type SelectPrimitiveProps = HtmlHTMLAttributes<HTMLButtonElement> &
-  Pick<FloatingContainerProps, 'gap' | 'horizontalAlignment' | 'verticalAlignment' | 'className'> & {
-  value?: string[],
-  onItemClicked?: (value: string) => void,
-  onSelectionChanged?: (value: string[]) => void,
-  disabled?: boolean,
-  invalid?: boolean,
-  isMultiple?: boolean,
-  orientation?: Orientation,
-  placeholder?: ReactNode,
-  contentClassName?: string,
-}
-
-/**
- * A Select Component for selecting form a list of options
- *
- * The State is managed by the parent
- */
-export const SelectPrimitive = forwardRef<HTMLButtonElement, SelectPrimitiveProps>(function SelectPrimitive({
-                                                                                                              value,
-                                                                                                              id: userId,
-                                                                                                              onSelectionChanged,
-                                                                                                              onItemClicked,
-                                                                                                              disabled = false,
-                                                                                                              invalid = false,
-                                                                                                              isMultiple = true,
-                                                                                                              orientation = 'vertical',
-                                                                                                              placeholder,
-                                                                                                              contentClassName,
-                                                                                                              horizontalAlignment = 'center',
-                                                                                                              verticalAlignment = 'afterEnd',
-                                                                                                              gap,
-                                                                                                              ...props
-                                                                                                            }, forwardRef) {
-  const translation = useTranslation([formTranslation])
-
-  const [openState, setOpenState] = useState<OpenState>({ open: false })
-  const [highlightedIndex, setHighlightedIndex] = useState<number | undefined>(undefined)
-
-  const triggerRef = useRef<HTMLButtonElement>(null)
-  useImperativeHandle(forwardRef, () => triggerRef.current)
-  const listBoxRef = useRef<HTMLUListElement | null>(null)
-  const optionsRef = useRef<RegisteredOption[]>([])
-  const selectedRef = useRef<RegisteredSelectedDisplay>(null)
-
-  const generatedId = useId()
-  const id = generatedId ?? userId
-
-  const registerItem = useCallback((item: RegisteredSelectItem) => {
-    if (item.type === 'selectedDisplay') {
-      selectedRef.current = item
-    } else if (item.type === 'option') {
-      optionsRef.current.push(item)
-      optionsRef.current.sort((a, b) => {
-        const aEl = a.ref.current
-        const bEl = b.ref.current
-        if (!aEl || !bEl) return 0
-        return aEl.compareDocumentPosition(bEl) & Node.DOCUMENT_POSITION_FOLLOWING ? -1 : 1
-      })
-    }
-  }, [])
-
-  const unregisterItem = useCallback((id: string) => {
-    optionsRef.current = optionsRef.current.filter(i => i.id !== id)
-  }, [])
-
-  const isSelected = useCallback(
-    (val: string) => (value ?? []).includes(val),
-    [value]
-  )
-
-  const isHighlighted = useCallback(
-    (val: string) => highlightedIndex !== undefined && optionsRef.current[highlightedIndex]?.id === val,
-    [highlightedIndex]
-  )
-
-
-  const onItemClickedHandler = useCallback(
-    (id: string) => {
-      const index = optionsRef.current.findIndex(i => i.id === id)
-      if (index === -1) {
-        console.error('ListBoxItem provided an invalid id')
-        return
-      }
-      const item = optionsRef.current[index]
-      const val = item.value
-      onItemClicked?.(val)
-      setHighlightedIndex(index)
-      if (!isMultiple) {
-        onSelectionChanged?.([val])
-        setOpenState({ open: false })
-      } else {
-        if (isSelected(val)) {
-          onSelectionChanged?.((value ?? []).filter(v => v !== val))
-        } else {
-          onSelectionChanged?.([...(value ?? []), val])
-        }
-      }
-    },
-    [onItemClicked, isMultiple, onSelectionChanged, isSelected, value]
-  )
-
-  const setHighlightedId = useCallback((id: string) => {
-    const index = optionsRef.current.findIndex(i => i.id === id)
-    if (index !== -1) {
-      setHighlightedIndex(index)
-    }
-  }, [])
-
-  // Scroll highlighted item into view
-  useEffect(() => {
-    if (highlightedIndex !== undefined) {
-      optionsRef.current[highlightedIndex]?.ref.current?.scrollIntoView({ block: 'nearest', behavior: 'auto' })
-    }
-  }, [highlightedIndex])
-
-  const highlightedItem: RegisteredSelectItem | undefined = optionsRef.current[highlightedIndex]
-  const ctxValue: SelectContextType = {
-    registerItem,
-    unregisterItem,
-    isHighlighted,
-    highlightedId: highlightedItem?.id,
-    setHighlightedId,
-    onItemClick: onItemClickedHandler,
-    isSelected,
-  }
-
-  const moveHighlight = (delta: number) => {
-    if (optionsRef.current.length === 0) return
-    let nextIndex = highlightedIndex ?? -1
-    for (let i = 0; i < optionsRef.current.length; i++) {
-      nextIndex = (nextIndex + delta + optionsRef.current.length) % optionsRef.current.length
-      if (!optionsRef.current[nextIndex].disabled) break
-    }
-    setHighlightedIndex(nextIndex)
-  }
-
-  const selectedOption = useMemo(() => optionsRef.current.find(option => (value ?? []).some(value => value === option.value)), [value])
-  useLogOnce(
-    'The selected value is not found in the options list.',
-    value !== undefined && selectedOption !== undefined
-  )
-
-  useFocusTrap({
-    container: listBoxRef,
-    active: openState.open,
-    focusFirst: true,
-  })
-
-  return (
-    <>
-      <button
-        id={id}
-        ref={triggerRef}
-        {...props}
-        className={clsx(
-          'flex-row-4 items-center justify-between bg-input-background text-input-text rounded-md px-2.5 py-2.5',
-          'data-placeholder:text-description',
-          props.className
-        )}
-        onClick={() => setOpenState(({ open }) => ({ open: !open }))}
-        onKeyDown={event => {
-          switch (event.key) {
-            case 'ArrowDown':
-              setOpenState({ open: true, startIndex: 0 })
-              break
-            case 'ArrowUp':
-              setOpenState({ open: true, startIndex: optionsRef.current.length - 1 })
-          }
-        }}
-
-        data-placeholder={!value ? '' : undefined}
-        data-disabled={disabled ? '' : undefined}
-        data-invalid={invalid ? '' : undefined}
-
-        aria-invalid={invalid}
-        aria-disabled={disabled}
-        aria-haspopup="listbox"
-        aria-expanded={openState.open}
-        aria-controls={openState.open ? `${id}-listbox` : undefined}
-      >
-        {(value ?? []).length > 0 ? (value ?? value.join(', ')) : placeholder ?? `${translation('select')}...`}
-        <ExpansionIcon isExpanded={openState.open}/>
-      </button>
-      {openState.open && (
-        <FloatingContainer
-          id={`${id}-listbox`}
-          verticalAlignment={verticalAlignment}
-          horizontalAlignment={horizontalAlignment}
-          gap={gap}
-          anchor={triggerRef}
-          className={clsx('flex-col-0 p-2 bg-menu-background text-menu-text rounded-md shadow-hw-bottom focus-style-within', contentClassName)}
-        >
-          <SelectContext.Provider value={ctxValue}>
-            <ul
-              ref={listBoxRef}
-              onFocus={() => {
-                if (highlightedIndex === undefined) {
-                  const firstEnabled = optionsRef.current.findIndex(i => !i.disabled)
-                  setHighlightedIndex(firstEnabled !== -1 ? firstEnabled : undefined)
-                }
-              }}
-              onBlur={() => {
-                setHighlightedIndex(undefined)
-              }}
-              onKeyDown={(event) => {
-                switch (event.key) {
-                  case 'Escape':
-                    setOpenState({ open: false })
-                    event.preventDefault()
-                    break
-                  case match(orientation, {
-                    vertical: 'ArrowDown',
-                    horizontal: 'ArrowUp'
-                  }):
-                    moveHighlight(1)
-                    event.preventDefault()
-                    break
-                  case match(orientation, {
-                    vertical: 'ArrowUp',
-                    horizontal: 'ArrowDown'
-                  }):
-                    moveHighlight(-1)
-                    event.preventDefault()
-                    break
-                  case 'Home':
-                    setHighlightedIndex(optionsRef.current.findIndex(i => !i.disabled))
-                    event.preventDefault()
-                    break
-                  case 'End':
-                    for (let i = optionsRef.current.length - 1; i >= 0; i--) {
-                      if (!optionsRef.current[i].disabled) {
-                        setHighlightedIndex(i)
-                        break
-                      }
-                    }
-                    event.preventDefault()
-                    break
-                  case 'Enter':
-                  case ' ':
-                    if (highlightedIndex !== undefined) {
-                      event.preventDefault()
-                      onItemClickedHandler(optionsRef.current[highlightedIndex].id)
-                    }
-                    break
-                }
-              }}
-
-              className={clsx('focus-style-none', props.className)}
-
-              role="listbox"
-              aria-multiselectable={isMultiple}
-              aria-orientation={orientation}
-              tabIndex={0}
-            >
-              {props.children}
-            </ul>
-          </SelectContext.Provider>
-        </FloatingContainer>
-      )}
-    </>
-  )
-})
-
-export type SelectProps = Omit<SelectPrimitiveProps, 'isMultiple' | 'value' | 'onSelectionChanged'> & {
-  value?: string,
-  onSelectionChanged?: (value?: string) => void,
+export type SelectProps = Omit<SelectRootProps, 'isMultiSelect' | 'values' | 'onValuesChanged'> & {
+  contentPanelProps?: SelectContentProps,
+  buttonProps?: SelectButtonProps,
 }
 
 export const Select = forwardRef<HTMLButtonElement, SelectProps>(function Select({
-                                                                                   value,
-                                                                                   onSelectionChanged,
+                                                                                   children,
+                                                                                   contentPanelProps,
+                                                                                   buttonProps,
                                                                                    ...props
                                                                                  }, ref) {
   return (
-    <SelectPrimitive
-      {...props}
-      ref={ref}
-      value={value !== undefined ? [value] : undefined}
-      onSelectionChanged={value => onSelectionChanged(value[0])}
-      isMultiple={false}
-    />
+    <SelectRoot {...props} isMultiSelect={false}>
+      <SelectButton ref={ref} {...buttonProps} />
+      <SelectContent {...contentPanelProps}>{children}</SelectContent>
+    </SelectRoot>
   )
 })
 
@@ -433,7 +632,7 @@ export const Select = forwardRef<HTMLButtonElement, SelectProps>(function Select
 export type SelectUncontrolledProps = SelectProps
 export const SelectUncontrolled = forwardRef<HTMLButtonElement, SelectUncontrolledProps>(function SelectUncontrolled({
                                                                                                                        value: initialValue,
-                                                                                                                       onSelectionChanged,
+                                                                                                                       onValueChanged,
                                                                                                                        ...props
                                                                                                                      }, ref) {
   const [value, setValue] = useState(initialValue)
@@ -447,9 +646,9 @@ export const SelectUncontrolled = forwardRef<HTMLButtonElement, SelectUncontroll
       {...props}
       ref={ref}
       value={value}
-      onSelectionChanged={value => {
+      onValueChanged={value => {
         setValue(value)
-        onSelectionChanged?.(value)
+        onValueChanged?.(value)
       }}
     />
   )
@@ -459,41 +658,95 @@ export const SelectUncontrolled = forwardRef<HTMLButtonElement, SelectUncontroll
 //
 // MultiSelect
 //
-export type MultiSelectProps = Omit<SelectPrimitiveProps, 'isMultiple'>
+export type MultiSelectProps = Omit<SelectRootProps, 'isMultiSelect' | 'value' | 'onValueChanged'> & {
+  contentPanelProps?: SelectContentProps,
+  buttonProps?: SelectButtonProps,
+}
 
 export const MultiSelect = forwardRef<HTMLButtonElement, MultiSelectProps>(function MultiSelect({
+                                                                                                  children,
+                                                                                                  contentPanelProps,
+                                                                                                  buttonProps,
                                                                                                   ...props
                                                                                                 }, ref) {
   return (
-    <SelectPrimitive
-      {...props}
-      ref={ref}
-      isMultiple={true}
-    />
+    <SelectRoot {...props} isMultiSelect={true}>
+      <SelectButton ref={ref} {...buttonProps} />
+      <SelectContent {...contentPanelProps}>{children}</SelectContent>
+    </SelectRoot>
   )
 })
 
 
 export type MultiSelectUncontrolledProps = MultiSelectProps
 export const MultiSelectUncontrolled = forwardRef<HTMLButtonElement, MultiSelectUncontrolledProps>(function MultiSelectUncontrolled({
-                                                                                                                                      value: initialValue,
-                                                                                                                                      onSelectionChanged,
+                                                                                                                                      values: initialValues,
+                                                                                                                                      onValuesChanged,
                                                                                                                                       ...props
                                                                                                                                     }, ref) {
-  const [value, setValue] = useState(initialValue)
+  const [values, setValues] = useState(initialValues)
 
   useEffect(() => {
-    setValue(initialValue)
-  }, [initialValue])
+    setValues(initialValues)
+  }, [initialValues])
 
   return (
     <MultiSelect
       {...props}
       ref={ref}
-      value={value}
-      onSelectionChanged={value => {
-        setValue(value)
-        onSelectionChanged?.(value)
+      values={values}
+      onValuesChanged={value => {
+        setValues(value)
+        onValuesChanged?.(value)
+      }}
+    />
+  )
+})
+
+
+//
+// MultiSelectChipDisplay
+//
+export type MultiSelectChipDisplayProps = Omit<SelectRootProps, 'isMultiSelect' | 'value' | 'onValueChanged'> & {
+  contentPanelProps?: SelectContentProps,
+  chipDisplayProps?: SelectChipDisplayProps,
+}
+
+export const MultiSelectChipDisplay = forwardRef<HTMLDivElement, MultiSelectChipDisplayProps>(function MultiSelectChipDisplay({
+                                                                                                                                children,
+                                                                                                                                contentPanelProps,
+                                                                                                                                chipDisplayProps,
+                                                                                                                                ...props
+                                                                                                                              }, ref) {
+  return (
+    <SelectRoot {...props} isMultiSelect={true}>
+      <SelectChipDisplay ref={ref} {...chipDisplayProps} />
+      <SelectContent {...contentPanelProps}>{children}</SelectContent>
+    </SelectRoot>
+  )
+})
+
+
+export type MultiSelectChipDisplayUncontrolledProps = MultiSelectChipDisplayProps
+export const MultiSelectChipDisplayUncontrolled = forwardRef<HTMLDivElement, MultiSelectChipDisplayUncontrolledProps>(function MultiSelectChipDisplayUncontrolled({
+                                                                                                                                                                    values: initialValues,
+                                                                                                                                                                    onValuesChanged,
+                                                                                                                                                                    ...props
+                                                                                                                                                                  }, ref) {
+  const [values, setValues] = useState(initialValues)
+
+  useEffect(() => {
+    setValues(initialValues)
+  }, [initialValues])
+
+  return (
+    <MultiSelectChipDisplay
+      {...props}
+      ref={ref}
+      values={values}
+      onValuesChanged={value => {
+        setValues(value)
+        onValuesChanged?.(value)
       }}
     />
   )

@@ -1,16 +1,19 @@
 import { action } from 'storybook/actions'
-import { MultiSelectUncontrolled, SelectOption } from '../../../src/components/user-action/select/Select'
+import {
+  MultiSelectChipDisplayUncontrolled,
+  SelectOption
+} from '../../../src/components/user-action/select/Select'
 import type { Meta, StoryObj } from '@storybook/nextjs'
 
 const meta = {
   title: 'User Action/Select',
-  component: MultiSelectUncontrolled,
-} satisfies Meta<typeof MultiSelectUncontrolled>
+  component: MultiSelectChipDisplayUncontrolled,
+} satisfies Meta<typeof MultiSelectChipDisplayUncontrolled>
 
 export default meta
 type Story = StoryObj<typeof meta>;
 
-export const multiSelect: Story = {
+export const multiSelectChipDisplay: Story = {
   args: {
     disabled: false,
     onValuesChanged: action('onChange'),

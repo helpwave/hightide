@@ -13,7 +13,7 @@ type Story = StoryObj<typeof meta>;
 export const select: Story = {
   args: {
     disabled: false,
-    onChange: action('updated'),
+    onValueChanged: action('updated'),
     children: [
       { value: 'Apple' },
       { value: 'Pear', disabled: true },

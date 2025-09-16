@@ -2,7 +2,6 @@ import clsx from 'clsx'
 import type { CSSProperties } from 'react'
 import { useMemo } from 'react'
 import { UserIcon } from 'lucide-react'
-import Image from 'next/image'
 import * as AvatarPrimitive from '@radix-ui/react-avatar'
 
 const avtarSizeList = ['sm', 'md', 'lg', 'xl'] as const

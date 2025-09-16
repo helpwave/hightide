@@ -3,17 +3,15 @@ import { action } from 'storybook/actions'
 import type { StorybookHelperSelectType } from '../../../src/storybook/helper'
 import { StorybookHelper } from '../../../src/storybook/helper'
 import { useState } from 'react'
-import type { MultiSelectOption } from '../../../src/components/user-action/select/MultiSelect'
-import { MultiSelect } from '../../../src/components/user-action/select/MultiSelect'
+import { MultiSelect, Select, SelectOption } from '../../../src/components/user-action/select/Select'
 import { FormElementWrapper } from '../../../src/components/form/FormElementWrapper'
 import { Input } from '../../../src/components/user-action/input/Input'
-import { Select } from '../../../src/components/user-action/select/Select'
 import { Textarea } from '../../../src/components/user-action/Textarea'
 
 type FormValue = {
   name: string,
   favouriteFruit: StorybookHelperSelectType,
-  allergies: MultiSelectOption<StorybookHelperSelectType>[],
+  allergies: string[],
   notes: string,
 }
 
@@ -29,12 +27,7 @@ const FormExample = ({
   const [state, setState] = useState<FormValue>({
     name: 'John Doe',
     favouriteFruit: 'Strawberry',
-    allergies: StorybookHelper.selectValues.map(value => ({
-      id: value,
-      label: value,
-      keywords: [value],
-      selected: value === 'Mango'
-    })),
+    allergies: StorybookHelper.selectValues.filter((value, index) => index === 5),
     notes: 'I don\'t like pineapple',
   })
 
@@ -91,16 +84,15 @@ const FormExample = ({
         label="Your favourite Fruit"
       >
         {(bag) => (
-          <Select<StorybookHelperSelectType>
+          <Select
             {...bag}
             value={state.favouriteFruit}
-            options={StorybookHelper.selectValues.map(value => ({
-              id: value,
-              label: value,
-              keywords: [value]
-            }))}
-            onChange={favouriteFruit => setStatePropagator({ favouriteFruit })}
-          />
+            onValueChanged={favouriteFruit => setStatePropagator({ favouriteFruit: favouriteFruit as StorybookHelperSelectType })}
+          >
+            {StorybookHelper.selectValues.map(value => (
+              <SelectOption key={value} value={value}/>
+            ))}
+          </Select>
         )}
       </FormElementWrapper>
       <FormElementWrapper
@@ -110,11 +102,15 @@ const FormExample = ({
         label="Allergies"
       >
         {(bag) => (
-          <MultiSelect<StorybookHelperSelectType>
+          <MultiSelect
             {...bag}
-            options={state.allergies}
-            onChange={allergies => setStatePropagator({ allergies })}
-          />
+            values={state.allergies}
+            onValuesChanged={allergies => setStatePropagator({ allergies })}
+          >
+            {StorybookHelper.selectValues.map(value => (
+              <SelectOption key={value} value={value}/>
+            ))}
+          </MultiSelect>
         )}
       </FormElementWrapper>
       <FormElementWrapper
