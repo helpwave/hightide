@@ -19,7 +19,7 @@ type ButtonOverwriteType = {
   disabled?: boolean,
 }
 
-export type ConfirmDialogProps = DialogProps & {
+export type ConfirmDialogProps = Omit<DialogProps, 'onClose'> & {
   isShowingDecline?: boolean,
   requireAnswer?: boolean,
   onCancel: () => void,

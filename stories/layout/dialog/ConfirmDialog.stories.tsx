@@ -24,6 +24,7 @@ const ConfirmDialogExample = ({
   return (
     <>
       <ConfirmDialog
+        {...props}
         isOpen={isOpen}
         onConfirm={() => {
           onConfirm()
@@ -33,11 +34,10 @@ const ConfirmDialogExample = ({
           onDecline()
           setIsOpen(false)
         }}
-        onClose={() => {
-          props.onClose?.()
+        onCancel={() => {
+          props.onCancel?.()
           setIsOpen(false)
         }}
-        {...props}
       />
       <div className="flex-row-2 items-center justify-center min-h-[400px]">
         <SolidButton onClick={() => setIsOpen(true)}>Show Dialog</SolidButton>
@@ -58,9 +58,10 @@ export const confirmDialog: Story = {
   args: {
     isOpen: true,
     isModal: true,
-    title: 'Do you want to confirm this?',
+    titleElement: 'Do you want to confirm this?',
     description: 'Whatever you click only closes the Dialog',
     onDecline: action('onDecline'),
     onConfirm: action('onConfirm'),
+    onCancel: action('onCancel'),
   }
 }

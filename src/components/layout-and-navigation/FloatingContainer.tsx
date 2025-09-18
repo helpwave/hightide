@@ -1,19 +1,91 @@
 import type { HTMLAttributes, MutableRefObject, ReactNode } from 'react'
+import { useCallback } from 'react'
 import { forwardRef, useEffect, useImperativeHandle, useRef, useState } from 'react'
 import { createPortal } from 'react-dom'
 import { useIsMounted } from '@/src/hooks/focus/useIsMounted'
-import { match } from '@/src/utils/match'
 import { clamp } from '@/src/utils/math'
 import { clsx } from 'clsx'
 
-type Position = {
+type Alignment = 'beforeStart' | 'afterStart' | 'center' | 'beforeEnd' | 'afterEnd'
+
+type RectangleBounds = {
+  top: number,
+  right: number,
+  bottom: number,
+  left: number,
+  width: number,
+  height: number,
+}
+
+type CalculatePositionOptions = {
+  verticalAlignment?: Alignment,
+  horizontalAlignment?: Alignment,
+  screenPadding?: number,
+  gap?: number,
+}
+
+type CalculatePositionProps = {
+  windowRect: RectangleBounds,
+  containerRect: RectangleBounds,
+  anchorRect: RectangleBounds,
+  options: CalculatePositionOptions,
+}
+
+type CalculatePositionResult = {
   left: number,
   top: number,
   maxWidth: number,
   maxHeight: number,
 }
 
-type Alignment = 'beforeStart' | 'afterStart' | 'center' | 'beforeEnd' | 'afterEnd'
+function calculatePosition({
+                             windowRect,
+                             containerRect,
+                             anchorRect,
+                             options,
+                           }: CalculatePositionProps): CalculatePositionResult {
+  const { verticalAlignment, horizontalAlignment, gap, screenPadding } = options
+  const windowWidth = windowRect.width
+  const windowHeight = windowRect.height
+
+  const maxWidth = windowWidth - 2 * screenPadding
+  const maxHeight = windowHeight - 2 * screenPadding
+
+  const width = Math.min(containerRect.width, maxWidth)
+  const height = Math.min(containerRect.height, maxHeight)
+
+  const leftSuggestion = {
+    beforeStart: anchorRect.left - width - gap,
+    afterStart: anchorRect.left,
+    center: anchorRect.left + anchorRect.width / 2 - width / 2,
+    beforeEnd: anchorRect.right - width,
+    afterEnd: anchorRect.right + gap,
+  }[horizontalAlignment]
+
+  const topSuggestion = {
+    beforeStart: anchorRect.top - height - gap,
+    afterStart: anchorRect.top,
+    center: anchorRect.top + anchorRect.height / 2 - height / 2,
+    beforeEnd: anchorRect.bottom - height,
+    afterEnd: anchorRect.bottom + gap,
+  }[verticalAlignment]
+
+  const left = clamp(leftSuggestion, [
+    screenPadding,
+    windowWidth - screenPadding - width,
+  ])
+  const top = clamp(topSuggestion, [
+    screenPadding,
+    windowHeight - screenPadding - height,
+  ])
+
+  return {
+    left,
+    top,
+    maxWidth,
+    maxHeight,
+  }
+}
 
 export type FloatingContainerProps = HTMLAttributes<HTMLDivElement> & {
   anchor?: MutableRefObject<HTMLElement>,
@@ -30,6 +102,12 @@ export type FloatingContainerProps = HTMLAttributes<HTMLDivElement> & {
   backgroundOverlay?: ReactNode,
 }
 
+/**
+ * A floating container that aligns to its anchor
+ *
+ * Notes:
+ * - to hide it use the hidden attribute as other means break the functionality
+ */
 export const FloatingContainer = forwardRef<HTMLDivElement, FloatingContainerProps>(function FloatingContainer({
                                                                                                                  children,
                                                                                                                  backgroundOverlay,
@@ -45,21 +123,15 @@ export const FloatingContainer = forwardRef<HTMLDivElement, FloatingContainerPro
   useImperativeHandle(forwardRef, () => innerRef.current)
 
   const isMounted = useIsMounted()
-  const [position, setPosition] = useState<Position>()
+  const [position, setPosition] = useState<CalculatePositionResult>()
 
   const pollingRate = 100
 
-  useEffect(() => {
-    const calculatePosition = () => {
+  const calculate = useCallback(() => {
+      const containerRect = innerRef.current.getBoundingClientRect()
       const windowHeight = window.innerHeight
       const windowWidth = window.innerWidth
-      const anchorElement = anchor?.current
-
-      if(anchor && !anchorElement) {
-        console.warn('FloatingContainer anchor provided, but its value is undefined')
-      }
-
-      const anchorBoundingRect = anchorElement?.getBoundingClientRect() ?? {
+      const windowRect: RectangleBounds = {
         top: 0,
         bottom: windowHeight,
         left: 0,
@@ -67,54 +139,46 @@ export const FloatingContainer = forwardRef<HTMLDivElement, FloatingContainerPro
         width: windowWidth,
         height: windowHeight,
       }
+      const anchorElement = anchor?.current
+      if (anchor && !anchorElement) {
+        console.warn('FloatingContainer anchor provided, but its value is undefined')
+      }
+      const anchorRect: RectangleBounds = anchorElement?.getBoundingClientRect() ?? windowRect
 
-      const maxWidth = windowWidth - 2 * screenPadding
-      const maxHeight = windowHeight - 2 * screenPadding
+      const calculateProps: CalculatePositionProps = {
+        windowRect,
+        anchorRect,
+        containerRect,
+        options: {
+          gap,
+          screenPadding,
+          horizontalAlignment,
+          verticalAlignment
+        }
+      }
+      setPosition(calculatePosition(calculateProps))
+    }, [anchor, gap, horizontalAlignment, screenPadding, verticalAlignment])
 
-      const containerBoundingRect = innerRef.current.getBoundingClientRect()
-      const width = Math.min(containerBoundingRect.width, maxWidth)
-      const height = Math.min(containerBoundingRect.height, maxHeight)
-
-      const leftSuggestion = match(horizontalAlignment, {
-        beforeStart: anchorBoundingRect.left - width - gap,
-        afterStart: anchorBoundingRect.left,
-        center: anchorBoundingRect.left + anchorBoundingRect.width / 2 - width / 2,
-        beforeEnd: anchorBoundingRect.right - width,
-        afterEnd: anchorBoundingRect.right + gap,
-      })
-      const left = clamp(leftSuggestion, [screenPadding, windowWidth - screenPadding - width])
-
-      const topSuggestion = match(verticalAlignment, {
-        beforeStart: anchorBoundingRect.top - height - gap,
-        afterStart: anchorBoundingRect.top,
-        center: anchorBoundingRect.top + anchorBoundingRect.height / 2 - height / 2,
-        beforeEnd: anchorBoundingRect.bottom - height,
-        afterEnd: anchorBoundingRect.bottom + gap,
-      })
-      const top = clamp(topSuggestion, [screenPadding, windowHeight - screenPadding - height])
-
-      setPosition({
-        left,
-        top,
-        maxWidth,
-        maxHeight
-      })
+  useEffect(() => {
+    if (!isMounted && props.hidden) {
+      return
     }
+    calculate()
+  }, [calculate, isMounted, props.hidden])
 
-    calculatePosition()
-
-    window.addEventListener('resize', calculatePosition)
+  useEffect(() => {
+    window.addEventListener('resize', calculate)
     let timeout: NodeJS.Timeout
     if (reactToAnchorScrolling) {
-      timeout = setInterval(calculatePosition, pollingRate)
+      timeout = setInterval(calculate, pollingRate)
     }
     return () => {
+      window.removeEventListener('resize', calculate)
       if (timeout) {
         clearInterval(timeout)
       }
-      window.removeEventListener('resize', calculatePosition)
     }
-  }, [isMounted, anchor, horizontalAlignment, verticalAlignment, screenPadding, gap, reactToAnchorScrolling])
+  }, [calculate, reactToAnchorScrolling])
 
   return createPortal(
     <>
@@ -123,10 +187,10 @@ export const FloatingContainer = forwardRef<HTMLDivElement, FloatingContainerPro
         {...props}
         ref={innerRef}
         style={{
-          position: 'fixed',
+          position: 'absolute',
           overflow: 'hidden',
           opacity: position ? undefined : 0, // hide when position calculation isn't done yet
-          transition: `top ${pollingRate}ms linear, left ${pollingRate}ms linear`,
+          transition: !props.hidden ? `top ${pollingRate}ms linear, left ${pollingRate}ms linear` : undefined,
           ...position,
           ...props.style
         }}

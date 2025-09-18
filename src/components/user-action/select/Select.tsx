@@ -538,6 +538,7 @@ export const SelectContent = forwardRef<HTMLUListElement, SelectContentProps>(
       trigger.toggleOpen(false)
     })
 
+    // TODO allow the ul element to be the floating container
     return (
       <FloatingContainer
         id={`${state.id}-listbox`}

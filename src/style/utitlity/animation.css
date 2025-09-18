@@ -142,6 +142,10 @@
   @keyframes pop-in {
     0% {
       opacity: 0;
+      scale: 100%; /* Necessary so that the FloatingContainer picks up the correct position */
+    }
+    1% {
+      opacity: 0;
       scale: 80%;
     }
     100% {

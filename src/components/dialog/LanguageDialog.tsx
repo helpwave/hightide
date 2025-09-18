@@ -1,7 +1,7 @@
 import type { ReactNode, PropsWithChildren } from 'react'
 import type { PropsForTranslation, Translation } from '../../localization/useTranslation'
 import { useTranslation } from '../../localization/useTranslation'
-import { Select } from '../user-action/select/Select'
+import { Select, SelectOption } from '../user-action/select/Select'
 import type { Language } from '../../localization/util'
 import { LanguageUtil } from '../../localization/util'
 import { useLanguage } from '../../localization/LanguageProvider'
@@ -30,7 +30,7 @@ const defaultLanguageDialogTranslation: Translation<LanguageDialogTranslation> =
   }
 }
 
-type LanguageDialogProps = Omit<DialogProps, 'title' | 'description'> & {
+type LanguageDialogProps = Omit<DialogProps, 'titleElement' | 'description'> & {
   titleOverwrite?: ReactNode,
   descriptionOverwrite?: ReactNode,
 }
@@ -52,7 +52,7 @@ export const LanguageDialog = ({
 
   return (
     <Dialog
-      titleEl={titleOverwrite ?? translation('language')}
+      titleElement={titleOverwrite ?? translation('language')}
       description={descriptionOverwrite ?? translation('chooseLanguage')}
       onClose={onClose}
       {...props}
@@ -60,10 +60,15 @@ export const LanguageDialog = ({
       <div className="w-64">
         <Select
           value={language}
-          options={LanguageUtil.languages.map((language) => ({ value: language, display: translation(language) }))}
-          onChange={(language: string) => setLanguage(language as Language)}
-          contentClassName="z-100"
-        />
+          onValueChanged={(language: string) => setLanguage(language as Language)}
+          contentPanelProps={{
+            className: 'z-100'
+          }}
+        >
+          {LanguageUtil.languages.map((language) => (
+            <SelectOption key={language} value={language}>{translation(language)}</SelectOption>
+          ))}
+        </Select>
         <div className="flex-row-4 mt-3 justify-end">
           <SolidButton color="positive" onClick={onClose}>
             {translation('done')}
