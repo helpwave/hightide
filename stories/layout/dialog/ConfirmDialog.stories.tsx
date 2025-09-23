@@ -56,7 +56,7 @@ type Story = StoryObj<typeof meta>;
 
 export const confirmDialog: Story = {
   args: {
-    isOpen: true,
+    isOpen: false,
     isModal: true,
     titleElement: 'Do you want to confirm this?',
     description: 'Whatever you click only closes the Dialog',

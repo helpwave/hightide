@@ -49,7 +49,9 @@ export const TextProperty = ({
       icon={<Text size={24}/>}
       input={({ softRequired }) => (
         <Textarea
-          className={clsx('ring-0 border-0 outline-0 !px-0 p-0 m-0 shadow-none rounded-none', { 'bg-surface-warning placeholder-warning': softRequired && !hasValue })}
+          className={clsx({
+            'bg-surface-warning placeholder-warning': softRequired && !hasValue
+          })}
           rows={5}
           defaultStyle={false}
           value={value ?? ''}

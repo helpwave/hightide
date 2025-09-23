@@ -14,7 +14,6 @@ type Story = StoryObj<typeof meta>;
 export const expandable: Story = {
   args: {
     isExpanded: false,
-    onChange: action('onChange'),
     disabled: false,
     clickOnlyOnHeader: true,
     label: (<span className="typography-label-lg">Label</span>),
@@ -23,6 +22,7 @@ export const expandable: Story = {
       <div className="flex-col-2 overflow-y-auto">
         {range(20).map(value => (<div  key={value}>{`Item ${value}`}</div>))}
       </div>
-    )
+    ),
+    onChange: action('onChange'),
   },
 }

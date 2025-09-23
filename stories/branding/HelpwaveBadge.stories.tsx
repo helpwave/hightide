@@ -11,7 +11,7 @@ type Story = StoryObj<typeof meta>;
 
 export const helpwaveBadge: Story = {
   args: {
-    size: 'small',
+    size: 'sm',
     title: 'helpwave',
     className: ''
   },

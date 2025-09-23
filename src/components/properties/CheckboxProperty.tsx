@@ -7,6 +7,8 @@ import type { PropertyBaseProps } from './PropertyBase'
 import { PropertyBase } from './PropertyBase'
 import type { FormTranslationType } from '../../localization/defaults/form'
 import { formTranslation } from '../../localization/defaults/form'
+import { useId } from 'react'
+import { Label } from '@/src/components/user-action/Label'
 
 type CheckboxPropertyTranslation = FormTranslationType
 
@@ -26,6 +28,7 @@ export const CheckboxProperty = ({
                                    ...baseProps
                                  }: PropsForTranslation<CheckboxPropertyTranslation, CheckboxPropertyProps>) => {
   const translation = useTranslation([formTranslation], overwriteTranslation)
+  const id= useId()
 
   return (
     <PropertyBase
@@ -34,13 +37,18 @@ export const CheckboxProperty = ({
       readOnly={readOnly}
       icon={<Check size={24}/>}
       input={() => (
-        <Checkbox
-          checked={value ?? true}
-          disabled={readOnly}
-          onChange={onChange}
-          label={{ name: `${translation('yes')}/${translation('no')}`, labelType: 'labelMedium' }}
-          containerClassName="w-full"
-        />
+        <div className="flex-row-2 items-center">
+          <Checkbox
+            id={id}
+            checked={value ?? true}
+            disabled={readOnly}
+            onChange={onChange}
+            aria-labelledby={id+'label'}
+          />
+          <Label id={id+'label'}>
+            {`${translation('yes')}/${translation('no')}`}
+          </Label>
+        </div>
       )}
     />
   )

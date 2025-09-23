@@ -61,8 +61,9 @@ export const LanguageDialog = ({
         <Select
           value={language}
           onValueChanged={(language: string) => setLanguage(language as Language)}
-          contentPanelProps={{
-            className: 'z-100'
+          contentPanelProps={{ className: 'z-100' }}
+          buttonProps={{
+            selectedDisplay: value => translation(value as Language)
           }}
         >
           {LanguageUtil.languages.map((language) => (

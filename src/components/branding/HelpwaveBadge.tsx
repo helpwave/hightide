@@ -1,12 +1,11 @@
-import clsx from 'clsx'
 import { HelpwaveLogo } from '../icons-and-geometry/HelpwaveLogo'
+import type { HTMLAttributes } from 'react'
+import clsx from 'clsx'
 
 type Size = 'sm' | 'md' | 'lg'
 
-export type HelpwaveBadgeProps = {
+export type HelpwaveBadgeProps = HTMLAttributes<HTMLSpanElement> & {
   size?: Size,
-  title?: string,
-  className?: string,
 }
 
 /**
@@ -14,22 +13,24 @@ export type HelpwaveBadgeProps = {
  */
 export const HelpwaveBadge = ({
                                 size = 'sm',
-                                title = 'helpwave',
-                                className = ''
+                                ...props
                               }: HelpwaveBadgeProps) => {
   return (
-    <span>
-      <HelpwaveLogo className={clsx({
-
-      },className)} />
-      title={title}
-      titleClassName={size === 'sm' ? 'typography-title-md-semibold' : 'typography-title-lg-semibold'}
+    <span
+      {...props}
       className={clsx(
-      {
-        'px-2 py-1 rounded-md': size === 'sm',
-        'px-4 py-1 rounded-md': size === 'lg',
-      }, className
-    )}
+        'flex flex-row items-center font-bold font-space rounded-md',
+        {
+          'px-2 py-1': size === 'sm' || size === 'md',
+          'px-4 py-1': size === 'lg',
+          'gap-x-1': size === 'sm',
+          'gap-x-2 text-lg': size === 'md',
+          'gap-x-2 text-xl': size === 'lg'
+        }, props.className
+      )}
+    >
+      <HelpwaveLogo size={size}/>
+      helpwave
     </span>
   )
 }

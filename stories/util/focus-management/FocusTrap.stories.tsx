@@ -4,7 +4,7 @@ import { useRef, useState } from 'react'
 import { InputUncontrolled } from '../../../src/components/user-action/input/Input'
 import { FocusTrap } from '@/src/components/utils/FocusTrap'
 import { clsx } from 'clsx'
-import { createPortal } from 'react-dom'
+import { Dialog } from '../../../src/components/dialog'
 
 const Example = () => {
   const ref = useRef<HTMLButtonElement>(null)
@@ -15,39 +15,25 @@ const Example = () => {
 
   return (
     <>
-      {showDialog && (
-        createPortal(
-          <FocusTrap
-            className="fixed top-1/2 left-1/2 -translate-1/2 flex-col-2 p-2 bg-overlay-background text-overlay-text rounded-lg shadow-hw-bottom"
-          >
-            <span>This is the first dialog trap</span>
-            <div className="flex-row-4 justify-end">
-              <SolidButton onClick={() => setShowDialog2(true)}>
-                Open next
-              </SolidButton>
-              <SolidButton onClick={() => setShowDialog(false)} color="negative">
-                Close
-              </SolidButton>
-            </div>
-          </FocusTrap>,
-          document.body
-        )
-      )}
-      {showDialog2 && (
-        createPortal(
-          <FocusTrap
-            className="fixed top-16 left-1/2 -translate-x-1/2 flex-col-2 p-2 bg-overlay-background text-overlay-text rounded-lg shadow-hw-bottom"
-          >
-            <span>This is the second dialog trap</span>
-            <div className="flex-row-4 justify-end">
-              <SolidButton onClick={() => setShowDialog2(false)} color="negative">
-                Ok
-              </SolidButton>
-            </div>
-          </FocusTrap>,
-          document.body
-        )
-      )}
+      <Dialog
+        isOpen={showDialog}
+        titleElement="Dialog 1"
+        description="This is the second dialog trap"
+        onClose={() => setShowDialog(false)}
+      >
+        <SolidButton onClick={() => setShowDialog2(true)}>
+          Open next
+        </SolidButton>
+        <SolidButton onClick={() => setShowDialog(false)} color="negative">
+          Close
+        </SolidButton>
+      </Dialog>
+      <Dialog
+        isOpen={showDialog2}
+        titleElement="Dialog 2"
+        description="This is the second dialog trap"
+        onClose={() => setShowDialog2(false)}
+      />
       <div className="flex-col-4">
         <FocusTrap
           active={active}

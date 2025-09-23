@@ -9,7 +9,7 @@ import { ConfirmDialog } from '@/src/components/dialog/ConfirmDialog'
 type DiscardChangesDialogTranslation = FormTranslationType
 
 type DiscardChangesDialogProps =
-  Omit<ConfirmDialogProps, 'onDecline' | 'onConfirm' | 'buttonOverwrites' | 'title' | 'description'>
+  Omit<ConfirmDialogProps, 'onDecline' | 'onConfirm' | 'buttonOverwrites' | 'titleElement' | 'description'>
   & {
   isShowingDecline?: boolean,
   requireAnswer?: boolean,
@@ -34,7 +34,7 @@ export const DiscardChangesDialog = ({
   return (
     <ConfirmDialog
       {...props}
-      title={titleOverwrite ?? translation('unsavedChanges')}
+      titleElement={titleOverwrite ?? translation('unsavedChanges')}
       description={descriptionOverwrite ?? translation('unsavedChangesSaveQuestion')}
       onConfirm={onSave}
       onCancel={onCancel}

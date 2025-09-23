@@ -333,7 +333,7 @@ export const Carousel = ({
           <>
             <IconButton
               color="neutral"
-              className={clsx('absolute z-10 left-0 top-1/2 -translate-y-1/2 shadow-md', { hidden: !canGoLeft() })}
+              className={clsx('absolute z-10 left-2 top-1/2 -translate-y-1/2 shadow-md', { hidden: !canGoLeft() })}
               disabled={!canGoLeft()}
               onClick={() => left()}
             >
@@ -341,7 +341,7 @@ export const Carousel = ({
             </IconButton>
             <IconButton
               color="neutral"
-              className={clsx('absolute z-10 right-0 top-1/2 -translate-y-1/2 shadow-md', { hidden: !canGoRight() })}
+              className={clsx('absolute z-10 right-2 top-1/2 -translate-y-1/2 shadow-md', { hidden: !canGoRight() })}
               disabled={!canGoRight()}
               onClick={() => right()}
             >

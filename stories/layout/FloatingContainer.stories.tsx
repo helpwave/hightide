@@ -55,11 +55,12 @@ type Story = StoryObj<typeof meta>;
 export const floatingContainer: Story = {
   args: {
     anchor: true,
-    backgroundOverlay: true,
-    verticalAlignment: 'center',
+    backgroundOverlay: false,
+    isPolling: true,
+    verticalAlignment: 'afterEnd',
     horizontalAlignment: 'center',
     screenPadding: 16,
     gap: 4,
-    reactToAnchorScrolling: true,
+    pollingInterval: 100
   },
 }

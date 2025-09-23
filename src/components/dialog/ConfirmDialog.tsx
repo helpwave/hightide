@@ -81,7 +81,6 @@ export const ConfirmDialog = ({
           </SolidButton>
         )}
         <SolidButton
-          autoFocus
           color={buttonOverwrites?.[2].color ?? mapping[confirmType]}
           onClick={onConfirm}
           disabled={buttonOverwrites?.[2].disabled ?? false}

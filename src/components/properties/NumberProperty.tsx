@@ -54,7 +54,6 @@ export const NumberProperty = ({
           className={clsx('flex-row-2 grow', { 'text-warning': softRequired && !hasValue })}
         >
           <Input
-            expanded={false}
             className={clsx('!ring-0 !border-0 !outline-0 !p-0 !m-0 !w-fit !shadow-none !rounded-none', { 'bg-surface-warning placeholder-warning': softRequired && !hasValue })}
             value={value?.toString() ?? ''}
             type="number"

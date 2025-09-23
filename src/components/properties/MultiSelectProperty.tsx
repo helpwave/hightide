@@ -37,12 +37,13 @@ export const MultiSelectProperty = ({
           disabled={props.readOnly}
           contentPanelProps={{
             className: clsx(
-              '!border-none !p-0 !min-h-10',
-              {
-                '!bg-warning !text-surface-warning': softRequired && !hasValue,
-                '': !softRequired || hasValue,
-              }
+              '!border-none !min-h-10'
             )
+          }}
+          chipDisplayProps={{
+            className: clsx({
+              '!bg-warning !text-surface-warning': softRequired && !hasValue,
+            })
           }}
         >
           {options.map(value => (<SelectOption key={value} value={value}/>))}

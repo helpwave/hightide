@@ -14,14 +14,14 @@ import clsx from 'clsx'
 import type { Translation } from '@/src/localization/useTranslation'
 import { useTranslation } from '@/src/localization/useTranslation'
 import { ExpansionIcon } from '@/src/components/layout-and-navigation/Expandable'
-import type { FloatingContainerProps } from '@/src/components/layout-and-navigation/FloatingContainer'
-import { FloatingContainer } from '@/src/components/layout-and-navigation/FloatingContainer'
 import { useFocusTrap } from '@/src/hooks/focus/useFocusTrap'
 import { match } from '@/src/utils/match'
 import { CheckIcon, Plus, XIcon } from 'lucide-react'
 import { Chip } from '@/src/components/layout-and-navigation/Chip'
-import { useOutsideClick } from '@/src/hooks/useOutsideClick'
 import { IconButton } from '@/src/components/user-action/Button'
+import type { UseFloatingElementOptions } from '@/src/hooks/useFloatingElement'
+import { useFloatingElement } from '@/src/hooks/useFloatingElement'
+import { createPortal } from 'react-dom'
 
 //
 // Context
@@ -142,6 +142,7 @@ export const SelectRoot = ({
     optionsRef.current = optionsRef.current.filter(i => i.value !== value)
   }, [])
 
+  // Setting isSelected to false only works for multiselects
   const toggleSelection = (value: string, isSelected?: boolean) => {
     if (disabled) {
       return
@@ -151,21 +152,18 @@ export const SelectRoot = ({
       console.error(`SelectOption with value: ${value} not found`)
       return
     }
-    const isSelectedBefore = state.value.includes(value)
-    const isSelectedAfter = isSelected ?? !isSelectedBefore
-    if (isSelectedAfter === isSelectedBefore) {
-      return
-    }
 
     let newValue: string[]
-    if (!isSelectedAfter) {
-      newValue = state.value.filter(v => v !== value)
-    } else {
-      if (isMultiSelect) {
-        newValue = [...state.value, value]
+    if (isMultiSelect) {
+      const isSelectedBefore = state.value.includes(value)
+      const isSelectedAfter = isSelected ?? !isSelectedBefore
+      if (!isSelectedAfter) {
+        newValue = state.value.filter(v => v !== value)
       } else {
-        newValue = [value]
+        newValue = [...state.value, value]
       }
+    } else {
+      newValue = [value]
     }
 
     if (!isMultiSelect) {
@@ -204,7 +202,7 @@ export const SelectRoot = ({
     if (highlightStartPosition === 'first') {
       highlightedIndex = optionsRef.current.findIndex(option => !option.disabled)
     } else {
-      highlightedIndex = optionsRef.current.length -1 - [...optionsRef.current].reverse().findIndex(option => !option.disabled)
+      highlightedIndex = optionsRef.current.length - 1 - [...optionsRef.current].reverse().findIndex(option => !option.disabled)
     }
     if (highlightedIndex === -1 || highlightedIndex === optionsRef.current.length) {
       highlightedIndex = 0
@@ -290,9 +288,13 @@ export const SelectOption = forwardRef<HTMLLIElement, SelectOptionProps>(
 
     // Register with parent
     useEffect(() => {
-      register({ value, disabled, ref: itemRef })
+      register({
+        value,
+        disabled,
+        ref: itemRef,
+      })
       return () => unregister(value)
-    }, [value, disabled, register, unregister])
+    }, [value, disabled, register, unregister, children])
 
     const isHighlighted = state.highlightedValue === value
     const isSelected = state.value.includes(value)
@@ -317,7 +319,6 @@ export const SelectOption = forwardRef<HTMLLIElement, SelectOptionProps>(
           'data-highlighted:bg-primary/20',
           'data-disabled:text-disabled data-disabled:cursor-not-allowed',
           'not-data-disabled:cursor-pointer',
-          'group',
           className
         )}
         onClick={(event) => {
@@ -365,10 +366,11 @@ const defaultSelectButtonTranslation: Translation<SelectButtonTranslationType> =
 
 type SelectButtonProps = ButtonHTMLAttributes<HTMLButtonElement> & {
   placeholder?: ReactNode,
+  selectedDisplay?: (value: string[]) => ReactNode,
 }
 
 export const SelectButton = forwardRef<HTMLButtonElement, SelectButtonProps>(function SelectButton(
-  { placeholder, ...props }, ref
+  { placeholder, selectedDisplay, ...props }, ref
 ) {
   const translation = useTranslation([defaultSelectButtonTranslation])
   const { state, trigger } = useSelectContext()
@@ -397,7 +399,7 @@ export const SelectButton = forwardRef<HTMLButtonElement, SelectButtonProps>(fun
         props.className
       )}
       onClick={() => toggleOpen(!state.isOpen)}
-      onKeyDown={event   => {
+      onKeyDown={event => {
         switch (event.key) {
           case 'ArrowDown':
             toggleOpen(true, { highlightStartPosition: 'first' })
@@ -418,7 +420,10 @@ export const SelectButton = forwardRef<HTMLButtonElement, SelectButtonProps>(fun
       aria-expanded={state.isOpen}
       aria-controls={state.isOpen ? `${state.id}-listbox` : undefined}
     >
-      {hasValue ? (state.value.join(', ')) : placeholder ?? translation('clickToSelect')}
+      {hasValue ?
+        selectedDisplay?.(state.value) ?? state.value.join(', ')
+        : placeholder ?? translation('clickToSelect')
+      }
       <ExpansionIcon isExpanded={state.isOpen}/>
     </button>
   )
@@ -510,16 +515,14 @@ export const SelectChipDisplay = forwardRef<HTMLDivElement, SelectChipDisplayPro
 ///
 type Orientation = 'vertical' | 'horizontal'
 
-export type SelectContentProps = HTMLAttributes<HTMLUListElement> &
-  Pick<FloatingContainerProps, 'gap' | 'horizontalAlignment' | 'verticalAlignment'> & {
+export type SelectContentProps = HTMLAttributes<HTMLUListElement> & {
+  alignment?: Pick<UseFloatingElementOptions, 'gap' | 'horizontalAlignment' | 'verticalAlignment'>,
   orientation?: Orientation,
 }
 
 export const SelectContent = forwardRef<HTMLUListElement, SelectContentProps>(
   function SelectContent({
-                           gap,
-                           horizontalAlignment,
-                           verticalAlignment,
+                           alignment,
                            orientation = 'vertical',
                            ...props
                          }, ref) {
@@ -528,35 +531,36 @@ export const SelectContent = forwardRef<HTMLUListElement, SelectContentProps>(
 
     const { trigger, state, item } = useSelectContext()
 
+    const position = useFloatingElement({
+      active: state.isOpen,
+      anchorRef: trigger.ref,
+      containerRef: innerRef,
+      ...alignment,
+    })
+
     useFocusTrap({
       container: innerRef,
-      active: state.isOpen,
-      focusFirst: true,
+      active: state.isOpen && !!position,
     })
 
-    useOutsideClick([innerRef], () => {
-      trigger.toggleOpen(false)
-    })
-
-    // TODO allow the ul element to be the floating container
-    return (
-      <FloatingContainer
-        id={`${state.id}-listbox`}
-        verticalAlignment={verticalAlignment}
-        horizontalAlignment={horizontalAlignment}
-        gap={gap}
-        anchor={trigger.ref}
-        hidden={!state.isOpen}
-        className={clsx('flex-col-0 p-2 bg-menu-background text-menu-text rounded-md shadow-hw-bottom focus-style-within')}
-      >
+    return createPortal(
+      <>
+        <div
+          hidden={!state.isOpen}
+          onClick={() => trigger.toggleOpen(false)}
+          className={clsx('fixed w-screen h-screen inset-0')}
+        />
         <ul
-          ref={innerRef}
           {...props}
+          id={`${state.id}-listbox`}
+          ref={innerRef}
+          hidden={!state.isOpen}
           onKeyDown={(event) => {
             switch (event.key) {
               case 'Escape':
                 trigger.toggleOpen(false)
                 event.preventDefault()
+                event.stopPropagation()
                 break
               case match(orientation, {
                 vertical: 'ArrowDown',
@@ -584,7 +588,7 @@ export const SelectContent = forwardRef<HTMLUListElement, SelectContentProps>(
               case ' ':
                 if (state.highlightedValue) {
                   item.toggleSelection(state.highlightedValue)
-                  if(!state.isMultiSelect) {
+                  if (!state.isMultiSelect) {
                     trigger.toggleOpen(false)
                   }
                   event.preventDefault()
@@ -593,16 +597,21 @@ export const SelectContent = forwardRef<HTMLUListElement, SelectContentProps>(
             }
           }}
 
-          className={clsx('focus-style-none', props.className)}
+          className={clsx('flex-col-0 p-2 bg-menu-background text-menu-text rounded-md shadow-hw-bottom focus-style-within overflow-auto', props.className)}
+          style={{
+            opacity: position ? undefined : 0,
+            position: 'fixed',
+            ...position
+          }}
 
           role="listbox"
           aria-multiselectable={state.isMultiSelect}
           aria-orientation={orientation}
-          tabIndex={0}
+          tabIndex={position ? 0 : undefined}
         >
           {props.children}
         </ul>
-      </FloatingContainer>
+      </>, document.body
     )
   }
 )
@@ -612,7 +621,7 @@ export const SelectContent = forwardRef<HTMLUListElement, SelectContentProps>(
 //
 export type SelectProps = Omit<SelectRootProps, 'isMultiSelect' | 'values' | 'onValuesChanged'> & {
   contentPanelProps?: SelectContentProps,
-  buttonProps?: SelectButtonProps,
+  buttonProps?: Omit<SelectButtonProps, 'selectedDisplay'> & { selectedDisplay?: (value: string) => ReactNode },
 }
 
 export const Select = forwardRef<HTMLButtonElement, SelectProps>(function Select({
@@ -623,7 +632,15 @@ export const Select = forwardRef<HTMLButtonElement, SelectProps>(function Select
                                                                                  }, ref) {
   return (
     <SelectRoot {...props} isMultiSelect={false}>
-      <SelectButton ref={ref} {...buttonProps} />
+      <SelectButton
+        ref={ref}
+        {...buttonProps}
+        selectedDisplay={values => {
+          const value = values[0]
+          if(!buttonProps?.selectedDisplay) return undefined
+          return buttonProps.selectedDisplay(value)
+        }}
+      />
       <SelectContent {...contentPanelProps}>{children}</SelectContent>
     </SelectRoot>
   )

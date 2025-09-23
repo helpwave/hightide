@@ -1,11 +1,10 @@
 import { type PropsWithChildren, type ReactNode } from 'react'
 import type { PropsForTranslation, Translation } from '../../localization/useTranslation'
 import { useTranslation } from '../../localization/useTranslation'
-import { Select } from '../user-action/select/Select'
+import { Select, SelectOption } from '../user-action/select/Select'
 import { SolidButton } from '../user-action/Button'
-import type { ThemeTypeTranslation } from '../../theming/useTheme'
-import { useTheme } from '../../theming/useTheme'
-import { ThemeUtil } from '../../theming/useTheme'
+import type { ThemeType, ThemeTypeTranslation } from '../../theming/useTheme'
+import { ThemeUtil, useTheme } from '../../theming/useTheme'
 import type { FormTranslationType } from '../../localization/defaults/form'
 import { formTranslation } from '../../localization/defaults/form'
 import type { DialogProps } from '@/src/components/dialog/Dialog'
@@ -26,7 +25,7 @@ const defaultConfirmDialogTranslation: Translation<ThemeDialogTranslationAddon> 
   }
 }
 
-type ThemeDialogProps = Omit<DialogProps, 'title' | 'description'> & {
+type ThemeDialogProps = Omit<DialogProps, 'titleElement' | 'description'> & {
   titleOverwrite?: ReactNode,
   descriptionOverwrite?: ReactNode,
 }
@@ -48,7 +47,7 @@ export const ThemeDialog = ({
 
   return (
     <Dialog
-      title={titleOverwrite ?? translation('theme')}
+      titleElement={titleOverwrite ?? translation('theme')}
       description={descriptionOverwrite ?? translation('chooseTheme')}
       onClose={onClose}
       {...props}
@@ -56,10 +55,17 @@ export const ThemeDialog = ({
       <div className="w-64">
         <Select
           value={theme}
-          options={ThemeUtil.themes.map((theme) => ({ label: translation(theme), id: theme }))}
-          onChange={(theme) => setTheme(theme)}
-          searchOptions={{ disabled: true }}
-        />
+          onValueChanged={(theme) => setTheme(theme as ThemeType)}
+          contentPanelProps={{
+            className: 'z-100'
+          }}
+          buttonProps={{
+            selectedDisplay: (value) => translation(value as ThemeType)
+          }}
+        >
+          {ThemeUtil.themes.map((theme) =>
+            <SelectOption key={theme} value={theme}>{translation(theme)}</SelectOption>)}
+        </Select>
         <div className="flex-row-4 mt-3 justify-end">
           <SolidButton autoFocus color="positive" onClick={onClose}>
             {translation('done')}

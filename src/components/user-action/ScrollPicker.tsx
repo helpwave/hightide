@@ -102,7 +102,7 @@ export const ScrollPicker = <T, >({
       let newVelocity = velocity
       let usedVelocity
       let newCurrentIndex = currentIndex
-      const isAutoScrolling = velocity === 0 && (!lastScrollTimeStamp || timestamp - lastScrollTimeStamp > 300)
+      const isAutoScrolling = velocity <= 10 && (!lastScrollTimeStamp || timestamp - lastScrollTimeStamp > 50)
 
       const newLastScrollTimeStamp = velocity !== 0 ? timestamp : lastScrollTimeStamp
 
@@ -193,9 +193,10 @@ export const ScrollPicker = <T, >({
       style={{ height: containerHeight }}
       onWheel={event => {
         if (event.deltaY !== 0) {
+          const deltaY = clamp(event.deltaY,[-itemHeight*2/3, itemHeight*2/3])
           // TODO slower increase
           setAnimation(({ velocity, ...animationData }) =>
-            ({ ...animationData, velocity: velocity + event.deltaY }))
+            ({ ...animationData, velocity: velocity + deltaY }))
         }
       }}
     >

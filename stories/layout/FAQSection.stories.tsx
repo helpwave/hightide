@@ -39,7 +39,7 @@ export const FAQSectionExample: StoryFn = () => (
         title: 'What does the helpwave logo look like?',
         content: {
           type: 'custom',
-          value: (<div className="flex-row-2 justify-center"><HelpwaveLogo/></div>)
+          value: (<div className="flex-row-2 justify-center"><HelpwaveLogo size="lg"/></div>)
         }
       },
     ]}

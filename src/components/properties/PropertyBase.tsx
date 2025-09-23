@@ -61,12 +61,12 @@ export const PropertyBase = ({
         {requiredAndNoValue && (
           <div className="text-warning"><AlertTriangle size={24}/></div>
         )}
-        {onRemove && hasValue && (
+        {onRemove && !readOnly && (
           <TextButton
             onClick={onRemove}
             color="negative"
-            className={clsx('items-center', { '!text-transparent': !hasValue || readOnly })}
-            disabled={!hasValue || readOnly}
+            className={clsx('items-center', { '!text-transparent': !hasValue })}
+            disabled={!hasValue}
           >
             {translation('remove')}
           </TextButton>
