@@ -1,7 +1,7 @@
 import { Binary } from 'lucide-react'
 import clsx from 'clsx'
-import { noop } from '../../util/noop'
-import { Input } from '../user-action/Input'
+import { noop } from '@/src/utils/noop'
+import { Input } from '../user-action/input/Input'
 import type { PropsForTranslation, Translation } from '../../localization/useTranslation'
 import { useTranslation } from '../../localization/useTranslation'
 import type { PropertyBaseProps } from './PropertyBase'
@@ -54,7 +54,6 @@ export const NumberProperty = ({
           className={clsx('flex-row-2 grow', { 'text-warning': softRequired && !hasValue })}
         >
           <Input
-            expanded={false}
             className={clsx('!ring-0 !border-0 !outline-0 !p-0 !m-0 !w-fit !shadow-none !rounded-none', { 'bg-surface-warning placeholder-warning': softRequired && !hasValue })}
             value={value?.toString() ?? ''}
             type="number"

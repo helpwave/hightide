@@ -1,5 +1,6 @@
 import type { StoryFn } from '@storybook/nextjs'
-import { FAQSection, Helpwave } from '../../src'
+import { FAQSection } from '../../src/components/layout-and-navigation/FAQSection'
+import { HelpwaveLogo } from '../../src/components/icons-and-geometry/HelpwaveLogo'
 
 const meta = {
   title: 'Layout',
@@ -38,7 +39,7 @@ export const FAQSectionExample: StoryFn = () => (
         title: 'What does the helpwave logo look like?',
         content: {
           type: 'custom',
-          value: (<div className="flex-row-2 justify-center"><Helpwave/></div>)
+          value: (<div className="flex-row-2 justify-center"><HelpwaveLogo size="lg"/></div>)
         }
       },
     ]}

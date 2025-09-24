@@ -1,8 +1,9 @@
 import type { Preview } from '@storybook/nextjs'
-import { LanguageProvider, ThemeProvider, useTheme } from '../src'
-import '../src/css/globals.css'
+import '../src/style/globals.css'
 import './storybookStyleOverrides.css'
 import { useEffect } from 'react'
+import { ThemeProvider, useTheme } from '../src/theming/useTheme'
+import { LanguageProvider } from '../src/localization/LanguageProvider'
 
 const preview: Preview = {
   parameters: {

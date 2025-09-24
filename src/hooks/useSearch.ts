@@ -1,5 +1,5 @@
 import { useCallback, useEffect, useMemo, useState } from 'react'
-import { MultiSubjectSearchWithMapping } from '../util/simpleSearch'
+import { MultiSubjectSearchWithMapping } from '@/src/utils/simpleSearch'
 
 export type UseSearchProps<T> = {
   list: T[],

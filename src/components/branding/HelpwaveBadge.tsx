@@ -1,36 +1,36 @@
+import { HelpwaveLogo } from '../icons-and-geometry/HelpwaveLogo'
+import type { HTMLAttributes } from 'react'
 import clsx from 'clsx'
-import { Tile } from '../layout-and-navigation/Tile'
-import { Helpwave } from '../icons-and-geometry/Helpwave'
 
-type Size = 'small' | 'large'
+type Size = 'sm' | 'md' | 'lg'
 
-export type HelpwaveBadgeProps = {
+export type HelpwaveBadgeProps = HTMLAttributes<HTMLSpanElement> & {
   size?: Size,
-  title?: string,
-  className?: string,
 }
 
 /**
  * A Badge with the helpwave logo and the helpwave name
  */
 export const HelpwaveBadge = ({
-                                size = 'small',
-                                title = 'helpwave',
-                                className = ''
+                                size = 'sm',
+                                ...props
                               }: HelpwaveBadgeProps) => {
-  const iconSize: number = size === 'small' ? 24 : 64
-
   return (
-    <Tile
-      prefix={(<Helpwave size={iconSize}/>)}
-      title={title}
-      titleClassName={size === 'small' ? 'textstyle-title-lg text-base' : 'textstyle-title-xl'}
+    <span
+      {...props}
       className={clsx(
+        'flex flex-row items-center font-bold font-space rounded-md',
         {
-          'px-2 py-1 rounded-md': size === 'small',
-          'px-4 py-1 rounded-md': size === 'large',
-        }, className
+          'px-2 py-1': size === 'sm' || size === 'md',
+          'px-4 py-1': size === 'lg',
+          'gap-x-1': size === 'sm',
+          'gap-x-2 text-lg': size === 'md',
+          'gap-x-2 text-xl': size === 'lg'
+        }, props.className
       )}
-    />
+    >
+      <HelpwaveLogo size={size}/>
+      helpwave
+    </span>
   )
 }

@@ -1,5 +1,5 @@
 import type { Meta, StoryObj } from '@storybook/nextjs'
-import { BreadCrumb } from '../../src'
+import { BreadCrumb } from '../../src/components/layout-and-navigation/BreadCrumb'
 
 const meta = {
   title: 'Layout',

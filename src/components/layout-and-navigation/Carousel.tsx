@@ -2,11 +2,11 @@ import type { ReactNode } from 'react'
 import React, { useCallback, useEffect, useMemo, useRef, useState } from 'react'
 import clsx from 'clsx'
 import { ChevronLeft, ChevronRight } from 'lucide-react'
-import { createLoopingListWithIndex, range } from '../../util/array'
-import { clamp } from '../../util/math'
-import { EaseFunctions } from '../../util/easeFunctions'
-import type { Direction } from '../../util/loopingArray'
-import { LoopingArrayCalculator } from '../../util/loopingArray'
+import { createLoopingListWithIndex, range } from '@/src/utils/array'
+import { clamp } from '@/src/utils/math'
+import { EaseFunctions } from '@/src/utils/easeFunctions'
+import type { Direction } from '@/src/utils/loopingArray'
+import { LoopingArrayCalculator } from '@/src/utils/loopingArray'
 import { IconButton } from '../user-action/Button'
 
 
@@ -333,7 +333,7 @@ export const Carousel = ({
           <>
             <IconButton
               color="neutral"
-              className={clsx('absolute z-10 left-0 top-1/2 -translate-y-1/2 shadow-md', { hidden: !canGoLeft() })}
+              className={clsx('absolute z-10 left-2 top-1/2 -translate-y-1/2 shadow-md', { hidden: !canGoLeft() })}
               disabled={!canGoLeft()}
               onClick={() => left()}
             >
@@ -341,7 +341,7 @@ export const Carousel = ({
             </IconButton>
             <IconButton
               color="neutral"
-              className={clsx('absolute z-10 right-0 top-1/2 -translate-y-1/2 shadow-md', { hidden: !canGoRight() })}
+              className={clsx('absolute z-10 right-2 top-1/2 -translate-y-1/2 shadow-md', { hidden: !canGoRight() })}
               disabled={!canGoRight()}
               onClick={() => right()}
             >

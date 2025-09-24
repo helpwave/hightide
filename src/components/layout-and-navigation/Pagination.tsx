@@ -4,8 +4,8 @@ import type { PropsForTranslation } from '../../localization/useTranslation'
 import { useTranslation } from '../../localization/useTranslation'
 import type { FormTranslationType } from '../../localization/defaults/form'
 import { formTranslation } from '../../localization/defaults/form'
-import { Input } from '../user-action/Input'
-import { clamp } from '../../util/math'
+import { Input } from '../user-action/input/Input'
+import { clamp } from '@/src/utils/math'
 import type { CSSProperties } from 'react'
 import { useEffect, useState } from 'react'
 import { IconButton } from '../user-action/Button'
@@ -61,9 +61,8 @@ export const Pagination = ({
       <div className="flex-row-2 min-w-56 items-center justify-center mx-2 text-center">
         <Input
           value={value}
-          containerClassName="flex flex-1 h-10"
           className={clsx(
-            'w-full text-center font-bold input-indicator-hidden'
+            'w-full text-center font-bold input-indicator-hidden h-10'
           )}
           type="number"
           min={1}
@@ -71,13 +70,13 @@ export const Pagination = ({
           disabled={noPages}
           onChangeText={value => {
             if (value) {
-              setValue(clamp(Number(value), 1, pageCount).toString())
+              setValue(clamp(Number(value), [1, pageCount]).toString())
             } else {
               setValue(value)
             }
           }}
           onEditCompleted={value => {
-            changePage(clamp(Number(value) - 1, 0, pageCount - 1))
+            changePage(clamp(Number(value) - 1, [0, pageCount - 1]))
           }}
           editCompleteOptions={{ delay: 800 }}
         />

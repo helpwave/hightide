@@ -1,7 +1,7 @@
 import type { Meta, StoryObj } from '@storybook/nextjs'
 import { useEffect, useState } from 'react'
-import type { CheckboxPropertyProps } from '../../../src'
-import { CheckboxProperty } from '../../../src'
+import type { CheckboxPropertyProps } from '../../../src/components/properties/CheckboxProperty'
+import { CheckboxProperty } from '../../../src/components/properties/CheckboxProperty'
 
 type CheckboxPropertyExampleProps = Omit<CheckboxPropertyProps, 'onChange' | 'onRemove'> & {
   readOnly: boolean,

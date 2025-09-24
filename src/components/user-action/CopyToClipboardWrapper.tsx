@@ -4,7 +4,7 @@ import { clsx } from 'clsx'
 import type { FormTranslationType } from '../../localization/defaults/form'
 import { formTranslation } from '../../localization/defaults/form'
 import { useTranslation } from '../../localization/useTranslation'
-import { writeToClipboard } from '../../util/writeToClipboard'
+import { writeToClipboard } from '@/src/utils/writeToClipboard'
 import { CheckIcon, Copy } from 'lucide-react'
 
 type Position = 'top' | 'bottom' | 'left' | 'right'

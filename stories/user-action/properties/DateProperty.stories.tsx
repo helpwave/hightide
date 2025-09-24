@@ -1,8 +1,7 @@
 import type { Meta, StoryObj } from '@storybook/nextjs'
 import { useEffect, useState } from 'react'
-import type { DatePropertyProps } from '../../../src'
-import { DateProperty } from '../../../src'
-import { noop } from '../../../src'
+import type { DatePropertyProps } from '../../../src/components/properties/DateProperty'
+import { DateProperty } from '../../../src/components/properties/DateProperty'
 
 type DatePropertyExampleProps = DatePropertyProps & {
   readOnly: boolean,
@@ -13,9 +12,9 @@ type DatePropertyExampleProps = DatePropertyProps & {
  */
 const DatePropertyExample = ({
                                value,
-                               onChange = noop,
-                               onRemove = noop,
-                               onEditComplete = noop,
+                               onChange,
+                               onRemove,
+                               onEditComplete,
                                ...restProps
                              }: DatePropertyExampleProps) => {
   const [usedDate, setUsedDate] = useState<Date | undefined>(value)
@@ -29,15 +28,15 @@ const DatePropertyExample = ({
       {...restProps}
       onChange={date => {
         setUsedDate(date)
-        onChange(date)
+        onChange?.(date)
       }}
       onEditComplete={date => {
         setUsedDate(date)
-        onEditComplete(date)
+        onEditComplete?.(date)
       }}
       onRemove={() => {
         setUsedDate(undefined)
-        onRemove()
+        onRemove?.()
       }}
       value={usedDate}
     />

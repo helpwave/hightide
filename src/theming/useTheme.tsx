@@ -2,7 +2,7 @@ import type { Dispatch, PropsWithChildren, SetStateAction } from 'react'
 import { useMemo } from 'react'
 import { createContext, useContext, useEffect, useState } from 'react'
 import type { Translation, TranslationPlural } from '../localization/useTranslation'
-import { noop } from '../util/noop'
+import { noop } from '@/src/utils/noop'
 import { useLocalStorage } from '../hooks/useLocalStorage'
 
 const themes = ['light', 'dark', 'system'] as const

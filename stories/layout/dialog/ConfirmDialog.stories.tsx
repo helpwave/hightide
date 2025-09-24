@@ -1,26 +1,30 @@
 import type { Meta, StoryObj } from '@storybook/nextjs'
-import { useState } from 'react'
-import { ConfirmDialog, SolidButton } from '../../../src'
 import { action } from 'storybook/actions'
+import { useEffect, useState } from 'react'
+import type { ConfirmDialogProps } from '../../../src/components/dialog'
+import { ConfirmDialog } from '../../../src/components/dialog'
+import { SolidButton } from '../../../src/components/user-action/Button'
 
-
-type ConfirmDialogExampleProps = {
-  onDecline: () => void,
-  onConfirm: () => void,
-}
 
 /**
  * An Example Component for the ConfirmModal
  */
 const ConfirmDialogExample = ({
-                               onDecline,
-                               onConfirm,
-                             }: ConfirmDialogExampleProps) => {
-  const [isOpen, setIsOpen] = useState(false)
+                                isOpen: initialIsOpen,
+                                onDecline,
+                                onConfirm,
+                                ...props
+                              }: ConfirmDialogProps) => {
+  const [isOpen, setIsOpen] = useState(true)
+
+  useEffect(() => {
+    setIsOpen(initialIsOpen)
+  }, [initialIsOpen])
 
   return (
     <>
       <ConfirmDialog
+        {...props}
         isOpen={isOpen}
         onConfirm={() => {
           onConfirm()
@@ -30,7 +34,10 @@ const ConfirmDialogExample = ({
           onDecline()
           setIsOpen(false)
         }}
-        headerProps={{ titleText: 'Confirmation Required' }}
+        onCancel={() => {
+          props.onCancel?.()
+          setIsOpen(false)
+        }}
       />
       <div className="flex-row-2 items-center justify-center min-h-[400px]">
         <SolidButton onClick={() => setIsOpen(true)}>Show Dialog</SolidButton>
@@ -49,7 +56,12 @@ type Story = StoryObj<typeof meta>;
 
 export const confirmDialog: Story = {
   args: {
+    isOpen: false,
+    isModal: true,
+    titleElement: 'Do you want to confirm this?',
+    description: 'Whatever you click only closes the Dialog',
     onDecline: action('onDecline'),
     onConfirm: action('onConfirm'),
+    onCancel: action('onCancel'),
   }
 }

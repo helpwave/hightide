@@ -1,6 +1,6 @@
 import type { Meta, StoryObj } from '@storybook/nextjs'
 import clsx from 'clsx'
-import { PropertyBase } from '../../../src'
+import { PropertyBase } from '../../../src/components/properties/PropertyBase'
 
 const meta = {
   title: 'User Action/Property',

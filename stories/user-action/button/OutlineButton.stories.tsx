@@ -1,5 +1,5 @@
 import type { Meta, StoryObj } from '@storybook/nextjs'
-import { ButtonColorUtil, OutlineButton } from '../../../src'
+import { ButtonColorUtil, OutlineButton } from '../../../src/components/user-action/Button'
 import { action } from 'storybook/actions'
 
 const meta = {

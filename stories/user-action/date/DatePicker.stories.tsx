@@ -1,5 +1,6 @@
 import type { Meta, StoryObj } from '@storybook/nextjs'
-import { addDuration, DatePickerUncontrolled, subtractDuration } from '../../../src'
+import { DatePickerUncontrolled } from '../../../src/components/date/DatePicker'
+import { addDuration, subtractDuration } from '../../../src/utils/date'
 
 const meta = {
   title: 'User Action/Date',

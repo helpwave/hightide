@@ -1,6 +1,7 @@
 import type { Meta, StoryObj } from '@storybook/nextjs'
-import { SolidButton, TextButton, useDelay } from '../../../src'
 import { action } from 'storybook/actions'
+import { SolidButton, TextButton } from '@/src/components/user-action/Button'
+import { useDelay } from '@/src/hooks/useDelay'
 
 type UseDelayExampleProps = {
   delay: number,

@@ -1,7 +1,8 @@
 import type { Meta, StoryObj } from '@storybook/nextjs'
-import type { AvatarGroupProps, AvatarProps } from '../../src'
-import { AvatarGroup, range } from '../../src'
+import type { AvatarGroupProps, AvatarProps } from '@/src/components/icons-and-geometry/Avatar'
+import { range } from '@/src/utils/array'
 import { faker } from '@faker-js/faker'
+import { AvatarGroup } from '../../src/components/icons-and-geometry/Avatar'
 
 type AvatarGroupExampleProps = Omit<AvatarGroupProps, 'avatars'> & {
   useImage?: boolean,

@@ -1,59 +1,36 @@
 import type { Meta, StoryObj } from '@storybook/nextjs'
-import { useEffect, useState } from 'react'
-import type { MultiSelectOption } from '../../../src'
-import type { MultiSelectPropertyProps } from '../../../src'
-import { MultiSelectProperty } from '../../../src'
+import { useMemo, useState } from 'react'
 import { action } from 'storybook/actions'
+import type { MultiSelectPropertyProps } from '../../../src/components/properties/MultiSelectProperty'
+import { MultiSelectProperty } from '../../../src/components/properties/MultiSelectProperty'
+import { StorybookHelper } from '../../../src/storybook/helper'
 
 type MultiSelectPropertyExample =
-  Omit<MultiSelectPropertyProps, 'onChange' | 'onRemove' | 'search' | 'selectedDisplay' | 'options'>
+  Omit<MultiSelectPropertyProps, 'values' | 'search' | 'selectedDisplay' | 'options'>
 
 /**
  * Example for using the MultiSelectProperty
  */
 const MultiSelectPropertyExample = ({
-                                      hintText,
                                       ...restProps
                                     }: MultiSelectPropertyExample) => {
-  const [options, setOptions] = useState<MultiSelectOption<string>[]>([
-    { value: 'apple', label: 'Apple', selected: false },
-    { value: 'pear', label: 'Pear', selected: false },
-    { value: 'plum', label: 'Plum', selected: false },
-    { value: 'strawberry', label: 'Strawberry', selected: false, disabled: true },
-    { value: 'orange', label: 'Orange', selected: false },
-    { value: 'maracuja', label: 'Maracuja', selected: false },
-    { value: 'lemon', label: 'Lemon', selected: false },
-    { value: 'pineapple', label: 'Pineapple', selected: false },
-    { value: 'kiwi', label: 'Kiwi', selected: false },
-    { value: 'watermelon', label: 'Watermelon', selected: false },
-  ].map(value => ({ ...value, searchTags: [value.label] })))
+  const [values, setValues] = useState<string[]>(StorybookHelper.selectValues.slice(3,4))
 
-
-  useEffect(() => {
-    setOptions(options => options.map(value => ({ ...value, selected: false })))
-  }, [hintText])
+  const options = useMemo(() => [...StorybookHelper.selectValues], [])
 
   return (
     <MultiSelectProperty
       {...restProps}
+      values={values}
       options={options}
-      onChange={options => {
-        action('onChange')(options)
-        setOptions(options)
+      onValuesChanged={values => {
+        restProps.onValuesChanged?.(values)
+        setValues(values)
       }}
       onRemove={() => {
-        action('onRemove')()
-        setOptions(options.map(value => ({ ...value, selected: false })))
+        restProps.onRemove?.()
+        setValues([])
       }}
-      onAddNew={value => {
-        setOptions(prevState => [...prevState, {
-          value,
-          label: value,
-          selected: true,
-          searchTags: [value],
-        }])
-      }}
-      hintText={hintText}
     />
   )
 }
@@ -72,6 +49,7 @@ export const multiSelectProperty: Story = {
     name: 'Fruits',
     softRequired: false,
     readOnly: false,
-    hintText: 'Select',
+    onRemove: action('onRemove'),
+    onValuesChanged: action('onValuesChanged')
   },
 }

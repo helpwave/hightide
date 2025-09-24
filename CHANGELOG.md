@@ -5,6 +5,32 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/)
 and adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [0.1.26] - 2025-07-23
+
+### Changed
+- Renamed `textstyle` to `typography` for ClassNames
+- Changed css folder to style folder
+
+### Removed
+- removed typographies (full list below)
+  - `typography-title-3xl`
+  - `typography-title-2xl`
+  - `typography-title-xl`
+  - `typography-title-sm`
+  - `textstyle-title-normal`
+  - `textstyle-accent`
+  - `textstyle-description`
+  - `textstyle-table-name`
+  - `textstyle-table-header`
+  - `textstyle-navigation-item`
+  - `textstyle-form-error`
+  - `textstyle-form-description`
+- Removed Label from base input components. (full list below)
+  - `Input`
+  - `Select`
+  - `MultiSelect`
+  - `Textarea`
+
 ## [0.1.25] - 2025-07-19
 
 ### Added
@@ -142,7 +168,7 @@ and adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
 ### Fixed
 
-- fixed `LanguageModal` and `ThemeModal` not displaying their text in the Select
+- fixed `LanguageModal` and `ThemeDialog` not displaying their text in the Select
 
 ## [0.1.10] - 2025-07-02
 
@@ -215,7 +241,7 @@ and adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
 ### Fixed
 
-- `InputModal` is now a modal and not a dialog
+- `InputDialog` is now a modal and not a dialog
 - Button now have the not-allowed cursor when disabled
 - Removed gap in `BreadCrumb` components
 
@@ -246,7 +272,7 @@ and adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
 - .editorconfig
 - `IconButton`
-- `ThemeModal`
+- `ThemeDialog`
 - [`storybookThemeOverride.css`](./.storybook/storybookStyleOverrides.css)
 
 ### Changed

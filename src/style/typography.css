@@ -1,0 +1,171 @@
+@theme {
+  /*
+   * text
+   */
+  --text-xs: calc(12 / 16 * 1rem);
+  --text-xs--line-height: calc(15 / 12);
+
+  --text-sm: calc(14 / 16 * 1rem);
+  --text-sm--line-height: calc(17 / 14);
+
+  --text-base: 1rem;
+  --text-base--line-height: calc(19 / 16);
+
+  --text-lg: calc(18 / 16 * 1rem);
+  --text-lg--line-height: calc(23 / 18);
+
+  --text-xl: calc(20 / 16 * 1rem);
+  --text-xl--line-height: calc(26 / 20);
+
+  --text-2xl: calc(22 / 16 * 1rem);
+  --text-2xl--line-height: calc(28 / 22);
+
+  --text-3xl: calc(24 / 16 * 1rem);
+  --text-3xl--line-height: calc(30 / 24);
+
+  --text-4xl: calc(32 / 16 * 1rem);
+  --text-4xl--line-height: calc(40 / 32);
+
+  --text-5xl: 3rem;
+  --text-5xl--line-height: 1;
+
+  --text-6xl: 3.75rem;
+  --text-6xl--line-height: 1;
+
+  --text-7xl: 4.5rem;
+  --text-7xl--line-height: 1;
+
+  --text-8xl: 6rem;
+  --text-8xl--line-height: 1;
+
+  --text-9xl: 8rem;
+  --text-9xl--line-height: 1;
+
+  /*
+   * fonts
+   */
+  --font-inter: 'Inter', sans-serif;
+  --font-space: 'Space Grotesk', sans-serif;
+}
+
+/* Headline */
+@utility typography-headline-lg-bold {
+  @apply text-4xl font-space font-bold;
+}
+
+@utility typography-headline-md-semibold {
+  @apply text-3xl font-space font-semibold;
+}
+
+@utility typography-headline-sm-bold {
+  @apply text-2xl font-space font-bold;
+}
+
+/* Title */
+@utility typography-title-lg-semibold {
+  @apply text-2xl font-space font-semibold;
+}
+
+@utility typography-title-md-semibold {
+  @apply text-lg font-space font-semibold;
+}
+
+@utility typography-title-sm-medium {
+  @apply text-base font-space font-medium;
+}
+
+@utility typography-title-sm-semibold {
+  @apply text-base font-space font-semibold;
+}
+
+/* Body */
+@utility typography-body-lg-regular {
+  @apply text-lg font-normal;
+}
+
+@utility typography-body-lg-medium {
+  @apply text-lg font-medium;
+}
+
+@utility typography-body-lg-semibold {
+  @apply text-lg font-semibold;
+}
+
+@utility typography-body-md-light {
+  @apply text-base font-light;
+}
+
+@utility typography-body-md-regular {
+  @apply text-base font-normal;
+}
+
+@utility typography-body-md-medium {
+  @apply text-base font-medium;
+}
+
+@utility typography-body-md-bold {
+  @apply text-base font-bold;
+}
+
+/* Label */
+@utility typography-label-lg-regular {
+  @apply text-base font-normal;
+}
+
+@utility typography-label-lg-semibold {
+  @apply text-base font-semibold;
+}
+
+@utility typography-label-lg-bold {
+  @apply text-base font-bold;
+}
+
+@utility typography-label-md-regular {
+  @apply text-sm font-normal;
+}
+
+@utility typography-label-md-medium {
+  @apply text-sm font-medium;
+}
+
+@utility typography-label-md-bold {
+  @apply text-sm font-bold;
+}
+
+/* Caption */
+@utility typography-caption-lg-regular {
+  @apply text-lg font-normal;
+}
+
+@utility typography-caption-md-medium {
+  @apply text-base font-medium;
+}
+
+@utility typography-caption-md-bold {
+  @apply text-base font-bold;
+}
+
+@utility typography-caption-sm-regular {
+  @apply text-sm font-normal;
+}
+
+@utility typography-caption-sm-medium {
+  @apply text-sm font-medium;
+}
+
+/* Button */
+@utility typography-button-lg-semibold {
+  @apply text-lg font-semibold;
+}
+
+@utility typography-button-md-semibold {
+  @apply text-base font-semibold;
+}
+
+@utility typography-button-sm-regular {
+  @apply text-sm font-normal;
+}
+
+@utility typography-button-sm-semibold {
+  @apply text-sm font-semibold;
+}

@@ -1,13 +1,12 @@
 import type { Meta, StoryObj } from '@storybook/nextjs'
-import type {
-  DatePickerProps,
-  DateTimePickerProps,
-  DayPickerProps,
-  TimePickerProps,
-  YearMonthPickerProps
-} from '../../../src'
-import { addDuration, DateTimePicker, noop, subtractDuration } from '../../../src'
 import { useEffect, useState } from 'react'
+import type { DateTimePickerProps } from '../../../src/components/user-action/DateAndTimePicker'
+import { DateTimePicker } from '../../../src/components/user-action/DateAndTimePicker'
+import type { DatePickerProps } from '../../../src/components/date/DatePicker'
+import type { TimePickerProps } from '../../../src/components/date/TimePicker'
+import type { YearMonthPickerProps } from '../../../src/components/date/YearMonthPicker'
+import type { DayPickerProps } from '../../../src/components/date/DayPicker'
+import { addDuration, subtractDuration } from '../../../src/utils/date'
 
 type DateTimePickerExampleProps = Omit<DateTimePickerProps, 'datePickerProps' | 'timePickerProps'> &
   Pick<DatePickerProps, 'initialDisplay'> & Pick<TimePickerProps, 'is24HourFormat' | 'minuteIncrement'> &
@@ -18,9 +17,9 @@ type DateTimePickerExampleProps = Omit<DateTimePickerProps, 'datePickerProps' | 
  */
 const DateTimePickerExample = ({
                                  value,
-                                 onChange = noop,
-                                 onRemove = noop,
-                                 onFinish = noop,
+                                 onChange,
+                                 onRemove,
+                                 onFinish,
                                  initialDisplay,
                                  is24HourFormat,
                                  minuteIncrement,
@@ -37,15 +36,15 @@ const DateTimePickerExample = ({
       {...props}
       value={time}
       onChange={date => {
-        onChange(date)
+        onChange?.(date)
         setTime(date)
       }}
       onRemove={() => {
-        onRemove()
+        onRemove?.()
         setTime(new Date())
       }}
       onFinish={date => {
-        onFinish(date)
+        onFinish?.(date)
         setTime(date)
       }}
       timePickerProps={{ is24HourFormat, minuteIncrement }}

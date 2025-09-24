@@ -5,7 +5,7 @@ This repository contains all components and themes employed by helpwave's web ap
 ## Theming
 
 Theming is achieved through an extensive [tailwindcss](https://tailwindcss.com) config in
-the [globals.css](src/css/globals.css)
+the [globals.css](src/style/globals.css)
 
 ## Storybook
 

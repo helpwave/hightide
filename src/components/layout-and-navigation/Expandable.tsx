@@ -1,12 +1,31 @@
 import type { PropsWithChildren, ReactNode } from 'react'
-import { forwardRef, useCallback, useEffect, useState } from 'react'
+import { forwardRef, useCallback, useEffect, useId, useState } from 'react'
 import { ChevronDown } from 'lucide-react'
 import clsx from 'clsx'
-import { noop } from '../../util/noop'
+import { noop } from '@/src/utils/noop'
+
+export type ExpansionIconProps = {
+  isExpanded?: boolean,
+  className?: string,
+}
+
+export const ExpansionIcon = ({ isExpanded, className }: ExpansionIconProps) => {
+  return (
+    <ChevronDown
+      aria-hidden={true}
+      className={clsx(
+        'min-w-6 w-6 min-h-6 h-6 transition-transform motion-safe:duration-200 motion-reduce:duration-0 ease-in-out',
+        { 'rotate-180': isExpanded },
+        className
+      )}
+    />
+  )
+}
 
 type IconBuilder = (expanded: boolean) => ReactNode
 
 export type ExpandableProps = PropsWithChildren<{
+  id?: string,
   label: ReactNode,
   icon?: IconBuilder,
   isExpanded?: boolean,
@@ -22,30 +41,12 @@ export type ExpandableProps = PropsWithChildren<{
   contentExpandedClassName?: string,
 }>
 
-
-export type ExpansionIconProps = {
-  isExpanded: boolean,
-  className?: string,
-}
-
-export const ExpansionIcon = ({ isExpanded, className }: ExpansionIconProps) => {
-  return (
-    <ChevronDown
-      className={clsx(
-        'min-w-6 w-6 min-h-6 h-6 transition-transform duration-200 ease-in-out',
-        { 'rotate-180': isExpanded },
-        className
-      )}
-    />
-  )
-}
-
-
 /**
  * A Component for showing and hiding content
  */
 export const Expandable = forwardRef<HTMLDivElement, ExpandableProps>(function Expandable({
                                                                                             children,
+                                                                                            id: providedId,
                                                                                             label,
                                                                                             icon,
                                                                                             isExpanded = false,
@@ -57,16 +58,26 @@ export const Expandable = forwardRef<HTMLDivElement, ExpandableProps>(function E
                                                                                             contentClassName,
                                                                                             contentExpandedClassName,
                                                                                           }, ref) {
+
   const defaultIcon = useCallback((expanded: boolean) => <ExpansionIcon isExpanded={expanded}/>, [])
   icon ??= defaultIcon
+
+  const generatedId = useId()
+  const id = providedId ?? generatedId
 
   return (
     <div
       ref={ref}
-      className={clsx('flex-col-0 bg-surface text-on-surface group rounded-lg shadow-sm', { 'cursor-pointer': !clickOnlyOnHeader && !disabled }, className)}
       onClick={() => !clickOnlyOnHeader && !disabled && onChange(!isExpanded)}
+
+      className={clsx(
+        'flex-col-0 bg-surface text-on-surface group rounded-lg shadow-sm',
+        { 'cursor-pointer': !clickOnlyOnHeader && !disabled }, className
+      )}
     >
-      <div
+      <button
+        onClick={() => clickOnlyOnHeader && !disabled && onChange(!isExpanded)}
+
         className={clsx(
           'flex-row-2 py-2 px-4 rounded-lg justify-between items-center bg-surface text-on-surface select-none',
           {
@@ -76,12 +87,16 @@ export const Expandable = forwardRef<HTMLDivElement, ExpandableProps>(function E
           },
           headerClassName
         )}
-        onClick={() => clickOnlyOnHeader && !disabled && onChange(!isExpanded)}
+
+        aria-expanded={isExpanded}
+        aria-controls={`${id}-content`}
+        aria-disabled={disabled ?? undefined}
       >
         {label}
         {icon(isExpanded)}
-      </div>
+      </button>
       <div
+        id={`${id}-content`}
         className={clsx(
           'flex-col-2 px-4 transition-all duration-300 ease-in-out',
           {
@@ -90,6 +105,8 @@ export const Expandable = forwardRef<HTMLDivElement, ExpandableProps>(function E
           },
           contentClassName
         )}
+
+        role="region"
       >
         {children}
       </div>

@@ -1,40 +1,34 @@
 import type { Meta, StoryObj } from '@storybook/nextjs'
 import { action } from 'storybook/actions'
-import { SelectUncontrolled } from '../../../src'
+import { SelectOption, SelectUncontrolled } from '../../../src/components/user-action/select/Select'
 
 const meta = {
   title: 'User Action/Select',
-  component: SelectUncontrolled<string>,
-} satisfies Meta<typeof SelectUncontrolled<string>>
+  component: SelectUncontrolled,
+} satisfies Meta<typeof SelectUncontrolled>
 
 export default meta
 type Story = StoryObj<typeof meta>;
 
 export const select: Story = {
-  decorators: [
-    (Story) => (
-      <div className="flex-row-0 rounded-lg h-32 w-64 bg-warning/20 overflow-auto">
-        <div className="min-w-96 h-full">
-          <Story/>
-        </div>
-      </div>
-    )
-  ],
   args: {
-    label: { name: 'Your favourite fruit' },
     disabled: false,
-    hintText: 'Select something',
-    alignmentVertical: 'bottomOutside',
-    alignmentHorizontal: 'leftInside',
-    className: 'max-w-96',
-    onChange: action('updated'),
-    options: [
-      { value: '1', label: 'Apple' },
-      { value: '2', label: 'Pear', disabled: true },
-      { value: '3', label: 'Strawberry' },
-      { value: '4', label: 'Pineapple-styled' },
-      { value: '5', label: 'Blackberry' },
-      { value: '6', label: 'Blueberry', disabled: true }
-    ],
+    onValueChanged: action('updated'),
+    children: [
+      { value: 'Apple' },
+      { value: 'Pear', disabled: true },
+      { value: 'Strawberry' },
+      { value: 'Pineapple' },
+      { value: 'Blackberry' },
+      { value: 'Blueberry', disabled: true },
+      { value: 'Banana' },
+      { value: 'Kiwi', disabled: true },
+      { value: 'Maracuja', disabled: true },
+      { value: 'Wildberry', disabled: true },
+      { value: 'Watermelon' },
+      { value: 'Honeymelon' },
+      { value: 'Papja' }
+    ].sort((a,b) => a.value.localeCompare(b.value))
+      .map((value, index) => (<SelectOption key={index} {...value} />)),
   },
 }

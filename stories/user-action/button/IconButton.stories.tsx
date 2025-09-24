@@ -1,5 +1,5 @@
 import type { Meta, StoryObj } from '@storybook/nextjs'
-import { IconButton, IconButtonUtil } from '../../../src'
+import { IconButton, IconButtonUtil } from '../../../src/components/user-action/Button'
 import { action } from 'storybook/actions'
 import { Plus } from 'lucide-react'
 

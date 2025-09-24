@@ -1,5 +1,6 @@
 import type { Meta, StoryObj } from '@storybook/nextjs'
-import { range, ScrollPicker } from '../../src'
+import { range } from '../../src/utils/array'
+import { ScrollPicker } from '../../src/components/user-action/ScrollPicker'
 
 const meta = {
   title: 'User Action',

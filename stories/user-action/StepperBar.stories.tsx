@@ -1,6 +1,6 @@
 import type { Meta, StoryObj } from '@storybook/nextjs'
-import { StepperBarUncontrolled } from '../../src'
 import { action } from 'storybook/actions'
+import { StepperBarUncontrolled } from '../../src/components/layout-and-navigation/StepperBar'
 
 const meta = {
   title: 'User Action',

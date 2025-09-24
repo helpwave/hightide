@@ -1,5 +1,5 @@
 import { IconButton, SolidButton } from '../user-action/Button'
-import { Input } from '../user-action/Input'
+import { Input } from '../user-action/input/Input'
 import { FilterIcon } from 'lucide-react'
 import { Menu } from '../user-action/Menu'
 import type { Translation } from '../../localization/useTranslation'
@@ -74,7 +74,7 @@ export const TableFilterButton = <T, >({
     >
       {({ close }) => (
         <div className="flex-col-1 p-2 items-start font-normal text-menu-text">
-          <h4 className="textstyle-title-sm">{translation('filter')}</h4>
+          <h4 className="typography-label-md-semibold">{translation('filter')}</h4>
           {filterType === 'text' && (
             <Input
               value={(filterValue ?? '') as string}

@@ -1,8 +1,8 @@
 import clsx from 'clsx'
 import type { SolidButtonProps } from '../user-action/Button'
 import { ButtonUtil, SolidButton } from '../user-action/Button'
-import { noop } from '../../util/noop'
-import { Helpwave } from '../icons-and-geometry/Helpwave'
+import { noop } from '@/src/utils/noop'
+import { HelpwaveLogo } from '../icons-and-geometry/HelpwaveLogo'
 
 type LoadingButtonProps = {
   isLoading?: boolean,
@@ -16,7 +16,7 @@ export const LoadingButton = ({ isLoading = false, size = 'medium', onClick, ...
       {
         isLoading && (
           <div className={clsx('flex-row-2 absolute inset-0 items-center justify-center bg-white/40', paddingClass)}>
-            <Helpwave animate="loading" className="text-white"/>
+            <HelpwaveLogo animate="loading" className="text-white"/>
           </div>
         )
       }

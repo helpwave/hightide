@@ -1,39 +1,28 @@
-import { useState } from 'react'
-import type { CheckedState } from '@radix-ui/react-checkbox'
-import * as CheckboxPrimitive from '@radix-ui/react-checkbox'
+import { useEffect, useState } from 'react'
 import { Check, Minus } from 'lucide-react'
 import clsx from 'clsx'
-import type { LabelProps } from './Label'
-import { Label } from './Label'
+import type { CheckboxProps as RadixCheckboxProps } from '@radix-ui/react-checkbox'
+import { CheckboxIndicator as RadixCheckboxIndicator, Root as RadixCheckbox } from '@radix-ui/react-checkbox'
 
-type CheckBoxSize = 'small' | 'medium' | 'large'
+type CheckBoxSize = 'sm' | 'md' | 'lg'
 
 const checkboxSizeMapping: Record<CheckBoxSize, string> = {
-  small: 'size-5',
-  medium: 'size-6',
-  large: 'size-8',
+  sm: 'size-5 border-1',
+  md: 'size-6 border-1',
+  lg: 'size-8 border-2',
 }
 
 const checkboxIconSizeMapping: Record<CheckBoxSize, string> = {
-  small: 'size-4',
-  medium: 'size-5',
-  large: 'size-7',
+  sm: 'size-4 stroke-3',
+  md: 'size-5 stroke-3',
+  lg: 'size-7 stroke-3',
 }
 
-type CheckboxProps = {
-  /** used for the label's `for` attribute */
-  id?: string,
-  label?: Omit<LabelProps, 'id'>,
-  /**
-   * @default false
-   */
-  checked: CheckedState,
-  disabled?: boolean,
+export type CheckboxProps = Omit<RadixCheckboxProps, 'checked' | 'onCheckedChange' | 'onChange'> & {
+  checked?: boolean,
+  indeterminate?: boolean,
   onChange?: (checked: boolean) => void,
-  onChangeTristate?: (checked: CheckedState) => void,
   size?: CheckBoxSize,
-  className?: string,
-  containerClassName?: string,
 }
 
 /**
@@ -41,120 +30,73 @@ type CheckboxProps = {
  *
  * The state is managed by the parent
  */
-const Checkbox = ({
-                    id,
-                    label,
-                    checked,
-                    disabled,
-                    onChange,
-                    onChangeTristate,
-                    size = 'medium',
-                    className = '',
-                    containerClassName
-                  }: CheckboxProps) => {
+export const Checkbox = ({
+                           disabled,
+                           checked = false,
+                           indeterminate = false,
+                           onChange,
+                           size = 'md',
+                           className = '',
+                           ...props
+                         }: CheckboxProps) => {
   const usedSizeClass = checkboxSizeMapping[size]
   const innerIconSize = checkboxIconSizeMapping[size]
 
-  const propagateChange = (checked: CheckedState) => {
-    if (onChangeTristate) {
-      onChangeTristate(checked)
-    }
-    if (onChange) {
-      onChange(checked === 'indeterminate' ? false : checked)
-    }
-  }
-
-  const changeValue = () => {
-    if (disabled) {
-      return
-    }
-    const newValue = checked === 'indeterminate' ? false : !checked
-    propagateChange(newValue)
-  }
-
   return (
-    <div
-      className={clsx('group flex-row-2 items-center', {
-        'cursor-pointer': !disabled,
-        'cursor-not-allowed': disabled,
-      }, containerClassName)}
-      onClick={changeValue}
-    >
-      <CheckboxPrimitive.Root
-        onCheckedChange={propagateChange}
-        checked={checked}
-        disabled={disabled}
-        id={id}
-        className={clsx(usedSizeClass, `items-center border-2 rounded outline-none `, {
+    <RadixCheckbox
+      {...props}
+      disabled={disabled}
+      checked={indeterminate ? 'indeterminate' : checked}
+      onCheckedChange={onChange}
+      className={clsx(
+        usedSizeClass,
+        `flex-col-0 items-center justify-center rounded outline-none`,
+        {
           'text-disabled-text border-disabled-outline bg-disabled-background cursor-not-allowed': disabled,
-          'focus:border-primary group-hover:border-primary ': !disabled,
+          'hover:border-primary': !disabled,
           'bg-input-background': !disabled && !checked,
-          'bg-primary/30 border-primary text-primary': !disabled && checked === true || checked === 'indeterminate',
-        }, className)}
-      >
-        <CheckboxPrimitive.Indicator>
-          {checked === true && <Check className={innerIconSize}/>}
-          {checked === 'indeterminate' && <Minus className={innerIconSize}/>}
-        </CheckboxPrimitive.Indicator>
-      </CheckboxPrimitive.Root>
-      {label && (
-        <Label
-          {...label}
-          className={clsx(
-            label.className,
-            {
-              'cursor-pointer': !disabled,
-              'cursor-not-allowed': disabled,
-            }
-          )}
-          htmlFor={id}
-        />
+          'bg-primary/30 border-primary text-primary': !disabled && (checked || indeterminate),
+        },
+        className
       )}
-    </div>
+    >
+      <RadixCheckboxIndicator>
+        {!checked && !indeterminate && <div className={clsx('bg-input-background', innerIconSize)}/>}
+        {checked && !indeterminate && <Check className={innerIconSize}/>}
+        {indeterminate && <Minus className={innerIconSize}/>}
+      </RadixCheckboxIndicator>
+    </RadixCheckbox>
   )
 }
 
-type CheckboxUncontrolledProps = Omit<CheckboxProps, 'value' | 'checked'> & {
-  /**
-   * @default false
-   */
-  defaultValue?: CheckedState,
-}
+export type CheckboxUncontrolledProps = CheckboxProps
 
 /**
  * A Tristate checkbox
  *
  * The state is managed by this component
  */
-const CheckboxUncontrolled = ({
-                                onChange,
-                                onChangeTristate,
-                                defaultValue = false,
-                                ...props
-                              }: CheckboxUncontrolledProps) => {
-  const [checked, setChecked] = useState(defaultValue)
+export const CheckboxUncontrolled = ({
+                                       checked: initialChecked,
+                                       onChange,
+                                       ...props
+                                     }: CheckboxUncontrolledProps) => {
+  const [checked, setChecked] = useState(initialChecked)
 
-  const handleChange = (checked: CheckedState) => {
-    if (onChangeTristate) {
-      onChangeTristate(checked)
-    }
-    if (onChange) {
-      onChange(checked === 'indeterminate' ? false : checked)
-    }
-    setChecked(checked)
-  }
+  useEffect(() => {
+    setChecked(initialChecked)
+  }, [initialChecked])
 
   return (
     <Checkbox
       {...props}
       checked={checked}
-      onChangeTristate={handleChange}
+      onChange={(value) => {
+        setChecked(value)
+        if (onChange) {
+          onChange(value)
+        }
+      }}
     />
   )
-}
-
-export {
-  CheckboxProps,
-  CheckboxUncontrolled,
-  Checkbox,
 }

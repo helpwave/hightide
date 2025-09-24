@@ -1,5 +1,5 @@
 import type { Meta, StoryObj } from '@storybook/nextjs'
-import { ChipList } from '../../../src'
+import { ChipList } from '../../../src/components/layout-and-navigation/Chip'
 
 const meta = {
   title: 'Layout/Chip',

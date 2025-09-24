@@ -1,5 +1,5 @@
 import type { Meta, StoryObj } from '@storybook/nextjs'
-import { ProgressIndicator } from '../../src'
+import { ProgressIndicator } from '@/src/components/loading-states/ProgressIndicator'
 
 const meta = {
   title: 'Other/Progress Indicator',

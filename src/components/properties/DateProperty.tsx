@@ -1,8 +1,8 @@
 import { CalendarDays } from 'lucide-react'
 import clsx from 'clsx'
-import { formatDate, formatDateTime } from '../../util/date'
-import { noop } from '../../util/noop'
-import { Input } from '../user-action/Input'
+import { formatDate, formatDateTime } from '@/src/utils/date'
+import { noop } from '@/src/utils/noop'
+import { Input } from '../user-action/input/Input'
 import type { PropertyBaseProps } from './PropertyBase'
 import { PropertyBase } from './PropertyBase'
 

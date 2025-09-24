@@ -3,7 +3,7 @@ import clsx from 'clsx'
 import type { PropsForTranslation, Translation } from '../../localization/useTranslation'
 import { useTranslation } from '../../localization/useTranslation'
 import { Textarea } from '../user-action/Textarea'
-import { noop } from '../../util/noop'
+import { noop } from '@/src/utils/noop'
 import type { PropertyBaseProps } from './PropertyBase'
 import { PropertyBase } from './PropertyBase'
 
@@ -49,7 +49,9 @@ export const TextProperty = ({
       icon={<Text size={24}/>}
       input={({ softRequired }) => (
         <Textarea
-          className={clsx('ring-0 border-0 outline-0 !px-0 p-0 m-0 shadow-none rounded-none', { 'bg-surface-warning placeholder-warning': softRequired && !hasValue })}
+          className={clsx({
+            'bg-surface-warning placeholder-warning': softRequired && !hasValue
+          })}
           rows={5}
           defaultStyle={false}
           value={value ?? ''}
