@@ -1,5 +1,5 @@
-import type { ReactNode } from 'react'
-import React, { useCallback, useEffect, useMemo, useRef, useState } from 'react'
+import type { HTMLAttributes, ReactNode } from 'react'
+import React, { forwardRef, useCallback, useEffect, useMemo, useRef, useState } from 'react'
 import clsx from 'clsx'
 import { ChevronLeft, ChevronRight } from 'lucide-react'
 import { createLoopingListWithIndex, range } from '@/src/utils/array'
@@ -8,26 +8,169 @@ import { EaseFunctions } from '@/src/utils/easeFunctions'
 import type { Direction } from '@/src/utils/loopingArray'
 import { LoopingArrayCalculator } from '@/src/utils/loopingArray'
 import { IconButton } from '../user-action/Button'
+import type { Translation } from '@/src/localization/useTranslation'
+import { useTranslation } from '@/src/localization/useTranslation'
 
+//
+// CarouselTab
+//
+type CarouselTabTranslationType = {
+  showSlide: string,
+  slideNavigation: string,
+}
 
-export type CarouselProps = {
-  children: ReactNode[],
-  animationTime?: number,
-  isLooping?: boolean,
-  isAutoLooping?: boolean,
-  autoLoopingTimeOut?: number,
-  autoLoopAnimationTime?: number,
-  hintNext?: boolean,
-  arrows?: boolean,
-  dots?: boolean,
-  /**
-   * Percentage that is allowed to be scrolled further
-   */
-  overScrollThreshold?: number,
-  blurColor?: string,
-  className?: string,
-  heightClassName?: string,
-  widthClassName?: string,
+const defaultCarouselTabTranslationType: Translation<CarouselTabTranslationType> = {
+  en: {
+    showSlide: `Show Slide {{index}}`,
+    slideNavigation: 'Slide navigation'
+  },
+  de: {
+    showSlide: 'Zeige Slide {{index}}',
+    slideNavigation: 'Slide Navigation',
+  }
+}
+
+type CarouselTabsProps = {
+  itemCount: number,
+  currentIndex: number,
+  onChange: (index: number) => void,
+}
+
+export default function CarouselTabs({
+                                       itemCount,
+                                       currentIndex,
+                                       onChange,
+                                     }: CarouselTabsProps) {
+  const translation = useTranslation<CarouselTabTranslationType>([
+    defaultCarouselTabTranslationType,
+  ])
+
+  const tabRefs = useRef<(HTMLButtonElement | null)[]>([])
+
+  const handleKeyDown = (event: React.KeyboardEvent, index: number) => {
+    let newIndex = index
+    if (event.key === 'ArrowRight') {
+      newIndex = (index + 1) % itemCount
+    } else if (event.key === 'ArrowLeft') {
+      newIndex = (index - 1 + itemCount) % itemCount
+    } else {
+      return
+    }
+    event.preventDefault()
+    onChange(newIndex)
+    tabRefs.current[newIndex]?.focus()
+  }
+
+  return (
+    <div
+      className="flex-row-1 items-center justify-center w-full my-2"
+      role="tablist"
+      aria-label={translation('slideNavigation')}
+    >
+      {range(itemCount).map((index) => {
+        const isSelected = currentIndex === index
+        return (
+          <button
+            key={index}
+            ref={(el) => (tabRefs.current[index] = el)}
+            role="tab"
+            aria-selected={isSelected}
+            aria-controls={`carousel-slide-${index}`}
+            id={`carousel-tab-${index}`}
+            tabIndex={isSelected ? 0 : -1}
+            aria-label={translation('showSlide', { replacements: { index: (index + 1).toString() } })}
+            className={clsx(
+              'w-8 min-w-8 h-3 min-h-3 first:rounded-l-md last:rounded-r-md',
+              {
+                'bg-carousel-dot-disabled hover:bg-carousel-dot-active': currentIndex !== index,
+                'bg-carousel-dot-active hover:brightness-90': currentIndex === index,
+              }
+            )}
+            onClick={() => onChange(index)}
+            onKeyDown={(e) => handleKeyDown(e, index)}
+          />
+        )
+      })}
+    </div>
+  )
+}
+
+//
+// CarouselSlide
+//
+type CarouselSlideTranslationType = {
+  slide: string,
+  slideOf: string,
+}
+
+const defaultCarouselSlideTranslationType: Translation<CarouselSlideTranslationType> = {
+  en: {
+    slide: 'Slide',
+    slideOf: `Slide {{index}} of {{length}} slides`,
+  },
+  de: {
+    slide: 'Slide',
+    slideOf: `Slide {{index}} von {{length}} slides`,
+  }
+}
+
+export interface CarouselSlideProps extends HTMLAttributes<HTMLDivElement> {
+  index: number,
+  itemCount: number,
+  isSelected?: boolean,
+}
+
+export const CarouselSlide = forwardRef<HTMLDivElement, CarouselSlideProps>(
+  function CarouselSlide({
+                           index,
+                           itemCount,
+                           isSelected = false,
+                           ...props
+                         }, ref) {
+    const translation = useTranslation<CarouselSlideTranslationType>([defaultCarouselSlideTranslationType])
+
+    return (
+      <div
+        {...props}
+        ref={ref}
+        tabIndex={isSelected ? 0 : undefined}
+        role="group"
+        aria-roledescription={translation('slide')}
+        aria-label={translation('slideOf', {
+          replacements: {
+            index: (index + 1).toString(),
+            length: (itemCount).toString(),
+          },
+        })}
+        aria-hidden={isSelected || undefined}
+      />
+    )
+  }
+)
+
+//
+// Carousel
+//
+type CarouselTranslationType = {
+  slide: string,
+  carousel: string,
+  slideOf: string,
+  chooseSlide: string,
+}
+
+const defaultCarouselTranslationType: Translation<CarouselTranslationType> = {
+  en: {
+    slide: 'Slide',
+    carousel: 'Carousel',
+    slideOf: `Slide {{index}} of {{length}} slides`,
+    chooseSlide: 'Choose slide to display'
+  },
+  de: {
+    slide: 'Slide',
+    carousel: 'Karussell',
+    slideOf: `Slide {{index}} von {{length}} slides`,
+    chooseSlide: 'Wähle die angezeigte Slide aus'
+  }
 }
 
 type ItemType = {
@@ -44,7 +187,7 @@ type CarouselAnimationState = {
   startPosition: number,
   startTime?: number,
   lastUpdateTime?: number,
-  isAutoLooping: boolean,
+  isAutoPlaying: boolean,
 }
 
 type DragState = {
@@ -60,11 +203,31 @@ type CarouselInformation = {
   animationState?: CarouselAnimationState,
 }
 
+export type CarouselProps = Omit<HTMLAttributes<HTMLDivElement>, 'children'> & {
+  children: ReactNode[],
+  animationTime?: number,
+  isLooping?: boolean,
+  isAutoPlaying?: boolean,
+  autoLoopingTimeOut?: number,
+  autoLoopAnimationTime?: number,
+  hintNext?: boolean,
+  arrows?: boolean,
+  dots?: boolean,
+  /**
+   * Percentage that is allowed to be scrolled further
+   */
+  overScrollThreshold?: number,
+  blurColor?: string,
+  heightClassName?: string,
+  widthClassName?: string,
+  slideContainerProps?: HTMLAttributes<HTMLDivElement>,
+}
+
 export const Carousel = ({
                            children,
                            animationTime = 200,
                            isLooping = false,
-                           isAutoLooping = false,
+                           isAutoPlaying = false,
                            autoLoopingTimeOut = 5000,
                            autoLoopAnimationTime = 500,
                            hintNext = false,
@@ -72,11 +235,40 @@ export const Carousel = ({
                            dots = true,
                            overScrollThreshold = 0.1,
                            blurColor = 'from-background',
-                           className = '',
                            heightClassName = 'h-96',
                            widthClassName = 'w-[70%] desktop:w-1/2',
+                           slideContainerProps,
+                           ...props
                          }: CarouselProps) => {
-  if (isAutoLooping && !isLooping) {
+  const translation = useTranslation([defaultCarouselTranslationType])
+  const slideRefs = useRef<HTMLDivElement[]>([])
+  const [hasFocus, setHasFocus] = useState(false)
+  const isPaused = hasFocus
+  const carouselContainerRef = useRef<HTMLDivElement>(null)
+
+  useEffect(() => {
+    const carousel = carouselContainerRef.current
+
+    if (carousel) {
+      function onFocus() {
+        setHasFocus(true)
+      }
+
+      function onBlur() {
+        setHasFocus(false)
+      }
+
+
+      carousel?.addEventListener('focusin', onFocus)
+      carousel?.addEventListener('focusout', onBlur)
+      return () => {
+        carousel?.removeEventListener('focusin', onFocus)
+        carousel?.removeEventListener('focusin', onFocus)
+      }
+    }
+  }, [])
+
+  if (isAutoPlaying && !isLooping) {
     console.error('When isAutoLooping is true, isLooping should also be true')
     isLooping = true
   }
@@ -128,7 +320,7 @@ export const Carousel = ({
           }
         }
       }
-      const useAnimationTime = animationState.isAutoLooping ? autoLoopAnimationTime : animationTime
+      const useAnimationTime = animationState.isAutoPlaying ? autoLoopAnimationTime : animationTime
       const progress = clamp((time - animationState.startTime) / useAnimationTime) // progress
       const easedProgress = EaseFunctions.easeInEaseOut(progress)
       const distance = util.getDistanceDirectional(animationState.startPosition, animationState.targetPosition, animationState.direction)
@@ -173,12 +365,12 @@ export const Carousel = ({
       startPosition: currentPosition,
       targetPosition: (currentPosition + 1) % length,
       direction: 1, // always move forward
-      isAutoLooping: true
+      isAutoPlaying: true
     }
   }))
 
   useEffect(() => {
-    if (!animationId.current && !animationState && !dragState && !timeOut.current) {
+    if (!animationId.current && !animationState && !dragState && !timeOut.current && !isPaused) {
       if (autoLoopingTimeOut > 0) {
         timeOut.current = setTimeout(() => {
           startAutoLoop()
@@ -187,6 +379,9 @@ export const Carousel = ({
       } else {
         startAutoLoop()
       }
+    }
+    if (isPaused && timeOut.current) {
+      clearTimeout(timeOut.current)
     }
   }, [animationState, dragState, animationId.current, timeOut.current]) // eslint-disable-line react-hooks/exhaustive-deps
 
@@ -214,7 +409,7 @@ export const Carousel = ({
         targetPosition: targetPosition!,
         direction,
         startPosition: currentPosition,
-        isAutoLooping: false
+        isAutoPlaying: false
       },
       timeOut: undefined
     }))
@@ -240,26 +435,18 @@ export const Carousel = ({
     }
   }
 
-  let items: ItemType[] = children.map((item, index) => ({
+  const items: ItemType[] = children.map((item, index) => ({
     index,
     item
   }))
-
-  if (isLooping) {
-    const before = createLoopingListWithIndex(children, length - 1, paddingItemCount, false).reverse().map(([index, item]) => ({
-      index,
-      item
-    }))
-    const after = createLoopingListWithIndex(children, 0, paddingItemCount).map(([index, item]) => ({
-      index,
-      item
-    }))
-    items = [
-      ...before,
-      ...items,
-      ...after
-    ]
-  }
+  const before = createLoopingListWithIndex(children, length - 1, paddingItemCount, false).reverse().map(([index, item]) => ({
+    index,
+    item
+  }))
+  const after = createLoopingListWithIndex(children, 0, paddingItemCount).map(([index, item]) => ({
+    index,
+    item
+  }))
 
   const onDragStart = (x: number) => setCarouselInformation(prevState => ({
     ...prevState,
@@ -326,9 +513,112 @@ export const Carousel = ({
     onTouchCancel: (event: React.TouchEvent<HTMLDivElement>) => onDragEnd(event.changedTouches[0]!.clientX, (event.target as HTMLDivElement).getBoundingClientRect().width),
   }
 
+  console.log(isPaused)
+
   return (
-    <div className="flex-col-2 items-center w-full">
-      <div className={clsx(`relative w-full overflow-hidden`, heightClassName, className)}>
+    <div
+      ref={carouselContainerRef}
+      {...props}
+      className={clsx('flex-col-2 items-center w-full', props.className)}
+      role="region"
+      aria-roledescription={translation('slide')}
+    >
+      <div
+        {...slideContainerProps}
+        className={clsx(`relative w-full overflow-hidden`, heightClassName, slideContainerProps?.className)}
+      >
+        {hintNext ? (
+          <div className={clsx(`flex-row-2 relative h-full`, heightClassName)}>
+            <div className="flex-row-2 relative h-full w-full px-2 overflow-hidden">
+              {before.map(({
+                            item,
+                            index
+                          }, listIndex) => (
+                <CarouselSlide
+                  key={'before'+index}
+                  index={index}
+                  itemCount={length}
+                  {...dragHandlers}
+                  onClick={() => startAnimation(index)}
+                  className={clsx(
+                    `absolute left-[50%] h-full overflow-hidden`,
+                    widthClassName,
+                    { '!cursor-grabbing': !!dragState }
+                  )}
+                  style={{ translate: getStyleOffset(listIndex - (isLooping ? paddingItemCount : 0)) }}
+                >
+                  {item}
+                </CarouselSlide>
+              ))}
+              {items.map(({
+                            item,
+                            index
+                          }, listIndex) => (
+                <CarouselSlide
+                  ref={slideRefs[index]}
+                  key={listIndex}
+                  index={index}
+                  itemCount={length}
+                  isSelected={currentIndex === index}
+                  {...dragHandlers}
+                  onClick={() => startAnimation(index)}
+                  className={clsx(
+                    `absolute left-[50%] h-full overflow-hidden`,
+                    widthClassName,
+                    { '!cursor-grabbing': !!dragState }
+                  )}
+                  style={{ translate: getStyleOffset(before.length + listIndex - (isLooping ? paddingItemCount : 0)) }}
+                >
+                  {item}
+                </CarouselSlide>
+              ))}
+              {after.map(({
+                             item,
+                             index
+                           }, listIndex) => (
+                <CarouselSlide
+                  key={'after'+index}
+                  index={index}
+                  itemCount={length}
+                  {...dragHandlers}
+                  onClick={() => startAnimation(index)}
+                  className={clsx(
+                    `absolute left-[50%] h-full overflow-hidden`,
+                    widthClassName,
+                    { '!cursor-grabbing': !!dragState }
+                  )}
+                  style={{ translate: getStyleOffset(before.length + items.length + listIndex - (isLooping ? paddingItemCount : 0)) }}
+                >
+                  {item}
+                </CarouselSlide>
+              ))}
+            </div>
+            <div
+              className={clsx(`hidden desktop:block pointer-events-none absolute left-0 h-full w-[20%] bg-gradient-to-r to-transparent`, blurColor)}
+            />
+            <div
+              className={clsx(`hidden desktop:block pointer-events-none absolute right-0 h-full w-[20%] bg-gradient-to-l to-transparent`, blurColor)}
+            />
+          </div>
+        ) : (
+          <div
+            ref={slideRefs[currentIndex]}
+            {...dragHandlers}
+            className={clsx('px-16 h-full', { '!cursor-grabbing': !!dragState })}
+
+            tabIndex={0}
+            role="group"
+            aria-roledescription={translation('slide')}
+            aria-label={translation('slideOf', {
+              replacements: {
+                index: (currentIndex + 1).toString(),
+                length: items.length.toString()
+              }
+            })}
+          >
+            {children[currentIndex]}
+          </div>
+        )}
         {arrows && (
           <>
             <IconButton
@@ -349,52 +639,8 @@ export const Carousel = ({
             </IconButton>
           </>
         )}
-        {hintNext ? (
-          <div className={clsx(`flex-row-2 relative h-full`, heightClassName)}>
-            <div className="flex-row-2 relative h-full w-full px-2 overflow-hidden">
-              {items.map(({
-                            item,
-                            index
-                          }, listIndex) => (
-                <div
-                  key={listIndex}
-                  className={clsx(`absolute left-[50%] h-full overflow-hidden`, widthClassName, { '!cursor-grabbing': !!dragState })}
-                  style={{ translate: getStyleOffset(listIndex - (isLooping ? paddingItemCount : 0)) }}
-                  {...dragHandlers}
-                  onClick={() => startAnimation(index)}
-                >
-                  {item}
-                </div>
-              ))}
-            </div>
-            <div
-              className={clsx(`hidden pointer-events-none desktop:block absolute left-0 h-full w-[20%] bg-gradient-to-r to-transparent`, blurColor)}
-            />
-            <div
-              className={clsx(`hidden pointer-events-none desktop:block absolute right-0 h-full w-[20%] bg-gradient-to-l to-transparent`, blurColor)}
-            />
-          </div>
-        ) : (
-          <div className={clsx('px-16 h-full', { '!cursor-grabbing': !!dragState })} {...dragHandlers}>
-            {children[currentIndex]}
-          </div>
-        )}
       </div>
-      {dots && (
-        <div
-          className="flex-row-2 items-center justify-center w-full my-2">
-          {range(length).map(index => (
-            <button
-              key={index}
-              className={clsx('w-8 min-w-8 h-3 min-h-3 first:rounded-l-md last:rounded-r-md', {
-                'bg-carousel-dot-disabled hover:bg-carousel-dot-active': currentIndex !== index,
-                'bg-carousel-dot-active hover:brightness-90': currentIndex === index
-              })}
-              onClick={() => startAnimation(index)}
-            />
-          ))}
-        </div>
-      )}
+      {dots && (<CarouselTabs itemCount={length} currentIndex={currentIndex} onChange={startAnimation}/>)}
     </div>
   )
 }
