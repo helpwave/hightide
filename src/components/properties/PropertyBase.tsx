@@ -65,7 +65,7 @@ export const PropertyBase = ({
           <TextButton
             onClick={onRemove}
             color="negative"
-            className={clsx('items-center', { '!text-transparent': !hasValue })}
+            className={clsx('items-center')}
             disabled={!hasValue}
           >
             {translation('remove')}
