@@ -7,9 +7,25 @@ and adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
 ## [0.1.26] - 2025-07-23
 
+### Added
+- Add `FloatingContainer` and `useFloatingElement` for aligning a floating element
+- Add `ListBox` for selecting a value from a list
+- Added accessibility for `Select`, `MultiSelect`, `Expandable`, `Avatar`
+- `FormElementWrapper` to label and validate inputs
+- Add size options for `Expandable`
+- Add `ScrollArea`
+- Add `FocusTrap` and `useFocusTrap` for focus trapping
+- Add `useIsMounted` for checking when a component is rendered
+
 ### Changed
 - Renamed `textstyle` to `typography` for ClassNames
 - Changed css folder to style folder
+- Changed `HelpwaveBadge`, `HelpwaveLogo` to allow for different sizes
+- Merged `Dialog` and `Modal` and made modal a configuration option
+- Adjust `LanguageDialog`, `ThemeDialog`, `ConfirmDialog`, `InputDialog`, `DiscardChangeDialog` for changes to `Dialog`
+- Updated Stories
+- Changed `range` function syntax: (new) `range(value, [lower, higher])`
+- Changed relative to absolute imports (only partial)
 
 ### Removed
 - removed typographies (full list below)
@@ -30,6 +46,7 @@ and adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
   - `Select`
   - `MultiSelect`
   - `Textarea`
+- Removed `InputModal`, `LanguageModal`, `ThemeModal`
 
 ## [0.1.25] - 2025-07-19
 
