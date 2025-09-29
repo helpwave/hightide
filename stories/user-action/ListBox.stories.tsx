@@ -1,6 +1,6 @@
 import type { Meta, StoryObj } from '@storybook/nextjs'
 import { action } from 'storybook/actions'
-import { ListBoxItem, ListBoxUncontrolled } from '../../src/components/layout-and-navigation/ListBox'
+import { ListBoxItem, ListBoxUncontrolled } from '../../src/components/layout/ListBox'
 
 
 const meta = {

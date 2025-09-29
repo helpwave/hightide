@@ -35,7 +35,7 @@ import { TableSortButton } from '@/src/components/table/TableSortButton'
 import type { TableFilterType } from '@/src/components/table/TableFilterButton'
 import { TableFilterButton } from '@/src/components/table/TableFilterButton'
 import { FillerRowElement } from '@/src/components/table/FillerRowElement'
-import { Pagination } from '@/src/components/layout-and-navigation/Pagination'
+import { Pagination } from '@/src/components/navigation/Pagination'
 import { Checkbox } from '@/src/components/user-action/Checkbox'
 
 declare module '@tanstack/react-table' {

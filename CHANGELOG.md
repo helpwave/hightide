@@ -11,9 +11,11 @@ and adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 - Add a theme preference listener to `useTheme` hook
 - Add icons to the Theme dialog
 - Add a config attribute to the `SelectRoot` component
+- Add `Navigation` and `NavigationList` components for reusable Navigation menus
 
 ### Changed
 - move `isMultiSelect` attribute of `SelectRoot` into the config `SelectConfiguration`
+- split `layout-and-navigation` into `layout` and `navigation` (same for stories)
 
 ## [0.1.26] - 2025-09-24
 
