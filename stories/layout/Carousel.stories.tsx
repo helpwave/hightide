@@ -1,8 +1,8 @@
 import type { Meta, StoryObj } from '@storybook/nextjs'
 import Image from 'next/image'
 import { clsx } from 'clsx'
-import type { CarouselProps } from '../../src/components/layout-and-navigation/Carousel'
-import { Carousel } from '../../src/components/layout-and-navigation/Carousel'
+import type { CarouselProps } from '../../src/components/layout/Carousel'
+import { Carousel } from '../../src/components/layout/Carousel'
 import { range } from '../../src/utils/array'
 
 type CarouselExampleProps = Omit<CarouselProps, 'blurColor' | 'children'> & {
