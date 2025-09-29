@@ -33,6 +33,7 @@ type RegisteredOption = {
 }
 
 type HighlightPosition = 'first' | 'last'
+type SelectIconAppearance = 'left' | 'right' | 'none'
 
 type InternalSelectContextState = {
   isOpen: boolean,
@@ -44,7 +45,11 @@ type SelectContextState = InternalSelectContextState & {
   value: string[],
   disabled: boolean,
   invalid: boolean,
+}
+
+type SelectConfiguration = {
   isMultiSelect: boolean,
+  iconAppearance: SelectIconAppearance,
 }
 
 type ToggleOpenOptions = {
@@ -57,6 +62,7 @@ const defaultToggleOpenOptions: ToggleOpenOptions = {
 
 type SelectContextType = {
   state: SelectContextState,
+  config: SelectConfiguration,
   item: {
     register: (item: RegisteredOption) => void,
     unregister: (value: string) => void,
@@ -96,6 +102,7 @@ export type SelectRootProps = PropsWithChildren<{
   disabled?: boolean,
   invalid?: boolean,
   isMultiSelect?: boolean,
+  iconAppearance?: SelectIconAppearance,
 }>
 
 export const SelectRoot = ({
@@ -109,6 +116,7 @@ export const SelectRoot = ({
                              disabled = false,
                              invalid = false,
                              isMultiSelect = false,
+                             iconAppearance = 'left',
                            }: SelectRootProps) => {
   const optionsRef = useRef<RegisteredOption[]>([])
   const triggerRef = useRef<HTMLElement>(null)
@@ -125,7 +133,10 @@ export const SelectRoot = ({
     disabled,
     invalid,
     value: isMultiSelect ? (values ?? []) : [value].filter(Boolean),
+  }
+  const config: SelectConfiguration = {
     isMultiSelect,
+    iconAppearance,
   }
 
   const registerItem = useCallback((item: RegisteredOption) => {
@@ -249,6 +260,7 @@ export const SelectRoot = ({
 
   const contextValue: SelectContextType = {
     state,
+    config,
     item: {
       register: registerItem,
       unregister: unregisterItem,
@@ -277,14 +289,17 @@ export const SelectRoot = ({
 export type SelectOptionProps = Omit<HTMLAttributes<HTMLLIElement>, 'children'> & {
   value: string,
   disabled?: boolean,
+  iconAppearance?: SelectIconAppearance,
   children?: ReactNode,
 }
 
 export const SelectOption = forwardRef<HTMLLIElement, SelectOptionProps>(
-  function SelectOption({ value, disabled = false, children, className, ...restProps }, ref) {
-    const { state, item, trigger } = useSelectContext()
+  function SelectOption({ children, value, disabled = false, iconAppearance, className, ...restProps }, ref) {
+    const { state, config, item, trigger } = useSelectContext()
     const { register, unregister, toggleSelection, highlightItem } = item
     const itemRef = useRef<HTMLLIElement>(null)
+
+    iconAppearance ??= config.iconAppearance
 
     // Register with parent
     useEffect(() => {
@@ -324,7 +339,7 @@ export const SelectOption = forwardRef<HTMLLIElement, SelectOptionProps>(
         onClick={(event) => {
           if (!disabled) {
             toggleSelection(value)
-            if (!state.isMultiSelect) {
+            if (!config.isMultiSelect) {
               trigger.toggleOpen(false)
             }
             restProps.onClick?.(event)
@@ -337,11 +352,19 @@ export const SelectOption = forwardRef<HTMLLIElement, SelectOptionProps>(
           }
         }}
       >
-        <CheckIcon
-          className={clsx('w-4 h-4', { 'opacity-0': !isSelected || disabled })}
-          aria-hidden={true}
-        />
+        {iconAppearance === 'left' && (
+          <CheckIcon
+            className={clsx('w-4 h-4', { 'opacity-0': !isSelected || disabled })}
+            aria-hidden={true}
+          />
+        )}
         {children ?? value}
+        {iconAppearance === 'right' && (
+          <CheckIcon
+            className={clsx('w-4 h-4', { 'opacity-0': !isSelected || disabled })}
+            aria-hidden={true}
+          />
+        )}
       </li>
     )
   }
@@ -529,7 +552,7 @@ export const SelectContent = forwardRef<HTMLUListElement, SelectContentProps>(
     const innerRef = useRef<HTMLUListElement | null>(null)
     useImperativeHandle(ref, () => innerRef.current)
 
-    const { trigger, state, item } = useSelectContext()
+    const { trigger, state, config, item } = useSelectContext()
 
     const position = useFloatingElement({
       active: state.isOpen,
@@ -588,7 +611,7 @@ export const SelectContent = forwardRef<HTMLUListElement, SelectContentProps>(
               case ' ':
                 if (state.highlightedValue) {
                   item.toggleSelection(state.highlightedValue)
-                  if (!state.isMultiSelect) {
+                  if (!config.isMultiSelect) {
                     trigger.toggleOpen(false)
                   }
                   event.preventDefault()
@@ -605,7 +628,7 @@ export const SelectContent = forwardRef<HTMLUListElement, SelectContentProps>(
           }}
 
           role="listbox"
-          aria-multiselectable={state.isMultiSelect}
+          aria-multiselectable={config.isMultiSelect}
           aria-orientation={orientation}
           tabIndex={position ? 0 : undefined}
         >
@@ -637,7 +660,7 @@ export const Select = forwardRef<HTMLButtonElement, SelectProps>(function Select
         {...buttonProps}
         selectedDisplay={values => {
           const value = values[0]
-          if(!buttonProps?.selectedDisplay) return undefined
+          if (!buttonProps?.selectedDisplay) return undefined
           return buttonProps.selectedDisplay(value)
         }}
       />
