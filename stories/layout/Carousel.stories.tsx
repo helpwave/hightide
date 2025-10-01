@@ -27,8 +27,15 @@ const CarouselExample = ({
         {range(5).map(index => {
           const color = ['bg-positive', 'bg-negative', 'bg-primary', 'bg-secondary', 'bg-warning'][index]
           return (
-            <div key={index} className={clsx('flex-row-0 justify-center items-center h-full rounded-2xl mx-4', color)}>
-              <Image src="https://helpwave.de/favicon.ico" alt="" width={256} height={256}/>
+            <div
+              key={index}
+                 className={clsx(
+                   'flex-row-0 justify-center items-center h-full rounded-2xl mx-4 border-2 border-transparent',
+                   'group-focus-within/slide:border-primary',
+                   color
+                   )}
+            >
+              <Image src="https://helpwave.de/favicon.ico" alt="" width={256} height={256} draggable={false} />
             </div>
           )
         })}

@@ -162,6 +162,8 @@ export const CarouselSlide = forwardRef<HTMLDivElement, CarouselSlideProps>(
         ref={ref}
         id={`${id}-slide-${index}`}
 
+        className={clsx('focus-style-none group/slide', props.className)}
+
         tabIndex={isSelected ? 0 : undefined}
         role="group"
         aria-roledescription={translation('slide')}
@@ -171,7 +173,7 @@ export const CarouselSlide = forwardRef<HTMLDivElement, CarouselSlideProps>(
             length: (slideCount).toString(),
           },
         })}
-        aria-hidden={isSelected || undefined}
+        aria-hidden={isSelected ? undefined : true}
       />
     )
   }
@@ -180,6 +182,11 @@ export const CarouselSlide = forwardRef<HTMLDivElement, CarouselSlideProps>(
 //
 // Carousel
 //
+type DragState = {
+  dragStartX: number,
+  dragOffsetX: number,
+}
+
 type CarouselTranslationType = {
   slide: string,
   carousel: string,
@@ -247,8 +254,10 @@ export const Carousel = ({
   const slideRefs = useRef<HTMLDivElement[]>([])
   const [currentIndex, setCurrentIndex] = useState<number>(0)
   const [hasFocus, setHasFocus] = useState(false)
+  const [dragState, setDragState] = useState<DragState>()
   const isPaused = hasFocus
   const carouselContainerRef = useRef<HTMLDivElement>(null)
+  const [disableClick, setDisableClick] = useState(false)
 
   const timeOut = useRef<NodeJS.Timeout | undefined>(undefined)
 
@@ -304,7 +313,7 @@ export const Carousel = ({
 
   const left = () => {
     if (canGoLeft()) {
-      setCurrentIndex((currentIndex + length - 1) % length)
+      setCurrentIndex(currentIndex - 1)
     }
   }
 
@@ -325,10 +334,11 @@ export const Carousel = ({
         right()
       }
     }
-    if (isPaused && timeOut.current) {
+    if ((isPaused || !!dragState) && timeOut.current) {
       clearTimeout(timeOut.current)
+      timeOut.current = undefined
     }
-  }, [right, isPaused, autoLoopingTimeOut])
+  }, [right, isPaused, autoLoopingTimeOut, dragState])
 
 
   let items: ItemType[] = children.map((item, index) => ({
@@ -350,6 +360,32 @@ export const Carousel = ({
     items = [...before, ...items, ...after]
   }
 
+  const handlePointerDown = (e: React.PointerEvent) => {
+    setDragState({
+      dragOffsetX: 0,
+      dragStartX: e.clientX,
+    })
+  }
+
+  const handlePointerMove = (e: React.PointerEvent) => {
+    if (!dragState) return
+    setDragState(prevState => ({ dragStartX: prevState.dragStartX, dragOffsetX: e.clientX - prevState.dragStartX }))
+  }
+
+  const handlePointerUp = () => {
+    if (!dragState) return
+    if (dragState.dragOffsetX > 50) {
+      left()
+    } else if (dragState.dragOffsetX < -50) {
+      right()
+    }
+    setDragState(undefined)
+  }
+
+  useEffect(() => {
+    setDisableClick(!dragState)
+  }, [dragState])
+
   return (
     <CarouselContext.Provider value={{ id, currentIndex, slideCount: length, isLooping }}>
       <div
@@ -366,7 +402,13 @@ export const Carousel = ({
           className={clsx(`relative w-full overflow-hidden`, heightClassName, slideContainerProps?.className)}
         >
           {hintNext ? (
-            <div className={clsx(`flex-row-2 relative h-full`, heightClassName)}>
+            <div
+              onPointerDown={handlePointerDown}
+              onPointerMove={handlePointerMove}
+              onPointerUp={handlePointerUp}
+              onPointerLeave={handlePointerUp}
+              className={clsx(`flex-row-2 relative h-full`, heightClassName)}
+            >
               <div className="flex-row-2 relative h-full w-full px-2 overflow-hidden">
                 {items.map(({
                               item,
@@ -379,14 +421,14 @@ export const Carousel = ({
                       ref={isInItems ? slideRefs[index] : undefined}
                       key={listIndex}
                       index={index}
-                      onClick={() => setCurrentIndex(index)}
                       className={clsx(
                         `absolute left-[50%] h-full overflow-hidden transition-transform ease-in-out`,
                         widthClassName
                       )}
+                      onClick={() => !disableClick && setCurrentIndex(index)}
                       style={{
-                        translate: getStyleOffset(listIndex - (isLooping ? paddingItemCount : 0)),
-                        transitionDuration: (isAutoPlaying && !isPaused ? autoLoopAnimationTime : animationTime) + 'ms',
+                        translate: `calc(${getStyleOffset(listIndex - (isLooping ? paddingItemCount : 0))} + ${dragState ? dragState.dragOffsetX : 0}px)`,
+                        transitionDuration: dragState ? '0ms' : ((isAutoPlaying && !isPaused ? autoLoopAnimationTime : animationTime) + 'ms'),
                       }}
                     >
                       {item}
