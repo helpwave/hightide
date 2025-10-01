@@ -1,8 +1,7 @@
 import type { Preview } from '@storybook/nextjs'
 import '../src/style/globals.css'
 import './storybookStyleOverrides.css'
-import { useEffect } from 'react'
-import { ThemeProvider, useTheme } from '../src/theming/useTheme'
+import { ThemeProvider } from '../src/theming/useTheme'
 import { LanguageProvider } from '../src/localization/LanguageProvider'
 
 const preview: Preview = {
@@ -33,15 +32,6 @@ const preview: Preview = {
     (Story, context) => {
       const App = Story
       const theme = context.globals.backgrounds?.value
-      const { setTheme } = useTheme()
-
-      useEffect(() => {
-        if(!theme) {
-          return
-        }
-        setTheme(theme)
-      }, [theme]) // eslint-disable-line react-hooks/exhaustive-deps
-
       const language = context.globals.language
 
       return (

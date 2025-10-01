@@ -5,12 +5,20 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/)
 and adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
-## [0.1.27] - 2025-07-23
+## [0.1.27] - 2025-09-29
 
 ### Added
+- Add a theme preference listener to `useTheme` hook
+- Add icons to the Theme dialog
+- Add a config attribute to the `SelectRoot` component
+- Add `Navigation` and `NavigationList` components for reusable Navigation menus
 - Add accessibility for carousel
 
-## [0.1.26] - 2025-07-23
+### Changed
+- move `isMultiSelect` attribute of `SelectRoot` into the config `SelectConfiguration`
+- split `layout-and-navigation` into `layout` and `navigation` (same for stories)
+
+## [0.1.26] - 2025-09-24
 
 ### Added
 - Add `FloatingContainer` and `useFloatingElement` for aligning a floating element

@@ -1,5 +1,5 @@
 import type { Meta, StoryObj } from '@storybook/nextjs'
-import { TextImage } from '@/src/components/layout-and-navigation/TextImage'
+import { TextImage } from '@/src/components/layout/TextImage'
 
 const meta = {
   title: 'Layout',
