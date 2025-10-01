@@ -12,6 +12,7 @@ and adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 - Add icons to the Theme dialog
 - Add a config attribute to the `SelectRoot` component
 - Add `Navigation` and `NavigationList` components for reusable Navigation menus
+- Add accessibility for carousel
 
 ### Changed
 - move `isMultiSelect` attribute of `SelectRoot` into the config `SelectConfiguration`
