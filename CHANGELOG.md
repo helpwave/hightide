@@ -7,6 +7,12 @@ and adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
 ## [0.1.28] - 2025-10-02
 
+### Added
+- added barreling script and barrel files
+
+### Changed
+- pin dependencies
+
 ### Fixed
 - Fix css export path
 

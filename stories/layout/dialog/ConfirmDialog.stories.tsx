@@ -1,9 +1,9 @@
 import type { Meta, StoryObj } from '@storybook/nextjs'
 import { action } from 'storybook/actions'
 import { useEffect, useState } from 'react'
-import type { ConfirmDialogProps } from '../../../src/components/dialog'
-import { ConfirmDialog } from '../../../src/components/dialog'
-import { SolidButton } from '../../../src/components/user-action/Button'
+import { SolidButton } from '../../../src'
+import type { ConfirmDialogProps } from '../../../src'
+import { ConfirmDialog } from '../../../src'
 
 
 /**
