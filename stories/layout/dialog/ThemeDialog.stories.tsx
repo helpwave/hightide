@@ -1,7 +1,7 @@
 import type { Meta, StoryObj  } from '@storybook/nextjs'
 import { useState } from 'react'
-import { ThemeDialog } from '../../../src/components/dialog'
-import { SolidButton } from '../../../src/components/user-action/Button'
+import { SolidButton } from '../../../src'
+import { ThemeDialog } from '../../../src'
 
 /**
  * An implementation of the ThemeDialog

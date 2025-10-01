@@ -1,9 +1,8 @@
 import type { Meta, StoryObj } from '@storybook/nextjs'
 import { useState } from 'react'
 import { action } from 'storybook/actions'
-import { DiscardChangesDialog } from '../../../src/components/dialog'
-import { SolidButton } from '../../../src/components/user-action/Button'
-
+import { SolidButton } from '../../../src'
+import { DiscardChangesDialog } from '../../../src'
 
 type DiscardChangesDialogExampleProps = {
   onDontSave: () => void,

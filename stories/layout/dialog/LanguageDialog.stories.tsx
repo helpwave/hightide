@@ -1,7 +1,7 @@
 import type { Meta, StoryObj } from '@storybook/nextjs'
 import { useState } from 'react'
-import { LanguageDialog } from '../../../src/components/dialog'
-import { SolidButton } from '../../../src/components/user-action/Button'
+import { SolidButton } from '../../../src'
+import { LanguageDialog } from '../../../src'
 
 
 /**
