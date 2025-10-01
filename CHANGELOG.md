@@ -5,7 +5,12 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/)
 and adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
-## [0.1.26] - 2025-07-23
+## [0.1.26] - 2025-10-02
+
+### Fixed
+- Fix css export path
+
+## [0.1.26] - 2025-10-02
 
 ### Added
 - Add `FloatingContainer` and `useFloatingElement` for aligning a floating element

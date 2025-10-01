@@ -19,8 +19,8 @@
       "require": "./dist/index.cjs",
       "import": "./dist/index.js"
     },
-    "./style/globals.css": "./dist/css/globals.css",
-    "./style/uncompiled/globals.css": "./dist/css/uncompiled/globals.css"
+    "./style/globals.css": "./dist/style/globals.css",
+    "./style/uncompiled/globals.css": "./dist/style/uncompiled/globals.css"
   },
   "scripts": {
     "clean": "rm -rf dist",
