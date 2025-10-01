@@ -18,7 +18,6 @@
   --breakpoint-desktop: 64rem; /* 1024px for 16px font-size*/
 }
 
-/* Styles that can be overwritten by utils */
 @layer components {
   .btn-sm {
     @apply flex-row-1 items-center justify-center px-1.5 py-1 rounded-1.5 h-8 min-h-8;
@@ -79,11 +78,13 @@
   .section-padding {
     @apply px-6 tablet:px-12 desktop:px-24 py-16;
   }
-}
 
-@layer components {
+  .link {
+    @apply decoration-3 p-2 hover:underline focus:underline font-bold text-lg rounded;
+  }
+
   * {
-    @apply border-border;
+    @apply border-border list-none;
   }
 
   html {

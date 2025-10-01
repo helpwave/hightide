@@ -1,5 +1,5 @@
 import type { StoryFn } from '@storybook/nextjs'
-import { FAQSection } from '../../src/components/layout-and-navigation/FAQSection'
+import { FAQSection } from '../../src/components/layout/FAQSection'
 import { HelpwaveLogo } from '../../src/components/icons-and-geometry/HelpwaveLogo'
 
 const meta = {
