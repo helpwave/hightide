@@ -8,9 +8,14 @@ import type { FormTranslationType } from '../../localization/defaults/form'
 
 type SingleSelectPropertyTranslation = FormTranslationType
 
-export type SingleSelectPropertyProps = Omit<PropertyBaseProps, 'icon' | 'input' | 'hasValue' | 'className'> & {
+type SelectPropertyOption = {
   value: string,
-  options: string[],
+  label?: string,
+}
+
+export type SingleSelectPropertyProps = Omit<PropertyBaseProps, 'icon' | 'input' | 'hasValue' | 'className'> & {
+  value?: string,
+  options: SelectPropertyOption[],
   onValueChanged?: (value: string) => void,
   onAddNew?: (value: string) => void,
 }
@@ -45,7 +50,11 @@ export const SingleSelectProperty = ({
             )
           }}
         >
-          {options.map(value => (<SelectOption key={value} value={value}/>))}
+          {options.map(option => (
+            <SelectOption key={option.value} value={option.value}>
+              {option.label ?? option.value}
+            </SelectOption>
+          ))}
         </Select>
       )}
     />
