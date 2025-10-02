@@ -1,11 +1,17 @@
 import type { HTMLAttributes, ReactNode } from 'react'
+import { useEffect } from 'react'
+import { useState } from 'react'
 import { useId } from 'react'
 import { clsx } from 'clsx'
 import type { BagFunction } from '@/src/utils/bagFunctions'
 import type { LabelProps } from '@/src/components/user-action/Label'
 import { Label } from '@/src/components/user-action/Label'
 
+type ErrorShowBehaviour = 'always' | 'whenTouched'
+
 type FormElementWrapperBag = {
+  'touched': boolean,
+  'onTouched': (isTouched?: boolean) => void,
   'invalid': boolean,
   'required': boolean,
   'disabled': boolean,
@@ -17,10 +23,12 @@ type FormElementWrapperBag = {
 export type FormElementWrapperProps = {
   children: BagFunction<FormElementWrapperBag>,
   id?: string,
-  required: boolean,
-  disabled: boolean,
+  required?: boolean,
+  disabled?: boolean,
+  isTouched?: boolean,
   label?: ReactNode,
   labelProps?: Omit<LabelProps, 'children'>,
+  errorShowBehaviour?: ErrorShowBehaviour,
   error?: ReactNode,
   errorProps?: Omit<HTMLAttributes<HTMLParagraphElement>, 'children'>,
   description?: ReactNode,
@@ -33,16 +41,23 @@ export const FormElementWrapper = ({
                                      id,
                                      required = false,
                                      disabled = false,
+                                     isTouched: initialIsTouched = false,
                                      label,
                                      labelProps,
+                                     errorShowBehaviour = 'whenTouched',
                                      error,
                                      errorProps,
                                      description,
                                      descriptionProps,
                                      containerClassName,
                                    }: FormElementWrapperProps) => {
+  const [touched, setTouched] = useState(initialIsTouched)
   const generatedId = useId()
   const usedId = id ?? generatedId
+
+  useEffect(() => {
+    setTouched(initialIsTouched)
+  }, [initialIsTouched])
 
   const describedBy: string = [
     description ? `${usedId}-description` : undefined,
@@ -51,9 +66,13 @@ export const FormElementWrapper = ({
 
   const labeledBy = label ? `${usedId}-label` : undefined
 
+  const isShowingError = errorShowBehaviour === 'always' || (touched)
+
   const bag: FormElementWrapperBag = {
+    'touched': touched,
+    'onTouched': (isTouched) => setTouched(isTouched ?? true),
     'disabled': disabled,
-    'invalid': !!error,
+    'invalid': !!error && isShowingError,
     'required': required,
     'id': usedId,
     'aria-describedby': describedBy,
@@ -61,21 +80,21 @@ export const FormElementWrapper = ({
   }
 
   return (
-    <div className={clsx('flex flex-col gap-y-1', containerClassName)}>
+    <div className={clsx('relative flex flex-col gap-y-1', containerClassName)}>
       {label && (
-        <Label htmlFor={usedId} className={clsx('typography-label-md', labelProps?.className)}>
+        <Label htmlFor={usedId} size="lg" className={clsx('flex-row-1 items-start', labelProps?.className)}>
           {label}
-          {required && <span role="none" className="text-primary font-bold">*</span>}
+          {required && <div role="none" className="bg-primary w-2 h-2 rounded-full"/>}
         </Label>
       )}
       {description && (
-        <p {...descriptionProps} className={clsx('text-description text-xs', descriptionProps?.className)}>
+        <p {...descriptionProps} className={clsx('text-description text-sm', descriptionProps?.className)}>
           {description}
         </p>
       )}
       {children(bag)}
-      {error && (
-        <p {...errorProps} role="alert" className={clsx('text-negative text-sm font-medium', errorProps)}>
+      {error && isShowingError && (
+        <p {...errorProps} role="alert" className={clsx('absolute top-[calc(100%_+_0.25rem)] left-0 text-negative text-sm font-medium', errorProps)}>
           {error}
         </p>
       )}

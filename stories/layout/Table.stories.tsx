@@ -144,7 +144,7 @@ const TableExample = ({ ...props }: TableExampleProps) => {
   return (
     <div className="flex-col-3">
       <div className="flex-row-2 justify-between items-center">
-        <h2 className="typography-title-md-semibold">Address book</h2>
+        <h2 className="typography-title-md">Address book</h2>
         <div className="flex-row-2 items-center">
           {Object.keys(selection).length > 0 && (
             <SolidButton size="small" color="negative" onClick={() => {

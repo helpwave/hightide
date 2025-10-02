@@ -35,9 +35,9 @@ export type IconButtonColor = typeof IconButtonUtil.icon[number]
 /**
  * The different sizes for a button
  */
-type ButtonSizes = 'small' | 'medium' | 'large'
+type ButtonSizes = 'small' | 'medium' | 'large' | 'none'
 
-type IconButtonSize = 'tiny' | 'small' | 'medium' | 'large'
+type IconButtonSize = 'tiny' | 'small' | 'medium' | 'large' | 'none'
 
 /**
  * The shard properties between all button types
@@ -50,12 +50,14 @@ export type ButtonProps = ButtonHTMLAttributes<HTMLButtonElement> & {
 }
 
 const paddingMapping: Record<ButtonSizes, string> = {
+  none: '',
   small: 'btn-sm',
   medium: 'btn-md',
   large: 'btn-lg'
 }
 
 const iconPaddingMapping: Record<IconButtonSize, string> = {
+  none: '',
   tiny: 'icon-btn-xs',
   small: 'icon-btn-sm',
   medium: 'icon-btn-md',
@@ -137,7 +139,7 @@ export const SolidButton = forwardRef<HTMLButtonElement, SolidButtonProps>(funct
         'group font-semibold',
         colorClasses,
         'not-disabled:hover:brightness-90',
-        'disabled:text-disabled-text disabled:bg-disabled-background',
+        'disabled:text-disabled disabled:bg-disabled-background',
         ButtonUtil.paddingMapping[size],
         className
       )}
@@ -195,7 +197,7 @@ export const OutlineButton = ({
         'group font-semibold bg-transparent border-2 ',
         'not-disabled:hover:brightness-80',
         colorClasses,
-        'disabled:text-disabled-text disabled:border-disabled-outline',
+        'disabled:text-disabled disabled:border-disabled-outline',
         ButtonUtil.paddingMapping[size],
         className
       )}
@@ -241,9 +243,9 @@ export const TextButton = ({
                       ...restProps
                     }: TextButtonProps) => {
   const colorClasses = {
-    primary: 'not-disabled:bg-transparent not-disabled:text-button-text-primary-text focus-style-none focus-visible:ring-2 not-disabled:focus-visible:ring-button-text-primary-text',
-    negative: 'not-disabled:bg-transparent not-disabled:text-button-text-negative-text focus-style-none focus-visible:ring-2 not-disabled:focus-visible:ring-button-text-negative-text',
-    neutral: 'not-disabled:bg-transparent not-disabled:text-button-text-neutral-text focus-style-none focus-visible:ring-2 not-disabled:focus-visible:ring-button-text-neutral-text',
+    primary: 'not-disabled:bg-transparent not-disabled:text-button-text-primary-text not-disabled:focus-visible:outline-button-text-primary-text',
+    negative: 'not-disabled:bg-transparent not-disabled:text-button-text-negative-text not-disabled:focus-visible:outline-button-text-negative-text',
+    neutral: 'not-disabled:bg-transparent not-disabled:text-button-text-neutral-text not-disabled:focus-visible:outline-button-text-neutral-text',
   }[color]
 
   const backgroundColor = {
@@ -263,7 +265,7 @@ export const TextButton = ({
       onClick={onClick}
       className={clsx(
         'group font-semibold',
-        'disabled:text-disabled-text',
+        'disabled:text-disabled',
         colorClasses,
         {
           [backgroundColor]: coloredHoverBackground,
@@ -328,7 +330,7 @@ export const IconButton = forwardRef<HTMLButtonElement, IconButtonProps>(functio
       className={clsx(
         colorClasses,
         'not-disabled:hover:brightness-90',
-        'disabled:text-disabled-text',
+        'disabled:text-disabled',
         {
           'disabled:bg-disabled-background': color !== 'transparent',
           'disabled:opacity-70': color === 'transparent',

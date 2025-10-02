@@ -60,7 +60,7 @@ export const DayPicker = ({
                     'text-button-solid-neutral-text bg-button-solid-neutral-background': !isSelected && isSameMonth && isDayValid,
                     'text-button-solid-primary-text bg-button-solid-primary-background': isSelected && isDayValid,
                     'hover:brightness-90 hover:bg-button-solid-primary-background hover:text-button-solid-primary-text': isDayValid,
-                    'text-disabled-text bg-disabled-background cursor-not-allowed': !isDayValid,
+                    'text-disabled bg-disabled-background cursor-not-allowed': !isDayValid,
                     'border-secondary': isToday && markToday,
                     'border-transparent': !isToday || !markToday,
                   }

@@ -57,7 +57,7 @@ export const DatePicker = ({
       <div className="flex-row-2 items-center justify-between h-7">
         <TextButton
           className={clsx('flex-row-1 items-center cursor-pointer select-none', {
-            'text-disabled-text': displayMode !== 'day',
+            'text-disabled': displayMode !== 'day',
           })}
           onClick={() => setDisplayMode(displayMode === 'day' ? 'yearMonth' : 'day')}
         >

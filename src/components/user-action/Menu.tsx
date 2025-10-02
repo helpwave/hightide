@@ -1,11 +1,11 @@
 import { type PropsWithChildren, type ReactNode, type RefObject, useEffect, useRef, useState } from 'react'
 import clsx from 'clsx'
-import { useOutsideClick } from '../../hooks/useOutsideClick'
-import { useHoverState } from '../../hooks/useHoverState'
+import { useOutsideClick } from '@/src'
+import { useHoverState } from '@/src'
 import type { PropsWithBagFunctionOrChildren } from '@/src/utils/bagFunctions'
 import { BagFunctionUtil } from '@/src/utils/bagFunctions'
-import type { PopoverHorizontalAlignment, PopoverVerticalAlignment } from '../../hooks/usePopoverPosition'
-import { usePopoverPosition } from '../../hooks/usePopoverPosition'
+import type { PopoverHorizontalAlignment, PopoverVerticalAlignment } from '@/src'
+import { usePopoverPosition } from '@/src'
 import { createPortal } from 'react-dom'
 
 export type MenuItemProps = {
@@ -14,6 +14,7 @@ export type MenuItemProps = {
   isDisabled?: boolean,
   className?: string,
 }
+// TODO differentiate between buttons, links and toggleable items here
 export const MenuItem = ({
                            children,
                            onClick,
@@ -25,7 +26,7 @@ export const MenuItem = ({
     className={clsx('block px-3 py-1.5 first:rounded-t-md last:rounded-b-md text-sm font-semibold text-nowrap', {
       'text-right': alignment === 'right',
       'text-left': alignment === 'left',
-      'text-disabled-text cursor-not-allowed': isDisabled,
+      'text-disabled cursor-not-allowed': isDisabled,
       'text-menu-text hover:bg-primary/20': !isDisabled,
       'cursor-pointer': !!onClick,
     }, className)}

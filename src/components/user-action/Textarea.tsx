@@ -47,11 +47,11 @@ export const Textarea = forwardRef<HTMLTextAreaElement, TextareaProps>(function 
       id={id}
       className={clsx(
         'resize-none w-full h-32 overflow-y-scroll',
-        'py-2 px-3 rounded-md border-1',
+        'py-2 px-3 rounded-md border-2 border-transparent focus-style-none',
         {
-          'bg-input-background text-input-text hover:border-primary focus-within:border-primary focus-within:ring-2 ring-focus': !disabled && !invalid,
-          'bg-on-negative text-negative border-negative-border hover:border-negative-border-hover focus-visible:ring-negative-border': invalid && !disabled && defaultStyle,
-          'text-disabled-text bg-disabled-background border-disabled-border': disabled && defaultStyle,
+          'bg-input-background text-input-text hover:border-primary focus:border-primary': !disabled && !invalid,
+          'bg-negative/20 text-negative hover:border-negative focus-visible:border-negative': invalid && !disabled && defaultStyle,
+          'text-disabled bg-disabled-background border-disabled-border': disabled && defaultStyle,
         },
         className
       )}

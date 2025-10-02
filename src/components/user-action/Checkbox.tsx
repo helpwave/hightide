@@ -50,9 +50,9 @@ export const Checkbox = ({
       onCheckedChange={onChange}
       className={clsx(
         usedSizeClass,
-        `flex-col-0 items-center justify-center rounded outline-none`,
+        `flex-col-0 items-center justify-center rounded`,
         {
-          'text-disabled-text border-disabled-outline bg-disabled-background cursor-not-allowed': disabled,
+          'text-disabled border-disabled-outline bg-disabled-background cursor-not-allowed': disabled,
           'hover:border-primary': !disabled,
           'bg-input-background': !disabled && !checked,
           'bg-primary/30 border-primary text-primary': !disabled && (checked || indeterminate),
