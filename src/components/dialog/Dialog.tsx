@@ -96,7 +96,7 @@ export const Dialog = ({
         className
       )}
     >
-      <div className="typography-title-lg-semibold mr-8">
+      <div className="typography-title-lg mr-8">
         {titleElement}
       </div>
       <div className="text-description">

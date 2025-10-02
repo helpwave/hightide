@@ -35,7 +35,6 @@
   --color-negative: var(--color-red-500);
   --color-on-negative:  var(--color-white);
   --color-negative-border: var(--color-negative);
-  --color-negative-border-hover: var(--color-red-700);
 
   --color-disabled: var(--color-gray-300);
   --color-disabled-background: var(--color-gray-100);
@@ -51,6 +50,7 @@
   --color-text-secondary: var(--color-gray-600);
   --color-text-tertiary: var(--color-gray-300);
   --color-text-highlight: var(--color-highlight);
+  --color-placeholder: var(--color-gray-500);
   --color-description: var(--color-gray-600);
   --color-label: var(--color-gray-700);
 
@@ -74,7 +74,9 @@
     --color-positive: var(--color-green-700);
 
     --color-negative: var(--color-red-500);
-    --color-negative-border-hover: var(--color-red-600);
+
+    --color-disabled: var(--color-gray-500);
+    --color-disabled-background: var(--color-gray-700);
 
     /* Surface */
     --color-surface: var(--color-gray-800);
@@ -84,6 +86,7 @@
     --color-text-primary: var(--color-gray-100);
     --color-text-secondary: var(--color-gray-400);
     --color-text-tertiary: var(--color-gray-600);
+    --color-placeholder: var(--color-gray-500);
     --color-description: var(--color-gray-400);
     --color-label: var(--color-gray-300);
 

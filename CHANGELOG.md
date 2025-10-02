@@ -5,6 +5,24 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/)
 and adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [0.1.29] - 2025-10-02
+
+### Added
+- HTML elements now use `color-scheme: dark` when in dark mode
+- Add invalid state styling to Selects
+- Add a placeholder color called `placeholder`
+- Add a hook for localized validation translation `useTranslatedValidators`
+
+### Changed
+- `disabled` and `required` are now optional in `FormElementWrapper`
+- changed focus to draw an outline instead of a ring
+
+### Removed
+- removed several typography entries that only change the `font-weight` (e.g. `typography-label-md-bold` -> `typography-label-md font-bold`)
+
+### Fix
+- Fix disabled color for `Select`
+
 ## [0.1.28] - 2025-10-02
 
 ### Added

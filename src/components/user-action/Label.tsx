@@ -1,11 +1,11 @@
 import clsx from 'clsx'
 import type { LabelHTMLAttributes } from 'react'
 
-export type LabelType = 'sm' | 'md'
+export type LabelType = 'md' | 'lg'
 
 const styleMapping: Record<LabelType, string> = {
-  sm: 'typography-label-xs color-label-text',
   md: 'typography-label-md color-label-text',
+  lg: 'typography-label-lg color-label-text',
 }
 
 export type LabelProps = LabelHTMLAttributes<HTMLLabelElement> & {

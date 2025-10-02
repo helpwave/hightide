@@ -18,7 +18,7 @@ import { useFocusTrap } from '@/src/hooks/focus/useFocusTrap'
 import { match } from '@/src/utils/match'
 import { CheckIcon, Plus, XIcon } from 'lucide-react'
 import { Chip } from '@/src/components/layout/Chip'
-import { IconButton } from '@/src/components/user-action/Button'
+import { IconButton, TextButton } from '@/src/components/user-action/Button'
 import type { UseFloatingElementOptions } from '@/src/hooks/useFloatingElement'
 import { useFloatingElement } from '@/src/hooks/useFloatingElement'
 import { createPortal } from 'react-dom'
@@ -416,22 +416,38 @@ export const SelectButton = forwardRef<HTMLButtonElement, SelectButtonProps>(fun
       {...props}
       ref={innerRef}
       id={state.id} // TODO allow for a custom id here
-      className={clsx(
-        'flex-row-2 items-center justify-between bg-input-background text-input-text rounded-md px-2.5 py-2.5',
-        'data-placeholder:text-description',
-        props.className
-      )}
-      onClick={() => toggleOpen(!state.isOpen)}
+      disabled={disabled}
+
+      onClick={(event) => {
+        props.onClick?.(event)
+        toggleOpen(!state.isOpen)
+      }}
       onKeyDown={event => {
+        props.onKeyDown?.(event)
         switch (event.key) {
           case 'ArrowDown':
             toggleOpen(true, { highlightStartPosition: 'first' })
+            event.preventDefault()
+            event.stopPropagation()
             break
           case 'ArrowUp':
             toggleOpen(true, { highlightStartPosition: 'last' })
+            event.preventDefault()
+            event.stopPropagation()
             break
         }
       }}
+
+      className={clsx(
+        'flex-row-2 items-center justify-between rounded-md px-3 py-2',
+        {
+          'bg-input-background text-placeholder': !hasValue && !disabled && !invalid,
+          'bg-input-background text-input-text': hasValue && !disabled && !invalid,
+          'bg-negative/20 text-negative': !disabled && invalid,
+          'bg-disabled-background text-disabled': disabled,
+        },
+        props.className
+      )}
 
       data-placeholder={!hasValue ? '' : undefined}
       data-disabled={disabled ? '' : undefined}
@@ -447,7 +463,14 @@ export const SelectButton = forwardRef<HTMLButtonElement, SelectButtonProps>(fun
         selectedDisplay?.(state.value) ?? state.value.join(', ')
         : placeholder ?? translation('clickToSelect')
       }
-      <ExpansionIcon isExpanded={state.isOpen}/>
+      <ExpansionIcon
+        isExpanded={state.isOpen}
+        className={clsx({
+          'text-input-text': !disabled && !invalid,
+          'text-negative': !disabled && invalid,
+          'text-disabled': disabled,
+        })}
+      />
     </button>
   )
 })
@@ -494,15 +517,17 @@ export const SelectChipDisplay = forwardRef<HTMLDivElement, SelectChipDisplayPro
       {state.value.map((value) => (
         <Chip key={value} className="gap-x-2">
           {value}
-          <button
+          <TextButton
             // TODO add label to indicate purpose to screen reader
             onClick={() => {
               item.toggleSelection(value, false)
             }}
-            className="focus-within:text-negative hover:bg-negative/20 hover:text-negative rounded-md focus-style-none focus-visible:ring-2 focus-visible:ring-negative focus-visible:bg-negative/20"
+            size="none"
+            color="negative"
+            className="flex-row-0 items-center px-0.5 py-0.5 w-6 h-6 rounded"
           >
-            <XIcon/>
-          </button>
+            <XIcon className="w-5 h-5"/>
+          </TextButton>
         </Chip>
       ))}
       <IconButton

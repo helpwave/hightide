@@ -69,11 +69,11 @@ export const Input = forwardRef<HTMLInputElement, InputProps>(function Input({
       value={value}
       disabled={disabled}
       className={defaultStyle ? clsx(
-        'px-2.5 py-1.75 rounded-md border-1 text-sm',
+        'px-3 py-2 rounded-md text-sm h-10 border-2 border-transparent focus-style-none',
         {
           'bg-input-background text-input-text hover:border-primary focus:border-primary': !disabled && !invalid,
-          'bg-on-negative text-negative border-negative-border hover:border-negative-border-hover focus-visible:ring-negative-border': !disabled && invalid,
-          'bg-disabled-background text-disabled-text border-disabled-border': disabled,
+          'bg-negative/20 text-negative hover:border-negative focus-visible:border-negative': !disabled && invalid,
+          'bg-disabled-background text-disabled border-disabled-border': disabled,
         }, className
       ) : className}
       onKeyDown={event => {

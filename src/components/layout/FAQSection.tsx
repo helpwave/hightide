@@ -38,7 +38,7 @@ export const FAQSection = ({
           <ExpandableUncontrolled
             key={id}
             {...restProps}
-            label={(<h3 id={id} className="typography-title-md-semibold">{title}</h3>)}
+            label={(<span id={id} className="typography-title-md">{title}</span>)}
             clickOnlyOnHeader={false}
             icon={(expanded) => (<ExpansionIcon isExpanded={expanded} className="text-primary"/>)}
             className={clsx('rounded-xl', expandableClassName)}

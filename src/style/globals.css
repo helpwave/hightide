@@ -20,31 +20,31 @@
 
 @layer components {
   .btn-sm {
-    @apply flex-row-1 items-center justify-center px-1.5 py-1 rounded-1.5 h-8 min-h-8;
+    @apply flex-row-1 items-center justify-center px-1.5 py-1 rounded-1.5 h-8;
   }
 
   .btn-md {
-    @apply flex-row-2 items-center justify-center px-3 py-2 rounded-1.5 h-10 min-h-10;
+    @apply flex-row-2 items-center justify-center px-3 py-2 rounded-1.5 h-10;
   }
 
   .btn-lg {
-    @apply flex-row-2 items-center justify-center px-4 py-2.5 rounded-1.5 h-12 min-h-12;
+    @apply flex-row-2 items-center justify-center px-4 py-2.5 rounded-1.5 h-12;
   }
 
   .icon-btn-xs {
-    @apply flex-row-0 items-center justify-center p-1 rounded-1 h-6 min-h-6 w-6 min-w-6;
+    @apply flex-row-0 items-center justify-center p-1 rounded-1 h-6 w-6;
   }
 
   .icon-btn-sm {
-    @apply flex-row-0 items-center justify-center p-1.5 rounded-1.5 h-8 min-h-8 w-8 min-w-8;
+    @apply flex-row-0 items-center justify-center p-1.5 rounded-1.5 h-8 w-8;
   }
 
   .icon-btn-md {
-    @apply flex-row-0 items-center justify-center p-2 rounded-1.5 h-10 min-h-10 w-10 min-w-10;
+    @apply flex-row-0 items-center justify-center p-2 rounded-1.5 h-10 w-10;
   }
 
   .icon-btn-lg {
-    @apply flex-row-0 items-center justify-center p-3 rounded-1.5 h-12 min-h-12 w-12 min-w-12;
+    @apply flex-row-0 items-center justify-center p-3 rounded-1.5 h-12 w-12;
   }
 
   .card-sm {
@@ -85,6 +85,10 @@
 
   * {
     @apply border-border list-none;
+
+    @variant dark {
+      color-scheme: dark;
+    }
   }
 
   html {
@@ -95,10 +99,19 @@
     @apply cursor-pointer text-nowrap;
   }
 
+  input {
+    @apply placeholder-placeholder
+  }
+
   *:disabled {
     @apply cursor-not-allowed;
   }
 
+  @media (prefers-reduced-motion: reduce) {
+    * {
+      @apply transition-none animate-none;
+    }
+  }
 
   /* move the focus styles into its own file and utilities */
   *:focus {
@@ -106,21 +119,15 @@
   }
 
   *:focus-visible {
-    @apply ring-2 ring-focus;
+    @apply outline-2 outline-focus outline-offset-2;
   }
 
   .focus-style-within:focus-within {
-    @apply ring-2 ring-focus;
+    @apply outline-2 outline-focus;
   }
 
   .focus-style-none {
-    @apply focus-visible:ring-0 focus-within:ring-0;
-  }
-
-  @media (prefers-reduced-motion: reduce) {
-    * {
-      @apply transition-none animate-none;
-    }
+    @apply focus-visible:outline-0 focus-within:outline-0 outline-offset-0;
   }
 
   /**

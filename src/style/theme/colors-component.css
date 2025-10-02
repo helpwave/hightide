@@ -132,7 +132,7 @@
   /* Other */
   --color-border: var(--color-gray-200);
   --color-divider: var(--color-gray-100);
-  --color-focus: var(--color-purple-400);
+  --color-focus: var(--color-primary);
   --color-outline: var(--color-gray-100);
   --color-outline-variant: var(--color-gray-200);
 }
@@ -170,7 +170,7 @@
     /* Other */
     --color-border: var(--color-gray-600);
     --color-divider: var(--color-gray-700);
-    --color-focus: var(--color-purple-500);
+    --color-focus: var(--color-primary);
     --color-outline: var(--color-gray-700);
     --color-outline-variant: var(--color-gray-600);
   }
