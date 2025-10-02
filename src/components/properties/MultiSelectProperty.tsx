@@ -8,9 +8,14 @@ import type { FormTranslationType } from '../../localization/defaults/form'
 
 type TranslationType = FormTranslationType
 
+type SelectPropertyOption = {
+  value: string,
+  label?: string,
+}
+
 export type MultiSelectPropertyProps = Omit<PropertyBaseProps, 'icon' | 'input' | 'hasValue' | 'className'> & {
   values: string[],
-  options: string[],
+  options: SelectPropertyOption[],
   onValuesChanged?: (value: string[]) => void,
 }
 
@@ -46,7 +51,11 @@ export const MultiSelectProperty = ({
             })
           }}
         >
-          {options.map(value => (<SelectOption key={value} value={value}/>))}
+          {options.map(option => (
+            <SelectOption key={option.value} value={option.value}>
+              {option.label ?? option.value}
+            </SelectOption>
+          ))}
         </MultiSelectChipDisplay>
       )}
     />
