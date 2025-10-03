@@ -52,7 +52,7 @@
   --color-carousel-dot-disabled: var(--color-disabled-background);
 
   /* Input */
-  --color-input-background: var(--color-surface);
+  --color-input-background: var(--color-surface-variant);
   --color-input-text: var(--color-on-surface);
 
   /* Menu */

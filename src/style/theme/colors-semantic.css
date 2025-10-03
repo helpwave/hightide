@@ -40,9 +40,9 @@
   --color-disabled-background: var(--color-gray-100);
 
   /* Surface */
-  --color-surface:  var(--color-white);
+  --color-surface:  var(--color-gray-50);
   --color-on-surface: var(--color-text-primary);
-  --color-surface-variant: var(--color-gray-25);
+  --color-surface-variant: var(--color-white);
   --color-surface-warning: var(--color-orange-100);
 
   /* Text */
@@ -80,7 +80,7 @@
 
     /* Surface */
     --color-surface: var(--color-gray-800);
-    --color-surface-variant: var(--color-gray-700);
+    --color-surface-variant: var(--color-gray-900);
 
     /* Text */
     --color-text-primary: var(--color-gray-100);
