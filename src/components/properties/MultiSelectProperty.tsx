@@ -1,30 +1,25 @@
 import { List } from 'lucide-react'
 import clsx from 'clsx'
-import type { PropsForTranslation } from '../../localization/useTranslation'
-import { MultiSelectChipDisplay, SelectOption } from '../user-action/select/Select'
-import type { PropertyBaseProps } from './PropertyBase'
-import { PropertyBase } from './PropertyBase'
-import type { FormTranslationType } from '../../localization/defaults/form'
+import type { PropsForTranslation } from '@/src'
+import { MultiSelectChipDisplay } from '@/src'
+import type { PropertyBaseProps } from '@/src'
+import { PropertyBase } from '@/src'
+import type { FormTranslationType } from '@/src'
+import type { PropsWithChildren } from 'react'
 
 type TranslationType = FormTranslationType
 
-type SelectPropertyOption = {
-  value: string,
-  label?: string,
-}
-
-export type MultiSelectPropertyProps = Omit<PropertyBaseProps, 'icon' | 'input' | 'hasValue' | 'className'> & {
+export type MultiSelectPropertyProps = Omit<PropertyBaseProps, 'icon' | 'input' | 'hasValue' | 'className'> & PropsWithChildren<{
   values: string[],
-  options: SelectPropertyOption[],
   onValuesChanged?: (value: string[]) => void,
-}
+}>
 
 /**
  * An Input for MultiSelect properties
  */
 export const MultiSelectProperty = ({
+                                      children,
                                       values,
-                                      options,
                                       onValuesChanged,
                                       ...props
                                     }: PropsForTranslation<TranslationType, MultiSelectPropertyProps>) => {
@@ -51,11 +46,7 @@ export const MultiSelectProperty = ({
             })
           }}
         >
-          {options.map(option => (
-            <SelectOption key={option.value} value={option.value}>
-              {option.label ?? option.value}
-            </SelectOption>
-          ))}
+          {children}
         </MultiSelectChipDisplay>
       )}
     />
