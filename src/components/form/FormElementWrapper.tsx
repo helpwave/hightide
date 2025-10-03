@@ -16,7 +16,7 @@ type FormElementWrapperBag = {
   'required': boolean,
   'disabled': boolean,
   'aria-describedby': string,
-  'aria-labelby': string,
+  'aria-labelledby': string,
   'id': string,
 }
 
@@ -64,7 +64,7 @@ export const FormElementWrapper = ({
     error ? `${usedId}-error` : undefined,
   ].filter(Boolean).join(' ')
 
-  const labeledBy = label ? `${usedId}-label` : undefined
+  const labelledBy = label ? `${usedId}-label` : undefined
 
   const isShowingError = errorShowBehaviour === 'always' || (touched)
 
@@ -76,7 +76,7 @@ export const FormElementWrapper = ({
     'required': required,
     'id': usedId,
     'aria-describedby': describedBy,
-    'aria-labelby': labeledBy
+    'aria-labelledby': labelledBy
   }
 
   return (

@@ -1,12 +1,12 @@
 import { type PropsWithChildren, type ReactNode } from 'react'
-import type { PropsForTranslation, Translation } from '../../localization/useTranslation'
-import { useTranslation } from '../../localization/useTranslation'
-import { Select, SelectOption } from '../user-action/select/Select'
-import { SolidButton } from '../user-action/Button'
-import type { ThemeType, ThemeTypeTranslation } from '../../theming/useTheme'
-import { ThemeUtil, useTheme } from '../../theming/useTheme'
-import type { FormTranslationType } from '../../localization/defaults/form'
-import { formTranslation } from '../../localization/defaults/form'
+import type { PropsForTranslation, Translation } from '@/src'
+import { useTranslation } from '@/src'
+import { Select, SelectOption } from '@/src'
+import { SolidButton } from '@/src'
+import type { ThemeType, ThemeTypeTranslation } from '@/src'
+import { ThemeUtil, useTheme } from '@/src'
+import type { FormTranslationType } from '@/src'
+import { formTranslation } from '@/src'
 import type { DialogProps } from '@/src/components/dialog/Dialog'
 import { Dialog } from '@/src/components/dialog/Dialog'
 import { MonitorCog, MoonIcon, SunIcon } from 'lucide-react'
@@ -80,7 +80,7 @@ export const ThemeDialog = ({
           onValueChanged={(theme) => setTheme(theme as ThemeType)}
           iconAppearance="right"
           contentPanelProps={{
-            className: 'z-100'
+            className: 'z-200'
           }}
           buttonProps={{
             selectedDisplay: (value) => (

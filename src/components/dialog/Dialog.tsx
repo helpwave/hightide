@@ -71,7 +71,7 @@ export const Dialog = ({
     <>
       <div
         className={clsx(
-          'fixed inset-0 h-screen w-screen bg-overlay-shadow',
+          'fixed inset-0 h-screen w-screen bg-overlay-shadow z-100',
           {
             'motion-safe:animate-fade-in': isOpen,
             'motion-safe:animate-fade-out': !isOpen,
@@ -91,7 +91,7 @@ export const Dialog = ({
           }
         }}
         className={clsx(
-          'flex-col-2 p-4 bg-overlay-background text-overlay-text rounded-xl shadow-hw-bottom max-w-[calc(100vw_-_1rem)] max-h-[calc(100vh_-_1rem)]',
+          'flex-col-2 p-4 bg-overlay-background text-overlay-text rounded-xl shadow-hw-bottom max-w-[calc(100vw_-_2rem)] max-h-[calc(100vh_-_2rem)] z-100',
           {
             'motion-safe:animate-pop-in': isOpen,
             'motion-safe:animate-pop-out': !isOpen,
