@@ -54,6 +54,9 @@ export const FloatingContainer = forwardRef<HTMLDivElement, FloatingContainerPro
       <div
         {...props}
         ref={innerRef}
+
+        data-positioned={position && !props.hidden ? '' : undefined}
+
         style={{
           position: 'fixed',
           overflow: 'hidden',

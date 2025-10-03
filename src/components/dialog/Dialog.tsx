@@ -59,8 +59,6 @@ export const Dialog = ({
     focusFirst: true,
   })
 
-  if (!isOpen) return undefined
-
   return (
     <FloatingContainer
       ref={ref}
@@ -77,7 +75,7 @@ export const Dialog = ({
           className={clsx(
             'fixed inset-0 h-screen w-screen bg-overlay-shadow',
             {
-              'motion-safe:animate-fade-in animation-delay-3000': isOpen,
+              'motion-safe:animate-fade-in': isOpen,
               'motion-safe:animate-fade-out': !isOpen,
             },
             backgroundClassName
@@ -90,7 +88,7 @@ export const Dialog = ({
       className={clsx(
         'flex-col-2 p-4 bg-overlay-background text-overlay-text rounded-xl shadow-hw-bottom',
         {
-          'motion-safe:animate-pop-in': isOpen,
+          'data-positioned:motion-safe:animate-pop-in': isOpen,
           'motion-safe:animate-pop-out': !isOpen,
         },
         className
@@ -99,9 +97,11 @@ export const Dialog = ({
       <div className="typography-title-lg mr-8">
         {titleElement}
       </div>
-      <div className="text-description">
-        {description}
-      </div>
+      {description && (
+        <div className="text-description">
+          {description}
+        </div>
+      )}
       {isModal && (
         <div
           className="absolute top-0 right-0"

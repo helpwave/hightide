@@ -5,6 +5,15 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/)
 and adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [0.1.32] - 2025-10-03
+
+### Changed
+- Changed the default background for surfaces and inputs to create higher contrasts
+
+### Fixed
+- Fix a `Dialog`s description rendering a div when not set
+- Fix initial misalignment of `Dialog`s in some cases
+
 ## [0.1.31] - 2025-10-03
 
 ### Changed
