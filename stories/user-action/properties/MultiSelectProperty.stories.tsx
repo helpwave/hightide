@@ -1,12 +1,17 @@
 import type { Meta, StoryObj } from '@storybook/nextjs'
-import { useMemo, useState } from 'react'
+import { useState } from 'react'
 import { action } from 'storybook/actions'
-import type { MultiSelectPropertyProps } from '../../../src/components/properties/MultiSelectProperty'
-import { MultiSelectProperty } from '../../../src/components/properties/MultiSelectProperty'
+import type { MultiSelectPropertyProps } from '../../../src'
+import { SelectOption } from '../../../src'
+import { MultiSelectProperty } from '../../../src'
 import { StorybookHelper } from '../../../src/storybook/helper'
+import clsx from 'clsx'
 
 type MultiSelectPropertyExample =
   Omit<MultiSelectPropertyProps, 'values' | 'search' | 'selectedDisplay' | 'options'>
+
+const options = [...StorybookHelper.selectValues]
+
 
 /**
  * Example for using the MultiSelectProperty
@@ -14,15 +19,12 @@ type MultiSelectPropertyExample =
 const MultiSelectPropertyExample = ({
                                       ...restProps
                                     }: MultiSelectPropertyExample) => {
-  const [values, setValues] = useState<string[]>(StorybookHelper.selectValues.slice(3,4))
-
-  const options = useMemo(() => [...StorybookHelper.selectValues], [])
+  const [values, setValues] = useState<string[]>(options.slice(3, 5))
 
   return (
     <MultiSelectProperty
       {...restProps}
       values={values}
-      options={options}
       onValuesChanged={values => {
         restProps.onValuesChanged?.(values)
         setValues(values)
@@ -50,6 +52,22 @@ export const multiSelectProperty: Story = {
     softRequired: false,
     readOnly: false,
     onRemove: action('onRemove'),
-    onValuesChanged: action('onValuesChanged')
+    onValuesChanged: action('onValuesChanged'),
+    children: options.map(option => (
+      <SelectOption key={option} value={option}>
+        <span className="flex-row-1 items-center">
+            <span
+              className={clsx(
+                'w-4 h-4 rounded-full',
+                {
+                  'bg-primary': option.length % 3 === 0,
+                  'bg-secondary': option.length % 3 !== 0,
+                }
+              )}
+            />
+          {option}
+          </span>
+      </SelectOption>
+    ))
   },
 }

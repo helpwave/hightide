@@ -1,32 +1,31 @@
 import { List } from 'lucide-react'
 import clsx from 'clsx'
-import type { PropsForTranslation } from '../../localization/useTranslation'
-import type { PropertyBaseProps } from './PropertyBase'
-import { PropertyBase } from './PropertyBase'
-import { Select, SelectOption } from '../user-action/select/Select'
-import type { FormTranslationType } from '../../localization/defaults/form'
+import type { PropsForTranslation } from '@/src'
+import type { PropertyBaseProps } from '@/src'
+import { PropertyBase } from '@/src'
+import { Select } from '@/src'
+import type { FormTranslationType } from '@/src'
+import type { PropsWithChildren, ReactNode } from 'react'
 
 type SingleSelectPropertyTranslation = FormTranslationType
 
-type SelectPropertyOption = {
-  value: string,
-  label?: string,
-}
-
-export type SingleSelectPropertyProps = Omit<PropertyBaseProps, 'icon' | 'input' | 'hasValue' | 'className'> & {
+export type SingleSelectPropertyProps =
+  Omit<PropertyBaseProps, 'icon' | 'input' | 'hasValue' | 'className'>
+  & PropsWithChildren<{
   value?: string,
-  options: SelectPropertyOption[],
   onValueChanged?: (value: string) => void,
   onAddNew?: (value: string) => void,
-}
+  selectedDisplay?: (value: string) => ReactNode,
+}>
 
 /**
  * An Input for SingleSelect properties
  */
 export const SingleSelectProperty = ({
+                                       children,
                                        value,
-                                       options,
                                        onValueChanged,
+                                       selectedDisplay,
                                        ...props
                                      }: PropsForTranslation<SingleSelectPropertyTranslation, SingleSelectPropertyProps>) => {
   const hasValue = value !== undefined
@@ -47,14 +46,11 @@ export const SingleSelectProperty = ({
               {
                 '!bg-warning !text-surface-warning': softRequired && !hasValue,
               }
-            )
+            ),
+            selectedDisplay: selectedDisplay,
           }}
         >
-          {options.map(option => (
-            <SelectOption key={option.value} value={option.value}>
-              {option.label ?? option.value}
-            </SelectOption>
-          ))}
+          {children}
         </Select>
       )}
     />

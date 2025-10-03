@@ -41,7 +41,7 @@ function generateBarrel(dir, relativeDir = '') {
   if (exports.length) {
     const barrelPath = path.join(dir, 'index.ts')
     fs.writeFileSync(barrelPath, exports.join('\n') + '\n')
-    console.log('✔ Generated barrel:', barrelPath)
+    console.info('✔ Generated barrel:', barrelPath)
   }
 }
 

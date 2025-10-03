@@ -1,7 +1,12 @@
-import type { ButtonHTMLAttributes, HTMLAttributes, PropsWithChildren, ReactNode } from 'react'
+import type {
+  ButtonHTMLAttributes,
+  HTMLAttributes,
+  PropsWithChildren,
+  ReactNode } from 'react'
 import React, {
   createContext,
   forwardRef,
+  Fragment,
   useCallback,
   useContext,
   useEffect,
@@ -28,6 +33,7 @@ import { createPortal } from 'react-dom'
 //
 type RegisteredOption = {
   value: string,
+  label: ReactNode,
   disabled: boolean,
   ref: React.RefObject<HTMLLIElement>,
 }
@@ -43,6 +49,8 @@ type InternalSelectContextState = {
 type SelectContextState = InternalSelectContextState & {
   id: string,
   value: string[],
+  options: RegisteredOption[],
+  selectedOptions: RegisteredOption[],
   disabled: boolean,
   invalid: boolean,
 }
@@ -118,7 +126,7 @@ export const SelectRoot = ({
                              isMultiSelect = false,
                              iconAppearance = 'left',
                            }: SelectRootProps) => {
-  const optionsRef = useRef<RegisteredOption[]>([])
+  const [options, setOptions] = useState<RegisteredOption[]>([])
   const triggerRef = useRef<HTMLElement>(null)
   const generatedId = useId()
   const usedId = id ?? generatedId
@@ -127,30 +135,37 @@ export const SelectRoot = ({
     isOpen,
   })
 
+  const selectedValues = isMultiSelect ? (values ?? []) : [value].filter(Boolean)
   const state: SelectContextState = {
     ...internalState,
     id: usedId,
     disabled,
     invalid,
-    value: isMultiSelect ? (values ?? []) : [value].filter(Boolean),
+    value: selectedValues,
+    options: options,
+    selectedOptions: selectedValues.map(value => options.find(option => value === option.value)).filter(Boolean),
   }
+
   const config: SelectConfiguration = {
     isMultiSelect,
     iconAppearance,
   }
 
   const registerItem = useCallback((item: RegisteredOption) => {
-    optionsRef.current.push(item)
-    optionsRef.current.sort((a, b) => {
-      const aEl = a.ref.current
-      const bEl = b.ref.current
-      if (!aEl || !bEl) return 0
-      return aEl.compareDocumentPosition(bEl) & Node.DOCUMENT_POSITION_FOLLOWING ? -1 : 1
+    setOptions(prev => {
+      const updated = [...prev, item]
+      updated.sort((a, b) => {
+        const aEl = a.ref.current
+        const bEl = b.ref.current
+        if (!aEl || !bEl) return 0
+        return aEl.compareDocumentPosition(bEl) & Node.DOCUMENT_POSITION_FOLLOWING ? -1 : 1
+      })
+      return updated
     })
   }, [])
 
   const unregisterItem = useCallback((value: string) => {
-    optionsRef.current = optionsRef.current.filter(i => i.value !== value)
+    setOptions(prev => prev.filter(i => i.value !== value))
   }, [])
 
   // Setting isSelected to false only works for multiselects
@@ -158,7 +173,7 @@ export const SelectRoot = ({
     if (disabled) {
       return
     }
-    const option = optionsRef.current.find(i => i.value === value)
+    const option = options.find(i => i.value === value)
     if (!option) {
       console.error(`SelectOption with value: ${value} not found`)
       return
@@ -207,37 +222,37 @@ export const SelectRoot = ({
     triggerRef.current = null
   }, [])
 
-  const toggleOpen = (isOpen?: boolean, options?: ToggleOpenOptions) => {
-    const { highlightStartPosition } = { ...defaultToggleOpenOptions, ...options }
+  const toggleOpen = (isOpen?: boolean, toggleOpenOptions?: ToggleOpenOptions) => {
+    const { highlightStartPosition } = { ...defaultToggleOpenOptions, ...toggleOpenOptions }
     let highlightedIndex: number
     if (highlightStartPosition === 'first') {
-      highlightedIndex = optionsRef.current.findIndex(option => !option.disabled)
+      highlightedIndex = options.findIndex(option => !option.disabled)
     } else {
-      highlightedIndex = optionsRef.current.length - 1 - [...optionsRef.current].reverse().findIndex(option => !option.disabled)
+      highlightedIndex = options.length - 1 - [...options].reverse().findIndex(option => !option.disabled)
     }
-    if (highlightedIndex === -1 || highlightedIndex === optionsRef.current.length) {
+    if (highlightedIndex === -1 || highlightedIndex === options.length) {
       highlightedIndex = 0
     }
     setInternalState(prevState => ({
       ...prevState,
       isOpen: isOpen ?? !prevState.isOpen,
-      highlightedValue: optionsRef.current[highlightedIndex].value,
+      highlightedValue: options[highlightedIndex].value,
     }))
   }
 
   const moveHighlightedIndex = (delta: number) => {
-    let highlightedIndex = optionsRef.current.findIndex(value => value.value === internalState.highlightedValue)
+    let highlightedIndex = options.findIndex(value => value.value === internalState.highlightedValue)
     if (highlightedIndex === -1) {
       highlightedIndex = 0
     }
-    const optionLength = optionsRef.current.length
+    const optionLength = options.length
     const startIndex = (highlightedIndex + (delta % optionLength) + optionLength) % optionLength
     const isForward = delta >= 0
-    let highlightedValue = optionsRef.current[startIndex].value
-    for (let i = 0; i < optionsRef.current.length; i++) {
+    let highlightedValue = options[startIndex].value
+    for (let i = 0; i < options.length; i++) {
       const index = (startIndex + (isForward ? i : -i) + optionLength) % optionLength
-      if (!optionsRef.current[index].disabled) {
-        highlightedValue = optionsRef.current[index].value
+      if (!options[index].disabled) {
+        highlightedValue = options[index].value
         break
       }
     }
@@ -250,13 +265,13 @@ export const SelectRoot = ({
 
   useEffect(() => {
     if (!internalState.highlightedValue) return
-    const highlighted = optionsRef.current.find(value => value.value === internalState.highlightedValue)
+    const highlighted = options.find(value => value.value === internalState.highlightedValue)
     if (highlighted) {
       highlighted.ref.current.scrollIntoView({ behavior: 'instant', block: 'nearest' })
     } else {
       console.error(`SelectRoot: Could not find highlighted value (${internalState.highlightedValue})`)
     }
-  }, [internalState.highlightedValue])
+  }, [internalState.highlightedValue]) // eslint-disable-line react-hooks/exhaustive-deps
 
   const contextValue: SelectContextType = {
     state,
@@ -301,15 +316,18 @@ export const SelectOption = forwardRef<HTMLLIElement, SelectOptionProps>(
 
     iconAppearance ??= config.iconAppearance
 
+    const label = children ?? value
+
     // Register with parent
     useEffect(() => {
       register({
         value,
+        label,
         disabled,
         ref: itemRef,
       })
       return () => unregister(value)
-    }, [value, disabled, register, unregister, children])
+    }, [value, disabled, register, unregister, children, label])
 
     const isHighlighted = state.highlightedValue === value
     const isSelected = state.value.includes(value)
@@ -358,7 +376,7 @@ export const SelectOption = forwardRef<HTMLLIElement, SelectOptionProps>(
             aria-hidden={true}
           />
         )}
-        {children ?? value}
+        {label}
         {iconAppearance === 'right' && (
           <CheckIcon
             className={clsx('w-4 h-4', { 'opacity-0': !isSelected || disabled })}
@@ -460,7 +478,16 @@ export const SelectButton = forwardRef<HTMLButtonElement, SelectButtonProps>(fun
       aria-controls={state.isOpen ? `${state.id}-listbox` : undefined}
     >
       {hasValue ?
-        selectedDisplay?.(state.value) ?? state.value.join(', ')
+        selectedDisplay?.(state.value) ?? (
+          <div className={clsx('flex flex-wrap gap-x-1 gap-y-2')}>
+            {state.selectedOptions.map(({ value, label }, index) => (
+              <span key={value} className="flex-row-0">
+                {label}
+                {index < state.value.length - 1 && (<span>{','}</span>)}
+              </span>
+            ))}
+          </div>
+        )
         : placeholder ?? translation('clickToSelect')
       }
       <ExpansionIcon
@@ -514,9 +541,9 @@ export const SelectChipDisplay = forwardRef<HTMLDivElement, SelectChipDisplayPro
       aria-invalid={invalid}
       aria-disabled={disabled}
     >
-      {state.value.map((value) => (
+      {state.selectedOptions.map(({ value, label }) => (
         <Chip key={value} className="gap-x-2">
-          {value}
+          {label}
           <TextButton
             // TODO add label to indicate purpose to screen reader
             onClick={() => {

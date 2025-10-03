@@ -1,9 +1,11 @@
 import type { Meta, StoryObj } from '@storybook/nextjs'
 import { useState } from 'react'
 import { action } from 'storybook/actions'
-import type { SingleSelectPropertyProps } from '../../../src/components/properties/SelectProperty'
-import { SingleSelectProperty } from '../../../src/components/properties/SelectProperty'
+import type { SingleSelectPropertyProps } from '../../../src'
+import { SelectOption } from '../../../src'
+import { SingleSelectProperty } from '../../../src'
 import { StorybookHelper } from '../../../src/storybook/helper'
+import clsx from 'clsx'
 
 type SingleSelectPropertyExample = Omit<SingleSelectPropertyProps, 'onChange' | 'onRemove' | 'searchMapping' | 'options'>
 
@@ -22,7 +24,6 @@ const SingleSelectPropertyExample = ({
     <SingleSelectProperty
       {...restProps}
       value={usedValue}
-      options={options}
       onValueChanged={value => {
         action('onChange')(value)
         setUsedValue(value)
@@ -50,5 +51,21 @@ export const singleSelectProperty: Story = {
     name: 'Fruits',
     softRequired: false,
     readOnly: false,
+    children: options.map(option => (
+      <SelectOption key={option} value={option}>
+        <span className="flex-row-1 items-center">
+            <span
+              className={clsx(
+                'w-4 h-4 rounded-full',
+                {
+                  'bg-primary': option.length % 3 === 0,
+                  'bg-secondary': option.length % 3 !== 0,
+                }
+              )}
+            />
+          {option}
+          </span>
+      </SelectOption>
+    ))
   },
 }
