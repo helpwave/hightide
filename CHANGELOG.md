@@ -5,7 +5,15 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/)
 and adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
-## [0.1.32] - 2025-10-03
+## [0.1.34] - 2025-10-03
+
+### Changed
+- Changed Dialog z-index to 100
+
+### Fixed
+- Fix `FormElementWrapper` labelledBy misspelling
+
+## [0.1.33] - 2025-10-03
 
 ### Changed
 - Change `Dialog` to only use fixed positions

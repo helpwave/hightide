@@ -1,11 +1,11 @@
 import type { ReactNode, PropsWithChildren } from 'react'
-import type { PropsForTranslation, Translation } from '../../localization/useTranslation'
-import { useTranslation } from '../../localization/useTranslation'
-import { Select, SelectOption } from '../user-action/select/Select'
-import type { Language } from '../../localization/util'
-import { LanguageUtil } from '../../localization/util'
-import { useLanguage } from '../../localization/LanguageProvider'
-import { SolidButton } from '../user-action/Button'
+import type { PropsForTranslation, Translation } from '@/src'
+import { useTranslation } from '@/src'
+import { Select, SelectOption } from '@/src'
+import type { Language } from '@/src'
+import { LanguageUtil } from '@/src'
+import { useLanguage } from '@/src'
+import { SolidButton } from '@/src'
 import type { DialogProps } from '@/src/components/dialog/Dialog'
 import { Dialog } from '@/src/components/dialog/Dialog'
 
@@ -61,7 +61,7 @@ export const LanguageDialog = ({
         <Select
           value={language}
           onValueChanged={(language: string) => setLanguage(language as Language)}
-          contentPanelProps={{ className: 'z-100' }}
+          contentPanelProps={{ className: 'z-200' }}
           buttonProps={{
             selectedDisplay: value => translation(value as Language)
           }}
