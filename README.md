@@ -20,7 +20,7 @@ npm run storybook
 - Run the barreling script
 
 ```bash
-npm run generate-barrels
+npm run barrel
 ```
 
 - Increase the version number in the [package.json](package.json)

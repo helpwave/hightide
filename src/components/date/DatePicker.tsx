@@ -1,18 +1,18 @@
 import { useEffect, useState } from 'react'
 import { ArrowDown, ArrowUp, ChevronDown } from 'lucide-react'
-import { useLocale } from '../../localization/LanguageProvider'
-import type { PropsForTranslation } from '../../localization/useTranslation'
-import { useTranslation } from '../../localization/useTranslation'
-import { noop } from '@/src/utils/noop'
+import { useLocale } from '@/src'
+import type { PropsForTranslation } from '@/src'
+import { useTranslation } from '@/src'
 import { addDuration, isInTimeSpan, subtractDuration } from '@/src/utils/date'
 import clsx from 'clsx'
-import { SolidButton, TextButton } from '../user-action/Button'
-import type { YearMonthPickerProps } from './YearMonthPicker'
-import { YearMonthPicker } from './YearMonthPicker'
-import type { DayPickerProps } from './DayPicker'
-import { DayPicker } from './DayPicker'
-import type { TimeTranslationType } from '../../localization/defaults/time'
-import { timeTranslation } from '../../localization/defaults/time'
+import { SolidButton, TextButton } from '@/src'
+import type { YearMonthPickerProps } from '@/src'
+import { YearMonthPicker } from '@/src'
+import type { DayPickerProps } from '@/src'
+import { DayPicker } from '@/src'
+import type { TimeTranslationType } from '@/src'
+import { timeTranslation } from '@/src'
+import { useOverwritableState } from '@/src/hooks/useOverwritableState'
 
 type DatePickerTranslationType = TimeTranslationType
 
@@ -38,7 +38,7 @@ export const DatePicker = ({
                              start = subtractDuration(new Date(), { years: 50 }),
                              end = addDuration(new Date(), { years: 50 }),
                              initialDisplay = 'day',
-                             onChange = noop,
+                             onChange,
                              yearMonthPickerProps,
                              dayPickerProps,
                              className = ''
@@ -109,7 +109,7 @@ export const DatePicker = ({
             end={end}
             selected={value}
             onChange={date => {
-              onChange(date)
+              onChange?.(date)
             }}
           />
           <div className="mt-2">
@@ -135,21 +135,16 @@ export const DatePicker = ({
  */
 export const DatePickerUncontrolled = ({
                                        value = new Date(),
-                                       onChange = noop,
+                                       onChange,
                                        ...props
                                      }: DatePickerProps) => {
-  const [date, setDate] = useState<Date>(value)
-
-  useEffect(() => setDate(value), [value])
+  const [date, setDate] = useOverwritableState<Date>(value, onChange)
 
   return (
     <DatePicker
       {...props}
       value={date}
-      onChange={date1 => {
-        setDate(date1)
-        onChange(date1)
-      }}
+      onChange={setDate}
     />
   )
 }
