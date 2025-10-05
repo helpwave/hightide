@@ -10,6 +10,8 @@ and adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 ### Added
 - Added `--clean` option to barrel script
 - Added `useOverwritableState` to wrap `useState` and `useEffect` in uncontrolled components
+- Added `FormElementWrapper` onTouched callback and aria-attributes
+- Added `ValidatorError`s and translation for selection items
 
 ### Changed
 - Changed `barrel` script location to a dedicated [scripts folder](scripts)

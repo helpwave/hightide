@@ -462,7 +462,9 @@ export const SelectButton = forwardRef<HTMLButtonElement, SelectButtonProps>(fun
         {
           'bg-input-background text-placeholder': !hasValue && !disabled && !invalid,
           'bg-input-background text-input-text': hasValue && !disabled && !invalid,
-          'bg-negative/20 text-negative': !disabled && invalid,
+          'bg-negative/20': !disabled && invalid,
+          'text-placeholder': !hasValue && !disabled,
+          'text-negative': hasValue && !disabled && invalid,
           'bg-disabled-background text-disabled': disabled,
         },
         props.className
