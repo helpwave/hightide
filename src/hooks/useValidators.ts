@@ -1,5 +1,6 @@
-import type { Translation } from '@/src'
-import { useTranslation, validateEmail } from '@/src'
+import { validateEmail } from '@/src/utils/emailValidation'
+import type { Translation } from '@/src/localization/useTranslation'
+import { useTranslation } from '@/src/localization/useTranslation'
 
 export type ValidatorError =
   'notEmpty'

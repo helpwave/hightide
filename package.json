@@ -25,8 +25,9 @@
   "scripts": {
     "clean": "rm -rf dist",
     "build-css": "npx @tailwindcss/cli -i src/style/globals.css -o ./dist/style/globals.css",
-    "barrel": "node barrel.js",
-    "build": "npm run clean && npm run barrel && tsup && npm run build-css && cp -R src/style/ ./dist/style/uncompiled/",
+    "barrel": "node scripts/barrel.js",
+    "build": "tsup && npm run build-css && cp -R src/style/ ./dist/style/uncompiled/",
+    "build-production": "npm run clean && npm run barrel && tsup && npm run build",
     "storybook": "storybook dev -p 6006",
     "build-storybook": "storybook build",
     "lint": "eslint ."
