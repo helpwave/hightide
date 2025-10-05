@@ -2,6 +2,7 @@ import type { HTMLAttributes } from 'react'
 import React, { createContext, forwardRef, useCallback, useContext, useEffect, useRef, useState } from 'react'
 import { clsx } from 'clsx'
 import { match } from '@/src/utils/match'
+import { useOverwritableState } from '@/src/hooks/useOverwritableState'
 
 //
 // Context
@@ -292,20 +293,13 @@ export const ListBoxMultipleUncontrolled = ({
                                               onSelectionChanged,
                                               ...props
                                             }: ListBoxMultipleUncontrolledProps) => {
-  const [value, setValue] = useState(initialValue)
-
-  useEffect(() => {
-    setValue(initialValue)
-  }, [initialValue])
+  const [value, setValue] = useOverwritableState(initialValue, onSelectionChanged)
 
   return (
     <ListBoxMultiple
       {...props}
       value={value}
-      onSelectionChanged={(newValue) => {
-        setValue(newValue)
-        onSelectionChanged?.(newValue)
-      }}
+      onSelectionChanged={setValue}
     />
   )
 }
@@ -338,20 +332,13 @@ export const ListBoxUncontrolled = ({
                                       onSelectionChanged,
                                       ...props
                                     }: ListBoxUncontrolledProps) => {
-  const [value, setValue] = useState(initialValue)
-
-  useEffect(() => {
-    setValue(initialValue)
-  }, [initialValue])
+  const [value, setValue] = useOverwritableState(initialValue, onSelectionChanged)
 
   return (
     <ListBox
       {...props}
       value={value}
-      onSelectionChanged={(newValue) => {
-        setValue(newValue)
-        onSelectionChanged?.(newValue)
-      }}
+      onSelectionChanged={setValue}
     />
   )
 }

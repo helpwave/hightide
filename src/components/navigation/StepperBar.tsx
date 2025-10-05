@@ -4,9 +4,9 @@ import { useTranslation } from '../../localization/useTranslation'
 import { range } from '@/src/utils/array'
 import { SolidButton } from '../user-action/Button'
 import clsx from 'clsx'
-import { useEffect, useState } from 'react'
 import type { FormTranslationType } from '../../localization/defaults/form'
 import { formTranslation } from '../../localization/defaults/form'
+import { useOverwritableState } from '@/src/hooks/useOverwritableState'
 
 type StepperBarTranslation = FormTranslationType
 
@@ -36,7 +36,7 @@ const defaultState: StepperState = {
  */
 export const StepperBar = ({
                              overwriteTranslation,
-                             state,
+                             state = defaultState,
                              numberOfSteps,
                              disabledSteps = new Set(),
                              onChange,
@@ -119,20 +119,13 @@ export const StepperBar = ({
 }
 
 export const StepperBarUncontrolled = ({ state, onChange, ...props }: StepperBarProps) => {
-  const [usedState, setUsedState] = useState<StepperState>(state ?? defaultState)
-
-  useEffect(() => {
-    setUsedState(state ?? defaultState)
-  }, [state])
+  const [usedState, setUsedState] = useOverwritableState<StepperState>(state, onChange)
 
   return (
     <StepperBar
       {...props}
       state={usedState}
-      onChange={newState => {
-        setUsedState(newState)
-        onChange(newState)
-      }}
+      onChange={setUsedState}
     />
   )
 }

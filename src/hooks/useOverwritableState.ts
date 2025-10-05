@@ -1,6 +1,6 @@
 import type React from 'react'
 import { useEffect, useState } from 'react'
-import { resolveSetState } from '@/src'
+import { resolveSetState } from '@/src/utils/resolveSetState'
 
 export const useOverwritableState = <T>(initialValue?: T, onChange?: (value: T) => void): [T, React.Dispatch<React.SetStateAction<T>>] => {
   const [state, setState] = useState<T>(initialValue)

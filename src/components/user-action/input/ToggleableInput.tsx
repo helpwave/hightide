@@ -3,6 +3,7 @@ import { Pencil } from 'lucide-react'
 import clsx from 'clsx'
 import type { EditCompleteOptions, InputProps } from '@/src/components/user-action/input/Input'
 import { Input } from '@/src/components/user-action/input/Input'
+import { useOverwritableState } from '@/src/hooks/useOverwritableState'
 
 type ToggleableInputProps = Omit<InputProps, 'defaultStyle'> & {
   initialState?: 'editing' | 'display',
@@ -74,19 +75,12 @@ export const ToggleableInputUncontrolled = ({
                                               onChangeText,
                                               ...restProps
                                             }: ToggleableInputProps) => {
-  const [value, setValue] = useState(initialValue)
-
-  useEffect(() => {
-    setValue(initialValue)
-  }, [initialValue])
+  const [value, setValue] = useOverwritableState(initialValue, onChangeText)
 
   return (
     <ToggleableInput
       value={value}
-      onChangeText={text => {
-        onChangeText?.(text)
-        setValue(text)
-      }}
+      onChangeText={setValue}
       {...restProps}
     />
   )

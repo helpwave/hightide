@@ -1,18 +1,18 @@
 import { useEffect, useState } from 'react'
 import { ArrowDown, ArrowUp, ChevronDown } from 'lucide-react'
-import { useLocale } from '@/src'
-import type { PropsForTranslation } from '@/src'
-import { useTranslation } from '@/src'
 import { addDuration, isInTimeSpan, subtractDuration } from '@/src/utils/date'
 import clsx from 'clsx'
-import { SolidButton, TextButton } from '@/src'
-import type { YearMonthPickerProps } from '@/src'
-import { YearMonthPicker } from '@/src'
-import type { DayPickerProps } from '@/src'
-import { DayPicker } from '@/src'
-import type { TimeTranslationType } from '@/src'
-import { timeTranslation } from '@/src'
 import { useOverwritableState } from '@/src/hooks/useOverwritableState'
+import type { TimeTranslationType } from '@/src/localization/defaults/time'
+import { timeTranslation } from '@/src/localization/defaults/time'
+import type { DayPickerProps } from '@/src/components/date/DayPicker'
+import { DayPicker } from '@/src/components/date/DayPicker'
+import type { YearMonthPickerProps } from '@/src/components/date/YearMonthPicker'
+import { YearMonthPicker } from '@/src/components/date/YearMonthPicker'
+import type { PropsForTranslation } from '@/src/localization/useTranslation'
+import { useTranslation } from '@/src/localization/useTranslation'
+import { useLocale } from '@/src/localization/LanguageProvider'
+import { SolidButton, TextButton } from '@/src/components/user-action/Button'
 
 type DatePickerTranslationType = TimeTranslationType
 
@@ -134,7 +134,7 @@ export const DatePicker = ({
  * Example for the Date Picker
  */
 export const DatePickerUncontrolled = ({
-                                       value = new Date(),
+                                       value,
                                        onChange,
                                        ...props
                                      }: DatePickerProps) => {
