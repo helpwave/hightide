@@ -1,9 +1,10 @@
 import type { ReactNode } from 'react'
 import { useId } from 'react'
-import { forwardRef, useEffect, useState } from 'react'
+import { forwardRef, useState } from 'react'
 import clsx from 'clsx'
 import type { InputProps } from '@/src/components/user-action/input/Input'
 import { Input } from '@/src/components/user-action/input/Input'
+import { useOverwritableState } from '@/src/hooks/useOverwritableState'
 
 type InsideLabelInputProps = Omit<InputProps, 'aria-label' | 'aria-labelledby' | 'placeholder'> & {
   label: ReactNode,
@@ -61,20 +62,13 @@ export const InsideLabelInputUncontrolled = ({
                                                value: initialValue,
                                                ...props
                                              }: InsideLabelInputProps) => {
-  const [value, setValue] = useState(initialValue)
-
-  useEffect(() => {
-    setValue(initialValue)
-  }, [initialValue])
+  const [value, setValue] = useOverwritableState(initialValue, props.onChangeText)
 
   return (
     <InsideLabelInput
       {...props}
       value={value}
-      onChangeText={text => {
-        props.onChangeText?.(text)
-        setValue(text)
-      }}
+      onChangeText={setValue}
     />
   )
 }

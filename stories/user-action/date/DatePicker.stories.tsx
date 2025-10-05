@@ -1,6 +1,7 @@
 import type { Meta, StoryObj } from '@storybook/nextjs'
 import { DatePickerUncontrolled } from '../../../src/components/date/DatePicker'
 import { addDuration, subtractDuration } from '../../../src/utils/date'
+import { action } from 'storybook/actions'
 
 const meta = {
   title: 'User Action/Date',
@@ -19,5 +20,6 @@ export const datePicker: Story = {
     className: '',
     yearMonthPickerProps: {},
     dayPickerProps: {},
+    onChange: action('onChange'),
   },
 }

@@ -1,8 +1,8 @@
 import type { PropsWithChildren, ReactNode } from 'react'
-import { forwardRef, useCallback, useEffect, useId, useState } from 'react'
+import { forwardRef, useCallback, useId } from 'react'
 import { ChevronDown } from 'lucide-react'
 import clsx from 'clsx'
-import { noop } from '@/src/utils/noop'
+import { useOverwritableState } from '@/src/hooks/useOverwritableState'
 
 export type ExpansionIconProps = {
   isExpanded?: boolean,
@@ -50,7 +50,7 @@ export const Expandable = forwardRef<HTMLDivElement, ExpandableProps>(function E
                                                                                             label,
                                                                                             icon,
                                                                                             isExpanded = false,
-                                                                                            onChange = noop,
+                                                                                            onChange,
                                                                                             clickOnlyOnHeader = true,
                                                                                             disabled = false,
                                                                                             className,
@@ -68,7 +68,7 @@ export const Expandable = forwardRef<HTMLDivElement, ExpandableProps>(function E
   return (
     <div
       ref={ref}
-      onClick={() => !clickOnlyOnHeader && !disabled && onChange(!isExpanded)}
+      onClick={() => !clickOnlyOnHeader && !disabled && onChange?.(!isExpanded)}
 
       className={clsx(
         'flex-col-0 bg-surface text-on-surface group rounded-lg shadow-sm',
@@ -76,7 +76,7 @@ export const Expandable = forwardRef<HTMLDivElement, ExpandableProps>(function E
       )}
     >
       <button
-        onClick={() => clickOnlyOnHeader && !disabled && onChange(!isExpanded)}
+        onClick={() => clickOnlyOnHeader && !disabled && onChange?.(!isExpanded)}
 
         className={clsx(
           'flex-row-2 py-2 px-4 rounded-lg justify-between items-center bg-surface text-on-surface select-none',
@@ -116,25 +116,18 @@ export const Expandable = forwardRef<HTMLDivElement, ExpandableProps>(function E
 
 export const ExpandableUncontrolled = forwardRef<HTMLDivElement, ExpandableProps>(function ExpandableUncontrolled({
                                                                                                                     isExpanded,
-                                                                                                                    onChange = noop,
+                                                                                                                    onChange,
                                                                                                                     ...props
                                                                                                                   },
                                                                                                                   ref) {
-  const [usedIsExpanded, setUsedIsExpanded] = useState(isExpanded)
-
-  useEffect(() => {
-    setUsedIsExpanded(isExpanded)
-  }, [isExpanded])
+  const [usedIsExpanded, setUsedIsExpanded] = useOverwritableState(isExpanded, onChange)
 
   return (
     <Expandable
       {...props}
       ref={ref}
       isExpanded={usedIsExpanded}
-      onChange={value => {
-        onChange(value)
-        setUsedIsExpanded(value)
-      }}
+      onChange={setUsedIsExpanded}
     />
   )
 })

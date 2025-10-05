@@ -27,6 +27,7 @@ import { IconButton, TextButton } from '@/src/components/user-action/Button'
 import type { UseFloatingElementOptions } from '@/src/hooks/useFloatingElement'
 import { useFloatingElement } from '@/src/hooks/useFloatingElement'
 import { createPortal } from 'react-dom'
+import { useOverwritableState } from '@/src/hooks/useOverwritableState'
 
 //
 // Context
@@ -728,21 +729,14 @@ export const SelectUncontrolled = forwardRef<HTMLButtonElement, SelectUncontroll
                                                                                                                        onValueChanged,
                                                                                                                        ...props
                                                                                                                      }, ref) {
-  const [value, setValue] = useState(initialValue)
-
-  useEffect(() => {
-    setValue(initialValue)
-  }, [initialValue])
+  const [value, setValue] = useOverwritableState(initialValue, onValueChanged)
 
   return (
     <Select
       {...props}
       ref={ref}
       value={value}
-      onValueChanged={value => {
-        setValue(value)
-        onValueChanged?.(value)
-      }}
+      onValueChanged={setValue}
     />
   )
 })
@@ -777,21 +771,14 @@ export const MultiSelectUncontrolled = forwardRef<HTMLButtonElement, MultiSelect
                                                                                                                                       onValuesChanged,
                                                                                                                                       ...props
                                                                                                                                     }, ref) {
-  const [values, setValues] = useState(initialValues)
-
-  useEffect(() => {
-    setValues(initialValues)
-  }, [initialValues])
+  const [values, setValues] = useOverwritableState(initialValues, onValuesChanged)
 
   return (
     <MultiSelect
       {...props}
       ref={ref}
       values={values}
-      onValuesChanged={value => {
-        setValues(value)
-        onValuesChanged?.(value)
-      }}
+      onValuesChanged={setValues}
     />
   )
 })
@@ -826,21 +813,14 @@ export const MultiSelectChipDisplayUncontrolled = forwardRef<HTMLDivElement, Mul
                                                                                                                                                                     onValuesChanged,
                                                                                                                                                                     ...props
                                                                                                                                                                   }, ref) {
-  const [values, setValues] = useState(initialValues)
-
-  useEffect(() => {
-    setValues(initialValues)
-  }, [initialValues])
+  const [values, setValues] = useOverwritableState(initialValues, onValuesChanged)
 
   return (
     <MultiSelectChipDisplay
       {...props}
       ref={ref}
       values={values}
-      onValuesChanged={value => {
-        setValues(value)
-        onValuesChanged?.(value)
-      }}
+      onValuesChanged={setValues}
     />
   )
 })

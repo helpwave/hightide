@@ -37,6 +37,7 @@ import { TableFilterButton } from '@/src/components/table/TableFilterButton'
 import { FillerRowElement } from '@/src/components/table/FillerRowElement'
 import { Pagination } from '@/src/components/navigation/Pagination'
 import { Checkbox } from '@/src/components/user-action/Checkbox'
+import { useOverwritableState } from '@/src/hooks/useOverwritableState'
 
 declare module '@tanstack/react-table' {
   // eslint-disable-next-line @typescript-eslint/no-unused-vars
@@ -442,11 +443,7 @@ export const Table = <T, >({
 export type TableUncontrolledProps<T> = TableProps<T>
 
 export const TableUncontrolled = <T, >({ data, ...props }: TableUncontrolledProps<T>) => {
-  const [usedDate, setUsedData] = useState<T[]>(data)
-
-  useEffect(() => {
-    setUsedData(data)
-  }, [data])
+  const [usedDate] = useOverwritableState<T[]>(data)
 
   return (
     <Table

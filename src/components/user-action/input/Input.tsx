@@ -1,9 +1,10 @@
 import type { InputHTMLAttributes } from 'react'
-import React, { forwardRef, useEffect, useImperativeHandle, useRef, useState } from 'react'
+import React, { forwardRef, useImperativeHandle, useRef } from 'react'
 import clsx from 'clsx'
 import type { UseDelayOptionsResolved } from '@/src/hooks/useDelay'
 import { useDelay  } from '@/src/hooks/useDelay'
 import { useFocusManagement } from '@/src/hooks/focus/useFocusManagement'
+import { useOverwritableState } from '@/src/hooks/useOverwritableState'
 
 export type EditCompleteOptionsResolved = {
   onBlur: boolean,
@@ -122,20 +123,13 @@ export const InputUncontrolled = ({
                                     onChangeText,
                                     ...props
                                   }: InputProps) => {
-  const [usedValue, setUsedValue] = useState(value)
-
-  useEffect(() => {
-    setUsedValue(value)
-  }, [value])
+  const [usedValue, setUsedValue] = useOverwritableState(value, onChangeText)
 
   return (
     <Input
       {...props}
       value={usedValue}
-      onChangeText={text => {
-        onChangeText?.(text)
-        setUsedValue(text)
-      }}
+      onChangeText={setUsedValue}
     />
   )
 }
