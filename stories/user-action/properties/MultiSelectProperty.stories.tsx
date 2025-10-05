@@ -1,11 +1,11 @@
 import type { Meta, StoryObj } from '@storybook/nextjs'
 import { useState } from 'react'
 import { action } from 'storybook/actions'
-import type { MultiSelectPropertyProps } from '../../../src'
-import { SelectOption } from '../../../src'
-import { MultiSelectProperty } from '../../../src'
 import { StorybookHelper } from '../../../src/storybook/helper'
 import clsx from 'clsx'
+import type { MultiSelectPropertyProps } from '../../../src/components/properties/MultiSelectProperty'
+import { MultiSelectProperty } from '../../../src/components/properties/MultiSelectProperty'
+import { SelectOption } from '../../../src/components/user-action/select/Select'
 
 type MultiSelectPropertyExample =
   Omit<MultiSelectPropertyProps, 'values' | 'search' | 'selectedDisplay' | 'options'>

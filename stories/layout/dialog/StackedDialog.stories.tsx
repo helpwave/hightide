@@ -1,7 +1,8 @@
 import type { Meta, StoryObj } from '@storybook/nextjs'
 import { useState } from 'react'
-import type { DialogPosition } from '../../../src'
-import { Dialog, SolidButton } from '../../../src'
+import type { DialogPosition } from '../../../src/components/dialog/Dialog'
+import { Dialog } from '../../../src/components/dialog/Dialog'
+import { SolidButton } from '../../../src/components/user-action/Button'
 
 
 /**

@@ -4,7 +4,7 @@ import { useRef, useState } from 'react'
 import { InputUncontrolled } from '../../../src/components/user-action/input/Input'
 import { FocusTrap } from '@/src/components/utils/FocusTrap'
 import { clsx } from 'clsx'
-import { Dialog } from '../../../src/components/dialog'
+import { Dialog } from '../../../src/components/dialog/Dialog'
 
 const Example = () => {
   const ref = useRef<HTMLButtonElement>(null)

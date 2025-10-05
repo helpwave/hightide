@@ -17,16 +17,10 @@ npm run storybook
 
 ### Publishing a new version
 
-- Run the barreling script
-
-```bash
-npm run generate-barrels
-```
-
 - Increase the version number in the [package.json](package.json)
 
-```bash
-npm run build
-```
-
 - Update the [CHANGELOG.md](CHANGELOG.md)
+
+```bash
+npm run build-production
+```

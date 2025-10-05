@@ -1,11 +1,11 @@
 import { List } from 'lucide-react'
 import clsx from 'clsx'
-import type { PropsForTranslation } from '@/src'
-import { MultiSelectChipDisplay } from '@/src'
-import type { PropertyBaseProps } from '@/src'
-import { PropertyBase } from '@/src'
-import type { FormTranslationType } from '@/src'
 import type { PropsWithChildren } from 'react'
+import type { FormTranslationType } from '@/src/localization/defaults/form'
+import type { PropertyBaseProps } from '@/src/components/properties/PropertyBase'
+import { PropertyBase } from '@/src/components/properties/PropertyBase'
+import type { PropsForTranslation } from '@/src/localization/useTranslation'
+import { MultiSelectChipDisplay } from '@/src/components/user-action/select/Select'
 
 type TranslationType = FormTranslationType
 
