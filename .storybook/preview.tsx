@@ -22,6 +22,7 @@ const preview: Preview = {
       toolbar: {
         icon: 'globe',
         items: [
+          { value: 'system', title: 'System' },
           { value: 'en', title: 'English' },
           { value: 'de', title: 'German' },
         ],
@@ -31,13 +32,13 @@ const preview: Preview = {
   decorators: [
     (Story, context) => {
       const App = Story
-      const theme = context.globals.backgrounds?.value
+      const theme = context.globals.backgrounds?.value ?? 'system'
       const language = context.globals.language
 
       return (
         <main className="p-4">
-          <ThemeProvider initialTheme={theme}>
-            <LanguageProvider initialLanguage={language}>
+          <ThemeProvider theme={theme}>
+            <LanguageProvider language={language}>
               <App/>
             </LanguageProvider>
           </ThemeProvider>
