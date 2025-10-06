@@ -2,7 +2,6 @@ import type { ReactNode } from 'react'
 import clsx from 'clsx'
 import type { PropsForTranslation } from '../../localization/useTranslation'
 import { useTranslation } from '../../localization/useTranslation'
-import { noop } from '@/src/utils/noop'
 import { addDuration, subtractDuration } from '@/src/utils/date'
 import { SolidButton } from './Button'
 import type { TimePickerProps } from '../date/TimePicker'
@@ -39,9 +38,9 @@ export const DateTimePicker = ({
                                  start = subtractDuration(new Date(), { years: 50 }),
                                  end = addDuration(new Date(), { years: 50 }),
                                  mode = 'dateTime',
-                                 onFinish = noop,
-                                 onChange = noop,
-                                 onRemove = noop,
+                                 onFinish,
+                                 onChange,
+                                 onRemove,
                                  timePickerProps,
                                  datePickerProps,
                                }: PropsForTranslation<DateAndTimePickerTranslationType, DateTimePickerProps>) => {
@@ -89,7 +88,7 @@ export const DateTimePicker = ({
           <SolidButton size="medium" color="negative" onClick={onRemove}>{translation('clear')}</SolidButton>
           <SolidButton
             size="medium"
-            onClick={() => onFinish(value)}
+            onClick={() => onFinish?.(value)}
           >
             {translation('change')}
           </SolidButton>

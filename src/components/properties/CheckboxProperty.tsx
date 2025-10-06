@@ -1,5 +1,4 @@
 import { Check } from 'lucide-react'
-import { noop } from '@/src/utils/noop'
 import { Checkbox } from '../user-action/Checkbox'
 import type { PropsForTranslation } from '../../localization/useTranslation'
 import { useTranslation } from '../../localization/useTranslation'
@@ -23,7 +22,7 @@ export type CheckboxPropertyProps = Omit<PropertyBaseProps, 'icon' | 'input' | '
 export const CheckboxProperty = ({
                                    overwriteTranslation,
                                    value,
-                                   onChange = noop,
+                                   onChange,
                                    readOnly,
                                    ...baseProps
                                  }: PropsForTranslation<CheckboxPropertyTranslation, CheckboxPropertyProps>) => {

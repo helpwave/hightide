@@ -16,9 +16,11 @@ and adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 ### Changed
 - Changed `barrel` script location to a dedicated [scripts folder](scripts)
 - Split `build` script in `build` and `build-production`
+- Stopped saving of system theme and language values and instead load them if value is not found
 
 ### Removed
 - Removed index.ts files from version control to force direct imports
+- Removed usages of `noop`
 
 ## [0.1.34] - 2025-10-03
 

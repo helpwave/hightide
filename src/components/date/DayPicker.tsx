@@ -1,6 +1,5 @@
 import type { WeekDay } from '@/src/utils/date'
 import { equalDate, getWeeksForCalenderMonth, isInTimeSpan } from '@/src/utils/date'
-import { noop } from '@/src/utils/noop'
 import clsx from 'clsx'
 import { useLocale } from '../../localization/LanguageProvider'
 import { useEffect, useState } from 'react'
@@ -24,7 +23,7 @@ export const DayPicker = ({
                             selected,
                             start,
                             end,
-                            onChange = noop,
+                            onChange,
                             weekStart = 'monday',
                             markToday = true,
                             className = ''
@@ -65,7 +64,7 @@ export const DayPicker = ({
                     'border-transparent': !isToday || !markToday,
                   }
                 )}
-                onClick={() => onChange(date)}
+                onClick={() => onChange?.(date)}
               >
                 {date.getDate()}
               </button>
@@ -80,7 +79,7 @@ export const DayPicker = ({
 export const DayPickerUncontrolled = ({
                                         displayedMonth,
                                         selected,
-                                        onChange = noop,
+                                        onChange,
                                         ...restProps
                                       }: DayPickerProps) => {
   const [date, setDate] = useState(selected)
@@ -98,7 +97,7 @@ export const DayPickerUncontrolled = ({
       onChange={newDate => {
         setDate(newDate)
         setUsedDDisplayedMonth(newDate)
-        onChange(newDate)
+        onChange?.(newDate)
       }}
       {...restProps}
     />
