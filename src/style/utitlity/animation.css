@@ -15,7 +15,7 @@
 }
 
 @utility animate-fade-out {
-  animation: fade-out 0.2s ease-in-out;
+  animation: fade-out 0.2s ease-in-out forwards;
 }
 
 @utility animate-fade {

@@ -5,7 +5,12 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/)
 and adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
-## [0.1.35] - 2025-10-05
+## [0.1.36] - 2025-10-06
+
+### Fixed
+- Fixed closing animation for `Dialog`
+
+## [0.1.35] - 2025-10-06
 
 ### Added
 - Added `--clean` option to barrel script
