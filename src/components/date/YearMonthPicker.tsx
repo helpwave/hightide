@@ -1,12 +1,12 @@
-import { useEffect, useRef, useState } from 'react'
+import { useEffect, useRef } from 'react'
 import { Scrollbars } from 'react-custom-scrollbars-2'
-import { noop } from '@/src/utils/noop'
 import { equalSizeGroups, range } from '@/src/utils/array'
 import clsx from 'clsx'
 import { ExpandableUncontrolled } from '@/src/components/layout/Expandable'
 import { addDuration, monthsList, subtractDuration } from '@/src/utils/date'
 import { useLocale } from '../../localization/LanguageProvider'
 import { SolidButton } from '../user-action/Button'
+import { useOverwritableState } from '@/src/hooks/useOverwritableState'
 
 export type YearMonthPickerProps = {
   displayedYearMonth?: Date,
@@ -23,7 +23,7 @@ export const YearMonthPicker = ({
                                   displayedYearMonth = new Date(),
                                   start = subtractDuration(new Date(), { years: 50 }),
                                   end = addDuration(new Date(), { years: 50 }),
-                                  onChange = noop,
+                                  onChange,
                                   className = '',
                                   maxHeight = 300,
                                   showValueOpen = true
@@ -85,7 +85,7 @@ export const YearMonthPicker = ({
                           className="flex-1"
                           size="small"
                           onClick={() => {
-                            onChange(newDate)
+                            onChange?.(newDate)
                           }}
                         >
                           {new Intl.DateTimeFormat(locale, { month: 'short' }).format(newDate)}
@@ -105,20 +105,15 @@ export const YearMonthPicker = ({
 
 export const YearMonthPickerUncontrolled = ({
                                               displayedYearMonth,
-                                              onChange = noop,
+                                              onChange,
                                               ...props
                                             }: YearMonthPickerProps) => {
-  const [yearMonth, setYearMonth] = useState<Date>(displayedYearMonth ?? new Date())
-
-  useEffect(() => setYearMonth(displayedYearMonth), [displayedYearMonth])
+  const [yearMonth, setYearMonth] = useOverwritableState<Date>(displayedYearMonth, onChange)
 
   return (
     <YearMonthPicker
       displayedYearMonth={yearMonth}
-      onChange={date => {
-        setYearMonth(date)
-        onChange(date)
-      }}
+      onChange={setYearMonth}
       {...props}
     />
   )

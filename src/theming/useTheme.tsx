@@ -1,7 +1,5 @@
 import type { Dispatch, PropsWithChildren, SetStateAction } from 'react'
-import { useCallback } from 'react'
-import { useMemo } from 'react'
-import { createContext, useContext, useEffect, useState } from 'react'
+import { createContext, useCallback, useContext, useEffect, useMemo, useState } from 'react'
 import type { Translation, TranslationPlural } from '../localization/useTranslation'
 import { useLocalStorage } from '../hooks/useLocalStorage'
 
@@ -49,26 +47,40 @@ type ThemeContextType = {
 export const ThemeContext = createContext<ThemeContextType | null>(null)
 
 type ThemeProviderProps = {
-  initialTheme?: ThemeType,
+  /**
+   * Only set this if you want to control the theme yourself
+   */
+  theme?: ThemeType,
 }
 
-export const ThemeProvider = ({ children, initialTheme }: PropsWithChildren<ThemeProviderProps>) => {
-  const [storedTheme, setStoredTheme] = useLocalStorage<ThemeType>('theme', initialTheme ?? 'system')
+export const ThemeProvider = ({ children, theme }: PropsWithChildren<ThemeProviderProps>) => {
+  const {
+    value: storedTheme,
+    setValue: setStoredTheme,
+    deleteValue: deleteStoredTheme
+  } = useLocalStorage<ThemeType>('theme', 'system')
   const [themePreference, setThemePreference] = useState<ThemeType>('system')
 
-  const resolvedTheme = useMemo(() => {
-    if(storedTheme && storedTheme !== 'system') {
+  const resolvedTheme = useMemo((): ResolvedTheme => {
+    if (theme && theme !== 'system') {
+      return theme
+    }
+    if (storedTheme && storedTheme !== 'system') {
       return storedTheme
     }
-    return themePreference === 'dark' ? 'dark' : 'light'
-  }, [storedTheme, themePreference])
+    if (themePreference !== 'system') {
+      return themePreference
+    }
+    return 'light'
+  }, [storedTheme, theme, themePreference])
 
   useEffect(() => {
-    if (!!initialTheme && storedTheme !== initialTheme) {
-      console.warn('ThemeProvider initial state changed: Prefer using useTheme\'s setTheme instead')
-      setStoredTheme(initialTheme)
+    if (theme === 'system') {
+      deleteStoredTheme()
+    } else {
+      setStoredTheme(theme)
     }
-  }, [initialTheme]) // eslint-disable-line react-hooks/exhaustive-deps
+  }, [theme]) // eslint-disable-line react-hooks/exhaustive-deps
 
   useEffect(() => {
     document.documentElement.setAttribute('data-theme', resolvedTheme)
@@ -99,7 +111,20 @@ export const ThemeProvider = ({ children, initialTheme }: PropsWithChildren<Them
   }, [getPreference])
 
   return (
-    <ThemeContext.Provider value={{ theme: storedTheme, resolvedTheme, setTheme: setStoredTheme }}>
+    <ThemeContext.Provider
+      value={{
+        theme: storedTheme,
+        resolvedTheme,
+        setTheme: (newTheme) => {
+          if (theme) {
+            console.warn('ThemeProvider: Attempting to change the ' +
+              "theme while setting a fixed theme won't have any effect. " +
+              'Change the theme provided to the ThemeProvider instead.')
+          }
+          setStoredTheme(newTheme)
+        }
+      }}
+    >
       {children}
     </ThemeContext.Provider>
   )
@@ -107,7 +132,7 @@ export const ThemeProvider = ({ children, initialTheme }: PropsWithChildren<Them
 
 export const useTheme = () => {
   const context = useContext(ThemeContext)
-  if(!context) {
+  if (!context) {
     throw new Error('useTheme must be used within ThemeContext. Try adding a ThemeProvider around your app.')
   }
   return context

@@ -1,11 +1,11 @@
 import { List } from 'lucide-react'
 import clsx from 'clsx'
-import type { PropsForTranslation } from '@/src'
-import type { PropertyBaseProps } from '@/src'
-import { PropertyBase } from '@/src'
-import { Select } from '@/src'
-import type { FormTranslationType } from '@/src'
 import type { PropsWithChildren, ReactNode } from 'react'
+import type { FormTranslationType } from '@/src/localization/defaults/form'
+import type { PropertyBaseProps } from '@/src/components/properties/PropertyBase'
+import { PropertyBase } from '@/src/components/properties/PropertyBase'
+import type { PropsForTranslation } from '@/src/localization/useTranslation'
+import { Select } from '@/src/components/user-action/select/Select'
 
 type SingleSelectPropertyTranslation = FormTranslationType
 

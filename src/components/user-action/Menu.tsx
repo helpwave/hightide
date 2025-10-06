@@ -1,12 +1,12 @@
 import { type PropsWithChildren, type ReactNode, type RefObject, useEffect, useRef, useState } from 'react'
 import clsx from 'clsx'
-import { useOutsideClick } from '@/src'
-import { useHoverState } from '@/src'
 import type { PropsWithBagFunctionOrChildren } from '@/src/utils/bagFunctions'
 import { BagFunctionUtil } from '@/src/utils/bagFunctions'
-import type { PopoverHorizontalAlignment, PopoverVerticalAlignment } from '@/src'
-import { usePopoverPosition } from '@/src'
 import { createPortal } from 'react-dom'
+import type { PopoverHorizontalAlignment, PopoverVerticalAlignment } from '@/src/hooks/usePopoverPosition'
+import { usePopoverPosition } from '@/src/hooks/usePopoverPosition'
+import { useHoverState } from '@/src/hooks/useHoverState'
+import { useOutsideClick } from '@/src/hooks/useOutsideClick'
 
 export type MenuItemProps = {
   onClick?: () => void,

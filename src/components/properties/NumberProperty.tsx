@@ -1,6 +1,5 @@
 import { Binary } from 'lucide-react'
 import clsx from 'clsx'
-import { noop } from '@/src/utils/noop'
 import { Input } from '../user-action/input/Input'
 import type { PropsForTranslation, Translation } from '../../localization/useTranslation'
 import { useTranslation } from '../../localization/useTranslation'
@@ -33,9 +32,9 @@ export type NumberPropertyProps = Omit<PropertyBaseProps, 'icon' | 'input' | 'ha
 export const NumberProperty = ({
                                  overwriteTranslation,
                                  value,
-                                 onChange = noop,
-                                 onRemove = noop,
-                                 onEditComplete = noop,
+                                 onChange,
+                                 onRemove,
+                                 onEditComplete,
                                  readOnly,
                                  suffix,
                                  ...baseProps
@@ -64,7 +63,7 @@ export const NumberProperty = ({
               if (isNaN(numberValue)) {
                 onRemove()
               } else {
-                onChange(numberValue)
+                onChange?.(numberValue)
               }
             }}
             onEditCompleted={(value) => {

@@ -1,10 +1,10 @@
 import type { ReactNode, TextareaHTMLAttributes } from 'react'
-import { forwardRef, useEffect, useId, useState } from 'react'
+import { forwardRef, useId } from 'react'
 import clsx from 'clsx'
 import type { LabelProps } from '@/src/components/user-action/Label'
 import { Label } from '@/src/components/user-action/Label'
 import { useDelay, type UseDelayOptions } from '@/src/hooks/useDelay'
-import { noop } from '@/src/utils/noop'
+import { useOverwritableState } from '@/src/hooks/useOverwritableState'
 
 export type TextareaProps = Omit<TextareaHTMLAttributes<HTMLTextAreaElement>, 'value'> & {
   /** Inside the area */
@@ -77,24 +77,17 @@ export const Textarea = forwardRef<HTMLTextAreaElement, TextareaProps>(function 
  * A Textarea component that is not controlled by its parent
  */
 export const TextareaUncontrolled = ({
-                                       value = '',
-                                       onChangeText = noop,
+                                       value,
+                                       onChangeText,
                                        ...props
                                      }: TextareaProps) => {
-  const [text, setText] = useState<string>(value)
-
-  useEffect(() => {
-    setText(value)
-  }, [value])
+  const [text, setText] = useOverwritableState<string>(value, onChangeText)
 
   return (
     <Textarea
       {...props}
       value={text}
-      onChangeText={text => {
-        setText(text)
-        onChangeText(text)
-      }}
+      onChangeText={setText}
     />
   )
 }

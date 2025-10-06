@@ -1,8 +1,8 @@
-import { useEffect, useState } from 'react'
 import { Check, Minus } from 'lucide-react'
 import clsx from 'clsx'
 import type { CheckboxProps as RadixCheckboxProps } from '@radix-ui/react-checkbox'
 import { CheckboxIndicator as RadixCheckboxIndicator, Root as RadixCheckbox } from '@radix-ui/react-checkbox'
+import { useOverwritableState } from '@/src/hooks/useOverwritableState'
 
 type CheckBoxSize = 'sm' | 'md' | 'lg'
 
@@ -81,22 +81,13 @@ export const CheckboxUncontrolled = ({
                                        onChange,
                                        ...props
                                      }: CheckboxUncontrolledProps) => {
-  const [checked, setChecked] = useState(initialChecked)
-
-  useEffect(() => {
-    setChecked(initialChecked)
-  }, [initialChecked])
+  const [checked, setChecked] = useOverwritableState(initialChecked, onChange)
 
   return (
     <Checkbox
       {...props}
       checked={checked}
-      onChange={(value) => {
-        setChecked(value)
-        if (onChange) {
-          onChange(value)
-        }
-      }}
+      onChange={setChecked}
     />
   )
 }

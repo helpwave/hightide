@@ -1,7 +1,6 @@
 import { CalendarDays } from 'lucide-react'
 import clsx from 'clsx'
 import { formatDate, formatDateTime } from '@/src/utils/date'
-import { noop } from '@/src/utils/noop'
 import { Input } from '../user-action/input/Input'
 import type { PropertyBaseProps } from './PropertyBase'
 import { PropertyBase } from './PropertyBase'
@@ -18,8 +17,8 @@ export type DatePropertyProps = Omit<PropertyBaseProps, 'icon' | 'input' | 'hasV
  */
 export const DateProperty = ({
                                value,
-                               onChange = noop,
-                               onEditComplete = noop,
+                               onChange,
+                               onEditComplete,
                                readOnly,
                                type = 'dateTime',
                                ...baseProps
@@ -45,9 +44,9 @@ export const DateProperty = ({
               return
             }
             const dueDate = new Date(value)
-            onChange(dueDate)
+            onChange?.(dueDate)
           }}
-          onEditCompleted={(value) => onEditComplete(new Date(value))}
+          onEditCompleted={(value) => onEditComplete?.(new Date(value))}
         />
       )}
     />

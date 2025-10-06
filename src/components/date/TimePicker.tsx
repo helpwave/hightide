@@ -1,8 +1,8 @@
-import { useEffect, useRef, useState } from 'react'
+import { useEffect, useRef } from 'react'
 import { Scrollbars } from 'react-custom-scrollbars-2'
-import { noop } from '@/src/utils/noop'
 import { closestMatch, range } from '@/src/utils/array'
 import clsx from 'clsx'
+import { useOverwritableState } from '@/src/hooks/useOverwritableState'
 
 type MinuteIncrement = '1min' | '5min' | '10min' | '15min' | '30min'
 
@@ -17,7 +17,7 @@ export type TimePickerProps = {
 
 export const TimePicker = ({
                              time = new Date(),
-                             onChange = noop,
+                             onChange,
                              is24HourFormat = true,
                              minuteIncrement = '5min',
                              maxHeight = 300,
@@ -87,7 +87,7 @@ export const TimePicker = ({
   const onChangeWrapper = (transformer: (newDate: Date) => void) => {
     const newDate = new Date(time)
     transformer(newDate)
-    onChange(newDate)
+    onChange?.(newDate)
   }
 
   return (
@@ -148,20 +148,16 @@ export const TimePicker = ({
 
 export const TimePickerUncontrolled = ({
                                        time,
-                                       onChange = noop,
+                                       onChange,
                                        ...props
                                      }: TimePickerProps) => {
-  const [value, setValue] = useState(time)
-  useEffect(() => setValue(time), [time])
+  const [value, setValue] = useOverwritableState(time, onChange)
 
   return (
     <TimePicker
       {...props}
       time={value}
-      onChange={time1 => {
-        setValue(time1)
-        onChange(time1)
-      }}
+      onChange={setValue}
     />
   )
 }

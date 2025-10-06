@@ -1,6 +1,5 @@
 import type { CSSProperties } from 'react'
 import { useCallback, useEffect, useState } from 'react'
-import { noop } from '@/src/utils/noop'
 import { Circle } from './Circle'
 import clsx from 'clsx'
 
@@ -40,7 +39,7 @@ export const AnimatedRing = ({
                                className,
                                fillAnimationDuration = 3,
                                repeating = false,
-                               onAnimationFinished = noop,
+                               onAnimationFinished,
                                style,
                              }: AnimatedRingProps) => {
   const [currentWidth, setCurrentWidth] = useState(0)
@@ -55,7 +54,7 @@ export const AnimatedRing = ({
     if (progress < 1) {
       requestAnimationFrame((newTimestamp) => animate(newTimestamp, startTime))
     } else {
-      onAnimationFinished()
+      onAnimationFinished?.()
       if (repeating) {
         setCurrentWidth(0)
         requestAnimationFrame((newTimestamp) => animate(newTimestamp, newTimestamp))
@@ -100,7 +99,7 @@ export const RingWave = ({
                            className,
                            fillAnimationDuration = 3,
                            repeating = false,
-                           onAnimationFinished = noop,
+                           onAnimationFinished,
                            style
                          }: RingWaveProps) => {
   const [currentInnerSize, setCurrentInnerSize] = useState(startInnerSize)
@@ -119,7 +118,7 @@ export const RingWave = ({
     if (progress < 1) {
       requestAnimationFrame((newTimestamp) => animate(newTimestamp, startTime))
     } else {
-      onAnimationFinished()
+      onAnimationFinished?.()
       if (repeating) {
         setCurrentInnerSize(startInnerSize)
         requestAnimationFrame((newTimestamp) => animate(newTimestamp, newTimestamp))

@@ -5,6 +5,23 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/)
 and adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [0.1.35] - 2025-10-05
+
+### Added
+- Added `--clean` option to barrel script
+- Added `useOverwritableState` to wrap `useState` and `useEffect` in uncontrolled components
+- Added `FormElementWrapper` onTouched callback and aria-attributes
+- Added `ValidatorError`s and translation for selection items
+
+### Changed
+- Changed `barrel` script location to a dedicated [scripts folder](scripts)
+- Split `build` script in `build` and `build-production`
+- Stopped saving of system theme and language values and instead load them if value is not found
+
+### Removed
+- Removed index.ts files from version control to force direct imports
+- Removed usages of `noop`
+
 ## [0.1.34] - 2025-10-03
 
 ### Changed

@@ -1,13 +1,13 @@
 import type { ReactNode, PropsWithChildren } from 'react'
-import type { PropsForTranslation, Translation } from '@/src'
-import { useTranslation } from '@/src'
-import { Select, SelectOption } from '@/src'
-import type { Language } from '@/src'
-import { LanguageUtil } from '@/src'
-import { useLanguage } from '@/src'
-import { SolidButton } from '@/src'
 import type { DialogProps } from '@/src/components/dialog/Dialog'
 import { Dialog } from '@/src/components/dialog/Dialog'
+import type { Language } from '@/src/localization/util'
+import { LanguageUtil } from '@/src/localization/util'
+import type { PropsForTranslation, Translation } from '@/src/localization/useTranslation'
+import { useTranslation } from '@/src/localization/useTranslation'
+import { useLanguage } from '@/src/localization/LanguageProvider'
+import { Select, SelectOption } from '@/src/components/user-action/select/Select'
+import { SolidButton } from '@/src/components/user-action/Button'
 
 type LanguageDialogTranslation = {
   language: string,
