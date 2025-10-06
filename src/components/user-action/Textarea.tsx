@@ -4,7 +4,6 @@ import clsx from 'clsx'
 import type { LabelProps } from '@/src/components/user-action/Label'
 import { Label } from '@/src/components/user-action/Label'
 import { useDelay, type UseDelayOptions } from '@/src/hooks/useDelay'
-import { noop } from '@/src/utils/noop'
 import { useOverwritableState } from '@/src/hooks/useOverwritableState'
 
 export type TextareaProps = Omit<TextareaHTMLAttributes<HTMLTextAreaElement>, 'value'> & {
@@ -79,7 +78,7 @@ export const Textarea = forwardRef<HTMLTextAreaElement, TextareaProps>(function 
  */
 export const TextareaUncontrolled = ({
                                        value,
-                                       onChangeText = noop,
+                                       onChangeText,
                                        ...props
                                      }: TextareaProps) => {
   const [text, setText] = useOverwritableState<string>(value, onChangeText)

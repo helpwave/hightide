@@ -27,7 +27,6 @@ import {
 import { range } from '@/src/utils/array'
 import { Scrollbars } from 'react-custom-scrollbars-2'
 import { clamp } from '@/src/utils/math'
-import { noop } from '@/src/utils/noop'
 import { TableCell } from '@/src/components/table/TableCell'
 import { TableFilters } from '@/src/components/table/Filter'
 import { useResizeCallbackWrapper } from '@/src/hooks/useResizeCallbackWrapper'
@@ -77,7 +76,7 @@ export const Table = <T, >({
                              data,
                              fillerRow,
                              initialState,
-                             onRowClick = noop,
+                             onRowClick,
                              className,
                              tableClassName,
                              defaultColumn,
@@ -398,7 +397,7 @@ export const Table = <T, >({
           <tbody>
           {table.getRowModel().rows.map(row => {
             return (
-              <tr key={row.id} onClick={() => onRowClick(row, table)} className={table.options.meta?.bodyRowClassName}>
+              <tr key={row.id} onClick={() => onRowClick?.(row, table)} className={table.options.meta?.bodyRowClassName}>
                 {row.getVisibleCells().map(cell => {
                   return (
                     <td key={cell.id}>
@@ -467,7 +466,7 @@ export const TableWithSelection = <T, >({
                                           rowSelection,
                                           disableClickRowClickSelection = false,
                                           selectionRowId = 'selection',
-                                          onRowClick = noop,
+                                          onRowClick,
                                           meta,
                                           ...props
                                         }: TableWithSelectionProps<T>) => {
@@ -523,7 +522,7 @@ export const TableWithSelection = <T, >({
         if (!disableClickRowClickSelection) {
           row.toggleSelected()
         }
-        onRowClick(row, table)
+        onRowClick?.(row, table)
       }}
       meta={{
         ...meta,

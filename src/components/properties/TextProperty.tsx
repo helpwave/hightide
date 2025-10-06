@@ -3,7 +3,6 @@ import clsx from 'clsx'
 import type { PropsForTranslation, Translation } from '../../localization/useTranslation'
 import { useTranslation } from '../../localization/useTranslation'
 import { Textarea } from '../user-action/Textarea'
-import { noop } from '@/src/utils/noop'
 import type { PropertyBaseProps } from './PropertyBase'
 import { PropertyBase } from './PropertyBase'
 
@@ -33,9 +32,9 @@ export const TextProperty = ({
                                overwriteTranslation,
                                value,
                                readOnly,
-                               onChange = noop,
-                               onRemove = noop,
-                               onEditComplete = noop,
+                               onChange,
+                               onRemove,
+                               onEditComplete,
                                ...baseProps
                              }: PropsForTranslation<TextPropertyTranslation, TextPropertyProps>) => {
   const translation = useTranslation([defaultTextPropertyTranslation], overwriteTranslation)
@@ -59,16 +58,16 @@ export const TextProperty = ({
           placeholder={`${translation('text')}...`}
           onChangeText={(value) => {
             if (!value) {
-              onRemove()
+              onRemove?.()
             } else {
-              onChange(value)
+              onChange?.(value)
             }
           }}
           onEditCompleted={(value) => {
             if (!value) {
-              onRemove()
+              onRemove?.()
             } else {
-              onEditComplete(value)
+              onEditComplete?.(value)
             }
           }}
         />

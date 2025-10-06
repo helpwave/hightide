@@ -1,6 +1,5 @@
 import { useCallback, useEffect, useState } from 'react'
 import clsx from 'clsx'
-import { noop } from '@/src/utils/noop'
 import { getNeighbours, range } from '@/src/utils/array'
 import { clamp } from '@/src/utils/math'
 
@@ -37,7 +36,7 @@ export const ScrollPicker = <T, >({
                                     options,
                                     mapping,
                                     selected,
-                                    onChange = noop,
+                                    onChange,
                                     disabled = false,
                                   }: ScrollPickerProps<T>) => {
   let selectedIndex = 0
@@ -145,7 +144,7 @@ export const ScrollPicker = <T, >({
       }
 
       if ((currentIndex !== newTargetIndex || newTargetIndex !== targetIndex) && newTargetIndex === newCurrentIndex) {
-        onChange(items[newCurrentIndex]!)
+        onChange?.(items[newCurrentIndex]!)
       }
       return {
         targetIndex: newTargetIndex,
