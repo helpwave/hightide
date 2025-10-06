@@ -7,8 +7,12 @@ and adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
 ## [0.1.36] - 2025-10-06
 
+### Changed
+- Changed  `useLocalStorage` to remove values that produce an error on load
+
 ### Fixed
 - Fixed closing animation for `Dialog`
+- Fixed `LanguageProvider` and `ThemeProvider` to not set undefined values into storage
 
 ## [0.1.35] - 2025-10-06
 

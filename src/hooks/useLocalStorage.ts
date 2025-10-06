@@ -25,8 +25,16 @@ export const useLocalStorage = <T>(key: string, backupValue: T): UseLocalStorage
       return backupValue
     }
     const storageService = new LocalStorageService()
-    const value = storageService.get<T>(key)
-    return value || backupValue
+    try {
+      const value = storageService.get<T>(key)
+      return value || backupValue
+      // eslint-disable-next-line @typescript-eslint/no-unused-vars
+    } catch (_) {
+      console.warn('useLocalStorage: Error while reading the stored value. Make sure your typing is correct.')
+      storageService.delete(key)
+      console.info(`useLocalStorage: deleted erroneous value for key: ${key}`)
+      return backupValue
+    }
   }, [backupValue, key])
 
   const [storedValue, setStoredValue] = useState<T>(get)

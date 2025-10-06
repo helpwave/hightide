@@ -42,6 +42,7 @@ export const LanguageProvider = ({ children, language }: PropsWithChildren<Langu
   }, [language, languagePreference, storedLanguage])
 
   useEffect(() => {
+    if(!language) return
     if (language === 'system') {
       deleteStoredLanguage()
     } else {
