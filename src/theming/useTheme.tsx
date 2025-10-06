@@ -75,6 +75,7 @@ export const ThemeProvider = ({ children, theme }: PropsWithChildren<ThemeProvid
   }, [storedTheme, theme, themePreference])
 
   useEffect(() => {
+    if(!theme) return
     if (theme === 'system') {
       deleteStoredTheme()
     } else {

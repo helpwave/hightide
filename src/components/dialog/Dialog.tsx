@@ -1,4 +1,6 @@
 import type { PropsWithChildren, ReactNode } from 'react'
+import { useEffect } from 'react'
+import { useState } from 'react'
 import { useRef } from 'react'
 import clsx from 'clsx'
 import { X } from 'lucide-react'
@@ -27,6 +29,7 @@ export type DialogProps = {
   /** If true shows a close button and sends onClose on background clicks */
   isModal?: boolean,
   position?: DialogPosition,
+  isAnimated?: boolean,
 }
 
 /**
@@ -42,10 +45,22 @@ export const Dialog = ({
                          className,
                          backgroundClassName,
                          position = 'center',
+                         isAnimated = true,
                        }: PropsWithChildren<DialogProps>) => {
   const translation = useTranslation([formTranslation])
+  const [visible, setVisible] = useState(isOpen)
 
   const ref = useRef<HTMLDivElement>(null)
+
+  useEffect(() => {
+    if(isOpen) {
+      setVisible(true)
+    } else {
+      if(!isAnimated) {
+        setVisible(false)
+      }
+    }
+  }, [isAnimated, isOpen])
 
   const onCloseWrapper = () => {
     if (!isModal) return
@@ -56,7 +71,7 @@ export const Dialog = ({
 
   useFocusTrap({
     container: ref,
-    active: isOpen,
+    active: visible,
     focusFirst: true,
   })
 
@@ -70,6 +85,7 @@ export const Dialog = ({
   return createPortal(
     <>
       <div
+        hidden={!visible}
         className={clsx(
           'fixed inset-0 h-screen w-screen bg-overlay-shadow z-100',
           {
@@ -78,16 +94,25 @@ export const Dialog = ({
           },
           backgroundClassName
         )}
-        hidden={!isOpen}
-        aria-hidden={true}
+        onAnimationEnd={() => {
+          if(!isOpen) {
+            setVisible(false)
+          }
+        }}
         onClick={onCloseWrapper}
+        aria-hidden={true}
       />
       <div
         ref={ref}
-        hidden={!isOpen}
+        hidden={!visible}
         onKeyDown={event => {
           if (event.key === 'Escape') {
             onCloseWrapper()
+          }
+        }}
+        onAnimationEnd={() => {
+          if(!isOpen) {
+            setVisible(false)
           }
         }}
         className={clsx(
