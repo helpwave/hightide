@@ -143,18 +143,18 @@ const defaultCarouselSlideTranslationType: Translation<CarouselSlideTranslationT
 }
 
 export interface CarouselSlideProps extends HTMLAttributes<HTMLDivElement> {
+  isSelected: boolean,
   index: number,
 }
 
 export const CarouselSlide = forwardRef<HTMLDivElement, CarouselSlideProps>(
   function CarouselSlide({
                            index,
+                           isSelected,
                            ...props
                          }, ref) {
     const translation = useTranslation<CarouselSlideTranslationType>([defaultCarouselSlideTranslationType])
-    const { id, currentIndex, slideCount } = useCarouselContext()
-
-    const isSelected = currentIndex === index
+    const { id, slideCount } = useCarouselContext()
 
     return (
       <div
@@ -230,7 +230,7 @@ export type CarouselProps = Omit<HTMLAttributes<HTMLDivElement>, 'children'> & {
   overScrollThreshold?: number,
   blurColor?: string,
   heightClassName?: string,
-  widthClassName?: string,
+  slideClassName?: string,
   slideContainerProps?: HTMLAttributes<HTMLDivElement>,
   onSlideChanged?: (index: number) => void,
 }
@@ -247,7 +247,7 @@ export const Carousel = ({
                            dots = true,
                            blurColor = 'from-background',
                            heightClassName = 'h-96',
-                           widthClassName = 'w-[70%] desktop:w-1/2',
+                           slideClassName = 'w-[70%] desktop:w-1/2',
                            slideContainerProps,
                            onSlideChanged,
                            ...props
@@ -427,9 +427,10 @@ export const Carousel = ({
                       ref={isInItems ? slideRefs[index] : undefined}
                       key={listIndex}
                       index={index}
+                      isSelected={isInItems && currentIndex === index}
                       className={clsx(
                         `absolute left-[50%] h-full overflow-hidden transition-transform ease-in-out`,
-                        widthClassName
+                        slideClassName
                       )}
                       onClick={() => !disableClick && setCurrentIndex(index)}
                       style={{
