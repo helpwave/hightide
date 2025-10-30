@@ -232,6 +232,7 @@ export type CarouselProps = Omit<HTMLAttributes<HTMLDivElement>, 'children'> & {
   heightClassName?: string,
   widthClassName?: string,
   slideContainerProps?: HTMLAttributes<HTMLDivElement>,
+  onSlideChanged?: (index: number) => void,
 }
 
 export const Carousel = ({
@@ -248,6 +249,7 @@ export const Carousel = ({
                            heightClassName = 'h-96',
                            widthClassName = 'w-[70%] desktop:w-1/2',
                            slideContainerProps,
+                           onSlideChanged,
                            ...props
                          }: CarouselProps) => {
   const translation = useTranslation([defaultCarouselTranslationType])
@@ -385,6 +387,10 @@ export const Carousel = ({
   useEffect(() => {
     setDisableClick(!dragState)
   }, [dragState])
+
+  useEffect(() => {
+    onSlideChanged?.(currentIndex)
+  }, [currentIndex]) // eslint-disable-line react-hooks/exhaustive-deps
 
   return (
     <CarouselContext.Provider value={{ id, currentIndex, slideCount: length, isLooping }}>
