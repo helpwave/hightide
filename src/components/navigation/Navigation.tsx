@@ -21,9 +21,9 @@ type SubItemNavigationItem = {
   items?: SimpleNavigationItem[],
 }
 
-type NavigationItem = SimpleNavigationItem | SubItemNavigationItem
+export type NavigationItemType = SimpleNavigationItem | SubItemNavigationItem
 
-function isSubItem(item: NavigationItem): item is SubItemNavigationItem {
+function isSubItem(item: NavigationItemType): item is SubItemNavigationItem {
   return 'items' in item && Array.isArray(item.items)
 }
 
@@ -118,7 +118,7 @@ const NavigationItemWithSubItem = ({
 /// NavigationItemList
 ///
 export type NavigationItemListProps = Omit<HTMLAttributes<HTMLElement>, 'children'> & {
-  items: NavigationItem[],
+  items: NavigationItemType[],
 }
 
 export const NavigationItemList = ({ items, ...restProps }: NavigationItemListProps) => {
