@@ -1,9 +1,8 @@
 'use client'
 
-import type { PropsWithChildren, ReactNode } from 'react'
-import { useEffect } from 'react'
-import { useState } from 'react'
-import { useRef } from 'react'
+import type { HTMLAttributes, PropsWithChildren, ReactNode } from 'react'
+import { useId } from 'react'
+import { useEffect, useRef, useState } from 'react'
 import clsx from 'clsx'
 import { X } from 'lucide-react'
 import { useTranslation } from '@/src/localization/useTranslation'
@@ -15,7 +14,7 @@ import { createPortal } from 'react-dom'
 
 export type DialogPosition = 'top' | 'center' | 'none'
 
-export type DialogProps = {
+export type DialogProps = HTMLAttributes<HTMLDivElement> & {
   /** Whether the dialog is currently open */
   isOpen: boolean,
   /** Title of the Dialog used for accessibility */
@@ -26,12 +25,11 @@ export type DialogProps = {
   onClose?: () => void,
   /** Styling for the background */
   backgroundClassName?: string,
-  /** Styling for the main content */
-  className?: string,
   /** If true shows a close button and sends onClose on background clicks */
   isModal?: boolean,
   position?: DialogPosition,
   isAnimated?: boolean,
+  containerClassName?: string,
 }
 
 /**
@@ -44,21 +42,24 @@ export const Dialog = ({
                          description,
                          isModal = true,
                          onClose,
-                         className,
                          backgroundClassName,
                          position = 'center',
                          isAnimated = true,
+                         containerClassName,
+                         ...props
                        }: PropsWithChildren<DialogProps>) => {
   const translation = useTranslation([formTranslation])
   const [visible, setVisible] = useState(isOpen)
+  const generatedId = useId()
+  const id = props.id ?? generatedId
 
   const ref = useRef<HTMLDivElement>(null)
 
   useEffect(() => {
-    if(isOpen) {
+    if (isOpen) {
       setVisible(true)
     } else {
-      if(!isAnimated) {
+      if (!isAnimated) {
         setVisible(false)
       }
     }
@@ -84,12 +85,15 @@ export const Dialog = ({
   }
   const positionStyle = positionMap[position]
 
+  if (!visible) return
+
   return createPortal(
-    <>
+    <div id={`dialog-container-${id}`} className={clsx('fixed inset-0 h-screen w-screen', containerClassName)}>
       <div
+        id={`dialog-background-${id}`}
         hidden={!visible}
         className={clsx(
-          'fixed inset-0 h-screen w-screen bg-overlay-shadow z-100',
+          'fixed inset-0 h-screen w-screen bg-overlay-shadow',
           {
             'motion-safe:animate-fade-in': isOpen,
             'motion-safe:animate-fade-out': !isOpen,
@@ -97,7 +101,7 @@ export const Dialog = ({
           backgroundClassName
         )}
         onAnimationEnd={() => {
-          if(!isOpen) {
+          if (!isOpen) {
             setVisible(false)
           }
         }}
@@ -105,6 +109,8 @@ export const Dialog = ({
         aria-hidden={true}
       />
       <div
+        {...props}
+        id={`dialog-${id}`}
         ref={ref}
         hidden={!visible}
         onKeyDown={event => {
@@ -113,18 +119,18 @@ export const Dialog = ({
           }
         }}
         onAnimationEnd={() => {
-          if(!isOpen) {
+          if (!isOpen) {
             setVisible(false)
           }
         }}
         className={clsx(
-          'flex-col-2 p-4 bg-overlay-background text-overlay-text rounded-xl shadow-hw-bottom max-w-[calc(100vw_-_2rem)] max-h-[calc(100vh_-_2rem)] z-100',
+          'flex-col-2 p-4 bg-overlay-background text-overlay-text rounded-xl shadow-hw-bottom max-w-[calc(100vw_-_2rem)] max-h-[calc(100vh_-_2rem)]',
           {
             'motion-safe:animate-pop-in': isOpen,
             'motion-safe:animate-pop-out': !isOpen,
           },
           positionStyle,
-          className
+          props.className
         )}
       >
         <div className="typography-title-lg mr-8">
@@ -155,7 +161,7 @@ export const Dialog = ({
         )}
         {children}
       </div>
-    </>
+    </div>
     , document.body
   )
 }

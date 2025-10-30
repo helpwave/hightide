@@ -15,7 +15,7 @@ const ConfirmDialogExample = ({
                                 onConfirm,
                                 ...props
                               }: ConfirmDialogProps) => {
-  const [isOpen, setIsOpen] = useState(true)
+  const [isOpen, setIsOpen] = useState(false)
 
   useEffect(() => {
     setIsOpen(initialIsOpen)
