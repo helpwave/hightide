@@ -117,7 +117,7 @@ export const ThemeProvider = ({ children, theme }: PropsWithChildren<ThemeProvid
         theme: storedTheme,
         resolvedTheme,
         setTheme: (newTheme) => {
-          if (theme) {
+          if (theme && theme !== 'system') {
             console.warn('ThemeProvider: Attempting to change the ' +
               "theme while setting a fixed theme won't have any effect. " +
               'Change the theme provided to the ThemeProvider instead.')

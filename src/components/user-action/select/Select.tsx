@@ -1,17 +1,13 @@
-import type {
-  ButtonHTMLAttributes,
-  HTMLAttributes,
-  PropsWithChildren,
-  ReactNode } from 'react'
+import type { ButtonHTMLAttributes, HTMLAttributes, PropsWithChildren, ReactNode } from 'react'
 import React, {
   createContext,
   forwardRef,
-  Fragment,
   useCallback,
   useContext,
   useEffect,
   useId,
   useImperativeHandle,
+  useMemo,
   useRef,
   useState
 } from 'react'
@@ -39,21 +35,21 @@ type RegisteredOption = {
   ref: React.RefObject<HTMLLIElement>,
 }
 
-type HighlightPosition = 'first' | 'last'
+type HighlightStartPositionBehavior = 'first' | 'last'
 type SelectIconAppearance = 'left' | 'right' | 'none'
 
 type InternalSelectContextState = {
   isOpen: boolean,
+  options: RegisteredOption[],
   highlightedValue?: string,
 }
 
 type SelectContextState = InternalSelectContextState & {
   id: string,
   value: string[],
-  options: RegisteredOption[],
-  selectedOptions: RegisteredOption[],
   disabled: boolean,
   invalid: boolean,
+  selectedOptions: RegisteredOption[],
 }
 
 type SelectConfiguration = {
@@ -62,11 +58,11 @@ type SelectConfiguration = {
 }
 
 type ToggleOpenOptions = {
-  highlightStartPosition?: HighlightPosition,
+  highlightStartPositionBehavior?: HighlightStartPositionBehavior,
 }
 
 const defaultToggleOpenOptions: ToggleOpenOptions = {
-  highlightStartPosition: 'first',
+  highlightStartPositionBehavior: 'first',
 }
 
 type SelectContextType = {
@@ -127,24 +123,27 @@ export const SelectRoot = ({
                              isMultiSelect = false,
                              iconAppearance = 'left',
                            }: SelectRootProps) => {
-  const [options, setOptions] = useState<RegisteredOption[]>([])
   const triggerRef = useRef<HTMLElement>(null)
   const generatedId = useId()
   const usedId = id ?? generatedId
 
   const [internalState, setInternalState] = useState<InternalSelectContextState>({
     isOpen,
+    options: [],
   })
 
-  const selectedValues = isMultiSelect ? (values ?? []) : [value].filter(Boolean)
+  const selectedValues = useMemo(() => isMultiSelect ? (values ?? []) : [value].filter(Boolean),
+    [isMultiSelect, value, values])
+  const selectedOptions = useMemo(() =>
+      selectedValues.map(value => internalState.options.find(option => value === option.value)).filter(Boolean),
+    [selectedValues, internalState.options])
   const state: SelectContextState = {
     ...internalState,
     id: usedId,
     disabled,
     invalid,
     value: selectedValues,
-    options: options,
-    selectedOptions: selectedValues.map(value => options.find(option => value === option.value)).filter(Boolean),
+    selectedOptions,
   }
 
   const config: SelectConfiguration = {
@@ -153,20 +152,29 @@ export const SelectRoot = ({
   }
 
   const registerItem = useCallback((item: RegisteredOption) => {
-    setOptions(prev => {
-      const updated = [...prev, item]
-      updated.sort((a, b) => {
+    setInternalState(prev => {
+      const updatedOptions = [...prev.options, item]
+      updatedOptions.sort((a, b) => {
         const aEl = a.ref.current
         const bEl = b.ref.current
         if (!aEl || !bEl) return 0
         return aEl.compareDocumentPosition(bEl) & Node.DOCUMENT_POSITION_FOLLOWING ? -1 : 1
       })
-      return updated
+      return {
+        ...prev,
+        options: updatedOptions,
+      }
     })
   }, [])
 
   const unregisterItem = useCallback((value: string) => {
-    setOptions(prev => prev.filter(i => i.value !== value))
+    setInternalState(prev => {
+      const updatedOptions = prev.options.filter(i => i.value !== value)
+      return {
+        ...prev,
+        options: updatedOptions,
+      }
+    })
   }, [])
 
   // Setting isSelected to false only works for multiselects
@@ -174,7 +182,7 @@ export const SelectRoot = ({
     if (disabled) {
       return
     }
-    const option = options.find(i => i.value === value)
+    const option = state.options.find(i => i.value === value)
     if (!option) {
       console.error(`SelectOption with value: ${value} not found`)
       return
@@ -224,36 +232,41 @@ export const SelectRoot = ({
   }, [])
 
   const toggleOpen = (isOpen?: boolean, toggleOpenOptions?: ToggleOpenOptions) => {
-    const { highlightStartPosition } = { ...defaultToggleOpenOptions, ...toggleOpenOptions }
-    let highlightedIndex: number
-    if (highlightStartPosition === 'first') {
-      highlightedIndex = options.findIndex(option => !option.disabled)
-    } else {
-      highlightedIndex = options.length - 1 - [...options].reverse().findIndex(option => !option.disabled)
-    }
-    if (highlightedIndex === -1 || highlightedIndex === options.length) {
-      highlightedIndex = 0
+    const { highlightStartPositionBehavior } = { ...defaultToggleOpenOptions, ...toggleOpenOptions }
+    let firstSelectedValue: string | undefined
+    let firstEnabledValue: string | undefined
+    for (let i = 0; i < state.options.length; i++) {
+      const currentOption = state.options[highlightStartPositionBehavior === 'first' ? i : state.options.length - i - 1]
+      if (!currentOption.disabled) {
+        if (!firstEnabledValue) {
+          firstEnabledValue = currentOption.value
+        }
+        if (selectedValues.includes(currentOption.value)) {
+          firstSelectedValue = currentOption.value
+          break
+        }
+      }
     }
     setInternalState(prevState => ({
       ...prevState,
       isOpen: isOpen ?? !prevState.isOpen,
-      highlightedValue: options[highlightedIndex].value,
+      highlightedValue: firstSelectedValue ?? firstEnabledValue
     }))
   }
 
   const moveHighlightedIndex = (delta: number) => {
-    let highlightedIndex = options.findIndex(value => value.value === internalState.highlightedValue)
+    let highlightedIndex = state.options.findIndex(value => value.value === internalState.highlightedValue)
     if (highlightedIndex === -1) {
       highlightedIndex = 0
     }
-    const optionLength = options.length
+    const optionLength = state.options.length
     const startIndex = (highlightedIndex + (delta % optionLength) + optionLength) % optionLength
     const isForward = delta >= 0
-    let highlightedValue = options[startIndex].value
-    for (let i = 0; i < options.length; i++) {
+    let highlightedValue = state.options[startIndex].value
+    for (let i = 0; i < state.options.length; i++) {
       const index = (startIndex + (isForward ? i : -i) + optionLength) % optionLength
-      if (!options[index].disabled) {
-        highlightedValue = options[index].value
+      if (!state.options[index].disabled) {
+        highlightedValue = state.options[index].value
         break
       }
     }
@@ -266,13 +279,13 @@ export const SelectRoot = ({
 
   useEffect(() => {
     if (!internalState.highlightedValue) return
-    const highlighted = options.find(value => value.value === internalState.highlightedValue)
+    const highlighted = internalState.options.find(value => value.value === internalState.highlightedValue)
     if (highlighted) {
-      highlighted.ref.current.scrollIntoView({ behavior: 'instant', block: 'nearest' })
+      highlighted.ref.current?.scrollIntoView({ behavior: 'instant', block: 'nearest' })
     } else {
       console.error(`SelectRoot: Could not find highlighted value (${internalState.highlightedValue})`)
     }
-  }, [internalState.highlightedValue]) // eslint-disable-line react-hooks/exhaustive-deps
+  }, [internalState.highlightedValue])
 
   const contextValue: SelectContextType = {
     state,
@@ -445,12 +458,12 @@ export const SelectButton = forwardRef<HTMLButtonElement, SelectButtonProps>(fun
         props.onKeyDown?.(event)
         switch (event.key) {
           case 'ArrowDown':
-            toggleOpen(true, { highlightStartPosition: 'first' })
+            toggleOpen(true, { highlightStartPositionBehavior: 'first' })
             event.preventDefault()
             event.stopPropagation()
             break
           case 'ArrowUp':
-            toggleOpen(true, { highlightStartPosition: 'last' })
+            toggleOpen(true, { highlightStartPositionBehavior: 'last' })
             event.preventDefault()
             event.stopPropagation()
             break
@@ -566,10 +579,10 @@ export const SelectChipDisplay = forwardRef<HTMLDivElement, SelectChipDisplayPro
         onKeyDown={event => {
           switch (event.key) {
             case 'ArrowDown':
-              toggleOpen(true, { highlightStartPosition: 'first' })
+              toggleOpen(true, { highlightStartPositionBehavior: 'first' })
               break
             case 'ArrowUp':
-              toggleOpen(true, { highlightStartPosition: 'last' })
+              toggleOpen(true, { highlightStartPositionBehavior: 'last' })
           }
         }}
         size="small"
@@ -596,12 +609,14 @@ type Orientation = 'vertical' | 'horizontal'
 export type SelectContentProps = HTMLAttributes<HTMLUListElement> & {
   alignment?: Pick<UseFloatingElementOptions, 'gap' | 'horizontalAlignment' | 'verticalAlignment'>,
   orientation?: Orientation,
+  containerClassName?: string,
 }
 
 export const SelectContent = forwardRef<HTMLUListElement, SelectContentProps>(
   function SelectContent({
                            alignment,
                            orientation = 'vertical',
+                           containerClassName,
                            ...props
                          }, ref) {
     const innerRef = useRef<HTMLUListElement | null>(null)
@@ -622,17 +637,19 @@ export const SelectContent = forwardRef<HTMLUListElement, SelectContentProps>(
     })
 
     return createPortal(
-      <>
+      <div
+        id={`select-container-${state.id}`} className={clsx('fixed inset-0 w-screen h-screen', containerClassName)}
+        hidden={!state.isOpen}
+      >
         <div
-          hidden={!state.isOpen}
+          id={`select-background-${state.id}`}
           onClick={() => trigger.toggleOpen(false)}
-          className={clsx('fixed w-screen h-screen inset-0')}
+          className={clsx('fixed inset-0 w-screen h-screen')}
         />
         <ul
           {...props}
           id={`${state.id}-listbox`}
           ref={innerRef}
-          hidden={!state.isOpen}
           onKeyDown={(event) => {
             switch (event.key) {
               case 'Escape':
@@ -689,7 +706,7 @@ export const SelectContent = forwardRef<HTMLUListElement, SelectContentProps>(
         >
           {props.children}
         </ul>
-      </>, document.body
+      </div>, document.body
     )
   }
 )

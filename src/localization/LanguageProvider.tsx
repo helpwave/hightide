@@ -78,7 +78,7 @@ export const LanguageProvider = ({ children, language }: PropsWithChildren<Langu
     <LanguageContext.Provider value={{
       language: resolvedLanguage,
       setLanguage: (newLanguage) => {
-        if (language) {
+        if (language !== 'system') {
           console.warn('LanguageProvider: Attempting to change the ' +
             "language while setting a fixed language won't have any effect. " +
             'Change the language provided to the LanguageProvider instead.')

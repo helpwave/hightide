@@ -5,6 +5,16 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/)
 and adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [0.1.38] - 2025-10-30
+
+### Changed
+- Changed `Dialog`s to only be part of the DOM-Tree when open
+
+### Fixed
+- Fixed `SelectButton` not reacting correctly to arrow keys when determining the highlighted value
+- Fixed `ThemeProvider` and `LanguageProvider` to consider the `system` value as an overwrite
+- Fixed `ConfirmDialog` story using a wrong initial state
+
 ## [0.1.37] - 2025-10-30
 
 ### Changed
