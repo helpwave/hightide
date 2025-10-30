@@ -29,13 +29,13 @@ const CarouselExample = ({
           return (
             <div
               key={index}
-                 className={clsx(
-                   'flex-row-0 justify-center items-center h-full rounded-2xl mx-4 border-2 border-transparent',
-                   'group-focus-within/slide:border-primary',
-                   color
-                   )}
+              className={clsx(
+                'flex-row-0 justify-center items-center h-full rounded-2xl mx-4 border-4 border-transparent',
+                'group-focus-within/slide:border-primary',
+                color
+              )}
             >
-              <Image src="https://helpwave.de/favicon.ico" alt="" width={256} height={256} draggable={false} />
+              <Image src="https://helpwave.de/favicon.ico" alt="" width={256} height={256} draggable={false}/>
             </div>
           )
         })}
