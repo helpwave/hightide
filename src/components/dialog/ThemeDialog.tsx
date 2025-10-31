@@ -80,7 +80,7 @@ export const ThemeDialog = ({
           onValueChanged={(theme) => setTheme(theme as ThemeType)}
           iconAppearance="right"
           contentPanelProps={{
-            className: 'z-200'
+            containerClassName: 'z-200',
           }}
           buttonProps={{
             selectedDisplay: (value) => (
