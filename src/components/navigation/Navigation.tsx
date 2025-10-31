@@ -106,7 +106,13 @@ const NavigationItemWithSubItem = ({
       >
         {items.map(({ link, label, external }, index) => (
           <li key={index}>
-            <Link href={link} target={external ? '_blank' : undefined} className="link">{label}</Link>
+            <Link
+              href={link}
+              target={external ? '_blank' : undefined}
+              className="flex-row-0 link w-full"
+            >
+              {label}
+            </Link>
           </li>
         ))}
       </ul>
@@ -123,17 +129,17 @@ export type NavigationItemListProps = Omit<HTMLAttributes<HTMLElement>, 'childre
 
 export const NavigationItemList = ({ items, ...restProps }: NavigationItemListProps) => {
   return (
-    <nav {...restProps} className={clsx('flex-row-6 items-center', restProps.className)}>
-      {items.map((item, index) => (
-        <li key={index}>
-          {isSubItem(item) ? (
-            <NavigationItemWithSubItem {...item} />
-          ) : (
-            <Link href={item.link} target={item.external ? '_blank' : undefined} className="link">{item.label}</Link>
-          )}
-        </li>
-      ))}
-    </nav>
+    <ul {...restProps} className={clsx('flex-row-6 items-center', restProps.className)}>
+        {items.map((item, index) => (
+          <li key={index}>
+            {isSubItem(item) ? (
+              <NavigationItemWithSubItem {...item} />
+            ) : (
+              <Link href={item.link} target={item.external ? '_blank' : undefined} className="link">{item.label}</Link>
+            )}
+          </li>
+        ))}
+    </ul>
   )
 }
 
@@ -141,6 +147,7 @@ export const NavigationItemList = ({ items, ...restProps }: NavigationItemListPr
 /// Navigation
 ///
 export type NavigationProps = NavigationItemListProps
+
 export const Navigation = ({ ...props }: NavigationProps) => {
   const [isMobileOpen, setIsMobileOpen] = useState(false)
   const id = useId()
@@ -151,7 +158,7 @@ export const Navigation = ({ ...props }: NavigationProps) => {
   }, [isMobileOpen])
 
   return (
-    <>
+    <nav>
       <NavigationItemList
         {...props}
         className={clsx('hidden', { 'desktop:flex': !isMobileOpen }, props.className)}
@@ -194,6 +201,6 @@ export const Navigation = ({ ...props }: NavigationProps) => {
         </IconButton>
         <NavigationItemList {...props} className={clsx('flex-col-8', props.className)}/>
       </div>
-    </>
+    </nav>
   )
 }
