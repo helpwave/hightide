@@ -28,7 +28,7 @@ export const DayPicker = ({
                             markToday = true,
                             className = ''
                           }: DayPickerProps) => {
-  const locale = useLocale()
+  const { locale } = useLocale()
   const month = displayedMonth.getMonth()
   const weeks = getWeeksForCalenderMonth(displayedMonth, weekStart)
 

@@ -28,7 +28,7 @@ export const YearMonthPicker = ({
                                   maxHeight = 300,
                                   showValueOpen = true
                                 }: YearMonthPickerProps) => {
-  const locale = useLocale()
+  const { locale } = useLocale()
   const ref = useRef<HTMLDivElement>(null)
 
   useEffect(() => {
