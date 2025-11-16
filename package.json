@@ -7,13 +7,17 @@
     "url": "git+https://github.com/helpwave/hightide.git"
   },
   "license": "MPL-2.0",
-  "version": "0.1.42",
+  "version": "0.1.43",
   "files": [
     "dist"
   ],
   "main": "dist/index.cjs",
   "module": "dist/index.js",
   "types": "dist/index.d.ts",
+  "bin": {
+    "build-translation": ".dist/scripts/compile-arb.js",
+    "barrel": ".dist/scripts/barrel.js"
+  },
   "exports": {
     ".": {
       "require": "./dist/index.cjs",
@@ -24,13 +28,15 @@
   },
   "scripts": {
     "clean": "rm -rf dist",
+    "build-translation": "node scripts/compile-arb.js --force ./locales ./src/i18n",
     "build-css": "npx @tailwindcss/cli -i src/style/globals.css -o ./dist/style/globals.css",
     "barrel": "node scripts/barrel.js",
-    "build": "tsup && npm run build-css && cp -R src/style/ ./dist/style/uncompiled/",
-    "build-production": "npm run clean && npm run barrel && tsup && npm run build",
+    "build": "tsup",
+    "build-production": "npm run clean && npm run build-translation && npm run barrel && npm run build && npm run build-css && cp -R src/style/ ./dist/style/uncompiled/ && cp -R scripts/ ./dist/scripts/",
     "storybook": "storybook dev -p 6006",
     "build-storybook": "storybook build",
-    "lint": "eslint ."
+    "lint": "eslint .",
+    "init": "npm run build-translation"
   },
   "dependencies": {
     "@tailwindcss/cli": "4.1.7",

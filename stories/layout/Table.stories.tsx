@@ -5,8 +5,7 @@ import { faker } from '@faker-js/faker'
 import { range } from '../../src/utils/array'
 import type { TableProps } from '../../src/components/table/Table'
 import { TableWithSelection } from '../../src/components/table/Table'
-import type { Translation } from '../../src/localization/useTranslation'
-import { useTranslation } from '../../src/localization/useTranslation'
+import { useStandardTranslation } from '../../src/i18n/useTranslation'
 import { TableCell } from '../../src/components/table/TableCell'
 import { SolidButton } from '../../src/components/user-action/Button'
 
@@ -30,35 +29,10 @@ const createRandomDataType = (): DataType => {
 
 const exampleData: DataType[] = range(100).map(() => createRandomDataType())
 
-type TranslationType = {
-  id: string,
-  name: string,
-  age: string,
-  street: string,
-  entryDate: string,
-}
-
-const defaultTranslation: Translation<TranslationType> = {
-  en: {
-    id: 'Identifier',
-    name: 'Name',
-    age: 'Age',
-    street: 'Street',
-    entryDate: 'Entry Date'
-  },
-  de: {
-    id: 'ID',
-    name: 'Name',
-    age: 'Alter',
-    street: 'Straße',
-    entryDate: 'Eintragsdatum'
-  }
-}
-
 type TableExampleProps = Omit<TableProps<DataType>, 'data' | 'setData' | 'columns' | 'initialState'>
 
 const TableExample = ({ ...props }: TableExampleProps) => {
-  const translation = useTranslation([defaultTranslation])
+  const translation = useStandardTranslation()
   const [data, setData] = useState<DataType[]>(exampleData)
   const [selection, setSelection] = useState<RowSelectionState>(
     exampleData.reduce((previousValue, _, currentIndex) => {
@@ -75,7 +49,7 @@ const TableExample = ({ ...props }: TableExampleProps) => {
   const columns = useMemo<ColumnDef<DataType>[]>(() => [
     {
       id: 'id',
-      header: translation('id'),
+      header: translation('identifier'),
       accessorKey: 'id',
       minSize: 200,
       size: 250,

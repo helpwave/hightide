@@ -1,0 +1,107 @@
+{
+  "january": "January",
+  "february": "Febuary",
+  "march": "March",
+  "april": "April",
+  "may": "May",
+  "june": "June",
+  "july": "July",
+  "august": "August",
+  "september": "September",
+  "october": "October",
+  "november": "November",
+  "december": "December",
+  "century": "{count, plural, one{Century} other{Centuries}}",
+  "@century": {
+    "placeholders": {
+      "count": {}
+    }
+  },
+  "decade": "{count, plural, one{Decade} other{Decades}}",
+  "@decade": {
+    "placeholders": {
+      "count": {}
+    }
+  },
+  "year": "{count, plural, one{Year} other{Years}}",
+  "@year": {
+    "placeholders": {
+      "count": {}
+    }
+  },
+  "month": "{count, plural, one{Month} other{Months}}",
+  "@month": {
+    "placeholders": {
+      "count": {}
+    }
+  },
+  "day": "{count, plural, one{Day} other{Days}}",
+  "@day": {
+    "placeholders": {
+      "count": {}
+    }
+  },
+  "hour": "{count, plural, one{Hour} other{Hours}}",
+  "@hour": {
+    "placeholders": {
+      "count": {}
+    }
+  },
+  "minute": "{count, plural, one{Minute} other{Minutes}}",
+  "@minute": {
+    "placeholders": {
+      "count": {}
+    }
+  },
+  "second": "{count, plural, one{Second} other{Seconds}}",
+  "@second": {
+    "placeholders": {
+      "count": {}
+    }
+  },
+  "millisecond": "{count, plural, one{Millisecond} other{Milliseconds}}",
+  "@millisecond": {
+    "placeholders": {
+      "count": {}
+    }
+  },
+  "microsecond": "{count, plural, one{Microsecond} other{Microseconds}}",
+  "@microsecond": {
+    "placeholders": {
+      "count": {}
+    }
+  },
+  "nanosecond": "{count, plural, one{Nanosecond} other{Nanoseconds}}",
+  "@nanosecond": {
+    "placeholders": {
+      "count": {}
+    }
+  },
+  "yesterday": "Yesterday",
+  "today": "Today",
+  "tomorrow": "Tomorrow",
+  "in": "in",
+  "ago": "ago",
+  "inDays": "in {days} days",
+  "@inDays": {
+    "placeholders": {
+      "days": {
+        "type": "number"
+      }
+    }
+  },
+  "agoDays": "days {days} ago",
+  "@agoDays": {
+    "placeholders": {
+      "days": {
+        "type": "number"
+      }
+    }
+  },
+  "monthName": "{month, select, january{January} february{February} march{March} april{April} may{May} june{June} july{July} august{August} september{September} october{October} november{November} december{December} other{Unknown Month}}",
+  "@monthName": {
+    "placeholders": {
+      "month": {}
+    }
+  }
+}

@@ -1,13 +1,10 @@
 import { List } from 'lucide-react'
 import clsx from 'clsx'
 import type { PropsWithChildren, ReactNode } from 'react'
-import type { FormTranslationType } from '@/src/localization/defaults/form'
 import type { PropertyBaseProps } from '@/src/components/properties/PropertyBase'
 import { PropertyBase } from '@/src/components/properties/PropertyBase'
-import type { PropsForTranslation } from '@/src/localization/useTranslation'
-import { Select } from '@/src/components/user-action/select/Select'
 
-type SingleSelectPropertyTranslation = FormTranslationType
+import { Select } from '@/src/components/user-action/select/Select'
 
 export type SingleSelectPropertyProps =
   Omit<PropertyBaseProps, 'icon' | 'input' | 'hasValue' | 'className'>
@@ -27,7 +24,7 @@ export const SingleSelectProperty = ({
                                        onValueChanged,
                                        selectedDisplay,
                                        ...props
-                                     }: PropsForTranslation<SingleSelectPropertyTranslation, SingleSelectPropertyProps>) => {
+                                     }: SingleSelectPropertyProps) => {
   const hasValue = value !== undefined
 
   return (

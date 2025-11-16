@@ -2,12 +2,7 @@ import type { ReactNode } from 'react'
 import { AlertTriangle } from 'lucide-react'
 import clsx from 'clsx'
 import { TextButton } from '../user-action/Button'
-import type { PropsForTranslation } from '../../localization/useTranslation'
-import { useTranslation } from '../../localization/useTranslation'
-import type { FormTranslationType } from '../../localization/defaults/form'
-import { formTranslation } from '../../localization/defaults/form'
-
-type PropertyBaseTranslation = FormTranslationType
+import { useStandardTranslation } from '@/src/i18n/useTranslation'
 
 export type PropertyBaseProps = {
   name: string,
@@ -24,7 +19,6 @@ export type PropertyBaseProps = {
  * A component for showing a properties with uniform styling
  */
 export const PropertyBase = ({
-                               overwriteTranslation,
                                name,
                                input,
                                softRequired = false,
@@ -33,8 +27,8 @@ export const PropertyBase = ({
                                readOnly,
                                onRemove,
                                className = '',
-                             }: PropsForTranslation<PropertyBaseTranslation, PropertyBaseProps>) => {
-  const translation = useTranslation([formTranslation], overwriteTranslation)
+                             }: PropertyBaseProps) => {
+  const translation = useStandardTranslation()
   const requiredAndNoValue = softRequired && !hasValue
   return (
     <div className={clsx('flex-row-0 group', className)}>

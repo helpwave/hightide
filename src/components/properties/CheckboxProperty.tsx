@@ -1,15 +1,11 @@
 import { Check } from 'lucide-react'
 import { Checkbox } from '../user-action/Checkbox'
-import type { PropsForTranslation } from '../../localization/useTranslation'
-import { useTranslation } from '../../localization/useTranslation'
 import type { PropertyBaseProps } from './PropertyBase'
 import { PropertyBase } from './PropertyBase'
-import type { FormTranslationType } from '../../localization/defaults/form'
-import { formTranslation } from '../../localization/defaults/form'
 import { useId } from 'react'
 import { Label } from '@/src/components/user-action/Label'
+import { useStandardTranslation } from '@/src/i18n/useTranslation'
 
-type CheckboxPropertyTranslation = FormTranslationType
 
 export type CheckboxPropertyProps = Omit<PropertyBaseProps, 'icon' | 'input' | 'hasValue' | 'onRemove'> & {
   value?: boolean,
@@ -20,13 +16,12 @@ export type CheckboxPropertyProps = Omit<PropertyBaseProps, 'icon' | 'input' | '
  * An Input component for a boolean values
  */
 export const CheckboxProperty = ({
-                                   overwriteTranslation,
                                    value,
                                    onChange,
                                    readOnly,
                                    ...baseProps
-                                 }: PropsForTranslation<CheckboxPropertyTranslation, CheckboxPropertyProps>) => {
-  const translation = useTranslation([formTranslation], overwriteTranslation)
+                                 }: CheckboxPropertyProps) => {
+  const translation = useStandardTranslation()
   const id= useId()
 
   return (

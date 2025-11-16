@@ -1,12 +1,7 @@
-import type { PropsForTranslation } from '../../localization/useTranslation'
-import { useTranslation } from '../../localization/useTranslation'
 import clsx from 'clsx'
-import type { FormTranslationType } from '../../localization/defaults/form'
-import { formTranslation } from '../../localization/defaults/form'
+import { useStandardTranslation } from '@/src/i18n/useTranslation'
 
 type TextImageColor = 'primary' | 'secondary' | 'dark'
-
-type TextImageTranslation = FormTranslationType
 
 export type TextImageProps = {
   title: string,
@@ -23,7 +18,6 @@ export type TextImageProps = {
  * A Component for layering a Text upon an image
  */
 export const TextImage = ({
-                            overwriteTranslation,
                             title,
                             description,
                             imageUrl,
@@ -32,8 +26,8 @@ export const TextImage = ({
                             badge,
                             contentClassName = '',
                             className = '',
-                          }: PropsForTranslation<TextImageTranslation, TextImageProps>) => {
-  const translation = useTranslation([formTranslation], overwriteTranslation)
+                          }: TextImageProps) => {
+  const translation = useStandardTranslation()
 
   const chipColorMapping: Record<TextImageColor, string> = {
     primary: 'text-text-image-primary-background bg-text-image-primary-text',

@@ -4,7 +4,7 @@ import { equalSizeGroups, range } from '@/src/utils/array'
 import clsx from 'clsx'
 import { ExpandableUncontrolled } from '@/src/components/layout/Expandable'
 import { addDuration, monthsList, subtractDuration } from '@/src/utils/date'
-import { useLocale } from '../../localization/LanguageProvider'
+import { useLocale } from '@/src/i18n/LocaleProvider'
 import { SolidButton } from '../user-action/Button'
 import { useOverwritableState } from '@/src/hooks/useOverwritableState'
 

@@ -3,18 +3,14 @@ import { ArrowDown, ArrowUp, ChevronDown } from 'lucide-react'
 import { addDuration, isInTimeSpan, subtractDuration } from '@/src/utils/date'
 import clsx from 'clsx'
 import { useOverwritableState } from '@/src/hooks/useOverwritableState'
-import type { TimeTranslationType } from '@/src/localization/defaults/time'
-import { timeTranslation } from '@/src/localization/defaults/time'
 import type { DayPickerProps } from '@/src/components/date/DayPicker'
 import { DayPicker } from '@/src/components/date/DayPicker'
 import type { YearMonthPickerProps } from '@/src/components/date/YearMonthPicker'
 import { YearMonthPicker } from '@/src/components/date/YearMonthPicker'
-import type { PropsForTranslation } from '@/src/localization/useTranslation'
-import { useTranslation } from '@/src/localization/useTranslation'
-import { useLocale } from '@/src/localization/LanguageProvider'
+import { useStandardTranslation } from '@/src/i18n/useTranslation'
+import { useLocale } from '@/src/i18n/LocaleProvider'
 import { SolidButton, TextButton } from '@/src/components/user-action/Button'
-
-type DatePickerTranslationType = TimeTranslationType
+import { LocalizationUtil } from '@/src/i18n/util'
 
 type DisplayMode = 'yearMonth' | 'day'
 
@@ -33,7 +29,6 @@ export type DatePickerProps = {
  * A Component for picking a date
  */
 export const DatePicker = ({
-                             overwriteTranslation,
                              value = new Date(),
                              start = subtractDuration(new Date(), { years: 50 }),
                              end = addDuration(new Date(), { years: 50 }),
@@ -42,9 +37,9 @@ export const DatePicker = ({
                              yearMonthPickerProps,
                              dayPickerProps,
                              className = ''
-                           }: PropsForTranslation<DatePickerTranslationType, DatePickerProps>) => {
-  const locale = useLocale()
-  const translation = useTranslation([timeTranslation], overwriteTranslation)
+                           }: DatePickerProps) => {
+  const { locale } = useLocale()
+  const translation = useStandardTranslation()
   const [displayedMonth, setDisplayedMonth] = useState<Date>(value)
   const [displayMode, setDisplayMode] = useState<DisplayMode>(initialDisplay)
 
@@ -61,7 +56,7 @@ export const DatePicker = ({
           })}
           onClick={() => setDisplayMode(displayMode === 'day' ? 'yearMonth' : 'day')}
         >
-          {`${new Intl.DateTimeFormat(locale, { month: 'long' }).format(displayedMonth)} ${displayedMonth.getFullYear()}`}
+          {`${new Intl.DateTimeFormat(LocalizationUtil.localToLanguage(locale), { month: 'long' }).format(displayedMonth)} ${displayedMonth.getFullYear()}`}
           <ChevronDown size={16}/>
         </TextButton>
         {displayMode === 'day' && (
@@ -121,7 +116,7 @@ export const DatePicker = ({
                 onChange(newDate)
               }}
             >
-              {translation('today')}
+              {translation('time.today')}
             </TextButton>
           </div>
         </div>
