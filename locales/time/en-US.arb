@@ -11,67 +11,67 @@
   "october": "October",
   "november": "November",
   "december": "December",
-  "century": "{count, plural, one{Century} other{Centuries}}",
+  "century": "{count, plural, =1{Century} other{Centuries}}",
   "@century": {
     "placeholders": {
       "count": {}
     }
   },
-  "decade": "{count, plural, one{Decade} other{Decades}}",
+  "decade": "{count, plural, =1{Decade} other{Decades}}",
   "@decade": {
     "placeholders": {
       "count": {}
     }
   },
-  "year": "{count, plural, one{Year} other{Years}}",
+  "year": "{count, plural, =1{Year} other{Years}}",
   "@year": {
     "placeholders": {
       "count": {}
     }
   },
-  "month": "{count, plural, one{Month} other{Months}}",
+  "month": "{count, plural, =1{Month} other{Months}}",
   "@month": {
     "placeholders": {
       "count": {}
     }
   },
-  "day": "{count, plural, one{Day} other{Days}}",
+  "day": "{count, plural, =1{Day} other{Days}}",
   "@day": {
     "placeholders": {
       "count": {}
     }
   },
-  "hour": "{count, plural, one{Hour} other{Hours}}",
+  "hour": "{count, plural, =1{Hour} other{Hours}}",
   "@hour": {
     "placeholders": {
       "count": {}
     }
   },
-  "minute": "{count, plural, one{Minute} other{Minutes}}",
+  "minute": "{count, plural, =1{Minute} other{Minutes}}",
   "@minute": {
     "placeholders": {
       "count": {}
     }
   },
-  "second": "{count, plural, one{Second} other{Seconds}}",
+  "second": "{count, plural, =1{Second} other{Seconds}}",
   "@second": {
     "placeholders": {
       "count": {}
     }
   },
-  "millisecond": "{count, plural, one{Millisecond} other{Milliseconds}}",
+  "millisecond": "{count, plural, =1{Millisecond} other{Milliseconds}}",
   "@millisecond": {
     "placeholders": {
       "count": {}
     }
   },
-  "microsecond": "{count, plural, one{Microsecond} other{Microseconds}}",
+  "microsecond": "{count, plural, =1{Microsecond} other{Microseconds}}",
   "@microsecond": {
     "placeholders": {
       "count": {}
     }
   },
-  "nanosecond": "{count, plural, one{Nanosecond} other{Nanoseconds}}",
+  "nanosecond": "{count, plural, =1{Nanosecond} other{Nanoseconds}}",
   "@nanosecond": {
     "placeholders": {
       "count": {}

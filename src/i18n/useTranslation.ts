@@ -1,4 +1,4 @@
-import { interpretICU } from '@/src/i18n/interpretICU'
+import { ICUUtil } from '@/src/i18n/icu'
 import { ArrayUtil } from '@/src/utils/array'
 import type { Exact, SingleOrArray } from '@/src/utils/typing'
 import type { SupportedLocale } from '@/src/i18n/translations'
@@ -36,7 +36,7 @@ export function useICUTranslation<L extends string, T extends TranslationEntries
 
         const msg = localizedTranslation[key]
         if (typeof msg === 'string') {
-          return interpretICU(msg, values)
+          return ICUUtil.interpret(msg, values)
         }
       }
       console.warn(`useTranslation: No translation for key "${key}" found.`)

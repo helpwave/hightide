@@ -80,7 +80,7 @@
   "submit": "Abschicken",
   "success": "Erfolg",
   "text": "Text",
-  "themes": "{count, plural, one{Farbschema} other{Farbschemas}}",
+  "themes": "{count, plural, =1{Farbschema} other{Farbschemas}}",
   "@themes": {
     "placeholders": {
       "count": {}

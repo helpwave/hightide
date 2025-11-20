@@ -80,7 +80,7 @@
   "submit": "Submit",
   "success": "Success",
   "text": "Text",
-  "themes": "{count, plural, one{Theme} other{Themes}}",
+  "themes": "{count, plural, =1{Theme} other{Themes}}",
   "@themes": {
     "placeholders": {
       "count": {}

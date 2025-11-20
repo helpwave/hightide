@@ -94,7 +94,7 @@ function readARBDir(dir, prefix = '') {
 
         entry['type'] = 'func'
         entry['params'] = params
-        entry['value'] = `(values): string => interpretICU(${toSingleQuote(value)}, values)`
+        entry['value'] = `(values): string => ICUUtil.interpret(${toSingleQuote(value)}, values)`
       } else {
         // --- Plain text case ---
         entry['type'] = 'text'
@@ -189,7 +189,7 @@ async function main() {
   let output = `// AUTO-GENERATED. DO NOT EDIT.\n\n`
 
   output += '//The translations expect an ICU (International Components for Unicode) interpreter\n'
-  output += 'import { interpretICU } from \'./interpretICU\'\n\n'
+  output += 'import { ICUUtil } from \'./icu\'\n\n'
 
   output += `export const supportedLocales = [${[...locales.values()].map(value => `'${value}'`).join(', ')}] as const\n\n`
 
