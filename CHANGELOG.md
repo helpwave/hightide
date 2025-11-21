@@ -5,21 +5,15 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/)
 and adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
-## [0.1.43] - 2025-11-15
-
-### Added
-- `interpretICU` function to parse ICU with replacement values
-- `compile-arb.js` script for reading and compile translations
+## [0.1.43] - 2025-11-21
 
 ### Changed
 - Changed translation to use the arb format and ICU string replacements
 - Moved translations to the [locales folder](locales/)
-- Exported scripts for usage outside the library
 - Locales are now used instead of Languages
-- translations are now split into 3 translation functions
-  - `useTranslation`: general purpose, locale and translation mapping need to be provided
-  - `useStandardTranslation`: directly usable and uses the preferred locale
-  - `useICUTranslation`: similar to useTranslation but parses every call with a ICU replacer 
+- translations are now split into 2 translation functions
+  - `useTranslation`: directly usable and uses the preferred locale
+  - `useICUTranslation`: parses every input with a ICU interpreter (less efficient) 
 
 ### Fixed
 - fixed padding on the `InsideLabel` to be properly aligned

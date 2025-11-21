@@ -1,5 +1,5 @@
 import clsx from 'clsx'
-import { useStandardTranslation } from '@/src/i18n/useTranslation'
+import { useTranslation } from '@/src/i18n/useTranslation'
 
 type TextImageColor = 'primary' | 'secondary' | 'dark'
 
@@ -27,7 +27,7 @@ export const TextImage = ({
                             contentClassName = '',
                             className = '',
                           }: TextImageProps) => {
-  const translation = useStandardTranslation()
+  const translation = useTranslation()
 
   const chipColorMapping: Record<TextImageColor, string> = {
     primary: 'text-text-image-primary-background bg-text-image-primary-text',

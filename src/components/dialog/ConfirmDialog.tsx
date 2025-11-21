@@ -1,7 +1,7 @@
 import type { PropsWithChildren } from 'react'
 import type { SolidButtonColor } from '../user-action/Button'
 import { SolidButton } from '../user-action/Button'
-import { useStandardTranslation } from '@/src/i18n/useTranslation'
+import { useTranslation } from '@/src/i18n/useTranslation'
 import clsx from 'clsx'
 import type { DialogProps } from './Dialog'
 import { Dialog } from './Dialog'
@@ -40,7 +40,7 @@ export const ConfirmDialog = ({
                                 className,
                                 ...restProps
                               }: PropsWithChildren<ConfirmDialogProps>) => {
-  const translation = useStandardTranslation()
+  const translation = useTranslation()
 
   const mapping: Record<ConfirmDialogType, SolidButtonColor> = {
     neutral: 'neutral',

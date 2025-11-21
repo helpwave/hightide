@@ -1,5 +1,5 @@
 import { validateEmail } from '@/src/utils/emailValidation'
-import { useStandardTranslation } from '@/src/i18n/useTranslation'
+import { useTranslation } from '@/src/i18n/useTranslation'
 
 export type ValidatorError =
   'notEmpty'
@@ -73,7 +73,7 @@ export const UseValidators = {
 }
 
 export const useTranslatedValidators = () => {
-  const translation = useStandardTranslation()
+  const translation = useTranslation()
 
   return {
     notEmpty: (value: unknown) => {

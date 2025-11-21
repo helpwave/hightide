@@ -5,7 +5,7 @@ import { faker } from '@faker-js/faker'
 import { range } from '../../src/utils/array'
 import type { TableProps } from '../../src/components/table/Table'
 import { TableWithSelection } from '../../src/components/table/Table'
-import { useStandardTranslation } from '../../src/i18n/useTranslation'
+import { useTranslation } from '../../src/i18n/useTranslation'
 import { TableCell } from '../../src/components/table/TableCell'
 import { SolidButton } from '../../src/components/user-action/Button'
 
@@ -32,7 +32,7 @@ const exampleData: DataType[] = range(100).map(() => createRandomDataType())
 type TableExampleProps = Omit<TableProps<DataType>, 'data' | 'setData' | 'columns' | 'initialState'>
 
 const TableExample = ({ ...props }: TableExampleProps) => {
-  const translation = useStandardTranslation()
+  const translation = useTranslation()
   const [data, setData] = useState<DataType[]>(exampleData)
   const [selection, setSelection] = useState<RowSelectionState>(
     exampleData.reduce((previousValue, _, currentIndex) => {

@@ -5,7 +5,7 @@ import { useId } from 'react'
 import { useEffect, useRef, useState } from 'react'
 import clsx from 'clsx'
 import { X } from 'lucide-react'
-import { useStandardTranslation } from '@/src/i18n/useTranslation'
+import { useTranslation } from '@/src/i18n/useTranslation'
 import { IconButton } from '@/src/components/user-action/Button'
 import { useFocusTrap } from '@/src/hooks/focus/useFocusTrap'
 import { useLogOnce } from '@/src/hooks/useLogOnce'
@@ -47,7 +47,7 @@ export const Dialog = ({
                          containerClassName,
                          ...props
                        }: PropsWithChildren<DialogProps>) => {
-  const translation = useStandardTranslation()
+  const translation = useTranslation()
   const [visible, setVisible] = useState(isOpen)
   const generatedId = useId()
   const id = props.id ?? generatedId

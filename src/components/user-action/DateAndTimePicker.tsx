@@ -6,7 +6,7 @@ import type { TimePickerProps } from '../date/TimePicker'
 import { TimePicker } from '../date/TimePicker'
 import type { DatePickerProps } from '../date/DatePicker'
 import { DatePicker } from '../date/DatePicker'
-import { useStandardTranslation } from '@/src/i18n/useTranslation'
+import { useTranslation } from '@/src/i18n/useTranslation'
 
 export type DateTimePickerMode = 'date' | 'time' | 'dateTime'
 
@@ -36,7 +36,7 @@ export const DateTimePicker = ({
                                  timePickerProps,
                                  datePickerProps,
                                }: DateTimePickerProps) => {
-  const translation = useStandardTranslation()
+  const translation = useTranslation()
 
   const useDate = mode === 'dateTime' || mode === 'date'
   const useTime = mode === 'dateTime' || mode === 'time'

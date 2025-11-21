@@ -1,7 +1,7 @@
 import { Binary } from 'lucide-react'
 import clsx from 'clsx'
 import { Input } from '../user-action/input/Input'
-import { useStandardTranslation } from '@/src/i18n/useTranslation'
+import { useTranslation } from '@/src/i18n/useTranslation'
 import type { PropertyBaseProps } from './PropertyBase'
 import { PropertyBase } from './PropertyBase'
 
@@ -24,7 +24,7 @@ export const NumberProperty = ({
                                  suffix,
                                  ...baseProps
                                }: NumberPropertyProps) => {
-  const translation = useStandardTranslation()
+  const translation = useTranslation()
   const hasValue = value !== undefined
 
   return (

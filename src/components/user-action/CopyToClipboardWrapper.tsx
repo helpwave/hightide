@@ -3,7 +3,7 @@ import { useState } from 'react'
 import { clsx } from 'clsx'
 import { writeToClipboard } from '@/src/utils/writeToClipboard'
 import { CheckIcon, Copy } from 'lucide-react'
-import { useStandardTranslation } from '@/src/i18n/useTranslation'
+import { useTranslation } from '@/src/i18n/useTranslation'
 
 type Position = 'top' | 'bottom' | 'left' | 'right'
 
@@ -39,7 +39,7 @@ export const CopyToClipboardWrapper = ({
                                          position = 'bottom',
                                          zIndex = 10,
                                        }: CopyToClipboardWrapperProps) => {
-  const translation = useStandardTranslation()
+  const translation = useTranslation()
   const [isShowingIndication, setIsShowingIndication] = useState(false)
   const [isShowingConfirmation, setIsShowingConfirmation] = useState(false)
 

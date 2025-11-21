@@ -1,5 +1,5 @@
 import { Check, ChevronLeft, ChevronRight } from 'lucide-react'
-import { useStandardTranslation } from '@/src/i18n/useTranslation'
+import { useTranslation } from '@/src/i18n/useTranslation'
 import { range } from '@/src/utils/array'
 import { SolidButton } from '../user-action/Button'
 import clsx from 'clsx'
@@ -39,7 +39,7 @@ export const StepperBar = ({
                              showDots = true,
                              className = '',
                            }: StepperBarProps) => {
-  const translation = useStandardTranslation()
+  const translation = useTranslation()
   const dots = range(numberOfSteps + 1) // +1 for last finish step
   const { currentStep, seenSteps } = state ?? defaultState
 

@@ -4,7 +4,7 @@ import type { PropertyBaseProps } from './PropertyBase'
 import { PropertyBase } from './PropertyBase'
 import { useId } from 'react'
 import { Label } from '@/src/components/user-action/Label'
-import { useStandardTranslation } from '@/src/i18n/useTranslation'
+import { useTranslation } from '@/src/i18n/useTranslation'
 
 
 export type CheckboxPropertyProps = Omit<PropertyBaseProps, 'icon' | 'input' | 'hasValue' | 'onRemove'> & {
@@ -21,7 +21,7 @@ export const CheckboxProperty = ({
                                    readOnly,
                                    ...baseProps
                                  }: CheckboxPropertyProps) => {
-  const translation = useStandardTranslation()
+  const translation = useTranslation()
   const id= useId()
 
   return (

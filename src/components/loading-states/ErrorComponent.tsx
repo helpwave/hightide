@@ -1,6 +1,6 @@
 import { AlertOctagon } from 'lucide-react'
 import clsx from 'clsx'
-import { useStandardTranslation } from '@/src/i18n/useTranslation'
+import { useTranslation } from '@/src/i18n/useTranslation'
 
 export type ErrorComponentProps = {
   errorText?: string,
@@ -14,7 +14,7 @@ export const ErrorComponent = ({
                                  errorText,
                                  classname
                                }: ErrorComponentProps) => {
-  const translation = useStandardTranslation()
+  const translation = useTranslation()
   return (
     <div className={clsx('flex-col-4 items-center justify-center w-full h-24', classname)}>
       <AlertOctagon size={64} className="text-warning"/>

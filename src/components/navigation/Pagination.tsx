@@ -5,7 +5,7 @@ import { clamp } from '@/src/utils/math'
 import type { CSSProperties } from 'react'
 import { useEffect, useState } from 'react'
 import { IconButton } from '../user-action/Button'
-import { useStandardTranslation } from '@/src/i18n/useTranslation'
+import { useTranslation } from '@/src/i18n/useTranslation'
 
 
 export type PaginationProps = {
@@ -26,7 +26,7 @@ export const Pagination = ({
                              className,
                              style,
                            }: PaginationProps) => {
-  const translation = useStandardTranslation()
+  const translation = useTranslation()
   const [value, setValue] = useState<string>((pageIndex + 1).toString())
 
   const noPages = pageCount === 0
