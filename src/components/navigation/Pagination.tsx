@@ -1,16 +1,12 @@
 import { ChevronFirst, ChevronLast, ChevronLeft, ChevronRight } from 'lucide-react'
 import clsx from 'clsx'
-import type { PropsForTranslation } from '../../localization/useTranslation'
-import { useTranslation } from '../../localization/useTranslation'
-import type { FormTranslationType } from '../../localization/defaults/form'
-import { formTranslation } from '../../localization/defaults/form'
 import { Input } from '../user-action/input/Input'
 import { clamp } from '@/src/utils/math'
 import type { CSSProperties } from 'react'
 import { useEffect, useState } from 'react'
 import { IconButton } from '../user-action/Button'
+import { useTranslation } from '@/src/i18n/useTranslation'
 
-type PaginationTranslation = FormTranslationType
 
 export type PaginationProps = {
   pageIndex: number, // starts with 0
@@ -24,14 +20,13 @@ export type PaginationProps = {
  * A Component showing the pagination allowing first, before, next and last page navigation
  */
 export const Pagination = ({
-                             overwriteTranslation,
                              pageIndex,
                              pageCount,
                              onPageChanged,
                              className,
                              style,
-                           }: PropsForTranslation<PaginationTranslation, PaginationProps>) => {
-  const translation = useTranslation([formTranslation], overwriteTranslation)
+                           }: PaginationProps) => {
+  const translation = useTranslation()
   const [value, setValue] = useState<string>((pageIndex + 1).toString())
 
   const noPages = pageCount === 0

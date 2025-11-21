@@ -13,10 +13,10 @@
     "baseUrl": ".",
     "paths": {
       "@/*": ["./*"]
-    }
+    },
   },
   "include": [
-    "src"
+    "src",
   ],
   "exclude": [
     "src/storybook"

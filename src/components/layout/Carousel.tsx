@@ -14,8 +14,7 @@ import clsx from 'clsx'
 import { ChevronLeft, ChevronRight } from 'lucide-react'
 import { createLoopingListWithIndex, range } from '@/src/utils/array'
 import { IconButton } from '../user-action/Button'
-import type { Translation } from '@/src/localization/useTranslation'
-import { useTranslation } from '@/src/localization/useTranslation'
+import { useTranslation } from '@/src/i18n/useTranslation'
 
 //
 // CarouselContext
@@ -40,22 +39,6 @@ const useCarouselContext = () => {
 //
 // CarouselTab
 //
-type CarouselTabTranslationType = {
-  showSlide: string,
-  slideNavigation: string,
-}
-
-const defaultCarouselTabTranslationType: Translation<CarouselTabTranslationType> = {
-  en: {
-    showSlide: `Show Slide {{index}}`,
-    slideNavigation: 'Slide navigation'
-  },
-  de: {
-    showSlide: 'Zeige Slide {{index}}',
-    slideNavigation: 'Slide Navigation',
-  }
-}
-
 type CarouselTabsProps = {
   onChange: (index: number) => void,
 }
@@ -63,9 +46,7 @@ type CarouselTabsProps = {
 export default function CarouselTabs({
                                        onChange,
                                      }: CarouselTabsProps) {
-  const translation = useTranslation<CarouselTabTranslationType>([
-    defaultCarouselTabTranslationType,
-  ])
+  const translation = useTranslation()
   const { id, slideCount, currentIndex, isLooping } = useCarouselContext()
 
   const tabRefs = useRef<(HTMLButtonElement | null)[]>([])
@@ -112,7 +93,7 @@ export default function CarouselTabs({
 
             role="tab"
             tabIndex={isSelected ? 0 : -1}
-            aria-label={translation('showSlide', { replacements: { index: (index + 1).toString() } })}
+            aria-label={translation('showSlide', { index: (index + 1) })}
             aria-selected={isSelected}
             aria-controls={`slide-${index}`}
             aria-disabled={isSelected}
@@ -126,22 +107,6 @@ export default function CarouselTabs({
 //
 // CarouselSlide
 //
-type CarouselSlideTranslationType = {
-  slide: string,
-  slideOf: string,
-}
-
-const defaultCarouselSlideTranslationType: Translation<CarouselSlideTranslationType> = {
-  en: {
-    slide: 'Slide',
-    slideOf: `Slide {{index}} of {{length}} slides`,
-  },
-  de: {
-    slide: 'Slide',
-    slideOf: `Slide {{index}} von {{length}} slides`,
-  }
-}
-
 export interface CarouselSlideProps extends HTMLAttributes<HTMLDivElement> {
   isSelected: boolean,
   index: number,
@@ -153,7 +118,7 @@ export const CarouselSlide = forwardRef<HTMLDivElement, CarouselSlideProps>(
                            isSelected,
                            ...props
                          }, ref) {
-    const translation = useTranslation<CarouselSlideTranslationType>([defaultCarouselSlideTranslationType])
+    const translation = useTranslation()
     const { id, slideCount } = useCarouselContext()
 
     return (
@@ -168,10 +133,8 @@ export const CarouselSlide = forwardRef<HTMLDivElement, CarouselSlideProps>(
         role="group"
         aria-roledescription={translation('slide')}
         aria-label={translation('slideOf', {
-          replacements: {
-            index: (index + 1).toString(),
-            length: (slideCount).toString(),
-          },
+          index: (index + 1),
+          length: (slideCount),
         })}
         aria-hidden={isSelected ? undefined : true}
       />
@@ -185,28 +148,6 @@ export const CarouselSlide = forwardRef<HTMLDivElement, CarouselSlideProps>(
 type DragState = {
   dragStartX: number,
   dragOffsetX: number,
-}
-
-type CarouselTranslationType = {
-  slide: string,
-  carousel: string,
-  slideOf: string,
-  chooseSlide: string,
-}
-
-const defaultCarouselTranslationType: Translation<CarouselTranslationType> = {
-  en: {
-    slide: 'Slide',
-    carousel: 'Carousel',
-    slideOf: `Slide {{index}} of {{length}} slides`,
-    chooseSlide: 'Choose slide to display'
-  },
-  de: {
-    slide: 'Slide',
-    carousel: 'Karussell',
-    slideOf: `Slide {{index}} von {{length}} slides`,
-    chooseSlide: 'Wähle die angezeigte Slide aus'
-  }
 }
 
 type ItemType = {
@@ -252,7 +193,7 @@ export const Carousel = ({
                            onSlideChanged,
                            ...props
                          }: CarouselProps) => {
-  const translation = useTranslation([defaultCarouselTranslationType])
+  const translation = useTranslation()
   const slideRefs = useRef<HTMLDivElement[]>([])
   const [currentIndex, setCurrentIndex] = useState<number>(0)
   const [hasFocus, setHasFocus] = useState(false)
@@ -459,10 +400,8 @@ export const Carousel = ({
               role="group"
               aria-roledescription={translation('slide')}
               aria-label={translation('slideOf', {
-                replacements: {
-                  index: (currentIndex + 1).toString(),
-                  length: items.length.toString()
-                }
+                index: (currentIndex + 1),
+                length: items.length
               })}
             >
               {children[currentIndex]}

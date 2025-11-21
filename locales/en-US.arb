@@ -1,0 +1,165 @@
+{
+  "add": "Add",
+  "all": "All",
+  "apply": "Apply",
+  "back": "Back",
+  "cancel": "Cancel",
+  "carousel": "Carousel",
+  "change": "Change",
+  "chooseLanguage": "Choose your language",
+  "chooseTheme": "Choose your preferred color theme.",
+  "chooseSlide": "Choose slide to display",
+  "clear": "Clear",
+  "click": "Click",
+  "clickToCopy": "Click to Copy",
+  "clickToSelect": "Click to select",
+  "close": "Close",
+  "confirm": "Confirm",
+  "copy": "Copy",
+  "copied": "Copied",
+  "create": "Create",
+  "decline": "Decline",
+  "delete": "Delete",
+  "discard": "Discard",
+  "discardChanges": "Discard Changes",
+  "done": "Done",
+  "edit": "Edit",
+  "enterText": "Enter text here",
+  "error": "Error",
+  "errorOccurred": "An error occurred",
+  "exit": "Exit",
+  "fieldRequiredError": "This field is required.",
+  "invalidEmailError": "Please enter a valid email address.",
+  "language": "Language",
+  "less": "Less",
+  "loading": "Loading",
+  "locale": "Locale",
+  "maxLengthError": "Maximum length exceeded.",
+  "minLengthError": "Minimum length not met.",
+  "more": "More",
+  "next": "Next",
+  "no": "No",
+  "none": "None",
+  "nothingFound": "Nothing found",
+  "of": "of",
+  "optional": "Optional",
+  "pleaseWait": "Please wait...",
+  "previous": "Previous",
+  "remove": "Remove",
+  "required": "Required",
+  "reset": "Reset",
+  "save": "Save",
+  "saved": "Saved",
+  "search": "Search",
+  "select": "Select",
+  "selectOption": "Select an option",
+  "show": "Show",
+  "showMore": "Show more",
+  "showLess": "Show less",
+  "showSlide": "Show Slide {index}",
+  "@showSlide": {
+    "placeholders": {
+      "index": {
+        "type": "number"
+      }
+    }
+  },
+  "slide": "Slide",
+  "slideOf": "Slide {index} of {length} slides",
+  "@slideOf": {
+    "placeholders": {
+      "index": {
+        "type": "number"
+      },
+      "length": {
+        "type": "number"
+      }
+    }
+  },
+  "slideNavigation": "Slide navigation",
+  "submit": "Submit",
+  "success": "Success",
+  "text": "Text",
+  "themes": "{count, plural, =1{Theme} other{Themes}}",
+  "@themes": {
+    "placeholders": {
+      "count": {}
+    }
+  },
+  "themeMode": "{theme, select, dark{Dark} light{Light} system{System}}",
+  "@themeMode": {
+    "placeholders": {
+      "theme": {}
+    }
+  },
+  "update": "Update",
+  "unsavedChanges": "Unsaved Changes",
+  "unsavedChangesSaveQuestion": "Do you want to save your changes?",
+  "value": "Value",
+  "yes": "Yes",
+  "filter": "Filter",
+  "min": "Min",
+  "max": "Max",
+  "startDate": "Start",
+  "endDate": "End",
+  "notEmpty": "The field cannot be empty.",
+  "invalidEmail": "The email is not valid.",
+  "tooShort": "The value requires at least {min} characters.",
+  "@tooShort": {
+    "placeholders": {
+      "min": { "type": "number" }
+    }
+  },
+  "tooLong": "The value requires less than {max} characters.",
+  "@tooLong": {
+    "placeholders": {
+      "max": { "type": "number" }
+    }
+  },
+  "outOfRangeString": "The value needs to have between {min} and {max} characters.",
+  "@outOfRangeString": {
+    "placeholders": {
+      "min": { "type": "number" },
+      "max": { "type": "number" }
+    }
+  },
+  "outOfRangeNumber": "The value must be between {min} and {max}.",
+  "@outOfRangeNumber": {
+    "placeholders": {
+      "min": { "type": "number" },
+      "max": { "type": "number" }
+    }
+  },
+  "outOfRangeSelectionItems": "Between {min} and {max} items must be selected.",
+  "@outOfRangeSelectionItems": {
+    "placeholders": {
+      "min": { "type": "number" },
+      "max": { "type": "number" }
+    }
+  },
+  "tooFewSelectionItems": "Select at least {min} items.",
+  "@tooFewSelectionItems": {
+    "placeholders": {
+      "min": { "type": "number" }
+    }
+  },
+  "tooManySelectionItems": "Select at most {max} items.",
+  "@tooManySelectionItems": {
+    "placeholders": {
+      "max": { "type": "number" }
+    }
+  },
+  "identifier": "Identifier",
+  "name": "Name",
+  "age": "Age",
+  "street": "Street",
+  "entryDate": "Entry Date",
+  "gender": "{gender, select, male{Male} female{Female} other{Other}}",
+  "@gender": {
+    "placeholders": {
+      "gender": {}
+    }
+  },
+  "welcome": "Welcome",
+  "goodToSeeYou": "Good to see you"
+}

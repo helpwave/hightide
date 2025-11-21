@@ -2,7 +2,7 @@ import type { Preview } from '@storybook/nextjs'
 import '../src/style/globals.css'
 import './storybookStyleOverrides.css'
 import { ThemeProvider } from '../src/theming/useTheme'
-import { LanguageProvider } from '../src/localization/LanguageProvider'
+import { LocaleProvider } from '../src/i18n/LocaleProvider'
 
 const preview: Preview = {
   parameters: {
@@ -18,13 +18,13 @@ const preview: Preview = {
     language: {
       name: 'Language',
       description: 'Component Language',
-      defaultValue: 'en',
+      defaultValue: 'en-US',
       toolbar: {
         icon: 'globe',
         items: [
           { value: 'system', title: 'System' },
-          { value: 'en', title: 'English' },
-          { value: 'de', title: 'German' },
+          { value: 'en-US', title: 'English' },
+          { value: 'de-DE', title: 'German' },
         ],
       },
     },
@@ -38,9 +38,9 @@ const preview: Preview = {
       return (
         <main className="p-4">
           <ThemeProvider theme={theme}>
-            <LanguageProvider language={language}>
+            <LocaleProvider locale={language}>
               <App/>
-            </LanguageProvider>
+            </LocaleProvider>
           </ThemeProvider>
         </main>
       )

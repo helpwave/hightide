@@ -31,3 +31,6 @@ storybook-static
 
 # build
 dist/
+
+# generated translations
+src/i18n/translations.ts

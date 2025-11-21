@@ -1,6 +1,5 @@
 import type { Dispatch, PropsWithChildren, SetStateAction } from 'react'
 import { createContext, useCallback, useContext, useEffect, useMemo, useState } from 'react'
-import type { Translation, TranslationPlural } from '../localization/useTranslation'
 import { useLocalStorage } from '../hooks/useLocalStorage'
 
 const themes = ['light', 'dark', 'system'] as const
@@ -8,34 +7,8 @@ const themes = ['light', 'dark', 'system'] as const
 export type ThemeType = typeof themes[number]
 export type ResolvedTheme = Exclude<ThemeType, 'system'>
 
-export type ThemeTypeTranslation = Record<ThemeType, string> & {
-  theme: TranslationPlural,
-}
-
-const defaultThemeTypeTranslation: Translation<ThemeTypeTranslation> = {
-  en: {
-    dark: 'Dark',
-    light: 'Light',
-    system: 'System',
-    theme: {
-      one: 'Theme',
-      other: 'Themes'
-    }
-  },
-  de: {
-    dark: 'Dunkel',
-    light: 'Hell',
-    system: 'System',
-    theme: {
-      one: 'Farbschema',
-      other: 'Farbschemas'
-    }
-  }
-}
-
 export const ThemeUtil = {
   themes,
-  translation: defaultThemeTypeTranslation,
 }
 
 type ThemeContextType = {

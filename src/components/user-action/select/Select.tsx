@@ -12,8 +12,7 @@ import React, {
   useState
 } from 'react'
 import clsx from 'clsx'
-import type { Translation } from '@/src/localization/useTranslation'
-import { useTranslation } from '@/src/localization/useTranslation'
+import { useTranslation } from '@/src/i18n/useTranslation'
 import { ExpansionIcon } from '@/src/components/layout/Expandable'
 import { useFocusTrap } from '@/src/hooks/focus/useFocusTrap'
 import { match } from '@/src/utils/match'
@@ -405,20 +404,6 @@ export const SelectOption = forwardRef<HTMLLIElement, SelectOptionProps>(
 ///
 /// SelectButton
 ///
-type SelectButtonTranslationType = {
-  clickToSelect: string,
-}
-
-const defaultSelectButtonTranslation: Translation<SelectButtonTranslationType> = {
-  en: {
-    clickToSelect: 'Click to select',
-
-  },
-  de: {
-    clickToSelect: 'Zum auswählen drücken'
-  }
-}
-
 type SelectButtonProps = ButtonHTMLAttributes<HTMLButtonElement> & {
   placeholder?: ReactNode,
   selectedDisplay?: (value: string[]) => ReactNode,
@@ -427,7 +412,7 @@ type SelectButtonProps = ButtonHTMLAttributes<HTMLButtonElement> & {
 export const SelectButton = forwardRef<HTMLButtonElement, SelectButtonProps>(function SelectButton(
   { placeholder, selectedDisplay, ...props }, ref
 ) {
-  const translation = useTranslation([defaultSelectButtonTranslation])
+  const translation = useTranslation()
   const { state, trigger } = useSelectContext()
   const { register, unregister, toggleOpen } = trigger
 

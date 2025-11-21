@@ -1,7 +1,7 @@
 export type ProgressIndicatorProps = {
   /*
     The amount of progress that has been made
-    Value form 0 to 1
+    Value base 0 to 1
    */
   progress: number,
   strokeWidth?: number,

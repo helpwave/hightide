@@ -143,6 +143,15 @@ const moveItems = <T>(list: T[], move: number = 0) => {
   return result
 }
 
+function resolveSingleOrArray<T>(value: T | T[]): T[] {
+  if (Array.isArray(value)) {
+    return value
+  } else if (value) {
+    return [value]
+  }
+  return []
+}
+
 export const ArrayUtil = {
   unique: <T>(list: T[]): T[] => {
     const seen = new Set<T>()
@@ -159,4 +168,5 @@ export const ArrayUtil = {
     return list.filter((item) => !remove.has(item))
   },
   moveItems,
+  resolveSingleOrArray
 }

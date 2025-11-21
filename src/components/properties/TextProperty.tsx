@@ -1,23 +1,9 @@
 import { Text } from 'lucide-react'
 import clsx from 'clsx'
-import type { PropsForTranslation, Translation } from '../../localization/useTranslation'
-import { useTranslation } from '../../localization/useTranslation'
+import { useTranslation } from '@/src/i18n/useTranslation'
 import { Textarea } from '../user-action/Textarea'
 import type { PropertyBaseProps } from './PropertyBase'
 import { PropertyBase } from './PropertyBase'
-
-type TextPropertyTranslation = {
-  text: string,
-}
-
-const defaultTextPropertyTranslation: Translation<TextPropertyTranslation> = {
-  en: {
-    text: 'Text'
-  },
-  de: {
-    text: 'Text'
-  }
-}
 
 export type TextPropertyProps = Omit<PropertyBaseProps, 'icon' | 'input' | 'hasValue'> & {
   value?: string,
@@ -29,15 +15,14 @@ export type TextPropertyProps = Omit<PropertyBaseProps, 'icon' | 'input' | 'hasV
  * An Input for Text properties
  */
 export const TextProperty = ({
-                               overwriteTranslation,
                                value,
                                readOnly,
                                onChange,
                                onRemove,
                                onEditComplete,
                                ...baseProps
-                             }: PropsForTranslation<TextPropertyTranslation, TextPropertyProps>) => {
-  const translation = useTranslation([defaultTextPropertyTranslation], overwriteTranslation)
+                             }: TextPropertyProps) => {
+  const translation = useTranslation()
   const hasValue = value !== undefined
 
   return (

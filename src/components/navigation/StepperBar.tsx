@@ -1,14 +1,9 @@
 import { Check, ChevronLeft, ChevronRight } from 'lucide-react'
-import type { PropsForTranslation } from '../../localization/useTranslation'
-import { useTranslation } from '../../localization/useTranslation'
+import { useTranslation } from '@/src/i18n/useTranslation'
 import { range } from '@/src/utils/array'
 import { SolidButton } from '../user-action/Button'
 import clsx from 'clsx'
-import type { FormTranslationType } from '../../localization/defaults/form'
-import { formTranslation } from '../../localization/defaults/form'
 import { useOverwritableState } from '@/src/hooks/useOverwritableState'
-
-type StepperBarTranslation = FormTranslationType
 
 export type StepperState = {
   currentStep: number,
@@ -35,7 +30,6 @@ const defaultState: StepperState = {
  * A Component for stepping
  */
 export const StepperBar = ({
-                             overwriteTranslation,
                              state = defaultState,
                              numberOfSteps,
                              disabledSteps = new Set(),
@@ -44,8 +38,8 @@ export const StepperBar = ({
                              finishText,
                              showDots = true,
                              className = '',
-                           }: PropsForTranslation<StepperBarTranslation, StepperBarProps>) => {
-  const translation = useTranslation([formTranslation], overwriteTranslation)
+                           }: StepperBarProps) => {
+  const translation = useTranslation()
   const dots = range(numberOfSteps + 1) // +1 for last finish step
   const { currentStep, seenSteps } = state ?? defaultState
 

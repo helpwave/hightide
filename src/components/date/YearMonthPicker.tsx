@@ -4,7 +4,7 @@ import { equalSizeGroups, range } from '@/src/utils/array'
 import clsx from 'clsx'
 import { ExpandableUncontrolled } from '@/src/components/layout/Expandable'
 import { addDuration, monthsList, subtractDuration } from '@/src/utils/date'
-import { useLocale } from '../../localization/LanguageProvider'
+import { useLocale } from '@/src/i18n/LocaleProvider'
 import { SolidButton } from '../user-action/Button'
 import { useOverwritableState } from '@/src/hooks/useOverwritableState'
 
@@ -28,7 +28,7 @@ export const YearMonthPicker = ({
                                   maxHeight = 300,
                                   showValueOpen = true
                                 }: YearMonthPickerProps) => {
-  const locale = useLocale()
+  const { locale } = useLocale()
   const ref = useRef<HTMLDivElement>(null)
 
   useEffect(() => {

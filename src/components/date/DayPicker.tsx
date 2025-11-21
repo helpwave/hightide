@@ -1,7 +1,7 @@
 import type { WeekDay } from '@/src/utils/date'
 import { equalDate, getWeeksForCalenderMonth, isInTimeSpan } from '@/src/utils/date'
 import clsx from 'clsx'
-import { useLocale } from '../../localization/LanguageProvider'
+import { useLocale } from '@/src/i18n/LocaleProvider'
 import { useEffect, useState } from 'react'
 
 export type DayPickerProps = {
@@ -28,7 +28,7 @@ export const DayPicker = ({
                             markToday = true,
                             className = ''
                           }: DayPickerProps) => {
-  const locale = useLocale()
+  const { locale } = useLocale()
   const month = displayedMonth.getMonth()
   const weeks = getWeeksForCalenderMonth(displayedMonth, weekStart)
 

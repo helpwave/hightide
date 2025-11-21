@@ -1,6 +1,5 @@
 import { validateEmail } from '@/src/utils/emailValidation'
-import type { Translation } from '@/src/localization/useTranslation'
-import { useTranslation } from '@/src/localization/useTranslation'
+import { useTranslation } from '@/src/i18n/useTranslation'
 
 export type ValidatorError =
   'notEmpty'
@@ -66,34 +65,6 @@ const emailValidator = (value: string | undefined) => {
 }
 
 
-
-type ValidatorTranslationType = Record<ValidatorError, string>
-
-export const defaultValidatorTranslation: Translation<ValidatorTranslationType> = {
-  en: {
-    notEmpty: 'The field cannot be empty.',
-    invalidEmail: 'The email is not valid.',
-    tooShort: 'The value requires at least {{min}} characters.',
-    tooLong: 'The value requires less than {{max}} characters.',
-    outOfRangeString: 'The value needs to have between {{min}} and {{max}} characters.',
-    outOfRangeNumber: 'The value must be between {{min}} and {{max}}.',
-    outOfRangeSelectionItems: 'Between {{min}} and {{max}} items must be selected.',
-    tooFewSelectionItems: 'Select at least {{min}} items.',
-    tooManySelectionItems: 'Select at most {{max}} items.',
-  },
-  de: {
-    notEmpty: 'Das Feld darf nicht leer sein.',
-    invalidEmail: 'Die E-Mail ist ungültig.',
-    tooShort: 'Der Wert muss mindestens {{min}} Zeichen enthalten.',
-    tooLong: 'Der Wert darf höchstens {{max}} Zeichen enthalten.',
-    outOfRangeString: 'Der Wert muss zwischen {{min}} und {{max}} Zeichen lang sein.',
-    outOfRangeNumber: 'Der Wert muss zwischen {{min}} und {{max}} liegen.',
-    outOfRangeSelectionItems: 'Es müssen zwischen {{min}} und {{max}} Elemente ausgewählt werden.',
-    tooFewSelectionItems: 'Es müssen mindestens {{min}} Elemente ausgewählt werden.',
-    tooManySelectionItems: 'Es müssen maximal {{max}} Elemente ausgewählt werden.',
-  },
-}
-
 export const UseValidators = {
   notEmpty: notEmpty,
   length: lengthValidator,
@@ -102,7 +73,7 @@ export const UseValidators = {
 }
 
 export const useTranslatedValidators = () => {
-  const translation = useTranslation([defaultValidatorTranslation])
+  const translation = useTranslation()
 
   return {
     notEmpty: (value: unknown) => {
@@ -115,20 +86,22 @@ export const useTranslatedValidators = () => {
       const [min, max] = length
       const result = lengthValidator(value, length)
       if (result) {
-        return translation(result, { replacements: { min: min.toString(), max: max.toString() } })
+        return translation(result as 'outOfRangeString' | 'tooShort' | 'tooLong', { min, max })
       }
     },
     email: (value: string) => {
       const result = emailValidator(value)
       if (result) {
-        return translation(result)
+        return translation(result as 'invalidEmail')
       }
     },
-    selection: (value: unknown[]| undefined, length: [number | undefined, number | undefined]) => {
+    selection: (value: unknown[] | undefined, length: [number | undefined, number | undefined]) => {
       const [min, max] = length
       const result = selectionValidator(value, length)
       if (result) {
-        return translation(result, { replacements: { min: min.toString(), max: max.toString() } })
+        return translation(result as
+            'outOfRangeSelectionItems' | 'tooFewSelectionItems' | 'tooManySelectionItems',
+          { min, max })
       }
     }
   }

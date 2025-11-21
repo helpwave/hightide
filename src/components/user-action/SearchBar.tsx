@@ -1,13 +1,9 @@
 import type { InputProps } from './input/Input'
 import { Input } from './input/Input'
-import { useTranslation } from '../../localization/useTranslation'
-import type { FormTranslationType } from '../../localization/defaults/form'
-import { formTranslation } from '../../localization/defaults/form'
 import { IconButton } from './Button'
 import { Search } from 'lucide-react'
 import { clsx } from 'clsx'
-
-type TranslationType = FormTranslationType
+import { useTranslation } from '@/src/i18n/useTranslation'
 
 export type SearchBarProps = InputProps & {
   onSearch?: () => void,
@@ -22,7 +18,7 @@ export const SearchBar = ({
                             containerClassName,
                             ...inputProps
                           }: SearchBarProps) => {
-  const translation = useTranslation<TranslationType>([formTranslation])
+  const translation = useTranslation()
 
   return (
     <div className={clsx('flex-row-2 justify-between items-center', containerClassName)}>

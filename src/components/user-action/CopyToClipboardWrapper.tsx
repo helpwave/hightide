@@ -1,15 +1,11 @@
 import type { CSSProperties, PropsWithChildren } from 'react'
 import { useState } from 'react'
 import { clsx } from 'clsx'
-import type { FormTranslationType } from '../../localization/defaults/form'
-import { formTranslation } from '../../localization/defaults/form'
-import { useTranslation } from '../../localization/useTranslation'
 import { writeToClipboard } from '@/src/utils/writeToClipboard'
 import { CheckIcon, Copy } from 'lucide-react'
+import { useTranslation } from '@/src/i18n/useTranslation'
 
 type Position = 'top' | 'bottom' | 'left' | 'right'
-
-type CopyToClipboardWrapperTranslationType = FormTranslationType
 
 export type CopyToClipboardWrapperProps = PropsWithChildren<{
   textToCopy: string,
@@ -43,7 +39,7 @@ export const CopyToClipboardWrapper = ({
                                          position = 'bottom',
                                          zIndex = 10,
                                        }: CopyToClipboardWrapperProps) => {
-  const translation = useTranslation<CopyToClipboardWrapperTranslationType>([formTranslation])
+  const translation = useTranslation()
   const [isShowingIndication, setIsShowingIndication] = useState(false)
   const [isShowingConfirmation, setIsShowingConfirmation] = useState(false)
 

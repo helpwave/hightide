@@ -1,13 +1,10 @@
 import { List } from 'lucide-react'
 import clsx from 'clsx'
 import type { PropsWithChildren } from 'react'
-import type { FormTranslationType } from '@/src/localization/defaults/form'
 import type { PropertyBaseProps } from '@/src/components/properties/PropertyBase'
 import { PropertyBase } from '@/src/components/properties/PropertyBase'
-import type { PropsForTranslation } from '@/src/localization/useTranslation'
-import { MultiSelectChipDisplay } from '@/src/components/user-action/select/Select'
 
-type TranslationType = FormTranslationType
+import { MultiSelectChipDisplay } from '@/src/components/user-action/select/Select'
 
 export type MultiSelectPropertyProps = Omit<PropertyBaseProps, 'icon' | 'input' | 'hasValue' | 'className'> & PropsWithChildren<{
   values: string[],
@@ -22,7 +19,7 @@ export const MultiSelectProperty = ({
                                       values,
                                       onValuesChanged,
                                       ...props
-                                    }: PropsForTranslation<TranslationType, MultiSelectPropertyProps>) => {
+                                    }: MultiSelectPropertyProps) => {
   const hasValue = values.length > 0
 
   return (

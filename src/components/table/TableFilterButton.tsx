@@ -2,41 +2,11 @@ import { IconButton, SolidButton } from '../user-action/Button'
 import { Input } from '../user-action/input/Input'
 import { FilterIcon } from 'lucide-react'
 import { Menu } from '../user-action/Menu'
-import type { Translation } from '../../localization/useTranslation'
-import { useTranslation } from '../../localization/useTranslation'
-import { formTranslation } from '../../localization/defaults/form'
 import { useEffect, useState } from 'react'
 import type { Column } from '@tanstack/react-table'
+import { useTranslation } from '@/src/i18n/useTranslation'
 
 export type TableFilterType = 'text' | 'range' | 'dateRange'
-
-type TableFilterTranslationType = {
-  filter: string,
-  min: string,
-  max: string,
-  startDate: string,
-  endDate: string,
-  text: string,
-}
-
-const defaultTableFilterTranslation: Translation<TableFilterTranslationType> = {
-  en: {
-    filter: 'Filter',
-    min: 'Min',
-    max: 'Max',
-    startDate: 'Start',
-    endDate: 'End',
-    text: 'Text...',
-  },
-  de: {
-    filter: 'Filter',
-    min: 'Min',
-    max: 'Max',
-    startDate: 'Start',
-    endDate: 'Ende',
-    text: 'Text...',
-  }
-}
 
 export type TableFilterButtonProps<T = unknown> = {
   filterType: TableFilterType,
@@ -47,7 +17,7 @@ export const TableFilterButton = <T, >({
                                          filterType,
                                          column,
                                        }: TableFilterButtonProps<T>) => {
-  const translation = useTranslation([formTranslation, defaultTableFilterTranslation])
+  const translation = useTranslation()
   const columnFilterValue = column.getFilterValue()
   const [filterValue, setFilterValue] = useState<unknown>(columnFilterValue)
   const hasFilter = !!filterValue
@@ -79,7 +49,7 @@ export const TableFilterButton = <T, >({
             <Input
               value={(filterValue ?? '') as string}
               autoFocus={true}
-              placeholder={translation('text')}
+              placeholder={translation('text')+'...'}
               onChangeText={setFilterValue}
               className="h-10"
             />

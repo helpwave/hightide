@@ -1,12 +1,7 @@
 import type { PropsWithChildren, ReactNode } from 'react'
-import type { PropsForTranslation } from '../../localization/useTranslation'
-import { useTranslation } from '../../localization/useTranslation'
-import type { FormTranslationType } from '../../localization/defaults/form'
-import { formTranslation } from '../../localization/defaults/form'
+import { useTranslation } from '@/src/i18n/useTranslation'
 import type { ConfirmDialogProps } from '@/src/components/dialog/ConfirmDialog'
 import { ConfirmDialog } from '@/src/components/dialog/ConfirmDialog'
-
-type DiscardChangesDialogTranslation = FormTranslationType
 
 type DiscardChangesDialogProps =
   Omit<ConfirmDialogProps, 'onDecline' | 'onConfirm' | 'buttonOverwrites' | 'titleElement' | 'description'>
@@ -21,7 +16,6 @@ type DiscardChangesDialogProps =
 }
 
 export const DiscardChangesDialog = ({
-                                       overwriteTranslation,
                                        children,
                                        onCancel,
                                        onSave,
@@ -29,8 +23,8 @@ export const DiscardChangesDialog = ({
                                        titleOverwrite,
                                        descriptionOverwrite,
                                        ...props
-                                     }: PropsForTranslation<DiscardChangesDialogTranslation, PropsWithChildren<DiscardChangesDialogProps>>) => {
-  const translation = useTranslation([formTranslation], overwriteTranslation)
+                                     }: PropsWithChildren<DiscardChangesDialogProps>) => {
+  const translation = useTranslation()
   return (
     <ConfirmDialog
       {...props}

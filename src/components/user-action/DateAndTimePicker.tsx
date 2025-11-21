@@ -1,19 +1,12 @@
 import type { ReactNode } from 'react'
 import clsx from 'clsx'
-import type { PropsForTranslation } from '../../localization/useTranslation'
-import { useTranslation } from '../../localization/useTranslation'
 import { addDuration, subtractDuration } from '@/src/utils/date'
 import { SolidButton } from './Button'
 import type { TimePickerProps } from '../date/TimePicker'
 import { TimePicker } from '../date/TimePicker'
 import type { DatePickerProps } from '../date/DatePicker'
 import { DatePicker } from '../date/DatePicker'
-import type { FormTranslationType } from '../../localization/defaults/form'
-import { formTranslation } from '../../localization/defaults/form'
-import type { TimeTranslationType } from '../../localization/defaults/time'
-import { timeTranslation } from '../../localization/defaults/time'
-
-type DateAndTimePickerTranslationType = FormTranslationType & TimeTranslationType
+import { useTranslation } from '@/src/i18n/useTranslation'
 
 export type DateTimePickerMode = 'date' | 'time' | 'dateTime'
 
@@ -33,7 +26,6 @@ export type DateTimePickerProps = {
  * A Component for picking a Date and Time
  */
 export const DateTimePicker = ({
-                                 overwriteTranslation,
                                  value = new Date(),
                                  start = subtractDuration(new Date(), { years: 50 }),
                                  end = addDuration(new Date(), { years: 50 }),
@@ -43,8 +35,8 @@ export const DateTimePicker = ({
                                  onRemove,
                                  timePickerProps,
                                  datePickerProps,
-                               }: PropsForTranslation<DateAndTimePickerTranslationType, DateTimePickerProps>) => {
-  const translation = useTranslation([formTranslation, timeTranslation], overwriteTranslation)
+                               }: DateTimePickerProps) => {
+  const translation = useTranslation()
 
   const useDate = mode === 'dateTime' || mode === 'date'
   const useTime = mode === 'dateTime' || mode === 'time'

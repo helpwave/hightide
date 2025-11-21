@@ -1,15 +1,10 @@
 import type { PropsWithChildren } from 'react'
 import type { SolidButtonColor } from '../user-action/Button'
 import { SolidButton } from '../user-action/Button'
-import type { PropsForTranslation } from '../../localization/useTranslation'
-import { useTranslation } from '../../localization/useTranslation'
+import { useTranslation } from '@/src/i18n/useTranslation'
 import clsx from 'clsx'
 import type { DialogProps } from './Dialog'
 import { Dialog } from './Dialog'
-import type { FormTranslationType } from '../../localization/defaults/form'
-import { formTranslation } from '../../localization/defaults/form'
-
-type ConfirmDialogTranslation = FormTranslationType
 
 export type ConfirmDialogType = 'positive' | 'negative' | 'neutral' | 'primary'
 
@@ -36,7 +31,6 @@ export type ConfirmDialogProps = Omit<DialogProps, 'onClose'> & {
  * A Dialog for asking the user for confirmation
  */
 export const ConfirmDialog = ({
-                                overwriteTranslation,
                                 children,
                                 onCancel,
                                 onConfirm,
@@ -45,8 +39,8 @@ export const ConfirmDialog = ({
                                 buttonOverwrites,
                                 className,
                                 ...restProps
-                              }: PropsForTranslation<ConfirmDialogTranslation, PropsWithChildren<ConfirmDialogProps>>) => {
-  const translation = useTranslation([formTranslation], overwriteTranslation)
+                              }: PropsWithChildren<ConfirmDialogProps>) => {
+  const translation = useTranslation()
 
   const mapping: Record<ConfirmDialogType, SolidButtonColor> = {
     neutral: 'neutral',

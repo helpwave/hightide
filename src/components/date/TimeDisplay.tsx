@@ -1,25 +1,4 @@
-import type { PropsForTranslation, Translation } from '../../localization/useTranslation'
-import { useTranslation } from '../../localization/useTranslation'
-import type { TimeTranslationType } from '../../localization/defaults/time'
-import { timeTranslation } from '../../localization/defaults/time'
-
-type TimeDisplayTranslationType = TimeTranslationType & {
-  inDays: string,
-  agoDays: string,
-}
-
-const defaultTimeDisplayTranslations: Translation<TimeDisplayTranslationType> = {
-  en: {
-    ...timeTranslation.en,
-    inDays: `in {{days}} days`,
-    agoDays: `{{days}} days ago`,
-  },
-  de: {
-    ...timeTranslation.de,
-    inDays: `in {{days}} Tagen`,
-    agoDays: `vor {{days}} Tagen`,
-  }
-}
+import { useTranslation } from '@/src/i18n/useTranslation'
 
 type TimeDisplayMode = 'daysFromToday' | 'date'
 
@@ -32,36 +11,35 @@ type TimeDisplayProps = {
  * A Component for displaying time and dates in a unified fashion
  */
 export const TimeDisplay = ({
-                              overwriteTranslation,
                               date,
                               mode = 'daysFromToday'
-                            }: PropsForTranslation<TimeDisplayTranslationType, TimeDisplayProps>) => {
-  const translation = useTranslation([defaultTimeDisplayTranslations], overwriteTranslation)
+                            }: TimeDisplayProps) => {
+  const translation = useTranslation()
   const difference = new Date().setHours(0, 0, 0, 0).valueOf() - new Date(date).setHours(0, 0, 0, 0).valueOf()
   const isBefore = difference > 0
   const differenceInDays = Math.floor(Math.abs(difference) / (1000 * 3600 * 24))
 
   let displayString
   if (differenceInDays === 0) {
-    displayString = translation('today')
+    displayString = translation('time.today')
   } else if (differenceInDays === 1) {
-    displayString = isBefore ? translation('yesterday') : translation('tomorrow')
+    displayString = isBefore ? translation('time.yesterday') : translation('time.tomorrow')
   } else {
-    displayString = isBefore ? translation('agoDays', { replacements: { days: differenceInDays.toString() } }) : translation('inDays', { replacements: { days: differenceInDays.toString() } })
+    displayString = isBefore ? translation('time.agoDays', { days: differenceInDays }) : translation('time.inDays', { days: differenceInDays })
   }
   const monthToTranslation: { [key: number]: string } = {
-    0: translation('january'),
-    1: translation('february'),
-    2: translation('march'),
-    3: translation('april'),
-    4: translation('may'),
-    5: translation('june'),
-    6: translation('july'),
-    7: translation('august'),
-    8: translation('september'),
-    9: translation('october'),
-    10: translation('november'),
-    11: translation('december')
+    0: translation('time.january'),
+    1: translation('time.february'),
+    2: translation('time.march'),
+    3: translation('time.april'),
+    4: translation('time.may'),
+    5: translation('time.june'),
+    6: translation('time.july'),
+    7: translation('time.august'),
+    8: translation('time.september'),
+    9: translation('time.october'),
+    10: translation('time.november'),
+    11: translation('time.december')
   } as const
 
   let fullString
@@ -71,9 +49,5 @@ export const TimeDisplay = ({
     fullString = `${date.getDate()}. ${monthToTranslation[date.getMonth()]} ${date.getFullYear()}`
   }
 
-  return (
-    <span>
-      {fullString}
-    </span>
-  )
+  return (<span>{fullString}</span>)
 }

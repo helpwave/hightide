@@ -41,8 +41,8 @@ const Example = () => {
           className={clsx(
             'flex-col-2 rounded-md p-2',
             {
-              'bg-surface text-on-surface': active,
-              'bg-surface-warning text-on-surface': !active,
+              'bg-primary/30': active,
+              'bg-surface text-on-surface': !active,
             }
           )}
         >
@@ -56,8 +56,8 @@ const Example = () => {
             className={clsx(
               'flex-col-2 rounded-md p-2',
               {
-                'bg-surface-variant text-on-surface': innerActive,
-                'bg-surface-warning text-on-surface': !innerActive,
+                'bg-primary/30': innerActive,
+                'bg-surface text-on-surface': !innerActive,
               }
             )}
           >

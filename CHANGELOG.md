@@ -5,6 +5,19 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/)
 and adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [0.1.43] - 2025-11-21
+
+### Changed
+- Changed translation to use the arb format and ICU string replacements
+- Moved translations to the [locales folder](locales/)
+- Locales are now used instead of Languages
+- translations are now split into 2 translation functions
+  - `useTranslation`: directly usable and uses the preferred locale
+  - `useICUTranslation`: parses every input with a ICU interpreter (less efficient) 
+
+### Fixed
+- fixed padding on the `InsideLabel` to be properly aligned
+
 ## [0.1.42] - 2025-10-31
 
 ### Fixed

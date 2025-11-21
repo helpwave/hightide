@@ -1,0 +1,165 @@
+{
+  "add": "Hinzufügen",
+  "all": "Alle",
+  "apply": "Anwenden",
+  "back": "Zurück",
+  "cancel": "Abbrechen",
+  "carousel": "Karussell",
+  "change": "Ändern",
+  "chooseLanguage": "Wähle deine bevorzugte Sprache",
+  "chooseTheme": "Wähle dein bevorzugtes Farbschema.",
+  "chooseSlide": "Wähle die angezeigte Slide aus",
+  "clear": "Löschen",
+  "click": "Klicken",
+  "clickToCopy": "Zum kopieren klicken",
+  "clickToSelect": "Zum Auswählen drücken",
+  "close": "Schließen",
+  "confirm": "Bestätigen",
+  "copy": "Kopieren",
+  "copied": "Kopiert",
+  "create": "Erstellen",
+  "decline": "Ablehnen",
+  "delete": "Löschen",
+  "discard": "Verwerfen",
+  "discardChanges": "Änderungen Verwerfen",
+  "done": "Fertig",
+  "edit": "Bearbeiten",
+  "enterText": "Text hier eingeben",
+  "error": "Fehler",
+  "errorOccurred": "Ein Fehler ist aufgetreten",
+  "exit": "Beenden",
+  "fieldRequiredError": "Dieses Feld ist erforderlich.",
+  "invalidEmailError": "Bitte geben Sie eine gültige E-Mail-Adresse ein.",
+  "language": "Sprache",
+  "less": "Weniger",
+  "loading": "Lädt",
+  "locale": "Locale",
+  "maxLengthError": "Maximale Länge überschritten.",
+  "minLengthError": "Mindestlänge nicht erreicht.",
+  "more": "Mehr",
+  "next": "Weiter",
+  "no": "Nein",
+  "none": "Nichts",
+  "nothingFound": "Nichts gefunden",
+  "of": "von",
+  "optional": "Optional",
+  "pleaseWait": "Bitte warten...",
+  "previous": "Vorherige",
+  "remove": "Entfernen",
+  "required": "Erforderlich",
+  "reset": "Zurücksetzen",
+  "save": "Speichern",
+  "saved": "Gespeichert",
+  "search": "Suche",
+  "select": "Select",
+  "selectOption": "Option auswählen",
+  "show": "Anzeigen",
+  "showMore": "Mehr anzeigen",
+  "showLess": "Weniger anzeigen",
+  "showSlide": "Zeige Slide {index}",
+  "@showSlide": {
+    "placeholders": {
+      "index": {
+        "type": "number"
+      }
+    }
+  },
+  "slide": "Slide",
+  "slideOf": "Slide {index} von {length} slides",
+  "@slideOf": {
+    "placeholders": {
+      "index": {
+        "type": "number"
+      },
+      "length": {
+        "type": "number"
+      }
+    }
+  },
+  "slideNavigation": "Slide Navigation",
+  "submit": "Abschicken",
+  "success": "Erfolg",
+  "text": "Text",
+  "themes": "{count, plural, =1{Farbschema} other{Farbschemas}}",
+  "@themes": {
+    "placeholders": {
+      "count": {}
+    }
+  },
+  "themeMode": "{theme, select, dark{Dunkel} light{Hell} system{System}}",
+  "@themeMode": {
+    "placeholders": {
+      "theme": {}
+    }
+  },
+  "update": "Update",
+  "unsavedChanges": "Ungespeicherte Änderungen",
+  "unsavedChangesSaveQuestion": "Möchtest du die Änderungen speichern?",
+  "value": "Wert",
+  "yes": "Ja",
+  "filter": "Filter",
+  "min": "Min",
+  "max": "Max",
+  "startDate": "Start",
+  "endDate": "Ende",
+  "notEmpty": "Das Feld darf nicht leer sein.",
+  "invalidEmail": "Die E-Mail ist ungültig.",
+  "tooShort": "Der Wert muss mindestens {min} Zeichen enthalten.",
+  "@tooShort": {
+    "placeholders": {
+      "min": { "type": "number" }
+    }
+  },
+  "tooLong": "Der Wert darf höchstens {max} Zeichen enthalten.",
+  "@tooLong": {
+    "placeholders": {
+      "max": { "type": "number" }
+    }
+  },
+  "outOfRangeString": "Der Wert muss zwischen {min} und {max} Zeichen lang sein.",
+  "@outOfRangeString": {
+    "placeholders": {
+      "min": { "type": "number" },
+      "max": { "type": "number" }
+    }
+  },
+  "outOfRangeNumber": "Der Wert muss zwischen {min} und {max} liegen.",
+  "@outOfRangeNumber": {
+    "placeholders": {
+      "min": { "type": "number" },
+      "max": { "type": "number" }
+    }
+  },
+  "outOfRangeSelectionItems": "Es müssen zwischen {min} und {max} Elemente ausgewählt werden.",
+  "@outOfRangeSelectionItems": {
+    "placeholders": {
+      "min": { "type": "number" },
+      "max": { "type": "number" }
+    }
+  },
+  "tooFewSelectionItems": "Es müssen mindestens {min} Elemente ausgewählt werden.",
+  "@tooFewSelectionItems": {
+    "placeholders": {
+      "min": { "type": "number" }
+    }
+  },
+  "tooManySelectionItems": "Es müssen maximal {max} Elemente ausgewählt werden.",
+  "@tooManySelectionItems": {
+    "placeholders": {
+      "max": { "type": "number" }
+    }
+  },
+  "identifier": "Identifikator",
+  "name": "Name",
+  "age": "Alter",
+  "street": "Straße",
+  "entryDate": "Eintragsdatum",
+  "gender": "{gender, select, male{Männlich} female{Weiblich} other{Divers}}",
+  "@gender": {
+    "placeholders": {
+      "gender": {}
+    }
+  },
+  "welcome": "Willkommen",
+  "goodToSeeYou": "Schön dich zu sehen"
+}
