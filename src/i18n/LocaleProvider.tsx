@@ -2,11 +2,11 @@ import type { Dispatch, PropsWithChildren, SetStateAction } from 'react'
 import { createContext, useContext, useEffect, useMemo, useState } from 'react'
 import { useLocalStorage } from '../hooks/useLocalStorage'
 import { LocalizationUtil } from './util'
-import type { SupportedLocale } from '@/src/i18n/translations'
+import type { HightideTranslationLocales } from '@/src/i18n/translations'
 
 export type LocaleContextValue = {
-  locale: SupportedLocale,
-  setLocale: Dispatch<SetStateAction<SupportedLocale>>,
+  locale: HightideTranslationLocales,
+  setLocale: Dispatch<SetStateAction<HightideTranslationLocales>>,
 }
 
 export const LocaleContext = createContext<LocaleContextValue>({
@@ -14,11 +14,11 @@ export const LocaleContext = createContext<LocaleContextValue>({
   setLocale: (v) => v
 })
 
-type LocaleWithSystem = SupportedLocale | 'system'
+type LocaleWithSystem = HightideTranslationLocales | 'system'
 
 type LocaleProviderProps = {
   locale?: LocaleWithSystem,
-  onChangedLocale?: (locale: SupportedLocale) => void,
+  onChangedLocale?: (locale: HightideTranslationLocales) => void,
 }
 
 export const LocaleProvider = ({ children, locale, onChangedLocale }: PropsWithChildren<LocaleProviderProps>) => {
@@ -64,7 +64,7 @@ export const LocaleProvider = ({ children, locale, onChangedLocale }: PropsWithC
           localesToTestAgainst.find(
             (test) => locale === test || locale.split('-')[0] === LocalizationUtil.localToLanguage(test)
           ))
-        .filter((entry): entry is SupportedLocale => entry !== undefined)
+        .filter((entry): entry is HightideTranslationLocales => entry !== undefined)
 
       if (matchingBrowserLanguage.length === 0) return
 

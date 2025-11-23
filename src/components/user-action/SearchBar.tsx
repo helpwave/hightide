@@ -3,7 +3,7 @@ import { Input } from './input/Input'
 import { IconButton } from './Button'
 import { Search } from 'lucide-react'
 import { clsx } from 'clsx'
-import { useTranslation } from '@/src/i18n/useTranslation'
+import { useHightideTranslation } from '@/src/i18n/useHightideTranslation'
 
 export type SearchBarProps = InputProps & {
   onSearch?: () => void,
@@ -18,7 +18,7 @@ export const SearchBar = ({
                             containerClassName,
                             ...inputProps
                           }: SearchBarProps) => {
-  const translation = useTranslation()
+  const translation = useHightideTranslation()
 
   return (
     <div className={clsx('flex-row-2 justify-between items-center', containerClassName)}>

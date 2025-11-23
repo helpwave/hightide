@@ -1,5 +1,5 @@
 import type { PropsWithChildren, ReactNode } from 'react'
-import { useTranslation } from '@/src/i18n/useTranslation'
+import { useHightideTranslation } from '@/src/i18n/useHightideTranslation'
 import type { ConfirmDialogProps } from '@/src/components/dialog/ConfirmDialog'
 import { ConfirmDialog } from '@/src/components/dialog/ConfirmDialog'
 
@@ -24,7 +24,7 @@ export const DiscardChangesDialog = ({
                                        descriptionOverwrite,
                                        ...props
                                      }: PropsWithChildren<DiscardChangesDialogProps>) => {
-  const translation = useTranslation()
+  const translation = useHightideTranslation()
   return (
     <ConfirmDialog
       {...props}

@@ -2,7 +2,7 @@ import type { ReactNode } from 'react'
 import { AlertTriangle } from 'lucide-react'
 import clsx from 'clsx'
 import { TextButton } from '../user-action/Button'
-import { useTranslation } from '@/src/i18n/useTranslation'
+import { useHightideTranslation } from '@/src/i18n/useHightideTranslation'
 
 export type PropertyBaseProps = {
   name: string,
@@ -28,7 +28,7 @@ export const PropertyBase = ({
                                onRemove,
                                className = '',
                              }: PropertyBaseProps) => {
-  const translation = useTranslation()
+  const translation = useHightideTranslation()
   const requiredAndNoValue = softRequired && !hasValue
   return (
     <div className={clsx('flex-row-0 group', className)}>

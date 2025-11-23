@@ -14,7 +14,7 @@ import clsx from 'clsx'
 import { ChevronLeft, ChevronRight } from 'lucide-react'
 import { createLoopingListWithIndex, range } from '@/src/utils/array'
 import { IconButton } from '../user-action/Button'
-import { useTranslation } from '@/src/i18n/useTranslation'
+import { useHightideTranslation } from '@/src/i18n/useHightideTranslation'
 
 //
 // CarouselContext
@@ -46,7 +46,7 @@ type CarouselTabsProps = {
 export default function CarouselTabs({
                                        onChange,
                                      }: CarouselTabsProps) {
-  const translation = useTranslation()
+  const translation = useHightideTranslation()
   const { id, slideCount, currentIndex, isLooping } = useCarouselContext()
 
   const tabRefs = useRef<(HTMLButtonElement | null)[]>([])
@@ -118,7 +118,7 @@ export const CarouselSlide = forwardRef<HTMLDivElement, CarouselSlideProps>(
                            isSelected,
                            ...props
                          }, ref) {
-    const translation = useTranslation()
+    const translation = useHightideTranslation()
     const { id, slideCount } = useCarouselContext()
 
     return (
@@ -193,7 +193,7 @@ export const Carousel = ({
                            onSlideChanged,
                            ...props
                          }: CarouselProps) => {
-  const translation = useTranslation()
+  const translation = useHightideTranslation()
   const slideRefs = useRef<HTMLDivElement[]>([])
   const [currentIndex, setCurrentIndex] = useState<number>(0)
   const [hasFocus, setHasFocus] = useState(false)

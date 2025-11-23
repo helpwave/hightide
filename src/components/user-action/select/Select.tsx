@@ -12,7 +12,7 @@ import React, {
   useState
 } from 'react'
 import clsx from 'clsx'
-import { useTranslation } from '@/src/i18n/useTranslation'
+import { useHightideTranslation } from '@/src/i18n/useHightideTranslation'
 import { ExpansionIcon } from '@/src/components/layout/Expandable'
 import { useFocusTrap } from '@/src/hooks/focus/useFocusTrap'
 import { match } from '@/src/utils/match'
@@ -412,7 +412,7 @@ type SelectButtonProps = ButtonHTMLAttributes<HTMLButtonElement> & {
 export const SelectButton = forwardRef<HTMLButtonElement, SelectButtonProps>(function SelectButton(
   { placeholder, selectedDisplay, ...props }, ref
 ) {
-  const translation = useTranslation()
+  const translation = useHightideTranslation()
   const { state, trigger } = useSelectContext()
   const { register, unregister, toggleOpen } = trigger
 

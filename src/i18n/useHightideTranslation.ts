@@ -1,10 +1,14 @@
-import type { GeneratedTranslationEntries, SupportedLocale } from '@/src/i18n/translations'
-import { generatedTranslations } from '@/src/i18n/translations'
 import { useLocale } from '@/src/i18n/LocaleProvider'
-import type { PartialTranslation, Translation, TranslationEntries } from '@helpwave/internationalization'
+import type {
+  PartialTranslationExtension,
+  Translation,
+  TranslationEntries
+} from '@helpwave/internationalization'
 import { combineTranslation, ICUUtil } from '@helpwave/internationalization'
 import { ArrayUtil } from '@/src/utils/array'
 import type { SingleOrArray } from '@/src/utils/typing'
+import type { HightideTranslationEntries, HightideTranslationLocales } from '@/src/i18n/translations'
+import { hightideTranslation } from '@/src/i18n/translations'
 
 /**
  * Use for translations where you know that all values are ICU strings.
@@ -41,33 +45,25 @@ export function useICUTranslation<L extends string, T extends Record<string, str
   }
 }
 
-// TODO allow translation overwrites
-type UseTranslationOverwrites = {
-  locale?: SupportedLocale,
+type UseHidetideTranslationOverwrites = {
+  locale?: HightideTranslationLocales,
 }
 
-type TranslationExtension<
-  L1 extends string,
-  L2 extends string,
-  T1 extends TranslationEntries,
-  T2 extends TranslationEntries
-> = PartialTranslation<L1 | L2, T1 & T2>
-
-type BaseTranslationExtension<L extends string, T extends TranslationEntries>
-  = TranslationExtension<L, SupportedLocale, T, GeneratedTranslationEntries>
+type HidetideTranslationExtension<L extends string, T extends TranslationEntries>
+  = PartialTranslationExtension<L, HightideTranslationLocales, T, HightideTranslationEntries>
 /**
- * A wrapper for the useTranslation to load and specify the translations for the library
+ * A wrapper for the useHightideTranslation to load and specify the translations for the library
  */
-export function useTranslation<L extends string, T extends TranslationEntries>(
-  extensions?: SingleOrArray<BaseTranslationExtension<L,T>>,
-  overwrites?: UseTranslationOverwrites
+export function useHightideTranslation<L extends string, T extends TranslationEntries>(
+  extensions?: SingleOrArray<HidetideTranslationExtension<L,T>>,
+  overwrites?: UseHidetideTranslationOverwrites
 ) {
   const { locale: inferredLocale } = useLocale()
   const locale = overwrites?.locale ?? inferredLocale
   const translationExtensions = ArrayUtil.resolveSingleOrArray(extensions)
 
-  return combineTranslation<L | SupportedLocale, T & GeneratedTranslationEntries>([
+  return combineTranslation<L | HightideTranslationLocales, T & HightideTranslationEntries>([
     ...translationExtensions,
-    generatedTranslations as BaseTranslationExtension<L,T>
+    hightideTranslation as HidetideTranslationExtension<L,T>
   ], locale)
 }

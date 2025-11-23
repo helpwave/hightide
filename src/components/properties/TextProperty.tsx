@@ -1,6 +1,6 @@
 import { Text } from 'lucide-react'
 import clsx from 'clsx'
-import { useTranslation } from '@/src/i18n/useTranslation'
+import { useHightideTranslation } from '@/src/i18n/useHightideTranslation'
 import { Textarea } from '../user-action/Textarea'
 import type { PropertyBaseProps } from './PropertyBase'
 import { PropertyBase } from './PropertyBase'
@@ -22,7 +22,7 @@ export const TextProperty = ({
                                onEditComplete,
                                ...baseProps
                              }: TextPropertyProps) => {
-  const translation = useTranslation()
+  const translation = useHightideTranslation()
   const hasValue = value !== undefined
 
   return (
