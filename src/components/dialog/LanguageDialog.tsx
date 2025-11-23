@@ -5,8 +5,8 @@ import { LocalizationUtil } from '@/src/i18n/util'
 import { useLocale } from '@/src/i18n/LocaleProvider'
 import { Select, SelectOption } from '@/src/components/user-action/select/Select'
 import { SolidButton } from '@/src/components/user-action/Button'
-import { useTranslation } from '@/src/i18n/useTranslation'
-import type { SupportedLocale } from '@/src/i18n/translations'
+import { useHightideTranslation } from '@/src/i18n/useHightideTranslation'
+import type { HightideTranslationLocales } from '@/src/i18n/translations'
 
 type LanguageDialogProps = Omit<DialogProps, 'titleElement' | 'description'> & PropsWithChildren<{
   titleOverwrite?: ReactNode,
@@ -25,7 +25,7 @@ export const LanguageDialog = ({
                                  ...props
                                }: LanguageDialogProps) => {
   const { locale, setLocale } = useLocale()
-  const translation = useTranslation()
+  const translation = useHightideTranslation()
 
   return (
     <Dialog
@@ -37,7 +37,7 @@ export const LanguageDialog = ({
       <div className="w-64">
         <Select
           value={locale}
-          onValueChanged={(language: string) => setLocale(language as SupportedLocale)}
+          onValueChanged={(language: string) => setLocale(language as HightideTranslationLocales)}
           contentPanelProps={{ containerClassName: 'z-200' }}
           buttonProps={{
             selectedDisplay: locale => LocalizationUtil.languagesLocalNames[locale]

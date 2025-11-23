@@ -1,5 +1,5 @@
 import type { Meta, StoryObj } from '@storybook/nextjs'
-import { useTranslation } from '../../src/i18n/useTranslation'
+import { useHightideTranslation } from '../../src/i18n/useHightideTranslation'
 
 type TranslationExampleProps = {
   name: string,
@@ -17,7 +17,7 @@ const TranslationExample = ({
                               min,
                               max
                             }: TranslationExampleProps) => {
-  const translation = useTranslation()
+  const translation = useHightideTranslation()
   return (
     <p className="rounded bg-surface text-on-surface p-1 px-2">
       {translation('welcome')}{'! '}

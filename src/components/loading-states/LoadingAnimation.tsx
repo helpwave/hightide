@@ -1,4 +1,4 @@
-import { useTranslation } from '@/src/i18n/useTranslation'
+import { useHightideTranslation } from '@/src/i18n/useHightideTranslation'
 import clsx from 'clsx'
 import { HelpwaveLogo } from '../icons-and-geometry/HelpwaveLogo'
 
@@ -14,7 +14,7 @@ export const LoadingAnimation = ({
                                    loadingText,
                                    classname
                                  }: LoadingAnimationProps) => {
-  const translation = useTranslation()
+  const translation = useHightideTranslation()
   return (
     <div className={clsx('flex-col-2 items-center justify-center w-full h-24', classname)}>
       <HelpwaveLogo animate="loading"/>

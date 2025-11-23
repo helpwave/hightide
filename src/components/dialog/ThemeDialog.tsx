@@ -7,7 +7,7 @@ import type { ThemeType } from '@/src/theming/useTheme'
 import { ThemeUtil, useTheme } from '@/src/theming/useTheme'
 import { Select, SelectOption } from '@/src/components/user-action/select/Select'
 import { SolidButton } from '@/src/components/user-action/Button'
-import { useTranslation } from '@/src/i18n/useTranslation'
+import { useHightideTranslation } from '@/src/i18n/useHightideTranslation'
 
 type ThemeIconProps = {
   theme: ThemeType,
@@ -46,7 +46,7 @@ export const ThemeDialog = ({
                               ...props
                             }: PropsWithChildren<ThemeDialogProps>) => {
   const { theme, setTheme } = useTheme()
-  const translation = useTranslation()
+  const translation = useHightideTranslation()
 
   return (
     <Dialog

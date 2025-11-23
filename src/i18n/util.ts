@@ -1,10 +1,10 @@
-import type { SupportedLocale } from '@/src/i18n/translations'
-import { supportedLocales } from '@/src/i18n/translations'
+import type { HightideTranslationLocales } from '@/src/i18n/translations'
+import { hightideTranslationLocales } from '@/src/i18n/translations'
 
 /**
  * The supported locales' names in their respective language
  */
-const localsNames: Record<SupportedLocale, string> = {
+const localsNames: Record<HightideTranslationLocales, string> = {
   'en-US': 'English (US)',
   'de-DE': 'Deutsch',
 }
@@ -12,9 +12,9 @@ const localsNames: Record<SupportedLocale, string> = {
 /**
  * The default locale
  */
-const DEFAULT_LOCALE: SupportedLocale = 'en-US'
+const DEFAULT_LOCALE: HightideTranslationLocales = 'en-US'
 
-function localeToLanguage(locale: SupportedLocale) {
+function localeToLanguage(locale: HightideTranslationLocales) {
   return locale.split('-')[0]
 }
 
@@ -22,7 +22,7 @@ function localeToLanguage(locale: SupportedLocale) {
  * A constant definition for holding data regarding languages
  */
 export const LocalizationUtil = {
-  locals: supportedLocales,
+  locals: hightideTranslationLocales,
   localToLanguage: localeToLanguage,
   DEFAULT_LOCALE,
   languagesLocalNames: localsNames,
