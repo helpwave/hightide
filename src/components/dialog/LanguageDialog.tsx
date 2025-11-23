@@ -5,7 +5,7 @@ import { LocalizationUtil } from '@/src/i18n/util'
 import { useLocale } from '@/src/i18n/LocaleProvider'
 import { Select, SelectOption } from '@/src/components/user-action/select/Select'
 import { SolidButton } from '@/src/components/user-action/Button'
-import { useTranslation } from '@/src/i18n/useTranslation'
+import { useHightideTranslation } from '@/src/i18n/useHightideTranslation'
 import type { SupportedLocale } from '@/src/i18n/translations'
 
 type LanguageDialogProps = Omit<DialogProps, 'titleElement' | 'description'> & PropsWithChildren<{
@@ -25,7 +25,7 @@ export const LanguageDialog = ({
                                  ...props
                                }: LanguageDialogProps) => {
   const { locale, setLocale } = useLocale()
-  const translation = useTranslation()
+  const translation = useHightideTranslation()
 
   return (
     <Dialog

@@ -1,4 +1,4 @@
-import { useTranslation } from '@/src/i18n/useTranslation'
+import { useHightideTranslation } from '@/src/i18n/useHightideTranslation'
 
 type TimeDisplayMode = 'daysFromToday' | 'date'
 
@@ -14,7 +14,7 @@ export const TimeDisplay = ({
                               date,
                               mode = 'daysFromToday'
                             }: TimeDisplayProps) => {
-  const translation = useTranslation()
+  const translation = useHightideTranslation()
   const difference = new Date().setHours(0, 0, 0, 0).valueOf() - new Date(date).setHours(0, 0, 0, 0).valueOf()
   const isBefore = difference > 0
   const differenceInDays = Math.floor(Math.abs(difference) / (1000 * 3600 * 24))

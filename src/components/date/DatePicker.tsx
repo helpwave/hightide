@@ -7,7 +7,7 @@ import type { DayPickerProps } from '@/src/components/date/DayPicker'
 import { DayPicker } from '@/src/components/date/DayPicker'
 import type { YearMonthPickerProps } from '@/src/components/date/YearMonthPicker'
 import { YearMonthPicker } from '@/src/components/date/YearMonthPicker'
-import { useTranslation } from '@/src/i18n/useTranslation'
+import { useHightideTranslation } from '@/src/i18n/useHightideTranslation'
 import { useLocale } from '@/src/i18n/LocaleProvider'
 import { SolidButton, TextButton } from '@/src/components/user-action/Button'
 import { LocalizationUtil } from '@/src/i18n/util'
@@ -39,7 +39,7 @@ export const DatePicker = ({
                              className = ''
                            }: DatePickerProps) => {
   const { locale } = useLocale()
-  const translation = useTranslation()
+  const translation = useHightideTranslation()
   const [displayedMonth, setDisplayedMonth] = useState<Date>(value)
   const [displayMode, setDisplayMode] = useState<DisplayMode>(initialDisplay)
 

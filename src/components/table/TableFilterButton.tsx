@@ -4,7 +4,7 @@ import { FilterIcon } from 'lucide-react'
 import { Menu } from '../user-action/Menu'
 import { useEffect, useState } from 'react'
 import type { Column } from '@tanstack/react-table'
-import { useTranslation } from '@/src/i18n/useTranslation'
+import { useHightideTranslation } from '@/src/i18n/useHightideTranslation'
 
 export type TableFilterType = 'text' | 'range' | 'dateRange'
 
@@ -17,7 +17,7 @@ export const TableFilterButton = <T, >({
                                          filterType,
                                          column,
                                        }: TableFilterButtonProps<T>) => {
-  const translation = useTranslation()
+  const translation = useHightideTranslation()
   const columnFilterValue = column.getFilterValue()
   const [filterValue, setFilterValue] = useState<unknown>(columnFilterValue)
   const hasFilter = !!filterValue
