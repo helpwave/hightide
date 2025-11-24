@@ -7,6 +7,14 @@ and adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
 ## [0.1.45] - 2025-11-24
 
+### Fix
+- Fix build to properly recognize external packages
+
+### Security
+- Remove unused dependencies
+
+## [0.1.45] - 2025-11-24
+
 ### Upgrade
 - Increase version of `@helpwave/internationalization` to `0.3.0`
 
