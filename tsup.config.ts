@@ -1,11 +1,11 @@
 import { defineConfig } from 'tsup'
 
 export default defineConfig({
-  entry: ['src/**/*.{ts,tsx}'],
+  entry: ['src/index.ts'], // explicit main entry
   format: ['cjs', 'esm'],
+  outDir: 'dist',
   dts: true,
   sourcemap: true,
-  outDir: 'dist',
   clean: true,
   splitting: false,
   minify: false,
@@ -21,4 +21,5 @@ export default defineConfig({
     'tinycolor2',
     '@helpwave/internationalization',
   ],
+  cjsInterop: true,
 })
