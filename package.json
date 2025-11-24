@@ -7,8 +7,7 @@
     "url": "git+https://github.com/helpwave/hightide.git"
   },
   "license": "MPL-2.0",
-  "version": "0.1.46",
-  "type": "module",
+  "version": "0.1.47",
   "files": [
     "dist"
   ],
@@ -31,8 +30,7 @@
     "build-intl": "npx build-intl --force -i ./locales -o ./src/i18n/translations.ts -n hightideTranslation",
     "build-css": "npx @tailwindcss/cli -i src/style/globals.css -o ./dist/style/globals.css",
     "barrel": "node scripts/barrel.js",
-    "build": "tsup",
-    "build-production": "npm run clean && npm run build-intl && npm run barrel && npm run build && npm run build-css && cp -R src/style/ ./dist/style/uncompiled/ && cp -R scripts/ ./dist/scripts/",
+    "build": "npm run clean && npm run build-intl && npm run barrel && tsup && npm run build-css && cp -R src/style/ ./dist/style/uncompiled/ && cp -R scripts/ ./dist/scripts/",
     "storybook": "storybook dev -p 6006",
     "build-storybook": "storybook build",
     "lint": "eslint .",

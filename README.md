@@ -38,5 +38,5 @@ npm run storybook
 - Update the [CHANGELOG.md](CHANGELOG.md)
 
 ```bash
-npm run build-production
+npm run build
 ```
