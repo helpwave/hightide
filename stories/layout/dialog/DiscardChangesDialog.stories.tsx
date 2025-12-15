@@ -2,7 +2,7 @@ import type { Meta, StoryObj } from '@storybook/nextjs'
 import { useState } from 'react'
 import { action } from 'storybook/actions'
 import { DiscardChangesDialog } from '../../../src/components/dialog/DiscardChangesDialog'
-import { SolidButton } from '../../../src/components/user-action/Button'
+import { Button } from '../../../src/components/user-action/Button'
 
 type DiscardChangesDialogExampleProps = {
   onDontSave: () => void,
@@ -38,7 +38,7 @@ const DiscardChangesDialogExample = ({
         }}
       />
       <div className="flex-row-2 items-center justify-center min-h-[400px]">
-        <SolidButton onClick={() => setIsOpen(true)}>Show Dialog</SolidButton>
+        <Button onClick={() => setIsOpen(true)}>Show Dialog</Button>
       </div>
     </>
   )

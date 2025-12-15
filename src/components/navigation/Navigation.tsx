@@ -6,8 +6,9 @@ import Link from 'next/link'
 import clsx from 'clsx'
 import type { UseFloatingElementOptions } from '@/src/hooks/useFloatingElement'
 import { useFloatingElement } from '@/src/hooks/useFloatingElement'
-import { IconButton } from '@/src/components/user-action/Button'
+import { Button } from '@/src/components/user-action/Button'
 import { ExpansionIcon } from '@/src/components/layout/Expandable'
+import { useZIndexRegister } from '@/src/hooks/useZIndexRegister'
 
 type SimpleNavigationItem = {
   label: ReactNode,
@@ -62,6 +63,7 @@ const NavigationItemWithSubItem = ({
     }
   }, [])
 
+  const zIndex = useZIndexRegister(isOpen)
   // TODO at arrow key navigation
 
   return (
@@ -99,10 +101,10 @@ const NavigationItemWithSubItem = ({
 
         hidden={!isOpen}
         className={clsx(
-          'fixed flex-col-4 p-4 bg-surface text-on-surface shadow-side shadow-hw-bottom rounded-md z-2001',
+          'fixed flex-col-4 p-4 bg-surface text-on-surface shadow-side shadow-hw-bottom rounded-md',
           { 'opacity-0': !style }
         )}
-        style={style}
+        style={{ ...style, zIndex }}
       >
         {items.map(({ link, label, external }, index) => (
           <li key={index}>
@@ -157,15 +159,18 @@ export const Navigation = ({ ...props }: NavigationProps) => {
     menuRef.current?.focus()
   }, [isMobileOpen])
 
+  const zIndex = useZIndexRegister(isMobileOpen)
+
   return (
     <nav>
       <NavigationItemList
         {...props}
         className={clsx('hidden', { 'desktop:flex': !isMobileOpen }, props.className)}
       />
-      <IconButton
-        color="transparent"
-
+      <Button
+        layout="icon"
+        coloringStyle="text"
+        color="neutral"
         onClick={() => setIsMobileOpen(true)}
 
         className="desktop:hidden"
@@ -175,7 +180,7 @@ export const Navigation = ({ ...props }: NavigationProps) => {
         aria-controls={'navigation-menu-' + id}
       >
         <MenuIcon className="w-6 h-6"/>
-      </IconButton>
+      </Button>
       <div
         id={'navigation-menu-' + id}
         ref={menuRef}
@@ -190,15 +195,21 @@ export const Navigation = ({ ...props }: NavigationProps) => {
         }}
 
         className={clsx(
-          'flex-col-8 items-center justify-center fixed inset-0 p-8 w-screen h-screen z-2000 bg-surface text-on-surface', {
+          'flex-col-8 items-center justify-center fixed inset-0 p-8 w-screen h-screen bg-surface text-on-surface', {
             'desktop:hidden': isMobileOpen,
           },
           props.className
         )}
+        style={{ zIndex }}
       >
-        <IconButton color="transparent" onClick={() => setIsMobileOpen(false)}>
+        <Button
+          layout="icon"
+          coloringStyle="text"
+          color="neutral"
+          onClick={() => setIsMobileOpen(false)}
+        >
           <XIcon/>
-        </IconButton>
+        </Button>
         <NavigationItemList {...props} className={clsx('flex-col-8', props.className)}/>
       </div>
     </nav>

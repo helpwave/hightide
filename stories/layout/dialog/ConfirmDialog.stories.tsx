@@ -3,7 +3,7 @@ import { action } from 'storybook/actions'
 import { useEffect, useState } from 'react'
 import type { ConfirmDialogProps } from '../../../src/components/dialog/ConfirmDialog'
 import { ConfirmDialog } from '../../../src/components/dialog/ConfirmDialog'
-import { SolidButton } from '../../../src/components/user-action/Button'
+import { Button } from '../../../src/components/user-action/Button'
 
 
 /**
@@ -40,7 +40,7 @@ const ConfirmDialogExample = ({
         }}
       />
       <div className="flex-row-2 items-center justify-center min-h-[400px]">
-        <SolidButton onClick={() => setIsOpen(true)}>Show Dialog</SolidButton>
+        <Button onClick={() => setIsOpen(true)}>Show Dialog</Button>
       </div>
     </>
   )

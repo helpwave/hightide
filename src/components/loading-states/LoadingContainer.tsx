@@ -6,6 +6,6 @@ export type LoadingComponentProps = {
 
 export const LoadingContainer = ({ className }: LoadingComponentProps) => {
   return (
-    <div className={clsx('relative overflow-hidden shimmer bg-disabled-background rounded-md', className)}/>
+    <div className={clsx('relative overflow-hidden shimmer bg-disabled/30 rounded-md', className)}/>
   )
 }

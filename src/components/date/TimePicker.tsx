@@ -1,8 +1,8 @@
 import { useEffect, useRef } from 'react'
-import { Scrollbars } from 'react-custom-scrollbars-2'
 import { closestMatch, range } from '@/src/utils/array'
 import clsx from 'clsx'
 import { useOverwritableState } from '@/src/hooks/useOverwritableState'
+import { Button } from '@/src/components/user-action/Button'
 
 type MinuteIncrement = '1min' | '5min' | '10min' | '15min' | '30min'
 
@@ -20,14 +20,14 @@ export const TimePicker = ({
                              onChange,
                              is24HourFormat = true,
                              minuteIncrement = '5min',
-                             maxHeight = 300,
+                             maxHeight = 280,
                              className = ''
                            }: TimePickerProps) => {
   const minuteRef = useRef<HTMLButtonElement>(null)
   const hourRef = useRef<HTMLButtonElement>(null)
 
   const isPM = time.getHours() >= 11
-  const hours = is24HourFormat ? range(24) : range([1, 12], { exclusiveEnd: false })
+  const hours = is24HourFormat ? range(24) : range(12)
   let minutes = range(60)
 
   useEffect(() => {
@@ -81,9 +81,6 @@ export const TimePicker = ({
 
   const closestMinute = closestMatch(minutes, (item1, item2) => Math.abs(item1 - time.getMinutes()) < Math.abs(item2 - time.getMinutes()))
 
-  const style = (selected: boolean) => clsx('chip-full hover:brightness-90 hover:bg-primary hover:text-on-primary rounded-md mr-3',
-    { 'bg-primary text-on-primary': selected, 'bg-white text-black': !selected })
-
   const onChangeWrapper = (transformer: (newDate: Date) => void) => {
     const newDate = new Date(time)
     transformer(newDate)
@@ -91,55 +88,55 @@ export const TimePicker = ({
   }
 
   return (
-    <div className={clsx('flex-row-2 w-fit min-w-[150px] select-none', className)}>
-      <Scrollbars autoHeight autoHeightMax={maxHeight} style={{ height: '100%' }}>
-        <div className="flex-col-1 h-full">
-          {hours.map(hour => {
-            const currentHour = hour === time.getHours() - (!is24HourFormat && isPM ? 12 : 0)
-            return (
-              <button
-                key={hour}
-                ref={currentHour ? hourRef : undefined}
-                className={style(currentHour)}
-                onClick={() => onChangeWrapper(newDate => newDate.setHours(hour + (!is24HourFormat && isPM ? 12 : 0)))}
-              >
-                {hour.toString().padStart(2, '0')}
-              </button>
-            )
-          })}
-        </div>
-      </Scrollbars>
-      <Scrollbars autoHeight autoHeightMax={maxHeight} style={{ height: '100%' }}>
-        <div className="flex-col-1 h-full">
-          {minutes.map(minute => {
-            const currentMinute = minute === closestMinute
-            return (
-              <button
-                key={minute + minuteIncrement} // minute increment so that scroll works
-                ref={currentMinute ? minuteRef : undefined}
-                className={style(currentMinute)}
-                onClick={() => onChangeWrapper(newDate => newDate.setMinutes(minute))}
-              >
-                {minute.toString().padStart(2, '0')}
-              </button>
-            )
-          })}
-        </div>
-      </Scrollbars>
+    <div className={clsx('flex-row-2 w-fit min-w-[150px] select-none overflow-hidden', className)}>
+      <div className="flex-col-1 h-full overflow-y-auto min-w-16">
+        {hours.map(hour => {
+          const isSelected = hour === time.getHours() - (!is24HourFormat && isPM ? 12 : 0)
+          return (
+            <Button
+              size="small"
+              color={isSelected ? 'primary' : 'neutral'}
+              key={hour}
+              ref={isSelected ? hourRef : undefined}
+              onClick={() => onChangeWrapper(newDate => newDate.setHours(hour + (!is24HourFormat && isPM ? 12 : 0)))}
+            >
+              {hour.toString().padStart(2, '0')}
+            </Button>
+          )
+        })}
+      </div>
+      <div className="flex-col-1 h-full overflow-y-auto min-w-16">
+        {minutes.map(minute => {
+          const isSelected = minute === closestMinute
+          return (
+            <Button
+              size="small"
+              color={isSelected ? 'primary' : 'neutral'}
+              key={minute + minuteIncrement} // minute increment so that scroll works
+              ref={isSelected ? minuteRef : undefined}
+              onClick={() => onChangeWrapper(newDate => newDate.setMinutes(minute))}
+            >
+              {minute.toString().padStart(2, '0')}
+            </Button>
+          )
+        })}
+      </div>
       {!is24HourFormat && (
-        <div className="flex-col-1">
-          <button
-            className={style(!isPM)}
+        <div className="flex-col-1 min-w-16">
+          <Button
+            size="small"
+            color={!isPM ? 'primary' : 'neutral'}
             onClick={() => onChangeWrapper(newDate => isPM && newDate.setHours(newDate.getHours() - 12))}
           >
             AM
-          </button>
-          <button
-            className={style(isPM)}
+          </Button>
+          <Button
+            size="small"
+            color={isPM ? 'primary' : 'neutral'}
             onClick={() => onChangeWrapper(newDate => !isPM && newDate.setHours(newDate.getHours() + 12))}
           >
             PM
-          </button>
+          </Button>
         </div>
       )}
     </div>
@@ -147,10 +144,10 @@ export const TimePicker = ({
 }
 
 export const TimePickerUncontrolled = ({
-                                       time,
-                                       onChange,
-                                       ...props
-                                     }: TimePickerProps) => {
+                                         time,
+                                         onChange,
+                                         ...props
+                                       }: TimePickerProps) => {
   const [value, setValue] = useOverwritableState(time, onChange)
 
   return (

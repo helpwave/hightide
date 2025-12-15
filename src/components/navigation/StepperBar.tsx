@@ -1,7 +1,7 @@
 import { Check, ChevronLeft, ChevronRight } from 'lucide-react'
 import { useHightideTranslation } from '@/src/i18n/useHightideTranslation'
 import { range } from '@/src/utils/array'
-import { SolidButton } from '../user-action/Button'
+import { Button } from '../user-action/Button'
 import clsx from 'clsx'
 import { useOverwritableState } from '@/src/hooks/useOverwritableState'
 
@@ -53,7 +53,7 @@ export const StepperBar = ({
       className={clsx('flex-row-2 justify-between',className)}
     >
       <div className="flex-row-2 flex-[2] justify-start">
-        <SolidButton
+        <Button
           disabled={currentStep === 0 || disabledSteps.has(currentStep)}
           onClick={() => {
             update(currentStep - 1)
@@ -62,7 +62,7 @@ export const StepperBar = ({
         >
           <ChevronLeft size={14}/>
           {translation('back')}
-        </SolidButton>
+        </Button>
       </div>
       <div className="flex-row-2 flex-[5] justify-center items-center">
         {showDots && dots.map((value, index) => {
@@ -86,26 +86,26 @@ export const StepperBar = ({
       </div>
       {currentStep !== numberOfSteps && (
         <div className="flex-row-2 flex-[2] justify-end">
-          <SolidButton
+          <Button
             onClick={() => update(currentStep + 1)}
             className="flex-row-1 items-center justify-center"
             disabled={disabledSteps.has(currentStep)}
           >
             {translation('next')}
             <ChevronRight size={14}/>
-          </SolidButton>
+          </Button>
         </div>
       )}
       {currentStep === numberOfSteps && (
         <div className="flex-row-2 flex-[2] justify-end">
-          <SolidButton
+          <Button
             disabled={disabledSteps.has(currentStep)}
             onClick={onFinish}
             className="flex-row-1 items-center justify-center"
           >
             <Check size={14}/>
             {finishText ?? translation('confirm')}
-          </SolidButton>
+          </Button>
         </div>
       )}
     </div>

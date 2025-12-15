@@ -1,0 +1,8 @@
+/* The theme variables */
+@theme {
+  /*
+   * breakpoints
+   */
+  --breakpoint-tablet: 48rem; /* 768px for 16px font-size */
+  --breakpoint-desktop: 64rem; /* 1024px for 16px font-size*/
+}

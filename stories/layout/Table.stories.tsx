@@ -7,7 +7,7 @@ import type { TableProps } from '../../src/components/table/Table'
 import { TableWithSelection } from '../../src/components/table/Table'
 import { useHightideTranslation } from '../../src/i18n/useHightideTranslation'
 import { TableCell } from '../../src/components/table/TableCell'
-import { SolidButton } from '../../src/components/user-action/Button'
+import { Button } from '../../src/components/user-action/Button'
 
 type DataType = {
   id: string,
@@ -122,25 +122,25 @@ const TableExample = ({ ...props }: TableExampleProps) => {
         <h2 className="typography-title-md">Address book</h2>
         <div className="flex-row-2 items-center">
           {Object.keys(selection).length > 0 && (
-            <SolidButton size="small" color="negative" onClick={() => {
+            <Button size="small" color="negative" onClick={() => {
               setData(prevState => prevState.filter((_, index) => !selection[index]))
               setSelection({})
             }}>
               Delete
-            </SolidButton>
+            </Button>
           )}
-          <SolidButton
+          <Button
             size="small"
             onClick={() => setData(data => [...data, createRandomDataType()])}
           >
             Add Item
-          </SolidButton>
-          <SolidButton
+          </Button>
+          <Button
             size="small"
             onClick={() => setData(data => [...data, ...range(1000).map(_ => createRandomDataType())])}
           >
             Add 1000 Items
-          </SolidButton>
+          </Button>
         </div>
       </div>
       <TableWithSelection

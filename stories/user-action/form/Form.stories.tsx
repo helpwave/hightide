@@ -6,7 +6,7 @@ import { useState } from 'react'
 import { useTranslatedValidators } from '../../../src/hooks/useValidators'
 import { FormElementWrapper } from '../../../src/components/form/FormElementWrapper'
 import { Input } from '../../../src/components/user-action/input/Input'
-import { MultiSelect, Select, SelectOption } from '../../../src/components/user-action/select/Select'
+import { MultiSelect, Select, SelectOption } from '../../../src/components/user-action/Select'
 import { Textarea } from '../../../src/components/user-action/Textarea'
 
 type FormValue = {

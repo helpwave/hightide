@@ -1,7 +1,7 @@
 import type { ReactNode } from 'react'
 import clsx from 'clsx'
 import { addDuration, subtractDuration } from '@/src/utils/date'
-import { SolidButton } from './Button'
+import { Button } from './Button'
 import type { TimePickerProps } from '../date/TimePicker'
 import { TimePicker } from '../date/TimePicker'
 import type { DatePickerProps } from '../date/DatePicker'
@@ -48,8 +48,8 @@ export const DateTimePicker = ({
     dateDisplay = (
       <DatePicker
         {...datePickerProps}
-        className="min-w-[320px] min-h-[250px]"
-        yearMonthPickerProps={{ maxHeight: 218 }}
+        className="min-w-80 min-h-71 max-h-71"
+        yearMonthPickerProps={{ className: 'h-full grow' }}
         value={value}
         start={start}
         end={end}
@@ -61,8 +61,7 @@ export const DateTimePicker = ({
     timeDisplay = (
       <TimePicker
         {...timePickerProps}
-        className={clsx('h-full', { 'justify-between w-full': mode === 'time' })}
-        maxHeight={250}
+        className={clsx('min-h-71 max-h-71', { 'justify-between w-full': mode === 'time' })}
         time={value}
         onChange={onChange}
       />
@@ -77,13 +76,13 @@ export const DateTimePicker = ({
       </div>
       <div className="flex-row-2 justify-end">
         <div className="flex-row-2 mt-1">
-          <SolidButton size="medium" color="negative" onClick={onRemove}>{translation('clear')}</SolidButton>
-          <SolidButton
+          <Button size="medium" color="negative" onClick={onRemove}>{translation('clear')}</Button>
+          <Button
             size="medium"
             onClick={() => onFinish?.(value)}
           >
             {translation('change')}
-          </SolidButton>
+          </Button>
         </div>
       </div>
     </div>

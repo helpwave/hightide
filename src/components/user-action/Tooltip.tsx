@@ -1,6 +1,7 @@
 import type { CSSProperties, PropsWithChildren, ReactNode } from 'react'
 import { useHoverState } from '../../hooks/useHoverState'
 import { clsx } from 'clsx'
+import { useZIndexRegister } from '@/src/hooks/useZIndexRegister'
 
 type Position = 'top' | 'bottom' | 'left' | 'right'
 
@@ -21,7 +22,6 @@ export type TooltipProps = PropsWithChildren<{
    */
   containerClassName?: string,
   position?: Position,
-  zIndex?: number,
 }>
 
 /**
@@ -32,7 +32,6 @@ export type TooltipProps = PropsWithChildren<{
  * @param tooltipClassName Additional ClassNames for the Container of the tooltip
  * @param containerClassName Additional ClassNames for the Container holding the content
  * @param position The direction of the tooltip relative to the Container
- * @param zIndex The z Index of the tooltip (you may require this when stacking modal)
  * @constructor
  */
 export const Tooltip = ({
@@ -42,7 +41,6 @@ export const Tooltip = ({
                           tooltipClassName = '',
                           containerClassName = '',
                           position = 'bottom',
-                          zIndex = 10,
                         }: TooltipProps) => {
   const { isHovered, handlers } = useHoverState()
 
@@ -67,6 +65,8 @@ export const Tooltip = ({
     left: { borderWidth: `${triangleSize}px 0 ${triangleSize}px ${triangleSize}px` },
     right: { borderWidth: `${triangleSize}px ${triangleSize}px ${triangleSize}px 0` }
   }
+
+  const zIndex = useZIndexRegister(isHovered)
 
   return (
     <div

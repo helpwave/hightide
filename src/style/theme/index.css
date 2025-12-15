@@ -2,3 +2,6 @@
 @import './colors-basic.css';
 @import './colors-semantic.css';
 @import './colors-component.css';
+@import './typography.css';
+@import './breakpoints.css';
+@import './components.css';

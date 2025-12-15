@@ -1,7 +1,7 @@
 import type { Meta, StoryObj } from '@storybook/nextjs'
 import { action } from 'storybook/actions'
-import { SolidButton, TextButton } from '@/src/components/user-action/Button'
 import { useDelay } from '@/src/hooks/useDelay'
+import { Button } from '../../../src/components/user-action/Button'
 
 type UseDelayExampleProps = {
   delay: number,
@@ -13,13 +13,13 @@ const UseDelayExample = ({ delay, timerCallback }: UseDelayExampleProps) => {
 
   return (
     <div className="flex-col-2 items-center justify-center">
-      <SolidButton onClick={() => restartTimer(timerCallback)}>
+      <Button onClick={() => restartTimer(timerCallback)}>
         {'Press me'}
-      </SolidButton>
+      </Button>
       <span className="mt-12">{`Has an active timer: ${hasActiveTimer}`}</span>
-      <TextButton onClick={ clearTimer} color="negative" disabled={!hasActiveTimer}>
+      <Button coloringStyle="text" onClick={ clearTimer} color="negative" disabled={!hasActiveTimer}>
         {'Clear'}
-      </TextButton>
+      </Button>
     </div>
   )
 }

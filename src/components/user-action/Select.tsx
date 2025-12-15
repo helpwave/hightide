@@ -18,11 +18,12 @@ import { useFocusTrap } from '@/src/hooks/focus/useFocusTrap'
 import { match } from '@/src/utils/match'
 import { CheckIcon, Plus, XIcon } from 'lucide-react'
 import { Chip } from '@/src/components/layout/Chip'
-import { IconButton, TextButton } from '@/src/components/user-action/Button'
+import { Button } from '@/src/components/user-action/Button'
 import type { UseFloatingElementOptions } from '@/src/hooks/useFloatingElement'
 import { useFloatingElement } from '@/src/hooks/useFloatingElement'
 import { createPortal } from 'react-dom'
 import { useOverwritableState } from '@/src/hooks/useOverwritableState'
+import { useZIndexRegister } from '@/src/hooks/useZIndexRegister'
 
 //
 // Context
@@ -383,14 +384,14 @@ export const SelectOption = forwardRef<HTMLLIElement, SelectOptionProps>(
           }
         }}
       >
-        {iconAppearance === 'left' && (
+        {iconAppearance === 'left' && (state.value.length > 0 || config.isMultiSelect) && (
           <CheckIcon
             className={clsx('w-4 h-4', { 'opacity-0': !isSelected || disabled })}
             aria-hidden={true}
           />
         )}
         {label}
-        {iconAppearance === 'right' && (
+        {iconAppearance === 'right' && (state.value.length > 0 || config.isMultiSelect) && (
           <CheckIcon
             className={clsx('w-4 h-4', { 'opacity-0': !isSelected || disabled })}
             aria-hidden={true}
@@ -545,20 +546,21 @@ export const SelectChipDisplay = forwardRef<HTMLDivElement, SelectChipDisplayPro
       {state.selectedOptions.map(({ value, label }) => (
         <Chip key={value} className="gap-x-2">
           {label}
-          <TextButton
+          <Button
             // TODO add label to indicate purpose to screen reader
             onClick={() => {
               item.toggleSelection(value, false)
             }}
             size="none"
             color="negative"
+            coloringStyle="text"
             className="flex-row-0 items-center px-0.5 py-0.5 w-6 h-6 rounded"
           >
             <XIcon className="w-5 h-5"/>
-          </TextButton>
+          </Button>
         </Chip>
       ))}
-      <IconButton
+      <Button
         id={state.id} // TODO allow for a custom id here
         onClick={() => toggleOpen()}
         onKeyDown={event => {
@@ -570,6 +572,7 @@ export const SelectChipDisplay = forwardRef<HTMLDivElement, SelectChipDisplayPro
               toggleOpen(true, { highlightStartPositionBehavior: 'last' })
           }
         }}
+        layout="icon"
         size="small"
         color="neutral"
 
@@ -580,7 +583,7 @@ export const SelectChipDisplay = forwardRef<HTMLDivElement, SelectChipDisplayPro
         aria-controls={state.isOpen ? `${state.id}-listbox` : undefined}
       >
         <Plus/>
-      </IconButton>
+      </Button>
     </div>
   )
 })
@@ -621,9 +624,14 @@ export const SelectContent = forwardRef<HTMLUListElement, SelectContentProps>(
       active: state.isOpen && !!position,
     })
 
+
+    const zIndex = useZIndexRegister(state.isOpen)
+
     return createPortal(
       <div
-        id={`select-container-${state.id}`} className={clsx('fixed inset-0 w-screen h-screen', containerClassName)}
+        id={`select-container-${state.id}`}
+        className={clsx('fixed inset-0 w-screen h-screen', containerClassName)}
+        style={{ zIndex: zIndex }}
         hidden={!state.isOpen}
       >
         <div

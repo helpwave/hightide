@@ -1,0 +1,211 @@
+/* Button */
+@layer components {
+  .btn-xs {
+    @apply flex-row-1 items-center justify-center px-1 py-0.75 rounded-1 h-7 text-sm;
+  }
+
+  .btn-sm {
+    @apply flex-row-1 items-center justify-center px-1.5 py-1 rounded-1.5 h-8;
+  }
+
+  .btn-md {
+    @apply flex-row-2 items-center justify-center px-3 py-2 rounded-1.5 h-10;
+  }
+
+  .btn-lg {
+    @apply flex-row-2 items-center justify-center px-4 py-2.5 rounded-1.5 h-12;
+  }
+
+  .icon-btn-xs {
+    @apply flex-row-0 items-center justify-center p-1 rounded-1 h-6 w-6;
+  }
+
+  .icon-btn-sm {
+    @apply flex-row-0 items-center justify-center p-1.5 rounded-1.5 h-8 w-8;
+  }
+
+  .icon-btn-md {
+    @apply flex-row-0 items-center justify-center p-2 rounded-1.5 h-10 w-10;
+  }
+
+  .icon-btn-lg {
+    @apply flex-row-0 items-center justify-center p-3 rounded-1.5 h-12 w-12;
+  }
+}
+
+/* Card */
+@layer components {
+  .card-sm {
+    @apply flex-col-2 bg-surface text-on-surface px-2 py-1 rounded;
+  }
+
+  .card-md {
+    @apply flex-col-2 bg-surface text-on-surface px-4 py-2 rounded-md;
+  }
+
+  .card-lg {
+    @apply flex-col-2 bg-surface text-on-surface px-8 py-4 rounded-lg;
+  }
+}
+
+/* Chip */
+@layer components {
+  .chip-sm {
+    @apply flex-row-1 items-center justify-center px-1 py-0.5 rounded-md;
+  }
+
+  .chip-md {
+    @apply flex-row-1 items-center justify-center px-2 py-1 rounded-md;
+  }
+
+  .chip-lg {
+    @apply flex-row-2 items-center justify-center px-4 py-2 rounded-md;
+  }
+}
+
+/* Link */
+@layer components {
+  .link {
+    @apply decoration-3 p-2 hover:underline focus:underline font-bold text-lg rounded;
+  }
+}
+
+/* HTML Element defaults */
+@layer components {
+  * {
+    @apply border-border list-none;
+
+    @variant dark {
+      color-scheme: dark;
+    }
+  }
+
+  html {
+    @apply bg-background text-on-background;
+  }
+
+  button {
+    @apply cursor-pointer text-nowrap;
+  }
+
+  input {
+    @apply placeholder-placeholder
+  }
+
+  *:disabled {
+    @apply cursor-not-allowed;
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    * {
+      @apply transition-none animate-none;
+    }
+  }
+
+  /* move the focus styles into its own file and utilities */
+  *:focus {
+    @apply outline-0 ring-0;
+  }
+
+  *:focus-visible {
+    @apply outline-2 outline-focus outline-offset-2;
+  }
+
+  .focus-style-within:focus-within {
+    @apply outline-2 outline-focus;
+  }
+
+  .focus-style-none {
+    @apply focus-visible:outline-0 focus-within:outline-0 outline-offset-0;
+  }
+
+  /**
+   * Table
+   */
+
+  table {
+    @apply table-fixed border-separate border-spacing-0 bg-table-background text-table-text;
+  }
+
+  th {
+    @apply px-3 first:pl-6 last:pr-6 py-2.5 border-y-1 first:border-l-1 last:border-r-1 first:rounded-tl-lg last:rounded-tr-lg bg-table-header-background text-label font-bold;
+  }
+
+  tbody > tr {
+    @apply hover:bg-table-row-hover-background;
+  }
+
+  td {
+    @apply px-3 first:pl-6 last:pr-6 py-2.5 border-b-1 first:border-l-1 last:border-r-1 [nth-last-child(1)]:first:rounded-bl-lg [nth-last-child(1)]:last:rounded-br-lg;
+  }
+
+  tbody > tr:last-child > td {
+    @apply first:rounded-bl-lg last:rounded-br-lg;
+  }
+
+  .table-resize-indicator {
+    @apply absolute top-2 bottom-2 right-0;
+  }
+
+  th:last-child > .table-resize-indicator {
+    @apply right-6;
+  }
+
+  /**
+   * Scrollbar
+   */
+  @supports (scrollbar-color: auto) {
+    * {
+      scrollbar-color: var(--color-gray-500) transparent;
+    }
+  }
+
+  /* Otherwise, use `::-webkit-scrollbar-*` pseudo-elements */
+
+  @supports selector(::-webkit-scrollbar) {
+    * {
+      scrollbar-color: initial;
+    }
+
+    :root{
+      --scrollbar-width: 10px;
+      --scrollbar-padding: 1px;
+    }
+
+    *::-webkit-scrollbar {
+      width: var(--scrollbar-width);
+      height: var(--scrollbar-width);
+    }
+
+    *::-webkit-scrollbar-track {
+      border-radius: 9999px;
+      background: transparent;
+      cursor: default;
+    }
+
+    *::-webkit-scrollbar-thumb {
+      background-color: var(--color-gray-500);
+      border-radius: 9999px;
+      border: var(--scrollbar-padding) solid transparent;
+      background-clip: padding-box;
+      cursor: default;
+      transition: background-color 0.2s ease;
+    }
+
+    *::-webkit-scrollbar-thumb:active {
+      background-color: var(--color-gray-600);
+    }
+
+    *::-webkit-scrollbar-thumb:vertical {
+      min-height: calc(var(--scrollbar-width) * 3);
+    }
+
+    *::-webkit-scrollbar-thumb:horizontal {
+      min-width: calc(var(--scrollbar-width) * 3);
+    }
+
+    *::-webkit-scrollbar-corner {
+      background: transparent;
+    }
+  }
+}

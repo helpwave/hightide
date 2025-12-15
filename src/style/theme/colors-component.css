@@ -10,46 +10,9 @@
   --color-icon-secondary: var(--color-text-secondary);
   --color-icon-highlight: var(--color-highlight);
 
-  /* Button Outline */
-  --color-button-outline-primary-outline: var(--color-primary);
-  --color-button-outline-primary-icon: var(--color-primary);
-  --color-button-outline-primary-text: var(--color-primary);
-
-  /* Button Solid */
-  --color-button-solid-primary-background: var(--color-primary);
-  --color-button-solid-primary-text: var(--color-on-primary);
-  --color-button-solid-primary-icon: var(--color-on-primary);
-  --color-button-solid-secondary-background: var(--color-purple-50);
-  --color-button-solid-secondary-text: var(--color-primary);
-  --color-button-solid-secondary-icon: var(--color-primary);
-  --color-button-solid-tertiary-background: var(--color-gray-50);
-  --color-button-solid-tertiary-icon: var(--color-gray-500);
-  --color-button-solid-tertiary-text: var(--color-gray-500);
-  --color-button-solid-neutral-background: var(--color-gray-150);
-  --color-button-solid-neutral-icon: var(--color-text-primary);
-  --color-button-solid-neutral-text: var(--color-text-primary);
-  --color-button-solid-positive-background: var(--color-positive);
-  --color-button-solid-positive-icon: var(--color-on-positive);
-  --color-button-solid-positive-text: var(--color-on-positive);
-  --color-button-solid-warning-background: var(--color-warning);
-  --color-button-solid-warning-icon: var(--color-on-warning);
-  --color-button-solid-warning-text: var(--color-on-warning);
-  --color-button-solid-negative-background: var(--color-negative);
-  --color-button-solid-negative-icon: var(--color-on-negative);
-  --color-button-solid-negative-text: var(--color-on-negative);
-
-  /* Button Text */
-  --color-button-text-hover-background: #77777733;
-  --color-button-text-neutral-text: var(--color-gray-800);
-  --color-button-text-neutral-icon: var(--color-gray-800);
-  --color-button-text-negative-text: var(--color-negative);
-  --color-button-text-negative-icon: var(--color-negative);
-  --color-button-text-primary-text: var(--color-primary);
-  --color-button-text-primary-icon: var(--color-primary);
-
   /* Carousel */
   --color-carousel-dot-active: var(--color-primary);
-  --color-carousel-dot-disabled: var(--color-disabled-background);
+  --color-carousel-dot-disabled: var(--color-disabled);
 
   /* Input */
   --color-input-background: var(--color-surface-variant);
@@ -91,32 +54,6 @@
   --color-table-header-background: color-mix(in srgb, var(--color-blue-500) 15%, var(--color-surface));
   --color-table-row-hover-background: color-mix(in srgb, var(--color-purple-500) 15%, var(--color-surface));
 
-  /* Tag */
-  --color-tag-dark-background: var(--color-gray-800);
-  --color-tag-dark-text: var(--color-gray-100);
-  --color-tag-dark-icon: var(--color-gray-100);
-  --color-tag-default-background: #50687C;
-  --color-tag-default-text: var(--color-gray-100);
-  --color-tag-default-icon: var(--color-gray-100);
-  --color-tag-green-background: #E2E9DB;
-  --color-tag-green-text: #7A977E;
-  --color-tag-green-icon: #7A977E;
-  --color-tag-yellow-background: #FEEACB;
-  --color-tag-yellow-text: #C79345;
-  --color-tag-yellow-icon: #C79345;
-  --color-tag-red-background: #FEE0DD;
-  --color-tag-red-text: #D67268;
-  --color-tag-red-icon: #D67268;
-  --color-tag-blue-background: #DBE2F3;
-  --color-tag-blue-text: #758ECE;
-  --color-tag-blue-icon: #758ECE;
-  --color-tag-pink-background: #F3DBE7;
-  --color-tag-pink-text: #CE75A0;
-  --color-tag-pink-icon: #CE75A0;
-  --color-tag-orange-background: #FEEACB;
-  --color-tag-orange-text: #EA8E00;
-  --color-tag-orange-icon: #EA8E00;
-
   /* TextImage */
   --color-text-image-primary-background: var(--color-primary);
   --color-text-image-primary-text: var(--color-white);
@@ -141,16 +78,6 @@
 @layer base {
   /* dark theme */
   @variant dark {
-    /* Button Solid */
-    --color-button-solid-neutral-background: var(--color-gray-750);
-    --color-button-solid-neutral-icon: var(--color-gray-100);
-    --color-button-solid-neutral-text: var(--color-gray-100);
-
-    /* Button Text */
-    --color-button-text-hover-background: #3F3F3F33;
-    --color-button-text-neutral-text: var(--color-gray-100);
-    --color-button-text-neutral-icon: var(--color-gray-100);
-
     /* Property */
     --color-property-title-background: var(--color-gray-750);
 
@@ -163,9 +90,6 @@
     /* Scrollbar */
     --color-scrollbar-track: #FFFFFF33;
     --color-scrollbar-thumb: var(--color-gray-300);
-
-    /* Tag */
-    --color-tag-dark-background: var(--color-gray-900);
 
     /* Other */
     --color-border: var(--color-gray-600);

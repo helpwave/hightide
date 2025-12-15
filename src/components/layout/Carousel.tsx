@@ -13,7 +13,7 @@ import React, {
 import clsx from 'clsx'
 import { ChevronLeft, ChevronRight } from 'lucide-react'
 import { createLoopingListWithIndex, range } from '@/src/utils/array'
-import { IconButton } from '../user-action/Button'
+import { Button } from '../user-action/Button'
 import { useHightideTranslation } from '@/src/i18n/useHightideTranslation'
 
 //
@@ -256,7 +256,7 @@ export const Carousel = ({
 
   const left = () => {
     if (canGoLeft()) {
-      setCurrentIndex(currentIndex - 1)
+      setCurrentIndex((currentIndex + length - 1) % length)
     }
   }
 
@@ -409,22 +409,24 @@ export const Carousel = ({
           )}
           {arrows && (
             <>
-              <IconButton
+              <Button
+                layout="icon"
                 color="neutral"
                 className={clsx('absolute z-10 left-2 top-1/2 -translate-y-1/2 shadow-md', { hidden: !canGoLeft() })}
                 disabled={!canGoLeft()}
                 onClick={() => left()}
               >
                 <ChevronLeft size={24}/>
-              </IconButton>
-              <IconButton
+              </Button>
+              <Button
+                layout="icon"
                 color="neutral"
                 className={clsx('absolute z-10 right-2 top-1/2 -translate-y-1/2 shadow-md', { hidden: !canGoRight() })}
                 disabled={!canGoRight()}
                 onClick={() => right()}
               >
                 <ChevronRight size={24}/>
-              </IconButton>
+              </Button>
             </>
           )}
         </div>

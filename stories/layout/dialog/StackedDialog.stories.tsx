@@ -2,7 +2,7 @@ import type { Meta, StoryObj } from '@storybook/nextjs'
 import { useState } from 'react'
 import type { DialogPosition } from '../../../src/components/dialog/Dialog'
 import { Dialog } from '../../../src/components/dialog/Dialog'
-import { SolidButton } from '../../../src/components/user-action/Button'
+import { Button } from '../../../src/components/user-action/Button'
 
 
 /**
@@ -15,7 +15,7 @@ const StackedDialog = ({ position }: { position: DialogPosition }) => {
   return (
     <>
       <div className="flex-row-2 items-center justify-center min-h-[400px]">
-        <SolidButton onClick={() => setModal1(true)}>Open Dialog</SolidButton>
+        <Button onClick={() => setModal1(true)}>Open Dialog</Button>
       </div>
 
       <Dialog
@@ -26,8 +26,8 @@ const StackedDialog = ({ position }: { position: DialogPosition }) => {
         position={position}
         onClose={() => setModal1(false)}
       >
-        <SolidButton onClick={() => setModal2(true)}>Open 2</SolidButton>
-        <SolidButton color="negative" onClick={() => setModal1(false)}>Close</SolidButton>
+        <Button onClick={() => setModal2(true)}>Open 2</Button>
+        <Button color="negative" onClick={() => setModal1(false)}>Close</Button>
       </Dialog>
 
       <Dialog
@@ -38,8 +38,8 @@ const StackedDialog = ({ position }: { position: DialogPosition }) => {
         position={position}
         onClose={() => setModal2(false)}
       >
-        <SolidButton onClick={() => setModal3(true)}>Open 3</SolidButton>
-        <SolidButton color="negative" onClick={() => setModal2(false)}>Close</SolidButton>
+        <Button onClick={() => setModal3(true)}>Open 3</Button>
+        <Button color="negative" onClick={() => setModal2(false)}>Close</Button>
       </Dialog>
       <Dialog
         titleElement="Dialog 3"
@@ -48,7 +48,7 @@ const StackedDialog = ({ position }: { position: DialogPosition }) => {
         position={position}
         onClose={() => setModal3(false)}
       >
-        <SolidButton color="negative" onClick={() => setModal3(false)}>Close 3</SolidButton>
+        <Button color="negative" onClick={() => setModal3(false)}>Close 3</Button>
       </Dialog>
     </>
   )

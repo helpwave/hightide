@@ -25,7 +25,6 @@ import {
   useReactTable
 } from '@tanstack/react-table'
 import { range } from '@/src/utils/array'
-import { Scrollbars } from 'react-custom-scrollbars-2'
 import { clamp } from '@/src/utils/math'
 import { TableCell } from '@/src/components/table/TableCell'
 import { TableFilters } from '@/src/components/table/Filter'
@@ -64,6 +63,7 @@ export type TableProps<T> = {
   fillerRow?: (columnId: string, table: ReactTable<T>) => ReactNode,
   initialState?: Omit<InitialTableState, 'columnSizing' | 'columnSizingInfo'>,
   className?: string,
+  tableContainerClassName?: string,
   onRowClick?: (row: Row<T>, table: ReactTable<T>) => void,
   state?: Omit<TableState, 'columnSizing' | 'columnSizingInfo'>,
   tableClassName?: string,
@@ -79,6 +79,7 @@ export const Table = <T, >({
                              onRowClick,
                              className,
                              tableClassName,
+                             tableContainerClassName,
                              defaultColumn,
                              state,
                              columns,
@@ -315,11 +316,7 @@ export const Table = <T, >({
 
   return (
     <div ref={ref} className={clsx('flex-col-4', className)}>
-      <Scrollbars
-        autoHeight={true}
-        autoHeightMax={tableRef.current?.offsetHeight ? (tableRef.current?.offsetHeight + 2) : undefined}
-        autoHide={true}
-      >
+      <div className={clsx('flex-col-0 w-full overflow-auto', tableContainerClassName)}>
         <table
           ref={tableRef}
           className={clsx(tableClassName)}
@@ -362,16 +359,16 @@ export const Table = <T, >({
                                 const sorted = header.column.getIsSorted()
                                 const isMulti = header.column.getCanMultiSort()
                                 console.log(isMulti, header.column.id)
-                                if(!isMulti) {
+                                if (!isMulti) {
                                   table.resetSorting()
                                 }
-                                if(!sorted) {
+                                if (!sorted) {
                                   header.column.toggleSorting(true, isMulti)
                                   return
                                 } else if (sorted === 'desc') {
                                   header.column.toggleSorting(false, isMulti)
                                 }
-                                if(sorted === 'asc') {
+                                if (sorted === 'asc') {
                                   header.column.clearSorting()
                                 }
                               }}
@@ -445,7 +442,7 @@ export const Table = <T, >({
           })}
           </tbody>
         </table>
-      </Scrollbars>
+      </div>
       <div className="flex-row-2 justify-center">
         <Pagination
           pageIndex={table.getState().pagination.pageIndex}

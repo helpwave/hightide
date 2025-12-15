@@ -4,7 +4,7 @@ import type { PropsWithChildren, ReactNode } from 'react'
 import type { PropertyBaseProps } from '@/src/components/properties/PropertyBase'
 import { PropertyBase } from '@/src/components/properties/PropertyBase'
 
-import { Select } from '@/src/components/user-action/select/Select'
+import { Select } from '@/src/components/user-action/Select'
 
 export type SingleSelectPropertyProps =
   Omit<PropertyBaseProps, 'icon' | 'input' | 'hasValue' | 'className'>

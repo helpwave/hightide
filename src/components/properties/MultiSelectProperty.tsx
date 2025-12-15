@@ -4,7 +4,7 @@ import type { PropsWithChildren } from 'react'
 import type { PropertyBaseProps } from '@/src/components/properties/PropertyBase'
 import { PropertyBase } from '@/src/components/properties/PropertyBase'
 
-import { MultiSelectChipDisplay } from '@/src/components/user-action/select/Select'
+import { MultiSelectChipDisplay } from '@/src/components/user-action/Select'
 
 export type MultiSelectPropertyProps = Omit<PropertyBaseProps, 'icon' | 'input' | 'hasValue' | 'className'> & PropsWithChildren<{
   values: string[],

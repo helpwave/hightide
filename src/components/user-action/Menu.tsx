@@ -7,6 +7,7 @@ import type { PopoverHorizontalAlignment, PopoverVerticalAlignment } from '@/src
 import { usePopoverPosition } from '@/src/hooks/usePopoverPosition'
 import { useHoverState } from '@/src/hooks/useHoverState'
 import { useOutsideClick } from '@/src/hooks/useOutsideClick'
+import { useZIndexRegister } from '@/src/hooks/useZIndexRegister'
 
 export type MenuItemProps = {
   onClick?: () => void,
@@ -123,6 +124,8 @@ export const Menu = <T extends HTMLElement>({
     }
   }, [isOpen])
 
+  const zIndex = useZIndexRegister(isOpen)
+
   return (
     <>
       {trigger(bag, triggerRef)}
@@ -145,7 +148,8 @@ export const Menu = <T extends HTMLElement>({
             }
           }}
           style={{
-            ...menuPosition
+            ...menuPosition,
+            zIndex
           }}
         >
           {BagFunctionUtil.resolve<MenuBag>(children, bag)}
