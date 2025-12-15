@@ -1,4 +1,4 @@
-import { IconButton, SolidButton } from '../user-action/Button'
+import { Button } from '../user-action/Button'
 import { Input } from '../user-action/input/Input'
 import { FilterIcon } from 'lucide-react'
 import { Menu } from '../user-action/Menu'
@@ -30,9 +30,14 @@ export const TableFilterButton = <T, >({
     <Menu<HTMLDivElement>
       trigger={({ toggleOpen }, ref) => (
         <div ref={ref} className="relative">
-          <IconButton color="neutral" size="tiny" onClick={toggleOpen}>
+          <Button
+            layout="icon"
+            color="neutral"
+            size="tiny"
+            onClick={toggleOpen}
+          >
             <FilterIcon/>
-          </IconButton>
+          </Button>
           {hasFilter && (
             <div
               className="absolute top-0.5 right-0.5 w-2 h-2 rounded-full bg-primary pointer-events-none"
@@ -105,19 +110,19 @@ export const TableFilterButton = <T, >({
           )}
           <div className="flex-row-2 justify-end w-full">
             {hasFilter && (
-              <SolidButton color="negative" size="small" onClick={() => {
+              <Button color="negative" size="small" onClick={() => {
                 column.setFilterValue(undefined)
                 close()
               }}>
                 {translation('remove')}
-              </SolidButton>
+              </Button>
             )}
-            <SolidButton size="small" onClick={() => {
+            <Button size="small" onClick={() => {
               column.setFilterValue(filterValue)
               close()
             }}>
               {translation('apply')}
-            </SolidButton>
+            </Button>
           </div>
         </div>
       )}

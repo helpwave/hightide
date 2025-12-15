@@ -1,6 +1,6 @@
 import type { PropsWithChildren } from 'react'
-import type { SolidButtonColor } from '../user-action/Button'
-import { SolidButton } from '../user-action/Button'
+import type { ButtonColor } from '../user-action/Button'
+import { Button } from '../user-action/Button'
 import { useHightideTranslation } from '@/src/i18n/useHightideTranslation'
 import clsx from 'clsx'
 import type { DialogProps } from './Dialog'
@@ -10,7 +10,7 @@ export type ConfirmDialogType = 'positive' | 'negative' | 'neutral' | 'primary'
 
 type ButtonOverwriteType = {
   text?: string,
-  color?: SolidButtonColor,
+  color?: ButtonColor,
   disabled?: boolean,
 }
 
@@ -42,7 +42,7 @@ export const ConfirmDialog = ({
                               }: PropsWithChildren<ConfirmDialogProps>) => {
   const translation = useHightideTranslation()
 
-  const mapping: Record<ConfirmDialogType, SolidButtonColor> = {
+  const mapping: Record<ConfirmDialogType, ButtonColor> = {
     neutral: 'neutral',
     negative: 'negative',
     positive: 'positive',
@@ -56,31 +56,31 @@ export const ConfirmDialog = ({
       </div>
       <div className="flex-row-4 mt-3 justify-end">
         {onCancel && (
-          <SolidButton
+          <Button
             color={buttonOverwrites?.[0].color ?? 'neutral'}
             onClick={onCancel}
             disabled={buttonOverwrites?.[0].disabled ?? false}
           >
             {buttonOverwrites?.[0].text ?? translation('cancel')}
-          </SolidButton>
+          </Button>
         )}
         {onDecline && (
-          <SolidButton
+          <Button
             color={buttonOverwrites?.[1].color ?? 'negative'}
             onClick={onDecline}
 
             disabled={buttonOverwrites?.[1].disabled ?? false}
           >
             {buttonOverwrites?.[1].text ?? translation('decline')}
-          </SolidButton>
+          </Button>
         )}
-        <SolidButton
+        <Button
           color={buttonOverwrites?.[2].color ?? mapping[confirmType]}
           onClick={onConfirm}
           disabled={buttonOverwrites?.[2].disabled ?? false}
         >
           {buttonOverwrites?.[2].text ?? translation('confirm')}
-        </SolidButton>
+        </Button>
       </div>
     </Dialog>
   )

@@ -7,8 +7,8 @@ type TooltipStackExampleProps = Omit<TooltipProps, 'children' | 'tooltip'>
 const TooltipStackExample = ({ ...props }: TooltipStackExampleProps) => {
   return (
     <Tooltip tooltip={(
-      <Tooltip zIndex={11} tooltip={(
-        <span>Try to hover <Tooltip tooltip="Great right?" zIndex={12}>
+      <Tooltip tooltip={(
+        <span>Try to hover <Tooltip tooltip="Great right?">
           <span className="font-bold underline">here</span>
         </Tooltip></span>
       )}>This is a Text on which you can hover to show
@@ -32,7 +32,6 @@ export const tooltipStackExample: Story = {
   args: {
     animationDelay: 700,
     position: 'right',
-    zIndex: 10,
     containerClassName: '',
     tooltipClassName: ''
   },

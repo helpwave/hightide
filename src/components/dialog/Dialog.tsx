@@ -6,10 +6,11 @@ import { useEffect, useRef, useState } from 'react'
 import clsx from 'clsx'
 import { X } from 'lucide-react'
 import { useHightideTranslation } from '@/src/i18n/useHightideTranslation'
-import { IconButton } from '@/src/components/user-action/Button'
+import { Button } from '@/src/components/user-action/Button'
 import { useFocusTrap } from '@/src/hooks/focus/useFocusTrap'
 import { useLogOnce } from '@/src/hooks/useLogOnce'
 import { createPortal } from 'react-dom'
+import { useZIndexRegister } from '@/src/hooks/useZIndexRegister'
 
 export type DialogPosition = 'top' | 'center' | 'none'
 
@@ -77,6 +78,8 @@ export const Dialog = ({
     focusFirst: true,
   })
 
+  const zIndex = useZIndexRegister(isOpen)
+
   const positionMap: Record<DialogPosition, string> = {
     top: 'fixed top-8 left-1/2 -translate-x-1/2',
     center: 'fixed left-1/2 -translate-x-1/2 top-1/2 -translate-y-1/2',
@@ -87,7 +90,11 @@ export const Dialog = ({
   if (!visible) return
 
   return createPortal(
-    <div id={`dialog-container-${id}`} className={clsx('fixed inset-0 h-screen w-screen', containerClassName)}>
+    <div
+      id={`dialog-container-${id}`}
+      className={clsx('fixed inset-0 h-screen w-screen', containerClassName)}
+      style={{ zIndex }}
+    >
       <div
         id={`dialog-background-${id}`}
         hidden={!visible}
@@ -148,14 +155,15 @@ export const Dialog = ({
               paddingRight: 'inherit'
             }}
           >
-            <IconButton
+            <Button
+              layout="icon"
               color="neutral"
               size="tiny"
               aria-label={translation('close')}
               onClick={onCloseWrapper}
             >
               <X/>
-            </IconButton>
+            </Button>
           </div>
         )}
         {children}

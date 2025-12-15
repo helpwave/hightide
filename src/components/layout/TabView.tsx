@@ -96,7 +96,7 @@ export function TabView({ children, outerDivProps, onTabChanged, initialTabIndex
               onClick={() => setActive(t.id)}
               onKeyDown={(e) => onKeyDown(e, t.id)}
               className={clsx(
-                'flex-row-0 grow justify-center px-3 pb-1 typography-label-md border-b-2',
+                'flex-row-0 grow justify-center px-3 pb-2.25 typography-label-md font-bold border-b-2',
                 active === t.id
                   ? 'border-primary'
                   : 'text-description hover:text-on-background'

@@ -1,11 +1,10 @@
 import { useEffect, useRef } from 'react'
-import { Scrollbars } from 'react-custom-scrollbars-2'
 import { equalSizeGroups, range } from '@/src/utils/array'
 import clsx from 'clsx'
 import { ExpandableUncontrolled } from '@/src/components/layout/Expandable'
 import { addDuration, monthsList, subtractDuration } from '@/src/utils/date'
 import { useLocale } from '@/src/i18n/LocaleProvider'
-import { SolidButton } from '../user-action/Button'
+import { Button } from '../user-action/Button'
 import { useOverwritableState } from '@/src/hooks/useOverwritableState'
 
 export type YearMonthPickerProps = {
@@ -18,14 +17,12 @@ export type YearMonthPickerProps = {
   showValueOpen?: boolean,
 }
 
-// TODO use a dynamically loading infinite list here
 export const YearMonthPicker = ({
                                   displayedYearMonth = new Date(),
                                   start = subtractDuration(new Date(), { years: 50 }),
                                   end = addDuration(new Date(), { years: 50 }),
                                   onChange,
                                   className = '',
-                                  maxHeight = 300,
                                   showValueOpen = true
                                 }: YearMonthPickerProps) => {
   const { locale } = useLocale()
@@ -52,53 +49,49 @@ export const YearMonthPicker = ({
   const years = range([start.getFullYear(), end.getFullYear()], { exclusiveEnd: false })
 
   return (
-    <div className={clsx('flex-col-0 select-none', className)}>
-      <Scrollbars autoHeight autoHeightMax={maxHeight} style={{ height: '100%' }}>
-        <div className="flex-col-1 mr-3">
-          {years.map(year => {
-            const selectedYear = displayedYearMonth.getFullYear() === year
-            return (
-              <ExpandableUncontrolled
-                key={year}
-                ref={(displayedYearMonth.getFullYear() ?? new Date().getFullYear()) === year ? ref : undefined}
-                label={<span className={clsx({ 'text-primary font-bold': selectedYear })}>{year}</span>}
-                isExpanded={showValueOpen && selectedYear}
-                contentClassName="gap-y-1"
-              >
-                {equalSizeGroups([...monthsList], 3).map((monthList, index) => (
-                  <div key={index} className="flex-row-1">
-                    {monthList.map(month => {
-                      const monthIndex = monthsList.indexOf(month)
-                      const newDate = new Date(year, monthIndex)
+    <div className={clsx('flex-col-1 select-none overflow-y-auto', className)}>
+      {years.map(year => {
+        const selectedYear = displayedYearMonth.getFullYear() === year
+        return (
+          <ExpandableUncontrolled
+            key={year}
+            ref={(displayedYearMonth.getFullYear() ?? new Date().getFullYear()) === year ? ref : undefined}
+            label={<span className={clsx({ 'text-primary font-bold': selectedYear })}>{year}</span>}
+            isExpanded={showValueOpen && selectedYear}
+            contentClassName="gap-y-1"
+          >
+            {equalSizeGroups([...monthsList], 3).map((monthList, index) => (
+              <div key={index} className="flex-row-1">
+                {monthList.map(month => {
+                  const monthIndex = monthsList.indexOf(month)
+                  const newDate = new Date(year, monthIndex)
 
-                      const selectedMonth = selectedYear && monthIndex === displayedYearMonth.getMonth()
-                      const firstOfMonth = new Date(year, monthIndex, 1)
-                      const lastOfMonth = new Date(year, monthIndex, 1)
-                      const isAfterStart = start === undefined || start <= addDuration(subtractDuration(lastOfMonth, { days: 1 }), { months: 1 })
-                      const isBeforeEnd = end === undefined || firstOfMonth <= end
-                      const isValid = isAfterStart && isBeforeEnd
-                      return (
-                        <SolidButton
-                          key={month}
-                          disabled={!isValid}
-                          color={selectedMonth && isValid ? 'primary' : 'neutral'}
-                          className="flex-1"
-                          size="small"
-                          onClick={() => {
-                            onChange?.(newDate)
-                          }}
-                        >
-                          {new Intl.DateTimeFormat(locale, { month: 'short' }).format(newDate)}
-                        </SolidButton>
-                      )
-                    })}
-                  </div>
-                ))}
-              </ExpandableUncontrolled>
-            )
-          })}
-        </div>
-      </Scrollbars>
+                  const selectedMonth = selectedYear && monthIndex === displayedYearMonth.getMonth()
+                  const firstOfMonth = new Date(year, monthIndex, 1)
+                  const lastOfMonth = new Date(year, monthIndex, 1)
+                  const isAfterStart = start === undefined || start <= addDuration(subtractDuration(lastOfMonth, { days: 1 }), { months: 1 })
+                  const isBeforeEnd = end === undefined || firstOfMonth <= end
+                  const isValid = isAfterStart && isBeforeEnd
+                  return (
+                    <Button
+                      key={month}
+                      disabled={!isValid}
+                      color={selectedMonth && isValid ? 'primary' : 'neutral'}
+                      className="flex-1"
+                      size="small"
+                      onClick={() => {
+                        onChange?.(newDate)
+                      }}
+                    >
+                      {new Intl.DateTimeFormat(locale, { month: 'short' }).format(newDate)}
+                    </Button>
+                  )
+                })}
+              </div>
+            ))}
+          </ExpandableUncontrolled>
+        )
+      })}
     </div>
   )
 }

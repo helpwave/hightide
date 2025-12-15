@@ -2,7 +2,7 @@ import type { Meta, StoryObj } from '@storybook/nextjs'
 import type { MenuProps } from '../../src/components/user-action/Menu'
 import { Menu, MenuItem } from '../../src/components/user-action/Menu'
 import { action } from 'storybook/actions'
-import { SolidButton } from '../../src/components/user-action/Button'
+import { Button } from '../../src/components/user-action/Button'
 import { range } from '../../src/utils/array'
 
 type MenuExampleProps = Omit<MenuProps<HTMLDivElement>, 'trigger'>
@@ -17,9 +17,9 @@ const MenuExample = ({
         {...props}
         trigger={({ toggleOpen, disabled }, ref) => {
           return (
-            <SolidButton ref={ref} onClick={toggleOpen} disabled={disabled}>
+            <Button ref={ref} onClick={toggleOpen} disabled={disabled}>
               Open Menu
-            </SolidButton>
+            </Button>
           )
         }}
       >

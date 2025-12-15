@@ -3,8 +3,8 @@ import type { DialogProps } from '@/src/components/dialog/Dialog'
 import { Dialog } from '@/src/components/dialog/Dialog'
 import { LocalizationUtil } from '@/src/i18n/util'
 import { useLocale } from '@/src/i18n/LocaleProvider'
-import { Select, SelectOption } from '@/src/components/user-action/select/Select'
-import { SolidButton } from '@/src/components/user-action/Button'
+import { Select, SelectOption } from '@/src/components/user-action/Select'
+import { Button } from '@/src/components/user-action/Button'
 import { useHightideTranslation } from '@/src/i18n/useHightideTranslation'
 import type { HightideTranslationLocales } from '@/src/i18n/translations'
 
@@ -38,7 +38,6 @@ export const LanguageDialog = ({
         <Select
           value={locale}
           onValueChanged={(language: string) => setLocale(language as HightideTranslationLocales)}
-          contentPanelProps={{ containerClassName: 'z-200' }}
           buttonProps={{
             selectedDisplay: locale => LocalizationUtil.languagesLocalNames[locale]
           }}
@@ -48,9 +47,9 @@ export const LanguageDialog = ({
           ))}
         </Select>
         <div className="flex-row-4 mt-3 justify-end">
-          <SolidButton color="positive" onClick={onClose}>
+          <Button color="positive" onClick={onClose}>
             {translation('done')}
-          </SolidButton>
+          </Button>
         </div>
       </div>
     </Dialog>

@@ -1,9 +1,9 @@
 import type { InputProps } from './input/Input'
 import { Input } from './input/Input'
-import { IconButton } from './Button'
 import { Search } from 'lucide-react'
 import { clsx } from 'clsx'
 import { useHightideTranslation } from '@/src/i18n/useHightideTranslation'
+import { Button } from '@/src/components/user-action/Button'
 
 export type SearchBarProps = InputProps & {
   onSearch?: () => void,
@@ -27,9 +27,14 @@ export const SearchBar = ({
         placeholder={placeholder ?? translation('search')}
       />
       {onSearch && (
-        <IconButton color="neutral" disabled={disableOnSearch} onClick={onSearch}>
+        <Button
+          layout="icon"
+          color="neutral"
+          disabled={disableOnSearch}
+          onClick={onSearch}
+        >
           <Search className="w-full h-full"/>
-        </IconButton>
+        </Button>
       )}
     </div>
   )

@@ -1,7 +1,7 @@
 import type { Meta, StoryObj } from '@storybook/nextjs'
 import { useState } from 'react'
 import { LanguageDialog } from '../../../src/components/dialog/LanguageDialog'
-import { SolidButton } from '../../../src/components/user-action/Button'
+import { Button } from '../../../src/components/user-action/Button'
 
 
 /**
@@ -17,7 +17,7 @@ const LanguageModalExample = () => {
         onClose={() => setIsOpen(false)}
       />
       <div className="flex-row-2 items-center justify-center min-h-[400px]">
-        <SolidButton onClick={() => setIsOpen(true)}>Show Modal</SolidButton>
+        <Button onClick={() => setIsOpen(true)}>Show Modal</Button>
       </div>
     </>
   )

@@ -4,7 +4,7 @@ import { Input } from '../user-action/input/Input'
 import { clamp } from '@/src/utils/math'
 import type { CSSProperties } from 'react'
 import { useEffect, useState } from 'react'
-import { IconButton } from '../user-action/Button'
+import { Button } from '../user-action/Button'
 import { useHightideTranslation } from '@/src/i18n/useHightideTranslation'
 
 
@@ -47,12 +47,22 @@ export const Pagination = ({
 
   return (
     <div className={clsx('flex-row-1', className)} style={style}>
-      <IconButton color="transparent" onClick={() => changePage(0)} disabled={onFirstPage || noPages}>
+      <Button
+        layout="icon"
+        coloringStyle="text"
+        color="neutral"
+        onClick={() => changePage(0)} disabled={onFirstPage || noPages}
+      >
         <ChevronFirst/>
-      </IconButton>
-      <IconButton color="transparent" onClick={() => changePage(pageIndex - 1)} disabled={onFirstPage || noPages}>
+      </Button>
+      <Button
+        layout="icon"
+        coloringStyle="text"
+        color="neutral"
+        onClick={() => changePage(pageIndex - 1)} disabled={onFirstPage || noPages}
+      >
         <ChevronLeft/>
-      </IconButton>
+      </Button>
       <div className="flex-row-2 min-w-56 items-center justify-center mx-2 text-center">
         <Input
           value={value}
@@ -82,12 +92,22 @@ export const Pagination = ({
           {pageCount}
         </span>
       </div>
-      <IconButton color="transparent" onClick={() => changePage(pageIndex + 1)} disabled={onLastPage || noPages}>
+      <Button
+        layout="icon"
+        coloringStyle="text"
+        color="neutral"
+        onClick={() => changePage(pageIndex + 1)} disabled={onLastPage || noPages}
+      >
         <ChevronRight/>
-      </IconButton>
-      <IconButton color="transparent" onClick={() => changePage(pageCount - 1)} disabled={onLastPage || noPages}>
+      </Button>
+      <Button
+        layout="icon"
+        coloringStyle="text"
+        color="neutral"
+        onClick={() => changePage(pageCount - 1)} disabled={onLastPage || noPages}
+      >
         <ChevronLast/>
-      </IconButton>
+      </Button>
     </div>
   )
 }

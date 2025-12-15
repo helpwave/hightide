@@ -1,10 +1,10 @@
 import type { Meta, StoryObj } from '@storybook/nextjs'
-import { SolidButton } from '@/src/components/user-action/Button'
 import { useRef, useState } from 'react'
 import { InputUncontrolled } from '../../../src/components/user-action/input/Input'
 import { FocusTrap } from '@/src/components/utils/FocusTrap'
 import { clsx } from 'clsx'
 import { Dialog } from '../../../src/components/dialog/Dialog'
+import { Button } from '../../../src/components/user-action/Button'
 
 const Example = () => {
   const ref = useRef<HTMLButtonElement>(null)
@@ -21,12 +21,12 @@ const Example = () => {
         description="This is the second dialog trap"
         onClose={() => setShowDialog(false)}
       >
-        <SolidButton onClick={() => setShowDialog2(true)}>
+        <Button onClick={() => setShowDialog2(true)}>
           Open next
-        </SolidButton>
-        <SolidButton onClick={() => setShowDialog(false)} color="negative">
+        </Button>
+        <Button onClick={() => setShowDialog(false)} color="negative">
           Close
-        </SolidButton>
+        </Button>
       </Dialog>
       <Dialog
         isOpen={showDialog2}
@@ -47,9 +47,9 @@ const Example = () => {
           )}
         >
           <span>{`FocusTrap ${active ? 'active' : 'inactive'}`}</span>
-          <SolidButton ref={ref} onClick={() => setActive(prevState => !prevState)} className="w-min">
+          <Button ref={ref} onClick={() => setActive(prevState => !prevState)} className="w-min">
             {'Toggle Focus Trap'}
-          </SolidButton>
+          </Button>
           <FocusTrap
             active={innerActive}
             initialFocus={ref}
@@ -62,16 +62,16 @@ const Example = () => {
             )}
           >
             <span>{`Inner FocusTrap ${innerActive ? 'active' : 'inactive'}`}</span>
-            <SolidButton ref={ref} onClick={() => setInnerActive(prevState => !prevState)} className="w-min">
+            <Button ref={ref} onClick={() => setInnerActive(prevState => !prevState)} className="w-min">
               {'Toggle Inner Focus Trap'}
-            </SolidButton>
+            </Button>
             <InputUncontrolled className="w-min"/>
           </FocusTrap>
         </FocusTrap>
         <span>This part is not reachable with keyboard navigation when the traps are active</span>
-        <SolidButton onClick={() => setShowDialog(true)} className="w-min">
+        <Button onClick={() => setShowDialog(true)} className="w-min">
           {'Open dialog trap'}
-        </SolidButton>
+        </Button>
       </div>
     </>
   )

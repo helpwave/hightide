@@ -5,6 +5,31 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/)
 and adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [0.3.0] - 2025-12-15
+
+### Added
+- `coloring-<solid | text | outline>` CSS class uses the colors below to color the element according to the color
+- `prmiary`, `secondary`, `positive`, `negative`, `warning`, `disabled` CSS classes to set the variables for `coloring-*`
+- `useZIndexRegistry` hook to manage zIndex of elements that pop in and out of the viewport like `Select`, `Dialog`, `Tooltip`
+
+### Changed
+- Consolidated `SolidButton`, `TextButton`, `OutlinedButton`, `IconButton` into on component `Button` with four attributes `ButtonSize`, `ButtonColoringStyle`, `ButtonLayout`, `ButtonColor`
+- Split css classes into theming and utility 
+- `SelectOption`s now only use marker padding when there is a selected value
+- Changed styling of `DayPicker` to make the currently selected day more easily visible
+
+### Fixed
+- Fixed `Carousel` having negative indexes for when left button is used
+
+### Removed
+- `SolidButton`
+- `TextButton`
+- `OutlinedButton`
+- `IconButton`
+- `color-tag-*` are removed and `Chip` now uses the button colors
+- Dependency on `react-custom-scrollbars-2` and `tinycolor2`
+- Removed `shading` utilities
+
 ## [0.2.0] - 2025-12-15
 
 ### Added

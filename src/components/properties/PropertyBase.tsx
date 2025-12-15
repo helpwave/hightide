@@ -1,7 +1,7 @@
 import type { ReactNode } from 'react'
 import { AlertTriangle } from 'lucide-react'
 import clsx from 'clsx'
-import { TextButton } from '../user-action/Button'
+import { Button } from '../user-action/Button'
 import { useHightideTranslation } from '@/src/i18n/useHightideTranslation'
 
 export type PropertyBaseProps = {
@@ -56,14 +56,15 @@ export const PropertyBase = ({
           <div className="text-warning"><AlertTriangle size={24}/></div>
         )}
         {onRemove && !readOnly && (
-          <TextButton
+          <Button
             onClick={onRemove}
             color="negative"
+            coloringStyle="text"
             className={clsx('items-center')}
             disabled={!hasValue}
           >
             {translation('remove')}
-          </TextButton>
+          </Button>
         )}
       </div>
     </div>

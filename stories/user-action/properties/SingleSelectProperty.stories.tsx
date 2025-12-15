@@ -5,7 +5,7 @@ import { StorybookHelper } from '../../../src/storybook/helper'
 import clsx from 'clsx'
 import type { SingleSelectPropertyProps } from '../../../src/components/properties/SelectProperty'
 import { SingleSelectProperty } from '../../../src/components/properties/SelectProperty'
-import { SelectOption } from '../../../src/components/user-action/select/Select'
+import { SelectOption } from '../../../src/components/user-action/Select'
 
 type SingleSelectPropertyExample = Omit<SingleSelectPropertyProps, 'onChange' | 'onRemove' | 'searchMapping' | 'options'>
 

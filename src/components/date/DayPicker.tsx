@@ -3,6 +3,7 @@ import { equalDate, getWeeksForCalenderMonth, isInTimeSpan } from '@/src/utils/d
 import clsx from 'clsx'
 import { useLocale } from '@/src/i18n/LocaleProvider'
 import { useEffect, useState } from 'react'
+import { Button } from '@/src/components/user-action/Button'
 
 export type DayPickerProps = {
   displayedMonth: Date,
@@ -49,25 +50,24 @@ export const DayPicker = ({
             const isSameMonth = date.getMonth() === month
             const isDayValid = isInTimeSpan(date, start, end)
             return (
-              <button
+              <Button
                 disabled={!isDayValid}
                 key={date.getDate()}
+                color={isSelected ? 'primary' : 'neutral'}
+                coloringStyle={isSelected ? 'solid' : 'text'}
+                size="small"
                 className={clsx(
                   'flex-1 rounded-full border-2',
                   {
                     'text-description': !isSameMonth && !isSelected && isDayValid,
-                    'text-button-solid-neutral-text bg-button-solid-neutral-background': !isSelected && isSameMonth && isDayValid,
-                    'text-button-solid-primary-text bg-button-solid-primary-background': isSelected && isDayValid,
-                    'hover:brightness-90 hover:bg-button-solid-primary-background hover:text-button-solid-primary-text': isDayValid,
-                    'text-disabled bg-disabled-background cursor-not-allowed': !isDayValid,
-                    'border-secondary': isToday && markToday,
-                    'border-transparent': !isToday || !markToday,
+                    'border-on-background': isToday && markToday,
+                    'border-transparent': !(isToday && markToday),
                   }
                 )}
                 onClick={() => onChange?.(date)}
               >
                 {date.getDate()}
-              </button>
+              </Button>
             )
           })}
         </div>

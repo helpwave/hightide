@@ -1,10 +1,10 @@
 import { ChevronDown, ChevronsUpDown, ChevronUp } from 'lucide-react'
-import type { IconButtonProps } from '../user-action/Button'
-import { IconButton } from '../user-action/Button'
+import type { ButtonProps } from '../user-action/Button'
+import { Button } from '../user-action/Button'
 import clsx from 'clsx'
 import type { SortDirection } from '@tanstack/react-table'
 
-export type TableSortButtonProps = IconButtonProps & {
+export type TableSortButtonProps = ButtonProps & {
   sortDirection: SortDirection | false,
   invert?: boolean,
 }
@@ -13,12 +13,13 @@ export type TableSortButtonProps = IconButtonProps & {
  * An Extension of the normal button that displays the sorting state right of the content
  */
 export const TableSortButton = ({
-                             sortDirection,
-                             invert = false,
-                             color = 'neutral',
-                             className,
-                             ...buttonProps
-                           }: TableSortButtonProps) => {
+                                  sortDirection,
+                                  invert = false,
+                                  color = 'neutral',
+                                  size = 'tiny',
+                                  className,
+                                  ...buttonProps
+                                }: TableSortButtonProps) => {
   let icon = <ChevronsUpDown className="w-full h-full"/>
   if (sortDirection) {
     let usedSortDirection = sortDirection
@@ -30,13 +31,14 @@ export const TableSortButton = ({
   }
 
   return (
-    <IconButton
-      size="tiny"
+    <Button
+      layout="icon"
       color={color}
+      size={size}
       className={clsx(className)}
       {...buttonProps}
     >
       {icon}
-    </IconButton>
+    </Button>
   )
 }

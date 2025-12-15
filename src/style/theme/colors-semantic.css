@@ -9,39 +9,26 @@
   --color-background: var(--color-gray-75);
   --color-on-background: var(--color-text-primary);
 
-  /* Gender */
-  --color-gender-female: var(--color-red-400);
-  --color-gender-female-outline: var(--color-red-300);
-  --color-gender-female-surface: var(--color-red-100);
-  --color-gender-female-background: var(--color-red-50);
-
-  --color-gender-male: var(--color-blue-500);
-  --color-gender-male-outline: var(--color-blue-200);
-  --color-gender-male-surface: var(--color-blue-100);
-  --color-gender-male-background: var(--color-blue-50);
-
-  --color-gender-neutral: var(--color-gray-700);
-  --color-gender-neutral-outline: var(--color-gray-300);
-  --color-gender-neutral-surface: var(--color-gray-100);
-  --color-gender-neutral-background: var(--color-gray-25);
-
   /* States */
   --color-warning: var(--color-orange-500);
   --color-on-warning:  var(--color-white);
+  --color-warning-hover: var(--color-orange-600);
 
   --color-positive: var(--color-green-500);
   --color-on-positive:  var(--color-white);
+  --color-positive-hover: var(--color-green-600);
 
   --color-negative: var(--color-red-500);
   --color-on-negative:  var(--color-white);
-  --color-negative-border: var(--color-negative);
+  --color-negative-hover: var(--color-red-600);
 
   --color-disabled: var(--color-gray-300);
-  --color-disabled-background: var(--color-gray-100);
+  --color-on-disabled: var(--color-gray-500);
 
   /* Surface */
   --color-surface:  var(--color-gray-50);
   --color-on-surface: var(--color-text-primary);
+  --color-surface-hover: var(--color-gray-100);
   --color-surface-variant: var(--color-white);
   --color-surface-warning: var(--color-orange-100);
 
@@ -57,8 +44,20 @@
   /* Other */
   --color-primary: var(--color-purple-500);
   --color-on-primary: var(--color-white);
-  --color-secondary: var(--color-blue-800);
+  --color-primary-hover: var(--color-purple-600);
+
+  --color-secondary: var(--color-blue-500);
   --color-on-secondary:  var(--color-white);
+  --color-secondary-hover:  var(--color-blue-600);
+
+  --color-neutral: var(--color-gray-50);
+  --color-on-neutral: var(--color-text-primary);
+  --color-neutral-hover: var(--color-gray-100);
+  --color-neutral-text: var(--color-text-primary);
+  --color-neutral-text-hover: var(--color-text-primary);
+  --color-neutral-outline: var(--color-text-primary);
+  --color-neutral-outline-hover: var(--color-gray-700);
+
   --color-highlight:  var(--color-blue-500);
 }
 
@@ -76,10 +75,11 @@
     --color-negative: var(--color-red-500);
 
     --color-disabled: var(--color-gray-500);
-    --color-disabled-background: var(--color-gray-700);
+    --color-on-disabled: var(--color-gray-300);
 
     /* Surface */
     --color-surface: var(--color-gray-800);
+    --color-surface-hover: var(--color-gray-700);
     --color-surface-variant: var(--color-gray-900);
 
     /* Text */
@@ -92,5 +92,9 @@
 
     /* Other */
     --color-primary: var(--color-purple-400);
+
+    --color-neutral: var(--color-gray-700);
+    --color-neutral-hover: var(--color-gray-800);
+    --color-neutral-outline-hover: var(--color-gray-200);
   }
 }

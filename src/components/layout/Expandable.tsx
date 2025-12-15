@@ -71,7 +71,7 @@ export const Expandable = forwardRef<HTMLDivElement, ExpandableProps>(function E
       onClick={() => !clickOnlyOnHeader && !disabled && onChange?.(!isExpanded)}
 
       className={clsx(
-        'flex-col-0 bg-surface text-on-surface group rounded-lg shadow-sm',
+        'flex-col-0 surface coloring-solid group rounded-lg shadow-sm',
         { 'cursor-pointer': !clickOnlyOnHeader && !disabled }, className
       )}
     >
@@ -79,7 +79,7 @@ export const Expandable = forwardRef<HTMLDivElement, ExpandableProps>(function E
         onClick={() => clickOnlyOnHeader && !disabled && onChange?.(!isExpanded)}
 
         className={clsx(
-          'flex-row-2 py-2 px-4 rounded-lg justify-between items-center bg-surface text-on-surface select-none',
+          'flex-row-2 py-2 px-4 rounded-lg justify-between items-center coloring-solid-hover select-none',
           {
             'group-hover:brightness-97': !isExpanded,
             'hover:brightness-97': isExpanded && !disabled,

@@ -1,7 +1,7 @@
 import type { Meta, StoryObj  } from '@storybook/nextjs'
 import { useState } from 'react'
 import { ThemeDialog } from '../../../src/components/dialog/ThemeDialog'
-import { SolidButton } from '../../../src/components/user-action/Button'
+import { Button } from '../../../src/components/user-action/Button'
 
 /**
  * An implementation of the ThemeDialog
@@ -16,7 +16,7 @@ const ThemeDialogExample = () => {
         onClose={() => setIsOpen(false)}
       />
       <div className="flex-row-2 items-center justify-center min-h-[400px]">
-        <SolidButton onClick={() => setIsOpen(true)}>Show Dialog</SolidButton>
+        <Button onClick={() => setIsOpen(true)}>Show Dialog</Button>
       </div>
     </>
   )

@@ -5,7 +5,7 @@ import { StorybookHelper } from '../../../src/storybook/helper'
 import clsx from 'clsx'
 import type { MultiSelectPropertyProps } from '../../../src/components/properties/MultiSelectProperty'
 import { MultiSelectProperty } from '../../../src/components/properties/MultiSelectProperty'
-import { SelectOption } from '../../../src/components/user-action/select/Select'
+import { SelectOption } from '../../../src/components/user-action/Select'
 
 type MultiSelectPropertyExample =
   Omit<MultiSelectPropertyProps, 'values' | 'search' | 'selectedDisplay' | 'options'>

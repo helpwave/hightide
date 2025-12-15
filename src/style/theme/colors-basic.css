@@ -29,6 +29,7 @@
   /* Green */
   --color-green-100: #D1EFD8;
   --color-green-500: #69CB81;
+  --color-green-600: #61bf78;
   --color-green-700: #53a567;
   --color-green-900: #2C5536;
 
@@ -36,6 +37,7 @@
   --color-orange-100: #FBECD9;
   --color-orange-200: #F7D8B3;
   --color-orange-500: #EA9E40;
+  --color-orange-600: #c18133;
 
   /* Purple */
   --color-purple-50: #EFE6FD;

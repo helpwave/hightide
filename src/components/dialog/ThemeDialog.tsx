@@ -5,8 +5,8 @@ import { MonitorCog, MoonIcon, SunIcon } from 'lucide-react'
 import clsx from 'clsx'
 import type { ThemeType } from '@/src/theming/useTheme'
 import { ThemeUtil, useTheme } from '@/src/theming/useTheme'
-import { Select, SelectOption } from '@/src/components/user-action/select/Select'
-import { SolidButton } from '@/src/components/user-action/Button'
+import { Select, SelectOption } from '@/src/components/user-action/Select'
+import { Button } from '@/src/components/user-action/Button'
 import { useHightideTranslation } from '@/src/i18n/useHightideTranslation'
 
 type ThemeIconProps = {
@@ -60,9 +60,6 @@ export const ThemeDialog = ({
           value={theme}
           onValueChanged={(theme) => setTheme(theme as ThemeType)}
           iconAppearance="right"
-          contentPanelProps={{
-            containerClassName: 'z-200',
-          }}
           buttonProps={{
             selectedDisplay: (value) => (
               <div className="flex-row-2 items-center">
@@ -83,9 +80,9 @@ export const ThemeDialog = ({
           ))}
         </Select>
         <div className="flex-row-4 mt-3 justify-end">
-          <SolidButton autoFocus color="positive" onClick={onClose}>
+          <Button autoFocus color="positive" onClick={onClose}>
             {translation('done')}
-          </SolidButton>
+          </Button>
         </div>
       </div>
     </Dialog>

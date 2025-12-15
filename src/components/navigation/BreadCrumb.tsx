@@ -20,8 +20,6 @@ type BreadCrumbProps = {
  * e.g. Organizations/Ward/<id>
  */
 export const BreadCrumb = ({ crumbs, linkClassName, containerClassName }: BreadCrumbProps) => {
-  const color = 'text-description'
-
   return (
     <div className={clsx('flex-row-0.5 items-center', containerClassName)}>
       {crumbs.map((crumb, index) => {
@@ -30,11 +28,18 @@ export const BreadCrumb = ({ crumbs, linkClassName, containerClassName }: BreadC
           <Fragment key={index}>
             <Link
               href={crumb.link}
-              className={clsx('btn-sm hover:bg-description/20', linkClassName, { [color]: !isLast })}
+              className={clsx(
+                'btn-sm coloring-text-hover',
+                {
+                  description: !isLast,
+                  neutral: isLast,
+                },
+                linkClassName
+              )}
             >
               {crumb.display}
             </Link>
-            {!isLast && <span className={clsx(`px-1`, color)}>/</span>}
+            {!isLast && <span className={clsx(`px-1`, 'text-description')}>/</span>}
           </Fragment>
         )
       })}
