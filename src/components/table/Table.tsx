@@ -312,8 +312,6 @@ export const Table = <T, >({
     return colSizes
   }, [table.getState().columnSizingInfo, table.getState().columnSizing]) // eslint-disable-line react-hooks/exhaustive-deps
 
-  console.log(table.getState().sorting)
-
   return (
     <div ref={ref} className={clsx('flex-col-4', className)}>
       <div className={clsx('flex-col-0 w-full overflow-auto', tableContainerClassName)}>
@@ -358,7 +356,6 @@ export const Table = <T, >({
                               onClick={() => {
                                 const sorted = header.column.getIsSorted()
                                 const isMulti = header.column.getCanMultiSort()
-                                console.log(isMulti, header.column.id)
                                 if (!isMulti) {
                                   table.resetSorting()
                                 }
