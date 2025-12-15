@@ -60,11 +60,11 @@
   }
 
   .chip {
-    @apply row gap-x-1 items-center justify-center px-2 py-1 rounded-md;
+    @apply flex-row-1 items-center justify-center px-2 py-1 rounded-md;
   }
 
   .chip-full {
-    @apply row gap-x-1 items-center justify-center px-2 py-1 rounded-full;
+    @apply flex-row-1 items-center justify-center px-2 py-1 rounded-full;
   }
 
   .section-padding-x {

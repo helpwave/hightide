@@ -36,7 +36,7 @@ export const CheckboxProperty = ({
             id={id}
             checked={value ?? true}
             disabled={readOnly}
-            onChange={onChange}
+            onCheckedChange={onChange}
             aria-labelledby={id+'label'}
           />
           <Label id={id+'label'}>
