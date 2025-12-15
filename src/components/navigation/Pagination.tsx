@@ -57,7 +57,7 @@ export const Pagination = ({
         <Input
           value={value}
           className={clsx(
-            'w-full text-center font-bold input-indicator-hidden h-10'
+            'w-24 text-center font-bold input-indicator-hidden h-10'
           )}
           type="number"
           min={1}
@@ -77,7 +77,7 @@ export const Pagination = ({
         />
         <span className="select-none w-10">{translation('of')}</span>
         <span
-          className="flex-row-2 flex-1 items-center justify-center select-none h-10 bg-input-background text-input-text rounded-md font-bold"
+          className="flex-row-2 w-24 items-center justify-center select-none h-10 bg-input-background text-input-text rounded-md font-bold"
         >
           {pageCount}
         </span>

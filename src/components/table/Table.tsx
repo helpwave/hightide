@@ -311,6 +311,8 @@ export const Table = <T, >({
     return colSizes
   }, [table.getState().columnSizingInfo, table.getState().columnSizing]) // eslint-disable-line react-hooks/exhaustive-deps
 
+  console.log(table.getState().sorting)
+
   return (
     <div ref={ref} className={clsx('flex-col-4', className)}>
       <Scrollbars
@@ -356,7 +358,23 @@ export const Table = <T, >({
                           {header.column.getCanSort() && (
                             <TableSortButton
                               sortDirection={header.column.getIsSorted()}
-                              onClick={() => header.column.toggleSorting()}
+                              onClick={() => {
+                                const sorted = header.column.getIsSorted()
+                                const isMulti = header.column.getCanMultiSort()
+                                console.log(isMulti, header.column.id)
+                                if(!isMulti) {
+                                  table.resetSorting()
+                                }
+                                if(!sorted) {
+                                  header.column.toggleSorting(true, isMulti)
+                                  return
+                                } else if (sorted === 'desc') {
+                                  header.column.toggleSorting(false, isMulti)
+                                }
+                                if(sorted === 'asc') {
+                                  header.column.clearSorting()
+                                }
+                              }}
                             />
                           )}
                           {header.column.getCanFilter() && header.column.columnDef.meta?.filterType ? (
@@ -397,7 +415,8 @@ export const Table = <T, >({
           <tbody>
           {table.getRowModel().rows.map(row => {
             return (
-              <tr key={row.id} onClick={() => onRowClick?.(row, table)} className={table.options.meta?.bodyRowClassName}>
+              <tr key={row.id} onClick={() => onRowClick?.(row, table)}
+                  className={table.options.meta?.bodyRowClassName}>
                 {row.getVisibleCells().map(cell => {
                   return (
                     <td key={cell.id}>
@@ -479,7 +498,7 @@ export const TableWithSelection = <T, >({
             <Checkbox
               checked={table.getIsAllRowsSelected()}
               indeterminate={table.getIsSomeRowsSelected()}
-              onChange={value => {
+              onCheckedChange={value => {
                 const newValue = !!value
                 table.toggleAllRowsSelected(newValue)
               }}
@@ -491,7 +510,7 @@ export const TableWithSelection = <T, >({
             <Checkbox
               disabled={!row.getCanSelect()}
               checked={row.getIsSelected()}
-              onChange={row.getToggleSelectedHandler()}
+              onCheckedChange={row.getToggleSelectedHandler()}
             />
           )
         },

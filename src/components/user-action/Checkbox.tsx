@@ -1,8 +1,7 @@
 import { Check, Minus } from 'lucide-react'
 import clsx from 'clsx'
-import type { CheckboxProps as RadixCheckboxProps } from '@radix-ui/react-checkbox'
-import { CheckboxIndicator as RadixCheckboxIndicator, Root as RadixCheckbox } from '@radix-ui/react-checkbox'
 import { useOverwritableState } from '@/src/hooks/useOverwritableState'
+import type { HTMLAttributes } from 'react'
 
 type CheckBoxSize = 'sm' | 'md' | 'lg'
 
@@ -18,10 +17,11 @@ const checkboxIconSizeMapping: Record<CheckBoxSize, string> = {
   lg: 'size-7 stroke-3',
 }
 
-export type CheckboxProps = Omit<RadixCheckboxProps, 'checked' | 'onCheckedChange' | 'onChange'> & {
+export type CheckboxProps = HTMLAttributes<HTMLDivElement> & {
   checked?: boolean,
+  disabled?: boolean,
   indeterminate?: boolean,
-  onChange?: (checked: boolean) => void,
+  onCheckedChange?: (checked: boolean) => void,
   size?: CheckBoxSize,
 }
 
@@ -34,7 +34,7 @@ export const Checkbox = ({
                            disabled,
                            checked = false,
                            indeterminate = false,
-                           onChange,
+                           onCheckedChange,
                            size = 'md',
                            className = '',
                            ...props
@@ -43,11 +43,22 @@ export const Checkbox = ({
   const innerIconSize = checkboxIconSizeMapping[size]
 
   return (
-    <RadixCheckbox
+    <div
       {...props}
-      disabled={disabled}
-      checked={indeterminate ? 'indeterminate' : checked}
-      onCheckedChange={onChange}
+      onClick={(event) => {
+        if (!disabled) {
+          onCheckedChange(!checked)
+          props.onClick?.(event)
+        }
+      }}
+      onKeyDown={(event) => {
+        if (disabled) return
+        if (event.key === ' ' || event.key === 'Enter') {
+          event.preventDefault()
+          onCheckedChange(!checked)
+          props.onKeyDown?.(event)
+        }
+      }}
       className={clsx(
         usedSizeClass,
         `flex-col-0 items-center justify-center rounded`,
@@ -59,13 +70,15 @@ export const Checkbox = ({
         },
         className
       )}
+      role="checkbox"
+      aria-checked={indeterminate ? 'mixed' : checked}
+      aria-disabled={disabled}
+      tabIndex={disabled ? -1 : 0}
     >
-      <RadixCheckboxIndicator>
-        {!checked && !indeterminate && <div className={clsx('bg-input-background', innerIconSize)}/>}
-        {checked && !indeterminate && <Check className={innerIconSize}/>}
-        {indeterminate && <Minus className={innerIconSize}/>}
-      </RadixCheckboxIndicator>
-    </RadixCheckbox>
+      {!checked && !indeterminate && <div className={clsx('bg-input-background', innerIconSize)}/>}
+      {checked && !indeterminate && <Check className={innerIconSize}/>}
+      {indeterminate && <Minus className={innerIconSize}/>}
+    </div>
   )
 }
 
@@ -78,16 +91,16 @@ export type CheckboxUncontrolledProps = CheckboxProps
  */
 export const CheckboxUncontrolled = ({
                                        checked: initialChecked,
-                                       onChange,
+                                       onCheckedChange,
                                        ...props
                                      }: CheckboxUncontrolledProps) => {
-  const [checked, setChecked] = useOverwritableState(initialChecked, onChange)
+  const [checked, setChecked] = useOverwritableState(initialChecked, onCheckedChange)
 
   return (
     <Checkbox
       {...props}
       checked={checked}
-      onChange={setChecked}
+      onCheckedChange={setChecked}
     />
   )
 }

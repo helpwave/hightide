@@ -1,8 +1,7 @@
 import clsx from 'clsx'
 import type { CSSProperties } from 'react'
-import { useMemo } from 'react'
+import { useMemo, useState } from 'react'
 import { UserIcon } from 'lucide-react'
-import * as AvatarPrimitive from '@radix-ui/react-avatar'
 
 const avtarSizeList = ['sm', 'md', 'lg', 'xl'] as const
 export type AvatarSize = typeof avtarSizeList[number]
@@ -42,7 +41,15 @@ export type AvatarProps = {
 /**
  * A component for showing a profile picture
  */
-export const Avatar = ({ image, name, size = 'md', fullyRounded, className = '' }: AvatarProps) => {
+export const Avatar = ({
+                         image,
+                         name,
+                         size = 'md',
+                         fullyRounded,
+                         className = ''
+                       }: AvatarProps) => {
+  const [hasError, setHasError] = useState(false)
+  const [isLoaded, setIsLoaded] = useState(false)
   const pixels = avatarSizeMapping[size]
 
   const sizeStyle: CSSProperties = {
@@ -71,29 +78,29 @@ export const Avatar = ({ image, name, size = 'md', fullyRounded, className = '' 
   }
 
   return (
-    <AvatarPrimitive.Root
+    <div
       className={clsx(
-        `flex-row-0 items-center justify-center bg-primary text-on-primary`,
+        `relative flex-row-0 items-center justify-center bg-primary text-on-primary`,
         rounding,
         className
       )}
       style={sizeStyle}
     >
-      <AvatarPrimitive.Image
+      <img
         src={image?.avatarUrl}
         alt={image?.alt}
-        className={clsx(rounding)}
+        className={clsx(rounding, { 'absolute left-0 top-0 -translate-1/2 opacity-0 z-1 ': !isLoaded || hasError })}
+        onLoad={() => setIsLoaded(true)}
+        onError={() => setHasError(true)}
       />
-      <AvatarPrimitive.Fallback asChild>
-        {name ? (
-          <span className={textClassName}>
-            {displayName}
-          </span>
-        ) : (
-          <UserIcon size={Math.round(pixels * 3 / 4)}/>
-        )}
-      </AvatarPrimitive.Fallback>
-    </AvatarPrimitive.Root>
+      {name ? (
+        <span className={textClassName}>
+          {displayName}
+        </span>
+      ) : (
+        <UserIcon size={Math.round(pixels * 3 / 4)}/>
+      )}
+    </div>
   )
 }
 

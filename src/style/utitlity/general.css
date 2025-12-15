@@ -1,15 +1,7 @@
-@utility col {
-  @apply flex flex-col gap-y-2;
-}
-
 @utility flex-col-* {
   display: flex;
   flex-direction: column;
   row-gap: calc(var(--spacing) * --value(number));
-}
-
-@utility row {
-  @apply flex flex-row gap-x-2;
 }
 
 @utility flex-row-* {

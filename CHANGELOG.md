@@ -5,6 +5,26 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/)
 and adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [0.2.0] - 2025-12-15
+
+### Added
+- `PromiseUtils` with a `sleep` and `delayed` function
+
+### Changed
+- `CheckBox` now propagates value changes with `onCheckedChange`
+
+### Removed
+- Removed `row` and `col` css utilities use `flex-row-2` and `flex-col-2` instead 
+  - Regex for checking usage ``("|'|`| )col("|'|`| )`` or ``("|'|`| )row("|'|`| )``
+- Removed dependency on `radix-ui`
+
+### Fixed
+- Allow Tables to be sorted by multiple columns
+- Pagination max Page count now has the same size as the Input for the current page
+
+### Security
+- Update and pin all dependencies
+
 ## [0.1.48] - 2025-12-01
 
 ### Added

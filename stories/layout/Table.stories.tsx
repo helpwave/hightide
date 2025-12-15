@@ -57,6 +57,7 @@ const TableExample = ({ ...props }: TableExampleProps) => {
       meta: {
         filterType: 'text'
       },
+      sortingFn: 'text',
     },
     {
       id: 'name',
@@ -153,6 +154,7 @@ const TableExample = ({ ...props }: TableExampleProps) => {
             pageSize: 10,
           },
         }}
+        enableMultiSort={true}
       />
     </div>
   )
