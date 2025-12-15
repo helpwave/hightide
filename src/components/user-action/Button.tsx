@@ -11,7 +11,7 @@ type ButtonColoringStyle = 'outline' | 'solid' | 'text' | 'tonal' | 'none'
 
 type ButtonLayout = 'icon' | 'default' | 'none'
 
-const buttonColorsList = ['primary', 'secondary', 'positive', 'warning', 'negative', 'neutral'] as const
+const buttonColorsList = ['primary', 'secondary', 'positive', 'warning', 'negative', 'neutral', 'none'] as const
 
 /**
  * The allowed colors for the Button
@@ -43,6 +43,7 @@ export const ButtonUtil = {
     warning: 'warning',
     negative: 'negative',
     neutral: 'neutral',
+    none: '',
   } satisfies Record<ButtonColor, string>
 }
 
