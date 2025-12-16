@@ -1,7 +1,5 @@
-@import './variants.css';
-@import './colors-basic.css';
-@import './colors-semantic.css';
-@import './colors-component.css';
+@import './colors/index.css';
 @import './typography.css';
 @import './breakpoints.css';
 @import './components.css';
+@import './shadow.css';

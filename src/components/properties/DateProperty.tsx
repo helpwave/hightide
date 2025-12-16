@@ -33,7 +33,7 @@ export const DateProperty = ({
       icon={<CalendarDays size={24}/>}
       input={({ softRequired }) => (
         <Input
-          className={clsx('!ring-0 !border-0 !outline-0 !p-0 !m-0 !shadow-none !w-fit !rounded-none', { 'bg-surface-warning': softRequired && !hasValue })}
+          className={clsx('default-style-none focus-style-none', { 'bg-surface-warning': softRequired && !hasValue })}
           value={dateText}
           type={type === 'dateTime' ? 'datetime-local' : 'date'}
           readOnly={readOnly}

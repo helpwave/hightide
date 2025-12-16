@@ -43,7 +43,7 @@ export const ButtonUtil = {
     warning: 'warning',
     negative: 'negative',
     neutral: 'neutral',
-    none: '',
+    none: 'reset-coloring-variables',
   } satisfies Record<ButtonColor, string>
 }
 

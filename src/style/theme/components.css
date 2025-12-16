@@ -70,10 +70,103 @@
   }
 }
 
+/* Focus */
+@utility focus-style-outline {
+  &:focus-visible {
+    @apply outline-solid outline-2 outline-focus outline-offset-2;
+  }
+}
+
+@utility focus-style-border {
+  &:focus-visible {
+    @apply border-2 border-focus;
+  }
+}
+
+@utility focus-style-default {
+  &:focus-visible:not(.focus-style-none) {
+    @apply focus-style-outline;
+  }
+}
+
+@utility focus-style-none {
+  &:focus-visible {
+    @apply outline-none;
+  }
+}
+
+@utility input-element {
+  @apply border-2 border-transparent focus-style-none focus-style-border;
+  &:not([data-disabled]):not([data-invalid]) {
+    @apply bg-input-background hover:border-primary;
+
+    &:not([data-value]) {
+      @apply text-placeholder;
+    }
+
+    &[data-value] {
+      @apply text-input-text;
+    }
+  }
+
+  &:not([data-disabled])[data-invalid] {
+    @apply bg-negative/20;
+
+    --color-focus: var(--color-negative);
+
+    &[data-value] {
+      @apply text-negative;
+    }
+
+    &:not([data-value]) {
+      @apply text-placeholder;
+    }
+  }
+
+  &[data-disabled] {
+    @apply bg-disabled text-on-disabled;
+  }
+}
+
+/* input-elements */
+@layer components {
+  *[data-name="input"]:not(.default-style-none) {
+    @apply px-3 py-2 rounded-md h-10 input-element;
+  }
+
+  *[data-name="textarea"]:not(.default-style-none) {
+    @apply w-full h-32 py-2 px-3 rounded-md resize-none overflow-y-scroll input-element;
+  }
+
+  *[data-name="select-button"]:not(.default-style-none) {
+    @apply flex-row-2 items-center justify-between rounded-md px-3 py-2 input-element;
+  }
+
+  *[data-name="select-button-chips"]:not(.default-style-none) {
+    @apply flex flex-wrap gap-2 items-center rounded-md px-2.5 py-2.5 input-element;
+    &:not([data-disabled]){
+      @apply hover:cursor-pointer;
+    }
+  }
+
+  *[data-name="checkbox"]:not(.default-style-none) {
+    @apply flex-col-0 items-center justify-center rounded input-element focus-style-outline;
+    &:not([data-disabled]){
+      @apply hover:cursor-pointer;
+    }
+    &:not([data-disabled]):not([data-invalid]):not([data-value='false']) {
+      @apply bg-primary/40 border-primary text-primary;
+    }
+    &:not([data-disabled]):not([data-invalid])[data-value='false'] {
+      @apply border-border text-border hover:border-primary hover:text-primary bg-transparent;
+    }
+  }
+}
+
 /* HTML Element defaults */
 @layer components {
   * {
-    @apply border-border list-none;
+    @apply border-border list-none placeholder-placeholder;
 
     @variant dark {
       color-scheme: dark;
@@ -86,10 +179,6 @@
 
   button {
     @apply cursor-pointer text-nowrap;
-  }
-
-  input {
-    @apply placeholder-placeholder
   }
 
   *:disabled {
@@ -107,22 +196,13 @@
     @apply outline-0 ring-0;
   }
 
-  *:focus-visible {
-    @apply outline-2 outline-focus outline-offset-2;
-  }
-
-  .focus-style-within:focus-within {
-    @apply outline-2 outline-focus;
-  }
-
-  .focus-style-none {
-    @apply focus-visible:outline-0 focus-within:outline-0 outline-offset-0;
+  * {
+    @apply focus-style-default;
   }
 
   /**
    * Table
    */
-
   table {
     @apply table-fixed border-separate border-spacing-0 bg-table-background text-table-text;
   }
@@ -161,13 +241,12 @@
   }
 
   /* Otherwise, use `::-webkit-scrollbar-*` pseudo-elements */
-
   @supports selector(::-webkit-scrollbar) {
     * {
       scrollbar-color: initial;
     }
 
-    :root{
+    :root {
       --scrollbar-width: 10px;
       --scrollbar-padding: 1px;
     }

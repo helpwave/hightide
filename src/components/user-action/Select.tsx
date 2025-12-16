@@ -456,20 +456,8 @@ export const SelectButton = forwardRef<HTMLButtonElement, SelectButtonProps>(fun
         }
       }}
 
-      className={clsx(
-        'flex-row-2 items-center justify-between rounded-md px-3 py-2',
-        {
-          'bg-input-background text-placeholder': !hasValue && !disabled && !invalid,
-          'bg-input-background text-input-text': hasValue && !disabled && !invalid,
-          'bg-negative/20': !disabled && invalid,
-          'text-placeholder': !hasValue && !disabled,
-          'text-negative': hasValue && !disabled && invalid,
-          'bg-disabled-background text-disabled': disabled,
-        },
-        props.className
-      )}
-
-      data-placeholder={!hasValue ? '' : undefined}
+      data-name={props['data-name'] ?? 'select-button'}
+      data-value={hasValue ? '' : undefined}
       data-disabled={disabled ? '' : undefined}
       data-invalid={invalid ? '' : undefined}
 
@@ -492,14 +480,7 @@ export const SelectButton = forwardRef<HTMLButtonElement, SelectButtonProps>(fun
         )
         : placeholder ?? translation('clickToSelect')
       }
-      <ExpansionIcon
-        isExpanded={state.isOpen}
-        className={clsx({
-          'text-input-text': !disabled && !invalid,
-          'text-negative': !disabled && invalid,
-          'text-disabled': disabled,
-        })}
-      />
+      <ExpansionIcon isExpanded={state.isOpen}/>
     </button>
   )
 })
@@ -533,10 +514,14 @@ export const SelectChipDisplay = forwardRef<HTMLDivElement, SelectChipDisplayPro
     <div
       {...props}
       ref={innerRef}
-      className={clsx(
-        'flex flex-wrap flex-row gap-2 items-center bg-input-background text-input-text rounded-md px-2.5 py-2.5',
-        props.className
-      )}
+
+      onClick={(event) => {
+        toggleOpen()
+        props.onClick?.(event)
+      }}
+
+      data-name={props['data-name'] ?? 'select-button-chips'}
+      data-value={state.value.length > 0 ? '' : undefined}
       data-disabled={disabled ? '' : undefined}
       data-invalid={invalid ? '' : undefined}
 
@@ -551,18 +536,21 @@ export const SelectChipDisplay = forwardRef<HTMLDivElement, SelectChipDisplayPro
             onClick={() => {
               item.toggleSelection(value, false)
             }}
-            size="none"
+            size="tiny"
             color="negative"
             coloringStyle="text"
-            className="flex-row-0 items-center px-0.5 py-0.5 w-6 h-6 rounded"
+            className="flex-row-0 items-center"
           >
-            <XIcon className="w-5 h-5"/>
+            <XIcon className="size-5"/>
           </Button>
         </Chip>
       ))}
       <Button
         id={state.id} // TODO allow for a custom id here
-        onClick={() => toggleOpen()}
+        onClick={(event) => {
+          event.stopPropagation()
+          toggleOpen()
+        }}
         onKeyDown={event => {
           switch (event.key) {
             case 'ArrowDown':
@@ -581,6 +569,8 @@ export const SelectChipDisplay = forwardRef<HTMLDivElement, SelectChipDisplayPro
         aria-haspopup="listbox"
         aria-expanded={state.isOpen}
         aria-controls={state.isOpen ? `${state.id}-listbox` : undefined}
+
+        className="size-9"
       >
         <Plus/>
       </Button>
@@ -685,7 +675,7 @@ export const SelectContent = forwardRef<HTMLUListElement, SelectContentProps>(
             }
           }}
 
-          className={clsx('flex-col-0 p-2 bg-menu-background text-menu-text rounded-md shadow-hw-bottom focus-style-within overflow-auto', props.className)}
+          className={clsx('flex-col-0 p-2 bg-menu-background text-menu-text rounded-md shadow-hw-bottom focus-outline-within overflow-auto', props.className)}
           style={{
             opacity: position ? undefined : 0,
             position: 'fixed',

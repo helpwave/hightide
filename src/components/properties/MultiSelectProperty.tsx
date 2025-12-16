@@ -6,7 +6,9 @@ import { PropertyBase } from '@/src/components/properties/PropertyBase'
 
 import { MultiSelectChipDisplay } from '@/src/components/user-action/Select'
 
-export type MultiSelectPropertyProps = Omit<PropertyBaseProps, 'icon' | 'input' | 'hasValue' | 'className'> & PropsWithChildren<{
+export type MultiSelectPropertyProps =
+  Omit<PropertyBaseProps, 'icon' | 'input' | 'hasValue' | 'className'>
+  & PropsWithChildren<{
   values: string[],
   onValuesChanged?: (value: string[]) => void,
 }>
@@ -38,9 +40,10 @@ export const MultiSelectProperty = ({
             )
           }}
           chipDisplayProps={{
-            className: clsx({
-              '!bg-warning !text-surface-warning': softRequired && !hasValue,
-            })
+            className: clsx(
+              'default-style-none flex flex-wrap gap-x-2 gap-y-2 items-center hover:cursor-pointer',
+              { '!bg-warning text-surface-warning': softRequired && !hasValue }
+            )
           }}
         >
           {children}

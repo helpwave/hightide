@@ -1,6 +1,5 @@
 import type { InputHTMLAttributes } from 'react'
 import React, { forwardRef, useImperativeHandle, useRef } from 'react'
-import clsx from 'clsx'
 import type { UseDelayOptionsResolved } from '@/src/hooks/useDelay'
 import { useDelay  } from '@/src/hooks/useDelay'
 import { useFocusManagement } from '@/src/hooks/focus/useFocusManagement'
@@ -26,7 +25,6 @@ export type InputProps = InputHTMLAttributes<HTMLInputElement> & {
   onChangeText?: (text: string) => void,
   onEditCompleted?: (text: string) => void,
   editCompleteOptions?: EditCompleteOptions,
-  defaultStyle?: boolean,
 }
 
 /**
@@ -42,8 +40,6 @@ export const Input = forwardRef<HTMLInputElement, InputProps>(function Input({
                                                                                editCompleteOptions,
                                                                                disabled = false,
                                                                                invalid = false,
-                                                                               defaultStyle = true,
-                                                                               className,
                                                                                ...props
                                                                              }, forwardedRef) {
   const {
@@ -69,14 +65,6 @@ export const Input = forwardRef<HTMLInputElement, InputProps>(function Input({
       ref={innerRef}
       value={value}
       disabled={disabled}
-      className={defaultStyle ? clsx(
-        'px-3 py-2 rounded-md text-sm h-10 border-2 border-transparent focus-style-none',
-        {
-          'bg-input-background text-input-text hover:border-primary focus:border-primary': !disabled && !invalid,
-          'bg-negative/20 text-negative hover:border-negative focus-visible:border-negative': !disabled && invalid,
-          'bg-disabled-background text-disabled border-disabled-border': disabled,
-        }, className
-      ) : className}
       onKeyDown={event => {
         props.onKeyDown?.(event)
         if (!allowEnterComplete) {
@@ -105,6 +93,11 @@ export const Input = forwardRef<HTMLInputElement, InputProps>(function Input({
         })
         onChangeText?.(value)
       }}
+
+      data-name={props['data-name'] ?? 'input'}
+      data-value={value ? '' : undefined}
+      data-disabled={disabled ? '' : undefined}
+      data-invalid={invalid ? '' : undefined}
 
       aria-invalid={props['aria-invalid'] ?? invalid}
       aria-disabled={props['aria-disabled'] ?? disabled}

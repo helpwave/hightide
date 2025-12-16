@@ -39,7 +39,7 @@ export const SingleSelectProperty = ({
           disabled={props.readOnly}
           buttonProps={{
             className: clsx(
-              'border-none w-full',
+              'default-style-none focus-style-none flex-row-2 w-full items-center',
               {
                 '!bg-warning !text-surface-warning': softRequired && !hasValue,
               }

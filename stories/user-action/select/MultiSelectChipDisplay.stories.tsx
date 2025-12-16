@@ -16,6 +16,7 @@ type Story = StoryObj<typeof meta>;
 export const multiSelectChipDisplay: Story = {
   args: {
     disabled: false,
+    invalid: false,
     onValuesChanged: action('onChange'),
     values: ['Apple', 'Cherry'],
     children: [

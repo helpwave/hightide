@@ -35,7 +35,7 @@ export const PropertyBase = ({
       <div
         className={clsx(
           'flex-row-2 max-w-48 min-w-48 px-3 py-2 items-center rounded-l-xl border-2 border-r-0', {
-            'bg-property-title-background text-property-title-text group-hover:border-primary': !requiredAndNoValue,
+            'bg-property-title-background text-property-title-text group-hover:border-primary group-focus-within:border-primary': !requiredAndNoValue,
             'bg-warning text-surface-warning group-hover:border-warning border-warning/90': requiredAndNoValue,
           }, className
         )}
@@ -46,7 +46,7 @@ export const PropertyBase = ({
       <div
         className={clsx(
           'flex-row-2 grow px-3 py-2 justify-between items-center rounded-r-xl border-2 border-l-0 min-h-15', {
-            'bg-input-background text-input-text group-hover:border-primary': !requiredAndNoValue,
+            'bg-input-background text-input-text group-hover:border-primary group-focus-within:border-primary': !requiredAndNoValue,
             'bg-surface-warning group-hover:border-warning border-warning/90': requiredAndNoValue,
           }, className
         )}

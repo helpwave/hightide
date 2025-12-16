@@ -15,7 +15,8 @@ export const checkbox: Story = {
     checked: true,
     indeterminate: false,
     disabled: false,
-    size: 'md',
+    invalid: false,
+    size: 'medium',
     onChange: action('onChange')
   },
 }

@@ -5,6 +5,21 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/)
 and adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [0.4.0] - 2025-12-16
+
+### Added
+- A [conventions document](/documentation/conventions.md)
+- A `input-element` style for all user-input elements
+
+### Changed
+- All user-input elements now provide `data-disabled`, `data-invalid` and `data-value` attributes for styling
+- Focus styling now uses these tailwind utilities
+  - `focus-style-outline` provided also as `focus-style-default` for every element (deactivatable with `focus-style-none`)
+  - `focus-style-border`
+  - `focus-style-none`
+- Styling location of several user-input elements to component.css
+- CSS exports to differentiate better between utilities and theming
+
 ## [0.3.0] - 2025-12-15
 
 ### Added
