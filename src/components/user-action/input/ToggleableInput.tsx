@@ -52,11 +52,13 @@ export const ToggleableInput = forwardRef<HTMLInputElement, ToggleableInputProps
           ...editCompleteOptions,
           allowEnterComplete: true
         }}
-        className={clsx(`w-full ring-0 outline-0 decoration-primary underline-offset-4`, {
-          'underline': isEditing,
+
+        data-name={props['data-name'] ?? 'togglable-input'}
+        data-isEditing={isEditing ? '' : undefined}
+        // TODO move to component config
+        className={clsx(`w-full rounded-md`, {
           'text-transparent': !isEditing,
         })}
-        defaultStyle={false}
       />
       {!isEditing && (
         <div className="absolute left-0 flex-row-2 items-center pointer-events-none touch-none w-full overflow-hidden">

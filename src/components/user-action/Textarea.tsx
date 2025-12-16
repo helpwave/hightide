@@ -13,7 +13,6 @@ export type TextareaProps = Omit<TextareaHTMLAttributes<HTMLTextAreaElement>, 'v
   onChangeText?: (text: string) => void,
   onEditCompleted?: (text: string) => void,
   saveDelayOptions?: UseDelayOptions,
-  defaultStyle?: boolean,
 }
 
 /**
@@ -28,10 +27,8 @@ export const Textarea = forwardRef<HTMLTextAreaElement, TextareaProps>(function 
                                                                                            onBlur,
                                                                                            onEditCompleted,
                                                                                            saveDelayOptions,
-                                                                                           defaultStyle = true,
                                                                                            invalid = false,
                                                                                            disabled = false,
-                                                                                           className,
                                                                                            ...props
                                                                                          }, ref) {
   const { restartTimer, clearTimer } = useDelay(saveDelayOptions)
@@ -43,18 +40,11 @@ export const Textarea = forwardRef<HTMLTextAreaElement, TextareaProps>(function 
 
   return (
     <textarea
+      {...props}
       ref={ref}
       id={id}
-      className={clsx(
-        'resize-none w-full h-32 overflow-y-scroll',
-        'py-2 px-3 rounded-md border-2 border-transparent focus-style-none',
-        {
-          'bg-input-background text-input-text hover:border-primary focus:border-primary': !disabled && !invalid,
-          'bg-negative/20 text-negative hover:border-negative focus-visible:border-negative': invalid && !disabled && defaultStyle,
-          'text-disabled bg-disabled-background border-disabled-border': disabled && defaultStyle,
-        },
-        className
-      )}
+      disabled={disabled}
+
       onChange={(event) => {
         const value = event.target.value
         restartTimer(() => {
@@ -67,8 +57,11 @@ export const Textarea = forwardRef<HTMLTextAreaElement, TextareaProps>(function 
         onBlur?.(event)
         onEditCompletedWrapper(event.target.value)
       }}
-      disabled={disabled}
-      {...props}
+
+      data-name={props['data-name'] ?? 'textarea'}
+      data-value={props.value ? '' : undefined}
+      data-disabled={disabled ? '' : undefined}
+      data-invalid={invalid ? '' : undefined}
     />
   )
 })
@@ -133,7 +126,6 @@ export const TextareaWithHeadline = ({
           'border-transparent focus:ring-0 focus-visible:ring-0 resize-none h-32',
           className
         )}
-        defaultStyle={false}
       />
     </div>
   )

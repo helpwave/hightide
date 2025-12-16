@@ -1,0 +1,7 @@
+@utility shadow-hw-bottom {
+  --shadow-bottom: 0 calc(1rem/16) calc(20rem/16) 0 var(--tw-shadow-color, rgb(0 0 0 / 10%));
+
+  @variant dark {
+    --shadow-bottom: 0 calc(1rem/16) calc(20rem/16) 0 var(--tw-shadow-color, rgb(0 0 0 / 20%));
+  }
+}

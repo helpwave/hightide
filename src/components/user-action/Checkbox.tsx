@@ -3,24 +3,25 @@ import clsx from 'clsx'
 import { useOverwritableState } from '@/src/hooks/useOverwritableState'
 import type { HTMLAttributes } from 'react'
 
-type CheckBoxSize = 'sm' | 'md' | 'lg'
+type CheckBoxSize = 'small' | 'medium' | 'large'
 
 const checkboxSizeMapping: Record<CheckBoxSize, string> = {
-  sm: 'size-5 border-1',
-  md: 'size-6 border-1',
-  lg: 'size-8 border-2',
+  small: 'size-5 border-2',
+  medium: 'size-6 border-2',
+  large: 'size-8 border-2',
 }
 
 const checkboxIconSizeMapping: Record<CheckBoxSize, string> = {
-  sm: 'size-4 stroke-3',
-  md: 'size-5 stroke-3',
-  lg: 'size-7 stroke-3',
+  small: 'size-3.5 stroke-3',
+  medium: 'size-4.5 stroke-3',
+  large: 'size-6 stroke-3',
 }
 
 export type CheckboxProps = HTMLAttributes<HTMLDivElement> & {
   checked?: boolean,
   disabled?: boolean,
   indeterminate?: boolean,
+  invalid?: boolean,
   onCheckedChange?: (checked: boolean) => void,
   size?: CheckBoxSize,
 }
@@ -34,8 +35,9 @@ export const Checkbox = ({
                            disabled,
                            checked = false,
                            indeterminate = false,
+                           invalid = false,
                            onCheckedChange,
-                           size = 'md',
+                           size = 'medium',
                            className = '',
                            ...props
                          }: CheckboxProps) => {
@@ -61,23 +63,21 @@ export const Checkbox = ({
       }}
       className={clsx(
         usedSizeClass,
-        `flex-col-0 items-center justify-center rounded`,
-        {
-          'text-disabled border-disabled-outline bg-disabled-background cursor-not-allowed': disabled,
-          'hover:border-primary': !disabled,
-          'bg-input-background': !disabled && !checked,
-          'bg-primary/30 border-primary text-primary': !disabled && (checked || indeterminate),
-        },
         className
       )}
+
+      data-name={props['data-name'] ?? 'checkbox'}
+      data-value={!indeterminate ? checked : 'indeterminate'}
+      data-disabled={disabled ? '' : undefined}
+      data-invalid={invalid ? '' : undefined}
+
       role="checkbox"
       aria-checked={indeterminate ? 'mixed' : checked}
       aria-disabled={disabled}
       tabIndex={disabled ? -1 : 0}
     >
-      {!checked && !indeterminate && <div className={clsx('bg-input-background', innerIconSize)}/>}
-      {checked && !indeterminate && <Check className={innerIconSize}/>}
-      {indeterminate && <Minus className={innerIconSize}/>}
+      {!indeterminate && <Check className={innerIconSize} aria-hidden={true}/>}
+      {indeterminate && <Minus className={innerIconSize} aria-hidden={true}/>}
     </div>
   )
 }
