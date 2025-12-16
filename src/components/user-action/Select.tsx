@@ -569,6 +569,8 @@ export const SelectChipDisplay = forwardRef<HTMLDivElement, SelectChipDisplayPro
         aria-haspopup="listbox"
         aria-expanded={state.isOpen}
         aria-controls={state.isOpen ? `${state.id}-listbox` : undefined}
+
+        className="size-9"
       >
         <Plus/>
       </Button>

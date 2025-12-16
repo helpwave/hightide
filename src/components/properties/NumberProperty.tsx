@@ -39,7 +39,7 @@ export const NumberProperty = ({
           className={clsx('relative flex-row-2 max-w-56', { 'text-warning': softRequired && !hasValue })}
         >
           <Input
-            className={clsx('!ring-0 !border-0 !outline-0 !py-0 pl-0 pr-8 !m-0 !shadow-none !rounded-none w-full', { 'bg-surface-warning placeholder-warning': softRequired && !hasValue })}
+            className={clsx('default-style-none focus-style-none w-full pr-8', { 'bg-surface-warning placeholder-warning': softRequired && !hasValue })}
             value={value?.toString() ?? ''}
             type="number"
             readOnly={readOnly}
