@@ -78,8 +78,9 @@ export default function CarouselTabs({
           <button
             id={`${id}-tab-${index}`}
             key={index}
-            ref={(el) => (tabRefs.current[index] = el)}
-
+            ref={(el) => {
+              tabRefs.current[index] = el
+            }}
             onClick={() => onChange(index)}
             onKeyDown={(e) => handleKeyDown(e, index)}
 

@@ -40,7 +40,7 @@ const NavigationItemWithSubItem = ({
                                      ...options
                                    }: NavigationItemWithSubItemProps) => {
   const [isOpen, setOpen] = useState(false)
-  const containerRef = useRef<HTMLUListElement>()
+  const containerRef = useRef<HTMLUListElement>(null)
   const triggerRef = useRef<HTMLButtonElement>(null)
   const id = useId()
 

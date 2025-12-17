@@ -1,6 +1,6 @@
 'use client'
 
-import type { CSSProperties, MutableRefObject } from 'react'
+import type { CSSProperties, RefObject } from 'react'
 import { useCallback, useEffect, useState } from 'react'
 import { clamp } from '@/src/utils/math'
 import { useIsMounted } from '@/src/hooks/focus/useIsMounted'
@@ -93,9 +93,9 @@ export type UseFloatingElementOptions = CalculatePositionOptions & {
 }
 
 export type UseFloatingElementProps = UseFloatingElementOptions & {
-  containerRef: MutableRefObject<HTMLElement>,
-  anchorRef: MutableRefObject<HTMLElement>,
-  windowRef?: MutableRefObject<HTMLElement>,
+  containerRef: RefObject<HTMLElement>,
+  anchorRef: RefObject<HTMLElement>,
+  windowRef?: RefObject<HTMLElement>,
   active?: boolean,
 }
 
