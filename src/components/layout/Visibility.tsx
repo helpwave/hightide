@@ -1,0 +1,12 @@
+import type { PropsWithChildren } from 'react'
+
+export type VisibilityProps = PropsWithChildren & {
+  isVisible?: boolean,
+}
+
+export function Visibility({ children, isVisible }: VisibilityProps) {
+  if (isVisible) {
+    return children
+  }
+  return undefined
+}

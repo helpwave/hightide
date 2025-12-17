@@ -1,7 +1,7 @@
 /* Button */
 @layer components {
   .btn-xs {
-    @apply flex-row-1 items-center justify-center px-1 py-0.75 rounded-1 h-7 text-sm;
+    @apply flex-row-1 items-center justify-center px-1 py-0.75 rounded-1 h-6 text-sm;
   }
 
   .btn-sm {

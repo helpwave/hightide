@@ -1,9 +1,10 @@
-import { equalSizeGroups } from './array'
+import { equalSizeGroups } from '@/src/utils/array'
+import type { DurationJSON } from '@/src/utils/duration'
 
-export const monthsList = ['january', 'february', 'march', 'april', 'may', 'june', 'july', 'august', 'september', 'october', 'november', 'december'] as const
+const monthsList = ['january', 'february', 'march', 'april', 'may', 'june', 'july', 'august', 'september', 'october', 'november', 'december'] as const
 export type Month = typeof monthsList[number]
 
-export const weekDayList = ['sunday', 'monday', 'tuesday', 'wednesday', 'thursday', 'friday', 'saturday'] as const
+const weekDayList = ['sunday', 'monday', 'tuesday', 'wednesday', 'thursday', 'friday', 'saturday'] as const
 export type WeekDay = typeof weekDayList[number]
 
 export const formatDate = (date: Date) => {
@@ -20,22 +21,7 @@ export const formatDateTime = (date: Date) => {
   return `${dateString}T${hours}:${minutes}`
 }
 
-export const getDaysInMonth = (year: number, month: number): number => {
-  const lastDayOfMonth = new Date(year, month + 1, 0)
-  return lastDayOfMonth.getDate()
-}
-
-export type Duration = {
-  years?: number,
-  months?: number,
-  days?: number,
-  hours?: number,
-  minutes?: number,
-  seconds?: number,
-  milliseconds?: number,
-}
-
-export const changeDuration = (date: Date, duration: Duration, isAdding?: boolean): Date => {
+export const changeDuration = (date: Date, duration: Partial<DurationJSON>, isAdding?: boolean): Date => {
   const {
     years = 0,
     months = 0,
@@ -97,15 +83,15 @@ export const changeDuration = (date: Date, duration: Duration, isAdding?: boolea
   return newDate
 }
 
-export const addDuration = (date: Date, duration: Duration): Date => {
+export const addDuration = (date: Date, duration: Partial<DurationJSON>): Date => {
   return changeDuration(date, duration, true)
 }
 
-export const subtractDuration = (date: Date, duration: Duration): Date => {
+export const subtractDuration = (date: Date, duration: Partial<DurationJSON>): Date => {
   return changeDuration(date, duration, false)
 }
 
-export const getBetweenDuration = (startDate: Date, endDate: Date): Duration => {
+export const getBetweenDuration = (startDate: Date, endDate: Date): Partial<DurationJSON> => {
   const durationInMilliseconds = endDate.getTime() - startDate.getTime()
 
   const millisecondsInSecond = 1000
@@ -149,7 +135,7 @@ export const isInTimeSpan = (value: Date, startDate?: Date, endDate?: Date): boo
 }
 
 /** Compare two dates on the year, month, day */
-export const equalDate = (date1: Date, date2: Date) => {
+const equalDate = (date1: Date, date2: Date) => {
   return date1.getFullYear() === date2.getFullYear()
     && date1.getMonth() === date2.getMonth()
     && date1.getDate() === date2.getDate()
@@ -177,4 +163,61 @@ export const getWeeksForCalenderMonth = (date: Date, weekStart: WeekDay, weeks: 
 
   // weeks
   return equalSizeGroups(dayList, 7)
+}
+
+const formatGerman = (date: Date, showTime: boolean) => {
+  const d = new Intl.DateTimeFormat('de-DE', {
+    day: '2-digit',
+    month: '2-digit',
+    year: 'numeric',
+  }).format(date)
+
+  if (!showTime) return d
+
+  const t = new Intl.DateTimeFormat('de-DE', {
+    hour: '2-digit',
+    minute: '2-digit',
+  }).format(date)
+
+  return `${d} um ${t} Uhr`
+}
+
+const formatAbsolute = (date: Date, locale: string, showTime: boolean) => {
+  if (locale === 'de-DE') {
+    return formatGerman(date, showTime)
+  }
+
+  const options: Intl.DateTimeFormatOptions = {
+    year: 'numeric',
+    month: 'numeric',
+    day: 'numeric',
+  }
+
+  if (showTime) {
+    options.hour = 'numeric'
+    options.minute = 'numeric'
+  }
+
+  return new Intl.DateTimeFormat(locale, options).format(date)
+}
+
+const formatRelative = (date: Date, locale: string, showTime: boolean) => {
+  const rtf = new Intl.RelativeTimeFormat(locale, { numeric: 'auto' })
+  const now = new Date()
+  const diffInSeconds = (date.getTime() - now.getTime()) / 1000
+
+  if (Math.abs(diffInSeconds) < 60) return rtf.format(Math.round(diffInSeconds), 'second')
+  if (Math.abs(diffInSeconds) < 3600) return rtf.format(Math.round(diffInSeconds / 60), 'minute')
+  if (Math.abs(diffInSeconds) < 86400) return rtf.format(Math.round(diffInSeconds / 3600), 'hour')
+  if (Math.abs(diffInSeconds) < 604800) return rtf.format(Math.round(diffInSeconds / 86400), 'day')
+
+  return formatAbsolute(date, locale, showTime)
+}
+
+export const DateUtils = {
+  monthsList,
+  weekDayList,
+  equalDate,
+  formatAbsolute,
+  formatRelative
 }

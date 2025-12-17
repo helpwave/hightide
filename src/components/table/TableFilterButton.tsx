@@ -36,7 +36,7 @@ export const TableFilterButton = <T, >({
             size="tiny"
             onClick={toggleOpen}
           >
-            <FilterIcon/>
+            <FilterIcon className="size-4"/>
           </Button>
           {hasFilter && (
             <div

@@ -13,4 +13,7 @@ export default [
       'storybook/prefer-pascal-case': 'off',
     },
   },
+  {
+    ignores: ['src/i18n/translations.ts'],
+  }
 ]

@@ -88,7 +88,7 @@ export const TimePicker = ({
   }
 
   return (
-    <div className={clsx('flex-row-2 w-fit min-w-[150px] select-none overflow-hidden', className)}>
+    <div className={clsx('flex-row-2 select-none overflow-hidden', className)}>
       <div className="flex-col-1 h-full overflow-y-auto min-w-16">
         {hours.map(hour => {
           const isSelected = hour === time.getHours() - (!is24HourFormat && isPM ? 12 : 0)

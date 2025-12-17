@@ -1,4 +1,4 @@
-import type { HTMLAttributes } from 'react'
+import type { HTMLAttributes, RefObject } from 'react'
 import React, { createContext, forwardRef, useCallback, useContext, useEffect, useRef, useState } from 'react'
 import { clsx } from 'clsx'
 import { match } from '@/src/utils/match'
@@ -72,7 +72,7 @@ export const ListBoxItem = forwardRef<HTMLLIElement, ListBoxItemProps>(
         ref={(node) => {
           itemRef.current = node
           if (typeof ref === 'function') ref(node)
-          else if (ref) (ref as React.MutableRefObject<HTMLLIElement | null>).current = node
+          else if (ref) (ref as RefObject<HTMLLIElement | null>).current = node
         }}
         id={id}
         role="option"

@@ -5,6 +5,30 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/)
 and adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [0.5.0] - 2025-12-17
+
+### Added
+- VisibilityComponent
+
+### Changed
+- Upgrade to Storybook 10.0.0
+- Disable `Button`s `onClick` event propagation by default
+  - This can be reactivated with the `allowClickEventPropagation` flag
+- Change DateTimePicker styling and arrangement
+- deprecated `MutableRefObject` to `RefObject`
+- `TableSortButton` show the index at which it currently is applied
+- Changed Tooltip to be position based on anchor an not relative
+
+### Fixed
+- tooltips not disappearing if mouseleave happens too fast 
+- .arb variable typing not set
+
+### Removed
+- Tests for translation parser which are now in [@helpwave/hightide](https://github.com/helpwave/hightide) 
+
+### Security
+- Update dependencies
+
 ## [0.4.0] - 2025-12-16
 
 ### Added

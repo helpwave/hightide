@@ -92,7 +92,9 @@ export function TabView({ children, outerDivProps, onTabChanged, initialTabIndex
               aria-controls={`${t.id}-panel`}
               id={`${t.id}-tab`}
               tabIndex={active === t.id ? 0 : -1}
-              ref={(el) => (buttonRefs.current[t.id] = el)}
+              ref={(el) => {
+                buttonRefs.current[t.id] = el
+              }}
               onClick={() => setActive(t.id)}
               onKeyDown={(e) => onKeyDown(e, t.id)}
               className={clsx(

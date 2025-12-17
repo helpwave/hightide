@@ -3,9 +3,18 @@ import type { ButtonProps } from '../user-action/Button'
 import { Button } from '../user-action/Button'
 import clsx from 'clsx'
 import type { SortDirection } from '@tanstack/react-table'
+import { Visibility } from '@/src/components/layout/Visibility'
+import { Tooltip } from '@/src/components/user-action/Tooltip'
+import { useHightideTranslation } from '@/src/i18n/useHightideTranslation'
+
+type SortingIndexDisplay = {
+  index: number,
+  sortingsCount: number,
+}
 
 export type TableSortButtonProps = ButtonProps & {
   sortDirection: SortDirection | false,
+  sortingIndexDisplay?: SortingIndexDisplay,
   invert?: boolean,
 }
 
@@ -18,27 +27,42 @@ export const TableSortButton = ({
                                   color = 'neutral',
                                   size = 'tiny',
                                   className,
-                                  ...buttonProps
+                                  sortingIndexDisplay,
+                                  ...props
                                 }: TableSortButtonProps) => {
-  let icon = <ChevronsUpDown className="w-full h-full"/>
+  const translation = useHightideTranslation()
+  const { sortingsCount, index } = sortingIndexDisplay
+
+  let icon = <ChevronsUpDown className="size-4"/>
   if (sortDirection) {
     let usedSortDirection = sortDirection
     if (invert) {
       usedSortDirection = usedSortDirection === 'desc' ? 'asc' : 'desc'
     }
-    icon = usedSortDirection === 'asc' ? (<ChevronUp className="w-full h-full"/>) : (
-      <ChevronDown className="w-full h-full"/>)
+    icon = usedSortDirection === 'asc' ?
+      (<ChevronUp className="size-4"/>) : (<ChevronDown className="size-4"/>)
   }
 
+  const hasSortingIndex = !!sortingIndexDisplay && sortingsCount > 1 && index > 0
+
   return (
-    <Button
-      layout="icon"
-      color={color}
-      size={size}
-      className={clsx(className)}
-      {...buttonProps}
-    >
-      {icon}
-    </Button>
+    <Tooltip tooltip={translation('rSortingOrderAfter', { otherSortings: index - 1  } )} disabled={!hasSortingIndex}>
+      <Button
+        layout={hasSortingIndex ? 'default' : 'icon'}
+        color={color}
+        size={size}
+        className={clsx('relative', className)}
+        {...props}
+      >
+        <Visibility isVisible={hasSortingIndex}>
+          <div
+            className={clsx('absolute bottom-0 right-1/2 translate-x-1/2 translate-y-2/3 z-1 primary coloring-solid rounded-full h-4 w-5 text-sm')}
+          >
+            {`${index}.`}
+          </div>
+        </Visibility>
+        {icon}
+      </Button>
+    </Tooltip>
   )
 }

@@ -63,6 +63,7 @@ export type ButtonProps = ButtonHTMLAttributes<HTMLButtonElement> & {
   coloringStyle?: ButtonColoringStyle,
   startIcon?: ReactNode,
   endIcon?: ReactNode,
+  allowClickEventPropagation?: boolean,
 }
 
 /**
@@ -77,6 +78,7 @@ export const Button = forwardRef<HTMLButtonElement, ButtonProps>(function SolidB
                                                                                         startIcon,
                                                                                         endIcon,
                                                                                         disabled,
+                                                                                        allowClickEventPropagation = false,
                                                                                         className,
                                                                                         ...restProps
                                                                                       }, ref) {
@@ -99,6 +101,12 @@ export const Button = forwardRef<HTMLButtonElement, ButtonProps>(function SolidB
         paddingMapping[layout][size],
         className
       )}
+      onClick={event => {
+        if(!allowClickEventPropagation) {
+          event.stopPropagation()
+        }
+        restProps?.onClick(event)
+      }}
       disabled={disabled}
     >
       {startIcon}

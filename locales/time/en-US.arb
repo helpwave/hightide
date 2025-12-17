@@ -14,67 +14,89 @@
   "century": "{count, plural, =1{Century} other{Centuries}}",
   "@century": {
     "placeholders": {
-      "count": {}
+      "count": {
+        "type": "number"
+      }
     }
   },
   "decade": "{count, plural, =1{Decade} other{Decades}}",
   "@decade": {
     "placeholders": {
-      "count": {}
+      "count": {
+        "type": "number"
+      }
     }
   },
   "year": "{count, plural, =1{Year} other{Years}}",
   "@year": {
     "placeholders": {
-      "count": {}
+      "count": {
+        "type": "number"
+      }
     }
   },
   "month": "{count, plural, =1{Month} other{Months}}",
   "@month": {
     "placeholders": {
-      "count": {}
+      "count": {
+        "type": "number"
+      }
     }
   },
   "day": "{count, plural, =1{Day} other{Days}}",
   "@day": {
     "placeholders": {
-      "count": {}
+      "count": {
+        "type": "number"
+      }
     }
   },
   "hour": "{count, plural, =1{Hour} other{Hours}}",
   "@hour": {
     "placeholders": {
-      "count": {}
+      "count": {
+        "type": "number"
+      }
     }
   },
   "minute": "{count, plural, =1{Minute} other{Minutes}}",
   "@minute": {
     "placeholders": {
-      "count": {}
+      "count": {
+        "type": "number"
+      }
     }
   },
   "second": "{count, plural, =1{Second} other{Seconds}}",
   "@second": {
     "placeholders": {
-      "count": {}
+      "count": {
+        "type": "number"
+      }
     }
   },
   "millisecond": "{count, plural, =1{Millisecond} other{Milliseconds}}",
   "@millisecond": {
     "placeholders": {
-      "count": {}
+      "count": {
+        "type": "number"
+      }
     }
   },
   "microsecond": "{count, plural, =1{Microsecond} other{Microseconds}}",
   "@microsecond": {
     "placeholders": {
-      "count": {}
+      "count": {
+        "type": "number"
+      }
     }
   },
   "nanosecond": "{count, plural, =1{Nanosecond} other{Nanoseconds}}",
   "@nanosecond": {
     "placeholders": {
-      "count": {}
+      "count": {
+        "type": "number"
+      }
     }
   },
   "yesterday": "Yesterday",
