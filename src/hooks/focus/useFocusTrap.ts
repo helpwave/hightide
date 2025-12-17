@@ -1,6 +1,6 @@
 'use client'
 
-import type { MutableRefObject } from 'react'
+import type { RefObject } from 'react'
 import { useCallback, useEffect, useId, useRef, useState } from 'react'
 import { useIsMounted } from '@/src/hooks/focus/useIsMounted'
 
@@ -30,8 +30,8 @@ type ListenerType = {
   unpause: () => void,
   focus: () => void,
   focusLast: () => void,
-  container: MutableRefObject<HTMLElement>,
-  initialFocusElement: MutableRefObject<HTMLElement>,
+  container: RefObject<HTMLElement>,
+  initialFocusElement: RefObject<HTMLElement>,
 }
 
 class FocusTrapService {
@@ -144,9 +144,9 @@ class FocusTrapService {
 const service = new FocusTrapService()
 
 export type UseFocusTrapProps = {
-  container: MutableRefObject<HTMLElement>,
+  container: RefObject<HTMLElement>,
   active?: boolean,
-  initialFocus?: MutableRefObject<HTMLElement>,
+  initialFocus?: RefObject<HTMLElement>,
   /**
    * Whether to focus the first element when the initialFocus isn't provided
    *
@@ -161,7 +161,7 @@ export const useFocusTrap = ({
                                initialFocus,
                                focusFirst = true,
                              }: UseFocusTrapProps) => {
-  const lastFocusRef = useRef<HTMLElement | null>(null)
+  const lastFocusRef = useRef<HTMLElement>(null)
   const [paused, setPaused] = useState(false)
   const isMounted = useIsMounted()
   const id = useId()

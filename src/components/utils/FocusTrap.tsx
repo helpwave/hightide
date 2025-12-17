@@ -1,6 +1,6 @@
 'use client'
 
-import type { HTMLAttributes, MutableRefObject } from 'react'
+import type { HTMLAttributes, RefObject } from 'react'
 import { useRef } from 'react'
 import { useImperativeHandle } from 'react'
 import { forwardRef } from 'react'
@@ -8,7 +8,7 @@ import { useFocusTrap } from '@/src/hooks/focus/useFocusTrap'
 
 export type FocusTrapProps = HTMLAttributes<HTMLDivElement> & {
   active?: boolean,
-  initialFocus?: MutableRefObject<HTMLElement>,
+  initialFocus?: RefObject<HTMLElement>,
   /**
    * Whether to focus the first element when the initialFocus isn't provided
    *

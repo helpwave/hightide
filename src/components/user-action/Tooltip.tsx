@@ -1,7 +1,8 @@
 import type { CSSProperties, PropsWithChildren, ReactNode } from 'react'
-import { useHoverState } from '../../hooks/useHoverState'
+import { useState } from 'react'
 import { clsx } from 'clsx'
 import { useZIndexRegister } from '@/src/hooks/useZIndexRegister'
+import { Visibility } from '@/src/components/layout/Visibility'
 
 type Position = 'top' | 'bottom' | 'left' | 'right'
 
@@ -10,9 +11,15 @@ export type TooltipProps = PropsWithChildren<{
   /**
    * Number of milliseconds until the tooltip appears
    *
-   * defaults to 1000ms
+   * defaults to 400ms
    */
-  animationDelay?: number,
+  appearDelay?: number,
+  /**
+   * Number of milliseconds until the tooltip disappears
+   *
+   * defaults to 50ms
+   */
+  disappearDelay?: number,
   /**
    * Class names of additional styling properties for the tooltip
    */
@@ -23,6 +30,11 @@ export type TooltipProps = PropsWithChildren<{
   containerClassName?: string,
   position?: Position,
 }>
+
+type TooltipState = {
+  isShown: boolean,
+  timer: NodeJS.Timeout | null,
+}
 
 /**
  * A Component for showing a tooltip when hovering over Content
@@ -37,12 +49,17 @@ export type TooltipProps = PropsWithChildren<{
 export const Tooltip = ({
                           tooltip,
                           children,
-                          animationDelay = 650,
+                          appearDelay = 400,
+                          disappearDelay = 50,
                           tooltipClassName = '',
                           containerClassName = '',
                           position = 'bottom',
                         }: TooltipProps) => {
-  const { isHovered, handlers } = useHoverState()
+  const [state, setState] = useState<TooltipState>({
+    isShown: false,
+    timer: null,
+  })
+  const { isShown } = state
 
   const positionClasses = {
     top: `bottom-full left-1/2 -translate-x-1/2 mb-[6px]`,
@@ -66,22 +83,45 @@ export const Tooltip = ({
     right: { borderWidth: `${triangleSize}px ${triangleSize}px ${triangleSize}px 0` }
   }
 
-  const zIndex = useZIndexRegister(isHovered)
+  const zIndex = useZIndexRegister(isShown)
 
   return (
     <div
       className={clsx('relative inline-block', containerClassName)}
-      {...handlers}
+      onMouseEnter={() => setState(prevState => {
+        clearTimeout(prevState.timer)
+        return {
+          ...prevState,
+          timer: setTimeout(() => {
+            setState(prevState => {
+              clearTimeout(prevState.timer)
+              return { isShown: true, timer: null }
+            })
+          }, appearDelay)
+        }
+      })}
+      onMouseLeave={() => setState(prevState => {
+        clearTimeout(prevState.timer)
+        return {
+          ...prevState,
+          timer: setTimeout(() => {
+            setState(prevState => {
+              clearTimeout(prevState.timer)
+              return { isShown: false, timer: null }
+            })
+          }, disappearDelay)
+        }
+      })}
     >
       {children}
-      {isHovered && (
+      <Visibility isVisible={isShown}>
         <div
           className={clsx(
             `opacity-0 absolute text-xs font-semibold text-tooltip-text px-2 py-1 rounded whitespace-nowrap
            animate-tooltip-fade-in shadow-around-md bg-tooltip-background`,
             positionClasses[position], tooltipClassName
           )}
-          style={{ zIndex, animationDelay: animationDelay + 'ms' }}
+          style={{ zIndex, animationDelay: appearDelay + 'ms' }}
         >
           {tooltip}
           <div
@@ -89,7 +129,7 @@ export const Tooltip = ({
             style={{ ...triangleStyle[position], zIndex: zIndex + 1 }}
           />
         </div>
-      )}
+      </Visibility>
     </div>
   )
 }

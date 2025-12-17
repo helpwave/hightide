@@ -1,4 +1,4 @@
-import type { HTMLAttributes, MutableRefObject, ReactNode } from 'react'
+import type { HTMLAttributes, RefObject, ReactNode } from 'react'
 import { forwardRef, useImperativeHandle, useRef } from 'react'
 import { createPortal } from 'react-dom'
 import { clsx } from 'clsx'
@@ -6,7 +6,7 @@ import type { UseFloatingElementOptions } from '@/src/hooks/useFloatingElement'
 import { useFloatingElement } from '@/src/hooks/useFloatingElement'
 
 export type FloatingContainerProps = HTMLAttributes<HTMLDivElement> & UseFloatingElementOptions & {
-  anchor?: MutableRefObject<HTMLElement>,
+  anchor?: RefObject<HTMLElement>,
   /**
    * Polls the position of the anchor every 100ms
    *

@@ -6,8 +6,32 @@ type TooltipExampleProps = Omit<TooltipProps, 'children' | 'tooltip'> & { toolti
 
 const TooltipExample = ({ tooltipText, ...props }: TooltipExampleProps) => {
   return (
-    <Tooltip tooltip={tooltipText} {...props}><span
-      className="bg-primary text-white px-2 py-1 rounded-lg">Hover over me</span></Tooltip>
+    <div className="flex-col-2 items-center">
+      <Tooltip tooltip={tooltipText} {...props}>
+        <span className="bg-primary text-white px-2 py-1 rounded-lg">Hover over me</span>
+      </Tooltip>
+      <Tooltip tooltip={tooltipText} {...props}>
+        <span className="bg-primary text-white px-2 py-1 rounded-lg">Hover over me</span>
+      </Tooltip>
+      <Tooltip tooltip={tooltipText} {...props}>
+        <span className="bg-primary text-white px-2 py-1 rounded-lg">Hover over me</span>
+      </Tooltip>
+      <Tooltip tooltip={tooltipText} {...props}>
+        <span className="bg-primary text-white px-2 py-1 rounded-lg">Hover over me</span>
+      </Tooltip>
+      <Tooltip tooltip={tooltipText} {...props}>
+        <span className="bg-primary text-white px-2 py-1 rounded-lg">Hover over me</span>
+      </Tooltip>
+      <Tooltip tooltip={tooltipText} {...props}>
+        <span className="bg-primary text-white px-2 py-1 rounded-lg">Hover over me</span>
+      </Tooltip>
+      <Tooltip tooltip={tooltipText} {...props}>
+        <span className="bg-primary text-white px-2 py-1 rounded-lg">Hover over me</span>
+      </Tooltip>
+      <Tooltip tooltip={tooltipText} {...props}>
+        <span className="bg-primary text-white px-2 py-1 rounded-lg">Hover over me</span>
+      </Tooltip>
+    </div>
   )
 }
 
@@ -22,9 +46,9 @@ type Story = StoryObj<typeof meta>;
 export const tooltip: Story = {
   args: {
     tooltipText: 'Tooltip',
-    animationDelay: 700,
+    appearDelay: 500,
+    disappearDelay: 50,
     position: 'bottom',
-    zIndex: 10,
     containerClassName: '',
     tooltipClassName: ''
   },

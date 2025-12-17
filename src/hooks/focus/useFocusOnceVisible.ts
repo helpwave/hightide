@@ -1,8 +1,8 @@
-import type { MutableRefObject } from 'react'
+import type { RefObject } from 'react'
 import React, { useEffect } from 'react'
 
 export const useFocusOnceVisible = (
-  ref: MutableRefObject<HTMLElement>,
+  ref: RefObject<HTMLElement>,
   disable: boolean = false
 ) => {
   const [hasUsedFocus, setHasUsedFocus] = React.useState(false)

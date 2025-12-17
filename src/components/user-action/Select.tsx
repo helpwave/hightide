@@ -1,4 +1,4 @@
-import type { ButtonHTMLAttributes, HTMLAttributes, PropsWithChildren, ReactNode } from 'react'
+import type { ButtonHTMLAttributes, HTMLAttributes, PropsWithChildren, ReactNode, RefObject } from 'react'
 import React, {
   createContext,
   forwardRef,
@@ -352,7 +352,7 @@ export const SelectOption = forwardRef<HTMLLIElement, SelectOptionProps>(
         ref={(node) => {
           itemRef.current = node
           if (typeof ref === 'function') ref(node)
-          else if (ref) (ref as React.MutableRefObject<HTMLLIElement | null>).current = node
+          else if (ref) (ref as RefObject<HTMLLIElement | null>).current = node
         }}
         id={value}
         role="option"
