@@ -1,4 +1,5 @@
-import { equalSizeGroups } from './array'
+import { equalSizeGroups } from '@/src/utils/array'
+import type { DurationJSON } from '@/src/utils/duration'
 
 const monthsList = ['january', 'february', 'march', 'april', 'may', 'june', 'july', 'august', 'september', 'october', 'november', 'december'] as const
 export type Month = typeof monthsList[number]
@@ -20,17 +21,7 @@ export const formatDateTime = (date: Date) => {
   return `${dateString}T${hours}:${minutes}`
 }
 
-export type Duration = {
-  years?: number,
-  months?: number,
-  days?: number,
-  hours?: number,
-  minutes?: number,
-  seconds?: number,
-  milliseconds?: number,
-}
-
-export const changeDuration = (date: Date, duration: Duration, isAdding?: boolean): Date => {
+export const changeDuration = (date: Date, duration: Partial<DurationJSON>, isAdding?: boolean): Date => {
   const {
     years = 0,
     months = 0,
@@ -92,15 +83,15 @@ export const changeDuration = (date: Date, duration: Duration, isAdding?: boolea
   return newDate
 }
 
-export const addDuration = (date: Date, duration: Duration): Date => {
+export const addDuration = (date: Date, duration: Partial<DurationJSON>): Date => {
   return changeDuration(date, duration, true)
 }
 
-export const subtractDuration = (date: Date, duration: Duration): Date => {
+export const subtractDuration = (date: Date, duration: Partial<DurationJSON>): Date => {
   return changeDuration(date, duration, false)
 }
 
-export const getBetweenDuration = (startDate: Date, endDate: Date): Duration => {
+export const getBetweenDuration = (startDate: Date, endDate: Date): Partial<DurationJSON> => {
   const durationInMilliseconds = endDate.getTime() - startDate.getTime()
 
   const millisecondsInSecond = 1000
