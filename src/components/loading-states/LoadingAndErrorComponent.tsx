@@ -38,10 +38,10 @@ export const LoadingAndErrorComponent = ({
   }
 
   if (isLoading || (minimumLoadingDuration && isInMinimumLoading)) {
-    return (loadingComponent ?? <LoadingContainer className={clsx(className)}/>)
+    return <>{(loadingComponent ?? <LoadingContainer className={clsx(className)}/>)}</>
   }
   if (hasError) {
-    return (errorComponent ?? <LoadingContainer className={clsx('bg-negative', className)}/>)
+    return <>{(errorComponent ?? <LoadingContainer className={clsx('bg-negative', className)}/>)}</>
   }
-  return children
+  return <>{children}</>
 }
