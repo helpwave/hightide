@@ -5,8 +5,5 @@ export type VisibilityProps = PropsWithChildren & {
 }
 
 export function Visibility({ children, isVisible }: VisibilityProps) {
-  if (isVisible) {
-    return children
-  }
-  return undefined
+  return (<>{isVisible && children}</>)
 }
