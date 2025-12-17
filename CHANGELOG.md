@@ -7,8 +7,17 @@ and adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
 ## [0.5.0] - 2025-12-17
 
+### Added
+- VisibilityComponent
+
 ### Changed
 - Updgrade to Storybook 10.0.0
+- Disable `Button`s `onClick` event propagation by default
+  - This can be reactivated with the `allowClickEventPropagation` flag
+- Change DateTimePicker styling and arrangement
+
+### Removed
+- Tests for translation parser which are now in [@helpwave/hightide](https://github.com/helpwave/hightide) 
 
 ### Security
 - Update dependencies

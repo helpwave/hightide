@@ -1,5 +1,6 @@
 import type { WeekDay } from '@/src/utils/date'
-import { equalDate, getWeeksForCalenderMonth, isInTimeSpan } from '@/src/utils/date'
+import { DateUtils } from '@/src/utils/date'
+import { getWeeksForCalenderMonth, isInTimeSpan } from '@/src/utils/date'
 import clsx from 'clsx'
 import { useLocale } from '@/src/i18n/LocaleProvider'
 import { useEffect, useState } from 'react'
@@ -45,8 +46,8 @@ export const DayPicker = ({
       {weeks.map((week, index) => (
         <div key={index} className="flex-row-2 text-center">
           {week.map((date) => {
-            const isSelected = !!selected && equalDate(selected, date)
-            const isToday = equalDate(new Date(), date)
+            const isSelected = !!selected && DateUtils.equalDate(selected, date)
+            const isToday = DateUtils.equalDate(new Date(), date)
             const isSameMonth = date.getMonth() === month
             const isDayValid = isInTimeSpan(date, start, end)
             return (

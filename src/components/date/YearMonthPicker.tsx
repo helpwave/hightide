@@ -2,7 +2,7 @@ import { useEffect, useRef } from 'react'
 import { equalSizeGroups, range } from '@/src/utils/array'
 import clsx from 'clsx'
 import { ExpandableUncontrolled } from '@/src/components/layout/Expandable'
-import { addDuration, monthsList, subtractDuration } from '@/src/utils/date'
+import { addDuration, DateUtils, subtractDuration } from '@/src/utils/date'
 import { useLocale } from '@/src/i18n/LocaleProvider'
 import { Button } from '../user-action/Button'
 import { useOverwritableState } from '@/src/hooks/useOverwritableState'
@@ -59,11 +59,12 @@ export const YearMonthPicker = ({
             label={<span className={clsx({ 'text-primary font-bold': selectedYear })}>{year}</span>}
             isExpanded={showValueOpen && selectedYear}
             contentClassName="gap-y-1"
+            contentExpandedClassName="!p-2"
           >
-            {equalSizeGroups([...monthsList], 3).map((monthList, index) => (
+            {equalSizeGroups([...DateUtils.monthsList], 3).map((monthList, index) => (
               <div key={index} className="flex-row-1">
                 {monthList.map(month => {
-                  const monthIndex = monthsList.indexOf(month)
+                  const monthIndex = DateUtils.monthsList.indexOf(month)
                   const newDate = new Date(year, monthIndex)
 
                   const selectedMonth = selectedYear && monthIndex === displayedYearMonth.getMonth()

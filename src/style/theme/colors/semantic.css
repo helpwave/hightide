@@ -93,7 +93,7 @@
     --color-primary: var(--color-purple-400);
 
     --color-neutral: var(--color-gray-700);
-    --color-neutral-hover: var(--color-gray-800);
+    --color-neutral-hover: var(--color-gray-600);
     --color-neutral-outline-hover: var(--color-gray-200);
   }
 }
