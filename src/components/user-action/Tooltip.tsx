@@ -6,6 +6,11 @@ import { Visibility } from '@/src/components/layout/Visibility'
 import { useFloatingElement } from '@/src/hooks/useFloatingElement'
 import { createPortal } from 'react-dom'
 
+type TooltipState = {
+  isShown: boolean,
+  timer: NodeJS.Timeout | null,
+}
+
 type Position = 'top' | 'bottom' | 'left' | 'right'
 
 export type TooltipProps = PropsWithChildren<{
@@ -33,11 +38,6 @@ export type TooltipProps = PropsWithChildren<{
   position?: Position,
   disabled?: boolean,
 }>
-
-type TooltipState = {
-  isShown: boolean,
-  timer: NodeJS.Timeout | null,
-}
 
 /**
  * A Component for showing a tooltip when hovering over Content
@@ -77,10 +77,22 @@ export const Tooltip = ({
   }
 
   const triangleStyle: Record<Position, CSSProperties> = {
-    top: { borderWidth: `${triangleSize}rem ${triangleSize}rem 0 ${triangleSize}rem`, transform: `translate(0,${triangleSize}rem)` },
-    bottom: { borderWidth: `0 ${triangleSize}rem ${triangleSize}rem ${triangleSize}rem`, transform: `translate(0,-${triangleSize}rem)` },
-    left: { borderWidth: `${triangleSize}rem 0 ${triangleSize}rem ${triangleSize}rem`, transform: `translate(${triangleSize}rem,0)` },
-    right: { borderWidth: `${triangleSize}rem ${triangleSize}rem ${triangleSize}rem 0`, transform: `translate(-${triangleSize}rem,0)` }
+    top: {
+      borderWidth: `${triangleSize}rem ${triangleSize}rem 0 ${triangleSize}rem`,
+      transform: `translate(0,${triangleSize}rem)`
+    },
+    bottom: {
+      borderWidth: `0 ${triangleSize}rem ${triangleSize}rem ${triangleSize}rem`,
+      transform: `translate(0,-${triangleSize}rem)`
+    },
+    left: {
+      borderWidth: `${triangleSize}rem 0 ${triangleSize}rem ${triangleSize}rem`,
+      transform: `translate(${triangleSize}rem,0)`
+    },
+    right: {
+      borderWidth: `${triangleSize}rem ${triangleSize}rem ${triangleSize}rem 0`,
+      transform: `translate(-${triangleSize}rem,0)`
+    }
   }
 
   const isActive = !disabled && isShown
@@ -108,8 +120,10 @@ export const Tooltip = ({
     <div
       ref={anchorRef}
       className={clsx('relative inline-block', containerClassName)}
-      onMouseEnter={() => setState(prevState => {
-        clearTimeout(prevState.timer)
+      onPointerEnter={() => setState(prevState => {
+        if(prevState.isShown) {
+          return prevState
+        }
         return {
           ...prevState,
           timer: setTimeout(() => {
@@ -120,7 +134,7 @@ export const Tooltip = ({
           }, appearDelay)
         }
       })}
-      onMouseLeave={() => setState(prevState => {
+      onPointerLeave={() => setState(prevState => {
         clearTimeout(prevState.timer)
         return {
           ...prevState,
@@ -158,7 +172,7 @@ export const Tooltip = ({
               ...triangleStyle[position],
               zIndex: zIndexTriangle,
               animationDelay: appearDelay + 'ms'
-          }}
+            }}
           />
           , document.body
         )}
