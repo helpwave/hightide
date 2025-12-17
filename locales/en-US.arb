@@ -83,7 +83,7 @@
   "themes": "{count, plural, =1{Theme} other{Themes}}",
   "@themes": {
     "placeholders": {
-      "count": {}
+      "count": { "type":  "number" }
     }
   },
   "themeMode": "{theme, select, dark{Dark} light{Light} system{System}}",
@@ -161,5 +161,11 @@
     }
   },
   "welcome": "Welcome",
-  "goodToSeeYou": "Good to see you"
+  "goodToSeeYou": "Good to see you",
+  "rSortingOrderAfter": "Applied {otherSortings, plural, =0{as the first sorting} =1{after # other sorting} other{after # other sortings}}",
+  "@rSortingOrderAfter": {
+    "placeholders": {
+      "otherSortings": { "type": "number" }
+    }
+  }
 }

@@ -353,6 +353,10 @@ export const Table = <T, >({
                           {header.column.getCanSort() && (
                             <TableSortButton
                               sortDirection={header.column.getIsSorted()}
+                              sortingIndexDisplay={{
+                                index: header.column.getIsSorted() ? (header.column.getSortIndex() + 1) : -1,
+                                sortingsCount: table.getState().sorting.length,
+                              }}
                               onClick={() => {
                                 const sorted = header.column.getIsSorted()
                                 const isMulti = header.column.getCanMultiSort()

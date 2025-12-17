@@ -1,8 +1,10 @@
 import type { CSSProperties, PropsWithChildren, ReactNode } from 'react'
-import { useState } from 'react'
+import { useRef, useState } from 'react'
 import { clsx } from 'clsx'
 import { useZIndexRegister } from '@/src/hooks/useZIndexRegister'
 import { Visibility } from '@/src/components/layout/Visibility'
+import { useFloatingElement } from '@/src/hooks/useFloatingElement'
+import { createPortal } from 'react-dom'
 
 type Position = 'top' | 'bottom' | 'left' | 'right'
 
@@ -29,6 +31,7 @@ export type TooltipProps = PropsWithChildren<{
    */
   containerClassName?: string,
   position?: Position,
+  disabled?: boolean,
 }>
 
 type TooltipState = {
@@ -54,39 +57,56 @@ export const Tooltip = ({
                           tooltipClassName = '',
                           containerClassName = '',
                           position = 'bottom',
+                          disabled = false,
                         }: TooltipProps) => {
   const [state, setState] = useState<TooltipState>({
     isShown: false,
     timer: null,
   })
   const { isShown } = state
+  const anchorRef = useRef<HTMLDivElement>(null)
+  const containerRef = useRef<HTMLDivElement>(null)
+  const triangleRef = useRef<HTMLDivElement>(null)
 
-  const positionClasses = {
-    top: `bottom-full left-1/2 -translate-x-1/2 mb-[6px]`,
-    bottom: `top-full left-1/2 -translate-x-1/2 mt-[6px]`,
-    left: `right-full top-1/2 -translate-y-1/2 mr-[6px]`,
-    right: `left-full top-1/2 -translate-y-1/2 ml-[6px]`
-  }
-
-  const triangleSize = 6
+  const triangleSize = 0.375
   const triangleClasses = {
-    top: `top-full left-1/2 -translate-x-1/2 border-t-tooltip-background border-l-transparent border-r-transparent`,
-    bottom: `bottom-full left-1/2 -translate-x-1/2 border-b-tooltip-background border-l-transparent border-r-transparent`,
-    left: `left-full top-1/2 -translate-y-1/2 border-l-tooltip-background border-t-transparent border-b-transparent`,
-    right: `right-full top-1/2 -translate-y-1/2 border-r-tooltip-background border-t-transparent border-b-transparent`
+    top: `border-t-tooltip-background border-l-transparent border-r-transparent`,
+    bottom: `border-b-tooltip-background border-l-transparent border-r-transparent`,
+    left: `border-l-tooltip-background border-t-transparent border-b-transparent`,
+    right: `border-r-tooltip-background border-t-transparent border-b-transparent`
   }
 
   const triangleStyle: Record<Position, CSSProperties> = {
-    top: { borderWidth: `${triangleSize}px ${triangleSize}px 0 ${triangleSize}px` },
-    bottom: { borderWidth: `0 ${triangleSize}px ${triangleSize}px ${triangleSize}px` },
-    left: { borderWidth: `${triangleSize}px 0 ${triangleSize}px ${triangleSize}px` },
-    right: { borderWidth: `${triangleSize}px ${triangleSize}px ${triangleSize}px 0` }
+    top: { borderWidth: `${triangleSize}rem ${triangleSize}rem 0 ${triangleSize}rem`, transform: `translate(0,${triangleSize}rem)` },
+    bottom: { borderWidth: `0 ${triangleSize}rem ${triangleSize}rem ${triangleSize}rem`, transform: `translate(0,-${triangleSize}rem)` },
+    left: { borderWidth: `${triangleSize}rem 0 ${triangleSize}rem ${triangleSize}rem`, transform: `translate(${triangleSize}rem,0)` },
+    right: { borderWidth: `${triangleSize}rem ${triangleSize}rem ${triangleSize}rem 0`, transform: `translate(-${triangleSize}rem,0)` }
   }
 
-  const zIndex = useZIndexRegister(isShown)
+  const isActive = !disabled && isShown
+
+  const css = useFloatingElement({
+    active: isActive,
+    anchorRef: anchorRef,
+    containerRef,
+    horizontalAlignment: position === 'left' ? 'beforeStart' : position === 'right' ? 'afterEnd' : 'center',
+    verticalAlignment: position === 'top' ? 'beforeStart' : position === 'bottom' ? 'afterEnd' : 'center',
+  })
+
+  const cssTriangle = useFloatingElement({
+    active: isActive,
+    anchorRef: anchorRef,
+    containerRef: triangleRef,
+    horizontalAlignment: position === 'left' ? 'beforeStart' : position === 'right' ? 'afterEnd' : 'center',
+    verticalAlignment: position === 'top' ? 'beforeStart' : position === 'bottom' ? 'afterEnd' : 'center',
+  })
+
+  const zIndex = useZIndexRegister(isActive)
+  const zIndexTriangle = useZIndexRegister(isActive)
 
   return (
     <div
+      ref={anchorRef}
       className={clsx('relative inline-block', containerClassName)}
       onMouseEnter={() => setState(prevState => {
         clearTimeout(prevState.timer)
@@ -114,21 +134,34 @@ export const Tooltip = ({
       })}
     >
       {children}
-      <Visibility isVisible={isShown}>
-        <div
-          className={clsx(
-            `opacity-0 absolute text-xs font-semibold text-tooltip-text px-2 py-1 rounded whitespace-nowrap
-           animate-tooltip-fade-in shadow-around-md bg-tooltip-background`,
-            positionClasses[position], tooltipClassName
-          )}
-          style={{ zIndex, animationDelay: appearDelay + 'ms' }}
-        >
-          {tooltip}
+      <Visibility isVisible={isActive}>
+        {createPortal(
           <div
-            className={clsx(`absolute w-0 h-0`, triangleClasses[position])}
-            style={{ ...triangleStyle[position], zIndex: zIndex + 1 }}
+            ref={containerRef}
+            className={clsx(
+              `opacity-0 absolute text-xs font-semibold text-tooltip-text px-2 py-1 rounded
+           animate-tooltip-fade-in shadow-around-md bg-tooltip-background`,
+              tooltipClassName
+            )}
+            style={{ ...css, zIndex, animationDelay: appearDelay + 'ms' }}
+          >
+            {tooltip}
+          </div>
+          , document.body
+        )}
+        {createPortal(
+          <div
+            ref={triangleRef}
+            className={clsx(`absolute w-0 h-0 opacity-0 animate-tooltip-fade-in`, triangleClasses[position])}
+            style={{
+              ...cssTriangle,
+              ...triangleStyle[position],
+              zIndex: zIndexTriangle,
+              animationDelay: appearDelay + 'ms'
+          }}
           />
-        </div>
+          , document.body
+        )}
       </Visibility>
     </div>
   )

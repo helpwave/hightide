@@ -16,9 +16,12 @@ and adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
   - This can be reactivated with the `allowClickEventPropagation` flag
 - Change DateTimePicker styling and arrangement
 - deprecated `MutableRefObject` to `RefObject`
+- `TableSortButton` show the index at which it currently is applied
+- Changed Tooltip to be position based on anchor an not relative
 
 ### Fixed
-- Fixed tooltips not disappearing if mouseleave happens too fast 
+- tooltips not disappearing if mouseleave happens too fast 
+- .arb variable typing not set
 
 ### Removed
 - Tests for translation parser which are now in [@helpwave/hightide](https://github.com/helpwave/hightide) 
