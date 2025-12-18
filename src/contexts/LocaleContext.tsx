@@ -1,32 +1,37 @@
 import type { Dispatch, PropsWithChildren, SetStateAction } from 'react'
 import { createContext, useContext, useEffect, useMemo, useState } from 'react'
 import { useLocalStorage } from '../hooks/useLocalStorage'
-import { LocalizationUtil } from './util'
+import { LocalizationUtil } from '../i18n/util'
 import type { HightideTranslationLocales } from '@/src/i18n/translations'
+import type { LocalizationConfig } from '@/src/contexts/HightideConfigContext'
+import { useHightideConfig } from '@/src/contexts/HightideConfigContext'
 
 export type LocaleContextValue = {
   locale: HightideTranslationLocales,
   setLocale: Dispatch<SetStateAction<HightideTranslationLocales>>,
 }
 
-export const LocaleContext = createContext<LocaleContextValue>({
-  locale: LocalizationUtil.DEFAULT_LOCALE,
-  setLocale: (v) => v
-})
+export const LocaleContext = createContext<LocaleContextValue | null>(null)
 
 type LocaleWithSystem = HightideTranslationLocales | 'system'
 
-type LocaleProviderProps = {
+export type LocaleProviderProps = PropsWithChildren & Partial<LocalizationConfig> & {
   locale?: LocaleWithSystem,
   onChangedLocale?: (locale: HightideTranslationLocales) => void,
 }
 
-export const LocaleProvider = ({ children, locale, onChangedLocale }: PropsWithChildren<LocaleProviderProps>) => {
+export const LocaleProvider = ({
+                                 children,
+                                 locale,
+                                 defaultLocale,
+                                 onChangedLocale
+                               }: LocaleProviderProps) => {
   const {
     value: storedLocale,
     setValue: setStoredLocale,
     deleteValue: deleteStoredLocale,
   } = useLocalStorage<LocaleWithSystem>('locale', 'system')
+  const { config } = useHightideConfig()
   const [localePreference, setLocalePreference] = useState<LocaleWithSystem>('system')
 
   const resolvedLocale = useMemo(() => {
@@ -39,11 +44,11 @@ export const LocaleProvider = ({ children, locale, onChangedLocale }: PropsWithC
     if (localePreference !== 'system') {
       return localePreference
     }
-    return LocalizationUtil.DEFAULT_LOCALE
-  }, [locale, localePreference, storedLocale])
+    return config.locale.defaultLocale ?? defaultLocale
+  }, [config.locale.defaultLocale, defaultLocale, locale, localePreference, storedLocale])
 
   useEffect(() => {
-    if(!locale) return
+    if (!locale) return
     if (locale === 'system') {
       deleteStoredLocale()
     } else {

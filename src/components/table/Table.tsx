@@ -305,8 +305,8 @@ export const Table = <T, >({
     const colSizes: { [key: string]: number } = {}
     for (let i = 0; i < headers.length; i++) {
       const header = headers[i]!
-      colSizes[`--header-${header.id}-size`] = Math.floor(header.getSize())
-      colSizes[`--col-${header.column.id}-size`] = Math.floor(header.column.getSize())
+      colSizes[`--header-${header.id}-size`] = header.getSize()
+      colSizes[`--col-${header.column.id}-size`] = header.column.getSize()
     }
 
     return colSizes

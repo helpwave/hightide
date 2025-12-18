@@ -1,10 +1,12 @@
 import type { CSSProperties, PropsWithChildren, ReactNode } from 'react'
-import { useRef, useState } from 'react'
+import { useMemo, useRef, useState } from 'react'
 import { clsx } from 'clsx'
 import { useZIndexRegister } from '@/src/hooks/useZIndexRegister'
 import { Visibility } from '@/src/components/layout/Visibility'
 import { useFloatingElement } from '@/src/hooks/useFloatingElement'
 import { createPortal } from 'react-dom'
+import type { TooltipConfig } from '@/src/contexts/HightideConfigContext'
+import { useHightideConfig } from '@/src/contexts/HightideConfigContext'
 
 type TooltipState = {
   isShown: boolean,
@@ -13,20 +15,8 @@ type TooltipState = {
 
 type Position = 'top' | 'bottom' | 'left' | 'right'
 
-export type TooltipProps = PropsWithChildren<{
+export type TooltipProps = PropsWithChildren & Partial<TooltipConfig> & {
   tooltip: ReactNode,
-  /**
-   * Number of milliseconds until the tooltip appears
-   *
-   * defaults to 400ms
-   */
-  appearDelay?: number,
-  /**
-   * Number of milliseconds until the tooltip disappears
-   *
-   * defaults to 50ms
-   */
-  disappearDelay?: number,
   /**
    * Class names of additional styling properties for the tooltip
    */
@@ -37,7 +27,7 @@ export type TooltipProps = PropsWithChildren<{
   containerClassName?: string,
   position?: Position,
   disabled?: boolean,
-}>
+}
 
 /**
  * A Component for showing a tooltip when hovering over Content
@@ -52,8 +42,8 @@ export type TooltipProps = PropsWithChildren<{
 export const Tooltip = ({
                           tooltip,
                           children,
-                          appearDelay = 400,
-                          disappearDelay = 50,
+                          appearDelay: appearDelayOverwrite,
+                          disappearDelay: disappearDelayOverwrite,
                           tooltipClassName = '',
                           containerClassName = '',
                           position = 'bottom',
@@ -63,6 +53,15 @@ export const Tooltip = ({
     isShown: false,
     timer: null,
   })
+  const { config } = useHightideConfig()
+  const appearDelay = useMemo(
+    () => appearDelayOverwrite ?? config.tooltip.appearDelay,
+    [config.tooltip.appearDelay, appearDelayOverwrite]
+  )
+  const disappearDelay = useMemo(
+    () => disappearDelayOverwrite ?? config.tooltip.disappearDelay,
+    [config.tooltip.disappearDelay, disappearDelayOverwrite]
+  )
   const { isShown } = state
   const anchorRef = useRef<HTMLDivElement>(null)
   const containerRef = useRef<HTMLDivElement>(null)
@@ -121,7 +120,7 @@ export const Tooltip = ({
       ref={anchorRef}
       className={clsx('relative inline-block', containerClassName)}
       onPointerEnter={() => setState(prevState => {
-        if(prevState.isShown) {
+        if (prevState.isShown) {
           return prevState
         }
         return {

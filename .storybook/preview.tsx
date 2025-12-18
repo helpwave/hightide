@@ -1,8 +1,7 @@
 import type { Preview } from '@storybook/nextjs'
 import '../src/style/globals.css'
 import './storybookStyleOverrides.css'
-import { ThemeProvider } from '../src/theming/useTheme'
-import { LocaleProvider } from '../src/i18n/LocaleProvider'
+import { HightideProvider } from '../src/contexts/HightideProvider'
 
 const preview: Preview = {
   parameters: {
@@ -33,15 +32,16 @@ const preview: Preview = {
     (Story, context) => {
       const App = Story
       const theme = context.globals.backgrounds?.value ?? 'system'
-      const language = context.globals.language
+      const locale = context.globals.language
 
       return (
         <main className="p-4">
-          <ThemeProvider theme={theme}>
-            <LocaleProvider locale={language}>
-              <App/>
-            </LocaleProvider>
-          </ThemeProvider>
+          <HightideProvider
+            theme={{ theme }}
+            locale={{ locale }}
+          >
+            <App/>
+          </HightideProvider>
         </main>
       )
     },

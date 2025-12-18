@@ -1,7 +1,7 @@
 import type { WeekDay } from '@/src/utils/date'
 import { DateUtils, getWeeksForCalenderMonth, isInTimeSpan } from '@/src/utils/date'
 import clsx from 'clsx'
-import { useLocale } from '@/src/i18n/LocaleProvider'
+import { useLocale } from '@/src/contexts/LocaleContext'
 import { useEffect, useState } from 'react'
 import { Button } from '@/src/components/user-action/Button'
 

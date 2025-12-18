@@ -7,7 +7,7 @@ import type { DayPickerProps } from '@/src/components/date/DayPicker'
 import { DayPicker } from '@/src/components/date/DayPicker'
 import type { YearMonthPickerProps } from '@/src/components/date/YearMonthPicker'
 import { YearMonthPicker } from '@/src/components/date/YearMonthPicker'
-import { useLocale } from '@/src/i18n/LocaleProvider'
+import { useLocale } from '@/src/contexts/LocaleContext'
 import { Button } from '@/src/components/user-action/Button'
 import { LocalizationUtil } from '@/src/i18n/util'
 

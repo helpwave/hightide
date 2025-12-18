@@ -9,11 +9,6 @@ const localsNames: Record<HightideTranslationLocales, string> = {
   'de-DE': 'Deutsch',
 }
 
-/**
- * The default locale
- */
-const DEFAULT_LOCALE: HightideTranslationLocales = 'en-US'
-
 function localeToLanguage(locale: HightideTranslationLocales) {
   return locale.split('-')[0]
 }
@@ -24,6 +19,5 @@ function localeToLanguage(locale: HightideTranslationLocales) {
 export const LocalizationUtil = {
   locals: hightideTranslationLocales,
   localToLanguage: localeToLanguage,
-  DEFAULT_LOCALE,
   languagesLocalNames: localsNames,
 }

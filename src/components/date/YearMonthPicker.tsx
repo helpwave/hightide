@@ -3,7 +3,7 @@ import { equalSizeGroups, range } from '@/src/utils/array'
 import clsx from 'clsx'
 import { ExpandableUncontrolled } from '@/src/components/layout/Expandable'
 import { addDuration, DateUtils, subtractDuration } from '@/src/utils/date'
-import { useLocale } from '@/src/i18n/LocaleProvider'
+import { useLocale } from '@/src/contexts/LocaleContext'
 import { Button } from '../user-action/Button'
 import { useOverwritableState } from '@/src/hooks/useOverwritableState'
 

@@ -1,6 +1,8 @@
 import type { Dispatch, PropsWithChildren, SetStateAction } from 'react'
 import { createContext, useCallback, useContext, useEffect, useMemo, useState } from 'react'
 import { useLocalStorage } from '../hooks/useLocalStorage'
+import type { ThemeConfig } from '@/src/contexts/HightideConfigContext'
+import { useHightideConfig } from '@/src/contexts/HightideConfigContext'
 
 const themes = ['light', 'dark', 'system'] as const
 
@@ -19,19 +21,20 @@ type ThemeContextType = {
 
 export const ThemeContext = createContext<ThemeContextType | null>(null)
 
-type ThemeProviderProps = {
+export type ThemeProviderProps = PropsWithChildren & Partial<ThemeConfig> & {
   /**
    * Only set this if you want to control the theme yourself
    */
   theme?: ThemeType,
 }
 
-export const ThemeProvider = ({ children, theme }: PropsWithChildren<ThemeProviderProps>) => {
+export const ThemeProvider = ({ children, theme, initialTheme }: ThemeProviderProps) => {
   const {
     value: storedTheme,
     setValue: setStoredTheme,
     deleteValue: deleteStoredTheme
   } = useLocalStorage<ThemeType>('theme', 'system')
+  const { config } = useHightideConfig()
   const [themePreference, setThemePreference] = useState<ThemeType>('system')
 
   const resolvedTheme = useMemo((): ResolvedTheme => {
@@ -44,8 +47,8 @@ export const ThemeProvider = ({ children, theme }: PropsWithChildren<ThemeProvid
     if (themePreference !== 'system') {
       return themePreference
     }
-    return 'light'
-  }, [storedTheme, theme, themePreference])
+    return initialTheme ?? config.theme.initialTheme
+  }, [config.theme.initialTheme, initialTheme, storedTheme, theme, themePreference])
 
   useEffect(() => {
     if(!theme) return
