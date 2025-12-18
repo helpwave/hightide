@@ -115,8 +115,11 @@ export function useFloatingElement({
   const isMounted = useIsMounted()
 
   const calculate = useCallback(() => {
-    const containerRect = containerRef.current.getBoundingClientRect()
-    const windowRect: RectangleBounds = windowRef?.current.getBoundingClientRect() ?? {
+    const containerRect = containerRef.current?.getBoundingClientRect()
+    if(!containerRect) {
+      return
+    }
+    const windowRect: RectangleBounds = windowRef?.current?.getBoundingClientRect() ?? {
       top: 0,
       bottom: window.innerHeight,
       left: 0,
@@ -156,6 +159,9 @@ export function useFloatingElement({
   }, [calculate, active, isMounted, height, width])
 
   useEffect(() => {
+    if(!containerRef.current && active) {
+      return
+    }
     window.addEventListener('resize', calculate)
     let timeout: NodeJS.Timeout
     if (isPolling) {
@@ -167,7 +173,7 @@ export function useFloatingElement({
         clearInterval(timeout)
       }
     }
-  }, [calculate, isPolling, pollingInterval])
+  }, [active, calculate, containerRef, isPolling, pollingInterval])
 
   return style
 }
