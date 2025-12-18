@@ -1,6 +1,5 @@
 import type { WeekDay } from '@/src/utils/date'
-import { DateUtils } from '@/src/utils/date'
-import { getWeeksForCalenderMonth, isInTimeSpan } from '@/src/utils/date'
+import { DateUtils, getWeeksForCalenderMonth, isInTimeSpan } from '@/src/utils/date'
 import clsx from 'clsx'
 import { useLocale } from '@/src/i18n/LocaleProvider'
 import { useEffect, useState } from 'react'
@@ -65,7 +64,14 @@ export const DayPicker = ({
                     'border-transparent': !(isToday && markToday),
                   }
                 )}
-                onClick={() => onChange?.(date)}
+                onClick={() => onChange?.(new Date(
+                  date.getFullYear(),
+                  date.getMonth(),
+                  date.getDate(),
+                  selected.getHours(),
+                  selected.getMinutes(),
+                  selected.getSeconds()
+                ))}
               >
                 {date.getDate()}
               </Button>
