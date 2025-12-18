@@ -161,6 +161,22 @@
       @apply border-border text-border hover:border-primary hover:text-primary bg-transparent;
     }
   }
+
+  *[data-name="expandable-root"]:not(.default-style-none) {
+    @apply flex-col-0 surface coloring-solid group rounded-lg shadow-sm;
+
+    &:not([data-disabled])[data-allowContainerToggle] {
+      @apply cursor-pointer;
+    }
+  }
+
+  *[data-name="expandable-icon"]:not(.default-style-none) {
+    @apply size-6 transition-transform motion-safe:duration-200 motion-reduce:duration-0 ease-in-out;
+
+    &[data-isExpanded] {
+      @apply rotate-180;
+    }
+  }
 }
 
 /* HTML Element defaults */
