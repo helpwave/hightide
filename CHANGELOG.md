@@ -5,7 +5,12 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/)
 and adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
-## [0.5.2] - 2025-12-18
+## [0.5.4] - 2025-12-18
+
+### Fixed
+- `useFloatingElement` calculating when no container exists yet
+
+## [0.5.3] - 2025-12-18
 
 ### Fixed
 - `DateTimeInput` missing translation
