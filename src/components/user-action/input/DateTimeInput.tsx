@@ -65,7 +65,7 @@ export const DateTimeInput = ({
       <div {...containerProps} className={clsx('relative w-full', containerProps?.className)}>
         <Input
           {...cleanInputProps}
-          placeholder={translation('clickToAdd')}
+          placeholder={translation('clickToSelect')}
           value={date ? DateUtils.formatAbsolute(date, locale, mode === 'dateTime') : ''}
           onClick={(event) => {
             setIsOpen(true)
@@ -134,7 +134,7 @@ export const DateTimeInputUncontrolled = ({
                                             date: initialDate,
                                             ...props
 }: DateTimeInputProps) => {
-  const [date, setDate] = useOverwritableState<Date>(useMemo(() => initialDate ?? new Date(), [initialDate]))
+  const [date, setDate] = useOverwritableState<Date>(initialDate)
 
   return (
     <DateTimeInput
@@ -145,7 +145,7 @@ export const DateTimeInputUncontrolled = ({
         props.onValueChange?.(newDate)
       }}
       onRemove={() => {
-        setDate(new Date())
+        setDate(undefined)
         props.onRemove?.()
       }}
     />

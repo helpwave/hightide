@@ -8,6 +8,13 @@ and adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 ## [0.5.2] - 2025-12-18
 
 ### Fixed
+- `DateTimeInput` missing translation
+- a bug where changing days caused the minutes to change as well
+- the many `Tooltip`s story
+
+## [0.5.2] - 2025-12-18
+
+### Fixed
 - `LoadingAndErrorComponent` and `Visibility` to always return a `JSX.Element`
 
 ## [0.5.1] - 2025-12-18
