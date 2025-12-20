@@ -12,6 +12,12 @@ const preview: Preview = {
         system: { name: 'System', value: '#FFFFFF' },
       }
     },
+    docs: {
+      codePanel: true,
+    },
+    options: {
+      selectedPanel: 'storybook/docs/panel',
+    },
   },
   globalTypes: {
     language: {

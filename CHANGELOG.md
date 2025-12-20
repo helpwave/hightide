@@ -10,9 +10,14 @@ and adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 ### Added
 - `HightideConfigContext` for storing Look and Feel Variables
 - `HightideProvider` to bundle all hightide contexts in one provider
+- Added Code panel to storybook
 
 ### Changed
 - `Tables` to no longer round their column size
+- Split `Expandable` into 3 components `ExpandableRoot`, `ExpandableHeader`, `ExpandableContent`
+
+### Fixed
+- `useOverwritableState` propagating the old instead of the updated state
 
 ## [0.5.4] - 2025-12-18
 

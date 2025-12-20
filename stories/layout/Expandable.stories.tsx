@@ -1,12 +1,12 @@
 import type { Meta, StoryObj } from '@storybook/nextjs'
 import { action } from 'storybook/actions'
-import { ExpandableUncontrolled } from '../../src/components/layout/Expandable'
+import { ExpandableContent, ExpandableRoot, ExpandableHeader } from '../../src/components/layout/Expandable'
 import { range } from '../../src/utils/array'
 
 const meta = {
   title: 'Layout',
-  component: ExpandableUncontrolled,
-} satisfies Meta<typeof ExpandableUncontrolled>
+  component: ExpandableRoot,
+} satisfies Meta<typeof ExpandableRoot>
 
 export default meta
 type Story = StoryObj<typeof meta>;
@@ -15,14 +15,19 @@ export const expandable: Story = {
   args: {
     isExpanded: false,
     disabled: false,
-    clickOnlyOnHeader: true,
-    label: (<span className="typography-label-lg">Label</span>),
-    contentExpandedClassName: 'overflow-y-hidden',
-    children: (
-      <div className="flex-col-2 overflow-y-auto">
-        {range(20).map(value => (<div  key={value}>{`Item ${value}`}</div>))}
-      </div>
-    ),
+    allowContainerToggle: true,
     onChange: action('onChange'),
   },
+  render: (args) => (
+    <ExpandableRoot {...args}>
+      <ExpandableHeader>
+        {'Label'}
+      </ExpandableHeader>
+      <ExpandableContent>
+        {range(5).map((value) => (
+          <div key={value}>{`Item ${value}`}</div>
+        ))}
+      </ExpandableContent>
+    </ExpandableRoot>
+  ),
 }

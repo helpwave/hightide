@@ -1,52 +1,35 @@
 import type { ReactNode } from 'react'
-import clsx from 'clsx'
 import type { ExpandableProps } from './Expandable'
-import { ExpansionIcon } from './Expandable'
-import { ExpandableUncontrolled } from './Expandable'
-import { MarkdownInterpreter } from './MarkdownInterpreter'
-
-type ContentType = {
-  type: 'markdown',
-  value: string,
-} | {
-  type: 'custom',
-  value: ReactNode,
-}
+import { ExpandableContent, ExpandableHeader, ExpandableRoot } from './Expandable'
 
 export type FAQItem = Pick<ExpandableProps, 'isExpanded' | 'className'> & {
-  id: string,
   title: string,
-  content: ContentType,
+  content: ReactNode,
 }
 
 export type FAQSectionProps = {
   entries: FAQItem[],
-  expandableClassName?: string,
 }
 
-/**
- * Description
- */
+// TODO add a descirption
 export const FAQSection = ({
                              entries,
-                             expandableClassName
                            }: FAQSectionProps) => {
   return (
     <ul className="flex-col-4">
-      {entries.map(({ id, title, content, ...restProps }) => (
-        <li key={id}>
-          <ExpandableUncontrolled
-            key={id}
+      {entries.map(({ title, content, ...restProps }, index) => (
+        <li key={index}>
+          <ExpandableRoot
             {...restProps}
-            label={(<span id={id} className="typography-title-md">{title}</span>)}
-            clickOnlyOnHeader={false}
-            icon={(expanded) => (<ExpansionIcon isExpanded={expanded} className="text-primary"/>)}
-            className={clsx('rounded-xl', expandableClassName)}
+            allowContainerToggle={true}
           >
-            <div className="mt-2">
-              {content.type === 'markdown' ? (<MarkdownInterpreter text={content.value}/>) : content.value}
-            </div>
-          </ExpandableUncontrolled>
+            <ExpandableHeader>
+              {title}
+            </ExpandableHeader>
+            <ExpandableContent>
+              {content}
+            </ExpandableContent>
+          </ExpandableRoot>
         </li>
       ))}
     </ul>

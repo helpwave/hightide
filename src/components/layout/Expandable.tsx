@@ -5,6 +5,7 @@ import { createContext, forwardRef, useCallback, useContext, useId, useMemo } fr
 import { ChevronDown } from 'lucide-react'
 import clsx from 'clsx'
 import { useOverwritableState } from '@/src/hooks/useOverwritableState'
+import { Visibility } from './Visibility'
 
 //
 // Context
@@ -54,7 +55,7 @@ export const ExpansionIcon = ({
     <div
       {...props}
       data-name="expandable-icon"
-      data-isExpanded={isExpanded ? '' : undefined}
+      data-expanded={isExpanded ? '' : undefined}
       data-disabled={disabled ? '' : undefined}
     >
       {children ? (
@@ -127,9 +128,9 @@ export const ExpandableRoot = forwardRef<HTMLDivElement, ExpandableRootProps>(fu
         }}
 
         data-name="expandable-root"
-        data-isExpanded={isExpanded ? '' : undefined}
+        data-expanded={isExpanded ? '' : undefined}
         data-disabled={disabled ? '' : undefined}
-        data-allowContainerToggle={allowContainerToggle ? '' : undefined}
+        data-containertoggleable={allowContainerToggle ? '' : undefined}
       >
         {children}
       </div>
@@ -141,11 +142,14 @@ export const ExpandableRoot = forwardRef<HTMLDivElement, ExpandableRootProps>(fu
 // ExpandableHeader
 //
 
-export type ExpandableHeaderProps = HTMLAttributes<HTMLDivElement>
+export type ExpandableHeaderProps = HTMLAttributes<HTMLDivElement> & {
+  isUsingDefaultIcon?: boolean,
+}
 
 export const ExpandableHeader = forwardRef<HTMLDivElement, ExpandableHeaderProps>(function ExpandableHeader({
                                                                                                                  children,
                                                                                                                  className,
+                                                                                                                 isUsingDefaultIcon = true,
                                                                                                                  ...props
                                                                                                                }, ref) {
   const { isExpanded, toggle, ids, setIds, disabled } = useExpandableContext()
@@ -166,23 +170,19 @@ export const ExpandableHeader = forwardRef<HTMLDivElement, ExpandableHeaderProps
         props.onClick?.(event)
         toggle()
       }}
-      className={clsx(
-        'flex-row-2 py-2 px-4 rounded-lg justify-between items-center coloring-solid-hover select-none',
-        {
-          'group-hover:brightness-97': !isExpanded,
-          'hover:brightness-97': isExpanded && !disabled,
-          'cursor-pointer': !disabled,
-        },
-        className
-      )}
+
+      data-name="expandable-header"
+      data-expanded={isExpanded ? '' : undefined}
+      data-disabled={disabled ? '' : undefined}
 
       aria-expanded={isExpanded}
       aria-controls={ids.content}
       aria-disabled={disabled || undefined}
-
-      data-isExpanded={isExpanded}
     >
       {children}
+      <Visibility isVisible={isUsingDefaultIcon}>
+        <ExpansionIcon/>
+      </Visibility>
     </div>
   )
 })
@@ -206,19 +206,12 @@ export const ExpandableContent = forwardRef<HTMLDivElement, ExpandableContentPro
 
   return (
     <div
+      {...props}
       ref={ref}
       id={ids.content}
-      className={clsx(
-        'flex-col-2 px-4 transition-all duration-300 ease-in-out',
-        {
-          [clsx('max-h-96 opacity-100 pb-2 overflow-y-auto', expandedClassName)]: isExpanded,
-          'max-h-0 opacity-0 overflow-hidden': !isExpanded,
-        },
-        className
-      )}
-      role="region"
-      data-isExpanded={isExpanded}
-      {...props}
+      
+      data-name="expandable-content"
+      data-expanded={isExpanded ? '' : undefined}
     >
       {children}
     </div>
@@ -281,12 +274,16 @@ export const Expandable = forwardRef<HTMLDivElement, ExpandableProps>(function E
           {ctx => iconBuilder(ctx?.isExpanded ?? false)}
         </ExpandableContext.Consumer>
       </ExpandableHeader>
-      <ExpandableContent
-        className={contentClassName}
-        expandedClassName={contentExpandedClassName}
-      >
-        {children}
-      </ExpandableContent>
+      <ExpandableContext.Consumer>
+        {ctx => (
+          <ExpandableContent
+            className={clsx(contentClassName, {[contentExpandedClassName ?? ""]: !!ctx?.isExpanded})}
+          >
+            {children}
+          </ExpandableContent>
+        )}
+      </ExpandableContext.Consumer>
+      
     </ExpandableRoot>
   )
 })

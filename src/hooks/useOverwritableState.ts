@@ -12,7 +12,7 @@ export const useOverwritableState = <T>(initialValue?: T, onChange?: (value: T) 
   const onChangeWrapper: React.Dispatch<React.SetStateAction<T>> = (action) => {
     const resolved = resolveSetState(action, state)
     setState(resolved)
-    onChange?.(state)
+    onChange?.(resolved)
   }
 
   return [state, onChangeWrapper]

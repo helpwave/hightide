@@ -1,7 +1,7 @@
 import { useEffect, useRef } from 'react'
 import { equalSizeGroups, range } from '@/src/utils/array'
 import clsx from 'clsx'
-import { ExpandableUncontrolled } from '@/src/components/layout/Expandable'
+import { ExpandableContent, ExpandableHeader, ExpandableRoot } from '@/src/components/layout/Expandable'
 import { addDuration, DateUtils, subtractDuration } from '@/src/utils/date'
 import { useLocale } from '@/src/contexts/LocaleContext'
 import { Button } from '../user-action/Button'
@@ -53,44 +53,46 @@ export const YearMonthPicker = ({
       {years.map(year => {
         const selectedYear = displayedYearMonth.getFullYear() === year
         return (
-          <ExpandableUncontrolled
+          <ExpandableRoot
             key={year}
             ref={(displayedYearMonth.getFullYear() ?? new Date().getFullYear()) === year ? ref : undefined}
-            label={<span className={clsx({ 'text-primary font-bold': selectedYear })}>{year}</span>}
             isExpanded={showValueOpen && selectedYear}
-            contentClassName="gap-y-1"
-            contentExpandedClassName="!p-2"
           >
-            {equalSizeGroups([...DateUtils.monthsList], 3).map((monthList, index) => (
-              <div key={index} className="flex-row-1">
-                {monthList.map(month => {
-                  const monthIndex = DateUtils.monthsList.indexOf(month)
-                  const newDate = new Date(year, monthIndex)
+            <ExpandableHeader className={clsx('px-2', { 'text-primary font-bold': selectedYear })}>
+              {year}
+            </ExpandableHeader>
+            <ExpandableContent className="gap-y-1 px-2">
+              {equalSizeGroups([...DateUtils.monthsList], 3).map((monthList, index) => (
+                <div key={index} className="flex-row-1">
+                  {monthList.map(month => {
+                    const monthIndex = DateUtils.monthsList.indexOf(month)
+                    const newDate = new Date(year, monthIndex)
 
-                  const selectedMonth = selectedYear && monthIndex === displayedYearMonth.getMonth()
-                  const firstOfMonth = new Date(year, monthIndex, 1)
-                  const lastOfMonth = new Date(year, monthIndex, 1)
-                  const isAfterStart = start === undefined || start <= addDuration(subtractDuration(lastOfMonth, { days: 1 }), { months: 1 })
-                  const isBeforeEnd = end === undefined || firstOfMonth <= end
-                  const isValid = isAfterStart && isBeforeEnd
-                  return (
-                    <Button
-                      key={month}
-                      disabled={!isValid}
-                      color={selectedMonth && isValid ? 'primary' : 'neutral'}
-                      className="flex-1"
-                      size="small"
-                      onClick={() => {
-                        onChange?.(newDate)
-                      }}
-                    >
-                      {new Intl.DateTimeFormat(locale, { month: 'short' }).format(newDate)}
-                    </Button>
-                  )
-                })}
-              </div>
-            ))}
-          </ExpandableUncontrolled>
+                    const selectedMonth = selectedYear && monthIndex === displayedYearMonth.getMonth()
+                    const firstOfMonth = new Date(year, monthIndex, 1)
+                    const lastOfMonth = new Date(year, monthIndex, 1)
+                    const isAfterStart = start === undefined || start <= addDuration(subtractDuration(lastOfMonth, { days: 1 }), { months: 1 })
+                    const isBeforeEnd = end === undefined || firstOfMonth <= end
+                    const isValid = isAfterStart && isBeforeEnd
+                    return (
+                      <Button
+                        key={month}
+                        disabled={!isValid}
+                        color={selectedMonth && isValid ? 'primary' : 'neutral'}
+                        className="flex-1"
+                        size="small"
+                        onClick={() => {
+                          onChange?.(newDate)
+                        }}
+                      >
+                        {new Intl.DateTimeFormat(locale, { month: 'short' }).format(newDate)}
+                      </Button>
+                    )
+                  })}
+                </div>
+              ))}
+            </ExpandableContent>
+          </ExpandableRoot>
         )
       })}
     </div>
