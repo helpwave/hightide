@@ -7,7 +7,7 @@ type LoadingButtonProps = {
   isLoading?: boolean,
 } & ButtonProps
 
-export const LoadingButton = ({ isLoading = false, size = 'medium', onClick, ...rest }: LoadingButtonProps) => {
+export const LoadingButton = ({ isLoading = false, size = 'md', onClick, ...rest }: LoadingButtonProps) => {
 
   return (
     <div className="inline-block relative">

@@ -25,7 +25,7 @@ export const TableSortButton = ({
                                   sortDirection,
                                   invert = false,
                                   color = 'neutral',
-                                  size = 'tiny',
+                                  size = 'xs',
                                   className,
                                   sortingIndexDisplay,
                                   ...props

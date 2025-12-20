@@ -1,50 +1,24 @@
 import type { ButtonHTMLAttributes, ReactNode } from 'react'
 import { forwardRef } from 'react'
-import clsx from 'clsx'
 
 /**
  * The different sizes for a button
  */
-type ButtonSize = 'tiny' | 'small' | 'medium' | 'large' | 'none'
+type ButtonSize = 'xs' | 'sm' | 'md' | 'lg' | null
 
-type ButtonColoringStyle = 'outline' | 'solid' | 'text' | 'tonal' | 'none'
+type ButtonColoringStyle = 'outline' | 'solid' | 'text' | 'tonal' | null
 
-type ButtonLayout = 'icon' | 'default' | 'none'
+type ButtonLayout = 'icon' | 'default' | null
 
-const buttonColorsList = ['primary', 'secondary', 'positive', 'warning', 'negative', 'neutral', 'none'] as const
+const buttonColorsList = ['primary', 'secondary', 'positive', 'warning', 'negative', 'neutral'] as const
 
 /**
  * The allowed colors for the Button
  */
-export type ButtonColor = typeof buttonColorsList[number]
-
-const paddingMapping: Record<ButtonLayout, Partial<Record<ButtonSize, string>>> = {
-  default: {
-    tiny: 'btn-xs',
-    small: 'btn-sm',
-    medium: 'btn-md',
-    large: 'btn-lg'
-  },
-  icon: {
-    tiny: 'icon-btn-xs',
-    small: 'icon-btn-sm',
-    medium: 'icon-btn-md',
-    large: 'icon-btn-lg'
-  },
-  none: {}
-}
+export type ButtonColor = typeof buttonColorsList[number] | null
 
 export const ButtonUtil = {
   colors: buttonColorsList,
-  colorClasses: {
-    primary: 'primary',
-    secondary: 'secondary',
-    positive: 'positive',
-    warning: 'warning',
-    negative: 'negative',
-    neutral: 'neutral',
-    none: 'reset-coloring-variables',
-  } satisfies Record<ButtonColor, string>
 }
 
 /**
@@ -61,8 +35,6 @@ export type ButtonProps = ButtonHTMLAttributes<HTMLButtonElement> & {
    * @default 'solid'
    */
   coloringStyle?: ButtonColoringStyle,
-  startIcon?: ReactNode,
-  endIcon?: ReactNode,
   allowClickEventPropagation?: boolean,
 }
 
@@ -72,42 +44,34 @@ export type ButtonProps = ButtonHTMLAttributes<HTMLButtonElement> & {
 export const Button = forwardRef<HTMLButtonElement, ButtonProps>(function SolidButton({
                                                                                         children,
                                                                                         layout = 'default',
-                                                                                        size = 'medium',
+                                                                                        size = 'md',
                                                                                         color = 'primary',
                                                                                         coloringStyle = 'solid',
                                                                                         startIcon,
                                                                                         endIcon,
                                                                                         disabled,
                                                                                         allowClickEventPropagation = false,
-                                                                                        className,
-                                                                                        ...restProps
+                                                                                        ...props
                                                                                       }, ref) {
-  const colorClasses = ButtonUtil.colorClasses[color]
-
   return (
     <button
-      {...restProps}
+      {...props}
       ref={ref}
-      className={clsx(
-        'group font-semibold',
-        {
-          'disabled': disabled,
-          [colorClasses]: !disabled,
-          'coloring-solid-hover': coloringStyle === 'solid',
-          'coloring-text-hover': coloringStyle === 'text',
-          'coloring-outline-hover': coloringStyle === 'outline',
-          'coloring-tonal-hover': coloringStyle === 'tonal',
-        },
-        paddingMapping[layout][size],
-        className
-      )}
+      disabled={disabled}
+
       onClick={event => {
         if(!allowClickEventPropagation) {
           event.stopPropagation()
         }
-        restProps?.onClick(event)
+        props?.onClick(event)
       }}
-      disabled={disabled}
+
+      data-name={props['data-name'] ?? 'button'}
+      data-disabled={disabled ? '': undefined}
+      data-size={size ?? undefined}
+      data-layout={layout ?? undefined}
+      data-color={color ?? undefined}
+      data-coloringstyle={coloringStyle ?? undefined}
     >
       {startIcon}
       {children}

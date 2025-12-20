@@ -55,7 +55,7 @@ export const DayPicker = ({
                 key={date.getDate()}
                 color={isSelected ? 'primary' : 'neutral'}
                 coloringStyle={isSelected ? 'solid' : 'text'}
-                size="small"
+                size="sm"
                 className={clsx(
                   'flex-1 rounded-full border-2',
                   {

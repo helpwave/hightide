@@ -94,7 +94,7 @@ export const TimePicker = ({
           const isSelected = hour === time.getHours() - (!is24HourFormat && isPM ? 12 : 0)
           return (
             <Button
-              size="small"
+              size="sm"
               color={isSelected ? 'primary' : 'neutral'}
               key={hour}
               ref={isSelected ? hourRef : undefined}
@@ -110,7 +110,7 @@ export const TimePicker = ({
           const isSelected = minute === closestMinute
           return (
             <Button
-              size="small"
+              size="sm"
               color={isSelected ? 'primary' : 'neutral'}
               key={minute + minuteIncrement} // minute increment so that scroll works
               ref={isSelected ? minuteRef : undefined}
@@ -124,14 +124,14 @@ export const TimePicker = ({
       {!is24HourFormat && (
         <div className="flex-col-1 min-w-16">
           <Button
-            size="small"
+            size="sm"
             color={!isPM ? 'primary' : 'neutral'}
             onClick={() => onChangeWrapper(newDate => isPM && newDate.setHours(newDate.getHours() - 12))}
           >
             AM
           </Button>
           <Button
-            size="small"
+            size="sm"
             color={isPM ? 'primary' : 'neutral'}
             onClick={() => onChangeWrapper(newDate => !isPM && newDate.setHours(newDate.getHours() + 12))}
           >

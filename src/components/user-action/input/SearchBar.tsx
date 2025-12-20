@@ -34,7 +34,7 @@ export const SearchBar = ({
       {onSearch && (
         <Button
           {...searchButtonProps}
-          size="small"
+          size="sm"
           layout="icon"
           color="neutral"
           coloringStyle="text"

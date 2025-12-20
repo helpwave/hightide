@@ -42,6 +42,10 @@
   --coloring-text-hover: var(--color-neutral-text-hover);
   --coloring-outline: var(--color-neutral-outline);
   --coloring-outline-hover: var(--color-neutral-outline-hover);
+  --coloring-tonal: var(--color-neutral-tonal);
+  --coloring-tonal-text: var(--color-neutral-tonal-text);
+  --coloring-tonal-background: var(--color-neutral-tonal-background);
+  --coloring-tonal-hover: var(--color-neutral-tonal-hover);
 }
 
 @utility disabled {

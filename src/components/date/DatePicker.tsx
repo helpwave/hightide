@@ -49,7 +49,7 @@ export const DatePicker = ({
     <div className={clsx('flex-col-3', className)}>
       <div className="flex-row-2 items-center justify-between">
         <Button
-          size="small"
+          size="sm"
           coloringStyle="text"
           className={clsx('flex-row-1 items-center cursor-pointer select-none', {
             'text-disabled': displayMode !== 'day',
@@ -62,7 +62,7 @@ export const DatePicker = ({
         {displayMode === 'day' && (
           <div className="flex-row-2 justify-end">
             <Button
-              size="small"
+              size="sm"
               coloringStyle="tonal"
               onClick={() => {
                 const newDate = new Date()
@@ -73,7 +73,7 @@ export const DatePicker = ({
               <Calendar className="size-5"/>
             </Button>
             <Button
-              size="small"
+              size="sm"
               disabled={!isInTimeSpan(subtractDuration(displayedMonth, { months: 1 }), start, end)}
               onClick={() => {
                 setDisplayedMonth(subtractDuration(displayedMonth, { months: 1 }))
@@ -82,7 +82,7 @@ export const DatePicker = ({
               <ArrowUp size={20}/>
             </Button>
             <Button
-              size="small"
+              size="sm"
               disabled={!isInTimeSpan(addDuration(displayedMonth, { months: 1 }), start, end)}
               onClick={() => {
                 setDisplayedMonth(addDuration(displayedMonth, { months: 1 }))

@@ -1,0 +1,23 @@
+@utility focus-style-outline {
+  &:focus-visible {
+    @apply outline-solid outline-2 outline-focus outline-offset-1;
+  }
+}
+
+@utility focus-style-border {
+  &:focus-visible {
+    @apply border-2 border-focus;
+  }
+}
+
+@utility focus-style-default {
+  &:focus-visible:not(.focus-style-none) {
+    @apply focus-style-outline;
+  }
+}
+
+@utility focus-style-none {
+  &:focus-visible {
+    @apply outline-none;
+  }
+}

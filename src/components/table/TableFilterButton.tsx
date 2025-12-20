@@ -33,7 +33,7 @@ export const TableFilterButton = <T, >({
           <Button
             layout="icon"
             color="neutral"
-            size="tiny"
+            size="xs"
             onClick={toggleOpen}
           >
             <FilterIcon className="size-4"/>
@@ -110,14 +110,14 @@ export const TableFilterButton = <T, >({
           )}
           <div className="flex-row-2 justify-end w-full">
             {hasFilter && (
-              <Button color="negative" size="small" onClick={() => {
+              <Button color="negative" size="sm" onClick={() => {
                 column.setFilterValue(undefined)
                 close()
               }}>
                 {translation('remove')}
               </Button>
             )}
-            <Button size="small" onClick={() => {
+            <Button size="sm" onClick={() => {
               column.setFilterValue(filterValue)
               close()
             }}>

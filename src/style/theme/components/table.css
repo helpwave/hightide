@@ -1,0 +1,29 @@
+@layer components {
+    table {
+        @apply table-fixed border-separate border-spacing-0 bg-table-background text-table-text;
+    }
+
+    th {
+        @apply px-3 first:pl-6 last:pr-6 py-2.5 border-y-1 first:border-l-1 last:border-r-1 first:rounded-tl-lg last:rounded-tr-lg bg-table-header-background text-label font-bold;
+    }
+
+    tbody > tr {
+        @apply hover:bg-table-row-hover-background;
+    }
+
+    td {
+        @apply px-3 first:pl-6 last:pr-6 py-2.5 border-b-1 first:border-l-1 last:border-r-1 [nth-last-child(1)]:first:rounded-bl-lg [nth-last-child(1)]:last:rounded-br-lg;
+    }
+
+    tbody > tr:last-child > td {
+        @apply first:rounded-bl-lg last:rounded-br-lg;
+    }
+
+    .table-resize-indicator {
+        @apply absolute top-2 bottom-2 right-0;
+    }
+
+    th:last-child > .table-resize-indicator {
+        @apply right-6;
+    }
+}

@@ -158,7 +158,7 @@ export const Dialog = ({
             <Button
               layout="icon"
               color="neutral"
-              size="tiny"
+              size="xs"
               aria-label={translation('close')}
               onClick={onCloseWrapper}
             >

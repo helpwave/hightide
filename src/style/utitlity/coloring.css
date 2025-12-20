@@ -12,14 +12,14 @@
 
 @utility coloring-tonal {
   @apply
-  bg-[var(--coloring-color)]/20
-  text-[var(--coloring-color)];
+  bg-[var(--coloring-tonal-background,var(--coloring-tonal,var(--coloring-color)))]/20
+  text-[var(--coloring-tonal-text,var(--coloring-tonal,var(--coloring-color)))];
 }
 
 @utility coloring-tonal-hover {
   @apply
   coloring-tonal
-  hover:bg-[var(--coloring-color)]/30;
+  hover:bg-[var(--coloring-tonal-hover,var(--coloring-tonal-background,var(--coloring-tonal,var(--coloring-color))))]/30;
 }
 
 @utility coloring-text {
@@ -35,7 +35,7 @@
 
 @utility coloring-outline {
   @apply
-  border-1
+  border-2
   border-[var(--coloring-border,var(--coloring-outline,var(--coloring-color)))]
   text-[var(--coloring-outline,var(--coloring-color))];
 }
@@ -55,4 +55,8 @@
   --coloring-text-hover: initial;
   --coloring-outline: initial;
   --coloring-outline-hover: initial;
+  --coloring-tonal: initial;
+  --coloring-tonal-background: initial;
+  --coloring-tonal-text: initial;
+  --coloring-tonal-hover: initial;
 }

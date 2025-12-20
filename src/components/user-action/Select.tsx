@@ -536,7 +536,7 @@ export const SelectChipDisplay = forwardRef<HTMLDivElement, SelectChipDisplayPro
             onClick={() => {
               item.toggleSelection(value, false)
             }}
-            size="tiny"
+            size="xs"
             color="negative"
             coloringStyle="text"
             className="flex-row-0 items-center"
@@ -561,7 +561,7 @@ export const SelectChipDisplay = forwardRef<HTMLDivElement, SelectChipDisplayPro
           }
         }}
         layout="icon"
-        size="small"
+        size="sm"
         color="neutral"
 
         aria-invalid={invalid}

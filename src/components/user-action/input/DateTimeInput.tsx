@@ -79,7 +79,7 @@ export const DateTimeInput = ({
           )}
         />
         <Button
-          coloringStyle="text" layout="icon" color="neutral" size="small"
+          coloringStyle="text" layout="icon" color="neutral" size="sm"
           className="absolute right-1 top-1/2 -translate-y-1/2"
           disabled={isReadOnly}
           onClick={() => setIsOpen(prevState => !prevState)}
@@ -104,7 +104,7 @@ export const DateTimeInput = ({
           <div className="flex-row-2 justify-end">
             <Visibility isVisible={!!onRemove}>
               <Button
-                size="medium"
+                size="md"
                 color="negative"
                 onClick={() => {
                   onRemove?.()
@@ -115,7 +115,7 @@ export const DateTimeInput = ({
               </Button>
             </Visibility>
             <Button
-              size="medium"
+              size="md"
               onClick={() => {
                 onEditCompleted?.(date)
                 setIsOpen(false)

@@ -80,7 +80,7 @@ export const YearMonthPicker = ({
                         disabled={!isValid}
                         color={selectedMonth && isValid ? 'primary' : 'neutral'}
                         className="flex-1"
-                        size="small"
+                        size="sm"
                         onClick={() => {
                           onChange?.(newDate)
                         }}
