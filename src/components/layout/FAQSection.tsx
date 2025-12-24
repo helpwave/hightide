@@ -13,8 +13,8 @@ export type FAQSectionProps = {
 
 // TODO add a descirption
 export const FAQSection = ({
-                             entries,
-                           }: FAQSectionProps) => {
+  entries,
+}: FAQSectionProps) => {
   return (
     <ul className="flex-col-4">
       {entries.map(({ title, content, ...restProps }, index) => (

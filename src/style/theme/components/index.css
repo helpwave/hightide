@@ -5,4 +5,12 @@
 @import "./table.css";
 @import "./scrollbar.css";
 @import "./link.css";
+@import "./avatar.css";
+@import "./chip.css";
+@import "./breadcrumb.css";
+@import "./tabswitcher.css";
+@import "./expandable.css";
+@import "./expansion-icon.css";
+@import "./checkbox.css";
+@import "./tooltip.css";
 @import "./general.css";

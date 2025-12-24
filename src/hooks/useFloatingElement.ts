@@ -38,11 +38,11 @@ type UseFloatingElementStyle = {
 }
 
 function calculatePosition({
-                             windowRect,
-                             containerRect,
-                             anchorRect,
-                             options,
-                           }: CalculatePositionProps): UseFloatingElementStyle {
+  windowRect,
+  containerRect,
+  anchorRect,
+  options,
+}: CalculatePositionProps): UseFloatingElementStyle {
   const { verticalAlignment, horizontalAlignment, gap, screenPadding } = options
   const windowWidth = windowRect.width
   const windowHeight = windowRect.height
@@ -100,17 +100,17 @@ export type UseFloatingElementProps = UseFloatingElementOptions & {
 }
 
 export function useFloatingElement({
-                                     active = true,
-                                     windowRef,
-                                     anchorRef,
-                                     containerRef,
-                                     isPolling = false,
-                                     pollingInterval = 100,
-                                     verticalAlignment = 'afterEnd',
-                                     horizontalAlignment = 'afterStart',
-                                     screenPadding = 16,
-                                     gap = 4,
-                                   }: UseFloatingElementProps) {
+  active = true,
+  windowRef,
+  anchorRef,
+  containerRef,
+  isPolling = false,
+  pollingInterval = 100,
+  verticalAlignment = 'afterEnd',
+  horizontalAlignment = 'afterStart',
+  screenPadding = 16,
+  gap = 4,
+}: UseFloatingElementProps) {
   const [style, setStyle] = useState<CSSProperties>()
   const isMounted = useIsMounted()
 
@@ -147,16 +147,13 @@ export function useFloatingElement({
     setStyle(calculatePosition(calculateProps))
   }, [anchorRef, containerRef, gap, horizontalAlignment, screenPadding, verticalAlignment, windowRef])
 
-
-  const height = containerRef.current?.getBoundingClientRect().height
-  const width = containerRef.current?.getBoundingClientRect().width
   useEffect(() => {
     if (active && isMounted) {
       calculate()
     } else {
       setStyle(undefined)
     }
-  }, [calculate, active, isMounted, height, width])
+  }, [calculate, active, isMounted])
 
   useEffect(() => {
     if(!containerRef.current && active) {

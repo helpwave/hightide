@@ -18,15 +18,15 @@ export type TextImageProps = {
  * A Component for layering a Text upon an image
  */
 export const TextImage = ({
-                            title,
-                            description,
-                            imageUrl,
-                            onShowMoreClicked,
-                            color = 'primary',
-                            badge,
-                            contentClassName = '',
-                            className = '',
-                          }: TextImageProps) => {
+  title,
+  description,
+  imageUrl,
+  onShowMoreClicked,
+  color = 'primary',
+  badge,
+  contentClassName = '',
+  className = '',
+}: TextImageProps) => {
   const translation = useHightideTranslation()
 
   const chipColorMapping: Record<TextImageColor, string> = {

@@ -67,3 +67,29 @@
   --coloring-on-color: var(--color-on-surface);
   --coloring-hover: var(--color-surface-hover);
 }
+
+@utility coloring-style-detect {
+  @apply data-[coloringstyle=solid]:coloring-solid;
+  @apply data-[coloringstyle=text]:coloring-text;
+  @apply data-[coloringstyle=outline]:coloring-outline;
+  @apply data-[coloringstyle=tonal]:coloring-tonal;
+}
+
+@utility coloring-style-hover-detect {
+  @apply data-[coloringstyle=solid]:coloring-solid-hover;
+  @apply data-[coloringstyle=text]:coloring-text-hover;
+  @apply data-[coloringstyle=outline]:coloring-outline-hover;
+  @apply data-[coloringstyle=tonal]:coloring-tonal-hover;
+}
+
+@utility coloring-color-detect {
+  @apply data-[color=primary]:primary;
+  @apply data-[color=secondary]:secondary;
+  @apply data-[color=positive]:positive;
+  @apply data-[color=warning]:warning;
+  @apply data-[color=negative]:negative;
+  @apply data-[color=neutral]:neutral;
+  @apply data-[color=description]:description;
+  @apply data-[color=surface]:surface;
+  @apply data-[color=disabled]:disabled;
+}

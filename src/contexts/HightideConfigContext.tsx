@@ -41,7 +41,7 @@ export type HightideConfig = {
 const defaultConfig: HightideConfig = {
   tooltip: {
     appearDelay: 400,
-    disappearDelay: 100,
+    disappearDelay: 500,
   },
   theme: {
     initialTheme: 'light'
@@ -53,16 +53,16 @@ const defaultConfig: HightideConfig = {
 
 function mergeConfig(config: HightideConfig, overwrite: DeepPartial<HightideConfig>): HightideConfig {
   return {
-   locale: {
-     ...config.locale,
-     ...overwrite?.locale
-   },
+    locale: {
+      ...config.locale,
+      ...overwrite?.locale
+    },
     theme: {
-     ...config.theme,
+      ...config.theme,
       ...overwrite.theme,
     },
     tooltip: {
-     ...config.tooltip,
+      ...config.tooltip,
       ...overwrite.tooltip,
     }
   }
@@ -78,9 +78,9 @@ export const HightideConfigContext = createContext<ConfigType | null>(null)
 export type HightideConfigProviderProps = PropsWithChildren & DeepPartial<HightideConfig>
 
 export const HightideConfigProvider = ({
-                                         children,
-                                         ...initialOverwrite
-                                       }: HightideConfigProviderProps) => {
+  children,
+  ...initialOverwrite
+}: HightideConfigProviderProps) => {
   const [config, setConfig] = useState<HightideConfig>(mergeConfig(defaultConfig, initialOverwrite))
 
   return (

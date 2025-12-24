@@ -8,25 +8,35 @@ and adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 ## [0.6.0] - 2025-12-18
 
 ### Added
+
 - `HightideConfigContext` for storing Look and Feel Variables
 - `HightideProvider` to bundle all hightide contexts in one provider
 - Added Code panel to storybook
 
 ### Changed
+
 - `Tables` to no longer round their column size
 - Split `Expandable` into 3 components `ExpandableRoot`, `ExpandableHeader`, `ExpandableContent`
+- storybook folder structure and removed title from stories to allow for dynamic folder structure
+- Component styling to be CSS and data-attribute based instead of relying on in component classNames
+- Moved `ExpansionIcon` out of `Expandable` file and into its own
+- Changed internal folder structure
 
 ### Fixed
+
 - `useOverwritableState` propagating the old instead of the updated state
+- `Table` background to overflow on the edges
 
 ## [0.5.4] - 2025-12-18
 
 ### Fixed
+
 - `useFloatingElement` calculating when no container exists yet
 
 ## [0.5.3] - 2025-12-18
 
 ### Fixed
+
 - `DateTimeInput` missing translation
 - a bug where changing days caused the minutes to change as well
 - the many `Tooltip`s story
@@ -34,19 +44,23 @@ and adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 ## [0.5.2] - 2025-12-18
 
 ### Fixed
+
 - `LoadingAndErrorComponent` and `Visibility` to always return a `JSX.Element`
 
 ## [0.5.1] - 2025-12-18
 
 ### Fixed
+
 - fixed race condition in tooltip
 
 ## [0.5.0] - 2025-12-17
 
 ### Added
+
 - VisibilityComponent
 
 ### Changed
+
 - Upgrade to Storybook 10.0.0
 - Disable `Button`s `onClick` event propagation by default
   - This can be reactivated with the `allowClickEventPropagation` flag
@@ -56,22 +70,27 @@ and adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 - Changed Tooltip to be position based on anchor an not relative
 
 ### Fixed
-- tooltips not disappearing if mouseleave happens too fast 
+
+- tooltips not disappearing if mouseleave happens too fast
 - .arb variable typing not set
 
 ### Removed
-- Tests for translation parser which are now in [@helpwave/hightide](https://github.com/helpwave/hightide) 
+
+- Tests for translation parser which are now in [@helpwave/hightide](https://github.com/helpwave/hightide)
 
 ### Security
+
 - Update dependencies
 
 ## [0.4.0] - 2025-12-16
 
 ### Added
+
 - A [conventions document](/documentation/conventions.md)
 - A `input-element` style for all user-input elements
 
 ### Changed
+
 - All user-input elements now provide `data-disabled`, `data-invalid` and `data-value` attributes for styling
 - Focus styling now uses these tailwind utilities
   - `focus-style-outline` provided also as `focus-style-default` for every element (deactivatable with `focus-style-none`)
@@ -83,20 +102,24 @@ and adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 ## [0.3.0] - 2025-12-15
 
 ### Added
+
 - `coloring-<solid | text | outline>` CSS class uses the colors below to color the element according to the color
 - `prmiary`, `secondary`, `positive`, `negative`, `warning`, `disabled` CSS classes to set the variables for `coloring-*`
 - `useZIndexRegistry` hook to manage zIndex of elements that pop in and out of the viewport like `Select`, `Dialog`, `Tooltip`
 
 ### Changed
+
 - Consolidated `SolidButton`, `TextButton`, `OutlinedButton`, `IconButton` into on component `Button` with four attributes `ButtonSize`, `ButtonColoringStyle`, `ButtonLayout`, `ButtonColor`
-- Split css classes into theming and utility 
+- Split css classes into theming and utility
 - `SelectOption`s now only use marker padding when there is a selected value
 - Changed styling of `DayPicker` to make the currently selected day more easily visible
 
 ### Fixed
+
 - Fixed `Carousel` having negative indexes for when left button is used
 
 ### Removed
+
 - `SolidButton`
 - `TextButton`
 - `OutlinedButton`
@@ -108,101 +131,123 @@ and adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 ## [0.2.0] - 2025-12-15
 
 ### Added
+
 - `PromiseUtils` with a `sleep` and `delayed` function
 
 ### Changed
+
 - `CheckBox` now propagates value changes with `onCheckedChange`
 
 ### Removed
-- Removed `row` and `col` css utilities use `flex-row-2` and `flex-col-2` instead 
-  - Regex for checking usage ``("|'|`| )col("|'|`| )`` or ``("|'|`| )row("|'|`| )``
+
+- Removed `row` and `col` css utilities use `flex-row-2` and `flex-col-2` instead
+  - Regex for checking usage `` ("|'|`| )col("|'|`| ) `` or `` ("|'|`| )row("|'|`| ) ``
 - Removed dependency on `radix-ui`
 
 ### Fixed
+
 - Allow Tables to be sorted by multiple columns
 - Pagination max Page count now has the same size as the Input for the current page
 
 ### Security
+
 - Update and pin all dependencies
 
 ## [0.1.48] - 2025-12-01
 
 ### Added
+
 - Added `TabView` and `Tab` for easily changing between tabs
 
 ### Update
+
 - `"@helpwave/internationalization": "0.4.0"`
 
 ## [0.1.47] - 2025-11-24
 
 ### Change
+
 - `tsup` now only uses one entrypoint
 - Merged `build` and `build-production` into one `build` script
 
 ### Fix
+
 - fix commonJS and module exports
 
 ## [0.1.46] - 2025-11-24
 
 ### Fix
+
 - Fix build to properly recognize external packages
 
 ### Security
+
 - Remove unused dependencies
 
 ## [0.1.45] - 2025-11-24
 
 ### Upgrade
+
 - Increase version of `@helpwave/internationalization` to `0.3.0`
 
 ## [0.1.44] - 2025-11-23
 
 ### Changed
+
 - Change the name of the translations to `HightideTranslation` to be easier to integrate with other translations
 
 ## [0.1.43] - 2025-11-21
 
 ### Changed
+
 - Changed translation to use the arb format and ICU string replacements
 - Moved translations to the [locales folder](locales/)
 - Locales are now used instead of Languages
 - translations are now split into 2 translation functions
   - `useTranslation`: directly usable and uses the preferred locale
-  - `useICUTranslation`: parses every input with a ICU interpreter (less efficient) 
+  - `useICUTranslation`: parses every input with a ICU interpreter (less efficient)
 
 ### Fixed
+
 - fixed padding on the `InsideLabel` to be properly aligned
 
 ## [0.1.42] - 2025-10-31
 
 ### Fixed
+
 - Fixed `NavigationItemWithSubItem` to make all links have the same length int the menu
 - Fixed `<li>` elements in `Navigation`
 
 ## [0.1.41] - 2025-10-31
 
 ### Fixed
+
 - Fixed `ThemeDialog` and `LanguageDialog` to properly show select options
 
 ## [0.1.40] - 2025-10-30
 
 ### Fixed
+
 - Fixed `Carousel` having more than one focusable item
 
 ## [0.1.39] - 2025-10-30
 
 ### Changed
+
 - Changed `Carousel` to have an event `onSlideChanged` when the slide changes
 
 ### Removed
+
 - Removed `TextImage` component
 
 ## [0.1.38] - 2025-10-30
 
 ### Changed
+
 - Changed `Dialog`s to only be part of the DOM-Tree when open
 
 ### Fixed
+
 - Fixed `SelectButton` not reacting correctly to arrow keys when determining the highlighted value
 - Fixed `ThemeProvider` and `LanguageProvider` to consider the `system` value as an overwrite
 - Fixed `ConfirmDialog` story using a wrong initial state
@@ -210,101 +255,123 @@ and adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 ## [0.1.37] - 2025-10-30
 
 ### Changed
+
 - Exported and renamed `NavigationItem` to `NavigationItemType`
 
 ### Fixed
+
 - Fixed `Dialog` not being client side by default
 
 ## [0.1.36] - 2025-10-06
 
 ### Changed
-- Changed  `useLocalStorage` to remove values that produce an error on load
+
+- Changed `useLocalStorage` to remove values that produce an error on load
 
 ### Fixed
+
 - Fixed closing animation for `Dialog`
 - Fixed `LanguageProvider` and `ThemeProvider` to not set undefined values into storage
 
 ## [0.1.35] - 2025-10-06
 
 ### Added
+
 - Added `--clean` option to barrel script
 - Added `useOverwritableState` to wrap `useState` and `useEffect` in uncontrolled components
 - Added `FormElementWrapper` onTouched callback and aria-attributes
 - Added `ValidatorError`s and translation for selection items
 
 ### Changed
+
 - Changed `barrel` script location to a dedicated [scripts folder](scripts)
 - Split `build` script in `build` and `build-production`
 - Stopped saving of system theme and language values and instead load them if value is not found
 
 ### Removed
+
 - Removed index.ts files from version control to force direct imports
 - Removed usages of `noop`
 
 ## [0.1.34] - 2025-10-03
 
 ### Changed
+
 - Changed Dialog z-index to 100
 
 ### Fixed
+
 - Fix `FormElementWrapper` labelledBy misspelling
 
 ## [0.1.33] - 2025-10-03
 
 ### Changed
+
 - Change `Dialog` to only use fixed positions
 
 ## [0.1.32] - 2025-10-03
 
 ### Changed
+
 - Changed the default background for surfaces and inputs to create higher contrasts
 
 ### Fixed
+
 - Fix a `Dialog`s description rendering a div when not set
 - Fix initial misalignment of `Dialog`s in some cases
 
 ## [0.1.31] - 2025-10-03
 
 ### Changed
+
 - Make `SingleSelectProperty` and `MultiSelectProperty` use `SelectOption`s for styling
 
 ## [0.1.30] - 2025-10-03
 
 ### Changed
+
 - Changed `SingleSelectProperty` and `MultiSelectProperty` to accept a label
 
 ## [0.1.29] - 2025-10-02
 
 ### Added
+
 - HTML elements now use `color-scheme: dark` when in dark mode
 - Add invalid state styling to Selects
 - Add a placeholder color called `placeholder`
 - Add a hook for localized validation translation `useTranslatedValidators`
 
 ### Changed
+
 - `disabled` and `required` are now optional in `FormElementWrapper`
 - changed focus to draw an outline instead of a ring
 
 ### Removed
+
 - removed several typography entries that only change the `font-weight` (e.g. `typography-label-md-bold` -> `typography-label-md font-bold`)
 
 ### Fix
+
 - Fix disabled color for `Select`
 
 ## [0.1.28] - 2025-10-02
 
 ### Added
+
 - added barreling script and barrel files
 
 ### Changed
+
 - pin dependencies
 
 ### Fixed
+
 - Fix css export path
 
 ## [0.1.27] - 2025-10-02
 
 ### Added
+
 - Add a theme preference listener to `useTheme` hook
 - Add icons to the Theme dialog
 - Add a config attribute to the `SelectRoot` component
@@ -312,12 +379,14 @@ and adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 - Add accessibility for carousel
 
 ### Changed
+
 - move `isMultiSelect` attribute of `SelectRoot` into the config `SelectConfiguration`
 - split `layout-and-navigation` into `layout` and `navigation` (same for stories)
 
 ## [0.1.26] - 2025-09-24
 
 ### Added
+
 - Add `FloatingContainer` and `useFloatingElement` for aligning a floating element
 - Add `ListBox` for selecting a value from a list
 - Added accessibility for `Select`, `MultiSelect`, `Expandable`, `Avatar`
@@ -328,6 +397,7 @@ and adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 - Add `useIsMounted` for checking when a component is rendered
 
 ### Changed
+
 - Renamed `textstyle` to `typography` for ClassNames
 - Changed css folder to style folder
 - Changed `HelpwaveBadge`, `HelpwaveLogo` to allow for different sizes
@@ -338,6 +408,7 @@ and adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 - Changed relative to absolute imports (only partial)
 
 ### Removed
+
 - removed typographies (full list below)
   - `typography-title-3xl`
   - `typography-title-2xl`
@@ -361,20 +432,24 @@ and adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 ## [0.1.25] - 2025-07-19
 
 ### Added
+
 - Added a story for a form example
 
 ### Fixed
+
 - Fixed `ThemeProvider` to correctly use the stored theme in the context
 - Fixed disabled state and styling on `Checkbox`, `Input`, `Select`, `MultiSelect`
 
 ## [0.1.24] - 2025-07-17
 
 ### Fixed
-- Fixed `useTheme` and `ThemeProvider` to correctly load the theme 
+
+- Fixed `useTheme` and `ThemeProvider` to correctly load the theme
 
 ## [0.1.23] - 2025-07-17
 
 ### Changed
+
 - Changed `Avatar` to show backup icon when no name or image supplied
 - Changed component to use next `Image` and `Link`
 - Changed CSS to use referential values
@@ -385,44 +460,54 @@ and adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 ## [0.1.22] - 2025-07-16
 
 ### Added
+
 - Added `coloredHoverBackground` option to `TextButton`
 - Added colors for input elements to css instead of using surface
 
 ### Changed
+
 - Change `Avatar` component to allow for name displays
 - Change color for `Modal`s and `Menu`s
 
 ### Fixed
+
 - Fixed `Menu` and `Overlay` z-Indexes
 
 ## [0.1.21] - 2025-07-14
 
 ### Added
+
 - Save theme choice to local storage
 
 ### Changed
+
 - Changed storybook background
 - Changed color on dark surface to be brighter
 
 ### Fixed
+
 - Fixed `Menu` and `Overlay` z-Indexes
 
 ## [0.1.20] - 2025-07-14
 
 ### Added
+
 - Added `LoadingContainer` for showing a loading animation
 
 ### Changed
+
 - Changed `Expandable` to allow for styling the expansion container
 
 ## [0.1.19] - 2025-07-11
 
 ### Added
+
 - Add animations for `Expandable`, `Select`, `MultiSelect`, `Menu`, `Modal`, `Dialog`
-- Add utility for defining a flex-column or flex-row with its gap directly 
+- Add utility for defining a flex-column or flex-row with its gap directly
 - Add hook `usePopoverPosition` to easily define the position of a popover based on a trigger element
 
 ### Changed
+
 - Changed the disabled color for dark and light mode
 - Changed overlay background color to be configurable
 - Changed `Select` and `MultiSelect` to now be variants of `Menu`
@@ -433,34 +518,40 @@ and adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 ## [0.1.18] - 2025-07-07
 
 ### Fix
+
 - fix console logging in `useDelay`
 - fix helpwave icon animation for safari
 
 ## [0.1.17] - 2025-07-07
 
 ### Fix
+
 - fix `TableWithSelection` access to `bodyRowClassName`
 
 ## [0.1.16] - 2025-07-07
 
 ### Added
+
 - Added a `useDelay` story
 - Added a `CopyToClipboardWrapper` to allow for easy copy to clipboard buttons
 
 ### Changed
-- `TableWithSelection` now allows for disabling row selection
 
+- `TableWithSelection` now allows for disabling row selection
 
 ## [0.1.13] - 2025-07-04
 
 ### Added
+
 - Added a `TableCell` component which is used to display all unspecified table cells
 
 ### Changed
+
 - `TableState` is now optional on the table
 
 ### Fixed
-- Fixed `Table` stories to only use known properties 
+
+- Fixed `Table` stories to only use known properties
 
 ## [0.1.12] - 2025-07-02
 
@@ -472,7 +563,7 @@ and adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 - Added a page input to the pagination component
 - Added a `resolveSetState` function to easily get the value that result from a `SetState` in a `Dispatch`
 - Added `useRerender` hook to allow for easy rerendering
-- Added `useFocusMangement`, `useFocusOnceVisible`. `useResizeCallbackWrapper` 
+- Added `useFocusMangement`, `useFocusOnceVisible`. `useResizeCallbackWrapper`
 
 ### Changed
 
@@ -483,7 +574,6 @@ and adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 ### Fixed
 
 - Fixed `CheckBox` disabled state
-
 
 ## [0.1.11] - 2025-07-02
 
@@ -613,6 +703,7 @@ and adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 - Update the `Tooltip` appearance
 
 ### Removed
+
 - examples which are now part of their corresponding story
 
 ## [Unreleased]

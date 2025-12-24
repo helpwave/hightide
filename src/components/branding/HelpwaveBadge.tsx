@@ -1,4 +1,4 @@
-import { HelpwaveLogo } from '../icons-and-geometry/HelpwaveLogo'
+import { HelpwaveLogo } from './HelpwaveLogo'
 import type { HTMLAttributes } from 'react'
 import clsx from 'clsx'
 
@@ -12,9 +12,9 @@ export type HelpwaveBadgeProps = HTMLAttributes<HTMLSpanElement> & {
  * A Badge with the helpwave logo and the helpwave name
  */
 export const HelpwaveBadge = ({
-                                size = 'sm',
-                                ...props
-                              }: HelpwaveBadgeProps) => {
+  size = 'sm',
+  ...props
+}: HelpwaveBadgeProps) => {
   return (
     <span
       {...props}

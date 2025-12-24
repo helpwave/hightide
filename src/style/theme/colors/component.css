@@ -50,16 +50,8 @@
   /* Table */
   --color-table-background: var(--color-surface);
   --color-table-text: var(--color-on-surface);
-  --color-table-header-background: color-mix(
-    in srgb,
-    var(--color-blue-500) 15%,
-    var(--color-surface)
-  );
-  --color-table-row-hover-background: color-mix(
-    in srgb,
-    var(--color-purple-500) 15%,
-    var(--color-surface)
-  );
+  --color-table-header-background: var(--color-surface-variant);
+  --color-table-row-hover-background: var(--color-surface-hover);
 
   /* TextImage */
   --color-text-image-primary-background: var(--color-primary);

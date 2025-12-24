@@ -1,13 +1,22 @@
 @layer components {
-  .chip-sm {
-    @apply flex-row-1 items-center justify-center px-1 py-0.5 rounded-md;
+  [data-name="chip"] {
+    @apply flex flex-row items-center justify-center w-fit font-semibold coloring-color-detect coloring-style-detect;
+
+    &[data-size="xs"] {
+      @apply gap-x-1 px-1 py-0.75 rounded-1 h-6 text-sm;
+    }
+    &[data-size="sm"] {
+      @apply gap-x-1 px-1.5 py-1 rounded-1.5 h-8;
+    }
+    &[data-size="md"] {
+      @apply gap-x-2 px-3 py-2 rounded-1.5 h-10;
+    }
+    &[data-size="lg"] {
+      @apply gap-x-2 px-4 py-2.5 rounded-1.5 h-12;
+    }
   }
 
-  .chip-md {
-    @apply flex-row-1 items-center justify-center px-2 py-1 rounded-md;
-  }
-
-  .chip-lg {
-    @apply flex-row-2 items-center justify-center px-4 py-2 rounded-md;
+  [data-name="chip-list"] {
+    @apply flex flex-wrap gap-x-2 gap-y-2;
   }
 }
