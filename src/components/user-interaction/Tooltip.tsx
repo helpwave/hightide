@@ -1,13 +1,16 @@
-import type { CSSProperties, PropsWithChildren, ReactNode } from 'react'
-import { useMemo, useRef, useState } from 'react'
+import type { PropsWithChildren, ReactNode } from 'react'
+import { useCallback, useMemo, useRef, useState } from 'react'
 import { clsx } from 'clsx'
 import { Visibility } from '@/src/components/layout/Visibility'
+import type { FloatingElementAlignment } from '@/src/hooks/useFloatingElement'
 import { useFloatingElement } from '@/src/hooks/useFloatingElement'
 import { createPortal } from 'react-dom'
 import type { TooltipConfig } from '@/src/contexts/HightideConfigContext'
 import { useHightideConfig } from '@/src/contexts/HightideConfigContext'
 import { DataAttributesUtil } from '@/src/utils/dataAttribute'
+import type { UseOverlayRegistryProps } from '@/src/hooks/useOverlayRegistry'
 import { useOverlayRegistry } from '@/src/hooks/useOverlayRegistry'
+import { useTransitionState } from '@/src/hooks/useTransitionState'
 
 type TooltipState = {
   isShown: boolean,
@@ -44,8 +47,8 @@ export const Tooltip = ({
   children,
   appearDelay: appearDelayOverwrite,
   disappearDelay: disappearDelayOverwrite,
-  tooltipClassName = '',
-  containerClassName = '',
+  tooltipClassName,
+  containerClassName,
   position = 'bottom',
   disabled = false,
 }: TooltipProps) => {
@@ -62,114 +65,108 @@ export const Tooltip = ({
     () => disappearDelayOverwrite ?? config.tooltip.disappearDelay,
     [config.tooltip.disappearDelay, disappearDelayOverwrite]
   )
-  const { isShown } = state
   const anchorRef = useRef<HTMLDivElement>(null)
   const containerRef = useRef<HTMLDivElement>(null)
   const triangleRef = useRef<HTMLDivElement>(null)
 
-  const triangleSize = 0.375
-  const triangleClasses = {
-    top: `border-t-tooltip-background border-l-transparent border-r-transparent`,
-    bottom: `border-b-tooltip-background border-l-transparent border-r-transparent`,
-    left: `border-l-tooltip-background border-t-transparent border-b-transparent`,
-    right: `border-r-tooltip-background border-t-transparent border-b-transparent`
-  }
+  const isActive = !disabled && state.isShown
 
-  const triangleStyle: Record<Position, CSSProperties> = {
-    top: {
-      borderWidth: `${triangleSize}rem ${triangleSize}rem 0 ${triangleSize}rem`,
-      transform: `translate(0,${triangleSize}rem)`
-    },
-    bottom: {
-      borderWidth: `0 ${triangleSize}rem ${triangleSize}rem ${triangleSize}rem`,
-      transform: `translate(0,-${triangleSize}rem)`
-    },
-    left: {
-      borderWidth: `${triangleSize}rem 0 ${triangleSize}rem ${triangleSize}rem`,
-      transform: `translate(${triangleSize}rem,0)`
-    },
-    right: {
-      borderWidth: `${triangleSize}rem ${triangleSize}rem ${triangleSize}rem 0`,
-      transform: `translate(-${triangleSize}rem,0)`
-    }
-  }
+  const { isVisible, transitionState, callbacks } = useTransitionState(
+    useMemo(() => ({ isOpen: isActive }), [isActive])
+  )
 
-  const isActive = !disabled && isShown
+  const verticalAlignment: FloatingElementAlignment= useMemo(() =>
+    position === 'top' ? 'beforeStart' : position === 'bottom' ? 'afterEnd' : 'center',
+  [position])
 
-  const css = useFloatingElement({
-    active: isActive,
+  const horizontalAlignment: FloatingElementAlignment = useMemo(() =>
+    position === 'left' ? 'beforeStart' : position === 'right' ? 'afterEnd' : 'center',
+  [position])
+
+  const css = useFloatingElement(useMemo(() => ({
+    active: isActive || isVisible,
     anchorRef: anchorRef,
     containerRef,
-    horizontalAlignment: position === 'left' ? 'beforeStart' : position === 'right' ? 'afterEnd' : 'center',
-    verticalAlignment: position === 'top' ? 'beforeStart' : position === 'bottom' ? 'afterEnd' : 'center',
-  })
+    horizontalAlignment,
+    verticalAlignment,
+  }), [horizontalAlignment, isActive, isVisible, verticalAlignment]))
 
-  const cssTriangle = useFloatingElement({
-    active: isActive,
+  const cssTriangle = useFloatingElement(useMemo(() => ({
+    active: isActive || isVisible,
     anchorRef: anchorRef,
     containerRef: triangleRef,
-    horizontalAlignment: position === 'left' ? 'beforeStart' : position === 'right' ? 'afterEnd' : 'center',
-    verticalAlignment: position === 'top' ? 'beforeStart' : position === 'bottom' ? 'afterEnd' : 'center',
-  })
+    horizontalAlignment,
+    verticalAlignment,
+  }), [horizontalAlignment, isActive, isVisible, verticalAlignment]))
 
-  const { zIndex } = useOverlayRegistry({ isActive })
-  const { zIndex: zIndexTriangle } = useOverlayRegistry({ isActive })
+  const regsitryOptions: UseOverlayRegistryProps = useMemo(() => ({ isActive }), [isActive])
+  const { zIndex } = useOverlayRegistry(regsitryOptions)
+  const { zIndex: zIndexTriangle } = useOverlayRegistry(regsitryOptions)
+
+  const onEnter = useCallback(() => {
+    setState(prevState => {
+      if (prevState.isShown) {
+        clearTimeout(prevState.timer)
+        return {
+          ...prevState,
+          timer: null
+        }
+      }
+      return {
+        ...prevState,
+        timer: setTimeout(() => {
+          setState(prevState => {
+            clearTimeout(prevState.timer)
+            return { ...prevState, isShown: true, timer: null }
+          })
+        }, appearDelay)
+      }
+    })
+  }, [appearDelay])
+
+  const onLeave = useCallback(() => {
+    setState(prevState => {
+      if (!prevState.isShown) {
+        clearTimeout(prevState.timer)
+        return {
+          ...prevState,
+          timer: null
+        }
+      }
+      clearTimeout(prevState.timer)
+      return {
+        ...prevState,
+        timer: setTimeout(() => {
+          setState(prevState => {
+            clearTimeout(prevState.timer)
+            return { ...prevState, isShown: false, timer: null }
+          })
+        }, disappearDelay)
+      }
+    })
+  }, [disappearDelay])
 
   return (
     <div
       ref={anchorRef}
       className={clsx('relative inline-block', containerClassName)}
-      onPointerEnter={() => setState(prevState => {
-        if (prevState.isShown) {
-          clearTimeout(state.timer)
-          return {
-            ...prevState,
-            timer: null
-          }
-        }
-        return {
-          ...prevState,
-          timer: setTimeout(() => {
-            setState(prevState => {
-              clearTimeout(prevState.timer)
-              return { isShown: true, timer: null }
-            })
-          }, appearDelay)
-        }
-      })}
-      onPointerLeave={() => setState(prevState => {
-        clearTimeout(prevState.timer)
-        return {
-          ...prevState,
-          timer: setTimeout(() => {
-            setState(prevState => {
-              clearTimeout(prevState.timer)
-              return { isShown: false, timer: null }
-            })
-          }, disappearDelay)
-        }
-      })}
+      onPointerEnter={onEnter}
+      onPointerLeave={onLeave}
     >
       {children}
-      <Visibility isVisible={isActive}>
+      <Visibility isVisible={isActive || isVisible}>
         {createPortal(
           <div
             ref={containerRef}
 
-            onPointerEnter={() => setState(prevState => {
-              if (prevState.isShown) {
-                clearTimeout(state.timer)
-                return {
-                  ...prevState,
-                  timer: null
-                }
-              }
-            })}
+            {...callbacks}
+            onPointerEnter={onEnter}
 
             data-name={DataAttributesUtil.name('tooltip')}
+            data-state={transitionState}
 
             className={tooltipClassName}
-            style={{ ...css, zIndex, animationDelay: appearDelay + 'ms' }}
+            style={{ ...css,zIndex }}
           >
             {tooltip}
           </div>
@@ -178,13 +175,12 @@ export const Tooltip = ({
         {createPortal(
           <div
             ref={triangleRef}
-            className={clsx(`absolute w-0 h-0 opacity-0 animate-tooltip-fade-in`, triangleClasses[position])}
-            style={{
-              ...cssTriangle,
-              ...triangleStyle[position],
-              zIndex: zIndexTriangle,
-              animationDelay: appearDelay + 'ms'
-            }}
+
+            data-name="tooltip-triangle"
+            data-state={transitionState}
+            data-position={position}
+
+            style={{ ...cssTriangle,  zIndex: zIndexTriangle }}
           />
           , document.body
         )}

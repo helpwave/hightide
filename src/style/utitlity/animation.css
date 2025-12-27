@@ -1,21 +1,158 @@
+@keyframes fade-in {
+  0% {
+    opacity: 0;
+  }
+  100% {
+    opacity: 1;
+  }
+}
+
+@-webkit-keyframes bigLeftUp {
+  0%,
+  25% {
+    stroke-dashoffset: 1000;
+  }
+  50%,
+  75%,
+  100% {
+    stroke-dashoffset: 0;
+  }
+}
+@keyframes bigLeftUp {
+  0%,
+  25% {
+    stroke-dashoffset: 1000;
+  }
+  50%,
+  75%,
+  100% {
+    stroke-dashoffset: 0;
+  }
+}
+
+@-webkit-keyframes bigRightDown {
+  0%,
+  25%,
+  50% {
+    stroke-dashoffset: 0;
+  }
+  75%,
+  100% {
+    stroke-dashoffset: -1000;
+  }
+}
+@keyframes bigRightDown {
+  0%,
+  25%,
+  50% {
+    stroke-dashoffset: 0;
+  }
+  75%,
+  100% {
+    stroke-dashoffset: -1000;
+  }
+}
+
+@-webkit-keyframes smallLeftUp {
+  0%,
+  25%,
+  50% {
+    stroke-dashoffset: 1000;
+  }
+  75%,
+  100% {
+    stroke-dashoffset: 0;
+  }
+}
+@keyframes smallLeftUp {
+  0%,
+  25%,
+  50% {
+    stroke-dashoffset: 1000;
+  }
+  75%,
+  100% {
+    stroke-dashoffset: 0;
+  }
+}
+
+@-webkit-keyframes smallRightDown {
+  0%,
+  25% {
+    stroke-dashoffset: 0;
+  }
+  50%,
+  75%,
+  100% {
+    stroke-dashoffset: -1000;
+  }
+}
+@keyframes smallRightDown {
+  0%,
+  25% {
+    stroke-dashoffset: 0;
+  }
+  50%,
+  75%,
+  100% {
+    stroke-dashoffset: -1000;
+  }
+}
+
+@keyframes pop-in {
+  0% {
+    opacity: 0;
+    scale: 100%; /* Necessary so that the FloatingContainer picks up the correct position */
+  }
+  1% {
+    opacity: 0;
+    scale: 80%;
+  }
+  100% {
+    opacity: 1;
+    scale: 100%;
+  }
+}
+
+@keyframes pop-out {
+  0% {
+    opacity: 1;
+    scale: 100%;
+  }
+  100% {
+    opacity: 0;
+    scale: 80%;
+  }
+}
+
+@keyframes shimmer {
+  0% {
+    left: -100%;
+  }
+  100% {
+    left: 100%;
+  }
+}
+
 @utility animation-delay-* {
   animation-delay: calc(--value(number) * 1ms);
 }
 
 @utility animate-pop-in {
-  animation: pop-in 0.2s ease-in-out;
+  animation: pop-in var(--animation-duration-in, 250ms) ease-in-out forwards;
 }
 
 @utility animate-pop-out {
-  animation: pop-out 0.1s ease-in-out forwards;
+  animation: pop-out var(--animation-duration-out, 170ms) ease-in-out forwards;
 }
 
 @utility animate-fade-in {
-  animation: fade-in 0.2s ease-in-out;
+  animation: fade-in var(--animation-duration-in, 250ms) ease-in-out;
 }
 
 @utility animate-fade-out {
-  animation: fade-out 0.1s ease-in-out forwards;
+  animation: fade-in var(--animation-duration-in, 170ms) ease-in-out forwards
+    reverse;
 }
 
 @utility animate-fade {
@@ -43,161 +180,19 @@
 }
 
 @utility animate-tooltip-fade-in {
-  animation: fade-in 0.2s ease-in-out forwards;
-  -webkit-animation: fade-in 0.2s ease-in-out forwards;
+  animation: fade-in var(--animation-duration-in, 250ms) ease-in-out 1 forwards;
+  -webkit-animation: fade-in var(--animation-duration-in, 250ms) ease-in-out 1
+    forwards;
 }
 
 @utility animate-tooltip-fade-out {
-  animation: fade-in 0.2s ease-in-out forwards;
-  -webkit-animation: fade-in 0.2s ease-in-out forwards;
+  animation: fade-in var(--animation-duration-in, 170ms) ease-in-out 1 reverse
+    forwards;
+  -webkit-animation: fade-in var(--animation-duration-in, 170ms) ease-in-out 1
+    reverse forwards;
 }
 
 @layer utilities {
-  @keyframes fade-in {
-    0% {
-      opacity: 0;
-    }
-    100% {
-      opacity: 1;
-    }
-  }
-
-  @keyframes fade-out {
-    0% {
-      opacity: 1;
-    }
-    100% {
-      opacity: 0;
-    }
-  }
-
-  @-webkit-keyframes bigLeftUp {
-    0%,
-    25% {
-      stroke-dashoffset: 1000;
-    }
-    50%,
-    75%,
-    100% {
-      stroke-dashoffset: 0;
-    }
-  }
-  @keyframes bigLeftUp {
-    0%,
-    25% {
-      stroke-dashoffset: 1000;
-    }
-    50%,
-    75%,
-    100% {
-      stroke-dashoffset: 0;
-    }
-  }
-
-  @-webkit-keyframes bigRightDown {
-    0%,
-    25%,
-    50% {
-      stroke-dashoffset: 0;
-    }
-    75%,
-    100% {
-      stroke-dashoffset: -1000;
-    }
-  }
-  @keyframes bigRightDown {
-    0%,
-    25%,
-    50% {
-      stroke-dashoffset: 0;
-    }
-    75%,
-    100% {
-      stroke-dashoffset: -1000;
-    }
-  }
-
-  @-webkit-keyframes smallLeftUp {
-    0%,
-    25%,
-    50% {
-      stroke-dashoffset: 1000;
-    }
-    75%,
-    100% {
-      stroke-dashoffset: 0;
-    }
-  }
-  @keyframes smallLeftUp {
-    0%,
-    25%,
-    50% {
-      stroke-dashoffset: 1000;
-    }
-    75%,
-    100% {
-      stroke-dashoffset: 0;
-    }
-  }
-
-  @-webkit-keyframes smallRightDown {
-    0%,
-    25% {
-      stroke-dashoffset: 0;
-    }
-    50%,
-    75%,
-    100% {
-      stroke-dashoffset: -1000;
-    }
-  }
-  @keyframes smallRightDown {
-    0%,
-    25% {
-      stroke-dashoffset: 0;
-    }
-    50%,
-    75%,
-    100% {
-      stroke-dashoffset: -1000;
-    }
-  }
-
-  @keyframes pop-in {
-    0% {
-      opacity: 0;
-      scale: 100%; /* Necessary so that the FloatingContainer picks up the correct position */
-    }
-    1% {
-      opacity: 0;
-      scale: 80%;
-    }
-    100% {
-      opacity: 1;
-      scale: 100%;
-    }
-  }
-
-  @keyframes pop-out {
-    0% {
-      opacity: 1;
-      scale: 100%;
-    }
-    100% {
-      opacity: 0;
-      scale: 80%;
-    }
-  }
-
-  @keyframes shimmer {
-    0% {
-      left: -100%;
-    }
-    100% {
-      left: 100%;
-    }
-  }
-
   .shimmer::before {
     content: "";
     position: absolute;

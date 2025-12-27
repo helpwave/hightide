@@ -8,7 +8,6 @@ type UseTransitionStateResult = {
     callbacks: {
         onAnimationStart: () => void,
         onAnimationEnd: () => void,
-        onAnimationCancel: () => void,
         onTransitionStart: () => void,
         onTransitionEnd: () => void,
         onTransitionCancel: () => void,
@@ -74,7 +73,6 @@ export const useTransitionState = ({ isOpen }: UseTransitionStateProps): UseTran
     callbacks: {
       onAnimationStart: onStart,
       onAnimationEnd: onEnd,
-      onAnimationCancel: onEnd,
       onTransitionStart: onStart,
       onTransitionEnd: onEnd,
       onTransitionCancel: onEnd,

@@ -64,6 +64,7 @@ export const Drawer = ({
       id={ids.container}
 
       data-name="drawer-container"
+      data-open={DataAttributesUtil.bool(isOpen)}
 
       className={containerClassName}
       style={{ zIndex, '--drawer-depth': depth.toString() } as React.CSSProperties}
@@ -75,6 +76,8 @@ export const Drawer = ({
 
         data-name="drawer-background"
         data-state={transitionState}
+        data-depth={depth}
+        data-alignment={alignment}
 
         aria-hidden={true}
 

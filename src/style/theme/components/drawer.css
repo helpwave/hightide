@@ -37,36 +37,45 @@
 @layer components {
   [data-name="drawer-container"] {
     @apply fixed inset-0 h-screen w-screen;
+    &:not([data-open]) {
+      @apply touch-none pointer-events-none;
+    }
   }
 
   [data-name="drawer-background"] {
-    @apply fixed inset-0 h-screen w-screen bg-transparent transition-colors;
-    &[data-state="opening"],
-    &[data-state="opened"] {
-      @apply duration-200 bg-overlay-shadow;
+    @apply fixed inset-0 w-screen h-screen bg-overlay-shadow;
+    &[data-state="opening"] {
+      animation-duration: var(--animation-duration-in);
     }
+
     &[data-state="closing"] {
-      @apply duration-100;
+      animation-duration: var(--animation-duration-out);
+      animation-direction: reverse;
+    }
+
+    &[data-state="opening"],
+    &[data-state="closing"] {
+      animation-name: fade-in;
     }
   }
 
   [data-name="drawer-content"] {
-    @apply flex-col-2 p-4 bg-overlay-background text-overlay-text;
+    @apply relative flex-col-2 p-4 bg-overlay-background text-overlay-text;
     animation-timing-function: ease-out;
     animation-fill-mode: forwards;
 
     &[data-state="opening"] {
-      animation-duration: 200ms;
+      animation-duration: var(--animation-duration-in);
     }
 
     &[data-state="closing"] {
-      animation-duration: 100ms;
+      animation-duration: var(--animation-duration-out);
       animation-direction: reverse;
     }
 
     &[data-alignment="top"] {
       @apply fixed top-0 left-0 w-screen rounded-b-lg;
-      height: calc(50vh - var(--drawer-depth, 0) * 1vh);
+      height: calc(50vh - var(--drawer-depth, 0) * var(--drawer-indent, 0px));
       transform: translateY(-100%);
 
       &[data-state="opening"],
@@ -80,7 +89,7 @@
 
     &[data-alignment="bottom"] {
       @apply fixed bottom-0 left-0 w-screen rounded-t-lg;
-      height: calc(50vh - var(--drawer-depth, 0) * 1vh);
+      height: calc(50vh - var(--drawer-depth, 0) * var(--drawer-indent, 0px));
       transform: translateY(100%);
 
       &[data-state="opening"],
@@ -94,7 +103,7 @@
 
     &[data-alignment="left"] {
       @apply fixed top-0 left-0 h-screen rounded-r-lg;
-      width: calc(50vw - var(--drawer-depth, 0) * 1vw);
+      width: calc(50vw - var(--drawer-depth, 0) * var(--drawer-indent, 0px));
       transform: translateX(-100%);
 
       &[data-state="opening"],
@@ -108,7 +117,7 @@
 
     &[data-alignment="right"] {
       @apply fixed top-0 right-0 h-screen rounded-l-lg;
-      width: calc(50vw - var(--drawer-depth, 0) * 1vw);
+      width: calc(50vw - var(--drawer-depth, 0) * var(--drawer-indent, 0px));
       transform: translateX(100%);
 
       &[data-state="opening"],

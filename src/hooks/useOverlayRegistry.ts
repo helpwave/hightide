@@ -89,13 +89,13 @@ class OverlayRegistry {
   }
 }
 
-type UseOverlayRegistryProps = Partial<OverlayItem> & {
+export type UseOverlayRegistryProps = Partial<OverlayItem> & {
     isActive?: boolean,
     /** Tags cannot change on every render, thus make sure they are wrapped in a useMemo or similar */
     tags?: string[],
 }
 
-type UseOverlayRegistryResult = {
+export type UseOverlayRegistryResult = {
     isInFront: boolean,
     zIndex?: number,
     position?: number,

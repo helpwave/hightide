@@ -40,8 +40,8 @@ export type HightideConfig = {
 
 const defaultConfig: HightideConfig = {
   tooltip: {
-    appearDelay: 400,
-    disappearDelay: 500,
+    appearDelay: 200,
+    disappearDelay: 400,
   },
   theme: {
     initialTheme: 'light'

@@ -13,6 +13,8 @@ and adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 - `HightideProvider` to bundle all hightide contexts in one provider
 - Added Code panel to storybook
 - `Drawer` component that alows for stacking
+- autoprefixer for CSS backwards compatability
+- `useTransitionState` hook to keep track of transition changes
 
 ### Changed
 

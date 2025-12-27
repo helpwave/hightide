@@ -84,6 +84,7 @@ export const Dialog = ({
       id={ids.container}
 
       data-name="dialog-container"
+      data-open={DataAttributesUtil.bool(isOpen)}
 
       className={containerClassName}
       style={{ zIndex }}
