@@ -7,7 +7,7 @@ import type { PopoverHorizontalAlignment, PopoverVerticalAlignment } from '@/src
 import { usePopoverPosition } from '@/src/hooks/usePopoverPosition'
 import { useHoverState } from '@/src/hooks/useHoverState'
 import { useOutsideClick } from '@/src/hooks/useOutsideClick'
-import { useZIndexRegister } from '@/src/hooks/useZIndexRegister'
+import { useOverlayRegistry } from '@/src/hooks/useOverlayRegistry'
 
 export type MenuItemProps = {
   onClick?: () => void,
@@ -124,7 +124,9 @@ export const Menu = <T extends HTMLElement>({
     }
   }, [isOpen])
 
-  const zIndex = useZIndexRegister(isOpen)
+  const { zIndex } = useOverlayRegistry({
+    isActive: isOpen,
+  })
 
   return (
     <>

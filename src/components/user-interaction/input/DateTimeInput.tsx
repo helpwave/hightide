@@ -7,13 +7,13 @@ import { Input } from '@/src/components/user-interaction/input/Input'
 import { useOverwritableState } from '@/src/hooks/useOverwritableState'
 import { useLocale } from '@/src/contexts/LocaleContext'
 import { useOutsideClick } from '@/src/hooks/useOutsideClick'
-import { useZIndexRegister } from '@/src/hooks/useZIndexRegister'
 import type { DateTimePickerProps } from '@/src/components/user-interaction/date/DateAndTimePicker'
 import { DateTimePicker } from '@/src/components/user-interaction/date/DateAndTimePicker'
 import { Button } from '@/src/components/user-interaction/Button'
 import { useHightideTranslation } from '@/src/i18n/useHightideTranslation'
 import { Visibility } from '@/src/components/layout/Visibility'
 import { DateUtils } from '@/src/utils/date'
+import { useOverlayRegistry } from '@/src/hooks/useOverlayRegistry'
 
 export type DateTimeInputProps = Omit<InputProps, 'onEditCompleted'> & {
   date?: Date,
@@ -46,7 +46,7 @@ export const DateTimeInput = ({
     setIsOpen(false)
   })
 
-  const zIndex = useZIndexRegister(isOpen)
+  const { zIndex } = useOverlayRegistry({ isActive: isOpen })
 
   const isReadOnly = useMemo(() => props.readOnly || props.disabled, [props.readOnly, props.disabled])
 

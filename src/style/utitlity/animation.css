@@ -7,7 +7,7 @@
 }
 
 @utility animate-pop-out {
-  animation: pop-out 0.2s ease-in-out forwards;
+  animation: pop-out 0.1s ease-in-out forwards;
 }
 
 @utility animate-fade-in {
@@ -15,7 +15,7 @@
 }
 
 @utility animate-fade-out {
-  animation: fade-out 0.2s ease-in-out forwards;
+  animation: fade-out 0.1s ease-in-out forwards;
 }
 
 @utility animate-fade {
@@ -72,69 +72,93 @@
   }
 
   @-webkit-keyframes bigLeftUp {
-    0%, 25% {
+    0%,
+    25% {
       stroke-dashoffset: 1000;
     }
-    50%, 75%, 100% {
+    50%,
+    75%,
+    100% {
       stroke-dashoffset: 0;
     }
   }
   @keyframes bigLeftUp {
-    0%, 25% {
+    0%,
+    25% {
       stroke-dashoffset: 1000;
     }
-    50%, 75%, 100% {
+    50%,
+    75%,
+    100% {
       stroke-dashoffset: 0;
     }
   }
 
   @-webkit-keyframes bigRightDown {
-    0%, 25%, 50% {
+    0%,
+    25%,
+    50% {
       stroke-dashoffset: 0;
     }
-    75%, 100% {
+    75%,
+    100% {
       stroke-dashoffset: -1000;
     }
   }
   @keyframes bigRightDown {
-    0%, 25%, 50% {
+    0%,
+    25%,
+    50% {
       stroke-dashoffset: 0;
     }
-    75%, 100% {
+    75%,
+    100% {
       stroke-dashoffset: -1000;
     }
   }
 
   @-webkit-keyframes smallLeftUp {
-    0%, 25%, 50% {
+    0%,
+    25%,
+    50% {
       stroke-dashoffset: 1000;
     }
-    75%, 100% {
+    75%,
+    100% {
       stroke-dashoffset: 0;
     }
   }
   @keyframes smallLeftUp {
-    0%, 25%, 50% {
+    0%,
+    25%,
+    50% {
       stroke-dashoffset: 1000;
     }
-    75%, 100% {
+    75%,
+    100% {
       stroke-dashoffset: 0;
     }
   }
 
   @-webkit-keyframes smallRightDown {
-    0%, 25% {
+    0%,
+    25% {
       stroke-dashoffset: 0;
     }
-    50%, 75%, 100% {
+    50%,
+    75%,
+    100% {
       stroke-dashoffset: -1000;
     }
   }
   @keyframes smallRightDown {
-    0%, 25% {
+    0%,
+    25% {
       stroke-dashoffset: 0;
     }
-    50%, 75%, 100% {
+    50%,
+    75%,
+    100% {
       stroke-dashoffset: -1000;
     }
   }
@@ -175,7 +199,7 @@
   }
 
   .shimmer::before {
-    content: '';
+    content: "";
     position: absolute;
     top: 0;
     left: -100%;

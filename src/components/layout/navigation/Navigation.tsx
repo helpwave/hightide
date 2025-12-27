@@ -8,7 +8,7 @@ import type { UseFloatingElementOptions } from '@/src/hooks/useFloatingElement'
 import { useFloatingElement } from '@/src/hooks/useFloatingElement'
 import { Button } from '@/src/components/user-interaction/Button'
 import { ExpansionIcon } from '@/src/components/display-and-visualization/ExpansionIcon'
-import { useZIndexRegister } from '@/src/hooks/useZIndexRegister'
+import { useOverlayRegistry } from '@/src/hooks/useOverlayRegistry'
 
 type SimpleNavigationItem = {
   label: ReactNode,
@@ -63,7 +63,7 @@ const NavigationItemWithSubItem = ({
     }
   }, [])
 
-  const zIndex = useZIndexRegister(isOpen)
+  const { zIndex } = useOverlayRegistry()
   // TODO at arrow key navigation
 
   return (
@@ -159,7 +159,7 @@ export const Navigation = ({ ...props }: NavigationProps) => {
     menuRef.current?.focus()
   }, [isMobileOpen])
 
-  const zIndex = useZIndexRegister(isMobileOpen)
+  const { zIndex } = useOverlayRegistry({ isActive: isMobileOpen })
 
   return (
     <nav>

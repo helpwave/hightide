@@ -87,8 +87,6 @@ export function TabSwitcher({ children }: TabSwitcherProps) {
     setPortalState(state)
   }, [])
 
-  console.log('state', state)
-
   return (
     <TabContext.Provider
       value={{
@@ -229,8 +227,6 @@ export function TabPanel({ label, ...props }: TabProps) {
   }, [id, label, labelId])
 
   const isActive = activeId === id
-
-  console.log(id, activeId, isActive)
 
   const content = (
     <div

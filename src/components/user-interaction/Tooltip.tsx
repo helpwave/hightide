@@ -1,13 +1,13 @@
 import type { CSSProperties, PropsWithChildren, ReactNode } from 'react'
 import { useMemo, useRef, useState } from 'react'
 import { clsx } from 'clsx'
-import { useZIndexRegister } from '@/src/hooks/useZIndexRegister'
 import { Visibility } from '@/src/components/layout/Visibility'
 import { useFloatingElement } from '@/src/hooks/useFloatingElement'
 import { createPortal } from 'react-dom'
 import type { TooltipConfig } from '@/src/contexts/HightideConfigContext'
 import { useHightideConfig } from '@/src/contexts/HightideConfigContext'
 import { DataAttributesUtil } from '@/src/utils/dataAttribute'
+import { useOverlayRegistry } from '@/src/hooks/useOverlayRegistry'
 
 type TooltipState = {
   isShown: boolean,
@@ -112,8 +112,8 @@ export const Tooltip = ({
     verticalAlignment: position === 'top' ? 'beforeStart' : position === 'bottom' ? 'afterEnd' : 'center',
   })
 
-  const zIndex = useZIndexRegister(isActive)
-  const zIndexTriangle = useZIndexRegister(isActive)
+  const { zIndex } = useOverlayRegistry({ isActive })
+  const { zIndex: zIndexTriangle } = useOverlayRegistry({ isActive })
 
   return (
     <div

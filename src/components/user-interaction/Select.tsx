@@ -23,7 +23,7 @@ import type { UseFloatingElementOptions } from '@/src/hooks/useFloatingElement'
 import { useFloatingElement } from '@/src/hooks/useFloatingElement'
 import { createPortal } from 'react-dom'
 import { useOverwritableState } from '@/src/hooks/useOverwritableState'
-import { useZIndexRegister } from '@/src/hooks/useZIndexRegister'
+import { useOverlayRegistry } from '@/src/hooks/useOverlayRegistry'
 
 //
 // Context
@@ -617,7 +617,7 @@ export const SelectContent = forwardRef<HTMLUListElement, SelectContentProps>(
     })
 
 
-    const zIndex = useZIndexRegister(state.isOpen)
+    const { zIndex } = useOverlayRegistry({ isActive: state.isOpen })
 
     return createPortal(
       <div

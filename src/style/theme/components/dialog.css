@@ -1,0 +1,33 @@
+@layer components {
+  [data-name="dialog-container"] {
+    @apply fixed inset-0 h-screen w-screen;
+  }
+
+  [data-name="dialog-background"] {
+    @apply fixed inset-0 h-screen w-screen bg-transparent transition-colors;
+    &[data-state="opening"],
+    &[data-state="opened"] {
+      @apply duration-200 bg-overlay-shadow;
+    }
+    &[data-state="closing"] {
+      @apply duration-100;
+    }
+  }
+
+  [data-name="dialog-content"] {
+    @apply flex-col-2 p-4 bg-overlay-background text-overlay-text rounded-xl shadow-hw-bottom max-w-[calc(100vw_-_2rem)] max-h-[calc(100vh_-_2rem)];
+    &[data-state="opening"],
+    &[data-state="opened"] {
+      @apply animate-pop-in;
+    }
+    &[data-state="closing"] {
+      @apply animate-pop-out;
+    }
+    &[data-position="top"] {
+      @apply fixed top-8 left-1/2 -translate-x-1/2;
+    }
+    &[data-position="center"] {
+      @apply fixed left-1/2 -translate-x-1/2 top-1/2 -translate-y-1/2;
+    }
+  }
+}

@@ -1,16 +1,18 @@
 'use client'
 
 import type { HTMLAttributes, PropsWithChildren, ReactNode } from 'react'
-import { useId } from 'react'
-import { useEffect, useRef, useState } from 'react'
-import clsx from 'clsx'
+import { useId, useMemo } from 'react'
+import { useRef }  from 'react'
 import { X } from 'lucide-react'
 import { useHightideTranslation } from '@/src/i18n/useHightideTranslation'
 import { Button } from '@/src/components/user-interaction/Button'
 import { useFocusTrap } from '@/src/hooks/focus/useFocusTrap'
 import { useLogOnce } from '@/src/hooks/useLogOnce'
 import { createPortal } from 'react-dom'
-import { useZIndexRegister } from '@/src/hooks/useZIndexRegister'
+import { useOverlayRegistry } from '@/src/hooks/useOverlayRegistry'
+import { Visibility } from '../Visibility'
+import { useTransitionState } from '@/src/hooks/useTransitionState'
+import { DataAttributesUtil } from '@/src/utils/dataAttribute'
 
 export type DialogPosition = 'top' | 'center' | 'none'
 
@@ -44,26 +46,17 @@ export const Dialog = ({
   onClose,
   backgroundClassName,
   position = 'center',
-  isAnimated = true,
   containerClassName,
   ...props
 }: PropsWithChildren<DialogProps>) => {
   const translation = useHightideTranslation()
-  const [visible, setVisible] = useState(isOpen)
   const generatedId = useId()
-  const id = props.id ?? generatedId
-
+  const ids = useMemo(() => ({
+    container: `dialog-container-${generatedId}` ,
+    background: `dialog-background-${generatedId}` ,
+    content: props.id ?? `dialog-content-${generatedId}`
+  }), [generatedId, props.id])
   const ref = useRef<HTMLDivElement>(null)
-
-  useEffect(() => {
-    if (isOpen) {
-      setVisible(true)
-    } else {
-      if (!isAnimated) {
-        setVisible(false)
-      }
-    }
-  }, [isAnimated, isOpen])
 
   const onCloseWrapper = () => {
     if (!isModal) return
@@ -72,82 +65,68 @@ export const Dialog = ({
 
   useLogOnce('Dialog: onClose should be defined for modal dialogs', isModal && !onClose)
 
+  const { isVisible, transitionState, callbacks } = useTransitionState({ isOpen })
+
   useFocusTrap({
     container: ref,
-    active: visible,
+    active: isVisible,
     focusFirst: true,
   })
 
-  const zIndex = useZIndexRegister(isOpen)
+  const { zIndex } = useOverlayRegistry({
+    isActive: isVisible,
+  })
 
-  const positionMap: Record<DialogPosition, string> = {
-    top: 'fixed top-8 left-1/2 -translate-x-1/2',
-    center: 'fixed left-1/2 -translate-x-1/2 top-1/2 -translate-y-1/2',
-    none: ''
-  }
-  const positionStyle = positionMap[position]
-
-  if (!visible) return
+  if (!isVisible) return
 
   return createPortal(
     <div
-      id={`dialog-container-${id}`}
-      className={clsx('fixed inset-0 h-screen w-screen', containerClassName)}
+      id={ids.container}
+
+      data-name="dialog-container"
+
+      className={containerClassName}
       style={{ zIndex }}
     >
       <div
-        id={`dialog-background-${id}`}
-        hidden={!visible}
-        className={clsx(
-          'fixed inset-0 h-screen w-screen bg-overlay-shadow',
-          {
-            'motion-safe:animate-fade-in': isOpen,
-            'motion-safe:animate-fade-out': !isOpen,
-          },
-          backgroundClassName
-        )}
-        onAnimationEnd={() => {
-          if (!isOpen) {
-            setVisible(false)
-          }
-        }}
+        id={ids.background}
+
         onClick={onCloseWrapper}
+
+        data-name="dialog-background"
+        data-state={transitionState}
+
         aria-hidden={true}
+
+        className={backgroundClassName}
       />
       <div
         {...props}
-        id={`dialog-${id}`}
+        id={ids.content}
         ref={ref}
-        hidden={!visible}
+
         onKeyDown={event => {
           if (event.key === 'Escape') {
             onCloseWrapper()
           }
         }}
-        onAnimationEnd={() => {
-          if (!isOpen) {
-            setVisible(false)
-          }
-        }}
-        className={clsx(
-          'flex-col-2 p-4 bg-overlay-background text-overlay-text rounded-xl shadow-hw-bottom max-w-[calc(100vw_-_2rem)] max-h-[calc(100vh_-_2rem)]',
-          {
-            'motion-safe:animate-pop-in': isOpen,
-            'motion-safe:animate-pop-out': !isOpen,
-          },
-          positionStyle,
-          props.className
-        )}
+        {...callbacks}
+
+        data-name={DataAttributesUtil.name('dialog-content',props)}
+        data-state={transitionState}
+        data-position={position}
+
+        className={props.className}
       >
         <div className="typography-title-lg mr-8">
           {titleElement}
         </div>
-        {description && (
+        <Visibility isVisible={!!description}>
           <div className="text-description">
             {description}
           </div>
-        )}
-        {isModal && (
+        </Visibility>
+        <Visibility isVisible={isModal}>
           <div
             className="absolute top-0 right-0"
             style={{
@@ -165,7 +144,7 @@ export const Dialog = ({
               <X/>
             </Button>
           </div>
-        )}
+        </Visibility>
         {children}
       </div>
     </div>

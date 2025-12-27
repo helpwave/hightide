@@ -12,6 +12,7 @@ and adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 - `HightideConfigContext` for storing Look and Feel Variables
 - `HightideProvider` to bundle all hightide contexts in one provider
 - Added Code panel to storybook
+- `Drawer` component that alows for stacking
 
 ### Changed
 
@@ -21,6 +22,7 @@ and adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 - Component styling to be CSS and data-attribute based instead of relying on in component classNames
 - Moved `ExpansionIcon` out of `Expandable` file and into its own
 - Changed internal folder structure
+- Replaced `ZIndexRegistry` with `OverlayRegistry` to allow for saving more information about overlays then just their zIndex
 
 ### Fixed
 
