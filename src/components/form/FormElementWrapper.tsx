@@ -2,8 +2,8 @@ import type { HTMLAttributes, ReactNode } from 'react'
 import { useId } from 'react'
 import { clsx } from 'clsx'
 import type { BagFunction } from '@/src/utils/bagFunctions'
-import type { LabelProps } from '@/src/components/user-action/Label'
-import { Label } from '@/src/components/user-action/Label'
+import type { LabelProps } from '@/src/components/display-and-visualization/Label'
+import { Label } from '@/src/components/display-and-visualization/Label'
 import { useOverwritableState } from '@/src/hooks/useOverwritableState'
 
 type ErrorShowBehaviour = 'always' | 'whenTouched'
@@ -39,21 +39,21 @@ export type FormElementWrapperProps = {
 }
 
 export const FormElementWrapper = ({
-                                     children,
-                                     id,
-                                     required = false,
-                                     disabled = false,
-                                     isShowingError: initialIsShowingError = false,
-                                     onIsShowingError,
-                                     label,
-                                     labelProps,
-                                     errorShowBehaviour = 'whenTouched',
-                                     error,
-                                     errorProps,
-                                     description,
-                                     descriptionProps,
-                                     containerClassName,
-                                   }: FormElementWrapperProps) => {
+  children,
+  id,
+  required = false,
+  disabled = false,
+  isShowingError: initialIsShowingError = false,
+  onIsShowingError,
+  label,
+  labelProps,
+  errorShowBehaviour = 'whenTouched',
+  error,
+  errorProps,
+  description,
+  descriptionProps,
+  containerClassName,
+}: FormElementWrapperProps) => {
   const [touched, setTouched] = useOverwritableState(initialIsShowingError, onIsShowingError)
   const generatedId = useId()
   const usedId = id ?? generatedId

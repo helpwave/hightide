@@ -49,13 +49,15 @@
   --color-on-secondary:  var(--color-white);
   --color-secondary-hover:  var(--color-blue-600);
 
-  --color-neutral: var(--color-gray-50);
-  --color-on-neutral: var(--color-text-primary);
-  --color-neutral-hover: var(--color-gray-100);
-  --color-neutral-text: var(--color-text-primary);
-  --color-neutral-text-hover: var(--color-text-primary);
-  --color-neutral-outline: var(--color-text-primary);
-  --color-neutral-outline-hover: var(--color-gray-700);
+  --color-neutral: var(--color-gray-150);
+  --color-on-neutral: var(--color-black);
+  --color-neutral-hover: var(--color-gray-200);
+  --color-neutral-text: var(--color-black);
+  --color-neutral-text-hover: var(--color-gray-500);
+  --color-neutral-outline: var(--color-black);
+  --color-neutral-outline-hover: var(--color-gray-600);
+  --color-neutral-tonal-text: var(--color-black);
+  --color-neutral-tonal-background: var(--color-gray-300);
 
   --color-highlight:  var(--color-blue-500);
 }
@@ -92,8 +94,13 @@
     /* Other */
     --color-primary: var(--color-purple-400);
 
-    --color-neutral: var(--color-gray-700);
+    --color-neutral: var(--color-gray-750);
     --color-neutral-hover: var(--color-gray-600);
-    --color-neutral-outline-hover: var(--color-gray-200);
+    --color-on-neutral: var(--color-white);
+    --color-neutral-text: var(--color-white);
+    --color-neutral-outline: var(--color-gray-200);
+    --color-neutral-outline-hover: var(--color-gray-400);
+    --color-neutral-tonal-text: var(--color-white);
+    --color-neutral-tonal-background: var(--color-gray-400);
   }
 }

@@ -3,8 +3,8 @@ import config from '@helpwave/eslint-config'
 
 export default [
   {
-  ignores: ['dist/**'],
-},
+    ignores: ['dist/**'],
+  },
   ...config.recommended,
   ...storybook.configs['flat/recommended'],
   {
@@ -15,5 +15,11 @@ export default [
   },
   {
     ignores: ['src/i18n/translations.ts'],
+  },
+  {
+    // TODO add this to helpwave eslint config
+    rules: {
+      indent: ['warn', 2]
+    }
   }
 ]

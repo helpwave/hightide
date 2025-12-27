@@ -1,4 +1,4 @@
-import { useLocale } from '@/src/i18n/LocaleProvider'
+import { useLocale } from '@/src/contexts/LocaleContext'
 import type {
   PartialTranslationExtension,
   Translation,
