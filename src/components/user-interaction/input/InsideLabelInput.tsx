@@ -63,13 +63,13 @@ export const InsideLabelInputUncontrolled = ({
   value: initialValue,
   ...props
 }: InsideLabelInputProps) => {
-  const [value, setValue] = useOverwritableState(initialValue, props.onChangeText)
+  const [value, setValue] = useOverwritableState(initialValue, props.onValueChange)
 
   return (
     <InsideLabelInput
       {...props}
       value={value}
-      onChangeText={setValue}
+      onValueChange={setValue}
     />
   )
 }

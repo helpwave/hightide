@@ -37,12 +37,11 @@
     @apply px-3 py-2 rounded-md h-10 input-element;
   }
 
-  [data-name="textarea"]:not(.default-style-none) {
-    @apply w-full h-32 py-2 px-3 rounded-md resize-none overflow-y-scroll input-element;
-  }
-
   [data-name="select-button"]:not(.default-style-none) {
     @apply flex-row-2 items-center justify-between rounded-md px-3 py-2 input-element;
+    &:not([data-disabled]) {
+      @apply hover:cursor-pointer;
+    }
   }
 
   [data-name="select-button-chips"]:not(.default-style-none) {

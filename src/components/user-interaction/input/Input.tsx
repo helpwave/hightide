@@ -4,6 +4,8 @@ import type { UseDelayOptionsResolved } from '@/src/hooks/useDelay'
 import { useDelay  } from '@/src/hooks/useDelay'
 import { useFocusManagement } from '@/src/hooks/focus/useFocusManagement'
 import { useOverwritableState } from '@/src/hooks/useOverwritableState'
+import type { FormElementWrapperBagProps } from '../../form/FormElementWrapper'
+import { DataAttributesUtil } from '@/src/utils/dataAttribute'
 
 export type EditCompleteOptionsResolved = {
   onBlur: boolean,
@@ -16,16 +18,12 @@ export type EditCompleteOptions = Partial<EditCompleteOptionsResolved>
 const defaultEditCompleteOptions: EditCompleteOptionsResolved = {
   allowEnterComplete: false,
   onBlur: true,
-  afterDelay: true,
+  afterDelay: false,
   delay: 2500
 }
 
-export type InputProps = InputHTMLAttributes<HTMLInputElement> & {
-  invalid?: boolean,
-  onChangeText?: (text: string) => void,
-  onEditCompleted?: (text: string) => void,
-  editCompleteOptions?: EditCompleteOptions,
-}
+export type InputProps = Omit<InputHTMLAttributes<HTMLInputElement>, 'value'> &
+  Partial<FormElementWrapperBagProps<string>> & { editCompleteOptions?: EditCompleteOptions }
 
 /**
  * A Component for inputting text or other information
@@ -34,9 +32,8 @@ export type InputProps = InputHTMLAttributes<HTMLInputElement> & {
  */
 export const Input = forwardRef<HTMLInputElement, InputProps>(function Input({
   value,
-  onChange,
-  onChangeText,
-  onEditCompleted,
+  onValueChange,
+  onEditComplete,
   editCompleteOptions,
   disabled = false,
   invalid = false,
@@ -73,31 +70,31 @@ export const Input = forwardRef<HTMLInputElement, InputProps>(function Input({
         if (event.key === 'Enter' && !event.shiftKey) {
           event.preventDefault()
           innerRef.current?.blur()
-          onEditCompleted?.((event.target as HTMLInputElement).value)
+          onEditComplete?.((event.target as HTMLInputElement).value)
           focusNext()
         }
       }}
       onBlur={event => {
         props.onBlur?.(event)
         if (allowEditCompleteOnBlur) {
-          onEditCompleted?.(event.target.value)
+          onEditComplete?.(event.target.value)
           clearTimer()
         }
       }}
       onChange={event => {
-        onChange?.(event)
+        props.onChange?.(event)
         const value = event.target.value
         restartTimer(() => {
           innerRef.current?.blur()
-          onEditCompleted?.(value)
+          onEditComplete?.(value)
         })
-        onChangeText?.(value)
+        onValueChange?.(value)
       }}
 
-      data-name={props['data-name'] ?? 'input'}
-      data-value={value ? '' : undefined}
-      data-disabled={disabled ? '' : undefined}
-      data-invalid={invalid ? '' : undefined}
+      data-name={DataAttributesUtil.name('input', props)}
+      data-value={DataAttributesUtil.bool(!!value)}
+      data-disabled={DataAttributesUtil.bool(disabled)}
+      data-invalid={DataAttributesUtil.bool(invalid)}
 
       aria-invalid={props['aria-invalid'] ?? invalid}
       aria-disabled={props['aria-disabled'] ?? disabled}
@@ -112,18 +109,18 @@ export const Input = forwardRef<HTMLInputElement, InputProps>(function Input({
  * Its state is managed by the component itself
  */
 export const InputUncontrolled = forwardRef<HTMLInputElement, InputProps>(function InputUncontrolled({
-  value = '',
-  onChangeText,
+  value,
+  onValueChange,
   ...props
 }, ref) {
-  const [usedValue, setUsedValue] = useOverwritableState(value, onChangeText)
+  const [usedValue, setUsedValue] = useOverwritableState(value, onValueChange)
 
   return (
     <Input
       {...props}
       ref={ref}
       value={usedValue}
-      onChangeText={setUsedValue}
+      onValueChange={setUsedValue}
     />
   )
 })

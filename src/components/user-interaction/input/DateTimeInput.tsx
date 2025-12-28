@@ -15,10 +15,10 @@ import { Visibility } from '@/src/components/layout/Visibility'
 import { DateUtils } from '@/src/utils/date'
 import { useOverlayRegistry } from '@/src/hooks/useOverlayRegistry'
 
-export type DateTimeInputProps = Omit<InputProps, 'onEditCompleted'> & {
+export type DateTimeInputProps = Omit<InputProps, 'onEditComplete'> & {
   date?: Date,
   onValueChange?: (date: Date) => void,
-  onEditCompleted?: (date: Date) => void,
+  onEditComplete?: (date: Date) => void,
   onRemove?: () => void,
   mode?: 'date' | 'dateTime',
   containerProps?: HTMLAttributes<HTMLDivElement>,
@@ -28,7 +28,7 @@ export type DateTimeInputProps = Omit<InputProps, 'onEditCompleted'> & {
 export const DateTimeInput = ({
   date,
   onValueChange,
-  onEditCompleted,
+  onEditComplete,
   onRemove,
   containerProps,
   mode = 'date',
@@ -117,7 +117,7 @@ export const DateTimeInput = ({
             <Button
               size="md"
               onClick={() => {
-                onEditCompleted?.(date)
+                onEditComplete?.(date)
                 setIsOpen(false)
               }}
             >

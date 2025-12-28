@@ -92,6 +92,7 @@ export default function CarouselTabs({
               }
             )}
 
+            type="button"
             role="tab"
             tabIndex={isSelected ? 0 : -1}
             aria-label={translation('showSlide', { index: (index + 1) })}

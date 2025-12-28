@@ -1,5 +1,6 @@
 import clsx from 'clsx'
 import { useHightideTranslation } from '@/src/i18n/useHightideTranslation'
+import { Button } from '../user-interaction/Button'
 
 type TextImageColor = 'primary' | 'secondary' | 'dark'
 
@@ -62,7 +63,13 @@ export const TextImage = ({
         </div>
         {onShowMoreClicked && (
           <div className="flex-row-2 mt-2 underline">
-            <button onClick={onShowMoreClicked}>{translation('showMore')}</button>
+            <Button
+              color="neutral"
+              coloringStyle="text"
+              onClick={onShowMoreClicked}
+            >
+              {translation('showMore')}
+            </Button>
           </div>
         )}
       </div>

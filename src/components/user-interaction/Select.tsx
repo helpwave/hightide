@@ -436,6 +436,7 @@ export const SelectButton = forwardRef<HTMLButtonElement, SelectButtonProps>(fun
       ref={innerRef}
       id={state.id} // TODO allow for a custom id here
       disabled={disabled}
+      type="button"
 
       onClick={(event) => {
         props.onClick?.(event)

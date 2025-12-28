@@ -71,6 +71,7 @@ const NavigationItemWithSubItem = ({
       <button
         id={'navigation-' + id}
         ref={triggerRef}
+        type="button"
 
         onClick={() => {
           setOpen(!isOpen)

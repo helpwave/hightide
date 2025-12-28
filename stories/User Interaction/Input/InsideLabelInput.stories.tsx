@@ -19,7 +19,7 @@ export const insideLabelInput: Story = {
       </span>
     ),
     onChange: action('onChange'),
-    onChangeText: action('onChangeText'),
-    onEditCompleted: action('onEditCompleted'),
+    onValueChange: action('onValueChange'),
+    onEditComplete: action('onEditComplete'),
   },
 }

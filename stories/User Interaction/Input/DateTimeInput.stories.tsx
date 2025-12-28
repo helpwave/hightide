@@ -17,6 +17,6 @@ export const dateTimeInput: Story = {
     mode: 'date',
     onValueChange: action('onValueChange'),
     onRemove: action('onRemove'),
-    onEditCompleted: action('onEditCompleted'),
+    onEditComplete: action('onEditComplete'),
   },
 }

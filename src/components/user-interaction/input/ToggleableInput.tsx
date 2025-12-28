@@ -39,8 +39,8 @@ export const ToggleableInput = forwardRef<HTMLInputElement, ToggleableInputProps
         {...props}
         ref={innerRef}
         value={value}
-        onEditCompleted={(text) => {
-          props.onEditCompleted?.(text)
+        onEditComplete={(text) => {
+          props.onEditComplete?.(text)
           setIsEditing(false)
         }}
         onFocus={event => {
@@ -74,15 +74,15 @@ export const ToggleableInput = forwardRef<HTMLInputElement, ToggleableInputProps
 
 export const ToggleableInputUncontrolled = ({
   value: initialValue,
-  onChangeText,
+  onValueChange,
   ...restProps
 }: ToggleableInputProps) => {
-  const [value, setValue] = useOverwritableState(initialValue, onChangeText)
+  const [value, setValue] = useOverwritableState(initialValue, onValueChange)
 
   return (
     <ToggleableInput
       value={value}
-      onChangeText={setValue}
+      onValueChange={setValue}
       {...restProps}
     />
   )

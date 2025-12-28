@@ -13,7 +13,7 @@ export const togglableInput: Story = {
   args: {
     value: 'Text',
     onChange: action('onChange'),
-    onChangeText: action('onChangeText'),
-    onEditCompleted: action('onEditCompleted'),
+    onValueChange: action('onValueChange'),
+    onEditComplete: action('onEditComplete'),
   },
 }

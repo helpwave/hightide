@@ -41,14 +41,14 @@ export const TextProperty = ({
           value={value ?? ''}
           readOnly={readOnly}
           placeholder={`${translation('text')}...`}
-          onChangeText={(value) => {
+          onValueChange={(value) => {
             if (!value) {
               onRemove?.()
             } else {
               onChange?.(value)
             }
           }}
-          onEditCompleted={(value) => {
+          onEditComplete={(value) => {
             if (!value) {
               onRemove?.()
             } else {

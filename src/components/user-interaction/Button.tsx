@@ -64,6 +64,8 @@ export const Button = forwardRef<HTMLButtonElement, ButtonProps>(function SolidB
         props?.onClick(event)
       }}
 
+      type={props['type'] ?? 'button'}
+
       data-name={props['data-name'] ?? 'button'}
       data-disabled={disabled ? '': undefined}
       data-size={size ?? undefined}

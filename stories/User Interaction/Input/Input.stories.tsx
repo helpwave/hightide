@@ -22,7 +22,7 @@ export const input: Story = {
       delay: 2500
     },
     onChange: action('onChange'),
-    onChangeText: action('onChangeText'),
-    onEditCompleted: action('onEditCompleted'),
+    onValueChange: action('onValueChange'),
+    onEditComplete: action('onEditComplete'),
   },
 }

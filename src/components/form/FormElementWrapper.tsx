@@ -1,93 +1,86 @@
-import type { HTMLAttributes, ReactNode } from 'react'
-import { useId } from 'react'
+import type { HTMLAttributes, ReactElement, ReactNode } from 'react'
+import React, { cloneElement, isValidElement, useId, useMemo } from 'react'
 import { clsx } from 'clsx'
 import type { BagFunction } from '@/src/utils/bagFunctions'
 import type { LabelProps } from '@/src/components/display-and-visualization/Label'
 import { Label } from '@/src/components/display-and-visualization/Label'
-import { useOverwritableState } from '@/src/hooks/useOverwritableState'
+import type { FormInputProps } from './useForm'
 
-type ErrorShowBehaviour = 'always' | 'whenTouched'
+type FormElementHTMLProperties = Pick<HTMLAttributes<HTMLElement>, 'id' | 'aria-labelledby' | 'aria-describedby' | 'aria-disabled' | 'aria-readonly' | 'aria-invalid' | 'aria-errormessage' | 'aria-required'>
 
-type FormElementHTMLProperties = Pick<HTMLAttributes<HTMLElement>, 'id' | 'aria-labelledby' | 'aria-describedby' | 'aria-disabled' | 'aria-invalid' | 'aria-errormessage' | 'aria-required'>
-
-export type FormElementStateProperties = {
+export type FormElementWrapperBagProps<T> = FormElementHTMLProperties & Omit<FormInputProps<T>, 'invalidDescription'> & {
   invalid: boolean,
-  disabled: boolean,
 }
 
-type FormElementWrapperBag = FormElementHTMLProperties & FormElementStateProperties & {
+export type FormElementWrapperBag<T> =  {
+  props: FormElementWrapperBagProps<T>,
   required: boolean,
-  isShowingError: boolean,
-  setIsShowingError: (isShowingError?: boolean) => void,
 }
 
-export type FormElementWrapperProps = {
-  children: BagFunction<FormElementWrapperBag>,
+export type FormElementWrapperProps<T> = Partial<FormInputProps<T>> & {
+  children: BagFunction<FormElementWrapperBag<T>> | ReactElement<Partial<FormInputProps<T>>>,
   id?: string,
   required?: boolean,
-  disabled?: boolean,
-  isShowingError?: boolean,
-  onIsShowingError?: (isTouched: boolean) => void,
   label?: ReactNode,
   labelProps?: Omit<LabelProps, 'children'>,
-  errorShowBehaviour?: ErrorShowBehaviour,
-  error?: ReactNode,
-  errorProps?: Omit<HTMLAttributes<HTMLParagraphElement>, 'children'>,
+  invalidDescription?: ReactNode,
+  invalidDescriptionProps?: Omit<HTMLAttributes<HTMLParagraphElement>, 'children'>,
   description?: ReactNode,
   descriptionProps?: Omit<HTMLAttributes<HTMLParagraphElement>, 'children'>,
   containerClassName?: string,
 }
 
-export const FormElementWrapper = ({
+export const FormElementWrapper = <T,>({
   children,
   id,
+  value,
+  onValueChange,
+  onEditComplete,
   required = false,
   disabled = false,
-  isShowingError: initialIsShowingError = false,
-  onIsShowingError,
+  readOnly: readonly = false,
   label,
   labelProps,
-  errorShowBehaviour = 'whenTouched',
-  error,
-  errorProps,
+  invalidDescription,
+  invalidDescriptionProps,
   description,
   descriptionProps,
   containerClassName,
-}: FormElementWrapperProps) => {
-  const [touched, setTouched] = useOverwritableState(initialIsShowingError, onIsShowingError)
+}: FormElementWrapperProps<T>) => {
   const generatedId = useId()
-  const usedId = id ?? generatedId
-
-  const errorId = `${usedId}-description`
-  const labelId = `${usedId}-label`
-  const descriptionId = `${usedId}-description`
+  const ids = useMemo(() => ({
+    input: id ?? generatedId,
+    error: `form-element-error-${generatedId}`,
+    label: `form-element-label-${generatedId}`,
+    description: `form-element-description-${generatedId}`
+  }), [generatedId, id])
 
   const describedBy: string = [
-    description ? descriptionId : undefined,
-    error ? errorId : undefined,
+    description ? ids.description : undefined,
+    invalidDescription ? ids.error : undefined,
   ].filter(Boolean).join(' ')
 
-  const labelledBy = label ? `${usedId}-label` : undefined
+  const labelledBy = label ? ids.label : undefined
+  const invalid = !!invalidDescription
 
-  const isShowingError = errorShowBehaviour === 'always' || (touched)
-
-  const bag: FormElementWrapperBag = {
-    'isShowingError': touched,
-    'setIsShowingError': (isTouched) => {
-      const newValue = isTouched ?? true
-      setTouched(newValue)
-      onIsShowingError?.(isTouched)
+  const bag: FormElementWrapperBag<T> = {
+    props: {
+      'id': ids.input,
+      disabled,
+      invalid,
+      'readOnly': readonly,
+      value,
+      onValueChange,
+      onEditComplete,
+      'aria-required': required,
+      'aria-disabled': disabled,
+      'aria-readonly': readonly,
+      'aria-describedby': describedBy,
+      'aria-labelledby': labelledBy,
+      'aria-invalid': invalid,
+      'aria-errormessage': invalid ? ids.error : undefined,
     },
-    'disabled': disabled,
-    'invalid': !!error && isShowingError,
-    'required': required,
-    'id': usedId,
-    'aria-required': required,
-    'aria-disabled': disabled,
-    'aria-describedby': describedBy,
-    'aria-labelledby': labelledBy,
-    'aria-invalid': !!error,
-    'aria-errormessage': error ? errorId : undefined,
+    required,
   }
 
   return (
@@ -95,8 +88,8 @@ export const FormElementWrapper = ({
       {label && (
         <Label
           {...labelProps}
-          id={labelId}
-          htmlFor={usedId}
+          id={ids.label}
+          htmlFor={ids.input}
           size="lg"
           className={clsx('flex-row-1 items-start', labelProps?.className)}
         >
@@ -107,23 +100,33 @@ export const FormElementWrapper = ({
       {description && (
         <p
           {...descriptionProps}
-          id={descriptionId}
+          id={ids.description}
           className={clsx('text-description text-sm', descriptionProps?.className)}
         >
           {description}
         </p>
       )}
-      {children(bag)}
-      {error && isShowingError && (
+      {typeof children === 'function'
+        ? children(bag)
+        : isValidElement(children) ?
+          React.Children.map(children,  element => cloneElement(element, { ...bag.props }))
+          : children
+      }
+      {invalid && (
         <p
-          {...errorProps}
-          id={errorId}
-          className={clsx('absolute top-[calc(100%_+_0.25rem)] left-0 text-negative text-sm font-medium', errorProps?.className)}
+          {...invalidDescriptionProps}
+          id={ids.description}
+
           role="alert"
-          aria-hidden={!error}
+          aria-hidden={!invalid}
           aria-live="polite"
+
+          className={clsx(
+            'absolute top-[calc(100%_+_0.25rem)] left-0 text-negative text-sm font-medium',
+            invalidDescriptionProps?.className
+          )}
         >
-          {error}
+          {invalidDescription}
         </p>
       )}
     </div>

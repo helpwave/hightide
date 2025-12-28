@@ -5,15 +5,11 @@ import type { LabelProps } from '@/src/components/display-and-visualization/Labe
 import { Label } from '@/src/components/display-and-visualization/Label'
 import { useDelay, type UseDelayOptions } from '@/src/hooks/useDelay'
 import { useOverwritableState } from '@/src/hooks/useOverwritableState'
+import type { FormElementWrapperBagProps } from '../form/FormElementWrapper'
+import { DataAttributesUtil } from '@/src/utils/dataAttribute'
 
-export type TextareaProps = Omit<TextareaHTMLAttributes<HTMLTextAreaElement>, 'value'> & {
-  /** Inside the area */
-  value?: string,
-  invalid?: boolean,
-  onChangeText?: (text: string) => void,
-  onEditCompleted?: (text: string) => void,
-  saveDelayOptions?: UseDelayOptions,
-}
+export type TextareaProps = Omit<TextareaHTMLAttributes<HTMLTextAreaElement>, 'value'> &
+ Partial<FormElementWrapperBagProps<string>> & { saveDelayOptions?: UseDelayOptions }
 
 /**
  * A Textarea component for inputting longer texts
@@ -22,10 +18,8 @@ export type TextareaProps = Omit<TextareaHTMLAttributes<HTMLTextAreaElement>, 'v
  */
 export const Textarea = forwardRef<HTMLTextAreaElement, TextareaProps>(function Textarea({
   id,
-  onChange,
-  onChangeText,
-  onBlur,
-  onEditCompleted,
+  onValueChange,
+  onEditComplete,
   saveDelayOptions,
   invalid = false,
   disabled = false,
@@ -33,8 +27,8 @@ export const Textarea = forwardRef<HTMLTextAreaElement, TextareaProps>(function 
 }, ref) {
   const { restartTimer, clearTimer } = useDelay(saveDelayOptions)
 
-  const onEditCompletedWrapper = (text: string) => {
-    onEditCompleted?.(text)
+  const onEditCompleteWrapper = (text: string) => {
+    onEditComplete?.(text)
     clearTimer()
   }
 
@@ -48,20 +42,20 @@ export const Textarea = forwardRef<HTMLTextAreaElement, TextareaProps>(function 
       onChange={(event) => {
         const value = event.target.value
         restartTimer(() => {
-          onEditCompletedWrapper(value)
+          onEditCompleteWrapper(value)
         })
-        onChange?.(event)
-        onChangeText?.(value)
+        props.onChange?.(event)
+        onValueChange?.(value)
       }}
       onBlur={(event) => {
-        onBlur?.(event)
-        onEditCompletedWrapper(event.target.value)
+        props.onBlur?.(event)
+        onEditCompleteWrapper(event.target.value)
       }}
 
-      data-name={props['data-name'] ?? 'textarea'}
-      data-value={props.value ? '' : undefined}
-      data-disabled={disabled ? '' : undefined}
-      data-invalid={invalid ? '' : undefined}
+      data-name={DataAttributesUtil.name('textarea', props)}
+      data-value={DataAttributesUtil.bool(!!props.value)}
+      data-disabled={DataAttributesUtil.bool(disabled)}
+      data-invalid={DataAttributesUtil.bool(invalid)}
     />
   )
 })
@@ -70,17 +64,17 @@ export const Textarea = forwardRef<HTMLTextAreaElement, TextareaProps>(function 
  * A Textarea component that is not controlled by its parent
  */
 export const TextareaUncontrolled = ({
-  value,
-  onChangeText,
+  value: initialValue,
+  onValueChange,
   ...props
 }: TextareaProps) => {
-  const [text, setText] = useOverwritableState<string>(value, onChangeText)
+  const [value, setValue] = useOverwritableState<string>(initialValue, onValueChange)
 
   return (
     <Textarea
       {...props}
-      value={text}
-      onChangeText={setText}
+      value={value}
+      onValueChange={setValue}
     />
   )
 }

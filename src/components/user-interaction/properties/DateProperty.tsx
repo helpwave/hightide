@@ -46,7 +46,7 @@ export const DateProperty = ({
             const dueDate = new Date(value)
             onChange?.(dueDate)
           }}
-          onEditCompleted={(value) => onEditComplete?.(new Date(value))}
+          onEditComplete={(value) => onEditComplete?.(new Date(value))}
         />
       )}
     />

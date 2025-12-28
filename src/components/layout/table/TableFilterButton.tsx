@@ -55,17 +55,17 @@ export const TableFilterButton = <T, >({
               value={(filterValue ?? '') as string}
               autoFocus={true}
               placeholder={translation('text')+'...'}
-              onChangeText={setFilterValue}
+              onValueChange={setFilterValue}
               className="h-10"
             />
           )}
           {filterType === 'range' && (
             <div className="flex-row-2 items-center">
               <Input
-                value={(filterValue as [number, number])?.[0] ?? ''}
+                value={(filterValue as [number, number])?.[0].toString() ?? ''}
                 type="number"
                 placeholder={translation('min')}
-                onChangeText={text => {
+                onValueChange={text => {
                   const num = Number(text)
                   setFilterValue((old: [number, number]) => [num, old?.[1]])
                 }}
@@ -73,10 +73,10 @@ export const TableFilterButton = <T, >({
               />
               <span className="font-bold">-</span>
               <Input
-                value={(filterValue as [number, number])?.[1] ?? ''}
+                value={(filterValue as [number, number])?.[1].toString() ?? ''}
                 type="number"
                 placeholder={translation('max')}
-                onChangeText={text => {
+                onValueChange={text => {
                   const num = Number(text)
                   setFilterValue((old: [number, number]) => [old?.[0], num])
                 }}
@@ -90,7 +90,7 @@ export const TableFilterButton = <T, >({
                 value={(filterValue as [Date, Date])?.[0] ? (filterValue as [Date, Date])?.[0].toISOString().slice(0, 16) : ''}
                 type="datetime-local"
                 placeholder={translation('startDate')}
-                onChangeText={text => {
+                onValueChange={text => {
                   const value = new Date(text)
                   setFilterValue((old: [Date, Date]) => [value, old?.[1]])
                 }}
@@ -100,7 +100,7 @@ export const TableFilterButton = <T, >({
                 value={(filterValue as [Date, Date])?.[1] ? (filterValue as [Date, Date])?.[1].toISOString().slice(0, 16) : ''}
                 type="datetime-local"
                 placeholder={translation('endDate')}
-                onChangeText={text => {
+                onValueChange={text => {
                   const value = new Date(text)
                   setFilterValue((old: [Date, Date]) => [old?.[0], value])
                 }}

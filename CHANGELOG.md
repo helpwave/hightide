@@ -15,6 +15,7 @@ and adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 - `Drawer` component that alows for stacking
 - autoprefixer for CSS backwards compatability
 - `useTransitionState` hook to keep track of transition changes
+- `useForm` hook for form handling
 
 ### Changed
 
@@ -25,6 +26,8 @@ and adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 - Moved `ExpansionIcon` out of `Expandable` file and into its own
 - Changed internal folder structure
 - Replaced `ZIndexRegistry` with `OverlayRegistry` to allow for saving more information about overlays then just their zIndex
+- `FormElementWrapper` to clone children and give them the required props when not using the bag
+- Input elements such as `Input`, `TextArea`, `Select`, etc. now all use `onValueChange` and `onEditComplete` instead of other alternative names
 
 ### Fixed
 

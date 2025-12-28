@@ -44,7 +44,7 @@ export const NumberProperty = ({
             type="number"
             readOnly={readOnly}
             placeholder={`${translation('value')}...`}
-            onChangeText={(value) => {
+            onValueChange={(value) => {
               const numberValue = parseFloat(value)
               if (isNaN(numberValue)) {
                 onRemove()
@@ -52,7 +52,7 @@ export const NumberProperty = ({
                 onChange?.(numberValue)
               }
             }}
-            onEditCompleted={(value) => {
+            onEditComplete={(value) => {
               const numberValue = parseFloat(value)
               if (isNaN(numberValue)) {
                 onRemove()
