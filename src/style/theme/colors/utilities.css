@@ -1,40 +1,40 @@
 @utility primary {
-  @apply reset-coloring-variables;
+  @apply coloring-reset-variables;
   --coloring-color: var(--color-primary);
   --coloring-on-color: var(--color-on-primary);
   --coloring-hover: var(--color-primary-hover);
 }
 
 @utility secondary {
-  @apply reset-coloring-variables;
+  @apply coloring-reset-variables;
   --coloring-color: var(--color-secondary);
   --coloring-on-color: var(--color-on-secondary);
   --coloring-hover: var(--color-secondary-hover);
 }
 
 @utility positive {
-  @apply reset-coloring-variables;
+  @apply coloring-reset-variables;
   --coloring-color: var(--color-positive);
   --coloring-on-color: var(--color-on-positive);
   --coloring-hover: var(--color-positive-hover);
 }
 
 @utility negative {
-  @apply reset-coloring-variables;
+  @apply coloring-reset-variables;
   --coloring-color: var(--color-negative);
   --coloring-on-color: var(--color-on-negative);
   --coloring-hover: var(--color-negative-hover);
 }
 
 @utility warning {
-  @apply reset-coloring-variables;
+  @apply coloring-reset-variables;
   --coloring-color: var(--color-warning);
   --coloring-on-color: var(--color-on-warning);
   --coloring-hover: var(--color-warning-hover);
 }
 
 @utility neutral {
-  @apply reset-coloring-variables;
+  @apply coloring-reset-variables;
   --coloring-color: var(--color-neutral);
   --coloring-on-color: var(--color-on-neutral);
   --coloring-hover: var(--color-neutral-hover);
@@ -49,7 +49,7 @@
 }
 
 @utility disabled {
-  @apply reset-coloring-variables;
+  @apply coloring-reset-variables;
   --coloring-color: var(--color-disabled);
   --coloring-on-color: var(--color-on-disabled);
   --coloring-hover: var(--color-disabled);
@@ -57,12 +57,12 @@
 }
 
 @utility description {
-  @apply reset-coloring-variables;
+  @apply coloring-reset-variables;
   --coloring-color: var(--color-description);
 }
 
 @utility surface {
-  @apply reset-coloring-variables;
+  @apply coloring-reset-variables;
   --coloring-color: var(--color-surface);
   --coloring-on-color: var(--color-on-surface);
   --coloring-hover: var(--color-surface-hover);

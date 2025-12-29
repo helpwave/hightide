@@ -97,7 +97,7 @@ function useSelectContext() {
 //
 // SelectRoot
 //
-export type SelectRootProps = PropsWithChildren<{
+export type SelectRootProps = PropsWithChildren & {
   id?: string,
   value?: string,
   onValueChange?: (value: string) => void,
@@ -108,7 +108,7 @@ export type SelectRootProps = PropsWithChildren<{
   invalid?: boolean,
   isMultiSelect?: boolean,
   iconAppearance?: SelectIconAppearance,
-}>
+}
 
 export const SelectRoot = ({
   children,

@@ -15,7 +15,7 @@ and adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 - `Drawer` component that alows for stacking
 - autoprefixer for CSS backwards compatability
 - `useTransitionState` hook to keep track of transition changes
-- `useForm` hook for form handling
+- `Form` and `FormStore` for form handling
 
 ### Changed
 

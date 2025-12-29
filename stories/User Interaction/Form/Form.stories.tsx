@@ -3,16 +3,17 @@ import { action } from 'storybook/actions'
 import type { StorybookHelperSelectType } from '../../../src/storybook/helper'
 import { StorybookHelper } from '../../../src/storybook/helper'
 import { useTranslatedValidators } from '../../../src/hooks/useValidators'
-import { FormElementWrapper } from '../../../src/components/form/FormElementWrapper'
 import { Input } from '../../../src/components/user-interaction/input/Input'
 import { MultiSelect, Select, SelectOption } from '../../../src/components/user-interaction/Select'
 import { Textarea } from '../../../src/components/user-interaction/Textarea'
 import { Button } from '../../../src/components/user-interaction/Button'
-import type { ValidationBehaviour } from '../../../src/components/form/useForm'
-import { useForm } from '../../../src/components/form/useForm'
+import { Form } from '../../../src/components/form/Form'
 import { Visibility } from '../../../src/components/layout/Visibility'
 import { HelpwaveLogo } from '../../../src/components/branding/HelpwaveLogo'
-import { useEffect, useState } from 'react'
+import { useEffect, useMemo, useState } from 'react'
+import type { FormValidationBehaviour } from '../../../src/components/form/FormStore'
+import { FormFieldWrapper } from '../../../src/components/form/FormFieldWrapper'
+import { FormContext } from '../../../src/components/form/FormContext'
 
 type FormState = 'editing' | 'sending' | 'submitted'
 
@@ -29,7 +30,7 @@ type StoryArgs = {
   onSubmit?: (value: FormValue) => void,
   onValueChange?: (value: FormValue) => void,
   disabled?: boolean,
-  validationBehaviour?: ValidationBehaviour,
+  validationBehaviour?: FormValidationBehaviour,
 }
 
 const meta: Meta<StoryArgs> = {}
@@ -58,160 +59,144 @@ export const basic: Story = {
       }
     }, [state])
 
-    const {
-      values,
-      isInvalid,
-      itemProps,
-      submit,
-      reset,
-      registerRef
-    } = useForm<FormValue>({
-      initialValues: {
-        name: '',
-        email: '',
-        favouriteFruit: undefined,
-        allergies: StorybookHelper.selectValues.filter((_, index) => index === 5),
-        contributions: [],
-        notes: '' ,
-      },
-      validators: {
-        name: (val) => validators.notEmpty(val) ?? validators.length(val, [4, 32]),
-        email: (val) => validators.notEmpty(val) ?? validators.email(val),
-        favouriteFruit: (val) => validators.notEmpty(val),
-        contributions: (val) => validators.notEmpty(val?.length) ?? validators.selection(val, [2, 4]),
-      },
-      validationBehaviour,
-      onSubmit: (finalValues) => {
-        onSubmit?.(finalValues)
-        setState('sending')
-      },
-    })
-
-    // Sync state changes to Storybook actions
-    useEffect(() => onValueChange?.(values), [values, onValueChange])
-
     return (
-      <>
+      <Form<FormValue>
+        initialValues={{
+          name: '',
+          email: '',
+          favouriteFruit: undefined,
+          allergies: StorybookHelper.selectValues.filter((_, index) => index === 5),
+          contributions: [],
+          notes: '' ,
+        }}
+        validators={useMemo(() => ({
+          name: (val) => validators.notEmpty(val) ?? validators.length(val, [4, 32]),
+          email: (val) => validators.notEmpty(val) ?? validators.email(val),
+          favouriteFruit: (val) => validators.notEmpty(val),
+          contributions: (val) => validators.notEmpty(val?.length) ?? validators.selection(val, [2, 4]),
+        }), [validators])}
+        validationBehaviour={validationBehaviour}
+        onFormSubmit={(finalValues) => {
+          setState('sending')
+          onSubmit?.(finalValues)
+        }}
+        onValueChange={onValueChange}
+        className="flex-col-8 w-full max-w-128"
+      >
+        <span className="typography-title-lg">{'Fruit Salad Form'}</span>
+
         <Visibility isVisible={state !== 'submitted'}>
-          <form className="flex-col-8 w-full max-w-128">
-            <span className="typography-title-lg">{'Fruit Salad Form'}</span>
+          <FormFieldWrapper
+            name="name"
+            required={true}
+            description="Your name will not be visible to others."
+            label="Your name"
+          >
+            <Input placeholder="e.g. John Doe" />
+          </FormFieldWrapper>
 
-            <FormElementWrapper
-              required={true}
-              description="Your name will not be visible to others."
-              label="Your name"
-              {...itemProps.name}
-            >
-              <Input
-                ref={registerRef('name')}
-                placeholder="e.g. John Doe"
-              />
-            </FormElementWrapper>
+          <FormFieldWrapper
+            name="email"
+            required={true}
+            description="A email to contact you."
+            label="Email"
+          >
+            <Input placeholder="e.g. test@helpwave.de" />
+          </FormFieldWrapper>
 
-            <FormElementWrapper
-              required={true}
-              description="A email to contact you."
-              label="Email"
-              {...itemProps.email}
-            >
-              <Input
-                ref={registerRef('email')}
-                placeholder="e.g. test@helpwave.de"
-              />
-            </FormElementWrapper>
+          <FormFieldWrapper
+            name="favouriteFruit"
+            required={true}
+            description="We will use this to include as many likes as possible."
+            label="Your favourite Fruit"
+          >
+            <Select>
+              {StorybookHelper.selectValues.map(value => (
+                <SelectOption key={value} value={value}/>
+              ))}
+            </Select>
+          </FormFieldWrapper>
 
-            <FormElementWrapper
-              required={true}
-              description="We will use this to include as many likes as possible."
-              label="Your favourite Fruit"
-              {...itemProps.favouriteFruit}
-            >
-              <Select ref={registerRef('favouriteFruit')}>
-                {StorybookHelper.selectValues.map(value => (
-                  <SelectOption key={value} value={value}/>
-                ))}
-              </Select>
-            </FormElementWrapper>
+          <FormFieldWrapper
+            name="contributions"
+            required={true}
+            description="Please specify which ingredients you are bringing."
+            label="Your contribution"
+          >
+            <MultiSelect>
+              {StorybookHelper.selectValues.map(value => (
+                <SelectOption key={value} value={value}/>
+              ))}
+            </MultiSelect>
+          </FormFieldWrapper>
 
-            <FormElementWrapper
-              required={true}
-              description="Please specify which ingredients you are bringing."
-              label="Your contribution"
-              {...itemProps.contributions}
-            >
-              <MultiSelect
-                ref={registerRef('contributions')}
-              >
-                {StorybookHelper.selectValues.map(value => (
-                  <SelectOption key={value} value={value}/>
-                ))}
-              </MultiSelect>
-            </FormElementWrapper>
+          <FormFieldWrapper
+            name="allergies"
+            description="The ingredients you are allergic to."
+            label="Allergies"
+          >
+            <MultiSelect>
+              {StorybookHelper.selectValues.map(value => (
+                <SelectOption key={value} value={value}/>
+              ))}
+            </MultiSelect>
+          </FormFieldWrapper>
 
-            <FormElementWrapper
-              description="The ingredients you are allergic to."
-              label="Allergies"
-              {...itemProps.allergies}
-            >
-              <MultiSelect ref={registerRef('allergies')}>
-                {StorybookHelper.selectValues.map(value => (
-                  <SelectOption key={value} value={value}/>
-                ))}
-              </MultiSelect>
-            </FormElementWrapper>
+          <FormFieldWrapper
+            name="notes"
+            description="Anything else we should be aware of or you'd like us to know."
+            label="Notes"
+          >
+            <Textarea
+              placeholder="e.g. Please buy the delicious cranberry juice"
+            />
+          </FormFieldWrapper>
 
-            <FormElementWrapper
-              description="Anything else we should be aware of or you'd like us to know."
-              label="Notes"
-              {...itemProps.notes}
-            >
-              <Textarea
-                ref={registerRef('notes')}
-                placeholder="e.g. Please buy the delicious cranberry juice"
-              />
-            </FormElementWrapper>
-
-            <Visibility isVisible={state === 'sending'}>
-              <div className="flex-col-2 items-center">
-                <HelpwaveLogo size="lg" animate="loading" />
-                {'Sending'}
+          <FormContext.Consumer>
+            {(context) => (
+              <div className="flex gap-4 mt-4">
+                <Button
+                  color="negative"
+                  onClick={context?.reset}
+                >
+                  {'Reset'}
+                </Button>
+                <Button
+                  onClick={context?.submit}
+                  disabled={state === 'sending'}
+                >
+                  {'Submit'}
+                </Button>
               </div>
-            </Visibility>
-
-            <Visibility isVisible={isInvalid}>
-              <span className="text-negative">{'There are errors'}</span>
-            </Visibility>
-
-            <div className="flex gap-4 mt-4">
-              <Button
-                color="negative"
-                onClick={reset}
-              >
-                {'Reset'}
-              </Button>
-              <Button
-                onClick={submit}
-                disabled={state === 'sending'}
-              >
-                {'Submit'}
-              </Button>
-            </div>
-          </form>
+            )}
+          </FormContext.Consumer>
         </Visibility>
+
+        <Visibility isVisible={state === 'sending'}>
+          <div className="flex-col-2 items-center">
+            <HelpwaveLogo size="lg" animate="loading" />
+            {'Sending'}
+          </div>
+        </Visibility>
+
         <Visibility isVisible={state === 'submitted'}>
           <span className="text-positive">
             {'Your Submission was sucessful'}
           </span>
-          <Button
-            onClick={() => {
-              reset()
-              setState('editing')
-            }}
-          >
-            {'Next Submission'}
-          </Button>
+          <FormContext.Consumer>
+            {(context) => (
+              <Button
+                onClick={() => {
+                  context?.store.reset()
+                  setState('editing')
+                }}
+              >
+                {'Next Submission'}
+              </Button>
+            )}
+          </FormContext.Consumer>
         </Visibility>
-      </>
+      </Form>
     )
   }
 }

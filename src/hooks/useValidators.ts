@@ -1,5 +1,6 @@
 import { validateEmail } from '@/src/utils/emailValidation'
 import { useHightideTranslation } from '@/src/i18n/useHightideTranslation'
+import { useMemo } from 'react'
 
 export type ValidatorError =
   'notEmpty'
@@ -75,7 +76,7 @@ export const UseValidators = {
 export const useTranslatedValidators = () => {
   const translation = useHightideTranslation()
 
-  return {
+  return useMemo(() => ({
     notEmpty: (value: unknown) => {
       const result = notEmpty(value)
       if (result) {
@@ -104,5 +105,5 @@ export const useTranslatedValidators = () => {
         { min, max })
       }
     }
-  }
+  }), [translation])
 }

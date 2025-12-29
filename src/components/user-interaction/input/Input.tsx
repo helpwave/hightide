@@ -4,7 +4,7 @@ import type { UseDelayOptionsResolved } from '@/src/hooks/useDelay'
 import { useDelay  } from '@/src/hooks/useDelay'
 import { useFocusManagement } from '@/src/hooks/focus/useFocusManagement'
 import { useOverwritableState } from '@/src/hooks/useOverwritableState'
-import type { FormElementWrapperBagProps } from '../../form/FormElementWrapper'
+import type { FormFieldWrapperBagProps } from '../../form/FormFieldWrapper'
 import { DataAttributesUtil } from '@/src/utils/dataAttribute'
 
 export type EditCompleteOptionsResolved = {
@@ -23,7 +23,7 @@ const defaultEditCompleteOptions: EditCompleteOptionsResolved = {
 }
 
 export type InputProps = Omit<InputHTMLAttributes<HTMLInputElement>, 'value'> &
-  Partial<FormElementWrapperBagProps<string>> & { editCompleteOptions?: EditCompleteOptions }
+  Partial<FormFieldWrapperBagProps<string>> & { editCompleteOptions?: EditCompleteOptions }
 
 /**
  * A Component for inputting text or other information

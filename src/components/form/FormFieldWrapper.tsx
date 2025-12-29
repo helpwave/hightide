@@ -4,50 +4,55 @@ import { clsx } from 'clsx'
 import type { BagFunction } from '@/src/utils/bagFunctions'
 import type { LabelProps } from '@/src/components/display-and-visualization/Label'
 import { Label } from '@/src/components/display-and-visualization/Label'
-import type { FormInputProps } from './useForm'
+import { useFormContext, useFormField } from './FormContext'
+import type { FormValue } from './FormStore'
 
-type FormElementHTMLProperties = Pick<HTMLAttributes<HTMLElement>, 'id' | 'aria-labelledby' | 'aria-describedby' | 'aria-disabled' | 'aria-readonly' | 'aria-invalid' | 'aria-errormessage' | 'aria-required'>
+type FormFieldHTMLProperties = Pick<HTMLAttributes<HTMLElement>, 'id' | 'aria-labelledby' | 'aria-describedby' | 'aria-disabled' | 'aria-readonly' | 'aria-invalid' | 'aria-errormessage' | 'aria-required'>
 
-export type FormElementWrapperBagProps<T> = FormElementHTMLProperties & Omit<FormInputProps<T>, 'invalidDescription'> & {
+export type FormFieldProps<T> = {
+  value: T,
+  onValueChange: (value: T) => void,
+  onEditComplete: (value: T) => void,
   invalid: boolean,
-}
+  disabled: boolean,
+  readOnly: boolean,
+} & FormFieldHTMLProperties
 
-export type FormElementWrapperBag<T> =  {
-  props: FormElementWrapperBagProps<T>,
+export type FormFieldWrapperBag<T> =  {
+  props: FormFieldProps<T>,
   required: boolean,
 }
 
-export type FormElementWrapperProps<T> = Partial<FormInputProps<T>> & {
-  children: BagFunction<FormElementWrapperBag<T>> | ReactElement<Partial<FormInputProps<T>>>,
+export type FormFieldWrapperProps<T extends FormValue> = {
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+  children: BagFunction<FormFieldWrapperBag<T[keyof T]>> | (ReactElement<FormFieldProps<T[keyof T]> & React.RefAttributes<any>>),
   id?: string,
+  name: keyof T,
   required?: boolean,
   label?: ReactNode,
   labelProps?: Omit<LabelProps, 'children'>,
-  invalidDescription?: ReactNode,
   invalidDescriptionProps?: Omit<HTMLAttributes<HTMLParagraphElement>, 'children'>,
   description?: ReactNode,
   descriptionProps?: Omit<HTMLAttributes<HTMLParagraphElement>, 'children'>,
   containerClassName?: string,
 }
 
-export const FormElementWrapper = <T,>({
+export const FormFieldWrapper = <T extends FormValue>({
   children,
   id,
-  value,
-  onValueChange,
-  onEditComplete,
+  name,
   required = false,
-  disabled = false,
-  readOnly: readonly = false,
   label,
   labelProps,
-  invalidDescription,
   invalidDescriptionProps,
   description,
   descriptionProps,
   containerClassName,
-}: FormElementWrapperProps<T>) => {
+}: FormFieldWrapperProps<T>) => {
   const generatedId = useId()
+  const { registerRef } = useFormContext<T>()
+  const { invalidDescription, ...props } = useFormField<T, keyof T>(name)
+
   const ids = useMemo(() => ({
     input: id ?? generatedId,
     error: `form-element-error-${generatedId}`,
@@ -61,20 +66,15 @@ export const FormElementWrapper = <T,>({
   ].filter(Boolean).join(' ')
 
   const labelledBy = label ? ids.label : undefined
+
   const invalid = !!invalidDescription
 
-  const bag: FormElementWrapperBag<T> = {
+  const bag: FormFieldWrapperBag<T[keyof T]> = {
     props: {
+      ...props,
       'id': ids.input,
-      disabled,
       invalid,
-      'readOnly': readonly,
-      value,
-      onValueChange,
-      onEditComplete,
       'aria-required': required,
-      'aria-disabled': disabled,
-      'aria-readonly': readonly,
       'aria-describedby': describedBy,
       'aria-labelledby': labelledBy,
       'aria-invalid': invalid,
@@ -109,11 +109,11 @@ export const FormElementWrapper = <T,>({
       {typeof children === 'function'
         ? children(bag)
         : isValidElement(children) ?
-          React.Children.map(children,  element => cloneElement(element, { ...bag.props }))
+          React.Children.map(children, element => cloneElement(element, { ...bag.props, ref: registerRef(name) }))
           : children
       }
       {invalid && (
-        <p
+        <div
           {...invalidDescriptionProps}
           id={ids.description}
 
@@ -127,7 +127,7 @@ export const FormElementWrapper = <T,>({
           )}
         >
           {invalidDescription}
-        </p>
+        </div>
       )}
     </div>
   )

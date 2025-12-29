@@ -21,11 +21,11 @@ export type LocaleProviderProps = PropsWithChildren & Partial<LocalizationConfig
 }
 
 export const LocaleProvider = ({
-                                 children,
-                                 locale,
-                                 defaultLocale,
-                                 onChangedLocale
-                               }: LocaleProviderProps) => {
+  children,
+  locale,
+  defaultLocale,
+  onChangedLocale
+}: LocaleProviderProps) => {
   const {
     value: storedLocale,
     setValue: setStoredLocale,

@@ -1,53 +1,45 @@
 @utility coloring-solid {
-  @apply
-  bg-[var(--coloring-solid-color,var(--coloring-color))]
+  @apply bg-[var(--coloring-solid-color,var(--coloring-color))]
   text-[var(--coloring-solid-text,var(--coloring-on-color))];
 }
 
 @utility coloring-solid-hover {
-  @apply
-  coloring-solid
+  @apply coloring-solid
   hover:bg-[var(--coloring-solid-hover,var(--coloring-hover))];
 }
 
 @utility coloring-tonal {
-  @apply
-  bg-[var(--coloring-tonal-background,var(--coloring-tonal,var(--coloring-color)))]/20
+  @apply bg-[var(--coloring-tonal-background,var(--coloring-tonal,var(--coloring-color)))]/20
   text-[var(--coloring-tonal-text,var(--coloring-tonal,var(--coloring-color)))];
 }
 
 @utility coloring-tonal-hover {
-  @apply
-  coloring-tonal
+  @apply coloring-tonal
   hover:bg-[var(--coloring-tonal-hover,var(--coloring-tonal-background,var(--coloring-tonal,var(--coloring-color))))]/30;
 }
 
 @utility coloring-text {
-  @apply
-  text-[var(--coloring-text,var(--coloring-color))];
+  @apply text-[var(--coloring-text,var(--coloring-color))];
 }
 
 @utility coloring-text-hover {
-  @apply
-  coloring-text
+  @apply coloring-text
   hover:bg-[var(--coloring-text-hover,var(--coloring-text,var(--coloring-color)))]/20;
 }
 
 @utility coloring-outline {
-  @apply
-  border-2
+  @apply border-2
   border-[var(--coloring-border,var(--coloring-outline,var(--coloring-color)))]
   text-[var(--coloring-outline,var(--coloring-color))];
 }
 
 @utility coloring-outline-hover {
-  @apply
-  coloring-outline
+  @apply coloring-outline
   hover:border-[var(--coloring-border-hover,--coloring-hover)]
   hover:text-[var(--coloring-outline-hover,var(--coloring-hover))];
 }
 
-@utility reset-coloring-variables {
+@utility coloring-reset-variables {
   --coloring-color: initial;
   --coloring-on-color: initial;
   --coloring-hover: initial;

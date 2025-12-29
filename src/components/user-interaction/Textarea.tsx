@@ -5,11 +5,11 @@ import type { LabelProps } from '@/src/components/display-and-visualization/Labe
 import { Label } from '@/src/components/display-and-visualization/Label'
 import { useDelay, type UseDelayOptions } from '@/src/hooks/useDelay'
 import { useOverwritableState } from '@/src/hooks/useOverwritableState'
-import type { FormElementWrapperBagProps } from '../form/FormElementWrapper'
+import type { FormFieldWrapperBagProps } from '../form/FormFieldWrapper'
 import { DataAttributesUtil } from '@/src/utils/dataAttribute'
 
 export type TextareaProps = Omit<TextareaHTMLAttributes<HTMLTextAreaElement>, 'value'> &
- Partial<FormElementWrapperBagProps<string>> & { saveDelayOptions?: UseDelayOptions }
+ Partial<FormFieldWrapperBagProps<string>> & { saveDelayOptions?: UseDelayOptions }
 
 /**
  * A Textarea component for inputting longer texts
