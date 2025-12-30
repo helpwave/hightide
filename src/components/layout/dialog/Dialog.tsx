@@ -2,7 +2,7 @@
 
 import type { HTMLAttributes, PropsWithChildren, ReactNode } from 'react'
 import { useId, useMemo } from 'react'
-import { useRef }  from 'react'
+import { useRef } from 'react'
 import { X } from 'lucide-react'
 import { useHightideTranslation } from '@/src/i18n/useHightideTranslation'
 import { Button } from '@/src/components/user-interaction/Button'
@@ -12,7 +12,7 @@ import { createPortal } from 'react-dom'
 import { useOverlayRegistry } from '@/src/hooks/useOverlayRegistry'
 import { Visibility } from '../Visibility'
 import { useTransitionState } from '@/src/hooks/useTransitionState'
-import { DataAttributesUtil } from '@/src/utils/dataAttribute'
+import { PropsUtil } from '@/src/utils/propsUtil'
 
 export type DialogPosition = 'top' | 'center' | 'none'
 
@@ -52,8 +52,8 @@ export const Dialog = ({
   const translation = useHightideTranslation()
   const generatedId = useId()
   const ids = useMemo(() => ({
-    container: `dialog-container-${generatedId}` ,
-    background: `dialog-background-${generatedId}` ,
+    container: `dialog-container-${generatedId}`,
+    background: `dialog-background-${generatedId}`,
     content: props.id ?? `dialog-content-${generatedId}`
   }), [generatedId, props.id])
   const ref = useRef<HTMLDivElement>(null)
@@ -84,7 +84,7 @@ export const Dialog = ({
       id={ids.container}
 
       data-name="dialog-container"
-      data-open={DataAttributesUtil.bool(isOpen)}
+      data-open={PropsUtil.dataAttributes.bool(isOpen)}
 
       className={containerClassName}
       style={{ zIndex }}
@@ -113,7 +113,7 @@ export const Dialog = ({
         }}
         {...callbacks}
 
-        data-name={DataAttributesUtil.name('dialog-content',props)}
+        data-name={PropsUtil.dataAttributes.name('dialog-content', props)}
         data-state={transitionState}
         data-position={position}
 
@@ -142,7 +142,7 @@ export const Dialog = ({
               aria-label={translation('close')}
               onClick={onCloseWrapper}
             >
-              <X/>
+              <X />
             </Button>
           </div>
         </Visibility>

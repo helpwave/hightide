@@ -8,19 +8,19 @@ import { Visibility } from './Visibility'
 import { Button } from '../user-interaction/Button'
 import { X } from 'lucide-react'
 import { useTransitionState } from '@/src/hooks/useTransitionState'
-import { DataAttributesUtil } from '@/src/utils/dataAttribute'
+import { PropsUtil } from '@/src/utils/propsUtil'
 
 export type DrawerAligment = 'left' | 'right' | 'bottom' | 'top'
 
 export type DrawerProps = HTMLAttributes<HTMLDivElement> & {
-    isOpen: boolean,
-    alignment: DrawerAligment,
-    titleElement: ReactNode,
-    description: ReactNode,
-    isAnimated?: boolean,
-    containerClassName?: string,
-    backgroundClassName?: string,
-    onClose: () => void,
+  isOpen: boolean,
+  alignment: DrawerAligment,
+  titleElement: ReactNode,
+  description: ReactNode,
+  isAnimated?: boolean,
+  containerClassName?: string,
+  backgroundClassName?: string,
+  onClose: () => void,
 }
 
 export const Drawer = ({
@@ -37,8 +37,8 @@ export const Drawer = ({
   const translation = useHightideTranslation()
   const generatedId = useId()
   const ids = useMemo(() => ({
-    container: `dialog-container-${generatedId}` ,
-    background: `dialog-background-${generatedId}` ,
+    container: `dialog-container-${generatedId}`,
+    background: `dialog-background-${generatedId}`,
     content: props.id ?? `dialog-content-${generatedId}`
   }), [generatedId, props.id])
   const ref = useRef<HTMLDivElement>(null)
@@ -64,7 +64,7 @@ export const Drawer = ({
       id={ids.container}
 
       data-name="drawer-container"
-      data-open={DataAttributesUtil.bool(isOpen)}
+      data-open={PropsUtil.dataAttributes.bool(isOpen)}
 
       className={containerClassName}
       style={{ zIndex, '--drawer-depth': depth.toString() } as React.CSSProperties}
@@ -88,14 +88,10 @@ export const Drawer = ({
         id={ids.content}
         ref={ref}
 
-        onKeyDown={event => {
-          if (event.key === 'Escape') {
-            onClose()
-          }
-        }}
+        onKeyDown={PropsUtil.aria.close(close)}
         {...callbacks}
 
-        data-name={DataAttributesUtil.name('drawer-content', props)}
+        data-name={PropsUtil.dataAttributes.name('drawer-content', props)}
         data-state={transitionState}
         data-depth={depth}
         data-alignment={alignment}
@@ -124,7 +120,7 @@ export const Drawer = ({
             aria-label={translation('close')}
             onClick={onClose}
           >
-            <X/>
+            <X />
           </Button>
         </div>
         {children}

@@ -7,10 +7,10 @@ import { useFloatingElement } from '@/src/hooks/useFloatingElement'
 import { createPortal } from 'react-dom'
 import type { TooltipConfig } from '@/src/contexts/HightideConfigContext'
 import { useHightideConfig } from '@/src/contexts/HightideConfigContext'
-import { DataAttributesUtil } from '@/src/utils/dataAttribute'
 import type { UseOverlayRegistryProps } from '@/src/hooks/useOverlayRegistry'
 import { useOverlayRegistry } from '@/src/hooks/useOverlayRegistry'
 import { useTransitionState } from '@/src/hooks/useTransitionState'
+import { PropsUtil } from '@/src/utils/propsUtil'
 
 type TooltipState = {
   isShown: boolean,
@@ -75,13 +75,13 @@ export const Tooltip = ({
     useMemo(() => ({ isOpen: isActive }), [isActive])
   )
 
-  const verticalAlignment: FloatingElementAlignment= useMemo(() =>
+  const verticalAlignment: FloatingElementAlignment = useMemo(() =>
     position === 'top' ? 'beforeStart' : position === 'bottom' ? 'afterEnd' : 'center',
-  [position])
+    [position])
 
   const horizontalAlignment: FloatingElementAlignment = useMemo(() =>
     position === 'left' ? 'beforeStart' : position === 'right' ? 'afterEnd' : 'center',
-  [position])
+    [position])
 
   const css = useFloatingElement(useMemo(() => ({
     active: isActive || isVisible,
@@ -162,11 +162,11 @@ export const Tooltip = ({
             {...callbacks}
             onPointerEnter={onEnter}
 
-            data-name={DataAttributesUtil.name('tooltip')}
+            data-name={PropsUtil.dataAttributes.name('tooltip')}
             data-state={transitionState}
 
             className={tooltipClassName}
-            style={{ ...css,zIndex }}
+            style={{ ...css, zIndex }}
           >
             {tooltip}
           </div>
@@ -180,7 +180,7 @@ export const Tooltip = ({
             data-state={transitionState}
             data-position={position}
 
-            style={{ ...cssTriangle,  zIndex: zIndexTriangle }}
+            style={{ ...cssTriangle, zIndex: zIndexTriangle }}
           />
           , document.body
         )}

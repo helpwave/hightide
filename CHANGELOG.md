@@ -34,6 +34,10 @@ and adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 - `useOverwritableState` propagating the old instead of the updated state
 - `Table` background to overflow on the edges
 
+### Removed
+
+- `Label` component due to it having no functionality
+
 ## [0.5.4] - 2025-12-18
 
 ### Fixed

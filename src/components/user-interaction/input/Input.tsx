@@ -1,11 +1,12 @@
 import type { InputHTMLAttributes } from 'react'
 import React, { forwardRef, useImperativeHandle, useRef } from 'react'
 import type { UseDelayOptionsResolved } from '@/src/hooks/useDelay'
-import { useDelay  } from '@/src/hooks/useDelay'
+import { useDelay } from '@/src/hooks/useDelay'
 import { useFocusManagement } from '@/src/hooks/focus/useFocusManagement'
 import { useOverwritableState } from '@/src/hooks/useOverwritableState'
-import type { FormFieldWrapperBagProps } from '../../form/FormFieldWrapper'
-import { DataAttributesUtil } from '@/src/utils/dataAttribute'
+import type { FormFieldInteractionStates } from '../../form/FieldLayout'
+import type { FormFieldDataHandling } from '../../form/FormField'
+import { PropsUtil } from '@/src/utils/propsUtil'
 
 export type EditCompleteOptionsResolved = {
   onBlur: boolean,
@@ -22,8 +23,10 @@ const defaultEditCompleteOptions: EditCompleteOptionsResolved = {
   delay: 2500
 }
 
-export type InputProps = Omit<InputHTMLAttributes<HTMLInputElement>, 'value'> &
-  Partial<FormFieldWrapperBagProps<string>> & { editCompleteOptions?: EditCompleteOptions }
+export type InputProps = Omit<InputHTMLAttributes<HTMLInputElement>, 'value'>
+  & Partial<FormFieldDataHandling<string>>
+  & Partial<FormFieldInteractionStates>
+  & { editCompleteOptions?: EditCompleteOptions }
 
 /**
  * A Component for inputting text or other information
@@ -31,12 +34,10 @@ export type InputProps = Omit<InputHTMLAttributes<HTMLInputElement>, 'value'> &
  * Its state is managed must be managed by the parent
  */
 export const Input = forwardRef<HTMLInputElement, InputProps>(function Input({
-  value,
+  invalid = false,
   onValueChange,
   onEditComplete,
   editCompleteOptions,
-  disabled = false,
-  invalid = false,
   ...props
 }, forwardedRef) {
   const {
@@ -60,8 +61,7 @@ export const Input = forwardRef<HTMLInputElement, InputProps>(function Input({
     <input
       {...props}
       ref={innerRef}
-      value={value}
-      disabled={disabled}
+
       onKeyDown={event => {
         props.onKeyDown?.(event)
         if (!allowEnterComplete) {
@@ -91,13 +91,11 @@ export const Input = forwardRef<HTMLInputElement, InputProps>(function Input({
         onValueChange?.(value)
       }}
 
-      data-name={DataAttributesUtil.name('input', props)}
-      data-value={DataAttributesUtil.bool(!!value)}
-      data-disabled={DataAttributesUtil.bool(disabled)}
-      data-invalid={DataAttributesUtil.bool(invalid)}
+      data-name={PropsUtil.dataAttributes.name('input', props)}
+      data-value={PropsUtil.dataAttributes.bool(!!props.value)}
+      {...PropsUtil.dataAttributes.interactionStates({ ...props, invalid })}
 
-      aria-invalid={props['aria-invalid'] ?? invalid}
-      aria-disabled={props['aria-disabled'] ?? disabled}
+      {...PropsUtil.aria.interactionStates({ ...props, invalid }, props)}
     />
   )
 })

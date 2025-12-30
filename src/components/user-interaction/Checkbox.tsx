@@ -1,20 +1,21 @@
 import { Check, Minus } from 'lucide-react'
 import { useOverwritableState } from '@/src/hooks/useOverwritableState'
-import type { HTMLAttributes } from 'react'
-import { DataAttributesUtil } from '@/src/utils/dataAttribute'
+import { useCallback, type HTMLAttributes } from 'react'
 import { Visibility } from '../layout/Visibility'
+import { PropsUtil } from '@/src/utils/propsUtil'
+import type { FormFieldInteractionStates } from '../form/FieldLayout'
+import type { FormFieldDataHandling } from '../form/FormField'
 
 type CheckBoxSize = 'sm' | 'md' | 'lg' | null
 
-export type CheckboxProps = HTMLAttributes<HTMLDivElement> & {
-  checked?: boolean,
-  disabled?: boolean,
-  indeterminate?: boolean,
-  invalid?: boolean,
-  onCheckedChange?: (checked: boolean) => void,
-  size?: CheckBoxSize,
-  alwaysShowCheckIcon?: boolean,
-}
+export type CheckboxProps = HTMLAttributes<HTMLDivElement>
+  & Partial<FormFieldInteractionStates>
+  & Partial<FormFieldDataHandling<boolean>>
+  & {
+    indeterminate?: boolean,
+    size?: CheckBoxSize,
+    alwaysShowCheckIcon?: boolean,
+  }
 
 /**
  * A Tristate checkbox
@@ -22,21 +23,30 @@ export type CheckboxProps = HTMLAttributes<HTMLDivElement> & {
  * The state is managed by the parent
  */
 export const Checkbox = ({
-  disabled,
-  checked = false,
+  value = false,
   indeterminate = false,
+  required = false,
   invalid = false,
-  onCheckedChange,
+  disabled = false,
+  readOnly = false,
+  onValueChange,
+  onEditComplete,
   size = 'md',
   alwaysShowCheckIcon = false,
   ...props
 }: CheckboxProps) => {
+  const onChangeWrapper = useCallback(() => {
+    onValueChange?.(!value)
+    onEditComplete?.(!value)
+  }, [onEditComplete, onValueChange, value])
+
   return (
     <div
       {...props}
+
       onClick={(event) => {
         if (!disabled) {
-          onCheckedChange(!checked)
+          onChangeWrapper()
           props.onClick?.(event)
         }
       }}
@@ -44,27 +54,27 @@ export const Checkbox = ({
         if (disabled) return
         if (event.key === ' ' || event.key === 'Enter') {
           event.preventDefault()
-          onCheckedChange(!checked)
+          onChangeWrapper()
           props.onKeyDown?.(event)
         }
       }}
 
-      data-name={DataAttributesUtil.name('checkbox', props)}
-      data-checked={!indeterminate ? checked : 'indeterminate'}
-      data-disabled={DataAttributesUtil.bool(disabled)}
-      data-invalid={DataAttributesUtil.bool(invalid)}
+      data-name={PropsUtil.dataAttributes.name('checkbox', props)}
+      data-checked={!indeterminate ? value : 'indeterminate'}
       data-size={size ?? undefined}
+      {...PropsUtil.dataAttributes.interactionStates({ disabled, invalid, readOnly, required })}
 
       role="checkbox"
-      aria-checked={indeterminate ? 'mixed' : checked}
-      aria-disabled={disabled}
       tabIndex={disabled ? -1 : 0}
+
+      aria-checked={indeterminate ? 'mixed' : value}
+      {...PropsUtil.aria.interactionStates({ disabled, invalid, readOnly, required }, props)}
     >
       <Visibility isVisible={indeterminate}>
-        <Minus data-name="checkbox-indicator" aria-hidden={true}/>
+        <Minus data-name="checkbox-indicator" aria-hidden={true} />
       </Visibility>
-      <Visibility isVisible={!indeterminate && (alwaysShowCheckIcon || checked)}>
-        <Check data-name="checkbox-indicator" aria-hidden={true}/>
+      <Visibility isVisible={!indeterminate && (alwaysShowCheckIcon || value)}>
+        <Check data-name="checkbox-indicator" aria-hidden={true} />
       </Visibility>
     </div>
   )
@@ -78,17 +88,17 @@ export type CheckboxUncontrolledProps = CheckboxProps
  * The state is managed by this component
  */
 export const CheckboxUncontrolled = ({
-  checked: initialChecked,
-  onCheckedChange,
+  value: initialValue,
+  onValueChange,
   ...props
 }: CheckboxUncontrolledProps) => {
-  const [checked, setChecked] = useOverwritableState(initialChecked, onCheckedChange)
+  const [value, setValue] = useOverwritableState(initialValue, onValueChange)
 
   return (
     <Checkbox
       {...props}
-      checked={checked}
-      onCheckedChange={setChecked}
+      value={value}
+      onValueChange={setValue}
     />
   )
 }

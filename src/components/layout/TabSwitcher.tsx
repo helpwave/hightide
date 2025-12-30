@@ -1,8 +1,7 @@
 import type { Dispatch, HTMLAttributes, KeyboardEvent, PropsWithChildren, ReactNode, RefObject, SetStateAction } from 'react'
 import { useCallback, useId, useState } from 'react'
 import { createContext, useContext, useEffect, useRef } from 'react'
-import { PropsUtil } from '@/src/utils/propsExtender'
-import { DataAttributesUtil as DataAttributeUtil } from '@/src/utils/dataAttribute'
+import { PropsUtil } from '@/src/utils/propsUtil'
 import { createPortal } from 'react-dom'
 import { Visibility } from './Visibility'
 
@@ -25,7 +24,7 @@ type PortalState = {
 export interface TabContextType {
   tabs: {
     activeId: string | null,
-    setActiveId: Dispatch<SetStateAction<string| null>>,
+    setActiveId: Dispatch<SetStateAction<string | null>>,
     register: (info: TabInfo) => void,
     unregister: (id: string) => void,
     info?: TabInfo[],
@@ -67,9 +66,9 @@ export function TabSwitcher({ children }: TabSwitcherProps) {
     setState(prevState => {
       const infos = prevState.infos.filter(value => value.id !== id)
       let activeId = prevState.activeId
-      if(activeId === id) {
+      if (activeId === id) {
         const index = prevState.infos.findIndex(value => value.id === id)
-        if(infos.length > 0) {
+        if (infos.length > 0) {
           const newIndex = index % infos.length
           activeId = infos[newIndex].id
         } else {
@@ -145,7 +144,7 @@ export function TabList({ ...props }: TabListProps) {
 
       onKeyDown={onKeyDown}
 
-      data-name={DataAttributeUtil.name('tab-list', props)}
+      data-name={PropsUtil.dataAttributes.name('tab-list', props)}
 
       role="tablist"
       aria-orientation="horizontal"
@@ -158,12 +157,10 @@ export function TabList({ ...props }: TabListProps) {
           }}
           id={tabInfo.labelId}
 
-          {...PropsUtil.aria.buttonClickEmulator({
-            onClick: () => setActive(tabInfo.id)
-          })}
+          {...PropsUtil.aria.click(() => setActive(tabInfo.id))}
 
           data-name="tab-list-item"
-          data-active={DataAttributeUtil.bool(activeId === tabInfo.id)}
+          data-active={PropsUtil.dataAttributes.bool(activeId === tabInfo.id)}
 
           role="tab"
           aria-selected={activeId === tabInfo.id}
@@ -193,7 +190,7 @@ export function TabView({ ...props }: TabViewProps) {
   useEffect(() => {
     setPortal({ id, ref })
     return () => setPortal(null)
-  // eslint-disable-next-line react-hooks/exhaustive-deps
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [id])
 
   return (
@@ -201,7 +198,7 @@ export function TabView({ ...props }: TabViewProps) {
       {...props}
       ref={ref}
       id={id}
-      data-name={DataAttributeUtil.name('tab-view', props)}
+      data-name={PropsUtil.dataAttributes.name('tab-view', props)}
     />
   )
 }
@@ -223,7 +220,7 @@ export function TabPanel({ label, ...props }: TabProps) {
   useEffect(() => {
     register({ id, label, labelId })
     return () => unregister(id)
-  // eslint-disable-next-line react-hooks/exhaustive-deps
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [id, label, labelId])
 
   const isActive = activeId === id
@@ -234,7 +231,7 @@ export function TabPanel({ label, ...props }: TabProps) {
       id={id}
       hidden={!isActive}
 
-      data-name={DataAttributeUtil.name('tab-panel')}
+      data-name={PropsUtil.dataAttributes.name('tab-panel')}
 
       role="tabpanel"
       aria-labelledby={labelId}

@@ -84,7 +84,7 @@ export class FormStore<T extends FormValue> {
     this.notify({ type: 'onChange', key, value })
   }
 
-  setValues<K extends keyof T>(values: Partial<T[K]>) {
+  setValues(values: Partial<T>) {
     Object.keys(values).forEach(key => this.setValue(key, values[key]))
   }
 

@@ -36,9 +36,9 @@ import { FillerCell } from '@/src/components/layout/table/FillerCell'
 import { Pagination } from '@/src/components/layout/navigation/Pagination'
 import { Checkbox } from '@/src/components/user-interaction/Checkbox'
 import { useOverwritableState } from '@/src/hooks/useOverwritableState'
-import { DataAttributesUtil } from '@/src/utils/dataAttribute'
 import { Visibility } from '../Visibility'
 import { BagFunctionUtil, type BagFunctionOrValue } from '@/src/utils/bagFunctions'
+import { PropsUtil } from '@/src/utils/propsUtil'
 
 declare module '@tanstack/react-table' {
   // eslint-disable-next-line @typescript-eslint/no-unused-vars
@@ -73,7 +73,7 @@ export type TableProps<T> = {
 /**
  * The standard table
  */
-export const Table = <T, >({
+export const Table = <T,>({
   data,
   fillerRow,
   initialState,
@@ -314,12 +314,12 @@ export const Table = <T, >({
   }, [table.getState().columnSizingInfo, table.getState().columnSizing]) // eslint-disable-line react-hooks/exhaustive-deps
 
   return (
-    <div ref={ref} data-name={DataAttributesUtil.name('table-container')} className={className}>
-      <div data-name={DataAttributesUtil.name('table-scroll-wrapper')} className={tableContainerClassName}>
+    <div ref={ref} data-name={PropsUtil.dataAttributes.name('table-container')} className={className}>
+      <div data-name={PropsUtil.dataAttributes.name('table-scroll-wrapper')} className={tableContainerClassName}>
         <table
           ref={tableRef}
 
-          data-name={DataAttributesUtil.name('table')}
+          data-name={PropsUtil.dataAttributes.name('table')}
 
           style={{
             ...columnSizeVars,
@@ -344,14 +344,14 @@ export const Table = <T, >({
           ))}
           <thead>
             {table.getHeaderGroups().map(headerGroup => (
-              <tr key={headerGroup.id} data-name={DataAttributesUtil.name('table-header-row')} className={table.options.meta?.headerRowClassName}>
+              <tr key={headerGroup.id} data-name={PropsUtil.dataAttributes.name('table-header-row')} className={table.options.meta?.headerRowClassName}>
                 {headerGroup.headers.map(header => {
                   return (
                     <th
                       key={header.id}
                       colSpan={header.colSpan}
 
-                      data-name={DataAttributesUtil.name('table-header-cell')}
+                      data-name={PropsUtil.dataAttributes.name('table-header-cell')}
                       className={clsx('group/table-header-cell', header.column.columnDef.meta?.className)}
                     >
                       <Visibility isVisible={!header.isPlaceholder}>
@@ -401,11 +401,11 @@ export const Table = <T, >({
                           }}
 
                           data-name="table-resize-indicator"
-                          data-active={DataAttributesUtil.bool(
+                          data-active={PropsUtil.dataAttributes.bool(
                             !!columnSizingInfo?.columnSizingStart
                             && !!columnSizingInfo?.columnSizingStart?.find(([id, _]) => id === header.column.id)
                           )}
-                          data-disabled={DataAttributesUtil.bool(
+                          data-disabled={PropsUtil.dataAttributes.bool(
                             !!columnSizingInfo?.columnSizingStart
                             && (columnSizingInfo.columnSizingStart?.length ?? 0) > 0
                             && !columnSizingInfo.columnSizingStart?.find(([id, _]) => id === header.column.id)
@@ -446,7 +446,7 @@ export const Table = <T, >({
                   {columns.map((column) => {
                     return (
                       <td key={column.id}>
-                        {fillerRow ? fillerRow(column.id, table) : (<FillerCell/>)}
+                        {fillerRow ? fillerRow(column.id, table) : (<FillerCell />)}
                       </td>
                     )
                   })}
@@ -470,7 +470,7 @@ export const Table = <T, >({
 
 export type TableUncontrolledProps<T> = TableProps<T>
 
-export const TableUncontrolled = <T, >({ data, ...props }: TableUncontrolledProps<T>) => {
+export const TableUncontrolled = <T,>({ data, ...props }: TableUncontrolledProps<T>) => {
   const [usedDate] = useOverwritableState<T[]>(data)
 
   return (
@@ -488,7 +488,7 @@ export type TableWithSelectionProps<T> = TableProps<T> & {
   selectionRowId?: string,
 }
 
-export const TableWithSelection = <T, >({
+export const TableWithSelection = <T,>({
   columns,
   state,
   fillerRow,
@@ -506,9 +506,9 @@ export const TableWithSelection = <T, >({
         header: ({ table }) => {
           return (
             <Checkbox
-              checked={table.getIsAllRowsSelected()}
+              value={table.getIsAllRowsSelected()}
               indeterminate={table.getIsSomeRowsSelected()}
-              onCheckedChange={value => {
+              onValueChange={value => {
                 const newValue = !!value
                 table.toggleAllRowsSelected(newValue)
               }}
@@ -519,8 +519,8 @@ export const TableWithSelection = <T, >({
           return (
             <Checkbox
               disabled={!row.getCanSelect()}
-              checked={row.getIsSelected()}
-              onCheckedChange={row.getToggleSelectedHandler()}
+              value={row.getIsSelected()}
+              onValueChange={row.getToggleSelectedHandler()}
             />
           )
         },
@@ -539,9 +539,9 @@ export const TableWithSelection = <T, >({
       columns={columnsWithSelection}
       fillerRow={(columnId, table) => {
         if (columnId === selectionRowId) {
-          return (<Checkbox checked={false} disabled={true} className="max-w-6"/>)
+          return (<Checkbox value={false} disabled={true} className="max-w-6" />)
         }
-        return fillerRow ? fillerRow(columnId, table) : (<FillerCell/>)
+        return fillerRow ? fillerRow(columnId, table) : (<FillerCell />)
       }}
       state={{
         rowSelection,

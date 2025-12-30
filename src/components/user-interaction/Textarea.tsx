@@ -1,15 +1,16 @@
-import type { ReactNode, TextareaHTMLAttributes } from 'react'
+import type { LabelHTMLAttributes, ReactNode, TextareaHTMLAttributes } from 'react'
 import { forwardRef, useId } from 'react'
 import clsx from 'clsx'
-import type { LabelProps } from '@/src/components/display-and-visualization/Label'
-import { Label } from '@/src/components/display-and-visualization/Label'
 import { useDelay, type UseDelayOptions } from '@/src/hooks/useDelay'
 import { useOverwritableState } from '@/src/hooks/useOverwritableState'
-import type { FormFieldWrapperBagProps } from '../form/FormFieldWrapper'
-import { DataAttributesUtil } from '@/src/utils/dataAttribute'
+import type { FormFieldInteractionStates } from '../form/FieldLayout'
+import type { FormFieldDataHandling } from '../form/FormField'
+import { PropsUtil } from '@/src/utils/propsUtil'
 
-export type TextareaProps = Omit<TextareaHTMLAttributes<HTMLTextAreaElement>, 'value'> &
- Partial<FormFieldWrapperBagProps<string>> & { saveDelayOptions?: UseDelayOptions }
+export type TextareaProps = Omit<TextareaHTMLAttributes<HTMLTextAreaElement>, 'value'>
+  & Partial<FormFieldDataHandling<string>>
+  & Partial<FormFieldInteractionStates>
+  & { saveDelayOptions?: UseDelayOptions }
 
 /**
  * A Textarea component for inputting longer texts
@@ -17,12 +18,10 @@ export type TextareaProps = Omit<TextareaHTMLAttributes<HTMLTextAreaElement>, 'v
  * The State is managed by the parent
  */
 export const Textarea = forwardRef<HTMLTextAreaElement, TextareaProps>(function Textarea({
-  id,
+  invalid = false,
   onValueChange,
   onEditComplete,
   saveDelayOptions,
-  invalid = false,
-  disabled = false,
   ...props
 }, ref) {
   const { restartTimer, clearTimer } = useDelay(saveDelayOptions)
@@ -32,12 +31,12 @@ export const Textarea = forwardRef<HTMLTextAreaElement, TextareaProps>(function 
     clearTimer()
   }
 
+  console.log('build text')
+
   return (
     <textarea
       {...props}
       ref={ref}
-      id={id}
-      disabled={disabled}
 
       onChange={(event) => {
         const value = event.target.value
@@ -52,10 +51,11 @@ export const Textarea = forwardRef<HTMLTextAreaElement, TextareaProps>(function 
         onEditCompleteWrapper(event.target.value)
       }}
 
-      data-name={DataAttributesUtil.name('textarea', props)}
-      data-value={DataAttributesUtil.bool(!!props.value)}
-      data-disabled={DataAttributesUtil.bool(disabled)}
-      data-invalid={DataAttributesUtil.bool(invalid)}
+      data-name={PropsUtil.dataAttributes.name('textarea', props)}
+      data-value={PropsUtil.dataAttributes.bool(!!props.value)}
+      {...PropsUtil.dataAttributes.interactionStates({ ...props, invalid })}
+
+      {...PropsUtil.aria.interactionStates({ ...props, invalid }, props)}
     />
   )
 })
@@ -81,7 +81,7 @@ export const TextareaUncontrolled = ({
 
 export type TextareaWithHeadlineProps = Omit<TextareaProps, 'defaultStyle'> & {
   headline: ReactNode,
-  headlineProps: Omit<LabelProps, 'children'>,
+  headlineProps: Omit<LabelHTMLAttributes<HTMLLabelElement>, 'children'>,
   containerClassName?: string,
 }
 
@@ -109,9 +109,9 @@ export const TextareaWithHeadline = ({
       )}
     >
       {headline && (
-        <Label size="md" {...headlineProps} htmlFor={usedId}>
+        <label {...headlineProps} htmlFor={usedId} className={clsx('typography-lable-md text-label', headlineProps.className)}>
           {headline}
-        </Label>
+        </label>
       )}
       <Textarea
         {...props}
