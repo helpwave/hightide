@@ -30,75 +30,75 @@ export type ASTNodeInterpreterProps = {
   className?: string,
 }
 export const ASTNodeInterpreter = ({
-                                     node,
-                                     isRoot = false,
-                                     className = '',
-                                   }: ASTNodeInterpreterProps) => {
+  node,
+  isRoot = false,
+  className = '',
+}: ASTNodeInterpreterProps) => {
   switch (node.type) {
-    case 'newline':
-      return <br/>
-    case 'text':
-      return isRoot ? <span className={className}>{node.text}</span> : node.text
-    case 'helpwave':
-      return (<span className="font-bold font-space no-underline">helpwave</span>)
-    case 'none':
-      return isRoot ? (
-          <span className={className}>{node.children.map((value, index) => (
-            <ASTNodeInterpreter key={index}
-                                node={value}/>
-          ))}</span>
-        ) :
-        <>{node.children.map((value, index) => <ASTNodeInterpreter key={index} node={value}/>)}</>
-    case 'bold':
-      return <b>{node.children.map((value, index) => <ASTNodeInterpreter key={index} node={value}/>)}</b>
-    case 'italic':
-      return <i>{node.children.map((value, index) => <ASTNodeInterpreter key={index} node={value}/>)}</i>
-    case 'underline':
-      return (<u>{node.children.map((value, index) => (<ASTNodeInterpreter key={index} node={value}/>))}</u>)
-    case 'font-space':
-      return (
-        <span className="font-space">{node.children.map((value, index) => (
-          <ASTNodeInterpreter key={index}
-                              node={value}/>
-        ))}</span>
-      )
-    case 'primary':
-      return (
-        <span className="text-primary">{node.children.map((value, index) => (
-          <ASTNodeInterpreter
-            key={index} node={value}/>
-        ))}</span>
-      )
-    case 'secondary':
-      return (
-        <span className="text-secondary">{node.children.map((value, index) => (
-          <ASTNodeInterpreter
-            key={index} node={value}/>
-        ))}</span>
-      )
-    case 'warn':
-      return (
-        <span className="text-warning">{node.children.map((value, index) => (
-          <ASTNodeInterpreter
-            key={index} node={value}/>
-        ))}</span>
-      )
-    case 'positive':
-      return (
-        <span className="text-positive">{node.children.map((value, index) => (
-          <ASTNodeInterpreter
-            key={index} node={value}/>
-        ))}</span>
-      )
-    case 'negative':
-      return (
-        <span className="text-negative">{node.children.map((value, index) => (
-          <ASTNodeInterpreter
-            key={index} node={value}/>
-        ))}</span>
-      )
-    default:
-      return null
+  case 'newline':
+    return <br/>
+  case 'text':
+    return isRoot ? <span className={className}>{node.text}</span> : node.text
+  case 'helpwave':
+    return (<span className="font-bold font-space no-underline">helpwave</span>)
+  case 'none':
+    return isRoot ? (
+      <span className={className}>{node.children.map((value, index) => (
+        <ASTNodeInterpreter key={index}
+          node={value}/>
+      ))}</span>
+    ) :
+      <>{node.children.map((value, index) => <ASTNodeInterpreter key={index} node={value}/>)}</>
+  case 'bold':
+    return <b>{node.children.map((value, index) => <ASTNodeInterpreter key={index} node={value}/>)}</b>
+  case 'italic':
+    return <i>{node.children.map((value, index) => <ASTNodeInterpreter key={index} node={value}/>)}</i>
+  case 'underline':
+    return (<u>{node.children.map((value, index) => (<ASTNodeInterpreter key={index} node={value}/>))}</u>)
+  case 'font-space':
+    return (
+      <span className="font-space">{node.children.map((value, index) => (
+        <ASTNodeInterpreter key={index}
+          node={value}/>
+      ))}</span>
+    )
+  case 'primary':
+    return (
+      <span className="text-primary">{node.children.map((value, index) => (
+        <ASTNodeInterpreter
+          key={index} node={value}/>
+      ))}</span>
+    )
+  case 'secondary':
+    return (
+      <span className="text-secondary">{node.children.map((value, index) => (
+        <ASTNodeInterpreter
+          key={index} node={value}/>
+      ))}</span>
+    )
+  case 'warn':
+    return (
+      <span className="text-warning">{node.children.map((value, index) => (
+        <ASTNodeInterpreter
+          key={index} node={value}/>
+      ))}</span>
+    )
+  case 'positive':
+    return (
+      <span className="text-positive">{node.children.map((value, index) => (
+        <ASTNodeInterpreter
+          key={index} node={value}/>
+      ))}</span>
+    )
+  case 'negative':
+    return (
+      <span className="text-negative">{node.children.map((value, index) => (
+        <ASTNodeInterpreter
+          key={index} node={value}/>
+      ))}</span>
+    )
+  default:
+    return null
   }
 }
 

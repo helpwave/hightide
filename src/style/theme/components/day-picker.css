@@ -1,0 +1,46 @@
+@layer components {
+  [data-name="day-picker-container"] {
+    @apply flex-col-1 min-w-64 select-none;
+  }
+
+  [data-name="day-picker-header-row"] {
+    @apply grid grid-cols-7 gap-2;
+  }
+
+  [data-name="day-picker-header-item"] {
+    @apply flex items-center justify-center grow font-semibold;
+  }
+
+  [data-name="day-picker-body-row"] {
+    @apply grid grid-cols-7 gap-2;
+  }
+
+  [data-name="day-picker-body-item"] {
+    @apply flex-row-0 items-center justify-center rounded-full border-2 border-transparent h-8;
+
+    &[data-today] {
+      @apply border-on-background;
+    }
+    &:not([data-invalid]) {
+      @apply hover:cursor-pointer;
+      &[data-selected] {
+        @apply coloring-solid-hover primary;
+      }
+      &:not([data-selected]) {
+        @apply coloring-text-hover neutral;
+      }
+      &:not([data-selected]):not([data-samemonth]) {
+        @apply text-description;
+      }
+    }
+    &[data-invalid] {
+      @apply hover:cursor-not-allowed disabled;
+      &[data-selected] {
+        @apply coloring-solid;
+      }
+      &:not([data-selected]) {
+        @apply coloring-text;
+      }
+    }
+  }
+}

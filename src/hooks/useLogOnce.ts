@@ -21,15 +21,15 @@ export const useLogOnce = (
   useEffect(() => {
     if (!hasLogged && condition) {
       switch (type) {
-        case 'info':
-          console.info(message)
-          break
-        case 'error':
-          console.error(message)
-          break
-        case 'warning':
-          console.warn(message)
-          break
+      case 'info':
+        console.info(message)
+        break
+      case 'error':
+        console.error(message)
+        break
+      case 'warning':
+        console.warn(message)
+        break
       }
       setHasLogged(true)
     }

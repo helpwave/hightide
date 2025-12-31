@@ -22,17 +22,17 @@ export type FloatingContainerProps = HTMLAttributes<HTMLDivElement> & UseFloatin
  * - to hide it use the hidden attribute as other means break the functionality
  */
 export const FloatingContainer = forwardRef<HTMLDivElement, FloatingContainerProps>(function FloatingContainer({
-                                                                                                                 children,
-                                                                                                                 backgroundOverlay,
-                                                                                                                 anchor,
-                                                                                                                 isPolling = false,
-                                                                                                                 pollingInterval = 100,
-                                                                                                                 verticalAlignment = 'afterEnd',
-                                                                                                                 horizontalAlignment = 'afterStart',
-                                                                                                                 screenPadding = 16,
-                                                                                                                 gap = 4,
-                                                                                                                 ...props
-                                                                                                               }, forwardRef) {
+  children,
+  backgroundOverlay,
+  anchor,
+  isPolling = false,
+  pollingInterval = 100,
+  verticalAlignment = 'afterEnd',
+  horizontalAlignment = 'afterStart',
+  screenPadding = 16,
+  gap = 4,
+  ...props
+}, forwardRef) {
   const innerRef = useRef<HTMLDivElement>(null)
   useImperativeHandle(forwardRef, () => innerRef.current)
 

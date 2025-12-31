@@ -18,14 +18,14 @@ export class Duration {
   readonly milliseconds: number
 
   constructor({
-                years = 0,
-                months = 0,
-                days = 0,
-                hours = 0,
-                minutes = 0,
-                seconds = 0,
-                milliseconds = 0,
-              }: Partial<DurationJSON> = {}) {
+    years = 0,
+    months = 0,
+    days = 0,
+    hours = 0,
+    minutes = 0,
+    seconds = 0,
+    milliseconds = 0,
+  }: Partial<DurationJSON> = {}) {
     this.assertRanges({ years, months, days, hours, minutes, seconds, milliseconds })
 
     this.years = years

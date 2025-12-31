@@ -28,9 +28,11 @@ next-env.d.ts
 
 # Storybook
 storybook-static
+debug-storybook.log
 
 # build
 dist/
+.next
 
 # generated translations
 src/i18n/translations.ts

@@ -1,0 +1,13 @@
+@layer components {
+  [data-name="expansion-icon"]:not(.default-style-none) {
+    @apply flex-col-0 items-center justify-center size-6 transition-transform motion-safe:duration-200 motion-reduce:duration-0 ease-in-out;
+
+    &[data-expanded] {
+      @apply rotate-180;
+    }
+
+    &[data-disabled] {
+      @apply text-disabled;
+    }
+  }
+}

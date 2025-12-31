@@ -1,0 +1,28 @@
+@layer components {
+  * {
+    @apply border-border list-none placeholder-placeholder;
+
+    @variant dark {
+      color-scheme: dark;
+    }
+  }
+
+  html {
+    @apply bg-background text-on-background;
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    * {
+      @apply transition-none animate-none;
+    }
+  }
+
+  /* move the focus styles into its own file and utilities */
+  *:focus {
+    @apply outline-0 ring-0;
+  }
+
+  * {
+    @apply focus-style-default;
+  }
+}

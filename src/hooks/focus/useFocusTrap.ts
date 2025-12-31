@@ -156,11 +156,11 @@ export type UseFocusTrapProps = {
 }
 
 export const useFocusTrap = ({
-                               container,
-                               active = true,
-                               initialFocus,
-                               focusFirst = true,
-                             }: UseFocusTrapProps) => {
+  container,
+  active = true,
+  initialFocus,
+  focusFirst = true,
+}: UseFocusTrapProps) => {
   const lastFocusRef = useRef<HTMLElement>(null)
   const [paused, setPaused] = useState(false)
   const isMounted = useIsMounted()

@@ -13,7 +13,7 @@ import React, {
 import clsx from 'clsx'
 import { ChevronLeft, ChevronRight } from 'lucide-react'
 import { createLoopingListWithIndex, range } from '@/src/utils/array'
-import { Button } from '../user-action/Button'
+import { Button } from '../user-interaction/Button'
 import { useHightideTranslation } from '@/src/i18n/useHightideTranslation'
 
 //
@@ -44,8 +44,8 @@ type CarouselTabsProps = {
 }
 
 export default function CarouselTabs({
-                                       onChange,
-                                     }: CarouselTabsProps) {
+  onChange,
+}: CarouselTabsProps) {
   const translation = useHightideTranslation()
   const { id, slideCount, currentIndex, isLooping } = useCarouselContext()
 
@@ -92,6 +92,7 @@ export default function CarouselTabs({
               }
             )}
 
+            type="button"
             role="tab"
             tabIndex={isSelected ? 0 : -1}
             aria-label={translation('showSlide', { index: (index + 1) })}
@@ -115,10 +116,10 @@ export interface CarouselSlideProps extends HTMLAttributes<HTMLDivElement> {
 
 export const CarouselSlide = forwardRef<HTMLDivElement, CarouselSlideProps>(
   function CarouselSlide({
-                           index,
-                           isSelected,
-                           ...props
-                         }, ref) {
+    index,
+    isSelected,
+    ...props
+  }, ref) {
     const translation = useHightideTranslation()
     const { id, slideCount } = useCarouselContext()
 
@@ -178,22 +179,22 @@ export type CarouselProps = Omit<HTMLAttributes<HTMLDivElement>, 'children'> & {
 }
 
 export const Carousel = ({
-                           children,
-                           animationTime = 200,
-                           isLooping = false,
-                           isAutoPlaying = false,
-                           autoLoopingTimeOut = 5000,
-                           autoLoopAnimationTime = 1000,
-                           hintNext = false,
-                           arrows = false,
-                           dots = true,
-                           blurColor = 'from-background',
-                           heightClassName = 'h-96',
-                           slideClassName = 'w-[70%] desktop:w-1/2',
-                           slideContainerProps,
-                           onSlideChanged,
-                           ...props
-                         }: CarouselProps) => {
+  children,
+  animationTime = 200,
+  isLooping = false,
+  isAutoPlaying = false,
+  autoLoopingTimeOut = 5000,
+  autoLoopAnimationTime = 1000,
+  hintNext = false,
+  arrows = false,
+  dots = true,
+  blurColor = 'from-background',
+  heightClassName = 'h-96',
+  slideClassName = 'w-[70%] desktop:w-1/2',
+  slideContainerProps,
+  onSlideChanged,
+  ...props
+}: CarouselProps) => {
   const translation = useHightideTranslation()
   const slideRefs = useRef<HTMLDivElement[]>([])
   const [currentIndex, setCurrentIndex] = useState<number>(0)
@@ -359,9 +360,9 @@ export const Carousel = ({
             >
               <div className="flex-row-2 relative h-full w-full px-2 overflow-hidden">
                 {items.map(({
-                              item,
-                              index
-                            }, listIndex) => {
+                  item,
+                  index
+                }, listIndex) => {
                   const isInItems = before.length <= listIndex && listIndex < items.length - after.length
 
                   return (

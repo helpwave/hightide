@@ -23,10 +23,10 @@ export type TransitionWrapperProps = PropsWithBagFunctionOrChildren<TransitionBa
  * Only use when you have a transition happening
  */
 export function Transition({
-                             children,
-                             show,
-                             includeAnimation = true,
-                           }: TransitionWrapperProps) {
+  children,
+  show,
+  includeAnimation = true,
+}: TransitionWrapperProps) {
   const [isOpen, setIsOpen] = useState<boolean>(show)
   const [isTransitioning, setIsTransitioning] = useState<boolean>(!isOpen)
 
