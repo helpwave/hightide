@@ -20,14 +20,23 @@
   }
 
   [data-name="expandable-content"]:not(.default-style-none) {
-    @apply flex-col-2 px-4 transition-all duration-300 ease-in-out;
+    @apply flex-col-2 px-4 transition-all ease-in-out;
+
+    &[data-state="opening"],
+    &[data-state="closing"] {
+      @apply overflow-hidden;
+    }
+
+    &[data-state="opened"] {
+      @apply overflow-y-auto;
+    }
 
     &:not([data-expanded]) {
-      @apply max-h-0 opacity-0 overflow-hidden py-0;
+      @apply max-h-0 opacity-0 overflow-hidden py-0 duration-[var(--animation-duration-out)];
     }
 
     &[data-expanded] {
-      @apply max-h-96 opacity-100 py-2 overflow-y-auto;
+      @apply max-h-96 opacity-100 py-2 duration-[var(--animation-duration-in)];
     }
   }
 }

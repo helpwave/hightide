@@ -1,4 +1,4 @@
-import { useEffect, useState } from 'react'
+import { useState } from 'react'
 import { ArrowDown, ArrowUp, Calendar, ChevronDown } from 'lucide-react'
 import type { WeekDay } from '@/src/utils/date'
 import { addDuration, isInTimeSpan, subtractDuration } from '@/src/utils/date'
@@ -11,15 +11,14 @@ import { YearMonthPicker } from '@/src/components/user-interaction/date/YearMont
 import { useLocale } from '@/src/contexts/LocaleContext'
 import { Button } from '@/src/components/user-interaction/Button'
 import { LocalizationUtil } from '@/src/i18n/util'
+import type { FormFieldDataHandling } from '../../form/FormField'
 
 type DisplayMode = 'yearMonth' | 'day'
 
-export type DatePickerProps = {
-  value?: Date,
+export type DatePickerProps = Partial<FormFieldDataHandling<Date>> & {
   start?: Date,
   end?: Date,
   initialDisplay?: DisplayMode,
-  onValueChange?: (date: Date) => void,
   weekStart?: WeekDay,
   dayPickerProps?: Omit<DayPickerProps, 'displayedMonth' | 'onChange' | 'selected' | 'weekStart'>,
   yearMonthPickerProps?: Omit<YearMonthPickerProps, 'displayedYearMonth' | 'onChange' | 'start' | 'end'>,
@@ -31,22 +30,19 @@ export type DatePickerProps = {
  */
 export const DatePicker = ({
   value = new Date(),
-  start = subtractDuration(new Date(), { years: 50 }),
-  end = addDuration(new Date(), { years: 50 }),
+  start,
+  end,
   initialDisplay = 'day',
   weekStart,
   onValueChange,
+  onEditComplete,
   yearMonthPickerProps,
   dayPickerProps,
-  className = ''
+  className
 }: DatePickerProps) => {
   const { locale } = useLocale()
-  const [displayedMonth, setDisplayedMonth] = useState<Date>(value)
+  const [displayedMonth, setDisplayedMonth] = useState<Date>(new Date(value.getFullYear(), value.getMonth(), 1))
   const [displayMode, setDisplayMode] = useState<DisplayMode>(initialDisplay)
-
-  useEffect(() => {
-    setDisplayedMonth(value)
-  }, [value])
 
   return (
     <div className={clsx('flex-col-3', className)}>
@@ -71,6 +67,7 @@ export const DatePicker = ({
                 const newDate = new Date()
                 newDate.setHours(value.getHours(), value.getMinutes())
                 onValueChange(newDate)
+                setDisplayedMonth(newDate)
               }}
             >
               <Calendar className="size-5"/>
@@ -99,23 +96,30 @@ export const DatePicker = ({
       {displayMode === 'yearMonth' ? (
         <YearMonthPicker
           {...yearMonthPickerProps}
-          displayedYearMonth={value}
+          value={value}
           start={start}
           end={end}
           onValueChange={newDate => {
             setDisplayedMonth(newDate)
             setDisplayMode('day')
           }}
+          onEditComplete={newDate => {
+            setDisplayedMonth(newDate)
+            setDisplayMode('day')
+          }}
+          className="h-60 max-h-60"
         />
       ) : (
         <DayPicker
           {...dayPickerProps}
+          value={value}
           displayedMonth={displayedMonth}
           start={start}
           end={end}
           weekStart={weekStart}
-          selected={value}
           onValueChange={onValueChange}
+          onEditComplete={onEditComplete}
+          className="h-60 max-h-60"
         />
       )}
     </div>

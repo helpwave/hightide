@@ -61,7 +61,7 @@ export const Button = forwardRef<HTMLButtonElement, ButtonProps>(function SolidB
         if(!allowClickEventPropagation) {
           event.stopPropagation()
         }
-        props?.onClick(event)
+        props.onClick?.(event)
       }}
 
       type={props['type'] ?? 'button'}

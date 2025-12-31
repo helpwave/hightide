@@ -117,18 +117,18 @@ function navigate<T>({
 }: NavigateType<T>): React.KeyboardEventHandler<T> {
   return (event) => {
     switch (event.key) {
-      case 'ArrowLeft':
-        left(event)
-        break
-      case 'ArrowRight':
-        right(event)
-        break
-      case 'ArrowUp':
-        up(event)
-        break
-      case 'ArrowDown':
-        down(event)
-        break
+    case 'ArrowLeft':
+      left(event)
+      break
+    case 'ArrowRight':
+      right(event)
+      break
+    case 'ArrowUp':
+      up(event)
+      break
+    case 'ArrowDown':
+      down(event)
+      break
     }
   }
 }

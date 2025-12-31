@@ -16,6 +16,7 @@ and adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 - autoprefixer for CSS backwards compatability
 - `useTransitionState` hook to keep track of transition changes
 - `Form` and `FormStore` for form handling
+- `InifinteScroll` component for infinitly scrolling lists
 
 ### Changed
 
@@ -28,6 +29,7 @@ and adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 - Replaced `ZIndexRegistry` with `OverlayRegistry` to allow for saving more information about overlays then just their zIndex
 - `FormElementWrapper` to clone children and give them the required props when not using the bag
 - Input elements such as `Input`, `TextArea`, `Select`, etc. now all use `onValueChange` and `onEditComplete` instead of other alternative names
+- Date- and Time-Picker to use the `value`, `onValueChange`, `onEditComplete` pattern
 
 ### Fixed
 

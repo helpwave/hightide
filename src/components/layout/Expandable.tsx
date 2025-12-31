@@ -6,6 +6,7 @@ import clsx from 'clsx'
 import { useOverwritableState } from '@/src/hooks/useOverwritableState'
 import { Visibility } from './Visibility'
 import { ExpansionIcon } from '../display-and-visualization/ExpansionIcon'
+import { useTransitionState } from '@/src/hooks/useTransitionState'
 
 //
 // Context
@@ -87,7 +88,7 @@ export const ExpandableRoot = forwardRef<HTMLDivElement, ExpandableRootProps>(fu
 
         onClick={(event) => {
           props.onClick?.(event)
-          if(allowContainerToggle) {
+          if (allowContainerToggle) {
             toggle()
           }
         }}
@@ -118,7 +119,7 @@ export const ExpandableHeader = forwardRef<HTMLDivElement, ExpandableHeaderProps
 }, ref) {
   const { isExpanded, toggle, ids, setIds, disabled } = useExpandableContext()
   useEffect(() => {
-    if(props.id) {
+    if (props.id) {
       setIds(prevState => ({ ...prevState, header: props.id }))
     }
   }, [props.id, setIds])
@@ -155,18 +156,23 @@ export const ExpandableHeader = forwardRef<HTMLDivElement, ExpandableHeaderProps
 // ExpandableContent
 //
 
-export type ExpandableContentProps = HTMLAttributes<HTMLDivElement>
+export type ExpandableContentProps = HTMLAttributes<HTMLDivElement> & {
+  forceMount?: boolean,
+}
 
 export const ExpandableContent = forwardRef<HTMLDivElement, ExpandableContentProps>(function ExpandableContent({
   children,
+  forceMount = false,
   ...props
 }, ref) {
   const { isExpanded, ids, setIds } = useExpandableContext()
   useEffect(() => {
-    if(props.id) {
+    if (props.id) {
       setIds(prevState => ({ ...prevState, content: props.id }))
     }
   }, [props.id, setIds])
+
+  const { transitionState, callbacks } = useTransitionState({ isOpen: isExpanded })
 
   return (
     <div
@@ -174,10 +180,15 @@ export const ExpandableContent = forwardRef<HTMLDivElement, ExpandableContentPro
       ref={ref}
       id={ids.content}
 
+      {...callbacks}
+
       data-name="expandable-content"
       data-expanded={isExpanded ? '' : undefined}
+      data-state={transitionState}
     >
-      {children}
+      <Visibility isVisible={forceMount || isExpanded}>
+        {children}
+      </Visibility>
     </div>
   )
 })
@@ -218,7 +229,7 @@ export const Expandable = forwardRef<HTMLDivElement, ExpandableProps>(function E
   contentExpandedClassName,
 }, ref) {
 
-  const defaultIcon = useCallback((expanded: boolean) => <ExpansionIcon isExpanded={expanded}/>, [])
+  const defaultIcon = useCallback((expanded: boolean) => <ExpansionIcon isExpanded={expanded} />, [])
   const iconBuilder = icon ?? defaultIcon
 
   return (

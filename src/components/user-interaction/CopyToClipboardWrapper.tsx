@@ -32,13 +32,13 @@ export type CopyToClipboardWrapperProps = PropsWithChildren<{
  * @constructor
  */
 export const CopyToClipboardWrapper = ({
-                                         children,
-                                         textToCopy,
-                                         tooltipClassName = '',
-                                         containerClassName = '',
-                                         position = 'bottom',
-                                         zIndex = 10,
-                                       }: CopyToClipboardWrapperProps) => {
+  children,
+  textToCopy,
+  tooltipClassName = '',
+  containerClassName = '',
+  position = 'bottom',
+  zIndex = 10,
+}: CopyToClipboardWrapperProps) => {
   const translation = useHightideTranslation()
   const [isShowingIndication, setIsShowingIndication] = useState(false)
   const [isShowingConfirmation, setIsShowingConfirmation] = useState(false)

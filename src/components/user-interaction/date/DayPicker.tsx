@@ -1,16 +1,15 @@
 import type { WeekDay } from '@/src/utils/date'
 import { DateUtils, getWeeksForCalenderMonth, isInTimeSpan } from '@/src/utils/date'
-import clsx from 'clsx'
 import { useLocale } from '@/src/contexts/LocaleContext'
-import { useEffect, useState } from 'react'
-import { Button } from '@/src/components/user-interaction/Button'
+import type { FormFieldDataHandling } from '../../form/FormField'
+import { useOverwritableState } from '@/src/hooks/useOverwritableState'
+import { PropsUtil } from '@/src/utils/propsUtil'
+import { useMemo } from 'react'
 
-export type DayPickerProps = {
+export type DayPickerProps = Partial<FormFieldDataHandling<Date>> & {
   displayedMonth: Date,
-  selected?: Date,
   start?: Date,
   end?: Date,
-  onValueChange?: (date: Date) => void,
   weekStart?: WeekDay,
   markToday?: boolean,
   className?: string,
@@ -21,10 +20,11 @@ export type DayPickerProps = {
  */
 export const DayPicker = ({
   displayedMonth,
-  selected,
-  start,
-  end,
+  value,
+  start: providedStart,
+  end: providedEnd,
   onValueChange,
+  onEditComplete,
   weekStart = 'monday',
   markToday = true,
   className = ''
@@ -33,48 +33,61 @@ export const DayPicker = ({
   const month = displayedMonth.getMonth()
   const weeks = getWeeksForCalenderMonth(displayedMonth, weekStart)
 
+  // TODO add keyboard navigation here
+
+  const end = useMemo(() => {
+    if(!providedEnd) return
+    return new Date(providedEnd.getFullYear(), providedEnd.getMonth(), providedEnd.getDate())
+  }, [providedEnd])
+
+  const start = useMemo(() => {
+    if(!providedStart) return
+    return new Date(providedStart.getFullYear(), providedStart.getMonth(), providedStart.getDate())
+  }, [providedStart])
+
   return (
-    <div className={clsx('flex-col-1 min-w-[220px] select-none', className)}>
-      <div className="flex-row-2 text-center">
+    <div className={className} data-name="day-picker-container">
+      <div data-name="day-picker-header-row">
         {weeks[0]!.map((weekDay, index) => (
-          <div key={index} className="flex-1 font-semibold">
+          <div key={index} data-name="day-picker-header-item">
             {new Intl.DateTimeFormat(locale, { weekday: 'long' }).format(weekDay).substring(0, 2)}
           </div>
         ))}
       </div>
       {weeks.map((week, index) => (
-        <div key={index} className="flex-row-2 text-center">
+        <div key={index} data-name="day-picker-body-row">
           {week.map((date) => {
-            const isSelected = !!selected && DateUtils.equalDate(selected, date)
+            const isSelected = !!value && DateUtils.equalDate(value, date)
             const isToday = DateUtils.equalDate(new Date(), date)
             const isSameMonth = date.getMonth() === month
             const isDayValid = isInTimeSpan(date, start, end)
             return (
-              <Button
-                disabled={!isDayValid}
+              <button
                 key={date.getDate()}
-                color={isSelected ? 'primary' : 'neutral'}
-                coloringStyle={isSelected ? 'solid' : 'text'}
-                size="sm"
-                className={clsx(
-                  'flex-1 rounded-full border-2',
-                  {
-                    'text-description': !isSameMonth && !isSelected && isDayValid,
-                    'border-on-background': isToday && markToday,
-                    'border-transparent': !(isToday && markToday),
-                  }
-                )}
-                onClick={() => onValueChange?.(new Date(
-                  date.getFullYear(),
-                  date.getMonth(),
-                  date.getDate(),
-                  selected.getHours(),
-                  selected.getMinutes(),
-                  selected.getSeconds()
-                ))}
+
+                disabled={!isDayValid}
+
+                onClick={() => {
+                  const newDate = new Date(
+                    date.getFullYear(),
+                    date.getMonth(),
+                    date.getDate(),
+                    value.getHours(),
+                    value.getMinutes(),
+                    value.getSeconds()
+                  )
+                  onValueChange?.(newDate)
+                  onEditComplete?.(newDate)
+                }}
+
+                data-name="day-picker-body-item"
+                data-selected={PropsUtil.dataAttributes.bool(isSelected)}
+                data-invalid={PropsUtil.dataAttributes.bool(!isDayValid)}
+                data-today={PropsUtil.dataAttributes.bool(isToday && markToday)}
+                data-samemonth={PropsUtil.dataAttributes.bool(isSameMonth)}
               >
                 {date.getDate()}
-              </Button>
+              </button>
             )
           })}
         </div>
@@ -84,29 +97,17 @@ export const DayPicker = ({
 }
 
 export const DayPickerUncontrolled = ({
-  displayedMonth,
-  selected,
+  value: initialValue,
   onValueChange,
-  ...restProps
+  ...props
 }: DayPickerProps) => {
-  const [date, setDate] = useState(selected)
-  const [usedDisplayedMonth, setUsedDDisplayedMonth] = useState(displayedMonth)
-
-  useEffect(() => {
-    setDate(selected)
-    setUsedDDisplayedMonth(selected)
-  }, [selected])
+  const [value, setValue] = useOverwritableState(initialValue, onValueChange)
 
   return (
     <DayPicker
-      displayedMonth={usedDisplayedMonth}
-      selected={date}
-      onValueChange={newDate => {
-        setDate(newDate)
-        setUsedDDisplayedMonth(newDate)
-        onValueChange?.(newDate)
-      }}
-      {...restProps}
+      value={value}
+      onValueChange={setValue}
+      {...props}
     />
   )
 }

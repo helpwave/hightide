@@ -1,68 +1,32 @@
 import { useEffect, useRef } from 'react'
 import { closestMatch, range } from '@/src/utils/array'
-import clsx from 'clsx'
 import { useOverwritableState } from '@/src/hooks/useOverwritableState'
 import { Button } from '@/src/components/user-interaction/Button'
+import type { FormFieldDataHandling } from '../../form/FormField'
 
 export type TimePickerMinuteIncrement = '1min' | '5min' | '10min' | '15min' | '30min'
 
-export type TimePickerProps = {
-  time?: Date,
-  onValueChange?: (time: Date) => void,
+// TODO add start, and end constraints
+export type TimePickerProps = Partial<FormFieldDataHandling<Date>> & {
   is24HourFormat?: boolean,
   minuteIncrement?: TimePickerMinuteIncrement,
-  maxHeight?: number,
   className?: string,
 }
 
 export const TimePicker = ({
-  time = new Date(),
+  value = new Date(),
   onValueChange,
+  onEditComplete,
   is24HourFormat = true,
   minuteIncrement = '5min',
-  maxHeight = 280,
-  className = ''
+  className,
 }: TimePickerProps) => {
   const minuteRef = useRef<HTMLButtonElement>(null)
   const hourRef = useRef<HTMLButtonElement>(null)
 
-  const isPM = time.getHours() >= 11
+  const isPM = value.getHours() > 11
   const hours = is24HourFormat ? range(24) : range(12)
   let minutes = range(60)
-
-  useEffect(() => {
-    const scrollToItem = () => {
-      if (minuteRef.current) {
-        const container = minuteRef.current.parentElement!
-
-        const hasOverflow = container.scrollHeight > maxHeight
-        if (hasOverflow) {
-          minuteRef.current.scrollIntoView({
-            behavior: 'instant',
-            block: 'nearest',
-          })
-        }
-      }
-    }
-    scrollToItem()
-  }, [minuteRef, minuteRef.current]) // eslint-disable-line
-
-  useEffect(() => {
-    const scrollToItem = () => {
-      if (hourRef.current) {
-        const container = hourRef.current.parentElement!
-
-        const hasOverflow = container.scrollHeight > maxHeight
-        if (hasOverflow) {
-          hourRef.current.scrollIntoView({
-            behavior: 'instant',
-            block: 'nearest',
-          })
-        }
-      }
-    }
-    scrollToItem()
-  }, [hourRef, hourRef.current]) // eslint-disable-line
 
   switch (minuteIncrement) {
   case '5min':
@@ -79,19 +43,35 @@ export const TimePicker = ({
     break
   }
 
-  const closestMinute = closestMatch(minutes, (item1, item2) => Math.abs(item1 - time.getMinutes()) < Math.abs(item2 - time.getMinutes()))
+  const closestMinute = closestMatch(minutes, (item1, item2) => Math.abs(item1 - value.getMinutes()) < Math.abs(item2 - value.getMinutes()))
+  const hour = value.getHours()
+
+  useEffect(() => {
+    minuteRef.current?.scrollIntoView({
+      behavior: 'smooth',
+      block: 'nearest',
+    })
+  }, [closestMinute])
+
+  useEffect(() => {
+    hourRef.current?.scrollIntoView({
+      behavior: 'smooth',
+      block: 'nearest',
+    })
+  }, [hour])
 
   const onChangeWrapper = (transformer: (newDate: Date) => void) => {
-    const newDate = new Date(time)
+    const newDate = new Date(value)
     transformer(newDate)
     onValueChange?.(newDate)
+    onEditComplete?.(newDate)
   }
 
   return (
-    <div className={clsx('flex-row-2 select-none overflow-hidden', className)}>
-      <div className="flex-col-1 h-full overflow-y-auto min-w-16">
+    <div data-name="time-picker-container" className={className}>
+      <div data-name="time-picker-value-column">
         {hours.map(hour => {
-          const isSelected = hour === time.getHours() - (!is24HourFormat && isPM ? 12 : 0)
+          const isSelected = hour === value.getHours() - (!is24HourFormat && isPM ? 12 : 0)
           return (
             <Button
               size="sm"
@@ -105,7 +85,7 @@ export const TimePicker = ({
           )
         })}
       </div>
-      <div className="flex-col-1 h-full overflow-y-auto min-w-16">
+      <div data-name="time-picker-value-column">
         {minutes.map(minute => {
           const isSelected = minute === closestMinute
           return (
@@ -122,7 +102,7 @@ export const TimePicker = ({
         })}
       </div>
       {!is24HourFormat && (
-        <div className="flex-col-1 min-w-16">
+        <div data-name="time-picker-value-column">
           <Button
             size="sm"
             color={!isPM ? 'primary' : 'neutral'}
@@ -144,16 +124,16 @@ export const TimePicker = ({
 }
 
 export const TimePickerUncontrolled = ({
-  time,
+  value: initialValue,
   onValueChange,
   ...props
 }: TimePickerProps) => {
-  const [value, setValue] = useOverwritableState(time, onValueChange)
+  const [value, setValue] = useOverwritableState(initialValue, onValueChange)
 
   return (
     <TimePicker
       {...props}
-      time={value}
+      value={value}
       onValueChange={setValue}
     />
   )

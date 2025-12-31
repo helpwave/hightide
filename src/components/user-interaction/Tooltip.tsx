@@ -77,11 +77,11 @@ export const Tooltip = ({
 
   const verticalAlignment: FloatingElementAlignment = useMemo(() =>
     position === 'top' ? 'beforeStart' : position === 'bottom' ? 'afterEnd' : 'center',
-    [position])
+  [position])
 
   const horizontalAlignment: FloatingElementAlignment = useMemo(() =>
     position === 'left' ? 'beforeStart' : position === 'right' ? 'afterEnd' : 'center',
-    [position])
+  [position])
 
   const css = useFloatingElement(useMemo(() => ({
     active: isActive || isVisible,

@@ -31,8 +31,6 @@ export const Textarea = forwardRef<HTMLTextAreaElement, TextareaProps>(function 
     clearTimer()
   }
 
-  console.log('build text')
-
   return (
     <textarea
       {...props}

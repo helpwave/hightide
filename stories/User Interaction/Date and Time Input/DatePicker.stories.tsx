@@ -16,9 +16,9 @@ export const datePicker: Story = {
     start: subtractDuration(new Date(), { years: 50 }),
     end: addDuration(new Date(), { years: 50 }),
     initialDisplay: 'day',
-    className: '',
     yearMonthPickerProps: {},
     dayPickerProps: {},
     onValueChange: action('onValueChange'),
+    onEditComplete: action('onEditComplete')
   },
 }

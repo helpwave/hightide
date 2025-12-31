@@ -1,25 +1,23 @@
 import { type ReactNode } from 'react'
 import clsx from 'clsx'
 import type { WeekDay } from '@/src/utils/date'
-import { addDuration, subtractDuration } from '@/src/utils/date'
-import type { TimePickerProps, TimePickerMinuteIncrement } from '../date/TimePicker'
-import { TimePicker } from '../date/TimePicker'
-import type { DatePickerProps } from '../date/DatePicker'
-import { DatePicker } from '../date/DatePicker'
+import type { TimePickerProps, TimePickerMinuteIncrement } from './TimePicker'
+import { TimePicker } from './TimePicker'
+import type { DatePickerProps } from './DatePicker'
+import { DatePicker } from './DatePicker'
 import { useOverwritableState } from '@/src/hooks/useOverwritableState'
+import type { FormFieldDataHandling } from '../../form/FormField'
 
 export type DateTimePickerMode = 'date' | 'time' | 'dateTime'
 
-export type DateTimePickerProps = {
+export type DateTimePickerProps = Partial<FormFieldDataHandling<Date>> & {
   mode?: DateTimePickerMode,
-  value?: Date,
   start?: Date,
   end?: Date,
   is24HourFormat?: boolean,
   minuteIncrement?: TimePickerMinuteIncrement,
   markToday?: boolean,
   weekStart?: WeekDay,
-  onValueChange?: (date: Date) => void,
   datePickerProps?: Omit<DatePickerProps, 'onChange' | 'value' | 'start' | 'end'>,
   timePickerProps?: Omit<TimePickerProps, 'onChange' | 'time' | 'is24HourFormat' | 'minuteIncrement'>,
 }
@@ -29,13 +27,14 @@ export type DateTimePickerProps = {
  */
 export const DateTimePicker = ({
   value = new Date(),
-  start = subtractDuration(new Date(), { years: 50 }),
-  end = addDuration(new Date(), { years: 50 }),
+  start,
+  end,
   mode = 'dateTime',
   is24HourFormat,
   minuteIncrement,
   weekStart,
-  onValueChange: onChange,
+  onValueChange,
+  onEditComplete,
   timePickerProps,
   datePickerProps,
 }: DateTimePickerProps) => {
@@ -51,11 +50,12 @@ export const DateTimePicker = ({
         {...datePickerProps}
         className="min-w-80"
         yearMonthPickerProps={{ className: 'h-full grow' }}
-        value={value}
         start={start}
         end={end}
         weekStart={weekStart}
-        onValueChange={onChange}
+        value={value}
+        onValueChange={onValueChange}
+        onEditComplete={onEditComplete}
       />
     )
   }
@@ -66,8 +66,9 @@ export const DateTimePicker = ({
         is24HourFormat={is24HourFormat}
         minuteIncrement={minuteIncrement}
         className={clsx({ 'justify-between': mode === 'time' })}
-        time={value}
-        onValueChange={onChange}
+        value={value}
+        onValueChange={onValueChange}
+        onEditComplete={onEditComplete}
       />
     )
   }
@@ -80,8 +81,8 @@ export const DateTimePicker = ({
   )
 }
 
-export const DateTimePickerUncontrolled = ({ value: overwriteValue, onValueChange, ...props }: DateTimePickerProps) => {
-  const [value, setValue] = useOverwritableState(overwriteValue, onValueChange)
+export const DateTimePickerUncontrolled = ({ value: initialValue, onValueChange, ...props }: DateTimePickerProps) => {
+  const [value, setValue] = useOverwritableState(initialValue, onValueChange)
 
   return (
     <DateTimePicker

@@ -12,11 +12,17 @@ type Story = StoryObj<typeof meta>;
 
 export const yearMonthPicker: Story = {
   args: {
+    value: new Date(),
     start: subtractDuration(new Date(), { years: 50 }),
     end: addDuration(new Date(), { years: 50 }),
-    className: 'max-w-64',
-    maxHeight: 300,
-    showValueOpen: false,
     onValueChange: action('onValueChange'),
+    onEditComplete: action('onEditComplete'),
   },
+  decorators: (Story) => {
+    return (
+      <div className="h-128 overflow-hidden max-w-64">
+        <Story />
+      </div>
+    )
+  }
 }

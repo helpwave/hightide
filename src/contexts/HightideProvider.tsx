@@ -13,11 +13,11 @@ type HightideProviderProps = PropsWithChildren & {
 }
 
 export const HightideProvider = ({
-                                   children,
-                                   theme,
-                                   locale,
-                                   config,
-                                 }: HightideProviderProps) => {
+  children,
+  theme,
+  locale,
+  config,
+}: HightideProviderProps) => {
   return (
     <LocaleProvider {...locale}>
       <ThemeProvider {...theme}>
