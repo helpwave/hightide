@@ -4,9 +4,21 @@ on:
   push:
     branches:
       - main
+    paths:
+      - 'src/components/**'
+      - 'tests/**'
+      - 'package.json'
+      - 'package-lock.json'
+      - '.github/workflows/test.yaml'
   pull_request:
     branches:
       - '**'
+    paths:
+      - 'src/components/**'
+      - 'tests/**'
+      - 'package.json'
+      - 'package-lock.json'
+      - '.github/workflows/test.yaml'
 
 jobs:
   publish:
