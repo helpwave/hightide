@@ -120,8 +120,8 @@
       }
     }
   },
-  "monthName": "{month, select, january{Januar} february{Februar} march{März} april{April} may{Mai} june{Juni} july{Juli} august{August} september{September} october{Oktober} november{November} december{Dezember} other{Unbekannter Monat}}",
-  "@monthName": {
+  "sMonthName": "{month, select, january{Januar} february{Februar} march{März} april{April} may{Mai} june{Juni} july{Juli} august{August} september{September} october{Oktober} november{November} december{Dezember} other{Unbekannter Monat}}",
+  "@sMonthName": {
     "placeholders": {
       "month": {}
     }

@@ -28,7 +28,7 @@ export const translation: Story = {
         {translation('goodToSeeYou')}{', '}
         <span className="text-primary">{name}</span>{'. '}
         <br/>
-        {translation('gender', { gender }) + '. '}
+        {translation('sGender', { gender }) + '. '}
         <br/>
         {translation('outOfRangeString', { min, max })}
       </p>

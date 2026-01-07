@@ -50,7 +50,7 @@ export const ThemeDialog = ({
 
   return (
     <Dialog
-      titleElement={titleOverwrite ?? translation('themes', { count: 1 })}
+      titleElement={titleOverwrite ?? translation('pThemes', { count: 1 })}
       description={descriptionOverwrite ?? translation('chooseTheme')}
       onClose={onClose}
       {...props}
@@ -64,7 +64,7 @@ export const ThemeDialog = ({
             selectedDisplay: (value) => (
               <div className="flex-row-2 items-center">
                 <ThemeIcon theme={theme}/>
-                {translation('themeMode', { theme: value })}
+                {translation('sThemeMode', { theme: value })}
               </div>
             ),
             className: 'min-w-32',
@@ -74,7 +74,7 @@ export const ThemeDialog = ({
             <SelectOption key={theme} value={theme} className="gap-x-6 justify-between">
               <div className="flex-row-2 items-center">
                 <ThemeIcon theme={theme}/>
-                {translation('themeMode', { theme: theme })}
+                {translation('sThemeMode', { theme: theme })}
               </div>
             </SelectOption>
           ))}
