@@ -1,0 +1,254 @@
+---
+name: theming
+description: Rules for component theming using data attributes and CSS file structure
+---
+
+# Overview
+
+Components should use data attributes for styling and state management. All component styles are defined in CSS files within the theme system, following a consistent pattern based on the Expandable component.
+
+## Data Attributes Pattern
+
+### Component Identification
+
+Every component element should have a `data-name` attribute that uniquely identifies it:
+
+```tsx
+<div data-name="my-component-root">
+  <div data-name="my-component-header">...</div>
+  <div data-name="my-component-content">...</div>
+</div>
+```
+
+**Naming Convention:**
+- Use kebab-case: `my-component-root`, `my-component-header`
+- For sub-components, use descriptive names: `expandable-root`, `expandable-header`, `expandable-content`
+- For container elements: `dialog-container`, `day-picker-container`
+
+### Boolean Data Attributes
+
+Boolean data attributes use an empty string when `true` and `undefined` when `false`:
+
+```tsx
+<div
+  data-expanded={isExpanded ? '' : undefined}
+  data-disabled={disabled ? '' : undefined}
+  data-containertoggleable={allowContainerToggle ? '' : undefined}
+/>
+```
+
+**Available Utilities:**
+- `PropsUtil.dataAttributes.bool(value)` - Returns `''` if true, `undefined` if false
+- `PropsUtil.dataAttributes.name(defaultName, props)` - Gets `data-name` from props or uses default
+
+**Example from Expandable:**
+```tsx
+data-expanded={isExpanded ? '' : undefined}
+data-disabled={disabled ? '' : undefined}
+data-containertoggleable={allowContainerToggle ? '' : undefined}
+```
+
+### State Data Attributes
+
+For state values, use string attributes:
+
+```tsx
+<div data-state={transitionState} />  // "opening" | "closing" | "opened" | "closed"
+<div data-position="center" />        // "top" | "center" | "bottom"
+<div data-size="md" />                // "xs" | "sm" | "md" | "lg"
+```
+
+### Interaction States
+
+For form elements and interactive components, use the interaction states utility:
+
+```tsx
+import { PropsUtil } from '@/src/utils/propsUtil'
+
+<div
+  {...PropsUtil.dataAttributes.interactionStates({
+    disabled,
+    invalid,
+    readOnly,
+    required
+  })}
+/>
+```
+
+This automatically sets: `data-disabled`, `data-invalid`, `data-readonly`, `data-required`
+
+## CSS File Structure
+
+### File Location
+
+Component CSS files are located in `src/style/theme/components/` and follow the naming pattern:
+- Component file: `src/components/layout/Expandable.tsx`
+- CSS file: `src/style/theme/components/expandable.css`
+
+### CSS Layer and Selectors
+
+All component styles must be wrapped in `@layer components` and target data attributes:
+
+```css
+@layer components {
+  [data-name="my-component-root"]:not(.default-style-none) {
+    @apply flex-col-0 surface coloring-solid rounded-lg;
+  }
+
+  [data-name="my-component-header"]:not(.default-style-none) {
+    @apply flex-row-2 justify-between items-center;
+    
+    &:not([data-disabled]) {
+      @apply cursor-pointer;
+    }
+    
+    &[data-disabled] {
+      @apply cursor-not-allowed disabled;
+    }
+  }
+}
+```
+
+**Key Rules:**
+1. Always use `@layer components` wrapper
+2. Target `[data-name="component-name"]` selectors
+3. Include `:not(.default-style-none)` to allow opt-out styling
+4. Use Tailwind `@apply` directives for utility classes
+5. Use nested selectors for state-based styling: `&[data-expanded]`, `&:not([data-disabled])`
+
+### State-Based Styling
+
+Style different states using attribute selectors:
+
+```css
+[data-name="expandable-content"]:not(.default-style-none) {
+  @apply transition-all ease-in-out;
+
+  &:not([data-expanded]) {
+    @apply max-h-0 opacity-0 overflow-hidden;
+  }
+
+  &[data-expanded] {
+    @apply max-h-24 opacity-100;
+  }
+
+  &[data-state="opening"],
+  &[data-state="closing"] {
+    @apply overflow-hidden;
+  }
+
+  &[data-state="opened"] {
+    @apply overflow-y-auto;
+  }
+}
+```
+
+### Custom Utilities
+
+You can define custom utilities using `@utility`:
+
+```css
+@utility expadable-content-h-* {
+  height: calc(var(--spacing) * --value(number));
+
+  &[data-expanded] {
+    max-height: calc(var(--spacing) * --value(number));
+  }
+}
+```
+
+### Importing CSS Files
+
+All component CSS files must be imported in `src/style/theme/components/index.css`:
+
+```css
+@import "./expandable.css";
+@import "./button.css";
+@import "./my-component.css";
+```
+
+**Important:** Add your new CSS file import to maintain the build order.
+
+## Complete Example: Expandable Component
+
+### Component (Expandable.tsx)
+
+```tsx
+<div
+  data-name="expandable-root"
+  data-expanded={isExpanded ? '' : undefined}
+  data-disabled={disabled ? '' : undefined}
+  data-containertoggleable={allowContainerToggle ? '' : undefined}
+>
+  <div
+    data-name="expandable-header"
+    data-expanded={isExpanded ? '' : undefined}
+    data-disabled={disabled ? '' : undefined}
+  >
+    {children}
+  </div>
+  <div
+    data-name="expandable-content"
+    data-expanded={isExpanded ? '' : undefined}
+    data-state={transitionState}
+  >
+    {content}
+  </div>
+</div>
+```
+
+### CSS (expandable.css)
+
+```css
+@layer components {
+  [data-name="expandable-root"]:not(.default-style-none) {
+    @apply flex-col-0 surface coloring-solid rounded-lg shadow-sm;
+
+    &:not([data-disabled])[data-containertoggleable] {
+      @apply cursor-pointer;
+    }
+  }
+
+  [data-name="expandable-header"]:not(.default-style-none) {
+    @apply flex-row-2 justify-between items-center py-2 px-4 rounded-lg;
+
+    &:not([data-disabled]) {
+      @apply cursor-pointer surface coloring-solid-hover;
+    }
+
+    &[data-disabled] {
+      @apply cursor-not-allowed disabled coloring-solid;
+    }
+  }
+
+  [data-name="expandable-content"]:not(.default-style-none) {
+    @apply flex-col-2 px-4 transition-all ease-in-out;
+
+    &:not([data-expanded]) {
+      @apply max-h-0 opacity-0 overflow-hidden;
+    }
+
+    &[data-expanded] {
+      @apply max-h-24 opacity-100;
+    }
+
+    &[data-state="opening"],
+    &[data-state="closing"] {
+      @apply overflow-hidden;
+    }
+  }
+}
+```
+
+## Best Practices
+
+1. **Separation of Concerns**: Keep styling in CSS files, not inline styles or className logic
+2. **Data Attributes First**: Use data attributes for all state-based styling
+3. **Opt-Out Support**: Always include `:not(.default-style-none)` for flexibility
+4. **Consistent Naming**: Use kebab-case for `data-name` attributes matching component structure
+5. **State Management**: Use boolean attributes for on/off states, string attributes for multi-value states
+6. **Utility Classes**: Prefer Tailwind utilities via `@apply` over custom CSS when possible
+7. **File Organization**: One CSS file per component, imported in `components/index.css`
+
+@src/style/theme/components/**
+@src/components/**
