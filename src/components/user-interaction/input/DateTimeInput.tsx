@@ -14,19 +14,20 @@ import { useHightideTranslation } from '@/src/i18n/useHightideTranslation'
 import { Visibility } from '@/src/components/layout/Visibility'
 import { DateUtils } from '@/src/utils/date'
 import { useOverlayRegistry } from '@/src/hooks/useOverlayRegistry'
+import type { FormFieldDataHandling } from '../../form/FormField'
 
-export type DateTimeInputProps = Omit<InputProps, 'onEditComplete'> & {
-  date?: Date,
-  onValueChange?: (date: Date) => void,
-  onEditComplete?: (date: Date) => void,
+export type DateTimeInputProps = Omit<InputProps, keyof FormFieldDataHandling<string>>
+& Partial<FormFieldDataHandling<Date>>
+& {
   onRemove?: () => void,
+  // TODO allow mode = time
   mode?: 'date' | 'dateTime',
   containerProps?: HTMLAttributes<HTMLDivElement>,
-  pickerProps?: Omit<DateTimePickerProps, 'mode' | 'value' | 'onChange'>,
+  pickerProps?: Omit<DateTimePickerProps, keyof FormFieldDataHandling<Date> | 'mode'>,
 }
 
 export const DateTimeInput = ({
-  date,
+  value,
   onValueChange,
   onEditComplete,
   onRemove,
@@ -39,11 +40,11 @@ export const DateTimeInput = ({
   const { locale } = useLocale()
   const [isOpen, setIsOpen] = useState(false)
 
-
   const containerRef = useRef<HTMLDivElement>(null)
 
   useOutsideClick([containerRef], () => {
     setIsOpen(false)
+    onEditComplete(value)
   })
 
   const { zIndex } = useOverlayRegistry({ isActive: isOpen })
@@ -56,26 +57,22 @@ export const DateTimeInput = ({
     }
   }, [isReadOnly])
 
-  const cleanInputProps = { ...props } as Omit<typeof props, 'isShowingError' | 'setIsShowingError'> & Record<string, unknown>
-  delete (cleanInputProps as Record<string, unknown>)['isShowingError']
-  delete (cleanInputProps as Record<string, unknown>)['setIsShowingError']
-
   return (
     <>
       <div {...containerProps} className={clsx('relative w-full', containerProps?.className)}>
         <Input
-          {...cleanInputProps}
+          {...props}
           placeholder={translation('clickToSelect')}
-          value={date ? DateUtils.formatAbsolute(date, locale, mode === 'dateTime') : ''}
+          value={value ? DateUtils.formatAbsolute(value, locale, mode === 'dateTime') : ''}
           onClick={(event) => {
             setIsOpen(true)
-            cleanInputProps.onClick?.(event)
+            props.onClick?.(event)
           }}
           readOnly={true}
           className={clsx(
             'pr-10 w-full',
             { 'hover:cursor-pointer': !isReadOnly },
-            cleanInputProps.className
+            props.className
           )}
         />
         <Button
@@ -96,13 +93,12 @@ export const DateTimeInput = ({
           <DateTimePicker
             {...pickerProps}
             mode={mode}
-            value={date}
-            onValueChange={(newDate) => {
-              onValueChange(newDate)
-            }}
+            value={value}
+            onValueChange={onValueChange}
+            onEditComplete={onEditComplete}
           />
           <div className="flex-row-2 justify-end">
-            <Visibility isVisible={!!onRemove}>
+            <Visibility isVisible={!!onRemove && !!value}>
               <Button
                 size="md"
                 color="negative"
@@ -110,18 +106,30 @@ export const DateTimeInput = ({
                   onRemove?.()
                   setIsOpen(false)
                 }}
+                className="min-w-26"
               >
                 {translation('clear')}
+              </Button>
+            </Visibility>
+            <Visibility isVisible={!value}>
+              <Button
+                size="md"
+                color="neutral"
+                onClick={() => setIsOpen(false)}
+                className="min-w-26"
+              >
+                {translation('cancel')}
               </Button>
             </Visibility>
             <Button
               size="md"
               onClick={() => {
-                onEditComplete?.(date)
+                onEditComplete?.(value)
                 setIsOpen(false)
               }}
+              className="min-w-26"
             >
-              {translation('change')}
+              {translation('done')}
             </Button>
           </div>
         </div>
@@ -131,21 +139,21 @@ export const DateTimeInput = ({
 }
 
 export const DateTimeInputUncontrolled = ({
-  date: initialDate,
+  value: initialValue,
   ...props
 }: DateTimeInputProps) => {
-  const [date, setDate] = useOverwritableState<Date>(initialDate)
+  const [value, setValue] = useOverwritableState<Date | undefined>(initialValue)
 
   return (
     <DateTimeInput
       {...props}
-      date={date}
+      value={value}
       onValueChange={(newDate) => {
-        setDate(newDate)
+        setValue(newDate)
         props.onValueChange?.(newDate)
       }}
       onRemove={() => {
-        setDate(undefined)
+        setValue(undefined)
         props.onRemove?.()
       }}
     />

@@ -1,19 +1,10 @@
 import { List } from 'lucide-react'
 import clsx from 'clsx'
-import type { PropsWithChildren, ReactNode } from 'react'
-import type { PropertyBaseProps } from '@/src/components/user-interaction/properties/PropertyBase'
-import { PropertyBase } from '@/src/components/user-interaction/properties/PropertyBase'
-
+import type { PropsWithChildren } from 'react'
+import { PropertyField } from '@/src/components/user-interaction/properties/PropertyField'
 import { Select } from '@/src/components/user-interaction/Select'
 
-export type SingleSelectPropertyProps =
-  Omit<PropertyBaseProps, 'icon' | 'input' | 'hasValue' | 'className'>
-  & PropsWithChildren<{
-  value?: string,
-  onValueChanged?: (value: string) => void,
-  onAddNew?: (value: string) => void,
-  selectedDisplay?: (value: string) => ReactNode,
-}>
+export type SingleSelectPropertyProps = PropertyField<string> & PropsWithChildren
 
 /**
  * An Input for SingleSelect properties
@@ -21,21 +12,25 @@ export type SingleSelectPropertyProps =
 export const SingleSelectProperty = ({
   children,
   value,
-  onValueChanged,
-  selectedDisplay,
+  onValueChange,
+  onEditComplete,
   ...props
 }: SingleSelectPropertyProps) => {
   const hasValue = value !== undefined
 
   return (
-    <PropertyBase
+    <PropertyField
       {...props}
       hasValue={hasValue}
       icon={<List size={24}/>}
-      input={({ softRequired }) => (
+    >
+      {({ softRequired }) => (
         <Select
           value={value}
-          onValueChange={onValueChanged}
+          onValueChange={(value) => {
+            onValueChange?.(value)
+            onEditComplete?.(value)
+          }}
           disabled={props.readOnly}
           buttonProps={{
             className: clsx(
@@ -44,12 +39,11 @@ export const SingleSelectProperty = ({
                 '!bg-warning !text-surface-warning': softRequired && !hasValue,
               }
             ),
-            selectedDisplay: selectedDisplay,
           }}
         >
           {children}
         </Select>
       )}
-    />
+    </PropertyField>
   )
 }

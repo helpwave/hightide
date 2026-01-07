@@ -21,8 +21,9 @@ export const multiSelectProperty: Story = {
     name: 'Fruits',
     softRequired: false,
     readOnly: false,
-    onRemove: action('onRemove'),
-    onValueChange: action('onValuesChanged'),
+    oonRemove: action('onRemove'),
+    onValueChange: action('onValueChange'),
+    onEditComplete: action('onEditComplete'),
     children: options.map(option => (
       <SelectOption key={option} value={option}>
         <span className="flex-row-1 items-center">
@@ -40,8 +41,8 @@ export const multiSelectProperty: Story = {
       </SelectOption>
     ))
   },
-  render: ({ values: initialValues, ...props }) => {
-    const [values, setValues] = useState<string[]>(initialValues)
+  render: ({ value: initialValue, ...props }) => {
+    const [values, setValues] = useState<string[]>(initialValue)
 
     return (
       <MultiSelectProperty

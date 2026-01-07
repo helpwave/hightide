@@ -2,23 +2,18 @@ import { Binary } from 'lucide-react'
 import clsx from 'clsx'
 import { Input } from '@/src/components/user-interaction/input/Input'
 import { useHightideTranslation } from '@/src/i18n/useHightideTranslation'
-import type { PropertyBaseProps } from './PropertyBase'
-import { PropertyBase } from './PropertyBase'
+import { PropertyField } from './PropertyField'
 
-export type NumberPropertyProps = Omit<PropertyBaseProps, 'icon' | 'input' | 'hasValue'> & {
-  value?: number,
-  suffix?: string,
-  onChange?: (value: number) => void,
-  onEditComplete?: (value: number) => void,
-}
+export type NumberPropertyProps = PropertyField<number>
+& { suffix?: string }
 
 /**
  * An Input for number properties
  */
 export const NumberProperty = ({
   value,
-  onChange,
   onRemove,
+  onValueChange,
   onEditComplete,
   readOnly,
   suffix,
@@ -28,12 +23,13 @@ export const NumberProperty = ({
   const hasValue = value !== undefined
 
   return (
-    <PropertyBase
+    <PropertyField
       {...baseProps}
       onRemove={onRemove}
       hasValue={hasValue}
       icon={<Binary size={24}/>}
-      input={({ softRequired }) => (
+    >
+      {({ softRequired }) => (
         // TODO this max width might be to low for some numbers
         <div
           className={clsx('relative flex-row-2 max-w-56', { 'text-warning': softRequired && !hasValue })}
@@ -49,7 +45,7 @@ export const NumberProperty = ({
               if (isNaN(numberValue)) {
                 onRemove()
               } else {
-                onChange?.(numberValue)
+                onValueChange?.(numberValue)
               }
             }}
             onEditComplete={(value) => {
@@ -57,7 +53,7 @@ export const NumberProperty = ({
               if (isNaN(numberValue)) {
                 onRemove()
               } else {
-                onEditComplete(numberValue)
+                onEditComplete?.(numberValue)
               }
             }}
           />
@@ -73,6 +69,6 @@ export const NumberProperty = ({
           )}
         </div>
       )}
-    />
+    </PropertyField>
   )
 }

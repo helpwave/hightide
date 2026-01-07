@@ -17,6 +17,5 @@ export const searchBar: Story = {
     placeholder: 'Placeholder',
     onSearch: action('onSearch'),
     onValueChange: action('onValueChange'),
-    onEditComplete: action('onEditComplete'),
   },
 }

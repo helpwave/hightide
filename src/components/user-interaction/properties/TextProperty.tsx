@@ -2,14 +2,9 @@ import { Text } from 'lucide-react'
 import clsx from 'clsx'
 import { useHightideTranslation } from '@/src/i18n/useHightideTranslation'
 import { Textarea } from '@/src/components/user-interaction/Textarea'
-import type { PropertyBaseProps } from './PropertyBase'
-import { PropertyBase } from './PropertyBase'
+import { PropertyField } from './PropertyField'
 
-export type TextPropertyProps = Omit<PropertyBaseProps, 'icon' | 'input' | 'hasValue'> & {
-  value?: string,
-  onChange?: (value: string) => void,
-  onEditComplete?: (value: string) => void,
-}
+export type TextPropertyProps = PropertyField<string>
 
 /**
  * An Input for Text properties
@@ -17,8 +12,8 @@ export type TextPropertyProps = Omit<PropertyBaseProps, 'icon' | 'input' | 'hasV
 export const TextProperty = ({
   value,
   readOnly,
-  onChange,
   onRemove,
+  onValueChange,
   onEditComplete,
   ...baseProps
 }: TextPropertyProps) => {
@@ -26,12 +21,13 @@ export const TextProperty = ({
   const hasValue = value !== undefined
 
   return (
-    <PropertyBase
+    <PropertyField
       {...baseProps}
       onRemove={onRemove}
       hasValue={hasValue}
       icon={<Text size={24}/>}
-      input={({ softRequired }) => (
+    >
+      {({ softRequired }) => (
         <Textarea
           className={clsx(
             'default-style-none focus-style-none w-full',
@@ -45,7 +41,7 @@ export const TextProperty = ({
             if (!value) {
               onRemove?.()
             } else {
-              onChange?.(value)
+              onValueChange?.(value)
             }
           }}
           onEditComplete={(value) => {
@@ -57,6 +53,6 @@ export const TextProperty = ({
           }}
         />
       )}
-    />
+    </PropertyField>
   )
 }

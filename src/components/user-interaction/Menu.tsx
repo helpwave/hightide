@@ -1,6 +1,5 @@
-import { type PropsWithChildren, type ReactNode, type RefObject, useEffect, useRef, useState } from 'react'
+import { type PropsWithChildren, type ReactNode, useCallback, useEffect, useRef, useState } from 'react'
 import clsx from 'clsx'
-import type { PropsWithBagFunctionOrChildren } from '@/src/utils/bagFunctions'
 import { BagFunctionUtil } from '@/src/utils/bagFunctions'
 import { createPortal } from 'react-dom'
 import type { PopoverHorizontalAlignment, PopoverVerticalAlignment } from '@/src/hooks/usePopoverPosition'
@@ -54,8 +53,9 @@ export type MenuBag = {
   close: () => void,
 }
 
-export type MenuProps<T> = PropsWithBagFunctionOrChildren<MenuBag> & {
-  trigger: (bag: MenuBag, ref: RefObject<T>) => ReactNode,
+export type MenuProps = {
+  children: (bag: MenuBag) => ReactNode | ReactNode,
+  trigger: (bag: MenuBag, ref: (el: HTMLElement | null) => void) => ReactNode,
   /**
    * @default 'l'
    */
@@ -69,7 +69,7 @@ export type MenuProps<T> = PropsWithBagFunctionOrChildren<MenuBag> & {
 /**
  * A Menu Component to allow the user to see different functions
  */
-export const Menu = <T extends HTMLElement>({
+export const Menu = ({
   trigger,
   children,
   alignmentHorizontal = 'leftInside',
@@ -77,9 +77,9 @@ export const Menu = <T extends HTMLElement>({
   showOnHover = false,
   disabled = false,
   menuClassName = '',
-}: MenuProps<T>) => {
+}: MenuProps) => {
   const { isHovered: isOpen, setIsHovered: setIsOpen } = useHoverState({ isDisabled: !showOnHover || disabled })
-  const triggerRef = useRef<T>(null)
+  const triggerRef = useRef<HTMLElement>(null)
   const menuRef = useRef<HTMLDivElement>(null)
   useOutsideClick([triggerRef, menuRef], () => setIsOpen(false))
 
@@ -130,7 +130,7 @@ export const Menu = <T extends HTMLElement>({
 
   return (
     <>
-      {trigger(bag, triggerRef)}
+      {trigger(bag, useCallback((el) => triggerRef.current = el, []))}
       {createPortal((
         <div
           ref={menuRef}

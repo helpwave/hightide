@@ -1,6 +1,7 @@
 import type { Meta, StoryObj } from '@storybook/nextjs'
 import { useEffect, useState } from 'react'
 import { CheckboxProperty } from '../../../src/components/user-interaction/properties/CheckboxProperty'
+import { action } from 'storybook/actions'
 
 const meta = {
   component: CheckboxProperty,
@@ -15,7 +16,9 @@ export const checkboxProperty: Story = {
     name: 'Property',
     softRequired: false,
     readOnly: false,
-    className: '',
+    onRemove: action('onRemove'),
+    onValueChange: action('onValueChange'),
+    onEditComplete: action('onEditComplete'),
   },
   render: ({ value, ...props }) => {
     const [usedValue, setUsedValue] = useState<boolean | undefined>(value)
@@ -27,7 +30,7 @@ export const checkboxProperty: Story = {
     return (
       <CheckboxProperty
         {...props}
-        onChange={setUsedValue}
+        onValueChange={setUsedValue}
         value={usedValue}
       />
     )

@@ -1,6 +1,7 @@
 import type { Meta, StoryObj } from '@storybook/nextjs'
 import { useEffect, useState } from 'react'
 import { DateProperty } from '../../../src/components/user-interaction/properties/DateProperty'
+import { action } from 'storybook/actions'
 
 const meta = {
   component: DateProperty,
@@ -16,7 +17,9 @@ export const dateProperty: Story = {
     value: undefined,
     readOnly: false,
     type: 'dateTime',
-    className: '',
+    onRemove: action('onRemove'),
+    onValueChange: action('onValueChange'),
+    onEditComplete: action('onEditComplete')
   },
   render: ({ value, ...props }) => {
     const [usedDate, setUsedDate] = useState<Date | undefined>(value)
@@ -28,9 +31,9 @@ export const dateProperty: Story = {
     return (
       <DateProperty
         {...props}
-        onChange={date => {
+        onValueChange={date => {
           setUsedDate(date)
-          props.onChange?.(date)
+          props.onValueChange?.(date)
         }}
         onEditComplete={date => {
           setUsedDate(date)

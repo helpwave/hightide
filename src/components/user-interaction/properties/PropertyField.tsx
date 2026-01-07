@@ -4,13 +4,24 @@ import clsx from 'clsx'
 import { Button } from '@/src/components/user-interaction/Button'
 import { useHightideTranslation } from '@/src/i18n/useHightideTranslation'
 
-export type PropertyBaseProps = {
+export type PropertyField<T> = {
   name: string,
-  input: (props: { softRequired: boolean, hasValue: boolean }) => ReactNode,
-  onRemove?: () => void,
-  hasValue: boolean,
   softRequired?: boolean,
   readOnly?: boolean,
+  value?: T,
+  onRemove?: () => void,
+  onValueChange?: (value: T) => void,
+  onEditComplete?: (value: T) => void,
+}
+
+
+export type PropertyFieldProps = {
+  children: (props: { softRequired: boolean, hasValue: boolean }) => ReactNode,
+  name: string,
+  softRequired?: boolean,
+  readOnly?: boolean,
+  hasValue: boolean,
+  onRemove?: () => void,
   icon?: ReactNode,
   className?: string,
 }
@@ -18,16 +29,16 @@ export type PropertyBaseProps = {
 /**
  * A component for showing a properties with uniform styling
  */
-export const PropertyBase = ({
+export const PropertyField = ({
   name,
-  input,
+  children,
   softRequired = false,
   hasValue,
   icon,
   readOnly,
   onRemove,
   className = '',
-}: PropertyBaseProps) => {
+}: PropertyFieldProps) => {
   const translation = useHightideTranslation()
   const requiredAndNoValue = softRequired && !hasValue
   return (
@@ -51,7 +62,7 @@ export const PropertyBase = ({
           }, className
         )}
       >
-        {input({ softRequired, hasValue })}
+        {children({ softRequired, hasValue })}
         {requiredAndNoValue && (
           <div className="text-warning"><AlertTriangle size={24}/></div>
         )}

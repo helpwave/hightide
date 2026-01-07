@@ -5,7 +5,7 @@ import type { EditCompleteOptions, InputProps } from '@/src/components/user-inte
 import { Input } from '@/src/components/user-interaction/input/Input'
 import { useOverwritableState } from '@/src/hooks/useOverwritableState'
 
-type ToggleableInputProps = Omit<InputProps, 'defaultStyle'> & {
+type ToggleableInputProps = InputProps & {
   initialState?: 'editing' | 'display',
   editCompleteOptions?: Omit<EditCompleteOptions, 'allowEnterComplete'>,
 }

@@ -1,14 +1,10 @@
 import { CalendarDays } from 'lucide-react'
 import clsx from 'clsx'
-import { formatDate, formatDateTime } from '@/src/utils/date'
-import { Input } from '@/src/components/user-interaction/input/Input'
-import type { PropertyBaseProps } from './PropertyBase'
-import { PropertyBase } from './PropertyBase'
+import { PropertyField } from './PropertyField'
+import { DateTimeInput } from '../input/DateTimeInput'
 
-export type DatePropertyProps = Omit<PropertyBaseProps, 'icon' | 'input' | 'hasValue'> & {
-  value?: Date,
-  onChange?: (date: Date) => void,
-  onEditComplete?: (value: Date) => void,
+export type DatePropertyProps = PropertyField<Date>
+& {
   type?: 'dateTime' | 'date',
 }
 
@@ -17,7 +13,7 @@ export type DatePropertyProps = Omit<PropertyBaseProps, 'icon' | 'input' | 'hasV
  */
 export const DateProperty = ({
   value,
-  onChange,
+  onValueChange,
   onEditComplete,
   readOnly,
   type = 'dateTime',
@@ -25,30 +21,24 @@ export const DateProperty = ({
 }: DatePropertyProps) => {
   const hasValue = !!value
 
-  const dateText = value ? (type === 'dateTime' ? formatDateTime(value) : formatDate(value)) : ''
   return (
-    <PropertyBase
+    <PropertyField
       {...baseProps}
       hasValue={hasValue}
       icon={<CalendarDays size={24}/>}
-      input={({ softRequired }) => (
-        <Input
-          className={clsx('default-style-none focus-style-none', { 'bg-surface-warning': softRequired && !hasValue })}
-          value={dateText}
-          type={type === 'dateTime' ? 'datetime-local' : 'date'}
+    >
+      {({ softRequired }) => (
+        <DateTimeInput
+          value={value}
+          mode={type}
           readOnly={readOnly}
-          onChange={(event) => {
-            const value = event.target.value
-            if (!value) {
-              event.preventDefault()
-              return
-            }
-            const dueDate = new Date(value)
-            onChange?.(dueDate)
-          }}
-          onEditComplete={(value) => onEditComplete?.(new Date(value))}
+
+          onValueChange={onValueChange}
+          onEditComplete={onEditComplete}
+
+          className={clsx('default-style-none focus-style-none', { 'bg-surface-warning': softRequired && !hasValue })}
         />
       )}
-    />
+    </PropertyField>
   )
 }

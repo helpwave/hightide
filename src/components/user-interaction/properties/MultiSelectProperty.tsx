@@ -1,18 +1,10 @@
 import { List } from 'lucide-react'
 import clsx from 'clsx'
-import type { PropsWithChildren } from 'react'
-import type { PropertyBaseProps } from '@/src/components/user-interaction/properties/PropertyBase'
-import { PropertyBase } from '@/src/components/user-interaction/properties/PropertyBase'
-
+import { PropertyField } from '@/src/components/user-interaction/properties/PropertyField'
 import { MultiSelectChipDisplay } from '@/src/components/user-interaction/Select'
+import type { PropsWithChildren } from 'react'
 
-export type MultiSelectPropertyProps =
-  Omit<PropertyBaseProps, 'icon' | 'input' | 'hasValue' | 'className'>
-  & PropsWithChildren<{
-  value: string[],
-  onValueChange?: (value: string[]) => void,
-}>
-
+export type MultiSelectPropertyProps = PropertyField<string[]> & PropsWithChildren
 /**
  * An Input for MultiSelect properties
  */
@@ -20,19 +12,24 @@ export const MultiSelectProperty = ({
   children,
   value,
   onValueChange,
+  onEditComplete,
   ...props
 }: MultiSelectPropertyProps) => {
   const hasValue = value.length > 0
 
   return (
-    <PropertyBase
+    <PropertyField
       {...props}
       hasValue={hasValue}
       icon={<List size={24}/>}
-      input={({ softRequired }) => (
+    >
+      {({ softRequired }) => (
         <MultiSelectChipDisplay
           value={value}
-          onValueChange={onValueChange}
+          onValueChange={(value) => {
+            onValueChange?.(value)
+            onEditComplete?.(value)
+          }}
           disabled={props.readOnly}
           contentPanelProps={{
             className: clsx(
@@ -49,6 +46,6 @@ export const MultiSelectProperty = ({
           {children}
         </MultiSelectChipDisplay>
       )}
-    />
+    </PropertyField>
   )
 }
