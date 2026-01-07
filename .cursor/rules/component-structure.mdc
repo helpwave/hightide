@@ -1,0 +1,377 @@
+---
+name: component-structure
+description: Rules for component structure and organization based on project conventions
+---
+
+# Overview
+
+All components must follow a consistent structure to ensure maintainability and readability. This rule defines the exact order and organization of component code.
+
+## Component Principles
+
+1. **Separation of logic and styling** - Keep styling in CSS files, logic in components
+2. **Consistent structure** - All components follow the same structure pattern
+
+## Component File Structure
+
+### 1. Type Definitions (Props)
+
+Define component props **first**, before the component implementation:
+
+```tsx
+export type InputProps = Omit<InputHTMLAttributes<HTMLInputElement>, 'value'>
+  & Partial<FormFieldDataHandling<string>>
+  & Partial<FormFieldInteractionStates>
+  & { editCompleteOptions?: EditCompleteOptions }
+```
+
+**Important Rules:**
+- **Never overwrite HTMLAttributes directly** - Always use `Omit` or intersection types
+- Use descriptive names even if longer (e.g., `onValueChange` instead of `onChange` if parameters differ)
+- Combine multiple type sources using intersection types (`&`)
+
+### 2. Documentation
+
+Provide a JSDoc comment describing the component:
+
+```tsx
+/**
+ * A Component for inputting text or other information
+ *
+ * Its state is managed must be managed by the parent
+ */
+```
+
+### 3. Component Implementation
+
+Use `forwardRef` for components that need ref forwarding:
+
+```tsx
+export const Input = forwardRef<HTMLInputElement, InputProps>(function Input({
+  value,
+  onValueChange,
+  editCompleteOptions,
+  disabled = false,
+  invalid = false,
+  ...props
+}, forwardedRef) {
+  // Component body
+})
+```
+
+**Function Naming:**
+- Use the component name as the function name inside `forwardRef`
+- This helps with React DevTools debugging
+
+## Component Body Order
+
+Inside the component function, follow this exact order:
+
+### 1. States
+
+```tsx
+const [isExpanded, setIsExpanded] = useState(false)
+const [ids, setIds] = useState<ExpandableContextIdsState>({...})
+```
+
+**Exception:** Refs can be placed near their corresponding hooks if semantically more coherent:
+```tsx
+const innerRef = useRef<HTMLInputElement>(null)
+useImperativeHandle(forwardedRef, () => innerRef.current)
+```
+
+### 2. Constants and Memos
+
+```tsx
+const {
+  onBlur: allowEditCompleteOnBlur,
+  afterDelay,
+  delay,
+  allowEnterComplete,
+} = { ...defaultEditCompleteOptions, ...editCompleteOptions }
+
+const contextValue = useMemo(() => ({
+  isExpanded: !!isExpanded,
+  toggle,
+  setIsExpanded,
+  ids,
+  setIds,
+  disabled
+}), [isExpanded, toggle, setIsExpanded, ids, disabled])
+```
+
+### 3. Other Hooks and Effects
+
+```tsx
+const { restartTimer, clearTimer } = useDelay({
+  delay,
+  disabled: !afterDelay,
+})
+
+const { focusNext } = useFocusManagement()
+
+useEffect(() => {
+  // Effect logic
+}, [dependencies])
+```
+
+## JSX Element Attribute Order
+
+When returning JSX, attributes must be in this **exact order**:
+
+### 1. Props Spread
+
+```tsx
+<input
+  {...props}
+```
+
+### 2. Refs
+
+```tsx
+  ref={innerRef}
+```
+
+### 3. Values and State Variables
+
+```tsx
+  value={value}
+  disabled={disabled}
+  id={ids.root}
+```
+
+### 4. Functions, Actions, Callbacks
+
+```tsx
+  onKeyDown={(event) => {
+    props.onKeyDown?.(event)
+    // Custom logic
+  }}
+  onBlur={(event) => {
+    props.onBlur?.(event)
+    // Custom logic
+  }}
+  onClick={(event) => {
+    props.onClick?.(event)
+    if (allowContainerToggle) {
+      toggle()
+    }
+  }}
+```
+
+**Important:** Always call the original prop handler first (`props.onKeyDown?.(event)`) unless your action **must** prevent it.
+
+### 5. Data Attributes
+
+```tsx
+  data-name={PropsUtil.dataAttributes.name('input', props)}
+  data-value={PropsUtil.dataAttributes.bool(!!value)}
+  data-expanded={isExpanded ? '' : undefined}
+  data-disabled={disabled ? '' : undefined}
+  {...PropsUtil.dataAttributes.interactionStates({ ...props, invalid })}
+```
+
+**Pattern:**
+- Use `PropsUtil.dataAttributes.bool(value)` for boolean attributes (returns `''` if true, `undefined` if false)
+- Use `PropsUtil.dataAttributes.name(defaultName, props)` for component identification
+- Use `PropsUtil.dataAttributes.interactionStates()` for form interaction states
+
+### 6. ARIA Attributes
+
+```tsx
+  aria-invalid={props['aria-invalid'] ?? invalid}
+  aria-disabled={props['aria-disabled'] ?? disabled}
+  aria-expanded={isExpanded}
+  aria-controls={ids.content}
+  {...PropsUtil.aria.interactionStates({ ...props, invalid }, props)}
+```
+
+**Pattern:**
+- Allow props to override defaults: `props['aria-invalid'] ?? invalid`
+- Use `PropsUtil.aria.interactionStates()` for consistent ARIA interaction states
+
+### 7. ClassName and Style
+
+```tsx
+  className={clsx('custom-class', { 'conditional-class': condition })}
+  style={customStyle}
+/>
+```
+
+## Complete Example
+
+```tsx
+// 1. Type Definition
+export type InputProps = Omit<InputHTMLAttributes<HTMLInputElement>, 'value'>
+  & Partial<FormFieldDataHandling<string>>
+  & Partial<FormFieldInteractionStates>
+  & { editCompleteOptions?: EditCompleteOptions }
+
+// 2. Documentation
+/**
+ * A Component for inputting text or other information
+ *
+ * Its state is managed must be managed by the parent
+ */
+
+// 3. Component Implementation
+export const Input = forwardRef<HTMLInputElement, InputProps>(function Input({
+  value,
+  onValueChange,
+  editCompleteOptions,
+  disabled = false,
+  invalid = false,
+  ...props
+}, forwardedRef) {
+  // 1. Constants and Memos
+  const {
+    onBlur: allowEditCompleteOnBlur,
+    afterDelay,
+    delay,
+    allowEnterComplete,
+  } = { ...defaultEditCompleteOptions, ...editCompleteOptions }
+
+  // 2. Hooks
+  const { restartTimer, clearTimer } = useDelay({
+    delay,
+    disabled: !afterDelay,
+  })
+
+  const innerRef = useRef<HTMLInputElement>(null)
+  useImperativeHandle(forwardedRef, () => innerRef.current)
+
+  const { focusNext } = useFocusManagement()
+
+  // 3. Return JSX
+  return (
+    <input
+      // 1. Props
+      {...props}
+      // 2. Refs
+      ref={innerRef}
+      // 3. Values and state variables
+      value={value}
+      disabled={disabled}
+      // 4. Functions, Actions, Callbacks
+      onKeyDown={(event) => {
+        props.onKeyDown?.(event)
+        if (!allowEnterComplete) {
+          return
+        }
+        if (event.key === 'Enter' && !event.shiftKey) {
+          event.preventDefault()
+          innerRef.current?.blur()
+          onEditComplete?.(event.target.value)
+          focusNext()
+        }
+      }}
+      onBlur={(event) => {
+        props.onBlur?.(event)
+        if (allowEditCompleteOnBlur) {
+          onEditComplete?.(event.target.value)
+          clearTimer()
+        }
+      }}
+      onChange={(event) => {
+        props.onChange?.(event)
+        const value = event.target.value
+        restartTimer(() => {
+          innerRef.current?.blur()
+          onEditComplete?.(value)
+        })
+        onValueChange?.(value)
+      }}
+      // 5. Data attributes
+      data-name={PropsUtil.dataAttributes.name('input', props)}
+      data-value={PropsUtil.dataAttributes.bool(!!value)}
+      {...PropsUtil.dataAttributes.interactionStates({ ...props, invalid })}
+      // 6. ARIA
+      {...PropsUtil.aria.interactionStates({ ...props, invalid }, props)}
+      // 7. ClassName and style (if needed)
+    />
+  )
+})
+```
+
+## Naming Conventions
+
+### Callback Functions
+
+- **Always use present tense**: `onComplete`, `onChange`, `onValueChange`
+- **Never use native HTML callback names** unless they share the exact same parameters
+- **Use descriptive names**: `onValueChange` instead of `onChange` if the signature differs
+
+**Examples:**
+- ✅ `onValueChange` - Custom callback with different signature
+- ✅ `onEditComplete` - Custom callback
+- ❌ `onChange` - Only if it matches native HTML `onChange` exactly
+
+### Component Names
+
+- Use PascalCase: `Input`, `ExpandableRoot`, `PropertyBase`
+- Use descriptive names: `ExpandableHeader` not `Header`
+
+## Context and Sub-Components
+
+For components with context and sub-components:
+
+### Context Definition
+
+```tsx
+//
+// Context
+//
+
+type ExpandableContextState = {
+  ids: ExpandableContextIdsState,
+  setIds: Dispatch<SetStateAction<ExpandableContextIdsState>>,
+  disabled: boolean,
+  isExpanded: boolean,
+  toggle: () => void,
+  setIsExpanded: Dispatch<SetStateAction<boolean>>,
+}
+
+const ExpandableContext = createContext<ExpandableContextState | null>(null)
+
+function useExpandableContext() {
+  const context = useContext(ExpandableContext)
+  if (!context) {
+    throw new Error('Expandable components must be used within an ExpandableRoot')
+  }
+  return context
+}
+```
+
+### Sub-Component Sections
+
+Use comment separators:
+
+```tsx
+//
+// ExpandableRoot
+//
+
+export type ExpandableRootProps = ...
+
+export const ExpandableRoot = ...
+
+//
+// ExpandableHeader
+//
+
+export type ExpandableHeaderProps = ...
+
+export const ExpandableHeader = ...
+```
+
+## Best Practices
+
+1. **Follow the exact order** - Don't deviate from the specified structure
+2. **Always call original handlers** - Call `props.onClick?.(event)` before your logic
+3. **Use utilities** - Leverage `PropsUtil` for data attributes and ARIA
+4. **Document components** - Always include JSDoc comments
+5. **Type safety** - Never overwrite HTMLAttributes, use `Omit` or intersections
+6. **Consistent naming** - Use present tense for callbacks, PascalCase for components
+7. **Separation of concerns** - Keep styling in CSS files, not in components
+
+@src/components/**
