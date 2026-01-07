@@ -1,0 +1,102 @@
+@layer components {
+  [data-name="property-root"]:not(.default-style-none) {
+    @apply flex-row-0 rounded-xl;
+  }
+
+  [data-name="property-root"]:not(.default-style-none) {
+    transition: outline-offset var(--animation-duration-in, 250ms);
+    outline-offset: 0;
+
+    &:hover {
+      [data-name="property-title"]:not([data-invalid]),
+      [data-name="property-content"]:not([data-invalid]) {
+        @apply border-primary;
+      }
+
+      [data-name="property-title"][data-invalid],
+      [data-name="property-content"][data-invalid] {
+        @apply border-warning;
+      }
+    }
+
+    &:focus-within {
+      @apply outline-solid outline-2;
+      outline-offset: calc(var(--spacing) * 0.25);
+
+      &:not([data-invalid]) {
+        @apply outline-primary;
+      }
+
+      &[data-invalid] {
+        @apply outline-warning;
+      }
+    }
+  }
+
+
+  [data-name="property-title"]:not(.default-style-none) {
+    @apply flex-row-2 max-w-48 min-w-48 px-3 py-2 items-center justify-between rounded-l-xl border-2 border-r-0;
+
+    &:not([data-invalid]) {
+      @apply bg-property-title-background text-property-title-text;
+    }
+
+    &[data-invalid] {
+      @apply bg-warning text-on-warning border-warning-hover;
+    }
+  }
+
+
+  [data-name="property-title-icon"]:not(.default-style-none) {
+    @apply max-w-6 min-w-6;
+  }
+
+  [data-name="property-title-text"]:not(.default-style-none) {
+    @apply font-semibold truncate min-w-0;
+  }
+
+  [data-name="property-content"]:not(.default-style-none) {
+    @apply flex-row-2 grow px-3 py-2 justify-between items-center rounded-r-xl border-2 border-l-0 min-h-15;
+
+    &:not([data-invalid]) {
+      @apply bg-input-background text-input-text;
+    }
+
+    &[data-invalid] {
+      @apply bg-surface-warning border-warning;
+    }
+  }
+
+  [data-name="property-actions"]:not(.default-style-none) {
+    @apply flex-row-2 items-center gap-1;
+  }
+
+  [data-name="property-input-wrapper"]:not(.default-style-none) {
+    @apply relative flex-row-2 w-full;
+
+    &[data-invalid] {
+      @apply text-warning;
+
+      [data-name="select-button"],
+      [data-name="select-button-chips"] {
+        @apply !bg-warning !text-surface-warning;
+      }
+    }
+  }
+
+  [data-name="property-input"]:not(.default-style-none) {
+    @apply rounded p-1;
+
+    &[data-invalid] {
+      @apply bg-surface-warning placeholder-warning;
+    }
+  }
+
+  [data-name="property-suffix"]:not(.default-style-none) {
+    @apply absolute top-1/2 -translate-y-1/2 right-2;
+
+    &[data-invalid] {
+      @apply bg-surface-warning;
+    }
+  }
+}

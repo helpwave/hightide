@@ -1,0 +1,313 @@
+---
+name: storybook-stories
+description: Rules for defining Storybook stories including prop order and structure
+---
+
+# Overview
+
+All Storybook stories must follow a consistent structure to ensure maintainability and readability. This rule defines the exact order and organization of story code.
+
+## Story Structure
+
+### 1. Meta Definition
+
+Define the meta object with explicit type annotation:
+
+```tsx
+const meta: Meta<typeof MyComponent> = {
+  component: MyComponent,
+}
+
+export default meta
+type Story = StoryObj<typeof meta>;
+```
+
+**Important:** Always use explicit type annotation `meta: Meta<typeof MyComponent>` instead of `satisfies`.
+
+### 2. Story Naming
+
+**Always name the story the same as the file it's in** (converted to camelCase):
+
+- File: `PropertyBase.stories.tsx` → Story: `propertyBase`
+- File: `NumberProperty.stories.tsx` → Story: `numberProperty`
+- File: `MyComponent.stories.tsx` → Story: `myComponent`
+
+```tsx
+export const propertyBase: Story = {
+  // story definition
+}
+```
+
+### 3. Story Implementation
+
+**Always use `render` function or the component directly** - never use only `args` without a render function when the component needs state management or custom logic.
+
+## Args Order
+
+Props in `args` must follow this **exact order**:
+
+### 1. Visual Props (affect appearance/state)
+
+Props that change how the component looks or behaves visually:
+
+```tsx
+args: {
+  name: 'Property',
+  required: false,
+  value: undefined,
+  disabled: false,
+  readOnly: false,
+  size: 'md',
+  color: 'primary',
+  // ... other visual props
+}
+```
+
+**Common visual props:**
+- `name`, `label`, `title`
+- `required`, `disabled`, `readOnly`, `invalid`
+- `value`, `defaultValue`
+- `size`, `color`, `coloringStyle`, `layout`
+- `type`, `mode`, `variant`
+- `className`, `style`
+
+### 2. Children and JSX Content
+
+Props that contain JSX or React nodes:
+
+```tsx
+args: {
+  // ... visual props
+  icon: <Icon size={24}/>,
+  children: options.map(option => (
+    <SelectOption key={option} value={option}>
+      {option}
+    </SelectOption>
+  )),
+  // ... or
+  children: ({ required, hasValue, invalid }) => (
+    <div>Content</div>
+  ),
+}
+```
+
+**Common JSX props:**
+- `children` (JSX elements or render functions)
+- `icon`, `label`, `titleElement`
+- Any prop that accepts ReactNode
+
+### 3. Callbacks (all actively used by component)
+
+**All callbacks that the component uses must be included as actions:**
+
+```tsx
+args: {
+  // ... visual props
+  // ... children/JSX
+  onValueChange: action('onValueChange'),
+  onEditComplete: action('onEditComplete'),
+  onRemove: action('onRemove'),
+  onValueClear: action('onValueClear'),
+  onClick: action('onClick'),
+  onSubmit: action('onSubmit'),
+  // ... all other callbacks
+}
+```
+
+**Important:**
+- **Always use `action()` from `storybook/actions`** for all callbacks
+- Include **all callbacks** that the component actively uses, not just some
+- Order callbacks alphabetically or by logical grouping
+
+## Render Function Pattern
+
+### Using Uncontrolled Variants (Preferred)
+
+**If the component has an `Uncontrolled` variant, use it instead of managing state manually:**
+
+```tsx
+import { MyComponentUncontrolled } from '@/src/components/...'
+
+export const myComponent: Story = {
+  args: {
+    // ... props
+    onValueChange: action('onValueChange'),
+  },
+  render: (args) => {
+    return (
+      <MyComponentUncontrolled
+        {...args}
+        onValueChange={(val) => {
+          args.onValueChange?.(val)
+        }}
+      />
+    )
+  }
+}
+```
+
+**Benefits:**
+- Simpler code - no state management needed
+- Component handles state internally
+- Still allows action callbacks to be called
+
+### Manual State Management (When No Uncontrolled Variant)
+
+When the component doesn't have an uncontrolled variant, manage state manually:
+
+```tsx
+render: ({ value, ...props }) => {
+  const [usedValue, setUsedValue] = useState(value)
+
+  useEffect(() => {
+    setUsedValue(value)
+  }, [value])
+
+  return (
+    <MyComponent
+      {...props}
+      value={usedValue}
+      onValueChange={(val) => {
+        props.onValueChange?.(val)
+        setUsedValue(val)
+      }}
+      onEditComplete={(val) => {
+        props.onEditComplete?.(val)
+        setUsedValue(val)
+      }}
+      onRemove={() => {
+        props.onRemove?.()
+        setUsedValue(undefined)
+      }}
+    />
+  )
+}
+```
+
+**Pattern:**
+1. Check if component has `ComponentNameUncontrolled` variant
+2. If yes, use uncontrolled variant and call action callbacks
+3. If no, extract state-managed props (like `value`) from args
+4. Create local state with `useState`
+5. Sync with `useEffect` if needed
+6. Call action callbacks **first**, then update local state
+7. Pass all props including callbacks to component
+
+## Complete Examples
+
+### Example 1: Using Uncontrolled Variant
+
+```tsx
+import type { Meta, StoryObj } from '@storybook/nextjs'
+import { InputUncontrolled } from '@/src/components/user-interaction/input/Input'
+import { action } from 'storybook/actions'
+
+const meta: Meta<typeof InputUncontrolled> = {
+  component: InputUncontrolled,
+}
+
+export default meta
+type Story = StoryObj<typeof meta>;
+
+export const input: Story = {
+  args: {
+    // 1. Visual props
+    value: '',
+    disabled: false,
+    readOnly: false,
+    // 2. Children/JSX (none)
+    // 3. Callbacks
+    onValueChange: action('onValueChange'),
+    onEditComplete: action('onEditComplete'),
+  },
+  render: (args) => {
+    return (
+      <InputUncontrolled
+        {...args}
+        onValueChange={(val) => {
+          args.onValueChange?.(val)
+        }}
+        onEditComplete={(val) => {
+          args.onEditComplete?.(val)
+        }}
+      />
+    )
+  }
+}
+```
+
+### Example 2: Manual State Management (No Uncontrolled Variant)
+
+```tsx
+import type { Meta, StoryObj } from '@storybook/nextjs'
+import { useEffect, useState } from 'react'
+import { NumberProperty } from '@/src/components/user-interaction/properties/NumberProperty'
+import { action } from 'storybook/actions'
+
+const meta: Meta<typeof NumberProperty> = {
+  component: NumberProperty,
+}
+
+export default meta
+type Story = StoryObj<typeof meta>;
+
+export const numberProperty: Story = {
+  args: {
+    // 1. Visual props
+    name: 'Property',
+    required: false,
+    value: undefined,
+    suffix: 'kg',
+    readOnly: false,
+    className: '',
+    // 2. Children/JSX (none in this case)
+    // 3. Callbacks
+    onValueChange: action('onValueChange'),
+    onEditComplete: action('onEditComplete'),
+    onRemove: action('onRemove'),
+    onValueClear: action('onValueClear'),
+  },
+  render: ({ value, ...props }) => {
+    const [usedValue, setUsedValue] = useState<number | undefined>(value)
+
+    useEffect(() => {
+      setUsedValue(value)
+    }, [value])
+
+    return (
+      <NumberProperty
+        {...props}
+        value={usedValue}
+        onValueChange={(val) => {
+          props.onValueChange?.(val)
+          setUsedValue(val)
+        }}
+        onEditComplete={(val) => {
+          props.onEditComplete?.(val)
+          setUsedValue(val)
+        }}
+        onRemove={() => {
+          props.onRemove?.()
+          setUsedValue(undefined)
+        }}
+        onValueClear={() => {
+          props.onValueClear?.()
+          setUsedValue(undefined)
+        }}
+      />
+    )
+  }
+}
+```
+
+## Best Practices
+
+1. **Follow exact order** - Visual props → Children/JSX → Callbacks
+2. **Include all callbacks** - Don't omit callbacks that the component uses
+3. **Use actions** - Always wrap callbacks with `action()` from `storybook/actions`
+4. **Name consistently** - Story name must match filename (camelCase)
+5. **Use render function** - When component needs state management or custom logic
+6. **Call actions first** - In render functions, call action callbacks before updating state
+7. **Sync state properly** - Use `useEffect` to sync local state with args when needed
+
+@stories/**

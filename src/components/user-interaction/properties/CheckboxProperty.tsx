@@ -21,7 +21,7 @@ export const CheckboxProperty = ({
   return (
     <PropertyBase
       {...baseProps}
-      hasValue={true}
+      hasValue={value !== undefined}
       readOnly={readOnly}
       icon={<Check size={24}/>}
     >

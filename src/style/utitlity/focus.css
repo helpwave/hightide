@@ -1,6 +1,10 @@
 @utility focus-style-outline {
+  transition: outline-offset var(--animation-duration-in, 250ms);
+  outline-offset: 0;
+
   &:focus-visible {
-    @apply outline-solid outline-2 outline-focus outline-offset-1;
+    @apply outline-solid outline-2 outline-focus;
+    outline-offset: calc(var(--spacing) * 0.25);
   }
 }
 

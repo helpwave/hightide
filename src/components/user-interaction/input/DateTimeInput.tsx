@@ -1,5 +1,6 @@
 import type { HTMLAttributes } from 'react'
 import { useEffect, useMemo, useRef, useState } from 'react'
+import { createPortal } from 'react-dom'
 import { CalendarIcon } from 'lucide-react'
 import clsx from 'clsx'
 import type { InputProps } from '@/src/components/user-interaction/input/Input'
@@ -14,6 +15,7 @@ import { useHightideTranslation } from '@/src/i18n/useHightideTranslation'
 import { Visibility } from '@/src/components/layout/Visibility'
 import { DateUtils } from '@/src/utils/date'
 import { useOverlayRegistry } from '@/src/hooks/useOverlayRegistry'
+import { useFloatingElement } from '@/src/hooks/useFloatingElement'
 import type { FormFieldDataHandling } from '../../form/FormField'
 
 export type DateTimeInputProps = Omit<InputProps, keyof FormFieldDataHandling<string>>
@@ -40,9 +42,19 @@ export const DateTimeInput = ({
   const { locale } = useLocale()
   const [isOpen, setIsOpen] = useState(false)
 
+  const anchorRef = useRef<HTMLDivElement>(null)
   const containerRef = useRef<HTMLDivElement>(null)
 
-  useOutsideClick([containerRef], () => {
+  const position = useFloatingElement({
+    active: isOpen,
+    anchorRef,
+    containerRef,
+    verticalAlignment: 'afterEnd',
+    horizontalAlignment: 'afterStart',
+    gap: 4,
+  })
+
+  useOutsideClick([containerRef, anchorRef], () => {
     setIsOpen(false)
     onEditComplete(value)
   })
@@ -59,7 +71,7 @@ export const DateTimeInput = ({
 
   return (
     <>
-      <div {...containerProps} className={clsx('relative w-full', containerProps?.className)}>
+      <div {...containerProps} ref={anchorRef} className={clsx('relative w-full', containerProps?.className)}>
         <Input
           {...props}
           placeholder={translation('clickToSelect')}
@@ -85,54 +97,61 @@ export const DateTimeInput = ({
         </Button>
       </div>
       <Visibility isVisible={isOpen}>
-        <div
-          ref={containerRef}
-          className="absolute left-0 flex-col-3 rounded-lg shadow-xl border bg-surface-variant text-on-surface border-divider p-2"
-          style={{ zIndex }}
-        >
-          <DateTimePicker
-            {...pickerProps}
-            mode={mode}
-            value={value}
-            onValueChange={onValueChange}
-            onEditComplete={onEditComplete}
-          />
-          <div className="flex-row-2 justify-end">
-            <Visibility isVisible={!!onRemove && !!value}>
+        {createPortal(
+          <div
+            ref={containerRef}
+            className="fixed flex-col-3 rounded-lg shadow-xl border bg-surface-variant text-on-surface border-divider p-2"
+            style={{
+              ...position,
+              zIndex,
+              opacity: position ? undefined : 0,
+            }}
+          >
+            <DateTimePicker
+              {...pickerProps}
+              mode={mode}
+              value={value}
+              onValueChange={onValueChange}
+              onEditComplete={onEditComplete}
+            />
+            <div className="flex-row-2 justify-end">
+              <Visibility isVisible={!!onRemove && !!value}>
+                <Button
+                  size="md"
+                  color="negative"
+                  onClick={() => {
+                    onRemove?.()
+                    setIsOpen(false)
+                  }}
+                  className="min-w-26"
+                >
+                  {translation('clear')}
+                </Button>
+              </Visibility>
+              <Visibility isVisible={!value}>
+                <Button
+                  size="md"
+                  color="neutral"
+                  onClick={() => setIsOpen(false)}
+                  className="min-w-26"
+                >
+                  {translation('cancel')}
+                </Button>
+              </Visibility>
               <Button
                 size="md"
-                color="negative"
                 onClick={() => {
-                  onRemove?.()
+                  onEditComplete?.(value)
                   setIsOpen(false)
                 }}
                 className="min-w-26"
               >
-                {translation('clear')}
+                {translation('done')}
               </Button>
-            </Visibility>
-            <Visibility isVisible={!value}>
-              <Button
-                size="md"
-                color="neutral"
-                onClick={() => setIsOpen(false)}
-                className="min-w-26"
-              >
-                {translation('cancel')}
-              </Button>
-            </Visibility>
-            <Button
-              size="md"
-              onClick={() => {
-                onEditComplete?.(value)
-                setIsOpen(false)
-              }}
-              className="min-w-26"
-            >
-              {translation('done')}
-            </Button>
-          </div>
-        </div>
+            </div>
+          </div>,
+          document.body
+        )}
       </Visibility>
     </>
   )

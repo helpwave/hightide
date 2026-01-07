@@ -1,8 +1,8 @@
 import { Binary } from 'lucide-react'
-import clsx from 'clsx'
 import { Input } from '@/src/components/user-interaction/input/Input'
 import { useHightideTranslation } from '@/src/i18n/useHightideTranslation'
 import { PropertyBase, PropertyField } from './PropertyBase'
+import { PropsUtil } from '@/src/utils/propsUtil'
 
 export type NumberPropertyProps = PropertyField<number>
 & { suffix?: string }
@@ -29,17 +29,19 @@ export const NumberProperty = ({
       hasValue={hasValue}
       icon={<Binary size={24}/>}
     >
-      {({ softRequired }) => (
-        // TODO this max width might be to low for some numbers
+      {({ invalid }) => (
         <div
-          className={clsx('relative flex-row-2 max-w-56', { 'text-warning': softRequired && !hasValue })}
+          data-name="property-input-wrapper"
+          data-invalid={PropsUtil.dataAttributes.bool(invalid)}
         >
           <Input
-            className={clsx('default-style-none focus-style-none w-full pr-8', { 'bg-surface-warning placeholder-warning': softRequired && !hasValue })}
+            className="w-full pr-8"
+            data-name="property-input"
+            data-invalid={PropsUtil.dataAttributes.bool(invalid)}
             value={value?.toString() ?? ''}
             type="number"
             readOnly={readOnly}
-            placeholder={`${translation('value')}...`}
+            placeholder={translation('value')}
             onValueChange={(value) => {
               const numberValue = parseFloat(value)
               if (isNaN(numberValue)) {
@@ -59,10 +61,8 @@ export const NumberProperty = ({
           />
           {suffix && (
             <span
-              className={clsx(
-                'absolute top-1/2 -translate-y-1/2 right-2',
-                { 'bg-surface-warning': softRequired && !hasValue }
-              )}
+              data-name="property-suffix"
+              data-invalid={PropsUtil.dataAttributes.bool(invalid)}
             >
               {suffix}
             </span>

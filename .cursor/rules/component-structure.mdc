@@ -126,10 +126,12 @@ When returning JSX, attributes must be in this **exact order**:
   {...props}
 ```
 
-### 2. Refs
+### 2. Refs and identifier
 
 ```tsx
+  key={key} // if needed
   ref={innerRef}
+  id={ids.root}
 ```
 
 ### 3. Values and State Variables
@@ -137,7 +139,6 @@ When returning JSX, attributes must be in this **exact order**:
 ```tsx
   value={value}
   disabled={disabled}
-  id={ids.root}
 ```
 
 ### 4. Functions, Actions, Callbacks
@@ -166,15 +167,20 @@ When returning JSX, attributes must be in this **exact order**:
 ```tsx
   data-name={PropsUtil.dataAttributes.name('input', props)}
   data-value={PropsUtil.dataAttributes.bool(!!value)}
-  data-expanded={isExpanded ? '' : undefined}
-  data-disabled={disabled ? '' : undefined}
+  data-expanded={PropsUtil.dataAttributes.bool(isExpanded)}
+  data-disabled={PropsUtil.dataAttributes.bool(disabled)}
+  data-invalid={PropsUtil.dataAttributes.bool(requiredAndNoValue)}
   {...PropsUtil.dataAttributes.interactionStates({ ...props, invalid })}
 ```
 
-**Pattern:**
-- Use `PropsUtil.dataAttributes.bool(value)` for boolean attributes (returns `''` if true, `undefined` if false)
+**Required Pattern:**
+- **Always use `PropsUtil.dataAttributes.bool(value)` for boolean data attributes** - Returns `''` if true, `undefined` if false
 - Use `PropsUtil.dataAttributes.name(defaultName, props)` for component identification
 - Use `PropsUtil.dataAttributes.interactionStates()` for form interaction states
+
+**Never use manual boolean patterns:**
+- ❌ `data-expanded={isExpanded ? '' : undefined}` - Use `PropsUtil.dataAttributes.bool(isExpanded)` instead
+- ❌ `data-disabled={disabled ? '' : undefined}` - Use `PropsUtil.dataAttributes.bool(disabled)` instead
 
 ### 6. ARIA Attributes
 
@@ -284,6 +290,7 @@ export const Input = forwardRef<HTMLInputElement, InputProps>(function Input({
       // 5. Data attributes
       data-name={PropsUtil.dataAttributes.name('input', props)}
       data-value={PropsUtil.dataAttributes.bool(!!value)}
+      data-invalid={PropsUtil.dataAttributes.bool(invalid)}
       {...PropsUtil.dataAttributes.interactionStates({ ...props, invalid })}
       // 6. ARIA
       {...PropsUtil.aria.interactionStates({ ...props, invalid }, props)}

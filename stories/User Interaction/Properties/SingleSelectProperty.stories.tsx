@@ -9,18 +9,18 @@ import { SelectOption } from '@/src/components/user-interaction/Select'
 const options = [...StorybookHelper.selectValues]
 
 
-const meta = {
+const meta: Meta<typeof SingleSelectProperty> = {
   component: SingleSelectProperty,
-} satisfies Meta<typeof SingleSelectProperty>
+}
 
 export default meta
 type Story = StoryObj<typeof meta>;
 
 export const singleSelectProperty: Story = {
   args: {
-    value: undefined,
     name: 'Fruits',
-    softRequired: false,
+    required: false,
+    value: undefined,
     readOnly: false,
     children: options.map(option => (
       <SelectOption key={option} value={option}>
@@ -37,7 +37,11 @@ export const singleSelectProperty: Story = {
           {option}
         </span>
       </SelectOption>
-    ))
+    )),
+    onValueChange: action('onValueChange'),
+    onEditComplete: action('onEditComplete'),
+    onRemove: action('onRemove'),
+    onValueClear: action('onValueClear'),
   },
   render: ({ value, ...props }) => {
     const [usedValue, setUsedValue] = useState<string | undefined>(value)
@@ -46,12 +50,16 @@ export const singleSelectProperty: Story = {
       <SingleSelectProperty
         {...props}
         value={usedValue}
-        onValueChange={value => {
-          action('onChange')(value)
-          setUsedValue(value)
+        onValueChange={(val) => {
+          props.onValueChange?.(val)
+          setUsedValue(val)
         }}
-        onRemove={() => {
-          action('onRemove')()
+        onEditComplete={(val) => {
+          props.onEditComplete?.(val)
+          setUsedValue(val)
+        }}
+        onValueClear={() => {
+          props.onValueClear?.()
           setUsedValue(undefined)
         }}
       />

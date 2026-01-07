@@ -3,22 +3,23 @@ import { useEffect, useState } from 'react'
 import { CheckboxProperty } from '@/src/components/user-interaction/properties/CheckboxProperty'
 import { action } from 'storybook/actions'
 
-const meta = {
+const meta: Meta<typeof CheckboxProperty> = {
   component: CheckboxProperty,
-} satisfies Meta<typeof CheckboxProperty>
+}
 
 export default meta
 type Story = StoryObj<typeof meta>;
 
 export const checkboxProperty: Story = {
   args: {
-    value: undefined,
     name: 'Property',
-    softRequired: false,
+    required: false,
+    value: undefined,
     readOnly: false,
-    onRemove: action('onRemove'),
     onValueChange: action('onValueChange'),
     onEditComplete: action('onEditComplete'),
+    onRemove: action('onRemove'),
+    onValueClear: action('onValueClear'),
   },
   render: ({ value, ...props }) => {
     const [usedValue, setUsedValue] = useState<boolean | undefined>(value)
@@ -30,8 +31,19 @@ export const checkboxProperty: Story = {
     return (
       <CheckboxProperty
         {...props}
-        onValueChange={setUsedValue}
         value={usedValue}
+        onValueChange={(val) => {
+          props.onValueChange?.(val)
+          setUsedValue(val)
+        }}
+        onEditComplete={(val) => {
+          props.onEditComplete?.(val)
+          setUsedValue(val)
+        }}
+        onValueClear={() => {
+          props.onValueClear?.()
+          setUsedValue(undefined)
+        }}
       />
     )
   }

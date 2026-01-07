@@ -1,8 +1,8 @@
 import { Text } from 'lucide-react'
-import clsx from 'clsx'
 import { useHightideTranslation } from '@/src/i18n/useHightideTranslation'
 import { Textarea } from '@/src/components/user-interaction/Textarea'
-import { PropertyBase } from './PropertyBase'
+import { PropertyBase, PropertyField} from './PropertyBase'
+import { PropsUtil } from '@/src/utils/propsUtil'
 
 export type TextPropertyProps = PropertyField<string>
 
@@ -27,16 +27,15 @@ export const TextProperty = ({
       hasValue={hasValue}
       icon={<Text size={24}/>}
     >
-      {({ softRequired }) => (
+      {({ invalid }) => (
         <Textarea
-          className={clsx(
-            'default-style-none focus-style-none w-full',
-            { 'bg-surface-warning placeholder-warning': softRequired && !hasValue }
-          )}
+          className="w-full"
+          data-name="property-input"
+          data-invalid={PropsUtil.dataAttributes.bool(invalid)}
           rows={5}
           value={value ?? ''}
           readOnly={readOnly}
-          placeholder={`${translation('text')}...`}
+          placeholder={translation('text')}
           onValueChange={(value) => {
             if (!value) {
               onRemove?.()

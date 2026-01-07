@@ -10,7 +10,7 @@
   "chooseTheme": "Wähle dein bevorzugtes Farbschema.",
   "chooseSlide": "Wähle die angezeigte Slide aus",
   "clear": "Löschen",
-  "clearProperty": "Eigenschaft löschen",
+  "removeProperty": "Eigenschaft entfernen",
   "clearValue": "Wert löschen",
   "click": "Klicken",
   "clickToCopy": "Zum kopieren klicken",

@@ -8,22 +8,19 @@ import { StorybookHelper } from '@/src/storybook/helper'
 
 const options = StorybookHelper.selectValues
 
-const meta = {
+const meta: Meta<typeof MultiSelectProperty> = {
   component: MultiSelectProperty,
-} satisfies Meta<typeof MultiSelectProperty>
+}
 
 export default meta
 type Story = StoryObj<typeof meta>;
 
 export const multiSelectProperty: Story = {
   args: {
-    value: options.slice(3, 5),
     name: 'Fruits',
-    softRequired: false,
+    required: false,
+    value: options.slice(3, 5),
     readOnly: false,
-    oonRemove: action('onRemove'),
-    onValueChange: action('onValueChange'),
-    onEditComplete: action('onEditComplete'),
     children: options.map(option => (
       <SelectOption key={option} value={option}>
         <span className="flex-row-1 items-center">
@@ -39,7 +36,11 @@ export const multiSelectProperty: Story = {
           {option}
         </span>
       </SelectOption>
-    ))
+    )),
+    onValueChange: action('onValueChange'),
+    onEditComplete: action('onEditComplete'),
+    onRemove: action('onRemove'),
+    onValueClear: action('onValueClear'),
   },
   render: ({ value: initialValue, ...props }) => {
     const [values, setValues] = useState<string[]>(initialValue)
@@ -47,13 +48,17 @@ export const multiSelectProperty: Story = {
     return (
       <MultiSelectProperty
         {...props}
-        values={values}
-        onValueChange={values => {
-          props.onValueChange?.(values)
-          setValues(values)
+        value={values}
+        onValueChange={(vals) => {
+          props.onValueChange?.(vals)
+          setValues(vals)
         }}
-        onRemove={() => {
-          props.onRemove?.()
+        onEditComplete={(vals) => {
+          props.onEditComplete?.(vals)
+          setValues(vals)
+        }}
+        onValueClear={() => {
+          props.onValueClear?.()
           setValues([])
         }}
       />

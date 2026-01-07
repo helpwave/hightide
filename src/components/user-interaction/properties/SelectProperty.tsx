@@ -1,8 +1,8 @@
 import { List } from 'lucide-react'
-import clsx from 'clsx'
 import type { PropsWithChildren } from 'react'
-import { PropertyBase } from '@/src/components/user-interaction/properties/PropertyBase'
+import { PropertyBase, PropertyField } from '@/src/components/user-interaction/properties/PropertyBase'
 import { Select } from '@/src/components/user-interaction/Select'
+import { PropsUtil } from '@/src/utils/propsUtil'
 
 export type SingleSelectPropertyProps = PropertyField<string> & PropsWithChildren
 
@@ -24,25 +24,25 @@ export const SingleSelectProperty = ({
       hasValue={hasValue}
       icon={<List size={24}/>}
     >
-      {({ softRequired }) => (
-        <Select
-          value={value}
-          onValueChange={(value) => {
-            onValueChange?.(value)
-            onEditComplete?.(value)
-          }}
-          disabled={props.readOnly}
-          buttonProps={{
-            className: clsx(
-              'default-style-none focus-style-none flex-row-2 w-full items-center',
-              {
-                '!bg-warning !text-surface-warning': softRequired && !hasValue,
-              }
-            ),
-          }}
+      {({ invalid }) => (
+        <div
+          data-name="property-input-wrapper"
+          data-invalid={PropsUtil.dataAttributes.bool(invalid)}
         >
-          {children}
-        </Select>
+          <Select
+            value={value}
+            onValueChange={(value) => {
+              onValueChange?.(value)
+              onEditComplete?.(value)
+            }}
+            disabled={props.readOnly}
+            buttonProps={{
+              className: 'flex-row-2 w-full items-center justify-between p-1 border-0',
+            }}
+          >
+            {children}
+          </Select>
+        </div>
       )}
     </PropertyBase>
   )

@@ -3,9 +3,9 @@ import { useEffect, useState } from 'react'
 import { DateProperty } from '@/src/components/user-interaction/properties/DateProperty'
 import { action } from 'storybook/actions'
 
-const meta = {
+const meta: Meta<typeof DateProperty> = {
   component: DateProperty,
-} satisfies Meta<typeof DateProperty>
+}
 
 export default meta
 type Story = StoryObj<typeof meta>;
@@ -13,13 +13,14 @@ type Story = StoryObj<typeof meta>;
 export const dateProperty: Story = {
   args: {
     name: 'Property',
-    softRequired: false,
+    required: false,
     value: undefined,
     readOnly: false,
     type: 'dateTime',
-    onRemove: action('onRemove'),
     onValueChange: action('onValueChange'),
-    onEditComplete: action('onEditComplete')
+    onEditComplete: action('onEditComplete'),
+    onRemove: action('onRemove'),
+    onValueClear: action('onValueClear'),
   },
   render: ({ value, ...props }) => {
     const [usedDate, setUsedDate] = useState<Date | undefined>(value)
@@ -31,19 +32,19 @@ export const dateProperty: Story = {
     return (
       <DateProperty
         {...props}
-        onValueChange={date => {
-          setUsedDate(date)
-          props.onValueChange?.(date)
-        }}
-        onEditComplete={date => {
-          setUsedDate(date)
-          props.onEditComplete?.(date)
-        }}
-        onRemove={() => {
-          setUsedDate(undefined)
-          props.onRemove?.()
-        }}
         value={usedDate}
+        onValueChange={(date) => {
+          props.onValueChange?.(date)
+          setUsedDate(date)
+        }}
+        onEditComplete={(date) => {
+          props.onEditComplete?.(date)
+          setUsedDate(date)
+        }}
+        onValueClear={() => {
+          props.onValueClear?.()
+          setUsedDate(undefined)
+        }}
       />
     )
   }

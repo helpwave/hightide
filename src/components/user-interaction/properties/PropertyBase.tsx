@@ -1,13 +1,13 @@
 import type { ReactNode } from 'react'
 import { AlertTriangle, Trash, X } from 'lucide-react'
-import clsx from 'clsx'
 import { Button } from '@/src/components/user-interaction/Button'
 import { useHightideTranslation } from '@/src/i18n/useHightideTranslation'
 import { Tooltip } from '../Tooltip'
+import { PropsUtil } from '@/src/utils/propsUtil'
 
 export type PropertyField<T> = {
   name: string,
-  softRequired?: boolean,
+  required?: boolean,
   readOnly?: boolean,
   allowClear?: boolean,
   value?: T,
@@ -19,11 +19,12 @@ export type PropertyField<T> = {
 
 
 export type PropertyBaseProps = {
-  children: (props: { softRequired: boolean, hasValue: boolean }) => ReactNode,
+  children: (props: { required: boolean, hasValue: boolean, invalid: boolean }) => ReactNode,
   name: string,
-  softRequired?: boolean,
+  required?: boolean,
   readOnly?: boolean,
   allowClear?: boolean,
+  allowRemove?: boolean,
   hasValue: boolean,
   onRemove?: () => void,
   onValueClear?: () => void,
@@ -37,67 +38,80 @@ export type PropertyBaseProps = {
 export const PropertyBase = ({
   name,
   children,
-  softRequired = false,
+  required = false,
   hasValue,
   icon,
   readOnly,
-  allowClear = false,
+  allowClear = true,
+  allowRemove = true,
   onRemove,
   onValueClear,
-  className = '',
+  className,
 }: PropertyBaseProps) => {
   const translation = useHightideTranslation()
-  const requiredAndNoValue = softRequired && !hasValue
+  const invalid = required && !hasValue
+  
+  const isClearEnabled = allowClear && !readOnly
+  const isRemoveEnabled = allowRemove && !readOnly
+  const showActionsContainer = isClearEnabled || isRemoveEnabled
+
   return (
-    <div className={clsx('flex-row-0 group', className)}>
+    <div
+      className={className ? `group/property ${className}` : 'group/property'}
+      data-name="property-root"
+      data-invalid={PropsUtil.dataAttributes.bool(invalid)}
+    >
       <div
-        className={clsx(
-          'flex-row-2 max-w-48 min-w-48 px-3 py-2 items-center rounded-l-xl border-2 border-r-0', {
-            'bg-property-title-background text-property-title-text group-hover:border-primary group-focus-within:border-primary': !requiredAndNoValue,
-            'bg-warning text-surface-warning group-hover:border-warning border-warning/90': requiredAndNoValue,
-          }, className
-        )}
+        className={className}
+        data-name="property-title"
+        data-invalid={PropsUtil.dataAttributes.bool(invalid)}
       >
-        <div className="max-w-6 min-w-6 text-text-primary">{icon}</div>
-        <span className="font-semibold">{name}</span>
+        <Tooltip tooltip={name} containerClassName="min-w-0">
+          <div className='flex-row-1 items-center'>
+            <div data-name="property-title-icon">{icon}</div>
+            <span data-name="property-title-text">{name}</span>
+          </div>
+        </Tooltip>
+        {invalid && (
+            <AlertTriangle className='size-force-6'/>
+        )}
       </div>
       <div
-        className={clsx(
-          'flex-row-2 grow px-3 py-2 justify-between items-center rounded-r-xl border-2 border-l-0 min-h-15', {
-            'bg-input-background text-input-text group-hover:border-primary group-focus-within:border-primary': !requiredAndNoValue,
-            'bg-surface-warning group-hover:border-warning border-warning/90': requiredAndNoValue,
-          }, className
-        )}
+        className={className}
+        data-name="property-content"
+        data-invalid={PropsUtil.dataAttributes.bool(invalid)}
       >
-        {children({ softRequired, hasValue })}
-        {allowClear && hasValue && (
-          <Tooltip tooltip={translation('clearValue')}>
-            <Button
-              onClick={onValueClear}
-              color="negative"
-              coloringStyle="text"
-              layout="icon"
-              size="sm"
-            >
-              <X className='size-force-5' />
-            </Button>
-          </Tooltip>
-        )}
-        {requiredAndNoValue && (
-          <div className="text-warning"><AlertTriangle className='size-force-6'/></div>
-        )}
-        {onRemove && !readOnly && (
-          <Tooltip tooltip={translation('clearProperty')}> 
-            <Button
-              onClick={onRemove}
-              color="negative"
-              coloringStyle="text"
-              layout="icon"
-              size="sm"
-            >
-              <Trash className='size-force-5' />
-            </Button>
-          </Tooltip>
+        {children({ required, hasValue, invalid })}
+        {showActionsContainer && (
+          <div data-name="property-actions">
+            {isClearEnabled && (
+              <Tooltip tooltip={translation('clearValue')}>
+                <Button
+                  onClick={onValueClear}
+                  disabled={!hasValue}
+                  color="negative"
+                  coloringStyle="text"
+                  layout="icon"
+                  size="sm"
+                >
+                  <X className='size-force-5' />
+                </Button>
+              </Tooltip>
+            )}
+            {isRemoveEnabled && (
+              <Tooltip tooltip={translation('removeProperty')}> 
+                <Button
+                  onClick={onRemove}
+                  color="negative"
+                  coloringStyle="text"
+                  layout="icon"
+                  size="sm"
+                >
+                  <Trash className='size-force-5' />
+                </Button>
+              </Tooltip>
+            )}
+          </div>
         )}
       </div>
     </div>

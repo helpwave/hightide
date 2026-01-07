@@ -1,7 +1,7 @@
 import { CalendarDays } from 'lucide-react'
-import clsx from 'clsx'
 import { PropertyBase, PropertyField } from './PropertyBase'
 import { DateTimeInput } from '../input/DateTimeInput'
+import { PropsUtil } from '@/src/utils/propsUtil'
 
 export type DatePropertyProps = PropertyField<Date>
 & {
@@ -27,16 +27,15 @@ export const DateProperty = ({
       hasValue={hasValue}
       icon={<CalendarDays size={24}/>}
     >
-      {({ softRequired }) => (
+      {({ invalid }) => (
         <DateTimeInput
           value={value}
           mode={type}
           readOnly={readOnly}
-
           onValueChange={onValueChange}
           onEditComplete={onEditComplete}
-
-          className={clsx('default-style-none focus-style-none', { 'bg-surface-warning': softRequired && !hasValue })}
+          data-name="property-input"
+          data-invalid={PropsUtil.dataAttributes.bool(invalid)}
         />
       )}
     </PropertyBase>
