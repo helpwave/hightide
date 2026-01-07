@@ -10,16 +10,16 @@ export type VerticalDividerProps = {
  * A Component for creating a vertical Divider
  */
 export const VerticalDivider = ({
-                                  width = 1,
-                                  height = 100,
-                                  strokeWidth = 4,
-                                  dashGap = 4,
-                                  dashLength = 4,
-                                }: VerticalDividerProps) => {
+  width = 1,
+  height = 100,
+  strokeWidth = 4,
+  dashGap = 4,
+  dashLength = 4,
+}: VerticalDividerProps) => {
   return (
     <div style={{ width: width + 'px', height: height + 'px' }}>
       <svg width={width} height={height} viewBox={`0 0 ${width} ${height}`} fill="none"
-           xmlns="http://www.w3.org/2000/svg">
+        xmlns="http://www.w3.org/2000/svg">
         <line
           opacity="0.5"
           x1={width / 2}

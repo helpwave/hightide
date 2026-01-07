@@ -1,0 +1,51 @@
+---
+name: translations
+description: Rules for adding translations and how to apply the update
+---
+
+# Overview
+
+To add translations edit the corresponding file in the locales folder and follow these rules:
+1. always add translations for all languages
+2. Keep the keys sorted alphabetically
+3. Use lower camel case for the translation
+4. Prefix Selections with "s"
+5. Prefix Plural Selections with "p" if the translation does not include the count and with "n" if it includes the count
+6. Prefix Replacements with "r"
+7. In case of both Selection and Replacement choose the Selection prefix
+8. After adding all translations, run `npm run build-intl` to update the generated translation file
+
+## ICU Message Type Prefixes
+
+### Selection (prefix "s")
+ICU `select` statements that choose between options based on a value:
+- Example: `"sThemeMode": "{theme, select, dark{Dark} light{Light} system{System}}"`
+- Example: `"sGender": "{gender, select, male{Male} female{Female} other{Other}}"`
+
+### Plural Selection (prefix "p" or "n")
+ICU `plural` statements for pluralization:
+- **"p" prefix**: When the translation does NOT include the count number
+  - Example: `"pThemes": "{count, plural, =1{Theme} other{Themes}}"`
+- **"n" prefix**: When the translation DOES include the count (using `#` or `{count}`)
+  - Example: `"nItems": "{count, plural, =1{# item} other{# items}}"`
+
+### Replacement (prefix "r")
+When there is text outside the ICU statement (before or after):
+- Example: `"rSortingOrderAfter": "Applied {otherSortings, plural, ...}"`
+
+### Combined Cases
+If a translation has both Selection/Plural AND Replacement (text outside), use the Selection prefix (rule 7).
+
+## Examples
+
+**Correct:**
+- `"clearValue": "Clear Value"` - simple string, no prefix
+- `"sThemeMode": "{theme, select, ...}"` - selection, "s" prefix
+- `"pThemes": "{count, plural, =1{Theme} other{Themes}}"` - plural without count, "p" prefix
+- `"rSortingOrderAfter": "Applied {otherSortings, plural, ...}"` - replacement, "r" prefix
+
+**Incorrect:**
+- `"themeMode": "{theme, select, ...}"` - missing "s" prefix
+- `"themes": "{count, plural, ...}"` - missing "p" prefix
+
+@locales/**

@@ -1,26 +1,202 @@
-import type { PropsWithChildren, ReactNode } from 'react'
-import { forwardRef, useCallback, useId } from 'react'
-import { ChevronDown } from 'lucide-react'
+import type { Dispatch, HTMLAttributes, PropsWithChildren, ReactNode, SetStateAction } from 'react'
+import { useEffect } from 'react'
+import { useState } from 'react'
+import { createContext, forwardRef, useCallback, useContext, useId, useMemo } from 'react'
 import clsx from 'clsx'
 import { useOverwritableState } from '@/src/hooks/useOverwritableState'
+import { Visibility } from './Visibility'
+import { ExpansionIcon } from '../display-and-visualization/ExpansionIcon'
+import { useTransitionState } from '@/src/hooks/useTransitionState'
 
-export type ExpansionIconProps = {
+//
+// Context
+//
+type ExpandableContextIdsState = {
+  root: string,
+  header: string,
+  content: string,
+}
+
+type ExpandableContextState = {
+  ids: ExpandableContextIdsState,
+  setIds: Dispatch<SetStateAction<ExpandableContextIdsState>>,
+  disabled: boolean,
+  isExpanded: boolean,
+  toggle: () => void,
+  setIsExpanded: Dispatch<SetStateAction<boolean>>,
+}
+
+const ExpandableContext = createContext<ExpandableContextState | null>(null)
+
+function useExpandableContext() {
+  const context = useContext(ExpandableContext)
+  if (!context) {
+    throw new Error('Expandable components must be used within an ExpandableRoot')
+  }
+  return context
+}
+
+//
+// ExpandableRoot
+//
+
+export type ExpandableRootProps = HTMLAttributes<HTMLDivElement> & {
   isExpanded?: boolean,
-  className?: string,
+  onExpandedChange?: (isExpanded: boolean) => void,
+  disabled?: boolean,
+  allowContainerToggle?: boolean,
 }
 
-export const ExpansionIcon = ({ isExpanded, className }: ExpansionIconProps) => {
+export const ExpandableRoot = forwardRef<HTMLDivElement, ExpandableRootProps>(function ExpandableRoot({
+  children,
+  id: providedId,
+  isExpanded: controlledExpanded,
+  onExpandedChange,
+  disabled = false,
+  allowContainerToggle = false,
+  ...props
+}, ref) {
+  const generatedId = useId()
+  const [ids, setIds] = useState<ExpandableContextIdsState>({
+    root: providedId ?? `expandable-${generatedId}-root`,
+    header: `expandable-${generatedId}-header`,
+    content: `expandable-${generatedId}-content`
+  })
+  const [isExpanded, setIsExpanded] = useOverwritableState(controlledExpanded, onExpandedChange)
+
+  const toggle = useCallback(() => {
+    if (!disabled) {
+      setIsExpanded(!isExpanded)
+    }
+  }, [disabled, isExpanded, setIsExpanded])
+
+  const contextValue = useMemo(() => ({
+    isExpanded: !!isExpanded,
+    toggle,
+    setIsExpanded,
+    ids,
+    setIds,
+    disabled
+  }), [isExpanded, toggle, setIsExpanded, ids, disabled])
+
   return (
-    <ChevronDown
-      aria-hidden={true}
-      className={clsx(
-        'min-w-6 w-6 min-h-6 h-6 transition-transform motion-safe:duration-200 motion-reduce:duration-0 ease-in-out',
-        { 'rotate-180': isExpanded },
-        className
-      )}
-    />
+    <ExpandableContext.Provider value={contextValue}>
+      <div
+        {...props}
+        ref={ref}
+        id={ids.root}
+
+        onClick={(event) => {
+          props.onClick?.(event)
+          if (allowContainerToggle) {
+            toggle()
+          }
+        }}
+
+        data-name="expandable-root"
+        data-expanded={isExpanded ? '' : undefined}
+        data-disabled={disabled ? '' : undefined}
+        data-containertoggleable={allowContainerToggle ? '' : undefined}
+      >
+        {children}
+      </div>
+    </ExpandableContext.Provider>
   )
+})
+
+//
+// ExpandableHeader
+//
+
+export type ExpandableHeaderProps = HTMLAttributes<HTMLDivElement> & {
+  isUsingDefaultIcon?: boolean,
 }
+
+export const ExpandableHeader = forwardRef<HTMLDivElement, ExpandableHeaderProps>(function ExpandableHeader({
+  children,
+  isUsingDefaultIcon = true,
+  ...props
+}, ref) {
+  const { isExpanded, toggle, ids, setIds, disabled } = useExpandableContext()
+  useEffect(() => {
+    if (props.id) {
+      setIds(prevState => ({ ...prevState, header: props.id }))
+    }
+  }, [props.id, setIds])
+
+  return (
+    <div
+      {...props}
+      ref={ref}
+      id={ids.header}
+
+      onClick={event => {
+        event.stopPropagation()
+        props.onClick?.(event)
+        toggle()
+      }}
+
+      data-name="expandable-header"
+      data-expanded={isExpanded ? '' : undefined}
+      data-disabled={disabled ? '' : undefined}
+
+      aria-expanded={isExpanded}
+      aria-controls={ids.content}
+      aria-disabled={disabled || undefined}
+    >
+      {children}
+      <Visibility isVisible={isUsingDefaultIcon}>
+        <ExpansionIcon isExpanded={isExpanded} disabled={disabled} />
+      </Visibility>
+    </div>
+  )
+})
+
+//
+// ExpandableContent
+//
+
+export type ExpandableContentProps = HTMLAttributes<HTMLDivElement> & {
+  forceMount?: boolean,
+}
+
+export const ExpandableContent = forwardRef<HTMLDivElement, ExpandableContentProps>(function ExpandableContent({
+  children,
+  forceMount = false,
+  ...props
+}, ref) {
+  const { isExpanded, ids, setIds } = useExpandableContext()
+  useEffect(() => {
+    if (props.id) {
+      setIds(prevState => ({ ...prevState, content: props.id }))
+    }
+  }, [props.id, setIds])
+
+  const { transitionState, callbacks } = useTransitionState({ isOpen: isExpanded })
+
+  return (
+    <div
+      {...props}
+      ref={ref}
+      id={ids.content}
+
+      {...callbacks}
+
+      data-name="expandable-content"
+      data-expanded={isExpanded ? '' : undefined}
+      data-state={transitionState}
+    >
+      <Visibility isVisible={forceMount || isExpanded}>
+        {children}
+      </Visibility>
+    </div>
+  )
+})
+
+
+//
+// Composite / Legacy Components
+//
 
 type IconBuilder = (expanded: boolean) => ReactNode
 
@@ -30,9 +206,6 @@ export type ExpandableProps = PropsWithChildren<{
   icon?: IconBuilder,
   isExpanded?: boolean,
   onChange?: (isExpanded: boolean) => void,
-  /**
-   * Whether the expansion should only happen when the header is clicked or on the entire component
-   */
   clickOnlyOnHeader?: boolean,
   disabled?: boolean,
   className?: string,
@@ -41,85 +214,60 @@ export type ExpandableProps = PropsWithChildren<{
   contentExpandedClassName?: string,
 }>
 
-/**
- * A Component for showing and hiding content
- */
 export const Expandable = forwardRef<HTMLDivElement, ExpandableProps>(function Expandable({
-                                                                                            children,
-                                                                                            id: providedId,
-                                                                                            label,
-                                                                                            icon,
-                                                                                            isExpanded = false,
-                                                                                            onChange,
-                                                                                            clickOnlyOnHeader = true,
-                                                                                            disabled = false,
-                                                                                            className,
-                                                                                            headerClassName,
-                                                                                            contentClassName,
-                                                                                            contentExpandedClassName,
-                                                                                          }, ref) {
+  children,
+  id,
+  label,
+  icon,
+  isExpanded,
+  onChange,
+  clickOnlyOnHeader = true,
+  disabled = false,
+  className,
+  headerClassName,
+  contentClassName,
+  contentExpandedClassName,
+}, ref) {
 
-  const defaultIcon = useCallback((expanded: boolean) => <ExpansionIcon isExpanded={expanded}/>, [])
-  icon ??= defaultIcon
-
-  const generatedId = useId()
-  const id = providedId ?? generatedId
+  const defaultIcon = useCallback((expanded: boolean) => <ExpansionIcon isExpanded={expanded} />, [])
+  const iconBuilder = icon ?? defaultIcon
 
   return (
-    <div
+    <ExpandableRoot
       ref={ref}
-      onClick={() => !clickOnlyOnHeader && !disabled && onChange?.(!isExpanded)}
-
-      className={clsx(
-        'flex-col-0 surface coloring-solid group rounded-lg shadow-sm',
-        { 'cursor-pointer': !clickOnlyOnHeader && !disabled }, className
-      )}
+      id={id}
+      isExpanded={isExpanded}
+      onExpandedChange={onChange}
+      disabled={disabled}
+      allowContainerToggle={!clickOnlyOnHeader}
+      className={className}
     >
-      <button
-        onClick={() => clickOnlyOnHeader && !disabled && onChange?.(!isExpanded)}
-
-        className={clsx(
-          'flex-row-2 py-2 px-4 rounded-lg justify-between items-center coloring-solid-hover select-none',
-          {
-            'group-hover:brightness-97': !isExpanded,
-            'hover:brightness-97': isExpanded && !disabled,
-            'cursor-pointer': clickOnlyOnHeader && !disabled,
-          },
-          headerClassName
-        )}
-
-        aria-expanded={isExpanded}
-        aria-controls={`${id}-content`}
-        aria-disabled={disabled ?? undefined}
-      >
+      <ExpandableHeader className={headerClassName}>
         {label}
-        {icon(isExpanded)}
-      </button>
-      <div
-        id={`${id}-content`}
-        className={clsx(
-          'flex-col-2 px-4 transition-all duration-300 ease-in-out',
-          {
-            [clsx('max-h-96 opacity-100 pb-2 overflow-y-auto', contentExpandedClassName)]: isExpanded,
-            'max-h-0 opacity-0 overflow-hidden': !isExpanded,
-          },
-          contentClassName
+        {/* We use a consumer here because the iconBuilder needs the state which is inside the provider */}
+        <ExpandableContext.Consumer>
+          {ctx => iconBuilder(ctx?.isExpanded ?? false)}
+        </ExpandableContext.Consumer>
+      </ExpandableHeader>
+      <ExpandableContext.Consumer>
+        {ctx => (
+          <ExpandableContent
+            className={clsx(contentClassName, { [contentExpandedClassName ?? '']: !!ctx?.isExpanded })}
+          >
+            {children}
+          </ExpandableContent>
         )}
+      </ExpandableContext.Consumer>
 
-        role="region"
-      >
-        {children}
-      </div>
-    </div>
+    </ExpandableRoot>
   )
 })
 
 export const ExpandableUncontrolled = forwardRef<HTMLDivElement, ExpandableProps>(function ExpandableUncontrolled({
-                                                                                                                    isExpanded,
-                                                                                                                    onChange,
-                                                                                                                    ...props
-                                                                                                                  },
-                                                                                                                  ref) {
+  isExpanded,
+  onChange,
+  ...props
+}, ref) {
   const [usedIsExpanded, setUsedIsExpanded] = useOverwritableState(isExpanded, onChange)
 
   return (

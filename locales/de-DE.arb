@@ -10,6 +10,8 @@
   "chooseTheme": "Wähle dein bevorzugtes Farbschema.",
   "chooseSlide": "Wähle die angezeigte Slide aus",
   "clear": "Löschen",
+  "removeProperty": "Eigenschaft entfernen",
+  "clearValue": "Wert löschen",
   "click": "Klicken",
   "clickToCopy": "Zum kopieren klicken",
   "clickToSelect": "Zum Auswählen drücken",
@@ -80,14 +82,14 @@
   "submit": "Abschicken",
   "success": "Erfolg",
   "text": "Text",
-  "themes": "{count, plural, =1{Farbschema} other{Farbschemas}}",
-  "@themes": {
+  "pThemes": "{count, plural, =1{Farbschema} other{Farbschemas}}",
+  "@pThemes": {
     "placeholders": {
       "count": { "type":  "number" }
     }
   },
-  "themeMode": "{theme, select, dark{Dunkel} light{Hell} system{System}}",
-  "@themeMode": {
+  "sThemeMode": "{theme, select, dark{Dunkel} light{Hell} system{System}}",
+  "@sThemeMode": {
     "placeholders": {
       "theme": {}
     }
@@ -97,11 +99,11 @@
   "unsavedChangesSaveQuestion": "Möchtest du die Änderungen speichern?",
   "value": "Wert",
   "yes": "Ja",
-  "filter": "Filter",
-  "min": "Min",
-  "max": "Max",
-  "startDate": "Start",
   "endDate": "Ende",
+  "filter": "Filter",
+  "max": "Max",
+  "min": "Min",
+  "startDate": "Start",
   "notEmpty": "Das Feld darf nicht leer sein.",
   "invalidEmail": "Die E-Mail ist ungültig.",
   "tooShort": "Der Wert muss mindestens {min} Zeichen enthalten.",
@@ -149,19 +151,19 @@
       "max": { "type": "number" }
     }
   },
+  "age": "Alter",
+  "entryDate": "Eintragsdatum",
   "identifier": "Identifikator",
   "name": "Name",
-  "age": "Alter",
   "street": "Straße",
-  "entryDate": "Eintragsdatum",
-  "gender": "{gender, select, male{Männlich} female{Weiblich} other{Divers}}",
-  "@gender": {
+  "sGender": "{gender, select, male{Männlich} female{Weiblich} other{Divers}}",
+  "@sGender": {
     "placeholders": {
       "gender": {}
     }
   },
-  "welcome": "Willkommen",
   "goodToSeeYou": "Schön dich zu sehen",
+  "welcome": "Willkommen",
   "rSortingOrderAfter": "Angewendet {otherSortings, plural, =0{als primäre Sortierung} =1{nach # anderen Sortierung} other{nach # anderen Sortierungen}}",
   "@rSortingOrderAfter": {
     "placeholders": {

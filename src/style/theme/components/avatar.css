@@ -1,0 +1,74 @@
+@layer components {
+  *[data-name="avatar"] {
+    @apply relative flex-row-0 items-center justify-center primary coloring-solid rounded-full;
+    &[data-group] {
+      @apply absolute shadow-side shadow-r-4 shadow-hard;
+    }
+    &[data-size="xs"] {
+      @apply size-6 p-0.5 text-xs font-semibold;
+    }
+    &[data-size="sm"] {
+      @apply size-8 p-1 text-xs font-semibold;
+    }
+    &[data-size="md"] {
+      @apply size-10 p-1.5 text-lg font-semibold;
+    }
+    &[data-size="lg"] {
+      @apply size-12 p-2 text-2xl font-bold;
+    }
+
+    &[data-group]:nth-child(1) {
+      left: calc(0 * var(--size) * var(--overlap));
+      z-index: 5;
+    }
+    &[data-group]:nth-child(2) {
+      left: calc(1 * var(--size) * var(--overlap));
+      z-index: 4;
+    }
+    &[data-group]:nth-child(3) {
+      left: calc(2 * var(--size) * var(--overlap));
+      z-index: 3;
+    }
+    &[data-group]:nth-child(4) {
+      left: calc(3 * var(--size) * var(--overlap));
+      z-index: 2;
+    }
+    &[data-group]:nth-child(5) {
+      left: calc(4 * var(--size) * var(--overlap));
+      z-index: 1;
+    }
+  }
+
+  *[data-name="avatar-image"] {
+    @apply absolute left-0 top-0 z-1 rounded-[inherit] size-[inherit];
+    &:not([data-loaded]) {
+      @apply opacity-0;
+    }
+  }
+
+  *[data-name="avatar-group"] {
+    @apply flex-row-2 items-center h-[var(--size)] w-fit;
+    --overlap: 0.5;
+    --count: 5;
+    &[data-size="xs"] {
+      --size: calc(var(--spacing) * 6);
+    }
+    &[data-size="sm"] {
+      --size: calc(var(--spacing) * 8);
+    }
+    &[data-size="md"] {
+      --size: calc(var(--spacing) * 10);
+    }
+    &[data-size="lg"] {
+      --size: calc(var(--spacing) * 12);
+    }
+  }
+
+  *[data-name="avatar-group-container"] {
+    @apply relative w-[calc(var(--size)*(0.5*4+1))] h-[var(--size)];
+  }
+
+  *[data-name="avatar-group-more"] {
+    @apply flex-row-2 truncate items-center text-[calc(var(--size)*2/3)];
+  }
+}

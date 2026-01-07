@@ -1,4 +1,4 @@
-import { useLocale } from '@/src/i18n/LocaleProvider'
+import { useLocale } from '@/src/contexts/LocaleContext'
 import type {
   PartialTranslationExtension,
   Translation,
@@ -9,6 +9,7 @@ import { ArrayUtil } from '@/src/utils/array'
 import type { SingleOrArray } from '@/src/utils/typing'
 import type { HightideTranslationEntries, HightideTranslationLocales } from '@/src/i18n/translations'
 import { hightideTranslation } from '@/src/i18n/translations'
+import { useMemo } from 'react'
 
 /**
  * Use for translations where you know that all values are ICU strings.
@@ -60,10 +61,10 @@ export function useHightideTranslation<L extends string, T extends TranslationEn
 ) {
   const { locale: inferredLocale } = useLocale()
   const locale = overwrites?.locale ?? inferredLocale
-  const translationExtensions = ArrayUtil.resolveSingleOrArray(extensions)
 
-  return combineTranslation<L | HightideTranslationLocales, T & HightideTranslationEntries>([
-    ...translationExtensions,
+  return useMemo(() => combineTranslation<L | HightideTranslationLocales, T & HightideTranslationEntries>([
+    ... ArrayUtil.resolveSingleOrArray(extensions),
     hightideTranslation as HidetideTranslationExtension<L,T>
-  ], locale)
+  ], locale),
+  [locale, extensions])
 }

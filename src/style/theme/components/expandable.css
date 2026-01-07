@@ -1,0 +1,50 @@
+@layer components {
+  [data-name="expandable-root"]:not(.default-style-none) {
+    @apply flex-col-0 surface coloring-solid rounded-lg shadow-sm;
+
+    &:not([data-disabled])[data-containertoggleable] {
+      @apply cursor-pointer;
+    }
+  }
+
+  [data-name="expandable-header"]:not(.default-style-none) {
+    @apply flex-row-2 justify-between items-center py-2 px-4 rounded-lg select-none;
+
+    &:not([data-disabled]) {
+      @apply cursor-pointer surface coloring-solid-hover;
+    }
+
+    &[data-disabled] {
+      @apply cursor-not-allowed disabled coloring-solid;
+    }
+  }
+
+  [data-name="expandable-content"]:not(.default-style-none) {
+    @apply flex-col-2 px-4 transition-all ease-in-out h-24;
+
+    &[data-state="opening"],
+    &[data-state="closing"] {
+      @apply overflow-hidden;
+    }
+
+    &[data-state="opened"] {
+      @apply overflow-y-auto;
+    }
+
+    &:not([data-expanded]) {
+      @apply max-h-0 opacity-0 overflow-hidden py-0 duration-[var(--animation-duration-out)];
+    }
+
+    &[data-expanded] {
+      @apply max-h-24 opacity-100 py-2 duration-[var(--animation-duration-in)];
+    }
+  }
+}
+
+@utility expadable-content-h-* {
+  height: calc(var(--spacing) * --value(number));
+
+  &[data-expanded] {
+    max-height: calc(var(--spacing) * --value(number));
+  }
+}

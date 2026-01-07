@@ -1,0 +1,53 @@
+@utility input-element {
+  @apply border-2 focus-style-none focus-style-border;
+  &:not([data-disabled]):not([data-invalid]) {
+    @apply bg-input-background hover:border-primary-hover;
+
+    &:not([data-value]) {
+      @apply text-placeholder;
+    }
+
+    &[data-value] {
+      @apply text-input-text;
+    }
+  }
+
+  &:not([data-disabled])[data-invalid] {
+    @apply bg-negative/20 border-negative hover:border-negative-hover;
+
+    --color-focus: var(--color-negative);
+
+    &[data-value] {
+      @apply text-negative;
+    }
+
+    &:not([data-value]) {
+      @apply text-placeholder;
+    }
+  }
+
+  &[data-disabled] {
+    @apply border-disabled bg-disabled text-on-disabled placeholder:text-transparent cursor-not-allowed;
+  }
+}
+
+/* input-elements */
+@layer components {
+  [data-name="input"]:not(.default-style-none) {
+    @apply px-3 py-2 rounded-md h-10 input-element;
+  }
+
+  [data-name="select-button"]:not(.default-style-none) {
+    @apply flex-row-2 items-center justify-between rounded-md px-3 py-2 input-element;
+    &:not([data-disabled]) {
+      @apply hover:cursor-pointer;
+    }
+  }
+
+  [data-name="select-button-chips"]:not(.default-style-none) {
+    @apply flex flex-wrap gap-2 items-center rounded-md px-2.5 py-2.5 input-element;
+    &:not([data-disabled]) {
+      @apply hover:cursor-pointer;
+    }
+  }
+}

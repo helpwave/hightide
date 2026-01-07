@@ -4,7 +4,7 @@
     "moduleResolution": "bundler",
     "module": "ESNext",
     "outDir": "dist",
-    "rootDir": "src",
+    "rootDir": ".",
     "declaration": true,
     "declarationDir": "dist",
     "jsx": "react-jsx",
@@ -13,12 +13,15 @@
     "baseUrl": ".",
     "paths": {
       "@/*": ["./*"]
-    },
+    }
   },
   "include": [
     "src",
+    "stories",
   ],
   "exclude": [
-    "src/storybook"
+    "src/storybook",
+    "dist",
+    "node_modules"
   ]
 }

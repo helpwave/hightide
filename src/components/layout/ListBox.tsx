@@ -121,14 +121,14 @@ export type ListBoxPrimitiveProps = HTMLAttributes<HTMLUListElement> & {
 
 export const ListBoxPrimitive = forwardRef<HTMLUListElement, ListBoxPrimitiveProps>(
   function ListBoxPrimitive({
-                              value,
-                              onSelectionChanged,
-                              onItemClicked,
-                              isSelection = false,
-                              isMultiple = false,
-                              orientation = 'vertical',
-                              ...props
-                            }, ref) {
+    value,
+    onSelectionChanged,
+    onItemClicked,
+    isSelection = false,
+    isMultiple = false,
+    orientation = 'vertical',
+    ...props
+  }, ref) {
     const itemsRef = useRef<RegisteredItem[]>([])
     const [highlightedIndex, setHighlightedIndex] = useState<number | undefined>(undefined)
 
@@ -228,40 +228,40 @@ export const ListBoxPrimitive = forwardRef<HTMLUListElement, ListBoxPrimitivePro
           }}
           onKeyDown={(event) => {
             switch (event.key) {
-              case match(orientation, {
-                vertical: 'ArrowDown',
-                horizontal: 'ArrowUp'
-              }):
-                moveHighlight(1)
-                event.preventDefault()
-                break
-              case match(orientation, {
-                vertical: 'ArrowUp',
-                horizontal: 'ArrowDown'
-              }):
-                moveHighlight(-1)
-                event.preventDefault()
-                break
-              case 'Home':
-                setHighlightedIndex(itemsRef.current.findIndex(i => !i.disabled))
-                event.preventDefault()
-                break
-              case 'End':
-                for (let i = itemsRef.current.length - 1; i >= 0; i--) {
-                  if (!itemsRef.current[i].disabled) {
-                    setHighlightedIndex(i)
-                    break
-                  }
+            case match(orientation, {
+              vertical: 'ArrowDown',
+              horizontal: 'ArrowUp'
+            }):
+              moveHighlight(1)
+              event.preventDefault()
+              break
+            case match(orientation, {
+              vertical: 'ArrowUp',
+              horizontal: 'ArrowDown'
+            }):
+              moveHighlight(-1)
+              event.preventDefault()
+              break
+            case 'Home':
+              setHighlightedIndex(itemsRef.current.findIndex(i => !i.disabled))
+              event.preventDefault()
+              break
+            case 'End':
+              for (let i = itemsRef.current.length - 1; i >= 0; i--) {
+                if (!itemsRef.current[i].disabled) {
+                  setHighlightedIndex(i)
+                  break
                 }
+              }
+              event.preventDefault()
+              break
+            case 'Enter':
+            case ' ':
+              if (highlightedIndex !== undefined) {
                 event.preventDefault()
-                break
-              case 'Enter':
-              case ' ':
-                if (highlightedIndex !== undefined) {
-                  event.preventDefault()
-                  onItemClickedHandler(itemsRef.current[highlightedIndex].id)
-                }
-                break
+                onItemClickedHandler(itemsRef.current[highlightedIndex].id)
+              }
+              break
             }
             props.onKeyDown?.(event)
           }}
@@ -289,10 +289,10 @@ export const ListBoxMultiple = ({ ...props }: ListBoxMultipleProps) => {
 
 export type ListBoxMultipleUncontrolledProps = ListBoxMultipleProps
 export const ListBoxMultipleUncontrolled = ({
-                                              value: initialValue,
-                                              onSelectionChanged,
-                                              ...props
-                                            }: ListBoxMultipleUncontrolledProps) => {
+  value: initialValue,
+  onSelectionChanged,
+  ...props
+}: ListBoxMultipleUncontrolledProps) => {
   const [value, setValue] = useOverwritableState(initialValue, onSelectionChanged)
 
   return (
@@ -309,10 +309,10 @@ export type ListBoxProps = Omit<ListBoxPrimitiveProps, 'isMultiple' | 'value' | 
   onSelectionChanged?: (value: string) => void,
 }
 export const ListBox = forwardRef<HTMLUListElement, ListBoxProps>(function ListBox({
-                                                                                     value,
-                                                                                     onSelectionChanged,
-                                                                                     ...props
-                                                                                   }, ref) {
+  value,
+  onSelectionChanged,
+  ...props
+}, ref) {
   return (
     <ListBoxPrimitive
       ref={ref}
@@ -328,10 +328,10 @@ export const ListBox = forwardRef<HTMLUListElement, ListBoxProps>(function ListB
 
 export type ListBoxUncontrolledProps = ListBoxProps
 export const ListBoxUncontrolled = ({
-                                      value: initialValue,
-                                      onSelectionChanged,
-                                      ...props
-                                    }: ListBoxUncontrolledProps) => {
+  value: initialValue,
+  onSelectionChanged,
+  ...props
+}: ListBoxUncontrolledProps) => {
   const [value, setValue] = useOverwritableState(initialValue, onSelectionChanged)
 
   return (

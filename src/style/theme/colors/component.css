@@ -1,4 +1,4 @@
-@import './semantic.css';
+@import "./semantic.css";
 
 /*
  * default light-theme component colors
@@ -21,9 +21,6 @@
   --color-menu-background: var(--color-surface-variant);
   --color-menu-text: var(--color-on-surface);
   --color-menu-border: var(--color-border);
-
-  /* Label */
-  --color-label-text: var(--color-text-secondary);
 
   /* Overlay, Dialog, Modal */
   --color-overlay-background: var(--color-surface);
@@ -50,8 +47,8 @@
   /* Table */
   --color-table-background: var(--color-surface);
   --color-table-text: var(--color-on-surface);
-  --color-table-header-background: color-mix(in srgb, var(--color-blue-500) 15%, var(--color-surface));
-  --color-table-row-hover-background: color-mix(in srgb, var(--color-purple-500) 15%, var(--color-surface));
+  --color-table-header-background: var(--color-surface-variant);
+  --color-table-row-hover-background: var(--color-surface-hover);
 
   /* TextImage */
   --color-text-image-primary-background: var(--color-primary);
@@ -87,7 +84,7 @@
     --color-overlay-shadow: #00000060;
 
     /* Scrollbar */
-    --color-scrollbar-track: #FFFFFF33;
+    --color-scrollbar-track: #ffffff33;
     --color-scrollbar-thumb: var(--color-gray-300);
 
     /* Other */

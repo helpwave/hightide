@@ -1,0 +1,55 @@
+@layer components {
+  @supports (scrollbar-color: auto) {
+    * {
+      scrollbar-color: var(--color-gray-500) transparent;
+    }
+  }
+
+  /* Otherwise, use `::-webkit-scrollbar-*` pseudo-elements */
+  @supports selector(::-webkit-scrollbar) {
+    * {
+      scrollbar-color: initial;
+    }
+
+    :root {
+      --scrollbar-width: 10px;
+      --scrollbar-padding: 1px;
+    }
+
+    *::-webkit-scrollbar {
+      width: var(--scrollbar-width);
+      height: var(--scrollbar-width);
+    }
+
+    *::-webkit-scrollbar-track {
+      border-radius: 9999px;
+      background: transparent;
+      cursor: default;
+    }
+
+    *::-webkit-scrollbar-thumb {
+      background-color: var(--color-gray-500);
+      border-radius: 9999px;
+      border: var(--scrollbar-padding) solid transparent;
+      background-clip: padding-box;
+      cursor: default;
+      transition: background-color 0.2s ease;
+    }
+
+    *::-webkit-scrollbar-thumb:active {
+      background-color: var(--color-gray-600);
+    }
+
+    *::-webkit-scrollbar-thumb:vertical {
+      min-height: calc(var(--scrollbar-width) * 3);
+    }
+
+    *::-webkit-scrollbar-thumb:horizontal {
+      min-width: calc(var(--scrollbar-width) * 3);
+    }
+
+    *::-webkit-scrollbar-corner {
+      background: transparent;
+    }
+  }
+}

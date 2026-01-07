@@ -10,6 +10,8 @@
   "chooseTheme": "Choose your preferred color theme.",
   "chooseSlide": "Choose slide to display",
   "clear": "Clear",
+  "removeProperty": "Remove Property",
+  "clearValue": "Clear Value",
   "click": "Click",
   "clickToCopy": "Click to Copy",
   "clickToSelect": "Click to select",
@@ -80,14 +82,14 @@
   "submit": "Submit",
   "success": "Success",
   "text": "Text",
-  "themes": "{count, plural, =1{Theme} other{Themes}}",
-  "@themes": {
+  "pThemes": "{count, plural, =1{Theme} other{Themes}}",
+  "@pThemes": {
     "placeholders": {
       "count": { "type":  "number" }
     }
   },
-  "themeMode": "{theme, select, dark{Dark} light{Light} system{System}}",
-  "@themeMode": {
+  "sThemeMode": "{theme, select, dark{Dark} light{Light} system{System}}",
+  "@sThemeMode": {
     "placeholders": {
       "theme": {}
     }
@@ -97,11 +99,11 @@
   "unsavedChangesSaveQuestion": "Do you want to save your changes?",
   "value": "Value",
   "yes": "Yes",
-  "filter": "Filter",
-  "min": "Min",
-  "max": "Max",
-  "startDate": "Start",
   "endDate": "End",
+  "filter": "Filter",
+  "max": "Max",
+  "min": "Min",
+  "startDate": "Start",
   "notEmpty": "The field cannot be empty.",
   "invalidEmail": "The email is not valid.",
   "tooShort": "The value requires at least {min} characters.",
@@ -149,19 +151,19 @@
       "max": { "type": "number" }
     }
   },
+  "age": "Age",
+  "entryDate": "Entry Date",
   "identifier": "Identifier",
   "name": "Name",
-  "age": "Age",
   "street": "Street",
-  "entryDate": "Entry Date",
-  "gender": "{gender, select, male{Male} female{Female} other{Other}}",
-  "@gender": {
+  "sGender": "{gender, select, male{Male} female{Female} other{Other}}",
+  "@sGender": {
     "placeholders": {
       "gender": {}
     }
   },
-  "welcome": "Welcome",
   "goodToSeeYou": "Good to see you",
+  "welcome": "Welcome",
   "rSortingOrderAfter": "Applied {otherSortings, plural, =0{as the first sorting} =1{after # other sorting} other{after # other sortings}}",
   "@rSortingOrderAfter": {
     "placeholders": {

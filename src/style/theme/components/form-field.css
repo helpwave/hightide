@@ -1,0 +1,17 @@
+@layer components {
+  [data-name="form-field-container"] {
+    @apply relative flex-col-1;
+  }
+
+  [data-name="form-field-container"] {
+    @apply text-description text-sm;
+  }
+
+  [data-name="form-field-error"] {
+    @apply absolute top-[calc(100%_+_0.25rem)] left-0 text-negative text-sm font-medium;
+  }
+
+  [data-name="form-field-label"] {
+    @apply flex-row-1 items-start typography-label-lg text-label;
+  }
+}

@@ -13,15 +13,15 @@ export type UseSearchProps<T> = {
 }
 
 export const useSearch = <T>({
-                               list,
-                               initialSearch,
-                               searchMapping,
-                               additionalSearchTags,
-                               isSearchInstant = true,
-                               sortingFunction,
-                               filter,
-                               disabled = false,
-                             }: UseSearchProps<T>) => {
+  list,
+  initialSearch,
+  searchMapping,
+  additionalSearchTags,
+  isSearchInstant = true,
+  sortingFunction,
+  filter,
+  disabled = false,
+}: UseSearchProps<T>) => {
   const [search, setSearch] = useState<string>(initialSearch ?? '')
   const [result, setResult] = useState<T[]>(list)
   const searchTags = useMemo(() => additionalSearchTags ?? [], [additionalSearchTags])

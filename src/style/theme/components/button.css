@@ -1,0 +1,65 @@
+@layer components {
+  [data-name="button"] {
+    @apply: font-semibold whitespace-nowrap;
+    &:not([data-disabled]) {
+      @apply cursor-pointer coloring-color-detect coloring-style-hover-detect;
+    }
+    &[data-disabled] {
+      @apply disabled coloring-style-detect cursor-not-allowed;
+    }
+    &[data-layout="icon"] {
+      @apply flex-col-0 items-center justify-center;
+      &[data-size="xs"] {
+        @apply p-1 rounded-1 size-6;
+        &[data-coloringstyle="outline"] {
+          @apply p-0.5;
+        }
+      }
+      &[data-size="sm"] {
+        @apply p-1.5 rounded-1.5 size-8;
+        &[data-coloringstyle="outline"] {
+          @apply p-1;
+        }
+      }
+      &[data-size="md"] {
+        @apply p-2 rounded-1.5 size-10;
+        &[data-coloringstyle="outline"] {
+          @apply p-1.5;
+        }
+      }
+      &[data-size="lg"] {
+        @apply p-2 rounded-1.5 size-12;
+        &[data-coloringstyle="outline"] {
+          @apply p-1.5;
+        }
+      }
+    }
+    &[data-layout="default"] {
+      @apply flex flex-row items-center justify-center;
+      &[data-size="xs"] {
+        @apply gap-x-1 px-1 py-0.75 rounded-1 h-6 text-sm;
+        &[data-coloringstyle="outline"] {
+          @apply px-0.5 py-0.25;
+        }
+      }
+      &[data-size="sm"] {
+        @apply gap-x-1 px-1.5 py-1 rounded-1.5 h-8;
+        &[data-coloringstyle="outline"] {
+          @apply px-1 py-0.5;
+        }
+      }
+      &[data-size="md"] {
+        @apply gap-x-2 px-3 py-2 rounded-1.5 h-10;
+        &[data-coloringstyle="outline"] {
+          @apply px-2.5 py-1.5;
+        }
+      }
+      &[data-size="lg"] {
+        @apply gap-x-2 px-4 py-2.5 rounded-1.5 h-12;
+        &[data-coloringstyle="outline"] {
+          @apply px-3.5 py-2;
+        }
+      }
+    }
+  }
+}

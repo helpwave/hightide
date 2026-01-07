@@ -1,0 +1,6 @@
+:root {
+  --spacing: 0.25rem;
+  --drawer-indent: calc(4 * var(--spacing));
+  --animation-duration-in: 250ms;
+  --animation-duration-out: 170ms;
+}

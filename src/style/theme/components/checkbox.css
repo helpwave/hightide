@@ -1,0 +1,49 @@
+@layer components {
+  [data-name="checkbox"]:not(.default-style-none) {
+    @apply flex-col-0 items-center justify-center rounded border-2;
+    &:not([data-disabled]) {
+      @apply hover:cursor-pointer;
+    }
+    &[data-disabled] {
+      @apply border-on-disabled bg-disabled cursor-not-allowed;
+      @apply data-[checked=false]:text-transparent text-on-disabled;
+    }
+    &:not([data-disabled])[data-invalid] {
+      @apply border-negative hover:border-negative-hover;
+    }
+    &:not([data-disabled])[data-invalid]:not([data-checked="false"]) {
+      @apply text-negative bg-negative/20;
+    }
+    &:not([data-disabled])[data-invalid][data-checked="false"] {
+      @apply text-border bg-transparent;
+    }
+    &:not([data-disabled]):not([data-invalid]):not([data-checked="false"]) {
+      @apply bg-primary/40 border-primary text-primary hover:border-primary-hover hover:bg-primary/20;
+    }
+    &:not([data-disabled]):not([data-invalid])[data-checked="false"] {
+      @apply border-border text-border bg-transparent hover:border-primary-hover;
+    }
+
+    &[data-size="sm"] {
+      @apply size-5;
+    }
+    &[data-size="md"] {
+      @apply size-6;
+    }
+    &[data-size="lg"] {
+      @apply size-8;
+    }
+  }
+  [data-name="checkbox-indicator"]:not(.default-style-none) {
+    @apply w-full h-full;
+    &[data-size="sm"] {
+      @apply stroke-3;
+    }
+    &[data-size="md"] {
+      @apply stroke-3;
+    }
+    &[data-size="lg"] {
+      @apply stroke-3;
+    }
+  }
+}
