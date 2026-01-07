@@ -1,7 +1,7 @@
 import type { Meta, StoryObj } from '@storybook/nextjs'
 import { action } from 'storybook/actions'
-import { useDelay } from '../../../src/hooks/useDelay'
-import { Button } from '../../../src/components/user-interaction/Button'
+import { useDelay } from '@/src/hooks/useDelay'
+import { Button } from '@/src/components/user-interaction/Button'
 
 type StoryArgs = {
   delay: number,

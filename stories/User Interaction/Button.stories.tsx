@@ -1,6 +1,6 @@
 import type { Meta, StoryObj } from '@storybook/nextjs'
-import { ButtonUtil } from '../../src/components/user-interaction/Button'
-import { Button } from '../../src/components/user-interaction/Button'
+import { ButtonUtil } from '@/src/components/user-interaction/Button'
+import { Button } from '@/src/components/user-interaction/Button'
 import { action } from 'storybook/actions'
 import { MinusIcon } from 'lucide-react'
 

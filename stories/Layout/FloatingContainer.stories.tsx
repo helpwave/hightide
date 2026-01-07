@@ -1,6 +1,6 @@
 import type { Meta, StoryObj } from '@storybook/nextjs'
-import type { FloatingContainerProps } from '../../src/components/layout/FloatingContainer'
-import { FloatingContainer } from '../../src/components/layout/FloatingContainer'
+import type { FloatingContainerProps } from '@/src/components/layout/FloatingContainer'
+import { FloatingContainer } from '@/src/components/layout/FloatingContainer'
 import { useRef } from 'react'
 
 type StoryArgs = Omit<FloatingContainerProps, 'children'> & {

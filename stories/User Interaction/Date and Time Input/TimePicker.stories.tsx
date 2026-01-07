@@ -1,5 +1,5 @@
 import type { Meta, StoryObj } from '@storybook/nextjs'
-import { TimePickerUncontrolled } from '../../../src/components/user-interaction/date/TimePicker'
+import { TimePickerUncontrolled } from '@/src/components/user-interaction/date/TimePicker'
 import { action } from 'storybook/actions'
 
 const meta = {

@@ -1,27 +1,32 @@
 import type { ReactNode } from 'react'
-import { AlertTriangle } from 'lucide-react'
+import { AlertTriangle, Trash, X } from 'lucide-react'
 import clsx from 'clsx'
 import { Button } from '@/src/components/user-interaction/Button'
 import { useHightideTranslation } from '@/src/i18n/useHightideTranslation'
+import { Tooltip } from '../Tooltip'
 
 export type PropertyField<T> = {
   name: string,
   softRequired?: boolean,
   readOnly?: boolean,
+  allowClear?: boolean,
   value?: T,
   onRemove?: () => void,
+  onValueClear?: () => void,
   onValueChange?: (value: T) => void,
   onEditComplete?: (value: T) => void,
 }
 
 
-export type PropertyFieldProps = {
+export type PropertyBaseProps = {
   children: (props: { softRequired: boolean, hasValue: boolean }) => ReactNode,
   name: string,
   softRequired?: boolean,
   readOnly?: boolean,
+  allowClear?: boolean,
   hasValue: boolean,
   onRemove?: () => void,
+  onValueClear?: () => void,
   icon?: ReactNode,
   className?: string,
 }
@@ -29,16 +34,18 @@ export type PropertyFieldProps = {
 /**
  * A component for showing a properties with uniform styling
  */
-export const PropertyField = ({
+export const PropertyBase = ({
   name,
   children,
   softRequired = false,
   hasValue,
   icon,
   readOnly,
+  allowClear = false,
   onRemove,
+  onValueClear,
   className = '',
-}: PropertyFieldProps) => {
+}: PropertyBaseProps) => {
   const translation = useHightideTranslation()
   const requiredAndNoValue = softRequired && !hasValue
   return (
@@ -63,19 +70,34 @@ export const PropertyField = ({
         )}
       >
         {children({ softRequired, hasValue })}
+        {allowClear && hasValue && (
+          <Tooltip tooltip={translation('clearValue')}>
+            <Button
+              onClick={onValueClear}
+              color="negative"
+              coloringStyle="text"
+              layout="icon"
+              size="sm"
+            >
+              <X className='size-force-5' />
+            </Button>
+          </Tooltip>
+        )}
         {requiredAndNoValue && (
-          <div className="text-warning"><AlertTriangle size={24}/></div>
+          <div className="text-warning"><AlertTriangle className='size-force-6'/></div>
         )}
         {onRemove && !readOnly && (
-          <Button
-            onClick={onRemove}
-            color="negative"
-            coloringStyle="text"
-            className={clsx('items-center')}
-            disabled={!hasValue}
-          >
-            {translation('remove')}
-          </Button>
+          <Tooltip tooltip={translation('clearProperty')}> 
+            <Button
+              onClick={onRemove}
+              color="negative"
+              coloringStyle="text"
+              layout="icon"
+              size="sm"
+            >
+              <Trash className='size-force-5' />
+            </Button>
+          </Tooltip>
         )}
       </div>
     </div>

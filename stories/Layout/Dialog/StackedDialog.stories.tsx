@@ -1,8 +1,8 @@
 import type { Meta, StoryObj } from '@storybook/nextjs'
 import { useState } from 'react'
-import type { DialogPosition } from '../../../src/components/layout/dialog/Dialog'
-import { Dialog } from '../../../src/components/layout/dialog/Dialog'
-import { Button } from '../../../src/components/user-interaction/Button'
+import type { DialogPosition } from '@/src/components/layout/dialog/Dialog'
+import { Dialog } from '@/src/components/layout/dialog/Dialog'
+import { Button } from '@/src/components/user-interaction/Button'
 
 type StoryArgs = {
   position: DialogPosition,

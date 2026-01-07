@@ -10,6 +10,8 @@
   "chooseTheme": "Choose your preferred color theme.",
   "chooseSlide": "Choose slide to display",
   "clear": "Clear",
+  "clearValue": "Clear Value",
+  "clearProperty": "Clear Property",
   "click": "Click",
   "clickToCopy": "Click to Copy",
   "clickToSelect": "Click to select",

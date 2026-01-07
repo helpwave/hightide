@@ -1,6 +1,6 @@
 import type { Meta, StoryObj } from '@storybook/nextjs'
 import { useEffect, useState } from 'react'
-import { CheckboxProperty } from '../../../src/components/user-interaction/properties/CheckboxProperty'
+import { CheckboxProperty } from '@/src/components/user-interaction/properties/CheckboxProperty'
 import { action } from 'storybook/actions'
 
 const meta = {

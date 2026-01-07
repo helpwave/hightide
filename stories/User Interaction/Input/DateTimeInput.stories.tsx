@@ -1,6 +1,6 @@
 import type { Meta, StoryObj } from '@storybook/nextjs'
 import { action } from 'storybook/actions'
-import { DateTimeInputUncontrolled } from '../../../src/components/user-interaction/input/DateTimeInput'
+import { DateTimeInputUncontrolled } from '@/src/components/user-interaction/input/DateTimeInput'
 
 const meta = {
   component: DateTimeInputUncontrolled,

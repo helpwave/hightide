@@ -2,9 +2,9 @@ import type { Meta, StoryObj } from '@storybook/nextjs'
 import { useState } from 'react'
 import { action } from 'storybook/actions'
 import clsx from 'clsx'
-import { MultiSelectProperty } from '../../../src/components/user-interaction/properties/MultiSelectProperty'
-import { SelectOption } from '../../../src/components/user-interaction/Select'
-import { StorybookHelper } from '../../../src/storybook/helper'
+import { MultiSelectProperty } from '@/src/components/user-interaction/properties/MultiSelectProperty'
+import { SelectOption } from '@/src/components/user-interaction/Select'
+import { StorybookHelper } from '@/src/storybook/helper'
 
 const options = StorybookHelper.selectValues
 

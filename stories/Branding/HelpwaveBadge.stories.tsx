@@ -1,5 +1,5 @@
 import type { Meta, StoryObj } from '@storybook/nextjs'
-import { HelpwaveBadge } from '../../src/components/branding/HelpwaveBadge'
+import { HelpwaveBadge } from '@/src/components/branding/HelpwaveBadge'
 
 const meta = {
   component: HelpwaveBadge,

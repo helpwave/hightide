@@ -1,8 +1,8 @@
 import type { Meta, StoryObj } from '@storybook/nextjs'
-import { Menu, MenuItem } from '../../src/components/user-interaction/Menu'
+import { Menu, MenuItem } from '@/src/components/user-interaction/Menu'
 import { action } from 'storybook/actions'
-import { Button } from '../../src/components/user-interaction/Button'
-import { range } from '../../src/utils/array'
+import { Button } from '@/src/components/user-interaction/Button'
+import { range } from '@/src/utils/array'
 
 const meta = {
   component: Menu,

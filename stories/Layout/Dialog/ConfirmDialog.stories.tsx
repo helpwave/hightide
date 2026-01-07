@@ -1,6 +1,6 @@
 import type { Meta, StoryObj } from '@storybook/nextjs'
 import { action } from 'storybook/actions'
-import { ConfirmDialog } from '../../../src/components/layout/dialog/ConfirmDialog'
+import { ConfirmDialog } from '@/src/components/layout/dialog/ConfirmDialog'
 
 
 const meta: Meta = {

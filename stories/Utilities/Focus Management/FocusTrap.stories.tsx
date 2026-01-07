@@ -1,10 +1,10 @@
 import type { Meta, StoryObj } from '@storybook/nextjs'
 import { useRef, useState } from 'react'
-import { InputUncontrolled } from '../../../src/components/user-interaction/input/Input'
-import { FocusTrap } from '../../../src/components/utils/FocusTrap'
+import { InputUncontrolled } from '@/src/components/user-interaction/input/Input'
+import { FocusTrap } from '@/src/components/utils/FocusTrap'
 import { clsx } from 'clsx'
-import { Dialog } from '../../../src/components/layout/dialog/Dialog'
-import { Button } from '../../../src/components/user-interaction/Button'
+import { Dialog } from '@/src/components/layout/dialog/Dialog'
+import { Button } from '@/src/components/user-interaction/Button'
 
 type StoryArgs = unknown
 

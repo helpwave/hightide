@@ -1,5 +1,5 @@
 import type { Meta, StoryObj } from '@storybook/nextjs'
-import { MarkdownInterpreter } from '../../src/components/layout/MarkdownInterpreter'
+import { MarkdownInterpreter } from '@/src/components/layout/MarkdownInterpreter'
 
 const meta = {
   component: MarkdownInterpreter,

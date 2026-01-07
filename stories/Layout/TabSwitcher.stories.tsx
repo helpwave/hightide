@@ -1,5 +1,5 @@
 import type { Meta, StoryObj } from '@storybook/nextjs'
-import { TabList, TabPanel, TabSwitcher } from '../../src/components/layout/TabSwitcher'
+import { TabList, TabPanel, TabSwitcher } from '@/src/components/layout/TabSwitcher'
 
 
 const meta = {

@@ -1,5 +1,5 @@
 import type { Meta, StoryObj } from '@storybook/nextjs'
-import { LoadingAndErrorComponent } from '../../../src/components/layout/loading/LoadingAndErrorComponent'
+import { LoadingAndErrorComponent } from '@/src/components/layout/loading/LoadingAndErrorComponent'
 
 const meta = {
   component: LoadingAndErrorComponent,

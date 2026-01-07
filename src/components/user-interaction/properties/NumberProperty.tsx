@@ -2,7 +2,7 @@ import { Binary } from 'lucide-react'
 import clsx from 'clsx'
 import { Input } from '@/src/components/user-interaction/input/Input'
 import { useHightideTranslation } from '@/src/i18n/useHightideTranslation'
-import { PropertyField } from './PropertyField'
+import { PropertyBase, PropertyField } from './PropertyBase'
 
 export type NumberPropertyProps = PropertyField<number>
 & { suffix?: string }
@@ -23,7 +23,7 @@ export const NumberProperty = ({
   const hasValue = value !== undefined
 
   return (
-    <PropertyField
+    <PropertyBase
       {...baseProps}
       onRemove={onRemove}
       hasValue={hasValue}
@@ -69,6 +69,6 @@ export const NumberProperty = ({
           )}
         </div>
       )}
-    </PropertyField>
+    </PropertyBase>
   )
 }

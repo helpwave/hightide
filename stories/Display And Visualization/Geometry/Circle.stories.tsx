@@ -1,5 +1,5 @@
 import type { Meta, StoryObj } from '@storybook/nextjs'
-import { Circle } from '../../../src/components/display-and-visualization/Circle'
+import { Circle } from '@/src/components/display-and-visualization/Circle'
 
 const meta = {
   component: Circle,

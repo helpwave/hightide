@@ -1,5 +1,5 @@
 import type { Meta, StoryObj } from '@storybook/nextjs'
-import { RingWave } from '../../../../src/components/display-and-visualization/Ring'
+import { RingWave } from '@/src/components/display-and-visualization/Ring'
 
 const meta = {
   component: RingWave,

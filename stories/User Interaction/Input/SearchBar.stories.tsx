@@ -1,6 +1,6 @@
 import type { Meta, StoryObj } from '@storybook/nextjs'
 import { action } from 'storybook/actions'
-import { SearchBar } from '../../../src/components/user-interaction/input/SearchBar'
+import { SearchBar } from '@/src/components/user-interaction/input/SearchBar'
 
 const meta = {
   component: SearchBar,

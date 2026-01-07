@@ -1,7 +1,7 @@
 import type { Meta, StoryObj } from '@storybook/nextjs'
 import { action } from 'storybook/actions'
-import { YearMonthPickerUncontrolled } from '../../../src/components/user-interaction/date/YearMonthPicker'
-import { addDuration, subtractDuration } from '../../../src/utils/date'
+import { YearMonthPickerUncontrolled } from '@/src/components/user-interaction/date/YearMonthPicker'
+import { addDuration, subtractDuration } from '@/src/utils/date'
 
 const meta = {
   component: YearMonthPickerUncontrolled,

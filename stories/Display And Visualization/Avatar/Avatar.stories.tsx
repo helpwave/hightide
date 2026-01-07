@@ -1,5 +1,5 @@
 import type { Meta, StoryObj } from '@storybook/nextjs'
-import { Avatar } from '../../../src/components/display-and-visualization/Avatar'
+import { Avatar } from '@/src/components/display-and-visualization/Avatar'
 
 type StoryArgs = {
   useName: boolean,

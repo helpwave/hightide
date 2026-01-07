@@ -56,6 +56,7 @@
     &[data-state="opening"],
     &[data-state="closing"] {
       animation-name: fade-in;
+      animation-fill-mode: forwards;
     }
   }
 
@@ -73,9 +74,29 @@
       animation-direction: reverse;
     }
 
+    &[data-alignment="top"], &[data-alignment="bottom"] {
+      height: calc(95vh - var(--drawer-depth, 0) * var(--drawer-indent, 0px));
+      @variant tablet {
+        height: calc(70vh - var(--drawer-depth, 0) * var(--drawer-indent, 0px));
+      }
+      @variant desktop {
+        height: calc(50vh - var(--drawer-depth, 0) * var(--drawer-indent, 0px));
+      }
+    }
+
+    &[data-alignment="right"], &[data-alignment="left"] {
+      width: calc(95vw - var(--drawer-depth, 0) * var(--drawer-indent, 0px));
+      @variant tablet {
+        width: calc(70vw - var(--drawer-depth, 0) * var(--drawer-indent, 0px));
+      }
+      @variant desktop {
+        width: calc(50vw - var(--drawer-depth, 0) * var(--drawer-indent, 0px));
+      }
+    }
+
     &[data-alignment="top"] {
       @apply fixed top-0 left-0 w-screen rounded-b-lg;
-      height: calc(50vh - var(--drawer-depth, 0) * var(--drawer-indent, 0px));
+      
       transform: translateY(-100%);
 
       &[data-state="opening"],
@@ -89,7 +110,6 @@
 
     &[data-alignment="bottom"] {
       @apply fixed bottom-0 left-0 w-screen rounded-t-lg;
-      height: calc(50vh - var(--drawer-depth, 0) * var(--drawer-indent, 0px));
       transform: translateY(100%);
 
       &[data-state="opening"],
@@ -103,7 +123,6 @@
 
     &[data-alignment="left"] {
       @apply fixed top-0 left-0 h-screen rounded-r-lg;
-      width: calc(50vw - var(--drawer-depth, 0) * var(--drawer-indent, 0px));
       transform: translateX(-100%);
 
       &[data-state="opening"],
@@ -117,7 +136,6 @@
 
     &[data-alignment="right"] {
       @apply fixed top-0 right-0 h-screen rounded-l-lg;
-      width: calc(50vw - var(--drawer-depth, 0) * var(--drawer-indent, 0px));
       transform: translateX(100%);
 
       &[data-state="opening"],

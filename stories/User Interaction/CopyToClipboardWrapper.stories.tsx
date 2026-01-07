@@ -1,5 +1,5 @@
 import type { Meta, StoryObj } from '@storybook/nextjs'
-import { CopyToClipboardWrapper } from '../../src/components/user-interaction/CopyToClipboardWrapper'
+import { CopyToClipboardWrapper } from '@/src/components/user-interaction/CopyToClipboardWrapper'
 
 const meta = {
   component: CopyToClipboardWrapper,

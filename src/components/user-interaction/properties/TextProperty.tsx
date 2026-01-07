@@ -2,7 +2,7 @@ import { Text } from 'lucide-react'
 import clsx from 'clsx'
 import { useHightideTranslation } from '@/src/i18n/useHightideTranslation'
 import { Textarea } from '@/src/components/user-interaction/Textarea'
-import { PropertyField } from './PropertyField'
+import { PropertyBase } from './PropertyBase'
 
 export type TextPropertyProps = PropertyField<string>
 
@@ -21,7 +21,7 @@ export const TextProperty = ({
   const hasValue = value !== undefined
 
   return (
-    <PropertyField
+    <PropertyBase
       {...baseProps}
       onRemove={onRemove}
       hasValue={hasValue}
@@ -53,6 +53,6 @@ export const TextProperty = ({
           }}
         />
       )}
-    </PropertyField>
+    </PropertyBase>
   )
 }

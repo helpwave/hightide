@@ -1,7 +1,7 @@
 import type { Meta, StoryObj } from '@storybook/nextjs'
 import { action } from 'storybook/actions'
-import { ExpandableContent, ExpandableRoot, ExpandableHeader } from '../../src/components/layout/Expandable'
-import { range } from '../../src/utils/array'
+import { ExpandableContent, ExpandableRoot, ExpandableHeader } from '@/src/components/layout/Expandable'
+import { range } from '@/src/utils/array'
 
 const meta = {
   component: ExpandableRoot,

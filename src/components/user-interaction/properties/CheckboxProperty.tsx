@@ -1,5 +1,5 @@
 import { Check } from 'lucide-react'
-import { PropertyField } from './PropertyField'
+import { PropertyBase, PropertyField} from './PropertyBase'
 import { useHightideTranslation } from '@/src/i18n/useHightideTranslation'
 import { Button } from '@/src/components/user-interaction/Button'
 
@@ -19,7 +19,7 @@ export const CheckboxProperty = ({
   const translation = useHightideTranslation()
 
   return (
-    <PropertyField
+    <PropertyBase
       {...baseProps}
       hasValue={true}
       readOnly={readOnly}
@@ -49,6 +49,6 @@ export const CheckboxProperty = ({
           </Button>
         </div>
       )}
-    </PropertyField>
+    </PropertyBase>
   )
 }

@@ -27,7 +27,7 @@ export const TableFilterButton = <T, >({
   }, [columnFilterValue])
 
   return (
-    <Menu<HTMLDivElement>
+    <Menu
       trigger={({ toggleOpen }, ref) => (
         <div ref={ref} className="relative">
           <Button

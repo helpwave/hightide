@@ -1,5 +1,5 @@
 import type { Meta, StoryObj } from '@storybook/nextjs'
-import { ProgressIndicator } from '../../src/components/display-and-visualization/ProgressIndicator'
+import { ProgressIndicator } from '@/src/components/display-and-visualization/ProgressIndicator'
 
 const meta = {
   component: ProgressIndicator,

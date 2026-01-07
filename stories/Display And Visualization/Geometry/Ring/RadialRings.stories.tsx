@@ -1,5 +1,5 @@
 import type { Meta, StoryObj } from '@storybook/nextjs'
-import { RadialRings } from '../../../../src/components/display-and-visualization/Ring'
+import { RadialRings } from '@/src/components/display-and-visualization/Ring'
 
 const meta = {
   component: RadialRings,

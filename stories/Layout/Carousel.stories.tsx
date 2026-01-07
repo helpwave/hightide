@@ -1,9 +1,9 @@
 import type { Meta, StoryObj } from '@storybook/nextjs'
 import Image from 'next/image'
 import { clsx } from 'clsx'
-import type { CarouselProps } from '../../src/components/layout/Carousel'
-import { Carousel } from '../../src/components/layout/Carousel'
-import { range } from '../../src/utils/array'
+import type { CarouselProps } from '@/src/components/layout/Carousel'
+import { Carousel } from '@/src/components/layout/Carousel'
+import { range } from '@/src/utils/array'
 
 type StoryArgs = CarouselProps & {
   hasBlur?: boolean,

@@ -1,5 +1,5 @@
 import type { Meta, StoryObj } from '@storybook/nextjs'
-import { Navigation } from '../../../src/components/layout/navigation/Navigation'
+import { Navigation } from '@/src/components/layout/navigation/Navigation'
 
 const meta = {
   component: Navigation,

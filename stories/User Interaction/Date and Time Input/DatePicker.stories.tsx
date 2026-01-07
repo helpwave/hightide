@@ -1,6 +1,6 @@
 import type { Meta, StoryObj } from '@storybook/nextjs'
-import { DatePickerUncontrolled } from '../../../src/components/user-interaction/date/DatePicker'
-import { addDuration, subtractDuration } from '../../../src/utils/date'
+import { DatePickerUncontrolled } from '@/src/components/user-interaction/date/DatePicker'
+import { addDuration, subtractDuration } from '@/src/utils/date'
 import { action } from 'storybook/actions'
 
 const meta = {

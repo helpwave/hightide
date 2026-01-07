@@ -1,0 +1,18 @@
+---
+name: translations
+description: Rules for adding translations and how to apply the update
+---
+
+# Overview
+
+To add translations edit the corresponding file in the locales folder and follow these rules:
+1. always add translations for all languages
+2. Keep the keys sorted alphabetically
+3. Use lower camel case for the translation
+4. Prefix Selections with "s"
+5. Prefix Plural Selections with "p" if the translation does not include the count and with "n" if it includes the count
+6. Prefix Replacements with "r"
+7. In case of both Selection and Replacement choose the Selection prefix
+8. After adding all translations, run `npm run build-intl` to update the generated translation file
+
+@locales/**

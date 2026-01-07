@@ -1,5 +1,5 @@
 import type { Meta, StoryObj } from '@storybook/nextjs'
-import { TextareaUncontrolled } from '../../src/components/user-interaction/Textarea'
+import { TextareaUncontrolled } from '@/src/components/user-interaction/Textarea'
 
 const meta = {
   component: TextareaUncontrolled,

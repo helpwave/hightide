@@ -1,6 +1,6 @@
 import { action } from 'storybook/actions'
 import type { Meta, StoryObj } from '@storybook/nextjs'
-import { InsideLabelInputUncontrolled } from '../../../src/components/user-interaction/input/InsideLabelInput'
+import { InsideLabelInputUncontrolled } from '@/src/components/user-interaction/input/InsideLabelInput'
 import { clsx } from 'clsx'
 
 const meta = {

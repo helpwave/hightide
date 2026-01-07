@@ -1,7 +1,7 @@
 import type { Meta, StoryObj } from '@storybook/nextjs'
-import type { AvatarProps } from '../../../src/components/display-and-visualization/Avatar'
-import  { AvatarGroup } from '../../../src/components/display-and-visualization/Avatar'
-import { range } from '../../../src/utils/array'
+import type { AvatarProps } from '@/src/components/display-and-visualization/Avatar'
+import  { AvatarGroup } from '@/src/components/display-and-visualization/Avatar'
+import { range } from '@/src/utils/array'
 import { faker } from '@faker-js/faker'
 
 const avatars: AvatarProps[] = range(10).map(() => ({

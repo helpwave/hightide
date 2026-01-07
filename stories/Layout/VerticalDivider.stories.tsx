@@ -1,5 +1,5 @@
 import type { Meta, StoryObj } from '@storybook/nextjs'
-import { VerticalDivider } from '../../src/components/layout/VerticalDivider'
+import { VerticalDivider } from '@/src/components/layout/VerticalDivider'
 
 const meta = {
   component: VerticalDivider,

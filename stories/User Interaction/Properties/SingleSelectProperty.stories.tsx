@@ -1,10 +1,10 @@
 import type { Meta, StoryObj } from '@storybook/nextjs'
 import { useState } from 'react'
 import { action } from 'storybook/actions'
-import { StorybookHelper } from '../../../src/storybook/helper'
+import { StorybookHelper } from '@/src/storybook/helper'
 import clsx from 'clsx'
-import { SingleSelectProperty } from '../../../src/components/user-interaction/properties/SelectProperty'
-import { SelectOption } from '../../../src/components/user-interaction/Select'
+import { SingleSelectProperty } from '@/src/components/user-interaction/properties/SelectProperty'
+import { SelectOption } from '@/src/components/user-interaction/Select'
 
 const options = [...StorybookHelper.selectValues]
 
@@ -46,7 +46,7 @@ export const singleSelectProperty: Story = {
       <SingleSelectProperty
         {...props}
         value={usedValue}
-        onValueChanged={value => {
+        onValueChange={value => {
           action('onChange')(value)
           setUsedValue(value)
         }}

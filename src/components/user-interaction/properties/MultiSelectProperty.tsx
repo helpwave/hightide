@@ -1,6 +1,6 @@
 import { List } from 'lucide-react'
 import clsx from 'clsx'
-import { PropertyField } from '@/src/components/user-interaction/properties/PropertyField'
+import { PropertyBase, PropertyField } from '@/src/components/user-interaction/properties/PropertyBase'
 import { MultiSelectChipDisplay } from '@/src/components/user-interaction/Select'
 import type { PropsWithChildren } from 'react'
 
@@ -18,7 +18,7 @@ export const MultiSelectProperty = ({
   const hasValue = value.length > 0
 
   return (
-    <PropertyField
+    <PropertyBase
       {...props}
       hasValue={hasValue}
       icon={<List size={24}/>}
@@ -46,6 +46,6 @@ export const MultiSelectProperty = ({
           {children}
         </MultiSelectChipDisplay>
       )}
-    </PropertyField>
+    </PropertyBase>
   )
 }

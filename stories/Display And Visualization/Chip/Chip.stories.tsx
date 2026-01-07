@@ -1,5 +1,5 @@
 import type { Meta, StoryObj } from '@storybook/nextjs'
-import { Chip, ChipUtil } from '../../../src/components/display-and-visualization/Chip'
+import { Chip, ChipUtil } from '@/src/components/display-and-visualization/Chip'
 
 const meta = {
   component: Chip,

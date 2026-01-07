@@ -1,5 +1,5 @@
 import type { Meta, StoryObj  } from '@storybook/nextjs'
-import { ThemeDialog } from '../../src/components/layout/dialog/ThemeDialog'
+import { ThemeDialog } from '@/src/components/layout/dialog/ThemeDialog'
 
 const meta: Meta = {
   component: ThemeDialog,

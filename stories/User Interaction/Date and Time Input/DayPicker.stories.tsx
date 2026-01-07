@@ -1,6 +1,6 @@
 import type { Meta, StoryObj } from '@storybook/nextjs'
 import { action } from 'storybook/actions'
-import { DayPickerUncontrolled } from '../../../src/components/user-interaction/date/DayPicker'
+import { DayPickerUncontrolled } from '@/src/components/user-interaction/date/DayPicker'
 
 const meta = {
   component: DayPickerUncontrolled,

@@ -1,5 +1,5 @@
 import type { Meta, StoryObj } from '@storybook/nextjs'
-import { useHightideTranslation } from '../../src/i18n/useHightideTranslation'
+import { useHightideTranslation } from '@/src/i18n/useHightideTranslation'
 
 type StoryArgs = {
   name: string,

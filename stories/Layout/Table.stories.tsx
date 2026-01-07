@@ -2,12 +2,12 @@ import type { Meta, StoryObj } from '@storybook/nextjs'
 import { useMemo, useState } from 'react'
 import type { ColumnDef, RowSelectionState } from '@tanstack/react-table'
 import { faker } from '@faker-js/faker'
-import { range } from '../../src/utils/array'
-import type { TableProps } from '../../src/components/layout/table/Table'
-import { TableWithSelection } from '../../src/components/layout/table/Table'
-import { useHightideTranslation } from '../../src/i18n/useHightideTranslation'
-import { TableCell } from '../../src/components/layout/table/TableCell'
-import { Button } from '../../src/components/user-interaction/Button'
+import { range } from '@/src/utils/array'
+import type { TableProps } from '@/src/components/layout/table/Table'
+import { TableWithSelection } from '@/src/components/layout/table/Table'
+import { useHightideTranslation } from '@/src/i18n/useHightideTranslation'
+import { TableCell } from '@/src/components/layout/table/TableCell'
+import { Button } from '@/src/components/user-interaction/Button'
 
 type DataType = {
   id: string,
