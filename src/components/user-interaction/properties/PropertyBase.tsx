@@ -50,7 +50,7 @@ export const PropertyBase = ({
 }: PropertyBaseProps) => {
   const translation = useHightideTranslation()
   const invalid = required && !hasValue
-  
+
   const isClearEnabled = allowClear && !readOnly
   const isRemoveEnabled = allowRemove && !readOnly
   const showActionsContainer = isClearEnabled || isRemoveEnabled
@@ -67,13 +67,13 @@ export const PropertyBase = ({
         data-invalid={PropsUtil.dataAttributes.bool(invalid)}
       >
         <Tooltip tooltip={name} containerClassName="min-w-0">
-          <div className='flex-row-1 items-center'>
+          <div className="flex-row-1 items-center">
             <div data-name="property-title-icon">{icon}</div>
             <span data-name="property-title-text">{name}</span>
           </div>
         </Tooltip>
         {invalid && (
-            <AlertTriangle className='size-force-6'/>
+          <AlertTriangle className="size-force-6"/>
         )}
       </div>
       <div
@@ -94,12 +94,12 @@ export const PropertyBase = ({
                   layout="icon"
                   size="sm"
                 >
-                  <X className='size-force-5' />
+                  <X className="size-force-5" />
                 </Button>
               </Tooltip>
             )}
             {isRemoveEnabled && (
-              <Tooltip tooltip={translation('removeProperty')}> 
+              <Tooltip tooltip={translation('removeProperty')}>
                 <Button
                   onClick={onRemove}
                   color="negative"
@@ -107,7 +107,7 @@ export const PropertyBase = ({
                   layout="icon"
                   size="sm"
                 >
-                  <Trash className='size-force-5' />
+                  <Trash className="size-force-5" />
                 </Button>
               </Tooltip>
             )}

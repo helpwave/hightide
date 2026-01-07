@@ -1,7 +1,8 @@
 import { Binary } from 'lucide-react'
 import { Input } from '@/src/components/user-interaction/input/Input'
 import { useHightideTranslation } from '@/src/i18n/useHightideTranslation'
-import { PropertyBase, PropertyField } from './PropertyBase'
+import type { PropertyField } from './PropertyBase'
+import { PropertyBase } from './PropertyBase'
 import { PropsUtil } from '@/src/utils/propsUtil'
 
 export type NumberPropertyProps = PropertyField<number>

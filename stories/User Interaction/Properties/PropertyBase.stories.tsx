@@ -19,7 +19,7 @@ export const propertyBase: Story = {
     readOnly: false,
     allowClear: false,
     icon: <Text size={24}/>,
-    children: ({ required, hasValue, invalid }) => (
+    children: ({ invalid }) => (
       <div
         className={clsx('flex-row-2 grow py-2 px-4', { 'text-warning': invalid })}
       >

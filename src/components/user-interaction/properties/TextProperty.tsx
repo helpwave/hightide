@@ -1,7 +1,8 @@
 import { Text } from 'lucide-react'
 import { useHightideTranslation } from '@/src/i18n/useHightideTranslation'
 import { Textarea } from '@/src/components/user-interaction/Textarea'
-import { PropertyBase, PropertyField} from './PropertyBase'
+import type { PropertyField } from './PropertyBase'
+import { PropertyBase } from './PropertyBase'
 import { PropsUtil } from '@/src/utils/propsUtil'
 
 export type TextPropertyProps = PropertyField<string>

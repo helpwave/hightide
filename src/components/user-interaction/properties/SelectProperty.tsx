@@ -1,6 +1,7 @@
 import { List } from 'lucide-react'
 import type { PropsWithChildren } from 'react'
-import { PropertyBase, PropertyField } from '@/src/components/user-interaction/properties/PropertyBase'
+import type { PropertyField } from '@/src/components/user-interaction/properties/PropertyBase'
+import { PropertyBase } from '@/src/components/user-interaction/properties/PropertyBase'
 import { Select } from '@/src/components/user-interaction/Select'
 import { PropsUtil } from '@/src/utils/propsUtil'
 

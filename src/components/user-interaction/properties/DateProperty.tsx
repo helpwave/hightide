@@ -1,5 +1,5 @@
 import { CalendarDays } from 'lucide-react'
-import { PropertyBase, PropertyField } from './PropertyBase'
+import { PropertyBase, type PropertyField } from './PropertyBase'
 import { DateTimeInput } from '../input/DateTimeInput'
 import { PropsUtil } from '@/src/utils/propsUtil'
 

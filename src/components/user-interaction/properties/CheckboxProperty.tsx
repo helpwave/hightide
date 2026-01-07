@@ -1,5 +1,5 @@
 import { Check } from 'lucide-react'
-import { PropertyBase, PropertyField} from './PropertyBase'
+import { PropertyBase, type PropertyField } from './PropertyBase'
 import { useHightideTranslation } from '@/src/i18n/useHightideTranslation'
 import { Button } from '@/src/components/user-interaction/Button'
 
