@@ -82,36 +82,8 @@ export const basic: Story = {
       onValueChange: onValueChange
     })
 
-    /*
-    <Form<FormValue>
-        initialValues={{
-          name: '',
-          email: '',
-          favouriteFruit: undefined,
-          allergies: StorybookHelper.selectValues.filter((_, index) => index === 5),
-          contributions: [],
-          notes: '' ,
-        }}
-        validators={useMemo(() => ({
-          name: (val) => validators.notEmpty(val) ?? validators.length(val, [4, 32]),
-          email: (val) => validators.notEmpty(val) ?? validators.email(val),
-          favouriteFruit: (val) => validators.notEmpty(val),
-          contributions: (val) => validators.notEmpty(val?.length) ?? validators.selection(val, [2, 4]),
-        }), [validators])}
-        validationBehaviour={validationBehaviour}
-        onFormSubmit={(finalValues) => {
-          setState('sending')
-          onSubmit?.(finalValues)
-        }}
-        onValueChange={onValueChange}
-        className="flex-col-8 w-full max-w-128"
-      >
-    */
-
     return (
       <FormProvider state={form}>
-
-
         <form className="flex-col-8 w-full max-w-128" onSubmit={event => {
           event.preventDefault()
           form.submit()
@@ -237,5 +209,173 @@ export const basic: Story = {
         </form>
       </FormProvider>
     )
+  },
+  parameters: {
+    docs: {
+      source: {
+        code: `
+const validators = useTranslatedValidators()
+
+const [state, setState] = useState<FormState>('editing')
+useEffect(() => {
+  if (state === 'sending') {
+    setTimeout(() => setState('submitted'), 2000)
   }
+}, [state])
+
+const form = useCreateForm<FormValue>({
+  initialValues: {
+    name: '',
+    email: '',
+    favouriteFruit: undefined,
+    allergies: StorybookHelper.selectValues.filter((_, index) => index === 5),
+    contributions: [],
+    notes: '',
+  },
+  validators: useMemo(() => ({
+    name: (val) => validators.notEmpty(val) ?? validators.length(val, [4, 32]),
+    email: (val) => validators.notEmpty(val) ?? validators.email(val),
+    favouriteFruit: (val) => validators.notEmpty(val),
+    contributions: (val) => validators.notEmpty(val?.length) ?? validators.selection(val, [2, 4]),
+  }), [validators]),
+  validationBehaviour: validationBehaviour,
+  onFormSubmit: (finalValues) => {
+    setState('sending')
+    onSubmit?.(finalValues)
+  },
+  onValueChange: onValueChange
+})
+
+return (
+  <FormProvider state={form}>
+    <form className="flex-col-8 w-full max-w-128" onSubmit={event => {
+      event.preventDefault()
+      form.submit()
+    }}>
+      <span className="typography-title-lg">{'Fruit Salad Form'}</span>
+
+      <Visibility isVisible={state !== 'submitted'}>
+        <FormField<FormValue, 'name'>
+          name="name"
+          required={true}
+          description="Your name will not be visible to others."
+          label="Your name"
+        >
+          {({ dataProps, focusableElementProps, interactionStates }) => (
+            <Input {...dataProps} {...focusableElementProps} {...interactionStates} placeholder="e.g. John Doe" />
+          )}
+        </FormField>
+
+        <FormField<FormValue, 'email'>
+          name="email"
+          required={true}
+          description="A email to contact you."
+          label="Email"
+        >
+          {({ dataProps, focusableElementProps, interactionStates }) => (
+            <Input {...dataProps} {...focusableElementProps} {...interactionStates} placeholder="e.g. test@helpwave.de" />
+          )}
+        </FormField>
+
+        <FormField<FormValue, 'favouriteFruit'>
+          name="favouriteFruit"
+          required={true}
+          description="We will use this to include as many likes as possible."
+          label="Your favourite Fruit"
+        >
+          {({ dataProps, focusableElementProps, interactionStates }) => (
+            <Select {...dataProps as FormFieldDataHandling<string>} {...focusableElementProps} {...interactionStates}>
+              {StorybookHelper.selectValues.map(value => (
+                <SelectOption key={value} value={value} />
+              ))}
+            </Select>
+          )}
+        </FormField>
+
+        <FormField<FormValue, 'contributions'>
+          name="contributions"
+          required={true}
+          description="Please specify which ingredients you are bringing."
+          label="Your contribution"
+        >
+          {({ dataProps, focusableElementProps, interactionStates }) => (
+            <MultiSelect {...dataProps as FormFieldDataHandling<string[]>} {...focusableElementProps} {...interactionStates}>
+              {StorybookHelper.selectValues.map(value => (
+                <SelectOption key={value} value={value} />
+              ))}
+            </MultiSelect>
+          )}
+        </FormField>
+
+        <FormField<FormValue, 'allergies'>
+          name="allergies"
+          description="The ingredients you are allergic to."
+          label="Allergies"
+        >
+          {({ dataProps, focusableElementProps, interactionStates }) => (
+            <MultiSelect {...dataProps as FormFieldDataHandling<string[]>} {...focusableElementProps} {...interactionStates}>
+              {StorybookHelper.selectValues.map(value => (
+                <SelectOption key={value} value={value} />
+              ))}
+            </MultiSelect>
+          )}
+        </FormField>
+
+        <FormField<FormValue, 'notes'>
+          name="notes"
+          description="Anything else we should be aware of or you'd like us to know."
+          label="Notes"
+        >
+          {({ dataProps, focusableElementProps, interactionStates }) => (
+            <Textarea
+              {...dataProps} {...focusableElementProps} {...interactionStates}
+              placeholder="e.g. Please buy the delicious cranberry juice"
+            />
+          )}
+        </FormField>
+
+        <div className="flex gap-4 mt-4">
+          <Button
+            color="negative"
+            onClick={form.reset}
+          >
+            {'Reset'}
+          </Button>
+          <Button
+            onClick={form.submit}
+            disabled={state === 'sending'}
+          >
+            {'Submit'}
+          </Button>
+        </div>
+      </Visibility>
+
+      <Visibility isVisible={state === 'sending'}>
+        <div className="flex-col-2 items-center">
+          <HelpwaveLogo size="lg" animate="loading" />
+          {'Sending'}
+        </div>
+      </Visibility>
+
+      <Visibility isVisible={state === 'submitted'}>
+        <span className="text-positive">
+          {'Your Submission was sucessful'}
+        </span>
+        <Button
+          onClick={() => {
+            form.reset()
+            setState('editing')
+          }}
+        >
+          {'Next Submission'}
+        </Button>
+      </Visibility>
+    </form>
+  </FormProvider>
+)
+        `.trim(),
+        language: 'tsx',
+      },
+    },
+  },
 }
