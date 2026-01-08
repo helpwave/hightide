@@ -4,7 +4,9 @@ import type { StorybookHelperSelectType } from '@/src/storybook/helper'
 import { StorybookHelper } from '@/src/storybook/helper'
 import { useTranslatedValidators } from '@/src/hooks/useValidators'
 import { Input } from '@/src/components/user-interaction/input/Input'
-import { MultiSelect, Select, SelectOption } from '@/src/components/user-interaction/Select'
+import { MultiSelect } from '@/src/components/user-interaction/select/MultiSelect'
+import { Select } from '@/src/components/user-interaction/select/Select'
+import { SelectOption } from '@/src/components/user-interaction/select/SelectComponents'
 import { Textarea } from '@/src/components/user-interaction/Textarea'
 import { Button } from '@/src/components/user-interaction/Button'
 import { useCreateForm } from '@/src/components/form/useCreateForm'
@@ -30,6 +32,9 @@ type FormValue = {
 type StoryArgs = {
   onSubmit?: (value: FormValue) => void,
   onValueChange?: (value: FormValue) => void,
+  onValidUpdate?: (value: { updatedKeys: (keyof FormValue)[], update: Partial<FormValue> }) => void,
+  onValueTouched?: (value: { key: keyof FormValue, value: FormValue[keyof FormValue] }) => void,
+  onUpdate?: (value: { updatedKeys: (keyof FormValue)[], update: Partial<FormValue> }) => void,
   disabled?: boolean,
   validationBehaviour?: FormValidationBehaviour,
 }
@@ -41,14 +46,21 @@ type Story = StoryObj<typeof meta>;
 
 export const basic: Story = {
   args: {
-    onValueChange: action('onValueChange'),
     disabled: false,
-    validationBehaviour: 'touched'
+    validationBehaviour: 'touched',
+    onValueChange: action('onValueChange'),
+    onValueTouched: action('onValueTouched'),
+    onUpdate: action('onValueUpdate'),
+    onValidUpdate: action('onValidUpdate'),
+    onSubmit: action('onSubmit'),
   },
   render: ({
-    onValueChange,
-    onSubmit,
     validationBehaviour,
+    onSubmit,
+    onValueChange,
+    onValueTouched,
+    onUpdate,
+    onValidUpdate,
   }) => {
     const validators = useTranslatedValidators()
 
@@ -79,8 +91,19 @@ export const basic: Story = {
         setState('sending')
         onSubmit?.(finalValues)
       },
-      onValueChange: onValueChange
+      onValueChange: onValueChange,
+      onUpdate: (updatedKeys, update) => onUpdate?.({ updatedKeys, update }),
+      onValidUpdate: (updatedKeys, update) => onValidUpdate?.({ updatedKeys, update }),
     })
+
+    useEffect(() => {
+      const unsubscribe = form.store.subscribe('ALL', (event) => {
+        if (event.type === 'onTouched') {
+          onValueTouched?.({ key: event.key, value: event.value })
+        }
+      })
+      return () => unsubscribe()
+    }, [form.store, onValueTouched])
 
     return (
       <FormProvider state={form}>
@@ -243,8 +266,18 @@ const form = useCreateForm<FormValue>({
     setState('sending')
     onSubmit?.(finalValues)
   },
-  onValueChange: onValueChange
+  onValueChange: onValueChange,
+  onUpdate: (updatedKeys, update) => onUpdate?.({ updatedKeys, update }),
 })
+
+useEffect(() => {
+  const unsubscribe = form.store.subscribe('ALL', (event) => {
+    if (event.type === 'onTouched') {
+      onValueTouched?.({ key: event.key, value: event.value })
+    }
+  })
+  return () => unsubscribe()
+}, [form.store, onValueTouched])
 
 return (
   <FormProvider state={form}>

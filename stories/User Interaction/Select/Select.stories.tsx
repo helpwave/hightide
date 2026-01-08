@@ -1,6 +1,7 @@
 import type { Meta, StoryObj } from '@storybook/nextjs'
 import { action } from 'storybook/actions'
-import { SelectOption, SelectUncontrolled } from '@/src/components/user-interaction/Select'
+import { SelectUncontrolled } from '@/src/components/user-interaction/select/Select'
+import { SelectOption } from '@/src/components/user-interaction/select/SelectComponents'
 
 const meta = {
   component: SelectUncontrolled,
@@ -15,6 +16,7 @@ export const select: Story = {
     disabled: false,
     invalid: false,
     onValueChange: action('onValueChange'),
+    onEditComplete: action('onEditComplete'),
     children: [
       { value: 'Apple' },
       { value: 'Pear', disabled: true },

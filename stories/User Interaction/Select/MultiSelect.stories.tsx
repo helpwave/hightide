@@ -1,6 +1,7 @@
 import { action } from 'storybook/actions'
 import type { Meta, StoryObj } from '@storybook/nextjs'
-import { MultiSelectUncontrolled, SelectOption } from '@/src/components/user-interaction/Select'
+import { MultiSelectUncontrolled } from '@/src/components/user-interaction/select/MultiSelect'
+import { MultiSelectOption } from '@/src/components/user-interaction/select/SelectComponents'
 
 const meta = {
   component: MultiSelectUncontrolled,
@@ -15,6 +16,7 @@ export const multiSelect: Story = {
     disabled: false,
     invalid: false,
     onValueChange: action('onValueChange'),
+    onEditComplete: action('onEditComplete'),
     children: [
       { value: 'Apple' },
       { value: 'Banana', disabled: true },
@@ -29,6 +31,6 @@ export const multiSelect: Story = {
       { value: 'Kiwifruit' },
       { value: 'Lemon', disabled: true }
     ].sort((a,b) => a.value.localeCompare(b.value))
-      .map((value, index) => (<SelectOption key={index} {...value} />)),
+      .map((value, index) => (<MultiSelectOption key={index} {...value} />)),
   },
 }

@@ -1,12 +1,39 @@
 import { useCallback, useEffect, useMemo, useRef, type ReactNode } from 'react'
 import type { FormEvent, FormStoreProps, FormValue } from './FormStore'
 import { FormStore } from './FormStore'
-import type { FormFieldDataHandling } from './FormField'
 
 export type UseCreateFormProps<T extends FormValue> = FormStoreProps<T> & {
   onFormSubmit: (values: T) => void,
   onFormError?: (values: T, errors: Partial<Record<keyof T, ReactNode>>) => void,
+  /**
+   * Called when the form values change.
+   *
+   * E.g. a key press for an input field.
+   *
+   * For most purposes use {@link onUpdate} instead.
+   * @param values The new values of the form.
+   */
   onValueChange?: (values: T) => void,
+  /**
+   * Called when the form values change and the corresponding inputs determined that the user
+   * finished editing these fields and the client should make an update against the server.
+   *
+   * E.g. a user finished editing an input field by pressing enter or blurring the field.
+   *
+   * @param updatedKeys The keys that were updated.
+   * @param update The update that was made.
+   */
+  onValidUpdate?: (updatedKeys: (keyof T)[], update: Partial<T>) => void,
+  /**
+   * Called when the form values change and the corresponding inputs determined that the user
+   * finished editing these fields and the client should make an update against the server.
+   *
+   * E.g. a user finished editing an input field by pressing enter or blurring the field.
+   *
+   * @param updatedKeys The keys that were updated.
+   * @param update The update that was made.
+   */
+  onUpdate?: (updatedKeys: (keyof T)[], update: Partial<T>) => void,
   /* Whether to scroll and focus the first element when submitting with an error or resetting */
   scrollToElements?: boolean,
   scrollOptions?: ScrollIntoViewOptions,
@@ -18,7 +45,6 @@ export type UseCreateFormResult<T extends FormValue> = {
   submit: () => void,
   update: (updater: Partial<T> | ((current: T) => Partial<T>)) => void,
   validateAll: () => void,
-  getDataProps: <K extends keyof T>(key: K) => FormFieldDataHandling<T[K]>,
   getError: (key: keyof T) => ReactNode,
   getErrors: () => Partial<Record<keyof T, ReactNode>>,
   getIsValid: () => boolean,
@@ -31,6 +57,8 @@ export function useCreateForm<T extends FormValue>({
   onFormSubmit,
   onFormError,
   onValueChange,
+  onUpdate,
+  onValidUpdate,
   initialValues,
   hasTriedSubmitting,
   validators,
@@ -64,28 +92,30 @@ export function useCreateForm<T extends FormValue>({
 
   useEffect(() => {
     const handleUpdate = (event: FormEvent<T>) => {
-      if (event.type === 'submit') {
-        onFormSubmit(event.values)
-      } else if (event.type === 'submitError') {
-        onFormError?.(event.values, event.errors)
+      if (event.type === 'onSubmit') {
+        if(event.hasErrors) {
+          onFormError?.(event.values, event.errors)
 
-        if (scrollToElements) {
-          const errorInputs = (Object.keys(event.errors) as (keyof T)[])
-            .filter((key) => event.errors[key])
-            .map((key) => fieldRefs.current[key])
-            .filter((el): el is HTMLElement => el !== null && el !== undefined)
+          if (scrollToElements) {
+            const errorInputs = (Object.keys(event.errors) as (keyof T)[])
+              .filter((key) => event.errors[key])
+              .map((key) => fieldRefs.current[key])
+              .filter((el): el is HTMLElement => el !== null && el !== undefined)
 
-          if (errorInputs.length > 0) {
-            errorInputs.sort((a, b) => {
-              const position = a.compareDocumentPosition(b)
-              if (position & Node.DOCUMENT_POSITION_FOLLOWING) return -1
-              if (position & Node.DOCUMENT_POSITION_PRECEDING) return 1
-              return 0
-            })
+            if (errorInputs.length > 0) {
+              errorInputs.sort((a, b) => {
+                const position = a.compareDocumentPosition(b)
+                if (position & Node.DOCUMENT_POSITION_FOLLOWING) return -1
+                if (position & Node.DOCUMENT_POSITION_PRECEDING) return 1
+                return 0
+              })
 
-            errorInputs[0].scrollIntoView(scrollOptions)
-            errorInputs[0].focus()
+              errorInputs[0].scrollIntoView(scrollOptions)
+              errorInputs[0].focus()
+            }
           }
+        } else {
+          onFormSubmit(event.values)
         }
       } else if (event.type === 'reset') {
         if (scrollToElements) {
@@ -106,6 +136,11 @@ export function useCreateForm<T extends FormValue>({
         }
       } else if (event.type === 'onChange') {
         onValueChange?.(storeRef.current.getAllValues())
+      } else if (event.type === 'onUpdate') {
+        onUpdate?.(event.updatedKeys, event.update)
+        if(!event.hasErrors) {
+          onValidUpdate?.(event.updatedKeys, event.update)
+        }
       }
     }
 
@@ -113,18 +148,8 @@ export function useCreateForm<T extends FormValue>({
     return () => {
       unsubscribe()
     }
-  }, [onFormError, onFormSubmit, onValueChange, scrollOptions, scrollToElements])
+  }, [onFormError, onFormSubmit, onUpdate, onValidUpdate, onValueChange, scrollOptions, scrollToElements])
 
-  const getDataProps = useCallback(<K extends keyof T>(key: K): FormFieldDataHandling<T[K]> => {
-    return {
-      value: storeRef.current.getValue(key),
-      onValueChange: (val: T[K]) => storeRef.current.setValue(key, val),
-      onEditComplete: (val: T[K]) => {
-        storeRef.current.setValue(key, val)
-        storeRef.current.setTouched(key)
-      },
-    }
-  },[])
 
   const callbacks = useMemo(() => ({
     reset: () => storeRef.current.reset(),
@@ -147,7 +172,6 @@ export function useCreateForm<T extends FormValue>({
   return {
     store: storeRef.current,
     ...callbacks,
-    getDataProps,
     registerRef
   }
 }

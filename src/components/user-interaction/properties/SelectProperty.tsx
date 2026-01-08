@@ -2,7 +2,7 @@ import { List } from 'lucide-react'
 import type { PropsWithChildren } from 'react'
 import type { PropertyField } from '@/src/components/user-interaction/properties/PropertyBase'
 import { PropertyBase } from '@/src/components/user-interaction/properties/PropertyBase'
-import { Select } from '@/src/components/user-interaction/Select'
+import { Select } from '@/src/components/user-interaction/select/Select'
 import { PropsUtil } from '@/src/utils/propsUtil'
 
 export type SingleSelectPropertyProps = PropertyField<string> & PropsWithChildren

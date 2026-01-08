@@ -3,10 +3,10 @@ import React, { forwardRef, useImperativeHandle, useRef } from 'react'
 import type { UseDelayOptionsResolved } from '@/src/hooks/useDelay'
 import { useDelay } from '@/src/hooks/useDelay'
 import { useFocusManagement } from '@/src/hooks/focus/useFocusManagement'
-import { useOverwritableState } from '@/src/hooks/useOverwritableState'
 import type { FormFieldInteractionStates } from '../../form/FieldLayout'
 import type { FormFieldDataHandling } from '../../form/FormField'
 import { PropsUtil } from '@/src/utils/propsUtil'
+import { useOverwritableState } from '@/src/hooks/useOverwritableState'
 
 export type EditCompleteOptionsResolved = {
   onBlur: boolean,
