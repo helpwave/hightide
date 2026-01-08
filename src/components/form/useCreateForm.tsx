@@ -20,6 +20,8 @@ export type UseCreateFormResult<T extends FormValue> = {
   validateAll: () => void,
   getDataProps: <K extends keyof T>(key: K) => FormFieldDataHandling<T[K]>,
   getError: (key: keyof T) => ReactNode,
+  getErrors: () => Partial<Record<keyof T, ReactNode>>,
+  getIsValid: () => boolean,
   getValues: () => T,
   getValue: <K extends keyof T>(key: K) => T[K],
   registerRef: (key: keyof T) => (el: HTMLElement | null) => void,
@@ -136,8 +138,10 @@ export function useCreateForm<T extends FormValue>({
     },
     validateAll: () => storeRef.current.validateAll(),
     getError: (key: keyof T) => storeRef.current.getError(key),
-    getValues: () => storeRef.current.getAllValues(),
+    getErrors: () => storeRef.current.getErrors(),
+    getIsValid: () =>  !storeRef.current.getHasError(),
     getValue: <K extends keyof T>(key: K) => storeRef.current.getValue(key),
+    getValues: () => storeRef.current.getAllValues(),
   }), [])
 
   return {

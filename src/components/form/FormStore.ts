@@ -105,6 +105,10 @@ export class FormStore<T extends FormValue> {
     return Object.values(this.errors).some(value => value !== undefined && value !== null)
   }
 
+  getErrors(): Partial<Record<keyof T, ReactNode>> {
+    return { ...this.errors }
+  }
+
   getError(key: keyof T): ReactNode {
     return this.errors[key]
   }
