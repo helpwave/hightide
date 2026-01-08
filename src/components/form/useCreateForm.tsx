@@ -1,4 +1,4 @@
-import { useCallback, useEffect, useRef, type ReactNode } from 'react'
+import { useCallback, useEffect, useMemo, useRef, type ReactNode } from 'react'
 import type { FormEvent, FormStoreProps, FormValue } from './FormStore'
 import { FormStore } from './FormStore'
 import type { FormFieldDataHandling } from './FormField'
@@ -16,10 +16,11 @@ export type UseCreateFormResult<T extends FormValue> = {
   store: FormStore<T>,
   reset: () => void,
   submit: () => void,
-  update: (value: Partial<T>) => void,
+  update: (updater: Partial<T> | ((current: T) => Partial<T>)) => void,
   validateAll: () => void,
   getDataProps: <K extends keyof T>(key: K) => FormFieldDataHandling<T[K]>,
   getError: (key: keyof T) => ReactNode,
+  getValues: () => T,
   getValue: <K extends keyof T>(key: K) => T[K],
   registerRef: (key: keyof T) => (el: HTMLElement | null) => void,
 }
@@ -123,17 +124,26 @@ export function useCreateForm<T extends FormValue>({
     }
   },[])
 
-  return {
-    store: storeRef.current,
-
+  const callbacks = useMemo(() => ({
     reset: () => storeRef.current.reset(),
     submit: () => storeRef.current.submit(),
-    update: (value: Partial<T>) => storeRef.current.setValues(value),
+    update: (updater: Partial<T> | ((current: T) => Partial<T>)) => {
+      if (typeof updater === 'function') {
+        storeRef.current.setValues(updater(storeRef.current.getAllValues()))
+      } else {
+        storeRef.current.setValues(updater)
+      }
+    },
     validateAll: () => storeRef.current.validateAll(),
-
-    getDataProps,
     getError: (key: keyof T) => storeRef.current.getError(key),
+    getValues: () => storeRef.current.getAllValues(),
     getValue: <K extends keyof T>(key: K) => storeRef.current.getValue(key),
+  }), [])
+
+  return {
+    store: storeRef.current,
+    ...callbacks,
+    getDataProps,
     registerRef
   }
 }

@@ -5,6 +5,11 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/)
 and adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [0.6.1] - 2026-01-07
+
+### Added
+- `useFormCreate` now returns the functions `getValues()` and allows update to receive an `updater` function
+
 ## [0.6.0] - 2026-01-07
 
 ### Added
