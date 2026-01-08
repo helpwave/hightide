@@ -1,8 +1,8 @@
 import { action } from 'storybook/actions'
 import {
-  MultiSelectChipDisplayUncontrolled,
-  SelectOption
-} from '@/src/components/user-interaction/Select'
+  MultiSelectChipDisplayUncontrolled
+} from '@/src/components/user-interaction/select/MultiSelectChipDisplay'
+import { MultiSelectOption } from '@/src/components/user-interaction/select/SelectComponents'
 import type { Meta, StoryObj } from '@storybook/nextjs'
 
 const meta = {
@@ -18,6 +18,7 @@ export const multiSelectChipDisplay: Story = {
     disabled: false,
     invalid: false,
     onValueChange: action('onValueChange'),
+    onEditComplete: action('onEditComplete'),
     children: [
       { value: 'Apple' },
       { value: 'Banana', disabled: true },
@@ -32,6 +33,6 @@ export const multiSelectChipDisplay: Story = {
       { value: 'Kiwifruit' },
       { value: 'Lemon', disabled: true }
     ].sort((a,b) => a.value.localeCompare(b.value))
-      .map((value, index) => (<SelectOption key={index} {...value} />)),
+      .map((value, index) => (<MultiSelectOption key={index} {...value} />)),
   },
 }

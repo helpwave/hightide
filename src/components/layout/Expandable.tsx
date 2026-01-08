@@ -197,13 +197,9 @@ export const ExpandableContent = forwardRef<HTMLDivElement, ExpandableContentPro
 //
 // Composite / Legacy Components
 //
-
-type IconBuilder = (expanded: boolean) => ReactNode
-
 export type ExpandableProps = PropsWithChildren<{
   id?: string,
   label: ReactNode,
-  icon?: IconBuilder,
   isExpanded?: boolean,
   onChange?: (isExpanded: boolean) => void,
   clickOnlyOnHeader?: boolean,
@@ -218,7 +214,6 @@ export const Expandable = forwardRef<HTMLDivElement, ExpandableProps>(function E
   children,
   id,
   label,
-  icon,
   isExpanded,
   onChange,
   clickOnlyOnHeader = true,
@@ -228,10 +223,6 @@ export const Expandable = forwardRef<HTMLDivElement, ExpandableProps>(function E
   contentClassName,
   contentExpandedClassName,
 }, ref) {
-
-  const defaultIcon = useCallback((expanded: boolean) => <ExpansionIcon isExpanded={expanded} />, [])
-  const iconBuilder = icon ?? defaultIcon
-
   return (
     <ExpandableRoot
       ref={ref}
@@ -244,10 +235,6 @@ export const Expandable = forwardRef<HTMLDivElement, ExpandableProps>(function E
     >
       <ExpandableHeader className={headerClassName}>
         {label}
-        {/* We use a consumer here because the iconBuilder needs the state which is inside the provider */}
-        <ExpandableContext.Consumer>
-          {ctx => iconBuilder(ctx?.isExpanded ?? false)}
-        </ExpandableContext.Consumer>
       </ExpandableHeader>
       <ExpandableContext.Consumer>
         {ctx => (

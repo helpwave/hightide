@@ -1,6 +1,6 @@
 import type { PropsWithChildren, ReactNode } from 'react'
 import { createContext, useCallback, useContext, useSyncExternalStore } from 'react'
-import type { FormValue } from './FormStore'
+import type { FormStore, FormValue } from './FormStore'
 import type { UseCreateFormResult } from './useCreateForm'
 import type { FormFieldDataHandling } from './FormField'
 
@@ -26,14 +26,19 @@ export function useForm<T extends FormValue>() {
   return ctx as FormContextType<T>
 }
 
+export type UseFormFieldOptions = {
+  triggerUpdate?: boolean,
+}
+
 export type FormFieldResult<T> = {
+  store: FormStore<T>,
   value: T,
   error: ReactNode,
   dataProps: FormFieldDataHandling<T>,
   registerRef: (el: HTMLElement | null) => void,
 }
 
-export function useFormField<T extends FormValue, K extends keyof T>(key: K): FormFieldResult<T[K]> | null {
+export function useFormField<T extends FormValue, K extends keyof T>(key: K, { triggerUpdate = true }: UseFormFieldOptions): FormFieldResult<T[K]> | null {
   const context = useContext(FormContext)
 
   const subscribe = useCallback((cb: () => void) => {
@@ -51,14 +56,27 @@ export function useFormField<T extends FormValue, K extends keyof T>(key: K): Fo
     () => context ? context.store.getError(key) : undefined
   )
 
+  const getDataProps = useCallback(() => {
+    return {
+      value: context ? context.store.getValue(key) : undefined,
+      onValueChange: (val: T[K]) => context?.store.setValue(key, val),
+      onEditComplete: (val: T[K]) => {
+        context?.store.setTouched(key)
+        context?.store.setValue(key, val, triggerUpdate)
+      }
+    }
+  }, [context, key, triggerUpdate])
+
+
   if (!context) return null
 
-  const { registerRef, getDataProps } = context
+  const { registerRef } = context
 
   return {
+    store: context.store,
     value,
     error,
-    dataProps: getDataProps(key),
+    dataProps: getDataProps(),
     registerRef: registerRef(key),
   }
 }

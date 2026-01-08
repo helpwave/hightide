@@ -5,6 +5,19 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/)
 and adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [0.6.3] - 2026-01-08
+
+### Added
+- `useFormCreate` now returns the functions `onUpdate()`
+- Functionality to form handling to differentiate local changes and updates that should be sent to the server
+
+### Changed
+- `Select` and `MultiSelect` to have different types for their options
+
+### Fixed
+- `MultiSelect` not triggering `onEditComplete`
+- `Expandable` to only show one expansion icon
+
 ## [0.6.2] - 2026-01-08
 
 ### Added

@@ -3,8 +3,8 @@ import { useState } from 'react'
 import { action } from 'storybook/actions'
 import clsx from 'clsx'
 import { MultiSelectProperty } from '@/src/components/user-interaction/properties/MultiSelectProperty'
-import { SelectOption } from '@/src/components/user-interaction/Select'
 import { StorybookHelper } from '@/src/storybook/helper'
+import { MultiSelectOption } from '@/src/components/user-interaction/select/SelectComponents'
 
 const options = StorybookHelper.selectValues
 
@@ -22,7 +22,7 @@ export const multiSelectProperty: Story = {
     value: options.slice(3, 5),
     readOnly: false,
     children: options.map(option => (
-      <SelectOption key={option} value={option}>
+      <MultiSelectOption key={option} value={option}>
         <span className="flex-row-1 items-center">
           <span
             className={clsx(
@@ -35,7 +35,7 @@ export const multiSelectProperty: Story = {
           />
           {option}
         </span>
-      </SelectOption>
+      </MultiSelectOption>
     )),
     onValueChange: action('onValueChange'),
     onEditComplete: action('onEditComplete'),

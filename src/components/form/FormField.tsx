@@ -13,11 +13,15 @@ export type FormFieldBag<T extends FormValue, K extends keyof T> = {
   dataProps: FormFieldDataHandling<T[K]>,
   focusableElementProps: FormFieldFocusableElementProps,
   interactionStates: FormFieldInteractionStates,
+  other: {
+    updateValue: (value: T[K]) => void,
+  },
 }
 
 export interface FormFieldProps<T extends FormValue, K extends keyof T> extends Omit<FormFieldLayoutProps, 'invalidDescription' | 'children'> {
   children: (bag: FormFieldBag<T, K>) => ReactNode,
   name: K,
+  triggerUpdateOnEditComplete?: boolean,
 }
 
 export type FormFieldDataHandling<T> = {
@@ -26,8 +30,8 @@ export type FormFieldDataHandling<T> = {
   onEditComplete: (value: T) => void,
 }
 
-export const FormField = <T extends FormValue, K extends keyof T>({ children, name, ...props }: FormFieldProps<T, K>) => {
-  const formField = useFormField<T, K>(name)
+export const FormField = <T extends FormValue, K extends keyof T>({ children, name, triggerUpdateOnEditComplete, ...props }: FormFieldProps<T, K>) => {
+  const formField = useFormField<T, K>(name, { triggerUpdate: triggerUpdateOnEditComplete })
 
   if (!formField) {
     throw new Error('<FormField> can only be used inside a FormContext try wrapping your app in a <FormProvider>')
@@ -42,7 +46,10 @@ export const FormField = <T extends FormValue, K extends keyof T>({ children, na
           ...formFieldLayoutBag.ariaAttributes,
           ref: formField.registerRef,
         },
-        interactionStates: formFieldLayoutBag.interactionStates
+        interactionStates: formFieldLayoutBag.interactionStates,
+        other: {
+          updateValue: (value: T[K]) => formField.store.setValue(name, value, true),
+        },
       })}
     </FormFieldLayout>
   )

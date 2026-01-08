@@ -4,8 +4,7 @@ import { action } from 'storybook/actions'
 import { StorybookHelper } from '@/src/storybook/helper'
 import clsx from 'clsx'
 import { SingleSelectProperty } from '@/src/components/user-interaction/properties/SelectProperty'
-import { SelectOption } from '@/src/components/user-interaction/Select'
-
+import { SelectOption } from '@/src/components/user-interaction/select/SelectComponents'
 const options = [...StorybookHelper.selectValues]
 
 

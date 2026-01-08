@@ -5,7 +5,7 @@ import { MonitorCog, MoonIcon, SunIcon } from 'lucide-react'
 import clsx from 'clsx'
 import type { ThemeType } from '@/src/contexts/ThemeContext'
 import { ThemeUtil, useTheme } from '@/src/contexts/ThemeContext'
-import { Select, SelectOption } from '@/src/components/user-interaction/Select'
+import { Select, SelectOption } from '@/src/components/user-interaction/select'
 import { Button } from '@/src/components/user-interaction/Button'
 import { useHightideTranslation } from '@/src/i18n/useHightideTranslation'
 
