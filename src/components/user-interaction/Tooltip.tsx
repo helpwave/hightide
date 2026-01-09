@@ -1,21 +1,18 @@
 import type { PropsWithChildren, ReactNode } from 'react'
+import { useEffect } from 'react'
+import { useId } from 'react'
 import { useCallback, useMemo, useRef, useState } from 'react'
 import { clsx } from 'clsx'
 import { Visibility } from '@/src/components/layout/Visibility'
 import type { FloatingElementAlignment } from '@/src/hooks/useFloatingElement'
 import { useFloatingElement } from '@/src/hooks/useFloatingElement'
 import { createPortal } from 'react-dom'
-import type { TooltipConfig } from '@/src/contexts/HightideConfigContext'
-import { useHightideConfig } from '@/src/contexts/HightideConfigContext'
 import type { UseOverlayRegistryProps } from '@/src/hooks/useOverlayRegistry'
 import { useOverlayRegistry } from '@/src/hooks/useOverlayRegistry'
 import { useTransitionState } from '@/src/hooks/useTransitionState'
 import { PropsUtil } from '@/src/utils/propsUtil'
-
-type TooltipState = {
-  isShown: boolean,
-  timer: NodeJS.Timeout | null,
-}
+import type { TooltipConfig } from '@/src/contexts/HightideConfigContext'
+import { useHightideConfig } from '@/src/contexts/HightideConfigContext'
 
 type Position = 'top' | 'bottom' | 'left' | 'right'
 
@@ -45,31 +42,27 @@ export type TooltipProps = PropsWithChildren & Partial<TooltipConfig> & {
 export const Tooltip = ({
   tooltip,
   children,
-  appearDelay: appearDelayOverwrite,
-  disappearDelay: disappearDelayOverwrite,
+  appearDelay: appearOverwrite,
   tooltipClassName,
   containerClassName,
   position = 'bottom',
   disabled = false,
 }: TooltipProps) => {
-  const [state, setState] = useState<TooltipState>({
-    isShown: false,
-    timer: null,
-  })
+  const id = useId()
+  const [open, setOpen] = useState(false)
+  const timeoutRef = useRef<number | null>(null)
+
   const { config } = useHightideConfig()
-  const appearDelay = useMemo(
-    () => appearDelayOverwrite ?? config.tooltip.appearDelay,
-    [config.tooltip.appearDelay, appearDelayOverwrite]
-  )
-  const disappearDelay = useMemo(
-    () => disappearDelayOverwrite ?? config.tooltip.disappearDelay,
-    [config.tooltip.disappearDelay, disappearDelayOverwrite]
-  )
+
+  const appearDelay = useMemo(() =>
+    appearOverwrite ?? config.tooltip.appearDelay,
+  [appearOverwrite, config.tooltip.appearDelay])
+
   const anchorRef = useRef<HTMLDivElement>(null)
   const containerRef = useRef<HTMLDivElement>(null)
   const triangleRef = useRef<HTMLDivElement>(null)
 
-  const isActive = !disabled && state.isShown
+  const isActive = !disabled && open
 
   const { isVisible, transitionState, callbacks } = useTransitionState(
     useMemo(() => ({ isOpen: isActive }), [isActive])
@@ -103,68 +96,72 @@ export const Tooltip = ({
   const { zIndex } = useOverlayRegistry(regsitryOptions)
   const { zIndex: zIndexTriangle } = useOverlayRegistry(regsitryOptions)
 
-  const onEnter = useCallback(() => {
-    setState(prevState => {
-      if (prevState.isShown) {
-        clearTimeout(prevState.timer)
-        return {
-          ...prevState,
-          timer: null
-        }
-      }
-      return {
-        ...prevState,
-        timer: setTimeout(() => {
-          setState(prevState => {
-            clearTimeout(prevState.timer)
-            return { ...prevState, isShown: true, timer: null }
-          })
-        }, appearDelay)
-      }
-    })
-  }, [appearDelay])
+  const openWithDelay = useCallback(() => {
+    if (timeoutRef.current || open) return
 
-  const onLeave = useCallback(() => {
-    setState(prevState => {
-      if (!prevState.isShown) {
-        clearTimeout(prevState.timer)
-        return {
-          ...prevState,
-          timer: null
-        }
+    timeoutRef.current = window.setTimeout(() => {
+      timeoutRef.current = null
+      setOpen(true)
+    }, appearDelay)
+  }, [appearDelay, open])
+
+
+  const close = useCallback(() => {
+    if (timeoutRef.current) {
+      clearTimeout(timeoutRef.current)
+      timeoutRef.current = null
+    }
+    setOpen(false)
+  }, [])
+
+  useEffect(() => {
+    if (!open) return
+
+    const closeOnBlur = () => close()
+    const closeOnScroll = () => close()
+
+    window.addEventListener('blur', closeOnBlur)
+    window.addEventListener('scroll', closeOnScroll, true)
+
+    return () => {
+      window.removeEventListener('blur', closeOnBlur)
+      window.removeEventListener('scroll', closeOnScroll, true)
+    }
+  }, [open, close])
+
+  useEffect(() => {
+    return () => {
+      if (timeoutRef.current) {
+        clearTimeout(timeoutRef.current)
       }
-      clearTimeout(prevState.timer)
-      return {
-        ...prevState,
-        timer: setTimeout(() => {
-          setState(prevState => {
-            clearTimeout(prevState.timer)
-            return { ...prevState, isShown: false, timer: null }
-          })
-        }, disappearDelay)
-      }
-    })
-  }, [disappearDelay])
+    }
+  }, [])
+
 
   return (
     <div
       ref={anchorRef}
       className={clsx('relative inline-block', containerClassName)}
-      onPointerEnter={onEnter}
-      onPointerLeave={onLeave}
+      aria-describedby={isVisible ? id : undefined}
+      onPointerEnter={openWithDelay}
+      onPointerLeave={close}
+      onPointerCancel={close}
+      onFocus={openWithDelay}
+      onBlur={close}
     >
       {children}
       <Visibility isVisible={isActive || isVisible}>
         {createPortal(
           <div
             ref={containerRef}
+            id={id}
 
             {...callbacks}
-            onPointerEnter={onEnter}
 
             data-name={PropsUtil.dataAttributes.name('tooltip')}
             data-state={transitionState}
 
+            role="tooltip"
             className={tooltipClassName}
             style={{ ...css, zIndex }}
           >

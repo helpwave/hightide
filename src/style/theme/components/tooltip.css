@@ -1,13 +1,22 @@
+@utility animate-tooltip-fade-in {
+  animation: fade-in calc(var(--animation-duration-in, 250ms) * 2) ease-in-out 1 forwards;
+}
+
+@utility animate-tooltip-fade-out {
+  animation: fade-in var(--animation-duration-out, 170ms) ease-in-out 1 reverse
+  forwards;
+}
+
 @layer components {
   [data-name="tooltip"] {
     @apply absolute px-2 py-1 rounded shadow-around-md;
     @apply text-xs font-semibold text-tooltip-text bg-tooltip-background;
 
     &[data-state="opening"] {
-      @apply opacity-0 animate-tooltip-fade-in;
+      @apply animate-tooltip-fade-in;
     }
     &[data-state="closing"] {
-      @apply opacity-0 animate-tooltip-fade-out;
+      @apply animate-tooltip-fade-out;
     }
     &[data-state="closed"] {
       @apply opacity-0;
@@ -19,10 +28,10 @@
     --triangle-size: calc(1.5 * var(--spacing));
 
     &[data-state="opening"] {
-      @apply opacity-0 animate-tooltip-fade-in;
+      @apply animate-tooltip-fade-in;
     }
     &[data-state="closing"] {
-      @apply opacity-0 animate-tooltip-fade-out;
+      @apply animate-tooltip-fade-out;
     }
     &[data-state="closed"] {
       @apply opacity-0;

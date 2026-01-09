@@ -7,17 +7,6 @@
   }
 }
 
-@-webkit-keyframes bigLeftUp {
-  0%,
-  25% {
-    stroke-dashoffset: 1000;
-  }
-  50%,
-  75%,
-  100% {
-    stroke-dashoffset: 0;
-  }
-}
 @keyframes bigLeftUp {
   0%,
   25% {
@@ -30,17 +19,6 @@
   }
 }
 
-@-webkit-keyframes bigRightDown {
-  0%,
-  25%,
-  50% {
-    stroke-dashoffset: 0;
-  }
-  75%,
-  100% {
-    stroke-dashoffset: -1000;
-  }
-}
 @keyframes bigRightDown {
   0%,
   25%,
@@ -53,17 +31,6 @@
   }
 }
 
-@-webkit-keyframes smallLeftUp {
-  0%,
-  25%,
-  50% {
-    stroke-dashoffset: 1000;
-  }
-  75%,
-  100% {
-    stroke-dashoffset: 0;
-  }
-}
 @keyframes smallLeftUp {
   0%,
   25%,
@@ -76,17 +43,6 @@
   }
 }
 
-@-webkit-keyframes smallRightDown {
-  0%,
-  25% {
-    stroke-dashoffset: 0;
-  }
-  50%,
-  75%,
-  100% {
-    stroke-dashoffset: -1000;
-  }
-}
 @keyframes smallRightDown {
   0%,
   25% {
@@ -161,35 +117,18 @@
 
 @utility animate-wave-big-left-up {
   animation: bigLeftUp 1.7s ease-in infinite normal;
-  -webkit-animation: bigLeftUp 1.7s ease-in infinite normal;
 }
 
 @utility animate-wave-big-right-down {
   animation: bigRightDown 1.7s ease-in infinite reverse;
-  -webkit-animation: bigRightDown 1.7s ease-in infinite reverse;
 }
 
 @utility animate-wave-small-left-up {
   animation: smallLeftUp 1.7s ease-in infinite normal;
-  -webkit-animation: smallLeftUp 1.7s ease-in infinite normal;
 }
 
 @utility animate-wave-small-right-down {
   animation: smallRightDown 1.7s ease-in infinite reverse;
-  -webkit-animation: smallRightDown 1.7s ease-in infinite reverse;
-}
-
-@utility animate-tooltip-fade-in {
-  animation: fade-in var(--animation-duration-in, 250ms) ease-in-out 1 forwards;
-  -webkit-animation: fade-in var(--animation-duration-in, 250ms) ease-in-out 1
-    forwards;
-}
-
-@utility animate-tooltip-fade-out {
-  animation: fade-in var(--animation-duration-in, 170ms) ease-in-out 1 reverse
-    forwards;
-  -webkit-animation: fade-in var(--animation-duration-in, 170ms) ease-in-out 1
-    reverse forwards;
 }
 
 @layer utilities {

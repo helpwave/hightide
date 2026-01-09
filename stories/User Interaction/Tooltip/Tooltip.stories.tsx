@@ -11,11 +11,10 @@ type Story = StoryObj<typeof meta>;
 export const tooltip: Story = {
   args: {
     tooltip: 'Tooltip',
-    appearDelay: 500,
-    disappearDelay: 500,
     position: 'bottom',
-    containerClassName: '',
-    tooltipClassName: ''
+    appearDelay: undefined,
+    containerClassName: undefined,
+    tooltipClassName: undefined,
   },
   decorators: (Story) => {
     return (
