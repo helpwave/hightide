@@ -32,16 +32,16 @@
     }
 
     &:not([data-expanded]) {
-      @apply max-h-0 opacity-0 overflow-hidden py-0 duration-[var(--animation-duration-out)];
+      @apply max-h-0 opacity-0 overflow-hidden py-0 duration-(--animation-duration-out);
     }
 
     &[data-expanded] {
-      @apply max-h-24 opacity-100 py-2 duration-[var(--animation-duration-in)];
+      @apply max-h-24 opacity-100 py-2 duration-(--animation-duration-in);
     }
   }
 }
 
-@utility expadable-content-h-* {
+@utility expandable-content-h-* {
   height: calc(var(--spacing) * --value(number));
 
   &[data-expanded] {
