@@ -22,7 +22,7 @@ export const expandable: Story = {
       <ExpandableHeader>
         {'Label'}
       </ExpandableHeader>
-      <ExpandableContent>
+      <ExpandableContent className="expandable-content-h-40">
         {range(5).map((value) => (
           <div key={value}>{`Item ${value}`}</div>
         ))}

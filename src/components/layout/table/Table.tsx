@@ -442,10 +442,10 @@ export const Table = <T,>({
             })}
             {range(table.getState().pagination.pageSize - table.getRowModel().rows.length, { allowEmptyRange: true }).map((row, index) => {
               return (
-                <tr key={'filler-row-' + index}>
+                <tr key={'filler-row-' + index} data-name="table-body-filler-row">
                   {columns.map((column) => {
                     return (
-                      <td key={column.id}>
+                      <td key={column.id} data-name="table-body-filler-cell">
                         {fillerRow ? fillerRow(column.id, table) : (<FillerCell />)}
                       </td>
                     )
