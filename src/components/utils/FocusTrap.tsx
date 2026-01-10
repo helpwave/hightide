@@ -7,7 +7,7 @@ import { forwardRef } from 'react'
 import { useFocusTrap } from '@/src/hooks/focus/useFocusTrap'
 
 export type FocusTrapProps = HTMLAttributes<HTMLDivElement> & {
-  active?: boolean,
+  active: boolean,
   initialFocus?: RefObject<HTMLElement | null>,
   /**
    * Whether to focus the first element when the initialFocus isn't provided
@@ -21,7 +21,7 @@ export type FocusTrapProps = HTMLAttributes<HTMLDivElement> & {
  * A wrapper for the useFocusTrap hook that directly renders it to a div
  */
 export const FocusTrap = forwardRef<HTMLDivElement, FocusTrapProps>(function FocusTrap({
-  active = true,
+  active,
   initialFocus,
   focusFirst = false,
   ...props

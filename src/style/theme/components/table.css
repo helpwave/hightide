@@ -1,9 +1,5 @@
 @layer components {
   [data-name="table-container"] {
-    @apply flex-col-4;
-  }
-
-  [data-name="table-scroll-wrapper"] {
     @apply flex-col-0 w-full overflow-auto;
   }
 

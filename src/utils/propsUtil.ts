@@ -84,7 +84,7 @@ const extender = {
 
 function click<T>(onClick: () => void) {
   const keyboardEventHandler: React.KeyboardEventHandler<T> = (event) => {
-    if (event.key === 'Enter' || event.key === 'Space') {
+    if (event.key === 'Enter' || event.key === ' ') {
       onClick()
     }
   }

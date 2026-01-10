@@ -1,4 +1,4 @@
-@utility animate-tooltip-fade-in {
+  @utility animate-tooltip-fade-in {
   animation: fade-in calc(var(--animation-duration-in, 250ms) * 2) ease-in-out 1 forwards;
 }
 

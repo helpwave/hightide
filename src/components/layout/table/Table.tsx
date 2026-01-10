@@ -8,7 +8,6 @@ import type {
   ColumnSizingState,
   FilterFn,
   InitialTableState,
-  PaginationState,
   Row,
   RowData,
   RowSelectionState,
@@ -17,28 +16,26 @@ import type {
   TableState
 } from '@tanstack/react-table'
 import {
-  flexRender,
   getCoreRowModel,
   getFilteredRowModel,
   getPaginationRowModel,
   getSortedRowModel,
   useReactTable
 } from '@tanstack/react-table'
-import { range } from '@/src/utils/array'
-import { clamp } from '@/src/utils/math'
 import { TableCell } from '@/src/components/layout/table/TableCell'
-import { TableFilters } from '@/src/components/layout/table/Filter'
-import { useResizeCallbackWrapper } from '@/src/hooks/useResizeCallbackWrapper'
-import { TableSortButton } from '@/src/components/layout/table/TableSortButton'
+import { TableFilter } from '@/src/components/layout/table/TableFilter'
 import type { TableFilterType } from '@/src/components/layout/table/TableFilterButton'
-import { TableFilterButton } from '@/src/components/layout/table/TableFilterButton'
 import { FillerCell } from '@/src/components/layout/table/FillerCell'
-import { Pagination } from '@/src/components/layout/navigation/Pagination'
 import { Checkbox } from '@/src/components/user-interaction/Checkbox'
-import { useOverwritableState } from '@/src/hooks/useOverwritableState'
-import { Visibility } from '../Visibility'
-import { BagFunctionUtil, type BagFunctionOrValue } from '@/src/utils/bagFunctions'
+import { type BagFunctionOrValue } from '@/src/utils/bagFunctions'
 import { PropsUtil } from '@/src/utils/propsUtil'
+import { TableBody } from './TableBody'
+import { ColumnSizeUtil } from './columnSizeUtil'
+import { useResizeCallbackWrapper } from '@/src/hooks/useResizeCallbackWrapper'
+import { TableHeader } from './TableHeader'
+import { TableContext } from './TableContext'
+import { TablePageSizeController, TablePagination } from './TablePagination'
+import { TableColumn } from './TableColumn'
 
 declare module '@tanstack/react-table' {
   // eslint-disable-next-line @typescript-eslint/no-unused-vars
@@ -60,15 +57,16 @@ declare module '@tanstack/react-table' {
 
 export type TableProps<T> = {
   data: T[],
-  columns: ColumnDef<T>[],
+  columns?: ColumnDef<T>[],
+  children?: ReactNode,
   fillerRow?: (columnId: string, table: ReactTable<T>) => ReactNode,
   initialState?: Omit<InitialTableState, 'columnSizing' | 'columnSizingInfo'>,
-  className?: string,
-  tableContainerClassName?: string,
+  containerClassName?: string,
   onRowClick?: (row: Row<T>, table: ReactTable<T>) => void,
   state?: Omit<TableState, 'columnSizing' | 'columnSizingInfo'>,
   tableClassName?: string,
 } & Partial<TableOptions<T>>
+
 
 /**
  * The standard table
@@ -78,138 +76,89 @@ export const Table = <T,>({
   fillerRow,
   initialState,
   onRowClick,
-  className,
   tableClassName,
-  tableContainerClassName,
-  defaultColumn,
+  containerClassName: tableContainerClassName,
+  defaultColumn: defaultColumnOverwrite,
   state,
-  columns,
+  columns: columnsProp,
+  children,
   ...tableOptions
 }: TableProps<T>) => {
   const ref = useRef<HTMLDivElement>(null)
   const tableRef = useRef<HTMLTableElement>(null)
+  const [registeredColumns, setRegisteredColumns] = useState<ColumnDef<T>[]>([])
+
+  const registerColumn = useCallback((column: ColumnDef<T>) => {
+    setRegisteredColumns(prev => {
+      return [...prev, column]
+    })
+  }, [])
+
+  const unregisterColumn = useCallback((columnId: string) => {
+    setRegisteredColumns(prev => {
+      return prev.filter(column => column.id !== columnId)
+    })
+  }, [])
+
+  const columns = useMemo(() => {
+    const contextColumns = Array.from(registeredColumns.values())
+    if (columnsProp) {
+      return [...contextColumns, ...columnsProp]
+    }
+    return contextColumns
+  }, [columnsProp, registeredColumns])
+
+  const defaultColumn = useMemo(() => {
+    return {
+      minSize: 60,
+      maxSize: 800,
+      cell: ({ cell }) => {
+        return (<TableCell>{cell.getValue() as string}</TableCell>)
+      },
+      ...defaultColumnOverwrite,
+    }
+  }, [defaultColumnOverwrite])
 
   const [columnSizing, setColumnSizing] = useState<ColumnSizingState>(columns.reduce((previousValue, currentValue) => {
     return {
       ...previousValue,
-      [currentValue.id]: currentValue.minSize ?? defaultColumn.minSize,
+      [currentValue.id]: currentValue.size ??  defaultColumn.size ?? currentValue.minSize ?? defaultColumn.minSize,
     }
   }, {}))
+
   const [columnSizingInfo, setColumnSizingInfo] = useState<ColumnSizingInfoState>()
-  const [pagination, setPagination] = useState<PaginationState>({
-    pageSize: 10,
-    pageIndex: 0,
-    ...initialState?.pagination
-  })
+
   const [columnFilters, setColumnFilters] = useState<ColumnFiltersState>(initialState?.columnFilters)
 
-  const computedColumnMinWidths = useMemo(() => {
-    return columns.reduce((previousValue, column) => {
-      return {
-        ...previousValue,
-        // every column is at least 12px wide
-        [column.id]: (column.minSize ?? defaultColumn?.minSize ?? 12)
-      }
-    }, {})
-  }, [columns, defaultColumn])
 
-  const computedColumnMaxWidths = useMemo(() => {
-    return columns.reduce((previousValue, column) => {
-      return {
-        ...previousValue,
-        [column.id]: (column.maxSize ?? defaultColumn?.maxSize)
-      }
-    }, {})
-  }, [columns, defaultColumn])
 
-  const tableMinWidth = useMemo(() => {
-    return columns.reduce((sum, column) => {
-      return sum + computedColumnMinWidths[column.id]
-    }, 0)
-  }, [columns, computedColumnMinWidths])
-
-  const updateColumnSizes = useMemo(() => {
-    return (previous: ColumnSizingState) => {
-      const updateSizing = {
-        ...columnSizing,
-        ...previous
-      }
-
-      const containerWidth = ref.current.offsetWidth
-
-      // enforce min and max constraints
-      columns.forEach((column) => {
-        updateSizing[column.id] = clamp(updateSizing[column.id], [computedColumnMinWidths[column.id], computedColumnMaxWidths[column.id] ?? containerWidth])
-      })
-
-      // table width of the current sizing
-      const width = columns
-        .reduce((previousValue, currentValue) => previousValue + updateSizing[currentValue.id], 0)
-
-      if (width > containerWidth) {
-        if (tableMinWidth >= containerWidth) {
-          return columns.reduce((previousValue, currentValue) => ({
-            ...previousValue,
-            [currentValue.id]: computedColumnMinWidths[currentValue.id]
-          }), {})
+  const updateColumnSizes = useCallback((newColumnSizing: ColumnSizingState) => {
+    return ColumnSizeUtil.calculate({
+      previousSizing: columnSizing,
+      newSizing: newColumnSizing,
+      minWidthsPerColumn: columns.reduce((previousValue, currentValue) => {
+        return {
+          ...previousValue,
+          [currentValue.id]: currentValue.minSize ?? defaultColumn.minSize,
         }
-
-        let reduceableColumns = columns
-          .map(value => value.id)
-          .filter(id => updateSizing[id] - computedColumnMinWidths[id] > 0)
-
-        let spaceToReduce = width - containerWidth
-
-        while (spaceToReduce > 0 && reduceableColumns.length > 0) {
-          let maxReduceAmount = reduceableColumns.reduce((previousValue, id) => Math.max(previousValue, updateSizing[id] - computedColumnMinWidths[id]), 0)
-          if (maxReduceAmount * reduceableColumns.length > spaceToReduce) {
-            maxReduceAmount = spaceToReduce / reduceableColumns.length
-          }
-
-          reduceableColumns.forEach(id => {
-            updateSizing[id] -= maxReduceAmount
-          })
-
-          spaceToReduce -= maxReduceAmount * reduceableColumns.length
-          reduceableColumns = reduceableColumns.filter(id => updateSizing[id] - computedColumnMinWidths[id] > 0)
+      }, {}),
+      maxWidthsPerColumn: columns.reduce((previousValue, currentValue) => {
+        return {
+          ...previousValue,
+          [currentValue.id]: currentValue.maxSize ?? defaultColumn.maxSize,
         }
-      } else if (width <= containerWidth) {
-        let distributableWidth = containerWidth - width
+      }, {}),
+      columnIds: columns.map(column => column.id),
+      target: {
+        width: ref.current?.offsetWidth,
+        behaviour: 'equalOrHigher',
+      },
+    })
+  }, [columnSizing, columns, defaultColumn.maxSize, defaultColumn.minSize])
 
-        // check max width violations
-        const violatingColumns = columns.filter(value =>
-          computedColumnMaxWidths[value.id] && (updateSizing[value.id] > computedColumnMaxWidths[value.id]))
-
-        const violationColumnsAmount = violatingColumns.reduce(
-          (previousValue, column) => previousValue + updateSizing[column.id] - computedColumnMaxWidths[column.id], 0
-        )
-        distributableWidth += violationColumnsAmount
-
-        let enlargeableColumns = columns
-          .filter(col => !computedColumnMaxWidths[col.id] || updateSizing[col.id] < computedColumnMaxWidths[col.id])
-          .map(value => value.id)
-
-        while (distributableWidth > 0 && enlargeableColumns.length > 0) {
-          let minEnlargeableAmount = enlargeableColumns.reduce((previousValue, id) => Math.min(previousValue, computedColumnMaxWidths[id] ? computedColumnMaxWidths[id] - updateSizing[id] : distributableWidth), distributableWidth)
-          if (minEnlargeableAmount * enlargeableColumns.length > distributableWidth) {
-            minEnlargeableAmount = distributableWidth / enlargeableColumns.length
-          }
-
-          enlargeableColumns.forEach(id => {
-            updateSizing[id] += minEnlargeableAmount
-          })
-
-          distributableWidth -= minEnlargeableAmount * enlargeableColumns.length
-          enlargeableColumns = enlargeableColumns.filter(id => !computedColumnMaxWidths[id] || updateSizing[id] < computedColumnMaxWidths[id])
-        }
-
-        if (distributableWidth > 0) {
-          updateSizing[columns[columns.length - 1].id] += distributableWidth
-        }
-      }
-      return updateSizing
-    }
-  }, [columns, computedColumnMaxWidths, computedColumnMinWidths, tableMinWidth]) // eslint-disable-line react-hooks/exhaustive-deps
+  useResizeCallbackWrapper(useCallback(() => {
+    setColumnSizing(updateColumnSizes(columnSizing))
+  }, [updateColumnSizes, columnSizing]))
 
   const table = useReactTable({
     data,
@@ -218,25 +167,17 @@ export const Table = <T,>({
     getSortedRowModel: getSortedRowModel(),
     getPaginationRowModel: getPaginationRowModel(),
     initialState: initialState,
-    defaultColumn: {
-      minSize: 60,
-      maxSize: 700,
-      cell: ({ cell }) => {
-        return (<TableCell>{cell.getValue() as string}</TableCell>)
-      },
-      ...defaultColumn,
-    },
+    defaultColumn,
     columns,
     state: {
       columnSizing,
       columnSizingInfo,
-      pagination,
       columnFilters,
       ...state
     },
     filterFns: {
       ...tableOptions?.filterFns,
-      dateRange: TableFilters.dateRange,
+      dateRange: TableFilter.dateRange,
     },
     onColumnSizingInfoChange: updaterOrValue => {
       setColumnSizingInfo(updaterOrValue)
@@ -253,12 +194,6 @@ export const Table = <T,>({
         tableOptions.onColumnSizingChange(updaterOrValue)
       }
     },
-    onPaginationChange: updaterOrValue => {
-      setPagination(updaterOrValue)
-      if (tableOptions.onPaginationChange) {
-        tableOptions.onPaginationChange(updaterOrValue)
-      }
-    },
     onColumnFiltersChange: updaterOrValue => {
       setColumnFilters(updaterOrValue)
       table.toggleAllRowsSelected(false)
@@ -271,51 +206,21 @@ export const Table = <T,>({
     ...tableOptions,
   })
 
-  const [hasInitializedSizing, setHasInitializedSizing] = useState(false)
   useEffect(() => {
-    if (!hasInitializedSizing && ref.current) {
-      setHasInitializedSizing(true)
-      table.setColumnSizing(updateColumnSizes(columnSizing))
-    }
-  }, [columnSizing, hasInitializedSizing]) // eslint-disable-line react-hooks/exhaustive-deps
-
-  useResizeCallbackWrapper(useCallback(() => {
-    table.setColumnSizing(updateColumnSizes)
-  }, [updateColumnSizes])) // eslint-disable-line react-hooks/exhaustive-deps
-
-  const pageCount = table.getPageCount()
-  useEffect(() => {
-    const totalPages = pageCount
-    if (totalPages === 0) {
-      if (pagination.pageIndex !== 0) {
-        table.setPagination(prevState => ({
-          ...prevState,
-          pageIndex: 0,
-        }))
-      }
-    } else if (pagination.pageIndex >= totalPages) {
-      table.setPagination((prev) => ({
-        ...prev,
-        pageIndex: totalPages - 1,
-      }))
-    }
-  }, [data, pageCount, pagination.pageSize, pagination.pageIndex]) // eslint-disable-line react-hooks/exhaustive-deps
+    table.setColumnSizing(updateColumnSizes(columnSizing))
+  // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [])
 
   const columnSizeVars = useMemo(() => {
-    const headers = table.getFlatHeaders()
-    const colSizes: { [key: string]: number } = {}
-    for (let i = 0; i < headers.length; i++) {
-      const header = headers[i]!
-      colSizes[`--header-${header.id}-size`] = header.getSize()
-      colSizes[`--col-${header.column.id}-size`] = header.column.getSize()
-    }
+    return ColumnSizeUtil.toSizeVars(table)
+  // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [table, table.getState().columnSizingInfo, table.getState().columnSizing])
 
-    return colSizes
-  }, [table.getState().columnSizingInfo, table.getState().columnSizing]) // eslint-disable-line react-hooks/exhaustive-deps
 
   return (
-    <div ref={ref} data-name={PropsUtil.dataAttributes.name('table-container')} className={className}>
-      <div data-name={PropsUtil.dataAttributes.name('table-scroll-wrapper')} className={tableContainerClassName}>
+    <TableContext.Provider value={{ table, registerColumn, unregisterColumn }}>
+      {children}
+      <div ref={ref} data-name={PropsUtil.dataAttributes.name('table-container')} className={tableContainerClassName}>
         <table
           ref={tableRef}
 
@@ -328,156 +233,20 @@ export const Table = <T,>({
 
           className={tableClassName}
         >
-          {table.getHeaderGroups().map((headerGroup) => (
-            <colgroup key={headerGroup.id}>
-              {headerGroup.headers.map(header => (
-                <col
-                  key={header.id}
-                  style={{
-                    width: `calc(var(--header-${header?.id}-size) * 1px)`,
-                    minWidth: header.column.columnDef.minSize,
-                    maxWidth: header.column.columnDef.maxSize,
-                  }}
-                />
-              ))}
-            </colgroup>
-          ))}
-          <thead>
-            {table.getHeaderGroups().map(headerGroup => (
-              <tr key={headerGroup.id} data-name={PropsUtil.dataAttributes.name('table-header-row')} className={table.options.meta?.headerRowClassName}>
-                {headerGroup.headers.map(header => {
-                  return (
-                    <th
-                      key={header.id}
-                      colSpan={header.colSpan}
-
-                      data-name={PropsUtil.dataAttributes.name('table-header-cell')}
-                      className={clsx('group/table-header-cell', header.column.columnDef.meta?.className)}
-                    >
-                      <Visibility isVisible={!header.isPlaceholder}>
-                        <div className="flex-row-1 items-center">
-                          <Visibility isVisible={header.column.getCanSort()}>
-                            <TableSortButton
-                              sortDirection={header.column.getIsSorted()}
-                              sortingIndexDisplay={{
-                                index: header.column.getIsSorted() ? (header.column.getSortIndex() + 1) : -1,
-                                sortingsCount: table.getState().sorting.length,
-                              }}
-                              onClick={() => {
-                                const sorted = header.column.getIsSorted()
-                                const isMulti = header.column.getCanMultiSort()
-                                if (!isMulti) {
-                                  table.resetSorting()
-                                }
-                                if (!sorted) {
-                                  header.column.toggleSorting(true, isMulti)
-                                  return
-                                } else if (sorted === 'desc') {
-                                  header.column.toggleSorting(false, isMulti)
-                                }
-                                if (sorted === 'asc') {
-                                  header.column.clearSorting()
-                                }
-                              }}
-                            />
-                          </Visibility>
-                          <Visibility isVisible={header.column.getCanFilter() && !!header.column.columnDef.meta?.filterType}>
-                            <TableFilterButton
-                              column={header.column}
-                              filterType={header.column.columnDef.meta?.filterType}
-                            />
-                          </Visibility>
-                          {flexRender(
-                            header.column.columnDef.header,
-                            header.getContext()
-                          )}
-                        </div>
-                      </Visibility>
-                      <Visibility isVisible={header.column.getCanResize()}>
-                        <div
-                          onPointerDown={header.getResizeHandler()}
-                          onDoubleClick={() => {
-                            header.column.resetSize()
-                          }}
-
-                          data-name="table-resize-indicator"
-                          data-active={PropsUtil.dataAttributes.bool(
-                            !!columnSizingInfo?.columnSizingStart
-                            && !!columnSizingInfo?.columnSizingStart?.find(([id, _]) => id === header.column.id)
-                          )}
-                          data-disabled={PropsUtil.dataAttributes.bool(
-                            !!columnSizingInfo?.columnSizingStart
-                            && (columnSizingInfo.columnSizingStart?.length ?? 0) > 0
-                            && !columnSizingInfo.columnSizingStart?.find(([id, _]) => id === header.column.id)
-                          )}
-                        />
-                      </Visibility>
-                    </th>
-                  )
-                })}
-              </tr>
-            ))}
-          </thead>
-          <tbody>
-            {table.getRowModel().rows.map(row => {
-              return (
-                <tr
-                  key={row.id}
-                  onClick={() => onRowClick?.(row, table)}
-                  data-name="table-body-row"
-                  className={BagFunctionUtil.resolve(table.options.meta?.bodyRowClassName, row.original)}
-                >
-                  {row.getVisibleCells().map(cell => {
-                    return (
-                      <td key={cell.id} data-name="table-body-cell">
-                        {flexRender(
-                          cell.column.columnDef.cell,
-                          cell.getContext()
-                        )}
-                      </td>
-                    )
-                  })}
-                </tr>
-              )
-            })}
-            {range(table.getState().pagination.pageSize - table.getRowModel().rows.length, { allowEmptyRange: true }).map((row, index) => {
-              return (
-                <tr key={'filler-row-' + index} data-name="table-body-filler-row">
-                  {columns.map((column) => {
-                    return (
-                      <td key={column.id} data-name="table-body-filler-cell">
-                        {fillerRow ? fillerRow(column.id, table) : (<FillerCell />)}
-                      </td>
-                    )
-                  })}
-                </tr>
-              )
-            })}
-          </tbody>
+          <TableHeader table={table} />
+          <TableBody
+            table={table}
+            onRowClick={onRowClick}
+            fillerRow={fillerRow}
+            isUsingFillerRows={table.getRowModel().rows.length < table.getState().pagination.pageSize}
+          />
         </table>
       </div>
-      <div className="flex-row-2 justify-center">
-        <Pagination
-          pageIndex={table.getState().pagination.pageIndex}
-          pageCount={table.getPageCount()}
-          onPageChanged={page => table.setPageIndex(page)}
-        />
+      <div className="flex-row-8 justify-center relative w-full">
+        <TablePagination />
+        <TablePageSizeController buttonProps={{ className: 'min-w-24' }} tooltipProps={{ containerClassName: 'top-0 right-0' }} />
       </div>
-    </div>
-  )
-}
-
-
-export type TableUncontrolledProps<T> = TableProps<T>
-
-export const TableUncontrolled = <T,>({ data, ...props }: TableUncontrolledProps<T>) => {
-  const [usedDate] = useOverwritableState<T[]>(data)
-
-  return (
-    <Table
-      {...props}
-      data={usedDate}
-    />
+    </TableContext.Provider>
   )
 }
 
@@ -489,7 +258,7 @@ export type TableWithSelectionProps<T> = TableProps<T> & {
 }
 
 export const TableWithSelection = <T,>({
-  columns,
+  children,
   state,
   fillerRow,
   rowSelection,
@@ -499,44 +268,8 @@ export const TableWithSelection = <T,>({
   meta,
   ...props
 }: TableWithSelectionProps<T>) => {
-  const columnsWithSelection = useMemo<ColumnDef<T>[]>(() => {
-    return [
-      {
-        id: selectionRowId,
-        header: ({ table }) => {
-          return (
-            <Checkbox
-              value={table.getIsAllRowsSelected()}
-              indeterminate={table.getIsSomeRowsSelected()}
-              onValueChange={value => {
-                const newValue = !!value
-                table.toggleAllRowsSelected(newValue)
-              }}
-            />
-          )
-        },
-        cell: ({ row }) => {
-          return (
-            <Checkbox
-              disabled={!row.getCanSelect()}
-              value={row.getIsSelected()}
-              onValueChange={row.getToggleSelectedHandler()}
-            />
-          )
-        },
-        size: 60,
-        minSize: 60,
-        maxSize: 60,
-        enableResizing: false,
-        enableSorting: false,
-      },
-      ...columns,
-    ]
-  }, [columns, selectionRowId])
-
   return (
     <Table
-      columns={columnsWithSelection}
       fillerRow={(columnId, table) => {
         if (columnId === selectionRowId) {
           return (<Checkbox value={false} disabled={true} className="max-w-6" />)
@@ -561,6 +294,37 @@ export const TableWithSelection = <T,>({
         )
       }}
       {...props}
-    />
+    >
+      <TableColumn
+        id={selectionRowId}
+        header={({ table }) => {
+          return (
+            <Checkbox
+              value={table.getIsAllRowsSelected()}
+              indeterminate={table.getIsSomeRowsSelected()}
+              onValueChange={value => {
+                const newValue = !!value
+                table.toggleAllRowsSelected(newValue)
+              }}
+            />
+          )
+        }}
+        cell={({ row }) => {
+          return (
+            <Checkbox
+              disabled={!row.getCanSelect()}
+              value={row.getIsSelected()}
+              onValueChange={row.getToggleSelectedHandler()}
+            />
+          )
+        }}
+        size={60}
+        minSize={60}
+        maxSize={60}
+        enableResizing={false}
+        enableSorting={false}
+      />
+      {children}
+    </Table>
   )
 }

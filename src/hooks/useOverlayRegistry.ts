@@ -104,13 +104,13 @@ export type UseOverlayRegistryResult = {
     tagItemCounts: Record<string, number>,
 }
 
-export const useOverlayRegistry = (props?: UseOverlayRegistryProps): UseOverlayRegistryResult => {
+export const useOverlayRegistry = (props: UseOverlayRegistryProps = {}): UseOverlayRegistryResult => {
   const generatedId = useId()
   const [hasAppeared, setHasAppeared] = useState<boolean>(props.isActive)
   const item: OverlayItem = useMemo(() => ({
-    id: props?.id ?? generatedId,
-    tags: props?.tags,
-  }), [props?.id, generatedId, props?.tags])
+    id: props.id ?? generatedId,
+    tags: props.tags,
+  }), [props.id, generatedId, props.tags])
   const [value, setValue] = useState<OverlayRegistryValue>({
     activeId: null,
     itemInformation: {},
@@ -139,7 +139,7 @@ export const useOverlayRegistry = (props?: UseOverlayRegistryProps): UseOverlayR
       })
       setHasAppeared(false)
     }
-  }, [props?.isActive, item, registry])
+  }, [props.isActive, item, registry])
 
   const itemInformation = value.itemInformation[item.id]
 

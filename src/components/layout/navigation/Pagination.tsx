@@ -1,17 +1,16 @@
 import { ChevronFirst, ChevronLast, ChevronLeft, ChevronRight } from 'lucide-react'
 import clsx from 'clsx'
 import { Input } from '@/src/components/user-interaction/input/Input'
-import { clamp } from '@/src/utils/math'
+import { MathUtil } from '@/src/utils/math'
 import type { CSSProperties } from 'react'
 import { useEffect, useState } from 'react'
 import { Button } from '@/src/components/user-interaction/Button'
 import { useHightideTranslation } from '@/src/i18n/useHightideTranslation'
 
-
-export type PaginationProps = {
-  pageIndex: number, // starts with 0
+export interface PaginationProps {
+  pageIndex: number,
   pageCount: number,
-  onPageChanged: (page: number) => void,
+  onPageIndexChanged?: (pageIndex: number) => void,
   className?: string,
   style?: CSSProperties,
 }
@@ -22,7 +21,7 @@ export type PaginationProps = {
 export const Pagination = ({
   pageIndex,
   pageCount,
-  onPageChanged,
+  onPageIndexChanged,
   className,
   style,
 }: PaginationProps) => {
@@ -42,7 +41,7 @@ export const Pagination = ({
   }, [pageIndex, noPages])
 
   const changePage = (page: number) => {
-    onPageChanged(page)
+    onPageIndexChanged(page)
   }
 
   return (
@@ -75,13 +74,13 @@ export const Pagination = ({
           disabled={noPages}
           onValueChange={value => {
             if (value) {
-              setValue(clamp(Number(value), [1, pageCount]).toString())
+              setValue(MathUtil.clamp(Number(value), [1, pageCount]).toString())
             } else {
               setValue(value)
             }
           }}
           onEditComplete={value => {
-            changePage(clamp(Number(value) - 1, [0, pageCount - 1]))
+            changePage(MathUtil.clamp(Number(value) - 1, [0, pageCount - 1]))
           }}
           editCompleteOptions={{ delay: 800 }}
         />

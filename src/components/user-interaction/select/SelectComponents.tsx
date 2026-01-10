@@ -8,10 +8,10 @@ import { useHightideTranslation } from '@/src/i18n/useHightideTranslation'
 import { ExpansionIcon } from '@/src/components/display-and-visualization/ExpansionIcon'
 import { useFocusTrap } from '@/src/hooks/focus/useFocusTrap'
 import { useOverlayRegistry } from '@/src/hooks/useOverlayRegistry'
-import type { UseFloatingElementOptions } from '@/src/hooks/useFloatingElement'
-import { useFloatingElement } from '@/src/hooks/useFloatingElement'
-import { createPortal } from 'react-dom'
+import type { UseAnchoredPositionOptions } from '@/src/hooks/useAnchoredPosition'
+import { useAnchoredPosition } from '@/src/hooks/useAnchoredPosition'
 import { match } from '@/src/utils/match'
+import { Portal } from '../../utils/Portal'
 
 //
 // SelectOption
@@ -204,7 +204,7 @@ export const SelectButton = forwardRef<HTMLButtonElement, SelectButtonProps>(fun
 type Orientation = 'vertical' | 'horizontal'
 
 export type SelectContentProps = HTMLAttributes<HTMLUListElement> & {
-  alignment?: Pick<UseFloatingElementOptions, 'gap' | 'horizontalAlignment' | 'verticalAlignment'>,
+  alignment?: Pick<UseAnchoredPositionOptions, 'gap' | 'horizontalAlignment' | 'verticalAlignment'>,
   orientation?: Orientation,
   containerClassName?: string,
 }
@@ -230,7 +230,7 @@ export const SelectContent = forwardRef<HTMLUListElement, SelectContentProps>(fu
     }
   }, [id, setIds])
 
-  const position = useFloatingElement({
+  const position = useAnchoredPosition({
     active: state.isOpen,
     anchorRef: trigger.ref,
     containerRef: innerRef,
@@ -244,77 +244,79 @@ export const SelectContent = forwardRef<HTMLUListElement, SelectContentProps>(fu
 
   const { zIndex } = useOverlayRegistry({ isActive: state.isOpen })
 
-  return createPortal(
-    <div
-      id={ids.content}
-      className={clsx('fixed inset-0 w-screen h-screen', containerClassName)}
-      style={{ zIndex: zIndex }}
-      hidden={!state.isOpen}
-    >
+  return (
+    <Portal>
       <div
-        onClick={() => trigger.toggleOpen(false)}
-        className={clsx('fixed inset-0 w-screen h-screen')}
-      />
-      <ul
-        {...props}
-        ref={innerRef}
-        onKeyDown={(event) => {
-          switch (event.key) {
-          case 'Escape':
-            trigger.toggleOpen(false)
-            event.preventDefault()
-            event.stopPropagation()
-            break
-          case match(orientation, {
-            vertical: 'ArrowDown',
-            horizontal: 'ArrowUp'
-          }):
-            item.moveHighlightedIndex(1)
-            event.preventDefault()
-            break
-          case match(orientation, {
-            vertical: 'ArrowUp',
-            horizontal: 'ArrowDown'
-          }):
-            item.moveHighlightedIndex(-1)
-            event.preventDefault()
-            break
-          case 'Home':
-            // TODO support later by selecting the first not disabled entry
-            event.preventDefault()
-            break
-          case 'End':
-            // TODO support later by selecting the last not disabled entry
-            event.preventDefault()
-            break
-          case 'Enter': // Fall through
-          case ' ':
-            if (state.highlightedValue) {
-              item.toggleSelection(state.highlightedValue)
-              if (!config.isMultiSelect) {
-                trigger.toggleOpen(false)
-              }
-              event.preventDefault()
-            }
-            break
-          }
-        }}
-
-        className={clsx('flex-col-0 p-2 bg-menu-background text-menu-text rounded-md shadow-hw-bottom focus-outline-within overflow-auto', props.className)}
-        style={{
-          opacity: position ? undefined : 0,
-          position: 'fixed',
-          ...position
-        }}
-
-        role="listbox"
-        aria-multiselectable={config.isMultiSelect}
-        aria-orientation={orientation}
-        tabIndex={position ? 0 : undefined}
+        id={ids.content}
+        className={clsx('fixed inset-0 w-screen h-screen', containerClassName)}
+        style={{ zIndex: zIndex }}
+        hidden={!state.isOpen}
       >
-        {props.children}
-      </ul>
-    </div>, document.body
+        <div
+          onClick={() => trigger.toggleOpen(false)}
+          className={clsx('fixed inset-0 w-screen h-screen')}
+        />
+        <ul
+          {...props}
+          ref={innerRef}
+          onKeyDown={(event) => {
+            switch (event.key) {
+            case 'Escape':
+              trigger.toggleOpen(false)
+              event.preventDefault()
+              event.stopPropagation()
+              break
+            case match(orientation, {
+              vertical: 'ArrowDown',
+              horizontal: 'ArrowUp'
+            }):
+              item.moveHighlightedIndex(1)
+              event.preventDefault()
+              break
+            case match(orientation, {
+              vertical: 'ArrowUp',
+              horizontal: 'ArrowDown'
+            }):
+              item.moveHighlightedIndex(-1)
+              event.preventDefault()
+              break
+            case 'Home':
+            // TODO support later by selecting the first not disabled entry
+              event.preventDefault()
+              break
+            case 'End':
+            // TODO support later by selecting the last not disabled entry
+              event.preventDefault()
+              break
+            case 'Enter': // Fall through
+            case ' ':
+              if (state.highlightedValue) {
+                item.toggleSelection(state.highlightedValue)
+                if (!config.isMultiSelect) {
+                  trigger.toggleOpen(false)
+                }
+                event.preventDefault()
+              }
+              break
+            }
+          }}
+
+          className={clsx('flex-col-0 p-2 bg-menu-background text-menu-text rounded-md shadow-hw-bottom focus-outline-within overflow-auto', props.className)}
+          style={{
+            opacity: position ? undefined : 0,
+            position: 'fixed',
+            ...position
+          }}
+
+          role="listbox"
+          aria-multiselectable={config.isMultiSelect}
+          aria-orientation={orientation}
+          tabIndex={position ? 0 : undefined}
+        >
+          {props.children}
+        </ul>
+      </div>
+    </Portal>
   )
 })
 

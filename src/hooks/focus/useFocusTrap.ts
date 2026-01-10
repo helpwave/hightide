@@ -145,7 +145,7 @@ const service = new FocusTrapService()
 
 export type UseFocusTrapProps = {
   container: RefObject<HTMLElement>,
-  active?: boolean,
+  active: boolean,
   initialFocus?: RefObject<HTMLElement>,
   /**
    * Whether to focus the first element when the initialFocus isn't provided
@@ -157,7 +157,7 @@ export type UseFocusTrapProps = {
 
 export const useFocusTrap = ({
   container,
-  active = true,
+  active,
   initialFocus,
   focusFirst = true,
 }: UseFocusTrapProps) => {

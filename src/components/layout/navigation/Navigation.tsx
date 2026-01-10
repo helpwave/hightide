@@ -4,8 +4,8 @@ import { useEffect } from 'react'
 import React, { useCallback, useId, useRef, useState } from 'react'
 import Link from 'next/link'
 import clsx from 'clsx'
-import type { UseFloatingElementOptions } from '@/src/hooks/useFloatingElement'
-import { useFloatingElement } from '@/src/hooks/useFloatingElement'
+import type { UseAnchoredPositionOptions } from '@/src/hooks/useAnchoredPosition'
+import { useAnchoredPosition } from '@/src/hooks/useAnchoredPosition'
 import { Button } from '@/src/components/user-interaction/Button'
 import { ExpansionIcon } from '@/src/components/display-and-visualization/ExpansionIcon'
 import { useOverlayRegistry } from '@/src/hooks/useOverlayRegistry'
@@ -31,7 +31,7 @@ function isSubItem(item: NavigationItemType): item is SubItemNavigationItem {
 ///
 /// NavigationItemWithSubItem
 ///
-type NavigationItemWithSubItemProps = SubItemNavigationItem & UseFloatingElementOptions
+type NavigationItemWithSubItemProps = SubItemNavigationItem & UseAnchoredPositionOptions
 
 const NavigationItemWithSubItem = ({
   items,
@@ -44,7 +44,7 @@ const NavigationItemWithSubItem = ({
   const triggerRef = useRef<HTMLButtonElement>(null)
   const id = useId()
 
-  const style = useFloatingElement({
+  const style = useAnchoredPosition({
     active: isOpen,
     containerRef,
     anchorRef: triggerRef,

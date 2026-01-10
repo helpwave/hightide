@@ -4,15 +4,15 @@ import { useId } from 'react'
 import { useCallback, useMemo, useRef, useState } from 'react'
 import { clsx } from 'clsx'
 import { Visibility } from '@/src/components/layout/Visibility'
-import type { FloatingElementAlignment } from '@/src/hooks/useFloatingElement'
-import { useFloatingElement } from '@/src/hooks/useFloatingElement'
-import { createPortal } from 'react-dom'
+import type { FloatingElementAlignment } from '@/src/hooks/useAnchoredPosition'
+import { useAnchoredPosition } from '@/src/hooks/useAnchoredPosition'
 import type { UseOverlayRegistryProps } from '@/src/hooks/useOverlayRegistry'
 import { useOverlayRegistry } from '@/src/hooks/useOverlayRegistry'
 import { useTransitionState } from '@/src/hooks/useTransitionState'
 import { PropsUtil } from '@/src/utils/propsUtil'
 import type { TooltipConfig } from '@/src/contexts/HightideConfigContext'
 import { useHightideConfig } from '@/src/contexts/HightideConfigContext'
+import { Portal } from '../utils'
 
 type Position = 'top' | 'bottom' | 'left' | 'right'
 
@@ -76,7 +76,7 @@ export const Tooltip = ({
     position === 'left' ? 'beforeStart' : position === 'right' ? 'afterEnd' : 'center',
   [position])
 
-  const css = useFloatingElement(useMemo(() => ({
+  const css = useAnchoredPosition(useMemo(() => ({
     active: isActive || isVisible,
     anchorRef: anchorRef,
     containerRef,
@@ -84,17 +84,17 @@ export const Tooltip = ({
     verticalAlignment,
   }), [horizontalAlignment, isActive, isVisible, verticalAlignment]))
 
-  const cssTriangle = useFloatingElement(useMemo(() => ({
+  const cssTriangle = useAnchoredPosition(useMemo(() => ({
     active: isActive || isVisible,
     anchorRef: anchorRef,
     containerRef: triangleRef,
     horizontalAlignment,
     verticalAlignment,
+    gap: 0,
   }), [horizontalAlignment, isActive, isVisible, verticalAlignment]))
 
   const regsitryOptions: UseOverlayRegistryProps = useMemo(() => ({ isActive }), [isActive])
   const { zIndex } = useOverlayRegistry(regsitryOptions)
-  const { zIndex: zIndexTriangle } = useOverlayRegistry(regsitryOptions)
 
   const openWithDelay = useCallback(() => {
     if (timeoutRef.current || open) return
@@ -151,7 +151,16 @@ export const Tooltip = ({
     >
       {children}
       <Visibility isVisible={isActive || isVisible}>
-        {createPortal(
+        <Portal>
+          <div
+            ref={triangleRef}
+
+            data-name="tooltip-triangle"
+            data-state={transitionState}
+            data-position={position}
+
+            style={{ ...cssTriangle, zIndex, position: 'fixed' }}
+          />
           <div
             ref={containerRef}
             id={id}
@@ -163,24 +172,11 @@ export const Tooltip = ({
 
             role="tooltip"
             className={tooltipClassName}
-            style={{ ...css, zIndex }}
+            style={{ ...css, zIndex, position: 'fixed' }}
           >
             {tooltip}
           </div>
-          , document.body
-        )}
-        {createPortal(
-          <div
-            ref={triangleRef}
-
-            data-name="tooltip-triangle"
-            data-state={transitionState}
-            data-position={position}
-
-            style={{ ...cssTriangle, zIndex: zIndexTriangle }}
-          />
-          , document.body
-        )}
+        </Portal>
       </Visibility>
     </div>
   )

@@ -94,12 +94,19 @@
       "theme": {}
     }
   },
+  "sDateTimeSelect": "{datetimeMode, select, date{Datum auswählen} dateTime{Datum und Uhrzeit auswählen}}",
+  "@sDateTimeSelect": {
+    "placeholders": {
+      "datetimeMode": {}
+    }
+  },
   "update": "Update",
   "unsavedChanges": "Ungespeicherte Änderungen",
   "unsavedChangesSaveQuestion": "Möchtest du die Änderungen speichern?",
   "value": "Wert",
   "yes": "Ja",
   "endDate": "Ende",
+  "entriesPerPage": "Einträge pro Seite",
   "filter": "Filter",
   "max": "Max",
   "min": "Min",

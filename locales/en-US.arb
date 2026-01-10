@@ -94,12 +94,19 @@
       "theme": {}
     }
   },
+  "sDateTimeSelect": "{datetimeMode, select, date{Select Date} dateTime{Select Date and Time}}",
+  "@sDateTimeSelect": {
+    "placeholders": {
+      "datetimeMode": {}
+    }
+  },
   "update": "Update",
   "unsavedChanges": "Unsaved Changes",
   "unsavedChangesSaveQuestion": "Do you want to save your changes?",
   "value": "Value",
   "yes": "Yes",
   "endDate": "End",
+  "entriesPerPage": "Entries per page",
   "filter": "Filter",
   "max": "Max",
   "min": "Min",

@@ -1,4 +1,4 @@
-const dateRange = (row, columnId, filterValue: [Date | null, Date | null]) => {
+const dateRange = (row, columnId, filterValue: [Date | null | undefined, Date | null | undefined]) => {
   const [min, max] = filterValue
   const value = row.getValue(columnId)
 
@@ -12,6 +12,6 @@ const dateRange = (row, columnId, filterValue: [Date | null, Date | null]) => {
 }
 
 
-export const TableFilters = {
+export const TableFilter = {
   dateRange
 }

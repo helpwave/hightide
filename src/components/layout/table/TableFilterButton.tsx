@@ -1,10 +1,16 @@
 import { Button } from '../../user-interaction/Button'
 import { Input } from '../../user-interaction/input/Input'
 import { FilterIcon } from 'lucide-react'
-import { Menu } from '../../user-interaction/Menu'
-import { useEffect, useState } from 'react'
+import { useCallback, useEffect, useId, useMemo, useRef, useState } from 'react'
 import type { Column } from '@tanstack/react-table'
 import { useHightideTranslation } from '@/src/i18n/useHightideTranslation'
+import { AnchoredFloatingContainer } from '../AnchoredFloatingContainer'
+import { FocusTrap } from '../../utils/FocusTrap'
+import { useOutsideClick } from '@/src/hooks/useOutsideClick'
+import { Visibility } from '../Visibility'
+import { DateTimeInput } from '../../user-interaction/input/DateTimeInput'
+import { FormFieldLayout } from '../../form/FieldLayout'
+import { useOverlayRegistry } from '@/src/hooks'
 
 export type TableFilterType = 'text' | 'range' | 'dateRange'
 
@@ -21,111 +27,202 @@ export const TableFilterButton = <T, >({
   const columnFilterValue = column.getFilterValue()
   const [filterValue, setFilterValue] = useState<unknown>(columnFilterValue)
   const hasFilter = !!filterValue
+  const anchorRef = useRef<HTMLButtonElement>(null)
+  const containerRef = useRef<HTMLDivElement>(null)
+  const [isDateTimeInputOpen, setIsDateTimeInputOpen] = useState(false)
+  const [isOpen, setIsOpen] = useState(false)
+  const id = useId()
+  const ids = useMemo(() => ({
+    button: `table-filter-button-${id}`,
+    popup: `table-filter-popup-${id}`,
+    label: `table-filter-label-${id}`,
+  }), [id])
+  const [temporaryMinDateValue, setTemporaryMinDateValue] = useState<Date | null>(null)
+  const [temporaryMaxDateValue, setTemporaryMaxDateValue] = useState<Date | null>(null)
 
   useEffect(() => {
     setFilterValue(columnFilterValue)
   }, [columnFilterValue])
 
+  useOutsideClick({
+    refs: [ containerRef,  anchorRef ],
+    handler: () => setIsOpen(false),
+    active: isOpen && !isDateTimeInputOpen
+  })
+
+  // we need to avoid the race condition of setting to false before the useOutsideClick hook is called
+  const setIsDateTimeInputOpenWrapper = useCallback((isOpen: boolean) => {
+    if(isOpen) {
+      setIsDateTimeInputOpen(isOpen)
+    } else {
+      setTimeout(() => {
+        setIsDateTimeInputOpen(isOpen)
+      }, 50)
+    }
+  }, [])
+
+  const { zIndex } = useOverlayRegistry({ isActive: isOpen })
+
   return (
-    <Menu
-      trigger={({ toggleOpen }, ref) => (
-        <div ref={ref} className="relative">
-          <Button
-            layout="icon"
-            color="neutral"
-            size="xs"
-            onClick={toggleOpen}
-          >
-            <FilterIcon className="size-4"/>
-          </Button>
-          {hasFilter && (
-            <div
-              className="absolute top-0.5 right-0.5 w-2 h-2 rounded-full bg-primary pointer-events-none"
-              aria-hidden={true}
-            />
-          )}
-        </div>
-      )}
-    >
-      {({ close }) => (
-        <div className="flex-col-1 p-2 items-start font-normal text-menu-text">
-          <h4 className="typography-label-md-semibold">{translation('filter')}</h4>
-          {filterType === 'text' && (
-            <Input
-              value={(filterValue ?? '') as string}
-              autoFocus={true}
-              placeholder={translation('text')+'...'}
-              onValueChange={setFilterValue}
-              className="h-10"
-            />
-          )}
-          {filterType === 'range' && (
-            <div className="flex-row-2 items-center">
+    <>
+      <Button
+        ref={anchorRef}
+        id={ids.button}
+        layout="icon"
+        color="neutral"
+        size="xs"
+
+        onClick={() => setIsOpen(!isOpen)}
+
+        role="combobox"
+        aria-haspopup="dialog"
+        aria-expanded={isOpen}
+        aria-controls={isOpen ? ids.popup : undefined}
+        aria-labelledby={ids.label}
+
+        className="relative"
+      >
+        <FilterIcon className="size-4"/>
+        <Visibility isVisible={hasFilter}>
+          <div className="absolute -top-1 -right-1 w-2 h-2 rounded-full bg-primary" />
+        </Visibility>
+      </Button>
+      <Visibility isVisible={isOpen}>
+        <AnchoredFloatingContainer
+          ref={containerRef}
+          id={ids.popup}
+          options={{
+            verticalAlignment: 'afterEnd',
+            horizontalAlignment: 'center',
+          }}
+          anchor={anchorRef}
+
+          role="dialog"
+          aria-labelledby={ids.label}
+
+          style={{ zIndex }}
+        >
+          <FocusTrap active={isOpen} className="flex-col-2 p-2 items-start">
+            <span id={ids.label} className="typography-label-lg font-semibold">{translation('filter')}</span>
+            {filterType === 'text' && (
               <Input
-                value={(filterValue as [number, number])?.[0].toString() ?? ''}
-                type="number"
-                placeholder={translation('min')}
-                onValueChange={text => {
-                  const num = Number(text)
-                  setFilterValue((old: [number, number]) => [num, old?.[1]])
-                }}
-                className="h-10 input-indicator-hidden w-40"
+                value={(filterValue ?? '') as string}
+                autoFocus={true}
+                placeholder={translation('text')+'...'}
+                onValueChange={setFilterValue}
               />
-              <span className="font-bold">-</span>
-              <Input
-                value={(filterValue as [number, number])?.[1].toString() ?? ''}
-                type="number"
-                placeholder={translation('max')}
-                onValueChange={text => {
-                  const num = Number(text)
-                  setFilterValue((old: [number, number]) => [old?.[0], num])
-                }}
-                className="h-10 input-indicator-hidden w-40"
-              />
-            </div>
-          )}
-          {filterType === 'dateRange' && (
-            <>
-              <Input
-                value={(filterValue as [Date, Date])?.[0] ? (filterValue as [Date, Date])?.[0].toISOString().slice(0, 16) : ''}
-                type="datetime-local"
-                placeholder={translation('startDate')}
-                onValueChange={text => {
-                  const value = new Date(text)
-                  setFilterValue((old: [Date, Date]) => [value, old?.[1]])
-                }}
-                className="h-10 w-50"
-              />
-              <Input
-                value={(filterValue as [Date, Date])?.[1] ? (filterValue as [Date, Date])?.[1].toISOString().slice(0, 16) : ''}
-                type="datetime-local"
-                placeholder={translation('endDate')}
-                onValueChange={text => {
-                  const value = new Date(text)
-                  setFilterValue((old: [Date, Date]) => [old?.[0], value])
-                }}
-                className="h-10 w-50"
-              />
-            </>
-          )}
-          <div className="flex-row-2 justify-end w-full">
-            {hasFilter && (
-              <Button color="negative" size="sm" onClick={() => {
-                column.setFilterValue(undefined)
-                close()
-              }}>
-                {translation('remove')}
-              </Button>
             )}
-            <Button size="sm" onClick={() => {
-              column.setFilterValue(filterValue)
-              close()
-            }}>
-              {translation('apply')}
-            </Button>
-          </div>
-        </div>
-      )}
-    </Menu>
+            {filterType === 'range' && (
+              <div className="flex-col-2 items-center">
+                <FormFieldLayout
+                  label={translation('min')}
+                >
+                  {({ ariaAttributes, interactionStates, id }) => (
+                    <Input
+                      {...ariaAttributes}
+                      {...interactionStates}
+                      id={id}
+                      value={(filterValue as [number, number])?.[0]?.toString() ?? ''}
+                      type="number"
+                      placeholder={translation('value')}
+                      onValueChange={text => {
+                        const num = Number(text)
+                        setFilterValue((old: [number, number]) => [num, old?.[1]])
+                      }}
+                      className="input-indicator-hidden w-40"
+                    />
+                  )}
+                </FormFieldLayout>
+                <FormFieldLayout
+                  label={translation('max')}
+                >
+                  {({ ariaAttributes, interactionStates, id }) => (
+                    <Input
+                      {...ariaAttributes}
+                      {...interactionStates}
+                      id={id}
+                      value={(filterValue as [number, number])?.[1]?.toString() ?? ''}
+                      type="number"
+                      placeholder={translation('value')}
+                      onValueChange={text => {
+                        const num = Number(text)
+                        setFilterValue((old: [number, number]) => [old?.[0], num])
+                      }}
+                      className="input-indicator-hidden w-40"
+                    />
+                  )}
+                </FormFieldLayout>
+              </div>
+            )}
+            {filterType === 'dateRange' && (
+              <>
+                <DateTimeInput
+                  value={temporaryMinDateValue ?? (filterValue as [Date, Date])?.[0] ?? null}
+                  placeholder={translation('startDate')}
+                  onValueChange={value => setTemporaryMinDateValue(value)}
+                  onEditComplete={value => {
+                    setFilterValue((old: [Date, Date]) => {
+                      console.log('value', value, old)
+                      if(value && old?.[1] && value > old?.[1]) {
+                        if(!old?.[0]) {
+                          return [old?.[1], value]
+                        }
+                        const diff = old?.[1].getTime() - old?.[0].getTime()
+                        return [value, new Date(value.getTime() + diff)]
+                      }
+                      return [value, old?.[1]]
+                    })
+                    setTemporaryMinDateValue(null)
+                  }}
+                  allowRemove={true}
+                  onDialogOpeningChange={setIsDateTimeInputOpenWrapper}
+                  outsideClickCloses={false}
+                  className="min-w-60"
+                />
+                <DateTimeInput
+                  value={temporaryMaxDateValue ?? (filterValue as [Date, Date])?.[1] ?? null}
+                  placeholder={translation('endDate')}
+                  onValueChange={value => setTemporaryMaxDateValue(value)}
+                  onEditComplete={value => {
+                    setFilterValue((old: [Date, Date]) => {
+                      console.log('value', value, old)
+                      if(value && old?.[0] && value < old?.[0]) {
+                        if(!old?.[1]) {
+                          return [value, old?.[0]]
+                        }
+                        const diff = old?.[1].getTime() - old?.[0].getTime()
+                        return [new Date(value.getTime() - diff), value]
+                      }
+                      return [old?.[0], value]
+                    })
+                  }}
+                  allowRemove={true}
+                  onDialogOpeningChange={setIsDateTimeInputOpenWrapper}
+                  outsideClickCloses={false}
+                  className="min-w-60"
+                />
+              </>
+            )}
+            <div className="flex-row-2 justify-end w-full">
+              {hasFilter && (
+                <Button color="negative" size="sm" onClick={() => {
+                  column.setFilterValue(undefined)
+                  setIsOpen(false)
+                }}>
+                  {translation('remove')}
+                </Button>
+              )}
+              <Button size="sm" onClick={() => {
+                column.setFilterValue(filterValue)
+                setIsOpen(false)
+              }}>
+                {translation('apply')}
+              </Button>
+            </div>
+          </FocusTrap>
+
+        </AnchoredFloatingContainer>
+      </Visibility>
+    </>
   )
 }
