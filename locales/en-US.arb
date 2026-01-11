@@ -54,6 +54,7 @@
   "saved": "Saved",
   "search": "Search",
   "select": "Select",
+  "selection": "Selection",
   "selectOption": "Select an option",
   "show": "Show",
   "showMore": "Show more",
@@ -176,5 +177,16 @@
     "placeholders": {
       "otherSortings": { "type": "number" }
     }
-  }
+  },
+  "columnPicker": "Column Picker",
+  "columnPickerDescription": "Reorder and show or hide columns",
+  "columns": "Columns",
+  "moveUp": "Move up",
+  "moveDown": "Move down",
+  "hideColumn": "Hide column",
+  "showColumn": "Show column",
+  "pinned": "Pinned",
+  "unpin": "Unpin",
+  "pinLeft": "Pin to left",
+  "pinRight": "Pin to right"
 }

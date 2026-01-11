@@ -1,15 +1,15 @@
-import { Pagination } from '../navigation'
+import { Pagination } from '@/src/components/layout/navigation/Pagination'
 import { useTableContext } from './TableContext'
 import { useEffect } from 'react'
-import type { SelectProps } from '@/src/components/user-interaction/select'
-import { Select, SelectOption } from '@/src/components/user-interaction/select'
+import { Select, type SelectProps } from '@/src/components/user-interaction/select/Select'
+import { SelectOption } from '@/src/components/user-interaction/select/SelectComponents'
 import type { TooltipProps } from '@/src/components/user-interaction/Tooltip'
 import { Tooltip } from '@/src/components/user-interaction/Tooltip'
 import { useHightideTranslation } from '@/src/i18n/useHightideTranslation'
-import { MathUtil } from '@/src/utils'
+import { MathUtil } from '@/src/utils/math'
 
 export const TablePagination = () => {
-  const { table } = useTableContext()
+  const { tableState: table } = useTableContext()
 
   useEffect(() => {
     const { pageIndex } = table.getState().pagination
@@ -41,7 +41,7 @@ export const TablePageSizeController = ({
   tooltipProps,
   ...props
 }: TablePageSizeControllerProps) => {
-  const { table } = useTableContext()
+  const { tableState: table } = useTableContext()
   const translation = useHightideTranslation()
   const currentPageSize = table.getState().pagination.pageSize
 

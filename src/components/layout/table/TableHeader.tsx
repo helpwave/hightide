@@ -4,14 +4,17 @@ import clsx from 'clsx'
 import { Visibility } from '../Visibility'
 import { TableSortButton } from './TableSortButton'
 import { TableFilterButton } from './TableFilterButton'
+import { useTableContext } from './TableContext'
 
 export type TableHeaderProps<T> = {
-  table: ReactTable<T>,
+  table?: ReactTable<T>,
 }
 
-export const TableHeader = <T,>({ table }: TableHeaderProps<T>) => {
-  const columnSizingInfo = table.getState().columnSizingInfo
+export const TableHeader = <T,>({ table: tableOverride }: TableHeaderProps<T>) => {
+  const { tableState } = useTableContext<T>()
 
+  const table = tableOverride ?? tableState
+  const columnSizingInfo = table.getState().columnSizingInfo
   return (
     <>
       {table.getHeaderGroups().map((headerGroup) => (

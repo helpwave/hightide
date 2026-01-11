@@ -12,7 +12,7 @@ import { useTransitionState } from '@/src/hooks/useTransitionState'
 import { PropsUtil } from '@/src/utils/propsUtil'
 import type { TooltipConfig } from '@/src/contexts/HightideConfigContext'
 import { useHightideConfig } from '@/src/contexts/HightideConfigContext'
-import { Portal } from '../utils'
+import { Portal } from '@/src/components/utils/Portal'
 
 type Position = 'top' | 'bottom' | 'left' | 'right'
 

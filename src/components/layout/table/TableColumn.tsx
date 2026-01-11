@@ -11,7 +11,7 @@ const TableColumnComponent = <T,>({
   filterType,
   ...props
 }: TableColumnProps<T>) => {
-  const { registerColumn, unregisterColumn } = useTableContext<T>()
+  const { column: { registerColumn } } = useTableContext<T>()
 
   const column = useMemo<ColumnDef<T>>(() => ({
     ...props,
@@ -22,14 +22,12 @@ const TableColumnComponent = <T,>({
   }), [])
 
   useEffect(() => {
-    const currentColumnId = column.id ?? ''
-
-    registerColumn(column)
+    const unsubscribe =registerColumn(column)
 
     return () => {
-      unregisterColumn(currentColumnId)
+      unsubscribe()
     }
-  }, [registerColumn, unregisterColumn, column])
+  }, [registerColumn, column])
 
   return null
 }

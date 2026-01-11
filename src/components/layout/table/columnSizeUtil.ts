@@ -27,7 +27,16 @@ const calculate = ({
 }: ColumnSizeCalculatoProps) => {
   const deltas: Record<string, number> = {}
 
-  for (const columnId in newSizing) {
+  const removedColumns = Object.keys(newSizing).filter(columnId => !columnIds.includes(columnId))
+  for(const columnId of removedColumns) {
+    delete newSizing[columnId]
+  }
+
+  for (const columnId of columnIds) {
+    if(!newSizing[columnId]) {
+      newSizing[columnId] = 0
+      continue
+    }
     const delta = (newSizing[columnId] ?? 0) - (previousSizing[columnId] ?? 0)
     if (delta !== 0) {
       deltas[columnId] = delta

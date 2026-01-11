@@ -3,12 +3,15 @@ import { useState } from 'react'
 import type { RowSelectionState } from '@tanstack/react-table'
 import { faker } from '@faker-js/faker'
 import { range } from '@/src/utils/array'
-import type { TableWithSelectionProps } from '@/src/components/layout/table/Table'
-import { TableWithSelection } from '@/src/components/layout/table/Table'
+import type { TableWithSelectionProviderProps } from '@/src/components/layout/table/TableWithSelection'
+import { TableWithSelectionProvider } from '@/src/components/layout/table/TableWithSelection'
 import { TableColumn } from '@/src/components/layout/table/TableColumn'
 import { useHightideTranslation } from '@/src/i18n/useHightideTranslation'
 import { TableCell } from '@/src/components/layout/table/TableCell'
 import { Button } from '@/src/components/user-interaction/Button'
+import { TableDisplay } from '@/src/components/layout/table/TableDisplay'
+import { TableColumnPicker } from '@/src/components/layout/table/TableColumnPicker'
+import { TablePagination } from '@/src/components/layout/table/TablePagination'
 
 type DataType = {
   id: string,
@@ -30,11 +33,9 @@ const createRandomDataType = (): DataType => {
 
 const exampleData: DataType[] = range(100).map(() => createRandomDataType())
 
-type StoryArgs = Omit<TableWithSelectionProps<DataType>, 'data' | 'rowSelection' | 'onRowSelectionChange' | 'children'>
+type StoryArgs = Omit<TableWithSelectionProviderProps<DataType>, 'data' | 'rowSelection' | 'onRowSelectionChange' | 'children'>
 
-const meta: Meta<StoryArgs> = {
-  title: 'Layout/Table/Selection',
-}
+const meta: Meta<StoryArgs> = {}
 
 export default meta
 type Story = StoryObj<typeof meta>
@@ -89,7 +90,7 @@ export const selection: Story = {
             </Button>
           </div>
         </div>
-        <TableWithSelection
+        <TableWithSelectionProvider
           {...args}
           data={data}
           rowSelection={selection}
@@ -152,7 +153,14 @@ export const selection: Story = {
             filterFn="dateRange"
             filterType="dateRange"
           />
-        </TableWithSelection>
+          <div className="flex-col-2 items-center">
+            <div className="flex-row-2 justify-end w-full">
+              <TableColumnPicker/>
+            </div>
+            <TableDisplay/>
+            <TablePagination/>
+          </div>
+        </TableWithSelectionProvider>
       </div>
     )
   },

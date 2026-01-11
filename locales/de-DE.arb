@@ -54,6 +54,7 @@
   "saved": "Gespeichert",
   "search": "Suche",
   "select": "Select",
+  "selection": "Auswahl",
   "selectOption": "Option auswählen",
   "show": "Anzeigen",
   "showMore": "Mehr anzeigen",
@@ -176,5 +177,16 @@
     "placeholders": {
       "otherSortings": { "type": "number" }
     }
-  }
+  },
+  "columnPicker": "Spaltenauswahl",
+  "columnPickerDescription": "Spalten neu anordnen und ein- oder ausblenden",
+  "columns": "Spalten",
+  "moveUp": "Nach oben",
+  "moveDown": "Nach unten",
+  "hideColumn": "Spalte ausblenden",
+  "showColumn": "Spalte einblenden",
+  "pinned": "Angeheftet",
+  "unpin": "Loslösen",
+  "pinLeft": "Links anheften",
+  "pinRight": "Rechts anheften"
 }

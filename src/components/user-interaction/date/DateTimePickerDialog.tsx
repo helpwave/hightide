@@ -54,10 +54,7 @@ export const DateTimePickerDialog = ({
         mode={mode}
         value={state ?? undefined}
         onValueChange={setState}
-        onEditComplete={value => {
-          setState(value)
-          onEditComplete?.(value)
-        }}
+        onEditComplete={setState}
       />
       <div className="flex-row-2 justify-end">
         <Visibility isVisible={allowRemove && !!initialValue}>

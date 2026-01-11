@@ -10,7 +10,7 @@ import { useOutsideClick } from '@/src/hooks/useOutsideClick'
 import { Visibility } from '../Visibility'
 import { DateTimeInput } from '../../user-interaction/input/DateTimeInput'
 import { FormFieldLayout } from '../../form/FieldLayout'
-import { useOverlayRegistry } from '@/src/hooks'
+import { useOverlayRegistry } from '@/src/hooks/useOverlayRegistry'
 
 export type TableFilterType = 'text' | 'range' | 'dateRange'
 
@@ -113,7 +113,7 @@ export const TableFilterButton = <T, >({
               />
             )}
             {filterType === 'range' && (
-              <div className="flex-col-2 items-center">
+              <div className="flex-row-2 items-center">
                 <FormFieldLayout
                   label={translation('min')}
                 >
@@ -129,7 +129,7 @@ export const TableFilterButton = <T, >({
                         const num = Number(text)
                         setFilterValue((old: [number, number]) => [num, old?.[1]])
                       }}
-                      className="input-indicator-hidden w-40"
+                      className="input-indicator-hidden w-28"
                     />
                   )}
                 </FormFieldLayout>
@@ -148,7 +148,7 @@ export const TableFilterButton = <T, >({
                         const num = Number(text)
                         setFilterValue((old: [number, number]) => [old?.[0], num])
                       }}
-                      className="input-indicator-hidden w-40"
+                      className="input-indicator-hidden w-28"
                     />
                   )}
                 </FormFieldLayout>

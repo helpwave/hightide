@@ -1,24 +1,19 @@
 import { range } from '@/src/utils/array'
 import { BagFunctionUtil } from '@/src/utils/bagFunctions'
-import type { Row } from '@tanstack/react-table'
 import { flexRender, type Table as ReactTable } from '@tanstack/react-table'
-import type { ReactNode } from 'react'
 import { FillerCell } from './FillerCell'
 import React from 'react'
+import { useTableContext } from './TableContext'
 
 export type TableBodyProps<T> = {
-  table: ReactTable<T>,
-  onRowClick?: (row: Row<T>, table: ReactTable<T>) => void,
-  isUsingFillerRows?: boolean,
-  fillerRow?: (columnId: string, table: ReactTable<T>) => ReactNode,
+  table?: ReactTable<T>,
 }
 
 const TableBodyVisual = <T,>({
-  table,
-  onRowClick,
-  fillerRow,
-  isUsingFillerRows,
+  table: tableOverride,
 }: TableBodyProps<T>) => {
+  const { tableState, body } = useTableContext<T>()
+  const table = tableOverride ?? tableState
   const columns = table.getAllColumns()
 
   return (
@@ -27,7 +22,7 @@ const TableBodyVisual = <T,>({
         return (
           <tr
             key={row.id}
-            onClick={() => onRowClick?.(row, table)}
+            onClick={() => body.onRowClick?.(row, table)}
             data-name="table-body-row"
             className={BagFunctionUtil.resolve(table.options.meta?.bodyRowClassName, row.original)}
           >
@@ -44,13 +39,13 @@ const TableBodyVisual = <T,>({
           </tr>
         )
       })}
-      {isUsingFillerRows && range(table.getState().pagination.pageSize - table.getRowModel().rows.length, { allowEmptyRange: true }).map((row, index) => {
+      {body.isUsingFillerRows && range(table.getState().pagination.pageSize - table.getRowModel().rows.length, { allowEmptyRange: true }).map((row, index) => {
         return (
           <tr key={'filler-row-' + index} data-name="table-body-filler-row">
             {columns.map((column) => {
               return (
                 <td key={column.id} data-name="table-body-filler-cell">
-                  {fillerRow ? fillerRow(column.id, table) : (<FillerCell />)}
+                  {body.fillerRow ? body.fillerRow(column.id, table) : (<FillerCell />)}
                 </td>
               )
             })}
@@ -64,10 +59,7 @@ const TableBodyVisual = <T,>({
 const TableBodyFactory = <T,>() => React.memo(
   TableBodyVisual<T>,
   (prevProps: TableBodyProps<T>, nextProps: TableBodyProps<T>) => {
-    return (
-      prevProps.table.options.data === nextProps.table.options.data &&
-          prevProps.isUsingFillerRows === nextProps.isUsingFillerRows
-    )
+    return prevProps.table.options.data === nextProps.table.options.data
   }
 )
 
