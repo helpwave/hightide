@@ -2,7 +2,7 @@ import { useEffect, useId, useMemo, useState } from 'react'
 
 export type OverlayItem = {
   id: string,
-   tags?: string[],
+  tags?: string[],
 }
 
 type OverlayItemInformation = OverlayItem & {
@@ -12,9 +12,9 @@ type OverlayItemInformation = OverlayItem & {
 }
 
 type OverlayRegistryValue = {
-    itemInformation: Record<string, OverlayItemInformation>,
-    tagItemCounts: Record<string, number>,
-    activeId: string | null,
+  itemInformation: Record<string, OverlayItemInformation>,
+  tagItemCounts: Record<string, number>,
+  activeId: string | null,
 }
 
 type OverlayRegistryListenerCallback = (value: OverlayRegistryValue) => void
@@ -37,6 +37,10 @@ class OverlayRegistry {
     this.overlayIds.add(item.id)
     this.overlayItems[item.id] = item
     this.notify()
+    return () => {
+      this.overlayIds.delete(item.id)
+      this.notify()
+    }
   }
 
   update(item: OverlayItem) {
@@ -52,10 +56,9 @@ class OverlayRegistry {
 
   addListener(callback: OverlayRegistryListenerCallback) {
     this.listeners.add(callback)
-  }
-
-  removeListener(callback: OverlayRegistryListenerCallback) {
-    this.listeners.delete(callback)
+    return () => {
+      this.listeners.delete(callback)
+    }
   }
 
   private notify() {
@@ -126,12 +129,12 @@ export const useOverlayRegistry = (props: UseOverlayRegistryProps = {}): UseOver
       setValue(value)
     }
 
-    registry.addListener(callback)
-    registry.register(item)
+    const removeListener = registry.addListener(callback)
+    const unregister = registry.register(item)
     setHasAppeared(true)
     return () => {
-      registry.removeListener(callback)
-      registry.unregister(item)
+      removeListener()
+      unregister()
       setValue({
         activeId: null,
         itemInformation: {},

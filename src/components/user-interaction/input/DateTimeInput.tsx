@@ -2,22 +2,19 @@ import type { ButtonHTMLAttributes, HTMLAttributes, ReactNode } from 'react'
 import { forwardRef, useCallback, useEffect, useId, useImperativeHandle, useMemo, useRef, useState } from 'react'
 import { CalendarIcon } from 'lucide-react'
 import clsx from 'clsx'
-import { useLocale } from '@/src/contexts/LocaleContext'
-import { useOutsideClick } from '@/src/hooks/useOutsideClick'
+import { useLocale } from '@/src/global-contexts/LocaleContext'
 import type { DateTimePickerProps } from '@/src/components/user-interaction/date/DateTimePicker'
 import { Button } from '@/src/components/user-interaction/Button'
 import { useHightideTranslation } from '@/src/i18n/useHightideTranslation'
 import { Visibility } from '@/src/components/layout/Visibility'
 import { DateUtils } from '@/src/utils/date'
 import type { FormFieldDataHandling } from '../../form/FormField'
-import { AnchoredFloatingContainer } from '../../layout/AnchoredFloatingContainer'
-import { FocusTrap } from '../../utils/FocusTrap'
 import { DateTimePickerDialog } from '../date/DateTimePickerDialog'
 import type { ControlledStateProps } from '@/src/hooks/useControlledState'
 import { useControlledState } from '@/src/hooks/useControlledState'
 import { PropsUtil } from '@/src/utils/propsUtil'
 import type { FormFieldInteractionStates } from '@/src/components/form/FieldLayout'
-import { useOverlayRegistry } from '@/src/hooks/useOverlayRegistry'
+import { PopUp } from '../../layout/PopUp'
 
 export type DateTimeInputHandle = {
   input: HTMLDivElement | null,
@@ -92,22 +89,11 @@ export const DateTimeInput = forwardRef<DateTimeInputHandle, DateTimeInputProps>
     popup: containerRef.current,
   } as DateTimeInputHandle))
 
-  useOutsideClick({
-    refs: [containerRef, innerRef],
-    handler: () => {
-      changeOpenWrapper(false)
-      onEditComplete?.(state)
-    },
-    active: outsideClickCloses
-  })
-
   useEffect(() => {
     if (readOnly || disabled) {
       changeOpenWrapper(false)
     }
   }, [changeOpenWrapper, readOnly, disabled])
-
-  const { zIndex } = useOverlayRegistry({ isActive: isOpen })
 
   const clickHandler = PropsUtil.aria.click<HTMLDivElement>(() => changeOpenWrapper(true))
 
@@ -159,37 +145,41 @@ export const DateTimeInput = forwardRef<DateTimeInputHandle, DateTimeInputProps>
           </Button>
         </Visibility>
       </div>
-      <Visibility isVisible={isOpen}>
-        <AnchoredFloatingContainer
-          ref={containerRef}
-          id={ids.popup}
-          anchor={innerRef}
-          options={{
-            verticalAlignment: 'afterEnd',
-            horizontalAlignment: 'center',
-            gap: 4,
+      <PopUp
+        ref={containerRef}
+        id={ids.popup}
+        isOpen={isOpen}
+        anchor={innerRef}
+        options={{
+          verticalAlignment: 'afterEnd',
+          horizontalAlignment: 'center',
+          gap: 4,
+        }}
+        outsideClickOptions={{ refs: [innerRef], active: outsideClickCloses }}
+
+        onClose={() => {
+          changeOpenWrapper(false)
+          onEditComplete?.(state)
+        }}
+
+        role="dialog"
+        aria-labelledby={ids.label}
+
+        className="flex-col-2 p-2"
+      >
+        <DateTimePickerDialog
+          value={dialogValue}
+          allowRemove={allowRemove}
+          onValueChange={setDialogValue}
+          onEditComplete={(value) => {
+            setState?.(value)
+            onEditComplete?.(value)
+            changeOpenWrapper(false)
           }}
-          className="fixed"
-          style={{ zIndex }}
-          role="dialog"
-          aria-labelledby={ids.label}
-        >
-          <FocusTrap active={true} className="flex-col-2 p-2 items-end">
-            <DateTimePickerDialog
-              value={dialogValue}
-              allowRemove={allowRemove}
-              onValueChange={setDialogValue}
-              onEditComplete={(value) => {
-                setState?.(value)
-                onEditComplete?.(value)
-                changeOpenWrapper(false)
-              }}
-              pickerProps={pickerProps}
-              mode={mode}
-            />
-          </FocusTrap>
-        </AnchoredFloatingContainer>
-      </Visibility>
+          pickerProps={pickerProps}
+          mode={mode}
+        />
+      </PopUp>
     </>
   )
 })

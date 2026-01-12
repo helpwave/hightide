@@ -10,13 +10,13 @@ import type { UseOverlayRegistryProps } from '@/src/hooks/useOverlayRegistry'
 import { useOverlayRegistry } from '@/src/hooks/useOverlayRegistry'
 import { useTransitionState } from '@/src/hooks/useTransitionState'
 import { PropsUtil } from '@/src/utils/propsUtil'
-import type { TooltipConfig } from '@/src/contexts/HightideConfigContext'
-import { useHightideConfig } from '@/src/contexts/HightideConfigContext'
+import type { TooltipConfig } from '@/src/global-contexts/HightideConfigContext'
+import { useHightideConfig } from '@/src/global-contexts/HightideConfigContext'
 import { Portal } from '@/src/components/utils/Portal'
 
 type Position = 'top' | 'bottom' | 'left' | 'right'
 
-export type TooltipProps = PropsWithChildren & Partial<TooltipConfig> & {
+export interface TooltipProps extends PropsWithChildren, Partial<TooltipConfig> {
   tooltip: ReactNode,
   /**
    * Class names of additional styling properties for the tooltip
@@ -58,9 +58,9 @@ export const Tooltip = ({
     appearOverwrite ?? config.tooltip.appearDelay,
   [appearOverwrite, config.tooltip.appearDelay])
 
-  const anchorRef = useRef<HTMLDivElement>(null)
-  const containerRef = useRef<HTMLDivElement>(null)
-  const triangleRef = useRef<HTMLDivElement>(null)
+  const anchor = useRef<HTMLDivElement>(null)
+  const container = useRef<HTMLDivElement>(null)
+  const triangle = useRef<HTMLDivElement>(null)
 
   const isActive = !disabled && open
 
@@ -78,16 +78,16 @@ export const Tooltip = ({
 
   const css = useAnchoredPosition(useMemo(() => ({
     active: isActive || isVisible,
-    anchorRef: anchorRef,
-    containerRef,
+    anchor: anchor,
+    container,
     horizontalAlignment,
     verticalAlignment,
   }), [horizontalAlignment, isActive, isVisible, verticalAlignment]))
 
   const cssTriangle = useAnchoredPosition(useMemo(() => ({
     active: isActive || isVisible,
-    anchorRef: anchorRef,
-    containerRef: triangleRef,
+    anchor: anchor,
+    container: triangle,
     horizontalAlignment,
     verticalAlignment,
     gap: 0,
@@ -140,7 +140,7 @@ export const Tooltip = ({
 
   return (
     <div
-      ref={anchorRef}
+      ref={anchor}
       className={clsx('relative inline-block', containerClassName)}
       aria-describedby={isVisible ? id : undefined}
       onPointerEnter={openWithDelay}
@@ -153,7 +153,7 @@ export const Tooltip = ({
       <Visibility isVisible={isActive || isVisible}>
         <Portal>
           <div
-            ref={triangleRef}
+            ref={triangle}
 
             data-name="tooltip-triangle"
             data-state={transitionState}
@@ -162,7 +162,7 @@ export const Tooltip = ({
             style={{ ...cssTriangle, zIndex, position: 'fixed' }}
           />
           <div
-            ref={containerRef}
+            ref={container}
             id={id}
 
             {...callbacks}

@@ -1,7 +1,7 @@
 import type { Preview } from '@storybook/nextjs'
 import '../src/style/globals.css'
 import './storybookStyleOverrides.css'
-import { HightideProvider } from '../src/contexts/HightideProvider'
+import { HightideProvider } from '../src/global-contexts/HightideProvider'
 
 const preview: Preview = {
   parameters: {

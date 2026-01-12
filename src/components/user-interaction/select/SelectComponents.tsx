@@ -232,8 +232,8 @@ export const SelectContent = forwardRef<HTMLUListElement, SelectContentProps>(fu
 
   const position = useAnchoredPosition({
     active: state.isOpen,
-    anchorRef: trigger.ref,
-    containerRef: innerRef,
+    anchor: trigger.ref,
+    container: innerRef,
     ...alignment,
   })
 

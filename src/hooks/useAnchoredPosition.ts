@@ -149,17 +149,17 @@ export type UseAnchoredPositionOptions = CalculatePositionOptions & {
 }
 
 export type UseAnchoredPostitionProps = UseAnchoredPositionOptions & {
-  containerRef: RefObject<HTMLElement>,
-  anchorRef: RefObject<HTMLElement>,
-  windowRef?: RefObject<HTMLElement>,
+  container: RefObject<HTMLElement>,
+  anchor: RefObject<HTMLElement>,
+  window?: RefObject<HTMLElement>,
   active?: boolean,
 }
 
 export function useAnchoredPosition({
   active = true,
-  windowRef,
-  anchorRef,
-  containerRef,
+  window: windowRef,
+  anchor: anchorRef,
+  container: containerRef,
   isPolling = false,
   pollingInterval = 100,
   verticalAlignment = 'afterEnd',

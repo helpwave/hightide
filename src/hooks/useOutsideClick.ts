@@ -3,7 +3,7 @@ import { useEffect } from 'react'
 
 export type UseOutsideClickProps = {
   refs: RefObject<HTMLElement>[],
-  handler: () => void,
+  handler: (event: MouseEvent | TouchEvent) => void,
   active?: boolean,
 }
 export const useOutsideClick = ({ refs, handler, active = true }: UseOutsideClickProps) => {
@@ -21,7 +21,7 @@ export const useOutsideClick = ({ refs, handler, active = true }: UseOutsideClic
         return
       }
 
-      handler()
+      handler(event)
     }
     document.addEventListener('mousedown', listener)
     document.addEventListener('touchstart', listener)

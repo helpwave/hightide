@@ -1,4 +1,4 @@
-import { useLocale } from '@/src/contexts/LocaleContext'
+import { useLocale } from '@/src/global-contexts/LocaleContext'
 import type {
   PartialTranslationExtension,
   Translation,

@@ -46,8 +46,8 @@ const NavigationItemWithSubItem = ({
 
   const style = useAnchoredPosition({
     active: isOpen,
-    containerRef,
-    anchorRef: triggerRef,
+    container: containerRef,
+    anchor: triggerRef,
     horizontalAlignment,
     ...options,
   })

@@ -85,6 +85,8 @@ const extender = {
 function click<T>(onClick: () => void) {
   const keyboardEventHandler: React.KeyboardEventHandler<T> = (event) => {
     if (event.key === 'Enter' || event.key === ' ') {
+      event.preventDefault()
+      event.stopPropagation()
       onClick()
     }
   }
@@ -95,10 +97,12 @@ function click<T>(onClick: () => void) {
   }
 }
 
-function close<T>(onClose: () => void): React.KeyboardEventHandler<T> {
+function close<T>(onClose?: () => void): React.KeyboardEventHandler<T> {
   return (event) => {
     if (event.key === 'Escape') {
-      onClose()
+      event.preventDefault()
+      event.stopPropagation()
+      onClose?.()
     }
   }
 }
@@ -119,15 +123,23 @@ function navigate<T>({
     switch (event.key) {
     case 'ArrowLeft':
       left(event)
+      event.preventDefault()
+      event.stopPropagation()
       break
     case 'ArrowRight':
       right(event)
+      event.preventDefault()
+      event.stopPropagation()
       break
     case 'ArrowUp':
       up(event)
+      event.preventDefault()
+      event.stopPropagation()
       break
     case 'ArrowDown':
       down(event)
+      event.preventDefault()
+      event.stopPropagation()
       break
     }
   }
