@@ -19,7 +19,7 @@ type OverlayRegistryValue = {
 
 type OverlayRegistryListenerCallback = (value: OverlayRegistryValue) => void
 
-class OverlayRegistry {
+export class OverlayRegistry {
   private static instance: OverlayRegistry | null = null
 
   static getInstance(): OverlayRegistry {
@@ -39,18 +39,13 @@ class OverlayRegistry {
     this.notify()
     return () => {
       this.overlayIds.delete(item.id)
+      delete this.overlayItems[item.id]
       this.notify()
     }
   }
 
   update(item: OverlayItem) {
     this.overlayItems[item.id] = item
-    this.notify()
-  }
-
-  unregister(item: OverlayItem) {
-    this.overlayIds.delete(item.id)
-    delete this.overlayItems[item.id]
     this.notify()
   }
 
@@ -103,13 +98,11 @@ export type UseOverlayRegistryResult = {
     zIndex?: number,
     position?: number,
     tagPositions?: Record<string, number>,
-    hasAppeared: boolean,
     tagItemCounts: Record<string, number>,
 }
 
 export const useOverlayRegistry = (props: UseOverlayRegistryProps = {}): UseOverlayRegistryResult => {
   const generatedId = useId()
-  const [hasAppeared, setHasAppeared] = useState<boolean>(props.isActive)
   const item: OverlayItem = useMemo(() => ({
     id: props.id ?? generatedId,
     tags: props.tags,
@@ -131,7 +124,6 @@ export const useOverlayRegistry = (props: UseOverlayRegistryProps = {}): UseOver
 
     const removeListener = registry.addListener(callback)
     const unregister = registry.register(item)
-    setHasAppeared(true)
     return () => {
       removeListener()
       unregister()
@@ -140,7 +132,6 @@ export const useOverlayRegistry = (props: UseOverlayRegistryProps = {}): UseOver
         itemInformation: {},
         tagItemCounts: {}
       })
-      setHasAppeared(false)
     }
   }, [props.isActive, item, registry])
 
@@ -151,7 +142,6 @@ export const useOverlayRegistry = (props: UseOverlayRegistryProps = {}): UseOver
     zIndex: itemInformation?.zIndex,
     position: itemInformation?.position,
     tagPositions: itemInformation?.tagPositions,
-    hasAppeared,
     tagItemCounts: value.tagItemCounts,
   }
 }
