@@ -180,6 +180,7 @@ export const useFocusTrap = ({
         const first = elements.item(0) as HTMLElement
         first.focus()
       } else {
+        console.warn('No focusable elements found in the focus trap, focusing the container instead. Make sure this is the correct behavior. Affected element: ', containerElement)
         containerElement.focus()
       }
     }

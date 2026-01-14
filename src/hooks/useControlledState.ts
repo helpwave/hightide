@@ -1,5 +1,5 @@
 import type React from 'react'
-import { useMemo, useState } from 'react'
+import { useState } from 'react'
 import { resolveSetState } from '../utils/resolveSetState'
 import { useLogOnce } from './useLogOnce'
 
@@ -17,18 +17,14 @@ export const useControlledState = <T>({
   isControlled: isEnforcingControlled
 }: ControlledStateProps<T>) : [T, React.Dispatch<React.SetStateAction<T>>] => {
   const [internalValue, setInternalValue] = useState(defaultValue)
-
-  const isControlled = isEnforcingControlled || value !== undefined
-
-  const initialValue = useMemo(() => {
-    return value
-  // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [])
+  const [isControlled] = useState(isEnforcingControlled || value !== undefined)
 
   useLogOnce(
-    'useControlledState: changed from uncontrolled to controlled state. Either don\'t '
-    +'provide a undefined value or set isControlled to true',
-    initialValue === undefined && value !== undefined
+    'useControlledState: Attempted to change from controlled to uncontrolled or vice versa.'
+    + 'For a controlled state: isControlled === true OR value !== undefined'
+    + 'For an uncontrolled state: isControlled === false OR value === undefined',
+    isControlled !== (isEnforcingControlled || value !== undefined),
+    { type: 'error' }
   )
 
   if(isControlled) {

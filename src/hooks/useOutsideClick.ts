@@ -1,12 +1,19 @@
 import type { RefObject } from 'react'
 import { useEffect } from 'react'
 
-export type UseOutsideClickProps = {
+export interface UseOutsideClickOptions {
   refs: RefObject<HTMLElement>[],
-  handler: (event: MouseEvent | TouchEvent) => void,
   active?: boolean,
 }
-export const useOutsideClick = ({ refs, handler, active = true }: UseOutsideClickProps) => {
+
+export interface UseOutsideClickHandlers {
+  onOutsideClick: (event: MouseEvent | TouchEvent) => void,
+}
+
+export interface UseOutsideClickProps extends UseOutsideClickOptions, UseOutsideClickHandlers{}
+
+
+export const useOutsideClick = ({ refs, onOutsideClick, active = true }: UseOutsideClickProps) => {
   useEffect(() => {
     if (!active) return
 
@@ -21,7 +28,7 @@ export const useOutsideClick = ({ refs, handler, active = true }: UseOutsideClic
         return
       }
 
-      handler(event)
+      onOutsideClick(event)
     }
     document.addEventListener('mousedown', listener)
     document.addEventListener('touchstart', listener)
@@ -31,5 +38,5 @@ export const useOutsideClick = ({ refs, handler, active = true }: UseOutsideClic
       document.removeEventListener('touchstart', listener)
       document.removeEventListener('pointerdown', listener)
     }
-  }, [refs, handler, active])
+  }, [refs, onOutsideClick, active])
 }

@@ -1,14 +1,18 @@
-import { useEffect, useId, useMemo, useRef, useState } from 'react'
+import type { SetStateAction } from 'react'
+import { useEffect, useId, useMemo, useState } from 'react'
 import { useLogOnce } from './useLogOnce'
+import { resolveSetState } from '../utils/resolveSetState'
 
-export interface VisbilityCoordinatorItemState {
+export interface VisbilityCoordinatorItem {
   triggerIds: string[],
   targetId: string | null,
   activeTriggerId: string | null,
   isVisible: boolean,
 }
 
-type VisbilityCoordinatorListener = (state: VisbilityCoordinatorItemState) => void
+export type VisbilityCoordinatorItemState = Record<string, unknown> | undefined
+
+type VisbilityCoordinatorListener = (item: VisbilityCoordinatorItem) => void
 
 export class VisbilityCoordinator {
   private static instance: VisbilityCoordinator | null = null
@@ -20,38 +24,46 @@ export class VisbilityCoordinator {
     return VisbilityCoordinator.instance
   }
 
+  private items: Record<string, VisbilityCoordinatorItem> = {}
   private states: Record<string, VisbilityCoordinatorItemState> = {}
   private listeners: Record<string, Set<VisbilityCoordinatorListener>> = {}
 
   get(id: string) {
-    const state = this.states[id]
-    if(!state) return
-    return { ...state, triggerIds: [...state.triggerIds] }
+    const item = this.items[id]
+    if(!item) return
+    return { ...item, triggerIds: [...item.triggerIds] }
   }
 
-  setIsVisibile(id: string, isVisible: boolean) {
-    const state = this.get(id)
-    if(state) {
-      state.isVisible = isVisible
+  setIsVisibile(id: string, isVisible: boolean, activeTriggerId: string | null = null) {
+    const item = this.items[id]
+    if(item && item.isVisible !== isVisible) {
+      item.isVisible = isVisible
+      item.activeTriggerId = activeTriggerId
       this.notify(id)
     } else {
       console.warn(`VisbilityCoordinator: No entry exists for "${id}" when trying to set its visiblity`)
     }
   }
 
-  toggle(id: string) {
-    const state = this.get(id)
-    if(state) {
-      state.isVisible = !state.isVisible
+  toggle(id: string, activeTriggerId: string | null = null) {
+    const item = this.items[id]
+    if(item) {
+      item.isVisible = !item.isVisible
+      item.activeTriggerId = activeTriggerId
       this.notify(id)
     } else {
       console.warn(`VisbilityCoordinator: No entry exists for "${id}" when trying to toggle its visiblity`)
     }
   }
 
+  updateState(id: string, data: SetStateAction<Record<string, unknown> | undefined>) {
+    this.states[id] = resolveSetState(data, this.states[id])
+    this.notify(id)
+  }
+
   updateId(id: string, updates: { oldId: string, newId: string, type: 'trigger' | 'target' }) {
-    const state = this.states[id]
-    if(!state) {
+    const item = this.items[id]
+    if(!item) {
       console.warn(`VisbilityCoordinator: No entry exists for "${id}" when trying to update its ids`)
       return
     }
@@ -59,74 +71,74 @@ export class VisbilityCoordinator {
     const { oldId, newId, type } = updates
 
     if(type === 'target') {
-      if(state.targetId !== oldId) {
-        console.warn(`VisbilityCoordinator: TargetId "${oldId}" does not match current targetId "${state.targetId}" for item "${id}"`)
+      if(item.targetId !== oldId) {
+        console.warn(`VisbilityCoordinator: TargetId "${oldId}" does not match current targetId "${item.targetId}" for item "${id}"`)
         return
       }
-      state.targetId = newId
+      item.targetId = newId
     } else if(type === 'trigger') {
-      const index = state.triggerIds.indexOf(oldId)
+      const index = item.triggerIds.indexOf(oldId)
       if(index === -1) {
         console.warn(`VisbilityCoordinator: TriggerId "${oldId}" not found for item "${id}"`)
         return
       }
-      state.triggerIds[index] = newId
-      if(state.activeTriggerId === oldId) {
-        state.activeTriggerId = newId
+      item.triggerIds[index] = newId
+      if(item.activeTriggerId === oldId) {
+        item.activeTriggerId = newId
       }
     }
 
     this.notify(id)
   }
 
-  register(id: string, stateChange: Partial<VisbilityCoordinatorItemState> = {}) {
-    if(!this.states[id]) {
-      this.states[id] = {
+  register(id: string, itemChange: Partial<VisbilityCoordinatorItem> = {}) {
+    if(!this.items[id]) {
+      this.items[id] = {
         isVisible: false,
         targetId: null,
         triggerIds: [],
-        activeTriggerId: null
+        activeTriggerId: null,
       }
     }
-    const state = this.states[id]
-    state.isVisible = stateChange.isVisible ?? state.isVisible
-    if(stateChange.activeTriggerId) {
-      if(state.activeTriggerId) {
-        console.error(`VisbilityCoordinator: Tried to set activeTriggerId "${stateChange.activeTriggerId}" on item with id "${id}" while the id is already set. Ensure your components only register once and unregister properly.`)
+    const item = this.items[id]
+    item.isVisible = itemChange.isVisible ?? item.isVisible
+    if(itemChange.activeTriggerId) {
+      if(item.activeTriggerId) {
+        console.error(`VisbilityCoordinator: Tried to set activeTriggerId "${itemChange.activeTriggerId}" on item with id "${id}" while the id is already set. Ensure your components only register once and unregister properly.`)
       } else {
-        state.activeTriggerId = stateChange.activeTriggerId
+        item.activeTriggerId = itemChange.activeTriggerId
       }
     }
-    if(stateChange.targetId) {
-      if(state.targetId) {
-        console.error(`VisbilityCoordinator: Tried to set targetId "${stateChange.targetId}" on item with id "${id}" while the id is already set. Ensure your components only register once and unregister properly.`)
+    if(itemChange.targetId) {
+      if(item.targetId) {
+        console.error(`VisbilityCoordinator: Tried to set targetId "${itemChange.targetId}" on item with id "${id}" while the id is already set. Ensure your components only register once and unregister properly.`)
       } else {
-        state.targetId = stateChange.targetId
+        item.targetId = itemChange.targetId
       }
     }
-    if(stateChange.triggerIds && stateChange.triggerIds.length > 0) {
-      for(const triggerId of stateChange.triggerIds) {
-        if(state.triggerIds.findIndex(id => id === triggerId) !== -1) {
+    if(itemChange.triggerIds && itemChange.triggerIds.length > 0) {
+      for(const triggerId of itemChange.triggerIds) {
+        if(item.triggerIds.findIndex(id => id === triggerId) !== -1) {
           console.error(`VisbilityCoordinator: Tried to set triggerId "${triggerId}" on item with id "${id}" while the id is already set. Ensure your components only register once and unregister properly.`)
         } else {
-          state.triggerIds.push(triggerId)
+          item.triggerIds.push(triggerId)
         }
       }
     }
     this.notify(id)
     return () => {
-      if(stateChange.targetId) {
-        state.targetId = null
+      if(itemChange.targetId) {
+        item.targetId = null
       }
-      if(stateChange.triggerIds) {
-        for(const triggerId of stateChange.triggerIds) {
-          const index = state.triggerIds.indexOf(triggerId)
+      if(itemChange.triggerIds) {
+        for(const triggerId of itemChange.triggerIds) {
+          const index = item.triggerIds.indexOf(triggerId)
           if (index !== -1) {
-            state.triggerIds.splice(index, 1)
+            item.triggerIds.splice(index, 1)
           }
 
-          if(state.activeTriggerId === triggerId) {
-            stateChange.activeTriggerId = null
+          if(item.activeTriggerId === triggerId) {
+            itemChange.activeTriggerId = null
           }
         }
       }
@@ -148,14 +160,14 @@ export class VisbilityCoordinator {
   }
 
   private notify(id: string) {
-    const state = this.get(id)
-    if(!state) {
+    const item = this.get(id)
+    if(!item) {
       console.warn(`VisbilityCoordinator: No entry exists for "${id}" when trying to notify about its changes`)
       return
     }
     const listeners = this.listeners[id]
     if(listeners) {
-      listeners.forEach((callback) => callback(state))
+      listeners.forEach((callback) => callback(item))
     }
   }
 }
@@ -163,37 +175,50 @@ export class VisbilityCoordinator {
 
 export interface UseVisbilityCoordinatorProps {
   id: string,
-  registerMode: 'trigger' | 'target' | 'both' | 'observer',
-  targetId?: string,
-  triggerId?: string,
+  registerMode: 'trigger' | 'target' | 'both',
+  target?: { id?: string },
+  trigger?: { id?: string, isActiveTrigger?: boolean },
+  isInitiallyVisible?: boolean,
 }
 
-export interface UseVisbilityCoordinatorResult extends VisbilityCoordinatorItemState {
+export interface UseVisbilityCoordinatorObject {
+  id: string,
   toggle: () => void,
   open: () => void,
   close: () => void,
   setVisible: (isVisible: boolean) => void,
-  trigger: { id: string } | null,
-  target: { id: string } | null,
+}
+
+export interface UseVisbilityCoordinatorResult extends VisbilityCoordinatorItem {
+  trigger: UseVisbilityCoordinatorObject | null,
+  target: UseVisbilityCoordinatorObject | null,
 }
 
 export function useVisbilityCoordinator({
   id: initialId,
   registerMode,
-  targetId: targetIdOverwrite,
-  triggerId: triggerIdOverwrite
+  target: targetOverwrite,
+  trigger: triggerOverwrite,
+  isInitiallyVisible,
 } : UseVisbilityCoordinatorProps) : UseVisbilityCoordinatorResult {
   const generatedTargetId = useId()
   const generatedTriggerId = useId()
 
   const [mode] = useState(registerMode)
   const [id] = useState(initialId)
-  useLogOnce('useVisbilityCoordinator: You cannot change the registration mode during the runtime', mode !== registerMode, {type: "error"})
-  useLogOnce('useVisbilityCoordinator: You cannot change the id during the runtime', id !== initialId, {type: "error"})
-  const targetId = useMemo(() => targetIdOverwrite ?? generatedTargetId, [targetIdOverwrite, generatedTargetId])
-  const triggerId = useMemo(() => triggerIdOverwrite ?? generatedTriggerId, [triggerIdOverwrite, generatedTriggerId])
+  useLogOnce('useVisbilityCoordinator: You cannot change the registration mode during the runtime', mode !== registerMode, { type: 'error' })
+  useLogOnce('useVisbilityCoordinator: You cannot change the id during the runtime', id !== initialId, { type: 'error' })
+  const targetId = useMemo(() => {
+    if(mode === 'target' || mode === 'both') return targetOverwrite?.id ?? generatedTargetId
+    return null
+  }, [targetOverwrite?.id, generatedTargetId, mode])
+  const triggerId = useMemo(() => {
+    if(mode === 'trigger' || mode === 'both') return triggerOverwrite?.id ?? generatedTriggerId
+    return null
+  }, [triggerOverwrite?.id, generatedTriggerId, mode])
+  const [previousIds, setPreviousIds] = useState<{ targetId: string | null, triggerId: string | null }>({ targetId, triggerId })
 
-  const [state, setState] = useState<VisbilityCoordinatorItemState>({
+  const [item, setItem] = useState<VisbilityCoordinatorItem>({
     triggerIds: [],
     targetId: null,
     activeTriggerId: null,
@@ -203,63 +228,68 @@ export function useVisbilityCoordinator({
   const coordinator = useMemo(() => VisbilityCoordinator.getInstance(), [])
 
   useEffect(() => {
-    const 
-    if(mode === 'observer') {
-      function callback(newState: VisbilityCoordinatorItemState) {
-        setState(newState)
-      }
-      const removeListener = coordinator.addListener(id, callback)
-      const currentState = coordinator.get(id)
-      if(currentState) {
-        setState(currentState)
-      }
-      return () => {
-        removeListener()
-      }
+    if(coordinator.get(id)) {
+      return
     }
-
+    const unsubscribe = coordinator.addListener(id, (newState) => {
+      setItem(newState)
+    })
+    const unregister = coordinator.register(id, {
+      targetId: targetId ?? undefined,
+      triggerIds: triggerId ? [triggerId] : undefined,
+      activeTriggerId: isInitiallyVisible && triggerOverwrite.isActiveTrigger ? triggerId : undefined,
+      isVisible: isInitiallyVisible,
+    })
+    return () => {
+      unsubscribe()
+      unregister()
+    }
+  // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [])
 
   useEffect(() => {
-    coordinator.updateId(id, )
-  }, [targetId])
+    if(previousIds.targetId !== targetId) {
+      coordinator.updateId(targetId, { oldId: previousIds.targetId, newId: targetId, type: 'target' })
+      setPreviousIds(prev => ({ ...prev, targetId }))
+    }
+  }, [coordinator, previousIds.targetId, targetId])
 
-  const toggle = useMemo(() => () => {
-    coordinator.toggle(id)
-  }, [id, coordinator])
-
-  const open = useMemo(() => () => {
-    coordinator.setIsVisibile(id, true)
-  }, [id, coordinator])
-
-  const close = useMemo(() => () => {
-    coordinator.setIsVisibile(id, false)
-  }, [id, coordinator])
-
-  const setVisible = useMemo(() => (isVisible: boolean) => {
-    coordinator.setIsVisibile(id, isVisible)
-  }, [id, coordinator])
+  useEffect(() => {
+    if(previousIds.triggerId !== triggerId) {
+      coordinator.updateId(triggerId, { oldId: previousIds.triggerId, newId: triggerId, type: 'target' })
+      setPreviousIds(prev => ({ ...prev, triggerId }))
+    }
+  }, [coordinator, previousIds.triggerId, triggerId])
 
   const trigger = useMemo(() => {
-    if(registerMode === 'trigger' || registerMode === 'both') {
-      return { id: triggerId }
+    if(mode === 'trigger' || mode === 'both') {
+      const activeTriggerId = triggerOverwrite?.isActiveTrigger ? triggerId : null
+      return {
+        id: triggerId,
+        toggle: () => coordinator.toggle(id, activeTriggerId),
+        open: () => coordinator.setIsVisibile(id, true, activeTriggerId),
+        close: () => coordinator.setIsVisibile(id, false, activeTriggerId),
+        setVisible: (isVisible: boolean) => coordinator.setIsVisibile(id, isVisible, activeTriggerId),
+      }
     }
     return null
-  }, [registerMode, triggerId])
+  }, [coordinator, id, mode, triggerId, triggerOverwrite?.isActiveTrigger])
 
   const target = useMemo(() => {
-    if(registerMode === 'target' || registerMode === 'both') {
-      return { id: targetId }
+    if(mode === 'target' || mode === 'both') {
+      return {
+        id: targetId,
+        toggle: () => coordinator.toggle(id, null),
+        open: () => coordinator.setIsVisibile(id, true, null),
+        close: () => coordinator.setIsVisibile(id, false, null),
+        setVisible: (isVisible: boolean) => coordinator.setIsVisibile(id, isVisible, null),
+      }
     }
     return null
-  }, [registerMode, targetId])
+  }, [coordinator, id, mode, targetId])
 
   return {
-    ...state,
-    toggle,
-    open,
-    close,
-    setVisible,
+    ...item,
     trigger,
     target,
   }

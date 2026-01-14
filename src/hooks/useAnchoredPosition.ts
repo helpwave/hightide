@@ -106,19 +106,11 @@ function calculatePosition({
       left += gap
     } else if (horizontalAlignment === 'beforeStart') {
       left -= gap
-    } else if (horizontalAlignment === 'afterStart' && translateXPercent === 0) {
-      left += gap
-    } else if (horizontalAlignment === 'beforeEnd' && translateXPercent === -100) {
-      left -= gap
     }
 
     if (verticalAlignment === 'afterEnd') {
       top += gap
     } else if (verticalAlignment === 'beforeStart') {
-      top -= gap
-    } else if (verticalAlignment === 'afterStart' && translateYPercent === 0) {
-      top += gap
-    } else if (verticalAlignment === 'beforeEnd' && translateYPercent === -100) {
       top -= gap
     }
   }

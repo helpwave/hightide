@@ -1,5 +1,5 @@
 import type { ColumnDef } from '@tanstack/react-table'
-import { memo, useEffect, useMemo } from 'react'
+import { memo, useEffect, useMemo, useState } from 'react'
 import { useTableContext } from './TableContext'
 import type { TableFilterType } from './TableFilterButton'
 
@@ -13,13 +13,13 @@ const TableColumnComponent = <T,>({
 }: TableColumnProps<T>) => {
   const { column: { registerColumn } } = useTableContext<T>()
 
-  const column = useMemo<ColumnDef<T>>(() => ({
+  const [column] = useState<ColumnDef<T>>({
     ...props,
     meta: {
       ...props.meta,
       filterType,
     },
-  }), [])
+  })
 
   useEffect(() => {
     const unsubscribe =registerColumn(column)

@@ -1,8 +1,8 @@
 import type { Meta, StoryObj } from '@storybook/nextjs'
-import { useState } from 'react'
 import type { DialogPosition } from '@/src/components/layout/dialog/Dialog'
 import { Dialog } from '@/src/components/layout/dialog/Dialog'
 import { Button } from '@/src/components/user-interaction/Button'
+import { useVisbilityCoordinator } from '@/src/hooks/useVisibilityCoordinator'
 
 type StoryArgs = {
   position: DialogPosition,
@@ -19,46 +19,58 @@ export const stackedDialog: Story = {
     position: 'center'
   },
   render: ({ position }) => {
-    const [modal1, setModal1] = useState(false)
-    const [modal2, setModal2] = useState(false)
-    const [modal3, setModal3] = useState(false)
+    const dialog1 = useVisbilityCoordinator({
+      id: 'dialog1',
+      registerMode: 'both',
+      trigger: { isActiveTrigger: true },
+    })
+    const dialog2 = useVisbilityCoordinator({
+      id: 'dialog2',
+      registerMode: 'both',
+      trigger: { isActiveTrigger: true },
+    })
+    const dialog3 = useVisbilityCoordinator({
+      id: 'dialog3',
+      registerMode: 'both',
+      trigger: { isActiveTrigger: true },
+    })
     return (
       <>
         <div className="flex-row-2 items-center justify-center min-h-[400px]">
-          <Button onClick={() => setModal1(true)}>Open Dialog</Button>
+          <Button onClick={dialog1.trigger?.toggle}>Open Dialog</Button>
         </div>
 
         <Dialog
           titleElement="Dialog 1"
           description="This is the first Dialog"
-          isOpen={modal1}
+          isOpen={dialog1.isVisible}
           className="w-96 h-128"
           position={position}
-          onClose={() => setModal1(false)}
+          onClose={dialog1.target?.close}
         >
-          <Button onClick={() => setModal2(true)}>Open 2</Button>
-          <Button color="negative" onClick={() => setModal1(false)}>Close</Button>
+          <Button onClick={dialog2.trigger?.toggle}>Open 2</Button>
+          <Button color="negative" onClick={dialog1.target?.close}>Close</Button>
         </Dialog>
 
         <Dialog
           titleElement="Dialog 2"
           description="This is the second Dialog"
-          isOpen={modal2}
+          isOpen={dialog2.isVisible}
           className="w-[400px] bg-positive text-on-positive"
           position={position}
-          onClose={() => setModal2(false)}
+          onClose={dialog2.target?.close}
         >
-          <Button onClick={() => setModal3(true)}>Open 3</Button>
-          <Button color="negative" onClick={() => setModal2(false)}>Close</Button>
+          <Button onClick={dialog3.trigger?.toggle}>Open 3</Button>
+          <Button color="negative" onClick={dialog2.target?.close}>Close</Button>
         </Dialog>
         <Dialog
           titleElement="Dialog 3"
           description="This is the third Dialog. Click below to close it."
-          isOpen={modal3}
+          isOpen={dialog3.isVisible}
           position={position}
-          onClose={() => setModal3(false)}
+          onClose={dialog3.target?.close}
         >
-          <Button color="negative" onClick={() => setModal3(false)}>Close 3</Button>
+          <Button color="negative" onClick={dialog3.target?.close}>Close 3</Button>
         </Dialog>
       </>
     )
