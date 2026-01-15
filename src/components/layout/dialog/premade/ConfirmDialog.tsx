@@ -1,10 +1,10 @@
 import type { PropsWithChildren } from 'react'
-import type { ButtonColor } from '../../user-interaction/Button'
-import { Button } from '../../user-interaction/Button'
+import type { ButtonColor } from '@/src/components/user-interaction/Button'
+import { Button } from '@/src/components/user-interaction/Button'
 import { useHightideTranslation } from '@/src/i18n/useHightideTranslation'
 import clsx from 'clsx'
-import type { DialogProps } from './Dialog'
-import { Dialog } from './Dialog'
+import type { DialogProps } from '@/src/components/layout/dialog/Dialog'
+import { Dialog } from '@/src/components/layout/dialog/Dialog'
 
 export type ConfirmDialogType = 'positive' | 'negative' | 'neutral' | 'primary'
 

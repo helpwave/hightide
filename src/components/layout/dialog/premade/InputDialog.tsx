@@ -1,7 +1,7 @@
-import type { InputProps } from '../../user-interaction/input/Input'
-import { Input } from '../../user-interaction/input/Input'
-import type { ConfirmDialogProps } from '@/src/components/layout/dialog/ConfirmDialog'
-import { ConfirmDialog } from '@/src/components/layout/dialog/ConfirmDialog'
+import type { InputProps } from '../../../user-interaction/input/Input'
+import { Input } from '../../../user-interaction/input/Input'
+import type { ConfirmDialogProps } from '@/src/components/layout/dialog/premade/ConfirmDialog'
+import { ConfirmDialog } from '@/src/components/layout/dialog/premade/ConfirmDialog'
 
 export type InputModalProps = ConfirmDialogProps & {
   inputs: InputProps[],

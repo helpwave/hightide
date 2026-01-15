@@ -1,7 +1,7 @@
+import type { PropsWithChildren } from 'react'
 import { createPortal } from 'react-dom'
 
-export type PortalProps = {
-  children: React.ReactNode,
+export interface PortalProps extends PropsWithChildren {
   container?: HTMLElement,
 }
 

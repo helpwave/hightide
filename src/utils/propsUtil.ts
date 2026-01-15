@@ -145,6 +145,41 @@ function navigate<T>({
   }
 }
 
+export function mergeProps<T extends object, U extends Partial<T>>(
+  slotProps: T,
+  childProps: U
+): T & U {
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+  const result: any = { ...childProps }
+
+  for (const key in slotProps) {
+    const slotValue = slotProps[key as keyof T]
+    const childValue = childProps[key as keyof U]
+
+    if (key === 'className') {
+      result.className = [slotValue, childValue].filter(Boolean).join(' ')
+    } else if (key === 'style') {
+      result.style = { ...(slotValue as React.CSSProperties), ...(childValue as React.CSSProperties) }
+    } else if (
+      key.startsWith('on') &&
+      typeof slotValue === 'function' &&
+      typeof childValue === 'function'
+    ) {
+      // eslint-disable-next-line @typescript-eslint/no-explicit-any
+      result[key] = (...args: any[]) => {
+        // eslint-disable-next-line @typescript-eslint/no-unsafe-function-type
+        (slotValue as Function)(...args);
+        // eslint-disable-next-line @typescript-eslint/no-unsafe-function-type
+        (childValue as Function)(...args)
+      }
+    } else {
+      result[key] = childValue ?? slotValue
+    }
+  }
+
+  return result
+}
+
 type InteractionStateARIAAttributes = Pick<HTMLAttributes<HTMLDivElement>, 'aria-disabled' | 'aria-invalid' | 'aria-readonly' | 'aria-required'>
 
 function interactionStatesAria(
@@ -170,4 +205,5 @@ export const PropsUtil = {
   extender,
   dataAttributes,
   aria,
+  mergeProps,
 }

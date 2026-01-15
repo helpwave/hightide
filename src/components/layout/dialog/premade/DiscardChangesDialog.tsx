@@ -1,7 +1,7 @@
 import type { PropsWithChildren, ReactNode } from 'react'
 import { useHightideTranslation } from '@/src/i18n/useHightideTranslation'
-import type { ConfirmDialogProps } from '@/src/components/layout/dialog/ConfirmDialog'
-import { ConfirmDialog } from '@/src/components/layout/dialog/ConfirmDialog'
+import type { ConfirmDialogProps } from '@/src/components/layout/dialog/premade/ConfirmDialog'
+import { ConfirmDialog } from '@/src/components/layout/dialog/premade/ConfirmDialog'
 
 type DiscardChangesDialogProps =
   Omit<ConfirmDialogProps, 'onDecline' | 'onConfirm' | 'buttonOverwrites' | 'titleElement' | 'description'>

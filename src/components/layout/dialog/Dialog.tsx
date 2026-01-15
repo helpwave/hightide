@@ -1,7 +1,7 @@
 'use client'
 
 import type { HTMLAttributes, ReactNode } from 'react'
-import { forwardRef, useId, useImperativeHandle, useMemo } from 'react'
+import { forwardRef, useContext, useId, useImperativeHandle, useMemo } from 'react'
 import { X } from 'lucide-react'
 import { useHightideTranslation } from '@/src/i18n/useHightideTranslation'
 import { Button } from '@/src/components/user-interaction/Button'
@@ -15,12 +15,13 @@ import { Portal } from '../../utils/Portal'
 import clsx from 'clsx'
 import { FocusTrap } from '../../utils/FocusTrap'
 import { usePresenceRef } from '@/src/hooks/usePresenceRef'
+import { DialogContext } from './DialogContext'
 
 export type DialogPosition = 'top' | 'center' | 'none'
 
 export type DialogProps = HTMLAttributes<HTMLDivElement> & {
   /** Whether the dialog is currently open */
-  isOpen: boolean,
+  isOpen?: boolean,
   /** Title of the Dialog used for accessibility */
   titleElement: ReactNode,
   /** Description of the Dialog used for accessibility */
@@ -41,10 +42,10 @@ export type DialogProps = HTMLAttributes<HTMLDivElement> & {
  */
 export const Dialog = forwardRef<HTMLDivElement, DialogProps>(function Dialog({
   children,
-  isOpen,
+  isOpen: isOpenOverwrite,
   titleElement,
   description,
-  isModal = true,
+  isModal: isModalOverwrite = true,
   onClose,
   backgroundClassName,
   position = 'center',
@@ -56,21 +57,27 @@ export const Dialog = forwardRef<HTMLDivElement, DialogProps>(function Dialog({
   const ids = useMemo(() => ({
     container: `dialog-container-${generatedId}`,
     background: `dialog-background-${generatedId}`,
-    content: props.id ?? `dialog-content-${generatedId}`
+    content: props.id ?? `dialog-content-${generatedId}`,
+    title: `dialog-title-${generatedId}`,
+    description: `dialog-description-${generatedId}`,
   }), [generatedId, props.id])
+
+  const context = useContext(DialogContext)
+  const isOpen = isOpenOverwrite ?? context?.isOpen ?? false
+  const isModal = isModalOverwrite ?? context?.isModal ?? true
 
   const { refAssignment, isPresent, ref } = usePresenceRef<HTMLDivElement>({
     isOpen,
   })
   useImperativeHandle(forwardedRef, () => ref.current, [ref])
 
-
   const onCloseWrapper = () => {
     if (!isModal) return
     onClose?.()
+    context?.setIsOpen(false)
   }
 
-  useLogOnce('Dialog: onClose should be defined for modal dialogs', isModal && !onClose)
+  useLogOnce('Dialog: onClose should be defined for modal dialogs', isModal && !onClose && !context)
 
   const { isVisible, transitionState, callbacks } = useTransitionState({ isOpen })
 
@@ -83,6 +90,8 @@ export const Dialog = forwardRef<HTMLDivElement, DialogProps>(function Dialog({
   const { zIndex } = useOverlayRegistry({
     isActive: isVisible,
   })
+
+  const hasDescription = !!description
 
   return (
     <Visibility isVisible={isVisible}>
@@ -118,12 +127,17 @@ export const Dialog = forwardRef<HTMLDivElement, DialogProps>(function Dialog({
               data-state={transitionState}
               data-position={position}
 
+              role="dialog"
+              aria-modal={isModal}
+              aria-labelledby={ids.title}
+              aria-describedby={hasDescription ? ids.description : undefined}
+
               className={clsx('dialog-content', props.className)}
             >
               <div className="typography-title-lg mr-8">
                 {titleElement}
               </div>
-              <Visibility isVisible={!!description}>
+              <Visibility isVisible={hasDescription}>
                 <div className="text-description">
                   {description}
                 </div>
@@ -140,7 +154,7 @@ export const Dialog = forwardRef<HTMLDivElement, DialogProps>(function Dialog({
                     layout="icon"
                     color="neutral"
                     size="xs"
-                    aria-label={translation('close')}
+                    aria-label={translation('closeDialog')}
                     onClick={onCloseWrapper}
                   >
                     <X />

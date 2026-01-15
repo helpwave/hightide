@@ -13,12 +13,13 @@ and adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 - `TableContext`
 - `TableColumn` for defining the columns through the table context 
 - `PopUp` for simplifying the usage of the `AnchoredFloatingContainer` with conditional hiding logic and a `FocusTrap`
+- Add `DialogRoot` and `DialogOpener`
 
 ### Changed
 - `TableFilterButton` now uses the `DateTimeInput` component
 - the folder name for global contexts to `global-contexts` instead of the previous `context` to be more verbose about its purpose
-- `FocusTrap` by splitting it into `FocusTrap` which takes a ref of the element to entrap and `FocusTrapWrapper` which directly provided  this element as an `<div>`
-- `OverlayRegistry` now returns the unsubscribes as a return function of the subscribe
+- `FocusTrap` by splitting it into `FocusTrap` which takes a ref of the element to entrap and `FocusTrapWrapper` which directly provided this element as a `<div>`
+- `OverlayRegistry` now returns the unsubscribes as a return function of the subscribe function
 - several components to now use interfaces instead of types
 
 ### Removed
