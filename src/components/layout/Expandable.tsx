@@ -1,5 +1,5 @@
 import type { Dispatch, HTMLAttributes, PropsWithChildren, ReactNode, SetStateAction } from 'react'
-import { useEffect } from 'react'
+import { useEffect, useImperativeHandle, useRef } from 'react'
 import { useState } from 'react'
 import { createContext, forwardRef, useCallback, useContext, useId, useMemo } from 'react'
 import clsx from 'clsx'
@@ -164,23 +164,25 @@ export const ExpandableContent = forwardRef<HTMLDivElement, ExpandableContentPro
   children,
   forceMount = false,
   ...props
-}, ref) {
+}, forwardedRef) {
   const { isExpanded, ids, setIds } = useExpandableContext()
+
+  const ref = useRef<HTMLDivElement>(null)
+  useImperativeHandle(forwardedRef, () => ref.current, [ref])
+
   useEffect(() => {
     if (props.id) {
       setIds(prevState => ({ ...prevState, content: props.id }))
     }
   }, [props.id, setIds])
 
-  const { transitionState, callbacks } = useTransitionState({ isOpen: isExpanded })
+  const { transitionState } = useTransitionState({ isOpen: isExpanded, ref })
 
   return (
     <div
       {...props}
       ref={ref}
       id={ids.content}
-
-      {...callbacks}
 
       data-name="expandable-content"
       data-expanded={isExpanded ? '' : undefined}

@@ -45,7 +45,7 @@ export const Drawer = forwardRef<HTMLDivElement, DrawerProps>(function Drawer({
   const ref = useRef<HTMLDivElement>(null)
   useImperativeHandle(forwardedRef, () => ref.current, [ref])
 
-  const { isVisible, transitionState, callbacks } = useTransitionState({ isOpen })
+  const { isVisible, transitionState } = useTransitionState({ isOpen, ref })
 
   useFocusTrap({
     container: ref,
@@ -91,7 +91,6 @@ export const Drawer = forwardRef<HTMLDivElement, DrawerProps>(function Drawer({
         ref={ref}
 
         onKeyDown={PropsUtil.aria.close(close)}
-        {...callbacks}
 
         data-name={PropsUtil.dataAttributes.name('drawer-content', props)}
         data-state={transitionState}

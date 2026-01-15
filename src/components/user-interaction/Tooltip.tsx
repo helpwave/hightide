@@ -5,14 +5,13 @@ import { useCallback, useMemo, useRef, useState } from 'react'
 import { clsx } from 'clsx'
 import { Visibility } from '@/src/components/layout/Visibility'
 import type { FloatingElementAlignment } from '@/src/hooks/useAnchoredPosition'
-import { useAnchoredPosition } from '@/src/hooks/useAnchoredPosition'
-import type { UseOverlayRegistryProps } from '@/src/hooks/useOverlayRegistry'
 import { useOverlayRegistry } from '@/src/hooks/useOverlayRegistry'
 import { useTransitionState } from '@/src/hooks/useTransitionState'
 import { PropsUtil } from '@/src/utils/propsUtil'
 import type { TooltipConfig } from '@/src/global-contexts/HightideConfigContext'
 import { useHightideConfig } from '@/src/global-contexts/HightideConfigContext'
 import { Portal } from '@/src/components/utils/Portal'
+import { AnchoredFloatingContainer } from '../layout/AnchoredFloatingContainer'
 
 type Position = 'top' | 'bottom' | 'left' | 'right'
 
@@ -50,7 +49,7 @@ export const Tooltip = ({
 }: TooltipProps) => {
   const id = useId()
   const [open, setOpen] = useState(false)
-  const timeoutRef = useRef<number | null>(null)
+  const timeoutRef = useRef<NodeJS.Timeout>(undefined)
 
   const { config } = useHightideConfig()
 
@@ -64,8 +63,8 @@ export const Tooltip = ({
 
   const isActive = !disabled && open
 
-  const { isVisible, transitionState, callbacks } = useTransitionState(
-    useMemo(() => ({ isOpen: isActive }), [isActive])
+  const { isVisible, transitionState } = useTransitionState(
+    useMemo(() => ({ isOpen: isActive, ref: triangle }), [isActive])
   )
 
   const verticalAlignment: FloatingElementAlignment = useMemo(() =>
@@ -76,31 +75,13 @@ export const Tooltip = ({
     position === 'left' ? 'beforeStart' : position === 'right' ? 'afterEnd' : 'center',
   [position])
 
-  const css = useAnchoredPosition(useMemo(() => ({
-    active: isActive || isVisible,
-    anchor: anchor,
-    container,
-    horizontalAlignment,
-    verticalAlignment,
-  }), [horizontalAlignment, isActive, isVisible, verticalAlignment]))
-
-  const cssTriangle = useAnchoredPosition(useMemo(() => ({
-    active: isActive || isVisible,
-    anchor: anchor,
-    container: triangle,
-    horizontalAlignment,
-    verticalAlignment,
-    gap: 0,
-  }), [horizontalAlignment, isActive, isVisible, verticalAlignment]))
-
-  const regsitryOptions: UseOverlayRegistryProps = useMemo(() => ({ isActive }), [isActive])
-  const { zIndex } = useOverlayRegistry(regsitryOptions)
+  const { zIndex } = useOverlayRegistry({ isActive: isActive })
 
   const openWithDelay = useCallback(() => {
     if (timeoutRef.current || open) return
 
-    timeoutRef.current = window.setTimeout(() => {
-      timeoutRef.current = null
+    timeoutRef.current = setTimeout(() => {
+      timeoutRef.current = undefined
       setOpen(true)
     }, appearDelay)
   }, [appearDelay, open])
@@ -109,7 +90,7 @@ export const Tooltip = ({
   const close = useCallback(() => {
     if (timeoutRef.current) {
       clearTimeout(timeoutRef.current)
-      timeoutRef.current = null
+      timeoutRef.current = undefined
     }
     setOpen(false)
   }, [])
@@ -133,6 +114,7 @@ export const Tooltip = ({
     return () => {
       if (timeoutRef.current) {
         clearTimeout(timeoutRef.current)
+        timeoutRef.current = undefined
       }
     }
   }, [])
@@ -150,32 +132,39 @@ export const Tooltip = ({
       onBlur={close}
     >
       {children}
-      <Visibility isVisible={isActive || isVisible}>
+      <Visibility isVisible={isVisible}>
         <Portal>
-          <div
+          <AnchoredFloatingContainer
             ref={triangle}
-
+            anchor={anchor}
+            options={{
+              verticalAlignment,
+              horizontalAlignment,
+              gap: 0,
+            }}
             data-name="tooltip-triangle"
             data-state={transitionState}
             data-position={position}
 
-            style={{ ...cssTriangle, zIndex, position: 'fixed' }}
+            style={{ zIndex, position: 'fixed' }}
           />
-          <div
+          <AnchoredFloatingContainer
             ref={container}
             id={id}
-
-            {...callbacks}
-
+            anchor={anchor}
+            options={{
+              verticalAlignment,
+              horizontalAlignment,
+            }}
             data-name={PropsUtil.dataAttributes.name('tooltip')}
             data-state={transitionState}
 
             role="tooltip"
             className={tooltipClassName}
-            style={{ ...css, zIndex, position: 'fixed' }}
+            style={{ zIndex, position: 'fixed' }}
           >
             {tooltip}
-          </div>
+          </AnchoredFloatingContainer>
         </Portal>
       </Visibility>
     </div>

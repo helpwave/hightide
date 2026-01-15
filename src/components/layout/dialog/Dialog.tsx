@@ -1,7 +1,7 @@
 'use client'
 
 import type { HTMLAttributes, ReactNode } from 'react'
-import { forwardRef, useContext, useId, useImperativeHandle, useMemo } from 'react'
+import { forwardRef, useContext, useId, useImperativeHandle, useMemo, useRef } from 'react'
 import { X } from 'lucide-react'
 import { useHightideTranslation } from '@/src/i18n/useHightideTranslation'
 import { Button } from '@/src/components/user-interaction/Button'
@@ -62,6 +62,7 @@ export const Dialog = forwardRef<HTMLDivElement, DialogProps>(function Dialog({
     description: `dialog-description-${generatedId}`,
   }), [generatedId, props.id])
 
+  const containerRef = useRef<HTMLDivElement>(null)
   const context = useContext(DialogContext)
   const isOpen = isOpenOverwrite ?? context?.isOpen ?? false
   const isModal = isModalOverwrite ?? context?.isModal ?? true
@@ -79,7 +80,7 @@ export const Dialog = forwardRef<HTMLDivElement, DialogProps>(function Dialog({
 
   useLogOnce('Dialog: onClose should be defined for modal dialogs', isModal && !onClose && !context)
 
-  const { isVisible, transitionState, callbacks } = useTransitionState({ isOpen })
+  const { isVisible, transitionState } = useTransitionState({ isOpen, ref: containerRef })
 
   useFocusTrap({
     container: ref,
@@ -97,6 +98,7 @@ export const Dialog = forwardRef<HTMLDivElement, DialogProps>(function Dialog({
     <Visibility isVisible={isVisible}>
       <Portal>
         <div
+          ref={containerRef}
           id={ids.container}
 
           data-open={PropsUtil.dataAttributes.bool(isOpen)}
@@ -122,7 +124,6 @@ export const Dialog = forwardRef<HTMLDivElement, DialogProps>(function Dialog({
               ref={refAssignment}
 
               onKeyDown={PropsUtil.aria.close(onCloseWrapper)}
-              {...callbacks}
 
               data-state={transitionState}
               data-position={position}

@@ -22,6 +22,9 @@ and adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 - `OverlayRegistry` now returns the unsubscribes as a return function of the subscribe function
 - several components to now use interfaces instead of types
 
+### Fixed
+- impure calls and hooks for `useTransitionState`
+
 ### Removed
 - `usePopOverPosition` in favor of `useAnchoredPosition`
 
