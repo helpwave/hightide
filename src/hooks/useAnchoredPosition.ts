@@ -3,7 +3,6 @@
 import type { CSSProperties, RefObject } from 'react'
 import { useCallback, useEffect, useLayoutEffect, useMemo, useState } from 'react'
 import { MathUtil } from '@/src/utils/math'
-import { useIsMounted } from '@/src/hooks/focus/useIsMounted'
 
 export type FloatingElementAlignment = 'beforeStart' | 'afterStart' | 'center' | 'beforeEnd' | 'afterEnd'
 
@@ -160,7 +159,6 @@ export function useAnchoredPosition({
   gap = 4,
 }: UseAnchoredPostitionProps) {
   const [style, setStyle] = useState<CSSProperties>()
-  const isMounted = useIsMounted()
 
   const options = useMemo(() => ({
     horizontalAlignment,
@@ -201,15 +199,15 @@ export function useAnchoredPosition({
     setStyle(calculatePosition(calculateProps))
   }, [anchorRef, containerRef, options, windowRef])
 
-  useEffect(() => {
-    if (active && isMounted) {
+  useLayoutEffect(() => {
+    if (active) {
       calculate()
     } else {
       setStyle(undefined)
     }
-  }, [calculate, active, isMounted])
+  }, [calculate, active])
 
-  useLayoutEffect(() => {
+  useEffect(() => {
     if (!containerRef.current || !active) return
 
     const observer = new ResizeObserver(() => {
@@ -222,21 +220,29 @@ export function useAnchoredPosition({
   }, [active, calculate, containerRef])
 
   useEffect(() => {
-    if(!containerRef.current && active) {
+    if(!containerRef.current || !active) {
       return
     }
     window.addEventListener('resize', calculate)
+    return () => {
+      window.removeEventListener('resize', calculate)
+    }
+  }, [active, calculate, containerRef, isPolling, pollingInterval])
+
+
+  useEffect(() => {
+    if(!containerRef.current || !active) {
+      return
+    }
     let timeout: NodeJS.Timeout
     if (isPolling) {
       timeout = setInterval(calculate, pollingInterval)
     }
     return () => {
-      window.removeEventListener('resize', calculate)
       if (timeout) {
         clearInterval(timeout)
       }
     }
   }, [active, calculate, containerRef, isPolling, pollingInterval])
-
   return style
 }

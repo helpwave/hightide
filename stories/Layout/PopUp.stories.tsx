@@ -1,10 +1,12 @@
 import type { Meta, StoryObj } from '@storybook/nextjs'
-import type { AnchoredFloatingContainerProps } from '@/src/components/layout/AnchoredFloatingContainer'
 import { AnchoredFloatingContainer } from '@/src/components/layout/AnchoredFloatingContainer'
 import { useRef } from 'react'
 import type { UseAnchoredPositionOptions } from '@/src/hooks/useAnchoredPosition'
+import type { PopUpProps } from '@/src/components/layout/PopUp'
+import { PopUp } from '@/src/components/layout/PopUp'
+import { action } from 'storybook/actions'
 
-type StoryArgs = Omit<AnchoredFloatingContainerProps, 'options'> & UseAnchoredPositionOptions & {
+type StoryArgs = Omit<PopUpProps, 'options'> & UseAnchoredPositionOptions & {
   isAnchored?: boolean,
 }
 
@@ -15,8 +17,9 @@ const meta: Meta<StoryArgs> = {
 export default meta
 type Story = StoryObj<typeof meta>;
 
-export const anchoredFloatingContainer: Story = {
+export const popUp: Story = {
   args: {
+    isOpen: true,
     isAnchored: true,
     isPolling: true,
     verticalAlignment: 'afterEnd',
@@ -24,10 +27,11 @@ export const anchoredFloatingContainer: Story = {
     screenPadding: 16,
     gap: 4,
     pollingInterval: 100,
+    onClose: action('onClose'),
     children: (
-      <div className="flex-col-2 h-full w-full bg-primary text-on-primary rounded-md p-2">
-          Test Container
-        <span className="opacity-80">Description</span>
+      <div className="flex-col-2 h-full w-full p-2">
+        {'Test Container'}
+        <span className="opacity-80">{'Description'}</span>
       </div>
     ),
   },
@@ -52,6 +56,7 @@ export const anchoredFloatingContainer: Story = {
     ...props
   }) => {
     const anchorRef = useRef<HTMLDivElement>(null)
+
     return (
       <>
         <div className="flex-col-0 items-center h-full overflow-scroll">
@@ -64,7 +69,7 @@ export const anchoredFloatingContainer: Story = {
           </div>
           <div className="min-h-9/10"></div>
         </div>
-        <AnchoredFloatingContainer
+        <PopUp
           {...props}
           anchor={isAnchored ? anchorRef : undefined}
           className="w-128 h-64"
