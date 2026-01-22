@@ -1,22 +1,24 @@
-import { useState, useMemo, useRef, useId } from 'react'
+import { useMemo, useRef, useId } from 'react'
 import { ChevronUp, ChevronDown, ChevronLeft, ChevronRight, Eye, EyeOff, Pin, PinOff } from 'lucide-react'
 import { Button } from '@/src/components/user-interaction/Button'
 import { useTableContext } from './TableContext'
 import { useHightideTranslation } from '@/src/i18n/useHightideTranslation'
-import { PopUp } from '../PopUp'
+import type { PopUpProps } from '../popup/PopUp'
+import { PopUp } from '../popup/PopUp'
 
-export const TableColumnPicker = () => {
+
+// eslint-disable-next-line @typescript-eslint/no-empty-object-type
+export interface TableColumnPickerProps extends PopUpProps {}
+
+export const TableColumnPicker = ({ ...props }: TableColumnPickerProps) => {
   const { tableState: table } = useTableContext()
   const translation = useHightideTranslation()
-  const [isOpen, setIsOpen] = useState(false)
-  const anchorRef = useRef<HTMLButtonElement>(null)
   const containerRef = useRef<HTMLDivElement>(null)
-  const id = useId()
+  const generatedId = useId()
   const ids = useMemo(() => ({
-    button: `table-column-picker-button-${id}`,
-    popup: `table-column-picker-popup-${id}`,
-    label: `table-column-picker-label-${id}`,
-  }), [id])
+    popup: props.id ?? `table-column-picker-popup-${generatedId}`,
+    label: `table-column-picker-label-${generatedId}`,
+  }), [generatedId, props.id])
 
   const tableState = table.getState()
   const columnOrder = tableState.columnOrder
@@ -160,157 +162,139 @@ export const TableColumnPicker = () => {
   }
 
   return (
-    <>
-      <Button
-        ref={anchorRef}
-        id={ids.button}
-        onClick={() => setIsOpen(!isOpen)}
-        aria-haspopup="dialog"
-        aria-expanded={isOpen}
-        aria-controls={isOpen ? ids.popup : undefined}
-        aria-labelledby={ids.label}
-      >
-        {translation('columns')}
-      </Button>
-      <PopUp
-        ref={containerRef}
-        id={ids.popup}
-        isOpen={isOpen}
-        options={{
-          verticalAlignment: 'afterEnd',
-          horizontalAlignment: 'center',
-        }}
-        anchor={anchorRef}
-        outsideClickOptions={{
-          refs: [anchorRef]
-        }}
+    <PopUp
+      {...props}
+      ref={containerRef}
+      id={ids.popup}
+      options={{
+        verticalAlignment: 'afterEnd',
+        horizontalAlignment: 'center',
+        ...props.options,
+      }}
 
-        onClose={() => setIsOpen(false)}
+      role="dialog"
+      aria-labelledby={ids.label}
+      aria-describedby={ids.label}
 
-        role="dialog"
-        aria-labelledby={ids.label}
-        aria-describedby={ids.label}
+      className="flex-col-1 p-2 items-start min-w-72"
+    >
+      <div className="flex-col-1">
+        <span id={ids.label} className="typography-title-md font-semibold">
+          {translation('columnPicker')}
+        </span>
+        <span className="text-description typography-label-sm mb-2">
+          {translation('columnPickerDescription')}
+        </span>
+      </div>
+      <div className="flex-col-1 overflow-y-auto w-full">
+        {columns.map((column, index) => {
+          const columnId = column.id
+          const isVisible = column.getIsVisible()
+          const pinState = column.getIsPinned()
+          const isPinned = column.getCanPin() && !!pinState
+          const prevColumn = index > 0 ? columns[index - 1] : null
+          const nextColumn = index < columns.length - 1 ? columns[index + 1] : null
+          const prevIsPinned = prevColumn?.getCanPin() && !!prevColumn.getIsPinned()
+          const nextIsPinned = nextColumn?.getCanPin() && !!nextColumn.getIsPinned()
+          const canMoveUp = index > 0 && !isPinned && !prevIsPinned
+          const canMoveDown = index < columns.length - 1 && !isPinned && !nextIsPinned
 
-        className="flex-col-1 p-2 items-start min-w-72"
-      >
-        <div className="flex-col-1">
-          <span id={ids.label} className="typography-title-md font-semibold">
-            {translation('columnPicker')}
-          </span>
-          <span className="text-description typography-label-sm mb-2">
-            {translation('columnPickerDescription')}
-          </span>
-        </div>
-        <div className="flex-col-1 overflow-y-auto w-full">
-          {columns.map((column, index) => {
-            const columnId = column.id
-            const isVisible = column.getIsVisible()
-            const pinState = column.getIsPinned()
-            const isPinned = column.getCanPin() && !!pinState
-            const prevColumn = index > 0 ? columns[index - 1] : null
-            const nextColumn = index < columns.length - 1 ? columns[index + 1] : null
-            const prevIsPinned = prevColumn?.getCanPin() && !!prevColumn.getIsPinned()
-            const nextIsPinned = nextColumn?.getCanPin() && !!nextColumn.getIsPinned()
-            const canMoveUp = index > 0 && !isPinned && !prevIsPinned
-            const canMoveDown = index < columns.length - 1 && !isPinned && !nextIsPinned
-
-            return (
-              <div key={columnId} className="flex-row-2 items-center justify-between gap-2 w-full">
-                <div className="flex-row-2 gap-1">
-                  {isPinned ? (
-                    <>
-                      <Button
-                        layout="icon"
-                        size="sm"
-                        color="neutral"
-                        coloringStyle="text"
-                        disabled={pinState === 'left'}
-                        onClick={() => pinColumn(columnId, 'left')}
-                        aria-label={translation('pinLeft')}
-                      >
-                        <ChevronLeft className="size-4" />
-                      </Button>
-                      <Button
-                        layout="icon"
-                        size="sm"
-                        color="neutral"
-                        coloringStyle="text"
-                        disabled={pinState === 'right'}
-                        onClick={() => pinColumn(columnId, 'right')}
-                        aria-label={translation('pinRight')}
-                      >
-                        <ChevronRight className="size-4" />
-                      </Button>
-                    </>
-                  ) : (
-                    <>
-                      <Button
-                        layout="icon"
-                        size="sm"
-                        color="neutral"
-                        coloringStyle="text"
-                        disabled={!canMoveUp}
-                        onClick={() => moveColumn(columnId, 'up')}
-                        aria-label={translation('moveUp')}
-                      >
-                        <ChevronUp className="size-4" />
-                      </Button>
-                      <Button
-                        layout="icon"
-                        size="sm"
-                        color="neutral"
-                        coloringStyle="text"
-                        disabled={!canMoveDown}
-                        onClick={() => moveColumn(columnId, 'down')}
-                        aria-label={translation('moveDown')}
-                      >
-                        <ChevronDown className="size-4" />
-                      </Button>
-                    </>
-                  )}
-                </div>
-                <div className="flex-1 typography-label-lg">
-                  {getColumnHeader(columnId)}
-                </div>
-                <>
-                  <Button
-                    layout="icon"
-                    size="sm"
-                    color="neutral"
-                    coloringStyle="text"
-                    disabled={!column.getCanHide()}
-                    onClick={() => toggleColumnVisibility(columnId)}
-                    aria-label={isVisible ? translation('hideColumn') : translation('showColumn')}
-                  >
-                    {isVisible ? (
-                      <Eye className="size-4" />
-                    ) : (
-                      <EyeOff className="size-4" />
-                    )}
-                  </Button>
-                  <Button
-                    layout="icon"
-                    size="sm"
-                    color="neutral"
-                    coloringStyle="text"
-                    disabled={!column.getCanPin()}
-                    onClick={() => {
-                      if(isPinned) {
-                        unpinColumn(columnId)
-                      } else {
-                        pinColumn(columnId, 'left')
-                      }
-                    }}
-                    aria-label={isPinned ? translation('unpin') : translation('pinLeft')}
-                  >
-                    {isPinned ? ( <PinOff className="size-4" />) : ( <Pin className="size-4" />)}
-                  </Button>
-                </>
+          return (
+            <div key={columnId} className="flex-row-2 items-center justify-between gap-2 w-full">
+              <div className="flex-row-2 gap-1">
+                {isPinned ? (
+                  <>
+                    <Button
+                      layout="icon"
+                      size="sm"
+                      color="neutral"
+                      coloringStyle="text"
+                      disabled={pinState === 'left'}
+                      onClick={() => pinColumn(columnId, 'left')}
+                      aria-label={translation('pinLeft')}
+                    >
+                      <ChevronLeft className="size-4" />
+                    </Button>
+                    <Button
+                      layout="icon"
+                      size="sm"
+                      color="neutral"
+                      coloringStyle="text"
+                      disabled={pinState === 'right'}
+                      onClick={() => pinColumn(columnId, 'right')}
+                      aria-label={translation('pinRight')}
+                    >
+                      <ChevronRight className="size-4" />
+                    </Button>
+                  </>
+                ) : (
+                  <>
+                    <Button
+                      layout="icon"
+                      size="sm"
+                      color="neutral"
+                      coloringStyle="text"
+                      disabled={!canMoveUp}
+                      onClick={() => moveColumn(columnId, 'up')}
+                      aria-label={translation('moveUp')}
+                    >
+                      <ChevronUp className="size-4" />
+                    </Button>
+                    <Button
+                      layout="icon"
+                      size="sm"
+                      color="neutral"
+                      coloringStyle="text"
+                      disabled={!canMoveDown}
+                      onClick={() => moveColumn(columnId, 'down')}
+                      aria-label={translation('moveDown')}
+                    >
+                      <ChevronDown className="size-4" />
+                    </Button>
+                  </>
+                )}
               </div>
-            )
-          })}
-        </div>
-      </PopUp>
-    </>
+              <div className="flex-1 typography-label-lg">
+                {getColumnHeader(columnId)}
+              </div>
+              <>
+                <Button
+                  layout="icon"
+                  size="sm"
+                  color="neutral"
+                  coloringStyle="text"
+                  disabled={!column.getCanHide()}
+                  onClick={() => toggleColumnVisibility(columnId)}
+                  aria-label={isVisible ? translation('hideColumn') : translation('showColumn')}
+                >
+                  {isVisible ? (
+                    <Eye className="size-4" />
+                  ) : (
+                    <EyeOff className="size-4" />
+                  )}
+                </Button>
+                <Button
+                  layout="icon"
+                  size="sm"
+                  color="neutral"
+                  coloringStyle="text"
+                  disabled={!column.getCanPin()}
+                  onClick={() => {
+                    if(isPinned) {
+                      unpinColumn(columnId)
+                    } else {
+                      pinColumn(columnId, 'left')
+                    }
+                  }}
+                  aria-label={isPinned ? translation('unpin') : translation('pinLeft')}
+                >
+                  {isPinned ? ( <PinOff className="size-4" />) : ( <Pin className="size-4" />)}
+                </Button>
+              </>
+            </div>
+          )
+        })}
+      </div>
+    </PopUp>
   )
 }

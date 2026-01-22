@@ -2,8 +2,8 @@ import { type PropsWithChildren, type ReactNode, useCallback, useRef } from 'rea
 import clsx from 'clsx'
 import { BagFunctionUtil } from '@/src/utils/bagFunctions'
 import { useHoverState } from '@/src/hooks/useHoverState'
-import type { PopUpProps } from '../layout/PopUp'
-import { PopUp } from '../layout/PopUp'
+import type { PopUpProps } from '../layout/popup/PopUp'
+import { PopUp } from '../layout/popup/PopUp'
 
 export type MenuItemProps = {
   onClick?: () => void,

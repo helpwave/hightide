@@ -2,8 +2,8 @@ import type { Meta, StoryObj } from '@storybook/nextjs'
 import { AnchoredFloatingContainer } from '@/src/components/layout/AnchoredFloatingContainer'
 import { useRef } from 'react'
 import type { UseAnchoredPositionOptions } from '@/src/hooks/useAnchoredPosition'
-import type { PopUpProps } from '@/src/components/layout/PopUp'
-import { PopUp } from '@/src/components/layout/PopUp'
+import type { PopUpProps } from '@/src/components/layout/popup/PopUp'
+import { PopUp } from '@/src/components/layout/popup/PopUp'
 import { action } from 'storybook/actions'
 
 type StoryArgs = Omit<PopUpProps, 'options'> & UseAnchoredPositionOptions & {

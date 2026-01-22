@@ -5,6 +5,7 @@ import { Visibility } from '../Visibility'
 import { TableSortButton } from './TableSortButton'
 import { TableFilterButton } from './TableFilterButton'
 import { useTableContext } from './TableContext'
+import { useCallback, useEffect } from 'react'
 
 export type TableHeaderProps<T> = {
   table?: ReactTable<T>,
@@ -14,7 +15,55 @@ export const TableHeader = <T,>({ table: tableOverride }: TableHeaderProps<T>) =
   const { tableState } = useTableContext<T>()
 
   const table = tableOverride ?? tableState
-  const columnSizingInfo = table.getState().columnSizingInfo
+
+  const handleResizeMove = useCallback((e: MouseEvent | TouchEvent) => {
+    if (!table.getState().columnSizingInfo.isResizingColumn) return
+    const currentX = 'touches' in e ? e.touches[0].clientX : e.clientX
+    const deltaOffset = currentX - (table.getState().columnSizingInfo.startOffset ?? 0)
+
+    const newWidth = (table.getState().columnSizingInfo.startSize ?? 0) + (table.getState().columnSizingInfo.deltaOffset ?? 0)
+
+    table.setColumnSizing(prev => {
+      return {
+        ...prev,
+        [table.getState().columnSizingInfo.isResizingColumn as string]: newWidth,
+      }
+    })
+    table.setColumnSizingInfo((prev) => ({
+      ...prev,
+      deltaOffset,
+    }))
+  }, [table])
+
+  const handleResizeEnd = useCallback(() => {
+    if (!table.getState().columnSizingInfo.isResizingColumn) return
+    const newWidth = (table.getState().columnSizingInfo.startSize ?? 0) + (table.getState().columnSizingInfo.deltaOffset ?? 0)
+
+    table.setColumnSizing(prev => {
+      return {
+        ...prev,
+        [table.getState().columnSizingInfo.isResizingColumn as string]: newWidth,
+      }
+    })
+    table.setColumnSizingInfo({
+      columnSizingStart: [],
+      deltaOffset: null,
+      deltaPercentage: null,
+      isResizingColumn: false,
+      startOffset: null,
+      startSize: null,
+    })
+  }, [table])
+
+  useEffect(() => {
+    window.addEventListener('pointermove', handleResizeMove)
+    window.addEventListener('pointerup', handleResizeEnd)
+    return () => {
+      window.removeEventListener('pointermove', handleResizeMove)
+      window.removeEventListener('pointerup', handleResizeEnd)
+    }
+  }, [handleResizeEnd, handleResizeMove, table])
+
   return (
     <>
       {table.getHeaderGroups().map((headerGroup) => (
@@ -84,21 +133,25 @@ export const TableHeader = <T,>({ table: tableOverride }: TableHeaderProps<T>) =
                   </Visibility>
                   <Visibility isVisible={header.column.getCanResize()}>
                     <div
-                      onPointerDown={header.getResizeHandler()}
+                      onPointerDown={(e) => {
+                        const startX = 'touches' in e ? e.touches[0].clientX : e.clientX
+                        table.setColumnSizingInfo({
+                          columnSizingStart: Object.entries(table.getState().columnSizing),
+                          startOffset: startX,
+                          startSize: table.getState().columnSizing[header.column.id] ?? 0,
+                          deltaOffset: 0,
+                          deltaPercentage: null,
+                          isResizingColumn: header.column.id,
+                        })
+                      }}
+
                       onDoubleClick={() => {
                         header.column.resetSize()
                       }}
 
-                      data-name="table-resize-indicator"
-                      data-active={PropsUtil.dataAttributes.bool(
-                        !!columnSizingInfo?.columnSizingStart
-                            && !!columnSizingInfo?.columnSizingStart?.find(([id, _]) => id === header.column.id)
-                      )}
-                      data-disabled={PropsUtil.dataAttributes.bool(
-                        !!columnSizingInfo?.columnSizingStart
-                            && (columnSizingInfo.columnSizingStart?.length ?? 0) > 0
-                            && !columnSizingInfo.columnSizingStart?.find(([id, _]) => id === header.column.id)
-                      )}
+                      className="table-resize-indicator"
+                      data-active={PropsUtil.dataAttributes.bool(header.column.getCanResize() && header.column?.getIsResizing())}
+                      data-disabled={PropsUtil.dataAttributes.bool(!header.column.getCanResize())}
                     />
                   </Visibility>
                 </th>

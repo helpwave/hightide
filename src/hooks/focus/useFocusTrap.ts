@@ -2,7 +2,6 @@
 
 import type { RefObject } from 'react'
 import { useCallback, useEffect, useId, useRef, useState } from 'react'
-import { useIsMounted } from '@/src/hooks/focus/useIsMounted'
 
 const createFocusGuard = () => {
   const div = document.createElement('div')
@@ -163,7 +162,6 @@ export const useFocusTrap = ({
 }: UseFocusTrapProps) => {
   const lastFocusRef = useRef<HTMLElement>(null)
   const [paused, setPaused] = useState(false)
-  const isMounted = useIsMounted()
   const id = useId()
 
   const focusElement = useCallback(() => {
@@ -187,7 +185,7 @@ export const useFocusTrap = ({
   }, [container, initialFocus])
 
   useEffect(() => {
-    if (active && isMounted) {
+    if (active) {
       if (!lastFocusRef.current) {
         lastFocusRef.current = document.activeElement as HTMLElement
       }
@@ -218,10 +216,10 @@ export const useFocusTrap = ({
         lastFocusRef.current = undefined
       }
     }
-  }, [active, container, focusElement, id, initialFocus, isMounted])
+  }, [active, container, focusElement, id, initialFocus])
 
   useEffect(() => {
-    if (active && !paused && isMounted) {
+    if (active && !paused) {
       const containerElement = container.current
 
       function onKeyDown(event: KeyboardEvent) {
@@ -247,5 +245,5 @@ export const useFocusTrap = ({
         containerElement.removeEventListener('keydown', onKeyDown)
       }
     }
-  }, [active, paused, isMounted, container, initialFocus, focusFirst, focusElement])
+  }, [active, paused, container, initialFocus, focusFirst, focusElement])
 }

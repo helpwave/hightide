@@ -7,7 +7,7 @@ import { useHightideTranslation } from '@/src/i18n/useHightideTranslation'
 import { Visibility } from '../Visibility'
 import { DateTimeInput } from '../../user-interaction/input/DateTimeInput'
 import { FormFieldLayout } from '../../form/FieldLayout'
-import { PopUp } from '../PopUp'
+import { PopUp } from '../popup/PopUp'
 
 export type TableFilterType = 'text' | 'range' | 'dateRange'
 
@@ -86,7 +86,7 @@ export const TableFilterButton = <T, >({
           horizontalAlignment: 'center',
         }}
         anchor={anchorRef}
-        outsideClickOptions={{ refs: [anchorRef], active: !isDateTimeInputOpen }}
+        outsideClickOptions={{ refs: [anchorRef], active: filterType === 'dateRange' ? !isDateTimeInputOpen : undefined }}
 
         onClose={() => setIsOpen(false)}
 
@@ -99,7 +99,6 @@ export const TableFilterButton = <T, >({
         {filterType === 'text' && (
           <Input
             value={(filterValue ?? '') as string}
-            autoFocus={true}
             placeholder={translation('text')+'...'}
             onValueChange={setFilterValue}
           />

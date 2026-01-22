@@ -1,5 +1,5 @@
 import { MathUtil } from '@/src/utils/math'
-import type { Table as ReactTable } from '@tanstack/react-table'
+import type { ColumnSizingState } from '@tanstack/react-table'
 
 type ColumnSizeCalculateTargetBehavoir = 'equalOrHigher'
 
@@ -25,6 +25,9 @@ const calculate = ({
   minWidthsPerColumn,
   maxWidthsPerColumn
 }: ColumnSizeCalculatoProps) => {
+  if(columnIds.length === 0) {
+    return {}
+  }
   const deltas: Record<string, number> = {}
 
   const removedColumns = Object.keys(newSizing).filter(columnId => !columnIds.includes(columnId))
@@ -55,7 +58,7 @@ const calculate = ({
   const result = {
     ...newSizing,
   }
-  for (const columnId in deltas) {
+  for (const columnId of columnIds) {
     result[columnId] = MathUtil.clamp(result[columnId], [minWidthsPerColumn[columnId], maxWidthsPerColumn?.[columnId] ?? Infinity])
   }
 
@@ -93,16 +96,13 @@ const calculate = ({
   }
 }
 
-export const toSizeVars = <T>(table: ReactTable<T>) => {
-  const headers = table.getFlatHeaders()
-  const colSizes: { [key: string]: number } = {}
-  for (let i = 0; i < headers.length; i++) {
-    const header = headers[i]!
-    colSizes[`--header-${header.id}-size`] = header.getSize()
-    colSizes[`--col-${header.column.id}-size`] = header.column.getSize()
-  }
-
-  return colSizes
+export const toSizeVars = (sizing: ColumnSizingState) => {
+  return Object.entries(sizing).reduce((previousValue, [columnId, size]) => {
+    return {
+      ...previousValue,
+      [`--header-${columnId}-size`]: size,
+    }
+  }, {})
 }
 
 export const ColumnSizeUtil = {

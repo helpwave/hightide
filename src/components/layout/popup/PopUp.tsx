@@ -1,15 +1,17 @@
-import { forwardRef, useImperativeHandle } from 'react'
+import { forwardRef, useContext, useImperativeHandle } from 'react'
 import { clsx } from 'clsx'
-import { Portal } from '../utils/Portal'
-import type { AnchoredFloatingContainerProps } from './AnchoredFloatingContainer'
-import { AnchoredFloatingContainer } from './AnchoredFloatingContainer'
-import { Visibility } from './Visibility'
+import { Portal } from '../../utils/Portal'
+import type { AnchoredFloatingContainerProps } from '../AnchoredFloatingContainer'
+import { AnchoredFloatingContainer } from '../AnchoredFloatingContainer'
+import { Visibility } from '../Visibility'
 import type { UseFocusTrapProps } from '@/src/hooks/focus/useFocusTrap'
-import { FocusTrap } from '../utils/FocusTrap'
+import { FocusTrap } from '../../utils/FocusTrap'
 import type { UseOutsideClickHandlers, UseOutsideClickOptions } from '@/src/hooks/useOutsideClick'
 import { useOutsideClick } from '@/src/hooks/useOutsideClick'
 import { PropsUtil } from '@/src/utils/propsUtil'
 import { usePresenceRef } from '@/src/hooks/usePresenceRef'
+import { useLogOnce } from '@/src/hooks/useLogOnce'
+import { PopUpContext } from './PopUpContext'
 
 export interface PopUpProps extends AnchoredFloatingContainerProps, Partial<UseOutsideClickHandlers> {
   isOpen?: boolean,
@@ -20,28 +22,39 @@ export interface PopUpProps extends AnchoredFloatingContainerProps, Partial<UseO
 
 export const PopUp = forwardRef<HTMLDivElement, PopUpProps>(function PopUp({
   children,
-  isOpen = false,
+  isOpen: isOpenOverwrite,
   focusTrapOptions,
   onOutsideClick,
   onClose,
   outsideClickOptions,
+  anchor: anchorOverwrite,
   ...props
 }, forwardRef) {
-  const { refAssignment, isPresent, ref } = usePresenceRef<HTMLDivElement>({
-    isOpen,
-  })
+  const context = useContext(PopUpContext)
+  const isOpen = isOpenOverwrite ?? context?.isOpen ?? false
+  const anchor = anchorOverwrite ?? context?.triggerRef ?? undefined
+  const id = props.id ?? context?.popUpId
+  const { refAssignment, isPresent, ref } = usePresenceRef<HTMLDivElement>({ isOpen })
 
   useImperativeHandle(forwardRef, () => ref.current, [ref])
+
+  const onCloseWrapper = () => {
+    onClose?.()
+    context?.setIsOpen(false)
+  }
+
 
   useOutsideClick({
     onOutsideClick: (event) => {
       event.preventDefault()
-      onClose?.()
+      onCloseWrapper()
       onOutsideClick?.(event)
     },
-    active: outsideClickOptions?.active && isOpen,
+    active: isOpen && (outsideClickOptions?.active ?? true),
     refs: [ref, ...(outsideClickOptions?.refs ?? [])],
   })
+
+  useLogOnce('PopUp: Either provide "aria-label" or "aria-labelledby"', !props['aria-label'] && !props['aria-labelledby'])
 
   return (
     <Visibility isVisible={isOpen}>
@@ -49,9 +62,14 @@ export const PopUp = forwardRef<HTMLDivElement, PopUpProps>(function PopUp({
         <FocusTrap {...focusTrapOptions} active={isPresent && isOpen && (focusTrapOptions?.active ?? true)} container={ref}>
           <AnchoredFloatingContainer
             {...props}
+            id={id}
+            anchor={anchor}
             ref={refAssignment}
 
-            onKeyDown={PropsUtil.aria.close(onClose)}
+            onKeyDown={PropsUtil.aria.close(onCloseWrapper)}
+
+            role="dialog"
+            aria-modal={true}
 
             style={{
               position: 'fixed',

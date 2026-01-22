@@ -1,12 +1,10 @@
-import { getCoreRowModel, getFilteredRowModel, getPaginationRowModel, getSortedRowModel, useReactTable, type ColumnDef, type ColumnFiltersState, type ColumnSizingInfoState, type ColumnSizingState, type InitialTableState, type Table as ReactTable, type Row, type TableOptions, type TableState } from '@tanstack/react-table'
+import { getCoreRowModel, getFilteredRowModel, getPaginationRowModel, getSortedRowModel, useReactTable, type ColumnDef, type ColumnSizingState, type InitialTableState, type Table as ReactTable, type Row, type TableOptions, type TableState } from '@tanstack/react-table'
 import type { ReactNode, RefObject } from 'react'
 import { createContext, useCallback, useContext, useEffect, useMemo, useRef, useState } from 'react'
 import { TableCell } from './TableCell'
 import { ColumnSizeUtil } from './columnSizeUtil'
 import { useResizeCallbackWrapper } from '@/src/hooks/useResizeCallbackWrapper'
 import { TableFilter } from './TableFilter'
-
-
 
 export type TableContextType<T> = {
   tableState: ReactTable<T>,
@@ -42,9 +40,9 @@ export type TableProviderProps<T> = {
   children?: ReactNode,
   isUsingFillerRows?: boolean,
   fillerRow?: (columnId: string, table: ReactTable<T>) => ReactNode,
-  initialState?: Omit<InitialTableState, 'columnSizing' | 'columnSizingInfo'>,
+  initialState?: Omit<InitialTableState, 'columnSizing'>,
   onRowClick?: (row: Row<T>, table: ReactTable<T>) => void,
-  state?: Omit<TableState, 'columnSizing' | 'columnSizingInfo'>,
+  state?: Omit<TableState, 'columnSizing'>,
 } & Partial<TableOptions<T>>
 
 export const TableProvider = <T,>({
@@ -101,10 +99,6 @@ export const TableProvider = <T,>({
     }
   }, {}))
 
-  const [columnSizingInfo, setColumnSizingInfo] = useState<ColumnSizingInfoState>()
-
-  const [columnFilters, setColumnFilters] = useState<ColumnFiltersState>(state?.columnFilters ?? initialState?.columnFilters ?? [])
-
   const [columnOrder, setColumnOrder] = useState<string[]>(state?.columnOrder ?? initialState?.columnOrder ?? [])
   useEffect(() => {
     setColumnOrder(prev => {
@@ -115,10 +109,10 @@ export const TableProvider = <T,>({
     })
   }, [columns])
 
-  const updateColumnSizes = useCallback((newColumnSizing: ColumnSizingState) => {
+  const adjustColumnSizes = useCallback((previousSizing: ColumnSizingState, newSizing: ColumnSizingState) => {
     return ColumnSizeUtil.calculate({
-      previousSizing: columnSizing,
-      newSizing: newColumnSizing,
+      previousSizing,
+      newSizing,
       minWidthsPerColumn: columns.reduce((previousValue, currentValue) => {
         return {
           ...previousValue,
@@ -133,16 +127,19 @@ export const TableProvider = <T,>({
       }, {}),
       columnIds: columns.map(column => column.id),
       target: {
-        width: containerRef.current?.offsetWidth,
+        width: Math.floor(containerRef.current?.getBoundingClientRect().width ?? 0),
         behaviour: 'equalOrHigher',
       },
     })
-  }, [columnSizing, columns, defaultColumn.maxSize, defaultColumn.minSize])
+  }, [columns, defaultColumn.maxSize, defaultColumn.minSize])
+
+  useEffect(() => {
+    setColumnSizing(prev => adjustColumnSizes(prev, prev))
+  }, [adjustColumnSizes, columns, defaultColumn.maxSize, defaultColumn.minSize])
 
   useResizeCallbackWrapper(useCallback(() => {
-    setColumnSizing(updateColumnSizes(columnSizing))
-  }, [updateColumnSizes, columnSizing]))
-
+    setColumnSizing(prev => adjustColumnSizes(prev, prev))
+  }, [adjustColumnSizes]))
 
   const table = useReactTable({
     data,
@@ -156,35 +153,17 @@ export const TableProvider = <T,>({
     state: {
       ...state,
       columnSizing,
-      columnSizingInfo,
-      columnFilters,
       columnOrder,
     },
     filterFns: {
       ...tableOptions?.filterFns,
       dateRange: TableFilter.dateRange,
     },
-    onColumnSizingInfoChange: updaterOrValue => {
-      setColumnSizingInfo(updaterOrValue)
-      if (tableOptions.onColumnSizingInfoChange) {
-        tableOptions?.onColumnSizingInfoChange(updaterOrValue)
-      }
-    },
     onColumnSizingChange: updaterOrValue => {
       setColumnSizing(previous => {
         const newSizing = typeof updaterOrValue === 'function' ? updaterOrValue(previous) : updaterOrValue
-        return updateColumnSizes(newSizing)
+        return adjustColumnSizes(previous,newSizing)
       })
-      if (tableOptions.onColumnSizingChange) {
-        tableOptions.onColumnSizingChange(updaterOrValue)
-      }
-    },
-    onColumnFiltersChange: updaterOrValue => {
-      setColumnFilters(updaterOrValue)
-      table.toggleAllRowsSelected(false)
-      if (tableOptions.onColumnFiltersChange) {
-        tableOptions.onColumnFiltersChange(updaterOrValue)
-      }
     },
     onColumnOrderChange: updaterOrValue => {
       setColumnOrder(updaterOrValue)
@@ -193,18 +172,15 @@ export const TableProvider = <T,>({
       }
     },
     autoResetPageIndex: false,
+    enableColumnResizing: true,
     columnResizeMode: 'onChange',
     ...tableOptions,
   })
-  useEffect(() => {
-    table.setColumnSizing(updateColumnSizes(columnSizing))
-  // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [])
 
   const columnSizeVars = useMemo(() => {
-    return ColumnSizeUtil.toSizeVars(table)
-  // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [table, table.getState().columnSizingInfo, table.getState().columnSizing])
+    return ColumnSizeUtil.toSizeVars(columnSizing)
+  }, [columnSizing])
+
   return (
     <TableContext.Provider
       value={{

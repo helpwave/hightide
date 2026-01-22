@@ -25,7 +25,6 @@ declare module '@tanstack/react-table' {
     bodyRowClassName?: BagFunctionOrValue<TData, string>,
   }
 
-
   interface FilterFns {
     dateRange: FilterFn<unknown>,
   }

@@ -11,6 +11,9 @@ import type { TableState } from '@tanstack/react-table'
 import { TableProvider } from '@/src/components/layout/table/TableContext'
 import { TableColumnPicker } from '@/src/components/layout/table/TableColumnPicker'
 import { TablePagination } from '@/src/components/layout/table/TablePagination'
+import { PopUpRoot } from '@/src/components/layout/popup/PopUpRoot'
+import { Button } from '@/src/components/user-interaction/Button'
+import { PopUpOpener } from '@/src/components/layout/popup/PopUpOpener'
 
 type DataType = {
   id: string,
@@ -177,7 +180,12 @@ export const paginatedFetching: Story = {
             />
             <div className="flex-col-2 items-center">
               <div className="flex-row-2 justify-end w-full">
-                <TableColumnPicker/>
+                <PopUpRoot>
+                  <PopUpOpener>
+                    {({ props }) => <Button {...props}>{translation('columns')}</Button>}
+                  </PopUpOpener>
+                  <TableColumnPicker/>
+                </PopUpRoot>
               </div>
               <TableDisplay/>
               <TablePagination/>

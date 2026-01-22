@@ -14,7 +14,7 @@ import type { ControlledStateProps } from '@/src/hooks/useControlledState'
 import { useControlledState } from '@/src/hooks/useControlledState'
 import { PropsUtil } from '@/src/utils/propsUtil'
 import type { FormFieldInteractionStates } from '@/src/components/form/FieldLayout'
-import { PopUp } from '../../layout/PopUp'
+import { PopUp } from '../../layout/popup/PopUp'
 
 export type DateTimeInputHandle = {
   input: HTMLDivElement | null,
