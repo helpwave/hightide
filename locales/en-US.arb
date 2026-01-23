@@ -3,8 +3,10 @@
   "all": "All",
   "apply": "Apply",
   "back": "Back",
+  "between": "Between",
   "cancel": "Cancel",
   "carousel": "Carousel",
+  "contains": "Contains",
   "change": "Change",
   "chooseLanguage": "Choose your language",
   "chooseTheme": "Choose your preferred color theme.",
@@ -16,10 +18,12 @@
   "clickToCopy": "Click to Copy",
   "clickToSelect": "Click to select",
   "close": "Close",
+  "closeDialog": "Close dialog",
   "confirm": "Confirm",
   "copy": "Copy",
   "copied": "Copied",
   "create": "Create",
+  "date": "Date",
   "decline": "Decline",
   "delete": "Delete",
   "discard": "Discard",
@@ -54,6 +58,7 @@
   "saved": "Saved",
   "search": "Search",
   "select": "Select",
+  "selection": "Selection",
   "selectOption": "Select an option",
   "show": "Show",
   "showMore": "Show more",
@@ -94,18 +99,46 @@
       "theme": {}
     }
   },
+  "sDateTimeSelect": "{datetimeMode, select, date{Select Date} dateTime{Select Date and Time}}",
+  "@sDateTimeSelect": {
+    "placeholders": {
+      "datetimeMode": {}
+    }
+  },
   "update": "Update",
   "unsavedChanges": "Unsaved Changes",
   "unsavedChangesSaveQuestion": "Do you want to save your changes?",
   "value": "Value",
   "yes": "Yes",
   "endDate": "End",
+  "endsWith": "Ends with",
+  "entriesPerPage": "Entries per page",
+  "equals": "Equals",
   "filter": "Filter",
+  "filterNonWhitespace": "Non-whitespace",
+  "greaterThan": "Greater than",
+  "greaterThanOrEqual": "Greater than or equal",
+  "filterNotUndefined": "Defined",
+  "filterUndefined": "Undefined",
   "max": "Max",
   "min": "Min",
+  "notBetween": "Not between",
+  "notContains": "Not contains",
+  "notEquals": "Not equals",
+  "noParameterRequired": "No parameter required",
+  "parameter": "Parameter",
   "startDate": "Start",
+  "startsWith": "Starts with",
   "notEmpty": "The field cannot be empty.",
   "invalidEmail": "The email is not valid.",
+  "isFalse": "Is false",
+  "isTrue": "Is true",
+  "lessThan": "Less than",
+  "lessThanOrEqual": "Less than or equal",
+  "after": "After",
+  "before": "Before",
+  "onOrAfter": "After or Equal",
+  "onOrBefore": "Before or Equal",
   "tooShort": "The value requires at least {min} characters.",
   "@tooShort": {
     "placeholders": {
@@ -156,6 +189,8 @@
   "identifier": "Identifier",
   "name": "Name",
   "street": "Street",
+  "tag": "Tag",
+  "tags": "Tags",
   "sGender": "{gender, select, male{Male} female{Female} other{Other}}",
   "@sGender": {
     "placeholders": {
@@ -169,5 +204,16 @@
     "placeholders": {
       "otherSortings": { "type": "number" }
     }
-  }
+  },
+  "columnPicker": "Column Picker",
+  "columnPickerDescription": "Reorder and show or hide columns",
+  "columns": "Columns",
+  "moveUp": "Move up",
+  "moveDown": "Move down",
+  "hideColumn": "Hide column",
+  "showColumn": "Show column",
+  "pinned": "Pinned",
+  "unpin": "Unpin",
+  "pinLeft": "Pin to left",
+  "pinRight": "Pin to right"
 }

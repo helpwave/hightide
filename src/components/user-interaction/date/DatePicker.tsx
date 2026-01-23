@@ -8,7 +8,7 @@ import type { DayPickerProps } from '@/src/components/user-interaction/date/DayP
 import { DayPicker } from '@/src/components/user-interaction/date/DayPicker'
 import type { YearMonthPickerProps } from '@/src/components/user-interaction/date/YearMonthPicker'
 import { YearMonthPicker } from '@/src/components/user-interaction/date/YearMonthPicker'
-import { useLocale } from '@/src/contexts/LocaleContext'
+import { useLocale } from '@/src/global-contexts/LocaleContext'
 import { Button } from '@/src/components/user-interaction/Button'
 import { LocalizationUtil } from '@/src/i18n/util'
 import type { FormFieldDataHandling } from '../../form/FormField'

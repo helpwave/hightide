@@ -1,8 +1,8 @@
 import type { Dispatch, PropsWithChildren, SetStateAction } from 'react'
 import { createContext, useCallback, useContext, useEffect, useMemo, useState } from 'react'
 import { useLocalStorage } from '../hooks/useLocalStorage'
-import type { ThemeConfig } from '@/src/contexts/HightideConfigContext'
-import { useHightideConfig } from '@/src/contexts/HightideConfigContext'
+import type { ThemeConfig } from '@/src/global-contexts/HightideConfigContext'
+import { useHightideConfig } from '@/src/global-contexts/HightideConfigContext'
 
 const themes = ['light', 'dark', 'system'] as const
 

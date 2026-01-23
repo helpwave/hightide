@@ -3,8 +3,8 @@ import { createContext, useContext, useEffect, useMemo, useState } from 'react'
 import { useLocalStorage } from '../hooks/useLocalStorage'
 import { LocalizationUtil } from '../i18n/util'
 import type { HightideTranslationLocales } from '@/src/i18n/translations'
-import type { LocalizationConfig } from '@/src/contexts/HightideConfigContext'
-import { useHightideConfig } from '@/src/contexts/HightideConfigContext'
+import type { LocalizationConfig } from '@/src/global-contexts/HightideConfigContext'
+import { useHightideConfig } from '@/src/global-contexts/HightideConfigContext'
 
 export type LocaleContextValue = {
   locale: HightideTranslationLocales,

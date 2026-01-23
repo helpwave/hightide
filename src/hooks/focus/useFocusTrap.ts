@@ -2,7 +2,6 @@
 
 import type { RefObject } from 'react'
 import { useCallback, useEffect, useId, useRef, useState } from 'react'
-import { useIsMounted } from '@/src/hooks/focus/useIsMounted'
 
 const createFocusGuard = () => {
   const div = document.createElement('div')
@@ -145,7 +144,7 @@ const service = new FocusTrapService()
 
 export type UseFocusTrapProps = {
   container: RefObject<HTMLElement>,
-  active?: boolean,
+  active: boolean,
   initialFocus?: RefObject<HTMLElement>,
   /**
    * Whether to focus the first element when the initialFocus isn't provided
@@ -157,13 +156,12 @@ export type UseFocusTrapProps = {
 
 export const useFocusTrap = ({
   container,
-  active = true,
+  active,
   initialFocus,
   focusFirst = true,
 }: UseFocusTrapProps) => {
   const lastFocusRef = useRef<HTMLElement>(null)
   const [paused, setPaused] = useState(false)
-  const isMounted = useIsMounted()
   const id = useId()
 
   const focusElement = useCallback(() => {
@@ -180,13 +178,14 @@ export const useFocusTrap = ({
         const first = elements.item(0) as HTMLElement
         first.focus()
       } else {
+        console.warn('No focusable elements found in the focus trap, focusing the container instead. Make sure this is the correct behavior. Affected element: ', containerElement)
         containerElement.focus()
       }
     }
   }, [container, initialFocus])
 
   useEffect(() => {
-    if (active && isMounted) {
+    if (active) {
       if (!lastFocusRef.current) {
         lastFocusRef.current = document.activeElement as HTMLElement
       }
@@ -217,10 +216,10 @@ export const useFocusTrap = ({
         lastFocusRef.current = undefined
       }
     }
-  }, [active, container, focusElement, id, initialFocus, isMounted])
+  }, [active, container, focusElement, id, initialFocus])
 
   useEffect(() => {
-    if (active && !paused && isMounted) {
+    if (active && !paused) {
       const containerElement = container.current
 
       function onKeyDown(event: KeyboardEvent) {
@@ -246,5 +245,5 @@ export const useFocusTrap = ({
         containerElement.removeEventListener('keydown', onKeyDown)
       }
     }
-  }, [active, paused, isMounted, container, initialFocus, focusFirst, focusElement])
+  }, [active, paused, container, initialFocus, focusFirst, focusElement])
 }

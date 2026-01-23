@@ -1,0 +1,11 @@
+.pop-up {
+    @apply surface coloring-solid rounded-md border-2 border-outline-variant shadow-md;
+    @apply focus-within:border-primary;
+
+    &[data-positioned] {
+        @apply animate-pop-in;
+    }
+    &:not([data-positioned]) {
+        @apply opacity-0;
+    }
+}

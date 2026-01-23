@@ -1,15 +1,15 @@
 import { Button } from '../../user-interaction/Button'
-import { Input } from '../../user-interaction/input/Input'
 import { FilterIcon } from 'lucide-react'
-import { Menu } from '../../user-interaction/Menu'
-import { useEffect, useState } from 'react'
+import { useEffect, useId, useMemo, useRef, useState } from 'react'
 import type { Column } from '@tanstack/react-table'
 import { useHightideTranslation } from '@/src/i18n/useHightideTranslation'
-
-export type TableFilterType = 'text' | 'range' | 'dateRange'
+import { Visibility } from '../Visibility'
+import { PopUp } from '../popup/PopUp'
+import type { TableFilterCategory, TableFilterValue } from './TableFilter'
+import { TableFilterContent } from './TableFilterPopups'
 
 export type TableFilterButtonProps<T = unknown> = {
-  filterType: TableFilterType,
+  filterType: TableFilterCategory,
   column: Column<T>,
 }
 
@@ -19,113 +19,93 @@ export const TableFilterButton = <T, >({
 }: TableFilterButtonProps<T>) => {
   const translation = useHightideTranslation()
   const columnFilterValue = column.getFilterValue()
-  const [filterValue, setFilterValue] = useState<unknown>(columnFilterValue)
+  const [filterValue, setFilterValue] = useState<TableFilterValue | undefined>(columnFilterValue as TableFilterValue)
   const hasFilter = !!filterValue
+  const anchorRef = useRef<HTMLButtonElement>(null)
+  const containerRef = useRef<HTMLDivElement>(null)
+  const [isOpen, setIsOpen] = useState(false)
+  const id = useId()
+  const ids = useMemo(() => ({
+    button: `table-filter-button-${id}`,
+    popup: `table-filter-popup-${id}`,
+    label: `table-filter-label-${id}`,
+  }), [id])
 
   useEffect(() => {
-    setFilterValue(columnFilterValue)
+    setFilterValue(columnFilterValue as TableFilterValue)
   }, [columnFilterValue])
 
+  if (filterType === 'tags' && (!column.columnDef.meta?.filterData?.tags?.length || column.columnDef.meta.filterData.tags.length === 0)) {
+    return null
+  }
+
   return (
-    <Menu
-      trigger={({ toggleOpen }, ref) => (
-        <div ref={ref} className="relative">
-          <Button
-            layout="icon"
-            color="neutral"
-            size="xs"
-            onClick={toggleOpen}
-          >
-            <FilterIcon className="size-4"/>
-          </Button>
+    <>
+      <Button
+        ref={anchorRef}
+        id={ids.button}
+        layout="icon"
+        color="neutral"
+        size="xs"
+
+        onClick={() => setIsOpen(!isOpen)}
+
+        role="combobox"
+        aria-haspopup="dialog"
+        aria-expanded={isOpen}
+        aria-controls={isOpen ? ids.popup : undefined}
+        aria-labelledby={ids.label}
+
+        className="relative"
+      >
+        <FilterIcon className="size-4"/>
+        <Visibility isVisible={hasFilter}>
+          <div className="absolute -top-1 -right-1 w-2 h-2 rounded-full bg-primary" />
+        </Visibility>
+      </Button>
+      <PopUp
+        ref={containerRef}
+        id={ids.popup}
+        isOpen={isOpen}
+        options={{
+          verticalAlignment: 'afterEnd',
+          horizontalAlignment: 'center',
+        }}
+        anchor={anchorRef}
+
+        onClose={() => setIsOpen(false)}
+
+        role="dialog"
+        aria-labelledby={ids.label}
+
+        className="flex-col-2 p-2 items-start"
+      >
+        <span id={ids.label} className="typography-label-lg font-semibold">{translation('filter')}</span>
+        <TableFilterContent
+          columnId={column.id}
+          filterType={filterType}
+          filterValue={filterValue}
+          onFilterValueChange={setFilterValue}
+        />
+        <div className="flex-row-2 justify-end w-full">
           {hasFilter && (
-            <div
-              className="absolute top-0.5 right-0.5 w-2 h-2 rounded-full bg-primary pointer-events-none"
-              aria-hidden={true}
-            />
-          )}
-        </div>
-      )}
-    >
-      {({ close }) => (
-        <div className="flex-col-1 p-2 items-start font-normal text-menu-text">
-          <h4 className="typography-label-md-semibold">{translation('filter')}</h4>
-          {filterType === 'text' && (
-            <Input
-              value={(filterValue ?? '') as string}
-              autoFocus={true}
-              placeholder={translation('text')+'...'}
-              onValueChange={setFilterValue}
-              className="h-10"
-            />
-          )}
-          {filterType === 'range' && (
-            <div className="flex-row-2 items-center">
-              <Input
-                value={(filterValue as [number, number])?.[0].toString() ?? ''}
-                type="number"
-                placeholder={translation('min')}
-                onValueChange={text => {
-                  const num = Number(text)
-                  setFilterValue((old: [number, number]) => [num, old?.[1]])
-                }}
-                className="h-10 input-indicator-hidden w-40"
-              />
-              <span className="font-bold">-</span>
-              <Input
-                value={(filterValue as [number, number])?.[1].toString() ?? ''}
-                type="number"
-                placeholder={translation('max')}
-                onValueChange={text => {
-                  const num = Number(text)
-                  setFilterValue((old: [number, number]) => [old?.[0], num])
-                }}
-                className="h-10 input-indicator-hidden w-40"
-              />
-            </div>
-          )}
-          {filterType === 'dateRange' && (
-            <>
-              <Input
-                value={(filterValue as [Date, Date])?.[0] ? (filterValue as [Date, Date])?.[0].toISOString().slice(0, 16) : ''}
-                type="datetime-local"
-                placeholder={translation('startDate')}
-                onValueChange={text => {
-                  const value = new Date(text)
-                  setFilterValue((old: [Date, Date]) => [value, old?.[1]])
-                }}
-                className="h-10 w-50"
-              />
-              <Input
-                value={(filterValue as [Date, Date])?.[1] ? (filterValue as [Date, Date])?.[1].toISOString().slice(0, 16) : ''}
-                type="datetime-local"
-                placeholder={translation('endDate')}
-                onValueChange={text => {
-                  const value = new Date(text)
-                  setFilterValue((old: [Date, Date]) => [old?.[0], value])
-                }}
-                className="h-10 w-50"
-              />
-            </>
-          )}
-          <div className="flex-row-2 justify-end w-full">
-            {hasFilter && (
-              <Button color="negative" size="sm" onClick={() => {
-                column.setFilterValue(undefined)
-                close()
-              }}>
-                {translation('remove')}
-              </Button>
-            )}
-            <Button size="sm" onClick={() => {
-              column.setFilterValue(filterValue)
-              close()
+            <Button color="negative" size="sm" onClick={() => {
+              column.setFilterValue(undefined)
+              setIsOpen(false)
             }}>
-              {translation('apply')}
+              {translation('remove')}
             </Button>
-          </div>
+          )}
+          <Button size="sm" onClick={() => {
+            if (filterValue) {
+              column.setFilterValue(filterValue)
+            }
+            setIsOpen(false)
+          }}>
+            {translation('apply')}
+          </Button>
         </div>
-      )}
-    </Menu>
+      </PopUp>
+    </>
   )
 }

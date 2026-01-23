@@ -1,6 +1,6 @@
 import type { Meta, StoryObj } from '@storybook/nextjs'
 import { action } from 'storybook/actions'
-import { DiscardChangesDialog } from '@/src/components/layout/dialog/DiscardChangesDialog'
+import { DiscardChangesDialog } from '@/src/components/layout/dialog/premade/DiscardChangesDialog'
 
 const meta: Meta = {
   component: DiscardChangesDialog,

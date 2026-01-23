@@ -13,8 +13,11 @@ type Story = StoryObj<typeof meta>;
 
 export const menu: Story = {
   args: {
-    alignmentHorizontal: 'leftInside',
-    alignmentVertical: 'bottomOutside',
+    options: {
+      horizontalAlignment: 'afterStart',
+      verticalAlignment: 'afterEnd'
+    },
+    onOutsideClick: action('onOutsideClick'),
     children: ({ close }) =>
       range([1, 6]).map((index) => (
         <MenuItem

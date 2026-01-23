@@ -1,7 +1,7 @@
 import { useCallback, useEffect, useState } from 'react'
 import clsx from 'clsx'
 import { getNeighbours, range } from '@/src/utils/array'
-import { clamp } from '@/src/utils/math'
+import { MathUtil } from '@/src/utils/math'
 
 export type ScrollPickerProps<T> = {
   options: T[],
@@ -170,7 +170,7 @@ export const ScrollPicker = <T, >({
     const distance = max - min
 
     let opacityValue = min
-    const unitTransition = clamp((transition) / 0.5)
+    const unitTransition = MathUtil.clamp((transition) / 0.5)
     if (index === 1 || index === itemsCount - 2) {
       if (index === 1 && transition > 0) {
         opacityValue += Math.floor(unitTransition * distance)
@@ -183,7 +183,7 @@ export const ScrollPicker = <T, >({
     }
 
     // TODO this is not the right value for the bottom entry
-    return clamp(1 - (opacityValue / max))
+    return MathUtil.clamp(1 - (opacityValue / max))
   }
 
   return (
@@ -192,7 +192,7 @@ export const ScrollPicker = <T, >({
       style={{ height: containerHeight }}
       onWheel={event => {
         if (event.deltaY !== 0) {
-          const deltaY = clamp(event.deltaY,[-itemHeight*2/3, itemHeight*2/3])
+          const deltaY = MathUtil.clamp(event.deltaY, [-itemHeight*2/3, itemHeight*2/3])
           // TODO slower increase
           setAnimation(({ velocity, ...animationData }) =>
             ({ ...animationData, velocity: velocity + deltaY }))

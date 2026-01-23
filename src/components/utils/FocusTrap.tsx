@@ -1,27 +1,31 @@
 'use client'
 
-import type { HTMLAttributes, RefObject } from 'react'
+import type { HTMLAttributes, PropsWithChildren } from 'react'
 import { useRef } from 'react'
 import { useImperativeHandle } from 'react'
 import { forwardRef } from 'react'
+import type { UseFocusTrapProps } from '@/src/hooks/focus/useFocusTrap'
 import { useFocusTrap } from '@/src/hooks/focus/useFocusTrap'
 
-export type FocusTrapProps = HTMLAttributes<HTMLDivElement> & {
-  active?: boolean,
-  initialFocus?: RefObject<HTMLElement | null>,
-  /**
-   * Whether to focus the first element when the initialFocus isn't provided
-   *
-   * Focuses the container instead
-   */
-  focusFirst?: boolean,
+export interface FocusTrapProps extends PropsWithChildren, UseFocusTrapProps {}
+
+export const FocusTrap = ({ children, ...props }: FocusTrapProps) => {
+
+  useFocusTrap({
+    ...props
+  })
+
+  return children
 }
+
+
+export interface FocusTrapWrapperProps extends HTMLAttributes<HTMLDivElement>, Omit<FocusTrapProps, 'container'> {}
 
 /**
  * A wrapper for the useFocusTrap hook that directly renders it to a div
  */
-export const FocusTrap = forwardRef<HTMLDivElement, FocusTrapProps>(function FocusTrap({
-  active = true,
+export const FocusTrapWrapper = forwardRef<HTMLDivElement, FocusTrapWrapperProps>(function FocusTrap({
+  active,
   initialFocus,
   focusFirst = false,
   ...props

@@ -2,7 +2,7 @@ import { useEffect, useId, useMemo, useState } from 'react'
 
 export type OverlayItem = {
   id: string,
-   tags?: string[],
+  tags?: string[],
 }
 
 type OverlayItemInformation = OverlayItem & {
@@ -12,14 +12,14 @@ type OverlayItemInformation = OverlayItem & {
 }
 
 type OverlayRegistryValue = {
-    itemInformation: Record<string, OverlayItemInformation>,
-    tagItemCounts: Record<string, number>,
-    activeId: string | null,
+  itemInformation: Record<string, OverlayItemInformation>,
+  tagItemCounts: Record<string, number>,
+  activeId: string | null,
 }
 
 type OverlayRegistryListenerCallback = (value: OverlayRegistryValue) => void
 
-class OverlayRegistry {
+export class OverlayRegistry {
   private static instance: OverlayRegistry | null = null
 
   static getInstance(): OverlayRegistry {
@@ -29,14 +29,21 @@ class OverlayRegistry {
     return OverlayRegistry.instance
   }
 
-  private overlayIds = new Set<string>()
+  // The frontmost overlay is at the end of the array
+  private overlayIds: string[] = []
   private overlayItems: Record<string, OverlayItem> = {}
   private listeners = new Set<OverlayRegistryListenerCallback>()
 
   register(item: OverlayItem) {
-    this.overlayIds.add(item.id)
+    this.overlayIds = this.overlayIds.filter(id => id !== item.id)
+    this.overlayIds.push(item.id)
     this.overlayItems[item.id] = item
     this.notify()
+    return () => {
+      this.overlayIds = this.overlayIds.filter(id => id !== item.id)
+      delete this.overlayItems[item.id]
+      this.notify()
+    }
   }
 
   update(item: OverlayItem) {
@@ -44,18 +51,11 @@ class OverlayRegistry {
     this.notify()
   }
 
-  unregister(item: OverlayItem) {
-    this.overlayIds.delete(item.id)
-    delete this.overlayItems[item.id]
-    this.notify()
-  }
-
   addListener(callback: OverlayRegistryListenerCallback) {
     this.listeners.add(callback)
-  }
-
-  removeListener(callback: OverlayRegistryListenerCallback) {
-    this.listeners.delete(callback)
+    return () => {
+      this.listeners.delete(callback)
+    }
   }
 
   private notify() {
@@ -84,7 +84,7 @@ class OverlayRegistry {
       }
     }
     for (const callback of this.listeners) {
-      callback({ activeId: ids[0] ?? null, itemInformation, tagItemCounts: tagCount })
+      callback({ activeId: ids[ids.length - 1] ?? null, itemInformation, tagItemCounts: tagCount })
     }
   }
 }
@@ -100,17 +100,15 @@ export type UseOverlayRegistryResult = {
     zIndex?: number,
     position?: number,
     tagPositions?: Record<string, number>,
-    hasAppeared: boolean,
     tagItemCounts: Record<string, number>,
 }
 
-export const useOverlayRegistry = (props?: UseOverlayRegistryProps): UseOverlayRegistryResult => {
+export const useOverlayRegistry = (props: UseOverlayRegistryProps = {}): UseOverlayRegistryResult => {
   const generatedId = useId()
-  const [hasAppeared, setHasAppeared] = useState<boolean>(props.isActive)
   const item: OverlayItem = useMemo(() => ({
-    id: props?.id ?? generatedId,
-    tags: props?.tags,
-  }), [props?.id, generatedId, props?.tags])
+    id: props.id ?? generatedId,
+    tags: props.tags,
+  }), [props.id, generatedId, props.tags])
   const [value, setValue] = useState<OverlayRegistryValue>({
     activeId: null,
     itemInformation: {},
@@ -126,20 +124,18 @@ export const useOverlayRegistry = (props?: UseOverlayRegistryProps): UseOverlayR
       setValue(value)
     }
 
-    registry.addListener(callback)
-    registry.register(item)
-    setHasAppeared(true)
+    const removeListener = registry.addListener(callback)
+    const unregister = registry.register(item)
     return () => {
-      registry.removeListener(callback)
-      registry.unregister(item)
+      removeListener()
+      unregister()
       setValue({
         activeId: null,
         itemInformation: {},
         tagItemCounts: {}
       })
-      setHasAppeared(false)
     }
-  }, [props?.isActive, item, registry])
+  }, [props.isActive, item, registry])
 
   const itemInformation = value.itemInformation[item.id]
 
@@ -148,7 +144,6 @@ export const useOverlayRegistry = (props?: UseOverlayRegistryProps): UseOverlayR
     zIndex: itemInformation?.zIndex,
     position: itemInformation?.position,
     tagPositions: itemInformation?.tagPositions,
-    hasAppeared,
     tagItemCounts: value.tagItemCounts,
   }
 }

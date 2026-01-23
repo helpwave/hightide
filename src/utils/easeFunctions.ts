@@ -1,4 +1,4 @@
-import { clamp } from './math'
+import { MathUtil } from './math'
 
 export type EaseFunction = (t: number) => number
 
@@ -26,7 +26,7 @@ export class EaseFunctions {
   static cubicBezier(x1: number, y1: number, x2: number, y2: number): EaseFunction {
     const { y } = EaseFunctions.cubicBezierGeneric(x1, y1, x2, y2)
     return (t: number) => {
-      t = clamp(t)
+      t = MathUtil.clamp(t)
       return y(t) // <= equal to x(t) * 0 + y(t) * 1
     }
   }

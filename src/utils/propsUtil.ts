@@ -84,7 +84,9 @@ const extender = {
 
 function click<T>(onClick: () => void) {
   const keyboardEventHandler: React.KeyboardEventHandler<T> = (event) => {
-    if (event.key === 'Enter' || event.key === 'Space') {
+    if (event.key === 'Enter' || event.key === ' ') {
+      event.preventDefault()
+      event.stopPropagation()
       onClick()
     }
   }
@@ -95,10 +97,12 @@ function click<T>(onClick: () => void) {
   }
 }
 
-function close<T>(onClose: () => void): React.KeyboardEventHandler<T> {
+function close<T>(onClose?: () => void): React.KeyboardEventHandler<T> {
   return (event) => {
     if (event.key === 'Escape') {
-      onClose()
+      event.preventDefault()
+      event.stopPropagation()
+      onClose?.()
     }
   }
 }
@@ -119,18 +123,61 @@ function navigate<T>({
     switch (event.key) {
     case 'ArrowLeft':
       left(event)
+      event.preventDefault()
+      event.stopPropagation()
       break
     case 'ArrowRight':
       right(event)
+      event.preventDefault()
+      event.stopPropagation()
       break
     case 'ArrowUp':
       up(event)
+      event.preventDefault()
+      event.stopPropagation()
       break
     case 'ArrowDown':
       down(event)
+      event.preventDefault()
+      event.stopPropagation()
       break
     }
   }
+}
+
+export function mergeProps<T extends object, U extends Partial<T>>(
+  slotProps: T,
+  childProps: U
+): T & U {
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+  const result: any = { ...childProps }
+
+  for (const key in slotProps) {
+    const slotValue = slotProps[key as keyof T]
+    const childValue = childProps[key as keyof U]
+
+    if (key === 'className') {
+      result.className = [slotValue, childValue].filter(Boolean).join(' ')
+    } else if (key === 'style') {
+      result.style = { ...(slotValue as React.CSSProperties), ...(childValue as React.CSSProperties) }
+    } else if (
+      key.startsWith('on') &&
+      typeof slotValue === 'function' &&
+      typeof childValue === 'function'
+    ) {
+      // eslint-disable-next-line @typescript-eslint/no-explicit-any
+      result[key] = (...args: any[]) => {
+        // eslint-disable-next-line @typescript-eslint/no-unsafe-function-type
+        (slotValue as Function)(...args);
+        // eslint-disable-next-line @typescript-eslint/no-unsafe-function-type
+        (childValue as Function)(...args)
+      }
+    } else {
+      result[key] = childValue ?? slotValue
+    }
+  }
+
+  return result
 }
 
 type InteractionStateARIAAttributes = Pick<HTMLAttributes<HTMLDivElement>, 'aria-disabled' | 'aria-invalid' | 'aria-readonly' | 'aria-required'>
@@ -158,4 +205,5 @@ export const PropsUtil = {
   extender,
   dataAttributes,
   aria,
+  mergeProps,
 }

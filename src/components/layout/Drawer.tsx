@@ -2,7 +2,7 @@ import { useFocusTrap } from '@/src/hooks/focus/useFocusTrap'
 import { useOverlayRegistry } from '@/src/hooks/useOverlayRegistry'
 import { useHightideTranslation } from '@/src/i18n/useHightideTranslation'
 import type { ReactNode } from 'react'
-import { useId, useMemo, useRef, type HTMLAttributes } from 'react'
+import { forwardRef, useId, useImperativeHandle, useMemo, useRef, type HTMLAttributes } from 'react'
 import { createPortal } from 'react-dom'
 import { Visibility } from './Visibility'
 import { Button } from '../user-interaction/Button'
@@ -23,7 +23,7 @@ export type DrawerProps = HTMLAttributes<HTMLDivElement> & {
   onClose: () => void,
 }
 
-export const Drawer = ({
+export const Drawer = forwardRef<HTMLDivElement, DrawerProps>(function Drawer({
   children,
   isOpen = true,
   alignment = 'left',
@@ -33,7 +33,7 @@ export const Drawer = ({
   backgroundClassName,
   onClose,
   ...props
-}: DrawerProps) => {
+}, forwardedRef) {
   const translation = useHightideTranslation()
   const generatedId = useId()
   const ids = useMemo(() => ({
@@ -41,9 +41,11 @@ export const Drawer = ({
     background: `dialog-background-${generatedId}`,
     content: props.id ?? `dialog-content-${generatedId}`
   }), [generatedId, props.id])
-  const ref = useRef<HTMLDivElement>(null)
 
-  const { isVisible, transitionState, callbacks } = useTransitionState({ isOpen })
+  const ref = useRef<HTMLDivElement>(null)
+  useImperativeHandle(forwardedRef, () => ref.current, [ref])
+
+  const { isVisible, transitionState } = useTransitionState({ isOpen, ref })
 
   useFocusTrap({
     container: ref,
@@ -89,7 +91,6 @@ export const Drawer = ({
         ref={ref}
 
         onKeyDown={PropsUtil.aria.close(close)}
-        {...callbacks}
 
         data-name={PropsUtil.dataAttributes.name('drawer-content', props)}
         data-state={transitionState}
@@ -128,4 +129,4 @@ export const Drawer = ({
     </div>
     , document.body
   )
-}
+})

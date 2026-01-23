@@ -4,19 +4,18 @@ import { useId } from 'react'
 import { useCallback, useMemo, useRef, useState } from 'react'
 import { clsx } from 'clsx'
 import { Visibility } from '@/src/components/layout/Visibility'
-import type { FloatingElementAlignment } from '@/src/hooks/useFloatingElement'
-import { useFloatingElement } from '@/src/hooks/useFloatingElement'
-import { createPortal } from 'react-dom'
-import type { UseOverlayRegistryProps } from '@/src/hooks/useOverlayRegistry'
+import type { FloatingElementAlignment } from '@/src/hooks/useAnchoredPosition'
 import { useOverlayRegistry } from '@/src/hooks/useOverlayRegistry'
 import { useTransitionState } from '@/src/hooks/useTransitionState'
 import { PropsUtil } from '@/src/utils/propsUtil'
-import type { TooltipConfig } from '@/src/contexts/HightideConfigContext'
-import { useHightideConfig } from '@/src/contexts/HightideConfigContext'
+import type { TooltipConfig } from '@/src/global-contexts/HightideConfigContext'
+import { useHightideConfig } from '@/src/global-contexts/HightideConfigContext'
+import { Portal } from '@/src/components/utils/Portal'
+import { AnchoredFloatingContainer } from '../layout/AnchoredFloatingContainer'
 
 type Position = 'top' | 'bottom' | 'left' | 'right'
 
-export type TooltipProps = PropsWithChildren & Partial<TooltipConfig> & {
+export interface TooltipProps extends PropsWithChildren, Partial<TooltipConfig> {
   tooltip: ReactNode,
   /**
    * Class names of additional styling properties for the tooltip
@@ -50,7 +49,7 @@ export const Tooltip = ({
 }: TooltipProps) => {
   const id = useId()
   const [open, setOpen] = useState(false)
-  const timeoutRef = useRef<number | null>(null)
+  const timeoutRef = useRef<NodeJS.Timeout>(undefined)
 
   const { config } = useHightideConfig()
 
@@ -58,14 +57,14 @@ export const Tooltip = ({
     appearOverwrite ?? config.tooltip.appearDelay,
   [appearOverwrite, config.tooltip.appearDelay])
 
-  const anchorRef = useRef<HTMLDivElement>(null)
-  const containerRef = useRef<HTMLDivElement>(null)
-  const triangleRef = useRef<HTMLDivElement>(null)
+  const anchor = useRef<HTMLDivElement>(null)
+  const container = useRef<HTMLDivElement>(null)
+  const triangle = useRef<HTMLDivElement>(null)
 
   const isActive = !disabled && open
 
-  const { isVisible, transitionState, callbacks } = useTransitionState(
-    useMemo(() => ({ isOpen: isActive }), [isActive])
+  const { isVisible, transitionState } = useTransitionState(
+    useMemo(() => ({ isOpen: isActive, ref: triangle }), [isActive])
   )
 
   const verticalAlignment: FloatingElementAlignment = useMemo(() =>
@@ -76,31 +75,13 @@ export const Tooltip = ({
     position === 'left' ? 'beforeStart' : position === 'right' ? 'afterEnd' : 'center',
   [position])
 
-  const css = useFloatingElement(useMemo(() => ({
-    active: isActive || isVisible,
-    anchorRef: anchorRef,
-    containerRef,
-    horizontalAlignment,
-    verticalAlignment,
-  }), [horizontalAlignment, isActive, isVisible, verticalAlignment]))
-
-  const cssTriangle = useFloatingElement(useMemo(() => ({
-    active: isActive || isVisible,
-    anchorRef: anchorRef,
-    containerRef: triangleRef,
-    horizontalAlignment,
-    verticalAlignment,
-  }), [horizontalAlignment, isActive, isVisible, verticalAlignment]))
-
-  const regsitryOptions: UseOverlayRegistryProps = useMemo(() => ({ isActive }), [isActive])
-  const { zIndex } = useOverlayRegistry(regsitryOptions)
-  const { zIndex: zIndexTriangle } = useOverlayRegistry(regsitryOptions)
+  const { zIndex } = useOverlayRegistry({ isActive: isActive })
 
   const openWithDelay = useCallback(() => {
     if (timeoutRef.current || open) return
 
-    timeoutRef.current = window.setTimeout(() => {
-      timeoutRef.current = null
+    timeoutRef.current = setTimeout(() => {
+      timeoutRef.current = undefined
       setOpen(true)
     }, appearDelay)
   }, [appearDelay, open])
@@ -109,7 +90,7 @@ export const Tooltip = ({
   const close = useCallback(() => {
     if (timeoutRef.current) {
       clearTimeout(timeoutRef.current)
-      timeoutRef.current = null
+      timeoutRef.current = undefined
     }
     setOpen(false)
   }, [])
@@ -133,6 +114,7 @@ export const Tooltip = ({
     return () => {
       if (timeoutRef.current) {
         clearTimeout(timeoutRef.current)
+        timeoutRef.current = undefined
       }
     }
   }, [])
@@ -140,7 +122,7 @@ export const Tooltip = ({
 
   return (
     <div
-      ref={anchorRef}
+      ref={anchor}
       className={clsx('relative inline-block', containerClassName)}
       aria-describedby={isVisible ? id : undefined}
       onPointerEnter={openWithDelay}
@@ -150,37 +132,40 @@ export const Tooltip = ({
       onBlur={close}
     >
       {children}
-      <Visibility isVisible={isActive || isVisible}>
-        {createPortal(
-          <div
-            ref={containerRef}
+      <Visibility isVisible={isVisible}>
+        <Portal>
+          <AnchoredFloatingContainer
+            ref={triangle}
+            anchor={anchor}
+            options={{
+              verticalAlignment,
+              horizontalAlignment,
+              gap: 0,
+            }}
+            data-name="tooltip-triangle"
+            data-state={transitionState}
+            data-position={position}
+
+            style={{ zIndex, position: 'fixed' }}
+          />
+          <AnchoredFloatingContainer
+            ref={container}
             id={id}
-
-            {...callbacks}
-
+            anchor={anchor}
+            options={{
+              verticalAlignment,
+              horizontalAlignment,
+            }}
             data-name={PropsUtil.dataAttributes.name('tooltip')}
             data-state={transitionState}
 
             role="tooltip"
             className={tooltipClassName}
-            style={{ ...css, zIndex }}
+            style={{ zIndex, position: 'fixed' }}
           >
             {tooltip}
-          </div>
-          , document.body
-        )}
-        {createPortal(
-          <div
-            ref={triangleRef}
-
-            data-name="tooltip-triangle"
-            data-state={transitionState}
-            data-position={position}
-
-            style={{ ...cssTriangle, zIndex: zIndexTriangle }}
-          />
-          , document.body
-        )}
+          </AnchoredFloatingContainer>
+        </Portal>
       </Visibility>
     </div>
   )

@@ -1,180 +1,185 @@
-import type { HTMLAttributes } from 'react'
-import { useEffect, useMemo, useRef, useState } from 'react'
-import { createPortal } from 'react-dom'
+import type { ButtonHTMLAttributes, HTMLAttributes, ReactNode } from 'react'
+import { forwardRef, useCallback, useEffect, useId, useImperativeHandle, useMemo, useRef, useState } from 'react'
 import { CalendarIcon } from 'lucide-react'
 import clsx from 'clsx'
-import type { InputProps } from '@/src/components/user-interaction/input/Input'
-import { Input } from '@/src/components/user-interaction/input/Input'
-import { useOverwritableState } from '@/src/hooks/useOverwritableState'
-import { useLocale } from '@/src/contexts/LocaleContext'
-import { useOutsideClick } from '@/src/hooks/useOutsideClick'
+import { useLocale } from '@/src/global-contexts/LocaleContext'
 import type { DateTimePickerProps } from '@/src/components/user-interaction/date/DateTimePicker'
-import { DateTimePicker } from '@/src/components/user-interaction/date/DateTimePicker'
 import { Button } from '@/src/components/user-interaction/Button'
 import { useHightideTranslation } from '@/src/i18n/useHightideTranslation'
 import { Visibility } from '@/src/components/layout/Visibility'
 import { DateUtils } from '@/src/utils/date'
-import { useOverlayRegistry } from '@/src/hooks/useOverlayRegistry'
-import { useFloatingElement } from '@/src/hooks/useFloatingElement'
 import type { FormFieldDataHandling } from '../../form/FormField'
+import { DateTimePickerDialog } from '../date/DateTimePickerDialog'
+import type { ControlledStateProps } from '@/src/hooks/useControlledState'
+import { useControlledState } from '@/src/hooks/useControlledState'
+import { PropsUtil } from '@/src/utils/propsUtil'
+import type { FormFieldInteractionStates } from '@/src/components/form/FieldLayout'
+import { PopUp } from '../../layout/popup/PopUp'
 
-export type DateTimeInputProps = Omit<InputProps, keyof FormFieldDataHandling<string>>
-& Partial<FormFieldDataHandling<Date>>
-& {
-  onRemove?: () => void,
+export type DateTimeInputHandle = {
+  input: HTMLDivElement | null,
+  popup: HTMLDivElement | null,
+}
+
+export interface DateTimeInputProps extends
+  Partial<FormFieldInteractionStates>,
+  ControlledStateProps<Date | null>,
+  Omit<ButtonHTMLAttributes<HTMLDivElement>, 'defaultValue' | 'value'>,
+  Partial<FormFieldDataHandling<Date | null>>
+{
+  placeholder?: ReactNode,
+  allowRemove?: boolean,
   // TODO allow mode = time
   mode?: 'date' | 'dateTime',
   containerProps?: HTMLAttributes<HTMLDivElement>,
   pickerProps?: Omit<DateTimePickerProps, keyof FormFieldDataHandling<Date> | 'mode'>,
+  outsideClickCloses?: boolean,
+  onDialogOpeningChange?: (isOpen: boolean) => void,
 }
 
-export const DateTimeInput = ({
+export const DateTimeInput = forwardRef<DateTimeInputHandle, DateTimeInputProps>(function DateTimeInput({
   value,
+  defaultValue = null,
+  placeholder,
+  isControlled,
   onValueChange,
   onEditComplete,
-  onRemove,
+  allowRemove = false,
   containerProps,
   mode = 'date',
   pickerProps,
+  outsideClickCloses = true,
+  onDialogOpeningChange,
+  disabled = false,
+  readOnly = false,
+  invalid = false,
+  required = false,
   ...props
-}: DateTimeInputProps) => {
+}, forwardedRef) {
   const translation = useHightideTranslation()
   const { locale } = useLocale()
   const [isOpen, setIsOpen] = useState(false)
+  const [state, setState] = useControlledState({
+    value,
+    onValueChange,
+    defaultValue,
+    isControlled,
+  })
+  const [dialogValue, setDialogValue] = useState(state)
+  useEffect(() => {
+    setDialogValue(state)
+  }, [state])
 
-  const anchorRef = useRef<HTMLDivElement>(null)
+  const changeOpenWrapper = useCallback((isOpen: boolean) => {
+    onDialogOpeningChange?.(isOpen)
+    setIsOpen(isOpen)
+  }, [onDialogOpeningChange])
+
+  const id = useId()
+  const ids = useMemo(() => ({
+    input: `date-time-input-${id}`,
+    popup: `date-time-input-popup-${id}`,
+    label: `date-time-input-label-${id}`,
+  }), [id])
+
+  const innerRef = useRef<HTMLDivElement>(null)
   const containerRef = useRef<HTMLDivElement>(null)
-
-  const position = useFloatingElement({
-    active: isOpen,
-    anchorRef,
-    containerRef,
-    verticalAlignment: 'afterEnd',
-    horizontalAlignment: 'afterStart',
-    gap: 4,
-  })
-
-  useOutsideClick([containerRef, anchorRef], () => {
-    setIsOpen(false)
-    onEditComplete(value)
-  })
-
-  const { zIndex } = useOverlayRegistry({ isActive: isOpen })
-
-  const isReadOnly = useMemo(() => props.readOnly || props.disabled, [props.readOnly, props.disabled])
+  useImperativeHandle(forwardedRef, () => ({
+    input: innerRef.current,
+    popup: containerRef.current,
+  } as DateTimeInputHandle))
 
   useEffect(() => {
-    if (isReadOnly) {
-      setIsOpen(false)
+    if (readOnly || disabled) {
+      changeOpenWrapper(false)
     }
-  }, [isReadOnly])
+  }, [changeOpenWrapper, readOnly, disabled])
+
+  const clickHandler = PropsUtil.aria.click<HTMLDivElement>(() => changeOpenWrapper(true))
 
   return (
     <>
-      <div {...containerProps} ref={anchorRef} className={clsx('relative w-full', containerProps?.className)}>
-        <Input
+      <div {...containerProps} ref={innerRef} className={clsx('relative w-full', containerProps?.className)}>
+        <div
           {...props}
-          placeholder={translation('clickToSelect')}
-          value={value ? DateUtils.formatAbsolute(value, locale, mode === 'dateTime') : ''}
+          id={ids.input}
+
           onClick={(event) => {
-            setIsOpen(true)
+            clickHandler.onClick()
             props.onClick?.(event)
           }}
-          readOnly={true}
+          onKeyDown={clickHandler.onKeyDown}
+
+          {...PropsUtil.dataAttributes.interactionStates({ disabled, readOnly, invalid, required })}
+
+          {...PropsUtil.aria.interactionStates({ disabled, readOnly, invalid, required }, props)}
+          tabIndex={0}
+          role="combobox"
+          aria-haspopup="dialog"
+          aria-expanded={isOpen}
+          aria-controls={isOpen ? ids.popup : undefined}
+
           className={clsx(
-            'pr-10 w-full',
-            { 'hover:cursor-pointer': !isReadOnly },
+            'pr-10 w-full flex-row-2 items-center justify-between h-10 px-3 rounded-md input-element',
+            'outline-offset-0 outline-primary focus:outline-1 focus:outline-offset-1 focus:border-primary duration-(--animation-duration-in)',
+            { 'hover:cursor-pointer': !readOnly },
             props.className
           )}
-        />
-        <Button
-          coloringStyle="text" layout="icon" color="neutral" size="sm"
-          className="absolute right-1 top-1/2 -translate-y-1/2"
-          disabled={isReadOnly}
-          onClick={() => setIsOpen(prevState => !prevState)}
         >
-          <CalendarIcon className="size-5"/>
-        </Button>
-      </div>
-      <Visibility isVisible={isOpen}>
-        {createPortal(
-          <div
-            ref={containerRef}
-            className="fixed flex-col-3 rounded-lg shadow-xl border bg-surface-variant text-on-surface border-divider p-2"
-            style={{
-              ...position,
-              zIndex,
-              opacity: position ? undefined : 0,
+          {state ? DateUtils.formatAbsolute(state, locale, mode === 'dateTime') : placeholder ?? translation('clickToSelect')}
+        </div>
+        <Visibility isVisible={!readOnly}>
+          <Button
+            coloringStyle="text" layout="icon" color="neutral" size="sm"
+            className="absolute right-1 top-1/2 -translate-y-1/2"
+            disabled={disabled}
+            onClick={() => {
+              changeOpenWrapper(true)
             }}
+            aria-haspopup="dialog"
+            aria-expanded={isOpen}
+            aria-controls={isOpen ? ids.popup : undefined}
+            aria-label={translation('sDateTimeSelect', { datetimeMode: mode })}
           >
-            <DateTimePicker
-              {...pickerProps}
-              mode={mode}
-              value={value}
-              onValueChange={onValueChange}
-              onEditComplete={onEditComplete}
-            />
-            <div className="flex-row-2 justify-end">
-              <Visibility isVisible={!!onRemove && !!value}>
-                <Button
-                  size="md"
-                  color="negative"
-                  onClick={() => {
-                    onRemove?.()
-                    setIsOpen(false)
-                  }}
-                  className="min-w-26"
-                >
-                  {translation('clear')}
-                </Button>
-              </Visibility>
-              <Visibility isVisible={!value}>
-                <Button
-                  size="md"
-                  color="neutral"
-                  onClick={() => setIsOpen(false)}
-                  className="min-w-26"
-                >
-                  {translation('cancel')}
-                </Button>
-              </Visibility>
-              <Button
-                size="md"
-                onClick={() => {
-                  onEditComplete?.(value)
-                  setIsOpen(false)
-                }}
-                className="min-w-26"
-              >
-                {translation('done')}
-              </Button>
-            </div>
-          </div>,
-          document.body
-        )}
-      </Visibility>
+            <CalendarIcon className="size-5"/>
+          </Button>
+        </Visibility>
+      </div>
+      <PopUp
+        ref={containerRef}
+        id={ids.popup}
+        isOpen={isOpen}
+        anchor={innerRef}
+        options={{
+          verticalAlignment: 'afterEnd',
+          horizontalAlignment: 'center',
+          gap: 4,
+        }}
+        outsideClickOptions={{ refs: [innerRef], active: outsideClickCloses }}
+
+        onClose={() => {
+          changeOpenWrapper(false)
+          onEditComplete?.(state)
+        }}
+
+        role="dialog"
+        aria-labelledby={ids.label}
+
+        className="flex-col-2 p-2"
+      >
+        <DateTimePickerDialog
+          value={dialogValue}
+          allowRemove={allowRemove}
+          onValueChange={setDialogValue}
+          onEditComplete={(value) => {
+            setState?.(value)
+            onEditComplete?.(value)
+            changeOpenWrapper(false)
+          }}
+          pickerProps={pickerProps}
+          mode={mode}
+        />
+      </PopUp>
     </>
   )
-}
-
-export const DateTimeInputUncontrolled = ({
-  value: initialValue,
-  ...props
-}: DateTimeInputProps) => {
-  const [value, setValue] = useOverwritableState<Date | undefined>(initialValue)
-
-  return (
-    <DateTimeInput
-      {...props}
-      value={value}
-      onValueChange={(newDate) => {
-        setValue(newDate)
-        props.onValueChange?.(newDate)
-      }}
-      onRemove={() => {
-        setValue(undefined)
-        props.onRemove?.()
-      }}
-    />
-  )
-}
+})

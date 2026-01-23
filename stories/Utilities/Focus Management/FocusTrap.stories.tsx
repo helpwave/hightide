@@ -1,7 +1,7 @@
 import type { Meta, StoryObj } from '@storybook/nextjs'
 import { useRef, useState } from 'react'
 import { InputUncontrolled } from '@/src/components/user-interaction/input/Input'
-import { FocusTrap } from '@/src/components/utils/FocusTrap'
+import { FocusTrapWrapper } from '@/src/components/utils/FocusTrap'
 import { clsx } from 'clsx'
 import { Dialog } from '@/src/components/layout/dialog/Dialog'
 import { Button } from '@/src/components/user-interaction/Button'
@@ -44,7 +44,7 @@ export const focusTrap: Story = {
           onClose={() => setShowDialog2(false)}
         />
         <div className="flex-col-4">
-          <FocusTrap
+          <FocusTrapWrapper
             active={active}
             initialFocus={ref}
             className={clsx(
@@ -59,7 +59,7 @@ export const focusTrap: Story = {
             <Button ref={ref} onClick={() => setActive(prevState => !prevState)}>
               {'Toggle Focus Trap'}
             </Button>
-            <FocusTrap
+            <FocusTrapWrapper
               active={innerActive}
               initialFocus={ref2}
               className={clsx(
@@ -75,8 +75,8 @@ export const focusTrap: Story = {
                 {'Toggle Inner Focus Trap'}
               </Button>
               <InputUncontrolled ref={ref2} />
-            </FocusTrap>
-          </FocusTrap>
+            </FocusTrapWrapper>
+          </FocusTrapWrapper>
           <span>This part is not reachable with keyboard navigation when the traps are active</span>
           <Button onClick={() => setShowDialog(true)} >
             {'Open dialog trap'}

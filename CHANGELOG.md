@@ -5,6 +5,30 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/)
 and adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [0.6.6] - 2026-01-09
+
+### Added
+- Paginated Loading of Table entries
+- `TableColumnPicker` for choosing the displayed columns
+- `TableContext`
+- `TableColumn` for defining the columns through the table context 
+- `PopUp` for simplifying the usage of the `AnchoredFloatingContainer` with conditional hiding logic and a `FocusTrap`
+- Add `DialogRoot` and `DialogOpener`
+- Add several new `TableFilter`
+
+### Changed
+- `TableFilterButton` now uses the `DateTimeInput` component
+- the folder name for global contexts to `global-contexts` instead of the previous `context` to be more verbose about its purpose
+- `FocusTrap` by splitting it into `FocusTrap` which takes a ref of the element to entrap and `FocusTrapWrapper` which directly provided this element as a `<div>`
+- `OverlayRegistry` now returns the unsubscribes as a return function of the subscribe function
+- several components to now use interfaces instead of types
+
+### Fixed
+- impure calls and hooks for `useTransitionState`
+
+### Removed
+- `usePopOverPosition` in favor of `useAnchoredPosition`
+
 ## [0.6.5] - 2026-01-09
 
 ### Fixed

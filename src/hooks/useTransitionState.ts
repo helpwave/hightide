@@ -1,81 +1,128 @@
-import { useCallback, useEffect, useRef, useState } from 'react'
+'use client'
+
+import type { RefObject } from 'react'
+import { useCallback, useEffect, useLayoutEffect, useReducer, useRef, useState } from 'react'
 
 export type TransitionState = 'opened' | 'closed' | 'opening' | 'closing'
+
+const reducer = (state: TransitionState, action: 'open' | 'close' | 'finished') : TransitionState => {
+  switch (action) {
+  case 'open':
+    return 'opening'
+  case 'close':
+    return 'closing'
+  case 'finished':{
+    if(state === 'opening') {
+      return 'opened'
+    }
+    if(state === 'closing') {
+      return 'closed'
+    }
+    return state
+  }
+  default:
+    return state
+  }
+}
 
 type UseTransitionStateResult = {
     transitionState: TransitionState,
     isVisible: boolean,
-    callbacks: {
-        onAnimationStart: () => void,
-        onAnimationEnd: () => void,
-        onTransitionStart: () => void,
-        onTransitionEnd: () => void,
-        onTransitionCancel: () => void,
-    },
 }
 
 type UseTransitionStateProps = {
     isOpen: boolean,
+    initialState?: TransitionState,
+    ref?: RefObject<HTMLElement>,
+    timeout?: number,
 }
 
-export const useTransitionState = ({ isOpen }: UseTransitionStateProps): UseTransitionStateResult => {
-  const [hasTransitionFinished, setHasTransitionFinished] = useState(true)
-  const [currentOpen, setCurrentOpen] = useState(isOpen)
+export const useTransitionState = ({
+  isOpen,
+  initialState = 'closed',
+  ref,
+  timeout: initialTimeout = 1000,
+}: UseTransitionStateProps): UseTransitionStateResult => {
+  const [state, dispatch] = useReducer(reducer, initialState)
 
-  const isAnimating = useRef(false)
   const timer = useRef<NodeJS.Timeout | undefined>(undefined)
+  const hasAnimation = useRef<boolean>(false)
+  const [timeout] = useState<number>(initialTimeout)
 
   useEffect(() => {
-    if (isOpen === currentOpen) {
-      return
+    if (isOpen && state !== 'opened') {
+      dispatch('open')
+    } else if (!isOpen && state !== 'closed') {
+      dispatch('close')
     }
+  }, [isOpen, state])
 
-    setHasTransitionFinished(false)
-    setCurrentOpen(isOpen)
-    isAnimating.current = false
 
-    const checkAnimationStart = () => {
-      timer.current = setTimeout(() => {
-        if (!isAnimating.current) {
-          setHasTransitionFinished(true)
-        }
-      }, 50)
-    }
-    checkAnimationStart()
-
-    return () => {
+  useEffect(() => {
+    if (state === 'opening' || state === 'closing') {
+      if (timer.current) {
+        clearTimeout(timer.current)
+      }
+      if(timeout > 0) {
+        timer.current = setTimeout(() => {
+          dispatch('finished')
+        }, timeout)
+      }
+    } else {
       if (timer.current) {
         clearTimeout(timer.current)
       }
     }
-  }, [isOpen, currentOpen])
+  }, [state, timeout])
+
+  useLayoutEffect(() => {
+    if (ref?.current && (state === 'opening' || state === 'closing')) {
+      const animations = ref.current.getAnimations({ subtree: true })
+        .filter(animation => animation.effect?.getTiming().duration !== '0s')
+      if (animations.length > 0) {
+        hasAnimation.current = true
+        Promise.all(animations.map(animation => animation.finished))
+          .then(() => {
+            dispatch('finished')
+          })
+          .catch(() => {
+            dispatch('finished')
+          })
+      } else {
+        dispatch('finished')
+      }
+    }
+  }, [ref, state])
 
   const onStart = useCallback(() => {
-    isAnimating.current = true
+    hasAnimation.current = true
   }, [])
 
   const onEnd = useCallback(() => {
-    setHasTransitionFinished(true)
-    isAnimating.current = false
+    dispatch('finished')
+    hasAnimation.current = false
   }, [])
 
-  const transitionState: TransitionState = currentOpen
-    ? hasTransitionFinished
-      ? 'opened'
-      : 'opening'
-    : hasTransitionFinished
-      ? 'closed'
-      : 'closing'
+  useEffect(() => {
+    if (ref?.current && (state === 'opening' || state === 'closing')) {
+      const element = ref.current
+      element .addEventListener('animationstart', onStart)
+      element.addEventListener('animationend', onEnd)
+      element.addEventListener('transitionstart', onStart)
+      element.addEventListener('transitionend', onEnd)
+      element.addEventListener('transitioncancel', onEnd)
+      return () => {
+        element.removeEventListener('animationstart', onStart)
+        element.removeEventListener('animationend', onEnd)
+        element.removeEventListener('transitionstart', onStart)
+        element.removeEventListener('transitionend', onEnd)
+        element.removeEventListener('transitioncancel', onEnd)
+      }
+    }
+  }, [state, ref, onStart, onEnd])
 
   return {
-    transitionState,
-    isVisible: transitionState !== 'closed',
-    callbacks: {
-      onAnimationStart: onStart,
-      onAnimationEnd: onEnd,
-      onTransitionStart: onStart,
-      onTransitionEnd: onEnd,
-      onTransitionCancel: onEnd,
-    },
+    transitionState: state,
+    isVisible: state !== 'closed',
   }
 }

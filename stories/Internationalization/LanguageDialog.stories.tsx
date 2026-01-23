@@ -1,5 +1,5 @@
 import type { Meta, StoryObj } from '@storybook/nextjs'
-import { LanguageDialog } from '@/src/components/layout/dialog/LanguageDialog'
+import { LanguageDialog } from '@/src/components/layout/dialog/premade/LanguageDialog'
 
 const meta: Meta = {
   component: LanguageDialog,

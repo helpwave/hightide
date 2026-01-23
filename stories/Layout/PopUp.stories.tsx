@@ -1,35 +1,37 @@
 import type { Meta, StoryObj } from '@storybook/nextjs'
-import type { FloatingContainerProps } from '@/src/components/layout/FloatingContainer'
-import { FloatingContainer } from '@/src/components/layout/FloatingContainer'
+import { AnchoredFloatingContainer } from '@/src/components/layout/AnchoredFloatingContainer'
 import { useRef } from 'react'
+import type { UseAnchoredPositionOptions } from '@/src/hooks/useAnchoredPosition'
+import type { PopUpProps } from '@/src/components/layout/popup/PopUp'
+import { PopUp } from '@/src/components/layout/popup/PopUp'
+import { action } from 'storybook/actions'
 
-type StoryArgs = Omit<FloatingContainerProps, 'children'> & {
+type StoryArgs = Omit<PopUpProps, 'options'> & UseAnchoredPositionOptions & {
   isAnchored?: boolean,
-  hasBackgroundOverlay?: boolean,
 }
 
 const meta: Meta<StoryArgs> = {
-  component: FloatingContainer,
+  component: AnchoredFloatingContainer,
 }
 
 export default meta
 type Story = StoryObj<typeof meta>;
 
-export const floatingContainer: Story = {
+export const popUp: Story = {
   args: {
+    isOpen: true,
     isAnchored: true,
-    hasBackgroundOverlay: false,
     isPolling: true,
     verticalAlignment: 'afterEnd',
     horizontalAlignment: 'center',
     screenPadding: 16,
     gap: 4,
     pollingInterval: 100,
-    backgroudOverlay: (<div className="fixed inset-0 bg-overlay-shadow"/>),
+    onClose: action('onClose'),
     children: (
-      <div className="flex-col-2 h-full w-full bg-primary text-on-primary rounded-md p-2">
-          Test Container
-        <span className="opacity-80">Description</span>
+      <div className="flex-col-2 h-full w-full p-2">
+        {'Test Container'}
+        <span className="opacity-80">{'Description'}</span>
       </div>
     ),
   },
@@ -45,10 +47,16 @@ export const floatingContainer: Story = {
   },
   render: ({
     isAnchored,
-    hasBackgroundOverlay,
+    isPolling,
+    verticalAlignment,
+    horizontalAlignment,
+    screenPadding,
+    gap,
+    pollingInterval,
     ...props
   }) => {
     const anchorRef = useRef<HTMLDivElement>(null)
+
     return (
       <>
         <div className="flex-col-0 items-center h-full overflow-scroll">
@@ -61,11 +69,18 @@ export const floatingContainer: Story = {
           </div>
           <div className="min-h-9/10"></div>
         </div>
-        <FloatingContainer
+        <PopUp
           {...props}
           anchor={isAnchored ? anchorRef : undefined}
           className="w-128 h-64"
-          backgroundOverlay={hasBackgroundOverlay ? props.backgroudOverlay : undefined}
+          options={{
+            isPolling,
+            verticalAlignment,
+            horizontalAlignment,
+            screenPadding,
+            gap,
+            pollingInterval,
+          }}
         />
       </>
     )

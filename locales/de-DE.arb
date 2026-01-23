@@ -3,8 +3,10 @@
   "all": "Alle",
   "apply": "Anwenden",
   "back": "Zurück",
+  "between": "Zwischen",
   "cancel": "Abbrechen",
   "carousel": "Karussell",
+  "contains": "Enthält",
   "change": "Ändern",
   "chooseLanguage": "Wähle deine bevorzugte Sprache",
   "chooseTheme": "Wähle dein bevorzugtes Farbschema.",
@@ -16,10 +18,12 @@
   "clickToCopy": "Zum kopieren klicken",
   "clickToSelect": "Zum Auswählen drücken",
   "close": "Schließen",
+  "closeDialog": "Dialog schließen",
   "confirm": "Bestätigen",
   "copy": "Kopieren",
   "copied": "Kopiert",
   "create": "Erstellen",
+  "date": "Datum",
   "decline": "Ablehnen",
   "delete": "Löschen",
   "discard": "Verwerfen",
@@ -54,6 +58,7 @@
   "saved": "Gespeichert",
   "search": "Suche",
   "select": "Select",
+  "selection": "Auswahl",
   "selectOption": "Option auswählen",
   "show": "Anzeigen",
   "showMore": "Mehr anzeigen",
@@ -94,18 +99,46 @@
       "theme": {}
     }
   },
+  "sDateTimeSelect": "{datetimeMode, select, date{Datum auswählen} dateTime{Datum und Uhrzeit auswählen}}",
+  "@sDateTimeSelect": {
+    "placeholders": {
+      "datetimeMode": {}
+    }
+  },
   "update": "Update",
   "unsavedChanges": "Ungespeicherte Änderungen",
   "unsavedChangesSaveQuestion": "Möchtest du die Änderungen speichern?",
   "value": "Wert",
   "yes": "Ja",
   "endDate": "Ende",
+  "endsWith": "Endet mit",
+  "entriesPerPage": "Einträge pro Seite",
+  "equals": "Gleich",
   "filter": "Filter",
+  "filterNonWhitespace": "Nicht leer",
+  "greaterThan": "Größer als",
+  "greaterThanOrEqual": "Größer oder gleich",
+  "filterNotUndefined": "Definiert",
+  "filterUndefined": "Undefiniert",
   "max": "Max",
   "min": "Min",
+  "notBetween": "Nicht zwischen",
+  "notContains": "Enthält nicht",
+  "notEquals": "Nicht gleich",
+  "noParameterRequired": "Kein Parameter erforderlich",
+  "parameter": "Parameter",
   "startDate": "Start",
+  "startsWith": "Beginnt mit",
   "notEmpty": "Das Feld darf nicht leer sein.",
   "invalidEmail": "Die E-Mail ist ungültig.",
+  "isFalse": "Ist falsch",
+  "isTrue": "Ist wahr",
+  "lessThan": "Kleiner als",
+  "lessThanOrEqual": "Kleiner oder gleich",
+  "after": "Nach",
+  "before": "Vor",
+  "onOrAfter": "Nach oder Gleich",
+  "onOrBefore": "Vor oder Gleich",
   "tooShort": "Der Wert muss mindestens {min} Zeichen enthalten.",
   "@tooShort": {
     "placeholders": {
@@ -156,6 +189,8 @@
   "identifier": "Identifikator",
   "name": "Name",
   "street": "Straße",
+  "tag": "Tag",
+  "tags": "Tags",
   "sGender": "{gender, select, male{Männlich} female{Weiblich} other{Divers}}",
   "@sGender": {
     "placeholders": {
@@ -169,5 +204,16 @@
     "placeholders": {
       "otherSortings": { "type": "number" }
     }
-  }
+  },
+  "columnPicker": "Spaltenauswahl",
+  "columnPickerDescription": "Spalten neu anordnen und ein- oder ausblenden",
+  "columns": "Spalten",
+  "moveUp": "Nach oben",
+  "moveDown": "Nach unten",
+  "hideColumn": "Spalte ausblenden",
+  "showColumn": "Spalte einblenden",
+  "pinned": "Angeheftet",
+  "unpin": "Loslösen",
+  "pinLeft": "Links anheften",
+  "pinRight": "Rechts anheften"
 }

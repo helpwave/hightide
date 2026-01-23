@@ -6,12 +6,7 @@ import clsx from 'clsx'
 import { CheckIcon } from 'lucide-react'
 import { useHightideTranslation } from '@/src/i18n/useHightideTranslation'
 import { ExpansionIcon } from '@/src/components/display-and-visualization/ExpansionIcon'
-import { useFocusTrap } from '@/src/hooks/focus/useFocusTrap'
-import { useOverlayRegistry } from '@/src/hooks/useOverlayRegistry'
-import type { UseFloatingElementOptions } from '@/src/hooks/useFloatingElement'
-import { useFloatingElement } from '@/src/hooks/useFloatingElement'
-import { createPortal } from 'react-dom'
-import { match } from '@/src/utils/match'
+import { PopUp, type PopUpProps } from '../../layout/popup/PopUp'
 
 //
 // SelectOption
@@ -201,19 +196,11 @@ export const SelectButton = forwardRef<HTMLButtonElement, SelectButtonProps>(fun
 ///
 /// SelectContent
 ///
-type Orientation = 'vertical' | 'horizontal'
-
-export type SelectContentProps = HTMLAttributes<HTMLUListElement> & {
-  alignment?: Pick<UseFloatingElementOptions, 'gap' | 'horizontalAlignment' | 'verticalAlignment'>,
-  orientation?: Orientation,
-  containerClassName?: string,
-}
+export type SelectContentProps = PopUpProps
 
 export const SelectContent = forwardRef<HTMLUListElement, SelectContentProps>(function SelectContent({
   id,
-  alignment,
-  orientation = 'vertical',
-  containerClassName,
+  options,
   ...props
 }, ref) {
   const innerRef = useRef<HTMLUListElement>(null)
@@ -230,52 +217,30 @@ export const SelectContent = forwardRef<HTMLUListElement, SelectContentProps>(fu
     }
   }, [id, setIds])
 
-  const position = useFloatingElement({
-    active: state.isOpen,
-    anchorRef: trigger.ref,
-    containerRef: innerRef,
-    ...alignment,
-  })
-
-  useFocusTrap({
-    container: innerRef,
-    active: state.isOpen && !!position,
-  })
-
-  const { zIndex } = useOverlayRegistry({ isActive: state.isOpen })
-
-  return createPortal(
-    <div
+  return (
+    <PopUp
+      {...props}
       id={ids.content}
-      className={clsx('fixed inset-0 w-screen h-screen', containerClassName)}
-      style={{ zIndex: zIndex }}
-      hidden={!state.isOpen}
+      isOpen={state.isOpen}
+      anchor={trigger.ref}
+      options={options}
+      forceMount={true}
+      onClose={() => {
+        trigger.toggleOpen(false)
+        props.onClose?.()
+      }}
+
+      aria-labelledby={ids.trigger}
     >
-      <div
-        onClick={() => trigger.toggleOpen(false)}
-        className={clsx('fixed inset-0 w-screen h-screen')}
-      />
       <ul
-        {...props}
         ref={innerRef}
         onKeyDown={(event) => {
           switch (event.key) {
-          case 'Escape':
-            trigger.toggleOpen(false)
-            event.preventDefault()
-            event.stopPropagation()
-            break
-          case match(orientation, {
-            vertical: 'ArrowDown',
-            horizontal: 'ArrowUp'
-          }):
+          case 'ArrowDown':
             item.moveHighlightedIndex(1)
             event.preventDefault()
             break
-          case match(orientation, {
-            vertical: 'ArrowUp',
-            horizontal: 'ArrowDown'
-          }):
+          case 'ArrowUp':
             item.moveHighlightedIndex(-1)
             event.preventDefault()
             break
@@ -301,20 +266,15 @@ export const SelectContent = forwardRef<HTMLUListElement, SelectContentProps>(fu
         }}
 
         className={clsx('flex-col-0 p-2 bg-menu-background text-menu-text rounded-md shadow-hw-bottom focus-outline-within overflow-auto', props.className)}
-        style={{
-          opacity: position ? undefined : 0,
-          position: 'fixed',
-          ...position
-        }}
 
         role="listbox"
         aria-multiselectable={config.isMultiSelect}
-        aria-orientation={orientation}
-        tabIndex={position ? 0 : undefined}
+        aria-orientation="vertical"
+        tabIndex={0}
       >
         {props.children}
       </ul>
-    </div>, document.body
+    </PopUp>
   )
 })
 

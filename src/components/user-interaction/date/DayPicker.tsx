@@ -1,6 +1,6 @@
 import type { WeekDay } from '@/src/utils/date'
 import { DateUtils, getWeeksForCalenderMonth, isInTimeSpan } from '@/src/utils/date'
-import { useLocale } from '@/src/contexts/LocaleContext'
+import { useLocale } from '@/src/global-contexts/LocaleContext'
 import type { FormFieldDataHandling } from '../../form/FormField'
 import { useOverwritableState } from '@/src/hooks/useOverwritableState'
 import { PropsUtil } from '@/src/utils/propsUtil'

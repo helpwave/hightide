@@ -1,9 +1,5 @@
 @layer components {
   [data-name="table-container"] {
-    @apply flex-col-4;
-  }
-
-  [data-name="table-scroll-wrapper"] {
     @apply flex-col-0 w-full overflow-auto;
   }
 
@@ -13,7 +9,7 @@
   }
 
   [data-name="table-filler-cell"] {
-    @apply flex flex-row items-center w-1/2 h-4 text-disabled font-bold;
+    @apply flex flex-row items-center w-1/2 h-6 text-disabled font-bold;
   }
 
   [data-name="table-cell"] {
@@ -45,10 +41,10 @@
     @apply [nth-last-child(1)]:first:rounded-bl-lg [nth-last-child(1)]:last:rounded-br-lg;
   }
 
-  [data-name="table-resize-indicator"] {
+  .table-resize-indicator {
     @apply absolute right-1 top-1/2 -translate-y-1/2;
     @apply h-6 w-2 rounded bg-primary;
-    @apply cursor-col-resize select-none touch-none;
+    @apply cursor-col-resize;
     @apply opacity-0 transition-opacity;
 
     &[data-active] {

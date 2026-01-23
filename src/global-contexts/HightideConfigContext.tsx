@@ -1,5 +1,5 @@
 import { createContext, type PropsWithChildren, useContext, useState } from 'react'
-import type { ResolvedTheme } from '@/src/contexts/ThemeContext'
+import type { ResolvedTheme } from '@/src/global-contexts/ThemeContext'
 import type { HightideTranslationLocales } from '@/src/i18n/translations'
 import type { DeepPartial } from '@/src/utils/typing'
 

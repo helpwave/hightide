@@ -148,7 +148,7 @@ Style different states using attribute selectors:
 You can define custom utilities using `@utility`:
 
 ```css
-@utility expadable-content-h-* {
+@utility expandable-content-h-* {
   height: calc(var(--spacing) * --value(number));
 
   &[data-expanded] {

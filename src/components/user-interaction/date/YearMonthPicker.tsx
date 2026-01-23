@@ -3,7 +3,7 @@ import { equalSizeGroups, range } from '@/src/utils/array'
 import clsx from 'clsx'
 import { ExpandableContent, ExpandableHeader, ExpandableRoot } from '@/src/components/layout/Expandable'
 import { addDuration, DateUtils, subtractDuration } from '@/src/utils/date'
-import { useLocale } from '@/src/contexts/LocaleContext'
+import { useLocale } from '@/src/global-contexts/LocaleContext'
 import { useOverwritableState } from '@/src/hooks/useOverwritableState'
 import { Button } from '@/src/components/user-interaction/Button'
 import type { FormFieldDataHandling } from '../../form/FormField'
@@ -46,7 +46,7 @@ const YearRow = memo(function YearRow({
       <ExpandableHeader className={clsx('px-2', { 'text-primary font-bold': isSelectedYear })}>
         {year}
       </ExpandableHeader>
-      <ExpandableContent className="gap-y-1 px-2 expadable-content-h-39">
+      <ExpandableContent className="gap-y-1 px-2 expandable-content-h-39">
         {isExpanded && monthGrid.map((group, groupIdx) => (
           <div key={groupIdx} className="flex-row-1">
             {group.map(month => {
