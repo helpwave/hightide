@@ -1,25 +1,30 @@
 import type { ColumnDef } from '@tanstack/react-table'
-import { memo, useEffect, useMemo, useState } from 'react'
-import { useTableContext } from './TableContext'
-import type { TableFilterType } from './TableFilterButton'
+import { memo,  useEffect,  useMemo, useState } from 'react'
+import { useTableColumnDefinitionContext } from './TableContext'
+import type { TableFilterCategory } from './TableFilter'
+import { useLogOnce } from '@/src/hooks/useLogOnce'
 
 export type TableColumnProps<T> = ColumnDef<T> & {
-  filterType?: TableFilterType,
+  filterType?: TableFilterCategory,
 }
 
 const TableColumnComponent = <T,>({
   filterType,
   ...props
 }: TableColumnProps<T>) => {
-  const { column: { registerColumn } } = useTableContext<T>()
+  const { registerColumn } = useTableColumnDefinitionContext<T>()
+
+  const filterFn = filterType ?? props.filterFn
+
+  useLogOnce(
+    'TableColumn: For filterType === tags, filterData.tags must be set.',
+    filterType === 'tags' && props.meta?.filterData?.tags === undefined
+  )
 
   const [column] = useState<ColumnDef<T>>({
     ...props,
-    meta: {
-      ...props.meta,
-      filterType,
-    },
-  })
+    filterFn,
+  } as ColumnDef<T>)
 
   useEffect(() => {
     const unsubscribe =registerColumn(column)
@@ -44,7 +49,8 @@ const TableColumnFactory = <T,>() => memo(
     prevProps.enableHiding === nextProps.enableHiding &&
     prevProps.enablePinning === nextProps.enablePinning &&
     prevProps.enableResizing === nextProps.enableResizing &&
-    prevProps.enableSorting === nextProps.enableSorting
+    prevProps.enableSorting === nextProps.enableSorting &&
+    prevProps.meta === nextProps.meta
   }
 )
 

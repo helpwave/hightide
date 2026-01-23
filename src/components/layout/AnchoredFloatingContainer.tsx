@@ -2,7 +2,6 @@ import type { HTMLAttributes, RefObject } from 'react'
 import { forwardRef, useImperativeHandle, useRef } from 'react'
 import type { UseAnchoredPositionOptions } from '@/src/hooks/useAnchoredPosition'
 import { useAnchoredPosition as useAnchoredPosition } from '@/src/hooks/useAnchoredPosition'
-import { useOverlayRegistry } from '@/src/hooks/useOverlayRegistry'
 
 export type BackgroundOverlayProps = HTMLAttributes<HTMLDivElement>
 
@@ -26,8 +25,6 @@ export const AnchoredFloatingContainer = forwardRef<HTMLDivElement, AnchoredFloa
     anchor: anchor,
   })
 
-  const { zIndex } = useOverlayRegistry()
-
   return (
     <div
       {...props}
@@ -36,7 +33,6 @@ export const AnchoredFloatingContainer = forwardRef<HTMLDivElement, AnchoredFloa
       data-positioned={position ? '' : undefined}
 
       style={{
-        zIndex,
         overflow: 'hidden',
         ...position,
         ...props.style

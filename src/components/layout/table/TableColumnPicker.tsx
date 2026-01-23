@@ -1,7 +1,7 @@
 import { useMemo, useRef, useId } from 'react'
 import { ChevronUp, ChevronDown, ChevronLeft, ChevronRight, Eye, EyeOff, Pin, PinOff } from 'lucide-react'
 import { Button } from '@/src/components/user-interaction/Button'
-import { useTableContext } from './TableContext'
+import { useTableBodyContext } from './TableContext'
 import { useHightideTranslation } from '@/src/i18n/useHightideTranslation'
 import type { PopUpProps } from '../popup/PopUp'
 import { PopUp } from '../popup/PopUp'
@@ -11,7 +11,7 @@ import { PopUp } from '../popup/PopUp'
 export interface TableColumnPickerProps extends PopUpProps {}
 
 export const TableColumnPicker = ({ ...props }: TableColumnPickerProps) => {
-  const { tableState: table } = useTableContext()
+  const { table: table } = useTableBodyContext()
   const translation = useHightideTranslation()
   const containerRef = useRef<HTMLDivElement>(null)
   const generatedId = useId()

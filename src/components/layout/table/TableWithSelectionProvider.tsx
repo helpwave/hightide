@@ -1,10 +1,11 @@
 import clsx from 'clsx'
 import { Checkbox } from '@/src/components/user-interaction/Checkbox'
 import { FillerCell } from './FillerCell'
-import type { TableProviderProps } from './TableContext'
-import { TableProvider } from './TableContext'
+import type { TableProviderProps } from './TableProvider'
+import { TableProvider } from './TableProvider'
 import { TableColumn } from './TableColumn'
-import type { RowSelectionState } from '@tanstack/react-table'
+import type { Row, RowSelectionState, Table } from '@tanstack/react-table'
+import { useCallback } from 'react'
 
 export interface TableWithSelectionProviderProps<T> extends TableProviderProps<T> {
     rowSelection: RowSelectionState,
@@ -26,12 +27,12 @@ export const TableWithSelectionProvider = <T,>({
   return (
     <TableProvider
       {...props}
-      fillerRow={(columnId, table) => {
+      fillerRow={useCallback((columnId: string, table: Table<T>) => {
         if (columnId === selectionRowId) {
           return (<Checkbox value={false} disabled={true} className="max-w-6" />)
         }
         return fillerRow?.(columnId, table) ?? (<FillerCell />)
-      }}
+      }, [fillerRow, selectionRowId])}
       initialState={{
         ...props.initialState,
         columnPinning: {
@@ -43,12 +44,12 @@ export const TableWithSelectionProvider = <T,>({
         rowSelection,
         ...state
       }}
-      onRowClick={(row, table) => {
+      onRowClick={useCallback((row: Row<T>, table: Table<T>) => {
         if (!disableClickRowClickSelection) {
           row.toggleSelected()
         }
         onRowClick?.(row, table)
-      }}
+      }, [disableClickRowClickSelection, onRowClick])}
       meta={{
         ...meta,
         bodyRowClassName: clsx(

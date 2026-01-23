@@ -6,12 +6,7 @@ import clsx from 'clsx'
 import { CheckIcon } from 'lucide-react'
 import { useHightideTranslation } from '@/src/i18n/useHightideTranslation'
 import { ExpansionIcon } from '@/src/components/display-and-visualization/ExpansionIcon'
-import { useFocusTrap } from '@/src/hooks/focus/useFocusTrap'
-import { useOverlayRegistry } from '@/src/hooks/useOverlayRegistry'
-import type { UseAnchoredPositionOptions } from '@/src/hooks/useAnchoredPosition'
-import { useAnchoredPosition } from '@/src/hooks/useAnchoredPosition'
-import { match } from '@/src/utils/match'
-import { Portal } from '../../utils/Portal'
+import { PopUp, type PopUpProps } from '../../layout/popup/PopUp'
 
 //
 // SelectOption
@@ -201,19 +196,11 @@ export const SelectButton = forwardRef<HTMLButtonElement, SelectButtonProps>(fun
 ///
 /// SelectContent
 ///
-type Orientation = 'vertical' | 'horizontal'
-
-export type SelectContentProps = HTMLAttributes<HTMLUListElement> & {
-  alignment?: Pick<UseAnchoredPositionOptions, 'gap' | 'horizontalAlignment' | 'verticalAlignment'>,
-  orientation?: Orientation,
-  containerClassName?: string,
-}
+export type SelectContentProps = PopUpProps
 
 export const SelectContent = forwardRef<HTMLUListElement, SelectContentProps>(function SelectContent({
   id,
-  alignment,
-  orientation = 'vertical',
-  containerClassName,
+  options,
   ...props
 }, ref) {
   const innerRef = useRef<HTMLUListElement>(null)
@@ -230,93 +217,64 @@ export const SelectContent = forwardRef<HTMLUListElement, SelectContentProps>(fu
     }
   }, [id, setIds])
 
-  const position = useAnchoredPosition({
-    active: state.isOpen,
-    anchor: trigger.ref,
-    container: innerRef,
-    ...alignment,
-  })
-
-  useFocusTrap({
-    container: innerRef,
-    active: state.isOpen && !!position,
-  })
-
-  const { zIndex } = useOverlayRegistry({ isActive: state.isOpen })
-
   return (
-    <Portal>
-      <div
-        id={ids.content}
-        className={clsx('fixed inset-0 w-screen h-screen', containerClassName)}
-        style={{ zIndex: zIndex }}
-        hidden={!state.isOpen}
-      >
-        <div
-          onClick={() => trigger.toggleOpen(false)}
-          className={clsx('fixed inset-0 w-screen h-screen')}
-        />
-        <ul
-          {...props}
-          ref={innerRef}
-          onKeyDown={(event) => {
-            switch (event.key) {
-            case 'Escape':
-              trigger.toggleOpen(false)
-              event.preventDefault()
-              event.stopPropagation()
-              break
-            case match(orientation, {
-              vertical: 'ArrowDown',
-              horizontal: 'ArrowUp'
-            }):
-              item.moveHighlightedIndex(1)
-              event.preventDefault()
-              break
-            case match(orientation, {
-              vertical: 'ArrowUp',
-              horizontal: 'ArrowDown'
-            }):
-              item.moveHighlightedIndex(-1)
-              event.preventDefault()
-              break
-            case 'Home':
+    <PopUp
+      {...props}
+      id={ids.content}
+      isOpen={state.isOpen}
+      anchor={trigger.ref}
+      options={options}
+      forceMount={true}
+      onClose={() => {
+        trigger.toggleOpen(false)
+        props.onClose?.()
+      }}
+
+      aria-labelledby={ids.trigger}
+    >
+      <ul
+        ref={innerRef}
+        onKeyDown={(event) => {
+          switch (event.key) {
+          case 'ArrowDown':
+            item.moveHighlightedIndex(1)
+            event.preventDefault()
+            break
+          case 'ArrowUp':
+            item.moveHighlightedIndex(-1)
+            event.preventDefault()
+            break
+          case 'Home':
             // TODO support later by selecting the first not disabled entry
-              event.preventDefault()
-              break
-            case 'End':
+            event.preventDefault()
+            break
+          case 'End':
             // TODO support later by selecting the last not disabled entry
-              event.preventDefault()
-              break
-            case 'Enter': // Fall through
-            case ' ':
-              if (state.highlightedValue) {
-                item.toggleSelection(state.highlightedValue)
-                if (!config.isMultiSelect) {
-                  trigger.toggleOpen(false)
-                }
-                event.preventDefault()
+            event.preventDefault()
+            break
+          case 'Enter': // Fall through
+          case ' ':
+            if (state.highlightedValue) {
+              item.toggleSelection(state.highlightedValue)
+              if (!config.isMultiSelect) {
+                trigger.toggleOpen(false)
               }
-              break
+              event.preventDefault()
             }
-          }}
+            break
+          }
+        }}
 
-          className={clsx('flex-col-0 p-2 bg-menu-background text-menu-text rounded-md shadow-hw-bottom focus-outline-within overflow-auto', props.className)}
-          style={{
-            opacity: position ? undefined : 0,
-            position: 'fixed',
-            ...position
-          }}
+        className={clsx('flex-col-0 p-2 bg-menu-background text-menu-text rounded-md shadow-hw-bottom focus-outline-within overflow-auto', props.className)}
 
-          role="listbox"
-          aria-multiselectable={config.isMultiSelect}
-          aria-orientation={orientation}
-          tabIndex={position ? 0 : undefined}
-        >
-          {props.children}
-        </ul>
-      </div>
-    </Portal>
+        role="listbox"
+        aria-multiselectable={config.isMultiSelect}
+        aria-orientation="vertical"
+        tabIndex={0}
+      >
+        {props.children}
+      </ul>
+    </PopUp>
   )
 })
 

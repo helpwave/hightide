@@ -1,34 +1,12 @@
 import type { TableHTMLAttributes } from 'react'
 import type {
-  FilterFn,
-  RowData,
   Table as ReactTable
 } from '@tanstack/react-table'
-import {
-} from '@tanstack/react-table'
-import type { TableFilterType } from '@/src/components/layout/table/TableFilterButton'
-import { type BagFunctionOrValue } from '@/src/utils/bagFunctions'
 import { PropsUtil } from '@/src/utils/propsUtil'
+import './types'
 import { TableBody } from './TableBody'
 import { TableHeader } from './TableHeader'
-import { useTableContext } from './TableContext'
-
-declare module '@tanstack/react-table' {
-  // eslint-disable-next-line @typescript-eslint/no-unused-vars
-  interface ColumnMeta<TData extends RowData, TValue> {
-    className?: string,
-    filterType?: TableFilterType,
-  }
-
-  interface TableMeta<TData> {
-    headerRowClassName?: string,
-    bodyRowClassName?: BagFunctionOrValue<TData, string>,
-  }
-
-  interface FilterFns {
-    dateRange: FilterFn<unknown>,
-  }
-}
+import { useTableBodyContext, useTableContainerContext, useTableHeaderContext } from './TableContext'
 
 export interface TableDisplayProps<T> extends TableHTMLAttributes<HTMLTableElement> {
   table?: ReactTable<T>,
@@ -40,23 +18,27 @@ export interface TableDisplayProps<T> extends TableHTMLAttributes<HTMLTableEleme
  * The standard table
  */
 export const TableDisplay = <T,>({
+  children,
   containerProps,
   ...props
 }: TableDisplayProps<T>) => {
-  const { tableState, table: contextTableProps, container } = useTableContext<T>()
+  const { table } = useTableBodyContext<T>()
+  const { containerRef } = useTableContainerContext<T>()
+  const { sizeVars } = useTableHeaderContext<T>()
 
   return (
-    <div {...containerProps} ref={container.ref} data-name={PropsUtil.dataAttributes.name('table-container')}>
+    <div {...containerProps} ref={containerRef} data-name={PropsUtil.dataAttributes.name('table-container')}>
       <table
         {...props}
 
         data-name={PropsUtil.dataAttributes.name('table')}
 
         style={{
-          ...contextTableProps.sizeVars,
-          width: Math.floor(Math.max(tableState.getTotalSize(), container.ref.current?.offsetWidth ?? tableState.getTotalSize())),
+          ...sizeVars,
+          width: Math.floor(Math.max(table.getTotalSize(), containerRef.current?.offsetWidth ?? table.getTotalSize())),
         }}
       >
+        {children}
         <TableHeader />
         <TableBody />
       </table>

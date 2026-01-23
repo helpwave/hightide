@@ -4,15 +4,17 @@ import clsx from 'clsx'
 import { Visibility } from '../Visibility'
 import { TableSortButton } from './TableSortButton'
 import { TableFilterButton } from './TableFilterButton'
-import { useTableContext } from './TableContext'
+import { useTableHeaderContext } from './TableContext'
 import { useCallback, useEffect } from 'react'
+import type { TableFilterCategory } from './TableFilter'
+import { isTableFilterCategory } from './TableFilter'
 
 export type TableHeaderProps<T> = {
   table?: ReactTable<T>,
 }
 
 export const TableHeader = <T,>({ table: tableOverride }: TableHeaderProps<T>) => {
-  const { tableState } = useTableContext<T>()
+  const { table: tableState } = useTableHeaderContext<T>()
 
   const table = tableOverride ?? tableState
 
@@ -119,10 +121,10 @@ export const TableHeader = <T,>({ table: tableOverride }: TableHeaderProps<T>) =
                           }}
                         />
                       </Visibility>
-                      <Visibility isVisible={header.column.getCanFilter() && !!header.column.columnDef.meta?.filterType}>
+                      <Visibility isVisible={header.column.getCanFilter() && isTableFilterCategory(header.column.columnDef.filterFn)}>
                         <TableFilterButton
                           column={header.column}
-                          filterType={header.column.columnDef.meta?.filterType}
+                          filterType={header.column.columnDef.filterFn as TableFilterCategory}
                         />
                       </Visibility>
                       {flexRender(

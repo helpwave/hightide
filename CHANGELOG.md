@@ -14,6 +14,7 @@ and adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 - `TableColumn` for defining the columns through the table context 
 - `PopUp` for simplifying the usage of the `AnchoredFloatingContainer` with conditional hiding logic and a `FocusTrap`
 - Add `DialogRoot` and `DialogOpener`
+- Add several new `TableFilter`
 
 ### Changed
 - `TableFilterButton` now uses the `DateTimeInput` component

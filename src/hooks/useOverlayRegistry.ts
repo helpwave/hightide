@@ -29,16 +29,18 @@ export class OverlayRegistry {
     return OverlayRegistry.instance
   }
 
-  private overlayIds = new Set<string>()
+  // The frontmost overlay is at the end of the array
+  private overlayIds: string[] = []
   private overlayItems: Record<string, OverlayItem> = {}
   private listeners = new Set<OverlayRegistryListenerCallback>()
 
   register(item: OverlayItem) {
-    this.overlayIds.add(item.id)
+    this.overlayIds = this.overlayIds.filter(id => id !== item.id)
+    this.overlayIds.push(item.id)
     this.overlayItems[item.id] = item
     this.notify()
     return () => {
-      this.overlayIds.delete(item.id)
+      this.overlayIds = this.overlayIds.filter(id => id !== item.id)
       delete this.overlayItems[item.id]
       this.notify()
     }
@@ -82,7 +84,7 @@ export class OverlayRegistry {
       }
     }
     for (const callback of this.listeners) {
-      callback({ activeId: ids[0] ?? null, itemInformation, tagItemCounts: tagCount })
+      callback({ activeId: ids[ids.length - 1] ?? null, itemInformation, tagItemCounts: tagCount })
     }
   }
 }

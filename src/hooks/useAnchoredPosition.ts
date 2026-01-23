@@ -181,9 +181,6 @@ export function useAnchoredPosition({
       height: window.innerHeight,
     }
     const anchorElement = anchorRef?.current
-    if (anchorRef && !anchorElement) {
-      console.warn('useAnchoredPosition Anchor provided, but its value is undefined')
-    }
     const anchorRect: RectangleBounds = anchorElement?.getBoundingClientRect() ?? windowRect
 
     if(containerRect.width === 0 || containerRect.height === 0) {

@@ -1,15 +1,12 @@
 import { Pagination } from '@/src/components/layout/navigation/Pagination'
-import { useTableContext } from './TableContext'
+import { useTableBodyContext } from './TableContext'
 import { useEffect } from 'react'
 import { Select, type SelectProps } from '@/src/components/user-interaction/select/Select'
 import { SelectOption } from '@/src/components/user-interaction/select/SelectComponents'
-import type { TooltipProps } from '@/src/components/user-interaction/Tooltip'
-import { Tooltip } from '@/src/components/user-interaction/Tooltip'
-import { useHightideTranslation } from '@/src/i18n/useHightideTranslation'
 import { MathUtil } from '@/src/utils/math'
 
 export const TablePagination = () => {
-  const { tableState: table } = useTableContext()
+  const { table: table } = useTableBodyContext()
 
   useEffect(() => {
     const { pageIndex } = table.getState().pagination
@@ -33,31 +30,26 @@ const defaultPageSizeOptions: number[] = [10, 25, 50, 100] as const
 
 export interface TablePageSizeControllerProps extends SelectProps {
     pageSizeOptions?: number[],
-    tooltipProps?: Omit<TooltipProps, 'children' | 'tooltip'>,
 }
 
 export const TablePageSizeController = ({
   pageSizeOptions = defaultPageSizeOptions,
-  tooltipProps,
   ...props
 }: TablePageSizeControllerProps) => {
-  const { tableState: table } = useTableContext()
-  const translation = useHightideTranslation()
+  const { table: table } = useTableBodyContext()
   const currentPageSize = table.getState().pagination.pageSize
 
   return (
-    <Tooltip tooltip={translation('entriesPerPage')} {...tooltipProps} position="top">
-      <Select
-        {...props}
-        value={currentPageSize.toString()}
-        onValueChange={(value) => table.setPageSize(Number(value))}
-      >
-        {pageSizeOptions.map(size => (
-          <SelectOption key={size} value={size.toString()}>
-            {size}
-          </SelectOption>
-        ))}
-      </Select>
-    </Tooltip>
+    <Select
+      {...props}
+      value={currentPageSize.toString()}
+      onValueChange={(value) => table.setPageSize(Number(value))}
+    >
+      {pageSizeOptions.map(size => (
+        <SelectOption key={size} value={size.toString()}>
+          {size}
+        </SelectOption>
+      ))}
+    </Select>
   )
 }
