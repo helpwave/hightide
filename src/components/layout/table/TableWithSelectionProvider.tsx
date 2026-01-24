@@ -79,13 +79,6 @@ export const TableWithSelectionProvider = <T,>({
         }
         onRowClick?.(row, table)
       }, [disableClickRowClickSelection, onRowClick])}
-      meta={{
-        ...meta,
-        bodyRowClassName: clsx(
-          { 'cursor-pointer': !disableClickRowClickSelection },
-          meta?.bodyRowClassName
-        )
-      }}
     >
       {children}
     </TableProvider>

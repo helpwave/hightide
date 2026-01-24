@@ -5,6 +5,7 @@ import { Visibility } from '../layout/Visibility'
 import { PropsUtil } from '@/src/utils/propsUtil'
 import type { FormFieldInteractionStates } from '../form/FieldLayout'
 import type { FormFieldDataHandling } from '../form/FormField'
+import clsx from 'clsx'
 
 type CheckBoxSize = 'sm' | 'md' | 'lg' | null
 
@@ -59,7 +60,6 @@ export const Checkbox = ({
         }
       }}
 
-      data-name={PropsUtil.dataAttributes.name('checkbox', props)}
       data-checked={!indeterminate ? value : 'indeterminate'}
       data-size={size ?? undefined}
       {...PropsUtil.dataAttributes.interactionStates({ disabled, invalid, readOnly, required })}
@@ -69,12 +69,14 @@ export const Checkbox = ({
 
       aria-checked={indeterminate ? 'mixed' : value}
       {...PropsUtil.aria.interactionStates({ disabled, invalid, readOnly, required }, props)}
+
+      className={clsx('checkbox', props.className)}
     >
       <Visibility isVisible={indeterminate}>
-        <Minus data-name="checkbox-indicator" aria-hidden={true} />
+        <Minus className="checkbox-indicator" aria-hidden={true} />
       </Visibility>
       <Visibility isVisible={!indeterminate && (alwaysShowCheckIcon || value)}>
-        <Check data-name="checkbox-indicator" aria-hidden={true} />
+        <Check className="checkbox-indicator" aria-hidden={true} />
       </Visibility>
     </div>
   )

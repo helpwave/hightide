@@ -17,6 +17,7 @@
   }
 
   .table-header-cell {
+    @apply relative;
     @apply px-3 first:pl-6 last:pr-6 py-2.5;
     @apply border-y-1 first:border-l-1 last:border-r-1;
     @apply first:rounded-tl-lg last:rounded-tr-lg;
@@ -29,6 +30,9 @@
 
   .table-body-row {
     @apply hover:bg-table-row-hover-background;
+    &[data-clickable] {
+      @apply hover:cursor-pointer;
+    }
   }
 
   .table-body-filler-row {

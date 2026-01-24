@@ -1,5 +1,5 @@
 @layer components {
-  [data-name="checkbox"]:not(.default-style-none) {
+  .checkbox {
     @apply flex-col-0 items-center justify-center rounded border-2;
     &:not([data-disabled]) {
       @apply hover:cursor-pointer;
@@ -25,16 +25,17 @@
     }
 
     &[data-size="sm"] {
-      @apply size-5;
+      @apply size-force-5;
     }
     &[data-size="md"] {
-      @apply size-6;
+      @apply size-force-6;
     }
     &[data-size="lg"] {
-      @apply size-8;
+      @apply size-force-8;
     }
   }
-  [data-name="checkbox-indicator"]:not(.default-style-none) {
+  
+  .checkbox-indicator{
     @apply w-full h-full;
     &[data-size="sm"] {
       @apply stroke-3;

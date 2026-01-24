@@ -1,5 +1,5 @@
 @layer components {
-  [data-name="textarea"]:not(.default-style-none) {
+  [data-name="textarea"] {
     @apply w-full h-32 py-2 px-3 rounded-md resize-none overflow-y-scroll input-element;
   }
 }
