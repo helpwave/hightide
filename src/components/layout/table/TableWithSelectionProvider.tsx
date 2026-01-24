@@ -1,4 +1,3 @@
-import clsx from 'clsx'
 import { Checkbox } from '@/src/components/user-interaction/Checkbox'
 import { FillerCell } from './FillerCell'
 import type { TableProviderProps } from './TableProvider'
@@ -20,7 +19,6 @@ export const TableWithSelectionProvider = <T,>({
   disableClickRowClickSelection = false,
   selectionRowId = 'selection',
   onRowClick,
-  meta,
   ...props
 }: TableWithSelectionProviderProps<T>) => {
   const columnDef = useMemo(() => [
