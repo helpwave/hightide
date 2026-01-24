@@ -91,11 +91,11 @@ All component styles must be wrapped in `@layer components` and target data attr
 
 ```css
 @layer components {
-  [data-name="my-component-root"]:not(.default-style-none) {
+  [data-name="my-component-root"] {
     @apply flex-col-0 surface coloring-solid rounded-lg;
   }
 
-  [data-name="my-component-header"]:not(.default-style-none) {
+  [data-name="my-component-header"] {
     @apply flex-row-2 justify-between items-center;
     
     &:not([data-disabled]) {
@@ -112,16 +112,15 @@ All component styles must be wrapped in `@layer components` and target data attr
 **Key Rules:**
 1. Always use `@layer components` wrapper
 2. Target `[data-name="component-name"]` selectors
-3. Include `:not(.default-style-none)` to allow opt-out styling
-4. Use Tailwind `@apply` directives for utility classes
-5. Use nested selectors for state-based styling: `&[data-expanded]`, `&:not([data-disabled])`
+3. Use Tailwind `@apply` directives for utility classes
+4. Use nested selectors for state-based styling: `&[data-expanded]`, `&:not([data-disabled])`
 
 ### State-Based Styling
 
 Style different states using attribute selectors:
 
 ```css
-[data-name="expandable-content"]:not(.default-style-none) {
+[data-name="expandable-content"] {
   @apply transition-all ease-in-out;
 
   &:not([data-expanded]) {
@@ -201,7 +200,7 @@ All component CSS files must be imported in `src/style/theme/components/index.cs
 
 ```css
 @layer components {
-  [data-name="expandable-root"]:not(.default-style-none) {
+  [data-name="expandable-root"] {
     @apply flex-col-0 surface coloring-solid rounded-lg shadow-sm;
 
     &:not([data-disabled])[data-containertoggleable] {
@@ -209,7 +208,7 @@ All component CSS files must be imported in `src/style/theme/components/index.cs
     }
   }
 
-  [data-name="expandable-header"]:not(.default-style-none) {
+  [data-name="expandable-header"] {
     @apply flex-row-2 justify-between items-center py-2 px-4 rounded-lg;
 
     &:not([data-disabled]) {
@@ -221,7 +220,7 @@ All component CSS files must be imported in `src/style/theme/components/index.cs
     }
   }
 
-  [data-name="expandable-content"]:not(.default-style-none) {
+  [data-name="expandable-content"] {
     @apply flex-col-2 px-4 transition-all ease-in-out;
 
     &:not([data-expanded]) {
@@ -263,7 +262,7 @@ All component CSS files must be imported in `src/style/theme/components/index.cs
 
 ```css
 /* CSS - Use group-hover/component-name */
-[data-name="property-title"]:not(.default-style-none) {
+[data-name="property-title"] {
   @apply group-hover/property:border-primary;
 }
 ```
@@ -271,7 +270,7 @@ All component CSS files must be imported in `src/style/theme/components/index.cs
 **Incorrect Patterns:**
 ```css
 /* ❌ Don't apply group in CSS */
-[data-name="property-root"]:not(.default-style-none) {
+[data-name="property-root"] {
   @apply flex-row-0 group;  /* Wrong! */
 }
 ```
@@ -290,7 +289,7 @@ All component CSS files must be imported in `src/style/theme/components/index.cs
 
 1. **Separation of Concerns**: Keep styling in CSS files, not inline styles or className logic
 2. **Data Attributes First**: Use data attributes for all state-based styling
-3. **Opt-Out Support**: Always include `:not(.default-style-none)` for flexibility
+3. **Opt-Out Support**: Always include `` for flexibility
 4. **Consistent Naming**: Use kebab-case for `data-name` attributes matching component structure
 5. **State Management**: Use boolean attributes for on/off states, string attributes for multi-value states
 6. **Utility Classes**: Prefer Tailwind utilities via `@apply` over custom CSS when possible

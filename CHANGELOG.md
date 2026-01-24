@@ -5,7 +5,19 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/)
 and adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
-## [0.6.7] - 2026-01-25
+## [0.6.8] - 2026-01-24
+
+### Changed
+- The body rows of a `TableBody` now have data attribute `data-clickable` if a defined `onRowClick` is provided
+
+### Fixed
+- `Checkbox` not enforcing its sizing
+- `TableHeader` cells not being relative to allow for proper positioning of the resize indicator
+
+### Removed
+- inconsistent usage of `default-style-none` on some classes by removing it entirely as `all: unset` is available through css
+
+## [0.6.7] - 2026-01-24
 
 ### Added
 - `Table` as a default implementation of a table with a provider pagination, title and actions

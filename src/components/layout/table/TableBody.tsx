@@ -5,6 +5,7 @@ import { FillerCell } from './FillerCell'
 import React from 'react'
 import { useTableDataContext } from './TableContext'
 import clsx from 'clsx'
+import { PropsUtil } from '@/src/utils/propsUtil'
 
 export const TableBody = React.memo(function TableBodyVisual() {
   const { table, onRowClick, isUsingFillerRows, fillerRow, pagination, rows } = useTableDataContext<unknown>()
@@ -17,6 +18,7 @@ export const TableBody = React.memo(function TableBodyVisual() {
           <tr
             key={row.id}
             onClick={() => onRowClick?.(row, table)}
+            data-clickable={PropsUtil.dataAttributes.bool(!!onRowClick)}
             className={clsx('table-body-row', BagFunctionUtil.resolve(table.options.meta?.bodyRowClassName, row.original))}
           >
             {row.getVisibleCells().map(cell => {
