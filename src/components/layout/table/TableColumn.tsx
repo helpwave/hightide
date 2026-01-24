@@ -50,7 +50,8 @@ const TableColumnFactory = <T,>() => memo(
     prevProps.enablePinning === nextProps.enablePinning &&
     prevProps.enableResizing === nextProps.enableResizing &&
     prevProps.enableSorting === nextProps.enableSorting &&
-    prevProps.meta === nextProps.meta
+    prevProps.meta === nextProps.meta,
+    prevProps.cell === nextProps.cell
   }
 )
 

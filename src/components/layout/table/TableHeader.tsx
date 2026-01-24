@@ -9,12 +9,13 @@ import { useCallback, useEffect } from 'react'
 import type { TableFilterCategory } from './TableFilter'
 import { isTableFilterCategory } from './TableFilter'
 
-export type TableHeaderProps<T> = {
-  table?: ReactTable<T>,
+export type TableHeaderProps = {
+  table?: ReactTable<unknown>,
+  isSticky?: boolean,
 }
 
-export const TableHeader = <T,>({ table: tableOverride }: TableHeaderProps<T>) => {
-  const { table: tableState } = useTableHeaderContext<T>()
+export const TableHeader = ({ table: tableOverride, isSticky = false }: TableHeaderProps) => {
+  const { table: tableState } = useTableHeaderContext<unknown>()
 
   const table = tableOverride ?? tableState
 
@@ -84,15 +85,16 @@ export const TableHeader = <T,>({ table: tableOverride }: TableHeaderProps<T>) =
       ))}
       <thead>
         {table.getHeaderGroups().map(headerGroup => (
-          <tr key={headerGroup.id} data-name={PropsUtil.dataAttributes.name('table-header-row')} className={table.options.meta?.headerRowClassName}>
+          <tr key={headerGroup.id} className={clsx('table-header-row', table.options.meta?.headerRowClassName)}>
             {headerGroup.headers.map(header => {
               return (
                 <th
                   key={header.id}
                   colSpan={header.colSpan}
 
-                  data-name={PropsUtil.dataAttributes.name('table-header-cell')}
-                  className={clsx('group/table-header-cell', header.column.columnDef.meta?.className)}
+
+                  data-sticky={isSticky ? '' : undefined}
+                  className={clsx('table-header-cell group/table-header-cell', header.column.columnDef.meta?.className)}
                 >
                   <Visibility isVisible={!header.isPlaceholder}>
                     <div className="flex-row-1 items-center">

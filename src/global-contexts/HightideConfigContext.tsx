@@ -8,6 +8,7 @@ export type TooltipConfig = {
    * Number of milliseconds until the tooltip appears
    */
   appearDelay: number,
+  isAnimated: boolean,
 }
 
 export type ThemeConfig = {
@@ -36,7 +37,8 @@ export type HightideConfig = {
 
 const defaultConfig: HightideConfig = {
   tooltip: {
-    appearDelay: 400,
+    appearDelay: 0,
+    isAnimated: false,
   },
   theme: {
     initialTheme: 'light'

@@ -20,6 +20,7 @@ type CalculatePositionOptions = {
   horizontalAlignment?: FloatingElementAlignment,
   screenPadding?: number,
   gap?: number,
+  avoidOverlap?: boolean,
 }
 
 type CalculatePositionProps = {
@@ -36,99 +37,168 @@ function calculatePosition({
   anchorRect,
   options,
 }: CalculatePositionProps): CSSProperties {
-  const { verticalAlignment, horizontalAlignment, gap, screenPadding } = options
-  const windowWidth = windowRect.width
-  const windowHeight = windowRect.height
+  const { verticalAlignment, horizontalAlignment, gap, screenPadding, avoidOverlap } = options
 
-  const maxWidth = windowWidth - 2 * screenPadding
-  const maxHeight = windowHeight - 2 * screenPadding
+  const calculateBasicPosition = (hAlign: FloatingElementAlignment, vAlign: FloatingElementAlignment) => {
+    const windowWidth = windowRect.width
+    const windowHeight = windowRect.height
 
-  const width = Math.min(containerRect.width, maxWidth)
-  const height = Math.min(containerRect.height, maxHeight)
+    const maxWidth = windowWidth - 2 * screenPadding
+    const maxHeight = windowHeight - 2 * screenPadding
 
-  const anchorCenterX = anchorRect.left + anchorRect.width / 2
-  const anchorCenterY = anchorRect.top + anchorRect.height / 2
+    const width = Math.min(containerRect.width, maxWidth)
+    const height = Math.min(containerRect.height, maxHeight)
 
-  let left: number
-  let top: number
-  let translateXPercent: number
-  let translateYPercent: number
+    const anchorCenterX = anchorRect.left + anchorRect.width / 2
+    const anchorCenterY = anchorRect.top + anchorRect.height / 2
 
-  switch (horizontalAlignment) {
-  case 'beforeStart':
-    left = anchorRect.left
-    translateXPercent = -100
-    break
-  case 'afterStart':
-    left = anchorRect.left
-    translateXPercent = 0
-    break
-  case 'center':
-    left = anchorCenterX
-    translateXPercent = -50
-    break
-  case 'beforeEnd':
-    left = anchorRect.right
-    translateXPercent = -100
-    break
-  case 'afterEnd':
-    left = anchorRect.right
-    translateXPercent = 0
-    break
-  }
+    let left: number
+    let top: number
+    let translateXPercent: number
+    let translateYPercent: number
 
-  switch (verticalAlignment) {
-  case 'beforeStart':
-    top = anchorRect.top
-    translateYPercent = -100
-    break
-  case 'afterStart':
-    top = anchorRect.top
-    translateYPercent = 0
-    break
-  case 'center':
-    top = anchorCenterY
-    translateYPercent = -50
-    break
-  case 'beforeEnd':
-    top = anchorRect.bottom
-    translateYPercent = -100
-    break
-  case 'afterEnd':
-    top = anchorRect.bottom
-    translateYPercent = 0
-    break
-  }
-
-  if (gap !== 0) {
-    if (horizontalAlignment === 'afterEnd') {
-      left += gap
-    } else if (horizontalAlignment === 'beforeStart') {
-      left -= gap
+    switch (hAlign) {
+    case 'beforeStart':
+      left = anchorRect.left
+      translateXPercent = -100
+      break
+    case 'afterStart':
+      left = anchorRect.left
+      translateXPercent = 0
+      break
+    case 'center':
+      left = anchorCenterX
+      translateXPercent = -50
+      break
+    case 'beforeEnd':
+      left = anchorRect.right
+      translateXPercent = -100
+      break
+    case 'afterEnd':
+      left = anchorRect.right
+      translateXPercent = 0
+      break
     }
 
-    if (verticalAlignment === 'afterEnd') {
-      top += gap
-    } else if (verticalAlignment === 'beforeStart') {
-      top -= gap
+    switch (vAlign) {
+    case 'beforeStart':
+      top = anchorRect.top
+      translateYPercent = -100
+      break
+    case 'afterStart':
+      top = anchorRect.top
+      translateYPercent = 0
+      break
+    case 'center':
+      top = anchorCenterY
+      translateYPercent = -50
+      break
+    case 'beforeEnd':
+      top = anchorRect.bottom
+      translateYPercent = -100
+      break
+    case 'afterEnd':
+      top = anchorRect.bottom
+      translateYPercent = 0
+      break
+    }
+
+    if (gap !== 0) {
+      if (hAlign === 'afterEnd') {
+        left += gap
+      } else if (hAlign === 'beforeStart') {
+        left -= gap
+      }
+
+      if (vAlign === 'afterEnd') {
+        top += gap
+      } else if (vAlign === 'beforeStart') {
+        top -= gap
+      }
+    }
+
+    const targetLeft = left + (width * translateXPercent / 100)
+    const targetTop = top + (height * translateYPercent / 100)
+
+    const clampedLeft = MathUtil.clamp(targetLeft, [screenPadding, windowWidth - screenPadding - width])
+    const clampedTop = MathUtil.clamp(targetTop, [screenPadding, windowHeight - screenPadding - height])
+
+    return {
+      left,
+      top,
+      clampedLeft,
+      clampedTop,
+      width,
+      height,
+      maxWidth,
+      maxHeight,
     }
   }
 
-  const targetLeft = left + (width * translateXPercent / 100)
-  const targetTop = top + (height * translateYPercent / 100)
+  // Calculate overlap area between two rectangles
+  const calculateOverlap = (left: number, top: number, width: number, height: number): number => {
+    const floatingRect = {
+      left,
+      top,
+      right: left + width,
+      bottom: top + height,
+    }
 
-  const clampedLeft = MathUtil.clamp(targetLeft, [screenPadding, windowWidth - screenPadding - width])
+    // Calculate overlap area
+    const overlapLeft = Math.max(floatingRect.left, anchorRect.left)
+    const overlapTop = Math.max(floatingRect.top, anchorRect.top)
+    const overlapRight = Math.min(floatingRect.right, anchorRect.right)
+    const overlapBottom = Math.min(floatingRect.bottom, anchorRect.bottom)
 
-  const clampedTop = MathUtil.clamp(targetTop, [screenPadding, windowHeight - screenPadding - height])
+    const overlapWidth = Math.max(0, overlapRight - overlapLeft)
+    const overlapHeight = Math.max(0, overlapBottom - overlapTop)
 
-  const adjustedTranslateX = (clampedLeft - left) / width * 100
-  const adjustedTranslateY = (clampedTop - top) / height * 100
+    return overlapWidth * overlapHeight
+  }
+
+  // Get original position
+  const originalPos = calculateBasicPosition(horizontalAlignment, verticalAlignment)
+  let bestPosition = originalPos
+
+  // If avoidOverlap is enabled and we have beforeStart/afterEnd alignments, try swapped alignments
+  if (avoidOverlap && (horizontalAlignment === 'beforeStart' || horizontalAlignment === 'afterEnd' || verticalAlignment === 'beforeStart' || verticalAlignment === 'afterEnd')) {
+    let bestOverlap = calculateOverlap(originalPos.clampedLeft, originalPos.clampedTop, originalPos.width, originalPos.height)
+
+    // Create swapped alignments
+    let altHorizontalAlignment = horizontalAlignment
+    let altVerticalAlignment = verticalAlignment
+
+    if (horizontalAlignment === 'beforeStart') {
+      altHorizontalAlignment = 'afterEnd'
+    } else if (horizontalAlignment === 'afterEnd') {
+      altHorizontalAlignment = 'beforeStart'
+    }
+
+    if (verticalAlignment === 'beforeStart') {
+      altVerticalAlignment = 'afterEnd'
+    } else if (verticalAlignment === 'afterEnd') {
+      altVerticalAlignment = 'beforeStart'
+    }
+
+    // Calculate alternative position
+    const altPos = calculateBasicPosition(altHorizontalAlignment, altVerticalAlignment)
+    const altOverlap = calculateOverlap(altPos.clampedLeft, altPos.clampedTop, altPos.width, altPos.height)
+
+    // Use alternative if it has less overlap
+    if (altOverlap < bestOverlap) {
+      bestPosition = altPos
+      bestOverlap = altOverlap
+    }
+  }
+
+  const adjustedTranslateX = (bestPosition.clampedLeft - bestPosition.left) / bestPosition.width * 100
+  const adjustedTranslateY = (bestPosition.clampedTop - bestPosition.top) / bestPosition.height * 100
 
   return {
-    left,
-    top,
-    maxWidth,
-    maxHeight,
+    left: bestPosition.left,
+    top: bestPosition.top,
+    maxWidth: bestPosition.maxWidth,
+    maxHeight: bestPosition.maxHeight,
     transform: `translate(${adjustedTranslateX}%, ${adjustedTranslateY}%)`,
     transformOrigin: 'top left',
   }
@@ -155,6 +225,7 @@ export function useAnchoredPosition({
   pollingInterval = 100,
   verticalAlignment = 'afterEnd',
   horizontalAlignment = 'afterStart',
+  avoidOverlap = false,
   screenPadding = 16,
   gap = 4,
 }: UseAnchoredPostitionProps) {
@@ -165,7 +236,8 @@ export function useAnchoredPosition({
     verticalAlignment,
     screenPadding,
     gap,
-  }), [horizontalAlignment, verticalAlignment, screenPadding, gap])
+    avoidOverlap,
+  }), [horizontalAlignment, verticalAlignment, screenPadding, gap, avoidOverlap])
 
   const calculate = useCallback(() => {
     const containerRect = containerRef.current?.getBoundingClientRect()

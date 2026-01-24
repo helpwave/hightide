@@ -2,19 +2,14 @@ import type { Meta, StoryObj } from '@storybook/nextjs'
 import { useState, useEffect, useMemo } from 'react'
 import { faker } from '@faker-js/faker'
 import { range } from '@/src/utils/array'
-import type { TableDisplayProps } from '@/src/components/layout/table/TableDisplay'
-import { TableDisplay } from '@/src/components/layout/table/TableDisplay'
 import { TableColumn } from '@/src/components/layout/table/TableColumn'
 import { useHightideTranslation } from '@/src/i18n/useHightideTranslation'
 import { TableCell } from '@/src/components/layout/table/TableCell'
-import type { TableState, SortingState, ColumnFiltersState, PaginationState } from '@tanstack/react-table'
-import { TableProvider } from '@/src/components/layout/table/TableProvider'
-import { TableColumnPicker } from '@/src/components/layout/table/TableColumnPicker'
-import { TablePageSizeController, TablePagination } from '@/src/components/layout/table/TablePagination'
-import { PopUpRoot } from '@/src/components/layout/popup/PopUpRoot'
-import { Button } from '@/src/components/user-interaction/Button'
-import { PopUpOpener } from '@/src/components/layout/popup/PopUpOpener'
+import type { TableState, SortingState, ColumnFiltersState, PaginationState, TableOptions } from '@tanstack/react-table'
+import { TableColumnSwitcher } from '@/src/components/layout/table/TableColumnSwitcher'
 import { Chip } from '@/src/components/display-and-visualization/Chip'
+import { Table } from '@/src/components/layout/table/Table'
+import { Visibility } from '@/src/components/layout/Visibility'
 
 const tags = ['Friend', 'Family', 'Work', 'School', 'Other'] as const
 type Tag = (typeof tags)[number]
@@ -307,7 +302,9 @@ const usePaginatedData = (
   return { data, isLoading, error, totalCount }
 }
 
-type StoryArgs = Omit<TableDisplayProps<DataType>, 'data' | 'children' | 'initialState'>
+type StoryArgs = Omit<TableOptions<DataType>, 'data' | 'children' | 'initialState'> & {
+  isSticky?: boolean,
+}
 
 const meta: Meta<StoryArgs> = {}
 
@@ -316,8 +313,9 @@ type Story = StoryObj<typeof meta>
 
 export const asyncDataExample: Story = {
   args: {
+    isSticky: false,
   },
-  render: (args) => {
+  render: ({ isSticky, ...args }) => {
     const translation = useHightideTranslation()
     const [pagination, setPagination] = useState<PaginationState>({ pageIndex: 0, pageSize: 10 })
     const [sorting, setSorting] = useState<SortingState>([])
@@ -328,144 +326,148 @@ export const asyncDataExample: Story = {
     const pageCount = useMemo(() => Math.ceil(totalCount / pagination.pageSize), [totalCount, pagination.pageSize])
 
     return (
-      <div className="flex-col-3">
-        <div className="flex-row-2 justify-between items-center">
-          <h2 className="typography-title-md">Paginated Data Fetching</h2>
-          {isLoading && (
-            <span className="typography-label-md">Loading...</span>
-          )}
-          {error && (
-            <span className="typography-label-md text-negative">Error: {error.message}</span>
-          )}
-        </div>
-        <TableProvider
-          {...args}
-          data={data}
-          manualPagination={true}
-          manualSorting={true}
-          manualFiltering={true}
-          pageCount={pageCount}
-          state={{
+      <Table
+        {...args}
+        table={{
+          data,
+          manualPagination: true,
+          manualSorting: true,
+          manualFiltering: true,
+          pageCount,
+          state: {
             pagination,
             sorting,
             columnFilters,
-          } as Partial<TableState> as TableState}
-          onPaginationChange={setPagination}
-          onSortingChange={(updater) => {
+          } as Partial<TableState> as TableState,
+          onPaginationChange: setPagination,
+          onSortingChange: (updater) => {
             setSorting(updater)
             setPagination({ ...pagination, pageIndex: 0 })
-          }}
-          onColumnFiltersChange={(updater) => {
+          },
+          onColumnFiltersChange: (updater) => {
             setColumnFilters(updater)
             setPagination({ ...pagination, pageIndex: 0 })
-          }}
-        >
-          <div className="flex-col-2 items-center">
-            <div className="flex-row-2 justify-end w-full">
-              <PopUpRoot>
-                <PopUpOpener>
-                  {({ props }) => <Button {...props}>{translation('columns')}</Button>}
-                </PopUpOpener>
-                <TableColumnPicker/>
-              </PopUpRoot>
+          },
+        }}
+        header={(
+          <div className="flex-row-2 items-center justify-between w-full">
+            <div className="flex-col-0">
+              <span className="typography-title-md">{'Paginated Data Fetching'}</span>
+              <Visibility isVisible={!!error}>
+                <span className="typography-label-md text-negative">Error: {error?.message}</span>
+              </Visibility>
+              <Visibility isVisible={!error}>
+                <Visibility isVisible={!!isLoading}>
+                  <span className="text-description typography-label-md">Loading...</span>
+                </Visibility>
+                <Visibility isVisible={!isLoading}>
+                  <span className="text-description typography-label-md">{`${totalCount} items loaded`}</span>
+                </Visibility>
+              </Visibility>
             </div>
-            <TableDisplay>
-              <TableColumn
-                id="id"
-                header={translation('identifier')}
-                accessorKey="id"
-                minSize={200}
-                size={250}
-                maxSize={300}
-                filterType="text"
-                sortingFn="text"
-              />
-              <TableColumn
-                id="name"
-                header={translation('name')}
-                accessorKey="name"
-                sortingFn="textCaseSensitive"
-                minSize={150}
-                size={200}
-                maxSize={400}
-                filterType="text"
-              />
-              <TableColumn
-                id="age"
-                header={translation('age')}
-                accessorKey="age"
-                sortingFn="alphanumeric"
-                minSize={140}
-                size={160}
-                maxSize={250}
-                filterType="number"
-              />
-              <TableColumn
-                id="street"
-                header={translation('street')}
-                accessorKey="street"
-                sortingFn="text"
-                minSize={250}
-                size={250}
-                maxSize={400}
-                filterType="text"
-              />
-              <TableColumn
-                id="entryDate"
-                header={translation('entryDate')}
-                cell={({ cell }) => (
-                  <TableCell>
-                    {(cell.getValue() as Date).toLocaleDateString()}
-                  </TableCell>
-                )}
-                accessorKey="entryDate"
-                sortingFn="datetime"
-                minSize={250}
-                size={250}
-                maxSize={400}
-                filterType="date"
-              />
-              <TableColumn
-                id="tags"
-                header="Tags"
-                cell={({ cell }) => (
-                  <div className="flex-row-2 flex-wrap gap-y-2">
-                    {(cell.getValue() as Tag[]).map(tag => (<Chip key={tag}>{tag}</Chip>))}
-                  </div>
-                )}
-                accessorKey="tags"
-                minSize={300}
-                size={300}
-                maxSize={400}
-                filterType="tags"
-                meta={{
-                  filterData: {
-                    tags: tags.map(tag => ({ tag, label: tag })),
-                  },
-                }}
-              />
-              <TableColumn
-                id="hasChildren"
-                header="Has Children"
-                cell={({ cell }) => (
-                  <TableCell>
-                    {cell.getValue() as boolean ? translation('yes') : translation('no')}
-                  </TableCell>
-                )}
-                accessorKey="hasChildren"
-                minSize={200}
-                size={200}
-                maxSize={300}
-                filterType="boolean"
-              />
-            </TableDisplay>
-            <div className="relative">
-              <TablePagination/>
-              <TablePageSizeController pageSizeOptions={[10, 25, 50, 100, 200, 500]} buttonProps={{ className: 'absolute left-1/1 top-0 h-10' }}/>
+            <div className="flex-row-2 items-center">
+              <TableColumnSwitcher/>
             </div>
           </div>
-        </TableProvider>
-      </div>
+        )}
+        displayProps={isSticky ? {
+          tableHeaderProps: {
+            isSticky: true,
+          },
+          containerProps: {
+            className: 'max-h-128',
+          },
+        } : undefined}
+      >
+        <TableColumn
+          id="id"
+          header={translation('identifier')}
+          accessorKey="id"
+          minSize={200}
+          size={250}
+          maxSize={300}
+          filterType="text"
+          sortingFn="text"
+        />
+        <TableColumn
+          id="name"
+          header={translation('name')}
+          accessorKey="name"
+          sortingFn="textCaseSensitive"
+          minSize={150}
+          size={200}
+          maxSize={400}
+          filterType="text"
+        />
+        <TableColumn
+          id="age"
+          header={translation('age')}
+          accessorKey="age"
+          sortingFn="alphanumeric"
+          minSize={140}
+          size={160}
+          maxSize={250}
+          filterType="number"
+        />
+        <TableColumn
+          id="street"
+          header={translation('street')}
+          accessorKey="street"
+          sortingFn="text"
+          minSize={250}
+          size={250}
+          maxSize={400}
+          filterType="text"
+        />
+        <TableColumn
+          id="entryDate"
+          header={translation('entryDate')}
+          cell={({ cell }) => (
+            <TableCell>
+              {(cell.getValue() as Date).toLocaleDateString()}
+            </TableCell>
+          )}
+          accessorKey="entryDate"
+          sortingFn="datetime"
+          minSize={250}
+          size={250}
+          maxSize={400}
+          filterType="date"
+        />
+        <TableColumn
+          id="tags"
+          header="Tags"
+          cell={({ cell }) => (
+            <div className="flex-row-2 flex-wrap gap-y-2">
+              {(cell.getValue() as Tag[]).map(tag => (<Chip key={tag}>{tag}</Chip>))}
+            </div>
+          )}
+          accessorKey="tags"
+          minSize={300}
+          size={300}
+          maxSize={400}
+          filterType="tags"
+          meta={{
+            filterData: {
+              tags: tags.map(tag => ({ tag, label: tag })),
+            },
+          }}
+        />
+        <TableColumn
+          id="hasChildren"
+          header="Has Children"
+          cell={({ cell }) => (
+            <TableCell>
+              {cell.getValue() as boolean ? translation('yes') : translation('no')}
+            </TableCell>
+          )}
+          accessorKey="hasChildren"
+          minSize={200}
+          size={200}
+          maxSize={300}
+          filterType="boolean"
+        />
+      </Table>
     )
   },
 }

@@ -1,37 +1,35 @@
 import type { TableHTMLAttributes } from 'react'
-import type {
-  Table as ReactTable
-} from '@tanstack/react-table'
-import { PropsUtil } from '@/src/utils/propsUtil'
 import './types'
 import { TableBody } from './TableBody'
+import type { TableHeaderProps } from './TableHeader'
 import { TableHeader } from './TableHeader'
-import { useTableBodyContext, useTableContainerContext, useTableHeaderContext } from './TableContext'
+import { useTableDataContext, useTableContainerContext, useTableHeaderContext } from './TableContext'
+import clsx from 'clsx'
 
-export interface TableDisplayProps<T> extends TableHTMLAttributes<HTMLTableElement> {
-  table?: ReactTable<T>,
+export interface TableDisplayProps extends TableHTMLAttributes<HTMLTableElement> {
   containerProps?: Omit<React.HTMLAttributes<HTMLDivElement>, 'children'>,
+  tableHeaderProps?: Omit<TableHeaderProps, 'children' | 'table'>,
 }
 
 
 /**
- * The standard table
+ * A display component for a table that requires a TableProvider for the table context
  */
 export const TableDisplay = <T,>({
   children,
   containerProps,
+  tableHeaderProps,
   ...props
-}: TableDisplayProps<T>) => {
-  const { table } = useTableBodyContext<T>()
+}: TableDisplayProps) => {
+  const { table } = useTableDataContext<T>()
   const { containerRef } = useTableContainerContext<T>()
   const { sizeVars } = useTableHeaderContext<T>()
 
   return (
-    <div {...containerProps} ref={containerRef} data-name={PropsUtil.dataAttributes.name('table-container')}>
+    <div {...containerProps} ref={containerRef} className={clsx('table-container', containerProps?.className)}>
       <table
         {...props}
-
-        data-name={PropsUtil.dataAttributes.name('table')}
+        className={clsx('table', props.className)}
 
         style={{
           ...sizeVars,
@@ -39,7 +37,7 @@ export const TableDisplay = <T,>({
         }}
       >
         {children}
-        <TableHeader />
+        <TableHeader {...tableHeaderProps} />
         <TableBody />
       </table>
     </div>

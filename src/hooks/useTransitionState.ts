@@ -50,9 +50,9 @@ export const useTransitionState = ({
   const [timeout] = useState<number>(initialTimeout)
 
   useEffect(() => {
-    if (isOpen && state !== 'opened') {
+    if (isOpen && (state !== 'opened' && state !== 'opening')) {
       dispatch('open')
-    } else if (!isOpen && state !== 'closed') {
+    } else if (!isOpen && (state !== 'closed' && state !== 'closing')) {
       dispatch('close')
     }
   }, [isOpen, state])
@@ -90,6 +90,8 @@ export const useTransitionState = ({
           })
       } else {
         dispatch('finished')
+        hasAnimation.current = false
+        clearTimeout(timer.current)
       }
     }
   }, [ref, state])
@@ -106,7 +108,7 @@ export const useTransitionState = ({
   useEffect(() => {
     if (ref?.current && (state === 'opening' || state === 'closing')) {
       const element = ref.current
-      element .addEventListener('animationstart', onStart)
+      element.addEventListener('animationstart', onStart)
       element.addEventListener('animationend', onEnd)
       element.addEventListener('transitionstart', onStart)
       element.addEventListener('transitionend', onEnd)

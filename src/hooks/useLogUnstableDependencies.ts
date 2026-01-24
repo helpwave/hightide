@@ -21,7 +21,7 @@ export function useLogUnstableDependencies<T extends Record<string, unknown>>(na
     }
 
     if (Object.keys(changes).length > 0) {
-      console.log(`[${name}] changed`, changes)
+      console.info(`[${name}] changed`, changes)
     }
 
     prev.current = value

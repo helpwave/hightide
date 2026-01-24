@@ -35,6 +35,10 @@
   "errorOccurred": "Ein Fehler ist aufgetreten",
   "exit": "Beenden",
   "fieldRequiredError": "Dieses Feld ist erforderlich.",
+  "first": "Erste",
+  "previous": "Vorherige",
+  "next": "Nächste",
+  "last": "Letzte",
   "invalidEmailError": "Bitte geben Sie eine gültige E-Mail-Adresse ein.",
   "language": "Sprache",
   "less": "Weniger",
@@ -215,5 +219,6 @@
   "pinned": "Angeheftet",
   "unpin": "Loslösen",
   "pinLeft": "Links anheften",
-  "pinRight": "Rechts anheften"
+  "pinRight": "Rechts anheften",
+  "changeColumnDisplay": "Spaltenanzeige ändern"
 }

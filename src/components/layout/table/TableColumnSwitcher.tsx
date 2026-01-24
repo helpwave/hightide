@@ -1,17 +1,19 @@
 import { useMemo, useRef, useId } from 'react'
-import { ChevronUp, ChevronDown, ChevronLeft, ChevronRight, Eye, EyeOff, Pin, PinOff } from 'lucide-react'
+import { ChevronUp, ChevronDown, ChevronLeft, ChevronRight, Eye, EyeOff, Pin, PinOff, ArrowLeftRightIcon } from 'lucide-react'
+import type { ButtonProps } from '@/src/components/user-interaction/Button'
 import { Button } from '@/src/components/user-interaction/Button'
-import { useTableBodyContext } from './TableContext'
+import { useTableDataContext } from './TableContext'
 import { useHightideTranslation } from '@/src/i18n/useHightideTranslation'
 import type { PopUpProps } from '../popup/PopUp'
 import { PopUp } from '../popup/PopUp'
+import { PopUpRoot } from '../popup/PopUpRoot'
+import { PopUpOpener } from '../popup/PopUpOpener'
+import { Tooltip } from '../../user-interaction/Tooltip'
 
+export type TableColumnSwitcherPopUpProps = PopUpProps
 
-// eslint-disable-next-line @typescript-eslint/no-empty-object-type
-export interface TableColumnPickerProps extends PopUpProps {}
-
-export const TableColumnPicker = ({ ...props }: TableColumnPickerProps) => {
-  const { table: table } = useTableBodyContext()
+export const TableColumnSwitcherPopUp = ({ ...props }: TableColumnSwitcherPopUpProps) => {
+  const { table } = useTableDataContext()
   const translation = useHightideTranslation()
   const containerRef = useRef<HTMLDivElement>(null)
   const generatedId = useId()
@@ -296,5 +298,28 @@ export const TableColumnPicker = ({ ...props }: TableColumnPickerProps) => {
         })}
       </div>
     </PopUp>
+  )
+}
+
+export interface TableColumnSwitcherProps extends TableColumnSwitcherPopUpProps {
+  buttonProps?: ButtonProps,
+}
+
+export const TableColumnSwitcher = ({ buttonProps, ...props }: TableColumnSwitcherProps) => {
+  const translation = useHightideTranslation()
+
+  return (
+    <PopUpRoot>
+      <PopUpOpener>
+        {({ props }) => (
+          <Tooltip tooltip={translation('changeColumnDisplay')}>
+            <Button {...props} size="md" layout="icon" color="neutral" coloringStyle="solid" {...buttonProps}>
+              <ArrowLeftRightIcon className="size-4" />
+            </Button>
+          </Tooltip>
+        )}
+      </PopUpOpener>
+      <TableColumnSwitcherPopUp {...props} />
+    </PopUpRoot>
   )
 }
