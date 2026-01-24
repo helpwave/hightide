@@ -10,7 +10,7 @@ export const TableCell = ({
   className,
 }: TableCellProps) => {
   return (
-    <span className={clsx('block max-w-full overflow-ellipsis truncate', className)}>
+    <span className={clsx('table-default-cell', className)}>
       {children}
     </span>
   )

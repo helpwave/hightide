@@ -1,7 +1,7 @@
 import type { ReactNode } from 'react'
 import { useCallback, useEffect, useMemo, useRef, useState } from 'react'
 import { ColumnSizeUtil } from './columnSizeUtil'
-import { TableBodyContext, TableColumnDefinitionContext, TableContainerContext, TableHeaderContext } from './TableContext'
+import { TableDataContext, TableColumnDefinitionContext, TableContainerContext, TableHeaderContext } from './TableContext'
 import { TableFilter } from './TableFilter'
 import type { ColumnDef, ColumnSizingState, InitialTableState, Row, TableOptions, TableState , Table as ReactTable } from '@tanstack/react-table'
 import { getCoreRowModel, getFilteredRowModel, getPaginationRowModel, getSortedRowModel, useReactTable } from '@tanstack/react-table'
@@ -161,15 +161,29 @@ export const TableProvider = <T,>({
   }, [columnSizing])
 
   const pagination = table.getState().pagination
-  const tableBodyContextValue = useMemo(() => ({
+  const rowSelection = table.getState().rowSelection
+  const rows = table.getRowModel().rows
+  const columnFilters = table.getState().columnFilters
+  const columnVisibility = table.getState().columnVisibility
+  const columnPinning = table.getState().columnPinning
+  const columnSorting = table.getState().sorting
+  // We need to include more state values than needed such that the consumer catch all changes properly
+  const tableDataContextValue = useMemo(() => ({
     table,
     columns,
     data,
     pagination,
+    rowSelection,
     isUsingFillerRows,
     fillerRow,
     onRowClick,
-  }), [table, data, pagination, isUsingFillerRows, fillerRow, onRowClick, columns])
+    rows,
+    columnOrder,
+    columnFilters,
+    columnVisibility,
+    columnPinning,
+    columnSorting,
+  }), [table, data, pagination, rowSelection, isUsingFillerRows, fillerRow, onRowClick, columns, rows, columnOrder, columnFilters, columnVisibility, columnPinning, columnSorting])
 
   const tableColumnDefinitionContextValue = useMemo(() => ({
     table,
@@ -187,7 +201,7 @@ export const TableProvider = <T,>({
   }), [table, containerRef])
 
   return (
-    <TableBodyContext.Provider value={tableBodyContextValue}>
+    <TableDataContext.Provider value={tableDataContextValue}>
       <TableColumnDefinitionContext.Provider value={tableColumnDefinitionContextValue}>
         <TableHeaderContext.Provider value={tableHeaderContextValue}>
           <TableContainerContext.Provider value={tableContainerContextValue}>
@@ -195,6 +209,6 @@ export const TableProvider = <T,>({
           </TableContainerContext.Provider>
         </TableHeaderContext.Provider>
       </TableColumnDefinitionContext.Provider>
-    </TableBodyContext.Provider>
+    </TableDataContext.Provider>
   )
 }

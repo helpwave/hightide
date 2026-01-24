@@ -5,7 +5,22 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/)
 and adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
-## [0.6.6] - 2026-01-09
+## [0.6.7] - 2026-01-25
+
+### Added
+- `Table` as a default implementation of a table with a provider pagination, title and actions
+- `TablePagination` an opinionated component for Table pagination
+- `TableColumnSwticher` a button with a pop-up for changing the column sorting and visibility
+
+### Changed
+- `TablePagination` buttons now show a tooltip
+- Table element styling now uses classNames and no longer data-attributes
+
+### Fixed
+- Table Context updates not triggering on sorting or other changes
+- A bug in `useTransitionState` that caused it to 
+
+## [0.6.6] - 2026-01-24
 
 ### Added
 - Paginated Loading of Table entries

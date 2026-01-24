@@ -3,9 +3,8 @@ import { Checkbox } from '@/src/components/user-interaction/Checkbox'
 import { FillerCell } from './FillerCell'
 import type { TableProviderProps } from './TableProvider'
 import { TableProvider } from './TableProvider'
-import { TableColumn } from './TableColumn'
 import type { Row, RowSelectionState, Table } from '@tanstack/react-table'
-import { useCallback } from 'react'
+import { useCallback, useMemo } from 'react'
 
 export interface TableWithSelectionProviderProps<T> extends TableProviderProps<T> {
     rowSelection: RowSelectionState,
@@ -24,6 +23,35 @@ export const TableWithSelectionProvider = <T,>({
   meta,
   ...props
 }: TableWithSelectionProviderProps<T>) => {
+  const columnDef = useMemo(() => [
+    {
+      id: selectionRowId,
+      header: ({ table }) => {
+        return (
+          <Checkbox
+            value={table.getIsAllRowsSelected()}
+            indeterminate={table.getIsSomeRowsSelected()}
+            onValueChange={value => {
+              const newValue = !!value
+              table.toggleAllRowsSelected(newValue)
+            }}
+          />
+        )
+      },
+      cell: ({ row }) => {
+        return (<Checkbox disabled={!row.getCanSelect()} value={row.getIsSelected()} onValueChange={row.getToggleSelectedHandler()} />)
+      },
+      size: 60,
+      minSize: 60,
+      maxSize: 60,
+      enableResizing: false,
+      enableSorting: false,
+      enableHiding: false,
+      enableColumnFilter: false,
+    },
+    ...(props.columns ?? []),
+  ], [selectionRowId, props.columns])
+
   return (
     <TableProvider
       {...props}
@@ -33,6 +61,7 @@ export const TableWithSelectionProvider = <T,>({
         }
         return fillerRow?.(columnId, table) ?? (<FillerCell />)
       }, [fillerRow, selectionRowId])}
+      columns={columnDef}
       initialState={{
         ...props.initialState,
         columnPinning: {
@@ -58,37 +87,6 @@ export const TableWithSelectionProvider = <T,>({
         )
       }}
     >
-      <TableColumn
-        id={selectionRowId}
-        header={({ table }) => {
-          return (
-            <Checkbox
-              value={table.getIsAllRowsSelected()}
-              indeterminate={table.getIsSomeRowsSelected()}
-              onValueChange={value => {
-                const newValue = !!value
-                table.toggleAllRowsSelected(newValue)
-              }}
-            />
-          )
-        }}
-        cell={({ row }) => {
-          return (
-            <Checkbox
-              disabled={!row.getCanSelect()}
-              value={row.getIsSelected()}
-              onValueChange={row.getToggleSelectedHandler()}
-            />
-          )
-        }}
-        size={60}
-        minSize={60}
-        maxSize={60}
-        enableResizing={false}
-        enableSorting={false}
-        enableHiding={false}
-        enableColumnFilter={false}
-      />
       {children}
     </TableProvider>
   )

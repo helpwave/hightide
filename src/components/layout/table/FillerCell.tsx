@@ -1,4 +1,5 @@
-import { PropsUtil } from '@/src/utils/propsUtil'
+
+import clsx from 'clsx'
 import { Minus } from 'lucide-react'
 import type { HTMLAttributes } from 'react'
 
@@ -8,7 +9,7 @@ export const FillerCell = ({ ...props }: FillerCellProps) => {
   return (
     <div
       {...props}
-      data-name={PropsUtil.dataAttributes.name('table-filler-cell')}
+      className={clsx('table-filler-cell', props.className)}
     >
       <Minus className="max-w-4 max-h-4" />
     </div>

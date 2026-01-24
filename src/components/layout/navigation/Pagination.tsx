@@ -5,6 +5,7 @@ import { MathUtil } from '@/src/utils/math'
 import type { CSSProperties } from 'react'
 import { useEffect, useState } from 'react'
 import { Button } from '@/src/components/user-interaction/Button'
+import { Tooltip } from '@/src/components/user-interaction/Tooltip'
 import { useHightideTranslation } from '@/src/i18n/useHightideTranslation'
 
 export interface PaginationProps {
@@ -46,22 +47,26 @@ export const Pagination = ({
 
   return (
     <div className={clsx('flex-row-1', className)} style={style}>
-      <Button
-        layout="icon"
-        coloringStyle="text"
-        color="neutral"
-        onClick={() => changePage(0)} disabled={onFirstPage || noPages}
-      >
-        <ChevronFirst/>
-      </Button>
-      <Button
-        layout="icon"
-        coloringStyle="text"
-        color="neutral"
-        onClick={() => changePage(pageIndex - 1)} disabled={onFirstPage || noPages}
-      >
-        <ChevronLeft/>
-      </Button>
+      <Tooltip tooltip={translation('first')}>
+        <Button
+          layout="icon"
+          coloringStyle="text"
+          color="neutral"
+          onClick={() => changePage(0)} disabled={onFirstPage || noPages}
+        >
+          <ChevronFirst/>
+        </Button>
+      </Tooltip>
+      <Tooltip tooltip={translation('previous')}>
+        <Button
+          layout="icon"
+          coloringStyle="text"
+          color="neutral"
+          onClick={() => changePage(pageIndex - 1)} disabled={onFirstPage || noPages}
+        >
+          <ChevronLeft/>
+        </Button>
+      </Tooltip>
       <div className="flex-row-2 min-w-56 items-center justify-center mx-2 text-center">
         <Input
           value={value}
@@ -91,22 +96,26 @@ export const Pagination = ({
           {pageCount}
         </span>
       </div>
-      <Button
-        layout="icon"
-        coloringStyle="text"
-        color="neutral"
-        onClick={() => changePage(pageIndex + 1)} disabled={onLastPage || noPages}
-      >
-        <ChevronRight/>
-      </Button>
-      <Button
-        layout="icon"
-        coloringStyle="text"
-        color="neutral"
-        onClick={() => changePage(pageCount - 1)} disabled={onLastPage || noPages}
-      >
-        <ChevronLast/>
-      </Button>
+      <Tooltip tooltip={translation('next')}>
+        <Button
+          layout="icon"
+          coloringStyle="text"
+          color="neutral"
+          onClick={() => changePage(pageIndex + 1)} disabled={onLastPage || noPages}
+        >
+          <ChevronRight/>
+        </Button>
+      </Tooltip>
+      <Tooltip tooltip={translation('last')}>
+        <Button
+          layout="icon"
+          coloringStyle="text"
+          color="neutral"
+          onClick={() => changePage(pageCount - 1)} disabled={onLastPage || noPages}
+        >
+          <ChevronLast/>
+        </Button>
+      </Tooltip>
     </div>
   )
 }

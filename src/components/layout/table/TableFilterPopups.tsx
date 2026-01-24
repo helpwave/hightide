@@ -41,7 +41,7 @@ import {
   CircleDot
 } from 'lucide-react'
 import type { TableFilterType } from './TableFilter'
-import { useTableBodyContext } from './TableContext'
+import { useTableDataContext } from './TableContext'
 
 export interface TableFilterBaseProps<T extends TableFilterValue> {
   columnId: string,
@@ -476,7 +476,7 @@ export type TagsFilterProps = TableFilterBaseProps<TagsFilterValue>
 
 export const TagsFilter = ({ columnId, filterValue, onFilterValueChange }: TagsFilterProps) => {
   const translation = useHightideTranslation()
-  const { table: table } = useTableBodyContext()
+  const { table: table } = useTableDataContext()
   const operator = filterValue?.operator ?? 'tagsContains'
   const parameter = filterValue?.parameter ?? {}
 
