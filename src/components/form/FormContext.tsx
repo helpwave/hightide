@@ -122,11 +122,12 @@ export interface FormObserverResult<T extends FormValue> {
   touched: Partial<Record<keyof T, boolean>>,
   errors: Partial<Record<keyof T, ReactNode>>,
   hasErrors: boolean,
+  hasTriedSubmitting: boolean,
 }
 
 export function useFormObserver<T extends FormValue>({ formStore }: UseFormObserverProps<T> = {}) : FormObserverResult<T> | null {
   const context = useContext(FormContext)
-  const store = formStore ?? context?.store
+  const store = formStore ?? context?.store as FormStore<T>
 
   const subscribe = useCallback((cb: () => void) => {
     if (!store) return () => { }
@@ -138,6 +139,7 @@ export function useFormObserver<T extends FormValue>({ formStore }: UseFormObser
   const errors = useSyncExternalStore(subscribe, () => store ? store.getErrors() : undefined)
   const touched = useSyncExternalStore(subscribe, () => store ? store.getAllTouched() : undefined)
   const hasErrors = useSyncExternalStore(subscribe, () => store ? store.getHasError() : undefined)
+  const hasTriedSubmitting = useSyncExternalStore(subscribe, () => store ? store.getHasTriedSubmitting() : undefined)
 
   if (!store) return null
 
@@ -147,5 +149,43 @@ export function useFormObserver<T extends FormValue>({ formStore }: UseFormObser
     errors,
     touched,
     hasErrors,
+    hasTriedSubmitting,
+  }
+}
+
+export interface UseFormObserverKeyProps<T extends FormValue, K extends keyof T> {
+  formStore?: FormStore<T>,
+  key: K,
+}
+
+export interface FormObserverKeyResult<T extends FormValue, K extends keyof T> {
+  store: FormStore<T>,
+  value: T[K],
+  error: ReactNode,
+  hasError: boolean,
+  touched: boolean,
+}
+
+export function useFormObserverKey<T extends FormValue, K extends keyof T>({ formStore, key }: UseFormObserverKeyProps<T, K>): FormObserverKeyResult<T, K> | null {
+  const context = useContext(FormContext)
+  const store = formStore ?? context?.store as FormStore<T>
+
+  const subscribe = useCallback((cb: () => void) => {
+    if (!store) return () => { }
+    return store.subscribe(key, cb)
+  }, [store, key])
+
+  const value = useSyncExternalStore(subscribe, () => store ? store.getValue(key) : undefined)
+  const error = useSyncExternalStore(subscribe, () => store ? store.getError(key) : undefined)
+  const touched = useSyncExternalStore(subscribe, () => store ? store.getTouched(key) : undefined)
+
+  if (!store) return null
+
+  return {
+    store,
+    value,
+    error,
+    touched,
+    hasError: !!error,
   }
 }
