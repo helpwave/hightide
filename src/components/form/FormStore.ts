@@ -141,6 +141,10 @@ export class FormStore<T extends FormValue> {
     return !!this.touched[key]
   }
 
+  getAllTouched(): Partial<Record<keyof T, boolean>> {
+    return { ...this.touched }
+  }
+
   setTouched(key: keyof T, isTouched: boolean = true) {
     if (this.touched[key] === isTouched) return
 

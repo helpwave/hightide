@@ -58,14 +58,14 @@ export function useFormField<T extends FormValue, K extends keyof T>(key: K, { t
 
   const getDataProps = useCallback(() => {
     return {
-      value: context ? context.store.getValue(key) : undefined,
+      value,
       onValueChange: (val: T[K]) => context?.store.setValue(key, val),
       onEditComplete: (val: T[K]) => {
         context?.store.setTouched(key)
         context?.store.setValue(key, val, triggerUpdate)
       }
     }
-  }, [context, key, triggerUpdate])
+  }, [context?.store, key, triggerUpdate, value])
 
 
   if (!context) return null
@@ -78,5 +78,43 @@ export function useFormField<T extends FormValue, K extends keyof T>(key: K, { t
     error,
     dataProps: getDataProps(),
     registerRef: registerRef(key),
+  }
+}
+
+export type UseFormObserverProps<T extends FormValue> = {
+  formStore?: FormStore<T>,
+}
+
+export interface FormObserverResult<T extends FormValue> {
+  store: FormStore<T>,
+  values: T,
+  touched: Partial<Record<keyof T, boolean>>,
+  errors: Partial<Record<keyof T, ReactNode>>,
+  hasErrors: boolean,
+}
+
+export function useFormObserver<T extends FormValue>({ formStore }: UseFormObserverProps<T> = {}) : FormObserverResult<T> | null {
+  const context = useContext(FormContext)
+  const store = formStore ?? context?.store
+
+  const subscribe = useCallback((cb: () => void) => {
+    if (!store) return () => { }
+    return store.subscribe('ALL', cb)
+  }, [store])
+
+
+  const values = useSyncExternalStore(subscribe, () => store ? store.getAllValues() : undefined)
+  const errors = useSyncExternalStore(subscribe, () => store ? store.getErrors() : undefined)
+  const touched = useSyncExternalStore(subscribe, () => store ? store.getAllTouched() : undefined)
+  const hasErrors = useSyncExternalStore(subscribe, () => store ? store.getHasError() : undefined)
+
+  if (!store) return null
+
+  return {
+    store,
+    values,
+    errors,
+    touched,
+    hasErrors,
   }
 }

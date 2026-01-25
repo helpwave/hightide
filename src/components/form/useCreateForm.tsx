@@ -40,16 +40,16 @@ export type UseCreateFormProps<T extends FormValue> = FormStoreProps<T> & {
 }
 
 export type UseCreateFormResult<T extends FormValue> = {
+  /**
+   * The form store.
+   * Do not attempt to read the store directly, use useFormObserver or useFormField instead.
+   * Otherwise you will not get the latest values and errors.
+   */
   store: FormStore<T>,
   reset: () => void,
   submit: () => void,
   update: (updater: Partial<T> | ((current: T) => Partial<T>)) => void,
   validateAll: () => void,
-  getError: (key: keyof T) => ReactNode,
-  getErrors: () => Partial<Record<keyof T, ReactNode>>,
-  getIsValid: () => boolean,
-  getValues: () => T,
-  getValue: <K extends keyof T>(key: K) => T[K],
   registerRef: (key: keyof T) => (el: HTMLElement | null) => void,
 }
 
@@ -162,11 +162,6 @@ export function useCreateForm<T extends FormValue>({
       }
     },
     validateAll: () => storeRef.current.validateAll(),
-    getError: (key: keyof T) => storeRef.current.getError(key),
-    getErrors: () => storeRef.current.getErrors(),
-    getIsValid: () =>  !storeRef.current.getHasError(),
-    getValue: <K extends keyof T>(key: K) => storeRef.current.getValue(key),
-    getValues: () => storeRef.current.getAllValues(),
   }), [])
 
   return {

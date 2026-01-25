@@ -1,0 +1,19 @@
+import type { ReactNode } from 'react'
+import type { FormValue } from './FormStore'
+import type { UseFormObserverProps } from './FormContext'
+import { useFormObserver, type FormObserverResult } from './FormContext'
+import { BagFunctionUtil } from '@/src/utils/bagFunctions'
+
+export interface FormObserverProps<T extends FormValue> extends UseFormObserverProps<T> {
+  children: (bag:FormObserverResult<T>) => ReactNode,
+}
+
+export const FormObserver = <T extends FormValue>({ children, formStore }: FormObserverProps<T>) => {
+  const formObserver = useFormObserver<T>({ formStore })
+
+  if (!formObserver) {
+    throw new Error('<FormObserver> can only be used inside a <FormProvider>')
+  }
+
+  return BagFunctionUtil.resolve(children, formObserver)
+}

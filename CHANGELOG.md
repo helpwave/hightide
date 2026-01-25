@@ -9,6 +9,7 @@ and adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
 ### Added
 - `onFillerRowClick` for `Table`s to react to such clicks
+- `useFormObserver` and `FormObserver` to listen to form updates
 
 ### Changed
 - `DateTimeInput` now only exposes its triggering elements ref
