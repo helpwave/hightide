@@ -8,6 +8,11 @@ and adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 ## [0.6.10] - 2026-01-25
 
 ### Fixed
+- `FormStore` to return stable copies to prevent infinite loops
+
+## [0.6.10] - 2026-01-25
+
+### Fixed
 - `TableBody` not showing filler row cells if `columnOrder` does not exist
 
 ## [0.6.9] - 2026-01-25
