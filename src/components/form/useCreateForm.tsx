@@ -2,7 +2,7 @@ import { useCallback, useEffect, useMemo, useRef, type ReactNode } from 'react'
 import type { FormEvent, FormStoreProps, FormValue } from './FormStore'
 import { FormStore } from './FormStore'
 
-export type UseCreateFormProps<T extends FormValue> = FormStoreProps<T> & {
+export type UseCreateFormProps<T extends FormValue> = Omit<FormStoreProps<T>, 'validationBehaviour'> & {
   onFormSubmit: (values: T) => void,
   onFormError?: (values: T, errors: Partial<Record<keyof T, ReactNode>>) => void,
   /**
@@ -62,7 +62,6 @@ export function useCreateForm<T extends FormValue>({
   initialValues,
   hasTriedSubmitting,
   validators,
-  validationBehaviour,
   scrollToElements = true,
   scrollOptions = { behavior: 'smooth', block: 'center' },
 }: UseCreateFormProps<T>) : UseCreateFormResult<T> {
@@ -71,13 +70,8 @@ export function useCreateForm<T extends FormValue>({
       initialValues,
       hasTriedSubmitting,
       validators,
-      validationBehaviour,
     })
   )
-
-  useEffect(() => {
-    storeRef.current.changeValidationBehavoir(validationBehaviour)
-  }, [validationBehaviour])
 
   useEffect(() => {
     storeRef.current.changeValidators(validators)

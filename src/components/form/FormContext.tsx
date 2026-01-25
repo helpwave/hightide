@@ -1,6 +1,6 @@
 import type { PropsWithChildren, ReactNode } from 'react'
 import { createContext, useCallback, useContext, useSyncExternalStore } from 'react'
-import type { FormStore, FormValue } from './FormStore'
+import type { FormStore, FormValue, FormValidationBehaviour } from './FormStore'
 import type { UseCreateFormResult } from './useCreateForm'
 import type { FormFieldDataHandling } from './FormField'
 
@@ -26,25 +26,39 @@ export function useForm<T extends FormValue>() {
   return ctx as FormContextType<T>
 }
 
-export type UseFormFieldOptions = {
-  triggerUpdate?: boolean,
+export interface UseFormFieldParameter<T extends FormValue> {
+  key: keyof T,
 }
+
+export interface UseFormFieldOptions {
+  triggerUpdate?: boolean,
+  validationBehaviour?: FormValidationBehaviour,
+}
+
+export interface UserFormFieldProps<T extends FormValue> extends UseFormFieldParameter<T>, UseFormFieldOptions {}
 
 export type FormFieldResult<T> = {
   store: FormStore<T>,
   value: T,
   error: ReactNode,
+  touched: boolean,
+  hasTriedSubmitting: boolean,
   dataProps: FormFieldDataHandling<T>,
   registerRef: (el: HTMLElement | null) => void,
 }
 
-export function useFormField<T extends FormValue, K extends keyof T>(key: K, { triggerUpdate = true }: UseFormFieldOptions): FormFieldResult<T[K]> | null {
+export function useFormField<T extends FormValue, K extends keyof T>(key: K, { triggerUpdate = true, validationBehaviour = 'touched' }: UseFormFieldOptions): FormFieldResult<T[K]> | null {
   const context = useContext(FormContext)
 
   const subscribe = useCallback((cb: () => void) => {
     if (!context) return () => { }
     return context.store.subscribe(key, cb)
   }, [context, key])
+
+  const subscribeAll = useCallback((cb: () => void) => {
+    if (!context) return () => { }
+    return context.store.subscribe('ALL', cb)
+  }, [context])
 
   const value = useSyncExternalStore(
     subscribe,
@@ -55,6 +69,21 @@ export function useFormField<T extends FormValue, K extends keyof T>(key: K, { t
     subscribe,
     () => context ? context.store.getError(key) : undefined
   )
+
+  const touched = useSyncExternalStore(
+    subscribe,
+    () => context ? context.store.getTouched(key) : undefined
+  )
+
+  const hasTriedSubmitting = useSyncExternalStore(
+    subscribeAll,
+    () => context ? context.store.getHasTriedSubmitting() : undefined
+  )
+  const isShowingErrors =
+    validationBehaviour === 'always' ||
+    (validationBehaviour === 'touched' && (touched ?? false)) ||
+    (validationBehaviour === 'submit' && (hasTriedSubmitting ?? false))
+
 
   const getDataProps = useCallback(() => {
     return {
@@ -75,7 +104,9 @@ export function useFormField<T extends FormValue, K extends keyof T>(key: K, { t
   return {
     store: context.store,
     value,
-    error,
+    error: isShowingErrors ? error : undefined,
+    touched: touched ?? false,
+    hasTriedSubmitting: hasTriedSubmitting ?? false,
     dataProps: getDataProps(),
     registerRef: registerRef(key),
   }

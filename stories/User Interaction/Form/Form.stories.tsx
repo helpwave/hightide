@@ -17,6 +17,7 @@ import type { FormValidationBehaviour } from '@/src/components/form/FormStore'
 import type { FormFieldDataHandling } from '@/src/components/form/FormField'
 import { FormField } from '@/src/components/form/FormField'
 import { FormProvider } from '@/src/components/form/FormContext'
+import { DateTimeInput } from '@/src/components/user-interaction/input/DateTimeInput'
 
 type FormState = 'editing' | 'sending' | 'submitted'
 
@@ -27,6 +28,7 @@ type FormValue = {
   allergies?: StorybookHelperSelectType[],
   contributions?: StorybookHelperSelectType[],
   notes?: string,
+  preferredDate: Date | null,
 }
 
 type StoryArgs = {
@@ -79,6 +81,7 @@ export const basic: Story = {
         allergies: StorybookHelper.selectValues.filter((_, index) => index === 5),
         contributions: [],
         notes: '',
+        preferredDate: null,
       },
       validators: useMemo(() => ({
         name: (val) => validators.notEmpty(val) ?? validators.length(val, [4, 32]),
@@ -86,7 +89,6 @@ export const basic: Story = {
         favouriteFruit: (val) => validators.notEmpty(val),
         contributions: (val) => validators.notEmpty(val?.length) ?? validators.selection(val, [2, 4]),
       }), [validators]),
-      validationBehaviour: validationBehaviour,
       onFormSubmit: (finalValues) => {
         setState('sending')
         onSubmit?.(finalValues)
@@ -119,6 +121,7 @@ export const basic: Story = {
               required={true}
               description="Your name will not be visible to others."
               label="Your name"
+              validationBehaviour={validationBehaviour}
             >
               {({ dataProps, focusableElementProps, interactionStates }) => (
                 <Input {...dataProps} {...focusableElementProps} {...interactionStates} placeholder="e.g. John Doe" />
@@ -130,6 +133,7 @@ export const basic: Story = {
               required={true}
               description="A email to contact you."
               label="Email"
+              validationBehaviour={validationBehaviour}
             >
               {({ dataProps, focusableElementProps, interactionStates }) => (
                 <Input {...dataProps} {...focusableElementProps} {...interactionStates} placeholder="e.g. test@helpwave.de" />
@@ -141,6 +145,7 @@ export const basic: Story = {
               required={true}
               description="We will use this to include as many likes as possible."
               label="Your favourite Fruit"
+              validationBehaviour={validationBehaviour}
             >
               {({ dataProps, focusableElementProps, interactionStates }) => (
                 <Select {...dataProps as FormFieldDataHandling<string>} {...focusableElementProps} {...interactionStates}>
@@ -156,6 +161,7 @@ export const basic: Story = {
               required={true}
               description="Please specify which ingredients you are bringing."
               label="Your contribution"
+              validationBehaviour={validationBehaviour}
             >
               {({ dataProps, focusableElementProps, interactionStates }) => (
                 <MultiSelect {...dataProps as FormFieldDataHandling<string[]>} {...focusableElementProps} {...interactionStates}>
@@ -170,6 +176,7 @@ export const basic: Story = {
               name="allergies"
               description="The ingredients you are allergic to."
               label="Allergies"
+              validationBehaviour={validationBehaviour}
             >
               {({ dataProps, focusableElementProps, interactionStates }) => (
                 <MultiSelect {...dataProps as FormFieldDataHandling<string[]>} {...focusableElementProps} {...interactionStates}>
@@ -180,10 +187,26 @@ export const basic: Story = {
               )}
             </FormField>
 
+            <FormField<FormValue, 'preferredDate'>
+              name="preferredDate"
+              description="The date you would like to attend the event."
+              label="Preferred Date"
+              validationBehaviour={validationBehaviour}
+            >
+              {({ dataProps, focusableElementProps, interactionStates }) => (
+                <DateTimeInput
+                  {...dataProps}
+                  {...focusableElementProps}
+                  {...interactionStates}
+                />
+              )}
+            </FormField>
+
             <FormField<FormValue, 'notes'>
               name="notes"
               description="Anything else we should be aware of or you'd like us to know."
               label="Notes"
+              validationBehaviour={validationBehaviour}
             >
               {({ dataProps, focusableElementProps, interactionStates }) => (
                 <Textarea
@@ -261,7 +284,6 @@ const form = useCreateForm<FormValue>({
     favouriteFruit: (val) => validators.notEmpty(val),
     contributions: (val) => validators.notEmpty(val?.length) ?? validators.selection(val, [2, 4]),
   }), [validators]),
-  validationBehaviour: validationBehaviour,
   onFormSubmit: (finalValues) => {
     setState('sending')
     onSubmit?.(finalValues)

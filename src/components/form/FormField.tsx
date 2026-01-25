@@ -2,7 +2,7 @@ import type { FormFieldAriaAttributes, FormFieldInteractionStates } from './Fiel
 import { FormFieldLayout, type FormFieldLayoutProps } from './FieldLayout'
 import { useFormField } from './FormContext'
 import type { ReactNode } from 'react'
-import type { FormValue } from './FormStore'
+import type { FormValue, FormValidationBehaviour } from './FormStore'
 
 export type FormFieldFocusableElementProps = FormFieldAriaAttributes & {
   id: string,
@@ -13,6 +13,7 @@ export type FormFieldBag<T extends FormValue, K extends keyof T> = {
   dataProps: FormFieldDataHandling<T[K]>,
   focusableElementProps: FormFieldFocusableElementProps,
   interactionStates: FormFieldInteractionStates,
+  touched: boolean,
   other: {
     updateValue: (value: T[K]) => void,
   },
@@ -22,6 +23,7 @@ export interface FormFieldProps<T extends FormValue, K extends keyof T> extends 
   children: (bag: FormFieldBag<T, K>) => ReactNode,
   name: K,
   triggerUpdateOnEditComplete?: boolean,
+  validationBehaviour?: FormValidationBehaviour,
 }
 
 export type FormFieldDataHandling<T> = {
@@ -30,8 +32,8 @@ export type FormFieldDataHandling<T> = {
   onEditComplete: (value: T) => void,
 }
 
-export const FormField = <T extends FormValue, K extends keyof T>({ children, name, triggerUpdateOnEditComplete, ...props }: FormFieldProps<T, K>) => {
-  const formField = useFormField<T, K>(name, { triggerUpdate: triggerUpdateOnEditComplete })
+export const FormField = <T extends FormValue, K extends keyof T>({ children, name, triggerUpdateOnEditComplete, validationBehaviour, ...props }: FormFieldProps<T, K>) => {
+  const formField = useFormField<T, K>(name, { triggerUpdate: triggerUpdateOnEditComplete, validationBehaviour })
 
   if (!formField) {
     throw new Error('<FormField> can only be used inside a FormContext try wrapping your app in a <FormProvider>')
@@ -47,6 +49,7 @@ export const FormField = <T extends FormValue, K extends keyof T>({ children, na
           ref: formField.registerRef,
         },
         interactionStates: formFieldLayoutBag.interactionStates,
+        touched: formField.touched,
         other: {
           updateValue: (value: T[K]) => formField.store.setValue(name, value, true),
         },

@@ -13,6 +13,7 @@ and adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
 ### Changed
 - `DateTimeInput` now only exposes its triggering elements ref
+- Moved `ValidationBehavoir` from the `FormStore` to the `FormField` 
 
 ### Fixed
 - `DateTimeInput` always showing the value as a placeholder
