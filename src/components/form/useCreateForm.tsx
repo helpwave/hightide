@@ -48,7 +48,7 @@ export type UseCreateFormResult<T extends FormValue> = {
   store: FormStore<T>,
   reset: () => void,
   submit: () => void,
-  update: (updater: Partial<T> | ((current: T) => Partial<T>)) => void,
+  update: (updater: Partial<T> | ((current: T) => Partial<T>), triggerUpdate?: boolean) => void,
   validateAll: () => void,
   registerRef: (key: keyof T) => (el: HTMLElement | null) => void,
 }
@@ -148,11 +148,11 @@ export function useCreateForm<T extends FormValue>({
   const callbacks = useMemo(() => ({
     reset: () => storeRef.current.reset(),
     submit: () => storeRef.current.submit(),
-    update: (updater: Partial<T> | ((current: T) => Partial<T>)) => {
+    update: (updater: Partial<T> | ((current: T) => Partial<T>), triggerUpdate: boolean = false) => {
       if (typeof updater === 'function') {
-        storeRef.current.setValues(updater(storeRef.current.getAllValues()))
+        storeRef.current.setValues(updater(storeRef.current.getAllValues()), triggerUpdate)
       } else {
-        storeRef.current.setValues(updater)
+        storeRef.current.setValues(updater, triggerUpdate)
       }
     },
     validateAll: () => storeRef.current.validateAll(),
