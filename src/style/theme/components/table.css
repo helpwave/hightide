@@ -37,6 +37,9 @@
 
   .table-body-filler-row {
     @apply hover:cursor-not-allowed;
+    &[data-clickable] {
+      @apply hover:cursor-pointer hover:bg-table-row-hover-background;
+    }
   }
 
   .table-body-cell, .table-body-filler-cell {
@@ -64,7 +67,7 @@
     }
   }
 
-  .table-body-row:last-child > .table-body-cell {
+  .table-body-row:last-child > .table-body-cell, .table-body-filler-row:last-child > .table-body-filler-cell {
     @apply first:rounded-bl-lg last:rounded-br-lg;
   }
 }

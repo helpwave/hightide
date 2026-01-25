@@ -5,6 +5,18 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/)
 and adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [0.6.9] - 2026-01-25
+
+### Added
+- `onFillerRowClick` for `Table`s to react to such clicks
+
+### Changed
+- `DateTimeInput` now only exposes its triggering elements ref
+
+### Fixed
+- `DateTimeInput` always showing the value as a placeholder
+- `TableBody` filler rows reacting to sorting and visibility
+
 ## [0.6.8] - 2026-01-24
 
 ### Changed

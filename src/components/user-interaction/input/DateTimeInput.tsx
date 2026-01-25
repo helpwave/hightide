@@ -16,11 +16,6 @@ import { PropsUtil } from '@/src/utils/propsUtil'
 import type { FormFieldInteractionStates } from '@/src/components/form/FieldLayout'
 import { PopUp } from '../../layout/popup/PopUp'
 
-export type DateTimeInputHandle = {
-  input: HTMLDivElement | null,
-  popup: HTMLDivElement | null,
-}
-
 export interface DateTimeInputProps extends
   Partial<FormFieldInteractionStates>,
   ControlledStateProps<Date | null>,
@@ -37,7 +32,7 @@ export interface DateTimeInputProps extends
   onDialogOpeningChange?: (isOpen: boolean) => void,
 }
 
-export const DateTimeInput = forwardRef<DateTimeInputHandle, DateTimeInputProps>(function DateTimeInput({
+export const DateTimeInput = forwardRef<HTMLDivElement, DateTimeInputProps>(function DateTimeInput({
   value,
   defaultValue = null,
   placeholder,
@@ -83,11 +78,7 @@ export const DateTimeInput = forwardRef<DateTimeInputHandle, DateTimeInputProps>
   }), [id])
 
   const innerRef = useRef<HTMLDivElement>(null)
-  const containerRef = useRef<HTMLDivElement>(null)
-  useImperativeHandle(forwardedRef, () => ({
-    input: innerRef.current,
-    popup: containerRef.current,
-  } as DateTimeInputHandle))
+  useImperativeHandle(forwardedRef, () => innerRef.current)
 
   useEffect(() => {
     if (readOnly || disabled) {
@@ -99,9 +90,10 @@ export const DateTimeInput = forwardRef<DateTimeInputHandle, DateTimeInputProps>
 
   return (
     <>
-      <div {...containerProps} ref={innerRef} className={clsx('relative w-full', containerProps?.className)}>
+      <div {...containerProps} className={clsx('relative w-full', containerProps?.className)}>
         <div
           {...props}
+          ref={innerRef}
           id={ids.input}
 
           onClick={(event) => {
@@ -112,7 +104,9 @@ export const DateTimeInput = forwardRef<DateTimeInputHandle, DateTimeInputProps>
 
           {...PropsUtil.dataAttributes.interactionStates({ disabled, readOnly, invalid, required })}
 
+          data-value={PropsUtil.dataAttributes.bool(!!state)}
           {...PropsUtil.aria.interactionStates({ disabled, readOnly, invalid, required }, props)}
+
           tabIndex={0}
           role="combobox"
           aria-haspopup="dialog"
@@ -146,7 +140,6 @@ export const DateTimeInput = forwardRef<DateTimeInputHandle, DateTimeInputProps>
         </Visibility>
       </div>
       <PopUp
-        ref={containerRef}
         id={ids.popup}
         isOpen={isOpen}
         anchor={innerRef}
