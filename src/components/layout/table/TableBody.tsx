@@ -10,17 +10,30 @@ import { Visibility } from '../Visibility'
 
 export const TableBody = React.memo(function TableBodyVisual() {
   const { table, onRowClick, onFillerRowClick, isUsingFillerRows, fillerRowCell, pagination, rows } = useTableDataContext<unknown>()
-  const pinnedColumnsLeft = table.getState().columnPinning?.left ?? []
-  const pinnedColumnsRight = table.getState().columnPinning?.right ?? []
-  let columnOrder = table.getState().columnOrder
-  columnOrder = [...pinnedColumnsLeft, ...columnOrder.filter(id => !pinnedColumnsLeft.includes(id) && !pinnedColumnsRight.includes(id)), ...pinnedColumnsRight]
-  const columnVisibility = table.getState().columnVisibility
-  const columns = columnOrder.map(id => {
-    const column = table.getColumn(id)
-    if (!column) return null
-    if (columnVisibility[id] === false) return null
-    return column
-  }).filter(Boolean)
+  const state = table.getState()
+  const baseOrder =
+  state.columnOrder?.length
+    ? state.columnOrder
+    : table.getVisibleLeafColumns().map(col => col.id)
+
+  const pinnedLeft = state.columnPinning?.left ?? []
+  const pinnedRight = state.columnPinning?.right ?? []
+
+  const columnOrder = [
+    ...pinnedLeft,
+    ...baseOrder.filter(
+      id => !pinnedLeft.includes(id) && !pinnedRight.includes(id)
+    ),
+    ...pinnedRight,
+  ]
+
+  const columns = columnOrder
+    .map(id => table.getColumn(id))
+    .filter(
+      (col): col is NonNullable<typeof col> =>
+        !!col && state.columnVisibility?.[col.id] !== false
+    )
+
   return (
     <tbody>
       {rows.map(row => {
