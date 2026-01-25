@@ -1,4 +1,4 @@
-import { Pagination, PaginationProps } from '@/src/components/layout/navigation/Pagination'
+import { Pagination, type PaginationProps } from '@/src/components/layout/navigation/Pagination'
 import { useTableDataContext } from './TableContext'
 import type { HTMLAttributes } from 'react'
 import { useEffect } from 'react'
@@ -8,9 +8,9 @@ import { MathUtil } from '@/src/utils/math'
 import { Visibility } from '../Visibility'
 import clsx from 'clsx'
 
-export type TablePaginationMenuProps = Omit<PaginationProps, "pageIndex" | "pageCount">
+export type TablePaginationMenuProps = Omit<PaginationProps, 'pageIndex' | 'pageCount'>
 
-export const TablePaginationMenu = ({...props}: TablePaginationMenuProps) => {
+export const TablePaginationMenu = ({ ...props }: TablePaginationMenuProps) => {
   const { table: table } = useTableDataContext()
 
   useEffect(() => {
@@ -72,10 +72,10 @@ export interface TablePaginationProps extends HTMLAttributes<HTMLDivElement> {
 export const TablePagination = ({ allowChangingPageSize = true, pageSizeOptions, ...props }: TablePaginationProps) => {
   return (
     <div {...props} className={clsx('container flex-col-2 sm:flex-row-8 items-center justify-center', props.className)}>
-        <TablePaginationMenu />
-        <Visibility isVisible={allowChangingPageSize}>
-          <TablePageSizeSelect pageSizeOptions={pageSizeOptions} buttonProps={{ className: 'h-10 min-w-24 max-w-24' }} />
-        </Visibility>
+      <TablePaginationMenu />
+      <Visibility isVisible={allowChangingPageSize}>
+        <TablePageSizeSelect pageSizeOptions={pageSizeOptions} buttonProps={{ className: 'h-10 min-w-24 max-w-24' }} />
+      </Visibility>
     </div>
   )
 }

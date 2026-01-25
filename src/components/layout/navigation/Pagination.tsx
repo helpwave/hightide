@@ -8,7 +8,7 @@ import { Button } from '@/src/components/user-interaction/Button'
 import { Tooltip } from '@/src/components/user-interaction/Tooltip'
 import { useHightideTranslation } from '@/src/i18n/useHightideTranslation'
 
-export interface PaginationProps extends Omit<HTMLAttributes<HTMLDivElement>, "children"> {
+export interface PaginationProps extends Omit<HTMLAttributes<HTMLDivElement>, 'children'> {
   pageIndex: number,
   pageCount: number,
   onPageIndexChanged?: (pageIndex: number) => void,
