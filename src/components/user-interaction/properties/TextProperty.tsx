@@ -13,7 +13,6 @@ export type TextPropertyProps = PropertyField<string>
 export const TextProperty = ({
   value,
   readOnly,
-  onRemove,
   onValueChange,
   onEditComplete,
   ...baseProps
@@ -24,7 +23,6 @@ export const TextProperty = ({
   return (
     <PropertyBase
       {...baseProps}
-      onRemove={onRemove}
       hasValue={hasValue}
       icon={<Text size={24}/>}
     >
@@ -37,20 +35,8 @@ export const TextProperty = ({
           value={value ?? ''}
           readOnly={readOnly}
           placeholder={translation('text')}
-          onValueChange={(value) => {
-            if (!value) {
-              onRemove?.()
-            } else {
-              onValueChange?.(value)
-            }
-          }}
-          onEditComplete={(value) => {
-            if (!value) {
-              onRemove?.()
-            } else {
-              onEditComplete?.(value)
-            }
-          }}
+          onValueChange={(value) => onValueChange?.(value)}
+          onEditComplete={(value) => onEditComplete?.(value)}
         />
       )}
     </PropertyBase>

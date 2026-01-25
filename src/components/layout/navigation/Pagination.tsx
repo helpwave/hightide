@@ -2,18 +2,16 @@ import { ChevronFirst, ChevronLast, ChevronLeft, ChevronRight } from 'lucide-rea
 import clsx from 'clsx'
 import { Input } from '@/src/components/user-interaction/input/Input'
 import { MathUtil } from '@/src/utils/math'
-import type { CSSProperties } from 'react'
+import type { HTMLAttributes } from 'react'
 import { useEffect, useState } from 'react'
 import { Button } from '@/src/components/user-interaction/Button'
 import { Tooltip } from '@/src/components/user-interaction/Tooltip'
 import { useHightideTranslation } from '@/src/i18n/useHightideTranslation'
 
-export interface PaginationProps {
+export interface PaginationProps extends Omit<HTMLAttributes<HTMLDivElement>, "children"> {
   pageIndex: number,
   pageCount: number,
   onPageIndexChanged?: (pageIndex: number) => void,
-  className?: string,
-  style?: CSSProperties,
 }
 
 /**
@@ -23,8 +21,7 @@ export const Pagination = ({
   pageIndex,
   pageCount,
   onPageIndexChanged,
-  className,
-  style,
+  ...props
 }: PaginationProps) => {
   const translation = useHightideTranslation()
   const [value, setValue] = useState<string>((pageIndex + 1).toString())
@@ -46,7 +43,7 @@ export const Pagination = ({
   }
 
   return (
-    <div className={clsx('flex-row-1', className)} style={style}>
+    <div {...props} className={clsx('flex-row-1', props.className)} >
       <Tooltip tooltip={translation('first')}>
         <Button
           layout="icon"

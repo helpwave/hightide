@@ -5,7 +5,16 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/)
 and adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
-## [0.6.10] - 2026-01-25
+## [0.6.12] - 2026-01-25
+
+### Added
+- `useCreateForm`s update method in its return type now accepts a boolean to indicate whether an update should be triggerd
+
+### Fixed
+- `TablePagination` for smaller screens
+- `NumberProperty` and `TextProperty` to not use `onRemove`
+
+## [0.6.11] - 2026-01-25
 
 ### Fixed
 - `FormStore` to return stable copies to prevent infinite loops

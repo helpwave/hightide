@@ -13,9 +13,9 @@ export type NumberPropertyProps = PropertyField<number>
  */
 export const NumberProperty = ({
   value,
-  onRemove,
   onValueChange,
   onEditComplete,
+  onValueClear,
   readOnly,
   suffix,
   ...baseProps
@@ -26,7 +26,7 @@ export const NumberProperty = ({
   return (
     <PropertyBase
       {...baseProps}
-      onRemove={onRemove}
+      onValueClear={onValueClear}
       hasValue={hasValue}
       icon={<Binary size={24}/>}
     >
@@ -46,7 +46,7 @@ export const NumberProperty = ({
             onValueChange={(value) => {
               const numberValue = parseFloat(value)
               if (isNaN(numberValue)) {
-                onRemove()
+                onValueClear()
               } else {
                 onValueChange?.(numberValue)
               }
@@ -54,7 +54,7 @@ export const NumberProperty = ({
             onEditComplete={(value) => {
               const numberValue = parseFloat(value)
               if (isNaN(numberValue)) {
-                onRemove()
+                onValueClear()
               } else {
                 onEditComplete?.(numberValue)
               }
