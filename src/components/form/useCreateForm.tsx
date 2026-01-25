@@ -2,7 +2,7 @@ import { useCallback, useEffect, useMemo, useRef, type ReactNode } from 'react'
 import type { FormEvent, FormStoreProps, FormValue } from './FormStore'
 import { FormStore } from './FormStore'
 
-export type UseCreateFormProps<T extends FormValue> = FormStoreProps<T> & {
+export type UseCreateFormProps<T extends FormValue> = Omit<FormStoreProps<T>, 'validationBehaviour'> & {
   onFormSubmit: (values: T) => void,
   onFormError?: (values: T, errors: Partial<Record<keyof T, ReactNode>>) => void,
   /**
@@ -40,16 +40,16 @@ export type UseCreateFormProps<T extends FormValue> = FormStoreProps<T> & {
 }
 
 export type UseCreateFormResult<T extends FormValue> = {
+  /**
+   * The form store.
+   * Do not attempt to read the store directly, use useFormObserver or useFormField instead.
+   * Otherwise you will not get the latest values and errors.
+   */
   store: FormStore<T>,
   reset: () => void,
   submit: () => void,
   update: (updater: Partial<T> | ((current: T) => Partial<T>)) => void,
   validateAll: () => void,
-  getError: (key: keyof T) => ReactNode,
-  getErrors: () => Partial<Record<keyof T, ReactNode>>,
-  getIsValid: () => boolean,
-  getValues: () => T,
-  getValue: <K extends keyof T>(key: K) => T[K],
   registerRef: (key: keyof T) => (el: HTMLElement | null) => void,
 }
 
@@ -62,7 +62,6 @@ export function useCreateForm<T extends FormValue>({
   initialValues,
   hasTriedSubmitting,
   validators,
-  validationBehaviour,
   scrollToElements = true,
   scrollOptions = { behavior: 'smooth', block: 'center' },
 }: UseCreateFormProps<T>) : UseCreateFormResult<T> {
@@ -71,13 +70,8 @@ export function useCreateForm<T extends FormValue>({
       initialValues,
       hasTriedSubmitting,
       validators,
-      validationBehaviour,
     })
   )
-
-  useEffect(() => {
-    storeRef.current.changeValidationBehavoir(validationBehaviour)
-  }, [validationBehaviour])
 
   useEffect(() => {
     storeRef.current.changeValidators(validators)
@@ -162,11 +156,6 @@ export function useCreateForm<T extends FormValue>({
       }
     },
     validateAll: () => storeRef.current.validateAll(),
-    getError: (key: keyof T) => storeRef.current.getError(key),
-    getErrors: () => storeRef.current.getErrors(),
-    getIsValid: () =>  !storeRef.current.getHasError(),
-    getValue: <K extends keyof T>(key: K) => storeRef.current.getValue(key),
-    getValues: () => storeRef.current.getAllValues(),
   }), [])
 
   return {

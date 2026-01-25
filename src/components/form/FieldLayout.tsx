@@ -1,6 +1,6 @@
 import type { HTMLAttributes, ReactNode } from 'react'
 import { useId, useMemo, forwardRef } from 'react'
-import { PropsUtil } from '@/src/utils/propsUtil'
+import clsx from 'clsx'
 
 export type FormFieldAriaAttributes = Pick<HTMLAttributes<HTMLElement>, 'aria-labelledby' | 'aria-describedby' | 'aria-disabled' | 'aria-readonly' | 'aria-invalid' | 'aria-errormessage' | 'aria-required'>
 
@@ -33,6 +33,7 @@ export type FormFieldLayoutProps = Omit<HTMLAttributes<HTMLDivElement>, 'childre
   invalidDescriptionProps?: Omit<HTMLAttributes<HTMLDivElement>, 'children' | 'id'>,
   description?: ReactNode,
   descriptionProps?: Omit<HTMLAttributes<HTMLParagraphElement>, 'children' | 'id'>,
+  showRequiredIndicator?: boolean,
 }
 
 export const FormFieldLayout = forwardRef<HTMLDivElement, FormFieldLayoutProps>(function FormFieldLayout({
@@ -47,6 +48,7 @@ export const FormFieldLayout = forwardRef<HTMLDivElement, FormFieldLayoutProps>(
   invalidDescriptionProps,
   description,
   descriptionProps,
+  showRequiredIndicator = true,
   ...props
 }, ref) {
   const generatedId = useId()
@@ -91,17 +93,17 @@ export const FormFieldLayout = forwardRef<HTMLDivElement, FormFieldLayoutProps>(
       {...props}
       ref={ref}
 
-      data-name={PropsUtil.dataAttributes.name('form-field-container', props)}
+      className={clsx('form-field-container', props.className)}
     >
       {label && (
         <label
           {...labelProps}
           id={ids.label}
           htmlFor={ids.input}
-          data-name="form-field-label"
+          className={clsx('form-field-label', labelProps?.className)}
         >
           {label}
-          {required && <div role="none" className="bg-primary w-2 h-2 rounded-full" />}
+          {showRequiredIndicator && required && <div role="none" className="bg-primary w-2 h-2 rounded-full" />}
         </label>
       )}
       {description && (
@@ -109,7 +111,7 @@ export const FormFieldLayout = forwardRef<HTMLDivElement, FormFieldLayoutProps>(
           {...descriptionProps}
           id={ids.description}
 
-          data-name="form-field-description"
+          className={clsx('form-field-description', descriptionProps?.className)}
         >
           {description}
         </p>
@@ -120,11 +122,11 @@ export const FormFieldLayout = forwardRef<HTMLDivElement, FormFieldLayoutProps>(
           {...invalidDescriptionProps}
           id={ids.description}
 
-          data-name="form-field-error"
-
           role="alert"
           aria-hidden={!invalid}
           aria-live="polite"
+
+          className={clsx('form-field-error', invalidDescriptionProps?.className)}
         >
           {invalidDescription}
         </div>

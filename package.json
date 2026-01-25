@@ -7,7 +7,7 @@
     "url": "git+https://github.com/helpwave/hightide.git"
   },
   "license": "MPL-2.0",
-  "version": "0.6.8",
+  "version": "0.6.9",
   "files": [
     "dist"
   ],

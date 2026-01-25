@@ -13,18 +13,20 @@ export type TableProviderProps<T> = {
     columns?: ColumnDef<T>[],
     children?: ReactNode,
     isUsingFillerRows?: boolean,
-    fillerRow?: (columnId: string, table: ReactTable<T>) => ReactNode,
+    fillerRowCell?: (columnId: string, table: ReactTable<T>) => ReactNode,
     initialState?: Omit<InitialTableState, 'columnSizing'>,
     onRowClick?: (row: Row<T>, table: ReactTable<T>) => void,
+    onFillerRowClick?: (index: number, table: ReactTable<T>) => void,
     state?: Omit<TableState, 'columnSizing'>,
   } & Partial<TableOptions<T>>
 
 export const TableProvider = <T,>({
   data,
   isUsingFillerRows = true,
-  fillerRow,
+  fillerRowCell,
   initialState,
   onRowClick,
+  onFillerRowClick,
   defaultColumn: defaultColumnOverwrite,
   state,
   columns: columnsProp,
@@ -175,15 +177,16 @@ export const TableProvider = <T,>({
     pagination,
     rowSelection,
     isUsingFillerRows,
-    fillerRow,
+    fillerRowCell,
     onRowClick,
+    onFillerRowClick,
     rows,
     columnOrder,
     columnFilters,
     columnVisibility,
     columnPinning,
     columnSorting,
-  }), [table, data, pagination, rowSelection, isUsingFillerRows, fillerRow, onRowClick, columns, rows, columnOrder, columnFilters, columnVisibility, columnPinning, columnSorting])
+  }), [table, data, pagination, rowSelection, isUsingFillerRows, fillerRowCell, onRowClick, onFillerRowClick, columns, rows, columnOrder, columnFilters, columnVisibility, columnPinning, columnSorting])
 
   const tableColumnDefinitionContextValue = useMemo(() => ({
     table,

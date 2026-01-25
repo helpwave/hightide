@@ -14,7 +14,7 @@ export interface TableWithSelectionProviderProps<T> extends TableProviderProps<T
 export const TableWithSelectionProvider = <T,>({
   children,
   state,
-  fillerRow,
+  fillerRowCell,
   rowSelection,
   disableClickRowClickSelection = false,
   selectionRowId = 'selection',
@@ -37,7 +37,13 @@ export const TableWithSelectionProvider = <T,>({
         )
       },
       cell: ({ row }) => {
-        return (<Checkbox disabled={!row.getCanSelect()} value={row.getIsSelected()} onValueChange={row.getToggleSelectedHandler()} />)
+        return (
+          <Checkbox
+            disabled={!row.getCanSelect()}
+            value={row.getIsSelected()}
+            onValueChange={row.getToggleSelectedHandler()}
+          />
+        )
       },
       size: 60,
       minSize: 60,
@@ -53,12 +59,12 @@ export const TableWithSelectionProvider = <T,>({
   return (
     <TableProvider
       {...props}
-      fillerRow={useCallback((columnId: string, table: Table<T>) => {
+      fillerRowCell={useCallback((columnId: string, table: Table<T>) => {
         if (columnId === selectionRowId) {
-          return (<Checkbox value={false} disabled={true} className="max-w-6" />)
+          return (<Checkbox value={false} disabled={true} />)
         }
-        return fillerRow?.(columnId, table) ?? (<FillerCell />)
-      }, [fillerRow, selectionRowId])}
+        return fillerRowCell?.(columnId, table) ?? (<FillerCell />)
+      }, [fillerRowCell, selectionRowId])}
       columns={columnDef}
       initialState={{
         ...props.initialState,

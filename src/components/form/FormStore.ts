@@ -51,14 +51,12 @@ export type FormStoreProps<T extends FormValue> = {
   hasTriedSubmitting?: boolean,
   submittingTouchesAll?: boolean,
   validators?: Partial<{ [K in keyof T]: (v: T[K]) => ReactNode }>,
-  validationBehaviour?: FormValidationBehaviour,
 }
 
 export class FormStore<T extends FormValue> {
   private values: T
   private initialValues: T
   private validators: Partial<{ [K in keyof T]: FormValidator<T> }>
-  private validationBehaviour: FormValidationBehaviour
 
   private hasTriedSubmitting: boolean = false
   private errors: Partial<Record<keyof T, ReactNode>> = {}
@@ -73,7 +71,6 @@ export class FormStore<T extends FormValue> {
     hasTriedSubmitting,
     submittingTouchesAll = true,
     validators = {},
-    validationBehaviour = 'touched',
   }: FormStoreProps<T>) {
     this.initialValues = initialValues
     this.values = { ...initialValues }
@@ -87,7 +84,6 @@ export class FormStore<T extends FormValue> {
     }
 
     this.validators = validators
-    this.validationBehaviour = validationBehaviour
     this.validateAll()
   }
 
@@ -103,8 +99,9 @@ export class FormStore<T extends FormValue> {
   setValue<K extends keyof T>(key: K, value: T[K], triggerUpdate: boolean = false) {
     if (this.values[key] !== value) {
       this.values[key] = value
-      this.validate(key)
+
       this.notify({ type: 'onChange', key, value, values: this.values })
+      this.validate(key)
     }
 
     if(triggerUpdate) {
@@ -141,11 +138,14 @@ export class FormStore<T extends FormValue> {
     return !!this.touched[key]
   }
 
+  getAllTouched(): Partial<Record<keyof T, boolean>> {
+    return { ...this.touched }
+  }
+
   setTouched(key: keyof T, isTouched: boolean = true) {
     if (this.touched[key] === isTouched) return
 
     this.touched[key] = isTouched
-    this.validate(key)
     this.notify({ type: 'onTouched', key, value: this.values[key], values: { ...this.values } })
   }
 
@@ -174,10 +174,8 @@ export class FormStore<T extends FormValue> {
     this.notify({ type: 'onError', key,  value: this.values[key], error, values: { ...this.values } })
   }
 
-  changeValidationBehavoir(validationBehaviour: FormValidationBehaviour) {
-    if(validationBehaviour === this.validationBehaviour) return
-    this.validationBehaviour = validationBehaviour
-    this.validateAll()
+  getHasTriedSubmitting(): boolean {
+    return this.hasTriedSubmitting
   }
 
   changeValidators(validators: Partial<Record<keyof T, FormValidator<T>>>) {
@@ -188,12 +186,7 @@ export class FormStore<T extends FormValue> {
   validate(key: keyof T) {
     const validator = this.validators[key]
 
-    const shouldValidate =
-      this.validationBehaviour === 'always' ||
-      (this.validationBehaviour === 'touched' && this.touched[key]) ||
-      (this.validationBehaviour === 'submit' && this.hasTriedSubmitting)
-
-    if (!validator || !shouldValidate) {
+    if (!validator) {
       this.setError(key, undefined)
       return
     }
@@ -238,7 +231,6 @@ export class FormStore<T extends FormValue> {
     if(this.submittingTouchesAll) {
       Object.keys(this.initialValues).forEach((k) => {
         this.touched[k as keyof T] = true
-        this.validate(k as keyof T)
       })
     }
 

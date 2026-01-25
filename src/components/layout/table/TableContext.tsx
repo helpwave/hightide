@@ -18,8 +18,9 @@ export type TableDataContextType<T> = {
   data: T[],
   pagination: PaginationState,
   isUsingFillerRows: boolean,
-  fillerRow: (columnId: string, table: ReactTable<T>) => ReactNode,
-  onRowClick: (row: Row<T>, table: ReactTable<T>) => void,
+  fillerRowCell: (columnId: string, table: ReactTable<T>) => ReactNode,
+  onRowClick?: (row: Row<T>, table: ReactTable<T>) => void,
+  onFillerRowClick?: (index: number, table: ReactTable<T>) => void,
 }
 
 // eslint-disable-next-line @typescript-eslint/no-explicit-any
