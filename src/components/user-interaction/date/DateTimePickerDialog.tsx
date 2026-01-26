@@ -46,7 +46,7 @@ export const DateTimePickerDialog = ({
           id={labelId}
           className="typography-title-md font-semibold"
         >
-          {label ?? translation('sDateTimeSelect', { datetimeMode: mode })}
+          {label ?? translation('sDateTimeSelect', { dateTimeMode: mode })}
         </span>
       </div>
       <DateTimePicker

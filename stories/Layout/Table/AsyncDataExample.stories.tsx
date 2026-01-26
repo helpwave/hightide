@@ -75,7 +75,7 @@ function getFilterCategory(operator: string): keyof typeof TableFilterOperator |
     ...TableFilterOperator.text,
     ...TableFilterOperator.number,
     ...TableFilterOperator.date,
-    ...TableFilterOperator.datetime,
+    ...TableFilterOperator.dateTime,
     ...TableFilterOperator.boolean,
     ...TableFilterOperator.tags,
     ...TableFilterOperator.tagsSingle,
@@ -97,8 +97,8 @@ function getFilterCategory(operator: string): keyof typeof TableFilterOperator |
   if (TableFilterOperator.date.includes(operator as typeof TableFilterOperator.date[number])) {
     return 'date'
   }
-  if (TableFilterOperator.datetime.includes(operator as typeof TableFilterOperator.datetime[number])) {
-    return 'datetime'
+  if (TableFilterOperator.dateTime.includes(operator as typeof TableFilterOperator.dateTime[number])) {
+    return 'dateTime'
   }
   if (TableFilterOperator.boolean.includes(operator as typeof TableFilterOperator.boolean[number])) {
     return 'boolean'
@@ -144,7 +144,7 @@ const fetchPaginatedData = async (
           return filterNumber(rowValue, filterValue as NumberFilterValue)
         case 'date':
           return filterDate(rowValue, filterValue as DateFilterValue)
-        case 'datetime':
+        case 'dateTime':
           return filterDatetime(rowValue, filterValue as DatetimeFilterValue)
         case 'boolean':
           return filterBoolean(rowValue, filterValue as BooleanFilterValue)
@@ -339,7 +339,7 @@ export const asyncDataExample: Story = {
             </TableCell>
           )}
           accessorKey="entryDate"
-          sortingFn="datetime"
+          sortingFn="dateTime"
           minSize={250}
           size={250}
           maxSize={400}
@@ -357,11 +357,11 @@ export const asyncDataExample: Story = {
               </TableCell>
             )}}
           accessorKey="lastOnlineDate"
-          sortingFn="datetime"
+          sortingFn="dateTime"
           minSize={250}
           size={250}
           maxSize={400}
-          filterType="datetime"
+          filterType="dateTime"
         />
         <TableColumn
           id="tags"

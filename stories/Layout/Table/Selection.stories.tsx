@@ -157,7 +157,7 @@ export const selection: Story = {
             </TableCell>
           )}
           accessorKey="entryDate"
-          sortingFn="datetime"
+          sortingFn="dateTime"
           minSize={250}
           size={250}
           maxSize={400}
