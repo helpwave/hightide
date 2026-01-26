@@ -220,5 +220,6 @@
   "unpin": "Loslösen",
   "pinLeft": "Links anheften",
   "pinRight": "Rechts anheften",
-  "changeColumnDisplay": "Spaltenanzeige ändern"
+  "changeColumnDisplay": "Spaltenanzeige ändern",
+  "caseSensitive": "Groß-/Klein beachten"
 }

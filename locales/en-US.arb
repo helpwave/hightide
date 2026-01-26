@@ -220,5 +220,6 @@
   "pinned": "Pinned",
   "unpin": "Unpin",
   "pinLeft": "Pin to left",
-  "pinRight": "Pin to right"
+  "pinRight": "Pin to right",
+  "caseSensitive": "Case Sensitive"
 }

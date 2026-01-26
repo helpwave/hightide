@@ -2,7 +2,7 @@ import { Input } from '../../user-interaction/input/Input'
 import { DateTimeInput } from '../../user-interaction/input/DateTimeInput'
 import { FormFieldLayout } from '../../form/FieldLayout'
 import { useHightideTranslation } from '@/src/i18n/useHightideTranslation'
-import { useMemo, useState } from 'react'
+import { useId, useMemo, useState } from 'react'
 import type {
   TableTextFilter,
   TableNumberFilter,
@@ -141,6 +141,46 @@ const getOperatorInfo = (operator: TableFilterType) => {
   case 'tagsNotEquals': return { icon: <EqualNot className="w-4 h-4" />, translationKey: 'notEquals' }
   case 'tagsContains': return { icon: <SearchCheck className="w-4 h-4" />, translationKey: 'contains' }
   case 'tagsNotContains': return { icon: <SearchX className="w-4 h-4" />, translationKey: 'notContains' }
+  case 'datetimeEquals': return { icon: <Equal className="w-4 h-4" />, translationKey: 'equals' }
+  case 'datetimeNotEquals': return { icon: <EqualNot className="w-4 h-4" />, translationKey: 'notEquals' }
+  case 'datetimeGreaterThan': return { icon: <ChevronRight className="w-4 h-4" />, translationKey: 'after' }
+  case 'datetimeGreaterThanOrEqual': return {
+    icon: (<div className="flex-row-0 items-center">
+      <ChevronRight className="w-4 h-4" />
+      <Equal className="-ml-1 w-4 h-4" />
+    </div>
+    ),
+    translationKey: 'onOrAfter'
+  }
+  case 'datetimeLessThan': return { icon: <ChevronLeft className="w-4 h-4" />, translationKey: 'before' }
+  case 'datetimeLessThanOrEqual': return {
+    icon: (<div className="flex-row-0 items-center">
+      <ChevronLeft className="w-4 h-4" />
+      <Equal className="-ml-1 w-4 h-4" />
+    </div>
+    ),
+    translationKey: 'onOrBefore'
+  }
+  case 'datetimeBetween': return {
+    icon: (<div className="flex-row-0 items-center">
+      <ChevronRight className="w-4 h-4" />
+      <ChevronLeft className="-ml-1 w-4 h-4" />
+    </div>
+    ),
+    translationKey: 'between'
+  }
+  case 'datetimeNotBetween': return {
+    icon: (<div className="flex-row-0 items-center">
+      <ChevronLeft className="w-4 h-4" />
+      <ChevronRight className="-ml-1 w-4 h-4" />
+    </div>
+    ),
+    translationKey: 'notBetween'
+  }
+  case 'tagsSingleEquals': return { icon: <Equal className="w-4 h-4" />, translationKey: 'equals' }
+  case 'tagsSingleNotEquals': return { icon: <EqualNot className="w-4 h-4" />, translationKey: 'notEquals' }
+  case 'tagsSingleContains': return { icon: <SearchCheck className="w-4 h-4" />, translationKey: 'contains' }
+  case 'tagsSingleNotContains': return { icon: <SearchX className="w-4 h-4" />, translationKey: 'notContains' }
   case 'undefined': return { icon: <CircleDashed className="w-4 h-4" />, translationKey: 'filterUndefined' }
   case 'notUndefined': return { icon: <CircleDot className="w-4 h-4" />, translationKey: 'filterNotUndefined' }
   default: return { icon: null, translationKey: 'undefined translation' }
@@ -170,6 +210,7 @@ export const TextFilter = ({ filterValue, onFilterValueChange }: TextFilterProps
   const translation = useHightideTranslation()
   const operator = filterValue?.operator ?? 'textContains'
   const parameter = filterValue?.parameter ?? {}
+  const id = useId()
 
   const availableOperators = useMemo(() => [
     ...TableFilterOperator.text,
@@ -211,6 +252,7 @@ export const TextFilter = ({ filterValue, onFilterValueChange }: TextFilterProps
         />
         <div className="flex-row-2 items-center gap-2">
           <Checkbox
+            id={id}
             value={parameter.isCaseSensitive ?? false}
             onValueChange={isCaseSensitive => {
               onFilterValueChange({
@@ -219,6 +261,7 @@ export const TextFilter = ({ filterValue, onFilterValueChange }: TextFilterProps
               })
             }}
           />
+          <label htmlFor={id}>{translation('caseSensitive')}</label>
         </div>
       </Visibility>
       <Visibility isVisible={!needsParameterInput}>
@@ -494,6 +537,7 @@ export const DatetimeFilter = ({ filterValue, onFilterValueChange }: DatetimeFil
       <Visibility isVisible={needsRangeInput}>
         <div className="flex-col-2 gap-2">
           <DateTimeInput
+            mode="dateTime"
             value={temporaryMinDateValue ?? parameter.min ?? null}
             placeholder={translation('startDate')}
             onValueChange={value => setTemporaryMinDateValue(value)}
@@ -524,6 +568,7 @@ export const DatetimeFilter = ({ filterValue, onFilterValueChange }: DatetimeFil
             className="min-w-64"
           />
           <DateTimeInput
+            mode="dateTime"
             value={temporaryMaxDateValue ?? parameter.max ?? null}
             placeholder={translation('endDate')}
             onValueChange={value => setTemporaryMaxDateValue(value)}

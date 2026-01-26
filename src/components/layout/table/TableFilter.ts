@@ -1,4 +1,14 @@
 import type { FilterFn } from '@tanstack/react-table'
+import {
+  filterText,
+  filterNumber,
+  filterDate,
+  filterDatetime,
+  filterBoolean,
+  filterTags,
+  filterTagsSingle,
+  filterGeneric
+} from '@/src/utils/filter'
 
 export const TableFilterOperator = {
   text: ['textEquals', 'textNotEquals', 'textNotWhitespace', 'textContains', 'textNotContains', 'textStartsWith', 'textEndsWith'],
@@ -111,317 +121,41 @@ export type TableFilterValue = TextFilterValue | NumberFilterValue | DateFilterV
 
 const textFilter: FilterFn<unknown> = (row, columnId, filterValue: TextFilterValue) => {
   const value = row.getValue<string>(columnId)
-  const parameter = filterValue.parameter
-  const operator = filterValue.operator
-  const isCaseSensitive = filterValue.parameter.isCaseSensitive ?? false
-
-  if (operator === 'textNotWhitespace') {
-    return value?.toString().trim().length > 0
-  }
-
-  const searchText = isCaseSensitive ? parameter.searchText ?? '' : (parameter.searchText ?? '').toLowerCase()
-  const cellText = isCaseSensitive ? value?.toString() ?? '' : value?.toString().toLowerCase() ?? ''
-
-  switch (operator) {
-  case 'textEquals':
-    return cellText === searchText
-  case 'textNotEquals':
-    return cellText !== searchText
-  case 'textContains':
-    return cellText.includes(searchText)
-  case 'textNotContains':
-    return !cellText.includes(searchText)
-  case 'textStartsWith':
-    return cellText.startsWith(searchText)
-  case 'textEndsWith':
-    return cellText.endsWith(searchText)
-  case 'undefined':
-    return value === undefined || value === null
-  case 'notUndefined':
-    return value !== undefined && value !== null
-  default:
-    return false
-  }
+  return filterText(value, filterValue)
 }
 
 const numberFilter: FilterFn<unknown> = (row, columnId, filterValue: NumberFilterValue) => {
   const value = row.getValue<number>(columnId)
-  const parameter = filterValue.parameter
-  const operator = filterValue.operator
-
-  switch (operator) {
-  case 'numberEquals':
-    return value === parameter.compareValue
-  case 'numberNotEquals':
-    return value !== parameter.compareValue
-  case 'numberGreaterThan':
-    return value > (parameter.compareValue ?? 0)
-  case 'numberGreaterThanOrEqual':
-    return value >= (parameter.compareValue ?? 0)
-  case 'numberLessThan':
-    return value < (parameter.compareValue ?? 0)
-  case 'numberLessThanOrEqual':
-    return value <= (parameter.compareValue ?? 0)
-  case 'numberBetween':
-    return value >= (parameter.min ?? -Infinity) && value <= (parameter.max ?? Infinity)
-  case 'numberNotBetween':
-    return value < (parameter.min ?? -Infinity) || value > (parameter.max ?? Infinity)
-  case 'undefined':
-    return value === undefined || value === null
-  case 'notUndefined':
-    return value !== undefined && value !== null
-  default:
-    return false
-  }
+  return filterNumber(value, filterValue)
 }
 
 const dateFilter: FilterFn<unknown> = (row, columnId, filterValue: DateFilterValue) => {
   const value = row.getValue<Date>(columnId)
-  const parameter = filterValue.parameter
-  const operator = filterValue.operator
-
-  const parseDate = (dateValue: Date | string | number | undefined | null): Date | null => {
-    if (!dateValue) return null
-    if (dateValue instanceof Date) return dateValue
-    if (typeof dateValue === 'string' || typeof dateValue === 'number') {
-      const parsed = new Date(dateValue)
-      return isNaN(parsed.getTime()) ? null : parsed
-    }
-    return null
-  }
-
-  const normalizeToDateOnly = (date: Date): Date => {
-    const normalized = new Date(date)
-    normalized.setHours(0, 0, 0, 0)
-    return normalized
-  }
-
-  const date = parseDate(value)
-  if (!date && !TableFilterOperator.generic.some(o => o === operator)) return false
-
-  const normalizedDate = date ? normalizeToDateOnly(date) : null
-
-  switch (operator) {
-  case 'dateEquals': {
-    const filterDate = parseDate(parameter.compareDate)
-    if (!filterDate || !normalizedDate) return false
-    return normalizedDate.getTime() === normalizeToDateOnly(filterDate).getTime()
-  }
-  case 'dateNotEquals': {
-    const filterDate = parseDate(parameter.compareDate)
-    if (!filterDate || !normalizedDate) return false
-    return normalizedDate.getTime() !== normalizeToDateOnly(filterDate).getTime()
-  }
-  case 'dateGreaterThan': {
-    const filterDate = parseDate(parameter.compareDate)
-    if (!filterDate || !normalizedDate) return false
-    return normalizedDate > normalizeToDateOnly(filterDate)
-  }
-  case 'dateGreaterThanOrEqual': {
-    const filterDate = parseDate(parameter.compareDate)
-    if (!filterDate || !normalizedDate) return false
-    return normalizedDate >= normalizeToDateOnly(filterDate)
-  }
-  case 'dateLessThan': {
-    const filterDate = parseDate(parameter.compareDate)
-    if (!filterDate || !normalizedDate) return false
-    return normalizedDate < normalizeToDateOnly(filterDate)
-  }
-  case 'dateLessThanOrEqual': {
-    const filterDate = parseDate(parameter.compareDate)
-    if (!filterDate || !normalizedDate) return false
-    return normalizedDate <= normalizeToDateOnly(filterDate)
-  }
-  case 'dateBetween': {
-    const minDate = parseDate(parameter.min)
-    const maxDate = parseDate(parameter.max)
-    if (!minDate || !maxDate || !normalizedDate) return false
-    return normalizedDate >= normalizeToDateOnly(minDate) && normalizedDate <= normalizeToDateOnly(maxDate)
-  }
-  case 'dateNotBetween': {
-    const minDate = parseDate(parameter.min)
-    const maxDate = parseDate(parameter.max)
-    if (!minDate || !maxDate || !normalizedDate) return false
-    return normalizedDate < normalizeToDateOnly(minDate) || normalizedDate > normalizeToDateOnly(maxDate)
-  }
-  case 'undefined':
-    return value === undefined || value === null
-  case 'notUndefined':
-    return value !== undefined && value !== null
-  default:
-    return false
-  }
+  return filterDate(value, filterValue)
 }
 
 const datetimeFilter: FilterFn<unknown> = (row, columnId, filterValue: DatetimeFilterValue) => {
   const value = row.getValue<Date>(columnId)
-  const parameter = filterValue.parameter
-  const operator = filterValue.operator
-
-  const parseDate = (dateValue: Date | string | number | undefined | null): Date | null => {
-    if (!dateValue) return null
-    if (dateValue instanceof Date) return dateValue
-    if (typeof dateValue === 'string' || typeof dateValue === 'number') {
-      const parsed = new Date(dateValue)
-      return isNaN(parsed.getTime()) ? null : parsed
-    }
-    return null
-  }
-
-  const datetime = parseDate(value)
-  if (!datetime && !TableFilterOperator.generic.some(o => o === operator)) return false
-
-  const normalize = (datetime: Date): Date => {
-    const normalized = new Date(datetime)
-    normalized.setSeconds(0, 0)
-    return normalized
-  }
-
-  const normalizedDatetime = datetime ? normalize(datetime) : null
-
-  switch (operator) {
-  case 'datetimeEquals': {
-    const filterDatetime = parseDate(parameter.compareDatetime)
-    if (!filterDatetime || !normalizedDatetime) return false
-    return normalizedDatetime.getTime() === normalize(filterDatetime).getTime()
-  }
-  case 'datetimeNotEquals': {
-    const filterDatetime = parseDate(parameter.compareDatetime)
-    if (!filterDatetime || !normalizedDatetime) return false
-    return normalizedDatetime.getTime() !== normalize(filterDatetime).getTime()
-  }
-  case 'datetimeGreaterThan': {
-    const filterDatetime = parseDate(parameter.compareDatetime)
-    if (!filterDatetime || !normalizedDatetime) return false
-    return normalizedDatetime > normalize(filterDatetime)
-  }
-  case 'datetimeGreaterThanOrEqual': {
-    const filterDatetime = parseDate(parameter.compareDatetime)
-    if (!filterDatetime || !normalizedDatetime) return false
-    return normalizedDatetime >= normalize(filterDatetime)
-  }
-  case 'datetimeLessThan': {
-    const filterDatetime = parseDate(parameter.compareDatetime)
-    if (!filterDatetime || !normalizedDatetime) return false
-    return normalizedDatetime < normalize(filterDatetime)
-  }
-  case 'datetimeLessThanOrEqual': {
-    const filterDatetime = parseDate(parameter.compareDatetime)
-    if (!filterDatetime || !normalizedDatetime) return false
-    return normalizedDatetime <= normalize(filterDatetime)
-  }
-  case 'datetimeBetween': {
-    const minDatetime = parseDate(parameter.min)
-    const maxDatetime = parseDate(parameter.max)
-    if (!minDatetime || !maxDatetime || !normalizedDatetime) return false
-    return normalizedDatetime >= normalize(minDatetime) && normalizedDatetime <= normalize(maxDatetime)
-  }
-  case 'datetimeNotBetween': {
-    const minDatetime = parseDate(parameter.min)
-    const maxDatetime = parseDate(parameter.max)
-    if (!minDatetime || !maxDatetime || !normalizedDatetime) return false
-    return normalizedDatetime < normalize(minDatetime) || normalizedDatetime > normalize(maxDatetime)
-  }
-  case 'undefined':
-    return value === undefined || value === null
-  case 'notUndefined':
-    return value !== undefined && value !== null
-  default:
-    return false
-  }
+  return filterDatetime(value, filterValue)
 }
 
 const booleanFilter: FilterFn<unknown> = (row, columnId, filterValue: BooleanFilterValue) => {
   const value = row.getValue<boolean>(columnId)
-  const operator = filterValue.operator
-
-  switch (operator) {
-  case 'booleanIsTrue':
-    return value === true
-  case 'booleanIsFalse':
-    return value === false
-  case 'undefined':
-    return value === undefined || value === null
-  case 'notUndefined':
-    return value !== undefined && value !== null
-  default:
-    return false
-  }
+  return filterBoolean(value, filterValue)
 }
 
 const tagsFilter: FilterFn<unknown> = (row, columnId, filterValue: TagsFilterValue) => {
   const value = row.getValue<unknown[]>(columnId)
-  const parameter = filterValue.parameter
-  const operator = filterValue.operator
-
-  switch (operator) {
-  case 'tagsEquals': {
-    if (!Array.isArray(value) || !Array.isArray(parameter.searchTags)) return false
-    if (value.length !== parameter.searchTags.length) return false
-    const valueSet = new Set(value)
-    const searchTagsSet = new Set(parameter.searchTags)
-    if (valueSet.size !== searchTagsSet.size) return false
-    return Array.from(valueSet).every(tag => searchTagsSet.has(tag))
-  }
-  case 'tagsNotEquals': {
-    if (!Array.isArray(value) || !Array.isArray(parameter.searchTags)) return true
-    if (value.length !== parameter.searchTags.length) return true
-    const valueSet = new Set(value)
-    const searchTagsSet = new Set(parameter.searchTags)
-    if (valueSet.size !== searchTagsSet.size) return true
-    return !Array.from(valueSet).every(tag => searchTagsSet.has(tag))
-  }
-  case 'tagsContains': {
-    if (!Array.isArray(value) || !Array.isArray(parameter.searchTags)) return false
-    return parameter.searchTags.every(tag => value.includes(tag))
-  }
-  case 'tagsNotContains': {
-    if (!Array.isArray(value) || !Array.isArray(parameter.searchTags)) return true
-    return !parameter.searchTags.every(tag => value.includes(tag))
-  }
-  case 'undefined':
-    return value === undefined || value === null
-  case 'notUndefined':
-    return value !== undefined && value !== null
-  default:
-    return false
-  }
+  return filterTags(value, filterValue)
 }
 
 const tagsSingleFilter: FilterFn<unknown> = (row, columnId, filterValue: TagsSingleFilterValue) => {
   const value = row.getValue<unknown>(columnId)
-  const parameter = filterValue.parameter
-  const operator = filterValue.operator
-
-  switch (operator) {
-  case 'tagsSingleEquals':
-    return value === parameter.searchTag
-  case 'tagsSingleNotEquals':
-    return value !== parameter.searchTag
-  case 'tagsSingleContains':
-    return parameter.searchTagsContains.includes(value)
-  case 'tagsSingleNotContains':
-    return !parameter.searchTagsContains.includes(value)
-  case 'undefined':
-    return value === undefined || value === null
-  case 'notUndefined':
-    return value !== undefined && value !== null
-  default:
-    return false
-  }
+  return filterTagsSingle(value, filterValue)
 }
 const genericFilter: FilterFn<unknown> = (row, columnId, filterValue: GenericFilterValue) => {
   const value = row.getValue<unknown>(columnId)
-  const operator = filterValue.operator
-
-  switch (operator) {
-  case 'undefined':
-    return value === undefined || value === null
-  case 'notUndefined':
-    return value !== undefined && value !== null
-  default:
-    return false
-  }
+  return filterGeneric(value, filterValue)
 }
 
 export const TableFilter = {
