@@ -220,5 +220,13 @@
   "pinned": "Pinned",
   "unpin": "Unpin",
   "pinLeft": "Pin to left",
-  "pinRight": "Pin to right"
+  "pinRight": "Pin to right",
+  "caseSensitive": "Case Sensitive",
+  "sorting": "Sorting",
+  "sSortingState": "{sortDirection, select, asc{Sorting (Currently Ascending)} desc{Sorting (Currently Descending)} other{Sorting (Currently None)}}",
+  "@sSortingState": {
+    "placeholders": {
+      "sortDirection": {}
+    }
+  }
 }

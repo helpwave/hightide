@@ -5,6 +5,16 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/)
 and adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [0.6.13] - 2026-01-26
+
+### Added
+- `TableFilter` for date time and single tags
+- `ToolTips` to `TableFilterButton` and `TableSortButton`
+- `label` meta attribute to column defs to allow for omitting the header name but still showing one for the `ColumnSwitcher` 
+
+### Fixed
+- `FormObserverKey` using the restricted `key` property
+
 ## [0.6.12] - 2026-01-25
 
 ### Added

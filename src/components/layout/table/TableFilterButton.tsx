@@ -7,6 +7,7 @@ import { Visibility } from '../Visibility'
 import { PopUp } from '../popup/PopUp'
 import type { TableFilterCategory, TableFilterValue } from './TableFilter'
 import { TableFilterContent } from './TableFilterPopups'
+import { Tooltip } from '../../user-interaction/Tooltip'
 
 export type TableFilterButtonProps<T = unknown> = {
   filterType: TableFilterCategory,
@@ -41,28 +42,30 @@ export const TableFilterButton = <T, >({
 
   return (
     <>
-      <Button
-        ref={anchorRef}
-        id={ids.button}
-        layout="icon"
-        color="neutral"
-        size="xs"
+      <Tooltip tooltip={translation('filter')} position="top">
+        <Button
+          ref={anchorRef}
+          id={ids.button}
+          layout="icon"
+          color="neutral"
+          size="xs"
 
-        onClick={() => setIsOpen(!isOpen)}
+          onClick={() => setIsOpen(!isOpen)}
 
-        role="combobox"
-        aria-haspopup="dialog"
-        aria-expanded={isOpen}
-        aria-controls={isOpen ? ids.popup : undefined}
-        aria-labelledby={ids.label}
+          role="combobox"
+          aria-haspopup="dialog"
+          aria-expanded={isOpen}
+          aria-controls={isOpen ? ids.popup : undefined}
+          aria-labelledby={ids.label}
 
-        className="relative"
-      >
-        <FilterIcon className="size-4"/>
-        <Visibility isVisible={hasFilter}>
-          <div className="absolute -top-1 -right-1 w-2 h-2 rounded-full bg-primary" />
-        </Visibility>
-      </Button>
+          className="relative"
+        >
+          <FilterIcon className="size-4"/>
+          <Visibility isVisible={hasFilter}>
+            <div className="absolute -top-1 -right-1 w-2 h-2 rounded-full bg-primary" />
+          </Visibility>
+        </Button>
+      </Tooltip>
       <PopUp
         ref={containerRef}
         id={ids.popup}

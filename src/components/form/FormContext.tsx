@@ -155,7 +155,7 @@ export function useFormObserver<T extends FormValue>({ formStore }: UseFormObser
 
 export interface UseFormObserverKeyProps<T extends FormValue, K extends keyof T> {
   formStore?: FormStore<T>,
-  key: K,
+  formKey: K,
 }
 
 export interface FormObserverKeyResult<T extends FormValue, K extends keyof T> {
@@ -166,18 +166,18 @@ export interface FormObserverKeyResult<T extends FormValue, K extends keyof T> {
   touched: boolean,
 }
 
-export function useFormObserverKey<T extends FormValue, K extends keyof T>({ formStore, key }: UseFormObserverKeyProps<T, K>): FormObserverKeyResult<T, K> | null {
+export function useFormObserverKey<T extends FormValue, K extends keyof T>({ formStore, formKey }: UseFormObserverKeyProps<T, K>): FormObserverKeyResult<T, K> | null {
   const context = useContext(FormContext)
   const store = formStore ?? context?.store as FormStore<T>
 
   const subscribe = useCallback((cb: () => void) => {
     if (!store) return () => { }
-    return store.subscribe(key, cb)
-  }, [store, key])
+    return store.subscribe(formKey, cb)
+  }, [store, formKey])
 
-  const value = useSyncExternalStore(subscribe, () => store ? store.getValue(key) : undefined)
-  const error = useSyncExternalStore(subscribe, () => store ? store.getError(key) : undefined)
-  const touched = useSyncExternalStore(subscribe, () => store ? store.getTouched(key) : undefined)
+  const value = useSyncExternalStore(subscribe, () => store ? store.getValue(formKey) : undefined)
+  const error = useSyncExternalStore(subscribe, () => store ? store.getError(formKey) : undefined)
+  const touched = useSyncExternalStore(subscribe, () => store ? store.getTouched(formKey) : undefined)
 
   if (!store) return null
 

@@ -46,7 +46,17 @@ export const TableSortButton = ({
   const hasSortingIndex = !!sortingIndexDisplay && sortingsCount > 1 && index > 0
 
   return (
-    <Tooltip tooltip={translation('rSortingOrderAfter', { otherSortings: index - 1  } )} disabled={!hasSortingIndex}>
+    <Tooltip
+      tooltip={(
+        <div className="flex-col-2">
+          <span>{translation('sSortingState', { sortDirection: sortDirection || 'none' })}</span>
+          <Visibility isVisible={hasSortingIndex}>
+            <span>{translation('rSortingOrderAfter', { otherSortings: index - 1  } )}</span>
+          </Visibility>
+        </div>
+      )}
+      position="top"
+    >
       <Button
         layout={hasSortingIndex ? 'default' : 'icon'}
         color={color}

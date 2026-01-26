@@ -8,6 +8,7 @@ declare module '@tanstack/react-table' {
       filterData?: {
         tags?: { tag: string, label: ReactNode }[],
       },
+      columnLabel?: string,
     }
 
     interface TableMeta<TData> {

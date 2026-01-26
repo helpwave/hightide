@@ -10,34 +10,107 @@ import { TableColumnSwitcher } from '@/src/components/layout/table/TableColumnSw
 import { Chip } from '@/src/components/display-and-visualization/Chip'
 import { Table } from '@/src/components/layout/table/Table'
 import { Visibility } from '@/src/components/layout/Visibility'
+import {
+  filterText,
+  filterNumber,
+  filterDate,
+  filterDatetime,
+  filterBoolean,
+  filterTags,
+  filterTagsSingle,
+  filterGeneric
+} from '@/src/utils/filter'
+import {
+  TableFilterOperator,
+  type TextFilterValue,
+  type NumberFilterValue,
+  type DateFilterValue,
+  type DatetimeFilterValue,
+  type BooleanFilterValue,
+  type TagsFilterValue,
+  type TagsSingleFilterValue,
+  type GenericFilterValue,
+  type TableFilterValue
+} from '@/src/components/layout/table/TableFilter'
 
-const tags = ['Friend', 'Family', 'Work', 'School', 'Other'] as const
-type Tag = (typeof tags)[number]
+const relationShipTags = ['Friend', 'Family', 'Work', 'School', 'Other'] as const
+type RelationShipTag = (typeof relationShipTags)[number]
+
+const hobbyTags = ['Reading', 'Writing', 'Coding', 'Gaming', 'Other'] as const
+type HobbyTag = (typeof hobbyTags)[number]
 
 type DataType = {
-  id: string,
   name: string,
   age: number,
   street: string,
   entryDate: Date,
-  tags: Tag[],
+  lastOnlineDate: Date,
+  tags: RelationShipTag[],
+  hobbies: HobbyTag | null,
   hasChildren: boolean,
 }
 
 const createRandomDataType = (): DataType => {
   return {
-    id: faker.string.uuid(),
     name: faker.person.fullName(),
     street: faker.location.streetAddress(),
     age: faker.number.int(100),
     entryDate: faker.date.past({ years: 20 }),
-    tags: faker.helpers.arrayElements(tags, { min: 0, max: 3 }),
+    lastOnlineDate: faker.date.past({ years: 20 }),
+    tags: faker.helpers.arrayElements(relationShipTags, { min: 0, max: 3 }),
+    hobbies: faker.helpers.arrayElements(hobbyTags, { min: 0, max: 1 })[0] ?? null,
     hasChildren: faker.datatype.boolean(),
   }
 }
 
 const TOTAL_ITEMS = 10000
 const allData: DataType[] = range(TOTAL_ITEMS).map(() => createRandomDataType())
+
+/**
+ * Determines the filter category based on the operator string.
+ */
+function getFilterCategory(operator: string): keyof typeof TableFilterOperator | null {
+  const allOperators = [
+    ...TableFilterOperator.generic,
+    ...TableFilterOperator.text,
+    ...TableFilterOperator.number,
+    ...TableFilterOperator.date,
+    ...TableFilterOperator.datetime,
+    ...TableFilterOperator.boolean,
+    ...TableFilterOperator.tags,
+    ...TableFilterOperator.tagsSingle,
+  ] as readonly string[]
+
+  if (!allOperators.includes(operator)) {
+    return null
+  }
+
+  if (TableFilterOperator.generic.includes(operator as typeof TableFilterOperator.generic[number])) {
+    return 'generic'
+  }
+  if (TableFilterOperator.text.includes(operator as typeof TableFilterOperator.text[number])) {
+    return 'text'
+  }
+  if (TableFilterOperator.number.includes(operator as typeof TableFilterOperator.number[number])) {
+    return 'number'
+  }
+  if (TableFilterOperator.date.includes(operator as typeof TableFilterOperator.date[number])) {
+    return 'date'
+  }
+  if (TableFilterOperator.datetime.includes(operator as typeof TableFilterOperator.datetime[number])) {
+    return 'datetime'
+  }
+  if (TableFilterOperator.boolean.includes(operator as typeof TableFilterOperator.boolean[number])) {
+    return 'boolean'
+  }
+  if (TableFilterOperator.tags.includes(operator as typeof TableFilterOperator.tags[number])) {
+    return 'tags'
+  }
+  if (TableFilterOperator.tagsSingle.includes(operator as typeof TableFilterOperator.tagsSingle[number])) {
+    return 'tagsSingle'
+  }
+  return null
+}
 
 const fetchPaginatedData = async (
   pageIndex: number,
@@ -56,183 +129,31 @@ const fetchPaginatedData = async (
     filteredData = filteredData.filter(row => {
       const rowValue = row[id as keyof DataType]
 
-      if (typeof value === 'object' && 'operator' in value) {
-        const filterValue = value as { operator: string, parameter: unknown }
-        const parameter = filterValue.parameter as Record<string, unknown>
+      if (typeof value === 'object' && 'operator' in value && 'parameter' in value) {
+        const filterValue = value as TableFilterValue
+        const category = getFilterCategory(filterValue.operator)
 
-        switch (filterValue.operator) {
-        case 'textEquals': {
-          const searchText = String(parameter.searchText ?? '').toLowerCase()
-          const cellText = String(rowValue ?? '').toLowerCase()
-          return cellText === searchText
+        if (!category) {
+          return true
         }
-        case 'textNotEquals': {
-          const searchText = String(parameter.searchText ?? '').toLowerCase()
-          const cellText = String(rowValue ?? '').toLowerCase()
-          return cellText !== searchText
-        }
-        case 'textNotWhitespace':
-          return String(rowValue ?? '').trim().length > 0
-        case 'textContains': {
-          const searchText = String(parameter.searchText ?? '').toLowerCase()
-          const cellText = String(rowValue ?? '').toLowerCase()
-          return cellText.includes(searchText)
-        }
-        case 'textNotContains': {
-          const searchText = String(parameter.searchText ?? '').toLowerCase()
-          const cellText = String(rowValue ?? '').toLowerCase()
-          return !cellText.includes(searchText)
-        }
-        case 'textStartsWith': {
-          const searchText = String(parameter.searchText ?? '').toLowerCase()
-          const cellText = String(rowValue ?? '').toLowerCase()
-          return cellText.startsWith(searchText)
-        }
-        case 'textEndsWith': {
-          const searchText = String(parameter.searchText ?? '').toLowerCase()
-          const cellText = String(rowValue ?? '').toLowerCase()
-          return cellText.endsWith(searchText)
-        }
-        case 'numberEquals':
-          return Number(rowValue) === Number(parameter.compareValue ?? 0)
-        case 'numberNotEquals':
-          return Number(rowValue) !== Number(parameter.compareValue ?? 0)
-        case 'numberGreaterThan':
-          return Number(rowValue) > Number(parameter.compareValue ?? 0)
-        case 'numberGreaterThanOrEqual':
-          return Number(rowValue) >= Number(parameter.compareValue ?? 0)
-        case 'numberLessThan':
-          return Number(rowValue) < Number(parameter.compareValue ?? 0)
-        case 'numberLessThanOrEqual':
-          return Number(rowValue) <= Number(parameter.compareValue ?? 0)
-        case 'numberBetween':
-          return Number(rowValue) >= Number(parameter.min ?? -Infinity) && Number(rowValue) <= Number(parameter.max ?? Infinity)
-        case 'numberNotBetween':
-          return Number(rowValue) < Number(parameter.min ?? -Infinity) || Number(rowValue) > Number(parameter.max ?? Infinity)
-        case 'dateEquals': {
-          const filterDate = parameter.compareDate as Date | undefined
-          if (!filterDate) return false
-          const rowDate = rowValue as Date
-          const normalizedRowDate = new Date(rowDate)
-          normalizedRowDate.setHours(0, 0, 0, 0)
-          const normalizedFilterDate = new Date(filterDate)
-          normalizedFilterDate.setHours(0, 0, 0, 0)
-          return normalizedRowDate.getTime() === normalizedFilterDate.getTime()
-        }
-        case 'dateNotEquals': {
-          const filterDate = parameter.compareDate as Date | undefined
-          if (!filterDate) return false
-          const rowDate = rowValue as Date
-          const normalizedRowDate = new Date(rowDate)
-          normalizedRowDate.setHours(0, 0, 0, 0)
-          const normalizedFilterDate = new Date(filterDate)
-          normalizedFilterDate.setHours(0, 0, 0, 0)
-          return normalizedRowDate.getTime() !== normalizedFilterDate.getTime()
-        }
-        case 'dateGreaterThan': {
-          const filterDate = parameter.compareDate as Date | undefined
-          if (!filterDate) return false
-          const rowDate = rowValue as Date
-          const normalizedRowDate = new Date(rowDate)
-          normalizedRowDate.setHours(0, 0, 0, 0)
-          const normalizedFilterDate = new Date(filterDate)
-          normalizedFilterDate.setHours(0, 0, 0, 0)
-          return normalizedRowDate > normalizedFilterDate
-        }
-        case 'dateGreaterThanOrEqual': {
-          const filterDate = parameter.compareDate as Date | undefined
-          if (!filterDate) return false
-          const rowDate = rowValue as Date
-          const normalizedRowDate = new Date(rowDate)
-          normalizedRowDate.setHours(0, 0, 0, 0)
-          const normalizedFilterDate = new Date(filterDate)
-          normalizedFilterDate.setHours(0, 0, 0, 0)
-          return normalizedRowDate >= normalizedFilterDate
-        }
-        case 'dateLessThan': {
-          const filterDate = parameter.compareDate as Date | undefined
-          if (!filterDate) return false
-          const rowDate = rowValue as Date
-          const normalizedRowDate = new Date(rowDate)
-          normalizedRowDate.setHours(0, 0, 0, 0)
-          const normalizedFilterDate = new Date(filterDate)
-          normalizedFilterDate.setHours(0, 0, 0, 0)
-          return normalizedRowDate < normalizedFilterDate
-        }
-        case 'dateLessThanOrEqual': {
-          const filterDate = parameter.compareDate as Date | undefined
-          if (!filterDate) return false
-          const rowDate = rowValue as Date
-          const normalizedRowDate = new Date(rowDate)
-          normalizedRowDate.setHours(0, 0, 0, 0)
-          const normalizedFilterDate = new Date(filterDate)
-          normalizedFilterDate.setHours(0, 0, 0, 0)
-          return normalizedRowDate <= normalizedFilterDate
-        }
-        case 'dateBetween': {
-          const minDate = parameter.min as Date | undefined
-          const maxDate = parameter.max as Date | undefined
-          if (!minDate || !maxDate) return false
-          const rowDate = rowValue as Date
-          const normalizedRowDate = new Date(rowDate)
-          normalizedRowDate.setHours(0, 0, 0, 0)
-          const normalizedMinDate = new Date(minDate)
-          normalizedMinDate.setHours(0, 0, 0, 0)
-          const normalizedMaxDate = new Date(maxDate)
-          normalizedMaxDate.setHours(0, 0, 0, 0)
-          return normalizedRowDate >= normalizedMinDate && normalizedRowDate <= normalizedMaxDate
-        }
-        case 'dateNotBetween': {
-          const minDate = parameter.min as Date | undefined
-          const maxDate = parameter.max as Date | undefined
-          if (!minDate || !maxDate) return false
-          const rowDate = rowValue as Date
-          const normalizedRowDate = new Date(rowDate)
-          normalizedRowDate.setHours(0, 0, 0, 0)
-          const normalizedMinDate = new Date(minDate)
-          normalizedMinDate.setHours(0, 0, 0, 0)
-          const normalizedMaxDate = new Date(maxDate)
-          normalizedMaxDate.setHours(0, 0, 0, 0)
-          return normalizedRowDate < normalizedMinDate || normalizedRowDate > normalizedMaxDate
-        }
-        case 'booleanIsTrue':
-          return rowValue === true
-        case 'booleanIsFalse':
-          return rowValue === false
-        case 'tagsEquals': {
-          const searchTags = parameter.searchTags as unknown[] | undefined
-          if (!Array.isArray(rowValue) || !Array.isArray(searchTags)) return false
-          if (rowValue.length !== searchTags.length) return false
-          const valueSet = new Set(rowValue)
-          const searchTagsSet = new Set(searchTags)
-          if (valueSet.size !== searchTagsSet.size) return false
-          return Array.from(valueSet).every(tag => searchTagsSet.has(tag))
-        }
-        case 'tagsNotEquals': {
-          const searchTags = parameter.searchTags as unknown[] | undefined
-          if (!Array.isArray(rowValue) || !Array.isArray(searchTags)) return true
-          if (rowValue.length !== searchTags.length) return true
-          const valueSet = new Set(rowValue)
-          const searchTagsSet = new Set(searchTags)
-          if (valueSet.size !== searchTagsSet.size) return true
-          return !Array.from(valueSet).every(tag => searchTagsSet.has(tag))
-        }
-        case 'tagsContains': {
-          const searchTags = parameter.searchTags as unknown[] | undefined
-          if (!Array.isArray(searchTags) || searchTags.length === 0) return false
-          const rowTags = rowValue as Tag[]
-          return Array.isArray(rowTags) && searchTags.every(tag => rowTags.includes(tag as Tag))
-        }
-        case 'tagsNotContains': {
-          const searchTags = parameter.searchTags as unknown[] | undefined
-          if (!Array.isArray(searchTags) || searchTags.length === 0) return true
-          const rowTags = rowValue as Tag[]
-          return !Array.isArray(rowTags) || !searchTags.every(tag => rowTags.includes(tag as Tag))
-        }
-        case 'undefined':
-          return rowValue === undefined || rowValue === null
-        case 'notUndefined':
-          return rowValue !== undefined && rowValue !== null
+
+        switch (category) {
+        case 'text':
+          return filterText(rowValue, filterValue as TextFilterValue)
+        case 'number':
+          return filterNumber(rowValue, filterValue as NumberFilterValue)
+        case 'date':
+          return filterDate(rowValue, filterValue as DateFilterValue)
+        case 'datetime':
+          return filterDatetime(rowValue, filterValue as DatetimeFilterValue)
+        case 'boolean':
+          return filterBoolean(rowValue, filterValue as BooleanFilterValue)
+        case 'tags':
+          return filterTags(rowValue, filterValue as TagsFilterValue)
+        case 'tagsSingle':
+          return filterTagsSingle(rowValue, filterValue as TagsSingleFilterValue)
+        case 'generic':
+          return filterGeneric(rowValue, filterValue as GenericFilterValue)
         default:
           return true
         }
@@ -380,16 +301,6 @@ export const asyncDataExample: Story = {
         } : undefined}
       >
         <TableColumn
-          id="id"
-          header={translation('identifier')}
-          accessorKey="id"
-          minSize={200}
-          size={250}
-          maxSize={300}
-          filterType="text"
-          sortingFn="text"
-        />
-        <TableColumn
           id="name"
           header={translation('name')}
           accessorKey="name"
@@ -435,13 +346,35 @@ export const asyncDataExample: Story = {
           filterType="date"
         />
         <TableColumn
+          id="lastOnlineDate"
+          header="Last Online"
+          cell={({ cell }) => {
+            const value = cell.getValue() as Date
+            if(!value) return <TableCell>No last online date</TableCell>
+            return (
+              <TableCell>
+                {value.toLocaleString()}
+              </TableCell>
+            )}}
+          accessorKey="lastOnlineDate"
+          sortingFn="datetime"
+          minSize={250}
+          size={250}
+          maxSize={400}
+          filterType="datetime"
+        />
+        <TableColumn
           id="tags"
           header="Tags"
-          cell={({ cell }) => (
-            <div className="flex-row-2 flex-wrap gap-y-2">
-              {(cell.getValue() as Tag[]).map(tag => (<Chip key={tag}>{tag}</Chip>))}
-            </div>
-          )}
+          cell={({ cell }) => {
+            const value = cell.getValue() as RelationShipTag[]
+            if(value.length === 0) return <TableCell>No tags</TableCell>
+            return (
+              <div className="flex-row-2 flex-wrap gap-y-2">
+                {value.map(tag => (<Chip key={tag}>{tag}</Chip>))}
+              </div>
+            )
+          }}
           accessorKey="tags"
           minSize={300}
           size={300}
@@ -449,7 +382,31 @@ export const asyncDataExample: Story = {
           filterType="tags"
           meta={{
             filterData: {
-              tags: tags.map(tag => ({ tag, label: tag })),
+              tags: relationShipTags.map(tag => ({ tag, label: tag })),
+            },
+          }}
+        />
+        <TableColumn
+          id="hobbies"
+          header="Hobbies"
+          cell={({ cell }) => {
+            const value = cell.getValue() as HobbyTag | null
+            if(!value) return <TableCell>No hobbies</TableCell>
+            return (
+              <div className="flex-row-2 flex-wrap gap-y-2">
+                {value ? (<Chip key={value}>{value}</Chip>) : null}
+              </div>
+            )
+          }}
+          accessorKey="hobbies"
+          minSize={200}
+          size={250}
+          maxSize={300}
+          filterType="tagsSingle"
+          sortingFn="text"
+          meta={{
+            filterData: {
+              tags: hobbyTags.map(tag => ({ tag, label: tag })),
             },
           }}
         />
