@@ -133,7 +133,7 @@ export const DateTimeInput = forwardRef<HTMLDivElement, DateTimeInputProps>(func
             aria-haspopup="dialog"
             aria-expanded={isOpen}
             aria-controls={isOpen ? ids.popup : undefined}
-            aria-label={translation('sDateTimeSelect', { dateTimeMode: mode })}
+            aria-label={translation('sDateTimeSelect', { datetimeMode: mode })}
           >
             <CalendarIcon className="size-5"/>
           </Button>
