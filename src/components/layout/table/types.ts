@@ -20,8 +20,10 @@ declare module '@tanstack/react-table' {
       text: FilterFn<unknown>,
       number: FilterFn<unknown>,
       date: FilterFn<unknown>,
+      dateTime: FilterFn<unknown>,
       boolean: FilterFn<unknown>,
       tags: FilterFn<unknown>,
+      tagsSingle:  FilterFn<unknown>,
       generic: FilterFn<unknown>,
     }
   }

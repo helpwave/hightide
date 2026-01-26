@@ -180,64 +180,64 @@ export function filterDate(value: unknown, filterValue: DateFilterValue): boolea
 }
 
 /**
- * Normalizes a datetime by removing seconds and milliseconds.
+ * Normalizes a dateTime by removing seconds and milliseconds.
  */
-function normalizeDatetime(datetime: Date): Date {
-  const normalized = new Date(datetime)
+function normalizeDatetime(dateTime: Date): Date {
+  const normalized = new Date(dateTime)
   normalized.setSeconds(0, 0)
   return normalized
 }
 
 /**
- * Filters a datetime value based on the provided filter value.
+ * Filters a dateTime value based on the provided filter value.
  */
 export function filterDatetime(value: unknown, filterValue: DatetimeFilterValue): boolean {
   const parameter = filterValue.parameter
   const operator = filterValue.operator
 
-  const datetime = parseDate(value as Date | string | number | undefined | null)
-  if (!datetime && !TableFilterOperator.generic.some(o => o === operator)) return false
+  const dateTime = parseDate(value as Date | string | number | undefined | null)
+  if (!dateTime && !TableFilterOperator.generic.some(o => o === operator)) return false
 
-  const normalizedDatetime = datetime ? normalizeDatetime(datetime) : null
+  const normalizedDatetime = dateTime ? normalizeDatetime(dateTime) : null
 
   switch (operator) {
-  case 'datetimeEquals': {
+  case 'dateTimeEquals': {
     const filterDatetime = parseDate(parameter.compareDatetime)
     if (!filterDatetime || !normalizedDatetime) return false
     return normalizedDatetime.getTime() === normalizeDatetime(filterDatetime).getTime()
   }
-  case 'datetimeNotEquals': {
+  case 'dateTimeNotEquals': {
     const filterDatetime = parseDate(parameter.compareDatetime)
     if (!filterDatetime || !normalizedDatetime) return false
     return normalizedDatetime.getTime() !== normalizeDatetime(filterDatetime).getTime()
   }
-  case 'datetimeGreaterThan': {
+  case 'dateTimeGreaterThan': {
     const filterDatetime = parseDate(parameter.compareDatetime)
     if (!filterDatetime || !normalizedDatetime) return false
     return normalizedDatetime > normalizeDatetime(filterDatetime)
   }
-  case 'datetimeGreaterThanOrEqual': {
+  case 'dateTimeGreaterThanOrEqual': {
     const filterDatetime = parseDate(parameter.compareDatetime)
     if (!filterDatetime || !normalizedDatetime) return false
     return normalizedDatetime >= normalizeDatetime(filterDatetime)
   }
-  case 'datetimeLessThan': {
+  case 'dateTimeLessThan': {
     const filterDatetime = parseDate(parameter.compareDatetime)
     if (!filterDatetime || !normalizedDatetime) return false
     return normalizedDatetime < normalizeDatetime(filterDatetime)
   }
-  case 'datetimeLessThanOrEqual': {
+  case 'dateTimeLessThanOrEqual': {
     const filterDatetime = parseDate(parameter.compareDatetime)
     if (!filterDatetime || !normalizedDatetime) return false
     return normalizedDatetime <= normalizeDatetime(filterDatetime)
   }
-  case 'datetimeBetween': {
+  case 'dateTimeBetween': {
     const minDatetime = parseDate(parameter.min)
     const maxDatetime = parseDate(parameter.max)
     if (!minDatetime || !maxDatetime || !normalizedDatetime) return false
     return normalizedDatetime >= normalizeDatetime(minDatetime) && normalizedDatetime <= normalizeDatetime(maxDatetime)
   }
-  case 'datetimeNotBetween': {
+  case 'dateTimeNotBetween': {
     const minDatetime = parseDate(parameter.min)
     const maxDatetime = parseDate(parameter.max)
     if (!minDatetime || !maxDatetime || !normalizedDatetime) return false

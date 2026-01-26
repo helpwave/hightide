@@ -17,11 +17,11 @@ import type {
   TagsFilterValue,
   GenericFilterValue,
   TableFilterValue,
-  TableFilterCategory,
-  DatetimeFilterValue,
   TableDatetimeFilter,
+  DatetimeFilterValue,
   TagsSingleFilterValue,
-  TableTagsSingleFilter
+  TableTagsSingleFilter,
+  TableFilterCategory
 } from './TableFilter'
 import { TableFilterOperator } from './TableFilter'
 import { Select } from '../../user-interaction/select/Select'
@@ -141,10 +141,10 @@ const getOperatorInfo = (operator: TableFilterType) => {
   case 'tagsNotEquals': return { icon: <EqualNot className="w-4 h-4" />, translationKey: 'notEquals' }
   case 'tagsContains': return { icon: <SearchCheck className="w-4 h-4" />, translationKey: 'contains' }
   case 'tagsNotContains': return { icon: <SearchX className="w-4 h-4" />, translationKey: 'notContains' }
-  case 'datetimeEquals': return { icon: <Equal className="w-4 h-4" />, translationKey: 'equals' }
-  case 'datetimeNotEquals': return { icon: <EqualNot className="w-4 h-4" />, translationKey: 'notEquals' }
-  case 'datetimeGreaterThan': return { icon: <ChevronRight className="w-4 h-4" />, translationKey: 'after' }
-  case 'datetimeGreaterThanOrEqual': return {
+  case 'dateTimeEquals': return { icon: <Equal className="w-4 h-4" />, translationKey: 'equals' }
+  case 'dateTimeNotEquals': return { icon: <EqualNot className="w-4 h-4" />, translationKey: 'notEquals' }
+  case 'dateTimeGreaterThan': return { icon: <ChevronRight className="w-4 h-4" />, translationKey: 'after' }
+  case 'dateTimeGreaterThanOrEqual': return {
     icon: (<div className="flex-row-0 items-center">
       <ChevronRight className="w-4 h-4" />
       <Equal className="-ml-1 w-4 h-4" />
@@ -152,8 +152,8 @@ const getOperatorInfo = (operator: TableFilterType) => {
     ),
     translationKey: 'onOrAfter'
   }
-  case 'datetimeLessThan': return { icon: <ChevronLeft className="w-4 h-4" />, translationKey: 'before' }
-  case 'datetimeLessThanOrEqual': return {
+  case 'dateTimeLessThan': return { icon: <ChevronLeft className="w-4 h-4" />, translationKey: 'before' }
+  case 'dateTimeLessThanOrEqual': return {
     icon: (<div className="flex-row-0 items-center">
       <ChevronLeft className="w-4 h-4" />
       <Equal className="-ml-1 w-4 h-4" />
@@ -161,7 +161,7 @@ const getOperatorInfo = (operator: TableFilterType) => {
     ),
     translationKey: 'onOrBefore'
   }
-  case 'datetimeBetween': return {
+  case 'dateTimeBetween': return {
     icon: (<div className="flex-row-0 items-center">
       <ChevronRight className="w-4 h-4" />
       <ChevronLeft className="-ml-1 w-4 h-4" />
@@ -169,7 +169,7 @@ const getOperatorInfo = (operator: TableFilterType) => {
     ),
     translationKey: 'between'
   }
-  case 'datetimeNotBetween': return {
+  case 'dateTimeNotBetween': return {
     icon: (<div className="flex-row-0 items-center">
       <ChevronLeft className="w-4 h-4" />
       <ChevronRight className="-ml-1 w-4 h-4" />
@@ -250,6 +250,19 @@ export const TextFilter = ({ filterValue, onFilterValueChange }: TextFilterProps
           }}
           className="min-w-64"
         />
+        <div className="flex-row-2 items-center gap-2">
+          <Checkbox
+            id={id}
+            value={parameter.isCaseSensitive ?? false}
+            onValueChange={isCaseSensitive => {
+              onFilterValueChange({
+                operator,
+                parameter: { ...parameter, isCaseSensitive },
+              })
+            }}
+          />
+          <label htmlFor={id}>{translation('caseSensitive')}</label>
+        </div>
         <div className="flex-row-2 items-center gap-2">
           <Checkbox
             id={id}
@@ -502,17 +515,17 @@ export type DatetimeFilterProps = TableFilterBaseProps<DatetimeFilterValue>
 
 export const DatetimeFilter = ({ filterValue, onFilterValueChange }: DatetimeFilterProps) => {
   const translation = useHightideTranslation()
-  const operator = filterValue?.operator ?? 'datetimeBetween'
+  const operator = filterValue?.operator ?? 'dateTimeBetween'
   const parameter = filterValue?.parameter ?? {}
   const [temporaryMinDateValue, setTemporaryMinDateValue] = useState<Date | null>(null)
   const [temporaryMaxDateValue, setTemporaryMaxDateValue] = useState<Date | null>(null)
 
   const availableOperators = useMemo(() => [
-    ...TableFilterOperator.datetime,
+    ...TableFilterOperator.dateTime,
     ...TableFilterOperator.generic,
   ], [])
 
-  const needsRangeInput = operator === 'datetimeBetween' || operator === 'datetimeNotBetween'
+  const needsRangeInput = operator === 'dateTimeBetween' || operator === 'dateTimeNotBetween'
   const needsParameterInput = operator !== 'undefined' && operator !== 'notUndefined'
 
   return (
@@ -858,7 +871,7 @@ export const TableFilterContent = ({ filterType, ...props }: TableFilterContentP
     return <NumberFilter {...props as TableFilterBaseProps<NumberFilterValue>} />
   case 'date':
     return <DateFilter {...props as TableFilterBaseProps<DateFilterValue>} />
-  case 'datetime':
+  case 'dateTime':
     return <DatetimeFilter {...props as TableFilterBaseProps<DatetimeFilterValue>} />
   case 'boolean':
     return <BooleanFilter {...props as TableFilterBaseProps<BooleanFilterValue>} />

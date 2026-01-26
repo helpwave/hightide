@@ -136,8 +136,10 @@ export const TableProvider = <T,>({
       text: TableFilter.text,
       number: TableFilter.number,
       date: TableFilter.date,
+      dateTime: TableFilter.dateTime,
       boolean: TableFilter.boolean,
       tags: TableFilter.tags,
+      tagsSingle: TableFilter.tagsSingle,
       generic: TableFilter.generic,
     },
     onColumnSizingChange: updaterOrValue => {

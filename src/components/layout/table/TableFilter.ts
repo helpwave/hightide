@@ -14,7 +14,7 @@ export const TableFilterOperator = {
   text: ['textEquals', 'textNotEquals', 'textNotWhitespace', 'textContains', 'textNotContains', 'textStartsWith', 'textEndsWith'],
   number: ['numberEquals', 'numberNotEquals', 'numberGreaterThan', 'numberGreaterThanOrEqual', 'numberLessThan', 'numberLessThanOrEqual', 'numberBetween', 'numberNotBetween'],
   date: ['dateEquals', 'dateNotEquals', 'dateGreaterThan', 'dateGreaterThanOrEqual', 'dateLessThan', 'dateLessThanOrEqual', 'dateBetween', 'dateNotBetween'],
-  datetime: ['datetimeEquals', 'datetimeNotEquals', 'datetimeGreaterThan', 'datetimeGreaterThanOrEqual', 'datetimeLessThan', 'datetimeLessThanOrEqual', 'datetimeBetween', 'datetimeNotBetween'],
+  dateTime: ['dateTimeEquals', 'dateTimeNotEquals', 'dateTimeGreaterThan', 'dateTimeGreaterThanOrEqual', 'dateTimeLessThan', 'dateTimeLessThanOrEqual', 'dateTimeBetween', 'dateTimeNotBetween'],
   boolean: ['booleanIsTrue', 'booleanIsFalse'],
   tags: ['tagsEquals', 'tagsNotEquals', 'tagsContains', 'tagsNotContains'],
   tagsSingle: ['tagsSingleEquals', 'tagsSingleNotEquals', 'tagsSingleContains', 'tagsSingleNotContains'],
@@ -25,7 +25,7 @@ export type TableGenericFilter = (typeof TableFilterOperator.generic)[number]
 export type TableTextFilter = (typeof TableFilterOperator.text)[number] | TableGenericFilter
 export type TableNumberFilter = (typeof TableFilterOperator.number)[number] | TableGenericFilter
 export type TableDateFilter = (typeof TableFilterOperator.date)[number]| TableGenericFilter
-export type TableDatetimeFilter = (typeof TableFilterOperator.datetime)[number] | TableGenericFilter
+export type TableDatetimeFilter = (typeof TableFilterOperator.dateTime)[number] | TableGenericFilter
 export type TableBooleanFilter = (typeof TableFilterOperator.boolean)[number] | TableGenericFilter
 export type TableTagsFilter = (typeof TableFilterOperator.tags)[number] | TableGenericFilter
 export type TableTagsSingleFilter = (typeof TableFilterOperator.tagsSingle)[number] | TableGenericFilter
@@ -116,16 +116,19 @@ export type GenericFilterValue = {
   parameter: GenericFilterParameter,
 }
 
+
 export type TableFilterValue = TextFilterValue | NumberFilterValue | DateFilterValue | DatetimeFilterValue
 | BooleanFilterValue | TagsFilterValue | TagsSingleFilterValue | GenericFilterValue
 
 const textFilter: FilterFn<unknown> = (row, columnId, filterValue: TextFilterValue) => {
   const value = row.getValue<string>(columnId)
   return filterText(value, filterValue)
+  return filterText(value, filterValue)
 }
 
 const numberFilter: FilterFn<unknown> = (row, columnId, filterValue: NumberFilterValue) => {
   const value = row.getValue<number>(columnId)
+  return filterNumber(value, filterValue)
   return filterNumber(value, filterValue)
 }
 
@@ -134,13 +137,14 @@ const dateFilter: FilterFn<unknown> = (row, columnId, filterValue: DateFilterVal
   return filterDate(value, filterValue)
 }
 
-const datetimeFilter: FilterFn<unknown> = (row, columnId, filterValue: DatetimeFilterValue) => {
+const dateTimeFilter: FilterFn<unknown> = (row, columnId, filterValue: DatetimeFilterValue) => {
   const value = row.getValue<Date>(columnId)
   return filterDatetime(value, filterValue)
 }
 
 const booleanFilter: FilterFn<unknown> = (row, columnId, filterValue: BooleanFilterValue) => {
   const value = row.getValue<boolean>(columnId)
+  return filterBoolean(value, filterValue)
   return filterBoolean(value, filterValue)
 }
 
@@ -153,8 +157,10 @@ const tagsSingleFilter: FilterFn<unknown> = (row, columnId, filterValue: TagsSin
   const value = row.getValue<unknown>(columnId)
   return filterTagsSingle(value, filterValue)
 }
+
 const genericFilter: FilterFn<unknown> = (row, columnId, filterValue: GenericFilterValue) => {
   const value = row.getValue<unknown>(columnId)
+  return filterGeneric(value, filterValue)
   return filterGeneric(value, filterValue)
 }
 
@@ -162,7 +168,7 @@ export const TableFilter = {
   text: textFilter,
   number: numberFilter,
   date: dateFilter,
-  datetime: datetimeFilter,
+  dateTime: dateTimeFilter,
   boolean: booleanFilter,
   tags: tagsFilter,
   tagsSingle: tagsSingleFilter,
