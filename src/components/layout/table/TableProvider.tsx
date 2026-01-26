@@ -17,7 +17,7 @@ export type TableProviderProps<T> = {
     initialState?: Omit<InitialTableState, 'columnSizing'>,
     onRowClick?: (row: Row<T>, table: ReactTable<T>) => void,
     onFillerRowClick?: (index: number, table: ReactTable<T>) => void,
-    state?: Omit<TableState, 'columnSizing'>,
+    state?: Partial<Omit<TableState, 'columnSizing'>>,
   } & Partial<TableOptions<T>>
 
 export const TableProvider = <T,>({

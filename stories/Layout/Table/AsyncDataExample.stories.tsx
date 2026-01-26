@@ -259,7 +259,7 @@ export const asyncDataExample: Story = {
             pagination,
             sorting,
             columnFilters,
-          } as Partial<TableState> as TableState,
+          },
           onPaginationChange: setPagination,
           onSortingChange: (updater) => {
             setSorting(updater)
