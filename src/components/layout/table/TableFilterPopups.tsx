@@ -263,19 +263,6 @@ export const TextFilter = ({ filterValue, onFilterValueChange }: TextFilterProps
           />
           <label htmlFor={id}>{translation('caseSensitive')}</label>
         </div>
-        <div className="flex-row-2 items-center gap-2">
-          <Checkbox
-            id={id}
-            value={parameter.isCaseSensitive ?? false}
-            onValueChange={isCaseSensitive => {
-              onFilterValueChange({
-                operator,
-                parameter: { ...parameter, isCaseSensitive },
-              })
-            }}
-          />
-          <label htmlFor={id}>{translation('caseSensitive')}</label>
-        </div>
       </Visibility>
       <Visibility isVisible={!needsParameterInput}>
         <span className="text-sm text-description h-10">
