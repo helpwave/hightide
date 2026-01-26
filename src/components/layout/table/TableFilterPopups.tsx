@@ -17,11 +17,11 @@ import type {
   TagsFilterValue,
   GenericFilterValue,
   TableFilterValue,
-  TableFilterCategory,
-  DatetimeFilterValue,
   TableDatetimeFilter,
+  DatetimeFilterValue,
   TagsSingleFilterValue,
-  TableTagsSingleFilter
+  TableTagsSingleFilter,
+  TableFilterCategory
 } from './TableFilter'
 import { TableFilterOperator } from './TableFilter'
 import { Select } from '../../user-interaction/select/Select'
@@ -250,6 +250,19 @@ export const TextFilter = ({ filterValue, onFilterValueChange }: TextFilterProps
           }}
           className="min-w-64"
         />
+        <div className="flex-row-2 items-center gap-2">
+          <Checkbox
+            id={id}
+            value={parameter.isCaseSensitive ?? false}
+            onValueChange={isCaseSensitive => {
+              onFilterValueChange({
+                operator,
+                parameter: { ...parameter, isCaseSensitive },
+              })
+            }}
+          />
+          <label htmlFor={id}>{translation('caseSensitive')}</label>
+        </div>
         <div className="flex-row-2 items-center gap-2">
           <Checkbox
             id={id}

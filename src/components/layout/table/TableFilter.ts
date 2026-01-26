@@ -116,16 +116,19 @@ export type GenericFilterValue = {
   parameter: GenericFilterParameter,
 }
 
+
 export type TableFilterValue = TextFilterValue | NumberFilterValue | DateFilterValue | DatetimeFilterValue
 | BooleanFilterValue | TagsFilterValue | TagsSingleFilterValue | GenericFilterValue
 
 const textFilter: FilterFn<unknown> = (row, columnId, filterValue: TextFilterValue) => {
   const value = row.getValue<string>(columnId)
   return filterText(value, filterValue)
+  return filterText(value, filterValue)
 }
 
 const numberFilter: FilterFn<unknown> = (row, columnId, filterValue: NumberFilterValue) => {
   const value = row.getValue<number>(columnId)
+  return filterNumber(value, filterValue)
   return filterNumber(value, filterValue)
 }
 
@@ -142,6 +145,7 @@ const dateTimeFilter: FilterFn<unknown> = (row, columnId, filterValue: DatetimeF
 const booleanFilter: FilterFn<unknown> = (row, columnId, filterValue: BooleanFilterValue) => {
   const value = row.getValue<boolean>(columnId)
   return filterBoolean(value, filterValue)
+  return filterBoolean(value, filterValue)
 }
 
 const tagsFilter: FilterFn<unknown> = (row, columnId, filterValue: TagsFilterValue) => {
@@ -153,8 +157,10 @@ const tagsSingleFilter: FilterFn<unknown> = (row, columnId, filterValue: TagsSin
   const value = row.getValue<unknown>(columnId)
   return filterTagsSingle(value, filterValue)
 }
+
 const genericFilter: FilterFn<unknown> = (row, columnId, filterValue: GenericFilterValue) => {
   const value = row.getValue<unknown>(columnId)
+  return filterGeneric(value, filterValue)
   return filterGeneric(value, filterValue)
 }
 
