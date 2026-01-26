@@ -339,7 +339,7 @@ export const asyncDataExample: Story = {
             </TableCell>
           )}
           accessorKey="entryDate"
-          sortingFn="dateTime"
+          sortingFn="datetime"
           minSize={250}
           size={250}
           maxSize={400}
@@ -357,7 +357,7 @@ export const asyncDataExample: Story = {
               </TableCell>
             )}}
           accessorKey="lastOnlineDate"
-          sortingFn="dateTime"
+          sortingFn="datetime"
           minSize={250}
           size={250}
           maxSize={400}
