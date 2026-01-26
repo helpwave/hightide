@@ -135,6 +135,7 @@ export const Tooltip = ({
       onPointerEnter={openWithDelay}
       onPointerLeave={close}
       onPointerCancel={close}
+      onClick={close}
       onFocus={openWithDelay}
       onBlur={close}
     >

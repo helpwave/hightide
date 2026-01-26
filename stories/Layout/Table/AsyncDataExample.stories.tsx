@@ -5,7 +5,7 @@ import { range } from '@/src/utils/array'
 import { TableColumn } from '@/src/components/layout/table/TableColumn'
 import { useHightideTranslation } from '@/src/i18n/useHightideTranslation'
 import { TableCell } from '@/src/components/layout/table/TableCell'
-import type { TableState, SortingState, ColumnFiltersState, PaginationState, TableOptions } from '@tanstack/react-table'
+import type { SortingState, ColumnFiltersState, PaginationState, TableOptions } from '@tanstack/react-table'
 import { TableColumnSwitcher } from '@/src/components/layout/table/TableColumnSwitcher'
 import { Chip } from '@/src/components/display-and-visualization/Chip'
 import { Table } from '@/src/components/layout/table/Table'
@@ -259,7 +259,7 @@ export const asyncDataExample: Story = {
             pagination,
             sorting,
             columnFilters,
-          } as Partial<TableState> as TableState,
+          },
           onPaginationChange: setPagination,
           onSortingChange: (updater) => {
             setSorting(updater)
