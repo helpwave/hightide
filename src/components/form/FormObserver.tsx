@@ -22,8 +22,8 @@ export interface FormObserverKeyProps<T extends FormValue, K extends keyof T> ex
   children: (bag:FormObserverKeyResult<T, K>) => ReactNode,
 }
 
-export const FormObserverKey = <T extends FormValue, K extends keyof T>({ children, formStore, key }: FormObserverKeyProps<T, K>) => {
-  const formObserver = useFormObserverKey<T, K>({ formStore, key })
+export const FormObserverKey = <T extends FormValue, K extends keyof T>({ children, formStore, formKey }: FormObserverKeyProps<T, K>) => {
+  const formObserver = useFormObserverKey<T, K>({ formStore, formKey })
 
   if (!formObserver) {
     throw new Error('<FormObserverKey> can only be used inside a <FormProvider>')

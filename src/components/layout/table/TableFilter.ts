@@ -4,8 +4,10 @@ export const TableFilterOperator = {
   text: ['textEquals', 'textNotEquals', 'textNotWhitespace', 'textContains', 'textNotContains', 'textStartsWith', 'textEndsWith'],
   number: ['numberEquals', 'numberNotEquals', 'numberGreaterThan', 'numberGreaterThanOrEqual', 'numberLessThan', 'numberLessThanOrEqual', 'numberBetween', 'numberNotBetween'],
   date: ['dateEquals', 'dateNotEquals', 'dateGreaterThan', 'dateGreaterThanOrEqual', 'dateLessThan', 'dateLessThanOrEqual', 'dateBetween', 'dateNotBetween'],
+  datetime: ['datetimeEquals', 'datetimeNotEquals', 'datetimeGreaterThan', 'datetimeGreaterThanOrEqual', 'datetimeLessThan', 'datetimeLessThanOrEqual', 'datetimeBetween', 'datetimeNotBetween'],
   boolean: ['booleanIsTrue', 'booleanIsFalse'],
   tags: ['tagsEquals', 'tagsNotEquals', 'tagsContains', 'tagsNotContains'],
+  tagsSingle: ['tagsSingleEquals', 'tagsSingleNotEquals', 'tagsSingleContains', 'tagsSingleNotContains'],
   generic: ['undefined', 'notUndefined']
 } as const
 
@@ -13,11 +15,14 @@ export type TableGenericFilter = (typeof TableFilterOperator.generic)[number]
 export type TableTextFilter = (typeof TableFilterOperator.text)[number] | TableGenericFilter
 export type TableNumberFilter = (typeof TableFilterOperator.number)[number] | TableGenericFilter
 export type TableDateFilter = (typeof TableFilterOperator.date)[number]| TableGenericFilter
+export type TableDatetimeFilter = (typeof TableFilterOperator.datetime)[number] | TableGenericFilter
 export type TableBooleanFilter = (typeof TableFilterOperator.boolean)[number] | TableGenericFilter
 export type TableTagsFilter = (typeof TableFilterOperator.tags)[number] | TableGenericFilter
+export type TableTagsSingleFilter = (typeof TableFilterOperator.tagsSingle)[number] | TableGenericFilter
 
 
-export type TableFilterType = TableTextFilter | TableNumberFilter | TableDateFilter | TableBooleanFilter | TableTagsFilter | TableGenericFilter
+export type TableFilterType = TableTextFilter | TableNumberFilter | TableDateFilter | TableDatetimeFilter
+| TableBooleanFilter | TableTagsFilter | TableTagsSingleFilter | TableGenericFilter
 
 export type TableFilterCategory = keyof typeof TableFilterOperator
 
@@ -27,6 +32,7 @@ export function isTableFilterCategory(value: unknown): value is TableFilterCateg
 
 export type TextFilterParameter = {
   searchText?: string,
+  isCaseSensitive?: boolean,
 }
 
 export type NumberFilterParameter = {
@@ -41,10 +47,21 @@ export type DateFilterParameter = {
   max?: Date,
 }
 
+export type DatetimeFilterParameter = {
+  compareDatetime?: Date,
+  min?: Date,
+  max?: Date,
+}
+
 export type BooleanFilterParameter = Record<string, never>
 
 export type TagsFilterParameter = {
   searchTags?: unknown[],
+}
+
+export type TagsSingleFilterParameter = {
+  searchTag?: unknown,
+  searchTagsContains?: unknown[],
 }
 
 export type GenericFilterParameter = Record<string, never>
@@ -64,6 +81,11 @@ export type DateFilterValue = {
   parameter: DateFilterParameter,
 }
 
+export type DatetimeFilterValue = {
+  operator: TableDatetimeFilter,
+  parameter: DatetimeFilterParameter,
+}
+
 export type BooleanFilterValue = {
   operator: TableBooleanFilter,
   parameter: BooleanFilterParameter,
@@ -74,24 +96,31 @@ export type TagsFilterValue = {
   parameter: TagsFilterParameter,
 }
 
+export type TagsSingleFilterValue = {
+  operator: TableTagsSingleFilter,
+  parameter: TagsSingleFilterParameter,
+}
+
 export type GenericFilterValue = {
   operator: TableGenericFilter,
   parameter: GenericFilterParameter,
 }
 
-export type TableFilterValue = TextFilterValue | NumberFilterValue | DateFilterValue | BooleanFilterValue | TagsFilterValue | GenericFilterValue
+export type TableFilterValue = TextFilterValue | NumberFilterValue | DateFilterValue | DatetimeFilterValue
+| BooleanFilterValue | TagsFilterValue | TagsSingleFilterValue | GenericFilterValue
 
 const textFilter: FilterFn<unknown> = (row, columnId, filterValue: TextFilterValue) => {
   const value = row.getValue<string>(columnId)
   const parameter = filterValue.parameter
   const operator = filterValue.operator
+  const isCaseSensitive = filterValue.parameter.isCaseSensitive ?? false
 
   if (operator === 'textNotWhitespace') {
     return value?.toString().trim().length > 0
   }
 
-  const searchText = (parameter.searchText ?? '').toLowerCase()
-  const cellText = value?.toString().toLowerCase() ?? ''
+  const searchText = isCaseSensitive ? parameter.searchText ?? '' : (parameter.searchText ?? '').toLowerCase()
+  const cellText = isCaseSensitive ? value?.toString() ?? '' : value?.toString().toLowerCase() ?? ''
 
   switch (operator) {
   case 'textEquals':
@@ -224,6 +253,84 @@ const dateFilter: FilterFn<unknown> = (row, columnId, filterValue: DateFilterVal
   }
 }
 
+const datetimeFilter: FilterFn<unknown> = (row, columnId, filterValue: DatetimeFilterValue) => {
+  const value = row.getValue<Date>(columnId)
+  const parameter = filterValue.parameter
+  const operator = filterValue.operator
+
+  const parseDate = (dateValue: Date | string | number | undefined | null): Date | null => {
+    if (!dateValue) return null
+    if (dateValue instanceof Date) return dateValue
+    if (typeof dateValue === 'string' || typeof dateValue === 'number') {
+      const parsed = new Date(dateValue)
+      return isNaN(parsed.getTime()) ? null : parsed
+    }
+    return null
+  }
+
+  const datetime = parseDate(value)
+  if (!datetime && !TableFilterOperator.generic.some(o => o === operator)) return false
+
+  const normalize = (datetime: Date): Date => {
+    const normalized = new Date(datetime)
+    normalized.setSeconds(0, 0)
+    return normalized
+  }
+
+  const normalizedDatetime = datetime ? normalize(datetime) : null
+
+  switch (operator) {
+  case 'datetimeEquals': {
+    const filterDatetime = parseDate(parameter.compareDatetime)
+    if (!filterDatetime || !normalizedDatetime) return false
+    return normalizedDatetime.getTime() === normalize(filterDatetime).getTime()
+  }
+  case 'datetimeNotEquals': {
+    const filterDatetime = parseDate(parameter.compareDatetime)
+    if (!filterDatetime || !normalizedDatetime) return false
+    return normalizedDatetime.getTime() !== normalize(filterDatetime).getTime()
+  }
+  case 'datetimeGreaterThan': {
+    const filterDatetime = parseDate(parameter.compareDatetime)
+    if (!filterDatetime || !normalizedDatetime) return false
+    return normalizedDatetime > normalize(filterDatetime)
+  }
+  case 'datetimeGreaterThanOrEqual': {
+    const filterDatetime = parseDate(parameter.compareDatetime)
+    if (!filterDatetime || !normalizedDatetime) return false
+    return normalizedDatetime >= normalize(filterDatetime)
+  }
+  case 'datetimeLessThan': {
+    const filterDatetime = parseDate(parameter.compareDatetime)
+    if (!filterDatetime || !normalizedDatetime) return false
+    return normalizedDatetime < normalize(filterDatetime)
+  }
+  case 'datetimeLessThanOrEqual': {
+    const filterDatetime = parseDate(parameter.compareDatetime)
+    if (!filterDatetime || !normalizedDatetime) return false
+    return normalizedDatetime <= normalize(filterDatetime)
+  }
+  case 'datetimeBetween': {
+    const minDatetime = parseDate(parameter.min)
+    const maxDatetime = parseDate(parameter.max)
+    if (!minDatetime || !maxDatetime || !normalizedDatetime) return false
+    return normalizedDatetime >= normalize(minDatetime) && normalizedDatetime <= normalize(maxDatetime)
+  }
+  case 'datetimeNotBetween': {
+    const minDatetime = parseDate(parameter.min)
+    const maxDatetime = parseDate(parameter.max)
+    if (!minDatetime || !maxDatetime || !normalizedDatetime) return false
+    return normalizedDatetime < normalize(minDatetime) || normalizedDatetime > normalize(maxDatetime)
+  }
+  case 'undefined':
+    return value === undefined || value === null
+  case 'notUndefined':
+    return value !== undefined && value !== null
+  default:
+    return false
+  }
+}
+
 const booleanFilter: FilterFn<unknown> = (row, columnId, filterValue: BooleanFilterValue) => {
   const value = row.getValue<boolean>(columnId)
   const operator = filterValue.operator
@@ -281,6 +388,28 @@ const tagsFilter: FilterFn<unknown> = (row, columnId, filterValue: TagsFilterVal
   }
 }
 
+const tagsSingleFilter: FilterFn<unknown> = (row, columnId, filterValue: TagsSingleFilterValue) => {
+  const value = row.getValue<unknown>(columnId)
+  const parameter = filterValue.parameter
+  const operator = filterValue.operator
+
+  switch (operator) {
+  case 'tagsSingleEquals':
+    return value === parameter.searchTag
+  case 'tagsSingleNotEquals':
+    return value !== parameter.searchTag
+  case 'tagsSingleContains':
+    return parameter.searchTagsContains.includes(value)
+  case 'tagsSingleNotContains':
+    return !parameter.searchTagsContains.includes(value)
+  case 'undefined':
+    return value === undefined || value === null
+  case 'notUndefined':
+    return value !== undefined && value !== null
+  default:
+    return false
+  }
+}
 const genericFilter: FilterFn<unknown> = (row, columnId, filterValue: GenericFilterValue) => {
   const value = row.getValue<unknown>(columnId)
   const operator = filterValue.operator
@@ -299,7 +428,9 @@ export const TableFilter = {
   text: textFilter,
   number: numberFilter,
   date: dateFilter,
+  datetime: datetimeFilter,
   boolean: booleanFilter,
   tags: tagsFilter,
+  tagsSingle: tagsSingleFilter,
   generic: genericFilter,
 }

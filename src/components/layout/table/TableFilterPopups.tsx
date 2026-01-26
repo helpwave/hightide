@@ -17,12 +17,16 @@ import type {
   TagsFilterValue,
   GenericFilterValue,
   TableFilterValue,
-  TableFilterCategory
+  TableFilterCategory,
+  DatetimeFilterValue,
+  TableDatetimeFilter,
+  TagsSingleFilterValue,
+  TableTagsSingleFilter
 } from './TableFilter'
 import { TableFilterOperator } from './TableFilter'
 import { Select } from '../../user-interaction/select/Select'
 import { SelectOption } from '../../user-interaction/select/SelectComponents'
-import { MultiSelectUncontrolled } from '../../user-interaction/select/MultiSelect'
+import { MultiSelect } from '../../user-interaction/select/MultiSelect'
 import { MultiSelectOption } from '../../user-interaction/select/SelectComponents'
 import { Visibility } from '../Visibility'
 import {
@@ -42,6 +46,7 @@ import {
 } from 'lucide-react'
 import type { TableFilterType } from './TableFilter'
 import { useTableDataContext } from './TableContext'
+import { Checkbox } from '../../user-interaction/Checkbox'
 
 export interface TableFilterBaseProps<T extends TableFilterValue> {
   columnId: string,
@@ -163,7 +168,7 @@ export type TextFilterProps = TableFilterBaseProps<TextFilterValue>
 
 export const TextFilter = ({ filterValue, onFilterValueChange }: TextFilterProps) => {
   const translation = useHightideTranslation()
-  const operator = filterValue?.operator ?? 'textEquals'
+  const operator = filterValue?.operator ?? 'textContains'
   const parameter = filterValue?.parameter ?? {}
 
   const availableOperators = useMemo(() => [
@@ -199,11 +204,22 @@ export const TextFilter = ({ filterValue, onFilterValueChange }: TextFilterProps
           onValueChange={searchText => {
             onFilterValueChange({
               operator,
-              parameter: { searchText },
+              parameter: { ...parameter, searchText },
             })
           }}
           className="min-w-64"
         />
+        <div className="flex-row-2 items-center gap-2">
+          <Checkbox
+            value={parameter.isCaseSensitive ?? false}
+            onValueChange={isCaseSensitive => {
+              onFilterValueChange({
+                operator,
+                parameter: { ...parameter, isCaseSensitive },
+              })
+            }}
+          />
+        </div>
       </Visibility>
       <Visibility isVisible={!needsParameterInput}>
         <span className="text-sm text-description h-10">
@@ -218,7 +234,7 @@ export type NumberFilterProps = TableFilterBaseProps<NumberFilterValue>
 
 export const NumberFilter = ({ filterValue, onFilterValueChange }: NumberFilterProps) => {
   const translation = useHightideTranslation()
-  const operator = filterValue?.operator ?? 'numberEquals'
+  const operator = filterValue?.operator ?? 'numberBetween'
   const parameter = filterValue?.parameter ?? {}
 
   const availableOperators = useMemo(() => [
@@ -320,7 +336,7 @@ export type DateFilterProps = TableFilterBaseProps<DateFilterValue>
 
 export const DateFilter = ({ filterValue, onFilterValueChange }: DateFilterProps) => {
   const translation = useHightideTranslation()
-  const operator = filterValue?.operator ?? 'dateEquals'
+  const operator = filterValue?.operator ?? 'dateBetween'
   const parameter = filterValue?.parameter ?? {}
   const [temporaryMinDateValue, setTemporaryMinDateValue] = useState<Date | null>(null)
   const [temporaryMaxDateValue, setTemporaryMaxDateValue] = useState<Date | null>(null)
@@ -439,6 +455,128 @@ export const DateFilter = ({ filterValue, onFilterValueChange }: DateFilterProps
   )
 }
 
+export type DatetimeFilterProps = TableFilterBaseProps<DatetimeFilterValue>
+
+export const DatetimeFilter = ({ filterValue, onFilterValueChange }: DatetimeFilterProps) => {
+  const translation = useHightideTranslation()
+  const operator = filterValue?.operator ?? 'datetimeBetween'
+  const parameter = filterValue?.parameter ?? {}
+  const [temporaryMinDateValue, setTemporaryMinDateValue] = useState<Date | null>(null)
+  const [temporaryMaxDateValue, setTemporaryMaxDateValue] = useState<Date | null>(null)
+
+  const availableOperators = useMemo(() => [
+    ...TableFilterOperator.datetime,
+    ...TableFilterOperator.generic,
+  ], [])
+
+  const needsRangeInput = operator === 'datetimeBetween' || operator === 'datetimeNotBetween'
+  const needsParameterInput = operator !== 'undefined' && operator !== 'notUndefined'
+
+  return (
+    <div className="flex-col-2 gap-2">
+      <Select
+        value={operator}
+        onValueChange={(newOperator) => {
+          onFilterValueChange({
+            operator: newOperator as TableDatetimeFilter,
+            parameter: needsParameterInput ? parameter : {},
+          })
+        }}
+        buttonProps={{ className: 'min-w-64' }}
+      >
+        {availableOperators.map((op) => (
+          <SelectOption key={op} value={op} iconAppearance="right">
+            <OperatorLabel operator={op} />
+          </SelectOption>
+        ))}
+      </Select>
+      <span className="typography-label-lg font-semibold">{translation('parameter')}</span>
+      <Visibility isVisible={needsRangeInput}>
+        <div className="flex-col-2 gap-2">
+          <DateTimeInput
+            value={temporaryMinDateValue ?? parameter.min ?? null}
+            placeholder={translation('startDate')}
+            onValueChange={value => setTemporaryMinDateValue(value)}
+            onEditComplete={value => {
+              if (value && parameter.max && value > parameter.max) {
+                if (!parameter.min) {
+                  onFilterValueChange({
+                    operator,
+                    parameter: { min: parameter.max, max: value },
+                  })
+                } else {
+                  const diff = parameter.max.getTime() - parameter.min.getTime()
+                  onFilterValueChange({
+                    operator,
+                    parameter: { min: value, max: new Date(value.getTime() + diff) },
+                  })
+                }
+              } else {
+                onFilterValueChange({
+                  operator,
+                  parameter: { ...parameter, min: value },
+                })
+              }
+              setTemporaryMinDateValue(null)
+            }}
+            allowRemove={true}
+            outsideClickCloses={false}
+            className="min-w-64"
+          />
+          <DateTimeInput
+            value={temporaryMaxDateValue ?? parameter.max ?? null}
+            placeholder={translation('endDate')}
+            onValueChange={value => setTemporaryMaxDateValue(value)}
+            onEditComplete={value => {
+              if (value && parameter.min && value < parameter.min) {
+                if (!parameter.max) {
+                  onFilterValueChange({
+                    operator,
+                    parameter: { min: value, max: parameter.min },
+                  })
+                } else {
+                  const diff = parameter.max.getTime() - parameter.min.getTime()
+                  onFilterValueChange({
+                    operator,
+                    parameter: { min: new Date(value.getTime() - diff), max: value },
+                  })
+                }
+              } else {
+                onFilterValueChange({
+                  operator,
+                  parameter: { ...parameter, max: value },
+                })
+              }
+            }}
+            allowRemove={true}
+            outsideClickCloses={false}
+            className="min-w-64"
+          />
+        </div>
+      </Visibility>
+      <Visibility isVisible={!needsRangeInput && needsParameterInput}>
+        <DateTimeInput
+          value={parameter.compareDatetime ?? null}
+          placeholder={translation('date')}
+          onValueChange={compareDatetime => {
+            onFilterValueChange({
+              operator,
+              parameter: { compareDatetime },
+            })
+          }}
+          allowRemove={true}
+          outsideClickCloses={false}
+          className="min-w-64"
+        />
+      </Visibility>
+      <Visibility isVisible={!needsParameterInput}>
+        <span className="text-sm text-description">
+          {translation('noParameterRequired')}
+        </span>
+      </Visibility>
+    </div>
+  )
+}
 export type BooleanFilterProps = TableFilterBaseProps<BooleanFilterValue>
 
 export const BooleanFilter = ({ filterValue, onFilterValueChange }: BooleanFilterProps) => {
@@ -517,7 +655,7 @@ export const TagsFilter = ({ columnId, filterValue, onFilterValueChange }: TagsF
       </Select>
       <span className="typography-label-lg font-semibold">{translation('parameter')}</span>
       <Visibility isVisible={needsParameterInput}>
-        <MultiSelectUncontrolled
+        <MultiSelect
           value={Array.isArray(parameter.searchTags) ? parameter.searchTags.map(tag => String(tag)) : []}
           onValueChange={(selectedTags: string[]) => {
             onFilterValueChange({
@@ -532,7 +670,96 @@ export const TagsFilter = ({ columnId, filterValue, onFilterValueChange }: TagsF
               {label}
             </MultiSelectOption>
           ))}
-        </MultiSelectUncontrolled>
+        </MultiSelect>
+      </Visibility>
+      <Visibility isVisible={!needsParameterInput}>
+        <span className="text-sm text-description">
+          {translation('noParameterRequired')}
+        </span>
+      </Visibility>
+    </div>
+  )
+}
+
+export type TagsSingleFilterProps = TableFilterBaseProps<TagsSingleFilterValue>
+export const TagsSingleFilter = ({ columnId, filterValue, onFilterValueChange }: TagsSingleFilterProps) => {
+  const translation = useHightideTranslation()
+  const { table: table } = useTableDataContext()
+  const operator = filterValue?.operator ?? 'tagsSingleContains'
+  const parameter = filterValue?.parameter ?? {}
+
+  const availableOperators = useMemo(() => [
+    ...TableFilterOperator.tagsSingle,
+    ...TableFilterOperator.generic,
+  ], [])
+
+  const availableTags = useMemo(() => {
+    const column = table.getColumn(columnId)
+    if (!column) return []
+    return column.columnDef.meta?.filterData?.tags ?? []
+  }, [columnId, table])
+
+  if (availableTags.length === 0) {
+    return null
+  }
+
+  const needsParameterInput = operator !== 'undefined' && operator !== 'notUndefined'
+  const needsMultiSelect = operator === 'tagsSingleContains' || operator === 'tagsSingleNotContains'
+
+  return (
+    <div className="flex-col-2 gap-2">
+      <Select
+        value={operator}
+        onValueChange={(newOperator) => {
+          onFilterValueChange({
+            operator: newOperator as TableTagsSingleFilter,
+            parameter: needsParameterInput ? parameter : {},
+          })
+        }}
+        buttonProps={{ className: 'min-w-64' }}
+      >
+        {availableOperators.map((op) => (
+          <SelectOption key={op} value={op} iconAppearance="right">
+            <OperatorLabel operator={op} />
+          </SelectOption>
+        ))}
+      </Select>
+      <span className="typography-label-lg font-semibold">{translation('parameter')}</span>
+      <Visibility isVisible={needsParameterInput && needsMultiSelect}>
+        <MultiSelect
+          value={Array.isArray(parameter.searchTagsContains) ? parameter.searchTagsContains.map(tag => String(tag)) : []}
+          onValueChange={(selectedTags: string[]) => {
+            onFilterValueChange({
+              operator,
+              parameter: { searchTagsContains: selectedTags.length > 0 ? selectedTags : undefined },
+            })
+          }}
+          buttonProps={{ className: 'min-w-64' }}
+        >
+          {availableTags.map(({ tag, label }) => (
+            <MultiSelectOption key={tag} value={tag}>
+              {label}
+            </MultiSelectOption>
+          ))}
+        </MultiSelect>
+      </Visibility>
+      <Visibility isVisible={needsParameterInput && !needsMultiSelect}>
+        <Select
+          value={parameter.searchTag ? String(parameter.searchTag) : undefined}
+          onValueChange={(selectedTag: string) => {
+            onFilterValueChange({
+              operator,
+              parameter: { searchTag: selectedTag ? String(selectedTag) : undefined },
+            })
+          }}
+          buttonProps={{ className: 'min-w-64' }}
+        >
+          {availableTags.map(({ tag, label }) => (
+            <SelectOption key={tag} value={tag}>
+              {label}
+            </SelectOption>
+          ))}
+        </Select>
       </Visibility>
       <Visibility isVisible={!needsParameterInput}>
         <span className="text-sm text-description">
@@ -586,10 +813,14 @@ export const TableFilterContent = ({ filterType, ...props }: TableFilterContentP
     return <NumberFilter {...props as TableFilterBaseProps<NumberFilterValue>} />
   case 'date':
     return <DateFilter {...props as TableFilterBaseProps<DateFilterValue>} />
+  case 'datetime':
+    return <DatetimeFilter {...props as TableFilterBaseProps<DatetimeFilterValue>} />
   case 'boolean':
     return <BooleanFilter {...props as TableFilterBaseProps<BooleanFilterValue>} />
   case 'tags':
     return <TagsFilter {...props as TableFilterBaseProps<TagsFilterValue>} />
+  case 'tagsSingle':
+    return <TagsSingleFilter {...props as TableFilterBaseProps<TagsSingleFilterValue>} />
   case 'generic':
     return <GenericFilter {...props as TableFilterBaseProps<GenericFilterValue>} />
   default:
