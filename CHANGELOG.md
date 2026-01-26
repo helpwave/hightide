@@ -9,6 +9,8 @@ and adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
 ### Added
 - `TableFilter` for date time and single tags
+- `ToolTips` to `TableFilterButton` and `TableSortButton`
+- `label` meta attribute to column defs to allow for omitting the header name but still showing one for the `ColumnSwitcher` 
 
 ### Fixed
 - `FormObserverKey` using the restricted `key` property

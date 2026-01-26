@@ -153,6 +153,10 @@ export const TableColumnSwitcherPopUp = ({ ...props }: TableColumnSwitcherPopUpP
 
   const getColumnHeader = (columnId: string) => {
     const column = table.getColumn(columnId)
+    const columnLabel = column?.columnDef.meta?.columnLabel
+    if (columnLabel) {
+      return columnLabel
+    }
     const header = column?.columnDef.header
     if (typeof header === 'string') {
       return header

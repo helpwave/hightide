@@ -221,5 +221,12 @@
   "pinLeft": "Links anheften",
   "pinRight": "Rechts anheften",
   "changeColumnDisplay": "Spaltenanzeige ändern",
-  "caseSensitive": "Groß-/Klein beachten"
+  "caseSensitive": "Groß-/Klein beachten",
+  "sorting": "Sortierung",
+  "sSortingState": "{sortDirection, select, asc{Sortierung (Aktuell Aufsteigend)} desc{Sortierung (Aktuell Absteigend)} other{Sortierung (Aktuell Keine)}}",
+  "@sSortingState": {
+    "placeholders": {
+      "sortDirection": {}
+    }
+  }
 }

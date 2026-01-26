@@ -4,6 +4,7 @@ import type { TableProviderProps } from './TableProvider'
 import { TableProvider } from './TableProvider'
 import type { Row, RowSelectionState, Table } from '@tanstack/react-table'
 import { useCallback, useMemo } from 'react'
+import { useHightideTranslation } from '@/src/i18n/useHightideTranslation'
 
 export interface TableWithSelectionProviderProps<T> extends TableProviderProps<T> {
     rowSelection: RowSelectionState,
@@ -21,6 +22,7 @@ export const TableWithSelectionProvider = <T,>({
   onRowClick,
   ...props
 }: TableWithSelectionProviderProps<T>) => {
+  const translation = useHightideTranslation()
   const columnDef = useMemo(() => [
     {
       id: selectionRowId,
@@ -52,9 +54,12 @@ export const TableWithSelectionProvider = <T,>({
       enableSorting: false,
       enableHiding: false,
       enableColumnFilter: false,
+      meta: {
+        columnLabel: translation('selection'),
+      },
     },
     ...(props.columns ?? []),
-  ], [selectionRowId, props.columns])
+  ], [selectionRowId, props.columns, translation])
 
   return (
     <TableProvider
