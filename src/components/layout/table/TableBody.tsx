@@ -3,36 +3,22 @@ import { BagFunctionUtil } from '@/src/utils/bagFunctions'
 import { flexRender } from '@tanstack/react-table'
 import { FillerCell } from './FillerCell'
 import React from 'react'
-import { useTableDataContext } from './TableContext'
+import { useTableStateWithoutSizingContext } from './TableContext'
 import clsx from 'clsx'
 import { PropsUtil } from '@/src/utils/propsUtil'
 import { Visibility } from '../Visibility'
 
 export const TableBody = React.memo(function TableBodyVisual() {
-  const { table, onRowClick, onFillerRowClick, isUsingFillerRows, fillerRowCell, pagination, rows } = useTableDataContext<unknown>()
-  const state = table.getState()
-  const baseOrder =
-  state.columnOrder?.length
-    ? state.columnOrder
-    : table.getVisibleLeafColumns().map(col => col.id)
-
-  const pinnedLeft = state.columnPinning?.left ?? []
-  const pinnedRight = state.columnPinning?.right ?? []
-
-  const columnOrder = [
-    ...pinnedLeft,
-    ...baseOrder.filter(
-      id => !pinnedLeft.includes(id) && !pinnedRight.includes(id)
-    ),
-    ...pinnedRight,
-  ]
+  const { table, isUsingFillerRows, fillerRowCell, onRowClick, onFillerRowClick } = useTableStateWithoutSizingContext<unknown>()
+  const rows = table.getRowModel().rows
+  const columnOrder = table.getState().columnOrder
+  const columnVisibility = table.getState().columnVisibility
+  const pagination = table.getState().pagination
 
   const columns = columnOrder
     .map(id => table.getColumn(id))
-    .filter(
-      (col): col is NonNullable<typeof col> =>
-        !!col && state.columnVisibility?.[col.id] !== false
-    )
+    .filter(Boolean)
+    .filter(col => columnVisibility?.[col.id] !== false)
 
   return (
     <tbody>

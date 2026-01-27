@@ -1,12 +1,15 @@
 import type { ReactNode } from 'react'
-import { useCallback, useEffect, useMemo, useRef, useState } from 'react'
+import { useCallback, useEffect, useLayoutEffect, useMemo, useRef, useState } from 'react'
 import { ColumnSizeUtil } from './columnSizeUtil'
-import { TableDataContext, TableColumnDefinitionContext, TableContainerContext, TableHeaderContext } from './TableContext'
+import type { TableStateWithoutSizingContextType } from './TableContext'
+import { TableColumnDefinitionContext, TableContainerContext, TableStateContext, TableStateWithoutSizingContext } from './TableContext'
 import { TableFilter } from './TableFilter'
-import type { ColumnDef, ColumnSizingState, InitialTableState, Row, TableOptions, TableState , Table as ReactTable } from '@tanstack/react-table'
+import type { ColumnDef, InitialTableState, Row, TableOptions, TableState , Table as ReactTable } from '@tanstack/react-table'
 import { getCoreRowModel, getFilteredRowModel, getPaginationRowModel, getSortedRowModel, useReactTable } from '@tanstack/react-table'
-import { useResizeCallbackWrapper } from '@/src/hooks/useResizeCallbackWrapper'
 import { TableCell } from './TableCell'
+import { ColumnSizingWithTargetFeature } from './ColumnSizingWithTargetFeature'
+import { useResizeCallbackWrapper } from '@/src/hooks/useResizeCallbackWrapper'
+import { AutoColumnOrderFeature } from './AutoColumnOrderFeature'
 
 export type TableProviderProps<T> = {
     data: T[],
@@ -14,10 +17,10 @@ export type TableProviderProps<T> = {
     children?: ReactNode,
     isUsingFillerRows?: boolean,
     fillerRowCell?: (columnId: string, table: ReactTable<T>) => ReactNode,
-    initialState?: Omit<InitialTableState, 'columnSizing'>,
+    initialState?: InitialTableState,
     onRowClick?: (row: Row<T>, table: ReactTable<T>) => void,
     onFillerRowClick?: (index: number, table: ReactTable<T>) => void,
-    state?: Partial<Omit<TableState, 'columnSizing'>>,
+    state?: Partial<TableState>,
   } & Partial<TableOptions<T>>
 
 export const TableProvider = <T,>({
@@ -35,6 +38,41 @@ export const TableProvider = <T,>({
 }: TableProviderProps<T>) => {
   const [registeredColumns, setRegisteredColumns] = useState<ColumnDef<T>[]>([])
   const containerRef = useRef<HTMLDivElement>(null)
+  const [,setTableState] = useState<TableState>({
+    columnSizing: {},
+    columnOrder: [],
+    columnFilters: [],
+    columnVisibility: {},
+    columnPinning: {},
+    sorting: [],
+    columnSizingInfo: {
+      columnSizingStart: [],
+      startOffset: 0,
+      startSize: 0,
+      deltaOffset: 0,
+      deltaPercentage: 0,
+      isResizingColumn: false,
+    },
+    rowPinning: {},
+    globalFilter: undefined,
+    expanded: {},
+    grouping: [],
+    rowSelection: {},
+    pagination: {
+      pageIndex: 0,
+      pageSize: 10,
+    },
+  })
+
+  const [targetWidth, setTargetWidth] =  useState<number | undefined>(undefined)
+  useLayoutEffect(() => {
+    const width = containerRef.current?.getBoundingClientRect().width
+    setTargetWidth(width !== undefined ? Math.floor(width) : undefined)
+  }, [containerRef])
+  useResizeCallbackWrapper(useCallback(() => {
+    const width = containerRef.current?.getBoundingClientRect().width
+    setTargetWidth(width !== undefined ? Math.floor(width) : undefined)
+  }, [containerRef]))
 
   const registerColumn = useCallback((column: ColumnDef<T>) => {
     setRegisteredColumns(prev => {
@@ -55,68 +93,6 @@ export const TableProvider = <T,>({
     return contextColumns
   }, [columnsProp, registeredColumns])
 
-  const defaultColumn = useMemo(() => {
-    return {
-      minSize: 60,
-      maxSize: 800,
-      cell: ({ cell }) => {
-        return (<TableCell>{String(cell.getValue())}</TableCell>)
-      },
-      enableResizing: true,
-      enablePinning: true,
-      ...defaultColumnOverwrite,
-    }
-  }, [defaultColumnOverwrite])
-
-  const [columnSizing, setColumnSizing] = useState<ColumnSizingState>(columns.reduce((previousValue, currentValue) => {
-    return {
-      ...previousValue,
-      [currentValue.id]: currentValue.size ??  defaultColumn.size ?? currentValue.minSize ?? defaultColumn.minSize,
-    }
-  }, {}))
-
-  const [columnOrder, setColumnOrder] = useState<string[]>(state?.columnOrder ?? initialState?.columnOrder ?? [])
-  useEffect(() => {
-    setColumnOrder(prev => {
-      const columnIds = columns.map(column => column.id)
-      const newColumnIds = columnIds.filter(columnId => !prev.includes(columnId))
-      const withoutRemovedColumns = prev.filter(columnId => !columnIds.includes(columnId))
-      return [...withoutRemovedColumns, ...newColumnIds]
-    })
-  }, [columns])
-
-  const adjustColumnSizes = useCallback((previousSizing: ColumnSizingState, newSizing: ColumnSizingState) => {
-    return ColumnSizeUtil.calculate({
-      previousSizing,
-      newSizing,
-      minWidthsPerColumn: columns.reduce((previousValue, currentValue) => {
-        return {
-          ...previousValue,
-          [currentValue.id]: currentValue.minSize ?? defaultColumn.minSize,
-        }
-      }, {}),
-      maxWidthsPerColumn: columns.reduce((previousValue, currentValue) => {
-        return {
-          ...previousValue,
-          [currentValue.id]: currentValue.maxSize ?? defaultColumn.maxSize,
-        }
-      }, {}),
-      columnIds: columns.map(column => column.id),
-      target: {
-        width: Math.floor(containerRef.current?.getBoundingClientRect().width ?? 0),
-        behaviour: 'equalOrHigher',
-      },
-    })
-  }, [columns, defaultColumn.maxSize, defaultColumn.minSize])
-
-  useEffect(() => {
-    setColumnSizing(prev => adjustColumnSizes(prev, prev))
-  }, [adjustColumnSizes, columns, defaultColumn.maxSize, defaultColumn.minSize])
-
-  useResizeCallbackWrapper(useCallback(() => {
-    setColumnSizing(prev => adjustColumnSizes(prev, prev))
-  }, [adjustColumnSizes]))
-
   const table = useReactTable({
     data,
     getCoreRowModel: getCoreRowModel(),
@@ -124,12 +100,25 @@ export const TableProvider = <T,>({
     getSortedRowModel: getSortedRowModel(),
     getPaginationRowModel: getPaginationRowModel(),
     initialState,
-    defaultColumn,
+    defaultColumn: {
+      minSize: 60,
+      maxSize: 800,
+      cell: useCallback(({ cell }) => {
+        return (<TableCell>{String(cell.getValue())}</TableCell>)
+      }, []),
+      enableResizing: true,
+      enablePinning: true,
+      ...defaultColumnOverwrite,
+    },
     columns,
     state: {
       ...state,
-      columnSizing,
-      columnOrder,
+    },
+    onStateChange: (updaterOrValue) => {
+      setTableState(prev => {
+        return typeof updaterOrValue === 'function' ? updaterOrValue(prev) : updaterOrValue
+      })
+      tableOptions.onStateChange?.(updaterOrValue)
     },
     filterFns: {
       ...tableOptions?.filterFns,
@@ -142,78 +131,120 @@ export const TableProvider = <T,>({
       tagsSingle: TableFilter.tagsSingle,
       generic: TableFilter.generic,
     },
-    onColumnSizingChange: updaterOrValue => {
-      setColumnSizing(previous => {
-        const newSizing = typeof updaterOrValue === 'function' ? updaterOrValue(previous) : updaterOrValue
-        return adjustColumnSizes(previous,newSizing)
-      })
-    },
-    onColumnOrderChange: updaterOrValue => {
-      setColumnOrder(updaterOrValue)
-      if (tableOptions.onColumnOrderChange) {
-        tableOptions.onColumnOrderChange(updaterOrValue)
-      }
-    },
+    _features: [
+      ...(tableOptions._features ?? []),
+      ColumnSizingWithTargetFeature,
+      AutoColumnOrderFeature,
+    ],
+    columnSizingTarget: targetWidth,
     autoResetPageIndex: false,
     enableColumnResizing: true,
     columnResizeMode: 'onChange',
     ...tableOptions,
   })
 
-  const columnSizeVars = useMemo(() => {
-    return ColumnSizeUtil.toSizeVars(columnSizing)
-  }, [columnSizing])
-
   const pagination = table.getState().pagination
-  const rowSelection = table.getState().rowSelection
-  const rows = table.getRowModel().rows
-  const columnFilters = table.getState().columnFilters
-  const columnVisibility = table.getState().columnVisibility
-  const columnPinning = table.getState().columnPinning
-  const columnSorting = table.getState().sorting
-  // We need to include more state values than needed such that the consumer catch all changes properly
-  const tableDataContextValue = useMemo(() => ({
-    table,
-    columns,
-    data,
-    pagination,
-    rowSelection,
-    isUsingFillerRows,
-    fillerRowCell,
-    onRowClick,
-    onFillerRowClick,
-    rows,
-    columnOrder,
-    columnFilters,
-    columnVisibility,
-    columnPinning,
-    columnSorting,
-  }), [table, data, pagination, rowSelection, isUsingFillerRows, fillerRowCell, onRowClick, onFillerRowClick, columns, rows, columnOrder, columnFilters, columnVisibility, columnPinning, columnSorting])
+  const pageCount = table.getPageCount()
+
+  // Fix pagination index when page count changes
+  useEffect(() => {
+    if(pageCount === -1) {
+      return
+    }
+    if(pagination.pageIndex > pageCount - 1) {
+      table.setPageIndex(pageCount - 1)
+    }
+  }, [table, pagination.pageIndex, pageCount])
+
+  // Fix column order when columns change
+  useEffect(() => {
+    table.setColumnOrder(prev => [...prev])
+  }, [table, columns])
+
+  // Fix column sizing when target width changes
+  useEffect(() => {
+    table.setColumnSizing(prev => ({ ...prev }))
+  }, [table, targetWidth])
+
 
   const tableColumnDefinitionContextValue = useMemo(() => ({
     table,
     registerColumn,
   }), [table, registerColumn])
 
-  const tableHeaderContextValue = useMemo(() => ({
-    table,
-    sizeVars: columnSizeVars,
-  }), [table, columnSizeVars])
 
   const tableContainerContextValue = useMemo(() => ({
     table,
     containerRef,
   }), [table, containerRef])
 
+  const relevantTableState: Omit<TableState, 'columnSizing' | 'columnSizingInfo'> = (() => {
+    // eslint-disable-next-line @typescript-eslint/no-unused-vars
+    const { columnSizing, columnSizingInfo, ...rest } = table.getState()
+    return rest
+  })()
+
+  const rowModel = table.getRowModel()
+  const tableStateWithoutSizingContextValue = useMemo<TableStateWithoutSizingContextType<T>>(() => ({
+    table,
+    isUsingFillerRows,
+    fillerRowCell,
+    onRowClick,
+    onFillerRowClick,
+    columnVisibility: relevantTableState.columnVisibility,
+    columnOrder: relevantTableState.columnOrder,
+    columnPinning: relevantTableState.columnPinning,
+    rowPinning: relevantTableState.rowPinning,
+    globalFilter: relevantTableState.globalFilter,
+    expanded: relevantTableState.expanded,
+    grouping: relevantTableState.grouping,
+    rowSelection: relevantTableState.rowSelection,
+    pagination: relevantTableState.pagination,
+    sorting: relevantTableState.sorting,
+    columnFilters: relevantTableState.columnFilters,
+    data,
+    columns,
+    rowModel,
+  }), [
+    table,
+    data,
+    columns,
+    rowModel,
+    isUsingFillerRows,
+    fillerRowCell,
+    onRowClick,
+    onFillerRowClick,
+    relevantTableState.columnVisibility,
+    relevantTableState.columnOrder,
+    relevantTableState.columnPinning,
+    relevantTableState.rowPinning,
+    relevantTableState.globalFilter,
+    relevantTableState.expanded,
+    relevantTableState.grouping,
+    relevantTableState.rowSelection,
+    relevantTableState.pagination,
+    relevantTableState.sorting,
+    relevantTableState.columnFilters
+  ])
+
+  const columnSizing = table.getState().columnSizing
+  const columnSizingInfo = table.getState().columnSizingInfo
+  const tableStateContextValue = useMemo(() => ({
+    ...tableStateWithoutSizingContextValue,
+    sizeVars: ColumnSizeUtil.toSizeVars(columnSizing),
+    columnSizingInfo,
+    columnSizing,
+  }), [columnSizing, columnSizingInfo, tableStateWithoutSizingContextValue])
+
   return (
-    <TableDataContext.Provider value={tableDataContextValue}>
-      <TableColumnDefinitionContext.Provider value={tableColumnDefinitionContextValue}>
-        <TableHeaderContext.Provider value={tableHeaderContextValue}>
+    <TableStateWithoutSizingContext.Provider value={tableStateWithoutSizingContextValue}>
+      <TableStateContext.Provider value={tableStateContextValue}>
+        <TableColumnDefinitionContext.Provider value={tableColumnDefinitionContextValue}>
           <TableContainerContext.Provider value={tableContainerContextValue}>
             {children}
           </TableContainerContext.Provider>
-        </TableHeaderContext.Provider>
-      </TableColumnDefinitionContext.Provider>
-    </TableDataContext.Provider>
+        </TableColumnDefinitionContext.Provider>
+      </TableStateContext.Provider>
+    </TableStateWithoutSizingContext.Provider>
   )
 }

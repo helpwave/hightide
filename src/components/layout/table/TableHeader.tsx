@@ -1,23 +1,20 @@
 import { PropsUtil } from '@/src/utils/propsUtil'
-import { flexRender, type Table as ReactTable } from '@tanstack/react-table'
+import { flexRender } from '@tanstack/react-table'
 import clsx from 'clsx'
 import { Visibility } from '../Visibility'
 import { TableSortButton } from './TableSortButton'
 import { TableFilterButton } from './TableFilterButton'
-import { useTableHeaderContext } from './TableContext'
 import { useCallback, useEffect } from 'react'
 import type { TableFilterCategory } from './TableFilter'
 import { isTableFilterCategory } from './TableFilter'
+import { TableStateContext, useTableStateWithoutSizingContext } from './TableContext'
 
 export type TableHeaderProps = {
-  table?: ReactTable<unknown>,
   isSticky?: boolean,
 }
 
-export const TableHeader = ({ table: tableOverride, isSticky = false }: TableHeaderProps) => {
-  const { table: tableState } = useTableHeaderContext<unknown>()
-
-  const table = tableOverride ?? tableState
+export const TableHeader = ({ isSticky = false }: TableHeaderProps) => {
+  const { table } = useTableStateWithoutSizingContext<unknown>()
 
   const handleResizeMove = useCallback((e: MouseEvent | TouchEvent) => {
     if (!table.getState().columnSizingInfo.isResizingColumn) return
@@ -70,18 +67,22 @@ export const TableHeader = ({ table: tableOverride, isSticky = false }: TableHea
   return (
     <>
       {table.getHeaderGroups().map((headerGroup) => (
-        <colgroup key={headerGroup.id}>
-          {headerGroup.headers.map(header => (
-            <col
-              key={header.id}
-              style={{
-                width: `calc(var(--header-${header?.id}-size) * 1px)`,
-                minWidth: header.column.columnDef.minSize,
-                maxWidth: header.column.columnDef.maxSize,
-              }}
-            />
-          ))}
-        </colgroup>
+        <TableStateContext.Consumer key={headerGroup.id}>
+          {({ sizeVars }) => (
+            <colgroup style={sizeVars}>
+              {headerGroup.headers.map(header => (
+                <col
+                  key={header.id}
+                  style={{
+                    width: `calc(var(--header-${header?.id}-size) * 1px)`,
+                    minWidth: header.column.columnDef.minSize,
+                    maxWidth: header.column.columnDef.maxSize,
+                  }}
+                />
+              ))}
+            </colgroup>
+          )}
+        </TableStateContext.Consumer>
       ))}
       <thead>
         {table.getHeaderGroups().map(headerGroup => (

@@ -26,4 +26,14 @@ declare module '@tanstack/react-table' {
       tagsSingle:  FilterFn<unknown>,
       generic: FilterFn<unknown>,
     }
+
+    // eslint-disable-next-line @typescript-eslint/no-unused-vars
+    interface TableOptions<TData extends RowData> {
+      columnSizingTarget?: number,
+    }
+
+    // eslint-disable-next-line @typescript-eslint/no-unused-vars
+    interface TableOptionsResolved<TData extends RowData> {
+      columnSizingTarget?: number,
+    }
   }

@@ -2,18 +2,18 @@ import { useMemo, useRef, useId } from 'react'
 import { ChevronUp, ChevronDown, ChevronLeft, ChevronRight, Eye, EyeOff, Pin, PinOff, ArrowLeftRightIcon } from 'lucide-react'
 import type { ButtonProps } from '@/src/components/user-interaction/Button'
 import { Button } from '@/src/components/user-interaction/Button'
-import { useTableDataContext } from './TableContext'
 import { useHightideTranslation } from '@/src/i18n/useHightideTranslation'
 import type { PopUpProps } from '../popup/PopUp'
 import { PopUp } from '../popup/PopUp'
 import { PopUpRoot } from '../popup/PopUpRoot'
 import { PopUpOpener } from '../popup/PopUpOpener'
 import { Tooltip } from '../../user-interaction/Tooltip'
+import { useTableStateWithoutSizingContext } from './TableContext'
 
 export type TableColumnSwitcherPopUpProps = PopUpProps
 
 export const TableColumnSwitcherPopUp = ({ ...props }: TableColumnSwitcherPopUpProps) => {
-  const { table } = useTableDataContext()
+  const { table } = useTableStateWithoutSizingContext()
   const translation = useHightideTranslation()
   const containerRef = useRef<HTMLDivElement>(null)
   const generatedId = useId()
