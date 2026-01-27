@@ -7,9 +7,16 @@ and adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
 ## [0.7.0] - 2026-01-27
 
+### Added
+- `ColumnSizingWithTargetFeature` and `AutoColumnOrderFeature` to Table for column size fixing and column ordering
+- `Tooltip` to `TableColumnSwitcher` 
+
 ### Changed
 - `useLocalStorage` to be called `useStorage` and allow for listing to storage changes
 - `ThemeDialog` is now split into `ThemeSelect` and `ThemeIcon`
+
+### Fixed
+- Table column sizing when toggling visibility and changing order
 
 ## [0.6.16] - 2026-01-26
 

@@ -161,10 +161,13 @@ export const TableProvider = <T,>({
     table.setColumnOrder(prev => [...prev])
   }, [table, columns])
 
-  // Fix column sizing when target width changes
+  // Fix column sizing when target width changes or column visibility changes
+  const columnVisibility = table.getState().columnVisibility
+  const columnOrder = table.getState().columnOrder
+  const columnPinning = table.getState().columnPinning
   useEffect(() => {
     table.setColumnSizing(prev => ({ ...prev }))
-  }, [table, targetWidth])
+  }, [table, targetWidth, columnVisibility, columnOrder, columnPinning])
 
 
   const tableColumnDefinitionContextValue = useMemo(() => ({
