@@ -3,12 +3,12 @@ import { useOverlayRegistry } from '@/src/hooks/useOverlayRegistry'
 import { useHightideTranslation } from '@/src/i18n/useHightideTranslation'
 import type { ReactNode } from 'react'
 import { forwardRef, useId, useImperativeHandle, useMemo, useRef, type HTMLAttributes } from 'react'
-import { createPortal } from 'react-dom'
 import { Visibility } from './Visibility'
 import { Button } from '../user-interaction/Button'
 import { X } from 'lucide-react'
 import { useTransitionState } from '@/src/hooks/useTransitionState'
 import { PropsUtil } from '@/src/utils/propsUtil'
+import { Portal } from '../utils/Portal'
 
 export type DrawerAligment = 'left' | 'right' | 'bottom' | 'top'
 
@@ -21,6 +21,7 @@ export type DrawerProps = HTMLAttributes<HTMLDivElement> & {
   containerClassName?: string,
   backgroundClassName?: string,
   onClose: () => void,
+  forceMount?: boolean,
 }
 
 export const Drawer = forwardRef<HTMLDivElement, DrawerProps>(function Drawer({
@@ -32,6 +33,7 @@ export const Drawer = forwardRef<HTMLDivElement, DrawerProps>(function Drawer({
   containerClassName,
   backgroundClassName,
   onClose,
+  forceMount = false,
   ...props
 }, forwardedRef) {
   const translation = useHightideTranslation()
@@ -59,74 +61,77 @@ export const Drawer = forwardRef<HTMLDivElement, DrawerProps>(function Drawer({
   })
   const depth = tagPositions && tagItemCounts ? ((tagItemCounts['drawer'] ?? 0) - (tagPositions['drawer'] ?? 0)) : 0
 
-  if (!isVisible) return
+  if (!isVisible && !forceMount) return
 
-  return createPortal(
-    <div
-      id={ids.container}
-
-      data-name="drawer-container"
-      data-open={PropsUtil.dataAttributes.bool(isOpen)}
-
-      className={containerClassName}
-      style={{ zIndex, '--drawer-depth': depth.toString() } as React.CSSProperties}
-    >
+  return (
+    <Portal>
       <div
-        id={ids.background}
+        id={ids.container}
 
-        onClick={onClose}
+        data-name="drawer-container"
+        data-open={PropsUtil.dataAttributes.bool(isOpen)}
 
-        data-name="drawer-background"
-        data-state={transitionState}
-        data-depth={depth}
-        data-alignment={alignment}
+        hidden={!isVisible && forceMount}
 
-        aria-hidden={true}
-
-        className={backgroundClassName}
-      />
-      <div
-        {...props}
-        id={ids.content}
-        ref={ref}
-
-        onKeyDown={PropsUtil.aria.close(close)}
-
-        data-name={PropsUtil.dataAttributes.name('drawer-content', props)}
-        data-state={transitionState}
-        data-depth={depth}
-        data-alignment={alignment}
-
-        className={props.className}
+        className={containerClassName}
+        style={{ zIndex, '--drawer-depth': depth.toString() } as React.CSSProperties}
       >
-        <div className="typography-title-lg mr-8">
-          {titleElement}
-        </div>
-        <Visibility isVisible={!!description}>
-          <div className="text-description">
-            {description}
-          </div>
-        </Visibility>
         <div
-          className="absolute top-0 right-0"
-          style={{
-            paddingTop: 'inherit',
-            paddingRight: 'inherit'
-          }}
+          id={ids.background}
+
+          onClick={onClose}
+
+          data-name="drawer-background"
+          data-state={transitionState}
+          data-depth={depth}
+          data-alignment={alignment}
+
+          aria-hidden={true}
+
+          className={backgroundClassName}
+        />
+        <div
+          {...props}
+          id={ids.content}
+          ref={ref}
+
+          onKeyDown={PropsUtil.aria.close(close)}
+
+          data-name={PropsUtil.dataAttributes.name('drawer-content', props)}
+          data-state={transitionState}
+          data-depth={depth}
+          data-alignment={alignment}
+
+          className={props.className}
         >
-          <Button
-            layout="icon"
-            color="neutral"
-            size="xs"
-            aria-label={translation('close')}
-            onClick={onClose}
+          <div className="typography-title-lg mr-8">
+            {titleElement}
+          </div>
+          <Visibility isVisible={!!description}>
+            <div className="text-description">
+              {description}
+            </div>
+          </Visibility>
+          <div
+            className="absolute top-0 right-0"
+            style={{
+              paddingTop: 'inherit',
+              paddingRight: 'inherit'
+            }}
           >
-            <X />
-          </Button>
+            <Button
+              layout="icon"
+              color="neutral"
+              size="xs"
+              aria-label={translation('close')}
+              onClick={onClose}
+            >
+              <X />
+            </Button>
+          </div>
+          {children}
         </div>
-        {children}
       </div>
-    </div>
-    , document.body
+    </Portal>
   )
 })

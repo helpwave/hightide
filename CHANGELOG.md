@@ -9,11 +9,14 @@ and adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
 ### Added
 - `ColumnSizingWithTargetFeature` and `AutoColumnOrderFeature` to Table for column size fixing and column ordering
-- `Tooltip` to `TableColumnSwitcher` 
+- `Tooltip` to `TableColumnSwitcher`
+- `forceMount` attribute to `Drawer`
+- `TooltipRoot`, `TooltipTrigger`, and `TooltipDisplay` to make it decomposable
 
 ### Changed
 - `useLocalStorage` to be called `useStorage` and allow for listing to storage changes
 - `ThemeDialog` is now split into `ThemeSelect` and `ThemeIcon`
+- `useTransitionState` uses the window to get animations if no valid ref is provided, and it warns if a ref is provided and its value is null
 
 ### Fixed
 - Table column sizing when toggling visibility and changing order

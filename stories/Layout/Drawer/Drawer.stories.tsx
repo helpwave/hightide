@@ -16,6 +16,7 @@ export const drawer: Story = {
     alignment: 'left',
     titleElement: 'This is the Title',
     description: 'Some descriptive Text',
+    forceMount: false,
     onClose: action('onClose'),
   }
 }

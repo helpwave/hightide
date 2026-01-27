@@ -1,54 +1,71 @@
-import type { PropsWithChildren, ReactNode } from 'react'
-import { useEffect } from 'react'
+import type { PropsWithChildren, ReactNode, RefObject } from 'react'
+import { forwardRef, useContext, useEffect, useImperativeHandle } from 'react'
 import { useId } from 'react'
 import { useCallback, useMemo, useRef, useState } from 'react'
 import { clsx } from 'clsx'
-import { Visibility } from '@/src/components/layout/Visibility'
-import type { FloatingElementAlignment } from '@/src/hooks/useAnchoredPosition'
+import type { FloatingElementAlignment, UseAnchoredPositionOptions } from '@/src/hooks/useAnchoredPosition'
 import { useOverlayRegistry } from '@/src/hooks/useOverlayRegistry'
 import { useTransitionState } from '@/src/hooks/useTransitionState'
 import type { TooltipConfig } from '@/src/global-contexts/HightideConfigContext'
 import { useHightideConfig } from '@/src/global-contexts/HightideConfigContext'
 import { Portal } from '@/src/components/utils/Portal'
+import type { AnchoredFloatingContainerProps } from '../layout/AnchoredFloatingContainer'
 import { AnchoredFloatingContainer } from '../layout/AnchoredFloatingContainer'
+import { createContext } from 'react'
+import { BagFunctionUtil } from '@/src/utils/bagFunctions'
 
-type Position = 'top' | 'bottom' | 'left' | 'right'
+export interface TooltipTriggerContextValue {
+  ref: RefObject<HTMLElement>,
+  callbackRef: (el: HTMLElement | null) => void,
+  props: {
+    'onPointerEnter': () => void,
+    'onPointerLeave': () => void,
+    'onPointerCancel': () => void,
+    'onClick': () => void,
+    'onFocus': () => void,
+    'onBlur': () => void,
+    'aria-describedby'?: string,
+  },
+}
 
-export interface TooltipProps extends PropsWithChildren, Partial<TooltipConfig> {
-  tooltip: ReactNode,
-  /**
-   * Class names of additional styling properties for the tooltip
-   */
-  tooltipClassName?: string,
-  /**
-   * Class names of additional styling properties for the container from which the tooltip will be created
-   */
-  containerClassName?: string,
-  position?: Position,
+export interface TooltipContextType {
+  tooltip: {
+    id: string,
+    setId: (id: string) => void,
+  },
+  trigger: TooltipTriggerContextValue,
+  disabled: boolean,
+  isShown: boolean,
+  open: () => void,
+  close: () => void,
+}
+
+const TooltipContext = createContext<TooltipContextType | null>(null)
+
+export const useTooltip = () => {
+  const context = useContext(TooltipContext)
+  if(!context) {
+    throw new Error('useTooltip must be used within a TooltipContext.Provider or TooltipRoot')
+  }
+  return context
+}
+
+export interface TooltipRootProps extends PropsWithChildren {
+  isInitiallyShown?: boolean,
+  appearDelay?: number,
   disabled?: boolean,
 }
 
-/**
- * A Component for showing a tooltip when hovering over Content
- * @param tooltip The tooltip to show can be a text or any ReactNode
- * @param children The Content for which the tooltip should be created
- * @param tooltipClassName Additional ClassNames for the Container of the tooltip
- * @param containerClassName Additional ClassNames for the Container holding the content
- * @param position The direction of the tooltip relative to the Container
- * @constructor
- */
-export const Tooltip = ({
-  tooltip,
+export const TooltipRoot = ({
   children,
+  isInitiallyShown = false,
   appearDelay: appearOverwrite,
-  isAnimated: isAnimatedOverwrite,
-  tooltipClassName,
-  containerClassName,
-  position = 'bottom',
   disabled = false,
-}: TooltipProps) => {
-  const id = useId()
-  const [open, setOpen] = useState(false)
+}: TooltipRootProps) => {
+  const generatedId = 'tooltip-' + useId()
+  const [tooltipId, setTooltipId] = useState<string | null>(generatedId)
+  const [isShown, setIsShown] = useState(isInitiallyShown)
+
   const timeoutRef = useRef<NodeJS.Timeout>(undefined)
 
   const { config } = useHightideConfig()
@@ -57,42 +74,21 @@ export const Tooltip = ({
     appearOverwrite ?? config.tooltip.appearDelay,
   [appearOverwrite, config.tooltip.appearDelay])
 
-  const isAnimated = useMemo(() =>
-    isAnimatedOverwrite ?? config.tooltip.isAnimated,
-  [isAnimatedOverwrite, config.tooltip.isAnimated])
-
-  const anchor = useRef<HTMLDivElement>(null)
-  const container = useRef<HTMLDivElement>(null)
-
-  const isActive = !disabled && open
-
-  const { isVisible, transitionState } = useTransitionState(
-    useMemo(() => ({ isOpen: isActive, ref: container }), [isActive])
-  )
-
-  const verticalAlignment: FloatingElementAlignment = useMemo(() =>
-    position === 'top' ? 'beforeStart' : position === 'bottom' ? 'afterEnd' : 'center',
-  [position])
-
-  const horizontalAlignment: FloatingElementAlignment = useMemo(() =>
-    position === 'left' ? 'beforeStart' : position === 'right' ? 'afterEnd' : 'center',
-  [position])
-
-  const { zIndex } = useOverlayRegistry({ isActive: isActive })
+  const triggerRef = useRef<HTMLElement>(null)
 
   const openWithDelay = useCallback(() => {
-    if (timeoutRef.current || open) return
+    if (timeoutRef.current || isShown) return
 
     if(appearDelay < 0) {
-      setOpen(true)
+      setIsShown(true)
       return
     }
 
     timeoutRef.current = setTimeout(() => {
       timeoutRef.current = undefined
-      setOpen(true)
+      setIsShown(true)
     }, appearDelay)
-  }, [appearDelay, open])
+  }, [appearDelay, isShown])
 
 
   const close = useCallback(() => {
@@ -100,11 +96,11 @@ export const Tooltip = ({
       clearTimeout(timeoutRef.current)
       timeoutRef.current = undefined
     }
-    setOpen(false)
+    setIsShown(false)
   }, [])
 
   useEffect(() => {
-    if (!open) return
+    if (!isShown) return
 
     const closeOnBlur = () => close()
     const closeOnScroll = () => close()
@@ -116,52 +112,202 @@ export const Tooltip = ({
       window.removeEventListener('blur', closeOnBlur)
       window.removeEventListener('scroll', closeOnScroll, true)
     }
-  }, [open, close])
+  }, [isShown, close])
 
   useEffect(() => {
-    return () => {
-      if (timeoutRef.current) {
+    if(disabled) {
+      setIsShown(false)
+      if(timeoutRef.current) {
         clearTimeout(timeoutRef.current)
         timeoutRef.current = undefined
       }
     }
-  }, [])
+  }, [disabled])
+
+  const contextValue: TooltipContextType = useMemo(() => ({
+    tooltip: {
+      id: tooltipId,
+      setId: setTooltipId,
+    },
+    trigger: {
+      ref: triggerRef,
+      callbackRef: (el: HTMLElement | null) => triggerRef.current = el,
+      props: {
+        'onPointerEnter': openWithDelay,
+        'onPointerLeave': close,
+        'onPointerCancel': close,
+        'onClick': openWithDelay,
+        'onFocus': openWithDelay,
+        'onBlur': close,
+        'aria-describedby': tooltipId,
+      },
+    },
+    disabled,
+    isShown,
+    open: openWithDelay,
+    close,
+  }), [tooltipId, openWithDelay, close, isShown, disabled])
 
   return (
-    <div
-      ref={anchor}
-      className={clsx('relative inline-block', containerClassName)}
-      aria-describedby={isVisible ? id : undefined}
-      onPointerEnter={openWithDelay}
-      onPointerLeave={close}
-      onPointerCancel={close}
-      onClick={close}
-      onFocus={openWithDelay}
-      onBlur={close}
-    >
+    <TooltipContext.Provider value={contextValue}>
       {children}
-      <Visibility isVisible={isVisible}>
-        <Portal>
-          <AnchoredFloatingContainer
-            ref={container}
-            id={id}
-            anchor={anchor}
-            options={{
-              verticalAlignment,
-              horizontalAlignment,
-              avoidOverlap: true,
-            }}
-            data-state={transitionState}
-            data-animated={isAnimated ? '': undefined}
+    </TooltipContext.Provider>
+  )
+}
 
-            role="tooltip"
-            className={clsx('tooltip', tooltipClassName)}
-            style={{ zIndex, position: 'fixed' }}
+
+
+
+
+
+
+type TooltipAligment = 'top' | 'bottom' | 'left' | 'right'
+
+export interface TooltipDisplayProps extends Omit<AnchoredFloatingContainerProps, 'options'>, Partial<TooltipConfig> {
+  alignment?: TooltipAligment,
+  disabled?: boolean,
+  isShown?: boolean,
+  options?: Omit<UseAnchoredPositionOptions, 'verticalAlignment' | 'horizontalAlignment'>,
+}
+
+export const TooltipDisplay = forwardRef<HTMLDivElement, TooltipDisplayProps>(function TooltipAnchoredFloatingContainer({
+  children,
+  alignment = 'bottom',
+  disabled: disabledOverwrite,
+  isShown: isShownOverwrite,
+  isAnimated: isAnimatedOverwrite,
+  anchor: anchorOverwrite,
+  ...props
+}, forwardRef) {
+  const { config } = useHightideConfig()
+  const tooltipContext = useContext(TooltipContext)
+
+  const disabled = disabledOverwrite ?? tooltipContext?.disabled
+  const isShown = isShownOverwrite ?? tooltipContext?.isShown
+  const anchor = anchorOverwrite ?? tooltipContext?.trigger.ref
+  const id = tooltipContext?.tooltip.id ?? props.id
+
+  useEffect(() => {
+    if(!tooltipContext && !props.id) return
+    tooltipContext?.tooltip.setId(props.id)
+  }, [props.id, tooltipContext])
+
+  const isAnimated = useMemo(() =>
+    isAnimatedOverwrite ?? config.tooltip.isAnimated,
+  [isAnimatedOverwrite, config.tooltip.isAnimated])
+
+  const container = useRef<HTMLDivElement>(null)
+
+  useImperativeHandle(forwardRef, () => container.current)
+
+  const isActive = !disabled && isShown
+
+  const { isVisible, transitionState } = useTransitionState(
+    useMemo(() => ({ isOpen: isShown, ref: container }), [isShown])
+  )
+
+  const verticalAlignment: FloatingElementAlignment = useMemo(() =>
+    alignment === 'top' ? 'beforeStart' : alignment === 'bottom' ? 'afterEnd' : 'center',
+  [alignment])
+
+  const horizontalAlignment: FloatingElementAlignment = useMemo(() =>
+    alignment === 'left' ? 'beforeStart' : alignment === 'right' ? 'afterEnd' : 'center',
+  [alignment])
+
+  const { zIndex } = useOverlayRegistry({ isActive })
+
+  if(disabled) return null
+  return (
+    <Portal>
+      <AnchoredFloatingContainer
+        {...props}
+        id={id}
+        ref={container}
+        anchor={anchor}
+        options={{
+          verticalAlignment,
+          horizontalAlignment,
+          avoidOverlap: true,
+        }}
+        data-state={transitionState}
+        data-animated={isAnimated ? '': undefined}
+
+        role="tooltip"
+        className={clsx('tooltip', props.className)}
+        style={{ zIndex, position: 'fixed', visibility: isVisible ? undefined : 'hidden', ...props.style }}
+      >
+        {children}
+      </AnchoredFloatingContainer>
+    </Portal>
+  )
+})
+
+
+
+export interface TooltipTriggerBag extends TooltipTriggerContextValue {
+  disabled: boolean,
+  isShown: boolean,
+}
+
+export interface TooltipTriggerProps {
+  children: (bag: TooltipTriggerBag) => ReactNode,
+}
+
+export const TooltipTrigger = ({
+  children,
+}: TooltipTriggerProps) => {
+  const context = useTooltip()
+  const bag: TooltipTriggerBag = { ...context.trigger, disabled: context.disabled, isShown: context.isShown }
+
+  return BagFunctionUtil.resolve(children, bag)
+}
+
+
+
+
+export interface TooltipProps extends TooltipRootProps, Pick<TooltipDisplayProps, 'alignment' | 'disabled' |'isAnimated'> {
+  tooltip: ReactNode,
+  tooltipClassName?: string,
+  containerClassName?: string,
+}
+
+/**
+ * A Component for showing a tooltip when hovering over Content
+ */
+export const Tooltip = ({
+  tooltip,
+  children,
+  isInitiallyShown,
+  appearDelay,
+  disabled,
+  containerClassName,
+  alignment,
+  isAnimated,
+}: TooltipProps) => {
+
+  return (
+    <TooltipRoot
+      isInitiallyShown={isInitiallyShown}
+      appearDelay={appearDelay}
+      disabled={disabled}
+    >
+      <TooltipTrigger>
+        {({ props, callbackRef, disabled }) => (
+          <div
+            ref={callbackRef}
+            className={clsx(containerClassName)}
+            {...(disabled ? undefined : props)}
           >
-            {tooltip}
-          </AnchoredFloatingContainer>
-        </Portal>
-      </Visibility>
-    </div>
+            {children}
+          </div>
+        )}
+      </TooltipTrigger>
+      <TooltipDisplay
+        alignment={alignment}
+        isAnimated={isAnimated}
+      >
+        {tooltip}
+      </TooltipDisplay>
+    </TooltipRoot>
   )
 }

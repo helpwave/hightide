@@ -76,8 +76,13 @@ export const useTransitionState = ({
   }, [state, timeout])
 
   useLayoutEffect(() => {
-    if (ref?.current && (state === 'opening' || state === 'closing')) {
-      const animations = ref.current.getAnimations({ subtree: true })
+    if (state === 'opening' || state === 'closing') {
+      let element = ref?.current
+      if(!element && ref) {
+        console.warn('useTransitionState: ref is not set to an element using window instead')
+        element = window.document.body
+      }
+      const animations = element.getAnimations({ subtree: true })
         .filter(animation => animation.effect?.getTiming().duration !== '0s')
       if (animations.length > 0) {
         hasAnimation.current = true
