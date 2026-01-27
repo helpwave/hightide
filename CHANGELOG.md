@@ -5,6 +5,12 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/)
 and adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [0.7.0] - 2026-01-27
+
+### Changed
+- `useLocalStorage` to be called `useStorage` and allow for listing to storage changes
+- `ThemeDialog` is now split into `ThemeSelect` and `ThemeIcon`
+
 ## [0.6.16] - 2026-01-26
 
 ### Fixed

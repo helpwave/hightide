@@ -1,6 +1,6 @@
 import type { Dispatch, PropsWithChildren, SetStateAction } from 'react'
 import { createContext, useCallback, useContext, useEffect, useMemo, useState } from 'react'
-import { useLocalStorage } from '../hooks/useLocalStorage'
+import { useStorage } from '../hooks/useStorage'
 import type { ThemeConfig } from '@/src/global-contexts/HightideConfigContext'
 import { useHightideConfig } from '@/src/global-contexts/HightideConfigContext'
 
@@ -33,7 +33,7 @@ export const ThemeProvider = ({ children, theme, initialTheme }: ThemeProviderPr
     value: storedTheme,
     setValue: setStoredTheme,
     deleteValue: deleteStoredTheme
-  } = useLocalStorage<ThemeType>('theme', 'system')
+  } = useStorage<ThemeType>({ key: 'theme', defaultValue: 'system' })
   const { config } = useHightideConfig()
   const [themePreference, setThemePreference] = useState<ThemeType>('system')
 
