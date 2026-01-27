@@ -148,6 +148,8 @@ export const TooltipRoot = ({
     close,
   }), [tooltipId, openWithDelay, close, isShown, disabled])
 
+  console.log('TooltipRoot', contextValue.tooltip.id)
+
   return (
     <TooltipContext.Provider value={contextValue}>
       {children}
@@ -188,7 +190,7 @@ export const TooltipDisplay = forwardRef<HTMLDivElement, TooltipDisplayProps>(fu
   const id = tooltipContext?.tooltip.id ?? props.id
 
   useEffect(() => {
-    if(!tooltipContext && !props.id) return
+    if(!tooltipContext || !props.id) return
     tooltipContext?.tooltip.setId(props.id)
   }, [props.id, tooltipContext])
 
