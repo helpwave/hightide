@@ -6,9 +6,10 @@ import Link from 'next/link'
 import clsx from 'clsx'
 import type { UseAnchoredPositionOptions } from '@/src/hooks/useAnchoredPosition'
 import { useAnchoredPosition } from '@/src/hooks/useAnchoredPosition'
-import { Button } from '@/src/components/user-interaction/Button'
 import { ExpansionIcon } from '@/src/components/display-and-visualization/ExpansionIcon'
 import { useOverlayRegistry } from '@/src/hooks/useOverlayRegistry'
+import { useHightideTranslation } from '@/src/i18n/useHightideTranslation'
+import { IconButton } from '../../user-interaction/IconButton'
 
 type SimpleNavigationItem = {
   label: ReactNode,
@@ -152,6 +153,7 @@ export const NavigationItemList = ({ items, ...restProps }: NavigationItemListPr
 export type NavigationProps = NavigationItemListProps
 
 export const Navigation = ({ ...props }: NavigationProps) => {
+  const translation = useHightideTranslation()
   const [isMobileOpen, setIsMobileOpen] = useState(false)
   const id = useId()
   const menuRef = useRef<HTMLDivElement>(null)
@@ -168,8 +170,8 @@ export const Navigation = ({ ...props }: NavigationProps) => {
         {...props}
         className={clsx('hidden', { 'desktop:flex': !isMobileOpen }, props.className)}
       />
-      <Button
-        layout="icon"
+      <IconButton
+        tooltip={translation('openNavigation')}
         coloringStyle="text"
         color="neutral"
         onClick={() => setIsMobileOpen(true)}
@@ -181,7 +183,7 @@ export const Navigation = ({ ...props }: NavigationProps) => {
         aria-controls={'navigation-menu-' + id}
       >
         <MenuIcon className="w-6 h-6"/>
-      </Button>
+      </IconButton>
       <div
         id={'navigation-menu-' + id}
         ref={menuRef}
@@ -203,14 +205,14 @@ export const Navigation = ({ ...props }: NavigationProps) => {
         )}
         style={{ zIndex }}
       >
-        <Button
-          layout="icon"
+        <IconButton
+          tooltip={translation('close')}
           coloringStyle="text"
           color="neutral"
           onClick={() => setIsMobileOpen(false)}
         >
           <XIcon/>
-        </Button>
+        </IconButton>
         <NavigationItemList {...props} className={clsx('flex-col-8', props.className)}/>
       </div>
     </nav>

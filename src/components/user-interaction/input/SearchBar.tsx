@@ -3,15 +3,15 @@ import { InputUncontrolled } from './Input'
 import { Search } from 'lucide-react'
 import { clsx } from 'clsx'
 import { useHightideTranslation } from '@/src/i18n/useHightideTranslation'
-import type { ButtonProps } from '@/src/components/user-interaction/Button'
-import { Button } from '@/src/components/user-interaction/Button'
 import type { HTMLAttributes } from 'react'
 import { useOverwritableState } from '@/src/hooks/useOverwritableState'
+import type { IconButtonProps } from '../IconButton'
+import { IconButton } from '../IconButton'
 
 export type SearchBarProps = Omit<InputProps, 'onValueChange' | 'onEditComplete'> & {
   onValueChange?: (value: string) => void,
   onSearch: (value: string) => void,
-  searchButtonProps?: Omit<ButtonProps, 'onClick'>,
+  searchButtonProps?: Omit<IconButtonProps, 'onClick'>,
   containerProps?: HTMLAttributes<HTMLDivElement>,
 }
 
@@ -37,17 +37,17 @@ export const SearchBar = ({
         // TODO use data-name="searchbar" and move styling to css
         className={clsx('pr-10 w-full', inputProps.className)}
       />
-      <Button
+      <IconButton
         {...searchButtonProps}
+        tooltip={translation('search')}
         size="sm"
-        layout="icon"
         color="neutral"
         coloringStyle="text"
         onClick={() => onSearch(value)}
         className={clsx('absolute right-1 top-1/2 -translate-y-1/2', searchButtonProps?.className)}
       >
         <Search className="w-full h-full"/>
-      </Button>
+      </IconButton>
     </div>
   )
 }

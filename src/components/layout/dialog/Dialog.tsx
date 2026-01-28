@@ -4,7 +4,6 @@ import type { HTMLAttributes, ReactNode } from 'react'
 import { forwardRef, useContext, useId, useImperativeHandle, useMemo, useRef } from 'react'
 import { X } from 'lucide-react'
 import { useHightideTranslation } from '@/src/i18n/useHightideTranslation'
-import { Button } from '@/src/components/user-interaction/Button'
 import { useFocusTrap } from '@/src/hooks/focus/useFocusTrap'
 import { useLogOnce } from '@/src/hooks/useLogOnce'
 import { useOverlayRegistry } from '@/src/hooks/useOverlayRegistry'
@@ -16,6 +15,7 @@ import clsx from 'clsx'
 import { FocusTrap } from '../../utils/FocusTrap'
 import { usePresenceRef } from '@/src/hooks/usePresenceRef'
 import { DialogContext } from './DialogContext'
+import { IconButton } from '../../user-interaction/IconButton'
 
 export type DialogPosition = 'top' | 'center' | 'none'
 
@@ -151,15 +151,15 @@ export const Dialog = forwardRef<HTMLDivElement, DialogProps>(function Dialog({
                     paddingRight: 'inherit'
                   }}
                 >
-                  <Button
-                    layout="icon"
-                    color="neutral"
+                  <IconButton
+                    tooltip={translation('closeDialog')}
                     size="xs"
-                    aria-label={translation('closeDialog')}
+                    color="neutral"
+                    coloringStyle="text"
                     onClick={onCloseWrapper}
                   >
-                    <X />
-                  </Button>
+                    <X size={24}/>
+                  </IconButton>
                 </div>
               </Visibility>
               {children}

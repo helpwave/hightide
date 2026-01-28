@@ -1,25 +1,15 @@
 import { Pagination, type PaginationProps } from '@/src/components/layout/navigation/Pagination'
-import { useTableDataContext } from './TableContext'
 import type { HTMLAttributes } from 'react'
-import { useEffect } from 'react'
 import { Select, type SelectProps } from '@/src/components/user-interaction/select/Select'
 import { SelectOption } from '@/src/components/user-interaction/select/SelectComponents'
-import { MathUtil } from '@/src/utils/math'
 import { Visibility } from '../Visibility'
 import clsx from 'clsx'
+import { useTableStateWithoutSizingContext } from './TableContext'
 
 export type TablePaginationMenuProps = Omit<PaginationProps, 'pageIndex' | 'pageCount'>
 
 export const TablePaginationMenu = ({ ...props }: TablePaginationMenuProps) => {
-  const { table: table } = useTableDataContext()
-
-  useEffect(() => {
-    const { pageIndex } = table.getState().pagination
-    const pageCount = table.getPageCount()
-    if(pageIndex >= pageCount || pageIndex < 0) {
-      table.setPageIndex(MathUtil.clamp(pageIndex, [0, pageCount- 1]))
-    }
-  }, [table])
+  const { table } = useTableStateWithoutSizingContext()
 
   return (
     <Pagination
@@ -35,7 +25,7 @@ export const TablePaginationMenu = ({ ...props }: TablePaginationMenuProps) => {
 }
 
 
-const defaultPageSizeOptions: number[] = [10, 25, 50, 100] as const
+const defaultPageSizeOptions: number[] = [10, 25, 50, 100, 500, 1000] as const
 
 export interface TablePageSizeSelectProps extends SelectProps {
   pageSizeOptions?: number[],
@@ -45,7 +35,7 @@ export const TablePageSizeSelect = ({
   pageSizeOptions = defaultPageSizeOptions,
   ...props
 }: TablePageSizeSelectProps) => {
-  const { table: table } = useTableDataContext()
+  const { table } = useTableStateWithoutSizingContext()
   const currentPageSize = table.getState().pagination.pageSize
 
   return (

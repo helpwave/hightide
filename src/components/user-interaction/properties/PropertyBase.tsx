@@ -1,9 +1,9 @@
 import type { ReactNode } from 'react'
 import { AlertTriangle, Trash, X } from 'lucide-react'
-import { Button } from '@/src/components/user-interaction/Button'
 import { useHightideTranslation } from '@/src/i18n/useHightideTranslation'
 import { Tooltip } from '../Tooltip'
 import { PropsUtil } from '@/src/utils/propsUtil'
+import { IconButton } from '../IconButton'
 
 export type PropertyField<T> = {
   name: string,
@@ -85,31 +85,27 @@ export const PropertyBase = ({
         {showActionsContainer && (
           <div data-name="property-actions">
             {isClearEnabled && (
-              <Tooltip tooltip={translation('clearValue')}>
-                <Button
-                  onClick={onValueClear}
-                  disabled={!hasValue}
-                  color="negative"
-                  coloringStyle="text"
-                  layout="icon"
-                  size="sm"
-                >
-                  <X className="size-force-5" />
-                </Button>
-              </Tooltip>
+              <IconButton
+                tooltip={translation('clearValue')}
+                onClick={onValueClear}
+                disabled={!hasValue}
+                color="negative"
+                coloringStyle="text"
+                size="sm"
+              >
+                <X className="size-force-5" />
+              </IconButton>
             )}
             {isRemoveEnabled && (
-              <Tooltip tooltip={translation('removeProperty')}>
-                <Button
-                  onClick={onRemove}
-                  color="negative"
-                  coloringStyle="text"
-                  layout="icon"
-                  size="sm"
-                >
-                  <Trash className="size-force-5" />
-                </Button>
-              </Tooltip>
+              <IconButton
+                tooltip={translation('removeProperty')}
+                onClick={onRemove}
+                color="negative"
+                coloringStyle="text"
+                size="sm"
+              >
+                <Trash className="size-force-5" />
+              </IconButton>
             )}
           </div>
         )}

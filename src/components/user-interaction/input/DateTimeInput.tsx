@@ -4,7 +4,6 @@ import { CalendarIcon } from 'lucide-react'
 import clsx from 'clsx'
 import { useLocale } from '@/src/global-contexts/LocaleContext'
 import type { DateTimePickerProps } from '@/src/components/user-interaction/date/DateTimePicker'
-import { Button } from '@/src/components/user-interaction/Button'
 import { useHightideTranslation } from '@/src/i18n/useHightideTranslation'
 import { Visibility } from '@/src/components/layout/Visibility'
 import { DateUtils } from '@/src/utils/date'
@@ -15,6 +14,7 @@ import { useControlledState } from '@/src/hooks/useControlledState'
 import { PropsUtil } from '@/src/utils/propsUtil'
 import type { FormFieldInteractionStates } from '@/src/components/form/FieldLayout'
 import { PopUp } from '../../layout/popup/PopUp'
+import { IconButton } from '../IconButton'
 
 export interface DateTimeInputProps extends
   Partial<FormFieldInteractionStates>,
@@ -123,8 +123,9 @@ export const DateTimeInput = forwardRef<HTMLDivElement, DateTimeInputProps>(func
           {state ? DateUtils.formatAbsolute(state, locale, mode === 'dateTime') : placeholder ?? translation('clickToSelect')}
         </div>
         <Visibility isVisible={!readOnly}>
-          <Button
-            coloringStyle="text" layout="icon" color="neutral" size="sm"
+          <IconButton
+            tooltip={translation('sDateTimeSelect', { datetimeMode: mode })}
+            coloringStyle="text" color="neutral" size="sm"
             className="absolute right-1 top-1/2 -translate-y-1/2"
             disabled={disabled}
             onClick={() => {
@@ -133,10 +134,9 @@ export const DateTimeInput = forwardRef<HTMLDivElement, DateTimeInputProps>(func
             aria-haspopup="dialog"
             aria-expanded={isOpen}
             aria-controls={isOpen ? ids.popup : undefined}
-            aria-label={translation('sDateTimeSelect', { datetimeMode: mode })}
           >
             <CalendarIcon className="size-5"/>
-          </Button>
+          </IconButton>
         </Visibility>
       </div>
       <PopUp

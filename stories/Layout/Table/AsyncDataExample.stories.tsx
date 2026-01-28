@@ -411,30 +411,6 @@ export const asyncDataExample: Story = {
           }}
         />
         <TableColumn
-          id="hobbies"
-          header="Hobbies"
-          cell={({ cell }) => {
-            const value = cell.getValue() as HobbyTag | null
-            if(!value) return <TableCell>No hobbies</TableCell>
-            return (
-              <div className="flex-row-2 flex-wrap gap-y-2">
-                {value ? (<Chip key={value}>{value}</Chip>) : null}
-              </div>
-            )
-          }}
-          accessorKey="hobbies"
-          minSize={200}
-          size={250}
-          maxSize={300}
-          filterType="tagsSingle"
-          sortingFn="text"
-          meta={{
-            filterData: {
-              tags: hobbyTags.map(tag => ({ tag, label: tag })),
-            },
-          }}
-        />
-        <TableColumn
           id="hasChildren"
           header="Has Children"
           cell={({ cell }) => (

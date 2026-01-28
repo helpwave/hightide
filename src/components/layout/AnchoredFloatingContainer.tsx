@@ -8,12 +8,14 @@ export type BackgroundOverlayProps = HTMLAttributes<HTMLDivElement>
 export interface AnchoredFloatingContainerProps extends HTMLAttributes<HTMLDivElement> {
   anchor?: RefObject<HTMLElement>,
   options?: UseAnchoredPositionOptions,
+  active?: boolean,
 }
 
 export const AnchoredFloatingContainer = forwardRef<HTMLDivElement, AnchoredFloatingContainerProps>(function FloatingContainer({
   children,
   anchor,
   options = {},
+  active = true,
   ...props
 }, forwardRef) {
   const innerRef = useRef<HTMLDivElement>(null)
@@ -23,6 +25,7 @@ export const AnchoredFloatingContainer = forwardRef<HTMLDivElement, AnchoredFloa
     ...options,
     container: innerRef,
     anchor: anchor,
+    active,
   })
 
   return (

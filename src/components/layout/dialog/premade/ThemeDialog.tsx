@@ -1,3 +1,4 @@
+import type { HTMLAttributes } from 'react'
 import { type PropsWithChildren, type ReactNode } from 'react'
 import type { DialogProps } from '@/src/components/layout/dialog/Dialog'
 import { Dialog } from '@/src/components/layout/dialog/Dialog'
@@ -7,30 +8,61 @@ import type { ThemeType } from '@/src/global-contexts/ThemeContext'
 import { ThemeUtil, useTheme } from '@/src/global-contexts/ThemeContext'
 import { Button } from '@/src/components/user-interaction/Button'
 import { useHightideTranslation } from '@/src/i18n/useHightideTranslation'
+import type { SelectProps } from '@/src/components/user-interaction/select/Select'
 import { Select } from '@/src/components/user-interaction/select/Select'
 import { SelectOption } from '@/src/components/user-interaction/select/SelectComponents'
 
-type ThemeIconProps = {
-  theme: ThemeType,
-  className?: string,
+export interface ThemeIconProps extends HTMLAttributes<SVGSVGElement> {
+  theme?: ThemeType,
 }
-const ThemeIcon = ({ theme, className }: ThemeIconProps) => {
-  if (theme === 'dark') {
-    return (
-      <MoonIcon className={clsx('w-4 h-4', className)}/>
-    )
-  } else if (theme === 'light') {
-    return (
-      <SunIcon className={clsx('w-4 h-4', className)}/>
-    )
-  } else {
-    return (
-      <MonitorCog className={clsx('w-4 h-4', className)}/>
-    )
+
+export const ThemeIcon = ({ theme: themeOverride, ...props }: ThemeIconProps) => {
+  const { resolvedTheme } = useTheme()
+  const theme = themeOverride ?? resolvedTheme
+
+  switch (theme) {
+  case 'dark':
+    return <MoonIcon {...props} className={clsx('w-4 h-4', props. className)}/>
+  case 'light':
+    return <SunIcon {...props} className={clsx('w-4 h-4', props.className)}/>
+  default:
+    return <MonitorCog {...props}className={clsx('w-4 h-4', props.className)}/>
   }
 }
 
-type ThemeDialogProps = Omit<DialogProps, 'titleElement' | 'description'> & {
+export type ThemeSelectProps = Omit<SelectProps, 'value'>
+
+export const ThemeSelect = ({ ...props }: ThemeSelectProps) => {
+  const translation = useHightideTranslation()
+  const { theme, setTheme } = useTheme()
+
+  return (
+    <Select
+      value={theme}
+      onEditComplete={(theme) => {
+        props.onEditComplete?.(theme)
+        setTheme(theme as ThemeType)
+      }}
+      iconAppearance="right"
+      {...props}
+      buttonProps={{
+        ...props.buttonProps,
+        className: clsx('min-w-32', props.buttonProps?.className),
+      }}
+    >
+      {ThemeUtil.themes.map((theme) => (
+        <SelectOption key={theme} value={theme} className="gap-x-6 justify-between">
+          <div className="flex-row-2 items-center">
+            <ThemeIcon theme={theme}/>
+            {translation('sThemeMode', { theme: theme })}
+          </div>
+        </SelectOption>
+      ))}
+    </Select>
+  )
+}
+
+export interface ThemeDialogProps extends Omit<DialogProps, 'titleElement' | 'description'> {
   titleOverwrite?: ReactNode,
   descriptionOverwrite?: ReactNode,
 }
@@ -46,7 +78,6 @@ export const ThemeDialog = ({
   descriptionOverwrite,
   ...props
 }: PropsWithChildren<ThemeDialogProps>) => {
-  const { theme, setTheme } = useTheme()
   const translation = useHightideTranslation()
 
   return (
@@ -57,31 +88,9 @@ export const ThemeDialog = ({
       {...props}
     >
       <div className="w-64">
-        <Select
-          value={theme}
-          onValueChange={(theme) => setTheme(theme as ThemeType)}
-          iconAppearance="right"
-          buttonProps={{
-            selectedDisplay: (value) => (
-              <div className="flex-row-2 items-center">
-                <ThemeIcon theme={theme}/>
-                {translation('sThemeMode', { theme: value })}
-              </div>
-            ),
-            className: 'min-w-32',
-          }}
-        >
-          {ThemeUtil.themes.map((theme) => (
-            <SelectOption key={theme} value={theme} className="gap-x-6 justify-between">
-              <div className="flex-row-2 items-center">
-                <ThemeIcon theme={theme}/>
-                {translation('sThemeMode', { theme: theme })}
-              </div>
-            </SelectOption>
-          ))}
-        </Select>
+        <ThemeSelect />
         <div className="flex-row-4 mt-3 justify-end">
-          <Button autoFocus color="positive" onClick={onClose}>
+          <Button onClick={onClose}>
             {translation('done')}
           </Button>
         </div>
