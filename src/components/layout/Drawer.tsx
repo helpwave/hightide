@@ -4,11 +4,11 @@ import { useHightideTranslation } from '@/src/i18n/useHightideTranslation'
 import type { ReactNode } from 'react'
 import { forwardRef, useId, useImperativeHandle, useMemo, useRef, type HTMLAttributes } from 'react'
 import { Visibility } from './Visibility'
-import { Button } from '../user-interaction/Button'
 import { X } from 'lucide-react'
 import { useTransitionState } from '@/src/hooks/useTransitionState'
 import { PropsUtil } from '@/src/utils/propsUtil'
 import { Portal } from '../utils/Portal'
+import { IconButton } from '../user-interaction/IconButton'
 
 export type DrawerAligment = 'left' | 'right' | 'bottom' | 'top'
 
@@ -119,15 +119,14 @@ export const Drawer = forwardRef<HTMLDivElement, DrawerProps>(function Drawer({
               paddingRight: 'inherit'
             }}
           >
-            <Button
-              layout="icon"
+            <IconButton
+              tooltip={translation('close')}
+              coloringStyle="text"
               color="neutral"
-              size="xs"
-              aria-label={translation('close')}
               onClick={onClose}
             >
-              <X />
-            </Button>
+              <X size={24}/>
+            </IconButton>
           </div>
           {children}
         </div>

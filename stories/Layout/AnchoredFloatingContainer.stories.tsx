@@ -67,7 +67,7 @@ export const anchoredFloatingContainer: Story = {
         <AnchoredFloatingContainer
           {...props}
           anchor={isAnchored ? anchorRef : undefined}
-          className="w-128 h-64"
+          className="w-128 h-64 fixed"
           options={{
             isPolling,
             verticalAlignment,

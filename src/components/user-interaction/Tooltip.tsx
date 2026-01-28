@@ -40,7 +40,7 @@ export interface TooltipContextType {
   close: () => void,
 }
 
-const TooltipContext = createContext<TooltipContextType | null>(null)
+export const TooltipContext = createContext<TooltipContextType | null>(null)
 
 export const useTooltip = () => {
   const context = useContext(TooltipContext)
@@ -148,8 +148,6 @@ export const TooltipRoot = ({
     close,
   }), [tooltipId, openWithDelay, close, isShown, disabled])
 
-  console.log('TooltipRoot', contextValue.tooltip.id)
-
   return (
     <TooltipContext.Provider value={contextValue}>
       {children}
@@ -225,6 +223,7 @@ export const TooltipDisplay = forwardRef<HTMLDivElement, TooltipDisplayProps>(fu
         {...props}
         id={id}
         ref={container}
+        active={isVisible}
         anchor={anchor}
         options={{
           verticalAlignment,

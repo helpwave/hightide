@@ -8,7 +8,7 @@ import type { ColumnDef, InitialTableState, Row, TableOptions, TableState , Tabl
 import { getCoreRowModel, getFilteredRowModel, getPaginationRowModel, getSortedRowModel, useReactTable } from '@tanstack/react-table'
 import { TableCell } from './TableCell'
 import { ColumnSizingWithTargetFeature } from './ColumnSizingWithTargetFeature'
-import { useResizeCallbackWrapper } from '@/src/hooks/useResizeCallbackWrapper'
+import { useWindowResizeObserver } from '@/src/hooks/useResizeCallbackWrapper'
 import { AutoColumnOrderFeature } from './AutoColumnOrderFeature'
 
 export type TableProviderProps<T> = {
@@ -69,7 +69,7 @@ export const TableProvider = <T,>({
     const width = containerRef.current?.getBoundingClientRect().width
     setTargetWidth(width !== undefined ? Math.floor(width) : undefined)
   }, [containerRef])
-  useResizeCallbackWrapper(useCallback(() => {
+  useWindowResizeObserver(useCallback(() => {
     const width = containerRef.current?.getBoundingClientRect().width
     setTargetWidth(width !== undefined ? Math.floor(width) : undefined)
   }, [containerRef]))

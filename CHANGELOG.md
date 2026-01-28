@@ -12,6 +12,10 @@ and adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 - `Tooltip` to `TableColumnSwitcher`
 - `forceMount` attribute to `Drawer`
 - `TooltipRoot`, `TooltipTrigger`, and `TooltipDisplay` to make it decomposable
+- `useResizeObserver` and `useScrollObserver` to react to resize and scroll events on HTMLElements
+  - added these to the `AnchoredFloatingContainer` as options
+- `IconButton` to better capture the different accessibility requirements of both button types
+  - use `IconButton` instead of buttons with `layout="icon"`
 
 ### Changed
 - `useLocalStorage` to be called `useStorage` and allow for listing to storage changes

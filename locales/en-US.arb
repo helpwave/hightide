@@ -223,6 +223,7 @@
   "pinRight": "Pin to right",
   "changeVisibility": "Change visibility",
   "changePinning": "Change pinning",
+  "changeSelection": "Change selection",
   "pinToRight": "Pin to right",
   "pinToLeft": "Pin to left",
   "increaseSortingPriority": "Increase sorting priority",

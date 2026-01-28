@@ -35,15 +35,6 @@ export const ColumnSizingWithTargetFeature: TableFeature = {
         table.getVisibleLeafColumns().map(column => column.id).filter(Boolean)
         : columnIds
 
-      console.log('column resizing', {
-        columnIds,
-        resultColumnIds: visibleSortedColumns,
-        columnOrder: table.getState().columnOrder,
-        columnVisibility,
-        columnPinning,
-        target,
-      })
-
       const result = ColumnSizeUtil.calculate({
         previousSizing: table.getState().columnSizing,
         newSizing,

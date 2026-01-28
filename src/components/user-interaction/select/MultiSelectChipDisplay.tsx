@@ -4,9 +4,10 @@ import type { HTMLAttributes, ReactNode } from 'react'
 import { forwardRef, useEffect, useImperativeHandle, useRef } from 'react'
 import { useOverwritableState } from '@/src/hooks/useOverwritableState'
 import { Chip } from '@/src/components/display-and-visualization/Chip'
-import { Button } from '@/src/components/user-interaction/Button'
 import { XIcon, Plus } from 'lucide-react'
 import { MultiSelectContent, type MultiSelectContentProps } from './SelectComponents'
+import { IconButton } from '../IconButton'
+import { useHightideTranslation } from '@/src/i18n/useHightideTranslation'
 
 ///
 /// MultiSelectChipDisplay
@@ -20,6 +21,7 @@ export const MultiSelectChipDisplayButton = forwardRef<HTMLDivElement, MultiSele
   id,
   ...props
 }, ref) {
+  const translation = useHightideTranslation()
   const { state, trigger, item, ids, setIds } = useSelectContext()
   const { register, unregister, toggleOpen } = trigger
 
@@ -63,22 +65,21 @@ export const MultiSelectChipDisplayButton = forwardRef<HTMLDivElement, MultiSele
       {state.selectedOptions.map(({ value, label }) => (
         <Chip key={value} className="gap-x-2">
           {label}
-          <Button
-            // TODO add label to indicate purpose to screen reader
+          <IconButton
+            tooltip={translation('remove')}
             onClick={() => {
               item.toggleSelection(value, false)
             }}
             size="xs"
             color="negative"
             coloringStyle="text"
-            layout="icon"
             className="flex-row-0 items-center"
           >
             <XIcon className="size-5"/>
-          </Button>
+          </IconButton>
         </Chip>
       ))}
-      <Button
+      <IconButton
         id={ids.trigger}
         onClick={(event) => {
           event.stopPropagation()
@@ -93,7 +94,7 @@ export const MultiSelectChipDisplayButton = forwardRef<HTMLDivElement, MultiSele
             toggleOpen(true, { highlightStartPositionBehavior: 'last' })
           }
         }}
-        layout="icon"
+        tooltip={translation('changeSelection')}
         size="sm"
         color="neutral"
 
@@ -106,7 +107,7 @@ export const MultiSelectChipDisplayButton = forwardRef<HTMLDivElement, MultiSele
         className="size-9"
       >
         <Plus/>
-      </Button>
+      </IconButton>
     </div>
   )
 })

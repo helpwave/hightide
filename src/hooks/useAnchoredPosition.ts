@@ -1,8 +1,11 @@
 'use client'
 
 import type { CSSProperties, RefObject } from 'react'
-import { useCallback, useEffect, useLayoutEffect, useMemo, useState } from 'react'
+import { useCallback, useEffect, useLayoutEffect, useMemo, useRef, useState } from 'react'
 import { MathUtil } from '@/src/utils/math'
+import { useWindowResizeObserver } from './useResizeCallbackWrapper'
+import { useResizeObserver } from './useResizeObserver'
+import { useScrollObserver } from './useScrollObserver'
 
 export type FloatingElementAlignment = 'beforeStart' | 'afterStart' | 'center' | 'beforeEnd' | 'afterEnd'
 
@@ -206,6 +209,8 @@ function calculatePosition({
 
 export type UseAnchoredPositionOptions = CalculatePositionOptions & {
   isPolling?: boolean,
+  isReactingToResize?: boolean,
+  isReactingToScroll?: boolean,
   pollingInterval?: number,
 }
 
@@ -216,12 +221,65 @@ export type UseAnchoredPostitionProps = UseAnchoredPositionOptions & {
   active?: boolean,
 }
 
+const measureSizes = ({
+  containerRef,
+  anchorRef,
+  windowRef,
+}: {
+    containerRef?: RefObject<HTMLElement>,
+    anchorRef?: RefObject<HTMLElement>,
+    windowRef?: RefObject<HTMLElement>,
+  }) => {
+  return {
+    container: containerRef?.current?.getBoundingClientRect(),
+    anchor: anchorRef?.current?.getBoundingClientRect(),
+    window: windowRef?.current?.getBoundingClientRect() ?? {
+      top: 0,
+      bottom: window.innerHeight,
+      left: 0,
+      right: window.innerWidth,
+      width: window.innerWidth,
+      height: window.innerHeight,
+    },
+  }
+}
+
+type MeasureSize = ReturnType<typeof measureSizes>
+
+// dont check position of container because we are changing it
+const isSameMeasurment = (a: MeasureSize, b: MeasureSize) =>
+  a &&
+  b &&
+  a.container?.width === b.container?.width &&
+  a.container?.height === b.container?.height &&
+  a.anchor?.top === b.anchor?.top &&
+  a.anchor?.left === b.anchor?.left &&
+  a.anchor?.right === b.anchor?.right &&
+  a.anchor?.bottom === b.anchor?.bottom &&
+  a.anchor?.width === b.anchor?.width &&
+  a.anchor?.height === b.anchor?.height &&
+  a.window?.top === b.window?.top &&
+  a.window?.left === b.window?.left &&
+  a.window?.right === b.window?.right &&
+  a.window?.bottom === b.window?.bottom &&
+  a.window?.width === b.window?.width &&
+  a.window?.height === b.window?.height
+
+const isSameOptions = (a: CalculatePositionOptions, b: CalculatePositionOptions) =>
+  a.horizontalAlignment === b.horizontalAlignment &&
+  a.verticalAlignment === b.verticalAlignment &&
+  a.screenPadding === b.screenPadding &&
+  a.gap === b.gap &&
+  a.avoidOverlap === b.avoidOverlap
+
 export function useAnchoredPosition({
   active = true,
   window: windowRef,
   anchor: anchorRef,
   container: containerRef,
   isPolling = false,
+  isReactingToResize = true,
+  isReactingToScroll = false,
   pollingInterval = 100,
   verticalAlignment = 'afterEnd',
   horizontalAlignment = 'afterStart',
@@ -230,6 +288,8 @@ export function useAnchoredPosition({
   gap = 4,
 }: UseAnchoredPostitionProps) {
   const [style, setStyle] = useState<CSSProperties>()
+  const lastSizes = useRef<MeasureSize | null>(null)
+  const lastOptions = useRef<CalculatePositionOptions | null>(null)
 
   const options = useMemo(() => ({
     horizontalAlignment,
@@ -240,20 +300,18 @@ export function useAnchoredPosition({
   }), [horizontalAlignment, verticalAlignment, screenPadding, gap, avoidOverlap])
 
   const calculate = useCallback(() => {
-    const containerRect = containerRef.current?.getBoundingClientRect()
-    if(!containerRect) {
+    const newMeasurement = measureSizes({ containerRef, anchorRef, windowRef })
+    if (!newMeasurement) return
+    if(isSameMeasurment(lastSizes.current, newMeasurement) && isSameOptions(options, lastOptions.current)) return
+    lastSizes.current = newMeasurement
+    lastOptions.current = options
+
+    if(!newMeasurement.container) {
       return
     }
-    const windowRect: RectangleBounds = windowRef?.current?.getBoundingClientRect() ?? {
-      top: 0,
-      bottom: window.innerHeight,
-      left: 0,
-      right: window.innerWidth,
-      width: window.innerWidth,
-      height: window.innerHeight,
-    }
-    const anchorElement = anchorRef?.current
-    const anchorRect: RectangleBounds = anchorElement?.getBoundingClientRect() ?? windowRect
+    const containerRect: RectangleBounds = newMeasurement.container
+    const windowRect: RectangleBounds = newMeasurement.window
+    const anchorRect: RectangleBounds = newMeasurement.anchor ?? newMeasurement.window
 
     if(containerRect.width === 0 || containerRect.height === 0) {
       return
@@ -269,35 +327,22 @@ export function useAnchoredPosition({
   }, [anchorRef, containerRef, options, windowRef])
 
   useLayoutEffect(() => {
-    if (active) {
-      calculate()
-    } else {
+    if (!active) {
       setStyle(undefined)
-    }
-  }, [calculate, active])
-
-  useEffect(() => {
-    if (!containerRef.current || !active) return
-
-    const observer = new ResizeObserver(() => {
-      calculate()
-    })
-
-    observer.observe(containerRef.current)
-
-    return () => observer.disconnect()
-  }, [active, calculate, containerRef])
-
-  useEffect(() => {
-    if(!containerRef.current || !active) {
+      lastSizes.current = null
       return
+    } else {
+      calculate()
     }
-    window.addEventListener('resize', calculate)
-    return () => {
-      window.removeEventListener('resize', calculate)
-    }
-  }, [active, calculate, containerRef, isPolling, pollingInterval])
+  }, [active, options, calculate])
 
+  useWindowResizeObserver(calculate)
+
+  useResizeObserver({ observedElementRef: containerRef, onResize: calculate, isActive: isReactingToResize && active })
+  useResizeObserver({ observedElementRef: anchorRef, onResize: calculate, isActive: isReactingToResize && active })
+  useResizeObserver({ observedElementRef: windowRef, onResize: calculate, isActive: isReactingToResize && active })
+
+  useScrollObserver({ observedElementRef: anchorRef, onScroll: calculate, isActive: isReactingToScroll && active })
 
   useEffect(() => {
     if(!containerRef.current || !active) {

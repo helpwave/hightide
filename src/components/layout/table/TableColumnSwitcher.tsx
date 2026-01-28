@@ -9,6 +9,7 @@ import { PopUpRoot } from '../popup/PopUpRoot'
 import { PopUpOpener } from '../popup/PopUpOpener'
 import { Tooltip } from '../../user-interaction/Tooltip'
 import { useTableStateWithoutSizingContext } from './TableContext'
+import { IconButton } from '../../user-interaction/IconButton'
 
 export type TableColumnSwitcherPopUpProps = PopUpProps
 
@@ -210,61 +211,49 @@ export const TableColumnSwitcherPopUp = ({ ...props }: TableColumnSwitcherPopUpP
               <div className="flex-row-2 gap-1">
                 {isPinned ? (
                   <>
-                    <Tooltip tooltip={translation('pinToLeft')}>
-                      <Button
-                        layout="icon"
-                        size="sm"
-                        color="neutral"
-                        coloringStyle="text"
-                        disabled={pinState === 'left'}
-                        onClick={() => pinColumn(columnId, 'left')}
-                        aria-label={translation('pinLeft')}
-                      >
-                        <ChevronLeft className="size-4" />
-                      </Button>
-                    </Tooltip>
-                    <Tooltip tooltip={translation('pinToRight')}>
-                      <Button
-                        layout="icon"
-                        size="sm"
-                        color="neutral"
-                        coloringStyle="text"
-                        disabled={pinState === 'right'}
-                        onClick={() => pinColumn(columnId, 'right')}
-                        aria-label={translation('pinRight')}
-                      >
-                        <ChevronRight className="size-4" />
-                      </Button>
-                    </Tooltip>
+                    <IconButton
+                      tooltip={translation('pinToLeft')}
+                      size="sm"
+                      color="neutral"
+                      coloringStyle="text"
+                      disabled={pinState === 'left'}
+                      onClick={() => pinColumn(columnId, 'left')}
+                    >
+                      <ChevronLeft className="size-4" />
+                    </IconButton>
+                    <IconButton
+                      tooltip={translation('pinToRight')}
+                      size="sm"
+                      color="neutral"
+                      coloringStyle="text"
+                      disabled={pinState === 'right'}
+                      onClick={() => pinColumn(columnId, 'right')}
+                    >
+                      <ChevronRight className="size-4" />
+                    </IconButton>
                   </>
                 ) : (
                   <>
-                    <Tooltip tooltip={translation('increaseSortingPriority')}>
-                      <Button
-                        layout="icon"
-                        size="sm"
-                        color="neutral"
-                        coloringStyle="text"
-                        disabled={!canMoveUp}
-                        onClick={() => moveColumn(columnId, 'up')}
-                        aria-label={translation('moveUp')}
-                      >
-                        <ChevronUp className="size-4" />
-                      </Button>
-                    </Tooltip>
-                    <Tooltip tooltip={translation('decreaseSortingPriority')}>
-                      <Button
-                        layout="icon"
-                        size="sm"
-                        color="neutral"
-                        coloringStyle="text"
-                        disabled={!canMoveDown}
-                        onClick={() => moveColumn(columnId, 'down')}
-                        aria-label={translation('moveDown')}
-                      >
-                        <ChevronDown className="size-4" />
-                      </Button>
-                    </Tooltip>
+                    <IconButton
+                      tooltip={translation('increaseSortingPriority')}
+                      size="sm"
+                      color="neutral"
+                      coloringStyle="text"
+                      disabled={!canMoveUp}
+                      onClick={() => moveColumn(columnId, 'up')}
+                    >
+                      <ChevronUp className="size-4" />
+                    </IconButton>
+                    <IconButton
+                      tooltip={translation('decreaseSortingPriority')}
+                      size="sm"
+                      color="neutral"
+                      coloringStyle="text"
+                      disabled={!canMoveDown}
+                      onClick={() => moveColumn(columnId, 'down')}
+                    >
+                      <ChevronDown className="size-4" />
+                    </IconButton>
                   </>
                 )}
               </div>
@@ -272,42 +261,38 @@ export const TableColumnSwitcherPopUp = ({ ...props }: TableColumnSwitcherPopUpP
                 {getColumnHeader(columnId)}
               </div>
               <>
-                <Tooltip tooltip={translation('changeVisibility')}>
-                  <Button
-                    layout="icon"
-                    size="sm"
-                    color="neutral"
-                    coloringStyle="text"
-                    disabled={!column.getCanHide()}
-                    onClick={() => toggleColumnVisibility(columnId)}
-                    aria-label={isVisible ? translation('hideColumn') : translation('showColumn')}
-                  >
-                    {isVisible ? (
-                      <Eye className="size-4" />
-                    ) : (
-                      <EyeOff className="size-4" />
-                    )}
-                  </Button>
-                </Tooltip>
-                <Tooltip tooltip={translation('changePinning')}>
-                  <Button
-                    layout="icon"
-                    size="sm"
-                    color="neutral"
-                    coloringStyle="text"
-                    disabled={!column.getCanPin()}
-                    onClick={() => {
-                      if(isPinned) {
-                        unpinColumn(columnId)
-                      } else {
-                        pinColumn(columnId, 'left')
-                      }
-                    }}
-                    aria-label={isPinned ? translation('unpin') : translation('pinLeft')}
-                  >
-                    {!isPinned ? ( <PinOff className="size-4" />) : ( <Pin className="size-4" />)}
-                  </Button>
-                </Tooltip>
+                <IconButton
+                  tooltip={translation('changeVisibility')}
+                  size="sm"
+                  color="neutral"
+                  coloringStyle="text"
+                  disabled={!column.getCanHide()}
+                  onClick={() => toggleColumnVisibility(columnId)}
+                  aria-label={isVisible ? translation('hideColumn') : translation('showColumn')}
+                >
+                  {isVisible ? (
+                    <Eye className="size-4" />
+                  ) : (
+                    <EyeOff className="size-4" />
+                  )}
+                </IconButton>
+                <IconButton
+                  tooltip={translation('changePinning')}
+                  size="sm"
+                  color="neutral"
+                  coloringStyle="text"
+                  disabled={!column.getCanPin()}
+                  onClick={() => {
+                    if(isPinned) {
+                      unpinColumn(columnId)
+                    } else {
+                      pinColumn(columnId, 'left')
+                    }
+                  }}
+                  aria-label={isPinned ? translation('unpin') : translation('pinLeft')}
+                >
+                  {!isPinned ? ( <PinOff className="size-4" />) : ( <Pin className="size-4" />)}
+                </IconButton>
               </>
             </div>
           )
