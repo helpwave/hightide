@@ -2,6 +2,7 @@ import type { MultiSelectRootProps } from './SelectContext'
 import { MultiSelectRoot, useSelectContext } from './SelectContext'
 import type { HTMLAttributes, ReactNode } from 'react'
 import { forwardRef, useEffect, useImperativeHandle, useRef } from 'react'
+import clsx from 'clsx'
 import { useOverwritableState } from '@/src/hooks/useOverwritableState'
 import { Chip } from '@/src/components/display-and-visualization/Chip'
 import { XIcon, Plus } from 'lucide-react'
@@ -19,6 +20,7 @@ type MultiSelectChipDisplayButtonProps = HTMLAttributes<HTMLDivElement> & {
 
 export const MultiSelectChipDisplayButton = forwardRef<HTMLDivElement, MultiSelectChipDisplayButtonProps>(function MultiSelectChipDisplayButton({
   id,
+  className,
   ...props
 }, ref) {
   const translation = useHightideTranslation()
@@ -54,7 +56,7 @@ export const MultiSelectChipDisplayButton = forwardRef<HTMLDivElement, MultiSele
         props.onClick?.(event)
       }}
 
-      data-name={props['data-name'] ?? 'select-button-chips'}
+      className={clsx('select-button-chips', className)}
       data-value={state.value.length > 0 ? '' : undefined}
       data-disabled={disabled ? '' : undefined}
       data-invalid={invalid ? '' : undefined}

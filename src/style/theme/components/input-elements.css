@@ -33,18 +33,18 @@
 
 /* input-elements */
 @layer components {
-  [data-name="input"] {
+  .input {
     @apply px-3 py-2 rounded-md h-10 input-element;
   }
 
-  [data-name="select-button"] {
+  .select-button {
     @apply flex-row-2 items-center justify-between rounded-md px-3 py-2 input-element;
     &:not([data-disabled]) {
       @apply hover:cursor-pointer;
     }
   }
 
-  [data-name="select-button-chips"] {
+  .select-button-chips {
     @apply flex flex-wrap gap-2 items-center rounded-md px-2.5 py-2.5 input-element;
     &:not([data-disabled]) {
       @apply hover:cursor-pointer;

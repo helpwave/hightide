@@ -1,4 +1,5 @@
 import { useEffect, useRef } from 'react'
+import clsx from 'clsx'
 import { closestMatch, range } from '@/src/utils/array'
 import { useOverwritableState } from '@/src/hooks/useOverwritableState'
 import { Button } from '@/src/components/user-interaction/Button'
@@ -68,8 +69,8 @@ export const TimePicker = ({
   }
 
   return (
-    <div data-name="time-picker-container" className={className}>
-      <div data-name="time-picker-value-column">
+    <div className={clsx('time-picker-container', className)}>
+      <div className="time-picker-value-column">
         {hours.map(hour => {
           const isSelected = hour === value.getHours() - (!is24HourFormat && isPM ? 12 : 0)
           return (
@@ -85,7 +86,7 @@ export const TimePicker = ({
           )
         })}
       </div>
-      <div data-name="time-picker-value-column">
+      <div className="time-picker-value-column">
         {minutes.map(minute => {
           const isSelected = minute === closestMinute
           return (
@@ -102,7 +103,7 @@ export const TimePicker = ({
         })}
       </div>
       {!is24HourFormat && (
-        <div data-name="time-picker-value-column">
+        <div className="time-picker-value-column">
           <Button
             size="sm"
             color={!isPM ? 'primary' : 'neutral'}

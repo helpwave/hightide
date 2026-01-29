@@ -1,5 +1,6 @@
 import type { ReactNode } from 'react'
 import { forwardRef, useImperativeHandle, useRef, type ButtonHTMLAttributes } from 'react'
+import clsx from 'clsx'
 import type { TooltipDisplayProps } from './Tooltip'
 import { TooltipContext, TooltipDisplay, TooltipRoot, useTooltip } from './Tooltip'
 import { Visibility } from '../layout/Visibility'
@@ -45,6 +46,7 @@ export const IconButtonBase = forwardRef<HTMLButtonElement, IconButtonBaseProps>
   coloringStyle = 'solid',
   allowClickEventPropagation = false,
   disabled,
+  className,
   ...props
 }, ref) {
   return (
@@ -62,7 +64,7 @@ export const IconButtonBase = forwardRef<HTMLButtonElement, IconButtonBaseProps>
         props.onClick?.(event)
       }}
 
-      data-name="button"
+      className={clsx('button', className)}
       data-disabled={disabled ? '': undefined}
       data-size={size ?? undefined}
       data-layout="icon"

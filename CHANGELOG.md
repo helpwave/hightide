@@ -10,6 +10,11 @@ and adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 ### Fixed
 - removed all disable react-hooks/exhaustive-deps lint warning and fix them appropriately
 
+### Changed
+- all components now use a hybrid approach for hybrid and controlled state management
+- `data-name` for components to a classname instead
+
+
 ### Removed
 - Geometry Components such as `Ring` and `Circle` as these can be CSS only solutions
 

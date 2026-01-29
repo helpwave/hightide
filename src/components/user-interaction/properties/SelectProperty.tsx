@@ -27,7 +27,7 @@ export const SingleSelectProperty = ({
     >
       {({ invalid }) => (
         <div
-          data-name="property-input-wrapper"
+          className="property-input-wrapper"
           data-invalid={PropsUtil.dataAttributes.bool(invalid)}
         >
           <Select

@@ -1,5 +1,6 @@
 import type { InputHTMLAttributes } from 'react'
 import React, { forwardRef, useImperativeHandle, useRef } from 'react'
+import clsx from 'clsx'
 import type { UseDelayOptionsResolved } from '@/src/hooks/useDelay'
 import { useDelay } from '@/src/hooks/useDelay'
 import { useFocusManagement } from '@/src/hooks/focus/useFocusManagement'
@@ -38,6 +39,7 @@ export const Input = forwardRef<HTMLInputElement, InputProps>(function Input({
   onValueChange,
   onEditComplete,
   editCompleteOptions,
+  className,
   ...props
 }, forwardedRef) {
   const {
@@ -91,7 +93,7 @@ export const Input = forwardRef<HTMLInputElement, InputProps>(function Input({
         onValueChange?.(value)
       }}
 
-      data-name={PropsUtil.dataAttributes.name('input', props)}
+      className={clsx('input', className)}
       data-value={PropsUtil.dataAttributes.bool(!!props.value)}
       {...PropsUtil.dataAttributes.interactionStates({ ...props, invalid })}
 

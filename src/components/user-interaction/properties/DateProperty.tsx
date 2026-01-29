@@ -34,7 +34,7 @@ export const DateProperty = ({
           readOnly={readOnly}
           onValueChange={onValueChange}
           onEditComplete={onEditComplete}
-          data-name="property-input"
+          className="property-input"
           data-invalid={PropsUtil.dataAttributes.bool(invalid)}
         />
       )}

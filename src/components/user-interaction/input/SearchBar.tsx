@@ -34,7 +34,7 @@ export const SearchBar = ({
         onValueChange={setValue}
         onEditComplete={onSearch}
         placeholder={inputProps.placeholder ?? translation('search')}
-        // TODO use data-name="searchbar" and move styling to css
+        // Styling applied via className
         className={clsx('pr-10 w-full', inputProps.className)}
       />
       <IconButton

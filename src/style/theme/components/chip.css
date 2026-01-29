@@ -1,5 +1,5 @@
 @layer components {
-  [data-name="chip"] {
+  .chip {
     @apply flex flex-row items-center justify-center w-fit font-semibold coloring-color-detect coloring-style-detect;
 
     &[data-size="xs"] {
@@ -16,7 +16,7 @@
     }
   }
 
-  [data-name="chip-list"] {
+  .chip-list {
     @apply flex flex-wrap gap-x-2 gap-y-2;
   }
 }

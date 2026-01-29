@@ -1,5 +1,5 @@
 @layer components {
-  [data-name="button"] {
+  .button {
     @apply: font-semibold whitespace-nowrap;
     &:not([data-disabled]) {
       @apply cursor-pointer coloring-color-detect coloring-style-hover-detect;

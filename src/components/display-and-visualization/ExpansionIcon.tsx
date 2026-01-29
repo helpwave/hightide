@@ -1,4 +1,5 @@
 import { ChevronDown } from 'lucide-react'
+import clsx from 'clsx'
 import type { HTMLAttributes } from 'react'
 
 export type ExpansionIconProps = HTMLAttributes<HTMLDivElement> & {
@@ -10,13 +11,14 @@ export const ExpansionIcon = ({
   children,
   isExpanded,
   disabled = false,
+  className,
   ...props
 }: ExpansionIconProps) => {
 
   return (
     <div
       {...props}
-      data-name="expansion-icon"
+      className={clsx('expansion-icon', className)}
       data-expanded={isExpanded ? '' : undefined}
       data-disabled={disabled ? '' : undefined}
     >

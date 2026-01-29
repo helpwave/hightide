@@ -110,6 +110,7 @@ export const SelectButton = forwardRef<HTMLButtonElement, SelectButtonProps>(fun
   id,
   placeholder,
   selectedDisplay,
+  className,
   ...props
 }, ref) {
   const translation = useHightideTranslation()
@@ -164,7 +165,7 @@ export const SelectButton = forwardRef<HTMLButtonElement, SelectButtonProps>(fun
         }
       }}
 
-      data-name={props['data-name'] ?? 'select-button'}
+      className={clsx('select-button', className)}
       data-value={hasValue ? '' : undefined}
       data-disabled={disabled ? '' : undefined}
       data-invalid={invalid ? '' : undefined}

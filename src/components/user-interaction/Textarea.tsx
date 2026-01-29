@@ -1,16 +1,20 @@
 import type { LabelHTMLAttributes, ReactNode, TextareaHTMLAttributes } from 'react'
-import { forwardRef, useId } from 'react'
+import { forwardRef, useCallback, useId } from 'react'
 import clsx from 'clsx'
 import { useDelay, type UseDelayOptions } from '@/src/hooks/useDelay'
-import { useOverwritableState } from '@/src/hooks/useOverwritableState'
 import type { FormFieldInteractionStates } from '../form/FieldLayout'
 import type { FormFieldDataHandling } from '../form/FormField'
 import { PropsUtil } from '@/src/utils/propsUtil'
+import { useControlledState } from '@/src/hooks/useControlledState'
+import { useEventCallbackStabilizer } from '@/src/hooks/useEventCallbackStabelizer'
 
 export type TextareaProps = Omit<TextareaHTMLAttributes<HTMLTextAreaElement>, 'value'>
   & Partial<FormFieldDataHandling<string>>
   & Partial<FormFieldInteractionStates>
-  & { saveDelayOptions?: UseDelayOptions }
+  & {
+    initialValue?: string,
+    saveDelayOptions?: UseDelayOptions,
+}
 
 /**
  * A Textarea component for inputting longer texts
@@ -18,23 +22,32 @@ export type TextareaProps = Omit<TextareaHTMLAttributes<HTMLTextAreaElement>, 'v
  * The State is managed by the parent
  */
 export const Textarea = forwardRef<HTMLTextAreaElement, TextareaProps>(function Textarea({
+  value: controlledValue,
+  initialValue,
   invalid = false,
   onValueChange,
   onEditComplete,
   saveDelayOptions,
   ...props
 }, ref) {
+  const [value, setValue] = useControlledState({
+    value: controlledValue,
+    onValueChange: onValueChange,
+    defaultValue: initialValue,
+  })
   const { restartTimer, clearTimer } = useDelay(saveDelayOptions)
 
-  const onEditCompleteWrapper = (text: string) => {
-    onEditComplete?.(text)
+  const onEditCompleteStable = useEventCallbackStabilizer(onEditComplete)
+  const onEditCompleteWrapper = useCallback((text: string) => {
+    onEditCompleteStable(text)
     clearTimer()
-  }
+  }, [onEditCompleteStable, clearTimer])
 
   return (
     <textarea
       {...props}
       ref={ref}
+      value={value}
 
       onChange={(event) => {
         const value = event.target.value
@@ -42,15 +55,15 @@ export const Textarea = forwardRef<HTMLTextAreaElement, TextareaProps>(function 
           onEditCompleteWrapper(value)
         })
         props.onChange?.(event)
-        onValueChange?.(value)
+        setValue(value)
       }}
       onBlur={(event) => {
         props.onBlur?.(event)
         onEditCompleteWrapper(event.target.value)
       }}
 
-      data-name={PropsUtil.dataAttributes.name('textarea', props)}
-      data-value={PropsUtil.dataAttributes.bool(!!props.value)}
+      className={clsx('textarea', props.className)}
+      data-value={PropsUtil.dataAttributes.bool(!!value)}
       {...PropsUtil.dataAttributes.interactionStates({ ...props, invalid })}
 
       {...PropsUtil.aria.interactionStates({ ...props, invalid }, props)}
@@ -58,24 +71,6 @@ export const Textarea = forwardRef<HTMLTextAreaElement, TextareaProps>(function 
   )
 })
 
-/**
- * A Textarea component that is not controlled by its parent
- */
-export const TextareaUncontrolled = ({
-  value: initialValue,
-  onValueChange,
-  ...props
-}: TextareaProps) => {
-  const [value, setValue] = useOverwritableState<string>(initialValue, onValueChange)
-
-  return (
-    <Textarea
-      {...props}
-      value={value}
-      onValueChange={setValue}
-    />
-  )
-}
 
 export type TextareaWithHeadlineProps = Omit<TextareaProps, 'defaultStyle'> & {
   headline: ReactNode,

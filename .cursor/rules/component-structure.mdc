@@ -162,10 +162,10 @@ When returning JSX, attributes must be in this **exact order**:
 
 **Important:** Always call the original prop handler first (`props.onKeyDown?.(event)`) unless your action **must** prevent it.
 
-### 5. Data Attributes
+### 5. Data Attributes and className
 
 ```tsx
-  data-name={PropsUtil.dataAttributes.name('input', props)}
+  className={clsx('input', className)}
   data-value={PropsUtil.dataAttributes.bool(!!value)}
   data-expanded={PropsUtil.dataAttributes.bool(isExpanded)}
   data-disabled={PropsUtil.dataAttributes.bool(disabled)}
@@ -174,8 +174,8 @@ When returning JSX, attributes must be in this **exact order**:
 ```
 
 **Required Pattern:**
+- **Use stable class names for structural identification** - Combine with `className` prop using `clsx`
 - **Always use `PropsUtil.dataAttributes.bool(value)` for boolean data attributes** - Returns `''` if true, `undefined` if false
-- Use `PropsUtil.dataAttributes.name(defaultName, props)` for component identification
 - Use `PropsUtil.dataAttributes.interactionStates()` for form interaction states
 
 **Never use manual boolean patterns:**
@@ -287,8 +287,8 @@ export const Input = forwardRef<HTMLInputElement, InputProps>(function Input({
         })
         onValueChange?.(value)
       }}
-      // 5. Data attributes
-      data-name={PropsUtil.dataAttributes.name('input', props)}
+      // 5. className and data attributes
+      className={clsx('input', className)}
       data-value={PropsUtil.dataAttributes.bool(!!value)}
       data-invalid={PropsUtil.dataAttributes.bool(invalid)}
       {...PropsUtil.dataAttributes.interactionStates({ ...props, invalid })}

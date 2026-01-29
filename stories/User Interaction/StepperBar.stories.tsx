@@ -15,7 +15,7 @@ export const stepperBar: Story = {
     numberOfSteps: 5,
     finishText: 'Done',
     onFinish: action('onFinish'),
-    onChange: action('onChange'),
+    onStateChange: action('onChange'),
     disabledSteps: new Set(),
   },
 }

@@ -23,7 +23,7 @@
     }
   }
 
-  [data-name="tooltip-triangle"] {
+  .tooltip-triangle {
     @apply absolute w-0 h-0;
     --triangle-size: calc(1.5 * var(--spacing));
 

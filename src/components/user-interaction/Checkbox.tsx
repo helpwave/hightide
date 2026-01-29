@@ -1,11 +1,12 @@
 import { Check, Minus } from 'lucide-react'
-import { useOverwritableState } from '@/src/hooks/useOverwritableState'
 import { useCallback, type HTMLAttributes } from 'react'
 import { Visibility } from '../layout/Visibility'
 import { PropsUtil } from '@/src/utils/propsUtil'
 import type { FormFieldInteractionStates } from '../form/FieldLayout'
 import type { FormFieldDataHandling } from '../form/FormField'
 import clsx from 'clsx'
+import { useControlledState } from '@/src/hooks/useControlledState'
+import { useEventCallbackStabilizer } from '@/src/hooks/useEventCallbackStabelizer'
 
 type CheckBoxSize = 'sm' | 'md' | 'lg' | null
 
@@ -13,6 +14,7 @@ export type CheckboxProps = HTMLAttributes<HTMLDivElement>
   & Partial<FormFieldInteractionStates>
   & Partial<FormFieldDataHandling<boolean>>
   & {
+    initialValue?: boolean,
     indeterminate?: boolean,
     size?: CheckBoxSize,
     alwaysShowCheckIcon?: boolean,
@@ -24,8 +26,9 @@ export type CheckboxProps = HTMLAttributes<HTMLDivElement>
  * The state is managed by the parent
  */
 export const Checkbox = ({
-  value = false,
-  indeterminate = false,
+  value: controlledValue,
+  initialValue = false,
+  indeterminate,
   required = false,
   invalid = false,
   disabled = false,
@@ -36,10 +39,18 @@ export const Checkbox = ({
   alwaysShowCheckIcon = false,
   ...props
 }: CheckboxProps) => {
-  const onChangeWrapper = useCallback(() => {
-    onValueChange?.(!value)
-    onEditComplete?.(!value)
-  }, [onEditComplete, onValueChange, value])
+  const onEditCompleteStable = useEventCallbackStabilizer(onEditComplete)
+  const onValueChangeStable = useEventCallbackStabilizer(onValueChange)
+  const onChangeWrapper = useCallback((value: boolean) => {
+    onValueChangeStable(!value)
+    onEditCompleteStable(!value)
+  }, [onValueChangeStable, onEditCompleteStable])
+
+  const [value, setValue] = useControlledState({
+    value: controlledValue,
+    onValueChange: onChangeWrapper,
+    defaultValue: initialValue,
+  })
 
   return (
     <div
@@ -47,7 +58,7 @@ export const Checkbox = ({
 
       onClick={(event) => {
         if (!disabled) {
-          onChangeWrapper()
+          setValue(prev => !prev)
           props.onClick?.(event)
         }
       }}
@@ -55,7 +66,7 @@ export const Checkbox = ({
         if (disabled) return
         if (event.key === ' ' || event.key === 'Enter') {
           event.preventDefault()
-          onChangeWrapper()
+          setValue(prev => !prev)
           props.onKeyDown?.(event)
         }
       }}
@@ -79,28 +90,5 @@ export const Checkbox = ({
         <Check className="checkbox-indicator" aria-hidden={true} />
       </Visibility>
     </div>
-  )
-}
-
-export type CheckboxUncontrolledProps = CheckboxProps
-
-/**
- * A Tristate checkbox
- *
- * The state is managed by this component
- */
-export const CheckboxUncontrolled = ({
-  value: initialValue,
-  onValueChange,
-  ...props
-}: CheckboxUncontrolledProps) => {
-  const [value, setValue] = useOverwritableState(initialValue, onValueChange)
-
-  return (
-    <Checkbox
-      {...props}
-      value={value}
-      onValueChange={setValue}
-    />
   )
 }

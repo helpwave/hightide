@@ -20,6 +20,7 @@ export const ToggleableInput = forwardRef<HTMLInputElement, ToggleableInputProps
   value,
   initialState = 'display',
   editCompleteOptions,
+  className,
   ...props
 }, forwardedRef) {
   const [isEditing, setIsEditing] = useState(initialState !== 'display')
@@ -53,10 +54,8 @@ export const ToggleableInput = forwardRef<HTMLInputElement, ToggleableInputProps
           allowEnterComplete: true
         }}
 
-        data-name={props['data-name'] ?? 'togglable-input'}
         data-isEditing={isEditing ? '' : undefined}
-        // TODO move to component config
-        className={clsx(`w-full rounded-md`, {
+        className={clsx('togglable-input', 'w-full rounded-md', className, {
           'text-transparent': !isEditing,
         })}
       />

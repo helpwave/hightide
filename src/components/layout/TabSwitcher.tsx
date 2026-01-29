@@ -1,6 +1,7 @@
 import type { Dispatch, HTMLAttributes, KeyboardEvent, PropsWithChildren, ReactNode, RefObject, SetStateAction } from 'react'
 import { useCallback, useId, useState } from 'react'
 import { createContext, useContext, useEffect, useRef } from 'react'
+import clsx from 'clsx'
 import { PropsUtil } from '@/src/utils/propsUtil'
 import { createPortal } from 'react-dom'
 import { Visibility } from './Visibility'
@@ -141,11 +142,8 @@ export function TabList({ ...props }: TabListProps) {
   return (
     <ul
       {...props}
-
+      className={clsx('tab-list', props.className)}
       onKeyDown={onKeyDown}
-
-      data-name={PropsUtil.dataAttributes.name('tab-list', props)}
-
       role="tablist"
       aria-orientation="horizontal"
     >
@@ -156,10 +154,8 @@ export function TabList({ ...props }: TabListProps) {
             refs.current[tabInfo.id] = el
           }}
           id={tabInfo.labelId}
-
+          className="tab-list-item"
           {...PropsUtil.aria.click(() => setActive(tabInfo.id))}
-
-          data-name="tab-list-item"
           data-active={PropsUtil.dataAttributes.bool(activeId === tabInfo.id)}
 
           role="tab"
@@ -197,7 +193,7 @@ export function TabView({ ...props }: TabViewProps) {
       {...props}
       ref={ref}
       id={id}
-      data-name={PropsUtil.dataAttributes.name('tab-view', props)}
+      className={clsx('tab-view', props.className)}
     />
   )
 }
@@ -228,9 +224,7 @@ export function TabPanel({ label, ...props }: TabProps) {
       {...props}
       id={id}
       hidden={!isActive}
-
-      data-name={PropsUtil.dataAttributes.name('tab-panel')}
-
+      className={clsx('tab-panel', props.className)}
       role="tabpanel"
       aria-labelledby={labelId}
     >

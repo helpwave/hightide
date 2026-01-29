@@ -1,5 +1,5 @@
 @layer components {
-  [data-name="expandable-root"] {
+  .expandable-root {
     @apply flex-col-0 surface coloring-solid rounded-lg shadow-sm;
 
     &:not([data-disabled])[data-containertoggleable] {
@@ -7,7 +7,7 @@
     }
   }
 
-  [data-name="expandable-header"] {
+  .expandable-header {
     @apply flex-row-2 justify-between items-center py-2 px-4 rounded-lg select-none;
 
     &:not([data-disabled]) {
@@ -19,7 +19,7 @@
     }
   }
 
-  [data-name="expandable-content"] {
+  .expandable-content {
     @apply flex-col-2 px-4 transition-all ease-in-out h-24;
 
     &[data-state="opening"],

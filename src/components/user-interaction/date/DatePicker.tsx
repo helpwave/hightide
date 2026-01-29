@@ -3,7 +3,6 @@ import { ArrowDown, ArrowUp, Calendar, ChevronDown } from 'lucide-react'
 import type { WeekDay } from '@/src/utils/date'
 import { addDuration, isInTimeSpan, subtractDuration } from '@/src/utils/date'
 import clsx from 'clsx'
-import { useOverwritableState } from '@/src/hooks/useOverwritableState'
 import type { DayPickerProps } from '@/src/components/user-interaction/date/DayPicker'
 import { DayPicker } from '@/src/components/user-interaction/date/DayPicker'
 import type { YearMonthPickerProps } from '@/src/components/user-interaction/date/YearMonthPicker'
@@ -12,10 +11,12 @@ import { useLocale } from '@/src/global-contexts/LocaleContext'
 import { Button } from '@/src/components/user-interaction/Button'
 import { LocalizationUtil } from '@/src/i18n/util'
 import type { FormFieldDataHandling } from '../../form/FormField'
+import { useControlledState } from '@/src/hooks/useControlledState'
 
 type DisplayMode = 'yearMonth' | 'day'
 
 export type DatePickerProps = Partial<FormFieldDataHandling<Date>> & {
+  initialValue?: Date,
   start?: Date,
   end?: Date,
   initialDisplay?: DisplayMode,
@@ -29,7 +30,8 @@ export type DatePickerProps = Partial<FormFieldDataHandling<Date>> & {
  * A Component for picking a date
  */
 export const DatePicker = ({
-  value = new Date(),
+  value: controlledValue,
+  initialValue = new Date(),
   start,
   end,
   initialDisplay = 'day',
@@ -41,6 +43,11 @@ export const DatePicker = ({
   className
 }: DatePickerProps) => {
   const { locale } = useLocale()
+  const [value, setValue] = useControlledState({
+    value: controlledValue,
+    onValueChange: onValueChange,
+    defaultValue: initialValue,
+  })
   const [displayedMonth, setDisplayedMonth] = useState<Date>(new Date(value.getFullYear(), value.getMonth(), 1))
   const [displayMode, setDisplayMode] = useState<DisplayMode>(initialDisplay)
 
@@ -66,7 +73,7 @@ export const DatePicker = ({
               onClick={() => {
                 const newDate = new Date()
                 newDate.setHours(value.getHours(), value.getMinutes())
-                onValueChange(newDate)
+                setValue(newDate)
                 setDisplayedMonth(newDate)
               }}
             >
@@ -117,30 +124,11 @@ export const DatePicker = ({
           start={start}
           end={end}
           weekStart={weekStart}
-          onValueChange={onValueChange}
+          onValueChange={setValue}
           onEditComplete={onEditComplete}
           className="h-60 max-h-60"
         />
       )}
     </div>
-  )
-}
-
-/**
- * Example for the Date Picker
- */
-export const DatePickerUncontrolled = ({
-  value,
-  onValueChange,
-  ...props
-}: DatePickerProps) => {
-  const [date, setDate] = useOverwritableState<Date>(value, onValueChange)
-
-  return (
-    <DatePicker
-      {...props}
-      value={date}
-      onValueChange={setDate}
-    />
   )
 }

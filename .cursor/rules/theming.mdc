@@ -1,22 +1,24 @@
 ---
 name: theming
-description: Rules for component theming using data attributes and CSS file structure
+description: Rules for component theming using className and data attributes and CSS file structure
 ---
 
 # Overview
 
-Components should use data attributes for styling and state management. All component styles are defined in CSS files within the theme system, following a consistent pattern based on the Expandable component.
+Components use `className` for structural identification and data attributes for state. All component styles are defined in CSS files within the theme system, following a consistent pattern based on the Expandable component.
 
-## Data Attributes Pattern
+## Component Identification and Styling
 
-### Component Identification
+### Component Identification (className)
 
-Every component element should have a `data-name` attribute that uniquely identifies it:
+Every component element should have a stable class name that uniquely identifies it. Combine with any `className` prop using `clsx`:
 
 ```tsx
-<div data-name="my-component-root">
-  <div data-name="my-component-header">...</div>
-  <div data-name="my-component-content">...</div>
+import clsx from 'clsx'
+
+<div className={clsx('my-component-root', className)}>
+  <div className="my-component-header">...</div>
+  <div className="my-component-content">...</div>
 </div>
 ```
 
@@ -39,7 +41,6 @@ Boolean data attributes use an empty string when `true` and `undefined` when `fa
 
 **Available Utilities:**
 - `PropsUtil.dataAttributes.bool(value)` - Returns `''` if true, `undefined` if false
-- `PropsUtil.dataAttributes.name(defaultName, props)` - Gets `data-name` from props or uses default
 
 **Example from Expandable:**
 ```tsx
@@ -120,7 +121,7 @@ All component styles must be wrapped in `@layer components` and target data attr
 Style different states using attribute selectors:
 
 ```css
-[data-name="expandable-content"] {
+.expandable-content {
   @apply transition-all ease-in-out;
 
   &:not([data-expanded]) {
@@ -174,20 +175,20 @@ All component CSS files must be imported in `src/style/theme/components/index.cs
 
 ```tsx
 <div
-  data-name="expandable-root"
+  className={clsx('expandable-root', className)}
   data-expanded={isExpanded ? '' : undefined}
   data-disabled={disabled ? '' : undefined}
   data-containertoggleable={allowContainerToggle ? '' : undefined}
 >
   <div
-    data-name="expandable-header"
+    className="expandable-header"
     data-expanded={isExpanded ? '' : undefined}
     data-disabled={disabled ? '' : undefined}
   >
     {children}
   </div>
   <div
-    data-name="expandable-content"
+    className="expandable-content"
     data-expanded={isExpanded ? '' : undefined}
     data-state={transitionState}
   >
@@ -200,7 +201,7 @@ All component CSS files must be imported in `src/style/theme/components/index.cs
 
 ```css
 @layer components {
-  [data-name="expandable-root"] {
+  .expandable-root {
     @apply flex-col-0 surface coloring-solid rounded-lg shadow-sm;
 
     &:not([data-disabled])[data-containertoggleable] {
@@ -208,7 +209,7 @@ All component CSS files must be imported in `src/style/theme/components/index.cs
     }
   }
 
-  [data-name="expandable-header"] {
+  .expandable-header {
     @apply flex-row-2 justify-between items-center py-2 px-4 rounded-lg;
 
     &:not([data-disabled]) {
@@ -220,7 +221,7 @@ All component CSS files must be imported in `src/style/theme/components/index.cs
     }
   }
 
-  [data-name="expandable-content"] {
+  .expandable-content {
     @apply flex-col-2 px-4 transition-all ease-in-out;
 
     &:not([data-expanded]) {
@@ -252,17 +253,16 @@ All component CSS files must be imported in `src/style/theme/components/index.cs
 ```tsx
 // Component
 <div
-  className="group/property"
-  data-name="property-root"
+  className={clsx('group/property', 'property-root', className)}
 >
-  <div data-name="property-title">...</div>
-  <div data-name="property-content">...</div>
+  <div className="property-title">...</div>
+  <div className="property-content">...</div>
 </div>
 ```
 
 ```css
 /* CSS - Use group-hover/component-name */
-[data-name="property-title"] {
+.property-title {
   @apply group-hover/property:border-primary;
 }
 ```
@@ -270,14 +270,14 @@ All component CSS files must be imported in `src/style/theme/components/index.cs
 **Incorrect Patterns:**
 ```css
 /* ❌ Don't apply group in CSS */
-[data-name="property-root"] {
+.property-root {
   @apply flex-row-0 group;  /* Wrong! */
 }
 ```
 
 ```tsx
 /* ❌ Don't use unnamed group */
-<div className="group" data-name="property-root">  /* Wrong! */
+<div className="group property-root">  /* Wrong! */
 ```
 
 **Examples from codebase:**
@@ -288,9 +288,9 @@ All component CSS files must be imported in `src/style/theme/components/index.cs
 ## Best Practices
 
 1. **Separation of Concerns**: Keep styling in CSS files, not inline styles or className logic
-2. **Data Attributes First**: Use data attributes for all state-based styling
+2. **ClassName for structure, data attributes for state**: Use className for structural selectors and data attributes for state-based styling
 3. **Opt-Out Support**: Always include `` for flexibility
-4. **Consistent Naming**: Use kebab-case for `data-name` attributes matching component structure
+4. **Consistent Naming**: Use kebab-case for root/structural class names matching component structure
 5. **State Management**: Use boolean attributes for on/off states, string attributes for multi-value states
 6. **Utility Classes**: Prefer Tailwind utilities via `@apply` over custom CSS when possible
 7. **File Organization**: One CSS file per component, imported in `components/index.css`

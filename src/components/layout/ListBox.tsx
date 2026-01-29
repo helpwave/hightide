@@ -2,7 +2,7 @@ import type { HTMLAttributes, RefObject } from 'react'
 import React, { createContext, forwardRef, useCallback, useContext, useEffect, useRef, useState } from 'react'
 import { clsx } from 'clsx'
 import { match } from '@/src/utils/match'
-import { useOverwritableState } from '@/src/hooks/useOverwritableState'
+import { useControlledState } from '@/src/hooks/useControlledState'
 
 //
 // Context
@@ -111,6 +111,7 @@ type ListBoxOrientation = 'vertical' | 'horizontal'
 //
 export type ListBoxPrimitiveProps = HTMLAttributes<HTMLUListElement> & {
   value?: string[],
+  initialValue?: string[],
   onItemClicked?: (value: string) => void,
   onSelectionChanged?: (value: string[]) => void,
   isSelection?: boolean,
@@ -121,7 +122,8 @@ export type ListBoxPrimitiveProps = HTMLAttributes<HTMLUListElement> & {
 
 export const ListBoxPrimitive = forwardRef<HTMLUListElement, ListBoxPrimitiveProps>(
   function ListBoxPrimitive({
-    value,
+    value: controlledValue,
+    initialValue,
     onSelectionChanged,
     onItemClicked,
     isSelection = false,
@@ -129,6 +131,11 @@ export const ListBoxPrimitive = forwardRef<HTMLUListElement, ListBoxPrimitivePro
     orientation = 'vertical',
     ...props
   }, ref) {
+    const [value, setValue] = useControlledState({
+      value: controlledValue,
+      onValueChange: onSelectionChanged,
+      defaultValue: initialValue,
+    })
     const itemsRef = useRef<RegisteredItem[]>([])
     const [highlightedIndex, setHighlightedIndex] = useState<number | undefined>(undefined)
 
@@ -164,16 +171,16 @@ export const ListBoxPrimitive = forwardRef<HTMLUListElement, ListBoxPrimitivePro
         setHighlightedIndex(index)
         if (!isSelection) return
         if (!isMultiple) {
-          onSelectionChanged?.([val])
+          setValue([val])
         } else {
           if (isSelected(val)) {
-            onSelectionChanged?.((value ?? []).filter(v => v !== val))
+            setValue((value ?? []).filter(v => v !== val))
           } else {
-            onSelectionChanged?.([...(value ?? []), val])
+            setValue([...(value ?? []), val])
           }
         }
       },
-      [onItemClicked, isSelection, isMultiple, onSelectionChanged, isSelected, value]
+      [onItemClicked, isSelection, isMultiple, setValue, isSelected, value]
     )
 
     const setHighlightedId = useCallback((id: string) => {
@@ -287,23 +294,6 @@ export const ListBoxMultiple = ({ ...props }: ListBoxMultipleProps) => {
   )
 }
 
-export type ListBoxMultipleUncontrolledProps = ListBoxMultipleProps
-export const ListBoxMultipleUncontrolled = ({
-  value: initialValue,
-  onSelectionChanged,
-  ...props
-}: ListBoxMultipleUncontrolledProps) => {
-  const [value, setValue] = useOverwritableState(initialValue, onSelectionChanged)
-
-  return (
-    <ListBoxMultiple
-      {...props}
-      value={value}
-      onSelectionChanged={setValue}
-    />
-  )
-}
-
 export type ListBoxProps = Omit<ListBoxPrimitiveProps, 'isMultiple' | 'value' | 'onSelectionChanged'> & {
   value?: string,
   onSelectionChanged?: (value: string) => void,
@@ -325,20 +315,3 @@ export const ListBox = forwardRef<HTMLUListElement, ListBoxProps>(function ListB
     />
   )
 })
-
-export type ListBoxUncontrolledProps = ListBoxProps
-export const ListBoxUncontrolled = ({
-  value: initialValue,
-  onSelectionChanged,
-  ...props
-}: ListBoxUncontrolledProps) => {
-  const [value, setValue] = useOverwritableState(initialValue, onSelectionChanged)
-
-  return (
-    <ListBox
-      {...props}
-      value={value}
-      onSelectionChanged={setValue}
-    />
-  )
-}

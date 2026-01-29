@@ -5,6 +5,7 @@ import type { FormFieldDataHandling } from '../../form/FormField'
 import { useOverwritableState } from '@/src/hooks/useOverwritableState'
 import { PropsUtil } from '@/src/utils/propsUtil'
 import { useMemo } from 'react'
+import clsx from 'clsx'
 
 export type DayPickerProps = Partial<FormFieldDataHandling<Date>> & {
   displayedMonth: Date,
@@ -46,16 +47,16 @@ export const DayPicker = ({
   }, [providedStart])
 
   return (
-    <div className={className} data-name="day-picker-container">
-      <div data-name="day-picker-header-row">
+    <div className={clsx('day-picker-container', className)}>
+      <div className="day-picker-header-row">
         {weeks[0]!.map((weekDay, index) => (
-          <div key={index} data-name="day-picker-header-item">
+          <div key={index} className="day-picker-header-item">
             {new Intl.DateTimeFormat(locale, { weekday: 'long' }).format(weekDay).substring(0, 2)}
           </div>
         ))}
       </div>
       {weeks.map((week, index) => (
-        <div key={index} data-name="day-picker-body-row">
+        <div key={index} className="day-picker-body-row">
           {week.map((date) => {
             const isSelected = !!value && DateUtils.equalDate(value, date)
             const isToday = DateUtils.equalDate(new Date(), date)
@@ -64,9 +65,8 @@ export const DayPicker = ({
             return (
               <button
                 key={date.getDate()}
-
+                className="day-picker-body-item"
                 disabled={!isDayValid}
-
                 onClick={() => {
                   const newDate = new Date(
                     date.getFullYear(),
@@ -79,8 +79,6 @@ export const DayPicker = ({
                   onValueChange?.(newDate)
                   onEditComplete?.(newDate)
                 }}
-
-                data-name="day-picker-body-item"
                 data-selected={PropsUtil.dataAttributes.bool(isSelected)}
                 data-invalid={PropsUtil.dataAttributes.bool(!isDayValid)}
                 data-today={PropsUtil.dataAttributes.bool(isToday && markToday)}

@@ -1,3 +1,4 @@
+import clsx from 'clsx'
 import { useFocusTrap } from '@/src/hooks/focus/useFocusTrap'
 import { useOverlayRegistry } from '@/src/hooks/useOverlayRegistry'
 import { useHightideTranslation } from '@/src/i18n/useHightideTranslation'
@@ -67,28 +68,20 @@ export const Drawer = forwardRef<HTMLDivElement, DrawerProps>(function Drawer({
     <Portal>
       <div
         id={ids.container}
-
-        data-name="drawer-container"
+        className={clsx('drawer-container', containerClassName)}
         data-open={PropsUtil.dataAttributes.bool(isOpen)}
-
         hidden={!isVisible && forceMount}
-
-        className={containerClassName}
         style={{ zIndex, '--drawer-depth': depth.toString() } as React.CSSProperties}
       >
         <div
           id={ids.background}
 
           onClick={onClose}
-
-          data-name="drawer-background"
+          className={clsx('drawer-background', backgroundClassName)}
           data-state={transitionState}
           data-depth={depth}
           data-alignment={alignment}
-
           aria-hidden={true}
-
-          className={backgroundClassName}
         />
         <div
           {...props}
@@ -96,13 +89,10 @@ export const Drawer = forwardRef<HTMLDivElement, DrawerProps>(function Drawer({
           ref={ref}
 
           onKeyDown={PropsUtil.aria.close(close)}
-
-          data-name={PropsUtil.dataAttributes.name('drawer-content', props)}
+          className={clsx('drawer-content', props.className)}
           data-state={transitionState}
           data-depth={depth}
           data-alignment={alignment}
-
-          className={props.className}
         >
           <div className="typography-title-lg mr-8">
             {titleElement}

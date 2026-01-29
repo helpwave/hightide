@@ -1,5 +1,6 @@
 import type { HTMLAttributes } from 'react'
 import { useEffect, useMemo, useState } from 'react'
+import clsx from 'clsx'
 import { UserIcon } from 'lucide-react'
 import { Visibility } from '../layout/Visibility'
 
@@ -41,7 +42,6 @@ export const Avatar = ({
   }, [name, size])
 
   const isShowingImage = !!image && (!hasError || !hasLoaded)
-  const dataName = props['data-name'] ?? 'avatar'
 
   useEffect(() => {
     if(initialImage?.avatarUrl !== image?.avatarUrl) {
@@ -54,7 +54,7 @@ export const Avatar = ({
   return (
     <div
       {...props}
-      data-name={dataName}
+      className={clsx('avatar', props.className)}
       data-size={props['data-size'] ?? size ?? undefined}
     >
       <Visibility isVisible={isShowingImage}>
@@ -62,11 +62,9 @@ export const Avatar = ({
           key={image?.avatarUrl}
           src={image?.avatarUrl}
           alt={image?.alt}
-
+          className="avatar-image"
           onLoad={() => setHasLoaded(true)}
           onError={() => setHasError(true)}
-
-          data-name={`${dataName}-image`}
           data-error={hasError ? '' : undefined}
           data-loaded={hasLoaded ? '' : undefined}
         />
@@ -95,7 +93,7 @@ export const AvatarGroup = ({
   const displayedProfiles = avatars.length < maxShownProfiles ? avatars : avatars.slice(0, maxShownProfiles)
   const notDisplayedProfiles = avatars.length - maxShownProfiles
   const group = (
-    <div data-name="avatar-group-container">
+    <div className="avatar-group-container">
       {displayedProfiles.map((avatar, index) => (
         <Avatar
           {...avatar}
@@ -111,13 +109,13 @@ export const AvatarGroup = ({
   return (
     <div
       {...props}
-      data-name="avatar-group"
+      className={clsx('avatar-group', props.className)}
       data-size={size ?? undefined}
     >
       {group}
       {showTotalNumber && notDisplayedProfiles > 0 && (
         <span
-          data-name="avatar-group-more"
+          className="avatar-group-more"
           data-size={size}
         >
           {`+ ${notDisplayedProfiles}`}

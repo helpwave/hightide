@@ -1,12 +1,12 @@
-import type { Dispatch, HTMLAttributes, PropsWithChildren, ReactNode, SetStateAction } from 'react'
+import type { Dispatch, HTMLAttributes, ReactNode, SetStateAction } from 'react'
 import { useEffect, useImperativeHandle, useRef } from 'react'
 import { useState } from 'react'
 import { createContext, forwardRef, useCallback, useContext, useId, useMemo } from 'react'
 import clsx from 'clsx'
-import { useOverwritableState } from '@/src/hooks/useOverwritableState'
 import { Visibility } from './Visibility'
 import { ExpansionIcon } from '../display-and-visualization/ExpansionIcon'
 import { useTransitionState } from '@/src/hooks/useTransitionState'
+import { useControlledState } from '@/src/hooks/useControlledState'
 
 //
 // Context
@@ -43,6 +43,7 @@ function useExpandableContext() {
 export type ExpandableRootProps = HTMLAttributes<HTMLDivElement> & {
   isExpanded?: boolean,
   onExpandedChange?: (isExpanded: boolean) => void,
+  isInitialExpanded?: boolean,
   disabled?: boolean,
   allowContainerToggle?: boolean,
 }
@@ -52,8 +53,10 @@ export const ExpandableRoot = forwardRef<HTMLDivElement, ExpandableRootProps>(fu
   id: providedId,
   isExpanded: controlledExpanded,
   onExpandedChange,
+  isInitialExpanded = false,
   disabled = false,
   allowContainerToggle = false,
+  className,
   ...props
 }, ref) {
   const generatedId = useId()
@@ -62,7 +65,11 @@ export const ExpandableRoot = forwardRef<HTMLDivElement, ExpandableRootProps>(fu
     header: `expandable-${generatedId}-header`,
     content: `expandable-${generatedId}-content`
   })
-  const [isExpanded, setIsExpanded] = useOverwritableState(controlledExpanded, onExpandedChange)
+  const [isExpanded, setIsExpanded] = useControlledState({
+    value: controlledExpanded,
+    onValueChange: onExpandedChange,
+    defaultValue: isInitialExpanded,
+  })
 
   const toggle = useCallback(() => {
     if (!disabled) {
@@ -71,7 +78,7 @@ export const ExpandableRoot = forwardRef<HTMLDivElement, ExpandableRootProps>(fu
   }, [disabled, isExpanded, setIsExpanded])
 
   const contextValue = useMemo(() => ({
-    isExpanded: !!isExpanded,
+    isExpanded,
     toggle,
     setIsExpanded,
     ids,
@@ -85,15 +92,13 @@ export const ExpandableRoot = forwardRef<HTMLDivElement, ExpandableRootProps>(fu
         {...props}
         ref={ref}
         id={ids.root}
-
+        className={clsx('expandable-root', className)}
         onClick={(event) => {
           props.onClick?.(event)
           if (allowContainerToggle) {
             toggle()
           }
         }}
-
-        data-name="expandable-root"
         data-expanded={isExpanded ? '' : undefined}
         data-disabled={disabled ? '' : undefined}
         data-containertoggleable={allowContainerToggle ? '' : undefined}
@@ -115,6 +120,7 @@ export type ExpandableHeaderProps = HTMLAttributes<HTMLDivElement> & {
 export const ExpandableHeader = forwardRef<HTMLDivElement, ExpandableHeaderProps>(function ExpandableHeader({
   children,
   isUsingDefaultIcon = true,
+  className,
   ...props
 }, ref) {
   const { isExpanded, toggle, ids, setIds, disabled } = useExpandableContext()
@@ -129,17 +135,14 @@ export const ExpandableHeader = forwardRef<HTMLDivElement, ExpandableHeaderProps
       {...props}
       ref={ref}
       id={ids.header}
-
+      className={clsx('expandable-header', className)}
       onClick={event => {
         event.stopPropagation()
         props.onClick?.(event)
         toggle()
       }}
-
-      data-name="expandable-header"
       data-expanded={isExpanded ? '' : undefined}
       data-disabled={disabled ? '' : undefined}
-
       aria-expanded={isExpanded}
       aria-controls={ids.content}
       aria-disabled={disabled || undefined}
@@ -163,6 +166,7 @@ export type ExpandableContentProps = HTMLAttributes<HTMLDivElement> & {
 export const ExpandableContent = forwardRef<HTMLDivElement, ExpandableContentProps>(function ExpandableContent({
   children,
   forceMount = false,
+  className,
   ...props
 }, forwardedRef) {
   const { isExpanded, ids, setIds } = useExpandableContext()
@@ -183,8 +187,7 @@ export const ExpandableContent = forwardRef<HTMLDivElement, ExpandableContentPro
       {...props}
       ref={ref}
       id={ids.content}
-
-      data-name="expandable-content"
+      className={clsx('expandable-content', className)}
       data-expanded={isExpanded ? '' : undefined}
       data-state={transitionState}
     >
@@ -197,51 +200,31 @@ export const ExpandableContent = forwardRef<HTMLDivElement, ExpandableContentPro
 
 
 //
-// Composite / Legacy Components
+// Composite
 //
-export type ExpandableProps = PropsWithChildren<{
-  id?: string,
-  label: ReactNode,
-  isExpanded?: boolean,
-  onChange?: (isExpanded: boolean) => void,
-  clickOnlyOnHeader?: boolean,
-  disabled?: boolean,
-  className?: string,
-  headerClassName?: string,
-  contentClassName?: string,
+export interface ExpandableProps extends ExpandableRootProps {
+  trigger: ReactNode,
+  triggerProps?: Omit<ExpandableHeaderProps, 'children'>,
+  contentProps?: Omit<ExpandableContentProps, 'children'>,
   contentExpandedClassName?: string,
-}>
+}
 
 export const Expandable = forwardRef<HTMLDivElement, ExpandableProps>(function Expandable({
   children,
-  id,
-  label,
-  isExpanded,
-  onChange,
-  clickOnlyOnHeader = true,
-  disabled = false,
-  className,
-  headerClassName,
-  contentClassName,
+  trigger,
+  triggerProps,
+  contentProps,
   contentExpandedClassName,
 }, ref) {
   return (
-    <ExpandableRoot
-      ref={ref}
-      id={id}
-      isExpanded={isExpanded}
-      onExpandedChange={onChange}
-      disabled={disabled}
-      allowContainerToggle={!clickOnlyOnHeader}
-      className={className}
-    >
-      <ExpandableHeader className={headerClassName}>
-        {label}
+    <ExpandableRoot ref={ref}>
+      <ExpandableHeader {...triggerProps}>
+        {trigger}
       </ExpandableHeader>
       <ExpandableContext.Consumer>
         {ctx => (
           <ExpandableContent
-            className={clsx(contentClassName, { [contentExpandedClassName ?? '']: !!ctx?.isExpanded })}
+            className={clsx(contentProps?.className, { [contentExpandedClassName ?? '']: !!ctx?.isExpanded })}
           >
             {children}
           </ExpandableContent>
@@ -249,22 +232,5 @@ export const Expandable = forwardRef<HTMLDivElement, ExpandableProps>(function E
       </ExpandableContext.Consumer>
 
     </ExpandableRoot>
-  )
-})
-
-export const ExpandableUncontrolled = forwardRef<HTMLDivElement, ExpandableProps>(function ExpandableUncontrolled({
-  isExpanded,
-  onChange,
-  ...props
-}, ref) {
-  const [usedIsExpanded, setUsedIsExpanded] = useOverwritableState(isExpanded, onChange)
-
-  return (
-    <Expandable
-      {...props}
-      ref={ref}
-      isExpanded={usedIsExpanded}
-      onChange={setUsedIsExpanded}
-    />
   )
 })

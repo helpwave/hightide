@@ -1,9 +1,9 @@
 @layer components {
-  [data-name="tab-list"] {
+  .tab-list {
     @apply flex-row-0;
   }
 
-  [data-name="tab-list-item"] {
+  .tab-list-item {
     @apply flex-row-0 grow justify-center px-3 py-2 typography-label-md font-bold border-b-2 transition-colors neutral coloring-text-hover;
     &[data-active] {
       @apply border-primary;
@@ -13,11 +13,11 @@
     }
   }
 
-  [data-name="tab-view"] {
+  .tab-view {
     @apply flex-col;
   }
 
-  [data-name="tab-panel"] {
+  .tab-panel {
     @apply flex-col-0 overflow-y-auto;
   }
 }

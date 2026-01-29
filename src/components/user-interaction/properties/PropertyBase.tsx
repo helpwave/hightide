@@ -1,4 +1,5 @@
 import type { ReactNode } from 'react'
+import clsx from 'clsx'
 import { AlertTriangle, Trash, X } from 'lucide-react'
 import { useHightideTranslation } from '@/src/i18n/useHightideTranslation'
 import { Tooltip } from '../Tooltip'
@@ -57,19 +58,17 @@ export const PropertyBase = ({
 
   return (
     <div
-      className={className ? `group/property ${className}` : 'group/property'}
-      data-name="property-root"
+      className={clsx('group/property', 'property-root', className)}
       data-invalid={PropsUtil.dataAttributes.bool(invalid)}
     >
       <div
-        className={className}
-        data-name="property-title"
+        className={clsx('property-title', className)}
         data-invalid={PropsUtil.dataAttributes.bool(invalid)}
       >
         <Tooltip tooltip={name} containerClassName="min-w-0">
           <div className="flex-row-1 items-center">
-            <div data-name="property-title-icon">{icon}</div>
-            <span data-name="property-title-text">{name}</span>
+            <div className="property-title-icon">{icon}</div>
+            <span className="property-title-text">{name}</span>
           </div>
         </Tooltip>
         {invalid && (
@@ -77,13 +76,12 @@ export const PropertyBase = ({
         )}
       </div>
       <div
-        className={className}
-        data-name="property-content"
+        className={clsx('property-content', className)}
         data-invalid={PropsUtil.dataAttributes.bool(invalid)}
       >
         {children({ required, hasValue, invalid })}
         {showActionsContainer && (
-          <div data-name="property-actions">
+          <div className="property-actions">
             {isClearEnabled && (
               <IconButton
                 tooltip={translation('clearValue')}
