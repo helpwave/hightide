@@ -7,8 +7,12 @@ and adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
 ## [0.8.0] - 2026-01-29
 
+### Added
+- keyboard controls to `DayPicker`
+
 ### Fixed
 - removed all disable react-hooks/exhaustive-deps lint warning and fix them appropriately
+- `IconButton` not reacting to blur for closing the tooltip
 
 ### Changed
 - all components now use a hybrid approach for hybrid and controlled state management

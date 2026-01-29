@@ -12,6 +12,8 @@ import { Button } from '@/src/components/user-interaction/Button'
 import { LocalizationUtil } from '@/src/i18n/util'
 import type { FormFieldDataHandling } from '../../form/FormField'
 import { useControlledState } from '@/src/hooks/useControlledState'
+import { IconButton } from '../IconButton'
+import { useHightideTranslation } from '@/src/i18n/useHightideTranslation'
 
 type DisplayMode = 'yearMonth' | 'day'
 
@@ -42,6 +44,7 @@ export const DatePicker = ({
   dayPickerProps,
   className
 }: DatePickerProps) => {
+  const translation = useHightideTranslation()
   const { locale } = useLocale()
   const [value, setValue] = useControlledState({
     value: controlledValue,
@@ -67,7 +70,8 @@ export const DatePicker = ({
         </Button>
         {displayMode === 'day' && (
           <div className="flex-row-2 justify-end">
-            <Button
+            <IconButton
+              tooltip={translation('time.today')}
               size="sm"
               coloringStyle="tonal"
               onClick={() => {
@@ -78,8 +82,9 @@ export const DatePicker = ({
               }}
             >
               <Calendar className="size-5"/>
-            </Button>
-            <Button
+            </IconButton>
+            <IconButton
+              tooltip={translation('time.previousMonth')}
               size="sm"
               disabled={!isInTimeSpan(subtractDuration(displayedMonth, { months: 1 }), start, end)}
               onClick={() => {
@@ -87,8 +92,9 @@ export const DatePicker = ({
               }}
             >
               <ArrowUp size={20}/>
-            </Button>
-            <Button
+            </IconButton>
+            <IconButton
+              tooltip={translation('time.nextMonth')}
               size="sm"
               disabled={!isInTimeSpan(addDuration(displayedMonth, { months: 1 }), start, end)}
               onClick={() => {
@@ -96,7 +102,7 @@ export const DatePicker = ({
               }}
             >
               <ArrowDown size={20}/>
-            </Button>
+            </IconButton>
           </div>
         )}
       </div>
@@ -121,6 +127,7 @@ export const DatePicker = ({
           {...dayPickerProps}
           value={value}
           displayedMonth={displayedMonth}
+          changeDisplayedMonth={setDisplayedMonth}
           start={start}
           end={end}
           weekStart={weekStart}

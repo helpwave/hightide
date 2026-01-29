@@ -1,27 +1,34 @@
 import { useEffect, useRef } from 'react'
 import clsx from 'clsx'
 import { closestMatch, range } from '@/src/utils/array'
-import { useOverwritableState } from '@/src/hooks/useOverwritableState'
 import { Button } from '@/src/components/user-interaction/Button'
 import type { FormFieldDataHandling } from '../../form/FormField'
+import { useControlledState } from '@/src/hooks/useControlledState'
 
 export type TimePickerMinuteIncrement = '1min' | '5min' | '10min' | '15min' | '30min'
 
 // TODO add start, and end constraints
 export type TimePickerProps = Partial<FormFieldDataHandling<Date>> & {
+  initialValue?: Date,
   is24HourFormat?: boolean,
   minuteIncrement?: TimePickerMinuteIncrement,
   className?: string,
 }
 
 export const TimePicker = ({
-  value = new Date(),
+  value: controlledValue,
+  initialValue = new Date(),
   onValueChange,
   onEditComplete,
   is24HourFormat = true,
   minuteIncrement = '5min',
   className,
 }: TimePickerProps) => {
+  const [value, setValue] = useControlledState({
+    value: controlledValue,
+    onValueChange: onValueChange,
+    defaultValue: initialValue,
+  })
   const minuteRef = useRef<HTMLButtonElement>(null)
   const hourRef = useRef<HTMLButtonElement>(null)
 
@@ -64,7 +71,7 @@ export const TimePicker = ({
   const onChangeWrapper = (transformer: (newDate: Date) => void) => {
     const newDate = new Date(value)
     transformer(newDate)
-    onValueChange?.(newDate)
+    setValue(newDate)
     onEditComplete?.(newDate)
   }
 
@@ -121,21 +128,5 @@ export const TimePicker = ({
         </div>
       )}
     </div>
-  )
-}
-
-export const TimePickerUncontrolled = ({
-  value: initialValue,
-  onValueChange,
-  ...props
-}: TimePickerProps) => {
-  const [value, setValue] = useOverwritableState(initialValue, onValueChange)
-
-  return (
-    <TimePicker
-      {...props}
-      value={value}
-      onValueChange={setValue}
-    />
   )
 }
