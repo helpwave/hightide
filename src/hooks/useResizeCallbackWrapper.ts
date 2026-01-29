@@ -8,12 +8,12 @@ import { useEffect } from 'react'
  *
  * @param callback Called when the window resizes
  */
-export const useResizeCallbackWrapper = (callback: (event: UIEvent) => void) => {
+export const useWindowResizeObserver = (onResize: () => void) => {
   useEffect(() => {
-    window.addEventListener('resize', callback)
+    window.addEventListener('resize', onResize)
 
     return () => {
-      window.removeEventListener('resize', callback)
+      window.removeEventListener('resize', onResize)
     }
-  }, [callback])
+  }, [onResize])
 }

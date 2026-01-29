@@ -1,3 +1,4 @@
+import { useLogOnce } from '@/src/hooks/useLogOnce'
 import type { ButtonHTMLAttributes } from 'react'
 import { forwardRef } from 'react'
 
@@ -51,6 +52,8 @@ export const Button = forwardRef<HTMLButtonElement, ButtonProps>(function SolidB
   allowClickEventPropagation = false,
   ...props
 }, ref) {
+  useLogOnce('Button: layout is deprecated, use IconButton instead', layout !== 'default', { type: 'warning' })
+
   return (
     <button
       {...props}

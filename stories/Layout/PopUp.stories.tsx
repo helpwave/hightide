@@ -1,5 +1,4 @@
 import type { Meta, StoryObj } from '@storybook/nextjs'
-import { AnchoredFloatingContainer } from '@/src/components/layout/AnchoredFloatingContainer'
 import { useRef } from 'react'
 import type { UseAnchoredPositionOptions } from '@/src/hooks/useAnchoredPosition'
 import type { PopUpProps } from '@/src/components/layout/popup/PopUp'
@@ -11,7 +10,7 @@ type StoryArgs = Omit<PopUpProps, 'options'> & UseAnchoredPositionOptions & {
 }
 
 const meta: Meta<StoryArgs> = {
-  component: AnchoredFloatingContainer,
+  component: PopUp,
 }
 
 export default meta

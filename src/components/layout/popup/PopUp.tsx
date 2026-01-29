@@ -1,4 +1,4 @@
-import { forwardRef, useContext, useImperativeHandle, useMemo } from 'react'
+import { forwardRef, useCallback, useContext, useImperativeHandle, useMemo } from 'react'
 import { clsx } from 'clsx'
 import { Portal } from '../../utils/Portal'
 import type { AnchoredFloatingContainerProps } from '../AnchoredFloatingContainer'
@@ -13,6 +13,7 @@ import { usePresenceRef } from '@/src/hooks/usePresenceRef'
 import { useLogOnce } from '@/src/hooks/useLogOnce'
 import { PopUpContext } from './PopUpContext'
 import { useOverlayRegistry } from '@/src/hooks/useOverlayRegistry'
+import { useScrollObserver } from '@/src/hooks/useScrollObserver'
 
 export interface PopUpProps extends AnchoredFloatingContainerProps, Partial<UseOutsideClickHandlers> {
   isOpen?: boolean,
@@ -43,10 +44,10 @@ export const PopUp = forwardRef<HTMLDivElement, PopUpProps>(function PopUp({
 
   useImperativeHandle(forwardRef, () => ref.current, [ref])
 
-  const onCloseWrapper = () => {
+  const onCloseWrapper = useCallback(() => {
     onClose?.()
     context?.setIsOpen(false)
-  }
+  }, [onClose, context])
 
   const { zIndex, isInFront } = useOverlayRegistry({ isActive: isOpen, tags: useMemo(() => ['popup'], []) })
 
@@ -60,6 +61,8 @@ export const PopUp = forwardRef<HTMLDivElement, PopUpProps>(function PopUp({
     refs: [ref, ...(anchorExcludedFromOutsideClick ? [] : [anchor]), ...(outsideClickOptions?.refs ?? [])],
   })
 
+  useScrollObserver({ observedElementRef: ref, onScroll: onCloseWrapper, isActive: isOpen })
+
   useLogOnce('PopUp: Either provide "aria-label" or "aria-labelledby"', !props['aria-label'] && !props['aria-labelledby'])
 
   return (
@@ -71,6 +74,7 @@ export const PopUp = forwardRef<HTMLDivElement, PopUpProps>(function PopUp({
             id={id}
             anchor={anchor}
             ref={refAssignment}
+            active={isOpen}
             hidden={!isOpen && forceMount}
 
             onKeyDown={PropsUtil.aria.close(onCloseWrapper)}

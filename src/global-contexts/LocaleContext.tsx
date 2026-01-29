@@ -1,6 +1,6 @@
 import type { Dispatch, PropsWithChildren, SetStateAction } from 'react'
 import { createContext, useContext, useEffect, useMemo, useState } from 'react'
-import { useLocalStorage } from '../hooks/useLocalStorage'
+import { useStorage } from '../hooks/useStorage'
 import { LocalizationUtil } from '../i18n/util'
 import type { HightideTranslationLocales } from '@/src/i18n/translations'
 import type { LocalizationConfig } from '@/src/global-contexts/HightideConfigContext'
@@ -30,7 +30,7 @@ export const LocaleProvider = ({
     value: storedLocale,
     setValue: setStoredLocale,
     deleteValue: deleteStoredLocale,
-  } = useLocalStorage<LocaleWithSystem>('locale', 'system')
+  } = useStorage<LocaleWithSystem>({ key: 'locale', defaultValue: 'system' })
   const { config } = useHightideConfig()
   const [localePreference, setLocalePreference] = useState<LocaleWithSystem>('system')
 

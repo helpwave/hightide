@@ -203,7 +203,7 @@
   },
   "goodToSeeYou": "Schön dich zu sehen",
   "welcome": "Willkommen",
-  "rSortingOrderAfter": "Angewendet {otherSortings, plural, =0{als primäre Sortierung} =1{nach # anderen Sortierung} other{nach # anderen Sortierungen}}",
+  "rSortingOrderAfter": "Angewendet {otherSortings, plural, =0{als primäre Sortierung} =1{nach einer anderen Sortierung} other{nach # anderen Sortierungen}}",
   "@rSortingOrderAfter": {
     "placeholders": {
       "otherSortings": { "type": "number" }
@@ -220,6 +220,13 @@
   "unpin": "Loslösen",
   "pinLeft": "Links anheften",
   "pinRight": "Rechts anheften",
+  "changeVisibility": "Sichtbarkeit ändern",
+  "changePinning": "Anheften ändern",
+  "changeSelection": "Auswahl ändern",
+  "pinToRight": "Rechts anheften",
+  "pinToLeft": "Links anheften",
+  "increaseSortingPriority": "Sortierpriorität erhöhen",
+  "decreaseSortingPriority": "Sortierpriorität verringern",
   "changeColumnDisplay": "Spaltenanzeige ändern",
   "caseSensitive": "Groß-/Klein beachten",
   "sorting": "Sortierung",

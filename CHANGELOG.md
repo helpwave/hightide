@@ -5,6 +5,29 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/)
 and adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [0.7.0] - 2026-01-27
+
+### Added
+- `ColumnSizingWithTargetFeature` and `AutoColumnOrderFeature` to Table for column size fixing and column ordering
+- `Tooltip` to `TableColumnSwitcher`
+- `forceMount` attribute to `Drawer`
+- `TooltipRoot`, `TooltipTrigger`, and `TooltipDisplay` to make it decomposable
+- `useResizeObserver` and `useScrollObserver` to react to resize and scroll events on HTMLElements
+  - added these to the `AnchoredFloatingContainer` as options
+- `IconButton` to better capture the different accessibility requirements of both button types
+  - use `IconButton` instead of buttons with `layout="icon"`
+
+### Changed
+- `useLocalStorage` to be called `useStorage` and allow for listing to storage changes
+- `ThemeDialog` is now split into `ThemeSelect` and `ThemeIcon`
+- `useTransitionState` uses the window to get animations if no valid ref is provided, and it warns if a ref is provided and its value is null
+- names for Tablefilters
+  - `tags` is now `multiTags`
+  - `tagsSingle` is now `singleTag`
+
+### Fixed
+- Table column sizing when toggling visibility and changing order
+
 ## [0.6.16] - 2026-01-26
 
 ### Fixed

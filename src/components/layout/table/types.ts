@@ -22,8 +22,18 @@ declare module '@tanstack/react-table' {
       date: FilterFn<unknown>,
       dateTime: FilterFn<unknown>,
       boolean: FilterFn<unknown>,
-      tags: FilterFn<unknown>,
-      tagsSingle:  FilterFn<unknown>,
+      multiTags: FilterFn<unknown>,
+      singleTag: FilterFn<unknown>,
       generic: FilterFn<unknown>,
+    }
+
+    // eslint-disable-next-line @typescript-eslint/no-unused-vars
+    interface TableOptions<TData extends RowData> {
+      columnSizingTarget?: number,
+    }
+
+    // eslint-disable-next-line @typescript-eslint/no-unused-vars
+    interface TableOptionsResolved<TData extends RowData> {
+      columnSizingTarget?: number,
     }
   }

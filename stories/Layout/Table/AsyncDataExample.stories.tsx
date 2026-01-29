@@ -77,8 +77,8 @@ function getFilterCategory(operator: string): keyof typeof TableFilterOperator |
     ...TableFilterOperator.date,
     ...TableFilterOperator.dateTime,
     ...TableFilterOperator.boolean,
-    ...TableFilterOperator.tags,
-    ...TableFilterOperator.tagsSingle,
+    ...TableFilterOperator.multiTags,
+    ...TableFilterOperator.singleTag,
   ] as readonly string[]
 
   if (!allOperators.includes(operator)) {
@@ -103,11 +103,11 @@ function getFilterCategory(operator: string): keyof typeof TableFilterOperator |
   if (TableFilterOperator.boolean.includes(operator as typeof TableFilterOperator.boolean[number])) {
     return 'boolean'
   }
-  if (TableFilterOperator.tags.includes(operator as typeof TableFilterOperator.tags[number])) {
-    return 'tags'
+  if (TableFilterOperator.multiTags.includes(operator as typeof TableFilterOperator.multiTags[number])) {
+    return 'multiTags'
   }
-  if (TableFilterOperator.tagsSingle.includes(operator as typeof TableFilterOperator.tagsSingle[number])) {
-    return 'tagsSingle'
+  if (TableFilterOperator.singleTag.includes(operator as typeof TableFilterOperator.singleTag[number])) {
+    return 'singleTag'
   }
   return null
 }
@@ -148,9 +148,9 @@ const fetchPaginatedData = async (
           return filterDatetime(rowValue, filterValue as DatetimeFilterValue)
         case 'boolean':
           return filterBoolean(rowValue, filterValue as BooleanFilterValue)
-        case 'tags':
+        case 'multiTags':
           return filterTags(rowValue, filterValue as TagsFilterValue)
-        case 'tagsSingle':
+        case 'singleTag':
           return filterTagsSingle(rowValue, filterValue as TagsSingleFilterValue)
         case 'generic':
           return filterGeneric(rowValue, filterValue as GenericFilterValue)
@@ -379,7 +379,7 @@ export const asyncDataExample: Story = {
           minSize={300}
           size={300}
           maxSize={400}
-          filterType="tags"
+          filterType="multiTags"
           meta={{
             filterData: {
               tags: relationShipTags.map(tag => ({ tag, label: tag })),
@@ -402,31 +402,7 @@ export const asyncDataExample: Story = {
           minSize={200}
           size={250}
           maxSize={300}
-          filterType="tagsSingle"
-          sortingFn="text"
-          meta={{
-            filterData: {
-              tags: hobbyTags.map(tag => ({ tag, label: tag })),
-            },
-          }}
-        />
-        <TableColumn
-          id="hobbies"
-          header="Hobbies"
-          cell={({ cell }) => {
-            const value = cell.getValue() as HobbyTag | null
-            if(!value) return <TableCell>No hobbies</TableCell>
-            return (
-              <div className="flex-row-2 flex-wrap gap-y-2">
-                {value ? (<Chip key={value}>{value}</Chip>) : null}
-              </div>
-            )
-          }}
-          accessorKey="hobbies"
-          minSize={200}
-          size={250}
-          maxSize={300}
-          filterType="tagsSingle"
+          filterType="singleTag"
           sortingFn="text"
           meta={{
             filterData: {

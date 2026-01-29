@@ -3,7 +3,7 @@ import './types'
 import { TableBody } from './TableBody'
 import type { TableHeaderProps } from './TableHeader'
 import { TableHeader } from './TableHeader'
-import { useTableDataContext, useTableContainerContext, useTableHeaderContext } from './TableContext'
+import { useTableContainerContext, useTableStateContext } from './TableContext'
 import clsx from 'clsx'
 
 export interface TableDisplayProps extends TableHTMLAttributes<HTMLTableElement> {
@@ -21,9 +21,8 @@ export const TableDisplay = <T,>({
   tableHeaderProps,
   ...props
 }: TableDisplayProps) => {
-  const { table } = useTableDataContext<T>()
+  const { table } = useTableStateContext<T>()
   const { containerRef } = useTableContainerContext<T>()
-  const { sizeVars } = useTableHeaderContext<T>()
 
   return (
     <div {...containerProps} ref={containerRef} className={clsx('table-container', containerProps?.className)}>
@@ -32,8 +31,8 @@ export const TableDisplay = <T,>({
         className={clsx('table', props.className)}
 
         style={{
-          ...sizeVars,
           width: Math.floor(Math.max(table.getTotalSize(), containerRef.current?.offsetWidth ?? table.getTotalSize())),
+          ...props.style,
         }}
       >
         {children}

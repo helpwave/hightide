@@ -2,18 +2,19 @@ import { useMemo, useRef, useId } from 'react'
 import { ChevronUp, ChevronDown, ChevronLeft, ChevronRight, Eye, EyeOff, Pin, PinOff, ArrowLeftRightIcon } from 'lucide-react'
 import type { ButtonProps } from '@/src/components/user-interaction/Button'
 import { Button } from '@/src/components/user-interaction/Button'
-import { useTableDataContext } from './TableContext'
 import { useHightideTranslation } from '@/src/i18n/useHightideTranslation'
 import type { PopUpProps } from '../popup/PopUp'
 import { PopUp } from '../popup/PopUp'
 import { PopUpRoot } from '../popup/PopUpRoot'
 import { PopUpOpener } from '../popup/PopUpOpener'
 import { Tooltip } from '../../user-interaction/Tooltip'
+import { useTableStateWithoutSizingContext } from './TableContext'
+import { IconButton } from '../../user-interaction/IconButton'
 
 export type TableColumnSwitcherPopUpProps = PopUpProps
 
 export const TableColumnSwitcherPopUp = ({ ...props }: TableColumnSwitcherPopUpProps) => {
-  const { table } = useTableDataContext()
+  const { table } = useTableStateWithoutSizingContext()
   const translation = useHightideTranslation()
   const containerRef = useRef<HTMLDivElement>(null)
   const generatedId = useId()
@@ -210,53 +211,49 @@ export const TableColumnSwitcherPopUp = ({ ...props }: TableColumnSwitcherPopUpP
               <div className="flex-row-2 gap-1">
                 {isPinned ? (
                   <>
-                    <Button
-                      layout="icon"
+                    <IconButton
+                      tooltip={translation('pinToLeft')}
                       size="sm"
                       color="neutral"
                       coloringStyle="text"
                       disabled={pinState === 'left'}
                       onClick={() => pinColumn(columnId, 'left')}
-                      aria-label={translation('pinLeft')}
                     >
                       <ChevronLeft className="size-4" />
-                    </Button>
-                    <Button
-                      layout="icon"
+                    </IconButton>
+                    <IconButton
+                      tooltip={translation('pinToRight')}
                       size="sm"
                       color="neutral"
                       coloringStyle="text"
                       disabled={pinState === 'right'}
                       onClick={() => pinColumn(columnId, 'right')}
-                      aria-label={translation('pinRight')}
                     >
                       <ChevronRight className="size-4" />
-                    </Button>
+                    </IconButton>
                   </>
                 ) : (
                   <>
-                    <Button
-                      layout="icon"
+                    <IconButton
+                      tooltip={translation('increaseSortingPriority')}
                       size="sm"
                       color="neutral"
                       coloringStyle="text"
                       disabled={!canMoveUp}
                       onClick={() => moveColumn(columnId, 'up')}
-                      aria-label={translation('moveUp')}
                     >
                       <ChevronUp className="size-4" />
-                    </Button>
-                    <Button
-                      layout="icon"
+                    </IconButton>
+                    <IconButton
+                      tooltip={translation('decreaseSortingPriority')}
                       size="sm"
                       color="neutral"
                       coloringStyle="text"
                       disabled={!canMoveDown}
                       onClick={() => moveColumn(columnId, 'down')}
-                      aria-label={translation('moveDown')}
                     >
                       <ChevronDown className="size-4" />
-                    </Button>
+                    </IconButton>
                   </>
                 )}
               </div>
@@ -264,8 +261,8 @@ export const TableColumnSwitcherPopUp = ({ ...props }: TableColumnSwitcherPopUpP
                 {getColumnHeader(columnId)}
               </div>
               <>
-                <Button
-                  layout="icon"
+                <IconButton
+                  tooltip={translation('changeVisibility')}
                   size="sm"
                   color="neutral"
                   coloringStyle="text"
@@ -278,9 +275,9 @@ export const TableColumnSwitcherPopUp = ({ ...props }: TableColumnSwitcherPopUpP
                   ) : (
                     <EyeOff className="size-4" />
                   )}
-                </Button>
-                <Button
-                  layout="icon"
+                </IconButton>
+                <IconButton
+                  tooltip={translation('changePinning')}
                   size="sm"
                   color="neutral"
                   coloringStyle="text"
@@ -294,8 +291,8 @@ export const TableColumnSwitcherPopUp = ({ ...props }: TableColumnSwitcherPopUpP
                   }}
                   aria-label={isPinned ? translation('unpin') : translation('pinLeft')}
                 >
-                  {isPinned ? ( <PinOff className="size-4" />) : ( <Pin className="size-4" />)}
-                </Button>
+                  {!isPinned ? ( <PinOff className="size-4" />) : ( <Pin className="size-4" />)}
+                </IconButton>
               </>
             </div>
           )

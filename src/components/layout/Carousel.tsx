@@ -13,8 +13,8 @@ import React, {
 import clsx from 'clsx'
 import { ChevronLeft, ChevronRight } from 'lucide-react'
 import { createLoopingListWithIndex, range } from '@/src/utils/array'
-import { Button } from '../user-interaction/Button'
 import { useHightideTranslation } from '@/src/i18n/useHightideTranslation'
+import { IconButton } from '../user-interaction/IconButton'
 
 //
 // CarouselContext
@@ -411,24 +411,24 @@ export const Carousel = ({
           )}
           {arrows && (
             <>
-              <Button
-                layout="icon"
+              <IconButton
+                tooltip={translation('previous')}
                 color="neutral"
                 className={clsx('absolute z-10 left-2 top-1/2 -translate-y-1/2 shadow-md', { hidden: !canGoLeft() })}
                 disabled={!canGoLeft()}
                 onClick={() => left()}
               >
                 <ChevronLeft size={24}/>
-              </Button>
-              <Button
-                layout="icon"
+              </IconButton>
+              <IconButton
+                tooltip={translation('next')}
                 color="neutral"
                 className={clsx('absolute z-10 right-2 top-1/2 -translate-y-1/2 shadow-md', { hidden: !canGoRight() })}
                 disabled={!canGoRight()}
                 onClick={() => right()}
               >
                 <ChevronRight size={24}/>
-              </Button>
+              </IconButton>
             </>
           )}
         </div>
