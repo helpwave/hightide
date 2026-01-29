@@ -33,5 +33,5 @@ export const useLogOnce = (
       }
       setHasLogged(true)
     }
-  }, [condition]) // eslint-disable-line react-hooks/exhaustive-deps
+  }, [condition, type, hasLogged, message])
 }

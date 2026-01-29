@@ -5,7 +5,15 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/)
 and adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
-## [0.7.0] - 2026-01-27
+## [0.8.0] - 2026-01-29
+
+### Fixed
+- removed all disable react-hooks/exhaustive-deps lint warning and fix them appropriately
+
+### Removed
+- Geometry Components such as `Ring` and `Circle` as these can be CSS only solutions
+
+## [0.7.0] - 2026-01-29
 
 ### Added
 - `ColumnSizingWithTargetFeature` and `AutoColumnOrderFeature` to Table for column size fixing and column ordering

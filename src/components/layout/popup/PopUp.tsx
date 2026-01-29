@@ -1,4 +1,5 @@
 import { forwardRef, useCallback, useContext, useImperativeHandle, useMemo } from 'react'
+import { useEventCallbackStabilizer } from '@/src/hooks/useEventCallbackStabelizer'
 import { clsx } from 'clsx'
 import { Portal } from '../../utils/Portal'
 import type { AnchoredFloatingContainerProps } from '../AnchoredFloatingContainer'
@@ -44,19 +45,22 @@ export const PopUp = forwardRef<HTMLDivElement, PopUpProps>(function PopUp({
 
   useImperativeHandle(forwardRef, () => ref.current, [ref])
 
+  const onCloseStable = useEventCallbackStabilizer(onClose)
+  const onOutsideClickStable = useEventCallbackStabilizer(onOutsideClick)
+
   const onCloseWrapper = useCallback(() => {
-    onClose?.()
+    onCloseStable()
     context?.setIsOpen(false)
-  }, [onClose, context])
+  }, [onCloseStable, context])
 
   const { zIndex, isInFront } = useOverlayRegistry({ isActive: isOpen, tags: useMemo(() => ['popup'], []) })
 
   useOutsideClick({
-    onOutsideClick: (event) => {
+    onOutsideClick: useCallback((event: MouseEvent | TouchEvent) => {
       event.preventDefault()
       onCloseWrapper()
-      onOutsideClick?.(event)
-    },
+      onOutsideClickStable(event)
+    }, [onCloseWrapper, onOutsideClickStable]),
     active: isOpen && isInFront && (outsideClickOptions?.active ?? true),
     refs: [ref, ...(anchorExcludedFromOutsideClick ? [] : [anchor]), ...(outsideClickOptions?.refs ?? [])],
   })

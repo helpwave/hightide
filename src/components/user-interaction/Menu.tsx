@@ -1,7 +1,6 @@
-import { type PropsWithChildren, type ReactNode, useCallback, useRef } from 'react'
+import { type PropsWithChildren, type ReactNode, useCallback, useRef, useState } from 'react'
 import clsx from 'clsx'
 import { BagFunctionUtil } from '@/src/utils/bagFunctions'
-import { useHoverState } from '@/src/hooks/useHoverState'
 import type { PopUpProps } from '../layout/popup/PopUp'
 import { PopUp } from '../layout/popup/PopUp'
 
@@ -39,7 +38,6 @@ export type MenuBag = {
 export interface MenuProps extends Omit<PopUpProps, 'children' | 'anchor'> {
   children: (bag: MenuBag) => ReactNode | ReactNode,
   trigger: (bag: MenuBag, ref: (el: HTMLElement | null) => void) => ReactNode,
-  showOnHover?: boolean,
   disabled?: boolean,
 }
 
@@ -49,12 +47,11 @@ export interface MenuProps extends Omit<PopUpProps, 'children' | 'anchor'> {
 export const Menu = ({
   trigger,
   children,
-  showOnHover = false,
   disabled = false,
   ...props
 }: MenuProps) => {
-  const { isHovered: isOpen, setIsHovered: setIsOpen } = useHoverState({ isDisabled: !showOnHover || disabled })
   const triggerRef = useRef<HTMLElement>(null)
+  const [isOpen, setIsOpen] = useState(false)
 
   const bag: MenuBag = {
     isOpen,
