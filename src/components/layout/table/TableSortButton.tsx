@@ -1,18 +1,17 @@
 import { ChevronDown, ChevronsUpDown, ChevronUp } from 'lucide-react'
-import type { ButtonProps } from '../../user-interaction/Button'
-import { Button } from '../../user-interaction/Button'
 import clsx from 'clsx'
 import type { SortDirection } from '@tanstack/react-table'
 import { Visibility } from '@/src/components/layout/Visibility'
-import { Tooltip } from '@/src/components/user-interaction/Tooltip'
 import { useHightideTranslation } from '@/src/i18n/useHightideTranslation'
+import type { IconButtonProps } from '@/src/components/user-interaction/IconButton'
+import { IconButton } from '@/src/components/user-interaction/IconButton'
 
 type SortingIndexDisplay = {
   index: number,
   sortingsCount: number,
 }
 
-export type TableSortButtonProps = ButtonProps & {
+export type TableSortButtonProps = IconButtonProps & {
   sortDirection: SortDirection | false,
   sortingIndexDisplay?: SortingIndexDisplay,
   invert?: boolean,
@@ -31,7 +30,7 @@ export const TableSortButton = ({
   ...props
 }: TableSortButtonProps) => {
   const translation = useHightideTranslation()
-  const { sortingsCount, index } = sortingIndexDisplay
+  const { index } = sortingIndexDisplay
 
   let icon = <ChevronsUpDown className="size-4"/>
   if (sortDirection) {
@@ -43,10 +42,10 @@ export const TableSortButton = ({
       (<ChevronUp className="size-4"/>) : (<ChevronDown className="size-4"/>)
   }
 
-  const hasSortingIndex = !!sortingIndexDisplay && sortingsCount > 1 && index > 0
+  const hasSortingIndex = !!sortingIndexDisplay && index > 0
 
   return (
-    <Tooltip
+    <IconButton
       tooltip={(
         <div className="flex-col-2">
           <span>{translation('sSortingState', { sortDirection: sortDirection || 'none' })}</span>
@@ -55,24 +54,19 @@ export const TableSortButton = ({
           </Visibility>
         </div>
       )}
-      position="top"
+      color={color}
+      size={size}
+      className={clsx('relative', className)}
+      {...props}
     >
-      <Button
-        layout={hasSortingIndex ? 'default' : 'icon'}
-        color={color}
-        size={size}
-        className={clsx('relative', className)}
-        {...props}
-      >
-        <Visibility isVisible={hasSortingIndex}>
-          <div
-            className={clsx('absolute bottom-0 right-1/2 translate-x-1/2 translate-y-2/3 z-1 primary coloring-solid rounded-full h-4 w-5 text-sm')}
-          >
-            {`${index}.`}
-          </div>
-        </Visibility>
-        {icon}
-      </Button>
-    </Tooltip>
+      <Visibility isVisible={hasSortingIndex}>
+        <div
+          className={clsx('absolute bottom-0 right-1/2 translate-x-1/2 translate-y-2/3 z-1 primary coloring-solid rounded-full h-4 w-5 text-sm')}
+        >
+          {`${index}.`}
+        </div>
+      </Visibility>
+      {icon}
+    </IconButton>
   )
 }

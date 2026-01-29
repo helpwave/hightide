@@ -20,6 +20,7 @@ export const TableBody = React.memo(function TableBodyVisual() {
     .filter(Boolean)
     .filter(col => columnVisibility?.[col.id] !== false)
 
+  console.log('render')
   return (
     <tbody>
       {rows.map(row => {

@@ -203,7 +203,7 @@
   },
   "goodToSeeYou": "Schön dich zu sehen",
   "welcome": "Willkommen",
-  "rSortingOrderAfter": "Angewendet {otherSortings, plural, =0{als primäre Sortierung} =1{nach # anderen Sortierung} other{nach # anderen Sortierungen}}",
+  "rSortingOrderAfter": "Angewendet {otherSortings, plural, =0{als primäre Sortierung} =1{nach einer anderen Sortierung} other{nach # anderen Sortierungen}}",
   "@rSortingOrderAfter": {
     "placeholders": {
       "otherSortings": { "type": "number" }
