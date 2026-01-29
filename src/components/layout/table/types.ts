@@ -22,8 +22,8 @@ declare module '@tanstack/react-table' {
       date: FilterFn<unknown>,
       dateTime: FilterFn<unknown>,
       boolean: FilterFn<unknown>,
-      tags: FilterFn<unknown>,
-      tagsSingle:  FilterFn<unknown>,
+      multiTags: FilterFn<unknown>,
+      singleTag: FilterFn<unknown>,
       generic: FilterFn<unknown>,
     }
 

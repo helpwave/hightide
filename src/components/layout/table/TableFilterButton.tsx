@@ -36,7 +36,9 @@ export const TableFilterButton = <T, >({
     setFilterValue(columnFilterValue as TableFilterValue)
   }, [columnFilterValue])
 
-  if (filterType === 'tags' && (!column.columnDef.meta?.filterData?.tags?.length || column.columnDef.meta.filterData.tags.length === 0)) {
+  const isTagsFilter = filterType === 'multiTags' || filterType === 'singleTag'
+  const hasTagsMetaData = column.columnDef.meta?.filterData?.tags?.length && column.columnDef.meta.filterData.tags.length > 0
+  if (isTagsFilter && !hasTagsMetaData) {
     return null
   }
 

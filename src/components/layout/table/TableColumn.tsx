@@ -17,8 +17,8 @@ const TableColumnComponent = <T,>({
   const filterFn = filterType ?? props.filterFn
 
   useLogOnce(
-    'TableColumn: For filterType === tags, filterData.tags must be set.',
-    filterType === 'tags' && props.meta?.filterData?.tags === undefined
+    'TableColumn: For filterType === multiTags or singleTag, filterData.tags must be set.',
+    (filterType === 'multiTags' || filterType === 'singleTag') && props.meta?.filterData?.tags === undefined
   )
 
   const [column] = useState<ColumnDef<T>>({

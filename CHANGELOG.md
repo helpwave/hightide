@@ -21,6 +21,9 @@ and adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 - `useLocalStorage` to be called `useStorage` and allow for listing to storage changes
 - `ThemeDialog` is now split into `ThemeSelect` and `ThemeIcon`
 - `useTransitionState` uses the window to get animations if no valid ref is provided, and it warns if a ref is provided and its value is null
+- names for Tablefilters
+  - `tags` is now `multiTags`
+  - `tagsSingle` is now `singleTag`
 
 ### Fixed
 - Table column sizing when toggling visibility and changing order

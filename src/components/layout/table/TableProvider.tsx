@@ -127,8 +127,8 @@ export const TableProvider = <T,>({
       date: TableFilter.date,
       dateTime: TableFilter.dateTime,
       boolean: TableFilter.boolean,
-      tags: TableFilter.tags,
-      tagsSingle: TableFilter.tagsSingle,
+      multiTags: TableFilter.multiTags,
+      singleTag: TableFilter.singleTag,
       generic: TableFilter.generic,
     },
     _features: [

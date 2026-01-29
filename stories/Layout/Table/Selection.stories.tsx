@@ -175,7 +175,7 @@ export const selection: Story = {
           minSize={300}
           size={300}
           maxSize={400}
-          filterType="tags"
+          filterType="multiTags"
           meta={{
             filterData: {
               tags: tags.map(tag => ({ tag, label: tag })),

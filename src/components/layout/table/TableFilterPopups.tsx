@@ -45,7 +45,7 @@ import {
   CircleDot
 } from 'lucide-react'
 import type { TableFilterType } from './TableFilter'
-import { useTableDataContext } from './TableContext'
+import { useTableStateWithoutSizingContext } from './TableContext'
 import { Checkbox } from '../../user-interaction/Checkbox'
 
 export interface TableFilterBaseProps<T extends TableFilterValue> {
@@ -659,12 +659,12 @@ export type TagsFilterProps = TableFilterBaseProps<TagsFilterValue>
 
 export const TagsFilter = ({ columnId, filterValue, onFilterValueChange }: TagsFilterProps) => {
   const translation = useHightideTranslation()
-  const { table: table } = useTableDataContext()
+  const { table } = useTableStateWithoutSizingContext()
   const operator = filterValue?.operator ?? 'tagsContains'
   const parameter = filterValue?.parameter ?? {}
 
   const availableOperators = useMemo(() => [
-    ...TableFilterOperator.tags,
+    ...TableFilterOperator.multiTags,
     ...TableFilterOperator.generic,
   ], [])
 
@@ -729,12 +729,12 @@ export const TagsFilter = ({ columnId, filterValue, onFilterValueChange }: TagsF
 export type TagsSingleFilterProps = TableFilterBaseProps<TagsSingleFilterValue>
 export const TagsSingleFilter = ({ columnId, filterValue, onFilterValueChange }: TagsSingleFilterProps) => {
   const translation = useHightideTranslation()
-  const { table: table } = useTableDataContext()
+  const { table } = useTableStateWithoutSizingContext()
   const operator = filterValue?.operator ?? 'tagsSingleContains'
   const parameter = filterValue?.parameter ?? {}
 
   const availableOperators = useMemo(() => [
-    ...TableFilterOperator.tagsSingle,
+    ...TableFilterOperator.singleTag,
     ...TableFilterOperator.generic,
   ], [])
 
@@ -862,9 +862,9 @@ export const TableFilterContent = ({ filterType, ...props }: TableFilterContentP
     return <DatetimeFilter {...props as TableFilterBaseProps<DatetimeFilterValue>} />
   case 'boolean':
     return <BooleanFilter {...props as TableFilterBaseProps<BooleanFilterValue>} />
-  case 'tags':
+  case 'multiTags':
     return <TagsFilter {...props as TableFilterBaseProps<TagsFilterValue>} />
-  case 'tagsSingle':
+  case 'singleTag':
     return <TagsSingleFilter {...props as TableFilterBaseProps<TagsSingleFilterValue>} />
   case 'generic':
     return <GenericFilter {...props as TableFilterBaseProps<GenericFilterValue>} />

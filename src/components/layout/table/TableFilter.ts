@@ -16,8 +16,8 @@ export const TableFilterOperator = {
   date: ['dateEquals', 'dateNotEquals', 'dateGreaterThan', 'dateGreaterThanOrEqual', 'dateLessThan', 'dateLessThanOrEqual', 'dateBetween', 'dateNotBetween'],
   dateTime: ['dateTimeEquals', 'dateTimeNotEquals', 'dateTimeGreaterThan', 'dateTimeGreaterThanOrEqual', 'dateTimeLessThan', 'dateTimeLessThanOrEqual', 'dateTimeBetween', 'dateTimeNotBetween'],
   boolean: ['booleanIsTrue', 'booleanIsFalse'],
-  tags: ['tagsEquals', 'tagsNotEquals', 'tagsContains', 'tagsNotContains'],
-  tagsSingle: ['tagsSingleEquals', 'tagsSingleNotEquals', 'tagsSingleContains', 'tagsSingleNotContains'],
+  multiTags: ['tagsEquals', 'tagsNotEquals', 'tagsContains', 'tagsNotContains'],
+  singleTag: ['tagsSingleEquals', 'tagsSingleNotEquals', 'tagsSingleContains', 'tagsSingleNotContains'],
   generic: ['undefined', 'notUndefined']
 } as const
 
@@ -27,8 +27,8 @@ export type TableNumberFilter = (typeof TableFilterOperator.number)[number] | Ta
 export type TableDateFilter = (typeof TableFilterOperator.date)[number]| TableGenericFilter
 export type TableDatetimeFilter = (typeof TableFilterOperator.dateTime)[number] | TableGenericFilter
 export type TableBooleanFilter = (typeof TableFilterOperator.boolean)[number] | TableGenericFilter
-export type TableTagsFilter = (typeof TableFilterOperator.tags)[number] | TableGenericFilter
-export type TableTagsSingleFilter = (typeof TableFilterOperator.tagsSingle)[number] | TableGenericFilter
+export type TableTagsFilter = (typeof TableFilterOperator.multiTags)[number] | TableGenericFilter
+export type TableTagsSingleFilter = (typeof TableFilterOperator.singleTag)[number] | TableGenericFilter
 
 
 export type TableFilterType = TableTextFilter | TableNumberFilter | TableDateFilter | TableDatetimeFilter
@@ -123,12 +123,10 @@ export type TableFilterValue = TextFilterValue | NumberFilterValue | DateFilterV
 const textFilter: FilterFn<unknown> = (row, columnId, filterValue: TextFilterValue) => {
   const value = row.getValue<string>(columnId)
   return filterText(value, filterValue)
-  return filterText(value, filterValue)
 }
 
 const numberFilter: FilterFn<unknown> = (row, columnId, filterValue: NumberFilterValue) => {
   const value = row.getValue<number>(columnId)
-  return filterNumber(value, filterValue)
   return filterNumber(value, filterValue)
 }
 
@@ -145,22 +143,20 @@ const dateTimeFilter: FilterFn<unknown> = (row, columnId, filterValue: DatetimeF
 const booleanFilter: FilterFn<unknown> = (row, columnId, filterValue: BooleanFilterValue) => {
   const value = row.getValue<boolean>(columnId)
   return filterBoolean(value, filterValue)
-  return filterBoolean(value, filterValue)
 }
 
-const tagsFilter: FilterFn<unknown> = (row, columnId, filterValue: TagsFilterValue) => {
+const multiTagsFilter: FilterFn<unknown> = (row, columnId, filterValue: TagsFilterValue) => {
   const value = row.getValue<unknown[]>(columnId)
   return filterTags(value, filterValue)
 }
 
-const tagsSingleFilter: FilterFn<unknown> = (row, columnId, filterValue: TagsSingleFilterValue) => {
+const singleTagFilter: FilterFn<unknown> = (row, columnId, filterValue: TagsSingleFilterValue) => {
   const value = row.getValue<unknown>(columnId)
   return filterTagsSingle(value, filterValue)
 }
 
 const genericFilter: FilterFn<unknown> = (row, columnId, filterValue: GenericFilterValue) => {
   const value = row.getValue<unknown>(columnId)
-  return filterGeneric(value, filterValue)
   return filterGeneric(value, filterValue)
 }
 
@@ -170,7 +166,7 @@ export const TableFilter = {
   date: dateFilter,
   dateTime: dateTimeFilter,
   boolean: booleanFilter,
-  tags: tagsFilter,
-  tagsSingle: tagsSingleFilter,
+  multiTags: multiTagsFilter,
+  singleTag: singleTagFilter,
   generic: genericFilter,
 }
