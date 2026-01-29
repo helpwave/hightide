@@ -124,9 +124,11 @@ const PrimitveSelectRoot = ({
 
   const selectedValues = useMemo(() => isMultiSelect ? (values ?? []) : [value].filter(Boolean),
     [isMultiSelect, value, values])
+
   const selectedOptions = useMemo(() =>
     selectedValues.map(value => internalState.options.find(option => value === option.value)).filter(Boolean),
   [selectedValues, internalState.options])
+
   const state: SelectContextState = {
     ...internalState,
     disabled,
@@ -280,8 +282,7 @@ const PrimitveSelectRoot = ({
     } else {
       console.error(`SelectRoot: Could not find highlighted value (${internalState.highlightedValue})`)
     }
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [internalState.highlightedValue])
+  }, [internalState.highlightedValue, internalState.options])
 
   const contextValue: SelectContextType = {
     ids,

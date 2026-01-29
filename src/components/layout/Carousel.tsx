@@ -14,6 +14,7 @@ import clsx from 'clsx'
 import { ChevronLeft, ChevronRight } from 'lucide-react'
 import { createLoopingListWithIndex, range } from '@/src/utils/array'
 import { useHightideTranslation } from '@/src/i18n/useHightideTranslation'
+import { useEventCallbackStabilizer } from '@/src/hooks/useEventCallbackStabelizer'
 import { IconButton } from '../user-interaction/IconButton'
 
 //
@@ -196,6 +197,7 @@ export const Carousel = ({
   ...props
 }: CarouselProps) => {
   const translation = useHightideTranslation()
+  const onSlideChangedStable = useEventCallbackStabilizer(onSlideChanged)
   const slideRefs = useRef<HTMLDivElement[]>([])
   const [currentIndex, setCurrentIndex] = useState<number>(0)
   const [hasFocus, setHasFocus] = useState(false)
@@ -332,8 +334,8 @@ export const Carousel = ({
   }, [dragState])
 
   useEffect(() => {
-    onSlideChanged?.(currentIndex)
-  }, [currentIndex]) // eslint-disable-line react-hooks/exhaustive-deps
+    onSlideChangedStable(currentIndex)
+  }, [currentIndex, onSlideChangedStable])
 
   return (
     <CarouselContext.Provider value={{ id, currentIndex, slideCount: length, isLooping }}>

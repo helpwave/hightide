@@ -1,7 +1,7 @@
 import { useControlledState, type ControlledStateProps } from '@/src/hooks/useControlledState'
 import { useHightideTranslation } from '@/src/i18n/useHightideTranslation'
 import { DateTimePicker, type DateTimePickerProps } from './DateTimePicker'
-import { useMemo, type ReactNode } from 'react'
+import { useState, type ReactNode } from 'react'
 import { Visibility } from '../../layout/Visibility'
 import { Button } from '../Button'
 
@@ -34,10 +34,7 @@ export const DateTimePickerDialog = ({
     isControlled,
   })
 
-  const initialValue = useMemo(() => {
-    return state
-  // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [])
+  const [initialValue] = useState(state)
 
   return (
     <>

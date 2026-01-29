@@ -190,8 +190,7 @@ export function TabView({ ...props }: TabViewProps) {
   useEffect(() => {
     setPortal({ id, ref })
     return () => setPortal(null)
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [id])
+  }, [id, setPortal])
 
   return (
     <div
@@ -220,8 +219,7 @@ export function TabPanel({ label, ...props }: TabProps) {
   useEffect(() => {
     register({ id, label, labelId })
     return () => unregister(id)
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [id, label, labelId])
+  }, [id, label, labelId, register, unregister])
 
   const isActive = activeId === id
 

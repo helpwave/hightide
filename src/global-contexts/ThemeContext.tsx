@@ -57,7 +57,7 @@ export const ThemeProvider = ({ children, theme, initialTheme }: ThemeProviderPr
     } else {
       setStoredTheme(theme)
     }
-  }, [theme]) // eslint-disable-line react-hooks/exhaustive-deps
+  }, [theme, deleteStoredTheme, setStoredTheme])
 
   useEffect(() => {
     document.documentElement.setAttribute('data-theme', resolvedTheme)

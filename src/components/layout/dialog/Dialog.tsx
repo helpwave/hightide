@@ -1,7 +1,8 @@
 'use client'
 
 import type { HTMLAttributes, ReactNode } from 'react'
-import { forwardRef, useContext, useId, useImperativeHandle, useMemo, useRef } from 'react'
+import { forwardRef, useCallback, useContext, useId, useImperativeHandle, useMemo, useRef } from 'react'
+import { useEventCallbackStabilizer } from '@/src/hooks/useEventCallbackStabelizer'
 import { X } from 'lucide-react'
 import { useHightideTranslation } from '@/src/i18n/useHightideTranslation'
 import { useFocusTrap } from '@/src/hooks/focus/useFocusTrap'
@@ -72,11 +73,12 @@ export const Dialog = forwardRef<HTMLDivElement, DialogProps>(function Dialog({
   })
   useImperativeHandle(forwardedRef, () => ref.current, [ref])
 
-  const onCloseWrapper = () => {
+  const onCloseStable = useEventCallbackStabilizer(onClose)
+  const onCloseWrapper = useCallback(() => {
     if (!isModal) return
-    onClose?.()
+    onCloseStable()
     context?.setIsOpen(false)
-  }
+  }, [onCloseStable, context, isModal])
 
   useLogOnce('Dialog: onClose should be defined for modal dialogs', isModal && !onClose && !context)
 

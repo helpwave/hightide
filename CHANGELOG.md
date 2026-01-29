@@ -11,6 +11,12 @@ and adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 - changed eslint config to ignore linting in `node_modules` and `security-patches`
 - the speed of the `HelpwaveLogo` animation can now be controlled
 
+### Fixed
+- removed all disable react-hooks/exhaustive-deps lint warning and fix them appropriately
+
+### Removed
+- Geometry Components such as `Ring` and `Circle` as these can be CSS only solutions
+
 ### Security
 - Update and change package versions to remove vulnerabilities
 
