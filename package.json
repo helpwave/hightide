@@ -83,5 +83,8 @@
   ],
   "bugs": {
     "url": "https://github.com/helpwave/hightide/issues"
+  },
+  "overrides": {
+    "elliptic": "file:./packages/elliptic-patched"
   }
 }
