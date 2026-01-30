@@ -1,10 +1,10 @@
 import type { Meta, StoryObj } from '@storybook/nextjs'
-import { CheckboxUncontrolled } from '@/src/components/user-interaction/Checkbox'
+import { Checkbox } from '@/src/components/user-interaction/Checkbox'
 import { action } from 'storybook/actions'
 
 const meta = {
-  component: CheckboxUncontrolled,
-} satisfies Meta<typeof CheckboxUncontrolled>
+  component: Checkbox,
+} satisfies Meta<typeof Checkbox>
 
 export default meta
 type Story = StoryObj<typeof meta>;

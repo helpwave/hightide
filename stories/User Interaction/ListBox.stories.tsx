@@ -1,11 +1,11 @@
 import type { Meta, StoryObj } from '@storybook/nextjs'
 import { action } from 'storybook/actions'
-import { ListBoxItem, ListBoxUncontrolled } from '@/src/components/layout/ListBox'
+import { ListBoxItem, ListBox } from '@/src/components/layout/ListBox'
 
 
 const meta = {
-  component: ListBoxUncontrolled,
-} satisfies Meta<typeof ListBoxUncontrolled>
+  component: ListBox,
+} satisfies Meta<typeof ListBox>
 
 export default meta
 type Story = StoryObj<typeof meta>;
