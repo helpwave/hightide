@@ -9,6 +9,7 @@ and adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
 ### Added
 - keyboard controls to `DayPicker`
+- `focus-style-shadow` for a shadow around the focused element
 
 ### Fixed
 - removed all disable react-hooks/exhaustive-deps lint warning and fix them appropriately

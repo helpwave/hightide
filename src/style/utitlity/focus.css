@@ -1,34 +1,33 @@
 @utility focus-style-outline {
-  transition: outline-offset var(--animation-duration-in, 250ms);
-  outline-offset: 0;
-
-  &:focus-visible {
-    @apply outline-solid outline-2 outline-focus;
-    outline-offset: calc(var(--spacing) * 0.25);
-  }
+  --focus-outline: 2px solid var(--color-focus);
+  --focus-outline-offset: calc(var(--spacing) * 0.25);
+  --focus-outline-transition: outline-offset var(--animation-duration-in, 250ms);
 }
 
 @utility focus-style-border {
-  &:focus-visible {
-    @apply border-2 border-focus;
-  }
+  --focus-border-color: var(--color-focus);
 }
 
 @utility focus-style-shadow {
-  &:focus-visible {
-    outline: 0 transparent transparent !important;
-    box-shadow: 0 0 6px 2px color-mix(in srgb, var(--color-focus) 60%, transparent);
-  }
-}
-
-@utility focus-style-default {
-  &:focus-visible {
-    @apply focus-style-outline;
-  }
+  --focus-box-shadow: 0 0 8px 2px color-mix(in srgb, var(--color-focus) 70%, transparent);
 }
 
 @utility focus-style-none {
+  --focus-outline: none;
+  --focus-outline-offset: 0;
+  --focus-outline-transition: none;
+  --focus-box-shadow: none;
+  --focus-border-color: inherit;
+}
+
+
+@utility focusable {
+  transition: var(--focus-outline-transition);
+
   &:focus-visible {
-    @apply outline-none;
+    outline: var(--focus-outline);
+    outline-offset: var(--focus-outline-offset);
+    box-shadow: var(--focus-box-shadow);
+    border-color: var(--focus-border-color);
   }
 }

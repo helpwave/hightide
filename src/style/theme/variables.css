@@ -3,4 +3,5 @@
   --drawer-indent: calc(4 * var(--spacing));
   --animation-duration-in: 250ms;
   --animation-duration-out: 170ms;
+  --default-size: calc(11 * var(--spacing)); /* This should always be at least 44px on standard settings */
 }
