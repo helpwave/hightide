@@ -1,5 +1,5 @@
 @utility input-element {
-  @apply border-2 focus-style-none focus-style-border;
+  @apply border-2 focus-style-none focus-style-border focus-style-shadow;
   &:not([data-disabled]):not([data-invalid]) {
     @apply bg-input-background hover:border-primary-hover;
 

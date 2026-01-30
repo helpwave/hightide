@@ -14,8 +14,15 @@
   }
 }
 
+@utility focus-style-shadow {
+  &:focus-visible {
+    outline: 0 transparent transparent !important;
+    box-shadow: 0 0 6px 2px color-mix(in srgb, var(--color-focus) 60%, transparent);
+  }
+}
+
 @utility focus-style-default {
-  &:focus-visible:not(.focus-style-none) {
+  &:focus-visible {
     @apply focus-style-outline;
   }
 }
