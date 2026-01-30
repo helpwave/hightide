@@ -116,19 +116,19 @@
 }
 
 @utility animate-wave-big-left-up {
-  animation: bigLeftUp 1.7s ease-in infinite normal;
+  animation: bigLeftUp var(--helpwave-loading-duration, 1.7s) ease-in infinite normal;
 }
 
 @utility animate-wave-big-right-down {
-  animation: bigRightDown 1.7s ease-in infinite reverse;
+  animation: bigRightDown var(--helpwave-loading-duration, 1.7s) ease-in infinite reverse;
 }
 
 @utility animate-wave-small-left-up {
-  animation: smallLeftUp 1.7s ease-in infinite normal;
+  animation: smallLeftUp var(--helpwave-loading-duration, 1.7s) ease-in infinite normal;
 }
 
 @utility animate-wave-small-right-down {
-  animation: smallRightDown 1.7s ease-in infinite reverse;
+  animation: smallRightDown var(--helpwave-loading-duration, 1.7s) ease-in infinite reverse;
 }
 
 @layer utilities {
