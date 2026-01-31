@@ -114,8 +114,7 @@ export const DateTimeInput = forwardRef<HTMLDivElement, DateTimeInputProps>(func
           aria-controls={isOpen ? ids.popup : undefined}
 
           className={clsx(
-            'pr-10 w-full flex-row-2 items-center justify-between h-10 px-3 rounded-md input-element',
-            'outline-offset-0 outline-primary focus:outline-1 focus:outline-offset-1 focus:border-primary duration-(--animation-duration-in)',
+            'input-element flex-row-2 px-3 pr-10 h-11 h-default rounded-md w-full items-center justify-between',
             { 'hover:cursor-pointer': !readOnly },
             props.className
           )}
