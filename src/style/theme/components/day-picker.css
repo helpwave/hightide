@@ -1,21 +1,21 @@
 @layer components {
-  .day-picker-container {
+  [data-name="day-picker-container"] {
     @apply flex-col-1 min-w-64 select-none;
   }
 
-  .day-picker-header-row {
+  [data-name="day-picker-header-row"] {
     @apply grid grid-cols-7 gap-2;
   }
 
-  .day-picker-header-item {
+  [data-name="day-picker-header-item"] {
     @apply flex items-center justify-center grow font-semibold;
   }
 
-  .day-picker-body-row {
+  [data-name="day-picker-body-row"] {
     @apply grid grid-cols-7 gap-2;
   }
 
-  .day-picker-body-item {
+  [data-name="day-picker-body-item"] {
     @apply flex-row-0 items-center justify-center rounded-full border-2 border-transparent h-8;
 
     &[data-today] {

@@ -25,7 +25,7 @@ export const MultiSelectProperty = ({
     >
       {({ invalid }) => (
         <div
-          className="property-input-wrapper"
+          data-name="property-input-wrapper"
           data-invalid={PropsUtil.dataAttributes.bool(invalid)}
         >
           <MultiSelectChipDisplay

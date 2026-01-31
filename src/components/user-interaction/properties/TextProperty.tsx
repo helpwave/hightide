@@ -1,5 +1,4 @@
 import { Text } from 'lucide-react'
-import clsx from 'clsx'
 import { useHightideTranslation } from '@/src/i18n/useHightideTranslation'
 import { Textarea } from '@/src/components/user-interaction/Textarea'
 import type { PropertyField } from './PropertyBase'
@@ -29,7 +28,8 @@ export const TextProperty = ({
     >
       {({ invalid }) => (
         <Textarea
-          className={clsx('property-input', 'w-full')}
+          data-name="property-input"
+          className="w-full"
           data-invalid={PropsUtil.dataAttributes.bool(invalid)}
           rows={5}
           value={value ?? ''}

@@ -1,5 +1,5 @@
 @layer components {
-  .checkbox {
+  [data-name="checkbox"] {
     @apply flex-col-0 items-center justify-center rounded border-2;
     &:not([data-disabled]) {
       @apply hover:cursor-pointer;
@@ -35,7 +35,7 @@
     }
   }
   
-  .checkbox-indicator{
+  [data-name="checkbox-indicator"]{
     @apply w-full h-full;
     &[data-size="sm"] {
       @apply stroke-3;

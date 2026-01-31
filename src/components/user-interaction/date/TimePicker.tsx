@@ -1,5 +1,4 @@
 import { useEffect, useRef } from 'react'
-import clsx from 'clsx'
 import { closestMatch, range } from '@/src/utils/array'
 import { Button } from '@/src/components/user-interaction/Button'
 import type { FormFieldDataHandling } from '../../form/FormField'
@@ -76,8 +75,8 @@ export const TimePicker = ({
   }
 
   return (
-    <div className={clsx('time-picker-container', className)}>
-      <div className="time-picker-value-column">
+    <div data-name="time-picker-container" className={className}>
+      <div data-name="time-picker-value-column">
         {hours.map(hour => {
           const isSelected = hour === value.getHours() - (!is24HourFormat && isPM ? 12 : 0)
           return (
@@ -93,7 +92,7 @@ export const TimePicker = ({
           )
         })}
       </div>
-      <div className="time-picker-value-column">
+      <div data-name="time-picker-value-column">
         {minutes.map(minute => {
           const isSelected = minute === closestMinute
           return (

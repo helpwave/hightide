@@ -56,7 +56,6 @@ export const ExpandableRoot = forwardRef<HTMLDivElement, ExpandableRootProps>(fu
   isInitialExpanded = false,
   disabled = false,
   allowContainerToggle = false,
-  className,
   ...props
 }, ref) {
   const generatedId = useId()
@@ -92,7 +91,7 @@ export const ExpandableRoot = forwardRef<HTMLDivElement, ExpandableRootProps>(fu
         {...props}
         ref={ref}
         id={ids.root}
-        className={clsx('expandable-root', className)}
+        data-name={props['data-name'] ?? 'expandable-root'}
         onClick={(event) => {
           props.onClick?.(event)
           if (allowContainerToggle) {
@@ -120,7 +119,6 @@ export type ExpandableHeaderProps = HTMLAttributes<HTMLDivElement> & {
 export const ExpandableHeader = forwardRef<HTMLDivElement, ExpandableHeaderProps>(function ExpandableHeader({
   children,
   isUsingDefaultIcon = true,
-  className,
   ...props
 }, ref) {
   const { isExpanded, toggle, ids, setIds, disabled } = useExpandableContext()
@@ -135,7 +133,7 @@ export const ExpandableHeader = forwardRef<HTMLDivElement, ExpandableHeaderProps
       {...props}
       ref={ref}
       id={ids.header}
-      className={clsx('expandable-header', className)}
+      data-name={props['data-name'] ?? 'expandable-header'}
       onClick={event => {
         event.stopPropagation()
         props.onClick?.(event)
@@ -166,7 +164,6 @@ export type ExpandableContentProps = HTMLAttributes<HTMLDivElement> & {
 export const ExpandableContent = forwardRef<HTMLDivElement, ExpandableContentProps>(function ExpandableContent({
   children,
   forceMount = false,
-  className,
   ...props
 }, forwardedRef) {
   const { isExpanded, ids, setIds } = useExpandableContext()
@@ -187,7 +184,7 @@ export const ExpandableContent = forwardRef<HTMLDivElement, ExpandableContentPro
       {...props}
       ref={ref}
       id={ids.content}
-      className={clsx('expandable-content', className)}
+      data-name={props['data-name'] ?? 'expandable-content'}
       data-expanded={isExpanded ? '' : undefined}
       data-state={transitionState}
     >

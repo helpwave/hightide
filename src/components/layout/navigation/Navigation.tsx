@@ -79,7 +79,8 @@ const NavigationItemWithSubItem = ({
         }}
         onBlur={onBlur}
 
-        className="link flex-row-1"
+        data-name="link"
+        className="flex-row-1"
 
         aria-haspopup="true"
         aria-expanded={isOpen}
@@ -139,7 +140,7 @@ export const NavigationItemList = ({ items, ...restProps }: NavigationItemListPr
           {isSubItem(item) ? (
             <NavigationItemWithSubItem {...item} />
           ) : (
-            <Link href={item.link} target={item.external ? '_blank' : undefined} className="link">{item.label}</Link>
+            <Link href={item.link} target={item.external ? '_blank' : undefined} data-name="link">{item.label}</Link>
           )}
         </li>
       ))}

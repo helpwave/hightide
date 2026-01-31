@@ -1,20 +1,20 @@
 @layer components {
-  .property-root {
+  [data-name="property-root"] {
     @apply flex-row-0 rounded-xl;
   }
 
-  .property-root {
+  [data-name="property-root"] {
     transition: outline-offset var(--animation-duration-in, 250ms);
     outline-offset: 0;
 
     &:hover {
-      .property-title:not([data-invalid]),
-      .property-content:not([data-invalid]) {
+      [data-name="property-title"]:not([data-invalid]),
+      [data-name="property-content"]:not([data-invalid]) {
         @apply border-primary;
       }
 
-      .property-title[data-invalid],
-      .property-content[data-invalid] {
+      [data-name="property-title"][data-invalid],
+      [data-name="property-content"][data-invalid] {
         @apply border-warning;
       }
     }
@@ -34,7 +34,7 @@
   }
 
 
-  .property-title {
+  [data-name="property-title"] {
     @apply flex-row-2 max-w-48 min-w-48 px-3 py-2 items-center justify-between rounded-l-xl border-2 border-r-0;
 
     &:not([data-invalid]) {
@@ -47,15 +47,15 @@
   }
 
 
-  .property-title-icon {
+  [data-name="property-title-icon"] {
     @apply max-w-6 min-w-6;
   }
 
-  .property-title-text {
+  [data-name="property-title-text"] {
     @apply font-semibold truncate min-w-0;
   }
 
-  .property-content {
+  [data-name="property-content"] {
     @apply flex-row-2 grow px-3 py-2 justify-between items-center rounded-r-xl border-2 border-l-0 min-h-15;
 
     &:not([data-invalid]) {
@@ -67,24 +67,24 @@
     }
   }
 
-  .property-actions {
+  [data-name="property-actions"] {
     @apply flex-row-2 items-center gap-1;
   }
 
-  .property-input-wrapper {
+  [data-name="property-input-wrapper"] {
     @apply relative flex-row-2 w-full;
 
     &[data-invalid] {
       @apply text-warning;
 
-      .select-button,
-      .select-button-chips {
+      [data-name="select-button"],
+      [data-name="select-chip-display"] {
         @apply !bg-warning !text-surface-warning;
       }
     }
   }
 
-  .property-input {
+  [data-name="property-input"] {
     @apply rounded p-1;
 
     &[data-invalid] {
@@ -92,7 +92,7 @@
     }
   }
 
-  .property-suffix {
+  [data-name="property-suffix"] {
     @apply absolute top-1/2 -translate-y-1/2 right-2;
 
     &[data-invalid] {

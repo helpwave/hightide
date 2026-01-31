@@ -110,7 +110,6 @@ export const SelectButton = forwardRef<HTMLButtonElement, SelectButtonProps>(fun
   id,
   placeholder,
   selectedDisplay,
-  className,
   ...props
 }, ref) {
   const translation = useHightideTranslation()
@@ -165,7 +164,7 @@ export const SelectButton = forwardRef<HTMLButtonElement, SelectButtonProps>(fun
         }
       }}
 
-      className={clsx('select-button', className)}
+      data-name={props['data-name'] ?? 'select-button'}
       data-value={hasValue ? '' : undefined}
       data-disabled={disabled ? '' : undefined}
       data-invalid={invalid ? '' : undefined}
@@ -266,7 +265,7 @@ export const SelectContent = forwardRef<HTMLUListElement, SelectContentProps>(fu
           }
         }}
 
-        className={clsx('flex-col-0 p-2 bg-menu-background text-menu-text rounded-md shadow-hw-bottom focus-outline-within overflow-auto', props.className)}
+        className={clsx('flex-col-0 p-2 overflow-auto')}
 
         role="listbox"
         aria-multiselectable={config.isMultiSelect}

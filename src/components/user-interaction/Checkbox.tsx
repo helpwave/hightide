@@ -4,7 +4,6 @@ import { Visibility } from '../layout/Visibility'
 import { PropsUtil } from '@/src/utils/propsUtil'
 import type { FormFieldInteractionStates } from '../form/FieldLayout'
 import type { FormFieldDataHandling } from '../form/FormField'
-import clsx from 'clsx'
 import { useControlledState } from '@/src/hooks/useControlledState'
 import { useEventCallbackStabilizer } from '@/src/hooks/useEventCallbackStabelizer'
 
@@ -81,13 +80,13 @@ export const Checkbox = ({
       aria-checked={indeterminate ? 'mixed' : value}
       {...PropsUtil.aria.interactionStates({ disabled, invalid, readOnly, required }, props)}
 
-      className={clsx('checkbox', props.className)}
+      data-name={props['data-name'] ?? 'checkbox'}
     >
       <Visibility isVisible={indeterminate}>
-        <Minus className="checkbox-indicator" aria-hidden={true} />
+        <Minus data-name="checkbox-indicator" className="checkbox-indicator" aria-hidden={true} />
       </Visibility>
       <Visibility isVisible={!indeterminate && (alwaysShowCheckIcon || value)}>
-        <Check className="checkbox-indicator" aria-hidden={true} />
+        <Check data-name="checkbox-indicator" className="checkbox-indicator" aria-hidden={true} />
       </Visibility>
     </div>
   )

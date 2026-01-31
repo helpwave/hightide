@@ -234,7 +234,7 @@ export const TooltipDisplay = forwardRef<HTMLDivElement, TooltipDisplayProps>(fu
         data-animated={isAnimated ? '': undefined}
 
         role="tooltip"
-        className={clsx('tooltip', props.className)}
+        data-name={props['data-name'] ?? 'tooltip'}
         style={{ zIndex, position: 'fixed', visibility: isVisible ? undefined : 'hidden', ...props.style }}
       >
         {children}

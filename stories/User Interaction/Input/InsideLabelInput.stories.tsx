@@ -1,18 +1,18 @@
 import { action } from 'storybook/actions'
 import type { Meta, StoryObj } from '@storybook/nextjs'
-import { InsideLabelInputUncontrolled } from '@/src/components/user-interaction/input/InsideLabelInput'
+import { InsideLabelInput } from '@/src/components/user-interaction/input/InsideLabelInput'
 import { clsx } from 'clsx'
 
 const meta = {
-  component: InsideLabelInputUncontrolled,
-} satisfies Meta<typeof InsideLabelInputUncontrolled>
+  component: InsideLabelInput,
+} satisfies Meta<typeof InsideLabelInput>
 
 export default meta
 type Story = StoryObj<typeof meta>;
 
 export const insideLabelInput: Story = {
   args: {
-    value: 'Text',
+    initialValue: 'Text',
     label: (
       <span className={clsx('text-description')}>
         Input Label

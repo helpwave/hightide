@@ -142,7 +142,7 @@ export function TabList({ ...props }: TabListProps) {
   return (
     <ul
       {...props}
-      className={clsx('tab-list', props.className)}
+      data-name={props['data-name'] ?? 'tab-list'}
       onKeyDown={onKeyDown}
       role="tablist"
       aria-orientation="horizontal"
@@ -154,7 +154,7 @@ export function TabList({ ...props }: TabListProps) {
             refs.current[tabInfo.id] = el
           }}
           id={tabInfo.labelId}
-          className="tab-list-item"
+          data-name="tab-list-item"
           {...PropsUtil.aria.click(() => setActive(tabInfo.id))}
           data-active={PropsUtil.dataAttributes.bool(activeId === tabInfo.id)}
 
@@ -224,7 +224,7 @@ export function TabPanel({ label, ...props }: TabProps) {
       {...props}
       id={id}
       hidden={!isActive}
-      className={clsx('tab-panel', props.className)}
+      data-name={props['data-name'] ?? 'tab-panel'}
       role="tabpanel"
       aria-labelledby={labelId}
     >

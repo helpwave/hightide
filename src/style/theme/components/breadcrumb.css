@@ -1,15 +1,15 @@
 @layer components {
-  .breadcrumb {
+  [data-name="breadcrumb"] {
     @apply flex-row-2 items-center;
   }
-  .breadcrumb-item {
+  [data-name="breadcrumb-item"] {
     @apply flex-row-1 items-center;
   }
-  .breadcrumb-link {
+  [data-name="breadcrumb-link"] {
     @apply flex-row-1 px-1.5 py-1 rounded-1.5 h-8;
     @apply description last:neutral coloring-text-hover;
   }
-  .breadcrumb-divider {
+  [data-name="breadcrumb-divider"] {
     @apply px-1 text-description;
   }
 }

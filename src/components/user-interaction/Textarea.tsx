@@ -62,7 +62,7 @@ export const Textarea = forwardRef<HTMLTextAreaElement, TextareaProps>(function 
         onEditCompleteWrapper(event.target.value)
       }}
 
-      className={clsx('textarea', props.className)}
+      data-name={props['data-name'] ?? 'textarea'}
       data-value={PropsUtil.dataAttributes.bool(!!value)}
       {...PropsUtil.dataAttributes.interactionStates({ ...props, invalid })}
 

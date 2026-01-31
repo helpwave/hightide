@@ -1,7 +1,6 @@
 @import "./colors/index.css";
 @import "./typography.css";
-@import "./breakpoints.css";
 @import "./components/index.css";
 @import "./shadow.css";
+@import "./element.css";
 @import "./variables.css";
-@import "./utility.css";

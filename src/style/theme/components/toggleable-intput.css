@@ -1,0 +1,10 @@
+@layer components {
+    [data-name="togglable-input"] {
+        all: unset;
+        @apply w-full rounded-md focus-style-none focus-style-outline focusable;
+
+        &:not([data-isediting]) {
+            @apply text-transparent;
+        }
+    }
+}

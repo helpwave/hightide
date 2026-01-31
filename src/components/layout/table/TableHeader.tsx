@@ -86,7 +86,7 @@ export const TableHeader = ({ isSticky = false }: TableHeaderProps) => {
       ))}
       <thead>
         {table.getHeaderGroups().map(headerGroup => (
-          <tr key={headerGroup.id} className={clsx('table-header-row', table.options.meta?.headerRowClassName)}>
+          <tr key={headerGroup.id} data-name="table-header-row" className={clsx(table.options.meta?.headerRowClassName)}>
             {headerGroup.headers.map(header => {
               return (
                 <th
@@ -95,7 +95,8 @@ export const TableHeader = ({ isSticky = false }: TableHeaderProps) => {
 
 
                   data-sticky={isSticky ? '' : undefined}
-                  className={clsx('table-header-cell group/table-header-cell', header.column.columnDef.meta?.className)}
+                  data-name="table-header-cell"
+                  className={clsx('group/table-header-cell', header.column.columnDef.meta?.className)}
                 >
                   <Visibility isVisible={!header.isPlaceholder}>
                     <div className="flex-row-1 items-center">
@@ -154,7 +155,7 @@ export const TableHeader = ({ isSticky = false }: TableHeaderProps) => {
                         header.column.resetSize()
                       }}
 
-                      className="table-resize-indicator"
+                      data-name="table-resize-indicator"
                       data-active={PropsUtil.dataAttributes.bool(header.column.getCanResize() && header.column?.getIsResizing())}
                       data-disabled={PropsUtil.dataAttributes.bool(!header.column.getCanResize())}
                     />

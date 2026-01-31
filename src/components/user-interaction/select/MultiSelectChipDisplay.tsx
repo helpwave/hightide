@@ -2,9 +2,6 @@ import type { MultiSelectRootProps } from './SelectContext'
 import { MultiSelectRoot, useSelectContext } from './SelectContext'
 import type { HTMLAttributes, ReactNode } from 'react'
 import { forwardRef, useEffect, useImperativeHandle, useRef } from 'react'
-import clsx from 'clsx'
-import { useOverwritableState } from '@/src/hooks/useOverwritableState'
-import { Chip } from '@/src/components/display-and-visualization/Chip'
 import { XIcon, Plus } from 'lucide-react'
 import { MultiSelectContent, type MultiSelectContentProps } from './SelectComponents'
 import { IconButton } from '../IconButton'
@@ -20,7 +17,6 @@ type MultiSelectChipDisplayButtonProps = HTMLAttributes<HTMLDivElement> & {
 
 export const MultiSelectChipDisplayButton = forwardRef<HTMLDivElement, MultiSelectChipDisplayButtonProps>(function MultiSelectChipDisplayButton({
   id,
-  className,
   ...props
 }, ref) {
   const translation = useHightideTranslation()
@@ -56,7 +52,7 @@ export const MultiSelectChipDisplayButton = forwardRef<HTMLDivElement, MultiSele
         props.onClick?.(event)
       }}
 
-      className={clsx('select-button-chips', className)}
+      data-name={props['data-name'] ?? 'select-chip-display'}
       data-value={state.value.length > 0 ? '' : undefined}
       data-disabled={disabled ? '' : undefined}
       data-invalid={invalid ? '' : undefined}
@@ -65,21 +61,21 @@ export const MultiSelectChipDisplayButton = forwardRef<HTMLDivElement, MultiSele
       aria-disabled={disabled}
     >
       {state.selectedOptions.map(({ value, label }) => (
-        <Chip key={value} className="gap-x-2">
+        <div key={value} data-name="select-chip-display-chip">
           {label}
           <IconButton
             tooltip={translation('remove')}
             onClick={() => {
               item.toggleSelection(value, false)
             }}
-            size="xs"
+            size="sm"
             color="negative"
             coloringStyle="text"
-            className="flex-row-0 items-center"
+            className="flex-row-0 items-center size-7 p-1"
           >
             <XIcon className="size-5"/>
           </IconButton>
-        </Chip>
+        </div>
       ))}
       <IconButton
         id={ids.trigger}
@@ -97,7 +93,7 @@ export const MultiSelectChipDisplayButton = forwardRef<HTMLDivElement, MultiSele
           }
         }}
         tooltip={translation('changeSelection')}
-        size="sm"
+        size="md"
         color="neutral"
 
         aria-invalid={invalid}
@@ -134,24 +130,5 @@ export const MultiSelectChipDisplay = forwardRef<HTMLDivElement, MultiSelectChip
       <MultiSelectChipDisplayButton ref={ref} {...chipDisplayProps} />
       <MultiSelectContent {...contentPanelProps}>{children}</MultiSelectContent>
     </MultiSelectRoot>
-  )
-})
-
-
-export type MultiSelectChipDisplayUncontrolledProps = MultiSelectChipDisplayProps
-export const MultiSelectChipDisplayUncontrolled = forwardRef<HTMLDivElement, MultiSelectChipDisplayUncontrolledProps>(function MultiSelectChipDisplayUncontrolled({
-  value: initialValue,
-  onValueChange,
-  ...props
-}, ref) {
-  const [value, setValue] = useOverwritableState(initialValue, onValueChange)
-
-  return (
-    <MultiSelectChipDisplay
-      {...props}
-      ref={ref}
-      value={value}
-      onValueChange={setValue}
-    />
   )
 })

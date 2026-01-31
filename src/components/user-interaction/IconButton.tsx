@@ -1,6 +1,5 @@
 import type { ReactNode } from 'react'
 import { forwardRef, useImperativeHandle, useRef, type ButtonHTMLAttributes } from 'react'
-import clsx from 'clsx'
 import type { TooltipDisplayProps } from './Tooltip'
 import { TooltipContext, TooltipDisplay, TooltipRoot, useTooltip } from './Tooltip'
 import { Visibility } from '../layout/Visibility'
@@ -46,7 +45,6 @@ export const IconButtonBase = forwardRef<HTMLButtonElement, IconButtonBaseProps>
   coloringStyle = 'solid',
   allowClickEventPropagation = false,
   disabled,
-  className,
   ...props
 }, ref) {
   return (
@@ -64,7 +62,7 @@ export const IconButtonBase = forwardRef<HTMLButtonElement, IconButtonBaseProps>
         props.onClick?.(event)
       }}
 
-      className={clsx('button', className)}
+      data-name={props['data-name'] ?? 'button'}
       data-disabled={disabled ? '': undefined}
       data-size={size ?? undefined}
       data-layout="icon"
@@ -158,6 +156,7 @@ export const IconButton = forwardRef<HTMLButtonElement, IconButtonProps>(functio
   'aria-label': ariaLabel,
   'aria-labelledby': ariaLabelledby,
   useTooltipAsLabel = true,
+  disabled,
   ...props
 }, ref) {
   const isLabeled = !!ariaLabel || !!ariaLabelledby
@@ -168,12 +167,14 @@ export const IconButton = forwardRef<HTMLButtonElement, IconButtonProps>(functio
   !isLabeled && !isTooltipLabel, { type: 'warning' })
 
   return (
-    <TooltipRoot>
+    <TooltipRoot disabled={disabled}>
       <TooltipContext.Consumer>
         {({ tooltip: { id } }) => (
           <IconButtonTooltipTrigger
             {...props}
             ref={ref}
+
+            disabled={disabled}
 
             aria-describedby={props['aria-describedby'] ?? (isLabeled && !!tooltip ? id : undefined)}
             aria-labelledby={isLabeled ? ariaLabelledby : (isTooltipLabel ? id : undefined)}

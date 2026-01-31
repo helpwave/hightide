@@ -2,6 +2,7 @@
 @import "./card.css";
 @import "./chip.css";
 @import "./input-elements.css";
+@import "./toggleable-intput.css";
 @import "./table.css";
 @import "./scrollbar.css";
 @import "./link.css";
@@ -21,4 +22,5 @@
 @import "./time-picker.css";
 @import "./property.css";
 @import "./pop-up.css";
+@import "./select.css";
 @import "./general.css";

@@ -1,6 +1,5 @@
 import { forwardRef, useCallback, useContext, useImperativeHandle, useMemo } from 'react'
 import { useEventCallbackStabilizer } from '@/src/hooks/useEventCallbackStabelizer'
-import { clsx } from 'clsx'
 import { Portal } from '../../utils/Portal'
 import type { AnchoredFloatingContainerProps } from '../AnchoredFloatingContainer'
 import { AnchoredFloatingContainer } from '../AnchoredFloatingContainer'
@@ -94,7 +93,7 @@ export const PopUp = forwardRef<HTMLDivElement, PopUpProps>(function PopUp({
               transition: `top ${props.options?.pollingInterval ?? 100}ms linear, left ${props.options?.pollingInterval ?? 100}ms linear`,
               ...props.style
             }}
-            className={clsx('pop-up', props.className)}
+            data-name={props['data-name'] ?? 'pop-up'}
           >
             {children}
           </AnchoredFloatingContainer>

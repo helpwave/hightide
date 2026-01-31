@@ -4,7 +4,6 @@ import { TableBody } from './TableBody'
 import type { TableHeaderProps } from './TableHeader'
 import { TableHeader } from './TableHeader'
 import { useTableContainerContext, useTableStateContext } from './TableContext'
-import clsx from 'clsx'
 
 export interface TableDisplayProps extends TableHTMLAttributes<HTMLTableElement> {
   containerProps?: Omit<React.HTMLAttributes<HTMLDivElement>, 'children'>,
@@ -25,10 +24,10 @@ export const TableDisplay = <T,>({
   const { containerRef } = useTableContainerContext<T>()
 
   return (
-    <div {...containerProps} ref={containerRef} className={clsx('table-container', containerProps?.className)}>
+    <div {...containerProps} ref={containerRef} data-name={containerProps?.['data-name'] ?? 'table-container'}>
       <table
         {...props}
-        className={clsx('table', props.className)}
+        data-name={props['data-name'] ?? 'table'}
 
         style={{
           width: Math.floor(Math.max(table.getTotalSize(), containerRef.current?.offsetWidth ?? table.getTotalSize())),

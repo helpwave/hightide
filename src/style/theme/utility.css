@@ -1,7 +1,0 @@
-@utility w-default {
-  width: var(--default-size);
-}
-
-@utility h-default {
-  height: var(--default-size);
-}

@@ -3,7 +3,6 @@ import { MultiSelectRoot } from './SelectContext'
 import type { MultiSelectContentProps, MultiSelectButtonProps } from './SelectComponents'
 import { MultiSelectButton, MultiSelectContent } from './SelectComponents'
 import { forwardRef } from 'react'
-import { useOverwritableState } from '@/src/hooks/useOverwritableState'
 
 //
 // MultiSelect
@@ -24,23 +23,5 @@ export const MultiSelect = forwardRef<HTMLButtonElement, MultiSelectProps>(funct
       <MultiSelectButton ref={ref} {...buttonProps} />
       <MultiSelectContent {...contentPanelProps}>{children}</MultiSelectContent>
     </MultiSelectRoot>
-  )
-})
-
-
-export const MultiSelectUncontrolled = forwardRef<HTMLButtonElement, MultiSelectProps>(function MultiSelectUncontrolled({
-  value: initialValue,
-  onValueChange,
-  ...props
-}, ref) {
-  const [value, setValue] = useOverwritableState(initialValue, onValueChange)
-
-  return (
-    <MultiSelect
-      {...props}
-      ref={ref}
-      value={value}
-      onValueChange={setValue}
-    />
   )
 })

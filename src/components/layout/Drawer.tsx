@@ -68,7 +68,8 @@ export const Drawer = forwardRef<HTMLDivElement, DrawerProps>(function Drawer({
     <Portal>
       <div
         id={ids.container}
-        className={clsx('drawer-container', containerClassName)}
+        data-name="drawer-container"
+        className={containerClassName}
         data-open={PropsUtil.dataAttributes.bool(isOpen)}
         hidden={!isVisible && forceMount}
         style={{ zIndex, '--drawer-depth': depth.toString() } as React.CSSProperties}
@@ -89,7 +90,7 @@ export const Drawer = forwardRef<HTMLDivElement, DrawerProps>(function Drawer({
           ref={ref}
 
           onKeyDown={PropsUtil.aria.close(close)}
-          className={clsx('drawer-content', props.className)}
+          data-name={props['data-name'] ?? 'drawer-content'}
           data-state={transitionState}
           data-depth={depth}
           data-alignment={alignment}

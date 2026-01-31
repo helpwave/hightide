@@ -1,4 +1,3 @@
-import clsx from 'clsx'
 import { useLogOnce } from '@/src/hooks/useLogOnce'
 import type { ButtonHTMLAttributes } from 'react'
 import { forwardRef } from 'react'
@@ -51,7 +50,6 @@ export const Button = forwardRef<HTMLButtonElement, ButtonProps>(function SolidB
   coloringStyle = 'solid',
   disabled,
   allowClickEventPropagation = false,
-  className,
   ...props
 }, ref) {
   useLogOnce('Button: layout is deprecated, use IconButton instead', layout !== 'default', { type: 'warning' })
@@ -61,14 +59,16 @@ export const Button = forwardRef<HTMLButtonElement, ButtonProps>(function SolidB
       {...props}
       ref={ref}
       disabled={disabled}
-      className={clsx('button', className)}
+      type={props['type'] ?? 'button'}
+
       onClick={event => {
         if(!allowClickEventPropagation) {
           event.stopPropagation()
         }
         props.onClick?.(event)
       }}
-      type={props['type'] ?? 'button'}
+
+      data-name={props['data-name'] ?? 'button'}
       data-disabled={disabled ? '': undefined}
       data-size={size ?? undefined}
       data-layout={layout ?? undefined}

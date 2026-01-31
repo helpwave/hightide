@@ -1,0 +1,32 @@
+@utility element-square-xs {
+  @apply p-1 rounded-1 size-element-xs;
+}
+
+@utility element-square-sm {
+  @apply p-1.5 rounded-1.5 size-element-sm;
+}
+
+@utility element-square-md {
+  @apply p-2.5 rounded-1.5 size-element-md;
+}
+
+@utility element-square-lg {  
+  @apply p-2.5 rounded-1.5 size-element-lg;
+}
+
+
+@utility element-xs {
+  @apply px-element-padding-direction-xs py-element-padding-xs rounded-1 h-element-xs;
+}
+
+@utility element-sm {
+  @apply px-element-padding-direction-sm py-element-padding-sm rounded-1.5 h-element-sm;
+}
+
+@utility element-md {
+  @apply px-element-padding-direction-md py-element-padding-md rounded-1.5 h-element-md;
+}
+
+@utility element-lg {  
+  @apply px-element-padding-direction-lg py-element-padding-lg rounded-1.5 h-element-lg;
+}

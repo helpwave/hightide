@@ -1,4 +1,4 @@
-.pop-up {
+[data-name="pop-up"] {
     @apply surface coloring-solid rounded-md border-2 border-outline-variant shadow-md;
     @apply focus-within:border-primary;
 

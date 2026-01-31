@@ -10,6 +10,7 @@ and adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 ### Added
 - keyboard controls to `DayPicker`
 - `focus-style-shadow` for a shadow around the focused element
+- CSS variable for styling elements uniformly
 
 ### Fixed
 - removed all disable react-hooks/exhaustive-deps lint warning and fix them appropriately
@@ -17,7 +18,7 @@ and adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
 ### Changed
 - all components now use a hybrid approach for hybrid and controlled state management
-- `data-name` for components to a classname instead
+- use `data-name=<name>` for all components for easily overridable styling instead of classnames
 
 
 ### Removed

@@ -9,7 +9,6 @@ import { Visibility } from '@/src/components/layout/Visibility'
 import { DateUtils } from '@/src/utils/date'
 import type { FormFieldDataHandling } from '../../form/FormField'
 import { DateTimePickerDialog } from '../date/DateTimePickerDialog'
-import type { ControlledStateProps } from '@/src/hooks/useControlledState'
 import { useControlledState } from '@/src/hooks/useControlledState'
 import { PropsUtil } from '@/src/utils/propsUtil'
 import type { FormFieldInteractionStates } from '@/src/components/form/FieldLayout'
@@ -18,25 +17,24 @@ import { IconButton } from '../IconButton'
 
 export interface DateTimeInputProps extends
   Partial<FormFieldInteractionStates>,
-  ControlledStateProps<Date | null>,
   Omit<ButtonHTMLAttributes<HTMLDivElement>, 'defaultValue' | 'value'>,
   Partial<FormFieldDataHandling<Date | null>>
 {
+  initialValue?: Date | null,
   placeholder?: ReactNode,
   allowRemove?: boolean,
   // TODO allow mode = time
   mode?: 'date' | 'dateTime',
   containerProps?: HTMLAttributes<HTMLDivElement>,
-  pickerProps?: Omit<DateTimePickerProps, keyof FormFieldDataHandling<Date> | 'mode'>,
+  pickerProps?: Omit<DateTimePickerProps, keyof FormFieldDataHandling<Date> | 'mode' | 'initialValue'>,
   outsideClickCloses?: boolean,
   onDialogOpeningChange?: (isOpen: boolean) => void,
 }
 
 export const DateTimeInput = forwardRef<HTMLDivElement, DateTimeInputProps>(function DateTimeInput({
   value,
-  defaultValue = null,
+  initialValue = null,
   placeholder,
-  isControlled,
   onValueChange,
   onEditComplete,
   allowRemove = false,
@@ -54,15 +52,15 @@ export const DateTimeInput = forwardRef<HTMLDivElement, DateTimeInputProps>(func
   const translation = useHightideTranslation()
   const { locale } = useLocale()
   const [isOpen, setIsOpen] = useState(false)
-  const [state, setState] = useControlledState({
+  const [state, setState] = useControlledState<Date | null>({
     value,
     onValueChange,
-    defaultValue,
-    isControlled,
+    defaultValue: initialValue,
   })
-  const [dialogValue, setDialogValue] = useState(state)
+  const [dialogValue, setDialogValue] = useState<Date>(state ?? new Date())
+
   useEffect(() => {
-    setDialogValue(state)
+    setDialogValue(state ?? new Date())
   }, [state])
 
   const changeOpenWrapper = useCallback((isOpen: boolean) => {
@@ -114,7 +112,7 @@ export const DateTimeInput = forwardRef<HTMLDivElement, DateTimeInputProps>(func
           aria-controls={isOpen ? ids.popup : undefined}
 
           className={clsx(
-            'input-element flex-row-2 px-3 pr-10 h-default rounded-md w-full items-center justify-between',
+            'input-element flex-row-2 px-3 pr-10 h-element-md rounded-md w-full items-center justify-between',
             { 'hover:cursor-pointer': !readOnly },
             props.className
           )}
@@ -164,7 +162,7 @@ export const DateTimeInput = forwardRef<HTMLDivElement, DateTimeInputProps>(func
           allowRemove={allowRemove}
           onValueChange={setDialogValue}
           onEditComplete={(value) => {
-            setState?.(value)
+            setState(value)
             onEditComplete?.(value)
             changeOpenWrapper(false)
           }}

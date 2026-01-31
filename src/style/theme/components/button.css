@@ -1,5 +1,5 @@
 @layer components {
-  .button {
+  [data-name="button"] {
     @apply: font-semibold whitespace-nowrap;
     &:not([data-disabled]) {
       @apply cursor-pointer coloring-color-detect coloring-style-hover-detect;
@@ -10,54 +10,64 @@
     &[data-layout="icon"] {
       @apply flex-col-0 items-center justify-center;
       &[data-size="xs"] {
-        @apply p-1 rounded-1 size-6;
+        @apply element-square-xs;
         &[data-coloringstyle="outline"] {
-          @apply p-0.5;
+          padding: calc(var(--spacing-element-padding-xs) - var(--coloring-outline-width)); 
         }
       }
       &[data-size="sm"] {
-        @apply p-1.5 rounded-1.5 size-8;
+        @apply element-square-sm;
         &[data-coloringstyle="outline"] {
-          @apply p-1;
+          padding: calc(var(--spacing-element-padding-sm) - var(--coloring-outline-width)); 
         }
       }
       &[data-size="md"] {
-        @apply p-2 rounded-1.5 size-10;
+        @apply element-square-md;
         &[data-coloringstyle="outline"] {
-          @apply p-1.5;
+          padding: calc(var(--spacing-element-padding-md) - var(--coloring-outline-width)); 
         }
       }
       &[data-size="lg"] {
-        @apply p-2 rounded-1.5 size-12;
+        @apply element-square-lg;
         &[data-coloringstyle="outline"] {
-          @apply p-1.5;
+          padding: calc(var(--spacing-element-padding-lg) - var(--coloring-outline-width)); 
         }
       }
     }
+    
     &[data-layout="default"] {
       @apply flex flex-row items-center justify-center;
       &[data-size="xs"] {
-        @apply gap-x-1 px-1 py-0.75 rounded-1 h-6 text-sm;
+        @apply gap-x-1 element-xs;
+        @apply text-xs;
         &[data-coloringstyle="outline"] {
-          @apply px-0.5 py-0.25;
+          padding: 
+            calc(var(--spacing-element-padding-xs) - var(--coloring-outline-width)) 
+            calc(var(--spacing-element-padding-direction-xs) - var(--coloring-outline-width));
         }
       }
       &[data-size="sm"] {
-        @apply gap-x-1 px-1.5 py-1 rounded-1.5 h-8;
+        @apply gap-x-1 element-sm;
         &[data-coloringstyle="outline"] {
-          @apply px-1 py-0.5;
+          padding: 
+            calc(var(--spacing-element-padding-sm) - var(--coloring-outline-width)) 
+            calc(var(--spacing-element-padding-direction-sm) - var(--coloring-outline-width));
         }
       }
       &[data-size="md"] {
-        @apply gap-x-2 px-3 py-2 rounded-1.5 h-10;
+        @apply gap-x-2 element-md;
         &[data-coloringstyle="outline"] {
-          @apply px-2.5 py-1.5;
+          padding: 
+            calc(var(--spacing-element-padding-md) - var(--coloring-outline-width)) 
+            calc(var(--spacing-element-padding-direction-md) - var(--coloring-outline-width));
         }
       }
       &[data-size="lg"] {
-        @apply gap-x-2 px-4 py-2.5 rounded-1.5 h-12;
+        @apply gap-x-2 element-lg;
         &[data-coloringstyle="outline"] {
-          @apply px-3.5 py-2;
+          padding: 
+            calc(var(--spacing-element-padding-lg) - var(--coloring-outline-width)) 
+            calc(var(--spacing-element-padding-direction-lg) - var(--coloring-outline-width));
         }
       }
     }

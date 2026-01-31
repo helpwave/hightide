@@ -1,5 +1,5 @@
 @layer components {
-  .avatar {
+  [data-name="avatar"] {
     @apply relative flex-row-0 items-center justify-center primary coloring-solid rounded-full;
     &[data-group] {
       @apply absolute shadow-side shadow-r-4 shadow-hard;
@@ -39,14 +39,14 @@
     }
   }
 
-  .avatar-image {
+  [data-name="avatar-image"] {
     @apply absolute left-0 top-0 z-1 rounded-[inherit] size-[inherit];
     &:not([data-loaded]) {
       @apply opacity-0;
     }
   }
 
-  .avatar-group {
+  [data-name="avatar-group"] {
     @apply flex-row-2 items-center h-[var(--size)] w-fit;
     --overlap: 0.5;
     --count: 5;
@@ -64,11 +64,11 @@
     }
   }
 
-  .avatar-group-container {
+  [data-name="avatar-group-container"] {
     @apply relative w-[calc(var(--size)*(0.5*4+1))] h-[var(--size)];
   }
 
-  .avatar-group-more {
+  [data-name="avatar-group-more"] {
     @apply flex-row-2 truncate items-center text-[calc(var(--size)*2/3)];
   }
 }

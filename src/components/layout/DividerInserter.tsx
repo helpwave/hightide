@@ -1,5 +1,4 @@
 import type { HTMLAttributes, ReactNode } from 'react'
-import clsx from 'clsx'
 
 export type DividerInserterProps = Omit<HTMLAttributes<HTMLDivElement>, 'children'> & {
   children: ReactNode[],
@@ -14,7 +13,6 @@ export type DividerInserterProps = Omit<HTMLAttributes<HTMLDivElement>, 'childre
 export const DividerInserter = ({
   children,
   divider,
-  className,
   ...restProps
 }: DividerInserterProps) => {
   const nodes: ReactNode[] = []
@@ -30,7 +28,7 @@ export const DividerInserter = ({
   }
 
   return (
-    <div className={clsx(className)} {...restProps}>
+    <div {...restProps}>
       {nodes}
     </div>
   )

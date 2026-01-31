@@ -1,13 +1,13 @@
 @layer components {
-  .card-sm {
+  [data-name="card-sm"] {
     @apply flex-col-2 surface coloring-solid px-2 py-1 rounded;
   }
 
-  .card-md {
+  [data-name="card-md"] {
     @apply flex-col-2 bg-surface text-on-surface px-4 py-2 rounded-md;
   }
 
-  .card-lg {
+  [data-name="card-lg"] {
     @apply flex-col-2 bg-surface text-on-surface px-8 py-4 rounded-lg;
   }
 }

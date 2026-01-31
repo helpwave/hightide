@@ -1,22 +1,21 @@
 import { ArrayUtil } from '@/src/utils/array'
 import Link from 'next/link'
-import clsx from 'clsx'
 import type { ComponentProps, HTMLAttributes, ReactNode } from 'react'
 
 export type BreadCrumbLinkProps = ComponentProps<typeof Link>
 
-export const BreadCrumbLink = ({ className, ...props } : BreadCrumbLinkProps) => {
+export const BreadCrumbLink = ({ ...props } : BreadCrumbLinkProps) => {
   return (
     <Link
       {...props}
-      className={clsx('breadcrumb-link', className)}
+      data-name={props['data-name'] ?? 'breadcrumb-link'}
     />
   )
 }
 
 const BreadCrumbDivider = () => {
   return (
-    <span className="breadcrumb-divider">/</span>
+    <span data-name="breadcrumb-divider">/</span>
   )
 }
 
@@ -30,15 +29,15 @@ type BreadCrumbGroupProps = HTMLAttributes<HTMLUListElement> & {
  *
  * e.g. Organizations/Ward/<id>
  */
-export const BreadCrumbGroup = ({ children, divider, className, ...props }: BreadCrumbGroupProps) => {
+export const BreadCrumbGroup = ({ children, divider, ...props }: BreadCrumbGroupProps) => {
   const items = ArrayUtil.resolveSingleOrArray(children)
 
   return (
-    <ul {...props} className={clsx('breadcrumb', className)}>
+    <ul {...props} data-name={props['data-name'] ?? 'breadcrumb'}>
       {items.map((item, index) => {
         const isLast = index === items.length - 1
         return (
-          <li key={index} className="breadcrumb-item">
+          <li key={index} data-name="breadcrumb-item">
             {item}
             {!isLast && divider !== null && (divider ?? <BreadCrumbDivider/>)}
           </li>

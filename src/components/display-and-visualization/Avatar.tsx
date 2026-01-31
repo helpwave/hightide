@@ -1,6 +1,5 @@
 import type { HTMLAttributes } from 'react'
 import { useEffect, useMemo, useState } from 'react'
-import clsx from 'clsx'
 import { UserIcon } from 'lucide-react'
 import { Visibility } from '../layout/Visibility'
 
@@ -54,7 +53,7 @@ export const Avatar = ({
   return (
     <div
       {...props}
-      className={clsx('avatar', props.className)}
+      data-name={props['data-name'] ?? 'avatar'}
       data-size={props['data-size'] ?? size ?? undefined}
     >
       <Visibility isVisible={isShowingImage}>
@@ -62,7 +61,7 @@ export const Avatar = ({
           key={image?.avatarUrl}
           src={image?.avatarUrl}
           alt={image?.alt}
-          className="avatar-image"
+          data-name="avatar-image"
           onLoad={() => setHasLoaded(true)}
           onError={() => setHasError(true)}
           data-error={hasError ? '' : undefined}
@@ -109,13 +108,13 @@ export const AvatarGroup = ({
   return (
     <div
       {...props}
-      className={clsx('avatar-group', props.className)}
+      data-name={props['data-name'] ?? 'avatar-group'}
       data-size={size ?? undefined}
     >
       {group}
       {showTotalNumber && notDisplayedProfiles > 0 && (
         <span
-          className="avatar-group-more"
+          data-name="avatar-group-more"
           data-size={size}
         >
           {`+ ${notDisplayedProfiles}`}

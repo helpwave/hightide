@@ -3,7 +3,7 @@ import { Pencil } from 'lucide-react'
 import clsx from 'clsx'
 import type { EditCompleteOptions, InputProps } from '@/src/components/user-interaction/input/Input'
 import { Input } from '@/src/components/user-interaction/input/Input'
-import { useOverwritableState } from '@/src/hooks/useOverwritableState'
+import { useControlledState } from '@/src/hooks/useControlledState'
 
 type ToggleableInputProps = InputProps & {
   initialState?: 'editing' | 'display',
@@ -17,12 +17,18 @@ type ToggleableInputProps = InputProps & {
  * The State is managed by the parent
  */
 export const ToggleableInput = forwardRef<HTMLInputElement, ToggleableInputProps>(function ToggleableInput({
-  value,
+  value: controlledValue,
+  initialValue,
+  onValueChange,
   initialState = 'display',
   editCompleteOptions,
-  className,
   ...props
 }, forwardedRef) {
+  const [value, setValue] = useControlledState({
+    value: controlledValue,
+    onValueChange,
+    defaultValue: initialValue,
+  })
   const [isEditing, setIsEditing] = useState(initialState !== 'display')
 
   const innerRef = useRef<HTMLInputElement>(null)
@@ -40,6 +46,7 @@ export const ToggleableInput = forwardRef<HTMLInputElement, ToggleableInputProps
         {...props}
         ref={innerRef}
         value={value}
+        onValueChange={setValue}
         onEditComplete={(text) => {
           props.onEditComplete?.(text)
           setIsEditing(false)
@@ -54,10 +61,8 @@ export const ToggleableInput = forwardRef<HTMLInputElement, ToggleableInputProps
           allowEnterComplete: true
         }}
 
-        data-isEditing={isEditing ? '' : undefined}
-        className={clsx('togglable-input', 'w-full rounded-md', className, {
-          'text-transparent': !isEditing,
-        })}
+        data-isediting={isEditing ? '' : undefined}
+        data-name={props['data-name'] ?? 'togglable-input'}
       />
       {!isEditing && (
         <div className="absolute left-0 flex-row-2 items-center pointer-events-none touch-none w-full overflow-hidden">
@@ -70,19 +75,3 @@ export const ToggleableInput = forwardRef<HTMLInputElement, ToggleableInputProps
     </div>
   )
 })
-
-export const ToggleableInputUncontrolled = ({
-  value: initialValue,
-  onValueChange,
-  ...restProps
-}: ToggleableInputProps) => {
-  const [value, setValue] = useOverwritableState(initialValue, onValueChange)
-
-  return (
-    <ToggleableInput
-      value={value}
-      onValueChange={setValue}
-      {...restProps}
-    />
-  )
-}

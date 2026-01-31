@@ -1,5 +1,4 @@
 import { Binary } from 'lucide-react'
-import clsx from 'clsx'
 import { Input } from '@/src/components/user-interaction/input/Input'
 import { useHightideTranslation } from '@/src/i18n/useHightideTranslation'
 import type { PropertyField } from './PropertyBase'
@@ -33,11 +32,12 @@ export const NumberProperty = ({
     >
       {({ invalid }) => (
         <div
-          className="property-input-wrapper"
+          data-name="property-input-wrapper"
           data-invalid={PropsUtil.dataAttributes.bool(invalid)}
         >
           <Input
-            className={clsx('property-input', 'w-full pr-8')}
+            data-name="property-input"
+            className="w-full pr-8"
             data-invalid={PropsUtil.dataAttributes.bool(invalid)}
             value={value?.toString() ?? ''}
             type="number"
@@ -62,7 +62,7 @@ export const NumberProperty = ({
           />
           {suffix && (
             <span
-              className="property-suffix"
+              data-name="property-suffix"
               data-invalid={PropsUtil.dataAttributes.bool(invalid)}
             >
               {suffix}

@@ -1,13 +1,12 @@
 import type { InputHTMLAttributes } from 'react'
 import React, { forwardRef, useImperativeHandle, useRef } from 'react'
-import clsx from 'clsx'
 import type { UseDelayOptionsResolved } from '@/src/hooks/useDelay'
 import { useDelay } from '@/src/hooks/useDelay'
 import { useFocusManagement } from '@/src/hooks/focus/useFocusManagement'
 import type { FormFieldInteractionStates } from '../../form/FieldLayout'
 import type { FormFieldDataHandling } from '../../form/FormField'
 import { PropsUtil } from '@/src/utils/propsUtil'
-import { useOverwritableState } from '@/src/hooks/useOverwritableState'
+import { useControlledState } from '@/src/hooks/useControlledState'
 
 export type EditCompleteOptionsResolved = {
   onBlur: boolean,
@@ -27,7 +26,10 @@ const defaultEditCompleteOptions: EditCompleteOptionsResolved = {
 export type InputProps = Omit<InputHTMLAttributes<HTMLInputElement>, 'value'>
   & Partial<FormFieldDataHandling<string>>
   & Partial<FormFieldInteractionStates>
-  & { editCompleteOptions?: EditCompleteOptions }
+  & {
+    editCompleteOptions?: EditCompleteOptions,
+    initialValue?: string,
+  }
 
 /**
  * A Component for inputting text or other information
@@ -35,13 +37,19 @@ export type InputProps = Omit<InputHTMLAttributes<HTMLInputElement>, 'value'>
  * Its state is managed must be managed by the parent
  */
 export const Input = forwardRef<HTMLInputElement, InputProps>(function Input({
+  value: controlledValue,
+  initialValue,
   invalid = false,
   onValueChange,
   onEditComplete,
   editCompleteOptions,
-  className,
   ...props
 }, forwardedRef) {
+  const [value, setValue] = useControlledState({
+    value: controlledValue,
+    onValueChange: onValueChange,
+    defaultValue: initialValue,
+  })
   const {
     onBlur: allowEditCompleteOnBlur,
     afterDelay,
@@ -62,6 +70,7 @@ export const Input = forwardRef<HTMLInputElement, InputProps>(function Input({
   return (
     <input
       {...props}
+      value={value}
       ref={innerRef}
 
       onKeyDown={event => {
@@ -90,37 +99,14 @@ export const Input = forwardRef<HTMLInputElement, InputProps>(function Input({
           innerRef.current?.blur()
           onEditComplete?.(value)
         })
-        onValueChange?.(value)
+        setValue(value)
       }}
 
-      className={clsx('input', className)}
-      data-value={PropsUtil.dataAttributes.bool(!!props.value)}
+      data-name={props['data-name'] ?? 'input'}
+      data-value={PropsUtil.dataAttributes.bool(!!value)}
       {...PropsUtil.dataAttributes.interactionStates({ ...props, invalid })}
 
       {...PropsUtil.aria.interactionStates({ ...props, invalid }, props)}
-    />
-  )
-})
-
-
-/**
- * A Component for inputting text or other information
- *
- * Its state is managed by the component itself
- */
-export const InputUncontrolled = forwardRef<HTMLInputElement, InputProps>(function InputUncontrolled({
-  value,
-  onValueChange,
-  ...props
-}, ref) {
-  const [usedValue, setUsedValue] = useOverwritableState(value, onValueChange)
-
-  return (
-    <Input
-      {...props}
-      ref={ref}
-      value={usedValue}
-      onValueChange={setUsedValue}
     />
   )
 })

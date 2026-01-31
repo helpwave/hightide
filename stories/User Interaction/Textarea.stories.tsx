@@ -10,9 +10,9 @@ type Story = StoryObj<typeof meta>;
 
 export const textarea: Story = {
   args: {
-    value: 'Text',
+    initialValue: 'Text',
     disabled: false,
     invalid: false,
-    className: '',
+    className: 'w-full',
   },
 }

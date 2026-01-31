@@ -1,9 +1,9 @@
 @layer components {
-  .time-picker-container {
+  [data-name="time-picker-container"] {
     @apply flex-row-2 flex-1 min-h-0 select-none overflow-hidden;
   }
 
-  .time-picker-value-column {
+  [data-name="time-picker-value-column"] {
     @apply flex-col-1 flex-1 overflow-y-auto min-w-20 max-w-20;
   }
 }

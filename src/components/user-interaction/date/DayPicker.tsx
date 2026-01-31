@@ -5,7 +5,6 @@ import { useLocale } from '@/src/global-contexts/LocaleContext'
 import type { FormFieldDataHandling } from '../../form/FormField'
 import { PropsUtil } from '@/src/utils/propsUtil'
 import { useCallback, useEffect, useMemo, useRef } from 'react'
-import clsx from 'clsx'
 import { useControlledState } from '@/src/hooks/useControlledState'
 
 export type DayPickerProps = Partial<FormFieldDataHandling<Date>> & {
@@ -35,7 +34,7 @@ export const DayPicker = ({
   onEditComplete,
   weekStart = 'monday',
   markToday = true,
-  className = ''
+  className,
 }: DayPickerProps) => {
   const { locale } = useLocale()
 
@@ -111,16 +110,16 @@ export const DayPicker = ({
 
 
   return (
-    <div className={clsx('day-picker-container', className)}>
-      <div className="day-picker-header-row">
+    <div data-name="day-picker-container" className={className}>
+      <div data-name="day-picker-header-row">
         {weeks[0]!.map((weekDay, index) => (
-          <div key={index} className="day-picker-header-item">
+          <div key={index} data-name="day-picker-header-item">
             {new Intl.DateTimeFormat(locale, { weekday: 'long' }).format(weekDay).substring(0, 2)}
           </div>
         ))}
       </div>
       {weeks.map((week, index) => (
-        <div key={index} className="day-picker-body-row">
+        <div key={index} data-name="day-picker-body-row">
           {week.map((date) => {
             const isSelected = !!value && DateUtils.equalDate(value, date)
             const isFocused = !!focusTargetDate && DateUtils.equalDate(focusTargetDate, date)
@@ -131,7 +130,7 @@ export const DayPicker = ({
               <div
                 key={date.getDate()}
                 ref={isFocused ? selectedButtonRef : undefined}
-                className="day-picker-body-item"
+                data-name="day-picker-body-item"
                 onClick={() => {
                   if (!isDayValid) return
                   const newDate = new Date(

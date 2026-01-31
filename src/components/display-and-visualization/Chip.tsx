@@ -1,5 +1,4 @@
 import type { HTMLAttributes } from 'react'
-import clsx from 'clsx'
 import { ButtonUtil } from '@/src/components/user-interaction/Button'
 
 type ChipSize = 'xs' | 'sm' | 'md' | 'lg' | null
@@ -27,13 +26,12 @@ export const Chip = ({
   color = 'neutral',
   coloringStyle = 'solid',
   size = 'md',
-  className,
   ...props
 }: ChipProps) => {
   return (
     <div
       {...props}
-      className={clsx('chip', className)}
+      data-name={props['data-name'] ?? 'chip'}
       data-color={color ?? undefined}
       data-coloringstyle={coloringStyle ?? undefined}
       data-size={size ?? undefined}
@@ -52,11 +50,10 @@ export type ChipListProps = HTMLAttributes<HTMLUListElement> & {
  */
 export const ChipList = ({
   list,
-  className,
   ...props
 }: ChipListProps) => {
   return (
-    <ul {...props} className={clsx('chip-list', className)}>
+    <ul {...props} data-name={props['data-name'] ?? 'chip-list'}>
       {list.map((value, index) => (
         <li key={index}>
           <Chip

@@ -105,7 +105,8 @@ export const Dialog = forwardRef<HTMLDivElement, DialogProps>(function Dialog({
 
           data-open={PropsUtil.dataAttributes.bool(isOpen)}
 
-          className={clsx('dialog-container', containerClassName)}
+          data-name="dialog-container"
+          className={containerClassName}
           style={{ zIndex }}
         >
           <div
@@ -135,7 +136,7 @@ export const Dialog = forwardRef<HTMLDivElement, DialogProps>(function Dialog({
               aria-labelledby={ids.title}
               aria-describedby={hasDescription ? ids.description : undefined}
 
-              className={clsx('dialog-content', props.className)}
+              data-name={props['data-name'] ?? 'dialog-content'}
             >
               <div className="typography-title-lg mr-8">
                 {titleElement}

@@ -28,9 +28,9 @@
 }
 
 @utility coloring-outline {
-  @apply border-2
-  border-[var(--coloring-border,var(--coloring-outline,var(--coloring-color)))]
-  text-[var(--coloring-outline,var(--coloring-color))];
+  border-width: var(--coloring-outline-width, 0.125rem);
+  @apply border-[var(--coloring-border,var(--coloring-outline,var(--coloring-color)))];
+  @apply text-[var(--coloring-outline,var(--coloring-color))];
 }
 
 @utility coloring-outline-hover {
