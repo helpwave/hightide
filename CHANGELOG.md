@@ -5,7 +5,7 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/)
 and adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
-## [0.8.0] - 2026-01-29
+## [0.8.0] - 2026-01-31
 
 ### Added
 - keyboard controls to `DayPicker`
@@ -20,6 +20,8 @@ and adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 - all components now use a hybrid approach for hybrid and controlled state management
 - use `data-name=<name>` for all components for easily overridable styling instead of classnames
 
+### Removed
+- `layout` attribute from `Button`
 
 ### Removed
 - Geometry Components such as `Ring` and `Circle` as these can be CSS only solutions

@@ -1,74 +1,47 @@
 @layer components {
   [data-name="button"] {
+    @apply flex flex-row items-center justify-center element;
     @apply: font-semibold whitespace-nowrap;
+
     &:not([data-disabled]) {
       @apply cursor-pointer coloring-color-detect coloring-style-hover-detect;
     }
+    
     &[data-disabled] {
       @apply disabled coloring-style-detect cursor-not-allowed;
     }
-    &[data-layout="icon"] {
-      @apply flex-col-0 items-center justify-center;
-      &[data-size="xs"] {
-        @apply element-square-xs;
-        &[data-coloringstyle="outline"] {
-          padding: calc(var(--spacing-element-padding-xs) - var(--coloring-outline-width)); 
-        }
-      }
-      &[data-size="sm"] {
-        @apply element-square-sm;
-        &[data-coloringstyle="outline"] {
-          padding: calc(var(--spacing-element-padding-sm) - var(--coloring-outline-width)); 
-        }
-      }
-      &[data-size="md"] {
-        @apply element-square-md;
-        &[data-coloringstyle="outline"] {
-          padding: calc(var(--spacing-element-padding-md) - var(--coloring-outline-width)); 
-        }
-      }
-      &[data-size="lg"] {
-        @apply element-square-lg;
-        &[data-coloringstyle="outline"] {
-          padding: calc(var(--spacing-element-padding-lg) - var(--coloring-outline-width)); 
-        }
+
+    &[data-size="xs"] {
+      @apply gap-x-1 sizing-xs;
+      @apply text-xs;
+      &[data-coloringstyle="outline"] {
+        padding: 
+          calc(var(--spacing-element-padding-xs) - var(--coloring-outline-width)) 
+          calc(var(--spacing-element-padding-direction-xs) - var(--coloring-outline-width));
       }
     }
-    
-    &[data-layout="default"] {
-      @apply flex flex-row items-center justify-center;
-      &[data-size="xs"] {
-        @apply gap-x-1 element-xs;
-        @apply text-xs;
-        &[data-coloringstyle="outline"] {
-          padding: 
-            calc(var(--spacing-element-padding-xs) - var(--coloring-outline-width)) 
-            calc(var(--spacing-element-padding-direction-xs) - var(--coloring-outline-width));
-        }
+    &[data-size="sm"] {
+      @apply gap-x-1 sizing-sm;
+      &[data-coloringstyle="outline"] {
+        padding: 
+          calc(var(--spacing-element-padding-sm) - var(--coloring-outline-width)) 
+          calc(var(--spacing-element-padding-direction-sm) - var(--coloring-outline-width));
       }
-      &[data-size="sm"] {
-        @apply gap-x-1 element-sm;
-        &[data-coloringstyle="outline"] {
-          padding: 
-            calc(var(--spacing-element-padding-sm) - var(--coloring-outline-width)) 
-            calc(var(--spacing-element-padding-direction-sm) - var(--coloring-outline-width));
-        }
+    }
+    &[data-size="md"] {
+      @apply gap-x-2 sizing-md;
+      &[data-coloringstyle="outline"] {
+        padding: 
+          calc(var(--spacing-element-padding-md) - var(--coloring-outline-width)) 
+          calc(var(--spacing-element-padding-direction-md) - var(--coloring-outline-width));
       }
-      &[data-size="md"] {
-        @apply gap-x-2 element-md;
-        &[data-coloringstyle="outline"] {
-          padding: 
-            calc(var(--spacing-element-padding-md) - var(--coloring-outline-width)) 
-            calc(var(--spacing-element-padding-direction-md) - var(--coloring-outline-width));
-        }
-      }
-      &[data-size="lg"] {
-        @apply gap-x-2 element-lg;
-        &[data-coloringstyle="outline"] {
-          padding: 
-            calc(var(--spacing-element-padding-lg) - var(--coloring-outline-width)) 
-            calc(var(--spacing-element-padding-direction-lg) - var(--coloring-outline-width));
-        }
+    }
+    &[data-size="lg"] {
+      @apply gap-x-2 sizing-lg;
+      &[data-coloringstyle="outline"] {
+        padding: 
+          calc(var(--spacing-element-padding-lg) - var(--coloring-outline-width)) 
+          calc(var(--spacing-element-padding-direction-lg) - var(--coloring-outline-width));
       }
     }
   }

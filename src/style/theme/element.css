@@ -1,32 +1,50 @@
-@utility element-square-xs {
-  @apply p-1 rounded-1 size-element-xs;
+@utility element {
+  padding: 
+    var(--element-padding, var(--spacing-element-padding-md)) 
+    var(--element-padding-direction, var(--spacing-element-padding-direction-md));
+  border-radius: var(--element-border-radius, 0.375rem);
+  height: var(--element-height, var(--spacing-element-md));
 }
 
-@utility element-square-sm {
-  @apply p-1.5 rounded-1.5 size-element-sm;
-}
-
-@utility element-square-md {
-  @apply p-2.5 rounded-1.5 size-element-md;
-}
-
-@utility element-square-lg {  
-  @apply p-2.5 rounded-1.5 size-element-lg;
+@utility element-square {
+  padding: var(--element-padding, var(--spacing-element-padding-md));
+  border-radius: var(--element-border-radius, 0.375rem);
+  height: var(--element-height, var(--spacing-element-height-md));
+  width: var(--element-height, var(--spacing-element-md));
 }
 
 
-@utility element-xs {
-  @apply px-element-padding-direction-xs py-element-padding-xs rounded-1 h-element-xs;
+@utility sizing-xs {
+  --element-padding: var(--spacing-element-padding-xs);
+  --element-padding-direction: var(--spacing-element-padding-direction-xs);
+  --element-border-radius: 0.25rem;
+  --element-height: var(--spacing-element-xs);
 }
 
-@utility element-sm {
-  @apply px-element-padding-direction-sm py-element-padding-sm rounded-1.5 h-element-sm;
+@utility sizing-sm {
+  --element-padding: var(--spacing-element-padding-sm);
+  --element-padding-direction: var(--spacing-element-padding-direction-sm);
+  --element-border-radius: 0.375rem;
+  --element-height: var(--spacing-element-sm);
 }
 
-@utility element-md {
-  @apply px-element-padding-direction-md py-element-padding-md rounded-1.5 h-element-md;
+@utility sizing-md {
+  --element-padding: var(--spacing-element-padding-md);
+  --element-padding-direction: var(--spacing-element-padding-direction-md);
+  --element-border-radius: 0.375rem;
+  --element-height: var(--spacing-element-md);
 }
 
-@utility element-lg {  
-  @apply px-element-padding-direction-lg py-element-padding-lg rounded-1.5 h-element-lg;
+@utility sizing-lg {
+  --element-padding: var(--spacing-element-padding-lg);
+  --element-padding-direction: var(--spacing-element-padding-direction-lg);
+  --element-border-radius: 0.5rem;
+  --element-height: var(--spacing-element-lg);
+}
+
+@utility sizing-none {
+  --element-padding: 0;
+  --element-padding-direction: 0;
+  --element-border-radius: 0;
+  --element-height: auto;
 }

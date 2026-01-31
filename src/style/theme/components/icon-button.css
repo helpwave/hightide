@@ -1,0 +1,38 @@
+@layer components {
+  [data-name="icon-button"] {
+    @apply flex-col-0 items-center justify-center element-square;
+    
+    &:not([data-disabled]) {
+        @apply cursor-pointer coloring-color-detect coloring-style-hover-detect;
+    }
+    
+    &[data-disabled] {
+        @apply disabled coloring-style-detect cursor-not-allowed;
+    }
+
+    &[data-size="xs"] {
+        @apply sizing-xs;
+        &[data-coloringstyle="outline"] {
+            padding: calc(var(--spacing-element-padding-xs) - var(--coloring-outline-width)); 
+        }
+    }
+    &[data-size="sm"] {
+        @apply sizing-sm;
+        &[data-coloringstyle="outline"] {
+            padding: calc(var(--spacing-element-padding-sm) - var(--coloring-outline-width)); 
+        }
+    }
+    &[data-size="md"] {
+        @apply sizing-md;
+        &[data-coloringstyle="outline"] {
+            padding: calc(var(--spacing-element-padding-md) - var(--coloring-outline-width)); 
+        }
+    }
+    &[data-size="lg"] {
+        @apply sizing-lg;
+        &[data-coloringstyle="outline"] {
+            padding: calc(var(--spacing-element-padding-lg) - var(--coloring-outline-width)); 
+        }
+    }
+  }
+}

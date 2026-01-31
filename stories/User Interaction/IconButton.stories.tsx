@@ -1,5 +1,5 @@
 import type { Meta, StoryObj } from '@storybook/nextjs'
-import { ButtonUtil } from '@/src/components/user-interaction/Button'
+import { StorybookStyling } from '@/src/storybook/styling'
 import { action } from 'storybook/actions'
 import { IconButton } from '@/src/components/user-interaction/IconButton'
 import { MinusIcon } from 'lucide-react'
@@ -9,7 +9,7 @@ const meta = {
   argTypes: {
     color: {
       control: 'select',
-      options: ButtonUtil.colors,
+      options: StorybookStyling.colors,
     },
   },
 } satisfies Meta<typeof IconButton>

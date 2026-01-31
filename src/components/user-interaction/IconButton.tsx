@@ -12,17 +12,6 @@ type IconButtonSize = 'xs' | 'sm' | 'md' | 'lg' | null
 
 type IconButtonColoringStyle = 'outline' | 'solid' | 'text' | 'tonal' | null
 
-const iconButtonColorsList = ['primary', 'secondary', 'positive', 'warning', 'negative', 'neutral'] as const
-
-/**
- * The allowed colors for the Button
- */
-export type IconButtonColor = typeof iconButtonColorsList[number] | null
-
-export const IconButtonUtil = {
-  colors: iconButtonColorsList,
-}
-
 
 
 export interface IconButtonBaseProps extends ButtonHTMLAttributes<HTMLButtonElement> {
@@ -30,7 +19,6 @@ export interface IconButtonBaseProps extends ButtonHTMLAttributes<HTMLButtonElem
      * @default 'medium'
      */
     size?: IconButtonSize,
-    color?: IconButtonColor,
     /**
      * @default 'solid'
      */
@@ -62,10 +50,9 @@ export const IconButtonBase = forwardRef<HTMLButtonElement, IconButtonBaseProps>
         props.onClick?.(event)
       }}
 
-      data-name={props['data-name'] ?? 'button'}
+      data-name={props['data-name'] ?? 'icon-button'}
       data-disabled={disabled ? '': undefined}
       data-size={size ?? undefined}
-      data-layout="icon"
       data-color={color ?? undefined}
       data-coloringstyle={coloringStyle ?? undefined}
     >
