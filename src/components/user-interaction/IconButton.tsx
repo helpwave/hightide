@@ -129,6 +129,12 @@ const IconButtonTooltipTrigger = forwardRef<HTMLButtonElement, IconButtonTooltip
         }
         props.onFocus?.(e)
       }}
+      onBlur={(e) => {
+        if(!disabled) {
+          tooltipTriggerProps.onBlur()
+        }
+        props.onBlur?.(e)
+      }}
     />
   )
 })
@@ -160,7 +166,7 @@ export const IconButton = forwardRef<HTMLButtonElement, IconButtonProps>(functio
   !isLabeled && !isTooltipLabel, { type: 'warning' })
 
   return (
-    <TooltipRoot>
+    <TooltipRoot disabled={props.disabled}>
       <TooltipContext.Consumer>
         {({ tooltip: { id } }) => (
           <IconButtonTooltipTrigger

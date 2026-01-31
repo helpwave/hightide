@@ -1,10 +1,11 @@
-import type { SVGProps } from 'react'
+import type { CSSProperties, SVGProps } from 'react'
 import { clsx } from 'clsx'
 
 export type HelpwaveProps = SVGProps<SVGSVGElement> & {
   color?: string,
   animate?: 'none' | 'loading' | 'pulse' | 'bounce',
   size?: 'sm' | 'md' | 'lg',
+  animationDuration?: number,
 }
 
 /**
@@ -14,6 +15,7 @@ export const HelpwaveLogo = ({
   color = 'currentColor',
   size,
   animate = 'none',
+  animationDuration = 1.7,
   ...props
 }: HelpwaveProps) => {
   const isLoadingAnimation = animate === 'loading'
@@ -24,6 +26,10 @@ export const HelpwaveLogo = ({
   } else if (animate === 'bounce') {
     svgAnimationKey = 'animate-bounce'
   }
+
+  const style = animationDuration !== undefined && isLoadingAnimation
+    ? { ...props.style, '--helpwave-loading-duration': `${animationDuration}s` } as CSSProperties
+    : props.style
 
   return (
     <svg
@@ -37,6 +43,7 @@ export const HelpwaveLogo = ({
         'max-w-12 max-h-12': size === 'md',
         'max-w-8 max-h-8': size === 'sm',
       }, props.className)}
+      style={style}
     >
       <g className={clsx(svgAnimationKey)}>
         <path className={clsx({ 'animate-wave-big-left-up': isLoadingAnimation })}

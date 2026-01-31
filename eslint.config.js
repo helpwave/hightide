@@ -3,7 +3,7 @@ import config from '@helpwave/eslint-config'
 
 export default [
   {
-    ignores: ['dist/**'],
+    ignores: ['dist/**', 'security-patches/**', 'node_modules/**'],
   },
   ...config.recommended,
   ...storybook.configs['flat/recommended'],
