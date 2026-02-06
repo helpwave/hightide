@@ -143,6 +143,7 @@ export const IconButton = forwardRef<HTMLButtonElement, IconButtonProps>(functio
   'aria-label': ariaLabel,
   'aria-labelledby': ariaLabelledby,
   useTooltipAsLabel = true,
+  color = 'neutral',
   disabled,
   ...props
 }, ref) {
@@ -161,6 +162,7 @@ export const IconButton = forwardRef<HTMLButtonElement, IconButtonProps>(functio
             {...props}
             ref={ref}
 
+            color={color}
             disabled={disabled}
 
             aria-describedby={props['aria-describedby'] ?? (isLabeled && !!tooltip ? id : undefined)}
