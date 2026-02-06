@@ -4,7 +4,7 @@ import { forwardRef, useState } from 'react'
 import clsx from 'clsx'
 import type { InputProps } from '@/src/components/user-interaction/input/Input'
 import { Input } from '@/src/components/user-interaction/input/Input'
-import { useControlledState } from '@/src/hooks'
+import { useControlledState } from '@/src/hooks/useControlledState'
 
 type InsideLabelInputProps = Omit<InputProps, 'aria-label' | 'aria-labelledby' | 'placeholder'> & {
   label: ReactNode,
