@@ -168,10 +168,12 @@ export const useFocusTrap = ({
     const containerElement = container.current
     // Try in the following order
     // 1. Focus the initial element
-    // 2. Focus the first focusable element in the container
+    // 2. Focus the first focusable element in the container, focusFirst is true
     // 3. Focus the container
     if (initialFocus?.current) {
       initialFocus.current.focus()
+    } else if (!focusFirst) {
+      containerElement.focus()
     } else {
       const elements = getContainedFocusableElements(containerElement)
       if (elements && elements.length > 0) {
@@ -182,7 +184,7 @@ export const useFocusTrap = ({
         containerElement.focus()
       }
     }
-  }, [container, initialFocus])
+  }, [container, focusFirst, initialFocus])
 
   useEffect(() => {
     if (active) {
@@ -245,5 +247,5 @@ export const useFocusTrap = ({
         containerElement.removeEventListener('keydown', onKeyDown)
       }
     }
-  }, [active, paused, container, initialFocus, focusFirst, focusElement])
+  }, [active, paused, container, initialFocus, focusElement])
 }

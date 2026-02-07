@@ -5,7 +5,7 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/)
 and adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
-## [0.8.0] - 2026-01-31
+## [0.8.0] - 2026-02-07
 
 ### Added
 - keyboard controls to `DayPicker`
@@ -13,13 +13,16 @@ and adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 - CSS variable for styling elements uniformly
 - `Switch` component
 
-### Fixed
-- removed all disable react-hooks/exhaustive-deps lint warning and fix them appropriately
-- `IconButton` not reacting to blur for closing the tooltip
-
 ### Changed
 - all components now use a hybrid approach for hybrid and controlled state management
 - use `data-name=<name>` for all components for easily overridable styling instead of classnames
+- `Drawer` now is modularized and provides a context
+
+### Fixed
+- removed all disable react-hooks/exhaustive-deps lint warning and fix them appropriately
+- `IconButton` not reacting to blur for closing the tooltip
+- `useFocusTrap`s `focusFirst` always being active even when false
+
 
 ### Removed
 - `layout` attribute from `Button`
