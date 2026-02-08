@@ -1,4 +1,4 @@
-import type { Dispatch, HTMLAttributes, KeyboardEvent, PropsWithChildren, ReactNode, RefObject, SetStateAction } from 'react'
+import type { CSSProperties, Dispatch, HTMLAttributes, KeyboardEvent, PropsWithChildren, ReactNode, RefObject, SetStateAction } from 'react'
 import { useCallback, useId, useState } from 'react'
 import { createContext, useContext, useEffect, useRef } from 'react'
 import clsx from 'clsx'
@@ -10,6 +10,31 @@ export interface TabInfo {
   id: string,
   labelId: string,
   label: ReactNode,
+  disabled?: boolean,
+  ref: RefObject<HTMLElement>,
+}
+
+function sortByDomOrder(infos: TabInfo[]): TabInfo[] {
+  return infos.slice().sort((a, b) => {
+    const elA = a.ref.current
+    const elB = b.ref.current
+    if (!elA && !elB) return 0
+    if (!elA) return 1
+    if (!elB) return -1
+    return (elA.compareDocumentPosition(elB) & Node.DOCUMENT_POSITION_FOLLOWING) ? -1 : 1
+  })
+}
+
+function getNextEnabledIdInOrder(sortedInfos: TabInfo[], currentActiveId: string | null): string | null {
+  const enabled = sortedInfos.filter(t => !t.disabled)
+  if (enabled.length === 0) return null
+  const currentIndex = sortedInfos.findIndex(t => t.id === currentActiveId)
+  const startIndex = currentIndex >= 0 ? (currentIndex + 1) % sortedInfos.length : 0
+  for (let i = 0; i < sortedInfos.length; i++) {
+    const idx = (startIndex + i) % sortedInfos.length
+    if (!sortedInfos[idx].disabled) return sortedInfos[idx].id
+  }
+  return null
 }
 
 type TabState = {
@@ -26,8 +51,7 @@ export interface TabContextType {
   tabs: {
     activeId: string | null,
     setActiveId: Dispatch<SetStateAction<string | null>>,
-    register: (info: TabInfo) => void,
-    unregister: (id: string) => void,
+    subscribe: (info: TabInfo) => () => void,
     info?: TabInfo[],
   },
   portal: {
@@ -57,31 +81,32 @@ export function TabSwitcher({ children }: TabSwitcherProps) {
   })
   const [portalState, setPortalState] = useState<PortalState>(null)
 
-  const register = useCallback((info: TabInfo) => {
-    setState(prevState => ({
-      activeId: prevState.activeId ?? info.id,
-      infos: [...prevState.infos, info],
-    }))
-  }, [])
-
-  const unregister = useCallback((id: string) => {
+  const subscribe = useCallback((info: TabInfo) => {
+    const id = info.id
     setState(prevState => {
-      const infos = prevState.infos.filter(value => value.id !== id)
-      let activeId = prevState.activeId
-      if (activeId === id) {
-        const index = prevState.infos.findIndex(value => value.id === id)
-        if (infos.length > 0) {
-          const newIndex = index % infos.length
-          activeId = infos[newIndex].id
-        } else {
-          activeId = null
-        }
-      }
-      return {
-        activeId,
-        infos,
-      }
+      const existingIndex = prevState.infos.findIndex(t => t.id === id)
+      const infos = existingIndex >= 0
+        ? prevState.infos.map((t, i) => (i === existingIndex ? { ...t, ...info } : t))
+        : [...prevState.infos, info]
+      const ordered = sortByDomOrder(infos)
+      const activeIsDisabled = prevState.activeId !== null && infos.some(t => t.id === prevState.activeId && t.disabled)
+      const activeId = activeIsDisabled
+        ? getNextEnabledIdInOrder(ordered, prevState.activeId)
+        : prevState.activeId ?? (info.disabled ? getNextEnabledIdInOrder(ordered, null) : id)
+      return { activeId, infos: ordered }
     })
+    return () => {
+      setState(prevState => {
+        const infos = prevState.infos.filter(t => t.id !== id)
+        const activeTab = prevState.activeId !== null ? infos.find(t => t.id === prevState.activeId) : null
+        const activeIsUnregisteredOrDisabled = prevState.activeId === id || (activeTab?.disabled === true)
+        const nextId = prevState.activeId === id
+          ? getNextEnabledIdInOrder(prevState.infos, id)
+          : getNextEnabledIdInOrder(infos, prevState.activeId)
+        const activeId = activeIsUnregisteredOrDisabled ? nextId : prevState.activeId
+        return { activeId, infos }
+      })
+    }
   }, [])
 
   const registerPortal = useCallback((state: PortalState) => {
@@ -98,8 +123,7 @@ export function TabSwitcher({ children }: TabSwitcherProps) {
         tabs: {
           activeId: state.activeId,
           setActiveId,
-          register,
-          unregister,
+          subscribe,
           info: state.infos,
         },
         portal: {
@@ -128,14 +152,15 @@ export function TabList({ ...props }: TabListProps) {
     const idx = info.findIndex((tab) => tab.id === activeId)
     if (idx === -1) return
 
+    const step = e.key === 'ArrowRight' ? 1 : e.key === 'ArrowLeft' ? -1 : 0
+    if (step === 0) return
+
     let nextIdx = idx
-    if (e.key === 'ArrowRight') {
-      nextIdx = (idx + 1) % info.length
-    } else if (e.key === 'ArrowLeft') {
-      nextIdx = (idx - 1 + info.length) % info.length
-    } else {
-      return
+    for (let i = 0; i < info.length; i++) {
+      nextIdx = (nextIdx + step + info.length) % info.length
+      if (!info[nextIdx].disabled) break
     }
+    if (info[nextIdx].disabled) return
 
     const nextId = info[nextIdx].id
     setActive(nextId)
@@ -149,26 +174,36 @@ export function TabList({ ...props }: TabListProps) {
       onKeyDown={onKeyDown}
       role="tablist"
       aria-orientation="horizontal"
+      style={{ '--tab-count': info.length, ...props.style } as CSSProperties}
     >
-      {info.map((tabInfo) => (
-        <li
-          key={tabInfo.id}
-          ref={(el) => {
-            refs.current[tabInfo.id] = el
-          }}
-          id={tabInfo.labelId}
-          data-name="tab-list-item"
-          {...PropsUtil.aria.click(() => setActive(tabInfo.id))}
-          data-active={PropsUtil.dataAttributes.bool(activeId === tabInfo.id)}
+      {info.map((tabInfo) => {
+        const isDisabled = !!tabInfo.disabled
+        const isActive = activeId === tabInfo.id
+        return (
+          <li
+            key={tabInfo.id}
+            ref={(el) => {
+              refs.current[tabInfo.id] = el
+            }}
+            id={tabInfo.labelId}
 
-          role="tab"
-          aria-selected={activeId === tabInfo.id}
-          aria-controls={activeId}
-          tabIndex={activeId === tabInfo.id ? 0 : -1}
-        >
-          {tabInfo.label}
-        </li>
-      ))}
+
+            {...(isDisabled ? {} : PropsUtil.aria.click(() => setActive(tabInfo.id)))}
+
+            data-name="tab-list-item"
+            data-active={PropsUtil.dataAttributes.bool(isActive)}
+            data-disabled={PropsUtil.dataAttributes.bool(isDisabled)}
+
+            role="tab"
+            aria-selected={isActive}
+            aria-disabled={isDisabled}
+            aria-controls={activeId}
+            tabIndex={isActive && !isDisabled ? 0 : -1}
+          >
+            {tabInfo.label}
+          </li>
+        )
+      })}
     </ul>
   )
 }
@@ -201,37 +236,43 @@ export function TabView({ ...props }: TabViewProps) {
   )
 }
 
-type TabProps = HTMLAttributes<HTMLDivElement> & {
+type TabPanelProps = HTMLAttributes<HTMLDivElement> & {
   label: string,
+  forceMount?: boolean,
+  disabled?: boolean,
 }
 
 //
 // TabPanel
 //
-export function TabPanel({ label, ...props }: TabProps) {
+export function TabPanel({ label, forceMount = false, disabled = false, ...props }: TabPanelProps) {
   const { tabs, portal } = useTabContext()
-  const { register, unregister, activeId } = tabs
+  const { subscribe, activeId } = tabs
   const generatedId = useId()
   const id = props.id ?? 'tab-panel-' + generatedId
   const labelId = 'tab-list-button-' + generatedId
+  const ref = useRef<HTMLDivElement>(null)
 
   useEffect(() => {
-    register({ id, label, labelId })
-    return () => unregister(id)
-  }, [id, label, labelId, register, unregister])
+    return subscribe({ id, label, labelId, disabled, ref })
+  }, [id, label, labelId, disabled, subscribe])
 
   const isActive = activeId === id
 
   const content = (
     <div
       {...props}
+      ref={ref}
       id={id}
       hidden={!isActive}
+
       data-name={props['data-name'] ?? 'tab-panel'}
+      data-disabled={PropsUtil.dataAttributes.bool(disabled)}
+
       role="tabpanel"
       aria-labelledby={labelId}
     >
-      <Visibility isVisible={isActive}>
+      <Visibility isVisible={isActive || forceMount}>
         {props.children}
       </Visibility>
     </div>

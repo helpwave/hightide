@@ -12,6 +12,7 @@ and adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 - `focus-style-shadow` for a shadow around the focused element
 - CSS variable for styling elements uniformly
 - `Switch` component
+- disable option for `TabPanel`s
 
 ### Changed
 - all components now use a hybrid approach for hybrid and controlled state management
