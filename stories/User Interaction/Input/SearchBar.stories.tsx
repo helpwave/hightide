@@ -11,7 +11,7 @@ type Story = StoryObj<typeof meta>;
 
 export const searchBar: Story = {
   args: {
-    value: '',
+    initialValue: '',
     disabled: false,
     invalid: false,
     placeholder: 'Placeholder',

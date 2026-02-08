@@ -58,16 +58,16 @@ export const Checkbox = ({
       onClick={(event) => {
         if (!disabled) {
           setValue(prev => !prev)
-          props.onClick?.(event)
         }
+        props.onClick?.(event)
       }}
       onKeyDown={(event) => {
         if (disabled) return
         if (event.key === ' ' || event.key === 'Enter') {
           event.preventDefault()
           setValue(prev => !prev)
-          props.onKeyDown?.(event)
         }
+        props.onKeyDown?.(event)
       }}
 
       data-checked={!indeterminate ? value : 'indeterminate'}
