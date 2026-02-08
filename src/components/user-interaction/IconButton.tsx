@@ -110,12 +110,6 @@ const IconButtonTooltipTrigger = forwardRef<HTMLButtonElement, IconButtonTooltip
         }
         props.onPointerCancel?.(e)
       }}
-      onFocus={(e) => {
-        if(!disabled) {
-          tooltipTriggerProps.onFocus()
-        }
-        props.onFocus?.(e)
-      }}
       onBlur={(e) => {
         if(!disabled) {
           tooltipTriggerProps.onBlur()

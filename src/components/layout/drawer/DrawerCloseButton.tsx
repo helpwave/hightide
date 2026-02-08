@@ -27,6 +27,7 @@ export function DrawerCloseButton({
       {...props}
 
       tooltip={tooltip ?? translation('close')}
+
       onClick={(event) => {
         handleClose()
         onClick?.(event)

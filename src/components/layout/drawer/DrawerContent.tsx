@@ -38,7 +38,6 @@ export const DrawerContent = forwardRef<HTMLDivElement, DrawerContentProps>(func
   useFocusTrap({
     container: ref,
     active: isVisible,
-    focusFirst: false,
   })
 
   const { zIndex, tagPositions, tagItemCounts } = useOverlayRegistry({
@@ -46,7 +45,6 @@ export const DrawerContent = forwardRef<HTMLDivElement, DrawerContentProps>(func
     tags: useMemo(() => ['drawer'], [])
   })
   const depth = tagPositions && tagItemCounts ? ((tagItemCounts['drawer'] ?? 0) - (tagPositions['drawer'] ?? 0)) : 0
-  console.log('depth', depth)
   const { setOpen } = useDrawerContext()
 
   if (!isVisible && !forceMount) return null

@@ -15,13 +15,16 @@ and adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
 ### Changed
 - all components now use a hybrid approach for hybrid and controlled state management
-- use `data-name=<name>` for all components for easily overridable styling instead of classnames
+- use `data-name=<name>` for all components for easily overridable styling instead of classnNames
 - `Drawer` now is modularized and provides a context
+- `Tooltip` does not open on focus anymore, and provides its tooltip always to screen readers
 
 ### Fixed
 - removed all disable react-hooks/exhaustive-deps lint warning and fix them appropriately
 - `IconButton` not reacting to blur for closing the tooltip
-- `useFocusTrap`s `focusFirst` always being active even when false
+
+### Removed
+- `focusFirst` from `useFocusTrap` due to the availability of `initialFocus`
 
 
 ### Removed

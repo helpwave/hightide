@@ -12,7 +12,6 @@ import { Visibility } from '../Visibility'
 import { useTransitionState } from '@/src/hooks/useTransitionState'
 import { PropsUtil } from '@/src/utils/propsUtil'
 import { Portal } from '../../utils/Portal'
-import clsx from 'clsx'
 import { FocusTrap } from '../../utils/FocusTrap'
 import { usePresenceRef } from '@/src/hooks/usePresenceRef'
 import { DialogContext } from './DialogContext'
@@ -87,7 +86,6 @@ export const Dialog = forwardRef<HTMLDivElement, DialogProps>(function Dialog({
   useFocusTrap({
     container: ref,
     active: isVisible,
-    focusFirst: true,
   })
 
   const { zIndex } = useOverlayRegistry({
@@ -114,11 +112,12 @@ export const Dialog = forwardRef<HTMLDivElement, DialogProps>(function Dialog({
 
             onClick={onCloseWrapper}
 
+            data-name="dialog-background"
             data-state={transitionState}
 
             aria-hidden={true}
 
-            className={clsx('dialog-background', backgroundClassName)}
+            className={backgroundClassName}
           />
           <FocusTrap active={isPresent && isOpen} container={ref}>
             <div
@@ -138,7 +137,7 @@ export const Dialog = forwardRef<HTMLDivElement, DialogProps>(function Dialog({
 
               data-name={props['data-name'] ?? 'dialog-content'}
             >
-              <div className="typography-title-lg mr-8">
+              <div className="typography-title-lg mr-10">
                 {titleElement}
               </div>
               <Visibility isVisible={hasDescription}>

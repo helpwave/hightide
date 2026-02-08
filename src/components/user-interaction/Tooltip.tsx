@@ -22,7 +22,6 @@ export interface TooltipTriggerContextValue {
     'onPointerLeave': () => void,
     'onPointerCancel': () => void,
     'onClick': () => void,
-    'onFocus': () => void,
     'onBlur': () => void,
     'aria-describedby'?: string,
   },
@@ -137,7 +136,6 @@ export const TooltipRoot = ({
         'onPointerLeave': close,
         'onPointerCancel': close,
         'onClick': openWithDelay,
-        'onFocus': openWithDelay,
         'onBlur': close,
         'aria-describedby': tooltipId,
       },
@@ -217,6 +215,9 @@ export const TooltipDisplay = forwardRef<HTMLDivElement, TooltipDisplayProps>(fu
   const { zIndex } = useOverlayRegistry({ isActive })
 
   if(disabled) return null
+
+  console.log(props)
+
   return (
     <Portal>
       <AnchoredFloatingContainer
@@ -229,13 +230,23 @@ export const TooltipDisplay = forwardRef<HTMLDivElement, TooltipDisplayProps>(fu
           verticalAlignment,
           horizontalAlignment,
           avoidOverlap: true,
+          ...props.options,
         }}
+
+        data-name={props['data-name'] ?? 'tooltip'}
         data-state={transitionState}
         data-animated={isAnimated ? '': undefined}
 
         role="tooltip"
-        data-name={props['data-name'] ?? 'tooltip'}
-        style={{ zIndex, position: 'fixed', visibility: isVisible ? undefined : 'hidden', ...props.style }}
+
+        style={{
+          zIndex,
+          position: 'fixed',
+          opacity: isVisible ? undefined : 0,
+          pointerEvents: isVisible ? undefined : 'none',
+          touchAction: isVisible ? undefined : 'none',
+          ...props.style
+        }}
       >
         {children}
       </AnchoredFloatingContainer>
