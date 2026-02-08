@@ -18,6 +18,7 @@ and adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 - use `data-name=<name>` for all components for easily overridable styling instead of classnNames
 - `Drawer` now is modularized and provides a context
 - `Tooltip` does not open on focus anymore, and provides its tooltip always to screen readers
+- styling of several components
 
 ### Fixed
 - removed all disable react-hooks/exhaustive-deps lint warning and fix them appropriately
@@ -25,12 +26,7 @@ and adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
 ### Removed
 - `focusFirst` from `useFocusTrap` due to the availability of `initialFocus`
-
-
-### Removed
 - `layout` attribute from `Button`
-
-### Removed
 - Geometry Components such as `Ring` and `Circle` as these can be CSS only solutions
 
 ## [0.7.0] - 2026-01-29

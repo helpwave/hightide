@@ -1,10 +1,10 @@
 import { useControlledState } from '@/src/hooks/useControlledState'
 import { useHightideTranslation } from '@/src/i18n/useHightideTranslation'
-import { DateTimePicker, type DateTimePickerProps } from './DateTimePicker'
+import { DateTimePicker, type DateTimePickerProps } from '@/src/components/user-interaction/date/DateTimePicker'
 import { type ReactNode } from 'react'
-import { Visibility } from '../../layout/Visibility'
-import { Button } from '../Button'
-import type { FormFieldDataHandling } from '../../form'
+import { Visibility } from '@/src/components/layout/Visibility'
+import { Button } from '@/src/components/user-interaction/Button'
+import type { FormFieldDataHandling } from '@/src/components/form/FormField'
 
 export interface DateTimePickerDialogProps extends Partial<FormFieldDataHandling<Date | null>> {
   initialValue?: Date | null,

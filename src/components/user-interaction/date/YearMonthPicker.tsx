@@ -47,7 +47,7 @@ const YearRow = memo(function YearRow({
       <ExpandableHeader className={clsx('px-2', { 'text-primary font-bold': isSelectedYear })}>
         {year}
       </ExpandableHeader>
-      <ExpandableContent className="gap-y-1 px-2 expandable-content-h-39">
+      <ExpandableContent className="gap-y-1 px-2 expandable-content-h-43">
         {isExpanded && monthGrid.map((group, groupIdx) => (
           <div key={groupIdx} className="flex-row-1">
             {group.map(month => {
@@ -64,7 +64,7 @@ const YearRow = memo(function YearRow({
                   key={month}
                   disabled={!isValid}
                   color={isSelectedMonth && isValid ? 'primary' : 'neutral'}
-                  className="flex-1"
+                  className="flex-1 min-w-auto"
                   size="sm"
                   onClick={() => {
                     if (isValid) {

@@ -1,7 +1,7 @@
 @layer components {
   [data-name="button"] {
     @apply flex flex-row items-center justify-center element;
-    @apply: font-semibold whitespace-nowrap;
+    @apply: font-semibold whitespace-nowrap w-fit;
 
     &:not([data-disabled]) {
       @apply cursor-pointer coloring-color-detect coloring-style-hover-detect;
@@ -13,7 +13,7 @@
 
     &[data-size="xs"] {
       @apply gap-x-1 sizing-xs;
-      @apply text-xs;
+      @apply text-xs min-w-20;
       &[data-coloringstyle="outline"] {
         padding: 
           calc(var(--spacing-element-padding-xs) - var(--coloring-outline-width)) 
@@ -22,6 +22,7 @@
     }
     &[data-size="sm"] {
       @apply gap-x-1 sizing-sm;
+      @apply min-w-28;
       &[data-coloringstyle="outline"] {
         padding: 
           calc(var(--spacing-element-padding-sm) - var(--coloring-outline-width)) 
@@ -30,6 +31,7 @@
     }
     &[data-size="md"] {
       @apply gap-x-2 sizing-md;
+      @apply min-w-36;
       &[data-coloringstyle="outline"] {
         padding: 
           calc(var(--spacing-element-padding-md) - var(--coloring-outline-width)) 
@@ -38,6 +40,7 @@
     }
     &[data-size="lg"] {
       @apply gap-x-2 sizing-lg;
+      @apply text-lg min-w-45;
       &[data-coloringstyle="outline"] {
         padding: 
           calc(var(--spacing-element-padding-lg) - var(--coloring-outline-width)) 

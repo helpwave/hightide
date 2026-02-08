@@ -2,7 +2,6 @@ import type { PropsWithChildren, ReactNode, RefObject } from 'react'
 import { forwardRef, useContext, useEffect, useImperativeHandle } from 'react'
 import { useId } from 'react'
 import { useCallback, useMemo, useRef, useState } from 'react'
-import { clsx } from 'clsx'
 import type { FloatingElementAlignment, UseAnchoredPositionOptions } from '@/src/hooks/useAnchoredPosition'
 import { useOverlayRegistry } from '@/src/hooks/useOverlayRegistry'
 import { useTransitionState } from '@/src/hooks/useTransitionState'
@@ -51,6 +50,7 @@ export const useTooltip = () => {
 
 export interface TooltipRootProps extends PropsWithChildren {
   isInitiallyShown?: boolean,
+  onIsShownChange?: (isShown: boolean) => void,
   appearDelay?: number,
   disabled?: boolean,
 }
@@ -58,6 +58,7 @@ export interface TooltipRootProps extends PropsWithChildren {
 export const TooltipRoot = ({
   children,
   isInitiallyShown = false,
+  onIsShownChange,
   appearDelay: appearOverwrite,
   disabled = false,
 }: TooltipRootProps) => {
@@ -74,6 +75,10 @@ export const TooltipRoot = ({
   [appearOverwrite, config.tooltip.appearDelay])
 
   const triggerRef = useRef<HTMLElement>(null)
+
+  useEffect(() => {
+    onIsShownChange?.(isShown)
+  }, [isShown, onIsShownChange])
 
   const openWithDelay = useCallback(() => {
     if (timeoutRef.current || isShown) return
@@ -216,8 +221,6 @@ export const TooltipDisplay = forwardRef<HTMLDivElement, TooltipDisplayProps>(fu
 
   if(disabled) return null
 
-  console.log(props)
-
   return (
     <Portal>
       <AnchoredFloatingContainer
@@ -295,6 +298,7 @@ export const Tooltip = ({
   containerClassName,
   alignment,
   isAnimated,
+  ...props
 }: TooltipProps) => {
 
   return (
@@ -307,7 +311,7 @@ export const Tooltip = ({
         {({ props, callbackRef, disabled }) => (
           <div
             ref={callbackRef}
-            className={clsx(containerClassName)}
+            className={containerClassName}
             {...(disabled ? undefined : props)}
           >
             {children}
@@ -317,6 +321,7 @@ export const Tooltip = ({
       <TooltipDisplay
         alignment={alignment}
         isAnimated={isAnimated}
+        {...props}
       >
         {tooltip}
       </TooltipDisplay>

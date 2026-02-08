@@ -86,6 +86,7 @@ export const TimePicker = ({
               key={hour}
               ref={isSelected ? hourRef : undefined}
               onClick={() => onChangeWrapper(newDate => newDate.setHours(hour + (!is24HourFormat && isPM ? 12 : 0)))}
+              className="min-w-16"
             >
               {hour.toString().padStart(2, '0')}
             </Button>
@@ -102,6 +103,7 @@ export const TimePicker = ({
               key={minute + minuteIncrement} // minute increment so that scroll works
               ref={isSelected ? minuteRef : undefined}
               onClick={() => onChangeWrapper(newDate => newDate.setMinutes(minute))}
+              className="min-w-16"
             >
               {minute.toString().padStart(2, '0')}
             </Button>
@@ -109,11 +111,12 @@ export const TimePicker = ({
         })}
       </div>
       {!is24HourFormat && (
-        <div className="time-picker-value-column">
+        <div data-name="time-picker-value-column">
           <Button
             size="sm"
             color={!isPM ? 'primary' : 'neutral'}
             onClick={() => onChangeWrapper(newDate => isPM && newDate.setHours(newDate.getHours() - 12))}
+            className="min-w-16"
           >
             AM
           </Button>
@@ -121,6 +124,7 @@ export const TimePicker = ({
             size="sm"
             color={isPM ? 'primary' : 'neutral'}
             onClick={() => onChangeWrapper(newDate => !isPM && newDate.setHours(newDate.getHours() + 12))}
+            className="min-w-16"
           >
             PM
           </Button>

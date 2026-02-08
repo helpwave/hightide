@@ -41,8 +41,8 @@ export const Checkbox = ({
   const onEditCompleteStable = useEventCallbackStabilizer(onEditComplete)
   const onValueChangeStable = useEventCallbackStabilizer(onValueChange)
   const onChangeWrapper = useCallback((value: boolean) => {
-    onValueChangeStable(!value)
-    onEditCompleteStable(!value)
+    onValueChangeStable(value)
+    onEditCompleteStable(value)
   }, [onValueChangeStable, onEditCompleteStable])
 
   const [value, setValue] = useControlledState({

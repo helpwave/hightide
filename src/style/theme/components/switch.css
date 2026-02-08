@@ -43,10 +43,11 @@
   }
 
   [data-name="switch-thumb"] {
-    @apply bg-on-surface rounded-full transition-all duration-[var(--animation-duration-in,250ms)] h-4 w-4;
-    @apply absolute top-1/2 -translate-y-1/2 left-0;
+    @apply bg-on-surface rounded-full transition-all duration-[var(--animation-duration-in,250ms)] h-3 w-3;
+    @apply absolute top-1/2 -translate-y-1/2 left-0.5;
 
     &[data-active] {
+      @apply w-4 h-4;
       left: calc(100% - 4 * var(--spacing));
     }
   }

@@ -57,12 +57,13 @@ export function TabSwitcher({ children }: TabSwitcherProps) {
   })
   const [portalState, setPortalState] = useState<PortalState>(null)
 
-  const register = (info: TabInfo) => {
+  const register = useCallback((info: TabInfo) => {
     setState(prevState => ({
       activeId: prevState.activeId ?? info.id,
       infos: [...prevState.infos, info],
     }))
-  }
+  }, [])
+
   const unregister = useCallback((id: string) => {
     setState(prevState => {
       const infos = prevState.infos.filter(value => value.id !== id)
@@ -87,14 +88,16 @@ export function TabSwitcher({ children }: TabSwitcherProps) {
     setPortalState(state)
   }, [])
 
+  const setActiveId = useCallback((activeId: string) => {
+    setState(prevState => ({ ...prevState, activeId }))
+  }, [])
+
   return (
     <TabContext.Provider
       value={{
         tabs: {
           activeId: state.activeId,
-          setActiveId: (activeId: string) => {
-            setState(prevState => ({ ...prevState, activeId }))
-          },
+          setActiveId,
           register,
           unregister,
           info: state.infos,

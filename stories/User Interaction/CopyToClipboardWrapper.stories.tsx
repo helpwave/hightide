@@ -11,11 +11,8 @@ type Story = StoryObj<typeof meta>;
 export const copyToClipboardWrapper: Story = {
   args: {
     textToCopy: 'Click to copy me',
-    position: 'bottom',
-    containerClassName: '',
-    tooltipClassName: '',
-    children: (
-      <span className="bg-primary text-white px-2 py-1 rounded-lg">{'Click to copy me'}</span>
-    )
+    alignment: 'bottom',
+    containerClassName: 'bg-primary text-white px-2 py-1 rounded-lg',
+    children: 'Click to copy me',
   },
 }

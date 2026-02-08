@@ -23,7 +23,7 @@ const preview: Preview = {
     language: {
       name: 'Language',
       description: 'Component Language',
-      defaultValue: 'en-US',
+      defaultValue: 'system',
       toolbar: {
         icon: 'globe',
         items: [

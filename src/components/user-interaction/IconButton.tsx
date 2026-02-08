@@ -92,6 +92,14 @@ const IconButtonTooltipTrigger = forwardRef<HTMLButtonElement, IconButtonTooltip
         }
         props.onClick?.(event)
       }}
+      onKeyDown={(e) => {
+        if(!disabled) {
+          if(e.key === 'Enter' || e.key === ' ') {
+            tooltipTriggerProps.onClick()
+          }
+        }
+        props.onKeyDown?.(e)
+      }}
       onPointerEnter={(e) => {
         if(!disabled) {
           tooltipTriggerProps.onPointerEnter()

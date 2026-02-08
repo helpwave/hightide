@@ -111,11 +111,7 @@ export const DateTimeInput = forwardRef<HTMLDivElement, DateTimeInputProps>(func
           aria-expanded={isOpen}
           aria-controls={isOpen ? ids.popup : undefined}
 
-          className={clsx(
-            'input-element flex-row-2 px-3 pr-10 h-element-md rounded-md w-full items-center justify-between',
-            { 'hover:cursor-pointer': !readOnly },
-            props.className
-          )}
+          data-name={props['data-name'] ?? 'date-time-input'}
         >
           {state ? DateUtils.formatAbsolute(state, locale, mode === 'dateTime') : placeholder ?? translation('clickToSelect')}
         </div>

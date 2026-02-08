@@ -93,7 +93,8 @@
     --color-label: var(--color-gray-300);
 
     /* Other */
-    --color-primary: var(--color-purple-400);
+    --color-primary: var(--color-purple-500);
+    --color-primary-hover: var(--color-purple-400);
 
     --color-neutral: var(--color-gray-750);
     --color-neutral-hover: var(--color-gray-600);

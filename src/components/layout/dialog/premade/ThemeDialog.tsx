@@ -47,7 +47,7 @@ export const ThemeSelect = ({ ...props }: ThemeSelectProps) => {
       {...props}
       buttonProps={{
         ...props.buttonProps,
-        className: clsx('min-w-32', props.buttonProps?.className),
+        className: clsx('min-w-40 w-fit', props.buttonProps?.className),
       }}
     >
       {ThemeUtil.themes.map((theme) => (
@@ -85,15 +85,14 @@ export const ThemeDialog = ({
       titleElement={titleOverwrite ?? translation('pThemes', { count: 1 })}
       description={descriptionOverwrite ?? translation('chooseTheme')}
       onClose={onClose}
+      className="w-80"
       {...props}
     >
-      <div className="w-64">
-        <ThemeSelect />
-        <div className="flex-row-4 mt-3 justify-end">
-          <Button onClick={onClose}>
-            {translation('done')}
-          </Button>
-        </div>
+      <ThemeSelect />
+      <div className="flex-row-4 w-full mt-3 justify-end">
+        <Button onClick={onClose}>
+          {translation('done')}
+        </Button>
       </div>
     </Dialog>
   )
