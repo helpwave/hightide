@@ -1,4 +1,3 @@
-import { clsx } from 'clsx'
 import type { PropsWithChildren } from 'react'
 
 export type TableCellProps = PropsWithChildren<{
@@ -10,7 +9,7 @@ export const TableCell = ({
   className,
 }: TableCellProps) => {
   return (
-    <span className={clsx('table-default-cell', className)}>
+    <span data-name="table-default-cell" className={className}>
       {children}
     </span>
   )

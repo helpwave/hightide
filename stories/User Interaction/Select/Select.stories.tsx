@@ -1,18 +1,18 @@
 import type { Meta, StoryObj } from '@storybook/nextjs'
 import { action } from 'storybook/actions'
-import { SelectUncontrolled } from '@/src/components/user-interaction/select/Select'
+import { Select } from '@/src/components/user-interaction/select/Select'
 import { SelectOption } from '@/src/components/user-interaction/select/SelectComponents'
 
 const meta = {
-  component: SelectUncontrolled,
-} satisfies Meta<typeof SelectUncontrolled>
+  component: Select,
+} satisfies Meta<typeof Select>
 
 export default meta
 type Story = StoryObj<typeof meta>;
 
 export const select: Story = {
   args: {
-    value: undefined,
+    initialValue: undefined,
     disabled: false,
     invalid: false,
     onValueChange: action('onValueChange'),

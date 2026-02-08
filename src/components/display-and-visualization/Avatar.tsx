@@ -41,7 +41,6 @@ export const Avatar = ({
   }, [name, size])
 
   const isShowingImage = !!image && (!hasError || !hasLoaded)
-  const dataName = props['data-name'] ?? 'avatar'
 
   useEffect(() => {
     if(initialImage?.avatarUrl !== image?.avatarUrl) {
@@ -54,7 +53,7 @@ export const Avatar = ({
   return (
     <div
       {...props}
-      data-name={dataName}
+      data-name={props['data-name'] ?? 'avatar'}
       data-size={props['data-size'] ?? size ?? undefined}
     >
       <Visibility isVisible={isShowingImage}>
@@ -62,11 +61,9 @@ export const Avatar = ({
           key={image?.avatarUrl}
           src={image?.avatarUrl}
           alt={image?.alt}
-
+          data-name="avatar-image"
           onLoad={() => setHasLoaded(true)}
           onError={() => setHasError(true)}
-
-          data-name={`${dataName}-image`}
           data-error={hasError ? '' : undefined}
           data-loaded={hasLoaded ? '' : undefined}
         />
@@ -95,7 +92,7 @@ export const AvatarGroup = ({
   const displayedProfiles = avatars.length < maxShownProfiles ? avatars : avatars.slice(0, maxShownProfiles)
   const notDisplayedProfiles = avatars.length - maxShownProfiles
   const group = (
-    <div data-name="avatar-group-container">
+    <div className="avatar-group-container">
       {displayedProfiles.map((avatar, index) => (
         <Avatar
           {...avatar}
@@ -111,7 +108,7 @@ export const AvatarGroup = ({
   return (
     <div
       {...props}
-      data-name="avatar-group"
+      data-name={props['data-name'] ?? 'avatar-group'}
       data-size={size ?? undefined}
     >
       {group}

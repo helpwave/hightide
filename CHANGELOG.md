@@ -5,7 +5,32 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/)
 and adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
-## [0.7.0] - 2026-01-27
+## [0.8.0] - 2026-02-08
+
+### Added
+- keyboard controls to `DayPicker`
+- `focus-style-shadow` for a shadow around the focused element
+- CSS variable for styling elements uniformly
+- `Switch` component
+- disable option for `TabPanel`s
+
+### Changed
+- all components now use a hybrid approach for hybrid and controlled state management
+- use `data-name=<name>` for all components for easily overridable styling instead of classnNames
+- `Drawer` now is modularized and provides a context
+- `Tooltip` does not open on focus anymore, and provides its tooltip always to screen readers
+- styling of several components
+
+### Fixed
+- removed all disable react-hooks/exhaustive-deps lint warning and fix them appropriately
+- `IconButton` not reacting to blur for closing the tooltip
+
+### Removed
+- `focusFirst` from `useFocusTrap` due to the availability of `initialFocus`
+- `layout` attribute from `Button`
+- Geometry Components such as `Ring` and `Circle` as these can be CSS only solutions
+
+## [0.7.0] - 2026-01-29
 
 ### Added
 - `ColumnSizingWithTargetFeature` and `AutoColumnOrderFeature` to Table for column size fixing and column ordering

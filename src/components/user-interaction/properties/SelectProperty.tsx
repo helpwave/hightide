@@ -2,8 +2,9 @@ import { List } from 'lucide-react'
 import type { PropsWithChildren } from 'react'
 import type { PropertyField } from '@/src/components/user-interaction/properties/PropertyBase'
 import { PropertyBase } from '@/src/components/user-interaction/properties/PropertyBase'
-import { Select } from '@/src/components/user-interaction/select/Select'
 import { PropsUtil } from '@/src/utils/propsUtil'
+import { SelectRoot } from '../select/SelectContext'
+import { SelectButton, SelectContent } from '../select/SelectComponents'
 
 export type SingleSelectPropertyProps = PropertyField<string> & PropsWithChildren
 
@@ -30,19 +31,20 @@ export const SingleSelectProperty = ({
           data-name="property-input-wrapper"
           data-invalid={PropsUtil.dataAttributes.bool(invalid)}
         >
-          <Select
+          <SelectRoot
             value={value}
             onValueChange={(value) => {
               onValueChange?.(value)
               onEditComplete?.(value)
             }}
             disabled={props.readOnly}
-            buttonProps={{
-              className: 'flex-row-2 w-full items-center justify-between p-1 border-0',
-            }}
           >
-            {children}
-          </Select>
+            <SelectButton
+              className="flex-row-2 w-full items-center justify-between"
+              hideExpansionIcon={true} data-name="property-input"
+            />
+            <SelectContent>{children}</SelectContent>
+          </SelectRoot>
         </div>
       )}
     </PropertyBase>

@@ -16,3 +16,23 @@ export const helpwaveLoadingAnimation: Story = {
     height: 128,
   },
 }
+
+export const helpwaveLoadingAnimationSlow: Story = {
+  args: {
+    color: 'currentColor',
+    animate: 'loading',
+    animationDuration: 3,
+    width: 128,
+    height: 128,
+  },
+}
+
+export const helpwaveLoadingAnimationFast: Story = {
+  args: {
+    color: 'currentColor',
+    animate: 'loading',
+    animationDuration: 0.8,
+    width: 128,
+    height: 128,
+  },
+}

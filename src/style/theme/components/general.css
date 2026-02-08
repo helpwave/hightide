@@ -23,6 +23,6 @@
   }
 
   * {
-    @apply focus-style-default;
+    @apply focus-style-outline focusable;
   }
 }

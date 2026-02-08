@@ -1,6 +1,7 @@
 import { useCallback, useEffect, useMemo, useRef, type ReactNode } from 'react'
 import type { FormEvent, FormStoreProps, FormValue } from './FormStore'
 import { FormStore } from './FormStore'
+import { useEventCallbackStabilizer } from '@/src/hooks/useEventCallbackStabelizer'
 
 export type UseCreateFormProps<T extends FormValue> = Omit<FormStoreProps<T>, 'validationBehaviour'> & {
   onFormSubmit: (values: T) => void,
@@ -65,6 +66,12 @@ export function useCreateForm<T extends FormValue>({
   scrollToElements = true,
   scrollOptions = { behavior: 'smooth', block: 'center' },
 }: UseCreateFormProps<T>) : UseCreateFormResult<T> {
+  const onFormSubmitStable = useEventCallbackStabilizer(onFormSubmit)
+  const onFormErrorStable = useEventCallbackStabilizer(onFormError)
+  const onValueChangeStable = useEventCallbackStabilizer(onValueChange)
+  const onUpdateStable = useEventCallbackStabilizer(onUpdate)
+  const onValidUpdateStable = useEventCallbackStabilizer(onValidUpdate)
+
   const storeRef = useRef<FormStore<T>>(
     new FormStore<T>({
       initialValues,
@@ -88,7 +95,7 @@ export function useCreateForm<T extends FormValue>({
     const handleUpdate = (event: FormEvent<T>) => {
       if (event.type === 'onSubmit') {
         if(event.hasErrors) {
-          onFormError?.(event.values, event.errors)
+          onFormErrorStable(event.values, event.errors)
 
           if (scrollToElements) {
             const errorInputs = (Object.keys(event.errors) as (keyof T)[])
@@ -109,7 +116,7 @@ export function useCreateForm<T extends FormValue>({
             }
           }
         } else {
-          onFormSubmit(event.values)
+          onFormSubmitStable(event.values)
         }
       } else if (event.type === 'reset') {
         if (scrollToElements) {
@@ -129,11 +136,11 @@ export function useCreateForm<T extends FormValue>({
           }
         }
       } else if (event.type === 'onChange') {
-        onValueChange?.(storeRef.current.getAllValues())
+        onValueChangeStable(storeRef.current.getAllValues())
       } else if (event.type === 'onUpdate') {
-        onUpdate?.(event.updatedKeys, event.update)
+        onUpdateStable(event.updatedKeys, event.update)
         if(!event.hasErrors) {
-          onValidUpdate?.(event.updatedKeys, event.update)
+          onValidUpdateStable(event.updatedKeys, event.update)
         }
       }
     }
@@ -142,7 +149,7 @@ export function useCreateForm<T extends FormValue>({
     return () => {
       unsubscribe()
     }
-  }, [onFormError, onFormSubmit, onUpdate, onValidUpdate, onValueChange, scrollOptions, scrollToElements])
+  }, [onFormErrorStable, onFormSubmitStable, onUpdateStable, onValidUpdateStable, onValueChangeStable, scrollOptions, scrollToElements])
 
 
   const callbacks = useMemo(() => ({

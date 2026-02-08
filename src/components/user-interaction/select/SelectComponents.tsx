@@ -104,12 +104,14 @@ export const SelectOption = forwardRef<HTMLLIElement, SelectOptionProps>(
 export type SelectButtonProps = ButtonHTMLAttributes<HTMLButtonElement> & {
   placeholder?: ReactNode,
   selectedDisplay?: (value: string[]) => ReactNode,
+  hideExpansionIcon?: boolean,
 }
 
 export const SelectButton = forwardRef<HTMLButtonElement, SelectButtonProps>(function SelectButton({
   id,
   placeholder,
   selectedDisplay,
+  hideExpansionIcon = false,
   ...props
 }, ref) {
   const translation = useHightideTranslation()
@@ -188,7 +190,7 @@ export const SelectButton = forwardRef<HTMLButtonElement, SelectButtonProps>(fun
         )
         : placeholder ?? translation('clickToSelect')
       }
-      <ExpansionIcon isExpanded={state.isOpen}/>
+      {!hideExpansionIcon && <ExpansionIcon isExpanded={state.isOpen}/>}
     </button>
   )
 })
@@ -265,7 +267,7 @@ export const SelectContent = forwardRef<HTMLUListElement, SelectContentProps>(fu
           }
         }}
 
-        className={clsx('flex-col-0 p-2 bg-menu-background text-menu-text rounded-md shadow-hw-bottom focus-outline-within overflow-auto', props.className)}
+        className={clsx('flex-col-0 p-2 overflow-auto')}
 
         role="listbox"
         aria-multiselectable={config.isMultiSelect}

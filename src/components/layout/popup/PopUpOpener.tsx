@@ -24,15 +24,15 @@ export interface PopUpOpenerProps<T extends HTMLElement> {
 
 export function PopUpOpener<T extends HTMLElement = HTMLButtonElement>({ children }: PopUpOpenerProps<T>) {
   const context = usePopUpContext()
+  const { setTriggerRef } = context
   const ref = useRef<T>(null)
 
   useEffect(() => {
-    context.setTriggerRef(ref)
+    setTriggerRef(ref)
     return () => {
-      context.setTriggerRef(null)
+      setTriggerRef(null)
     }
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [])
+  }, [setTriggerRef])
 
   const bag: PopUpOpenerBag<T> = useMemo<PopUpOpenerBag<T>>(() => ({
     open: () => context.setIsOpen(true),

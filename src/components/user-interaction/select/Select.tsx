@@ -2,7 +2,6 @@ import type { ReactNode } from 'react'
 import {
   forwardRef
 } from 'react'
-import { useOverwritableState } from '@/src/hooks/useOverwritableState'
 import type { SelectRootProps } from './SelectContext'
 import { SelectRoot } from './SelectContext'
 import type { SelectButtonProps, SelectContentProps } from './SelectComponents'
@@ -36,24 +35,5 @@ export const Select = forwardRef<HTMLButtonElement, SelectProps>(function Select
       />
       <SelectContent {...contentPanelProps}>{children}</SelectContent>
     </SelectRoot>
-  )
-})
-
-
-export type SelectUncontrolledProps = SelectProps
-export const SelectUncontrolled = forwardRef<HTMLButtonElement, SelectUncontrolledProps>(function SelectUncontrolled({
-  value: initialValue,
-  onValueChange,
-  ...props
-}, ref) {
-  const [value, setValue] = useOverwritableState(initialValue, onValueChange)
-
-  return (
-    <Select
-      {...props}
-      ref={ref}
-      value={value}
-      onValueChange={setValue}
-    />
   )
 })

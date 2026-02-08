@@ -31,7 +31,6 @@ export const Chip = ({
   return (
     <div
       {...props}
-
       data-name={props['data-name'] ?? 'chip'}
       data-color={color ?? undefined}
       data-coloringstyle={coloringStyle ?? undefined}

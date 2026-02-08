@@ -1,19 +1,19 @@
 import type { Meta, StoryObj } from '@storybook/nextjs'
-import { DateTimePickerUncontrolled } from '@/src/components/user-interaction/date/DateTimePicker'
+import { DateTimePicker } from '@/src/components/user-interaction/date/DateTimePicker'
 import { addDuration, subtractDuration } from '@/src/utils/date'
 import { action } from 'storybook/actions'
 
 
 const meta = {
-  component: DateTimePickerUncontrolled,
-} satisfies Meta<typeof DateTimePickerUncontrolled>
+  component: DateTimePicker,
+} satisfies Meta<typeof DateTimePicker>
 
 export default meta
 type Story = StoryObj<typeof meta>;
 
 export const dateTimePicker: Story = {
   args: {
-    value: new Date(),
+    initialValue: new Date(),
     mode: 'dateTime',
     start: subtractDuration(new Date(), { years: 50 }),
     end: addDuration(new Date(), { years: 50 }),

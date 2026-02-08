@@ -1,7 +1,8 @@
 'use client'
 
 import type { HTMLAttributes, ReactNode } from 'react'
-import { forwardRef, useContext, useId, useImperativeHandle, useMemo, useRef } from 'react'
+import { forwardRef, useCallback, useContext, useId, useImperativeHandle, useMemo, useRef } from 'react'
+import { useEventCallbackStabilizer } from '@/src/hooks/useEventCallbackStabelizer'
 import { X } from 'lucide-react'
 import { useHightideTranslation } from '@/src/i18n/useHightideTranslation'
 import { useFocusTrap } from '@/src/hooks/focus/useFocusTrap'
@@ -11,7 +12,6 @@ import { Visibility } from '../Visibility'
 import { useTransitionState } from '@/src/hooks/useTransitionState'
 import { PropsUtil } from '@/src/utils/propsUtil'
 import { Portal } from '../../utils/Portal'
-import clsx from 'clsx'
 import { FocusTrap } from '../../utils/FocusTrap'
 import { usePresenceRef } from '@/src/hooks/usePresenceRef'
 import { DialogContext } from './DialogContext'
@@ -72,11 +72,12 @@ export const Dialog = forwardRef<HTMLDivElement, DialogProps>(function Dialog({
   })
   useImperativeHandle(forwardedRef, () => ref.current, [ref])
 
-  const onCloseWrapper = () => {
+  const onCloseStable = useEventCallbackStabilizer(onClose)
+  const onCloseWrapper = useCallback(() => {
     if (!isModal) return
-    onClose?.()
+    onCloseStable()
     context?.setIsOpen(false)
-  }
+  }, [onCloseStable, context, isModal])
 
   useLogOnce('Dialog: onClose should be defined for modal dialogs', isModal && !onClose && !context)
 
@@ -85,7 +86,6 @@ export const Dialog = forwardRef<HTMLDivElement, DialogProps>(function Dialog({
   useFocusTrap({
     container: ref,
     active: isVisible,
-    focusFirst: true,
   })
 
   const { zIndex } = useOverlayRegistry({
@@ -103,7 +103,8 @@ export const Dialog = forwardRef<HTMLDivElement, DialogProps>(function Dialog({
 
           data-open={PropsUtil.dataAttributes.bool(isOpen)}
 
-          className={clsx('dialog-container', containerClassName)}
+          data-name="dialog-container"
+          className={containerClassName}
           style={{ zIndex }}
         >
           <div
@@ -111,11 +112,12 @@ export const Dialog = forwardRef<HTMLDivElement, DialogProps>(function Dialog({
 
             onClick={onCloseWrapper}
 
+            data-name="dialog-background"
             data-state={transitionState}
 
             aria-hidden={true}
 
-            className={clsx('dialog-background', backgroundClassName)}
+            className={backgroundClassName}
           />
           <FocusTrap active={isPresent && isOpen} container={ref}>
             <div
@@ -133,9 +135,9 @@ export const Dialog = forwardRef<HTMLDivElement, DialogProps>(function Dialog({
               aria-labelledby={ids.title}
               aria-describedby={hasDescription ? ids.description : undefined}
 
-              className={clsx('dialog-content', props.className)}
+              data-name={props['data-name'] ?? 'dialog-content'}
             >
-              <div className="typography-title-lg mr-8">
+              <div className="typography-title-lg mr-10">
                 {titleElement}
               </div>
               <Visibility isVisible={hasDescription}>

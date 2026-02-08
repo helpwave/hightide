@@ -1,6 +1,5 @@
 import type { HTMLAttributes, ReactNode } from 'react'
 import { useId, useMemo, forwardRef } from 'react'
-import clsx from 'clsx'
 
 export type FormFieldAriaAttributes = Pick<HTMLAttributes<HTMLElement>, 'aria-labelledby' | 'aria-describedby' | 'aria-disabled' | 'aria-readonly' | 'aria-invalid' | 'aria-errormessage' | 'aria-required'>
 
@@ -93,14 +92,14 @@ export const FormFieldLayout = forwardRef<HTMLDivElement, FormFieldLayoutProps>(
       {...props}
       ref={ref}
 
-      className={clsx('form-field-container', props.className)}
+      data-name={props['data-name'] ?? 'form-field-container'}
     >
       {label && (
         <label
           {...labelProps}
           id={ids.label}
           htmlFor={ids.input}
-          className={clsx('form-field-label', labelProps?.className)}
+          data-name={labelProps?.['data-name'] ?? 'form-field-label'}
         >
           {label}
           {showRequiredIndicator && required && <div role="none" className="bg-primary w-2 h-2 rounded-full" />}
@@ -111,7 +110,7 @@ export const FormFieldLayout = forwardRef<HTMLDivElement, FormFieldLayoutProps>(
           {...descriptionProps}
           id={ids.description}
 
-          className={clsx('form-field-description', descriptionProps?.className)}
+          data-name={descriptionProps?.['data-name'] ?? 'form-field-description'}
         >
           {description}
         </p>
@@ -126,7 +125,7 @@ export const FormFieldLayout = forwardRef<HTMLDivElement, FormFieldLayoutProps>(
           aria-hidden={!invalid}
           aria-live="polite"
 
-          className={clsx('form-field-error', invalidDescriptionProps?.className)}
+          data-name={invalidDescriptionProps?.['data-name'] ?? 'form-field-error'}
         >
           {invalidDescription}
         </div>

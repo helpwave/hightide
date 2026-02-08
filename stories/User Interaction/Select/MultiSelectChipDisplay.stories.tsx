@@ -1,20 +1,20 @@
 import { action } from 'storybook/actions'
 import {
-  MultiSelectChipDisplayUncontrolled
+  MultiSelectChipDisplay
 } from '@/src/components/user-interaction/select/MultiSelectChipDisplay'
 import { MultiSelectOption } from '@/src/components/user-interaction/select/SelectComponents'
 import type { Meta, StoryObj } from '@storybook/nextjs'
 
 const meta = {
-  component: MultiSelectChipDisplayUncontrolled,
-} satisfies Meta<typeof MultiSelectChipDisplayUncontrolled>
+  component: MultiSelectChipDisplay,
+} satisfies Meta<typeof MultiSelectChipDisplay>
 
 export default meta
 type Story = StoryObj<typeof meta>;
 
 export const multiSelectChipDisplay: Story = {
   args: {
-    value: ['Apple', 'Cherry'],
+    initialValue: ['Apple', 'Cherry'],
     disabled: false,
     invalid: false,
     onValueChange: action('onValueChange'),

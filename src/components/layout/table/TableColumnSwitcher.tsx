@@ -1,13 +1,11 @@
 import { useMemo, useRef, useId } from 'react'
 import { ChevronUp, ChevronDown, ChevronLeft, ChevronRight, Eye, EyeOff, Pin, PinOff, ArrowLeftRightIcon } from 'lucide-react'
 import type { ButtonProps } from '@/src/components/user-interaction/Button'
-import { Button } from '@/src/components/user-interaction/Button'
 import { useHightideTranslation } from '@/src/i18n/useHightideTranslation'
 import type { PopUpProps } from '../popup/PopUp'
 import { PopUp } from '../popup/PopUp'
 import { PopUpRoot } from '../popup/PopUpRoot'
 import { PopUpOpener } from '../popup/PopUpOpener'
-import { Tooltip } from '../../user-interaction/Tooltip'
 import { useTableStateWithoutSizingContext } from './TableContext'
 import { IconButton } from '../../user-interaction/IconButton'
 
@@ -313,11 +311,14 @@ export const TableColumnSwitcher = ({ buttonProps, ...props }: TableColumnSwitch
     <PopUpRoot>
       <PopUpOpener>
         {({ props }) => (
-          <Tooltip tooltip={translation('changeColumnDisplay')}>
-            <Button {...props} size="md" layout="icon" color="neutral" coloringStyle="solid" {...buttonProps}>
-              <ArrowLeftRightIcon className="size-4" />
-            </Button>
-          </Tooltip>
+          <IconButton
+            {...props}
+            color="neutral"
+            tooltip={translation('changeColumnDisplay')}
+            {...buttonProps}
+          >
+            <ArrowLeftRightIcon className="size-4" />
+          </IconButton>
         )}
       </PopUpOpener>
       <TableColumnSwitcherPopUp {...props} />

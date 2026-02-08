@@ -1,12 +1,12 @@
 @layer components {
-  .dialog-container {
+  [data-name="dialog-container"] {
     @apply fixed inset-0 h-screen w-screen;
     &:not([data-open]) {
       @apply touch-none pointer-events-none;
     }
   }
 
-  .dialog-background {
+  [data-name="dialog-background"] {
     @apply fixed inset-0 h-screen w-screen bg-overlay-shadow;
     animation-fill-mode: forwards;
 
@@ -25,7 +25,7 @@
     }
   }
 
-  .dialog-content {
+  [data-name="dialog-content"] {
     @apply flex-col-2 p-4 bg-overlay-background text-overlay-text rounded-xl shadow-hw-bottom max-w-[calc(100vw_-_2rem)] max-h-[calc(100vh_-_2rem)];
     animation-timing-function: ease-out;
     animation-fill-mode: forwards;

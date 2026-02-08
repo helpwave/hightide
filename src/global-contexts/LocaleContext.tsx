@@ -5,6 +5,7 @@ import { LocalizationUtil } from '../i18n/util'
 import type { HightideTranslationLocales } from '@/src/i18n/translations'
 import type { LocalizationConfig } from '@/src/global-contexts/HightideConfigContext'
 import { useHightideConfig } from '@/src/global-contexts/HightideConfigContext'
+import { useEventCallbackStabilizer } from '../hooks/useEventCallbackStabelizer'
 
 export type LocaleContextValue = {
   locale: HightideTranslationLocales,
@@ -54,11 +55,13 @@ export const LocaleProvider = ({
     } else {
       setStoredLocale(locale)
     }
-  }, [locale]) // eslint-disable-line react-hooks/exhaustive-deps
+  }, [locale, deleteStoredLocale, setStoredLocale])
+
+  const onChangeRef = useEventCallbackStabilizer(onChangedLocale)
 
   useEffect(() => {
-    onChangedLocale?.(resolvedLocale)
-  }, [resolvedLocale]) // eslint-disable-line react-hooks/exhaustive-deps
+    onChangeRef?.(resolvedLocale)
+  }, [resolvedLocale, onChangeRef])
 
   useEffect(() => {
     const localesToTestAgainst = Object.values(LocalizationUtil.locals)

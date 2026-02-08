@@ -2,7 +2,6 @@ import type { PropsWithChildren, ReactNode, RefObject } from 'react'
 import { forwardRef, useContext, useEffect, useImperativeHandle } from 'react'
 import { useId } from 'react'
 import { useCallback, useMemo, useRef, useState } from 'react'
-import { clsx } from 'clsx'
 import type { FloatingElementAlignment, UseAnchoredPositionOptions } from '@/src/hooks/useAnchoredPosition'
 import { useOverlayRegistry } from '@/src/hooks/useOverlayRegistry'
 import { useTransitionState } from '@/src/hooks/useTransitionState'
@@ -22,7 +21,6 @@ export interface TooltipTriggerContextValue {
     'onPointerLeave': () => void,
     'onPointerCancel': () => void,
     'onClick': () => void,
-    'onFocus': () => void,
     'onBlur': () => void,
     'aria-describedby'?: string,
   },
@@ -52,6 +50,7 @@ export const useTooltip = () => {
 
 export interface TooltipRootProps extends PropsWithChildren {
   isInitiallyShown?: boolean,
+  onIsShownChange?: (isShown: boolean) => void,
   appearDelay?: number,
   disabled?: boolean,
 }
@@ -59,6 +58,7 @@ export interface TooltipRootProps extends PropsWithChildren {
 export const TooltipRoot = ({
   children,
   isInitiallyShown = false,
+  onIsShownChange,
   appearDelay: appearOverwrite,
   disabled = false,
 }: TooltipRootProps) => {
@@ -75,6 +75,10 @@ export const TooltipRoot = ({
   [appearOverwrite, config.tooltip.appearDelay])
 
   const triggerRef = useRef<HTMLElement>(null)
+
+  useEffect(() => {
+    onIsShownChange?.(isShown)
+  }, [isShown, onIsShownChange])
 
   const openWithDelay = useCallback(() => {
     if (timeoutRef.current || isShown) return
@@ -137,7 +141,6 @@ export const TooltipRoot = ({
         'onPointerLeave': close,
         'onPointerCancel': close,
         'onClick': openWithDelay,
-        'onFocus': openWithDelay,
         'onBlur': close,
         'aria-describedby': tooltipId,
       },
@@ -217,6 +220,7 @@ export const TooltipDisplay = forwardRef<HTMLDivElement, TooltipDisplayProps>(fu
   const { zIndex } = useOverlayRegistry({ isActive })
 
   if(disabled) return null
+
   return (
     <Portal>
       <AnchoredFloatingContainer
@@ -229,13 +233,23 @@ export const TooltipDisplay = forwardRef<HTMLDivElement, TooltipDisplayProps>(fu
           verticalAlignment,
           horizontalAlignment,
           avoidOverlap: true,
+          ...props.options,
         }}
+
+        data-name={props['data-name'] ?? 'tooltip'}
         data-state={transitionState}
         data-animated={isAnimated ? '': undefined}
 
         role="tooltip"
-        className={clsx('tooltip', props.className)}
-        style={{ zIndex, position: 'fixed', visibility: isVisible ? undefined : 'hidden', ...props.style }}
+
+        style={{
+          zIndex,
+          position: 'fixed',
+          opacity: isVisible ? undefined : 0,
+          pointerEvents: isVisible ? undefined : 'none',
+          touchAction: isVisible ? undefined : 'none',
+          ...props.style
+        }}
       >
         {children}
       </AnchoredFloatingContainer>
@@ -284,6 +298,7 @@ export const Tooltip = ({
   containerClassName,
   alignment,
   isAnimated,
+  ...props
 }: TooltipProps) => {
 
   return (
@@ -296,7 +311,7 @@ export const Tooltip = ({
         {({ props, callbackRef, disabled }) => (
           <div
             ref={callbackRef}
-            className={clsx(containerClassName)}
+            className={containerClassName}
             {...(disabled ? undefined : props)}
           >
             {children}
@@ -306,6 +321,7 @@ export const Tooltip = ({
       <TooltipDisplay
         alignment={alignment}
         isAnimated={isAnimated}
+        {...props}
       >
         {tooltip}
       </TooltipDisplay>

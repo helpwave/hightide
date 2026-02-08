@@ -4,11 +4,6 @@
  * default light-theme component colors
  */
 @theme {
-  /* Icon */
-  --color-icon-primary: var(--color-text-primary);
-  --color-icon-secondary: var(--color-text-secondary);
-  --color-icon-highlight: var(--color-highlight);
-
   /* Carousel */
   --color-carousel-dot-active: var(--color-primary);
   --color-carousel-dot-disabled: var(--color-disabled);

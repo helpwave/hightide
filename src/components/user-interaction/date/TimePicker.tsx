@@ -1,26 +1,33 @@
 import { useEffect, useRef } from 'react'
 import { closestMatch, range } from '@/src/utils/array'
-import { useOverwritableState } from '@/src/hooks/useOverwritableState'
 import { Button } from '@/src/components/user-interaction/Button'
 import type { FormFieldDataHandling } from '../../form/FormField'
+import { useControlledState } from '@/src/hooks/useControlledState'
 
 export type TimePickerMinuteIncrement = '1min' | '5min' | '10min' | '15min' | '30min'
 
 // TODO add start, and end constraints
 export type TimePickerProps = Partial<FormFieldDataHandling<Date>> & {
+  initialValue?: Date,
   is24HourFormat?: boolean,
   minuteIncrement?: TimePickerMinuteIncrement,
   className?: string,
 }
 
 export const TimePicker = ({
-  value = new Date(),
+  value: controlledValue,
+  initialValue = new Date(),
   onValueChange,
   onEditComplete,
   is24HourFormat = true,
   minuteIncrement = '5min',
   className,
 }: TimePickerProps) => {
+  const [value, setValue] = useControlledState({
+    value: controlledValue,
+    onValueChange: onValueChange,
+    defaultValue: initialValue,
+  })
   const minuteRef = useRef<HTMLButtonElement>(null)
   const hourRef = useRef<HTMLButtonElement>(null)
 
@@ -63,7 +70,7 @@ export const TimePicker = ({
   const onChangeWrapper = (transformer: (newDate: Date) => void) => {
     const newDate = new Date(value)
     transformer(newDate)
-    onValueChange?.(newDate)
+    setValue(newDate)
     onEditComplete?.(newDate)
   }
 
@@ -79,6 +86,7 @@ export const TimePicker = ({
               key={hour}
               ref={isSelected ? hourRef : undefined}
               onClick={() => onChangeWrapper(newDate => newDate.setHours(hour + (!is24HourFormat && isPM ? 12 : 0)))}
+              className="min-w-16"
             >
               {hour.toString().padStart(2, '0')}
             </Button>
@@ -95,6 +103,7 @@ export const TimePicker = ({
               key={minute + minuteIncrement} // minute increment so that scroll works
               ref={isSelected ? minuteRef : undefined}
               onClick={() => onChangeWrapper(newDate => newDate.setMinutes(minute))}
+              className="min-w-16"
             >
               {minute.toString().padStart(2, '0')}
             </Button>
@@ -107,6 +116,7 @@ export const TimePicker = ({
             size="sm"
             color={!isPM ? 'primary' : 'neutral'}
             onClick={() => onChangeWrapper(newDate => isPM && newDate.setHours(newDate.getHours() - 12))}
+            className="min-w-16"
           >
             AM
           </Button>
@@ -114,27 +124,12 @@ export const TimePicker = ({
             size="sm"
             color={isPM ? 'primary' : 'neutral'}
             onClick={() => onChangeWrapper(newDate => !isPM && newDate.setHours(newDate.getHours() + 12))}
+            className="min-w-16"
           >
             PM
           </Button>
         </div>
       )}
     </div>
-  )
-}
-
-export const TimePickerUncontrolled = ({
-  value: initialValue,
-  onValueChange,
-  ...props
-}: TimePickerProps) => {
-  const [value, setValue] = useOverwritableState(initialValue, onValueChange)
-
-  return (
-    <TimePicker
-      {...props}
-      value={value}
-      onValueChange={setValue}
-    />
   )
 }

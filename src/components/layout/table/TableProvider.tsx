@@ -1,5 +1,6 @@
 import type { ReactNode } from 'react'
 import { useCallback, useEffect, useLayoutEffect, useMemo, useRef, useState } from 'react'
+import { useEventCallbackStabilizer } from '@/src/hooks/useEventCallbackStabelizer'
 import { ColumnSizeUtil } from './columnSizeUtil'
 import type { TableStateWithoutSizingContextType } from './TableContext'
 import { TableColumnDefinitionContext, TableContainerContext, TableStateContext, TableStateWithoutSizingContext } from './TableContext'
@@ -36,6 +37,9 @@ export const TableProvider = <T,>({
   children,
   ...tableOptions
 }: TableProviderProps<T>) => {
+  const onRowClickStable = useEventCallbackStabilizer(onRowClick)
+  const onFillerRowClickStable = useEventCallbackStabilizer(onFillerRowClick)
+
   const [registeredColumns, setRegisteredColumns] = useState<ColumnDef<T>[]>([])
   const containerRef = useRef<HTMLDivElement>(null)
   const [,setTableState] = useState<TableState>({
@@ -192,8 +196,8 @@ export const TableProvider = <T,>({
     table,
     isUsingFillerRows,
     fillerRowCell,
-    onRowClick,
-    onFillerRowClick,
+    onRowClick: onRowClickStable,
+    onFillerRowClick: onFillerRowClickStable,
     columnVisibility: relevantTableState.columnVisibility,
     columnOrder: relevantTableState.columnOrder,
     columnPinning: relevantTableState.columnPinning,
@@ -215,8 +219,8 @@ export const TableProvider = <T,>({
     rowModel,
     isUsingFillerRows,
     fillerRowCell,
-    onRowClick,
-    onFillerRowClick,
+    onRowClickStable,
+    onFillerRowClickStable,
     relevantTableState.columnVisibility,
     relevantTableState.columnOrder,
     relevantTableState.columnPinning,

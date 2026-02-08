@@ -1,4 +1,3 @@
-import { useLogOnce } from '@/src/hooks/useLogOnce'
 import type { ButtonHTMLAttributes } from 'react'
 import { forwardRef } from 'react'
 
@@ -8,8 +7,6 @@ import { forwardRef } from 'react'
 type ButtonSize = 'xs' | 'sm' | 'md' | 'lg' | null
 
 type ButtonColoringStyle = 'outline' | 'solid' | 'text' | 'tonal' | null
-
-type ButtonLayout = 'icon' | 'default' | null
 
 const buttonColorsList = ['primary', 'secondary', 'positive', 'warning', 'negative', 'neutral'] as const
 
@@ -30,7 +27,6 @@ export type ButtonProps = ButtonHTMLAttributes<HTMLButtonElement> & {
    * @default 'medium'
    */
   size?: ButtonSize,
-  layout?: ButtonLayout,
   color?: ButtonColor,
   /**
    * @default 'solid'
@@ -44,7 +40,6 @@ export type ButtonProps = ButtonHTMLAttributes<HTMLButtonElement> & {
  */
 export const Button = forwardRef<HTMLButtonElement, ButtonProps>(function SolidButton({
   children,
-  layout = 'default',
   size = 'md',
   color = 'primary',
   coloringStyle = 'solid',
@@ -52,13 +47,12 @@ export const Button = forwardRef<HTMLButtonElement, ButtonProps>(function SolidB
   allowClickEventPropagation = false,
   ...props
 }, ref) {
-  useLogOnce('Button: layout is deprecated, use IconButton instead', layout !== 'default', { type: 'warning' })
-
   return (
     <button
       {...props}
       ref={ref}
       disabled={disabled}
+      type={props['type'] ?? 'button'}
 
       onClick={event => {
         if(!allowClickEventPropagation) {
@@ -67,12 +61,9 @@ export const Button = forwardRef<HTMLButtonElement, ButtonProps>(function SolidB
         props.onClick?.(event)
       }}
 
-      type={props['type'] ?? 'button'}
-
       data-name={props['data-name'] ?? 'button'}
       data-disabled={disabled ? '': undefined}
       data-size={size ?? undefined}
-      data-layout={layout ?? undefined}
       data-color={color ?? undefined}
       data-coloringstyle={coloringStyle ?? undefined}
     >

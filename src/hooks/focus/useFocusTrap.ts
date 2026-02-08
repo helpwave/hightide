@@ -146,19 +146,12 @@ export type UseFocusTrapProps = {
   container: RefObject<HTMLElement>,
   active: boolean,
   initialFocus?: RefObject<HTMLElement>,
-  /**
-   * Whether to focus the first element when the initialFocus isn't provided
-   *
-   * Focuses the container instead
-   */
-  focusFirst?: boolean,
 }
 
 export const useFocusTrap = ({
   container,
   active,
   initialFocus,
-  focusFirst = true,
 }: UseFocusTrapProps) => {
   const lastFocusRef = useRef<HTMLElement>(null)
   const [paused, setPaused] = useState(false)
@@ -169,7 +162,6 @@ export const useFocusTrap = ({
     // Try in the following order
     // 1. Focus the initial element
     // 2. Focus the first focusable element in the container
-    // 3. Focus the container
     if (initialFocus?.current) {
       initialFocus.current.focus()
     } else {
@@ -178,8 +170,7 @@ export const useFocusTrap = ({
         const first = elements.item(0) as HTMLElement
         first.focus()
       } else {
-        console.warn('No focusable elements found in the focus trap, focusing the container instead. Make sure this is the correct behavior. Affected element: ', containerElement)
-        containerElement.focus()
+        console.warn('No focusable elements found in the focus trap. Affected element: ', containerElement)
       }
     }
   }, [container, initialFocus])
@@ -245,5 +236,5 @@ export const useFocusTrap = ({
         containerElement.removeEventListener('keydown', onKeyDown)
       }
     }
-  }, [active, paused, container, initialFocus, focusFirst, focusElement])
+  }, [active, paused, container, initialFocus, focusElement])
 }

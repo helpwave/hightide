@@ -1,15 +1,23 @@
 @layer components {
   [data-name="tab-list"] {
-    @apply flex-row-0;
+    display: grid;
+    grid-template-columns: repeat(var(--tab-count), 1fr);
   }
 
   [data-name="tab-list-item"] {
-    @apply flex-row-0 grow justify-center px-3 py-2 typography-label-md font-bold border-b-2 transition-colors neutral coloring-text-hover;
-    &[data-active] {
-      @apply border-primary;
+    @apply flex-row-0 grow justify-center px-3 py-2 typography-label-md border-b-4 transition-colors neutral coloring-text-hover;
+    
+    &[data-disabled] {
+      @apply cursor-not-allowed disabled coloring-text;
     }
-    &:not([data-active]) {
-      @apply text-description hover:cursor-pointer;
+
+    &:not([data-disabled]) {
+      &[data-active] {
+        @apply border-primary font-bold;
+      }
+      &:not([data-active]) {
+        @apply hover:cursor-pointer;
+      }
     }
   }
 

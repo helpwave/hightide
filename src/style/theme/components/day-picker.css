@@ -16,10 +16,10 @@
   }
 
   [data-name="day-picker-body-item"] {
-    @apply flex-row-0 items-center justify-center rounded-full border-2 border-transparent h-8;
+    @apply flex-row-0 items-center justify-center rounded-full h-8;
 
     &[data-today] {
-      @apply border-on-background;
+      @apply border-2 border-on-background;
     }
     &:not([data-invalid]) {
       @apply hover:cursor-pointer;

@@ -1,11 +1,13 @@
-import { useControlledState, type ControlledStateProps } from '@/src/hooks/useControlledState'
+import { useControlledState } from '@/src/hooks/useControlledState'
 import { useHightideTranslation } from '@/src/i18n/useHightideTranslation'
-import { DateTimePicker, type DateTimePickerProps } from './DateTimePicker'
-import { useMemo, type ReactNode } from 'react'
-import { Visibility } from '../../layout/Visibility'
-import { Button } from '../Button'
+import { DateTimePicker, type DateTimePickerProps } from '@/src/components/user-interaction/date/DateTimePicker'
+import { type ReactNode } from 'react'
+import { Visibility } from '@/src/components/layout/Visibility'
+import { Button } from '@/src/components/user-interaction/Button'
+import type { FormFieldDataHandling } from '@/src/components/form/FormField'
 
-export interface DateTimePickerDialogProps extends ControlledStateProps<Date | null> {
+export interface DateTimePickerDialogProps extends Partial<FormFieldDataHandling<Date | null>> {
+  initialValue?: Date | null,
   allowRemove?: boolean,
   onEditComplete?: (value: Date | null) => void,
   pickerProps: Omit<DateTimePickerProps, 'value' | 'onValueChange' | 'onEditComplete'>,
@@ -15,12 +17,11 @@ export interface DateTimePickerDialogProps extends ControlledStateProps<Date | n
 }
 
 export const DateTimePickerDialog = ({
-  defaultValue,
+  initialValue = null,
   value,
   allowRemove = true,
   onValueChange,
   onEditComplete,
-  isControlled,
   mode = 'date',
   pickerProps,
   labelId,
@@ -30,14 +31,8 @@ export const DateTimePickerDialog = ({
   const [state, setState] = useControlledState({
     value,
     onValueChange,
-    defaultValue: defaultValue,
-    isControlled,
+    defaultValue: initialValue
   })
-
-  const initialValue = useMemo(() => {
-    return state
-  // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [])
 
   return (
     <>
@@ -52,7 +47,7 @@ export const DateTimePickerDialog = ({
       <DateTimePicker
         {...pickerProps}
         mode={mode}
-        value={state ?? undefined}
+        value={state}
         onValueChange={setState}
         onEditComplete={setState}
       />
@@ -86,7 +81,6 @@ export const DateTimePickerDialog = ({
         <Button
           size="md"
           onClick={() => {
-            onValueChange?.(state)
             onEditComplete?.(state)
           }}
           className="min-w-26"

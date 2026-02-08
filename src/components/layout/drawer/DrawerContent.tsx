@@ -1,42 +1,28 @@
+import { forwardRef, useId, useImperativeHandle, useMemo, useRef, type HTMLAttributes } from 'react'
 import { useFocusTrap } from '@/src/hooks/focus/useFocusTrap'
 import { useOverlayRegistry } from '@/src/hooks/useOverlayRegistry'
-import { useHightideTranslation } from '@/src/i18n/useHightideTranslation'
-import type { ReactNode } from 'react'
-import { forwardRef, useId, useImperativeHandle, useMemo, useRef, type HTMLAttributes } from 'react'
-import { Visibility } from './Visibility'
-import { X } from 'lucide-react'
 import { useTransitionState } from '@/src/hooks/useTransitionState'
 import { PropsUtil } from '@/src/utils/propsUtil'
-import { Portal } from '../utils/Portal'
-import { IconButton } from '../user-interaction/IconButton'
+import { Portal } from '../../utils/Portal'
+import { useDrawerContext } from './DrawerContext'
+import type { DrawerAligment } from './Drawer'
 
-export type DrawerAligment = 'left' | 'right' | 'bottom' | 'top'
-
-export type DrawerProps = HTMLAttributes<HTMLDivElement> & {
-  isOpen: boolean,
+export type DrawerContentProps = HTMLAttributes<HTMLDivElement> & {
   alignment: DrawerAligment,
-  titleElement: ReactNode,
-  description: ReactNode,
-  isAnimated?: boolean,
   containerClassName?: string,
   backgroundClassName?: string,
-  onClose: () => void,
   forceMount?: boolean,
 }
 
-export const Drawer = forwardRef<HTMLDivElement, DrawerProps>(function Drawer({
+export const DrawerContent = forwardRef<HTMLDivElement, DrawerContentProps>(function DrawerContent({
   children,
-  isOpen = true,
   alignment = 'left',
-  titleElement,
-  description,
   containerClassName,
   backgroundClassName,
-  onClose,
   forceMount = false,
   ...props
 }, forwardedRef) {
-  const translation = useHightideTranslation()
+  const { isOpen } = useDrawerContext()
   const generatedId = useId()
   const ids = useMemo(() => ({
     container: `dialog-container-${generatedId}`,
@@ -52,7 +38,6 @@ export const Drawer = forwardRef<HTMLDivElement, DrawerProps>(function Drawer({
   useFocusTrap({
     container: ref,
     active: isVisible,
-    focusFirst: true,
   })
 
   const { zIndex, tagPositions, tagItemCounts } = useOverlayRegistry({
@@ -60,77 +45,45 @@ export const Drawer = forwardRef<HTMLDivElement, DrawerProps>(function Drawer({
     tags: useMemo(() => ['drawer'], [])
   })
   const depth = tagPositions && tagItemCounts ? ((tagItemCounts['drawer'] ?? 0) - (tagPositions['drawer'] ?? 0)) : 0
+  const { setOpen } = useDrawerContext()
 
-  if (!isVisible && !forceMount) return
+  if (!isVisible && !forceMount) return null
 
   return (
     <Portal>
       <div
         id={ids.container}
-
         data-name="drawer-container"
-        data-open={PropsUtil.dataAttributes.bool(isOpen)}
-
-        hidden={!isVisible && forceMount}
-
         className={containerClassName}
+        data-open={PropsUtil.dataAttributes.bool(isOpen)}
+        hidden={!isVisible && forceMount}
         style={{ zIndex, '--drawer-depth': depth.toString() } as React.CSSProperties}
       >
         <div
           id={ids.background}
-
-          onClick={onClose}
-
+          onClick={() => setOpen(false)}
+          className={backgroundClassName}
           data-name="drawer-background"
           data-state={transitionState}
           data-depth={depth}
           data-alignment={alignment}
-
           aria-hidden={true}
-
-          className={backgroundClassName}
         />
         <div
           {...props}
           id={ids.content}
           ref={ref}
-
-          onKeyDown={PropsUtil.aria.close(close)}
-
-          data-name={PropsUtil.dataAttributes.name('drawer-content', props)}
+          onKeyDown={PropsUtil.aria.close(() => setOpen(false))}
+          data-name={props['data-name'] ?? 'drawer-content'}
           data-state={transitionState}
           data-depth={depth}
           data-alignment={alignment}
-
-          className={props.className}
         >
-          <div className="typography-title-lg mr-8">
-            {titleElement}
-          </div>
-          <Visibility isVisible={!!description}>
-            <div className="text-description">
-              {description}
-            </div>
-          </Visibility>
-          <div
-            className="absolute top-0 right-0"
-            style={{
-              paddingTop: 'inherit',
-              paddingRight: 'inherit'
-            }}
-          >
-            <IconButton
-              tooltip={translation('close')}
-              coloringStyle="text"
-              color="neutral"
-              onClick={onClose}
-            >
-              <X size={24}/>
-            </IconButton>
-          </div>
           {children}
         </div>
       </div>
     </Portal>
   )
 })
+
+

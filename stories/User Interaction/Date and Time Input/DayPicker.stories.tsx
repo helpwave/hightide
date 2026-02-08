@@ -1,10 +1,10 @@
 import type { Meta, StoryObj } from '@storybook/nextjs'
 import { action } from 'storybook/actions'
-import { DayPickerUncontrolled } from '@/src/components/user-interaction/date/DayPicker'
+import { DayPicker } from '@/src/components/user-interaction/date/DayPicker'
 
 const meta = {
-  component: DayPickerUncontrolled,
-} satisfies Meta<typeof DayPickerUncontrolled>
+  component: DayPicker,
+} satisfies Meta<typeof DayPicker>
 
 export default meta
 type Story = StoryObj<typeof meta>;
@@ -12,7 +12,7 @@ type Story = StoryObj<typeof meta>;
 export const dayPicker: Story = {
   args: {
     displayedMonth: new Date(),
-    value: new Date(),
+    initialValue: new Date(),
     markToday: true,
     weekStart: 'monday',
     className: 'h-max-71',

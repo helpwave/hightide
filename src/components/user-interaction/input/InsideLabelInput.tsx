@@ -4,7 +4,7 @@ import { forwardRef, useState } from 'react'
 import clsx from 'clsx'
 import type { InputProps } from '@/src/components/user-interaction/input/Input'
 import { Input } from '@/src/components/user-interaction/input/Input'
-import { useOverwritableState } from '@/src/hooks/useOverwritableState'
+import { useControlledState } from '@/src/hooks/useControlledState'
 
 type InsideLabelInputProps = Omit<InputProps, 'aria-label' | 'aria-labelledby' | 'placeholder'> & {
   label: ReactNode,
@@ -17,10 +17,17 @@ type InsideLabelInputProps = Omit<InputProps, 'aria-label' | 'aria-labelledby' |
  */
 export const InsideLabelInput = forwardRef<HTMLInputElement, InsideLabelInputProps>(function InsideLabelInput({
   id: customId,
+  value: controlledValue,
+  initialValue,
+  onValueChange,
   label,
   ...props
 }, forwardedRef) {
-  const { value } = props
+  const [value, setValue] = useControlledState<string>({
+    value: controlledValue,
+    onValueChange,
+    defaultValue: initialValue,
+  })
   const [isFocused, setIsFocused] = useState(false)
   const generatedId = useId()
   const id = customId ?? generatedId
@@ -30,9 +37,11 @@ export const InsideLabelInput = forwardRef<HTMLInputElement, InsideLabelInputPro
       <Input
         {...props}
         id={id}
-        className={clsx('h-14 px-4 pb-2 py-6.5', props.className)}
         ref={forwardedRef}
-        aria-labelledby={id+ '-label'}
+
+        value={value}
+        onValueChange={setValue}
+
         onFocus={event => {
           props.onFocus?.(event)
           setIsFocused(true)
@@ -41,6 +50,10 @@ export const InsideLabelInput = forwardRef<HTMLInputElement, InsideLabelInputPro
           props.onBlur?.(event)
           setIsFocused(false)
         }}
+
+        aria-labelledby={id+ '-label'}
+
+        className={clsx('h-14 px-4 pb-2 py-6.5', props.className)}
       />
       <label
         id={id+ '-label'}
@@ -58,18 +71,3 @@ export const InsideLabelInput = forwardRef<HTMLInputElement, InsideLabelInputPro
     </div>
   )
 })
-
-export const InsideLabelInputUncontrolled = ({
-  value: initialValue,
-  ...props
-}: InsideLabelInputProps) => {
-  const [value, setValue] = useOverwritableState(initialValue, props.onValueChange)
-
-  return (
-    <InsideLabelInput
-      {...props}
-      value={value}
-      onValueChange={setValue}
-    />
-  )
-}

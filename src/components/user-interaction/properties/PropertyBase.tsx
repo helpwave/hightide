@@ -1,4 +1,5 @@
 import type { ReactNode } from 'react'
+import clsx from 'clsx'
 import { AlertTriangle, Trash, X } from 'lucide-react'
 import { useHightideTranslation } from '@/src/i18n/useHightideTranslation'
 import { Tooltip } from '../Tooltip'
@@ -57,12 +58,11 @@ export const PropertyBase = ({
 
   return (
     <div
-      className={className ? `group/property ${className}` : 'group/property'}
+      className={clsx('group/property', className)}
       data-name="property-root"
       data-invalid={PropsUtil.dataAttributes.bool(invalid)}
     >
       <div
-        className={className}
         data-name="property-title"
         data-invalid={PropsUtil.dataAttributes.bool(invalid)}
       >
@@ -77,7 +77,6 @@ export const PropertyBase = ({
         )}
       </div>
       <div
-        className={className}
         data-name="property-content"
         data-invalid={PropsUtil.dataAttributes.bool(invalid)}
       >

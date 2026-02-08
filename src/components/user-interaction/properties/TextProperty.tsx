@@ -28,8 +28,8 @@ export const TextProperty = ({
     >
       {({ invalid }) => (
         <Textarea
-          className="w-full"
           data-name="property-input"
+          className="w-full"
           data-invalid={PropsUtil.dataAttributes.bool(invalid)}
           rows={5}
           value={value ?? ''}

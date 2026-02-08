@@ -20,7 +20,6 @@ export const TableBody = React.memo(function TableBodyVisual() {
     .filter(Boolean)
     .filter(col => columnVisibility?.[col.id] !== false)
 
-  console.log('render')
   return (
     <tbody>
       {rows.map(row => {
@@ -29,11 +28,12 @@ export const TableBody = React.memo(function TableBodyVisual() {
             key={row.id}
             onClick={() => onRowClick?.(row, table)}
             data-clickable={PropsUtil.dataAttributes.bool(!!onRowClick)}
-            className={clsx('table-body-row', BagFunctionUtil.resolve(table.options.meta?.bodyRowClassName, row.original))}
+            data-name="table-body-row"
+            className={clsx(BagFunctionUtil.resolve(table.options.meta?.bodyRowClassName, row.original))}
           >
             {row.getVisibleCells().map(cell => {
               return (
-                <td key={cell.id} className={clsx('table-body-cell', cell.column.columnDef.meta?.className)}>
+                <td key={cell.id} data-name="table-body-cell" className={clsx(cell.column.columnDef.meta?.className)}>
                   {flexRender(
                     cell.column.columnDef.cell,
                     cell.getContext()
@@ -55,7 +55,7 @@ export const TableBody = React.memo(function TableBodyVisual() {
             >
               {columns.map((column) => {
                 return (
-                  <td key={column.id} className={clsx('table-body-filler-cell', column.columnDef.meta?.className)}>
+                  <td key={column.id} data-name="table-body-filler-cell" className={clsx(column.columnDef.meta?.className)}>
                     {fillerRowCell ? fillerRowCell(column.id, table) : (<FillerCell />)}
                   </td>
                 )

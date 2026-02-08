@@ -12,10 +12,6 @@ function bool(isActive: boolean): string | undefined {
   return isActive ? '' : undefined
 }
 
-function name(name: string, props: Record<string, unknown> = {}): string {
-  return props['data-name'] ? String(props['data-name']) : name
-}
-
 type InteractionStateDataAttributes = {
   'data-disabled': string | undefined,
   'data-invalid': string | undefined,
@@ -33,7 +29,6 @@ function interactionStatesData(interactionStates: Partial<FormFieldInteractionSt
 
 const dataAttributes = {
   bool,
-  name,
   interactionStates: interactionStatesData,
 }
 

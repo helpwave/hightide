@@ -1,18 +1,18 @@
 import type { Meta, StoryObj } from '@storybook/nextjs'
 import { action } from 'storybook/actions'
-import { YearMonthPickerUncontrolled } from '@/src/components/user-interaction/date/YearMonthPicker'
+import { YearMonthPicker } from '@/src/components/user-interaction/date/YearMonthPicker'
 import { addDuration, subtractDuration } from '@/src/utils/date'
 
 const meta = {
-  component: YearMonthPickerUncontrolled,
-} satisfies Meta<typeof YearMonthPickerUncontrolled>
+  component: YearMonthPicker,
+} satisfies Meta<typeof YearMonthPicker>
 
 export default meta
 type Story = StoryObj<typeof meta>;
 
 export const yearMonthPicker: Story = {
   args: {
-    value: new Date(),
+    initialValue: new Date(),
     start: subtractDuration(new Date(), { years: 50 }),
     end: addDuration(new Date(), { years: 50 }),
     onValueChange: action('onValueChange'),

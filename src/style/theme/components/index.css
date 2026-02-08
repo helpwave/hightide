@@ -2,6 +2,7 @@
 @import "./card.css";
 @import "./chip.css";
 @import "./input-elements.css";
+@import "./toggleable-intput.css";
 @import "./table.css";
 @import "./scrollbar.css";
 @import "./link.css";
@@ -12,6 +13,7 @@
 @import "./expandable.css";
 @import "./expansion-icon.css";
 @import "./checkbox.css";
+@import "./switch.css";
 @import "./tooltip.css";
 @import "./drawer.css";
 @import "./dialog.css";
@@ -21,4 +23,6 @@
 @import "./time-picker.css";
 @import "./property.css";
 @import "./pop-up.css";
+@import "./select.css";
 @import "./general.css";
+@import "./icon-button.css";

@@ -5,19 +5,18 @@ import { HelpwaveLogo } from '@/src/components/branding/HelpwaveLogo'
 export type LoadingAnimationProps = {
   loadingText?: string,
   classname?: string,
+  animationDuration?: number,
 }
 
-/**
- * A Component to show when loading data
- */
 export const LoadingAnimation = ({
   loadingText,
-  classname
+  classname,
+  animationDuration
 }: LoadingAnimationProps) => {
   const translation = useHightideTranslation()
   return (
     <div className={clsx('flex-col-2 items-center justify-center w-full h-24', classname)}>
-      <HelpwaveLogo animate="loading"/>
+      <HelpwaveLogo animate="loading" animationDuration={animationDuration} />
       {loadingText ?? `${translation('loading')}...`}
     </div>
   )

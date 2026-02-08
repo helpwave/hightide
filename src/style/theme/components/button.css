@@ -1,64 +1,50 @@
 @layer components {
   [data-name="button"] {
-    @apply: font-semibold whitespace-nowrap;
+    @apply flex flex-row items-center justify-center element;
+    @apply: font-semibold whitespace-nowrap w-fit;
+
     &:not([data-disabled]) {
       @apply cursor-pointer coloring-color-detect coloring-style-hover-detect;
     }
+    
     &[data-disabled] {
       @apply disabled coloring-style-detect cursor-not-allowed;
     }
-    &[data-layout="icon"] {
-      @apply flex-col-0 items-center justify-center;
-      &[data-size="xs"] {
-        @apply p-1 rounded-1 size-6;
-        &[data-coloringstyle="outline"] {
-          @apply p-0.5;
-        }
-      }
-      &[data-size="sm"] {
-        @apply p-1.5 rounded-1.5 size-8;
-        &[data-coloringstyle="outline"] {
-          @apply p-1;
-        }
-      }
-      &[data-size="md"] {
-        @apply p-2 rounded-1.5 size-10;
-        &[data-coloringstyle="outline"] {
-          @apply p-1.5;
-        }
-      }
-      &[data-size="lg"] {
-        @apply p-2 rounded-1.5 size-12;
-        &[data-coloringstyle="outline"] {
-          @apply p-1.5;
-        }
+
+    &[data-size="xs"] {
+      @apply gap-x-1 sizing-xs;
+      @apply text-xs min-w-20;
+      &[data-coloringstyle="outline"] {
+        padding: 
+          calc(var(--spacing-element-padding-xs) - var(--coloring-outline-width)) 
+          calc(var(--spacing-element-padding-direction-xs) - var(--coloring-outline-width));
       }
     }
-    &[data-layout="default"] {
-      @apply flex flex-row items-center justify-center;
-      &[data-size="xs"] {
-        @apply gap-x-1 px-1 py-0.75 rounded-1 h-6 text-sm;
-        &[data-coloringstyle="outline"] {
-          @apply px-0.5 py-0.25;
-        }
+    &[data-size="sm"] {
+      @apply gap-x-1 sizing-sm;
+      @apply min-w-28;
+      &[data-coloringstyle="outline"] {
+        padding: 
+          calc(var(--spacing-element-padding-sm) - var(--coloring-outline-width)) 
+          calc(var(--spacing-element-padding-direction-sm) - var(--coloring-outline-width));
       }
-      &[data-size="sm"] {
-        @apply gap-x-1 px-1.5 py-1 rounded-1.5 h-8;
-        &[data-coloringstyle="outline"] {
-          @apply px-1 py-0.5;
-        }
+    }
+    &[data-size="md"] {
+      @apply gap-x-2 sizing-md;
+      @apply min-w-36;
+      &[data-coloringstyle="outline"] {
+        padding: 
+          calc(var(--spacing-element-padding-md) - var(--coloring-outline-width)) 
+          calc(var(--spacing-element-padding-direction-md) - var(--coloring-outline-width));
       }
-      &[data-size="md"] {
-        @apply gap-x-2 px-3 py-2 rounded-1.5 h-10;
-        &[data-coloringstyle="outline"] {
-          @apply px-2.5 py-1.5;
-        }
-      }
-      &[data-size="lg"] {
-        @apply gap-x-2 px-4 py-2.5 rounded-1.5 h-12;
-        &[data-coloringstyle="outline"] {
-          @apply px-3.5 py-2;
-        }
+    }
+    &[data-size="lg"] {
+      @apply gap-x-2 sizing-lg;
+      @apply text-lg min-w-45;
+      &[data-coloringstyle="outline"] {
+        padding: 
+          calc(var(--spacing-element-padding-lg) - var(--coloring-outline-width)) 
+          calc(var(--spacing-element-padding-direction-lg) - var(--coloring-outline-width));
       }
     }
   }

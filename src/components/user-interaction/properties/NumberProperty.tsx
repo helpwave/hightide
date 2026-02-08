@@ -36,8 +36,8 @@ export const NumberProperty = ({
           data-invalid={PropsUtil.dataAttributes.bool(invalid)}
         >
           <Input
-            className="w-full pr-8"
             data-name="property-input"
+            className="w-full pr-8"
             data-invalid={PropsUtil.dataAttributes.bool(invalid)}
             value={value?.toString() ?? ''}
             type="number"

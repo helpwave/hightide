@@ -1,13 +1,14 @@
-import { memo, useCallback, useEffect, useLayoutEffect, useMemo, useRef, useState } from 'react'
+import { memo, useCallback, useEffect, useMemo, useRef, useState } from 'react'
 import { equalSizeGroups, range } from '@/src/utils/array'
 import clsx from 'clsx'
 import { ExpandableContent, ExpandableHeader, ExpandableRoot } from '@/src/components/layout/Expandable'
 import { addDuration, DateUtils, subtractDuration } from '@/src/utils/date'
 import { useLocale } from '@/src/global-contexts/LocaleContext'
-import { useOverwritableState } from '@/src/hooks/useOverwritableState'
 import { Button } from '@/src/components/user-interaction/Button'
 import type { FormFieldDataHandling } from '../../form/FormField'
 import { InfiniteScroll } from '../../layout/InifiniteScroll'
+import { useControlledState } from '@/src/hooks/useControlledState'
+import { useEventCallbackStabilizer } from '@/src/hooks/useEventCallbackStabelizer'
 
 // A performance optimized component for displayig the year rows
 const YearRow = memo(function YearRow({
@@ -46,7 +47,7 @@ const YearRow = memo(function YearRow({
       <ExpandableHeader className={clsx('px-2', { 'text-primary font-bold': isSelectedYear })}>
         {year}
       </ExpandableHeader>
-      <ExpandableContent className="gap-y-1 px-2 expandable-content-h-39">
+      <ExpandableContent className="gap-y-1 px-2 expandable-content-h-43">
         {isExpanded && monthGrid.map((group, groupIdx) => (
           <div key={groupIdx} className="flex-row-1">
             {group.map(month => {
@@ -63,7 +64,7 @@ const YearRow = memo(function YearRow({
                   key={month}
                   disabled={!isValid}
                   color={isSelectedMonth && isValid ? 'primary' : 'neutral'}
-                  className="flex-1"
+                  className="flex-1 min-w-auto"
                   size="sm"
                   onClick={() => {
                     if (isValid) {
@@ -86,13 +87,15 @@ const defaultStart = subtractDuration(new Date(), { years: 100 })
 const defaultEnd = addDuration(new Date(), { years: 100 })
 
 export type YearMonthPickerProps = Partial<FormFieldDataHandling<Date>> & {
+  initialValue?: Date,
   start?: Date,
   end?: Date,
   className?: string,
 }
 
 export const YearMonthPicker = ({
-  value = new Date(),
+  value: controlledValue,
+  initialValue = new Date(),
   start = defaultStart,
   end = defaultEnd,
   onValueChange,
@@ -100,6 +103,13 @@ export const YearMonthPicker = ({
   className,
 }: YearMonthPickerProps) => {
   const { locale } = useLocale()
+  const [value, setValue] = useControlledState({
+    value: controlledValue,
+    onValueChange: onValueChange,
+    defaultValue: initialValue,
+  })
+
+  const onEditCompleteStable = useEventCallbackStabilizer(onEditComplete)
 
   const monthNames = useMemo(() => {
     const formatter = new Intl.DateTimeFormat(locale, { month: 'short' })
@@ -119,16 +129,10 @@ export const YearMonthPicker = ({
     return new Date(end.getFullYear(), end.getMonth() + 1, 0).getTime()
   }, [end])
 
-  const callbackRefs = useRef({ onValueChange, onEditComplete })
-  useLayoutEffect(() => {
-    callbackRefs.current = { onValueChange, onEditComplete }
-  })
   const handleSelect = useCallback((newDate: Date) => {
-    const { onValueChange, onEditComplete } = callbackRefs.current
-
-    onValueChange?.(newDate)
-    onEditComplete?.(newDate)
-  }, [])
+    setValue(newDate)
+    onEditCompleteStable(newDate)
+  }, [onEditCompleteStable, setValue])
 
   return (
     <InfiniteScroll
@@ -154,21 +158,5 @@ export const YearMonthPicker = ({
         )
       })}
     </InfiniteScroll>
-  )
-}
-
-export const YearMonthPickerUncontrolled = ({
-  value: initialValue,
-  onValueChange,
-  ...props
-}: YearMonthPickerProps) => {
-  const [value, setValue] = useOverwritableState<Date>(initialValue, onValueChange)
-
-  return (
-    <YearMonthPicker
-      value={value}
-      onValueChange={setValue}
-      {...props}
-    />
   )
 }

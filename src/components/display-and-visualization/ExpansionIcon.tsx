@@ -16,7 +16,7 @@ export const ExpansionIcon = ({
   return (
     <div
       {...props}
-      data-name="expansion-icon"
+      data-name={props['data-name'] ?? 'expansion-icon'}
       data-expanded={isExpanded ? '' : undefined}
       data-disabled={disabled ? '' : undefined}
     >

@@ -1,10 +1,10 @@
 import type { Meta, StoryObj } from '@storybook/nextjs'
 import { action } from 'storybook/actions'
-import { StepperBarUncontrolled } from '@/src/components/layout/navigation/StepperBar'
+import { StepperBar } from '@/src/components/layout/navigation/StepperBar'
 
 const meta = {
-  component: StepperBarUncontrolled,
-} satisfies Meta<typeof StepperBarUncontrolled>
+  component: StepperBar,
+} satisfies Meta<typeof StepperBar>
 
 export default meta
 type Story = StoryObj<typeof meta>;
@@ -15,7 +15,7 @@ export const stepperBar: Story = {
     numberOfSteps: 5,
     finishText: 'Done',
     onFinish: action('onFinish'),
-    onChange: action('onChange'),
+    onStateChange: action('onChange'),
     disabledSteps: new Set(),
   },
 }

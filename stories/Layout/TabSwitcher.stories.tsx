@@ -1,26 +1,29 @@
 import type { Meta, StoryObj } from '@storybook/nextjs'
+import type { TabSwitcherProps } from '@/src/components/layout/TabSwitcher'
 import { TabList, TabPanel, TabSwitcher } from '@/src/components/layout/TabSwitcher'
 
 
-const meta = {
-  component: TabSwitcher,
-} satisfies Meta<typeof TabSwitcher>
+type StoryArgs = Omit<TabSwitcherProps, 'children'> & {
+  disableTestTab: boolean,
+}
+
+const meta: Meta<StoryArgs> = {}
 
 export default meta
 type Story = StoryObj<typeof meta>;
 
 export const tabSwitcher: Story = {
   args: {
-    children: undefined
+    disableTestTab: false,
   },
-  render: ({ ...args }) => {
+  render: ({ disableTestTab, ...args }) => {
     return (
       <TabSwitcher {...args}>
         <TabList/>
         <TabPanel label="Custom">
           {'Customers'}
         </TabPanel>
-        <TabPanel label="Test">
+        <TabPanel label="Test" disabled={disableTestTab}>
           {'Test'}
         </TabPanel>
         <TabPanel label="Red">

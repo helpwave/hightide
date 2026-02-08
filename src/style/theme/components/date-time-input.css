@@ -1,0 +1,9 @@
+@layer components {
+  [data-name="date-time-input"] {
+    @apply input-element flex-row-2 px-3 pr-10 h-element-md rounded-md w-full items-center justify-between;
+
+    &:hover {
+      @apply cursor-pointer;
+    }
+  }
+}

@@ -1,6 +1,7 @@
 import type React from 'react'
 import { useState } from 'react'
 import { resolveSetState } from '../utils/resolveSetState'
+import { useEventCallbackStabilizer } from './useEventCallbackStabelizer'
 import { useLogOnce } from './useLogOnce'
 
 export interface ControlledStateProps<T> {
@@ -19,6 +20,8 @@ export const useControlledState = <T>({
   const [internalValue, setInternalValue] = useState(defaultValue)
   const [isControlled] = useState(isEnforcingControlled || value !== undefined)
 
+  const onValueChangeStable = useEventCallbackStabilizer(onValueChange)
+
   useLogOnce(
     'useControlledState: Attempted to change from controlled to uncontrolled or vice versa.'
     + 'For a controlled state: isControlled === true OR value !== undefined'
@@ -28,13 +31,13 @@ export const useControlledState = <T>({
   )
 
   if(isControlled) {
-    return [value, onValueChange]
+    return [value, onValueChangeStable as React.Dispatch<React.SetStateAction<T>>]
   }
 
   const onChangeWrapper: React.Dispatch<React.SetStateAction<T>> = (action) => {
     const resolved = resolveSetState(action, internalValue)
     setInternalValue(resolved)
-    onValueChange?.(resolved)
+    onValueChangeStable(resolved)
   }
 
   return [internalValue, onChangeWrapper]

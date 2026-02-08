@@ -43,6 +43,8 @@
       }
     }
   },
+  "nextMonth": "Nächster Monat",
+  "previousMonth": "Vorheriger Monat",
   "day": "{count, plural, =1{Tag} other{Tage}}",
   "@day": {
     "placeholders": {

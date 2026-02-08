@@ -3,7 +3,7 @@ import { useHightideTranslation } from '@/src/i18n/useHightideTranslation'
 import { range } from '@/src/utils/array'
 import { Button } from '@/src/components/user-interaction/Button'
 import clsx from 'clsx'
-import { useOverwritableState } from '@/src/hooks/useOverwritableState'
+import { useControlledState } from '@/src/hooks/useControlledState'
 
 export type StepperState = {
   currentStep: number,
@@ -12,9 +12,10 @@ export type StepperState = {
 
 export type StepperBarProps = {
   state?: StepperState,
+  initialState?: StepperState,
+  onStateChange: (state: StepperState) => void,
   numberOfSteps: number,
   disabledSteps?: Set<number>,
-  onChange: (state: StepperState) => void,
   onFinish: () => void,
   finishText?: string,
   showDots?: boolean,
@@ -30,10 +31,11 @@ const defaultState: StepperState = {
  * A Component for stepping
  */
 export const StepperBar = ({
-  state = defaultState,
+  state: controlledState,
+  initialState = defaultState,
   numberOfSteps,
   disabledSteps = new Set(),
-  onChange,
+  onStateChange,
   onFinish,
   finishText,
   showDots = true,
@@ -41,11 +43,16 @@ export const StepperBar = ({
 }: StepperBarProps) => {
   const translation = useHightideTranslation()
   const dots = range(numberOfSteps + 1) // +1 for last finish step
-  const { currentStep, seenSteps } = state ?? defaultState
+  const [state, setState] = useControlledState({
+    value: controlledState,
+    onValueChange: onStateChange,
+    defaultValue: initialState,
+  })
+  const { currentStep, seenSteps } = state
 
   const update = (newStep: number) => {
     seenSteps.add(newStep)
-    onChange({ currentStep: newStep, seenSteps })
+    setState({ currentStep: newStep, seenSteps })
   }
 
   return (
@@ -109,17 +116,5 @@ export const StepperBar = ({
         </div>
       )}
     </div>
-  )
-}
-
-export const StepperBarUncontrolled = ({ state, onChange, ...props }: StepperBarProps) => {
-  const [usedState, setUsedState] = useOverwritableState<StepperState>(state, onChange)
-
-  return (
-    <StepperBar
-      {...props}
-      state={usedState}
-      onChange={setUsedState}
-    />
   )
 }

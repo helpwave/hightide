@@ -1,6 +1,6 @@
 import type { Meta, StoryObj } from '@storybook/nextjs'
-import type { DrawerAligment } from '@/src/components/layout/Drawer'
-import { Drawer } from '@/src/components/layout/Drawer'
+import type { DrawerAligment } from '@/src/components/layout/drawer/Drawer'
+import { Drawer } from '@/src/components/layout/drawer/Drawer'
 import { useState } from 'react'
 import { Button } from '@/src/components/user-interaction/Button'
 

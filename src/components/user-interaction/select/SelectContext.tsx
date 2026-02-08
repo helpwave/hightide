@@ -2,6 +2,7 @@ import type { Dispatch, PropsWithChildren, ReactNode, SetStateAction } from 'rea
 import { createContext, useCallback, useContext, useEffect, useId, useMemo, useRef, useState } from 'react'
 import type { FormFieldInteractionStates } from '../../form/FieldLayout'
 import type { FormFieldDataHandling } from '../../form/FormField'
+import { useControlledState } from '@/src/hooks/useControlledState'
 
 //
 // Context
@@ -79,7 +80,7 @@ export function useSelectContext() {
 //
 // PrimitiveSelectRoot
 //
-export type SharedSelectRootProps = Partial<FormFieldInteractionStates> & PropsWithChildren &{
+export type SharedSelectRootProps = Partial<FormFieldInteractionStates> & PropsWithChildren & {
     id?: string,
     initialIsOpen?: boolean,
     iconAppearance?: SelectIconAppearance,
@@ -87,8 +88,10 @@ export type SharedSelectRootProps = Partial<FormFieldInteractionStates> & PropsW
   }
 
 type PrimitiveSelectRootProps =  SharedSelectRootProps & {
+    initialValue?: string,
     value?: string,
     onValueChange?: (value: string) => void,
+    initialValues?: string[],
     values?: string[],
     onValuesChange?: (value: string[]) => void,
     isMultiSelect?: boolean,
@@ -97,9 +100,11 @@ type PrimitiveSelectRootProps =  SharedSelectRootProps & {
 const PrimitveSelectRoot = ({
   children,
   id,
-  value,
+  initialValue,
+  value: controlledValue,
   onValueChange,
-  values,
+  initialValues,
+  values: controlledValues,
   onValuesChange,
   onClose,
   initialIsOpen = false,
@@ -110,6 +115,17 @@ const PrimitveSelectRoot = ({
   isMultiSelect = false,
   iconAppearance = 'left',
 }: PrimitiveSelectRootProps) => {
+  const [value, setValue] = useControlledState({
+    value: controlledValue,
+    onValueChange,
+    defaultValue: initialValue,
+  })
+  const [values, setValues] = useControlledState({
+    value: controlledValues,
+    onValueChange: onValuesChange,
+    defaultValue: initialValues ?? [],
+  })
+
   const triggerRef = useRef<HTMLElement>(null)
   const generatedId = useId()
   const [ids, setIds] = useState<SelectContextIds>({
@@ -124,9 +140,11 @@ const PrimitveSelectRoot = ({
 
   const selectedValues = useMemo(() => isMultiSelect ? (values ?? []) : [value].filter(Boolean),
     [isMultiSelect, value, values])
+
   const selectedOptions = useMemo(() =>
     selectedValues.map(value => internalState.options.find(option => value === option.value)).filter(Boolean),
   [selectedValues, internalState.options])
+
   const state: SelectContextState = {
     ...internalState,
     disabled,
@@ -193,9 +211,9 @@ const PrimitveSelectRoot = ({
     }
 
     if (!isMultiSelect) {
-      onValueChange?.(newValue[0])
+      setValue(newValue[0])
     } else {
-      onValuesChange?.(newValue)
+      setValues(newValue)
     }
 
     setInternalState(prevState => ({
@@ -280,8 +298,7 @@ const PrimitveSelectRoot = ({
     } else {
       console.error(`SelectRoot: Could not find highlighted value (${internalState.highlightedValue})`)
     }
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [internalState.highlightedValue])
+  }, [internalState.highlightedValue, internalState.options])
 
   const contextValue: SelectContextType = {
     ids,
@@ -313,7 +330,9 @@ const PrimitveSelectRoot = ({
 //
 // SelectRoot
 //
-export type SelectRootProps = SharedSelectRootProps & Partial<FormFieldDataHandling<string>>
+export type SelectRootProps = SharedSelectRootProps & Partial<FormFieldDataHandling<string>> & {
+  initialValue?: string,
+}
 
 export const SelectRoot = ({ value, onValueChange, onEditComplete, ...props }: SelectRootProps) => {
   return (
@@ -332,13 +351,16 @@ export const SelectRoot = ({ value, onValueChange, onEditComplete, ...props }: S
 //
 // MultiSelectRoot
 //
-export type MultiSelectRootProps = SharedSelectRootProps & Partial<FormFieldDataHandling<string[]>>
+export type MultiSelectRootProps = SharedSelectRootProps & Partial<FormFieldDataHandling<string[]>> & {
+  initialValue?: string[],
+}
 
-export const MultiSelectRoot = ( { value, onValueChange, onEditComplete,...props }: MultiSelectRootProps) => {
+export const MultiSelectRoot = ( { value, onValueChange, initialValue, onEditComplete,...props }: MultiSelectRootProps) => {
   return (
     <PrimitveSelectRoot
       {...props}
       isMultiSelect={true}
+      initialValues={initialValue}
       values={value}
       onValuesChange={(values) => {
         onValueChange?.(values)

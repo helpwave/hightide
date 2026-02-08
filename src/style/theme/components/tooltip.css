@@ -1,4 +1,4 @@
-  @utility animate-tooltip-fade-in {
+@utility animate-tooltip-fade-in {
   animation: fade-in calc(var(--animation-duration-in, 250ms) * 2) ease-in-out 1 forwards;
 }
 
@@ -8,7 +8,7 @@
 }
 
 @layer components {
-  .tooltip {
+  [data-name="tooltip"] {
     @apply absolute px-2 py-1 rounded shadow-around-md;
     @apply text-xs font-semibold text-tooltip-text bg-tooltip-background truncate;
 

@@ -27,13 +27,12 @@ export interface FocusTrapWrapperProps extends HTMLAttributes<HTMLDivElement>, O
 export const FocusTrapWrapper = forwardRef<HTMLDivElement, FocusTrapWrapperProps>(function FocusTrap({
   active,
   initialFocus,
-  focusFirst = false,
   ...props
 }, forwardedRef) {
   const innerRef = useRef<HTMLDivElement>(null)
   useImperativeHandle(forwardedRef, () => innerRef.current)
 
-  useFocusTrap({ container: innerRef, active, initialFocus, focusFirst })
+  useFocusTrap({ container: innerRef, active, initialFocus })
 
   return (
     <div ref={innerRef} {...props}/>

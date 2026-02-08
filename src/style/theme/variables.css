@@ -3,4 +3,29 @@
   --drawer-indent: calc(4 * var(--spacing));
   --animation-duration-in: 250ms;
   --animation-duration-out: 170ms;
+
+  --coloring-outline-width: calc(0.5 * var(--spacing));
+}
+
+@theme {
+  /*
+   * breakpoints
+   */
+  --breakpoint-tablet: 48rem; /* 768px for 16px font-size */
+  --breakpoint-desktop: 64rem; /* 1024px for 16px font-size*/
+
+  --spacing-element-xs: calc(7 * var(--spacing));
+  --spacing-element-sm: calc(9 * var(--spacing));
+  --spacing-element-md: calc(11 * var(--spacing)); /* This should always be at least 44px on standard settings */
+  --spacing-element-lg: calc(13 * var(--spacing));
+
+  --spacing-element-padding-xs: calc((var(--spacing-element-xs) - 4 * var(--spacing)) / 2);
+  --spacing-element-padding-sm: calc((var(--spacing-element-sm) - 6 * var(--spacing)) / 2);
+  --spacing-element-padding-md: calc((var(--spacing-element-md) - 6 * var(--spacing)) / 2);
+  --spacing-element-padding-lg: calc((var(--spacing-element-lg) - 8 * var(--spacing)) / 2);
+
+  --spacing-element-padding-direction-xs: calc(var(--spacing-element-padding-xs) * 1.5);
+  --spacing-element-padding-direction-sm: calc(var(--spacing-element-padding-sm) * 2);
+  --spacing-element-padding-direction-md: calc(var(--spacing-element-padding-md) * 2);
+  --spacing-element-padding-direction-lg: calc(var(--spacing-element-padding-lg) * 3);
 }

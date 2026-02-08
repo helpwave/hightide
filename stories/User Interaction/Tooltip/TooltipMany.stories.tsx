@@ -13,7 +13,7 @@ type Story = StoryObj<typeof meta>;
 export const tooltipMany: Story = {
   args: {
     tooltip: 'Tooltip',
-    position: 'bottom',
+    alignment: 'bottom',
     appearDelay: undefined,
     containerClassName: '',
     tooltipClassName: '',
@@ -29,7 +29,7 @@ export const tooltipMany: Story = {
           )
         })}
         <Tooltip tooltip={tooltip} {...props}>
-          <Button className="bg-primary text-white px-2 py-1 rounded-lg">Tab to me</Button>
+          <Button>Tab to me</Button>
         </Tooltip>
       </>
     )

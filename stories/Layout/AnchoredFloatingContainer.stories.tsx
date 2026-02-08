@@ -19,6 +19,8 @@ export const anchoredFloatingContainer: Story = {
   args: {
     isAnchored: true,
     isPolling: true,
+    isReactingToResize: true,
+    isReactingToScroll: true,
     verticalAlignment: 'afterEnd',
     horizontalAlignment: 'center',
     screenPadding: 16,
@@ -44,6 +46,8 @@ export const anchoredFloatingContainer: Story = {
   render: ({
     isAnchored,
     isPolling,
+    isReactingToResize,
+    isReactingToScroll,
     verticalAlignment,
     horizontalAlignment,
     screenPadding,
@@ -75,6 +79,8 @@ export const anchoredFloatingContainer: Story = {
             screenPadding,
             gap,
             pollingInterval,
+            isReactingToResize,
+            isReactingToScroll,
           }}
         />
       </>

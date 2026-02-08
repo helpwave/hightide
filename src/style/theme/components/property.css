@@ -78,7 +78,7 @@
       @apply text-warning;
 
       [data-name="select-button"],
-      [data-name="select-button-chips"] {
+      [data-name="select-chip-display"] {
         @apply !bg-warning !text-surface-warning;
       }
     }

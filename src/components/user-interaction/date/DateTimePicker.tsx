@@ -5,12 +5,13 @@ import type { TimePickerProps, TimePickerMinuteIncrement } from './TimePicker'
 import { TimePicker } from './TimePicker'
 import type { DatePickerProps } from './DatePicker'
 import { DatePicker } from './DatePicker'
-import { useOverwritableState } from '@/src/hooks/useOverwritableState'
 import type { FormFieldDataHandling } from '../../form/FormField'
+import { useControlledState } from '@/src/hooks/useControlledState'
 
 export type DateTimePickerMode = 'date' | 'time' | 'dateTime'
 
 export type DateTimePickerProps = Partial<FormFieldDataHandling<Date>> & {
+  initialValue?: Date,
   mode?: DateTimePickerMode,
   start?: Date,
   end?: Date,
@@ -26,7 +27,8 @@ export type DateTimePickerProps = Partial<FormFieldDataHandling<Date>> & {
  * A Component for picking a Date and Time
  */
 export const DateTimePicker = ({
-  value = new Date(),
+  value: controlledValue,
+  initialValue = new Date(),
   start,
   end,
   mode = 'dateTime',
@@ -40,7 +42,11 @@ export const DateTimePicker = ({
 }: DateTimePickerProps) => {
   const useDate = mode === 'dateTime' || mode === 'date'
   const useTime = mode === 'dateTime' || mode === 'time'
-
+  const [value, setValue] = useControlledState({
+    value: controlledValue,
+    onValueChange: onValueChange,
+    defaultValue: initialValue,
+  })
   let dateDisplay: ReactNode
   let timeDisplay: ReactNode
 
@@ -54,7 +60,7 @@ export const DateTimePicker = ({
         end={end}
         weekStart={weekStart}
         value={value}
-        onValueChange={onValueChange}
+        onValueChange={setValue}
         onEditComplete={onEditComplete}
       />
     )
@@ -67,7 +73,7 @@ export const DateTimePicker = ({
         minuteIncrement={minuteIncrement}
         className={clsx({ 'justify-between': mode === 'time' })}
         value={value}
-        onValueChange={onValueChange}
+        onValueChange={setValue}
         onEditComplete={onEditComplete}
       />
     )
@@ -78,17 +84,5 @@ export const DateTimePicker = ({
       {dateDisplay}
       {timeDisplay}
     </div>
-  )
-}
-
-export const DateTimePickerUncontrolled = ({ value: initialValue, onValueChange, ...props }: DateTimePickerProps) => {
-  const [value, setValue] = useOverwritableState(initialValue, onValueChange)
-
-  return (
-    <DateTimePicker
-      {...props}
-      value={value}
-      onValueChange={setValue}
-    />
   )
 }

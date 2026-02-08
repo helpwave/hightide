@@ -1,6 +1,6 @@
 import type { Meta, StoryObj } from '@storybook/nextjs'
 import { useRef, useState } from 'react'
-import { InputUncontrolled } from '@/src/components/user-interaction/input/Input'
+import { Input } from '@/src/components/user-interaction/input/Input'
 import { FocusTrapWrapper } from '@/src/components/utils/FocusTrap'
 import { clsx } from 'clsx'
 import { Dialog } from '@/src/components/layout/dialog/Dialog'
@@ -74,7 +74,7 @@ export const focusTrap: Story = {
               <Button onClick={() => setInnerActive(prevState => !prevState)}>
                 {'Toggle Inner Focus Trap'}
               </Button>
-              <InputUncontrolled ref={ref2} />
+              <Input ref={ref2} />
             </FocusTrapWrapper>
           </FocusTrapWrapper>
           <span>This part is not reachable with keyboard navigation when the traps are active</span>

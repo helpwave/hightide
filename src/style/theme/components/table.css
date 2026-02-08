@@ -1,22 +1,22 @@
 @layer components {
-  .table-container {
+  [data-name="table-container"] {
     @apply flex-col-0 w-full overflow-auto;
   }
 
-  .table {
+  [data-name="table"] {
     @apply table-fixed border-separate border-spacing-0 rounded-lg;
     @apply bg-table-background text-table-text;
   }
 
-  .table-filler-cell {
+  [data-name="table-filler-cell"] {
     @apply flex flex-row items-center w-1/2 h-6 text-disabled font-bold;
   }
 
-  .table-default-cell {
+  [data-name="table-default-cell"] {
     @apply block max-w-full overflow-ellipsis truncate;
   }
 
-  .table-header-cell {
+  [data-name="table-header-cell"] {
     @apply relative;
     @apply px-3 first:pl-6 last:pr-6 py-2.5;
     @apply border-y-1 first:border-l-1 last:border-r-1;
@@ -28,27 +28,27 @@
     }
   }
 
-  .table-body-row {
+  [data-name="table-body-row"] {
     @apply hover:bg-table-row-hover-background;
     &[data-clickable] {
       @apply hover:cursor-pointer;
     }
   }
 
-  .table-body-filler-row {
+  [data-name="table-body-filler-row"] {
     @apply hover:cursor-not-allowed;
     &[data-clickable] {
       @apply hover:cursor-pointer hover:bg-table-row-hover-background;
     }
   }
 
-  .table-body-cell, .table-body-filler-cell {
+  [data-name="table-body-cell"], [data-name="table-body-filler-cell"] {
     @apply px-3 first:pl-6 last:pr-6 py-2.5;
     @apply border-b-1 first:border-l-1 last:border-r-1;
     @apply [nth-last-child(1)]:first:rounded-bl-lg [nth-last-child(1)]:last:rounded-br-lg;
   }
 
-  .table-resize-indicator {
+  [data-name="table-resize-indicator"] {
     @apply absolute right-1 top-1/2 -translate-y-1/2;
     @apply h-6 w-2 rounded bg-primary;
     @apply cursor-col-resize;
@@ -67,7 +67,8 @@
     }
   }
 
-  .table-body-row:last-child > .table-body-cell, .table-body-filler-row:last-child > .table-body-filler-cell {
+  [data-name="table-body-row"]:last-child > [data-name="table-body-cell"],
+  [data-name="table-body-filler-row"]:last-child > [data-name="table-body-filler-cell"] {
     @apply first:rounded-bl-lg last:rounded-br-lg;
   }
 }

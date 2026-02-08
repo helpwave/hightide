@@ -1,6 +1,6 @@
 import type { Meta, StoryObj } from '@storybook/nextjs'
 import { action } from 'storybook/actions'
-import { Drawer } from '@/src/components/layout/Drawer'
+import { Drawer } from '@/src/components/layout/drawer/Drawer'
 
 
 const meta: Meta = {
