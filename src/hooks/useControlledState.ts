@@ -5,13 +5,13 @@ import { useEventCallbackStabilizer } from './useEventCallbackStabelizer'
 import { useLogOnce } from './useLogOnce'
 
 export interface ControlledStateProps<T> {
-  /** 
+  /**
    * The controlled value of the state.
-   * 
+   *
    * This is determines whether the state:
    * 1. (value !== undefined) => controlled
    * 2. (value === undefined) => uncontrolled
-   * 
+   *
    * If you need to include undefined as a valid state, you can set isControlled to true to force the component to be controlled.
    */
   value?: T,
