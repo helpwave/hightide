@@ -1,27 +1,27 @@
 import { equalSizeGroups } from '@/src/utils/array'
 import type { DurationJSON } from '@/src/utils/duration'
 
+const DateTimeFormat = ['date', 'time', 'dateTime'] as const
+export type DateTimeFormat = typeof DateTimeFormat[number]
+
+const timesInSeconds = {
+  second: 1,
+  minute: 60,
+  hour: 3600,
+  day: 86400,
+  week: 604800,
+  monthImprecise: 2629800, // 30.4375 days
+  yearImprecise: 31557600, // 365.25 days
+} as const
+
+
 const monthsList = ['january', 'february', 'march', 'april', 'may', 'june', 'july', 'august', 'september', 'october', 'november', 'december'] as const
 export type Month = typeof monthsList[number]
 
 const weekDayList = ['sunday', 'monday', 'tuesday', 'wednesday', 'thursday', 'friday', 'saturday'] as const
 export type WeekDay = typeof weekDayList[number]
 
-export const formatDate = (date: Date) => {
-  const year = date.getFullYear().toString().padStart(4, '0')
-  const month = (date.getMonth() + 1).toString().padStart(2, '0')
-  const day = (date.getDate()).toString().padStart(2, '0')
-  return `${year}-${month}-${day}`
-}
-
-export const formatDateTime = (date: Date) => {
-  const dateString = formatDate(date)
-  const hours = date.getHours().toString().padStart(2, '0')
-  const minutes = date.getMinutes().toString().padStart(2, '0')
-  return `${dateString}T${hours}:${minutes}`
-}
-
-export const changeDuration = (date: Date, duration: Partial<DurationJSON>, isAdding?: boolean): Date => {
+const changeDuration = (date: Date, duration: Partial<DurationJSON>, isAdding?: boolean): Date => {
   const {
     years = 0,
     months = 0,
@@ -83,45 +83,19 @@ export const changeDuration = (date: Date, duration: Partial<DurationJSON>, isAd
   return newDate
 }
 
-export const addDuration = (date: Date, duration: Partial<DurationJSON>): Date => {
+const addDuration = (date: Date, duration: Partial<DurationJSON>): Date => {
   return changeDuration(date, duration, true)
 }
 
-export const subtractDuration = (date: Date, duration: Partial<DurationJSON>): Date => {
+const subtractDuration = (date: Date, duration: Partial<DurationJSON>): Date => {
   return changeDuration(date, duration, false)
-}
-
-export const getBetweenDuration = (startDate: Date, endDate: Date): Partial<DurationJSON> => {
-  const durationInMilliseconds = endDate.getTime() - startDate.getTime()
-
-  const millisecondsInSecond = 1000
-  const millisecondsInMinute = 60 * millisecondsInSecond
-  const millisecondsInHour = 60 * millisecondsInMinute
-  const millisecondsInDay = 24 * millisecondsInHour
-  const millisecondsInMonth = 30 * millisecondsInDay // Rough estimation, can be adjusted
-
-  const years = Math.floor(durationInMilliseconds / (365.25 * millisecondsInDay))
-  const months = Math.floor(durationInMilliseconds / millisecondsInMonth)
-  const days = Math.floor(durationInMilliseconds / millisecondsInDay)
-  const hours = Math.floor((durationInMilliseconds % millisecondsInDay) / millisecondsInHour)
-  const seconds = Math.floor((durationInMilliseconds % millisecondsInHour) / millisecondsInSecond)
-  const milliseconds = durationInMilliseconds % millisecondsInSecond
-
-  return {
-    years,
-    months,
-    days,
-    hours,
-    seconds,
-    milliseconds,
-  }
 }
 
 /** Checks if a given date is in the range of two dates
  *
  * An undefined value for startDate or endDate means no bound for the start or end respectively
  */
-export const isInTimeSpan = (value: Date, startDate?: Date, endDate?: Date): boolean => {
+const between = (value: Date, startDate?: Date, endDate?: Date): boolean => {
   if (startDate && endDate) {
     console.assert(startDate <= endDate)
     return startDate <= value && value <= endDate
@@ -141,7 +115,7 @@ const equalDate = (date1: Date, date2: Date) => {
     && date1.getDate() === date2.getDate()
 }
 
-export const getWeeksForCalenderMonth = (date: Date, weekStart: WeekDay, weeks: number = 6) => {
+const weeksForCalenderMonth = (date: Date, weekStart: WeekDay, weeks: number = 6) => {
   const month = date.getMonth()
   const year = date.getFullYear()
 
@@ -165,53 +139,50 @@ export const getWeeksForCalenderMonth = (date: Date, weekStart: WeekDay, weeks: 
   return equalSizeGroups(dayList, 7)
 }
 
-const formatGerman = (date: Date, showTime: boolean) => {
-  const d = new Intl.DateTimeFormat('de-DE', {
-    day: '2-digit',
-    month: '2-digit',
-    year: 'numeric',
-  }).format(date)
+const formatAbsolute = (date: Date, locale: string, format: DateTimeFormat) => {
+  let options: Intl.DateTimeFormatOptions
 
-  if (!showTime) return d
-
-  const t = new Intl.DateTimeFormat('de-DE', {
-    hour: '2-digit',
-    minute: '2-digit',
-  }).format(date)
-
-  return `${d} um ${t} Uhr`
-}
-
-const formatAbsolute = (date: Date, locale: string, showTime: boolean) => {
-  if (locale === 'de-DE') {
-    return formatGerman(date, showTime)
-  }
-
-  const options: Intl.DateTimeFormatOptions = {
-    year: 'numeric',
-    month: 'numeric',
-    day: 'numeric',
-  }
-
-  if (showTime) {
-    options.hour = 'numeric'
-    options.minute = 'numeric'
+  switch (format) {
+  case 'date':
+    options = {
+      year: '2-digit',
+      month: '2-digit',
+      day: '2-digit',
+    }
+    break
+  case 'time':
+    options = {
+      hour: '2-digit',
+      minute: '2-digit',
+    }
+    break
+  case 'dateTime':
+    options = {
+      year: 'numeric',
+      month: '2-digit',
+      day: '2-digit',
+      hour: '2-digit',
+      minute: '2-digit',
+    }
+    break
   }
 
   return new Intl.DateTimeFormat(locale, options).format(date)
 }
 
-const formatRelative = (date: Date, locale: string, showTime: boolean) => {
+const formatRelative = (date: Date, locale: string) => {
   const rtf = new Intl.RelativeTimeFormat(locale, { numeric: 'auto' })
   const now = new Date()
   const diffInSeconds = (date.getTime() - now.getTime()) / 1000
 
-  if (Math.abs(diffInSeconds) < 60) return rtf.format(Math.round(diffInSeconds), 'second')
-  if (Math.abs(diffInSeconds) < 3600) return rtf.format(Math.round(diffInSeconds / 60), 'minute')
-  if (Math.abs(diffInSeconds) < 86400) return rtf.format(Math.round(diffInSeconds / 3600), 'hour')
-  if (Math.abs(diffInSeconds) < 604800) return rtf.format(Math.round(diffInSeconds / 86400), 'day')
+  if (Math.abs(diffInSeconds) < timesInSeconds.minute) return rtf.format(Math.round(diffInSeconds), 'second')
+  if (Math.abs(diffInSeconds) < timesInSeconds.hour) return rtf.format(Math.round(diffInSeconds / timesInSeconds.minute), 'minute')
+  if (Math.abs(diffInSeconds) < timesInSeconds.day) return rtf.format(Math.round(diffInSeconds / timesInSeconds.hour), 'hour')
+  if (Math.abs(diffInSeconds) < timesInSeconds.week) return rtf.format(Math.round(diffInSeconds / timesInSeconds.day), 'day')
+  if (Math.abs(diffInSeconds) < timesInSeconds.monthImprecise) return rtf.format(Math.round(diffInSeconds / timesInSeconds.week), 'week')
+  if (Math.abs(diffInSeconds) < timesInSeconds.monthImprecise) return rtf.format(Math.round(diffInSeconds / timesInSeconds.monthImprecise), 'month')
 
-  return formatAbsolute(date, locale, showTime)
+  return rtf.format(Math.round(diffInSeconds / timesInSeconds.monthImprecise), 'year')
 }
 
 export const DateUtils = {
@@ -219,5 +190,10 @@ export const DateUtils = {
   weekDayList,
   equalDate,
   formatAbsolute,
-  formatRelative
+  formatRelative,
+  addDuration,
+  subtractDuration,
+  between,
+  weeksForCalenderMonth,
+  timesInSeconds,
 }

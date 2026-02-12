@@ -1,6 +1,6 @@
 import type { KeyboardEvent } from 'react'
 import type { WeekDay } from '@/src/utils/date'
-import { DateUtils, getWeeksForCalenderMonth, isInTimeSpan, addDuration, subtractDuration } from '@/src/utils/date'
+import { DateUtils } from '@/src/utils/date'
 import { useLocale } from '@/src/global-contexts/LocaleContext'
 import type { FormFieldDataHandling } from '../../form/FormField'
 import { PropsUtil } from '@/src/utils/propsUtil'
@@ -50,7 +50,7 @@ export const DayPicker = ({
   })
 
   const month = displayedMonth.getMonth()
-  const weeks = getWeeksForCalenderMonth(displayedMonth, weekStart)
+  const weeks = DateUtils.weeksForCalenderMonth(displayedMonth, weekStart)
   const selectedButtonRef = useRef<HTMLDivElement>(null)
 
   const isValueInDisplayedWeeks = useMemo(
@@ -88,7 +88,7 @@ export const DayPicker = ({
 
   const navigateTo = useCallback((candidate: Date) => {
     const clamped = clampToRange(candidate)
-    if (!isInTimeSpan(clamped, start, end)) return
+    if (!DateUtils.between(clamped, start, end)) return
     setValue(clamped)
     onEditComplete?.(clamped)
     if (clamped.getMonth() !== displayedMonth.getMonth() || clamped.getFullYear() !== displayedMonth.getFullYear()) {
@@ -99,10 +99,10 @@ export const DayPicker = ({
   const onKeyDown = useCallback(
     (event: KeyboardEvent<HTMLDivElement>) => {
       PropsUtil.aria.navigate<HTMLDivElement>({
-        left: () => focusTargetDate && navigateTo(subtractDuration(focusTargetDate, { days: 1 })),
-        right: () => focusTargetDate && navigateTo(addDuration(focusTargetDate, { days: 1 })),
-        up: () => focusTargetDate && navigateTo(subtractDuration(focusTargetDate, { days: 7 })),
-        down: () => focusTargetDate && navigateTo(addDuration(focusTargetDate, { days: 7 })),
+        left: () => focusTargetDate && navigateTo(DateUtils.subtractDuration(focusTargetDate, { days: 1 })),
+        right: () => focusTargetDate && navigateTo(DateUtils.addDuration(focusTargetDate, { days: 1 })),
+        up: () => focusTargetDate && navigateTo(DateUtils.subtractDuration(focusTargetDate, { days: 7 })),
+        down: () => focusTargetDate && navigateTo(DateUtils.addDuration(focusTargetDate, { days: 7 })),
       })(event)
     },
     [focusTargetDate, navigateTo]
@@ -125,7 +125,7 @@ export const DayPicker = ({
             const isFocused = !!focusTargetDate && DateUtils.equalDate(focusTargetDate, date)
             const isToday = DateUtils.equalDate(new Date(), date)
             const isSameMonth = date.getMonth() === month
-            const isDayValid = isInTimeSpan(date, start, end)
+            const isDayValid = DateUtils.between(date, start, end)
             return (
               <div
                 key={date.getDate()}
