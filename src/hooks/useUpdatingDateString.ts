@@ -3,10 +3,10 @@ import { DateUtils, type DateTimeFormat } from '../utils/date'
 import type { HightideTranslationLocales } from '../i18n/translations'
 import { useLocale } from '../global-contexts/LocaleContext'
 
-export interface UseUpdatingDateStrings {
-  absoluteFormat: DateTimeFormat,
-  localeOverride: HightideTranslationLocales,
+export interface UseUpdatingDateStringProps {
   date: Date,
+  absoluteFormat?: DateTimeFormat,
+  localeOverride?: HightideTranslationLocales,
 }
 
 type DateAndTimeStrings = {
@@ -15,7 +15,7 @@ type DateAndTimeStrings = {
   relative: string,
 }
 
-export const useUpdatingDateTime = ({ absoluteFormat, localeOverride, date }: UseUpdatingDateStrings) => {
+export const UseUpdatingDateString = ({ absoluteFormat = "dateTime", localeOverride, date }: UseUpdatingDateStringProps) => {
   // TODO add a parameter to the hightide cofig
   const { locale: contextLocale } = useLocale()
   const locale = localeOverride ?? contextLocale

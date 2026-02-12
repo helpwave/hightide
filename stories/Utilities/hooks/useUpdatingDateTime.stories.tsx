@@ -1,6 +1,6 @@
 import type { Meta, StoryObj } from '@storybook/nextjs'
 import type { HightideTranslationLocales } from '@/src/i18n/translations'
-import { useUpdatingDateTime as useUpdatingDateTimeHook } from '@/src/hooks/useUpdatingDateStrings'
+import { useUpdatingDateTime as useUpdatingDateTimeHook } from '@/src/hooks/useUpdatingDateString'
 
 type StoryArgs = {
   date: Date,
