@@ -8,6 +8,11 @@ and adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 ## [0.8.5] - 2026-02-12
 
 ### Fixed
+- `useUpdatingDateString` relative time not showing the month amount as years
+
+## [0.8.5] - 2026-02-12
+
+### Fixed
 - `useUpdatingDateString` relative time not showing the smallest relative unit for months
 
 ## [0.8.4] - 2026-02-12
