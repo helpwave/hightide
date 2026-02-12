@@ -5,5 +5,12 @@
     &:hover {
       @apply cursor-pointer;
     }
+
+    &[type="date"]::-webkit-calendar-picker-indicator,
+    &[type="datetime-local"]::-webkit-calendar-picker-indicator,
+    &[type="time"]::-webkit-calendar-picker-indicator {
+      display: none;
+      -webkit-appearance: none;
+    }
   }
 }

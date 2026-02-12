@@ -1,7 +1,7 @@
 import { useState } from 'react'
 import { ArrowDown, ArrowUp, Calendar, ChevronDown } from 'lucide-react'
 import type { WeekDay } from '@/src/utils/date'
-import { addDuration, isInTimeSpan, subtractDuration } from '@/src/utils/date'
+import { DateUtils } from '@/src/utils/date'
 import clsx from 'clsx'
 import type { DayPickerProps } from '@/src/components/user-interaction/date/DayPicker'
 import { DayPicker } from '@/src/components/user-interaction/date/DayPicker'
@@ -86,9 +86,9 @@ export const DatePicker = ({
             <IconButton
               tooltip={translation('time.previousMonth')}
               size="sm"
-              disabled={!isInTimeSpan(subtractDuration(displayedMonth, { months: 1 }), start, end)}
+              disabled={!DateUtils.between(DateUtils.subtractDuration(displayedMonth, { months: 1 }), start, end)}
               onClick={() => {
-                setDisplayedMonth(subtractDuration(displayedMonth, { months: 1 }))
+                setDisplayedMonth(DateUtils.subtractDuration(displayedMonth, { months: 1 }))
               }}
             >
               <ArrowUp size={20}/>
@@ -96,9 +96,9 @@ export const DatePicker = ({
             <IconButton
               tooltip={translation('time.nextMonth')}
               size="sm"
-              disabled={!isInTimeSpan(addDuration(displayedMonth, { months: 1 }), start, end)}
+              disabled={!DateUtils.between(DateUtils.addDuration(displayedMonth, { months: 1 }), start, end)}
               onClick={() => {
-                setDisplayedMonth(addDuration(displayedMonth, { months: 1 }))
+                setDisplayedMonth(DateUtils.addDuration(displayedMonth, { months: 1 }))
               }}
             >
               <ArrowDown size={20}/>

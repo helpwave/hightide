@@ -2,7 +2,7 @@ import { memo, useCallback, useEffect, useMemo, useRef, useState } from 'react'
 import { equalSizeGroups, range } from '@/src/utils/array'
 import clsx from 'clsx'
 import { ExpandableContent, ExpandableHeader, ExpandableRoot } from '@/src/components/layout/Expandable'
-import { addDuration, DateUtils, subtractDuration } from '@/src/utils/date'
+import { DateUtils } from '@/src/utils/date'
 import { useLocale } from '@/src/global-contexts/LocaleContext'
 import { Button } from '@/src/components/user-interaction/Button'
 import type { FormFieldDataHandling } from '../../form/FormField'
@@ -83,8 +83,8 @@ const YearRow = memo(function YearRow({
   )
 })
 
-const defaultStart = subtractDuration(new Date(), { years: 100 })
-const defaultEnd = addDuration(new Date(), { years: 100 })
+const defaultStart = DateUtils.subtractDuration(new Date(), { years: 100 })
+const defaultEnd = DateUtils.addDuration(new Date(), { years: 100 })
 
 export type YearMonthPickerProps = Partial<FormFieldDataHandling<Date>> & {
   initialValue?: Date,

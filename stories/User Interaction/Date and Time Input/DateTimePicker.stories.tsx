@@ -1,6 +1,6 @@
 import type { Meta, StoryObj } from '@storybook/nextjs'
 import { DateTimePicker } from '@/src/components/user-interaction/date/DateTimePicker'
-import { addDuration, subtractDuration } from '@/src/utils/date'
+import { DateUtils } from '@/src/utils/date'
 import { action } from 'storybook/actions'
 
 
@@ -15,8 +15,8 @@ export const dateTimePicker: Story = {
   args: {
     initialValue: new Date(),
     mode: 'dateTime',
-    start: subtractDuration(new Date(), { years: 50 }),
-    end: addDuration(new Date(), { years: 50 }),
+    start: DateUtils.subtractDuration(new Date(), { years: 50 }),
+    end: DateUtils.addDuration(new Date(), { years: 50 }),
     is24HourFormat: true,
     minuteIncrement: '5min',
     weekStart: 'monday',

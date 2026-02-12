@@ -379,6 +379,12 @@ export type DateFilterProps = TableFilterBaseProps<DateFilterValue>
 
 export const DateFilter = ({ filterValue, onFilterValueChange }: DateFilterProps) => {
   const translation = useHightideTranslation()
+  const id = useId()
+  const ids = {
+    startDate: `date-filter-start-date-${id}`,
+    endDate: `date-filter-end-date-${id}`,
+    compareDate: `date-filter-compare-date-${id}`,
+  }
   const operator = filterValue?.operator ?? 'dateBetween'
   const parameter = filterValue?.parameter ?? {}
   const [temporaryMinDateValue, setTemporaryMinDateValue] = useState<Date | null>(null)
@@ -413,9 +419,10 @@ export const DateFilter = ({ filterValue, onFilterValueChange }: DateFilterProps
       <span className="typography-label-lg font-semibold">{translation('parameter')}</span>
       <Visibility isVisible={needsRangeInput}>
         <div className="flex-col-2 gap-2">
+          <label htmlFor={ids.startDate} className="typography-label-md">{translation('startDate')}</label>
           <DateTimeInput
+            id={ids.startDate}
             value={temporaryMinDateValue ?? parameter.min ?? null}
-            placeholder={translation('startDate')}
             onValueChange={value => setTemporaryMinDateValue(value)}
             onEditComplete={value => {
               if (value && parameter.max && value > parameter.max) {
@@ -443,9 +450,10 @@ export const DateFilter = ({ filterValue, onFilterValueChange }: DateFilterProps
             outsideClickCloses={false}
             className="min-w-64"
           />
+          <label htmlFor={ids.endDate} className="typography-label-md">{translation('endDate')}</label>
           <DateTimeInput
+            id={ids.endDate}
             value={temporaryMaxDateValue ?? parameter.max ?? null}
-            placeholder={translation('endDate')}
             onValueChange={value => setTemporaryMaxDateValue(value)}
             onEditComplete={value => {
               if (value && parameter.min && value < parameter.min) {
@@ -475,9 +483,10 @@ export const DateFilter = ({ filterValue, onFilterValueChange }: DateFilterProps
         </div>
       </Visibility>
       <Visibility isVisible={!needsRangeInput && needsParameterInput}>
+        <label htmlFor={ids.compareDate} className="typography-label-md">{translation('date')}</label>
         <DateTimeInput
+          id={ids.compareDate}
           value={parameter.compareDate ?? null}
-          placeholder={translation('date')}
           onValueChange={compareDate => {
             onFilterValueChange({
               operator,
@@ -502,6 +511,12 @@ export type DatetimeFilterProps = TableFilterBaseProps<DatetimeFilterValue>
 
 export const DatetimeFilter = ({ filterValue, onFilterValueChange }: DatetimeFilterProps) => {
   const translation = useHightideTranslation()
+  const id = useId()
+  const ids = {
+    startDate: `datetime-filter-start-date-${id}`,
+    endDate: `datetime-filter-end-date-${id}`,
+    compareDate: `datetime-filter-compare-date-${id}`,
+  }
   const operator = filterValue?.operator ?? 'dateTimeBetween'
   const parameter = filterValue?.parameter ?? {}
   const [temporaryMinDateValue, setTemporaryMinDateValue] = useState<Date | null>(null)
@@ -536,10 +551,11 @@ export const DatetimeFilter = ({ filterValue, onFilterValueChange }: DatetimeFil
       <span className="typography-label-lg font-semibold">{translation('parameter')}</span>
       <Visibility isVisible={needsRangeInput}>
         <div className="flex-col-2 gap-2">
+          <label htmlFor={ids.startDate} className="typography-label-md">{translation('startDate')}</label>
           <DateTimeInput
+            id={ids.startDate}
             mode="dateTime"
             value={temporaryMinDateValue ?? parameter.min ?? null}
-            placeholder={translation('startDate')}
             onValueChange={value => setTemporaryMinDateValue(value)}
             onEditComplete={value => {
               if (value && parameter.max && value > parameter.max) {
@@ -567,10 +583,11 @@ export const DatetimeFilter = ({ filterValue, onFilterValueChange }: DatetimeFil
             outsideClickCloses={false}
             className="min-w-64"
           />
+          <label htmlFor={ids.endDate} className="typography-label-md">{translation('endDate')}</label>
           <DateTimeInput
+            id={ids.endDate}
             mode="dateTime"
             value={temporaryMaxDateValue ?? parameter.max ?? null}
-            placeholder={translation('endDate')}
             onValueChange={value => setTemporaryMaxDateValue(value)}
             onEditComplete={value => {
               if (value && parameter.min && value < parameter.min) {
@@ -600,9 +617,10 @@ export const DatetimeFilter = ({ filterValue, onFilterValueChange }: DatetimeFil
         </div>
       </Visibility>
       <Visibility isVisible={!needsRangeInput && needsParameterInput}>
+        <label htmlFor={ids.compareDate} className="typography-label-md">{translation('date')}</label>
         <DateTimeInput
+          id={ids.compareDate}
           value={parameter.compareDatetime ?? null}
-          placeholder={translation('date')}
           onValueChange={compareDatetime => {
             onFilterValueChange({
               operator,

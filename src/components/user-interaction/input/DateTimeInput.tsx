@@ -1,12 +1,10 @@
-import type { ButtonHTMLAttributes, HTMLAttributes, ReactNode } from 'react'
+import type { HTMLAttributes, InputHTMLAttributes } from 'react'
 import { forwardRef, useCallback, useEffect, useId, useImperativeHandle, useMemo, useRef, useState } from 'react'
 import { CalendarIcon } from 'lucide-react'
 import clsx from 'clsx'
-import { useLocale } from '@/src/global-contexts/LocaleContext'
 import type { DateTimePickerProps } from '@/src/components/user-interaction/date/DateTimePicker'
 import { useHightideTranslation } from '@/src/i18n/useHightideTranslation'
 import { Visibility } from '@/src/components/layout/Visibility'
-import { DateUtils } from '@/src/utils/date'
 import type { FormFieldDataHandling } from '../../form/FormField'
 import { DateTimePickerDialog } from '../date/DateTimePickerDialog'
 import { useControlledState } from '@/src/hooks/useControlledState'
@@ -14,27 +12,26 @@ import { PropsUtil } from '@/src/utils/propsUtil'
 import type { FormFieldInteractionStates } from '@/src/components/form/FieldLayout'
 import { PopUp } from '../../layout/popup/PopUp'
 import { IconButton } from '../IconButton'
+import { DateUtils, type DateTimeFormat } from '@/src/utils/date'
 
 export interface DateTimeInputProps extends
   Partial<FormFieldInteractionStates>,
-  Omit<ButtonHTMLAttributes<HTMLDivElement>, 'defaultValue' | 'value'>,
+  Omit<InputHTMLAttributes<HTMLInputElement>, 'defaultValue' | 'value' | 'placeholder'>,
   Partial<FormFieldDataHandling<Date | null>>
 {
   initialValue?: Date | null,
-  placeholder?: ReactNode,
   allowRemove?: boolean,
-  // TODO allow mode = time
-  mode?: 'date' | 'dateTime',
+  mode?: DateTimeFormat,
   containerProps?: HTMLAttributes<HTMLDivElement>,
   pickerProps?: Omit<DateTimePickerProps, keyof FormFieldDataHandling<Date> | 'mode' | 'initialValue'>,
   outsideClickCloses?: boolean,
   onDialogOpeningChange?: (isOpen: boolean) => void,
 }
 
-export const DateTimeInput = forwardRef<HTMLDivElement, DateTimeInputProps>(function DateTimeInput({
+export const DateTimeInput = forwardRef<HTMLInputElement, DateTimeInputProps>(function DateTimeInput({
+  id: inputId,
   value,
   initialValue = null,
-  placeholder,
   onValueChange,
   onEditComplete,
   allowRemove = false,
@@ -50,7 +47,6 @@ export const DateTimeInput = forwardRef<HTMLDivElement, DateTimeInputProps>(func
   ...props
 }, forwardedRef) {
   const translation = useHightideTranslation()
-  const { locale } = useLocale()
   const [isOpen, setIsOpen] = useState(false)
   const [state, setState] = useControlledState<Date | null>({
     value,
@@ -58,24 +54,26 @@ export const DateTimeInput = forwardRef<HTMLDivElement, DateTimeInputProps>(func
     defaultValue: initialValue,
   })
   const [dialogValue, setDialogValue] = useState<Date>(state ?? new Date())
+  const [dateString, setDateString] = useState<string>(state ? DateUtils.toInputString(state, mode) : '')
 
   useEffect(() => {
     setDialogValue(state ?? new Date())
-  }, [state])
+    setDateString(state ? DateUtils.toInputString(state, mode) : '')
+  }, [mode, state])
 
   const changeOpenWrapper = useCallback((isOpen: boolean) => {
     onDialogOpeningChange?.(isOpen)
     setIsOpen(isOpen)
   }, [onDialogOpeningChange])
 
-  const id = useId()
+  const generatedId = useId()
   const ids = useMemo(() => ({
-    input: `date-time-input-${id}`,
-    popup: `date-time-input-popup-${id}`,
-    label: `date-time-input-label-${id}`,
-  }), [id])
+    input: inputId ?? `date-time-input-${generatedId}`,
+    popup: `date-time-input-popup-${generatedId}`,
+    label: `date-time-input-label-${generatedId}`,
+  }), [generatedId, inputId])
 
-  const innerRef = useRef<HTMLDivElement>(null)
+  const innerRef = useRef<HTMLInputElement>(null)
   useImperativeHandle(forwardedRef, () => innerRef.current)
 
   useEffect(() => {
@@ -84,37 +82,32 @@ export const DateTimeInput = forwardRef<HTMLDivElement, DateTimeInputProps>(func
     }
   }, [changeOpenWrapper, readOnly, disabled])
 
-  const clickHandler = PropsUtil.aria.click<HTMLDivElement>(() => changeOpenWrapper(true))
-
   return (
     <>
       <div {...containerProps} className={clsx('relative w-full', containerProps?.className)}>
-        <div
+        <input
           {...props}
           ref={innerRef}
           id={ids.input}
+          value={dateString}
 
-          onClick={(event) => {
-            clickHandler.onClick()
-            props.onClick?.(event)
+          onChange={(event) => {
+            const date = event.target.valueAsDate
+            if(date) {
+              setState(date)
+            } else {
+              setDateString(event.target.value)
+            }
           }}
-          onKeyDown={clickHandler.onKeyDown}
+
+          type={mode === 'date' ? 'date' : mode === 'time' ? 'time' : 'datetime-local'}
 
           {...PropsUtil.dataAttributes.interactionStates({ disabled, readOnly, invalid, required })}
 
-          data-value={PropsUtil.dataAttributes.bool(!!state)}
-          {...PropsUtil.aria.interactionStates({ disabled, readOnly, invalid, required }, props)}
-
-          tabIndex={0}
-          role="combobox"
-          aria-haspopup="dialog"
-          aria-expanded={isOpen}
-          aria-controls={isOpen ? ids.popup : undefined}
-
           data-name={props['data-name'] ?? 'date-time-input'}
-        >
-          {state ? DateUtils.formatAbsolute(state, locale, mode === 'dateTime') : placeholder ?? translation('clickToSelect')}
-        </div>
+          data-value={PropsUtil.dataAttributes.bool(!!state || !!dateString)}
+          {...PropsUtil.aria.interactionStates({ disabled, readOnly, invalid, required }, props)}
+        />
         <Visibility isVisible={!readOnly}>
           <IconButton
             tooltip={translation('sDateTimeSelect', { datetimeMode: mode })}
