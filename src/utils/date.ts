@@ -182,7 +182,7 @@ const formatRelative = (date: Date, locale: string) => {
   if (Math.abs(diffInSeconds) < timesInSeconds.monthImprecise) return rtf.format(Math.round(diffInSeconds / timesInSeconds.week), 'week')
   if (Math.abs(diffInSeconds) < timesInSeconds.yearImprecise) return rtf.format(Math.round(diffInSeconds / timesInSeconds.monthImprecise), 'month')
 
-  return rtf.format(Math.round(diffInSeconds / timesInSeconds.monthImprecise), 'year')
+  return rtf.format(Math.round(diffInSeconds / timesInSeconds.yearImprecise), 'year')
 }
 
 const toInputString = (date: Date, format: DateTimeFormat) => {
