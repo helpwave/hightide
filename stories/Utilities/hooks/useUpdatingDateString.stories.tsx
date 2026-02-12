@@ -1,6 +1,6 @@
 import type { Meta, StoryObj } from '@storybook/nextjs'
 import type { HightideTranslationLocales } from '@/src/i18n/translations'
-import { useUpdatingDateTime as useUpdatingDateTimeHook } from '@/src/hooks/useUpdatingDateString'
+import { useUpdatingDateString } from '@/src/hooks/useUpdatingDateString'
 
 type StoryArgs = {
   date: Date,
@@ -14,7 +14,7 @@ export default meta
 type Story = StoryObj<typeof meta>
 
 function UpdatingDateTimeDisplay({ date, absoluteFormat, localeOverride }: StoryArgs) {
-  const { absolute, relative } = useUpdatingDateTimeHook({
+  const { absolute, relative } = useUpdatingDateString({
     date,
     absoluteFormat,
     localeOverride,
@@ -34,7 +34,7 @@ function UpdatingDateTimeDisplay({ date, absoluteFormat, localeOverride }: Story
   )
 }
 
-export const useUpdatingDateTime: Story = {
+export const UseUpdatingDateString: Story = {
   name: 'useUpdatingDateTime',
   args: {
     date: new Date(),
