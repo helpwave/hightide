@@ -180,7 +180,7 @@ const formatRelative = (date: Date, locale: string) => {
   if (Math.abs(diffInSeconds) < timesInSeconds.day) return rtf.format(Math.round(diffInSeconds / timesInSeconds.hour), 'hour')
   if (Math.abs(diffInSeconds) < timesInSeconds.week) return rtf.format(Math.round(diffInSeconds / timesInSeconds.day), 'day')
   if (Math.abs(diffInSeconds) < timesInSeconds.monthImprecise) return rtf.format(Math.round(diffInSeconds / timesInSeconds.week), 'week')
-  if (Math.abs(diffInSeconds) < timesInSeconds.monthImprecise) return rtf.format(Math.round(diffInSeconds / timesInSeconds.monthImprecise), 'month')
+  if (Math.abs(diffInSeconds) < timesInSeconds.yearImprecise) return rtf.format(Math.round(diffInSeconds / timesInSeconds.monthImprecise), 'month')
 
   return rtf.format(Math.round(diffInSeconds / timesInSeconds.monthImprecise), 'year')
 }
