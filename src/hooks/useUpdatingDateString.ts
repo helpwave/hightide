@@ -15,7 +15,7 @@ type DateAndTimeStrings = {
   relative: string,
 }
 
-export const UseUpdatingDateString = ({ absoluteFormat = 'dateTime', localeOverride, date }: UseUpdatingDateStringProps) => {
+export const useUpdatingDateString = ({ absoluteFormat = 'dateTime', localeOverride, date }: UseUpdatingDateStringProps) => {
   // TODO add a parameter to the hightide cofig
   const { locale: contextLocale } = useLocale()
   const locale = localeOverride ?? contextLocale
