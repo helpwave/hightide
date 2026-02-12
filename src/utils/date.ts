@@ -185,6 +185,17 @@ const formatRelative = (date: Date, locale: string) => {
   return rtf.format(Math.round(diffInSeconds / timesInSeconds.monthImprecise), 'year')
 }
 
+const toInputString = (date: Date, format: DateTimeFormat) => {
+  switch (format) {
+  case 'date':
+    return date.toISOString().split('T')[0]
+  case 'time':
+    return date.toISOString().split('T')[1].split('Z')[0]
+  case 'dateTime':
+    return date.toISOString()
+  }
+}
+
 export const DateUtils = {
   monthsList,
   weekDayList,
@@ -196,4 +207,5 @@ export const DateUtils = {
   between,
   weeksForCalenderMonth,
   timesInSeconds,
+  toInputString,
 }

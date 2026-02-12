@@ -1,6 +1,5 @@
 import { type ReactNode } from 'react'
-import clsx from 'clsx'
-import type { WeekDay } from '@/src/utils/date'
+import type { DateTimeFormat, WeekDay } from '@/src/utils/date'
 import type { TimePickerProps, TimePickerMinuteIncrement } from './TimePicker'
 import { TimePicker } from './TimePicker'
 import type { DatePickerProps } from './DatePicker'
@@ -8,11 +7,9 @@ import { DatePicker } from './DatePicker'
 import type { FormFieldDataHandling } from '../../form/FormField'
 import { useControlledState } from '@/src/hooks/useControlledState'
 
-export type DateTimePickerMode = 'date' | 'time' | 'dateTime'
-
 export type DateTimePickerProps = Partial<FormFieldDataHandling<Date>> & {
   initialValue?: Date,
-  mode?: DateTimePickerMode,
+  mode?: DateTimeFormat,
   start?: Date,
   end?: Date,
   is24HourFormat?: boolean,
@@ -71,7 +68,6 @@ export const DateTimePicker = ({
         {...timePickerProps}
         is24HourFormat={is24HourFormat}
         minuteIncrement={minuteIncrement}
-        className={clsx({ 'justify-between': mode === 'time' })}
         value={value}
         onValueChange={setValue}
         onEditComplete={onEditComplete}

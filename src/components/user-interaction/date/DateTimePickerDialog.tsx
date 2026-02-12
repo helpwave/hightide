@@ -5,13 +5,14 @@ import { type ReactNode } from 'react'
 import { Visibility } from '@/src/components/layout/Visibility'
 import { Button } from '@/src/components/user-interaction/Button'
 import type { FormFieldDataHandling } from '@/src/components/form/FormField'
+import type { DateTimeFormat } from '@/src/utils/date'
 
 export interface DateTimePickerDialogProps extends Partial<FormFieldDataHandling<Date | null>> {
   initialValue?: Date | null,
   allowRemove?: boolean,
   onEditComplete?: (value: Date | null) => void,
   pickerProps: Omit<DateTimePickerProps, 'value' | 'onValueChange' | 'onEditComplete'>,
-  mode?: 'date' | 'dateTime',
+  mode?: DateTimeFormat,
   label?: ReactNode,
   labelId?: string,
 }

@@ -9,6 +9,10 @@ and adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
 ### Added
 - `useUpdatingDateString` to show absolute or relative Date strings
+- time input to `DateTimeInput`
+
+### Changed
+- `DateTimeInput` to allow for writing input
 
 ## [0.8.1] - 2026-02-08
 
