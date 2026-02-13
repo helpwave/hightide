@@ -5,47 +5,66 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/)
 and adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
-## [0.8.5] - 2026-02-12
+## [0.8.7] - 2026-02-13
+
+### Changed
+
+- removed unused `tooltipClassName` attribute from `Tooltip` and add `displayProps`
 
 ### Fixed
+
+- `Expandable` not propagating its attributes to the root element
+
+## [0.8.6] - 2026-02-12
+
+### Fixed
+
 - `useUpdatingDateString` relative time not showing the month amount as years
 
 ## [0.8.5] - 2026-02-12
 
 ### Fixed
+
 - `useUpdatingDateString` relative time not showing the smallest relative unit for months
 
 ## [0.8.4] - 2026-02-12
 
 ### Fixed
+
 - `useUpdatingDateString` being capitalized
 
 ## [0.8.3] - 2026-02-12
 
 ### Changed
+
 - `useUpdatingDateTime` to `useUpdatingDateString`
 
 ### Fixed
+
 - `useUpdatingDateString` optional parameters to actually be optional
 
 ## [0.8.2] - 2026-02-12
 
 ### Added
+
 - `useUpdatingDateString` to show absolute or relative Date strings
 - time input to `DateTimeInput`
 
 ### Changed
+
 - `DateTimeInput` to allow for writing input
 
 ## [0.8.1] - 2026-02-08
 
 ### Fixed
+
 - `DateTimeInput` not using its styling
 - `useControlledState` not propagating the correct value for onChange
 
 ## [0.8.0] - 2026-02-08
 
 ### Added
+
 - keyboard controls to `DayPicker`
 - `focus-style-shadow` for a shadow around the focused element
 - CSS variable for styling elements uniformly
@@ -53,6 +72,7 @@ and adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 - disable option for `TabPanel`s
 
 ### Changed
+
 - all components now use a hybrid approach for hybrid and controlled state management
 - use `data-name=<name>` for all components for easily overridable styling instead of classnNames
 - `Drawer` now is modularized and provides a context
@@ -60,10 +80,12 @@ and adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 - styling of several components
 
 ### Fixed
+
 - removed all disable react-hooks/exhaustive-deps lint warning and fix them appropriately
 - `IconButton` not reacting to blur for closing the tooltip
 
 ### Removed
+
 - `focusFirst` from `useFocusTrap` due to the availability of `initialFocus`
 - `layout` attribute from `Button`
 - Geometry Components such as `Ring` and `Circle` as these can be CSS only solutions
@@ -71,6 +93,7 @@ and adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 ## [0.7.0] - 2026-01-29
 
 ### Added
+
 - `ColumnSizingWithTargetFeature` and `AutoColumnOrderFeature` to Table for column size fixing and column ordering
 - `Tooltip` to `TableColumnSwitcher`
 - `forceMount` attribute to `Drawer`
@@ -81,6 +104,7 @@ and adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
   - use `IconButton` instead of buttons with `layout="icon"`
 
 ### Changed
+
 - `useLocalStorage` to be called `useStorage` and allow for listing to storage changes
 - `ThemeDialog` is now split into `ThemeSelect` and `ThemeIcon`
 - `useTransitionState` uses the window to get animations if no valid ref is provided, and it warns if a ref is provided and its value is null
@@ -89,111 +113,134 @@ and adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
   - `tagsSingle` is now `singleTag`
 
 ### Fixed
+
 - Table column sizing when toggling visibility and changing order
 
 ## [0.6.16] - 2026-01-26
 
 ### Fixed
+
 - `TextFilter` popup having 2 case-sensitive checkboxes
 
 ## [0.6.15] - 2026-01-26
 
 ### Changed
+
 - `Tooltip` now closes on click
 
 ### Fixed
+
 - `TableProvider` to use a Partial state for controlled state management
 
 ## [0.6.14] - 2026-01-26
 
 ### Changed
+
 - `datetime` to `dateTime` for TableFilter
 
 ### Fixed
+
 - `dateTime` and `tagsSingle` and now part of the `FilterFns` object on table
 
 ## [0.6.13] - 2026-01-26
 
 ### Added
+
 - `TableFilter` for date time and single tags
 - `ToolTips` to `TableFilterButton` and `TableSortButton`
-- `label` meta attribute to column defs to allow for omitting the header name but still showing one for the `ColumnSwitcher` 
+- `label` meta attribute to column defs to allow for omitting the header name but still showing one for the `ColumnSwitcher`
 
 ### Fixed
+
 - `FormObserverKey` using the restricted `key` property
 
 ## [0.6.12] - 2026-01-25
 
 ### Added
+
 - `useCreateForm`s update method in its return type now accepts a boolean to indicate whether an update should be triggerd
 
 ### Fixed
+
 - `TablePagination` for smaller screens
 - `NumberProperty` and `TextProperty` to not use `onRemove`
 
 ## [0.6.11] - 2026-01-25
 
 ### Fixed
+
 - `FormStore` to return stable copies to prevent infinite loops
 
 ## [0.6.10] - 2026-01-25
 
 ### Fixed
+
 - `TableBody` not showing filler row cells if `columnOrder` does not exist
 
 ## [0.6.9] - 2026-01-25
 
 ### Added
+
 - `onFillerRowClick` for `Table`s to react to such clicks
 - `useFormObserver` and `FormObserver` to listen to form updates
 
 ### Changed
+
 - `DateTimeInput` now only exposes its triggering elements ref
-- Moved `ValidationBehavoir` from the `FormStore` to the `FormField` 
+- Moved `ValidationBehavoir` from the `FormStore` to the `FormField`
 
 ### Fixed
+
 - `DateTimeInput` always showing the value as a placeholder
 - `TableBody` filler rows reacting to sorting and visibility
 
 ## [0.6.8] - 2026-01-24
 
 ### Changed
+
 - The body rows of a `TableBody` now have data attribute `data-clickable` if a defined `onRowClick` is provided
 
 ### Fixed
+
 - `Checkbox` not enforcing its sizing
 - `TableHeader` cells not being relative to allow for proper positioning of the resize indicator
 
 ### Removed
+
 - inconsistent usage of `default-style-none` on some classes by removing it entirely as `all: unset` is available through css
 
 ## [0.6.7] - 2026-01-24
 
 ### Added
+
 - `Table` as a default implementation of a table with a provider pagination, title and actions
 - `TablePagination` an opinionated component for Table pagination
 - `TableColumnSwticher` a button with a pop-up for changing the column sorting and visibility
 
 ### Changed
+
 - `TablePagination` buttons now show a tooltip
 - Table element styling now uses classNames and no longer data-attributes
 
 ### Fixed
+
 - Table Context updates not triggering on sorting or other changes
-- A bug in `useTransitionState` that caused it to 
+- A bug in `useTransitionState` that caused it to
 
 ## [0.6.6] - 2026-01-24
 
 ### Added
+
 - Paginated Loading of Table entries
 - `TableColumnPicker` for choosing the displayed columns
 - `TableContext`
-- `TableColumn` for defining the columns through the table context 
+- `TableColumn` for defining the columns through the table context
 - `PopUp` for simplifying the usage of the `AnchoredFloatingContainer` with conditional hiding logic and a `FocusTrap`
 - Add `DialogRoot` and `DialogOpener`
 - Add several new `TableFilter`
 
 ### Changed
+
 - `TableFilterButton` now uses the `DateTimeInput` component
 - the folder name for global contexts to `global-contexts` instead of the previous `context` to be more verbose about its purpose
 - `FocusTrap` by splitting it into `FocusTrap` which takes a ref of the element to entrap and `FocusTrapWrapper` which directly provided this element as a `<div>`
@@ -201,48 +248,57 @@ and adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 - several components to now use interfaces instead of types
 
 ### Fixed
+
 - impure calls and hooks for `useTransitionState`
 
 ### Removed
+
 - `usePopOverPosition` in favor of `useAnchoredPosition`
 
 ## [0.6.5] - 2026-01-09
 
 ### Fixed
+
 - `FillerCell`s not having their padding on the table component
 - type in `expandable-content-h-*` utitlity class
 
 ## [0.6.4] - 2026-01-09
 
 ### Changed
+
 - `Select` and `MultiSelect` to have different types for their options
 
 ### Fixed
+
 - `Tooltip` not closing
 - `Select`s in dialogs
-
 
 ## [0.6.3] - 2026-01-08
 
 ### Added
+
 - `useFormCreate` now returns the functions `onUpdate()`
 - Functionality to form handling to differentiate local changes and updates that should be sent to the server
 
 ### Changed
+
 - `Select` and `MultiSelect` to have different types for their options
 
 ### Fixed
+
 - `MultiSelect` not triggering `onEditComplete`
 - `Expandable` to only show one expansion icon
 
 ## [0.6.2] - 2026-01-08
 
 ### Added
+
 - `useFormCreate` now returns the functions `getErrors()` and `getIsValid()`
 
 ## [0.6.1] - 2026-01-08
 
 ### Added
+
 - `useFormCreate` now returns the functions `getValues()` and allows update to receive an `updater` function
 
 ## [0.6.0] - 2026-01-07
@@ -257,7 +313,7 @@ and adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 - `useTransitionState` hook to keep track of transition changes
 - `Form` and `FormStore` for form handling
 - `InifinteScroll` component for infinitly scrolling lists
-- `PropertyField` type for enforcing the same interface for all properties 
+- `PropertyField` type for enforcing the same interface for all properties
 
 ### Changed
 

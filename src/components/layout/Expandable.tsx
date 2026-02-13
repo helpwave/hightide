@@ -212,9 +212,10 @@ export const Expandable = forwardRef<HTMLDivElement, ExpandableProps>(function E
   triggerProps,
   contentProps,
   contentExpandedClassName,
+  ...props
 }, ref) {
   return (
-    <ExpandableRoot ref={ref}>
+    <ExpandableRoot ref={ref} {...props}>
       <ExpandableHeader {...triggerProps}>
         {trigger}
       </ExpandableHeader>
@@ -227,7 +228,6 @@ export const Expandable = forwardRef<HTMLDivElement, ExpandableProps>(function E
           </ExpandableContent>
         )}
       </ExpandableContext.Consumer>
-
     </ExpandableRoot>
   )
 })

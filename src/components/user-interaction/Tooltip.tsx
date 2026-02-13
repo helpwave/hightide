@@ -280,10 +280,10 @@ export const TooltipTrigger = ({
 
 
 
-export interface TooltipProps extends TooltipRootProps, Pick<TooltipDisplayProps, 'alignment' | 'disabled' |'isAnimated'> {
+export interface TooltipProps extends TooltipRootProps, Pick<TooltipDisplayProps, 'alignment' |'isAnimated'> {
   tooltip: ReactNode,
-  tooltipClassName?: string,
   containerClassName?: string,
+  displayProps?: Omit<TooltipDisplayProps, 'alignment' |'isAnimated'>,
 }
 
 /**
@@ -298,12 +298,14 @@ export const Tooltip = ({
   containerClassName,
   alignment,
   isAnimated,
-  ...props
+  onIsShownChange,
+  displayProps,
 }: TooltipProps) => {
 
   return (
     <TooltipRoot
       isInitiallyShown={isInitiallyShown}
+      onIsShownChange={onIsShownChange}
       appearDelay={appearDelay}
       disabled={disabled}
     >
@@ -321,7 +323,7 @@ export const Tooltip = ({
       <TooltipDisplay
         alignment={alignment}
         isAnimated={isAnimated}
-        {...props}
+        {...displayProps}
       >
         {tooltip}
       </TooltipDisplay>
