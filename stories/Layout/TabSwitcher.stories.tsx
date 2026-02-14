@@ -1,10 +1,14 @@
 import type { Meta, StoryObj } from '@storybook/nextjs'
 import type { TabSwitcherProps } from '@/src/components/layout/TabSwitcher'
 import { TabList, TabPanel, TabSwitcher } from '@/src/components/layout/TabSwitcher'
+import { useState } from 'react'
+import { Button } from '@/src'
+import { action } from 'storybook/actions'
 
 
 type StoryArgs = Omit<TabSwitcherProps, 'children'> & {
   disableTestTab: boolean,
+  initallyShowRed: boolean,
 }
 
 const meta: Meta<StoryArgs> = {}
@@ -15,8 +19,11 @@ type Story = StoryObj<typeof meta>;
 export const tabSwitcher: Story = {
   args: {
     disableTestTab: false,
+    initallyShowRed: true,
+    onActiveIdChange: action('onActiveIdChange')
   },
-  render: ({ disableTestTab, ...args }) => {
+  render: ({ disableTestTab, initallyShowRed, ...args }) => {
+    const [clicks, setClicks] = useState(1)
     return (
       <TabSwitcher {...args}>
         <TabList/>
@@ -26,9 +33,10 @@ export const tabSwitcher: Story = {
         <TabPanel label="Test" disabled={disableTestTab}>
           {'Test'}
         </TabPanel>
-        <TabPanel label="Red">
+        <TabPanel label={`Red (${clicks})`} initiallyActive={initallyShowRed}>
           <div className="w-full h-full bg-red-400 text-white">
-            {'Red'}
+            {`${clicks} Clicks`}
+            <Button onClick={() => setClicks(prev => prev + 1)}>{'+1'}</Button>
           </div>
         </TabPanel>
         <TabPanel label="Blue">
