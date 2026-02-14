@@ -28,7 +28,7 @@ export const useControlledState = <T>({
   onValueChange,
   defaultValue,
   isControlled: isEnforcingControlled
-}: ControlledStateProps<T>) : [T, React.Dispatch<React.SetStateAction<T>>] => {
+}: ControlledStateProps<T>) : [T, React.Dispatch<React.SetStateAction<T>>, boolean] => {
   const [internalValue, setInternalValue] = useState(() => defaultValue)
   const [isControlled] = useState(isEnforcingControlled || controlledValue !== undefined)
 
@@ -60,5 +60,5 @@ export const useControlledState = <T>({
 
   const value = isControlled ? controlledValue : internalValue
 
-  return [value, setState]
+  return [value, setState, isControlled]
 }
