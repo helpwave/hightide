@@ -7,11 +7,14 @@ import { Button } from '@/src/components/user-interaction/Button'
 import type { FormFieldDataHandling } from '@/src/components/form/FormField'
 import type { DateTimeFormat } from '@/src/utils/date'
 
-export interface DateTimePickerDialogProps extends Partial<FormFieldDataHandling<Date | null>> {
+export interface DateTimePickerDialogProps extends
+Partial<FormFieldDataHandling<Date | null>>,
+Pick<DateTimePickerProps, 'start' | 'end' | 'weekStart' | 'markToday' | 'is24HourFormat' | 'minuteIncrement' | 'secondIncrement' | 'millisecondIncrement' | 'precision'>
+{
   initialValue?: Date | null,
   allowRemove?: boolean,
   onEditComplete?: (value: Date | null) => void,
-  pickerProps: Omit<DateTimePickerProps, 'value' | 'onValueChange' | 'onEditComplete'>,
+  pickerProps: Omit<DateTimePickerProps, 'value' | 'onValueChange' | 'onEditComplete' | 'start' | 'end' | 'weekStart' | 'markToday' | 'is24HourFormat' | 'minuteIncrement' | 'secondIncrement' | 'millisecondIncrement' | 'precision'>,
   mode?: DateTimeFormat,
   label?: ReactNode,
   labelId?: string,
@@ -25,6 +28,15 @@ export const DateTimePickerDialog = ({
   onEditComplete,
   mode = 'date',
   pickerProps,
+  start,
+  end,
+  weekStart,
+  markToday,
+  is24HourFormat,
+  minuteIncrement,
+  secondIncrement,
+  millisecondIncrement,
+  precision,
   labelId,
   label,
 }: DateTimePickerDialogProps) => {
@@ -51,6 +63,15 @@ export const DateTimePickerDialog = ({
         value={state}
         onValueChange={setState}
         onEditComplete={setState}
+        start={start}
+        end={end}
+        weekStart={weekStart}
+        markToday={markToday}
+        is24HourFormat={is24HourFormat}
+        minuteIncrement={minuteIncrement}
+        secondIncrement={secondIncrement}
+        millisecondIncrement={millisecondIncrement}
+        precision={precision}
       />
       <div className="flex-row-2 justify-end">
         <Visibility isVisible={allowRemove && !!initialValue}>

@@ -1,6 +1,6 @@
 @layer components {
   [data-name="time-picker-container"] {
-    @apply flex-row-2 flex-1 min-h-0 select-none overflow-hidden;
+    @apply flex-row-2 flex-1 min-h-0 select-none overflow-x-auto;
   }
 
   [data-name="time-picker-value-column"] {
