@@ -5,7 +5,7 @@ import clsx from 'clsx'
 import { PropsUtil } from '@/src/utils/propsUtil'
 import { createPortal } from 'react-dom'
 import { Visibility } from './Visibility'
-import { useControlledState } from '@/src/hooks'
+import { useControlledState } from '@/src/hooks/useControlledState'
 
 export interface TabInfo {
   id: string,

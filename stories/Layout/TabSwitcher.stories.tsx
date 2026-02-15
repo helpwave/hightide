@@ -2,7 +2,7 @@ import type { Meta, StoryObj } from '@storybook/nextjs'
 import type { TabSwitcherProps } from '@/src/components/layout/TabSwitcher'
 import { TabList, TabPanel, TabSwitcher } from '@/src/components/layout/TabSwitcher'
 import { useState } from 'react'
-import { Button } from '@/src'
+import { Button } from '@/src/components/user-interaction/Button'
 import { action } from 'storybook/actions'
 
 
