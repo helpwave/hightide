@@ -64,14 +64,14 @@ export const DateTimeInput = forwardRef<HTMLInputElement, DateTimeInputProps>(fu
     onValueChange,
     defaultValue: initialValue,
   })
-  const [dialogValue, setDialogValue] = useState<Date>(state ?? new Date())
+  const [dialogValue, setDialogValue] = useState<Date | null>(state)
   const [stringInputState, setStringInputState] = useState<{ state: string, date?: Date }>({
     state: state ? DateUtils.toInputString(state, mode, precision) : '',
     date: undefined,
   })
 
   useEffect(() => {
-    setDialogValue(state ?? new Date())
+    setDialogValue(state)
     setStringInputState({
       state: state ? DateUtils.toInputString(state, mode) : '',
       date: undefined,

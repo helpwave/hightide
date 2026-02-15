@@ -1,7 +1,7 @@
 import { useControlledState } from '@/src/hooks/useControlledState'
 import { useHightideTranslation } from '@/src/i18n/useHightideTranslation'
 import { DateTimePicker, type DateTimePickerProps } from '@/src/components/user-interaction/date/DateTimePicker'
-import { type ReactNode } from 'react'
+import { useEffect, useState, type ReactNode } from 'react'
 import { Visibility } from '@/src/components/layout/Visibility'
 import { Button } from '@/src/components/user-interaction/Button'
 import type { FormFieldDataHandling } from '@/src/components/form/FormField'
@@ -13,7 +13,6 @@ Pick<DateTimePickerProps, 'start' | 'end' | 'weekStart' | 'markToday' | 'is24Hou
 {
   initialValue?: Date | null,
   allowRemove?: boolean,
-  onEditComplete?: (value: Date | null) => void,
   pickerProps: Omit<DateTimePickerProps, 'value' | 'onValueChange' | 'onEditComplete' | 'start' | 'end' | 'weekStart' | 'markToday' | 'is24HourFormat' | 'minuteIncrement' | 'secondIncrement' | 'millisecondIncrement' | 'precision'>,
   mode?: DateTimeFormat,
   label?: ReactNode,
@@ -47,6 +46,12 @@ export const DateTimePickerDialog = ({
     defaultValue: initialValue
   })
 
+  const [pickerState, setPickerState] = useState(state ?? new Date())
+
+  useEffect(() => {
+    setPickerState(state ?? new Date())
+  }, [state])
+
   return (
     <>
       <div className="flex-row-2 justify-center w-full py-1">
@@ -60,9 +65,9 @@ export const DateTimePickerDialog = ({
       <DateTimePicker
         {...pickerProps}
         mode={mode}
-        value={state}
-        onValueChange={setState}
-        onEditComplete={setState}
+        value={pickerState}
+        onValueChange={setPickerState}
+        onEditComplete={setPickerState}
         start={start}
         end={end}
         weekStart={weekStart}
@@ -74,7 +79,7 @@ export const DateTimePickerDialog = ({
         precision={precision}
       />
       <div className="flex-row-2 justify-end">
-        <Visibility isVisible={allowRemove && !!initialValue}>
+        <Visibility isVisible={allowRemove && !!state}>
           <Button
             size="md"
             color="negative"
@@ -87,13 +92,13 @@ export const DateTimePickerDialog = ({
             {translation('clear')}
           </Button>
         </Visibility>
-        <Visibility isVisible={!initialValue}>
+        <Visibility isVisible={!state}>
           <Button
             size="md"
             color="neutral"
             onClick={() => {
-              setState(initialValue)
-              onEditComplete?.(initialValue)
+              setState(state)
+              onEditComplete?.(state)
             }}
             className="min-w-26"
           >
@@ -103,7 +108,7 @@ export const DateTimePickerDialog = ({
         <Button
           size="md"
           onClick={() => {
-            onEditComplete?.(state)
+            onEditComplete?.(pickerState)
           }}
           className="min-w-26"
         >
