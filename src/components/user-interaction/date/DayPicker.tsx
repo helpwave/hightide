@@ -139,7 +139,8 @@ export const DayPicker = ({
                     date.getDate(),
                     value.getHours(),
                     value.getMinutes(),
-                    value.getSeconds()
+                    value.getSeconds(),
+                    value.getMilliseconds()
                   )
                   setValue(newDate)
                   onEditComplete?.(newDate)

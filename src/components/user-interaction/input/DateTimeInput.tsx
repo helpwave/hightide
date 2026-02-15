@@ -18,13 +18,14 @@ import { useDelay } from '@/src/hooks'
 export interface DateTimeInputProps extends
   Partial<FormFieldInteractionStates>,
   Omit<InputHTMLAttributes<HTMLInputElement>, 'defaultValue' | 'value' | 'placeholder'>,
-  Partial<FormFieldDataHandling<Date | null>>
+  Partial<FormFieldDataHandling<Date | null>>,
+  Pick<DateTimePickerProps, 'mode' | 'start' | 'end' | 'weekStart' | 'markToday' | 'is24HourFormat' | 'minuteIncrement' | 'secondIncrement' | 'millisecondIncrement' | 'precision'>
 {
   initialValue?: Date | null,
   allowRemove?: boolean,
   mode?: DateTimeFormat,
   containerProps?: HTMLAttributes<HTMLDivElement>,
-  pickerProps?: Omit<DateTimePickerProps, keyof FormFieldDataHandling<Date> | 'mode' | 'initialValue'>,
+  pickerProps?: Omit<DateTimePickerProps, keyof FormFieldDataHandling<Date> | 'mode' | 'initialValue' | 'start' | 'end' | 'weekStart' | 'markToday' | 'is24HourFormat' | 'minuteIncrement' | 'secondIncrement' | 'millisecondIncrement' | 'precision'>,
   outsideClickCloses?: boolean,
   onDialogOpeningChange?: (isOpen: boolean) => void,
 }
@@ -41,6 +42,15 @@ export const DateTimeInput = forwardRef<HTMLInputElement, DateTimeInputProps>(fu
   pickerProps,
   outsideClickCloses = true,
   onDialogOpeningChange,
+  start,
+  end,
+  weekStart,
+  markToday,
+  is24HourFormat,
+  minuteIncrement,
+  secondIncrement,
+  millisecondIncrement,
+  precision,
   disabled = false,
   readOnly = false,
   invalid = false,
@@ -56,7 +66,7 @@ export const DateTimeInput = forwardRef<HTMLInputElement, DateTimeInputProps>(fu
   })
   const [dialogValue, setDialogValue] = useState<Date>(state ?? new Date())
   const [stringInputState, setStringInputState] = useState<{ state: string, date?: Date }>({
-    state: state ? DateUtils.toInputString(state, mode) : '',
+    state: state ? DateUtils.toInputString(state, mode, precision) : '',
     date: undefined,
   })
 
@@ -105,8 +115,9 @@ export const DateTimeInput = forwardRef<HTMLInputElement, DateTimeInputProps>(fu
           value={stringInputState.state}
 
           onChange={(event) => {
-            const date = event.target.valueAsDate
-            if(date) {
+            const date = new Date(event.target.value ?? '')
+            const isValid = !isNaN(date.getTime())
+            if(isValid) {
               restartTimer(() => {
                 innerRef.current?.blur()
                 setState(date)
@@ -117,7 +128,7 @@ export const DateTimeInput = forwardRef<HTMLInputElement, DateTimeInputProps>(fu
             }
             setStringInputState({
               state: event.target.value,
-              date: event.target.valueAsDate ?? undefined,
+              date: isValid ? date : undefined,
             })
           }}
           onBlur={(event) => {
@@ -194,6 +205,15 @@ export const DateTimeInput = forwardRef<HTMLInputElement, DateTimeInputProps>(fu
           }}
           pickerProps={pickerProps}
           mode={mode}
+          start={start}
+          end={end}
+          weekStart={weekStart}
+          markToday={markToday}
+          is24HourFormat={is24HourFormat}
+          minuteIncrement={minuteIncrement}
+          secondIncrement={secondIncrement}
+          millisecondIncrement={millisecondIncrement}
+          precision={precision}
         />
       </PopUp>
     </>

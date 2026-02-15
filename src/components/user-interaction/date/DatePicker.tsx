@@ -1,6 +1,5 @@
 import { useState } from 'react'
 import { ArrowDown, ArrowUp, Calendar, ChevronDown } from 'lucide-react'
-import type { WeekDay } from '@/src/utils/date'
 import { DateUtils } from '@/src/utils/date'
 import clsx from 'clsx'
 import type { DayPickerProps } from '@/src/components/user-interaction/date/DayPicker'
@@ -17,13 +16,13 @@ import { useHightideTranslation } from '@/src/i18n/useHightideTranslation'
 
 type DisplayMode = 'yearMonth' | 'day'
 
-export type DatePickerProps = Partial<FormFieldDataHandling<Date>> & {
+export interface DatePickerProps extends
+ Partial<FormFieldDataHandling<Date>>,
+ Pick<DayPickerProps, 'markToday' | 'start' | 'end' | 'weekStart'>
+ {
   initialValue?: Date,
-  start?: Date,
-  end?: Date,
   initialDisplay?: DisplayMode,
-  weekStart?: WeekDay,
-  dayPickerProps?: Omit<DayPickerProps, 'displayedMonth' | 'onChange' | 'selected' | 'weekStart'>,
+  dayPickerProps?: Omit<DayPickerProps, 'displayedMonth' | 'onChange' | 'selected' | 'weekStart' | 'markToday' | 'start' | 'end'>,
   yearMonthPickerProps?: Omit<YearMonthPickerProps, 'displayedYearMonth' | 'onChange' | 'start' | 'end'>,
   className?: string,
 }

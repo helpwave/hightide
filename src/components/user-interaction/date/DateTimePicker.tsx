@@ -1,23 +1,21 @@
 import { type ReactNode } from 'react'
-import type { DateTimeFormat, WeekDay } from '@/src/utils/date'
-import type { TimePickerProps, TimePickerMinuteIncrement } from './TimePicker'
+import type { DateTimeFormat } from '@/src/utils/date'
+import type { TimePickerProps } from './TimePicker'
 import { TimePicker } from './TimePicker'
 import type { DatePickerProps } from './DatePicker'
 import { DatePicker } from './DatePicker'
 import type { FormFieldDataHandling } from '../../form/FormField'
 import { useControlledState } from '@/src/hooks/useControlledState'
 
-export type DateTimePickerProps = Partial<FormFieldDataHandling<Date>> & {
+export interface DateTimePickerProps extends
+Partial<FormFieldDataHandling<Date>>,
+Pick<DatePickerProps, 'start' | 'end' | 'weekStart' | 'markToday'>,
+Pick<TimePickerProps, 'is24HourFormat' | 'minuteIncrement' | 'secondIncrement' | 'millisecondIncrement' | 'precision'>
+{
   initialValue?: Date,
   mode?: DateTimeFormat,
-  start?: Date,
-  end?: Date,
-  is24HourFormat?: boolean,
-  minuteIncrement?: TimePickerMinuteIncrement,
-  markToday?: boolean,
-  weekStart?: WeekDay,
-  datePickerProps?: Omit<DatePickerProps, 'onChange' | 'value' | 'start' | 'end'>,
-  timePickerProps?: Omit<TimePickerProps, 'onChange' | 'time' | 'is24HourFormat' | 'minuteIncrement'>,
+  datePickerProps?: Omit<DatePickerProps, 'onChange' | 'value' | 'start' | 'end' | 'markToday'>,
+  timePickerProps?: Omit<TimePickerProps, 'onChange' | 'time' | 'is24HourFormat' | 'minuteIncrement' | 'secondIncrement' | 'millisecondIncrement' | 'precision'>,
 }
 
 /**
@@ -32,6 +30,9 @@ export const DateTimePicker = ({
   is24HourFormat,
   minuteIncrement,
   weekStart,
+  secondIncrement,
+  millisecondIncrement,
+  precision,
   onValueChange,
   onEditComplete,
   timePickerProps,
@@ -68,6 +69,9 @@ export const DateTimePicker = ({
         {...timePickerProps}
         is24HourFormat={is24HourFormat}
         minuteIncrement={minuteIncrement}
+        secondIncrement={secondIncrement}
+        millisecondIncrement={millisecondIncrement}
+        precision={precision}
         value={value}
         onValueChange={setValue}
         onEditComplete={onEditComplete}

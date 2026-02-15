@@ -4,6 +4,8 @@ import type { DurationJSON } from '@/src/utils/duration'
 const DateTimeFormat = ['date', 'time', 'dateTime'] as const
 export type DateTimeFormat = typeof DateTimeFormat[number]
 
+export type DateTimePrecision = 'minute' | 'second' | 'millisecond'
+
 const timesInSeconds = {
   second: 1,
   minute: 60,
@@ -185,14 +187,48 @@ const formatRelative = (date: Date, locale: string) => {
   return rtf.format(Math.round(diffInSeconds / timesInSeconds.yearImprecise), 'year')
 }
 
-const toInputString = (date: Date, format: DateTimeFormat) => {
+const toInputString = (date: Date, format: DateTimeFormat, precision: DateTimePrecision = 'minute', isLocalTime: boolean = true) => {
+  const pad = (n: number, l = 2) => String(n).padStart(l, '0')
+
+  const parts = isLocalTime
+    ? {
+      y: date.getFullYear(),
+      m: date.getMonth() + 1,
+      d: date.getDate(),
+      h: date.getHours(),
+      min: date.getMinutes(),
+      s: date.getSeconds(),
+      ms: date.getMilliseconds()
+    }
+    : {
+      y: date.getUTCFullYear(),
+      m: date.getUTCMonth() + 1,
+      d: date.getUTCDate(),
+      h: date.getUTCHours(),
+      min: date.getUTCMinutes(),
+      s: date.getUTCSeconds(),
+      ms: date.getUTCMilliseconds()
+    }
+
+  const dateStr = `${pad(parts.y, 4)}-${pad(parts.m)}-${pad(parts.d)}`
+
+  let timeStr = `${pad(parts.h)}:${pad(parts.min)}`
+
+  if (precision === 'second' || precision === 'millisecond') {
+    timeStr += `:${pad(parts.s)}`
+  }
+
+  if (precision === 'millisecond') {
+    timeStr += `.${pad(parts.ms, 3)}`
+  }
+
   switch (format) {
   case 'date':
-    return date.toISOString().split('T')[0]
+    return dateStr
   case 'time':
-    return date.toISOString().split('T')[1].split('Z')[0]
+    return timeStr
   case 'dateTime':
-    return date.toISOString().split('Z')[0]
+    return `${dateStr}T${timeStr}`
   }
 }
 
