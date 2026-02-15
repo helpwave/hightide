@@ -192,7 +192,7 @@ const toInputString = (date: Date, format: DateTimeFormat) => {
   case 'time':
     return date.toISOString().split('T')[1].split('Z')[0]
   case 'dateTime':
-    return date.toISOString()
+    return date.toISOString().split('Z')[0]
   }
 }
 

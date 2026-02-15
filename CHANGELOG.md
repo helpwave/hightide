@@ -9,6 +9,12 @@ and adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
 ### Fixed
 
+- `DateUtils.toInputString` to have the wrong format for dateTime
+
+## [0.8.9] - 2026-02-15
+
+### Fixed
+
 - `DateTimeInput` to trigger `onValueChange` and `onEditComplete` as expected
 
 ## [0.8.8] - 2026-02-14
