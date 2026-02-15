@@ -55,7 +55,7 @@ export const DateTimeInput = forwardRef<HTMLInputElement, DateTimeInputProps>(fu
     defaultValue: initialValue,
   })
   const [dialogValue, setDialogValue] = useState<Date>(state ?? new Date())
-  const [stingInputState, setStringInputState] = useState<{ state: string, date?: Date }>({
+  const [stringInputState, setStringInputState] = useState<{ state: string, date?: Date }>({
     state: state ? DateUtils.toInputString(state, mode) : '',
     date: undefined,
   })
@@ -102,7 +102,7 @@ export const DateTimeInput = forwardRef<HTMLInputElement, DateTimeInputProps>(fu
           {...props}
           ref={innerRef}
           id={ids.input}
-          value={stingInputState.state}
+          value={stringInputState.state}
 
           onChange={(event) => {
             const date = event.target.valueAsDate
@@ -123,10 +123,13 @@ export const DateTimeInput = forwardRef<HTMLInputElement, DateTimeInputProps>(fu
           onBlur={(event) => {
             props.onBlur?.(event)
             clearTimer()
-            if(stingInputState.date) {
-              setState(stingInputState.date)
-              onEditComplete?.(stingInputState.date)
+            if(stringInputState.date) {
+              setState(stringInputState.date)
+              onEditComplete?.(stringInputState.date)
             } else {
+              if(innerRef.current) {
+                innerRef.current.value = ''
+              }
               setStringInputState({
                 state: state ? DateUtils.toInputString(state, mode) : '',
                 date: undefined,
@@ -139,7 +142,7 @@ export const DateTimeInput = forwardRef<HTMLInputElement, DateTimeInputProps>(fu
           {...PropsUtil.dataAttributes.interactionStates({ disabled, readOnly, invalid, required })}
 
           data-name={props['data-name'] ?? 'date-time-input'}
-          data-value={PropsUtil.dataAttributes.bool(!!state || !!stingInputState)}
+          data-value={PropsUtil.dataAttributes.bool(!!state || !!stringInputState)}
           {...PropsUtil.aria.interactionStates({ disabled, readOnly, invalid, required }, props)}
         />
         <Visibility isVisible={!readOnly}>
