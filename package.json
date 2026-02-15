@@ -54,9 +54,9 @@
     "@babel/preset-typescript": "7.26.0",
     "@faker-js/faker": "10.1.0",
     "@helpwave/eslint-config": "0.0.11",
-    "@storybook/addon-docs": "10.2.3",
-    "@storybook/addon-links": "10.2.3",
-    "@storybook/nextjs": "^10.2.3",
+    "@storybook/addon-docs": "10.2.8",
+    "@storybook/addon-links": "10.2.8",
+    "@storybook/nextjs": "^10.2.8",
     "@tailwindcss/postcss": "4.1.18",
     "@types/jest": "30.0.0",
     "@types/node": "20.17.10",
@@ -66,14 +66,14 @@
     "@vitest/mocker": "4.0.16",
     "autoprefixer": "10.4.23",
     "eslint": "9.31.0",
-    "eslint-plugin-storybook": "10.2.3",
+    "eslint-plugin-storybook": "10.2.8",
     "jest": "30.2.0",
     "postcss": "8.5.6",
-    "storybook": "10.2.3",
+    "storybook": "10.2.8",
     "ts-jest": "29.4.5",
     "tsup": "8.5.0",
     "typescript": "5.7.2",
-    "webpack": "5.97.1"
+    "webpack": "5.105.2"
   },
   "keywords": [
     "react",
@@ -83,5 +83,8 @@
   ],
   "bugs": {
     "url": "https://github.com/helpwave/hightide/issues"
+  },
+  "overrides": {
+    "elliptic": "^6.6.1"
   }
 }
