@@ -23,6 +23,7 @@ jobs:
           dry-run: true
       - name: Test print
         if: ${{ steps.publish.outputs.type == '' }}
+        continue-on-error: true
         run: |
           echo "❌ No version change detected. Refusing to publish."
           exit 1
