@@ -60,7 +60,7 @@ export const Input = forwardRef<HTMLInputElement, InputProps>(function Input({
   const {
     restartTimer,
     clearTimer
-  } = useDelay({ delay, disabled: !afterDelay })
+  } = useDelay({ delay, disabled: !afterDelay || props.disabled || props.readOnly })
 
   const innerRef = useRef<HTMLInputElement>(null)
   useImperativeHandle(forwardedRef, () => innerRef.current)

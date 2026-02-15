@@ -13,6 +13,7 @@ import type { FormFieldInteractionStates } from '@/src/components/form/FieldLayo
 import { PopUp } from '../../layout/popup/PopUp'
 import { IconButton } from '../IconButton'
 import { DateUtils, type DateTimeFormat } from '@/src/utils/date'
+import { useDelay } from '@/src/hooks'
 
 export interface DateTimeInputProps extends
   Partial<FormFieldInteractionStates>,
@@ -54,11 +55,17 @@ export const DateTimeInput = forwardRef<HTMLInputElement, DateTimeInputProps>(fu
     defaultValue: initialValue,
   })
   const [dialogValue, setDialogValue] = useState<Date>(state ?? new Date())
-  const [dateString, setDateString] = useState<string>(state ? DateUtils.toInputString(state, mode) : '')
+  const [stingInputState, setStringInputState] = useState<{ state: string, date?: Date }>({
+    state: state ? DateUtils.toInputString(state, mode) : '',
+    date: undefined,
+  })
 
   useEffect(() => {
     setDialogValue(state ?? new Date())
-    setDateString(state ? DateUtils.toInputString(state, mode) : '')
+    setStringInputState({
+      state: state ? DateUtils.toInputString(state, mode) : '',
+      date: undefined,
+    })
   }, [mode, state])
 
   const changeOpenWrapper = useCallback((isOpen: boolean) => {
@@ -82,6 +89,12 @@ export const DateTimeInput = forwardRef<HTMLInputElement, DateTimeInputProps>(fu
     }
   }, [changeOpenWrapper, readOnly, disabled])
 
+  const {
+    restartTimer,
+    clearTimer
+  } = useDelay({ delay: 2000, disabled: disabled || readOnly })
+
+
   return (
     <>
       <div {...containerProps} className={clsx('relative w-full', containerProps?.className)}>
@@ -89,14 +102,35 @@ export const DateTimeInput = forwardRef<HTMLInputElement, DateTimeInputProps>(fu
           {...props}
           ref={innerRef}
           id={ids.input}
-          value={dateString}
+          value={stingInputState.state}
 
           onChange={(event) => {
             const date = event.target.valueAsDate
             if(date) {
-              setState(date)
+              restartTimer(() => {
+                innerRef.current?.blur()
+                setState(date)
+                onEditComplete?.(date)
+              })
             } else {
-              setDateString(event.target.value)
+              clearTimer()
+            }
+            setStringInputState({
+              state: event.target.value,
+              date: event.target.valueAsDate ?? undefined,
+            })
+          }}
+          onBlur={(event) => {
+            props.onBlur?.(event)
+            clearTimer()
+            if(stingInputState.date) {
+              setState(stingInputState.date)
+              onEditComplete?.(stingInputState.date)
+            } else {
+              setStringInputState({
+                state: state ? DateUtils.toInputString(state, mode) : '',
+                date: undefined,
+              })
             }
           }}
 
@@ -105,7 +139,7 @@ export const DateTimeInput = forwardRef<HTMLInputElement, DateTimeInputProps>(fu
           {...PropsUtil.dataAttributes.interactionStates({ disabled, readOnly, invalid, required })}
 
           data-name={props['data-name'] ?? 'date-time-input'}
-          data-value={PropsUtil.dataAttributes.bool(!!state || !!dateString)}
+          data-value={PropsUtil.dataAttributes.bool(!!state || !!stingInputState)}
           {...PropsUtil.aria.interactionStates({ disabled, readOnly, invalid, required }, props)}
         />
         <Visibility isVisible={!readOnly}>
