@@ -25,9 +25,9 @@ import type {
 } from './TableFilter'
 import { TableFilterOperator } from './TableFilter'
 import { Select } from '../../user-interaction/select/Select'
-import { SelectOption } from '../../user-interaction/select/SelectComponents'
+import { SelectOption } from '../../user-interaction/select/SelectContent'
 import { MultiSelect } from '../../user-interaction/select/MultiSelect'
-import { MultiSelectOption } from '../../user-interaction/select/SelectComponents'
+import { MultiSelectOption } from '../../user-interaction/select/SelectContent'
 import { Visibility } from '../Visibility'
 import {
   ArrowRight,

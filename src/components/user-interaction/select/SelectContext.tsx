@@ -13,7 +13,7 @@ type RegisteredOption = {
   label: string,
   display: ReactNode,
   disabled: boolean,
-  ref: React.RefObject<HTMLLIElement>,
+  ref: React.RefObject<HTMLElement>,
 }
 
 export type HighlightStartPositionBehavior = 'first' | 'last'
@@ -61,6 +61,8 @@ type SelectContextType = {
     register: (item: RegisteredOption) => void,
     unregister: (value: string) => void,
     toggleSelection: (value: string, isSelected?: boolean) => void,
+    highlightFirst: () => void,
+    highlightLast: () => void,
     highlightItem: (value: string) => void,
     moveHighlightedIndex: (delta: number) => void,
   },
@@ -247,15 +249,27 @@ const PrimitveSelectRoot = ({
     }))
   }
 
-  const highlightItem = (value: string) => {
-    if (disabled) {
+  const highlightItem = useCallback((value: string) => {
+    if (disabled || !state.visibleOptions.some(opt => opt.value === value && !opt.disabled)) {
       return
     }
     setInternalState(prevState => ({
       ...prevState,
       highlightedValue: value,
     }))
-  }
+  }, [disabled, state.visibleOptions])
+
+  const highlightFirst = useCallback(() => {
+    const firstOption = state.visibleOptions.find(opt => !opt.disabled)
+    if(!firstOption) return
+    highlightItem(firstOption.value)
+  }, [highlightItem, state.visibleOptions])
+
+  const highlightLast = useCallback(() => {
+    const lastOption = [...state.visibleOptions].reverse().find(opt => !opt.disabled)
+    if(!lastOption) return
+    highlightItem(lastOption.value)
+  }, [highlightItem, state.visibleOptions])
 
   const registerTrigger = useCallback((ref: React.RefObject<HTMLElement>) => {
     triggerRef.current = ref.current
@@ -343,6 +357,8 @@ const PrimitveSelectRoot = ({
       register: registerItem,
       unregister: unregisterItem,
       toggleSelection,
+      highlightFirst,
+      highlightLast,
       highlightItem,
       moveHighlightedIndex,
     },

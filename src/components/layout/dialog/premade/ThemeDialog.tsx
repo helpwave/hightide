@@ -10,7 +10,7 @@ import { Button } from '@/src/components/user-interaction/Button'
 import { useHightideTranslation } from '@/src/i18n/useHightideTranslation'
 import type { SelectProps } from '@/src/components/user-interaction/select/Select'
 import { Select } from '@/src/components/user-interaction/select/Select'
-import { SelectOption } from '@/src/components/user-interaction/select/SelectComponents'
+import { SelectOption } from '@/src/components/user-interaction/select/SelectContent'
 
 export interface ThemeIconProps extends HTMLAttributes<SVGSVGElement> {
   theme?: ThemeType,

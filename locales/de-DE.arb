@@ -52,6 +52,12 @@
   "no": "Nein",
   "none": "Nichts",
   "nothingFound": "Nichts gefunden",
+  "nResultsFound": "{count, plural, =1{# Ergebnis gefunden} other{# Ergebnisse gefunden}}",
+  "@nResultsFound": {
+    "placeholders": {
+      "count": { "type": "number" }
+    }
+  },
   "of": "von",
   "optional": "Optional",
   "pleaseWait": "Bitte warten...",

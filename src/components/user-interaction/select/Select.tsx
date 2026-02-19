@@ -4,9 +4,10 @@ import {
 } from 'react'
 import type { SelectRootProps } from './SelectContext'
 import { SelectRoot } from './SelectContext'
-import type { SelectButtonProps, SelectContentProps } from './SelectComponents'
-import { SelectButton } from './SelectComponents'
-import { SelectContent } from './SelectComponents'
+import type { SelectButtonProps } from './SelectButton'
+import { SelectButton } from './SelectButton'
+import type { SelectContentProps } from './SelectContent'
+import { SelectContent } from './SelectContent'
 
 //
 // Select
@@ -16,7 +17,7 @@ export type SelectProps = SelectRootProps & {
   buttonProps?: Omit<SelectButtonProps, 'selectedDisplay'> & { selectedDisplay?: (value: string) => ReactNode },
 }
 
-export const Select = forwardRef<HTMLButtonElement, SelectProps>(function Select({
+export const Select = forwardRef<HTMLDivElement, SelectProps>(function Select({
   children,
   contentPanelProps,
   buttonProps,

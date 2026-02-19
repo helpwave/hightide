@@ -8,7 +8,7 @@ import { useHightideTranslation } from '@/src/i18n/useHightideTranslation'
 import type { HightideTranslationLocales } from '@/src/i18n/translations'
 import type { SelectProps } from '@/src/components/user-interaction/select/Select'
 import { Select } from '@/src/components/user-interaction/select/Select'
-import { SelectOption } from '@/src/components/user-interaction/select/SelectComponents'
+import { SelectOption } from '@/src/components/user-interaction/select/SelectContent'
 import clsx from 'clsx'
 
 type LanguageSelectProps = Omit<SelectProps, 'value'>

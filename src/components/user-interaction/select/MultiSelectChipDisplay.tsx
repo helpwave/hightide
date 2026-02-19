@@ -3,7 +3,7 @@ import { MultiSelectRoot, useSelectContext } from './SelectContext'
 import type { HTMLAttributes, ReactNode } from 'react'
 import { forwardRef, useEffect, useImperativeHandle, useRef } from 'react'
 import { XIcon, Plus } from 'lucide-react'
-import { MultiSelectContent, type MultiSelectContentProps } from './SelectComponents'
+import { MultiSelectContent, type MultiSelectContentProps } from './SelectContent'
 import { IconButton } from '../IconButton'
 import { useHightideTranslation } from '@/src/i18n/useHightideTranslation'
 

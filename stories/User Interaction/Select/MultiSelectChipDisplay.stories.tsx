@@ -2,7 +2,7 @@ import { action } from 'storybook/actions'
 import {
   MultiSelectChipDisplay
 } from '@/src/components/user-interaction/select/MultiSelectChipDisplay'
-import { MultiSelectOption } from '@/src/components/user-interaction/select/SelectComponents'
+import { MultiSelectOption } from '@/src/components/user-interaction/select/SelectOption'
 import type { Meta, StoryObj } from '@storybook/nextjs'
 
 const meta = {

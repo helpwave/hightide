@@ -4,7 +4,7 @@ import { action } from 'storybook/actions'
 import { StorybookHelper } from '@/src/storybook/helper'
 import clsx from 'clsx'
 import { SingleSelectProperty } from '@/src/components/user-interaction/properties/SelectProperty'
-import { SelectOption } from '@/src/components/user-interaction/select/SelectComponents'
+import { SelectOption } from '@/src/components/user-interaction/select/SelectOption'
 const options = [...StorybookHelper.selectValues]
 
 
@@ -22,7 +22,7 @@ export const singleSelectProperty: Story = {
     value: undefined,
     readOnly: false,
     children: options.map(option => (
-      <SelectOption key={option} value={option}>
+      <SelectOption key={option} value={option} label={option}>
         <span className="flex-row-1 items-center">
           <span
             className={clsx(

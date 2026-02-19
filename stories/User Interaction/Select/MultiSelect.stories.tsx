@@ -1,7 +1,7 @@
 import { action } from 'storybook/actions'
 import type { Meta, StoryObj } from '@storybook/nextjs'
 import { MultiSelect } from '@/src/components/user-interaction/select/MultiSelect'
-import { MultiSelectOption } from '@/src/components/user-interaction/select/SelectComponents'
+import { MultiSelectOption } from '@/src/components/user-interaction/select/SelectOption'
 
 const meta = {
   component: MultiSelect,

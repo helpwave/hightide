@@ -1,7 +1,8 @@
 import type { MultiSelectRootProps } from './SelectContext'
 import { MultiSelectRoot } from './SelectContext'
-import type { MultiSelectContentProps, MultiSelectButtonProps } from './SelectComponents'
-import { MultiSelectButton, MultiSelectContent } from './SelectComponents'
+import type { MultiSelectButtonProps } from './SelectButton'
+import { MultiSelectButton } from './SelectButton'
+import { type MultiSelectContentProps, MultiSelectContent } from './SelectContent'
 import { forwardRef } from 'react'
 
 //
@@ -12,7 +13,7 @@ export interface MultiSelectProps extends MultiSelectRootProps {
   buttonProps?: MultiSelectButtonProps,
 }
 
-export const MultiSelect = forwardRef<HTMLButtonElement, MultiSelectProps>(function MultiSelect({
+export const MultiSelect = forwardRef<HTMLDivElement, MultiSelectProps>(function MultiSelect({
   children,
   contentPanelProps,
   buttonProps,
