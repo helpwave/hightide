@@ -1,11 +1,13 @@
 import type { ComponentProps } from 'react'
-import { forwardRef, useEffect, useImperativeHandle, useRef } from 'react'
+import { forwardRef, useCallback, useEffect, useImperativeHandle, useRef } from 'react'
 import { useSelectContext } from './SelectContext'
 import clsx from 'clsx'
 import { useHightideTranslation } from '@/src/i18n/useHightideTranslation'
 import { PopUp, type PopUpProps } from '@/src/components/layout/popup/PopUp'
 import { Input } from '@/src/components/user-interaction/input/Input'
 import { Visibility } from '../../layout/Visibility'
+
+const TYPEAHEAD_RESET_MS = 500
 
 export interface SelectContentProps extends PopUpProps {
   showSearch?: boolean,
@@ -22,6 +24,8 @@ export const SelectContent = forwardRef<HTMLUListElement, SelectContentProps>(fu
   const translation = useHightideTranslation()
   const innerRef = useRef<HTMLUListElement>(null)
   const searchInputRef = useRef<HTMLInputElement>(null)
+  const typeAheadBufferRef = useRef('')
+  const typeAheadTimeoutRef = useRef<ReturnType<typeof setTimeout> | null>(null)
   useImperativeHandle(ref, () => innerRef.current)
 
   const { trigger, state, config, item, ids, setIds, search } = useSelectContext()
@@ -35,10 +39,30 @@ export const SelectContent = forwardRef<HTMLUListElement, SelectContentProps>(fu
     }
   }, [id, setIds])
 
+  useEffect(() => {
+    if (!state.isOpen) {
+      typeAheadBufferRef.current = ''
+      if (typeAheadTimeoutRef.current) {
+        clearTimeout(typeAheadTimeoutRef.current)
+        typeAheadTimeoutRef.current = null
+      }
+    }
+  }, [state.isOpen])
+
+  useEffect(() => {
+    return () => {
+      if (typeAheadTimeoutRef.current) {
+        clearTimeout(typeAheadTimeoutRef.current)
+      }
+    }
+  }, [])
+
   const showSearch = showSearchOverride ?? search.showSearch
   const listboxAriaLabel = showSearch ? translation('searchResults') : undefined
 
-  const keyHandler = (event: React.KeyboardEvent) => {
+  const keyHandler = useCallback((event: React.KeyboardEvent) => {
+
+
     switch (event.key) {
     case 'ArrowDown':
       item.moveHighlightedIndex(1)
@@ -58,7 +82,7 @@ export const SelectContent = forwardRef<HTMLUListElement, SelectContentProps>(fu
       break
     case 'Enter':
     case ' ':
-      if(showSearch && event.key === ' ') return
+      if (showSearch && event.key === ' ') return
 
       if (state.highlightedValue) {
         item.toggleSelection(state.highlightedValue)
@@ -68,8 +92,50 @@ export const SelectContent = forwardRef<HTMLUListElement, SelectContentProps>(fu
         event.preventDefault()
       }
       break
+    default:
+      if (
+        !showSearch &&
+          !event.ctrlKey &&
+          !event.metaKey &&
+          !event.altKey
+      ) {
+        const char = event.key.toLowerCase()
+        if (typeAheadTimeoutRef.current) {
+          clearTimeout(typeAheadTimeoutRef.current)
+        }
+        typeAheadBufferRef.current += char
+        typeAheadTimeoutRef.current = setTimeout(() => {
+          typeAheadBufferRef.current = ''
+        }, TYPEAHEAD_RESET_MS)
+
+        const opts = state.visibleOptions
+        const buf = typeAheadBufferRef.current
+        if (opts.length === 0) {
+          event.preventDefault()
+          return
+        }
+        const currentIndex = opts.findIndex(o => o.value === state.highlightedValue)
+        const startFrom = currentIndex >= 0 ? (currentIndex + 1) % opts.length : 0
+        for (let i = 0; i < opts.length; i++) {
+          const j = (startFrom + i) % opts.length
+          if (!opts[j].disabled && opts[j].label.toLowerCase().startsWith(buf)) {
+            item.highlightItem(opts[j].value)
+            event.preventDefault()
+            return
+          }
+        }
+        event.preventDefault()
+        return
+      }
     }
-  }
+  }, [
+    showSearch,
+    state.visibleOptions,
+    state.highlightedValue,
+    item,
+    config.isMultiSelect,
+    trigger,
+  ])
 
   return (
     <PopUp

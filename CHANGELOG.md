@@ -7,6 +7,10 @@ and adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
 ## [0.9.0] - 2026-02-19
 
+## Added
+- Search for `Select` and `MultiSelect`
+- Type ahead support for `Select` and `MultiSelect`
+
 ## Fixed
 - imports in `TimePicker` and `DateTimeInput`
 
