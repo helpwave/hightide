@@ -51,7 +51,12 @@ export const ThemeSelect = ({ ...props }: ThemeSelectProps) => {
       }}
     >
       {ThemeUtil.themes.map((theme) => (
-        <SelectOption key={theme} value={theme} className="gap-x-6 justify-between">
+        <SelectOption
+          key={theme}
+          value={theme}
+          label={translation('sThemeMode', { theme: theme })}
+          className="gap-x-6 justify-between"
+        >
           <div className="flex-row-2 items-center">
             <ThemeIcon theme={theme}/>
             {translation('sThemeMode', { theme: theme })}

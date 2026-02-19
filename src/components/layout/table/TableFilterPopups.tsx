@@ -232,7 +232,12 @@ export const TextFilter = ({ filterValue, onFilterValueChange }: TextFilterProps
         buttonProps={{ className: 'min-w-64' }}
       >
         {availableOperators.map((op) => (
-          <SelectOption key={op} value={op} iconAppearance="right">
+          <SelectOption
+            key={op}
+            value={op}
+            label={translation(getOperatorInfo(op).translationKey)}
+            iconAppearance="right"
+          >
             <OperatorLabel operator={op} />
           </SelectOption>
         ))}
@@ -301,7 +306,12 @@ export const NumberFilter = ({ filterValue, onFilterValueChange }: NumberFilterP
         buttonProps={{ className: 'min-w-64' }}
       >
         {availableOperators.map((op) => (
-          <SelectOption key={op} value={op} iconAppearance="right">
+          <SelectOption
+            key={op}
+            value={op}
+            label={translation(getOperatorInfo(op).translationKey)}
+            iconAppearance="right"
+          >
             <OperatorLabel operator={op} />
           </SelectOption>
         ))}
@@ -411,7 +421,12 @@ export const DateFilter = ({ filterValue, onFilterValueChange }: DateFilterProps
         buttonProps={{ className: 'min-w-64' }}
       >
         {availableOperators.map((op) => (
-          <SelectOption key={op} value={op} iconAppearance="right">
+          <SelectOption
+            key={op}
+            value={op}
+            label={translation(getOperatorInfo(op).translationKey)}
+            iconAppearance="right"
+          >
             <OperatorLabel operator={op} />
           </SelectOption>
         ))}
@@ -543,7 +558,12 @@ export const DatetimeFilter = ({ filterValue, onFilterValueChange }: DatetimeFil
         buttonProps={{ className: 'min-w-64' }}
       >
         {availableOperators.map((op) => (
-          <SelectOption key={op} value={op} iconAppearance="right">
+          <SelectOption
+            key={op}
+            value={op}
+            label={translation(getOperatorInfo(op).translationKey)}
+            iconAppearance="right"
+          >
             <OperatorLabel operator={op} />
           </SelectOption>
         ))}
@@ -643,6 +663,7 @@ export const DatetimeFilter = ({ filterValue, onFilterValueChange }: DatetimeFil
 export type BooleanFilterProps = TableFilterBaseProps<BooleanFilterValue>
 
 export const BooleanFilter = ({ filterValue, onFilterValueChange }: BooleanFilterProps) => {
+  const translation = useHightideTranslation()
   const operator = filterValue?.operator ?? 'booleanIsTrue'
 
   const availableOperators = useMemo(() => [
@@ -664,7 +685,12 @@ export const BooleanFilter = ({ filterValue, onFilterValueChange }: BooleanFilte
         buttonProps={{ className: 'min-w-64' }}
       >
         {availableOperators.map((op) => (
-          <SelectOption key={op} value={op} iconAppearance="right">
+          <SelectOption
+            key={op}
+            value={op}
+            label={translation(getOperatorInfo(op).translationKey)}
+            iconAppearance="right"
+          >
             <OperatorLabel operator={op} />
           </SelectOption>
         ))}
@@ -711,7 +737,12 @@ export const TagsFilter = ({ columnId, filterValue, onFilterValueChange }: TagsF
         buttonProps={{ className: 'min-w-64' }}
       >
         {availableOperators.map((op) => (
-          <SelectOption key={op} value={op} iconAppearance="right">
+          <SelectOption
+            key={op}
+            value={op}
+            label={translation(getOperatorInfo(op).translationKey)}
+            iconAppearance="right"
+          >
             <OperatorLabel operator={op} />
           </SelectOption>
         ))}
@@ -729,7 +760,7 @@ export const TagsFilter = ({ columnId, filterValue, onFilterValueChange }: TagsF
           buttonProps={{ className: 'min-w-64' }}
         >
           {availableTags.map(({ tag, label }) => (
-            <MultiSelectOption key={tag} value={tag}>
+            <MultiSelectOption key={tag} value={tag} label={label}>
               {label}
             </MultiSelectOption>
           ))}
@@ -782,7 +813,12 @@ export const TagsSingleFilter = ({ columnId, filterValue, onFilterValueChange }:
         buttonProps={{ className: 'min-w-64' }}
       >
         {availableOperators.map((op) => (
-          <SelectOption key={op} value={op} iconAppearance="right">
+          <SelectOption
+            key={op}
+            value={op}
+            label={translation(getOperatorInfo(op).translationKey)}
+            iconAppearance="right"
+          >
             <OperatorLabel operator={op} />
           </SelectOption>
         ))}
@@ -800,9 +836,7 @@ export const TagsSingleFilter = ({ columnId, filterValue, onFilterValueChange }:
           buttonProps={{ className: 'min-w-64' }}
         >
           {availableTags.map(({ tag, label }) => (
-            <MultiSelectOption key={tag} value={tag}>
-              {label}
-            </MultiSelectOption>
+            <MultiSelectOption key={tag} value={tag} label={label}/>
           ))}
         </MultiSelect>
       </Visibility>
@@ -818,9 +852,7 @@ export const TagsSingleFilter = ({ columnId, filterValue, onFilterValueChange }:
           buttonProps={{ className: 'min-w-64' }}
         >
           {availableTags.map(({ tag, label }) => (
-            <SelectOption key={tag} value={tag}>
-              {label}
-            </SelectOption>
+            <SelectOption key={tag} value={tag} label={label}/>
           ))}
         </Select>
       </Visibility>
@@ -836,6 +868,7 @@ export const TagsSingleFilter = ({ columnId, filterValue, onFilterValueChange }:
 export type GenericFilterProps = TableFilterBaseProps<GenericFilterValue>
 
 export const GenericFilter = ({ filterValue, onFilterValueChange }: GenericFilterProps) => {
+  const translation = useHightideTranslation()
   const operator = filterValue?.operator ?? 'notUndefined'
 
   const availableOperators = useMemo(() => [
@@ -855,7 +888,12 @@ export const GenericFilter = ({ filterValue, onFilterValueChange }: GenericFilte
         buttonProps={{ className: 'min-w-64' }}
       >
         {availableOperators.map((op) => (
-          <SelectOption key={op} value={op} iconAppearance="right">
+          <SelectOption
+            key={op}
+            value={op}
+            label={translation(getOperatorInfo(op).translationKey)}
+            iconAppearance="right"
+          >
             <OperatorLabel operator={op} />
           </SelectOption>
         ))}

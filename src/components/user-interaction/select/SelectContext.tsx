@@ -1,70 +1,81 @@
-import type { Dispatch, PropsWithChildren, ReactNode, SetStateAction } from 'react'
+import type { Dispatch, ReactNode, SetStateAction } from 'react'
 import { createContext, useCallback, useContext, useEffect, useId, useMemo, useRef, useState } from 'react'
 import type { FormFieldInteractionStates } from '../../form/FieldLayout'
 import type { FormFieldDataHandling } from '../../form/FormField'
 import { useControlledState } from '@/src/hooks/useControlledState'
+import { MultiSearchWithMapping } from '@/src/utils/simpleSearch'
 
 //
 // Context
 //
 type RegisteredOption = {
-    value: string,
-    label: ReactNode,
-    disabled: boolean,
-    ref: React.RefObject<HTMLLIElement>,
-  }
+  value: string,
+  label: string,
+  display: ReactNode,
+  disabled: boolean,
+  ref: React.RefObject<HTMLLIElement>,
+}
 
 export type HighlightStartPositionBehavior = 'first' | 'last'
 export type SelectIconAppearance = 'left' | 'right' | 'none'
 
 type InternalSelectContextState = {
-    isOpen: boolean,
-    options: RegisteredOption[],
-    highlightedValue?: string,
+  isOpen: boolean,
+  options: RegisteredOption[],
+  highlightedValue?: string,
+  searchQuery: string,
 }
 
 type SelectContextIds = {
-    trigger: string,
-    content: string,
+  trigger: string,
+  content: string,
+  listbox: string,
+  searchInput: string,
 }
 
 type SelectContextState = InternalSelectContextState & FormFieldInteractionStates & {
-    value: string[],
-    selectedOptions: RegisteredOption[],
+  value: string[],
+  selectedOptions: RegisteredOption[],
+  visibleOptions: RegisteredOption[],
 }
 
 type SelectConfiguration = {
-isMultiSelect: boolean,
-iconAppearance: SelectIconAppearance,
+  isMultiSelect: boolean,
+  iconAppearance: SelectIconAppearance,
 }
 
 type ToggleOpenOptions = {
-highlightStartPositionBehavior?: HighlightStartPositionBehavior,
+  highlightStartPositionBehavior?: HighlightStartPositionBehavior,
 }
 
 const defaultToggleOpenOptions: ToggleOpenOptions = {
   highlightStartPositionBehavior: 'first',
 }
 
-  type SelectContextType = {
-    ids: SelectContextIds,
-    setIds: Dispatch<SetStateAction<SelectContextIds>>,
-    state: SelectContextState,
-    config: SelectConfiguration,
-    item: {
-      register: (item: RegisteredOption) => void,
-      unregister: (value: string) => void,
-      toggleSelection: (value: string, isSelected?: boolean) => void,
-      highlightItem: (value: string) => void,
-      moveHighlightedIndex: (delta: number) => void,
-    },
-    trigger: {
-      ref: React.RefObject<HTMLElement>,
-      register: (element: React.RefObject<HTMLElement>) => void,
-      unregister: () => void,
-      toggleOpen: (isOpen?: boolean, options?: ToggleOpenOptions) => void,
-    },
-  }
+type SelectContextType = {
+  ids: SelectContextIds,
+  setIds: Dispatch<SetStateAction<SelectContextIds>>,
+  state: SelectContextState,
+  config: SelectConfiguration,
+  item: {
+    register: (item: RegisteredOption) => void,
+    unregister: (value: string) => void,
+    toggleSelection: (value: string, isSelected?: boolean) => void,
+    highlightItem: (value: string) => void,
+    moveHighlightedIndex: (delta: number) => void,
+  },
+  trigger: {
+    ref: React.RefObject<HTMLElement>,
+    register: (element: React.RefObject<HTMLElement>) => void,
+    unregister: () => void,
+    toggleOpen: (isOpen?: boolean, options?: ToggleOpenOptions) => void,
+  },
+  search: {
+    showSearch: boolean,
+    searchQuery: string,
+    setSearchQuery: (query: string) => void,
+  },
+}
 
 export const SelectContext = createContext<SelectContextType | null>(null)
 
@@ -80,21 +91,23 @@ export function useSelectContext() {
 //
 // PrimitiveSelectRoot
 //
-export type SharedSelectRootProps = Partial<FormFieldInteractionStates> & PropsWithChildren & {
-    id?: string,
-    initialIsOpen?: boolean,
-    iconAppearance?: SelectIconAppearance,
-    onClose?: () => void,
-  }
+export interface SharedSelectRootProps extends Partial<FormFieldInteractionStates> {
+  children: ReactNode,
+  id?: string,
+  initialIsOpen?: boolean,
+  iconAppearance?: SelectIconAppearance,
+  showSearch?: boolean,
+  onClose?: () => void,
+}
 
-type PrimitiveSelectRootProps =  SharedSelectRootProps & {
-    initialValue?: string,
-    value?: string,
-    onValueChange?: (value: string) => void,
-    initialValues?: string[],
-    values?: string[],
-    onValuesChange?: (value: string[]) => void,
-    isMultiSelect?: boolean,
+interface PrimitiveSelectRootProps extends SharedSelectRootProps {
+  initialValue?: string,
+  value?: string,
+  onValueChange?: (value: string) => void,
+  initialValues?: string[],
+  values?: string[],
+  onValuesChange?: (value: string[]) => void,
+  isMultiSelect?: boolean,
 }
 
 const PrimitveSelectRoot = ({
@@ -113,6 +126,7 @@ const PrimitveSelectRoot = ({
   required = false,
   invalid = false,
   isMultiSelect = false,
+  showSearch = false,
   iconAppearance = 'left',
 }: PrimitiveSelectRootProps) => {
   const [value, setValue] = useControlledState({
@@ -128,14 +142,18 @@ const PrimitveSelectRoot = ({
 
   const triggerRef = useRef<HTMLElement>(null)
   const generatedId = useId()
+  const prefix = isMultiSelect ? 'multi-select-' : 'select-'
   const [ids, setIds] = useState<SelectContextIds>({
-    trigger: id ?? (isMultiSelect ? 'multi-select-' + generatedId : 'select-' + generatedId),
-    content: isMultiSelect ? 'multi-select-content-' + generatedId : 'select-content-' + generatedId,
+    trigger: id ?? (prefix + generatedId),
+    content: prefix + 'content-' + generatedId,
+    listbox: prefix + 'listbox-' + generatedId,
+    searchInput: prefix + 'search-' + generatedId,
   })
 
   const [internalState, setInternalState] = useState<InternalSelectContextState>({
     isOpen: initialIsOpen,
     options: [],
+    searchQuery: '',
   })
 
   const selectedValues = useMemo(() => isMultiSelect ? (values ?? []) : [value].filter(Boolean),
@@ -145,6 +163,12 @@ const PrimitveSelectRoot = ({
     selectedValues.map(value => internalState.options.find(option => value === option.value)).filter(Boolean),
   [selectedValues, internalState.options])
 
+  const visibleOptions = useMemo(() => {
+    const q = internalState.searchQuery.trim().toLowerCase()
+    if (!q) return internalState.options
+    return MultiSearchWithMapping(internalState.searchQuery, internalState.options, o => [o.label])
+  }, [internalState.options, internalState.searchQuery])
+
   const state: SelectContextState = {
     ...internalState,
     disabled,
@@ -153,6 +177,7 @@ const PrimitveSelectRoot = ({
     required,
     value: selectedValues,
     selectedOptions,
+    visibleOptions,
   }
 
   const config: SelectConfiguration = {
@@ -240,12 +265,17 @@ const PrimitveSelectRoot = ({
     triggerRef.current = null
   }, [])
 
+  const setSearchQuery = useCallback((query: string) => {
+    setInternalState(prev => ({ ...prev, searchQuery: query }))
+  }, [])
+
   const toggleOpen = (isOpen?: boolean, toggleOpenOptions?: ToggleOpenOptions) => {
     const { highlightStartPositionBehavior } = { ...defaultToggleOpenOptions, ...toggleOpenOptions }
+    const optionsToUse = visibleOptions
     let firstSelectedValue: string | undefined
     let firstEnabledValue: string | undefined
-    for (let i = 0; i < state.options.length; i++) {
-      const currentOption = state.options[highlightStartPositionBehavior === 'first' ? i : state.options.length - i - 1]
+    for (let i = 0; i < optionsToUse.length; i++) {
+      const currentOption = optionsToUse[highlightStartPositionBehavior === 'first' ? i : optionsToUse.length - i - 1]
       if (!currentOption.disabled) {
         if (!firstEnabledValue) {
           firstEnabledValue = currentOption.value
@@ -260,7 +290,8 @@ const PrimitveSelectRoot = ({
     setInternalState(prevState => ({
       ...prevState,
       isOpen: newIsOpen,
-      highlightedValue: firstSelectedValue ?? firstEnabledValue
+      highlightedValue: firstSelectedValue ?? firstEnabledValue,
+      ...(newIsOpen ? {} : { searchQuery: '' }),
     }))
     if (!newIsOpen) {
       onClose?.()
@@ -268,18 +299,20 @@ const PrimitveSelectRoot = ({
   }
 
   const moveHighlightedIndex = (delta: number) => {
-    let highlightedIndex = state.options.findIndex(value => value.value === internalState.highlightedValue)
+    const optionsToUse = visibleOptions
+    if (optionsToUse.length === 0) return
+    let highlightedIndex = optionsToUse.findIndex(opt => opt.value === internalState.highlightedValue)
     if (highlightedIndex === -1) {
       highlightedIndex = 0
     }
-    const optionLength = state.options.length
+    const optionLength = optionsToUse.length
     const startIndex = (highlightedIndex + (delta % optionLength) + optionLength) % optionLength
     const isForward = delta >= 0
-    let highlightedValue = state.options[startIndex].value
-    for (let i = 0; i < state.options.length; i++) {
+    let highlightedValue = optionsToUse[startIndex]?.value
+    for (let i = 0; i < optionsToUse.length; i++) {
       const index = (startIndex + (isForward ? i : -i) + optionLength) % optionLength
-      if (!state.options[index].disabled) {
-        highlightedValue = state.options[index].value
+      if (!optionsToUse[index].disabled) {
+        highlightedValue = optionsToUse[index].value
         break
       }
     }
@@ -291,14 +324,15 @@ const PrimitveSelectRoot = ({
   }
 
   useEffect(() => {
-    if (!internalState.highlightedValue) return
-    const highlighted = internalState.options.find(value => value.value === internalState.highlightedValue)
+    const highlighted = visibleOptions.find(opt => opt.value === internalState.highlightedValue)
     if (highlighted) {
       highlighted.ref.current?.scrollIntoView({ behavior: 'instant', block: 'nearest' })
+    } else if (visibleOptions.length > 0) {
+      setInternalState(prev => ({ ...prev, highlightedValue: visibleOptions[0].value }))
     } else {
-      console.error(`SelectRoot: Could not find highlighted value (${internalState.highlightedValue})`)
+      setInternalState(prev => ({ ...prev, highlightedValue: undefined }))
     }
-  }, [internalState.highlightedValue, internalState.options])
+  }, [internalState.highlightedValue, visibleOptions])
 
   const contextValue: SelectContextType = {
     ids,
@@ -317,6 +351,11 @@ const PrimitveSelectRoot = ({
       register: registerTrigger,
       unregister: unregisterTrigger,
       toggleOpen,
+    },
+    search: {
+      showSearch,
+      searchQuery: internalState.searchQuery,
+      setSearchQuery,
     },
   }
 
@@ -351,7 +390,7 @@ export const SelectRoot = ({ value, onValueChange, onEditComplete, ...props }: S
 //
 // MultiSelectRoot
 //
-export type MultiSelectRootProps = SharedSelectRootProps & Partial<FormFieldDataHandling<string[]>> & {
+export interface MultiSelectRootProps extends SharedSelectRootProps, Partial<FormFieldDataHandling<string[]>> {
   initialValue?: string[],
 }
 

@@ -60,9 +60,9 @@ export const MultiSelectChipDisplayButton = forwardRef<HTMLDivElement, MultiSele
       aria-invalid={invalid}
       aria-disabled={disabled}
     >
-      {state.selectedOptions.map(({ value, label }) => (
+      {state.selectedOptions.map(({ value, display }) => (
         <div key={value} data-name="select-chip-display-chip">
-          {label}
+          {display}
           <IconButton
             tooltip={translation('remove')}
             onClick={() => {
@@ -98,7 +98,7 @@ export const MultiSelectChipDisplayButton = forwardRef<HTMLDivElement, MultiSele
 
         aria-invalid={invalid}
         aria-disabled={disabled}
-        aria-haspopup="listbox"
+        aria-haspopup="dialog"
         aria-expanded={state.isOpen}
         aria-controls={state.isOpen ? ids.content : undefined}
 

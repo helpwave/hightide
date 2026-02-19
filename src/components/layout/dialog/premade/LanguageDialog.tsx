@@ -30,7 +30,9 @@ export const LanguageSelect = ({ ...props }: LanguageSelectProps) => {
       }}
     >
       {LocalizationUtil.locals.map((local) => (
-        <SelectOption key={local} value={local}>{LocalizationUtil.languagesLocalNames[local]}</SelectOption>
+        <SelectOption key={local} value={local} label={LocalizationUtil.languagesLocalNames[local]}>
+          {LocalizationUtil.languagesLocalNames[local]}
+        </SelectOption>
       ))}
     </Select>
   )

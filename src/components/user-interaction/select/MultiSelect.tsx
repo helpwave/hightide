@@ -7,10 +7,10 @@ import { forwardRef } from 'react'
 //
 // MultiSelect
 //
-export type MultiSelectProps = MultiSelectRootProps & {
-    contentPanelProps?: MultiSelectContentProps,
-    buttonProps?: MultiSelectButtonProps,
-  }
+export interface MultiSelectProps extends MultiSelectRootProps {
+  contentPanelProps?: MultiSelectContentProps,
+  buttonProps?: MultiSelectButtonProps,
+}
 
 export const MultiSelect = forwardRef<HTMLButtonElement, MultiSelectProps>(function MultiSelect({
   children,

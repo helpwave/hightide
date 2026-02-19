@@ -1,46 +1,61 @@
-import type { ButtonHTMLAttributes, HTMLAttributes, ReactNode, RefObject } from 'react'
+import type { ButtonHTMLAttributes, ComponentProps, HTMLAttributes, ReactNode, RefObject } from 'react'
 import type { SelectIconAppearance } from './SelectContext'
-import { forwardRef, useEffect, useImperativeHandle, useRef } from 'react'
+import { createContext, forwardRef, useContext, useEffect, useImperativeHandle, useRef } from 'react'
 import { useSelectContext } from './SelectContext'
 import clsx from 'clsx'
 import { CheckIcon } from 'lucide-react'
 import { useHightideTranslation } from '@/src/i18n/useHightideTranslation'
 import { ExpansionIcon } from '@/src/components/display-and-visualization/ExpansionIcon'
 import { PopUp, type PopUpProps } from '../../layout/popup/PopUp'
+import { Input } from '@/src/components/user-interaction/input/Input'
+
+export type SelectOptionDisplayLocation = 'trigger' | 'list'
+
+const SelectOptionDisplayContext = createContext<SelectOptionDisplayLocation | null>(null)
+
+export function useSelectOptionDisplayLocation(): SelectOptionDisplayLocation {
+  const context = useContext(SelectOptionDisplayContext)
+  if (!context) {
+    throw new Error('useSelectOptionDisplayLocation must be used within a SelectOptionDisplayContext')
+  }
+  return context
+}
 
 //
 // SelectOption
 //
-export type SelectOptionProps = Omit<HTMLAttributes<HTMLLIElement>, 'children'> & {
-    value: string,
-    disabled?: boolean,
-    iconAppearance?: SelectIconAppearance,
-    children?: ReactNode,
-  }
+export interface SelectOptionProps extends Omit<HTMLAttributes<HTMLLIElement>, 'children'> {
+  value: string,
+  label: string,
+  disabled?: boolean,
+  iconAppearance?: SelectIconAppearance,
+  children?: ReactNode,
+}
 
 export const SelectOption = forwardRef<HTMLLIElement, SelectOptionProps>(
-  function SelectOption({ children, value, disabled = false, iconAppearance, className, ...restProps }, ref) {
+  function SelectOption({ children, label, value, disabled = false, iconAppearance, className, ...restProps }, ref) {
     const { state, config, item, trigger } = useSelectContext()
     const { register, unregister, toggleSelection, highlightItem } = item
     const itemRef = useRef<HTMLLIElement>(null)
 
     iconAppearance ??= config.iconAppearance
 
-    const label = children ?? value
+    const display: ReactNode = children ?? label
 
-    // Register with parent
     useEffect(() => {
       register({
         value,
         label,
+        display,
         disabled,
         ref: itemRef,
       })
       return () => unregister(value)
-    }, [value, disabled, register, unregister, children, label])
+    }, [value, label, disabled, register, unregister, display])
 
     const isHighlighted = state.highlightedValue === value
     const isSelected = state.value.includes(value)
+    const isVisible = state.visibleOptions.some(opt => opt.value === value)
 
     return (
       <li
@@ -54,14 +69,17 @@ export const SelectOption = forwardRef<HTMLLIElement, SelectOptionProps>(
         role="option"
         aria-disabled={disabled}
         aria-selected={isSelected}
+        aria-hidden={!isVisible}
         data-highlighted={isHighlighted ? '' : undefined}
         data-selected={isSelected ? '' : undefined}
         data-disabled={disabled ? '' : undefined}
+        data-visible={isVisible ? '' : undefined}
         className={clsx(
           'flex-row-1 items-center px-2 py-1 rounded-md',
           'data-highlighted:bg-primary/20',
           'data-disabled:text-disabled data-disabled:cursor-not-allowed',
           'not-data-disabled:cursor-pointer',
+          !isVisible && 'hidden',
           className
         )}
         onClick={(event) => {
@@ -86,7 +104,9 @@ export const SelectOption = forwardRef<HTMLLIElement, SelectOptionProps>(
             aria-hidden={true}
           />
         )}
-        {label}
+        <SelectOptionDisplayContext.Provider value="list">
+          {display}
+        </SelectOptionDisplayContext.Provider>
         {iconAppearance === 'right' && (state.value.length > 0 || config.isMultiSelect) && (
           <CheckIcon
             className={clsx('w-4 h-4', { 'opacity-0': !isSelected || disabled })}
@@ -173,16 +193,18 @@ export const SelectButton = forwardRef<HTMLButtonElement, SelectButtonProps>(fun
 
       aria-invalid={invalid}
       aria-disabled={disabled}
-      aria-haspopup="listbox"
+      aria-haspopup="dialog"
       aria-expanded={state.isOpen}
       aria-controls={state.isOpen ? ids.content : undefined}
     >
       {hasValue ?
         selectedDisplay?.(state.value) ?? (
           <div className={clsx('flex flex-wrap gap-x-1 gap-y-2')}>
-            {state.selectedOptions.map(({ value, label }, index) => (
+            {state.selectedOptions.map(({ value, display }, index) => (
               <span key={value} className="flex-row-0">
-                {label}
+                <SelectOptionDisplayContext.Provider value="trigger">
+                  {display}
+                </SelectOptionDisplayContext.Provider>
                 {index < state.value.length - 1 && (<span>{','}</span>)}
               </span>
             ))}
@@ -198,26 +220,36 @@ export const SelectButton = forwardRef<HTMLButtonElement, SelectButtonProps>(fun
 ///
 /// SelectContent
 ///
-export type SelectContentProps = PopUpProps
+export type SelectContentProps = PopUpProps & {
+  showSearch?: boolean,
+  searchInputProps?: Omit<ComponentProps<typeof Input>, 'value' | 'onValueChange'>,
+}
 
 export const SelectContent = forwardRef<HTMLUListElement, SelectContentProps>(function SelectContent({
   id,
   options,
+  showSearch: showSearchOverride,
+  searchInputProps,
   ...props
 }, ref) {
+  const translation = useHightideTranslation()
   const innerRef = useRef<HTMLUListElement>(null)
+  const searchInputRef = useRef<HTMLInputElement>(null)
   useImperativeHandle(ref, () => innerRef.current)
 
-  const { trigger, state, config, item, ids, setIds } = useSelectContext()
+  const { trigger, state, config, item, ids, setIds, search } = useSelectContext()
 
   useEffect(() => {
-    if(id) {
+    if (id) {
       setIds(prev => ({
         ...prev,
         content: id,
       }))
     }
   }, [id, setIds])
+
+  const showSearch = showSearchOverride ?? search.showSearch
+  const listboxAriaLabel = showSearch ? translation('searchResults') : undefined
 
   return (
     <PopUp
@@ -231,51 +263,62 @@ export const SelectContent = forwardRef<HTMLUListElement, SelectContentProps>(fu
         trigger.toggleOpen(false)
         props.onClose?.()
       }}
-
       aria-labelledby={ids.trigger}
     >
-      <ul
-        ref={innerRef}
-        onKeyDown={(event) => {
-          switch (event.key) {
-          case 'ArrowDown':
-            item.moveHighlightedIndex(1)
-            event.preventDefault()
-            break
-          case 'ArrowUp':
-            item.moveHighlightedIndex(-1)
-            event.preventDefault()
-            break
-          case 'Home':
-            // TODO support later by selecting the first not disabled entry
-            event.preventDefault()
-            break
-          case 'End':
-            // TODO support later by selecting the last not disabled entry
-            event.preventDefault()
-            break
-          case 'Enter': // Fall through
-          case ' ':
-            if (state.highlightedValue) {
-              item.toggleSelection(state.highlightedValue)
-              if (!config.isMultiSelect) {
-                trigger.toggleOpen(false)
-              }
+      <div className={clsx('flex flex-col', showSearch && 'gap-2')}>
+        {showSearch && (
+          <Input
+            {...searchInputProps}
+            ref={searchInputRef}
+            id={ids.searchInput}
+            value={search.searchQuery}
+            onValueChange={search.setSearchQuery}
+            placeholder={searchInputProps?.placeholder ?? translation('filterOptions')}
+            aria-label={translation('filterOptions')}
+            className={clsx('mx-2 mt-2 shrink-0', searchInputProps?.className)}
+          />
+        )}
+        <ul
+          ref={innerRef}
+          id={ids.listbox}
+          onKeyDown={(event) => {
+            switch (event.key) {
+            case 'ArrowDown':
+              item.moveHighlightedIndex(1)
               event.preventDefault()
+              break
+            case 'ArrowUp':
+              item.moveHighlightedIndex(-1)
+              event.preventDefault()
+              break
+            case 'Home':
+              event.preventDefault()
+              break
+            case 'End':
+              event.preventDefault()
+              break
+            case 'Enter':
+            case ' ':
+              if (state.highlightedValue) {
+                item.toggleSelection(state.highlightedValue)
+                if (!config.isMultiSelect) {
+                  trigger.toggleOpen(false)
+                }
+                event.preventDefault()
+              }
+              break
             }
-            break
-          }
-        }}
-
-        className={clsx('flex-col-0 p-2 overflow-auto')}
-
-        role="listbox"
-        aria-multiselectable={config.isMultiSelect}
-        aria-orientation="vertical"
-        tabIndex={0}
-      >
-        {props.children}
-      </ul>
+          }}
+          className={clsx('flex-col-0 p-2 overflow-auto')}
+          role="listbox"
+          aria-multiselectable={config.isMultiSelect}
+          aria-orientation="vertical"
+          aria-label={listboxAriaLabel}
+          tabIndex={0}
+        >
+          {props.children}
+        </ul>
+      </div>
     </PopUp>
   )
 })
