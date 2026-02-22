@@ -12,25 +12,29 @@
 
     &[data-size="xs"] {
         @apply sizing-xs;
-        &[data-coloringstyle="outline"] {
+        &[data-coloringstyle="outline"],
+        &[data-coloringstyle="tonal-outline"] {
             padding: calc(var(--spacing-element-padding-xs) - var(--coloring-outline-width)); 
         }
     }
     &[data-size="sm"] {
         @apply sizing-sm;
-        &[data-coloringstyle="outline"] {
+        &[data-coloringstyle="outline"],
+        &[data-coloringstyle="tonal-outline"] {
             padding: calc(var(--spacing-element-padding-sm) - var(--coloring-outline-width)); 
         }
     }
     &[data-size="md"] {
         @apply sizing-md;
-        &[data-coloringstyle="outline"] {
+        &[data-coloringstyle="outline"],
+        &[data-coloringstyle="tonal-outline"] {
             padding: calc(var(--spacing-element-padding-md) - var(--coloring-outline-width)); 
         }
     }
     &[data-size="lg"] {
         @apply sizing-lg;
-        &[data-coloringstyle="outline"] {
+        &[data-coloringstyle="outline"],
+        &[data-coloringstyle="tonal-outline"] {
             padding: calc(var(--spacing-element-padding-lg) - var(--coloring-outline-width)); 
         }
     }

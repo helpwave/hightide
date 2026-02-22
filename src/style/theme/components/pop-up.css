@@ -1,7 +1,14 @@
 [data-name="pop-up"] {
-    @apply surface coloring-solid rounded-md border-2 border-outline-variant shadow-md;
+    @apply surface coloring-solid rounded-md border-2 border-outline-variant shadow-lg shadow-black/15;
     @apply focus-within:border-primary;
 
+    transition: 
+        top var(--anchored-position-polling-interval, 100ms) linear,
+        left var(--anchored-position-polling-interval, 100ms) linear,
+        right var(--anchored-position-polling-interval, 100ms) linear,
+        bottom var(--anchored-position-polling-interval, 100ms) linear,
+        border-color var(--animation-duration-in, 250ms) ease-in-out,
+        box-shadow var(--animation-duration-in, 250ms) ease-in-out;
     &[data-positioned] {
         @apply animate-pop-in;
     }

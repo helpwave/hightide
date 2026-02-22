@@ -13,16 +13,16 @@ import { useWindowResizeObserver } from '@/src/hooks/useResizeCallbackWrapper'
 import { AutoColumnOrderFeature } from './AutoColumnOrderFeature'
 
 export type TableProviderProps<T> = {
-    data: T[],
-    columns?: ColumnDef<T>[],
-    children?: ReactNode,
-    isUsingFillerRows?: boolean,
-    fillerRowCell?: (columnId: string, table: ReactTable<T>) => ReactNode,
-    initialState?: InitialTableState,
-    onRowClick?: (row: Row<T>, table: ReactTable<T>) => void,
-    onFillerRowClick?: (index: number, table: ReactTable<T>) => void,
-    state?: Partial<TableState>,
-  } & Partial<TableOptions<T>>
+  data: T[],
+  columns?: ColumnDef<T>[],
+  children?: ReactNode,
+  isUsingFillerRows?: boolean,
+  fillerRowCell?: (columnId: string, table: ReactTable<T>) => ReactNode,
+  initialState?: InitialTableState,
+  onRowClick?: (row: Row<T>, table: ReactTable<T>) => void,
+  onFillerRowClick?: (index: number, table: ReactTable<T>) => void,
+  state?: Partial<TableState>,
+} & Partial<TableOptions<T>>
 
 export const TableProvider = <T,>({
   data,
@@ -133,7 +133,7 @@ export const TableProvider = <T,>({
       boolean: TableFilter.boolean,
       multiTags: TableFilter.multiTags,
       singleTag: TableFilter.singleTag,
-      generic: TableFilter.generic,
+      unknownType: TableFilter.unknownType,
     },
     _features: [
       ...(tableOptions._features ?? []),

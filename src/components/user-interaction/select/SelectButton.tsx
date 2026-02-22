@@ -1,4 +1,4 @@
-import type { HTMLAttributes, ReactNode } from 'react'
+import type { ComponentPropsWithoutRef, ReactNode } from 'react'
 import { forwardRef, useEffect, useImperativeHandle, useRef } from 'react'
 import { useSelectContext } from './SelectContext'
 import clsx from 'clsx'
@@ -6,7 +6,7 @@ import { useHightideTranslation } from '@/src/i18n/useHightideTranslation'
 import { ExpansionIcon } from '@/src/components/display-and-visualization/ExpansionIcon'
 import { SelectOptionDisplayContext } from './SelectOption'
 
-export interface SelectButtonProps extends HTMLAttributes<HTMLDivElement> {
+export interface SelectButtonProps extends ComponentPropsWithoutRef<'div'> {
   placeholder?: ReactNode,
   disabled?: boolean,
   selectedDisplay?: (value: string[]) => ReactNode,
@@ -93,21 +93,21 @@ export const SelectButton = forwardRef<HTMLDivElement, SelectButtonProps>(functi
       aria-expanded={state.isOpen}
       aria-controls={state.isOpen ? ids.content : undefined}
     >
-      {hasValue ?
-        selectedDisplay?.(state.value) ?? (
-          <div className={clsx('flex flex-wrap gap-x-1 gap-y-2')}>
-            {state.selectedOptions.map(({ value, display }, index) => (
-              <span key={value} className="flex-row-0">
-                <SelectOptionDisplayContext.Provider value="trigger">
+      <SelectOptionDisplayContext.Provider value="trigger">
+        {hasValue ?
+          selectedDisplay?.(state.value) ?? (
+            <div className={clsx('flex flex-wrap gap-x-1 gap-y-2')}>
+              {state.selectedOptions.map(({ value, display }, index) => (
+                <span key={value} className="flex-row-0">
                   {display}
-                </SelectOptionDisplayContext.Provider>
-                {index < state.value.length - 1 && (<span>{','}</span>)}
-              </span>
-            ))}
-          </div>
-        )
-        : placeholder ?? translation('clickToSelect')
-      }
+                  {index < state.value.length - 1 && (<span>{','}</span>)}
+                </span>
+              ))}
+            </div>
+          )
+          : placeholder ?? translation('clickToSelect')
+        }
+      </SelectOptionDisplayContext.Provider>
       {!hideExpansionIcon && <ExpansionIcon isExpanded={state.isOpen}/>}
     </div>
   )

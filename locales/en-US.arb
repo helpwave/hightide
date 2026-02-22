@@ -1,5 +1,6 @@
 {
   "add": "Add",
+  "addFilter": "Add filter",
   "all": "All",
   "apply": "Apply",
   "back": "Back",
@@ -31,6 +32,7 @@
   "discardChanges": "Discard Changes",
   "done": "Done",
   "edit": "Edit",
+  "editFilter": "Edit filter",
   "enterText": "Enter text here",
   "error": "Error",
   "errorOccurred": "An error occurred",
@@ -64,8 +66,83 @@
   "pleaseWait": "Please wait...",
   "previous": "Previous",
   "remove": "Remove",
+  "removeFilter": "Remove filter",
   "required": "Required",
   "reset": "Reset",
+  "rBetween": "Between {value1} and {value2}",
+  "@rBetween": {
+    "placeholders": {
+      "value1": {},
+      "value2": {}
+    }
+  },
+  "rContains": "Contains {value}",
+  "@rContains": {
+    "placeholders": {
+      "value": {}
+    }
+  },
+  "rEndsWith": "Ends with {value}",
+  "@rEndsWith": {
+    "placeholders": {
+      "value": {}
+    }
+  },
+  "rEquals": "Equals {value}",
+  "@rEquals": {
+    "placeholders": {
+      "value": {}
+    }
+  },
+  "rGreaterThan": "Greater than {value}",
+  "@rGreaterThan": {
+    "placeholders": {
+      "value": {}
+    }
+  },
+  "rGreaterThanOrEqual": "Greater than or equal {value}",
+  "@rGreaterThanOrEqual": {
+    "placeholders": {
+      "value": {}
+    }
+  },
+  "rLessThan": "Less than {value}",
+  "@rLessThan": {
+    "placeholders": {
+      "value": {}
+    }
+  },
+  "rLessThanOrEqual": "Less than or equal {value}",
+  "@rLessThanOrEqual": {
+    "placeholders": {
+      "value": {}
+    }
+  },
+  "rNotBetween": "Not between {value1} and {value2}",
+  "@rNotBetween": {
+    "placeholders": {
+      "value1": {},
+      "value2": {}
+    }
+  },
+  "rNotContains": "Not contains {value}",
+  "@rNotContains": {
+    "placeholders": {
+      "value": {}
+    }
+  },
+  "rNotEquals": "Not equals {value}",
+  "@rNotEquals": {
+    "placeholders": {
+      "value": {}
+    }
+  },
+  "rStartsWith": "Starts with {value}",
+  "@rStartsWith": {
+    "placeholders": {
+      "value": {}
+    }
+  },
   "save": "Save",
   "saved": "Saved",
   "search": "Search",
@@ -146,6 +223,8 @@
   "invalidEmail": "The email is not valid.",
   "isFalse": "Is false",
   "isTrue": "Is true",
+  "isUndefined": "Is undefined",
+  "isNotUndefined": "Is defined",
   "lessThan": "Less than",
   "lessThanOrEqual": "Less than or equal",
   "after": "After",
@@ -227,6 +306,7 @@
   "showColumn": "Show column",
   "pinned": "Pinned",
   "unpin": "Unpin",
+  "unknown": "Unknown",
   "pinLeft": "Pin to left",
   "pinRight": "Pin to right",
   "changeVisibility": "Change visibility",

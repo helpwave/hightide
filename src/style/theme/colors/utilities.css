@@ -73,6 +73,7 @@
   @apply data-[coloringstyle=text]:coloring-text;
   @apply data-[coloringstyle=outline]:coloring-outline;
   @apply data-[coloringstyle=tonal]:coloring-tonal;
+  @apply data-[coloringstyle=tonal-outline]:coloring-tonal-outline;
 }
 
 @utility coloring-style-hover-detect {
@@ -80,6 +81,7 @@
   @apply data-[coloringstyle=text]:coloring-text-hover;
   @apply data-[coloringstyle=outline]:coloring-outline-hover;
   @apply data-[coloringstyle=tonal]:coloring-tonal-hover;
+  @apply data-[coloringstyle=tonal-outline]:coloring-tonal-outline-hover;
 }
 
 @utility coloring-color-detect {

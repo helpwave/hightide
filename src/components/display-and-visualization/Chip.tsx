@@ -3,7 +3,7 @@ import { ButtonUtil } from '@/src/components/user-interaction/Button'
 
 type ChipSize = 'xs' | 'sm' | 'md' | 'lg' | null
 
-type ChipColoringStyle = 'solid' | 'tonal' | null
+type ChipColoringStyle = 'solid' | 'tonal' | 'outline' | 'tonal-outline' | null
 
 const chipColors = ButtonUtil.colors
 export type ChipColor = typeof chipColors[number]

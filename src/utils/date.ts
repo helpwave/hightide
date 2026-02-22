@@ -232,6 +232,28 @@ const toInputString = (date: Date, format: DateTimeFormat, precision: DateTimePr
   }
 }
 
+function tryParseDate(dateValue: Date | string | number | undefined | null): Date | null {
+  if (!dateValue) return null
+  if (dateValue instanceof Date) return dateValue
+  if (typeof dateValue === 'string' || typeof dateValue === 'number') {
+    const parsed = new Date(dateValue)
+    return isNaN(parsed.getTime()) ? null : parsed
+  }
+  return null
+}
+
+function normalizeToDateOnly(date: Date): Date {
+  const normalized = new Date(date)
+  normalized.setHours(0, 0, 0, 0)
+  return normalized
+}
+
+function normalizeDatetime(dateTime: Date): Date {
+  const normalized = new Date(dateTime)
+  normalized.setSeconds(0, 0)
+  return normalized
+}
+
 export const DateUtils = {
   monthsList,
   weekDayList,
@@ -244,4 +266,10 @@ export const DateUtils = {
   weeksForCalenderMonth,
   timesInSeconds,
   toInputString,
+  tryParseDate,
+  toOnlyDate: normalizeToDateOnly,
+  /**
+   * Normalizes a datetime by removing seconds and milliseconds.
+   */
+  toDateTimeOnly: normalizeDatetime,
 }

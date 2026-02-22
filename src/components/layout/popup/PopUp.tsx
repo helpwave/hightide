@@ -24,7 +24,7 @@ export interface PopUpProps extends AnchoredFloatingContainerProps, Partial<UseO
   anchorExcludedFromOutsideClick?: boolean,
 }
 
-export const PopUp = forwardRef<HTMLDivElement, PopUpProps>(function PopUp({
+export const PopUp = forwardRef<HTMLElement, PopUpProps>(function PopUp({
   children,
   isOpen: isOpenOverwrite,
   focusTrapOptions,
@@ -52,7 +52,8 @@ export const PopUp = forwardRef<HTMLDivElement, PopUpProps>(function PopUp({
     context?.setIsOpen(false)
   }, [onCloseStable, context])
 
-  const { zIndex, isInFront } = useOverlayRegistry({ isActive: isOpen, tags: useMemo(() => ['popup'], []) })
+  const { zIndex, tagPositions } = useOverlayRegistry({ isActive: isOpen, tags: useMemo(() => ['popup'], []) })
+  const isInFront = tagPositions?.['popup'] === 0
 
   useOutsideClick({
     onOutsideClick: useCallback((event: MouseEvent | TouchEvent) => {
@@ -90,7 +91,6 @@ export const PopUp = forwardRef<HTMLDivElement, PopUpProps>(function PopUp({
               zIndex,
               position: 'fixed',
               overflow: 'hidden',
-              transition: `top ${props.options?.pollingInterval ?? 100}ms linear, left ${props.options?.pollingInterval ?? 100}ms linear`,
               ...props.style
             }}
             data-name={props['data-name'] ?? 'pop-up'}

@@ -1,5 +1,6 @@
 {
   "add": "Hinzufügen",
+  "addFilter": "Filter hinzufügen",
   "all": "Alle",
   "apply": "Anwenden",
   "back": "Zurück",
@@ -30,6 +31,7 @@
   "discardChanges": "Änderungen Verwerfen",
   "done": "Fertig",
   "edit": "Bearbeiten",
+  "editFilter": "Filter bearbeiten",
   "enterText": "Text hier eingeben",
   "error": "Fehler",
   "errorOccurred": "Ein Fehler ist aufgetreten",
@@ -63,8 +65,83 @@
   "pleaseWait": "Bitte warten...",
   "previous": "Vorherige",
   "remove": "Entfernen",
+  "removeFilter": "Filter entfernen",
   "required": "Erforderlich",
   "reset": "Zurücksetzen",
+  "rBetween": "Zwischen {value1} und {value2}",
+  "@rBetween": {
+    "placeholders": {
+      "value1": {},
+      "value2": {}
+    }
+  },
+  "rContains": "Enthält {value}",
+  "@rContains": {
+    "placeholders": {
+      "value": {}
+    }
+  },
+  "rEndsWith": "Endet mit {value}",
+  "@rEndsWith": {
+    "placeholders": {
+      "value": {}
+    }
+  },
+  "rEquals": "Gleich {value}",
+  "@rEquals": {
+    "placeholders": {
+      "value": {}
+    }
+  },
+  "rGreaterThan": "Größer als {value}",
+  "@rGreaterThan": {
+    "placeholders": {
+      "value": {}
+    }
+  },
+  "rGreaterThanOrEqual": "Größer oder gleich {value}",
+  "@rGreaterThanOrEqual": {
+    "placeholders": {
+      "value": {}
+    }
+  },
+  "rLessThan": "Kleiner als {value}",
+  "@rLessThan": {
+    "placeholders": {
+      "value": {}
+    }
+  },
+  "rLessThanOrEqual": "Kleiner oder gleich {value}",
+  "@rLessThanOrEqual": {
+    "placeholders": {
+      "value": {}
+    }
+  },
+  "rNotBetween": "Nicht zwischen {value1} und {value2}",
+  "@rNotBetween": {
+    "placeholders": {
+      "value1": {},
+      "value2": {}
+    }
+  },
+  "rNotContains": "Enthält nicht {value}",
+  "@rNotContains": {
+    "placeholders": {
+      "value": {}
+    }
+  },
+  "rNotEquals": "Nicht gleich {value}",
+  "@rNotEquals": {
+    "placeholders": {
+      "value": {}
+    }
+  },
+  "rStartsWith": "Beginnt mit {value}",
+  "@rStartsWith": {
+    "placeholders": {
+      "value": {}
+    }
+  },
   "save": "Speichern",
   "saved": "Gespeichert",
   "search": "Suche",
@@ -145,6 +222,8 @@
   "invalidEmail": "Die E-Mail ist ungültig.",
   "isFalse": "Ist falsch",
   "isTrue": "Ist wahr",
+  "isUndefined": "Ist undefiniert",
+  "isNotUndefined": "Ist definiert",
   "lessThan": "Kleiner als",
   "lessThanOrEqual": "Kleiner oder gleich",
   "after": "Nach",
@@ -226,6 +305,7 @@
   "showColumn": "Spalte einblenden",
   "pinned": "Angeheftet",
   "unpin": "Loslösen",
+  "unknown": "Unbekannt",
   "pinLeft": "Links anheften",
   "pinRight": "Rechts anheften",
   "changeVisibility": "Sichtbarkeit ändern",

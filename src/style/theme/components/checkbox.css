@@ -1,6 +1,14 @@
 @layer components {
   [data-name="checkbox"] {
     @apply flex-col-0 items-center justify-center rounded border-2;
+    transition: 
+      border-color var(--animation-duration-in, 250ms) ease-in-out, 
+      box-shadow var(--animation-duration-in, 250ms) ease-in-out,
+      outline-color var(--animation-duration-in, 250ms) ease-in-out,
+      outline-offset var(--animation-duration-in, 250ms) ease-in-out,
+      color 100ms ease-in-out,
+      background-color 100ms ease-in-out;
+
     &:not([data-disabled]) {
       @apply hover:cursor-pointer;
     }

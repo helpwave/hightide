@@ -73,14 +73,10 @@ export class OverlayRegistry {
         zIndex: startZIndex + index,
       }
       for(const tag of item.tags ?? []) {
-        let position = tagCount[tag]
-        if(position === undefined) {
-          position = 0
-        } else {
-          position++
-        }
-        tagCount[tag] = position
-        itemInformation[id].tagPositions[tag] = position
+        const count = tagCount[tag] ?? 0
+        const nextPosition = count
+        tagCount[tag] = count + 1
+        itemInformation[id].tagPositions[tag] = nextPosition
       }
     }
     for (const callback of this.listeners) {

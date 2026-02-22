@@ -14,7 +14,7 @@ import { SelectContent } from './SelectContent'
 //
 export type SelectProps = SelectRootProps & {
   contentPanelProps?: SelectContentProps,
-  buttonProps?: Omit<SelectButtonProps, 'selectedDisplay'> & { selectedDisplay?: (value: string) => ReactNode },
+  buttonProps?: Omit<SelectButtonProps, 'selectedDisplay'> & { selectedDisplay?: (value: string) => ReactNode } & { [key: string]: unknown },
 }
 
 export const Select = forwardRef<HTMLDivElement, SelectProps>(function Select({

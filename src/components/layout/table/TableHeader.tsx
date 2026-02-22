@@ -5,9 +5,8 @@ import { Visibility } from '../Visibility'
 import { TableSortButton } from './TableSortButton'
 import { TableFilterButton } from './TableFilterButton'
 import { useCallback, useEffect } from 'react'
-import type { TableFilterCategory } from './TableFilter'
-import { isTableFilterCategory } from './TableFilter'
 import { TableStateContext, useTableStateWithoutSizingContext } from './TableContext'
+import { DataTypeUtils, type DataType } from '../../user-interaction/data/data-types'
 
 export type TableHeaderProps = {
   isSticky?: boolean,
@@ -125,10 +124,10 @@ export const TableHeader = ({ isSticky = false }: TableHeaderProps) => {
                           }}
                         />
                       </Visibility>
-                      <Visibility isVisible={header.column.getCanFilter() && isTableFilterCategory(header.column.columnDef.filterFn)}>
+                      <Visibility isVisible={header.column.getCanFilter() && DataTypeUtils.types.includes(header.column.columnDef.filterFn as DataType)}>
                         <TableFilterButton
-                          column={header.column}
-                          filterType={header.column.columnDef.filterFn as TableFilterCategory}
+                          header={header}
+                          filterType={header.column.columnDef.filterFn as DataType}
                         />
                       </Visibility>
                       {flexRender(

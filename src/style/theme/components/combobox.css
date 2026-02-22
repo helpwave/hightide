@@ -1,0 +1,21 @@
+@layer components {
+  [data-name="combobox-root"] {
+    @apply flex-col-2;
+  }
+
+  [data-name="combobox-input"] {
+    @apply input-element rounded-md;
+  }
+
+  [data-name="combobox-list"] {
+    @apply flex-col-1 overflow-y-auto;
+  }
+
+  [data-name="combobox-option"] {
+    @apply flex-row-1 items-center px-2 py-1 rounded-md cursor-pointer;
+
+    &[data-highlighted] {
+      @apply bg-primary/20;
+    }
+  }
+}

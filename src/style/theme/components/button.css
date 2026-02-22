@@ -14,7 +14,8 @@
     &[data-size="xs"] {
       @apply gap-x-1 sizing-xs;
       @apply text-xs min-w-20;
-      &[data-coloringstyle="outline"] {
+      &[data-coloringstyle="outline"],
+      &[data-coloringstyle="tonal-outline"] {
         padding: 
           calc(var(--spacing-element-padding-xs) - var(--coloring-outline-width)) 
           calc(var(--spacing-element-padding-direction-xs) - var(--coloring-outline-width));
@@ -23,7 +24,8 @@
     &[data-size="sm"] {
       @apply gap-x-1 sizing-sm;
       @apply min-w-28;
-      &[data-coloringstyle="outline"] {
+      &[data-coloringstyle="outline"],
+      &[data-coloringstyle="tonal-outline"] {
         padding: 
           calc(var(--spacing-element-padding-sm) - var(--coloring-outline-width)) 
           calc(var(--spacing-element-padding-direction-sm) - var(--coloring-outline-width));
@@ -32,7 +34,8 @@
     &[data-size="md"] {
       @apply gap-x-2 sizing-md;
       @apply min-w-36;
-      &[data-coloringstyle="outline"] {
+      &[data-coloringstyle="outline"],
+      &[data-coloringstyle="tonal-outline"] {
         padding: 
           calc(var(--spacing-element-padding-md) - var(--coloring-outline-width)) 
           calc(var(--spacing-element-padding-direction-md) - var(--coloring-outline-width));
@@ -41,7 +44,8 @@
     &[data-size="lg"] {
       @apply gap-x-2 sizing-lg;
       @apply text-lg min-w-45;
-      &[data-coloringstyle="outline"] {
+      &[data-coloringstyle="outline"],
+      &[data-coloringstyle="tonal-outline"] {
         padding: 
           calc(var(--spacing-element-padding-lg) - var(--coloring-outline-width)) 
           calc(var(--spacing-element-padding-direction-lg) - var(--coloring-outline-width));

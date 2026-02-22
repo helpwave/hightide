@@ -10,7 +10,7 @@ import { useLogOnce } from '@/src/hooks/useLogOnce'
  */
 type IconButtonSize = 'xs' | 'sm' | 'md' | 'lg' | null
 
-type IconButtonColoringStyle = 'outline' | 'solid' | 'text' | 'tonal' | null
+type IconButtonColoringStyle = 'outline' | 'solid' | 'text' | 'tonal' | 'tonal-outline' | null
 
 
 
@@ -23,7 +23,6 @@ export interface IconButtonBaseProps extends ButtonHTMLAttributes<HTMLButtonElem
      * @default 'solid'
      */
     coloringStyle?: IconButtonColoringStyle,
-    allowClickEventPropagation?: boolean,
 }
 
 export const IconButtonBase = forwardRef<HTMLButtonElement, IconButtonBaseProps>(function IconButtonBase({
@@ -31,7 +30,6 @@ export const IconButtonBase = forwardRef<HTMLButtonElement, IconButtonBaseProps>
   size = 'md',
   color = 'primary',
   coloringStyle = 'solid',
-  allowClickEventPropagation = false,
   disabled,
   ...props
 }, ref) {
@@ -44,9 +42,6 @@ export const IconButtonBase = forwardRef<HTMLButtonElement, IconButtonBaseProps>
 
 
       onClick={event => {
-        if(!allowClickEventPropagation) {
-          event.stopPropagation()
-        }
         props.onClick?.(event)
       }}
 

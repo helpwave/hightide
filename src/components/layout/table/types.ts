@@ -24,7 +24,7 @@ declare module '@tanstack/react-table' {
       boolean: FilterFn<unknown>,
       multiTags: FilterFn<unknown>,
       singleTag: FilterFn<unknown>,
-      generic: FilterFn<unknown>,
+      unknownType: FilterFn<unknown>,
     }
 
     // eslint-disable-next-line @typescript-eslint/no-unused-vars
