@@ -1,7 +1,7 @@
 import type { Meta, StoryObj } from '@storybook/nextjs'
 import { action } from 'storybook/actions'
-import { Select } from '@/src/components/user-interaction/select/Select'
-import { SelectOption } from '@/src/components/user-interaction/select/SelectOption'
+import { Select } from '@/src/components/user-interaction/Select/Select'
+import { SelectOption } from '@/src/components/user-interaction/Select/SelectOption'
 
 const meta = {
   component: Select,

@@ -4,7 +4,7 @@ import { action } from 'storybook/actions'
 import clsx from 'clsx'
 import { MultiSelectProperty } from '@/src/components/user-interaction/properties/MultiSelectProperty'
 import { StorybookHelper } from '@/src/storybook/helper'
-import { MultiSelectOption } from '@/src/components/user-interaction/select/SelectOption'
+import { MultiSelectOption } from '@/src/components/user-interaction/MultiSelect/MultiSelectOption'
 
 const options = StorybookHelper.selectValues
 

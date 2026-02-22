@@ -9,9 +9,10 @@ and adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
 ## Added
 - Search for `Select` and `MultiSelect`
-- Type ahead support for `Select` and `MultiSelect`
+- Type ahead support for `Select` and `MultiSelect`npm
 - `Combobox` component
 - `FilterList` component for dynamically choosing and setting filters
+- `SingleSelectionContext`, `MultiSelectionContext` and `HighlightContext`
 
 ## Fixed
 - imports in `TimePicker` and `DateTimeInput`

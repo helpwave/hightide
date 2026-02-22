@@ -6,12 +6,12 @@ import { useLocale } from '@/src/global-contexts/LocaleContext'
 import { Button } from '@/src/components/user-interaction/Button'
 import { useHightideTranslation } from '@/src/i18n/useHightideTranslation'
 import type { HightideTranslationLocales } from '@/src/i18n/translations'
-import type { SelectProps } from '@/src/components/user-interaction/select/Select'
-import { Select } from '@/src/components/user-interaction/select/Select'
-import { SelectOption } from '@/src/components/user-interaction/select/SelectContent'
+import type { SelectProps } from '@/src/components/user-interaction/Select/Select'
+import { Select } from '@/src/components/user-interaction/Select/Select'
+import { SelectOption } from '@/src/components/user-interaction/Select/SelectOption'
 import clsx from 'clsx'
 
-type LanguageSelectProps = Omit<SelectProps, 'value'>
+type LanguageSelectProps = Omit<SelectProps, 'value' | 'children'>
 
 export const LanguageSelect = ({ ...props }: LanguageSelectProps) => {
   const { locale, setLocale } = useLocale()

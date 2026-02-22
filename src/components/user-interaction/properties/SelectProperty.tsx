@@ -3,9 +3,9 @@ import type { PropsWithChildren } from 'react'
 import type { PropertyField } from '@/src/components/user-interaction/properties/PropertyBase'
 import { PropertyBase } from '@/src/components/user-interaction/properties/PropertyBase'
 import { PropsUtil } from '@/src/utils/propsUtil'
-import { SelectRoot } from '@/src/components/user-interaction/select/SelectContext'
-import { SelectButton } from '@/src/components/user-interaction/select/SelectButton'
-import { SelectContent } from '@/src/components/user-interaction/select/SelectContent'
+import { SelectRoot } from '@/src/components/user-interaction/Select/SelectContext'
+import { SelectButton } from '@/src/components/user-interaction/Select/SelectButton'
+import { SelectContent } from '@/src/components/user-interaction/Select/SelectContent'
 
 export interface SingleSelectPropertyProps extends PropertyField<string>, PropsWithChildren {}
 

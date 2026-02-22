@@ -8,9 +8,9 @@ import type { ThemeType } from '@/src/global-contexts/ThemeContext'
 import { ThemeUtil, useTheme } from '@/src/global-contexts/ThemeContext'
 import { Button } from '@/src/components/user-interaction/Button'
 import { useHightideTranslation } from '@/src/i18n/useHightideTranslation'
-import type { SelectProps } from '@/src/components/user-interaction/select/Select'
-import { Select } from '@/src/components/user-interaction/select/Select'
-import { SelectOption } from '@/src/components/user-interaction/select/SelectContent'
+import type { SelectProps } from '@/src/components/user-interaction/Select/Select'
+import { Select } from '@/src/components/user-interaction/Select/Select'
+import { SelectOption } from '@/src/components/user-interaction/Select/SelectOption'
 
 export interface ThemeIconProps extends HTMLAttributes<SVGSVGElement> {
   theme?: ThemeType,
@@ -30,7 +30,7 @@ export const ThemeIcon = ({ theme: themeOverride, ...props }: ThemeIconProps) =>
   }
 }
 
-export type ThemeSelectProps = Omit<SelectProps, 'value'>
+export type ThemeSelectProps = Omit<SelectProps, 'value' | 'children'>
 
 export const ThemeSelect = ({ ...props }: ThemeSelectProps) => {
   const translation = useHightideTranslation()

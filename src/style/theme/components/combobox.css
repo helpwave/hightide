@@ -18,4 +18,8 @@
       @apply bg-primary/20;
     }
   }
+
+  [data-name="combobox-list-status"] {
+    @apply text-description text-sm px-2 py-1 rounded-md;
+  }
 }

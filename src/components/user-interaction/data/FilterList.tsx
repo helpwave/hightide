@@ -9,7 +9,8 @@ import { PopUp } from '../../layout/popup/PopUp'
 import { PopUpOpener } from '../../layout/popup/PopUpOpener'
 import { Button } from '../Button'
 import { FilterPopUp } from './FilterPopUp'
-import { Combobox, ComboboxOption } from '../Combobox'
+import { Combobox } from '@/src/components/user-interaction/Combobox/Combobox'
+import { ComboboxOption } from '@/src/components/user-interaction/Combobox/ComboboxOption'
 import { PopUpContext } from '../../layout/popup/PopUpContext'
 import { ExpansionIcon } from '../../display-and-visualization/ExpansionIcon'
 import { FilterOperatorUtils } from './FilterOperator'
@@ -57,19 +58,21 @@ export const FilterList = ({ value, onValueChange, availableItems }: FilterListP
         <PopUp className="flex-col-0 p-2">
           <PopUpContext.Consumer>
             {({ setIsOpen }) => (
-              <Combobox onItemClick={(id) => {
-                const item = itemRecord[id]
-                if(!item) return
-                const newValue: IdentifierFilterValue = {
-                  id: item.id,
-                  dataType: item.dataType,
-                  operator: FilterOperatorUtils.getDefaultOperator(item.dataType),
-                  parameter: {}
-                }
-                onValueChange([...value, newValue])
-                setEditState(newValue)
-                setIsOpen(false)
-              }}>
+              <Combobox
+                onItemClick={(id) => {
+                  const item = itemRecord[id]
+                  if(!item) return
+                  const newValue: IdentifierFilterValue = {
+                    id: item.id,
+                    dataType: item.dataType,
+                    operator: FilterOperatorUtils.getDefaultOperator(item.dataType),
+                    parameter: {}
+                  }
+                  onValueChange([...value, newValue])
+                  setEditState(newValue)
+                  setIsOpen(false)
+                }}
+              >
                 {inactiveItems.map(item => (
                   <ComboboxOption key={item.id} value={item.id} label={item.label}>
                     {DataTypeUtils.toIcon(item.dataType)}
