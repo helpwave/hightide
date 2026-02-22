@@ -50,7 +50,6 @@ export const useControlledState = <T>({
 
   const setState: React.Dispatch<React.SetStateAction<T>> = useCallback((action) => {
     const resolved = resolveSetState(action, lastValue.current)
-    if(resolved === lastValue.current) return
     if(!isControlled)  {
       lastValue.current = resolved
       setInternalValue(resolved)
