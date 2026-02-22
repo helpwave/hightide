@@ -13,8 +13,18 @@ export interface MultiSelectButtonProps extends ComponentPropsWithoutRef<"div"> 
   hideExpansionIcon?: boolean;
 }
 
-export const MultiSelectButton = forwardRef<HTMLDivElement, MultiSelectButtonProps>(function MultiSelectButton(
-  { id, placeholder, disabled: disabledOverride, selectedDisplay, hideExpansionIcon = false, ...props },
+export const MultiSelectButton = forwardRef<
+  HTMLDivElement,
+  MultiSelectButtonProps
+>(function MultiSelectButton(
+  {
+    id,
+    placeholder,
+    disabled: disabledOverride,
+    selectedDisplay,
+    hideExpansionIcon = false,
+    ...props
+  },
   ref
 ) {
   const translation = useHightideTranslation();

@@ -1,10 +1,8 @@
 import type { HTMLAttributes, ReactNode } from "react";
 import { forwardRef, useEffect, useImperativeHandle, useRef } from "react";
-import {
-  MultiSelectRoot,
-  useMultiSelectContext,
-  type MultiSelectRootProps,
-} from "./MultiSelectContext";
+import { useMultiSelectContext } from "./MultiSelectContext";
+import type { MultiSelectRootProps } from "./MultiSelectRoot";
+import { MultiSelectRoot } from "./MultiSelectRoot";
 import type { MultiSelectContentProps } from "./MultiSelectContent";
 import { MultiSelectContent } from "./MultiSelectContent";
 import { IconButton } from "@/src/components/user-interaction/IconButton";

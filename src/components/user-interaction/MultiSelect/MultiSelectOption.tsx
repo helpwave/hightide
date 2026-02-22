@@ -32,7 +32,7 @@ export const MultiSelectOption = forwardRef<HTMLLIElement, MultiSelectOptionProp
   { children, label, value, disabled = false, iconAppearance, className, ...restProps },
   ref
 ) {
-  const { state, item, trigger, iconAppearance: ctxIconAppearance } = useMultiSelectContext();
+  const { state, item, iconAppearance: ctxIconAppearance } = useMultiSelectContext();
   const { register, toggleSelection, highlightItem } = item;
   const itemRef = useRef<HTMLLIElement>(null);
 

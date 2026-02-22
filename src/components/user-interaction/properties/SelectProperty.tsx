@@ -3,7 +3,7 @@ import type { PropsWithChildren } from 'react'
 import type { PropertyField } from '@/src/components/user-interaction/properties/PropertyBase'
 import { PropertyBase } from '@/src/components/user-interaction/properties/PropertyBase'
 import { PropsUtil } from '@/src/utils/propsUtil'
-import { SelectRoot } from '@/src/components/user-interaction/Select/SelectContext'
+import { SelectRoot } from '@/src/components/user-interaction/Select/SelectRoot'
 import { SelectButton } from '@/src/components/user-interaction/Select/SelectButton'
 import { SelectContent } from '@/src/components/user-interaction/Select/SelectContent'
 

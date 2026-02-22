@@ -1,7 +1,7 @@
 import type { ReactNode } from "react";
 import { forwardRef } from "react";
-import type { SelectRootProps } from "./SelectContext";
-import { SelectRoot } from "./SelectContext";
+import type { SelectRootProps } from "./SelectRoot";
+import { SelectRoot } from "./SelectRoot";
 import type { SelectButtonProps } from "./SelectButton";
 import { SelectButton } from "./SelectButton";
 import type { SelectContentProps } from "./SelectContent";

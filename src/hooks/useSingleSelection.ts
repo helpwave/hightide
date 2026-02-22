@@ -1,5 +1,5 @@
 import type { ReactNode } from "react";
-import { useCallback, useMemo, useState } from "react";
+import { useCallback, useMemo } from "react";
 import { useControlledState } from "@/src/hooks/useControlledState";
 
 export interface SelectionOption<T> {
@@ -10,6 +10,7 @@ export interface SelectionOption<T> {
 }
 
 export interface UseSingleSelectionOptions<T> {
+  options: ReadonlyArray<SelectionOption<T>>;
   value: T | null | undefined;
   onSelectionChange: (selection: T) => void;
   initialSelection: T | null;
@@ -22,21 +23,16 @@ export interface SingleSelectionReturn<T> {
   selectedOption: SelectionOption<T> | null;
   options: ReadonlyArray<SelectionOption<T>>;
   changeSelection: (selection: T) => void;
-  registerOption: (option: SelectionOption<T>) => () => void;
 }
 
-export function useSingleSelection<T>(
-  options: UseSingleSelectionOptions<T>
-): SingleSelectionReturn<T> {
-  const {
-    value,
-    onSelectionChange,
-    initialSelection,
-    isControlled,
-    compareOptions,
-  } = options;
-
-  const [optionsList, setOptionsList] = useState<SelectionOption<T>[]>([]);
+export function useSingleSelection<T>({
+  options: optionsList,
+  value,
+  onSelectionChange,
+  initialSelection,
+  isControlled,
+  compareOptions,
+}: UseSingleSelectionOptions<T>): SingleSelectionReturn<T> {
   const [selection, setSelection] = useControlledState({
     value: value ?? undefined,
     onValueChange: onSelectionChange,
@@ -50,17 +46,6 @@ export function useSingleSelection<T>(
     if (selection == null) return null;
     return optionsList.find((o) => compare(o.value, selection)) ?? null;
   }, [optionsList, selection, compare]);
-
-  const registerOption = useCallback(
-    (option: SelectionOption<T>) => {
-      setOptionsList((prev) => [...prev, option]);
-      return () =>
-        setOptionsList((prev) =>
-          prev.filter((o) => !compare(o.value, option.value))
-        );
-    },
-    [compare]
-  );
 
   const changeSelection = useCallback(
     (next: T) => {
@@ -77,8 +62,7 @@ export function useSingleSelection<T>(
       selectedOption,
       options: optionsList,
       changeSelection,
-      registerOption,
     }),
-    [selection, selectedOption, optionsList, changeSelection, registerOption]
+    [selection, selectedOption, optionsList, changeSelection]
   );
 }

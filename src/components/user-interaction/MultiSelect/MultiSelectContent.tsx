@@ -164,7 +164,9 @@ export const MultiSelectContent = forwardRef<HTMLUListElement, MultiSelectConten
               aria-selected={false}
               aria-disabled={true}
               aria-live="polite"
-              className={clsx("text-description", { "sr-only": state.visibleOptions.length > 0 })}
+              aria-atomic={true}
+              data-name="select-list-status"
+              className={clsx({ "sr-only": state.visibleOptions.length > 0 })}
             >
               {translation("nResultsFound", { count: state.visibleOptions.length })}
             </li>

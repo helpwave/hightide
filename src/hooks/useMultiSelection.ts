@@ -1,8 +1,9 @@
 import type { SelectionOption } from "@/src/hooks/useSingleSelection";
 import { useControlledState } from "@/src/hooks/useControlledState";
-import { useCallback, useMemo, useState } from "react";
+import { useCallback, useMemo } from "react";
 
 export interface UseMultiSelectionOptions<T> {
+  options: ReadonlyArray<SelectionOption<T>>;
   value?: ReadonlyArray<T>;
   onSelectionChange: (selection: ReadonlyArray<T>) => void;
   initialSelection?: ReadonlyArray<T>;
@@ -17,21 +18,16 @@ export interface MultiSelectionReturn<T> {
   setSelection: (selection: ReadonlyArray<T>) => void;
   toggleSelection: (value: T) => void;
   isSelected: (value: T) => boolean;
-  registerOption: (option: SelectionOption<T>) => () => void;
 }
 
-export function useMultiSelection<T>(
-  options: UseMultiSelectionOptions<T>
-): MultiSelectionReturn<T> {
-  const {
-    value,
-    onSelectionChange,
-    initialSelection = [],
-    isControlled,
-    compareOptions,
-  } = options;
-
-  const [optionsList, setOptionsList] = useState<SelectionOption<T>[]>([]);
+export function useMultiSelection<T>({
+  options: optionsList,
+  value,
+  onSelectionChange,
+  initialSelection = [],
+  isControlled,
+  compareOptions,
+}: UseMultiSelectionOptions<T>): MultiSelectionReturn<T> {
   const [selection, setSelection] = useControlledState({
     value: value as T[] | undefined,
     onValueChange: onSelectionChange as (v: T[]) => void,
@@ -52,17 +48,6 @@ export function useMultiSelection<T>(
   const isSelected = useCallback(
     (value: T) => selection.some((s) => compare(s, value)),
     [selection, compare]
-  );
-
-  const registerOption = useCallback(
-    (option: SelectionOption<T>) => {
-      setOptionsList((prev) => [...prev, option]);
-      return () =>
-        setOptionsList((prev) =>
-          prev.filter((o) => !compare(o.value, option.value))
-        );
-    },
-    [compare]
   );
 
   const toggleSelection = useCallback(
@@ -92,7 +77,6 @@ export function useMultiSelection<T>(
       setSelection: setSelectionValue,
       toggleSelection,
       isSelected,
-      registerOption,
     }),
     [
       selection,
@@ -101,7 +85,6 @@ export function useMultiSelection<T>(
       setSelectionValue,
       toggleSelection,
       isSelected,
-      registerOption,
     ]
   );
 }

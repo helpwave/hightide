@@ -30,7 +30,7 @@ export const SelectOption = forwardRef<HTMLLIElement, SelectOptionProps>(functio
   ref
 ) {
   const { state, item, trigger, iconAppearance: ctxIconAppearance } = useSelectContext();
-  const { register, unregister, toggleSelection, highlightItem } = item;
+  const { register, toggleSelection, highlightItem } = item;
   const itemRef = useRef<HTMLLIElement>(null);
 
   const display: ReactNode = children ?? label;
@@ -41,7 +41,7 @@ export const SelectOption = forwardRef<HTMLLIElement, SelectOptionProps>(functio
       value,
       label,
       display,
-      disabled,
+      disabled: disabled,
       ref: itemRef as React.RefObject<HTMLElement>,
     });
   }, [value, label, disabled, register, display]);
