@@ -27,35 +27,31 @@ export interface UseSelectOptions {
 
 export type UseSelectFirstHighlightBehavior = "first" | "last";
 
-export interface UseSelectOpenState {
+export interface UseSelectState {
+  value: string | null;
+  highlightedValue: string | undefined;
   isOpen: boolean;
+  searchQuery: string;
+  options: ReadonlyArray<UseSelectOption>;
+}
+
+export interface UseSelectComputedState {
+  visibleOptionIds: ReadonlyArray<string>;
+}
+
+export interface UseSelectActions {
   setIsOpen: (isOpen: boolean, behavior?: UseSelectFirstHighlightBehavior) => void;
   toggleOpen: (behavior?: UseSelectFirstHighlightBehavior) => void;
-}
-
-export interface UseSelectSearchState {
-  searchQuery: string;
   setSearchQuery: (query: string) => void;
-}
-
-export interface UseSelectHighlightState {
-  highlightedValue: string | undefined;
   highlightFirst: () => void;
   highlightLast: () => void;
   highlightNext: () => void;
   highlightPrevious: () => void;
   highlightItem: (value: string) => void;
-}
-
-export interface UseSelectSelectionState {
-  value: string | null;
   selectValue: (value: string) => void;
 }
 
-export interface UseSelectReturn extends UseSelectOpenState, UseSelectSearchState, UseSelectHighlightState, UseSelectSelectionState {
-  options: ReadonlyArray<UseSelectOption>;
-  visibleOptionIds: ReadonlyArray<string>;
-}
+export interface UseSelectReturn extends UseSelectState, UseSelectComputedState, UseSelectActions {}
 
 export function useSelect({
   options,
@@ -104,29 +100,34 @@ export function useSelect({
     initialValue: selection.selection,
   });
 
-  const highlightState: UseSelectHighlightState = useMemo(() => ({
+  const state: UseSelectState = useMemo(() => ({
+    value: selection.selection,
     highlightedValue: listNav.highlightedId,
-    highlightFirst: listNav.first,
-    highlightLast: listNav.last,
-    highlightNext: listNav.next,
-    highlightPrevious: listNav.previous,
-    highlightItem: (value: string) => {
-      if (!enabledOptions.some((o) => o.id === value)) return;
-      listNav.highlight(value)
-    }
-  }), [enabledOptions, listNav]);
+    isOpen,
+    searchQuery,
+    options,
+  }), [selection.selection, listNav.highlightedId, isOpen, searchQuery, options]);
+
+  const computedState: UseSelectComputedState = useMemo(() => ({
+    visibleOptionIds,
+  }), [visibleOptionIds]);
+
+  const highlightItem = useCallback((value: string) => {
+    if (!enabledOptions.some((o) => o.id === value)) return;
+    listNav.highlight(value)
+  }, [enabledOptions, listNav]);
 
   const setIsOpenWrapper = useCallback((isOpen: boolean, behavior?: UseSelectFirstHighlightBehavior) => {
     behavior = behavior ?? "first";
     if(isOpen) {
       if(selection.selection == null) {
         if(behavior === "first") {
-          highlightState.highlightFirst();
+          listNav.first();
         } else if (behavior === "last") {
-          highlightState.highlightLast();
+          listNav.last();
         }
       } else {
-        highlightState.highlightItem(selection.selection);
+        highlightItem(selection.selection);
       }
     } else {
       setSearchQuery("");
@@ -134,34 +135,28 @@ export function useSelect({
     }
     setIsOpen(isOpen);
     onIsOpenChangeStable(isOpen);
-  }, [setIsOpen, highlightState, onCloseStable, onEditCompleteStable, selection.selection, onIsOpenChangeStable]);
+  }, [setIsOpen, highlightItem, onCloseStable, onEditCompleteStable, selection.selection, onIsOpenChangeStable]);
 
+  const toggleOpenWrapper = useCallback((behavior?: UseSelectFirstHighlightBehavior) => {
+    const next = !isOpen;
+    setIsOpenWrapper(next, behavior);
+  }, [setIsOpenWrapper]);
 
-  const selectionState: UseSelectSelectionState = useMemo(() => ({
-    value: selection.selection,
+  const actions: UseSelectActions = useMemo(() => ({
     selectValue: (id: string) => selection.selectValue(id),
-  }), [selection.selection, selection.selectValue]);
-
-  const openState: UseSelectOpenState = useMemo(() => ({
-    isOpen,
     setIsOpen: setIsOpenWrapper,
-    toggleOpen: (behavior?: UseSelectFirstHighlightBehavior) => {
-      const next = !isOpen;
-      setIsOpenWrapper(next, behavior);
-    }
-  }), [isOpen, setIsOpenWrapper]);
-
-  const searchState: UseSelectSearchState = useMemo(() => ({
-    searchQuery,
+    toggleOpen: toggleOpenWrapper,
     setSearchQuery,
-  }), [searchQuery, setSearchQuery]);
+    highlightFirst: listNav.first,
+    highlightLast: listNav.last,
+    highlightNext: listNav.next,
+    highlightPrevious: listNav.previous,
+    highlightItem,
+  }), [setIsOpenWrapper, listNav.first, listNav.last, listNav.next, listNav.previous, highlightItem]);
 
-  return useMemo((): UseSelectReturn => ({
-    ...openState,
-    ...highlightState,
-    ...selectionState,
-    ...searchState,
-    options,
-    visibleOptionIds,
-  }), [openState, highlightState, selectionState, searchState, options, visibleOptionIds] );
+  return useMemo(() => ({
+    ...state,
+    ...computedState,
+    ...actions,
+  }), [state, computedState, actions]);
 }

@@ -7,7 +7,7 @@ import { DOMUtils } from "@/src/utils/dom";
 import { FormFieldDataHandling } from "../../form/FormField";
 import { useEventCallbackStabilizer } from "@/src/hooks/useEventCallbackStabelizer";
 import { FormFieldInteractionStates } from "../../form/FieldLayout";
-import { PopUpContext } from "../../layout";
+import { PopUpContext } from "@/src/components/layout/popup/PopUpContext";
 
 export interface SelectIds {
   trigger: string;

@@ -6,7 +6,7 @@ import { useMultiSelect } from "./useMultiSelect";
 import { DOMUtils } from "@/src/utils/dom";
 import type { FormFieldDataHandling } from "@/src/components/form/FormField";
 import type { FormFieldInteractionStates } from "@/src/components/form/FieldLayout";
-import { PopUpContext } from "../../layout";
+import { PopUpContext } from "@/src/components/layout/popup/PopUpContext";
 
 export interface MultiSelectIds {
   trigger: string;

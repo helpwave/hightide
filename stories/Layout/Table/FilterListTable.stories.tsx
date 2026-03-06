@@ -10,7 +10,12 @@ import { FilterList } from '@/src/components/user-interaction/data/FilterList'
 import type { IdentifierFilterValue, FilterListItem, FilterListPopUpBuilderProps } from '@/src/components/user-interaction/data/FilterList'
 import { FilterFunctions } from '@/src/components/user-interaction/data/filter-function'
 import type { DataType } from '@/src/components/user-interaction/data/data-types'
-import { FilterBasePopUp, FilterOperatorUtils, Input, Select, SelectOption, Visibility } from '@/src'
+import { FilterOperatorUtils } from '@/src/components/user-interaction/data/FilterOperator'
+import { FilterBasePopUp } from '@/src/components/user-interaction/data/FilterPopUp'
+import { Input } from '@/src/components/user-interaction/input/Input'
+import { Select } from '@/src/components/user-interaction/Select/Select'
+import { SelectOption } from '@/src/components/user-interaction/Select/SelectOption'
+import { Visibility } from '@/src/components/layout/Visibility'
 
 type Row = {
   name: string,
