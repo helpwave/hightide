@@ -18,7 +18,7 @@ import { useScrollObserver } from '@/src/hooks/useScrollObserver'
 export interface PopUpProps extends AnchoredFloatingContainerProps, Partial<UseOutsideClickHandlers> {
   isOpen?: boolean,
   focusTrapOptions?: Omit<UseFocusTrapProps, 'container'>,
-  outsideClickOptions?: UseOutsideClickOptions,
+  outsideClickOptions?: Partial<UseOutsideClickOptions>,
   onClose?: () => void,
   forceMount?: boolean,
   anchorExcludedFromOutsideClick?: boolean,
@@ -55,13 +55,16 @@ export const PopUp = forwardRef<HTMLElement, PopUpProps>(function PopUp({
   const { zIndex, tagPositions } = useOverlayRegistry({ isActive: isOpen, tags: useMemo(() => ['popup'], []) })
   const isInFront = tagPositions?.['popup'] === 0
 
+  const isOutsideClickActive = isOpen && isInFront && (outsideClickOptions?.active ?? true)
+
   useOutsideClick({
     onOutsideClick: useCallback((event: MouseEvent | TouchEvent) => {
-      event.preventDefault()
+      if(event.defaultPrevented) return
       onCloseWrapper()
       onOutsideClickStable(event)
+      event.preventDefault()
     }, [onCloseWrapper, onOutsideClickStable]),
-    active: isOpen && isInFront && (outsideClickOptions?.active ?? true),
+    active: isOutsideClickActive,
     refs: [ref, ...(anchorExcludedFromOutsideClick ? [] : [anchor]), ...(outsideClickOptions?.refs ?? [])],
   })
 

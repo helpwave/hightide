@@ -1,7 +1,7 @@
 import clsx from "clsx";
 import { CheckIcon } from "lucide-react";
 import type { HTMLAttributes, ReactNode, RefObject } from "react";
-import { createContext, forwardRef, useContext, useEffect, useRef } from "react";
+import { createContext, forwardRef, useContext, useEffect, useId, useRef } from "react";
 import type { SelectIconAppearance } from "./SelectContext";
 import { useSelectContext } from "./SelectContext";
 
@@ -17,86 +17,88 @@ export function useSelectOptionDisplayLocation(): SelectOptionDisplayLocation {
   return context;
 }
 
-export interface SelectOptionProps extends Omit<HTMLAttributes<HTMLLIElement>, "children"> {
-  value: string;
+export interface SelectOptionProps<T = string> extends HTMLAttributes<HTMLLIElement> {
+  value: T;
   label: string;
   disabled?: boolean;
   iconAppearance?: SelectIconAppearance;
-  children?: ReactNode;
 }
 
-export const SelectOption = forwardRef<HTMLLIElement, SelectOptionProps>(function SelectOption(
-  { children, label, value, disabled = false, iconAppearance, className, ...restProps },
-  ref
-) {
-  const { state, item, trigger, iconAppearance: ctxIconAppearance } = useSelectContext();
-  const { register, toggleSelection, highlightItem } = item;
+export const SelectOption = forwardRef<HTMLLIElement, SelectOptionProps<unknown>>(function SelectOption<T = string>({
+  children,
+  label,
+  value,
+  disabled = false,
+  iconAppearance,
+  className,
+  ...props
+}: SelectOptionProps<T>, ref) {
+  const context= useSelectContext<T>();
   const itemRef = useRef<HTMLLIElement>(null);
 
   const display: ReactNode = children ?? label;
-  const iconAppearanceResolved = iconAppearance ?? ctxIconAppearance;
+  const iconAppearanceResolved = iconAppearance ?? context.config.iconAppearance;
+  
+  const generatedId = useId();
+  const optionId = props?.id ?? "select-option-" + generatedId;
 
   useEffect(() => {
-    return register({
+    return context.registerOption({
+      id: optionId,
       value,
       label,
       display,
       disabled: disabled,
       ref: itemRef as React.RefObject<HTMLElement>,
     });
-  }, [value, label, disabled, register, display]);
+  }, [value, label, disabled, context.registerOption, display]);
 
-  const isHighlighted = state.highlightedValue === value;
-  const isSelected = state.value.includes(value);
-  const isVisible = state.visibleOptions.some((opt) => opt.value === value);
+  const isHighlighted = context.highlightedId === optionId;
+  const isSelected = context.selectedId === optionId;
+  const isVisible = context.visibleOptionIds.includes(optionId);
 
   return (
     <li
-      {...restProps}
+      {...props}
       ref={(node) => {
         itemRef.current = node;
         if (typeof ref === "function") ref(node);
         else if (ref) (ref as RefObject<HTMLLIElement | null>).current = node;
       }}
-      id={value}
+      id={optionId}
+      hidden={!isVisible}
       role="option"
       aria-disabled={disabled}
       aria-selected={isSelected}
       aria-hidden={!isVisible}
+
+      data-name="select-list-option"
       data-highlighted={isHighlighted ? "" : undefined}
       data-selected={isSelected ? "" : undefined}
       data-disabled={disabled ? "" : undefined}
       data-visible={isVisible ? "" : undefined}
-      className={clsx(
-        "flex-row-1 items-center px-2 py-1 rounded-md",
-        "data-highlighted:bg-primary/20",
-        "data-disabled:text-disabled data-disabled:cursor-not-allowed",
-        "not-data-disabled:cursor-pointer",
-        !isVisible && "hidden",
-        className
-      )}
+
       onClick={(event) => {
         if (!disabled) {
-          toggleSelection(value);
-          trigger.toggleOpen(false);
-          restProps.onClick?.(event);
+          context.toggleSelection(optionId);
+          props.onClick?.(event);
         }
       }}
       onMouseEnter={(event) => {
         if (!disabled) {
-          highlightItem(value);
-          restProps.onMouseEnter?.(event);
+          context.highlightItem(optionId);
+          props.onMouseEnter?.(event);
         }
       }}
     >
-      {iconAppearanceResolved === "left" && state.value.length > 0 && (
+      {iconAppearanceResolved === "left" && context.selectedId !== null && (
         <CheckIcon
           className={clsx("w-4 h-4", { "opacity-0": !isSelected || disabled })}
           aria-hidden={true}
         />
       )}
       <SelectOptionDisplayContext.Provider value="list">{display}</SelectOptionDisplayContext.Provider>
-      {iconAppearanceResolved === "right" && state.value.length > 0 && (
+      {iconAppearanceResolved === "right" && context.selectedId !== null && (
         <CheckIcon
           className={clsx("w-4 h-4", { "opacity-0": !isSelected || disabled })}
           aria-hidden={true}

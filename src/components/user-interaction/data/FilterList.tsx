@@ -1,6 +1,6 @@
 import { useMemo, useState, type ReactNode } from 'react'
 import type { FilterValue } from './filter-function'
-import { useFilterValueTranslation } from './filter-function'
+import { FilterValueUtils, useFilterValueTranslation } from './filter-function'
 import { DataTypeUtils, type DataType } from './data-types'
 import { useHightideTranslation } from '@/src/i18n/useHightideTranslation'
 import { PlusIcon } from 'lucide-react'
@@ -19,12 +19,23 @@ export interface IdentifierFilterValue extends FilterValue {
   id: string,
 }
 
+export interface FilterListPopUpBuilderProps {
+  value: FilterValue,
+  onValueChange: (value: FilterValue) => void,
+  onRemove: () => void,
+  dataType: DataType,
+  tags: ReadonlyArray<{ tag: string, label: string, display?: ReactNode }>,
+  name: string,
+  isOpen: boolean,
+  close: () => void,
+}
+
 export interface FilterListItem {
   id: string,
   label: string,
-  display?: ReactNode,
   dataType: DataType,
   tags: ReadonlyArray<{ tag: string, label: string, display?: ReactNode }>,
+  popUpBuilder?: (props: FilterListPopUpBuilderProps) => ReactNode,
 }
 
 export interface FilterListProps {
@@ -44,6 +55,20 @@ export const FilterList = ({ value, onValueChange, availableItems }: FilterListP
   }, {} as Record<string, FilterListItem>), [availableItems])
   const [editState, setEditState] = useState<IdentifierFilterValue | undefined>(undefined)
 
+  const valueWithEditState = useMemo(() => {
+    let foundEditValue = false
+    for(const item of value) {
+      if(item.id === editState?.id) {
+        foundEditValue = true
+        break
+      }
+    }
+    if(!foundEditValue && editState) {
+      return [...value, editState]
+    }
+    return value
+  }, [value, editState])
+
   return (
     <div className="flex-row-1 flex-wrap gap-y-1">
       <PopUpRoot>
@@ -55,7 +80,7 @@ export const FilterList = ({ value, onValueChange, availableItems }: FilterListP
             </Button>
           )}
         </PopUpOpener>
-        <PopUp className="flex-col-0 p-2">
+        <PopUp className="flex-col-2 p-2">
           <PopUpContext.Consumer>
             {({ setIsOpen }) => (
               <Combobox
@@ -68,7 +93,6 @@ export const FilterList = ({ value, onValueChange, availableItems }: FilterListP
                     operator: FilterOperatorUtils.getDefaultOperator(item.dataType),
                     parameter: {}
                   }
-                  onValueChange([...value, newValue])
                   setEditState(newValue)
                   setIsOpen(false)
                 }}
@@ -84,7 +108,7 @@ export const FilterList = ({ value, onValueChange, availableItems }: FilterListP
           </PopUpContext.Consumer>
         </PopUp>
       </PopUpRoot>
-      {value.map(filterValue => {
+      {valueWithEditState.map(filterValue => {
         const item = itemRecord[filterValue.id]
         if(!item) return null
         return (
@@ -93,10 +117,14 @@ export const FilterList = ({ value, onValueChange, availableItems }: FilterListP
             isOpen={editState?.id === filterValue.id}
             onIsOpenChange={isOpen => {
               if (!isOpen) {
-                onValueChange(value.map(prevItem => prevItem.id === filterValue.id ? { ...prevItem, ...(editState ?? {}) } : prevItem))
+                const isEditStateValid = editState ? FilterValueUtils.isValid(editState) : false;
+                if(isEditStateValid) {
+                  onValueChange(valueWithEditState.map(prevItem => prevItem.id === filterValue.id ? { ...prevItem, ...editState } : prevItem))
+                }
                 setEditState(undefined)
               } else {
                 const valueItem = value.find(prevItem => prevItem.id === filterValue.id)
+                if(!valueItem) return
                 setEditState({ ...valueItem })
               }
             }}
@@ -109,14 +137,39 @@ export const FilterList = ({ value, onValueChange, availableItems }: FilterListP
                 </Button>
               )}
             </PopUpOpener>
-            <FilterPopUp
-              name={item.label}
-              value={editState?.id === filterValue.id ? editState : filterValue}
-              dataType={item.dataType}
-              tags={item.tags}
-              onValueChange={value => setEditState({ ...filterValue, ...value })}
-              onRemove={() => onValueChange(value.filter(prevItem => prevItem.id !== filterValue.id))}
-            />
+            {item.popUpBuilder ? (
+              <PopUpContext.Consumer>
+                {({ isOpen, setIsOpen }) => (
+                  item.popUpBuilder({
+                    value: editState?.id === filterValue.id ? editState : filterValue,
+                    onValueChange: value => setEditState({ ...filterValue, ...value }),
+                    onRemove: () => {
+                      onValueChange(value.filter(prevItem => prevItem.id !== filterValue.id))
+                      setEditState(undefined)
+                    },
+                    dataType: item.dataType,
+                    tags: item.tags,
+                    name: item.label,
+                    isOpen,
+                    close: () => setIsOpen(false),
+                  })
+                )}
+              </PopUpContext.Consumer>
+            ) : (
+              <FilterPopUp
+                name={item.label}
+                value={editState?.id === filterValue.id ? editState : filterValue}
+                dataType={item.dataType}
+                tags={item.tags}
+                onValueChange={value => {
+                  setEditState({ ...filterValue, ...value })
+                }}
+                onRemove={() => {
+                  onValueChange(value.filter(prevItem => prevItem.id !== filterValue.id))
+                  setEditState(undefined)
+                }}
+              />
+            )}
           </PopUpRoot>
         )
       })}

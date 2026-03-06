@@ -1,41 +1,39 @@
-import type { ReactNode } from "react";
+import { forwardRef, type ReactNode, JSX } from "react";
 import { ComboboxRoot } from "./ComboboxRoot";
 import { ComboboxInput } from "./ComboboxInput";
 import { ComboboxList } from "./ComboboxList";
 import type { ComboboxInputProps } from "./ComboboxInput";
 import type { ComboboxListProps } from "./ComboboxList";
 
-export interface ComboboxProps {
+export interface ComboboxProps<T = string> {
   children: ReactNode;
-  onItemClick: (id: string) => void;
+  onItemClick?: (value: T) => void;
   id?: string;
-  searchString?: string;
-  onSearchStringChange?: (value: string) => void;
-  initialSearchString?: string;
+  searchQuery?: string;
+  onSearchQueryChange?: (value: string) => void;
+  initialSearchQuery?: string;
   inputProps?: ComboboxInputProps;
   listProps?: ComboboxListProps;
 }
 
-export function Combobox({
+export const Combobox = forwardRef<HTMLInputElement, ComboboxProps<unknown>>(function Combobox<T = string> ({
   children,
   onItemClick,
-  id,
-  searchString,
-  onSearchStringChange,
-  initialSearchString,
+  searchQuery,
+  onSearchQueryChange,
+  initialSearchQuery,
   inputProps,
   listProps,
-}: ComboboxProps) {
+}, ref) {
   return (
-    <ComboboxRoot
-      id={id}
+    <ComboboxRoot<T>
       onItemClick={onItemClick}
-      searchString={searchString}
-      onSearchStringChange={onSearchStringChange}
-      initialSearchString={initialSearchString}
+      searchQuery={searchQuery}
+      onSearchQueryChange={onSearchQueryChange}
+      initialSearchQuery={initialSearchQuery}
     >
-      <ComboboxInput {...inputProps} />
+      <ComboboxInput ref={ref} {...inputProps} />
       <ComboboxList {...listProps}>{children}</ComboboxList>
     </ComboboxRoot>
   );
-}
+}) as <T = string>(props: ComboboxProps<T> & React.RefAttributes<HTMLDivElement>) => JSX.Element;

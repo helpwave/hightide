@@ -30,18 +30,19 @@ export const ThemeIcon = ({ theme: themeOverride, ...props }: ThemeIconProps) =>
   }
 }
 
-export type ThemeSelectProps = Omit<SelectProps, 'value' | 'children'>
+export type ThemeSelectProps = Omit<SelectProps<ThemeType>, 'value' | 'children'>
 
 export const ThemeSelect = ({ ...props }: ThemeSelectProps) => {
   const translation = useHightideTranslation()
   const { theme, setTheme } = useTheme()
 
   return (
-    <Select
+    <Select<ThemeType>
       value={theme}
-      onEditComplete={(theme) => {
-        props.onEditComplete?.(theme)
-        setTheme(theme as ThemeType)
+      onEditComplete={(value) => {
+        console.log('onEditComplete', value)
+        props.onEditComplete?.(value)
+        setTheme(value)
       }}
       iconAppearance="right"
       {...props}
@@ -49,6 +50,7 @@ export const ThemeSelect = ({ ...props }: ThemeSelectProps) => {
         ...props.buttonProps,
         className: clsx('min-w-40 w-fit', props.buttonProps?.className),
       }}
+      showSearch={false}
     >
       {ThemeUtil.themes.map((theme) => (
         <SelectOption

@@ -1,22 +1,22 @@
 import type { ComponentPropsWithoutRef, ReactNode } from "react";
 import { forwardRef, useEffect, useImperativeHandle, useRef } from "react";
 import { useMultiSelectContext } from "./MultiSelectContext";
-import clsx from "clsx";
 import { useHightideTranslation } from "@/src/i18n/useHightideTranslation";
 import { ExpansionIcon } from "@/src/components/display-and-visualization/ExpansionIcon";
 import { MultiSelectOptionDisplayContext } from "./MultiSelectOption";
 
-export interface MultiSelectButtonProps extends ComponentPropsWithoutRef<"div"> {
+export interface MultiSelectButtonProps<T = string>
+  extends ComponentPropsWithoutRef<"div"> {
   placeholder?: ReactNode;
   disabled?: boolean;
-  selectedDisplay?: (values: string[]) => ReactNode;
+  selectedDisplay?: (values: T[]) => ReactNode;
   hideExpansionIcon?: boolean;
 }
 
 export const MultiSelectButton = forwardRef<
   HTMLDivElement,
-  MultiSelectButtonProps
->(function MultiSelectButton(
+  MultiSelectButtonProps<unknown>
+>(function MultiSelectButton<T>(
   {
     id,
     placeholder,
@@ -24,37 +24,39 @@ export const MultiSelectButton = forwardRef<
     selectedDisplay,
     hideExpansionIcon = false,
     ...props
-  },
+  }: MultiSelectButtonProps<T>,
   ref
 ) {
   const translation = useHightideTranslation();
-  const { state, trigger, setIds, ids } = useMultiSelectContext();
-  const { register, unregister, toggleOpen } = trigger;
+  const context = useMultiSelectContext<T>();
 
   useEffect(() => {
-    if (id) setIds((prev) => ({ ...prev, trigger: id }));
-  }, [id, setIds]);
+    if (id) context.config.setIds((prev) => ({ ...prev, trigger: id }));
+  }, [id, context.config.setIds]);
 
   const innerRef = useRef<HTMLDivElement>(null);
   useImperativeHandle(ref, () => innerRef.current!);
 
   useEffect(() => {
-    register(innerRef);
+    const unregister = context.layout.registerTrigger(innerRef);
     return () => unregister();
-  }, [register, unregister]);
+  }, [context.layout.registerTrigger]);
 
-  const disabled = !!disabledOverride || !!state.disabled;
-  const invalid = state.invalid;
-  const hasValue = state.value.length > 0;
+  const disabled = !!disabledOverride || !!context.disabled;
+  const invalid = context.invalid;
+  const hasValue = context.value.length > 0;
+  const selectedOptions = context.selectedIds
+    .map((id) => context.idToOptionMap[id])
+    .filter(Boolean);
 
   return (
     <div
       {...props}
       ref={innerRef}
-      id={ids.trigger}
+      id={context.config.ids.trigger}
       onClick={(event) => {
         props.onClick?.(event);
-        toggleOpen(!state.isOpen);
+        context.toggleIsOpen();
       }}
       onKeyDown={(event) => {
         props.onKeyDown?.(event);
@@ -62,23 +64,23 @@ export const MultiSelectButton = forwardRef<
         switch (event.key) {
           case "Enter":
           case " ":
-            toggleOpen(!state.isOpen);
+            context.toggleIsOpen();
             event.preventDefault();
             event.stopPropagation();
             break;
           case "ArrowDown":
-            toggleOpen(true, { highlightStartPositionBehavior: "first" });
+            context.setIsOpen(true, "first");
             event.preventDefault();
             event.stopPropagation();
             break;
           case "ArrowUp":
-            toggleOpen(true, { highlightStartPositionBehavior: "last" });
+            context.setIsOpen(true, "last");
             event.preventDefault();
             event.stopPropagation();
             break;
         }
       }}
-      data-name={props["data-name"] ?? "select-button"}
+      data-name={props["data-name"] ?? "multi-select-button"}
       data-value={hasValue ? "" : undefined}
       data-disabled={disabled ? "" : undefined}
       data-invalid={invalid ? "" : undefined}
@@ -87,24 +89,24 @@ export const MultiSelectButton = forwardRef<
       aria-invalid={invalid}
       aria-disabled={disabled}
       aria-haspopup="dialog"
-      aria-expanded={state.isOpen}
-      aria-controls={state.isOpen ? ids.content : undefined}
+      aria-expanded={context.isOpen}
+      aria-controls={context.isOpen ? context.config.ids.content : undefined}
     >
       <MultiSelectOptionDisplayContext.Provider value="trigger">
         {hasValue
-          ? selectedDisplay?.(state.value) ?? (
-              <div className={clsx("flex flex-wrap gap-x-1 gap-y-2")}>
-                {state.selectedOptions.map(({ value, display }, index) => (
-                  <span key={value} className="flex-row-0">
-                    {display}
-                    {index < state.value.length - 1 && <span>,</span>}
+          ? selectedDisplay?.(context.value) ?? (
+              <div className="flex flex-wrap gap-x-1 gap-y-2">
+                {selectedOptions.map((opt, index) => (
+                  <span key={opt.id}>
+                    {opt.display}
+                    {index < selectedOptions.length - 1 && <span>,</span>}
                   </span>
                 ))}
               </div>
             )
           : placeholder ?? translation("clickToSelect")}
       </MultiSelectOptionDisplayContext.Provider>
-      {!hideExpansionIcon && <ExpansionIcon isExpanded={state.isOpen} />}
+      {!hideExpansionIcon && <ExpansionIcon isExpanded={context.isOpen} />}
     </div>
   );
 });

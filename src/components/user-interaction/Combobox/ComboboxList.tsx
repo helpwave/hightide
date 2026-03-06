@@ -1,5 +1,5 @@
 import type { HTMLAttributes, RefObject } from "react";
-import { forwardRef, useCallback } from "react";
+import { forwardRef, useEffect, useRef } from "react";
 import clsx from "clsx";
 import { useComboboxContext } from "./ComboboxContext";
 import { useHightideTranslation } from "@/src/i18n/useHightideTranslation";
@@ -9,21 +9,26 @@ export interface ComboboxListProps extends HTMLAttributes<HTMLUListElement> {}
 export const ComboboxList = forwardRef<HTMLUListElement, ComboboxListProps>(
   function ComboboxList({ children, ...props }, ref) {
     const translation = useHightideTranslation();
-    const { ids, listRef, visibleOptions } = useComboboxContext();
+    const context = useComboboxContext();
+    const innerRef = useRef<HTMLUListElement>(null);
 
-    const setRefs = useCallback((node: HTMLUListElement | null) => {
-      (listRef as RefObject<HTMLUListElement | null>).current = node;
+    useEffect(() => {
+      return context.layout.registerList(innerRef as RefObject<HTMLUListElement | null>);
+    }, [context.layout.registerList]);
+
+    const setRefs = (node: HTMLUListElement | null) => {
+      (innerRef as RefObject<HTMLUListElement | null>).current = node;
       if (typeof ref === "function") ref(node);
       else if (ref) (ref as RefObject<HTMLUListElement | null>).current = node;
-    }, [ref, listRef]);
+    };
 
-    const count = visibleOptions.length;
+    const count = context.visibleOptionIds.length;
 
     return (
       <ul
         {...props}
         ref={setRefs}
-        id={ids.listbox}
+        id={context.config.ids.listbox}
         role="listbox"
         aria-label={translation("filterOptions")}
         tabIndex={-1}

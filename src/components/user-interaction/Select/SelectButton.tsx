@@ -1,20 +1,19 @@
 import type { ComponentPropsWithoutRef, ReactNode } from "react";
 import { forwardRef, useEffect, useImperativeHandle, useRef } from "react";
-import { useSelectContext } from "./SelectContext";
-import clsx from "clsx";
+import { SelectOptionType, useSelectContext } from "./SelectContext";
 import { useHightideTranslation } from "@/src/i18n/useHightideTranslation";
 import { ExpansionIcon } from "@/src/components/display-and-visualization/ExpansionIcon";
 import { SelectOptionDisplayContext } from "./SelectOption";
 
-export interface SelectButtonProps extends ComponentPropsWithoutRef<"div"> {
+export interface SelectButtonProps<T = string> extends ComponentPropsWithoutRef<"div"> {
   placeholder?: ReactNode;
   disabled?: boolean;
-  selectedDisplay?: (value: string[]) => ReactNode;
+  selectedDisplay?: (value: SelectOptionType<T> | null) => ReactNode;
   hideExpansionIcon?: boolean;
 }
 
-export const SelectButton = forwardRef<HTMLDivElement, SelectButtonProps>(
-  function SelectButton(
+export const SelectButton = forwardRef<HTMLDivElement, SelectButtonProps<unknown>>(
+  function SelectButton<T>(
     {
       id,
       placeholder,
@@ -22,37 +21,37 @@ export const SelectButton = forwardRef<HTMLDivElement, SelectButtonProps>(
       selectedDisplay,
       hideExpansionIcon = false,
       ...props
-    },
+    }: SelectButtonProps<T>,
     ref
   ) {
     const translation = useHightideTranslation();
-    const { state, trigger, setIds, ids } = useSelectContext();
-    const { register, unregister, toggleOpen } = trigger;
+    const context = useSelectContext<T>();
 
     useEffect(() => {
-      if (id) setIds((prev) => ({ ...prev, trigger: id }));
-    }, [id, setIds]);
+      if (id) context.config.setIds((prev) => ({ ...prev, trigger: id }));
+    }, [id, context.config.setIds]);
 
     const innerRef = useRef<HTMLDivElement>(null);
     useImperativeHandle(ref, () => innerRef.current!);
 
     useEffect(() => {
-      register(innerRef);
+      const unregister = context.layout.registerTrigger(innerRef);
       return () => unregister();
-    }, [register, unregister]);
+    }, [context.layout.registerTrigger]);
 
-    const disabled = !!disabledOverride || !!state.disabled;
-    const invalid = state.invalid;
-    const hasValue = state.value.length > 0;
+    const disabled = !!disabledOverride || !!context.disabled;
+    const invalid = context.invalid;
+    const hasValue = context.selectedId !== null;
+    const selectedOption = context.idToOptionMap[context.selectedId] ?? null;
 
     return (
       <div
         {...props}
         ref={innerRef}
-        id={ids.trigger}
+        id={context.config.ids.trigger}
         onClick={(event) => {
           props.onClick?.(event);
-          toggleOpen(!state.isOpen);
+          context.toggleIsOpen();
         }}
         onKeyDown={(event) => {
           props.onKeyDown?.(event);
@@ -60,17 +59,17 @@ export const SelectButton = forwardRef<HTMLDivElement, SelectButtonProps>(
           switch (event.key) {
             case "Enter":
             case " ":
-              toggleOpen(!state.isOpen);
+              context.toggleIsOpen();
               event.preventDefault();
               event.stopPropagation();
               break;
             case "ArrowDown":
-              toggleOpen(true, { highlightStartPositionBehavior: "first" });
+              context.setIsOpen(true, "first");
               event.preventDefault();
               event.stopPropagation();
               break;
             case "ArrowUp":
-              toggleOpen(true, { highlightStartPositionBehavior: "last" });
+              context.setIsOpen(true, "last");
               event.preventDefault();
               event.stopPropagation();
               break;
@@ -85,24 +84,15 @@ export const SelectButton = forwardRef<HTMLDivElement, SelectButtonProps>(
         aria-invalid={invalid}
         aria-disabled={disabled}
         aria-haspopup="dialog"
-        aria-expanded={state.isOpen}
-        aria-controls={state.isOpen ? ids.content : undefined}
+        aria-expanded={context.isOpen}
+        aria-controls={context.isOpen ? context.config.ids.content : undefined}
       >
         <SelectOptionDisplayContext.Provider value="trigger">
           {hasValue
-            ? selectedDisplay?.(state.value) ?? (
-                <div className={clsx("flex flex-wrap gap-x-1 gap-y-2")}>
-                  {state.selectedOptions.map(({ value, display }, index) => (
-                    <span key={value} className="flex-row-0">
-                      {display}
-                      {index < state.value.length - 1 && <span>,</span>}
-                    </span>
-                  ))}
-                </div>
-              )
+            ? selectedDisplay?.(selectedOption) ?? (selectedOption.display)
             : placeholder ?? translation("clickToSelect")}
         </SelectOptionDisplayContext.Provider>
-        {!hideExpansionIcon && <ExpansionIcon isExpanded={state.isOpen} />}
+        {!hideExpansionIcon && <ExpansionIcon isExpanded={context.isOpen} />}
       </div>
     );
   }

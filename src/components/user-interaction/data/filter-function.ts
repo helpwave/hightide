@@ -18,10 +18,106 @@ export type FilterParameter = {
   singleOptionSearch?: unknown,
 }
 
+const allowedOperatorsByDataType: Record<DataType, FilterOperator[]> = {
+  text: ['equals', 'notEquals', 'contains', 'notContains', 'startsWith', 'endsWith', 'isUndefined', 'isNotUndefined'],
+  number: ['equals', 'notEquals', 'greaterThan', 'greaterThanOrEqual', 'lessThan', 'lessThanOrEqual', 'between', 'notBetween', 'isUndefined', 'isNotUndefined'],
+  date: ['equals', 'notEquals', 'greaterThan', 'greaterThanOrEqual', 'lessThan', 'lessThanOrEqual', 'between', 'notBetween', 'isUndefined', 'isNotUndefined'],
+  dateTime: ['equals', 'notEquals', 'greaterThan', 'greaterThanOrEqual', 'lessThan', 'lessThanOrEqual', 'between', 'notBetween', 'isUndefined', 'isNotUndefined'],
+  boolean: ['isTrue', 'isFalse', 'isUndefined', 'isNotUndefined'],
+  multiTags: ['equals', 'notEquals', 'contains', 'notContains', 'isUndefined', 'isNotUndefined'],
+  singleTag: ['equals', 'notEquals', 'contains', 'notContains', 'isUndefined', 'isNotUndefined'],
+  unknownType: ['isUndefined', 'isNotUndefined'],
+}
+
 export type FilterValue = {
   dataType: DataType,
   operator: FilterOperator,
   parameter: FilterParameter,
+}
+
+const OPERATORS_WITHOUT_PARAMETERS: FilterOperator[] = [
+  'isUndefined',
+  'isNotUndefined',
+  'isTrue',
+  'isFalse',
+]
+
+function isParameterValidForOperator(
+  dataType: DataType,
+  operator: FilterOperator,
+  parameter: FilterParameter
+): boolean {
+  if (OPERATORS_WITHOUT_PARAMETERS.includes(operator)) {
+    return true
+  }
+
+  switch (dataType) {
+  case 'text': {
+    return typeof parameter.searchText === 'string'
+  }
+  case 'number': {
+    if (operator === 'between' || operator === 'notBetween') {
+      const min = parameter.minNumber
+      const max = parameter.maxNumber
+      return (
+        typeof min === 'number' &&
+        !Number.isNaN(min) &&
+        typeof max === 'number' &&
+        !Number.isNaN(max) &&
+        min <= max
+      )
+    }
+    const v = parameter.compareValue
+    return typeof v === 'number' && !Number.isNaN(v)
+  }
+  case 'date':
+  case 'dateTime': {
+    if (operator === 'between' || operator === 'notBetween') {
+      const minDate = DateUtils.tryParseDate(parameter.minDate)
+      const maxDate = DateUtils.tryParseDate(parameter.maxDate)
+      if (!minDate || !maxDate) return false
+      const minNorm = dataType === 'date'
+        ? DateUtils.toOnlyDate(minDate).getTime()
+        : DateUtils.toDateTimeOnly(minDate).getTime()
+      const maxNorm = dataType === 'date'
+        ? DateUtils.toOnlyDate(maxDate).getTime()
+        : DateUtils.toDateTimeOnly(maxDate).getTime()
+      return minNorm <= maxNorm
+    }
+    return DateUtils.tryParseDate(parameter.compareDate) != null
+  }
+  case 'boolean':
+    return true
+  case 'multiTags': {
+    return Array.isArray(parameter.multiOptionSearch)
+  }
+  case 'singleTag': {
+    if (operator === 'contains' || operator === 'notContains') {
+      return Array.isArray(parameter.multiOptionSearch)
+    }
+    if(operator === 'equals' || operator === 'notEquals') {
+      return typeof parameter.singleOptionSearch === 'string'
+    }
+    return true
+  }
+  case 'unknownType':
+    return true
+  default:
+    return false
+  }
+}
+
+function isFilterValueValid(value: FilterValue): boolean {
+  const allowed = allowedOperatorsByDataType[value.dataType]
+  if (!allowed?.includes(value.operator)) {
+    return false
+  }
+  return isParameterValidForOperator(value.dataType, value.operator, value.parameter)
+}
+
+export const FilterValueUtils = {
+  allowedOperatorsByDataType,
+  isValid: isFilterValueValid,
 }
 
 /**

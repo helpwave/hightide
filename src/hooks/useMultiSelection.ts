@@ -1,9 +1,13 @@
-import type { SelectionOption } from "@/src/hooks/useSingleSelection";
 import { useControlledState } from "@/src/hooks/useControlledState";
 import { useCallback, useMemo } from "react";
 
+export interface UseMultiSelectionOption {
+  id: string;
+  disabled?: boolean;
+}
+
 export interface UseMultiSelectionOptions<T> {
-  options: ReadonlyArray<SelectionOption<T>>;
+  options: ReadonlyArray<UseMultiSelectionOption>;
   value?: ReadonlyArray<T>;
   onSelectionChange: (selection: ReadonlyArray<T>) => void;
   initialSelection?: ReadonlyArray<T>;
@@ -13,8 +17,8 @@ export interface UseMultiSelectionOptions<T> {
 
 export interface MultiSelectionReturn<T> {
   selection: ReadonlyArray<T>;
-  selectedOptions: ReadonlyArray<SelectionOption<T>>;
-  options: ReadonlyArray<SelectionOption<T>>;
+  selectedOptions: ReadonlyArray<UseMultiSelectionOption>;
+  options: ReadonlyArray<UseMultiSelectionOption>;
   setSelection: (selection: ReadonlyArray<T>) => void;
   toggleSelection: (value: T) => void;
   isSelected: (value: T) => boolean;
@@ -37,32 +41,23 @@ export function useMultiSelection<T>({
 
   const compare = useMemo(() => compareOptions ?? Object.is, [compareOptions]);
 
-  const selectedOptions = useMemo(
-    () =>
-      selection
-        .map((s) => optionsList.find((o) => compare(o.value, s)))
-        .filter((o): o is SelectionOption<T> => o != null),
-    [selection, optionsList, compare]
-  );
+  const selectedOptions = useMemo(() => selection
+    .map((s) => optionsList.find((o) => compare(o.id, s)))
+    .filter((o): o is UseMultiSelectionOption => o != null)
+  , [selection, optionsList, compare]);
 
   const isSelected = useCallback(
     (value: T) => selection.some((s) => compare(s, value)),
     [selection, compare]
   );
 
-  const toggleSelection = useCallback(
-    (value: T) => {
-      const option = optionsList.find((o) => compare(o.value, value));
-      if (!option || option.disabled) return;
-      setSelection((prev) => {
-        const next = prev.some((s) => compare(s, value))
-          ? prev.filter((s) => !compare(s, value))
-          : [...prev, value];
-        return next;
-      });
-    },
-    [optionsList, compare, setSelection]
-  );
+  const toggleSelection = useCallback((value: T) => {
+    const option = optionsList.find((o) => compare(o.id, value));
+    if (!option || option.disabled) return;
+    setSelection((prev) => prev.some((s) => compare(s, value))
+      ? prev.filter((s) => !compare(s, value))
+      : [...prev, value]);
+  }, [optionsList, compare, setSelection]);
 
   const setSelectionValue = useCallback(
     (next: ReadonlyArray<T>) => setSelection(Array.from(next)),

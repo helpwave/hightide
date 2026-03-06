@@ -53,7 +53,11 @@ export const FilterBasePopUp = forwardRef<HTMLDivElement, FilterPopUpBaseProps>(
   const translation = useHightideTranslation()
 
   return (
-    <PopUp ref={ref} {...props} className={clsx('flex-col-3 p-3 relative min-w-64', props.className)}>
+    <PopUp 
+      ref={ref}
+      {...props}
+      className={clsx('flex-col-3 p-3 relative min-w-64', props.className)}
+    >
       <div className="flex-row-4 justify-between w-full">
         <div className="flex-row-0.5 items-center">
           <span className="typography-label-sm text-description">{name ?? translation('filter')}</span>
@@ -63,7 +67,7 @@ export const FilterBasePopUp = forwardRef<HTMLDivElement, FilterPopUpBaseProps>(
             buttonProps={{
               'data-name': 'filter-operator-select',
               'className': 'w-fit coloring-text-hover neutral flex-row-1 items-center h-element-sm px-2 py-1 rounded-md hover:cursor-pointer font-bold',
-              'selectedDisplay': (op: FilterOperator) => translation(FilterOperatorUtils.getInfo(op).translationKey)
+              'selectedDisplay': (option) => option ? translation(FilterOperatorUtils.getInfo(option.value as FilterOperator).translationKey) : ''
             }}
             iconAppearance="right"
           >
@@ -201,7 +205,9 @@ export const NumberFilterPopUp = forwardRef<HTMLDivElement, FilterPopUpProps>(fu
       {...props}
       name={name}
       operator={operator}
-      onOperatorChange={(newOperator) => onValueChange({ dataType: 'number', parameter, operator: newOperator })}
+      onOperatorChange={(newOperator) => {
+        onValueChange({ dataType: 'number', parameter, operator: newOperator })
+      }}
       onRemove={onRemove}
       allowedOperators={FilterOperatorUtils.operatorsByCategory.number}
       hasValue={!!value}

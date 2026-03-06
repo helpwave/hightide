@@ -1,68 +1,103 @@
-import type { ReactNode } from "react";
 import { useCallback, useMemo } from "react";
 import { useControlledState } from "@/src/hooks/useControlledState";
 
-export interface SelectionOption<T> {
-  value: T;
-  label: string;
-  display: ReactNode;
-  disabled: boolean;
+export interface SelectionOption {
+  id: string;
+  disabled?: boolean;
 }
 
-export interface UseSingleSelectionOptions<T> {
-  options: ReadonlyArray<SelectionOption<T>>;
-  value: T | null | undefined;
-  onSelectionChange: (selection: T) => void;
-  initialSelection: T | null;
-  isControlled?: boolean;
-  compareOptions?: (a: T, b: T) => boolean;
+export interface UseSingleSelectionOptions {
+  options: ReadonlyArray<SelectionOption>;
+  selection?: string | null;
+  onSelectionChange?: (selection: string | null) => void;
+  initialSelection?: string | null;
+  isLooping?: boolean;
 }
 
-export interface SingleSelectionReturn<T> {
-  selection: T | null;
-  selectedOption: SelectionOption<T> | null;
-  options: ReadonlyArray<SelectionOption<T>>;
-  changeSelection: (selection: T) => void;
+export interface SingleSelectionReturn {
+  selection: string | null;
+  selectedIndex: number | null;
+  selectByIndex: (index: number) => void;
+  selectValue: (value: string | null) => void;
+  selectFirst: () => void;
+  selectLast: () => void;
+  selectNext: () => void;
+  selectPrevious: () => void;
 }
 
-export function useSingleSelection<T>({
+export function useSingleSelection({
   options: optionsList,
-  value,
+  selection: controlledSelection,
   onSelectionChange,
   initialSelection,
-  isControlled,
-  compareOptions,
-}: UseSingleSelectionOptions<T>): SingleSelectionReturn<T> {
+  isLooping = true,
+}: UseSingleSelectionOptions): SingleSelectionReturn {
   const [selection, setSelection] = useControlledState({
-    value: value ?? undefined,
+    value: controlledSelection,
     onValueChange: onSelectionChange,
     defaultValue: initialSelection,
-    isControlled: isControlled ?? value !== undefined,
   });
 
-  const compare = useMemo(() => compareOptions ?? Object.is, [compareOptions]);
+  const selectedIndex = useMemo(() => {
+    return optionsList.findIndex((o) => o.id === selection);
+  }, [optionsList, selection]);
 
-  const selectedOption = useMemo(() => {
-    if (selection == null) return null;
-    return optionsList.find((o) => compare(o.value, selection)) ?? null;
-  }, [optionsList, selection, compare]);
+  const enabledOptions = useMemo(() => optionsList.filter((o) => !o.disabled), [optionsList]);
 
-  const changeSelection = useCallback(
-    (next: T) => {
-      const option = optionsList.find((o) => compare(o.value, next));
-      if (!option || option.disabled) return;
-      setSelection(next);
-    },
-    [optionsList, compare, setSelection]
-  );
+  const changeSelection = useCallback((next: string | null) => {
+    const option = enabledOptions.find((o) => o.id === next);
+    if(!option && next != null) {
+      console.warn(`Attempted to select an option ${next} that is not valid or disabled`);
+      return;
+    }
+    setSelection(option?.id ?? null);
+  }, [enabledOptions, setSelection]);
 
-  return useMemo(
-    () => ({
-      selection: selection ?? null,
-      selectedOption,
-      options: optionsList,
-      changeSelection,
-    }),
-    [selection, selectedOption, optionsList, changeSelection]
-  );
+  const selectByIndex = useCallback((index: number) => {
+    const option = optionsList[index];
+    if(!option || option.disabled || index < 0 || index >= optionsList.length) {
+      console.warn(`Attempted to select an index ${index} that is not valid or disabled`);
+      return;
+    }
+    setSelection(option.id);
+  }, [optionsList, setSelection]);
+
+  const selectFirst = useCallback(() => {
+    if(enabledOptions.length === 0) return;
+    const first = enabledOptions.find((o) => !o.disabled);
+    setSelection(first?.id ?? null);
+  }, [enabledOptions, setSelection]);
+
+  const selectLast = useCallback(() => {
+    if(enabledOptions.length === 0) return;
+    const last = [...enabledOptions].reverse().find((o) => !o.disabled);
+    setSelection(last?.id ?? null);
+  }, [enabledOptions, setSelection]);
+
+  const selectNext = useCallback(() => {
+    if(enabledOptions.length === 0) return;
+    let currentIndex = enabledOptions.findIndex((o) => o.id === selection);
+    if(currentIndex === -1) currentIndex = 0;
+    const nextIndex = isLooping ? (currentIndex + 1) % enabledOptions.length : Math.min(currentIndex + 1, enabledOptions.length - 1);
+    setSelection(enabledOptions[nextIndex].id);
+  }, [enabledOptions, selection, isLooping, setSelection]);
+
+  const selectPrevious = useCallback(() => {
+    if(enabledOptions.length === 0) return;
+    let currentIndex = enabledOptions.findIndex((o) => o.id === selection);
+    if(currentIndex === -1) currentIndex = enabledOptions.length;
+    const previousIndex = isLooping ? (currentIndex - 1 + enabledOptions.length) % enabledOptions.length : Math.max(currentIndex - 1, 0);
+    setSelection(enabledOptions[previousIndex].id);
+  }, [enabledOptions, selection, isLooping, setSelection]);
+
+  return useMemo(() => ({
+    selection,
+    selectedIndex,
+    selectByIndex,
+    selectValue: changeSelection,
+    selectFirst,
+    selectLast,
+    selectNext,
+    selectPrevious,
+  }), [selection, selectedIndex, enabledOptions, changeSelection, selectFirst, selectLast, selectNext, selectPrevious]);
 }

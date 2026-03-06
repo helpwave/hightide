@@ -14,10 +14,9 @@ export interface SelectContentProps extends PopUpProps {
   searchInputProps?: Omit<ComponentProps<typeof Input>, "value" | "onValueChange">;
 }
 
-export const SelectContent = forwardRef<HTMLUListElement, SelectContentProps>(function SelectContent(
-  { id, options, showSearch: showSearchOverride, searchInputProps, ...props },
-  ref
-) {
+export const SelectContent = forwardRef<HTMLUListElement, SelectContentProps>(function SelectContent<T>({ 
+  id, options, showSearch: showSearchOverride, searchInputProps, ...props
+}, ref) {
   const translation = useHightideTranslation();
   const innerRef = useRef<HTMLUListElement>(null);
   const searchInputRef = useRef<HTMLInputElement>(null);
@@ -25,21 +24,21 @@ export const SelectContent = forwardRef<HTMLUListElement, SelectContentProps>(fu
   const typeAheadTimeoutRef = useRef<ReturnType<typeof setTimeout> | null>(null);
   useImperativeHandle(ref, () => innerRef.current!);
 
-  const { trigger, state, item, ids, setIds, search } = useSelectContext();
+  const context = useSelectContext<T>();
 
   useEffect(() => {
-    if (id) setIds((prev) => ({ ...prev, content: id }));
-  }, [id, setIds]);
+    if (id) context.config.setIds((prev) => ({ ...prev, content: id }));
+  }, [id, context.config.setIds]);
 
   useEffect(() => {
-    if (!state.isOpen) {
+    if (!context.isOpen) {
       typeAheadBufferRef.current = "";
       if (typeAheadTimeoutRef.current) {
         clearTimeout(typeAheadTimeoutRef.current);
         typeAheadTimeoutRef.current = null;
       }
     }
-  }, [state.isOpen]);
+  }, [context.isOpen]);
 
   useEffect(
     () => () => {
@@ -48,34 +47,33 @@ export const SelectContent = forwardRef<HTMLUListElement, SelectContentProps>(fu
     []
   );
 
-  const showSearch = showSearchOverride ?? search.showSearch;
+  const showSearch = showSearchOverride ?? context.search.hasSearch;
   const listboxAriaLabel = showSearch ? translation("searchResults") : undefined;
 
   const keyHandler = useCallback(
     (event: React.KeyboardEvent) => {
       switch (event.key) {
         case "ArrowDown":
-          item.moveHighlightedIndex(1);
+          context.highlightNext();
           event.preventDefault();
           break;
         case "ArrowUp":
-          item.moveHighlightedIndex(-1);
+          context.highlightPrevious();
           event.preventDefault();
           break;
         case "Home":
           event.preventDefault();
-          item.highlightFirst();
+          context.highlightFirst();
           break;
         case "End":
           event.preventDefault();
-          item.highlightLast();
+          context.highlightLast();
           break;
         case "Enter":
         case " ":
           if (showSearch && event.key === " ") return;
-          if (state.highlightedValue) {
-            item.toggleSelection(state.highlightedValue);
-            trigger.toggleOpen(false);
+          if (context.highlightedId) {
+            context.toggleSelection(context.highlightedId);
             event.preventDefault();
           }
           break;
@@ -87,18 +85,19 @@ export const SelectContent = forwardRef<HTMLUListElement, SelectContentProps>(fu
             typeAheadTimeoutRef.current = setTimeout(() => {
               typeAheadBufferRef.current = "";
             }, TYPEAHEAD_RESET_MS);
-            const opts = state.visibleOptions;
+            const optionIds = context.visibleOptionIds;
             const buf = typeAheadBufferRef.current;
-            if (opts.length === 0) {
+            if (optionIds.length === 0) {
               event.preventDefault();
               return;
             }
-            const currentIndex = opts.findIndex((o) => o.value === state.highlightedValue);
-            const startFrom = currentIndex >= 0 ? (currentIndex + 1) % opts.length : 0;
-            for (let i = 0; i < opts.length; i++) {
-              const j = (startFrom + i) % opts.length;
-              if (!opts[j].disabled && opts[j].label.toLowerCase().startsWith(buf)) {
-                item.highlightItem(opts[j].value);
+            const currentIndex = optionIds.findIndex((id) => id === context.highlightedId);
+            const startFrom = currentIndex >= 0 ? (currentIndex + 1) % optionIds.length : 0;
+            for (let i = 0; i < optionIds.length; i++) {
+              const j = (startFrom + i) % optionIds.length;
+              const option = context.idToOptionMap[optionIds[j]];
+              if (!option.disabled && option.label.toLowerCase().startsWith(buf)) {
+                context.highlightItem(option.id);
                 event.preventDefault();
                 return;
               }
@@ -108,39 +107,39 @@ export const SelectContent = forwardRef<HTMLUListElement, SelectContentProps>(fu
           break;
       }
     },
-    [showSearch, state.visibleOptions, state.highlightedValue, item, trigger]
+    [showSearch, context.visibleOptionIds, context.highlightedId, context.highlightItem, context.toggleSelection]
   );
 
   return (
     <PopUp
       {...props}
-      id={ids.content}
-      isOpen={state.isOpen}
-      anchor={trigger.ref}
+      id={context.config.ids.content}
+      isOpen={context.isOpen}
+      anchor={context.layout.triggerRef}
       options={options}
       forceMount={true}
       onClose={() => {
-        trigger.toggleOpen(false);
+        context.setIsOpen(false);
         props.onClose?.();
       }}
-      aria-labelledby={ids.trigger}
-      className="gap-y-1"
+      aria-labelledby={context.config.ids.trigger}
+      className={clsx("gap-y-1", props.className)}
     >
       {showSearch && (
         <Input
           {...searchInputProps}
           ref={searchInputRef}
-          id={ids.searchInput}
-          value={search.searchQuery}
-          onValueChange={search.setSearchQuery}
+          id={context.config.ids.searchInput}
+          value={context.search.searchQuery}
+          onValueChange={context.search.setSearchQuery}
           onKeyDown={keyHandler}
           placeholder={searchInputProps?.placeholder ?? translation("filterOptions")}
           role="combobox"
           aria-autocomplete="list"
-          aria-expanded={state.isOpen}
-          aria-controls={ids.listbox}
+          aria-expanded={context.isOpen}
+          aria-controls={context.config.ids.listbox}
           aria-activedescendant={
-            state.highlightedValue ? ids.listbox + "-" + state.highlightedValue : undefined
+            context.highlightedId ? context.config.ids.listbox + "-" + context.highlightedId : undefined
           }
           aria-label={searchInputProps?.["aria-label"] ?? translation("filterOptions")}
           className={clsx("mx-2 mt-2 shrink-0", searchInputProps?.className)}
@@ -148,7 +147,7 @@ export const SelectContent = forwardRef<HTMLUListElement, SelectContentProps>(fu
       )}
       <ul
         ref={innerRef}
-        id={ids.listbox}
+        id={context.config.ids.listbox}
         onKeyDown={showSearch ? undefined : keyHandler}
         role="listbox"
         aria-multiselectable={false}
@@ -166,9 +165,9 @@ export const SelectContent = forwardRef<HTMLUListElement, SelectContentProps>(fu
             aria-live="polite"
             aria-atomic={true}
             data-name="select-list-status"
-            className={clsx({ "sr-only": state.visibleOptions.length > 0 })}
+            className={clsx({ "sr-only": context.visibleOptionIds.length > 0 })}
           >
-            {translation("nResultsFound", { count: state.visibleOptions.length })}
+            {translation("nResultsFound", { count: context.visibleOptionIds.length })}
           </li>
         </Visibility>
       </ul>

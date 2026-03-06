@@ -4,7 +4,7 @@ import type { PropsWithChildren } from 'react'
 import { PropsUtil } from '@/src/utils/propsUtil'
 import { MultiSelectChipDisplay } from '@/src/components/user-interaction/MultiSelect/MultiSelectChipDisplay'
 
-export type MultiSelectPropertyProps = PropertyField<string[]> & PropsWithChildren
+export interface MultiSelectPropertyProps extends PropertyField<string[]>, PropsWithChildren {}
 /**
  * An Input for MultiSelect properties
  */
@@ -30,9 +30,10 @@ export const MultiSelectProperty = ({
         >
           <MultiSelectChipDisplay
             value={value}
-            onValueChange={(value) => {
-              onValueChange?.(value)
-              onEditComplete?.(value)
+            onValueChange={(val) => {
+              const arr = val as string[]
+              onValueChange?.(arr)
+              onEditComplete?.(arr)
             }}
             disabled={props.readOnly}
             contentPanelProps={{

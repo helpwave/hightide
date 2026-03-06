@@ -1,267 +1,167 @@
-import type { Dispatch, ReactNode, RefObject, SetStateAction } from "react";
 import {
   useCallback,
-  useEffect,
-  useId,
   useMemo,
-  useRef,
   useState,
 } from "react";
-import type { FormFieldInteractionStates } from "@/src/components/form/FieldLayout";
-import type { FormFieldDataHandling } from "@/src/components/form/FormField";
 import { useSingleSelection } from "@/src/hooks/useSingleSelection";
 import { useListNavigation } from "@/src/hooks/useListNavigation";
 import { MultiSearchWithMapping } from "@/src/utils/simpleSearch";
-import type { SelectionOption } from "@/src/hooks/useSingleSelection";
-import type {
-  SelectContextType,
-  SelectContextState,
-  SelectIconAppearance,
-  RegisteredSelectOption,
-} from "./SelectContext";
+import { useEventCallbackStabilizer } from "@/src/hooks/useEventCallbackStabelizer";
 
-export interface UseSelectConfiguration extends Partial<FormFieldInteractionStates> {
-  id?: string;
+export interface UseSelectOption {
+  id: string;
+  label?: string;
+  disabled?: boolean;
+}
+
+export interface UseSelectOptions {
+  options: ReadonlyArray<UseSelectOption>;
+  value?: string | null;
+  onValueChange?: (value: string) => void;
+  onEditComplete?: (value: string) => void;
+  initialValue?: string | null;
   initialIsOpen?: boolean;
-  iconAppearance?: SelectIconAppearance;
-  showSearch?: boolean;
-  
-}
-
-export interface UseSelectState extends Partial<FormFieldDataHandling<string>> {
-  initialValue?: string;
-}
-
-export interface UseSelectProps extends UseSelectConfiguration, UseSelectState {
   onClose?: () => void;
-  options: ReadonlyArray<RegisteredSelectOption>;
+  onIsOpenChange?: (isOpen: boolean) => void;
 }
 
-export type UseSelectResult = Omit<SelectContextType, "item"> & {
-  item: Omit<SelectContextType["item"], "register">;
-};
+export type UseSelectFirstHighlightBehavior = "first" | "last";
 
-function toSelectionOptions(
-  options: ReadonlyArray<RegisteredSelectOption>
-): ReadonlyArray<SelectionOption<string>> {
-  return options.map((o) => ({
-    value: o.value,
-    label: o.label,
-    display: o.display,
-    disabled: o.disabled,
-  }));
+export interface UseSelectOpenState {
+  isOpen: boolean;
+  setIsOpen: (isOpen: boolean, behavior?: UseSelectFirstHighlightBehavior) => void;
+  toggleOpen: (behavior?: UseSelectFirstHighlightBehavior) => void;
 }
 
-export function useSelect(props: UseSelectProps): UseSelectResult {
-  const {
-    options,
-    id,
-    value: controlledValue,
-    onValueChange,
-    onEditComplete,
-    initialValue,
-    onClose,
-    initialIsOpen = false,
-    disabled = false,
-    readOnly = false,
-    required = false,
-    invalid = false,
-    showSearch = false,
-    iconAppearance = "left",
-  } = props;
+export interface UseSelectSearchState {
+  searchQuery: string;
+  setSearchQuery: (query: string) => void;
+}
 
-  const triggerRef = useRef<HTMLElement>(null);
-  const generatedId = useId();
-  const [ids, setIds] = useState({
-    trigger: id ?? "select-" + generatedId,
-    content: "select-content-" + generatedId,
-    listbox: "select-listbox-" + generatedId,
-    searchInput: "select-search-" + generatedId,
-  });
-  const [isOpen, setIsOpen] = useState(initialIsOpen);
+export interface UseSelectHighlightState {
+  highlightedValue: string | undefined;
+  highlightFirst: () => void;
+  highlightLast: () => void;
+  highlightNext: () => void;
+  highlightPrevious: () => void;
+  highlightItem: (value: string) => void;
+}
+
+export interface UseSelectSelectionState {
+  value: string | null;
+  selectValue: (value: string) => void;
+}
+
+export interface UseSelectReturn extends UseSelectOpenState, UseSelectSearchState, UseSelectHighlightState, UseSelectSelectionState {
+  options: ReadonlyArray<UseSelectOption>;
+  visibleOptionIds: ReadonlyArray<string>;
+}
+
+export function useSelect({
+  options,
+  value: controlledValue,
+  onValueChange,
+  onEditComplete,
+  initialValue = null,
+  onClose,
+  onIsOpenChange,
+  initialIsOpen = false,
+}: UseSelectOptions): UseSelectReturn {
+ const [isOpen, setIsOpen] = useState(initialIsOpen);
   const [searchQuery, setSearchQuery] = useState("");
 
-  const selectionOptions = useMemo(
-    () => toSelectionOptions(options),
-    [options]
-  );
+  const onValueChangeStable = useEventCallbackStabilizer(onValueChange);
+  const onEditCompleteStable = useEventCallbackStabilizer(onEditComplete);
+  const onCloseStable = useEventCallbackStabilizer(onClose);
+  const onIsOpenChangeStable = useEventCallbackStabilizer(onIsOpenChange);
+
+  const onSelectionChangeWrapper = useCallback((id: string | null) => {
+    if(id === null) return;
+    onValueChangeStable(id)
+    onEditCompleteStable(id)
+    setIsOpen(false);
+  }, [onValueChangeStable, onEditCompleteStable, setIsOpen]);
 
   const selection = useSingleSelection({
-    options: selectionOptions,
-    value: controlledValue !== undefined ? controlledValue : null,
-    onSelectionChange: (v) => {
-      onValueChange?.(v);
-      onEditComplete?.(v);
-    },
-    initialSelection: initialValue ?? null,
-    isControlled: controlledValue !== undefined,
+    options: options,
+    selection: controlledValue,
+    onSelectionChange: onSelectionChangeWrapper,
+    initialSelection: initialValue,
   });
-
+  
   const visibleOptions = useMemo(() => {
     const q = searchQuery.trim().toLowerCase();
     if (!q) return options;
     return MultiSearchWithMapping(searchQuery, [...options], (o) => [o.label]);
   }, [options, searchQuery]);
 
+  const visibleOptionIds = useMemo(() => visibleOptions.map((o) => o.id), [visibleOptions]);
+
+  const enabledOptions = useMemo(() => visibleOptions.filter((o) => !o.disabled), [visibleOptions]);
+
   const listNav = useListNavigation({
-    options: visibleOptions.map((o) => o.value),
-    initialValue: controlledValue ?? initialValue ?? undefined,
+    options: enabledOptions.map((o) => o.id),
+    initialValue: selection.selection,
   });
 
-  const selectedOptions = useMemo(
-    () =>
-      selection.selection != null
-        ? options.filter((o) => o.value === selection.selection)
-        : [],
-    [selection.selection, options]
-  );
-  const value = useMemo(
-    () => (selection.selection != null ? [selection.selection] : []),
-    [selection.selection]
-  );
-
-  useEffect(() => {
-    if (
-      listNav.highlightedId != null &&
-      !visibleOptions.some((o) => o.value === listNav.highlightedId)
-    ) {
-      const first = visibleOptions.find((o) => !o.disabled);
-      if (first) listNav.highlight(first.value);
+  const highlightState: UseSelectHighlightState = useMemo(() => ({
+    highlightedValue: listNav.highlightedId,
+    highlightFirst: listNav.first,
+    highlightLast: listNav.last,
+    highlightNext: listNav.next,
+    highlightPrevious: listNav.previous,
+    highlightItem: (value: string) => {
+      if (!enabledOptions.some((o) => o.id === value)) return;
+      listNav.highlight(value)
     }
-  }, [visibleOptions, listNav.highlightedId, listNav.highlight]);
+  }), [enabledOptions, listNav]);
 
-  useEffect(() => {
-    const opt = options.find((o) => o.value === listNav.highlightedId);
-    opt?.ref?.current?.scrollIntoView?.({ behavior: "instant", block: "nearest" });
-  }, [listNav.highlightedId, options]);
-
-  const toggleSelection = useCallback(
-    (value: string) => {
-      if (disabled) return;
-      selection.changeSelection(value);
-      setIsOpen((prev) => (prev ? false : prev));
-    },
-    [disabled, selection]
-  );
-
-  const highlightItem = useCallback(
-    (value: string) => {
-      if (disabled || !visibleOptions.some((o) => o.value === value && !o.disabled))
-        return;
-      listNav.highlight(value);
-    },
-    [disabled, visibleOptions, listNav]
-  );
-
-  const highlightFirst = useCallback(() => {
-    const first = visibleOptions.find((o) => !o.disabled);
-    if (first) listNav.highlight(first.value);
-  }, [visibleOptions, listNav]);
-
-  const highlightLast = useCallback(() => {
-    const last = [...visibleOptions].reverse().find((o) => !o.disabled);
-    if (last) listNav.highlight(last.value);
-  }, [visibleOptions, listNav]);
-
-  const moveHighlightedIndex = useCallback(
-    (delta: number) => {
-      const list = visibleOptions.filter((o) => !o.disabled);
-      if (list.length === 0) return;
-      const idx = list.findIndex((o) => o.value === listNav.highlightedId);
-      const startIdx =
-        idx < 0 ? 0 : (idx + (delta % list.length) + list.length) % list.length;
-      const isForward = delta >= 0;
-      let nextIdx = startIdx;
-      for (let i = 0; i < list.length; i++) {
-        const j =
-          (startIdx + (isForward ? i : -i) + list.length) % list.length;
-        if (!list[j].disabled) {
-          nextIdx = j;
-          break;
+  const setIsOpenWrapper = useCallback((isOpen: boolean, behavior?: UseSelectFirstHighlightBehavior) => {
+    behavior = behavior ?? "first";
+    if(isOpen) {
+      if(selection.selection == null) {
+        if(behavior === "first") {
+          highlightState.highlightFirst();
+        } else if (behavior === "last") {
+          highlightState.highlightLast();
         }
-      }
-      listNav.highlight(list[nextIdx].value);
-    },
-    [visibleOptions, listNav]
-  );
-
-  const registerTrigger = useCallback((ref: RefObject<HTMLElement>) => {
-    (triggerRef as React.MutableRefObject<HTMLElement | null>).current =
-      ref.current;
-  }, []);
-
-  const unregisterTrigger = useCallback(() => {
-    (triggerRef as React.MutableRefObject<HTMLElement | null>).current = null;
-  }, []);
-
-  const toggleOpen = useCallback(
-    (open?: boolean, opts?: { highlightStartPositionBehavior?: "first" | "last" }) => {
-      const next = open ?? !isOpen;
-      if (next) {
-        const behavior = opts?.highlightStartPositionBehavior ?? "first";
-        const list = visibleOptions.filter((o) => !o.disabled);
-        const firstSelected = list.find((o) => o.value === selection.selection);
-        const fallback = behavior === "first" ? list[0] : list[list.length - 1];
-        const toHighlight = firstSelected ?? fallback;
-        if (toHighlight) listNav.highlight(toHighlight.value);
       } else {
-        setSearchQuery("");
-        onClose?.();
+        highlightState.highlightItem(selection.selection);
       }
-      setIsOpen(next);
-    },
-    [isOpen, visibleOptions, selection.selection, listNav, onClose]
-  );
+    } else {
+      setSearchQuery("");
+      onCloseStable?.();
+    }
+    setIsOpen(isOpen);
+    onIsOpenChangeStable(isOpen);
+  }, [setIsOpen, highlightState, onCloseStable, onEditCompleteStable, selection.selection, onIsOpenChangeStable]);
 
-  const state: SelectContextState = {
+
+  const selectionState: UseSelectSelectionState = useMemo(() => ({
+    value: selection.selection,
+    selectValue: (id: string) => selection.selectValue(id),
+  }), [selection.selection, selection.selectValue]);
+
+  const openState: UseSelectOpenState = useMemo(() => ({
     isOpen,
-    options,
-    visibleOptions,
-    searchQuery,
-    value,
-    selectedOptions,
-    highlightedValue: listNav.highlightedId ?? undefined,
-    disabled,
-    invalid,
-    readOnly,
-    required,
-  };
+    setIsOpen: setIsOpenWrapper,
+    toggleOpen: (behavior?: UseSelectFirstHighlightBehavior) => {
+      const next = !isOpen;
+      setIsOpenWrapper(next, behavior);
+    }
+  }), [isOpen, setIsOpenWrapper]);
 
-  return useMemo(
-    (): UseSelectResult => ({
-      ids,
-      setIds: setIds as Dispatch<SetStateAction<typeof ids>>,
-      state,
-      iconAppearance,
-      item: {
-        toggleSelection,
-        highlightFirst,
-        highlightLast,
-        highlightItem,
-        moveHighlightedIndex,
-      },
-      trigger: {
-        ref: triggerRef,
-        register: registerTrigger,
-        unregister: unregisterTrigger,
-        toggleOpen,
-      },
-      search: { showSearch, searchQuery, setSearchQuery },
-    }),
-    [
-      ids,
-      state,
-      iconAppearance,
-      toggleSelection,
-      highlightFirst,
-      highlightLast,
-      highlightItem,
-      moveHighlightedIndex,
-      registerTrigger,
-      unregisterTrigger,
-      toggleOpen,
-      showSearch,
-      searchQuery,
-    ]
-  );
+  const searchState: UseSelectSearchState = useMemo(() => ({
+    searchQuery,
+    setSearchQuery,
+  }), [searchQuery, setSearchQuery]);
+
+  return useMemo((): UseSelectReturn => ({
+    ...openState,
+    ...highlightState,
+    ...selectionState,
+    ...searchState,
+    options,
+    visibleOptionIds,
+  }), [openState, highlightState, selectionState, searchState, options, visibleOptionIds] );
 }

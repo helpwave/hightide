@@ -18,6 +18,7 @@ import type { FormFieldDataHandling } from '@/src/components/form/FormField'
 import { FormField } from '@/src/components/form/FormField'
 import { FormProvider } from '@/src/components/form/FormContext'
 import { DateTimeInput } from '@/src/components/user-interaction/input/DateTimeInput'
+import { MultiSelectOption } from '@/src/components/user-interaction/MultiSelect/MultiSelectOption'
 
 type FormState = 'editing' | 'sending' | 'submitted'
 
@@ -150,7 +151,7 @@ export const basic: Story = {
               {({ dataProps, focusableElementProps, interactionStates }) => (
                 <Select {...dataProps as FormFieldDataHandling<string>} {...focusableElementProps} {...interactionStates}>
                   {StorybookHelper.selectValues.map(value => (
-                    <SelectOption key={value} value={value} />
+                    <SelectOption key={value} value={value} label={value} />
                   ))}
                 </Select>
               )}
@@ -164,9 +165,9 @@ export const basic: Story = {
               validationBehaviour={validationBehaviour}
             >
               {({ dataProps, focusableElementProps, interactionStates }) => (
-                <MultiSelect {...dataProps as FormFieldDataHandling<string[]>} {...focusableElementProps} {...interactionStates}>
+                <MultiSelect {...dataProps} {...focusableElementProps} {...interactionStates}>
                   {StorybookHelper.selectValues.map(value => (
-                    <SelectOption key={value} value={value} />
+                    <MultiSelectOption key={value} value={value} label={value} />
                   ))}
                 </MultiSelect>
               )}
@@ -181,7 +182,7 @@ export const basic: Story = {
               {({ dataProps, focusableElementProps, interactionStates }) => (
                 <MultiSelect {...dataProps as FormFieldDataHandling<string[]>} {...focusableElementProps} {...interactionStates}>
                   {StorybookHelper.selectValues.map(value => (
-                    <SelectOption key={value} value={value} />
+                    <MultiSelectOption key={value} value={value} label={value} />
                   ))}
                 </MultiSelect>
               )}

@@ -14,165 +14,195 @@ export interface MultiSelectContentProps extends PopUpProps {
   searchInputProps?: Omit<ComponentProps<typeof Input>, "value" | "onValueChange">;
 }
 
-export const MultiSelectContent = forwardRef<HTMLUListElement, MultiSelectContentProps>(
-  function MultiSelectContent(
-    { id, options, showSearch: showSearchOverride, searchInputProps, ...props },
-    ref
-  ) {
-    const translation = useHightideTranslation();
-    const innerRef = useRef<HTMLUListElement>(null);
-    const searchInputRef = useRef<HTMLInputElement>(null);
-    const typeAheadBufferRef = useRef("");
-    const typeAheadTimeoutRef = useRef<ReturnType<typeof setTimeout> | null>(null);
-    useImperativeHandle(ref, () => innerRef.current!);
+export const MultiSelectContent = forwardRef<
+  HTMLUListElement,
+  MultiSelectContentProps
+>(function MultiSelectContent<T>(
+  { id, options, showSearch: showSearchOverride, searchInputProps, ...props },
+  ref
+) {
+  const translation = useHightideTranslation();
+  const innerRef = useRef<HTMLUListElement>(null);
+  const searchInputRef = useRef<HTMLInputElement>(null);
+  const typeAheadBufferRef = useRef("");
+  const typeAheadTimeoutRef = useRef<ReturnType<typeof setTimeout> | null>(null);
+  useImperativeHandle(ref, () => innerRef.current!);
 
-    const { trigger, state, item, ids, setIds, search } = useMultiSelectContext();
+  const context = useMultiSelectContext<T>();
 
-    useEffect(() => {
-      if (id) setIds((prev) => ({ ...prev, content: id }));
-    }, [id, setIds]);
+  useEffect(() => {
+    if (id) context.config.setIds((prev) => ({ ...prev, content: id }));
+  }, [id, context.config.setIds]);
 
-    useEffect(() => {
-      if (!state.isOpen) {
-        typeAheadBufferRef.current = "";
-        if (typeAheadTimeoutRef.current) {
-          clearTimeout(typeAheadTimeoutRef.current);
-          typeAheadTimeoutRef.current = null;
-        }
+  useEffect(() => {
+    if (!context.isOpen) {
+      typeAheadBufferRef.current = "";
+      if (typeAheadTimeoutRef.current) {
+        clearTimeout(typeAheadTimeoutRef.current);
+        typeAheadTimeoutRef.current = null;
       }
-    }, [state.isOpen]);
+    }
+  }, [context.isOpen]);
 
-    useEffect(
-      () => () => {
-        if (typeAheadTimeoutRef.current) clearTimeout(typeAheadTimeoutRef.current);
-      },
-      []
-    );
+  useEffect(
+    () => () => {
+      if (typeAheadTimeoutRef.current) clearTimeout(typeAheadTimeoutRef.current);
+    },
+    []
+  );
 
-    const showSearch = showSearchOverride ?? search.showSearch;
-    const listboxAriaLabel = showSearch ? translation("searchResults") : undefined;
+  const showSearch = showSearchOverride ?? context.search.hasSearch;
+  const listboxAriaLabel = showSearch ? translation("searchResults") : undefined;
 
-    const keyHandler = useCallback(
-      (event: React.KeyboardEvent) => {
-        switch (event.key) {
-          case "ArrowDown":
-            item.moveHighlightedIndex(1);
+  const keyHandler = useCallback(
+    (event: React.KeyboardEvent) => {
+      switch (event.key) {
+        case "ArrowDown":
+          context.highlightNext();
+          event.preventDefault();
+          break;
+        case "ArrowUp":
+          context.highlightPrevious();
+          event.preventDefault();
+          break;
+        case "Home":
+          event.preventDefault();
+          context.highlightFirst();
+          break;
+        case "End":
+          event.preventDefault();
+          context.highlightLast();
+          break;
+        case "Enter":
+        case " ":
+          if (showSearch && event.key === " ") return;
+          if (context.highlightedId) {
+            context.toggleSelection(context.highlightedId);
             event.preventDefault();
-            break;
-          case "ArrowUp":
-            item.moveHighlightedIndex(-1);
-            event.preventDefault();
-            break;
-          case "Home":
-            event.preventDefault();
-            item.highlightFirst();
-            break;
-          case "End":
-            event.preventDefault();
-            item.highlightLast();
-            break;
-          case "Enter":
-          case " ":
-            if (showSearch && event.key === " ") return;
-            if (state.highlightedValue) {
-              item.toggleSelection(state.highlightedValue);
+          }
+          break;
+        default:
+          if (!showSearch && !event.ctrlKey && !event.metaKey && !event.altKey) {
+            const char = event.key.toLowerCase();
+            if (typeAheadTimeoutRef.current)
+              clearTimeout(typeAheadTimeoutRef.current);
+            typeAheadBufferRef.current += char;
+            typeAheadTimeoutRef.current = setTimeout(() => {
+              typeAheadBufferRef.current = "";
+            }, TYPEAHEAD_RESET_MS);
+            const optionIds = context.visibleOptionIds;
+            const buf = typeAheadBufferRef.current;
+            if (optionIds.length === 0) {
               event.preventDefault();
+              return;
             }
-            break;
-          default:
-            if (!showSearch && !event.ctrlKey && !event.metaKey && !event.altKey) {
-              const char = event.key.toLowerCase();
-              if (typeAheadTimeoutRef.current) clearTimeout(typeAheadTimeoutRef.current);
-              typeAheadBufferRef.current += char;
-              typeAheadTimeoutRef.current = setTimeout(() => {
-                typeAheadBufferRef.current = "";
-              }, TYPEAHEAD_RESET_MS);
-              const opts = state.visibleOptions;
-              const buf = typeAheadBufferRef.current;
-              if (opts.length === 0) {
+            const currentIndex = optionIds.findIndex(
+              (oid) => oid === context.highlightedId
+            );
+            const startFrom =
+              currentIndex >= 0
+                ? (currentIndex + 1) % optionIds.length
+                : 0;
+            for (let i = 0; i < optionIds.length; i++) {
+              const j = (startFrom + i) % optionIds.length;
+              const option = context.idToOptionMap[optionIds[j]];
+              if (
+                option &&
+                !option.disabled &&
+                (option.label ?? "").toLowerCase().startsWith(buf)
+              ) {
+                context.highlightItem(option.id);
                 event.preventDefault();
                 return;
               }
-              const currentIndex = opts.findIndex((o) => o.value === state.highlightedValue);
-              const startFrom = currentIndex >= 0 ? (currentIndex + 1) % opts.length : 0;
-              for (let i = 0; i < opts.length; i++) {
-                const j = (startFrom + i) % opts.length;
-                if (!opts[j].disabled && opts[j].label.toLowerCase().startsWith(buf)) {
-                  item.highlightItem(opts[j].value);
-                  event.preventDefault();
-                  return;
-                }
-              }
-              event.preventDefault();
             }
-            break;
-        }
-      },
-      [showSearch, state.visibleOptions, state.highlightedValue, item]
-    );
+            event.preventDefault();
+          }
+          break;
+      }
+    },
+    [
+      showSearch,
+      context.visibleOptionIds,
+      context.highlightedId,
+      context.highlightItem,
+      context.toggleSelection,
+      context.highlightNext,
+      context.highlightPrevious,
+      context.highlightFirst,
+      context.highlightLast,
+    ]
+  );
 
-    return (
-      <PopUp
-        {...props}
-        id={ids.content}
-        isOpen={state.isOpen}
-        anchor={trigger.ref}
-        options={options}
-        forceMount={true}
-        onClose={() => {
-          trigger.toggleOpen(false);
-          props.onClose?.();
-        }}
-        aria-labelledby={ids.trigger}
-        className="gap-y-1"
+  return (
+    <PopUp
+      {...props}
+      id={context.config.ids.content}
+      isOpen={context.isOpen}
+      anchor={context.layout.triggerRef}
+      options={options}
+      forceMount={true}
+      onClose={() => {
+        context.setIsOpen(false);
+        props.onClose?.();
+      }}
+      aria-labelledby={context.config.ids.trigger}
+      className={clsx("gap-y-1", props.className)}
+    >
+      {showSearch && (
+        <Input
+          {...searchInputProps}
+          ref={searchInputRef}
+          id={context.config.ids.searchInput}
+          value={context.search.searchQuery ?? ""}
+          onValueChange={context.search.setSearchQuery}
+          onKeyDown={keyHandler}
+          placeholder={searchInputProps?.placeholder ?? translation("filterOptions")}
+          role="combobox"
+          aria-autocomplete="list"
+          aria-expanded={context.isOpen}
+          aria-controls={context.config.ids.listbox}
+          aria-activedescendant={
+            context.highlightedId
+              ? context.highlightedId
+              : undefined
+          }
+          aria-label={searchInputProps?.["aria-label"] ?? translation("filterOptions")}
+          className={clsx("mx-2 mt-2 shrink-0", searchInputProps?.className)}
+        />
+      )}
+      <ul
+        ref={innerRef}
+        id={context.config.ids.listbox}
+        onKeyDown={showSearch ? undefined : keyHandler}
+        role="listbox"
+
+        data-name="multi-select-list"
+        aria-multiselectable={true}
+        aria-orientation="vertical"
+        aria-label={listboxAriaLabel}
+        tabIndex={showSearch ? undefined : 0}
+        className={clsx("flex-col-1 p-2 overflow-auto")}
       >
-        {showSearch && (
-          <Input
-            {...searchInputProps}
-            ref={searchInputRef}
-            id={ids.searchInput}
-            value={search.searchQuery}
-            onValueChange={search.setSearchQuery}
-            onKeyDown={keyHandler}
-            placeholder={searchInputProps?.placeholder ?? translation("filterOptions")}
-            role="combobox"
-            aria-autocomplete="list"
-            aria-expanded={state.isOpen}
-            aria-controls={ids.listbox}
-            aria-activedescendant={
-              state.highlightedValue ? ids.listbox + "-" + state.highlightedValue : undefined
-            }
-            aria-label={searchInputProps?.["aria-label"] ?? translation("filterOptions")}
-            className={clsx("mx-2 mt-2 shrink-0", searchInputProps?.className)}
-          />
-        )}
-        <ul
-          ref={innerRef}
-          id={ids.listbox}
-          onKeyDown={showSearch ? undefined : keyHandler}
-          role="listbox"
-          aria-multiselectable={true}
-          aria-orientation="vertical"
-          aria-label={listboxAriaLabel}
-          tabIndex={showSearch ? undefined : 0}
-          className={clsx("flex-col-1 p-2 overflow-auto")}
-        >
-          {props.children}
-          <Visibility isVisible={showSearch}>
-            <li
-              role="option"
-              aria-selected={false}
-              aria-disabled={true}
-              aria-live="polite"
-              aria-atomic={true}
-              data-name="select-list-status"
-              className={clsx({ "sr-only": state.visibleOptions.length > 0 })}
-            >
-              {translation("nResultsFound", { count: state.visibleOptions.length })}
-            </li>
-          </Visibility>
-        </ul>
-      </PopUp>
-    );
-  }
-);
+        {props.children}
+        <Visibility isVisible={showSearch}>
+          <li
+            role="option"
+            aria-selected={false}
+            aria-disabled={true}
+            aria-live="polite"
+            aria-atomic={true}
+            data-name="multi-select-list-status"
+            className={clsx({
+              "sr-only": context.visibleOptionIds.length > 0,
+            })}
+          >
+            {translation("nResultsFound", {
+              count: context.visibleOptionIds.length,
+            })}
+          </li>
+        </Visibility>
+      </ul>
+    </PopUp>
+  );
+});

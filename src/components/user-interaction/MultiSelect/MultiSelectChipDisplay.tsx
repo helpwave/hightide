@@ -19,45 +19,51 @@ export const MultiSelectChipDisplayButton = forwardRef<
   MultiSelectChipDisplayButtonProps
 >(function MultiSelectChipDisplayButton({ id, ...props }, ref) {
   const translation = useHightideTranslation();
-  const { state, trigger, item, ids, setIds } = useMultiSelectContext();
-  const { register, unregister, toggleOpen } = trigger;
+  const context = useMultiSelectContext<unknown>();
 
   useEffect(() => {
-    if (id) setIds((prev) => ({ ...prev, trigger: id }));
-  }, [id, setIds]);
+    if (id) context.config.setIds((prev) => ({ ...prev, trigger: id }));
+  }, [id, context.config.setIds]);
 
   const innerRef = useRef<HTMLDivElement>(null);
   useImperativeHandle(ref, () => innerRef.current!);
 
   useEffect(() => {
-    register(innerRef);
+    const unregister = context.layout.registerTrigger(innerRef);
     return () => unregister();
-  }, [register, unregister]);
+  }, [context.layout.registerTrigger]);
 
-  const disabled = !!props?.disabled || !!state.disabled;
-  const invalid = state.invalid;
+  const disabled = !!props?.disabled || !!context.disabled;
+  const invalid = context.invalid;
+  const selectedOptions = context.selectedIds
+    .map((oid) => context.idToOptionMap[oid])
+    .filter(Boolean);
 
   return (
     <div
       {...props}
       ref={innerRef}
       onClick={(event) => {
-        toggleOpen();
         props.onClick?.(event);
+        if(event.defaultPrevented) return;
+        context.toggleIsOpen();
       }}
-      data-name={props["data-name"] ?? "select-chip-display"}
-      data-value={state.value.length > 0 ? "" : undefined}
+      data-name={props["data-name"] ?? "multi-select-chip-display-button"}
+      data-value={context.value.length > 0 ? "" : undefined}
       data-disabled={disabled ? "" : undefined}
       data-invalid={invalid ? "" : undefined}
       aria-invalid={invalid}
       aria-disabled={disabled}
     >
-      {state.selectedOptions.map(({ value, display }) => (
-        <div key={value} data-name="select-chip-display-chip">
-          {display}
+      {selectedOptions.map((opt) => (
+        <div key={opt.id} data-name="multi-select-chip-display-chip">
+          {opt.display}
           <IconButton
             tooltip={translation("remove")}
-            onClick={() => item.toggleSelection(value, false)}
+            onClick={(e) => {
+              context.toggleSelection(opt.id, false)
+              e.preventDefault();
+            }}
             size="sm"
             color="negative"
             coloringStyle="text"
@@ -68,18 +74,18 @@ export const MultiSelectChipDisplayButton = forwardRef<
         </div>
       ))}
       <IconButton
-        id={ids.trigger}
+        id={context.config.ids.trigger}
         onClick={(event) => {
           event.stopPropagation();
-          toggleOpen();
+          context.toggleIsOpen();
         }}
         onKeyDown={(event) => {
           switch (event.key) {
             case "ArrowDown":
-              toggleOpen(true, { highlightStartPositionBehavior: "first" });
+              context.setIsOpen(true, "first");
               break;
             case "ArrowUp":
-              toggleOpen(true, { highlightStartPositionBehavior: "last" });
+              context.setIsOpen(true, "last");
           }
         }}
         tooltip={translation("changeSelection")}
@@ -88,8 +94,10 @@ export const MultiSelectChipDisplayButton = forwardRef<
         aria-invalid={invalid}
         aria-disabled={disabled}
         aria-haspopup="dialog"
-        aria-expanded={state.isOpen}
-        aria-controls={state.isOpen ? ids.content : undefined}
+        aria-expanded={context.isOpen}
+        aria-controls={
+          context.isOpen ? context.config.ids.content : undefined
+        }
         className="size-9"
       >
         <Plus />
@@ -98,15 +106,23 @@ export const MultiSelectChipDisplayButton = forwardRef<
   );
 });
 
-export type MultiSelectChipDisplayProps = MultiSelectRootProps & {
+export type MultiSelectChipDisplayProps<T = string> = MultiSelectRootProps<T> & {
   contentPanelProps?: MultiSelectContentProps;
   chipDisplayProps?: MultiSelectChipDisplayButtonProps;
 };
 
-export const MultiSelectChipDisplay = forwardRef<HTMLDivElement, MultiSelectChipDisplayProps>(
-  function MultiSelectChipDisplay({ children, contentPanelProps, chipDisplayProps, ...props }, ref) {
+export const MultiSelectChipDisplay = forwardRef(
+  function MultiSelectChipDisplay<T = string>(
+    {
+      children,
+      contentPanelProps,
+      chipDisplayProps,
+      ...props
+    }: MultiSelectChipDisplayProps<T>,
+    ref: React.ForwardedRef<HTMLDivElement>
+  ) {
     return (
-      <MultiSelectRoot {...props}>
+      <MultiSelectRoot<T> {...props}>
         <MultiSelectChipDisplayButton ref={ref} {...chipDisplayProps} />
         <MultiSelectContent {...contentPanelProps}>{children}</MultiSelectContent>
       </MultiSelectRoot>

@@ -1,15 +1,14 @@
 import type { Dispatch, ReactNode, RefObject, SetStateAction } from "react";
 import { createContext, useContext } from "react";
 import type { FormFieldInteractionStates } from "@/src/components/form/FieldLayout";
+import { UseMultiSelectFirstHighlightBehavior } from "./useMultiSelect";
 
-export interface MultiSelectOptionType {
-  value: string;
-  label: string;
-  display: ReactNode;
-  disabled: boolean;
-}
-
-export interface RegisteredMultiSelectOption extends MultiSelectOptionType {
+export interface MultiSelectOptionType<T = string> {
+  id: string;
+  value: T;
+  label?: string;
+  display?: ReactNode;
+  disabled?: boolean;
   ref: RefObject<HTMLElement>;
 }
 
@@ -20,53 +19,62 @@ export interface MultiSelectContextIds {
   searchInput: string;
 }
 
-export interface MultiSelectContextState extends FormFieldInteractionStates {
+export interface MultiSelectContextInternalState extends FormFieldInteractionStates {
+  selectedIds: string[];
+  highlightedId: string | null;
   isOpen: boolean;
-  options: ReadonlyArray<RegisteredMultiSelectOption>;
-  visibleOptions: ReadonlyArray<RegisteredMultiSelectOption>;
-  searchQuery: string;
-  value: string[];
-  selectedOptions: ReadonlyArray<RegisteredMultiSelectOption>;
-  highlightedValue: string | undefined;
+}
+
+export interface MultiSelectContextComputedState<T> {
+  options: ReadonlyArray<MultiSelectOptionType<T>>;
+  visibleOptionIds: ReadonlyArray<string>;
+  idToOptionMap: Record<string, MultiSelectOptionType<T>>;
+  value: T[];
+}
+
+export interface MultiSelectContextActions<T> {
+  registerOption(option: MultiSelectOptionType<T>): () => void;
+  toggleSelection(id: string, isSelected?: boolean): void;
+  highlightFirst(): void;
+  highlightLast(): void;
+  highlightNext(): void;
+  highlightPrevious(): void;
+  highlightItem(id: string): void;
+  setIsOpen(open: boolean, behavior?: UseMultiSelectFirstHighlightBehavior): void;
+  toggleIsOpen(behavior?: UseMultiSelectFirstHighlightBehavior): void;
+}
+
+export interface MultiSelectContextLayout {
+  triggerRef: RefObject<HTMLElement>;
+  registerTrigger(element: RefObject<HTMLElement>): () => void;
+}
+
+export interface MultiSelectContextSearch {
+  hasSearch: boolean;
+  searchQuery?: string;
+  setSearchQuery(query: string): void;
 }
 
 export type MultiSelectIconAppearance = "left" | "right" | "none";
 
-export interface MultiSelectContextType {
+export interface MultiSelectContextConfig {
+  iconAppearance: MultiSelectIconAppearance;
   ids: MultiSelectContextIds;
   setIds: Dispatch<SetStateAction<MultiSelectContextIds>>;
-  state: MultiSelectContextState;
-  iconAppearance: MultiSelectIconAppearance;
-  item: {
-    register: (item: RegisteredMultiSelectOption) => () => void;
-    toggleSelection: (value: string, isSelected?: boolean) => void;
-    highlightFirst: () => void;
-    highlightLast: () => void;
-    highlightItem: (value: string) => void;
-    moveHighlightedIndex: (delta: number) => void;
-  };
-  trigger: {
-    ref: RefObject<HTMLElement>;
-    register: (element: RefObject<HTMLElement>) => void;
-    unregister: () => void;
-    toggleOpen: (
-      isOpen?: boolean,
-      options?: { highlightStartPositionBehavior?: "first" | "last" }
-    ) => void;
-  };
-  search: {
-    showSearch: boolean;
-    searchQuery: string;
-    setSearchQuery: (query: string) => void;
-  };
 }
 
-const MultiSelectContext = createContext<MultiSelectContextType | null>(null);
+export interface MultiSelectContextType<T> extends MultiSelectContextActions<T>, MultiSelectContextInternalState, MultiSelectContextComputedState<T> {
+  config: MultiSelectContextConfig;
+  layout: MultiSelectContextLayout;
+  search: MultiSelectContextSearch;
+}
 
-export function useMultiSelectContext(): MultiSelectContextType {
+const MultiSelectContext = createContext<MultiSelectContextType<unknown> | null>(null);
+
+export function useMultiSelectContext<T>(): MultiSelectContextType<T> {
   const ctx = useContext(MultiSelectContext);
   if (!ctx) throw new Error("useMultiSelectContext must be used within MultiSelectRoot");
-  return ctx;
+  return ctx as MultiSelectContextType<T>;
 }
 
 export { MultiSelectContext };
