@@ -1,72 +1,36 @@
-import { useCallback, useEffect, useMemo, useState } from 'react'
-import { MultiSubjectSearchWithMapping } from '@/src/utils/simpleSearch'
+import { useMemo } from "react";
+import { MultiSearchWithMapping } from "@/src/utils/simpleSearch";
+import { useEventCallbackStabilizer } from "@/src/hooks/useEventCallbackStabelizer";
 
-export type UseSearchProps<T> = {
-  list: T[],
-  searchMapping: (item: T) => string[],
-  initialSearch?: string,
-  additionalSearchTags?: string[],
-  isSearchInstant?: boolean,
-  sortingFunction?: (a: T, b: T) => number,
-  filter?: (item: T) => boolean,
-  disabled?: boolean,
+export interface UseSearchOptions<T> {
+  items: ReadonlyArray<T>;
+  searchQuery: string;
+  toTags?: (value: T) => string[];
 }
 
-export const useSearch = <T>({
-  list,
-  initialSearch,
-  searchMapping,
-  additionalSearchTags,
-  isSearchInstant = true,
-  sortingFunction,
-  filter,
-  disabled = false,
-}: UseSearchProps<T>) => {
-  const [search, setSearch] = useState<string>(initialSearch ?? '')
-  const [result, setResult] = useState<T[]>(list)
-  const searchTags = useMemo(() => additionalSearchTags ?? [], [additionalSearchTags])
+export interface UseSearchReturn<T> {
+  searchResult: ReadonlyArray<T>;
+}
 
-  const updateSearch = useCallback((newSearch?: string) => {
-    const usedSearch = newSearch ?? search
-    if (newSearch) {
-      setSearch(search)
-    }
-    setResult(MultiSubjectSearchWithMapping([usedSearch, ...searchTags], list, searchMapping))
-  }, [searchTags, list, search, searchMapping])
+function defaultToTags<T>(value: T): string[] {
+  return [String(value)];
+}
 
-  useEffect(() => {
-    if (isSearchInstant) {
-      setResult(MultiSubjectSearchWithMapping([search, ...searchTags], list, searchMapping))
-    }
-  }, [searchTags, isSearchInstant, list, search, searchMapping, additionalSearchTags])
+export function useSearch<T>({
+  items,
+  searchQuery,
+  toTags,
+}: UseSearchOptions<T>): UseSearchReturn<T> {
+  const toTagsResolved = toTags ?? defaultToTags;
+  const toTagsStable = useEventCallbackStabilizer(toTagsResolved);
 
-  const filteredResult: T[] = useMemo(() => {
-    if (!filter) {
-      return result
-    }
-    return result.filter(filter)
-  }, [result, filter])
+  const searchResult = useMemo(() => {
+    const q = searchQuery.trim().toLowerCase();
+    if (!q) return items;
+    return MultiSearchWithMapping(searchQuery, [...items], (item) => toTagsStable(item));
+  }, [items, searchQuery, toTags, toTagsStable]);
 
-  const sortedAndFilteredResult: T[] = useMemo(() => {
-    if (!sortingFunction) {
-      return filteredResult
-    }
-    return filteredResult.sort(sortingFunction)
-  }, [filteredResult, sortingFunction])
-
-  const usedResult = useMemo(() => {
-    if (!disabled) {
-      return sortedAndFilteredResult
-    }
-    return list
-  }, [disabled, list, sortedAndFilteredResult])
-
-  return {
-    result: usedResult,
-    hasResult: usedResult.length > 0,
-    allItems: list,
-    updateSearch,
-    search,
-    setSearch,
-  }
+  return useMemo((): UseSearchReturn<T> => ({
+    searchResult,
+  }), [searchResult]);
 }

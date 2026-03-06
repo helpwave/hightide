@@ -7,21 +7,17 @@ import { PopUp, type PopUpProps } from "@/src/components/layout/popup/PopUp";
 import { Input } from "@/src/components/user-interaction/input/Input";
 import { Visibility } from "@/src/components/layout/Visibility";
 
-const TYPEAHEAD_RESET_MS = 500;
-
 export interface SelectContentProps extends PopUpProps {
   showSearch?: boolean;
   searchInputProps?: Omit<ComponentProps<typeof Input>, "value" | "onValueChange">;
 }
 
-export const SelectContent = forwardRef<HTMLUListElement, SelectContentProps>(function SelectContent<T>({ 
+export const SelectContent = forwardRef<HTMLUListElement, SelectContentProps>(function SelectContent<T>({
   id, options, showSearch: showSearchOverride, searchInputProps, ...props
 }, ref) {
   const translation = useHightideTranslation();
   const innerRef = useRef<HTMLUListElement>(null);
   const searchInputRef = useRef<HTMLInputElement>(null);
-  const typeAheadBufferRef = useRef("");
-  const typeAheadTimeoutRef = useRef<ReturnType<typeof setTimeout> | null>(null);
   useImperativeHandle(ref, () => innerRef.current!);
 
   const context = useSelectContext<T>();
@@ -29,23 +25,6 @@ export const SelectContent = forwardRef<HTMLUListElement, SelectContentProps>(fu
   useEffect(() => {
     if (id) context.config.setIds((prev) => ({ ...prev, content: id }));
   }, [id, context.config.setIds]);
-
-  useEffect(() => {
-    if (!context.isOpen) {
-      typeAheadBufferRef.current = "";
-      if (typeAheadTimeoutRef.current) {
-        clearTimeout(typeAheadTimeoutRef.current);
-        typeAheadTimeoutRef.current = null;
-      }
-    }
-  }, [context.isOpen]);
-
-  useEffect(
-    () => () => {
-      if (typeAheadTimeoutRef.current) clearTimeout(typeAheadTimeoutRef.current);
-    },
-    []
-  );
 
   const showSearch = showSearchOverride ?? context.search.hasSearch;
   const listboxAriaLabel = showSearch ? translation("searchResults") : undefined;
@@ -78,36 +57,15 @@ export const SelectContent = forwardRef<HTMLUListElement, SelectContentProps>(fu
           }
           break;
         default:
-          if (!showSearch && !event.ctrlKey && !event.metaKey && !event.altKey) {
-            const char = event.key.toLowerCase();
-            if (typeAheadTimeoutRef.current) clearTimeout(typeAheadTimeoutRef.current);
-            typeAheadBufferRef.current += char;
-            typeAheadTimeoutRef.current = setTimeout(() => {
-              typeAheadBufferRef.current = "";
-            }, TYPEAHEAD_RESET_MS);
-            const optionIds = context.visibleOptionIds;
-            const buf = typeAheadBufferRef.current;
-            if (optionIds.length === 0) {
+          if (!showSearch && !event.ctrlKey && !event.metaKey && !event.altKey && event.key.length === 1) {
+            if (context.handleTypeaheadKey(event.key)) {
               event.preventDefault();
-              return;
             }
-            const currentIndex = optionIds.findIndex((id) => id === context.highlightedId);
-            const startFrom = currentIndex >= 0 ? (currentIndex + 1) % optionIds.length : 0;
-            for (let i = 0; i < optionIds.length; i++) {
-              const j = (startFrom + i) % optionIds.length;
-              const option = context.idToOptionMap[optionIds[j]];
-              if (!option.disabled && option.label.toLowerCase().startsWith(buf)) {
-                context.highlightItem(option.id);
-                event.preventDefault();
-                return;
-              }
-            }
-            event.preventDefault();
           }
           break;
       }
     },
-    [showSearch, context.visibleOptionIds, context.highlightedId, context.highlightItem, context.toggleSelection]
+    [showSearch, context]
   );
 
   return (

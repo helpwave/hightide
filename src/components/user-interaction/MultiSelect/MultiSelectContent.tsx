@@ -7,8 +7,6 @@ import { PopUp, type PopUpProps } from "@/src/components/layout/popup/PopUp";
 import { Input } from "@/src/components/user-interaction/input/Input";
 import { Visibility } from "@/src/components/layout/Visibility";
 
-const TYPEAHEAD_RESET_MS = 500;
-
 export interface MultiSelectContentProps extends PopUpProps {
   showSearch?: boolean;
   searchInputProps?: Omit<ComponentProps<typeof Input>, "value" | "onValueChange">;
@@ -24,8 +22,6 @@ export const MultiSelectContent = forwardRef<
   const translation = useHightideTranslation();
   const innerRef = useRef<HTMLUListElement>(null);
   const searchInputRef = useRef<HTMLInputElement>(null);
-  const typeAheadBufferRef = useRef("");
-  const typeAheadTimeoutRef = useRef<ReturnType<typeof setTimeout> | null>(null);
   useImperativeHandle(ref, () => innerRef.current!);
 
   const context = useMultiSelectContext<T>();
@@ -33,23 +29,6 @@ export const MultiSelectContent = forwardRef<
   useEffect(() => {
     if (id) context.config.setIds((prev) => ({ ...prev, content: id }));
   }, [id, context.config.setIds]);
-
-  useEffect(() => {
-    if (!context.isOpen) {
-      typeAheadBufferRef.current = "";
-      if (typeAheadTimeoutRef.current) {
-        clearTimeout(typeAheadTimeoutRef.current);
-        typeAheadTimeoutRef.current = null;
-      }
-    }
-  }, [context.isOpen]);
-
-  useEffect(
-    () => () => {
-      if (typeAheadTimeoutRef.current) clearTimeout(typeAheadTimeoutRef.current);
-    },
-    []
-  );
 
   const showSearch = showSearchOverride ?? context.search.hasSearch;
   const listboxAriaLabel = showSearch ? translation("searchResults") : undefined;
@@ -82,56 +61,21 @@ export const MultiSelectContent = forwardRef<
           }
           break;
         default:
-          if (!showSearch && !event.ctrlKey && !event.metaKey && !event.altKey) {
-            const char = event.key.toLowerCase();
-            if (typeAheadTimeoutRef.current)
-              clearTimeout(typeAheadTimeoutRef.current);
-            typeAheadBufferRef.current += char;
-            typeAheadTimeoutRef.current = setTimeout(() => {
-              typeAheadBufferRef.current = "";
-            }, TYPEAHEAD_RESET_MS);
-            const optionIds = context.visibleOptionIds;
-            const buf = typeAheadBufferRef.current;
-            if (optionIds.length === 0) {
+          if (
+            !showSearch &&
+            !event.ctrlKey &&
+            !event.metaKey &&
+            !event.altKey &&
+            event.key.length === 1
+          ) {
+            if (context.handleTypeaheadKey(event.key)) {
               event.preventDefault();
-              return;
             }
-            const currentIndex = optionIds.findIndex(
-              (oid) => oid === context.highlightedId
-            );
-            const startFrom =
-              currentIndex >= 0
-                ? (currentIndex + 1) % optionIds.length
-                : 0;
-            for (let i = 0; i < optionIds.length; i++) {
-              const j = (startFrom + i) % optionIds.length;
-              const option = context.idToOptionMap[optionIds[j]];
-              if (
-                option &&
-                !option.disabled &&
-                (option.label ?? "").toLowerCase().startsWith(buf)
-              ) {
-                context.highlightItem(option.id);
-                event.preventDefault();
-                return;
-              }
-            }
-            event.preventDefault();
           }
           break;
       }
     },
-    [
-      showSearch,
-      context.visibleOptionIds,
-      context.highlightedId,
-      context.highlightItem,
-      context.toggleSelection,
-      context.highlightNext,
-      context.highlightPrevious,
-      context.highlightFirst,
-      context.highlightLast,
-    ]
+    [showSearch, context]
   );
 
   return (
@@ -163,9 +107,7 @@ export const MultiSelectContent = forwardRef<
           aria-expanded={context.isOpen}
           aria-controls={context.config.ids.listbox}
           aria-activedescendant={
-            context.highlightedId
-              ? context.highlightedId
-              : undefined
+            context.highlightedId ? context.highlightedId : undefined
           }
           aria-label={searchInputProps?.["aria-label"] ?? translation("filterOptions")}
           className={clsx("mx-2 mt-2 shrink-0", searchInputProps?.className)}
@@ -176,7 +118,6 @@ export const MultiSelectContent = forwardRef<
         id={context.config.ids.listbox}
         onKeyDown={showSearch ? undefined : keyHandler}
         role="listbox"
-
         data-name="multi-select-list"
         aria-multiselectable={true}
         aria-orientation="vertical"

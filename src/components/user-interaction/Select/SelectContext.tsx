@@ -19,14 +19,14 @@ export interface SelectContextIds {
   searchInput: string;
 }
 
-export interface SelectContextInternalState extends FormFieldInteractionStates {
+export interface SelectContextState<T> extends FormFieldInteractionStates {
   selectedId: string | null;
+  options: ReadonlyArray<SelectOptionType<T>>;
   highlightedId: string | null;
   isOpen: boolean;
 }
 
 export interface SelectContextComputedState<T> {
-  options: ReadonlyArray<SelectOptionType<T>>;
   visibleOptionIds: ReadonlyArray<string>;
   idToOptionMap: Record<string, SelectOptionType<T>>;
 }
@@ -39,6 +39,7 @@ export interface SelectContextActions<T> {
   highlightNext(): void;
   highlightPrevious(): void;
   highlightItem(id: string): void;
+  handleTypeaheadKey(key: string): boolean;
   setIsOpen(open: boolean, behavior?: UseSelectFirstHighlightBehavior): void;
   toggleIsOpen(behavior?: UseSelectFirstHighlightBehavior): void;
 }
@@ -62,7 +63,7 @@ export interface SelectContextConfig {
   setIds: Dispatch<SetStateAction<SelectContextIds>>;
 }
 
-export interface SelectContextType<T> extends SelectContextActions<T>, SelectContextInternalState, SelectContextComputedState<T> {
+export interface SelectContextType<T> extends SelectContextActions<T>, SelectContextState<T>, SelectContextComputedState<T> {
   config: SelectContextConfig;
   layout: SelectContextLayout;
   search: SelectContextSearch;

@@ -1,12 +1,14 @@
 import {
   useCallback,
+  useEffect,
   useMemo,
+  useRef,
   useState,
 } from "react";
 import { useMultiSelection } from "@/src/hooks/useMultiSelection";
 import { useListNavigation } from "@/src/hooks/useListNavigation";
-import { MultiSearchWithMapping } from "@/src/utils/simpleSearch";
 import { useEventCallbackStabilizer } from "@/src/hooks/useEventCallbackStabelizer";
+import { useSearch, useTypeAheadSearch } from "@/src/hooks";
 
 export interface UseMultiSelectOption {
   id: string;
@@ -22,45 +24,39 @@ export interface UseMultiSelectOptions {
   initialValue?: string[];
   initialIsOpen?: boolean;
   onClose?: () => void;
+  typeAheadResetMs?: number;
 }
 
 export type UseMultiSelectFirstHighlightBehavior = "first" | "last";
 
-export interface UseMultiSelectOpenState {
+export interface UseMultiSelectState {
+  value: string[];
+  highlightedId: string | null;
   isOpen: boolean;
+  searchQuery: string;
+  options: ReadonlyArray<UseMultiSelectOption>;
+}
+
+export interface UseMultiSelectComputedState {
+  visibleOptionIds: ReadonlyArray<string>;
+}
+
+export interface UseMultiSelectActions {
   setIsOpen: (isOpen: boolean, behavior?: UseMultiSelectFirstHighlightBehavior) => void;
   toggleOpen: (behavior?: UseMultiSelectFirstHighlightBehavior) => void;
-}
-
-export interface UseMultiSelectSearchState {
-  searchQuery: string;
   setSearchQuery: (query: string) => void;
-}
-
-export interface UseMultiSelectHighlightState {
-  highlightedId: string | null;
   highlightFirst: () => void;
   highlightLast: () => void;
   highlightNext: () => void;
   highlightPrevious: () => void;
   highlightItem: (id: string) => void;
-}
-
-export interface UseMultiSelectSelectionState {
-  value: string[];
   toggleSelection: (id: string, isSelected?: boolean) => void;
   setSelection: (ids: string[]) => void;
   isSelected: (id: string) => boolean;
+  handleTypeaheadKey: (key: string) => boolean;
 }
 
-export interface UseMultiSelectReturn
-  extends UseMultiSelectOpenState,
-    UseMultiSelectSearchState,
-    UseMultiSelectHighlightState,
-    UseMultiSelectSelectionState {
-  options: ReadonlyArray<UseMultiSelectOption>;
-  visibleOptionIds: ReadonlyArray<string>;
-}
+export interface UseMultiSelectReturn extends UseMultiSelectState, UseMultiSelectComputedState, UseMultiSelectActions {}
 
 export function useMultiSelect({
   options,
@@ -70,6 +66,7 @@ export function useMultiSelect({
   initialValue = [],
   onClose,
   initialIsOpen = false,
+  typeAheadResetMs = 500,
 }: UseMultiSelectOptions): UseMultiSelectReturn {
   const [isOpen, setIsOpen] = useState(initialIsOpen);
   const [searchQuery, setSearchQuery] = useState("");
@@ -90,11 +87,11 @@ export function useMultiSelect({
   const editCompleteStable = useEventCallbackStabilizer(onEditComplete);
   const onCloseStable = useEventCallbackStabilizer(onClose);
 
-  const visibleOptions = useMemo(() => {
-    const q = searchQuery.trim().toLowerCase();
-    if (!q) return options;
-    return MultiSearchWithMapping(searchQuery, [...options], (o) => [o.label ?? ""]);
-  }, [options, searchQuery]);
+  const { searchResult: visibleOptions } = useSearch({
+    items: options,
+    searchQuery,
+    toTags: useCallback((o: UseMultiSelectOption) => [o.label ?? ""], []),
+  });
 
   const visibleOptionIds = useMemo(
     () => visibleOptions.map((o) => o.id),
@@ -111,19 +108,36 @@ export function useMultiSelect({
     initialValue: selection.selection[0] ?? null,
   });
 
-  const highlightState: UseMultiSelectHighlightState = useMemo(
-    () => ({
-      highlightedId: listNav.highlightedId,
-      highlightFirst: listNav.first,
-      highlightLast: listNav.last,
-      highlightNext: listNav.next,
-      highlightPrevious: listNav.previous,
-      highlightItem: (id: string) => {
-        if (!enabledOptions.some((o) => o.id === id)) return;
-        listNav.highlight(id);
+  const typeAhead = useTypeAheadSearch({
+    options: enabledOptions,
+    resetTimer: typeAheadResetMs,
+    toString: (o) => o.label ?? "",
+    onResultChange: useCallback(
+      (option: UseMultiSelectOption | null) => {
+        if (option) listNav.highlight(option.id);
       },
-    }),
+      [listNav]
+    ),
+  });
+
+  useEffect(() => {
+    if (!isOpen) typeAhead.reset();
+  }, [isOpen]);
+
+  const highlightItem = useCallback(
+    (id: string) => {
+      if (!enabledOptions.some((o) => o.id === id)) return;
+      listNav.highlight(id);
+    },
     [enabledOptions, listNav]
+  );
+
+  const handleTypeaheadKey = useCallback(
+    (key: string): boolean => {
+      typeAhead.addToTypeAhead(key.toLowerCase());
+      return true;
+    },
+    [typeAhead]
   );
 
   const toggleSelectionValue = useCallback(
@@ -135,19 +149,9 @@ export function useMultiSelect({
       } else {
         selection.setSelection(selection.selection.filter((s) => s !== id));
       }
-      highlightState.highlightItem(id);
+      highlightItem(id);
     },
-    [selection, highlightState]
-  );
-
-  const selectionState: UseMultiSelectSelectionState = useMemo(
-    () => ({
-      value: [...selection.selection],
-      toggleSelection: toggleSelectionValue,
-      setSelection: (ids: string[]) => selection.setSelection(ids),
-      isSelected: selection.isSelected,
-    }),
-    [selection.selection, selection.setSelection, selection.isSelected, toggleSelectionValue]
+    [selection, highlightItem]
   );
 
   const setIsOpenWrapper = useCallback(
@@ -156,19 +160,17 @@ export function useMultiSelect({
       behavior = behavior ?? "first";
       if (open) {
         if (enabledOptions.length > 0) {
-          let selected: UseMultiSelectOption | undefined
-          if(behavior === "first") {
-            selected = enabledOptions.find((o) =>
-              selection.isSelected(o.id)
-            );
+          let selected: UseMultiSelectOption | undefined;
+          if (behavior === "first") {
+            selected = enabledOptions.find((o) => selection.isSelected(o.id));
             selected ??= enabledOptions[0];
           } else if (behavior === "last") {
-            selected = [...enabledOptions].reverse().find((o) =>
-              selection.isSelected(o.id)
-            );
+            selected = [...enabledOptions]
+              .reverse()
+              .find((o) => selection.isSelected(o.id));
             selected ??= enabledOptions[enabledOptions.length - 1];
           }
-          if (selected) highlightState.highlightItem(selected.id);
+          if (selected) highlightItem(selected.id);
         }
       } else {
         setSearchQuery("");
@@ -177,7 +179,7 @@ export function useMultiSelect({
       }
     },
     [
-      highlightState,
+      highlightItem,
       onCloseStable,
       editCompleteStable,
       selection.selection,
@@ -186,41 +188,71 @@ export function useMultiSelect({
     ]
   );
 
-  const openState: UseMultiSelectOpenState = useMemo(
-    () => ({
-      isOpen,
-      setIsOpen: setIsOpenWrapper,
-      toggleOpen: (behavior?: UseMultiSelectFirstHighlightBehavior) => {
-        setIsOpenWrapper(!isOpen, behavior);
-      },
-    }),
+  const toggleOpenWrapper = useCallback(
+    (behavior?: UseMultiSelectFirstHighlightBehavior) => {
+      setIsOpenWrapper(!isOpen, behavior);
+    },
     [isOpen, setIsOpenWrapper]
   );
 
-  const searchState: UseMultiSelectSearchState = useMemo(
+  const state: UseMultiSelectState = useMemo(
     () => ({
+      value: [...selection.selection],
+      highlightedId: listNav.highlightedId,
+      isOpen,
       searchQuery,
-      setSearchQuery,
+      options,
     }),
-    [searchQuery, setSearchQuery]
+    [
+      selection.selection,
+      listNav.highlightedId,
+      isOpen,
+      searchQuery,
+      options,
+    ]
+  );
+
+  const computedState: UseMultiSelectComputedState = useMemo(
+    () => ({ visibleOptionIds }),
+    [visibleOptionIds]
+  );
+
+  const actions: UseMultiSelectActions = useMemo(
+    () => ({
+      setIsOpen: setIsOpenWrapper,
+      toggleOpen: toggleOpenWrapper,
+      setSearchQuery,
+      highlightFirst: listNav.first,
+      highlightLast: listNav.last,
+      highlightNext: listNav.next,
+      highlightPrevious: listNav.previous,
+      highlightItem,
+      toggleSelection: toggleSelectionValue,
+      setSelection: (ids: string[]) => selection.setSelection(ids),
+      isSelected: selection.isSelected,
+      handleTypeaheadKey,
+    }),
+    [
+      setIsOpenWrapper,
+      toggleOpenWrapper,
+      listNav.first,
+      listNav.last,
+      listNav.next,
+      listNav.previous,
+      highlightItem,
+      toggleSelectionValue,
+      selection.setSelection,
+      selection.isSelected,
+      handleTypeaheadKey,
+    ]
   );
 
   return useMemo(
     (): UseMultiSelectReturn => ({
-      ...openState,
-      ...highlightState,
-      ...selectionState,
-      ...searchState,
-      options,
-      visibleOptionIds,
+      ...state,
+      ...computedState,
+      ...actions,
     }),
-    [
-      openState,
-      highlightState,
-      selectionState,
-      searchState,
-      options,
-      visibleOptionIds,
-    ]
+    [state, computedState, actions]
   );
 }

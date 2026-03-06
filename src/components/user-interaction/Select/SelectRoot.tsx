@@ -169,6 +169,7 @@ export function SelectRoot<T>({
         highlightNext: state.highlightNext,
         highlightPrevious: state.highlightPrevious,
         highlightItem: state.highlightItem,
+        handleTypeaheadKey: state.handleTypeaheadKey,
         setIsOpen: state.setIsOpen,
         toggleIsOpen: state.toggleOpen,
         config,

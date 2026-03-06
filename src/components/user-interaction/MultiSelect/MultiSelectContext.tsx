@@ -19,17 +19,17 @@ export interface MultiSelectContextIds {
   searchInput: string;
 }
 
-export interface MultiSelectContextInternalState extends FormFieldInteractionStates {
+export interface MultiSelectContextState<T> extends FormFieldInteractionStates {
+  value: T[];
+  options: ReadonlyArray<MultiSelectOptionType<T>>;
   selectedIds: string[];
   highlightedId: string | null;
   isOpen: boolean;
 }
 
 export interface MultiSelectContextComputedState<T> {
-  options: ReadonlyArray<MultiSelectOptionType<T>>;
   visibleOptionIds: ReadonlyArray<string>;
   idToOptionMap: Record<string, MultiSelectOptionType<T>>;
-  value: T[];
 }
 
 export interface MultiSelectContextActions<T> {
@@ -40,6 +40,7 @@ export interface MultiSelectContextActions<T> {
   highlightNext(): void;
   highlightPrevious(): void;
   highlightItem(id: string): void;
+  handleTypeaheadKey(key: string): boolean;
   setIsOpen(open: boolean, behavior?: UseMultiSelectFirstHighlightBehavior): void;
   toggleIsOpen(behavior?: UseMultiSelectFirstHighlightBehavior): void;
 }
@@ -63,7 +64,7 @@ export interface MultiSelectContextConfig {
   setIds: Dispatch<SetStateAction<MultiSelectContextIds>>;
 }
 
-export interface MultiSelectContextType<T> extends MultiSelectContextActions<T>, MultiSelectContextInternalState, MultiSelectContextComputedState<T> {
+export interface MultiSelectContextType<T> extends MultiSelectContextActions<T>, MultiSelectContextState<T>, MultiSelectContextComputedState<T> {
   config: MultiSelectContextConfig;
   layout: MultiSelectContextLayout;
   search: MultiSelectContextSearch;

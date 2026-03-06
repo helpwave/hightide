@@ -1,12 +1,14 @@
 import {
   useCallback,
+  useEffect,
   useMemo,
+  useRef,
   useState,
 } from "react";
 import { useSingleSelection } from "@/src/hooks/useSingleSelection";
 import { useListNavigation } from "@/src/hooks/useListNavigation";
-import { MultiSearchWithMapping } from "@/src/utils/simpleSearch";
 import { useEventCallbackStabilizer } from "@/src/hooks/useEventCallbackStabelizer";
+import { useSearch, useTypeAheadSearch } from "@/src/hooks";
 
 export interface UseSelectOption {
   id: string;
@@ -17,12 +19,13 @@ export interface UseSelectOption {
 export interface UseSelectOptions {
   options: ReadonlyArray<UseSelectOption>;
   value?: string | null;
-  onValueChange?: (value: string) => void;
-  onEditComplete?: (value: string) => void;
   initialValue?: string | null;
   initialIsOpen?: boolean;
+  onValueChange?: (value: string) => void;
+  onEditComplete?: (value: string) => void;
   onClose?: () => void;
   onIsOpenChange?: (isOpen: boolean) => void;
+  typeAheadResetMs?: number;
 }
 
 export type UseSelectFirstHighlightBehavior = "first" | "last";
@@ -49,6 +52,7 @@ export interface UseSelectActions {
   highlightPrevious: () => void;
   highlightItem: (value: string) => void;
   selectValue: (value: string) => void;
+  handleTypeaheadKey: (key: string) => boolean;
 }
 
 export interface UseSelectReturn extends UseSelectState, UseSelectComputedState, UseSelectActions {}
@@ -62,8 +66,9 @@ export function useSelect({
   onClose,
   onIsOpenChange,
   initialIsOpen = false,
+  typeAheadResetMs = 500,
 }: UseSelectOptions): UseSelectReturn {
- const [isOpen, setIsOpen] = useState(initialIsOpen);
+  const [isOpen, setIsOpen] = useState(initialIsOpen);
   const [searchQuery, setSearchQuery] = useState("");
 
   const onValueChangeStable = useEventCallbackStabilizer(onValueChange);
@@ -85,11 +90,11 @@ export function useSelect({
     initialSelection: initialValue,
   });
   
-  const visibleOptions = useMemo(() => {
-    const q = searchQuery.trim().toLowerCase();
-    if (!q) return options;
-    return MultiSearchWithMapping(searchQuery, [...options], (o) => [o.label]);
-  }, [options, searchQuery]);
+  const { searchResult: visibleOptions } = useSearch({
+    items: options,
+    searchQuery,
+    toTags: useCallback((o: UseSelectOption) => [o.label], []),
+  });
 
   const visibleOptionIds = useMemo(() => visibleOptions.map((o) => o.id), [visibleOptions]);
 
@@ -99,6 +104,22 @@ export function useSelect({
     options: enabledOptions.map((o) => o.id),
     initialValue: selection.selection,
   });
+
+  const typeAhead = useTypeAheadSearch({
+    options: enabledOptions,
+    resetTimer: typeAheadResetMs,
+    toString: (o) => o.label ?? "",
+    onResultChange: useCallback(
+      (option: UseSelectOption | null) => {
+        if (option) listNav.highlight(option.id);
+      },
+      [listNav]
+    ),
+  });
+
+  useEffect(() => {
+    if (!isOpen) typeAhead.reset();
+  }, [isOpen]);
 
   const state: UseSelectState = useMemo(() => ({
     value: selection.selection,
@@ -114,8 +135,16 @@ export function useSelect({
 
   const highlightItem = useCallback((value: string) => {
     if (!enabledOptions.some((o) => o.id === value)) return;
-    listNav.highlight(value)
+    listNav.highlight(value);
   }, [enabledOptions, listNav]);
+
+  const handleTypeaheadKey = useCallback(
+    (key: string): boolean => {
+      typeAhead.addToTypeAhead(key.toLowerCase());
+      return true;
+    },
+    [typeAhead]
+  );
 
   const setIsOpenWrapper = useCallback((isOpen: boolean, behavior?: UseSelectFirstHighlightBehavior) => {
     behavior = behavior ?? "first";
@@ -152,7 +181,8 @@ export function useSelect({
     highlightNext: listNav.next,
     highlightPrevious: listNav.previous,
     highlightItem,
-  }), [setIsOpenWrapper, listNav.first, listNav.last, listNav.next, listNav.previous, highlightItem]);
+    handleTypeaheadKey,
+  }), [setIsOpenWrapper, listNav.first, listNav.last, listNav.next, listNav.previous, highlightItem, handleTypeaheadKey]);
 
   return useMemo(() => ({
     ...state,

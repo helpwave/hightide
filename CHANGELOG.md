@@ -13,6 +13,10 @@ and adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 - `Combobox` component
 - `FilterList` component for dynamically choosing and setting filters
 - `useSelectState`, `useMultiSelectState`, `useCombobox`, `useSingleSelection`, `useMultiSelection`
+- `useTypeAheadSearch` for getting the value of a timed type ahead search 
+
+## Changed
+- `useSearch` to require less parameter and only do a simple search and caching the result
 
 ## Fixed
 - imports in `TimePicker` and `DateTimeInput`
