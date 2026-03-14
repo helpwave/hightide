@@ -5,9 +5,14 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/)
 and adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
-## [0.9.0] - 2026-02-20
+## [0.9.1] - 2026-02-14
 
-## Added
+### Changed
+- The structure of `IdentifiedFilterValue` is now the same as `ColumnFilter` from `@tanstack/react-table` to allow for easy integration 
+
+## [0.9.0] - 2026-02-14
+
+### Added
 - Search for `Select` and `MultiSelect`
 - Type ahead support for `Select` and `MultiSelect`npm
 - `Combobox` component
@@ -15,13 +20,13 @@ and adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 - `useSelectState`, `useMultiSelectState`, `useCombobox`, `useSingleSelection`, `useMultiSelection`
 - `useTypeAheadSearch` for getting the value of a timed type ahead search 
 
-## Changed
+### Changed
 - `useSearch` to require less parameter and only do a simple search and caching the result
 
-## Fixed
+### Fixed
 - imports in `TimePicker` and `DateTimeInput`
 
-## Security
+### Security
 - update packages
 
 ## [0.8.12] - 2026-02-15
