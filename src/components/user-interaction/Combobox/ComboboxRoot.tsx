@@ -1,14 +1,14 @@
-import type { ReactNode, RefObject } from "react";
-import { useCallback, useId, useMemo, useState } from "react";
-import { ComboboxContext } from "./ComboboxContext";
-import type { ComboboxContextConfig, ComboboxContextIds, ComboboxContextLayout, ComboboxContextType, ComboboxOptionType } from "./ComboboxContext";
-import type { UseComboboxOptions } from "./useCombobox";
-import { useCombobox } from "./useCombobox";
-import { DOMUtils } from "@/src/utils/dom";
+import type { ReactNode, RefObject } from 'react'
+import { useCallback, useId, useMemo, useState } from 'react'
+import { ComboboxContext } from './ComboboxContext'
+import type { ComboboxContextConfig, ComboboxContextIds, ComboboxContextLayout, ComboboxContextType, ComboboxOptionType } from './ComboboxContext'
+import type { UseComboboxOptions } from './useCombobox'
+import { useCombobox } from './useCombobox'
+import { DOMUtils } from '@/src/utils/dom'
 
-export interface ComboboxRootProps<T = string> extends Omit<UseComboboxOptions, "options"> {
-  children: ReactNode;
-  onItemClick?: (value: T) => void;
+export interface ComboboxRootProps<T = string> extends Omit<UseComboboxOptions, 'options'> {
+  children: ReactNode,
+  onItemClick?: (value: T) => void,
 }
 
 export function ComboboxRoot<T = string>({
@@ -16,34 +16,33 @@ export function ComboboxRoot<T = string>({
   onItemClick,
   ...hookProps
 }: ComboboxRootProps<T>) {
-  const [options, setOptions] = useState<ComboboxOptionType<T>[]>([]);
-  const [listRef, setListRef] = useState<RefObject<HTMLUListElement | null> | null>(null);
-  const generatedId = useId();
+  const [options, setOptions] = useState<ComboboxOptionType<T>[]>([])
+  const [listRef, setListRef] = useState<RefObject<HTMLUListElement | null> | null>(null)
+  const generatedId = useId()
   const [ids, setIds] = useState<ComboboxContextIds>({
     trigger: `combobox-${generatedId}`,
     listbox: `combobox-${generatedId}-listbox`,
-  });
+  })
 
   const registerOption = useCallback(
     (option: ComboboxOptionType<T>) => {
       setOptions((prev) => {
-        const next = prev.filter((o) => o.id !== option.id);
-        next.push(option);
+        const next = prev.filter((o) => o.id !== option.id)
+        next.push(option)
         next.sort((a, b) =>
-          DOMUtils.compareDocumentPosition(a.ref.current, b.ref.current)
-        );
-        return next;
-      });
+          DOMUtils.compareDocumentPosition(a.ref.current, b.ref.current))
+        return next
+      })
       return () =>
-        setOptions((prev) => prev.filter((o) => o.id !== option.id));
+        setOptions((prev) => prev.filter((o) => o.id !== option.id))
     },
     []
-  );
+  )
 
   const registerList = useCallback((ref: RefObject<HTMLUListElement | null>) => {
-    setListRef(() => ref);
-    return () => setListRef(null);
-  }, []);
+    setListRef(() => ref)
+    return () => setListRef(null)
+  }, [])
 
   const hookOptions = useMemo(
     () =>
@@ -53,29 +52,29 @@ export function ComboboxRoot<T = string>({
         disabled: o.disabled,
       })),
     [options]
-  );
+  )
 
-  const state = useCombobox({ ...hookProps, options: hookOptions });
+  const state = useCombobox({ ...hookProps, options: hookOptions })
 
   const idToOptionMap = useMemo(() => {
     return options.reduce((acc, o) => {
-      acc[o.id] = o;
-      return acc;
-    }, {} as Record<string, ComboboxOptionType<T>>);
-  }, [options]);
+      acc[o.id] = o
+      return acc
+    }, {} as Record<string, ComboboxOptionType<T>>)
+  }, [options])
 
   const selectOption = useCallback(
     (id: string) => {
-      const option = idToOptionMap[id];
-      if (option) onItemClick?.(option.value as T);
+      const option = idToOptionMap[id]
+      if (option) onItemClick?.(option.value as T)
     },
     [idToOptionMap, onItemClick]
-  );
+  )
 
   const config: ComboboxContextConfig = useMemo(
     () => ({ ids, setIds }),
     [ids, setIds]
-  );
+  )
 
   const layout: ComboboxContextLayout = useMemo(
     () => ({
@@ -83,7 +82,7 @@ export function ComboboxRoot<T = string>({
       registerList,
     }),
     [listRef, registerList]
-  );
+  )
 
   const search = useMemo(
     () => ({
@@ -91,7 +90,7 @@ export function ComboboxRoot<T = string>({
       setSearchQuery: state.setSearchQuery,
     }),
     [state.searchQuery, state.setSearchQuery]
-  );
+  )
 
   const contextValue = useMemo(
     () => ({
@@ -126,11 +125,11 @@ export function ComboboxRoot<T = string>({
       layout,
       search,
     ]
-  );
+  )
 
   return (
     <ComboboxContext.Provider value={contextValue as ComboboxContextType<unknown>}>
       {children}
     </ComboboxContext.Provider>
-  );
+  )
 }

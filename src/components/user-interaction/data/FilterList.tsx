@@ -117,7 +117,7 @@ export const FilterList = ({ value, onValueChange, availableItems }: FilterListP
             isOpen={editState?.id === filterValue.id}
             onIsOpenChange={isOpen => {
               if (!isOpen) {
-                const isEditStateValid = editState ? FilterValueUtils.isValid(editState) : false;
+                const isEditStateValid = editState ? FilterValueUtils.isValid(editState) : false
                 if(isEditStateValid) {
                   onValueChange(valueWithEditState.map(prevItem => prevItem.id === filterValue.id ? { ...prevItem, ...editState } : prevItem))
                 }

@@ -38,7 +38,7 @@ const AgeFilterPopUp = ({ value, onValueChange, onRemove, name }: FilterListPopU
     range: `number-filter-range-${id}`,
     compareValue: `number-filter-compare-value-${id}`,
   }
-  
+
   const operator = useMemo(() => {
     const suggestion = value?.operator ?? 'between'
     if (!FilterOperatorUtils.typeCheck.number(suggestion)) {

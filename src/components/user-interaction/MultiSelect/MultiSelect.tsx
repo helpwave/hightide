@@ -1,14 +1,14 @@
-import { forwardRef } from "react";
-import type { MultiSelectRootProps } from "./MultiSelectRoot";
-import { MultiSelectRoot } from "./MultiSelectRoot";
-import type { MultiSelectButtonProps } from "./MultiSelectButton";
-import { MultiSelectButton } from "./MultiSelectButton";
-import type { MultiSelectContentProps } from "./MultiSelectContent";
-import { MultiSelectContent } from "./MultiSelectContent";
+import { forwardRef } from 'react'
+import type { MultiSelectRootProps } from './MultiSelectRoot'
+import { MultiSelectRoot } from './MultiSelectRoot'
+import type { MultiSelectButtonProps } from './MultiSelectButton'
+import { MultiSelectButton } from './MultiSelectButton'
+import type { MultiSelectContentProps } from './MultiSelectContent'
+import { MultiSelectContent } from './MultiSelectContent'
 
 export interface MultiSelectProps<T = string> extends MultiSelectRootProps<T> {
-  contentPanelProps?: MultiSelectContentProps;
-  buttonProps?: MultiSelectButtonProps<T>;
+  contentPanelProps?: MultiSelectContentProps,
+  buttonProps?: MultiSelectButtonProps<T>,
 }
 
 export const MultiSelect = forwardRef<HTMLDivElement, MultiSelectProps<unknown>>(
@@ -18,6 +18,6 @@ export const MultiSelect = forwardRef<HTMLDivElement, MultiSelectProps<unknown>>
         <MultiSelectButton ref={ref} {...buttonProps} />
         <MultiSelectContent {...contentPanelProps}>{children}</MultiSelectContent>
       </MultiSelectRoot>
-    );
+    )
   }
-);
+) as <T = string>(props: MultiSelectProps<T> & { ref?: React.Ref<HTMLDivElement> }) => React.ReactElement

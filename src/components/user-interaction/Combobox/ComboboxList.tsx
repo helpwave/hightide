@@ -1,28 +1,30 @@
-import type { HTMLAttributes, RefObject } from "react";
-import { forwardRef, useEffect, useRef } from "react";
-import clsx from "clsx";
-import { useComboboxContext } from "./ComboboxContext";
-import { useHightideTranslation } from "@/src/i18n/useHightideTranslation";
+import type { HTMLAttributes, RefObject } from 'react'
+import { forwardRef, useEffect, useRef } from 'react'
+import clsx from 'clsx'
+import { useComboboxContext } from './ComboboxContext'
+import { useHightideTranslation } from '@/src/i18n/useHightideTranslation'
 
-export interface ComboboxListProps extends HTMLAttributes<HTMLUListElement> {}
+export type ComboboxListProps = HTMLAttributes<HTMLUListElement>
 
 export const ComboboxList = forwardRef<HTMLUListElement, ComboboxListProps>(
   function ComboboxList({ children, ...props }, ref) {
-    const translation = useHightideTranslation();
-    const context = useComboboxContext();
-    const innerRef = useRef<HTMLUListElement>(null);
+    const translation = useHightideTranslation()
+    const context = useComboboxContext()
+    const { layout } = context
+    const { registerList } = layout
+    const innerRef = useRef<HTMLUListElement>(null)
 
     useEffect(() => {
-      return context.layout.registerList(innerRef as RefObject<HTMLUListElement | null>);
-    }, [context.layout.registerList]);
+      return registerList(innerRef as RefObject<HTMLUListElement | null>)
+    }, [registerList])
 
     const setRefs = (node: HTMLUListElement | null) => {
-      (innerRef as RefObject<HTMLUListElement | null>).current = node;
-      if (typeof ref === "function") ref(node);
-      else if (ref) (ref as RefObject<HTMLUListElement | null>).current = node;
-    };
+      (innerRef as RefObject<HTMLUListElement | null>).current = node
+      if (typeof ref === 'function') ref(node)
+      else if (ref) (ref as RefObject<HTMLUListElement | null>).current = node
+    }
 
-    const count = context.visibleOptionIds.length;
+    const count = context.visibleOptionIds.length
 
     return (
       <ul
@@ -30,7 +32,7 @@ export const ComboboxList = forwardRef<HTMLUListElement, ComboboxListProps>(
         ref={setRefs}
         id={context.config.ids.listbox}
         role="listbox"
-        aria-label={translation("filterOptions")}
+        aria-label={translation('filterOptions')}
         tabIndex={-1}
         data-name="combobox-list"
       >
@@ -42,11 +44,11 @@ export const ComboboxList = forwardRef<HTMLUListElement, ComboboxListProps>(
           aria-live="polite"
           aria-atomic={true}
           data-name="combobox-list-status"
-          className={clsx({ "sr-only": count > 0 })}
+          className={clsx({ 'sr-only': count > 0 })}
         >
-          {translation("nResultsFound", { count })}
+          {translation('nResultsFound', { count })}
         </li>
       </ul>
-    );
+    )
   }
-);
+)

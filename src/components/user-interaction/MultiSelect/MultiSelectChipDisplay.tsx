@@ -1,57 +1,60 @@
-import type { HTMLAttributes, ReactNode } from "react";
-import { forwardRef, useEffect, useImperativeHandle, useRef } from "react";
-import { useMultiSelectContext } from "./MultiSelectContext";
-import type { MultiSelectRootProps } from "./MultiSelectRoot";
-import { MultiSelectRoot } from "./MultiSelectRoot";
-import type { MultiSelectContentProps } from "./MultiSelectContent";
-import { MultiSelectContent } from "./MultiSelectContent";
-import { IconButton } from "@/src/components/user-interaction/IconButton";
-import { useHightideTranslation } from "@/src/i18n/useHightideTranslation";
-import { XIcon, Plus } from "lucide-react";
+import type { HTMLAttributes, ReactNode } from 'react'
+import { forwardRef, useEffect, useImperativeHandle, useRef } from 'react'
+import { useMultiSelectContext } from './MultiSelectContext'
+import type { MultiSelectRootProps } from './MultiSelectRoot'
+import { MultiSelectRoot } from './MultiSelectRoot'
+import type { MultiSelectContentProps } from './MultiSelectContent'
+import { MultiSelectContent } from './MultiSelectContent'
+import { IconButton } from '@/src/components/user-interaction/IconButton'
+import { useHightideTranslation } from '@/src/i18n/useHightideTranslation'
+import { XIcon, Plus } from 'lucide-react'
 
 export type MultiSelectChipDisplayButtonProps = HTMLAttributes<HTMLDivElement> & {
-  disabled?: boolean;
-  placeholder?: ReactNode;
+  disabled?: boolean,
+  placeholder?: ReactNode,
 };
 
 export const MultiSelectChipDisplayButton = forwardRef<
   HTMLDivElement,
   MultiSelectChipDisplayButtonProps
 >(function MultiSelectChipDisplayButton({ id, ...props }, ref) {
-  const translation = useHightideTranslation();
-  const context = useMultiSelectContext<unknown>();
+  const translation = useHightideTranslation()
+  const context = useMultiSelectContext<unknown>()
+  const { config, layout } = context
+  const { setIds } = config
+  const { registerTrigger } = layout
 
   useEffect(() => {
-    if (id) context.config.setIds((prev) => ({ ...prev, trigger: id }));
-  }, [id, context.config.setIds]);
+    if (id) setIds((prev) => ({ ...prev, trigger: id }))
+  }, [id, setIds])
 
-  const innerRef = useRef<HTMLDivElement>(null);
-  useImperativeHandle(ref, () => innerRef.current!);
+  const innerRef = useRef<HTMLDivElement>(null)
+  useImperativeHandle(ref, () => innerRef.current!)
 
   useEffect(() => {
-    const unregister = context.layout.registerTrigger(innerRef);
-    return () => unregister();
-  }, [context.layout.registerTrigger]);
+    const unregister = registerTrigger(innerRef)
+    return () => unregister()
+  }, [registerTrigger])
 
-  const disabled = !!props?.disabled || !!context.disabled;
-  const invalid = context.invalid;
+  const disabled = !!props?.disabled || !!context.disabled
+  const invalid = context.invalid
   const selectedOptions = context.selectedIds
     .map((oid) => context.idToOptionMap[oid])
-    .filter(Boolean);
+    .filter(Boolean)
 
   return (
     <div
       {...props}
       ref={innerRef}
       onClick={(event) => {
-        props.onClick?.(event);
-        if(event.defaultPrevented) return;
-        context.toggleIsOpen();
+        props.onClick?.(event)
+        if(event.defaultPrevented) return
+        context.toggleIsOpen()
       }}
-      data-name={props["data-name"] ?? "multi-select-chip-display-button"}
-      data-value={context.value.length > 0 ? "" : undefined}
-      data-disabled={disabled ? "" : undefined}
-      data-invalid={invalid ? "" : undefined}
+      data-name={props['data-name'] ?? 'multi-select-chip-display-button'}
+      data-value={context.value.length > 0 ? '' : undefined}
+      data-disabled={disabled ? '' : undefined}
+      data-invalid={invalid ? '' : undefined}
       aria-invalid={invalid}
       aria-disabled={disabled}
     >
@@ -59,10 +62,10 @@ export const MultiSelectChipDisplayButton = forwardRef<
         <div key={opt.id} data-name="multi-select-chip-display-chip">
           {opt.display}
           <IconButton
-            tooltip={translation("remove")}
+            tooltip={translation('remove')}
             onClick={(e) => {
               context.toggleSelection(opt.id, false)
-              e.preventDefault();
+              e.preventDefault()
             }}
             size="sm"
             color="negative"
@@ -76,19 +79,19 @@ export const MultiSelectChipDisplayButton = forwardRef<
       <IconButton
         id={context.config.ids.trigger}
         onClick={(event) => {
-          event.stopPropagation();
-          context.toggleIsOpen();
+          event.stopPropagation()
+          context.toggleIsOpen()
         }}
         onKeyDown={(event) => {
           switch (event.key) {
-            case "ArrowDown":
-              context.setIsOpen(true, "first");
-              break;
-            case "ArrowUp":
-              context.setIsOpen(true, "last");
+          case 'ArrowDown':
+            context.setIsOpen(true, 'first')
+            break
+          case 'ArrowUp':
+            context.setIsOpen(true, 'last')
           }
         }}
-        tooltip={translation("changeSelection")}
+        tooltip={translation('changeSelection')}
         size="md"
         color="neutral"
         aria-invalid={invalid}
@@ -103,12 +106,12 @@ export const MultiSelectChipDisplayButton = forwardRef<
         <Plus />
       </IconButton>
     </div>
-  );
-});
+  )
+})
 
 export type MultiSelectChipDisplayProps<T = string> = MultiSelectRootProps<T> & {
-  contentPanelProps?: MultiSelectContentProps;
-  chipDisplayProps?: MultiSelectChipDisplayButtonProps;
+  contentPanelProps?: MultiSelectContentProps,
+  chipDisplayProps?: MultiSelectChipDisplayButtonProps,
 };
 
 export const MultiSelectChipDisplay = forwardRef(
@@ -126,6 +129,6 @@ export const MultiSelectChipDisplay = forwardRef(
         <MultiSelectChipDisplayButton ref={ref} {...chipDisplayProps} />
         <MultiSelectContent {...contentPanelProps}>{children}</MultiSelectContent>
       </MultiSelectRoot>
-    );
+    )
   }
-);
+)

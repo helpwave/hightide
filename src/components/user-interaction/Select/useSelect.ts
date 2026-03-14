@@ -2,57 +2,56 @@ import {
   useCallback,
   useEffect,
   useMemo,
-  useRef,
-  useState,
-} from "react";
-import { useSingleSelection } from "@/src/hooks/useSingleSelection";
-import { useListNavigation } from "@/src/hooks/useListNavigation";
-import { useEventCallbackStabilizer } from "@/src/hooks/useEventCallbackStabelizer";
-import { useSearch, useTypeAheadSearch } from "@/src/hooks";
+  useState
+} from 'react'
+import { useSingleSelection } from '@/src/hooks/useSingleSelection'
+import { useListNavigation } from '@/src/hooks/useListNavigation'
+import { useEventCallbackStabilizer } from '@/src/hooks/useEventCallbackStabelizer'
+import { useSearch, useTypeAheadSearch } from '@/src/hooks'
 
 export interface UseSelectOption {
-  id: string;
-  label?: string;
-  disabled?: boolean;
+  id: string,
+  label?: string,
+  disabled?: boolean,
 }
 
 export interface UseSelectOptions {
-  options: ReadonlyArray<UseSelectOption>;
-  value?: string | null;
-  initialValue?: string | null;
-  initialIsOpen?: boolean;
-  onValueChange?: (value: string) => void;
-  onEditComplete?: (value: string) => void;
-  onClose?: () => void;
-  onIsOpenChange?: (isOpen: boolean) => void;
-  typeAheadResetMs?: number;
+  options: ReadonlyArray<UseSelectOption>,
+  value?: string | null,
+  initialValue?: string | null,
+  initialIsOpen?: boolean,
+  onValueChange?: (value: string) => void,
+  onEditComplete?: (value: string) => void,
+  onClose?: () => void,
+  onIsOpenChange?: (isOpen: boolean) => void,
+  typeAheadResetMs?: number,
 }
 
-export type UseSelectFirstHighlightBehavior = "first" | "last";
+export type UseSelectFirstHighlightBehavior = 'first' | 'last';
 
 export interface UseSelectState {
-  value: string | null;
-  highlightedValue: string | undefined;
-  isOpen: boolean;
-  searchQuery: string;
-  options: ReadonlyArray<UseSelectOption>;
+  value: string | null,
+  highlightedValue: string | undefined,
+  isOpen: boolean,
+  searchQuery: string,
+  options: ReadonlyArray<UseSelectOption>,
 }
 
 export interface UseSelectComputedState {
-  visibleOptionIds: ReadonlyArray<string>;
+  visibleOptionIds: ReadonlyArray<string>,
 }
 
 export interface UseSelectActions {
-  setIsOpen: (isOpen: boolean, behavior?: UseSelectFirstHighlightBehavior) => void;
-  toggleOpen: (behavior?: UseSelectFirstHighlightBehavior) => void;
-  setSearchQuery: (query: string) => void;
-  highlightFirst: () => void;
-  highlightLast: () => void;
-  highlightNext: () => void;
-  highlightPrevious: () => void;
-  highlightItem: (value: string) => void;
-  selectValue: (value: string) => void;
-  handleTypeaheadKey: (key: string) => void;
+  setIsOpen: (isOpen: boolean, behavior?: UseSelectFirstHighlightBehavior) => void,
+  toggleOpen: (behavior?: UseSelectFirstHighlightBehavior) => void,
+  setSearchQuery: (query: string) => void,
+  highlightFirst: () => void,
+  highlightLast: () => void,
+  highlightNext: () => void,
+  highlightPrevious: () => void,
+  highlightItem: (value: string) => void,
+  selectValue: (value: string) => void,
+  handleTypeaheadKey: (key: string) => void,
 }
 
 export interface UseSelectReturn extends UseSelectState, UseSelectComputedState, UseSelectActions {}
@@ -68,117 +67,121 @@ export function useSelect({
   initialIsOpen = false,
   typeAheadResetMs = 500,
 }: UseSelectOptions): UseSelectReturn {
-  const [isOpen, setIsOpen] = useState(initialIsOpen);
-  const [searchQuery, setSearchQuery] = useState("");
+  const [isOpen, setIsOpen] = useState(initialIsOpen)
+  const [searchQuery, setSearchQuery] = useState('')
 
-  const onValueChangeStable = useEventCallbackStabilizer(onValueChange);
-  const onEditCompleteStable = useEventCallbackStabilizer(onEditComplete);
-  const onCloseStable = useEventCallbackStabilizer(onClose);
-  const onIsOpenChangeStable = useEventCallbackStabilizer(onIsOpenChange);
+  const onValueChangeStable = useEventCallbackStabilizer(onValueChange)
+  const onEditCompleteStable = useEventCallbackStabilizer(onEditComplete)
+  const onCloseStable = useEventCallbackStabilizer(onClose)
+  const onIsOpenChangeStable = useEventCallbackStabilizer(onIsOpenChange)
 
   const onSelectionChangeWrapper = useCallback((id: string | null) => {
-    if(id === null) return;
+    if(id === null) return
     onValueChangeStable(id)
     onEditCompleteStable(id)
-    setIsOpen(false);
-  }, [onValueChangeStable, onEditCompleteStable, setIsOpen]);
+    setIsOpen(false)
+  }, [onValueChangeStable, onEditCompleteStable, setIsOpen])
 
-  const selection = useSingleSelection({
+  const { selection, selectValue } = useSingleSelection({
     options: options,
     selection: controlledValue,
     onSelectionChange: onSelectionChangeWrapper,
     initialSelection: initialValue,
-  });
-  
+  })
+
   const { searchResult: visibleOptions } = useSearch({
     items: options,
     searchQuery,
     toTags: useCallback((o: UseSelectOption) => [o.label], []),
-  });
+  })
 
-  const visibleOptionIds = useMemo(() => visibleOptions.map((o) => o.id), [visibleOptions]);
+  const visibleOptionIds = useMemo(() => visibleOptions.map((o) => o.id), [visibleOptions])
 
-  const enabledOptions = useMemo(() => visibleOptions.filter((o) => !o.disabled), [visibleOptions]);
+  const enabledOptions = useMemo(() => visibleOptions.filter((o) => !o.disabled), [visibleOptions])
 
-  const listNav = useListNavigation({
+  const {
+    highlightedId,
+    highlight: listNavHighlight,
+    first: listNavFirst,
+    last: listNavLast,
+    next: listNavNext,
+    previous: listNavPrevious,
+  } = useListNavigation({
     options: enabledOptions.map((o) => o.id),
-    initialValue: selection.selection,
-  });
+    initialValue: selection,
+  })
 
-  const typeAhead = useTypeAheadSearch({
+  const { addToTypeAhead, reset: typeAheadReset } = useTypeAheadSearch({
     options: enabledOptions,
     resetTimer: typeAheadResetMs,
-    toString: (o) => o.label ?? "",
-    onResultChange: useCallback(
-      (option: UseSelectOption | null) => {
-        if (option) listNav.highlight(option.id);
-      },
-      [listNav]
-    ),
-  });
+    toString: (o) => o.label ?? '',
+    onResultChange: useCallback((option: UseSelectOption | null) => {
+      if (option) listNavHighlight(option.id)
+    }, [listNavHighlight]),
+  })
 
   useEffect(() => {
-    if (!isOpen) typeAhead.reset();
-  }, [isOpen]);
+    if (!isOpen) typeAheadReset()
+  }, [isOpen, typeAheadReset])
 
   const state: UseSelectState = useMemo(() => ({
-    value: selection.selection,
-    highlightedValue: listNav.highlightedId,
+    value: selection,
+    highlightedValue: highlightedId,
     isOpen,
     searchQuery,
     options,
-  }), [selection.selection, listNav.highlightedId, isOpen, searchQuery, options]);
+  }), [selection, highlightedId, isOpen, searchQuery, options])
 
   const computedState: UseSelectComputedState = useMemo(() => ({
     visibleOptionIds,
-  }), [visibleOptionIds]);
+  }), [visibleOptionIds])
 
   const highlightItem = useCallback((value: string) => {
-    if (!enabledOptions.some((o) => o.id === value)) return;
-    listNav.highlight(value);
-  }, [enabledOptions, listNav]);
+    if (!enabledOptions.some((o) => o.id === value)) return
+    listNavHighlight(value)
+  }, [enabledOptions, listNavHighlight])
 
   const setIsOpenWrapper = useCallback((isOpen: boolean, behavior?: UseSelectFirstHighlightBehavior) => {
-    behavior = behavior ?? "first";
+    behavior = behavior ?? 'first'
     if(isOpen) {
-      if(selection.selection == null) {
-        if(behavior === "first") {
-          listNav.first();
-        } else if (behavior === "last") {
-          listNav.last();
+      if(selection == null) {
+        if(behavior === 'first') {
+          listNavFirst()
+        } else if (behavior === 'last') {
+          listNavLast()
         }
       } else {
-        highlightItem(selection.selection);
+        highlightItem(selection)
       }
     } else {
-      setSearchQuery("");
-      onCloseStable?.();
+      setSearchQuery('')
+      onCloseStable?.()
     }
-    setIsOpen(isOpen);
-    onIsOpenChangeStable(isOpen);
-  }, [setIsOpen, highlightItem, onCloseStable, onEditCompleteStable, selection.selection, onIsOpenChangeStable]);
+    setIsOpen(isOpen)
+    onIsOpenChangeStable(isOpen)
+  }, [setIsOpen, highlightItem, onCloseStable, setSearchQuery, onIsOpenChangeStable, selection, listNavFirst, listNavLast])
 
   const toggleOpenWrapper = useCallback((behavior?: UseSelectFirstHighlightBehavior) => {
-    const next = !isOpen;
-    setIsOpenWrapper(next, behavior);
-  }, [setIsOpenWrapper]);
+    const next = !isOpen
+    setIsOpenWrapper(next, behavior)
+  }, [isOpen, setIsOpenWrapper])
 
   const actions: UseSelectActions = useMemo(() => ({
-    selectValue: (id: string) => selection.selectValue(id),
+    selectValue: (id: string) => selectValue(id),
     setIsOpen: setIsOpenWrapper,
     toggleOpen: toggleOpenWrapper,
     setSearchQuery,
-    highlightFirst: listNav.first,
-    highlightLast: listNav.last,
-    highlightNext: listNav.next,
-    highlightPrevious: listNav.previous,
+    highlightFirst: listNavFirst,
+    highlightLast: listNavLast,
+    highlightNext: listNavNext,
+    highlightPrevious: listNavPrevious,
     highlightItem,
-    handleTypeaheadKey: typeAhead.addToTypeAhead,
-  }), [setIsOpenWrapper, listNav.first, listNav.last, listNav.next, listNav.previous, highlightItem, typeAhead.addToTypeAhead]);
+    handleTypeaheadKey: addToTypeAhead,
+  }), [selectValue, setIsOpenWrapper, listNavFirst, listNavLast, listNavNext, listNavPrevious, highlightItem, addToTypeAhead, toggleOpenWrapper])
 
   return useMemo(() => ({
     ...state,
     ...computedState,
     ...actions,
-  }), [state, computedState, actions]);
+  }), [state, computedState, actions])
 }

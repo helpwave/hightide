@@ -53,7 +53,7 @@ export const FilterBasePopUp = forwardRef<HTMLDivElement, FilterPopUpBaseProps>(
   const translation = useHightideTranslation()
 
   return (
-    <PopUp 
+    <PopUp
       ref={ref}
       {...props}
       className={clsx('flex-col-3 p-3 relative min-w-64', props.className)}

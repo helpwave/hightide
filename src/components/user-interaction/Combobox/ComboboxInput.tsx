@@ -1,47 +1,48 @@
-import { type ComponentProps, forwardRef, useCallback } from "react";
-import { Input } from "@/src/components/user-interaction/input/Input";
-import { useHightideTranslation } from "@/src/i18n/useHightideTranslation";
-import { useComboboxContext } from "./ComboboxContext";
+import { type ComponentProps, forwardRef, useCallback } from 'react'
+import { Input } from '@/src/components/user-interaction/input/Input'
+import { useHightideTranslation } from '@/src/i18n/useHightideTranslation'
+import { useComboboxContext } from './ComboboxContext'
 
-export interface ComboboxInputProps extends Omit<ComponentProps<typeof Input>, "value"> {}
+export type ComboboxInputProps = Omit<ComponentProps<typeof Input>, 'value'>
 
 export const ComboboxInput = forwardRef<HTMLInputElement, ComboboxInputProps>(
   function ComboboxInput(props, ref) {
-    const translation = useHightideTranslation();
-    const context = useComboboxContext();
+    const translation = useHightideTranslation()
+    const context = useComboboxContext()
+    const { highlightNext, highlightPrevious, highlightFirst, highlightLast, highlightedId, selectOption } = context
 
     const handleKeyDown = useCallback(
       (event: React.KeyboardEvent<HTMLInputElement>) => {
-        props.onKeyDown?.(event);
+        props.onKeyDown?.(event)
         switch (event.key) {
-          case "ArrowDown":
-            context.highlightNext();
-            event.preventDefault();
-            break;
-          case "ArrowUp":
-            context.highlightPrevious();
-            event.preventDefault();
-            break;
-          case "Home":
-            context.highlightFirst();
-            event.preventDefault();
-            break;
-          case "End":
-            context.highlightLast();
-            event.preventDefault();
-            break;
-          case "Enter":
-            if (context.highlightedId) {
-              context.selectOption(context.highlightedId);
-              event.preventDefault();
-            }
-            break;
-          default:
-            break;
+        case 'ArrowDown':
+          highlightNext()
+          event.preventDefault()
+          break
+        case 'ArrowUp':
+          highlightPrevious()
+          event.preventDefault()
+          break
+        case 'Home':
+          highlightFirst()
+          event.preventDefault()
+          break
+        case 'End':
+          highlightLast()
+          event.preventDefault()
+          break
+        case 'Enter':
+          if (highlightedId) {
+            selectOption(highlightedId)
+            event.preventDefault()
+          }
+          break
+        default:
+          break
         }
       },
-      [props, context.highlightedId, context.highlightNext, context.highlightPrevious, context.highlightFirst, context.highlightLast, context.selectOption]
-    );
+      [props, highlightedId, selectOption, highlightNext, highlightPrevious, highlightFirst, highlightLast]
+    )
 
     return (
       <Input
@@ -50,13 +51,13 @@ export const ComboboxInput = forwardRef<HTMLInputElement, ComboboxInputProps>(
         value={context.search.searchQuery}
         onValueChange={context.search.setSearchQuery}
         onKeyDown={handleKeyDown}
-        placeholder={props.placeholder ?? translation("search")}
+        placeholder={props.placeholder ?? translation('search')}
         role="combobox"
         aria-expanded={context.visibleOptionIds.length > 0}
         aria-controls={context.config.ids.listbox}
         aria-activedescendant={context.highlightedId ?? undefined}
         aria-autocomplete="list"
       />
-    );
+    )
   }
-);
+)

@@ -21,6 +21,9 @@ and adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 ## Fixed
 - imports in `TimePicker` and `DateTimeInput`
 
+## Security
+- update packages
+
 ## [0.8.12] - 2026-02-15
 
 ### Fixed

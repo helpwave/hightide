@@ -1,15 +1,15 @@
-import type { ComponentProps } from "react";
-import { forwardRef, useCallback, useEffect, useImperativeHandle, useRef } from "react";
-import { useMultiSelectContext } from "./MultiSelectContext";
-import clsx from "clsx";
-import { useHightideTranslation } from "@/src/i18n/useHightideTranslation";
-import { PopUp, type PopUpProps } from "@/src/components/layout/popup/PopUp";
-import { Input } from "@/src/components/user-interaction/input/Input";
-import { Visibility } from "@/src/components/layout/Visibility";
+import type { ComponentProps } from 'react'
+import { forwardRef, useCallback, useEffect, useImperativeHandle, useRef } from 'react'
+import { useMultiSelectContext } from './MultiSelectContext'
+import clsx from 'clsx'
+import { useHightideTranslation } from '@/src/i18n/useHightideTranslation'
+import { PopUp, type PopUpProps } from '@/src/components/layout/popup/PopUp'
+import { Input } from '@/src/components/user-interaction/input/Input'
+import { Visibility } from '@/src/components/layout/Visibility'
 
 export interface MultiSelectContentProps extends PopUpProps {
-  showSearch?: boolean;
-  searchInputProps?: Omit<ComponentProps<typeof Input>, "value" | "onValueChange">;
+  showSearch?: boolean,
+  searchInputProps?: Omit<ComponentProps<typeof Input>, 'value' | 'onValueChange'>,
 }
 
 export const MultiSelectContent = forwardRef<
@@ -19,64 +19,65 @@ export const MultiSelectContent = forwardRef<
   { id, options, showSearch: showSearchOverride, searchInputProps, ...props },
   ref
 ) {
-  const translation = useHightideTranslation();
-  const innerRef = useRef<HTMLUListElement>(null);
-  const searchInputRef = useRef<HTMLInputElement>(null);
-  useImperativeHandle(ref, () => innerRef.current!);
+  const translation = useHightideTranslation()
+  const innerRef = useRef<HTMLUListElement>(null)
+  const searchInputRef = useRef<HTMLInputElement>(null)
+  useImperativeHandle(ref, () => innerRef.current!)
 
-  const context = useMultiSelectContext<T>();
+  const context = useMultiSelectContext<T>()
+  const { config, highlightNext, highlightPrevious, highlightFirst, highlightLast, highlightedId, handleTypeaheadKey, toggleSelection } = context
+  const { setIds } = config
 
   useEffect(() => {
-    if (id) context.config.setIds((prev) => ({ ...prev, content: id }));
-  }, [id, context.config.setIds]);
+    if (id) setIds((prev) => ({ ...prev, content: id }))
+  }, [id, setIds])
 
-  const showSearch = showSearchOverride ?? context.search.hasSearch;
-  const listboxAriaLabel = showSearch ? translation("searchResults") : undefined;
+  const showSearch = showSearchOverride ?? context.search.hasSearch
+  const listboxAriaLabel = showSearch ? translation('searchResults') : undefined
 
   const keyHandler = useCallback(
     (event: React.KeyboardEvent) => {
       switch (event.key) {
-        case "ArrowDown":
-          context.highlightNext();
-          event.preventDefault();
-          break;
-        case "ArrowUp":
-          context.highlightPrevious();
-          event.preventDefault();
-          break;
-        case "Home":
-          event.preventDefault();
-          context.highlightFirst();
-          break;
-        case "End":
-          event.preventDefault();
-          context.highlightLast();
-          break;
-        case "Enter":
-        case " ":
-          if (showSearch && event.key === " ") return;
-          if (context.highlightedId) {
-            context.toggleSelection(context.highlightedId);
-            event.preventDefault();
-          }
-          break;
-        default:
-          if (
-            !showSearch &&
+      case 'ArrowDown':
+        highlightNext()
+        event.preventDefault()
+        break
+      case 'ArrowUp':
+        highlightPrevious()
+        event.preventDefault()
+        break
+      case 'Home':
+        event.preventDefault()
+        highlightFirst()
+        break
+      case 'End':
+        event.preventDefault()
+        highlightLast()
+        break
+      case 'Enter':
+      case ' ':
+        if (showSearch && event.key === ' ') return
+        if (highlightedId) {
+          toggleSelection(highlightedId)
+          event.preventDefault()
+        }
+        break
+      default:
+        if (
+          !showSearch &&
             !event.ctrlKey &&
             !event.metaKey &&
             !event.altKey &&
             event.key.length === 1
-          ) {
-            if (context.handleTypeaheadKey(event.key)) {
-              event.preventDefault();
-            }
-          }
-          break;
+        ) {
+          handleTypeaheadKey(event.key)
+          event.preventDefault()
+        }
+        break
       }
     },
-    [showSearch, context]
-  );
+    [showSearch, handleTypeaheadKey, toggleSelection, highlightedId, highlightNext, highlightPrevious, highlightFirst, highlightLast]
+  )
 
   return (
     <PopUp
@@ -87,21 +88,21 @@ export const MultiSelectContent = forwardRef<
       options={options}
       forceMount={true}
       onClose={() => {
-        context.setIsOpen(false);
-        props.onClose?.();
+        context.setIsOpen(false)
+        props.onClose?.()
       }}
       aria-labelledby={context.config.ids.trigger}
-      className={clsx("gap-y-1", props.className)}
+      className={clsx('gap-y-1', props.className)}
     >
       {showSearch && (
         <Input
           {...searchInputProps}
           ref={searchInputRef}
           id={context.config.ids.searchInput}
-          value={context.search.searchQuery ?? ""}
+          value={context.search.searchQuery ?? ''}
           onValueChange={context.search.setSearchQuery}
           onKeyDown={keyHandler}
-          placeholder={searchInputProps?.placeholder ?? translation("filterOptions")}
+          placeholder={searchInputProps?.placeholder ?? translation('filterOptions')}
           role="combobox"
           aria-autocomplete="list"
           aria-expanded={context.isOpen}
@@ -109,8 +110,8 @@ export const MultiSelectContent = forwardRef<
           aria-activedescendant={
             context.highlightedId ? context.highlightedId : undefined
           }
-          aria-label={searchInputProps?.["aria-label"] ?? translation("filterOptions")}
-          className={clsx("mx-2 mt-2 shrink-0", searchInputProps?.className)}
+          aria-label={searchInputProps?.['aria-label'] ?? translation('filterOptions')}
+          className={clsx('mx-2 mt-2 shrink-0', searchInputProps?.className)}
         />
       )}
       <ul
@@ -123,7 +124,7 @@ export const MultiSelectContent = forwardRef<
         aria-orientation="vertical"
         aria-label={listboxAriaLabel}
         tabIndex={showSearch ? undefined : 0}
-        className={clsx("flex-col-1 p-2 overflow-auto")}
+        className={clsx('flex-col-1 p-2 overflow-auto')}
       >
         {props.children}
         <Visibility isVisible={showSearch}>
@@ -135,15 +136,15 @@ export const MultiSelectContent = forwardRef<
             aria-atomic={true}
             data-name="multi-select-list-status"
             className={clsx({
-              "sr-only": context.visibleOptionIds.length > 0,
+              'sr-only': context.visibleOptionIds.length > 0,
             })}
           >
-            {translation("nResultsFound", {
+            {translation('nResultsFound', {
               count: context.visibleOptionIds.length,
             })}
           </li>
         </Visibility>
       </ul>
     </PopUp>
-  );
-});
+  )
+})

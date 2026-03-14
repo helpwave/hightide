@@ -1,78 +1,78 @@
-import type { Dispatch, ReactNode, RefObject, SetStateAction } from "react";
-import { createContext, useContext } from "react";
-import { UseSelectFirstHighlightBehavior } from "./useSelect";
-import { FormFieldInteractionStates } from "../../form/FieldLayout";
+import type { Dispatch, ReactNode, RefObject, SetStateAction } from 'react'
+import { createContext, useContext } from 'react'
+import type { UseSelectFirstHighlightBehavior } from './useSelect'
+import type { FormFieldInteractionStates } from '../../form/FieldLayout'
 
 export interface SelectOptionType<T = string> {
-  id: string;
-  value: T;
-  label?: string;
-  display?: ReactNode;
-  disabled?: boolean;
-  ref: RefObject<HTMLElement>;
+  id: string,
+  value: T,
+  label?: string,
+  display?: ReactNode,
+  disabled?: boolean,
+  ref: RefObject<HTMLElement>,
 }
 
 export interface SelectContextIds {
-  trigger: string;
-  content: string;
-  listbox: string;
-  searchInput: string;
+  trigger: string,
+  content: string,
+  listbox: string,
+  searchInput: string,
 }
 
 export interface SelectContextState<T> extends FormFieldInteractionStates {
-  selectedId: string | null;
-  options: ReadonlyArray<SelectOptionType<T>>;
-  highlightedId: string | null;
-  isOpen: boolean;
+  selectedId: string | null,
+  options: ReadonlyArray<SelectOptionType<T>>,
+  highlightedId: string | null,
+  isOpen: boolean,
 }
 
 export interface SelectContextComputedState<T> {
-  visibleOptionIds: ReadonlyArray<string>;
-  idToOptionMap: Record<string, SelectOptionType<T>>;
+  visibleOptionIds: ReadonlyArray<string>,
+  idToOptionMap: Record<string, SelectOptionType<T>>,
 }
 
 export interface SelectContextActions<T> {
-  registerOption(option: SelectOptionType<T>): () => void;
-  toggleSelection(id: string): void;
-  highlightFirst(): void;
-  highlightLast(): void;
-  highlightNext(): void;
-  highlightPrevious(): void;
-  highlightItem(id: string): void;
-  handleTypeaheadKey(key: string): void;
-  setIsOpen(open: boolean, behavior?: UseSelectFirstHighlightBehavior): void;
-  toggleIsOpen(behavior?: UseSelectFirstHighlightBehavior): void;
+  registerOption(option: SelectOptionType<T>): () => void,
+  toggleSelection(id: string): void,
+  highlightFirst(): void,
+  highlightLast(): void,
+  highlightNext(): void,
+  highlightPrevious(): void,
+  highlightItem(id: string): void,
+  handleTypeaheadKey(key: string): void,
+  setIsOpen(open: boolean, behavior?: UseSelectFirstHighlightBehavior): void,
+  toggleIsOpen(behavior?: UseSelectFirstHighlightBehavior): void,
 }
 
 export interface SelectContextLayout {
-  triggerRef: RefObject<HTMLElement>;
-  registerTrigger(element: RefObject<HTMLElement>): () => void;
+  triggerRef: RefObject<HTMLElement>,
+  registerTrigger(element: RefObject<HTMLElement>): () => void,
 }
 
 export interface SelectContextSearch {
   hasSearch: boolean,
   searchQuery?: string,
-  setSearchQuery(query: string): void;
+  setSearchQuery(query: string): void,
 }
 
-export type SelectIconAppearance = "left" | "right" | "none";
+export type SelectIconAppearance = 'left' | 'right' | 'none';
 
 export interface SelectContextConfig {
-  iconAppearance: SelectIconAppearance;
-  ids: SelectContextIds;
-  setIds: Dispatch<SetStateAction<SelectContextIds>>;
+  iconAppearance: SelectIconAppearance,
+  ids: SelectContextIds,
+  setIds: Dispatch<SetStateAction<SelectContextIds>>,
 }
 
 export interface SelectContextType<T> extends SelectContextActions<T>, SelectContextState<T>, SelectContextComputedState<T> {
-  config: SelectContextConfig;
-  layout: SelectContextLayout;
-  search: SelectContextSearch;
+  config: SelectContextConfig,
+  layout: SelectContextLayout,
+  search: SelectContextSearch,
 }
 
-export const SelectContext = createContext<SelectContextType<unknown> | null>(null);
+export const SelectContext = createContext<SelectContextType<unknown> | null>(null)
 
 export function useSelectContext<T>(): SelectContextType<T> {
-  const ctx = useContext(SelectContext);
-  if (!ctx) throw new Error("useSelectContext must be used within SelectRoot");
-  return ctx as SelectContextType<T>;
+  const ctx = useContext(SelectContext)
+  if (!ctx) throw new Error('useSelectContext must be used within SelectRoot')
+  return ctx as SelectContextType<T>
 }

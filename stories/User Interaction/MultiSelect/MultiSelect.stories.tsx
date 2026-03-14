@@ -1,11 +1,11 @@
-import type { Meta, StoryObj } from '@storybook/nextjs'
 import { action } from 'storybook/actions'
+import type { Meta, StoryObj } from '@storybook/nextjs'
 import { useEffect, useState } from 'react'
-import { Select } from '@/src/components/user-interaction/Select/Select'
-import { SelectOption } from '@/src/components/user-interaction/Select/SelectOption'
+import { MultiSelect } from '@/src/components/user-interaction/MultiSelect/MultiSelect'
+import { MultiSelectOption } from '@/src/components/user-interaction/MultiSelect/MultiSelectOption'
 
-const meta: Meta<typeof Select> = {
-  component: Select,
+const meta: Meta<typeof MultiSelect> = {
+  component: MultiSelect,
 }
 
 export default meta
@@ -13,32 +13,31 @@ type Story = StoryObj<typeof meta>;
 
 const fruitOptions = [
   { value: 'Apple', label: 'Apple' },
-  { value: 'Pear', label: 'Pear', disabled: true },
-  { value: 'Strawberry', label: 'Strawberry' },
-  { value: 'Pineapple', label: 'Pineapple' },
-  { value: 'Blackberry', label: 'Blackberry' },
-  { value: 'Blueberry', label: 'Blueberry', disabled: true },
-  { value: 'Banana', label: 'Banana' },
-  { value: 'Kiwi', label: 'Kiwi', disabled: true },
-  { value: 'Maracuja', label: 'Maracuja', disabled: true },
-  { value: 'Wildberry', label: 'Wildberry', disabled: true },
-  { value: 'Watermelon', label: 'Watermelon' },
-  { value: 'Honeymelon', label: 'Honeymelon' },
-  { value: 'Papja', label: 'Papja' }
+  { value: 'Banana', label: 'Banana', disabled: true },
+  { value: 'Cherry', label: 'Cherry' },
+  { value: 'Dragonfruit', label: 'Dragonfruit', className: '!text-red-400' },
+  { value: 'Elderberry', label: 'Elderberry' },
+  { value: 'Fig', label: 'Fig' },
+  { value: 'Grapefruit', label: 'Grapefruit' },
+  { value: 'Honeydew', label: 'Honeydew' },
+  { value: 'Indianfig', label: 'Indianfig' },
+  { value: 'Jackfruit', label: 'Jackfruit' },
+  { value: 'Kiwifruit', label: 'Kiwifruit' },
+  { value: 'Lemon', label: 'Lemon', disabled: true }
 ].sort((a, b) => a.value.localeCompare(b.value))
 
-export const select: Story = {
+export const multiSelect: Story = {
   args: {
-    initialValue: undefined,
+    initialValue: ['Apple', 'Cherry'],
     disabled: false,
     invalid: false,
-    showSearch: false,
+    showSearch: true,
     readOnly: false,
     required: false,
     onValueChange: action('onValueChange'),
     onEditComplete: action('onEditComplete'),
     children: fruitOptions.map((item, index) => (
-      <SelectOption key={index} {...item} />
+      <MultiSelectOption key={index} {...item} />
     )),
   },
 }
@@ -57,12 +56,11 @@ const users: User[] = [
   { uuid: '5', name: 'Eve Wilson', email: 'eve@example.com' },
 ]
 
-function compareUser(a: User | null, b: User | null): boolean {
-  if (a === null || b === null) return a === b
+function compareUser(a: User, b: User): boolean {
   return a.uuid === b.uuid
 }
 
-export const selectWithUser: Story = {
+export const multiSelectWithUser: Story = {
   args: {
     value: undefined,
     initialValue: undefined,
@@ -75,20 +73,20 @@ export const selectWithUser: Story = {
     onValueChange: action('onValueChange'),
     onEditComplete: action('onEditComplete'),
     buttonProps: {
-      placeholder: 'Select a user',
-      selectedDisplay: (option) => {
-        if (!option) return null
-        const user = option.value as User
-        return (
-          <div className="flex flex-col">
-            <span>{user.name}</span>
-            <span className="typography-body-sm text-description">{user.email}</span>
-          </div>
-        )
-      },
+      placeholder: 'Select users',
+      selectedDisplay: (values: User[]) => (
+        <div className="flex flex-col gap-1">
+          {values.map((user) => (
+            <div key={user.uuid} className="flex flex-col">
+              <span>{user.name}</span>
+              <span className="typography-body-sm text-description">{user.email}</span>
+            </div>
+          ))}
+        </div>
+      ),
     },
     children: users.map((user) => (
-      <SelectOption
+      <MultiSelectOption
         key={user.uuid}
         id={user.uuid}
         value={user}
@@ -98,17 +96,22 @@ export const selectWithUser: Story = {
           <span>{user.name}</span>
           <span className="typography-body-sm text-description">{user.email}</span>
         </div>
-      </SelectOption>
+      </MultiSelectOption>
     )),
   },
   render: (args) => {
-    const [value, setValue] = useState<User | null>(args.value ?? null)
+    const [value, setValue] = useState<User[]>(args.value as User[] | undefined ?? [])
+
     useEffect(() => {
-      setValue(args.value ?? null)
+      setValue(args.value as User[] | undefined ?? [])
     }, [args.value])
+
+    const initialValue = args.initialValue as User[] | undefined ?? []
+
     return (
-      <Select<User>
+      <MultiSelect<User>
         {...args}
+        initialValue={initialValue}
         value={value}
         onValueChange={(v) => {
           args.onValueChange?.(v)
