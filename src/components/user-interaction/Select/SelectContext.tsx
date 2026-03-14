@@ -39,7 +39,7 @@ export interface SelectContextActions<T> {
   highlightNext(): void;
   highlightPrevious(): void;
   highlightItem(id: string): void;
-  handleTypeaheadKey(key: string): boolean;
+  handleTypeaheadKey(key: string): void;
   setIsOpen(open: boolean, behavior?: UseSelectFirstHighlightBehavior): void;
   toggleIsOpen(behavior?: UseSelectFirstHighlightBehavior): void;
 }

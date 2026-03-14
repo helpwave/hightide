@@ -40,7 +40,7 @@ export interface MultiSelectContextActions<T> {
   highlightNext(): void;
   highlightPrevious(): void;
   highlightItem(id: string): void;
-  handleTypeaheadKey(key: string): boolean;
+  handleTypeaheadKey(key: string): void;
   setIsOpen(open: boolean, behavior?: UseMultiSelectFirstHighlightBehavior): void;
   toggleIsOpen(behavior?: UseMultiSelectFirstHighlightBehavior): void;
 }

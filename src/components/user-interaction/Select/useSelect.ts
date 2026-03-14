@@ -52,7 +52,7 @@ export interface UseSelectActions {
   highlightPrevious: () => void;
   highlightItem: (value: string) => void;
   selectValue: (value: string) => void;
-  handleTypeaheadKey: (key: string) => boolean;
+  handleTypeaheadKey: (key: string) => void;
 }
 
 export interface UseSelectReturn extends UseSelectState, UseSelectComputedState, UseSelectActions {}
@@ -138,14 +138,6 @@ export function useSelect({
     listNav.highlight(value);
   }, [enabledOptions, listNav]);
 
-  const handleTypeaheadKey = useCallback(
-    (key: string): boolean => {
-      typeAhead.addToTypeAhead(key.toLowerCase());
-      return true;
-    },
-    [typeAhead]
-  );
-
   const setIsOpenWrapper = useCallback((isOpen: boolean, behavior?: UseSelectFirstHighlightBehavior) => {
     behavior = behavior ?? "first";
     if(isOpen) {
@@ -181,8 +173,8 @@ export function useSelect({
     highlightNext: listNav.next,
     highlightPrevious: listNav.previous,
     highlightItem,
-    handleTypeaheadKey,
-  }), [setIsOpenWrapper, listNav.first, listNav.last, listNav.next, listNav.previous, highlightItem, handleTypeaheadKey]);
+    handleTypeaheadKey: typeAhead.addToTypeAhead,
+  }), [setIsOpenWrapper, listNav.first, listNav.last, listNav.next, listNav.previous, highlightItem, typeAhead.addToTypeAhead]);
 
   return useMemo(() => ({
     ...state,

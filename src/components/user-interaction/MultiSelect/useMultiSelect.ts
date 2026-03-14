@@ -53,7 +53,7 @@ export interface UseMultiSelectActions {
   toggleSelection: (id: string, isSelected?: boolean) => void;
   setSelection: (ids: string[]) => void;
   isSelected: (id: string) => boolean;
-  handleTypeaheadKey: (key: string) => boolean;
+  handleTypeaheadKey: (key: string) => void;
 }
 
 export interface UseMultiSelectReturn extends UseMultiSelectState, UseMultiSelectComputedState, UseMultiSelectActions {}
@@ -130,14 +130,6 @@ export function useMultiSelect({
       listNav.highlight(id);
     },
     [enabledOptions, listNav]
-  );
-
-  const handleTypeaheadKey = useCallback(
-    (key: string): boolean => {
-      typeAhead.addToTypeAhead(key.toLowerCase());
-      return true;
-    },
-    [typeAhead]
   );
 
   const toggleSelectionValue = useCallback(
@@ -230,7 +222,7 @@ export function useMultiSelect({
       toggleSelection: toggleSelectionValue,
       setSelection: (ids: string[]) => selection.setSelection(ids),
       isSelected: selection.isSelected,
-      handleTypeaheadKey,
+      handleTypeaheadKey: typeAhead.addToTypeAhead,
     }),
     [
       setIsOpenWrapper,
@@ -243,7 +235,7 @@ export function useMultiSelect({
       toggleSelectionValue,
       selection.setSelection,
       selection.isSelected,
-      handleTypeaheadKey,
+      typeAhead.addToTypeAhead,
     ]
   );
 
