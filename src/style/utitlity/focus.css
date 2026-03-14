@@ -9,7 +9,7 @@
 }
 
 @utility focus-style-shadow {
-  --focus-box-shadow: 0 0 8px 2px color-mix(in srgb, var(--color-focus) 70%, transparent);
+  --focus-box-shadow: 0 0 calc(var(--spacing) * 1) calc(var(--spacing) * 0.5) color-mix(in srgb, var(--color-focus) 70%, transparent);
 }
 
 @utility focus-style-none {

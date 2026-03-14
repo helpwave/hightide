@@ -5,6 +5,25 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/)
 and adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [0.9.0] - 2026-02-20
+
+## Added
+- Search for `Select` and `MultiSelect`
+- Type ahead support for `Select` and `MultiSelect`npm
+- `Combobox` component
+- `FilterList` component for dynamically choosing and setting filters
+- `useSelectState`, `useMultiSelectState`, `useCombobox`, `useSingleSelection`, `useMultiSelection`
+- `useTypeAheadSearch` for getting the value of a timed type ahead search 
+
+## Changed
+- `useSearch` to require less parameter and only do a simple search and caching the result
+
+## Fixed
+- imports in `TimePicker` and `DateTimeInput`
+
+## Security
+- update packages
+
 ## [0.8.12] - 2026-02-15
 
 ### Fixed

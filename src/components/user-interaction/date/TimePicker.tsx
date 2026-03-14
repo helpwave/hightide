@@ -1,10 +1,10 @@
 import { useEffect, useMemo, useRef } from 'react'
 import { closestMatch, range } from '@/src/utils/array'
 import { Button } from '@/src/components/user-interaction/Button'
-import type { FormFieldDataHandling } from '../../form/FormField'
+import type { FormFieldDataHandling } from '@/src/components/form/FormField'
 import { useControlledState } from '@/src/hooks/useControlledState'
-import type { DateTimePrecision } from '@/src/utils'
-import { Visibility } from '../../layout'
+import type { DateTimePrecision } from '@/src/utils/date'
+import { Visibility } from '@/src/components/layout/Visibility'
 
 export type TimePickerMinuteIncrement = '1min' | '5min' | '10min' | '15min' | '30min'
 

@@ -1,11 +1,11 @@
 import type { ColumnDef } from '@tanstack/react-table'
 import { memo,  useEffect,  useMemo, useState } from 'react'
 import { useTableColumnDefinitionContext } from './TableContext'
-import type { TableFilterCategory } from './TableFilter'
+import type { DataType } from '../../user-interaction/data/data-types'
 import { useLogOnce } from '@/src/hooks/useLogOnce'
 
 export type TableColumnProps<T> = ColumnDef<T> & {
-  filterType?: TableFilterCategory,
+  filterType?: DataType,
 }
 
 const TableColumnComponent = <T,>({

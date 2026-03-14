@@ -10,28 +10,7 @@ import { TableColumnSwitcher } from '@/src/components/layout/table/TableColumnSw
 import { Chip } from '@/src/components/display-and-visualization/Chip'
 import { Table } from '@/src/components/layout/table/Table'
 import { Visibility } from '@/src/components/layout/Visibility'
-import {
-  filterText,
-  filterNumber,
-  filterDate,
-  filterDatetime,
-  filterBoolean,
-  filterTags,
-  filterTagsSingle,
-  filterGeneric
-} from '@/src/utils/filter'
-import {
-  TableFilterOperator,
-  type TextFilterValue,
-  type NumberFilterValue,
-  type DateFilterValue,
-  type DatetimeFilterValue,
-  type BooleanFilterValue,
-  type TagsFilterValue,
-  type TagsSingleFilterValue,
-  type GenericFilterValue,
-  type TableFilterValue
-} from '@/src/components/layout/table/TableFilter'
+import { FilterFunctions, type FilterValue } from '@/src/components/user-interaction/data/filter-function'
 
 const relationShipTags = ['Friend', 'Family', 'Work', 'School', 'Other'] as const
 type RelationShipTag = (typeof relationShipTags)[number]
@@ -66,52 +45,6 @@ const createRandomDataType = (): DataType => {
 const TOTAL_ITEMS = 10000
 const allData: DataType[] = range(TOTAL_ITEMS).map(() => createRandomDataType())
 
-/**
- * Determines the filter category based on the operator string.
- */
-function getFilterCategory(operator: string): keyof typeof TableFilterOperator | null {
-  const allOperators = [
-    ...TableFilterOperator.generic,
-    ...TableFilterOperator.text,
-    ...TableFilterOperator.number,
-    ...TableFilterOperator.date,
-    ...TableFilterOperator.dateTime,
-    ...TableFilterOperator.boolean,
-    ...TableFilterOperator.multiTags,
-    ...TableFilterOperator.singleTag,
-  ] as readonly string[]
-
-  if (!allOperators.includes(operator)) {
-    return null
-  }
-
-  if (TableFilterOperator.generic.includes(operator as typeof TableFilterOperator.generic[number])) {
-    return 'generic'
-  }
-  if (TableFilterOperator.text.includes(operator as typeof TableFilterOperator.text[number])) {
-    return 'text'
-  }
-  if (TableFilterOperator.number.includes(operator as typeof TableFilterOperator.number[number])) {
-    return 'number'
-  }
-  if (TableFilterOperator.date.includes(operator as typeof TableFilterOperator.date[number])) {
-    return 'date'
-  }
-  if (TableFilterOperator.dateTime.includes(operator as typeof TableFilterOperator.dateTime[number])) {
-    return 'dateTime'
-  }
-  if (TableFilterOperator.boolean.includes(operator as typeof TableFilterOperator.boolean[number])) {
-    return 'boolean'
-  }
-  if (TableFilterOperator.multiTags.includes(operator as typeof TableFilterOperator.multiTags[number])) {
-    return 'multiTags'
-  }
-  if (TableFilterOperator.singleTag.includes(operator as typeof TableFilterOperator.singleTag[number])) {
-    return 'singleTag'
-  }
-  return null
-}
-
 const fetchPaginatedData = async (
   pageIndex: number,
   pageSize: number,
@@ -130,30 +63,30 @@ const fetchPaginatedData = async (
       const rowValue = row[id as keyof DataType]
 
       if (typeof value === 'object' && 'operator' in value && 'parameter' in value) {
-        const filterValue = value as TableFilterValue
-        const category = getFilterCategory(filterValue.operator)
+        const filterValue = value as FilterValue
+        const dataType = filterValue.dataType
 
-        if (!category) {
+        if (!dataType) {
           return true
         }
 
-        switch (category) {
+        switch (dataType) {
         case 'text':
-          return filterText(rowValue, filterValue as TextFilterValue)
+          return FilterFunctions.text(rowValue, filterValue.operator, filterValue.parameter)
         case 'number':
-          return filterNumber(rowValue, filterValue as NumberFilterValue)
+          return FilterFunctions.number(rowValue, filterValue.operator, filterValue.parameter)
         case 'date':
-          return filterDate(rowValue, filterValue as DateFilterValue)
+          return FilterFunctions.date(rowValue, filterValue.operator, filterValue.parameter)
         case 'dateTime':
-          return filterDatetime(rowValue, filterValue as DatetimeFilterValue)
+          return FilterFunctions.dateTime(rowValue, filterValue.operator, filterValue.parameter)
         case 'boolean':
-          return filterBoolean(rowValue, filterValue as BooleanFilterValue)
-        case 'multiTags':
-          return filterTags(rowValue, filterValue as TagsFilterValue)
+          return FilterFunctions.boolean(rowValue, filterValue.operator, filterValue.parameter)
         case 'singleTag':
-          return filterTagsSingle(rowValue, filterValue as TagsSingleFilterValue)
-        case 'generic':
-          return filterGeneric(rowValue, filterValue as GenericFilterValue)
+          return FilterFunctions.singleTag(rowValue, filterValue.operator, filterValue.parameter)
+        case 'multiTags':
+          return FilterFunctions.multiTags(rowValue, filterValue.operator, filterValue.parameter)
+        case 'unknownType':
+          return FilterFunctions.unknownType(rowValue, filterValue.operator, filterValue.parameter)
         default:
           return true
         }

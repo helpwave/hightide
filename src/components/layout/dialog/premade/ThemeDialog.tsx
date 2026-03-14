@@ -8,9 +8,9 @@ import type { ThemeType } from '@/src/global-contexts/ThemeContext'
 import { ThemeUtil, useTheme } from '@/src/global-contexts/ThemeContext'
 import { Button } from '@/src/components/user-interaction/Button'
 import { useHightideTranslation } from '@/src/i18n/useHightideTranslation'
-import type { SelectProps } from '@/src/components/user-interaction/select/Select'
-import { Select } from '@/src/components/user-interaction/select/Select'
-import { SelectOption } from '@/src/components/user-interaction/select/SelectComponents'
+import type { SelectProps } from '@/src/components/user-interaction/Select/Select'
+import { Select } from '@/src/components/user-interaction/Select/Select'
+import { SelectOption } from '@/src/components/user-interaction/Select/SelectOption'
 
 export interface ThemeIconProps extends HTMLAttributes<SVGSVGElement> {
   theme?: ThemeType,
@@ -30,18 +30,19 @@ export const ThemeIcon = ({ theme: themeOverride, ...props }: ThemeIconProps) =>
   }
 }
 
-export type ThemeSelectProps = Omit<SelectProps, 'value'>
+export type ThemeSelectProps = Omit<SelectProps<ThemeType>, 'value' | 'children'>
 
 export const ThemeSelect = ({ ...props }: ThemeSelectProps) => {
   const translation = useHightideTranslation()
   const { theme, setTheme } = useTheme()
 
   return (
-    <Select
+    <Select<ThemeType>
       value={theme}
-      onEditComplete={(theme) => {
-        props.onEditComplete?.(theme)
-        setTheme(theme as ThemeType)
+      onEditComplete={(value) => {
+        console.log('onEditComplete', value)
+        props.onEditComplete?.(value)
+        setTheme(value)
       }}
       iconAppearance="right"
       {...props}
@@ -49,9 +50,15 @@ export const ThemeSelect = ({ ...props }: ThemeSelectProps) => {
         ...props.buttonProps,
         className: clsx('min-w-40 w-fit', props.buttonProps?.className),
       }}
+      showSearch={false}
     >
       {ThemeUtil.themes.map((theme) => (
-        <SelectOption key={theme} value={theme} className="gap-x-6 justify-between">
+        <SelectOption
+          key={theme}
+          value={theme}
+          label={translation('sThemeMode', { theme: theme })}
+          className="gap-x-6 justify-between"
+        >
           <div className="flex-row-2 items-center">
             <ThemeIcon theme={theme}/>
             {translation('sThemeMode', { theme: theme })}

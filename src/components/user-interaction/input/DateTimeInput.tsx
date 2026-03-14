@@ -13,7 +13,7 @@ import type { FormFieldInteractionStates } from '@/src/components/form/FieldLayo
 import { PopUp } from '../../layout/popup/PopUp'
 import { IconButton } from '../IconButton'
 import { DateUtils, type DateTimeFormat } from '@/src/utils/date'
-import { useDelay } from '@/src/hooks'
+import { useDelay } from '@/src/hooks/useDelay'
 
 export interface DateTimeInputProps extends
   Partial<FormFieldInteractionStates>,

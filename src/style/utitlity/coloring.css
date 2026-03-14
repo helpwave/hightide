@@ -1,4 +1,15 @@
+@utility coloring-transition {
+  transition: 
+    border-color var(--animation-duration-in, 250ms) ease-in-out, 
+    box-shadow var(--animation-duration-in, 250ms) ease-in-out,
+    outline-color var(--animation-duration-in, 250ms) ease-in-out,
+    outline-offset var(--animation-duration-in, 250ms) ease-in-out,
+    color var(--animation-duration-in, 250ms) ease-in-out,
+    background-color var(--animation-duration-in, 250ms) ease-in-out;
+}
+
 @utility coloring-solid {
+  @apply coloring-transition;
   @apply bg-[var(--coloring-solid-color,var(--coloring-color))]
   text-[var(--coloring-solid-text,var(--coloring-on-color))];
 }
@@ -9,6 +20,7 @@
 }
 
 @utility coloring-tonal {
+  @apply coloring-transition;
   @apply bg-[var(--coloring-tonal-background,var(--coloring-tonal,var(--coloring-color)))]/20
   text-[var(--coloring-tonal-text,var(--coloring-tonal,var(--coloring-color)))];
 }
@@ -19,6 +31,7 @@
 }
 
 @utility coloring-text {
+  @apply coloring-transition;
   @apply text-[var(--coloring-text,var(--coloring-color))];
 }
 
@@ -28,6 +41,7 @@
 }
 
 @utility coloring-outline {
+  @apply coloring-transition;
   border-width: var(--coloring-outline-width, 0.125rem);
   @apply border-[var(--coloring-border,var(--coloring-outline,var(--coloring-color)))];
   @apply text-[var(--coloring-outline,var(--coloring-color))];
@@ -37,6 +51,19 @@
   @apply coloring-outline
   hover:border-[var(--coloring-border-hover,--coloring-hover)]
   hover:text-[var(--coloring-outline-hover,var(--coloring-hover))];
+}
+
+@utility coloring-tonal-outline {
+  @apply coloring-transition coloring-tonal;
+  border-width: var(--coloring-outline-width, 0.125rem);
+  @apply border-[var(--coloring-border,var(--coloring-outline,var(--coloring-color)))];
+}
+
+@utility coloring-tonal-outline-hover {
+  @apply coloring-tonal-outline
+  hover:border-[var(--coloring-border-hover,--coloring-hover)]
+  hover:text-[var(--coloring-outline-hover,var(--coloring-hover))]
+  hover:bg-[var(--coloring-tonal-hover,var(--coloring-tonal-background,var(--coloring-tonal,var(--coloring-color))))]/30;
 }
 
 @utility coloring-reset-variables {

@@ -1,19 +1,50 @@
 @layer components {
-    [data-name="select-button"] {
-      @apply input-element flex-row-2 items-center justify-between rounded-md px-3 py-2;
-      &:not([data-disabled]) {
-        @apply hover:cursor-pointer;
-      }
-    }
-  
-    [data-name="select-chip-display"] {
-      @apply input-element flex flex-wrap gap-2 items-center rounded-md px-2.5 py-2.5;
-      &:not([data-disabled]) {
-        @apply hover:cursor-pointer;
-      }
-    }
 
-    [data-name="select-chip-display-chip"] {
-      @apply flex-row-1 items-center pl-2 pr-1 coloring-solid neutral rounded-md h-9;
+  [data-name="select-button"],
+  [data-name="multi-select-button"] {
+    @apply input-element flex-row-2 items-center justify-between rounded-md px-3 py-2;
+
+    &:not([data-disabled]) {
+      @apply hover:cursor-pointer;
     }
   }
+
+  [data-name="multi-select-chip-display-button"] {
+    @apply input-element flex flex-wrap gap-2 items-center rounded-md px-2.5 py-2.5;
+
+    &:not([data-disabled]) {
+      @apply hover:cursor-pointer;
+    }
+  }
+
+  [data-name="multi-select-chip-display-chip"] {
+    @apply flex-row-1 items-center pl-2 pr-1 coloring-solid neutral rounded-md h-9;
+  }
+
+  [data-name="select-list"],
+  [data-name="multi-select-list"] {
+    @apply flex-col-1 overflow-y-auto;
+  }
+
+  [data-name="select-list-option"],
+  [data-name="multi-select-list-option"] {
+    @apply flex-row-1 items-center px-2 py-1 rounded-md;
+
+    &[data-disabled] {
+      @apply cursor-not-allowed text-disabled;
+    }
+
+    &:not([data-disabled]) {
+      @apply cursor-pointer;
+
+      &[data-highlighted] {
+        @apply bg-primary/20;
+      }
+    }
+  }
+
+  [data-name="select-list-status"],
+  [data-name="multi-select-list-status"] {
+    @apply text-description px-2 py-1 rounded-md;
+  }
+}

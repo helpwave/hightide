@@ -23,6 +23,6 @@
   }
 
   * {
-    @apply focus-style-outline focusable;
+    @apply focus-style-outline focusable outline-focus;
   }
 }

@@ -1,7 +1,7 @@
 import { Pagination, type PaginationProps } from '@/src/components/layout/navigation/Pagination'
 import type { HTMLAttributes } from 'react'
-import { Select, type SelectProps } from '@/src/components/user-interaction/select/Select'
-import { SelectOption } from '@/src/components/user-interaction/select/SelectComponents'
+import { Select, type SelectProps } from '@/src/components/user-interaction/Select/Select'
+import { SelectOption } from '@/src/components/user-interaction/Select/SelectOption'
 import { Visibility } from '../Visibility'
 import clsx from 'clsx'
 import { useTableStateWithoutSizingContext } from './TableContext'
@@ -27,7 +27,7 @@ export const TablePaginationMenu = ({ ...props }: TablePaginationMenuProps) => {
 
 const defaultPageSizeOptions: number[] = [10, 25, 50, 100, 500, 1000] as const
 
-export interface TablePageSizeSelectProps extends SelectProps {
+export interface TablePageSizeSelectProps extends Omit<SelectProps, 'children'> {
   pageSizeOptions?: number[],
 }
 
@@ -45,9 +45,7 @@ export const TablePageSizeSelect = ({
       onValueChange={(value) => table.setPageSize(Number(value))}
     >
       {pageSizeOptions.map(size => (
-        <SelectOption key={size} value={size.toString()}>
-          {size}
-        </SelectOption>
+        <SelectOption key={size} value={size.toString()} label={size.toString()}/>
       ))}
     </Select>
   )

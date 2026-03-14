@@ -1,163 +1,78 @@
 import type { FilterFn } from '@tanstack/react-table'
-import {
-  filterText,
-  filterNumber,
-  filterDate,
-  filterDatetime,
-  filterBoolean,
-  filterTags,
-  filterTagsSingle,
-  filterGeneric
-} from '@/src/utils/filter'
-
-export const TableFilterOperator = {
-  text: ['textEquals', 'textNotEquals', 'textNotWhitespace', 'textContains', 'textNotContains', 'textStartsWith', 'textEndsWith'],
-  number: ['numberEquals', 'numberNotEquals', 'numberGreaterThan', 'numberGreaterThanOrEqual', 'numberLessThan', 'numberLessThanOrEqual', 'numberBetween', 'numberNotBetween'],
-  date: ['dateEquals', 'dateNotEquals', 'dateGreaterThan', 'dateGreaterThanOrEqual', 'dateLessThan', 'dateLessThanOrEqual', 'dateBetween', 'dateNotBetween'],
-  dateTime: ['dateTimeEquals', 'dateTimeNotEquals', 'dateTimeGreaterThan', 'dateTimeGreaterThanOrEqual', 'dateTimeLessThan', 'dateTimeLessThanOrEqual', 'dateTimeBetween', 'dateTimeNotBetween'],
-  boolean: ['booleanIsTrue', 'booleanIsFalse'],
-  multiTags: ['tagsEquals', 'tagsNotEquals', 'tagsContains', 'tagsNotContains'],
-  singleTag: ['tagsSingleEquals', 'tagsSingleNotEquals', 'tagsSingleContains', 'tagsSingleNotContains'],
-  generic: ['undefined', 'notUndefined']
-} as const
-
-export type TableGenericFilter = (typeof TableFilterOperator.generic)[number]
-export type TableTextFilter = (typeof TableFilterOperator.text)[number] | TableGenericFilter
-export type TableNumberFilter = (typeof TableFilterOperator.number)[number] | TableGenericFilter
-export type TableDateFilter = (typeof TableFilterOperator.date)[number]| TableGenericFilter
-export type TableDatetimeFilter = (typeof TableFilterOperator.dateTime)[number] | TableGenericFilter
-export type TableBooleanFilter = (typeof TableFilterOperator.boolean)[number] | TableGenericFilter
-export type TableTagsFilter = (typeof TableFilterOperator.multiTags)[number] | TableGenericFilter
-export type TableTagsSingleFilter = (typeof TableFilterOperator.singleTag)[number] | TableGenericFilter
+import { FilterOperatorUtils } from '../../user-interaction/data/FilterOperator'
+import { FilterFunctions, type FilterValue } from '../../user-interaction/data/filter-function'
 
 
-export type TableFilterType = TableTextFilter | TableNumberFilter | TableDateFilter | TableDatetimeFilter
-| TableBooleanFilter | TableTagsFilter | TableTagsSingleFilter | TableGenericFilter
-
-export type TableFilterCategory = keyof typeof TableFilterOperator
-
-export function isTableFilterCategory(value: unknown): value is TableFilterCategory {
-  return typeof value === 'string' && value in TableFilterOperator
-}
-
-export type TextFilterParameter = {
-  searchText?: string,
-  isCaseSensitive?: boolean,
-}
-
-export type NumberFilterParameter = {
-  compareValue?: number,
-  min?: number,
-  max?: number,
-}
-
-export type DateFilterParameter = {
-  compareDate?: Date,
-  min?: Date,
-  max?: Date,
-}
-
-export type DatetimeFilterParameter = {
-  compareDatetime?: Date,
-  min?: Date,
-  max?: Date,
-}
-
-export type BooleanFilterParameter = Record<string, never>
-
-export type TagsFilterParameter = {
-  searchTags?: unknown[],
-}
-
-export type TagsSingleFilterParameter = {
-  searchTag?: unknown,
-  searchTagsContains?: unknown[],
-}
-
-export type GenericFilterParameter = Record<string, never>
-
-export type TextFilterValue = {
-  operator: TableTextFilter,
-  parameter: TextFilterParameter,
-}
-
-export type NumberFilterValue = {
-  operator: TableNumberFilter,
-  parameter: NumberFilterParameter,
-}
-
-export type DateFilterValue = {
-  operator: TableDateFilter,
-  parameter: DateFilterParameter,
-}
-
-export type DatetimeFilterValue = {
-  operator: TableDatetimeFilter,
-  parameter: DatetimeFilterParameter,
-}
-
-export type BooleanFilterValue = {
-  operator: TableBooleanFilter,
-  parameter: BooleanFilterParameter,
-}
-
-export type TagsFilterValue = {
-  operator: TableTagsFilter,
-  parameter: TagsFilterParameter,
-}
-
-export type TagsSingleFilterValue = {
-  operator: TableTagsSingleFilter,
-  parameter: TagsSingleFilterParameter,
-}
-
-export type GenericFilterValue = {
-  operator: TableGenericFilter,
-  parameter: GenericFilterParameter,
-}
-
-
-export type TableFilterValue = TextFilterValue | NumberFilterValue | DateFilterValue | DatetimeFilterValue
-| BooleanFilterValue | TagsFilterValue | TagsSingleFilterValue | GenericFilterValue
-
-const textFilter: FilterFn<unknown> = (row, columnId, filterValue: TextFilterValue) => {
+const textFilter: FilterFn<unknown> = (row, columnId, filterValue: FilterValue) => {
   const value = row.getValue<string>(columnId)
-  return filterText(value, filterValue)
+  const operator = filterValue.operator
+  if (!FilterOperatorUtils.typeCheck.text(operator)) {
+    return true
+  }
+  return FilterFunctions.text(value, operator, filterValue.parameter)
 }
 
-const numberFilter: FilterFn<unknown> = (row, columnId, filterValue: NumberFilterValue) => {
+const numberFilter: FilterFn<unknown> = (row, columnId, filterValue: FilterValue) => {
   const value = row.getValue<number>(columnId)
-  return filterNumber(value, filterValue)
+  const operator = filterValue.operator
+  if (!FilterOperatorUtils.typeCheck.number(operator)) {
+    return true
+  }
+  return FilterFunctions.number(value, operator, filterValue.parameter)
 }
 
-const dateFilter: FilterFn<unknown> = (row, columnId, filterValue: DateFilterValue) => {
+const dateFilter: FilterFn<unknown> = (row, columnId, filterValue: FilterValue) => {
   const value = row.getValue<Date>(columnId)
-  return filterDate(value, filterValue)
+  const operator = filterValue.operator
+  if (!FilterOperatorUtils.typeCheck.date(operator)) {
+    return true
+  }
+  return FilterFunctions.date(value, operator, filterValue.parameter)
 }
 
-const dateTimeFilter: FilterFn<unknown> = (row, columnId, filterValue: DatetimeFilterValue) => {
+const dateTimeFilter: FilterFn<unknown> = (row, columnId, filterValue: FilterValue) => {
   const value = row.getValue<Date>(columnId)
-  return filterDatetime(value, filterValue)
+  const operator = filterValue.operator
+  if (!FilterOperatorUtils.typeCheck.datetime(operator)) {
+    return true
+  }
+  return FilterFunctions.dateTime(value, operator, filterValue.parameter)
 }
 
-const booleanFilter: FilterFn<unknown> = (row, columnId, filterValue: BooleanFilterValue) => {
+const booleanFilter: FilterFn<unknown> = (row, columnId, filterValue: FilterValue) => {
   const value = row.getValue<boolean>(columnId)
-  return filterBoolean(value, filterValue)
+  const operator = filterValue.operator
+  if (!FilterOperatorUtils.typeCheck.boolean(operator)) {
+    return true
+  }
+  return FilterFunctions.boolean(value, operator, filterValue.parameter)
 }
 
-const multiTagsFilter: FilterFn<unknown> = (row, columnId, filterValue: TagsFilterValue) => {
+const multiTagsFilter: FilterFn<unknown> = (row, columnId, filterValue: FilterValue) => {
   const value = row.getValue<unknown[]>(columnId)
-  return filterTags(value, filterValue)
+  const operator = filterValue.operator
+  if (!FilterOperatorUtils.typeCheck.tags(operator)) {
+    return true
+  }
+  return FilterFunctions.multiTags(value, operator, filterValue.parameter)
 }
 
-const singleTagFilter: FilterFn<unknown> = (row, columnId, filterValue: TagsSingleFilterValue) => {
+const singleTagFilter: FilterFn<unknown> = (row, columnId, filterValue: FilterValue) => {
   const value = row.getValue<unknown>(columnId)
-  return filterTagsSingle(value, filterValue)
+  const operator = filterValue.operator
+  if (!FilterOperatorUtils.typeCheck.tagsSingle(operator)) {
+    return true
+  }
+  return FilterFunctions.singleTag(value, operator, filterValue.parameter)
 }
 
-const genericFilter: FilterFn<unknown> = (row, columnId, filterValue: GenericFilterValue) => {
+const unknownTypeFilter: FilterFn<unknown> = (row, columnId, filterValue: FilterValue) => {
   const value = row.getValue<unknown>(columnId)
-  return filterGeneric(value, filterValue)
+  const operator = filterValue.operator
+  if (!FilterOperatorUtils.typeCheck.unknownType(operator)) {
+    return true
+  }
+  return FilterFunctions.unknownType(value, operator, filterValue.parameter)
 }
 
 export const TableFilter = {
@@ -168,5 +83,5 @@ export const TableFilter = {
   boolean: booleanFilter,
   multiTags: multiTagsFilter,
   singleTag: singleTagFilter,
-  generic: genericFilter,
+  unknownType: unknownTypeFilter,
 }

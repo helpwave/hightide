@@ -1,26 +1,27 @@
-import { Button } from '../../user-interaction/Button'
 import { FilterIcon } from 'lucide-react'
 import { useEffect, useId, useMemo, useRef, useState } from 'react'
-import type { Column } from '@tanstack/react-table'
+import type { Header } from '@tanstack/react-table'
+import { flexRender } from '@tanstack/react-table'
 import { useHightideTranslation } from '@/src/i18n/useHightideTranslation'
 import { Visibility } from '../Visibility'
-import { PopUp } from '../popup/PopUp'
-import type { TableFilterCategory, TableFilterValue } from './TableFilter'
-import { TableFilterContent } from './TableFilterPopups'
 import { IconButton } from '../../user-interaction/IconButton'
+import type { DataType } from '../../user-interaction/data/data-types'
+import type { FilterValue } from '../../user-interaction/data/filter-function'
+import { FilterPopUp } from '../../user-interaction/data/FilterPopUp'
 
-export type TableFilterButtonProps<T = unknown> = {
-  filterType: TableFilterCategory,
-  column: Column<T>,
+export type TableFilterButtonProps = {
+  filterType: DataType,
+  header: Header<unknown, unknown>,
 }
 
-export const TableFilterButton = <T, >({
+export const TableFilterButton = ({
   filterType,
-  column,
-}: TableFilterButtonProps<T>) => {
+  header,
+}: TableFilterButtonProps) => {
   const translation = useHightideTranslation()
+  const column = header.column
   const columnFilterValue = column.getFilterValue()
-  const [filterValue, setFilterValue] = useState<TableFilterValue | undefined>(columnFilterValue as TableFilterValue)
+  const [filterValue, setFilterValue] = useState<FilterValue | undefined>(columnFilterValue as FilterValue | undefined)
   const hasFilter = !!filterValue
   const anchorRef = useRef<HTMLButtonElement>(null)
   const containerRef = useRef<HTMLDivElement>(null)
@@ -33,7 +34,7 @@ export const TableFilterButton = <T, >({
   }), [id])
 
   useEffect(() => {
-    setFilterValue(columnFilterValue as TableFilterValue)
+    setFilterValue(columnFilterValue as FilterValue)
   }, [columnFilterValue])
 
   const isTagsFilter = filterType === 'multiTags' || filterType === 'singleTag'
@@ -47,7 +48,7 @@ export const TableFilterButton = <T, >({
       <IconButton
         ref={anchorRef}
         id={ids.button}
-        tooltip={translation('filter')}
+        tooltip={translation(filterValue ? 'editFilter' : 'addFilter')}
         color="neutral"
         size="xs"
 
@@ -66,7 +67,7 @@ export const TableFilterButton = <T, >({
           <div className="absolute -top-1 -right-1 w-2 h-2 rounded-full bg-primary" />
         </Visibility>
       </IconButton>
-      <PopUp
+      <FilterPopUp
         ref={containerRef}
         id={ids.popup}
         isOpen={isOpen}
@@ -76,39 +77,24 @@ export const TableFilterButton = <T, >({
         }}
         anchor={anchorRef}
 
-        onClose={() => setIsOpen(false)}
+        onValueChange={setFilterValue}
+        onRemove={() => {
+          column.setFilterValue(undefined)
+          setIsOpen(false)
+        }}
+        onClose={() => {
+          column.setFilterValue(filterValue)
+          setIsOpen(false)
+        }}
 
-        role="dialog"
-        aria-labelledby={ids.label}
+        className="flex-col-2 px-3 py-2 items-start"
+        dataType={filterType}
+        value={filterValue}
 
-        className="flex-col-2 p-2 items-start"
-      >
-        <span id={ids.label} className="typography-label-lg font-semibold">{translation('filter')}</span>
-        <TableFilterContent
-          columnId={column.id}
-          filterType={filterType}
-          filterValue={filterValue}
-          onFilterValueChange={setFilterValue}
-        />
-        <div className="flex-row-2 justify-end w-full">
-          {hasFilter && (
-            <Button color="negative" size="sm" onClick={() => {
-              column.setFilterValue(undefined)
-              setIsOpen(false)
-            }}>
-              {translation('remove')}
-            </Button>
-          )}
-          <Button size="sm" onClick={() => {
-            if (filterValue) {
-              column.setFilterValue(filterValue)
-            }
-            setIsOpen(false)
-          }}>
-            {translation('apply')}
-          </Button>
-        </div>
-      </PopUp>
+        name={flexRender(column.columnDef.header, header.getContext())}
+
+        tags={column.columnDef.meta?.filterData?.tags ?? []}
+      />
     </>
   )
 }

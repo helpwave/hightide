@@ -6,7 +6,7 @@ import { forwardRef } from 'react'
  */
 type ButtonSize = 'xs' | 'sm' | 'md' | 'lg' | null
 
-type ButtonColoringStyle = 'outline' | 'solid' | 'text' | 'tonal' | null
+type ButtonColoringStyle = 'outline' | 'solid' | 'text' | 'tonal' | 'tonal-outline' | null
 
 const buttonColorsList = ['primary', 'secondary', 'positive', 'warning', 'negative', 'neutral'] as const
 
