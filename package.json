@@ -15,7 +15,7 @@
   "module": "dist/index.js",
   "types": "dist/index.d.ts",
   "bin": {
-    "barrel": ".dist/scripts/barrel.js"
+    "barrel": "dist/scripts/barrel.js"
   },
   "exports": {
     ".": {
