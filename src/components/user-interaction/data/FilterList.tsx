@@ -14,9 +14,10 @@ import { ComboboxOption } from '@/src/components/user-interaction/Combobox/Combo
 import { PopUpContext } from '../../layout/popup/PopUpContext'
 import { ExpansionIcon } from '../../display-and-visualization/ExpansionIcon'
 import { FilterOperatorUtils } from './FilterOperator'
+import type { ColumnFilter } from '@tanstack/react-table'
 
-export interface IdentifierFilterValue extends FilterValue {
-  id: string,
+export interface IdentifierFilterValue extends ColumnFilter {
+  value: FilterValue,
 }
 
 export interface FilterListPopUpBuilderProps {
@@ -57,13 +58,13 @@ export const FilterList = ({ value, onValueChange, availableItems }: FilterListP
 
   const valueWithEditState = useMemo(() => {
     let foundEditValue = false
-    for(const item of value) {
-      if(item.id === editState?.id) {
+    for (const item of value) {
+      if (item.id === editState?.id) {
         foundEditValue = true
         break
       }
     }
-    if(!foundEditValue && editState) {
+    if (!foundEditValue && editState) {
       return [...value, editState]
     }
     return value
@@ -86,12 +87,14 @@ export const FilterList = ({ value, onValueChange, availableItems }: FilterListP
               <Combobox
                 onItemClick={(id) => {
                   const item = itemRecord[id]
-                  if(!item) return
+                  if (!item) return
                   const newValue: IdentifierFilterValue = {
                     id: item.id,
-                    dataType: item.dataType,
-                    operator: FilterOperatorUtils.getDefaultOperator(item.dataType),
-                    parameter: {}
+                    value: {
+                      dataType: item.dataType,
+                      operator: FilterOperatorUtils.getDefaultOperator(item.dataType),
+                      parameter: {}
+                    },
                   }
                   setEditState(newValue)
                   setIsOpen(false)
@@ -108,23 +111,23 @@ export const FilterList = ({ value, onValueChange, availableItems }: FilterListP
           </PopUpContext.Consumer>
         </PopUp>
       </PopUpRoot>
-      {valueWithEditState.map(filterValue => {
-        const item = itemRecord[filterValue.id]
-        if(!item) return null
+      {valueWithEditState.map(columnFilter => {
+        const item = itemRecord[columnFilter.id]
+        if (!item) return null
         return (
           <PopUpRoot
-            key={filterValue.id}
-            isOpen={editState?.id === filterValue.id}
+            key={columnFilter.id}
+            isOpen={editState?.id === columnFilter.id}
             onIsOpenChange={isOpen => {
               if (!isOpen) {
-                const isEditStateValid = editState ? FilterValueUtils.isValid(editState) : false
-                if(isEditStateValid) {
-                  onValueChange(valueWithEditState.map(prevItem => prevItem.id === filterValue.id ? { ...prevItem, ...editState } : prevItem))
+                const isEditStateValid = editState ? FilterValueUtils.isValid(editState.value) : false
+                if (isEditStateValid) {
+                  onValueChange(valueWithEditState.map(prevItem => prevItem.id === columnFilter.id ? { ...prevItem, ...editState } : prevItem))
                 }
                 setEditState(undefined)
               } else {
-                const valueItem = value.find(prevItem => prevItem.id === filterValue.id)
-                if(!valueItem) return
+                const valueItem = value.find(prevItem => prevItem.id === columnFilter.id)
+                if (!valueItem) return
                 setEditState({ ...valueItem })
               }
             }}
@@ -132,7 +135,7 @@ export const FilterList = ({ value, onValueChange, availableItems }: FilterListP
             <PopUpOpener>
               {({ toggleOpen, props, isOpen }) => (
                 <Button {...props} onClick={toggleOpen} color="primary" coloringStyle="tonal" size="sm">
-                  {item.label + ': ' + filterValueToLabel(filterValue, { tags: item.tags })}
+                  {item.label + ': ' + filterValueToLabel(columnFilter.value, { tags: item.tags })}
                   <ExpansionIcon isExpanded={isOpen} />
                 </Button>
               )}
@@ -141,10 +144,10 @@ export const FilterList = ({ value, onValueChange, availableItems }: FilterListP
               <PopUpContext.Consumer>
                 {({ isOpen, setIsOpen }) => (
                   item.popUpBuilder({
-                    value: editState?.id === filterValue.id ? editState : filterValue,
-                    onValueChange: value => setEditState({ ...filterValue, ...value }),
+                    value: editState?.id === columnFilter.id ? editState.value : columnFilter.value,
+                    onValueChange: value => setEditState({ ...columnFilter, value }),
                     onRemove: () => {
-                      onValueChange(value.filter(prevItem => prevItem.id !== filterValue.id))
+                      onValueChange(value.filter(prevItem => prevItem.id !== columnFilter.id))
                       setEditState(undefined)
                     },
                     dataType: item.dataType,
@@ -158,14 +161,14 @@ export const FilterList = ({ value, onValueChange, availableItems }: FilterListP
             ) : (
               <FilterPopUp
                 name={item.label}
-                value={editState?.id === filterValue.id ? editState : filterValue}
+                value={editState?.id === columnFilter.id ? editState.value : columnFilter.value}
                 dataType={item.dataType}
                 tags={item.tags}
                 onValueChange={value => {
-                  setEditState({ ...filterValue, ...value })
+                  setEditState({ ...columnFilter, value })
                 }}
                 onRemove={() => {
-                  onValueChange(value.filter(prevItem => prevItem.id !== filterValue.id))
+                  onValueChange(value.filter(prevItem => prevItem.id !== columnFilter.id))
                   setEditState(undefined)
                 }}
               />

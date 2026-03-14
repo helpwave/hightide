@@ -44,9 +44,9 @@ export const select: Story = {
 }
 
 export interface User {
-  uuid: string
-  name: string
-  email: string
+  uuid: string,
+  name: string,
+  email: string,
 }
 
 const users: User[] = [

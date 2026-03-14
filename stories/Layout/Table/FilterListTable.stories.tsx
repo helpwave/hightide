@@ -74,7 +74,7 @@ const AgeFilterPopUp = ({ value, onValueChange, onRemove, name }: FilterListPopU
               onValueChange({ ...value, parameter: { ...parameter, minNumber: newRange[0], maxNumber: newRange[1] } })
             }}
             compareFunction={(a, b) => {
-              if(a === null || b === null) return false
+              if (a === null || b === null) return false
               return a[0] === b[0] && a[1] === b[1]
             }}
           >
@@ -141,9 +141,9 @@ function filterData(data: Row[], filters: IdentifierFilterValue[]): Row[] {
   return data.filter(row => {
     return filters.every(f => {
       const rowValue = row[f.id as keyof Row]
-      const fn = FilterFunctions[f.dataType as DataType]
+      const fn = FilterFunctions[f.value.dataType as DataType]
       if (!fn) return true
-      return fn(rowValue, f.operator, f.parameter)
+      return fn(rowValue, f.value.operator, f.value.parameter)
     })
   })
 }
