@@ -117,6 +117,36 @@ const equalDate = (date1: Date, date2: Date) => {
     && date1.getDate() === date2.getDate()
 }
 
+const isLastMillisecondOfDay = (date: Date): boolean => {
+  const next = new Date(date.getTime() + 1)
+  return !equalDate(date, next)
+}
+
+
+const sameTime = (a: Date, b: Date, compareSeconds: boolean = false, compareMilliseconds: boolean = false): boolean => {
+  if (a.getHours() !== b.getHours() || a.getMinutes() !== b.getMinutes()) {
+    return false
+  }
+  if (compareSeconds && a.getSeconds() !== b.getSeconds()) {
+    return false
+  }
+  if (compareMilliseconds && a.getMilliseconds() !== b.getMilliseconds()) {
+    return false
+  }
+  return true
+}
+
+const withTime = (datePart: Date, timePart: Date): Date => {
+  const out = new Date(datePart)
+  out.setHours(
+    timePart.getHours(),
+    timePart.getMinutes(),
+    timePart.getSeconds(),
+    timePart.getMilliseconds()
+  )
+  return out
+}
+
 const weeksForCalenderMonth = (date: Date, weekStart: WeekDay, weeks: number = 6) => {
   const month = date.getMonth()
   const year = date.getFullYear()
@@ -258,6 +288,9 @@ export const DateUtils = {
   monthsList,
   weekDayList,
   equalDate,
+  isLastMillisecondOfDay,
+  sameTime,
+  withTime,
   formatAbsolute,
   formatRelative,
   addDuration,

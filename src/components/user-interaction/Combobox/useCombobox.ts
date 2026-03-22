@@ -1,7 +1,7 @@
 import { useCallback, useMemo } from 'react'
 import { useListNavigation } from '@/src/hooks/useListNavigation'
 import { useControlledState } from '@/src/hooks/useControlledState'
-import { useSearch } from '@/src/hooks'
+import { useSearch } from '@/src/hooks/useSearch'
 
 export interface UseComboboxOption {
   id: string,

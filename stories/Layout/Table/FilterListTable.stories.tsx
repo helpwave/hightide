@@ -61,7 +61,6 @@ const AgeFilterPopUp = ({ value, onValueChange, onRemove, name }: FilterListPopU
       onOperatorChange={(newOperator) => onValueChange({ dataType: 'number', parameter, operator: newOperator })}
       onRemove={onRemove}
       allowedOperators={FilterOperatorUtils.operatorsByCategory.number}
-      hasValue={!!value}
       noParameterRequired={!needsParameterInput}
     >
       <Visibility isVisible={needsRangeInput}>

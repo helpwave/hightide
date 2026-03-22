@@ -1,3 +1,4 @@
+import type { PropsWithChildren } from 'react'
 import { useMemo, useState, type ReactNode } from 'react'
 import type { FilterValue } from './filter-function'
 import { FilterValueUtils, useFilterValueTranslation } from './filter-function'
@@ -37,9 +38,10 @@ export interface FilterListItem {
   dataType: DataType,
   tags: ReadonlyArray<{ tag: string, label: string, display?: ReactNode }>,
   popUpBuilder?: (props: FilterListPopUpBuilderProps) => ReactNode,
+  activeLabelBuilder?: (value: FilterValue) => ReactNode,
 }
 
-export interface FilterListProps {
+export interface FilterListProps extends PropsWithChildren {
   value: IdentifierFilterValue[],
   onValueChange: (value: IdentifierFilterValue[]) => void,
   availableItems: FilterListItem[],
@@ -75,7 +77,7 @@ export const FilterList = ({ value, onValueChange, availableItems }: FilterListP
       <PopUpRoot>
         <PopUpOpener>
           {({ toggleOpen, props }) => (
-            <Button {...props} onClick={toggleOpen} color="neutral" size="sm">
+            <Button {...props} onClick={toggleOpen} color="neutral" size="md">
               {translation('addFilter')}
               <PlusIcon className="size-4" />
             </Button>
@@ -134,45 +136,46 @@ export const FilterList = ({ value, onValueChange, availableItems }: FilterListP
           >
             <PopUpOpener>
               {({ toggleOpen, props, isOpen }) => (
-                <Button {...props} onClick={toggleOpen} color="primary" coloringStyle="tonal" size="sm">
-                  {item.label + ': ' + filterValueToLabel(columnFilter.value, { tags: item.tags })}
+                <Button {...props} onClick={toggleOpen} color="primary" coloringStyle="tonal-outline" size="md">
+                  {item.activeLabelBuilder ?
+                    item.activeLabelBuilder(columnFilter.value) :
+                    item.label + ': ' + filterValueToLabel(columnFilter.value, { tags: item.tags })}
                   <ExpansionIcon isExpanded={isOpen} />
                 </Button>
               )}
             </PopUpOpener>
-            {item.popUpBuilder ? (
-              <PopUpContext.Consumer>
-                {({ isOpen, setIsOpen }) => (
-                  item.popUpBuilder({
-                    value: editState?.id === columnFilter.id ? editState.value : columnFilter.value,
-                    onValueChange: value => setEditState({ ...columnFilter, value }),
-                    onRemove: () => {
-                      onValueChange(value.filter(prevItem => prevItem.id !== columnFilter.id))
-                      setEditState(undefined)
-                    },
-                    dataType: item.dataType,
-                    tags: item.tags,
-                    name: item.label,
-                    isOpen,
-                    close: () => setIsOpen(false),
-                  })
-                )}
-              </PopUpContext.Consumer>
-            ) : (
-              <FilterPopUp
-                name={item.label}
-                value={editState?.id === columnFilter.id ? editState.value : columnFilter.value}
-                dataType={item.dataType}
-                tags={item.tags}
-                onValueChange={value => {
-                  setEditState({ ...columnFilter, value })
-                }}
-                onRemove={() => {
-                  onValueChange(value.filter(prevItem => prevItem.id !== columnFilter.id))
-                  setEditState(undefined)
-                }}
-              />
-            )}
+            <PopUpContext.Consumer>
+              {({ isOpen, setIsOpen }) => item.popUpBuilder ? (
+                item.popUpBuilder({
+                  value: editState?.id === columnFilter.id ? editState.value : columnFilter.value,
+                  onValueChange: value => setEditState({ ...columnFilter, value }),
+                  onRemove: () => {
+                    onValueChange(value.filter(prevItem => prevItem.id !== columnFilter.id))
+                    setEditState(undefined)
+                  },
+                  dataType: item.dataType,
+                  tags: item.tags,
+                  name: item.label,
+                  isOpen,
+                  close: () => setIsOpen(false),
+                })
+              ) : (
+                <FilterPopUp
+                  name={item.label}
+                  value={editState?.id === columnFilter.id ? editState.value : columnFilter.value}
+                  dataType={item.dataType}
+                  tags={item.tags}
+                  onValueChange={value => {
+                    setEditState({ ...columnFilter, value })
+                  }}
+                  onRemove={() => {
+                    onValueChange(value.filter(prevItem => prevItem.id !== columnFilter.id))
+                    setEditState(undefined)
+                  }}
+                  onClose={() => setIsOpen(false)}
+                />
+              )}
+            </PopUpContext.Consumer>
           </PopUpRoot>
         )
       })}
