@@ -1,4 +1,4 @@
-import type { HTMLAttributes, InputHTMLAttributes } from 'react'
+import type { HTMLAttributes, InputHTMLAttributes, ReactNode } from 'react'
 import { forwardRef, useCallback, useEffect, useId, useImperativeHandle, useMemo, useRef, useState } from 'react'
 import { CalendarIcon } from 'lucide-react'
 import clsx from 'clsx'
@@ -28,6 +28,7 @@ export interface DateTimeInputProps extends
   pickerProps?: Omit<DateTimePickerProps, keyof FormFieldDataHandling<Date> | 'mode' | 'initialValue' | 'start' | 'end' | 'weekStart' | 'markToday' | 'is24HourFormat' | 'minuteIncrement' | 'secondIncrement' | 'millisecondIncrement' | 'precision'>,
   outsideClickCloses?: boolean,
   onDialogOpeningChange?: (isOpen: boolean) => void,
+  actions?: ReactNode[],
 }
 
 export const DateTimeInput = forwardRef<HTMLInputElement, DateTimeInputProps>(function DateTimeInput({
@@ -55,6 +56,7 @@ export const DateTimeInput = forwardRef<HTMLInputElement, DateTimeInputProps>(fu
   readOnly = false,
   invalid = false,
   required = false,
+  actions = [],
   ...props
 }, forwardedRef) {
   const translation = useHightideTranslation()
@@ -114,6 +116,12 @@ export const DateTimeInput = forwardRef<HTMLInputElement, DateTimeInputProps>(fu
           id={ids.input}
           value={stringInputState.state}
 
+          onClick={(event) => {
+            event.preventDefault()
+          }}
+          onFocus={(event) => {
+            event.preventDefault()
+          }}
           onChange={(event) => {
             const date = new Date(event.target.value ?? '')
             const isValid = !isNaN(date.getTime())
@@ -156,22 +164,24 @@ export const DateTimeInput = forwardRef<HTMLInputElement, DateTimeInputProps>(fu
           data-value={PropsUtil.dataAttributes.bool(!!state || !!stringInputState)}
           {...PropsUtil.aria.interactionStates({ disabled, readOnly, invalid, required }, props)}
         />
-        <Visibility isVisible={!readOnly}>
-          <IconButton
-            tooltip={translation('sDateTimeSelect', { datetimeMode: mode })}
-            coloringStyle="text" color="neutral" size="sm"
-            className="absolute right-1 top-1/2 -translate-y-1/2"
-            disabled={disabled}
-            onClick={() => {
-              changeOpenWrapper(true)
-            }}
-            aria-haspopup="dialog"
-            aria-expanded={isOpen}
-            aria-controls={isOpen ? ids.popup : undefined}
-          >
-            <CalendarIcon className="size-5"/>
-          </IconButton>
-        </Visibility>
+        <div className="absolute right-1 top-1/2 -translate-y-1/2 flex-row-0">
+          {actions}
+          <Visibility isVisible={!readOnly}>
+            <IconButton
+              tooltip={translation('sDateTimeSelect', { datetimeMode: mode })}
+              coloringStyle="text" color="neutral" size="sm"
+              disabled={disabled}
+              onClick={() => {
+                changeOpenWrapper(true)
+              }}
+              aria-haspopup="dialog"
+              aria-expanded={isOpen}
+              aria-controls={isOpen ? ids.popup : undefined}
+            >
+              <CalendarIcon className="size-5"/>
+            </IconButton>
+          </Visibility>
+        </div>
       </div>
       <PopUp
         id={ids.popup}

@@ -1,6 +1,7 @@
 {
   "add": "Hinzufügen",
   "addFilter": "Filter hinzufügen",
+  "addTime": "Uhrzeit hinzufügen",
   "all": "Alle",
   "apply": "Anwenden",
   "back": "Zurück",
@@ -290,6 +291,7 @@
   },
   "goodToSeeYou": "Schön dich zu sehen",
   "welcome": "Willkommen",
+  "withoutTime": "Ohne Uhrzeit",
   "rSortingOrderAfter": "Angewendet {otherSortings, plural, =0{als primäre Sortierung} =1{nach einer anderen Sortierung} other{nach # anderen Sortierungen}}",
   "@rSortingOrderAfter": {
     "placeholders": {

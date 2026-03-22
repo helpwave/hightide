@@ -7,7 +7,8 @@ import {
 import { useMultiSelection } from '@/src/hooks/useMultiSelection'
 import { useListNavigation } from '@/src/hooks/useListNavigation'
 import { useEventCallbackStabilizer } from '@/src/hooks/useEventCallbackStabelizer'
-import { useSearch, useTypeAheadSearch } from '@/src/hooks'
+import { useSearch } from '@/src/hooks/useSearch'
+import { useTypeAheadSearch } from '@/src/hooks/useTypeAheadSearch'
 
 export interface UseMultiSelectOption {
   id: string,

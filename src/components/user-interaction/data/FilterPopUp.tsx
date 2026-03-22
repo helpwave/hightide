@@ -35,7 +35,6 @@ export interface FilterPopUpBaseProps extends PopUpProps {
   onOperatorChange: (operator: FilterOperator) => void,
   onRemove: () => void,
   allowedOperators: FilterOperator[],
-  hasValue: boolean,
   noParameterRequired?: boolean,
 }
 
@@ -46,7 +45,6 @@ export const FilterBasePopUp = forwardRef<HTMLDivElement, FilterPopUpBaseProps>(
   onOperatorChange,
   onRemove,
   allowedOperators,
-  hasValue,
   noParameterRequired = false,
   ...props
 }: FilterPopUpBaseProps, ref) {
@@ -78,7 +76,7 @@ export const FilterBasePopUp = forwardRef<HTMLDivElement, FilterPopUpBaseProps>(
             ))}
           </Select>
         </div>
-        <Visibility isVisible={hasValue}>
+        <div className="flex-row-0 items-center">
           <IconButton
             tooltip={translation('removeFilter')}
             onClick={onRemove}
@@ -88,8 +86,6 @@ export const FilterBasePopUp = forwardRef<HTMLDivElement, FilterPopUpBaseProps>(
           >
             <TrashIcon className="size-4" />
           </IconButton>
-        </Visibility>
-        <Visibility isVisible={!hasValue}>
           <IconButton
             tooltip={translation('close')}
             onClick={props.onClose}
@@ -99,7 +95,7 @@ export const FilterBasePopUp = forwardRef<HTMLDivElement, FilterPopUpBaseProps>(
           >
             <XIcon className="size-4" />
           </IconButton>
-        </Visibility>
+        </div>
       </div>
       {children}
       <Visibility isVisible={noParameterRequired}>
@@ -139,7 +135,6 @@ export const TextFilterPopUp = forwardRef<HTMLDivElement, FilterPopUpProps>(func
       onOperatorChange={(newOperator) => onValueChange({ dataType: 'text', parameter, operator: newOperator })}
       onRemove={onRemove}
       allowedOperators={FilterOperatorUtils.operatorsByCategory.text}
-      hasValue={!!value}
       noParameterRequired={!needsParameterInput}
     >
       <Visibility isVisible={needsParameterInput}>
@@ -210,7 +205,6 @@ export const NumberFilterPopUp = forwardRef<HTMLDivElement, FilterPopUpProps>(fu
       }}
       onRemove={onRemove}
       allowedOperators={FilterOperatorUtils.operatorsByCategory.number}
-      hasValue={!!value}
       noParameterRequired={!needsParameterInput}
     >
       <Visibility isVisible={needsRangeInput}>
@@ -303,7 +297,6 @@ export const DateFilterPopUp = forwardRef<HTMLDivElement, FilterPopUpProps>(func
       onOperatorChange={(newOperator) => onValueChange({ dataType: 'date', parameter, operator: newOperator })}
       onRemove={onRemove}
       allowedOperators={FilterOperatorUtils.operatorsByCategory.date}
-      hasValue={!!value}
       noParameterRequired={!needsParameterInput}
     >
       <Visibility isVisible={needsRangeInput}>
@@ -437,7 +430,6 @@ export const DatetimeFilterPopUp = forwardRef<HTMLDivElement, FilterPopUpProps>(
       onOperatorChange={(newOperator) => onValueChange({ dataType: 'dateTime', parameter, operator: newOperator })}
       onRemove={onRemove}
       allowedOperators={FilterOperatorUtils.operatorsByCategory.dateTime}
-      hasValue={!!value}
     >
       <span className="typography-label-lg font-semibold">{translation('parameter')}</span>
       <Visibility isVisible={needsRangeInput}>
@@ -561,7 +553,6 @@ export const BooleanFilterPopUp = forwardRef<HTMLDivElement, FilterPopUpProps>(f
       onOperatorChange={(newOperator) => onValueChange({ dataType: 'boolean', parameter, operator: newOperator })}
       onRemove={onRemove}
       allowedOperators={FilterOperatorUtils.operatorsByCategory.boolean}
-      hasValue={!!value}
     />
   )
 })
@@ -598,7 +589,6 @@ export const TagsFilterPopUp = forwardRef<HTMLDivElement, TagsFilterPopUpProps>(
       onOperatorChange={(newOperator) => onValueChange({ dataType: 'multiTags', parameter, operator: newOperator })}
       onRemove={onRemove}
       allowedOperators={FilterOperatorUtils.operatorsByCategory.multiTags}
-      hasValue={!!value}
     >
       <span className="typography-label-lg font-semibold">{translation('parameter')}</span>
       <Visibility isVisible={needsParameterInput}>
@@ -663,7 +653,6 @@ export const TagsSingleFilterPopUp = forwardRef<HTMLDivElement, TagsSingleFilter
       onOperatorChange={(newOperator) => onValueChange({ dataType: 'singleTag', parameter, operator: newOperator })}
       onRemove={onRemove}
       allowedOperators={FilterOperatorUtils.operatorsByCategory.singleTag}
-      hasValue={!!value}
     >
       <span className="typography-label-lg font-semibold">{translation('parameter')}</span>
       <Visibility isVisible={needsParameterInput && needsMultiSelect}>
@@ -726,7 +715,6 @@ export const GenericFilterPopUp = forwardRef<HTMLDivElement, FilterPopUpProps>(f
       onOperatorChange={(newOperator) => onValueChange({ ...value, operator: newOperator })}
       onRemove={() => onValueChange({ ...value, operator: undefined })}
       allowedOperators={FilterOperatorUtils.operatorsByCategory.unknownType}
-      hasValue={!!value}
     />
   )
 })

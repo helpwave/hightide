@@ -1,6 +1,7 @@
 {
   "add": "Add",
   "addFilter": "Add filter",
+  "addTime": "Add Time",
   "all": "All",
   "apply": "Apply",
   "back": "Back",
@@ -291,6 +292,7 @@
   },
   "goodToSeeYou": "Good to see you",
   "welcome": "Welcome",
+  "withoutTime": "Without Time",
   "rSortingOrderAfter": "Applied {otherSortings, plural, =0{as the first sorting} =1{after # other sorting} other{after # other sortings}}",
   "@rSortingOrderAfter": {
     "placeholders": {

@@ -5,6 +5,18 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/)
 and adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [0.9.2] - 2026-03-22
+
+### Added
+- `FlexibleDateTimeInput` component for `DateTimeInput` for easy switching between Date and DateTime input
+- actions attribute to `DateTimeInput` for displaying action buttons
+- Tests for `useMultiSelection` and `useSingleSelection` hooks
+
+### Changed
+- `FilterList`
+  - Height of chips and buttons is not consistent with the standard height
+  - Allows the addition of children
+
 ## [0.9.1] - 2026-02-14
 
 ### Changed
