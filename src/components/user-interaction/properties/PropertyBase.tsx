@@ -56,58 +56,73 @@ export const PropertyBase = ({
   const isRemoveEnabled = allowRemove && !readOnly
   const showActionsContainer = isClearEnabled || isRemoveEnabled
 
+  const renderActionButtons = () => (
+    <>
+      {isClearEnabled && (
+        <IconButton
+          tooltip={translation('clearValue')}
+          onClick={onValueClear}
+          disabled={!hasValue}
+          color="negative"
+          coloringStyle="text"
+          size="sm"
+        >
+          <X className="size-force-5" />
+        </IconButton>
+      )}
+      {isRemoveEnabled && (
+        <IconButton
+          tooltip={translation('removeProperty')}
+          onClick={onRemove}
+          color="negative"
+          coloringStyle="text"
+          size="sm"
+        >
+          <Trash className="size-force-5" />
+        </IconButton>
+      )}
+    </>
+  )
+
   return (
     <div
-      className={clsx('group/property', className)}
+      className={clsx('group/property min-w-0 w-full', className)}
       data-name="property-root"
       data-invalid={PropsUtil.dataAttributes.bool(invalid)}
     >
-      <div
-        data-name="property-title"
-        data-invalid={PropsUtil.dataAttributes.bool(invalid)}
-      >
-        <Tooltip tooltip={name} containerClassName="min-w-0">
-          <div className="flex-row-1 items-center">
-            <div data-name="property-title-icon">{icon}</div>
-            <span data-name="property-title-text">{name}</span>
-          </div>
-        </Tooltip>
-        {invalid && (
-          <AlertTriangle className="size-force-6"/>
-        )}
-      </div>
-      <div
-        data-name="property-content"
-        data-invalid={PropsUtil.dataAttributes.bool(invalid)}
-      >
-        {children({ required, hasValue, invalid })}
-        {showActionsContainer && (
-          <div data-name="property-actions">
-            {isClearEnabled && (
-              <IconButton
-                tooltip={translation('clearValue')}
-                onClick={onValueClear}
-                disabled={!hasValue}
-                color="negative"
-                coloringStyle="text"
-                size="sm"
-              >
-                <X className="size-force-5" />
-              </IconButton>
-            )}
-            {isRemoveEnabled && (
-              <IconButton
-                tooltip={translation('removeProperty')}
-                onClick={onRemove}
-                color="negative"
-                coloringStyle="text"
-                size="sm"
-              >
-                <Trash className="size-force-5" />
-              </IconButton>
+      <div data-name="property-inner">
+        <div
+          data-name="property-title"
+          data-invalid={PropsUtil.dataAttributes.bool(invalid)}
+        >
+          <div className="flex min-w-0 flex-1 flex-row items-center justify-between gap-2">
+            <Tooltip tooltip={name} containerClassName="min-w-0">
+              <div className="flex-row-1 items-center">
+                <div data-name="property-title-icon">{icon}</div>
+                <span data-name="property-title-text">{name}</span>
+              </div>
+            </Tooltip>
+            {invalid && (
+              <AlertTriangle className="size-force-6 shrink-0"/>
             )}
           </div>
-        )}
+          {showActionsContainer && (
+            <div data-name="property-title-actions">
+              {renderActionButtons()}
+            </div>
+          )}
+        </div>
+        <div
+          data-name="property-content"
+          data-invalid={PropsUtil.dataAttributes.bool(invalid)}
+        >
+          {children({ required, hasValue, invalid })}
+          {showActionsContainer && (
+            <div data-name="property-actions">
+              {renderActionButtons()}
+            </div>
+          )}
+        </div>
       </div>
     </div>
   )
