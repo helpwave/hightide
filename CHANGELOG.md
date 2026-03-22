@@ -5,6 +5,16 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/)
 and adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [0.9.4] - 2026-03-22
+
+### Changed
+
+- `FilterList` to allow limiting the used operators
+
+### Fixed
+- `FlexibleDateTimeInput` not having a correct default time and throwing warnings on mode change
+
+
 ## [0.9.3] - 2026-03-22
 
 ### Added

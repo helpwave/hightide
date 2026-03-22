@@ -13,6 +13,7 @@ import { FilterPopUp } from './FilterPopUp'
 import { Combobox } from '@/src/components/user-interaction/Combobox/Combobox'
 import { ComboboxOption } from '@/src/components/user-interaction/Combobox/ComboboxOption'
 import { PopUpContext } from '../../layout/popup/PopUpContext'
+import type { FilterOperator } from './FilterOperator'
 import { FilterOperatorUtils } from './FilterOperator'
 import type { ColumnFilter } from '@tanstack/react-table'
 
@@ -24,11 +25,12 @@ export interface FilterListPopUpBuilderProps {
   value: FilterValue,
   onValueChange: (value: FilterValue) => void,
   onRemove: () => void,
+  operatorOverrides?: FilterOperator[],
   dataType: DataType,
   tags: ReadonlyArray<{ tag: string, label: string, display?: ReactNode }>,
   name: string,
   isOpen: boolean,
-  close: () => void,
+  onClose: () => void,
 }
 
 export interface FilterListItem {
@@ -36,6 +38,7 @@ export interface FilterListItem {
   label: string,
   dataType: DataType,
   tags: ReadonlyArray<{ tag: string, label: string, display?: ReactNode }>,
+  operatorOverrides?: FilterOperator[],
   popUpBuilder?: (props: FilterListPopUpBuilderProps) => ReactNode,
   activeLabelBuilder?: (value: FilterValue) => ReactNode,
 }
@@ -156,11 +159,12 @@ export const FilterList = ({ value, onValueChange, availableItems }: FilterListP
                     onValueChange(value.filter(prevItem => prevItem.id !== columnFilter.id))
                     setEditState(undefined)
                   },
+                  operatorOverrides: item.operatorOverrides,
                   dataType: item.dataType,
                   tags: item.tags,
                   name: item.label,
                   isOpen,
-                  close: () => setIsOpen(false),
+                  onClose: () => setIsOpen(false),
                 })
               ) : (
                 <FilterPopUp
@@ -168,6 +172,7 @@ export const FilterList = ({ value, onValueChange, availableItems }: FilterListP
                   value={editState?.id === columnFilter.id ? editState.value : columnFilter.value}
                   dataType={item.dataType}
                   tags={item.tags}
+                  operatorOverrides={item.operatorOverrides}
                   onValueChange={value => {
                     setEditState({ ...columnFilter, value })
                   }}
