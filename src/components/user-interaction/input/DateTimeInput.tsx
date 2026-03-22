@@ -67,18 +67,16 @@ export const DateTimeInput = forwardRef<HTMLInputElement, DateTimeInputProps>(fu
     defaultValue: initialValue,
   })
   const [dialogValue, setDialogValue] = useState<Date | null>(state)
-  const [stringInputState, setStringInputState] = useState<{ state: string, date?: Date }>({
+  const [stringInputState, setStringInputState] = useState<{ state: string, date?: Date, mode: DateTimeFormat }>({
     state: state ? DateUtils.toInputString(state, mode, precision) : '',
     date: undefined,
+    mode,
   })
 
-  useEffect(() => {
-    setDialogValue(state)
-    setStringInputState({
-      state: state ? DateUtils.toInputString(state, mode) : '',
-      date: undefined,
-    })
-  }, [mode, state])
+  const safeInputString = useMemo(() => {
+    if(!state) return ''
+    return stringInputState.mode !== mode ? DateUtils.toInputString(state, mode, precision) : stringInputState.state
+  }, [stringInputState.mode, stringInputState.state, mode, state, precision])
 
   const changeOpenWrapper = useCallback((isOpen: boolean) => {
     onDialogOpeningChange?.(isOpen)
@@ -114,13 +112,18 @@ export const DateTimeInput = forwardRef<HTMLInputElement, DateTimeInputProps>(fu
           {...props}
           ref={innerRef}
           id={ids.input}
-          value={stringInputState.state}
+          value={safeInputString}
 
           onClick={(event) => {
             event.preventDefault()
           }}
           onFocus={(event) => {
             event.preventDefault()
+          }}
+          onKeyDown={(event) => {
+            if(event.key === ' ') {
+              event.preventDefault()
+            }
           }}
           onChange={(event) => {
             const date = new Date(event.target.value ?? '')
@@ -137,6 +140,7 @@ export const DateTimeInput = forwardRef<HTMLInputElement, DateTimeInputProps>(fu
             setStringInputState({
               state: event.target.value,
               date: isValid ? date : undefined,
+              mode,
             })
           }}
           onBlur={(event) => {
@@ -152,6 +156,7 @@ export const DateTimeInput = forwardRef<HTMLInputElement, DateTimeInputProps>(fu
               setStringInputState({
                 state: state ? DateUtils.toInputString(state, mode) : '',
                 date: undefined,
+                mode,
               })
             }
           }}

@@ -36,7 +36,7 @@ const createRow = (): Row => ({
   hasChildren: faker.datatype.boolean(),
 })
 
-const AgeFilterPopUp = ({ value, onValueChange, onRemove, name }: FilterListPopUpBuilderProps) => {
+const AgeFilterPopUp = ({ value, onValueChange, onRemove, name, onClose: close, ...props }: FilterListPopUpBuilderProps) => {
   const translation = useHightideTranslation()
   const id = useId()
   const ids = {
@@ -61,7 +61,9 @@ const AgeFilterPopUp = ({ value, onValueChange, onRemove, name }: FilterListPopU
 
   return (
     <FilterBasePopUp
+      onClose={close}
       name={name}
+      operatorOverrides={props.operatorOverrides}
       operator={operator}
       onOperatorChange={(newOperator) => onValueChange({ dataType: 'number', parameter, operator: newOperator })}
       onRemove={onRemove}
@@ -73,9 +75,9 @@ const AgeFilterPopUp = ({ value, onValueChange, onRemove, name }: FilterListPopU
           <label htmlFor={ids.range} className="typography-label-md">{translation('min')}</label>
           <Select<[number, number]>
             buttonProps={{ id: ids.range }}
-            value={parameter.minNumber !== undefined && parameter.maxNumber !== undefined ? [parameter.minNumber, parameter.maxNumber] : null}
+            value={parameter.numberMin !== undefined && parameter.numberMax !== undefined ? [parameter.numberMin, parameter.numberMax] : null}
             onValueChange={(newRange) => {
-              onValueChange({ ...value, parameter: { ...parameter, minNumber: newRange[0], maxNumber: newRange[1] } })
+              onValueChange({ ...value, parameter: { ...parameter, numberMin: newRange[0], numberMax: newRange[1] } })
             }}
             compareFunction={(a, b) => {
               if (a === null || b === null) return false
@@ -92,7 +94,7 @@ const AgeFilterPopUp = ({ value, onValueChange, onRemove, name }: FilterListPopU
       </Visibility>
       <Visibility isVisible={!needsRangeInput && needsParameterInput}>
         <Input
-          value={parameter.compareValue?.toString() ?? ''}
+          value={parameter.numberValue?.toString() ?? ''}
           type="number"
           placeholder="0"
           onValueChange={text => {
@@ -100,7 +102,7 @@ const AgeFilterPopUp = ({ value, onValueChange, onRemove, name }: FilterListPopU
             onValueChange({
               dataType: 'number',
               operator,
-              parameter: { ...parameter, compareValue: isNaN(num) ? undefined : num },
+              parameter: { ...parameter, numberValue: isNaN(num) ? undefined : num },
             })
           }}
           className="min-w-64"

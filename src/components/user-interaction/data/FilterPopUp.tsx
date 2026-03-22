@@ -1,17 +1,16 @@
 import { useHightideTranslation } from '@/src/i18n/useHightideTranslation'
 import { Visibility } from '@/src/components/layout/Visibility'
 import { IconButton } from '@/src/components/user-interaction/IconButton'
-import { TrashIcon, XIcon } from 'lucide-react'
+import { Check, TrashIcon } from 'lucide-react'
 import { PopUp, type PopUpProps } from '@/src/components/layout/popup/PopUp'
 import type { FilterValue } from './filter-function'
 import type { FilterOperator } from './FilterOperator'
 import { FilterOperatorUtils } from './FilterOperator'
 import type { ReactNode } from 'react'
-import { forwardRef, useId, useMemo, useState } from 'react'
+import { forwardRef, useEffect, useId, useMemo, useState } from 'react'
 import { Select } from '../Select/Select'
 import { SelectOption } from '../Select/SelectOption'
 import { Input } from '../input/Input'
-import { Checkbox } from '../Checkbox'
 import { DateTimeInput } from '../input/DateTimeInput'
 import { MultiSelect } from '../MultiSelect/MultiSelect'
 import { MultiSelectOption } from '../MultiSelect/MultiSelectOption'
@@ -35,6 +34,7 @@ export interface FilterPopUpBaseProps extends PopUpProps {
   onOperatorChange: (operator: FilterOperator) => void,
   onRemove: () => void,
   allowedOperators: FilterOperator[],
+  operatorOverrides?: FilterOperator[],
   noParameterRequired?: boolean,
 }
 
@@ -45,10 +45,21 @@ export const FilterBasePopUp = forwardRef<HTMLDivElement, FilterPopUpBaseProps>(
   onOperatorChange,
   onRemove,
   allowedOperators,
+  operatorOverrides,
   noParameterRequired = false,
   ...props
 }: FilterPopUpBaseProps, ref) {
   const translation = useHightideTranslation()
+  const operators = useMemo(() => {
+    if(!operatorOverrides || operatorOverrides.length === 0) return allowedOperators
+    return allowedOperators.filter(op => operatorOverrides.includes(op))
+  }, [allowedOperators, operatorOverrides])
+
+  useEffect(() => {
+    if(operators.length === 0) {
+      onRemove()
+    }
+  }, [operators, onRemove])
 
   return (
     <PopUp
@@ -69,7 +80,7 @@ export const FilterBasePopUp = forwardRef<HTMLDivElement, FilterPopUpBaseProps>(
             }}
             iconAppearance="right"
           >
-            {allowedOperators.map((op) => (
+            {operators.map((op) => (
               <SelectOption key={op} value={op} label={translation(FilterOperatorUtils.getInfo(op).translationKey)}>
                 <FilterOperatorLabel operator={op} />
               </SelectOption>
@@ -87,13 +98,13 @@ export const FilterBasePopUp = forwardRef<HTMLDivElement, FilterPopUpBaseProps>(
             <TrashIcon className="size-4" />
           </IconButton>
           <IconButton
-            tooltip={translation('close')}
+            tooltip={translation('done')}
             onClick={props.onClose}
             color="neutral"
             coloringStyle="text"
             size="sm"
           >
-            <XIcon className="size-4" />
+            <Check className="size-4" />
           </IconButton>
         </div>
       </div>
@@ -142,31 +153,17 @@ export const TextFilterPopUp = forwardRef<HTMLDivElement, FilterPopUpProps>(func
           <label htmlFor={ids.search} className="typography-label-md">{translation('search')}</label>
           <Input
             id={ids.search}
-            value={parameter.searchText ?? ''}
+            value={parameter.stringValue ?? ''}
             placeholder={translation('value')}
             onValueChange={searchText => {
               onValueChange({
                 dataType: 'text',
                 operator,
-                parameter: { ...parameter, searchText },
+                parameter: { ...parameter, stringValue: searchText },
               })
             }}
             className="min-w-64"
           />
-        </div>
-        <div className="flex-row-2 items-center mt-1">
-          <Checkbox
-            id={ids.caseSensitive}
-            value={parameter.isCaseSensitive ?? false}
-            onValueChange={isCaseSensitive => {
-              onValueChange({
-                dataType: 'text',
-                operator,
-                parameter: { ...parameter, isCaseSensitive },
-              })
-            }}
-          />
-          <label htmlFor={ids.caseSensitive}>{translation('caseSensitive')}</label>
         </div>
       </Visibility>
     </FilterBasePopUp>
@@ -212,7 +209,7 @@ export const NumberFilterPopUp = forwardRef<HTMLDivElement, FilterPopUpProps>(fu
           <label htmlFor={ids.min} className="typography-label-md">{translation('min')}</label>
           <Input
             id={ids.min}
-            value={parameter.minNumber?.toString() ?? ''}
+            value={parameter.numberMin?.toString() ?? ''}
             type="number"
             placeholder="0"
             onValueChange={text => {
@@ -220,7 +217,7 @@ export const NumberFilterPopUp = forwardRef<HTMLDivElement, FilterPopUpProps>(fu
               onValueChange({
                 dataType: 'number',
                 operator,
-                parameter: { ...parameter, minNumber: isNaN(num) ? undefined : num },
+                parameter: { ...parameter, numberMin: isNaN(num) ? undefined : num },
               })
             }}
             className="min-w-64"
@@ -230,7 +227,7 @@ export const NumberFilterPopUp = forwardRef<HTMLDivElement, FilterPopUpProps>(fu
           <label htmlFor={ids.max} className="typography-label-md">{translation('max')}</label>
           <Input
             id={ids.max}
-            value={parameter.maxNumber?.toString() ?? ''}
+            value={parameter.numberMax?.toString() ?? ''}
             type="number"
             placeholder="1"
             onValueChange={text => {
@@ -238,7 +235,7 @@ export const NumberFilterPopUp = forwardRef<HTMLDivElement, FilterPopUpProps>(fu
               onValueChange({
                 dataType: 'number',
                 operator,
-                parameter: { ...parameter, maxNumber: isNaN(num) ? undefined : num },
+                parameter: { ...parameter, numberMax: isNaN(num) ? undefined : num },
               })
             }}
             className="min-w-64"
@@ -247,7 +244,7 @@ export const NumberFilterPopUp = forwardRef<HTMLDivElement, FilterPopUpProps>(fu
       </Visibility>
       <Visibility isVisible={!needsRangeInput && needsParameterInput}>
         <Input
-          value={parameter.compareValue?.toString() ?? ''}
+          value={parameter.numberValue?.toString() ?? ''}
           type="number"
           placeholder="0"
           onValueChange={text => {
@@ -255,7 +252,7 @@ export const NumberFilterPopUp = forwardRef<HTMLDivElement, FilterPopUpProps>(fu
             onValueChange({
               dataType: 'number',
               operator,
-              parameter: { ...parameter, compareValue: isNaN(num) ? undefined : num },
+              parameter: { ...parameter, numberValue: isNaN(num) ? undefined : num },
             })
           }}
           className="min-w-64"
@@ -304,29 +301,29 @@ export const DateFilterPopUp = forwardRef<HTMLDivElement, FilterPopUpProps>(func
           <label htmlFor={ids.startDate} className="typography-label-md">{translation('startDate')}</label>
           <DateTimeInput
             id={ids.startDate}
-            value={temporaryMinDateValue ?? parameter.minDate ?? null}
+            value={temporaryMinDateValue ?? parameter.dateMin ?? null}
             onValueChange={setTemporaryMinDateValue}
             onEditComplete={dateValue => {
-              if (dateValue && parameter.maxDate && dateValue > parameter.maxDate) {
-                if (!parameter.minDate) {
+              if (dateValue && parameter.dateMax && dateValue > parameter.dateMax) {
+                if (!parameter.dateMin) {
                   onValueChange({
                     dataType: 'date',
                     operator,
-                    parameter: { ...parameter, minDate: parameter.maxDate, maxDate: dateValue },
+                    parameter: { ...parameter, dateMin: parameter.dateMax, dateMax: dateValue },
                   })
                 } else {
-                  const diff = parameter.maxDate.getTime() - parameter.minDate.getTime()
+                  const diff = parameter.dateMax.getTime() - parameter.dateMin.getTime()
                   onValueChange({
                     dataType: 'date',
                     operator,
-                    parameter: { ...parameter, minDate: dateValue, maxDate: new Date(dateValue.getTime() + diff) },
+                    parameter: { ...parameter, dateMin: dateValue, dateMax: new Date(dateValue.getTime() + diff) },
                   })
                 }
               } else {
                 onValueChange({
                   dataType: 'date',
                   operator,
-                  parameter: { ...parameter, minDate: dateValue },
+                  parameter: { ...parameter, dateMin: dateValue },
                 })
               }
               setTemporaryMinDateValue(null)
@@ -340,29 +337,29 @@ export const DateFilterPopUp = forwardRef<HTMLDivElement, FilterPopUpProps>(func
           <label htmlFor={ids.endDate} className="typography-label-md">{translation('endDate')}</label>
           <DateTimeInput
             id={ids.endDate}
-            value={temporaryMaxDateValue ?? parameter.maxDate ?? null}
+            value={temporaryMaxDateValue ?? parameter.dateMax ?? null}
             onValueChange={setTemporaryMaxDateValue}
             onEditComplete={dateValue => {
-              if (dateValue && parameter.minDate && dateValue < parameter.minDate) {
-                if (!parameter.maxDate) {
+              if (dateValue && parameter.dateMin && dateValue < parameter.dateMin) {
+                if (!parameter.dateMax) {
                   onValueChange({
                     dataType: 'date',
                     operator,
-                    parameter: { ...parameter, minDate: dateValue, maxDate: parameter.minDate },
+                    parameter: { ...parameter, dateMin: dateValue, dateMax: parameter.dateMin },
                   })
                 } else {
-                  const diff = parameter.maxDate.getTime() - parameter.minDate.getTime()
+                  const diff = parameter.dateMax.getTime() - parameter.dateMin.getTime()
                   onValueChange({
                     dataType: 'date',
                     operator,
-                    parameter: { ...parameter, minDate: new Date(dateValue.getTime() - diff), maxDate: dateValue },
+                    parameter: { ...parameter, dateMin: new Date(dateValue.getTime() - diff), dateMax: dateValue },
                   })
                 }
               } else {
                 onValueChange({
                   dataType: 'date',
                   operator,
-                  parameter: { ...parameter, maxDate: dateValue },
+                  parameter: { ...parameter, dateMax: dateValue },
                 })
               }
               setTemporaryMaxDateValue(null)
@@ -377,11 +374,11 @@ export const DateFilterPopUp = forwardRef<HTMLDivElement, FilterPopUpProps>(func
         <label htmlFor={ids.compareDate} className="typography-label-md">{translation('date')}</label>
         <DateTimeInput
           id={ids.compareDate}
-          value={parameter.compareDate ?? null}
+          value={parameter.dateValue ?? null}
           onValueChange={compareDate => {
             onValueChange({
               ...value,
-              parameter: { ...parameter, compareDate },
+              parameter: { ...parameter, dateValue: compareDate },
             })
           }}
           allowRemove={true}
@@ -438,29 +435,29 @@ export const DatetimeFilterPopUp = forwardRef<HTMLDivElement, FilterPopUpProps>(
           <DateTimeInput
             id={ids.startDate}
             mode="dateTime"
-            value={temporaryMinDateValue ?? parameter.minDate ?? null}
+            value={temporaryMinDateValue ?? parameter.dateMin ?? null}
             onValueChange={setTemporaryMinDateValue}
             onEditComplete={dateValue => {
-              if (dateValue && parameter.maxDate && dateValue > parameter.maxDate) {
-                if (!parameter.minDate) {
+              if (dateValue && parameter.dateMax && dateValue > parameter.dateMax) {
+                if (!parameter.dateMin) {
                   onValueChange({
                     dataType: 'dateTime',
                     operator,
-                    parameter: { ...parameter, minDate: parameter.maxDate, maxDate: dateValue },
+                    parameter: { ...parameter, dateMin: parameter.dateMax, dateMax: dateValue },
                   })
                 } else {
-                  const diff = parameter.maxDate.getTime() - parameter.minDate.getTime()
+                  const diff = parameter.dateMax.getTime() - parameter.dateMin.getTime()
                   onValueChange({
                     dataType: 'dateTime',
                     operator,
-                    parameter: { ...parameter, minDate: dateValue, maxDate: new Date(dateValue.getTime() + diff) },
+                    parameter: { ...parameter, dateMin: dateValue, dateMax: new Date(dateValue.getTime() + diff) },
                   })
                 }
               } else {
                 onValueChange({
                   dataType: 'dateTime',
                   operator,
-                  parameter: { ...parameter, minDate: dateValue },
+                  parameter: { ...parameter, dateMin: dateValue },
                 })
               }
               setTemporaryMinDateValue(null)
@@ -473,29 +470,29 @@ export const DatetimeFilterPopUp = forwardRef<HTMLDivElement, FilterPopUpProps>(
           <DateTimeInput
             id={ids.endDate}
             mode="dateTime"
-            value={temporaryMaxDateValue ?? parameter.maxDate ?? null}
+            value={temporaryMaxDateValue ?? parameter.dateMax ?? null}
             onValueChange={setTemporaryMaxDateValue}
             onEditComplete={dateValue => {
-              if (dateValue && parameter.minDate && dateValue < parameter.minDate) {
-                if (!parameter.maxDate) {
+              if (dateValue && parameter.dateMin && dateValue < parameter.dateMin) {
+                if (!parameter.dateMax) {
                   onValueChange({
                     dataType: 'dateTime',
                     operator,
-                    parameter: { ...parameter, minDate: dateValue, maxDate: parameter.minDate },
+                    parameter: { ...parameter, dateMin: dateValue, dateMax: parameter.dateMin },
                   })
                 } else {
-                  const diff = parameter.maxDate.getTime() - parameter.minDate.getTime()
+                  const diff = parameter.dateMax.getTime() - parameter.dateMin.getTime()
                   onValueChange({
                     dataType: 'dateTime',
                     operator,
-                    parameter: { ...parameter, minDate: new Date(dateValue.getTime() - diff), maxDate: dateValue },
+                    parameter: { ...parameter, dateMin: new Date(dateValue.getTime() - diff), dateMax: dateValue },
                   })
                 }
               } else {
                 onValueChange({
                   dataType: 'dateTime',
                   operator,
-                  parameter: { ...parameter, maxDate: dateValue },
+                  parameter: { ...parameter, dateMax: dateValue },
                 })
               }
               setTemporaryMaxDateValue(null)
@@ -511,12 +508,12 @@ export const DatetimeFilterPopUp = forwardRef<HTMLDivElement, FilterPopUpProps>(
         <DateTimeInput
           id={ids.compareDate}
           mode="dateTime"
-          value={parameter.compareDate ?? null}
+          value={parameter.dateValue ?? null}
           onValueChange={compareDate => {
             onValueChange({
               dataType: 'dateTime',
               operator,
-              parameter: { ...parameter, compareDate },
+              parameter: { ...parameter, dateValue: compareDate },
             })
           }}
           allowRemove={true}
@@ -573,7 +570,7 @@ export const TagsFilterPopUp = forwardRef<HTMLDivElement, TagsFilterPopUpProps>(
     return suggestion
   }, [value])
   const parameter = value?.parameter ?? {}
-  const selectedTags = (Array.isArray(parameter.multiOptionSearch) ? parameter.multiOptionSearch : []) as string[]
+  const selectedTags = (Array.isArray(parameter.uuidValues) ? parameter.uuidValues : []) as string[]
 
   const needsParameterInput = operator !== 'isUndefined' && operator !== 'isNotUndefined'
 
@@ -598,7 +595,7 @@ export const TagsFilterPopUp = forwardRef<HTMLDivElement, TagsFilterPopUpProps>(
             onValueChange({
               dataType: 'multiTags',
               operator,
-              parameter: { ...parameter, multiOptionSearch: selected.length > 0 ? selected : undefined },
+              parameter: { ...parameter, uuidValues: selected.length > 0 ? selected : undefined },
             })
           }}
           buttonProps={{ className: 'min-w-64' }}
@@ -635,8 +632,8 @@ export const TagsSingleFilterPopUp = forwardRef<HTMLDivElement, TagsSingleFilter
     return suggestion
   }, [value])
   const parameter = value?.parameter ?? {}
-  const selectedTagsMulti = (Array.isArray(parameter.multiOptionSearch) ? parameter.multiOptionSearch : []) as string[]
-  const selectedTagSingle = parameter.singleOptionSearch != null ? String(parameter.singleOptionSearch) : undefined
+  const selectedTagsMulti = (Array.isArray(parameter.uuidValues) ? parameter.uuidValues : []) as string[]
+  const selectedTagSingle = parameter.uuidValue != null ? String(parameter.uuidValue) : undefined
 
   const needsParameterInput = operator !== 'isUndefined' && operator !== 'isNotUndefined'
   const needsMultiSelect = operator === 'contains' || operator === 'notContains'
@@ -662,7 +659,7 @@ export const TagsSingleFilterPopUp = forwardRef<HTMLDivElement, TagsSingleFilter
             onValueChange({
               dataType: 'singleTag',
               operator,
-              parameter: { ...parameter, multiOptionSearch: selected.length > 0 ? selected : undefined },
+              parameter: { ...parameter, uuidValues: selected.length > 0 ? selected : undefined },
             })
           }}
           buttonProps={{ className: 'min-w-64' }}
@@ -679,7 +676,7 @@ export const TagsSingleFilterPopUp = forwardRef<HTMLDivElement, TagsSingleFilter
             onValueChange({
               dataType: 'singleTag',
               operator,
-              parameter: { ...parameter, singleOptionSearch: selectedTag ?? undefined },
+              parameter: { ...parameter, uuidValue: selectedTag ?? undefined },
             })
           }}
           buttonProps={{ className: 'min-w-64' }}
@@ -722,6 +719,7 @@ export const GenericFilterPopUp = forwardRef<HTMLDivElement, FilterPopUpProps>(f
 export interface DataTypeFilterPopUpProps extends FilterPopUpProps {
   dataType: DataType,
   tags: ReadonlyArray<{ tag: string, label: string, display?: ReactNode }>,
+  operatorOverrides?: FilterOperator[],
 }
 export const FilterPopUp = forwardRef<HTMLDivElement, DataTypeFilterPopUpProps>(function FilterPopUp ({
   name,
