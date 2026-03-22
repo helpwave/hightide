@@ -13,7 +13,6 @@ import { FilterPopUp } from './FilterPopUp'
 import { Combobox } from '@/src/components/user-interaction/Combobox/Combobox'
 import { ComboboxOption } from '@/src/components/user-interaction/Combobox/ComboboxOption'
 import { PopUpContext } from '../../layout/popup/PopUpContext'
-import { ExpansionIcon } from '../../display-and-visualization/ExpansionIcon'
 import { FilterOperatorUtils } from './FilterOperator'
 import type { ColumnFilter } from '@tanstack/react-table'
 
@@ -73,11 +72,11 @@ export const FilterList = ({ value, onValueChange, availableItems }: FilterListP
   }, [value, editState])
 
   return (
-    <div className="flex-row-1 flex-wrap gap-y-1">
+    <div className="flex-row-2 flex-wrap gap-y-2">
       <PopUpRoot>
         <PopUpOpener>
           {({ toggleOpen, props }) => (
-            <Button {...props} onClick={toggleOpen} color="neutral" size="md">
+            <Button {...props} onClick={toggleOpen} color="neutral" size="sm" className="min-w-36">
               {translation('addFilter')}
               <PlusIcon className="size-4" />
             </Button>
@@ -135,12 +134,16 @@ export const FilterList = ({ value, onValueChange, availableItems }: FilterListP
             }}
           >
             <PopUpOpener>
-              {({ toggleOpen, props, isOpen }) => (
-                <Button {...props} onClick={toggleOpen} color="primary" coloringStyle="tonal-outline" size="md">
+              {({ toggleOpen, props }) => (
+                <Button {...props} onClick={toggleOpen} color="primary" coloringStyle="tonal-outline" size="sm">
                   {item.activeLabelBuilder ?
-                    item.activeLabelBuilder(columnFilter.value) :
-                    item.label + ': ' + filterValueToLabel(columnFilter.value, { tags: item.tags })}
-                  <ExpansionIcon isExpanded={isOpen} />
+                    item.activeLabelBuilder(columnFilter.value) : (
+                      <>
+                        <span className="font-bold">{item.label}</span>
+                        {filterValueToLabel(columnFilter.value, { tags: item.tags })}
+                      </>
+                    )
+                  }
                 </Button>
               )}
             </PopUpOpener>

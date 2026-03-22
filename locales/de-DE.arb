@@ -1,6 +1,7 @@
 {
   "add": "Hinzufügen",
   "addFilter": "Filter hinzufügen",
+  "addSorting": "Sortierung hinzufügen",
   "addTime": "Uhrzeit hinzufügen",
   "all": "Alle",
   "apply": "Anwenden",
@@ -319,6 +320,8 @@
   "decreaseSortingPriority": "Sortierpriorität verringern",
   "changeColumnDisplay": "Spaltenanzeige ändern",
   "caseSensitive": "Groß-/Klein beachten",
+  "sortAsc": "ASC",
+  "sortDesc": "DESC",
   "sorting": "Sortierung",
   "sSortingState": "{sortDirection, select, asc{Sortierung (Aktuell Aufsteigend)} desc{Sortierung (Aktuell Absteigend)} other{Sortierung (Aktuell Keine)}}",
   "@sSortingState": {

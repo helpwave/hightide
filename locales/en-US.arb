@@ -1,6 +1,7 @@
 {
   "add": "Add",
   "addFilter": "Add filter",
+  "addSorting": "Add sorting",
   "addTime": "Add Time",
   "all": "All",
   "apply": "Apply",
@@ -319,6 +320,8 @@
   "increaseSortingPriority": "Increase sorting priority",
   "decreaseSortingPriority": "Decrease sorting priority",
   "caseSensitive": "Case Sensitive",
+  "sortAsc": "ASC",
+  "sortDesc": "DESC",
   "sorting": "Sorting",
   "sSortingState": "{sortDirection, select, asc{Sorting (Currently Ascending)} desc{Sorting (Currently Descending)} other{Sorting (Currently None)}}",
   "@sSortingState": {

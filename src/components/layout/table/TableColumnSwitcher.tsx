@@ -1,5 +1,5 @@
 import { useMemo, useRef, useId } from 'react'
-import { ChevronUp, ChevronDown, ChevronLeft, ChevronRight, Eye, EyeOff, Pin, PinOff, ArrowLeftRightIcon } from 'lucide-react'
+import { ChevronUp, ChevronDown, ChevronLeft, ChevronRight, Eye, EyeOff, Pin, PinOff, Columns3Cog } from 'lucide-react'
 import type { ButtonProps } from '@/src/components/user-interaction/Button'
 import { useHightideTranslation } from '@/src/i18n/useHightideTranslation'
 import type { PopUpProps } from '../popup/PopUp'
@@ -8,6 +8,7 @@ import { PopUpRoot } from '../popup/PopUpRoot'
 import { PopUpOpener } from '../popup/PopUpOpener'
 import { useTableStateWithoutSizingContext } from './TableContext'
 import { IconButton } from '../../user-interaction/IconButton'
+import { Visibility } from '../Visibility'
 
 export type TableColumnSwitcherPopUpProps = PopUpProps
 
@@ -20,6 +21,9 @@ export const TableColumnSwitcherPopUp = ({ ...props }: TableColumnSwitcherPopUpP
     popup: props.id ?? `table-column-picker-popup-${generatedId}`,
     label: `table-column-picker-label-${generatedId}`,
   }), [generatedId, props.id])
+
+  const enableHiding = table.options.enableHiding !== false
+  const enableColumnPinning = table.options.enableColumnPinning !== false
 
   const tableState = table.getState()
   const columnOrder = tableState.columnOrder
@@ -259,38 +263,42 @@ export const TableColumnSwitcherPopUp = ({ ...props }: TableColumnSwitcherPopUpP
                 {getColumnHeader(columnId)}
               </div>
               <>
-                <IconButton
-                  tooltip={translation('changeVisibility')}
-                  size="sm"
-                  color="neutral"
-                  coloringStyle="text"
-                  disabled={!column.getCanHide()}
-                  onClick={() => toggleColumnVisibility(columnId)}
-                  aria-label={isVisible ? translation('hideColumn') : translation('showColumn')}
-                >
-                  {isVisible ? (
-                    <Eye className="size-4" />
-                  ) : (
-                    <EyeOff className="size-4" />
-                  )}
-                </IconButton>
-                <IconButton
-                  tooltip={translation('changePinning')}
-                  size="sm"
-                  color="neutral"
-                  coloringStyle="text"
-                  disabled={!column.getCanPin()}
-                  onClick={() => {
-                    if(isPinned) {
-                      unpinColumn(columnId)
-                    } else {
-                      pinColumn(columnId, 'left')
-                    }
-                  }}
-                  aria-label={isPinned ? translation('unpin') : translation('pinLeft')}
-                >
-                  {!isPinned ? ( <PinOff className="size-4" />) : ( <Pin className="size-4" />)}
-                </IconButton>
+                <Visibility isVisible={enableHiding}>
+                  <IconButton
+                    tooltip={translation('changeVisibility')}
+                    size="sm"
+                    color="neutral"
+                    coloringStyle="text"
+                    disabled={!column.getCanHide()}
+                    onClick={() => toggleColumnVisibility(columnId)}
+                    aria-label={isVisible ? translation('hideColumn') : translation('showColumn')}
+                  >
+                    {isVisible ? (
+                      <Eye className="size-4" />
+                    ) : (
+                      <EyeOff className="size-4" />
+                    )}
+                  </IconButton>
+                </Visibility>
+                <Visibility isVisible={enableColumnPinning}>
+                  <IconButton
+                    tooltip={translation('changePinning')}
+                    size="sm"
+                    color="neutral"
+                    coloringStyle="text"
+                    disabled={!column.getCanPin()}
+                    onClick={() => {
+                      if(isPinned) {
+                        unpinColumn(columnId)
+                      } else {
+                        pinColumn(columnId, 'left')
+                      }
+                    }}
+                    aria-label={isPinned ? translation('unpin') : translation('pinLeft')}
+                  >
+                    {!isPinned ? ( <PinOff className="size-4" />) : ( <Pin className="size-4" />)}
+                  </IconButton>
+                </Visibility>
               </>
             </div>
           )
@@ -317,7 +325,7 @@ export const TableColumnSwitcher = ({ buttonProps, ...props }: TableColumnSwitch
             tooltip={translation('changeColumnDisplay')}
             {...buttonProps}
           >
-            <ArrowLeftRightIcon className="size-4" />
+            <Columns3Cog className="size-5" />
           </IconButton>
         )}
       </PopUpOpener>
