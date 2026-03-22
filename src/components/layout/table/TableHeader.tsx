@@ -98,7 +98,7 @@ export const TableHeader = ({ isSticky = false }: TableHeaderProps) => {
                   className={clsx('group/table-header-cell', header.column.columnDef.meta?.className)}
                 >
                   <Visibility isVisible={!header.isPlaceholder}>
-                    <div className="flex-row-1 items-center">
+                    <div className="flex-row-1 items-center truncate">
                       <Visibility isVisible={header.column.getCanSort()}>
                         <TableSortButton
                           sortDirection={header.column.getIsSorted()}

@@ -1,4 +1,5 @@
 import type { Meta, StoryObj } from '@storybook/nextjs'
+import type { ColumnSort } from '@tanstack/react-table'
 import { useId, useMemo, useState } from 'react'
 import { faker } from '@faker-js/faker'
 import { range } from '@/src/utils/array'
@@ -16,6 +17,10 @@ import { Input } from '@/src/components/user-interaction/input/Input'
 import { Select } from '@/src/components/user-interaction/Select/Select'
 import { SelectOption } from '@/src/components/user-interaction/Select/SelectOption'
 import { Visibility } from '@/src/components/layout/Visibility'
+import { SortingList } from '@/src/components/user-interaction/data/SortingList'
+import type { SortingListItem } from '@/src/components/user-interaction/data/SortingList'
+import { DateUtils } from '@/src/utils/date'
+import { TableColumnSwitcher } from '@/src/components/layout/table/TableColumnSwitcher'
 
 type Row = {
   name: string,
@@ -135,6 +140,12 @@ const availableItems: FilterListItem[] = [
   },
 ]
 
+const sortingAvailableItems: SortingListItem[] = availableItems.map(({ id, label, dataType }) => ({
+  id,
+  label,
+  dataType,
+}))
+
 function filterData(data: Row[], filters: IdentifierFilterValue[]): Row[] {
   if (filters.length === 0) return data
   return data.filter(row => {
@@ -144,6 +155,34 @@ function filterData(data: Row[], filters: IdentifierFilterValue[]): Row[] {
       if (!fn) return true
       return fn(rowValue, f.value.operator, f.value.parameter)
     })
+  })
+}
+
+function sortRows(data: Row[], sorting: ColumnSort[]): Row[] {
+  if (sorting.length === 0) return data
+  return [...data].sort((a, b) => {
+    for (const sort of sorting) {
+      const { id, desc } = sort
+      const aValue = a[id as keyof Row]
+      const bValue = b[id as keyof Row]
+      let comparison = 0
+      if (aValue instanceof Date && bValue instanceof Date) {
+        comparison = aValue.getTime() - bValue.getTime()
+      } else if (typeof aValue === 'string' && typeof bValue === 'string') {
+        comparison = aValue.localeCompare(bValue)
+      } else if (typeof aValue === 'number' && typeof bValue === 'number') {
+        comparison = aValue - bValue
+      } else if (typeof aValue === 'boolean' && typeof bValue === 'boolean') {
+        comparison = Number(aValue) - Number(bValue)
+      } else {
+        if (aValue < bValue) comparison = -1
+        else if (aValue > bValue) comparison = 1
+      }
+      if (comparison !== 0) {
+        return desc ? -comparison : comparison
+      }
+    }
+    return 0
   })
 }
 
@@ -159,25 +198,34 @@ export const filterListTable: Story = {
   render: () => {
     const translation = useHightideTranslation()
     const [filterValue, setFilterValue] = useState<IdentifierFilterValue[]>([])
+    const [sorting, setSorting] = useState<ColumnSort[]>([])
 
-    const filteredData = useMemo(
-      () => filterData(allData, filterValue),
-      [filterValue]
-    )
+    const tableData = useMemo(() => {
+      const filtered = filterData(allData, filterValue)
+      return sortRows(filtered, sorting)
+    }, [filterValue, sorting])
 
     return (
       <Table
         table={{
-          data: filteredData,
+          data: tableData,
+          manualSorting: true,
+          manualFiltering: true,
+          enableColumnFilters: false,
+          enableSorting: false,
+          enableColumnPinning: false,
           initialState: {
             pagination: { pageSize: 10 },
           },
         }}
         header={(
           <div className="flex-col-2 w-full">
-            <span className="typography-title-md">Table with Filter List</span>
+            <div className="flex-row-8 justify-between items-center">
+              <span className="typography-title-md">{'Table with Filter and Sorting Lists'}</span>
+              <TableColumnSwitcher/>
+            </div>
             <span className="text-description typography-label-md">
-              {filteredData.length} of {allData.length} rows
+              {tableData.length} of {allData.length} rows
             </span>
             <FilterList
               value={filterValue}
@@ -186,6 +234,11 @@ export const filterListTable: Story = {
               }}
               availableItems={availableItems}
             />
+            <SortingList
+              sorting={sorting}
+              onSortingChange={setSorting}
+              availableItems={sortingAvailableItems}
+            />
           </div>
         )}
       >
@@ -193,7 +246,6 @@ export const filterListTable: Story = {
           id="name"
           header={translation('name')}
           accessorKey="name"
-          sortingFn="textCaseSensitive"
           minSize={150}
           size={200}
         />
@@ -201,7 +253,6 @@ export const filterListTable: Story = {
           id="age"
           header={translation('age')}
           accessorKey="age"
-          sortingFn="alphanumeric"
           minSize={100}
           size={120}
         />
@@ -211,10 +262,9 @@ export const filterListTable: Story = {
           accessorKey="entryDate"
           cell={({ cell }) => (
             <TableCell>
-              {(cell.getValue() as Date).toLocaleDateString()}
+              {DateUtils.toInputString(cell.getValue() as Date, 'date')}
             </TableCell>
           )}
-          sortingFn="datetime"
           minSize={140}
           size={160}
         />
@@ -227,7 +277,6 @@ export const filterListTable: Story = {
               {cell.getValue() ? translation('yes') : translation('no')}
             </TableCell>
           )}
-          sortingFn="basic"
           minSize={100}
           size={120}
         />

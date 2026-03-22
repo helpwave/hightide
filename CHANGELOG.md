@@ -5,6 +5,16 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/)
 and adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [0.9.3] - 2026-03-22
+
+### Added
+- `SortingList`
+
+### Changed
+- `ColumnSwitcher` icon
+- `TableHeader` to truncate
+- `TableColumnSwitcher` does not show pinning icon anymore when pinning is disabled 
+
 ## [0.9.2] - 2026-03-22
 
 ### Added
