@@ -5,6 +5,8 @@ import {
   getProcessModelLibraryEntry,
   processModelLibrary
 } from '@/src/components/display-and-visualization/process-model/processModelLibrary'
+import { Select } from '@/src/components/user-interaction/Select/Select'
+import { SelectOption } from '@/src/components/user-interaction/Select/SelectOption'
 
 const meta: Meta<typeof ProcessModelCanvas> = {
   component: ProcessModelCanvas,
@@ -22,20 +24,18 @@ export const processModelCanvas: Story = {
     )
     return (
       <div className="flex flex-col gap-4">
-        <label className="flex flex-row items-center gap-2 text-sm font-medium text-on-surface">
+        <div className="flex flex-row items-center gap-2 text-sm font-medium text-on-surface">
           <span>Example model</span>
-          <select
-            className="rounded-md border border-border bg-surface px-2 py-1 text-on-surface"
+          <Select
             value={modelId}
-            onChange={(event) => setModelId(event.target.value)}
+            onValueChange={setModelId}
+            showSearch={false}
           >
             {processModelLibrary.map((entry) => (
-              <option key={entry.id} value={entry.id}>
-                {entry.name}
-              </option>
+              <SelectOption key={entry.id} value={entry.id} label={entry.name} />
             ))}
-          </select>
-        </label>
+          </Select>
+        </div>
         <ProcessModelCanvas graph={graph} />
       </div>
     )

@@ -129,25 +129,12 @@
     @apply flex flex-row flex-wrap items-center justify-center gap-2;
   }
 
-  .process-model-trace-replay-btn {
-    @apply flex cursor-pointer flex-row items-center gap-1.5 rounded-md border-0 px-3.5 py-1.5 text-xs font-semibold transition-colors duration-150;
-    font-family: var(--font-inter);
-  }
-
-  .process-model-trace-replay-btn-primary {
-    @apply bg-primary text-on-primary hover:bg-primary-hover;
-  }
-
-  .process-model-trace-replay-btn-secondary {
-    @apply border border-border bg-surface text-on-surface hover:bg-surface-hover;
-  }
-
   .process-model-trace-replay-speed {
-    @apply flex flex-row items-center gap-2 text-xs font-medium text-description;
+    @apply flex flex-row items-center gap-2;
   }
 
-  .process-model-trace-replay-select {
-    @apply cursor-pointer rounded-md border border-border bg-surface px-2.5 py-1.5 text-xs font-medium text-on-surface;
+  .process-model-trace-replay-speed-label {
+    @apply text-xs font-medium text-description;
   }
 
   .process-model-trace-log {

@@ -175,6 +175,7 @@
     }
   },
   "slideNavigation": "Slide Navigation",
+  "speed": "Geschwindigkeit",
   "submit": "Abschicken",
   "success": "Erfolg",
   "text": "Text",
@@ -218,6 +219,8 @@
   "notEquals": "Nicht gleich",
   "noParameterRequired": "Kein Parameter erforderlich",
   "parameter": "Parameter",
+  "pauseTrace": "Trace pausieren",
+  "playTrace": "Trace abspielen",
   "startDate": "Start",
   "startsWith": "Beginnt mit",
   "notEmpty": "Das Feld darf nicht leer sein.",

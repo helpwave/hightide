@@ -6,9 +6,14 @@ import {
   useState
 } from 'react'
 import clsx from 'clsx'
+import { useHightideTranslation } from '@/src/i18n/useHightideTranslation'
+import { Button } from '@/src/components/user-interaction/Button'
+import { Select } from '@/src/components/user-interaction/Select/Select'
+import { SelectOption } from '@/src/components/user-interaction/Select/SelectOption'
 import { ProcessModelCanvas } from './ProcessModelCanvas'
 import { getProcessModelEdgePathDomId } from './layoutProcessModel'
 import type { ProcessModelGraphWithTraces, ProcessModelTrace } from './types'
+import { Pause, Play, RotateCcw } from 'lucide-react'
 
 export type ProcessModelTraceReplayProps = {
   graph: ProcessModelGraphWithTraces,
@@ -20,6 +25,13 @@ type LogLine = {
   time: string,
   text: string,
 }
+
+const SPEED_OPTIONS = [
+  { value: 1, label: '1×' },
+  { value: 1.5, label: '1.5×' },
+  { value: 2, label: '2×' },
+  { value: 3, label: '3×' },
+] as const
 
 function sleep(ms: number, signal: AbortSignal): Promise<void> {
   return new Promise((resolve) => {
@@ -77,6 +89,7 @@ function runParticleAlongPath(
 }
 
 export const ProcessModelTraceReplay = ({ graph, className }: ProcessModelTraceReplayProps) => {
+  const translation = useHightideTranslation()
   const pathPrefix = useId().replace(/:/g, '')
   const hostRef = useRef<HTMLDivElement>(null)
   const traceIndexRef = useRef(0)
@@ -248,12 +261,9 @@ export const ProcessModelTraceReplay = ({ graph, className }: ProcessModelTraceR
   return (
     <div data-name="process-model-trace-replay" className={clsx('process-model-trace-replay', className)}>
       <div className="process-model-trace-replay-toolbar">
-        <button
-          type="button"
-          className={clsx(
-            'process-model-trace-replay-btn',
-            isPlaying ? 'process-model-trace-replay-btn-secondary' : 'process-model-trace-replay-btn-primary'
-          )}
+        <Button
+          color={isPlaying ? 'secondary' : 'primary'}
+          coloringStyle={isPlaying ? 'outline' : 'solid'}
           onClick={() => {
             if (isPlaying) {
               stopPlayback()
@@ -262,28 +272,29 @@ export const ProcessModelTraceReplay = ({ graph, className }: ProcessModelTraceR
             }
           }}
         >
-          {isPlaying ? 'Pause trace' : 'Play trace'}
-        </button>
-        <button
-          type="button"
-          className="process-model-trace-replay-btn process-model-trace-replay-btn-secondary"
+          {isPlaying ? <Pause /> : <Play />}
+          {isPlaying ? translation('pauseTrace') : translation('playTrace')}
+        </Button>
+        <Button
+          color="secondary"
+          coloringStyle="outline"
           onClick={resetReplay}
         >
-          Reset
-        </button>
-        <label className="process-model-trace-replay-speed">
-          <span>Speed</span>
-          <select
-            className="process-model-trace-replay-select"
-            value={String(speedMult)}
-            onChange={(e) => setSpeedMult(Number.parseFloat(e.target.value))}
+          <RotateCcw />
+          {translation('reset')}
+        </Button>
+        <div className="process-model-trace-replay-speed">
+          <span className="process-model-trace-replay-speed-label">{translation('speed')}</span>
+          <Select
+            value={speedMult}
+            onValueChange={setSpeedMult}
+            showSearch={false}
           >
-            <option value="1">1×</option>
-            <option value="1.5">1.5×</option>
-            <option value="2">2×</option>
-            <option value="3">3×</option>
-          </select>
-        </label>
+            {SPEED_OPTIONS.map((option) => (
+              <SelectOption key={option.value} value={option.value} label={option.label} />
+            ))}
+          </Select>
+        </div>
       </div>
       <div ref={hostRef}>
         <ProcessModelCanvas

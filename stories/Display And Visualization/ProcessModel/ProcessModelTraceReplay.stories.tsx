@@ -6,6 +6,8 @@ import {
   processModelLibrary
 } from '@/src/components/display-and-visualization/process-model/processModelLibrary'
 import type { ProcessModelGraphWithTraces } from '@/src/components/display-and-visualization/process-model/types'
+import { Select } from '@/src/components/user-interaction/Select/Select'
+import { SelectOption } from '@/src/components/user-interaction/Select/SelectOption'
 
 const meta: Meta<typeof ProcessModelTraceReplay> = {
   component: ProcessModelTraceReplay,
@@ -23,20 +25,18 @@ export const processModelTraceReplay: Story = {
     }, [modelId])
     return (
       <div className="flex flex-col items-center gap-4">
-        <label className="flex w-full max-w-[900px] flex-row items-center gap-2 text-sm font-medium text-on-surface">
+        <div className="flex w-full max-w-[900px] flex-row items-center gap-2 text-sm font-medium text-on-surface">
           <span>Example model</span>
-          <select
-            className="rounded-md border border-border bg-surface px-2 py-1 text-on-surface"
+          <Select
             value={modelId}
-            onChange={(event) => setModelId(event.target.value)}
+            onValueChange={setModelId}
+            showSearch={false}
           >
             {processModelLibrary.map((entry) => (
-              <option key={entry.id} value={entry.id}>
-                {entry.name}
-              </option>
+              <SelectOption key={entry.id} value={entry.id} label={entry.name} />
             ))}
-          </select>
-        </label>
+          </Select>
+        </div>
         <ProcessModelTraceReplay key={modelId} graph={graph} />
       </div>
     )
