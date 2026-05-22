@@ -1,13 +1,4 @@
-import {
-  computeLayout,
-  estimateProcessModelActivityChromeWidth,
-  estimateProcessModelActivityNodeWidth,
-  getEdgePoints,
-  getProcessModelEdgePathDomId,
-  maxEdgeWeight,
-  terminalCountDisplayLine,
-  weightToStyle
-} from '../../src/components/display-and-visualization/process-model/layoutProcessModel'
+import { ProcessModelLayoutUtilities } from '../../src/components/display-and-visualization/process-model/layoutProcessModel'
 import type { ProcessModelGraph } from '../../src/components/display-and-visualization/process-model/types'
 
 const verticalTwoNodeGraph: ProcessModelGraph = {
@@ -35,8 +26,8 @@ const activity = (
 
 describe('estimateProcessModelActivityNodeWidth', () => {
   test('grows with longer label text', () => {
-    const short = estimateProcessModelActivityNodeWidth('A', '1')
-    const long = estimateProcessModelActivityNodeWidth('Very long activity step name', '1')
+    const short = ProcessModelLayoutUtilities.estimateProcessModelActivityNodeWidth('A', '1')
+    const long = ProcessModelLayoutUtilities.estimateProcessModelActivityNodeWidth('Very long activity step name', '1')
     expect(long).toBeGreaterThan(short)
     expect(short).toBeGreaterThanOrEqual(120)
   })
@@ -44,15 +35,15 @@ describe('estimateProcessModelActivityNodeWidth', () => {
 
 describe('estimateProcessModelActivityChromeWidth', () => {
   test('terminal width tracks label and count line like the activity node', () => {
-    const narrow = estimateProcessModelActivityChromeWidth(
+    const narrow = ProcessModelLayoutUtilities.estimateProcessModelActivityChromeWidth(
       'terminal',
       'Start',
-      terminalCountDisplayLine('1')
+      ProcessModelLayoutUtilities.terminalCountDisplayLine('1')
     )
-    const wide = estimateProcessModelActivityChromeWidth(
+    const wide = ProcessModelLayoutUtilities.estimateProcessModelActivityChromeWidth(
       'terminal',
       'Very long start or end node title',
-      terminalCountDisplayLine('99999')
+      ProcessModelLayoutUtilities.terminalCountDisplayLine('99999')
     )
     expect(wide).toBeGreaterThan(narrow)
     expect(narrow).toBeGreaterThanOrEqual(120)
@@ -62,7 +53,7 @@ describe('estimateProcessModelActivityChromeWidth', () => {
 
 describe('computeLayout', () => {
   test('assigns positions for each node id', () => {
-    const { positions, canvasW, canvasH } = computeLayout(verticalTwoNodeGraph)
+    const { positions, canvasW, canvasH } = ProcessModelLayoutUtilities.computeLayout(verticalTwoNodeGraph)
     expect(positions.a).toBeDefined()
     expect(positions.b).toBeDefined()
     expect(positions.a.w).toBeGreaterThan(0)
@@ -89,16 +80,16 @@ describe('computeLayout', () => {
       ],
       edges: [],
     }
-    const wShort = computeLayout(shortGraph).positions.m.w
-    const wLong = computeLayout(longGraph).positions.m.w
+    const wShort = ProcessModelLayoutUtilities.computeLayout(shortGraph).positions.m.w
+    const wLong = ProcessModelLayoutUtilities.computeLayout(longGraph).positions.m.w
     expect(wLong).toBeGreaterThan(wShort)
   })
 })
 
 describe('getEdgePoints', () => {
   test('returns vertical path for stacked nodes', () => {
-    const { positions } = computeLayout(verticalTwoNodeGraph)
-    const pts = getEdgePoints(positions, 'a', 'b', verticalTwoNodeGraph.edges)
+    const { positions } = ProcessModelLayoutUtilities.computeLayout(verticalTwoNodeGraph)
+    const pts = ProcessModelLayoutUtilities.getEdgePoints(positions, 'a', 'b', verticalTwoNodeGraph.edges)
     expect(pts).not.toBeNull()
     expect(pts?.pathD).toMatch(/^M[\d.-]+,[\d.-]+\s+L[\d.-]+,[\d.-]+$/)
     expect(pts?.labelPt.x).toBeDefined()
@@ -106,8 +97,8 @@ describe('getEdgePoints', () => {
   })
 
   test('returns null when node id is missing', () => {
-    const { positions } = computeLayout(verticalTwoNodeGraph)
-    expect(getEdgePoints(positions, 'a', 'missing', verticalTwoNodeGraph.edges)).toBeNull()
+    const { positions } = ProcessModelLayoutUtilities.computeLayout(verticalTwoNodeGraph)
+    expect(ProcessModelLayoutUtilities.getEdgePoints(positions, 'a', 'missing', verticalTwoNodeGraph.edges)).toBeNull()
   })
 
   test('curved skip edge ends with a straight segment for the marker', () => {
@@ -118,8 +109,8 @@ describe('getEdgePoints', () => {
       ],
       edges: [{ from: 's', to: 'e', label: '1', weight: 1 }],
     }
-    const { positions } = computeLayout(skipGraph)
-    const pts = getEdgePoints(positions, 's', 'e', skipGraph.edges)
+    const { positions } = ProcessModelLayoutUtilities.computeLayout(skipGraph)
+    const pts = ProcessModelLayoutUtilities.getEdgePoints(positions, 's', 'e', skipGraph.edges)
     expect(pts).not.toBeNull()
     expect(pts?.pathD).toContain(' C')
     expect(pts?.pathD).toMatch(/\s+L[\d.-]+,[\d.-]+$/)
@@ -128,39 +119,39 @@ describe('getEdgePoints', () => {
 
 describe('maxEdgeWeight', () => {
   test('returns max of weights', () => {
-    expect(maxEdgeWeight([{ from: 'a', to: 'b', label: 'x', weight: 3 }, { from: 'b', to: 'c', label: 'y', weight: 10 }])).toBe(10)
+    expect(ProcessModelLayoutUtilities.maxEdgeWeight([{ from: 'a', to: 'b', label: 'x', weight: 3 }, { from: 'b', to: 'c', label: 'y', weight: 10 }])).toBe(10)
   })
 
   test('returns 1 for empty edges', () => {
-    expect(maxEdgeWeight([])).toBe(1)
+    expect(ProcessModelLayoutUtilities.maxEdgeWeight([])).toBe(1)
   })
 })
 
 describe('getProcessModelEdgePathDomId', () => {
   test('prefixes id when prefix is set', () => {
-    expect(getProcessModelEdgePathDomId('p1', 'a', 'b')).toBe('ep-p1-a-b')
+    expect(ProcessModelLayoutUtilities.getProcessModelEdgePathDomId('p1', 'a', 'b')).toBe('ep-p1-a-b')
   })
 
   test('omits prefix segment when prefix is empty', () => {
-    expect(getProcessModelEdgePathDomId('', 'a', 'b')).toBe('ep-a-b')
-    expect(getProcessModelEdgePathDomId(undefined, 'a', 'b')).toBe('ep-a-b')
+    expect(ProcessModelLayoutUtilities.getProcessModelEdgePathDomId('', 'a', 'b')).toBe('ep-a-b')
+    expect(ProcessModelLayoutUtilities.getProcessModelEdgePathDomId(undefined, 'a', 'b')).toBe('ep-a-b')
   })
 })
 
 describe('weightToStyle', () => {
   test('maps high ratio to strong marker tier', () => {
-    const s = weightToStyle(80, 100)
+    const s = ProcessModelLayoutUtilities.weightToStyle(80, 100)
     expect(s.markerTier).toBe('strong')
     expect(s.opacity).toBe(1)
   })
 
   test('maps mid ratio to medium', () => {
-    const s = weightToStyle(40, 100)
+    const s = ProcessModelLayoutUtilities.weightToStyle(40, 100)
     expect(s.markerTier).toBe('medium')
   })
 
   test('maps low ratio to faint', () => {
-    const s = weightToStyle(10, 100)
+    const s = ProcessModelLayoutUtilities.weightToStyle(10, 100)
     expect(s.markerTier).toBe('faint')
   })
 })

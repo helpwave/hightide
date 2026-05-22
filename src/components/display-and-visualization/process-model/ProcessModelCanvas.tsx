@@ -3,13 +3,7 @@ import clsx from 'clsx'
 import { Check, Plus } from 'lucide-react'
 import { ProcessModelActivityNode } from './ProcessModelActivityNode'
 import { ProcessModelTerminalNode } from './ProcessModelTerminalNode'
-import {
-  computeLayout,
-  getEdgePoints,
-  getProcessModelEdgePathDomId,
-  maxEdgeWeight,
-  weightToStyle
-} from './layoutProcessModel'
+import { ProcessModelLayoutUtilities } from './layoutProcessModel'
 import type {
   ProcessModelGraph,
   ProcessModelGraphActivityNode,
@@ -61,16 +55,16 @@ export const ProcessModelCanvas = ({
   replayParticle = null,
 }: ProcessModelCanvasProps) => {
   const uid = useId().replace(/:/g, '')
-  const { positions, canvasW, canvasH } = useMemo(() => computeLayout(graph), [graph])
-  const maxW = useMemo(() => maxEdgeWeight(graph.edges), [graph.edges])
+  const { positions, canvasW, canvasH } = useMemo(() => ProcessModelLayoutUtilities.computeLayout(graph), [graph])
+  const maxW = useMemo(() => ProcessModelLayoutUtilities.maxEdgeWeight(graph.edges), [graph.edges])
 
   const edgeElements = useMemo(() => {
     return graph.edges.map((edge) => {
-      const pts = getEdgePoints(positions, edge.from, edge.to, graph.edges)
+      const pts = ProcessModelLayoutUtilities.getEdgePoints(positions, edge.from, edge.to, graph.edges)
       if (!pts) {
         return null
       }
-      const { opacity, sw, markerTier } = weightToStyle(edge.weight, maxW)
+      const { opacity, sw, markerTier } = ProcessModelLayoutUtilities.weightToStyle(edge.weight, maxW)
       const lp = pts.labelPt
       const pillW = edge.label.length * 6.8 + 12
       const pillH = 17
@@ -79,7 +73,7 @@ export const ProcessModelCanvas = ({
         edgeReplayHighlight != null
         && edge.from === edgeReplayHighlight.from
         && edge.to === edgeReplayHighlight.to
-      const pathId = getProcessModelEdgePathDomId(edgePathIdPrefix, edge.from, edge.to)
+      const pathId = ProcessModelLayoutUtilities.getProcessModelEdgePathDomId(edgePathIdPrefix, edge.from, edge.to)
       const strokeOpacity = isReplayEdge ? 1 : opacity
       const strokeWidth = isReplayEdge ? 3 : sw
       return (

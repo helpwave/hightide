@@ -11,7 +11,7 @@ import { Button } from '@/src/components/user-interaction/Button'
 import { Select } from '@/src/components/user-interaction/Select/Select'
 import { SelectOption } from '@/src/components/user-interaction/Select/SelectOption'
 import { ProcessModelCanvas } from './ProcessModelCanvas'
-import { getProcessModelEdgePathDomId } from './layoutProcessModel'
+import { ProcessModelLayoutUtilities } from './layoutProcessModel'
 import type { ProcessModelGraphWithTraces, ProcessModelTrace } from './types'
 import { Pause, Play, RotateCcw } from 'lucide-react'
 
@@ -115,7 +115,7 @@ export const ProcessModelTraceReplay = ({ graph, className }: ProcessModelTraceR
       if (!svg) {
         return null
       }
-      const id = getProcessModelEdgePathDomId(pathPrefix, from, to)
+      const id = ProcessModelLayoutUtilities.getProcessModelEdgePathDomId(pathPrefix, from, to)
       return svg.querySelector(`#${CSS.escape(id)}`)
     },
     [pathPrefix]
@@ -262,8 +262,9 @@ export const ProcessModelTraceReplay = ({ graph, className }: ProcessModelTraceR
     <div data-name="process-model-trace-replay" className={clsx('process-model-trace-replay', className)}>
       <div className="process-model-trace-replay-toolbar">
         <Button
-          color={isPlaying ? 'secondary' : 'primary'}
+          color="primary"
           coloringStyle={isPlaying ? 'outline' : 'solid'}
+          className="min-w-48"
           onClick={() => {
             if (isPlaying) {
               stopPlayback()
@@ -276,7 +277,7 @@ export const ProcessModelTraceReplay = ({ graph, className }: ProcessModelTraceR
           {isPlaying ? translation('pauseTrace') : translation('playTrace')}
         </Button>
         <Button
-          color="secondary"
+          color="primary"
           coloringStyle="outline"
           onClick={resetReplay}
         >

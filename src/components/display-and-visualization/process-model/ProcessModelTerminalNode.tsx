@@ -1,6 +1,6 @@
 import type { ReactNode } from 'react'
 import { ProcessModelActivityNode } from './ProcessModelActivityNode'
-import { terminalCountDisplayLine } from './layoutProcessModel'
+import { ProcessModelLayoutUtilities } from './layoutProcessModel'
 import type { ProcessModelTerminalKind } from './types'
 
 export type ProcessModelTerminalNodeProps = {
@@ -59,7 +59,7 @@ export const ProcessModelTerminalNode = ({
       nodeId={nodeId}
       kind="terminal"
       label={label}
-      count={terminalCountDisplayLine(count)}
+      count={ProcessModelLayoutUtilities.terminalCountDisplayLine(count)}
       customIcon={<TerminalHexIcon variant={variant} />}
       bordered={bordered}
       active={active}

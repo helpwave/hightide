@@ -13,7 +13,7 @@ const NODE_H = 52
 const COL_GAP = 72
 const ROW_GAP = 72
 
-export const ACTIVITY_NODE_MIN_WIDTH = 120
+const ACTIVITY_NODE_MIN_WIDTH = 120
 
 const ACTIVITY_PAD_X = 24
 const ACTIVITY_ICON_W = 28
@@ -26,15 +26,21 @@ const TERMINAL_LABEL_PX_PER_CHAR = 7.5
 const TERMINAL_COUNT_PX_PER_CHAR = 6.2
 const ACTIVITY_WIDTH_SAFETY_PX = 14
 
+const EDGE_LABEL_ALONG_FR = 0.22
+const EDGE_LABEL_BEZIER_T = 0.2
+const EDGE_STRAIGHT_PX = 14
+
+type CubicPt = { x: number, y: number }
+
 function stringVisualUnits(s: string): number {
   return [...s].length
 }
 
-export function terminalCountDisplayLine(rawCount: string): string {
+function terminalCountDisplayLine(rawCount: string): string {
   return `${rawCount} traces`
 }
 
-export function estimateProcessModelActivityChromeWidth(
+function estimateProcessModelActivityChromeWidth(
   kind: ProcessModelActivityNodeKind,
   label: string,
   countLine: string
@@ -51,15 +57,9 @@ export function estimateProcessModelActivityChromeWidth(
   return Math.max(ACTIVITY_NODE_MIN_WIDTH, Math.ceil(w))
 }
 
-export function estimateProcessModelActivityNodeWidth(label: string, count: string): number {
+function estimateProcessModelActivityNodeWidth(label: string, count: string): number {
   return estimateProcessModelActivityChromeWidth('activity', label, count)
 }
-
-const EDGE_LABEL_ALONG_FR = 0.22
-const EDGE_LABEL_BEZIER_T = 0.2
-const EDGE_STRAIGHT_PX = 14
-
-type CubicPt = { x: number, y: number }
 
 function cubicBezierPoint(
   x0: number,
@@ -174,7 +174,7 @@ function nodeWidth(n: ProcessModelGraphNode): number {
   return estimateProcessModelActivityNodeWidth(n.label, n.count)
 }
 
-export function computeLayout(graph: ProcessModelGraph): ProcessModelLayoutResult {
+function computeLayout(graph: ProcessModelGraph): ProcessModelLayoutResult {
   const nodes = graph.nodes
   const layers: Record<number, ProcessModelGraphNode[]> = {}
   nodes.forEach((n) => {
@@ -213,7 +213,7 @@ export function computeLayout(graph: ProcessModelGraph): ProcessModelLayoutResul
   return { positions, canvasW, canvasH }
 }
 
-export function getEdgePoints(
+function getEdgePoints(
   pos: Record<string, ProcessModelNodePosition>,
   fromId: string,
   toId: string,
@@ -328,7 +328,7 @@ export function getEdgePoints(
   return { pathD, labelPt }
 }
 
-export function weightToStyle(weight: number, maxWeight: number): ProcessModelEdgeStrokeStyle {
+function weightToStyle(weight: number, maxWeight: number): ProcessModelEdgeStrokeStyle {
   const ratio = maxWeight > 0 ? weight / maxWeight : 0
   if (ratio > 0.6) {
     return { opacity: 1.0, sw: 2.5, markerTier: 'strong' }
@@ -339,16 +339,14 @@ export function weightToStyle(weight: number, maxWeight: number): ProcessModelEd
   return { opacity: 0.28, sw: 1.4, markerTier: 'faint' }
 }
 
-export function maxEdgeWeight(edges: ProcessModelEdge[]): number {
+function maxEdgeWeight(edges: ProcessModelEdge[]): number {
   if (!edges.length) {
     return 1
   }
   return Math.max(...edges.map((e) => e.weight))
 }
 
-export { NODE_H }
-
-export function getProcessModelEdgePathDomId(
+function getProcessModelEdgePathDomId(
   pathIdPrefix: string | undefined,
   from: string,
   to: string
@@ -357,4 +355,17 @@ export function getProcessModelEdgePathDomId(
     return `ep-${pathIdPrefix}-${from}-${to}`
   }
   return `ep-${from}-${to}`
+}
+
+export const ProcessModelLayoutUtilities = {
+  ACTIVITY_NODE_MIN_WIDTH,
+  NODE_H,
+  terminalCountDisplayLine,
+  estimateProcessModelActivityChromeWidth,
+  estimateProcessModelActivityNodeWidth,
+  computeLayout,
+  getEdgePoints,
+  weightToStyle,
+  maxEdgeWeight,
+  getProcessModelEdgePathDomId,
 }
