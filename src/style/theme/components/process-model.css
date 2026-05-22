@@ -1,0 +1,167 @@
+@layer components {
+  .process-model-canvas-wrap {
+    @apply relative overflow-visible rounded-2xl bg-surface p-8 shadow-md;
+  }
+
+  .process-model-svg {
+    @apply block overflow-visible;
+  }
+
+  .process-model-edge-path {
+    stroke: var(--color-process-model-edge-stroke);
+  }
+
+  .process-model-edge-marker-fill {
+    fill: var(--color-process-model-edge-stroke);
+  }
+
+  .process-model-edge-label-bg {
+    fill: var(--color-process-model-edge-label-bg);
+  }
+
+  .process-model-edge-label-text {
+    font-family: var(--font-inter);
+  }
+
+  .process-model-edge-label-text-strong {
+    fill: var(--color-process-model-edge-label-text-strong);
+  }
+
+  .process-model-edge-label-text-muted {
+    fill: var(--color-process-model-edge-label-text-muted);
+  }
+
+  .process-model-foreign-object {
+    overflow: visible;
+  }
+
+  .process-model-foreign-object-inner {
+    width: 100%;
+    height: 100%;
+  }
+
+  .process-model-foreign-object-inner .process-model-activity-node {
+    @apply w-full min-w-0;
+  }
+
+  .process-model-activity-node {
+    @apply flex h-full w-max min-w-[120px] max-w-full cursor-default select-none items-center gap-2 rounded-xl border border-border bg-surface px-3 py-2.5 transition-[border-color,box-shadow,background-color] duration-200 ease-out;
+    font-family: var(--font-inter);
+  }
+
+  .process-model-activity-node:not([data-bordered]) {
+    @apply border-transparent;
+  }
+
+  .process-model-activity-node[data-interactive] {
+    @apply cursor-pointer;
+  }
+
+  .process-model-activity-node[data-interactive]:focus-visible {
+    @apply outline-2 outline-offset-2 outline-primary;
+  }
+
+  .process-model-activity-node[data-active] {
+    border-color: var(--color-purple-400);
+    box-shadow: 0 0 0 3px var(--color-process-model-node-active-ring);
+    background-color: var(--color-process-model-node-active-bg);
+  }
+
+  .process-model-activity-node[data-visited]:not([data-active]) {
+    border-color: var(--color-process-model-node-visited-border);
+    background-color: var(--color-process-model-node-visited-bg);
+  }
+
+  .process-model-activity-node-icon {
+    @apply flex h-7 w-7 shrink-0 items-center justify-center rounded-lg;
+    background-color: var(--color-process-model-activity-icon-bg);
+  }
+
+  .process-model-activity-node-icon-svg {
+    @apply text-primary;
+  }
+
+  .process-model-activity-node-text {
+    @apply flex min-w-0 flex-1 flex-col;
+  }
+
+  .process-model-activity-node-label {
+    @apply whitespace-nowrap text-xs font-semibold leading-tight text-on-surface;
+  }
+
+  .process-model-activity-node-count {
+    @apply mt-px whitespace-nowrap text-[11px] font-medium text-description;
+  }
+
+  .process-model-activity-node[data-kind="terminal"] {
+    @apply gap-3;
+  }
+
+  .process-model-activity-node[data-kind="terminal"] .process-model-activity-node-icon {
+    @apply h-auto w-auto rounded-none bg-transparent p-0;
+  }
+
+  .process-model-activity-node[data-kind="terminal"] .process-model-activity-node-label {
+    @apply whitespace-nowrap text-sm font-bold leading-snug text-on-surface;
+  }
+
+  .process-model-activity-node[data-kind="terminal"] .process-model-activity-node-count {
+    @apply mt-0.5 whitespace-nowrap text-xs font-medium text-description;
+  }
+
+  .process-model-terminal-node-hex-fill {
+    fill: var(--color-process-model-terminal-fill);
+  }
+
+  .process-model-activity-node[data-kind="terminal"][data-active] .process-model-terminal-node-hex-fill {
+    fill: var(--color-process-model-terminal-fill-active);
+  }
+
+  .process-model-activity-node[data-kind="terminal"][data-visited]:not([data-active]) .process-model-terminal-node-hex-fill {
+    fill: var(--color-process-model-terminal-fill-visited);
+  }
+
+  .process-model-trace-replay {
+    @apply flex w-full max-w-[900px] flex-col gap-4;
+  }
+
+  .process-model-trace-replay-toolbar {
+    @apply flex flex-row flex-wrap items-center justify-center gap-2;
+  }
+
+  .process-model-trace-replay-speed {
+    @apply flex flex-row items-center gap-2;
+  }
+
+  .process-model-trace-replay-speed-label {
+    @apply text-xs font-medium text-description;
+  }
+
+  .process-model-trace-log {
+    @apply w-full overflow-hidden rounded-lg bg-surface shadow-md;
+  }
+
+  .process-model-trace-log-header {
+    @apply border-b border-border bg-surface-variant px-4 py-2.5 text-[11px] font-semibold uppercase tracking-wide text-description;
+  }
+
+  .process-model-trace-log-body {
+    @apply max-h-[110px] overflow-y-auto py-1.5;
+  }
+
+  .process-model-trace-log-placeholder {
+    @apply px-4 py-1.5 text-[11px] italic text-description;
+  }
+
+  .process-model-trace-log-event {
+    @apply flex flex-row items-center gap-2 px-4 py-1 text-[11px] text-on-surface;
+  }
+
+  .process-model-trace-log-dot {
+    @apply h-1.5 w-1.5 shrink-0 rounded-full bg-primary;
+  }
+
+  .process-model-trace-log-time {
+    @apply min-w-[36px] shrink-0 text-[10px] text-description;
+  }
+}
