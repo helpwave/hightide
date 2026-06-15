@@ -1,16 +1,30 @@
 @layer components {
   [data-name="date-time-input"] {
-    @apply input-element flex-row-2 px-3 pr-10 h-element-md rounded-md w-full items-center justify-between;
+    @apply input-element flex-row-2 items-center justify-between w-full px-3 h-element-md rounded-md;
 
-    &:hover {
-      @apply cursor-pointer;
+    &:focus-within {
+      box-shadow: var(--focus-box-shadow);
+      border-color: var(--focus-border-color);
+    }
+  }
+
+  [data-name="date-time-field"] {
+    @apply flex-row-0 items-center min-w-0 grow overflow-hidden;
+  }
+
+  [data-name="date-time-segment"] {
+    @apply rounded-sm px-0.5 text-center tabular-nums cursor-text focus-style-none;
+
+    &:focus {
+      @apply bg-primary/15;
     }
 
-    &[type="date"]::-webkit-calendar-picker-indicator,
-    &[type="datetime-local"]::-webkit-calendar-picker-indicator,
-    &[type="time"]::-webkit-calendar-picker-indicator {
-      display: none;
-      -webkit-appearance: none;
+    &[data-placeholder] {
+      @apply text-placeholder;
     }
+  }
+
+  [data-name="date-time-separator"] {
+    @apply px-px;
   }
 }

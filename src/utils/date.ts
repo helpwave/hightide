@@ -122,6 +122,11 @@ const isLastMillisecondOfDay = (date: Date): boolean => {
   return !equalDate(date, next)
 }
 
+/** The number of days in the given month, where monthIndex is 0-based (0 = January) */
+const daysInMonth = (year: number, monthIndex: number): number => {
+  return new Date(year, monthIndex + 1, 0).getDate()
+}
+
 
 const sameTime = (a: Date, b: Date, compareSeconds: boolean = false, compareMilliseconds: boolean = false): boolean => {
   if (a.getHours() !== b.getHours() || a.getMinutes() !== b.getMinutes()) {
@@ -289,6 +294,7 @@ export const DateUtils = {
   weekDayList,
   equalDate,
   isLastMillisecondOfDay,
+  daysInMonth,
   sameTime,
   withTime,
   formatAbsolute,

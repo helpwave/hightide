@@ -2,6 +2,8 @@ import type { Meta, StoryObj } from '@storybook/nextjs'
 import { action } from 'storybook/actions'
 import { useEffect, useState } from 'react'
 import { FlexibleDateTimeInput } from '@/src/components/user-interaction/input/FlexibleDateTimeInput'
+import { TimeDisplay } from '@/src/components/user-interaction/date/TimeDisplay'
+import { LocaleContext } from '@/src/global-contexts/LocaleContext'
 
 const meta: Meta<typeof FlexibleDateTimeInput> = {
   component: FlexibleDateTimeInput,
@@ -21,7 +23,7 @@ export const flexibleDateTimeInput: Story = {
     minuteIncrement: '5min',
     secondIncrement: '1s',
     millisecondIncrement: '100ms',
-    is24HourFormat: false,
+    is24HourFormat: true,
     initialValue: null,
     value: undefined,
     onValueChange: action('onValueChange'),
@@ -33,18 +35,26 @@ export const flexibleDateTimeInput: Story = {
       setValue(args.value ?? args.initialValue ?? null)
     }, [args.value, args.initialValue])
     return (
-      <FlexibleDateTimeInput
-        {...args}
-        value={value}
-        onValueChange={(v) => {
-          args.onValueChange?.(v)
-          setValue(v)
-        }}
-        onEditComplete={(v) => {
-          args.onEditComplete?.(v)
-          setValue(v)
-        }}
-      />
+      <LocaleContext.Provider value={{ locale: 'de-DE', setLocale: () => {} }}>
+        <div className="flex-col-2 w-full max-w-md">
+          <FlexibleDateTimeInput
+            {...args}
+            value={value}
+            onValueChange={(next) => {
+              args.onValueChange?.(next)
+              setValue(next)
+            }}
+            onEditComplete={(next) => {
+              args.onEditComplete?.(next)
+              setValue(next)
+            }}
+          />
+          <div className="flex-col-1 text-sm text-description">
+            <pre>value = {value === null ? 'null' : value.toISOString()}</pre>
+            {value && <TimeDisplay date={value} mode="date"/>}
+          </div>
+        </div>
+      </LocaleContext.Provider>
     )
   },
 }
