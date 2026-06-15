@@ -142,8 +142,6 @@ describe('DateTimeField', () => {
       const [day, month] = screen.getAllByRole('spinbutton')
 
       act(() => day.focus())
-      // Reproduce the real-browser race: focus is heading to the month (same field) but momentarily
-      // sits on <body>, while the blur still reports the month as the related target.
       act(() => day.blur())
       frames.length = 0
       act(() => fireEvent.focusOut(day, { relatedTarget: month }))
@@ -225,6 +223,39 @@ describe('DateTimeInput controlled value', () => {
     expect(screen.getAllByRole('spinbutton').map(segment => segment.textContent)).toEqual(['06', '15', '2026'])
     const committed = onValueChange.mock.calls.at(-1)![0] as Date
     expect([committed.getMonth(), committed.getDate(), committed.getFullYear()]).toEqual([5, 15, 2026])
+  })
+})
+
+describe('DateTimeInput time zone', () => {
+  test('reads the display zone from the locale context', () => {
+    render(
+      <LocaleContext.Provider value={{ locale: 'en-US', setLocale: () => {}, timeZone: 'America/New_York' }}>
+        <DateTimeInput
+          mode="dateTime"
+          is24HourFormat={true}
+          initialValue={new Date(Date.UTC(2024, 5, 1, 2, 30))}
+        />
+      </LocaleContext.Provider>
+    )
+
+    expect(screen.getAllByRole('spinbutton').map(segment => segment.textContent))
+      .toEqual(['05', '31', '2024', '22', '30'])
+  })
+
+  test('an explicit timeZone prop overrides the context', () => {
+    render(
+      <LocaleContext.Provider value={{ locale: 'en-US', setLocale: () => {}, timeZone: 'America/New_York' }}>
+        <DateTimeInput
+          mode="dateTime"
+          is24HourFormat={true}
+          timeZone="UTC"
+          initialValue={new Date(Date.UTC(2024, 5, 1, 2, 30))}
+        />
+      </LocaleContext.Provider>
+    )
+
+    expect(screen.getAllByRole('spinbutton').map(segment => segment.textContent))
+      .toEqual(['06', '01', '2024', '02', '30'])
   })
 })
 

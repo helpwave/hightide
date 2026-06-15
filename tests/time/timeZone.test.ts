@@ -2,7 +2,6 @@ import { DateUtils } from '../../src/utils/date'
 
 describe('DateUtils time zone conversion', () => {
   test('reads the wall clock fields of an instant in a given zone', () => {
-    // 2024-06-01T00:30:00Z is still 2024-05-31 in New York (UTC-4 in summer).
     const instant = new Date(Date.UTC(2024, 5, 1, 0, 30, 0))
     const parts = DateUtils.zonedParts(instant, 'America/New_York')
     expect([parts.year, parts.month, parts.day, parts.hour, parts.minute]).toEqual([2024, 5, 31, 20, 30])

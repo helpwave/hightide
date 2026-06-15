@@ -80,7 +80,6 @@ describe('FlexibleDateTimeInput mode toggle', () => {
 
   test('lets a full year be typed over an existing value without snapping to the 1900s', () => {
     const { onValueChange } = renderFlexible({ defaultMode: 'date', initialValue: new Date(2026, 0, 1, 23, 59, 59, 999) })
-    // German order is day, month, year.
     const year = screen.getAllByRole('spinbutton')[2]
 
     act(() => year.focus())

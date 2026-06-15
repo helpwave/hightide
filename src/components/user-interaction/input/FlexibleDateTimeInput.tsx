@@ -5,30 +5,26 @@ import { DateTimeInput, type DateTimeInputProps } from './DateTimeInput'
 import { useControlledState } from '@/src/hooks/useControlledState'
 import { IconButton } from '../IconButton'
 import { useHightideTranslation } from '@/src/i18n/useHightideTranslation'
+import { useLocale } from '@/src/global-contexts/LocaleContext'
 
 export interface FlexibleDateTimeInputProps extends Omit<DateTimeInputProps, 'mode'> {
   defaultMode: Exclude<DateTimeFormat, 'time'>,
-  /** The time of day used while no explicit time is set. Defaults to 23:59:59.999 */
   fixedTime?: Date | null,
 }
 
-/**
- * A date input that can optionally be extended with a time.
- *
- * While only a date is shown the value is anchored to a fixed time of day (end of day by
- * default). Adding a time switches to a full date and time editor seeded with the current time.
- */
 export const FlexibleDateTimeInput = forwardRef<HTMLDivElement, FlexibleDateTimeInputProps>(function FlexibleDateTimeInput({
   defaultMode = 'date',
   value: controlledValue,
   initialValue,
   onValueChange,
   fixedTime: fixedTimeOverride,
-  timeZone,
+  timeZone: timeZoneOverride,
   actions = [],
   ...props
 }, forwardedRef) {
   const translation = useHightideTranslation()
+  const { timeZone: contextTimeZone } = useLocale()
+  const timeZone = timeZoneOverride ?? contextTimeZone
   const fixedTime = fixedTimeOverride ?? new Date(1970, 0, 1, 23, 59, 59, 999)
   const [value, setValue] = useControlledState<Date | null>({
     value: controlledValue,
@@ -36,9 +32,6 @@ export const FlexibleDateTimeInput = forwardRef<HTMLDivElement, FlexibleDateTime
     defaultValue: initialValue,
   })
 
-  // The "fixed time" anchor is a wall clock concept, so the comparisons and rewrites below happen
-  // in the display zone. Values stay absolute instants on the wire; only this internal time math
-  // is shifted into the chosen zone.
   const zoned = (date: Date) => DateUtils.toZonedDate(date, timeZone)
   const unzoned = (date: Date) => DateUtils.fromZonedDate(date, timeZone)
   const hasFixedTime = (date: Date) => DateUtils.sameTime(zoned(date), fixedTime, true, true)

@@ -37,12 +37,6 @@ export interface DateTimeFieldProps extends
   locale?: string,
 }
 
-/**
- * A segmented date and time editor where each part is an individually focusable spin button.
- *
- * The displayed segments always reflect the underlying value: any complete and valid edit is
- * committed immediately, so the value passed to the parent never drifts from what is shown.
- */
 export const DateTimeField = forwardRef<HTMLDivElement, DateTimeFieldProps>(function DateTimeField({
   value: controlledValue,
   initialValue = null,
@@ -110,8 +104,6 @@ export const DateTimeField = forwardRef<HTMLDivElement, DateTimeFieldProps>(func
   }
 
   useEffect(() => {
-    // Never overwrite a segment that is mid-entry: while a buffer is held the displayed digits
-    // are ahead of the committed value on purpose, and echoing the value back would clobber them.
     if (editStateRef.current.buffer) {
       return
     }
@@ -127,11 +119,6 @@ export const DateTimeField = forwardRef<HTMLDivElement, DateTimeFieldProps>(func
 
   const apply = (next: SegmentEditState) => {
     setEditState(next)
-    // Hold off on committing a half-typed year. A one to three digit year is a valid number but
-    // almost never what the user means, and committing it would emit (and round-trip) a stray date
-    // such as 0002/1902 on the way to "2004". The year is committed once it is fully typed (the
-    // buffer clears on auto-advance) or when focus leaves the field, where a shorthand year is
-    // expanded the same way arrow stepping already does.
     if (next.buffer?.type === 'year') {
       return
     }
@@ -238,9 +225,6 @@ export const DateTimeField = forwardRef<HTMLDivElement, DateTimeFieldProps>(func
   const onFieldBlur = (event: FocusEvent<HTMLDivElement>) => {
     props.onBlur?.(event)
     const field = event.currentTarget
-    // Moving focus to another segment of the same field (auto-advance, tab, arrow keys) is not the
-    // end of editing. relatedTarget tells us where focus is heading, so we can ignore those moves
-    // synchronously instead of mistaking the brief focus gap for the user leaving the field.
     const nextFocus = event.relatedTarget
     if (nextFocus instanceof Node && field.contains(nextFocus)) {
       return
@@ -253,7 +237,6 @@ export const DateTimeField = forwardRef<HTMLDivElement, DateTimeFieldProps>(func
       const composed = composeDate(editStateRef.current.values, layout, mode, is24Hour, value ?? undefined)
       if (composed) {
         setEditState({ values: decomposeDate(composed, layout, is24Hour), buffer: null })
-        // A deferred or shorthand year is only committed here, once the user has left the field.
         if (composed.getTime() !== (value?.getTime() ?? null)) {
           setValue(composed)
         }

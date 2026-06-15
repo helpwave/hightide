@@ -10,6 +10,8 @@ import { useEventCallbackStabilizer } from '../hooks/useEventCallbackStabelizer'
 export type LocaleContextValue = {
   locale: HightideTranslationLocales,
   setLocale: Dispatch<SetStateAction<HightideTranslationLocales>>,
+  timeZone?: string,
+  setTimeZone?: (timeZone: string | undefined) => void,
 }
 
 export const LocaleContext = createContext<LocaleContextValue | null>(null)
@@ -19,19 +21,29 @@ type LocaleWithSystem = HightideTranslationLocales | 'system'
 export type LocaleProviderProps = PropsWithChildren & Partial<LocalizationConfig> & {
   locale?: LocaleWithSystem,
   onChangedLocale?: (locale: HightideTranslationLocales) => void,
+  timeZone?: string,
+  onChangedTimeZone?: (timeZone: string | undefined) => void,
 }
 
 export const LocaleProvider = ({
   children,
   locale,
   defaultLocale,
-  onChangedLocale
+  defaultTimeZone,
+  timeZone,
+  onChangedLocale,
+  onChangedTimeZone,
 }: LocaleProviderProps) => {
   const {
     value: storedLocale,
     setValue: setStoredLocale,
     deleteValue: deleteStoredLocale,
   } = useStorage<LocaleWithSystem>({ key: 'locale', defaultValue: 'system' })
+  const {
+    value: storedTimeZone,
+    setValue: setStoredTimeZone,
+    deleteValue: deleteStoredTimeZone,
+  } = useStorage<string | undefined>({ key: 'timeZone', defaultValue: undefined })
   const { config } = useHightideConfig()
   const [localePreference, setLocalePreference] = useState<LocaleWithSystem>('system')
 
@@ -57,11 +69,26 @@ export const LocaleProvider = ({
     }
   }, [locale, deleteStoredLocale, setStoredLocale])
 
+  const resolvedTimeZone = useMemo(() => {
+    return timeZone ?? storedTimeZone ?? config.locale.defaultTimeZone ?? defaultTimeZone
+  }, [timeZone, storedTimeZone, config.locale.defaultTimeZone, defaultTimeZone])
+
+  useEffect(() => {
+    if (timeZone === undefined) return
+    setStoredTimeZone(timeZone)
+  }, [timeZone, setStoredTimeZone])
+
   const onChangeRef = useEventCallbackStabilizer(onChangedLocale)
 
   useEffect(() => {
     onChangeRef?.(resolvedLocale)
   }, [resolvedLocale, onChangeRef])
+
+  const onChangeTimeZoneRef = useEventCallbackStabilizer(onChangedTimeZone)
+
+  useEffect(() => {
+    onChangeTimeZoneRef?.(resolvedTimeZone)
+  }, [resolvedTimeZone, onChangeTimeZoneRef])
 
   useEffect(() => {
     const localesToTestAgainst = Object.values(LocalizationUtil.locals)
@@ -97,7 +124,21 @@ export const LocaleProvider = ({
             'Change the locale provided to the LocaleProvider instead.')
         }
         setStoredLocale(newLocale)
-      }
+      },
+      timeZone: resolvedTimeZone,
+      setTimeZone: (newTimeZone) => {
+        if (timeZone !== undefined) {
+          console.warn('LocaleProvider: Attempting to change the ' +
+            "time zone while setting a fixed time zone won't have any effect. " +
+            'Change the timeZone provided to the LocaleProvider instead.')
+          return
+        }
+        if (newTimeZone === undefined) {
+          deleteStoredTimeZone()
+        } else {
+          setStoredTimeZone(newTimeZone)
+        }
+      },
     }}>
       {children}
     </LocaleContext.Provider>
@@ -110,6 +151,14 @@ export const useLocale = () => {
     throw new Error('useLocale must be used within LocaleContext. Try adding a LocaleProvider around your app.')
   }
   return context
+}
+
+export const useTimeZone = () => {
+  const context = useContext(LocaleContext)
+  if (!context) {
+    throw new Error('useTimeZone must be used within LocaleContext. Try adding a LocaleProvider around your app.')
+  }
+  return { timeZone: context.timeZone, setTimeZone: context.setTimeZone }
 }
 
 export const useLanguage = () => {

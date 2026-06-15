@@ -4,6 +4,7 @@ import { CalendarIcon, X } from 'lucide-react'
 import clsx from 'clsx'
 import type { DateTimePickerProps } from '@/src/components/user-interaction/date/DateTimePicker'
 import { useHightideTranslation } from '@/src/i18n/useHightideTranslation'
+import { useLocale } from '@/src/global-contexts/LocaleContext'
 import { Visibility } from '@/src/components/layout/Visibility'
 import type { FormFieldDataHandling } from '../../form/FormField'
 import { DateTimePickerDialog } from '../date/DateTimePickerDialog'
@@ -23,15 +24,8 @@ export interface DateTimeInputProps extends
 {
   initialValue?: Date | null,
   allowRemove?: boolean,
-  /** Shows a clear button on optional fields with a value. Has no effect when required. Defaults to true */
   allowClear?: boolean,
   mode?: DateTimeFormat,
-  /**
-   * Display and edit the value as the wall clock of this IANA time zone (e.g. `'Europe/Berlin'`,
-   * `'UTC'`) instead of the viewer's local zone. The value contract is unchanged: `value`,
-   * `onValueChange` and `onEditComplete` keep using absolute `Date` instants — only the segments
-   * the user sees and types are interpreted in this zone. Leave undefined to use the local zone.
-   */
   timeZone?: string,
   containerProps?: HTMLAttributes<HTMLDivElement>,
   pickerProps?: Omit<DateTimePickerProps, keyof FormFieldDataHandling<Date> | 'mode' | 'initialValue' | 'start' | 'end' | 'weekStart' | 'markToday' | 'is24HourFormat' | 'minuteIncrement' | 'secondIncrement' | 'millisecondIncrement' | 'precision'>,
@@ -40,13 +34,6 @@ export interface DateTimeInputProps extends
   actions?: ReactNode[],
 }
 
-/**
- * An input for picking a date, a time or both.
- *
- * The value can be typed segment by segment with the keyboard or selected from the calendar
- * dialog. Both paths write to the same value, so the displayed input and the stored value
- * always stay in sync.
- */
 export const DateTimeInput = forwardRef<HTMLDivElement, DateTimeInputProps>(function DateTimeInput({
   id: inputId,
   value,
@@ -57,7 +44,7 @@ export const DateTimeInput = forwardRef<HTMLDivElement, DateTimeInputProps>(func
   allowClear = true,
   containerProps,
   mode = 'date',
-  timeZone,
+  timeZone: timeZoneOverride,
   precision = 'minute',
   pickerProps,
   outsideClickCloses = true,
@@ -78,6 +65,8 @@ export const DateTimeInput = forwardRef<HTMLDivElement, DateTimeInputProps>(func
   ...props
 }, forwardedRef) {
   const translation = useHightideTranslation()
+  const { timeZone: contextTimeZone } = useLocale()
+  const timeZone = timeZoneOverride ?? contextTimeZone
   const [isOpen, setIsOpen] = useState(false)
   const [state, setState] = useControlledState<Date | null>({
     value,
@@ -91,9 +80,6 @@ export const DateTimeInput = forwardRef<HTMLDivElement, DateTimeInputProps>(func
     setIsOpen(isOpen)
   }, [onDialogOpeningChange])
 
-  // The field and calendar always work in the local wall clock. When a time zone is given we hand
-  // them a value shifted to that zone's wall clock and convert every edit back to an absolute
-  // instant on the way out, so the public value contract stays time-zone agnostic.
   const toZoned = useCallback((date: Date | null) => DateUtils.toZonedDate(date, timeZone), [timeZone])
   const fromZoned = useCallback((date: Date | null) => DateUtils.fromZonedDate(date, timeZone), [timeZone])
 
