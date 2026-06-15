@@ -1,5 +1,5 @@
 import type { FocusEvent, HTMLAttributes, KeyboardEvent } from 'react'
-import { forwardRef, useEffect, useMemo, useRef, useState } from 'react'
+import { forwardRef, useEffect, useLayoutEffect, useMemo, useRef, useState } from 'react'
 import clsx from 'clsx'
 import { useControlledState } from '@/src/hooks/useControlledState'
 import { useLocale } from '@/src/global-contexts/LocaleContext'
@@ -132,8 +132,17 @@ export const DateTimeField = forwardRef<HTMLDivElement, DateTimeFieldProps>(func
 
   const focusType = (type: EditableSegmentType) => {
     setFocusedType(type)
-    segmentRefs.current.get(type)?.focus()
   }
+
+  useLayoutEffect(() => {
+    if (focusedType === null) {
+      return
+    }
+    const element = segmentRefs.current.get(focusedType)
+    if (element && document.activeElement !== element) {
+      element.focus()
+    }
+  }, [focusedType])
 
   const neighbour = (type: EditableSegmentType, offset: number) => editableTypes[editableTypes.indexOf(type) + offset]
 
@@ -222,7 +231,12 @@ export const DateTimeField = forwardRef<HTMLDivElement, DateTimeFieldProps>(func
       }
       setFocusedType(null)
       const composed = composeDate(editStateRef.current.values, layout, mode, is24Hour, value ?? undefined)
-      onEditComplete?.(composed ?? value ?? null)
+      if (composed) {
+        setEditState({ values: decomposeDate(composed, layout, is24Hour), buffer: null })
+        onEditComplete?.(composed)
+      } else {
+        onEditComplete?.(value ?? null)
+      }
     })
   }
 

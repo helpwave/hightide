@@ -1,6 +1,6 @@
 import type { HTMLAttributes, ReactNode } from 'react'
 import { forwardRef, useCallback, useEffect, useId, useImperativeHandle, useMemo, useRef, useState } from 'react'
-import { CalendarIcon } from 'lucide-react'
+import { CalendarIcon, X } from 'lucide-react'
 import clsx from 'clsx'
 import type { DateTimePickerProps } from '@/src/components/user-interaction/date/DateTimePicker'
 import { useHightideTranslation } from '@/src/i18n/useHightideTranslation'
@@ -23,6 +23,8 @@ export interface DateTimeInputProps extends
 {
   initialValue?: Date | null,
   allowRemove?: boolean,
+  /** Shows a clear button on optional fields with a value. Has no effect when required. Defaults to true */
+  allowClear?: boolean,
   mode?: DateTimeFormat,
   containerProps?: HTMLAttributes<HTMLDivElement>,
   pickerProps?: Omit<DateTimePickerProps, keyof FormFieldDataHandling<Date> | 'mode' | 'initialValue' | 'start' | 'end' | 'weekStart' | 'markToday' | 'is24HourFormat' | 'minuteIncrement' | 'secondIncrement' | 'millisecondIncrement' | 'precision'>,
@@ -45,6 +47,7 @@ export const DateTimeInput = forwardRef<HTMLDivElement, DateTimeInputProps>(func
   onValueChange,
   onEditComplete,
   allowRemove = false,
+  allowClear = true,
   containerProps,
   mode = 'date',
   precision = 'minute',
@@ -147,6 +150,18 @@ export const DateTimeInput = forwardRef<HTMLDivElement, DateTimeInputProps>(func
         />
         <div className="flex-row-1 items-center">
           {actions}
+          <Visibility isVisible={!required && allowClear && !readOnly && !disabled && state !== null}>
+            <IconButton
+              tooltip={translation('clearValue')}
+              coloringStyle="text" color="neutral" size="sm"
+              onClick={() => {
+                setState(null)
+                onEditComplete?.(null)
+              }}
+            >
+              <X className="size-5"/>
+            </IconButton>
+          </Visibility>
           <Visibility isVisible={!readOnly}>
             <IconButton
               tooltip={translation('sDateTimeSelect', { datetimeMode: mode })}

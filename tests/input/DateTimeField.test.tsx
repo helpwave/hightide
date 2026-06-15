@@ -120,6 +120,40 @@ describe('DateTimeField', () => {
     }
   })
 
+  test('auto-advances focus to the next segment once a segment is full', () => {
+    renderField()
+    const [day, month] = screen.getAllByRole('spinbutton')
+
+    act(() => day.focus())
+    typeInto(day, '01')
+
+    expect(document.activeElement).toBe(month)
+  })
+
+  test('normalizes a shorthand year to the stored full year on blur', () => {
+    const frames: FrameRequestCallback[] = []
+    const raf = jest.spyOn(window, 'requestAnimationFrame').mockImplementation((callback) => {
+      frames.push(callback)
+      return frames.length
+    })
+    try {
+      const { onValueChange } = renderField()
+      const [day, month, year] = screen.getAllByRole('spinbutton')
+
+      act(() => day.focus())
+      typeInto(day, '15')
+      typeInto(month, '06')
+      typeInto(year, '03')
+      act(() => (document.activeElement as HTMLElement | null)?.blur())
+      act(() => frames.forEach(frame => frame(0)))
+
+      expect(screen.getAllByRole('spinbutton')[2].textContent).toBe('1903')
+      expect((onValueChange.mock.calls.at(-1)![0] as Date).getFullYear()).toBe(1903)
+    } finally {
+      raf.mockRestore()
+    }
+  })
+
   test('clears the value when all segments are emptied', () => {
     const { onValueChange } = renderField({ initialValue: new Date(2026, 5, 15) })
     const [day, month, year] = screen.getAllByRole('spinbutton')
@@ -166,5 +200,57 @@ describe('DateTimeInput controlled value', () => {
     expect(screen.getAllByRole('spinbutton').map(segment => segment.textContent)).toEqual(['06', '15', '2026'])
     const committed = onValueChange.mock.calls.at(-1)![0] as Date
     expect([committed.getMonth(), committed.getDate(), committed.getFullYear()]).toEqual([5, 15, 2026])
+  })
+})
+
+describe('DateTimeInput clear button', () => {
+  const renderInput = (props: { initialValue?: Date | null, required?: boolean, allowClear?: boolean }) => {
+    const onValueChange = jest.fn()
+    const Wrapper = () => {
+      const [value, setValue] = useState<Date | null>(props.initialValue ?? null)
+      return (
+        <LocaleContext.Provider value={{ locale: 'de-DE', setLocale: () => {} }}>
+          <DateTimeInput
+            mode="date"
+            required={props.required}
+            allowClear={props.allowClear}
+            value={value}
+            onValueChange={(next) => {
+              onValueChange(next)
+              setValue(next)
+            }}
+          />
+        </LocaleContext.Provider>
+      )
+    }
+    render(<Wrapper/>)
+    return { onValueChange }
+  }
+
+  const clearButton = () => screen.queryByRole('button', { name: 'Wert löschen' })
+
+  test('appears for an optional field with a value and clears it', () => {
+    const { onValueChange } = renderInput({ initialValue: new Date(2026, 5, 15) })
+    const button = clearButton()
+    expect(button).not.toBeNull()
+
+    fireEvent.click(button!)
+
+    expect(onValueChange).toHaveBeenLastCalledWith(null)
+  })
+
+  test('is hidden for a required field', () => {
+    renderInput({ initialValue: new Date(2026, 5, 15), required: true })
+    expect(clearButton()).toBeNull()
+  })
+
+  test('is hidden when allowClear is false', () => {
+    renderInput({ initialValue: new Date(2026, 5, 15), allowClear: false })
+    expect(clearButton()).toBeNull()
+  })
+
+  test('is hidden when there is no value', () => {
+    renderInput({ initialValue: null })
+    expect(clearButton()).toBeNull()
   })
 })
