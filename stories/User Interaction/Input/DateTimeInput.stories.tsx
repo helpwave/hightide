@@ -23,6 +23,7 @@ export const dateTimeInput: Story = {
     minuteIncrement: '5min',
     secondIncrement: '1s',
     millisecondIncrement: '100ms',
+    is24HourFormat: true,
     initialValue: null,
     value: undefined,
     onValueChange: action('onValueChange'),
