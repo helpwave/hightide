@@ -7,6 +7,8 @@ export interface UseUpdatingDateStringProps {
   date: Date,
   absoluteFormat?: DateTimeFormat,
   localeOverride?: HightideTranslationLocales,
+  is24HourFormat?: boolean,
+  timeZone?: string,
 }
 
 type DateAndTimeStrings = {
@@ -15,23 +17,24 @@ type DateAndTimeStrings = {
   relative: string,
 }
 
-export const useUpdatingDateString = ({ absoluteFormat = 'dateTime', localeOverride, date }: UseUpdatingDateStringProps) => {
-  // TODO add a parameter to the hightide cofig
-  const { locale: contextLocale } = useLocale()
+export const useUpdatingDateString = ({ absoluteFormat = 'dateTime', localeOverride, is24HourFormat: is24HourFormatOverride, timeZone: timeZoneOverride, date }: UseUpdatingDateStringProps) => {
+  const { locale: contextLocale, is24HourFormat: contextIs24HourFormat, timeZone: contextTimeZone } = useLocale()
   const locale = localeOverride ?? contextLocale
+  const is24HourFormat = is24HourFormatOverride ?? contextIs24HourFormat ?? true
+  const timeZone = timeZoneOverride ?? contextTimeZone
   const [dateAndTimeStrings, setDateAndTimeStrings] = useState<DateAndTimeStrings>({
     compareDate: date,
-    absolute: DateUtils.formatAbsolute(date, locale, absoluteFormat),
+    absolute: DateUtils.formatAbsolute(date, locale, absoluteFormat, { is24HourFormat, timeZone }),
     relative: DateUtils.formatRelative(date, locale),
   })
 
   useEffect(() => {
     setDateAndTimeStrings({
       compareDate: date,
-      absolute: DateUtils.formatAbsolute(date, locale, absoluteFormat),
+      absolute: DateUtils.formatAbsolute(date, locale, absoluteFormat, { is24HourFormat, timeZone }),
       relative: DateUtils.formatRelative(date, locale),
     })
-  }, [date, absoluteFormat, locale])
+  }, [date, absoluteFormat, locale, is24HourFormat, timeZone])
 
   useEffect(() => {
     let timeoutId: NodeJS.Timeout
@@ -53,17 +56,16 @@ export const useUpdatingDateString = ({ absoluteFormat = 'dateTime', localeOverr
       timeoutId = setInterval(() => {
         setDateAndTimeStrings({
           compareDate: date,
-          absolute: DateUtils.formatAbsolute(date, locale, absoluteFormat),
+          absolute: DateUtils.formatAbsolute(date, locale, absoluteFormat, { is24HourFormat, timeZone }),
           relative: DateUtils.formatRelative(date, locale),
         })
-        // We divide by 2 to have cleaner updates
       }, delayInSeconds * 1000 / 2)
     }
 
     startTimer()
 
     return () => clearInterval(timeoutId)
-  }, [absoluteFormat, date, locale])
+  }, [absoluteFormat, date, locale, is24HourFormat, timeZone])
 
   return {
     absolute: dateAndTimeStrings.absolute,

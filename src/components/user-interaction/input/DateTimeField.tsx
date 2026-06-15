@@ -37,12 +37,6 @@ export interface DateTimeFieldProps extends
   locale?: string,
 }
 
-/**
- * A segmented date and time editor where each part is an individually focusable spin button.
- *
- * The displayed segments always reflect the underlying value: any complete and valid edit is
- * committed immediately, so the value passed to the parent never drifts from what is shown.
- */
 export const DateTimeField = forwardRef<HTMLDivElement, DateTimeFieldProps>(function DateTimeField({
   value: controlledValue,
   initialValue = null,
@@ -60,7 +54,7 @@ export const DateTimeField = forwardRef<HTMLDivElement, DateTimeFieldProps>(func
   ...props
 }, forwardedRef) {
   const translation = useHightideTranslation()
-  const { locale: contextLocale } = useLocale()
+  const { locale: contextLocale, is24HourFormat: contextIs24HourFormat } = useLocale()
   const locale = localeOverride ?? contextLocale
 
   const [value, setValue] = useControlledState<Date | null>({
@@ -69,12 +63,7 @@ export const DateTimeField = forwardRef<HTMLDivElement, DateTimeFieldProps>(func
     defaultValue: initialValue,
   })
 
-  const is24Hour = useMemo(() => {
-    if (is24HourFormat !== undefined) {
-      return is24HourFormat
-    }
-    return !new Intl.DateTimeFormat(locale, { hour: 'numeric' }).resolvedOptions().hour12
-  }, [is24HourFormat, locale])
+  const is24Hour = is24HourFormat ?? contextIs24HourFormat ?? true
 
   const layout = useMemo(
     () => buildSegmentLayout({ locale, mode, precision, is24HourFormat: is24Hour }),
@@ -110,6 +99,9 @@ export const DateTimeField = forwardRef<HTMLDivElement, DateTimeFieldProps>(func
   }
 
   useEffect(() => {
+    if (editStateRef.current.buffer) {
+      return
+    }
     const shown = composeDate(editStateRef.current.values, layout, mode, is24Hour, value ?? undefined)
     if ((shown?.getTime() ?? null) === (value?.getTime() ?? null)) {
       return
@@ -122,6 +114,9 @@ export const DateTimeField = forwardRef<HTMLDivElement, DateTimeFieldProps>(func
 
   const apply = (next: SegmentEditState) => {
     setEditState(next)
+    if (next.buffer?.type === 'year') {
+      return
+    }
     const composed = composeDate(next.values, layout, mode, is24Hour, value ?? undefined)
     if (composed) {
       setValue(composed)
@@ -225,6 +220,10 @@ export const DateTimeField = forwardRef<HTMLDivElement, DateTimeFieldProps>(func
   const onFieldBlur = (event: FocusEvent<HTMLDivElement>) => {
     props.onBlur?.(event)
     const field = event.currentTarget
+    const nextFocus = event.relatedTarget
+    if (nextFocus instanceof Node && field.contains(nextFocus)) {
+      return
+    }
     requestAnimationFrame(() => {
       if (field.contains(document.activeElement)) {
         return
@@ -233,6 +232,9 @@ export const DateTimeField = forwardRef<HTMLDivElement, DateTimeFieldProps>(func
       const composed = composeDate(editStateRef.current.values, layout, mode, is24Hour, value ?? undefined)
       if (composed) {
         setEditState({ values: decomposeDate(composed, layout, is24Hour), buffer: null })
+        if (composed.getTime() !== (value?.getTime() ?? null)) {
+          setValue(composed)
+        }
         onEditComplete?.(composed)
       } else {
         onEditComplete?.(value ?? null)

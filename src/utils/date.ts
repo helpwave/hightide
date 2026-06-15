@@ -12,8 +12,8 @@ const timesInSeconds = {
   hour: 3600,
   day: 86400,
   week: 604800,
-  monthImprecise: 2629800, // 30.4375 days
-  yearImprecise: 31557600, // 365.25 days
+  monthImprecise: 2629800,
+  yearImprecise: 31557600,
 } as const
 
 
@@ -34,7 +34,6 @@ const changeDuration = (date: Date, duration: Partial<DurationJSON>, isAdding?: 
     milliseconds = 0,
   } = duration
 
-  // Check ranges
   if (years < 0) {
     console.error(`Range error years must be greater than 0: received ${years}`)
     return new Date(date)
@@ -93,10 +92,6 @@ const subtractDuration = (date: Date, duration: Partial<DurationJSON>): Date => 
   return changeDuration(date, duration, false)
 }
 
-/** Checks if a given date is in the range of two dates
- *
- * An undefined value for startDate or endDate means no bound for the start or end respectively
- */
 const between = (value: Date, startDate?: Date, endDate?: Date): boolean => {
   if (startDate && endDate) {
     console.assert(startDate <= endDate)
@@ -110,7 +105,6 @@ const between = (value: Date, startDate?: Date, endDate?: Date): boolean => {
   }
 }
 
-/** Compare two dates on the year, month, day */
 const equalDate = (date1: Date, date2: Date) => {
   return date1.getFullYear() === date2.getFullYear()
     && date1.getMonth() === date2.getMonth()
@@ -122,7 +116,6 @@ const isLastMillisecondOfDay = (date: Date): boolean => {
   return !equalDate(date, next)
 }
 
-/** The number of days in the given month, where monthIndex is 0-based (0 = January) */
 const daysInMonth = (year: number, monthIndex: number): number => {
   return new Date(year, monthIndex + 1, 0).getDate()
 }
@@ -152,32 +145,125 @@ const withTime = (datePart: Date, timePart: Date): Date => {
   return out
 }
 
+type ZonedParts = {
+  year: number,
+  month: number,
+  day: number,
+  hour: number,
+  minute: number,
+  second: number,
+  millisecond: number,
+}
+
+const zonedPartsFormatterCache = new Map<string, Intl.DateTimeFormat>()
+
+const zonedPartsFormatter = (timeZone: string): Intl.DateTimeFormat => {
+  let formatter = zonedPartsFormatterCache.get(timeZone)
+  if (!formatter) {
+    formatter = new Intl.DateTimeFormat('en-US', {
+      timeZone,
+      hourCycle: 'h23',
+      year: 'numeric',
+      month: '2-digit',
+      day: '2-digit',
+      hour: '2-digit',
+      minute: '2-digit',
+      second: '2-digit',
+    })
+    zonedPartsFormatterCache.set(timeZone, formatter)
+  }
+  return formatter
+}
+
+const zonedParts = (date: Date, timeZone: string): ZonedParts => {
+  const parts: Record<string, string> = {}
+  for (const part of zonedPartsFormatter(timeZone).formatToParts(date)) {
+    if (part.type !== 'literal') {
+      parts[part.type] = part.value
+    }
+  }
+  return {
+    year: Number(parts.year),
+    month: Number(parts.month),
+    day: Number(parts.day),
+    hour: Number(parts.hour) % 24,
+    minute: Number(parts.minute),
+    second: Number(parts.second),
+    millisecond: date.getMilliseconds(),
+  }
+}
+
+const zoneOffsetMs = (date: Date, timeZone: string): number => {
+  const parts = zonedParts(date, timeZone)
+  const asUtc = Date.UTC(parts.year, parts.month - 1, parts.day, parts.hour, parts.minute, parts.second, parts.millisecond)
+  return asUtc - date.getTime()
+}
+
+function toZonedDate(date: Date, timeZone?: string): Date
+function toZonedDate(date: null, timeZone?: string): null
+function toZonedDate(date: Date | null, timeZone?: string): Date | null
+function toZonedDate(date: Date | null, timeZone?: string): Date | null {
+  if (!date || !timeZone) {
+    return date
+  }
+  const parts = zonedParts(date, timeZone)
+  return new Date(parts.year, parts.month - 1, parts.day, parts.hour, parts.minute, parts.second, parts.millisecond)
+}
+
+function fromZonedDate(date: Date, timeZone?: string): Date
+function fromZonedDate(date: null, timeZone?: string): null
+function fromZonedDate(date: Date | null, timeZone?: string): Date | null
+function fromZonedDate(date: Date | null, timeZone?: string): Date | null {
+  if (!date || !timeZone) {
+    return date
+  }
+  const asUtc = Date.UTC(
+    date.getFullYear(), date.getMonth(), date.getDate(),
+    date.getHours(), date.getMinutes(), date.getSeconds(), date.getMilliseconds()
+  )
+  let offset = zoneOffsetMs(new Date(asUtc), timeZone)
+  const refined = zoneOffsetMs(new Date(asUtc - offset), timeZone)
+  if (refined !== offset) {
+    offset = refined
+  }
+  return new Date(asUtc - offset)
+}
+
 const weeksForCalenderMonth = (date: Date, weekStart: WeekDay, weeks: number = 6) => {
   const month = date.getMonth()
   const year = date.getFullYear()
 
   const dayList: Date[] = []
-  let currentDate = new Date(year, month, 1) // Start of month
+  let currentDate = new Date(year, month, 1)
   const weekStartIndex = weekDayList.indexOf(weekStart)
 
-  // Move the current day to the week before
   while (currentDate.getDay() !== weekStartIndex) {
     currentDate = subtractDuration(currentDate, { days: 1 })
   }
 
   while (dayList.length < 7 * weeks) {
     const date = new Date(currentDate)
-    date.setHours(date.getHours(), date.getMinutes()) // To make sure we are not overwriting the time
+    date.setHours(date.getHours(), date.getMinutes())
     dayList.push(date)
     currentDate = addDuration(currentDate, { days: 1 })
   }
 
-  // weeks
   return equalSizeGroups(dayList, 7)
 }
 
-const formatAbsolute = (date: Date, locale: string, format: DateTimeFormat) => {
+type FormatAbsoluteOptions = {
+  timeZone?: string,
+  is24HourFormat?: boolean,
+}
+
+const formatAbsolute = (date: Date, locale: string, format: DateTimeFormat, { timeZone, is24HourFormat = true }: FormatAbsoluteOptions = {}) => {
   let options: Intl.DateTimeFormatOptions
+
+  const timeOptions: Intl.DateTimeFormatOptions = {
+    hour: '2-digit',
+    minute: '2-digit',
+    hourCycle: is24HourFormat ? 'h23' : 'h12',
+  }
 
   switch (format) {
   case 'date':
@@ -189,8 +275,7 @@ const formatAbsolute = (date: Date, locale: string, format: DateTimeFormat) => {
     break
   case 'time':
     options = {
-      hour: '2-digit',
-      minute: '2-digit',
+      ...timeOptions,
     }
     break
   case 'dateTime':
@@ -198,13 +283,12 @@ const formatAbsolute = (date: Date, locale: string, format: DateTimeFormat) => {
       year: 'numeric',
       month: '2-digit',
       day: '2-digit',
-      hour: '2-digit',
-      minute: '2-digit',
+      ...timeOptions,
     }
     break
   }
 
-  return new Intl.DateTimeFormat(locale, options).format(date)
+  return new Intl.DateTimeFormat(locale, { ...options, timeZone }).format(date)
 }
 
 const formatRelative = (date: Date, locale: string) => {
@@ -297,6 +381,9 @@ export const DateUtils = {
   daysInMonth,
   sameTime,
   withTime,
+  zonedParts,
+  toZonedDate,
+  fromZonedDate,
   formatAbsolute,
   formatRelative,
   addDuration,
@@ -307,8 +394,5 @@ export const DateUtils = {
   toInputString,
   tryParseDate,
   toOnlyDate: normalizeToDateOnly,
-  /**
-   * Normalizes a datetime by removing seconds and milliseconds.
-   */
   toDateTimeOnly: normalizeDatetime,
 }

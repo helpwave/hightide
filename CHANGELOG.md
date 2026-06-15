@@ -5,6 +5,19 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/)
 and adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [0.10.1] - 2026-06-15
+
+### Added
+- `timeZone` and `is24HourFormat` to the `LocaleProvider`/`LocaleContext` (default 24 hour format), used by the date and time inputs, pickers, `TimeDisplay`, `DateProperty` and `useUpdatingDateString`, with optional per-component overrides
+- `DateUtils.toZonedDate`, `DateUtils.fromZonedDate` and `DateUtils.zonedParts`
+
+### Changed
+- `DateProperty` now forwards the full `DateTimeInput` event API (`Date | null` values, `onEditComplete`, `timeZone`, `is24HourFormat`, ranges, ...)
+
+### Fixed
+- Typing a full year (e.g. `2004`) into `DateTimeInput`/`FlexibleDateTimeInput` no longer resets to a 1900s year
+- Date and time segments no longer fire `onEditComplete` while focus auto-advances between segments
+
 ## [0.10.0] - 2026-06-15
 
 ### Changed

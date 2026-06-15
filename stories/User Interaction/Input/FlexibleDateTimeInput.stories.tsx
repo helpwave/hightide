@@ -5,8 +5,17 @@ import { FlexibleDateTimeInput } from '@/src/components/user-interaction/input/F
 import { TimeDisplay } from '@/src/components/user-interaction/date/TimeDisplay'
 import { LocaleContext } from '@/src/global-contexts/LocaleContext'
 
+const timeZones = ['', 'UTC', 'America/New_York', 'Europe/Berlin', 'Asia/Tokyo', 'Pacific/Kiritimati']
+
 const meta: Meta<typeof FlexibleDateTimeInput> = {
   component: FlexibleDateTimeInput,
+  argTypes: {
+    timeZone: {
+      control: 'select',
+      options: timeZones,
+      description: 'Display and edit the value in this IANA time zone. Empty uses the local zone.',
+    },
+  },
 }
 
 export default meta
@@ -24,18 +33,19 @@ export const flexibleDateTimeInput: Story = {
     secondIncrement: '1s',
     millisecondIncrement: '100ms',
     is24HourFormat: true,
+    timeZone: '',
     initialValue: null,
     value: undefined,
     onValueChange: action('onValueChange'),
     onEditComplete: action('onEditComplete'),
   },
-  render: (args) => {
+  render: ({ is24HourFormat, timeZone, ...args }) => {
     const [value, setValue] = useState<Date | null>(args.initialValue ?? null)
     useEffect(() => {
       setValue(args.value ?? args.initialValue ?? null)
     }, [args.value, args.initialValue])
     return (
-      <LocaleContext.Provider value={{ locale: 'de-DE', setLocale: () => {} }}>
+      <LocaleContext.Provider value={{ locale: 'de-DE', setLocale: () => {}, is24HourFormat, timeZone: timeZone || undefined }}>
         <div className="flex-col-2 w-full max-w-md">
           <FlexibleDateTimeInput
             {...args}
@@ -51,6 +61,15 @@ export const flexibleDateTimeInput: Story = {
           />
           <div className="flex-col-1 text-sm text-description">
             <pre>value = {value === null ? 'null' : value.toISOString()}</pre>
+            {value && timeZone && (
+              <pre>
+                {`in ${timeZone} = ${new Intl.DateTimeFormat('de-DE', {
+                  timeZone,
+                  dateStyle: 'short',
+                  timeStyle: 'medium',
+                }).format(value)}`}
+              </pre>
+            )}
             {value && <TimeDisplay date={value} mode="date"/>}
           </div>
         </div>

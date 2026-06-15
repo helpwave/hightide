@@ -4,6 +4,7 @@ import { CalendarIcon, X } from 'lucide-react'
 import clsx from 'clsx'
 import type { DateTimePickerProps } from '@/src/components/user-interaction/date/DateTimePicker'
 import { useHightideTranslation } from '@/src/i18n/useHightideTranslation'
+import { useLocale } from '@/src/global-contexts/LocaleContext'
 import { Visibility } from '@/src/components/layout/Visibility'
 import type { FormFieldDataHandling } from '../../form/FormField'
 import { DateTimePickerDialog } from '../date/DateTimePickerDialog'
@@ -12,7 +13,7 @@ import { PropsUtil } from '@/src/utils/propsUtil'
 import type { FormFieldInteractionStates } from '@/src/components/form/FieldLayout'
 import { PopUp } from '../../layout/popup/PopUp'
 import { IconButton } from '../IconButton'
-import type { DateTimeFormat } from '@/src/utils/date'
+import { DateUtils, type DateTimeFormat } from '@/src/utils/date'
 import { DateTimeField } from './DateTimeField'
 
 export interface DateTimeInputProps extends
@@ -23,9 +24,9 @@ export interface DateTimeInputProps extends
 {
   initialValue?: Date | null,
   allowRemove?: boolean,
-  /** Shows a clear button on optional fields with a value. Has no effect when required. Defaults to true */
   allowClear?: boolean,
   mode?: DateTimeFormat,
+  timeZone?: string,
   containerProps?: HTMLAttributes<HTMLDivElement>,
   pickerProps?: Omit<DateTimePickerProps, keyof FormFieldDataHandling<Date> | 'mode' | 'initialValue' | 'start' | 'end' | 'weekStart' | 'markToday' | 'is24HourFormat' | 'minuteIncrement' | 'secondIncrement' | 'millisecondIncrement' | 'precision'>,
   outsideClickCloses?: boolean,
@@ -33,13 +34,6 @@ export interface DateTimeInputProps extends
   actions?: ReactNode[],
 }
 
-/**
- * An input for picking a date, a time or both.
- *
- * The value can be typed segment by segment with the keyboard or selected from the calendar
- * dialog. Both paths write to the same value, so the displayed input and the stored value
- * always stay in sync.
- */
 export const DateTimeInput = forwardRef<HTMLDivElement, DateTimeInputProps>(function DateTimeInput({
   id: inputId,
   value,
@@ -50,6 +44,7 @@ export const DateTimeInput = forwardRef<HTMLDivElement, DateTimeInputProps>(func
   allowClear = true,
   containerProps,
   mode = 'date',
+  timeZone: timeZoneOverride,
   precision = 'minute',
   pickerProps,
   outsideClickCloses = true,
@@ -70,6 +65,8 @@ export const DateTimeInput = forwardRef<HTMLDivElement, DateTimeInputProps>(func
   ...props
 }, forwardedRef) {
   const translation = useHightideTranslation()
+  const { timeZone: contextTimeZone } = useLocale()
+  const timeZone = timeZoneOverride ?? contextTimeZone
   const [isOpen, setIsOpen] = useState(false)
   const [state, setState] = useControlledState<Date | null>({
     value,
@@ -82,6 +79,9 @@ export const DateTimeInput = forwardRef<HTMLDivElement, DateTimeInputProps>(func
     onDialogOpeningChange?.(isOpen)
     setIsOpen(isOpen)
   }, [onDialogOpeningChange])
+
+  const toZoned = useCallback((date: Date | null) => DateUtils.toZonedDate(date, timeZone), [timeZone])
+  const fromZoned = useCallback((date: Date | null) => DateUtils.fromZonedDate(date, timeZone), [timeZone])
 
   const generatedId = useId()
   const ids = useMemo(() => ({
@@ -134,7 +134,7 @@ export const DateTimeInput = forwardRef<HTMLDivElement, DateTimeInputProps>(func
       >
         <DateTimeField
           ref={fieldRef}
-          value={state}
+          value={toZoned(state)}
           mode={mode}
           precision={precision}
           is24HourFormat={is24HourFormat}
@@ -142,8 +142,8 @@ export const DateTimeInput = forwardRef<HTMLDivElement, DateTimeInputProps>(func
           readOnly={readOnly}
           invalid={invalid}
           required={required}
-          onValueChange={setState}
-          onEditComplete={onEditComplete}
+          onValueChange={(next) => setState(fromZoned(next))}
+          onEditComplete={(next) => onEditComplete?.(fromZoned(next))}
           aria-labelledby={props['aria-labelledby']}
           aria-describedby={props['aria-describedby']}
           className="grow"
@@ -201,18 +201,19 @@ export const DateTimeInput = forwardRef<HTMLDivElement, DateTimeInputProps>(func
         className="flex-col-2 p-2"
       >
         <DateTimePickerDialog
-          value={dialogValue}
+          value={toZoned(dialogValue)}
           allowRemove={allowRemove}
-          onValueChange={setDialogValue}
+          onValueChange={(value) => setDialogValue(fromZoned(value))}
           onEditComplete={(value) => {
-            setState(value)
-            onEditComplete?.(value)
+            const absolute = fromZoned(value)
+            setState(absolute)
+            onEditComplete?.(absolute)
             changeOpenWrapper(false)
           }}
           pickerProps={pickerProps}
           mode={mode}
-          start={start}
-          end={end}
+          start={toZoned(start ?? null) ?? undefined}
+          end={toZoned(end ?? null) ?? undefined}
           weekStart={weekStart}
           markToday={markToday}
           is24HourFormat={is24HourFormat}

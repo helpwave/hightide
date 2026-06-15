@@ -4,29 +4,18 @@ import type { HightideTranslationLocales } from '@/src/i18n/translations'
 import type { DeepPartial } from '@/src/utils/typing'
 
 export type TooltipConfig = {
-  /**
-   * Number of milliseconds until the tooltip appears
-   */
   appearDelay: number,
   isAnimated: boolean,
 }
 
 export type ThemeConfig = {
-  /**
-   * The initial theme to show when:
-   * 1. The system preference is not or cannot be loaded
-   * 2. The user has not set an app preference
-   */
   initialTheme: ResolvedTheme,
 }
 
 export type LocalizationConfig = {
-  /**
-   * The initial locale to use when:
-   * 1. The system preference is not or cannot be loaded
-   * 2. The user has not set an app preference
-   */
   defaultLocale: HightideTranslationLocales,
+  defaultTimeZone?: string,
+  defaultIs24HourFormat?: boolean,
 }
 
 export type HightideConfig = {
