@@ -152,6 +152,107 @@ const withTime = (datePart: Date, timePart: Date): Date => {
   return out
 }
 
+type ZonedParts = {
+  year: number,
+  /** 1-based month, matching the human reading of a clock rather than Date#getMonth. */
+  month: number,
+  day: number,
+  hour: number,
+  minute: number,
+  second: number,
+  millisecond: number,
+}
+
+const zonedPartsFormatterCache = new Map<string, Intl.DateTimeFormat>()
+
+const zonedPartsFormatter = (timeZone: string): Intl.DateTimeFormat => {
+  let formatter = zonedPartsFormatterCache.get(timeZone)
+  if (!formatter) {
+    formatter = new Intl.DateTimeFormat('en-US', {
+      timeZone,
+      hourCycle: 'h23',
+      year: 'numeric',
+      month: '2-digit',
+      day: '2-digit',
+      hour: '2-digit',
+      minute: '2-digit',
+      second: '2-digit',
+    })
+    zonedPartsFormatterCache.set(timeZone, formatter)
+  }
+  return formatter
+}
+
+/** The wall clock fields of an instant as observed in the given IANA time zone. */
+const zonedParts = (date: Date, timeZone: string): ZonedParts => {
+  const parts: Record<string, string> = {}
+  for (const part of zonedPartsFormatter(timeZone).formatToParts(date)) {
+    if (part.type !== 'literal') {
+      parts[part.type] = part.value
+    }
+  }
+  return {
+    year: Number(parts.year),
+    month: Number(parts.month),
+    day: Number(parts.day),
+    // h23 still renders midnight as '24' in some engines, so fold it back to 0.
+    hour: Number(parts.hour) % 24,
+    minute: Number(parts.minute),
+    second: Number(parts.second),
+    // Milliseconds are identical in every time zone, so read them straight off the instant.
+    millisecond: date.getMilliseconds(),
+  }
+}
+
+const zoneOffsetMs = (date: Date, timeZone: string): number => {
+  const parts = zonedParts(date, timeZone)
+  const asUtc = Date.UTC(parts.year, parts.month - 1, parts.day, parts.hour, parts.minute, parts.second, parts.millisecond)
+  return asUtc - date.getTime()
+}
+
+/**
+ * Re-expresses an absolute instant as a "wall clock" Date in the runtime's local zone whose
+ * fields (getFullYear, getHours, …) read the same as a clock standing in `timeZone`.
+ *
+ * Passing no time zone returns the input unchanged, so an optional override can be threaded
+ * through without branching. The result is only meant for reading or editing the displayed
+ * fields; convert it back with {@link fromZonedDate} before exposing it as a real value again.
+ */
+function toZonedDate(date: Date, timeZone?: string): Date
+function toZonedDate(date: null, timeZone?: string): null
+function toZonedDate(date: Date | null, timeZone?: string): Date | null
+function toZonedDate(date: Date | null, timeZone?: string): Date | null {
+  if (!date || !timeZone) {
+    return date
+  }
+  const parts = zonedParts(date, timeZone)
+  return new Date(parts.year, parts.month - 1, parts.day, parts.hour, parts.minute, parts.second, parts.millisecond)
+}
+
+/**
+ * Inverse of {@link toZonedDate}: reads the local wall clock fields of `date` as if they were
+ * a clock reading in `timeZone` and returns the matching absolute instant.
+ */
+function fromZonedDate(date: Date, timeZone?: string): Date
+function fromZonedDate(date: null, timeZone?: string): null
+function fromZonedDate(date: Date | null, timeZone?: string): Date | null
+function fromZonedDate(date: Date | null, timeZone?: string): Date | null {
+  if (!date || !timeZone) {
+    return date
+  }
+  const asUtc = Date.UTC(
+    date.getFullYear(), date.getMonth(), date.getDate(),
+    date.getHours(), date.getMinutes(), date.getSeconds(), date.getMilliseconds()
+  )
+  // Two passes so a wall clock sitting next to a DST transition resolves to the correct offset.
+  let offset = zoneOffsetMs(new Date(asUtc), timeZone)
+  const refined = zoneOffsetMs(new Date(asUtc - offset), timeZone)
+  if (refined !== offset) {
+    offset = refined
+  }
+  return new Date(asUtc - offset)
+}
+
 const weeksForCalenderMonth = (date: Date, weekStart: WeekDay, weeks: number = 6) => {
   const month = date.getMonth()
   const year = date.getFullYear()
@@ -297,6 +398,9 @@ export const DateUtils = {
   daysInMonth,
   sameTime,
   withTime,
+  zonedParts,
+  toZonedDate,
+  fromZonedDate,
   formatAbsolute,
   formatRelative,
   addDuration,

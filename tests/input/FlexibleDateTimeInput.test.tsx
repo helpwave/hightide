@@ -2,7 +2,7 @@
  * @jest-environment jsdom
  */
 import { useState } from 'react'
-import { fireEvent, render, screen } from '@testing-library/react'
+import { act, fireEvent, render, screen } from '@testing-library/react'
 import { LocaleContext } from '../../src/global-contexts/LocaleContext'
 import { FlexibleDateTimeInput, type FlexibleDateTimeInputProps } from '../../src/components/user-interaction/input/FlexibleDateTimeInput'
 
@@ -30,6 +30,11 @@ const renderFlexible = (props: Partial<FlexibleDateTimeInputProps> & { defaultMo
 const toggleMode = () => fireEvent.click(screen.getAllByRole('button')[0])
 const segmentCount = () => screen.getAllByRole('spinbutton').length
 const lastValue = (mock: jest.Mock): Date => mock.mock.calls.at(-1)![0] as Date
+const typeInto = (segment: HTMLElement, digits: string) => {
+  for (const digit of digits) {
+    fireEvent.keyDown(segment, { key: digit })
+  }
+}
 
 describe('FlexibleDateTimeInput mode toggle', () => {
   test('date to date time without a value reveals the time segments', () => {
@@ -71,6 +76,18 @@ describe('FlexibleDateTimeInput mode toggle', () => {
     expect(segmentCount()).toBe(3)
     const committed = lastValue(onValueChange)
     expect([committed.getHours(), committed.getMinutes(), committed.getSeconds(), committed.getMilliseconds()]).toEqual([23, 59, 59, 999])
+  })
+
+  test('lets a full year be typed over an existing value without snapping to the 1900s', () => {
+    const { onValueChange } = renderFlexible({ defaultMode: 'date', initialValue: new Date(2026, 0, 1, 23, 59, 59, 999) })
+    // German order is day, month, year.
+    const year = screen.getAllByRole('spinbutton')[2]
+
+    act(() => year.focus())
+    typeInto(year, '2004')
+
+    expect(screen.getAllByRole('spinbutton')[2].textContent).toBe('2004')
+    expect(lastValue(onValueChange).getFullYear()).toBe(2004)
   })
 
   test('uses 24 hour time without a day period for German', () => {

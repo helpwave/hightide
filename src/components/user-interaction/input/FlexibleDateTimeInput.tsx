@@ -24,6 +24,7 @@ export const FlexibleDateTimeInput = forwardRef<HTMLDivElement, FlexibleDateTime
   initialValue,
   onValueChange,
   fixedTime: fixedTimeOverride,
+  timeZone,
   actions = [],
   ...props
 }, forwardedRef) {
@@ -34,20 +35,29 @@ export const FlexibleDateTimeInput = forwardRef<HTMLDivElement, FlexibleDateTime
     onValueChange,
     defaultValue: initialValue,
   })
+
+  // The "fixed time" anchor is a wall clock concept, so the comparisons and rewrites below happen
+  // in the display zone. Values stay absolute instants on the wire; only this internal time math
+  // is shifted into the chosen zone.
+  const zoned = (date: Date) => DateUtils.toZonedDate(date, timeZone)
+  const unzoned = (date: Date) => DateUtils.fromZonedDate(date, timeZone)
+  const hasFixedTime = (date: Date) => DateUtils.sameTime(zoned(date), fixedTime, true, true)
+
   const [mode, setMode] = useState<Exclude<DateTimeFormat, 'time'>>(() => {
-    if (value && !DateUtils.sameTime(value, fixedTime, true, true)) {
+    if (value && !hasFixedTime(value)) {
       return 'dateTime'
     }
     return defaultMode
   })
 
-  const toDate = (date: Date) => DateUtils.withTime(date, fixedTime)
-  const toDateTime = (date: Date) => DateUtils.sameTime(date, fixedTime, true, true) ? DateUtils.withTime(date, new Date()) : date
+  const toDate = (date: Date) => unzoned(DateUtils.withTime(zoned(date), fixedTime))
+  const toDateTime = (date: Date) => hasFixedTime(date) ? unzoned(DateUtils.withTime(zoned(date), zoned(new Date()))) : date
 
   return (
     <DateTimeInput
       {...props}
       ref={forwardedRef}
+      timeZone={timeZone}
       mode={mode}
       value={value}
       onValueChange={(next) => {

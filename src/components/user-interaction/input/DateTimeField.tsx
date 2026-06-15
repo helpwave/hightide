@@ -110,6 +110,11 @@ export const DateTimeField = forwardRef<HTMLDivElement, DateTimeFieldProps>(func
   }
 
   useEffect(() => {
+    // Never overwrite a segment that is mid-entry: while a buffer is held the displayed digits
+    // are ahead of the committed value on purpose, and echoing the value back would clobber them.
+    if (editStateRef.current.buffer) {
+      return
+    }
     const shown = composeDate(editStateRef.current.values, layout, mode, is24Hour, value ?? undefined)
     if ((shown?.getTime() ?? null) === (value?.getTime() ?? null)) {
       return
@@ -122,6 +127,14 @@ export const DateTimeField = forwardRef<HTMLDivElement, DateTimeFieldProps>(func
 
   const apply = (next: SegmentEditState) => {
     setEditState(next)
+    // Hold off on committing a half-typed year. A one to three digit year is a valid number but
+    // almost never what the user means, and committing it would emit (and round-trip) a stray date
+    // such as 0002/1902 on the way to "2004". The year is committed once it is fully typed (the
+    // buffer clears on auto-advance) or when focus leaves the field, where a shorthand year is
+    // expanded the same way arrow stepping already does.
+    if (next.buffer?.type === 'year') {
+      return
+    }
     const composed = composeDate(next.values, layout, mode, is24Hour, value ?? undefined)
     if (composed) {
       setValue(composed)
@@ -233,6 +246,10 @@ export const DateTimeField = forwardRef<HTMLDivElement, DateTimeFieldProps>(func
       const composed = composeDate(editStateRef.current.values, layout, mode, is24Hour, value ?? undefined)
       if (composed) {
         setEditState({ values: decomposeDate(composed, layout, is24Hour), buffer: null })
+        // A deferred or shorthand year is only committed here, once the user has left the field.
+        if (composed.getTime() !== (value?.getTime() ?? null)) {
+          setValue(composed)
+        }
         onEditComplete?.(composed)
       } else {
         onEditComplete?.(value ?? null)

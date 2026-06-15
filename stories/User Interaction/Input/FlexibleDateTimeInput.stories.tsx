@@ -5,8 +5,17 @@ import { FlexibleDateTimeInput } from '@/src/components/user-interaction/input/F
 import { TimeDisplay } from '@/src/components/user-interaction/date/TimeDisplay'
 import { LocaleContext } from '@/src/global-contexts/LocaleContext'
 
+const timeZones = ['', 'UTC', 'America/New_York', 'Europe/Berlin', 'Asia/Tokyo', 'Pacific/Kiritimati']
+
 const meta: Meta<typeof FlexibleDateTimeInput> = {
   component: FlexibleDateTimeInput,
+  argTypes: {
+    timeZone: {
+      control: 'select',
+      options: timeZones,
+      description: 'Display and edit the value in this IANA time zone. Empty uses the local zone.',
+    },
+  },
 }
 
 export default meta
@@ -24,6 +33,7 @@ export const flexibleDateTimeInput: Story = {
     secondIncrement: '1s',
     millisecondIncrement: '100ms',
     is24HourFormat: true,
+    timeZone: '',
     initialValue: null,
     value: undefined,
     onValueChange: action('onValueChange'),
@@ -51,6 +61,15 @@ export const flexibleDateTimeInput: Story = {
           />
           <div className="flex-col-1 text-sm text-description">
             <pre>value = {value === null ? 'null' : value.toISOString()}</pre>
+            {value && args.timeZone && (
+              <pre>
+                {`in ${args.timeZone} = ${new Intl.DateTimeFormat('de-DE', {
+                  timeZone: args.timeZone,
+                  dateStyle: 'short',
+                  timeStyle: 'medium',
+                }).format(value)}`}
+              </pre>
+            )}
             {value && <TimeDisplay date={value} mode="date"/>}
           </div>
         </div>

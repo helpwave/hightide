@@ -12,7 +12,7 @@ import { PropsUtil } from '@/src/utils/propsUtil'
 import type { FormFieldInteractionStates } from '@/src/components/form/FieldLayout'
 import { PopUp } from '../../layout/popup/PopUp'
 import { IconButton } from '../IconButton'
-import type { DateTimeFormat } from '@/src/utils/date'
+import { DateUtils, type DateTimeFormat } from '@/src/utils/date'
 import { DateTimeField } from './DateTimeField'
 
 export interface DateTimeInputProps extends
@@ -26,6 +26,13 @@ export interface DateTimeInputProps extends
   /** Shows a clear button on optional fields with a value. Has no effect when required. Defaults to true */
   allowClear?: boolean,
   mode?: DateTimeFormat,
+  /**
+   * Display and edit the value as the wall clock of this IANA time zone (e.g. `'Europe/Berlin'`,
+   * `'UTC'`) instead of the viewer's local zone. The value contract is unchanged: `value`,
+   * `onValueChange` and `onEditComplete` keep using absolute `Date` instants — only the segments
+   * the user sees and types are interpreted in this zone. Leave undefined to use the local zone.
+   */
+  timeZone?: string,
   containerProps?: HTMLAttributes<HTMLDivElement>,
   pickerProps?: Omit<DateTimePickerProps, keyof FormFieldDataHandling<Date> | 'mode' | 'initialValue' | 'start' | 'end' | 'weekStart' | 'markToday' | 'is24HourFormat' | 'minuteIncrement' | 'secondIncrement' | 'millisecondIncrement' | 'precision'>,
   outsideClickCloses?: boolean,
@@ -50,6 +57,7 @@ export const DateTimeInput = forwardRef<HTMLDivElement, DateTimeInputProps>(func
   allowClear = true,
   containerProps,
   mode = 'date',
+  timeZone,
   precision = 'minute',
   pickerProps,
   outsideClickCloses = true,
@@ -82,6 +90,12 @@ export const DateTimeInput = forwardRef<HTMLDivElement, DateTimeInputProps>(func
     onDialogOpeningChange?.(isOpen)
     setIsOpen(isOpen)
   }, [onDialogOpeningChange])
+
+  // The field and calendar always work in the local wall clock. When a time zone is given we hand
+  // them a value shifted to that zone's wall clock and convert every edit back to an absolute
+  // instant on the way out, so the public value contract stays time-zone agnostic.
+  const toZoned = useCallback((date: Date | null) => DateUtils.toZonedDate(date, timeZone), [timeZone])
+  const fromZoned = useCallback((date: Date | null) => DateUtils.fromZonedDate(date, timeZone), [timeZone])
 
   const generatedId = useId()
   const ids = useMemo(() => ({
@@ -134,7 +148,7 @@ export const DateTimeInput = forwardRef<HTMLDivElement, DateTimeInputProps>(func
       >
         <DateTimeField
           ref={fieldRef}
-          value={state}
+          value={toZoned(state)}
           mode={mode}
           precision={precision}
           is24HourFormat={is24HourFormat}
@@ -142,8 +156,8 @@ export const DateTimeInput = forwardRef<HTMLDivElement, DateTimeInputProps>(func
           readOnly={readOnly}
           invalid={invalid}
           required={required}
-          onValueChange={setState}
-          onEditComplete={onEditComplete}
+          onValueChange={(next) => setState(fromZoned(next))}
+          onEditComplete={(next) => onEditComplete?.(fromZoned(next))}
           aria-labelledby={props['aria-labelledby']}
           aria-describedby={props['aria-describedby']}
           className="grow"
@@ -201,18 +215,19 @@ export const DateTimeInput = forwardRef<HTMLDivElement, DateTimeInputProps>(func
         className="flex-col-2 p-2"
       >
         <DateTimePickerDialog
-          value={dialogValue}
+          value={toZoned(dialogValue)}
           allowRemove={allowRemove}
-          onValueChange={setDialogValue}
+          onValueChange={(value) => setDialogValue(fromZoned(value))}
           onEditComplete={(value) => {
-            setState(value)
-            onEditComplete?.(value)
+            const absolute = fromZoned(value)
+            setState(absolute)
+            onEditComplete?.(absolute)
             changeOpenWrapper(false)
           }}
           pickerProps={pickerProps}
           mode={mode}
-          start={start}
-          end={end}
+          start={toZoned(start ?? null) ?? undefined}
+          end={toZoned(end ?? null) ?? undefined}
           weekStart={weekStart}
           markToday={markToday}
           is24HourFormat={is24HourFormat}
