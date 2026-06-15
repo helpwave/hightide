@@ -1,4 +1,4 @@
-import type { HTMLAttributes, InputHTMLAttributes, ReactNode } from 'react'
+import type { HTMLAttributes, ReactNode } from 'react'
 import { forwardRef, useCallback, useEffect, useId, useImperativeHandle, useMemo, useRef, useState } from 'react'
 import { CalendarIcon } from 'lucide-react'
 import clsx from 'clsx'
@@ -12,14 +12,14 @@ import { PropsUtil } from '@/src/utils/propsUtil'
 import type { FormFieldInteractionStates } from '@/src/components/form/FieldLayout'
 import { PopUp } from '../../layout/popup/PopUp'
 import { IconButton } from '../IconButton'
-import { DateUtils, type DateTimeFormat } from '@/src/utils/date'
-import { useDelay } from '@/src/hooks/useDelay'
+import type { DateTimeFormat } from '@/src/utils/date'
+import { DateTimeField } from './DateTimeField'
 
 export interface DateTimeInputProps extends
   Partial<FormFieldInteractionStates>,
-  Omit<InputHTMLAttributes<HTMLInputElement>, 'defaultValue' | 'value' | 'placeholder'>,
+  Omit<HTMLAttributes<HTMLDivElement>, 'defaultValue' | 'onChange'>,
   Partial<FormFieldDataHandling<Date | null>>,
-  Pick<DateTimePickerProps, 'mode' | 'start' | 'end' | 'weekStart' | 'markToday' | 'is24HourFormat' | 'minuteIncrement' | 'secondIncrement' | 'millisecondIncrement' | 'precision'>
+  Pick<DateTimePickerProps, 'start' | 'end' | 'weekStart' | 'markToday' | 'is24HourFormat' | 'minuteIncrement' | 'secondIncrement' | 'millisecondIncrement' | 'precision'>
 {
   initialValue?: Date | null,
   allowRemove?: boolean,
@@ -31,7 +31,14 @@ export interface DateTimeInputProps extends
   actions?: ReactNode[],
 }
 
-export const DateTimeInput = forwardRef<HTMLInputElement, DateTimeInputProps>(function DateTimeInput({
+/**
+ * An input for picking a date, a time or both.
+ *
+ * The value can be typed segment by segment with the keyboard or selected from the calendar
+ * dialog. Both paths write to the same value, so the displayed input and the stored value
+ * always stay in sync.
+ */
+export const DateTimeInput = forwardRef<HTMLDivElement, DateTimeInputProps>(function DateTimeInput({
   id: inputId,
   value,
   initialValue = null,
@@ -40,6 +47,7 @@ export const DateTimeInput = forwardRef<HTMLInputElement, DateTimeInputProps>(fu
   allowRemove = false,
   containerProps,
   mode = 'date',
+  precision = 'minute',
   pickerProps,
   outsideClickCloses = true,
   onDialogOpeningChange,
@@ -51,7 +59,6 @@ export const DateTimeInput = forwardRef<HTMLInputElement, DateTimeInputProps>(fu
   minuteIncrement,
   secondIncrement,
   millisecondIncrement,
-  precision,
   disabled = false,
   readOnly = false,
   invalid = false,
@@ -67,16 +74,6 @@ export const DateTimeInput = forwardRef<HTMLInputElement, DateTimeInputProps>(fu
     defaultValue: initialValue,
   })
   const [dialogValue, setDialogValue] = useState<Date | null>(state)
-  const [stringInputState, setStringInputState] = useState<{ state: string, date?: Date, mode: DateTimeFormat }>({
-    state: state ? DateUtils.toInputString(state, mode, precision) : '',
-    date: undefined,
-    mode,
-  })
-
-  const safeInputString = useMemo(() => {
-    if(!state) return ''
-    return stringInputState.mode !== mode ? DateUtils.toInputString(state, mode, precision) : stringInputState.state
-  }, [stringInputState.mode, stringInputState.state, mode, state, precision])
 
   const changeOpenWrapper = useCallback((isOpen: boolean) => {
     onDialogOpeningChange?.(isOpen)
@@ -90,8 +87,9 @@ export const DateTimeInput = forwardRef<HTMLInputElement, DateTimeInputProps>(fu
     label: `date-time-input-label-${generatedId}`,
   }), [generatedId, inputId])
 
-  const innerRef = useRef<HTMLInputElement>(null)
-  useImperativeHandle(forwardedRef, () => innerRef.current)
+  const controlRef = useRef<HTMLDivElement>(null)
+  const fieldRef = useRef<HTMLDivElement>(null)
+  useImperativeHandle(forwardedRef, () => controlRef.current as HTMLDivElement)
 
   useEffect(() => {
     if (readOnly || disabled) {
@@ -99,77 +97,55 @@ export const DateTimeInput = forwardRef<HTMLInputElement, DateTimeInputProps>(fu
     }
   }, [changeOpenWrapper, readOnly, disabled])
 
-  const {
-    restartTimer,
-    clearTimer
-  } = useDelay({ delay: 2000, disabled: disabled || readOnly })
+  useEffect(() => {
+    if (isOpen) {
+      setDialogValue(state)
+    }
+  }, [isOpen, state])
 
+  const focusField = () => {
+    fieldRef.current?.querySelector<HTMLElement>('[data-name="date-time-segment"]')?.focus()
+  }
 
   return (
-    <>
-      <div {...containerProps} className={clsx('relative w-full', containerProps?.className)}>
-        <input
-          {...props}
-          ref={innerRef}
-          id={ids.input}
-          value={safeInputString}
+    <div {...containerProps} className={clsx('relative w-full', containerProps?.className)}>
+      <div
+        {...props}
+        ref={controlRef}
+        id={ids.input}
 
-          onClick={(event) => {
-            event.preventDefault()
-          }}
-          onFocus={(event) => {
-            event.preventDefault()
-          }}
-          onKeyDown={(event) => {
-            if(event.key === ' ') {
-              event.preventDefault()
-            }
-          }}
-          onChange={(event) => {
-            const date = new Date(event.target.value ?? '')
-            const isValid = !isNaN(date.getTime())
-            if(isValid) {
-              restartTimer(() => {
-                innerRef.current?.blur()
-                setState(date)
-                onEditComplete?.(date)
-              })
-            } else {
-              clearTimer()
-            }
-            setStringInputState({
-              state: event.target.value,
-              date: isValid ? date : undefined,
-              mode,
-            })
-          }}
-          onBlur={(event) => {
-            props.onBlur?.(event)
-            clearTimer()
-            if(stringInputState.date) {
-              setState(stringInputState.date)
-              onEditComplete?.(stringInputState.date)
-            } else {
-              if(innerRef.current) {
-                innerRef.current.value = ''
-              }
-              setStringInputState({
-                state: state ? DateUtils.toInputString(state, mode) : '',
-                date: undefined,
-                mode,
-              })
-            }
-          }}
+        tabIndex={-1}
 
-          type={mode === 'date' ? 'date' : mode === 'time' ? 'time' : 'datetime-local'}
+        onFocus={(event) => {
+          props.onFocus?.(event)
+          if (event.target === event.currentTarget && !disabled) {
+            focusField()
+          }
+        }}
 
-          {...PropsUtil.dataAttributes.interactionStates({ disabled, readOnly, invalid, required })}
-
-          data-name={props['data-name'] ?? 'date-time-input'}
-          data-value={PropsUtil.dataAttributes.bool(!!state || !!stringInputState)}
-          {...PropsUtil.aria.interactionStates({ disabled, readOnly, invalid, required }, props)}
+        className={clsx('cursor-text', props.className)}
+        data-name={props['data-name'] ?? 'date-time-input'}
+        data-value={PropsUtil.dataAttributes.bool(!!state)}
+        {...PropsUtil.dataAttributes.interactionStates({ disabled, readOnly, invalid, required })}
+        {...PropsUtil.aria.interactionStates({ disabled, readOnly, invalid, required }, props)}
+      >
+        <DateTimeField
+          ref={fieldRef}
+          value={state}
+          mode={mode}
+          precision={precision}
+          is24HourFormat={is24HourFormat}
+          disabled={disabled}
+          readOnly={readOnly}
+          invalid={invalid}
+          required={required}
+          onValueChange={setState}
+          onEditComplete={onEditComplete}
+          aria-labelledby={props['aria-labelledby']}
+          aria-describedby={props['aria-describedby']}
+          className="grow"
         />
-        <div className="absolute right-1 top-1/2 -translate-y-1/2 flex-row-0">
+        <div className="flex-row-1 items-center">
           {actions}
           <Visibility isVisible={!readOnly}>
             <IconButton
@@ -191,13 +167,13 @@ export const DateTimeInput = forwardRef<HTMLInputElement, DateTimeInputProps>(fu
       <PopUp
         id={ids.popup}
         isOpen={isOpen}
-        anchor={innerRef}
+        anchor={controlRef}
         options={{
           verticalAlignment: 'afterEnd',
           horizontalAlignment: 'center',
           gap: 4,
         }}
-        outsideClickOptions={{ refs: [innerRef], active: outsideClickCloses }}
+        outsideClickOptions={{ refs: [controlRef], active: outsideClickCloses }}
 
         onClose={() => {
           changeOpenWrapper(false)
@@ -231,6 +207,6 @@ export const DateTimeInput = forwardRef<HTMLInputElement, DateTimeInputProps>(fu
           precision={precision}
         />
       </PopUp>
-    </>
+    </div>
   )
 })
