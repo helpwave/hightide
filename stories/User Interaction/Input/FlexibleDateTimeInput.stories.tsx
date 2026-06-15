@@ -2,6 +2,7 @@ import type { Meta, StoryObj } from '@storybook/nextjs'
 import { action } from 'storybook/actions'
 import { useEffect, useState } from 'react'
 import { FlexibleDateTimeInput } from '@/src/components/user-interaction/input/FlexibleDateTimeInput'
+import { LocaleContext } from '@/src/global-contexts/LocaleContext'
 
 const meta: Meta<typeof FlexibleDateTimeInput> = {
   component: FlexibleDateTimeInput,
@@ -33,18 +34,23 @@ export const flexibleDateTimeInput: Story = {
       setValue(args.value ?? args.initialValue ?? null)
     }, [args.value, args.initialValue])
     return (
-      <FlexibleDateTimeInput
-        {...args}
-        value={value}
-        onValueChange={(v) => {
-          args.onValueChange?.(v)
-          setValue(v)
-        }}
-        onEditComplete={(v) => {
-          args.onEditComplete?.(v)
-          setValue(v)
-        }}
-      />
+      <LocaleContext.Provider value={{ locale: 'de-DE', setLocale: () => {} }}>
+        <div className="flex-col-2 w-full max-w-md">
+          <FlexibleDateTimeInput
+            {...args}
+            value={value}
+            onValueChange={(next) => {
+              args.onValueChange?.(next)
+              setValue(next)
+            }}
+            onEditComplete={(next) => {
+              args.onEditComplete?.(next)
+              setValue(next)
+            }}
+          />
+          <pre className="text-sm text-description">value = {value === null ? 'null' : value.toISOString()}</pre>
+        </div>
+      </LocaleContext.Provider>
     )
   },
 }

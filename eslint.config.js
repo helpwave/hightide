@@ -17,6 +17,12 @@ export default [
     ignores: ['src/i18n/translations.ts'],
   },
   {
+    files: ['**/*.cjs'],
+    rules: {
+      '@typescript-eslint/no-require-imports': 'off',
+    },
+  },
+  {
     // TODO add this to helpwave eslint config
     rules: {
       indent: ['warn', 2]

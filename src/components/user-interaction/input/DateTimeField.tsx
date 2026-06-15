@@ -1,5 +1,5 @@
 import type { FocusEvent, HTMLAttributes, KeyboardEvent } from 'react'
-import { forwardRef, useCallback, useEffect, useMemo, useRef, useState } from 'react'
+import { forwardRef, useEffect, useMemo, useRef, useState } from 'react'
 import clsx from 'clsx'
 import { useControlledState } from '@/src/hooks/useControlledState'
 import { useLocale } from '@/src/global-contexts/LocaleContext'
@@ -92,13 +92,22 @@ export const DateTimeField = forwardRef<HTMLDivElement, DateTimeFieldProps>(func
   editStateRef.current = editState
 
   const segmentRefs = useRef(new Map<EditableSegmentType, HTMLSpanElement>())
-  const registerSegment = useCallback((type: EditableSegmentType) => (element: HTMLSpanElement | null) => {
-    if (element) {
-      segmentRefs.current.set(type, element)
-    } else {
-      segmentRefs.current.delete(type)
+  const segmentRefCallbacks = useRef(new Map<EditableSegmentType, (element: HTMLSpanElement | null) => void>())
+  const registerSegment = (type: EditableSegmentType) => {
+    const existing = segmentRefCallbacks.current.get(type)
+    if (existing) {
+      return existing
     }
-  }, [])
+    const callback = (element: HTMLSpanElement | null) => {
+      if (element) {
+        segmentRefs.current.set(type, element)
+      } else {
+        segmentRefs.current.delete(type)
+      }
+    }
+    segmentRefCallbacks.current.set(type, callback)
+    return callback
+  }
 
   useEffect(() => {
     const shown = composeDate(editStateRef.current.values, layout, mode, is24Hour, value ?? undefined)
@@ -206,20 +215,23 @@ export const DateTimeField = forwardRef<HTMLDivElement, DateTimeFieldProps>(func
 
   const onFieldBlur = (event: FocusEvent<HTMLDivElement>) => {
     props.onBlur?.(event)
-    if (event.currentTarget.contains(event.relatedTarget)) {
-      return
-    }
-    setFocusedType(null)
-    const composed = composeDate(editState.values, layout, mode, is24Hour, value ?? undefined)
-    if (composed) {
-      onEditComplete?.(composed)
-    } else {
-      setEditState({
-        values: value ? decomposeDate(value, layout, is24Hour) : {},
-        buffer: null,
-      })
-      onEditComplete?.(value ?? null)
-    }
+    const field = event.currentTarget
+    requestAnimationFrame(() => {
+      if (field.contains(document.activeElement)) {
+        return
+      }
+      setFocusedType(null)
+      const composed = composeDate(editStateRef.current.values, layout, mode, is24Hour, value ?? undefined)
+      if (composed) {
+        onEditComplete?.(composed)
+      } else {
+        setEditState({
+          values: value ? decomposeDate(value, layout, is24Hour) : {},
+          buffer: null,
+        })
+        onEditComplete?.(value ?? null)
+      }
+    })
   }
 
   const activeType = focusedType ?? editableTypes[0]
