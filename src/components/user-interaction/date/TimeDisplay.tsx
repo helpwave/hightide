@@ -1,21 +1,31 @@
 import { useHightideTranslation } from '@/src/i18n/useHightideTranslation'
+import { useDateTimeFormat, useLocale } from '@/src/global-contexts/LocaleContext'
+import { DateUtils } from '@/src/utils/date'
 
 type TimeDisplayMode = 'daysFromToday' | 'date'
 
 type TimeDisplayProps = {
   date: Date,
   mode?: TimeDisplayMode,
+  is24HourFormat?: boolean,
+  timeZone?: string,
 }
 
-/**
- * A Component for displaying time and dates in a unified fashion
- */
 export const TimeDisplay = ({
   date,
-  mode = 'daysFromToday'
+  mode = 'daysFromToday',
+  is24HourFormat: is24HourFormatOverride,
+  timeZone: timeZoneOverride,
 }: TimeDisplayProps) => {
   const translation = useHightideTranslation()
-  const difference = new Date().setHours(0, 0, 0, 0).valueOf() - new Date(date).setHours(0, 0, 0, 0).valueOf()
+  const { locale } = useLocale()
+  const { is24HourFormat: contextIs24HourFormat, timeZone: contextTimeZone } = useDateTimeFormat()
+  const is24HourFormat = is24HourFormatOverride ?? contextIs24HourFormat
+  const timeZone = timeZoneOverride ?? contextTimeZone
+
+  const zonedDate = DateUtils.toZonedDate(date, timeZone)
+  const zonedNow = DateUtils.toZonedDate(new Date(), timeZone)
+  const difference = new Date(zonedNow).setHours(0, 0, 0, 0).valueOf() - new Date(zonedDate).setHours(0, 0, 0, 0).valueOf()
   const isBefore = difference > 0
   const differenceInDays = Math.floor(Math.abs(difference) / (1000 * 3600 * 24))
 
@@ -44,9 +54,15 @@ export const TimeDisplay = ({
 
   let fullString
   if (mode === 'daysFromToday') {
-    fullString = `${date.getHours().toString().padStart(2, '0')}:${date.getMinutes().toString().padStart(2, '0')} - ${displayString}`
+    const timeString = new Intl.DateTimeFormat(locale, {
+      hour: '2-digit',
+      minute: '2-digit',
+      hourCycle: is24HourFormat ? 'h23' : 'h12',
+      timeZone,
+    }).format(date)
+    fullString = `${timeString} - ${displayString}`
   } else {
-    fullString = `${date.getDate()}. ${monthToTranslation[date.getMonth()]} ${date.getFullYear()}`
+    fullString = `${zonedDate.getDate()}. ${monthToTranslation[zonedDate.getMonth()]} ${zonedDate.getFullYear()}`
   }
 
   return (<span>{fullString}</span>)

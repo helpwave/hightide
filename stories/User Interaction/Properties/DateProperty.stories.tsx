@@ -23,10 +23,10 @@ export const dateProperty: Story = {
     onValueClear: action('onValueClear'),
   },
   render: ({ value, ...props }) => {
-    const [usedDate, setUsedDate] = useState<Date | undefined>(value)
+    const [usedDate, setUsedDate] = useState<Date | null>(value ?? null)
 
     useEffect(() => {
-      setUsedDate(value)
+      setUsedDate(value ?? null)
     }, [value])
 
     return (
@@ -43,7 +43,7 @@ export const dateProperty: Story = {
         }}
         onValueClear={() => {
           props.onValueClear?.()
-          setUsedDate(undefined)
+          setUsedDate(null)
         }}
       />
     )

@@ -130,6 +130,29 @@ describe('DateTimeField', () => {
     expect(document.activeElement).toBe(month)
   })
 
+  test('does not complete editing while focus moves to another segment', () => {
+    const frames: FrameRequestCallback[] = []
+    const raf = jest.spyOn(window, 'requestAnimationFrame').mockImplementation((callback) => {
+      frames.push(callback)
+      return frames.length
+    })
+    try {
+      const onEditComplete = jest.fn()
+      renderField({ onEditComplete })
+      const [day, month] = screen.getAllByRole('spinbutton')
+
+      act(() => day.focus())
+      act(() => day.blur())
+      frames.length = 0
+      act(() => fireEvent.focusOut(day, { relatedTarget: month }))
+      act(() => frames.forEach(frame => frame(0)))
+
+      expect(onEditComplete).not.toHaveBeenCalled()
+    } finally {
+      raf.mockRestore()
+    }
+  })
+
   test('normalizes a shorthand year to the stored full year on blur', () => {
     const frames: FrameRequestCallback[] = []
     const raf = jest.spyOn(window, 'requestAnimationFrame').mockImplementation((callback) => {
@@ -200,6 +223,71 @@ describe('DateTimeInput controlled value', () => {
     expect(screen.getAllByRole('spinbutton').map(segment => segment.textContent)).toEqual(['06', '15', '2026'])
     const committed = onValueChange.mock.calls.at(-1)![0] as Date
     expect([committed.getMonth(), committed.getDate(), committed.getFullYear()]).toEqual([5, 15, 2026])
+  })
+})
+
+describe('DateTimeInput hour format', () => {
+  test('defaults to a 24 hour clock regardless of locale', () => {
+    render(
+      <LocaleContext.Provider value={{ locale: 'en-US', setLocale: () => {} }}>
+        <DateTimeInput mode="time" initialValue={new Date(2024, 0, 1, 18, 30)} />
+      </LocaleContext.Provider>
+    )
+
+    expect(screen.getAllByRole('spinbutton').map(segment => segment.textContent)).toEqual(['18', '30'])
+  })
+
+  test('uses a 12 hour clock when the context opts out', () => {
+    render(
+      <LocaleContext.Provider value={{ locale: 'en-US', setLocale: () => {}, is24HourFormat: false }}>
+        <DateTimeInput mode="time" initialValue={new Date(2024, 0, 1, 18, 30)} />
+      </LocaleContext.Provider>
+    )
+
+    expect(screen.getAllByRole('spinbutton').map(segment => segment.textContent)).toEqual(['06', '30', 'PM'])
+  })
+
+  test('an explicit is24HourFormat prop overrides the context', () => {
+    render(
+      <LocaleContext.Provider value={{ locale: 'en-US', setLocale: () => {}, is24HourFormat: false }}>
+        <DateTimeInput mode="time" is24HourFormat={true} initialValue={new Date(2024, 0, 1, 18, 30)} />
+      </LocaleContext.Provider>
+    )
+
+    expect(screen.getAllByRole('spinbutton').map(segment => segment.textContent)).toEqual(['18', '30'])
+  })
+})
+
+describe('DateTimeInput time zone', () => {
+  test('reads the display zone from the locale context', () => {
+    render(
+      <LocaleContext.Provider value={{ locale: 'en-US', setLocale: () => {}, timeZone: 'America/New_York' }}>
+        <DateTimeInput
+          mode="dateTime"
+          is24HourFormat={true}
+          initialValue={new Date(Date.UTC(2024, 5, 1, 2, 30))}
+        />
+      </LocaleContext.Provider>
+    )
+
+    expect(screen.getAllByRole('spinbutton').map(segment => segment.textContent))
+      .toEqual(['05', '31', '2024', '22', '30'])
+  })
+
+  test('an explicit timeZone prop overrides the context', () => {
+    render(
+      <LocaleContext.Provider value={{ locale: 'en-US', setLocale: () => {}, timeZone: 'America/New_York' }}>
+        <DateTimeInput
+          mode="dateTime"
+          is24HourFormat={true}
+          timeZone="UTC"
+          initialValue={new Date(Date.UTC(2024, 5, 1, 2, 30))}
+        />
+      </LocaleContext.Provider>
+    )
+
+    expect(screen.getAllByRole('spinbutton').map(segment => segment.textContent))
+      .toEqual(['06', '01', '2024', '02', '30'])
   })
 })
 

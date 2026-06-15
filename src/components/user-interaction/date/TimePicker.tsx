@@ -5,6 +5,7 @@ import type { FormFieldDataHandling } from '@/src/components/form/FormField'
 import { useControlledState } from '@/src/hooks/useControlledState'
 import type { DateTimePrecision } from '@/src/utils/date'
 import { Visibility } from '@/src/components/layout/Visibility'
+import { useDateTimeFormat } from '@/src/global-contexts/LocaleContext'
 
 export type TimePickerMinuteIncrement = '1min' | '5min' | '10min' | '15min' | '30min'
 
@@ -12,7 +13,6 @@ export type TimePickerSecondIncrement = '1s' | '5s' | '10s' | '15s' | '30s'
 
 export type TimePickerMillisecondIncrement = '1ms' | '5ms' | '10ms' | '25ms' | '50ms' | '100ms' | '250ms' | '500ms'
 
-// TODO add start, and end constraints
 export interface TimePickerProps extends Partial<FormFieldDataHandling<Date>> {
   initialValue?: Date,
   is24HourFormat?: boolean,
@@ -28,13 +28,15 @@ export const TimePicker = ({
   initialValue = new Date(),
   onValueChange,
   onEditComplete,
-  is24HourFormat = true,
+  is24HourFormat: is24HourFormatOverride,
   minuteIncrement = '5min',
   secondIncrement = '5s',
   millisecondIncrement = '100ms',
   precision = 'minute',
   className,
 }: TimePickerProps) => {
+  const { is24HourFormat: contextIs24HourFormat } = useDateTimeFormat()
+  const is24HourFormat = is24HourFormatOverride ?? contextIs24HourFormat
   const [value, setValue] = useControlledState({
     value: controlledValue,
     onValueChange: onValueChange,
@@ -149,7 +151,7 @@ export const TimePicker = ({
             <Button
               size="sm"
               color={isSelected ? 'primary' : 'neutral'}
-              key={minute + minuteIncrement} // minute increment so that scroll works
+              key={minute + minuteIncrement}
               ref={isSelected ? minuteRef : undefined}
               onClick={() => onChangeWrapper(newDate => newDate.setMinutes(minute))}
               className="min-w-16"
@@ -167,7 +169,7 @@ export const TimePicker = ({
               <Button
                 size="sm"
                 color={isSelected ? 'primary' : 'neutral'}
-                key={second + secondIncrement} // second increment so that scroll works
+                key={second + secondIncrement}
                 ref={isSelected ? minuteRef : undefined}
                 onClick={() => onChangeWrapper(newDate => newDate.setSeconds(second))}
                 className="min-w-16"
@@ -186,7 +188,7 @@ export const TimePicker = ({
               <Button
                 size="sm"
                 color={isSelected ? 'primary' : 'neutral'}
-                key={millisecond + millisecondIncrement} // millisecond increment so that scroll works
+                key={millisecond + millisecondIncrement}
                 ref={isSelected ? minuteRef : undefined}
                 onClick={() => onChangeWrapper(newDate => newDate.setMilliseconds(millisecond))}
                 className="min-w-16"
