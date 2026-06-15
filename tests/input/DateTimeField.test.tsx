@@ -99,6 +99,27 @@ describe('DateTimeField', () => {
     }
   })
 
+  test('keeps a partial value visible after focus leaves the field', () => {
+    const frames: FrameRequestCallback[] = []
+    const raf = jest.spyOn(window, 'requestAnimationFrame').mockImplementation((callback) => {
+      frames.push(callback)
+      return frames.length
+    })
+    try {
+      renderField()
+      const [day] = screen.getAllByRole('spinbutton')
+
+      act(() => day.focus())
+      typeInto(day, '01')
+      act(() => (document.activeElement as HTMLElement | null)?.blur())
+      act(() => frames.forEach(frame => frame(0)))
+
+      expect(screen.getAllByRole('spinbutton')[0].textContent).toBe('01')
+    } finally {
+      raf.mockRestore()
+    }
+  })
+
   test('clears the value when all segments are emptied', () => {
     const { onValueChange } = renderField({ initialValue: new Date(2026, 5, 15) })
     const [day, month, year] = screen.getAllByRole('spinbutton')

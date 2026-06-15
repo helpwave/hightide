@@ -222,15 +222,7 @@ export const DateTimeField = forwardRef<HTMLDivElement, DateTimeFieldProps>(func
       }
       setFocusedType(null)
       const composed = composeDate(editStateRef.current.values, layout, mode, is24Hour, value ?? undefined)
-      if (composed) {
-        onEditComplete?.(composed)
-      } else {
-        setEditState({
-          values: value ? decomposeDate(value, layout, is24Hour) : {},
-          buffer: null,
-        })
-        onEditComplete?.(value ?? null)
-      }
+      onEditComplete?.(composed ?? value ?? null)
     })
   }
 

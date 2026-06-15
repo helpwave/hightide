@@ -2,6 +2,7 @@ import type { Meta, StoryObj } from '@storybook/nextjs'
 import { action } from 'storybook/actions'
 import { useEffect, useState } from 'react'
 import { FlexibleDateTimeInput } from '@/src/components/user-interaction/input/FlexibleDateTimeInput'
+import { TimeDisplay } from '@/src/components/user-interaction/date/TimeDisplay'
 import { LocaleContext } from '@/src/global-contexts/LocaleContext'
 
 const meta: Meta<typeof FlexibleDateTimeInput> = {
@@ -22,7 +23,6 @@ export const flexibleDateTimeInput: Story = {
     minuteIncrement: '5min',
     secondIncrement: '1s',
     millisecondIncrement: '100ms',
-    is24HourFormat: false,
     initialValue: null,
     value: undefined,
     onValueChange: action('onValueChange'),
@@ -48,7 +48,10 @@ export const flexibleDateTimeInput: Story = {
               setValue(next)
             }}
           />
-          <pre className="text-sm text-description">value = {value === null ? 'null' : value.toISOString()}</pre>
+          <div className="flex-col-1 text-sm text-description">
+            <pre>value = {value === null ? 'null' : value.toISOString()}</pre>
+            {value && <TimeDisplay date={value} mode="date"/>}
+          </div>
         </div>
       </LocaleContext.Provider>
     )
