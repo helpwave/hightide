@@ -3,7 +3,7 @@ import {
   MultiSelectChipDisplay
 } from '@/src/components/user-interaction/MultiSelect/MultiSelectChipDisplay'
 import { MultiSelectOption } from '@/src/components/user-interaction/MultiSelect/MultiSelectOption'
-import type { Meta, StoryObj } from '@storybook/nextjs'
+import type { Meta, StoryObj } from '@storybook/nextjs-vite'
 
 const meta = {
   component: MultiSelectChipDisplay,

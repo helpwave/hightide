@@ -1,4 +1,4 @@
-import type { Meta, StoryObj } from '@storybook/nextjs'
+import type { Meta, StoryObj } from '@storybook/nextjs-vite'
 import { action } from 'storybook/actions'
 import { Combobox } from '@/src/components/user-interaction/Combobox/Combobox'
 import { ComboboxOption } from '@/src/components/user-interaction/Combobox/ComboboxOption'

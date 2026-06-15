@@ -1,4 +1,4 @@
-import type { Meta, StoryObj } from '@storybook/nextjs'
+import type { Meta, StoryObj } from '@storybook/nextjs-vite'
 import { LanguageDialog } from '@/src/components/layout/dialog/premade/LanguageDialog'
 
 const meta: Meta = {

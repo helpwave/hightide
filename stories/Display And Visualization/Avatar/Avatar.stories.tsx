@@ -1,4 +1,4 @@
-import type { Meta, StoryObj } from '@storybook/nextjs'
+import type { Meta, StoryObj } from '@storybook/nextjs-vite'
 import { Avatar } from '@/src/components/display-and-visualization/Avatar'
 
 type StoryArgs = {

@@ -1,4 +1,4 @@
-import type { Meta, StoryObj } from '@storybook/nextjs'
+import type { Meta, StoryObj } from '@storybook/nextjs-vite'
 import { DateTimePicker } from '@/src/components/user-interaction/date/DateTimePicker'
 import { DateUtils } from '@/src/utils/date'
 import { action } from 'storybook/actions'

@@ -1,4 +1,4 @@
-import type { Meta, StoryObj } from '@storybook/nextjs'
+import type { Meta, StoryObj } from '@storybook/nextjs-vite'
 import { range } from '@/src/utils/array'
 import { ScrollPicker } from '@/src/components/user-interaction/ScrollPicker'
 

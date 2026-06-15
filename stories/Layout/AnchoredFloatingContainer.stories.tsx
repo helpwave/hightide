@@ -1,4 +1,4 @@
-import type { Meta, StoryObj } from '@storybook/nextjs'
+import type { Meta, StoryObj } from '@storybook/nextjs-vite'
 import type { AnchoredFloatingContainerProps } from '@/src/components/layout/AnchoredFloatingContainer'
 import { AnchoredFloatingContainer } from '@/src/components/layout/AnchoredFloatingContainer'
 import { useRef } from 'react'

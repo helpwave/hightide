@@ -1,4 +1,4 @@
-import type { Meta, StoryObj } from '@storybook/nextjs'
+import type { Meta, StoryObj } from '@storybook/nextjs-vite'
 import type { ColumnSort } from '@tanstack/react-table'
 import { useId, useMemo, useState } from 'react'
 import { faker } from '@faker-js/faker'

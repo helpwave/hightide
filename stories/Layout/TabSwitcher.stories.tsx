@@ -1,4 +1,4 @@
-import type { Meta, StoryObj } from '@storybook/nextjs'
+import type { Meta, StoryObj } from '@storybook/nextjs-vite'
 import type { TabSwitcherProps } from '@/src/components/layout/TabSwitcher'
 import { TabList, TabPanel, TabSwitcher } from '@/src/components/layout/TabSwitcher'
 import { useState } from 'react'

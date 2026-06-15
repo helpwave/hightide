@@ -1,4 +1,4 @@
-import type { Meta, StoryObj } from '@storybook/nextjs'
+import type { Meta, StoryObj } from '@storybook/nextjs-vite'
 import type { AvatarProps } from '@/src/components/display-and-visualization/Avatar'
 import  { AvatarGroup } from '@/src/components/display-and-visualization/Avatar'
 import { range } from '@/src/utils/array'

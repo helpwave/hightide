@@ -1,4 +1,4 @@
-import type { Meta, StoryObj } from '@storybook/nextjs'
+import type { Meta, StoryObj } from '@storybook/nextjs-vite'
 import { action } from 'storybook/actions'
 import { ExpandableContent, ExpandableRoot, ExpandableHeader } from '@/src/components/layout/Expandable'
 import { range } from '@/src/utils/array'

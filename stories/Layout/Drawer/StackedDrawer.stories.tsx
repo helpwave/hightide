@@ -1,4 +1,4 @@
-import type { Meta, StoryObj } from '@storybook/nextjs'
+import type { Meta, StoryObj } from '@storybook/nextjs-vite'
 import type { DrawerAligment } from '@/src/components/layout/drawer/Drawer'
 import { Drawer } from '@/src/components/layout/drawer/Drawer'
 import { useState } from 'react'

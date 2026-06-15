@@ -1,4 +1,4 @@
-import type { Meta, StoryObj } from '@storybook/nextjs'
+import type { Meta, StoryObj } from '@storybook/nextjs-vite'
 import { CopyToClipboardWrapper } from '@/src/components/user-interaction/CopyToClipboardWrapper'
 
 const meta = {

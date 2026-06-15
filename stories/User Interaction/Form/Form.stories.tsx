@@ -1,4 +1,4 @@
-import type { Meta, StoryObj } from '@storybook/nextjs'
+import type { Meta, StoryObj } from '@storybook/nextjs-vite'
 import { action } from 'storybook/actions'
 import type { StorybookHelperSelectType } from '@/src/storybook/helper'
 import { StorybookHelper } from '@/src/storybook/helper'

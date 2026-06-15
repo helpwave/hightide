@@ -1,4 +1,4 @@
-import type { Meta, StoryObj } from '@storybook/nextjs'
+import type { Meta, StoryObj } from '@storybook/nextjs-vite'
 import { FAQSection } from '@/src/components/layout/FAQSection'
 import { HelpwaveLogo } from '@/src/components/branding/HelpwaveLogo'
 import { MarkdownInterpreter } from '@/src/components/layout/MarkdownInterpreter'
