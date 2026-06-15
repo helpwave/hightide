@@ -10,7 +10,7 @@
     "access": "public"
   },
   "license": "MPL-2.0",
-  "version": "0.9.5",
+  "version": "0.10.0",
   "files": [
     "dist"
   ],
@@ -58,12 +58,12 @@
     "@babel/preset-typescript": "7.26.0",
     "@faker-js/faker": "10.1.0",
     "@helpwave/eslint-config": "0.0.11",
-    "@storybook/addon-docs": "10.2.10",
-    "@storybook/addon-links": "10.2.10",
-    "@storybook/nextjs": "10.2.10",
+    "@storybook/addon-docs": "10.4.5",
+    "@storybook/addon-links": "10.4.5",
+    "@storybook/nextjs-vite": "10.4.5",
     "@tailwindcss/postcss": "4.1.18",
     "@types/jest": "30.0.0",
-    "@types/node": "20.17.10",
+    "@types/node": "20.19.43",
     "@types/react": "19.2.3",
     "@types/react-dom": "19.2.3",
     "@types/tinycolor2": "1.4.6",
@@ -71,15 +71,15 @@
     "@vitest/mocker": "4.0.16",
     "autoprefixer": "10.4.23",
     "eslint": "9.31.0",
-    "eslint-plugin-storybook": "10.2.10",
+    "eslint-plugin-storybook": "10.4.5",
     "jest": "30.2.0",
     "jest-environment-jsdom": "30.2.0",
-    "postcss": "8.5.6",
-    "storybook": "10.2.10",
+    "postcss": "8.5.15",
+    "storybook": "10.4.5",
     "ts-jest": "29.4.6",
     "tsup": "8.5.1",
     "typescript": "5.7.2",
-    "webpack": "5.105.2"
+    "vite": "7.3.5"
   },
   "keywords": [
     "react",
@@ -91,6 +91,7 @@
     "url": "https://github.com/helpwave/hightide/issues"
   },
   "overrides": {
-    "elliptic": "^6.6.1"
+    "esbuild": "0.28.1",
+    "postcss": "8.5.15"
   }
 }

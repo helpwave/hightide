@@ -1,4 +1,4 @@
-import type { Meta, StoryObj } from '@storybook/nextjs'
+import type { Meta, StoryObj } from '@storybook/nextjs-vite'
 import Image from 'next/image'
 import { clsx } from 'clsx'
 import type { CarouselProps } from '@/src/components/layout/Carousel'

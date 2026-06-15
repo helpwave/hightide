@@ -1,4 +1,4 @@
-import type { Meta, StoryObj } from '@storybook/nextjs'
+import type { Meta, StoryObj } from '@storybook/nextjs-vite'
 import { ButtonUtil } from '@/src/components/user-interaction/Button'
 import { Button } from '@/src/components/user-interaction/Button'
 import { action } from 'storybook/actions'

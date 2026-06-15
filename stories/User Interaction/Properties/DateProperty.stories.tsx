@@ -1,4 +1,4 @@
-import type { Meta, StoryObj } from '@storybook/nextjs'
+import type { Meta, StoryObj } from '@storybook/nextjs-vite'
 import { useEffect, useState } from 'react'
 import { DateProperty } from '@/src/components/user-interaction/properties/DateProperty'
 import { action } from 'storybook/actions'

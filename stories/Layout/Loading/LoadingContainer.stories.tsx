@@ -1,4 +1,4 @@
-import type { Meta, StoryObj } from '@storybook/nextjs'
+import type { Meta, StoryObj } from '@storybook/nextjs-vite'
 import { LoadingContainer } from '@/src/components/layout/loading/LoadingContainer'
 
 const meta = {

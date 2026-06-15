@@ -1,4 +1,4 @@
-import type { Meta, StoryObj } from '@storybook/nextjs'
+import type { Meta, StoryObj } from '@storybook/nextjs-vite'
 import { Check, Plus } from 'lucide-react'
 import { useMemo, useState } from 'react'
 import { action } from 'storybook/actions'

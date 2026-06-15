@@ -1,4 +1,4 @@
-import type { Meta, StoryObj } from '@storybook/nextjs'
+import type { Meta, StoryObj } from '@storybook/nextjs-vite'
 import { useHightideTranslation } from '@/src/i18n/useHightideTranslation'
 
 type StoryArgs = {

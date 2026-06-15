@@ -1,4 +1,4 @@
-import type { Meta, StoryObj } from '@storybook/nextjs'
+import type { Meta, StoryObj } from '@storybook/nextjs-vite'
 import { Navigation } from '@/src/components/layout/navigation/Navigation'
 
 const meta = {

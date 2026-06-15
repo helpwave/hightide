@@ -1,4 +1,4 @@
-import type { Meta, StoryObj } from '@storybook/nextjs'
+import type { Meta, StoryObj } from '@storybook/nextjs-vite'
 import { ProgressIndicator } from '@/src/components/display-and-visualization/ProgressIndicator'
 
 const meta = {

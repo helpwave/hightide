@@ -1,6 +1,6 @@
 import path from 'node:path'
 import { fileURLToPath } from 'node:url'
-import type { StorybookConfig } from '@storybook/nextjs'
+import type { StorybookConfig } from '@storybook/nextjs-vite'
 
 const dirname = path.dirname(fileURLToPath(import.meta.url))
 
@@ -8,7 +8,7 @@ const config: StorybookConfig = {
   stories: ['../stories/**/*.stories.@(js|jsx|ts|tsx)'],
   addons: ['@storybook/addon-links', '@storybook/addon-docs'],
   framework: {
-    name: '@storybook/nextjs',
+    name: '@storybook/nextjs-vite',
     options: {},
   },
   docs: {},
@@ -18,14 +18,17 @@ const config: StorybookConfig = {
   core: {
     disableTelemetry: true,
   },
-  webpackFinal: async (config) => {
+  viteFinal: async (config) => {
+    const { mergeConfig } = await import('vite')
     const projectRoot = path.resolve(dirname, '..')
-    config.resolve = config.resolve ?? {}
-    config.resolve.alias = {
-      ...config.resolve.alias,
-      '@': projectRoot,
-    }
-    return config
+
+    return mergeConfig(config, {
+      resolve: {
+        alias: {
+          '@': projectRoot,
+        },
+      },
+    })
   },
 }
 

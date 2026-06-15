@@ -1,4 +1,4 @@
-import type { Meta, StoryObj } from '@storybook/nextjs'
+import type { Meta, StoryObj } from '@storybook/nextjs-vite'
 import { BreadCrumbs } from '@/src/components/layout/navigation/BreadCrumbs'
 
 const meta = {

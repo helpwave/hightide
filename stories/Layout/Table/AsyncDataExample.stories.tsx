@@ -1,4 +1,4 @@
-import type { Meta, StoryObj } from '@storybook/nextjs'
+import type { Meta, StoryObj } from '@storybook/nextjs-vite'
 import { useState, useEffect, useMemo } from 'react'
 import { faker } from '@faker-js/faker'
 import { range } from '@/src/utils/array'
