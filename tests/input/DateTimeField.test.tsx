@@ -130,6 +130,31 @@ describe('DateTimeField', () => {
     expect(document.activeElement).toBe(month)
   })
 
+  test('does not complete editing while focus moves to another segment', () => {
+    const frames: FrameRequestCallback[] = []
+    const raf = jest.spyOn(window, 'requestAnimationFrame').mockImplementation((callback) => {
+      frames.push(callback)
+      return frames.length
+    })
+    try {
+      const onEditComplete = jest.fn()
+      renderField({ onEditComplete })
+      const [day, month] = screen.getAllByRole('spinbutton')
+
+      act(() => day.focus())
+      // Reproduce the real-browser race: focus is heading to the month (same field) but momentarily
+      // sits on <body>, while the blur still reports the month as the related target.
+      act(() => day.blur())
+      frames.length = 0
+      act(() => fireEvent.focusOut(day, { relatedTarget: month }))
+      act(() => frames.forEach(frame => frame(0)))
+
+      expect(onEditComplete).not.toHaveBeenCalled()
+    } finally {
+      raf.mockRestore()
+    }
+  })
+
   test('normalizes a shorthand year to the stored full year on blur', () => {
     const frames: FrameRequestCallback[] = []
     const raf = jest.spyOn(window, 'requestAnimationFrame').mockImplementation((callback) => {

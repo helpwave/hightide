@@ -238,6 +238,13 @@ export const DateTimeField = forwardRef<HTMLDivElement, DateTimeFieldProps>(func
   const onFieldBlur = (event: FocusEvent<HTMLDivElement>) => {
     props.onBlur?.(event)
     const field = event.currentTarget
+    // Moving focus to another segment of the same field (auto-advance, tab, arrow keys) is not the
+    // end of editing. relatedTarget tells us where focus is heading, so we can ignore those moves
+    // synchronously instead of mistaking the brief focus gap for the user leaving the field.
+    const nextFocus = event.relatedTarget
+    if (nextFocus instanceof Node && field.contains(nextFocus)) {
+      return
+    }
     requestAnimationFrame(() => {
       if (field.contains(document.activeElement)) {
         return
