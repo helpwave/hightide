@@ -251,8 +251,19 @@ const weeksForCalenderMonth = (date: Date, weekStart: WeekDay, weeks: number = 6
   return equalSizeGroups(dayList, 7)
 }
 
-const formatAbsolute = (date: Date, locale: string, format: DateTimeFormat) => {
+type FormatAbsoluteOptions = {
+  timeZone?: string,
+  is24HourFormat?: boolean,
+}
+
+const formatAbsolute = (date: Date, locale: string, format: DateTimeFormat, { timeZone, is24HourFormat = true }: FormatAbsoluteOptions = {}) => {
   let options: Intl.DateTimeFormatOptions
+
+  const timeOptions: Intl.DateTimeFormatOptions = {
+    hour: '2-digit',
+    minute: '2-digit',
+    hourCycle: is24HourFormat ? 'h23' : 'h12',
+  }
 
   switch (format) {
   case 'date':
@@ -264,8 +275,7 @@ const formatAbsolute = (date: Date, locale: string, format: DateTimeFormat) => {
     break
   case 'time':
     options = {
-      hour: '2-digit',
-      minute: '2-digit',
+      ...timeOptions,
     }
     break
   case 'dateTime':
@@ -273,13 +283,12 @@ const formatAbsolute = (date: Date, locale: string, format: DateTimeFormat) => {
       year: 'numeric',
       month: '2-digit',
       day: '2-digit',
-      hour: '2-digit',
-      minute: '2-digit',
+      ...timeOptions,
     }
     break
   }
 
-  return new Intl.DateTimeFormat(locale, options).format(date)
+  return new Intl.DateTimeFormat(locale, { ...options, timeZone }).format(date)
 }
 
 const formatRelative = (date: Date, locale: string) => {

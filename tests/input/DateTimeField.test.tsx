@@ -226,6 +226,38 @@ describe('DateTimeInput controlled value', () => {
   })
 })
 
+describe('DateTimeInput hour format', () => {
+  test('defaults to a 24 hour clock regardless of locale', () => {
+    render(
+      <LocaleContext.Provider value={{ locale: 'en-US', setLocale: () => {} }}>
+        <DateTimeInput mode="time" initialValue={new Date(2024, 0, 1, 18, 30)} />
+      </LocaleContext.Provider>
+    )
+
+    expect(screen.getAllByRole('spinbutton').map(segment => segment.textContent)).toEqual(['18', '30'])
+  })
+
+  test('uses a 12 hour clock when the context opts out', () => {
+    render(
+      <LocaleContext.Provider value={{ locale: 'en-US', setLocale: () => {}, is24HourFormat: false }}>
+        <DateTimeInput mode="time" initialValue={new Date(2024, 0, 1, 18, 30)} />
+      </LocaleContext.Provider>
+    )
+
+    expect(screen.getAllByRole('spinbutton').map(segment => segment.textContent)).toEqual(['06', '30', 'PM'])
+  })
+
+  test('an explicit is24HourFormat prop overrides the context', () => {
+    render(
+      <LocaleContext.Provider value={{ locale: 'en-US', setLocale: () => {}, is24HourFormat: false }}>
+        <DateTimeInput mode="time" is24HourFormat={true} initialValue={new Date(2024, 0, 1, 18, 30)} />
+      </LocaleContext.Provider>
+    )
+
+    expect(screen.getAllByRole('spinbutton').map(segment => segment.textContent)).toEqual(['18', '30'])
+  })
+})
+
 describe('DateTimeInput time zone', () => {
   test('reads the display zone from the locale context', () => {
     render(

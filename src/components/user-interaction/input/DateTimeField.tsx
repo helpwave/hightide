@@ -54,7 +54,7 @@ export const DateTimeField = forwardRef<HTMLDivElement, DateTimeFieldProps>(func
   ...props
 }, forwardedRef) {
   const translation = useHightideTranslation()
-  const { locale: contextLocale } = useLocale()
+  const { locale: contextLocale, is24HourFormat: contextIs24HourFormat } = useLocale()
   const locale = localeOverride ?? contextLocale
 
   const [value, setValue] = useControlledState<Date | null>({
@@ -63,12 +63,7 @@ export const DateTimeField = forwardRef<HTMLDivElement, DateTimeFieldProps>(func
     defaultValue: initialValue,
   })
 
-  const is24Hour = useMemo(() => {
-    if (is24HourFormat !== undefined) {
-      return is24HourFormat
-    }
-    return !new Intl.DateTimeFormat(locale, { hour: 'numeric' }).resolvedOptions().hour12
-  }, [is24HourFormat, locale])
+  const is24Hour = is24HourFormat ?? contextIs24HourFormat ?? true
 
   const layout = useMemo(
     () => buildSegmentLayout({ locale, mode, precision, is24HourFormat: is24Hour }),

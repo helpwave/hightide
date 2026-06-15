@@ -12,6 +12,8 @@ export type LocaleContextValue = {
   setLocale: Dispatch<SetStateAction<HightideTranslationLocales>>,
   timeZone?: string,
   setTimeZone?: (timeZone: string | undefined) => void,
+  is24HourFormat?: boolean,
+  setIs24HourFormat?: (is24HourFormat: boolean | undefined) => void,
 }
 
 export const LocaleContext = createContext<LocaleContextValue | null>(null)
@@ -23,6 +25,8 @@ export type LocaleProviderProps = PropsWithChildren & Partial<LocalizationConfig
   onChangedLocale?: (locale: HightideTranslationLocales) => void,
   timeZone?: string,
   onChangedTimeZone?: (timeZone: string | undefined) => void,
+  is24HourFormat?: boolean,
+  onChangedIs24HourFormat?: (is24HourFormat: boolean) => void,
 }
 
 export const LocaleProvider = ({
@@ -30,9 +34,12 @@ export const LocaleProvider = ({
   locale,
   defaultLocale,
   defaultTimeZone,
+  defaultIs24HourFormat,
   timeZone,
+  is24HourFormat,
   onChangedLocale,
   onChangedTimeZone,
+  onChangedIs24HourFormat,
 }: LocaleProviderProps) => {
   const {
     value: storedLocale,
@@ -44,6 +51,11 @@ export const LocaleProvider = ({
     setValue: setStoredTimeZone,
     deleteValue: deleteStoredTimeZone,
   } = useStorage<string | undefined>({ key: 'timeZone', defaultValue: undefined })
+  const {
+    value: storedIs24HourFormat,
+    setValue: setStoredIs24HourFormat,
+    deleteValue: deleteStoredIs24HourFormat,
+  } = useStorage<boolean | undefined>({ key: 'is24HourFormat', defaultValue: undefined })
   const { config } = useHightideConfig()
   const [localePreference, setLocalePreference] = useState<LocaleWithSystem>('system')
 
@@ -78,6 +90,15 @@ export const LocaleProvider = ({
     setStoredTimeZone(timeZone)
   }, [timeZone, setStoredTimeZone])
 
+  const resolvedIs24HourFormat = useMemo(() => {
+    return is24HourFormat ?? storedIs24HourFormat ?? config.locale.defaultIs24HourFormat ?? defaultIs24HourFormat ?? true
+  }, [is24HourFormat, storedIs24HourFormat, config.locale.defaultIs24HourFormat, defaultIs24HourFormat])
+
+  useEffect(() => {
+    if (is24HourFormat === undefined) return
+    setStoredIs24HourFormat(is24HourFormat)
+  }, [is24HourFormat, setStoredIs24HourFormat])
+
   const onChangeRef = useEventCallbackStabilizer(onChangedLocale)
 
   useEffect(() => {
@@ -89,6 +110,12 @@ export const LocaleProvider = ({
   useEffect(() => {
     onChangeTimeZoneRef?.(resolvedTimeZone)
   }, [resolvedTimeZone, onChangeTimeZoneRef])
+
+  const onChangeIs24HourFormatRef = useEventCallbackStabilizer(onChangedIs24HourFormat)
+
+  useEffect(() => {
+    onChangeIs24HourFormatRef?.(resolvedIs24HourFormat)
+  }, [resolvedIs24HourFormat, onChangeIs24HourFormatRef])
 
   useEffect(() => {
     const localesToTestAgainst = Object.values(LocalizationUtil.locals)
@@ -139,6 +166,20 @@ export const LocaleProvider = ({
           setStoredTimeZone(newTimeZone)
         }
       },
+      is24HourFormat: resolvedIs24HourFormat,
+      setIs24HourFormat: (newIs24HourFormat) => {
+        if (is24HourFormat !== undefined) {
+          console.warn('LocaleProvider: Attempting to change the ' +
+            "hour format while setting a fixed hour format won't have any effect. " +
+            'Change the is24HourFormat provided to the LocaleProvider instead.')
+          return
+        }
+        if (newIs24HourFormat === undefined) {
+          deleteStoredIs24HourFormat()
+        } else {
+          setStoredIs24HourFormat(newIs24HourFormat)
+        }
+      },
     }}>
       {children}
     </LocaleContext.Provider>
@@ -159,6 +200,14 @@ export const useTimeZone = () => {
     throw new Error('useTimeZone must be used within LocaleContext. Try adding a LocaleProvider around your app.')
   }
   return { timeZone: context.timeZone, setTimeZone: context.setTimeZone }
+}
+
+export const useDateTimeFormat = () => {
+  const context = useContext(LocaleContext)
+  return {
+    is24HourFormat: context?.is24HourFormat ?? true,
+    timeZone: context?.timeZone,
+  }
 }
 
 export const useLanguage = () => {

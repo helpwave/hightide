@@ -39,13 +39,13 @@ export const flexibleDateTimeInput: Story = {
     onValueChange: action('onValueChange'),
     onEditComplete: action('onEditComplete'),
   },
-  render: (args) => {
+  render: ({ is24HourFormat, timeZone, ...args }) => {
     const [value, setValue] = useState<Date | null>(args.initialValue ?? null)
     useEffect(() => {
       setValue(args.value ?? args.initialValue ?? null)
     }, [args.value, args.initialValue])
     return (
-      <LocaleContext.Provider value={{ locale: 'de-DE', setLocale: () => {} }}>
+      <LocaleContext.Provider value={{ locale: 'de-DE', setLocale: () => {}, is24HourFormat, timeZone: timeZone || undefined }}>
         <div className="flex-col-2 w-full max-w-md">
           <FlexibleDateTimeInput
             {...args}
@@ -61,10 +61,10 @@ export const flexibleDateTimeInput: Story = {
           />
           <div className="flex-col-1 text-sm text-description">
             <pre>value = {value === null ? 'null' : value.toISOString()}</pre>
-            {value && args.timeZone && (
+            {value && timeZone && (
               <pre>
-                {`in ${args.timeZone} = ${new Intl.DateTimeFormat('de-DE', {
-                  timeZone: args.timeZone,
+                {`in ${timeZone} = ${new Intl.DateTimeFormat('de-DE', {
+                  timeZone,
                   dateStyle: 'short',
                   timeStyle: 'medium',
                 }).format(value)}`}

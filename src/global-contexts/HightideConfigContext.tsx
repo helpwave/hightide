@@ -15,6 +15,7 @@ export type ThemeConfig = {
 export type LocalizationConfig = {
   defaultLocale: HightideTranslationLocales,
   defaultTimeZone?: string,
+  defaultIs24HourFormat?: boolean,
 }
 
 export type HightideConfig = {
