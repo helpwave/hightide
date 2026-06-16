@@ -9,7 +9,7 @@ export interface SelectOptionType<T = string> {
   label?: string,
   display?: ReactNode,
   disabled?: boolean,
-  ref: RefObject<HTMLElement>,
+  ref: RefObject<HTMLElement | null>,
 }
 
 export interface SelectContextIds {
@@ -45,8 +45,8 @@ export interface SelectContextActions<T> {
 }
 
 export interface SelectContextLayout {
-  triggerRef: RefObject<HTMLElement>,
-  registerTrigger(element: RefObject<HTMLElement>): () => void,
+  triggerRef: RefObject<HTMLElement | null>,
+  registerTrigger(element: RefObject<HTMLElement | null>): () => void,
 }
 
 export interface SelectContextSearch {

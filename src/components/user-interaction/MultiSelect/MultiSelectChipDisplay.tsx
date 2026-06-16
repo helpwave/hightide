@@ -1,4 +1,4 @@
-import type { HTMLAttributes, ReactNode } from 'react'
+import type { ForwardedRef, HTMLAttributes, ReactNode } from 'react'
 import { forwardRef, useEffect, useImperativeHandle, useRef } from 'react'
 import { useMultiSelectContext } from './MultiSelectContext'
 import type { MultiSelectRootProps } from './MultiSelectRoot'
@@ -10,14 +10,15 @@ import { useHightideTranslation } from '@/src/i18n/useHightideTranslation'
 import { XIcon, Plus } from 'lucide-react'
 
 export type MultiSelectChipDisplayButtonProps = HTMLAttributes<HTMLDivElement> & {
-  disabled?: boolean,
-  placeholder?: ReactNode,
-};
+  'disabled'?: boolean,
+  'placeholder'?: ReactNode,
+  'data-name'?: string,
+}
 
 export const MultiSelectChipDisplayButton = forwardRef<
   HTMLDivElement,
   MultiSelectChipDisplayButtonProps
->(function MultiSelectChipDisplayButton({ id, ...props }, ref) {
+>(function MultiSelectChipDisplayButton({ id, ...props }, ref: ForwardedRef<HTMLDivElement>) {
   const translation = useHightideTranslation()
   const context = useMultiSelectContext<unknown>()
   const { config, layout } = context
@@ -28,7 +29,7 @@ export const MultiSelectChipDisplayButton = forwardRef<
     if (id) setIds((prev) => ({ ...prev, trigger: id }))
   }, [id, setIds])
 
-  const innerRef = useRef<HTMLDivElement>(null)
+  const innerRef = useRef<HTMLDivElement | null>(null)
   useImperativeHandle(ref, () => innerRef.current!)
 
   useEffect(() => {
@@ -37,7 +38,9 @@ export const MultiSelectChipDisplayButton = forwardRef<
   }, [registerTrigger])
 
   const disabled = !!props?.disabled || !!context.disabled
+  const readOnly = !!context.readOnly
   const invalid = context.invalid
+  const hasInteractions = !readOnly && !disabled
   const selectedOptions = context.selectedIds
     .map((oid) => context.idToOptionMap[oid])
     .filter(Boolean)
@@ -48,21 +51,25 @@ export const MultiSelectChipDisplayButton = forwardRef<
       ref={innerRef}
       onClick={(event) => {
         props.onClick?.(event)
-        if(event.defaultPrevented) return
+        if (event.defaultPrevented) return
+        if (!hasInteractions) return
         context.toggleIsOpen()
       }}
       data-name={props['data-name'] ?? 'multi-select-chip-display-button'}
       data-value={context.value.length > 0 ? '' : undefined}
       data-disabled={disabled ? '' : undefined}
+      data-readonly={readOnly ? '' : undefined}
       data-invalid={invalid ? '' : undefined}
       aria-invalid={invalid}
       aria-disabled={disabled}
+      aria-readonly={readOnly}
     >
       {selectedOptions.map((opt) => (
         <div key={opt.id} data-name="multi-select-chip-display-chip">
           {opt.display}
           <IconButton
             tooltip={translation('remove')}
+            disabled={!hasInteractions}
             onClick={(e) => {
               context.toggleSelection(opt.id, false)
               e.preventDefault()
@@ -78,11 +85,14 @@ export const MultiSelectChipDisplayButton = forwardRef<
       ))}
       <IconButton
         id={context.config.ids.trigger}
+        disabled={!hasInteractions}
         onClick={(event) => {
           event.stopPropagation()
+          if (!hasInteractions) return
           context.toggleIsOpen()
         }}
         onKeyDown={(event) => {
+          if (!hasInteractions) return
           switch (event.key) {
           case 'ArrowDown':
             context.setIsOpen(true, 'first')

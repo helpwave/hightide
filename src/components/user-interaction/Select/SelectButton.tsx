@@ -1,4 +1,4 @@
-import type { ComponentPropsWithoutRef, ReactNode } from 'react'
+import type { ComponentPropsWithoutRef, ForwardedRef, ReactNode } from 'react'
 import { forwardRef, useEffect, useImperativeHandle, useRef } from 'react'
 import type { SelectOptionType } from './SelectContext'
 import { useSelectContext } from './SelectContext'
@@ -7,10 +7,11 @@ import { ExpansionIcon } from '@/src/components/display-and-visualization/Expans
 import { SelectOptionDisplayContext } from './SelectOption'
 
 export interface SelectButtonProps<T = string> extends ComponentPropsWithoutRef<'div'> {
-  placeholder?: ReactNode,
-  disabled?: boolean,
-  selectedDisplay?: (value: SelectOptionType<T> | null) => ReactNode,
-  hideExpansionIcon?: boolean,
+  'placeholder'?: ReactNode,
+  'disabled'?: boolean,
+  'selectedDisplay'?: (value: SelectOptionType<T> | null) => ReactNode,
+  'hideExpansionIcon'?: boolean,
+  'data-name'?: string,
 }
 
 export const SelectButton = forwardRef<HTMLDivElement, SelectButtonProps<unknown>>(
@@ -23,7 +24,7 @@ export const SelectButton = forwardRef<HTMLDivElement, SelectButtonProps<unknown
       hideExpansionIcon = false,
       ...props
     }: SelectButtonProps<T>,
-    ref
+    ref: ForwardedRef<HTMLDivElement>
   ) {
     const translation = useHightideTranslation()
     const context = useSelectContext<T>()
@@ -35,7 +36,7 @@ export const SelectButton = forwardRef<HTMLDivElement, SelectButtonProps<unknown
       if (id) setIds((prev) => ({ ...prev, trigger: id }))
     }, [id, setIds])
 
-    const innerRef = useRef<HTMLDivElement>(null)
+    const innerRef = useRef<HTMLDivElement | null>(null)
     useImperativeHandle(ref, () => innerRef.current!)
 
     useEffect(() => {
@@ -44,9 +45,11 @@ export const SelectButton = forwardRef<HTMLDivElement, SelectButtonProps<unknown
     }, [registerTrigger])
 
     const disabled = !!disabledOverride || !!context.disabled
+    const readOnly = !!context.readOnly
     const invalid = context.invalid
     const hasValue = context.selectedId !== null
-    const selectedOption = context.idToOptionMap[context.selectedId] ?? null
+    const hasInteractions = !readOnly && !disabled
+    const selectedOption = context.selectedId ? (context.idToOptionMap[context.selectedId] ?? null) : null
 
     return (
       <div
@@ -54,12 +57,13 @@ export const SelectButton = forwardRef<HTMLDivElement, SelectButtonProps<unknown
         ref={innerRef}
         id={context.config.ids.trigger}
         onClick={(event) => {
+          if (!hasInteractions) return
           props.onClick?.(event)
           context.toggleIsOpen()
         }}
         onKeyDown={(event) => {
           props.onKeyDown?.(event)
-          if (disabled) return
+          if (!hasInteractions) return
           switch (event.key) {
           case 'Enter':
           case ' ':
@@ -82,18 +86,20 @@ export const SelectButton = forwardRef<HTMLDivElement, SelectButtonProps<unknown
         data-name={props['data-name'] ?? 'select-button'}
         data-value={hasValue ? '' : undefined}
         data-disabled={disabled ? '' : undefined}
+        data-readonly={readOnly ? '' : undefined}
         data-invalid={invalid ? '' : undefined}
         tabIndex={disabled ? -1 : 0}
         role="button"
         aria-invalid={invalid}
         aria-disabled={disabled}
+        aria-readonly={readOnly}
         aria-haspopup="dialog"
         aria-expanded={context.isOpen}
         aria-controls={context.isOpen ? context.config.ids.content : undefined}
       >
         <SelectOptionDisplayContext.Provider value="trigger">
           {hasValue
-            ? selectedDisplay?.(selectedOption) ?? (selectedOption.display)
+            ? selectedDisplay?.(selectedOption) ?? (selectedOption?.display)
             : placeholder ?? translation('clickToSelect')}
         </SelectOptionDisplayContext.Provider>
         {!hideExpansionIcon && <ExpansionIcon isExpanded={context.isOpen} />}
