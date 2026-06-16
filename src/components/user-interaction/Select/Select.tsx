@@ -1,4 +1,4 @@
-import type { ReactNode, JSX } from 'react'
+import type { ReactNode, JSX, ForwardedRef } from 'react'
 import { forwardRef } from 'react'
 import type { SelectRootProps } from './SelectRoot'
 import { SelectRoot } from './SelectRoot'
@@ -17,7 +17,7 @@ export type SelectProps<T = string> = SelectRootProps<T> & {
 
 export const Select = forwardRef<HTMLDivElement, SelectProps<unknown>>(function Select<T>(
   { children, contentPanelProps, buttonProps, ...props }: SelectProps<T>,
-  ref
+  ref: ForwardedRef<HTMLDivElement>
 ) {
 
   return (
@@ -25,7 +25,7 @@ export const Select = forwardRef<HTMLDivElement, SelectProps<unknown>>(function 
       <SelectButton
         ref={ref}
         {...buttonProps}
-        selectedDisplay={(value: SelectOptionType<T> | null) => {
+        selectedDisplay={(value: SelectOptionType<unknown> | null) => {
           if (!buttonProps?.selectedDisplay) return undefined
           return buttonProps.selectedDisplay(value as SelectOptionType<T>)
         }}

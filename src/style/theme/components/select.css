@@ -4,7 +4,7 @@
   [data-name="multi-select-button"] {
     @apply input-element flex-row-2 items-center justify-between rounded-md px-3 py-2;
 
-    &:not([data-disabled]) {
+    &:not([data-disabled]):not([data-readonly]) {
       @apply hover:cursor-pointer;
     }
   }
@@ -12,7 +12,7 @@
   [data-name="multi-select-chip-display-button"] {
     @apply input-element flex flex-wrap gap-2 items-center rounded-md px-2.5 py-2.5;
 
-    &:not([data-disabled]) {
+    &:not([data-disabled]):not([data-readonly]) {
       @apply hover:cursor-pointer;
     }
   }

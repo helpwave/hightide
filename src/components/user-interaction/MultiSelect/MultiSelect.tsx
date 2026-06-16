@@ -1,3 +1,4 @@
+import type { ForwardedRef } from 'react'
 import { forwardRef } from 'react'
 import type { MultiSelectRootProps } from './MultiSelectRoot'
 import { MultiSelectRoot } from './MultiSelectRoot'
@@ -12,7 +13,7 @@ export interface MultiSelectProps<T = string> extends MultiSelectRootProps<T> {
 }
 
 export const MultiSelect = forwardRef<HTMLDivElement, MultiSelectProps<unknown>>(
-  function MultiSelect<T = string>({ children, contentPanelProps, buttonProps, ...props }: MultiSelectProps<T>, ref) {
+  function MultiSelect<T = string>({ children, contentPanelProps, buttonProps, ...props }: MultiSelectProps<T>, ref: ForwardedRef<HTMLDivElement>) {
     return (
       <MultiSelectRoot<T> {...props}>
         <MultiSelectButton ref={ref} {...buttonProps} />

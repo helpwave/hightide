@@ -9,7 +9,7 @@ export interface MultiSelectOptionType<T = string> {
   label?: string,
   display?: ReactNode,
   disabled?: boolean,
-  ref: RefObject<HTMLElement>,
+  ref: RefObject<HTMLElement | null>,
 }
 
 export interface MultiSelectContextIds {
@@ -46,8 +46,8 @@ export interface MultiSelectContextActions<T> {
 }
 
 export interface MultiSelectContextLayout {
-  triggerRef: RefObject<HTMLElement>,
-  registerTrigger(element: RefObject<HTMLElement>): () => void,
+  triggerRef: RefObject<HTMLElement | null>,
+  registerTrigger(element: RefObject<HTMLElement | null>): () => void,
 }
 
 export interface MultiSelectContextSearch {

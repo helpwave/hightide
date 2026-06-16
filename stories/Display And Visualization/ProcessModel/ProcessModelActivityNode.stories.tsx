@@ -27,8 +27,7 @@ const activityNodeExamples: ActivityNodeExample[] = processModelLibrary.flatMap(
       nodeLabel: node.label,
       count: node.count,
       activityIcon: node.activityIcon,
-    }))
-)
+    })))
 
 const meta: Meta<typeof ProcessModelActivityNode> = {
   component: ProcessModelActivityNode,

@@ -9,7 +9,11 @@
     background-color var(--animation-duration-in, 250ms) ease-in-out;
 
   &:not([data-disabled]):not([data-invalid]) {
-    @apply bg-input-background hover:border-primary-hover;
+    @apply bg-input-background;
+
+    &:not([data-readonly]) {
+      @apply hover:border-primary-hover;
+    }
 
     &:not([data-value]) {
       @apply text-placeholder;
@@ -21,7 +25,11 @@
   }
 
   &:not([data-disabled])[data-invalid] {
-    @apply bg-negative/20 border-negative hover:border-negative-hover;
+    @apply bg-negative/20 border-negative;
+
+    &:not([data-readonly]) {
+      @apply hover:border-negative-hover;
+    }
 
     --color-focus: var(--color-negative);
 
