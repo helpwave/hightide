@@ -18,19 +18,21 @@ type RectangleBounds = {
   height: number,
 }
 
-type CalculatePositionOptions = {
-  verticalAlignment?: FloatingElementAlignment,
-  horizontalAlignment?: FloatingElementAlignment,
-  screenPadding?: number,
-  gap?: number,
-  avoidOverlap?: boolean,
+type CalculatePositionOptionsResolved = {
+  verticalAlignment: FloatingElementAlignment,
+  horizontalAlignment: FloatingElementAlignment,
+  screenPadding: number,
+  gap: number,
+  avoidOverlap: boolean,
 }
+
+type CalculatePositionOptions = Partial<CalculatePositionOptionsResolved>
 
 type CalculatePositionProps = {
   windowRect: RectangleBounds,
   containerRect: RectangleBounds,
   anchorRect: RectangleBounds,
-  options: CalculatePositionOptions,
+  options: CalculatePositionOptionsResolved,
 }
 
 
@@ -215,9 +217,9 @@ export type UseAnchoredPositionOptions = CalculatePositionOptions & {
 }
 
 export type UseAnchoredPostitionProps = UseAnchoredPositionOptions & {
-  container: RefObject<HTMLElement>,
-  anchor: RefObject<HTMLElement>,
-  window?: RefObject<HTMLElement>,
+  container: RefObject<HTMLElement | null>,
+  anchor: RefObject<HTMLElement | null>,
+  window?: RefObject<HTMLElement | null>,
   active?: boolean,
 }
 
@@ -226,9 +228,9 @@ const measureSizes = ({
   anchorRef,
   windowRef,
 }: {
-    containerRef?: RefObject<HTMLElement>,
-    anchorRef?: RefObject<HTMLElement>,
-    windowRef?: RefObject<HTMLElement>,
+    containerRef?: RefObject<HTMLElement | null>,
+    anchorRef?: RefObject<HTMLElement | null>,
+    windowRef?: RefObject<HTMLElement | null>,
   }) => {
   return {
     container: containerRef?.current?.getBoundingClientRect(),
@@ -247,9 +249,9 @@ const measureSizes = ({
 type MeasureSize = ReturnType<typeof measureSizes>
 
 // dont check position of container because we are changing it
-const isSameMeasurment = (a: MeasureSize, b: MeasureSize) =>
-  a &&
-  b &&
+const isSameMeasurment = (a: MeasureSize | null, b: MeasureSize | null) =>
+  !!a &&
+  !!b &&
   a.container?.width === b.container?.width &&
   a.container?.height === b.container?.height &&
   a.anchor?.top === b.anchor?.top &&
@@ -265,7 +267,9 @@ const isSameMeasurment = (a: MeasureSize, b: MeasureSize) =>
   a.window?.width === b.window?.width &&
   a.window?.height === b.window?.height
 
-const isSameOptions = (a: CalculatePositionOptions, b: CalculatePositionOptions) =>
+const isSameOptions = (a: CalculatePositionOptions | null, b: CalculatePositionOptions | null) =>
+  !!a &&
+  !!b &&
   a.horizontalAlignment === b.horizontalAlignment &&
   a.verticalAlignment === b.verticalAlignment &&
   a.screenPadding === b.screenPadding &&
