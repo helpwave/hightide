@@ -2,7 +2,7 @@ import type { KeyboardEvent, MouseEvent } from 'react'
 import { useCallback } from 'react'
 import { ExternalLink } from 'lucide-react'
 import { ExpansionIcon } from '@/src/components/display-and-visualization/ExpansionIcon'
-import { useVerticalNavigationItem } from './VerticalNavigationContext'
+import { useNavigationItem } from './NavigationContext'
 import type { NavigationItemData } from './types'
 
 export interface VerticalNavigationItemProps {
@@ -35,7 +35,7 @@ export function VerticalNavigationItem({
     first,
     last,
     toggleExpansion,
-  } = useVerticalNavigationItem(id)
+  } = useNavigationItem(id)
 
   const hasChildren = items != null && items.length > 0
   const firstChildId = hasChildren ? items[0]?.id : undefined
@@ -180,8 +180,8 @@ export function VerticalNavigationItem({
       className="group/tree-node"
     >
       <div data-name="vertical-navigation-node-header" data-active={isFocused ? '' : undefined}>
-        <ExpansionIcon isExpanded={expanded} aria-hidden />
         {label}
+        <ExpansionIcon isExpanded={expanded} aria-hidden />
       </div>
       {expanded && (
         <ul

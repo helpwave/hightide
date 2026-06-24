@@ -21,12 +21,11 @@ export const HelpwaveBadge = ({
       className={clsx(
         'flex flex-row items-center font-bold font-space rounded-md',
         {
-          'px-2 py-1': size === 'sm' || size === 'md',
-          'px-4 py-1': size === 'lg',
           'gap-x-1': size === 'sm',
           'gap-x-2 text-lg': size === 'md',
           'gap-x-2 text-xl': size === 'lg'
-        }, props.className
+        },
+        props.className
       )}
     >
       <HelpwaveLogo size={size}/>

@@ -1,8 +1,4 @@
 @layer components {
-  [data-name="vertical-navigation-menu"] {
-    @apply flex-col-2 surface coloring-solid rounded-lg p-2 h-full;
-  }
-
   [data-name="vertical-navigation-tree"] {
     @apply flex-col-0 list-none m-0 p-0;
   }
@@ -12,7 +8,7 @@
   }
 
   [data-name="vertical-navigation-group"] {
-    @apply flex-col-0 list-none m-0 mt-0.5 ml-3 pl-3;
+    @apply flex-col-0 list-none m-0 my-0.5 ml-4 pl-2 border-l border-border;
   }
 
   [data-name="vertical-navigation-node-header"],
