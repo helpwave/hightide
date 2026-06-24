@@ -4,10 +4,13 @@ import { TableBody } from './TableBody'
 import type { TableHeaderProps } from './TableHeader'
 import { TableHeader } from './TableHeader'
 import { useTableContainerContext, useTableStateContext } from './TableContext'
+import type { TableVirtualizationOptions } from './VirtualizedTableBody'
+import { VirtualizedTableBody } from './VirtualizedTableBody'
 
 export interface TableDisplayProps extends TableHTMLAttributes<HTMLTableElement> {
   containerProps?: Omit<React.HTMLAttributes<HTMLDivElement>, 'children'>,
   tableHeaderProps?: Omit<TableHeaderProps, 'children' | 'table'>,
+  virtualized?: boolean | TableVirtualizationOptions,
 }
 
 
@@ -18,6 +21,7 @@ export const TableDisplay = <T,>({
   children,
   containerProps,
   tableHeaderProps,
+  virtualized = false,
   ...props
 }: TableDisplayProps) => {
   const { table } = useTableStateContext<T>()
@@ -36,7 +40,9 @@ export const TableDisplay = <T,>({
       >
         {children}
         <TableHeader {...tableHeaderProps} />
-        <TableBody />
+        {virtualized
+          ? <VirtualizedTableBody {...(typeof virtualized === 'object' ? virtualized : {})} />
+          : <TableBody />}
       </table>
     </div>
   )

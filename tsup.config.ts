@@ -15,6 +15,7 @@ export default defineConfig({
     'react-dom',
     'clsx',
     '@tanstack/react-table',
+    '@tanstack/react-virtual',
     'lucide-react',
     'radix-ui',
     'react-custom-scrollbars-2',
