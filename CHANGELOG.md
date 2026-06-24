@@ -5,6 +5,12 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/)
 and adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [0.11.0] - 2026-06-24
+
+### Added
+- Opt-in row virtualization (windowing) for the table via a new `virtualized` prop on `TableDisplay` (and through `Table`/`TableWithSelection` `displayProps`). Only the rows in (or near) the viewport are mounted to the DOM, keeping large, infinitely-scrolled lists responsive. Accepts `true` or `{ estimateRowHeight, overscan, scroll }`, where `scroll` is `'window'` (default, tracks the page scroll) or `'container'` (tracks the table container's own scroll). Rows stay in normal table flow via spacer rows, so column sizing/resizing, the sticky header, sorting, filtering, selection and row clicks are preserved; per-row heights are measured to support variable-height rows. Filler rows are ignored while virtualized.
+- `@tanstack/react-virtual` dependency.
+
 ## [0.10.3] - 2026-06-24
 
 ### Fixed
