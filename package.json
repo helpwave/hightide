@@ -54,10 +54,10 @@
     "react-dom": "^19.0.0"
   },
   "devDependencies": {
-    "@babel/core": "7.26.0",
-    "@babel/preset-env": "7.26.0",
-    "@babel/preset-react": "7.26.3",
-    "@babel/preset-typescript": "7.26.0",
+    "@babel/core": "7.29.7",
+    "@babel/preset-env": "7.29.7",
+    "@babel/preset-react": "7.29.7",
+    "@babel/preset-typescript": "7.29.7",
     "@faker-js/faker": "10.1.0",
     "@helpwave/eslint-config": "0.0.11",
     "@storybook/addon-docs": "10.4.5",
@@ -96,6 +96,7 @@
   },
   "overrides": {
     "esbuild": "0.28.1",
-    "postcss": "8.5.15"
+    "postcss": "8.5.15",
+    "js-yaml": "4.2.0"
   }
 }
