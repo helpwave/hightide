@@ -187,7 +187,9 @@ export const useFocusTrap = ({
 
       function unpause() {
         setPaused(false)
-        if (!container.current.contains(document.activeElement as HTMLElement)) {
+        // The container may already be unmounted when an outer trap is unpaused
+        // (e.g. closing a stacked popup), so guard against a null ref.
+        if (container.current && !container.current.contains(document.activeElement as HTMLElement)) {
           focusElement()
         }
       }
