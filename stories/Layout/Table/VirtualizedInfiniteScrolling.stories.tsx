@@ -9,17 +9,6 @@ import { TableColumnSwitcher } from '@/src/components/layout/table/TableColumnSw
 import { Chip } from '@/src/components/display-and-visualization/Chip'
 import { useHightideTranslation } from '@/src/i18n/useHightideTranslation'
 
-/*
- * Mirrors the TanStack "virtualized infinite scrolling" example
- * (https://tanstack.com/table/v8/docs/framework/react/examples/virtualized-infinite-scrolling)
- * against hightide's table: a large, paginated-on-scroll list where only the visible rows are
- * mounted to the DOM via the `virtualized` prop. Rendered in `container` scroll mode (a bounded,
- * internally-scrolling table with a sticky header), so the whole demo is self-contained.
- *
- * Open the elements panel while scrolling: the `<tbody>` only ever holds the visible rows plus a
- * small overscan, regardless of how many rows have been fetched.
- */
-
 type Person = {
   id: string,
   name: string,
@@ -33,11 +22,11 @@ type Person = {
 
 const statuses = ['active', 'inactive', 'pending'] as const
 
-// Deterministic data so the story looks the same on every load.
 faker.seed(20260624)
 
 const TOTAL_ROWS = 5000
 const FETCH_SIZE = 50
+const BOTTOM_THRESHOLD_PX = 500
 
 const allRows: Person[] = range(TOTAL_ROWS).map((index) => ({
   id: String(index + 1),
@@ -50,15 +39,11 @@ const allRows: Person[] = range(TOTAL_ROWS).map((index) => ({
   joined: faker.date.past({ years: 10 }),
 }))
 
-// Pretend backend: returns one page after a short delay.
 const fetchPage = async (pageIndex: number): Promise<Person[]> => {
   await new Promise((resolve) => setTimeout(resolve, 600))
   const start = pageIndex * FETCH_SIZE
   return allRows.slice(start, start + FETCH_SIZE)
 }
-
-// 500px from the bottom we kick off the next page.
-const BOTTOM_THRESHOLD_PX = 500
 
 const meta: Meta = {}
 
@@ -90,7 +75,6 @@ export const virtualizedInfiniteScrolling: Story = {
       setIsFetching(false)
     }, [])
 
-    // Load the first page on mount; the rest stream in as the user scrolls.
     useEffect(() => {
       void fetchNextPage()
     }, [fetchNextPage])
@@ -107,8 +91,6 @@ export const virtualizedInfiniteScrolling: Story = {
       <Table
         table={{
           data: flatData,
-          // Virtualization reserves the full scroll height itself, so filler rows are unnecessary,
-          // and we put every fetched row into a single page so they are all available to window.
           isUsingFillerRows: false,
           initialState: { pagination: { pageIndex: 0, pageSize: TOTAL_ROWS } },
         }}

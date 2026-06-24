@@ -9,32 +9,13 @@ import { PropsUtil } from '@/src/utils/propsUtil'
 import { BagFunctionUtil } from '@/src/utils/bagFunctions'
 
 export type TableVirtualizationOptions = {
-  /** Estimated row height in px, refined by measurement once rows mount. Default `48`. */
   estimateRowHeight?: number,
-  /** Rows rendered above and below the viewport to avoid blank space while scrolling. Default `8`. */
   overscan?: number,
-  /**
-   * Which scroll context to track:
-   * - `'window'` (default) windows against the page/document scroll. Use this when the list
-   *   scrolls with the page (e.g. a document-scroll infinite list with a sentinel below the table).
-   * - `'container'` windows against the table container's own scroll. The container
-   *   (`data-name="table-container"`) needs a bounded height and `overflow-y: auto` for this.
-   */
   scroll?: 'window' | 'container',
 }
 
 export type VirtualizedTableBodyProps = TableVirtualizationOptions
 
-/**
- * Drop-in replacement for {@link TableBody} that only mounts the visible rows (plus a small
- * overscan) instead of the whole row model. Rows stay in normal table flow — a single spacer
- * `<tr>` above and below the window reserves the scroll height — so column sizing (driven by the
- * `<colgroup>`), the sticky header, resizing, sorting/filtering, selection and row clicks all keep
- * working unchanged. Per-row heights are measured, so variable-height rows are supported.
- *
- * Filler rows are intentionally ignored here: virtualization already reserves the full scroll
- * height, so `isUsingFillerRows` is a no-op while virtualized.
- */
 export const VirtualizedTableBody = ({
   estimateRowHeight = 48,
   overscan = 8,
@@ -50,10 +31,6 @@ export const VirtualizedTableBody = ({
 
   useEffect(() => setIsMounted(true), [])
 
-  // In window mode the virtualizer needs the body's offset from the top of the document so it can
-  // map window scroll -> row positions. That offset only moves when layout above the table changes
-  // (resize), not when rows are appended below, so we track it via a ResizeObserver/resize listener
-  // and keep the dependency list narrow rather than recomputing on every row-count change.
   useEffect(() => {
     if (scroll !== 'window') return
     const element = bodyRef.current
@@ -78,7 +55,6 @@ export const VirtualizedTableBody = ({
     overscan,
     getItemKey: (index: number) => rows[index]?.id ?? index,
   }
-  // Hooks must run unconditionally; we just pick which result to use based on `scroll`.
   const windowVirtualizer = useWindowVirtualizer({ ...common, scrollMargin })
   const containerVirtualizer = useVirtualizer({ ...common, getScrollElement: () => containerRef.current })
   const virtualizer = scroll === 'window' ? windowVirtualizer : containerVirtualizer
@@ -102,9 +78,6 @@ export const VirtualizedTableBody = ({
     </tr>
   )
 
-  // Before mount, render the rows in plain flow (no windowing). The window virtualizer produces an
-  // empty range until it has measured the scroll position, so gating here avoids an SSR/hydration
-  // mismatch. Consumers that fetch rows client-side render nothing here anyway.
   if (!isMounted) {
     return (
       <tbody ref={bodyRef}>
