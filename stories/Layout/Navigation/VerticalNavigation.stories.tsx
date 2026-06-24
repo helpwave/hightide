@@ -81,7 +81,7 @@ export const verticalNavigation: Story = {
     initialActiveId: 'ward-management',
     onlyOneExpandedTree: false,
     header: (
-      <div className="typography-label-lg font-semibold px-2 py-1">
+      <div className="typography-label-lg font-semibold px-2 py-1 mb-6">
         Navigation
       </div>
     ),
@@ -98,7 +98,7 @@ export const verticalNavigation: Story = {
     const [activeId, setActiveId] = useState<string | null>(args.initialActiveId ?? null)
 
     return (
-      <div className="w-64">
+      <div className="w-64 h-full">
         <VerticalNavigation
           {...args}
           activeId={activeId}

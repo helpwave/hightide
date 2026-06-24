@@ -1,6 +1,6 @@
 @layer components {
   [data-name="vertical-navigation-menu"] {
-    @apply flex-col-2 surface coloring-solid rounded-lg p-2;
+    @apply flex-col-2 surface coloring-solid rounded-lg p-2 h-full;
   }
 
   [data-name="vertical-navigation-tree"] {

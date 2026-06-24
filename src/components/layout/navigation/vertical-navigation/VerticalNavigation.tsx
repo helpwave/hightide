@@ -1,5 +1,7 @@
-import type { ReactNode } from 'react'
-import { VerticalNavigationTree, type VerticalNavigationTreeProps } from './VerticalNavigationTree'
+import type { HTMLAttributes, ReactNode } from 'react'
+import { VerticalNavigationTree } from './VerticalNavigationTree'
+import type { TreeNavigationOptions } from '@/src/hooks/useTreeNavigation'
+import type { NavigationItemData } from './types'
 
 export type { NavigationItemData } from './types'
 export type { VerticalNavigationTreeProps } from './VerticalNavigationTree'
@@ -11,21 +13,32 @@ export {
   VerticalNavigationProvider,
 } from './VerticalNavigationContext'
 
-export interface VerticalNavigationProps extends VerticalNavigationTreeProps {
+export interface VerticalNavigationProps extends HTMLAttributes<HTMLDivElement>, Omit<TreeNavigationOptions, 'nodes'> {
   header: ReactNode,
   footer: ReactNode,
+  items: NavigationItemData[],
 }
 
 export function VerticalNavigation({
   header,
   footer,
   items,
-  ...navigationOptions
+  activeId,
+  onActiveIdChange,
+  initialActiveId,
+  onlyOneExpandedTree,
+  ...props
 }: VerticalNavigationProps) {
   return (
-    <div data-name="vertical-navigation-menu">
+    <div data-name="vertical-navigation-menu" {...props}>
       {header}
-      <VerticalNavigationTree items={items} {...navigationOptions} />
+      <VerticalNavigationTree
+        items={items}
+        activeId={activeId}
+        onActiveIdChange={onActiveIdChange}
+        initialActiveId={initialActiveId}
+        onlyOneExpandedTree={onlyOneExpandedTree}
+      />
       {footer}
     </div>
   )
