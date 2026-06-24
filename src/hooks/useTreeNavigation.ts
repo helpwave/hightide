@@ -20,13 +20,17 @@ export interface TreeNavigationOptions {
   onlyOneExpandedTree?: boolean,
 }
 
+export interface TreeNavigationActionOptions {
+  isFocusing?: boolean,
+}
+
 export interface TreeNavigationReturn {
   items: ReadonlyArray<TreeItem>,
   activeItem: TreeItem | null,
   navigateTo: (id: string) => void,
-  expand: (id: string) => void,
-  collapse: (id: string) => void,
-  toggleExpansion: (id: string) => void,
+  expand: (id: string, options?: TreeNavigationActionOptions) => void,
+  collapse: (id: string, options?: TreeNavigationActionOptions) => void,
+  toggleExpansion: (id: string, options?: TreeNavigationActionOptions) => void,
   next: () => void,
   previous: () => void,
   first: () => void,
@@ -212,24 +216,34 @@ export function useTreeNavigation({
     })
   }, [index, onlyOneExpandedTree, setActiveId])
 
-  const expand = useCallback((id: string) => {
+  const expand = useCallback((id: string, options?: TreeNavigationActionOptions) => {
     const entry = index.byId.get(id)
     if (entry == null || entry.node.items.length === 0) return
+
+    if (options?.isFocusing) {
+      setActiveId(id)
+    }
 
     setExpandedIds((prev) => {
       const next = new Set(prev)
       next.add(id)
-      const activePath = resolvedActiveId != null
-        ? index.byId.get(resolvedActiveId)?.path ?? null
-        : null
+      const activePath = options?.isFocusing
+        ? entry.path
+        : resolvedActiveId != null
+          ? index.byId.get(resolvedActiveId)?.path ?? null
+          : null
       return pruneExpandedIds(next, activePath, onlyOneExpandedTree, index)
     })
-  }, [index, onlyOneExpandedTree, resolvedActiveId])
+  }, [index, onlyOneExpandedTree, resolvedActiveId, setActiveId])
 
-  const collapse = useCallback((id: string) => {
-    if (resolvedActiveId != null) {
+  const collapse = useCallback((id: string, options?: TreeNavigationActionOptions) => {
+    if (!options?.isFocusing && resolvedActiveId != null) {
       const activeEntry = index.byId.get(resolvedActiveId)
       if (activeEntry != null && isAncestorOf(id, activeEntry.path)) return
+    }
+
+    if (options?.isFocusing) {
+      setActiveId(id)
     }
 
     const descendantIds = getDescendantIds(index, id)
@@ -241,11 +255,33 @@ export function useTreeNavigation({
       }
       return next
     })
-  }, [index, resolvedActiveId])
+  }, [index, resolvedActiveId, setActiveId])
 
-  const toggleExpansion = useCallback((id: string) => {
+  const toggleExpansion = useCallback((id: string, options?: TreeNavigationActionOptions) => {
     const entry = index.byId.get(id)
     if (entry == null || entry.node.items.length === 0) return
+
+    if (options?.isFocusing) {
+      setActiveId(id)
+      setExpandedIds((prev) => {
+        if (prev.has(id)) {
+          const next = new Set(prev)
+          next.delete(id)
+          for (const descendantId of getDescendantIds(index, id)) {
+            next.delete(descendantId)
+          }
+          return next
+        }
+
+        const next = new Set(prev)
+        next.add(id)
+        for (const ancestorId of getExpandableAncestorIds(entry.path, index)) {
+          next.add(ancestorId)
+        }
+        return pruneExpandedIds(next, entry.path, onlyOneExpandedTree, index)
+      })
+      return
+    }
 
     const isExpanded = expandedIds.has(id)
     if (isExpanded) {
@@ -253,7 +289,7 @@ export function useTreeNavigation({
     } else {
       expand(id)
     }
-  }, [index, expandedIds, expand, collapse])
+  }, [index, expandedIds, expand, collapse, onlyOneExpandedTree, setActiveId])
 
   const next = useCallback(() => {
     if (items.length === 0) return
@@ -305,10 +341,10 @@ export function useTreeNavigation({
     navigateTo,
     expand,
     collapse,
+    toggleExpansion,
     next,
     previous,
     first,
     last,
-    toggleExpansion,
-  }), [items, activeItem, navigateTo, expand, collapse, next, previous, first, last, toggleExpansion])
+  }), [items, activeItem, navigateTo, expand, collapse, toggleExpansion, next, previous, first, last])
 }

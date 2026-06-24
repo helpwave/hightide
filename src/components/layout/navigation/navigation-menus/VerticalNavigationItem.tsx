@@ -1,5 +1,5 @@
 import type { KeyboardEvent, MouseEvent } from 'react'
-import { useCallback } from 'react'
+import { useCallback, useRef } from 'react'
 import { ExternalLink } from 'lucide-react'
 import { ExpansionIcon } from '@/src/components/display-and-visualization/ExpansionIcon'
 import { useNavigationItem } from './NavigationContext'
@@ -22,6 +22,7 @@ export function VerticalNavigationItem({
   items,
   depth = 0,
 }: VerticalNavigationItemProps) {
+  const headerRef = useRef<HTMLDivElement>(null)
   const {
     expanded,
     isFocused,
@@ -41,9 +42,9 @@ export function VerticalNavigationItem({
   const firstChildId = hasChildren ? items[0]?.id : undefined
 
   const handleKeyDown = useCallback((event: KeyboardEvent<HTMLLIElement>) => {
-    if (!isFocused || event.isDefaultPrevented()) return
+    if (!isFocused || event.target !== event.currentTarget) return
+
     if (event.key === 'ArrowRight') {
-      event.preventDefault()
       if (!hasChildren) return
       if (!expanded) {
         expand(id)
@@ -56,7 +57,6 @@ export function VerticalNavigationItem({
     }
 
     if (event.key === 'ArrowLeft') {
-      event.preventDefault()
       if (hasChildren && expanded) {
         collapse(id)
         return
@@ -69,60 +69,48 @@ export function VerticalNavigationItem({
     }
 
     if (event.key === 'ArrowDown') {
-      event.preventDefault()
       next()
       return
     }
 
     if (event.key === 'ArrowUp') {
-      event.preventDefault()
       previous()
       return
     }
 
     if (event.key === 'Home') {
-      event.preventDefault()
       first()
       return
     }
 
     if (event.key === 'End') {
-      event.preventDefault()
       last()
       return
     }
 
     if (event.key === 'Enter' || event.key === ' ') {
-      event.preventDefault()
-      navigateTo(id)
       if (hasChildren) {
-        toggleExpansion(id)
+        toggleExpansion(id, { isFocusing: true })
+      } else {
+        navigateTo(id)
       }
       if (url == null) return
       if (external) {
         window.open(url, '_blank', 'noopener,noreferrer')
         return
       }
+      window.location.assign(url)
     }
   }, [collapse, expand, expanded, external, first, firstChildId, hasChildren, id, isFocused, last, navigateTo, next, path, previous, toggleExpansion, url])
 
-  const handleActivate = useCallback((event: MouseEvent<HTMLLIElement>) => {
-    if (event.isDefaultPrevented()) return
-    event.preventDefault()
-    if (hasChildren) {
-      navigateTo(id)
-      toggleExpansion(id)
-      return
-    }
+  const handleHeaderActivate = useCallback(() => {
+    toggleExpansion(id, { isFocusing: true })
+  }, [id, toggleExpansion])
+
+  const handleLeafActivate = useCallback((event: MouseEvent<HTMLLIElement>) => {
+    if ((event.target as Element).closest('[data-name="vertical-navigation-item-link"]')) return
     navigateTo(id)
-    if (url == null) return
-    if (event.target instanceof HTMLAnchorElement) return
-    if (external) {
-      window.open(url, '_blank', 'noopener,noreferrer')
-      return
-    }
-    window.location.assign(url)
-  }, [external, hasChildren, id, navigateTo, toggleExpansion, url])
+  }, [id, navigateTo])
 
   const labelContent = url == null ? (
     label
@@ -158,7 +146,7 @@ export function VerticalNavigationItem({
         aria-selected={isFocused ? true : undefined}
         tabIndex={isFocused ? 0 : -1}
         onKeyDown={handleKeyDown}
-        onClick={handleActivate}
+        onClick={handleLeafActivate}
       >
         {labelContent}
       </li>
@@ -176,10 +164,14 @@ export function VerticalNavigationItem({
       aria-expanded={expanded}
       tabIndex={isFocused ? 0 : -1}
       onKeyDown={handleKeyDown}
-      onClick={handleActivate}
       className="group/tree-node"
     >
-      <div data-name="vertical-navigation-node-header" data-active={isFocused ? '' : undefined}>
+      <div
+        ref={headerRef}
+        data-name="vertical-navigation-node-header"
+        data-active={isFocused ? '' : undefined}
+        onClick={handleHeaderActivate}
+      >
         {label}
         <ExpansionIcon isExpanded={expanded} aria-hidden />
       </div>

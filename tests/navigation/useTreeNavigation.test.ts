@@ -174,6 +174,22 @@ describe('useTreeNavigation', () => {
     expect(result.current.items.find((item) => item.id === 'root-a')?.expanded).toBe(true)
   })
 
+  test('toggleExpansion with isFocusing collapses parent after activating a descendant', () => {
+    const { result } = renderHook(() =>
+      useTreeNavigation({
+        nodes: sampleTree,
+        initialActiveId: 'child-a1',
+      }))
+
+    act(() => {
+      result.current.toggleExpansion('root-a', { isFocusing: true })
+    })
+
+    expect(result.current.activeItem?.id).toBe('root-a')
+    expect(result.current.items.map((item) => item.id)).toEqual(['root-a', 'root-b'])
+    expect(result.current.items.find((item) => item.id === 'root-a')?.expanded).toBe(false)
+  })
+
   test('next moves to next visible item in flattened tree order', () => {
     const { result } = renderHook(() =>
       useTreeNavigation({
