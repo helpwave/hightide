@@ -17,7 +17,6 @@ export interface TreeNavigationOptions {
   activeId?: string | null,
   onActiveIdChange?: (activeId: string | null) => void,
   initialActiveId?: string | null,
-  isNextLooping?: boolean,
   onlyOneExpandedTree?: boolean,
 }
 
@@ -166,7 +165,6 @@ export function useTreeNavigation({
   activeId: controlledActiveId,
   onActiveIdChange,
   initialActiveId,
-  isNextLooping = false,
   onlyOneExpandedTree = false,
 }: TreeNavigationOptions): TreeNavigationReturn {
   const index = useMemo(() => buildTreeIndex(nodes), [nodes])
@@ -272,11 +270,7 @@ export function useTreeNavigation({
       navigateTo(items[startIndex + 1].id)
       return
     }
-
-    if (isNextLooping) {
-      navigateTo(items[0].id)
-    }
-  }, [items, resolvedActiveId, isNextLooping, navigateTo])
+  }, [items, resolvedActiveId, navigateTo])
 
   const previous = useCallback(() => {
     if (items.length === 0) return
@@ -293,11 +287,7 @@ export function useTreeNavigation({
       navigateTo(items[startIndex - 1].id)
       return
     }
-
-    if (isNextLooping) {
-      navigateTo(items[items.length - 1].id)
-    }
-  }, [items, resolvedActiveId, isNextLooping, navigateTo])
+  }, [items, resolvedActiveId, navigateTo])
 
   const first = useCallback(() => {
     if (items.length === 0) return

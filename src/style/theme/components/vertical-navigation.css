@@ -12,7 +12,7 @@
   }
 
   [data-name="vertical-navigation-group"] {
-    @apply flex-col-0 list-none m-0 mt-0.5 ml-3 pl-3 border-l border-outline-variant;
+    @apply flex-col-0 list-none m-0 mt-0.5 ml-3 pl-3;
   }
 
   [data-name="vertical-navigation-node-header"],

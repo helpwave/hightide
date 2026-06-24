@@ -86,7 +86,7 @@ describe('useTreeNavigation', () => {
           activeId: props.activeId,
           onActiveIdChange,
         }),
-      { initialProps: { activeId: 'root-a' as string | null } },
+      { initialProps: { activeId: 'root-a' as string | null } }
     )
 
     expect(result.current.activeItem?.id).toBe('root-a')
@@ -202,51 +202,6 @@ describe('useTreeNavigation', () => {
     expect(result.current.activeItem?.id).toBe('child-a1')
   })
 
-  test('next loops to first visible item when isNextLooping is true', () => {
-    const { result } = renderHook(() =>
-      useTreeNavigation({
-        nodes: sampleTree,
-        initialActiveId: 'child-b1',
-        isNextLooping: true,
-      }))
-
-    act(() => {
-      result.current.next()
-    })
-
-    expect(result.current.activeItem?.id).toBe('root-a')
-  })
-
-  test('next does not pass last visible item when isNextLooping is false', () => {
-    const { result } = renderHook(() =>
-      useTreeNavigation({
-        nodes: sampleTree,
-        initialActiveId: 'child-b1',
-        isNextLooping: false,
-      }))
-
-    act(() => {
-      result.current.next()
-    })
-
-    expect(result.current.activeItem?.id).toBe('child-b1')
-  })
-
-  test('previous loops to last visible item when isNextLooping is true', () => {
-    const { result } = renderHook(() =>
-      useTreeNavigation({
-        nodes: sampleTree,
-        initialActiveId: 'root-a',
-        isNextLooping: true,
-      }))
-
-    act(() => {
-      result.current.previous()
-    })
-
-    expect(result.current.activeItem?.id).toBe('root-b')
-  })
-
   test('first navigates to first visible item', () => {
     const { result } = renderHook(() =>
       useTreeNavigation({
@@ -280,7 +235,7 @@ describe('useTreeNavigation', () => {
       useTreeNavigation({ nodes: sampleTree }))
 
     act(() => {
-      result.current.navigateTo('root-a', { expandIfBranch: true })
+      result.current.navigateTo('root-a')
     })
 
     expect(result.current.activeItem?.id).toBe('root-a')

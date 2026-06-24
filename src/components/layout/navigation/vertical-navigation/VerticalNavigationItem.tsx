@@ -41,7 +41,7 @@ export function VerticalNavigationItem({
   const firstChildId = hasChildren ? items[0]?.id : undefined
 
   const handleKeyDown = useCallback((event: KeyboardEvent<HTMLLIElement>) => {
-    if (!isFocused) return
+    if (!isFocused || event.isDefaultPrevented()) return
     if (event.key === 'ArrowRight') {
       event.preventDefault()
       if (!hasChildren) return
@@ -107,6 +107,8 @@ export function VerticalNavigationItem({
   }, [collapse, expand, expanded, external, first, firstChildId, hasChildren, id, isFocused, last, navigateTo, next, path, previous, toggleExpansion, url])
 
   const handleActivate = useCallback((event: MouseEvent<HTMLLIElement>) => {
+    if (event.isDefaultPrevented()) return
+    event.preventDefault()
     if (hasChildren) {
       navigateTo(id)
       toggleExpansion(id)

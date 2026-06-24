@@ -5,6 +5,7 @@ import {
   VerticalNavigation,
   type NavigationItemData
 } from '@/src/components/layout/navigation/vertical-navigation/VerticalNavigation'
+import { HelpwaveLogo } from '@/src/components/branding/HelpwaveLogo'
 
 const sampleItems: NavigationItemData[] = [
   {
@@ -26,6 +27,12 @@ const sampleItems: NavigationItemData[] = [
           { id: 'task-board', label: 'Task board', url: 'https://helpwave.de/product/tasks', external: true },
           { id: 'staff-planning', label: 'Staff planning', url: 'https://helpwave.de/product/staff', external: true },
         ],
+      },
+      {
+        id: 'other',
+        label: 'Other',
+        url: '#',
+        external: false,
       },
     ],
   },
@@ -72,16 +79,16 @@ type Story = StoryObj<typeof meta>
 export const verticalNavigation: Story = {
   args: {
     initialActiveId: 'ward-management',
-    isNextLooping: true,
-    onlyOneExpandedTree: true,
+    onlyOneExpandedTree: false,
     header: (
       <div className="typography-label-lg font-semibold px-2 py-1">
         Navigation
       </div>
     ),
     footer: (
-      <div className="typography-label-md text-description px-2 py-1">
-        helpwave
+      <div className="flex-row-1 items-center typography-label-md text-description px-2 py-1">
+        <span className="font-semibold">by</span> helpwave
+        <HelpwaveLogo size="sm" />
       </div>
     ),
     items: sampleItems,
