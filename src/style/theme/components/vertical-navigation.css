@@ -1,6 +1,6 @@
 @layer components {
   [data-name="vertical-navigation-tree"] {
-    @apply flex-col-0 list-none m-0 p-0;
+    @apply flex-col-2 list-none m-0 p-0;
   }
 
   [data-name="vertical-navigation-node"] {
@@ -8,12 +8,12 @@
   }
 
   [data-name="vertical-navigation-group"] {
-    @apply flex-col-0 list-none m-0 my-0.5 ml-4 pl-2 border-l border-border;
+    @apply flex-col-0 list-none m-0 my-0.5 ml-2.5 pl-2.5 border-l border-border;
   }
 
   [data-name="vertical-navigation-node-header"],
   [data-name="vertical-navigation-item"] {
-    @apply flex-row-1 items-center rounded-md min-h-9 min-w-0 px-2 py-1.5 typography-label-md;
+    @apply flex-row-1 items-center rounded-md min-h-9 min-w-0 px-2.5 py-1.5;
   
     &:hover, &:focus-visible {
       @apply bg-primary/15;
@@ -21,12 +21,15 @@
   }
 
   [data-name="vertical-navigation-node-header"] {
+    @apply justify-between;
+    
     &[data-active] {
-      @apply bg-primary/15 outline outline-2 outline-primary;
+      @apply bg-primary/15;
+      @apply group-focus-visible/tree-node:outline group-focus-visible/tree-node:outline-2 group-focus-visible/tree-node:outline-primary;
     }
   }
 
   [data-name="vertical-navigation-item-link"] {
-    @apply flex-row-2 items-center no-underline;
+    @apply flex-row-2 w-full items-center justify-between no-underline;
   }
 }

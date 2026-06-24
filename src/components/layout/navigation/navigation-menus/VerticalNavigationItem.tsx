@@ -123,7 +123,7 @@ export function VerticalNavigationItem({
       tabIndex={-1}
     >
       {label}
-      <ExternalLink className="size-4" />
+      <ExternalLink className="size-force-5" />
     </a>
   ) : (
     <a

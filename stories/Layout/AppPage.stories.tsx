@@ -1,10 +1,7 @@
 import type { Meta, StoryObj } from '@storybook/nextjs-vite'
-import { useState } from 'react'
-import { action } from 'storybook/actions'
 import { Bell, Settings } from 'lucide-react'
 import { AppPage } from '@/src/components/layout/app/AppPage'
 import { HelpwaveBadge } from '@/src/components/branding/HelpwaveBadge'
-import { VerticalNavigationTree } from '@/src/components/layout/navigation/navigation-menus/VerticalNavigationTree'
 import { IconButton } from '@/src/components/user-interaction/IconButton'
 import { longNavigationItems } from './Navigation/verticalNavigationSampleItems'
 
@@ -53,31 +50,18 @@ export const appPage: Story = {
     ),
   ],
   render: (args) => {
-    const [activeId, setActiveId] = useState<string | null>('ward-management')
-
     return (
       <AppPage
         {...args}
-        sidebar={(
-          <div className="flex-col-2 h-full min-h-0 py-2 desktop:max-w-64">
-            <HelpwaveBadge size="md" className="shrink-0 px-4" />
-            <div className="flex-1 min-h-0 px-4 py-0.5 overflow-y-auto overscroll-y-contain">
-              <VerticalNavigationTree
-                items={longNavigationItems}
-                activeId={activeId}
-                initialActiveId="ward-management"
-                onlyOneExpandedTree={false}
-                onActiveIdChange={(id) => {
-                  action('onActiveIdChange')(id)
-                  setActiveId(id)
-                }}
-              />
-            </div>
-            <p className="typography-label-md text-description shrink-0 px-4">
-              Navigate through helpwave products and organization settings.
+        sidebarProps={{
+          header: <HelpwaveBadge size="md" className="shrink-0" />,
+          navigationItems: longNavigationItems,
+          footer: (
+            <p className="typography-body-md text-description">
+              {'Welcome to the app page layout. Scroll to see how content flows beneath the sticky header.'}
             </p>
-          </div>
-        )}
+          )
+        }}
       />
     )
   },

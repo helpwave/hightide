@@ -40,9 +40,9 @@ export const HelpwaveLogo = ({
       strokeLinecap="round"
       strokeWidth={65}
       className={clsx({
-        'max-w-16 max-h-16': size === 'lg',
-        'max-w-12 max-h-12': size === 'md',
-        'max-w-8 max-h-8': size === 'sm',
+        'max-w-16 max-h-16 min-w-16 min-h-16': size === 'lg',
+        'max-w-12 max-h-12 min-w-12 min-h-12': size === 'md',
+        'max-w-8 max-h-8 min-w-8 min-h-8': size === 'sm',
       }, props.className)}
     >
       <g className={clsx(svgAnimationKey)}>
