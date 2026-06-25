@@ -22,10 +22,17 @@
 
   [data-name="vertical-navigation-node-header"] {
     @apply justify-between;
+    transition: var(--focus-outline-transition);
     
     &[data-active] {
       @apply bg-primary/15;
-      @apply group-focus-visible/tree-node:outline group-focus-visible/tree-node:outline-2 group-focus-visible/tree-node:outline-primary;
+
+      &:is(:where(.group\/tree-node):focus-visible *) {
+        outline: var(--focus-outline);
+        outline-offset: var(--focus-outline-offset);
+        box-shadow: var(--focus-box-shadow);
+        border-color: var(--focus-border-color);
+      }
     }
   }
 

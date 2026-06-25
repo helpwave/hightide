@@ -77,24 +77,24 @@ export const AppPageSidebarWithNavigation = ({
 }: AppPageSidebarWithNavigationProps) => {
   return (
     <AppSidebar {...props}>
-      <div className="flex-col-0 h-full min-h-0 py-2">
+      <div className="app-page-sidebar-with-navigation">
         {header && (
-          <div className="flex-col-0 items-start desktop:items-center px-2.5 mb-8">
+          <div className="app-page-sidebar-with-navigation-header">
             {header}
           </div>
         )}
         {navigationItems && !contentOverwrite && (
-          <div className="flex-1 min-h-0 pl-2.5 pr-1 py-0.5 overflow-y-auto overscroll-y-contain">
+          <div className="app-page-sidebar-with-navigation-scroll">
             <VerticalNavigationTree items={navigationItems} />
           </div>
         )}
         {contentOverwrite && (
-          <div className="flex-1 min-h-0 pl-2.5 pr-1 py-0.5 overflow-y-auto overscroll-y-contain">
+          <div className="app-page-sidebar-with-navigation-scroll">
             {contentOverwrite}
           </div>
         )}
         {footer && (
-          <div className="flex-col-0 px-2.5 pt-2">
+          <div className="app-page-sidebar-with-navigation-footer">
             {footer}
           </div>
         )}
@@ -133,7 +133,7 @@ export const AppPage = ({ children, headerActions, sidebarProps, ...props }: App
     return items?.map((item) => ({
       id: item.id,
       label: (
-        <span className={clsx('flex-row-1 items-center', { 'text-primary': item.isActive })}>
+        <span className={clsx('flex-row-2 items-center', { 'text-primary': item.isActive })}>
           {item.icon && (
             <span className="size-5">
               {item.icon}
