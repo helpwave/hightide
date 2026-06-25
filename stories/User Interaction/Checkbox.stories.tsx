@@ -15,6 +15,7 @@ export const checkbox: Story = {
     indeterminate: false,
     disabled: false,
     invalid: false,
+    isRounded: false,
     size: 'md',
     alwaysShowCheckIcon: false,
     onValueChange: action('onValueChange'),
