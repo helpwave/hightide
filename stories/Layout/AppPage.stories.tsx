@@ -93,7 +93,7 @@ export const appPage: Story = {
         {...args}
         sidebarProps={{
           header: <HelpwaveBadge size="md" className="shrink-0" />,
-          navigationItems,
+          items: navigationItems,
           footer: (
             <p className="typography-body-md text-description">
               Navigate through helpwave products and organization settings.
