@@ -5,16 +5,39 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/)
 and adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [0.12.0] - 2026-06-25
+
+### Added
+- App page layout components (`AppPage`, `AppSidebar`, `AppPageSidebarWithNavigation`) with responsive sidebar, mobile overlay, focus trap, and integrated vertical navigation
+- `Card`, `ActionCard`, and `NavigationCard` components with title/description layout, size variants (`sm`/`md`/`lg`), and interactive variants for actions and navigation
+- `AvatarWithStatus` component showing an online/offline status dot
+- `Checkbox` `isRounded` prop for rounded checkbox styling
+- `menu` translation key
+
+### Changed
+- Moved vertical navigation from `vertical-navigation/` to `navigation-menus/`; renamed internal context to `NavigationProvider`/`useNavigationContext`/`useNavigationItem` while keeping backward-compatible export aliases
+- Removed `VerticalNavigation` wrapper (header/footer shell); use `VerticalNavigationTree` directly or via `AppPageSidebarWithNavigation`
+- Updated vertical navigation styling (spacing, borders, focus outlines, hover states) and made tree items more customizable via CSS
+- `HelpwaveLogo` uses fixed min dimensions per size; removed default padding from `HelpwaveBadge`
+- `useTreeNavigation` `expand`/`collapse`/`toggleExpansion` now accept an optional `isFocusing` option; removed `isNextLooping` option
+
+### Fixed
+- Vertical navigation parent tree nodes not toggling expand/collapse on click
+- Vertical navigation keyboard controls (arrow keys only handled when the tree item itself is focused; Enter/Space toggles expansion on parent nodes without conflicting with nested links)
+
 ## [0.11.0] - 2026-06-24
 
 ### Added
 - Opt-in row virtualization (windowing) for the table via a new `virtualized` prop on `TableDisplay` (and through `Table`/`TableWithSelection` `displayProps`). Only the rows in (or near) the viewport are mounted to the DOM, keeping large, infinitely-scrolled lists responsive. Accepts `true` or `{ estimateRowHeight, overscan, scroll }`, where `scroll` is `'window'` (default, tracks the page scroll) or `'container'` (tracks the table container's own scroll). Rows stay in normal table flow via spacer rows, so column sizing/resizing, the sticky header, sorting, filtering, selection and row clicks are preserved; per-row heights are measured to support variable-height rows. Filler rows are ignored while virtualized.
 - `@tanstack/react-virtual` dependency.
 
+### Changed
+- Updated dependencies to resolve npm audit vulnerabilities (Babel presets, `js-yaml` override)
+
 ## [0.10.3] - 2026-06-24
 
-### Fixed
-- push `react` as peer dependency only
+### Changed
+- `react` and `react-dom` are now peer dependencies instead of direct dependencies
 
 ## [0.10.2] - 2026-06-16
 
