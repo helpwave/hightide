@@ -25,6 +25,12 @@ and adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 - Vertical navigation parent tree nodes not toggling expand/collapse on click
 - Vertical navigation keyboard controls (arrow keys only handled when the tree item itself is focused; Enter/Space toggles expansion on parent nodes without conflicting with nested links)
 
+## [0.11.1] - 2026-06-24
+
+### Fixed
+- The sticky table header (`tableHeaderProps.isSticky`) now stays opaque while the body scrolls. It already had a solid background but no stacking order, so the later-in-DOM body rows painted over it and it looked transparent; it now sits above them via `z-index`.
+- `useFocusTrap` no longer throws `Cannot read properties of null (reading 'contains')` when a trapped element unmounts. Unpausing an outer trap whose container had already been removed (e.g. closing a stacked popup or in-table editor) is now guarded against a null container ref.
+
 ## [0.11.0] - 2026-06-24
 
 ### Added

@@ -44,7 +44,7 @@ class FocusTrapService {
 
   private focusElement() {
     const active = this.getActive()
-    if(!active) return
+    if (!active) return
     const { container, initialFocusElement } = active
     const containerElement = container.current
     // Try in the following order
@@ -66,7 +66,7 @@ class FocusTrapService {
 
   private onFocusIn = (event: FocusEvent) => {
     const active = this.getActive()
-    if(!active || !active.container.current) return
+    if (!active || !active.container.current) return
     const { container } = active
     if (!container.current.contains(event.target as HTMLElement)) {
       this.focusElement()
@@ -187,7 +187,8 @@ export const useFocusTrap = ({
 
       function unpause() {
         setPaused(false)
-        if (!container.current.contains(document.activeElement as HTMLElement)) {
+
+        if (container.current && !container.current.contains(document.activeElement as HTMLElement)) {
           focusElement()
         }
       }
