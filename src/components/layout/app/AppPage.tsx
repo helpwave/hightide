@@ -114,15 +114,15 @@ export interface AppPageNavigationItem {
 }
 
 export interface AppPageSidebarProps {
-  header: ReactNode,
-  items: AppPageNavigationItem[],
-  content: ReactNode,
-  footer: ReactNode,
+  header?: ReactNode,
+  items?: AppPageNavigationItem[],
+  contentOverwrite?: ReactNode,
+  footer?: ReactNode,
 }
 
 export interface AppPageProps extends HTMLAttributes<HTMLDivElement> {
   headerActions?: ReactNode[],
-  sidebarProps: AppPageSidebarWithNavigationProps,
+  sidebarProps: AppPageSidebarProps,
 }
 
 export const AppPage = ({ children, headerActions, sidebarProps, ...props }: AppPageProps) => {
@@ -149,8 +149,8 @@ export const AppPage = ({ children, headerActions, sidebarProps, ...props }: App
   }, [])
 
   const navigationItems = useMemo(() => toNavigationItems(
-    sidebarProps.navigationItems
-  ), [sidebarProps.navigationItems, toNavigationItems])
+    sidebarProps.items
+  ), [sidebarProps.items, toNavigationItems])
 
   return (
     <div
