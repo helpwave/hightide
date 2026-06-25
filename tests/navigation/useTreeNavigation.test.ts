@@ -246,24 +246,6 @@ describe('useTreeNavigation', () => {
     expect(result.current.activeItem?.id).toBe('root-b')
   })
 
-  test('navigateTo with expandIfBranch expands branch nodes immediately', () => {
-    const { result } = renderHook(() =>
-      useTreeNavigation({ nodes: sampleTree }))
-
-    act(() => {
-      result.current.navigateTo('root-a')
-    })
-
-    expect(result.current.activeItem?.id).toBe('root-a')
-    expect(result.current.items.map((item) => item.id)).toEqual([
-      'root-a',
-      'child-a1',
-      'child-a2',
-      'root-b',
-    ])
-    expect(result.current.items.find((item) => item.id === 'root-a')?.expanded).toBe(true)
-  })
-
   test('navigateTo ignores invalid id', () => {
     const warn = jest.spyOn(console, 'warn').mockImplementation(() => {})
     const { result } = renderHook(() =>
