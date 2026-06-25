@@ -1,12 +1,12 @@
 import clsx from 'clsx'
 import { useCallback, useMemo, useRef, useState, type HTMLAttributes, type ReactNode } from 'react'
-import { IconButton } from '../../user-interaction'
-import { useHightideTranslation } from '@/src/i18n'
+import { IconButton } from '../../user-interaction/IconButton'
+import { useHightideTranslation } from '@/src/i18n/useHightideTranslation'
 import { MenuIcon, X } from 'lucide-react'
-import { useOverlayRegistry } from '@/src/hooks'
+import { useOverlayRegistry } from '@/src/hooks/useOverlayRegistry'
 import { PropsUtil } from '@/src/utils/propsUtil'
 import { VerticalNavigationTree, type NavigationItemData } from '../navigation/navigation-menus/VerticalNavigationTree'
-import { FocusTrap } from '../../utils'
+import { FocusTrap } from '../../utils/FocusTrap'
 
 
 export interface AppSidebarProps extends HTMLAttributes<HTMLDivElement> {
