@@ -41,8 +41,8 @@ const NavigationItemWithSubItem = ({
   ...options
 }: NavigationItemWithSubItemProps) => {
   const [isOpen, setOpen] = useState(false)
-  const containerRef = useRef<HTMLUListElement>(null)
-  const triggerRef = useRef<HTMLButtonElement>(null)
+  const containerRef = useRef<HTMLUListElement | null>(null)
+  const triggerRef = useRef<HTMLButtonElement | null>(null)
   const id = useId()
 
   const style = useAnchoredPosition({
@@ -109,7 +109,7 @@ const NavigationItemWithSubItem = ({
         )}
         style={{ ...style, zIndex }}
       >
-        {items.map(({ link, label, external }, index) => (
+        {!!items && items.length > 0 && items.map(({ link, label, external }, index) => (
           <li key={index}>
             <Link
               href={link}

@@ -1,7 +1,9 @@
 import type { HTMLAttributes } from 'react'
 import { useEffect, useMemo, useState } from 'react'
+import clsx from 'clsx'
 import { UserIcon } from 'lucide-react'
 import { Visibility } from '../layout/Visibility'
+import { PropsUtil } from '@/src/utils/propsUtil'
 
 export type AvatarSize = 'xs' | 'sm' | 'md' | 'lg' | null
 
@@ -120,6 +122,33 @@ export const AvatarGroup = ({
           {`+ ${notDisplayedProfiles}`}
         </span>
       )}
+    </div>
+  )
+}
+
+export type AvatarWithStatusProps = AvatarProps & {
+  isOnline: boolean,
+}
+
+export const AvatarWithStatus = ({
+  isOnline,
+  className,
+  size = 'md',
+  ...avatarProps
+}: AvatarWithStatusProps) => {
+  return (
+    <div
+      className={clsx(className)}
+      data-name="avatar-with-status"
+      data-size={size ?? undefined}
+    >
+      <Avatar {...avatarProps} size={size} />
+      <div
+        data-name="avatar-with-status-dot"
+        data-size={size ?? undefined}
+        data-online={PropsUtil.dataAttributes.bool(isOnline)}
+        aria-label={isOnline ? 'Online' : 'Offline'}
+      />
     </div>
   )
 }

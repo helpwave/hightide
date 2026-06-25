@@ -2,7 +2,7 @@ import type { RefObject } from 'react'
 import { useLayoutEffect } from 'react'
 
 export type UseResizeObserverProps = {
-  observedElementRef?: RefObject<Element>,
+  observedElementRef?: RefObject<Element | null>,
   onResize: () => void,
   isActive?: boolean,
 }

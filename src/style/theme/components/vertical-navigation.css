@@ -1,0 +1,42 @@
+@layer components {
+  [data-name="vertical-navigation-tree"] {
+    @apply flex-col-2 list-none m-0 p-0;
+  }
+
+  [data-name="vertical-navigation-node"] {
+    @apply list-none m-0 p-0 rounded-md outline-none cursor-pointer;
+  }
+
+  [data-name="vertical-navigation-group"] {
+    @apply flex-col-0 list-none m-0 my-0.5 ml-2.5 pl-2.5 border-l border-border;
+  }
+
+  [data-name="vertical-navigation-node-header"],
+  [data-name="vertical-navigation-item"] {
+    @apply flex-row-1 items-center rounded-md min-h-9 min-w-0 px-2.5 py-1.5;
+  
+    &:hover, &:focus-visible {
+      @apply bg-primary/15;
+    }
+  }
+
+  [data-name="vertical-navigation-node-header"] {
+    @apply justify-between;
+    transition: var(--focus-outline-transition);
+    
+    &[data-active] {
+      @apply bg-primary/15;
+
+      &:is(:where(.group\/tree-node):focus-visible *) {
+        outline: var(--focus-outline);
+        outline-offset: var(--focus-outline-offset);
+        box-shadow: var(--focus-box-shadow);
+        border-color: var(--focus-border-color);
+      }
+    }
+  }
+
+  [data-name="vertical-navigation-item-link"] {
+    @apply flex-row-2 w-full items-center justify-between no-underline;
+  }
+}

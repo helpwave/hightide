@@ -52,6 +52,7 @@
   "loading": "Loading",
   "locale": "Locale",
   "maxLengthError": "Maximum length exceeded.",
+  "menu": "Menu",
   "minLengthError": "Minimum length not met.",
   "more": "More",
   "next": "Next",

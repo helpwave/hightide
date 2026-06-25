@@ -17,6 +17,7 @@ export type CheckboxProps = HTMLAttributes<HTMLDivElement>
     indeterminate?: boolean,
     size?: CheckBoxSize,
     alwaysShowCheckIcon?: boolean,
+    isRounded?: boolean,
   }
 
 /**
@@ -36,6 +37,7 @@ export const Checkbox = ({
   onEditComplete,
   size = 'md',
   alwaysShowCheckIcon = false,
+  isRounded = false,
   ...props
 }: CheckboxProps) => {
   const onEditCompleteStable = useEventCallbackStabilizer(onEditComplete)
@@ -72,6 +74,7 @@ export const Checkbox = ({
 
       data-checked={!indeterminate ? value : 'indeterminate'}
       data-size={size ?? undefined}
+      data-rounded={isRounded ? '' : undefined}
       {...PropsUtil.dataAttributes.interactionStates({ disabled, invalid, readOnly, required })}
 
       role="checkbox"

@@ -71,4 +71,37 @@
   [data-name="avatar-group-more"] {
     @apply flex-row-2 truncate items-center text-[calc(var(--size)*2/3)];
   }
+
+  [data-name="avatar-with-status"] {
+    @apply relative inline-flex;
+  }
+
+  [data-name="avatar-with-status-dot"] {
+    @apply absolute right-0 bottom-0 z-1 rounded-full border-solid;
+    border-color: var(--color-background);
+
+    &[data-size="xs"] {
+      @apply size-3 border-[1.5px];
+    }
+
+    &[data-size="sm"] {
+      @apply size-3.5 border-2;
+    }
+
+    &[data-size="md"] {
+      @apply size-4 border-2;
+    }
+
+    &[data-size="lg"] {
+      @apply size-5 border-2;
+    }
+
+    &[data-online] {
+      background-color: var(--color-positive);
+    }
+
+    &:not([data-online]) {
+      background-color: var(--color-negative);
+    }
+  }
 }

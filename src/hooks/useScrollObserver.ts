@@ -21,7 +21,7 @@ function getScrollParents(el: HTMLElement): HTMLElement[] {
 }
 
 type UseScrollObserverProps = {
-  observedElementRef?: RefObject<HTMLElement>,
+  observedElementRef?: RefObject<HTMLElement | null>,
   onScroll: () => void,
   isActive?: boolean,
 }
