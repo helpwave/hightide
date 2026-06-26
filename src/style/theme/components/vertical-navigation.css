@@ -24,7 +24,7 @@
     @apply justify-between;
     transition: var(--focus-outline-transition);
     
-    &[data-active] {
+    &[data-focused] {
       @apply bg-primary/15;
 
       &:is(:where(.group\/tree-node):focus-visible *) {
@@ -38,5 +38,9 @@
 
   [data-name="vertical-navigation-item-link"] {
     @apply flex-row-2 w-full items-center justify-between no-underline;
+  }
+
+  .vertical-navigation-item-link-external-icon {
+    @apply size-force-5 text-description group-hover/tree-leaf:text-on-surface group-data-[focused]/tree-leaf:text-on-surface;
   }
 }
