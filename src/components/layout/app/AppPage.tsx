@@ -13,7 +13,7 @@ export interface AppSidebarProps extends HTMLAttributes<HTMLDivElement> {
   onClose?: () => void,
 }
 
-export const AppSidebar = ({ isOpen, onClose, children, ...props }: AppSidebarProps) => {
+export const AppSidebar = ({ isOpen = false, onClose, children, ...props }: AppSidebarProps) => {
   const translation = useHightideTranslation()
   const { zIndex } = useOverlayRegistry({ isActive: isOpen })
   const ref = useRef<HTMLDivElement>(null)
@@ -113,15 +113,15 @@ export interface AppPageNavigationItem {
 }
 
 export interface AppPageSidebarProps {
-  header: ReactNode,
-  items: AppPageNavigationItem[],
-  content: ReactNode,
-  footer: ReactNode,
+  header?: ReactNode,
+  items?: AppPageNavigationItem[],
+  contentOverwrite?: ReactNode,
+  footer?: ReactNode,
 }
 
 export interface AppPageProps extends HTMLAttributes<HTMLDivElement> {
   headerActions?: ReactNode[],
-  sidebarProps: AppPageSidebarWithNavigationProps,
+  sidebarProps: AppPageSidebarProps,
 }
 
 export const AppPage = ({ children, headerActions, sidebarProps, ...props }: AppPageProps) => {
@@ -148,8 +148,8 @@ export const AppPage = ({ children, headerActions, sidebarProps, ...props }: App
   }, [])
 
   const navigationItems = useMemo(() => toNavigationItems(
-    sidebarProps.navigationItems
-  ), [sidebarProps.navigationItems, toNavigationItems])
+    sidebarProps.items
+  ), [sidebarProps.items, toNavigationItems])
 
   return (
     <div

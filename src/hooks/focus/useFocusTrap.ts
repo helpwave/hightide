@@ -19,8 +19,8 @@ const createFocusGuard = () => {
   return div
 }
 
-function getContainedFocusableElements(element: HTMLElement) {
-  return element?.querySelectorAll('button, [href], input, select, textarea, [tabindex]:not([tabindex="-1"])')
+function getContainedFocusableElements(element: HTMLElement | null) {
+  return [...(element?.querySelectorAll('button, [href], input, select, textarea, [tabindex]:not([tabindex="-1"])') ?? [])]
 }
 
 type ListenerType = {
@@ -29,8 +29,8 @@ type ListenerType = {
   unpause: () => void,
   focus: () => void,
   focusLast: () => void,
-  container: RefObject<HTMLElement>,
-  initialFocusElement: RefObject<HTMLElement>,
+  container: RefObject<HTMLElement | null>,
+  initialFocusElement?: RefObject<HTMLElement | null>,
 }
 
 class FocusTrapService {
@@ -53,10 +53,10 @@ class FocusTrapService {
     // 3. Focus the container
     if (initialFocusElement?.current) {
       initialFocusElement.current.focus()
-    } else {
+    } else if(containerElement) {
       const elements = getContainedFocusableElements(containerElement)
       if (elements && elements.length > 0) {
-        const first = elements.item(0) as HTMLElement
+        const first = elements[0] as HTMLElement
         first.focus()
       } else {
         containerElement.focus()
@@ -68,7 +68,7 @@ class FocusTrapService {
     const active = this.getActive()
     if (!active || !active.container.current) return
     const { container } = active
-    if (!container.current.contains(event.target as HTMLElement)) {
+    if (container.current && !container.current.contains(event.target as HTMLElement)) {
       this.focusElement()
     }
   }
@@ -143,9 +143,9 @@ class FocusTrapService {
 const service = new FocusTrapService()
 
 export type UseFocusTrapProps = {
-  container: RefObject<HTMLElement>,
+  container: RefObject<HTMLElement | null>,
   active: boolean,
-  initialFocus?: RefObject<HTMLElement>,
+  initialFocus?: RefObject<HTMLElement | null>,
 }
 
 export const useFocusTrap = ({
@@ -164,10 +164,10 @@ export const useFocusTrap = ({
     // 2. Focus the first focusable element in the container
     if (initialFocus?.current) {
       initialFocus.current.focus()
-    } else {
+    } else if (containerElement) {
       const elements = getContainedFocusableElements(containerElement)
       if (elements && elements.length > 0) {
-        const first = elements.item(0) as HTMLElement
+        const first = elements[0] as HTMLElement
         first.focus()
       } else {
         console.warn('No focusable elements found in the focus trap. Affected element: ', containerElement)
@@ -205,15 +205,14 @@ export const useFocusTrap = ({
       service.register({ id, pause, focus, focusLast, unpause, container, initialFocusElement: initialFocus })
       return () => {
         service.unregister(id)
-        lastFocusRef.current = undefined
+        lastFocusRef.current = null
       }
     }
   }, [active, container, focusElement, id, initialFocus])
 
   useEffect(() => {
-    if (active && !paused) {
-      const containerElement = container.current
-
+    const containerElement = container.current
+    if (active && !paused && containerElement) {
       function onKeyDown(event: KeyboardEvent) {
         const key = event.key
         const elements = getContainedFocusableElements(containerElement)
