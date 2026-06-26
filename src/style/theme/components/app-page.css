@@ -113,4 +113,12 @@
   [data-name="app-page-main-spacer"] {
     @apply min-h-16;
   }
+
+  .app-page-navigation-item-label {
+    @apply flex-row-2 items-center justify-between;
+
+    &[data-active] {
+      @apply text-primary;
+    }
+  }
 }
