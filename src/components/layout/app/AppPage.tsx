@@ -8,7 +8,6 @@ import { PropsUtil } from '@/src/utils/propsUtil'
 import { VerticalNavigationTree, type NavigationItemData } from '../navigation/navigation-menus/VerticalNavigationTree'
 import { FocusTrap } from '../../utils/FocusTrap'
 
-
 export interface AppSidebarProps extends HTMLAttributes<HTMLDivElement> {
   isOpen?: boolean,
   onClose?: () => void,
@@ -114,15 +113,15 @@ export interface AppPageNavigationItem {
 }
 
 export interface AppPageSidebarProps {
-  header?: ReactNode,
-  items?: AppPageNavigationItem[],
-  contentOverwrite?: ReactNode,
-  footer?: ReactNode,
+  header: ReactNode,
+  items: AppPageNavigationItem[],
+  content: ReactNode,
+  footer: ReactNode,
 }
 
 export interface AppPageProps extends HTMLAttributes<HTMLDivElement> {
   headerActions?: ReactNode[],
-  sidebarProps: AppPageSidebarProps,
+  sidebarProps: AppPageSidebarWithNavigationProps,
 }
 
 export const AppPage = ({ children, headerActions, sidebarProps, ...props }: AppPageProps) => {
@@ -133,7 +132,7 @@ export const AppPage = ({ children, headerActions, sidebarProps, ...props }: App
     return items?.map((item) => ({
       id: item.id,
       label: (
-        <span className={clsx('flex-row-2 items-center', { 'text-primary': item.isActive })}>
+        <span className="app-page-navigation-item-label" data-acitve={item.isActive ? '' : undefined}>
           {item.icon && (
             <span className="size-5">
               {item.icon}
@@ -149,8 +148,8 @@ export const AppPage = ({ children, headerActions, sidebarProps, ...props }: App
   }, [])
 
   const navigationItems = useMemo(() => toNavigationItems(
-    sidebarProps.items
-  ), [sidebarProps.items, toNavigationItems])
+    sidebarProps.navigationItems
+  ), [sidebarProps.navigationItems, toNavigationItems])
 
   return (
     <div

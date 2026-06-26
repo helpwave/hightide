@@ -5,6 +5,13 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/)
 and adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [0.12.2] - 2026-06-26
+
+### Added
+- `useSwipeGesture` for detecting Swipe gestures
+- Gave `AppPage`'s Navigation Label Element a class for styling 
+
+
 ## [0.12.2] - 2026-06-25
 
 ### Fixed
