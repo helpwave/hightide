@@ -99,6 +99,8 @@ export const appPage: Story = {
               Navigate through helpwave products and organization settings.
             </p>
           ),
+          initialActiveId: 'section-0-item-0',
+          //activeUrl: 'https://helpwave.de/product/staff',
         }}
       />
     )

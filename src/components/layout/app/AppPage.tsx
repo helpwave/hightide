@@ -65,6 +65,7 @@ export interface AppPageSidebarWithNavigationProps extends AppSidebarProps {
   footer?: ReactNode,
   navigationItems?: NavigationItemData[],
   contentOverwrite?: ReactNode,
+  initialActiveId?: string,
 }
 
 export const AppPageSidebarWithNavigation = ({
@@ -72,6 +73,7 @@ export const AppPageSidebarWithNavigation = ({
   footer,
   navigationItems,
   contentOverwrite,
+  initialActiveId,
   ...props
 }: AppPageSidebarWithNavigationProps) => {
   return (
@@ -84,7 +86,7 @@ export const AppPageSidebarWithNavigation = ({
         )}
         {navigationItems && !contentOverwrite && (
           <div className="app-page-sidebar-with-navigation-scroll">
-            <VerticalNavigationTree items={navigationItems} />
+            <VerticalNavigationTree items={navigationItems} initialActiveId={initialActiveId}/>
           </div>
         )}
         {contentOverwrite && (
@@ -106,13 +108,14 @@ export interface AppPageNavigationItem {
   id: string,
   label: ReactNode,
   icon?: ReactNode,
-  isActive?: boolean,
   url?: string,
   external?: boolean,
   items?: AppPageNavigationItem[],
 }
 
 export interface AppPageSidebarProps {
+  activeUrl?: string,
+  initialActiveId?: string,
   header?: ReactNode,
   items?: AppPageNavigationItem[],
   contentOverwrite?: ReactNode,
@@ -129,27 +132,46 @@ export const AppPage = ({ children, headerActions, sidebarProps, ...props }: App
   const [isSidebarOpen, setIsSidebarOpen] = useState(false)
 
   const toNavigationItems = useCallback((items?: AppPageNavigationItem[]): NavigationItemData[] | undefined => {
-    return items?.map((item) => ({
-      id: item.id,
-      label: (
-        <span className="app-page-navigation-item-label" data-acitve={item.isActive ? '' : undefined}>
-          {item.icon && (
-            <span className="size-5">
-              {item.icon}
-            </span>
-          )}
-          {item.label}
-        </span>
-      ),
-      url: item.url,
-      external: item.external,
-      items: toNavigationItems(item.items),
-    })) ?? undefined
-  }, [])
+    return items?.map((item) => {
+      const isActive = (sidebarProps.activeUrl === item.url && !!sidebarProps.activeUrl) || item.id === sidebarProps.initialActiveId
+      return ({
+        id: item.id,
+        label: (
+          <span className="app-page-navigation-item-label" data-active-page={isActive ? '' : undefined}>
+            {item.icon && (
+              <span className="size-5">
+                {item.icon}
+              </span>
+            )}
+            {item.label}
+          </span>
+        ),
+        url: item.url,
+        external: item.external,
+        items: toNavigationItems(item.items),
+      })
+    }) ?? undefined
+  }, [sidebarProps.activeUrl, sidebarProps.initialActiveId])
 
   const navigationItems = useMemo(() => toNavigationItems(
     sidebarProps.items
   ), [sidebarProps.items, toNavigationItems])
+
+  const initialActiveId = useMemo(() => {
+    if (sidebarProps.initialActiveId) return sidebarProps.initialActiveId
+    if (!navigationItems) return undefined
+    const findActiveId = (items: NavigationItemData[]): string | undefined => {
+      for (const item of items) {
+        if (item.url === sidebarProps.activeUrl) return item.id
+        if (item.items) {
+          const found = findActiveId(item.items)
+          if (found) return found
+        }
+      }
+      return undefined
+    }
+    return findActiveId(navigationItems)
+  }, [navigationItems, sidebarProps.activeUrl, sidebarProps.initialActiveId])
 
   return (
     <div
@@ -164,6 +186,7 @@ export const AppPage = ({ children, headerActions, sidebarProps, ...props }: App
         footer={sidebarProps.footer}
         navigationItems={navigationItems}
         contentOverwrite={sidebarProps.contentOverwrite}
+        initialActiveId={initialActiveId}
       />
       <div data-name="app-page-content">
         <header data-name="app-page-header">

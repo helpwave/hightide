@@ -123,7 +123,7 @@ export function VerticalNavigationItem({
       tabIndex={-1}
     >
       {label}
-      <ExternalLink className="size-force-5 text-description" />
+      <ExternalLink className="vertical-navigation-item-link-external-icon" />
     </a>
   ) : (
     <a
@@ -142,11 +142,12 @@ export function VerticalNavigationItem({
         role="treeitem"
         data-name="vertical-navigation-item"
         data-depth={depth}
-        data-active={isFocused ? '' : undefined}
+        data-focused={isFocused ? '' : undefined}
         aria-selected={isFocused ? true : undefined}
         tabIndex={isFocused ? 0 : -1}
         onKeyDown={handleKeyDown}
         onClick={handleLeafActivate}
+        className="group/tree-leaf"
       >
         {labelContent}
       </li>
@@ -159,7 +160,7 @@ export function VerticalNavigationItem({
       role="treeitem"
       data-name="vertical-navigation-node"
       data-depth={depth}
-      data-active={isFocused ? '' : undefined}
+      data-focused={isFocused ? '' : undefined}
       data-expanded={expanded ? '' : undefined}
       aria-expanded={expanded}
       tabIndex={isFocused ? 0 : -1}
@@ -169,7 +170,7 @@ export function VerticalNavigationItem({
       <div
         ref={headerRef}
         data-name="vertical-navigation-node-header"
-        data-active={isFocused ? '' : undefined}
+        data-focused={isFocused ? '' : undefined}
         onClick={handleHeaderActivate}
       >
         {label}

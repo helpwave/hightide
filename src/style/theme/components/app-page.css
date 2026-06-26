@@ -115,9 +115,9 @@
   }
 
   .app-page-navigation-item-label {
-    @apply flex-row-2 items-center justify-between;
+    @apply flex-row-2 items-center w-full;
 
-    &[data-active] {
+    &[data-active-page] {
       @apply text-primary;
     }
   }
