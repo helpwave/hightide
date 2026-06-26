@@ -2,7 +2,6 @@
 
 import type { HTMLAttributes, PropsWithChildren } from 'react'
 import { useRef } from 'react'
-import { useImperativeHandle } from 'react'
 import { forwardRef } from 'react'
 import type { UseFocusTrapProps } from '@/src/hooks/focus/useFocusTrap'
 import { useFocusTrap } from '@/src/hooks/focus/useFocusTrap'
@@ -30,11 +29,21 @@ export const FocusTrapWrapper = forwardRef<HTMLDivElement, FocusTrapWrapperProps
   ...props
 }, forwardedRef) {
   const innerRef = useRef<HTMLDivElement>(null)
-  useImperativeHandle(forwardedRef, () => innerRef.current)
 
   useFocusTrap({ container: innerRef, active, initialFocus })
 
   return (
-    <div ref={innerRef} {...props}/>
+    <div
+      ref={(node) => {
+        innerRef.current = node
+
+        if (typeof forwardedRef === 'function') {
+          forwardedRef(node)
+        } else if (forwardedRef) {
+          forwardedRef.current = node
+        }
+      }}
+      {...props}
+    />
   )
 })

@@ -5,26 +5,39 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/)
 and adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
-## [0.12.2] - 2026-06-26
+## [0.12.4] - 2026-06-26
+
+### Changed
+
+- `AppPage`'s `sidebarProps` typing
+
+### Fixed
+
+- fixed typing for `useFocusTrap` and related types
+
+## [0.12.3] - 2026-06-26
 
 ### Added
-- `useSwipeGesture` for detecting Swipe gestures
-- Gave `AppPage`'s Navigation Label Element a class for styling 
 
+- `useSwipeGesture` for detecting Swipe gestures
+- Gave `AppPage`'s Navigation Label Element a class for styling
 
 ## [0.12.2] - 2026-06-25
 
 ### Fixed
+
 - `AppPage` using the wrong `SidebarProps` type
 
 ## [0.12.1] - 2026-06-25
 
 ### Fixed
+
 - Fixed package-lock.json
 
 ## [0.12.0] - 2026-06-25
 
 ### Added
+
 - App page layout components (`AppPage`, `AppSidebar`, `AppPageSidebarWithNavigation`) with responsive sidebar, mobile overlay, focus trap, and integrated vertical navigation
 - `Card`, `ActionCard`, and `NavigationCard` components with title/description layout, size variants (`sm`/`md`/`lg`), and interactive variants for actions and navigation
 - `AvatarWithStatus` component showing an online/offline status dot
@@ -32,6 +45,7 @@ and adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 - `menu` translation key
 
 ### Changed
+
 - Moved vertical navigation from `vertical-navigation/` to `navigation-menus/`; renamed internal context to `NavigationProvider`/`useNavigationContext`/`useNavigationItem` while keeping backward-compatible export aliases
 - Removed `VerticalNavigation` wrapper (header/footer shell); use `VerticalNavigationTree` directly or via `AppPageSidebarWithNavigation`
 - Updated vertical navigation styling (spacing, borders, focus outlines, hover states) and made tree items more customizable via CSS
@@ -39,44 +53,53 @@ and adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 - `useTreeNavigation` `expand`/`collapse`/`toggleExpansion` now accept an optional `isFocusing` option; removed `isNextLooping` option
 
 ### Fixed
+
 - Vertical navigation parent tree nodes not toggling expand/collapse on click
 - Vertical navigation keyboard controls (arrow keys only handled when the tree item itself is focused; Enter/Space toggles expansion on parent nodes without conflicting with nested links)
 
 ## [0.11.1] - 2026-06-24
 
 ### Fixed
+
 - The sticky table header (`tableHeaderProps.isSticky`) now stays opaque while the body scrolls. It already had a solid background but no stacking order, so the later-in-DOM body rows painted over it and it looked transparent; it now sits above them via `z-index`.
 - `useFocusTrap` no longer throws `Cannot read properties of null (reading 'contains')` when a trapped element unmounts. Unpausing an outer trap whose container had already been removed (e.g. closing a stacked popup or in-table editor) is now guarded against a null container ref.
 
 ## [0.11.0] - 2026-06-24
 
 ### Added
+
 - Opt-in row virtualization (windowing) for the table via a new `virtualized` prop on `TableDisplay` (and through `Table`/`TableWithSelection` `displayProps`). Only the rows in (or near) the viewport are mounted to the DOM, keeping large, infinitely-scrolled lists responsive. Accepts `true` or `{ estimateRowHeight, overscan, scroll }`, where `scroll` is `'window'` (default, tracks the page scroll) or `'container'` (tracks the table container's own scroll). Rows stay in normal table flow via spacer rows, so column sizing/resizing, the sticky header, sorting, filtering, selection and row clicks are preserved; per-row heights are measured to support variable-height rows. Filler rows are ignored while virtualized.
 - `@tanstack/react-virtual` dependency.
 
 ### Changed
+
 - Updated dependencies to resolve npm audit vulnerabilities (Babel presets, `js-yaml` override)
 
 ## [0.10.3] - 2026-06-24
 
 ### Changed
+
 - `react` and `react-dom` are now peer dependencies instead of direct dependencies
 
 ## [0.10.2] - 2026-06-16
 
 ### Fixed
+
 - readonly and disabled not blocking interaction for `SelectButton`, `MultiselectButton`, `MultiSelectChipDisplayButton`
 
 ## [0.10.1] - 2026-06-15
 
 ### Added
+
 - `timeZone` and `is24HourFormat` to the `LocaleProvider`/`LocaleContext` (default 24 hour format), used by the date and time inputs, pickers, `TimeDisplay`, `DateProperty` and `useUpdatingDateString`, with optional per-component overrides
 - `DateUtils.toZonedDate`, `DateUtils.fromZonedDate` and `DateUtils.zonedParts`
 
 ### Changed
+
 - `DateProperty` now forwards the full `DateTimeInput` event API (`Date | null` values, `onEditComplete`, `timeZone`, `is24HourFormat`, ranges, ...)
 
 ### Fixed
+
 - Typing a full year (e.g. `2004`) into `DateTimeInput`/`FlexibleDateTimeInput` no longer resets to a 1900s year
 - Date and time segments no longer fire `onEditComplete` while focus auto-advances between segments
 
@@ -90,6 +113,7 @@ and adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 ## [0.9.5] - 2026-03-23
 
 ### Fix
+
 - fix `PropertyBase` for small screen sizes to wrap its content
 
 ## [0.9.4] - 2026-03-22
@@ -99,27 +123,31 @@ and adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 - `FilterList` to allow limiting the used operators
 
 ### Fixed
-- `FlexibleDateTimeInput` not having a correct default time and throwing warnings on mode change
 
+- `FlexibleDateTimeInput` not having a correct default time and throwing warnings on mode change
 
 ## [0.9.3] - 2026-03-22
 
 ### Added
+
 - `SortingList`
 
 ### Changed
+
 - `ColumnSwitcher` icon
 - `TableHeader` to truncate
-- `TableColumnSwitcher` does not show pinning icon anymore when pinning is disabled 
+- `TableColumnSwitcher` does not show pinning icon anymore when pinning is disabled
 
 ## [0.9.2] - 2026-03-22
 
 ### Added
+
 - `FlexibleDateTimeInput` component for `DateTimeInput` for easy switching between Date and DateTime input
 - actions attribute to `DateTimeInput` for displaying action buttons
 - Tests for `useMultiSelection` and `useSingleSelection` hooks
 
 ### Changed
+
 - `FilterList`
   - Height of chips and buttons is not consistent with the standard height
   - Allows the addition of children
@@ -127,25 +155,30 @@ and adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 ## [0.9.1] - 2026-02-14
 
 ### Changed
-- The structure of `IdentifiedFilterValue` is now the same as `ColumnFilter` from `@tanstack/react-table` to allow for easy integration 
+
+- The structure of `IdentifiedFilterValue` is now the same as `ColumnFilter` from `@tanstack/react-table` to allow for easy integration
 
 ## [0.9.0] - 2026-02-14
 
 ### Added
+
 - Search for `Select` and `MultiSelect`
 - Type ahead support for `Select` and `MultiSelect`npm
 - `Combobox` component
 - `FilterList` component for dynamically choosing and setting filters
 - `useSelectState`, `useMultiSelectState`, `useCombobox`, `useSingleSelection`, `useMultiSelection`
-- `useTypeAheadSearch` for getting the value of a timed type ahead search 
+- `useTypeAheadSearch` for getting the value of a timed type ahead search
 
 ### Changed
+
 - `useSearch` to require less parameter and only do a simple search and caching the result
 
 ### Fixed
+
 - imports in `TimePicker` and `DateTimeInput`
 
 ### Security
+
 - update packages
 
 ## [0.8.12] - 2026-02-15
@@ -629,7 +662,7 @@ and adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 ### Removed
 
 - Removed `row` and `col` css utilities use `flex-row-2` and `flex-col-2` instead
-  - Regex for checking usage `` ("|'|`| )col("|'|`| ) `` or `` ("|'|`| )row("|'|`| ) ``
+  - Regex for checking usage ``("|'|`| )col("|'|`| )`` or ``("|'|`| )row("|'|`| )``
 - Removed dependency on `radix-ui`
 
 ### Fixed
