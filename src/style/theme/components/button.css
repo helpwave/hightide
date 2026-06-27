@@ -2,6 +2,7 @@
   [data-name="button"] {
     @apply flex flex-row items-center justify-center element;
     @apply: font-semibold whitespace-nowrap w-fit;
+    transition: var(--coloring-transitions), var(--focus-transitions);
 
     &:not([data-disabled]) {
       @apply cursor-pointer coloring-color-detect coloring-style-hover-detect;

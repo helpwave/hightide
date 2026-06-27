@@ -3,7 +3,6 @@ import { useEffect, useMemo, useState } from 'react'
 import clsx from 'clsx'
 import { UserIcon } from 'lucide-react'
 import { Visibility } from '../layout/Visibility'
-import { PropsUtil } from '@/src/utils/propsUtil'
 
 export type AvatarSize = 'xs' | 'sm' | 'md' | 'lg' | null
 
@@ -55,8 +54,8 @@ export const Avatar = ({
   return (
     <div
       {...props}
-      data-name={props['data-name'] ?? 'avatar'}
-      data-size={props['data-size'] ?? size ?? undefined}
+      data-name="avatar"
+      data-size={size ?? undefined}
     >
       <Visibility isVisible={isShowingImage}>
         <img
@@ -76,9 +75,10 @@ export const Avatar = ({
 }
 
 export type AvatarGroupProps = HTMLAttributes<HTMLDivElement> & {
-  avatars: Omit<AvatarProps, 'size'>[],
-  showTotalNumber?: boolean,
-  size?: AvatarSize,
+  'avatars': Omit<AvatarProps, 'size'>[],
+  'showTotalNumber'?: boolean,
+  'size'?: AvatarSize,
+  'data-name'?: string,
 }
 
 /**
@@ -126,12 +126,14 @@ export const AvatarGroup = ({
   )
 }
 
+export type AvatarStatus = 'online' | 'offline' | 'away' | 'busy' | 'unknown'
+
 export type AvatarWithStatusProps = AvatarProps & {
-  isOnline: boolean,
+  status?: AvatarStatus,
 }
 
 export const AvatarWithStatus = ({
-  isOnline,
+  status = 'unknown',
   className,
   size = 'md',
   ...avatarProps
@@ -146,8 +148,7 @@ export const AvatarWithStatus = ({
       <div
         data-name="avatar-with-status-dot"
         data-size={size ?? undefined}
-        data-online={PropsUtil.dataAttributes.bool(isOnline)}
-        aria-label={isOnline ? 'Online' : 'Offline'}
+        data-status={status}
       />
     </div>
   )

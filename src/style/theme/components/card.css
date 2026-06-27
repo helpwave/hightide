@@ -17,7 +17,9 @@
 
   [data-name="action-card"],
   [data-name="navigation-card"] {
-    @apply flex-col-1 w-full min-w-0 surface coloring-solid-hover shadow-md focusable focus-style-outline transition-all;
+    @apply flex-col-1 w-full min-w-0 surface coloring-solid-hover shadow-md focusable focus-style-outline;
+
+    transition: var(--coloring-transitions), var(--focus-transitions);
 
     &[data-size="sm"] {
       @apply px-2 py-1 rounded;

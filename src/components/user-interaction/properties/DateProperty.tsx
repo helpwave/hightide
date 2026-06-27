@@ -55,6 +55,7 @@ export const DateProperty = ({
           onValueChange={onValueChange}
           onEditComplete={onEditComplete}
           data-name="property-input"
+          className="flex-row-4 pr-0"
           data-invalid={PropsUtil.dataAttributes.bool(invalid)}
         />
       )}

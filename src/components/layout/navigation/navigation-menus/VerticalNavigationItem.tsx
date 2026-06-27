@@ -1,4 +1,4 @@
-import type { KeyboardEvent, MouseEvent } from 'react'
+import type { KeyboardEvent } from 'react'
 import { useCallback, useRef } from 'react'
 import { ExternalLink } from 'lucide-react'
 import { ExpansionIcon } from '@/src/components/display-and-visualization/ExpansionIcon'
@@ -107,32 +107,27 @@ export function VerticalNavigationItem({
     toggleExpansion(id, { isFocusing: true })
   }, [id, toggleExpansion])
 
-  const handleLeafActivate = useCallback((event: MouseEvent<HTMLLIElement>) => {
-    if ((event.target as Element).closest('[data-name="vertical-navigation-item-link"]')) return
+  const handleLeafActivate = useCallback(() => {
     navigateTo(id)
-  }, [id, navigateTo])
+    if (url == null) return
+    if (external) {
+      window.open(url, '_blank', 'noopener,noreferrer')
+      return
+    }
+    window.location.assign(url)
+  }, [external, id, navigateTo, url])
 
   const labelContent = url == null ? (
     label
   ) : external ? (
-    <a
-      href={url}
-      target="_blank"
-      rel="noopener noreferrer"
-      data-name="vertical-navigation-item-link"
-      tabIndex={-1}
-    >
+    <span data-name="vertical-navigation-item-link">
       {label}
       <ExternalLink className="vertical-navigation-item-link-external-icon" />
-    </a>
+    </span>
   ) : (
-    <a
-      href={url}
-      data-name="vertical-navigation-item-link"
-      tabIndex={-1}
-    >
+    <span data-name="vertical-navigation-item-link">
       {label}
-    </a>
+    </span>
   )
 
   if (!hasChildren) {

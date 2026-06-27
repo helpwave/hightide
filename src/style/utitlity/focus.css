@@ -1,7 +1,14 @@
+:root {
+  --focus-transitions:
+    outline-offset var(--animation-duration-in, 250ms) ease-in-out, 
+    outline-color var(--animation-duration-in, 250ms) ease-in-out,
+    border-color var(--animation-duration-in, 250ms) ease-in-out,
+    shadow var(--animation-duration-in, 250ms) ease-in-out;
+}
+
 @utility focus-style-outline {
   --focus-outline: 2px solid var(--color-focus);
-  --focus-outline-offset: calc(var(--spacing) * 0.25);
-  --focus-outline-transition: outline-offset var(--animation-duration-in, 250ms);
+  --focus-outline-offset: calc(var(--spacing) * 0.5);
 }
 
 @utility focus-style-border {
@@ -9,21 +16,22 @@
 }
 
 @utility focus-style-shadow {
-  --focus-box-shadow: 0 0 calc(var(--spacing) * 1) calc(var(--spacing) * 0.5) color-mix(in srgb, var(--color-focus) 70%, transparent);
+  --focus-box-shadow: 0 0 calc(var(--spacing) * 1) calc(var(--spacing) * 0.8) color-mix(in srgb, var(--color-focus) 35%, transparent);
+
+  @variant dark {
+    --focus-box-shadow: 0 0 calc(var(--spacing) * 1.5) calc(var(--spacing) * 0.8) color-mix(in srgb, var(--color-focus) 60%, transparent);
+  }
 }
 
 @utility focus-style-none {
   --focus-outline: none;
   --focus-outline-offset: 0;
-  --focus-outline-transition: none;
   --focus-box-shadow: none;
   --focus-border-color: inherit;
 }
 
 
 @utility focusable {
-  transition: var(--focus-outline-transition);
-
   &:focus-visible {
     outline: var(--focus-outline);
     outline-offset: var(--focus-outline-offset);

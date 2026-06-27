@@ -34,8 +34,8 @@ function UpdatingDateTimeDisplay({ date, absoluteFormat, localeOverride }: Story
   )
 }
 
-export const UseUpdatingDateString: Story = {
-  name: 'useUpdatingDateTime',
+export const story: Story = {
+  name: 'useUpdatingDateString',
   args: {
     date: new Date(),
     absoluteFormat: 'dateTime',

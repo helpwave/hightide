@@ -25,9 +25,9 @@
   --color-on-disabled: var(--color-gray-500);
 
   /* Surface */
-  --color-surface:  var(--color-gray-50);
+  --color-surface:  var(--color-gray-25);
   --color-on-surface: var(--color-text-primary);
-  --color-surface-hover: var(--color-gray-100);
+  --color-surface-hover: var(--color-white);
   --color-surface-variant: var(--color-white);
   --color-surface-warning: var(--color-orange-100);
 
@@ -93,8 +93,8 @@
     --color-label: var(--color-gray-300);
 
     /* Other */
-    --color-primary: var(--color-purple-500);
-    --color-primary-hover: var(--color-purple-400);
+    --color-primary: var(--color-purple-400);
+    --color-primary-hover: var(--color-purple-500);
 
     --color-neutral: var(--color-gray-750);
     --color-neutral-hover: var(--color-gray-600);

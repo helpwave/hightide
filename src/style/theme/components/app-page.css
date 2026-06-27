@@ -51,7 +51,7 @@
   }
 
   .app-sidebar-close-button {
-    @apply absolute top-0.5 right-0.5 z-10;
+    @apply absolute top-1 right-1 z-10;
 
     @variant desktop {
       @apply hidden;
@@ -71,7 +71,7 @@
   }
 
   .app-page-sidebar-with-navigation-scroll {
-    @apply flex-1 min-h-0 pl-3.25 pr-0.75 py-0.75 overflow-y-scroll overscroll-y-contain;
+    @apply flex-1 min-h-0 pl-3.25 pr-1 py-1 overflow-y-scroll overscroll-y-contain;
     scrollbar-gutter: stable;
   }
 
