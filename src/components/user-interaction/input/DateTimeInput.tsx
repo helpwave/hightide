@@ -110,6 +110,10 @@ export const DateTimeInput = forwardRef<HTMLDivElement, DateTimeInputProps>(func
     fieldRef.current?.querySelector<HTMLElement>('[data-name="date-time-segment"]')?.focus()
   }
 
+  const hasClear = !required && allowClear && !readOnly && !disabled && state !== null
+  const hasTimePicker = !readOnly
+  const hasActions = hasClear || hasTimePicker || actions.length > 0
+
   return (
     <div {...containerProps} className={clsx('relative w-full', containerProps?.className)}>
       <div
@@ -129,6 +133,7 @@ export const DateTimeInput = forwardRef<HTMLDivElement, DateTimeInputProps>(func
         className={clsx('cursor-text', props.className)}
         data-name={props['data-name'] ?? 'date-time-input'}
         data-value={PropsUtil.dataAttributes.bool(!!state)}
+        data-has-actions={PropsUtil.dataAttributes.bool(hasActions)}
         {...PropsUtil.dataAttributes.interactionStates({ disabled, readOnly, invalid, required })}
         {...PropsUtil.aria.interactionStates({ disabled, readOnly, invalid, required }, props)}
       >
@@ -146,11 +151,10 @@ export const DateTimeInput = forwardRef<HTMLDivElement, DateTimeInputProps>(func
           onEditComplete={(next) => onEditComplete?.(fromZoned(next))}
           aria-labelledby={props['aria-labelledby']}
           aria-describedby={props['aria-describedby']}
-          className="grow"
         />
         <div className="flex-row-1 items-center">
           {actions}
-          <Visibility isVisible={!required && allowClear && !readOnly && !disabled && state !== null}>
+          <Visibility isVisible={hasClear}>
             <IconButton
               tooltip={translation('clearValue')}
               coloringStyle="text" color="neutral" size="sm"
@@ -162,7 +166,7 @@ export const DateTimeInput = forwardRef<HTMLDivElement, DateTimeInputProps>(func
               <X className="size-5"/>
             </IconButton>
           </Visibility>
-          <Visibility isVisible={!readOnly}>
+          <Visibility isVisible={hasTimePicker}>
             <IconButton
               tooltip={translation('sDateTimeSelect', { datetimeMode: mode })}
               coloringStyle="text" color="neutral" size="sm"

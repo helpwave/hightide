@@ -1,5 +1,5 @@
 import type { Meta, StoryObj } from '@storybook/nextjs-vite'
-import { AvatarWithStatus } from '@/src/components/display-and-visualization/Avatar'
+import { AvatarWithStatus, type AvatarStatus } from '@/src/components/display-and-visualization/Avatar'
 
 type StoryArgs = {
   useName: boolean,
@@ -10,6 +10,10 @@ type StoryArgs = {
 const meta: Meta<StoryArgs> = {
   component: AvatarWithStatus,
   argTypes: {
+    status: {
+      control: 'select',
+      options: ['online', 'offline', 'away', 'busy', 'unknown'] satisfies AvatarStatus[],
+    },
     useName: { control: 'boolean' },
     useImage: { control: 'boolean' },
     useErrorImage: { control: 'boolean' },
@@ -21,12 +25,12 @@ type Story = StoryObj<typeof meta>
 
 export const avatarWithStatus: Story = {
   args: {
-    isOnline: true,
+    status: 'online',
+    size: 'md',
+    name: 'John Doe',
     useImage: true,
     useName: true,
     useErrorImage: false,
-    size: 'md',
-    name: 'John Doe',
   },
   render: ({ name, useImage, useName, useErrorImage, ...args }) => {
     return (

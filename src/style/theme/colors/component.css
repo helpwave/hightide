@@ -53,6 +53,10 @@
   --color-stepperbar-dot-normal: var(--color-purple-100);
   --color-stepperbar-dot-disabled: var(--color-description);
 
+  /* Switch */
+  --color-switch-thumb-inactive: var(--color-on-surface);
+  --color-switch-thumb-active: var(--color-white);
+
   /* Table */
   --color-table-background: var(--color-surface);
   --color-table-text: var(--color-on-surface);
@@ -101,6 +105,9 @@
     /* Scrollbar */
     --color-scrollbar-track: #ffffff33;
     --color-scrollbar-thumb: var(--color-gray-300);
+
+    /* Switch */
+    --color-switch-thumb-active: var(--color-on-surface);
 
     /* Other */
     --color-border: var(--color-gray-600);

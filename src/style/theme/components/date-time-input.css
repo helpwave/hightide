@@ -6,6 +6,10 @@
       box-shadow: var(--focus-box-shadow);
       border-color: var(--focus-border-color);
     }
+
+    &[data-has-actions] {
+      @apply pr-0.5;
+    }
   }
 
   [data-name="date-time-field"] {

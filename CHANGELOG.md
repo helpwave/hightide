@@ -5,6 +5,18 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/)
 and adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [0.12.7] - 2026-06-27
+
+### Added
+- hover effects to `ActionCard` and `NavigationCard`
+- `leading` and `trailing` element props for all cards
+
+### Changed
+- Transition Styling of focusable elements and coloring users by moving the transitions into reusable and combinable variables `--focus-transitions`
+ and `--coloring-transitions`
+- Adjusted dark mode primary color brightness to make elements easier to read
+- Small design adjustments to make the design more consistent in regard to focus and hover effects
+
 ## [0.12.6] - 2026-06-27
 
 ### Added

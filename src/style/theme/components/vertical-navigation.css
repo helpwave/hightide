@@ -14,7 +14,8 @@
   [data-name="vertical-navigation-node-header"],
   [data-name="vertical-navigation-item"] {
     @apply flex-row-1 items-center rounded-md min-h-9 min-w-0 px-2.5 py-1.5;
-  
+    transition: var(--focus-transitions);
+
     &:hover, &:focus-visible {
       @apply bg-primary/15;
     }
@@ -22,7 +23,7 @@
 
   [data-name="vertical-navigation-node-header"] {
     @apply justify-between;
-    transition: var(--focus-outline-transition);
+    transition: var(--focus-transitions);
     
     &[data-focused] {
       @apply bg-primary/15;

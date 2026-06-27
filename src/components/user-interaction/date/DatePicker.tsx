@@ -58,7 +58,7 @@ export const DatePicker = ({
       <div className="flex-row-2 items-center justify-between">
         <Button
           size="sm"
-          coloringStyle="text"
+          color="neutral"
           className={clsx('flex-row-1 items-center cursor-pointer select-none', {
             'text-disabled': displayMode !== 'day',
           })}

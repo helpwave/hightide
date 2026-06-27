@@ -2,6 +2,7 @@
   [data-name="switch"] {
     @apply flex-col-0 items-center justify-center;
     @apply h-7 w-12 rounded-full border-2 p-1;
+    transition: var(--coloring-transitions), var(--focus-transitions);
 
     &:not([data-disabled]) {
       @apply hover:cursor-pointer;
@@ -43,12 +44,15 @@
   }
 
   [data-name="switch-thumb"] {
-    @apply bg-on-surface rounded-full transition-all duration-[var(--animation-duration-in,250ms)] h-3 w-3;
+    @apply rounded-full transition-all duration-[var(--animation-duration-in,250ms)] h-3 w-3;
     @apply absolute top-1/2 -translate-y-1/2 left-0.5;
+
+    background-color: var(--color-switch-thumb-inactive, var(--color-on-surface));
 
     &[data-active] {
       @apply w-4 h-4;
       left: calc(100% - 4 * var(--spacing));
+      background-color: var(--color-switch-thumb-active, var(--color-on-surface));
     }
   }
 }

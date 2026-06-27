@@ -1,4 +1,5 @@
 import type { Meta, StoryObj } from '@storybook/nextjs-vite'
+import { BadgeCheck } from 'lucide-react'
 import { Card } from '@/src/components/display-and-visualization/Card'
 
 const meta: Meta<typeof Card> = {
@@ -13,5 +14,7 @@ export const card: Story = {
     title: 'Card title',
     description: 'Optional description for the card.',
     size: 'md',
+    leading: <BadgeCheck className="size-force-6" />,
+    trailing: <BadgeCheck className="size-force-6" />,
   },
 }

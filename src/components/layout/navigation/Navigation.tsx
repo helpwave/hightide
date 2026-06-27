@@ -172,7 +172,7 @@ export const Navigation = ({ ...props }: NavigationProps) => {
         className={clsx('hidden', { 'desktop:flex': !isMobileOpen }, props.className)}
       />
       <IconButton
-        tooltip={translation('openNavigation')}
+        tooltip={translation('menu')}
         coloringStyle="text"
         color="neutral"
         onClick={() => setIsMobileOpen(true)}

@@ -23,6 +23,7 @@
   }
 
   * {
+    transition: var(--focus-transitions);
     @apply focus-style-outline focusable outline-focus;
   }
 }

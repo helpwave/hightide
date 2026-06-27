@@ -1,5 +1,5 @@
 import type { Meta, StoryObj } from '@storybook/nextjs-vite'
-import { ChevronRight } from 'lucide-react'
+import { BadgeCheck, ChevronRight } from 'lucide-react'
 import { ActionCard } from '@/src/components/display-and-visualization/Card'
 import { action } from 'storybook/actions'
 
@@ -16,7 +16,8 @@ export const actionCard: Story = {
     description: 'Click to trigger an action.',
     size: 'md',
     disabled: false,
-    action: <ChevronRight className="size-force-5" />,
+    leading: <BadgeCheck className="size-force-6" />,
+    trailing: <ChevronRight className="size-force-6" />,
     onClick: action('onClick'),
   },
 }

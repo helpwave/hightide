@@ -77,7 +77,7 @@
   }
 
   [data-name="avatar-with-status-dot"] {
-    @apply absolute right-0 bottom-0 z-1 rounded-full border-solid;
+    @apply absolute right-0 bottom-0 z-1 rounded-full border-solid transition-colors;
     border-color: var(--color-background);
 
     &[data-size="xs"] {
@@ -96,12 +96,21 @@
       @apply size-5 border-2;
     }
 
-    &[data-online] {
+    &[data-status="online"] {
       background-color: var(--color-positive);
     }
 
-    &:not([data-online]) {
+    &[data-status="offline"],
+    &[data-status="unknown"] {
+      background-color: var(--color-gray-500);
+    }
+
+    &[data-status="busy"] {
       background-color: var(--color-negative);
+    }
+
+    &[data-status="away"] {
+      background-color: var(--color-warning);
     }
   }
 }
