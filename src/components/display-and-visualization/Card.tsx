@@ -7,20 +7,51 @@ import { PropsUtil } from '@/src/utils/propsUtil'
 
 export type CardSize = 'sm' | 'md' | 'lg'
 
+type CardHeaderContentProps = {
+  title: ReactNode,
+  description?: ReactNode,
+  leading?: ReactNode,
+  trailing?: ReactNode,
+}
+
+function CardHeaderContent({ title, description, leading, trailing }: CardHeaderContentProps) {
+  return (
+    <>
+      {leading != null && (
+        <span data-name="card-leading">{leading}</span>
+      )}
+      <div data-name="card-content">
+        <span data-name="card-title">{title}</span>
+        <Visibility isVisible={!!description}>
+          <span data-name="card-description">{description}</span>
+        </Visibility>
+      </div>
+      {trailing != null && (
+        <span data-name="card-trailing">{trailing}</span>
+      )}
+    </>
+  )
+}
+
 //
 // Card
 //
 
 export type CardProps = Omit<HTMLAttributes<HTMLDivElement>, 'title'> & {
-  title: ReactNode,
-  description?: ReactNode,
-  size?: CardSize,
+  'title': ReactNode,
+  'description'?: ReactNode,
+  'size'?: CardSize,
+  'leading'?: ReactNode,
+  'trailing'?: ReactNode,
+  'data-name'?: string,
 }
 
 export const Card = ({
   title,
   description,
   size = 'md',
+  leading,
+  trailing,
   children,
   className,
   ...props
@@ -32,10 +63,14 @@ export const Card = ({
       data-name={props['data-name'] ?? 'card'}
       data-size={size}
     >
-      <span data-name="card-title">{title}</span>
-      <Visibility isVisible={!!description}>
-        <span data-name="card-description">{description}</span>
-      </Visibility>
+      <div data-name="card-header">
+        <CardHeaderContent
+          title={title}
+          description={description}
+          leading={leading}
+          trailing={trailing}
+        />
+      </div>
       {children}
     </div>
   )
@@ -46,18 +81,21 @@ export const Card = ({
 //
 
 export type ActionCardProps = Omit<HTMLAttributes<HTMLDivElement>, 'title'> & {
-  title: ReactNode,
-  description?: ReactNode,
-  size?: CardSize,
-  action?: ReactNode,
-  disabled?: boolean,
+  'title': ReactNode,
+  'description'?: ReactNode,
+  'size'?: CardSize,
+  'leading'?: ReactNode,
+  'trailing'?: ReactNode,
+  'disabled'?: boolean,
+  'data-name'?: string,
 }
 
 export const ActionCard = forwardRef<HTMLDivElement, ActionCardProps>(function ActionCard({
   title,
   description,
   size = 'md',
-  action,
+  leading,
+  trailing,
   disabled = false,
   children,
   className,
@@ -93,17 +131,12 @@ export const ActionCard = forwardRef<HTMLDivElement, ActionCardProps>(function A
       tabIndex={onClick && !disabled ? 0 : undefined}
     >
       <div data-name="card-header">
-        <div data-name="card-content">
-          <span data-name="card-title">{title}</span>
-          <Visibility isVisible={!!description}>
-            <span data-name="card-description">{description}</span>
-          </Visibility>
-        </div>
-        {action != null && (
-          <div data-name="card-action">
-            {action}
-          </div>
-        )}
+        <CardHeaderContent
+          title={title}
+          description={description}
+          leading={leading}
+          trailing={trailing}
+        />
       </div>
       {children}
     </div>
@@ -115,17 +148,20 @@ export const ActionCard = forwardRef<HTMLDivElement, ActionCardProps>(function A
 //
 
 export type NavigationCardProps = Omit<HTMLAttributes<HTMLDivElement>, 'title'> & {
-  title: ReactNode,
-  description?: ReactNode,
-  size?: CardSize,
-  href: string,
-  isExternal?: boolean,
+  'title': ReactNode,
+  'description'?: ReactNode,
+  'size'?: CardSize,
+  'leading'?: ReactNode,
+  'href': string,
+  'isExternal'?: boolean,
+  'data-name'?: string,
 }
 
 export const NavigationCard = forwardRef<HTMLDivElement, NavigationCardProps>(function NavigationCard({
   title,
   description,
   size = 'md',
+  leading,
   href,
   isExternal = false,
   children,
@@ -171,12 +207,11 @@ export const NavigationCard = forwardRef<HTMLDivElement, NavigationCardProps>(fu
       tabIndex={0}
     >
       <div data-name="card-header">
-        <div data-name="card-content">
-          <span data-name="card-title">{title}</span>
-          <Visibility isVisible={!!description}>
-            <span data-name="card-description">{description}</span>
-          </Visibility>
-        </div>
+        <CardHeaderContent
+          title={title}
+          description={description}
+          leading={leading}
+        />
         <a
           href={href}
           target={isExternal ? '_blank' : undefined}

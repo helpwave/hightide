@@ -17,7 +17,7 @@
 
   [data-name="action-card"],
   [data-name="navigation-card"] {
-    @apply flex-col-1 w-full min-w-0 surface coloring-solid-hover shadow-md;
+    @apply flex-col-1 w-full min-w-0 surface coloring-solid-hover shadow-md focusable focus-style-outline transition-all;
 
     &[data-size="sm"] {
       @apply px-2 py-1 rounded;
@@ -33,15 +33,16 @@
   }
 
   [data-name="card-header"] {
-    @apply flex-row-2 items-center w-full min-w-0;
+    @apply flex-row-4 items-center w-full min-w-0;
   }
 
   [data-name="card-content"] {
     @apply flex-col-1 min-w-0 flex-1;
   }
 
-  [data-name="card-action"] {
-    @apply flex-col-0 items-center justify-center shrink-0 text-description;
+  [data-name="card-leading"],
+  [data-name="card-trailing"] {
+    @apply flex-col-0 items-center justify-center shrink-0 self-center text-description;
   }
 
   [data-name="navigation-card-action"] {
@@ -49,7 +50,7 @@
   }
 
   [data-name="card-title"] {
-    @apply typography-title-md;
+    @apply typography-title-md min-w-0;
   }
 
   [data-name="card"][data-size="sm"] [data-name="card-title"],
@@ -71,6 +72,10 @@
   [data-name="action-card"] {
     &:not([data-disabled]) {
       @apply cursor-pointer;
+
+      &:hover {
+        @apply shadow-lg;
+      }
     }
 
     &[data-disabled] {
@@ -80,5 +85,9 @@
 
   [data-name="navigation-card"] {
     @apply cursor-pointer;
+
+    &:hover {
+      @apply shadow-lg;
+    }
   }
 }
