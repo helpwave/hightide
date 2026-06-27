@@ -24,22 +24,22 @@ describe('useTreeNavigation', () => {
     const { result } = renderHook(() =>
       useTreeNavigation({ nodes: sampleTree }))
 
-    expect(result.current.items.map((item) => item.id)).toEqual(['root-a', 'root-b'])
-    expect(result.current.items.every((item) => !item.expanded)).toBe(true)
-    expect(result.current.activeItem).toBeNull()
+    expect(result.current.visibleItems.map((item) => item.id)).toEqual(['root-a', 'root-b'])
+    expect(result.current.visibleItems.every((item) => !item.expanded)).toBe(true)
+    expect(result.current.focusedItem).toBeNull()
   })
 
   test('hides children when parent is collapsed', () => {
     const { result } = renderHook(() =>
       useTreeNavigation({
         nodes: sampleTree,
-        initialActiveId: 'root-a',
+        initialFocusedId: 'root-a',
       }))
 
-    expect(result.current.items.map((item) => item.id)).toEqual(['root-a', 'root-b'])
+    expect(result.current.visibleItems.map((item) => item.id)).toEqual(['root-a', 'root-b'])
   })
 
-  test('navigateTo expands ancestors and exposes activeItem path', () => {
+  test('navigateTo expands ancestors and exposes focusedItem path', () => {
     const { result } = renderHook(() =>
       useTreeNavigation({ nodes: sampleTree }))
 
@@ -47,57 +47,57 @@ describe('useTreeNavigation', () => {
       result.current.navigateTo('child-a2')
     })
 
-    expect(result.current.activeItem).toEqual({
+    expect(result.current.focusedItem).toEqual({
       id: 'child-a2',
       path: ['root-a', 'child-a2'],
       expanded: false,
     })
-    expect(result.current.items.map((item) => item.id)).toEqual([
+    expect(result.current.visibleItems.map((item) => item.id)).toEqual([
       'root-a',
       'child-a1',
       'child-a2',
       'root-b',
     ])
-    expect(result.current.items[0]?.expanded).toBe(true)
+    expect(result.current.visibleItems[0]?.expanded).toBe(true)
   })
 
-  test('uses initialActiveId when uncontrolled', () => {
+  test('uses initialFocusedId when uncontrolled', () => {
     const { result } = renderHook(() =>
       useTreeNavigation({
         nodes: sampleTree,
-        initialActiveId: 'child-b1',
+        initialFocusedId: 'child-b1',
       }))
 
-    expect(result.current.activeItem?.id).toBe('child-b1')
-    expect(result.current.activeItem?.path).toEqual(['root-b', 'child-b1'])
-    expect(result.current.items.map((item) => item.id)).toEqual([
+    expect(result.current.focusedItem?.id).toBe('child-b1')
+    expect(result.current.focusedItem?.path).toEqual(['root-b', 'child-b1'])
+    expect(result.current.visibleItems.map((item) => item.id)).toEqual([
       'root-a',
       'root-b',
       'child-b1',
     ])
   })
 
-  test('controlled activeId follows prop', () => {
-    const onActiveIdChange = jest.fn()
+  test('controlled focusedId follows prop', () => {
+    const onFocusedIdChange = jest.fn()
     const { result, rerender } = renderHook(
-      (props: { activeId: string | null }) =>
+      (props: { focusedId: string | null }) =>
         useTreeNavigation({
           nodes: sampleTree,
-          activeId: props.activeId,
-          onActiveIdChange,
+          focusedId: props.focusedId,
+          onFocusedIdChange,
         }),
-      { initialProps: { activeId: 'root-a' as string | null } }
+      { initialProps: { focusedId: 'root-a' as string | null } }
     )
 
-    expect(result.current.activeItem?.id).toBe('root-a')
+    expect(result.current.focusedItem?.id).toBe('root-a')
 
-    rerender({ activeId: 'child-a1' })
+    rerender({ focusedId: 'child-a1' })
 
-    expect(result.current.activeItem?.id).toBe('child-a1')
-    expect(result.current.activeItem?.path).toEqual(['root-a', 'child-a1'])
+    expect(result.current.focusedItem?.id).toBe('child-a1')
+    expect(result.current.focusedItem?.path).toEqual(['root-a', 'child-a1'])
   })
 
-  test('onlyOneExpandedTree keeps only active path branches expanded', () => {
+  test('onlyOneExpandedTree keeps only focused path branches expanded', () => {
     const { result } = renderHook(() =>
       useTreeNavigation({
         nodes: sampleTree,
@@ -111,25 +111,25 @@ describe('useTreeNavigation', () => {
       result.current.expand('root-b')
     })
 
-    expect(result.current.items.map((item) => item.id)).toEqual([
+    expect(result.current.visibleItems.map((item) => item.id)).toEqual([
       'root-a',
       'child-a1',
       'child-a2',
       'root-b',
     ])
-    expect(result.current.items.find((item) => item.id === 'root-b')?.expanded).toBe(false)
+    expect(result.current.visibleItems.find((item) => item.id === 'root-b')?.expanded).toBe(false)
 
     act(() => {
       result.current.navigateTo('child-b1')
     })
 
-    expect(result.current.items.map((item) => item.id)).toEqual([
+    expect(result.current.visibleItems.map((item) => item.id)).toEqual([
       'root-a',
       'root-b',
       'child-b1',
     ])
-    expect(result.current.items.find((item) => item.id === 'root-a')?.expanded).toBe(false)
-    expect(result.current.items.find((item) => item.id === 'root-b')?.expanded).toBe(true)
+    expect(result.current.visibleItems.find((item) => item.id === 'root-a')?.expanded).toBe(false)
+    expect(result.current.visibleItems.find((item) => item.id === 'root-b')?.expanded).toBe(true)
   })
 
   test('expand reveals children and collapse hides descendants', () => {
@@ -140,7 +140,7 @@ describe('useTreeNavigation', () => {
       result.current.expand('root-a')
     })
 
-    expect(result.current.items.map((item) => item.id)).toEqual([
+    expect(result.current.visibleItems.map((item) => item.id)).toEqual([
       'root-a',
       'child-a1',
       'child-a2',
@@ -151,99 +151,99 @@ describe('useTreeNavigation', () => {
       result.current.collapse('root-a')
     })
 
-    expect(result.current.items.map((item) => item.id)).toEqual(['root-a', 'root-b'])
+    expect(result.current.visibleItems.map((item) => item.id)).toEqual(['root-a', 'root-b'])
   })
 
-  test('collapse does not collapse ancestor of active node', () => {
+  test('collapse does not collapse ancestor of focused node', () => {
     const { result } = renderHook(() =>
       useTreeNavigation({
         nodes: sampleTree,
-        initialActiveId: 'child-a1',
+        initialFocusedId: 'child-a1',
       }))
 
     act(() => {
       result.current.collapse('root-a')
     })
 
-    expect(result.current.items.map((item) => item.id)).toEqual([
+    expect(result.current.visibleItems.map((item) => item.id)).toEqual([
       'root-a',
       'child-a1',
       'child-a2',
       'root-b',
     ])
-    expect(result.current.items.find((item) => item.id === 'root-a')?.expanded).toBe(true)
+    expect(result.current.visibleItems.find((item) => item.id === 'root-a')?.expanded).toBe(true)
   })
 
   test('toggleExpansion with isFocusing collapses parent after activating a descendant', () => {
     const { result } = renderHook(() =>
       useTreeNavigation({
         nodes: sampleTree,
-        initialActiveId: 'child-a1',
+        initialFocusedId: 'child-a1',
       }))
 
     act(() => {
       result.current.toggleExpansion('root-a', { isFocusing: true })
     })
 
-    expect(result.current.activeItem?.id).toBe('root-a')
-    expect(result.current.items.map((item) => item.id)).toEqual(['root-a', 'root-b'])
-    expect(result.current.items.find((item) => item.id === 'root-a')?.expanded).toBe(false)
+    expect(result.current.focusedItem?.id).toBe('root-a')
+    expect(result.current.visibleItems.map((item) => item.id)).toEqual(['root-a', 'root-b'])
+    expect(result.current.visibleItems.find((item) => item.id === 'root-a')?.expanded).toBe(false)
   })
 
   test('next moves to next visible item in flattened tree order', () => {
     const { result } = renderHook(() =>
       useTreeNavigation({
         nodes: sampleTree,
-        initialActiveId: 'root-a',
+        initialFocusedId: 'root-a',
       }))
 
     act(() => {
       result.current.next()
     })
 
-    expect(result.current.activeItem?.id).toBe('root-b')
+    expect(result.current.focusedItem?.id).toBe('root-b')
   })
 
   test('previous moves to previous visible item in flattened tree order', () => {
     const { result } = renderHook(() =>
       useTreeNavigation({
         nodes: sampleTree,
-        initialActiveId: 'child-a2',
+        initialFocusedId: 'child-a2',
       }))
 
     act(() => {
       result.current.previous()
     })
 
-    expect(result.current.activeItem?.id).toBe('child-a1')
+    expect(result.current.focusedItem?.id).toBe('child-a1')
   })
 
   test('first navigates to first visible item', () => {
     const { result } = renderHook(() =>
       useTreeNavigation({
         nodes: sampleTree,
-        initialActiveId: 'child-b1',
+        initialFocusedId: 'child-b1',
       }))
 
     act(() => {
       result.current.first()
     })
 
-    expect(result.current.activeItem?.id).toBe('root-a')
+    expect(result.current.focusedItem?.id).toBe('root-a')
   })
 
   test('last navigates to last visible item', () => {
     const { result } = renderHook(() =>
       useTreeNavigation({
         nodes: sampleTree,
-        initialActiveId: 'root-a',
+        initialFocusedId: 'root-a',
       }))
 
     act(() => {
       result.current.last()
     })
 
-    expect(result.current.activeItem?.id).toBe('root-b')
+    expect(result.current.focusedItem?.id).toBe('root-b')
   })
 
   test('navigateTo ignores invalid id', () => {
@@ -251,16 +251,30 @@ describe('useTreeNavigation', () => {
     const { result } = renderHook(() =>
       useTreeNavigation({
         nodes: sampleTree,
-        initialActiveId: 'root-a',
+        initialFocusedId: 'root-a',
       }))
 
     act(() => {
       result.current.navigateTo('missing')
     })
 
-    expect(result.current.activeItem?.id).toBe('root-a')
+    expect(result.current.focusedItem?.id).toBe('root-a')
     expect(warn).toHaveBeenCalled()
     warn.mockRestore()
+  })
+
+  test('allItems includes collapsed descendants', () => {
+    const { result } = renderHook(() =>
+      useTreeNavigation({ nodes: sampleTree }))
+
+    expect(result.current.visibleItems.map((item) => item.id)).toEqual(['root-a', 'root-b'])
+    expect(result.current.allItems.map((item) => item.id)).toEqual([
+      'root-a',
+      'child-a1',
+      'child-a2',
+      'root-b',
+      'child-b1',
+    ])
   })
 
   test('empty tree yields empty items and no-op actions', () => {
@@ -268,8 +282,9 @@ describe('useTreeNavigation', () => {
     const { result } = renderHook(() =>
       useTreeNavigation({ nodes: [] }))
 
-    expect(result.current.items).toEqual([])
-    expect(result.current.activeItem).toBeNull()
+    expect(result.current.visibleItems).toEqual([])
+    expect(result.current.allItems).toEqual([])
+    expect(result.current.focusedItem).toBeNull()
 
     act(() => {
       result.current.navigateTo('any')
@@ -281,8 +296,9 @@ describe('useTreeNavigation', () => {
       result.current.collapse('any')
     })
 
-    expect(result.current.items).toEqual([])
-    expect(result.current.activeItem).toBeNull()
+    expect(result.current.visibleItems).toEqual([])
+    expect(result.current.allItems).toEqual([])
+    expect(result.current.focusedItem).toBeNull()
     warn.mockRestore()
   })
 })
