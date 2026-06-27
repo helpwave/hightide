@@ -4,8 +4,9 @@ import type { AppPageNavigationItem } from '@/src/components/layout/app/AppPage'
 import { AppPage } from '@/src/components/layout/app/AppPage'
 import { HelpwaveBadge } from '@/src/components/branding/HelpwaveBadge'
 import { IconButton } from '@/src/components/user-interaction/IconButton'
+import { useEffect, useState } from 'react'
 
-const navigationItems: AppPageNavigationItem[] = [
+const initialNavigationItems: AppPageNavigationItem[] = [
   {
     id: 'products',
     label: 'Products',
@@ -30,6 +31,9 @@ const navigationItems: AppPageNavigationItem[] = [
       },
     ],
   },
+]
+
+const additionalNavigationItems: AppPageNavigationItem[] = [
   ...Array.from({ length: 10 }, (_, sectionIndex) => ({
     id: `section-${sectionIndex}`,
     label: `Section ${sectionIndex + 1}`,
@@ -38,7 +42,7 @@ const navigationItems: AppPageNavigationItem[] = [
       id: `section-${sectionIndex}-item-${itemIndex}`,
       label: `Item ${itemIndex + 1}`,
       icon: <File className="size-5" />,
-      url: '#',
+      url: sectionIndex === 1 && itemIndex === 1 ? '#test' : '#',
     })),
   })),
 ]
@@ -88,6 +92,16 @@ export const appPage: Story = {
     ),
   ],
   render: (args) => {
+    const [navigationItems, setNavigationItems] = useState(() => [...initialNavigationItems])
+
+    useEffect(() => {
+      const timeout = setTimeout(() => {
+        setNavigationItems([...initialNavigationItems, ...additionalNavigationItems])
+      }, 1000)
+
+      return () => clearTimeout(timeout)
+    }, [])
+
     return (
       <AppPage
         {...args}
@@ -99,8 +113,7 @@ export const appPage: Story = {
               Navigate through helpwave products and organization settings.
             </p>
           ),
-          initialActiveId: 'section-0-item-0',
-          //activeUrl: 'https://helpwave.de/product/staff',
+          activeUrl: '#test',
         }}
       />
     )

@@ -1,15 +1,18 @@
 import type { PropsWithChildren } from 'react'
-import { createContext, useCallback, useContext, useEffect, useMemo, useRef } from 'react'
+import { createContext, useCallback, useContext, useEffect, useMemo, useRef, useState } from 'react'
 import {
   type TreeItem,
   type TreeNavigationOptions,
   type TreeNavigationReturn,
+  resolveTreeNodePath,
   useTreeNavigation
 } from '@/src/hooks/useTreeNavigation'
 
 export interface NavigationItemState {
   expanded: boolean,
   isFocused: boolean,
+  isActive: boolean,
+  isOnActivePath: boolean,
   path: ReadonlyArray<string>,
 }
 
@@ -26,38 +29,64 @@ export interface NavigationContextActions {
 }
 
 export interface NavigationContextType extends NavigationContextActions {
-  activeItem: TreeItem | null,
+  focusedItem: TreeItem | null,
   focusedId: string | null,
-  items: ReadonlyArray<TreeItem>,
+  activeId: string | null,
+  activePath: ReadonlyArray<string> | null,
+  visibleItems: ReadonlyArray<TreeItem>,
+  allItems: ReadonlyArray<TreeItem>,
   getItemState: (id: string) => NavigationItemState | null,
 }
 
 const NavigationContext = createContext<NavigationContextType | null>(null)
 
-export type NavigationProviderProps = PropsWithChildren<TreeNavigationOptions>
+export interface NavigationProviderProps extends PropsWithChildren<TreeNavigationOptions> {
+  activeId?: string | null,
+}
 
 export function NavigationProvider({
   children,
-  ...options
+  activeId = null,
+  ...treeOptions
 }: NavigationProviderProps) {
-  const navigation = useTreeNavigation(options)
+  const navigation = useTreeNavigation({
+    ...treeOptions,
+    initialFocusedId: treeOptions.initialFocusedId ?? activeId ?? treeOptions.nodes[0]?.id ?? null,
+  })
   const itemRefs = useRef(new Map<string, HTMLElement>())
 
-  const focusedId = navigation.activeItem?.id ?? navigation.items[0]?.id ?? null
+  const [hasNavigatedToActiveId, setHasNavigatedToActiveId] = useState(false)
+  useEffect(() => {
+    if (activeId == null || hasNavigatedToActiveId) return
+    const navigationItem = navigation.allItems.find((item) => item.id === activeId)
+    if (navigationItem == null) return
+    navigation.navigateTo(activeId)
+    setHasNavigatedToActiveId(true)
+  }, [activeId, navigation, navigation.navigateTo, navigation.allItems, hasNavigatedToActiveId])
+
+  const focusedId = useMemo(() => {
+    return navigation.focusedItem?.id ?? navigation.visibleItems[0]?.id ?? null
+  }, [navigation.focusedItem, navigation.visibleItems])
+
+  const activePath = useMemo(() => {
+    return resolveTreeNodePath(treeOptions.nodes, activeId)
+  }, [treeOptions.nodes, activeId])
 
   const itemStateById = useMemo(() => {
     const map = new Map<string, NavigationItemState>()
 
-    for (const item of navigation.items) {
+    for (const item of navigation.allItems) {
       map.set(item.id, {
         expanded: item.expanded,
         isFocused: focusedId === item.id,
+        isActive: activeId === item.id,
+        isOnActivePath: activePath?.includes(item.id) ?? false,
         path: item.path,
       })
     }
 
     return map
-  }, [navigation.items, focusedId])
+  }, [navigation.allItems, focusedId, activeId, activePath])
 
   const getItemState = useCallback((id: string) => {
     return itemStateById.get(id) ?? null
@@ -77,9 +106,12 @@ export function NavigationProvider({
   }, [focusedId])
 
   const value = useMemo((): NavigationContextType => ({
-    activeItem: navigation.activeItem,
+    focusedItem: navigation.focusedItem,
     focusedId,
-    items: navigation.items,
+    activeId,
+    activePath,
+    visibleItems: navigation.visibleItems,
+    allItems: navigation.allItems,
     getItemState,
     navigateTo: navigation.navigateTo,
     expand: navigation.expand,
@@ -91,8 +123,9 @@ export function NavigationProvider({
     toggleExpansion: navigation.toggleExpansion,
     registerItemRef,
   }), [
-    navigation.activeItem,
-    navigation.items,
+    navigation.focusedItem,
+    navigation.visibleItems,
+    navigation.allItems,
     navigation.navigateTo,
     navigation.expand,
     navigation.collapse,
@@ -102,6 +135,8 @@ export function NavigationProvider({
     navigation.last,
     navigation.toggleExpansion,
     focusedId,
+    activeId,
+    activePath,
     getItemState,
     registerItemRef,
   ])

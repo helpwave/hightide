@@ -40,7 +40,6 @@ export const ThemeSelect = ({ ...props }: ThemeSelectProps) => {
     <Select<ThemeType>
       value={theme}
       onEditComplete={(value) => {
-        console.log('onEditComplete', value)
         props.onEditComplete?.(value)
         setTheme(value)
       }}

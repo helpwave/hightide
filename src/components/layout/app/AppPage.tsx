@@ -65,7 +65,10 @@ export interface AppPageSidebarWithNavigationProps extends AppSidebarProps {
   footer?: ReactNode,
   navigationItems?: NavigationItemData[],
   contentOverwrite?: ReactNode,
-  initialActiveId?: string,
+  initialFocusedId?: string,
+  focusedId?: string | null,
+  onFocusedIdChange?: (focusedId: string | null) => void,
+  activeId?: string | null,
 }
 
 export const AppPageSidebarWithNavigation = ({
@@ -73,7 +76,10 @@ export const AppPageSidebarWithNavigation = ({
   footer,
   navigationItems,
   contentOverwrite,
-  initialActiveId,
+  initialFocusedId,
+  focusedId,
+  onFocusedIdChange,
+  activeId,
   ...props
 }: AppPageSidebarWithNavigationProps) => {
   return (
@@ -86,7 +92,13 @@ export const AppPageSidebarWithNavigation = ({
         )}
         {navigationItems && !contentOverwrite && (
           <div className="app-page-sidebar-with-navigation-scroll">
-            <VerticalNavigationTree items={navigationItems} initialActiveId={initialActiveId}/>
+            <VerticalNavigationTree
+              items={navigationItems}
+              initialFocusedId={initialFocusedId}
+              focusedId={focusedId}
+              onFocusedIdChange={onFocusedIdChange}
+              activeId={activeId}
+            />
           </div>
         )}
         {contentOverwrite && (
@@ -113,9 +125,26 @@ export interface AppPageNavigationItem {
   items?: AppPageNavigationItem[],
 }
 
+function findActiveIdByUrl(
+  items: ReadonlyArray<AppPageNavigationItem>,
+  activeUrl: string
+): string | null {
+  for (const item of items) {
+    if (item.url === activeUrl) return item.id
+    if (item.items != null) {
+      const found = findActiveIdByUrl(item.items, activeUrl)
+      if (found != null) return found
+    }
+  }
+  return null
+}
+
 export interface AppPageSidebarProps {
+  initialFocusedId?: string,
+  focusedId?: string | null,
+  onFocusedIdChange?: (focusedId: string | null) => void,
+  activeId?: string | null,
   activeUrl?: string,
-  initialActiveId?: string,
   header?: ReactNode,
   items?: AppPageNavigationItem[],
   contentOverwrite?: ReactNode,
@@ -131,9 +160,15 @@ export const AppPage = ({ children, headerActions, sidebarProps, ...props }: App
   const translation = useHightideTranslation()
   const [isSidebarOpen, setIsSidebarOpen] = useState(false)
 
+  const resolvedActiveId = useMemo(() => {
+    if (sidebarProps.activeId !== undefined) return sidebarProps.activeId
+    if (sidebarProps.activeUrl == null || sidebarProps.items == null) return null
+    return findActiveIdByUrl(sidebarProps.items, sidebarProps.activeUrl)
+  }, [sidebarProps.activeId, sidebarProps.activeUrl, sidebarProps.items])
+
   const toNavigationItems = useCallback((items?: AppPageNavigationItem[]): NavigationItemData[] | undefined => {
     return items?.map((item) => {
-      const isActive = (sidebarProps.activeUrl === item.url && !!sidebarProps.activeUrl) || item.id === sidebarProps.initialActiveId
+      const isActive = item.id === resolvedActiveId
       return ({
         id: item.id,
         label: (
@@ -151,27 +186,11 @@ export const AppPage = ({ children, headerActions, sidebarProps, ...props }: App
         items: toNavigationItems(item.items),
       })
     }) ?? undefined
-  }, [sidebarProps.activeUrl, sidebarProps.initialActiveId])
+  }, [resolvedActiveId])
 
   const navigationItems = useMemo(() => toNavigationItems(
     sidebarProps.items
   ), [sidebarProps.items, toNavigationItems])
-
-  const initialActiveId = useMemo(() => {
-    if (sidebarProps.initialActiveId) return sidebarProps.initialActiveId
-    if (!navigationItems) return undefined
-    const findActiveId = (items: NavigationItemData[]): string | undefined => {
-      for (const item of items) {
-        if (item.url === sidebarProps.activeUrl) return item.id
-        if (item.items) {
-          const found = findActiveId(item.items)
-          if (found) return found
-        }
-      }
-      return undefined
-    }
-    return findActiveId(navigationItems)
-  }, [navigationItems, sidebarProps.activeUrl, sidebarProps.initialActiveId])
 
   return (
     <div
@@ -186,7 +205,10 @@ export const AppPage = ({ children, headerActions, sidebarProps, ...props }: App
         footer={sidebarProps.footer}
         navigationItems={navigationItems}
         contentOverwrite={sidebarProps.contentOverwrite}
-        initialActiveId={initialActiveId}
+        initialFocusedId={sidebarProps.initialFocusedId}
+        focusedId={sidebarProps.focusedId}
+        onFocusedIdChange={sidebarProps.onFocusedIdChange}
+        activeId={resolvedActiveId}
       />
       <div data-name="app-page-content">
         <header data-name="app-page-header">

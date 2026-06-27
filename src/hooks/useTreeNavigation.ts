@@ -14,9 +14,9 @@ export interface TreeItem {
 
 export interface TreeNavigationOptions {
   nodes: ReadonlyArray<TreeNode>,
-  activeId?: string | null,
-  onActiveIdChange?: (activeId: string | null) => void,
-  initialActiveId?: string | null,
+  focusedId?: string | null,
+  onFocusedIdChange?: (focusedId: string | null) => void,
+  initialFocusedId?: string | null,
   onlyOneExpandedTree?: boolean,
 }
 
@@ -25,8 +25,9 @@ export interface TreeNavigationActionOptions {
 }
 
 export interface TreeNavigationReturn {
-  items: ReadonlyArray<TreeItem>,
-  activeItem: TreeItem | null,
+  visibleItems: ReadonlyArray<TreeItem>,
+  allItems: ReadonlyArray<TreeItem>,
+  focusedItem: TreeItem | null,
   navigateTo: (id: string) => void,
   expand: (id: string, options?: TreeNavigationActionOptions) => void,
   collapse: (id: string, options?: TreeNavigationActionOptions) => void,
@@ -72,6 +73,34 @@ function buildTreeIndex(nodes: ReadonlyArray<TreeNode>): TreeIndex {
     byId,
     roots: [...nodes],
   }
+}
+
+export function resolveTreeNodePath(
+  nodes: ReadonlyArray<TreeNode>,
+  id: string | null
+): ReadonlyArray<string> | null {
+  if (id == null) return null
+  const entry = buildTreeIndex(nodes).byId.get(id)
+  return entry?.path ?? null
+}
+
+function flattenAllItems(
+  nodes: ReadonlyArray<TreeNode>,
+  expandedIds: ReadonlySet<string>,
+  path: string[] = []
+): TreeItem[] {
+  const result: TreeItem[] = []
+
+  for (const node of nodes) {
+    const currentPath = [...path, node.id]
+    const hasChildren = node.items.length > 0
+    const expanded = hasChildren && expandedIds.has(node.id)
+
+    result.push({ id: node.id, path: currentPath, expanded })
+    result.push(...flattenAllItems(node.items, expandedIds, currentPath))
+  }
+
+  return result
 }
 
 function flattenVisibleItems(
@@ -127,15 +156,15 @@ function isAncestorOf(ancestorId: string, descendantPath: ReadonlyArray<string>)
 
 function pruneExpandedIds(
   expandedIds: ReadonlySet<string>,
-  activePath: ReadonlyArray<string> | null,
+  focusedPath: ReadonlyArray<string> | null,
   onlyOneExpandedTree: boolean,
   index: TreeIndex
 ): Set<string> {
-  if (!onlyOneExpandedTree || activePath == null) {
+  if (!onlyOneExpandedTree || focusedPath == null) {
     return new Set(expandedIds)
   }
 
-  const pathSet = new Set(activePath)
+  const pathSet = new Set(focusedPath)
   const pruned = new Set<string>()
 
   for (const id of expandedIds) {
@@ -149,59 +178,63 @@ function pruneExpandedIds(
   return pruned
 }
 
-function syncExpansionForActive(
+function syncExpansionForFocused(
   expandedIds: ReadonlySet<string>,
-  activePath: ReadonlyArray<string>,
+  focusedPath: ReadonlyArray<string>,
   onlyOneExpandedTree: boolean,
   index: TreeIndex
 ): Set<string> {
   const next = new Set(expandedIds)
 
-  for (const id of getExpandableAncestorIds(activePath, index)) {
+  for (const id of getExpandableAncestorIds(focusedPath, index)) {
     next.add(id)
   }
 
-  return pruneExpandedIds(next, activePath, onlyOneExpandedTree, index)
+  return pruneExpandedIds(next, focusedPath, onlyOneExpandedTree, index)
 }
 
 export function useTreeNavigation({
   nodes,
-  activeId: controlledActiveId,
-  onActiveIdChange,
-  initialActiveId,
+  focusedId: controlledFocusedId,
+  onFocusedIdChange,
+  initialFocusedId,
   onlyOneExpandedTree = false,
 }: TreeNavigationOptions): TreeNavigationReturn {
   const index = useMemo(() => buildTreeIndex(nodes), [nodes])
 
-  const [activeId, setActiveId] = useControlledState<string | null>({
-    value: controlledActiveId,
-    onValueChange: onActiveIdChange,
-    defaultValue: initialActiveId ?? null,
+  const [focusedId, setFocusedId] = useControlledState<string | null>({
+    value: controlledFocusedId,
+    onValueChange: onFocusedIdChange,
+    defaultValue: initialFocusedId ?? null,
   })
 
-  const resolvedActiveId = useMemo(() => {
-    if (activeId == null) return null
-    if (index.byId.has(activeId)) return activeId
+  const resolvedFocusedId = useMemo(() => {
+    if (focusedId == null) return null
+    if (index.byId.has(focusedId)) return focusedId
     return null
-  }, [activeId, index])
+  }, [focusedId, index])
 
   const [expandedIds, setExpandedIds] = useState<ReadonlySet<string>>(() => new Set())
 
   useEffect(() => {
-    if (resolvedActiveId == null) return
-    const entry = index.byId.get(resolvedActiveId)
+    if (resolvedFocusedId == null) return
+    const entry = index.byId.get(resolvedFocusedId)
     if (entry == null) return
-    setExpandedIds((prev) => syncExpansionForActive(prev, entry.path, onlyOneExpandedTree, index))
-  }, [resolvedActiveId, onlyOneExpandedTree, index])
+    setExpandedIds((prev) => syncExpansionForFocused(prev, entry.path, onlyOneExpandedTree, index))
+  }, [resolvedFocusedId, onlyOneExpandedTree, index])
 
-  const items = useMemo(() => {
+  const visibleItems = useMemo(() => {
     return flattenVisibleItems(nodes, expandedIds)
   }, [nodes, expandedIds])
 
-  const activeItem = useMemo(() => {
-    if (resolvedActiveId == null) return null
-    return items.find((item) => item.id === resolvedActiveId) ?? null
-  }, [items, resolvedActiveId])
+  const allItems = useMemo(() => {
+    return flattenAllItems(nodes, expandedIds)
+  }, [nodes, expandedIds])
+
+  const focusedItem = useMemo(() => {
+    if (resolvedFocusedId == null) return null
+    return allItems.find((item) => item.id === resolvedFocusedId) ?? null
+  }, [allItems, resolvedFocusedId])
 
   const navigateTo = useCallback((id: string) => {
     const entry = index.byId.get(id)
@@ -209,41 +242,41 @@ export function useTreeNavigation({
       console.warn(`Attempted to navigate to node ${id} that does not exist`)
       return
     }
-    setActiveId(id)
+    setFocusedId(id)
     setExpandedIds((prev) => {
-      const next = syncExpansionForActive(prev, entry.path, onlyOneExpandedTree, index)
+      const next = syncExpansionForFocused(prev, entry.path, onlyOneExpandedTree, index)
       return next
     })
-  }, [index, onlyOneExpandedTree, setActiveId])
+  }, [index, onlyOneExpandedTree, setFocusedId])
 
   const expand = useCallback((id: string, options?: TreeNavigationActionOptions) => {
     const entry = index.byId.get(id)
     if (entry == null || entry.node.items.length === 0) return
 
     if (options?.isFocusing) {
-      setActiveId(id)
+      setFocusedId(id)
     }
 
     setExpandedIds((prev) => {
       const next = new Set(prev)
       next.add(id)
-      const activePath = options?.isFocusing
+      const focusedPath = options?.isFocusing
         ? entry.path
-        : resolvedActiveId != null
-          ? index.byId.get(resolvedActiveId)?.path ?? null
+        : resolvedFocusedId != null
+          ? index.byId.get(resolvedFocusedId)?.path ?? null
           : null
-      return pruneExpandedIds(next, activePath, onlyOneExpandedTree, index)
+      return pruneExpandedIds(next, focusedPath, onlyOneExpandedTree, index)
     })
-  }, [index, onlyOneExpandedTree, resolvedActiveId, setActiveId])
+  }, [index, onlyOneExpandedTree, resolvedFocusedId, setFocusedId])
 
   const collapse = useCallback((id: string, options?: TreeNavigationActionOptions) => {
-    if (!options?.isFocusing && resolvedActiveId != null) {
-      const activeEntry = index.byId.get(resolvedActiveId)
-      if (activeEntry != null && isAncestorOf(id, activeEntry.path)) return
+    if (!options?.isFocusing && resolvedFocusedId != null) {
+      const focusedEntry = index.byId.get(resolvedFocusedId)
+      if (focusedEntry != null && isAncestorOf(id, focusedEntry.path)) return
     }
 
     if (options?.isFocusing) {
-      setActiveId(id)
+      setFocusedId(id)
     }
 
     const descendantIds = getDescendantIds(index, id)
@@ -255,14 +288,14 @@ export function useTreeNavigation({
       }
       return next
     })
-  }, [index, resolvedActiveId, setActiveId])
+  }, [index, resolvedFocusedId, setFocusedId])
 
   const toggleExpansion = useCallback((id: string, options?: TreeNavigationActionOptions) => {
     const entry = index.byId.get(id)
     if (entry == null || entry.node.items.length === 0) return
 
     if (options?.isFocusing) {
-      setActiveId(id)
+      setFocusedId(id)
       setExpandedIds((prev) => {
         if (prev.has(id)) {
           const next = new Set(prev)
@@ -289,55 +322,56 @@ export function useTreeNavigation({
     } else {
       expand(id)
     }
-  }, [index, expandedIds, expand, collapse, onlyOneExpandedTree, setActiveId])
+  }, [index, expandedIds, expand, collapse, onlyOneExpandedTree, setFocusedId])
 
   const next = useCallback(() => {
-    if (items.length === 0) return
+    if (visibleItems.length === 0) return
 
-    if (resolvedActiveId == null) {
-      navigateTo(items[0].id)
+    if (resolvedFocusedId == null) {
+      navigateTo(visibleItems[0].id)
       return
     }
 
-    const currentIndex = items.findIndex((item) => item.id === resolvedActiveId)
+    const currentIndex = visibleItems.findIndex((item) => item.id === resolvedFocusedId)
     const startIndex = currentIndex < 0 ? 0 : currentIndex
 
-    if (startIndex < items.length - 1) {
-      navigateTo(items[startIndex + 1].id)
+    if (startIndex < visibleItems.length - 1) {
+      navigateTo(visibleItems[startIndex + 1].id)
       return
     }
-  }, [items, resolvedActiveId, navigateTo])
+  }, [visibleItems, resolvedFocusedId, navigateTo])
 
   const previous = useCallback(() => {
-    if (items.length === 0) return
+    if (visibleItems.length === 0) return
 
-    if (resolvedActiveId == null) {
-      navigateTo(items[items.length - 1].id)
+    if (resolvedFocusedId == null) {
+      navigateTo(visibleItems[visibleItems.length - 1].id)
       return
     }
 
-    const currentIndex = items.findIndex((item) => item.id === resolvedActiveId)
-    const startIndex = currentIndex < 0 ? items.length - 1 : currentIndex
+    const currentIndex = visibleItems.findIndex((item) => item.id === resolvedFocusedId)
+    const startIndex = currentIndex < 0 ? visibleItems.length - 1 : currentIndex
 
     if (startIndex > 0) {
-      navigateTo(items[startIndex - 1].id)
+      navigateTo(visibleItems[startIndex - 1].id)
       return
     }
-  }, [items, resolvedActiveId, navigateTo])
+  }, [visibleItems, resolvedFocusedId, navigateTo])
 
   const first = useCallback(() => {
-    if (items.length === 0) return
-    navigateTo(items[0].id)
-  }, [items, navigateTo])
+    if (visibleItems.length === 0) return
+    navigateTo(visibleItems[0].id)
+  }, [visibleItems, navigateTo])
 
   const last = useCallback(() => {
-    if (items.length === 0) return
-    navigateTo(items[items.length - 1].id)
-  }, [items, navigateTo])
+    if (visibleItems.length === 0) return
+    navigateTo(visibleItems[visibleItems.length - 1].id)
+  }, [visibleItems, navigateTo])
 
   return useMemo((): TreeNavigationReturn => ({
-    items,
-    activeItem,
+    visibleItems,
+    allItems,
+    focusedItem,
     navigateTo,
     expand,
     collapse,
@@ -346,5 +380,5 @@ export function useTreeNavigation({
     previous,
     first,
     last,
-  }), [items, activeItem, navigateTo, expand, collapse, toggleExpansion, next, previous, first, last])
+  }), [visibleItems, allItems, focusedItem, navigateTo, expand, collapse, toggleExpansion, next, previous, first, last])
 }

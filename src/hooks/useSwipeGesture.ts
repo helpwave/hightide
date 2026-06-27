@@ -115,7 +115,6 @@ export const useSwipeGesture = ({
     const listenMouse = inputMode === 'mouse' || inputMode === 'both'
 
     const onGestureStart = (x: number, y: number, eventTarget: HTMLElement) => {
-      console.log('onGestureStart', x, y)
       if (!isWithinStartRegion(x, y)) return
 
       const scrollableParent = findScrollableParent(eventTarget)
@@ -131,7 +130,6 @@ export const useSwipeGesture = ({
     }
 
     const onGestureMove = (x: number, y: number, eventTarget: HTMLElement) => {
-      console.log('onGestureMove', x, y)
       const scrollableParent = findScrollableParent(eventTarget)
       const currentScrollY = scrollableParent?.scrollTop ?? window.scrollY
 

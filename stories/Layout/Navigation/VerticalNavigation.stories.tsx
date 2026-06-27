@@ -104,22 +104,22 @@ type Story = StoryObj<typeof meta>
 
 export const verticalNavigation: Story = {
   args: {
-    initialActiveId: 'ward-management',
+    initialFocusedId: 'ward-management',
     onlyOneExpandedTree: false,
     items: navigationItems,
-    onActiveIdChange: action('onActiveIdChange'),
+    onFocusedIdChange: action('onFocusedIdChange'),
   },
   render: (args) => {
-    const [activeId, setActiveId] = useState<string | null>(args.initialActiveId ?? null)
+    const [focusedId, setFocusedId] = useState<string | null>(args.initialFocusedId ?? null)
 
     return (
       <div className="w-64 h-96">
         <VerticalNavigationTree
           {...args}
-          activeId={activeId}
-          onActiveIdChange={(id) => {
-            args.onActiveIdChange?.(id)
-            setActiveId(id)
+          focusedId={focusedId}
+          onFocusedIdChange={(id) => {
+            args.onFocusedIdChange?.(id)
+            setFocusedId(id)
           }}
         />
       </div>
