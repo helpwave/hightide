@@ -5,6 +5,25 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/)
 and adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [0.12.8] - 2026-06-29
+
+### Added
+- `noScrolling` prop on `AppPage` to disable content scrolling and apply `data-noScrolling` on the content and main areas
+- Toggle-all button in `TableColumnSwitcher` to show or hide all hideable columns at once
+- `hideAllColumns` and `showAllColumns` translation keys
+- `useScrollbarState` hook to detect overflow scrollbars on a container
+- `data-scrollbar` attribute on the table container (`vertical`, `horizontal`, or `both`) based on overflow state
+- Semantic color tokens `--color-gray-250`, `--color-faded`, `--color-on-surface-variant`, and `--color-on-surface-warning`
+- `surface-variant` and `surface-warning` coloring utilities
+- `SemanticColors` Storybook story for semantic color tokens
+
+### Changed
+- `AppPage` content and main padding on desktop; header padding aligned with main content
+- Table container styling with border, rounded corners, and scrollbar-aware corner rounding via `--table-rounding-*` variables
+- Table header and body borders simplified; bottom-row rounding adapts when scrollbars are present
+- `VerticalNavigationItem` content shows a pointer cursor on hover
+- Basic and semantic color CSS formatting and theme token organization (`@theme static` for semantic colors)
+
 ## [0.12.7] - 2026-06-27
 
 ### Added

@@ -1,4 +1,5 @@
 import type { TableHTMLAttributes } from 'react'
+import { useRef } from 'react'
 import './types'
 import { TableBody } from './TableBody'
 import type { TableHeaderProps } from './TableHeader'
@@ -6,6 +7,7 @@ import { TableHeader } from './TableHeader'
 import { useTableContainerContext, useTableStateContext } from './TableContext'
 import type { TableVirtualizationOptions } from './VirtualizedTableBody'
 import { VirtualizedTableBody } from './VirtualizedTableBody'
+import { useScrollbarState } from '@/src/hooks/useScrollbarState'
 
 export interface TableDisplayProps extends TableHTMLAttributes<HTMLTableElement> {
   containerProps?: Omit<React.HTMLAttributes<HTMLDivElement>, 'children'>,
@@ -26,11 +28,23 @@ export const TableDisplay = <T,>({
 }: TableDisplayProps) => {
   const { table } = useTableStateContext<T>()
   const { containerRef } = useTableContainerContext<T>()
+  const tableRef = useRef<HTMLTableElement>(null)
+  const scrollbarState = useScrollbarState({
+    containerRef,
+    contentRef: tableRef,
+    dependencies: [virtualized],
+  })
 
   return (
-    <div {...containerProps} ref={containerRef} data-name={containerProps?.['data-name'] ?? 'table-container'}>
+    <div
+      {...containerProps}
+      ref={containerRef}
+      data-name={containerProps?.['data-name'] ?? 'table-container'}
+      data-scrollbar={scrollbarState}
+    >
       <table
         {...props}
+        ref={tableRef}
         data-name={props['data-name'] ?? 'table'}
 
         style={{

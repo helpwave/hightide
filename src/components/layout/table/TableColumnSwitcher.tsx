@@ -124,6 +124,13 @@ export const TableColumnSwitcherPopUp = ({ ...props }: TableColumnSwitcherPopUpP
     column?.toggleVisibility()
   }
 
+  const hasHideableColumns = table.getAllLeafColumns().some(column => column.getCanHide())
+  const allColumnsVisible = table.getIsAllColumnsVisible()
+
+  const toggleAllColumnsVisibility = () => {
+    table.toggleAllColumnsVisible()
+  }
+
   const pinColumn = (columnId: string, side: 'left' | 'right') => {
     const column = table.getColumn(columnId)
     if (!column || !column.getCanPin()) return
@@ -187,11 +194,30 @@ export const TableColumnSwitcherPopUp = ({ ...props }: TableColumnSwitcherPopUpP
 
       className="flex-col-1 p-2 items-start min-w-72"
     >
-      <div className="flex-col-1">
-        <span id={ids.label} className="typography-title-md font-semibold">
-          {translation('columnPicker')}
-        </span>
-        <span className="text-description typography-label-sm mb-2">
+      <div className="flex-col-1 w-full mb-2">
+        <div className="flex-row-2 items-center justify-between w-full">
+          <span id={ids.label} className="typography-title-md font-semibold">
+            {translation('columnPicker')}
+          </span>
+          <Visibility isVisible={enableHiding}>
+            <IconButton
+              tooltip={allColumnsVisible ? translation('hideAllColumns') : translation('showAllColumns')}
+              size="sm"
+              color="neutral"
+              coloringStyle="text"
+              disabled={!hasHideableColumns}
+              onClick={toggleAllColumnsVisibility}
+              aria-label={allColumnsVisible ? translation('hideAllColumns') : translation('showAllColumns')}
+            >
+              {allColumnsVisible ? (
+                <Eye className="size-4" />
+              ) : (
+                <EyeOff className="size-4" />
+              )}
+            </IconButton>
+          </Visibility>
+        </div>
+        <span className="text-description typography-label-sm">
           {translation('columnPickerDescription')}
         </span>
       </div>

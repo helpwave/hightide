@@ -73,6 +73,19 @@
   --coloring-hover: var(--color-surface-hover);
 }
 
+@utility surface-variant {
+  @apply coloring-reset-variables;
+  --coloring-color: var(--color-surface-variant);
+  --coloring-on-color: var(--color-on-surface-variant);
+  --coloring-hover: var(--color-surface-hover);
+}
+
+@utility surface-warning {
+  @apply coloring-reset-variables;
+  --coloring-color: var(--color-surface-warning);
+  --coloring-on-color: var(--color-on-surface-warning);
+}
+
 @utility coloring-style-detect {
   @apply data-[coloringstyle=solid]:coloring-solid;
   @apply data-[coloringstyle=text]:coloring-text;
@@ -98,5 +111,7 @@
   @apply data-[color=neutral]:neutral;
   @apply data-[color=description]:description;
   @apply data-[color=surface]:surface;
+  @apply data-[color=surface-variant]:surface-variant;
+  @apply data-[color=surface-warning]:surface-warning;
   @apply data-[color=disabled]:disabled;
 }

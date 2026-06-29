@@ -1,10 +1,23 @@
 @layer components {
   [data-name="table-container"] {
-    @apply flex-col-0 w-full overflow-auto;
+    @apply flex-col-0 w-full overflow-auto border-2 rounded-lg bg-background;
+
+    --table-rounding-bottom: var(--radius-lg);
+    --table-rounding-right: var(--radius-lg);
+
+    &[data-scrollbar="horizontal"],
+    &[data-scrollbar="both"] {
+      --table-rounding-bottom: 0px;
+    }
+
+    &[data-scrollbar="vertical"],
+    &[data-scrollbar="both"] {
+      --table-rounding-right: 0px;
+    }
   }
 
   [data-name="table"] {
-    @apply table-fixed border-separate border-spacing-0 rounded-lg;
+    @apply table-fixed border-separate border-spacing-0;
     @apply bg-table-background text-table-text;
   }
 
@@ -19,8 +32,8 @@
   [data-name="table-header-cell"] {
     @apply relative;
     @apply first:pl-3 last:pr-3;
-    @apply border-y-1 first:border-l-1 last:border-r-1;
-    @apply first:rounded-tl-lg last:rounded-tr-lg;
+    @apply border-b-2;
+    @apply first:rounded-tl-lg last:rounded-tr-[var(--table-rounding-right)];
     @apply bg-table-header-background text-description font-bold;
 
     &[data-sticky] {
@@ -46,10 +59,10 @@
     }
   }
 
-  [data-name="table-body-cell"], [data-name="table-body-filler-cell"] {
+  [data-name="table-body-cell"],
+  [data-name="table-body-filler-cell"] {
     @apply px-3 first:pl-6 last:pr-6 py-2.5;
-    @apply border-b-1 first:border-l-1 last:border-r-1;
-    @apply [nth-last-child(1)]:first:rounded-bl-lg [nth-last-child(1)]:last:rounded-br-lg;
+    @apply border-b-1;
   }
 
   [data-name="table-resize-indicator"] {
@@ -72,7 +85,10 @@
   }
 
   [data-name="table-body-row"]:last-child > [data-name="table-body-cell"],
-  [data-name="table-body-filler-row"]:last-child > [data-name="table-body-filler-cell"] {
-    @apply first:rounded-bl-lg last:rounded-br-lg;
+  [data-name="table-body-filler-row"]:last-child
+    > [data-name="table-body-filler-cell"] {
+    @apply first:rounded-bl-[var(--table-rounding-bottom)];
+    @apply last:rounded-br-[calc(min(var(--table-rounding-right),var(--table-rounding-bottom)))];
+    @apply border-b-0;
   }
 }
