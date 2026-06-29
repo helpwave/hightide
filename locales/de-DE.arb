@@ -56,6 +56,8 @@
   "more": "Mehr",
   "next": "Weiter",
   "no": "Nein",
+  "noColumn": "Keine Spalte",
+  "noData": "Keine Daten",
   "none": "Nichts",
   "nothingFound": "Nichts gefunden",
   "nResultsFound": "{count, plural, =1{# Ergebnis gefunden} other{# Ergebnisse gefunden}}",

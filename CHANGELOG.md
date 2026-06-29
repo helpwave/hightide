@@ -16,6 +16,12 @@ and adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 - Semantic color tokens `--color-gray-250`, `--color-faded`, `--color-on-surface-variant`, and `--color-on-surface-warning`
 - `surface-variant` and `surface-warning` coloring utilities
 - `SemanticColors` Storybook story for semantic color tokens
+- Placeholder `no-column` column when no visible data columns are defined, including for tables with row selection
+- `placeholderColumnExcludeIds` prop on `TableProvider` to exclude columns (e.g. selection) from placeholder column logic
+- `noColumn` and `noData` translation keys
+- `EmptyTable` Storybook story for empty tables with and without row selection
+- Filler rows for empty virtualized tables sized to the container height
+- `targetWidth` on `TableStateContext` for table width calculations
 
 ### Changed
 - `AppPage` content and main padding on desktop; header padding aligned with main content
@@ -23,6 +29,23 @@ and adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 - Table header and body borders simplified; bottom-row rounding adapts when scrollbars are present
 - `VerticalNavigationItem` content shows a pointer cursor on hover
 - Basic and semantic color CSS formatting and theme token organization (`@theme static` for semantic colors)
+- `TableBody` shows at least one filler row when data is empty, even if `isUsingFillerRows` is false
+- `TableProvider` column sizing target width subtracts the container border width
+- `TableDisplay` uses `targetWidth` from context instead of reading `containerRef` offset width directly
+- `TableWithSelectionProvider` disables the header select-all checkbox when there are no rows and reads selection state from table context
+- `VirtualizedInfiniteScrolling` story enables filler rows and uses fixed min/max height container classes
+- `PopUp` and `AnchoredFloatingContainer` forward refs via callback refs instead of `useImperativeHandle`
+- `PopUp` anchor prop is optional with an internal fallback ref
+- `useOutsideClick` refs accept `RefObject<HTMLElement | null>`
+- `FilterPopUp` date and datetime filters pass explicit `dataType`/`operator` and use `undefined` instead of `null` for cleared values
+- `GenericFilterPopUp` operator changes pass a structured filter value
+- `TableSortButton` handles an optional sorting index display safely
+
+### Fixed
+- `ColumnSizingWithTargetFeature` filters `visibleSortedColumns` to existing columns before sizing calculations
+- `columnSizeUtil` last-column shrink calculation when total width exceeds the target
+- Hidden columns are excluded when determining whether to show the placeholder column
+- `TableHeader` column resize pointer handling uses `clientX` consistently
 
 ## [0.12.7] - 2026-06-27
 

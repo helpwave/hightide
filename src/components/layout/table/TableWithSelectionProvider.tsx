@@ -2,9 +2,10 @@ import { Checkbox } from '@/src/components/user-interaction/Checkbox'
 import { FillerCell } from './FillerCell'
 import type { TableProviderProps } from './TableProvider'
 import { TableProvider } from './TableProvider'
-import type { Row, RowSelectionState, Table } from '@tanstack/react-table'
+import type { ColumnDef, Row, RowSelectionState, Table } from '@tanstack/react-table'
 import { useCallback, useMemo } from 'react'
 import { useHightideTranslation } from '@/src/i18n/useHightideTranslation'
+import { TableStateWithoutSizingContext } from './TableContext'
 
 export interface TableWithSelectionProviderProps<T> extends TableProviderProps<T> {
     rowSelection: RowSelectionState,
@@ -23,19 +24,27 @@ export const TableWithSelectionProvider = <T,>({
   ...props
 }: TableWithSelectionProviderProps<T>) => {
   const translation = useHightideTranslation()
-  const columnDef = useMemo(() => [
+  const columnDef: ColumnDef<T, unknown>[] = useMemo(() => [
     {
       id: selectionRowId,
-      header: ({ table }) => {
+      header: () => {
         return (
-          <Checkbox
-            value={table.getIsAllRowsSelected()}
-            indeterminate={table.getIsSomeRowsSelected()}
-            onValueChange={value => {
-              const newValue = !!value
-              table.toggleAllRowsSelected(newValue)
+          <TableStateWithoutSizingContext.Consumer>
+            {(context) => {
+              const table = context?.table
+              return (
+                <Checkbox
+                  value={table?.getIsAllRowsSelected()}
+                  indeterminate={table?.getIsSomeRowsSelected()}
+                  onValueChange={value => {
+                    const newValue = !!value
+                    table?.toggleAllRowsSelected(newValue)
+                  }}
+                  disabled={(table?.getRowCount() ?? 0) < 1}
+                />
+              )
             }}
-          />
+          </TableStateWithoutSizingContext.Consumer>
         )
       },
       cell: ({ row }) => {
@@ -61,9 +70,12 @@ export const TableWithSelectionProvider = <T,>({
     ...(props.columns ?? []),
   ], [selectionRowId, props.columns, translation])
 
+  const placeholderColumnExcludeIds = useMemo(() => [selectionRowId], [selectionRowId])
+
   return (
     <TableProvider
       {...props}
+      placeholderColumnExcludeIds={placeholderColumnExcludeIds}
       fillerRowCell={useCallback((columnId: string, table: Table<T>) => {
         if (columnId === selectionRowId) {
           return (<Checkbox value={false} disabled={true} />)

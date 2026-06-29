@@ -1,4 +1,5 @@
-import { forwardRef, useCallback, useContext, useImperativeHandle, useMemo } from 'react'
+import type { RefObject } from 'react'
+import { forwardRef, useCallback, useContext, useMemo, useRef } from 'react'
 import { useEventCallbackStabilizer } from '@/src/hooks/useEventCallbackStabelizer'
 import { Portal } from '../../utils/Portal'
 import type { AnchoredFloatingContainerProps } from '../AnchoredFloatingContainer'
@@ -15,13 +16,15 @@ import { PopUpContext } from './PopUpContext'
 import { useOverlayRegistry } from '@/src/hooks/useOverlayRegistry'
 import { useScrollObserver } from '@/src/hooks/useScrollObserver'
 
-export interface PopUpProps extends AnchoredFloatingContainerProps, Partial<UseOutsideClickHandlers> {
-  isOpen?: boolean,
-  focusTrapOptions?: Omit<UseFocusTrapProps, 'container'>,
-  outsideClickOptions?: Partial<UseOutsideClickOptions>,
-  onClose?: () => void,
-  forceMount?: boolean,
-  anchorExcludedFromOutsideClick?: boolean,
+export interface PopUpProps extends Omit<AnchoredFloatingContainerProps, 'anchor'>, Partial<UseOutsideClickHandlers> {
+  'isOpen'?: boolean,
+  'focusTrapOptions'?: Omit<UseFocusTrapProps, 'container'>,
+  'outsideClickOptions'?: Partial<UseOutsideClickOptions>,
+  'onClose'?: () => void,
+  'forceMount'?: boolean,
+  'anchorExcludedFromOutsideClick'?: boolean,
+  'anchor'?: RefObject<HTMLElement |null>,
+  'data-name'?: string,
 }
 
 export const PopUp = forwardRef<HTMLElement, PopUpProps>(function PopUp({
@@ -38,11 +41,10 @@ export const PopUp = forwardRef<HTMLElement, PopUpProps>(function PopUp({
 }, forwardRef) {
   const context = useContext(PopUpContext)
   const isOpen = isOpenOverwrite ?? context?.isOpen ?? false
-  const anchor = anchorOverwrite ?? context?.triggerRef ?? undefined
+  const fallbackAnchorRef = useRef(null)
+  const anchor = anchorOverwrite ?? context?.triggerRef ?? fallbackAnchorRef
   const id = props.id ?? context?.popUpId
   const { refAssignment, isPresent, ref } = usePresenceRef<HTMLDivElement>({ isOpen })
-
-  useImperativeHandle(forwardRef, () => ref.current, [ref])
 
   const onCloseStable = useEventCallbackStabilizer(onClose)
   const onOutsideClickStable = useEventCallbackStabilizer(onOutsideClick)
@@ -65,7 +67,7 @@ export const PopUp = forwardRef<HTMLElement, PopUpProps>(function PopUp({
       event.preventDefault()
     }, [onCloseWrapper, onOutsideClickStable]),
     active: isOutsideClickActive,
-    refs: [ref, ...(anchorExcludedFromOutsideClick ? [] : [anchor]), ...(outsideClickOptions?.refs ?? [])],
+    refs: [ref, ...(anchorExcludedFromOutsideClick || !anchor ? [] : [anchor]), ...(outsideClickOptions?.refs ?? [])],
   })
 
   useScrollObserver({ observedElementRef: ref, onScroll: onCloseWrapper, isActive: isOpen })
@@ -80,7 +82,15 @@ export const PopUp = forwardRef<HTMLElement, PopUpProps>(function PopUp({
             {...props}
             id={id}
             anchor={anchor}
-            ref={refAssignment}
+            ref={(el) => {
+              refAssignment(el)
+              if(!forwardRef) return
+              if(typeof forwardRef === 'function') {
+                forwardRef(el)
+              } else {
+                forwardRef.current = el
+              }
+            }}
             active={isOpen}
             hidden={!isOpen && forceMount}
 

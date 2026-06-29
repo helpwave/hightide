@@ -30,7 +30,6 @@ export const TableSortButton = ({
   ...props
 }: TableSortButtonProps) => {
   const translation = useHightideTranslation()
-  const { index } = sortingIndexDisplay
 
   let icon = <ChevronsUpDown className="size-4"/>
   if (sortDirection) {
@@ -42,7 +41,8 @@ export const TableSortButton = ({
       (<ChevronUp className="size-4"/>) : (<ChevronDown className="size-4"/>)
   }
 
-  const hasSortingIndex = !!sortingIndexDisplay && index > 0
+  const parsedIndex = sortingIndexDisplay?.index ?? -1
+  const hasSortingIndex = !!sortingIndexDisplay && parsedIndex > 0
 
   return (
     <IconButton
@@ -50,7 +50,7 @@ export const TableSortButton = ({
         <div className="flex-col-2">
           <span>{translation('sSortingState', { sortDirection: sortDirection || 'none' })}</span>
           <Visibility isVisible={hasSortingIndex}>
-            <span>{translation('rSortingOrderAfter', { otherSortings: index - 1  } )}</span>
+            <span>{translation('rSortingOrderAfter', { otherSortings: parsedIndex - 1  } )}</span>
           </Visibility>
         </div>
       )}
@@ -63,7 +63,7 @@ export const TableSortButton = ({
         <div
           className={clsx('absolute bottom-0 right-1/2 translate-x-1/2 translate-y-2/3 z-1 primary coloring-solid rounded-full h-4 w-5 text-sm')}
         >
-          {`${index}.`}
+          {`${parsedIndex}.`}
         </div>
       </Visibility>
       {icon}

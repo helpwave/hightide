@@ -91,7 +91,7 @@ export const virtualizedInfiniteScrolling: Story = {
       <Table
         table={{
           data: flatData,
-          isUsingFillerRows: false,
+          isUsingFillerRows: true,
           initialState: { pagination: { pageIndex: 0, pageSize: TOTAL_ROWS } },
         }}
         paginationOptions={{ showPagination: false }}
@@ -99,7 +99,7 @@ export const virtualizedInfiniteScrolling: Story = {
           virtualized: { scroll: 'container', estimateRowHeight: 48 },
           tableHeaderProps: { isSticky: true },
           containerProps: {
-            className: 'max-h-[600px]',
+            className: 'max-h-128 min-h-128',
             onScroll: (event) => fetchMoreOnBottomReached(event.currentTarget),
           },
         }}

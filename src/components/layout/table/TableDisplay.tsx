@@ -10,9 +10,10 @@ import { VirtualizedTableBody } from './VirtualizedTableBody'
 import { useScrollbarState } from '@/src/hooks/useScrollbarState'
 
 export interface TableDisplayProps extends TableHTMLAttributes<HTMLTableElement> {
-  containerProps?: Omit<React.HTMLAttributes<HTMLDivElement>, 'children'>,
-  tableHeaderProps?: Omit<TableHeaderProps, 'children' | 'table'>,
-  virtualized?: boolean | TableVirtualizationOptions,
+  'containerProps'?: Omit<React.HTMLAttributes<HTMLDivElement>, 'children'> & { 'data-name'?: string },
+  'tableHeaderProps'?: Omit<TableHeaderProps, 'children' | 'table'>,
+  'virtualized'?: boolean | TableVirtualizationOptions,
+  'data-name'?: string,
 }
 
 
@@ -26,7 +27,7 @@ export const TableDisplay = <T,>({
   virtualized = false,
   ...props
 }: TableDisplayProps) => {
-  const { table } = useTableStateContext<T>()
+  const { table, targetWidth } = useTableStateContext<T>()
   const { containerRef } = useTableContainerContext<T>()
   const tableRef = useRef<HTMLTableElement>(null)
   const scrollbarState = useScrollbarState({
@@ -48,7 +49,7 @@ export const TableDisplay = <T,>({
         data-name={props['data-name'] ?? 'table'}
 
         style={{
-          width: Math.floor(Math.max(table.getTotalSize(), containerRef.current?.offsetWidth ?? table.getTotalSize())),
+          width: Math.floor(Math.max(table.getTotalSize(), targetWidth ?? table.getTotalSize())),
           ...props.style,
         }}
       >

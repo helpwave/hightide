@@ -75,7 +75,9 @@ const calculate = ({
     }
   }
 
+
   const resultWidth = Object.values(result).reduce((previousValue, currentValue) => previousValue + currentValue, 0)
+
   if(resultWidth == targetWidth) {
     return result
   } else if(resultWidth < targetWidth) {
@@ -90,7 +92,7 @@ const calculate = ({
     if(isLastColumnChanging) {
       return result
     } else {
-      result[lastColumnId] -= Math.max(widthToTake, minWidthsPerColumn[lastColumnId])
+      result[lastColumnId] = Math.max(result[lastColumnId] - widthToTake, minWidthsPerColumn[lastColumnId])
       return result
     }
   }

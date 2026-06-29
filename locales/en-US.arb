@@ -57,6 +57,8 @@
   "more": "More",
   "next": "Next",
   "no": "No",
+  "noColumn": "No column",
+  "noData": "No data",
   "none": "None",
   "nothingFound": "Nothing found",
   "nResultsFound": "{count, plural, =1{# result found} other{# results found}}",

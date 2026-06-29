@@ -323,7 +323,7 @@ export const DateFilterPopUp = forwardRef<HTMLDivElement, FilterPopUpProps>(func
                 onValueChange({
                   dataType: 'date',
                   operator,
-                  parameter: { ...parameter, dateMin: dateValue },
+                  parameter: { ...parameter, dateMin: dateValue ?? undefined },
                 })
               }
               setTemporaryMinDateValue(null)
@@ -359,7 +359,7 @@ export const DateFilterPopUp = forwardRef<HTMLDivElement, FilterPopUpProps>(func
                 onValueChange({
                   dataType: 'date',
                   operator,
-                  parameter: { ...parameter, dateMax: dateValue },
+                  parameter: { ...parameter, dateMax: dateValue ?? undefined },
                 })
               }
               setTemporaryMaxDateValue(null)
@@ -377,8 +377,9 @@ export const DateFilterPopUp = forwardRef<HTMLDivElement, FilterPopUpProps>(func
           value={parameter.dateValue ?? null}
           onValueChange={compareDate => {
             onValueChange({
-              ...value,
-              parameter: { ...parameter, dateValue: compareDate },
+              dataType: 'date',
+              operator,
+              parameter: { ...parameter, dateValue: compareDate ?? undefined },
             })
           }}
           allowRemove={true}
@@ -457,7 +458,7 @@ export const DatetimeFilterPopUp = forwardRef<HTMLDivElement, FilterPopUpProps>(
                 onValueChange({
                   dataType: 'dateTime',
                   operator,
-                  parameter: { ...parameter, dateMin: dateValue },
+                  parameter: { ...parameter, dateMin: dateValue ?? undefined },
                 })
               }
               setTemporaryMinDateValue(null)
@@ -492,7 +493,7 @@ export const DatetimeFilterPopUp = forwardRef<HTMLDivElement, FilterPopUpProps>(
                 onValueChange({
                   dataType: 'dateTime',
                   operator,
-                  parameter: { ...parameter, dateMax: dateValue },
+                  parameter: { ...parameter, dateMax: dateValue ?? undefined },
                 })
               }
               setTemporaryMaxDateValue(null)
@@ -513,7 +514,7 @@ export const DatetimeFilterPopUp = forwardRef<HTMLDivElement, FilterPopUpProps>(
             onValueChange({
               dataType: 'dateTime',
               operator,
-              parameter: { ...parameter, dateValue: compareDate },
+              parameter: { ...parameter, dateValue: compareDate ?? undefined },
             })
           }}
           allowRemove={true}
@@ -695,7 +696,12 @@ export const TagsSingleFilterPopUp = forwardRef<HTMLDivElement, TagsSingleFilter
   )
 })
 
-export const GenericFilterPopUp = forwardRef<HTMLDivElement, FilterPopUpProps>(function GenericFilterPopUp ({ name, value, onValueChange, ...props }: FilterPopUpProps, ref) {
+export const GenericFilterPopUp = forwardRef<HTMLDivElement, FilterPopUpProps>(function GenericFilterPopUp ({
+  name,
+  value,
+  onValueChange,
+  ...props
+}: FilterPopUpProps, ref) {
   const operator = useMemo(() => {
     const suggestion = value?.operator ?? 'isNotUndefined'
     if (!FilterOperatorUtils.typeCheck.unknownType(suggestion)) {
@@ -709,8 +715,11 @@ export const GenericFilterPopUp = forwardRef<HTMLDivElement, FilterPopUpProps>(f
       {...props}
       name={name}
       operator={operator}
-      onOperatorChange={(newOperator) => onValueChange({ ...value, operator: newOperator })}
-      onRemove={() => onValueChange({ ...value, operator: undefined })}
+      onOperatorChange={(newOperator) => onValueChange({
+        dataType:'unknownType',
+        operator: newOperator,
+        parameter: {}
+      })}
       allowedOperators={FilterOperatorUtils.operatorsByCategory.unknownType}
     />
   )

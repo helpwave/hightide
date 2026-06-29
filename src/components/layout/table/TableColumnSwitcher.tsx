@@ -15,7 +15,7 @@ export type TableColumnSwitcherPopUpProps = PopUpProps
 export const TableColumnSwitcherPopUp = ({ ...props }: TableColumnSwitcherPopUpProps) => {
   const { table } = useTableStateWithoutSizingContext()
   const translation = useHightideTranslation()
-  const containerRef = useRef<HTMLDivElement>(null)
+  const containerRef = useRef<HTMLDivElement | null>(null)
   const generatedId = useId()
   const ids = useMemo(() => ({
     popup: props.id ?? `table-column-picker-popup-${generatedId}`,

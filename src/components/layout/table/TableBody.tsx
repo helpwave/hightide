@@ -18,7 +18,10 @@ export const TableBody = React.memo(function TableBodyVisual() {
   const columns = columnOrder
     .map(id => table.getColumn(id))
     .filter(Boolean)
-    .filter(col => columnVisibility?.[col.id] !== false)
+    .filter(col => !!col && columnVisibility?.[col.id] !== false)
+
+  const hasNoRows = rows.length === 0
+  const fillerRowCount = isUsingFillerRows ? pagination.pageSize - rows.length : (hasNoRows ? 1 : 0)
 
   return (
     <tbody>
@@ -44,8 +47,8 @@ export const TableBody = React.memo(function TableBodyVisual() {
           </tr>
         )
       })}
-      <Visibility isVisible={isUsingFillerRows}>
-        {range(pagination.pageSize - rows.length, { allowEmptyRange: true }).map((index) => {
+      <Visibility isVisible={fillerRowCount > 0}>
+        {range(fillerRowCount, { allowEmptyRange: true }).map((index) => {
           return (
             <tr
               key={'filler-row-' + index}
@@ -54,6 +57,7 @@ export const TableBody = React.memo(function TableBodyVisual() {
               data-clickable={PropsUtil.dataAttributes.bool(!!onFillerRowClick)}
             >
               {columns.map((column) => {
+                if(!column) return
                 return (
                   <td key={column.id} data-name="table-body-filler-cell" className={clsx(column.columnDef.meta?.className)}>
                     {fillerRowCell ? fillerRowCell(column.id, table) : (<FillerCell />)}

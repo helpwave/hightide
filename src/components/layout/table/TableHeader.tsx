@@ -67,8 +67,8 @@ export const TableHeader = ({ isSticky = false }: TableHeaderProps) => {
     <>
       {table.getHeaderGroups().map((headerGroup) => (
         <TableStateContext.Consumer key={headerGroup.id}>
-          {({ sizeVars }) => (
-            <colgroup style={sizeVars}>
+          {(tableStateContext) => (
+            <colgroup style={tableStateContext?.sizeVars}>
               {headerGroup.headers.map(header => (
                 <col
                   key={header.id}
@@ -139,7 +139,7 @@ export const TableHeader = ({ isSticky = false }: TableHeaderProps) => {
                   <Visibility isVisible={header.column.getCanResize()}>
                     <div
                       onPointerDown={(e) => {
-                        const startX = 'touches' in e ? e.touches[0].clientX : e.clientX
+                        const startX = e.clientX
                         table.setColumnSizingInfo({
                           columnSizingStart: Object.entries(table.getState().columnSizing),
                           startOffset: startX,

@@ -2,7 +2,9 @@
 import { Minus } from 'lucide-react'
 import type { HTMLAttributes } from 'react'
 
-export type FillerCellProps = HTMLAttributes<HTMLDivElement>
+export type FillerCellProps = HTMLAttributes<HTMLDivElement> & {
+  'data-name'?: string,
+}
 
 export const FillerCell = ({ ...props }: FillerCellProps) => {
   return (

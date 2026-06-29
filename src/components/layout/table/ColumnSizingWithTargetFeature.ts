@@ -31,9 +31,11 @@ export const ColumnSizingWithTargetFeature: TableFeature = {
         }
       }
       const columnIds = [...columnIdsLeft, ...columnIdsCenter, ...columnIdsRight]
-      const visibleSortedColumns = columnIds.length === 0 ?
+      const existingColumnIds = new Set(table.getAllColumns().map(column => column.id))
+      const visibleSortedColumns = (columnIds.length === 0 ?
         table.getVisibleLeafColumns().map(column => column.id).filter(Boolean)
         : columnIds
+      ).filter(columnId => existingColumnIds.has(columnId))
 
       const result = ColumnSizeUtil.calculate({
         previousSizing: table.getState().columnSizing,
@@ -43,20 +45,23 @@ export const ColumnSizingWithTargetFeature: TableFeature = {
           width: target,
           behaviour: 'equalOrHigher',
         },
-        minWidthsPerColumn: visibleSortedColumns.map(column => table.getColumn(column)).reduce((previousValue, currentValue) => {
+        minWidthsPerColumn: visibleSortedColumns.reduce((previousValue, columnId) => {
+          const column = table.getColumn(columnId)
+          if(!column) return previousValue
           return {
             ...previousValue,
-            [currentValue.id]: currentValue.columnDef.minSize ?? table.options.defaultColumn?.minSize ?? 20,
+            [column.id]: column.columnDef.minSize ?? table.options.defaultColumn?.minSize ?? 20,
           }
         }, {}),
-        maxWidthsPerColumn: visibleSortedColumns.map(column => table.getColumn(column)).reduce((previousValue, currentValue) => {
+        maxWidthsPerColumn: visibleSortedColumns.reduce((previousValue, columnId) => {
+          const column = table.getColumn(columnId)
+          if(!column) return previousValue
           return {
             ...previousValue,
-            [currentValue.id]: currentValue.columnDef.maxSize ?? table.options.defaultColumn?.maxSize ?? 1000,
+            [column.id]: column.columnDef.maxSize ?? table.options.defaultColumn?.maxSize ?? 1000,
           }
         }, {}),
       })
-
       oldSetColumnSizing(result)
     }
 
