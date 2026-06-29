@@ -36,3 +36,12 @@ dist/
 
 # generated translations
 src/i18n/translations.ts
+
+# monorepo packages (packages/*)
+packages/**/node_modules/
+packages/**/dist/
+packages/**/package-lock.json
+packages/**/storybook-static/
+# the hand-written package entry points are real source, not generated barrels
+!packages/**/src/index.ts
+!packages/**/scripts/*.mjs

@@ -1,0 +1,73 @@
+{
+  "name": "@helpwave/hightide-native",
+  "description": "helpwave's hightide component library for React Native (the basic app building blocks)",
+  "author": "helpwave <support@helpwave.de> (https://helpwave.de)",
+  "homepage": "https://helpwave.de",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/helpwave/hightide.git",
+    "directory": "packages/hightide-native"
+  },
+  "publishConfig": {
+    "access": "public"
+  },
+  "license": "MPL-2.0",
+  "version": "0.12.7",
+  "type": "module",
+  "files": [
+    "dist",
+    "tailwind.preset.js",
+    "global.css"
+  ],
+  "main": "dist/index.cjs",
+  "module": "dist/index.js",
+  "types": "dist/index.d.ts",
+  "exports": {
+    ".": {
+      "types": "./dist/index.d.ts",
+      "import": "./dist/index.js",
+      "require": "./dist/index.cjs"
+    },
+    "./tailwind.preset": "./tailwind.preset.js",
+    "./global.css": "./global.css"
+  },
+  "sideEffects": [
+    "*.css"
+  ],
+  "scripts": {
+    "build": "tsup",
+    "clean": "rm -rf dist",
+    "typecheck": "tsc --noEmit",
+    "gen:css": "node ./scripts/gen-global-css.mjs",
+    "storybook": "storybook dev -p 6007",
+    "build-storybook": "storybook build",
+    "prepublishOnly": "npm run build"
+  },
+  "dependencies": {
+    "@helpwave/hightide-tokens": "0.12.7",
+    "clsx": "2.1.1"
+  },
+  "peerDependencies": {
+    "react": ">=18.0.0",
+    "react-native": ">=0.74.0"
+  },
+  "peerDependenciesMeta": {
+    "nativewind": {
+      "optional": true
+    }
+  },
+  "devDependencies": {
+    "@storybook/addon-docs": "10.4.5",
+    "@storybook/addon-links": "10.4.5",
+    "@storybook/react-native-web-vite": "10.4.5",
+    "@types/react": "19.2.3",
+    "react": "19.2.0",
+    "react-dom": "19.2.0",
+    "react-native": "0.83.1",
+    "react-native-web": "0.21.1",
+    "storybook": "10.4.5",
+    "tsup": "8.5.0",
+    "typescript": "5.9.3",
+    "vite": "7.1.5"
+  }
+}
