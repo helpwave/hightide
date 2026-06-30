@@ -11,11 +11,6 @@
       scrollbar-color: initial;
     }
 
-    :root {
-      --scrollbar-width: 10px;
-      --scrollbar-padding: 1px;
-    }
-
     *::-webkit-scrollbar {
       width: var(--scrollbar-width);
       height: var(--scrollbar-width);

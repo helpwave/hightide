@@ -155,9 +155,16 @@ export interface AppPageProps extends HTMLAttributes<HTMLDivElement> {
   headerActions?: ReactNode[],
   sidebarProps: AppPageSidebarProps,
   noScrolling?: boolean,
+  hasSpacer?: boolean,
 }
 
-export const AppPage = ({ children, headerActions, sidebarProps, noScrolling = false, ...props }: AppPageProps) => {
+export const AppPage = ({
+  children,
+  headerActions,
+  sidebarProps,
+  noScrolling = false,
+  hasSpacer = true,
+  ...props }: AppPageProps) => {
   const translation = useHightideTranslation()
   const [isSidebarOpen, setIsSidebarOpen] = useState(false)
 
@@ -211,7 +218,7 @@ export const AppPage = ({ children, headerActions, sidebarProps, noScrolling = f
         onFocusedIdChange={sidebarProps.onFocusedIdChange}
         activeId={resolvedActiveId}
       />
-      <div data-name="app-page-content" data-noScrolling={noScrolling ? '' : undefined}>
+      <div data-name="app-page-content" data-no-scrolling={noScrolling ? '' : undefined}>
         <header data-name="app-page-header">
           <IconButton
             className="app-page-menu-button"
@@ -223,9 +230,9 @@ export const AppPage = ({ children, headerActions, sidebarProps, noScrolling = f
           </IconButton>
           {headerActions}
         </header>
-        <main data-name="app-page-main" data-noScrolling={noScrolling ? '' : undefined}>
+        <main data-name="app-page-main-content" data-outer-no-scrolling={noScrolling ? '' : undefined}>
           {children}
-          <div data-name="app-page-main-spacer" />
+          {hasSpacer && (<div className="app-page-main-spacer" />)}
         </main>
       </div>
     </div>
