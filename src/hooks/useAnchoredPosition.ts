@@ -196,15 +196,19 @@ function calculatePosition({
     }
   }
 
-  const adjustedTranslateX = (bestPosition.clampedLeft - bestPosition.left) / bestPosition.width * 100
-  const adjustedTranslateY = (bestPosition.clampedTop - bestPosition.top) / bestPosition.height * 100
-
+  // Position the floating element with absolute pixel coordinates instead of a
+  // translate transform. `clampedLeft`/`clampedTop` already encode the final
+  // on-screen position (anchor base + alignment offset + screen-edge clamping),
+  // so this is visually identical to the previous transform-based positioning.
+  // We avoid `transform: translate()` because the pop-in animation animates the
+  // `scale` transform; on Safari/WebKit a static positioning transform combined
+  // with an animated one gets dropped, mis-placing the popup. `transformOrigin`
+  // is kept so the scale animation still grows from the popup's top-left corner.
   return {
-    left: bestPosition.left,
-    top: bestPosition.top,
+    left: bestPosition.clampedLeft,
+    top: bestPosition.clampedTop,
     maxWidth: bestPosition.maxWidth,
     maxHeight: bestPosition.maxHeight,
-    transform: `translate(${adjustedTranslateX}%, ${adjustedTranslateY}%)`,
     transformOrigin: 'top left',
   }
 }
