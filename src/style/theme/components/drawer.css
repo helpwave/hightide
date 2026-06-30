@@ -1,18 +1,18 @@
 @keyframes expand-top {
   from {
-    transform: translateY(-100%);
+    transform: translateY(-100%) translateX(-50%);
   }
   to {
-    transform: translateY(0);
+    transform: translateY(0) translateX(-50%);
   }
 }
 
 @keyframes expand-bottom {
   from {
-    transform: translateY(100%);
+    transform: translateY(100%) translateX(-50%);
   }
   to {
-    transform: translateY(0);
+    transform: translateY(0) translateX(-50%);
   }
 }
 
@@ -35,7 +35,7 @@
 }
 
 @layer components {
-  [data-name="drawer-container"] {
+  .drawer-screen-cover {
     @apply fixed inset-0 h-screen w-screen;
     &:not([data-open]) {
       @apply touch-none pointer-events-none;
@@ -60,8 +60,8 @@
     }
   }
 
-  [data-name="drawer-content"] {
-    @apply relative flex-col-2 p-4 bg-overlay-background text-overlay-text;
+  .drawer-container {
+    @apply fixed bg-overlay-background text-overlay-text overflow-hidden;
     animation-timing-function: ease-out;
     animation-fill-mode: forwards;
 
@@ -74,17 +74,21 @@
       animation-direction: reverse;
     }
 
-    &[data-alignment="top"], &[data-alignment="bottom"] {
+    &[data-alignment="top"],
+    &[data-alignment="bottom"] {
+      width: calc(min(256 * var(--spacing), 100vw));
       height: calc(95vh - var(--drawer-depth, 0) * var(--drawer-indent, 0px));
       @variant tablet {
-        height: calc(70vh - var(--drawer-depth, 0) * var(--drawer-indent, 0px));
+        height: calc(95vh - var(--drawer-depth, 0) * var(--drawer-indent, 0px));
       }
       @variant desktop {
-        height: calc(50vh - var(--drawer-depth, 0) * var(--drawer-indent, 0px));
+        height: calc(95vh - var(--drawer-depth, 0) * var(--drawer-indent, 0px));
       }
     }
 
-    &[data-alignment="right"], &[data-alignment="left"] {
+    &[data-alignment="right"],
+    &[data-alignment="left"] {
+      @apply h-screen;
       width: calc(95vw - var(--drawer-depth, 0) * var(--drawer-indent, 0px));
       @variant tablet {
         width: calc(70vw - var(--drawer-depth, 0) * var(--drawer-indent, 0px));
@@ -95,34 +99,34 @@
     }
 
     &[data-alignment="top"] {
-      @apply fixed top-0 left-0 w-screen rounded-b-lg;
-      
-      transform: translateY(-100%);
+      @apply top-0 left-1/2 rounded-b-lg;
+
+      transform: translateY(-100%) translateX(-50%);
 
       &[data-state="opening"],
       &[data-state="closing"] {
         animation-name: expand-top;
       }
       &[data-state="opened"] {
-        transform: translateY(0);
+        transform: translateY(0) translateX(-50%);
       }
     }
 
     &[data-alignment="bottom"] {
-      @apply fixed bottom-0 left-0 w-screen rounded-t-lg;
-      transform: translateY(100%);
+      @apply bottom-0 left-1/2 rounded-t-lg;
+      transform: translateY(100%) translateX(-50%);
 
       &[data-state="opening"],
       &[data-state="closing"] {
         animation-name: expand-bottom;
       }
       &[data-state="opened"] {
-        transform: translateY(0);
+        transform: translateY(0) translateX(-50%);
       }
     }
 
     &[data-alignment="left"] {
-      @apply fixed top-0 left-0 h-screen rounded-r-lg;
+      @apply top-0 left-0 rounded-r-lg;
       transform: translateX(-100%);
 
       &[data-state="opening"],
@@ -135,7 +139,7 @@
     }
 
     &[data-alignment="right"] {
-      @apply fixed top-0 right-0 h-screen rounded-l-lg;
+      @apply top-0 right-0 rounded-l-lg;
       transform: translateX(100%);
 
       &[data-state="opening"],
@@ -145,6 +149,42 @@
       &[data-state="opened"] {
         transform: translateX(0);
       }
+    }
+  }
+
+  .drawer-close-button-positioner {
+    @apply absolute right-2 top-2;
+  }
+
+  .drawer-content {
+    @apply flex flex-col-0 h-full w-full scrollable-x;
+
+    &[data-no-scrolling] {
+      @apply scrollable-none;
+    }
+  }
+
+  .drawer-header {
+    @apply sticky top-0 bg-overlay-background pt-4 px-4;
+  }
+
+  .drawer-title {
+    @apply typography-title-lg mr-8;
+  }
+
+  .drawer-description {
+    @apply text-description;
+  }
+
+  .drawer-footer {
+    @apply sticky bottom-0 bg-overlay-background pb-4 px-4;
+  }
+
+  .drawer-main-content {
+    @apply flex-col-2 px-4 grow;
+
+    &[data-no-outer-scrolling] {
+      @apply overflow-hidden h-full;
     }
   }
 }

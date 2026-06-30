@@ -1,7 +1,7 @@
 import type { ReactNode } from 'react'
 import { forwardRef, type HTMLAttributes } from 'react'
 import { Visibility } from '../Visibility'
-import { DrawerContent } from './DrawerContent'
+import { DrawerContainer } from './DrawerContainer'
 import { DrawerCloseButton } from './DrawerCloseButton'
 import { DrawerRoot } from './DrawerRoot'
 
@@ -12,12 +12,15 @@ export type DrawerProps = HTMLAttributes<HTMLDivElement> & {
   alignment: DrawerAligment,
   titleElement: ReactNode,
   description: ReactNode,
+  headerOverwrite?: ReactNode,
+  footer?: ReactNode,
   isAnimated?: boolean,
   containerClassName?: string,
   backgroundClassName?: string,
   onClose: () => void,
   forceMount?: boolean,
   hasDefaultCloseIcon?: boolean,
+  noScrolling?: boolean,
 }
 
 export const Drawer = forwardRef<HTMLDivElement, DrawerProps>(function Drawer({
@@ -26,16 +29,19 @@ export const Drawer = forwardRef<HTMLDivElement, DrawerProps>(function Drawer({
   alignment = 'left',
   titleElement,
   description,
+  headerOverwrite,
+  footer,
   containerClassName,
   backgroundClassName,
   onClose,
   forceMount = false,
   hasDefaultCloseIcon = true,
+  noScrolling = false,
   ...props
 }, forwardedRef) {
   return (
     <DrawerRoot isOpen={isOpen} onIsOpenChange={(open) => !open && onClose()}>
-      <DrawerContent
+      <DrawerContainer
         ref={forwardedRef}
         alignment={alignment}
         containerClassName={containerClassName}
@@ -43,27 +49,36 @@ export const Drawer = forwardRef<HTMLDivElement, DrawerProps>(function Drawer({
         forceMount={forceMount}
         {...props}
       >
-        <div className="typography-title-lg mr-8">
-          {titleElement}
-        </div>
-        <Visibility isVisible={!!description}>
-          <div className="text-description">
-            {description}
+        <div className="drawer-content" data-no-scrolling={noScrolling ? '' : undefined}>
+          <div className="drawer-header">
+            {headerOverwrite ? headerOverwrite : (
+              <>
+                <div className="drawer-title">
+                  {titleElement}
+                </div>
+                <Visibility isVisible={!!description}>
+                  <div className="drawer-description">
+                    {description}
+                  </div>
+                </Visibility>
+              </>
+            )}
           </div>
-        </Visibility>
+          <div className="drawer-main-content" data-no-outer-scrolling={noScrolling ? '' : undefined}>
+            {children}
+          </div>
+          {!!footer && (
+            <div className="drawer-footer">
+              {footer}
+            </div>
+          )}
+        </div>
         {hasDefaultCloseIcon && (
-          <div
-            className="absolute top-0 right-0"
-            style={{
-              paddingTop: 'inherit',
-              paddingRight: 'inherit'
-            }}
-          >
+          <div className="drawer-close-button-positioner">
             <DrawerCloseButton />
           </div>
         )}
-        {children}
-      </DrawerContent>
+      </DrawerContainer>
     </DrawerRoot>
   )
 })

@@ -91,7 +91,7 @@ export const appPage: Story = {
       </>
     ),
   ],
-  render: (args) => {
+  render: ({ children, ...args }) => {
     const [navigationItems, setNavigationItems] = useState(() => [...initialNavigationItems])
 
     useEffect(() => {
@@ -115,7 +115,13 @@ export const appPage: Story = {
           ),
           activeUrl: '#test',
         }}
-      />
+      >
+        {args.noScrolling ? (
+          <div className="h-full flex-col-2 overflow-auto">
+            {children}
+          </div>
+        ) : children}
+      </AppPage>
     )
   },
 }

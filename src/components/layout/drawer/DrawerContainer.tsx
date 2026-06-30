@@ -7,15 +7,16 @@ import { Portal } from '../../utils/Portal'
 import { useDrawerContext } from './DrawerContext'
 import type { DrawerAligment } from './Drawer'
 import { ReactRefsUtil } from '@/src/utils/reactRefs'
+import clsx from 'clsx'
 
-export type DrawerContentProps = HTMLAttributes<HTMLDivElement> & {
+export type DrawerContainerProps = HTMLAttributes<HTMLDivElement> & {
   alignment: DrawerAligment,
   containerClassName?: string,
   backgroundClassName?: string,
   forceMount?: boolean,
 }
 
-export const DrawerContent = forwardRef<HTMLDivElement, DrawerContentProps>(function DrawerContent({
+export const DrawerContainer = forwardRef<HTMLDivElement, DrawerContainerProps>(function DrawerContent({
   children,
   alignment = 'left',
   containerClassName,
@@ -26,9 +27,9 @@ export const DrawerContent = forwardRef<HTMLDivElement, DrawerContentProps>(func
   const { isOpen } = useDrawerContext()
   const generatedId = useId()
   const ids = useMemo(() => ({
-    container: `dialog-container-${generatedId}`,
-    background: `dialog-background-${generatedId}`,
-    content: props.id ?? `dialog-content-${generatedId}`
+    screenCover: `drawer-screen-cover-${generatedId}`,
+    background: `drawer-background-${generatedId}`,
+    container: props.id ?? `drawer-container-${generatedId}`
   }), [generatedId, props.id])
 
   const ref = useRef<HTMLDivElement>(null)
@@ -52,9 +53,8 @@ export const DrawerContent = forwardRef<HTMLDivElement, DrawerContentProps>(func
   return (
     <Portal>
       <div
-        id={ids.container}
-        data-name="drawer-container"
-        className={containerClassName}
+        id={ids.screenCover}
+        className={clsx('drawer-screen-cover', containerClassName)}
         data-open={PropsUtil.dataAttributes.bool(isOpen)}
         hidden={!isVisible && forceMount}
         style={{ zIndex, '--drawer-depth': depth.toString() } as React.CSSProperties}
@@ -71,10 +71,10 @@ export const DrawerContent = forwardRef<HTMLDivElement, DrawerContentProps>(func
         />
         <div
           {...props}
-          id={ids.content}
+          id={ids.container}
           ref={ReactRefsUtil.assingRefsBuilder([ref, forwardedRef])}
           onKeyDown={PropsUtil.aria.close(() => setOpen(false))}
-          data-name={props['data-name'] ?? 'drawer-content'}
+          className="drawer-container"
           data-state={transitionState}
           data-depth={depth}
           data-alignment={alignment}

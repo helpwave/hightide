@@ -5,6 +5,28 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/)
 and adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [0.12.9] - 2026-06-30
+
+### Added
+
+- `hasSpacer` prop on `AppPage` to optionally hide the main content bottom spacer (defaults to `true`)
+- `headerOverwrite`, `footer`, and `noScrolling` props on `Drawer` for custom header, sticky footer, and scroll control
+- `DrawerContainer` component replacing the internal drawer shell with dedicated header, main content, and footer regions
+
+### Changed
+
+- `Drawer` layout restructured with sticky header and footer; close button positioned via `.drawer-close-button-positioner`
+- Drawer styling moved from `data-name` selectors to CSS classes (`drawer-screen-cover`, `drawer-container`, `drawer-content`, `drawer-header`, `drawer-main-content`, `drawer-footer`)
+- Top and bottom drawer alignments centered horizontally with a max width instead of full viewport width; height unified to 95vh across breakpoints
+- Left and right drawer alignments use full screen height
+- `AppPage` scroll data attributes renamed to `data-no-scrolling` and `data-outer-no-scrolling`; main content area uses `data-name="app-page-main-content"`
+- `AppPage` main spacer uses `.app-page-main-spacer` class instead of a `data-name` attribute
+- `AppPage` and `Drawer` Storybook stories demonstrate `noScrolling` with inner scroll containers
+
+### Removed
+
+- `DrawerContent` component (replaced by `DrawerContainer`)
+
 ## [0.12.8] - 2026-06-29
 
 ### Added
