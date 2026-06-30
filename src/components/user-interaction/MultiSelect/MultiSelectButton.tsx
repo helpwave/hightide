@@ -1,9 +1,10 @@
 import type { ComponentPropsWithoutRef, ForwardedRef, ReactNode } from 'react'
-import { forwardRef, useEffect, useImperativeHandle, useRef } from 'react'
+import { forwardRef, useEffect, useRef } from 'react'
 import { useMultiSelectContext } from './MultiSelectContext'
 import { useHightideTranslation } from '@/src/i18n/useHightideTranslation'
 import { ExpansionIcon } from '@/src/components/display-and-visualization/ExpansionIcon'
 import { MultiSelectOptionDisplayContext } from './MultiSelectOption'
+import { ReactRefsUtil } from '@/src/utils/reactRefs'
 
 export interface MultiSelectButtonProps<T = string>
   extends ComponentPropsWithoutRef<'div'> {
@@ -39,7 +40,6 @@ export const MultiSelectButton = forwardRef<
   }, [id, setIds])
 
   const innerRef = useRef<HTMLDivElement | null>(null)
-  useImperativeHandle(ref, () => innerRef.current!)
 
   useEffect(() => {
     const unregister = registerTrigger(innerRef)
@@ -58,7 +58,7 @@ export const MultiSelectButton = forwardRef<
   return (
     <div
       {...props}
-      ref={innerRef}
+      ref={ReactRefsUtil.assingRefsBuilder([innerRef, ref])}
       id={context.config.ids.trigger}
       onClick={(event) => {
         if (!hasInteractions) return

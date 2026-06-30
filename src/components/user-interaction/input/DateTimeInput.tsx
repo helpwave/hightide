@@ -1,5 +1,5 @@
 import type { HTMLAttributes, ReactNode } from 'react'
-import { forwardRef, useCallback, useEffect, useId, useImperativeHandle, useMemo, useRef, useState } from 'react'
+import { forwardRef, useCallback, useEffect, useId, useMemo, useRef, useState } from 'react'
 import { CalendarIcon, X } from 'lucide-react'
 import clsx from 'clsx'
 import type { DateTimePickerProps } from '@/src/components/user-interaction/date/DateTimePicker'
@@ -15,6 +15,7 @@ import { PopUp } from '../../layout/popup/PopUp'
 import { IconButton } from '../IconButton'
 import { DateUtils, type DateTimeFormat } from '@/src/utils/date'
 import { DateTimeField } from './DateTimeField'
+import { ReactRefsUtil } from '@/src/utils/reactRefs'
 
 export interface DateTimeInputProps extends
   Partial<FormFieldInteractionStates>,
@@ -22,16 +23,17 @@ export interface DateTimeInputProps extends
   Partial<FormFieldDataHandling<Date | null>>,
   Pick<DateTimePickerProps, 'start' | 'end' | 'weekStart' | 'markToday' | 'is24HourFormat' | 'minuteIncrement' | 'secondIncrement' | 'millisecondIncrement' | 'precision'>
 {
-  initialValue?: Date | null,
-  allowRemove?: boolean,
-  allowClear?: boolean,
-  mode?: DateTimeFormat,
-  timeZone?: string,
-  containerProps?: HTMLAttributes<HTMLDivElement>,
-  pickerProps?: Omit<DateTimePickerProps, keyof FormFieldDataHandling<Date> | 'mode' | 'initialValue' | 'start' | 'end' | 'weekStart' | 'markToday' | 'is24HourFormat' | 'minuteIncrement' | 'secondIncrement' | 'millisecondIncrement' | 'precision'>,
-  outsideClickCloses?: boolean,
-  onDialogOpeningChange?: (isOpen: boolean) => void,
-  actions?: ReactNode[],
+  'initialValue'?: Date | null,
+  'allowRemove'?: boolean,
+  'allowClear'?: boolean,
+  'mode'?: DateTimeFormat,
+  'timeZone'?: string,
+  'containerProps'?: HTMLAttributes<HTMLDivElement>,
+  'pickerProps'?: Omit<DateTimePickerProps, keyof FormFieldDataHandling<Date> | 'mode' | 'initialValue' | 'start' | 'end' | 'weekStart' | 'markToday' | 'is24HourFormat' | 'minuteIncrement' | 'secondIncrement' | 'millisecondIncrement' | 'precision'>,
+  'outsideClickCloses'?: boolean,
+  'onDialogOpeningChange'?: (isOpen: boolean) => void,
+  'actions'?: ReactNode[],
+  'data-name'?: string,
 }
 
 export const DateTimeInput = forwardRef<HTMLDivElement, DateTimeInputProps>(function DateTimeInput({
@@ -92,7 +94,6 @@ export const DateTimeInput = forwardRef<HTMLDivElement, DateTimeInputProps>(func
 
   const controlRef = useRef<HTMLDivElement>(null)
   const fieldRef = useRef<HTMLDivElement>(null)
-  useImperativeHandle(forwardedRef, () => controlRef.current as HTMLDivElement)
 
   useEffect(() => {
     if (readOnly || disabled) {
@@ -118,7 +119,7 @@ export const DateTimeInput = forwardRef<HTMLDivElement, DateTimeInputProps>(func
     <div {...containerProps} className={clsx('relative w-full', containerProps?.className)}>
       <div
         {...props}
-        ref={controlRef}
+        ref={ReactRefsUtil.assingRefsBuilder([controlRef, forwardedRef])}
         id={ids.input}
 
         tabIndex={-1}

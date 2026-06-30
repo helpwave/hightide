@@ -1,5 +1,5 @@
 import type { ForwardedRef, HTMLAttributes, ReactNode } from 'react'
-import { forwardRef, useEffect, useImperativeHandle, useRef } from 'react'
+import { forwardRef, useEffect, useRef } from 'react'
 import { useMultiSelectContext } from './MultiSelectContext'
 import type { MultiSelectRootProps } from './MultiSelectRoot'
 import { MultiSelectRoot } from './MultiSelectRoot'
@@ -8,6 +8,7 @@ import { MultiSelectContent } from './MultiSelectContent'
 import { IconButton } from '@/src/components/user-interaction/IconButton'
 import { useHightideTranslation } from '@/src/i18n/useHightideTranslation'
 import { XIcon, Plus } from 'lucide-react'
+import { ReactRefsUtil } from '@/src/utils/reactRefs'
 
 export type MultiSelectChipDisplayButtonProps = HTMLAttributes<HTMLDivElement> & {
   'disabled'?: boolean,
@@ -30,7 +31,6 @@ export const MultiSelectChipDisplayButton = forwardRef<
   }, [id, setIds])
 
   const innerRef = useRef<HTMLDivElement | null>(null)
-  useImperativeHandle(ref, () => innerRef.current!)
 
   useEffect(() => {
     const unregister = registerTrigger(innerRef)
@@ -48,7 +48,7 @@ export const MultiSelectChipDisplayButton = forwardRef<
   return (
     <div
       {...props}
-      ref={innerRef}
+      ref={ReactRefsUtil.assingRefsBuilder([innerRef, ref])}
       onClick={(event) => {
         props.onClick?.(event)
         if (event.defaultPrevented) return

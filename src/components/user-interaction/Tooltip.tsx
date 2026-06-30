@@ -1,5 +1,5 @@
 import type { PropsWithChildren, ReactNode, RefObject } from 'react'
-import { forwardRef, useContext, useEffect, useImperativeHandle } from 'react'
+import { forwardRef, useContext, useEffect } from 'react'
 import { useId } from 'react'
 import { useCallback, useMemo, useRef, useState } from 'react'
 import type { FloatingElementAlignment, UseAnchoredPositionOptions } from '@/src/hooks/useAnchoredPosition'
@@ -12,9 +12,10 @@ import type { AnchoredFloatingContainerProps } from '../layout/AnchoredFloatingC
 import { AnchoredFloatingContainer } from '../layout/AnchoredFloatingContainer'
 import { createContext } from 'react'
 import { BagFunctionUtil } from '@/src/utils/bagFunctions'
+import { ReactRefsUtil } from '@/src/utils/reactRefs'
 
 export interface TooltipTriggerContextValue {
-  ref: RefObject<HTMLElement>,
+  ref: RefObject<HTMLElement | null>,
   callbackRef: (el: HTMLElement | null) => void,
   props: {
     'onPointerEnter': () => void,
@@ -63,7 +64,7 @@ export const TooltipRoot = ({
   disabled = false,
 }: TooltipRootProps) => {
   const generatedId = 'tooltip-' + useId()
-  const [tooltipId, setTooltipId] = useState<string | null>(generatedId)
+  const [tooltipId, setTooltipId] = useState<string>(generatedId)
   const [isShown, setIsShown] = useState(isInitiallyShown)
 
   const timeoutRef = useRef<NodeJS.Timeout>(undefined)
@@ -74,7 +75,7 @@ export const TooltipRoot = ({
     appearOverwrite ?? config.tooltip.appearDelay,
   [appearOverwrite, config.tooltip.appearDelay])
 
-  const triggerRef = useRef<HTMLElement>(null)
+  const triggerRef = useRef<HTMLElement | null>(null)
 
   useEffect(() => {
     onIsShownChange?.(isShown)
@@ -166,11 +167,13 @@ export const TooltipRoot = ({
 
 type TooltipAligment = 'top' | 'bottom' | 'left' | 'right'
 
-export interface TooltipDisplayProps extends Omit<AnchoredFloatingContainerProps, 'options'>, Partial<TooltipConfig> {
-  alignment?: TooltipAligment,
-  disabled?: boolean,
-  isShown?: boolean,
-  options?: Omit<UseAnchoredPositionOptions, 'verticalAlignment' | 'horizontalAlignment'>,
+export interface TooltipDisplayProps extends Omit<AnchoredFloatingContainerProps, 'options' | 'anchor'>, Partial<TooltipConfig> {
+  'alignment'?: TooltipAligment,
+  'disabled'?: boolean,
+  'anchor'?: RefObject<HTMLElement | null>,
+  'isShown'?: boolean,
+  'options'?: Omit<UseAnchoredPositionOptions, 'verticalAlignment' | 'horizontalAlignment'>,
+  'data-name'?: string,
 }
 
 export const TooltipDisplay = forwardRef<HTMLDivElement, TooltipDisplayProps>(function TooltipAnchoredFloatingContainer({
@@ -184,10 +187,11 @@ export const TooltipDisplay = forwardRef<HTMLDivElement, TooltipDisplayProps>(fu
 }, forwardRef) {
   const { config } = useHightideConfig()
   const tooltipContext = useContext(TooltipContext)
+  const anchorFallback = useRef(null)
 
   const disabled = disabledOverwrite ?? tooltipContext?.disabled
-  const isShown = isShownOverwrite ?? tooltipContext?.isShown
-  const anchor = anchorOverwrite ?? tooltipContext?.trigger.ref
+  const isShown = isShownOverwrite ?? tooltipContext?.isShown ?? false
+  const anchor = anchorOverwrite ?? tooltipContext?.trigger.ref ?? anchorFallback
   const id = tooltipContext?.tooltip.id ?? props.id
 
   useEffect(() => {
@@ -199,9 +203,7 @@ export const TooltipDisplay = forwardRef<HTMLDivElement, TooltipDisplayProps>(fu
     isAnimatedOverwrite ?? config.tooltip.isAnimated,
   [isAnimatedOverwrite, config.tooltip.isAnimated])
 
-  const container = useRef<HTMLDivElement>(null)
-
-  useImperativeHandle(forwardRef, () => container.current)
+  const container = useRef<HTMLDivElement | null>(null)
 
   const isActive = !disabled && isShown
 
@@ -226,7 +228,7 @@ export const TooltipDisplay = forwardRef<HTMLDivElement, TooltipDisplayProps>(fu
       <AnchoredFloatingContainer
         {...props}
         id={id}
-        ref={container}
+        ref={ReactRefsUtil.assingRefsBuilder([container, forwardRef])}
         active={isVisible}
         anchor={anchor}
         options={{

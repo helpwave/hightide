@@ -51,6 +51,7 @@ export interface TableStateContextType<T> extends TableState {
   onRowClick?: (row: Row<T>, table: ReactTable<T>) => void,
   onFillerRowClick?: (index: number, table: ReactTable<T>) => void,
   sizeVars: Record<string, number>,
+  targetWidth?: number,
 }
 
 // eslint-disable-next-line @typescript-eslint/no-explicit-any
@@ -71,7 +72,7 @@ export const useTableStateContext = <T,>(): TableStateContextType<T> => {
 
 export type TableContainerContextType<T> = {
   table: Table<T>,
-  containerRef: RefObject<HTMLDivElement>,
+  containerRef: RefObject<HTMLDivElement | null>,
 }
 
 // eslint-disable-next-line @typescript-eslint/no-explicit-any

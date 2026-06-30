@@ -83,8 +83,8 @@
     @apply flex-col-0 grow overflow-y-auto overscroll-y-contain;
     scrollbar-gutter: stable;
 
-    @variant desktop {
-      @apply pl-6;
+    &[data-noScrolling] {
+      @apply overflow-hidden h-full;
     }
   }
 
@@ -92,7 +92,7 @@
     @apply sticky top-0 right-0 z-20 flex-row-2 items-center p-4 bg-background text-on-background;
 
     @variant desktop {
-      @apply pl-0;
+      @apply pl-6;
     }
   }
 
@@ -103,10 +103,14 @@
   }
 
   [data-name="app-page-main"] {
-    @apply flex-col-2 px-4;
+    @apply flex-col-0 px-4;
 
     @variant desktop {
-      @apply pl-0;
+      @apply pl-6;
+    }
+
+    &[data-noScrolling] {
+      @apply overflow-hidden;
     }
   }
 

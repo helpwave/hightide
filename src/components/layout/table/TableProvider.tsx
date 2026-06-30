@@ -2,20 +2,24 @@ import type { ReactNode } from 'react'
 import { useCallback, useEffect, useLayoutEffect, useMemo, useRef, useState } from 'react'
 import { useEventCallbackStabilizer } from '@/src/hooks/useEventCallbackStabelizer'
 import { ColumnSizeUtil } from './columnSizeUtil'
-import type { TableStateWithoutSizingContextType } from './TableContext'
+import type { TableColumnDefinitionContextType, TableContainerContextType, TableStateWithoutSizingContextType } from './TableContext'
 import { TableColumnDefinitionContext, TableContainerContext, TableStateContext, TableStateWithoutSizingContext } from './TableContext'
 import { TableFilter } from './TableFilter'
-import type { ColumnDef, InitialTableState, Row, TableOptions, TableState , Table as ReactTable } from '@tanstack/react-table'
+import type { ColumnDef, InitialTableState, Row, TableOptions, TableState , Table as ReactTable, CellContext, Table } from '@tanstack/react-table'
 import { getCoreRowModel, getFilteredRowModel, getPaginationRowModel, getSortedRowModel, useReactTable } from '@tanstack/react-table'
 import { TableCell } from './TableCell'
 import { ColumnSizingWithTargetFeature } from './ColumnSizingWithTargetFeature'
 import { useWindowResizeObserver } from '@/src/hooks/useResizeCallbackWrapper'
 import { AutoColumnOrderFeature } from './AutoColumnOrderFeature'
+import { useHightideTranslation } from '@/src/i18n/useHightideTranslation'
+import { createNoColumnPlaceholderColumn, hasNonExcludedColumns } from './placeholderColumn'
+import { FillerCell } from './FillerCell'
 
 export type TableProviderProps<T> = {
   data: T[],
   columns?: ColumnDef<T>[],
   children?: ReactNode,
+  placeholderColumnExcludeIds?: string[],
   isUsingFillerRows?: boolean,
   fillerRowCell?: (columnId: string, table: ReactTable<T>) => ReactNode,
   initialState?: InitialTableState,
@@ -27,22 +31,24 @@ export type TableProviderProps<T> = {
 export const TableProvider = <T,>({
   data,
   isUsingFillerRows = true,
-  fillerRowCell,
+  fillerRowCell: fillerRowCellOverwrite,
   initialState,
   onRowClick,
   onFillerRowClick,
   defaultColumn: defaultColumnOverwrite,
   state,
   columns: columnsProp,
+  placeholderColumnExcludeIds,
   children,
   ...tableOptions
 }: TableProviderProps<T>) => {
+  const translation = useHightideTranslation()
   const onRowClickStable = useEventCallbackStabilizer(onRowClick)
   const onFillerRowClickStable = useEventCallbackStabilizer(onFillerRowClick)
 
   const [registeredColumns, setRegisteredColumns] = useState<ColumnDef<T>[]>([])
-  const containerRef = useRef<HTMLDivElement>(null)
-  const [,setTableState] = useState<TableState>({
+  const containerRef = useRef<HTMLDivElement | null>(null)
+  const [tableState, setTableState] = useState<TableState>({
     columnSizing: {},
     columnOrder: [],
     columnFilters: [],
@@ -69,14 +75,21 @@ export const TableProvider = <T,>({
   })
 
   const [targetWidth, setTargetWidth] =  useState<number | undefined>(undefined)
-  useLayoutEffect(() => {
-    const width = containerRef.current?.getBoundingClientRect().width
-    setTargetWidth(width !== undefined ? Math.floor(width) : undefined)
+  const computeWidth = useCallback(() => {
+    const el = containerRef?.current
+    let width = el?.getBoundingClientRect().width
+
+    if(width === undefined || !el) return width
+    const styles = getComputedStyle(el)
+    width = width - parseFloat(styles.borderLeftWidth) - parseFloat(styles.borderRightWidth)
+    return Math.floor(width)
   }, [containerRef])
+  useLayoutEffect(() => {
+    setTargetWidth(computeWidth())
+  }, [computeWidth])
   useWindowResizeObserver(useCallback(() => {
-    const width = containerRef.current?.getBoundingClientRect().width
-    setTargetWidth(width !== undefined ? Math.floor(width) : undefined)
-  }, [containerRef]))
+    setTargetWidth(computeWidth())
+  }, [computeWidth]))
 
   const registerColumn = useCallback((column: ColumnDef<T>) => {
     setRegisteredColumns(prev => {
@@ -91,11 +104,33 @@ export const TableProvider = <T,>({
 
   const columns = useMemo(() => {
     const contextColumns = Array.from(registeredColumns.values())
-    if (columnsProp) {
-      return [...contextColumns, ...columnsProp]
+    const merged = columnsProp ? [...contextColumns, ...columnsProp] : contextColumns
+
+    const nonVisibleColumnIds: string[] = merged
+      .reduce((prev, next) => {
+        const id = next.id
+        if(!id || (tableState?.columnVisibility[id] ?? true)) return prev
+        return [...prev, id]
+      },[] as string[])
+
+    const excludedIds = [
+      ...(placeholderColumnExcludeIds ?? []),
+      ...nonVisibleColumnIds,
+    ]
+
+    if (!hasNonExcludedColumns(merged, excludedIds)) {
+      return [...merged, createNoColumnPlaceholderColumn<T>(translation)]
     }
-    return contextColumns
-  }, [columnsProp, registeredColumns])
+
+    return merged
+  }, [columnsProp, registeredColumns, placeholderColumnExcludeIds, translation, tableState.columnVisibility])
+
+  const defaultCell = useCallback((value : CellContext<T, unknown>) => {
+    let parsedValue: string = ''
+    if(typeof value === 'string') parsedValue = value
+    else parsedValue = String(value.cell.getValue())
+    return (<TableCell>{parsedValue}</TableCell>)
+  }, [])
 
   const table = useReactTable({
     data,
@@ -107,9 +142,7 @@ export const TableProvider = <T,>({
     defaultColumn: {
       minSize: 60,
       maxSize: 800,
-      cell: useCallback(({ cell }) => {
-        return (<TableCell>{String(cell.getValue())}</TableCell>)
-      }, []),
+      cell: defaultCell,
       enableResizing: true,
       enablePinning: true,
       ...defaultColumnOverwrite,
@@ -174,13 +207,13 @@ export const TableProvider = <T,>({
   }, [table, targetWidth, columnVisibility, columnOrder, columnPinning])
 
 
-  const tableColumnDefinitionContextValue = useMemo(() => ({
+  const tableColumnDefinitionContextValue: TableColumnDefinitionContextType<T> = useMemo(() => ({
     table,
     registerColumn,
   }), [table, registerColumn])
 
 
-  const tableContainerContextValue = useMemo(() => ({
+  const tableContainerContextValue: TableContainerContextType<T> = useMemo(() => ({
     table,
     containerRef,
   }), [table, containerRef])
@@ -192,6 +225,10 @@ export const TableProvider = <T,>({
   })()
 
   const rowModel = table.getRowModel()
+  const fillerRowCell = useCallback((columnId: string, table: Table<T>) => {
+    if(fillerRowCellOverwrite) return fillerRowCellOverwrite(columnId, table)
+    return <FillerCell/>
+  }, [fillerRowCellOverwrite])
   const tableStateWithoutSizingContextValue = useMemo<TableStateWithoutSizingContextType<T>>(() => ({
     table,
     isUsingFillerRows,
@@ -241,7 +278,8 @@ export const TableProvider = <T,>({
     sizeVars: ColumnSizeUtil.toSizeVars(columnSizing),
     columnSizingInfo,
     columnSizing,
-  }), [columnSizing, columnSizingInfo, tableStateWithoutSizingContextValue])
+    targetWidth,
+  }), [columnSizing, columnSizingInfo, tableStateWithoutSizingContextValue, targetWidth])
 
   return (
     <TableStateWithoutSizingContext.Provider value={tableStateWithoutSizingContextValue}>

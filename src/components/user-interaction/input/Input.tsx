@@ -1,5 +1,5 @@
 import type { InputHTMLAttributes } from 'react'
-import React, { forwardRef, useImperativeHandle, useRef } from 'react'
+import React, { forwardRef, useRef } from 'react'
 import type { UseDelayOptionsResolved } from '@/src/hooks/useDelay'
 import { useDelay } from '@/src/hooks/useDelay'
 import { useFocusManagement } from '@/src/hooks/focus/useFocusManagement'
@@ -7,6 +7,7 @@ import type { FormFieldInteractionStates } from '../../form/FieldLayout'
 import type { FormFieldDataHandling } from '../../form/FormField'
 import { PropsUtil } from '@/src/utils/propsUtil'
 import { useControlledState } from '@/src/hooks/useControlledState'
+import { ReactRefsUtil } from '@/src/utils/reactRefs'
 
 export type EditCompleteOptionsResolved = {
   onBlur: boolean,
@@ -27,8 +28,9 @@ export type InputProps = Omit<InputHTMLAttributes<HTMLInputElement>, 'value'>
   & Partial<FormFieldDataHandling<string>>
   & Partial<FormFieldInteractionStates>
   & {
-    editCompleteOptions?: EditCompleteOptions,
-    initialValue?: string,
+    'editCompleteOptions'?: EditCompleteOptions,
+    'initialValue'?: string,
+    'data-name'?: string,
   }
 
 /**
@@ -63,7 +65,6 @@ export const Input = forwardRef<HTMLInputElement, InputProps>(function Input({
   } = useDelay({ delay, disabled: !afterDelay || props.disabled || props.readOnly })
 
   const innerRef = useRef<HTMLInputElement>(null)
-  useImperativeHandle(forwardedRef, () => innerRef.current)
 
   const { focusNext } = useFocusManagement()
 
@@ -71,7 +72,7 @@ export const Input = forwardRef<HTMLInputElement, InputProps>(function Input({
     <input
       {...props}
       value={value}
-      ref={innerRef}
+      ref={ReactRefsUtil.assingRefsBuilder([innerRef, forwardedRef])}
 
       onKeyDown={event => {
         props.onKeyDown?.(event)

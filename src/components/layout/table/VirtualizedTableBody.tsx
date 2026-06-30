@@ -7,6 +7,8 @@ import clsx from 'clsx'
 import { useTableContainerContext, useTableStateWithoutSizingContext } from './TableContext'
 import { PropsUtil } from '@/src/utils/propsUtil'
 import { BagFunctionUtil } from '@/src/utils/bagFunctions'
+import { range } from '@/src/utils/array'
+import { FillerCell } from './FillerCell'
 
 export type TableVirtualizationOptions = {
   estimateRowHeight?: number,
@@ -21,7 +23,7 @@ export const VirtualizedTableBody = ({
   overscan = 8,
   scroll = 'window',
 }: VirtualizedTableBodyProps) => {
-  const { table, onRowClick } = useTableStateWithoutSizingContext<unknown>()
+  const { table, onRowClick, isUsingFillerRows, fillerRowCell } = useTableStateWithoutSizingContext<unknown>()
   const { containerRef } = useTableContainerContext<unknown>()
   const rows = table.getRowModel().rows
 
@@ -78,6 +80,26 @@ export const VirtualizedTableBody = ({
     </tr>
   )
 
+  const columnCount = Math.max(1, table.getVisibleLeafColumns().length)
+  const rowCount = containerRef.current && isUsingFillerRows ?
+    Math.floor(containerRef.current.clientHeight) / estimateRowHeight : 1
+
+  if (rows.length === 0) {
+    return (
+      <tbody ref={bodyRef}>
+        {range(rowCount).map((_, index) => (
+          <tr key={index} data-name="table-body-filler-row">
+            {table.getVisibleLeafColumns().map((col, colIndex) => (
+              <td key={colIndex} data-name="table-body-filler-cell">
+                {fillerRowCell(col.id, table) ?? <FillerCell/>}
+              </td>
+            ))}
+          </tr>
+        ))}
+      </tbody>
+    )
+  }
+
   if (!isMounted) {
     return (
       <tbody ref={bodyRef}>
@@ -90,7 +112,6 @@ export const VirtualizedTableBody = ({
   const total = virtualizer.getTotalSize()
   const paddingTop = items.length ? items[0].start - offset : 0
   const paddingBottom = items.length ? total - (items[items.length - 1].end - offset) : 0
-  const columnCount = Math.max(1, table.getVisibleLeafColumns().length)
 
   return (
     <tbody ref={bodyRef}>

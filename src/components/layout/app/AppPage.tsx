@@ -154,9 +154,10 @@ export interface AppPageSidebarProps {
 export interface AppPageProps extends HTMLAttributes<HTMLDivElement> {
   headerActions?: ReactNode[],
   sidebarProps: AppPageSidebarProps,
+  noScrolling?: boolean,
 }
 
-export const AppPage = ({ children, headerActions, sidebarProps, ...props }: AppPageProps) => {
+export const AppPage = ({ children, headerActions, sidebarProps, noScrolling = false, ...props }: AppPageProps) => {
   const translation = useHightideTranslation()
   const [isSidebarOpen, setIsSidebarOpen] = useState(false)
 
@@ -210,7 +211,7 @@ export const AppPage = ({ children, headerActions, sidebarProps, ...props }: App
         onFocusedIdChange={sidebarProps.onFocusedIdChange}
         activeId={resolvedActiveId}
       />
-      <div data-name="app-page-content">
+      <div data-name="app-page-content" data-noScrolling={noScrolling ? '' : undefined}>
         <header data-name="app-page-header">
           <IconButton
             className="app-page-menu-button"
@@ -222,7 +223,7 @@ export const AppPage = ({ children, headerActions, sidebarProps, ...props }: App
           </IconButton>
           {headerActions}
         </header>
-        <main data-name="app-page-main">
+        <main data-name="app-page-main" data-noScrolling={noScrolling ? '' : undefined}>
           {children}
           <div data-name="app-page-main-spacer" />
         </main>

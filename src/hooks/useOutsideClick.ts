@@ -2,7 +2,7 @@ import type { RefObject } from 'react'
 import { useEffect } from 'react'
 
 export interface UseOutsideClickOptions {
-  refs: RefObject<HTMLElement>[],
+  refs: RefObject<HTMLElement | null>[],
   active?: boolean,
 }
 

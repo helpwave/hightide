@@ -33,7 +33,7 @@ type UseTransitionStateResult = {
 type UseTransitionStateProps = {
     isOpen: boolean,
     initialState?: TransitionState,
-    ref?: RefObject<HTMLElement>,
+    ref: RefObject<HTMLElement | null>,
     timeout?: number,
 }
 
@@ -77,8 +77,8 @@ export const useTransitionState = ({
 
   useLayoutEffect(() => {
     if (state === 'opening' || state === 'closing') {
-      let element = ref?.current
-      if(!element && ref) {
+      let element = ref.current
+      if(!element) {
         console.warn('useTransitionState: ref is not set to an element using window instead')
         element = window.document.body
       }

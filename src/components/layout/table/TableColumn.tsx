@@ -42,7 +42,6 @@ const TableColumnFactory = <T,>() => memo(
   (prevProps, nextProps) => {
     return prevProps.filterType === nextProps.filterType &&
     prevProps.id === nextProps.id &&
-    prevProps['accessorKey'] === nextProps['accessorKey'] &&
     prevProps.enableColumnFilter === nextProps.enableColumnFilter &&
     prevProps.enableGlobalFilter === nextProps.enableGlobalFilter &&
     prevProps.enableGrouping === nextProps.enableGrouping &&

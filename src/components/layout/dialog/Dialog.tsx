@@ -1,7 +1,7 @@
 'use client'
 
 import type { HTMLAttributes, ReactNode } from 'react'
-import { forwardRef, useCallback, useContext, useId, useImperativeHandle, useMemo, useRef } from 'react'
+import { forwardRef, useCallback, useContext, useId, useMemo, useRef } from 'react'
 import { useEventCallbackStabilizer } from '@/src/hooks/useEventCallbackStabelizer'
 import { X } from 'lucide-react'
 import { useHightideTranslation } from '@/src/i18n/useHightideTranslation'
@@ -16,6 +16,7 @@ import { FocusTrap } from '../../utils/FocusTrap'
 import { usePresenceRef } from '@/src/hooks/usePresenceRef'
 import { DialogContext } from './DialogContext'
 import { IconButton } from '../../user-interaction/IconButton'
+import { ReactRefsUtil } from '@/src/utils/reactRefs'
 
 export type DialogPosition = 'top' | 'center' | 'none'
 
@@ -70,7 +71,6 @@ export const Dialog = forwardRef<HTMLDivElement, DialogProps>(function Dialog({
   const { refAssignment, isPresent, ref } = usePresenceRef<HTMLDivElement>({
     isOpen,
   })
-  useImperativeHandle(forwardedRef, () => ref.current, [ref])
 
   const onCloseStable = useEventCallbackStabilizer(onClose)
   const onCloseWrapper = useCallback(() => {
@@ -123,7 +123,7 @@ export const Dialog = forwardRef<HTMLDivElement, DialogProps>(function Dialog({
             <div
               {...props}
               id={ids.content}
-              ref={refAssignment}
+              ref={ReactRefsUtil.assingRefsBuilder([refAssignment, forwardedRef])}
 
               onKeyDown={PropsUtil.aria.close(onCloseWrapper)}
 

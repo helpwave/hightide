@@ -1,5 +1,5 @@
 import type { Dispatch, HTMLAttributes, ReactNode, SetStateAction } from 'react'
-import { useEffect, useImperativeHandle, useRef } from 'react'
+import { useEffect, useRef } from 'react'
 import { useState } from 'react'
 import { createContext, forwardRef, useCallback, useContext, useId, useMemo } from 'react'
 import clsx from 'clsx'
@@ -7,6 +7,7 @@ import { Visibility } from './Visibility'
 import { ExpansionIcon } from '../display-and-visualization/ExpansionIcon'
 import { useTransitionState } from '@/src/hooks/useTransitionState'
 import { useControlledState } from '@/src/hooks/useControlledState'
+import { ReactRefsUtil } from '@/src/utils/reactRefs'
 
 //
 // Context
@@ -41,11 +42,12 @@ function useExpandableContext() {
 //
 
 export type ExpandableRootProps = HTMLAttributes<HTMLDivElement> & {
-  isExpanded?: boolean,
-  onExpandedChange?: (isExpanded: boolean) => void,
-  isInitialExpanded?: boolean,
-  disabled?: boolean,
-  allowContainerToggle?: boolean,
+  'isExpanded'?: boolean,
+  'onExpandedChange'?: (isExpanded: boolean) => void,
+  'isInitialExpanded'?: boolean,
+  'disabled'?: boolean,
+  'allowContainerToggle'?: boolean,
+  'data-name'?: string,
 }
 
 export const ExpandableRoot = forwardRef<HTMLDivElement, ExpandableRootProps>(function ExpandableRoot({
@@ -113,7 +115,8 @@ export const ExpandableRoot = forwardRef<HTMLDivElement, ExpandableRootProps>(fu
 //
 
 export type ExpandableHeaderProps = HTMLAttributes<HTMLDivElement> & {
-  isUsingDefaultIcon?: boolean,
+  'isUsingDefaultIcon'?: boolean,
+  'data-name'?: string,
 }
 
 export const ExpandableHeader = forwardRef<HTMLDivElement, ExpandableHeaderProps>(function ExpandableHeader({
@@ -123,8 +126,9 @@ export const ExpandableHeader = forwardRef<HTMLDivElement, ExpandableHeaderProps
 }, ref) {
   const { isExpanded, toggle, ids, setIds, disabled } = useExpandableContext()
   useEffect(() => {
-    if (props.id) {
-      setIds(prevState => ({ ...prevState, header: props.id }))
+    const id = props.id
+    if (id) {
+      setIds(prevState => ({ ...prevState, header: id }))
     }
   }, [props.id, setIds])
 
@@ -158,7 +162,8 @@ export const ExpandableHeader = forwardRef<HTMLDivElement, ExpandableHeaderProps
 //
 
 export type ExpandableContentProps = HTMLAttributes<HTMLDivElement> & {
-  forceMount?: boolean,
+  'forceMount'?: boolean,
+  'data-name'?: string,
 }
 
 export const ExpandableContent = forwardRef<HTMLDivElement, ExpandableContentProps>(function ExpandableContent({
@@ -168,12 +173,12 @@ export const ExpandableContent = forwardRef<HTMLDivElement, ExpandableContentPro
 }, forwardedRef) {
   const { isExpanded, ids, setIds } = useExpandableContext()
 
-  const ref = useRef<HTMLDivElement>(null)
-  useImperativeHandle(forwardedRef, () => ref.current, [ref])
+  const ref = useRef<HTMLDivElement | null>(null)
 
   useEffect(() => {
-    if (props.id) {
-      setIds(prevState => ({ ...prevState, content: props.id }))
+    const id = props.id
+    if (id) {
+      setIds(prevState => ({ ...prevState, content: id }))
     }
   }, [props.id, setIds])
 
@@ -182,7 +187,7 @@ export const ExpandableContent = forwardRef<HTMLDivElement, ExpandableContentPro
   return (
     <div
       {...props}
-      ref={ref}
+      ref={ReactRefsUtil.assingRefsBuilder([ref, forwardedRef])}
       id={ids.content}
       data-name={props['data-name'] ?? 'expandable-content'}
       data-expanded={isExpanded ? '' : undefined}

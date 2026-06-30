@@ -1,11 +1,12 @@
-import type { ComponentProps } from 'react'
-import { forwardRef, useCallback, useEffect, useImperativeHandle, useRef } from 'react'
+import type { ComponentProps, ForwardedRef } from 'react'
+import { forwardRef, useCallback, useEffect, useRef } from 'react'
 import { useMultiSelectContext } from './MultiSelectContext'
 import clsx from 'clsx'
 import { useHightideTranslation } from '@/src/i18n/useHightideTranslation'
 import { PopUp, type PopUpProps } from '@/src/components/layout/popup/PopUp'
 import { Input } from '@/src/components/user-interaction/input/Input'
 import { Visibility } from '@/src/components/layout/Visibility'
+import { ReactRefsUtil } from '@/src/utils/reactRefs'
 
 export interface MultiSelectContentProps extends PopUpProps {
   showSearch?: boolean,
@@ -16,13 +17,12 @@ export const MultiSelectContent = forwardRef<
   HTMLUListElement,
   MultiSelectContentProps
 >(function MultiSelectContent<T>(
-  { id, options, showSearch: showSearchOverride, searchInputProps, ...props },
-  ref
+  { id, options, showSearch: showSearchOverride, searchInputProps, ...props } : MultiSelectContentProps,
+  ref: ForwardedRef<HTMLUListElement>
 ) {
   const translation = useHightideTranslation()
   const innerRef = useRef<HTMLUListElement>(null)
   const searchInputRef = useRef<HTMLInputElement>(null)
-  useImperativeHandle(ref, () => innerRef.current!)
 
   const context = useMultiSelectContext<T>()
   const { config, highlightNext, highlightPrevious, highlightFirst, highlightLast, highlightedId, handleTypeaheadKey, toggleSelection } = context
@@ -115,7 +115,7 @@ export const MultiSelectContent = forwardRef<
         />
       )}
       <ul
-        ref={innerRef}
+        ref={ReactRefsUtil.assingRefsBuilder([innerRef, ref])}
         id={context.config.ids.listbox}
         onKeyDown={showSearch ? undefined : keyHandler}
         role="listbox"

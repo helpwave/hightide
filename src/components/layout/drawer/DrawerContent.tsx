@@ -1,4 +1,4 @@
-import { forwardRef, useId, useImperativeHandle, useMemo, useRef, type HTMLAttributes } from 'react'
+import { forwardRef, useId, useMemo, useRef, type HTMLAttributes } from 'react'
 import { useFocusTrap } from '@/src/hooks/focus/useFocusTrap'
 import { useOverlayRegistry } from '@/src/hooks/useOverlayRegistry'
 import { useTransitionState } from '@/src/hooks/useTransitionState'
@@ -6,6 +6,7 @@ import { PropsUtil } from '@/src/utils/propsUtil'
 import { Portal } from '../../utils/Portal'
 import { useDrawerContext } from './DrawerContext'
 import type { DrawerAligment } from './Drawer'
+import { ReactRefsUtil } from '@/src/utils/reactRefs'
 
 export type DrawerContentProps = HTMLAttributes<HTMLDivElement> & {
   alignment: DrawerAligment,
@@ -31,7 +32,6 @@ export const DrawerContent = forwardRef<HTMLDivElement, DrawerContentProps>(func
   }), [generatedId, props.id])
 
   const ref = useRef<HTMLDivElement>(null)
-  useImperativeHandle(forwardedRef, () => ref.current, [ref])
 
   const { isVisible, transitionState } = useTransitionState({ isOpen, ref })
 
@@ -72,7 +72,7 @@ export const DrawerContent = forwardRef<HTMLDivElement, DrawerContentProps>(func
         <div
           {...props}
           id={ids.content}
-          ref={ref}
+          ref={ReactRefsUtil.assingRefsBuilder([ref, forwardedRef])}
           onKeyDown={PropsUtil.aria.close(() => setOpen(false))}
           data-name={props['data-name'] ?? 'drawer-content'}
           data-state={transitionState}
