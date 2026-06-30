@@ -15,6 +15,7 @@ import { useLogOnce } from '@/src/hooks/useLogOnce'
 import { PopUpContext } from './PopUpContext'
 import { useOverlayRegistry } from '@/src/hooks/useOverlayRegistry'
 import { useScrollObserver } from '@/src/hooks/useScrollObserver'
+import { ReactRefsUtil } from '@/src/utils/reactRefs'
 
 export interface PopUpProps extends Omit<AnchoredFloatingContainerProps, 'anchor'>, Partial<UseOutsideClickHandlers> {
   'isOpen'?: boolean,
@@ -27,7 +28,7 @@ export interface PopUpProps extends Omit<AnchoredFloatingContainerProps, 'anchor
   'data-name'?: string,
 }
 
-export const PopUp = forwardRef<HTMLElement, PopUpProps>(function PopUp({
+export const PopUp = forwardRef<HTMLDivElement, PopUpProps>(function PopUp({
   children,
   isOpen: isOpenOverwrite,
   focusTrapOptions,
@@ -82,15 +83,7 @@ export const PopUp = forwardRef<HTMLElement, PopUpProps>(function PopUp({
             {...props}
             id={id}
             anchor={anchor}
-            ref={(el) => {
-              refAssignment(el)
-              if(!forwardRef) return
-              if(typeof forwardRef === 'function') {
-                forwardRef(el)
-              } else {
-                forwardRef.current = el
-              }
-            }}
+            ref={ReactRefsUtil.assingRefsBuilder([refAssignment, forwardRef])}
             active={isOpen}
             hidden={!isOpen && forceMount}
 

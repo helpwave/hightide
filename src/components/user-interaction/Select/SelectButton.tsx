@@ -1,10 +1,11 @@
 import type { ComponentPropsWithoutRef, ForwardedRef, ReactNode } from 'react'
-import { forwardRef, useEffect, useImperativeHandle, useRef } from 'react'
+import { forwardRef, useEffect, useRef } from 'react'
 import type { SelectOptionType } from './SelectContext'
 import { useSelectContext } from './SelectContext'
 import { useHightideTranslation } from '@/src/i18n/useHightideTranslation'
 import { ExpansionIcon } from '@/src/components/display-and-visualization/ExpansionIcon'
 import { SelectOptionDisplayContext } from './SelectOption'
+import { ReactRefsUtil } from '@/src/utils/reactRefs'
 
 export interface SelectButtonProps<T = string> extends ComponentPropsWithoutRef<'div'> {
   'placeholder'?: ReactNode,
@@ -37,7 +38,6 @@ export const SelectButton = forwardRef<HTMLDivElement, SelectButtonProps<unknown
     }, [id, setIds])
 
     const innerRef = useRef<HTMLDivElement | null>(null)
-    useImperativeHandle(ref, () => innerRef.current!)
 
     useEffect(() => {
       const unregister = registerTrigger(innerRef)
@@ -54,7 +54,7 @@ export const SelectButton = forwardRef<HTMLDivElement, SelectButtonProps<unknown
     return (
       <div
         {...props}
-        ref={innerRef}
+        ref={ReactRefsUtil.assingRefsBuilder([innerRef, ref])}
         id={context.config.ids.trigger}
         onClick={(event) => {
           if (!hasInteractions) return

@@ -13,7 +13,7 @@ Pick<DateTimePickerProps, 'start' | 'end' | 'weekStart' | 'markToday' | 'is24Hou
 {
   initialValue?: Date | null,
   allowRemove?: boolean,
-  pickerProps: Omit<DateTimePickerProps, 'value' | 'onValueChange' | 'onEditComplete' | 'start' | 'end' | 'weekStart' | 'markToday' | 'is24HourFormat' | 'minuteIncrement' | 'secondIncrement' | 'millisecondIncrement' | 'precision'>,
+  pickerProps?: Omit<DateTimePickerProps, 'value' | 'onValueChange' | 'onEditComplete' | 'start' | 'end' | 'weekStart' | 'markToday' | 'is24HourFormat' | 'minuteIncrement' | 'secondIncrement' | 'millisecondIncrement' | 'precision'>,
   mode?: DateTimeFormat,
   label?: ReactNode,
   labelId?: string,
@@ -26,7 +26,7 @@ export const DateTimePickerDialog = ({
   onValueChange,
   onEditComplete,
   mode = 'date',
-  pickerProps,
+  pickerProps = {},
   start,
   end,
   weekStart,

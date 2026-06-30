@@ -2,6 +2,7 @@ import type { HTMLAttributes, RefObject } from 'react'
 import { forwardRef, useRef } from 'react'
 import type { UseAnchoredPositionOptions } from '@/src/hooks/useAnchoredPosition'
 import { useAnchoredPosition as useAnchoredPosition } from '@/src/hooks/useAnchoredPosition'
+import { ReactRefsUtil } from '@/src/utils/reactRefs'
 
 export type BackgroundOverlayProps = HTMLAttributes<HTMLDivElement>
 
@@ -30,15 +31,7 @@ export const AnchoredFloatingContainer = forwardRef<HTMLDivElement, AnchoredFloa
   return (
     <div
       {...props}
-      ref={(el) => {
-        innerRef.current = el
-        if(!forwardRef) return
-        if(typeof forwardRef === 'function') {
-          forwardRef(el)
-        } else {
-          forwardRef.current = el
-        }
-      }}
+      ref={ReactRefsUtil.assingRefsBuilder([innerRef, forwardRef])}
 
       data-positioned={position ? '' : undefined}
 

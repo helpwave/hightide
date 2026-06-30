@@ -8,6 +8,7 @@ and adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 ## [0.12.8] - 2026-06-29
 
 ### Added
+
 - `noScrolling` prop on `AppPage` to disable content scrolling and apply `data-noScrolling` on the content and main areas
 - Toggle-all button in `TableColumnSwitcher` to show or hide all hideable columns at once
 - `hideAllColumns` and `showAllColumns` translation keys
@@ -24,6 +25,7 @@ and adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 - `targetWidth` on `TableStateContext` for table width calculations
 
 ### Changed
+
 - `AppPage` content and main padding on desktop; header padding aligned with main content
 - Table container styling with border, rounded corners, and scrollbar-aware corner rounding via `--table-rounding-*` variables
 - Table header and body borders simplified; bottom-row rounding adapts when scrollbars are present
@@ -40,8 +42,10 @@ and adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 - `FilterPopUp` date and datetime filters pass explicit `dataType`/`operator` and use `undefined` instead of `null` for cleared values
 - `GenericFilterPopUp` operator changes pass a structured filter value
 - `TableSortButton` handles an optional sorting index display safely
+- Replaced `useImperativeHandle` by assigning both references to the object directly if both a forwarded ref and an internal ref exist
 
 ### Fixed
+
 - `ColumnSizingWithTargetFeature` filters `visibleSortedColumns` to existing columns before sizing calculations
 - `columnSizeUtil` last-column shrink calculation when total width exceeds the target
 - Hidden columns are excluded when determining whether to show the placeholder column
@@ -50,21 +54,25 @@ and adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 ## [0.12.7] - 2026-06-27
 
 ### Added
+
 - hover effects to `ActionCard` and `NavigationCard`
 - `leading` and `trailing` element props for all cards
 
 ### Changed
+
 - Transition Styling of focusable elements and coloring users by moving the transitions into reusable and combinable variables `--focus-transitions`
- and `--coloring-transitions`
+  and `--coloring-transitions`
 - Adjusted dark mode primary color brightness to make elements easier to read
 - Small design adjustments to make the design more consistent in regard to focus and hover effects
 
 ## [0.12.6] - 2026-06-27
 
 ### Added
+
 - `activeUrl` and `activeId` parameters to the `AppPage` to handle the late addtion of navigation items
 
 ### Changed
+
 - `AppPage` and `useTreeNavigation` variable names to use focused instead of active
 
 ## [0.12.5] - 2026-06-26
@@ -78,7 +86,6 @@ and adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 - Renamed `app-page-navigation-item-label` data-acitve attribute to data-active-page
 - Renamed data-active to data-focuesd in `VerticalNavigationItem`
 - styling of `app-page-navigation-item-label`
-
 
 ## [0.12.4] - 2026-06-26
 

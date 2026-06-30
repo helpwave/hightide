@@ -1,11 +1,12 @@
-import type { ComponentProps } from 'react'
-import { forwardRef, useCallback, useEffect, useImperativeHandle, useRef } from 'react'
+import type { ComponentProps, ForwardedRef } from 'react'
+import { forwardRef, useCallback, useEffect, useRef } from 'react'
 import { useSelectContext } from './SelectContext'
 import clsx from 'clsx'
 import { useHightideTranslation } from '@/src/i18n/useHightideTranslation'
 import { PopUp, type PopUpProps } from '@/src/components/layout/popup/PopUp'
 import { Input } from '@/src/components/user-interaction/input/Input'
 import { Visibility } from '@/src/components/layout/Visibility'
+import { ReactRefsUtil } from '@/src/utils/reactRefs'
 
 export interface SelectContentProps extends PopUpProps {
   showSearch?: boolean,
@@ -14,11 +15,10 @@ export interface SelectContentProps extends PopUpProps {
 
 export const SelectContent = forwardRef<HTMLUListElement, SelectContentProps>(function SelectContent<T>({
   id, options, showSearch: showSearchOverride, searchInputProps, ...props
-}, ref) {
+}: SelectContentProps, ref: ForwardedRef<HTMLUListElement>) {
   const translation = useHightideTranslation()
   const innerRef = useRef<HTMLUListElement>(null)
   const searchInputRef = useRef<HTMLInputElement>(null)
-  useImperativeHandle(ref, () => innerRef.current!)
 
   const context = useSelectContext<T>()
   const { config, handleTypeaheadKey, toggleSelection, highlightNext, highlightPrevious, highlightFirst, highlightLast, highlightedId } = context
@@ -105,7 +105,7 @@ export const SelectContent = forwardRef<HTMLUListElement, SelectContentProps>(fu
         />
       )}
       <ul
-        ref={innerRef}
+        ref={ReactRefsUtil.assingRefsBuilder([innerRef, ref])}
         id={context.config.ids.listbox}
         onKeyDown={showSearch ? undefined : keyHandler}
         role="listbox"

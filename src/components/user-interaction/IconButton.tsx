@@ -1,9 +1,10 @@
-import type { ReactNode } from 'react'
-import { forwardRef, useImperativeHandle, useRef, type ButtonHTMLAttributes } from 'react'
+import type { ForwardedRef, ReactNode } from 'react'
+import { forwardRef,type ButtonHTMLAttributes } from 'react'
 import type { TooltipDisplayProps } from './Tooltip'
 import { TooltipContext, TooltipDisplay, TooltipRoot, useTooltip } from './Tooltip'
 import { Visibility } from '../layout/Visibility'
 import { useLogOnce } from '@/src/hooks/useLogOnce'
+import { ReactRefsUtil } from '@/src/utils/reactRefs'
 
 /**
  * The different sizes for a icon button
@@ -18,11 +19,12 @@ export interface IconButtonBaseProps extends ButtonHTMLAttributes<HTMLButtonElem
     /**
      * @default 'medium'
      */
-    size?: IconButtonSize,
+    'size'?: IconButtonSize,
     /**
      * @default 'solid'
      */
-    coloringStyle?: IconButtonColoringStyle,
+    'coloringStyle'?: IconButtonColoringStyle,
+    'data-name'?: string,
 }
 
 export const IconButtonBase = forwardRef<HTMLButtonElement, IconButtonBaseProps>(function IconButtonBase({
@@ -70,14 +72,10 @@ const IconButtonTooltipTrigger = forwardRef<HTMLButtonElement, IconButtonTooltip
 }, ref) {
   const { trigger: { ref: triggerRef, props: tooltipTriggerProps } } = useTooltip()
 
-  const innerRef = useRef<HTMLButtonElement>(null)
-  useImperativeHandle(ref, () => innerRef.current)
-  useImperativeHandle(triggerRef, () => innerRef.current)
-
   return (
     <IconButtonBase
       {...props}
-      ref={innerRef}
+      ref={ReactRefsUtil.assingRefsBuilder([ref, triggerRef as ForwardedRef<HTMLButtonElement>])}
       disabled={disabled}
       type={props['type'] ?? 'button'}
 

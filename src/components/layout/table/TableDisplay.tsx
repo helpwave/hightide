@@ -33,7 +33,7 @@ export const TableDisplay = <T,>({
   const scrollbarState = useScrollbarState({
     containerRef,
     contentRef: tableRef,
-    dependencies: [virtualized],
+    isActive: !!virtualized,
   })
 
   return (

@@ -1,9 +1,10 @@
-import { forwardRef, useEffect, useImperativeHandle, useRef, useState } from 'react'
+import { forwardRef, useEffect, useRef, useState } from 'react'
 import { Pencil } from 'lucide-react'
 import clsx from 'clsx'
 import type { EditCompleteOptions, InputProps } from '@/src/components/user-interaction/input/Input'
 import { Input } from '@/src/components/user-interaction/input/Input'
 import { useControlledState } from '@/src/hooks/useControlledState'
+import { ReactRefsUtil } from '@/src/utils/reactRefs'
 
 type ToggleableInputProps = InputProps & {
   initialState?: 'editing' | 'display',
@@ -32,7 +33,6 @@ export const ToggleableInput = forwardRef<HTMLInputElement, ToggleableInputProps
   const [isEditing, setIsEditing] = useState(initialState !== 'display')
 
   const innerRef = useRef<HTMLInputElement>(null)
-  useImperativeHandle(forwardedRef, () => innerRef.current)
 
   useEffect(() => {
     if (isEditing) {
@@ -44,7 +44,7 @@ export const ToggleableInput = forwardRef<HTMLInputElement, ToggleableInputProps
     <div className={clsx('relative flex-row-2', { 'flex-1': isEditing })}>
       <Input
         {...props}
-        ref={innerRef}
+        ref={ReactRefsUtil.assingRefsBuilder([innerRef, forwardedRef])}
         value={value}
         onValueChange={setValue}
         onEditComplete={(text) => {

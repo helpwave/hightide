@@ -21,13 +21,13 @@ const getScrollbarState = (element: HTMLElement): ScrollbarState | undefined => 
 export type UseScrollbarStateProps = {
   containerRef: RefObject<HTMLElement | null>,
   contentRef?: RefObject<HTMLElement | null>,
-  dependencies?: unknown[],
+  isActive?: boolean,
 }
 
 export function useScrollbarState({
   containerRef,
   contentRef,
-  dependencies = [],
+  isActive = true
 }: UseScrollbarStateProps) {
   const [scrollbarState, setScrollbarState] = useState<ScrollbarState | undefined>(undefined)
 
@@ -41,7 +41,8 @@ export function useScrollbarState({
 
   useLayoutEffect(() => {
     const container = containerRef.current
-    if (!container) {
+    if (!container || !isActive) {
+      setScrollbarState(undefined)
       return
     }
 
@@ -58,7 +59,7 @@ export function useScrollbarState({
     return () => {
       observer.disconnect()
     }
-  }, [containerRef, contentRef, updateScrollbarState, ...dependencies])
+  }, [containerRef, contentRef, updateScrollbarState, isActive])
 
   return scrollbarState
 }
