@@ -1,6 +1,5 @@
 import type { Meta, StoryObj } from '@storybook/nextjs-vite'
 import { action } from 'storybook/actions'
-import type { DrawerProps } from '@/src/components/layout/drawer/Drawer'
 import { Drawer } from '@/src/components/layout/drawer/Drawer'
 import { Button } from '@/src/components/user-interaction/Button'
 
