@@ -5,6 +5,13 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/)
 and adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [0.12.10] - 2026-06-30
+
+### Fixed
+
+- Vertical navigation tree items (`AppPage` sidebar) now navigate client-side via `next/link` instead of `window.location.assign`, avoiding a full page reload on every navigation and fixing pages occasionally rendering incorrectly after using the browser's back button
+- `Dialog` and anchored pop-ups (e.g. `PopUp`, date field and selection dialogs) rendering off-center on Safari/WebKit; centering and anchored positioning no longer rely on a static `translate`/`transform` that the `pop-in` `scale` animation dropped. `Dialog` now centers via `inset` + auto margins and `useAnchoredPosition` positions via absolute pixel coordinates.
+
 ## [0.12.9] - 2026-06-30
 
 ### Added

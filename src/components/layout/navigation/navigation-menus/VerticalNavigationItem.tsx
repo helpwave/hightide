@@ -1,5 +1,7 @@
-import type { KeyboardEvent } from 'react'
+import type { KeyboardEvent, MouseEvent } from 'react'
 import { useCallback, useRef } from 'react'
+import Link from 'next/link'
+import { useRouter } from 'next/navigation'
 import { ExternalLink } from 'lucide-react'
 import { ExpansionIcon } from '@/src/components/display-and-visualization/ExpansionIcon'
 import { useNavigationItem } from './NavigationContext'
@@ -22,6 +24,7 @@ export function VerticalNavigationItem({
   items,
   depth = 0,
 }: VerticalNavigationItemProps) {
+  const router = useRouter()
   const headerRef = useRef<HTMLDivElement>(null)
   const {
     expanded,
@@ -40,6 +43,23 @@ export function VerticalNavigationItem({
 
   const hasChildren = items != null && items.length > 0
   const firstChildId = hasChildren ? items[0]?.id : undefined
+
+  const navigateToUrl = useCallback(() => {
+    if (url == null) return
+    if (external) {
+      window.open(url, '_blank', 'noopener,noreferrer')
+      return
+    }
+    router.push(url)
+  }, [external, router, url])
+
+  const handleLinkClick = useCallback((event: MouseEvent<HTMLAnchorElement>) => {
+    event.stopPropagation()
+    if (external) return
+    if (event.metaKey || event.ctrlKey || event.shiftKey || event.button !== 0) return
+    event.preventDefault()
+    navigateToUrl()
+  }, [external, navigateToUrl])
 
   const handleKeyDown = useCallback((event: KeyboardEvent<HTMLLIElement>) => {
     if (!isFocused || event.target !== event.currentTarget) return
@@ -91,43 +111,42 @@ export function VerticalNavigationItem({
     if (event.key === 'Enter' || event.key === ' ') {
       if (hasChildren) {
         toggleExpansion(id, { isFocusing: true })
-      } else {
-        navigateTo(id)
-      }
-      if (url == null) return
-      if (external) {
-        window.open(url, '_blank', 'noopener,noreferrer')
         return
       }
-      window.location.assign(url)
+      navigateTo(id)
+      if (url == null) return
+      event.preventDefault()
+      navigateToUrl()
     }
-  }, [collapse, expand, expanded, external, first, firstChildId, hasChildren, id, isFocused, last, navigateTo, next, path, previous, toggleExpansion, url])
+  }, [collapse, expand, expanded, first, firstChildId, hasChildren, id, isFocused, last, navigateTo, navigateToUrl, next, path, previous, toggleExpansion, url])
 
   const handleHeaderActivate = useCallback(() => {
     toggleExpansion(id, { isFocusing: true })
   }, [id, toggleExpansion])
 
-  const handleLeafActivate = useCallback(() => {
+  const handleLeafActivate = useCallback((event: MouseEvent<HTMLLIElement>) => {
+    if ((event.target as Element).closest('[data-name="vertical-navigation-item-link"]')) return
     navigateTo(id)
-    if (url == null) return
-    if (external) {
-      window.open(url, '_blank', 'noopener,noreferrer')
-      return
-    }
-    window.location.assign(url)
-  }, [external, id, navigateTo, url])
+    navigateToUrl()
+  }, [id, navigateTo, navigateToUrl])
 
   const labelContent = url == null ? (
     label
-  ) : external ? (
-    <span data-name="vertical-navigation-item-link">
-      {label}
-      <ExternalLink className="vertical-navigation-item-link-external-icon" />
-    </span>
   ) : (
-    <span data-name="vertical-navigation-item-link">
+    <Link
+      href={url}
+      data-name="vertical-navigation-item-link"
+      tabIndex={-1}
+      draggable={false}
+      target={external ? '_blank' : undefined}
+      rel={external ? 'noopener noreferrer' : undefined}
+      onClick={handleLinkClick}
+    >
       {label}
-    </span>
+      {external && (
+        <ExternalLink className="vertical-navigation-item-link-external-icon" />
+      )}
+    </Link>
   )
 
   if (!hasChildren) {
