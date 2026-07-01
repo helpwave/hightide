@@ -5,6 +5,17 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/)
 and adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [0.12.11] - 2026-07-01
+
+### Fixed
+
+- `AppPage` sidebar navigation (`VerticalNavigationItem`) now routes fully client-side inside consumer apps. `next` (and `next/*`) is externalized from the build, so the bundled `Link`/router read the host app's router context instead of a second, empty copy that was previously embedded in `dist` — the remaining full-page reloads (and the associated broken browser back button) are gone. Works in both the Pages and App router.
+- Navigation is now delegated to the `next/link` anchor for every activation path — mouse clicks, clicks on the row padding, and keyboard `Enter`/`Space` — instead of a parallel `router.push`/`window.location` call. This removes the dependency on the App-Router-only `useRouter` and keeps a single, history-aware navigation path (browser back/forward works).
+
+### Changed
+
+- External vertical navigation items — those flagged `external`, or whose `url` is an absolute/protocol-relative link — now open in a new tab by default (`target="_blank"` with `rel="noopener noreferrer"`).
+
 ## [0.12.10] - 2026-06-30
 
 ### Fixed

@@ -1,7 +1,6 @@
 import type { KeyboardEvent, MouseEvent } from 'react'
 import { useCallback, useRef } from 'react'
 import Link from 'next/link'
-import { useRouter } from 'next/navigation'
 import { ExternalLink } from 'lucide-react'
 import { ExpansionIcon } from '@/src/components/display-and-visualization/ExpansionIcon'
 import { useNavigationItem } from './NavigationContext'
@@ -16,6 +15,16 @@ export interface VerticalNavigationItemProps {
   depth?: number,
 }
 
+/**
+ * Absolute web URLs (and protocol-relative ones) always point at a different
+ * origin, so they can never be handled by the client-side router and should open
+ * in a new tab by default. Consumers can still force this via the `external` prop.
+ */
+function isExternalUrl(url?: string): boolean {
+  if (url == null) return false
+  return /^(https?:)?\/\//i.test(url)
+}
+
 export function VerticalNavigationItem({
   id,
   label,
@@ -24,8 +33,8 @@ export function VerticalNavigationItem({
   items,
   depth = 0,
 }: VerticalNavigationItemProps) {
-  const router = useRouter()
   const headerRef = useRef<HTMLDivElement>(null)
+  const linkRef = useRef<HTMLAnchorElement>(null)
   const {
     expanded,
     isFocused,
@@ -43,23 +52,24 @@ export function VerticalNavigationItem({
 
   const hasChildren = items != null && items.length > 0
   const firstChildId = hasChildren ? items[0]?.id : undefined
+  const isExternal = external || isExternalUrl(url)
 
-  const navigateToUrl = useCallback(() => {
-    if (url == null) return
-    if (external) {
-      window.open(url, '_blank', 'noopener,noreferrer')
-      return
-    }
-    router.push(url)
-  }, [external, router, url])
+  // Navigation is delegated to the underlying `next/link` anchor. Synthesizing a
+  // click on it routes through the host app's router exactly like a real click
+  // does — client-side, history-aware (so the browser back button works), and it
+  // honours `target="_blank"` for external links. Keeping a single navigation path
+  // (rather than a parallel `router.push`) means it stays router-agnostic and
+  // works in both the Pages and App router.
+  const activateLink = useCallback(() => {
+    linkRef.current?.click()
+  }, [])
 
   const handleLinkClick = useCallback((event: MouseEvent<HTMLAnchorElement>) => {
+    // Let `next/link` perform the navigation itself; we only sync the tree's
+    // focus state and stop the row handler from firing a second time.
     event.stopPropagation()
-    if (external) return
-    if (event.metaKey || event.ctrlKey || event.shiftKey || event.button !== 0) return
-    event.preventDefault()
-    navigateToUrl()
-  }, [external, navigateToUrl])
+    navigateTo(id)
+  }, [id, navigateTo])
 
   const handleKeyDown = useCallback((event: KeyboardEvent<HTMLLIElement>) => {
     if (!isFocused || event.target !== event.currentTarget) return
@@ -116,9 +126,9 @@ export function VerticalNavigationItem({
       navigateTo(id)
       if (url == null) return
       event.preventDefault()
-      navigateToUrl()
+      activateLink()
     }
-  }, [collapse, expand, expanded, first, firstChildId, hasChildren, id, isFocused, last, navigateTo, navigateToUrl, next, path, previous, toggleExpansion, url])
+  }, [activateLink, collapse, expand, expanded, first, firstChildId, hasChildren, id, isFocused, last, navigateTo, next, path, previous, toggleExpansion, url])
 
   const handleHeaderActivate = useCallback(() => {
     toggleExpansion(id, { isFocusing: true })
@@ -127,23 +137,24 @@ export function VerticalNavigationItem({
   const handleLeafActivate = useCallback((event: MouseEvent<HTMLLIElement>) => {
     if ((event.target as Element).closest('[data-name="vertical-navigation-item-link"]')) return
     navigateTo(id)
-    navigateToUrl()
-  }, [id, navigateTo, navigateToUrl])
+    activateLink()
+  }, [activateLink, id, navigateTo])
 
   const labelContent = url == null ? (
     label
   ) : (
     <Link
+      ref={linkRef}
       href={url}
       data-name="vertical-navigation-item-link"
       tabIndex={-1}
       draggable={false}
-      target={external ? '_blank' : undefined}
-      rel={external ? 'noopener noreferrer' : undefined}
+      target={isExternal ? '_blank' : undefined}
+      rel={isExternal ? 'noopener noreferrer' : undefined}
       onClick={handleLinkClick}
     >
       {label}
-      {external && (
+      {isExternal && (
         <ExternalLink className="vertical-navigation-item-link-external-icon" />
       )}
     </Link>
