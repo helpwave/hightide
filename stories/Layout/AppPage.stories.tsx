@@ -1,54 +1,121 @@
 import type { Meta, StoryObj } from '@storybook/nextjs-vite'
-import { Bell, File, Folder, Package, Settings } from 'lucide-react'
+import type { MouseEvent } from 'react'
+import { useSyncExternalStore } from 'react'
+import {
+  Activity,
+  Bell,
+  BookOpen,
+  ClipboardCheck,
+  LayoutDashboard,
+  Package,
+  Settings,
+  Users
+} from 'lucide-react'
 import type { AppPageNavigationItem } from '@/src/components/layout/app/AppPage'
 import { AppPage } from '@/src/components/layout/app/AppPage'
 import { HelpwaveBadge } from '@/src/components/branding/HelpwaveBadge'
 import { IconButton } from '@/src/components/user-interaction/IconButton'
-import { useEffect, useState } from 'react'
 
-const initialNavigationItems: AppPageNavigationItem[] = [
+/**
+ * Tiny external store holding the demo's "current route". Storybook has no real
+ * pages to navigate between, so `handleNavigation` (below) observes the clicks the
+ * sidebar's `next/link` items produce and publishes the target here; the story
+ * then re-renders with the new active item + content — in place, with no full
+ * page reload, mirroring what the router does in a real app.
+ */
+function createRouteStore(initial: string) {
+  let current = initial
+  const listeners = new Set<() => void>()
+  return {
+    get: () => current,
+    set: (next: string) => {
+      if (next === current) return
+      current = next
+      listeners.forEach((listener) => listener())
+    },
+    subscribe: (listener: () => void) => {
+      listeners.add(listener)
+      return () => listeners.delete(listener)
+    },
+  }
+}
+
+const initialRoute = '/dashboard'
+const routeStore = createRouteStore(initialRoute)
+
+const navigationItems: AppPageNavigationItem[] = [
+  { id: 'dashboard', label: 'Dashboard', icon: <LayoutDashboard className="size-5" />, url: '/dashboard' },
+  { id: 'patients', label: 'Patients', icon: <Users className="size-5" />, url: '/patients' },
+  { id: 'tasks', label: 'Tasks', icon: <ClipboardCheck className="size-5" />, url: '/tasks' },
   {
-    id: 'products',
-    label: 'Products',
+    id: 'settings',
+    label: 'Settings',
+    icon: <Settings className="size-5" />,
+    items: [
+      { id: 'settings-general', label: 'General', url: '/settings/general' },
+      { id: 'settings-team', label: 'Team', url: '/settings/team' },
+      { id: 'settings-billing', label: 'Billing', url: '/settings/billing' },
+    ],
+  },
+  {
+    id: 'resources',
+    label: 'Resources',
     icon: <Package className="size-5" />,
     items: [
       {
-        id: 'clinical',
-        label: 'Clinical',
-        items: [
-          { id: 'ward-management', label: 'Ward management', url: '#' },
-          { id: 'patient-overview', label: 'Patient overview', url: '#' },
-        ],
+        id: 'docs',
+        label: 'Documentation',
+        icon: <BookOpen className="size-5" />,
+        url: 'https://helpwave.de/product/tasks',
+        external: true,
       },
       {
-        id: 'operations',
-        label: 'Operations',
-        icon: <Settings className="size-5" />,
-        items: [
-          { id: 'task-board', label: 'Task board', url: 'https://helpwave.de/product/tasks', external: true },
-          { id: 'staff-planning', label: 'Staff planning', url: 'https://helpwave.de/product/staff', external: true },
-        ],
+        id: 'status',
+        label: 'Status page',
+        icon: <Activity className="size-5" />,
+        url: 'https://helpwave.de',
+        external: true,
       },
     ],
   },
 ]
 
-const additionalNavigationItems: AppPageNavigationItem[] = [
-  ...Array.from({ length: 10 }, (_, sectionIndex) => ({
-    id: `section-${sectionIndex}`,
-    label: `Section ${sectionIndex + 1}`,
-    icon: <Folder className="size-5" />,
-    items: Array.from({ length: 6 }, (_, itemIndex) => ({
-      id: `section-${sectionIndex}-item-${itemIndex}`,
-      label: `Item ${itemIndex + 1}`,
-      icon: <File className="size-5" />,
-      url: sectionIndex === 1 && itemIndex === 1 ? '#test' : '#',
-    })),
-  })),
-]
+const routeLabels: Record<string, string> = {
+  '/dashboard': 'Dashboard',
+  '/patients': 'Patients',
+  '/tasks': 'Tasks',
+  '/settings/general': 'Settings · General',
+  '/settings/team': 'Settings · Team',
+  '/settings/billing': 'Settings · Billing',
+}
 
 const meta: Meta<typeof AppPage> = {
   component: AppPage,
+  parameters: {
+    nextjs: {
+      // Provide a (mocked) Next router context so `next/link` handles clicks
+      // itself — it prevents the browser's default navigation and never reloads
+      // the page, which is the behaviour this story demonstrates.
+      appDirectory: true,
+      navigation: { pathname: initialRoute },
+    },
+  },
+}
+
+/**
+ * Storybook has no real pages to route between, so we observe the navigation the
+ * sidebar links trigger (a capture-phase click, which also covers keyboard
+ * activation since that synthesizes a click on the same anchor) and reflect the
+ * new route in the store. Internal links update the demo in place; external ones
+ * (absolute URLs) are left to open in a new tab.
+ */
+function handleNavigation(event: MouseEvent<HTMLDivElement>) {
+  const anchor = (event.target as Element).closest<HTMLAnchorElement>(
+    'a[data-name="vertical-navigation-item-link"]'
+  )
+  const href = anchor?.getAttribute('href')
+  if (href == null || /^(https?:)?\/\//.test(href)) return
+  routeStore.set(href)
 }
 
 export default meta
@@ -66,22 +133,6 @@ export const appPage: Story = {
         </IconButton>
       </div>
     )],
-    children: (
-      <div className="flex-col-4">
-        <h1 className="typography-headline-md">Dashboard</h1>
-        <p className="typography-body-md text-description">
-          Welcome to the app page layout. Scroll to see how content flows beneath the sticky header.
-        </p>
-        {Array.from({ length: 12 }, (_, index) => (
-          <div
-            key={index}
-            className="surface coloring-solid rounded-lg p-4 typography-label-md"
-          >
-            {`Section ${index + 1}`}
-          </div>
-        ))}
-      </div>
-    ),
   },
   decorators: [
     (Story) => (
@@ -91,37 +142,52 @@ export const appPage: Story = {
       </>
     ),
   ],
-  render: ({ children, ...args }) => {
-    const [navigationItems, setNavigationItems] = useState(() => [...initialNavigationItems])
-
-    useEffect(() => {
-      const timeout = setTimeout(() => {
-        setNavigationItems([...initialNavigationItems, ...additionalNavigationItems])
-      }, 1000)
-
-      return () => clearTimeout(timeout)
-    }, [])
+  render: (args) => {
+    const currentPath = useSyncExternalStore(routeStore.subscribe, routeStore.get, routeStore.get)
+    const currentLabel = routeLabels[currentPath] ?? currentPath
 
     return (
-      <AppPage
-        {...args}
-        sidebarProps={{
-          header: <HelpwaveBadge size="md" className="shrink-0" />,
-          items: navigationItems,
-          footer: (
-            <p className="typography-body-md text-description">
+      <div className="contents" onClickCapture={handleNavigation}>
+        <AppPage
+          {...args}
+          sidebarProps={{
+            header: <HelpwaveBadge size="md" className="shrink-0" />,
+            items: navigationItems,
+            // Drives the highlighted item; kept in sync with the observed navigation.
+            activeUrl: currentPath,
+            footer: (
+              <p className="typography-body-md text-description">
               Navigate through helpwave products and organization settings.
-            </p>
-          ),
-          activeUrl: '#test',
-        }}
-      >
-        {args.noScrolling ? (
-          <div className="h-full flex-col-2 overflow-auto">
-            {children}
+              </p>
+            ),
+          }}
+        >
+          <div className="flex-col-4">
+            <div className="flex-col-1">
+              <span className="typography-body-md text-description">Current route</span>
+              <h1 className="typography-headline-md">{currentLabel}</h1>
+              <code className="typography-body-md text-primary">{currentPath}</code>
+            </div>
+            <div className="flex-col-1 rounded-lg border border-border p-4">
+              <span className="typography-title-sm">Client-side routing</span>
+              <p className="typography-body-md text-description">
+              Clicking a sidebar entry navigates through <code>next/link</code> — the highlighted
+              item and this content update instantly, with no full page reload. In a real app the
+              browser back / forward buttons move through the history the same way. External links
+              (with the arrow icon) open in a new tab.
+              </p>
+            </div>
+            {Array.from({ length: 12 }, (_, index) => (
+              <div
+                key={index}
+                className="surface coloring-solid rounded-lg p-4 typography-label-md"
+              >
+                {`${currentLabel} · Section ${index + 1}`}
+              </div>
+            ))}
           </div>
-        ) : children}
-      </AppPage>
+        </AppPage>
+      </div>
     )
   },
 }
