@@ -25,7 +25,7 @@ const initialNavigationItems: AppPageNavigationItem[] = [
         label: 'Operations',
         icon: <Settings className="size-5" />,
         items: [
-          { id: 'task-board', label: 'Task board', url: 'https://helpwave.de/product/tasks', external: true },
+          { id: 'task-board', label: (<div className="flex-row-2 justify-between w-full">{'Task board'}<span className="text-description">8</span></div>), url: 'https://helpwave.de/product/tasks', external: true },
           { id: 'staff-planning', label: 'Staff planning', url: 'https://helpwave.de/product/staff', external: true },
         ],
       },
@@ -35,10 +35,31 @@ const initialNavigationItems: AppPageNavigationItem[] = [
     id: 'noLink',
     label: 'No Link And Children',
   },
+  {
+    id: 'customLabel',
+    label: (<div className="flex-row-2 justify-between w-full">{'With Label'}<span className="text-description">8</span></div>),
+  },
+  {
+    id: 'linkAndChildren',
+    label: 'Link and Children',
+    url: '#',
+    items: [
+      {
+        id: 'linkAndChildren-1',
+        label: 'SubItem 1',
+        url: '#',
+      },
+      {
+        id: 'linkAndChildren-2',
+        label: 'SubItem 2',
+        url: '#',
+      }
+    ]
+  },
 ]
 
 const additionalNavigationItems: AppPageNavigationItem[] = [
-  ...Array.from({ length: 10 }, (_, sectionIndex) => ({
+  ...Array.from({ length: 5 }, (_, sectionIndex) => ({
     id: `section-${sectionIndex}`,
     label: `Section ${sectionIndex + 1}`,
     icon: <Folder className="size-5" />,

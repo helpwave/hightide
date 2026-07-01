@@ -21,7 +21,7 @@
     }
 
     @variant desktop {
-      @apply relative min-w-56 max-w-64;
+      @apply relative min-w-64 max-w-72;
     }
 
     &:not([data-open]) {

@@ -57,10 +57,12 @@ export function VerticalNavigationMenuItem({
       target={external ? '_blank' : undefined}
       rel={external ? 'noopener noreferrer' : undefined}
     >
-      {label}
-      {external && (
-        <ExternalLink className="vertical-navigation-item-link-external-icon" />
-      )}
+      <div className="vertical-navigation-item-label" data-action-padding={hasChildren ? '' : undefined}>
+        {label}
+        {external && (
+          <ExternalLink className="vertical-navigation-item-link-external-icon" />
+        )}
+      </div>
     </LinkComponent>
   ) : (
     <div className="vertical-navigation-item-label">

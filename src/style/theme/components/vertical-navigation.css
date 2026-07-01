@@ -24,9 +24,8 @@
     @apply flex-col-0 list-none m-0 my-0.5 ml-2.5 pl-2.5 border-l border-border;
   }
 
-  .vertical-navigation-item-link,
-  .vertical-navigation-item-label {
-    @apply flex-row-2 flex-1 items-center min-w-0 pl-2.5 pr-11 py-1.5 min-h-11 rounded-md no-underline;
+  .vertical-navigation-item-link {
+    @apply min-w-0 w-full min-h-11 min-w-0 min-h-11 rounded-md;
 
     transition: var(--focus-transitions);
     &:focus-within {
@@ -34,6 +33,14 @@
       outline-offset: var(--focus-outline-offset);
       box-shadow: var(--focus-box-shadow);
       border-color: var(--focus-border-color);
+    }
+  }
+
+  .vertical-navigation-item-label {
+    @apply flex-row-2 flex-1 items-center min-w-0 w-full min-h-11 px-2.5 py-1.5;
+
+    &[data-action-padding] {
+      @apply pr-11;
     }
   }
 
