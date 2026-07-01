@@ -156,7 +156,9 @@ export const ActionCard = forwardRef<HTMLDivElement, ActionCardProps>(function A
 export type NavigationCardLinkProps = Pick<
   AnchorHTMLAttributes<HTMLAnchorElement>,
   'className' | 'href' | 'target' | 'rel' | 'aria-labelledby' | 'aria-describedby' | 'children'
->
+> & {
+  href: string,
+}
 
 const DefaultNavigationCardLink: ElementType<NavigationCardLinkProps> = 'a'
 
