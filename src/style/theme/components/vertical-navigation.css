@@ -25,7 +25,7 @@
   }
 
   .vertical-navigation-item-link {
-    @apply min-w-0 w-full min-h-11 min-w-0 min-h-11;
+    @apply min-w-0 w-full min-h-11 min-w-0 min-h-11 rounded-md;
 
     transition: var(--focus-transitions);
     &:focus-within {

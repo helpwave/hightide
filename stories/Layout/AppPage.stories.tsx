@@ -39,10 +39,27 @@ const initialNavigationItems: AppPageNavigationItem[] = [
     id: 'customLabel',
     label: (<div className="flex-row-2 justify-between w-full">{'With Label'}<span className="text-description">8</span></div>),
   },
+  {
+    id: 'linkAndChildren',
+    label: 'Link and Children',
+    url: '#',
+    items: [
+      {
+        id: 'linkAndChildren-1',
+        label: 'SubItem 1',
+        url: '#',
+      },
+      {
+        id: 'linkAndChildren-2',
+        label: 'SubItem 2',
+        url: '#',
+      }
+    ]
+  },
 ]
 
 const additionalNavigationItems: AppPageNavigationItem[] = [
-  ...Array.from({ length: 10 }, (_, sectionIndex) => ({
+  ...Array.from({ length: 5 }, (_, sectionIndex) => ({
     id: `section-${sectionIndex}`,
     label: `Section ${sectionIndex + 1}`,
     icon: <Folder className="size-5" />,
