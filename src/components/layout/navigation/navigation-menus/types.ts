@@ -1,5 +1,5 @@
 import type { ReactNode } from 'react'
-import type { TreeNode } from '@/src/hooks/useTreeNavigation'
+import type { TreeNode } from '@/src/hooks/trees/types'
 
 export interface NavigationItemData {
   id: string,

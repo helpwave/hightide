@@ -3,10 +3,9 @@ import { action } from 'storybook/actions'
 import { Drawer } from '@/src/components/layout/drawer/Drawer'
 import { Button } from '@/src/components/user-interaction/Button'
 
-
-const meta: Meta = {
+const meta: Meta<typeof Drawer> = {
   component: Drawer,
-} satisfies Meta<typeof Drawer>
+}
 
 export default meta
 type Story = StoryObj<typeof meta>;
@@ -33,7 +32,7 @@ export const drawer: Story = {
 
     forceMount: false,
     onClose: action('onClose'),
-    noScrolling: false
+    noScrolling: false,
   },
   render: ({ children, noScrolling, ...args }) => {
     return (

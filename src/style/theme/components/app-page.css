@@ -63,7 +63,7 @@
   }
 
   .app-page-sidebar-with-navigation-header {
-    @apply flex-col-0 items-start px-3.25 mb-8;
+    @apply flex-col-0 items-start px-3 mb-8;
 
     @variant desktop {
       @apply items-center;
@@ -71,12 +71,12 @@
   }
 
   .app-page-sidebar-with-navigation-scroll {
-    @apply flex-1 min-h-0 pl-3.25 pr-1 py-1 overflow-y-scroll overscroll-y-contain;
-    scrollbar-gutter: stable;
+    @apply flex-1 min-h-0 px-1.25 py-1 overflow-y-scroll overscroll-y-contain;
+    scrollbar-gutter: stable both-edges;
   }
 
   .app-page-sidebar-with-navigation-footer {
-    @apply flex-col-0 px-3.25 pt-2;
+    @apply flex-col-0 px-3 pt-2;
   }
 
   [data-name="app-page-content"] {

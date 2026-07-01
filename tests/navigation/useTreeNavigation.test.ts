@@ -1,7 +1,8 @@
 /** @jest-environment jsdom */
 
 import { act, renderHook } from '@testing-library/react'
-import { type TreeNode, useTreeNavigation } from '../../src/hooks/useTreeNavigation'
+import { type TreeNode } from '../../src/hooks/trees/types'
+import { useTreeNavigation } from '../../src/hooks/trees/useTreeNavigation'
 
 const sampleTree: TreeNode[] = [
   {

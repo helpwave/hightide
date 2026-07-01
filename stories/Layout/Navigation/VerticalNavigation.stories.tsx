@@ -1,7 +1,5 @@
 import type { Meta, StoryObj } from '@storybook/nextjs-vite'
 import type { ReactNode } from 'react'
-import { useState } from 'react'
-import { action } from 'storybook/actions'
 import {
   BedDouble,
   Briefcase,
@@ -21,7 +19,7 @@ import {
   Users,
   UsersRound
 } from 'lucide-react'
-import { VerticalNavigationTree } from '@/src/components/layout/navigation/navigation-menus/VerticalNavigationTree'
+import { VerticalNavigationMenu } from '@/src/components/layout/navigation/navigation-menus/VerticalNavigationMenu'
 import type { NavigationItemData } from '@/src/components/layout/navigation/navigation-menus/types'
 
 function navigationLabel(icon: ReactNode, label: string) {
@@ -95,8 +93,8 @@ const navigationItems: NavigationItemData[] = [
   { id: 'contact', label: navigationLabel(<Mail className="size-5" />, 'Contact'), url: '#' },
 ]
 
-const meta: Meta<typeof VerticalNavigationTree> = {
-  component: VerticalNavigationTree,
+const meta: Meta<typeof VerticalNavigationMenu> = {
+  component: VerticalNavigationMenu,
 }
 
 export default meta
@@ -104,24 +102,13 @@ type Story = StoryObj<typeof meta>
 
 export const verticalNavigation: Story = {
   args: {
-    initialFocusedId: 'ward-management',
     onlyOneExpandedTree: false,
     items: navigationItems,
-    onFocusedIdChange: action('onFocusedIdChange'),
   },
   render: (args) => {
-    const [focusedId, setFocusedId] = useState<string | null>(args.initialFocusedId ?? null)
-
     return (
       <div className="w-64 h-96">
-        <VerticalNavigationTree
-          {...args}
-          focusedId={focusedId}
-          onFocusedIdChange={(id) => {
-            args.onFocusedIdChange?.(id)
-            setFocusedId(id)
-          }}
-        />
+        <VerticalNavigationMenu {...args} />
       </div>
     )
   },
