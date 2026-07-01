@@ -10,7 +10,7 @@
     "access": "public"
   },
   "license": "MPL-2.0",
-  "version": "0.12.10",
+  "version": "0.12.11",
   "files": [
     "dist"
   ],
@@ -51,8 +51,14 @@
     "tailwindcss": "4.1.18"
   },
   "peerDependencies": {
+    "next": ">=15",
     "react": "^19.0.0",
     "react-dom": "^19.0.0"
+  },
+  "peerDependenciesMeta": {
+    "next": {
+      "optional": true
+    }
   },
   "devDependencies": {
     "@babel/core": "7.29.7",

@@ -13,6 +13,11 @@ export default defineConfig({
   external: [
     'react',
     'react-dom',
+    // Keep next as a runtime dependency of the consumer app. Bundling it would embed a second
+    // copy of next/link, next/image and Next's router context, so those components would read an
+    // empty router context and fall back to full-page navigation instead of client-side routing.
+    'next',
+    /^next\//,
     'clsx',
     '@tanstack/react-table',
     '@tanstack/react-virtual',

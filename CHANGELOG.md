@@ -5,6 +5,16 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/)
 and adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [0.12.11] - 2026-07-01
+
+### Fixed
+
+- `next` (and its subpaths) are now marked external in the build instead of being bundled. Previously `next/link`, `next/image` and Next's router context were embedded in the bundle, so `Link`/`useRouter` read an empty router context in consumer apps and the `0.12.10` navigation change still fell back to full-page navigation. All navigation components (`AppPage` sidebar, `Navigation`, `BreadCrumbs`) now use the host app's Next runtime and route client-side; the bundle also shrinks ~250KB
+
+### Changed
+
+- `next` declared as an optional peer dependency (`>=15`)
+
 ## [0.12.10] - 2026-06-30
 
 ### Fixed
