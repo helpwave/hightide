@@ -13,6 +13,8 @@ export default defineConfig({
   external: [
     'react',
     'react-dom',
+    'next',
+    /^next\//,
     'clsx',
     '@tanstack/react-table',
     '@tanstack/react-virtual',
