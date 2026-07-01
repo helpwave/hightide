@@ -19,12 +19,11 @@ export interface IconButtonBaseProps extends ButtonHTMLAttributes<HTMLButtonElem
     /**
      * @default 'medium'
      */
-    'size'?: IconButtonSize,
+    size?: IconButtonSize,
     /**
      * @default 'solid'
      */
-    'coloringStyle'?: IconButtonColoringStyle,
-    'data-name'?: string,
+    coloringStyle?: IconButtonColoringStyle,
 }
 
 export const IconButtonBase = forwardRef<HTMLButtonElement, IconButtonBaseProps>(function IconButtonBase({
@@ -47,7 +46,7 @@ export const IconButtonBase = forwardRef<HTMLButtonElement, IconButtonBaseProps>
         props.onClick?.(event)
       }}
 
-      data-name={props['data-name'] ?? 'icon-button'}
+      className="icon-button"
       data-disabled={disabled ? '': undefined}
       data-size={size ?? undefined}
       data-color={color ?? undefined}
@@ -152,19 +151,21 @@ export const IconButton = forwardRef<HTMLButtonElement, IconButtonProps>(functio
   return (
     <TooltipRoot disabled={disabled}>
       <TooltipContext.Consumer>
-        {({ tooltip: { id } }) => (
-          <IconButtonTooltipTrigger
-            {...props}
-            ref={ref}
+        {(context) => {
+          const id = context?.tooltip.id
+          return (
+            <IconButtonTooltipTrigger
+              {...props}
+              ref={ref}
 
-            color={color}
-            disabled={disabled}
+              color={color}
+              disabled={disabled}
 
-            aria-describedby={props['aria-describedby'] ?? (isLabeled && !!tooltip ? id : undefined)}
-            aria-labelledby={isLabeled ? ariaLabelledby : (isTooltipLabel ? id : undefined)}
-            aria-label={ariaLabel}
-          />
-        )}
+              aria-describedby={props['aria-describedby'] ?? (isLabeled && !!tooltip ? id : undefined)}
+              aria-labelledby={isLabeled ? ariaLabelledby : (isTooltipLabel ? id : undefined)}
+              aria-label={ariaLabel}
+            />
+          )}}
       </TooltipContext.Consumer>
       <Visibility isVisible={!!tooltip}>
         <TooltipDisplay aria-hidden={!useTooltipAsLabel && !!props['aria-hidden']} {...tooltipProps}>

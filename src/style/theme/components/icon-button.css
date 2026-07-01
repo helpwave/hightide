@@ -1,43 +1,61 @@
 @layer components {
-  [data-name="icon-button"] {
+  .icon-button {
     @apply flex-col-0 items-center justify-center element-square;
     transition: var(--coloring-transitions), var(--focus-transitions);
-    
+
     &:not([data-disabled]) {
-        @apply cursor-pointer coloring-color-detect coloring-style-hover-detect;
-    }
-    
-    &[data-disabled] {
-        @apply disabled coloring-style-detect cursor-not-allowed;
+      @apply cursor-pointer coloring-color-detect coloring-style-hover-detect;
     }
 
+    &[data-disabled] {
+      @apply disabled coloring-style-detect cursor-not-allowed;
+    }
+
+    /* Size Overwrites */
+    @apply sizing-md;
+    &[data-coloringstyle="outline"],
+    &[data-coloringstyle="tonal-outline"] {
+      padding: calc(
+        var(--spacing-element-padding-md) - var(--coloring-outline-width)
+      );
+    }
+
+    /* Size Overwrites */
     &[data-size="xs"] {
-        @apply sizing-xs;
-        &[data-coloringstyle="outline"],
-        &[data-coloringstyle="tonal-outline"] {
-            padding: calc(var(--spacing-element-padding-xs) - var(--coloring-outline-width)); 
-        }
+      @apply sizing-xs;
+      &[data-coloringstyle="outline"],
+      &[data-coloringstyle="tonal-outline"] {
+        padding: calc(
+          var(--spacing-element-padding-xs) - var(--coloring-outline-width)
+        );
+      }
     }
     &[data-size="sm"] {
-        @apply sizing-sm;
-        &[data-coloringstyle="outline"],
-        &[data-coloringstyle="tonal-outline"] {
-            padding: calc(var(--spacing-element-padding-sm) - var(--coloring-outline-width)); 
-        }
+      @apply sizing-sm;
+      &[data-coloringstyle="outline"],
+      &[data-coloringstyle="tonal-outline"] {
+        padding: calc(
+          var(--spacing-element-padding-sm) - var(--coloring-outline-width)
+        );
+      }
     }
     &[data-size="md"] {
-        @apply sizing-md;
-        &[data-coloringstyle="outline"],
-        &[data-coloringstyle="tonal-outline"] {
-            padding: calc(var(--spacing-element-padding-md) - var(--coloring-outline-width)); 
-        }
+      @apply sizing-md;
+      &[data-coloringstyle="outline"],
+      &[data-coloringstyle="tonal-outline"] {
+        padding: calc(
+          var(--spacing-element-padding-md) - var(--coloring-outline-width)
+        );
+      }
     }
     &[data-size="lg"] {
-        @apply sizing-lg;
-        &[data-coloringstyle="outline"],
-        &[data-coloringstyle="tonal-outline"] {
-            padding: calc(var(--spacing-element-padding-lg) - var(--coloring-outline-width)); 
-        }
+      @apply sizing-lg;
+      &[data-coloringstyle="outline"],
+      &[data-coloringstyle="tonal-outline"] {
+        padding: calc(
+          var(--spacing-element-padding-lg) - var(--coloring-outline-width)
+        );
+      }
     }
   }
 }
