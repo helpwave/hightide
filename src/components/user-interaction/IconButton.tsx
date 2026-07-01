@@ -5,6 +5,7 @@ import { TooltipContext, TooltipDisplay, TooltipRoot, useTooltip } from './Toolt
 import { Visibility } from '../layout/Visibility'
 import { useLogOnce } from '@/src/hooks/useLogOnce'
 import { ReactRefsUtil } from '@/src/utils/reactRefs'
+import clsx from 'clsx'
 
 /**
  * The different sizes for a icon button
@@ -46,7 +47,7 @@ export const IconButtonBase = forwardRef<HTMLButtonElement, IconButtonBaseProps>
         props.onClick?.(event)
       }}
 
-      className="icon-button"
+      className={clsx('icon-button', props.className)}
       data-disabled={disabled ? '': undefined}
       data-size={size ?? undefined}
       data-color={color ?? undefined}

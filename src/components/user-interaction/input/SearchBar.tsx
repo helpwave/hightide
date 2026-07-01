@@ -31,15 +31,14 @@ export const SearchBar = ({
     defaultValue: initialValue,
   })
   return (
-    <div {...containerProps} className={clsx('relative', containerProps?.className)}>
+    <div {...containerProps} className={clsx('search-bar-container group/search-bar', containerProps?.className)}>
       <Input
         {...inputProps}
         value={value}
         onValueChange={setValue}
         onEditComplete={onSearch}
         placeholder={inputProps.placeholder ?? translation('search')}
-        // Styling applied via className
-        className={clsx('pr-10 w-full', inputProps.className)}
+        className={clsx('search-bar-input', inputProps.className)}
       />
       <IconButton
         {...searchButtonProps}
@@ -48,9 +47,9 @@ export const SearchBar = ({
         color="neutral"
         coloringStyle="text"
         onClick={() => onSearch(value)}
-        className={clsx('absolute right-1.5 top-1/2 -translate-y-1/2', searchButtonProps?.className)}
+        className={clsx('search-bar-icon-button', searchButtonProps?.className)}
       >
-        <Search className="w-full h-full"/>
+        <Search className="search-bar-icon"/>
       </IconButton>
     </div>
   )
