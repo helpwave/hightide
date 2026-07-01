@@ -63,49 +63,49 @@ function calculatePosition({
     let translateYPercent: number
 
     switch (hAlign) {
-    case 'beforeStart':
-      left = anchorRect.left
-      translateXPercent = -100
-      break
-    case 'afterStart':
-      left = anchorRect.left
-      translateXPercent = 0
-      break
-    case 'center':
-      left = anchorCenterX
-      translateXPercent = -50
-      break
-    case 'beforeEnd':
-      left = anchorRect.right
-      translateXPercent = -100
-      break
-    case 'afterEnd':
-      left = anchorRect.right
-      translateXPercent = 0
-      break
+      case 'beforeStart':
+        left = anchorRect.left
+        translateXPercent = -100
+        break
+      case 'afterStart':
+        left = anchorRect.left
+        translateXPercent = 0
+        break
+      case 'center':
+        left = anchorCenterX
+        translateXPercent = -50
+        break
+      case 'beforeEnd':
+        left = anchorRect.right
+        translateXPercent = -100
+        break
+      case 'afterEnd':
+        left = anchorRect.right
+        translateXPercent = 0
+        break
     }
 
     switch (vAlign) {
-    case 'beforeStart':
-      top = anchorRect.top
-      translateYPercent = -100
-      break
-    case 'afterStart':
-      top = anchorRect.top
-      translateYPercent = 0
-      break
-    case 'center':
-      top = anchorCenterY
-      translateYPercent = -50
-      break
-    case 'beforeEnd':
-      top = anchorRect.bottom
-      translateYPercent = -100
-      break
-    case 'afterEnd':
-      top = anchorRect.bottom
-      translateYPercent = 0
-      break
+      case 'beforeStart':
+        top = anchorRect.top
+        translateYPercent = -100
+        break
+      case 'afterStart':
+        top = anchorRect.top
+        translateYPercent = 0
+        break
+      case 'center':
+        top = anchorCenterY
+        translateYPercent = -50
+        break
+      case 'beforeEnd':
+        top = anchorRect.bottom
+        translateYPercent = -100
+        break
+      case 'afterEnd':
+        top = anchorRect.bottom
+        translateYPercent = 0
+        break
     }
 
     if (gap !== 0) {
@@ -196,15 +196,11 @@ function calculatePosition({
     }
   }
 
-  const adjustedTranslateX = (bestPosition.clampedLeft - bestPosition.left) / bestPosition.width * 100
-  const adjustedTranslateY = (bestPosition.clampedTop - bestPosition.top) / bestPosition.height * 100
-
   return {
-    left: bestPosition.left,
-    top: bestPosition.top,
+    left: bestPosition.clampedLeft,
+    top: bestPosition.clampedTop,
     maxWidth: bestPosition.maxWidth,
     maxHeight: bestPosition.maxHeight,
-    transform: `translate(${adjustedTranslateX}%, ${adjustedTranslateY}%)`,
     transformOrigin: 'top left',
   }
 }
@@ -228,10 +224,10 @@ const measureSizes = ({
   anchorRef,
   windowRef,
 }: {
-    containerRef?: RefObject<HTMLElement | null>,
-    anchorRef?: RefObject<HTMLElement | null>,
-    windowRef?: RefObject<HTMLElement | null>,
-  }) => {
+  containerRef?: RefObject<HTMLElement | null>,
+  anchorRef?: RefObject<HTMLElement | null>,
+  windowRef?: RefObject<HTMLElement | null>,
+}) => {
   return {
     container: containerRef?.current?.getBoundingClientRect(),
     anchor: anchorRef?.current?.getBoundingClientRect(),
@@ -306,18 +302,18 @@ export function useAnchoredPosition({
   const calculate = useCallback(() => {
     const newMeasurement = measureSizes({ containerRef, anchorRef, windowRef })
     if (!newMeasurement) return
-    if(isSameMeasurment(lastSizes.current, newMeasurement) && isSameOptions(options, lastOptions.current)) return
+    if (isSameMeasurment(lastSizes.current, newMeasurement) && isSameOptions(options, lastOptions.current)) return
     lastSizes.current = newMeasurement
     lastOptions.current = options
 
-    if(!newMeasurement.container) {
+    if (!newMeasurement.container) {
       return
     }
     const containerRect: RectangleBounds = newMeasurement.container
     const windowRect: RectangleBounds = newMeasurement.window
     const anchorRect: RectangleBounds = newMeasurement.anchor ?? newMeasurement.window
 
-    if(containerRect.width === 0 || containerRect.height === 0) {
+    if (containerRect.width === 0 || containerRect.height === 0) {
       return
     }
 
@@ -349,7 +345,7 @@ export function useAnchoredPosition({
   useScrollObserver({ observedElementRef: anchorRef, onScroll: calculate, isActive: isReactingToScroll && active })
 
   useEffect(() => {
-    if(!containerRef.current || !active) {
+    if (!containerRef.current || !active) {
       return
     }
     let timeout: NodeJS.Timeout

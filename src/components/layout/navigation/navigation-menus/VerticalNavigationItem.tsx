@@ -1,5 +1,6 @@
 import type { KeyboardEvent } from 'react'
 import { useCallback, useRef } from 'react'
+import Link from 'next/link'
 import { ExternalLink } from 'lucide-react'
 import { ExpansionIcon } from '@/src/components/display-and-visualization/ExpansionIcon'
 import { useNavigationItem } from './NavigationContext'
@@ -23,6 +24,7 @@ export function VerticalNavigationItem({
   depth = 0,
 }: VerticalNavigationItemProps) {
   const headerRef = useRef<HTMLDivElement>(null)
+  const linkRef = useRef<HTMLAnchorElement>(null)
   const {
     expanded,
     isFocused,
@@ -91,17 +93,14 @@ export function VerticalNavigationItem({
     if (event.key === 'Enter' || event.key === ' ') {
       if (hasChildren) {
         toggleExpansion(id, { isFocusing: true })
-      } else {
-        navigateTo(id)
-      }
-      if (url == null) return
-      if (external) {
-        window.open(url, '_blank', 'noopener,noreferrer')
         return
       }
-      window.location.assign(url)
+      navigateTo(id)
+      if (url == null) return
+      event.preventDefault()
+      linkRef.current?.click()
     }
-  }, [collapse, expand, expanded, external, first, firstChildId, hasChildren, id, isFocused, last, navigateTo, next, path, previous, toggleExpansion, url])
+  }, [collapse, expand, expanded, first, firstChildId, hasChildren, id, isFocused, last, navigateTo, next, path, previous, toggleExpansion, url])
 
   const handleHeaderActivate = useCallback(() => {
     toggleExpansion(id, { isFocusing: true })
@@ -110,24 +109,27 @@ export function VerticalNavigationItem({
   const handleLeafActivate = useCallback(() => {
     navigateTo(id)
     if (url == null) return
-    if (external) {
-      window.open(url, '_blank', 'noopener,noreferrer')
-      return
-    }
-    window.location.assign(url)
-  }, [external, id, navigateTo, url])
+    linkRef.current?.click()
+  }, [id, navigateTo, url])
 
   const labelContent = url == null ? (
     label
-  ) : external ? (
-    <span data-name="vertical-navigation-item-link">
-      {label}
-      <ExternalLink className="vertical-navigation-item-link-external-icon" />
-    </span>
   ) : (
-    <span data-name="vertical-navigation-item-link">
+    <Link
+      ref={linkRef}
+      href={url}
+      data-name="vertical-navigation-item-link"
+      tabIndex={-1}
+      draggable={false}
+      target={external ? '_blank' : undefined}
+      rel={external ? 'noopener noreferrer' : undefined}
+      onClick={(event) => event.stopPropagation()}
+    >
       {label}
-    </span>
+      {external && (
+        <ExternalLink className="vertical-navigation-item-link-external-icon" />
+      )}
+    </Link>
   )
 
   if (!hasChildren) {
