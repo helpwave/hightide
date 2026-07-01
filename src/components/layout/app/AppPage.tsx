@@ -1,11 +1,13 @@
 import clsx from 'clsx'
+import type { ElementType } from 'react'
 import { useCallback, useMemo, useRef, useState, type HTMLAttributes, type ReactNode } from 'react'
 import { IconButton } from '../../user-interaction/IconButton'
 import { useHightideTranslation } from '@/src/i18n/useHightideTranslation'
 import { MenuIcon, X } from 'lucide-react'
 import { useOverlayRegistry } from '@/src/hooks/useOverlayRegistry'
 import { PropsUtil } from '@/src/utils/propsUtil'
-import { VerticalNavigationTree, type NavigationItemData } from '../navigation/navigation-menus/VerticalNavigationTree'
+import type { LinkComponentProps } from '../navigation/navigation-menus/VerticalNavigationMenu'
+import { VerticalNavigationMenu, type NavigationItemData } from '../navigation/navigation-menus/VerticalNavigationMenu'
 import { FocusTrap } from '../../utils/FocusTrap'
 
 export interface AppSidebarProps extends HTMLAttributes<HTMLDivElement> {
@@ -65,10 +67,8 @@ export interface AppPageSidebarWithNavigationProps extends AppSidebarProps {
   footer?: ReactNode,
   navigationItems?: NavigationItemData[],
   contentOverwrite?: ReactNode,
-  initialFocusedId?: string,
-  focusedId?: string | null,
-  onFocusedIdChange?: (focusedId: string | null) => void,
   activeId?: string | null,
+  LinkComponent?: ElementType<LinkComponentProps>,
 }
 
 export const AppPageSidebarWithNavigation = ({
@@ -76,10 +76,8 @@ export const AppPageSidebarWithNavigation = ({
   footer,
   navigationItems,
   contentOverwrite,
-  initialFocusedId,
-  focusedId,
-  onFocusedIdChange,
   activeId,
+  LinkComponent,
   ...props
 }: AppPageSidebarWithNavigationProps) => {
   return (
@@ -91,15 +89,13 @@ export const AppPageSidebarWithNavigation = ({
           </div>
         )}
         {navigationItems && !contentOverwrite && (
-          <div className="app-page-sidebar-with-navigation-scroll">
-            <VerticalNavigationTree
+          <nav className="app-page-sidebar-with-navigation-scroll">
+            <VerticalNavigationMenu
               items={navigationItems}
-              initialFocusedId={initialFocusedId}
-              focusedId={focusedId}
-              onFocusedIdChange={onFocusedIdChange}
+              LinkComponent={LinkComponent}
               activeId={activeId}
             />
-          </div>
+          </nav>
         )}
         {contentOverwrite && (
           <div className="app-page-sidebar-with-navigation-scroll">
@@ -140,15 +136,13 @@ function findActiveIdByUrl(
 }
 
 export interface AppPageSidebarProps {
-  initialFocusedId?: string,
-  focusedId?: string | null,
-  onFocusedIdChange?: (focusedId: string | null) => void,
   activeId?: string | null,
   activeUrl?: string,
   header?: ReactNode,
   items?: AppPageNavigationItem[],
   contentOverwrite?: ReactNode,
   footer?: ReactNode,
+  LinkComponent?: ElementType<LinkComponentProps>,
 }
 
 export interface AppPageProps extends HTMLAttributes<HTMLDivElement> {
@@ -213,10 +207,8 @@ export const AppPage = ({
         footer={sidebarProps.footer}
         navigationItems={navigationItems}
         contentOverwrite={sidebarProps.contentOverwrite}
-        initialFocusedId={sidebarProps.initialFocusedId}
-        focusedId={sidebarProps.focusedId}
-        onFocusedIdChange={sidebarProps.onFocusedIdChange}
         activeId={resolvedActiveId}
+        LinkComponent={sidebarProps.LinkComponent}
       />
       <div data-name="app-page-content" data-no-scrolling={noScrolling ? '' : undefined}>
         <header data-name="app-page-header">

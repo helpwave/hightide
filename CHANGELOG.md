@@ -5,6 +5,33 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/)
 and adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [0.12.11] - 2026-07-01
+
+### Added
+
+- Reusable tree hooks under `src/hooks/trees/`: `useTreeExpansion`, `useTreeFocusNavigation`, `useTreeNavigation`, and `treeUtilities`
+- `useTreeExpansion` controlled/uncontrolled expanded IDs via `expandedIds`, `onExpandedIdsChange`, and `initialExpandedIds` (`useControlledState`)
+- `pruneCollapsedSubtrees` option on `useTreeExpansion` to optionally preserve descendant expansion state when a parent node is collapsed
+- `VerticalNavigationMenu` and `VerticalNavigationMenuItem` components replacing the previous tree wrapper and item
+- `LinkComponent` prop on `VerticalNavigationMenu` and `AppPage` sidebar navigation for custom link rendering (e.g. Next.js `Link`)
+
+### Changed
+
+- `NavigationProvider` now uses `useTreeExpansion` only; `activePath` is derived locally from `activeId` instead of living in the expansion hook
+- `VerticalNavigationTree` renamed to `VerticalNavigationMenu`; `VerticalNavigationItem` renamed to `VerticalNavigationMenuItem` (backward-compatible export aliases kept)
+- `useTreeNavigation` moved from `src/hooks/useTreeNavigation.ts` to `src/hooks/trees/useTreeNavigation.ts`
+- Vertical navigation simplified to expansion and active-route state; removed focus/keyboard navigation from the navigation context (`focusedId`, `navigateTo`, `next`/`previous`, `registerItemRef`, etc.)
+- `AppPage` sidebar navigation removed `focusedId`, `initialFocusedId`, and `onFocusedIdChange` props
+- Vertical navigation styling updated to class-based selectors (`.vertical-navigation-item`, `.vertical-navigation-item-row`, etc.) with adjusted item height, hover/focus behavior, and absolutely positioned expand toggle
+- `useIsMounted` moved from `src/hooks/focus/useIsMounted.ts` to `src/hooks/useIsMounted.ts`
+- `LocaleContext` `setLocale` typing now accepts `'system'`; storage defaults for time zone and 24-hour format use `null` instead of `undefined`
+
+### Removed
+
+- `VerticalNavigationTree` and the previous `VerticalNavigationItem` implementation
+- `src/hooks/useTreeNavigation.ts` (replaced by the `src/hooks/trees/` module)
+- `isFocused` from navigation item state
+
 ## [0.12.10] - 2026-06-30
 
 ### Fixed

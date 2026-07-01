@@ -31,6 +31,10 @@ const initialNavigationItems: AppPageNavigationItem[] = [
       },
     ],
   },
+  {
+    id: 'noLink',
+    label: 'No Link And Children',
+  },
 ]
 
 const additionalNavigationItems: AppPageNavigationItem[] = [

@@ -7,9 +7,11 @@ import type { LocalizationConfig } from '@/src/global-contexts/HightideConfigCon
 import { useHightideConfig } from '@/src/global-contexts/HightideConfigContext'
 import { useEventCallbackStabilizer } from '../hooks/useEventCallbackStabelizer'
 
+type LocaleWithSystem = HightideTranslationLocales | 'system'
+
 export type LocaleContextValue = {
   locale: HightideTranslationLocales,
-  setLocale: Dispatch<SetStateAction<HightideTranslationLocales>>,
+  setLocale: Dispatch<SetStateAction<LocaleWithSystem>>,
   timeZone?: string,
   setTimeZone?: (timeZone: string | undefined) => void,
   is24HourFormat?: boolean,
@@ -17,8 +19,6 @@ export type LocaleContextValue = {
 }
 
 export const LocaleContext = createContext<LocaleContextValue | null>(null)
-
-type LocaleWithSystem = HightideTranslationLocales | 'system'
 
 export type LocaleProviderProps = PropsWithChildren & Partial<LocalizationConfig> & {
   locale?: LocaleWithSystem,
@@ -50,12 +50,12 @@ export const LocaleProvider = ({
     value: storedTimeZone,
     setValue: setStoredTimeZone,
     deleteValue: deleteStoredTimeZone,
-  } = useStorage<string | undefined>({ key: 'timeZone', defaultValue: undefined })
+  } = useStorage<string | null>({ key: 'timeZone', defaultValue: null })
   const {
     value: storedIs24HourFormat,
     setValue: setStoredIs24HourFormat,
     deleteValue: deleteStoredIs24HourFormat,
-  } = useStorage<boolean | undefined>({ key: 'is24HourFormat', defaultValue: undefined })
+  } = useStorage<boolean | null>({ key: 'is24HourFormat', defaultValue: null })
   const { config } = useHightideConfig()
   const [localePreference, setLocalePreference] = useState<LocaleWithSystem>('system')
 
