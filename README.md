@@ -2,6 +2,26 @@
 
 This repository contains all components and themes employed by helpwave's web application
 
+## The hightide family (web + React Native)
+
+hightide is a **hybrid design system**. The same design language is shared across
+platforms through a small family of packages:
+
+| Package | Platform | Location |
+| --- | --- | --- |
+| [`@helpwave/hightide`](package.json) | React (web) | this repo (root) |
+| [`@helpwave/hightide-native`](packages/hightide-native) | React Native | `packages/hightide-native` |
+| [`@helpwave/hightide-tokens`](packages/hightide-tokens) | shared design tokens | `packages/hightide-tokens` |
+
+All three are released **in lockstep** (same version). The web library is
+unchanged; the native library ships the _basic app building blocks_ (desktop-web
+patterns like `AppPage`/`Carousel`/`Table` are intentionally excluded).
+
+📖 Start with [`docs/native/ARCHITECTURE.md`](docs/native/ARCHITECTURE.md) for the
+design rationale, styling strategy and npm packaging/versioning model, and
+[`docs/native/COMPONENT-INVENTORY.md`](docs/native/COMPONENT-INVENTORY.md) for
+what is/ isn't ported.
+
 
 ## Development - Getting Started
 To start developing in the Project just run this command:
