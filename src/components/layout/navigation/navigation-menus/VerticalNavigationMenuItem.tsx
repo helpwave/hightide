@@ -1,4 +1,4 @@
-import type { ElementType, HTMLAttributeAnchorTarget, MouseEvent, ReactNode } from 'react'
+import type { ElementType, HTMLAttributeAnchorTarget, ReactNode } from 'react'
 import { useId, useRef } from 'react'
 import { ExternalLink } from 'lucide-react'
 import { ExpansionIcon } from '@/src/components/display-and-visualization/ExpansionIcon'
@@ -13,7 +13,6 @@ export interface LinkComponentProps {
   'rel'?: string | undefined,
   'aria-current'?: 'page' | undefined,
   'children'?: ReactNode,
-  'onClick'?: (event: MouseEvent<HTMLAnchorElement>) => void,
 }
 
 export interface VerticalNavigationMenuItemProps {
