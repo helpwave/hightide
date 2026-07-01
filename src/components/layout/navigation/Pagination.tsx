@@ -38,7 +38,7 @@ export const Pagination = ({
   }, [pageIndex, noPages])
 
   const changePage = (page: number) => {
-    onPageIndexChanged(page)
+    onPageIndexChanged?.(page)
   }
 
   return (

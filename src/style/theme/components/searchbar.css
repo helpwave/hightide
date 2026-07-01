@@ -1,0 +1,18 @@
+@layer components {
+  .search-bar-container {
+    @apply relative;
+  }
+
+  .search-bar-input {
+    @apply pr-10 w-full;
+    @apply group-hover/search-bar:border-primary;
+  }
+
+  .search-bar-icon {
+    @apply w-full h-full;
+  }
+
+  .search-bar-icon-button {
+    @apply absolute right-1.5 top-1/2 -translate-y-1/2;
+  }
+}

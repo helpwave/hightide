@@ -32,7 +32,7 @@ const CarouselContext = createContext<CarouselContextType | null>(null)
 const useCarouselContext = () => {
   const context = useContext(CarouselContext)
   if (!context) {
-    console.error('useCarouselContext must be used within CarouselContext')
+    throw Error('useCarouselContext must be used within CarouselContext')
   }
   return context
 }
@@ -316,7 +316,10 @@ export const Carousel = ({
 
   const handlePointerMove = (e: React.PointerEvent) => {
     if (!dragState) return
-    setDragState(prevState => ({ dragStartX: prevState.dragStartX, dragOffsetX: e.clientX - prevState.dragStartX }))
+    setDragState(prevState => {
+      if(!prevState) return prevState
+      return { dragStartX: prevState.dragStartX, dragOffsetX: e.clientX - prevState.dragStartX }
+    })
   }
 
   const handlePointerUp = () => {
@@ -369,7 +372,11 @@ export const Carousel = ({
 
                   return (
                     <CarouselSlide
-                      ref={isInItems ? slideRefs[index] : undefined}
+                      ref={(el) => {
+                        const array = slideRefs.current
+                        if(!array || !el || !isInItems) return
+                        array[index] = el
+                      }}
                       key={listIndex}
                       index={index}
                       isSelected={isInItems && currentIndex === index}
@@ -397,7 +404,11 @@ export const Carousel = ({
             </div>
           ) : (
             <div
-              ref={slideRefs[currentIndex]}
+              ref={(el) => {
+                const array = slideRefs.current
+                if(!array || !el) return
+                array[currentIndex] = el
+              }}
               className={clsx('px-16 h-full')}
 
               tabIndex={0}
