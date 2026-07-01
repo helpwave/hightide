@@ -1,5 +1,5 @@
-import type { HTMLAttributes, ReactNode } from 'react'
-import { forwardRef, useCallback } from 'react'
+import type { AnchorHTMLAttributes, ElementType, HTMLAttributes, ReactNode } from 'react'
+import { forwardRef, useId } from 'react'
 import clsx from 'clsx'
 import { ChevronRight, ExternalLink } from 'lucide-react'
 import { Visibility } from '../layout/Visibility'
@@ -9,21 +9,30 @@ export type CardSize = 'sm' | 'md' | 'lg'
 
 type CardHeaderContentProps = {
   title: ReactNode,
+  titleId?: string,
   description?: ReactNode,
+  descriptionId?: string,
   leading?: ReactNode,
   trailing?: ReactNode,
 }
 
-function CardHeaderContent({ title, description, leading, trailing }: CardHeaderContentProps) {
+function CardHeaderContent({
+  title,
+  titleId,
+  description,
+  descriptionId,
+  leading,
+  trailing,
+}: CardHeaderContentProps) {
   return (
     <>
       {leading != null && (
         <span data-name="card-leading">{leading}</span>
       )}
       <div data-name="card-content">
-        <span data-name="card-title">{title}</span>
+        <span id={titleId} data-name="card-title">{title}</span>
         <Visibility isVisible={!!description}>
-          <span data-name="card-description">{description}</span>
+          <span id={descriptionId} data-name="card-description">{description}</span>
         </Visibility>
       </div>
       {trailing != null && (
@@ -143,18 +152,26 @@ export const ActionCard = forwardRef<HTMLDivElement, ActionCardProps>(function A
   )
 })
 
+
+export type NavigationCardLinkProps = Pick<
+  AnchorHTMLAttributes<HTMLAnchorElement>,
+  'className' | 'href' | 'target' | 'rel' | 'aria-labelledby' | 'aria-describedby' | 'children'
+>
+
+const DefaultNavigationCardLink: ElementType<NavigationCardLinkProps> = 'a'
+
 //
 // NavigationCard
 //
 
 export type NavigationCardProps = Omit<HTMLAttributes<HTMLDivElement>, 'title'> & {
-  'title': ReactNode,
-  'description'?: ReactNode,
-  'size'?: CardSize,
-  'leading'?: ReactNode,
-  'href': string,
-  'isExternal'?: boolean,
-  'data-name'?: string,
+  title: ReactNode,
+  description?: ReactNode,
+  size?: CardSize,
+  leading?: ReactNode,
+  href: string,
+  isExternal?: boolean,
+  LinkComponent?: ElementType<NavigationCardLinkProps>,
 }
 
 export const NavigationCard = forwardRef<HTMLDivElement, NavigationCardProps>(function NavigationCard({
@@ -164,71 +181,49 @@ export const NavigationCard = forwardRef<HTMLDivElement, NavigationCardProps>(fu
   leading,
   href,
   isExternal = false,
+  LinkComponent = DefaultNavigationCardLink,
   children,
   className,
-  onClick,
-  onKeyDown,
   ...props
 }, ref) {
-  const navigate = useCallback(() => {
-    if (isExternal) {
-      window.open(href, '_blank', 'noopener,noreferrer')
-      return
-    }
-    window.location.assign(href)
-  }, [href, isExternal])
+  const generatedId = useId()
+  const descriptionId = `navigation-card-description-${generatedId}`
+  const titleId = `navigation-card-title-${generatedId}`
 
   return (
     <div
       {...props}
       ref={ref}
-      className={clsx('group/card', className)}
-      onClick={(event) => {
-        onClick?.(event)
-        if (event.defaultPrevented) {
-          return
-        }
-        navigate()
-      }}
-      onKeyDown={(event) => {
-        onKeyDown?.(event)
-        if (event.defaultPrevented) {
-          return
-        }
-        if (event.key === 'Enter' || event.key === ' ') {
-          event.preventDefault()
-          navigate()
-        }
-      }}
-      data-name={props['data-name'] ?? 'navigation-card'}
+      className={clsx('group/card navigation-card', className)}
       data-size={size}
       data-external={PropsUtil.dataAttributes.bool(isExternal)}
-      role="link"
-      tabIndex={0}
     >
-      <div data-name="card-header">
-        <CardHeaderContent
-          title={title}
-          description={description}
-          leading={leading}
-        />
-        <a
-          href={href}
-          target={isExternal ? '_blank' : undefined}
-          rel={isExternal ? 'noopener noreferrer' : undefined}
-          data-name="navigation-card-action"
-          tabIndex={-1}
-          aria-hidden={true}
-          onClick={(event) => event.stopPropagation()}
-        >
-          {isExternal ? (
-            <ExternalLink className="size-force-5" />
-          ) : (
-            <ChevronRight className="size-force-5" />
-          )}
-        </a>
-      </div>
-      {children}
+      <LinkComponent
+        href={href}
+        target={isExternal ? '_blank' : undefined}
+        rel={isExternal ? 'noopener noreferrer' : undefined}
+        className="navigation-card-link"
+        aria-labelledby={titleId}
+        aria-describedby={description ? descriptionId : undefined}
+      >
+        <div data-name="card-header">
+          <CardHeaderContent
+            title={title}
+            titleId={titleId}
+            description={description}
+            descriptionId={description ? descriptionId : undefined}
+            leading={leading}
+          />
+          <span className="navigation-card-action">
+            {isExternal ? (
+              <ExternalLink className="navigation-card-action-icon" aria-hidden="true" />
+            ) : (
+              <ChevronRight className="navigation-card-action-icon" aria-hidden="true" />
+            )}
+          </span>
+        </div>
+        {children}
+      </LinkComponent>
     </div>
   )
 })
