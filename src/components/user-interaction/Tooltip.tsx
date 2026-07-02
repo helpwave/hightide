@@ -235,6 +235,7 @@ export const TooltipDisplay = forwardRef<HTMLDivElement, TooltipDisplayProps>(fu
           verticalAlignment,
           horizontalAlignment,
           avoidOverlap: true,
+          screenPadding: config.tooltip.screenPadding,
           ...props.options,
         }}
 
@@ -248,8 +249,6 @@ export const TooltipDisplay = forwardRef<HTMLDivElement, TooltipDisplayProps>(fu
           zIndex,
           position: 'fixed',
           opacity: isVisible ? undefined : 0,
-          pointerEvents: isVisible ? undefined : 'none',
-          touchAction: isVisible ? undefined : 'none',
           ...props.style
         }}
       >

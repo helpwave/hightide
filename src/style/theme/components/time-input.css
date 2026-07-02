@@ -1,0 +1,17 @@
+@layer components {
+  .time-input {
+    @apply flex-row-2 items-center justify-center flex-wrap select-none;
+  }
+
+  .time-input-segment {
+    @apply min-w-14;
+  }
+
+  .time-input-period {
+    @apply flex-col-1 min-w-16;
+  }
+
+  .time-input-separator {
+    @apply typography-title-md font-semibold text-on-background;
+  }
+}

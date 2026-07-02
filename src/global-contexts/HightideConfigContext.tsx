@@ -6,6 +6,7 @@ import type { DeepPartial } from '@/src/utils/typing'
 export type TooltipConfig = {
   appearDelay: number,
   isAnimated: boolean,
+  screenPadding: number,
 }
 
 export type ThemeConfig = {
@@ -28,6 +29,7 @@ const defaultConfig: HightideConfig = {
   tooltip: {
     appearDelay: 0,
     isAnimated: false,
+    screenPadding: 1,
   },
   theme: {
     initialTheme: 'light'

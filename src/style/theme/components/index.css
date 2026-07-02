@@ -21,6 +21,9 @@
 @import "./form-field.css";
 @import "./day-picker.css";
 @import "./time-picker.css";
+@import "./time-input.css";
+@import "./number-stepper-input.css";
+@import "./number-input.css";
 @import "./property.css";
 @import "./pop-up.css";
 @import "./select.css";

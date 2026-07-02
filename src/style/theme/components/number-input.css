@@ -1,0 +1,13 @@
+@layer components {
+  .number-input-field {
+    @apply input-element px-2 py-1 rounded-md h-element-md text-center;
+    width: calc(
+      var(--number-input-approximate-max-characters, 6) * 1.1ch +
+        var(--spacing) * 12
+    );
+    min-width: calc(
+      var(--number-input-approximate-max-characters, 6) * 1.1ch +
+        var(--spacing) * 12
+    );
+  }
+}

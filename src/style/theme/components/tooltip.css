@@ -11,6 +11,7 @@
   [data-name="tooltip"] {
     @apply absolute px-2 py-1 rounded shadow-around-md;
     @apply text-xs font-semibold text-tooltip-text bg-tooltip-background truncate;
+    @apply pointer-events-none touch-none;
 
     &[data-state="opening"][data-animated] {
       @apply animate-tooltip-fade-in;
@@ -24,7 +25,7 @@
   }
 
   [data-name="tooltip-triangle"] {
-    @apply absolute w-0 h-0;
+    @apply absolute w-0 h-0 pointer-events-none touch-none;
     --triangle-size: calc(1.5 * var(--spacing));
 
     &[data-state="opening"] {

@@ -1,0 +1,22 @@
+@layer components {
+  .number-stepper-input {
+    @apply flex items-center gap-1;
+
+    &[data-layout="row"] {
+      @apply flex-row;
+    }
+
+    &[data-layout="col"] {
+      @apply flex-col;
+    }
+
+    &[data-disabled],
+    &[data-readonly] {
+      @apply cursor-not-allowed;
+    }
+  }
+
+  .number-stepper-input-button {
+    @apply shrink-0 w-full;
+  }
+}
