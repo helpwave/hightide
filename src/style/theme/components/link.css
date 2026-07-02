@@ -1,5 +1,0 @@
-@layer components {
-  [data-name="link"] {
-    @apply decoration-3 p-2 hover:underline focus:underline font-bold text-lg rounded;
-  }
-}

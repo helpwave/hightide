@@ -1,5 +1,4 @@
 import type { Meta, StoryObj } from '@storybook/nextjs-vite'
-import Image from 'next/image'
 import { clsx } from 'clsx'
 import type { CarouselProps } from '@/src/components/layout/Carousel'
 import { Carousel } from '@/src/components/layout/Carousel'
@@ -38,7 +37,7 @@ export const carousel: Story = {
             color
           )}
         >
-          <Image src="https://helpwave.de/favicon.ico" alt="" width={256} height={256} draggable={false}/>
+          <img src="https://helpwave.de/favicon.ico" alt="" width={256} height={256} draggable={false}/>
         </div>
       )
     }),

@@ -3,6 +3,7 @@ import { useCallback, useId, useState } from 'react'
 import { createContext, useContext, useEffect, useRef } from 'react'
 import clsx from 'clsx'
 import { PropsUtil } from '@/src/utils/propsUtil'
+import { resolveSetState } from '@/src/utils/resolveSetState'
 import { createPortal } from 'react-dom'
 import { Visibility } from './Visibility'
 import { useControlledState } from '@/src/hooks/useControlledState'
@@ -12,7 +13,7 @@ export interface TabInfo {
   labelId: string,
   label: ReactNode,
   disabled?: boolean,
-  ref: RefObject<HTMLElement>,
+  ref: RefObject<HTMLElement | null>,
 }
 
 function sortByDomOrder(infos: TabInfo[]): TabInfo[] {
@@ -28,7 +29,7 @@ function sortByDomOrder(infos: TabInfo[]): TabInfo[] {
 
 type PortalState = {
   id: string,
-  ref: RefObject<HTMLElement>,
+  ref: RefObject<HTMLElement | null>,
 }
 
 export interface TabContextType {
@@ -36,12 +37,12 @@ export interface TabContextType {
     activeId: string | null,
     setActiveId: Dispatch<SetStateAction<string | null>>,
     subscribe: (info: TabInfo) => () => void,
-    infos?: TabInfo[],
+    infos: TabInfo[],
   },
   portal: {
     id: string | null,
     element: HTMLElement | null,
-    setPortal: (state: PortalState | null) => void,
+    setPortal: Dispatch<SetStateAction<PortalState | null>>,
   },
 }
 
@@ -75,7 +76,7 @@ export function TabSwitcher({ children, activeId: controlledActiveId, onActiveId
     onValueChange: onActiveIdChange,
   })
   const [tabInfos, setTabInfos] = useState<TabInfo[]>([])
-  const [portalState, setPortalState] = useState<PortalState>(null)
+  const [portalState, setPortalState] = useState<PortalState | null>(null)
 
   const subscribe = useCallback((info: TabInfo) => {
     const id = info.id
@@ -105,14 +106,18 @@ export function TabSwitcher({ children, activeId: controlledActiveId, onActiveId
     }
   }, [activeId, setActiveId, tabInfos])
 
-  const registerPortal = useCallback((state: PortalState) => {
-    setPortalState(state)
+  const registerPortal: Dispatch<SetStateAction<PortalState | null>> = useCallback((action) => {
+    setPortalState(prev => resolveSetState(action, prev))
   }, [])
 
-  const changeActiveId = useCallback((activeId: string) => {
-    const info = tabInfos.find(value => value.id === activeId)
-    if(info && info.disabled) return
-    setActiveId(activeId)
+  const changeActiveId: Dispatch<SetStateAction<string | null>> = useCallback((action) => {
+    setActiveId(prev => {
+      const next = resolveSetState(action, prev)
+      if (next === null) return next
+      const info = tabInfos.find(value => value.id === next)
+      if (info?.disabled) return prev
+      return next
+    })
   }, [setActiveId, tabInfos])
 
   const resolvedActiveId = () => {
@@ -155,7 +160,8 @@ export function TabList({ ...props }: TabListProps) {
   const refs = useRef<Record<string, HTMLLIElement | null>>({})
 
   const onKeyDown = (e: KeyboardEvent<HTMLUListElement>) => {
-    const idx = infos.findIndex((tab) => tab.id === activeId)
+    if(!infos) return
+    const idx = infos?.findIndex((tab) => tab.id === activeId)
     if (idx === -1) return
 
     const step = e.key === 'ArrowRight' ? 1 : e.key === 'ArrowLeft' ? -1 : 0
@@ -176,13 +182,13 @@ export function TabList({ ...props }: TabListProps) {
   return (
     <ul
       {...props}
-      data-name={props['data-name'] ?? 'tab-list'}
+      data-name="tab-list"
       onKeyDown={onKeyDown}
       role="tablist"
       aria-orientation="horizontal"
-      style={{ '--tab-count': infos.length, ...props.style } as CSSProperties}
+      style={{ '--tab-count': infos?.length ?? 0, ...props.style } as CSSProperties}
     >
-      {infos.map((tabInfo) => {
+      {infos?.map((tabInfo) => {
         const isDisabled = !!tabInfo.disabled
         const isActive = activeId === tabInfo.id
         return (
@@ -225,7 +231,7 @@ export function TabView({ ...props }: TabViewProps) {
   const id = props.id ?? 'tab-view-' + generated
   const { portal } = useTabContext()
   const { setPortal } = portal
-  const ref = useRef<HTMLDivElement>(null)
+  const ref = useRef<HTMLDivElement | null>(null)
 
   useEffect(() => {
     setPortal({ id, ref })
@@ -283,7 +289,7 @@ export function TabPanel({ label, forceMount = false, disabled = false, initiall
       id={id}
       hidden={!isActive}
 
-      data-name={props['data-name'] ?? 'tab-panel'}
+      data-name="tab-panel"
       data-disabled={PropsUtil.dataAttributes.bool(disabled)}
 
       role="tabpanel"
