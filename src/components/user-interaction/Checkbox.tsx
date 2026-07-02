@@ -18,6 +18,7 @@ export type CheckboxProps = HTMLAttributes<HTMLDivElement>
     size?: CheckBoxSize,
     alwaysShowCheckIcon?: boolean,
     isRounded?: boolean,
+    interactive?: boolean,
   }
 
 /**
@@ -53,18 +54,20 @@ export const Checkbox = ({
     defaultValue: initialValue,
   })
 
+  const interactive = !disabled && !readOnly
+
   return (
     <div
       {...props}
 
       onClick={(event) => {
-        if (!disabled) {
+        if (interactive) {
           setValue(prev => !prev)
         }
         props.onClick?.(event)
       }}
       onKeyDown={(event) => {
-        if (disabled) return
+        if (!interactive) return
         if (event.key === ' ' || event.key === 'Enter') {
           event.preventDefault()
           setValue(prev => !prev)
@@ -77,13 +80,14 @@ export const Checkbox = ({
       data-rounded={isRounded ? '' : undefined}
       {...PropsUtil.dataAttributes.interactionStates({ disabled, invalid, readOnly, required })}
 
-      role="checkbox"
-      tabIndex={disabled ? -1 : 0}
+      role={interactive ? 'checkbox' : undefined}
+      tabIndex={interactive ? (disabled ? -1 : 0) : undefined}
+      aria-hidden={interactive ? undefined : true}
 
-      aria-checked={indeterminate ? 'mixed' : value}
+      aria-checked={interactive ? (indeterminate ? 'mixed' : value) : undefined}
       {...PropsUtil.aria.interactionStates({ disabled, invalid, readOnly, required }, props)}
 
-      data-name={props['data-name'] ?? 'checkbox'}
+      data-name="checkbox"
     >
       <Visibility isVisible={indeterminate}>
         <Minus data-name="checkbox-indicator" className="checkbox-indicator" aria-hidden={true} />
