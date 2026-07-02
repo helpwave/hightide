@@ -1,8 +1,7 @@
 import { Menu as MenuIcon, XIcon } from 'lucide-react'
-import type { HTMLAttributes, ReactNode } from 'react'
+import type { ComponentPropsWithoutRef, ElementType, HTMLAttributes, ReactNode } from 'react'
 import { useEffect } from 'react'
 import React, { useCallback, useId, useRef, useState } from 'react'
-import Link from 'next/link'
 import clsx from 'clsx'
 import type { UseAnchoredPositionOptions } from '@/src/hooks/useAnchoredPosition'
 import { useAnchoredPosition } from '@/src/hooks/useAnchoredPosition'
@@ -25,6 +24,10 @@ type SubItemNavigationItem = {
 
 export type NavigationItemType = SimpleNavigationItem | SubItemNavigationItem
 
+export type NavigationLinkComponentProps = ComponentPropsWithoutRef<'a'>
+
+const DefaultLink: ElementType<NavigationLinkComponentProps> = 'a'
+
 function isSubItem(item: NavigationItemType): item is SubItemNavigationItem {
   return 'items' in item && Array.isArray(item.items)
 }
@@ -32,12 +35,15 @@ function isSubItem(item: NavigationItemType): item is SubItemNavigationItem {
 ///
 /// NavigationItemWithSubItem
 ///
-type NavigationItemWithSubItemProps = SubItemNavigationItem & UseAnchoredPositionOptions
+type NavigationItemWithSubItemProps = SubItemNavigationItem & UseAnchoredPositionOptions & {
+  LinkComponent?: ElementType<NavigationLinkComponentProps>,
+}
 
 const NavigationItemWithSubItem = ({
   items,
   label,
   horizontalAlignment = 'center',
+  LinkComponent = DefaultLink,
   ...options
 }: NavigationItemWithSubItemProps) => {
   const [isOpen, setOpen] = useState(false)
@@ -79,8 +85,7 @@ const NavigationItemWithSubItem = ({
         }}
         onBlur={onBlur}
 
-        data-name="link"
-        className="flex-row-1"
+        className="navigation-item-button"
 
         aria-haspopup="true"
         aria-expanded={isOpen}
@@ -111,13 +116,14 @@ const NavigationItemWithSubItem = ({
       >
         {!!items && items.length > 0 && items.map(({ link, label, external }, index) => (
           <li key={index}>
-            <Link
+            <LinkComponent
               href={link}
               target={external ? '_blank' : undefined}
-              className="flex-row-0 link w-full"
+              rel={external ? 'noopener noreferrer' : undefined}
+              className="navigation-item-link-in-box"
             >
               {label}
-            </Link>
+            </LinkComponent>
           </li>
         ))}
       </ul>
@@ -130,17 +136,25 @@ const NavigationItemWithSubItem = ({
 ///
 export type NavigationItemListProps = Omit<HTMLAttributes<HTMLElement>, 'children'> & {
   items: NavigationItemType[],
+  LinkComponent?: ElementType<NavigationLinkComponentProps>,
 }
 
-export const NavigationItemList = ({ items, ...restProps }: NavigationItemListProps) => {
+export const NavigationItemList = ({ items, LinkComponent = DefaultLink, ...restProps }: NavigationItemListProps) => {
   return (
     <ul {...restProps} className={clsx('flex-row-6 items-center', restProps.className)}>
       {items.map((item, index) => (
         <li key={index}>
           {isSubItem(item) ? (
-            <NavigationItemWithSubItem {...item} />
+            <NavigationItemWithSubItem {...item} LinkComponent={LinkComponent} />
           ) : (
-            <Link href={item.link} target={item.external ? '_blank' : undefined} data-name="link">{item.label}</Link>
+            <LinkComponent
+              href={item.link}
+              target={item.external ? '_blank' : undefined}
+              rel={item.external ? 'noopener noreferrer' : undefined}
+              className="navigation-item-link"
+            >
+              {item.label}
+            </LinkComponent>
           )}
         </li>
       ))}

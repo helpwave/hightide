@@ -1,14 +1,18 @@
 import { ArrayUtil } from '@/src/utils/array'
-import Link from 'next/link'
-import type { ComponentProps, HTMLAttributes, ReactNode } from 'react'
+import clsx from 'clsx'
+import type { AnchorHTMLAttributes, ElementType, HTMLAttributes, ReactNode } from 'react'
 
-export type BreadCrumbLinkProps = ComponentProps<typeof Link>
+export type BreadCrumbLinkElementProps = AnchorHTMLAttributes<HTMLAnchorElement> & { href: string }
 
-export const BreadCrumbLink = ({ ...props } : BreadCrumbLinkProps) => {
+export type BreadCrumbLinkProps = BreadCrumbLinkElementProps & { LinkElement?: ElementType<BreadCrumbLinkElementProps> }
+
+const DefaultBreadCrumbLinkElement = 'a'
+
+export const BreadCrumbLink = ({ LinkElement = DefaultBreadCrumbLinkElement, className, ...props } : BreadCrumbLinkProps) => {
   return (
-    <Link
+    <LinkElement
       {...props}
-      data-name={props['data-name'] ?? 'breadcrumb-link'}
+      className={clsx('breadcrumb-link', className)}
     />
   )
 }
@@ -33,7 +37,7 @@ export const BreadCrumbGroup = ({ children, divider, ...props }: BreadCrumbGroup
   const items = ArrayUtil.resolveSingleOrArray(children)
 
   return (
-    <ul {...props} data-name={props['data-name'] ?? 'breadcrumb'}>
+    <ul {...props} data-name="breadcrumb">
       {items.map((item, index) => {
         const isLast = index === items.length - 1
         return (
@@ -54,12 +58,17 @@ export type Crumb = {
 
 export type BreadCrumbProps = {
   crumbs: Crumb[],
+  LinkElement?: ElementType<BreadCrumbLinkElementProps>,
 }
 
-export const BreadCrumbs = ({ crumbs }: BreadCrumbProps) => {
+export const BreadCrumbs = ({ crumbs, LinkElement }: BreadCrumbProps) => {
   return (
     <BreadCrumbGroup>
-      {crumbs.map(( { href, label }, index) => (<BreadCrumbLink key={index} href={href}>{label}</BreadCrumbLink>))}
+      {crumbs.map(( { href, label }, index) => (
+        <BreadCrumbLink key={index} href={href} LinkElement={LinkElement}>
+          {label}
+        </BreadCrumbLink>
+      ))}
     </BreadCrumbGroup>
   )
 }

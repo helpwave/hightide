@@ -1,0 +1,14 @@
+@layer components {
+  .navigation-item-link,
+  .navigation-item-link-in-box {
+    @apply decoration-3 p-2 hover:underline focus:underline font-bold text-lg rounded;
+  }
+
+  .navigation-item-link-in-box {
+    @apply flex-row-0 w-full;
+  }
+
+  .navigation-item-button {
+    @apply flex-row-1 p-2 hover:underline focus:underline font-bold text-lg rounded;
+  }
+}

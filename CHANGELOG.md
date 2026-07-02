@@ -5,6 +5,13 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/)
 and adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [0.12.16] - 2026-07-02
+
+### Changed
+
+- Removed dependencies on `radix-ui` and `next` for the build
+- Components that used `next/link` or `next/image` now expose a `LinkComponent` or `ImageComponent` attribute that can be used to change the type
+
 ## [0.12.15] - 2026-07-01
 
 ### Fixed
