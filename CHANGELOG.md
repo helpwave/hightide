@@ -5,6 +5,21 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/)
 and adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [0.12.17] - 2026-07-02
+
+### Added
+
+- `LabelledCheckbox` component with configurable label/checkbox positioning, container click handling, and accessible label association via `id` / `aria-labelledby`
+- `AvatarWithLabel` component for displaying an avatar beside a name or label
+- `ImageComponent` prop on `Avatar` and `AvatarGroup` to replace the default `img` element (same props as a native `img`)
+- `browserslist` configuration in `package.json` targeting common desktop and mobile browsers for autoprefixer
+- CSS vendor prefix tests verifying generated `dist/style/globals.css` contains `-webkit-`, `-moz-`, and related prefixes
+
+### Changed
+
+- CSS build (`build-css`) now runs through the PostCSS pipeline (`@tailwindcss/postcss` + autoprefixer) so browser targets apply to published CSS
+- `Checkbox` adds an `interactive` prop for non-interactive use inside `LabelledCheckbox`
+
 ## [0.12.16] - 2026-07-02
 
 ### Changed
