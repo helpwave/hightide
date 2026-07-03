@@ -31,6 +31,24 @@ export function findScrollableAncestor(element: HTMLElement | null): HTMLElement
   return null
 }
 
+/** Marks the {@link AppPage} content area — the scroll container for `'page'` mode. */
+export const APP_PAGE_CONTENT_SELECTOR = '[data-name="app-page-content"]'
+
+/**
+ * Resolves the scroll container for the `'page'` virtualization mode. Prefers the
+ * {@link AppPage} content area, which is a real scroll container regardless of how
+ * much content is currently loaded — resolving by overflow state alone would
+ * deadlock a virtualized list whose data arrives after mount (empty content →
+ * no overflow → no scroll element → no rows → still no overflow). Falls back to
+ * the nearest scrollable ancestor for non-AppPage contexts.
+ */
+export function findPageScrollContainer(element: HTMLElement | null): HTMLElement | null {
+  if (!element || typeof window === 'undefined') return null
+  const appPageContent = element.closest(APP_PAGE_CONTENT_SELECTOR)
+  if (appPageContent instanceof HTMLElement) return appPageContent
+  return findScrollableAncestor(element)
+}
+
 export type ScrollMetrics = {
   scrollTop: number,
   scrollHeight: number,

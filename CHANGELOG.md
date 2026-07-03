@@ -5,6 +5,12 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/)
 and adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [0.13.1] - 2026-07-03
+
+### Fixed
+
+- `page` virtualization now binds to the `AppPage` content area directly, so a list whose data loads after mount no longer renders zero rows (previously the empty content never overflowed, so no scroll container was found and the virtualizer deadlocked)
+
 ## [0.13.0] - 2026-07-03
 
 ### Changed
