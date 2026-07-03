@@ -56,48 +56,6 @@ export function applyStepperValueWithLoopEvent(
   }
 }
 
-const defaultStepperBaseChangeRate = 5
-const defaultStepperDoublingIntervalSeconds = 2
-
-function resolveDefaultStepperChangeRateMagnitude(
-  secondsSinceStart: number,
-  minimum?: number,
-  maximum?: number
-): number {
-  const doublings = Math.floor(secondsSinceStart / defaultStepperDoublingIntervalSeconds)
-  const changePerSecond = defaultStepperBaseChangeRate * (2 ** doublings)
-
-  if (!Number.isFinite(changePerSecond)) {
-    return 0
-  }
-
-  if (minimum === undefined || maximum === undefined) {
-    return changePerSecond
-  }
-
-  const range = maximum - minimum
-  if (!Number.isFinite(range) || range <= 0) {
-    return 0
-  }
-
-  return Math.min(changePerSecond, range * 0.2)
-}
-
-export const defaultStepperChangeRate: StepperChangeRate = ({
-  minimum,
-  maximum,
-  secondsSinceStart,
-  delta,
-}) => {
-  const magnitude = resolveDefaultStepperChangeRateMagnitude(secondsSinceStart, minimum, maximum)
-
-  if (magnitude === 0) {
-    return 0
-  }
-
-  return magnitude * (delta >= 0 ? 1 : -1)
-}
-
 export function integrateDefaultStepperChangeRate(
   secondsSinceStart: number,
   minimum?: number,

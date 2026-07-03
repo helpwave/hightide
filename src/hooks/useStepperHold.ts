@@ -1,19 +1,76 @@
-import { useCallback, useEffect, useRef } from 'react'
-import type { StepperChangeRate, StepperLoopEvent } from '@/src/components/user-interaction/input/stepperNumberInputUtils'
+import type { RefObject } from 'react'
+import { useCallback, useEffect, useMemo, useRef } from 'react'
+import type { StepperLoopEvent } from '@/src/components/user-interaction/input/stepperNumberInputUtils'
 import {
-  defaultStepperChangeRate,
   detectStepperLoopEvent,
   resolveStepperLoopingDisplayValue
 } from '@/src/components/user-interaction/input/stepperNumberInputUtils'
+import type { DirectionNumber } from '../utils/math'
+import { CurveBuilderUtil, ExponentialRateCurveBuilder } from '../utils/curves'
+
+export type ChangeRateCurveProps = {
+  multiplier?: number,
+  minimum?: number,
+  maximum?: number,
+}
+
+type UseResolveChangeRateCurveResult = RefObject<{
+  /**
+   * Input: Current Step
+   * Result: Steps per second
+   */
+  curve: (steps: number) => number,
+}>
+
+const useResolveChangeRateCurve = (changeRateCurveProps?: ChangeRateCurveProps, minimum?: number, maximum?: number) => {
+  const props: ChangeRateCurveProps = useMemo(() => {
+    let defaultMax = Infinity
+    if(minimum !== undefined && maximum !== undefined ) {
+      if(minimum > maximum) {
+        throw new Error(`Invalid minimum and maximum: ${minimum} > ${maximum}`)
+      }
+      if(isNaN(minimum) || !isFinite(minimum)) {
+        throw new Error(`Invalid minimum: ${minimum}`)
+      }
+      if(isNaN(maximum) || !isFinite(maximum)) {
+        throw new Error(`Invalid maximum: ${maximum}`)
+      }
+      defaultMax = maximum
+    }
+    return {
+      basis: 1.5,
+      multiplier: changeRateCurveProps?.multiplier ?? 5,
+    }
+  }, [changeRateCurveProps?.multiplier, maximum, minimum])
+
+  const curve = useMemo(() => CurveBuilderUtil.ExponentialRateCurveBuilder(props), [props])
+
+  const result: UseResolveChangeRateCurveResult = useRef({ curve, props: props })
+
+  useEffect(() => {
+    result.current.curve = curve
+    result.current.props = props
+  }, [curve, props])
+
+  return result
+}
+
+type HoldState = {
+  direction: DirectionNumber,
+  startTime: number,
+  lastTimestamp: number,
+  lastValue: number,
+  lastStep: number,
+}
 
 type UseStepperHoldOptions = {
   disabled?: boolean,
   minimum?: number,
   maximum?: number,
-  looping?: boolean,
+  isLooping?: boolean,
   displayedValue: number,
-  step?: number,
-  changeRate?: StepperChangeRate,
+  stepSize?: number,
+  changeRateCurveProps?: StepChangeRateCurveBuilderProps,
   onValueChange: (value: number) => void,
   onLooped?: (event: StepperLoopEvent) => void,
 }
@@ -22,30 +79,23 @@ export function useStepperHold({
   disabled = false,
   minimum,
   maximum,
-  looping = false,
+  isLooping: looping = false,
   displayedValue,
-  step = 1,
-  changeRate = defaultStepperChangeRate,
+  stepSize: step = 1,
+  changeRateCurveProps,
   onValueChange,
   onLooped,
 }: UseStepperHoldOptions) {
-  const holdStateRef = useRef<{
-    delta: number,
-    startTime: number,
-    startValue: number,
-    animationValue: number,
-    lastTimestamp: number,
-  } | null>(null)
+  const holdStateRef = useRef<HoldState | null>(null)
   const animationFrameRef = useRef<number>(0)
   const displayedValueRef = useRef(displayedValue)
   const onValueChangeRef = useRef(onValueChange)
-  const changeRateRef = useRef(changeRate)
   const loopingRef = useRef(looping)
   const onLoopedRef = useRef(onLooped)
 
+  const changeRateCurveRef = useResolveChangeRateCurve(changeRateCurveProps, minimum, maximum)
   displayedValueRef.current = displayedValue
   onValueChangeRef.current = onValueChange
-  changeRateRef.current = changeRate
   loopingRef.current = looping
   onLoopedRef.current = onLooped
 
@@ -64,20 +114,13 @@ export function useStepperHold({
     }
 
     const secondsSinceStart = (timestamp - holdState.startTime) / 1000
+    const lastStepTime = holdState.lastStep * changeRateCurveRef.current.props.stepLength
     const deltaTime = holdState.lastTimestamp
       ? Math.max(0, (timestamp - holdState.lastTimestamp) / 1000)
       : 0
     holdState.lastTimestamp = timestamp
 
-    const changePerSecond = changeRateRef.current({
-      minimum,
-      maximum,
-      displayedValue: displayedValueRef.current,
-      animationValue: holdState.animationValue,
-      secondsSinceStart,
-      startValue: holdState.startValue,
-      delta: holdState.delta,
-    })
+    const changePerSecond = changeRateCurveRef.current.curve(secondsSinceStart) * holdState.direction
 
     if (!Number.isFinite(changePerSecond)) {
       stopHold()
@@ -85,22 +128,22 @@ export function useStepperHold({
     }
 
     if (!loopingRef.current) {
-      if (holdState.delta > 0 && maximum !== undefined && holdState.animationValue >= maximum) {
-        holdState.animationValue = maximum
+      if (holdState.direction > 0 && maximum !== undefined && holdState.lastValue >= maximum) {
+        holdState.lastValue = maximum
         onValueChangeRef.current(maximum)
         stopHold()
         return
       }
 
-      if (holdState.delta < 0 && minimum !== undefined && holdState.animationValue <= minimum) {
-        holdState.animationValue = minimum
+      if (holdState.direction < 0 && minimum !== undefined && holdState.lastValue <= minimum) {
+        holdState.lastValue = minimum
         onValueChangeRef.current(minimum)
         stopHold()
         return
       }
     }
 
-    holdState.animationValue += changePerSecond * deltaTime
+    holdState.lastValue += changePerSecond * deltaTime
 
     if (!Number.isFinite(holdState.animationValue)) {
       stopHold()
@@ -151,7 +194,7 @@ export function useStepperHold({
     animationFrameRef.current = requestAnimationFrame(tick)
   }, [maximum, minimum, stopHold])
 
-  const startHold = useCallback((delta: number) => {
+  const startHold = useCallback((direction: DirectionNumber) => {
     if (disabled) {
       return
     }
@@ -159,7 +202,7 @@ export function useStepperHold({
     stopHold()
 
     const startValue = displayedValueRef.current
-    const nextAnimationValue = startValue + step * delta
+    const nextAnimationValue = startValue + step * direction
     const loopEvent = loopingRef.current && minimum !== undefined && maximum !== undefined
       ? detectStepperLoopEvent(startValue, nextAnimationValue, minimum, maximum)
       : undefined
@@ -176,7 +219,7 @@ export function useStepperHold({
     }
 
     holdStateRef.current = {
-      delta,
+      delta: direction,
       startTime: performance.now(),
       startValue,
       animationValue: nextAnimationValue,
@@ -193,3 +236,4 @@ export function useStepperHold({
     stopHold,
   }
 }
+

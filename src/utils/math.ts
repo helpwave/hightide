@@ -1,5 +1,6 @@
 export type Range = [number, number]
 export type UnBoundedRange = [undefined | number, undefined | number]
+export type DirectionNumber = 1 | -1
 
 function clamp(value: number, min: number, max: number): number
 function clamp(value: number, range?: [number, number]): number

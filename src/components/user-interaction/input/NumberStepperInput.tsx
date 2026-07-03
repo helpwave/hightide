@@ -13,8 +13,7 @@ import { NumberInput } from './NumberInput'
 import type { StepperChangeRate, StepperLoopEvent } from './stepperNumberInputUtils'
 import {
   applyStepperValueWithLoopEvent,
-  commitNumberInputValue,
-  defaultStepperChangeRate
+  commitNumberInputValue
 } from './stepperNumberInputUtils'
 
 export type { StepperLoopEvent }
@@ -28,7 +27,7 @@ export type NumberStepperInputProps = Omit<InputHTMLAttributes<HTMLInputElement>
     initialValue?: number,
     minimum?: number,
     maximum?: number,
-    step?: number,
+    stepSize?: number,
     layout?: NumberStepperInputLayout,
     looping?: boolean,
     approximateMaxCharacters?: number,
@@ -52,7 +51,7 @@ export const NumberStepperInput = forwardRef<HTMLInputElement, NumberStepperInpu
   onEditComplete,
   minimum,
   maximum,
-  step = 1,
+  stepSize: step = 1,
   layout = 'row',
   looping = false,
   approximateMaxCharacters = 6,
@@ -103,9 +102,9 @@ export const NumberStepperInput = forwardRef<HTMLInputElement, NumberStepperInpu
     disabled: disabled || readOnly,
     minimum,
     maximum,
-    looping,
+    isLooping: looping,
     displayedValue: value,
-    step,
+    stepSize: step,
     changeRate,
     onValueChange: setValue,
     onLooped,
@@ -126,7 +125,7 @@ export const NumberStepperInput = forwardRef<HTMLInputElement, NumberStepperInpu
       tooltip={translation('increaseValue')}
       tooltipProps={{ alignment: layout === 'row' ? 'bottom' : 'top', options: { avoidOverlap: false } }}
       className={clsx('number-stepper-input-button', plusButtonClassName)}
-      onPointerDown={() => {startHold(1)}}
+      onPointerDown={() => startHold(1)}
       onPointerUp={finishHold}
       onPointerLeave={finishHold}
       onPointerCancel={finishHold}
@@ -145,9 +144,7 @@ export const NumberStepperInput = forwardRef<HTMLInputElement, NumberStepperInpu
       tooltip={translation('decreaseValue')}
       tooltipProps={{ alignment: 'bottom', options: { avoidOverlap: false } }}
       className={clsx('number-stepper-input-button', minusButtonClassName)}
-      onPointerDown={() => {
-        startHold(-1)
-      }}
+      onPointerDown={() => startHold(-1)}
       onPointerUp={finishHold}
       onPointerLeave={finishHold}
       onPointerCancel={finishHold}
