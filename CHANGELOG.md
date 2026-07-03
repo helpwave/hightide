@@ -5,6 +5,17 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/)
 and adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [0.13.2] - 2026-07-03
+
+### Added
+
+- `columnSizingMode: 'natural'` on the table: disables the fill-the-container width negotiation so the browser's auto layout sizes columns to their content (respecting `minSize`); explicitly resized columns keep their width and drags start from the rendered width
+- `stickyScroll: 'page'` on the table header (auto-derived from the `'page'` virtualization mode): keeps the header visible while the surrounding page scrolls, offset below the AppPage header
+
+### Changed
+
+- Only the virtualizer matching the active scroll mode attaches scroll listeners and resize observers; `VirtualizedCardGrid` disables them entirely below its virtualization threshold
+
 ## [0.13.1] - 2026-07-03
 
 ### Fixed

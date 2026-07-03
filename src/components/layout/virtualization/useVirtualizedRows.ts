@@ -14,6 +14,7 @@ export type UseVirtualizedRowsOptions = {
   count: number,
   estimateRowHeight: number,
   overscan: number,
+  enabled?: boolean,
   getItemKey?: (index: number) => Key,
   /**
    * The element whose top marks where the virtualized content starts (e.g. the
@@ -48,6 +49,7 @@ export function useVirtualizedRows({
   count,
   estimateRowHeight,
   overscan,
+  enabled = true,
   getItemKey,
   contentRef,
   containerRef,
@@ -102,9 +104,9 @@ export function useVirtualizedRows({
     overscan,
     ...(getItemKey ? { getItemKey } : {}),
   }
-  const windowVirtualizer = useWindowVirtualizer({ ...common, scrollMargin })
-  const containerVirtualizer = useVirtualizer({ ...common, getScrollElement: () => containerRef?.current ?? null })
-  const pageVirtualizer = useVirtualizer({ ...common, getScrollElement: () => pageScrollElement, scrollMargin })
+  const windowVirtualizer = useWindowVirtualizer({ ...common, scrollMargin, enabled: enabled && scroll === 'window' })
+  const containerVirtualizer = useVirtualizer({ ...common, getScrollElement: () => containerRef?.current ?? null, enabled: enabled && scroll === 'container' })
+  const pageVirtualizer = useVirtualizer({ ...common, getScrollElement: () => pageScrollElement, scrollMargin, enabled: enabled && scroll === 'page' })
 
   const virtualizer = (
     scroll === 'window'
