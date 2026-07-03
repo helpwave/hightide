@@ -26,6 +26,10 @@
   }
 
   [data-name="table-header"] {
+    &[data-sticky-page] {
+      @apply relative z-10;
+    }
+
     @media print {
       transform: none !important;
     }
