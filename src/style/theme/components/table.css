@@ -19,6 +19,20 @@
   [data-name="table"] {
     @apply table-fixed border-separate border-spacing-0;
     @apply bg-table-background text-table-text;
+
+    &[data-column-sizing="natural"] {
+      @apply table-auto w-full;
+    }
+  }
+
+  [data-name="table-header"] {
+    &[data-sticky-page] {
+      @apply relative z-10;
+    }
+
+    @media print {
+      transform: none !important;
+    }
   }
 
   [data-name="table-filler-cell"] {
