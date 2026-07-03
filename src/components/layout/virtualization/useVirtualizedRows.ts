@@ -3,7 +3,7 @@ import { useEffect, useState } from 'react'
 import type { Virtualizer } from '@tanstack/react-virtual'
 import { useVirtualizer, useWindowVirtualizer } from '@tanstack/react-virtual'
 import {
-  findScrollableAncestor,
+  findPageScrollContainer,
   getScrollMetrics,
   isNearBottom,
   type VirtualizationScroll
@@ -72,7 +72,7 @@ export function useVirtualizedRows({
 
     const measure = () => {
       if (scroll === 'page') {
-        const container = findScrollableAncestor(content)
+        const container = findPageScrollContainer(content)
         setPageScrollElement(prev => (prev === container ? prev : container))
         const top = container
           ? content.getBoundingClientRect().top - container.getBoundingClientRect().top + container.scrollTop
@@ -92,7 +92,9 @@ export function useVirtualizedRows({
       resizeObserver.disconnect()
       window.removeEventListener('resize', measure)
     }
-  }, [scroll, usesOuterScroll, contentRef])
+    // `count` is included so the scroll container is re-resolved and the offset
+    // re-measured once rows arrive (data often loads after the first mount).
+  }, [scroll, usesOuterScroll, contentRef, count])
 
   const common = {
     count,
