@@ -81,6 +81,7 @@ export function VirtualizedCardGrid<T>({
     count: rows.length,
     estimateRowHeight: estimateRowHeightPx,
     overscan: overscanRows,
+    enabled: items.length > virtualizeThreshold,
     getItemKey: (index) => {
       const first = rows[index]?.[0]
       return first ? getItemKey(first) : index

@@ -87,6 +87,7 @@ export const pageScrollTable: Story = {
           paginationOptions={{ showPagination: false }}
           displayProps={{
             virtualized: { scroll: 'page', estimateRowHeight: 48, onReachBottom: fetchNextPage },
+            tableHeaderProps: { isSticky: true },
           }}
           footer={isFetching ? (
             <span className="text-description typography-label-md">Fetching more…</span>
