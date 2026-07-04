@@ -12,14 +12,41 @@ and adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 - `LabelledCheckbox` component with configurable label/checkbox positioning, container click handling, and accessible label association via `id` / `aria-labelledby`
 - `AvatarWithLabel` component for displaying an avatar beside a name or label
 - `ImageComponent` prop on `Avatar` and `AvatarGroup` to replace the default `img` element (same props as a native `img`)
+- `NumberInput` component with configurable width, range validation, and optional display formatting
+- `NumberStepperInput` component with increment/decrement buttons, hold-to-repeat via `useStepperHold`, optional looping, and `onLooped` callback
+- `TimeInput` component with vertical number steppers for hours, minutes, seconds, and milliseconds; AM/PM toggle buttons; zero-padded hour and minute display; date carry on loop events
+- `ChangingNumber` component and `useChangingNumber` hook for animating between numeric values using a configurable easing `curve` and `animationTime` (defaults to ease-in-ease-out)
+- `curve.ts` utilities: `Curve` type, `CurveBuilderUtil` with exponential rate, cubic-bezier, and `easeInEaseOut` curves
+- `MathUtil.resolveLoopingRangeValue`, `MathUtil.roundModulo`, and `MathUtil.clamp01`
+- `useStepperHold` hook for exponential step-based value changes during button hold
 - `browserslist` configuration in `package.json` targeting common desktop and mobile browsers for autoprefixer
 - CSS vendor prefix tests verifying generated `dist/style/globals.css` contains `-webkit-`, `-moz-`, and related prefixes
+- Unit tests for `MathUtil`, `array` utilities, and `LoopingArrayCalculator`
+- `TooltipConfig.screenPadding` (default `1`) applied by `TooltipDisplay` when positioning
+- `increaseValue` and `decreaseValue` translation keys
 
 ### Changed
 
 - CSS build (`build-css`) now runs through the PostCSS pipeline (`@tailwindcss/postcss` + autoprefixer) so browser targets apply to published CSS
 - `Checkbox` adds an `interactive` prop for non-interactive use inside `LabelledCheckbox`
-- Styling value for cards
+- `Card`, `ActionCard`, and `NavigationCard` styling moved from `data-name` selectors to class-based CSS (`.card`, `.card-header`, `.card-title`, etc.) with updated padding and size variants
+- `NavigationCard` now renders as the link root element (`HTMLAnchorElement` ref) with surface, padding, focus outline, and hover shadow on the anchor; removed the outer wrapper `div`
+- `NavigationCardLinkProps` now extends full `AnchorHTMLAttributes`
+- `Card` and `ActionCard` no longer accept a `data-name` override prop
+- `DateTimePicker` uses `TimeInput` instead of `TimePicker`, stacks date above time in a column layout, and renames `timePickerProps` to `timeInputProps`
+- `Tooltip` applies `pointer-events-none` and `touch-none` via CSS instead of inline styles
+- Easing helpers from `easeFunctions.ts` consolidated into `curve.ts`
+- `MathUtil.clamp` call sites updated to the `clamp(value, min, max)` signature across `Pagination`, `ScrollPicker`, `columnSizeUtil`, and related code
+
+### Removed
+
+- `easeFunctions.ts` (replaced by `curve.ts`)
+- `TooltipMany` Storybook story
+
+### Fixed
+
+- Published CSS missing browser vendor prefixes
+- `ChangingNumber` animation after removal of the legacy stepper change-rate utilities
 
 ## [0.13.4] - 2026-07-03
 
