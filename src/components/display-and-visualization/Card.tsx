@@ -27,16 +27,16 @@ function CardHeaderContent({
   return (
     <>
       {leading != null && (
-        <span data-name="card-leading">{leading}</span>
+        <span className="card-leading">{leading}</span>
       )}
-      <div data-name="card-content">
-        <span id={titleId} data-name="card-title">{title}</span>
+      <div className="card-content">
+        <span id={titleId} className="card-title">{title}</span>
         <Visibility isVisible={!!description}>
-          <span id={descriptionId} data-name="card-description">{description}</span>
+          <span id={descriptionId} className="card-description">{description}</span>
         </Visibility>
       </div>
       {trailing != null && (
-        <span data-name="card-trailing">{trailing}</span>
+        <span className="card-trailing">{trailing}</span>
       )}
     </>
   )
@@ -47,12 +47,11 @@ function CardHeaderContent({
 //
 
 export type CardProps = Omit<HTMLAttributes<HTMLDivElement>, 'title'> & {
-  'title': ReactNode,
-  'description'?: ReactNode,
-  'size'?: CardSize,
-  'leading'?: ReactNode,
-  'trailing'?: ReactNode,
-  'data-name'?: string,
+  title: ReactNode,
+  description?: ReactNode,
+  size?: CardSize,
+  leading?: ReactNode,
+  trailing?: ReactNode,
 }
 
 export const Card = ({
@@ -68,11 +67,10 @@ export const Card = ({
   return (
     <div
       {...props}
-      className={clsx('group/card', className)}
-      data-name={props['data-name'] ?? 'card'}
+      className={clsx('group/card card', className)}
       data-size={size}
     >
-      <div data-name="card-header">
+      <div className="card-header">
         <CardHeaderContent
           title={title}
           description={description}
@@ -90,13 +88,12 @@ export const Card = ({
 //
 
 export type ActionCardProps = Omit<HTMLAttributes<HTMLDivElement>, 'title'> & {
-  'title': ReactNode,
-  'description'?: ReactNode,
-  'size'?: CardSize,
-  'leading'?: ReactNode,
-  'trailing'?: ReactNode,
-  'disabled'?: boolean,
-  'data-name'?: string,
+  title: ReactNode,
+  description?: ReactNode,
+  size?: CardSize,
+  leading?: ReactNode,
+  trailing?: ReactNode,
+  disabled?: boolean,
 }
 
 export const ActionCard = forwardRef<HTMLDivElement, ActionCardProps>(function ActionCard({
@@ -116,7 +113,7 @@ export const ActionCard = forwardRef<HTMLDivElement, ActionCardProps>(function A
     <div
       {...props}
       ref={ref}
-      className={clsx('group/card', className)}
+      className={clsx('card group/card action-card', className)}
       onClick={(event) => {
         if (disabled) {
           return
@@ -133,13 +130,12 @@ export const ActionCard = forwardRef<HTMLDivElement, ActionCardProps>(function A
           event.currentTarget.click()
         }
       }}
-      data-name={props['data-name'] ?? 'action-card'}
       data-size={size}
       data-disabled={PropsUtil.dataAttributes.bool(disabled)}
       role={onClick ? 'button' : undefined}
       tabIndex={onClick && !disabled ? 0 : undefined}
     >
-      <div data-name="card-header">
+      <div className="card-header">
         <CardHeaderContent
           title={title}
           description={description}
@@ -153,10 +149,7 @@ export const ActionCard = forwardRef<HTMLDivElement, ActionCardProps>(function A
 })
 
 
-export type NavigationCardLinkProps = Pick<
-  AnchorHTMLAttributes<HTMLAnchorElement>,
-  'className' | 'href' | 'target' | 'rel' | 'aria-labelledby' | 'aria-describedby' | 'children'
-> & {
+export type NavigationCardLinkProps = AnchorHTMLAttributes<HTMLAnchorElement> & {
   href: string,
 }
 
@@ -166,7 +159,7 @@ const DefaultNavigationCardLink: ElementType<NavigationCardLinkProps> = 'a'
 // NavigationCard
 //
 
-export type NavigationCardProps = Omit<HTMLAttributes<HTMLDivElement>, 'title'> & {
+export type NavigationCardProps = Omit<HTMLAttributes<HTMLAnchorElement>, 'title'> & {
   title: ReactNode,
   description?: ReactNode,
   size?: CardSize,
@@ -176,7 +169,7 @@ export type NavigationCardProps = Omit<HTMLAttributes<HTMLDivElement>, 'title'> 
   LinkComponent?: ElementType<NavigationCardLinkProps>,
 }
 
-export const NavigationCard = forwardRef<HTMLDivElement, NavigationCardProps>(function NavigationCard({
+export const NavigationCard = forwardRef<HTMLAnchorElement, NavigationCardProps>(function NavigationCard({
   title,
   description,
   size = 'md',
@@ -193,39 +186,38 @@ export const NavigationCard = forwardRef<HTMLDivElement, NavigationCardProps>(fu
   const titleId = `navigation-card-title-${generatedId}`
 
   return (
-    <div
+    <LinkComponent
       {...props}
       ref={ref}
-      className={clsx('group/card navigation-card', className)}
+      href={href}
+      target={isExternal ? '_blank' : undefined}
+      rel={isExternal ? 'noopener noreferrer' : undefined}
+
       data-size={size}
       data-external={PropsUtil.dataAttributes.bool(isExternal)}
+
+      aria-labelledby={titleId}
+      aria-describedby={description ? descriptionId : undefined}
+
+      className={clsx('card group/card navigation-card', className)}
     >
-      <LinkComponent
-        href={href}
-        target={isExternal ? '_blank' : undefined}
-        rel={isExternal ? 'noopener noreferrer' : undefined}
-        className="navigation-card-link"
-        aria-labelledby={titleId}
-        aria-describedby={description ? descriptionId : undefined}
-      >
-        <div data-name="card-header">
-          <CardHeaderContent
-            title={title}
-            titleId={titleId}
-            description={description}
-            descriptionId={description ? descriptionId : undefined}
-            leading={leading}
-          />
-          <span className="navigation-card-action">
-            {isExternal ? (
-              <ExternalLink className="navigation-card-action-icon" aria-hidden="true" />
-            ) : (
-              <ChevronRight className="navigation-card-action-icon" aria-hidden="true" />
-            )}
-          </span>
-        </div>
-        {children}
-      </LinkComponent>
-    </div>
+      <div className="card-header">
+        <CardHeaderContent
+          title={title}
+          titleId={titleId}
+          description={description}
+          descriptionId={description ? descriptionId : undefined}
+          leading={leading}
+        />
+        <span className="navigation-card-action">
+          {isExternal ? (
+            <ExternalLink className="navigation-card-action-icon" aria-hidden="true" />
+          ) : (
+            <ChevronRight className="navigation-card-action-icon" aria-hidden="true" />
+          )}
+        </span>
+      </div>
+      {children}
+    </LinkComponent>
   )
 })
