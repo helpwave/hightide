@@ -157,11 +157,8 @@
   }
 
   .drawer-content {
-    @apply flex flex-col-0 h-full w-full scrollable-x;
-
-    &[data-no-scrolling] {
-      @apply scrollable-none;
-    }
+    @apply flex flex-col-0 h-full w-full overflow-y-auto;
+    scrollbar-gutter: stable;
   }
 
   .drawer-header {

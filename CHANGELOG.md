@@ -42,6 +42,7 @@ and adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
 - `easeFunctions.ts` (replaced by `curve.ts`)
 - `TooltipMany` Storybook story
+- `scrollable-x`, `scrollable-y`, `scrollable-none` in the `scrollable.css`
 
 ### Fixed
 
