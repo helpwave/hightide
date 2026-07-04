@@ -1,30 +1,33 @@
 import type { ReactNode } from 'react'
-import type { StepperChangeRate } from '@/src/components/user-interaction/input/stepperNumberInputUtils'
-import { defaultStepperChangeRate } from '@/src/components/user-interaction/input/stepperNumberInputUtils'
 import { useChangingNumber } from '@/src/hooks/useChangingNumber'
+import type { Curve } from '@/src/utils/curve'
+import { CurveBuilderUtil } from '@/src/utils/curve'
 
 export type ChangingNumberProps = {
   start: number,
   end: number,
-  changeRate?: StepperChangeRate,
+  animationTime?: number,
+  curve?: Curve,
   resetRateAfterUpdate?: boolean,
   formatValue?: (value: number) => ReactNode,
 }
 
 /**
- * Displays a number animating from start to end using a stepper change rate
+ * Displays a number animating from start to end along a curve over animationTime
  */
 export function ChangingNumber({
   start,
   end,
-  changeRate = defaultStepperChangeRate,
+  animationTime = 1000,
+  curve = CurveBuilderUtil.easeInEaseOut,
   resetRateAfterUpdate = false,
   formatValue = Math.round,
 }: ChangingNumberProps): ReactNode {
   const value = useChangingNumber({
     start,
     end,
-    changeRate,
+    animationTime,
+    curve,
     resetRateAfterUpdate,
   })
 

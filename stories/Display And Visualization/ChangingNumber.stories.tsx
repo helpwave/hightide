@@ -14,9 +14,10 @@ export const changingNumber: Story = {
   args: {
     start: 0,
     end: 5000,
+    animationTime: 1000,
     resetRateAfterUpdate: false,
   },
-  render: ({ start, end: initialEnd, resetRateAfterUpdate }) => {
+  render: ({ start, end: initialEnd, animationTime, resetRateAfterUpdate }) => {
     const [end, setEnd] = useState(initialEnd)
 
     return (
@@ -25,6 +26,7 @@ export const changingNumber: Story = {
           <ChangingNumber
             start={start}
             end={end}
+            animationTime={animationTime}
             resetRateAfterUpdate={resetRateAfterUpdate}
           />
         </span>
