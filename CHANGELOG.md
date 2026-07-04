@@ -14,6 +14,12 @@ and adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 - Infinite scroll (`onReachBottom`) is derived from the virtualizer's rendered range instead of an extra scroll listener, removing per-scroll-event forced layout reads (`scrollHeight`/`clientHeight`)
 - Inactive virtualizer instances get a zero item count so they no longer hold measurement caches for the full row set
 - Naturally sized (`columnSizingMode: 'natural'`) virtualized tables lock their measured column widths once rows are rendered (`data-natural-locked`, fixed table layout), so virtual row swaps no longer re-run the full-table auto layout or make the header shift; widths re-measure on viewport resize and user-resized columns keep their width
+- Column resize drags are clamped to the column's `minSize` (users can widen resizable columns freely but can no longer drag them below their minimum width), track the pointer without the previous one-event lag, and batch their table-state updates per animation frame instead of per pointermove
+
+### Fixed
+
+- Column resize drags no longer freeze mid-gesture: the resize handle now captures the pointer and prevents the browser's default press behaviour, so a native text-selection drag (started from previously selected header text) can no longer cancel the pointer stream after the first move
+- Row measurement (`ResizeObserver`) is batched into animation frames and scroll-idle detection uses the native `scrollend` event where available
 
 ### Removed
 

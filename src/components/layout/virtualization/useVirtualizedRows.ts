@@ -96,6 +96,8 @@ export function useVirtualizedRows({
   const common = {
     estimateSize: () => estimateRowHeight,
     overscan,
+    useScrollendEvent: true,
+    useAnimationFrameWithResizeObserver: true,
     ...(getItemKey ? { getItemKey } : {}),
   }
   const windowVirtualizer = useWindowVirtualizer({

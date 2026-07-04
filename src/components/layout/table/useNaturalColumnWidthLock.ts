@@ -14,7 +14,7 @@ export function useNaturalColumnWidthLock<T>({
   enabled,
 }: UseNaturalColumnWidthLockOptions<T>): boolean {
   const [isLocked, setIsLocked] = useState(false)
-  const autoLockedIdsRef = useRef<Set<string>>(new Set())
+  const autoLockedWidthsRef = useRef<Map<string, number>>(new Map())
 
   useLayoutEffect(() => {
     if (!enabled) {
@@ -43,7 +43,7 @@ export function useNaturalColumnWidthLock<T>({
       const width = headerCells[index]?.getBoundingClientRect().width
       if (width !== undefined && width > 0 && sizing[column.id] === undefined) {
         measured[column.id] = Math.round(width)
-        autoLockedIdsRef.current.add(column.id)
+        autoLockedWidthsRef.current.set(column.id, measured[column.id])
       }
     })
     if (Object.keys(measured).length === 0) return
@@ -57,13 +57,15 @@ export function useNaturalColumnWidthLock<T>({
       if (frame !== null) return
       frame = window.requestAnimationFrame(() => {
         frame = null
-        const autoLocked = autoLockedIdsRef.current
+        const autoLocked = autoLockedWidthsRef.current
         if (autoLocked.size === 0) return
-        autoLockedIdsRef.current = new Set()
+        autoLockedWidthsRef.current = new Map()
         setIsLocked(false)
         table.setColumnSizing(prev => {
           const next = { ...prev }
-          for (const id of autoLocked) delete next[id]
+          for (const [id, width] of autoLocked) {
+            if (next[id] === width) delete next[id]
+          }
           return next
         })
       })

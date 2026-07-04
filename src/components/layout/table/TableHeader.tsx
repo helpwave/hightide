@@ -4,7 +4,7 @@ import clsx from 'clsx'
 import { Visibility } from '../Visibility'
 import { TableSortButton } from './TableSortButton'
 import { TableFilterButton } from './TableFilterButton'
-import { useCallback, useEffect } from 'react'
+import { useCallback, useEffect, useRef } from 'react'
 import { TableStateContext, useTableStateWithoutSizingContext } from './TableContext'
 import { DataTypeUtils, type DataType } from '../../user-interaction/data/data-types'
 
@@ -15,36 +15,44 @@ export type TableHeaderProps = {
 export const TableHeader = ({ isSticky = false }: TableHeaderProps) => {
   const { table, columnSizingMode } = useTableStateWithoutSizingContext<unknown>()
   const isNaturalSizing = columnSizingMode === 'natural'
+  const resizeFrameRef = useRef<number | null>(null)
+  const resizePointerXRef = useRef(0)
+
+  const minColumnWidth = useCallback((columnId: string): number => {
+    const column = table.getColumn(columnId)
+    return column?.columnDef.minSize ?? table.options.defaultColumn?.minSize ?? 20
+  }, [table])
+
+  const applyResize = useCallback(() => {
+    const info = table.getState().columnSizingInfo
+    const columnId = info.isResizingColumn
+    if (!columnId) return
+    const deltaOffset = resizePointerXRef.current - (info.startOffset ?? 0)
+    const newWidth = Math.max(minColumnWidth(columnId), (info.startSize ?? 0) + deltaOffset)
+    table.setColumnSizing(prev => (prev[columnId] === newWidth ? prev : { ...prev, [columnId]: newWidth }))
+    table.setColumnSizingInfo(prev => ({ ...prev, deltaOffset }))
+  }, [table, minColumnWidth])
 
   const handleResizeMove = useCallback((e: MouseEvent | TouchEvent) => {
     if (!table.getState().columnSizingInfo.isResizingColumn) return
-    const currentX = 'touches' in e ? e.touches[0].clientX : e.clientX
-    const deltaOffset = currentX - (table.getState().columnSizingInfo.startOffset ?? 0)
-
-    const newWidth = (table.getState().columnSizingInfo.startSize ?? 0) + (table.getState().columnSizingInfo.deltaOffset ?? 0)
-
-    table.setColumnSizing(prev => {
-      return {
-        ...prev,
-        [table.getState().columnSizingInfo.isResizingColumn as string]: newWidth,
-      }
+    resizePointerXRef.current = 'touches' in e ? e.touches[0].clientX : e.clientX
+    if (resizeFrameRef.current !== null) return
+    resizeFrameRef.current = window.requestAnimationFrame(() => {
+      resizeFrameRef.current = null
+      applyResize()
     })
-    table.setColumnSizingInfo((prev) => ({
-      ...prev,
-      deltaOffset,
-    }))
-  }, [table])
+  }, [table, applyResize])
 
-  const handleResizeEnd = useCallback(() => {
+  const handleResizeEnd = useCallback((e: PointerEvent) => {
     if (!table.getState().columnSizingInfo.isResizingColumn) return
-    const newWidth = (table.getState().columnSizingInfo.startSize ?? 0) + (table.getState().columnSizingInfo.deltaOffset ?? 0)
-
-    table.setColumnSizing(prev => {
-      return {
-        ...prev,
-        [table.getState().columnSizingInfo.isResizingColumn as string]: newWidth,
-      }
-    })
+    if (typeof e.clientX === 'number' && e.clientX !== 0) {
+      resizePointerXRef.current = e.clientX
+    }
+    if (resizeFrameRef.current !== null) {
+      window.cancelAnimationFrame(resizeFrameRef.current)
+      resizeFrameRef.current = null
+    }
+    applyResize()
     table.setColumnSizingInfo({
       columnSizingStart: [],
       deltaOffset: null,
@@ -53,7 +61,7 @@ export const TableHeader = ({ isSticky = false }: TableHeaderProps) => {
       startOffset: null,
       startSize: null,
     })
-  }, [table])
+  }, [table, applyResize])
 
   useEffect(() => {
     window.addEventListener('pointermove', handleResizeMove)
@@ -61,6 +69,10 @@ export const TableHeader = ({ isSticky = false }: TableHeaderProps) => {
     return () => {
       window.removeEventListener('pointermove', handleResizeMove)
       window.removeEventListener('pointerup', handleResizeEnd)
+      if (resizeFrameRef.current !== null) {
+        window.cancelAnimationFrame(resizeFrameRef.current)
+        resizeFrameRef.current = null
+      }
     }
   }, [handleResizeEnd, handleResizeMove, table])
 
@@ -145,7 +157,11 @@ export const TableHeader = ({ isSticky = false }: TableHeaderProps) => {
                   <Visibility isVisible={header.column.getCanResize()}>
                     <div
                       onPointerDown={(e) => {
+                        e.preventDefault()
+                        e.currentTarget.setPointerCapture(e.pointerId)
+                        window.getSelection()?.removeAllRanges()
                         const startX = e.clientX
+                        resizePointerXRef.current = startX
                         const renderedWidth = (e.currentTarget as HTMLElement).closest('th')?.getBoundingClientRect().width
                         table.setColumnSizingInfo({
                           columnSizingStart: Object.entries(table.getState().columnSizing),
