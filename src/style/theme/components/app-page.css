@@ -79,8 +79,12 @@
     @apply flex-col-0 px-3 pt-2;
   }
 
+  [data-name="app-page-body"] {
+    @apply flex-col-0 grow min-w-0 h-full overflow-hidden;
+  }
+
   [data-name="app-page-content"] {
-    @apply flex-col-0 grow overflow-y-auto overscroll-y-contain;
+    @apply flex-col-0 grow min-h-0 overflow-y-auto overscroll-y-contain;
     scrollbar-gutter: stable;
 
     &[data-no-scrolling] {
@@ -89,7 +93,7 @@
   }
 
   [data-name="app-page-header"] {
-    @apply sticky top-0 right-0 z-20 flex-row-2 items-center p-4 bg-background text-on-background;
+    @apply flex-row-2 items-center p-4 bg-background text-on-background;
 
     @variant desktop {
       @apply pl-6;

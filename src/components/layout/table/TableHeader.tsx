@@ -4,56 +4,17 @@ import clsx from 'clsx'
 import { Visibility } from '../Visibility'
 import { TableSortButton } from './TableSortButton'
 import { TableFilterButton } from './TableFilterButton'
-import { useCallback, useEffect, useRef } from 'react'
+import { useCallback, useEffect } from 'react'
 import { TableStateContext, useTableStateWithoutSizingContext } from './TableContext'
 import { DataTypeUtils, type DataType } from '../../user-interaction/data/data-types'
-import { findPageScrollContainer } from '../virtualization/virtualizationScroll'
-import { MathUtil } from '@/src/utils/math'
 
 export type TableHeaderProps = {
   isSticky?: boolean,
-  stickyScroll?: 'container' | 'page',
 }
 
-export const TableHeader = ({ isSticky = false, stickyScroll = 'container' }: TableHeaderProps) => {
+export const TableHeader = ({ isSticky = false }: TableHeaderProps) => {
   const { table, columnSizingMode } = useTableStateWithoutSizingContext<unknown>()
-  const theadRef = useRef<HTMLTableSectionElement>(null)
-  const usesPageSticky = isSticky && stickyScroll === 'page'
   const isNaturalSizing = columnSizingMode === 'natural'
-
-  useEffect(() => {
-    if (!usesPageSticky || typeof window === 'undefined') return
-    const thead = theadRef.current
-    const tableElement = thead?.parentElement
-    if (!thead || !tableElement) return
-    const scrollElement = findPageScrollContainer(tableElement)
-    if (!scrollElement) return
-    const appPageHeader = scrollElement.querySelector('[data-name="app-page-header"]')
-
-    const update = () => {
-      const scrollRect = scrollElement.getBoundingClientRect()
-      const stickyTop = Math.max(
-        scrollRect.top,
-        appPageHeader ? appPageHeader.getBoundingClientRect().bottom : scrollRect.top
-      )
-      const tableRect = tableElement.getBoundingClientRect()
-      const maxShift = Math.max(0, tableRect.height - thead.offsetHeight)
-      const shift = MathUtil.clamp(stickyTop - tableRect.top, [0, maxShift])
-      thead.style.transform = shift > 0.5 ? `translate3d(0, ${shift}px, 0)` : ''
-    }
-
-    update()
-    const resizeObserver = new ResizeObserver(update)
-    resizeObserver.observe(tableElement)
-    scrollElement.addEventListener('scroll', update, { passive: true })
-    window.addEventListener('resize', update)
-    return () => {
-      resizeObserver.disconnect()
-      scrollElement.removeEventListener('scroll', update)
-      window.removeEventListener('resize', update)
-      thead.style.transform = ''
-    }
-  }, [usesPageSticky])
 
   const handleResizeMove = useCallback((e: MouseEvent | TouchEvent) => {
     if (!table.getState().columnSizingInfo.isResizingColumn) return
@@ -127,7 +88,7 @@ export const TableHeader = ({ isSticky = false, stickyScroll = 'container' }: Ta
           )}
         </TableStateContext.Consumer>
       ))}
-      <thead ref={theadRef} data-name="table-header" data-sticky-page={PropsUtil.dataAttributes.bool(usesPageSticky)}>
+      <thead data-name="table-header">
         {table.getHeaderGroups().map(headerGroup => (
           <tr key={headerGroup.id} data-name="table-header-row" className={clsx(table.options.meta?.headerRowClassName)}>
             {headerGroup.headers.map(header => {

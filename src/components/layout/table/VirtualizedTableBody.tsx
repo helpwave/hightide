@@ -1,6 +1,5 @@
-import type { Key } from 'react'
-import { useRef } from 'react'
-import type { Row } from '@tanstack/react-table'
+import { memo, useRef } from 'react'
+import type { Cell, Row, Table } from '@tanstack/react-table'
 import { flexRender } from '@tanstack/react-table'
 import clsx from 'clsx'
 import { useTableContainerContext, useTableStateWithoutSizingContext } from './TableContext'
@@ -21,6 +20,42 @@ export type TableVirtualizationOptions = {
 }
 
 export type VirtualizedTableBodyProps = TableVirtualizationOptions
+
+type VirtualizedTableRowProps = {
+  row: Row<unknown>,
+  cells: Cell<unknown, unknown>[],
+  table: Table<unknown>,
+  dataIndex?: number,
+  measureRef?: (node: Element | null) => void,
+  onRowClick?: (row: Row<unknown>, table: Table<unknown>) => void,
+  className?: string,
+}
+
+const VirtualizedTableRow = memo(({
+  row,
+  cells,
+  table,
+  dataIndex,
+  measureRef,
+  onRowClick,
+  className,
+}: VirtualizedTableRowProps) => (
+  <tr
+    data-index={dataIndex}
+    ref={measureRef}
+    onClick={onRowClick ? () => onRowClick(row, table) : undefined}
+    data-clickable={PropsUtil.dataAttributes.bool(!!onRowClick)}
+    data-name="table-body-row"
+    className={className}
+  >
+    {cells.map(cell => (
+      <td key={cell.id} data-name="table-body-cell" className={clsx(cell.column.columnDef.meta?.className)}>
+        {flexRender(cell.column.columnDef.cell, cell.getContext())}
+      </td>
+    ))}
+  </tr>
+))
+VirtualizedTableRow.displayName = 'VirtualizedTableRow'
 
 export const VirtualizedTableBody = ({
   estimateRowHeight = 48,
@@ -47,27 +82,24 @@ export const VirtualizedTableBody = ({
     reachBottomThresholdPx,
   })
 
-  const renderRow = (row: Row<unknown>, key: Key, measured: boolean, dataIndex?: number) => (
-    <tr
-      key={key}
-      data-index={dataIndex}
-      ref={measured ? virtualizer.measureElement : undefined}
-      onClick={() => onRowClick?.(row, table)}
-      data-clickable={PropsUtil.dataAttributes.bool(!!onRowClick)}
-      data-name="table-body-row"
-      className={clsx(BagFunctionUtil.resolve(table.options.meta?.bodyRowClassName, row.original))}
-    >
-      {row.getVisibleCells().map(cell => (
-        <td key={cell.id} data-name="table-body-cell" className={clsx(cell.column.columnDef.meta?.className)}>
-          {flexRender(cell.column.columnDef.cell, cell.getContext())}
-        </td>
-      ))}
-    </tr>
+  const bodyRowClassName = table.options.meta?.bodyRowClassName
+  const renderRow = (row: Row<unknown>, measured: boolean, dataIndex?: number) => (
+    <VirtualizedTableRow
+      key={row.id}
+      row={row}
+      cells={row.getVisibleCells()}
+      table={table}
+      dataIndex={dataIndex}
+      measureRef={measured ? virtualizer.measureElement : undefined}
+      onRowClick={onRowClick}
+      className={bodyRowClassName !== undefined ? clsx(BagFunctionUtil.resolve(bodyRowClassName, row.original)) : undefined}
+    />
   )
 
   const columnCount = Math.max(1, table.getVisibleLeafColumns().length)
-  const rowCount = containerRef.current && isUsingFillerRows ?
-    Math.floor(containerRef.current.clientHeight) / estimateRowHeight : 1
+  const rowCount = containerRef.current && isUsingFillerRows
+    ? Math.max(1, Math.floor(containerRef.current.clientHeight / estimateRowHeight))
+    : 1
 
   if (rows.length === 0) {
     return (
@@ -88,7 +120,7 @@ export const VirtualizedTableBody = ({
   if (!isMounted) {
     return (
       <tbody ref={bodyRef}>
-        {rows.map(row => renderRow(row, row.id, false))}
+        {rows.map(row => renderRow(row, false))}
       </tbody>
     )
   }
@@ -108,7 +140,7 @@ export const VirtualizedTableBody = ({
       {items.map(virtualRow => {
         const row = rows[virtualRow.index]
         if (!row) return null
-        return renderRow(row, virtualRow.key, true, virtualRow.index)
+        return renderRow(row, true, virtualRow.index)
       })}
       {paddingBottom > 0 && (
         <tr aria-hidden="true">

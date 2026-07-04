@@ -2,12 +2,7 @@ import type { Key, RefObject } from 'react'
 import { useEffect, useState } from 'react'
 import type { Virtualizer } from '@tanstack/react-virtual'
 import { useVirtualizer, useWindowVirtualizer } from '@tanstack/react-virtual'
-import {
-  findPageScrollContainer,
-  getScrollMetrics,
-  isNearBottom,
-  type VirtualizationScroll
-} from './virtualizationScroll'
+import { findPageScrollContainer, type VirtualizationScroll } from './virtualizationScroll'
 
 export type UseVirtualizedRowsOptions = {
   scroll: VirtualizationScroll,
@@ -24,7 +19,7 @@ export type UseVirtualizedRowsOptions = {
   contentRef: RefObject<HTMLElement | null>,
   /** The scroll container element for the `'container'` mode. */
   containerRef?: RefObject<HTMLElement | null>,
-  /** Called while the user is within `reachBottomThresholdPx` of the bottom. */
+  /** Called while the rendered range is within `reachBottomThresholdPx` of the end. */
   onReachBottom?: () => void,
   reachBottomThresholdPx?: number,
 }
@@ -99,14 +94,29 @@ export function useVirtualizedRows({
   }, [scroll, usesOuterScroll, contentRef, count])
 
   const common = {
-    count,
     estimateSize: () => estimateRowHeight,
     overscan,
     ...(getItemKey ? { getItemKey } : {}),
   }
-  const windowVirtualizer = useWindowVirtualizer({ ...common, scrollMargin, enabled: enabled && scroll === 'window' })
-  const containerVirtualizer = useVirtualizer({ ...common, getScrollElement: () => containerRef?.current ?? null, enabled: enabled && scroll === 'container' })
-  const pageVirtualizer = useVirtualizer({ ...common, getScrollElement: () => pageScrollElement, scrollMargin, enabled: enabled && scroll === 'page' })
+  const windowVirtualizer = useWindowVirtualizer({
+    ...common,
+    count: scroll === 'window' ? count : 0,
+    scrollMargin,
+    enabled: enabled && scroll === 'window',
+  })
+  const containerVirtualizer = useVirtualizer({
+    ...common,
+    count: scroll === 'container' ? count : 0,
+    getScrollElement: () => containerRef?.current ?? null,
+    enabled: enabled && scroll === 'container',
+  })
+  const pageVirtualizer = useVirtualizer({
+    ...common,
+    count: scroll === 'page' ? count : 0,
+    getScrollElement: () => pageScrollElement,
+    scrollMargin,
+    enabled: enabled && scroll === 'page',
+  })
 
   const virtualizer = (
     scroll === 'window'
@@ -117,24 +127,12 @@ export function useVirtualizedRows({
   ) as unknown as Virtualizer<Element, Element>
   const offset = usesOuterScroll ? scrollMargin : 0
 
-  // Infinite scroll: notify the consumer when the active scroll target nears its bottom.
+  const endIndex = virtualizer.range?.endIndex ?? (enabled ? -1 : (isMounted ? count - 1 : -1))
+  const thresholdRows = Math.max(1, Math.ceil(reachBottomThresholdPx / Math.max(1, estimateRowHeight)))
   useEffect(() => {
-    if (!onReachBottom || typeof window === 'undefined') return
-    const target: HTMLElement | Window | null =
-      scroll === 'window' ? window : scroll === 'page' ? pageScrollElement : containerRef?.current ?? null
-    if (!target) return
-
-    const handler = () => {
-      if (isNearBottom(getScrollMetrics(target), reachBottomThresholdPx)) onReachBottom()
-    }
-    target.addEventListener('scroll', handler, { passive: true } as AddEventListenerOptions)
-    window.addEventListener('resize', handler)
-    handler()
-    return () => {
-      target.removeEventListener('scroll', handler)
-      window.removeEventListener('resize', handler)
-    }
-  }, [scroll, pageScrollElement, containerRef, onReachBottom, reachBottomThresholdPx, isMounted])
+    if (!onReachBottom) return
+    if (endIndex >= count - 1 - thresholdRows) onReachBottom()
+  }, [onReachBottom, endIndex, count, thresholdRows, isMounted])
 
   return { virtualizer, offset, pageScrollElement, isMounted }
 }

@@ -14,6 +14,10 @@
     &[data-scrollbar="both"] {
       --table-rounding-right: 0px;
     }
+
+    &[data-page-scroll] {
+      @apply overflow-visible w-fit min-w-full;
+    }
   }
 
   [data-name="table"] {
@@ -22,16 +26,10 @@
 
     &[data-column-sizing="natural"] {
       @apply table-auto w-full;
-    }
-  }
 
-  [data-name="table-header"] {
-    &[data-sticky-page] {
-      @apply relative z-10;
-    }
-
-    @media print {
-      transform: none !important;
+      &[data-natural-locked] {
+        @apply table-fixed;
+      }
     }
   }
 
