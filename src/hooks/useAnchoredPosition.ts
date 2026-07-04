@@ -125,8 +125,8 @@ function calculatePosition({
     const targetLeft = left + (width * translateXPercent / 100)
     const targetTop = top + (height * translateYPercent / 100)
 
-    const clampedLeft = MathUtil.clamp(targetLeft, [screenPadding, windowWidth - screenPadding - width])
-    const clampedTop = MathUtil.clamp(targetTop, [screenPadding, windowHeight - screenPadding - height])
+    const clampedLeft = MathUtil.clamp(targetLeft, screenPadding, windowWidth - screenPadding - width)
+    const clampedTop = MathUtil.clamp(targetTop, screenPadding, windowHeight - screenPadding - height)
 
     return {
       left,

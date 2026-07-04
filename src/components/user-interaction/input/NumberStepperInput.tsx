@@ -8,17 +8,19 @@ import type { FormFieldInteractionStates } from '../../form/FieldLayout'
 import type { FormFieldDataHandling } from '../../form/FormField'
 import { PropsUtil } from '@/src/utils/propsUtil'
 import { useControlledState } from '@/src/hooks/useControlledState'
+import type { ChangeRateCurveProps, StepperLoopEvent } from '@/src/hooks/useStepperHold'
 import { useStepperHold } from '@/src/hooks/useStepperHold'
 import { NumberInput } from './NumberInput'
-import type { StepperChangeRate, StepperLoopEvent } from './stepperNumberInputUtils'
-import {
-  applyStepperValueWithLoopEvent,
-  commitNumberInputValue
-} from './stepperNumberInputUtils'
-
-export type { StepperLoopEvent }
+import type { DirectionNumber } from '@/src/utils/math'
 
 export type NumberStepperInputLayout = 'row' | 'col'
+
+type InputType = 'button' | 'keyboard'
+
+type ActiveInputState = {
+  type: InputType | null,
+  direction: DirectionNumber,
+}
 
 export type NumberStepperInputProps = Omit<InputHTMLAttributes<HTMLInputElement>, 'value' | 'type' | 'min' | 'max' | 'step'>
   & Partial<FormFieldInteractionStates>
@@ -31,7 +33,7 @@ export type NumberStepperInputProps = Omit<InputHTMLAttributes<HTMLInputElement>
     layout?: NumberStepperInputLayout,
     looping?: boolean,
     approximateMaxCharacters?: number,
-    changeRate?: StepperChangeRate,
+    changeRateCurveProps?: ChangeRateCurveProps,
     formatDisplayedValue?: (value: number) => string,
     parseDisplayedValue?: (rawValue: string) => number | undefined,
     onLooped?: (event: StepperLoopEvent) => void,
@@ -55,7 +57,7 @@ export const NumberStepperInput = forwardRef<HTMLInputElement, NumberStepperInpu
   layout = 'row',
   looping = false,
   approximateMaxCharacters = 6,
-  changeRate = defaultStepperChangeRate,
+  changeRateCurveProps,
   formatDisplayedValue,
   parseDisplayedValue,
   onLooped,
@@ -77,43 +79,39 @@ export const NumberStepperInput = forwardRef<HTMLInputElement, NumberStepperInpu
   valueRef.current = value
   const translation = useHightideTranslation()
 
-  const commitValue = useCallback((nextValue: number) => {
-    const resolved = commitNumberInputValue(nextValue, minimum, maximum, looping)
-    setValue(resolved)
-    onEditComplete?.(resolved)
-    return resolved
-  }, [looping, maximum, minimum, onEditComplete, setValue])
-
-  const applyStep = useCallback((delta: number) => {
-    const { value: nextValue, loopEvent } = applyStepperValueWithLoopEvent(
-      value,
-      step * delta,
-      minimum,
-      maximum,
-      looping
-    )
-    commitValue(nextValue)
-    if (loopEvent) {
-      onLooped?.(loopEvent)
-    }
-  }, [commitValue, looping, maximum, minimum, onLooped, step, value])
+  const activeInputStateRef = useRef<ActiveInputState>({
+    type: null,
+    direction: 1
+  })
 
   const { startHold, stopHold } = useStepperHold({
     disabled: disabled || readOnly,
     minimum,
     maximum,
     isLooping: looping,
-    displayedValue: value,
+    value,
     stepSize: step,
-    changeRate,
+    changeRateCurveProps,
     onValueChange: setValue,
     onLooped,
   })
 
-  const finishHold = useCallback(() => {
+  const start = useCallback((inputType: InputType, direction: DirectionNumber) => {
+    const activeInputState = activeInputStateRef.current
+
+    if(activeInputState.type !== null) return
+
+    activeInputState.type = inputType
+    activeInputState.direction = direction
+    startHold(direction)
+  }, [startHold])
+
+  const stop = useCallback((inputType: InputType, direction: DirectionNumber) => {
+    const activeInputState = activeInputStateRef.current
+    if(inputType !== activeInputState.type || direction !== activeInputState.direction) return
+    activeInputState.type = null
     stopHold()
-    commitValue(valueRef.current)
-  }, [commitValue, stopHold])
+  }, [stopHold])
 
   const plusButton = (
     <IconButton
@@ -125,10 +123,10 @@ export const NumberStepperInput = forwardRef<HTMLInputElement, NumberStepperInpu
       tooltip={translation('increaseValue')}
       tooltipProps={{ alignment: layout === 'row' ? 'bottom' : 'top', options: { avoidOverlap: false } }}
       className={clsx('number-stepper-input-button', plusButtonClassName)}
-      onPointerDown={() => startHold(1)}
-      onPointerUp={finishHold}
-      onPointerLeave={finishHold}
-      onPointerCancel={finishHold}
+      onPointerDown={() => start('button', 1)}
+      onPointerUp={() => stop('button', 1)}
+      onPointerLeave={() => stop('button', 1)}
+      onPointerCancel={() => stop('button', 1)}
     >
       <Plus aria-hidden={true} />
     </IconButton>
@@ -144,10 +142,10 @@ export const NumberStepperInput = forwardRef<HTMLInputElement, NumberStepperInpu
       tooltip={translation('decreaseValue')}
       tooltipProps={{ alignment: 'bottom', options: { avoidOverlap: false } }}
       className={clsx('number-stepper-input-button', minusButtonClassName)}
-      onPointerDown={() => startHold(-1)}
-      onPointerUp={finishHold}
-      onPointerLeave={finishHold}
-      onPointerCancel={finishHold}
+      onPointerDown={() => start('button', -1)}
+      onPointerUp={() => stop('button', -1)}
+      onPointerLeave={() => stop('button', -1)}
+      onPointerCancel={() => stop('button', -1)}
     >
       <Minus aria-hidden={true} />
     </IconButton>
@@ -169,7 +167,6 @@ export const NumberStepperInput = forwardRef<HTMLInputElement, NumberStepperInpu
         onEditComplete={onEditComplete}
         minimum={minimum}
         maximum={maximum}
-        looping={looping}
         approximateMaxCharacters={approximateMaxCharacters}
         formatDisplayedValue={formatDisplayedValue}
         parseDisplayedValue={parseDisplayedValue}
@@ -182,11 +179,22 @@ export const NumberStepperInput = forwardRef<HTMLInputElement, NumberStepperInpu
           props.onKeyDown?.(event)
           if (event.key === 'ArrowUp') {
             event.preventDefault()
-            applyStep(1)
+            start('keyboard', 1)
           }
           if (event.key === 'ArrowDown') {
             event.preventDefault()
-            applyStep(-1)
+            start('keyboard', -1)
+          }
+        }}
+        onKeyUp={(event) => {
+          props.onKeyDown?.(event)
+          if (event.key === 'ArrowUp') {
+            event.preventDefault()
+            stop('keyboard', 1)
+          }
+          if (event.key === 'ArrowDown') {
+            event.preventDefault()
+            stop('keyboard', -1)
           }
         }}
       />

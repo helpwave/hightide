@@ -1,10 +1,10 @@
+import type { DirectionNumber } from './math'
+
 /**
  *  1 is forwards
  *
  * -1 is backwards
  */
-export type Direction = 1 | -1
-
 export class LoopingArrayCalculator {
   length: number
   isLooping: boolean
@@ -44,7 +44,7 @@ export class LoopingArrayCalculator {
   /**
    * @return absolute distance forwards or Infinity when the target cannot be reached (only possible when not isLooping)
    */
-  getDistanceDirectional(position: number, target: number, direction: Direction): number {
+  getDistanceDirectional(position: number, target: number, direction: DirectionNumber): number {
     if (!this.isLooping && (position < -this.allowedOverScroll || position > this.allowedOverScroll + this.length - 1)) {
       throw new Error('Invalid parameters: position is out of bounds.')
     }
@@ -86,7 +86,7 @@ export class LoopingArrayCalculator {
     return Math.min(forwardDistance, backwardDistance)
   }
 
-  getBestDirection(position: number, target: number): Direction {
+  getBestDirection(position: number, target: number): DirectionNumber {
     const forwardDistance = this.getDistanceForward(position, target)
     const backwardDistance = this.getDistanceBackward(position, target)
     return forwardDistance < backwardDistance ? 1 : -1

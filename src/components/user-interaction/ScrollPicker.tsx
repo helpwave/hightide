@@ -1,6 +1,7 @@
 import { useCallback, useEffect, useState } from 'react'
 import clsx from 'clsx'
 import { getNeighbours, range } from '@/src/utils/array'
+import type { DirectionNumber } from '@/src/utils/math'
 import { MathUtil } from '@/src/utils/math'
 
 export type ScrollPickerProps<T> = {
@@ -27,7 +28,6 @@ type AnimationData<T> = {
 
 const up = 1
 const down = -1
-type Direction = 1 | -1
 
 /**
  * A component for picking an option by scrolling
@@ -67,7 +67,7 @@ export const ScrollPicker = <T, >({
 
   const containerHeight = itemHeight * (itemsShownCount - 2) + distance * (itemsShownCount - 2 + 1)
 
-  const getDirection = useCallback((targetIndex: number, currentIndex: number, transition: number, length: number): Direction => {
+  const getDirection = useCallback((targetIndex: number, currentIndex: number, transition: number, length: number): DirectionNumber => {
     if (targetIndex === currentIndex) {
       return transition > 0 ? up : down
     }
@@ -170,7 +170,7 @@ export const ScrollPicker = <T, >({
     const distance = max - min
 
     let opacityValue = min
-    const unitTransition = MathUtil.clamp((transition) / 0.5)
+    const unitTransition = MathUtil.clamp(transition / 0.5, 0, 1)
     if (index === 1 || index === itemsCount - 2) {
       if (index === 1 && transition > 0) {
         opacityValue += Math.floor(unitTransition * distance)
@@ -183,7 +183,7 @@ export const ScrollPicker = <T, >({
     }
 
     // TODO this is not the right value for the bottom entry
-    return MathUtil.clamp(1 - (opacityValue / max))
+    return MathUtil.clamp(1 - (opacityValue / max), 0, 1)
   }
 
   return (
@@ -192,7 +192,7 @@ export const ScrollPicker = <T, >({
       style={{ height: containerHeight }}
       onWheel={event => {
         if (event.deltaY !== 0) {
-          const deltaY = MathUtil.clamp(event.deltaY, [-itemHeight*2/3, itemHeight*2/3])
+          const deltaY = MathUtil.clamp(event.deltaY, -itemHeight * 2 / 3, itemHeight * 2 / 3)
           // TODO slower increase
           setAnimation(({ velocity, ...animationData }) =>
             ({ ...animationData, velocity: velocity + deltaY }))

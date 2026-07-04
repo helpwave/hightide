@@ -7,40 +7,14 @@ import { useDateTimeFormat } from '@/src/global-contexts/LocaleContext'
 import { Visibility } from '@/src/components/layout/Visibility'
 import { Button } from '@/src/components/user-interaction/Button'
 import { NumberStepperInput } from '@/src/components/user-interaction/input/NumberStepperInput'
-import type { StepperLoopEvent } from '@/src/components/user-interaction/input/stepperNumberInputUtils'
 import type {
   TimePickerMillisecondIncrement,
   TimePickerMinuteIncrement,
   TimePickerSecondIncrement
 } from './TimePicker'
+import type { StepperLoopEvent } from '@/src/hooks/useStepperHold'
 
 const padTwoDigits = (value: number) => String(Math.round(value)).padStart(2, '0')
-
-type TimeStepperUnit = 'hour' | 'minute' | 'second' | 'millisecond'
-
-function adjustDateForStepperLoop(
-  date: Date,
-  unit: TimeStepperUnit,
-  changeDirection: 1 | -1,
-  is24HourFormat: boolean
-) {
-  switch (unit) {
-  case 'millisecond':
-    date.setSeconds(date.getSeconds() + changeDirection)
-    break
-  case 'second':
-    date.setMinutes(date.getMinutes() + changeDirection)
-    break
-  case 'minute':
-    date.setHours(date.getHours() + changeDirection)
-    break
-  case 'hour':
-    if (is24HourFormat) {
-      date.setDate(date.getDate() + changeDirection)
-    }
-    break
-  }
-}
 
 const minuteSteps: Record<TimePickerMinuteIncrement, number> = {
   '1min': 1,
@@ -118,31 +92,36 @@ export const TimeInput = ({
   const secondStep = secondSteps[secondIncrement]
   const millisecondStep = millisecondSteps[millisecondIncrement]
 
-  const updateValue = useCallback((transformer: (date: Date) => void) => {
+  const updateValue = useCallback((transformer: (date: Date) => void, isEditComplete: boolean = false) => {
     const nextDate = new Date(valueRef.current)
     transformer(nextDate)
     valueRef.current = nextDate
     setValue(nextDate)
-    onEditComplete?.(nextDate)
+    if(isEditComplete) onEditComplete?.(nextDate)
   }, [onEditComplete, setValue])
 
-  const createStepperLoopedHandler = useCallback((unit: TimeStepperUnit) => {
-    return (event: StepperLoopEvent) => {
-      updateValue((date) => {
-        adjustDateForStepperLoop(date, unit, event.changeDirection, is24HourFormat)
-      })
-    }
-  }, [is24HourFormat, updateValue])
+  const onHourLooped = ({ direction }: StepperLoopEvent) => {
+    updateValue((date) => {
+      date.setDate(date.getDate() + direction)
+      if(!is24HourFormat) {
+        console.log({ hoursBefore: date.getHours(), hoursAfter: date.getHours() - direction * 12 })
+        date.setHours(date.getHours() - direction * 12)
+      }
+    })
+  }
+  const onMinuteLooped = ({ direction }: StepperLoopEvent) => {
+    updateValue((date) => date.setHours(date.getHours() + direction))
+  }
+  const onSecondLooped = ({ direction }: StepperLoopEvent) => {
+    updateValue((date) => date.setMinutes(date.getMinutes() + direction))
+  }
+  const onMillisecondLooped = ({ direction }: StepperLoopEvent) => {
+    updateValue((date) => date.setSeconds(date.getSeconds() + direction))
+  }
 
-  const onHourLooped = createStepperLoopedHandler('hour')
-  const onMinuteLooped = createStepperLoopedHandler('minute')
-  const onSecondLooped = createStepperLoopedHandler('second')
-  const onMillisecondLooped = createStepperLoopedHandler('millisecond')
-
-  const hourValue = useMemo(
-    () => is24HourFormat ? value.getHours() : to12HourDisplay(value.getHours()),
-    [is24HourFormat, value]
-  )
+  const hourValue = useMemo(() =>
+    is24HourFormat ? value.getHours() : to12HourDisplay(value.getHours())
+  , [is24HourFormat, value])
   const isPM = value.getHours() >= 12
 
   const setHourValue = useCallback((nextHour: number) => {
@@ -186,7 +165,7 @@ export const TimeInput = ({
         looping={true}
         approximateMaxCharacters={2}
         minimum={is24HourFormat ? 0 : 1}
-        maximum={is24HourFormat ? 23 : 12}
+        maximum={is24HourFormat ? 23 : 12.99}
         value={hourValue}
         onValueChange={setHourValue}
         onEditComplete={setHourValue}
@@ -202,7 +181,7 @@ export const TimeInput = ({
         approximateMaxCharacters={2}
         minimum={0}
         maximum={59}
-        step={minuteStep}
+        stepSize={minuteStep}
         value={value.getMinutes()}
         onValueChange={setMinuteValue}
         onEditComplete={setMinuteValue}
@@ -219,7 +198,7 @@ export const TimeInput = ({
           approximateMaxCharacters={2}
           minimum={0}
           maximum={59}
-          step={secondStep}
+          stepSize={secondStep}
           value={value.getSeconds()}
           onValueChange={setSecondValue}
           onEditComplete={setSecondValue}
@@ -236,7 +215,7 @@ export const TimeInput = ({
           approximateMaxCharacters={3}
           minimum={0}
           maximum={999}
-          step={millisecondStep}
+          stepSize={millisecondStep}
           value={value.getMilliseconds()}
           onValueChange={setMillisecondValue}
           onEditComplete={setMillisecondValue}

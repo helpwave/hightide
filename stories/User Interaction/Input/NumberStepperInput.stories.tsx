@@ -15,7 +15,7 @@ export const numberStepperInput: Story = {
     initialValue: 5,
     minimum: 0,
     maximum: 1000,
-    step: 1,
+    stepSize: 1,
     layout: 'row',
     looping: false,
     disabled: false,
