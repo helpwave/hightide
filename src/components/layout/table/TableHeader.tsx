@@ -38,7 +38,7 @@ export const TableHeader = ({ isSticky = false, stickyScroll = 'container' }: Ta
       )
       const tableRect = tableElement.getBoundingClientRect()
       const maxShift = Math.max(0, tableRect.height - thead.offsetHeight)
-      const shift = MathUtil.clamp(stickyTop - tableRect.top, [0, maxShift])
+      const shift = MathUtil.clamp(stickyTop - tableRect.top, 0, maxShift)
       thead.style.transform = shift > 0.5 ? `translate3d(0, ${shift}px, 0)` : ''
     }
 
