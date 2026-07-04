@@ -5,7 +5,7 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/)
 and adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
-## [0.12.17] - 2026-07-02
+## [0.14.0] - 2026-07-04
 
 ### Added
 
@@ -19,6 +19,37 @@ and adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
 - CSS build (`build-css`) now runs through the PostCSS pipeline (`@tailwindcss/postcss` + autoprefixer) so browser targets apply to published CSS
 - `Checkbox` adds an `interactive` prop for non-interactive use inside `LabelledCheckbox`
+- Styling value for cards
+
+## [0.13.4] - 2026-07-03
+
+### Fixed
+
+- Page-sticky table headers no longer show the rows underneath them: the translated `thead` now stacks above positioned cell content (buttons, selects), so its opaque header background covers the rows it slides over
+
+## [0.13.2] - 2026-07-03
+
+### Added
+
+- `columnSizingMode: 'natural'` on the table: disables the fill-the-container width negotiation so the browser's auto layout sizes columns to their content (respecting `minSize`); explicitly resized columns keep their width and drags start from the rendered width
+- `stickyScroll: 'page'` on the table header (auto-derived from the `'page'` virtualization mode): keeps the header visible while the surrounding page scrolls, offset below the AppPage header
+
+### Changed
+
+- Only the virtualizer matching the active scroll mode attaches scroll listeners and resize observers; `VirtualizedCardGrid` disables them entirely below its virtualization threshold
+
+## [0.13.1] - 2026-07-03
+
+### Fixed
+
+- `page` virtualization now binds to the `AppPage` content area directly, so a list whose data loads after mount no longer renders zero rows (previously the empty content never overflowed, so no scroll container was found and the virtualizer deadlocked)
+
+## [0.13.0] - 2026-07-03
+
+### Changed
+
+- Introduced virtualized infinite scrolling for generic usage
+- Implemented anchestor scroll element detection for infite scrolling
 
 ## [0.12.16] - 2026-07-02
 

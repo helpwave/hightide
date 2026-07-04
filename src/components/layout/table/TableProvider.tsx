@@ -2,7 +2,7 @@ import type { ReactNode } from 'react'
 import { useCallback, useEffect, useLayoutEffect, useMemo, useRef, useState } from 'react'
 import { useEventCallbackStabilizer } from '@/src/hooks/useEventCallbackStabelizer'
 import { ColumnSizeUtil } from './columnSizeUtil'
-import type { TableColumnDefinitionContextType, TableContainerContextType, TableStateWithoutSizingContextType } from './TableContext'
+import type { ColumnSizingMode, TableColumnDefinitionContextType, TableContainerContextType, TableStateWithoutSizingContextType } from './TableContext'
 import { TableColumnDefinitionContext, TableContainerContext, TableStateContext, TableStateWithoutSizingContext } from './TableContext'
 import { TableFilter } from './TableFilter'
 import type { ColumnDef, InitialTableState, Row, TableOptions, TableState , Table as ReactTable, CellContext, Table } from '@tanstack/react-table'
@@ -21,6 +21,7 @@ export type TableProviderProps<T> = {
   children?: ReactNode,
   placeholderColumnExcludeIds?: string[],
   isUsingFillerRows?: boolean,
+  columnSizingMode?: ColumnSizingMode,
   fillerRowCell?: (columnId: string, table: ReactTable<T>) => ReactNode,
   initialState?: InitialTableState,
   onRowClick?: (row: Row<T>, table: ReactTable<T>) => void,
@@ -31,6 +32,7 @@ export type TableProviderProps<T> = {
 export const TableProvider = <T,>({
   data,
   isUsingFillerRows = true,
+  columnSizingMode = 'fill',
   fillerRowCell: fillerRowCellOverwrite,
   initialState,
   onRowClick,
@@ -74,6 +76,7 @@ export const TableProvider = <T,>({
     },
   })
 
+  const negotiatesWidths = columnSizingMode === 'fill'
   const [targetWidth, setTargetWidth] =  useState<number | undefined>(undefined)
   const computeWidth = useCallback(() => {
     const el = containerRef?.current
@@ -85,11 +88,13 @@ export const TableProvider = <T,>({
     return Math.floor(width)
   }, [containerRef])
   useLayoutEffect(() => {
+    if(!negotiatesWidths) return
     setTargetWidth(computeWidth())
-  }, [computeWidth])
+  }, [computeWidth, negotiatesWidths])
   useWindowResizeObserver(useCallback(() => {
+    if(!negotiatesWidths) return
     setTargetWidth(computeWidth())
-  }, [computeWidth]))
+  }, [computeWidth, negotiatesWidths]))
 
   const registerColumn = useCallback((column: ColumnDef<T>) => {
     setRegisteredColumns(prev => {
@@ -173,7 +178,7 @@ export const TableProvider = <T,>({
       ColumnSizingWithTargetFeature,
       AutoColumnOrderFeature,
     ],
-    columnSizingTarget: targetWidth,
+    columnSizingTarget: negotiatesWidths ? targetWidth : undefined,
     autoResetPageIndex: false,
     enableColumnResizing: true,
     columnResizeMode: 'onChange',
@@ -232,6 +237,7 @@ export const TableProvider = <T,>({
   const tableStateWithoutSizingContextValue = useMemo<TableStateWithoutSizingContextType<T>>(() => ({
     table,
     isUsingFillerRows,
+    columnSizingMode,
     fillerRowCell,
     onRowClick: onRowClickStable,
     onFillerRowClick: onFillerRowClickStable,
@@ -255,6 +261,7 @@ export const TableProvider = <T,>({
     columns,
     rowModel,
     isUsingFillerRows,
+    columnSizingMode,
     fillerRowCell,
     onRowClickStable,
     onFillerRowClickStable,

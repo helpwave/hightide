@@ -27,7 +27,7 @@ export const TableDisplay = <T,>({
   virtualized = false,
   ...props
 }: TableDisplayProps) => {
-  const { table, targetWidth } = useTableStateContext<T>()
+  const { table, targetWidth, columnSizingMode } = useTableStateContext<T>()
   const { containerRef } = useTableContainerContext<T>()
   const tableRef = useRef<HTMLTableElement>(null)
   const scrollbarState = useScrollbarState({
@@ -35,6 +35,8 @@ export const TableDisplay = <T,>({
     contentRef: tableRef,
     isActive: !!virtualized,
   })
+
+  const virtualizedScroll = typeof virtualized === 'object' ? virtualized.scroll : undefined
 
   return (
     <div
@@ -47,14 +49,20 @@ export const TableDisplay = <T,>({
         {...props}
         ref={tableRef}
         data-name={props['data-name'] ?? 'table'}
+        data-column-sizing={columnSizingMode}
 
         style={{
-          width: Math.floor(Math.max(table.getTotalSize(), targetWidth ?? table.getTotalSize())),
+          ...(columnSizingMode === 'fill'
+            ? { width: Math.floor(Math.max(table.getTotalSize(), targetWidth ?? table.getTotalSize())) }
+            : {}),
           ...props.style,
         }}
       >
         {children}
-        <TableHeader {...tableHeaderProps} />
+        <TableHeader
+          {...tableHeaderProps}
+          stickyScroll={tableHeaderProps?.stickyScroll ?? (virtualizedScroll === 'page' ? 'page' : 'container')}
+        />
         {virtualized
           ? <VirtualizedTableBody {...(typeof virtualized === 'object' ? virtualized : {})} />
           : <TableBody />}

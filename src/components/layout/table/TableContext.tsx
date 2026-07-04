@@ -12,12 +12,15 @@ import type { ReactNode, RefObject } from 'react'
 import { createContext, useContext } from 'react'
 
 
+export type ColumnSizingMode = 'fill' | 'natural'
+
 export interface TableStateWithoutSizingContextType<T> extends Omit<TableState, 'columnSizing' | 'columnSizingInfo'> {
   table: ReactTable<T>,
   data: T[],
   columns: ColumnDef<T>[],
   rowModel: RowModel<T>,
   isUsingFillerRows: boolean,
+  columnSizingMode: ColumnSizingMode,
   fillerRowCell: (columnId: string, table: ReactTable<T>) => ReactNode,
   onRowClick?: (row: Row<T>, table: ReactTable<T>) => void,
   onFillerRowClick?: (index: number, table: ReactTable<T>) => void,
@@ -47,6 +50,7 @@ export interface TableStateContextType<T> extends TableState {
   columns: ColumnDef<T>[],
   rowModel: RowModel<T>,
   isUsingFillerRows: boolean,
+  columnSizingMode: ColumnSizingMode,
   fillerRowCell: (columnId: string, table: ReactTable<T>) => ReactNode,
   onRowClick?: (row: Row<T>, table: ReactTable<T>) => void,
   onFillerRowClick?: (index: number, table: ReactTable<T>) => void,
