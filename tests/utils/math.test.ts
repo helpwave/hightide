@@ -53,4 +53,53 @@ describe('MathUtil', () => {
       expect(MathUtil.roundModulo(-8, 5)).toBe(-10)
     })
   })
+
+  describe('resolveLoopingRangeValue', () => {
+    test('returns value unchanged when within range', () => {
+      expect(MathUtil.resolveLoopingRangeValue(5, 0, 10)).toEqual({
+        value: 5,
+        loopedOver: null,
+      })
+    })
+
+    test('returns boundary values unchanged', () => {
+      expect(MathUtil.resolveLoopingRangeValue(0, 0, 10)).toEqual({
+        value: 0,
+        loopedOver: null,
+      })
+      expect(MathUtil.resolveLoopingRangeValue(10, 0, 10)).toEqual({
+        value: 10,
+        loopedOver: null,
+      })
+    })
+
+    test('wraps values above maximum', () => {
+      expect(MathUtil.resolveLoopingRangeValue(11, 0, 10)).toEqual({
+        value: 1,
+        loopedOver: 'maximum',
+      })
+      expect(MathUtil.resolveLoopingRangeValue(24, 0, 23)).toEqual({
+        value: 1,
+        loopedOver: 'maximum',
+      })
+    })
+
+    test('wraps values below minimum', () => {
+      expect(MathUtil.resolveLoopingRangeValue(0, 1, 12)).toEqual({
+        value: 0,
+        loopedOver: 'minimum',
+      })
+      expect(MathUtil.resolveLoopingRangeValue(-2, 0, 23)).toEqual({
+        value: -2,
+        loopedOver: 'minimum',
+      })
+    })
+
+    test('supports non-zero minimum', () => {
+      expect(MathUtil.resolveLoopingRangeValue(13, 1, 12)).toEqual({
+        value: 2,
+        loopedOver: 'maximum',
+      })
+    })
+  })
 })

@@ -1,5 +1,6 @@
 import type { RefObject } from 'react'
 import { useCallback, useEffect, useMemo, useRef } from 'react'
+import type { LoopingRangeResult } from '../utils/math'
 import { MathUtil, type DirectionNumber } from '../utils/math'
 import type { Curve, ExponentialCurveBuilderProps } from '../utils/curve'
 import { CurveBuilderUtil } from '../utils/curve'
@@ -114,7 +115,7 @@ export function useStepperHold({
     }
 
     let shouldStop = false
-    let loopEvent: StepperLoopEvent | undefined = undefined
+    let loopingRangeResult: LoopingRangeResult | null = null
 
     if (!loopingRef.current) {
       if (holdState.direction > 0 && maximum !== undefined && holdState.value >= maximum) {
@@ -125,29 +126,28 @@ export function useStepperHold({
         holdState.value = minimum
         shouldStop = true
       }
-    }
-    if (loopingRef.current && minimum !== undefined && maximum !== undefined) {
-      const range = maximum -  minimum
-      if (holdState.direction > 0 && holdState.value > maximum) {
-        holdState.value = (holdState.value - maximum) % range + minimum
-        loopEvent = { direction: holdState.direction, loopedAround: 'maximum', value: minimum }
-      }
 
-      if (holdState.direction < 0 && minimum !== undefined && holdState.value < minimum) {
-        holdState.value = (holdState.value - minimum) % range + minimum
-        loopEvent = { direction: holdState.direction, loopedAround: 'minimum', value: maximum }
+
+    } else {
+      if(minimum !== undefined && maximum !== undefined) {
+        loopingRangeResult = MathUtil.resolveLoopingRangeValue(holdState.value, minimum, maximum)
+      } else {
+        loopingRangeResult = { value: MathUtil.clamp(holdState.value, minimum, maximum), loopedOver: null }
       }
     }
+
+    const rounded = MathUtil.roundModulo(holdState.value, stepSize)
 
     if(shouldStop) stopHold()
 
-    const rounded = MathUtil.roundModulo(holdState.value, stepSize)
-    const result = MathUtil.clamp(rounded, minimum, maximum)
+    onValueChangeRef.current(rounded)
 
-    onValueChangeRef.current(result)
-
-    if (loopEvent) {
-      onLoopedRef.current?.({ ...loopEvent, value: result })
+    if (loopingRangeResult?.loopedOver) {
+      onLoopedRef.current?.({
+        direction: holdState.direction,
+        loopedAround: loopingRangeResult.loopedOver,
+        value: rounded,
+      })
     }
   }, [maximum, minimum, stepSize, stopHold])
 

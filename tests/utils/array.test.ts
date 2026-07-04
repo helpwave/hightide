@@ -5,7 +5,7 @@ import {
   createLoopingListWithIndex,
   equalSizeGroups,
   getNeighbours,
-  range,
+  range
 } from '@/src/utils/array'
 
 describe('array utils', () => {
