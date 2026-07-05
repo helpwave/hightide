@@ -16,7 +16,7 @@
     }
 
     &[data-page-scroll] {
-      @apply overflow-visible w-fit min-w-full;
+      @apply overflow-x-auto w-full max-w-full;
     }
   }
 

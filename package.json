@@ -10,13 +10,14 @@
     "access": "public"
   },
   "license": "MPL-2.0",
-  "version": "0.14.0",
+  "version": "0.14.1",
   "browserslist": [
     "> 0.2%",
     "last 3 versions",
     "Firefox ESR",
     "not dead",
-    "iOS >= 12",
+    "Safari >= 11",
+    "iOS >= 11",
     "Android >= 5"
   ],
   "files": [
