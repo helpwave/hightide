@@ -210,7 +210,7 @@ export const AppPage = ({
         activeId={resolvedActiveId}
         LinkComponent={sidebarProps.LinkComponent}
       />
-      <div data-name="app-page-content" data-no-scrolling={noScrolling ? '' : undefined}>
+      <div data-name="app-page-body">
         <header data-name="app-page-header">
           <IconButton
             className="app-page-menu-button"
@@ -222,10 +222,12 @@ export const AppPage = ({
           </IconButton>
           {headerActions}
         </header>
-        <main data-name="app-page-main-content" data-outer-no-scrolling={noScrolling ? '' : undefined}>
-          {children}
-          {hasSpacer && (<div className="app-page-main-spacer" />)}
-        </main>
+        <div data-name="app-page-content" data-no-scrolling={noScrolling ? '' : undefined}>
+          <main data-name="app-page-main-content" data-outer-no-scrolling={noScrolling ? '' : undefined}>
+            {children}
+            {hasSpacer && (<div className="app-page-main-spacer" />)}
+          </main>
+        </div>
       </div>
     </div>
   )

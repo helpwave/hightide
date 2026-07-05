@@ -8,6 +8,7 @@ import { useTableContainerContext, useTableStateContext } from './TableContext'
 import type { TableVirtualizationOptions } from './VirtualizedTableBody'
 import { VirtualizedTableBody } from './VirtualizedTableBody'
 import { useScrollbarState } from '@/src/hooks/useScrollbarState'
+import { useNaturalColumnWidthLock } from './useNaturalColumnWidthLock'
 
 export interface TableDisplayProps extends TableHTMLAttributes<HTMLTableElement> {
   'containerProps'?: Omit<React.HTMLAttributes<HTMLDivElement>, 'children'> & { 'data-name'?: string },
@@ -30,13 +31,18 @@ export const TableDisplay = <T,>({
   const { table, targetWidth, columnSizingMode } = useTableStateContext<T>()
   const { containerRef } = useTableContainerContext<T>()
   const tableRef = useRef<HTMLTableElement>(null)
+  const virtualizedScroll = typeof virtualized === 'object' ? virtualized.scroll : undefined
+  const usesPageScroll = virtualizedScroll === 'page' || virtualizedScroll === 'window'
   const scrollbarState = useScrollbarState({
     containerRef,
     contentRef: tableRef,
-    isActive: !!virtualized,
+    isActive: !!virtualized && !usesPageScroll,
   })
-
-  const virtualizedScroll = typeof virtualized === 'object' ? virtualized.scroll : undefined
+  const isNaturalWidthLocked = useNaturalColumnWidthLock({
+    table,
+    tableRef,
+    enabled: columnSizingMode === 'natural' && !!virtualized,
+  })
 
   return (
     <div
@@ -44,12 +50,14 @@ export const TableDisplay = <T,>({
       ref={containerRef}
       data-name={containerProps?.['data-name'] ?? 'table-container'}
       data-scrollbar={scrollbarState}
+      data-page-scroll={usesPageScroll ? '' : undefined}
     >
       <table
         {...props}
         ref={tableRef}
         data-name={props['data-name'] ?? 'table'}
         data-column-sizing={columnSizingMode}
+        data-natural-locked={isNaturalWidthLocked ? '' : undefined}
 
         style={{
           ...(columnSizingMode === 'fill'
@@ -59,10 +67,7 @@ export const TableDisplay = <T,>({
         }}
       >
         {children}
-        <TableHeader
-          {...tableHeaderProps}
-          stickyScroll={tableHeaderProps?.stickyScroll ?? (virtualizedScroll === 'page' ? 'page' : 'container')}
-        />
+        <TableHeader {...tableHeaderProps} />
         {virtualized
           ? <VirtualizedTableBody {...(typeof virtualized === 'object' ? virtualized : {})} />
           : <TableBody />}

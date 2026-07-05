@@ -7,83 +7,52 @@ import { TableFilterButton } from './TableFilterButton'
 import { useCallback, useEffect, useRef } from 'react'
 import { TableStateContext, useTableStateWithoutSizingContext } from './TableContext'
 import { DataTypeUtils, type DataType } from '../../user-interaction/data/data-types'
-import { findPageScrollContainer } from '../virtualization/virtualizationScroll'
-import { MathUtil } from '@/src/utils/math'
 
 export type TableHeaderProps = {
   isSticky?: boolean,
-  stickyScroll?: 'container' | 'page',
 }
 
-export const TableHeader = ({ isSticky = false, stickyScroll = 'container' }: TableHeaderProps) => {
+export const TableHeader = ({ isSticky = false }: TableHeaderProps) => {
   const { table, columnSizingMode } = useTableStateWithoutSizingContext<unknown>()
-  const theadRef = useRef<HTMLTableSectionElement>(null)
-  const usesPageSticky = isSticky && stickyScroll === 'page'
   const isNaturalSizing = columnSizingMode === 'natural'
+  const resizeFrameRef = useRef<number | null>(null)
+  const resizePointerXRef = useRef(0)
 
-  useEffect(() => {
-    if (!usesPageSticky || typeof window === 'undefined') return
-    const thead = theadRef.current
-    const tableElement = thead?.parentElement
-    if (!thead || !tableElement) return
-    const scrollElement = findPageScrollContainer(tableElement)
-    if (!scrollElement) return
-    const appPageHeader = scrollElement.querySelector('[data-name="app-page-header"]')
+  const minColumnWidth = useCallback((columnId: string): number => {
+    const column = table.getColumn(columnId)
+    return column?.columnDef.minSize ?? table.options.defaultColumn?.minSize ?? 20
+  }, [table])
 
-    const update = () => {
-      const scrollRect = scrollElement.getBoundingClientRect()
-      const stickyTop = Math.max(
-        scrollRect.top,
-        appPageHeader ? appPageHeader.getBoundingClientRect().bottom : scrollRect.top
-      )
-      const tableRect = tableElement.getBoundingClientRect()
-      const maxShift = Math.max(0, tableRect.height - thead.offsetHeight)
-      const shift = MathUtil.clamp(stickyTop - tableRect.top, 0, maxShift)
-      thead.style.transform = shift > 0.5 ? `translate3d(0, ${shift}px, 0)` : ''
-    }
-
-    update()
-    const resizeObserver = new ResizeObserver(update)
-    resizeObserver.observe(tableElement)
-    scrollElement.addEventListener('scroll', update, { passive: true })
-    window.addEventListener('resize', update)
-    return () => {
-      resizeObserver.disconnect()
-      scrollElement.removeEventListener('scroll', update)
-      window.removeEventListener('resize', update)
-      thead.style.transform = ''
-    }
-  }, [usesPageSticky])
+  const applyResize = useCallback(() => {
+    const info = table.getState().columnSizingInfo
+    const columnId = info.isResizingColumn
+    if (!columnId) return
+    const deltaOffset = resizePointerXRef.current - (info.startOffset ?? 0)
+    const newWidth = Math.max(minColumnWidth(columnId), (info.startSize ?? 0) + deltaOffset)
+    table.setColumnSizing(prev => (prev[columnId] === newWidth ? prev : { ...prev, [columnId]: newWidth }))
+    table.setColumnSizingInfo(prev => ({ ...prev, deltaOffset }))
+  }, [table, minColumnWidth])
 
   const handleResizeMove = useCallback((e: MouseEvent | TouchEvent) => {
     if (!table.getState().columnSizingInfo.isResizingColumn) return
-    const currentX = 'touches' in e ? e.touches[0].clientX : e.clientX
-    const deltaOffset = currentX - (table.getState().columnSizingInfo.startOffset ?? 0)
-
-    const newWidth = (table.getState().columnSizingInfo.startSize ?? 0) + (table.getState().columnSizingInfo.deltaOffset ?? 0)
-
-    table.setColumnSizing(prev => {
-      return {
-        ...prev,
-        [table.getState().columnSizingInfo.isResizingColumn as string]: newWidth,
-      }
+    resizePointerXRef.current = 'touches' in e ? e.touches[0].clientX : e.clientX
+    if (resizeFrameRef.current !== null) return
+    resizeFrameRef.current = window.requestAnimationFrame(() => {
+      resizeFrameRef.current = null
+      applyResize()
     })
-    table.setColumnSizingInfo((prev) => ({
-      ...prev,
-      deltaOffset,
-    }))
-  }, [table])
+  }, [table, applyResize])
 
-  const handleResizeEnd = useCallback(() => {
+  const handleResizeEnd = useCallback((e: PointerEvent) => {
     if (!table.getState().columnSizingInfo.isResizingColumn) return
-    const newWidth = (table.getState().columnSizingInfo.startSize ?? 0) + (table.getState().columnSizingInfo.deltaOffset ?? 0)
-
-    table.setColumnSizing(prev => {
-      return {
-        ...prev,
-        [table.getState().columnSizingInfo.isResizingColumn as string]: newWidth,
-      }
-    })
+    if (typeof e.clientX === 'number' && e.clientX !== 0) {
+      resizePointerXRef.current = e.clientX
+    }
+    if (resizeFrameRef.current !== null) {
+      window.cancelAnimationFrame(resizeFrameRef.current)
+      resizeFrameRef.current = null
+    }
+    applyResize()
     table.setColumnSizingInfo({
       columnSizingStart: [],
       deltaOffset: null,
@@ -92,7 +61,7 @@ export const TableHeader = ({ isSticky = false, stickyScroll = 'container' }: Ta
       startOffset: null,
       startSize: null,
     })
-  }, [table])
+  }, [table, applyResize])
 
   useEffect(() => {
     window.addEventListener('pointermove', handleResizeMove)
@@ -100,6 +69,10 @@ export const TableHeader = ({ isSticky = false, stickyScroll = 'container' }: Ta
     return () => {
       window.removeEventListener('pointermove', handleResizeMove)
       window.removeEventListener('pointerup', handleResizeEnd)
+      if (resizeFrameRef.current !== null) {
+        window.cancelAnimationFrame(resizeFrameRef.current)
+        resizeFrameRef.current = null
+      }
     }
   }, [handleResizeEnd, handleResizeMove, table])
 
@@ -127,7 +100,7 @@ export const TableHeader = ({ isSticky = false, stickyScroll = 'container' }: Ta
           )}
         </TableStateContext.Consumer>
       ))}
-      <thead ref={theadRef} data-name="table-header" data-sticky-page={PropsUtil.dataAttributes.bool(usesPageSticky)}>
+      <thead data-name="table-header">
         {table.getHeaderGroups().map(headerGroup => (
           <tr key={headerGroup.id} data-name="table-header-row" className={clsx(table.options.meta?.headerRowClassName)}>
             {headerGroup.headers.map(header => {
@@ -184,7 +157,11 @@ export const TableHeader = ({ isSticky = false, stickyScroll = 'container' }: Ta
                   <Visibility isVisible={header.column.getCanResize()}>
                     <div
                       onPointerDown={(e) => {
+                        e.preventDefault()
+                        e.currentTarget.setPointerCapture(e.pointerId)
+                        window.getSelection()?.removeAllRanges()
                         const startX = e.clientX
+                        resizePointerXRef.current = startX
                         const renderedWidth = (e.currentTarget as HTMLElement).closest('th')?.getBoundingClientRect().width
                         table.setColumnSizingInfo({
                           columnSizingStart: Object.entries(table.getState().columnSizing),

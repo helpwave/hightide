@@ -49,6 +49,26 @@ and adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 - Published CSS missing browser vendor prefixes
 - `ChangingNumber` animation after removal of the legacy stepper change-rate utilities
 
+## [0.13.5] - 2026-07-04
+
+### Changed
+
+- Sticky table headers are now pure CSS (`position: sticky`) in every scroll mode: the `AppPage` header moved out of the scroll container (new `app-page-body` wrapper) and page-scroll table containers no longer create their own scrollport, removing the per-scroll-event JS repositioning (`getBoundingClientRect` + `transform`) that lagged behind fast scrolling
+- Virtualized table rows and card-grid rows are memoized, so the re-render the virtualizer triggers on every scroll frame only reconciles the row list instead of re-rendering every visible cell
+- Infinite scroll (`onReachBottom`) is derived from the virtualizer's rendered range instead of an extra scroll listener, removing per-scroll-event forced layout reads (`scrollHeight`/`clientHeight`)
+- Inactive virtualizer instances get a zero item count so they no longer hold measurement caches for the full row set
+- Naturally sized (`columnSizingMode: 'natural'`) virtualized tables lock their measured column widths once rows are rendered (`data-natural-locked`, fixed table layout), so virtual row swaps no longer re-run the full-table auto layout or make the header shift; widths re-measure on viewport resize and user-resized columns keep their width
+- Column resize drags are clamped to the column's `minSize` (users can widen resizable columns freely but can no longer drag them below their minimum width), track the pointer without the previous one-event lag, and batch their table-state updates per animation frame instead of per pointermove
+
+### Fixed
+
+- Column resize drags no longer freeze mid-gesture: the resize handle now captures the pointer and prevents the browser's default press behaviour, so a native text-selection drag (started from previously selected header text) can no longer cancel the pointer stream after the first move
+- Row measurement (`ResizeObserver`) is batched into animation frames and scroll-idle detection uses the native `scrollend` event where available
+
+### Removed
+
+- `stickyScroll` prop on `TableHeader` (obsolete: sticky headers no longer need JS positioning)
+
 ## [0.13.4] - 2026-07-03
 
 ### Fixed
