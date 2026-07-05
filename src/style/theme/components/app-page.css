@@ -71,8 +71,7 @@
   }
 
   .app-page-sidebar-with-navigation-scroll {
-    @apply flex-1 min-h-0 px-3 py-1 overflow-y-scroll overscroll-y-contain;
-    scrollbar-gutter: stable;
+    @apply flex-1 min-h-0 px-3 py-1 overflow-y-auto overscroll-y-contain;
   }
 
   .app-page-sidebar-with-navigation-footer {

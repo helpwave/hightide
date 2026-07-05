@@ -158,7 +158,6 @@
 
   .drawer-content {
     @apply flex flex-col-0 h-full w-full overflow-y-auto;
-    scrollbar-gutter: stable;
   }
 
   .drawer-header {
