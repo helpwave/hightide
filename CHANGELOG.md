@@ -5,6 +5,12 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/)
 and adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [Unreleased]
+
+### Fixed
+
+- Table containers in page-scroll mode (`data-page-scroll`) no longer grow beyond 100% width; horizontal overflow now scrolls inside the table container instead of the surrounding page, while vertical scrolling stays on the page
+
 ## [0.14.0] - 2026-07-05
 
 ### Added
