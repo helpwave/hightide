@@ -1,7 +1,7 @@
 import { type ReactNode } from 'react'
 import type { DateTimeFormat } from '@/src/utils/date'
-import type { TimePickerProps } from './TimePicker'
-import { TimePicker } from './TimePicker'
+import type { TimeInputProps } from './TimeInput'
+import { TimeInput } from './TimeInput'
 import type { DatePickerProps } from './DatePicker'
 import { DatePicker } from './DatePicker'
 import type { FormFieldDataHandling } from '../../form/FormField'
@@ -10,12 +10,12 @@ import { useControlledState } from '@/src/hooks/useControlledState'
 export interface DateTimePickerProps extends
 Partial<FormFieldDataHandling<Date>>,
 Pick<DatePickerProps, 'start' | 'end' | 'weekStart' | 'markToday'>,
-Pick<TimePickerProps, 'is24HourFormat' | 'minuteIncrement' | 'secondIncrement' | 'millisecondIncrement' | 'precision'>
+Pick<TimeInputProps, 'is24HourFormat' | 'minuteIncrement' | 'secondIncrement' | 'millisecondIncrement' | 'precision'>
 {
   initialValue?: Date,
   mode?: DateTimeFormat,
   datePickerProps?: Omit<DatePickerProps, 'onChange' | 'value' | 'start' | 'end' | 'markToday'>,
-  timePickerProps?: Omit<TimePickerProps, 'onChange' | 'time' | 'is24HourFormat' | 'minuteIncrement' | 'secondIncrement' | 'millisecondIncrement' | 'precision'>,
+  timeInputProps?: Omit<TimeInputProps, 'value' | 'onValueChange' | 'onEditComplete' | 'is24HourFormat' | 'minuteIncrement' | 'secondIncrement' | 'millisecondIncrement' | 'precision'>,
 }
 
 /**
@@ -35,7 +35,7 @@ export const DateTimePicker = ({
   precision,
   onValueChange,
   onEditComplete,
-  timePickerProps,
+  timeInputProps,
   datePickerProps,
 }: DateTimePickerProps) => {
   const useDate = mode === 'dateTime' || mode === 'date'
@@ -65,8 +65,8 @@ export const DateTimePicker = ({
   }
   if (useTime) {
     timeDisplay = (
-      <TimePicker
-        {...timePickerProps}
+      <TimeInput
+        {...timeInputProps}
         is24HourFormat={is24HourFormat}
         minuteIncrement={minuteIncrement}
         secondIncrement={secondIncrement}
@@ -80,7 +80,7 @@ export const DateTimePicker = ({
   }
 
   return (
-    <div className="flex-row-2 min-h-71 max-h-71">
+    <div className="flex-col-2 min-h-71 max-h-71">
       {dateDisplay}
       {timeDisplay}
     </div>

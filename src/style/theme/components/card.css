@@ -1,91 +1,66 @@
 @layer components {
-  [data-name="card"] {
-    @apply flex-col-1 w-full min-w-0 surface coloring-solid shadow-md;
+  .card {
+    @apply flex-col-0 w-full min-w-0 shadow-md surface coloring-solid;
 
     &[data-size="sm"] {
-      @apply px-2 py-1 rounded;
+      @apply px-3 py-2 rounded-md;
     }
 
     &[data-size="md"] {
-      @apply px-4 py-2 rounded-md;
+      @apply px-4 py-3 gap-y-3 rounded-md;
     }
 
     &[data-size="lg"] {
-      @apply px-8 py-4 rounded-lg;
+      @apply px-8 py-6 gap-y-4 rounded-lg;
     }
   }
 
-  [data-name="action-card"],
-  .navigation-card {
-    @apply flex-col-1 w-full min-w-0 surface coloring-solid-hover shadow-md focus-style-outline;
-    @apply hover:cursor-pointer hover:shadow-lg;
+  .card-header {
+    @apply flex flex-row items-center w-full min-w-0;
+
+    @apply gap-x-4;
+    @apply group-data-[size=sm]/card:min-h-16 group-data-[size=sm]/card:gap-x-3;
+    @apply group-data-[size=md]/card:min-h-20 group-data-[size=md]/card:gap-x-4;
+    @apply group-data-[size=lg]/card:min-h-24 group-data-[size=lg]/card:gap-x-6;
+  }
+
+  .card-content {
+    @apply flex-col-1.5 min-w-0 flex-1;
+  }
+
+  .card-leading,
+  .card-trailing {
+    @apply flex-col-0 items-center justify-center shrink-0 self-center text-description;
+  }
+
+  .card-title {
+    @apply min-w-0;
+
+    @apply typography-title-md;
+    @apply group-data-[size=sm]/card:typography-title-md;
+    @apply group-data-[size=md]/card:typography-title-md;
+    @apply group-data-[size=lg]/card:typography-title-lg;
+  }
+
+  .card-description {
+    @apply text-description;
+
+    @apply typography-body-md;
+    @apply group-data-[size=sm]/card:typography-body-md;
+    @apply group-data-[size=md]/card:typography-body-md;
+    @apply group-data-[size=lg]/card:typography-body-lg;
+  }
+
+  .action-card {
+    @apply surface coloring-solid-hover;
+    @apply focus-style-outline;
+
     transition: var(--coloring-transitions), var(--focus-transitions);
-
-    &[data-size="sm"] {
-      @apply px-2 py-1 rounded;
-    }
-
-    &[data-size="md"] {
-      @apply px-4 py-2 rounded-md;
-    }
-
-    &[data-size="lg"] {
-      @apply px-8 py-4 rounded-lg;
-    }
 
     &:focus-within {
       @apply focus-style-apply;
     }
-  }
 
-  [data-name="card-header"] {
-    @apply flex-row-4 items-center w-full min-w-0;
-  }
-
-  [data-name="card-content"] {
-    @apply flex-col-1 min-w-0 flex-1;
-  }
-
-  [data-name="card-leading"],
-  [data-name="card-trailing"] {
-    @apply flex-col-0 items-center justify-center shrink-0 self-center text-description;
-  }
-
-  .navigation-card-action {
-    @apply flex-col-0 items-center justify-center shrink-0 text-description transition-all rounded focus-visible:outline-none;
-    @apply group-hover/card:translate-x-1;
-    @apply group-hover/card:text-on-surface focus:text-on-surface;
-  }
-
-  .navigation-card-link {
-    @apply focus-visible:focus-style-none outline-none;
-  }
-
-  .navigation-card-action-icon {
-    @apply size-force-5;
-  }
-
-  [data-name="card-title"] {
-    @apply typography-title-md min-w-0;
-  }
-
-  [data-name="card"][data-size="sm"] [data-name="card-title"],
-  [data-name="action-card"][data-size="sm"] [data-name="card-title"],
-  [data-name="navigation-card"][data-size="sm"] [data-name="card-title"] {
-    @apply typography-title-sm;
-  }
-
-  [data-name="card"][data-size="lg"] [data-name="card-title"],
-  [data-name="action-card"][data-size="lg"] [data-name="card-title"],
-  [data-name="navigation-card"][data-size="lg"] [data-name="card-title"] {
-    @apply typography-title-lg;
-  }
-
-  [data-name="card-description"] {
-    @apply text-description typography-body-md;
-  }
-
-  [data-name="action-card"] {
     &:not([data-disabled]) {
       @apply cursor-pointer;
 
@@ -95,15 +70,32 @@
     }
 
     &[data-disabled] {
-      @apply cursor-not-allowed disabled;
+      @apply cursor-not-allowed;
     }
   }
 
-  [data-name="navigation-card"] {
-    @apply cursor-pointer;
+  .navigation-card {
+    @apply surface coloring-solid-hover;
+    @apply focus-style-outline;
+    @apply hover:cursor-pointer outline-none;
+    transition: var(--coloring-transitions), var(--focus-transitions);
 
     &:hover {
       @apply shadow-lg;
     }
+
+    &:focus-visible {
+      @apply focus-style-apply;
+    }
+  }
+
+  .navigation-card-action {
+    @apply flex-col-0 items-center justify-center shrink-0 text-description transition-all rounded focus-visible:outline-none;
+    @apply group-hover/card:translate-x-1;
+    @apply group-hover/card:text-on-surface focus:text-on-surface;
+  }
+
+  .navigation-card-action-icon {
+    @apply size-force-5;
   }
 }

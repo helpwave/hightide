@@ -63,49 +63,49 @@ function calculatePosition({
     let translateYPercent: number
 
     switch (hAlign) {
-      case 'beforeStart':
-        left = anchorRect.left
-        translateXPercent = -100
-        break
-      case 'afterStart':
-        left = anchorRect.left
-        translateXPercent = 0
-        break
-      case 'center':
-        left = anchorCenterX
-        translateXPercent = -50
-        break
-      case 'beforeEnd':
-        left = anchorRect.right
-        translateXPercent = -100
-        break
-      case 'afterEnd':
-        left = anchorRect.right
-        translateXPercent = 0
-        break
+    case 'beforeStart':
+      left = anchorRect.left
+      translateXPercent = -100
+      break
+    case 'afterStart':
+      left = anchorRect.left
+      translateXPercent = 0
+      break
+    case 'center':
+      left = anchorCenterX
+      translateXPercent = -50
+      break
+    case 'beforeEnd':
+      left = anchorRect.right
+      translateXPercent = -100
+      break
+    case 'afterEnd':
+      left = anchorRect.right
+      translateXPercent = 0
+      break
     }
 
     switch (vAlign) {
-      case 'beforeStart':
-        top = anchorRect.top
-        translateYPercent = -100
-        break
-      case 'afterStart':
-        top = anchorRect.top
-        translateYPercent = 0
-        break
-      case 'center':
-        top = anchorCenterY
-        translateYPercent = -50
-        break
-      case 'beforeEnd':
-        top = anchorRect.bottom
-        translateYPercent = -100
-        break
-      case 'afterEnd':
-        top = anchorRect.bottom
-        translateYPercent = 0
-        break
+    case 'beforeStart':
+      top = anchorRect.top
+      translateYPercent = -100
+      break
+    case 'afterStart':
+      top = anchorRect.top
+      translateYPercent = 0
+      break
+    case 'center':
+      top = anchorCenterY
+      translateYPercent = -50
+      break
+    case 'beforeEnd':
+      top = anchorRect.bottom
+      translateYPercent = -100
+      break
+    case 'afterEnd':
+      top = anchorRect.bottom
+      translateYPercent = 0
+      break
     }
 
     if (gap !== 0) {
@@ -125,8 +125,8 @@ function calculatePosition({
     const targetLeft = left + (width * translateXPercent / 100)
     const targetTop = top + (height * translateYPercent / 100)
 
-    const clampedLeft = MathUtil.clamp(targetLeft, [screenPadding, windowWidth - screenPadding - width])
-    const clampedTop = MathUtil.clamp(targetTop, [screenPadding, windowHeight - screenPadding - height])
+    const clampedLeft = MathUtil.clamp(targetLeft, screenPadding, windowWidth - screenPadding - width)
+    const clampedTop = MathUtil.clamp(targetTop, screenPadding, windowHeight - screenPadding - height)
 
     return {
       left,

@@ -59,7 +59,11 @@ const calculate = ({
     ...newSizing,
   }
   for (const columnId of columnIds) {
-    result[columnId] = MathUtil.clamp(result[columnId], [minWidthsPerColumn[columnId], maxWidthsPerColumn?.[columnId] ?? Infinity])
+    result[columnId] = MathUtil.clamp(
+      result[columnId],
+      minWidthsPerColumn[columnId],
+      maxWidthsPerColumn?.[columnId]
+    )
   }
 
   if(!hasTargetWidth) {

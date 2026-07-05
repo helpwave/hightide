@@ -79,7 +79,7 @@ export const multiSelectWithUser: Story = {
           {values.map((user) => (
             <div key={user.uuid} className="flex flex-col">
               <span>{user.name}</span>
-              <span className="typography-body-sm text-description">{user.email}</span>
+              <span className="text-description">{user.email}</span>
             </div>
           ))}
         </div>
@@ -94,7 +94,7 @@ export const multiSelectWithUser: Story = {
       >
         <div className="flex flex-col">
           <span>{user.name}</span>
-          <span className="typography-body-sm text-description">{user.email}</span>
+          <span className="text-description">{user.email}</span>
         </div>
       </MultiSelectOption>
     )),

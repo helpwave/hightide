@@ -82,7 +82,7 @@ export const selectWithUser: Story = {
         return (
           <div className="flex flex-col">
             <span>{user.name}</span>
-            <span className="typography-body-sm text-description">{user.email}</span>
+            <span className=" text-description">{user.email}</span>
           </div>
         )
       },
@@ -96,7 +96,7 @@ export const selectWithUser: Story = {
       >
         <div className="flex flex-col">
           <span>{user.name}</span>
-          <span className="typography-body-sm text-description">{user.email}</span>
+          <span className=" text-description">{user.email}</span>
         </div>
       </SelectOption>
     )),

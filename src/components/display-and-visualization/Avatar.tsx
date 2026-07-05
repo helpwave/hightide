@@ -1,4 +1,4 @@
-import type { HTMLAttributes } from 'react'
+import type { ElementType, HTMLAttributes, ImgHTMLAttributes, ReactNode } from 'react'
 import { useEffect, useMemo, useState } from 'react'
 import clsx from 'clsx'
 import { UserIcon } from 'lucide-react'
@@ -11,11 +11,15 @@ type ImageConfig = {
   alt: string,
 }
 
+export type AvatarImageProps = ImgHTMLAttributes<HTMLImageElement>
+
+const DefaultAvatarImage: ElementType<AvatarImageProps> = 'img'
 
 export type AvatarProps = Omit<HTMLAttributes<HTMLDivElement>, 'children'> & {
   image?: ImageConfig,
   name?: string,
   size?: AvatarSize,
+  ImageComponent?: ElementType<AvatarImageProps>,
 }
 
 /**
@@ -25,11 +29,13 @@ export const Avatar = ({
   image: initialImage,
   name,
   size = 'md',
+  ImageComponent = DefaultAvatarImage,
   ...props
 }: AvatarProps) => {
   const [hasError, setHasError] = useState(false)
   const [hasLoaded, setHasLoaded] = useState(false)
   const [image, setImage] = useState(initialImage)
+  const Image = ImageComponent
 
   const displayName = useMemo(() => {
     const maxLetters = size === 'sm' ? 1 : 2
@@ -58,7 +64,7 @@ export const Avatar = ({
       data-size={size ?? undefined}
     >
       <Visibility isVisible={isShowingImage}>
-        <img
+        <Image
           key={image?.avatarUrl}
           src={image?.avatarUrl}
           alt={image?.alt}
@@ -79,6 +85,7 @@ export type AvatarGroupProps = HTMLAttributes<HTMLDivElement> & {
   'showTotalNumber'?: boolean,
   'size'?: AvatarSize,
   'data-name'?: string,
+  'ImageComponent'?: ElementType<AvatarImageProps>,
 }
 
 /**
@@ -88,6 +95,7 @@ export const AvatarGroup = ({
   avatars,
   showTotalNumber = true,
   size = 'md',
+  ImageComponent,
   ...props
 }: AvatarGroupProps) => {
   const maxShownProfiles = 5
@@ -101,6 +109,7 @@ export const AvatarGroup = ({
           key={index}
           size={size}
           data-group=""
+          ImageComponent={avatar.ImageComponent ?? ImageComponent}
         />
       ))}
     </div>
@@ -150,6 +159,42 @@ export const AvatarWithStatus = ({
         data-size={size ?? undefined}
         data-status={status}
       />
+    </div>
+  )
+}
+
+type AvatarWithLabelPosition = 'left' | 'right'
+
+export type AvatarWithLabelProps = AvatarProps & {
+  label: ReactNode,
+  labelPosition?: AvatarWithLabelPosition,
+}
+
+/**
+ * An avatar with a label displayed beside it
+ */
+export const AvatarWithLabel = ({
+  label,
+  labelPosition = 'left',
+  className,
+  size = 'md',
+  ...avatarProps
+}: AvatarWithLabelProps) => {
+  const avatar = <Avatar {...avatarProps} size={size} />
+  const labelElement = (
+    <span className="avatar-with-label-text">
+      {label}
+    </span>
+  )
+
+  return (
+    <div
+      className={clsx('avatar-with-label', className)}
+      data-label-position={labelPosition}
+      data-size={size ?? undefined}
+    >
+      {labelPosition === 'left' ? labelElement : avatar}
+      {labelPosition === 'left' ? avatar : labelElement}
     </div>
   )
 }

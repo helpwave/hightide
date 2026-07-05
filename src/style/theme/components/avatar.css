@@ -113,4 +113,12 @@
       background-color: var(--color-warning);
     }
   }
+
+  .avatar-with-label {
+    @apply flex-row-2 items-center;
+  }
+
+  .avatar-with-label-text {
+    @apply typography-body-md truncate;
+  }
 }
