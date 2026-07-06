@@ -1,5 +1,4 @@
 @layer components {
-
   [data-name="select-button"],
   [data-name="multi-select-button"] {
     @apply input-element flex-row-2 items-center justify-between rounded-md px-3 py-2;
@@ -23,7 +22,12 @@
 
   [data-name="select-list"],
   [data-name="multi-select-list"] {
-    @apply flex-col-1 overflow-y-auto;
+    @apply flex-col-1 overflow-y-auto h-full;
+  }
+
+  .multi-select-content,
+  .select-content {
+    @apply flex-col-1;
   }
 
   [data-name="select-list-option"],

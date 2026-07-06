@@ -5,6 +5,42 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/)
 and adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [0.14.3] - 2026-07-06
+
+### Added
+
+- `TimeInput` `allowLooping` prop (default `false`) to control stepper value looping; logs an experimental-feature warning via `useLogOnce` when enabled
+- Class-based CSS theme files for `DatePicker`, `DateTimePicker`, `DateTimePickerDialog`, and `YearMonthPicker`
+- `DateTimePicker` container-query layout: date and time stack vertically by default and switch to a horizontal row at 24rem for minute/second precision or 40rem for millisecond precision
+- `DateTimePickerDialog` container-query action bar: stacks vertically in narrow containers and switches to a horizontal row at 20rem
+- `DateTimeInput` popup `data-mode` attribute for mode-specific dialog sizing
+- `TabPanel` `data-in-custom-tab-view` attribute so panels skip default padding when portaled into a custom `TabView`
+- `DateTimePickerDialog` Storybook story
+- `TabSwitcher` `tabSwitcherWithTabView` Storybook story demonstrating a custom `TabView` layout
+- `Browser Compatibility/Safari` Storybook story with demos for CSS that requires WebKit prefixes (`sticky`, `user-select`, `appearance`, `touch-action`, `transform`, `::-webkit-scrollbar`)
+
+### Changed
+
+- Date/time picker family (`DatePicker`, `DateTimePicker`, `DateTimePickerDialog`, `DayPicker`, `YearMonthPicker`, `DateTimeField`, `DateTimeInput`) migrated from `data-name` selectors to class-based CSS
+- `FormFieldLayout` migrated from `data-name` to class-based CSS (`.form-field-container`, `.form-field-label`, `.form-field-description`, `.form-field-error`)
+- `TabSwitcher` (`TabList`, `TabListItem`, `TabPanel`) migrated from `data-name` to class-based CSS
+- `DatePicker` always shows today/previous/next navigation buttons (disabled outside day view); month label uses short month format
+- `DateTimeInput` dialog popup uses a viewport-capped `min-width` and applies the wider tablet width only for `dateTime` mode
+- `FormFieldLayout` error message moved from absolute positioning to in-flow layout with padding
+- `TabPanel` default padding only applied when not rendered inside a custom `TabView`
+- `TimeInput` layout no longer wraps stepper segments
+- `NumberStepperInput` increment/decrement buttons use `tabIndex={-1}`
+- `useAnchoredPosition` default `screenPadding` reduced from 16 to 4
+- `useHightideTranslation` passes an empty object to ICU interpolation when `values` is undefined
+- `init` script now runs `npm i`, `clean`, and `build-intl`; `clean` also removes `storybook-static`
+
+### Fixed
+
+- `DayPicker` no longer steals focus when the displayed month changes unless focus is already inside the picker
+- `NumberStepperInput` keyboard hold-to-repeat stops when the input loses focus
+- Date/time picker layout, dialog sizing, and responsive behavior in constrained containers
+- `useAnchoredPosition` to account for keyboards on mobile devices
+
 ## [0.14.1] - 2026-07-05
 
 ### Changed

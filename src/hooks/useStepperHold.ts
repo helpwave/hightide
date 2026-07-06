@@ -116,6 +116,7 @@ export function useStepperHold({
 
     let shouldStop = false
     let loopingRangeResult: LoopingRangeResult | null = null
+    let result = holdState.value
 
     if (!loopingRef.current) {
       if (holdState.direction > 0 && maximum !== undefined && holdState.value >= maximum) {
@@ -126,27 +127,26 @@ export function useStepperHold({
         holdState.value = minimum
         shouldStop = true
       }
-
-
+      result = MathUtil.toModulo(holdState.value, stepSize, minimum, maximum)
     } else {
       if(minimum !== undefined && maximum !== undefined) {
         loopingRangeResult = MathUtil.resolveLoopingRangeValue(holdState.value, minimum, maximum)
       } else {
         loopingRangeResult = { value: MathUtil.clamp(holdState.value, minimum, maximum), loopedOver: null }
       }
+      loopingRangeResult.value = MathUtil.toModulo(loopingRangeResult.value, stepSize, minimum, maximum)
+      result = loopingRangeResult.value
     }
-
-    const rounded = MathUtil.roundModulo(holdState.value, stepSize)
 
     if(shouldStop) stopHold()
 
-    onValueChangeRef.current(rounded)
+    onValueChangeRef.current(result)
 
     if (loopingRangeResult?.loopedOver) {
       onLoopedRef.current?.({
         direction: holdState.direction,
         loopedAround: loopingRangeResult.loopedOver,
-        value: rounded,
+        value: result,
       })
     }
   }, [maximum, minimum, stepSize, stopHold])
