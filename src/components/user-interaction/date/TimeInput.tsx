@@ -106,7 +106,6 @@ export const TimeInput = ({
     updateValue((date) => {
       date.setDate(date.getDate() + direction)
       if(!is24HourFormat) {
-        console.log({ hoursBefore: date.getHours(), hoursAfter: date.getHours() - direction * 12 })
         date.setHours(date.getHours() - direction * 12)
       }
     })
