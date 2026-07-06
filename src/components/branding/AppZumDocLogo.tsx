@@ -69,7 +69,7 @@ export const AppZumDocLogo = ({
                 strokeWidth={7}
                 strokeLinecap="round"
                 pathLength={1000}
-                strokeDasharray="1000"
+                strokeDasharray="1000 2000"
               />
             </g>
             <g clipPath={`url(#${id}-front)`}>
@@ -80,7 +80,7 @@ export const AppZumDocLogo = ({
                 strokeWidth={7}
                 strokeLinecap="round"
                 pathLength={1000}
-                strokeDasharray="1000"
+                strokeDasharray="1000 2000"
               />
             </g>
           </>
