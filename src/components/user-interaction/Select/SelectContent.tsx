@@ -82,7 +82,7 @@ export const SelectContent = forwardRef<HTMLUListElement, SelectContentProps>(fu
         props.onClose?.()
       }}
       aria-labelledby={context.config.ids.trigger}
-      className={clsx('gap-y-1', props.className)}
+      className={clsx('select-content', props.className)}
     >
       {showSearch && (
         <Input
