@@ -25,12 +25,3 @@ export const appZumDocLoadingAnimation: Story = {
     height: 128,
   },
 }
-
-export const appZumDocLoadingAnimationSlow: Story = {
-  args: {
-    animate: 'loading',
-    animationDuration: 3,
-    width: 128,
-    height: 128,
-  },
-}
