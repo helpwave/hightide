@@ -103,32 +103,11 @@
   }
 }
 
-@-webkit-keyframes azdFillBack {
-  0% {
-    stroke-dashoffset: 1005;
-  }
-  50%,
-  100% {
-    stroke-dashoffset: 0;
-  }
-}
-
 @keyframes azdFillBack {
   0% {
     stroke-dashoffset: 1005;
   }
   50%,
-  100% {
-    stroke-dashoffset: 0;
-  }
-}
-
-@-webkit-keyframes azdFillFront {
-  0%,
-  33% {
-    stroke-dashoffset: 1005;
-  }
-  73%,
   100% {
     stroke-dashoffset: 0;
   }
@@ -226,12 +205,10 @@
 }
 
 @utility animate-azd-fill-back {
-  -webkit-animation: azdFillBack var(--helpwave-loading-duration, 1.7s) ease-in infinite normal;
   animation: azdFillBack var(--helpwave-loading-duration, 1.7s) ease-in infinite normal;
 }
 
 @utility animate-azd-fill-front {
-  -webkit-animation: azdFillFront var(--helpwave-loading-duration, 1.7s) ease-in infinite normal;
   animation: azdFillFront var(--helpwave-loading-duration, 1.7s) ease-in infinite normal;
 }
 
