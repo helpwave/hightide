@@ -10,14 +10,14 @@
     "access": "public"
   },
   "license": "MPL-2.0",
-  "version": "0.14.2",
+  "version": "0.14.3",
   "browserslist": [
     "> 0.2%",
     "last 3 versions",
     "Firefox ESR",
     "not dead",
-    "Safari >= 11",
-    "iOS >= 11",
+    "Safari >= 5",
+    "iOS >= 8",
     "Android >= 5"
   ],
   "files": [
@@ -47,7 +47,7 @@
     "storybook:devices": "storybook dev -p 6006 --host",
     "build-storybook": "storybook build",
     "lint": "eslint .",
-    "init": "npm run build-intl",
+    "init": "npm i && npm run clean && npm run build-intl",
     "test": "jest"
   },
   "dependencies": {

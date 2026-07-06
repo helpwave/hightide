@@ -23,17 +23,16 @@ export interface DateTimeInputProps extends
   Partial<FormFieldDataHandling<Date | null>>,
   Pick<DateTimePickerProps, 'start' | 'end' | 'weekStart' | 'markToday' | 'is24HourFormat' | 'minuteIncrement' | 'secondIncrement' | 'millisecondIncrement' | 'precision'>
 {
-  'initialValue'?: Date | null,
-  'allowRemove'?: boolean,
-  'allowClear'?: boolean,
-  'mode'?: DateTimeFormat,
-  'timeZone'?: string,
-  'containerProps'?: HTMLAttributes<HTMLDivElement>,
-  'pickerProps'?: Omit<DateTimePickerProps, keyof FormFieldDataHandling<Date> | 'mode' | 'initialValue' | 'start' | 'end' | 'weekStart' | 'markToday' | 'is24HourFormat' | 'minuteIncrement' | 'secondIncrement' | 'millisecondIncrement' | 'precision'>,
-  'outsideClickCloses'?: boolean,
-  'onDialogOpeningChange'?: (isOpen: boolean) => void,
-  'actions'?: ReactNode[],
-  'data-name'?: string,
+  initialValue?: Date | null,
+  allowRemove?: boolean,
+  allowClear?: boolean,
+  mode?: DateTimeFormat,
+  timeZone?: string,
+  containerProps?: HTMLAttributes<HTMLDivElement>,
+  pickerProps?: Omit<DateTimePickerProps, keyof FormFieldDataHandling<Date> | 'mode' | 'initialValue' | 'start' | 'end' | 'weekStart' | 'markToday' | 'is24HourFormat' | 'minuteIncrement' | 'secondIncrement' | 'millisecondIncrement' | 'precision'>,
+  outsideClickCloses?: boolean,
+  onDialogOpeningChange?: (isOpen: boolean) => void,
+  actions?: ReactNode[],
 }
 
 export const DateTimeInput = forwardRef<HTMLDivElement, DateTimeInputProps>(function DateTimeInput({
@@ -131,8 +130,8 @@ export const DateTimeInput = forwardRef<HTMLDivElement, DateTimeInputProps>(func
           }
         }}
 
-        className={clsx('cursor-text', props.className)}
-        data-name={props['data-name'] ?? 'date-time-input'}
+        className={clsx('date-time-input', props.className)}
+        data-name="date-time-input"
         data-value={PropsUtil.dataAttributes.bool(!!state)}
         data-has-actions={PropsUtil.dataAttributes.bool(hasActions)}
         {...PropsUtil.dataAttributes.interactionStates({ disabled, readOnly, invalid, required })}
@@ -203,7 +202,9 @@ export const DateTimeInput = forwardRef<HTMLDivElement, DateTimeInputProps>(func
         role="dialog"
         aria-labelledby={ids.label}
 
-        className="flex-col-2 p-2"
+        data-mode={mode}
+
+        className="date-time-input-dialog-popup"
       >
         <DateTimePickerDialog
           value={toZoned(dialogValue)}

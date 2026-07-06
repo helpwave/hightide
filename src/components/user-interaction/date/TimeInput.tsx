@@ -46,6 +46,7 @@ const millisecondSteps: Record<TimePickerMillisecondIncrement, number> = {
 export interface TimeInputProps extends Partial<FormFieldDataHandling<Date>> {
   initialValue?: Date,
   is24HourFormat?: boolean,
+  allowLooping?: boolean,
   precision?: DateTimePrecision,
   minuteIncrement?: TimePickerMinuteIncrement,
   secondIncrement?: TimePickerSecondIncrement,
@@ -76,6 +77,7 @@ export const TimeInput = ({
   secondIncrement = '1s',
   millisecondIncrement = '100ms',
   precision = 'minute',
+  allowLooping = false,
   className,
 }: TimeInputProps) => {
   const { is24HourFormat: contextIs24HourFormat } = useDateTimeFormat()
@@ -165,7 +167,9 @@ export const TimeInput = ({
         looping={true}
         approximateMaxCharacters={2}
         minimum={is24HourFormat ? 0 : 1}
-        maximum={is24HourFormat ? 23 : 12.99}
+        maximum={allowLooping ?
+          (is24HourFormat ? 23.99 : 12.99) :
+          (is24HourFormat ? 23 : 12)}
         value={hourValue}
         onValueChange={setHourValue}
         onEditComplete={setHourValue}

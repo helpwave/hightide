@@ -1,0 +1,27 @@
+@layer components {
+  .date-time-picker-dialog {
+    @apply flex-col-2 w-full;
+    container-type: inline-size;
+    container-name: date-time-picker-dialog;
+  }
+
+  .date-time-picker-dialog-header {
+    @apply flex-row-2 justify-center w-full py-1;
+  }
+
+  .date-time-picker-dialog-label {
+    @apply typography-title-md font-semibold;
+  }
+
+  .date-time-picker-dialog-actions {
+    @apply mt-2 flex-col-2 w-full;
+
+    @container date-time-picker-dialog (min-width: 20rem) {
+      @apply flex-row-2 justify-end;
+    }
+  }
+
+  .date-time-picker-dialog-action {
+    @apply min-w-26;
+  }
+}
