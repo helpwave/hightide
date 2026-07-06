@@ -14,8 +14,10 @@ export const TableBody = React.memo(function TableBodyVisual() {
   const columnOrder = table.getState().columnOrder
   const columnVisibility = table.getState().columnVisibility
   const pagination = table.getState().pagination
+  const allColumns = new Set(table.getAllColumns().map(col => col.id))
 
   const columns = columnOrder
+    .filter(id => allColumns.has(id))
     .map(id => table.getColumn(id))
     .filter(Boolean)
     .filter(col => !!col && columnVisibility?.[col.id] !== false)

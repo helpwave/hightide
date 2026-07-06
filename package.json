@@ -16,8 +16,8 @@
     "last 3 versions",
     "Firefox ESR",
     "not dead",
-    "Safari >= 11",
-    "iOS >= 11",
+    "Safari >= 5",
+    "iOS >= 8",
     "Android >= 5"
   ],
   "files": [
@@ -44,9 +44,10 @@
     "barrel": "node scripts/barrel.js",
     "build": "npm run clean && npm run build-intl && npm run barrel && tsup && npm run build-css && cp -R src/style/ ./dist/style/uncompiled/ && cp -R scripts/ ./dist/scripts/",
     "storybook": "storybook dev -p 6006",
+    "storybook:devices": "storybook dev -p 6006 --host",
     "build-storybook": "storybook build",
     "lint": "eslint .",
-    "init": "npm run build-intl",
+    "init": "npm i && npm run clean && npm run build-intl",
     "test": "jest"
   },
   "dependencies": {

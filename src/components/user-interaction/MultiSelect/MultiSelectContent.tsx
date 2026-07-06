@@ -92,7 +92,7 @@ export const MultiSelectContent = forwardRef<
         props.onClose?.()
       }}
       aria-labelledby={context.config.ids.trigger}
-      className={clsx('gap-y-1', props.className)}
+      className={clsx('multi-select-content', props.className)}
     >
       {showSearch && (
         <Input

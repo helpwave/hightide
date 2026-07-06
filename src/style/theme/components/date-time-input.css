@@ -31,4 +31,13 @@
   [data-name="date-time-separator"] {
     @apply px-px;
   }
+
+  .date-time-input-dialog-popup {
+    @apply p-2 min-w-96;
+    min-width: calc(min(100vw - 4 * var(--spacing), 96 * var(--spacing)));
+
+    &[data-mode="dateTime"] {
+      @apply tablet:min-w-180;
+    }
+  }
 }

@@ -39,4 +39,14 @@ describe('generated CSS vendor prefixes', () => {
   test('prefixes appearance resets for WebKit browsers', () => {
     expect(css).toMatch(/-webkit-appearance:\s*none/)
   })
+
+  test('prefixes loading wave animations for WebKit browsers', () => {
+    expect(css).toMatch(/@-webkit-keyframes bigLeftUp/)
+    expect(css).toMatch(/-webkit-animation:\s*bigLeftUp/)
+  })
+
+  test('keeps stroke-dashoffset unitless for SVG animations', () => {
+    expect(css).not.toMatch(/stroke-dashoffset:\s*-?\d+px/)
+    expect(css).toMatch(/stroke-dashoffset:\s*1000/)
+  })
 })

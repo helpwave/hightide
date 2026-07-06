@@ -23,6 +23,9 @@ const config: StorybookConfig = {
     const projectRoot = path.resolve(dirname, '..')
 
     return mergeConfig(config, {
+      css: {
+        postcss: path.resolve(projectRoot, 'postcss.config.mjs'),
+      },
       resolve: {
         alias: {
           '@': projectRoot,
