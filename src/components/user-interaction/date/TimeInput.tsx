@@ -163,7 +163,7 @@ export const TimeInput = ({
     <div data-name="time-input" className={clsx('time-input', className)}>
       <NumberStepperInput
         layout="col"
-        looping={true}
+        looping={allowLooping}
         approximateMaxCharacters={2}
         minimum={is24HourFormat ? 0 : 1}
         maximum={allowLooping ?
@@ -180,7 +180,7 @@ export const TimeInput = ({
       <span className="time-input-separator">:</span>
       <NumberStepperInput
         layout="col"
-        looping={true}
+        looping={allowLooping}
         approximateMaxCharacters={2}
         minimum={0}
         maximum={59}
@@ -197,7 +197,7 @@ export const TimeInput = ({
         <span className="time-input-separator">:</span>
         <NumberStepperInput
           layout="col"
-          looping={true}
+          looping={allowLooping}
           approximateMaxCharacters={2}
           minimum={0}
           maximum={59}
@@ -214,7 +214,7 @@ export const TimeInput = ({
         <span className="time-input-separator">.</span>
         <NumberStepperInput
           layout="col"
-          looping={true}
+          looping={allowLooping}
           approximateMaxCharacters={3}
           minimum={0}
           maximum={999}
