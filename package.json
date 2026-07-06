@@ -10,7 +10,7 @@
     "access": "public"
   },
   "license": "MPL-2.0",
-  "version": "0.14.1",
+  "version": "0.14.2",
   "browserslist": [
     "> 0.2%",
     "last 3 versions",
@@ -44,6 +44,7 @@
     "barrel": "node scripts/barrel.js",
     "build": "npm run clean && npm run build-intl && npm run barrel && tsup && npm run build-css && cp -R src/style/ ./dist/style/uncompiled/ && cp -R scripts/ ./dist/scripts/",
     "storybook": "storybook dev -p 6006",
+    "storybook:devices": "storybook dev -p 6006 --host",
     "build-storybook": "storybook build",
     "lint": "eslint .",
     "init": "npm run build-intl",
