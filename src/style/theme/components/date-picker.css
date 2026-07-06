@@ -1,0 +1,13 @@
+@layer components {
+  .date-picker {
+    @apply flex-col-3 grow;
+  }
+
+  .date-picker-content {
+    @apply h-60 max-h-60;
+  }
+
+  .date-picker-header {
+    @apply flex-row-2 items-center justify-between;
+  }
+}

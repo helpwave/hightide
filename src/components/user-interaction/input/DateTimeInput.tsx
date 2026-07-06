@@ -216,7 +216,7 @@ export const DateTimeInput = forwardRef<HTMLDivElement, DateTimeInputProps>(func
             onEditComplete?.(absolute)
             changeOpenWrapper(false)
           }}
-          pickerProps={pickerProps}
+          pickerProps={{ ...(pickerProps ?? {}), className: 'date-time-input-date-time-picker' }}
           mode={mode}
           start={toZoned(start ?? null) ?? undefined}
           end={toZoned(end ?? null) ?? undefined}
@@ -227,6 +227,7 @@ export const DateTimeInput = forwardRef<HTMLDivElement, DateTimeInputProps>(func
           secondIncrement={secondIncrement}
           millisecondIncrement={millisecondIncrement}
           precision={precision}
+          className="date-time-input-dialog"
         />
       </PopUp>
     </div>

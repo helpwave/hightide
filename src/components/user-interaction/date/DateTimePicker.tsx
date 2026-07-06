@@ -1,3 +1,4 @@
+import type { HTMLAttributes } from 'react'
 import { type ReactNode } from 'react'
 import type { DateTimeFormat } from '@/src/utils/date'
 import type { TimeInputProps } from './TimeInput'
@@ -6,8 +7,10 @@ import type { DatePickerProps } from './DatePicker'
 import { DatePicker } from './DatePicker'
 import type { FormFieldDataHandling } from '../../form/FormField'
 import { useControlledState } from '@/src/hooks/useControlledState'
+import clsx from 'clsx'
 
 export interface DateTimePickerProps extends
+HTMLAttributes<HTMLDivElement>,
 Partial<FormFieldDataHandling<Date>>,
 Pick<DatePickerProps, 'start' | 'end' | 'weekStart' | 'markToday'>,
 Pick<TimeInputProps, 'is24HourFormat' | 'minuteIncrement' | 'secondIncrement' | 'millisecondIncrement' | 'precision'>
@@ -37,6 +40,7 @@ export const DateTimePicker = ({
   onEditComplete,
   timeInputProps,
   datePickerProps,
+  ...props
 }: DateTimePickerProps) => {
   const useDate = mode === 'dateTime' || mode === 'date'
   const useTime = mode === 'dateTime' || mode === 'time'
@@ -52,8 +56,6 @@ export const DateTimePicker = ({
     dateDisplay = (
       <DatePicker
         {...datePickerProps}
-        className="min-w-80"
-        yearMonthPickerProps={{ className: 'h-full grow' }}
         start={start}
         end={end}
         weekStart={weekStart}
@@ -80,7 +82,7 @@ export const DateTimePicker = ({
   }
 
   return (
-    <div className="flex-col-2 min-h-71 max-h-71">
+    <div {...props} className={clsx('date-time-picker', props.className)} data-mode={mode}>
       {dateDisplay}
       {timeDisplay}
     </div>

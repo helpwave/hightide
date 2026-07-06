@@ -127,14 +127,14 @@ export function useStepperHold({
         holdState.value = minimum
         shouldStop = true
       }
-      result = MathUtil.toModulo(holdState.value, stepSize, minimum, maximum)
+      result = MathUtil.toStepRange(holdState.value, stepSize, minimum, maximum)
     } else {
       if(minimum !== undefined && maximum !== undefined) {
         loopingRangeResult = MathUtil.resolveLoopingRangeValue(holdState.value, minimum, maximum)
       } else {
         loopingRangeResult = { value: MathUtil.clamp(holdState.value, minimum, maximum), loopedOver: null }
       }
-      loopingRangeResult.value = MathUtil.toModulo(loopingRangeResult.value, stepSize, minimum, maximum)
+      loopingRangeResult.value = MathUtil.toStepRange(loopingRangeResult.value, stepSize, minimum, maximum)
       result = loopingRangeResult.value
     }
 

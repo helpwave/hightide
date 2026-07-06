@@ -31,26 +31,26 @@ describe('MathUtil', () => {
     })
   })
 
-  describe('closestModulo', () => {
+  describe('closestStep', () => {
     test('returns value unchanged when already aligned to modulo', () => {
-      expect(MathUtil.closestModulo(10, 5)).toBe(10)
-      expect(MathUtil.closestModulo(0, 5)).toBe(0)
+      expect(MathUtil.closestStep(10, 5)).toBe(10)
+      expect(MathUtil.closestStep(0, 5)).toBe(0)
     })
 
-    test('rounds to nearest multiple of modulo', () => {
-      expect(MathUtil.closestModulo(7, 5)).toBe(5)
-      expect(MathUtil.closestModulo(8, 5)).toBe(10)
-      expect(MathUtil.closestModulo(2, 5)).toBe(0)
+    test('rounds to nearest step', () => {
+      expect(MathUtil.closestStep(7, 5)).toBe(5)
+      expect(MathUtil.closestStep(8, 5)).toBe(10)
+      expect(MathUtil.closestStep(2, 5)).toBe(0)
     })
 
-    test('supports fractional modulo', () => {
-      expect(MathUtil.closestModulo(1.3, 0.5)).toBe(1.5)
-      expect(MathUtil.closestModulo(1.1, 0.5)).toBe(1)
+    test('supports fractional step sizes', () => {
+      expect(MathUtil.closestStep(1.3, 0.5)).toBe(1.5)
+      expect(MathUtil.closestStep(1.1, 0.5)).toBe(1)
     })
 
     test('rounds negative values to nearest multiple', () => {
-      expect(MathUtil.closestModulo(-7, 5)).toBe(-5)
-      expect(MathUtil.closestModulo(-8, 5)).toBe(-10)
+      expect(MathUtil.closestStep(-7, 5)).toBe(-5)
+      expect(MathUtil.closestStep(-8, 5)).toBe(-10)
     })
   })
 

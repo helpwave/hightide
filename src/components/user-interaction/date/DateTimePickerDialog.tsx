@@ -1,13 +1,16 @@
 import { useControlledState } from '@/src/hooks/useControlledState'
 import { useHightideTranslation } from '@/src/i18n/useHightideTranslation'
 import { DateTimePicker, type DateTimePickerProps } from '@/src/components/user-interaction/date/DateTimePicker'
+import type { HTMLAttributes } from 'react'
 import { useEffect, useState, type ReactNode } from 'react'
 import { Visibility } from '@/src/components/layout/Visibility'
 import { Button } from '@/src/components/user-interaction/Button'
 import type { FormFieldDataHandling } from '@/src/components/form/FormField'
 import type { DateTimeFormat } from '@/src/utils/date'
+import clsx from 'clsx'
 
 export interface DateTimePickerDialogProps extends
+HTMLAttributes<HTMLDivElement>,
 Partial<FormFieldDataHandling<Date | null>>,
 Pick<DateTimePickerProps, 'start' | 'end' | 'weekStart' | 'markToday' | 'is24HourFormat' | 'minuteIncrement' | 'secondIncrement' | 'millisecondIncrement' | 'precision'>
 {
@@ -38,6 +41,7 @@ export const DateTimePickerDialog = ({
   precision,
   labelId,
   label,
+  ...props
 }: DateTimePickerDialogProps) => {
   const translation = useHightideTranslation()
   const [state, setState] = useControlledState({
@@ -53,11 +57,11 @@ export const DateTimePickerDialog = ({
   }, [state])
 
   return (
-    <>
-      <div className="flex-row-2 justify-center w-full py-1">
+    <div {...props} className={clsx('date-time-picker-dialog', props?.className)}>
+      <div className="date-time-picker-dialog-header">
         <span
           id={labelId}
-          className="typography-title-md font-semibold"
+          className="date-time-picker-dialog-label"
         >
           {label ?? translation('sDateTimeSelect', { datetimeMode: mode })}
         </span>
@@ -78,7 +82,7 @@ export const DateTimePickerDialog = ({
         millisecondIncrement={millisecondIncrement}
         precision={precision}
       />
-      <div className="flex-row-2 justify-end">
+      <div className="date-time-picker-dialog-actions">
         <Visibility isVisible={allowRemove && !!state}>
           <Button
             size="md"
@@ -87,7 +91,7 @@ export const DateTimePickerDialog = ({
               setState(null)
               onEditComplete?.(null)
             }}
-            className="min-w-26"
+            className="date-time-picker-dialog-action"
           >
             {translation('clear')}
           </Button>
@@ -100,7 +104,7 @@ export const DateTimePickerDialog = ({
               setState(state)
               onEditComplete?.(state)
             }}
-            className="min-w-26"
+            className="date-time-picker-dialog-action"
           >
             {translation('cancel')}
           </Button>
@@ -110,11 +114,11 @@ export const DateTimePickerDialog = ({
           onClick={() => {
             onEditComplete?.(pickerState)
           }}
-          className="min-w-26"
+          className="date-time-picker-dialog-action"
         >
           {translation('done')}
         </Button>
       </div>
-    </>
+    </div>
   )
 }
