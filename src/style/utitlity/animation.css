@@ -7,18 +7,6 @@
   }
 }
 
-@-webkit-keyframes bigLeftUp {
-  0%,
-  25% {
-    stroke-dashoffset: 1000;
-  }
-  50%,
-  75%,
-  100% {
-    stroke-dashoffset: 0;
-  }
-}
-
 @keyframes bigLeftUp {
   0%,
   25% {
@@ -28,18 +16,6 @@
   75%,
   100% {
     stroke-dashoffset: 0;
-  }
-}
-
-@-webkit-keyframes bigRightDown {
-  0%,
-  25%,
-  50% {
-    stroke-dashoffset: 0;
-  }
-  70%,
-  100% {
-    stroke-dashoffset: -1000;
   }
 }
 
@@ -55,18 +31,6 @@
   }
 }
 
-@-webkit-keyframes smallLeftUp {
-  0%,
-  25%,
-  50% {
-    stroke-dashoffset: 1000;
-  }
-  75%,
-  100% {
-    stroke-dashoffset: 0;
-  }
-}
-
 @keyframes smallLeftUp {
   0%,
   25%,
@@ -76,18 +40,6 @@
   75%,
   100% {
     stroke-dashoffset: 0;
-  }
-}
-
-@-webkit-keyframes smallRightDown {
-  0%,
-  25% {
-    stroke-dashoffset: 0;
-  }
-  50%,
-  75%,
-  100% {
-    stroke-dashoffset: -1000;
   }
 }
 
@@ -185,22 +137,18 @@
 }
 
 @utility animate-wave-big-left-up {
-  -webkit-animation: bigLeftUp var(--helpwave-loading-duration, 1.7s) ease-in infinite normal;
   animation: bigLeftUp var(--helpwave-loading-duration, 1.7s) ease-in infinite normal;
 }
 
 @utility animate-wave-big-right-down {
-  -webkit-animation: bigRightDown var(--helpwave-loading-duration, 1.7s) ease-in infinite reverse;
   animation: bigRightDown var(--helpwave-loading-duration, 1.7s) ease-in infinite reverse;
 }
 
 @utility animate-wave-small-left-up {
-  -webkit-animation: smallLeftUp var(--helpwave-loading-duration, 1.7s) ease-in infinite normal;
   animation: smallLeftUp var(--helpwave-loading-duration, 1.7s) ease-in infinite normal;
 }
 
 @utility animate-wave-small-right-down {
-  -webkit-animation: smallRightDown var(--helpwave-loading-duration, 1.7s) ease-in infinite reverse;
   animation: smallRightDown var(--helpwave-loading-duration, 1.7s) ease-in infinite reverse;
 }
 
