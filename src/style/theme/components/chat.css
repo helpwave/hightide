@@ -1,0 +1,312 @@
+@layer components {
+  [data-name="chat-message-bubble-container"] {
+    @apply flex-col-1 max-w-70;
+
+    &[data-direction="incoming"] {
+      @apply self-start items-start;
+    }
+
+    &[data-direction="outgoing"] {
+      @apply self-end items-end;
+    }
+  }
+
+  [data-name="chat-message-bubble"] {
+    @apply flex-col-1 px-3.75 py-2.75 rounded-xl;
+
+    &[data-direction="incoming"] {
+      @apply rounded-bl-sm bg-neutral text-on-neutral;
+    }
+
+    &[data-direction="outgoing"] {
+      @apply rounded-br-sm bg-primary text-on-primary;
+    }
+  }
+
+  [data-name="chat-message-bubble-content"] {
+    @apply text-base/relaxed font-light;
+  }
+
+  [data-name="chat-message-bubble-timestamp"] {
+    @apply self-end text-xs font-medium opacity-75;
+  }
+
+  [data-name="chat-message-bubble-receipt"] {
+    @apply flex-row-1 items-center text-xs font-medium text-description;
+  }
+
+  [data-name="chat-message-bubble-receipt-icon"] {
+    @apply size-3.5 text-primary;
+  }
+
+  [data-name="chat-message-card"] {
+    @apply flex-col-0 shrink-0 w-full max-w-75 rounded-xl border border-divider bg-surface text-on-surface shadow-around-md overflow-hidden;
+
+    &[data-direction="incoming"] {
+      @apply self-start rounded-bl-sm;
+    }
+
+    &[data-direction="outgoing"] {
+      @apply self-end rounded-br-sm;
+    }
+  }
+
+  [data-name="chat-message-card-header"] {
+    @apply flex-row-0 gap-x-2.5 items-center px-3.75 py-3 border-b border-divider;
+  }
+
+  [data-name="chat-message-card-icon"] {
+    @apply flex-row-0 items-center justify-center size-9 rounded-md coloring-color-detect coloring-tonal;
+
+    > svg {
+      @apply size-4.5;
+    }
+  }
+
+  [data-name="chat-message-card-heading"] {
+    @apply flex-col-0 gap-y-0.5 grow min-w-0;
+  }
+
+  [data-name="chat-message-card-title"] {
+    @apply text-sm font-space font-bold coloring-color-detect coloring-text;
+  }
+
+  [data-name="chat-message-card-subtitle"] {
+    @apply text-xs text-description;
+  }
+
+  [data-name="chat-message-card-badge"] {
+    @apply shrink-0;
+  }
+
+  [data-name="chat-message-card-body"] {
+    @apply flex-col-1 px-3.75 py-3;
+  }
+
+  [data-name="chat-message-card-actions"] {
+    @apply flex-row-0 gap-x-2.5 px-3.75 pb-3.75;
+
+    > * {
+      @apply flex-1;
+    }
+
+    > [data-name="button"] {
+      @apply min-w-0;
+    }
+  }
+
+  [data-name="chat-attachment-card"] {
+    @apply flex-row-3 shrink-0 items-center w-full max-w-70 p-3 rounded-xl border border-divider bg-surface text-on-surface shadow-around-md;
+
+    &[data-direction="incoming"] {
+      @apply self-start rounded-bl-sm;
+    }
+
+    &[data-direction="outgoing"] {
+      @apply self-end rounded-br-sm;
+    }
+  }
+
+  [data-name="chat-attachment-card-icon"] {
+    @apply flex-row-0 shrink-0 items-center justify-center size-11 rounded-md negative coloring-tonal;
+
+    > svg {
+      @apply size-5.5;
+    }
+  }
+
+  [data-name="chat-attachment-card-info"] {
+    @apply flex-col-0 gap-y-0.5 grow min-w-0;
+  }
+
+  [data-name="chat-attachment-card-filename"] {
+    @apply text-sm font-medium truncate;
+  }
+
+  [data-name="chat-attachment-card-metadata"] {
+    @apply text-xs text-description;
+  }
+
+  [data-name="chat-system-line"] {
+    @apply flex-row-0 gap-x-1.5 self-center items-center justify-center text-xs font-medium coloring-color-detect coloring-text;
+  }
+
+  [data-name="chat-system-line-icon"] {
+    @apply flex-row-0 items-center;
+
+    > svg {
+      @apply size-3.5;
+    }
+  }
+
+  [data-name="chat-date-divider"] {
+    @apply self-center px-3.5 py-1 rounded-full bg-surface text-description text-xs font-medium shadow-around-md;
+  }
+
+  [data-name="chat-quick-reply-chip"] {
+    @apply flex-row-0 gap-x-1.5 items-center w-fit px-3.5 py-1.5 rounded-full border text-sm font-medium cursor-pointer;
+    @apply border-divider text-description bg-surface hover:bg-surface-hover;
+    transition: var(--coloring-transitions);
+
+    &[data-active] {
+      @apply border-primary text-primary;
+    }
+  }
+
+  [data-name="chat-composer"] {
+    @apply flex-row-3 items-center w-full px-3.5 py-3 border-t border-divider bg-surface text-on-surface;
+  }
+
+  [data-name="chat-composer-input-container"] {
+    @apply flex-row-0 gap-x-2.5 grow items-center h-11 px-4 rounded-full bg-background;
+
+    &:focus-within {
+      @apply outline-2 outline-primary;
+    }
+  }
+
+  [data-name="chat-composer-input"] {
+    @apply grow min-w-0 bg-transparent text-sm text-on-background outline-none placeholder:text-placeholder;
+  }
+
+  .chat-composer-send-button {
+    @apply rounded-full;
+  }
+
+  [data-name="chat-conversation-row"] {
+    @apply flex-row-3 items-center w-full px-3.5 py-3 text-left bg-transparent cursor-pointer;
+    transition: var(--coloring-transitions);
+
+    &:hover {
+      @apply bg-surface-hover;
+    }
+
+    &[data-selected] {
+      @apply bg-background;
+    }
+  }
+
+  [data-name="chat-conversation-row-content"] {
+    @apply flex-col-1 grow min-w-0;
+  }
+
+  [data-name="chat-conversation-row-top"] {
+    @apply flex-row-2 items-baseline justify-between;
+  }
+
+  [data-name="chat-conversation-row-title"] {
+    @apply text-base font-space font-medium truncate;
+
+    [data-name="chat-conversation-row"][data-unread] & {
+      @apply font-bold;
+    }
+  }
+
+  [data-name="chat-conversation-row-timestamp"] {
+    @apply shrink-0 text-xs text-description;
+
+    [data-name="chat-conversation-row"][data-unread] & {
+      @apply text-primary font-medium;
+    }
+  }
+
+  [data-name="chat-conversation-row-bottom"] {
+    @apply flex-row-2 items-center justify-between;
+  }
+
+  [data-name="chat-conversation-row-preview"] {
+    @apply flex-row-1 items-center min-w-0 text-sm text-description;
+
+    [data-name="chat-conversation-row"][data-unread] & {
+      @apply text-on-surface;
+    }
+  }
+
+  [data-name="chat-conversation-row-sent-indicator"] {
+    @apply size-3.5 shrink-0 text-primary;
+  }
+
+  [data-name="chat-conversation-row-unread-count"] {
+    @apply flex-row-0 shrink-0 items-center justify-center min-w-5 h-5 px-1.5 rounded-full bg-primary text-on-primary text-xs font-bold;
+  }
+
+  [data-name="chat-conversation-list"] {
+    @apply flex-col-0 h-full min-h-0 bg-surface text-on-surface;
+  }
+
+  [data-name="chat-conversation-list-header"] {
+    @apply flex-col-3 px-3.5 py-3.5;
+  }
+
+  [data-name="chat-conversation-list-scroll"] {
+    @apply flex-col-0 grow min-h-0 overflow-y-auto overscroll-y-contain;
+  }
+
+  [data-name="chat-conversation-list-footer"] {
+    @apply flex-col-0 px-3.5 py-2;
+  }
+
+  [data-name="chat-thread-header"] {
+    @apply flex-row-0 gap-x-2.5 items-center px-3.5 py-3 border-b border-divider bg-surface text-on-surface;
+  }
+
+  [data-name="chat-thread-header-info"] {
+    @apply flex-col-0 gap-y-0.5 grow min-w-0;
+  }
+
+  [data-name="chat-thread-header-title"] {
+    @apply text-base font-space font-bold truncate;
+  }
+
+  [data-name="chat-thread-header-subtitle"] {
+    @apply text-xs font-light text-description truncate;
+  }
+
+  [data-name="chat-thread-header-trailing"] {
+    @apply flex-row-1 shrink-0 items-center;
+  }
+
+  [data-name="chat-message-list"] {
+    @apply flex-col-3 grow min-h-0 overflow-y-auto overscroll-y-contain px-4 py-4.5 bg-background text-on-background;
+
+    > * {
+      @apply shrink-0;
+    }
+  }
+
+  [data-name="chat-thread"] {
+    @apply flex-col-0 h-full min-h-0;
+  }
+
+  [data-name="chat-layout"] {
+    @apply flex-row-0 h-full min-h-0 w-full rounded-lg border border-divider bg-surface text-on-surface overflow-hidden;
+  }
+
+  [data-name="chat-layout-sidebar"] {
+    @apply flex-col-0 w-full min-h-0;
+
+    @variant tablet {
+      @apply w-90 shrink-0 border-r border-divider;
+    }
+
+    [data-name="chat-layout"][data-conversation-open] & {
+      @apply hidden;
+
+      @variant tablet {
+        @apply flex;
+      }
+    }
+  }
+
+  [data-name="chat-layout-thread"] {
+    @apply flex-col-0 grow min-w-0 min-h-0;
+
+    [data-name="chat-layout"]:not([data-conversation-open]) & {
+      @apply hidden;
+
+      @variant tablet {
+        @apply flex;
+      }
+    }
+  }
+}

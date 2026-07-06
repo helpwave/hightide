@@ -5,6 +5,27 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/)
 and adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [0.15.0] - 2026-07-06
+
+### Added
+
+- `AppZumDocLogo` component with the official App zum Doc logo and configurable `frontColor`, `backColor`, and `size`
+- `AppZumDocBadge` component with the App zum Doc logo and wordmark, mirroring `HelpwaveBadge`
+- Chat component set for the App zum Doc messaging surfaces:
+  - `ChatLayout` two-pane layout (conversation list + open thread) with responsive single-pane behavior below the tablet breakpoint, nestable into `AppPage`
+  - `ChatThread` column layout with `header` and `footer` slots
+  - `ChatConversationList` with optional `header` and `footer` slots and a scrollable row area
+  - `ChatConversationRow` with avatar presence, timestamp, preview, sent indicator, unread count pill, and `selected`/`unread` states
+  - `ChatThreadHeader` with avatar presence, title, subtitle, and `leading`/`trailing` slots
+  - `ChatMessageList` scrollable message pane with optional `autoScroll`
+  - `ChatMessageBubble` incoming/outgoing bubble with asymmetric radii, inline timestamp, and optional read receipt
+  - `ChatMessageCard` structured message card (e.g. appointment proposal, prescription request, referral) with icon, title, subtitle, badge, body, and action footer
+  - `ChatAttachmentCard` with file icon, filename, metadata, and download action
+  - `ChatComposer` with controlled or uncontrolled value, `leading`/`trailing` slots, and enter-to-send
+  - `ChatQuickReplyChip` outlined pill button with active state
+  - `ChatSystemLine` centered status line with icon
+  - `ChatDateDivider` centered date pill
+
 ## [0.14.1] - 2026-07-05
 
 ### Changed

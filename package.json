@@ -10,7 +10,7 @@
     "access": "public"
   },
   "license": "MPL-2.0",
-  "version": "0.14.1",
+  "version": "0.15.0",
   "browserslist": [
     "> 0.2%",
     "last 3 versions",
