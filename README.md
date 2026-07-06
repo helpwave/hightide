@@ -7,7 +7,7 @@ This repository contains all components and themes employed by helpwave's web ap
 ### Step 1 — Install
 
 ```bash
-npm install @helpwave/hightide react react-dom
+npm install @helpwave/hightide
 ```
 
 ### Step 2 — Import the stylesheet
@@ -16,7 +16,7 @@ Import the pre-built CSS in your app entry point:
 
 ```ts
 // app entry (main.tsx, index.tsx, layout.tsx, …)
-import '@helpwave/hightide/style/globals.css'
+import "@helpwave/hightide/style/globals.css";
 ```
 
 Two stylesheet exports are available:
@@ -27,46 +27,30 @@ Two stylesheet exports are available:
 ### Step 3 — Wrap your app with `HightideProvider`
 
 ```tsx
-import { HightideProvider } from '@helpwave/hightide'
+import { HightideProvider } from "@helpwave/hightide";
 
-<HightideProvider theme={{ theme: 'system' }} locale={{ locale: 'system' }}>
+<HightideProvider theme={{ theme: "system" }} locale={{ locale: "system" }}>
   {children}
-</HightideProvider>
+</HightideProvider>;
 ```
 
 ### Step 4 — Use components
 
 ```tsx
-import { LoadingAnimation } from '@helpwave/hightide'
+import { LoadingAnimation } from "@helpwave/hightide";
 ```
-
-### Step 5 — Inherit hightide's browserslist
-
-Hightide defines its supported browsers in the `browserslist` field of [package.json](package.json). Extend it in your host app so your own build tooling stays aligned:
-
-```
-dangerousExtend
-extends @helpwave/hightide
-```
-
-Or in `package.json`:
-
-```json
-"browserslist": [
-  "extends @helpwave/hightide"
-]
-```
-
-If using `package.json` only, set `BROWSERSLIST_DANGEROUS_EXTEND=1` in your build scripts.
-
-Verify with `npx browserslist` in your host app.
 
 ### Uncompiled CSS path (advanced)
 
 If you compile Tailwind in your own app, install `tailwindcss` and `@tailwindcss/postcss`, add a `postcss.config.mjs` matching hightide's setup, and import the uncompiled stylesheet:
 
 ```css
-@import '@helpwave/hightide/style/uncompiled/globals.css';
+@import "tailwindcss";
+
+@import "@helpwave/hightide/style/uncompiled/globals.css";
+@source "./node_modules/@helpwave/hightide";
+
+/* Your Custom Styles */
 ```
 
 ## Development — Getting Started
