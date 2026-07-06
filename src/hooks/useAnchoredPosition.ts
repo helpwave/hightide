@@ -228,17 +228,27 @@ const measureSizes = ({
   anchorRef?: RefObject<HTMLElement | null>,
   windowRef?: RefObject<HTMLElement | null>,
 }) => {
+  const visualViewport = window.visualViewport
+  const fallback = visualViewport ? {
+    top: 0,
+    bottom: visualViewport.height - visualViewport.offsetTop,
+    left: 0,
+    right: visualViewport.width - visualViewport.offsetLeft,
+    width: visualViewport.width - visualViewport.offsetLeft,
+    height: visualViewport.height - visualViewport.offsetTop,
+  }: {
+    top: 0,
+    bottom: window.innerHeight,
+    left: 0,
+    right: window.innerWidth,
+    width: window.innerWidth,
+    height: window.innerHeight,
+  }
+
   return {
     container: containerRef?.current?.getBoundingClientRect(),
     anchor: anchorRef?.current?.getBoundingClientRect(),
-    window: windowRef?.current?.getBoundingClientRect() ?? {
-      top: 0,
-      bottom: window.innerHeight,
-      left: 0,
-      right: window.innerWidth,
-      width: window.innerWidth,
-      height: window.innerHeight,
-    },
+    window: windowRef?.current?.getBoundingClientRect() ?? fallback,
   }
 }
 

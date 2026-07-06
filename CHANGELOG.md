@@ -5,7 +5,7 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/)
 and adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
-## [0.14.2] - 2026-07-06
+## [0.14.3] - 2026-07-06
 
 ### Added
 
@@ -39,6 +39,7 @@ and adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 - `DayPicker` no longer steals focus when the displayed month changes unless focus is already inside the picker
 - `NumberStepperInput` keyboard hold-to-repeat stops when the input loses focus
 - Date/time picker layout, dialog sizing, and responsive behavior in constrained containers
+- `useAnchoredPosition` to account for keyboards on mobile devices
 
 ## [0.14.1] - 2026-07-05
 
