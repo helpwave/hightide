@@ -19,16 +19,16 @@ function clamp01(value: number): number {
   return clamp(value, 0, 1)
 }
 
-function closestModulo(value: number, modulo: number): number {
-  return Math.round(value / modulo) * modulo
+function closestStep(value: number, stepSize: number): number {
+  return Math.round(value / stepSize) * stepSize
 }
 
-function toModulo(value: number, modulo: number, min: number | undefined, max: number | undefined): number {
-  const minModulo = min !== undefined ? Math.ceil(min / modulo) * modulo : undefined
-  const maxModulo = max !== undefined ? Math.floor(max / modulo) * modulo : undefined
-  value = closestModulo(value, modulo)
-  if(minModulo !== undefined) value = Math.max(value, minModulo)
-  if(maxModulo !== undefined) value = Math.min(value, maxModulo)
+function toStepRange(value: number, stepSize: number, min: number | undefined, max: number | undefined): number {
+  const minStep = min !== undefined ? Math.ceil(min / stepSize) * stepSize : undefined
+  const maxStep = max !== undefined ? Math.floor(max / stepSize) * stepSize : undefined
+  value = closestStep(value, stepSize)
+  if(minStep !== undefined) value = Math.max(value, minStep)
+  if(maxStep !== undefined) value = Math.min(value, maxStep)
   return value
 }
 
@@ -62,7 +62,7 @@ function resolveLoopingRangeValue(
 export const MathUtil = {
   clamp,
   clamp01,
-  toModulo,
-  closestModulo,
+  toStepRange,
+  closestStep,
   resolveLoopingRangeValue,
 }

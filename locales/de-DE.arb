@@ -195,7 +195,7 @@
       "theme": {}
     }
   },
-  "sDateTimeSelect": "{datetimeMode, select, date{Datum auswählen} dateTime{Datum und Uhrzeit auswählen}}",
+  "sDateTimeSelect": "{datetimeMode, select, time{Zeit auswählen} date{Datum auswählen} dateTime{Datum und Uhrzeit auswählen}}",
   "@sDateTimeSelect": {
     "placeholders": {
       "datetimeMode": {}

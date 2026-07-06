@@ -28,13 +28,7 @@ and adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 - `time` mode for `TimeDisplay` rendering only the localized time, usable for chat timestamps
 - Unit tests for the chat component set and the App zum Doc branding components
 
-## [0.14.4] - 2026-07-06
-
-### Changed
-
-- Updated readme.md
-
-## [0.14.3] - 2026-07-06
+## [0.14.5] - 2026-07-06
 
 ### Added
 
@@ -45,17 +39,35 @@ and adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 - `DateTimeInput` popup `data-mode` attribute for mode-specific dialog sizing
 - `TabPanel` `data-in-custom-tab-view` attribute so panels skip default padding when portaled into a custom `TabView`
 - `DateTimePickerDialog` Storybook story
+
+### Changed
+
+- Date/time picker family (`DatePicker`, `DateTimePicker`, `DateTimePickerDialog`, `DayPicker`, `YearMonthPicker`, `DateTimeField`, `DateTimeInput`) migrated from `data-name` selectors to class-based CSS
+- `DatePicker` always shows today/previous/next navigation buttons (disabled outside day view); month label uses short month format
+- `DateTimeInput` dialog popup uses a viewport-capped `min-width` and applies the wider tablet width only for `dateTime` mode
+- `FormFieldLayout` error message moved from absolute positioning to in-flow layout with padding
+
+### Fixed
+
+- `TableProvider`'s `computeWidth` method not checking whether a float was parsed correctly
+- Add missing enum value "time" to the translation for key `sDateTimeSelect`
+
+## [0.14.4] - 2026-07-06
+
+### Changed
+
+- Updated readme.md
+
+## [0.14.3] - 2026-07-06
+
+### Added
+
 - `TabSwitcher` `tabSwitcherWithTabView` Storybook story demonstrating a custom `TabView` layout
 - `Browser Compatibility/Safari` Storybook story with demos for CSS that requires WebKit prefixes (`sticky`, `user-select`, `appearance`, `touch-action`, `transform`, `::-webkit-scrollbar`)
 
 ### Changed
 
-- Date/time picker family (`DatePicker`, `DateTimePicker`, `DateTimePickerDialog`, `DayPicker`, `YearMonthPicker`, `DateTimeField`, `DateTimeInput`) migrated from `data-name` selectors to class-based CSS
-- `FormFieldLayout` migrated from `data-name` to class-based CSS (`.form-field-container`, `.form-field-label`, `.form-field-description`, `.form-field-error`)
 - `TabSwitcher` (`TabList`, `TabListItem`, `TabPanel`) migrated from `data-name` to class-based CSS
-- `DatePicker` always shows today/previous/next navigation buttons (disabled outside day view); month label uses short month format
-- `DateTimeInput` dialog popup uses a viewport-capped `min-width` and applies the wider tablet width only for `dateTime` mode
-- `FormFieldLayout` error message moved from absolute positioning to in-flow layout with padding
 - `TabPanel` default padding only applied when not rendered inside a custom `TabView`
 - `TimeInput` layout no longer wraps stepper segments
 - `NumberStepperInput` increment/decrement buttons use `tabIndex={-1}`

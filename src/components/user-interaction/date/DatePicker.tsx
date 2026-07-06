@@ -53,57 +53,55 @@ export const DatePicker = ({
   const [displayedMonth, setDisplayedMonth] = useState<Date>(new Date(value.getFullYear(), value.getMonth(), 1))
   const [displayMode, setDisplayMode] = useState<DisplayMode>(initialDisplay)
 
+  const isDayMode = displayMode === 'day'
+
   return (
-    <div className={clsx('flex-col-3', className)}>
-      <div className="flex-row-2 items-center justify-between">
+    <div className={clsx('date-picker', className)}>
+      <div className="date-picker-header">
         <Button
           size="sm"
           color="neutral"
-          className={clsx('flex-row-1 items-center cursor-pointer select-none', {
-            'text-disabled': displayMode !== 'day',
-          })}
           onClick={() => setDisplayMode(displayMode === 'day' ? 'yearMonth' : 'day')}
         >
-          {`${new Intl.DateTimeFormat(LocalizationUtil.localToLanguage(locale), { month: 'long' }).format(displayedMonth)} ${displayedMonth.getFullYear()}`}
+          {`${new Intl.DateTimeFormat(LocalizationUtil.localToLanguage(locale), { month: 'short' }).format(displayedMonth)} ${displayedMonth.getFullYear()}`}
           <ChevronDown size={16}/>
         </Button>
-        {displayMode === 'day' && (
-          <div className="flex-row-2 justify-end">
-            <IconButton
-              tooltip={translation('time.today')}
-              size="sm"
-              coloringStyle="tonal"
-              onClick={() => {
-                const newDate = new Date()
-                newDate.setHours(value.getHours(), value.getMinutes())
-                setValue(newDate)
-                setDisplayedMonth(newDate)
-              }}
-            >
-              <Calendar className="size-5"/>
-            </IconButton>
-            <IconButton
-              tooltip={translation('time.previousMonth')}
-              size="sm"
-              disabled={!DateUtils.between(DateUtils.subtractDuration(displayedMonth, { months: 1 }), start, end)}
-              onClick={() => {
-                setDisplayedMonth(DateUtils.subtractDuration(displayedMonth, { months: 1 }))
-              }}
-            >
-              <ArrowUp size={20}/>
-            </IconButton>
-            <IconButton
-              tooltip={translation('time.nextMonth')}
-              size="sm"
-              disabled={!DateUtils.between(DateUtils.addDuration(displayedMonth, { months: 1 }), start, end)}
-              onClick={() => {
-                setDisplayedMonth(DateUtils.addDuration(displayedMonth, { months: 1 }))
-              }}
-            >
-              <ArrowDown size={20}/>
-            </IconButton>
-          </div>
-        )}
+        <div className="flex-row-2 justify-end">
+          <IconButton
+            tooltip={translation('time.today')}
+            size="sm"
+            coloringStyle="tonal"
+            disabled={!isDayMode}
+            onClick={() => {
+              const newDate = new Date()
+              newDate.setHours(value.getHours(), value.getMinutes())
+              setValue(newDate)
+              setDisplayedMonth(newDate)
+            }}
+          >
+            <Calendar className="size-5"/>
+          </IconButton>
+          <IconButton
+            tooltip={translation('time.previousMonth')}
+            size="sm"
+            disabled={!isDayMode || !DateUtils.between(DateUtils.subtractDuration(displayedMonth, { months: 1 }), start, end)}
+            onClick={() => {
+              setDisplayedMonth(DateUtils.subtractDuration(displayedMonth, { months: 1 }))
+            }}
+          >
+            <ArrowUp size={20}/>
+          </IconButton>
+          <IconButton
+            tooltip={translation('time.nextMonth')}
+            size="sm"
+            disabled={!isDayMode || !DateUtils.between(DateUtils.addDuration(displayedMonth, { months: 1 }), start, end)}
+            onClick={() => {
+              setDisplayedMonth(DateUtils.addDuration(displayedMonth, { months: 1 }))
+            }}
+          >
+            <ArrowDown size={20}/>
+          </IconButton>
+        </div>
       </div>
       {displayMode === 'yearMonth' ? (
         <YearMonthPicker
@@ -119,7 +117,7 @@ export const DatePicker = ({
             setDisplayedMonth(newDate)
             setDisplayMode('day')
           }}
-          className="h-60 max-h-60"
+          className="date-picker-content"
         />
       ) : (
         <DayPicker
@@ -132,7 +130,7 @@ export const DatePicker = ({
           weekStart={weekStart}
           onValueChange={setValue}
           onEditComplete={onEditComplete}
-          className="h-60 max-h-60"
+          className="date-picker-content"
         />
       )}
     </div>

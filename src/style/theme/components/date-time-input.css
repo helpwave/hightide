@@ -33,11 +33,21 @@
   }
 
   .date-time-input-dialog-popup {
-    @apply p-2 min-w-96;
+    @apply flex-col-0 min-w-96;
     min-width: calc(min(100vw - 4 * var(--spacing), 96 * var(--spacing)));
 
     &[data-mode="dateTime"] {
       @apply tablet:min-w-180;
     }
+  }
+
+  .date-time-input-date-time-picker {
+    &[data-mode="dateTime"] {
+      @apply tablet:flex-row-6;
+    }
+  }
+
+  .date-time-input-dialog {
+    @apply p-2 h-full overflow-y-auto;
   }
 }

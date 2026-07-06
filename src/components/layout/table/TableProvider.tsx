@@ -84,13 +84,19 @@ export const TableProvider = <T,>({
 
     if(width === undefined || !el) return width
     const styles = getComputedStyle(el)
-    width = width - parseFloat(styles.borderLeftWidth) - parseFloat(styles.borderRightWidth)
+    let leftBorderWidth = parseFloat(styles.borderLeftWidth)
+    if(isNaN(leftBorderWidth)) leftBorderWidth = 0
+    let rightBorderWidth = parseFloat(styles.borderRightWidth)
+    if(isNaN(rightBorderWidth)) rightBorderWidth = 0
+    width = width - leftBorderWidth - rightBorderWidth
     return Math.floor(width)
   }, [containerRef])
+
   useLayoutEffect(() => {
     if(!negotiatesWidths) return
     setTargetWidth(computeWidth())
   }, [computeWidth, negotiatesWidths])
+
   useWindowResizeObserver(useCallback(() => {
     if(!negotiatesWidths) return
     setTargetWidth(computeWidth())

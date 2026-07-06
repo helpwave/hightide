@@ -1,6 +1,6 @@
 @layer components {
   .date-time-picker-dialog {
-    @apply flex-col-2 w-full;
+    @apply flex-col-2 w-full overflow-y-auto p-2;
     container-type: inline-size;
     container-name: date-time-picker-dialog;
   }
