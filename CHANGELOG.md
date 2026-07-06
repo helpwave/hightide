@@ -24,6 +24,11 @@ and adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 - `DateTimeInput` dialog popup uses a viewport-capped `min-width` and applies the wider tablet width only for `dateTime` mode
 - `FormFieldLayout` error message moved from absolute positioning to in-flow layout with padding
 
+### Fixed
+
+- `TableProvider`'s `computeWidth` method not checking whether a float was parsed correctly
+- Add missing enum value "time" to the translation for key `sDateTimeSelect`
+
 ## [0.14.4] - 2026-07-06
 
 ### Changed
