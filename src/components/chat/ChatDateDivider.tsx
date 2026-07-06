@@ -1,4 +1,5 @@
 import type { HTMLAttributes } from 'react'
+import clsx from 'clsx'
 
 export type ChatDateDividerProps = HTMLAttributes<HTMLDivElement>
 
@@ -7,7 +8,7 @@ export const ChatDateDivider = ({
   ...props
 }: ChatDateDividerProps) => {
   return (
-    <div {...props} data-name="chat-date-divider">
+    <div {...props} className={clsx('chat-date-divider', props.className)}>
       {children}
     </div>
   )

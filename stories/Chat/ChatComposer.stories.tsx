@@ -1,8 +1,6 @@
 import type { Meta, StoryObj } from '@storybook/nextjs-vite'
 import { action } from 'storybook/actions'
-import { Camera, Paperclip } from 'lucide-react'
 import { ChatComposer } from '@/src/components/chat/ChatComposer'
-import { IconButton } from '@/src/components/user-interaction/IconButton'
 
 const meta: Meta<typeof ChatComposer> = {
   component: ChatComposer,
@@ -15,24 +13,29 @@ export const chatComposer: Story = {
   args: {
     placeholder: 'Nachricht an Dr. med. Sophie Vogt schreiben',
     sendLabel: 'Senden',
+    cameraLabel: 'Kamera',
+    attachmentLabel: 'Anhang',
     disabled: false,
+    onSend: action('onSend'),
+    onCamera: action('onCamera'),
+    onAttachment: action('onAttachment'),
+  },
+  render: (args) => (
+    <div className="w-150 max-w-full">
+      <ChatComposer {...args}/>
+    </div>
+  ),
+}
+
+export const withoutActions: Story = {
+  args: {
+    placeholder: 'Nachricht schreiben',
+    sendLabel: 'Senden',
     onSend: action('onSend'),
   },
   render: (args) => (
     <div className="w-150 max-w-full">
-      <ChatComposer
-        {...args}
-        leading={(
-          <>
-            <IconButton tooltip="Kamera" size="sm" color="neutral" coloringStyle="text">
-              <Camera/>
-            </IconButton>
-            <IconButton tooltip="Anhang" size="sm" color="neutral" coloringStyle="text">
-              <Paperclip/>
-            </IconButton>
-          </>
-        )}
-      />
+      <ChatComposer {...args}/>
     </div>
   ),
 }

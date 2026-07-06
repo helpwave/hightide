@@ -1,7 +1,10 @@
 import type { Meta, StoryObj } from '@storybook/nextjs-vite'
 import { useState } from 'react'
-import { CalendarDays, Camera, ChevronLeft, EllipsisVertical, Paperclip, Phone, Pill, SquarePen, UserRound } from 'lucide-react'
+import type { ReactNode } from 'react'
+import { CalendarDays, Pill } from 'lucide-react'
+import { action } from 'storybook/actions'
 import type { AvatarStatus } from '@/src/components/display-and-visualization/Avatar'
+import type { ChatLayoutListPosition } from '@/src/components/chat/ChatLayout'
 import { ChatLayout, ChatThread } from '@/src/components/chat/ChatLayout'
 import { ChatConversationList } from '@/src/components/chat/ChatConversationList'
 import { ChatConversationRow } from '@/src/components/chat/ChatConversationRow'
@@ -16,14 +19,13 @@ import { ChatQuickReplyChip } from '@/src/components/chat/ChatQuickReplyChip'
 import { ChatComposer } from '@/src/components/chat/ChatComposer'
 import { Chip } from '@/src/components/display-and-visualization/Chip'
 import { Button } from '@/src/components/user-interaction/Button'
-import { IconButton } from '@/src/components/user-interaction/IconButton'
-import { SearchBar } from '@/src/components/user-interaction/input/SearchBar'
+import { TimeDisplay } from '@/src/components/user-interaction/date/TimeDisplay'
 
 type DemoMessage = {
   id: string,
   direction: 'incoming' | 'outgoing',
   content: string,
-  timestamp: string,
+  timestamp: ReactNode,
   readReceipt?: string,
 }
 
@@ -32,7 +34,7 @@ type DemoConversation = {
   name: string,
   status: AvatarStatus,
   meta: string,
-  timestamp: string,
+  timestamp: ReactNode,
   preview: string,
   unreadCount?: number,
   isUnread?: boolean,
@@ -94,13 +96,23 @@ const initialMessages: DemoMessage[] = [
 
 const meta: Meta<typeof ChatLayout> = {
   component: ChatLayout,
+  argTypes: {
+    listPosition: {
+      control: 'select',
+      options: ['left', 'right'] satisfies ChatLayoutListPosition[],
+    },
+  },
 }
 
 export default meta
 type Story = StoryObj<typeof meta>
 
 export const chatLayout: Story = {
-  args: {},
+  args: {
+    listPosition: 'left',
+    className: 'rounded-lg border border-divider',
+    conversationList: null,
+  },
   decorators: [
     (Story) => (
       <>
@@ -123,7 +135,7 @@ export const chatLayout: Story = {
           id: `m${previous.length + 1}`,
           direction: 'outgoing',
           content,
-          timestamp: new Date().toLocaleTimeString('de-DE', { hour: '2-digit', minute: '2-digit' }),
+          timestamp: <TimeDisplay date={new Date()} mode="time"/>,
         },
       ])
     }
@@ -134,17 +146,12 @@ export const chatLayout: Story = {
         isConversationOpen={!!selected}
         conversationList={(
           <ChatConversationList
-            header={(
-              <>
-                <div className="flex-row-2 items-center justify-between">
-                  <span className="typography-title-md text-primary">Chats</span>
-                  <IconButton tooltip="Neuer Chat" size="sm" color="neutral" coloringStyle="text">
-                    <SquarePen/>
-                  </IconButton>
-                </div>
-                <SearchBar placeholder="Patient oder Nachricht suchen" onSearch={() => {}}/>
-              </>
-            )}
+            title="Chats"
+            createLabel="Neuer Chat"
+            hasSearch={true}
+            searchPlaceholder="Patient oder Nachricht suchen"
+            onCreate={action('onCreate')}
+            onSearch={action('onSearch')}
           >
             {conversations.map(conversation => (
               <ChatConversationRow
@@ -170,60 +177,37 @@ export const chatLayout: Story = {
                 avatar={{ name: selected.name, status: selected.status }}
                 title={selected.name}
                 subtitle={selected.meta}
-                leading={(
-                  <IconButton
-                    tooltip="Zurück"
-                    size="sm"
-                    color="neutral"
-                    coloringStyle="text"
-                    className="tablet:hidden"
-                    onClick={() => setSelectedId(null)}
-                  >
-                    <ChevronLeft/>
-                  </IconButton>
-                )}
-                trailing={(
-                  <>
-                    <IconButton tooltip="Anrufen" size="sm" color="neutral" coloringStyle="text">
-                      <Phone/>
-                    </IconButton>
-                    <IconButton tooltip="Patientenakte" size="sm" color="neutral" coloringStyle="text">
-                      <UserRound/>
-                    </IconButton>
-                    <IconButton tooltip="Mehr" size="sm" color="neutral" coloringStyle="text">
-                      <EllipsisVertical/>
-                    </IconButton>
-                  </>
-                )}
+                backLabel="Zurück"
+                callLabel="Anrufen"
+                addContactLabel="Zu Kontakten hinzufügen"
+                onBack={() => setSelectedId(null)}
+                onCall={action('onCall')}
+                onAddContact={action('onAddContact')}
               />
             )}
             footer={(
               <>
-                <div className="flex-row-2 flex-wrap px-3.5 pt-3 bg-surface">
-                  <ChatQuickReplyChip isActive={true}>Termin bestätigen</ChatQuickReplyChip>
-                  <ChatQuickReplyChip>Rezept ausstellen</ChatQuickReplyChip>
-                  <ChatQuickReplyChip>Überweisung senden</ChatQuickReplyChip>
+                <div className="flex-row-2 flex-wrap px-3.5 pt-3 pb-4 bg-surface">
+                  <ChatQuickReplyChip isActive={true} onClick={action('onQuickReply')}>Termin bestätigen</ChatQuickReplyChip>
+                  <ChatQuickReplyChip onClick={action('onQuickReply')}>Rezept ausstellen</ChatQuickReplyChip>
+                  <ChatQuickReplyChip onClick={action('onQuickReply')}>Überweisung senden</ChatQuickReplyChip>
                 </div>
                 <ChatComposer
                   placeholder={`Nachricht an ${selected.name} schreiben`}
                   sendLabel="Senden"
+                  cameraLabel="Kamera"
+                  attachmentLabel="Anhang"
                   onSend={sendMessage}
-                  leading={(
-                    <>
-                      <IconButton tooltip="Kamera" size="sm" color="neutral" coloringStyle="text">
-                        <Camera/>
-                      </IconButton>
-                      <IconButton tooltip="Anhang" size="sm" color="neutral" coloringStyle="text">
-                        <Paperclip/>
-                      </IconButton>
-                    </>
-                  )}
+                  onCamera={action('onCamera')}
+                  onAttachment={action('onAttachment')}
                 />
               </>
             )}
           >
             <ChatMessageList>
-              <ChatDateDivider>Heute</ChatDateDivider>
+              <ChatDateDivider>
+                <TimeDisplay date={new Date()} mode="date"/>
+              </ChatDateDivider>
               {messages.slice(0, 1).map(message => (
                 <ChatMessageBubble key={message.id} direction={message.direction} timestamp={message.timestamp}>
                   {message.content}
@@ -237,8 +221,8 @@ export const chatLayout: Story = {
                 badge={<Chip size="xs" color="primary" coloringStyle="tonal">NEU</Chip>}
                 actions={(
                   <>
-                    <Button size="sm" color="primary" className="rounded-full">Ausstellen</Button>
-                    <Button size="sm" color="neutral" className="rounded-full">Ablehnen</Button>
+                    <Button size="sm" color="primary" className="rounded-full" onClick={action('onIssue')}>Ausstellen</Button>
+                    <Button size="sm" color="neutral" className="rounded-full" onClick={action('onDecline')}>Ablehnen</Button>
                   </>
                 )}
               >
@@ -261,7 +245,7 @@ export const chatLayout: Story = {
                 metadata="PDF · 196 KB · 14:18"
                 direction="incoming"
                 downloadLabel="Herunterladen"
-                onDownload={() => {}}
+                onDownload={action('onDownload')}
               />
               {messages.slice(1).map(message => (
                 <ChatMessageBubble

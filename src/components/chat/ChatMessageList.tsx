@@ -1,5 +1,6 @@
 import type { HTMLAttributes } from 'react'
 import { useEffect, useRef } from 'react'
+import clsx from 'clsx'
 
 export type ChatMessageListProps = HTMLAttributes<HTMLDivElement> & {
   autoScroll?: boolean,
@@ -19,7 +20,7 @@ export const ChatMessageList = ({
   }, [autoScroll, children])
 
   return (
-    <div {...props} ref={ref} data-name="chat-message-list">
+    <div {...props} ref={ref} className={clsx('chat-message-list', props.className)}>
       {children}
     </div>
   )

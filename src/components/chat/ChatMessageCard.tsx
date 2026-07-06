@@ -1,4 +1,5 @@
 import type { HTMLAttributes, ReactNode } from 'react'
+import clsx from 'clsx'
 import type { ChatMessageDirection } from './ChatMessageBubble'
 import type { ChipColor } from '../display-and-visualization/Chip'
 
@@ -26,31 +27,31 @@ export const ChatMessageCard = ({
   return (
     <div
       {...props}
-      data-name="chat-message-card"
+      className={clsx('chat-message-card', props.className)}
       data-direction={direction}
       data-color={color ?? undefined}
     >
-      <div data-name="chat-message-card-header">
+      <div className="chat-message-card-header">
         {icon && (
-          <span data-name="chat-message-card-icon" data-color={color ?? undefined}>
+          <span className="chat-message-card-icon" data-color={color ?? undefined}>
             {icon}
           </span>
         )}
-        <span data-name="chat-message-card-heading">
-          <span data-name="chat-message-card-title" data-color={color ?? undefined}>{title}</span>
+        <span className="chat-message-card-heading">
+          <span className="chat-message-card-title" data-color={color ?? undefined}>{title}</span>
           {subtitle && (
-            <span data-name="chat-message-card-subtitle">{subtitle}</span>
+            <span className="chat-message-card-subtitle">{subtitle}</span>
           )}
         </span>
         {badge && (
-          <span data-name="chat-message-card-badge">{badge}</span>
+          <span className="chat-message-card-badge">{badge}</span>
         )}
       </div>
       {children && (
-        <div data-name="chat-message-card-body">{children}</div>
+        <div className="chat-message-card-body">{children}</div>
       )}
       {actions && (
-        <div data-name="chat-message-card-actions">{actions}</div>
+        <div className="chat-message-card-actions">{actions}</div>
       )}
     </div>
   )

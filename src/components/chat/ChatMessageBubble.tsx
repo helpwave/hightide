@@ -1,4 +1,5 @@
 import type { HTMLAttributes, ReactNode } from 'react'
+import clsx from 'clsx'
 import { CheckCheck } from 'lucide-react'
 
 export type ChatMessageDirection = 'incoming' | 'outgoing'
@@ -19,18 +20,18 @@ export const ChatMessageBubble = ({
   return (
     <div
       {...props}
-      data-name="chat-message-bubble-container"
+      className={clsx('chat-message-bubble-container', props.className)}
       data-direction={direction}
     >
-      <div data-name="chat-message-bubble" data-direction={direction}>
-        <span data-name="chat-message-bubble-content">{children}</span>
+      <div className="chat-message-bubble" data-direction={direction}>
+        <span className="chat-message-bubble-content">{children}</span>
         {timestamp && (
-          <span data-name="chat-message-bubble-timestamp">{timestamp}</span>
+          <span className="chat-message-bubble-timestamp">{timestamp}</span>
         )}
       </div>
       {readReceipt && (
-        <span data-name="chat-message-bubble-receipt">
-          <CheckCheck data-name="chat-message-bubble-receipt-icon"/>
+        <span className="chat-message-bubble-receipt">
+          <CheckCheck className="chat-message-bubble-receipt-icon"/>
           {readReceipt}
         </span>
       )}

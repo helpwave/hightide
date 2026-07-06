@@ -1,4 +1,5 @@
 import type { HTMLAttributes, ReactNode } from 'react'
+import clsx from 'clsx'
 import { Download, FileText } from 'lucide-react'
 import { IconButton } from '../user-interaction/IconButton'
 import type { ChatMessageDirection } from './ChatMessageBubble'
@@ -24,16 +25,16 @@ export const ChatAttachmentCard = ({
   return (
     <div
       {...props}
-      data-name="chat-attachment-card"
+      className={clsx('chat-attachment-card', props.className)}
       data-direction={direction}
     >
-      <span data-name="chat-attachment-card-icon">
+      <span className="chat-attachment-card-icon">
         {icon ?? <FileText/>}
       </span>
-      <span data-name="chat-attachment-card-info">
-        <span data-name="chat-attachment-card-filename">{name}</span>
+      <span className="chat-attachment-card-info">
+        <span className="chat-attachment-card-filename">{name}</span>
         {metadata && (
-          <span data-name="chat-attachment-card-metadata">{metadata}</span>
+          <span className="chat-attachment-card-metadata">{metadata}</span>
         )}
       </span>
       {onDownload && (

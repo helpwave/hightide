@@ -1,4 +1,5 @@
 import type { HTMLAttributes, ReactNode } from 'react'
+import clsx from 'clsx'
 import { CheckCheck } from 'lucide-react'
 import type { ChipColor } from '../display-and-visualization/Chip'
 
@@ -16,10 +17,10 @@ export const ChatSystemLine = ({
   return (
     <div
       {...props}
-      data-name="chat-system-line"
+      className={clsx('chat-system-line', props.className)}
       data-color={color ?? undefined}
     >
-      <span data-name="chat-system-line-icon">
+      <span className="chat-system-line-icon">
         {icon ?? <CheckCheck/>}
       </span>
       {children}

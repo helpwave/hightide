@@ -1,5 +1,6 @@
 import type { HTMLAttributes, ReactNode } from 'react'
-import { SendHorizontal } from 'lucide-react'
+import clsx from 'clsx'
+import { Camera, Paperclip, SendHorizontal } from 'lucide-react'
 import { IconButton } from '../user-interaction/IconButton'
 import { useControlledState } from '@/src/hooks/useControlledState'
 
@@ -11,6 +12,10 @@ export type ChatComposerProps = Omit<HTMLAttributes<HTMLDivElement>, 'onChange'>
   placeholder?: string,
   sendLabel?: string,
   disabled?: boolean,
+  onCamera?: () => void,
+  cameraLabel?: string,
+  onAttachment?: () => void,
+  attachmentLabel?: string,
   leading?: ReactNode,
   trailing?: ReactNode,
 }
@@ -23,6 +28,10 @@ export const ChatComposer = ({
   placeholder,
   sendLabel = 'Send',
   disabled = false,
+  onCamera,
+  cameraLabel = 'Camera',
+  onAttachment,
+  attachmentLabel = 'Attach file',
   leading,
   trailing,
   ...props
@@ -43,11 +52,35 @@ export const ChatComposer = ({
   }
 
   return (
-    <div {...props} data-name="chat-composer">
+    <div {...props} className={clsx('chat-composer', props.className)}>
       {leading}
-      <div data-name="chat-composer-input-container">
+      {onCamera && (
+        <IconButton
+          tooltip={cameraLabel}
+          size="sm"
+          color="neutral"
+          coloringStyle="text"
+          disabled={disabled}
+          onClick={onCamera}
+        >
+          <Camera/>
+        </IconButton>
+      )}
+      {onAttachment && (
+        <IconButton
+          tooltip={attachmentLabel}
+          size="sm"
+          color="neutral"
+          coloringStyle="text"
+          disabled={disabled}
+          onClick={onAttachment}
+        >
+          <Paperclip/>
+        </IconButton>
+      )}
+      <div className="chat-composer-input-container">
         <input
-          data-name="chat-composer-input"
+          className="chat-composer-input"
           value={value ?? ''}
           placeholder={placeholder}
           disabled={disabled}

@@ -55,6 +55,27 @@
   }
 }
 
+@keyframes azdFillBack {
+  0% {
+    stroke-dashoffset: 1000;
+  }
+  45%,
+  100% {
+    stroke-dashoffset: 0;
+  }
+}
+
+@keyframes azdFillFront {
+  0%,
+  35% {
+    stroke-dashoffset: 1000;
+  }
+  80%,
+  100% {
+    stroke-dashoffset: 0;
+  }
+}
+
 @keyframes pop-in {
   0% {
     opacity: 0;
@@ -129,6 +150,14 @@
 
 @utility animate-wave-small-right-down {
   animation: smallRightDown var(--helpwave-loading-duration, 1.7s) ease-in infinite reverse;
+}
+
+@utility animate-azd-fill-back {
+  animation: azdFillBack var(--helpwave-loading-duration, 1.7s) ease-in-out infinite normal;
+}
+
+@utility animate-azd-fill-front {
+  animation: azdFillFront var(--helpwave-loading-duration, 1.7s) ease-in-out infinite normal;
 }
 
 @layer utilities {

@@ -11,8 +11,26 @@ type Story = StoryObj<typeof meta>;
 export const appZumDocLogo: Story = {
   args: {
     size: 'md',
+    animate: 'none',
     frontColor: '#095763',
     backColor: '#4E97A2',
     className: ''
+  },
+}
+
+export const appZumDocLoadingAnimation: Story = {
+  args: {
+    animate: 'loading',
+    width: 128,
+    height: 128,
+  },
+}
+
+export const appZumDocLoadingAnimationSlow: Story = {
+  args: {
+    animate: 'loading',
+    animationDuration: 3,
+    width: 128,
+    height: 128,
   },
 }
