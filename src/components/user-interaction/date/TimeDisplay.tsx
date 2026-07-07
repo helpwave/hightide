@@ -2,7 +2,7 @@ import { useHightideTranslation } from '@/src/i18n/useHightideTranslation'
 import { useDateTimeFormat, useLocale } from '@/src/global-contexts/LocaleContext'
 import { DateUtils } from '@/src/utils/date'
 
-type TimeDisplayMode = 'daysFromToday' | 'date'
+type TimeDisplayMode = 'daysFromToday' | 'date' | 'time'
 
 type TimeDisplayProps = {
   date: Date,
@@ -52,15 +52,18 @@ export const TimeDisplay = ({
     11: translation('time.december')
   } as const
 
+  const timeString = new Intl.DateTimeFormat(locale, {
+    hour: '2-digit',
+    minute: '2-digit',
+    hourCycle: is24HourFormat ? 'h23' : 'h12',
+    timeZone,
+  }).format(date)
+
   let fullString
   if (mode === 'daysFromToday') {
-    const timeString = new Intl.DateTimeFormat(locale, {
-      hour: '2-digit',
-      minute: '2-digit',
-      hourCycle: is24HourFormat ? 'h23' : 'h12',
-      timeZone,
-    }).format(date)
     fullString = `${timeString} - ${displayString}`
+  } else if (mode === 'time') {
+    fullString = timeString
   } else {
     fullString = `${zonedDate.getDate()}. ${monthToTranslation[zonedDate.getMonth()]} ${zonedDate.getFullYear()}`
   }

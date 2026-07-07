@@ -5,6 +5,29 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/)
 and adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [0.15.0] - 2026-07-06
+
+### Added
+
+- `AppZumDocLogo` component with the official App zum Doc logo, configurable `frontColor`, `backColor`, and `size`, and an `animate` prop (`loading` fills both logo parts clockwise, plus `pulse` and `bounce`)
+- `AppZumDocBadge` component with the App zum Doc logo and wordmark, mirroring `HelpwaveBadge`
+- Chat component set for the App zum Doc messaging surfaces, styled via class names with `className` forwarding on every component:
+  - `ChatLayout` two-pane layout (conversation list + open thread) with responsive single-pane behavior below the tablet breakpoint, a `listPosition` option (`left`/`right`), no default border or rounding, nestable into `AppPage`
+  - `ChatThread` column layout with `header` and `footer` slots
+  - `ChatConversationList` with optional `title`, optional create button (`onCreate`), toggleable built-in `SearchBar` (`hasSearch`, `onSearch`), and `header`/`footer` slots around a scrollable row area
+  - `ChatConversationRow` with avatar presence, timestamp, preview, sent indicator, unread count pill, and `selected`/`unread` states
+  - `ChatThreadHeader` with avatar presence, title, subtitle, optional action buttons rendered only when their handler is set (`onBack`, `onCall`, `onAddContact`), and `leading`/`trailing` slots
+  - `ChatMessageList` scrollable message pane with optional `autoScroll`
+  - `ChatMessageBubble` incoming/outgoing bubble with asymmetric radii, inline timestamp, and optional read receipt
+  - `ChatMessageCard` structured message card (e.g. appointment proposal, prescription request, referral) with icon, title, subtitle, badge, body, and action footer
+  - `ChatAttachmentCard` with file icon, filename, metadata, and a download action shown only when `onDownload` is set
+  - `ChatComposer` with controlled or uncontrolled value, optional camera and attachment buttons rendered only when their handler is set (`onCamera`, `onAttachment`), `leading`/`trailing` slots, and enter-to-send
+  - `ChatQuickReplyChip` outlined pill button with active state
+  - `ChatSystemLine` centered status line with icon
+  - `ChatDateDivider` centered date pill
+- `time` mode for `TimeDisplay` rendering only the localized time, usable for chat timestamps
+- Unit tests for the chat component set and the App zum Doc branding components
+
 ## [0.14.5] - 2026-07-06
 
 ### Added
