@@ -1,0 +1,17 @@
+@layer components {
+  .scrollable-list {
+    @apply flex-col-0 h-full min-h-0;
+  }
+
+  .scrollable-list-header {
+    @apply flex-col-0 shrink-0;
+  }
+
+  .scrollable-list-content {
+    @apply flex-col-0 grow min-h-0 overflow-y-auto overscroll-y-contain;
+  }
+
+  .scrollable-list-footer {
+    @apply flex-col-0 shrink-0;
+  }
+}

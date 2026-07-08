@@ -16,7 +16,7 @@ export const chatQuickReplyChip: Story = {
     onClick: action('onClick'),
   },
   render: (args) => (
-    <div className="flex-row-2 flex-wrap">
+    <div className="flex-row-1 gap-1 flex-wrap">
       <ChatQuickReplyChip {...args}/>
       <ChatQuickReplyChip onClick={action('onClick')}>Rezept ausstellen</ChatQuickReplyChip>
       <ChatQuickReplyChip onClick={action('onClick')}>Überweisung senden</ChatQuickReplyChip>

@@ -1,0 +1,25 @@
+@layer components {
+  .chat-thread-header {
+    @apply flex-row-0 gap-x-3 items-center px-3.5 py-3 border-b border-divider bg-surface text-on-surface;
+  }
+
+  .chat-thread-header-info {
+    @apply flex-col-0 gap-y-0.5 grow min-w-0;
+  }
+
+  .chat-thread-header-title {
+    @apply text-base font-space font-bold truncate;
+  }
+
+  .chat-thread-header-subtitle {
+    @apply text-xs font-light text-description truncate;
+  }
+
+  .chat-thread-header-leading {
+    @apply flex-row-0.5 shrink-0 items-center;
+  }
+
+  .chat-thread-header-trailing {
+    @apply flex-row-0.5 shrink-0 items-center;
+  }
+}

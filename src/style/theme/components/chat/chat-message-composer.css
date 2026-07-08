@@ -1,0 +1,19 @@
+@layer components {
+  .chat-message-composer {
+    @apply flex-row-2 items-end w-full px-3.5 py-3;
+  }
+
+  .chat-message-composer-actions {
+    @apply flex-row-0 items-start;
+  }
+
+  .chat-message-composer-input {
+    @apply leading-[var(--text-base--line-height)] resize-none overflow-y-auto;
+    @apply bg-surface-variant text-on-surface p-3 rounded-md;
+    @apply min-w-0  min-h-11 grow;
+  }
+
+  .chat-message-composer-send-button {
+    @apply rounded-full;
+  }
+}

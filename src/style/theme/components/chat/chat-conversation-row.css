@@ -1,0 +1,71 @@
+@layer components {
+  .chat-conversation-row {
+    @apply flex-row-3 shrink-0 items-center w-full px-3.5 py-3 text-left bg-transparent cursor-pointer rounded-md;
+    @apply border-2 border-transparent focus-style-none focus-style-border outline-none;
+    transition: var(--coloring-transitions), var(--focus-transitions);
+
+    &:focus-visible {
+      @apply focus-style-apply;
+    }
+
+    &:hover {
+      @apply bg-surface-hover;
+    }
+
+    &[data-selected] {
+      @apply bg-background border-l-primary border-l-4 pl-3.25  ;
+
+      &:hover {
+        @apply bg-surface-hover;
+      }
+    }
+  }
+
+  .chat-conversation-row-content {
+    @apply flex-col-1 grow min-w-0 w-full;
+  }
+
+  .chat-conversation-row-top {
+    @apply flex-row-2 items-baseline justify-between;
+  }
+
+  .chat-conversation-row-title {
+    @apply text-base font-space font-medium truncate;
+
+    .chat-conversation-row[data-unread] & {
+      @apply font-bold;
+    }
+  }
+
+  .chat-conversation-row-timestamp {
+    @apply shrink-0 text-xs text-description;
+
+    .chat-conversation-row[data-unread] & {
+      @apply text-primary font-medium;
+    }
+  }
+
+  .chat-conversation-row-bottom {
+    @apply flex-row-2 items-center justify-between min-w-0 w-full ;
+  }
+
+  .chat-conversation-row-preview {
+    @apply flex-row-0.5 items-center min-w-0 max-w-full overflow-hidden;
+  }
+
+  .chat-conversation-row-preview-text {
+    @apply block min-w-0 max-w-full text-sm text-description truncate;
+  }
+
+  .chat-conversation-row[data-unread] & {
+    @apply text-on-surface;
+  }
+
+  .chat-conversation-row-sent-indicator {
+    @apply size-3.5 shrink-0 text-primary;
+  }
+
+  .chat-conversation-row-unread-count {
+    @apply flex-row-0 shrink-0 items-center justify-center min-w-5 h-5 px-1.5 rounded-full bg-primary text-on-primary text-xs font-bold;
+  }
+}

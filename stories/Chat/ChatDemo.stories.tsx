@@ -1,13 +1,12 @@
 import type { Meta, StoryObj } from '@storybook/nextjs-vite'
 import { useState } from 'react'
 import type { ReactNode } from 'react'
-import { CalendarDays, Pill } from 'lucide-react'
+import clsx from 'clsx'
+import { CalendarDays, Camera, ChevronLeft, Paperclip, Phone, Pill, Plus, UserRoundPlus } from 'lucide-react'
 import { action } from 'storybook/actions'
 import type { AvatarStatus } from '@/src/components/display-and-visualization/Avatar'
-import type { ChatLayoutListPosition } from '@/src/components/chat/ChatLayout'
-import { ChatLayout, ChatThread } from '@/src/components/chat/ChatLayout'
 import { ChatConversationList } from '@/src/components/chat/ChatConversationList'
-import { ChatConversationRow } from '@/src/components/chat/ChatConversationRow'
+import { ChatConversationRow, type ChatConversationSentIndicator } from '@/src/components/chat/ChatConversationRow'
 import { ChatThreadHeader } from '@/src/components/chat/ChatThreadHeader'
 import { ChatMessageList } from '@/src/components/chat/ChatMessageList'
 import { ChatMessageBubble } from '@/src/components/chat/ChatMessageBubble'
@@ -16,9 +15,10 @@ import { ChatAttachmentCard } from '@/src/components/chat/ChatAttachmentCard'
 import { ChatDateDivider } from '@/src/components/chat/ChatDateDivider'
 import { ChatSystemLine } from '@/src/components/chat/ChatSystemLine'
 import { ChatQuickReplyChip } from '@/src/components/chat/ChatQuickReplyChip'
-import { ChatComposer } from '@/src/components/chat/ChatComposer'
+import { ChatMessageComposer } from '@/src/components/chat/ChatMessageComposer'
 import { Chip } from '@/src/components/display-and-visualization/Chip'
 import { Button } from '@/src/components/user-interaction/Button'
+import { IconButton } from '@/src/components/user-interaction/IconButton'
 import { TimeDisplay } from '@/src/components/user-interaction/date/TimeDisplay'
 
 type DemoMessage = {
@@ -37,8 +37,51 @@ type DemoConversation = {
   timestamp: ReactNode,
   preview: string,
   unreadCount?: number,
-  isUnread?: boolean,
-  hasSentIndicator?: boolean,
+  sentIndicator?: ChatConversationSentIndicator,
+}
+
+type ChatDemoLayoutListPosition = 'left' | 'right'
+
+type ChatDemoLayoutProps = {
+  conversationList: ReactNode,
+  isConversationOpen?: boolean,
+  listPosition?: ChatDemoLayoutListPosition,
+  className?: string,
+  children?: ReactNode,
+}
+
+function ChatDemoLayout({
+  conversationList,
+  isConversationOpen = false,
+  className,
+  children,
+}: ChatDemoLayoutProps) {
+  return (
+    <div
+      className={clsx(
+        'flex-row-0 min-h-200 h-full max-h-200 min-h-0 w-full rounded-lg overflow-hidden border-2',
+        className
+      )}
+    >
+      <div
+        className={clsx(
+          'flex flex-col-0 grow min-w-0 min-h-0',
+          isConversationOpen ? 'flex' : 'hidden desktop:flex'
+        )}
+      >
+        {children}
+      </div>
+      <div
+        className={clsx(
+          'flex flex-col-0 w-full desktop:w-90 min-h-0',
+          isConversationOpen ? 'hidden desktop:flex' : 'flex',
+          'desktop:border-l-2'
+        )}
+      >
+        {conversationList}
+      </div>
+    </div>
+  )
 }
 
 const conversations: DemoConversation[] = [
@@ -50,7 +93,6 @@ const conversations: DemoConversation[] = [
     timestamp: '14:22',
     preview: 'Perfekt, ich habe den Befund erhalten.',
     unreadCount: 2,
-    isUnread: true,
   },
   {
     id: 'otte',
@@ -59,7 +101,7 @@ const conversations: DemoConversation[] = [
     meta: 'geb. 02.11.1974 · Vers.-Nr. M110236775 · GKV',
     timestamp: 'Gestern',
     preview: 'Vielen Dank für die schnelle Rückmeldung.',
-    hasSentIndicator: true,
+    sentIndicator: 'sent',
   },
   {
     id: 'hagen',
@@ -68,7 +110,7 @@ const conversations: DemoConversation[] = [
     meta: 'geb. 29.06.1958 · Vers.-Nr. B290658214 · PKV',
     timestamp: 'Mo.',
     preview: 'Das Rezept ist unterwegs.',
-    hasSentIndicator: true,
+    sentIndicator: 'sentAndReceived',
   },
 ]
 
@@ -94,37 +136,14 @@ const initialMessages: DemoMessage[] = [
   },
 ]
 
-const meta: Meta<typeof ChatLayout> = {
-  component: ChatLayout,
-  argTypes: {
-    listPosition: {
-      control: 'select',
-      options: ['left', 'right'] satisfies ChatLayoutListPosition[],
-    },
-  },
-}
+const meta: Meta<unknown> = {}
 
 export default meta
 type Story = StoryObj<typeof meta>
 
-export const chatLayout: Story = {
-  args: {
-    listPosition: 'left',
-    className: 'rounded-lg border border-divider',
-    conversationList: null,
-  },
-  decorators: [
-    (Story) => (
-      <>
-        <style>{'#storybook-root > main { padding: 0 !important; }'}</style>
-        <div className="h-dvh w-full p-3 bg-background">
-          <Story/>
-        </div>
-      </>
-    ),
-  ],
+export const chatDemo: Story = {
   render: (args) => {
-    const [selectedId, setSelectedId] = useState<string | null>('wellermann')
+    const [selectedId, setSelectedId] = useState<string | null>()
     const [messages, setMessages] = useState<DemoMessage[]>(initialMessages)
     const selected = conversations.find(conversation => conversation.id === selectedId)
 
@@ -141,17 +160,26 @@ export const chatLayout: Story = {
     }
 
     return (
-      <ChatLayout
-        {...args}
+      <ChatDemoLayout
+        listPosition={args.listPosition}
+        className={args.className}
         isConversationOpen={!!selected}
         conversationList={(
           <ChatConversationList
-            title="Chats"
-            createLabel="Neuer Chat"
-            hasSearch={true}
-            searchPlaceholder="Patient oder Nachricht suchen"
-            onCreate={action('onCreate')}
-            onSearch={action('onSearch')}
+            className="h-full"
+            header={(
+              <div className="flex-row-4 w-full items-center justify-between">
+                <span className="text-primary font-semibold">Chats</span>
+                <IconButton
+                  tooltip="Neuer Chat"
+                  size="sm"
+                  coloringStyle="text"
+                  onClick={action('onCreate')}
+                >
+                  <Plus className="size-5"/>
+                </IconButton>
+              </div>
+            )}
           >
             {conversations.map(conversation => (
               <ChatConversationRow
@@ -161,8 +189,7 @@ export const chatLayout: Story = {
                 timestamp={conversation.timestamp}
                 preview={conversation.preview}
                 unreadCount={conversation.unreadCount}
-                isUnread={conversation.isUnread}
-                hasSentIndicator={conversation.hasSentIndicator}
+                sentIndicator={conversation.sentIndicator}
                 isSelected={conversation.id === selectedId}
                 onClick={() => setSelectedId(conversation.id)}
               />
@@ -170,40 +197,53 @@ export const chatLayout: Story = {
           </ChatConversationList>
         )}
       >
+        {!selected && (
+          <div className="flex flex-col-0 grow min-w-0 min-h-0 items-center justify-center gap-y-2.5 bg-surface-variant text-on-surface">
+            <span className="typography-title-lg">Wählen Sie einen Chat aus</span>
+            <span className="text-sm text-description">oder starten Sie einen neuen Chat.</span>
+          </div>
+        )}
         {selected && (
-          <ChatThread
-            header={(
-              <ChatThreadHeader
-                avatar={{ name: selected.name, status: selected.status }}
-                title={selected.name}
-                subtitle={selected.meta}
-                backLabel="Zurück"
-                callLabel="Anrufen"
-                addContactLabel="Zu Kontakten hinzufügen"
-                onBack={() => setSelectedId(null)}
-                onCall={action('onCall')}
-                onAddContact={action('onAddContact')}
-              />
-            )}
-            footer={(
-              <>
-                <div className="flex-row-2 flex-wrap px-3.5 pt-3 pb-4 bg-surface">
-                  <ChatQuickReplyChip isActive={true} onClick={action('onQuickReply')}>Termin bestätigen</ChatQuickReplyChip>
-                  <ChatQuickReplyChip onClick={action('onQuickReply')}>Rezept ausstellen</ChatQuickReplyChip>
-                  <ChatQuickReplyChip onClick={action('onQuickReply')}>Überweisung senden</ChatQuickReplyChip>
-                </div>
-                <ChatComposer
-                  placeholder={`Nachricht an ${selected.name} schreiben`}
-                  sendLabel="Senden"
-                  cameraLabel="Kamera"
-                  attachmentLabel="Anhang"
-                  onSend={sendMessage}
-                  onCamera={action('onCamera')}
-                  onAttachment={action('onAttachment')}
-                />
-              </>
-            )}
-          >
+          <div className="flex flex-col-0 grow min-w-0 min-h-0">
+            <ChatThreadHeader
+              avatar={{ name: selected.name, status: selected.status }}
+              title={selected.name}
+              subtitle={selected.meta}
+              leftActions={(
+                <IconButton
+                  tooltip="Zurück"
+                  size="sm"
+                  color="neutral"
+                  coloringStyle="text"
+                  className="chat-thread-header-back desktop:hidden"
+                  onClick={() => setSelectedId(null)}
+                >
+                  <ChevronLeft/>
+                </IconButton>
+              )}
+              rightActions={(
+                <>
+                  <IconButton
+                    tooltip="Anrufen"
+                    size="sm"
+                    color="neutral"
+                    coloringStyle="text"
+                    onClick={action('onCall')}
+                  >
+                    <Phone/>
+                  </IconButton>
+                  <IconButton
+                    tooltip="Zu Kontakten hinzufügen"
+                    size="sm"
+                    color="neutral"
+                    coloringStyle="text"
+                    onClick={action('onAddContact')}
+                  >
+                    <UserRoundPlus/>
+                  </IconButton>
+                </>
+              )}
+            />
             <ChatMessageList>
               <ChatDateDivider>
                 <TimeDisplay date={new Date()} mode="date"/>
@@ -258,9 +298,44 @@ export const chatLayout: Story = {
                 </ChatMessageBubble>
               ))}
             </ChatMessageList>
-          </ChatThread>
+            <>
+              <div className="flex-row-2 flex-wrap px-3.5 pt-3 bg-surface rounded-t-lg">
+                <ChatQuickReplyChip isActive={true} onClick={action('onQuickReply')}>Termin bestätigen</ChatQuickReplyChip>
+                <ChatQuickReplyChip onClick={action('onQuickReply')}>Rezept ausstellen</ChatQuickReplyChip>
+                <ChatQuickReplyChip onClick={action('onQuickReply')}>Überweisung senden</ChatQuickReplyChip>
+              </div>
+              <ChatMessageComposer
+                placeholder={`Nachricht an ${selected.name} schreiben`}
+                sendLabel="Senden"
+                onSend={sendMessage}
+                actions={(
+                  <>
+                    <IconButton
+                      tooltip="Kamera"
+                      size="sm"
+                      color="neutral"
+                      coloringStyle="text"
+                      onClick={action('onCamera')}
+                    >
+                      <Camera/>
+                    </IconButton>
+                    <IconButton
+                      tooltip="Anhang"
+                      size="sm"
+                      color="neutral"
+                      coloringStyle="text"
+                      onClick={action('onAttachment')}
+                    >
+                      <Paperclip/>
+                    </IconButton>
+                  </>
+                )}
+                className="bg-surface text-on-surface"
+              />
+            </>
+          </div>
         )}
-      </ChatLayout>
+      </ChatDemoLayout>
     )
   },
 }
