@@ -1,0 +1,9 @@
+@layer components {
+  .chat-message-list {
+    @apply flex-col-3 grow min-h-0 h-full overflow-y-auto overscroll-y-contain px-4 py-4.5 bg-background text-on-background;
+
+    > * {
+      @apply shrink-0;
+    }
+  }
+}

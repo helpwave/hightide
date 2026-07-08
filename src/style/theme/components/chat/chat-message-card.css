@@ -1,0 +1,57 @@
+@layer components {
+  .chat-message-card {
+    @apply flex-col-0 shrink-0 w-full max-w-75 rounded-xl border border-divider bg-surface text-on-surface shadow-around-md overflow-hidden;
+
+    &[data-direction="incoming"] {
+      @apply self-start rounded-bl-sm;
+    }
+
+    &[data-direction="outgoing"] {
+      @apply self-end rounded-br-sm;
+    }
+  }
+
+  .chat-message-card-header {
+    @apply flex-row-0 gap-x-2.5 items-center px-3.75 py-3 border-b border-divider;
+  }
+
+  .chat-message-card-icon {
+    @apply flex-row-0 items-center justify-center size-9 rounded-md coloring-color-detect coloring-tonal;
+
+    > svg {
+      @apply size-4.5;
+    }
+  }
+
+  .chat-message-card-heading {
+    @apply flex-col-0 gap-y-0.5 grow min-w-0;
+  }
+
+  .chat-message-card-title {
+    @apply text-sm font-space font-bold coloring-color-detect coloring-text;
+  }
+
+  .chat-message-card-subtitle {
+    @apply text-xs text-description;
+  }
+
+  .chat-message-card-badge {
+    @apply shrink-0;
+  }
+
+  .chat-message-card-body {
+    @apply flex-col-1 px-3.75 py-3;
+  }
+
+  .chat-message-card-actions {
+    @apply flex-row-0 gap-x-2.5 px-3.75 pb-3.75;
+
+    > * {
+      @apply flex-1;
+    }
+
+    > [data-name="button"] {
+      @apply min-w-0;
+    }
+  }
+}

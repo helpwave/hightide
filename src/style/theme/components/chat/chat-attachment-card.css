@@ -1,0 +1,33 @@
+@layer components {
+  .chat-attachment-card {
+    @apply flex-row-3 shrink-0 items-center w-full max-w-70 p-3 rounded-xl border border-divider bg-surface text-on-surface shadow-around-md;
+
+    &[data-direction="incoming"] {
+      @apply self-start rounded-bl-sm;
+    }
+
+    &[data-direction="outgoing"] {
+      @apply self-end rounded-br-sm;
+    }
+  }
+
+  .chat-attachment-card-icon {
+    @apply flex-row-0 shrink-0 items-center justify-center size-11 rounded-md negative coloring-tonal;
+
+    > svg {
+      @apply size-5.5;
+    }
+  }
+
+  .chat-attachment-card-info {
+    @apply flex-col-0 gap-y-0.5 grow min-w-0;
+  }
+
+  .chat-attachment-card-filename {
+    @apply text-sm font-medium truncate;
+  }
+
+  .chat-attachment-card-metadata {
+    @apply text-xs text-description;
+  }
+}

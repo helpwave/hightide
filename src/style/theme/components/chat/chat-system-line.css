@@ -1,0 +1,13 @@
+@layer components {
+  .chat-system-line {
+    @apply flex-row-0 gap-x-1.5 self-center items-center justify-center text-xs font-medium coloring-color-detect coloring-text;
+  }
+
+  .chat-system-line-icon {
+    @apply flex-row-0 items-center;
+
+    > svg {
+      @apply size-3.5;
+    }
+  }
+}

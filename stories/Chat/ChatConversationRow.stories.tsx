@@ -24,8 +24,6 @@ export const chatConversationRow: Story = {
     preview: 'Perfekt, ich habe den Befund erhalten. Bis Mittwoch!',
     unreadCount: 2,
     isSelected: false,
-    isUnread: true,
-    hasSentIndicator: false,
     onClick: action('onClick'),
   },
   render: (args) => (
@@ -36,7 +34,7 @@ export const chatConversationRow: Story = {
         title="Miriam Otte"
         timestamp="Gestern"
         preview="Vielen Dank für die schnelle Rückmeldung."
-        hasSentIndicator={true}
+        sentIndicator="sent"
         isSelected={true}
         onClick={action('onClick')}
       />
@@ -45,6 +43,7 @@ export const chatConversationRow: Story = {
         title="Bernd Hagen"
         timestamp="Mo."
         preview="Das Rezept ist unterwegs."
+        sentIndicator="sentAndReceived"
         onClick={action('onClick')}
       />
     </div>

@@ -1,9 +1,11 @@
 import type { ButtonHTMLAttributes, ReactNode } from 'react'
 import clsx from 'clsx'
-import { Check } from 'lucide-react'
+import { Check, CheckCheck } from 'lucide-react'
 import type { AvatarWithStatusProps } from '../display-and-visualization/Avatar'
 import { AvatarWithStatus } from '../display-and-visualization/Avatar'
 import { PropsUtil } from '@/src/utils/propsUtil'
+
+export type ChatConversationSentIndicator = 'sent' | 'sentAndReceived'
 
 export type ChatConversationRowProps = ButtonHTMLAttributes<HTMLButtonElement> & {
   avatar: AvatarWithStatusProps,
@@ -12,8 +14,7 @@ export type ChatConversationRowProps = ButtonHTMLAttributes<HTMLButtonElement> &
   preview?: ReactNode,
   unreadCount?: number,
   isSelected?: boolean,
-  isUnread?: boolean,
-  hasSentIndicator?: boolean,
+  sentIndicator?: ChatConversationSentIndicator,
 }
 
 export const ChatConversationRow = ({
@@ -23,10 +24,12 @@ export const ChatConversationRow = ({
   preview,
   unreadCount,
   isSelected = false,
-  isUnread = false,
-  hasSentIndicator = false,
+  sentIndicator,
   ...props
 }: ChatConversationRowProps) => {
+  const isUnread = (unreadCount ?? 0) > 0
+  const SentIndicatorIcon = sentIndicator === 'sentAndReceived' ? CheckCheck : Check
+
   return (
     <button
       {...props}
@@ -45,12 +48,17 @@ export const ChatConversationRow = ({
         </span>
         <span className="chat-conversation-row-bottom">
           <span className="chat-conversation-row-preview">
-            {hasSentIndicator && (
-              <Check className="chat-conversation-row-sent-indicator"/>
+            {sentIndicator && (
+              <SentIndicatorIcon
+                className="chat-conversation-row-sent-indicator"
+                data-sent-indicator={sentIndicator}
+              />
             )}
-            {preview}
+            <span className="chat-conversation-row-preview-text">
+              {preview}
+            </span>
           </span>
-          {!!unreadCount && (
+          {isUnread && (
             <span className="chat-conversation-row-unread-count">{unreadCount}</span>
           )}
         </span>

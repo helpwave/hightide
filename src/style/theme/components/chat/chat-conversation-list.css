@@ -1,0 +1,21 @@
+@layer components {
+  .chat-conversation-list {
+    @apply bg-surface text-on-surface;
+  }
+
+  .chat-conversation-list-header {
+    @apply flex-col-3 px-3.5 py-3.5;
+  }
+
+  .chat-conversation-list-header-top {
+    @apply flex-row-2 items-center justify-between;
+  }
+
+  .chat-conversation-list-title {
+    @apply typography-title-md text-primary;
+  }
+
+  .chat-conversation-list-footer {
+    @apply px-3.5 py-2;
+  }
+}

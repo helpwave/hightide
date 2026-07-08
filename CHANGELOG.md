@@ -5,6 +5,34 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/)
 and adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [0.15.1] - 2026-07-08
+
+### Added
+
+- `ScrollableList` layout component with optional `header`/`footer` slots around a scrollable content area, per-section `className` overrides, and polymorphic `as` element
+- `useThrottle` hook returning a throttler with configurable interval and per-call override; Storybook story and unit tests
+- `useDebouncer` hook returning a debouncer with configurable interval and per-call override; Storybook story and unit tests
+- Interactive Chat Demo Storybook story composing the chat component set in a responsive two-pane Tailwind layout
+- `ChatConversationSentIndicator` type (`sent` | `sentAndReceived`) for `ChatConversationRow`
+- Per-component chat CSS theme files under `src/style/theme/components/chat/`
+
+### Changed
+
+- `ChatComposer` renamed to `ChatMessageComposer` with auto-growing `textarea` input (up to 7 lines), an `actions` slot replacing built-in camera/attachment buttons, and window-resize height syncing
+- `ChatConversationList` now extends `ScrollableList`; built-in title, create button, and search bar removed in favor of composable `header`/`footer` slots
+- `ChatConversationRow` `sentIndicator` enum replaces `hasSentIndicator`; unread state derived from `unreadCount` instead of a separate `isUnread` prop
+- `ChatThreadHeader` `leftActions`/`rightActions` slots replace built-in back/call/add-contact buttons and `leading`/`trailing` slots
+- Chat component CSS split from monolithic `chat.css` into per-component files imported via `chat/index.css`
+- `useResizeCallbackWrapper` renamed to `useWindowResizeObserver` (same API)
+
+### Removed
+
+- `ChatLayout` two-pane layout component with responsive single-pane behavior and `listPosition` option
+- `ChatThread` column layout with `header`/`footer` slots (previously co-exported from `ChatLayout`)
+- Monolithic `chat.css`
+- `useResizeCallbackWrapper`
+- Unit tests for the chat component set
+
 ## [0.15.0] - 2026-07-06
 
 ### Added

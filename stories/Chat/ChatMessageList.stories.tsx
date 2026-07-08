@@ -21,7 +21,7 @@ export const chatMessageList: Story = {
     autoScroll: true,
   },
   render: (args) => (
-    <div className="h-150 w-120 max-w-full rounded-lg border border-divider overflow-hidden">
+    <div className="h-150 w-120 max-w-full overflow-hidden">
       <ChatMessageList {...args}>
         <ChatDateDivider>Heute · 09:10</ChatDateDivider>
         <ChatMessageBubble direction="incoming" timestamp="09:12">

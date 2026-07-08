@@ -1,0 +1,41 @@
+@layer components {
+  .chat-message-bubble-container {
+    @apply flex-col-1 max-w-70;
+
+    &[data-direction="incoming"] {
+      @apply self-start items-start;
+    }
+
+    &[data-direction="outgoing"] {
+      @apply self-end items-end;
+    }
+  }
+
+  .chat-message-bubble {
+    @apply flex-col-1 px-3.75 py-2.75 rounded-xl;
+
+    &[data-direction="incoming"] {
+      @apply rounded-bl-sm bg-neutral text-on-neutral;
+    }
+
+    &[data-direction="outgoing"] {
+      @apply rounded-br-sm bg-primary text-on-primary;
+    }
+  }
+
+  .chat-message-bubble-content {
+    @apply text-base/relaxed font-light;
+  }
+
+  .chat-message-bubble-timestamp {
+    @apply self-end text-xs font-medium opacity-75;
+  }
+
+  .chat-message-bubble-receipt {
+    @apply flex-row-1 items-center text-xs font-medium text-description;
+  }
+
+  .chat-message-bubble-receipt-icon {
+    @apply size-3.5 text-primary;
+  }
+}
