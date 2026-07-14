@@ -12,9 +12,10 @@
   "license": "AGPL-3.0-only",
   "type": "module",
   "scripts": {
-    "clean": "pnpm -r run clean",
-    "init": "pnpm install && pnpm -r run init",
-    "build": "pnpm --filter @helpwave/hightide build",
+    "clean": "pnpm -r run clean && rm -rf node_modules",
+    "init": "pnpm -r run init",
+    "reset": "pnpm run clean && pnpm install && pnpm run init",
+    "build": "pnpm -r run build",
     "test": "pnpm -r run test",
     "lint": "pnpm -r run lint"
   }

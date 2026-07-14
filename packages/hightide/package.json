@@ -35,16 +35,16 @@
     "./style/uncompiled/globals.css": "./dist/style/uncompiled/globals.css"
   },
   "scripts": {
-    "clean": "rm -rf dist && pnpm run barrel -- --clean",
+    "clean": "rm -rf dist node_modules && pnpm run barrel -- --clean",
     "build-intl": "npx build-intl --force -i ./locales -o ./src/i18n/translations.ts -n hightideTranslation",
     "build-css": "NODE_ENV=production node scripts/build-css.mjs",
     "barrel": "node node_modules/@helpwave/hightide-utils/scripts/barrel.js",
-    "build": "pnpm --filter @helpwave/hightide-utils run barrel && pnpm run clean && pnpm run build-intl && pnpm run barrel && tsup && pnpm run build-css && cp -R src/style/ ./dist/style/uncompiled/",
+    "build": "tsup && pnpm run build-css && cp -R src/style/ ./dist/style/uncompiled/",
     "storybook": "storybook dev -p 6006",
     "storybook:devices": "storybook dev -p 6006 --host",
     "build-storybook": "storybook build",
     "lint": "eslint .",
-    "init": "pnpm --filter @helpwave/hightide-utils run init && pnpm run clean && pnpm run build-intl",
+    "init": "pnpm --filter @helpwave/hightide-utils run init && pnpm run build-intl",
     "test": "jest"
   },
   "dependencies": {

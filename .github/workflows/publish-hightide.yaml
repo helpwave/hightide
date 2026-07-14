@@ -5,8 +5,8 @@ on:
     branches:
       - main
     paths:
-      - 'packages/hightide/**'
-      - '.github/workflows/publish-hightide.yaml'
+      - "packages/hightide/**"
+      - ".github/workflows/publish-hightide.yaml"
 
 jobs:
   publish:
@@ -20,11 +20,12 @@ jobs:
 
       - uses: actions/setup-node@v4
         with:
-          node-version: 20
+          node-version: 24
           cache: pnpm
           registry-url: https://registry.npmjs.org
 
       - run: pnpm install --frozen-lockfile
+      - run: pnpm --filter @helpwave/hightide run init
       - run: pnpm --filter @helpwave/hightide build
 
       - name: Publish @helpwave/hightide
