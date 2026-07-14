@@ -2,6 +2,7 @@ import type { Preview } from '@storybook/nextjs-vite'
 import '@/src/style/globals.css'
 import './storybookStyleOverrides.css'
 import { HightideProvider } from '@/src/global-contexts/HightideProvider'
+import { isReactNativeStory, ReactNativeDecorator } from '../src/storybook/reactNativeDecorator'
 
 const preview: Preview = {
   parameters: {
@@ -36,6 +37,10 @@ const preview: Preview = {
   },
   decorators: [
     (Story, context) => {
+      if (isReactNativeStory(context.title)) {
+        return ReactNativeDecorator(Story, context)
+      }
+
       const App = Story
       const theme = context.globals.backgrounds?.value ?? 'system'
       const locale = context.globals.language

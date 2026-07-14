@@ -1,9 +1,12 @@
 import path from 'node:path'
+import { createRequire } from 'node:module'
 import { fileURLToPath } from 'node:url'
 import type { StorybookConfig } from '@storybook/nextjs-vite'
 
 const dirname = path.dirname(fileURLToPath(import.meta.url))
 const hightideRoot = path.resolve(dirname, '../../hightide')
+const require = createRequire(import.meta.url)
+const reactNativeWebRoot = path.dirname(require.resolve('react-native-web/package.json'))
 
 const config: StorybookConfig = {
   stories: ['../stories/**/*.stories.@(js|jsx|ts|tsx)'],
@@ -24,6 +27,9 @@ const config: StorybookConfig = {
     const projectRoot = path.resolve(dirname, '..')
 
     return mergeConfig(config, {
+      define: {
+        __DEV__: JSON.stringify(true),
+      },
       css: {
         postcss: path.resolve(projectRoot, 'postcss.config.mjs'),
       },
@@ -31,7 +37,21 @@ const config: StorybookConfig = {
         alias: {
           '@': hightideRoot,
           '@storybook-helpers': path.resolve(dirname, '../src/storybook'),
+          'react-native': reactNativeWebRoot,
         },
+        extensions: [
+          '.web.tsx',
+          '.web.ts',
+          '.web.jsx',
+          '.web.js',
+          '.tsx',
+          '.ts',
+          '.jsx',
+          '.js',
+        ],
+      },
+      optimizeDeps: {
+        include: ['react-native-web'],
       },
     })
   },
