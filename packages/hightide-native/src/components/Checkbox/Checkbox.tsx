@@ -1,0 +1,107 @@
+import { getComponentColors, getSemanticColors, remToPx, spacing } from '@helpwave/hightide-design'
+import { useControlledState, useEventCallbackStabilizer } from '@helpwave/hightide-utils'
+import { useCallback } from 'react'
+import { Pressable, Text, type PressableProps, type StyleProp, type ViewStyle } from 'react-native'
+import { useThemeMode } from '../../theme/ThemeContext'
+import type { FormFieldDataHandling, FormFieldInteractionStates } from '../../types/formField'
+
+export type CheckboxSize = 'sm' | 'md' | 'lg'
+
+const checkboxSizes: Record<CheckboxSize, number> = {
+  sm: 18,
+  md: 22,
+  lg: 26,
+}
+
+export type CheckboxProps = Omit<PressableProps, 'children' | 'style'>
+  & Partial<FormFieldInteractionStates>
+  & Partial<FormFieldDataHandling<boolean>>
+  & {
+    initialValue?: boolean,
+    indeterminate?: boolean,
+    size?: CheckboxSize,
+    alwaysShowCheckIcon?: boolean,
+    isRounded?: boolean,
+    style?: StyleProp<ViewStyle>,
+  }
+
+export const Checkbox = ({
+  value: controlledValue,
+  initialValue = false,
+  indeterminate,
+  invalid = false,
+  disabled = false,
+  readOnly = false,
+  onValueChange,
+  onEditComplete,
+  size = 'md',
+  alwaysShowCheckIcon = false,
+  isRounded = false,
+  style,
+  ...props
+}: CheckboxProps) => {
+  const mode = useThemeMode()
+  const semantic = getSemanticColors(mode)
+  const component = getComponentColors(mode)
+  const dimension = checkboxSizes[size]
+  const interactive = !disabled && !readOnly
+
+  const onEditCompleteStable = useEventCallbackStabilizer(onEditComplete)
+  const onValueChangeStable = useEventCallbackStabilizer(onValueChange)
+
+  const onChangeWrapper = useCallback((nextValue: boolean) => {
+    onValueChangeStable(nextValue)
+    onEditCompleteStable(nextValue)
+  }, [onEditCompleteStable, onValueChangeStable])
+
+  const [value, setValue] = useControlledState({
+    value: controlledValue,
+    onValueChange: onChangeWrapper,
+    defaultValue: initialValue,
+  })
+
+  const showIndicator = indeterminate || alwaysShowCheckIcon || value
+  const indicator = indeterminate ? '−' : '✓'
+  const borderColor = invalid ? semantic.negative : (value || indeterminate ? semantic.primary : component.border)
+  const backgroundColor = disabled
+    ? semantic.disabled
+    : (value || indeterminate ? semantic.primary : component.inputBackground)
+
+  return (
+    <Pressable
+      {...props}
+      disabled={!interactive}
+      accessibilityRole="checkbox"
+      accessibilityState={{
+        checked: indeterminate ? 'mixed' : value,
+        disabled,
+      }}
+      onPress={(event) => {
+        if (interactive) {
+          setValue((previous) => !previous)
+        }
+        props.onPress?.(event)
+      }}
+      style={[
+        {
+          width: dimension,
+          height: dimension,
+          alignItems: 'center',
+          justifyContent: 'center',
+          borderWidth: remToPx(spacing.coloringOutlineWidth),
+          borderColor,
+          borderRadius: isRounded ? dimension / 2 : 6,
+          backgroundColor,
+          opacity: disabled ? 0.6 : 1,
+        },
+        style,
+      ]}
+    >
+      {showIndicator && (
+        <Text style={{ color: semantic.onPrimary, fontSize: dimension * 0.65, fontWeight: '700' }}>
+          {indicator}
+        </Text>
+      )}
+    </Pressable>
+  )
+}
