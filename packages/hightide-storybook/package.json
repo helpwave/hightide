@@ -1,0 +1,60 @@
+{
+  "name": "@helpwave/hightide-storybook",
+  "private": true,
+  "description": "Storybook for helpwave hightide components",
+  "author": "helpwave <support@helpwave.de> (https://helpwave.de)",
+  "homepage": "https://helpwave.de",
+  "repository": {
+    "url": "git+https://github.com/helpwave/hightide.git"
+  },
+  "license": "AGPL-3.0-only",
+  "version": "0.0.1",
+  "type": "module",
+  "scripts": {
+    "clean": "rm -rf node_modules storybook-static",
+    "init": "pnpm --filter @helpwave/hightide run init",
+    "build": "storybook build",
+    "lint": "eslint .",
+    "test": "node -e \"process.exit(0)\"",
+    "storybook": "storybook dev -p 6006",
+    "storybook:devices": "storybook dev -p 6006 --host"
+  },
+  "dependencies": {
+    "@helpwave/hightide": "workspace:*",
+    "@helpwave/hightide-utils": "workspace:*",
+    "@helpwave/internationalization": "0.4.0",
+    "@tanstack/react-table": "8.21.3",
+    "@tanstack/react-virtual": "3.14.3",
+    "clsx": "2.1.1",
+    "lucide-react": "0.561.0"
+  },
+  "devDependencies": {
+    "@faker-js/faker": "10.1.0",
+    "@helpwave/eslint-config": "0.0.11",
+    "@storybook/addon-docs": "10.4.5",
+    "@storybook/addon-links": "10.4.5",
+    "@storybook/nextjs-vite": "10.4.5",
+    "@tailwindcss/postcss": "4.1.18",
+    "@types/node": "20.19.43",
+    "@types/react": "19.2.3",
+    "@types/react-dom": "19.2.3",
+    "autoprefixer": "10.4.23",
+    "eslint": "9.31.0",
+    "eslint-plugin-storybook": "10.4.5",
+    "postcss": "8.5.15",
+    "postcss-load-config": "^6.0.1",
+    "react": "19.2.3",
+    "react-dom": "19.2.3",
+    "storybook": "10.4.5",
+    "typescript": "5.7.2",
+    "vite": "7.3.5"
+  },
+  "bugs": {
+    "url": "https://github.com/helpwave/hightide/issues"
+  },
+  "overrides": {
+    "esbuild": "0.28.1",
+    "postcss": "8.5.15",
+    "js-yaml": "4.2.0"
+  }
+}

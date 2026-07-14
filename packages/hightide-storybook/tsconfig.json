@@ -3,25 +3,27 @@
     "target": "ES2019",
     "moduleResolution": "bundler",
     "module": "ESNext",
-    "outDir": "dist",
-    "rootDir": ".",
-    "declaration": true,
-    "declarationDir": "dist",
     "jsx": "react-jsx",
     "esModuleInterop": true,
     "skipLibCheck": true,
+    "strict": true,
     "baseUrl": ".",
     "paths": {
       "@/*": [
-        "./*"
+        "../hightide/*"
+      ],
+      "@storybook-helpers/*": [
+        "./src/storybook/*"
       ]
     }
   },
   "include": [
-    "src"
+    ".storybook",
+    "src",
+    "stories"
   ],
   "exclude": [
-    "dist",
-    "node_modules"
+    "node_modules",
+    "storybook-static"
   ]
 }

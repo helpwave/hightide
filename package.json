@@ -17,6 +17,7 @@
     "reset": "pnpm run clean && pnpm install && pnpm run init",
     "build": "pnpm -r run build",
     "test": "pnpm -r run test",
-    "lint": "pnpm -r run lint"
+    "lint": "pnpm -r run lint",
+    "storybook": "pnpm --filter @helpwave/hightide-storybook run storybook"
   }
 }

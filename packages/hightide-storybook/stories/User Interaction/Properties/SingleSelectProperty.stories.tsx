@@ -1,28 +1,28 @@
 import type { Meta, StoryObj } from '@storybook/nextjs-vite'
 import { useState } from 'react'
 import { action } from 'storybook/actions'
+import { StorybookHelper } from '@storybook-helpers/helper'
 import clsx from 'clsx'
-import { MultiSelectProperty } from '@/src/components/user-interaction/properties/MultiSelectProperty'
-import { StorybookHelper } from '@/src/storybook/helper'
-import { MultiSelectOption } from '@/src/components/user-interaction/MultiSelect/MultiSelectOption'
+import { SingleSelectProperty } from '@/src/components/user-interaction/properties/SelectProperty'
+import { SelectOption } from '@/src/components/user-interaction/Select/SelectOption'
+const options = [...StorybookHelper.selectValues]
 
-const options = StorybookHelper.selectValues
 
-const meta: Meta<typeof MultiSelectProperty> = {
-  component: MultiSelectProperty,
+const meta: Meta<typeof SingleSelectProperty> = {
+  component: SingleSelectProperty,
 }
 
 export default meta
 type Story = StoryObj<typeof meta>;
 
-export const multiSelectProperty: Story = {
+export const singleSelectProperty: Story = {
   args: {
     name: 'Fruits',
     required: false,
-    value: options.slice(3, 5),
+    value: undefined,
     readOnly: false,
     children: options.map(option => (
-      <MultiSelectOption key={option} value={option} label={option}>
+      <SelectOption key={option} value={option} label={option}>
         <span className="flex-row-1 items-center">
           <span
             className={clsx(
@@ -35,31 +35,31 @@ export const multiSelectProperty: Story = {
           />
           {option}
         </span>
-      </MultiSelectOption>
+      </SelectOption>
     )),
     onValueChange: action('onValueChange'),
     onEditComplete: action('onEditComplete'),
     onRemove: action('onRemove'),
     onValueClear: action('onValueClear'),
   },
-  render: ({ value: initialValue, ...props }) => {
-    const [values, setValues] = useState<string[]>(initialValue)
+  render: ({ value, ...props }) => {
+    const [usedValue, setUsedValue] = useState<string | undefined>(value)
 
     return (
-      <MultiSelectProperty
+      <SingleSelectProperty
         {...props}
-        value={values}
-        onValueChange={(vals) => {
-          props.onValueChange?.(vals)
-          setValues(vals)
+        value={usedValue}
+        onValueChange={(val) => {
+          props.onValueChange?.(val)
+          setUsedValue(val)
         }}
-        onEditComplete={(vals) => {
-          props.onEditComplete?.(vals)
-          setValues(vals)
+        onEditComplete={(val) => {
+          props.onEditComplete?.(val)
+          setUsedValue(val)
         }}
         onValueClear={() => {
           props.onValueClear?.()
-          setValues([])
+          setUsedValue(undefined)
         }}
       />
     )

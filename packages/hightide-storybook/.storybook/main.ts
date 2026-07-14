@@ -3,6 +3,7 @@ import { fileURLToPath } from 'node:url'
 import type { StorybookConfig } from '@storybook/nextjs-vite'
 
 const dirname = path.dirname(fileURLToPath(import.meta.url))
+const hightideRoot = path.resolve(dirname, '../../hightide')
 
 const config: StorybookConfig = {
   stories: ['../stories/**/*.stories.@(js|jsx|ts|tsx)'],
@@ -28,7 +29,8 @@ const config: StorybookConfig = {
       },
       resolve: {
         alias: {
-          '@': projectRoot,
+          '@': hightideRoot,
+          '@storybook-helpers': path.resolve(dirname, '../src/storybook'),
         },
       },
     })
