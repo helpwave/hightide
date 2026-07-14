@@ -1,0 +1,36 @@
+name: Test hightide
+
+on:
+  push:
+    branches:
+      - main
+    paths:
+      - 'packages/hightide/**'
+      - 'packages/hightide-utils/**'
+      - '.github/workflows/test-hightide.yaml'
+  pull_request:
+    branches:
+      - '**'
+    paths:
+      - 'packages/hightide/**'
+      - 'packages/hightide-utils/**'
+      - '.github/workflows/test-hightide.yaml'
+
+jobs:
+  test:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: pnpm/action-setup@v4
+        with:
+          version: 11.13.0
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 20
+          cache: pnpm
+
+      - run: pnpm install --frozen-lockfile
+      - run: pnpm --filter @helpwave/hightide build
+      - run: pnpm --filter @helpwave/hightide test

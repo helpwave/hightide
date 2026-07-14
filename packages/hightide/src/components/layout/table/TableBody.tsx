@@ -1,0 +1,75 @@
+import { range } from '@helpwave/hightide-utils'
+import { BagFunctionUtil } from '@helpwave/hightide-utils'
+import { flexRender } from '@tanstack/react-table'
+import { FillerCell } from './FillerCell'
+import React from 'react'
+import { useTableStateWithoutSizingContext } from './TableContext'
+import clsx from 'clsx'
+import { PropsUtil } from '@/src/utils/propsUtil'
+import { Visibility } from '../Visibility'
+
+export const TableBody = React.memo(function TableBodyVisual() {
+  const { table, isUsingFillerRows, fillerRowCell, onRowClick, onFillerRowClick } = useTableStateWithoutSizingContext<unknown>()
+  const rows = table.getRowModel().rows
+  const columnOrder = table.getState().columnOrder
+  const columnVisibility = table.getState().columnVisibility
+  const pagination = table.getState().pagination
+  const allColumns = new Set(table.getAllColumns().map(col => col.id))
+
+  const columns = columnOrder
+    .filter(id => allColumns.has(id))
+    .map(id => table.getColumn(id))
+    .filter(Boolean)
+    .filter(col => !!col && columnVisibility?.[col.id] !== false)
+
+  const hasNoRows = rows.length === 0
+  const fillerRowCount = isUsingFillerRows ? pagination.pageSize - rows.length : (hasNoRows ? 1 : 0)
+
+  return (
+    <tbody>
+      {rows.map(row => {
+        return (
+          <tr
+            key={row.id}
+            onClick={() => onRowClick?.(row, table)}
+            data-clickable={PropsUtil.dataAttributes.bool(!!onRowClick)}
+            data-name="table-body-row"
+            className={clsx(BagFunctionUtil.resolve(table.options.meta?.bodyRowClassName, row.original))}
+          >
+            {row.getVisibleCells().map(cell => {
+              return (
+                <td key={cell.id} data-name="table-body-cell" className={clsx(cell.column.columnDef.meta?.className)}>
+                  {flexRender(
+                    cell.column.columnDef.cell,
+                    cell.getContext()
+                  )}
+                </td>
+              )
+            })}
+          </tr>
+        )
+      })}
+      <Visibility isVisible={fillerRowCount > 0}>
+        {range(fillerRowCount, { allowEmptyRange: true }).map((index) => {
+          return (
+            <tr
+              key={'filler-row-' + index}
+              className={clsx('table-body-filler-row')}
+              onClick={() => onFillerRowClick?.(index, table)}
+              data-clickable={PropsUtil.dataAttributes.bool(!!onFillerRowClick)}
+            >
+              {columns.map((column) => {
+                if(!column) return
+                return (
+                  <td key={column.id} data-name="table-body-filler-cell" className={clsx(column.columnDef.meta?.className)}>
+                    {fillerRowCell ? fillerRowCell(column.id, table) : (<FillerCell />)}
+                  </td>
+                )
+              })}
+            </tr>
+          )
+        })}
+      </Visibility>
+    </tbody>
+  )
+})

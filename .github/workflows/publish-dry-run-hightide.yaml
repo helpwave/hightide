@@ -1,0 +1,56 @@
+name: Dry run publish hightide
+
+on:
+  pull_request:
+    branches:
+      - main
+    paths:
+      - 'packages/hightide/**'
+      - '.github/workflows/publish-dry-run-hightide.yaml'
+
+jobs:
+  publish:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: pnpm/action-setup@v4
+        with:
+          version: 11.13.0
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 20
+          cache: pnpm
+          registry-url: https://registry.npmjs.org
+
+      - run: pnpm install --frozen-lockfile
+      - run: pnpm --filter @helpwave/hightide build
+
+      - name: Check for version bump
+        run: |
+          node --input-type=module -e "
+          import { execSync } from 'node:child_process';
+          import { readFileSync } from 'node:fs';
+
+          const { name, version } = JSON.parse(readFileSync('packages/hightide/package.json', 'utf8'));
+          let published = '';
+
+          try {
+            published = execSync(\`npm view \${name} version\`, { encoding: 'utf8' }).trim();
+          } catch {
+            published = '';
+          }
+
+          if (version === published) {
+            console.log(\`❌ \${name}: version \${version} unchanged\`);
+            process.exit(1);
+          }
+
+          console.log(\`✅ \${name}: \${published || 'unpublished'} -> \${version}\`);
+          "
+
+      - name: Dry run publish @helpwave/hightide
+        run: pnpm --filter @helpwave/hightide publish --dry-run --no-git-checks --access public
+        env:
+          NODE_AUTH_TOKEN: ${{ secrets.NPM_TOKEN }}
