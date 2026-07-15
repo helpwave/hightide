@@ -4,7 +4,7 @@ import type { TooltipDisplayProps } from './Tooltip'
 import { TooltipContext, TooltipDisplay, TooltipRoot, useTooltip } from './Tooltip'
 import { Visibility } from '../layout/Visibility'
 import { useLogOnce } from '@helpwave/hightide-utils'
-import { ReactRefsUtil } from '@helpwave/hightide-utils'
+import { ReactUtils } from '@helpwave/hightide-utils'
 import clsx from 'clsx'
 
 /**
@@ -75,7 +75,7 @@ const IconButtonTooltipTrigger = forwardRef<HTMLButtonElement, IconButtonTooltip
   return (
     <IconButtonBase
       {...props}
-      ref={ReactRefsUtil.assingRefsBuilder([ref, triggerRef as ForwardedRef<HTMLButtonElement>])}
+      ref={ReactUtils.assingRefsBuilder([ref, triggerRef as ForwardedRef<HTMLButtonElement>])}
       disabled={disabled}
       type={props['type'] ?? 'button'}
 

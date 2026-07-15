@@ -1,4 +1,4 @@
-export * from './useSingleValueStore'
+export * from './useSimpleStoreSyncedValue'
 export * from './useMemoryKeyValueStore'
 export * from './useBrowserKeyValueStore'
 export * from './trees'

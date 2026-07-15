@@ -2,7 +2,7 @@
 
 import { renderHook } from '@testing-library/react'
 import { useBrowserKeyValueStore } from '../../src/hooks/useBrowserKeyValueStore'
-import { useSingleValueStore } from '../../src/hooks/useSingleValueStore'
+import { useSimpleStoreSyncedValue } from '../../src/hooks/useSimpleStoreSyncedValue'
 
 type TestLocale = 'en-US' | 'de-DE'
 
@@ -38,7 +38,7 @@ describe('useBrowserKeyValueStore', () => {
     const { result: storeResult } = renderHook(() => useBrowserKeyValueStore<TestLocale>({
       validate: isTestLocale,
     }))
-    const { result: valueResult } = renderHook(() => useSingleValueStore({
+    const { result: valueResult } = renderHook(() => useSimpleStoreSyncedValue({
       store: storeResult.current,
       key: 'locale',
       defaultValue: 'en-US' as TestLocale,

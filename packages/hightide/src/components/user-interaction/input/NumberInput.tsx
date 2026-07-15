@@ -5,7 +5,7 @@ import type { FormFieldInteractionStates } from '../../form/FieldLayout'
 import type { FormFieldDataHandling } from '../../form/FormField'
 import { PropsUtil } from '@/src/utils/propsUtil'
 import { useControlledState } from '@helpwave/hightide-utils'
-import { ReactRefsUtil } from '@helpwave/hightide-utils'
+import { ReactUtils } from '@helpwave/hightide-utils'
 import { MathUtil } from '@helpwave/hightide-utils'
 
 export type NumberInputProps = Omit<InputHTMLAttributes<HTMLInputElement>, 'value' | 'type' | 'min' | 'max' | 'step'>
@@ -53,7 +53,7 @@ export const NumberInput = forwardRef<HTMLInputElement, NumberInputProps>(functi
   return (
     <input
       {...props}
-      ref={ReactRefsUtil.assingRefsBuilder([innerRef, forwardedRef])}
+      ref={ReactUtils.assingRefsBuilder([innerRef, forwardedRef])}
       type="text"
       inputMode="numeric"
       value={Number.isFinite(value) ? (formatDisplayedValue?.(Math.round(value)) ?? String(Math.round(value))) : ''}

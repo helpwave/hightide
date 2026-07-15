@@ -16,7 +16,7 @@ import { FocusTrap } from '../../utils/FocusTrap'
 import { usePresenceRef } from '@/src/hooks/usePresenceRef'
 import { DialogContext } from './DialogContext'
 import { IconButton } from '../../user-interaction/IconButton'
-import { ReactRefsUtil } from '@helpwave/hightide-utils'
+import { ReactUtils } from '@helpwave/hightide-utils'
 
 export type DialogPosition = 'top' | 'center' | 'none'
 
@@ -123,7 +123,7 @@ export const Dialog = forwardRef<HTMLDivElement, DialogProps>(function Dialog({
             <div
               {...props}
               id={ids.content}
-              ref={ReactRefsUtil.assingRefsBuilder([refAssignment, forwardedRef])}
+              ref={ReactUtils.assingRefsBuilder([refAssignment, forwardedRef])}
 
               onKeyDown={PropsUtil.aria.close(onCloseWrapper)}
 

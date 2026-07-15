@@ -15,7 +15,7 @@ import { PopUp } from '../../layout/popup/PopUp'
 import { IconButton } from '../IconButton'
 import { DateUtils, type DateTimeFormat } from '@helpwave/hightide-utils'
 import { DateTimeField } from './DateTimeField'
-import { ReactRefsUtil } from '@helpwave/hightide-utils'
+import { ReactUtils } from '@helpwave/hightide-utils'
 
 export interface DateTimeInputProps extends
   Partial<FormFieldInteractionStates>,
@@ -118,7 +118,7 @@ export const DateTimeInput = forwardRef<HTMLDivElement, DateTimeInputProps>(func
     <div {...containerProps} className={clsx('relative w-full', containerProps?.className)}>
       <div
         {...props}
-        ref={ReactRefsUtil.assingRefsBuilder([controlRef, forwardedRef])}
+        ref={ReactUtils.assingRefsBuilder([controlRef, forwardedRef])}
         id={ids.input}
 
         tabIndex={-1}

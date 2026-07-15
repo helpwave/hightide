@@ -17,7 +17,7 @@ function assingRefsBuilder<T>(refs: ForwardedRef<T>[]) : (el: T | null) => void 
   }
 }
 
-export const ReactRefsUtil = {
+export const ReactUtils = {
   assignForwardRef,
   assingRefsBuilder
 }

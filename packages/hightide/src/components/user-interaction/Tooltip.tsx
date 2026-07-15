@@ -12,7 +12,7 @@ import type { AnchoredFloatingContainerProps } from '../layout/AnchoredFloatingC
 import { AnchoredFloatingContainer } from '../layout/AnchoredFloatingContainer'
 import { createContext } from 'react'
 import { BagFunctionUtil } from '@helpwave/hightide-utils'
-import { ReactRefsUtil } from '@helpwave/hightide-utils'
+import { ReactUtils } from '@helpwave/hightide-utils'
 
 export interface TooltipTriggerContextValue {
   ref: RefObject<HTMLElement | null>,
@@ -228,7 +228,7 @@ export const TooltipDisplay = forwardRef<HTMLDivElement, TooltipDisplayProps>(fu
       <AnchoredFloatingContainer
         {...props}
         id={id}
-        ref={ReactRefsUtil.assingRefsBuilder([container, forwardRef])}
+        ref={ReactUtils.assingRefsBuilder([container, forwardRef])}
         active={isVisible}
         anchor={anchor}
         options={{

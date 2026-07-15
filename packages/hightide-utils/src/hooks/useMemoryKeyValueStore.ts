@@ -1,4 +1,4 @@
-import type { KeyValueStore } from './useSingleValueStore'
+import type { KeyValueStore } from './useSimpleStoreSyncedValue'
 
 export const useMemoryKeyValueStore = <T = unknown>(): KeyValueStore<T> => {
   const values = new Map<string, T>()

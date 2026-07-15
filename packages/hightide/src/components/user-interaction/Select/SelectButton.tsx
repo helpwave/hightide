@@ -5,7 +5,7 @@ import { useSelectContext } from './SelectContext'
 import { useHightideTranslation } from '@/src/i18n/useHightideTranslation'
 import { ExpansionIcon } from '@/src/components/display-and-visualization/ExpansionIcon'
 import { SelectOptionDisplayContext } from './SelectOption'
-import { ReactRefsUtil } from '@helpwave/hightide-utils'
+import { ReactUtils } from '@helpwave/hightide-utils'
 
 export interface SelectButtonProps<T = string> extends ComponentPropsWithoutRef<'div'> {
   'placeholder'?: ReactNode,
@@ -54,7 +54,7 @@ export const SelectButton = forwardRef<HTMLDivElement, SelectButtonProps<unknown
     return (
       <div
         {...props}
-        ref={ReactRefsUtil.assingRefsBuilder([innerRef, ref])}
+        ref={ReactUtils.assingRefsBuilder([innerRef, ref])}
         id={context.config.ids.trigger}
         onClick={(event) => {
           if (!hasInteractions) return

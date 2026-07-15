@@ -1,4 +1,4 @@
-import type { KeyValueStore } from '../../hooks/useSingleValueStore'
+import type { KeyValueStore } from '../../hooks/useSimpleStoreSyncedValue'
 
 export const resolvedThemes = ['light', 'dark'] as const
 export type ResolvedTheme = typeof resolvedThemes[number]

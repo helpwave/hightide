@@ -7,7 +7,7 @@ import type { FormFieldInteractionStates } from '../../form/FieldLayout'
 import type { FormFieldDataHandling } from '../../form/FormField'
 import { PropsUtil } from '@/src/utils/propsUtil'
 import { useControlledState } from '@helpwave/hightide-utils'
-import { ReactRefsUtil } from '@helpwave/hightide-utils'
+import { ReactUtils } from '@helpwave/hightide-utils'
 
 export type EditCompleteOptionsResolved = {
   onBlur: boolean,
@@ -72,7 +72,7 @@ export const Input = forwardRef<HTMLInputElement, InputProps>(function Input({
     <input
       {...props}
       value={value}
-      ref={ReactRefsUtil.assingRefsBuilder([innerRef, forwardedRef])}
+      ref={ReactUtils.assingRefsBuilder([innerRef, forwardedRef])}
 
       onKeyDown={event => {
         props.onKeyDown?.(event)

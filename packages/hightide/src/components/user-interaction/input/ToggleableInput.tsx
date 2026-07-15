@@ -4,7 +4,7 @@ import clsx from 'clsx'
 import type { EditCompleteOptions, InputProps } from '@/src/components/user-interaction/input/Input'
 import { Input } from '@/src/components/user-interaction/input/Input'
 import { useControlledState } from '@helpwave/hightide-utils'
-import { ReactRefsUtil } from '@helpwave/hightide-utils'
+import { ReactUtils } from '@helpwave/hightide-utils'
 
 type ToggleableInputProps = InputProps & {
   initialState?: 'editing' | 'display',
@@ -44,7 +44,7 @@ export const ToggleableInput = forwardRef<HTMLInputElement, ToggleableInputProps
     <div className={clsx('relative flex-row-2', { 'flex-1': isEditing })}>
       <Input
         {...props}
-        ref={ReactRefsUtil.assingRefsBuilder([innerRef, forwardedRef])}
+        ref={ReactUtils.assingRefsBuilder([innerRef, forwardedRef])}
         value={value}
         onValueChange={setValue}
         onEditComplete={(text) => {

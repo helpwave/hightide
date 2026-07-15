@@ -6,7 +6,7 @@ import { PropsUtil } from '@/src/utils/propsUtil'
 import { Portal } from '../../utils/Portal'
 import { useDrawerContext } from './DrawerContext'
 import type { DrawerAligment } from './Drawer'
-import { ReactRefsUtil } from '@helpwave/hightide-utils'
+import { ReactUtils } from '@helpwave/hightide-utils'
 import clsx from 'clsx'
 
 export type DrawerContainerProps = HTMLAttributes<HTMLDivElement> & {
@@ -72,7 +72,7 @@ export const DrawerContainer = forwardRef<HTMLDivElement, DrawerContainerProps>(
         <div
           {...props}
           id={ids.container}
-          ref={ReactRefsUtil.assingRefsBuilder([ref, forwardedRef])}
+          ref={ReactUtils.assingRefsBuilder([ref, forwardedRef])}
           onKeyDown={PropsUtil.aria.close(() => setOpen(false))}
           className="drawer-container"
           data-state={transitionState}

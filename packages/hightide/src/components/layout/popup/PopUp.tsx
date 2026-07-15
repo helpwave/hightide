@@ -15,7 +15,7 @@ import { useLogOnce } from '@helpwave/hightide-utils'
 import { PopUpContext } from './PopUpContext'
 import { useOverlayRegistry } from '@helpwave/hightide-utils'
 import { useScrollObserver } from '@/src/hooks/useScrollObserver'
-import { ReactRefsUtil } from '@helpwave/hightide-utils'
+import { ReactUtils } from '@helpwave/hightide-utils'
 
 export interface PopUpProps extends Omit<AnchoredFloatingContainerProps, 'anchor'>, Partial<UseOutsideClickHandlers> {
   'isOpen'?: boolean,
@@ -83,7 +83,7 @@ export const PopUp = forwardRef<HTMLDivElement, PopUpProps>(function PopUp({
             {...props}
             id={id}
             anchor={anchor}
-            ref={ReactRefsUtil.assingRefsBuilder([refAssignment, forwardRef])}
+            ref={ReactUtils.assingRefsBuilder([refAssignment, forwardRef])}
             active={isOpen}
             hidden={!isOpen && forceMount}
 

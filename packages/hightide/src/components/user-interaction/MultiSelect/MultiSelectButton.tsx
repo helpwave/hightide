@@ -4,7 +4,7 @@ import { useMultiSelectContext } from './MultiSelectContext'
 import { useHightideTranslation } from '@/src/i18n/useHightideTranslation'
 import { ExpansionIcon } from '@/src/components/display-and-visualization/ExpansionIcon'
 import { MultiSelectOptionDisplayContext } from './MultiSelectOption'
-import { ReactRefsUtil } from '@helpwave/hightide-utils'
+import { ReactUtils } from '@helpwave/hightide-utils'
 
 export interface MultiSelectButtonProps<T = string>
   extends ComponentPropsWithoutRef<'div'> {
@@ -58,7 +58,7 @@ export const MultiSelectButton = forwardRef<
   return (
     <div
       {...props}
-      ref={ReactRefsUtil.assingRefsBuilder([innerRef, ref])}
+      ref={ReactUtils.assingRefsBuilder([innerRef, ref])}
       id={context.config.ids.trigger}
       onClick={(event) => {
         if (!hasInteractions) return

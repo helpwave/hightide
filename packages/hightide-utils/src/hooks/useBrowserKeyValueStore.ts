@@ -1,5 +1,5 @@
 import { useMemo } from 'react'
-import type { KeyValueStore } from './useSingleValueStore'
+import type { KeyValueStore } from './useSimpleStoreSyncedValue'
 
 export type UseBrowserKeyValueStoreProps<T> = {
   storage?: Storage,

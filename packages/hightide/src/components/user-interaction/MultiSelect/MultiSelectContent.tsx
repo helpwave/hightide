@@ -6,7 +6,7 @@ import { useHightideTranslation } from '@/src/i18n/useHightideTranslation'
 import { PopUp, type PopUpProps } from '@/src/components/layout/popup/PopUp'
 import { Input } from '@/src/components/user-interaction/input/Input'
 import { Visibility } from '@/src/components/layout/Visibility'
-import { ReactRefsUtil } from '@helpwave/hightide-utils'
+import { ReactUtils } from '@helpwave/hightide-utils'
 
 export interface MultiSelectContentProps extends PopUpProps {
   showSearch?: boolean,
@@ -115,7 +115,7 @@ export const MultiSelectContent = forwardRef<
         />
       )}
       <ul
-        ref={ReactRefsUtil.assingRefsBuilder([innerRef, ref])}
+        ref={ReactUtils.assingRefsBuilder([innerRef, ref])}
         id={context.config.ids.listbox}
         onKeyDown={showSearch ? undefined : keyHandler}
         role="listbox"

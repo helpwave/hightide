@@ -2,13 +2,13 @@
 
 import { act, renderHook } from '@testing-library/react'
 import { useMemoryKeyValueStore } from '../../src/hooks/useMemoryKeyValueStore'
-import { useSingleValueStore } from '../../src/hooks/useSingleValueStore'
+import { useSimpleStoreSyncedValue } from '../../src/hooks/useSimpleStoreSyncedValue'
 
 describe('useSingleValueStore', () => {
   test('reads the default value when the store is empty', () => {
     const store = useMemoryKeyValueStore()
 
-    const { result } = renderHook(() => useSingleValueStore({
+    const { result } = renderHook(() => useSimpleStoreSyncedValue({
       store,
       key: 'locale',
       defaultValue: 'en-US',
@@ -20,7 +20,7 @@ describe('useSingleValueStore', () => {
   test('persists values through the store', () => {
     const store = useMemoryKeyValueStore()
 
-    const { result } = renderHook(() => useSingleValueStore({
+    const { result } = renderHook(() => useSimpleStoreSyncedValue({
       store,
       key: 'locale',
       defaultValue: 'en-US',
@@ -38,7 +38,7 @@ describe('useSingleValueStore', () => {
     const store = useMemoryKeyValueStore()
     store.setValue('locale', 'de-DE')
 
-    const { result } = renderHook(() => useSingleValueStore({
+    const { result } = renderHook(() => useSimpleStoreSyncedValue({
       store,
       key: 'locale',
       defaultValue: 'en-US',

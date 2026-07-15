@@ -1,7 +1,7 @@
 import { useCallback, useEffect, useMemo } from 'react'
 import { useEventCallbackStabilizer } from '../../hooks/useEventCallbackStabelizer'
-import type { KeyValueStore } from '../../hooks/useSingleValueStore'
-import { useSingleValueStore } from '../../hooks/useSingleValueStore'
+import type { KeyValueStore } from '../../hooks/useSimpleStoreSyncedValue'
+import { useSimpleStoreSyncedValue } from '../../hooks/useSimpleStoreSyncedValue'
 import type {
   ThemeContextValue,
   ThemeWithSystem,
@@ -19,7 +19,7 @@ export const useCreateThemeContext = <TResolvedTheme extends string>({
     value: storedTheme,
     setValue: setStoredTheme,
     deleteValue: deleteStoredTheme,
-  } = useSingleValueStore<TResolvedTheme | null>({
+  } = useSimpleStoreSyncedValue<TResolvedTheme | null>({
     store: store as KeyValueStore<unknown> as KeyValueStore<TResolvedTheme | null>,
     key: 'theme',
     defaultValue: null,

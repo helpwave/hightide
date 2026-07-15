@@ -1,14 +1,26 @@
 import { useCallback, useEffect, useMemo } from 'react'
 import { useEventCallbackStabilizer } from '../../hooks/useEventCallbackStabelizer'
-import type { KeyValueStore } from '../../hooks/useSingleValueStore'
-import { useSingleValueStore } from '../../hooks/useSingleValueStore'
-import type {
-  LocaleWithSystem,
-  LocalizationContextValue,
-  UseCreateLocalizationContextProps
-} from './types'
+import { useSimpleStoreSyncedValue, type SimpleValueStore } from '../../hooks/useSimpleStoreSyncedValue'
+import type { LocaleWithSystem, LocalizationContextValue } from './LocalizationContext'
+import { StringUnionUtils } from '@/src/utils'
 
-type HourFormat = '24h' | '12h'
+const localizationHourFormats = ['24h', '12h'] as const
+type LocalizationHourFormat = typeof localizationHourFormats[number]
+
+export type UseCreateLocalizationContextProps<TLocale extends string> = {
+  store: SimpleValueStore,
+  fallbackLocale: TLocale,
+  fallbackTimeZone?: string,
+  fallbackIs24HourFormat?: boolean,
+  locale?: LocaleWithSystem<TLocale>,
+  supportedLocales: readonly TLocale[],
+  systemLocale?: TLocale,
+  timeZone?: string,
+  is24HourFormat?: boolean,
+  onChangedLocale?: (locale: TLocale) => void,
+  onChangedTimeZone?: (timeZone: string | undefined) => void,
+  onChangedIs24HourFormat?: (is24HourFormat: boolean) => void,
+}
 
 export const useCreateLocalizationContext = <TLocale extends string>({
   store,
@@ -16,6 +28,7 @@ export const useCreateLocalizationContext = <TLocale extends string>({
   fallbackTimeZone,
   fallbackIs24HourFormat,
   locale,
+  supportedLocales,
   systemLocale,
   timeZone,
   is24HourFormat,
@@ -27,28 +40,37 @@ export const useCreateLocalizationContext = <TLocale extends string>({
     value: storedLocale,
     setValue: setStoredLocale,
     deleteValue: deleteStoredLocale,
-  } = useSingleValueStore<TLocale | null>({
-    store: store as KeyValueStore<unknown> as KeyValueStore<TLocale | null>,
+  } = useSimpleStoreSyncedValue<TLocale>({
+    store,
     key: 'locale',
-    defaultValue: null,
+    decode: useCallback((value: string) => {
+      if(StringUnionUtils.isUnionValue(value, supportedLocales)) return value
+      return null
+    }, [supportedLocales]),
+    encode: useCallback((value) => value, []),
   })
   const {
     value: storedTimeZone,
     setValue: setStoredTimeZone,
     deleteValue: deleteStoredTimeZone,
-  } = useSingleValueStore<string | null>({
-    store: store as KeyValueStore<unknown> as KeyValueStore<string | null>,
+  } = useSimpleStoreSyncedValue<string>({
+    store,
     key: 'timeZone',
-    defaultValue: null,
+    decode: useCallback((value: string) => value, []),
+    encode: useCallback((value) => value, []),
   })
   const {
     value: hourFormat,
     setValue: setStoredHourFormat,
     deleteValue: deleteStoredHourFormat,
-  } = useSingleValueStore<HourFormat | null>({
-    store: store as KeyValueStore<unknown> as KeyValueStore<HourFormat | null>,
+  } = useSimpleStoreSyncedValue<LocalizationHourFormat>({
+    store,
     key: 'hourFormat',
-    defaultValue: null,
+    decode: useCallback((value: string) => {
+      if(StringUnionUtils.isUnionValue(value, localizationHourFormats)) return value
+      return null
+    }, []),
+    encode: useCallback((value) => value, []),
   })
 
   const resolvedLocale = useMemo(() => {
@@ -158,6 +180,7 @@ export const useCreateLocalizationContext = <TLocale extends string>({
   return {
     locale: resolvedLocale,
     setLocale,
+    supportedLocales,
     timeZone: resolvedTimeZone,
     setTimeZone,
     is24HourFormat: resolvedIs24HourFormat,
