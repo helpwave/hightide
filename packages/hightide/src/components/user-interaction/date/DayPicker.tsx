@@ -2,7 +2,6 @@ import type { KeyboardEvent } from 'react'
 import type { WeekDay } from '@helpwave/hightide-utils'
 import { DateUtils } from '@helpwave/hightide-utils'
 import { useLocalization } from '@/src/global-contexts/LocalizationProvider'
-import type { HightideTranslationLocales } from '@/src/i18n/translations'
 import type { FormFieldDataHandling } from '../../form/FormField'
 import { PropsUtil } from '@/src/utils/propsUtil'
 import { useCallback, useEffect, useMemo, useRef } from 'react'
@@ -37,7 +36,7 @@ export const DayPicker = ({
   markToday = true,
   className,
 }: DayPickerProps) => {
-  const { locale } = useLocalization<HightideTranslationLocales>()
+  const { locale } = useLocalization()
 
   const [value, setValue] = useControlledState({
     value: controlledValue,

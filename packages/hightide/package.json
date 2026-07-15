@@ -37,12 +37,11 @@
   },
   "scripts": {
     "clean": "rm -rf dist node_modules && pnpm run barrel -- --clean",
-    "build-intl": "npx build-intl --force -i ./locales -o ./src/i18n/translations.ts -n hightideTranslation",
     "build-css": "NODE_ENV=production node scripts/build-css.mjs",
     "barrel": "node node_modules/@helpwave/hightide-utils/scripts/barrel.js",
     "build": "pnpm run barrel && pnpm run build-css && cp -R src/style/ ./dist/style/uncompiled/",
     "lint": "eslint .",
-    "init": "pnpm --filter @helpwave/hightide-utils run init && pnpm run build-intl",
+    "init": "pnpm --filter @helpwave/hightide-utils run init",
     "test": "jest"
   },
   "dependencies": {

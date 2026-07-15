@@ -1,34 +1,34 @@
 import type { PropsWithChildren } from 'react'
 import { useEffect, useState } from 'react'
+import type {
+  SystemTheme
+} from '@helpwave/hightide-utils'
 import {
   ThemeContext,
   ThemeContextProvider,
-  ThemeUtil,
   useTheme as useThemeBase,
   useBrowserKeyValueStore,
-  type ResolvedTheme,
   type ThemeContextValue,
-  type ThemeType,
-  type ThemeWithSystem
+  type ThemeInformation
 } from '@helpwave/hightide-utils'
 import type { ThemeConfig } from '@/src/global-contexts/HightideConfigContext'
 import { useHightideConfig } from '@/src/global-contexts/HightideConfigContext'
 
-export type { ResolvedTheme, ThemeType }
-export { ThemeUtil }
+export type { ThemeInformation }
 
 export {
   ThemeContext,
 }
 
-export const useTheme = (): ThemeContextValue<ResolvedTheme> => useThemeBase<ResolvedTheme>()
+export const useTheme = (): ThemeContextValue => useThemeBase()
 
 export type ThemeProviderProps = PropsWithChildren & Partial<ThemeConfig> & {
-  theme?: ThemeWithSystem<ResolvedTheme>,
-  systemTheme?: ResolvedTheme,
+  theme?: string,
+  systemTheme?: string,
+  supportedThemes?: readonly ThemeInformation[],
 }
 
-const detectWebSystemTheme = (): ResolvedTheme | undefined => {
+const detectWebSystemTheme = (): SystemTheme | undefined => {
   if (typeof window === 'undefined') return undefined
   if (window.matchMedia('(prefers-color-scheme: dark)').matches) {
     return 'dark'
@@ -39,13 +39,13 @@ const detectWebSystemTheme = (): ResolvedTheme | undefined => {
   return undefined
 }
 
-const useWebSystemTheme = (enabled: boolean) => {
-  const [systemTheme, setSystemTheme] = useState<ResolvedTheme | undefined>(
-    () => (enabled ? detectWebSystemTheme() : undefined)
+const useWebSystemTheme = () => {
+  const [systemTheme, setSystemTheme] = useState<SystemTheme | undefined>(
+    () => (detectWebSystemTheme())
   )
 
   useEffect(() => {
-    if (!enabled || typeof window === 'undefined') return
+    if (typeof window === 'undefined') return
 
     const updateSystemTheme = () => {
       setSystemTheme(detectWebSystemTheme())
@@ -64,17 +64,17 @@ const useWebSystemTheme = (enabled: boolean) => {
       lightQuery.removeEventListener('change', updateSystemTheme)
       noPrefQuery.removeEventListener('change', updateSystemTheme)
     }
-  }, [enabled])
+  }, [])
 
   return systemTheme
 }
 
 const ThemeDocumentSync = () => {
-  const { resolvedTheme } = useTheme()
+  const { theme } = useTheme()
 
   useEffect(() => {
-    document.documentElement.setAttribute('data-theme', resolvedTheme)
-  }, [resolvedTheme])
+    document.documentElement.setAttribute('data-theme', theme)
+  }, [theme])
 
   return null
 }
@@ -83,19 +83,20 @@ export const ThemeProvider = ({
   children,
   theme,
   initialTheme,
-  systemTheme: systemThemeOverride,
+  supportedThemes,
 }: ThemeProviderProps) => {
   const { config } = useHightideConfig()
-  const store = useBrowserKeyValueStore<unknown>()
-  const detectedSystemTheme = useWebSystemTheme(systemThemeOverride === undefined && theme === undefined)
-  const systemTheme = systemThemeOverride ?? detectedSystemTheme
+  const store = useBrowserKeyValueStore()
+  const detectedSystemTheme = useWebSystemTheme()
+  const resolvedSupportedThemes = supportedThemes ?? config.theme.supportedThemes
 
   return (
     <ThemeContextProvider
       store={store}
       fallbackTheme={initialTheme ?? config.theme.initialTheme}
+      supportedThemes={resolvedSupportedThemes}
       theme={theme}
-      systemTheme={systemTheme}
+      systemTheme={detectedSystemTheme}
     >
       <ThemeDocumentSync />
       {children}

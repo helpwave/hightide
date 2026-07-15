@@ -1,24 +1,16 @@
 import type { PropsWithChildren } from 'react'
-import type { LocalizationContextValue } from './LocalizationContext'
 import { LocalizationContext } from './LocalizationContext'
 import type { UseCreateLocalizationContextProps } from './useCreateLocalizationContext'
 import { useCreateLocalizationContext } from './useCreateLocalizationContext'
-import { StringUnionUtils } from '@/src/utils'
 
-export type LocalizationProviderProps<TLocale extends string> =
-  PropsWithChildren & UseCreateLocalizationContextProps<TLocale>
+export type LocalizationProviderProps =
+  PropsWithChildren & UseCreateLocalizationContextProps
 
-export const LocalizationProvider = <TLocale extends string>({
+export const LocalizationProvider = ({
   children,
-  onChangedLocale,
   ...localizationProps
-}: LocalizationProviderProps<TLocale>) => {
-  const value: LocalizationContextValue<string> = useCreateLocalizationContext<string>({
-    ...localizationProps,
-    onChangedLocale: () => {
-      if(StringUnionUtils.isUnionValue(value, localizationProps.supportedLocales)) onChangedLocale?.(value)
-    }
-  })
+}: LocalizationProviderProps) => {
+  const value = useCreateLocalizationContext(localizationProps)
 
   return (
     <LocalizationContext.Provider value={value}>

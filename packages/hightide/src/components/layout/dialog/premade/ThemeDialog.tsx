@@ -4,8 +4,9 @@ import type { DialogProps } from '@/src/components/layout/dialog/Dialog'
 import { Dialog } from '@/src/components/layout/dialog/Dialog'
 import { MonitorCog, MoonIcon, SunIcon } from 'lucide-react'
 import clsx from 'clsx'
-import type { ThemeType } from '@/src/global-contexts/ThemeProvider'
-import { ThemeUtil, useTheme } from '@/src/global-contexts/ThemeProvider'
+import { resolveThemeName } from '@helpwave/hightide-utils'
+import { useLocalization } from '@/src/global-contexts/LocalizationProvider'
+import { useTheme } from '@/src/global-contexts/ThemeProvider'
 import { Button } from '@/src/components/user-interaction/Button'
 import { useHightideTranslation } from '@/src/i18n/useHightideTranslation'
 import type { SelectProps } from '@/src/components/user-interaction/Select/Select'
@@ -13,31 +14,31 @@ import { Select } from '@/src/components/user-interaction/Select/Select'
 import { SelectOption } from '@/src/components/user-interaction/Select/SelectOption'
 
 export interface ThemeIconProps extends HTMLAttributes<SVGSVGElement> {
-  theme?: ThemeType,
+  theme?: string,
 }
 
 export const ThemeIcon = ({ theme: themeOverride, ...props }: ThemeIconProps) => {
-  const { resolvedTheme } = useTheme()
-  const theme = themeOverride ?? resolvedTheme
+  const { theme } = useTheme()
+  const resolvedTheme = themeOverride ?? theme
 
-  switch (theme) {
+  switch (resolvedTheme) {
   case 'dark':
-    return <MoonIcon {...props} className={clsx('w-4 h-4', props. className)}/>
+    return <MoonIcon {...props} className={clsx('w-4 h-4', props.className)}/>
   case 'light':
     return <SunIcon {...props} className={clsx('w-4 h-4', props.className)}/>
   default:
-    return <MonitorCog {...props}className={clsx('w-4 h-4', props.className)}/>
+    return <MonitorCog {...props} className={clsx('w-4 h-4', props.className)}/>
   }
 }
 
-export type ThemeSelectProps = Omit<SelectProps<ThemeType>, 'value' | 'children'>
+export type ThemeSelectProps = Omit<SelectProps<string>, 'value' | 'children'>
 
 export const ThemeSelect = ({ ...props }: ThemeSelectProps) => {
-  const translation = useHightideTranslation()
-  const { theme, setTheme } = useTheme()
+  const { locale } = useLocalization()
+  const { theme, setTheme, supportedThemes } = useTheme()
 
   return (
-    <Select<ThemeType>
+    <Select<string>
       value={theme}
       onEditComplete={(value) => {
         props.onEditComplete?.(value)
@@ -51,16 +52,16 @@ export const ThemeSelect = ({ ...props }: ThemeSelectProps) => {
       }}
       showSearch={false}
     >
-      {ThemeUtil.themes.map((theme) => (
+      {supportedThemes.map((themeInformation) => (
         <SelectOption
-          key={theme}
-          value={theme}
-          label={translation('sThemeMode', { theme: theme })}
+          key={themeInformation.theme}
+          value={themeInformation.theme}
+          label={resolveThemeName(themeInformation, locale)}
           className="gap-x-6 justify-between"
         >
           <div className="flex-row-2 items-center">
-            <ThemeIcon theme={theme}/>
-            {translation('sThemeMode', { theme: theme })}
+            <ThemeIcon theme={themeInformation.theme} />
+            {resolveThemeName(themeInformation, locale)}
           </div>
         </SelectOption>
       ))}
@@ -73,11 +74,6 @@ export interface ThemeDialogProps extends Omit<DialogProps, 'titleElement' | 'de
   descriptionOverwrite?: ReactNode,
 }
 
-/**
- * A Dialog for selecting the Theme
- *
- * The State of open needs to be managed by the parent
- */
 export const ThemeDialog = ({
   onClose,
   titleOverwrite,

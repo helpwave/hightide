@@ -190,12 +190,6 @@
       "count": { "type":  "number" }
     }
   },
-  "sThemeMode": "{theme, select, dark{Dark} light{Light} system{System}}",
-  "@sThemeMode": {
-    "placeholders": {
-      "theme": {}
-    }
-  },
   "sDateTimeSelect": "{datetimeMode, select, time{Select Time} date{Select Date} dateTime{Select Date and Time}}",
   "@sDateTimeSelect": {
     "placeholders": {

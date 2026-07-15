@@ -1,6 +1,7 @@
 import { createContext, type PropsWithChildren, useContext, useState } from 'react'
-import type { ResolvedTheme } from '@helpwave/hightide-utils'
-import type { DeepPartial } from '@helpwave/hightide-utils'
+import type { DeepPartial, LocaleInformation, ThemeInformation } from '@helpwave/hightide-utils'
+import { defaultSupportedLocales } from './defaultSupportedLocales'
+import { defaultSupportedThemes } from './defaultSupportedThemes'
 
 export type TooltipConfig = {
   appearDelay: number,
@@ -9,12 +10,19 @@ export type TooltipConfig = {
 }
 
 export type ThemeConfig = {
-  initialTheme: ResolvedTheme,
+  initialTheme: string,
+  supportedThemes: readonly ThemeInformation[],
+}
+
+export type LocalizationConfig = {
+  fallbackLocale: string,
+  supportedLocales: readonly LocaleInformation[],
 }
 
 export type HightideConfig = {
   tooltip: TooltipConfig,
   theme: ThemeConfig,
+  localization: LocalizationConfig,
 }
 
 const defaultConfig: HightideConfig = {
@@ -25,6 +33,11 @@ const defaultConfig: HightideConfig = {
   },
   theme: {
     initialTheme: 'light',
+    supportedThemes: defaultSupportedThemes,
+  },
+  localization: {
+    fallbackLocale: 'en-US',
+    supportedLocales: defaultSupportedLocales,
   },
 }
 
@@ -33,10 +46,16 @@ function mergeConfig(config: HightideConfig, overwrite: DeepPartial<HightideConf
     theme: {
       ...config.theme,
       ...overwrite.theme,
+      supportedThemes: [...config.theme.supportedThemes, ...config.theme.supportedThemes]
     },
     tooltip: {
       ...config.tooltip,
       ...overwrite.tooltip,
+    },
+    localization: {
+      ...config.localization,
+      ...overwrite.localization,
+      supportedLocales: [...config.localization.supportedLocales, ...config.localization.supportedLocales]
     },
   }
 }

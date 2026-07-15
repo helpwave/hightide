@@ -4,7 +4,6 @@ import clsx from 'clsx'
 import { ExpandableContent, ExpandableHeader, ExpandableRoot } from '@/src/components/layout/Expandable'
 import { DateUtils } from '@helpwave/hightide-utils'
 import { useLocalization } from '@/src/global-contexts/LocalizationProvider'
-import type { HightideTranslationLocales } from '@/src/i18n/translations'
 import { Button } from '@/src/components/user-interaction/Button'
 import type { FormFieldDataHandling } from '../../form/FormField'
 import { InfiniteScroll } from '../../layout/InifiniteScroll'
@@ -103,7 +102,7 @@ export const YearMonthPicker = ({
   onEditComplete,
   className,
 }: YearMonthPickerProps) => {
-  const { locale } = useLocalization<HightideTranslationLocales>()
+  const { locale } = useLocalization()
   const [value, setValue] = useControlledState({
     value: controlledValue,
     onValueChange: onValueChange,

@@ -3,7 +3,6 @@ import { forwardRef, useEffect, useLayoutEffect, useMemo, useRef, useState } fro
 import clsx from 'clsx'
 import { useControlledState } from '@helpwave/hightide-utils'
 import { useLocalization } from '@/src/global-contexts/LocalizationProvider'
-import type { HightideTranslationLocales } from '@/src/i18n/translations'
 import { useHightideTranslation } from '@/src/i18n/useHightideTranslation'
 import { PropsUtil } from '@/src/utils/propsUtil'
 import type { FormFieldInteractionStates } from '@/src/components/form/FieldLayout'
@@ -55,7 +54,7 @@ export const DateTimeField = forwardRef<HTMLDivElement, DateTimeFieldProps>(func
   ...props
 }, forwardedRef) {
   const translation = useHightideTranslation()
-  const { locale: contextLocale, is24HourFormat: contextIs24HourFormat } = useLocalization<HightideTranslationLocales>()
+  const { locale: contextLocale, is24HourFormat: contextIs24HourFormat } = useLocalization()
   const locale = localeOverride ?? contextLocale
 
   const [value, setValue] = useControlledState<Date | null>({

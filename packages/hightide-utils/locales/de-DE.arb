@@ -189,12 +189,6 @@
       "count": { "type":  "number" }
     }
   },
-  "sThemeMode": "{theme, select, dark{Dunkel} light{Hell} system{System}}",
-  "@sThemeMode": {
-    "placeholders": {
-      "theme": {}
-    }
-  },
   "sDateTimeSelect": "{datetimeMode, select, time{Zeit auswählen} date{Datum auswählen} dateTime{Datum und Uhrzeit auswählen}}",
   "@sDateTimeSelect": {
     "placeholders": {

@@ -1,11 +1,15 @@
-import type { KeyValueStore } from './useSimpleStoreSyncedValue'
+import type { SimpleValueStore } from './useSimpleStoreSyncedValue'
 
-export const useMemoryKeyValueStore = <T = unknown>(): KeyValueStore<T> => {
-  const values = new Map<string, T>()
+export const useMemoryKeyValueStore = (): SimpleValueStore => {
+  const values = new Map<string, string>()
 
   return {
-    getValue: (key) => (values.has(key) ? values.get(key) : null) as T | null,
+    getValue: (key) => values.has(key) ? values.get(key) ?? null : null,
     setValue: (key, value) => {
+      if(value === null) {
+        values.delete(key)
+        return
+      }
       values.set(key, value)
     },
     deleteValue: (key) => {

@@ -1,17 +1,15 @@
 import { useMemo } from 'react'
-import type { KeyValueStore } from './useSimpleStoreSyncedValue'
+import type { SimpleValueStore } from './useSimpleStoreSyncedValue'
 
-export type UseBrowserKeyValueStoreProps<T> = {
+export type UseBrowserKeyValueStoreProps = {
   storage?: Storage,
   storageType?: 'local' | 'session',
-  validate?: (value: unknown) => value is T,
 }
 
-export const useBrowserKeyValueStore = <T = unknown>({
+export const useBrowserKeyValueStore = ({
   storage,
   storageType = 'local',
-  validate,
-}: UseBrowserKeyValueStoreProps<T> = {}): KeyValueStore<T> => {
+}: UseBrowserKeyValueStoreProps = {}): SimpleValueStore => {
   const storageService = useMemo(() => {
     if (storage !== undefined) {
       return storage
@@ -31,15 +29,7 @@ export const useBrowserKeyValueStore = <T = unknown>({
       if (!raw) {
         return null
       }
-      try {
-        const parsed: unknown = JSON.parse(raw)
-        if (validate && !validate(parsed)) {
-          return null
-        }
-        return parsed as T
-      } catch {
-        return null
-      }
+      return raw
     },
     setValue: (key, value) => {
       if (!storageService) {
@@ -50,5 +40,5 @@ export const useBrowserKeyValueStore = <T = unknown>({
     deleteValue: (key) => {
       storageService?.removeItem(key)
     },
-  }), [storageService, validate])
+  }), [storageService])
 }

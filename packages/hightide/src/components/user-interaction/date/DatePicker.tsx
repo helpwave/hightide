@@ -7,7 +7,6 @@ import { DayPicker } from '@/src/components/user-interaction/date/DayPicker'
 import type { YearMonthPickerProps } from '@/src/components/user-interaction/date/YearMonthPicker'
 import { YearMonthPicker } from '@/src/components/user-interaction/date/YearMonthPicker'
 import { useLocalization } from '@/src/global-contexts/LocalizationProvider'
-import type { HightideTranslationLocales } from '@/src/i18n/translations'
 import { Button } from '@/src/components/user-interaction/Button'
 import { LocalizationUtil } from '@/src/i18n/util'
 import type { FormFieldDataHandling } from '../../form/FormField'
@@ -45,7 +44,7 @@ export const DatePicker = ({
   className
 }: DatePickerProps) => {
   const translation = useHightideTranslation()
-  const { locale } = useLocalization<HightideTranslationLocales>()
+  const { locale } = useLocalization()
   const [value, setValue] = useControlledState({
     value: controlledValue,
     onValueChange: onValueChange,
@@ -64,7 +63,7 @@ export const DatePicker = ({
           color="neutral"
           onClick={() => setDisplayMode(displayMode === 'day' ? 'yearMonth' : 'day')}
         >
-          {`${new Intl.DateTimeFormat(LocalizationUtil.localToLanguage(locale), { month: 'short' }).format(displayedMonth)} ${displayedMonth.getFullYear()}`}
+          {`${new Intl.DateTimeFormat(LocalizationUtil.isoLocaleToLanguage(locale), { month: 'short' }).format(displayedMonth)} ${displayedMonth.getFullYear()}`}
           <ChevronDown size={16}/>
         </Button>
         <div className="flex-row-2 justify-end">

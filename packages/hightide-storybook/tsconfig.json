@@ -7,13 +7,9 @@
     "esModuleInterop": true,
     "skipLibCheck": true,
     "strict": true,
-    "baseUrl": ".",
     "paths": {
       "@/*": [
-        "../hightide/*"
-      ],
-      "@storybook-helpers/*": [
-        "./src/storybook/*"
+        "./*"
       ]
     }
   },

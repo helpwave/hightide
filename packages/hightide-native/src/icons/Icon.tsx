@@ -23,7 +23,7 @@ export const Icon = ({
 
 export const resolveIconProps = (
   size: ElementSize = 'md',
-  color?: string,
+  color?: string
 ): {
   size: number,
   strokeWidth: number,

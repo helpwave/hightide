@@ -27,15 +27,16 @@
     "lint": "eslint .",
     "test": "node -e \"process.exit(0)\""
   },
-  "peerDependencies": {
-    "react": "^19.0.0",
-    "react-native": ">=0.76.0",
-    "react-native-svg": ">=15.0.0"
-  },
   "dependencies": {
     "@helpwave/hightide-design": "workspace:*",
     "@helpwave/hightide-utils": "workspace:*",
     "lucide-react-native": "0.561.0"
+  },
+  "peerDependencies": {
+    "@react-native-async-storage/async-storage": ">=2.0.0",
+    "react": "^19.0.0",
+    "react-native": ">=0.76.0",
+    "react-native-svg": ">=15.0.0"
   },
   "devDependencies": {
     "@helpwave/eslint-config": "0.0.11",

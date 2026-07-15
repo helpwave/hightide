@@ -5,7 +5,7 @@ import {
   type ChipColoringStyle,
   type ColoringColor,
   getColoringTokens,
-  resolveColoringStyles,
+  resolveColoringStyles
 } from './coloring'
 
 export type ResolvedChipStyles = {

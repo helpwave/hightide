@@ -122,8 +122,14 @@
       }
     }
   },
-  "sMonthName": "{month, select, january{Januar} february{Februar} march{März} april{April} may{Mai} june{Juni} july{Juli} august{August} september{September} october{Oktober} november{November} december{Dezember} other{Unbekannter Monat}}",
-  "@sMonthName": {
+  "sMonthLong": "{month, select, january{Januar} february{Februar} march{März} april{April} may{Mai} june{Juni} july{Juli} august{August} september{September} october{Oktober} november{November} december{Dezember} other{Unbekannter Monat}}",
+  "@sMonthLong": {
+    "placeholders": {
+      "month": {}
+    }
+  },
+  "sMonthShort": "{month, select, january{Jan} february{Feb} march{Mär} april{Apr} may{Mai} june{Jun} july{Jul} august{Aug} september{Sep} october{Okt} november{Nov} december{Dez} other{???}}",
+  "@sMonthShort": {
     "placeholders": {
       "month": {}
     }

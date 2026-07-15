@@ -1,77 +1,71 @@
 import type { PropsWithChildren } from 'react'
-import { useEffect, useState } from 'react'
-import type {
-  KeyValueStore } from '@helpwave/hightide-utils'
 import {
-  LocalizationContext,
   LocalizationProvider as LocalizationProviderBase,
-  matchBrowserLocales,
+  LocalizationUtils,
   useBrowserKeyValueStore,
-  useDateTimeFormat,
-  useLocalization,
-  useTimeZone,
-  type LocalizationContextValue as LocalizationContextValueBase,
+  type LocaleInformation,
   type LocalizationProviderProps as LocalizationProviderPropsBase
 } from '@helpwave/hightide-utils'
-import { LocalizationUtil } from '../i18n/util'
-import type { HightideTranslationLocales } from '@/src/i18n/translations'
-
-export type HightideLocales<T extends string = string> = T | HightideTranslationLocales
-
-export type LocalizationContextValue<T extends string = string> = LocalizationContextValueBase<HightideLocales<T>>
+import { useEffect, useState } from 'react'
+import { useHightideConfig } from './HightideConfigContext'
 
 export {
   LocalizationContext,
   useLocalization,
   useTimeZone,
   useDateTimeFormat,
-}
+  type LocalizationContextValue,
+  type LocaleInformation,
+} from '@helpwave/hightide-utils'
 
-export type LocalizationProviderProps<T extends string = string> = PropsWithChildren
-  & Omit<LocalizationProviderPropsBase<HightideLocales<T>>, 'store'>
+export type LocalizationProviderProps = PropsWithChildren
+  & Omit<LocalizationProviderPropsBase, 'store' | 'systemLocale' | 'fallbackLocale' | 'supportedLocales'>
+  & Partial<Pick<LocalizationProviderPropsBase, 'fallbackLocale' |  'supportedLocales'>>
 
-const detectWebSystemLocale = (): HightideTranslationLocales | undefined => {
+const detectWebSystemLocale = (supportedLocales: readonly LocaleInformation[]): string | undefined => {
   if (typeof window === 'undefined') return undefined
-  return matchBrowserLocales(
+  return LocalizationUtils.matchBrowserLocales(
     window.navigator.languages,
-    LocalizationUtil.locals,
-    LocalizationUtil.localToLanguage
+    supportedLocales.map((value) => value.locale),
+    LocalizationUtils.isoLocaleToLanguageShort
   )
 }
 
-const useWebSystemLocale = <T extends string>() => {
-  const [systemLocale, setSystemLocale] = useState<HightideLocales<T> | undefined>(() =>
-    detectWebSystemLocale())
+const useWebSystemLocale = (supportedLocales: readonly LocaleInformation[]) => {
+  const [systemLocale, setSystemLocale] = useState<string | undefined>(() =>
+    detectWebSystemLocale(supportedLocales))
 
   useEffect(() => {
     if (typeof window === 'undefined') return
 
     const updateSystemLocale = () => {
-      setSystemLocale(detectWebSystemLocale())
+      setSystemLocale(detectWebSystemLocale(supportedLocales))
     }
 
     window.addEventListener('languagechange', updateSystemLocale)
     return () => window.removeEventListener('languagechange', updateSystemLocale)
-  }, [])
+  }, [supportedLocales])
 
   return systemLocale
 }
 
-export const LocalizationProvider = <T extends string = string>({
+export const LocalizationProvider = ({
   children,
-  fallbackLocale = 'de-DE' as HightideLocales<T>,
-  systemLocale: systemLocaleOverride,
+  fallbackLocale,
+  supportedLocales,
   ...rest
-}: LocalizationProviderProps<T>) => {
-  const store: KeyValueStore<string> = useBrowserKeyValueStore<string>()
-  const detectedSystemLocale = useWebSystemLocale<T>()
-  const systemLocale = systemLocaleOverride ?? detectedSystemLocale
+}: LocalizationProviderProps) => {
+  const store = useBrowserKeyValueStore()
+  const { config } = useHightideConfig()
+  const resolvedSupportedLocales = supportedLocales ?? config.localization.supportedLocales
+  const detectedSystemLocale = useWebSystemLocale(resolvedSupportedLocales)
 
   return (
-    <LocalizationProviderBase<HightideLocales<T>>
-      store={store as KeyValueStore<unknown>}
-      fallbackLocale={fallbackLocale}
-      systemLocale={systemLocale}
+    <LocalizationProviderBase
+      store={store}
+      fallbackLocale={fallbackLocale ?? config.localization.fallbackLocale}
+      supportedLocales={resolvedSupportedLocales}
+      systemLocale={detectedSystemLocale}
       {...rest}
     >
       {children}

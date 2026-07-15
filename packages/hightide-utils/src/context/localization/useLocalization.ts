@@ -2,7 +2,7 @@ import { useContext } from 'react'
 import type { LocalizationContextValue } from './LocalizationContext'
 import { LocalizationContext } from './LocalizationContext'
 
-export const useLocalization = <TLocale extends string = string>(): LocalizationContextValue<TLocale> => {
+export const useLocalization = (): LocalizationContextValue => {
   const context = useContext(LocalizationContext)
   if (!context) {
     throw new Error(
@@ -10,7 +10,5 @@ export const useLocalization = <TLocale extends string = string>(): Localization
     )
   }
 
-  // This assertion might become invalid if the provider and the user of the useLocalization hook
-  // use different defintions of TLocale
-  return context as unknown as LocalizationContextValue<TLocale>
+  return context
 }

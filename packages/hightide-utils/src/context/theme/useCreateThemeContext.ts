@@ -1,28 +1,50 @@
 import { useCallback, useEffect, useMemo } from 'react'
 import { useEventCallbackStabilizer } from '../../hooks/useEventCallbackStabelizer'
-import type { KeyValueStore } from '../../hooks/useSimpleStoreSyncedValue'
+import type { SimpleValueStore } from '../../hooks/useSimpleStoreSyncedValue'
 import { useSimpleStoreSyncedValue } from '../../hooks/useSimpleStoreSyncedValue'
-import type {
-  ThemeContextValue,
-  ThemeWithSystem,
-  UseCreateThemeContextProps,
-} from './types'
+import { StringUnionUtils } from '@/src/utils'
+import type { ThemeContextValue, ThemeInformation } from './ThemeContext'
 
-export const useCreateThemeContext = <TResolvedTheme extends string>({
+export type SystemTheme = 'dark' | 'light'
+
+export type UseCreateThemeContextProps = {
+  store: SimpleValueStore,
+  fallbackTheme: string,
+  supportedThemes: readonly ThemeInformation[],
+  theme?: string,
+  systemTheme?: SystemTheme,
+  onChangedTheme?: (theme: string) => void,
+}
+
+export const useCreateThemeContext = ({
   store,
   fallbackTheme,
+  supportedThemes,
   theme,
   systemTheme,
   onChangedTheme,
-}: UseCreateThemeContextProps<TResolvedTheme>): ThemeContextValue<TResolvedTheme> => {
+}: UseCreateThemeContextProps): ThemeContextValue => {
+  const supportedThemeKeys = useMemo(
+    () => supportedThemes.map((value) => value.theme),
+    [supportedThemes]
+  )
+  const resolvedThemeKeys = useMemo(
+    () => supportedThemeKeys.filter((key) => key !== 'system'),
+    [supportedThemeKeys]
+  )
+
   const {
     value: storedTheme,
     setValue: setStoredTheme,
     deleteValue: deleteStoredTheme,
-  } = useSimpleStoreSyncedValue<TResolvedTheme | null>({
-    store: store as KeyValueStore<unknown> as KeyValueStore<TResolvedTheme | null>,
+  } = useSimpleStoreSyncedValue<string>({
+    store,
     key: 'theme',
-    defaultValue: null,
+    decode: useCallback((value: string) => {
+      if (resolvedThemeKeys.includes(value)) return value
+      return null
+    }, [resolvedThemeKeys]),
+    encode: useCallback((value) => value, []),
   })
 
   const resolvedTheme = useMemo(() => {
@@ -32,55 +54,46 @@ export const useCreateThemeContext = <TResolvedTheme extends string>({
     if (storedTheme) {
       return storedTheme
     }
-    if (systemTheme) {
+    if (systemTheme && resolvedThemeKeys.includes(systemTheme)) {
       return systemTheme
     }
     return fallbackTheme
-  }, [fallbackTheme, theme, storedTheme, systemTheme])
-
-  const themePreference = useMemo((): ThemeWithSystem<TResolvedTheme> => {
-    if (theme !== undefined) {
-      return theme
-    }
-    if (storedTheme) {
-      return storedTheme
-    }
-    return 'system'
-  }, [theme, storedTheme])
+  }, [fallbackTheme, resolvedThemeKeys, storedTheme, systemTheme, theme])
 
   useEffect(() => {
     if (theme === undefined) return
     if (theme === 'system') {
       deleteStoredTheme()
-    } else {
+    } else if (StringUnionUtils.isUnionValue(theme, supportedThemeKeys)) {
       setStoredTheme(theme)
     }
-  }, [theme, deleteStoredTheme, setStoredTheme])
+  }, [deleteStoredTheme, setStoredTheme, supportedThemeKeys, theme])
 
   const onChangeRef = useEventCallbackStabilizer(onChangedTheme)
 
   useEffect(() => {
     onChangeRef?.(resolvedTheme)
-  }, [resolvedTheme, onChangeRef])
+  }, [onChangeRef, resolvedTheme])
 
-  const setTheme = useCallback((newTheme: ThemeWithSystem<TResolvedTheme>) => {
+  const setTheme = useCallback((newTheme: string) => {
     if (theme !== undefined) {
       console.warn(
         'useCreateThemeContext: Attempting to change the theme while setting a fixed theme won\'t have any effect. '
-          + 'Change the theme provided to the ThemeProvider instead.',
+          + 'Change the theme provided to the ThemeProvider instead.'
       )
       return
     }
     if (newTheme === 'system') {
       deleteStoredTheme()
-    } else {
-      setStoredTheme(newTheme)
+      return
     }
-  }, [deleteStoredTheme, setStoredTheme, theme])
+    if (!StringUnionUtils.isUnionValue(newTheme, supportedThemeKeys)) return
+    setStoredTheme(newTheme)
+  }, [deleteStoredTheme, setStoredTheme, supportedThemeKeys, theme])
 
   return {
-    theme: themePreference,
-    resolvedTheme,
+    theme: resolvedTheme,
     setTheme,
+    supportedThemes,
   }
 }

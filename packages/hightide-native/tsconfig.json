@@ -4,10 +4,9 @@
     "lib": ["ES2019", "DOM", "ES2020.Intl", "ES2021.Intl"],
     "moduleResolution": "bundler",
     "module": "ESNext",
-    "jsx": "react-jsx",
+    "jsx": "react-native",
     "esModuleInterop": true,
     "skipLibCheck": true,
-    "baseUrl": ".",
     "paths": {
       "@/*": [
         "./*"

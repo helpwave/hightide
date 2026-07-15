@@ -1,7 +1,7 @@
 const { execSync } = require('node:child_process')
 
 module.exports = () => {
-  execSync('npx build-intl --force -i ./locales -o ./src/i18n/translations.ts -n hightideTranslation', {
+  execSync('pnpm --filter @helpwave/hightide-utils run build-intl', {
     stdio: 'inherit',
   })
 }

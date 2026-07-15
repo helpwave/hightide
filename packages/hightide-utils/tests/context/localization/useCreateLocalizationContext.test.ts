@@ -3,16 +3,21 @@
 import { act, renderHook } from '@testing-library/react'
 import { useMemoryKeyValueStore } from '../../../src/hooks/useMemoryKeyValueStore'
 import { useCreateLocalizationContext } from '../../../src/context/localization/useCreateLocalizationContext'
+import type { LocaleInformation } from '../../../src/context/localization/LocalizationContext'
 
 describe('useCreateLocalizationContext', () => {
-  type TestLocale = 'en-US' | 'de-DE'
+  const supportedLocales: readonly LocaleInformation[] = [
+    { locale: 'en-US', localName: 'English (US)' },
+    { locale: 'de-DE', localName: 'Deutsch' },
+  ]
 
   test('resolves locale from controlled prop', () => {
     const store = useMemoryKeyValueStore()
 
-    const { result } = renderHook(() => useCreateLocalizationContext<TestLocale>({
+    const { result } = renderHook(() => useCreateLocalizationContext({
       store,
       fallbackLocale: 'en-US',
+      supportedLocales,
       locale: 'de-DE',
     }))
 
@@ -22,9 +27,10 @@ describe('useCreateLocalizationContext', () => {
   test('falls back to fallback locale', () => {
     const store = useMemoryKeyValueStore()
 
-    const { result } = renderHook(() => useCreateLocalizationContext<TestLocale>({
+    const { result } = renderHook(() => useCreateLocalizationContext({
       store,
       fallbackLocale: 'en-US',
+      supportedLocales,
     }))
 
     expect(result.current.locale).toBe('en-US')
@@ -33,9 +39,10 @@ describe('useCreateLocalizationContext', () => {
   test('prefers system locale over fallback locale', () => {
     const store = useMemoryKeyValueStore()
 
-    const { result } = renderHook(() => useCreateLocalizationContext<TestLocale>({
+    const { result } = renderHook(() => useCreateLocalizationContext({
       store,
       fallbackLocale: 'en-US',
+      supportedLocales,
       systemLocale: 'de-DE',
     }))
 
@@ -45,9 +52,10 @@ describe('useCreateLocalizationContext', () => {
   test('updates stored locale via setLocale', () => {
     const store = useMemoryKeyValueStore()
 
-    const { result } = renderHook(() => useCreateLocalizationContext<TestLocale>({
+    const { result } = renderHook(() => useCreateLocalizationContext({
       store,
       fallbackLocale: 'en-US',
+      supportedLocales,
     }))
 
     act(() => {
@@ -55,5 +63,33 @@ describe('useCreateLocalizationContext', () => {
     })
 
     expect(result.current.locale).toBe('de-DE')
+  })
+
+  test('ignores unsupported locales via setLocale', () => {
+    const store = useMemoryKeyValueStore()
+
+    const { result } = renderHook(() => useCreateLocalizationContext({
+      store,
+      fallbackLocale: 'en-US',
+      supportedLocales,
+    }))
+
+    act(() => {
+      result.current.setLocale('fr-FR')
+    })
+
+    expect(result.current.locale).toBe('en-US')
+  })
+
+  test('exposes supported locale information', () => {
+    const store = useMemoryKeyValueStore()
+
+    const { result } = renderHook(() => useCreateLocalizationContext({
+      store,
+      fallbackLocale: 'en-US',
+      supportedLocales,
+    }))
+
+    expect(result.current.supportedLocales).toEqual(supportedLocales)
   })
 })

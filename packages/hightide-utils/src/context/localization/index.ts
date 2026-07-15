@@ -1,6 +1,6 @@
 export * from './LocalizationContext'
 export * from './LocalizationProvider'
 export * from './useCreateLocalizationContext'
+export * from './useDateTimeFormat'
 export * from './useLocalization'
 export * from './useTimeZone'
-export * from './useDateTimeFormat'

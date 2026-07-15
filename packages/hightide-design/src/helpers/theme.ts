@@ -3,7 +3,7 @@ import type {
   ComponentColors,
   DesignTheme,
   SemanticColors,
-  ThemeMode,
+  ThemeMode
 } from '../types'
 
 export const getTheme = (mode: ThemeMode): DesignTheme => themes[mode]

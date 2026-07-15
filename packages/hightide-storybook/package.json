@@ -25,6 +25,7 @@
     "@helpwave/hightide-native": "workspace:*",
     "@helpwave/hightide-utils": "workspace:*",
     "@helpwave/internationalization": "0.4.0",
+    "@react-native-async-storage/async-storage": "2.2.0",
     "@tanstack/react-table": "8.21.3",
     "@tanstack/react-virtual": "3.14.3",
     "clsx": "2.1.1",

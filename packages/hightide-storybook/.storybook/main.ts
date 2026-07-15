@@ -50,9 +50,6 @@ const config: StorybookConfig = {
           '.js',
         ],
       },
-      optimizeDeps: {
-        include: ['react-native-web'],
-      },
     })
   },
 }

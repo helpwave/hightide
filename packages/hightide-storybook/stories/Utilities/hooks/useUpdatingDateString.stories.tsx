@@ -1,5 +1,5 @@
 import type { Meta, StoryObj } from '@storybook/nextjs-vite'
-import type { HightideTranslationLocales } from '@/src/i18n/translations'
+import type { HightideTranslationLocales } from '@helpwave/hightide-utils'
 import { useUpdatingDateString } from '@/src/hooks/useUpdatingDateString'
 
 type StoryArgs = {
