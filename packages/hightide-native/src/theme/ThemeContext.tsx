@@ -1,28 +1,45 @@
-import { createContext, useContext, type ReactNode } from 'react'
+import type { PropsWithChildren } from 'react'
 import type { ThemeMode } from '@helpwave/hightide-design'
+import {
+  ThemeContext,
+  ThemeContextProvider,
+  useTheme as useThemeBase,
+  useMemoryKeyValueStore,
+  type ThemeContextValue,
+  type ThemeWithSystem,
+} from '@helpwave/hightide-utils'
 
-type ThemeContextValue = {
-  mode: ThemeMode,
-}
-
-const ThemeContext = createContext<ThemeContextValue>({ mode: 'light' })
-
-export type ThemeProviderProps = {
+export type ThemeProviderProps = PropsWithChildren & {
   mode?: ThemeMode,
-  children: ReactNode,
+  theme?: ThemeWithSystem<ThemeMode>,
+  systemTheme?: ThemeMode,
+  fallbackTheme?: ThemeMode,
+  onChangedTheme?: (theme: ThemeMode) => void,
 }
+
+export {
+  ThemeContext,
+}
+
+export const useThemeMode = (): ThemeMode => useThemeBase<ThemeMode>().resolvedTheme
 
 export const ThemeProvider = ({
-  mode = 'light',
   children,
+  mode = 'light',
+  fallbackTheme,
+  ...rest
 }: ThemeProviderProps) => {
+  const store = useMemoryKeyValueStore()
+
   return (
-    <ThemeContext.Provider value={{ mode }}>
+    <ThemeContextProvider
+      store={store}
+      fallbackTheme={fallbackTheme ?? mode}
+      {...rest}
+    >
       {children}
-    </ThemeContext.Provider>
+    </ThemeContextProvider>
   )
 }
 
-export const useThemeMode = (): ThemeMode => {
-  return useContext(ThemeContext).mode
-}
+export type { ThemeContextValue }

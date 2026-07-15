@@ -4,8 +4,10 @@ import {
   resolveIconButtonStyles
 } from '@helpwave/hightide-design'
 import type { ElementSize } from '@helpwave/hightide-design'
+import type { LucideIcon } from 'lucide-react-native'
 import { forwardRef, type ReactNode } from 'react'
 import { Pressable, type PressableProps, type StyleProp, type ViewStyle } from 'react-native'
+import { Icon } from '../../icons/Icon'
 import { useThemeMode } from '../../theme/ThemeContext'
 
 export type IconButtonSize = ElementSize
@@ -14,13 +16,17 @@ export type IconButtonProps = Omit<PressableProps, 'children' | 'style'> & {
   size?: IconButtonSize,
   color?: ColoringColor,
   coloringStyle?: ButtonColoringStyle,
-  children: ReactNode,
+  icon?: LucideIcon,
+  iconSize?: ElementSize,
+  children?: ReactNode,
   accessibilityLabel: string,
   style?: StyleProp<ViewStyle>,
 }
 
 export const IconButton = forwardRef<React.ComponentRef<typeof Pressable>, IconButtonProps>(function IconButton({
   children,
+  icon,
+  iconSize,
   size = 'md',
   color = 'neutral',
   coloringStyle = 'solid',
@@ -37,6 +43,10 @@ export const IconButton = forwardRef<React.ComponentRef<typeof Pressable>, IconB
     coloringStyle,
     disabled: !!disabled,
   })
+
+  const content = icon
+    ? <Icon icon={icon} size={iconSize ?? size} color={resolved.color} />
+    : children
 
   return (
     <Pressable
@@ -60,7 +70,7 @@ export const IconButton = forwardRef<React.ComponentRef<typeof Pressable>, IconB
         style,
       ]}
     >
-      {children}
+      {content}
     </Pressable>
   )
 })

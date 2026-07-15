@@ -3,7 +3,7 @@ import { action } from 'storybook/actions'
 import { useEffect, useState } from 'react'
 import { FlexibleDateTimeInput } from '@/src/components/user-interaction/input/FlexibleDateTimeInput'
 import { TimeDisplay } from '@/src/components/user-interaction/date/TimeDisplay'
-import { LocaleContext } from '@/src/global-contexts/LocaleContext'
+import { LocalizationContext } from '@/src/global-contexts/LocaleContext'
 
 const timeZones = ['', 'UTC', 'America/New_York', 'Europe/Berlin', 'Asia/Tokyo', 'Pacific/Kiritimati']
 
@@ -45,7 +45,7 @@ export const flexibleDateTimeInput: Story = {
       setValue(args.value ?? args.initialValue ?? null)
     }, [args.value, args.initialValue])
     return (
-      <LocaleContext.Provider value={{ locale: 'de-DE', setLocale: () => {}, is24HourFormat, timeZone: timeZone || undefined }}>
+      <LocalizationContext.Provider value={{ locale: 'de-DE', setLocale: () => {}, is24HourFormat, timeZone: timeZone || undefined }}>
         <div className="flex-col-2 w-full max-w-md">
           <FlexibleDateTimeInput
             {...args}
@@ -73,7 +73,7 @@ export const flexibleDateTimeInput: Story = {
             {value && <TimeDisplay date={value} mode="date"/>}
           </div>
         </div>
-      </LocaleContext.Provider>
+      </LocalizationContext.Provider>
     )
   },
 }

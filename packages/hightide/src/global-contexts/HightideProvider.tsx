@@ -1,30 +1,30 @@
 import type { PropsWithChildren } from 'react'
 import type { HightideConfigProviderProps } from '@/src/global-contexts/HightideConfigContext'
 import { HightideConfigProvider } from '@/src/global-contexts/HightideConfigContext'
-import type { LocaleProviderProps } from '@/src/global-contexts/LocaleContext'
-import { LocaleProvider } from '@/src/global-contexts/LocaleContext'
-import type { ThemeProviderProps } from '@/src/global-contexts/ThemeContext'
-import { ThemeProvider } from '@/src/global-contexts/ThemeContext'
+import type { HightideLocales, LocalizationProviderProps } from '@/src/global-contexts/LocalizationProvider'
+import { LocalizationProvider } from '@/src/global-contexts/LocalizationProvider'
+import type { ThemeProviderProps } from '@/src/global-contexts/ThemeProvider'
+import { ThemeProvider } from '@/src/global-contexts/ThemeProvider'
 
-type HightideProviderProps = PropsWithChildren & {
+type HightideProviderProps<T extends string> = PropsWithChildren & {
   theme?: Omit<ThemeProviderProps, 'children'>,
-  locale?: Omit<LocaleProviderProps, 'children'>,
+  locale?: Omit<LocalizationProviderProps<T>, 'children'>,
   config?: Omit<HightideConfigProviderProps, 'children'>,
 }
 
-export const HightideProvider = ({
+export const HightideProvider = <T extends string>({
   children,
   theme,
   locale,
   config,
-}: HightideProviderProps) => {
+}: HightideProviderProps<T>) => {
   return (
-    <LocaleProvider {...locale}>
-      <ThemeProvider {...theme}>
-        <HightideConfigProvider {...config}>
+    <HightideConfigProvider {...config}>
+      <LocalizationProvider<T> {...locale} fallbackLocale={locale?.fallbackLocale ?? 'de-DE' as HightideLocales<T>}>
+        <ThemeProvider {...theme}>
           {children}
-        </HightideConfigProvider>
-      </ThemeProvider>
-    </LocaleProvider>
+        </ThemeProvider>
+      </LocalizationProvider>
+    </HightideConfigProvider>
   )
 }

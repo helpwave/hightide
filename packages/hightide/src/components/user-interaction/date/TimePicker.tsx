@@ -5,7 +5,7 @@ import type { FormFieldDataHandling } from '@/src/components/form/FormField'
 import { useControlledState } from '@helpwave/hightide-utils'
 import type { DateTimePrecision } from '@helpwave/hightide-utils'
 import { Visibility } from '@/src/components/layout/Visibility'
-import { useDateTimeFormat } from '@/src/global-contexts/LocaleContext'
+import { useDateTimeFormat } from '@/src/global-contexts/LocalizationProvider'
 
 export type TimePickerMinuteIncrement = '1min' | '5min' | '10min' | '15min' | '30min'
 

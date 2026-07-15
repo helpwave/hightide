@@ -6,7 +6,8 @@ import type { DayPickerProps } from '@/src/components/user-interaction/date/DayP
 import { DayPicker } from '@/src/components/user-interaction/date/DayPicker'
 import type { YearMonthPickerProps } from '@/src/components/user-interaction/date/YearMonthPicker'
 import { YearMonthPicker } from '@/src/components/user-interaction/date/YearMonthPicker'
-import { useLocale } from '@/src/global-contexts/LocaleContext'
+import { useLocalization } from '@/src/global-contexts/LocalizationProvider'
+import type { HightideTranslationLocales } from '@/src/i18n/translations'
 import { Button } from '@/src/components/user-interaction/Button'
 import { LocalizationUtil } from '@/src/i18n/util'
 import type { FormFieldDataHandling } from '../../form/FormField'
@@ -44,7 +45,7 @@ export const DatePicker = ({
   className
 }: DatePickerProps) => {
   const translation = useHightideTranslation()
-  const { locale } = useLocale()
+  const { locale } = useLocalization<HightideTranslationLocales>()
   const [value, setValue] = useControlledState({
     value: controlledValue,
     onValueChange: onValueChange,

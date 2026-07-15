@@ -1,4 +1,5 @@
 import { getComponentColors, getSemanticColors, remToPx } from '@helpwave/hightide-design'
+import { Check } from 'lucide-react-native'
 import { useMemo } from 'react'
 import {
   FlatList,
@@ -11,6 +12,7 @@ import {
   type ViewStyle
 } from 'react-native'
 import { Chip } from '../Chip/Chip'
+import { Icon } from '../../icons/Icon'
 import { useMultiSelect, type UseMultiSelectOption } from '../../hooks/useMultiSelect'
 import { useThemeMode } from '../../theme/ThemeContext'
 import type { FormFieldDataHandling, FormFieldInteractionStates } from '../../types/formField'
@@ -44,7 +46,7 @@ const CheckboxIndicator = ({ checked }: { checked: boolean }) => {
       alignItems: 'center',
       justifyContent: 'center',
     }}>
-      {checked && <Text style={{ color: semantic.onPrimary, fontSize: 12, fontWeight: '700' }}>✓</Text>}
+      {checked && <Icon icon={Check} size="sm" color={semantic.onPrimary} />}
     </View>
   )
 }
@@ -95,7 +97,7 @@ export const MultiSelect = ({
           borderRadius: remToPx('0.375rem'),
           borderWidth: 1,
           borderColor,
-          backgroundColor: disabled ? semantic.disabled : component.inputBackground,
+          backgroundColor: disabled ? semantic.disabled : component.input.background,
           justifyContent: 'center',
           gap: 8,
           opacity: disabled ? 0.6 : 1,
@@ -128,9 +130,9 @@ export const MultiSelect = ({
             style={{
               maxHeight: 360,
               borderRadius: 12,
-              backgroundColor: component.menuBackground,
+              backgroundColor: component.menu.background,
               borderWidth: 1,
-              borderColor: component.menuBorder,
+              borderColor: component.menu.border,
               overflow: 'hidden',
             }}
             onPress={(event) => event.stopPropagation()}
@@ -145,8 +147,8 @@ export const MultiSelect = ({
                   paddingHorizontal: 16,
                   paddingVertical: 12,
                   borderBottomWidth: 1,
-                  borderBottomColor: component.menuBorder,
-                  color: component.menuText,
+                  borderBottomColor: component.menu.border,
+                  color: component.menu.text,
                 }}
               />
             )}
@@ -163,7 +165,7 @@ export const MultiSelect = ({
                     style={{
                       paddingHorizontal: 16,
                       paddingVertical: 12,
-                      backgroundColor: isHighlighted ? component.tableRowHoverBackground : 'transparent',
+                      backgroundColor: isHighlighted ? component.table.rowHoverBackground : 'transparent',
                       opacity: item.disabled ? 0.5 : 1,
                       flexDirection: 'row',
                       alignItems: 'center',
@@ -172,7 +174,7 @@ export const MultiSelect = ({
                   >
                     <CheckboxIndicator checked={selected} />
                     <Text style={{
-                      color: selected ? semantic.primary : component.menuText,
+                      color: selected ? semantic.primary : component.menu.text,
                       fontWeight: selected ? '600' : '400',
                     }}>
                       {item.label}

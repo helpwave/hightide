@@ -29,11 +29,13 @@
   },
   "peerDependencies": {
     "react": "^19.0.0",
-    "react-native": ">=0.76.0"
+    "react-native": ">=0.76.0",
+    "react-native-svg": ">=15.0.0"
   },
   "dependencies": {
     "@helpwave/hightide-design": "workspace:*",
-    "@helpwave/hightide-utils": "workspace:*"
+    "@helpwave/hightide-utils": "workspace:*",
+    "lucide-react-native": "0.561.0"
   },
   "devDependencies": {
     "@helpwave/eslint-config": "0.0.11",
@@ -41,6 +43,7 @@
     "eslint": "9.31.0",
     "react": "19.2.3",
     "react-native": "0.79.2",
+    "react-native-svg": "15.12.0",
     "typescript": "5.7.2"
   },
   "keywords": [

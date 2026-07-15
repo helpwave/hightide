@@ -74,12 +74,12 @@ export const Select = ({
           borderRadius: remToPx('0.375rem'),
           borderWidth: 1,
           borderColor,
-          backgroundColor: disabled ? semantic.disabled : component.inputBackground,
+          backgroundColor: disabled ? semantic.disabled : component.input.background,
           justifyContent: 'center',
           opacity: disabled ? 0.6 : 1,
         }}
       >
-        <Text style={{ color: select.value ? component.inputText : semantic.placeholder }}>
+        <Text style={{ color: select.value ? component.input.text : semantic.placeholder }}>
           {selectedLabel}
         </Text>
       </Pressable>
@@ -98,9 +98,9 @@ export const Select = ({
             style={{
               maxHeight: 360,
               borderRadius: 12,
-              backgroundColor: component.menuBackground,
+              backgroundColor: component.menu.background,
               borderWidth: 1,
-              borderColor: component.menuBorder,
+              borderColor: component.menu.border,
               overflow: 'hidden',
             }}
             onPress={(event) => event.stopPropagation()}
@@ -115,8 +115,8 @@ export const Select = ({
                   paddingHorizontal: 16,
                   paddingVertical: 12,
                   borderBottomWidth: 1,
-                  borderBottomColor: component.menuBorder,
-                  color: component.menuText,
+                  borderBottomColor: component.menu.border,
+                  color: component.menu.text,
                 }}
               />
             )}
@@ -133,12 +133,12 @@ export const Select = ({
                     style={{
                       paddingHorizontal: 16,
                       paddingVertical: 12,
-                      backgroundColor: isHighlighted ? component.tableRowHoverBackground : 'transparent',
+                      backgroundColor: isHighlighted ? component.table.rowHoverBackground : 'transparent',
                       opacity: item.disabled ? 0.5 : 1,
                     }}
                   >
                     <Text style={{
-                      color: isSelected ? semantic.primary : component.menuText,
+                      color: isSelected ? semantic.primary : component.menu.text,
                       fontWeight: isSelected ? '600' : '400',
                     }}>
                       {item.label}

@@ -9,7 +9,11 @@
     "jsx": "react-jsx",
     "esModuleInterop": true,
     "skipLibCheck": true,
-    "baseUrl": ".",
+    "lib": [
+      "ES2020",
+      "ES2020.Intl",
+      "DOM"
+    ],
     "paths": {
       "@/*": [
         "./*"

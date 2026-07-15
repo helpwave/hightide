@@ -1,13 +1,12 @@
-import { buttonPadding } from '../padding'
-import { elementSizes, spacing } from '../size'
-import type { ElementSize, ThemeMode } from '../types'
+import { componentLayouts } from '../../tokens'
+import type { ElementSize, ThemeMode } from '../../types'
+import { toPx } from '../units'
 import {
   type ButtonColoringStyle,
   type ColoringColor,
   getColoringTokens,
-  resolveColoringStyles
+  resolveColoringStyles,
 } from './coloring'
-import { remToPx } from './rem'
 
 export type ResolvedButtonStyles = {
   backgroundColor: string,
@@ -21,6 +20,8 @@ export type ResolvedButtonStyles = {
   borderRadius: number,
   minHeight: number,
   fontSize: number,
+  iconSize: number,
+  iconStrokeWidth: number,
 }
 
 export type ResolveButtonStylesOptions = {
@@ -51,19 +52,22 @@ export const resolveButtonStyles = ({
 }: ResolveButtonStylesOptions): ResolvedButtonStyles => {
   const tokens = getColoringTokens(color, mode)
   const coloring = resolveColoringStyles(tokens, coloringStyle, mode, disabled)
-  const padding = buttonPadding[size]
-  const sizing = elementSizes[size]
+  const padding = componentLayouts.button[size]
+  const sizing = componentLayouts.element[size]
+  const icon = componentLayouts.icon[size]
   const outlinePadding = usesOutlinePadding(coloringStyle)
 
   return {
     ...coloring,
-    paddingVertical: remToPx(outlinePadding ? padding.paddingYOutline : padding.paddingY),
-    paddingHorizontal: remToPx(outlinePadding ? padding.paddingXOutline : padding.paddingX),
-    gap: remToPx(padding.gap),
-    minWidth: remToPx(padding.minWidth),
-    borderRadius: remToPx(padding.borderRadius),
-    minHeight: remToPx(sizing.height),
+    paddingVertical: toPx(outlinePadding ? padding.paddingYOutline : padding.paddingY),
+    paddingHorizontal: toPx(outlinePadding ? padding.paddingXOutline : padding.paddingX),
+    gap: toPx(padding.gap),
+    minWidth: toPx(padding.minWidth),
+    borderRadius: toPx(padding.borderRadius),
+    minHeight: toPx(sizing.height),
     fontSize: buttonFontSizes[size],
+    iconSize: toPx(icon.size),
+    iconStrokeWidth: toPx(icon.strokeWidth),
   }
 }
 
@@ -75,9 +79,9 @@ export const resolveIconButtonStyles = ({
   disabled = false,
 }: ResolveButtonStylesOptions): ResolvedButtonStyles => {
   const buttonStyles = resolveButtonStyles({ mode, size, color, coloringStyle, disabled })
-  const sizing = elementSizes[size]
-  const outlineWidth = remToPx(spacing.coloringOutlineWidth)
-  const dimension = remToPx(sizing.height)
+  const sizing = componentLayouts.element[size]
+  const outlineWidth = toPx(componentLayouts.shared.coloringOutlineWidth)
+  const dimension = toPx(sizing.height)
 
   return {
     ...buttonStyles,
@@ -85,7 +89,7 @@ export const resolveIconButtonStyles = ({
     paddingVertical: (dimension - (buttonStyles.borderWidth ?? 0) * 2) / 2,
     paddingHorizontal: (dimension - (buttonStyles.borderWidth ?? 0) * 2) / 2,
     gap: 0,
-    borderRadius: remToPx(buttonPadding[size].borderRadius),
+    borderRadius: toPx(componentLayouts.button[size].borderRadius),
     minHeight: dimension,
     borderWidth: buttonStyles.borderWidth ?? (coloringStyle === 'outline' || coloringStyle === 'tonal-outline' ? outlineWidth : 0),
   }

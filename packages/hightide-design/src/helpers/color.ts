@@ -1,14 +1,11 @@
-import type { RemValue } from '../types'
+import type { ColorValue } from '../types'
 
-const REM_BASE_PX = 16
+export const hexToRgba = (hex: ColorValue, alpha: number): string => {
+  if (!hex.startsWith('#')) {
+    return hex
+  }
 
-export const remToPx = (value: RemValue): number => {
-  const numeric = Number.parseFloat(value)
-  return numeric * REM_BASE_PX
-}
-
-export const hexToRgba = (hex: `#${string}`, alpha: number): string => {
-  const normalized = hex.replace('#', '')
+  const normalized = hex.slice(1)
   const expanded = normalized.length === 3
     ? normalized.split('').map((char) => char + char).join('')
     : normalized

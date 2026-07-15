@@ -1,7 +1,8 @@
-import { getSemanticColors } from '../color-semantic'
-import { spacing } from '../size'
-import type { HexColor, ThemeMode } from '../types'
-import { hexToRgba, remToPx } from './rem'
+import { getSemanticColors } from '../theme'
+import { componentLayouts } from '../../tokens'
+import type { ColorValue, ElementSize, ThemeMode } from '../../types'
+import { hexToRgba } from '../color'
+import { toPx } from '../units'
 
 export const coloringColors = ['primary', 'secondary', 'positive', 'warning', 'negative', 'neutral'] as const
 
@@ -14,21 +15,21 @@ export type ChipColoringStyle = 'solid' | 'tonal' | 'outline' | 'tonal-outline'
 export type ColoringStyle = ButtonColoringStyle
 
 export type ColoringTokens = {
-  color: HexColor,
-  onColor: HexColor,
-  hover: HexColor,
-  text?: HexColor,
-  textHover?: HexColor,
-  outline?: HexColor,
-  outlineHover?: HexColor,
-  tonalText?: HexColor,
-  tonalBackground?: HexColor,
+  color: ColorValue,
+  onColor: ColorValue,
+  hover: ColorValue,
+  text?: ColorValue,
+  textHover?: ColorValue,
+  outline?: ColorValue,
+  outlineHover?: ColorValue,
+  tonalText?: ColorValue,
+  tonalBackground?: ColorValue,
 }
 
 export type ResolvedColoringStyles = {
   backgroundColor: string,
-  color: HexColor,
-  borderColor?: HexColor,
+  color: ColorValue,
+  borderColor?: ColorValue,
   borderWidth?: number,
 }
 
@@ -55,8 +56,8 @@ export const getColoringTokens = (color: ColoringColor, mode: ThemeMode): Colori
 
   return {
     color: semantic[colorKey],
-    onColor: semantic[onColorKey] as HexColor,
-    hover: semantic[hoverKey] as HexColor,
+    onColor: semantic[onColorKey] as ColorValue,
+    hover: semantic[hoverKey] as ColorValue,
   }
 }
 
@@ -64,10 +65,10 @@ export const resolveColoringStyles = (
   tokens: ColoringTokens,
   coloringStyle: ColoringStyle,
   mode: ThemeMode,
-  disabled = false
+  disabled = false,
 ): ResolvedColoringStyles => {
   const semantic = getSemanticColors(mode)
-  const outlineWidth = remToPx(spacing.coloringOutlineWidth)
+  const outlineWidth = toPx(componentLayouts.shared.coloringOutlineWidth)
 
   if (disabled) {
     return {

@@ -1,6 +1,7 @@
 import { useCallback } from 'react'
 import { DateUtils } from '@helpwave/hightide-utils'
-import { useLocale } from '@/src/global-contexts/LocaleContext'
+import { useLocalization } from '@/src/global-contexts/LocalizationProvider'
+import type { HightideTranslationLocales } from '@/src/i18n/translations'
 import { useHightideTranslation } from '@/src/i18n/useHightideTranslation'
 import { type FilterOperator } from './FilterOperator'
 import type { DataType } from './data-types'
@@ -444,7 +445,7 @@ function tagToLabel(tags: ReadonlyArray<{ tag: string, label: string }> | undefi
 
 export function useFilterValueTranslation(): (value: FilterValue, options?: FilterValueTranslationOptions) => string {
   const translation = useHightideTranslation()
-  const { locale } = useLocale()
+  const { locale } = useLocalization<HightideTranslationLocales>()
 
   return useCallback((value: FilterValue, options?: FilterValueTranslationOptions): string => {
     const p = value.parameter

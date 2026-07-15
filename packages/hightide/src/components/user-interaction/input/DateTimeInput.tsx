@@ -4,7 +4,7 @@ import { CalendarIcon, X } from 'lucide-react'
 import clsx from 'clsx'
 import type { DateTimePickerProps } from '@/src/components/user-interaction/date/DateTimePicker'
 import { useHightideTranslation } from '@/src/i18n/useHightideTranslation'
-import { useLocale } from '@/src/global-contexts/LocaleContext'
+import { useLocalization } from '@/src/global-contexts/LocalizationProvider'
 import { Visibility } from '@/src/components/layout/Visibility'
 import type { FormFieldDataHandling } from '../../form/FormField'
 import { DateTimePickerDialog } from '../date/DateTimePickerDialog'
@@ -66,7 +66,7 @@ export const DateTimeInput = forwardRef<HTMLDivElement, DateTimeInputProps>(func
   ...props
 }, forwardedRef) {
   const translation = useHightideTranslation()
-  const { timeZone: contextTimeZone } = useLocale()
+  const { timeZone: contextTimeZone } = useLocalization()
   const timeZone = timeZoneOverride ?? contextTimeZone
   const [isOpen, setIsOpen] = useState(false)
   const [state, setState] = useControlledState<Date | null>({

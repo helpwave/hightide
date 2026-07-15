@@ -20,6 +20,7 @@
     "iOS >= 8",
     "Android >= 5"
   ],
+  "target": "ES2020",
   "files": [
     "dist"
   ],

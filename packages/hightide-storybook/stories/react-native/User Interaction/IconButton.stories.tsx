@@ -2,7 +2,7 @@ import type { Meta, StoryObj } from '@storybook/nextjs-vite'
 import { StorybookStyling } from '@storybook-helpers/styling'
 import { IconButton } from '@helpwave/hightide-native'
 import { action } from 'storybook/actions'
-import { Text } from 'react-native'
+import { Minus } from 'lucide-react-native'
 
 const meta = {
   component: IconButton,
@@ -24,14 +24,7 @@ export const iconButton: Story = {
     size: 'md',
     coloringStyle: 'solid',
     accessibilityLabel: 'Subtract',
+    icon: Minus,
     onPress: action('Pressed'),
-    children: <Text style={{ fontSize: 16, fontWeight: '700' }}>−</Text>,
-  },
-  render: ({ children, ...props }) => {
-    return (
-      <IconButton {...props}>
-        {children}
-      </IconButton>
-    )
   },
 }

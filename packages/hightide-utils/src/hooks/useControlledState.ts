@@ -1,6 +1,6 @@
 import type React from 'react'
 import { useCallback, useEffect, useRef, useState } from 'react'
-import { resolveSetState } from '../utils/resolveSetState'
+import { resolveSetState } from '../utils/setStateUtils'
 import { useEventCallbackStabilizer } from './useEventCallbackStabelizer'
 import { useLogOnce } from './useLogOnce'
 

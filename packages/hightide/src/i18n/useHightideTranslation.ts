@@ -1,4 +1,4 @@
-import { useLocale } from '@/src/global-contexts/LocaleContext'
+import { useLocalization } from '@/src/global-contexts/LocalizationProvider'
 import type {
   PartialTranslationExtension,
   Translation,
@@ -7,9 +7,12 @@ import type {
 import { combineTranslation, ICUUtil } from '@helpwave/internationalization'
 import { ArrayUtil } from '@helpwave/hightide-utils'
 import type { SingleOrArray } from '@helpwave/hightide-utils'
-import type { HightideTranslationEntries, HightideTranslationLocales } from '@/src/i18n/translations'
+import type {
+  HightideTranslationEntries,
+  HightideTranslationLocales
+} from '@/src/i18n/translations'
 import { hightideTranslation } from '@/src/i18n/translations'
-import { useMemo } from 'react'
+import { useCallback, useMemo } from 'react'
 
 /**
  * Use for translations where you know that all values are ICU strings.
@@ -23,10 +26,10 @@ export function useICUTranslation<L extends string, T extends Record<string, str
 ) {
   translations = Array.isArray(translations) ? translations : [translations]
 
-  return function translate(
+  const translate = useCallback((
     key: string,
     values?: Record<string, object>
-  ): string {
+  ): string => {
     try {
       for (let i = 0; i < translations.length; i++) {
         const localizedTranslation = translations[i][locale]
@@ -34,7 +37,7 @@ export function useICUTranslation<L extends string, T extends Record<string, str
 
         const msg = localizedTranslation[key]
         if (typeof msg === 'string') {
-          return ICUUtil.interpret(msg, values)
+          return ICUUtil.interpret(msg, values ?? {})
         }
       }
       console.warn(`useTranslation: No translation for key "${key}" found.`)
@@ -43,7 +46,8 @@ export function useICUTranslation<L extends string, T extends Record<string, str
     }
 
     return `{{${String(locale)}:${String(key)}}}`
-  }
+  }, [locale, translations])
+  return translate
 }
 
 type UseHidetideTranslationOverwrites = {
@@ -59,11 +63,11 @@ export function useHightideTranslation<L extends string, T extends TranslationEn
   extensions?: SingleOrArray<HidetideTranslationExtension<L,T>>,
   overwrites?: UseHidetideTranslationOverwrites
 ) {
-  const { locale: inferredLocale } = useLocale()
+  const { locale: inferredLocale } = useLocalization<HightideTranslationLocales>()
   const locale = overwrites?.locale ?? inferredLocale
 
   return useMemo(() => combineTranslation<L | HightideTranslationLocales, T & HightideTranslationEntries>([
-    ... ArrayUtil.resolveSingleOrArray(extensions),
+    ... ArrayUtil.resolveSingleOrArray(extensions ?? []),
     hightideTranslation as HidetideTranslationExtension<L,T>
   ], locale),
   [locale, extensions])

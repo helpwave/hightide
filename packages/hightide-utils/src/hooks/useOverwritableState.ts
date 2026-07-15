@@ -1,6 +1,6 @@
 import type React from 'react'
 import { useEffect, useState } from 'react'
-import { resolveSetState } from '../utils/resolveSetState'
+import { resolveSetState } from '../utils/setStateUtils'
 
 // TODO replace all usages of this hook with `useControlledState`
 export const useOverwritableState = <T>(overwriteValue?: T, onChange?: (value: T) => void): [T, React.Dispatch<React.SetStateAction<T>>] => {

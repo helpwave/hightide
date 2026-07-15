@@ -1,5 +1,6 @@
 import { useHightideTranslation } from '@/src/i18n/useHightideTranslation'
-import { useDateTimeFormat, useLocale } from '@/src/global-contexts/LocaleContext'
+import { useDateTimeFormat, useLocalization } from '@/src/global-contexts/LocalizationProvider'
+import type { HightideTranslationLocales } from '@/src/i18n/translations'
 import { DateUtils } from '@helpwave/hightide-utils'
 
 type TimeDisplayMode = 'daysFromToday' | 'date' | 'time'
@@ -18,7 +19,7 @@ export const TimeDisplay = ({
   timeZone: timeZoneOverride,
 }: TimeDisplayProps) => {
   const translation = useHightideTranslation()
-  const { locale } = useLocale()
+  const { locale } = useLocalization<HightideTranslationLocales>()
   const { is24HourFormat: contextIs24HourFormat, timeZone: contextTimeZone } = useDateTimeFormat()
   const is24HourFormat = is24HourFormatOverride ?? contextIs24HourFormat
   const timeZone = timeZoneOverride ?? contextTimeZone

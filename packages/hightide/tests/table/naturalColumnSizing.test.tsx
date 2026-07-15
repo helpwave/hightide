@@ -2,7 +2,7 @@
  * @jest-environment jsdom
  */
 import { render } from '@testing-library/react'
-import { LocaleContext } from '../../src/global-contexts/LocaleContext'
+import { LocalizationContext } from '../../src/global-contexts/LocaleContext'
 import { Table } from '../../src/components/layout/table/Table'
 import { TableColumn } from '../../src/components/layout/table/TableColumn'
 
@@ -14,7 +14,7 @@ const DATA: Row[] = [
 ]
 
 const renderTable = (columnSizingMode?: 'fill' | 'natural') => render(
-  <LocaleContext.Provider value={{ locale: 'en-US', setLocale: () => {} }}>
+  <LocalizationContext.Provider value={{ locale: 'en-US', setLocale: () => {} }}>
     <Table
       table={{ data: DATA, columnSizingMode, isUsingFillerRows: false }}
       paginationOptions={{ showPagination: false }}
@@ -22,7 +22,7 @@ const renderTable = (columnSizingMode?: 'fill' | 'natural') => render(
       <TableColumn<Row> id="name" header="Name" accessorKey="name" minSize={120}/>
       <TableColumn<Row> id="grade" header="Grade" accessorKey="grade" minSize={48}/>
     </Table>
-  </LocaleContext.Provider>
+  </LocalizationContext.Provider>
 )
 
 describe('table column sizing modes', () => {

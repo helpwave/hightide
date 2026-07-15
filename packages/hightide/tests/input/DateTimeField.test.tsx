@@ -3,7 +3,7 @@
  */
 import { useEffect, useState } from 'react'
 import { act, fireEvent, render, screen } from '@testing-library/react'
-import { LocaleContext } from '../../src/global-contexts/LocaleContext'
+import { LocalizationContext } from '../../src/global-contexts/LocaleContext'
 import { DateTimeField, type DateTimeFieldProps } from '../../src/components/user-interaction/input/DateTimeField'
 import { DateTimeInput } from '../../src/components/user-interaction/input/DateTimeInput'
 
@@ -12,7 +12,7 @@ const renderField = (props?: Partial<DateTimeFieldProps>) => {
   const Wrapper = () => {
     const [value, setValue] = useState<Date | null>(props?.initialValue ?? null)
     return (
-      <LocaleContext.Provider value={{ locale: 'de-DE', setLocale: () => {} }}>
+      <LocalizationContext.Provider value={{ locale: 'de-DE', setLocale: () => {} }}>
         <DateTimeField
           mode="date"
           locale="de-DE"
@@ -23,7 +23,7 @@ const renderField = (props?: Partial<DateTimeFieldProps>) => {
             setValue(next)
           }}
         />
-      </LocaleContext.Provider>
+      </LocalizationContext.Provider>
     )
   }
   render(<Wrapper/>)
@@ -196,7 +196,7 @@ describe('DateTimeInput controlled value', () => {
       setValue(null)
     }, [])
     return (
-      <LocaleContext.Provider value={{ locale: 'en-US', setLocale: () => {} }}>
+      <LocalizationContext.Provider value={{ locale: 'en-US', setLocale: () => {} }}>
         <DateTimeInput
           mode="date"
           value={value}
@@ -205,7 +205,7 @@ describe('DateTimeInput controlled value', () => {
             setValue(next)
           }}
         />
-      </LocaleContext.Provider>
+      </LocalizationContext.Provider>
     )
   }
 
@@ -229,9 +229,9 @@ describe('DateTimeInput controlled value', () => {
 describe('DateTimeInput hour format', () => {
   test('defaults to a 24 hour clock regardless of locale', () => {
     render(
-      <LocaleContext.Provider value={{ locale: 'en-US', setLocale: () => {} }}>
+      <LocalizationContext.Provider value={{ locale: 'en-US', setLocale: () => {} }}>
         <DateTimeInput mode="time" initialValue={new Date(2024, 0, 1, 18, 30)} />
-      </LocaleContext.Provider>
+      </LocalizationContext.Provider>
     )
 
     expect(screen.getAllByRole('spinbutton').map(segment => segment.textContent)).toEqual(['18', '30'])
@@ -239,9 +239,9 @@ describe('DateTimeInput hour format', () => {
 
   test('uses a 12 hour clock when the context opts out', () => {
     render(
-      <LocaleContext.Provider value={{ locale: 'en-US', setLocale: () => {}, is24HourFormat: false }}>
+      <LocalizationContext.Provider value={{ locale: 'en-US', setLocale: () => {}, is24HourFormat: false }}>
         <DateTimeInput mode="time" initialValue={new Date(2024, 0, 1, 18, 30)} />
-      </LocaleContext.Provider>
+      </LocalizationContext.Provider>
     )
 
     expect(screen.getAllByRole('spinbutton').map(segment => segment.textContent)).toEqual(['06', '30', 'PM'])
@@ -249,9 +249,9 @@ describe('DateTimeInput hour format', () => {
 
   test('an explicit is24HourFormat prop overrides the context', () => {
     render(
-      <LocaleContext.Provider value={{ locale: 'en-US', setLocale: () => {}, is24HourFormat: false }}>
+      <LocalizationContext.Provider value={{ locale: 'en-US', setLocale: () => {}, is24HourFormat: false }}>
         <DateTimeInput mode="time" is24HourFormat={true} initialValue={new Date(2024, 0, 1, 18, 30)} />
-      </LocaleContext.Provider>
+      </LocalizationContext.Provider>
     )
 
     expect(screen.getAllByRole('spinbutton').map(segment => segment.textContent)).toEqual(['18', '30'])
@@ -261,13 +261,13 @@ describe('DateTimeInput hour format', () => {
 describe('DateTimeInput time zone', () => {
   test('reads the display zone from the locale context', () => {
     render(
-      <LocaleContext.Provider value={{ locale: 'en-US', setLocale: () => {}, timeZone: 'America/New_York' }}>
+      <LocalizationContext.Provider value={{ locale: 'en-US', setLocale: () => {}, timeZone: 'America/New_York' }}>
         <DateTimeInput
           mode="dateTime"
           is24HourFormat={true}
           initialValue={new Date(Date.UTC(2024, 5, 1, 2, 30))}
         />
-      </LocaleContext.Provider>
+      </LocalizationContext.Provider>
     )
 
     expect(screen.getAllByRole('spinbutton').map(segment => segment.textContent))
@@ -276,14 +276,14 @@ describe('DateTimeInput time zone', () => {
 
   test('an explicit timeZone prop overrides the context', () => {
     render(
-      <LocaleContext.Provider value={{ locale: 'en-US', setLocale: () => {}, timeZone: 'America/New_York' }}>
+      <LocalizationContext.Provider value={{ locale: 'en-US', setLocale: () => {}, timeZone: 'America/New_York' }}>
         <DateTimeInput
           mode="dateTime"
           is24HourFormat={true}
           timeZone="UTC"
           initialValue={new Date(Date.UTC(2024, 5, 1, 2, 30))}
         />
-      </LocaleContext.Provider>
+      </LocalizationContext.Provider>
     )
 
     expect(screen.getAllByRole('spinbutton').map(segment => segment.textContent))
@@ -297,7 +297,7 @@ describe('DateTimeInput clear button', () => {
     const Wrapper = () => {
       const [value, setValue] = useState<Date | null>(props.initialValue ?? null)
       return (
-        <LocaleContext.Provider value={{ locale: 'de-DE', setLocale: () => {} }}>
+        <LocalizationContext.Provider value={{ locale: 'de-DE', setLocale: () => {} }}>
           <DateTimeInput
             mode="date"
             required={props.required}
@@ -308,7 +308,7 @@ describe('DateTimeInput clear button', () => {
               setValue(next)
             }}
           />
-        </LocaleContext.Provider>
+        </LocalizationContext.Provider>
       )
     }
     render(<Wrapper/>)

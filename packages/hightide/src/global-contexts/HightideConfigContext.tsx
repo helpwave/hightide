@@ -1,6 +1,5 @@
 import { createContext, type PropsWithChildren, useContext, useState } from 'react'
-import type { ResolvedTheme } from '@/src/global-contexts/ThemeContext'
-import type { HightideTranslationLocales } from '@/src/i18n/translations'
+import type { ResolvedTheme } from '@helpwave/hightide-utils'
 import type { DeepPartial } from '@helpwave/hightide-utils'
 
 export type TooltipConfig = {
@@ -13,16 +12,9 @@ export type ThemeConfig = {
   initialTheme: ResolvedTheme,
 }
 
-export type LocalizationConfig = {
-  defaultLocale: HightideTranslationLocales,
-  defaultTimeZone?: string,
-  defaultIs24HourFormat?: boolean,
-}
-
 export type HightideConfig = {
   tooltip: TooltipConfig,
   theme: ThemeConfig,
-  locale: LocalizationConfig,
 }
 
 const defaultConfig: HightideConfig = {
@@ -32,19 +24,12 @@ const defaultConfig: HightideConfig = {
     screenPadding: 1,
   },
   theme: {
-    initialTheme: 'light'
+    initialTheme: 'light',
   },
-  locale: {
-    defaultLocale: 'de-DE',
-  }
 }
 
 function mergeConfig(config: HightideConfig, overwrite: DeepPartial<HightideConfig>): HightideConfig {
   return {
-    locale: {
-      ...config.locale,
-      ...overwrite?.locale
-    },
     theme: {
       ...config.theme,
       ...overwrite.theme,
@@ -52,7 +37,7 @@ function mergeConfig(config: HightideConfig, overwrite: DeepPartial<HightideConf
     tooltip: {
       ...config.tooltip,
       ...overwrite.tooltip,
-    }
+    },
   }
 }
 
@@ -75,7 +60,7 @@ export const HightideConfigProvider = ({
     <HightideConfigContext.Provider
       value={{
         config,
-        setConfig: (value) => setConfig(prevState => mergeConfig(prevState, value)),
+        setConfig: (value) => setConfig((prevState) => mergeConfig(prevState, value)),
       }}
     >
       {children}
@@ -90,7 +75,7 @@ export const useHightideConfig = () => {
       config: defaultConfig,
       setConfig: () => {
         console.error('useHightideConfig.setConfig is not available without a HightideConfigProvider. Try wrapping your app a HightideConfigProvider.')
-      }
+      },
     }
   }
   return context

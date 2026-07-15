@@ -1,12 +1,12 @@
 import type { SetStateAction } from 'react'
 
-const resolveSetState = <T>(action: SetStateAction<T>, prev: T): T => {
+const resolve = <T>(action: SetStateAction<T>, prev: T): T => {
   return typeof action === 'function' ? (action as (prev: T) => T)(prev) : action
 }
 
-export const ResolveSetStateUtils = {
-  resolveSetState,
+export const SetStateUtils = {
+  resolve,
 }
 
 /** @deprecated Use ResolveSetStateUtils.resolveSetState instead. */
-export { resolveSetState }
+export { resolve as resolveSetState }

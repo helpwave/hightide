@@ -2,7 +2,7 @@ import type { PropsWithChildren, ReactNode } from 'react'
 import type { DialogProps } from '@/src/components/layout/dialog/Dialog'
 import { Dialog } from '@/src/components/layout/dialog/Dialog'
 import { LocalizationUtil } from '@/src/i18n/util'
-import { useLocale } from '@/src/global-contexts/LocaleContext'
+import { useLocalization } from '@/src/global-contexts/LocalizationProvider'
 import { Button } from '@/src/components/user-interaction/Button'
 import { useHightideTranslation } from '@/src/i18n/useHightideTranslation'
 import type { HightideTranslationLocales } from '@/src/i18n/translations'
@@ -14,7 +14,7 @@ import clsx from 'clsx'
 type LanguageSelectProps = Omit<SelectProps, 'value' | 'children'>
 
 export const LanguageSelect = ({ ...props }: LanguageSelectProps) => {
-  const { locale, setLocale } = useLocale()
+  const { locale, setLocale } = useLocalization<HightideTranslationLocales>()
 
   return (
     <Select

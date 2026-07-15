@@ -1,16 +1,25 @@
 import { getComponentColors, getSemanticColors, remToPx, spacing } from '@helpwave/hightide-design'
+import type { ElementSize } from '@helpwave/hightide-design'
 import { useControlledState, useEventCallbackStabilizer } from '@helpwave/hightide-utils'
+import { Check, Minus } from 'lucide-react-native'
 import { useCallback } from 'react'
-import { Pressable, Text, type PressableProps, type StyleProp, type ViewStyle } from 'react-native'
+import { Pressable, type PressableProps, type StyleProp, type ViewStyle } from 'react-native'
+import { Icon } from '../../icons/Icon'
 import { useThemeMode } from '../../theme/ThemeContext'
 import type { FormFieldDataHandling, FormFieldInteractionStates } from '../../types/formField'
 
 export type CheckboxSize = 'sm' | 'md' | 'lg'
 
 const checkboxSizes: Record<CheckboxSize, number> = {
-  sm: 18,
-  md: 22,
-  lg: 26,
+  sm: remToPx('1.25rem'),
+  md: remToPx('1.5rem'),
+  lg: remToPx('2rem'),
+}
+
+const checkboxIconSizes: Record<CheckboxSize, ElementSize> = {
+  sm: 'sm',
+  md: 'md',
+  lg: 'lg',
 }
 
 export type CheckboxProps = Omit<PressableProps, 'children' | 'style'>
@@ -44,6 +53,7 @@ export const Checkbox = ({
   const semantic = getSemanticColors(mode)
   const component = getComponentColors(mode)
   const dimension = checkboxSizes[size]
+  const iconSize = checkboxIconSizes[size]
   const interactive = !disabled && !readOnly
 
   const onEditCompleteStable = useEventCallbackStabilizer(onEditComplete)
@@ -61,11 +71,11 @@ export const Checkbox = ({
   })
 
   const showIndicator = indeterminate || alwaysShowCheckIcon || value
-  const indicator = indeterminate ? '−' : '✓'
+  const indicatorColor = value || indeterminate ? semantic.onPrimary : semantic.primary
   const borderColor = invalid ? semantic.negative : (value || indeterminate ? semantic.primary : component.border)
   const backgroundColor = disabled
     ? semantic.disabled
-    : (value || indeterminate ? semantic.primary : component.inputBackground)
+    : (value || indeterminate ? semantic.primary : component.input.background)
 
   return (
     <Pressable
@@ -98,9 +108,9 @@ export const Checkbox = ({
       ]}
     >
       {showIndicator && (
-        <Text style={{ color: semantic.onPrimary, fontSize: dimension * 0.65, fontWeight: '700' }}>
-          {indicator}
-        </Text>
+        indeterminate
+          ? <Icon icon={Minus} size={iconSize} color={indicatorColor} />
+          : <Icon icon={Check} size={iconSize} color={indicatorColor} />
       )}
     </Pressable>
   )
