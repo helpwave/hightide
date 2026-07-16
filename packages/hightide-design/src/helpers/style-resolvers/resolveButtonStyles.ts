@@ -1,5 +1,5 @@
 import { componentLayouts } from '../../tokens'
-import type { ElementSize, ThemeMode } from '../../types'
+import type { DesignTheme, ElementSize } from '../../types'
 import { toPx } from '../units'
 import {
   type ButtonColoringStyle,
@@ -25,7 +25,7 @@ export type ResolvedButtonStyles = {
 }
 
 export type ResolveButtonStylesOptions = {
-  mode: ThemeMode,
+  theme: DesignTheme,
   size: ElementSize,
   color: ColoringColor,
   coloringStyle: ButtonColoringStyle,
@@ -44,14 +44,14 @@ const usesOutlinePadding = (coloringStyle: ButtonColoringStyle): boolean => {
 }
 
 export const resolveButtonStyles = ({
-  mode,
+  theme,
   size,
   color,
   coloringStyle,
   disabled = false,
 }: ResolveButtonStylesOptions): ResolvedButtonStyles => {
-  const tokens = getColoringTokens(color, mode)
-  const coloring = resolveColoringStyles(tokens, coloringStyle, mode, disabled)
+  const tokens = getColoringTokens(color, theme.semantic)
+  const coloring = resolveColoringStyles(tokens, coloringStyle, theme.semantic, disabled)
   const padding = componentLayouts.button[size]
   const sizing = componentLayouts.element[size]
   const icon = componentLayouts.icon[size]
@@ -72,13 +72,13 @@ export const resolveButtonStyles = ({
 }
 
 export const resolveIconButtonStyles = ({
-  mode,
+  theme,
   size,
   color,
   coloringStyle,
   disabled = false,
 }: ResolveButtonStylesOptions): ResolvedButtonStyles => {
-  const buttonStyles = resolveButtonStyles({ mode, size, color, coloringStyle, disabled })
+  const buttonStyles = resolveButtonStyles({ theme, size, color, coloringStyle, disabled })
   const sizing = componentLayouts.element[size]
   const outlineWidth = toPx(componentLayouts.shared.coloringOutlineWidth)
   const dimension = toPx(sizing.height)

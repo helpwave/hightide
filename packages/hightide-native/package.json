@@ -1,0 +1,58 @@
+{
+  "name": "@helpwave/hightide-native",
+  "private": true,
+  "description": "helpwave hightide react native components",
+  "author": "helpwave <support@helpwave.de> (https://helpwave.de)",
+  "homepage": "https://helpwave.de",
+  "repository": {
+    "url": "git+https://github.com/helpwave/hightide.git"
+  },
+  "license": "AGPL-3.0-only",
+  "version": "0.0.1",
+  "type": "module",
+  "files": [
+    "src"
+  ],
+  "types": "./src/index.ts",
+  "exports": {
+    ".": {
+      "types": "./src/index.ts",
+      "default": "./src/index.ts"
+    }
+  },
+  "scripts": {
+    "clean": "rm -rf node_modules",
+    "init": "node -e \"process.exit(0)\"",
+    "build": "node -e \"process.exit(0)\"",
+    "lint": "eslint .",
+    "test": "node -e \"process.exit(0)\""
+  },
+  "dependencies": {
+    "@helpwave/hightide-design": "workspace:*",
+    "@helpwave/hightide-utils": "workspace:*",
+    "lucide-react-native": "0.561.0"
+  },
+  "peerDependencies": {
+    "@react-native-async-storage/async-storage": ">=2.0.0",
+    "react": "^19.0.0",
+    "react-native": ">=0.76.0",
+    "react-native-svg": ">=15.0.0"
+  },
+  "devDependencies": {
+    "@helpwave/eslint-config": "0.0.11",
+    "@types/react": "19.2.3",
+    "eslint": "9.31.0",
+    "react": "19.2.3",
+    "react-native": "0.79.2",
+    "react-native-svg": "15.12.0",
+    "typescript": "5.7.2"
+  },
+  "keywords": [
+    "react-native",
+    "component-library",
+    "typescript"
+  ],
+  "bugs": {
+    "url": "https://github.com/helpwave/hightide/issues"
+  }
+}

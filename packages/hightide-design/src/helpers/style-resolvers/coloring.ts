@@ -1,6 +1,5 @@
-import { getSemanticColors } from '../theme'
 import { componentLayouts } from '../../tokens'
-import type { ColorValue, ThemeMode } from '../../types'
+import type { ColorValue, SemanticColors } from '../../types'
 import { hexToRgba } from '../color'
 import { toPx } from '../units'
 
@@ -33,9 +32,7 @@ export type ResolvedColoringStyles = {
   borderWidth?: number,
 }
 
-export const getColoringTokens = (color: ColoringColor, mode: ThemeMode): ColoringTokens => {
-  const semantic = getSemanticColors(mode)
-
+export const getColoringTokens = (color: ColoringColor, semantic: SemanticColors): ColoringTokens => {
   if (color === 'neutral') {
     return {
       color: semantic.neutral,
@@ -64,10 +61,9 @@ export const getColoringTokens = (color: ColoringColor, mode: ThemeMode): Colori
 export const resolveColoringStyles = (
   tokens: ColoringTokens,
   coloringStyle: ColoringStyle,
-  mode: ThemeMode,
+  semantic: SemanticColors,
   disabled = false
 ): ResolvedColoringStyles => {
-  const semantic = getSemanticColors(mode)
   const outlineWidth = toPx(componentLayouts.shared.coloringOutlineWidth)
 
   if (disabled) {

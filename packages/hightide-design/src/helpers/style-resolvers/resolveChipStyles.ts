@@ -1,5 +1,5 @@
 import { componentLayouts } from '../../tokens'
-import type { ElementSize, ThemeMode } from '../../types'
+import type { DesignTheme, ElementSize } from '../../types'
 import { toPx } from '../units'
 import {
   type ChipColoringStyle,
@@ -22,7 +22,7 @@ export type ResolvedChipStyles = {
 }
 
 export type ResolveChipStylesOptions = {
-  mode: ThemeMode,
+  theme: DesignTheme,
   size: ElementSize,
   color: ColoringColor,
   coloringStyle: ChipColoringStyle,
@@ -30,14 +30,14 @@ export type ResolveChipStylesOptions = {
 }
 
 export const resolveChipStyles = ({
-  mode,
+  theme,
   size,
   color,
   coloringStyle,
   disabled = false,
 }: ResolveChipStylesOptions): ResolvedChipStyles => {
-  const tokens = getColoringTokens(color, mode)
-  const coloring = resolveColoringStyles(tokens, coloringStyle, mode, disabled)
+  const tokens = getColoringTokens(color, theme.semantic)
+  const coloring = resolveColoringStyles(tokens, coloringStyle, theme.semantic, disabled)
   const layout = componentLayouts.chip[size]
 
   return {
