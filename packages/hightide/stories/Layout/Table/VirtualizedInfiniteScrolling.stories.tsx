@@ -1,13 +1,13 @@
 import type { Meta, StoryObj } from '@storybook/nextjs-vite'
 import { useCallback, useEffect, useMemo, useRef, useState } from 'react'
 import { faker } from '@faker-js/faker'
-import { range } from '@/src/utils/array'
+import { range } from '@helpwave/hightide-utils/utils'
 import { Table } from '@/src/components/layout/table/Table'
 import { TableColumn } from '@/src/components/layout/table/TableColumn'
 import { TableCell } from '@/src/components/layout/table/TableCell'
 import { TableColumnSwitcher } from '@/src/components/layout/table/TableColumnSwitcher'
 import { Chip } from '@/src/components/display-and-visualization/Chip'
-import { useHightideTranslation } from '@/src/i18n/useHightideTranslation'
+import { useHightideTranslation } from '@helpwave/hightide-utils/context/translation'
 
 type Person = {
   id: string,

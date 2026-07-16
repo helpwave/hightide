@@ -3,16 +3,16 @@ import { forwardRef, useContext, useEffect } from 'react'
 import { useId } from 'react'
 import { useCallback, useMemo, useRef, useState } from 'react'
 import type { FloatingElementAlignment, UseAnchoredPositionOptions } from '@/src/hooks/useAnchoredPosition'
-import { useOverlayRegistry } from '@/src/hooks/useOverlayRegistry'
+import { useOverlayRegistry } from '@helpwave/hightide-utils/hooks'
 import { useTransitionState } from '@/src/hooks/useTransitionState'
-import type { TooltipConfig } from '@/src/global-contexts/HightideConfigContext'
-import { useHightideConfig } from '@/src/global-contexts/HightideConfigContext'
+import type { TooltipConfig } from '@/src/global-contexts/hightide-config'
+import { useHightideConfig } from '@/src/global-contexts/hightide-config'
 import { Portal } from '@/src/components/utils/Portal'
 import type { AnchoredFloatingContainerProps } from '../layout/AnchoredFloatingContainer'
 import { AnchoredFloatingContainer } from '../layout/AnchoredFloatingContainer'
 import { createContext } from 'react'
-import { BagFunctionUtil } from '@/src/utils/bagFunctions'
-import { ReactRefsUtil } from '@/src/utils/reactRefs'
+import { BagFunctionUtil } from '@helpwave/hightide-utils/utils'
+import { ReactUtils } from '@helpwave/hightide-utils/utils'
 
 export interface TooltipTriggerContextValue {
   ref: RefObject<HTMLElement | null>,
@@ -228,7 +228,7 @@ export const TooltipDisplay = forwardRef<HTMLDivElement, TooltipDisplayProps>(fu
       <AnchoredFloatingContainer
         {...props}
         id={id}
-        ref={ReactRefsUtil.assingRefsBuilder([container, forwardRef])}
+        ref={ReactUtils.assingRefsBuilder([container, forwardRef])}
         active={isVisible}
         anchor={anchor}
         options={{

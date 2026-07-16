@@ -1,5 +1,5 @@
-import type { DateTimeFormat, DateTimePrecision } from '@/src/utils/date'
-import { DateUtils } from '@/src/utils/date'
+import type { DateTimeFormat, DateTimePrecision } from '@helpwave/hightide-utils/utils'
+import { DateUtils } from '@helpwave/hightide-utils/utils'
 
 export const editableSegmentTypes = [
   'day',

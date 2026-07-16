@@ -2,7 +2,7 @@ import { useState } from 'react'
 import { clsx } from 'clsx'
 import { writeToClipboard } from '@/src/utils/writeToClipboard'
 import { CheckIcon, Copy } from 'lucide-react'
-import { useHightideTranslation } from '@/src/i18n/useHightideTranslation'
+import { useHightideTranslation } from '@helpwave/hightide-utils/context/translation'
 import { TooltipDisplay, TooltipRoot, TooltipTrigger, type TooltipProps } from './Tooltip'
 
 export interface CopyToClipboardWrapperProps extends Omit<TooltipProps, 'tooltip'> {

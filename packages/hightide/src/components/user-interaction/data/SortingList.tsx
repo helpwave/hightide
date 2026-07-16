@@ -1,7 +1,7 @@
 import { useMemo } from 'react'
 import type { ColumnSort } from '@tanstack/react-table'
 import { DataTypeUtils, type DataType } from './data-types'
-import { useHightideTranslation } from '@/src/i18n/useHightideTranslation'
+import { useHightideTranslation } from '@helpwave/hightide-utils/context/translation'
 import { ArrowDownWideNarrow, ArrowUpNarrowWide, PlusIcon, TrashIcon, XIcon } from 'lucide-react'
 import { PopUpRoot } from '../../layout/popup/PopUpRoot'
 import { PopUp } from '../../layout/popup/PopUp'

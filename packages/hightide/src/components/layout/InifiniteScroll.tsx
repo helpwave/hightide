@@ -10,7 +10,7 @@ import {
   useCallback
 } from 'react'
 import clsx from 'clsx'
-import { range } from '@/src/utils/array'
+import { range } from '@helpwave/hightide-utils/utils'
 import { Button } from '../user-interaction/Button'
 import { ChevronDown, ChevronUp } from 'lucide-react'
 import { Visibility } from './Visibility'

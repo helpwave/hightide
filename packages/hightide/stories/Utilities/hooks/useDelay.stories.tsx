@@ -1,6 +1,6 @@
 import type { Meta, StoryObj } from '@storybook/nextjs-vite'
 import { action } from 'storybook/actions'
-import { useDelay } from '@/src/hooks/useDelay'
+import { useDelay } from '@helpwave/hightide-utils/hooks'
 import { Button } from '@/src/components/user-interaction/Button'
 
 type StoryArgs = {

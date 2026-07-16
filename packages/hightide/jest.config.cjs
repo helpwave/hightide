@@ -5,6 +5,7 @@ module.exports = {
   testMatch: ['**/tests/**/*.test.ts', '**/tests/**/*.test.tsx'],
   extensionsToTreatAsEsm: ['.ts', '.tsx'],
   moduleNameMapper: {
+    '^@helpwave/hightide-utils/(.*)$': '<rootDir>/../hightide-utils/src/$1',
     '^@/(.*)$': '<rootDir>/$1',
   },
   transform: {

@@ -2,7 +2,7 @@ import type { ReactNode } from 'react'
 import type { FormValue } from './FormStore'
 import type { FormObserverKeyResult, UseFormObserverKeyProps, UseFormObserverProps } from './FormContext'
 import { useFormObserver, useFormObserverKey, type FormObserverResult } from './FormContext'
-import { BagFunctionUtil } from '@/src/utils/bagFunctions'
+import { BagFunctionUtil } from '@helpwave/hightide-utils/utils'
 
 export interface FormObserverProps<T extends FormValue> extends UseFormObserverProps<T> {
   children: (bag:FormObserverResult<T>) => ReactNode,

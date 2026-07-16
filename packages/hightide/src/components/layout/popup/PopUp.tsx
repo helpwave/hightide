@@ -1,6 +1,6 @@
 import type { RefObject } from 'react'
 import { forwardRef, useCallback, useContext, useMemo, useRef } from 'react'
-import { useEventCallbackStabilizer } from '@/src/hooks/useEventCallbackStabelizer'
+import { useEventCallbackStabilizer } from '@helpwave/hightide-utils/hooks'
 import { Portal } from '../../utils/Portal'
 import type { AnchoredFloatingContainerProps } from '../AnchoredFloatingContainer'
 import { AnchoredFloatingContainer } from '../AnchoredFloatingContainer'
@@ -11,11 +11,11 @@ import type { UseOutsideClickHandlers, UseOutsideClickOptions } from '@/src/hook
 import { useOutsideClick } from '@/src/hooks/useOutsideClick'
 import { PropsUtil } from '@/src/utils/propsUtil'
 import { usePresenceRef } from '@/src/hooks/usePresenceRef'
-import { useLogOnce } from '@/src/hooks/useLogOnce'
+import { useLogOnce } from '@helpwave/hightide-utils/hooks'
 import { PopUpContext } from './PopUpContext'
-import { useOverlayRegistry } from '@/src/hooks/useOverlayRegistry'
+import { useOverlayRegistry } from '@helpwave/hightide-utils/hooks'
 import { useScrollObserver } from '@/src/hooks/useScrollObserver'
-import { ReactRefsUtil } from '@/src/utils/reactRefs'
+import { ReactUtils } from '@helpwave/hightide-utils/utils'
 
 export interface PopUpProps extends Omit<AnchoredFloatingContainerProps, 'anchor'>, Partial<UseOutsideClickHandlers> {
   'isOpen'?: boolean,
@@ -83,7 +83,7 @@ export const PopUp = forwardRef<HTMLDivElement, PopUpProps>(function PopUp({
             {...props}
             id={id}
             anchor={anchor}
-            ref={ReactRefsUtil.assingRefsBuilder([refAssignment, forwardRef])}
+            ref={ReactUtils.assingRefsBuilder([refAssignment, forwardRef])}
             active={isOpen}
             hidden={!isOpen && forceMount}
 

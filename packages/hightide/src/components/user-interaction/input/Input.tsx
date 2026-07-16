@@ -1,13 +1,13 @@
 import type { InputHTMLAttributes } from 'react'
 import React, { forwardRef, useRef } from 'react'
-import type { UseDelayOptionsResolved } from '@/src/hooks/useDelay'
-import { useDelay } from '@/src/hooks/useDelay'
+import type { UseDelayOptionsResolved } from '@helpwave/hightide-utils/hooks'
+import { useDelay } from '@helpwave/hightide-utils/hooks'
 import { useFocusManagement } from '@/src/hooks/focus/useFocusManagement'
 import type { FormFieldInteractionStates } from '../../form/FieldLayout'
 import type { FormFieldDataHandling } from '../../form/FormField'
 import { PropsUtil } from '@/src/utils/propsUtil'
-import { useControlledState } from '@/src/hooks/useControlledState'
-import { ReactRefsUtil } from '@/src/utils/reactRefs'
+import { useControlledState } from '@helpwave/hightide-utils/hooks'
+import { ReactUtils } from '@helpwave/hightide-utils/utils'
 
 export type EditCompleteOptionsResolved = {
   onBlur: boolean,
@@ -72,7 +72,7 @@ export const Input = forwardRef<HTMLInputElement, InputProps>(function Input({
     <input
       {...props}
       value={value}
-      ref={ReactRefsUtil.assingRefsBuilder([innerRef, forwardedRef])}
+      ref={ReactUtils.assingRefsBuilder([innerRef, forwardedRef])}
 
       onKeyDown={event => {
         props.onKeyDown?.(event)

@@ -3,19 +3,19 @@ import { forwardRef, useCallback, useEffect, useId, useMemo, useRef, useState } 
 import { CalendarIcon, X } from 'lucide-react'
 import clsx from 'clsx'
 import type { DateTimePickerProps } from '@/src/components/user-interaction/date/DateTimePicker'
-import { useHightideTranslation } from '@/src/i18n/useHightideTranslation'
-import { useLocale } from '@/src/global-contexts/LocaleContext'
+import { useHightideTranslation } from '@helpwave/hightide-utils/context/translation'
+import { useLocalization } from '@/src/global-contexts/localization'
 import { Visibility } from '@/src/components/layout/Visibility'
 import type { FormFieldDataHandling } from '../../form/FormField'
 import { DateTimePickerDialog } from '../date/DateTimePickerDialog'
-import { useControlledState } from '@/src/hooks/useControlledState'
+import { useControlledState } from '@helpwave/hightide-utils/hooks'
 import { PropsUtil } from '@/src/utils/propsUtil'
 import type { FormFieldInteractionStates } from '@/src/components/form/FieldLayout'
 import { PopUp } from '../../layout/popup/PopUp'
 import { IconButton } from '../IconButton'
-import { DateUtils, type DateTimeFormat } from '@/src/utils/date'
+import { DateUtils, type DateTimeFormat } from '@helpwave/hightide-utils/utils'
 import { DateTimeField } from './DateTimeField'
-import { ReactRefsUtil } from '@/src/utils/reactRefs'
+import { ReactUtils } from '@helpwave/hightide-utils/utils'
 
 export interface DateTimeInputProps extends
   Partial<FormFieldInteractionStates>,
@@ -66,7 +66,7 @@ export const DateTimeInput = forwardRef<HTMLDivElement, DateTimeInputProps>(func
   ...props
 }, forwardedRef) {
   const translation = useHightideTranslation()
-  const { timeZone: contextTimeZone } = useLocale()
+  const { timeZone: contextTimeZone } = useLocalization()
   const timeZone = timeZoneOverride ?? contextTimeZone
   const [isOpen, setIsOpen] = useState(false)
   const [state, setState] = useControlledState<Date | null>({
@@ -118,7 +118,7 @@ export const DateTimeInput = forwardRef<HTMLDivElement, DateTimeInputProps>(func
     <div {...containerProps} className={clsx('relative w-full', containerProps?.className)}>
       <div
         {...props}
-        ref={ReactRefsUtil.assingRefsBuilder([controlRef, forwardedRef])}
+        ref={ReactUtils.assingRefsBuilder([controlRef, forwardedRef])}
         id={ids.input}
 
         tabIndex={-1}

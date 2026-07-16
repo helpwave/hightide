@@ -1,5 +1,5 @@
 import { Text } from 'lucide-react'
-import { useHightideTranslation } from '@/src/i18n/useHightideTranslation'
+import { useHightideTranslation } from '@helpwave/hightide-utils/context/translation'
 import { Textarea } from '@/src/components/user-interaction/Textarea'
 import type { PropertyField } from './PropertyBase'
 import { PropertyBase } from './PropertyBase'

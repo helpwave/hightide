@@ -2,7 +2,7 @@ import type { ColumnDef } from '@tanstack/react-table'
 import { memo,  useEffect,  useMemo, useState } from 'react'
 import { useTableColumnDefinitionContext } from './TableContext'
 import type { DataType } from '../../user-interaction/data/data-types'
-import { useLogOnce } from '@/src/hooks/useLogOnce'
+import { useLogOnce } from '@helpwave/hightide-utils/hooks'
 
 export type TableColumnProps<T> = ColumnDef<T> & {
   filterType?: DataType,

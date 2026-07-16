@@ -1,4 +1,4 @@
-import { ArrayUtil } from '@/src/utils/array'
+import { ArrayUtil } from '@helpwave/hightide-utils/utils'
 import clsx from 'clsx'
 import type { AnchorHTMLAttributes, ElementType, HTMLAttributes, ReactNode } from 'react'
 

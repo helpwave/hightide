@@ -1,5 +1,5 @@
 import type { ReactNode } from 'react'
-import type { TreeNode } from '@/src/hooks/trees/types'
+import type { TreeNode } from '@helpwave/hightide-utils/hooks'
 
 export interface NavigationItemData {
   id: string,

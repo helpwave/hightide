@@ -1,9 +1,9 @@
 import clsx from 'clsx'
 import { useCallback, useMemo, useRef } from 'react'
 import type { FormFieldDataHandling } from '@/src/components/form/FormField'
-import { useControlledState } from '@/src/hooks/useControlledState'
-import type { DateTimePrecision } from '@/src/utils/date'
-import { useDateTimeFormat } from '@/src/global-contexts/LocaleContext'
+import { useControlledState } from '@helpwave/hightide-utils/hooks'
+import type { DateTimePrecision } from '@helpwave/hightide-utils/utils'
+import { useDateTimeFormat } from '@/src/global-contexts/localization'
 import { Visibility } from '@/src/components/layout/Visibility'
 import { Button } from '@/src/components/user-interaction/Button'
 import { NumberStepperInput } from '@/src/components/user-interaction/input/NumberStepperInput'
@@ -12,7 +12,7 @@ import type {
   TimePickerMinuteIncrement,
   TimePickerSecondIncrement
 } from './TimePicker'
-import type { StepperLoopEvent } from '@/src/hooks/useStepperHold'
+import type { StepperLoopEvent } from '@helpwave/hightide-utils/hooks'
 
 const padTwoDigits = (value: number) => String(Math.round(value)).padStart(2, '0')
 

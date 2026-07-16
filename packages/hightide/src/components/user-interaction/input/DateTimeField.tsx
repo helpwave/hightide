@@ -1,13 +1,13 @@
 import type { FocusEvent, HTMLAttributes, KeyboardEvent } from 'react'
 import { forwardRef, useEffect, useLayoutEffect, useMemo, useRef, useState } from 'react'
 import clsx from 'clsx'
-import { useControlledState } from '@/src/hooks/useControlledState'
-import { useLocale } from '@/src/global-contexts/LocaleContext'
-import { useHightideTranslation } from '@/src/i18n/useHightideTranslation'
+import { useControlledState } from '@helpwave/hightide-utils/hooks'
+import { useLocalization } from '@/src/global-contexts/localization'
+import { useHightideTranslation } from '@helpwave/hightide-utils/context/translation'
 import { PropsUtil } from '@/src/utils/propsUtil'
 import type { FormFieldInteractionStates } from '@/src/components/form/FieldLayout'
 import type { FormFieldDataHandling } from '@/src/components/form/FormField'
-import type { DateTimeFormat, DateTimePrecision } from '@/src/utils/date'
+import type { DateTimeFormat, DateTimePrecision } from '@helpwave/hightide-utils/utils'
 import type { EditableSegmentType, SegmentEditState } from './dateTimeSegments'
 import {
   buildSegmentLayout,
@@ -54,7 +54,7 @@ export const DateTimeField = forwardRef<HTMLDivElement, DateTimeFieldProps>(func
   ...props
 }, forwardedRef) {
   const translation = useHightideTranslation()
-  const { locale: contextLocale, is24HourFormat: contextIs24HourFormat } = useLocale()
+  const { locale: contextLocale, is24HourFormat: contextIs24HourFormat } = useLocalization()
   const locale = localeOverride ?? contextLocale
 
   const [value, setValue] = useControlledState<Date | null>({

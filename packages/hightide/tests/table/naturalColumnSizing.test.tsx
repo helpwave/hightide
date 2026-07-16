@@ -2,11 +2,13 @@
  * @jest-environment jsdom
  */
 import { render } from '@testing-library/react'
-import { LocaleContext } from '../../src/global-contexts/LocaleContext'
+import { TestHightideProvider } from '../setup/TestHightideProvider'
 import { Table } from '../../src/components/layout/table/Table'
 import { TableColumn } from '../../src/components/layout/table/TableColumn'
 
 type Row = { id: string, name: string, grade: string }
+
+
 
 const DATA: Row[] = [
   { id: '1', name: 'Alice Doe', grade: 'A' },
@@ -14,7 +16,7 @@ const DATA: Row[] = [
 ]
 
 const renderTable = (columnSizingMode?: 'fill' | 'natural') => render(
-  <LocaleContext.Provider value={{ locale: 'en-US', setLocale: () => {} }}>
+  <TestHightideProvider locale="en-US">
     <Table
       table={{ data: DATA, columnSizingMode, isUsingFillerRows: false }}
       paginationOptions={{ showPagination: false }}
@@ -22,7 +24,7 @@ const renderTable = (columnSizingMode?: 'fill' | 'natural') => render(
       <TableColumn<Row> id="name" header="Name" accessorKey="name" minSize={120}/>
       <TableColumn<Row> id="grade" header="Grade" accessorKey="grade" minSize={48}/>
     </Table>
-  </LocaleContext.Provider>
+  </TestHightideProvider>
 )
 
 describe('table column sizing modes', () => {

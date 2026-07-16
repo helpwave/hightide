@@ -1,5 +1,5 @@
-import { validateEmail } from '@/src/utils/emailValidation'
-import { useHightideTranslation } from '@/src/i18n/useHightideTranslation'
+import { validateEmail } from '@helpwave/hightide-utils/utils'
+import { useHightideTranslation } from '@helpwave/hightide-utils/context/translation'
 import { useMemo } from 'react'
 
 export type ValidatorError =

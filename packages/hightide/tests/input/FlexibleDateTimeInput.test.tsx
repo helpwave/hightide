@@ -3,15 +3,17 @@
  */
 import { useState } from 'react'
 import { act, fireEvent, render, screen } from '@testing-library/react'
-import { LocaleContext } from '../../src/global-contexts/LocaleContext'
+import { TestHightideProvider } from '../setup/TestHightideProvider'
 import { FlexibleDateTimeInput, type FlexibleDateTimeInputProps } from '../../src/components/user-interaction/input/FlexibleDateTimeInput'
+
+
 
 const renderFlexible = (props: Partial<FlexibleDateTimeInputProps> & { defaultMode: 'date' | 'dateTime' }) => {
   const onValueChange = jest.fn()
   const Wrapper = () => {
     const [value, setValue] = useState<Date | null>(props.initialValue ?? null)
     return (
-      <LocaleContext.Provider value={{ locale: 'de-DE', setLocale: () => {} }}>
+      <TestHightideProvider locale="de-DE">
         <FlexibleDateTimeInput
           {...props}
           value={value}
@@ -20,7 +22,7 @@ const renderFlexible = (props: Partial<FlexibleDateTimeInputProps> & { defaultMo
             setValue(next)
           }}
         />
-      </LocaleContext.Provider>
+      </TestHightideProvider>
     )
   }
   render(<Wrapper/>)

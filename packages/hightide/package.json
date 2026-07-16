@@ -26,9 +26,6 @@
   "main": "dist/index.cjs",
   "module": "dist/index.js",
   "types": "dist/index.d.ts",
-  "bin": {
-    "barrel": "dist/scripts/barrel.js"
-  },
   "exports": {
     ".": {
       "require": "./dist/index.cjs",
@@ -39,10 +36,9 @@
   },
   "scripts": {
     "clean": "pnpm run barrel -- --clean && rm -rf dist node_modules",
-    "build-intl": "npx build-intl --force -i ./locales -o ./src/i18n/translations.ts -n hightideTranslation",
     "build-css": "NODE_ENV=production node scripts/build-css.mjs",
-    "barrel": "node scripts/barrel.js",
-    "build": "npm run build-intl && npm run barrel && tsup && npm run build-css && cp -R src/style/ ./dist/style/uncompiled/ && cp -R scripts/ ./dist/scripts/",
+    "barrel": "node node_modules/@helpwave/hightide-utils/scripts/barrel.js",
+    "build": "pnpm run barrel && tsup && pnpm run build-css && cp -R src/style/ ./dist/style/uncompiled/",
     "storybook": "storybook dev -p 6006",
     "storybook:devices": "storybook dev -p 6006 --host",
     "build-storybook": "storybook build",
@@ -51,6 +47,7 @@
     "test": "jest"
   },
   "dependencies": {
+    "@helpwave/hightide-utils": "workspace:*",
     "@helpwave/internationalization": "0.4.0",
     "@tailwindcss/cli": "4.1.18",
     "@tanstack/react-table": "8.21.3",
@@ -72,7 +69,7 @@
     "@helpwave/eslint-config": "0.0.11",
     "@storybook/addon-docs": "10.4.5",
     "@storybook/addon-links": "10.4.5",
-    "@storybook/nextjs-vite": "10.4.5",
+    "@storybook/react-vite": "10.4.5",
     "@tailwindcss/postcss": "4.1.18",
     "@testing-library/react": "16.3.0",
     "@types/jest": "30.0.0",

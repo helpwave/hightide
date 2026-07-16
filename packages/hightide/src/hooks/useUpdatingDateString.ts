@@ -1,7 +1,7 @@
 import { useEffect, useState } from 'react'
-import { DateUtils, type DateTimeFormat } from '../utils/date'
-import type { HightideTranslationLocales } from '../i18n/translations'
-import { useLocale } from '../global-contexts/LocaleContext'
+import { DateUtils, type DateTimeFormat } from '@helpwave/hightide-utils/utils'
+import type { HightideTranslationLocales } from '@helpwave/hightide-utils/i18n'
+import { useLocalization } from '../global-contexts/localization'
 
 export interface UseUpdatingDateStringProps {
   date: Date,
@@ -18,7 +18,7 @@ type DateAndTimeStrings = {
 }
 
 export const useUpdatingDateString = ({ absoluteFormat = 'dateTime', localeOverride, is24HourFormat: is24HourFormatOverride, timeZone: timeZoneOverride, date }: UseUpdatingDateStringProps) => {
-  const { locale: contextLocale, is24HourFormat: contextIs24HourFormat, timeZone: contextTimeZone } = useLocale()
+  const { locale: contextLocale, is24HourFormat: contextIs24HourFormat, timeZone: contextTimeZone } = useLocalization()
   const locale = localeOverride ?? contextLocale
   const is24HourFormat = is24HourFormatOverride ?? contextIs24HourFormat ?? true
   const timeZone = timeZoneOverride ?? contextTimeZone

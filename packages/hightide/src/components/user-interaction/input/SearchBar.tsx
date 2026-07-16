@@ -2,11 +2,11 @@ import type { InputProps } from './Input'
 import { Input } from './Input'
 import { Search } from 'lucide-react'
 import { clsx } from 'clsx'
-import { useHightideTranslation } from '@/src/i18n/useHightideTranslation'
+import { useHightideTranslation } from '@helpwave/hightide-utils/context/translation'
 import type { HTMLAttributes } from 'react'
 import type { IconButtonProps } from '../IconButton'
 import { IconButton } from '../IconButton'
-import { useControlledState } from '@/src/hooks/useControlledState'
+import { useControlledState } from '@helpwave/hightide-utils/hooks'
 
 export type SearchBarProps = Omit<InputProps, 'onValueChange' | 'onEditComplete'> & {
   onValueChange?: (value: string) => void,

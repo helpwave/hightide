@@ -2,7 +2,7 @@ import type { Meta, StoryObj } from '@storybook/nextjs-vite'
 import { clsx } from 'clsx'
 import type { CarouselProps } from '@/src/components/layout/Carousel'
 import { Carousel } from '@/src/components/layout/Carousel'
-import { range } from '@/src/utils/array'
+import { range } from '@helpwave/hightide-utils/utils'
 
 type StoryArgs = CarouselProps & {
   hasBlur?: boolean,

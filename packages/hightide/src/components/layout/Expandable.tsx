@@ -6,8 +6,8 @@ import clsx from 'clsx'
 import { Visibility } from './Visibility'
 import { ExpansionIcon } from '../display-and-visualization/ExpansionIcon'
 import { useTransitionState } from '@/src/hooks/useTransitionState'
-import { useControlledState } from '@/src/hooks/useControlledState'
-import { ReactRefsUtil } from '@/src/utils/reactRefs'
+import { useControlledState } from '@helpwave/hightide-utils/hooks'
+import { ReactUtils } from '@helpwave/hightide-utils/utils'
 
 //
 // Context
@@ -187,7 +187,7 @@ export const ExpandableContent = forwardRef<HTMLDivElement, ExpandableContentPro
   return (
     <div
       {...props}
-      ref={ReactRefsUtil.assingRefsBuilder([ref, forwardedRef])}
+      ref={ReactUtils.assingRefsBuilder([ref, forwardedRef])}
       id={ids.content}
       data-name={props['data-name'] ?? 'expandable-content'}
       data-expanded={isExpanded ? '' : undefined}

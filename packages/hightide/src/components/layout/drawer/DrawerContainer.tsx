@@ -1,12 +1,12 @@
 import { forwardRef, useId, useMemo, useRef, type HTMLAttributes } from 'react'
 import { useFocusTrap } from '@/src/hooks/focus/useFocusTrap'
-import { useOverlayRegistry } from '@/src/hooks/useOverlayRegistry'
+import { useOverlayRegistry } from '@helpwave/hightide-utils/hooks'
 import { useTransitionState } from '@/src/hooks/useTransitionState'
 import { PropsUtil } from '@/src/utils/propsUtil'
 import { Portal } from '../../utils/Portal'
 import { useDrawerContext } from './DrawerContext'
 import type { DrawerAligment } from './Drawer'
-import { ReactRefsUtil } from '@/src/utils/reactRefs'
+import { ReactUtils } from '@helpwave/hightide-utils/utils'
 import clsx from 'clsx'
 
 export type DrawerContainerProps = HTMLAttributes<HTMLDivElement> & {
@@ -72,7 +72,7 @@ export const DrawerContainer = forwardRef<HTMLDivElement, DrawerContainerProps>(
         <div
           {...props}
           id={ids.container}
-          ref={ReactRefsUtil.assingRefsBuilder([ref, forwardedRef])}
+          ref={ReactUtils.assingRefsBuilder([ref, forwardedRef])}
           onKeyDown={PropsUtil.aria.close(() => setOpen(false))}
           className="drawer-container"
           data-state={transitionState}

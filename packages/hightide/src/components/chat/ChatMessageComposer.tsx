@@ -3,7 +3,7 @@ import { useCallback, useLayoutEffect, useRef } from 'react'
 import clsx from 'clsx'
 import { SendHorizontal } from 'lucide-react'
 import { IconButton } from '../user-interaction/IconButton'
-import { useControlledState } from '@/src/hooks/useControlledState'
+import { useControlledState } from '@helpwave/hightide-utils/hooks'
 import { useWindowResizeObserver } from '@/src/hooks/useWindowResizeObserver'
 
 const MAX_INPUT_LINES = 7

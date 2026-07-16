@@ -1,7 +1,7 @@
 import { useCallback, useMemo } from 'react'
-import { useListNavigation } from '@/src/hooks/useListNavigation'
-import { useControlledState } from '@/src/hooks/useControlledState'
-import { useSearch } from '@/src/hooks/useSearch'
+import { useListNavigation } from '@helpwave/hightide-utils/hooks'
+import { useControlledState } from '@helpwave/hightide-utils/hooks'
+import { useSearch } from '@helpwave/hightide-utils/hooks'
 
 export interface UseComboboxOption {
   id: string,

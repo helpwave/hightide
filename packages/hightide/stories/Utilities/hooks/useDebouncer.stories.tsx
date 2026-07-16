@@ -4,7 +4,7 @@ import { useState } from 'react'
 
 import { Button } from '@/src/components/user-interaction/Button'
 import { Input } from '@/src/components/user-interaction/input/Input'
-import { useDebouncer } from '@/src/hooks/useDebouncer'
+import { useDebouncer } from '@helpwave/hightide-utils/hooks'
 
 type StoryArgs = {
   debounceMs: number,

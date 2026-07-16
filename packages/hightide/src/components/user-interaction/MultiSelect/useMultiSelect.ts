@@ -4,11 +4,11 @@ import {
   useMemo,
   useState
 } from 'react'
-import { useMultiSelection } from '@/src/hooks/useMultiSelection'
-import { useListNavigation } from '@/src/hooks/useListNavigation'
-import { useEventCallbackStabilizer } from '@/src/hooks/useEventCallbackStabelizer'
-import { useSearch } from '@/src/hooks/useSearch'
-import { useTypeAheadSearch } from '@/src/hooks/useTypeAheadSearch'
+import { useMultiSelection } from '@helpwave/hightide-utils/hooks'
+import { useListNavigation } from '@helpwave/hightide-utils/hooks'
+import { useEventCallbackStabilizer } from '@helpwave/hightide-utils/hooks'
+import { useSearch } from '@helpwave/hightide-utils/hooks'
+import { useTypeAheadSearch } from '@helpwave/hightide-utils/hooks'
 
 export interface UseMultiSelectOption {
   id: string,

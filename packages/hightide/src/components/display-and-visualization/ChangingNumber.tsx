@@ -1,7 +1,7 @@
 import type { ReactNode } from 'react'
-import { useChangingNumber } from '@/src/hooks/useChangingNumber'
-import type { Curve } from '@/src/utils/curve'
-import { CurveBuilderUtil } from '@/src/utils/curve'
+import { useChangingNumber } from '@helpwave/hightide-utils/hooks'
+import type { Curve } from '@helpwave/hightide-utils/utils'
+import { CurveBuilderUtil } from '@helpwave/hightide-utils/utils'
 
 export type ChangingNumberProps = {
   start: number,

@@ -2,11 +2,11 @@ import type { ComponentProps, ForwardedRef } from 'react'
 import { forwardRef, useCallback, useEffect, useRef } from 'react'
 import { useSelectContext } from './SelectContext'
 import clsx from 'clsx'
-import { useHightideTranslation } from '@/src/i18n/useHightideTranslation'
+import { useHightideTranslation } from '@helpwave/hightide-utils/context/translation'
 import { PopUp, type PopUpProps } from '@/src/components/layout/popup/PopUp'
 import { Input } from '@/src/components/user-interaction/input/Input'
 import { Visibility } from '@/src/components/layout/Visibility'
-import { ReactRefsUtil } from '@/src/utils/reactRefs'
+import { ReactUtils } from '@helpwave/hightide-utils/utils'
 
 export interface SelectContentProps extends PopUpProps {
   showSearch?: boolean,
@@ -105,7 +105,7 @@ export const SelectContent = forwardRef<HTMLUListElement, SelectContentProps>(fu
         />
       )}
       <ul
-        ref={ReactRefsUtil.assingRefsBuilder([innerRef, ref])}
+        ref={ReactUtils.assingRefsBuilder([innerRef, ref])}
         id={context.config.ids.listbox}
         onKeyDown={showSearch ? undefined : keyHandler}
         role="listbox"

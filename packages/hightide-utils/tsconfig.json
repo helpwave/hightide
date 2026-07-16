@@ -1,0 +1,35 @@
+{
+  "compilerOptions": {
+    "target": "ES2019",
+    "moduleResolution": "bundler",
+    "module": "ESNext",
+    "outDir": "dist",
+    "rootDir": ".",
+    "declaration": false,
+    "jsx": "react-jsx",
+    "esModuleInterop": true,
+    "skipLibCheck": true,
+    "lib": [
+      "ES2020",
+      "ES2020.Intl",
+      "DOM"
+    ],
+    "paths": {
+      "@/*": [
+        "./*"
+      ]
+    },
+    "types": [
+      "jest",
+      "node"
+    ]
+  },
+  "include": [
+    "src",
+    "tests"
+  ],
+  "exclude": [
+    "dist",
+    "node_modules"
+  ]
+}

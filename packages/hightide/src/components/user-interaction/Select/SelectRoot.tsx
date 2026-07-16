@@ -5,7 +5,7 @@ import type { SelectContextConfig, SelectContextLayout, SelectOptionType } from 
 import { useSelect } from '@/src/components/user-interaction/Select/useSelect'
 import { DOMUtils } from '@/src/utils/dom'
 import type { FormFieldDataHandling } from '@/src/components/form/FormField'
-import { useEventCallbackStabilizer } from '@/src/hooks/useEventCallbackStabelizer'
+import { useEventCallbackStabilizer } from '@helpwave/hightide-utils/hooks'
 import type { FormFieldInteractionStates } from '@/src/components/form/FieldLayout'
 import { PopUpContext } from '@/src/components/layout/popup/PopUpContext'
 

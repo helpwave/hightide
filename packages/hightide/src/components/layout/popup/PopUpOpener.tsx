@@ -1,6 +1,6 @@
 import { useEffect, useMemo, useRef, type ReactNode } from 'react'
 import { usePopUpContext } from './PopUpContext'
-import { BagFunctionUtil } from '@/src/utils/bagFunctions'
+import { BagFunctionUtil } from '@helpwave/hightide-utils/utils'
 import type { RefObject } from 'react'
 
 export interface PopUpOpenerBag<T extends HTMLElement> {

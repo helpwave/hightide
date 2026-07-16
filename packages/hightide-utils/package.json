@@ -1,0 +1,86 @@
+{
+  "name": "@helpwave/hightide-utils",
+  "private": true,
+  "description": "helpwave's utility library",
+  "author": "helpwave <support@helpwave.de> (https://helpwave.de)",
+  "homepage": "https://helpwave.de",
+  "repository": {
+    "url": "git+https://github.com/helpwave/hightide.git"
+  },
+  "license": "AGPL-3.0-only",
+  "version": "0.0.1",
+  "type": "module",
+  "files": [
+    "src",
+    "scripts/barrel.js"
+  ],
+  "exports": {
+    "./context": {
+      "types": "./src/context/index.ts",
+      "default": "./src/context/index.ts"
+    },
+    "./context/localization": {
+      "types": "./src/context/localization/index.ts",
+      "default": "./src/context/localization/index.ts"
+    },
+    "./context/translation": {
+      "types": "./src/context/translation/index.ts",
+      "default": "./src/context/translation/index.ts"
+    },
+    "./context/theme": {
+      "types": "./src/context/theme/index.ts",
+      "default": "./src/context/theme/index.ts"
+    },
+    "./hooks": {
+      "types": "./src/hooks/index.ts",
+      "default": "./src/hooks/index.ts"
+    },
+    "./i18n": {
+      "types": "./src/i18n/index.ts",
+      "default": "./src/i18n/index.ts"
+    },
+    "./utils": {
+      "types": "./src/utils/index.ts",
+      "default": "./src/utils/index.ts"
+    }
+  },
+  "bin": {
+    "barrel": "scripts/barrel.js"
+  },
+  "scripts": {
+    "clean": "pnpm run barrel -- --clean && rm -rf node_modules",
+    "barrel": "node scripts/barrel.js",
+    "barrel:check": "node scripts/barrel.js --check",
+    "build-intl": "build-intl --force -i ./locales -o ./src/i18n/translations.ts -n hightideTranslation",
+    "init": "pnpm run build-intl && pnpm run barrel",
+    "build": "node -e \"process.exit(0)\"",
+    "lint": "eslint .",
+    "test": "jest"
+  },
+  "dependencies": {
+    "@helpwave/internationalization": "0.4.0"
+  },
+  "peerDependencies": {
+    "react": "^19.0.0"
+  },
+  "devDependencies": {
+    "@helpwave/eslint-config": "0.0.11",
+    "@testing-library/react": "16.3.0",
+    "@types/jest": "30.0.0",
+    "@types/node": "20.19.43",
+    "@types/react": "19.2.3",
+    "eslint": "9.31.0",
+    "jest": "30.2.0",
+    "jest-environment-jsdom": "30.2.0",
+    "react": "19.2.3",
+    "ts-jest": "29.4.6",
+    "typescript": "5.7.2"
+  },
+  "keywords": [
+    "utilities",
+    "typescript"
+  ],
+  "bugs": {
+    "url": "https://github.com/helpwave/hightide/issues"
+  }
+}

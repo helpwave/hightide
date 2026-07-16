@@ -1,11 +1,11 @@
 import { forwardRef, useState } from 'react'
 import { ClockFading, ClockPlus } from 'lucide-react'
-import { DateUtils, type DateTimeFormat } from '@/src/utils/date'
+import { DateUtils, type DateTimeFormat } from '@helpwave/hightide-utils/utils'
 import { DateTimeInput, type DateTimeInputProps } from './DateTimeInput'
-import { useControlledState } from '@/src/hooks/useControlledState'
+import { useControlledState } from '@helpwave/hightide-utils/hooks'
 import { IconButton } from '../IconButton'
-import { useHightideTranslation } from '@/src/i18n/useHightideTranslation'
-import { useLocale } from '@/src/global-contexts/LocaleContext'
+import { useHightideTranslation } from '@helpwave/hightide-utils/context/translation'
+import { useLocalization } from '@/src/global-contexts/localization'
 
 export interface FlexibleDateTimeInputProps extends Omit<DateTimeInputProps, 'mode'> {
   defaultMode: Exclude<DateTimeFormat, 'time'>,
@@ -23,7 +23,7 @@ export const FlexibleDateTimeInput = forwardRef<HTMLDivElement, FlexibleDateTime
   ...props
 }, forwardedRef) {
   const translation = useHightideTranslation()
-  const { timeZone: contextTimeZone } = useLocale()
+  const { timeZone: contextTimeZone } = useLocalization()
   const timeZone = timeZoneOverride ?? contextTimeZone
   const fixedTime = fixedTimeOverride ?? new Date(1970, 0, 1, 23, 59, 59, 999)
   const [value, setValue] = useControlledState<Date | null>({

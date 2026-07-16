@@ -1,27 +1,25 @@
 import type { PropsWithChildren, ReactNode } from 'react'
 import type { DialogProps } from '@/src/components/layout/dialog/Dialog'
 import { Dialog } from '@/src/components/layout/dialog/Dialog'
-import { LocalizationUtil } from '@/src/i18n/util'
-import { useLocale } from '@/src/global-contexts/LocaleContext'
+import { useLocalization } from '@/src/global-contexts/localization'
 import { Button } from '@/src/components/user-interaction/Button'
-import { useHightideTranslation } from '@/src/i18n/useHightideTranslation'
-import type { HightideTranslationLocales } from '@/src/i18n/translations'
 import type { SelectProps } from '@/src/components/user-interaction/Select/Select'
 import { Select } from '@/src/components/user-interaction/Select/Select'
 import { SelectOption } from '@/src/components/user-interaction/Select/SelectOption'
 import clsx from 'clsx'
+import { useHightideTranslation } from '@helpwave/hightide-utils/context/translation'
 
 type LanguageSelectProps = Omit<SelectProps, 'value' | 'children'>
 
 export const LanguageSelect = ({ ...props }: LanguageSelectProps) => {
-  const { locale, setLocale } = useLocale()
+  const { locale, setLocale, supportedLocales } = useLocalization()
 
   return (
     <Select
       {...props}
       value={locale}
       onValueChange={(language: string) => {
-        setLocale(language as HightideTranslationLocales)
+        setLocale(language)
         props.onValueChange?.(language)
       }}
       buttonProps={{
@@ -29,9 +27,13 @@ export const LanguageSelect = ({ ...props }: LanguageSelectProps) => {
         className: clsx('min-w-40 w-fit', props.buttonProps?.className),
       }}
     >
-      {LocalizationUtil.locals.map((local) => (
-        <SelectOption key={local} value={local} label={LocalizationUtil.languagesLocalNames[local]}>
-          {LocalizationUtil.languagesLocalNames[local]}
+      {supportedLocales.map(({ locale: supportedLocale, localName }) => (
+        <SelectOption
+          key={supportedLocale}
+          value={supportedLocale}
+          label={localName}
+        >
+          {localName}
         </SelectOption>
       ))}
     </Select>
@@ -43,11 +45,6 @@ type LanguageDialogProps = Omit<DialogProps, 'titleElement' | 'description'> & P
   descriptionOverwrite?: ReactNode,
 }>
 
-/**
- * A Dialog for selecting the Language
- *
- * The State of open needs to be managed by the parent
- */
 export const LanguageDialog = ({
   onClose,
   titleOverwrite,

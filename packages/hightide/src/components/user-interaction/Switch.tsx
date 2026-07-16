@@ -1,8 +1,8 @@
 import { type HTMLAttributes, useCallback } from 'react'
 import type { FormFieldInteractionStates } from '../form/FieldLayout'
 import type { FormFieldDataHandling } from '../form/FormField'
-import { useControlledState } from '@/src/hooks/useControlledState'
-import { useEventCallbackStabilizer } from '@/src/hooks/useEventCallbackStabelizer'
+import { useControlledState } from '@helpwave/hightide-utils/hooks'
+import { useEventCallbackStabilizer } from '@helpwave/hightide-utils/hooks'
 import { PropsUtil } from '@/src/utils/propsUtil'
 
 export type SwitchProps = HTMLAttributes<HTMLDivElement>

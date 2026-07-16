@@ -1,4 +1,4 @@
-import { useHightideTranslation } from '@/src/i18n/useHightideTranslation'
+import { useHightideTranslation } from '@helpwave/hightide-utils/context/translation'
 import { Visibility } from '@/src/components/layout/Visibility'
 import { IconButton } from '@/src/components/user-interaction/IconButton'
 import { Check, TrashIcon } from 'lucide-react'
@@ -76,12 +76,12 @@ export const FilterBasePopUp = forwardRef<HTMLDivElement, FilterPopUpBaseProps>(
             buttonProps={{
               'data-name': 'filter-operator-select',
               'className': 'w-fit coloring-text-hover neutral flex-row-1 items-center h-element-sm px-2 py-1 rounded-md hover:cursor-pointer font-bold',
-              'selectedDisplay': (option) => option ? translation(FilterOperatorUtils.getInfo(option.value as FilterOperator).translationKey) : ''
+              'selectedDisplay': (option) => option ? translation(FilterOperatorUtils.getInfo(option.value as FilterOperator).translationKey as Parameters<typeof translation>[0]) : ''
             }}
             iconAppearance="right"
           >
             {operators.map((op) => (
-              <SelectOption key={op} value={op} label={translation(FilterOperatorUtils.getInfo(op).translationKey)}>
+              <SelectOption key={op} value={op} label={translation(FilterOperatorUtils.getInfo(op).translationKey as Parameters<typeof translation>[0])}>
                 <FilterOperatorLabel operator={op} />
               </SelectOption>
             ))}

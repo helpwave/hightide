@@ -2,7 +2,7 @@ import type { HTMLAttributes, RefObject } from 'react'
 import { forwardRef, useEffect, useRef } from 'react'
 import clsx from 'clsx'
 import { useComboboxContext } from './ComboboxContext'
-import { useHightideTranslation } from '@/src/i18n/useHightideTranslation'
+import { useHightideTranslation } from '@helpwave/hightide-utils/context/translation'
 
 export type ComboboxListProps = HTMLAttributes<HTMLUListElement>
 

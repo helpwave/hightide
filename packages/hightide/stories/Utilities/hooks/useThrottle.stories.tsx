@@ -4,7 +4,7 @@ import { useState } from 'react'
 
 import { Button } from '@/src/components/user-interaction/Button'
 import { Input } from '@/src/components/user-interaction/input/Input'
-import { useThrottle } from '@/src/hooks/useThrottle'
+import { useThrottle } from '@helpwave/hightide-utils/hooks'
 
 type StoryArgs = {
   throttleMs: number,

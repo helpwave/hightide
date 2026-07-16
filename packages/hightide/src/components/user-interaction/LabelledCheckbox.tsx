@@ -5,8 +5,8 @@ import { Checkbox, type CheckboxProps } from './Checkbox'
 import { PropsUtil } from '@/src/utils/propsUtil'
 import type { FormFieldDataHandling } from '../form/FormField'
 import type { FormFieldInteractionStates } from '../form/FieldLayout'
-import { useControlledState } from '@/src/hooks/useControlledState'
-import { useEventCallbackStabilizer } from '@/src/hooks/useEventCallbackStabelizer'
+import { useControlledState } from '@helpwave/hightide-utils/hooks'
+import { useEventCallbackStabilizer } from '@helpwave/hightide-utils/hooks'
 
 type LabelledCheckboxCheckPosition = 'left' | 'right'
 

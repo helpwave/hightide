@@ -1,7 +1,10 @@
 const { execSync } = require('node:child_process')
+const path = require('node:path')
 
 module.exports = () => {
-  execSync('npx build-intl --force -i ./locales -o ./src/i18n/translations.ts -n hightideTranslation', {
+  const utilsRoot = path.resolve(__dirname, '../../../hightide-utils')
+  execSync('npm run build-intl && npm run barrel', {
+    cwd: utilsRoot,
     stdio: 'inherit',
   })
 }

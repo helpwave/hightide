@@ -1,7 +1,7 @@
-import type { TreeItem } from '@/src/hooks/trees/types'
-import { TreeUtilities } from '@/src/hooks/trees/treeUtilities'
-import type { TreeExpansionOptions } from '@/src/hooks/trees/useTreeExpansion'
-import { useTreeExpansion } from '@/src/hooks/trees/useTreeExpansion'
+import type { TreeItem } from '@helpwave/hightide-utils/hooks'
+import { TreeUtilities } from '@helpwave/hightide-utils/hooks'
+import type { TreeExpansionOptions } from '@helpwave/hightide-utils/hooks'
+import { useTreeExpansion } from '@helpwave/hightide-utils/hooks'
 import type { ReactNode } from 'react'
 import { createContext, useCallback, useContext, useEffect, useMemo, useState } from 'react'
 

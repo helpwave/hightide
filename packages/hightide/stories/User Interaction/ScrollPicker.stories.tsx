@@ -1,5 +1,5 @@
 import type { Meta, StoryObj } from '@storybook/nextjs-vite'
-import { range } from '@/src/utils/array'
+import { range } from '@helpwave/hightide-utils/utils'
 import { ScrollPicker } from '@/src/components/user-interaction/ScrollPicker'
 
 const meta = {

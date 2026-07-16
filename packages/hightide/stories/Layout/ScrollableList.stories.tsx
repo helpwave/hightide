@@ -53,12 +53,12 @@ export const scrollableList: Story = {
 
 export const asNav: Story = {
   args: {
-    as: 'nav',
+    'as': 'nav',
     'aria-label': 'Sections',
-    className: 'surface coloring-solid rounded-lg border border-divider',
-    headerClassName: 'px-4 py-3 border-b border-divider',
-    contentClassName: 'px-2 py-1',
-    header: (
+    'className': 'surface coloring-solid rounded-lg border border-divider',
+    'headerClassName': 'px-4 py-3 border-b border-divider',
+    'contentClassName': 'px-2 py-1',
+    'header': (
       <span className="typography-title-md text-primary">{'Navigation'}</span>
     ),
   },

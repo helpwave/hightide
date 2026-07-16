@@ -1,14 +1,14 @@
 import { memo, useCallback, useEffect, useMemo, useRef, useState } from 'react'
-import { equalSizeGroups, range } from '@/src/utils/array'
+import { equalSizeGroups, range } from '@helpwave/hightide-utils/utils'
 import clsx from 'clsx'
 import { ExpandableContent, ExpandableHeader, ExpandableRoot } from '@/src/components/layout/Expandable'
-import { DateUtils } from '@/src/utils/date'
-import { useLocale } from '@/src/global-contexts/LocaleContext'
+import { DateUtils } from '@helpwave/hightide-utils/utils'
+import { useLocalization } from '@/src/global-contexts/localization'
 import { Button } from '@/src/components/user-interaction/Button'
 import type { FormFieldDataHandling } from '../../form/FormField'
 import { InfiniteScroll } from '../../layout/InifiniteScroll'
-import { useControlledState } from '@/src/hooks/useControlledState'
-import { useEventCallbackStabilizer } from '@/src/hooks/useEventCallbackStabelizer'
+import { useControlledState } from '@helpwave/hightide-utils/hooks'
+import { useEventCallbackStabilizer } from '@helpwave/hightide-utils/hooks'
 
 // A performance optimized component for displayig the year rows
 const YearRow = memo(function YearRow({
@@ -102,7 +102,7 @@ export const YearMonthPicker = ({
   onEditComplete,
   className,
 }: YearMonthPickerProps) => {
-  const { locale } = useLocale()
+  const { locale } = useLocalization()
   const [value, setValue] = useControlledState({
     value: controlledValue,
     onValueChange: onValueChange,

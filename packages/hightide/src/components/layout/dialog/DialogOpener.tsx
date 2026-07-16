@@ -1,6 +1,6 @@
 import { useMemo, type ReactNode } from 'react'
 import { useDialogContext } from './DialogContext'
-import { BagFunctionUtil } from '@/src/utils/bagFunctions'
+import { BagFunctionUtil } from '@helpwave/hightide-utils/utils'
 
 export interface DialogOpenerWrapperBag {
     open: () => void,

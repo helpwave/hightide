@@ -1,4 +1,4 @@
-import { MathUtil } from '@/src/utils/math'
+import { MathUtil } from '@helpwave/hightide-utils/utils'
 import type { ColumnSizingState } from '@tanstack/react-table'
 
 type ColumnSizeCalculateTargetBehavoir = 'equalOrHigher'

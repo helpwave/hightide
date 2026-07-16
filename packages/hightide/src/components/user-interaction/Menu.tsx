@@ -1,6 +1,6 @@
 import { type PropsWithChildren, type ReactNode, useCallback, useRef, useState } from 'react'
 import clsx from 'clsx'
-import { BagFunctionUtil } from '@/src/utils/bagFunctions'
+import { BagFunctionUtil } from '@helpwave/hightide-utils/utils'
 import type { PopUpProps } from '../layout/popup/PopUp'
 import { PopUp } from '../layout/popup/PopUp'
 

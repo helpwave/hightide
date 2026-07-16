@@ -1,4 +1,4 @@
-import { useControlledState } from '@/src/hooks/useControlledState'
+import { useControlledState } from '@helpwave/hightide-utils/hooks'
 import type { PropsWithChildren, RefObject } from 'react'
 import { useId, useMemo, useState } from 'react'
 import { PopUpContext } from './PopUpContext'

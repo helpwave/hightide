@@ -12,9 +12,9 @@ import React, {
 } from 'react'
 import clsx from 'clsx'
 import { ChevronLeft, ChevronRight } from 'lucide-react'
-import { createLoopingListWithIndex, range } from '@/src/utils/array'
-import { useHightideTranslation } from '@/src/i18n/useHightideTranslation'
-import { useEventCallbackStabilizer } from '@/src/hooks/useEventCallbackStabelizer'
+import { createLoopingListWithIndex, range } from '@helpwave/hightide-utils/utils'
+import { useHightideTranslation } from '@helpwave/hightide-utils/context/translation'
+import { useEventCallbackStabilizer } from '@helpwave/hightide-utils/hooks'
 import { IconButton } from '../user-interaction/IconButton'
 
 //

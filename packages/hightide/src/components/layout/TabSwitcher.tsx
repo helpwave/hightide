@@ -3,10 +3,10 @@ import { useCallback, useId, useState } from 'react'
 import { createContext, useContext, useEffect, useRef } from 'react'
 import clsx from 'clsx'
 import { PropsUtil } from '@/src/utils/propsUtil'
-import { resolveSetState } from '@/src/utils/resolveSetState'
+import { resolveSetState } from '@helpwave/hightide-utils/utils'
 import { createPortal } from 'react-dom'
 import { Visibility } from './Visibility'
-import { useControlledState } from '@/src/hooks/useControlledState'
+import { useControlledState } from '@helpwave/hightide-utils/hooks'
 
 export interface TabInfo {
   id: string,

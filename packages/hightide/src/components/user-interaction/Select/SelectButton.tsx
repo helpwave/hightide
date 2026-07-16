@@ -2,10 +2,10 @@ import type { ComponentPropsWithoutRef, ForwardedRef, ReactNode } from 'react'
 import { forwardRef, useEffect, useRef } from 'react'
 import type { SelectOptionType } from './SelectContext'
 import { useSelectContext } from './SelectContext'
-import { useHightideTranslation } from '@/src/i18n/useHightideTranslation'
+import { useHightideTranslation } from '@helpwave/hightide-utils/context/translation'
 import { ExpansionIcon } from '@/src/components/display-and-visualization/ExpansionIcon'
 import { SelectOptionDisplayContext } from './SelectOption'
-import { ReactRefsUtil } from '@/src/utils/reactRefs'
+import { ReactUtils } from '@helpwave/hightide-utils/utils'
 
 export interface SelectButtonProps<T = string> extends ComponentPropsWithoutRef<'div'> {
   'placeholder'?: ReactNode,
@@ -54,7 +54,7 @@ export const SelectButton = forwardRef<HTMLDivElement, SelectButtonProps<unknown
     return (
       <div
         {...props}
-        ref={ReactRefsUtil.assingRefsBuilder([innerRef, ref])}
+        ref={ReactUtils.assingRefsBuilder([innerRef, ref])}
         id={context.config.ids.trigger}
         onClick={(event) => {
           if (!hasInteractions) return

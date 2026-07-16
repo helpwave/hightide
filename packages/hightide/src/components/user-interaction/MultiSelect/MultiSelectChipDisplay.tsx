@@ -6,9 +6,9 @@ import { MultiSelectRoot } from './MultiSelectRoot'
 import type { MultiSelectContentProps } from './MultiSelectContent'
 import { MultiSelectContent } from './MultiSelectContent'
 import { IconButton } from '@/src/components/user-interaction/IconButton'
-import { useHightideTranslation } from '@/src/i18n/useHightideTranslation'
+import { useHightideTranslation } from '@helpwave/hightide-utils/context/translation'
 import { XIcon, Plus } from 'lucide-react'
-import { ReactRefsUtil } from '@/src/utils/reactRefs'
+import { ReactUtils } from '@helpwave/hightide-utils/utils'
 
 export type MultiSelectChipDisplayButtonProps = HTMLAttributes<HTMLDivElement> & {
   'disabled'?: boolean,
@@ -48,7 +48,7 @@ export const MultiSelectChipDisplayButton = forwardRef<
   return (
     <div
       {...props}
-      ref={ReactRefsUtil.assingRefsBuilder([innerRef, ref])}
+      ref={ReactUtils.assingRefsBuilder([innerRef, ref])}
       onClick={(event) => {
         props.onClick?.(event)
         if (event.defaultPrevented) return

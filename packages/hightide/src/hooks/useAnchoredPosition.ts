@@ -2,7 +2,7 @@
 
 import type { CSSProperties, RefObject } from 'react'
 import { useCallback, useEffect, useLayoutEffect, useMemo, useRef, useState } from 'react'
-import { MathUtil } from '@/src/utils/math'
+import { MathUtil } from '@helpwave/hightide-utils/utils'
 import { useWindowResizeObserver } from './useWindowResizeObserver'
 import { useResizeObserver } from './useResizeObserver'
 import { useScrollObserver } from './useScrollObserver'

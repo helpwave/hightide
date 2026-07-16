@@ -1,7 +1,7 @@
 import type { Meta, StoryObj } from '@storybook/nextjs-vite'
 import { useCallback, useState } from 'react'
 import { faker } from '@faker-js/faker'
-import { range } from '@/src/utils/array'
+import { range } from '@helpwave/hightide-utils/utils'
 import { Table } from '@/src/components/layout/table/Table'
 import { TableColumn } from '@/src/components/layout/table/TableColumn'
 import { Button } from '@/src/components/user-interaction/Button'

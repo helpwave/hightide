@@ -1,14 +1,10 @@
 import type { HTMLAttributes, ReactNode } from 'react'
 import { useId, useMemo, forwardRef } from 'react'
+import type { FormFieldInteractionStates } from '@/src/utils/propsUtil'
+
+export type { FormFieldInteractionStates }
 
 export type FormFieldAriaAttributes = Pick<HTMLAttributes<HTMLElement>, 'aria-labelledby' | 'aria-describedby' | 'aria-disabled' | 'aria-readonly' | 'aria-invalid' | 'aria-errormessage' | 'aria-required'>
-
-export type FormFieldInteractionStates = {
-  invalid: boolean,
-  disabled: boolean,
-  readOnly: boolean,
-  required: boolean,
-}
 
 export type FormFieldLayoutIds = {
   input: string,

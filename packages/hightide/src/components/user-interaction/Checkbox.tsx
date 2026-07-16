@@ -4,8 +4,8 @@ import { Visibility } from '../layout/Visibility'
 import { PropsUtil } from '@/src/utils/propsUtil'
 import type { FormFieldInteractionStates } from '../form/FieldLayout'
 import type { FormFieldDataHandling } from '../form/FormField'
-import { useControlledState } from '@/src/hooks/useControlledState'
-import { useEventCallbackStabilizer } from '@/src/hooks/useEventCallbackStabelizer'
+import { useControlledState } from '@helpwave/hightide-utils/hooks'
+import { useEventCallbackStabilizer } from '@helpwave/hightide-utils/hooks'
 
 type CheckBoxSize = 'sm' | 'md' | 'lg' | null
 

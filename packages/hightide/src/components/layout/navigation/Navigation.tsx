@@ -6,8 +6,8 @@ import clsx from 'clsx'
 import type { UseAnchoredPositionOptions } from '@/src/hooks/useAnchoredPosition'
 import { useAnchoredPosition } from '@/src/hooks/useAnchoredPosition'
 import { ExpansionIcon } from '@/src/components/display-and-visualization/ExpansionIcon'
-import { useOverlayRegistry } from '@/src/hooks/useOverlayRegistry'
-import { useHightideTranslation } from '@/src/i18n/useHightideTranslation'
+import { useOverlayRegistry } from '@helpwave/hightide-utils/hooks'
+import { useHightideTranslation } from '@helpwave/hightide-utils/context/translation'
 import { IconButton } from '../../user-interaction/IconButton'
 
 type SimpleNavigationItem = {

@@ -1,7 +1,7 @@
 import { useCallback, useEffect, useMemo, useRef, type ReactNode } from 'react'
 import type { FormEvent, FormStoreProps, FormValue } from './FormStore'
 import { FormStore } from './FormStore'
-import { useEventCallbackStabilizer } from '@/src/hooks/useEventCallbackStabelizer'
+import { useEventCallbackStabilizer } from '@helpwave/hightide-utils/hooks'
 
 export type UseCreateFormProps<T extends FormValue> = Omit<FormStoreProps<T>, 'validationBehaviour'> & {
   onFormSubmit: (values: T) => void,

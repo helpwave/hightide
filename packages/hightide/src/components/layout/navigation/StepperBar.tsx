@@ -1,9 +1,9 @@
 import { Check, ChevronLeft, ChevronRight } from 'lucide-react'
-import { useHightideTranslation } from '@/src/i18n/useHightideTranslation'
-import { range } from '@/src/utils/array'
+import { useHightideTranslation } from '@helpwave/hightide-utils/context/translation'
+import { range } from '@helpwave/hightide-utils/utils'
 import { Button } from '@/src/components/user-interaction/Button'
 import clsx from 'clsx'
-import { useControlledState } from '@/src/hooks/useControlledState'
+import { useControlledState } from '@helpwave/hightide-utils/hooks'
 
 export type StepperState = {
   currentStep: number,

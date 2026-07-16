@@ -1,12 +1,12 @@
 import type { LabelHTMLAttributes, ReactNode, TextareaHTMLAttributes } from 'react'
 import { forwardRef, useCallback, useId } from 'react'
 import clsx from 'clsx'
-import { useDelay, type UseDelayOptions } from '@/src/hooks/useDelay'
+import { useDelay, type UseDelayOptions } from '@helpwave/hightide-utils/hooks'
 import type { FormFieldInteractionStates } from '../form/FieldLayout'
 import type { FormFieldDataHandling } from '../form/FormField'
 import { PropsUtil } from '@/src/utils/propsUtil'
-import { useControlledState } from '@/src/hooks/useControlledState'
-import { useEventCallbackStabilizer } from '@/src/hooks/useEventCallbackStabelizer'
+import { useControlledState } from '@helpwave/hightide-utils/hooks'
+import { useEventCallbackStabilizer } from '@helpwave/hightide-utils/hooks'
 
 export type TextareaProps = Omit<TextareaHTMLAttributes<HTMLTextAreaElement>, 'value'>
   & Partial<FormFieldDataHandling<string>>

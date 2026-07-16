@@ -1,5 +1,5 @@
 import type { PropsWithChildren, ReactNode } from 'react'
-import { useHightideTranslation } from '@/src/i18n/useHightideTranslation'
+import { useHightideTranslation } from '@helpwave/hightide-utils/context/translation'
 import type { ConfirmDialogProps } from '@/src/components/layout/dialog/premade/ConfirmDialog'
 import { ConfirmDialog } from '@/src/components/layout/dialog/premade/ConfirmDialog'
 

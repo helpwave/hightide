@@ -1,8 +1,14 @@
 import type React from 'react'
-import type { SingleOrArray } from './typing'
-import { ArrayUtil } from './array'
-import type { FormFieldInteractionStates } from '../components/form/FieldLayout'
+import type { SingleOrArray } from '@helpwave/hightide-utils/utils'
+import { ArrayUtil } from '@helpwave/hightide-utils/utils'
 import type { HTMLAttributes } from 'react'
+
+export type FormFieldInteractionStates = {
+  invalid: boolean,
+  disabled: boolean,
+  readOnly: boolean,
+  required: boolean,
+}
 
 ///
 /// Data Attributes

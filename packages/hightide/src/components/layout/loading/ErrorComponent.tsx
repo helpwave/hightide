@@ -1,6 +1,6 @@
 import { AlertOctagon } from 'lucide-react'
 import clsx from 'clsx'
-import { useHightideTranslation } from '@/src/i18n/useHightideTranslation'
+import { useHightideTranslation } from '@helpwave/hightide-utils/context/translation'
 
 export type ErrorComponentProps = {
   errorText?: string,

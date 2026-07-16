@@ -2,12 +2,12 @@
 
 import type { HTMLAttributes, ReactNode } from 'react'
 import { forwardRef, useCallback, useContext, useId, useMemo, useRef } from 'react'
-import { useEventCallbackStabilizer } from '@/src/hooks/useEventCallbackStabelizer'
+import { useEventCallbackStabilizer } from '@helpwave/hightide-utils/hooks'
 import { X } from 'lucide-react'
-import { useHightideTranslation } from '@/src/i18n/useHightideTranslation'
+import { useHightideTranslation } from '@helpwave/hightide-utils/context/translation'
 import { useFocusTrap } from '@/src/hooks/focus/useFocusTrap'
-import { useLogOnce } from '@/src/hooks/useLogOnce'
-import { useOverlayRegistry } from '@/src/hooks/useOverlayRegistry'
+import { useLogOnce } from '@helpwave/hightide-utils/hooks'
+import { useOverlayRegistry } from '@helpwave/hightide-utils/hooks'
 import { Visibility } from '../Visibility'
 import { useTransitionState } from '@/src/hooks/useTransitionState'
 import { PropsUtil } from '@/src/utils/propsUtil'
@@ -16,7 +16,7 @@ import { FocusTrap } from '../../utils/FocusTrap'
 import { usePresenceRef } from '@/src/hooks/usePresenceRef'
 import { DialogContext } from './DialogContext'
 import { IconButton } from '../../user-interaction/IconButton'
-import { ReactRefsUtil } from '@/src/utils/reactRefs'
+import { ReactUtils } from '@helpwave/hightide-utils/utils'
 
 export type DialogPosition = 'top' | 'center' | 'none'
 
@@ -123,7 +123,7 @@ export const Dialog = forwardRef<HTMLDivElement, DialogProps>(function Dialog({
             <div
               {...props}
               id={ids.content}
-              ref={ReactRefsUtil.assingRefsBuilder([refAssignment, forwardedRef])}
+              ref={ReactUtils.assingRefsBuilder([refAssignment, forwardedRef])}
 
               onKeyDown={PropsUtil.aria.close(onCloseWrapper)}
 

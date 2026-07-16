@@ -1,7 +1,7 @@
 import { useMemo, useRef, useId } from 'react'
 import { ChevronUp, ChevronDown, ChevronLeft, ChevronRight, Eye, EyeOff, Pin, PinOff, Columns3Cog } from 'lucide-react'
 import type { ButtonProps } from '@/src/components/user-interaction/Button'
-import { useHightideTranslation } from '@/src/i18n/useHightideTranslation'
+import { useHightideTranslation } from '@helpwave/hightide-utils/context/translation'
 import type { PopUpProps } from '../popup/PopUp'
 import { PopUp } from '../popup/PopUp'
 import { PopUpRoot } from '../popup/PopUpRoot'

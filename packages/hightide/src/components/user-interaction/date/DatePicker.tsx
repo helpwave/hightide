@@ -1,18 +1,18 @@
 import { useState } from 'react'
 import { ArrowDown, ArrowUp, Calendar, ChevronDown } from 'lucide-react'
-import { DateUtils } from '@/src/utils/date'
+import { DateUtils } from '@helpwave/hightide-utils/utils'
+import { LocalizationUtil } from '@helpwave/hightide-utils/i18n'
 import clsx from 'clsx'
 import type { DayPickerProps } from '@/src/components/user-interaction/date/DayPicker'
 import { DayPicker } from '@/src/components/user-interaction/date/DayPicker'
 import type { YearMonthPickerProps } from '@/src/components/user-interaction/date/YearMonthPicker'
 import { YearMonthPicker } from '@/src/components/user-interaction/date/YearMonthPicker'
-import { useLocale } from '@/src/global-contexts/LocaleContext'
+import { useLocalization } from '@/src/global-contexts/localization'
 import { Button } from '@/src/components/user-interaction/Button'
-import { LocalizationUtil } from '@/src/i18n/util'
 import type { FormFieldDataHandling } from '../../form/FormField'
-import { useControlledState } from '@/src/hooks/useControlledState'
+import { useControlledState } from '@helpwave/hightide-utils/hooks'
 import { IconButton } from '../IconButton'
-import { useHightideTranslation } from '@/src/i18n/useHightideTranslation'
+import { useHightideTranslation } from '@helpwave/hightide-utils/context/translation'
 
 type DisplayMode = 'yearMonth' | 'day'
 
@@ -44,7 +44,7 @@ export const DatePicker = ({
   className
 }: DatePickerProps) => {
   const translation = useHightideTranslation()
-  const { locale } = useLocale()
+  const { locale } = useLocalization()
   const [value, setValue] = useControlledState({
     value: controlledValue,
     onValueChange: onValueChange,
@@ -63,7 +63,7 @@ export const DatePicker = ({
           color="neutral"
           onClick={() => setDisplayMode(displayMode === 'day' ? 'yearMonth' : 'day')}
         >
-          {`${new Intl.DateTimeFormat(LocalizationUtil.localToLanguage(locale), { month: 'short' }).format(displayedMonth)} ${displayedMonth.getFullYear()}`}
+          {`${new Intl.DateTimeFormat(LocalizationUtil.isoLocaleToLanguage(locale), { month: 'short' }).format(displayedMonth)} ${displayedMonth.getFullYear()}`}
           <ChevronDown size={16}/>
         </Button>
         <div className="flex-row-2 justify-end">

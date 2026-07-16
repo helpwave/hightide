@@ -1,5 +1,5 @@
-import { range } from '@/src/utils/array'
-import { BagFunctionUtil } from '@/src/utils/bagFunctions'
+import { range } from '@helpwave/hightide-utils/utils'
+import { BagFunctionUtil } from '@helpwave/hightide-utils/utils'
 import { flexRender } from '@tanstack/react-table'
 import { FillerCell } from './FillerCell'
 import React from 'react'

@@ -1,10 +1,10 @@
 import { ChevronFirst, ChevronLast, ChevronLeft, ChevronRight } from 'lucide-react'
 import clsx from 'clsx'
 import { Input } from '@/src/components/user-interaction/input/Input'
-import { MathUtil } from '@/src/utils/math'
+import { MathUtil } from '@helpwave/hightide-utils/utils'
 import type { HTMLAttributes } from 'react'
 import { useEffect, useState } from 'react'
-import { useHightideTranslation } from '@/src/i18n/useHightideTranslation'
+import { useHightideTranslation } from '@helpwave/hightide-utils/context/translation'
 import { IconButton } from '../../user-interaction/IconButton'
 
 export interface PaginationProps extends Omit<HTMLAttributes<HTMLDivElement>, 'children'> {

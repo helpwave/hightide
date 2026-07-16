@@ -1,8 +1,6 @@
 import { useCallback, useEffect, useState } from 'react'
 import clsx from 'clsx'
-import { getNeighbours, range } from '@/src/utils/array'
-import type { DirectionNumber } from '@/src/utils/math'
-import { MathUtil } from '@/src/utils/math'
+import { getNeighbours, range, MathUtil, type DirectionNumber } from '@helpwave/hightide-utils/utils'
 
 export type ScrollPickerProps<T> = {
   options: T[],
