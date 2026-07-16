@@ -70,7 +70,7 @@ export const Checkbox = ({
 
   const showIndicator = indeterminate || alwaysShowCheckIcon || value
   const indicatorColor = value || indeterminate ? semantic.onPrimary : semantic.primary
-  const borderColor = invalid ? semantic.negative : (value || indeterminate ? semantic.primary : component.border)
+  const borderColor = disabled ? semantic.disabled : invalid ? semantic.negative : (value || indeterminate ? semantic.primary : component.border)
   const backgroundColor = disabled
     ? semantic.disabled
     : (value || indeterminate ? semantic.primary : component.input.background)
