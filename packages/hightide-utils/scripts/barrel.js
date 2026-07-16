@@ -11,6 +11,7 @@ const EXCLUDE = ['style', 'storybook']
 // Check for --clean flag
 const CLEAN = process.argv.includes('--clean')
 const CHECK = process.argv.includes('--check')
+const WITH_ROOT = process.argv.includes('--with-root')
 
 const expectedBarrels = new Set()
 
@@ -123,7 +124,7 @@ function generateBarrel(dir, relativeDir = '') {
   const exports = collectExportsForDir(dir, relativeDir)
 
   // Skip the package root barrel; only folder-level exports are published.
-  if (exports.length && relativeDir !== '') {
+  if (exports.length && (relativeDir !== '' || WITH_ROOT)) {
     const barrelPath = path.join(dir, 'index.ts')
     fs.writeFileSync(barrelPath, exports.join('\n') + '\n')
     console.info('✔ Generated barrel:', barrelPath)

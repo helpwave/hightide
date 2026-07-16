@@ -1,3 +1,4 @@
+export * from '@helpwave/hightide-utils/i18n'
 export {
   TranslationContext,
   TranslationProvider,

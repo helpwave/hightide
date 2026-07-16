@@ -13,7 +13,10 @@ const config: StorybookConfig = {
   },
   docs: {},
   typescript: {
-    reactDocgen: 'react-docgen-typescript'
+    reactDocgen: 'react-docgen-typescript',
+    reactDocgenTypescriptOptions: {
+      tsconfigPath: path.resolve(dirname, '../tsconfig.storybook.json'),
+    },
   },
   core: {
     disableTelemetry: true,

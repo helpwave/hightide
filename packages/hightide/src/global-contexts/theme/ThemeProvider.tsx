@@ -1,12 +1,12 @@
 import type { PropsWithChildren } from 'react'
 import { useEffect } from 'react'
 import { useBrowserKeyValueStore } from '@helpwave/hightide-utils/hooks'
-import type { ThemeConfig as HightideThemeConfig } from '../hightide-config'
-import { useHightideConfig } from '../hightide-config'
+import type { ThemeConfig as HightideThemeConfig } from '@/src/global-contexts/hightide-config/HightideConfigContext'
+import { useHightideConfig } from '@/src/global-contexts/hightide-config/HightideConfigContext'
 import { useWebSystemTheme } from '@/src/hooks/useWebSystemTheme'
-import type { SystemTheme, ThemeInformation } from './forward-exports'
-import { useCreateThemeConfig } from './forward-exports'
-import { ThemeContext } from './ThemeContext'
+import type { SystemTheme, ThemeInformation } from '@helpwave/hightide-utils/context/theme'
+import { useCreateThemeConfig } from '@helpwave/hightide-utils/context/theme'
+import { ThemeContext } from '@/src/global-contexts/theme/ThemeContext'
 
 export type ThemeProviderProps = PropsWithChildren & Partial<HightideThemeConfig> & {
   theme?: string | null,

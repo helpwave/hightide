@@ -1,4 +1,4 @@
-import type { Preview } from '@storybook/nextjs-vite'
+import type { Preview } from '@storybook/react-vite'
 import '../src/style/globals.css'
 import './storybookStyleOverrides.css'
 import { HightideProvider } from '../src/global-contexts/HightideProvider'

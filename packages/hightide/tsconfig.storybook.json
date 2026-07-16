@@ -9,13 +9,17 @@
       "@/*": ["./*"]
     },
     "moduleResolution": "bundler",
-    "noEmit": true
+    "noEmit": true,
+    "types": [
+      "vite/client"
+    ]
   },
   "include": [
     "stories/**/*.ts",
     "stories/**/*.tsx",
     ".storybook/**/*.ts",
     ".storybook/**/*.tsx",
+    ".storybook/**/*.d.ts",
     "src/**/*.ts",
     "src/**/*.tsx"
   ],
