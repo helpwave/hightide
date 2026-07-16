@@ -1,0 +1,113 @@
+{
+  "name": "@helpwave/hightide",
+  "description": "helpwave's component and theming library",
+  "author": "helpwave <support@helpwave.de> (https://helpwave.de)",
+  "homepage": "https://helpwave.de",
+  "repository": {
+    "url": "git+https://github.com/helpwave/hightide.git"
+  },
+  "publishConfig": {
+    "access": "public"
+  },
+  "license": "AGPL-3.0-only",
+  "version": "0.15.1",
+  "browserslist": [
+    "> 0.2%",
+    "last 3 versions",
+    "Firefox ESR",
+    "not dead",
+    "Safari >= 5",
+    "iOS >= 8",
+    "Android >= 5"
+  ],
+  "files": [
+    "dist"
+  ],
+  "main": "dist/index.cjs",
+  "module": "dist/index.js",
+  "types": "dist/index.d.ts",
+  "bin": {
+    "barrel": "dist/scripts/barrel.js"
+  },
+  "exports": {
+    ".": {
+      "require": "./dist/index.cjs",
+      "import": "./dist/index.js"
+    },
+    "./style/globals.css": "./dist/style/globals.css",
+    "./style/uncompiled/globals.css": "./dist/style/uncompiled/globals.css"
+  },
+  "scripts": {
+    "clean": "pnpm run barrel -- --clean && rm -rf dist node_modules",
+    "build-intl": "npx build-intl --force -i ./locales -o ./src/i18n/translations.ts -n hightideTranslation",
+    "build-css": "NODE_ENV=production node scripts/build-css.mjs",
+    "barrel": "node scripts/barrel.js",
+    "build": "npm run build-intl && npm run barrel && tsup && npm run build-css && cp -R src/style/ ./dist/style/uncompiled/ && cp -R scripts/ ./dist/scripts/",
+    "storybook": "storybook dev -p 6006",
+    "storybook:devices": "storybook dev -p 6006 --host",
+    "build-storybook": "storybook build",
+    "lint": "eslint .",
+    "init": "pnpm --filter @helpwave/hightide-utils run init",
+    "test": "jest"
+  },
+  "dependencies": {
+    "@helpwave/internationalization": "0.4.0",
+    "@tailwindcss/cli": "4.1.18",
+    "@tanstack/react-table": "8.21.3",
+    "@tanstack/react-virtual": "3.14.3",
+    "clsx": "2.1.1",
+    "lucide-react": "0.561.0",
+    "tailwindcss": "4.1.18"
+  },
+  "peerDependencies": {
+    "react": "^19.0.0",
+    "react-dom": "^19.0.0"
+  },
+  "devDependencies": {
+    "@babel/core": "7.29.7",
+    "@babel/preset-env": "7.29.7",
+    "@babel/preset-react": "7.29.7",
+    "@babel/preset-typescript": "7.29.7",
+    "@faker-js/faker": "10.1.0",
+    "@helpwave/eslint-config": "0.0.11",
+    "@storybook/addon-docs": "10.4.5",
+    "@storybook/addon-links": "10.4.5",
+    "@storybook/nextjs-vite": "10.4.5",
+    "@tailwindcss/postcss": "4.1.18",
+    "@testing-library/react": "16.3.0",
+    "@types/jest": "30.0.0",
+    "@types/node": "20.19.43",
+    "@types/react": "19.2.3",
+    "@types/react-dom": "19.2.3",
+    "@types/tinycolor2": "1.4.6",
+    "@vitest/mocker": "4.0.16",
+    "autoprefixer": "10.4.23",
+    "eslint": "9.31.0",
+    "eslint-plugin-storybook": "10.4.5",
+    "jest": "30.2.0",
+    "jest-environment-jsdom": "30.2.0",
+    "postcss": "8.5.15",
+    "postcss-load-config": "^6.0.1",
+    "react": "19.2.3",
+    "react-dom": "19.2.3",
+    "storybook": "10.4.5",
+    "ts-jest": "29.4.6",
+    "tsup": "8.5.1",
+    "typescript": "5.7.2",
+    "vite": "7.3.5"
+  },
+  "keywords": [
+    "react",
+    "tailwindcss",
+    "component-library",
+    "typscript"
+  ],
+  "bugs": {
+    "url": "https://github.com/helpwave/hightide/issues"
+  },
+  "overrides": {
+    "esbuild": "0.28.1",
+    "postcss": "8.5.15",
+    "js-yaml": "4.2.0"
+  }
+}
