@@ -1,7 +1,7 @@
 import type { ComponentPropsWithoutRef, ForwardedRef, ReactNode } from 'react'
 import { forwardRef, useEffect, useRef } from 'react'
 import { useMultiSelectContext } from './MultiSelectContext'
-import { useHightideTranslation } from '@/src/i18n/useHightideTranslation'
+import { useHightideTranslation } from '@helpwave/hightide-utils'
 import { ExpansionIcon } from '@/src/components/display-and-visualization/ExpansionIcon'
 import { MultiSelectOptionDisplayContext } from './MultiSelectOption'
 import { ReactUtils } from '@helpwave/hightide-utils'

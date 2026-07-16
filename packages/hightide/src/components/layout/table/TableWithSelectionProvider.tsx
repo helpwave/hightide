@@ -4,7 +4,7 @@ import type { TableProviderProps } from './TableProvider'
 import { TableProvider } from './TableProvider'
 import type { ColumnDef, Row, RowSelectionState, Table } from '@tanstack/react-table'
 import { useCallback, useMemo } from 'react'
-import { useHightideTranslation } from '@/src/i18n/useHightideTranslation'
+import { useHightideTranslation } from '@helpwave/hightide-utils'
 import { TableStateWithoutSizingContext } from './TableContext'
 
 export interface TableWithSelectionProviderProps<T> extends TableProviderProps<T> {

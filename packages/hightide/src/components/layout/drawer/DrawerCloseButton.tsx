@@ -1,4 +1,4 @@
-import { useHightideTranslation } from '@/src/i18n/useHightideTranslation'
+import { useHightideTranslation } from '@helpwave/hightide-utils'
 import { X } from 'lucide-react'
 import type { IconButtonProps } from '../../user-interaction/IconButton'
 import { IconButton } from '../../user-interaction/IconButton'

@@ -1,7 +1,7 @@
 import { useCallback } from 'react'
 import { DateUtils } from '@helpwave/hightide-utils'
-import { useLocalization } from '@/src/global-contexts/LocalizationProvider'
-import { useHightideTranslation } from '@/src/i18n/useHightideTranslation'
+import { useLocalization } from '@/src/global-contexts/localization'
+import { useHightideTranslation } from '@helpwave/hightide-utils'
 import { type FilterOperator } from './FilterOperator'
 import type { DataType } from './data-types'
 

@@ -7,7 +7,7 @@ import type { UseAnchoredPositionOptions } from '@/src/hooks/useAnchoredPosition
 import { useAnchoredPosition } from '@/src/hooks/useAnchoredPosition'
 import { ExpansionIcon } from '@/src/components/display-and-visualization/ExpansionIcon'
 import { useOverlayRegistry } from '@helpwave/hightide-utils'
-import { useHightideTranslation } from '@/src/i18n/useHightideTranslation'
+import { useHightideTranslation } from '@helpwave/hightide-utils'
 import { IconButton } from '../../user-interaction/IconButton'
 
 type SimpleNavigationItem = {

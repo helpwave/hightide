@@ -8,7 +8,7 @@ import type { LucideIcon } from 'lucide-react-native'
 import { forwardRef, type ReactNode } from 'react'
 import { Pressable, type PressableProps, type StyleProp, type ViewStyle } from 'react-native'
 import { Icon } from '../../icons/Icon'
-import { useThemeMode } from '../../theme/ThemeContext'
+import { useThemeMode } from '../../global-contexts/theme'
 
 export type IconButtonSize = ElementSize
 

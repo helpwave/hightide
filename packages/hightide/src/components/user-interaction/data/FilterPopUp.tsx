@@ -1,4 +1,4 @@
-import { useHightideTranslation } from '@/src/i18n/useHightideTranslation'
+import { useHightideTranslation } from '@helpwave/hightide-utils'
 import { Visibility } from '@/src/components/layout/Visibility'
 import { IconButton } from '@/src/components/user-interaction/IconButton'
 import { Check, TrashIcon } from 'lucide-react'

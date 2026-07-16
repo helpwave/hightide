@@ -11,7 +11,7 @@ import { TableCell } from './TableCell'
 import { ColumnSizingWithTargetFeature } from './ColumnSizingWithTargetFeature'
 import { useWindowResizeObserver } from '@/src/hooks/useWindowResizeObserver'
 import { AutoColumnOrderFeature } from './AutoColumnOrderFeature'
-import { useHightideTranslation } from '@/src/i18n/useHightideTranslation'
+import { useHightideTranslation } from '@helpwave/hightide-utils'
 import { createNoColumnPlaceholderColumn, hasNonExcludedColumns } from './placeholderColumn'
 import { FillerCell } from './FillerCell'
 

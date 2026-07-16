@@ -2,7 +2,7 @@
  * @jest-environment jsdom
  */
 import { render } from '@testing-library/react'
-import { LocalizationContext } from '../../src/global-contexts/LocaleContext'
+import { LocalizationContext } from '../../src/global-contexts/localization'
 import { Table } from '../../src/components/layout/table/Table'
 import { TableColumn } from '../../src/components/layout/table/TableColumn'
 

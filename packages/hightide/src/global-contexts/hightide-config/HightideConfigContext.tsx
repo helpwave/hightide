@@ -1,0 +1,102 @@
+import { createContext, type PropsWithChildren, useContext, useState } from 'react'
+import type { DeepPartial } from '@helpwave/hightide-utils/utils'
+import type { LocaleInformation } from '../localization/forward-exports'
+import type { ThemeInformation } from '../theme/forward-exports'
+import { HightideConfigUtils } from './HightideConfigUtils'
+
+export type TooltipConfig = {
+  appearDelay: number,
+  isAnimated: boolean,
+  screenPadding: number,
+}
+
+export type ThemeConfig = {
+  initialTheme: string,
+  supportedThemes: readonly ThemeInformation[],
+}
+
+export type LocalizationConfig = {
+  fallbackLocale: string,
+  supportedLocales: readonly LocaleInformation[],
+}
+
+export type HightideConfig = {
+  tooltip: TooltipConfig,
+  theme: ThemeConfig,
+  localization: LocalizationConfig,
+}
+
+const defaultConfig: HightideConfig = {
+  tooltip: {
+    appearDelay: 0,
+    isAnimated: false,
+    screenPadding: 1,
+  },
+  theme: {
+    initialTheme: 'light',
+    supportedThemes: HightideConfigUtils.defaultSupportedThemes,
+  },
+  localization: {
+    fallbackLocale: 'en-US',
+    supportedLocales: HightideConfigUtils.defaultSupportedLocales,
+  },
+}
+
+function mergeConfig(config: HightideConfig, overwrite: DeepPartial<HightideConfig>): HightideConfig {
+  return {
+    theme: {
+      ...config.theme,
+      ...overwrite.theme,
+      supportedThemes: [...config.theme.supportedThemes, ...config.theme.supportedThemes]
+    },
+    tooltip: {
+      ...config.tooltip,
+      ...overwrite.tooltip,
+    },
+    localization: {
+      ...config.localization,
+      ...overwrite.localization,
+      supportedLocales: [...config.localization.supportedLocales, ...config.localization.supportedLocales]
+    },
+  }
+}
+
+type ConfigType = {
+  config: HightideConfig,
+  setConfig: (configOverwrite: DeepPartial<HightideConfig>) => void,
+}
+
+export const HightideConfigContext = createContext<ConfigType | null>(null)
+
+export type HightideConfigProviderProps = PropsWithChildren & DeepPartial<HightideConfig>
+
+export const HightideConfigProvider = ({
+  children,
+  ...initialOverwrite
+}: HightideConfigProviderProps) => {
+  const [config, setConfig] = useState<HightideConfig>(mergeConfig(defaultConfig, initialOverwrite))
+
+  return (
+    <HightideConfigContext.Provider
+      value={{
+        config,
+        setConfig: (value) => setConfig((prevState) => mergeConfig(prevState, value)),
+      }}
+    >
+      {children}
+    </HightideConfigContext.Provider>
+  )
+}
+
+export const useHightideConfig = () => {
+  const context = useContext(HightideConfigContext)
+  if (!context) {
+    return {
+      config: defaultConfig,
+      setConfig: () => {
+        console.error('useHightideConfig.setConfig is not available without a HightideConfigProvider. Try wrapping your app a HightideConfigProvider.')
+      },
+    }
+  }
+  return context
+}

@@ -7,7 +7,7 @@ import {
 import type { ElementSize } from '@helpwave/hightide-design'
 import { forwardRef, type ReactNode } from 'react'
 import { Pressable, Text, type PressableProps, type StyleProp, type ViewStyle } from 'react-native'
-import { useThemeMode } from '../../theme/ThemeContext'
+import { useThemeMode } from '../../global-contexts/theme'
 
 export type ButtonSize = ElementSize
 

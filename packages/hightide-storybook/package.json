@@ -13,11 +13,11 @@
   "scripts": {
     "clean": "rm -rf node_modules storybook-static",
     "init": "pnpm --filter @helpwave/hightide run init",
-    "build": "storybook build",
+    "build": "pnpm --filter @helpwave/hightide run build && storybook build",
     "lint": "eslint .",
     "test": "node -e \"process.exit(0)\"",
-    "storybook": "storybook dev -p 6006",
-    "storybook:devices": "storybook dev -p 6006 --host"
+    "storybook": "pnpm --filter @helpwave/hightide run build && storybook dev -p 6006",
+    "storybook:devices": "pnpm --filter @helpwave/hightide run build && storybook dev -p 6006 --host"
   },
   "dependencies": {
     "@helpwave/hightide": "workspace:*",

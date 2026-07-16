@@ -1,4 +1,4 @@
-import { useHightideTranslation } from '@/src/i18n/useHightideTranslation'
+import { useHightideTranslation } from '@helpwave/hightide-utils'
 import clsx from 'clsx'
 import { HelpwaveLogo } from '@/src/components/branding/HelpwaveLogo'
 

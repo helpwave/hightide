@@ -1,5 +1,5 @@
 import { useControlledState } from '@helpwave/hightide-utils'
-import { useHightideTranslation } from '@/src/i18n/useHightideTranslation'
+import { useHightideTranslation } from '@helpwave/hightide-utils'
 import { DateTimePicker, type DateTimePickerProps } from '@/src/components/user-interaction/date/DateTimePicker'
 import type { HTMLAttributes } from 'react'
 import { useEffect, useState, type ReactNode } from 'react'

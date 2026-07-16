@@ -3,7 +3,7 @@ import type { UseDelayOptionsResolved } from '@helpwave/hightide-utils'
 import { useControlledState, useDelay } from '@helpwave/hightide-utils'
 import { forwardRef } from 'react'
 import { TextInput, type StyleProp, type TextInputProps, type TextStyle } from 'react-native'
-import { useThemeMode } from '../../theme/ThemeContext'
+import { useThemeMode } from '../../global-contexts/theme'
 import type { FormFieldDataHandling, FormFieldInteractionStates } from '../../types/formField'
 
 export type EditCompleteOptionsResolved = {

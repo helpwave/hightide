@@ -1,3 +1,1 @@
-export * from './ThemeContext'
-export * from './ThemeProvider'
-export * from './useCreateThemeContext'
+export * from './useCreateThemeConfig'

@@ -19,8 +19,9 @@ const createFocusGuard = () => {
   return div
 }
 
-function getContainedFocusableElements(element: HTMLElement | null) {
-  return [...(element?.querySelectorAll('button, [href], input, select, textarea, [tabindex]:not([tabindex="-1"])') ?? [])]
+function getContainedFocusableElements(element: HTMLElement | null): Element[] {
+  if(!element) return []
+  return Array.from(element.querySelectorAll('button, [href], input, select, textarea, [tabindex]:not([tabindex="-1"])'))
 }
 
 type ListenerType = {

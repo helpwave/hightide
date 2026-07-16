@@ -1,4 +1,4 @@
-import { useHightideTranslation } from '@/src/i18n/useHightideTranslation'
+import { useHightideTranslation } from '@helpwave/hightide-utils'
 import type { FilterOperator } from '@/src/components/user-interaction/data/FilterOperator'
 import { FilterOperatorUtils } from '@/src/components/user-interaction/data/FilterOperator'
 

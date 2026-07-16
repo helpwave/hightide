@@ -4,24 +4,27 @@ import type { DialogProps } from '@/src/components/layout/dialog/Dialog'
 import { Dialog } from '@/src/components/layout/dialog/Dialog'
 import { MonitorCog, MoonIcon, SunIcon } from 'lucide-react'
 import clsx from 'clsx'
-import { resolveThemeName } from '@helpwave/hightide-utils'
-import { useLocalization } from '@/src/global-contexts/LocalizationProvider'
-import { useTheme } from '@/src/global-contexts/ThemeProvider'
+import { useLocalization } from '@/src/global-contexts/localization'
+import { useTheme } from '@/src/global-contexts/theme'
 import { Button } from '@/src/components/user-interaction/Button'
-import { useHightideTranslation } from '@/src/i18n/useHightideTranslation'
 import type { SelectProps } from '@/src/components/user-interaction/Select/Select'
 import { Select } from '@/src/components/user-interaction/Select/Select'
 import { SelectOption } from '@/src/components/user-interaction/Select/SelectOption'
+import { useHightideTranslation } from '@helpwave/hightide-utils'
 
 export interface ThemeIconProps extends HTMLAttributes<SVGSVGElement> {
-  theme?: string,
+  theme?: string | null,
 }
 
 export const ThemeIcon = ({ theme: themeOverride, ...props }: ThemeIconProps) => {
-  const { theme } = useTheme()
-  const resolvedTheme = themeOverride ?? theme
+  const { preferredTheme } = useTheme()
+  const displayTheme = themeOverride !== undefined ? themeOverride : preferredTheme
 
-  switch (resolvedTheme) {
+  if (displayTheme === null) {
+    return <MonitorCog {...props} className={clsx('w-4 h-4', props.className)}/>
+  }
+
+  switch (displayTheme) {
   case 'dark':
     return <MoonIcon {...props} className={clsx('w-4 h-4', props.className)}/>
   case 'light':
@@ -31,15 +34,17 @@ export const ThemeIcon = ({ theme: themeOverride, ...props }: ThemeIconProps) =>
   }
 }
 
-export type ThemeSelectProps = Omit<SelectProps<string>, 'value' | 'children'>
+export type ThemeSelectProps = Omit<SelectProps<string | null>, 'value' | 'children'>
 
 export const ThemeSelect = ({ ...props }: ThemeSelectProps) => {
   const { locale } = useLocalization()
-  const { theme, setTheme, supportedThemes } = useTheme()
+  const { preferredTheme, setTheme, supportedThemes } = useTheme()
+  const translation = useHightideTranslation()
+  const systemLabel = translation('system')
 
   return (
-    <Select<string>
-      value={theme}
+    <Select<string | null>
+      value={preferredTheme}
       onEditComplete={(value) => {
         props.onEditComplete?.(value)
         setTheme(value)
@@ -52,19 +57,33 @@ export const ThemeSelect = ({ ...props }: ThemeSelectProps) => {
       }}
       showSearch={false}
     >
-      {supportedThemes.map((themeInformation) => (
-        <SelectOption
-          key={themeInformation.theme}
-          value={themeInformation.theme}
-          label={resolveThemeName(themeInformation, locale)}
-          className="gap-x-6 justify-between"
-        >
-          <div className="flex-row-2 items-center">
-            <ThemeIcon theme={themeInformation.theme} />
-            {resolveThemeName(themeInformation, locale)}
-          </div>
-        </SelectOption>
-      ))}
+      <SelectOption
+        key="system"
+        value={null}
+        label={systemLabel}
+        className="gap-x-6 justify-between"
+      >
+        <div className="flex-row-2 items-center">
+          <ThemeIcon theme={null} />
+          {systemLabel}
+        </div>
+      </SelectOption>
+      {supportedThemes.map((themeInformation) => {
+        const label = themeInformation.nameTranslations[locale] ?? `{{ThemeDialog.themeInformation.nameTranslations:${locale}}}`
+        return (
+          <SelectOption
+            key={themeInformation.theme}
+            value={themeInformation.theme}
+            label={label}
+            className="gap-x-6 justify-between"
+          >
+            <div className="flex-row-2 items-center">
+              <ThemeIcon theme={themeInformation.theme} />
+              {label}
+            </div>
+          </SelectOption>
+        )
+      })}
     </Select>
   )
 }

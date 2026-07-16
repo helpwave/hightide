@@ -5,7 +5,7 @@ import { Check, Minus } from 'lucide-react-native'
 import { useCallback } from 'react'
 import { Pressable, type PressableProps, type StyleProp, type ViewStyle } from 'react-native'
 import { Icon } from '../../icons/Icon'
-import { useThemeMode } from '../../theme/ThemeContext'
+import { useThemeMode } from '../../global-contexts/theme'
 import type { FormFieldDataHandling, FormFieldInteractionStates } from '../../types/formField'
 
 export type CheckboxSize = 'sm' | 'md' | 'lg'

@@ -3,7 +3,7 @@
  */
 import { useState } from 'react'
 import { act, fireEvent, render, screen } from '@testing-library/react'
-import { LocalizationContext } from '../../src/global-contexts/LocaleContext'
+import { LocalizationContext } from '../../src/global-contexts/localization'
 import { FlexibleDateTimeInput, type FlexibleDateTimeInputProps } from '../../src/components/user-interaction/input/FlexibleDateTimeInput'
 
 const renderFlexible = (props: Partial<FlexibleDateTimeInputProps> & { defaultMode: 'date' | 'dateTime' }) => {

@@ -4,7 +4,7 @@ import { Input } from '@/src/components/user-interaction/input/Input'
 import { MathUtil } from '@helpwave/hightide-utils'
 import type { HTMLAttributes } from 'react'
 import { useEffect, useState } from 'react'
-import { useHightideTranslation } from '@/src/i18n/useHightideTranslation'
+import { useHightideTranslation } from '@helpwave/hightide-utils'
 import { IconButton } from '../../user-interaction/IconButton'
 
 export interface PaginationProps extends Omit<HTMLAttributes<HTMLDivElement>, 'children'> {

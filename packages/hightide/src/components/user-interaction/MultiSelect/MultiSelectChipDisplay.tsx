@@ -6,7 +6,7 @@ import { MultiSelectRoot } from './MultiSelectRoot'
 import type { MultiSelectContentProps } from './MultiSelectContent'
 import { MultiSelectContent } from './MultiSelectContent'
 import { IconButton } from '@/src/components/user-interaction/IconButton'
-import { useHightideTranslation } from '@/src/i18n/useHightideTranslation'
+import { useHightideTranslation } from '@helpwave/hightide-utils'
 import { XIcon, Plus } from 'lucide-react'
 import { ReactUtils } from '@helpwave/hightide-utils'
 

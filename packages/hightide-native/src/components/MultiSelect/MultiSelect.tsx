@@ -14,7 +14,7 @@ import {
 import { Chip } from '../Chip/Chip'
 import { Icon } from '../../icons/Icon'
 import { useMultiSelect, type UseMultiSelectOption } from '../../hooks/useMultiSelect'
-import { useThemeMode } from '../../theme/ThemeContext'
+import { useThemeMode } from '../../global-contexts/theme'
 import type { FormFieldDataHandling, FormFieldInteractionStates } from '../../types/formField'
 
 export type MultiSelectOption = UseMultiSelectOption

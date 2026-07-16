@@ -4,8 +4,8 @@ import { DateUtils, type DateTimeFormat } from '@helpwave/hightide-utils'
 import { DateTimeInput, type DateTimeInputProps } from './DateTimeInput'
 import { useControlledState } from '@helpwave/hightide-utils'
 import { IconButton } from '../IconButton'
-import { useHightideTranslation } from '@/src/i18n/useHightideTranslation'
-import { useLocalization } from '@/src/global-contexts/LocalizationProvider'
+import { useHightideTranslation } from '@helpwave/hightide-utils'
+import { useLocalization } from '@/src/global-contexts/localization'
 
 export interface FlexibleDateTimeInputProps extends Omit<DateTimeInputProps, 'mode'> {
   defaultMode: Exclude<DateTimeFormat, 'time'>,

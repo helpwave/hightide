@@ -1,7 +1,7 @@
 import type { PropsWithChildren, ReactNode } from 'react'
 import type { DialogProps } from '@/src/components/layout/dialog/Dialog'
 import { Dialog } from '@/src/components/layout/dialog/Dialog'
-import { useLocalization } from '@/src/global-contexts/LocalizationProvider'
+import { useLocalization } from '@/src/global-contexts/localization'
 import { Button } from '@/src/components/user-interaction/Button'
 import type { SelectProps } from '@/src/components/user-interaction/Select/Select'
 import { Select } from '@/src/components/user-interaction/Select/Select'

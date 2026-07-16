@@ -1,6 +1,5 @@
 import type { DecoratorFunction } from 'storybook/internal/types'
 import { HightideProvider } from '@helpwave/hightide-native'
-import { View } from 'react-native'
 
 export const isReactNativeStory = (title: string): boolean => {
   return title.startsWith('React Native/')
@@ -17,9 +16,7 @@ export const ReactNativeDecorator: DecoratorFunction = (Story, context) => {
       theme={{ theme: mode, fallbackTheme: mode }}
       locale={{ locale, fallbackLocale: 'en-US' }}
     >
-      <View style={{ padding: 16, alignSelf: 'flex-start' }}>
-        <Story />
-      </View>
+      <Story />
     </HightideProvider>
   )
 }

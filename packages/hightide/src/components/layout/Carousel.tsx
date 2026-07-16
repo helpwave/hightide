@@ -13,7 +13,7 @@ import React, {
 import clsx from 'clsx'
 import { ChevronLeft, ChevronRight } from 'lucide-react'
 import { createLoopingListWithIndex, range } from '@helpwave/hightide-utils'
-import { useHightideTranslation } from '@/src/i18n/useHightideTranslation'
+import { useHightideTranslation } from '@helpwave/hightide-utils'
 import { useEventCallbackStabilizer } from '@helpwave/hightide-utils'
 import { IconButton } from '../user-interaction/IconButton'
 

@@ -1,6 +1,6 @@
 import { useMemo } from 'react'
-import { ArrayUtil } from '@/src/utils'
-import type { SingleOrArray } from '@/src/utils'
+import { ArrayUtil } from '../../utils'
+import type { SingleOrArray } from '../../utils'
 import { useLocalization } from '../localization'
 
 export function useSingleKeyTranslation(

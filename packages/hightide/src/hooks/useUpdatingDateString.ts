@@ -1,7 +1,7 @@
 import { useEffect, useState } from 'react'
 import { DateUtils, type DateTimeFormat } from '@helpwave/hightide-utils'
 import type { HightideTranslationLocales } from '@helpwave/hightide-utils'
-import { useLocalization } from '../global-contexts/LocalizationProvider'
+import { useLocalization } from '../global-contexts/localization'
 
 export interface UseUpdatingDateStringProps {
   date: Date,

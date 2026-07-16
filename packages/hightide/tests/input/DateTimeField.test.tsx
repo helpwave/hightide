@@ -3,7 +3,7 @@
  */
 import { useEffect, useState } from 'react'
 import { act, fireEvent, render, screen } from '@testing-library/react'
-import { LocalizationContext } from '../../src/global-contexts/LocaleContext'
+import { LocalizationContext } from '../../src/global-contexts/localization'
 import { DateTimeField, type DateTimeFieldProps } from '../../src/components/user-interaction/input/DateTimeField'
 import { DateTimeInput } from '../../src/components/user-interaction/input/DateTimeInput'
 

@@ -1,7 +1,7 @@
 import type { PropsWithChildren } from 'react'
 import type { ButtonColor } from '@/src/components/user-interaction/Button'
 import { Button } from '@/src/components/user-interaction/Button'
-import { useHightideTranslation } from '@/src/i18n/useHightideTranslation'
+import { useHightideTranslation } from '@helpwave/hightide-utils'
 import clsx from 'clsx'
 import type { DialogProps } from '@/src/components/layout/dialog/Dialog'
 import { Dialog } from '@/src/components/layout/dialog/Dialog'

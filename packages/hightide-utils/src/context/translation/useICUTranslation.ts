@@ -1,8 +1,8 @@
 import type { Translation } from '@helpwave/internationalization'
 import { ICUUtil } from '@helpwave/internationalization'
 import { useCallback } from 'react'
-import { ArrayUtil } from '@/src/utils'
-import type { SingleOrArray } from '@/src/utils'
+import { ArrayUtil } from '../../utils'
+import type { SingleOrArray } from '../../utils'
 
 export function useICUTranslation<L extends string, T extends Record<string, string>>(
   translations: SingleOrArray<Translation<L, T>>,

@@ -7,7 +7,7 @@ import {
 import type { ElementSize } from '@helpwave/hightide-design'
 import type { ReactNode } from 'react'
 import { Text, View, type StyleProp, type ViewProps, type ViewStyle } from 'react-native'
-import { useThemeMode } from '../../theme/ThemeContext'
+import { useThemeMode } from '../../global-contexts/theme'
 
 export type ChipSize = ElementSize
 

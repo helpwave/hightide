@@ -1,6 +1,6 @@
 import { type ComponentProps, forwardRef, useCallback } from 'react'
 import { Input } from '@/src/components/user-interaction/input/Input'
-import { useHightideTranslation } from '@/src/i18n/useHightideTranslation'
+import { useHightideTranslation } from '@helpwave/hightide-utils'
 import { useComboboxContext } from './ComboboxContext'
 
 export type ComboboxInputProps = Omit<ComponentProps<typeof Input>, 'value'>

@@ -1,5 +1,5 @@
 import { Check, ChevronLeft, ChevronRight } from 'lucide-react'
-import { useHightideTranslation } from '@/src/i18n/useHightideTranslation'
+import { useHightideTranslation } from '@helpwave/hightide-utils'
 import { range } from '@helpwave/hightide-utils'
 import { Button } from '@/src/components/user-interaction/Button'
 import clsx from 'clsx'

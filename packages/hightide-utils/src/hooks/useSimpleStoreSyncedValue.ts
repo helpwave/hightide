@@ -68,8 +68,8 @@ export function useSimpleStoreSyncedValue<T>({
   }, [key, storedValue, encodeStable, store])
 
   const deleteValue = useCallback(() => {
-    store.deleteValue(key)
-  }, [key, store])
+    setStoredValue(null)
+  }, [setStoredValue])
 
   return {
     value: storedValue,

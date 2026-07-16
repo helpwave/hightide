@@ -2,7 +2,7 @@ import { useCallback, useEffect, useMemo } from 'react'
 import { useEventCallbackStabilizer } from '../../hooks/useEventCallbackStabelizer'
 import { useSimpleStoreSyncedValue, type SimpleValueStore } from '../../hooks/useSimpleStoreSyncedValue'
 import type { LocaleInformation, LocalizationContextValue } from './LocalizationContext'
-import { StringUnionUtils } from '@/src/utils'
+import { StringUnionUtils } from '../../utils'
 
 const localizationHourFormats = ['24h', '12h'] as const
 type LocalizationHourFormat = typeof localizationHourFormats[number]

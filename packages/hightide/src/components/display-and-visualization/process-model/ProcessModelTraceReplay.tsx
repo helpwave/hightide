@@ -6,7 +6,6 @@ import {
   useState
 } from 'react'
 import clsx from 'clsx'
-import { useHightideTranslation } from '@/src/i18n/useHightideTranslation'
 import { Button } from '@/src/components/user-interaction/Button'
 import { Select } from '@/src/components/user-interaction/Select/Select'
 import { SelectOption } from '@/src/components/user-interaction/Select/SelectOption'
@@ -14,6 +13,7 @@ import { ProcessModelCanvas } from './ProcessModelCanvas'
 import { ProcessModelLayoutUtilities } from './layoutProcessModel'
 import type { ProcessModelGraphWithTraces, ProcessModelTrace } from './types'
 import { Pause, Play, RotateCcw } from 'lucide-react'
+import { useHightideTranslation } from '@helpwave/hightide-utils'
 
 export type ProcessModelTraceReplayProps = {
   graph: ProcessModelGraphWithTraces,

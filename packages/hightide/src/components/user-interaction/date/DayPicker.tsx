@@ -1,7 +1,7 @@
 import type { KeyboardEvent } from 'react'
 import type { WeekDay } from '@helpwave/hightide-utils'
 import { DateUtils } from '@helpwave/hightide-utils'
-import { useLocalization } from '@/src/global-contexts/LocalizationProvider'
+import { useLocalization } from '@/src/global-contexts/localization'
 import type { FormFieldDataHandling } from '../../form/FormField'
 import { PropsUtil } from '@/src/utils/propsUtil'
 import { useCallback, useEffect, useMemo, useRef } from 'react'

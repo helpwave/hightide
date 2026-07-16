@@ -19,6 +19,34 @@
     ".": {
       "types": "./src/index.ts",
       "default": "./src/index.ts"
+    },
+    "./context": {
+      "types": "./src/context/index.ts",
+      "default": "./src/context/index.ts"
+    },
+    "./context/localization": {
+      "types": "./src/context/localization/index.ts",
+      "default": "./src/context/localization/index.ts"
+    },
+    "./context/translation": {
+      "types": "./src/context/translation/index.ts",
+      "default": "./src/context/translation/index.ts"
+    },
+    "./context/theme": {
+      "types": "./src/context/theme/index.ts",
+      "default": "./src/context/theme/index.ts"
+    },
+    "./hooks": {
+      "types": "./src/hooks/index.ts",
+      "default": "./src/hooks/index.ts"
+    },
+    "./i18n": {
+      "types": "./src/i18n/index.ts",
+      "default": "./src/i18n/index.ts"
+    },
+    "./utils": {
+      "types": "./src/utils/index.ts",
+      "default": "./src/utils/index.ts"
     }
   },
   "bin": {

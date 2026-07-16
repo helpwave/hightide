@@ -1,5 +1,5 @@
 import type { Preview } from '@storybook/nextjs-vite'
-import '@/src/style/globals.css'
+import '@helpwave/hightide/style/globals.css'
 import './storybookStyleOverrides.css'
 import { HightideProvider } from '@helpwave/hightide'
 
@@ -37,7 +37,12 @@ const preview: Preview = {
   decorators: [
     (Story, context) => {
       const App = Story
-      const theme = context.globals.backgrounds?.value ?? 'system'
+      const background = context.globals.backgrounds?.value
+      const theme = background === 'dark' || background === '#000000'
+        ? 'dark'
+        : background === 'light'
+          ? 'light'
+          : null
       const locale = context.globals.language
 
       return (

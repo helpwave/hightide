@@ -1,6 +1,6 @@
 import { Binary } from 'lucide-react'
 import { Input } from '@/src/components/user-interaction/input/Input'
-import { useHightideTranslation } from '@/src/i18n/useHightideTranslation'
+import { useHightideTranslation } from '@helpwave/hightide-utils'
 import type { PropertyField } from './PropertyBase'
 import { PropertyBase } from './PropertyBase'
 import { PropsUtil } from '@/src/utils/propsUtil'

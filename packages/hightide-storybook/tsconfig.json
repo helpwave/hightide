@@ -15,8 +15,7 @@
   },
   "include": [
     ".storybook",
-    "src",
-    "stories"
+    "src"
   ],
   "exclude": [
     "node_modules",

@@ -11,7 +11,7 @@ import {
   type ViewStyle
 } from 'react-native'
 import { useSelect, type UseSelectOption } from '../../hooks/useSelect'
-import { useThemeMode } from '../../theme/ThemeContext'
+import { useThemeMode } from '../../global-contexts/theme'
 import type { FormFieldDataHandling, FormFieldInteractionStates } from '../../types/formField'
 
 export type SelectOption<T extends string = string> = UseSelectOption & {
