@@ -14,9 +14,11 @@
     }
   },
   "include": [
-    "src"
+    "src",
+    "stories"
   ],
   "exclude": [
+    "src/storybook",
     "node_modules"
   ]
 }

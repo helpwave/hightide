@@ -18,6 +18,7 @@
     "build": "pnpm -r run build",
     "test": "pnpm -r run test",
     "lint": "pnpm -r run lint",
-    "storybook": "pnpm --filter @helpwave/hightide-utils run build && pnpm --filter @helpwave/hightide run build && pnpm --filter @helpwave/hightide run storybook"
+    "storybook": "pnpm --filter @helpwave/hightide-utils run build && pnpm --filter @helpwave/hightide run build && pnpm --filter @helpwave/hightide run storybook",
+    "storybook-native": "pnpm --filter @helpwave/hightide-utils run build && pnpm --filter @helpwave/hightide-design run build && pnpm --filter @helpwave/hightide-native run build && pnpm --filter @helpwave/hightide-native run storybook"
   }
 }
