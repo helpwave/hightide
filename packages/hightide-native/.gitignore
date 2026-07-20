@@ -3,3 +3,4 @@ storybook-static/
 debug-storybook.log
 *.tsbuildinfo
 .DS_Store
+index.ts
