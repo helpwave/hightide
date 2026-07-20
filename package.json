@@ -5,7 +5,7 @@
   "devEngines": {
     "packageManager": {
       "name": "pnpm",
-      "version": "^11.13.0",
+      "version": "11.15.1",
       "onFail": "download"
     }
   },
@@ -19,6 +19,8 @@
     "test": "pnpm -r run test",
     "lint": "pnpm -r run lint",
     "storybook": "pnpm --filter @helpwave/hightide-utils run build && pnpm --filter @helpwave/hightide run build && pnpm --filter @helpwave/hightide run storybook",
-    "storybook-native": "pnpm --filter @helpwave/hightide-utils run build && pnpm --filter @helpwave/hightide-design run build && pnpm --filter @helpwave/hightide-native run build && pnpm --filter @helpwave/hightide-native run storybook"
+    "storybook-native": "pnpm --filter @helpwave/hightide-utils run build && pnpm --filter @helpwave/hightide-design run build && pnpm --filter @helpwave/hightide-native run build && pnpm --filter @helpwave/hightide-native run storybook",
+    "build-storybook": "pnpm --filter @helpwave/hightide-utils run build && pnpm --filter @helpwave/hightide run build && pnpm --filter @helpwave/hightide run build-storybook",
+    "build-storybook-native": "pnpm --filter @helpwave/hightide-utils run build && pnpm --filter @helpwave/hightide-design run build && pnpm --filter @helpwave/hightide-native run build && pnpm --filter @helpwave/hightide-native run build-storybook"
   }
 }
