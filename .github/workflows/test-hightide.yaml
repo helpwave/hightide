@@ -33,4 +33,5 @@ jobs:
 
       - run: pnpm install --frozen-lockfile
       - run: pnpm -r run init
+      - run: pnpm --filter @helpwave/hightide-utils run build
       - run: pnpm --filter @helpwave/hightide test

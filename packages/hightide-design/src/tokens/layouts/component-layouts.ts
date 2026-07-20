@@ -10,10 +10,14 @@ export const componentLayouts = {
     scrollbarWidth: 10,
     scrollbarPadding: 1,
     coloringOutlineWidth: outlineWidth,
-    breakpointTablet: 768,
-    breakpointDesktop: 1024,
-    animationDurationIn: '250ms',
-    animationDurationOut: '170ms',
+    breakpoints: {
+      tablet: 768,
+      desktop: 1024,
+    },
+    animation: {
+      durationIn: '250ms',
+      durationOut: '170ms',
+    },
   },
   element: {
     xs: { height: 28, borderRadius: 4 },

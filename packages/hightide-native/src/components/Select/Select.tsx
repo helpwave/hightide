@@ -1,4 +1,3 @@
-import { remToPx } from '@helpwave/hightide-design'
 import { useMemo } from 'react'
 import {
   FlatList,
@@ -12,6 +11,7 @@ import {
 } from 'react-native'
 import { useSelect, type UseSelectOption } from '../../hooks/useSelect'
 import { useTheme } from '../../global-contexts/theme'
+import type { SelectState } from '../../theme'
 import type { FormFieldDataHandling, FormFieldInteractionStates } from '../../types/formField'
 
 export type SelectOption<T extends string = string> = UseSelectOption & {
@@ -42,7 +42,7 @@ export const Select = ({
   onEditComplete,
   style,
 }: SelectProps) => {
-  const { theme: { semantic, component } } = useTheme()
+  const { theme } = useTheme()
   const interactive = !disabled && !readOnly
 
   const select = useSelect({
@@ -58,26 +58,24 @@ export const Select = ({
     return selected?.label ?? placeholder
   }, [options, placeholder, select.value])
 
-  const borderColor = invalid ? semantic.negative : component.border
+  const state: SelectState = {
+    isDisabled: disabled,
+    isReadOnly: readOnly,
+    isInvalid: invalid,
+    isOpen: select.isOpen,
+    hasValue: !!select.value,
+  }
+
+  const selectTheme = theme.components.select
 
   return (
     <View style={style}>
       <Pressable
         disabled={!interactive}
         onPress={() => select.toggleOpen()}
-        style={{
-          minHeight: 44,
-          paddingHorizontal: remToPx('0.75rem'),
-          paddingVertical: remToPx('0.5rem'),
-          borderRadius: remToPx('0.375rem'),
-          borderWidth: 1,
-          borderColor,
-          backgroundColor: disabled ? semantic.disabled : component.input.background,
-          justifyContent: 'center',
-          opacity: disabled ? 0.6 : 1,
-        }}
+        style={selectTheme.trigger(state)}
       >
-        <Text style={{ color: select.value ? component.input.text : semantic.placeholder }}>
+        <Text style={selectTheme.triggerText(state)}>
           {selectedLabel}
         </Text>
       </Pressable>
@@ -89,18 +87,11 @@ export const Select = ({
         onRequestClose={() => select.setIsOpen(false)}
       >
         <Pressable
-          style={{ flex: 1, backgroundColor: 'rgba(0,0,0,0.35)', justifyContent: 'center', padding: 24 }}
+          style={selectTheme.overlay(state)}
           onPress={() => select.setIsOpen(false)}
         >
           <Pressable
-            style={{
-              maxHeight: 360,
-              borderRadius: 12,
-              backgroundColor: component.menu.background,
-              borderWidth: 1,
-              borderColor: component.menu.border,
-              overflow: 'hidden',
-            }}
+            style={selectTheme.menu(state)}
             onPress={(event) => event.stopPropagation()}
           >
             {showSearch && (
@@ -108,14 +99,8 @@ export const Select = ({
                 value={select.searchQuery}
                 onChangeText={select.setSearchQuery}
                 placeholder="Search…"
-                placeholderTextColor={semantic.placeholder}
-                style={{
-                  paddingHorizontal: 16,
-                  paddingVertical: 12,
-                  borderBottomWidth: 1,
-                  borderBottomColor: component.menu.border,
-                  color: component.menu.text,
-                }}
+                placeholderTextColor={selectTheme.searchPlaceholderColor(state)}
+                style={selectTheme.search(state)}
               />
             )}
             <FlatList
@@ -124,21 +109,19 @@ export const Select = ({
               renderItem={({ item }) => {
                 const isSelected = select.value === item.id
                 const isHighlighted = select.highlightedValue === item.id
+                const optionState = {
+                  isSelected,
+                  isHighlighted,
+                  isDisabled: item.disabled,
+                }
+
                 return (
                   <Pressable
                     disabled={item.disabled}
                     onPress={() => select.selectValue(item.id)}
-                    style={{
-                      paddingHorizontal: 16,
-                      paddingVertical: 12,
-                      backgroundColor: isHighlighted ? component.table.rowHoverBackground : 'transparent',
-                      opacity: item.disabled ? 0.5 : 1,
-                    }}
+                    style={selectTheme.option(optionState)}
                   >
-                    <Text style={{
-                      color: isSelected ? semantic.primary : component.menu.text,
-                      fontWeight: isSelected ? '600' : '400',
-                    }}>
+                    <Text style={selectTheme.optionText(optionState)}>
                       {item.label}
                     </Text>
                   </Pressable>

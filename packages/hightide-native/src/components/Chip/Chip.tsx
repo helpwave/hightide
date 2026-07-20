@@ -1,20 +1,29 @@
 import {
   coloringColors,
   type ChipColoringStyle,
-  type ColoringColor,
-  resolveChipStyles
+  type ColoringType,
+  type ElementSize
 } from '@helpwave/hightide-design'
-import type { ElementSize } from '@helpwave/hightide-design'
 import type { ReactNode } from 'react'
-import { Text, View, type StyleProp, type ViewProps, type ViewStyle } from 'react-native'
+import {
+  Text,
+  View,
+  type StyleProp,
+  type TextStyle,
+  type ViewProps,
+  type ViewStyle
+} from 'react-native'
 import { useTheme } from '../../global-contexts/theme'
+import type { ChipState, ChipStyle, ChipTextStyle } from '../../theme'
 
 export type ChipSize = ElementSize
 
-export type ChipColor = ColoringColor
+export type ChipColor = ColoringType
 
 export const ChipUtil = {
   colors: coloringColors,
+  sizes: ['xs', 'sm', 'md', 'lg'] as const satisfies readonly ElementSize[],
+  coloringStyles: ['solid', 'tonal', 'outline', 'tonal-outline'] as const satisfies readonly ChipColoringStyle[],
 }
 
 export type ChipProps = Omit<ViewProps, 'children' | 'style'> & {
@@ -23,6 +32,8 @@ export type ChipProps = Omit<ViewProps, 'children' | 'style'> & {
   size?: ChipSize,
   children?: ReactNode,
   style?: StyleProp<ViewStyle>,
+  chipStyle?: StyleProp<ViewStyle> | ((style: ChipStyle) => StyleProp<ViewStyle>),
+  textStyle?: StyleProp<TextStyle> | ((style: ChipTextStyle) => StyleProp<TextStyle>),
 }
 
 export const Chip = ({
@@ -31,39 +42,29 @@ export const Chip = ({
   coloringStyle = 'solid',
   size = 'md',
   style,
+  chipStyle,
+  textStyle,
   ...props
 }: ChipProps) => {
   const { theme } = useTheme()
-  const resolved = resolveChipStyles({
-    theme,
+  const state: ChipState = {
     size,
     color,
     coloringStyle,
-  })
+  }
+
+  const resolvedChip = theme.components.chip.chip(state)
+  const resolvedText = theme.components.chip.text(state)
+  const appliedChipStyle = typeof chipStyle === 'function' ? chipStyle(resolvedChip) : [resolvedChip, chipStyle]
+  const appliedTextStyle = typeof textStyle === 'function' ? textStyle(resolvedText) : [resolvedText, textStyle]
 
   return (
     <View
       {...props}
-      style={[
-        {
-          flexDirection: 'row',
-          alignItems: 'center',
-          justifyContent: 'center',
-          alignSelf: 'flex-start',
-          backgroundColor: resolved.backgroundColor,
-          borderColor: resolved.borderColor,
-          borderWidth: resolved.borderWidth ?? 0,
-          paddingVertical: resolved.paddingVertical,
-          paddingHorizontal: resolved.paddingHorizontal,
-          gap: resolved.gap,
-          minHeight: resolved.minHeight,
-          borderRadius: resolved.borderRadius,
-        },
-        style,
-      ]}
+      style={[appliedChipStyle, style]}
     >
       {typeof children === 'string' || typeof children === 'number'
-        ? <Text style={{ color: resolved.color, fontSize: resolved.fontSize, fontWeight: '600' }}>{children}</Text>
+        ? <Text style={appliedTextStyle}>{children}</Text>
         : children}
     </View>
   )

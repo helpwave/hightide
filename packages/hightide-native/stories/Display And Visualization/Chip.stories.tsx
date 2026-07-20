@@ -8,6 +8,14 @@ const meta = {
       control: 'select',
       options: ChipUtil.colors,
     },
+    size: {
+      control: 'select',
+      options: ChipUtil.sizes,
+    },
+    coloringStyle: {
+      control: 'select',
+      options: ChipUtil.coloringStyles,
+    },
   },
 } satisfies Meta<typeof Chip>
 

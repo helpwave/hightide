@@ -1,4 +1,3 @@
-import { inputElementSizes, remToPx } from '@helpwave/hightide-design'
 import {
   useControlledState,
   useDelay,
@@ -7,6 +6,7 @@ import {
 import { forwardRef } from 'react'
 import { TextInput, type StyleProp, type TextInputProps, type TextStyle } from 'react-native'
 import { useTheme } from '../../global-contexts/theme'
+import type { InputState, InputStyle } from '../../theme'
 import type { FormFieldDataHandling, FormFieldInteractionStates } from '../../types/formField'
 
 export type EditCompleteOptionsResolved = {
@@ -31,6 +31,7 @@ export type InputProps = Omit<TextInputProps, 'value' | 'style'>
     editCompleteOptions?: EditCompleteOptions,
     initialValue?: string,
     style?: StyleProp<TextStyle>,
+    inputStyle?: StyleProp<TextStyle> | ((style: InputStyle) => StyleProp<TextStyle>),
   }
 
 export const Input = forwardRef<TextInput, InputProps>(function Input({
@@ -44,10 +45,10 @@ export const Input = forwardRef<TextInput, InputProps>(function Input({
   onEditComplete,
   editCompleteOptions,
   style,
+  inputStyle,
   ...props
 }, ref) {
-  const { theme: { semantic, component } } = useTheme()
-  const sizing = inputElementSizes.md
+  const { theme } = useTheme()
 
   const [value, setValue] = useControlledState({
     value: controlledValue,
@@ -67,7 +68,16 @@ export const Input = forwardRef<TextInput, InputProps>(function Input({
     disabled: !afterDelay || disabled || readOnly,
   })
 
-  const borderColor = invalid ? semantic.negative : component.border
+  const state: InputState = {
+    isDisabled: disabled,
+    isInvalid: invalid,
+    isReadOnly: readOnly,
+  }
+
+  const resolvedInput = theme.components.input.input(state)
+  const appliedInputStyle = typeof inputStyle === 'function'
+    ? inputStyle(resolvedInput)
+    : [resolvedInput, inputStyle]
 
   return (
     <TextInput
@@ -96,22 +106,8 @@ export const Input = forwardRef<TextInput, InputProps>(function Input({
           clearTimer()
         }
       }}
-      placeholderTextColor={semantic.placeholder}
-      style={[
-        {
-          minHeight: remToPx(sizing.height),
-          paddingHorizontal: remToPx(sizing.paddingX),
-          paddingVertical: remToPx(sizing.paddingY),
-          borderRadius: remToPx(sizing.borderRadius),
-          borderWidth: 1,
-          borderColor,
-          backgroundColor: disabled ? semantic.disabled : component.input.background,
-          color: disabled ? semantic.onDisabled : component.input.text,
-          fontSize: 14,
-          opacity: disabled ? 0.6 : 1,
-        },
-        style,
-      ]}
+      placeholderTextColor={theme.components.input.placeholderColor(state)}
+      style={[appliedInputStyle, style]}
       accessibilityState={{ disabled, selected: required }}
     />
   )

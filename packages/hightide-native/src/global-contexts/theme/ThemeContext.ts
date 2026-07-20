@@ -1,6 +1,6 @@
 import { createContext, useContext } from 'react'
-import type { DesignTheme, ThemeMode } from '@helpwave/hightide-design'
 import type { ThemeConfigValue, ThemeInformation } from './forward-exports'
+import type { DesignTheme, ThemeMode } from '../../theme'
 
 export type { ThemeInformation }
 

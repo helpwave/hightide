@@ -1,26 +1,33 @@
 import {
   type ButtonColoringStyle,
-  type ColoringColor,
-  resolveIconButtonStyles
+  type ColoringType,
+  type ElementSize
 } from '@helpwave/hightide-design'
-import type { ElementSize } from '@helpwave/hightide-design'
 import type { LucideIcon } from 'lucide-react-native'
 import { forwardRef, type ReactNode } from 'react'
 import { Pressable, type PressableProps, type StyleProp, type ViewStyle } from 'react-native'
 import { Icon } from '../../icons/Icon'
 import { useTheme } from '../../global-contexts/theme'
+import type { IconButtonState, IconButtonStyle } from '../../theme'
 
 export type IconButtonSize = ElementSize
 
 export type IconButtonProps = Omit<PressableProps, 'children' | 'style'> & {
   size?: IconButtonSize,
-  color?: ColoringColor,
+  color?: ColoringType,
   coloringStyle?: ButtonColoringStyle,
   icon?: LucideIcon,
   iconSize?: ElementSize,
   children?: ReactNode,
   accessibilityLabel: string,
   style?: StyleProp<ViewStyle>,
+  buttonStyle?: StyleProp<ViewStyle> | ((style: IconButtonStyle) => StyleProp<ViewStyle>),
+}
+
+type PressableInteraction = {
+  pressed: boolean,
+  hovered?: boolean,
+  focused?: boolean,
 }
 
 export const IconButton = forwardRef<React.ComponentRef<typeof Pressable>, IconButtonProps>(function IconButton({
@@ -33,20 +40,30 @@ export const IconButton = forwardRef<React.ComponentRef<typeof Pressable>, IconB
   disabled,
   accessibilityLabel,
   style,
+  buttonStyle,
   ...props
 }, ref) {
   const { theme } = useTheme()
-  const resolved = resolveIconButtonStyles({
-    theme,
-    size,
-    color,
-    coloringStyle,
-    disabled: !!disabled,
-  })
 
-  const content = icon
-    ? <Icon icon={icon} size={iconSize ?? size} color={resolved.color} />
-    : children
+  const resolveStyles = (interaction: PressableInteraction) => {
+    const state: IconButtonState = {
+      size,
+      color,
+      coloringStyle,
+      isDisabled: !!disabled,
+      isPressed: interaction.pressed,
+      isHovered: !!interaction.hovered,
+      isFocused: !!interaction.focused,
+    }
+
+    const resolvedButton = theme.components.iconButton.button(state)
+    const resolvedIcon = theme.components.iconButton.icon(state)
+
+    return {
+      button: typeof buttonStyle === 'function' ? buttonStyle(resolvedButton) : [resolvedButton, buttonStyle],
+      icon: resolvedIcon,
+    }
+  }
 
   return (
     <Pressable
@@ -55,22 +72,18 @@ export const IconButton = forwardRef<React.ComponentRef<typeof Pressable>, IconB
       disabled={disabled}
       accessibilityRole="button"
       accessibilityLabel={accessibilityLabel}
-      style={[
-        {
-          alignItems: 'center',
-          justifyContent: 'center',
-          backgroundColor: resolved.backgroundColor,
-          borderColor: resolved.borderColor,
-          borderWidth: resolved.borderWidth ?? 0,
-          width: resolved.minWidth,
-          height: resolved.minHeight,
-          borderRadius: resolved.borderRadius,
-          opacity: disabled ? 0.6 : 1,
-        },
-        style,
-      ]}
+      style={(pressableState) => {
+        const resolved = resolveStyles(pressableState as PressableInteraction)
+        return [resolved.button, style]
+      }}
     >
-      {content}
+      {(pressableState) => {
+        const resolved = resolveStyles(pressableState as PressableInteraction)
+        if (icon) {
+          return <Icon icon={icon} size={iconSize ?? size} color={resolved.icon.color} />
+        }
+        return children
+      }}
     </Pressable>
   )
 })

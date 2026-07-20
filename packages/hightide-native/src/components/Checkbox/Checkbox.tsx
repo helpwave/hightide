@@ -1,26 +1,18 @@
-import { remToPx, spacing } from '@helpwave/hightide-design'
-import type { ElementSize } from '@helpwave/hightide-design'
 import { useControlledState, useEventCallbackStabilizer } from '@helpwave/hightide-utils/hooks'
 import { Check, Minus } from 'lucide-react-native'
 import { useCallback } from 'react'
-import { Pressable, type PressableProps, type StyleProp, type ViewStyle } from 'react-native'
+import {
+  Pressable,
+  type PressableProps,
+  type StyleProp,
+  type ViewStyle
+} from 'react-native'
 import { Icon } from '../../icons/Icon'
 import { useTheme } from '../../global-contexts/theme'
+import type { CheckboxSize, CheckboxState, CheckboxStyle } from '../../theme'
 import type { FormFieldDataHandling, FormFieldInteractionStates } from '../../types/formField'
 
-export type CheckboxSize = 'sm' | 'md' | 'lg'
-
-const checkboxSizes: Record<CheckboxSize, number> = {
-  sm: remToPx('1.25rem'),
-  md: remToPx('1.5rem'),
-  lg: remToPx('2rem'),
-}
-
-const checkboxIconSizes: Record<CheckboxSize, ElementSize> = {
-  sm: 'sm',
-  md: 'md',
-  lg: 'lg',
-}
+export type { CheckboxSize }
 
 export type CheckboxProps = Omit<PressableProps, 'children' | 'style'>
   & Partial<FormFieldInteractionStates>
@@ -32,6 +24,7 @@ export type CheckboxProps = Omit<PressableProps, 'children' | 'style'>
     alwaysShowCheckIcon?: boolean,
     isRounded?: boolean,
     style?: StyleProp<ViewStyle>,
+    checkboxStyle?: StyleProp<ViewStyle> | ((style: CheckboxStyle) => StyleProp<ViewStyle>),
   }
 
 export const Checkbox = ({
@@ -47,11 +40,10 @@ export const Checkbox = ({
   alwaysShowCheckIcon = false,
   isRounded = false,
   style,
+  checkboxStyle,
   ...props
 }: CheckboxProps) => {
-  const { theme: { semantic, component } } = useTheme()
-  const dimension = checkboxSizes[size]
-  const iconSize = checkboxIconSizes[size]
+  const { theme } = useTheme()
   const interactive = !disabled && !readOnly
 
   const onEditCompleteStable = useEventCallbackStabilizer(onEditComplete)
@@ -68,12 +60,21 @@ export const Checkbox = ({
     defaultValue: initialValue,
   })
 
-  const showIndicator = indeterminate || alwaysShowCheckIcon || value
-  const indicatorColor = value || indeterminate ? semantic.onPrimary : semantic.primary
-  const borderColor = disabled ? semantic.disabled : invalid ? semantic.negative : (value || indeterminate ? semantic.primary : component.border)
-  const backgroundColor = disabled
-    ? semantic.disabled
-    : (value || indeterminate ? semantic.primary : component.input.background)
+  const state: CheckboxState = {
+    size,
+    isChecked: value,
+    isIndeterminate: indeterminate,
+    isInvalid: invalid,
+    isDisabled: disabled,
+    isRounded,
+    alwaysShowCheckIcon,
+  }
+
+  const resolvedCheckbox = theme.components.checkbox.checkbox(state)
+  const resolvedIcon = theme.components.checkbox.icon(state)
+  const appliedCheckboxStyle = typeof checkboxStyle === 'function'
+    ? checkboxStyle(resolvedCheckbox)
+    : [resolvedCheckbox, checkboxStyle]
 
   return (
     <Pressable
@@ -90,25 +91,12 @@ export const Checkbox = ({
         }
         props.onPress?.(event)
       }}
-      style={[
-        {
-          width: dimension,
-          height: dimension,
-          alignItems: 'center',
-          justifyContent: 'center',
-          borderWidth: remToPx(spacing.coloringOutlineWidth),
-          borderColor,
-          borderRadius: isRounded ? dimension / 2 : 6,
-          backgroundColor,
-          opacity: disabled ? 0.6 : 1,
-        },
-        style,
-      ]}
+      style={[appliedCheckboxStyle, style]}
     >
-      {showIndicator && (
+      {resolvedIcon.visible && (
         indeterminate
-          ? <Icon icon={Minus} size={iconSize} color={indicatorColor} />
-          : <Icon icon={Check} size={iconSize} color={indicatorColor} />
+          ? <Icon icon={Minus} size={resolvedIcon.size} color={resolvedIcon.color} />
+          : <Icon icon={Check} size={resolvedIcon.size} color={resolvedIcon.color} />
       )}
     </Pressable>
   )

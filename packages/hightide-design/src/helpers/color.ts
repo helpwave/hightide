@@ -1,18 +1,20 @@
 import type { ColorValue } from '../types'
 
-export const hexToRgba = (hex: ColorValue, alpha: number): string => {
-  if (!hex.startsWith('#')) {
-    return hex
+const expandHex = (hex: string): string => {
+  const normalized = hex.startsWith('#') ? hex.slice(1) : hex
+
+  if (normalized.length === 3 || normalized.length === 4) {
+    return normalized.split('').map((char) => char + char).join('')
   }
 
-  const normalized = hex.slice(1)
-  const expanded = normalized.length === 3
-    ? normalized.split('').map((char) => char + char).join('')
-    : normalized
+  return normalized
+}
 
-  const red = Number.parseInt(expanded.slice(0, 2), 16)
-  const green = Number.parseInt(expanded.slice(2, 4), 16)
-  const blue = Number.parseInt(expanded.slice(4, 6), 16)
+export const hexWithAlpha = (hex: ColorValue, alpha: number): ColorValue => {
+  const expanded = expandHex(hex)
+  const rgb = expanded.slice(0, 6)
+  const alphaByte = Math.round(Math.min(1, Math.max(0, alpha)) * 255)
+  const alphaHex = alphaByte.toString(16).padStart(2, '0')
 
-  return `rgba(${red}, ${green}, ${blue}, ${alpha})`
+  return `#${rgb}${alphaHex}`
 }

@@ -1,20 +1,29 @@
 import {
   coloringColors,
   type ButtonColoringStyle,
-  type ColoringColor,
-  resolveButtonStyles
+  type ColoringType,
+  type ElementSize
 } from '@helpwave/hightide-design'
-import type { ElementSize } from '@helpwave/hightide-design'
 import { forwardRef, type ReactNode } from 'react'
-import { Pressable, Text, type PressableProps, type StyleProp, type ViewStyle } from 'react-native'
+import {
+  Pressable,
+  Text,
+  type PressableProps,
+  type StyleProp,
+  type TextStyle,
+  type ViewStyle
+} from 'react-native'
 import { useTheme } from '../../global-contexts/theme'
+import type { ButtonState, ButtonStyle, ButtonTextStyle } from '../../theme'
 
 export type ButtonSize = ElementSize
 
-export type ButtonColor = ColoringColor
+export type ButtonColor = ColoringType
 
 export const ButtonUtil = {
   colors: coloringColors,
+  sizes: ['xs', 'sm', 'md', 'lg'] as const satisfies readonly ElementSize[],
+  coloringStyles: ['outline', 'solid', 'text', 'tonal', 'tonal-outline'] as const satisfies readonly ButtonColoringStyle[],
 }
 
 export type ButtonProps = Omit<PressableProps, 'children' | 'style'> & {
@@ -23,6 +32,14 @@ export type ButtonProps = Omit<PressableProps, 'children' | 'style'> & {
   coloringStyle?: ButtonColoringStyle,
   children?: ReactNode,
   style?: StyleProp<ViewStyle>,
+  buttonStyle?: StyleProp<ViewStyle> | ((style: ButtonStyle) => StyleProp<ViewStyle>),
+  textStyle?: StyleProp<TextStyle> | ((style: ButtonTextStyle) => StyleProp<TextStyle>),
+}
+
+type PressableInteraction = {
+  pressed: boolean,
+  hovered?: boolean,
+  focused?: boolean,
 }
 
 export const Button = forwardRef<React.ComponentRef<typeof Pressable>, ButtonProps>(function Button({
@@ -32,44 +49,53 @@ export const Button = forwardRef<React.ComponentRef<typeof Pressable>, ButtonPro
   coloringStyle = 'solid',
   disabled,
   style,
+  buttonStyle,
+  textStyle,
   ...props
 }, ref) {
   const { theme } = useTheme()
-  const resolved = resolveButtonStyles({
-    theme,
-    size,
-    color,
-    coloringStyle,
-    disabled: !!disabled,
-  })
+
+  const resolveStyles = (interaction: PressableInteraction) => {
+    const state: ButtonState = {
+      size,
+      color,
+      coloringStyle,
+      isDisabled: !!disabled,
+      isPressed: interaction.pressed,
+      isHovered: !!interaction.hovered,
+      isFocused: !!interaction.focused,
+    }
+
+    const resolvedButton = theme.components.button.button(state)
+    const resolvedText = theme.components.button.text(state)
+
+    return {
+      button: typeof buttonStyle === 'function' ? buttonStyle(resolvedButton) : [resolvedButton, buttonStyle],
+      text: typeof textStyle === 'function' ? textStyle(resolvedText) : [resolvedText, textStyle],
+    }
+  }
 
   return (
     <Pressable
       {...props}
       ref={ref}
       disabled={disabled}
-      style={[
-        {
-          flexDirection: 'row',
-          alignItems: 'center',
-          justifyContent: 'center',
-          backgroundColor: resolved.backgroundColor,
-          borderColor: resolved.borderColor,
-          borderWidth: resolved.borderWidth ?? 0,
-          paddingVertical: resolved.paddingVertical,
-          paddingHorizontal: resolved.paddingHorizontal,
-          gap: resolved.gap,
-          minWidth: resolved.minWidth,
-          minHeight: resolved.minHeight,
-          borderRadius: resolved.borderRadius,
-          opacity: disabled ? 0.6 : 1,
-        },
-        style,
-      ]}
+      style={(pressableState) => {
+        const interaction = pressableState as PressableInteraction
+        const resolved = resolveStyles(interaction)
+
+        return [resolved.button, style]
+      }}
     >
-      {typeof children === 'string' || typeof children === 'number'
-        ? <Text style={{ color: resolved.color, fontSize: resolved.fontSize, fontWeight: '600' }}>{children}</Text>
-        : children}
+      {(pressableState) => {
+        const resolved = resolveStyles(pressableState as PressableInteraction)
+
+        if (typeof children === 'string' || typeof children === 'number') {
+          return <Text style={resolved.text}>{children}</Text>
+        }
+
+        return children
+      }}
     </Pressable>
   )
 })

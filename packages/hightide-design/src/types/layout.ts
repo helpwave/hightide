@@ -1,15 +1,23 @@
 import type { ElementSize, FixedUnit, ScalingUnit, TimeValue } from './units'
 
+export type BreakPointTokens = {
+  tablet: ScalingUnit,
+  desktop: ScalingUnit,
+}
+
+export type AnimationTokens = {
+  durationIn: TimeValue,
+  durationOut: TimeValue,
+}
+
 export type SharedLayoutTokens = {
   spacingBase: ScalingUnit,
   drawerIndent: ScalingUnit,
   scrollbarWidth: FixedUnit,
   scrollbarPadding: FixedUnit,
   coloringOutlineWidth: FixedUnit,
-  breakpointTablet: ScalingUnit,
-  breakpointDesktop: ScalingUnit,
-  animationDurationIn: TimeValue,
-  animationDurationOut: TimeValue,
+  breakpoints: BreakPointTokens,
+  animation: AnimationTokens,
 }
 
 export type ElementLayoutTokenMap = {

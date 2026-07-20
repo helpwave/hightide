@@ -1,4 +1,3 @@
-import { remToPx } from '@helpwave/hightide-design'
 import { Check } from 'lucide-react-native'
 import { useMemo } from 'react'
 import {
@@ -15,6 +14,7 @@ import { Chip } from '../Chip/Chip'
 import { Icon } from '../../icons/Icon'
 import { useMultiSelect, type UseMultiSelectOption } from '../../hooks/useMultiSelect'
 import { useTheme } from '../../global-contexts/theme'
+import type { MultiSelectState } from '../../theme'
 import type { FormFieldDataHandling, FormFieldInteractionStates } from '../../types/formField'
 
 export type MultiSelectOption = UseMultiSelectOption
@@ -30,25 +30,6 @@ export type MultiSelectProps = Partial<FormFieldDataHandling<string[]>>
     style?: StyleProp<ViewStyle>,
   }
 
-const CheckboxIndicator = ({ checked }: { checked: boolean }) => {
-  const { theme: { semantic, component } } = useTheme()
-
-  return (
-    <View style={{
-      width: 18,
-      height: 18,
-      borderRadius: 4,
-      borderWidth: 1,
-      borderColor: checked ? semantic.primary : component.border,
-      backgroundColor: checked ? semantic.primary : 'transparent',
-      alignItems: 'center',
-      justifyContent: 'center',
-    }}>
-      {checked && <Icon icon={Check} size="sm" color={semantic.onPrimary} />}
-    </View>
-  )
-}
-
 export const MultiSelect = ({
   options,
   value: controlledValue,
@@ -62,7 +43,7 @@ export const MultiSelect = ({
   onEditComplete,
   style,
 }: MultiSelectProps) => {
-  const { theme: { semantic, component } } = useTheme()
+  const { theme } = useTheme()
   const interactive = !disabled && !readOnly
 
   const multiSelect = useMultiSelect({
@@ -79,25 +60,23 @@ export const MultiSelect = ({
       .map((option) => option.label ?? option.id)
   }, [multiSelect, options])
 
-  const borderColor = invalid ? semantic.negative : component.border
+  const state: MultiSelectState = {
+    isDisabled: disabled,
+    isReadOnly: readOnly,
+    isInvalid: invalid,
+    isOpen: multiSelect.isOpen,
+    hasSelections: selectedLabels.length > 0,
+    hasValue: selectedLabels.length > 0,
+  }
+
+  const multiSelectTheme = theme.components.multiSelect
 
   return (
     <View style={style}>
       <Pressable
         disabled={!interactive}
         onPress={() => multiSelect.toggleOpen()}
-        style={{
-          minHeight: 44,
-          paddingHorizontal: remToPx('0.75rem'),
-          paddingVertical: remToPx('0.5rem'),
-          borderRadius: remToPx('0.375rem'),
-          borderWidth: 1,
-          borderColor,
-          backgroundColor: disabled ? semantic.disabled : component.input.background,
-          justifyContent: 'center',
-          gap: 8,
-          opacity: disabled ? 0.6 : 1,
-        }}
+        style={multiSelectTheme.trigger(state)}
       >
         {selectedLabels.length > 0
           ? (
@@ -109,7 +88,7 @@ export const MultiSelect = ({
               ))}
             </View>
           )
-          : <Text style={{ color: semantic.placeholder }}>{placeholder}</Text>}
+          : <Text style={multiSelectTheme.triggerText(state)}>{placeholder}</Text>}
       </Pressable>
 
       <Modal
@@ -119,18 +98,11 @@ export const MultiSelect = ({
         onRequestClose={() => multiSelect.setIsOpen(false)}
       >
         <Pressable
-          style={{ flex: 1, backgroundColor: 'rgba(0,0,0,0.35)', justifyContent: 'center', padding: 24 }}
+          style={multiSelectTheme.overlay(state)}
           onPress={() => multiSelect.setIsOpen(false)}
         >
           <Pressable
-            style={{
-              maxHeight: 360,
-              borderRadius: 12,
-              backgroundColor: component.menu.background,
-              borderWidth: 1,
-              borderColor: component.menu.border,
-              overflow: 'hidden',
-            }}
+            style={multiSelectTheme.menu(state)}
             onPress={(event) => event.stopPropagation()}
           >
             {showSearch && (
@@ -138,14 +110,8 @@ export const MultiSelect = ({
                 value={multiSelect.searchQuery}
                 onChangeText={multiSelect.setSearchQuery}
                 placeholder="Search…"
-                placeholderTextColor={semantic.placeholder}
-                style={{
-                  paddingHorizontal: 16,
-                  paddingVertical: 12,
-                  borderBottomWidth: 1,
-                  borderBottomColor: component.menu.border,
-                  color: component.menu.text,
-                }}
+                placeholderTextColor={multiSelectTheme.searchPlaceholderColor(state)}
+                style={multiSelectTheme.search(state)}
               />
             )}
             <FlatList
@@ -154,25 +120,25 @@ export const MultiSelect = ({
               renderItem={({ item }) => {
                 const selected = multiSelect.isSelected(item.id)
                 const isHighlighted = multiSelect.highlightedId === item.id
+                const optionState = {
+                  isSelected: selected,
+                  isHighlighted,
+                  isDisabled: item.disabled,
+                }
+                const checkboxIcon = multiSelectTheme.checkboxIcon(optionState)
+
                 return (
                   <Pressable
                     disabled={item.disabled}
                     onPress={() => multiSelect.toggleSelection(item.id)}
-                    style={{
-                      paddingHorizontal: 16,
-                      paddingVertical: 12,
-                      backgroundColor: isHighlighted ? component.table.rowHoverBackground : 'transparent',
-                      opacity: item.disabled ? 0.5 : 1,
-                      flexDirection: 'row',
-                      alignItems: 'center',
-                      gap: 10,
-                    }}
+                    style={multiSelectTheme.option(optionState)}
                   >
-                    <CheckboxIndicator checked={selected} />
-                    <Text style={{
-                      color: selected ? semantic.primary : component.menu.text,
-                      fontWeight: selected ? '600' : '400',
-                    }}>
+                    <View style={multiSelectTheme.checkbox(optionState)}>
+                      {checkboxIcon.visible && (
+                        <Icon icon={Check} size="sm" color={checkboxIcon.color} />
+                      )}
+                    </View>
+                    <Text style={multiSelectTheme.optionText(optionState)}>
                       {item.label}
                     </Text>
                   </Pressable>

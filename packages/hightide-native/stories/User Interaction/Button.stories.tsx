@@ -9,6 +9,14 @@ const meta = {
       control: 'select',
       options: ButtonUtil.colors,
     },
+    size: {
+      control: 'select',
+      options: ButtonUtil.sizes,
+    },
+    coloringStyle: {
+      control: 'select',
+      options: ButtonUtil.coloringStyles,
+    },
   },
 } satisfies Meta<typeof Button>
 

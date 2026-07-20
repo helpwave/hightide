@@ -25,7 +25,7 @@ export type ColorPaletteDetailedStep =
   | 950
   | 975
 
-export type ColorValue = `#${string}` | `rgb(${string})` | `rgba(${string})`
+export type ColorValue = `#${string}`
 
 export type ColorPaletteBasic = Record<ColorPaletteBasicStep, ColorValue>
 

@@ -1,4 +1,5 @@
 import { colorPalettes } from '../palettes'
+import { createColoringTokensDefinitions } from '../../helpers/style-resolvers/coloring'
 import type { ComponentColors, DesignTheme, SemanticColors } from '../../types'
 
 const { gray, green, orange, red, purple, blue, white, black } = colorPalettes
@@ -66,7 +67,7 @@ const component = {
   overlay: {
     background: semantic.surface,
     text: semantic.onSurface,
-    shadow: 'rgba(0, 0, 0, 0.22)',
+    shadow: '#00000038',
   },
   progressIndicator: {
     fill: semantic.primary,
@@ -101,7 +102,7 @@ const component = {
     text: semantic.description,
   },
   scrollbar: {
-    track: 'rgba(0, 0, 0, 0.2)',
+    track: '#00000033',
     thumb: gray[600],
   },
   stepperBarDot: {
@@ -147,5 +148,6 @@ const component = {
 export const lightTheme = {
   palettes: colorPalettes,
   semantic,
+  coloring: createColoringTokensDefinitions(semantic),
   component,
 } as const satisfies DesignTheme

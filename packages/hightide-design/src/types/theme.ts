@@ -1,4 +1,5 @@
 import type { ColorValue, DesignColorPalettes } from './color'
+import type { ColoringTokensDefinitions } from './coloring'
 
 export type ThemeMode = 'light' | 'dark'
 
@@ -146,6 +147,7 @@ export type ComponentColors = {
 export type DesignTheme = {
   palettes: DesignColorPalettes,
   semantic: SemanticColors,
+  coloring: ColoringTokensDefinitions,
   component: ComponentColors,
 }
 
