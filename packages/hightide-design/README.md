@@ -1,6 +1,35 @@
 # @helpwave/hightide-design
 
-TypeScript design tokens extracted from `@helpwave/hightide` CSS theme files.
+TypeScript design tokens extracted from `@helpwave/hightide` CSS theme files. Intended for React Native and other non-CSS consumers that need the same palettes, semantic colors, and layout values as the web library.
+
+## Install
+
+```bash
+pnpm add @helpwave/hightide-design
+```
+
+## Usage
+
+```ts
+import {
+  themes,
+  colorPalettes,
+  componentLayouts,
+  getTheme,
+  getSemanticColors,
+  resolveButtonStyles,
+  type ThemeMode,
+  type ScalingUnit,
+} from "@helpwave/hightide-design";
+
+const mode: ThemeMode = "dark";
+const theme = getTheme(mode);
+const background = theme.semantic.background;
+const menuBackground = theme.component.menu.background;
+const buttonHeight = componentLayouts.element.md.height;
+```
+
+Legacy rem-based exports (`spacing`, `buttonPadding`, `elementSizes`, etc.) remain available for existing consumers.
 
 ## Structure
 
@@ -31,29 +60,6 @@ src/
 - `helpers/theme.ts` — `getTheme`, `getSemanticColors`, `getComponentColors`
 - `helpers/units.ts` — `remToPx`, `getIconSizePx`, `toPx`
 - `helpers/style-resolvers/` — button and chip style resolution for React Native
-
-## Usage
-
-```ts
-import {
-  themes,
-  colorPalettes,
-  componentLayouts,
-  getTheme,
-  getSemanticColors,
-  resolveButtonStyles,
-  type ThemeMode,
-  type ScalingUnit,
-} from '@helpwave/hightide-design'
-
-const mode: ThemeMode = 'dark'
-const theme = getTheme(mode)
-const background = theme.semantic.background
-const menuBackground = theme.component.menu.background
-const buttonHeight = componentLayouts.element.md.height
-```
-
-Legacy rem-based exports (`spacing`, `buttonPadding`, `elementSizes`, etc.) remain available for existing consumers.
 
 ## Source of truth
 
