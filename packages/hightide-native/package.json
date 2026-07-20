@@ -1,11 +1,13 @@
 {
   "name": "@helpwave/hightide-native",
-  "private": true,
   "description": "helpwave hightide react native components",
   "author": "helpwave <support@helpwave.de> (https://helpwave.de)",
   "homepage": "https://helpwave.de",
   "repository": {
     "url": "git+https://github.com/helpwave/hightide.git"
+  },
+  "publishConfig": {
+    "access": "public"
   },
   "license": "AGPL-3.0-only",
   "version": "0.0.1",
@@ -13,17 +15,38 @@
   "files": [
     "src"
   ],
-  "types": "./src/index.ts",
   "exports": {
-    ".": {
-      "types": "./src/index.ts",
-      "default": "./src/index.ts"
+    "./components": {
+      "types": "./src/components/index.ts",
+      "default": "./src/components/index.ts"
+    },
+    "./global-contexts": {
+      "types": "./src/global-contexts/index.ts",
+      "default": "./src/global-contexts/index.ts"
+    },
+    "./hooks": {
+      "types": "./src/hooks/index.ts",
+      "default": "./src/hooks/index.ts"
+    },
+    "./icons": {
+      "types": "./src/icons/index.ts",
+      "default": "./src/icons/index.ts"
+    },
+    "./theme": {
+      "types": "./src/theme/index.ts",
+      "default": "./src/theme/index.ts"
+    },
+    "./types": {
+      "types": "./src/types/index.ts",
+      "default": "./src/types/index.ts"
     }
   },
   "scripts": {
-    "clean": "rm -rf node_modules storybook-static",
-    "init": "node -e \"process.exit(0)\"",
-    "build": "node -e \"process.exit(0)\"",
+    "clean": "pnpm run barrel -- --clean && rm -rf node_modules storybook-static",
+    "init": "pnpm run barrel",
+    "barrel": "node node_modules/@helpwave/hightide-utils/scripts/barrel.js",
+    "barrel:check": "node node_modules/@helpwave/hightide-utils/scripts/barrel.js --check",
+    "build": "pnpm run barrel",
     "storybook": "storybook dev -p 6007",
     "build-storybook": "storybook build",
     "lint": "eslint .",

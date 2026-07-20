@@ -1,8 +1,6 @@
 import { themes as designThemes } from '@helpwave/hightide-design'
 import { createDesignTheme } from './createTheme'
 
-export { createDesignTheme } from './createTheme'
-
 export const lightTheme = createDesignTheme(designThemes.light)
 
 export const darkTheme = createDesignTheme(designThemes.dark)
