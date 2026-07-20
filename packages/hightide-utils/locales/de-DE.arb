@@ -1,0 +1,338 @@
+{
+  "add": "Hinzufügen",
+  "addFilter": "Filter hinzufügen",
+  "addSorting": "Sortierung hinzufügen",
+  "addTime": "Uhrzeit hinzufügen",
+  "all": "Alle",
+  "apply": "Anwenden",
+  "back": "Zurück",
+  "between": "Zwischen",
+  "cancel": "Abbrechen",
+  "carousel": "Karussell",
+  "contains": "Enthält",
+  "change": "Ändern",
+  "chooseLanguage": "Wähle deine bevorzugte Sprache",
+  "chooseTheme": "Wähle dein bevorzugtes Farbschema.",
+  "system": "System",
+  "chooseSlide": "Wähle die angezeigte Slide aus",
+  "clear": "Löschen",
+  "removeProperty": "Eigenschaft entfernen",
+  "clearValue": "Wert löschen",
+  "click": "Klicken",
+  "clickToCopy": "Zum kopieren klicken",
+  "clickToSelect": "Zum Auswählen drücken",
+  "close": "Schließen",
+  "closeDialog": "Dialog schließen",
+  "confirm": "Bestätigen",
+  "copy": "Kopieren",
+  "copied": "Kopiert",
+  "create": "Erstellen",
+  "date": "Datum",
+  "dayPeriod": "AM/PM",
+  "decline": "Ablehnen",
+  "delete": "Löschen",
+  "discard": "Verwerfen",
+  "discardChanges": "Änderungen Verwerfen",
+  "done": "Fertig",
+  "edit": "Bearbeiten",
+  "editFilter": "Filter bearbeiten",
+  "enterText": "Text hier eingeben",
+  "error": "Fehler",
+  "errorOccurred": "Ein Fehler ist aufgetreten",
+  "exit": "Beenden",
+  "filterOptions": "Optionen filtern",
+  "fieldRequiredError": "Dieses Feld ist erforderlich.",
+  "first": "Erste",
+  "previous": "Vorherige",
+  "next": "Nächste",
+  "last": "Letzte",
+  "invalidEmailError": "Bitte geben Sie eine gültige E-Mail-Adresse ein.",
+  "language": "Sprache",
+  "less": "Weniger",
+  "loading": "Lädt",
+  "locale": "Locale",
+  "maxLengthError": "Maximale Länge überschritten.",
+  "menu": "Menü",
+  "minLengthError": "Mindestlänge nicht erreicht.",
+  "more": "Mehr",
+  "next": "Weiter",
+  "no": "Nein",
+  "noColumn": "Keine Spalte",
+  "noData": "Keine Daten",
+  "none": "Nichts",
+  "nothingFound": "Nichts gefunden",
+  "nResultsFound": "{count, plural, =1{# Ergebnis gefunden} other{# Ergebnisse gefunden}}",
+  "@nResultsFound": {
+    "placeholders": {
+      "count": { "type": "number" }
+    }
+  },
+  "of": "von",
+  "optional": "Optional",
+  "pleaseWait": "Bitte warten...",
+  "previous": "Vorherige",
+  "remove": "Entfernen",
+  "removeFilter": "Filter entfernen",
+  "required": "Erforderlich",
+  "reset": "Zurücksetzen",
+  "rBetween": "Zwischen {value1} und {value2}",
+  "@rBetween": {
+    "placeholders": {
+      "value1": {},
+      "value2": {}
+    }
+  },
+  "rContains": "Enthält {value}",
+  "@rContains": {
+    "placeholders": {
+      "value": {}
+    }
+  },
+  "rEndsWith": "Endet mit {value}",
+  "@rEndsWith": {
+    "placeholders": {
+      "value": {}
+    }
+  },
+  "rEquals": "Gleich {value}",
+  "@rEquals": {
+    "placeholders": {
+      "value": {}
+    }
+  },
+  "rGreaterThan": "Größer als {value}",
+  "@rGreaterThan": {
+    "placeholders": {
+      "value": {}
+    }
+  },
+  "rGreaterThanOrEqual": "Größer oder gleich {value}",
+  "@rGreaterThanOrEqual": {
+    "placeholders": {
+      "value": {}
+    }
+  },
+  "rLessThan": "Kleiner als {value}",
+  "@rLessThan": {
+    "placeholders": {
+      "value": {}
+    }
+  },
+  "rLessThanOrEqual": "Kleiner oder gleich {value}",
+  "@rLessThanOrEqual": {
+    "placeholders": {
+      "value": {}
+    }
+  },
+  "rNotBetween": "Nicht zwischen {value1} und {value2}",
+  "@rNotBetween": {
+    "placeholders": {
+      "value1": {},
+      "value2": {}
+    }
+  },
+  "rNotContains": "Enthält nicht {value}",
+  "@rNotContains": {
+    "placeholders": {
+      "value": {}
+    }
+  },
+  "rNotEquals": "Nicht gleich {value}",
+  "@rNotEquals": {
+    "placeholders": {
+      "value": {}
+    }
+  },
+  "rStartsWith": "Beginnt mit {value}",
+  "@rStartsWith": {
+    "placeholders": {
+      "value": {}
+    }
+  },
+  "save": "Speichern",
+  "saved": "Gespeichert",
+  "search": "Suche",
+  "searchResults": "Suchergebnisse",
+  "select": "Select",
+  "selection": "Auswahl",
+  "selectOption": "Option auswählen",
+  "show": "Anzeigen",
+  "showMore": "Mehr anzeigen",
+  "showLess": "Weniger anzeigen",
+  "showSlide": "Zeige Slide {index}",
+  "@showSlide": {
+    "placeholders": {
+      "index": {
+        "type": "number"
+      }
+    }
+  },
+  "slide": "Slide",
+  "slideOf": "Slide {index} von {length} slides",
+  "@slideOf": {
+    "placeholders": {
+      "index": {
+        "type": "number"
+      },
+      "length": {
+        "type": "number"
+      }
+    }
+  },
+  "slideNavigation": "Slide Navigation",
+  "speed": "Geschwindigkeit",
+  "submit": "Abschicken",
+  "success": "Erfolg",
+  "text": "Text",
+  "pThemes": "{count, plural, =1{Farbschema} other{Farbschemas}}",
+  "@pThemes": {
+    "placeholders": {
+      "count": { "type":  "number" }
+    }
+  },
+  "sDateTimeSelect": "{datetimeMode, select, time{Zeit auswählen} date{Datum auswählen} dateTime{Datum und Uhrzeit auswählen}}",
+  "@sDateTimeSelect": {
+    "placeholders": {
+      "datetimeMode": {}
+    }
+  },
+  "update": "Update",
+  "unsavedChanges": "Ungespeicherte Änderungen",
+  "unsavedChangesSaveQuestion": "Möchtest du die Änderungen speichern?",
+  "value": "Wert",
+  "yes": "Ja",
+  "endDate": "Ende",
+  "endsWith": "Endet mit",
+  "entriesPerPage": "Einträge pro Seite",
+  "equals": "Gleich",
+  "filter": "Filter",
+  "filterNonWhitespace": "Nicht leer",
+  "greaterThan": "Größer als",
+  "greaterThanOrEqual": "Größer oder gleich",
+  "filterNotUndefined": "Definiert",
+  "filterUndefined": "Undefiniert",
+  "max": "Max",
+  "min": "Min",
+  "notBetween": "Nicht zwischen",
+  "notContains": "Enthält nicht",
+  "notEquals": "Nicht gleich",
+  "noParameterRequired": "Kein Parameter erforderlich",
+  "parameter": "Parameter",
+  "pauseTrace": "Trace pausieren",
+  "playTrace": "Trace abspielen",
+  "startDate": "Start",
+  "startsWith": "Beginnt mit",
+  "notEmpty": "Das Feld darf nicht leer sein.",
+  "invalidEmail": "Die E-Mail ist ungültig.",
+  "isFalse": "Ist falsch",
+  "isTrue": "Ist wahr",
+  "isUndefined": "Ist undefiniert",
+  "isNotUndefined": "Ist definiert",
+  "lessThan": "Kleiner als",
+  "lessThanOrEqual": "Kleiner oder gleich",
+  "after": "Nach",
+  "before": "Vor",
+  "onOrAfter": "Nach oder Gleich",
+  "onOrBefore": "Vor oder Gleich",
+  "tooShort": "Der Wert muss mindestens {min} Zeichen enthalten.",
+  "@tooShort": {
+    "placeholders": {
+      "min": { "type": "number" }
+    }
+  },
+  "tooLong": "Der Wert darf höchstens {max} Zeichen enthalten.",
+  "@tooLong": {
+    "placeholders": {
+      "max": { "type": "number" }
+    }
+  },
+  "outOfRangeString": "Der Wert muss zwischen {min} und {max} Zeichen lang sein.",
+  "@outOfRangeString": {
+    "placeholders": {
+      "min": { "type": "number" },
+      "max": { "type": "number" }
+    }
+  },
+  "outOfRangeNumber": "Der Wert muss zwischen {min} und {max} liegen.",
+  "@outOfRangeNumber": {
+    "placeholders": {
+      "min": { "type": "number" },
+      "max": { "type": "number" }
+    }
+  },
+  "outOfRangeSelectionItems": "Es müssen zwischen {min} und {max} Elemente ausgewählt werden.",
+  "@outOfRangeSelectionItems": {
+    "placeholders": {
+      "min": { "type": "number" },
+      "max": { "type": "number" }
+    }
+  },
+  "tooFewSelectionItems": "Es müssen mindestens {min} Elemente ausgewählt werden.",
+  "@tooFewSelectionItems": {
+    "placeholders": {
+      "min": { "type": "number" }
+    }
+  },
+  "tooManySelectionItems": "Es müssen maximal {max} Elemente ausgewählt werden.",
+  "@tooManySelectionItems": {
+    "placeholders": {
+      "max": { "type": "number" }
+    }
+  },
+  "age": "Alter",
+  "entryDate": "Eintragsdatum",
+  "identifier": "Identifikator",
+  "name": "Name",
+  "street": "Straße",
+  "tag": "Tag",
+  "tags": "Tags",
+  "sGender": "{gender, select, male{Männlich} female{Weiblich} other{Divers}}",
+  "@sGender": {
+    "placeholders": {
+      "gender": {}
+    }
+  },
+  "goodToSeeYou": "Schön dich zu sehen",
+  "welcome": "Willkommen",
+  "withoutTime": "Ohne Uhrzeit",
+  "rSortingOrderAfter": "Angewendet {otherSortings, plural, =0{als primäre Sortierung} =1{nach einer anderen Sortierung} other{nach # anderen Sortierungen}}",
+  "@rSortingOrderAfter": {
+    "placeholders": {
+      "otherSortings": { "type": "number" }
+    }
+  },
+  "columnPicker": "Spaltenauswahl",
+  "columnPickerDescription": "Spalten neu anordnen und ein- oder ausblenden",
+  "columns": "Spalten",
+  "moveUp": "Nach oben",
+  "moveDown": "Nach unten",
+  "hideAllColumns": "Alle Spalten ausblenden",
+  "hideColumn": "Spalte ausblenden",
+  "showAllColumns": "Alle Spalten einblenden",
+  "showColumn": "Spalte einblenden",
+  "pinned": "Angeheftet",
+  "unpin": "Loslösen",
+  "unknown": "Unbekannt",
+  "pinLeft": "Links anheften",
+  "pinRight": "Rechts anheften",
+  "changeVisibility": "Sichtbarkeit ändern",
+  "changePinning": "Anheften ändern",
+  "changeSelection": "Auswahl ändern",
+  "pinToRight": "Rechts anheften",
+  "pinToLeft": "Links anheften",
+  "increaseSortingPriority": "Sortierpriorität erhöhen",
+  "increaseValue": "Wert erhöhen",
+  "decreaseSortingPriority": "Sortierpriorität verringern",
+  "decreaseValue": "Wert verringern",
+  "changeColumnDisplay": "Spaltenanzeige ändern",
+  "caseSensitive": "Groß-/Klein beachten",
+  "sortAsc": "ASC",
+  "sortDesc": "DESC",
+  "sorting": "Sortierung",
+  "sSortingState": "{sortDirection, select, asc{Sortierung (Aktuell Aufsteigend)} desc{Sortierung (Aktuell Absteigend)} other{Sortierung (Aktuell Keine)}}",
+  "@sSortingState": {
+    "placeholders": {
+      "sortDirection": {}
+    }
+  }
+}

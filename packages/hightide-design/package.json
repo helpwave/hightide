@@ -1,0 +1,43 @@
+{
+  "name": "@helpwave/hightide-design",
+  "private": true,
+  "description": "helpwave design tokens for hightide",
+  "author": "helpwave <support@helpwave.de> (https://helpwave.de)",
+  "homepage": "https://helpwave.de",
+  "repository": {
+    "url": "git+https://github.com/helpwave/hightide.git"
+  },
+  "license": "AGPL-3.0-only",
+  "version": "0.0.1",
+  "type": "module",
+  "files": [
+    "src"
+  ],
+  "types": "./src/index.ts",
+  "exports": {
+    ".": {
+      "types": "./src/index.ts",
+      "default": "./src/index.ts"
+    }
+  },
+  "scripts": {
+    "clean": "rm -rf node_modules",
+    "init": "node -e \"process.exit(0)\"",
+    "build": "node -e \"process.exit(0)\"",
+    "lint": "eslint .",
+    "test": "node -e \"process.exit(0)\""
+  },
+  "devDependencies": {
+    "@helpwave/eslint-config": "0.0.11",
+    "@types/node": "20.19.43",
+    "eslint": "9.31.0",
+    "typescript": "5.7.2"
+  },
+  "keywords": [
+    "design-tokens",
+    "typescript"
+  ],
+  "bugs": {
+    "url": "https://github.com/helpwave/hightide/issues"
+  }
+}

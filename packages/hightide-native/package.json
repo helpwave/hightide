@@ -1,0 +1,93 @@
+{
+  "name": "@helpwave/hightide-native",
+  "description": "helpwave hightide react native components",
+  "author": "helpwave <support@helpwave.de> (https://helpwave.de)",
+  "homepage": "https://helpwave.de",
+  "repository": {
+    "url": "git+https://github.com/helpwave/hightide.git"
+  },
+  "publishConfig": {
+    "access": "public"
+  },
+  "license": "AGPL-3.0-only",
+  "version": "0.0.1",
+  "type": "module",
+  "files": [
+    "src"
+  ],
+  "exports": {
+    "./components": {
+      "types": "./src/components/index.ts",
+      "default": "./src/components/index.ts"
+    },
+    "./global-contexts": {
+      "types": "./src/global-contexts/index.ts",
+      "default": "./src/global-contexts/index.ts"
+    },
+    "./hooks": {
+      "types": "./src/hooks/index.ts",
+      "default": "./src/hooks/index.ts"
+    },
+    "./icons": {
+      "types": "./src/icons/index.ts",
+      "default": "./src/icons/index.ts"
+    },
+    "./theme": {
+      "types": "./src/theme/index.ts",
+      "default": "./src/theme/index.ts"
+    },
+    "./types": {
+      "types": "./src/types/index.ts",
+      "default": "./src/types/index.ts"
+    }
+  },
+  "scripts": {
+    "clean": "pnpm run barrel -- --clean && rm -rf node_modules storybook-static",
+    "init": "pnpm run barrel",
+    "barrel": "node node_modules/@helpwave/hightide-utils/scripts/barrel.js",
+    "barrel:check": "node node_modules/@helpwave/hightide-utils/scripts/barrel.js --check",
+    "build": "pnpm run barrel",
+    "storybook": "storybook dev -p 6007",
+    "build-storybook": "storybook build",
+    "lint": "eslint .",
+    "test": "node -e \"process.exit(0)\""
+  },
+  "dependencies": {
+    "@helpwave/hightide-design": "workspace:*",
+    "@helpwave/hightide-utils": "workspace:*",
+    "lucide-react-native": "0.561.0"
+  },
+  "peerDependencies": {
+    "@react-native-async-storage/async-storage": ">=2.0.0",
+    "react": "^19.0.0",
+    "react-native": ">=0.76.0",
+    "react-native-svg": ">=15.0.0"
+  },
+  "devDependencies": {
+    "@helpwave/eslint-config": "0.0.11",
+    "@react-native-async-storage/async-storage": "2.2.0",
+    "@storybook/addon-docs": "10.4.5",
+    "@storybook/addon-links": "10.4.5",
+    "@storybook/react-native-web-vite": "10.4.5",
+    "@types/react": "19.2.3",
+    "@types/react-dom": "19.2.3",
+    "eslint": "9.31.0",
+    "eslint-plugin-storybook": "10.4.5",
+    "react": "19.2.3",
+    "react-dom": "19.2.3",
+    "react-native": "0.79.2",
+    "react-native-svg": "15.12.0",
+    "react-native-web": "0.20.0",
+    "storybook": "10.4.5",
+    "typescript": "5.7.2",
+    "vite": "7.3.5"
+  },
+  "keywords": [
+    "react-native",
+    "component-library",
+    "typescript"
+  ],
+  "bugs": {
+    "url": "https://github.com/helpwave/hightide/issues"
+  }
+}
