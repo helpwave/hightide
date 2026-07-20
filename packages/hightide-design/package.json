@@ -1,11 +1,13 @@
 {
   "name": "@helpwave/hightide-design",
-  "private": true,
   "description": "helpwave design tokens for hightide",
   "author": "helpwave <support@helpwave.de> (https://helpwave.de)",
   "homepage": "https://helpwave.de",
   "repository": {
     "url": "git+https://github.com/helpwave/hightide.git"
+  },
+  "publishConfig": {
+    "access": "public"
   },
   "license": "AGPL-3.0-only",
   "version": "0.0.1",

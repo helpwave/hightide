@@ -1,13 +1,13 @@
 # helpwave hightide
 
-This repository contains all components and themes employed by helpwave's web application.
+This package contains all components and themes employed by helpwave's web application.
 
 ## Installing in your React app
 
 ### Step 1 — Install
 
 ```bash
-npm install @helpwave/hightide
+pnpm add @helpwave/hightide
 ```
 
 ### Step 2 — Import the stylesheet
@@ -58,7 +58,7 @@ If you compile Tailwind in your own app, install `tailwindcss` and `@tailwindcss
 To start developing in the project, run:
 
 ```bash
-npm run init
+pnpm run init
 ```
 
 ## Translations
@@ -66,7 +66,7 @@ npm run init
 Translations are handled similar to Flutter's intl package with `.arb` files using ICU patterns for string replacements. These files are found in the [locales folder](locales/) and the typed translations are built with:
 
 ```bash
-npm run build-intl
+pnpm run build-intl
 ```
 
 The resulting files are by default found in the [i18n folder](src/i18n/).
@@ -80,13 +80,13 @@ Theming is achieved through an extensive [tailwindcss](https://tailwindcss.com) 
 We use [storybook](https://storybook.js.org/) for easily testing and showcasing our component library.
 
 ```bash
-npm run storybook
+pnpm run storybook
 ```
 
 To test on physical devices over the local network:
 
 ```bash
-npm run storybook:devices
+pnpm run storybook:devices
 ```
 
 Open `http://<your-ip>:6006` on your phone or tablet.
@@ -94,14 +94,5 @@ Open `http://<your-ip>:6006` on your phone or tablet.
 To build a static Storybook for hosted previews:
 
 ```bash
-npm run build-storybook
-```
-
-### Publishing a new version
-
-- Increase the version number in the [package.json](package.json)
-- Update the [CHANGELOG.md](CHANGELOG.md)
-
-```bash
-npm run build
+pnpm run build-storybook
 ```
