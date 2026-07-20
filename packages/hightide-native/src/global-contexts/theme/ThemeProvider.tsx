@@ -1,6 +1,5 @@
 import { useEffect, useMemo, useState, type PropsWithChildren } from 'react'
 import { Appearance } from 'react-native'
-import type { SimpleValueStore } from '@helpwave/hightide-utils/hooks'
 import { useNativeKeyValueStore } from '../../hooks/useNativeKeyValueStore'
 import { getTheme, themes, type ThemeMode } from '../../theme'
 import { HightideConfigUtils } from '../hightide-config/HightideConfigUtils'
@@ -9,7 +8,6 @@ import { useCreateThemeConfig } from './forward-exports'
 import { ThemeContext, useTheme, type ThemeContextValue } from './ThemeContext'
 
 export type ThemeProviderProps = PropsWithChildren & {
-  store?: SimpleValueStore,
   theme?: string | null,
   systemTheme?: SystemTheme,
   fallbackTheme?: ThemeMode,
@@ -57,16 +55,13 @@ const useNativeSystemTheme = (enabled: boolean) => {
 
 export const ThemeProvider = ({
   children,
-  store: storeProp,
   theme,
   fallbackTheme = 'light',
   systemTheme: systemThemeOverride,
   supportedThemes = HightideConfigUtils.defaultSupportedThemes,
   onChangedTheme,
 }: ThemeProviderProps) => {
-  const nativeStore = useNativeKeyValueStore()
-  const store = storeProp ?? nativeStore
-  const isHydrated = storeProp ? true : nativeStore.isHydrated
+  const store = useNativeKeyValueStore()
   const detectedSystemTheme = useNativeSystemTheme(systemThemeOverride === undefined)
   const systemTheme = systemThemeOverride ?? detectedSystemTheme
 
@@ -88,15 +83,15 @@ export const ThemeProvider = ({
       supportedThemes: themeConfig.supportedThemes,
       themeMode,
       theme: getTheme(themeMode),
+      isInitialized: store.isInitialized,
     }
   }, [
+    store.isInitialized,
     themeConfig.preferredTheme,
     themeConfig.setTheme,
     themeConfig.supportedThemes,
     themeConfig.theme,
   ])
-
-  if (!isHydrated) return null
 
   return (
     <ThemeContext.Provider value={value}>

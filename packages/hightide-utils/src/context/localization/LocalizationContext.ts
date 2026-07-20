@@ -13,6 +13,7 @@ export type LocalizationContextValue = {
   setTimeZone: (timeZone: string | null) => void,
   is24HourFormat: boolean | undefined,
   setIs24HourFormat: (is24HourFormat: boolean | null) => void,
+  isInitialized: boolean,
 }
 
 export const LocalizationContext = createContext<LocalizationContextValue | null>(null)

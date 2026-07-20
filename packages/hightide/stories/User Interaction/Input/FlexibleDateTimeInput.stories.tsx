@@ -53,6 +53,7 @@ export const flexibleDateTimeInput: Story = {
         setIs24HourFormat: () => {},
         timeZone: timeZone || undefined,
         setTimeZone: () => {},
+        isInitialized: true,
       }}>
         <div className="flex-col-2 w-full max-w-md">
           <FlexibleDateTimeInput

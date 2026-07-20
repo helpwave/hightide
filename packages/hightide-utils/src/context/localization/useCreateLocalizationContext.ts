@@ -191,5 +191,6 @@ export const useCreateLocalizationContext = ({
     setTimeZone,
     is24HourFormat: resolvedIs24HourFormat,
     setIs24HourFormat,
+    isInitialized: store.isInitialized,
   }
 }

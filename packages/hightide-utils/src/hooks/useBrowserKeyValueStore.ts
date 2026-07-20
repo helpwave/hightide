@@ -21,6 +21,7 @@ export const useBrowserKeyValueStore = ({
   }, [storage, storageType])
 
   return useMemo(() => ({
+    isInitialized: true,
     getValue: (key) => {
       if (!storageService) {
         return null

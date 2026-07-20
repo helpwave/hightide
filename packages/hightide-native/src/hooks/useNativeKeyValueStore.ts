@@ -4,13 +4,9 @@ import type { SimpleValueStore } from '@helpwave/hightide-utils/hooks'
 
 const storagePrefix = '@helpwave/hightide/'
 
-export type NativeKeyValueStore = SimpleValueStore & {
-  isHydrated: boolean,
-}
-
-export const useNativeKeyValueStore = (): NativeKeyValueStore => {
+export const useNativeKeyValueStore = (): SimpleValueStore => {
   const cacheRef = useRef(new Map<string, string | null>())
-  const [isHydrated, setIsHydrated] = useState(false)
+  const [isInitialized, setIsInitialized] = useState(false)
 
   useEffect(() => {
     let cancelled = false
@@ -30,7 +26,7 @@ export const useNativeKeyValueStore = (): NativeKeyValueStore => {
         console.error('useNativeKeyValueStore: Failed to hydrate AsyncStorage', error)
       } finally {
         if (!cancelled) {
-          setIsHydrated(true)
+          setIsInitialized(true)
         }
       }
     }
@@ -42,7 +38,7 @@ export const useNativeKeyValueStore = (): NativeKeyValueStore => {
   }, [])
 
   return useMemo(() => ({
-    isHydrated,
+    isInitialized,
     getValue: (key) => {
       if (!cacheRef.current.has(key)) return null
       return cacheRef.current.get(key) ?? null
@@ -59,5 +55,5 @@ export const useNativeKeyValueStore = (): NativeKeyValueStore => {
       cacheRef.current.delete(key)
       void AsyncStorage.removeItem(`${storagePrefix}${key}`)
     },
-  }), [isHydrated])
+  }), [isInitialized])
 }

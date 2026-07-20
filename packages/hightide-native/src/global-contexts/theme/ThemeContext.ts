@@ -7,6 +7,7 @@ export type { ThemeInformation }
 export type ThemeContextValue = Omit<ThemeConfigValue, 'theme'> & {
   themeMode: ThemeMode,
   theme: DesignTheme,
+  isInitialized: boolean,
 }
 
 export const ThemeContext = createContext<ThemeContextValue | null>(null)

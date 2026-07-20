@@ -1,4 +1,4 @@
-import { useCallback, useEffect } from 'react'
+import { useCallback, useEffect, useState } from 'react'
 import { useControlledState } from './useControlledState'
 import { useEventCallbackStabilizer } from './useEventCallbackStabelizer'
 
@@ -8,7 +8,9 @@ export interface KeyValueStore<TSchema extends Record<string, unknown>> {
   deleteValue<K extends keyof TSchema>(key: K): void,
 }
 
-export type SimpleValueStore = KeyValueStore<Record<string, string | null>>
+export type SimpleValueStore = KeyValueStore<Record<string, string | null>> & {
+  isInitialized: boolean,
+}
 
 export type UseSimpleStoreSyncedValueProps<T> = {
   store: SimpleValueStore,
@@ -39,13 +41,14 @@ export function useSimpleStoreSyncedValue<T>({
   decode = defaultDecoder as (value: string) => T | null,
   encode = defaultEncoder,
 }: UseSimpleStoreSyncedValueProps<T>): UseSimpleStoreSyncedValueResult<T> {
+  const [hasRead, setHasRead] = useState(false)
+
   const getStoredValue = useCallback(() => {
     const storeValue = store.getValue(key)
-    if(storeValue === null) return null
+    if (storeValue === null) return null
 
     try {
-      const decodedValue = decode(storeValue)
-      return decodedValue
+      return decode(storeValue)
     } catch (e) {
       console.log(e)
       return null
@@ -54,18 +57,40 @@ export function useSimpleStoreSyncedValue<T>({
 
   const [storedValue, setStoredValue] = useControlledState<T | null>({
     value: controlledValue,
-    defaultValue: initialValue ?? getStoredValue(),
+    defaultValue: initialValue ?? null,
     onValueChange: onChange,
   })
 
+  useEffect(() => {
+    if (!store.isInitialized || hasRead) return
+
+    if (initialValue === undefined && controlledValue === undefined) {
+      const fromStore = getStoredValue()
+      if (fromStore !== null) {
+        setStoredValue(fromStore)
+      }
+    }
+
+    setHasRead(true)
+  }, [
+    controlledValue,
+    getStoredValue,
+    hasRead,
+    initialValue,
+    setStoredValue,
+    store.isInitialized,
+  ])
+
   const encodeStable = useEventCallbackStabilizer(encode)
   useEffect(() => {
-    if(storedValue === null) {
+    if (!store.isInitialized || !hasRead) return
+
+    if (storedValue === null) {
       store.deleteValue(key)
     } else {
       store.setValue(key, encodeStable(storedValue))
     }
-  }, [key, storedValue, encodeStable, store])
+  }, [encodeStable, hasRead, key, store, storedValue])
 
   const deleteValue = useCallback(() => {
     setStoredValue(null)

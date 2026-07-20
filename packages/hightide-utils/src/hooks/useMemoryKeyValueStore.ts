@@ -4,9 +4,10 @@ export const useMemoryKeyValueStore = (): SimpleValueStore => {
   const values = new Map<string, string>()
 
   return {
+    isInitialized: true,
     getValue: (key) => values.has(key) ? values.get(key) ?? null : null,
     setValue: (key, value) => {
-      if(value === null) {
+      if (value === null) {
         values.delete(key)
         return
       }
