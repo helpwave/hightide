@@ -1,14 +1,13 @@
+import { hexWithAlpha, toPx } from '@helpwave/hightide-design/helpers'
+import { componentLayouts } from '@helpwave/hightide-design/tokens'
 import {
-  componentLayouts,
-  hexWithAlpha,
-  toPx,
   type ButtonColoringStyle,
   type ChipColoringStyle,
   type ColorValue,
   type ColoringDefinitionToken,
   type ColoringStyle,
   type SemanticColors
-} from '@helpwave/hightide-design'
+} from '@helpwave/hightide-design/types'
 import type { InteractionState } from '../types'
 
 export type ResolvedColoringStyles = {

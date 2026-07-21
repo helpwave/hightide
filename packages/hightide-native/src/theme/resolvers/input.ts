@@ -1,10 +1,10 @@
+import { remToPx } from '@helpwave/hightide-design/helpers'
+import { inputElementSizes } from '@helpwave/hightide-design/tokens'
 import {
-  inputElementSizes,
-  remToPx,
   type ComponentColors,
   type DesignTokens as DesignTokensTheme,
   type SemanticColors
-} from '@helpwave/hightide-design'
+} from '@helpwave/hightide-design/types'
 import type { TextStyle } from 'react-native'
 import type { InputState, InputTheme } from '../types'
 import { createStyleResolver, createValueResolver } from '../types/resolver'

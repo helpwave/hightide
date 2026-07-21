@@ -1,9 +1,6 @@
-import {
-  coloringColors,
-  type ButtonColoringStyle,
-  type ColoringType,
-  type ElementSize
-} from '@helpwave/hightide-design'
+import { type ColoringType } from '@helpwave/hightide-design/helpers'
+import { coloringColors } from '@helpwave/hightide-design/tokens'
+import { type ButtonColoringStyle, type ElementSize } from '@helpwave/hightide-design/types'
 import { forwardRef, type ReactNode } from 'react'
 import {
   Pressable,

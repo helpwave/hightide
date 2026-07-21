@@ -42,7 +42,7 @@ When those dependencies change:
 
 | Trigger | Workflows |
 | --- | --- |
-| PR to `main` (package paths) | `publish-dry-run-*.yaml` |
-| Push to `main` (package paths) | `publish-*.yaml` |
+| PR to `main` (package paths) | `*-publish-dry-run.yaml` |
+| Push to `main` (package paths) | `*-publish.yaml` |
 
 Always use **pnpm publish** (via `pnpm --filter … publish`), not `npm publish`.

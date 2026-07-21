@@ -1,10 +1,10 @@
+import { remToPx } from '@helpwave/hightide-design/helpers'
+import { fontWeights } from '@helpwave/hightide-design/tokens'
 import {
-  fontWeights,
-  remToPx,
   type ComponentColors,
   type DesignTokens as DesignTokensTheme,
   type SemanticColors
-} from '@helpwave/hightide-design'
+} from '@helpwave/hightide-design/types'
 import type {
   MultiSelectOptionState,
   MultiSelectState,

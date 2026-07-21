@@ -1,4 +1,9 @@
-import type { ButtonColoringStyle, ColorValue, ColoringType, ElementSize } from '@helpwave/hightide-design'
+import type { ColoringType } from '@helpwave/hightide-design/helpers'
+import type {
+  ButtonColoringStyle,
+  ColorValue,
+  ElementSize
+} from '@helpwave/hightide-design/types'
 import type { ViewStyle } from 'react-native'
 import type { InteractionState, StyleResolverFunction } from './resolver'
 

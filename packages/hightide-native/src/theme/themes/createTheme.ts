@@ -1,4 +1,4 @@
-import type { DesignTokens as DesignTokensTheme } from '@helpwave/hightide-design'
+import type { DesignTokens as DesignTokensTheme } from '@helpwave/hightide-design/types'
 import {
   createButtonThemeFromDesign,
   createChatThemeFromDesign,

@@ -1,4 +1,4 @@
-name: Lint hightide
+name: hightide Test
 
 on:
   push:
@@ -7,17 +7,17 @@ on:
     paths:
       - "packages/hightide/**"
       - "packages/hightide-utils/**"
-      - ".github/workflows/lint-hightide.yaml"
+      - ".github/workflows/hightide-test.yaml"
   pull_request:
     branches:
       - "**"
     paths:
       - "packages/hightide/**"
       - "packages/hightide-utils/**"
-      - ".github/workflows/lint-hightide.yaml"
+      - ".github/workflows/hightide-test.yaml"
 
 jobs:
-  lint:
+  test:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
@@ -33,4 +33,6 @@ jobs:
 
       - run: pnpm install --frozen-lockfile
       - run: pnpm -r run init
-      - run: pnpm --filter @helpwave/hightide lint
+      - run: pnpm --filter @helpwave/hightide-utils run build
+      - run: pnpm --filter @helpwave/hightide run build
+      - run: pnpm --filter @helpwave/hightide test

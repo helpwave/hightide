@@ -1,3 +1,6 @@
+export * from './animation'
 export * from './color-palettes'
+export * from './decoration'
+export * from './layout'
 export * from './themes'
 export * from './typography'

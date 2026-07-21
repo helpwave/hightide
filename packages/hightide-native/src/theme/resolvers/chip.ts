@@ -1,11 +1,10 @@
+import { toPx } from '@helpwave/hightide-design/helpers'
+import { componentLayouts, fontWeights } from '@helpwave/hightide-design/tokens'
 import {
-  componentLayouts,
-  fontWeights,
-  toPx,
   type ColoringDefintionTokens,
   type DesignTokens as DesignTokensTheme,
   type SemanticColors
-} from '@helpwave/hightide-design'
+} from '@helpwave/hightide-design/types'
 import type { TextStyle, ViewStyle } from 'react-native'
 import type { ChipState, ChipTheme } from '../types'
 import { createStyleResolver } from '../types/resolver'

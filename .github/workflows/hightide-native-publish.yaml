@@ -1,12 +1,12 @@
-name: Publish hightide-utils
+name: hightide-native Publish
 
 on:
   push:
     branches:
       - main
     paths:
-      - "packages/hightide-utils/**"
-      - ".github/workflows/publish-hightide-utils.yaml"
+      - "packages/hightide-native/**"
+      - ".github/workflows/hightide-native-publish.yaml"
 
 jobs:
   publish:
@@ -26,9 +26,10 @@ jobs:
 
       - run: pnpm install --frozen-lockfile
       - run: pnpm --filter @helpwave/hightide-utils run init
-      - run: pnpm --filter @helpwave/hightide-utils build
+      - run: pnpm --filter @helpwave/hightide-native run init
+      - run: pnpm --filter @helpwave/hightide-native build
 
-      - name: Publish @helpwave/hightide-utils
-        run: pnpm --filter @helpwave/hightide-utils publish --no-git-checks --access public
+      - name: Publish @helpwave/hightide-native
+        run: pnpm --filter @helpwave/hightide-native publish --no-git-checks --access public
         env:
           NODE_AUTH_TOKEN: ${{ secrets.NPM_TOKEN }}

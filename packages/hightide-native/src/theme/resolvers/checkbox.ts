@@ -1,11 +1,11 @@
+import { remToPx } from '@helpwave/hightide-design/helpers'
+import { spacing } from '@helpwave/hightide-design/tokens'
 import {
-  remToPx,
-  spacing,
   type ComponentColors,
   type DesignTokens as DesignTokensTheme,
   type ElementSize,
   type SemanticColors
-} from '@helpwave/hightide-design'
+} from '@helpwave/hightide-design/types'
 import type { ViewStyle } from 'react-native'
 import type {
   CheckboxSize,

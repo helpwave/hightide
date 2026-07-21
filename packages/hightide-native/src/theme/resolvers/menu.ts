@@ -1,11 +1,11 @@
 import { StyleSheet } from 'react-native'
-import {
-  fontWeights,
-  remToPx,
-  type ComponentColors,
-  type DesignTokens as DesignTokensTheme,
-  type SemanticColors
-} from '@helpwave/hightide-design'
+import { remToPx } from '@helpwave/hightide-design/helpers'
+import { fontWeights } from '@helpwave/hightide-design/tokens'
+import type {
+  ComponentColors,
+  DesignTokens as DesignTokensTheme,
+  SemanticColors
+} from '@helpwave/hightide-design/types'
 import type { MenuActionItemState, MenuTheme } from '../types'
 import { createStyleResolver, createValueResolver } from '../types/resolver'
 

@@ -1,9 +1,6 @@
-import {
-  coloringColors,
-  type ChipColoringStyle,
-  type ColoringType,
-  type ElementSize
-} from '@helpwave/hightide-design'
+import { type ColoringType } from '@helpwave/hightide-design/helpers'
+import { coloringColors } from '@helpwave/hightide-design/tokens'
+import { type ChipColoringStyle, type ElementSize } from '@helpwave/hightide-design/types'
 import { useMemo, type ReactNode } from 'react'
 import {
   Text,

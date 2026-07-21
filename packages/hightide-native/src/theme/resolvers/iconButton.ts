@@ -1,10 +1,10 @@
+import { toPx } from '@helpwave/hightide-design/helpers'
+import { componentLayouts } from '@helpwave/hightide-design/tokens'
 import {
-  componentLayouts,
-  toPx,
   type ColoringDefintionTokens,
   type DesignTokens as DesignTokensTheme,
   type SemanticColors
-} from '@helpwave/hightide-design'
+} from '@helpwave/hightide-design/types'
 import type { ViewStyle } from 'react-native'
 import type { IconButtonState, IconButtonTheme } from '../types'
 import { createStyleResolver, createValueResolver } from '../types/resolver'

@@ -1,12 +1,12 @@
-name: Dry run publish hightide-design
+name: hightide Dry run publish
 
 on:
   pull_request:
     branches:
       - main
     paths:
-      - "packages/hightide-design/**"
-      - ".github/workflows/publish-dry-run-hightide-design.yaml"
+      - "packages/hightide/**"
+      - ".github/workflows/hightide-publish-dry-run.yaml"
 
 jobs:
   publish:
@@ -25,8 +25,8 @@ jobs:
           registry-url: https://registry.npmjs.org
 
       - run: pnpm install --frozen-lockfile
-      - run: pnpm --filter @helpwave/hightide-design run init
-      - run: pnpm --filter @helpwave/hightide-design build
+      - run: pnpm --filter @helpwave/hightide run init
+      - run: pnpm --filter @helpwave/hightide build
 
       - name: Check for version bump
         run: |
@@ -34,7 +34,7 @@ jobs:
           import { execSync } from 'node:child_process';
           import { readFileSync } from 'node:fs';
 
-          const { name, version } = JSON.parse(readFileSync('packages/hightide-design/package.json', 'utf8'));
+          const { name, version } = JSON.parse(readFileSync('packages/hightide/package.json', 'utf8'));
           let published = '';
 
           try {
@@ -51,7 +51,7 @@ jobs:
           console.log(\`✅ \${name}: \${published || 'unpublished'} -> \${version}\`);
           "
 
-      - name: Dry run publish @helpwave/hightide-design
-        run: pnpm --filter @helpwave/hightide-design publish --dry-run --no-git-checks --access public
+      - name: Dry run publish @helpwave/hightide
+        run: pnpm --filter @helpwave/hightide publish --dry-run --no-git-checks --access public
         env:
           NODE_AUTH_TOKEN: ${{ secrets.NPM_TOKEN }}

@@ -15,22 +15,32 @@
   "files": [
     "src"
   ],
-  "types": "./src/index.ts",
   "exports": {
-    ".": {
-      "types": "./src/index.ts",
-      "default": "./src/index.ts"
+    "./helpers": {
+      "types": "./src/helpers/index.ts",
+      "default": "./src/helpers/index.ts"
+    },
+    "./tokens": {
+      "types": "./src/tokens/index.ts",
+      "default": "./src/tokens/index.ts"
+    },
+    "./types": {
+      "types": "./src/types/index.ts",
+      "default": "./src/types/index.ts"
     }
   },
   "scripts": {
-    "clean": "rm -rf node_modules",
-    "init": "node -e \"process.exit(0)\"",
-    "build": "node -e \"process.exit(0)\"",
+    "clean": "pnpm run barrel -- --clean && rm -rf node_modules",
+    "init": "pnpm run barrel",
+    "barrel": "node node_modules/@helpwave/hightide-utils/scripts/barrel.js",
+    "barrel:check": "node node_modules/@helpwave/hightide-utils/scripts/barrel.js --check",
+    "build": "pnpm run barrel",
     "lint": "eslint .",
-    "test": "node -e \"process.exit(0)\""
+    "test": "pnpm run barrel:check"
   },
   "devDependencies": {
     "@helpwave/eslint-config": "0.0.11",
+    "@helpwave/hightide-utils": "workspace:*",
     "@types/node": "20.19.43",
     "eslint": "9.31.0",
     "typescript": "5.7.2"

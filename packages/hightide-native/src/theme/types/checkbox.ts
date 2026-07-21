@@ -1,4 +1,4 @@
-import type { ColorValue, ElementSize } from '@helpwave/hightide-design'
+import type { ColorValue, ElementSize } from '@helpwave/hightide-design/types'
 import type { ViewStyle } from 'react-native'
 import type { InteractionState, StyleResolverFunction } from './resolver'
 

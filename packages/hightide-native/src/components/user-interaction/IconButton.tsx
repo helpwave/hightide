@@ -1,8 +1,5 @@
-import {
-  type ButtonColoringStyle,
-  type ColoringType,
-  type ElementSize
-} from '@helpwave/hightide-design'
+import { type ColoringType } from '@helpwave/hightide-design/helpers'
+import { type ButtonColoringStyle, type ElementSize } from '@helpwave/hightide-design/types'
 import type { LucideIcon } from 'lucide-react-native'
 import { forwardRef, type ReactNode } from 'react'
 import { Pressable, type PressableProps, type StyleProp, type ViewStyle } from 'react-native'

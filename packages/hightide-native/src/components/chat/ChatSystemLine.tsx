@@ -1,7 +1,7 @@
 import { useMemo, type ReactNode } from 'react'
 import { Text, View, type StyleProp, type ViewProps, type ViewStyle } from 'react-native'
 import { CheckCheck } from 'lucide-react-native'
-import type { ColoringType } from '@helpwave/hightide-design'
+import type { ColoringType } from '@helpwave/hightide-design/helpers'
 import { useTheme } from '../../global-contexts/theme'
 import type {
   ChatSystemLineState,

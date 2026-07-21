@@ -1,4 +1,5 @@
-import type { ColorValue, ColoringType } from '@helpwave/hightide-design'
+import type { ColoringType } from '@helpwave/hightide-design/helpers'
+import type { ColorValue } from '@helpwave/hightide-design/types'
 import type { TextStyle, ViewStyle } from 'react-native'
 import type { InteractionState, StyleResolverFunction } from './resolver'
 

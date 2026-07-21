@@ -1,4 +1,4 @@
-name: Dry run publish hightide-utils
+name: hightide-utils Dry run publish
 
 on:
   pull_request:
@@ -6,7 +6,7 @@ on:
       - main
     paths:
       - "packages/hightide-utils/**"
-      - ".github/workflows/publish-dry-run-hightide-utils.yaml"
+      - ".github/workflows/hightide-utils-publish-dry-run.yaml"
 
 jobs:
   publish:

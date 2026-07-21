@@ -1,5 +1,5 @@
 import type { Preview } from '@storybook/react-native-web-vite'
-import { themes } from '@helpwave/hightide-design'
+import { themes } from '@helpwave/hightide-design/tokens'
 import { HightideProvider } from '../src/global-contexts/HightideProvider'
 
 const lightBackground = themes.light.semantic.background

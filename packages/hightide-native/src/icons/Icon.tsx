@@ -1,4 +1,5 @@
-import { getIconSizePx, getIconStrokeWidth, type ElementSize } from '@helpwave/hightide-design'
+import { getIconSizePx, getIconStrokeWidth } from '@helpwave/hightide-design/helpers'
+import { type ElementSize } from '@helpwave/hightide-design/types'
 import type { LucideIcon } from 'lucide-react-native'
 
 export type IconProps = {

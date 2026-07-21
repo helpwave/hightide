@@ -56,7 +56,7 @@ function checkBarrel(dir, relativeDir = '', results = { failed: false }) {
   const exports = collectExportsForDir(dir, relativeDir)
   const barrelPath = path.join(dir, 'index.ts')
 
-  if (exports.length && relativeDir !== '') {
+  if (exports.length && (relativeDir !== '' || WITH_ROOT)) {
     expectedBarrels.add(barrelPath)
     const expected = exports.join('\n') + '\n'
 

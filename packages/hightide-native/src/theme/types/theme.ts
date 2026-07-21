@@ -3,7 +3,7 @@ import type {
   DesignColorPalettes,
   SemanticColors,
   TypographyScaleTokens
-} from '@helpwave/hightide-design'
+} from '@helpwave/hightide-design/types'
 import type { ComponentThemes } from './components'
 
 export type DesignTheme<T extends object = object> = {

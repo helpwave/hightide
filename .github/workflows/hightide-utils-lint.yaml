@@ -1,22 +1,18 @@
-name: Lint hightide-native
+name: hightide-utils Lint
 
 on:
   push:
     branches:
       - main
     paths:
-      - "packages/hightide-native/**"
       - "packages/hightide-utils/**"
-      - "packages/hightide-design/**"
-      - ".github/workflows/lint-hightide-native.yaml"
+      - ".github/workflows/hightide-utils-lint.yaml"
   pull_request:
     branches:
       - "**"
     paths:
-      - "packages/hightide-native/**"
       - "packages/hightide-utils/**"
-      - "packages/hightide-design/**"
-      - ".github/workflows/lint-hightide-native.yaml"
+      - ".github/workflows/hightide-utils-lint.yaml"
 
 jobs:
   lint:
@@ -35,4 +31,4 @@ jobs:
 
       - run: pnpm install --frozen-lockfile
       - run: pnpm --filter @helpwave/hightide-utils run init
-      - run: pnpm --filter @helpwave/hightide-native lint
+      - run: pnpm --filter @helpwave/hightide-utils lint

@@ -1,4 +1,4 @@
-name: Test hightide-utils
+name: hightide-utils Publish
 
 on:
   push:
@@ -6,16 +6,10 @@ on:
       - main
     paths:
       - "packages/hightide-utils/**"
-      - ".github/workflows/test-hightide-utils.yaml"
-  pull_request:
-    branches:
-      - "**"
-    paths:
-      - "packages/hightide-utils/**"
-      - ".github/workflows/test-hightide-utils.yaml"
+      - ".github/workflows/hightide-utils-publish.yaml"
 
 jobs:
-  test:
+  publish:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
@@ -28,7 +22,13 @@ jobs:
         with:
           node-version: 24
           cache: pnpm
+          registry-url: https://registry.npmjs.org
 
       - run: pnpm install --frozen-lockfile
       - run: pnpm --filter @helpwave/hightide-utils run init
-      - run: pnpm --filter @helpwave/hightide-utils test
+      - run: pnpm --filter @helpwave/hightide-utils build
+
+      - name: Publish @helpwave/hightide-utils
+        run: pnpm --filter @helpwave/hightide-utils publish --no-git-checks --access public
+        env:
+          NODE_AUTH_TOKEN: ${{ secrets.NPM_TOKEN }}

@@ -1,13 +1,12 @@
 import { StyleSheet } from 'react-native'
-import {
-  fontWeights,
-  hexWithAlpha,
-  remToPx,
-  type ColoringDefintionTokens,
-  type ComponentColors,
-  type DesignTokens as DesignTokensTheme,
-  type SemanticColors
-} from '@helpwave/hightide-design'
+import { hexWithAlpha, remToPx } from '@helpwave/hightide-design/helpers'
+import { fontWeights } from '@helpwave/hightide-design/tokens'
+import type {
+  ColoringDefintionTokens,
+  ComponentColors,
+  DesignTokens as DesignTokensTheme,
+  SemanticColors
+} from '@helpwave/hightide-design/types'
 import type {
   ChatAttachmentCardState,
   ChatConversationRowState,
