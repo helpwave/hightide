@@ -1,6 +1,6 @@
 import type { Meta, StoryObj } from '@storybook/react-native-web-vite'
 import { action } from 'storybook/actions'
-import { Input } from '@/src/components/Input/Input'
+import { Input } from '@/src/components/user-interaction/Input'
 
 const meta = {
   component: Input,

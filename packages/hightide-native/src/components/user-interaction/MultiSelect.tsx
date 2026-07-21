@@ -10,12 +10,12 @@ import {
   type StyleProp,
   type ViewStyle
 } from 'react-native'
-import { Chip } from '../Chip/Chip'
 import { Icon } from '../../icons/Icon'
 import { useMultiSelect, type UseMultiSelectOption } from '../../hooks/useMultiSelect'
 import { useTheme } from '../../global-contexts/theme'
 import type { MultiSelectState } from '../../theme'
 import type { FormFieldDataHandling, FormFieldInteractionStates } from '../../types/formField'
+import { Chip } from '../visualization-and-display'
 
 export type MultiSelectOption = UseMultiSelectOption
 

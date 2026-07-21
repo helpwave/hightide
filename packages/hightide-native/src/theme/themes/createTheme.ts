@@ -1,10 +1,12 @@
 import type { DesignTheme as DesignTokensTheme } from '@helpwave/hightide-design'
 import {
   createButtonThemeFromDesign,
+  createChatThemeFromDesign,
   createCheckboxThemeFromDesign,
   createChipThemeFromDesign,
   createIconButtonThemeFromDesign,
   createInputThemeFromDesign,
+  createMenuThemeFromDesign,
   createMultiSelectThemeFromDesign,
   createSelectThemeFromDesign
 } from '../resolvers'
@@ -22,5 +24,7 @@ export const createDesignTheme = (tokens: DesignTokensTheme): DesignTheme => ({
     input: createInputThemeFromDesign(tokens),
     select: createSelectThemeFromDesign(tokens),
     multiSelect: createMultiSelectThemeFromDesign(tokens),
+    chat: createChatThemeFromDesign(tokens),
+    menu: createMenuThemeFromDesign(tokens),
   },
 })
