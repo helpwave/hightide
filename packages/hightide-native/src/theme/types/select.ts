@@ -1,5 +1,6 @@
-import type { ColorValue, FontWeight } from '@helpwave/hightide-design'
-import type { InteractionState, ResolverFunction } from './resolver'
+import type { ColorValue } from '@helpwave/hightide-design'
+import type { StyleProp, TextStyle, ViewStyle } from 'react-native'
+import type { InteractionState, StyleResolverFunction } from './resolver'
 
 export type SelectState = InteractionState & {
   isInvalid?: boolean,
@@ -13,65 +14,27 @@ export type SelectOptionState = InteractionState & {
   isHighlighted?: boolean,
 }
 
-export type SelectTriggerStyle = {
-  minHeight: number,
-  paddingHorizontal: number,
-  paddingVertical: number,
-  borderRadius: number,
-  borderWidth: number,
-  borderColor: ColorValue,
-  backgroundColor: ColorValue,
-  justifyContent: 'center',
-  opacity: number,
-}
+export type SelectTriggerStyle = StyleProp<ViewStyle>
 
-export type SelectTriggerTextStyle = {
-  color: ColorValue,
-}
+export type SelectTriggerTextStyle = StyleProp<TextStyle>
 
-export type SelectOverlayStyle = {
-  flex: 1,
-  backgroundColor: ColorValue,
-  justifyContent: 'center',
-  padding: number,
-}
+export type SelectOverlayStyle = StyleProp<ViewStyle>
 
-export type SelectMenuStyle = {
-  maxHeight: number,
-  borderRadius: number,
-  backgroundColor: ColorValue,
-  borderWidth: number,
-  borderColor: ColorValue,
-  overflow: 'hidden',
-}
+export type SelectMenuStyle = StyleProp<ViewStyle>
 
-export type SelectSearchStyle = {
-  paddingHorizontal: number,
-  paddingVertical: number,
-  borderBottomWidth: number,
-  borderBottomColor: ColorValue,
-  color: ColorValue,
-}
+export type SelectSearchStyle = StyleProp<TextStyle>
 
-export type SelectOptionStyle = {
-  paddingHorizontal: number,
-  paddingVertical: number,
-  backgroundColor: ColorValue | 'transparent',
-  opacity: number,
-}
+export type SelectOptionStyle = StyleProp<ViewStyle>
 
-export type SelectOptionTextStyle = {
-  color: ColorValue,
-  fontWeight: FontWeight,
-}
+export type SelectOptionTextStyle = StyleProp<TextStyle>
 
 export type SelectTheme = {
-  trigger: ResolverFunction<SelectState, SelectTriggerStyle>,
-  triggerText: ResolverFunction<SelectState, SelectTriggerTextStyle>,
-  overlay: ResolverFunction<SelectState, SelectOverlayStyle>,
-  menu: ResolverFunction<SelectState, SelectMenuStyle>,
-  search: ResolverFunction<SelectState, SelectSearchStyle>,
-  searchPlaceholderColor: ResolverFunction<SelectState, ColorValue>,
-  option: ResolverFunction<SelectOptionState, SelectOptionStyle>,
-  optionText: ResolverFunction<SelectOptionState, SelectOptionTextStyle>,
+  trigger: StyleResolverFunction<SelectState, SelectTriggerStyle>,
+  triggerText: StyleResolverFunction<SelectState, SelectTriggerTextStyle>,
+  overlay: StyleResolverFunction<SelectState, SelectOverlayStyle>,
+  menu: StyleResolverFunction<SelectState, SelectMenuStyle>,
+  search: StyleResolverFunction<SelectState, SelectSearchStyle>,
+  searchPlaceholderColor: StyleResolverFunction<SelectState, ColorValue>,
+  option: StyleResolverFunction<SelectOptionState, SelectOptionStyle>,
+  optionText: StyleResolverFunction<SelectOptionState, SelectOptionTextStyle>,
 }

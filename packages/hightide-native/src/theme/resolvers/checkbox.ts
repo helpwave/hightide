@@ -6,12 +6,13 @@ import {
   type ElementSize,
   type SemanticColors
 } from '@helpwave/hightide-design'
+import type { ViewStyle } from 'react-native'
 import type {
   CheckboxSize,
   CheckboxState,
-  CheckboxStyle,
   CheckboxTheme
 } from '../types'
+import { createStyleResolver, createValueResolver } from '../types/resolver'
 
 const checkboxSizes: Record<CheckboxSize, number> = {
   sm: remToPx('1.25rem'),
@@ -50,7 +51,7 @@ export const createCheckboxTheme = ({
       ? semantic.disabled
       : (isActive ? semantic.primary : component.input.background)
 
-    const checkbox: CheckboxStyle = {
+    const checkbox: ViewStyle = {
       width: dimension,
       height: dimension,
       alignItems: 'center',
@@ -73,8 +74,8 @@ export const createCheckboxTheme = ({
   }
 
   return {
-    checkbox: (state) => resolveState(state).checkbox,
-    icon: (state) => resolveState(state).icon,
+    checkbox: createStyleResolver((state) => resolveState(state).checkbox),
+    icon: createValueResolver((state) => resolveState(state).icon),
   }
 }
 

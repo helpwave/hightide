@@ -46,7 +46,7 @@ const preview: Preview = {
         ? 'dark'
         : background === 'light' || background === lightBackground
           ? 'light'
-          : null
+          : 'light'
       const locale = context.globals.language
       const surfaceBackground = isDark ? darkBackground : lightBackground
       const surfaceColor = isDark ? darkOnBackground : lightOnBackground

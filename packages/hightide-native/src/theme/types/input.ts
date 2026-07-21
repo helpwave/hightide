@@ -1,25 +1,15 @@
 import type { ColorValue } from '@helpwave/hightide-design'
-import type { InteractionState, ResolverFunction } from './resolver'
+import type { StyleProp, TextStyle } from 'react-native'
+import type { InteractionState, StyleResolverFunction } from './resolver'
 
 export type InputState = InteractionState & {
   isInvalid?: boolean,
   isReadOnly?: boolean,
 }
 
-export type InputStyle = {
-  minHeight: number,
-  paddingHorizontal: number,
-  paddingVertical: number,
-  borderRadius: number,
-  borderWidth: number,
-  borderColor: ColorValue,
-  backgroundColor: ColorValue,
-  color: ColorValue,
-  fontSize: number,
-  opacity: number,
-}
+export type InputStyle = StyleProp<TextStyle>
 
 export type InputTheme = {
-  input: ResolverFunction<InputState, InputStyle>,
-  placeholderColor: ResolverFunction<InputState, ColorValue>,
+  input: StyleResolverFunction<InputState, InputStyle>,
+  placeholderColor: StyleResolverFunction<InputState, ColorValue>,
 }

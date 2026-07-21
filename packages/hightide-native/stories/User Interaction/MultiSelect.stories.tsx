@@ -1,6 +1,6 @@
 import type { Meta, StoryObj } from '@storybook/react-native-web-vite'
 import { action } from 'storybook/actions'
-import { MultiSelect } from '@/src/components/MultiSelect/MultiSelect'
+import { MultiSelect } from '@/src/components/user-interaction/MultiSelect'
 import { StorybookHelper } from '@/src/storybook/helper'
 
 const fruitOptions = StorybookHelper.selectValues

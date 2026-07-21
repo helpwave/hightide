@@ -1,11 +1,6 @@
-import type {
-  ChipColoringStyle,
-  ColorValue,
-  ColoringType,
-  ElementSize,
-  FontWeight
-} from '@helpwave/hightide-design'
-import type { InteractionState, ResolverFunction } from './resolver'
+import type { ChipColoringStyle, ColoringType, ElementSize } from '@helpwave/hightide-design'
+import type { StyleProp, TextStyle, ViewStyle } from 'react-native'
+import type { InteractionState, StyleResolverFunction } from './resolver'
 
 export type ChipState = InteractionState & {
   size?: ElementSize,
@@ -13,29 +8,11 @@ export type ChipState = InteractionState & {
   coloringStyle?: ChipColoringStyle,
 }
 
-export type ChipStyle = {
-  flexDirection: 'row',
-  alignItems: 'center',
-  justifyContent: 'center',
-  alignSelf: 'flex-start',
-  backgroundColor: ColorValue | 'transparent',
-  borderColor?: ColorValue,
-  borderWidth: number,
-  paddingVertical: number,
-  paddingHorizontal: number,
-  gap: number,
-  minHeight: number,
-  borderRadius: number,
-  opacity: number,
-}
+export type ChipStyle = StyleProp<ViewStyle>
 
-export type ChipTextStyle = {
-  color: ColorValue,
-  fontSize: number,
-  fontWeight: FontWeight,
-}
+export type ChipTextStyle = StyleProp<TextStyle>
 
 export type ChipTheme = {
-  chip: ResolverFunction<ChipState, ChipStyle>,
-  text: ResolverFunction<ChipState, ChipTextStyle>,
+  chip: StyleResolverFunction<ChipState, ChipStyle>,
+  text: StyleResolverFunction<ChipState, ChipTextStyle>,
 }

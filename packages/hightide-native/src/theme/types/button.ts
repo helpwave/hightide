@@ -1,11 +1,6 @@
-import type {
-  ButtonColoringStyle,
-  ColorValue,
-  ColoringType,
-  ElementSize,
-  FontWeight
-} from '@helpwave/hightide-design'
-import type { InteractionState, ResolverFunction } from './resolver'
+import type { ButtonColoringStyle, ColoringType, ElementSize } from '@helpwave/hightide-design'
+import type { StyleProp, TextStyle, ViewStyle } from 'react-native'
+import type { InteractionState, StyleResolverFunction } from './resolver'
 
 export type ButtonState = InteractionState & {
   size?: ElementSize,
@@ -13,29 +8,11 @@ export type ButtonState = InteractionState & {
   coloringStyle?: ButtonColoringStyle,
 }
 
-export type ButtonStyle = {
-  flexDirection: 'row',
-  alignItems: 'center',
-  justifyContent: 'center',
-  backgroundColor: ColorValue | 'transparent',
-  borderColor?: ColorValue,
-  borderWidth: number,
-  paddingVertical: number,
-  paddingHorizontal: number,
-  gap: number,
-  minWidth: number,
-  minHeight: number,
-  borderRadius: number,
-  opacity: number,
-}
+export type ButtonStyle = StyleProp<ViewStyle>
 
-export type ButtonTextStyle = {
-  color: ColorValue,
-  fontSize: number,
-  fontWeight: FontWeight,
-}
+export type ButtonTextStyle = StyleProp<TextStyle>
 
 export type ButtonTheme = {
-  button: ResolverFunction<ButtonState, ButtonStyle>,
-  text: ResolverFunction<ButtonState, ButtonTextStyle>,
+  button: StyleResolverFunction<ButtonState, ButtonStyle>,
+  text: StyleResolverFunction<ButtonState, ButtonTextStyle>,
 }

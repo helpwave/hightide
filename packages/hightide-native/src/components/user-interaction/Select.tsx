@@ -58,24 +58,49 @@ export const Select = ({
     return selected?.label ?? placeholder
   }, [options, placeholder, select.value])
 
-  const state: SelectState = {
+  const state = useMemo((): SelectState => ({
     isDisabled: disabled,
     isReadOnly: readOnly,
     isInvalid: invalid,
     isOpen: select.isOpen,
     hasValue: !!select.value,
-  }
+  }), [disabled, invalid, readOnly, select.isOpen, select.value])
 
   const selectTheme = theme.components.select
+
+  const resolvedTriggerStyle = useMemo(
+    () => selectTheme.trigger(state),
+    [selectTheme, state]
+  )
+  const resolvedTriggerTextStyle = useMemo(
+    () => selectTheme.triggerText(state),
+    [selectTheme, state]
+  )
+  const resolvedOverlayStyle = useMemo(
+    () => selectTheme.overlay(state),
+    [selectTheme, state]
+  )
+  const resolvedMenuStyle = useMemo(
+    () => selectTheme.menu(state),
+    [selectTheme, state]
+  )
+  const resolvedSearchStyle = useMemo(
+    () => selectTheme.search(state),
+    [selectTheme, state]
+  )
+  const searchPlaceholderColor = useMemo(
+    () => selectTheme.searchPlaceholderColor(state),
+    [selectTheme, state]
+  )
 
   return (
     <View style={style}>
       <Pressable
         disabled={!interactive}
         onPress={() => select.toggleOpen()}
-        style={selectTheme.trigger(state)}
+        style={resolvedTriggerStyle}
       >
-        <Text style={selectTheme.triggerText(state)}>
+        <Text style={resolvedTriggerTextStyle}>
           {selectedLabel}
         </Text>
       </Pressable>
@@ -87,11 +112,11 @@ export const Select = ({
         onRequestClose={() => select.setIsOpen(false)}
       >
         <Pressable
-          style={selectTheme.overlay(state)}
+          style={resolvedOverlayStyle}
           onPress={() => select.setIsOpen(false)}
         >
           <Pressable
-            style={selectTheme.menu(state)}
+            style={resolvedMenuStyle}
             onPress={(event) => event.stopPropagation()}
           >
             {showSearch && (
@@ -99,8 +124,8 @@ export const Select = ({
                 value={select.searchQuery}
                 onChangeText={select.setSearchQuery}
                 placeholder="Search…"
-                placeholderTextColor={selectTheme.searchPlaceholderColor(state)}
-                style={selectTheme.search(state)}
+                placeholderTextColor={searchPlaceholderColor}
+                style={resolvedSearchStyle}
               />
             )}
             <FlatList

@@ -5,7 +5,9 @@ import {
   type DesignTheme as DesignTokensTheme,
   type SemanticColors
 } from '@helpwave/hightide-design'
-import type { IconButtonState, IconButtonStyle, IconButtonTheme } from '../types'
+import type { ViewStyle } from 'react-native'
+import type { IconButtonState, IconButtonTheme } from '../types'
+import { createStyleResolver, createValueResolver } from '../types/resolver'
 import { isOutlineColoringStyle, resolveColoringStyles } from './coloring'
 
 export type CreateIconButtonThemeOptions = {
@@ -30,7 +32,7 @@ export const createIconButtonTheme = ({
       ? resolved.borderWidth
       : (isOutlineColoringStyle(coloringStyle) ? outlineWidth : 0)
 
-    const button: IconButtonStyle = {
+    const button: ViewStyle = {
       alignItems: 'center',
       justifyContent: 'center',
       backgroundColor: resolved.backgroundColor,
@@ -49,8 +51,8 @@ export const createIconButtonTheme = ({
   }
 
   return {
-    button: (state) => resolveState(state).button,
-    icon: (state) => resolveState(state).icon,
+    button: createStyleResolver((state) => resolveState(state).button),
+    icon: createValueResolver((state) => resolveState(state).icon),
   }
 }
 

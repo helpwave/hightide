@@ -8,7 +8,7 @@ import { forwardRef, type ReactNode } from 'react'
 import { Pressable, type PressableProps, type StyleProp, type ViewStyle } from 'react-native'
 import { Icon } from '../../icons/Icon'
 import { useTheme } from '../../global-contexts/theme'
-import type { IconButtonState, IconButtonStyle } from '../../theme'
+import type { IconButtonState, IconButtonStyle, StyleOverwrite } from '../../theme'
 
 export type IconButtonSize = ElementSize
 
@@ -21,7 +21,7 @@ export type IconButtonProps = Omit<PressableProps, 'children' | 'style'> & {
   children?: ReactNode,
   accessibilityLabel: string,
   style?: StyleProp<ViewStyle>,
-  buttonStyle?: StyleProp<ViewStyle> | ((style: IconButtonStyle) => StyleProp<ViewStyle>),
+  buttonStyle?: StyleOverwrite<IconButtonState, IconButtonStyle>,
 }
 
 type PressableInteraction = {
@@ -45,25 +45,15 @@ export const IconButton = forwardRef<React.ComponentRef<typeof Pressable>, IconB
 }, ref) {
   const { theme } = useTheme()
 
-  const resolveStyles = (interaction: PressableInteraction) => {
-    const state: IconButtonState = {
-      size,
-      color,
-      coloringStyle,
-      isDisabled: !!disabled,
-      isPressed: interaction.pressed,
-      isHovered: !!interaction.hovered,
-      isFocused: !!interaction.focused,
-    }
-
-    const resolvedButton = theme.components.iconButton.button(state)
-    const resolvedIcon = theme.components.iconButton.icon(state)
-
-    return {
-      button: typeof buttonStyle === 'function' ? buttonStyle(resolvedButton) : [resolvedButton, buttonStyle],
-      icon: resolvedIcon,
-    }
-  }
+  const resolveState = (interaction: PressableInteraction): IconButtonState => ({
+    size,
+    color,
+    coloringStyle,
+    isDisabled: !!disabled,
+    isPressed: interaction.pressed,
+    isHovered: !!interaction.hovered,
+    isFocused: !!interaction.focused,
+  })
 
   return (
     <Pressable
@@ -73,14 +63,16 @@ export const IconButton = forwardRef<React.ComponentRef<typeof Pressable>, IconB
       accessibilityRole="button"
       accessibilityLabel={accessibilityLabel}
       style={(pressableState) => {
-        const resolved = resolveStyles(pressableState as PressableInteraction)
-        return [resolved.button, style]
+        const state = resolveState(pressableState as PressableInteraction)
+        return [theme.components.iconButton.button(state, buttonStyle), style]
       }}
     >
       {(pressableState) => {
-        const resolved = resolveStyles(pressableState as PressableInteraction)
+        const state = resolveState(pressableState as PressableInteraction)
+        const resolvedIcon = theme.components.iconButton.icon(state)
+
         if (icon) {
-          return <Icon icon={icon} size={iconSize ?? size} color={resolved.icon.color} />
+          return <Icon icon={icon} size={iconSize ?? size} color={resolvedIcon.color} />
         }
         return children
       }}

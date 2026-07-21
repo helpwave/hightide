@@ -5,7 +5,9 @@ import {
   type DesignTheme as DesignTokensTheme,
   type SemanticColors
 } from '@helpwave/hightide-design'
-import type { ChipState, ChipStyle, ChipTextStyle, ChipTheme } from '../types'
+import type { TextStyle, ViewStyle } from 'react-native'
+import type { ChipState, ChipTheme } from '../types'
+import { createStyleResolver } from '../types/resolver'
 import { resolveColoringStyles } from './coloring'
 
 export type CreateChipThemeOptions = {
@@ -25,7 +27,7 @@ export const createChipTheme = ({
     const resolved = resolveColoringStyles(tokens, coloringStyle, semantic, state)
     const layout = componentLayouts.chip[size]
 
-    const chip: ChipStyle = {
+    const chip: ViewStyle = {
       flexDirection: 'row',
       alignItems: 'center',
       justifyContent: 'center',
@@ -41,7 +43,7 @@ export const createChipTheme = ({
       opacity: state.isDisabled ? 0.6 : 1,
     }
 
-    const text: ChipTextStyle = {
+    const text: TextStyle = {
       color: resolved.color,
       fontSize: toPx(layout.fontSize),
       fontWeight: '600',
@@ -51,8 +53,8 @@ export const createChipTheme = ({
   }
 
   return {
-    chip: (state) => resolveState(state).chip,
-    text: (state) => resolveState(state).text,
+    chip: createStyleResolver((state) => resolveState(state).chip),
+    text: createStyleResolver((state) => resolveState(state).text),
   }
 }
 
