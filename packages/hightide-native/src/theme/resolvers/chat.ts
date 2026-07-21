@@ -1,10 +1,11 @@
 import { StyleSheet } from 'react-native'
 import {
+  fontWeights,
   hexWithAlpha,
   remToPx,
-  type ColoringTokensDefinitions,
+  type ColoringDefintionTokens,
   type ComponentColors,
-  type DesignTheme as DesignTokensTheme,
+  type DesignTokens as DesignTokensTheme,
   type SemanticColors
 } from '@helpwave/hightide-design'
 import type {
@@ -21,7 +22,7 @@ import { createStyleResolver, createValueResolver } from '../types/resolver'
 export type CreateChatThemeOptions = {
   semantic: SemanticColors,
   component: ComponentColors,
-  coloring: ColoringTokensDefinitions,
+  coloring: ColoringDefintionTokens,
 }
 
 export const createChatTheme = ({
@@ -56,19 +57,19 @@ export const createChatTheme = ({
       flex: 1,
       color: semantic.onSurface,
       fontSize: remToPx('1rem'),
-      fontWeight: state.isUnread ? '700' : '500',
+      fontWeight: state.isUnread ? fontWeights.bold : fontWeights.medium,
     })),
     conversationRowTimestamp: createStyleResolver((state) => ({
       color: state.isUnread ? semantic.primary : semantic.description,
       fontSize: remToPx('0.75rem'),
-      fontWeight: state.isUnread ? '500' : '400',
+      fontWeight: state.isUnread ? fontWeights.medium : fontWeights.base,
       flexShrink: 0,
     })),
     conversationRowPreview: createStyleResolver((state) => ({
       flex: 1,
       color: state.isUnread ? semantic.onSurface : semantic.description,
       fontSize: remToPx('0.875rem'),
-      fontWeight: '300',
+      fontWeight: fontWeights.light,
     })),
     conversationRowUnreadBadge: createStyleResolver(() => ({
       minWidth: remToPx('1.25rem'),
@@ -82,7 +83,7 @@ export const createChatTheme = ({
     conversationRowUnreadBadgeText: createStyleResolver(() => ({
       color: semantic.onPrimary,
       fontSize: remToPx('0.6875rem'),
-      fontWeight: '700',
+      fontWeight: fontWeights.bold,
     })),
     conversationRowSentIndicator: createValueResolver(() => ({
       color: semantic.primary,
@@ -113,12 +114,12 @@ export const createChatTheme = ({
     threadHeaderTitle: createStyleResolver(() => ({
       color: semantic.onSurface,
       fontSize: remToPx('1rem'),
-      fontWeight: '700',
+      fontWeight: fontWeights.bold,
     })),
     threadHeaderSubtitle: createStyleResolver(() => ({
       color: semantic.description,
       fontSize: remToPx('0.75rem'),
-      fontWeight: '300',
+      fontWeight: fontWeights.light,
     })),
     messageList: createStyleResolver(() => ({
       flex: 1,
@@ -151,7 +152,7 @@ export const createChatTheme = ({
     messageBubbleContent: createStyleResolver((state: ChatMessageBubbleState) => ({
       color: state.direction === 'outgoing' ? semantic.onPrimary : semantic.onNeutral,
       fontSize: remToPx('1rem'),
-      fontWeight: '300',
+      fontWeight: fontWeights.light,
       lineHeight: remToPx('1.4rem'),
     })),
     messageBubbleTimestamp: createStyleResolver((state: ChatMessageBubbleState) => ({
@@ -160,7 +161,7 @@ export const createChatTheme = ({
         ? hexWithAlpha(semantic.onPrimary, 0.75)
         : semantic.description,
       fontSize: remToPx('0.6875rem'),
-      fontWeight: '500',
+      fontWeight: fontWeights.medium,
       textAlign: 'right',
     })),
     messageBubbleReceipt: createStyleResolver(() => ({
@@ -171,7 +172,7 @@ export const createChatTheme = ({
     messageBubbleReceiptText: createStyleResolver(() => ({
       color: semantic.description,
       fontSize: remToPx('0.6875rem'),
-      fontWeight: '500',
+      fontWeight: fontWeights.medium,
     })),
     messageBubbleReceiptIcon: createValueResolver(() => ({
       color: semantic.primary,
@@ -232,7 +233,7 @@ export const createChatTheme = ({
       return {
         color: tokens.text ?? tokens.color,
         fontSize: remToPx('0.875rem'),
-        fontWeight: '700',
+        fontWeight: fontWeights.bold,
       }
     }),
     messageCardSubtitle: createStyleResolver(() => ({
@@ -285,7 +286,7 @@ export const createChatTheme = ({
     attachmentCardName: createStyleResolver(() => ({
       color: semantic.onSurface,
       fontSize: remToPx('0.875rem'),
-      fontWeight: '500',
+      fontWeight: fontWeights.medium,
     })),
     attachmentCardMetadata: createStyleResolver(() => ({
       color: semantic.description,
@@ -305,7 +306,7 @@ export const createChatTheme = ({
       return {
         color: tokens.text ?? tokens.color,
         fontSize: remToPx('0.75rem'),
-        fontWeight: '500',
+        fontWeight: fontWeights.medium,
       }
     }),
     systemLineIcon: createValueResolver((state: ChatSystemLineState) => {
@@ -326,7 +327,7 @@ export const createChatTheme = ({
     dateDividerText: createStyleResolver(() => ({
       color: semantic.description,
       fontSize: remToPx('0.75rem'),
-      fontWeight: '500',
+      fontWeight: fontWeights.medium,
     })),
     quickReplyChip: createStyleResolver((state: ChatQuickReplyChipState) => {
       const pressed = !!state.isPressed && !state.isDisabled
@@ -347,7 +348,7 @@ export const createChatTheme = ({
     quickReplyChipText: createStyleResolver((state: ChatQuickReplyChipState) => ({
       color: state.isActive ? semantic.primary : semantic.description,
       fontSize: remToPx('0.875rem'),
-      fontWeight: '500',
+      fontWeight: fontWeights.medium,
     })),
     messageComposer: createStyleResolver(() => ({
       flexDirection: 'row',

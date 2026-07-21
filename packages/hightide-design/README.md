@@ -15,6 +15,11 @@ import {
   themes,
   colorPalettes,
   componentLayouts,
+  fontWeights,
+  fontSizes,
+  lineHeights,
+  fontFamilies,
+  typography,
   getTheme,
   getSemanticColors,
   resolveButtonStyles,
@@ -27,6 +32,7 @@ const theme = getTheme(mode);
 const background = theme.semantic.background;
 const menuBackground = theme.component.menu.background;
 const buttonHeight = componentLayouts.element.md.height;
+const headline = typography.headline.large;
 ```
 
 Legacy rem-based exports (`spacing`, `buttonPadding`, `elementSizes`, etc.) remain available for existing consumers.
@@ -48,12 +54,14 @@ src/
 - `SemanticColors` — fixed semantic color set per theme
 - `ComponentColors` — component colors grouped by component (e.g. `menu.background`, `input.text`)
 - `ComponentLayouts` — per-component sizes, padding, radii, and shared spacing
+- `TypographyScale` / `TypographyStyle` — semantic typography styles (`theme.typography.headline.large`, etc.)
 
 ### Static tokens
 
 - `tokens/palettes.ts` — color palettes shared across themes
-- `tokens/themes/light.ts`, `tokens/themes/dark.ts` — complete themes with palettes, semantic, and component colors
+- `tokens/themes/light.ts`, `tokens/themes/dark.ts` — complete themes with palettes, semantic, component colors, and typography
 - `tokens/layouts/component-layouts.ts` — component layout definitions
+- `tokens/typography/` — font weights, sizes, line heights, families, and the composed `typography` scale
 
 ### Helpers
 
@@ -70,6 +78,7 @@ Tokens mirror:
 - `packages/hightide/src/style/theme/colors/component.css`
 - `packages/hightide/src/style/theme/variables.css`
 - `packages/hightide/src/style/theme/element.css`
+- `packages/hightide/src/style/theme/typography.css`
 - `packages/hightide/src/style/theme/components/button.css`
 - `packages/hightide/src/style/theme/components/chip.css`
 - `packages/hightide/src/style/theme/components/input-elements.css`

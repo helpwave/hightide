@@ -1,5 +1,5 @@
 import type { ButtonColoringStyle, ColorValue, ColoringType, ElementSize } from '@helpwave/hightide-design'
-import type { StyleProp, ViewStyle } from 'react-native'
+import type { ViewStyle } from 'react-native'
 import type { InteractionState, StyleResolverFunction } from './resolver'
 
 export type IconButtonState = InteractionState & {
@@ -8,7 +8,7 @@ export type IconButtonState = InteractionState & {
   coloringStyle?: ButtonColoringStyle,
 }
 
-export type IconButtonStyle = StyleProp<ViewStyle>
+export type IconButtonStyle = ViewStyle
 
 export type IconButtonIconStyle = {
   color: ColorValue,

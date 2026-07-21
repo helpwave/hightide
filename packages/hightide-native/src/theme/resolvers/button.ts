@@ -1,8 +1,9 @@
 import {
   componentLayouts,
+  fontWeights,
   toPx,
-  type ColoringTokensDefinitions,
-  type DesignTheme as DesignTokensTheme,
+  type ColoringDefintionTokens,
+  type DesignTokens as DesignTokensTheme,
   type ElementSize,
   type SemanticColors
 } from '@helpwave/hightide-design'
@@ -20,7 +21,7 @@ const buttonFontSizes: Record<ElementSize, number> = {
 
 export type CreateButtonThemeOptions = {
   semantic: SemanticColors,
-  coloring: ColoringTokensDefinitions,
+  coloring: ColoringDefintionTokens,
 }
 
 export const createButtonTheme = ({
@@ -56,7 +57,7 @@ export const createButtonTheme = ({
     const text: TextStyle = {
       color: resolved.color,
       fontSize: buttonFontSizes[size],
-      fontWeight: '600',
+      fontWeight: fontWeights.semibold,
     }
 
     return { button, text }

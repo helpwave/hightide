@@ -1,20 +1,10 @@
-import type { ColoringToken, ColoringTokensDefinitions, ColoringType, SemanticColors } from '../../types'
+import type { ColoringDefinitionToken, ColoringDefintionTokens, SemanticColorTokens } from '../../types'
 
-export {
-  coloringTypes,
-  type ColoringType,
-  type ColoringColor,
-  type ButtonColoringStyle,
-  type ChipColoringStyle,
-  type ColoringStyle,
-  type ColoringToken,
-  type ColoringTokensDefinitions,
-  type ColoringTokens,
-} from '../../types'
+export const coloringTypes = ['primary', 'secondary', 'positive', 'warning', 'negative', 'neutral'] as const
 
-export const coloringColors = ['primary', 'secondary', 'positive', 'warning', 'negative', 'neutral'] as const satisfies readonly ColoringType[]
+export type ColoringType = typeof coloringTypes[number]
 
-export const createColoringTokensDefinitions = (semantic: SemanticColors): ColoringTokensDefinitions => ({
+export const createColoringTokensDefinitions = (semantic: SemanticColorTokens): Record<ColoringType, ColoringDefinitionToken> => ({
   primary: {
     color: semantic.primary,
     onColor: semantic.onPrimary,
@@ -55,5 +45,5 @@ export const createColoringTokensDefinitions = (semantic: SemanticColors): Color
 
 export const getColoringToken = (
   color: ColoringType,
-  definitions: ColoringTokensDefinitions
-): ColoringToken => definitions[color]
+  definitions: ColoringDefintionTokens
+): ColoringDefinitionToken => definitions[color]

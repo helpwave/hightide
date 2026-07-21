@@ -1,47 +1,47 @@
-import type { ElementSize, FixedUnit, ScalingUnit, TimeValue } from './units'
+export type BorderRadiusToken = number | 'full'
+
+export type ScalingUnitToken = number
+
+export type FixedUnitToken = number
+
+export type ElementSize = 'xs' | 'sm' | 'md' | 'lg'
 
 export type BreakPointTokens = {
-  tablet: ScalingUnit,
-  desktop: ScalingUnit,
-}
-
-export type AnimationTokens = {
-  durationIn: TimeValue,
-  durationOut: TimeValue,
+  tablet: ScalingUnitToken,
+  desktop: ScalingUnitToken,
 }
 
 export type SharedLayoutTokens = {
-  spacingBase: ScalingUnit,
-  drawerIndent: ScalingUnit,
-  scrollbarWidth: FixedUnit,
-  scrollbarPadding: FixedUnit,
-  coloringOutlineWidth: FixedUnit,
+  spacingBase: ScalingUnitToken,
+  drawerIndent: ScalingUnitToken,
+  scrollbarWidth: FixedUnitToken,
+  scrollbarPadding: FixedUnitToken,
+  coloringOutlineWidth: FixedUnitToken,
   breakpoints: BreakPointTokens,
-  animation: AnimationTokens,
 }
 
 export type ElementLayoutTokenMap = {
-  height: ScalingUnit,
-  borderRadius: ScalingUnit,
+  height: ScalingUnitToken,
+  borderRadius: ScalingUnitToken,
 }
 
 export type ElementLayoutTokens = Record<ElementSize, ElementLayoutTokenMap>
 
 export type ElementPaddingTokenMap = {
-  vertical: ScalingUnit,
-  horizontal: ScalingUnit,
+  vertical: ScalingUnitToken,
+  horizontal: ScalingUnitToken,
 }
 
 export type ElementPaddingTokens = Record<ElementSize, ElementPaddingTokenMap>
 
 export type ButtonLayoutTokenMap = {
-  paddingY: ScalingUnit,
-  paddingX: ScalingUnit,
-  paddingYOutline: ScalingUnit,
-  paddingXOutline: ScalingUnit,
-  gap: ScalingUnit,
-  minWidth: ScalingUnit,
-  borderRadius: ScalingUnit,
+  paddingY: ScalingUnitToken,
+  paddingX: ScalingUnitToken,
+  paddingYOutline: ScalingUnitToken,
+  paddingXOutline: ScalingUnitToken,
+  gap: ScalingUnitToken,
+  minWidth: ScalingUnitToken,
+  borderRadius: ScalingUnitToken,
 }
 
 export type ButtonLayoutTokens = Record<ElementSize, ButtonLayoutTokenMap>
@@ -49,31 +49,31 @@ export type ButtonLayoutTokens = Record<ElementSize, ButtonLayoutTokenMap>
 export type IconButtonLayoutTokens = Record<ElementSize, Pick<ButtonLayoutTokenMap, 'paddingYOutline' | 'paddingXOutline' | 'borderRadius'>>
 
 export type IconLayoutTokenMap = {
-  size: ScalingUnit,
-  strokeWidth: FixedUnit,
+  size: ScalingUnitToken,
+  strokeWidth: FixedUnitToken,
 }
 
 export type IconLayoutTokens = Record<ElementSize, IconLayoutTokenMap>
 
 export type InputLayoutTokenMap = {
-  height: ScalingUnit,
-  paddingX: ScalingUnit,
-  paddingY: ScalingUnit,
-  borderRadius: ScalingUnit,
+  height: ScalingUnitToken,
+  paddingX: ScalingUnitToken,
+  paddingY: ScalingUnitToken,
+  borderRadius: ScalingUnitToken,
 }
 
 export type ChipLayoutTokenMap = {
-  minHeight: ScalingUnit,
-  paddingVertical: ScalingUnit,
-  paddingHorizontal: ScalingUnit,
-  gap: ScalingUnit,
-  borderRadius: ScalingUnit,
-  fontSize: FixedUnit,
+  minHeight: ScalingUnitToken,
+  paddingVertical: ScalingUnitToken,
+  paddingHorizontal: ScalingUnitToken,
+  gap: ScalingUnitToken,
+  borderRadius: ScalingUnitToken,
+  fontSize: FixedUnitToken,
 }
 
 export type ChipLayoutTokens = Record<ElementSize, ChipLayoutTokenMap>
 
-export type ComponentLayouts = {
+export type ComponentLayoutTokens = {
   shared: SharedLayoutTokens,
   element: ElementLayoutTokens,
   elementPadding: ElementPaddingTokens,

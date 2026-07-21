@@ -1,5 +1,5 @@
 import type { ChipColoringStyle, ColoringType, ElementSize } from '@helpwave/hightide-design'
-import type { StyleProp, TextStyle, ViewStyle } from 'react-native'
+import type { TextStyle, ViewStyle } from 'react-native'
 import type { InteractionState, StyleResolverFunction } from './resolver'
 
 export type ChipState = InteractionState & {
@@ -8,9 +8,9 @@ export type ChipState = InteractionState & {
   coloringStyle?: ChipColoringStyle,
 }
 
-export type ChipStyle = StyleProp<ViewStyle>
+export type ChipStyle = ViewStyle
 
-export type ChipTextStyle = StyleProp<TextStyle>
+export type ChipTextStyle = TextStyle
 
 export type ChipTheme = {
   chip: StyleResolverFunction<ChipState, ChipStyle>,

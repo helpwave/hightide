@@ -1,4 +1,4 @@
-import type { ComponentLayouts } from '../../types'
+import type { ComponentLayoutTokens } from '../types'
 
 const spacingBase = 4
 const outlineWidth = 2
@@ -13,10 +13,6 @@ export const componentLayouts = {
     breakpoints: {
       tablet: 768,
       desktop: 1024,
-    },
-    animation: {
-      durationIn: '250ms',
-      durationOut: '170ms',
     },
   },
   element: {
@@ -95,4 +91,4 @@ export const componentLayouts = {
     md: { minHeight: 40, paddingVertical: 8, paddingHorizontal: 12, gap: 8, borderRadius: 6, fontSize: 14 },
     lg: { minHeight: 48, paddingVertical: 10, paddingHorizontal: 16, gap: 8, borderRadius: 6, fontSize: 14 },
   },
-} as const satisfies ComponentLayouts
+} as const satisfies ComponentLayoutTokens

@@ -1,13 +1,15 @@
 import type {
-  ColoringTokensDefinitions,
+  ColoringDefintionTokens,
   DesignColorPalettes,
-  SemanticColors
+  SemanticColors,
+  TypographyScaleTokens
 } from '@helpwave/hightide-design'
 import type { ComponentThemes } from './components'
 
-export type DesignTheme = {
+export type DesignTheme<T extends object = object> = {
   palettes: DesignColorPalettes,
   semantic: SemanticColors,
-  coloring: ColoringTokensDefinitions,
+  coloring: ColoringDefintionTokens,
+  typography: TypographyScaleTokens,
   components: ComponentThemes,
-}
+} & T

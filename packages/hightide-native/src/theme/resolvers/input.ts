@@ -2,7 +2,7 @@ import {
   inputElementSizes,
   remToPx,
   type ComponentColors,
-  type DesignTheme as DesignTokensTheme,
+  type DesignTokens as DesignTokensTheme,
   type SemanticColors
 } from '@helpwave/hightide-design'
 import type { TextStyle } from 'react-native'

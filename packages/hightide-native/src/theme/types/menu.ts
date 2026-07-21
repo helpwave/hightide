@@ -1,30 +1,30 @@
 import type { ColorValue } from '@helpwave/hightide-design'
-import type { StyleProp, TextStyle, ViewStyle } from 'react-native'
+import type { TextStyle, ViewStyle } from 'react-native'
 import type { InteractionState, StyleResolverFunction } from './resolver'
 
-export type MenuSectionStyle = StyleProp<ViewStyle>
+export type MenuSectionStyle = ViewStyle
 
-export type MenuSectionTitleStyle = StyleProp<TextStyle>
+export type MenuSectionTitleStyle = TextStyle
 
-export type MenuCardStyle = StyleProp<ViewStyle>
+export type MenuCardStyle = ViewStyle
 
-export type MenuItemStyle = StyleProp<ViewStyle>
+export type MenuItemStyle = ViewStyle
 
-export type MenuItemContentStyle = StyleProp<ViewStyle>
+export type MenuItemContentStyle = ViewStyle
 
-export type MenuItemLabelStyle = StyleProp<TextStyle>
+export type MenuItemLabelStyle = TextStyle
 
-export type MenuItemValueStyle = StyleProp<TextStyle>
+export type MenuItemValueStyle = TextStyle
 
 export type MenuActionItemState = InteractionState & {
   isDanger?: boolean,
 }
 
-export type MenuActionItemStyle = StyleProp<ViewStyle>
+export type MenuActionItemStyle = ViewStyle
 
-export type MenuActionItemContentStyle = StyleProp<ViewStyle>
+export type MenuActionItemContentStyle = ViewStyle
 
-export type MenuActionItemLabelStyle = StyleProp<TextStyle>
+export type MenuActionItemLabelStyle = TextStyle
 
 export type MenuActionItemIconColor = {
   color: ColorValue,

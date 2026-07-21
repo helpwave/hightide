@@ -1,4 +1,4 @@
-import type { ColorValue } from '../types'
+import type { ColorToken } from '../types'
 
 const expandHex = (hex: string): string => {
   const normalized = hex.startsWith('#') ? hex.slice(1) : hex
@@ -10,7 +10,7 @@ const expandHex = (hex: string): string => {
   return normalized
 }
 
-export const hexWithAlpha = (hex: ColorValue, alpha: number): ColorValue => {
+export const hexWithAlpha = (hex: ColorToken, alpha: number): ColorToken => {
   const expanded = expandHex(hex)
   const rgb = expanded.slice(0, 6)
   const alphaByte = Math.round(Math.min(1, Math.max(0, alpha)) * 255)

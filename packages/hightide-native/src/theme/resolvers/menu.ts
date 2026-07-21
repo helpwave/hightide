@@ -1,8 +1,9 @@
 import { StyleSheet } from 'react-native'
 import {
+  fontWeights,
   remToPx,
   type ComponentColors,
-  type DesignTheme as DesignTokensTheme,
+  type DesignTokens as DesignTokensTheme,
   type SemanticColors
 } from '@helpwave/hightide-design'
 import type { MenuActionItemState, MenuTheme } from '../types'
@@ -43,7 +44,7 @@ export const createMenuTheme = ({
   const resolveActionLabel = (state: MenuActionItemState) => ({
     color: state.isDanger ? semantic.negative : semantic.onSurface,
     fontSize: remToPx('0.9375rem'),
-    fontWeight: '500' as const,
+    fontWeight: fontWeights.medium,
   })
 
   const resolveActionIcon = (state: MenuActionItemState) => ({
@@ -58,7 +59,7 @@ export const createMenuTheme = ({
     sectionTitle: createStyleResolver(() => ({
       color: semantic.description,
       fontSize: remToPx('0.75rem'),
-      fontWeight: '700',
+      fontWeight: fontWeights.bold,
       letterSpacing: 0.4,
       textTransform: 'uppercase',
       paddingHorizontal: remToPx('0.25rem'),
@@ -88,7 +89,7 @@ export const createMenuTheme = ({
     itemValue: createStyleResolver(() => ({
       color: semantic.onSurface,
       fontSize: remToPx('0.9375rem'),
-      fontWeight: '500',
+      fontWeight: fontWeights.medium,
     })),
     actionItem: createStyleResolver(resolveActionItem),
     actionItemContent: createStyleResolver(resolveItemContent),

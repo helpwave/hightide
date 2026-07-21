@@ -1,7 +1,8 @@
 import {
+  fontWeights,
   remToPx,
   type ComponentColors,
-  type DesignTheme as DesignTokensTheme,
+  type DesignTokens as DesignTokensTheme,
   type SemanticColors
 } from '@helpwave/hightide-design'
 import type {
@@ -65,7 +66,7 @@ export const createSelectTheme = ({
     })),
     optionText: createStyleResolver((state: SelectOptionState) => ({
       color: state.isSelected ? semantic.primary : component.menu.text,
-      fontWeight: state.isSelected ? '600' : '400',
+      fontWeight: state.isSelected ? fontWeights.semibold : fontWeights.base,
     })),
   }
 }

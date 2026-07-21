@@ -1,43 +1,44 @@
-export type ColorPaletteBasicStep = 50 | 100 | 200 | 300 | 400 | 500 | 600 | 700 | 800 | 900 | 950
+export type ColorToken = `#${string}`
 
-export type ColorPaletteDetailedStep =
-  | 25
-  | 50
-  | 75
-  | 100
-  | 150
-  | 200
-  | 250
-  | 300
-  | 350
-  | 400
-  | 450
-  | 500
-  | 550
-  | 600
-  | 650
-  | 700
-  | 750
-  | 800
-  | 850
-  | 900
-  | 925
-  | 950
-  | 975
+export type SemanticColorTokens = Record<string, ColorToken>
 
-export type ColorValue = `#${string}`
+const colorPaletteBasicSteps = [50, 100, 200, 300, 400, 500, 600, 700, 800, 900, 950] as const
+export type ColorPaletteBasicStep = typeof colorPaletteBasicSteps[number]
 
-export type ColorPaletteBasic = Record<ColorPaletteBasicStep, ColorValue>
+const colorPaletteDetailedSteps = [
+  25, 50, 75, 100, 150, 200, 250,
+  300, 350, 400, 450, 500,
+  550, 600, 650, 700, 750,
+  800, 850, 900, 925, 950, 975
+]
+export type ColorPaletteDetailedStep = typeof colorPaletteDetailedSteps[number]
 
-export type ColorPaletteDetailed = Record<ColorPaletteDetailedStep, ColorValue>
-
-export type DesignColorPalettes = {
-  white: ColorValue,
-  black: ColorValue,
-  gray: ColorPaletteDetailed,
-  green: ColorPaletteBasic,
-  orange: ColorPaletteBasic,
-  purple: ColorPaletteBasic,
-  blue: ColorPaletteBasic,
-  red: ColorPaletteBasic,
+export const ColorPaletteUtils = {
+  basicSteps: colorPaletteBasicSteps,
+  detailedSteps: colorPaletteDetailedSteps,
 }
+
+export type ColorPalette<Steps extends number> = Record<Steps, ColorToken>
+
+export type ColorPaletteBasic = ColorPalette<ColorPaletteBasicStep>
+
+export type ColorPaletteDetailed = ColorPalette<ColorPaletteDetailedStep>
+
+export type ColorPaletteBasicToken = {
+  type: 'basic',
+  value: ColorPaletteBasic,
+}
+
+export type ColorPaletteDetailedToken = {
+  type: 'detailed',
+  value: ColorPaletteDetailed,
+}
+
+export type ColorPaletteSingleValueToken = {
+  type: 'singleValue',
+  value: ColorToken,
+}
+
+export type ColorPaletteToken =  ColorPaletteBasicToken | ColorPaletteDetailedToken | ColorPaletteSingleValueToken
+
+export type ColorPaletteTokens = Record<string, ColorPaletteToken>

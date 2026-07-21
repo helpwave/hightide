@@ -1,4 +1,4 @@
-import type { DesignTheme as DesignTokensTheme } from '@helpwave/hightide-design'
+import type { DesignTokens as DesignTokensTheme } from '@helpwave/hightide-design'
 import {
   createButtonThemeFromDesign,
   createChatThemeFromDesign,
@@ -16,6 +16,7 @@ export const createDesignTheme = (tokens: DesignTokensTheme): DesignTheme => ({
   palettes: tokens.palettes,
   semantic: tokens.semantic,
   coloring: tokens.coloring,
+  typography: tokens.typography,
   components: {
     button: createButtonThemeFromDesign(tokens),
     iconButton: createIconButtonThemeFromDesign(tokens),

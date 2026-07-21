@@ -4,20 +4,20 @@ import type { DesignTheme, ThemeMode } from '../../theme'
 
 export type { ThemeInformation }
 
-export type ThemeContextValue = Omit<ThemeConfigValue, 'theme'> & {
+export type ThemeContextValue<T extends object = object> = Omit<ThemeConfigValue, 'theme'> & {
   themeMode: ThemeMode,
-  theme: DesignTheme,
+  theme: DesignTheme<T>,
   isInitialized: boolean,
 }
 
-export const ThemeContext = createContext<ThemeContextValue | null>(null)
+export const ThemeContext = createContext<ThemeContextValue<object> | null>(null)
 
-export const useTheme = (): ThemeContextValue => {
+export const useTheme = <T extends object = object>(): ThemeContextValue<T> => {
   const context = useContext(ThemeContext)
   if (!context) {
     throw new Error(
       'useTheme must be used within ThemeContext. Try adding a ThemeProvider around your app.'
     )
   }
-  return context
+  return context as ThemeContextValue<T>
 }

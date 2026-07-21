@@ -103,7 +103,7 @@ export const ChatMessageComposer = ({
         size="md"
         onPress={send}
         icon={SendHorizontal}
-        buttonStyle={(prev) => [prev, { borderRadius: 999 }]}
+        buttonStyle={(prev) => ({ ...prev, borderRadius: 999 })}
       />
     </View>
   )

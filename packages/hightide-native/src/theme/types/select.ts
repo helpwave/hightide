@@ -1,5 +1,5 @@
 import type { ColorValue } from '@helpwave/hightide-design'
-import type { StyleProp, TextStyle, ViewStyle } from 'react-native'
+import type { TextStyle, ViewStyle } from 'react-native'
 import type { InteractionState, StyleResolverFunction } from './resolver'
 
 export type SelectState = InteractionState & {
@@ -14,19 +14,19 @@ export type SelectOptionState = InteractionState & {
   isHighlighted?: boolean,
 }
 
-export type SelectTriggerStyle = StyleProp<ViewStyle>
+export type SelectTriggerStyle = ViewStyle
 
-export type SelectTriggerTextStyle = StyleProp<TextStyle>
+export type SelectTriggerTextStyle = TextStyle
 
-export type SelectOverlayStyle = StyleProp<ViewStyle>
+export type SelectOverlayStyle = ViewStyle
 
-export type SelectMenuStyle = StyleProp<ViewStyle>
+export type SelectMenuStyle = ViewStyle
 
-export type SelectSearchStyle = StyleProp<TextStyle>
+export type SelectSearchStyle = TextStyle
 
-export type SelectOptionStyle = StyleProp<ViewStyle>
+export type SelectOptionStyle = ViewStyle
 
-export type SelectOptionTextStyle = StyleProp<TextStyle>
+export type SelectOptionTextStyle = TextStyle
 
 export type SelectTheme = {
   trigger: StyleResolverFunction<SelectState, SelectTriggerStyle>,

@@ -1,8 +1,8 @@
 import {
   componentLayouts,
   toPx,
-  type ColoringTokensDefinitions,
-  type DesignTheme as DesignTokensTheme,
+  type ColoringDefintionTokens,
+  type DesignTokens as DesignTokensTheme,
   type SemanticColors
 } from '@helpwave/hightide-design'
 import type { ViewStyle } from 'react-native'
@@ -12,7 +12,7 @@ import { isOutlineColoringStyle, resolveColoringStyles } from './coloring'
 
 export type CreateIconButtonThemeOptions = {
   semantic: SemanticColors,
-  coloring: ColoringTokensDefinitions,
+  coloring: ColoringDefintionTokens,
 }
 
 export const createIconButtonTheme = ({

@@ -5,7 +5,7 @@ import {
   type ButtonColoringStyle,
   type ChipColoringStyle,
   type ColorValue,
-  type ColoringToken,
+  type ColoringDefinitionToken,
   type ColoringStyle,
   type SemanticColors
 } from '@helpwave/hightide-design'
@@ -23,7 +23,7 @@ const usesHover = (state: InteractionState): boolean => {
 }
 
 export const resolveColoringStyles = (
-  tokens: ColoringToken,
+  tokens: ColoringDefinitionToken,
   coloringStyle: ColoringStyle,
   semantic: SemanticColors,
   state: InteractionState = {}

@@ -1,5 +1,5 @@
 import type { ColorValue, ColoringType } from '@helpwave/hightide-design'
-import type { StyleProp, TextStyle, ViewStyle } from 'react-native'
+import type { TextStyle, ViewStyle } from 'react-native'
 import type { InteractionState, StyleResolverFunction } from './resolver'
 
 export type ChatMessageDirection = 'incoming' | 'outgoing'
@@ -9,30 +9,30 @@ export type ChatConversationRowState = InteractionState & {
   isSelected?: boolean,
 }
 
-export type ChatConversationRowStyle = StyleProp<ViewStyle>
-export type ChatConversationRowTitleStyle = StyleProp<TextStyle>
-export type ChatConversationRowTimestampStyle = StyleProp<TextStyle>
-export type ChatConversationRowPreviewStyle = StyleProp<TextStyle>
-export type ChatConversationRowUnreadBadgeStyle = StyleProp<ViewStyle>
-export type ChatConversationRowUnreadBadgeTextStyle = StyleProp<TextStyle>
-export type ChatConversationListStyle = StyleProp<ViewStyle>
-export type ChatConversationListHeaderStyle = StyleProp<ViewStyle>
-export type ChatConversationListFooterStyle = StyleProp<ViewStyle>
-export type ChatThreadHeaderStyle = StyleProp<ViewStyle>
-export type ChatThreadHeaderTitleStyle = StyleProp<TextStyle>
-export type ChatThreadHeaderSubtitleStyle = StyleProp<TextStyle>
-export type ChatMessageListStyle = StyleProp<ViewStyle>
+export type ChatConversationRowStyle = ViewStyle
+export type ChatConversationRowTitleStyle = TextStyle
+export type ChatConversationRowTimestampStyle = TextStyle
+export type ChatConversationRowPreviewStyle = TextStyle
+export type ChatConversationRowUnreadBadgeStyle = ViewStyle
+export type ChatConversationRowUnreadBadgeTextStyle = TextStyle
+export type ChatConversationListStyle = ViewStyle
+export type ChatConversationListHeaderStyle = ViewStyle
+export type ChatConversationListFooterStyle = ViewStyle
+export type ChatThreadHeaderStyle = ViewStyle
+export type ChatThreadHeaderTitleStyle = TextStyle
+export type ChatThreadHeaderSubtitleStyle = TextStyle
+export type ChatMessageListStyle = ViewStyle
 
 export type ChatMessageBubbleState = {
   direction: ChatMessageDirection,
 }
 
-export type ChatMessageBubbleContainerStyle = StyleProp<ViewStyle>
-export type ChatMessageBubbleStyle = StyleProp<ViewStyle>
-export type ChatMessageBubbleContentStyle = StyleProp<TextStyle>
-export type ChatMessageBubbleTimestampStyle = StyleProp<TextStyle>
-export type ChatMessageBubbleReceiptStyle = StyleProp<ViewStyle>
-export type ChatMessageBubbleReceiptTextStyle = StyleProp<TextStyle>
+export type ChatMessageBubbleContainerStyle = ViewStyle
+export type ChatMessageBubbleStyle = ViewStyle
+export type ChatMessageBubbleContentStyle = TextStyle
+export type ChatMessageBubbleTimestampStyle = TextStyle
+export type ChatMessageBubbleReceiptStyle = ViewStyle
+export type ChatMessageBubbleReceiptTextStyle = TextStyle
 
 export type ChatMessageBubbleReceiptIconStyle = {
   color: ColorValue,
@@ -43,55 +43,55 @@ export type ChatMessageCardState = {
   color?: ColoringType,
 }
 
-export type ChatMessageCardStyle = StyleProp<ViewStyle>
-export type ChatMessageCardHeaderStyle = StyleProp<ViewStyle>
-export type ChatMessageCardIconStyle = StyleProp<ViewStyle>
+export type ChatMessageCardStyle = ViewStyle
+export type ChatMessageCardHeaderStyle = ViewStyle
+export type ChatMessageCardIconStyle = ViewStyle
 
 export type ChatMessageCardIconColor = {
   color: ColorValue,
 }
 
-export type ChatMessageCardTitleStyle = StyleProp<TextStyle>
-export type ChatMessageCardSubtitleStyle = StyleProp<TextStyle>
-export type ChatMessageCardBodyStyle = StyleProp<ViewStyle>
-export type ChatMessageCardActionsStyle = StyleProp<ViewStyle>
+export type ChatMessageCardTitleStyle = TextStyle
+export type ChatMessageCardSubtitleStyle = TextStyle
+export type ChatMessageCardBodyStyle = ViewStyle
+export type ChatMessageCardActionsStyle = ViewStyle
 
 export type ChatAttachmentCardState = {
   direction: ChatMessageDirection,
 }
 
-export type ChatAttachmentCardStyle = StyleProp<ViewStyle>
-export type ChatAttachmentCardIconStyle = StyleProp<ViewStyle>
+export type ChatAttachmentCardStyle = ViewStyle
+export type ChatAttachmentCardIconStyle = ViewStyle
 
 export type ChatAttachmentCardIconColor = {
   color: ColorValue,
 }
 
-export type ChatAttachmentCardNameStyle = StyleProp<TextStyle>
-export type ChatAttachmentCardMetadataStyle = StyleProp<TextStyle>
+export type ChatAttachmentCardNameStyle = TextStyle
+export type ChatAttachmentCardMetadataStyle = TextStyle
 
 export type ChatSystemLineState = {
   color?: ColoringType,
 }
 
-export type ChatSystemLineStyle = StyleProp<ViewStyle>
-export type ChatSystemLineTextStyle = StyleProp<TextStyle>
+export type ChatSystemLineStyle = ViewStyle
+export type ChatSystemLineTextStyle = TextStyle
 
 export type ChatSystemLineIconStyle = {
   color: ColorValue,
 }
 
-export type ChatDateDividerStyle = StyleProp<ViewStyle>
-export type ChatDateDividerTextStyle = StyleProp<TextStyle>
+export type ChatDateDividerStyle = ViewStyle
+export type ChatDateDividerTextStyle = TextStyle
 
 export type ChatQuickReplyChipState = InteractionState & {
   isActive?: boolean,
 }
 
-export type ChatQuickReplyChipStyle = StyleProp<ViewStyle>
-export type ChatQuickReplyChipTextStyle = StyleProp<TextStyle>
-export type ChatMessageComposerStyle = StyleProp<ViewStyle>
-export type ChatMessageComposerInputStyle = StyleProp<TextStyle>
+export type ChatQuickReplyChipStyle = ViewStyle
+export type ChatQuickReplyChipTextStyle = TextStyle
+export type ChatMessageComposerStyle = ViewStyle
+export type ChatMessageComposerInputStyle = TextStyle
 
 export type ChatTheme = {
   conversationRow: StyleResolverFunction<ChatConversationRowState, ChatConversationRowStyle>,

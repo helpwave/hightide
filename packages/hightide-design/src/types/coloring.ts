@@ -1,31 +1,21 @@
-import type { ColorValue } from './color'
+import type { ColorToken } from './color'
 
-export const coloringTypes = ['primary', 'secondary', 'positive', 'warning', 'negative', 'neutral'] as const
+export type ColoringStyle = 'outline' | 'solid' | 'text' | 'tonal' | 'tonal-outline'
 
-export type ColoringType = typeof coloringTypes[number]
+export type ButtonColoringStyle = ColoringStyle
 
-/** @deprecated Use ColoringType */
-export type ColoringColor = ColoringType
+export type ChipColoringStyle = Omit<ColoringStyle, 'text'>
 
-export type ButtonColoringStyle = 'outline' | 'solid' | 'text' | 'tonal' | 'tonal-outline'
-
-export type ChipColoringStyle = 'solid' | 'tonal' | 'outline' | 'tonal-outline'
-
-export type ColoringStyle = ButtonColoringStyle
-
-export type ColoringToken = {
-  color: ColorValue,
-  onColor: ColorValue,
-  hover: ColorValue,
-  text?: ColorValue,
-  textHover?: ColorValue,
-  outline?: ColorValue,
-  outlineHover?: ColorValue,
-  tonalText?: ColorValue,
-  tonalBackground?: ColorValue,
+export type ColoringDefinitionToken = {
+  color: ColorToken,
+  onColor: ColorToken,
+  hover: ColorToken,
+  text?: ColorToken,
+  textHover?: ColorToken,
+  outline?: ColorToken,
+  outlineHover?: ColorToken,
+  tonalText?: ColorToken,
+  tonalBackground?: ColorToken,
 }
 
-export type ColoringTokensDefinitions = Record<ColoringType, ColoringToken>
-
-/** @deprecated Use ColoringToken */
-export type ColoringTokens = ColoringToken
+export type ColoringDefintionTokens = Record<string, ColoringDefinitionToken>

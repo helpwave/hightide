@@ -1,3 +1,3 @@
-export * from './palettes'
+export * from './color-palettes'
 export * from './themes'
-export { componentLayouts } from './layouts/component-layouts'
+export * from './typography'

@@ -1,5 +1,5 @@
 import type { ColorValue } from '@helpwave/hightide-design'
-import type { StyleProp, TextStyle, ViewStyle } from 'react-native'
+import type { TextStyle, ViewStyle } from 'react-native'
 import type { StyleResolverFunction } from './resolver'
 import type {
   SelectMenuStyle,
@@ -16,13 +16,13 @@ export type MultiSelectState = SelectState & {
 
 export type MultiSelectOptionState = SelectOptionState
 
-export type MultiSelectTriggerStyle = StyleProp<ViewStyle>
+export type MultiSelectTriggerStyle = ViewStyle
 
-export type MultiSelectOptionStyle = StyleProp<ViewStyle>
+export type MultiSelectOptionStyle = ViewStyle
 
-export type MultiSelectOptionTextStyle = StyleProp<TextStyle>
+export type MultiSelectOptionTextStyle = TextStyle
 
-export type MultiSelectCheckboxStyle = StyleProp<ViewStyle>
+export type MultiSelectCheckboxStyle = ViewStyle
 
 export type MultiSelectCheckboxIconStyle = {
   color: ColorValue,

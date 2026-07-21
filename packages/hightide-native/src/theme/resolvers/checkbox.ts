@@ -2,7 +2,7 @@ import {
   remToPx,
   spacing,
   type ComponentColors,
-  type DesignTheme as DesignTokensTheme,
+  type DesignTokens as DesignTokensTheme,
   type ElementSize,
   type SemanticColors
 } from '@helpwave/hightide-design'

@@ -1,8 +1,9 @@
 import {
   componentLayouts,
+  fontWeights,
   toPx,
-  type ColoringTokensDefinitions,
-  type DesignTheme as DesignTokensTheme,
+  type ColoringDefintionTokens,
+  type DesignTokens as DesignTokensTheme,
   type SemanticColors
 } from '@helpwave/hightide-design'
 import type { TextStyle, ViewStyle } from 'react-native'
@@ -12,7 +13,7 @@ import { resolveColoringStyles } from './coloring'
 
 export type CreateChipThemeOptions = {
   semantic: SemanticColors,
-  coloring: ColoringTokensDefinitions,
+  coloring: ColoringDefintionTokens,
 }
 
 export const createChipTheme = ({
@@ -46,7 +47,7 @@ export const createChipTheme = ({
     const text: TextStyle = {
       color: resolved.color,
       fontSize: toPx(layout.fontSize),
-      fontWeight: '600',
+      fontWeight: fontWeights.semibold,
     }
 
     return { chip, text }
