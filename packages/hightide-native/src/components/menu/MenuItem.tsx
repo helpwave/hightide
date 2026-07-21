@@ -1,10 +1,11 @@
-import { type ReactNode } from 'react'
-import { Text, View, type StyleProp, type TextStyle, type ViewProps, type ViewStyle } from 'react-native'
+import { useMemo, type ReactNode } from 'react'
+import { Text, View, type StyleProp, type ViewProps, type ViewStyle } from 'react-native'
 import { useTheme } from '../../global-contexts/theme'
 import type {
   MenuItemLabelStyle,
   MenuItemStyle,
-  MenuItemValueStyle
+  MenuItemValueStyle,
+  StyleOverwrite
 } from '../../theme'
 
 export type MenuItemProps = Omit<ViewProps, 'style'> & {
@@ -13,9 +14,9 @@ export type MenuItemProps = Omit<ViewProps, 'style'> & {
   leading?: ReactNode,
   trailing?: ReactNode,
   style?: StyleProp<ViewStyle>,
-  itemStyle?: StyleProp<ViewStyle> | ((style: MenuItemStyle) => StyleProp<ViewStyle>),
-  labelStyle?: StyleProp<TextStyle> | ((style: MenuItemLabelStyle) => StyleProp<TextStyle>),
-  valueStyle?: StyleProp<TextStyle> | ((style: MenuItemValueStyle) => StyleProp<TextStyle>),
+  itemStyle?: StyleOverwrite<Record<string, never>, MenuItemStyle>,
+  labelStyle?: StyleOverwrite<Record<string, never>, MenuItemLabelStyle>,
+  valueStyle?: StyleOverwrite<Record<string, never>, MenuItemValueStyle>,
 }
 
 export const MenuItem = ({
@@ -30,27 +31,31 @@ export const MenuItem = ({
   ...props
 }: MenuItemProps) => {
   const { theme } = useTheme()
-  const resolvedItem = theme.components.menu.item({})
-  const resolvedContent = theme.components.menu.itemContent({})
-  const resolvedLabel = theme.components.menu.itemLabel({})
-  const resolvedValue = theme.components.menu.itemValue({})
+  const state = useMemo(() => ({}), [])
 
-  const appliedItem = typeof itemStyle === 'function'
-    ? itemStyle(resolvedItem)
-    : [resolvedItem, itemStyle]
-  const appliedLabel = typeof labelStyle === 'function'
-    ? labelStyle(resolvedLabel)
-    : [resolvedLabel, labelStyle]
-  const appliedValue = typeof valueStyle === 'function'
-    ? valueStyle(resolvedValue)
-    : [resolvedValue, valueStyle]
+  const resolvedItemStyle = useMemo(
+    () => theme.components.menu.item(state, itemStyle),
+    [theme, state, itemStyle]
+  )
+  const resolvedContentStyle = useMemo(
+    () => theme.components.menu.itemContent(state),
+    [theme, state]
+  )
+  const resolvedLabelStyle = useMemo(
+    () => theme.components.menu.itemLabel(state, labelStyle),
+    [theme, state, labelStyle]
+  )
+  const resolvedValueStyle = useMemo(
+    () => theme.components.menu.itemValue(state, valueStyle),
+    [theme, state, valueStyle]
+  )
 
   return (
-    <View {...props} style={[appliedItem, style]}>
+    <View {...props} style={[resolvedItemStyle, style]}>
       {leading}
-      <View style={resolvedContent}>
-        <Text style={appliedLabel}>{label}</Text>
-        <Text style={appliedValue}>{value}</Text>
+      <View style={resolvedContentStyle}>
+        <Text style={resolvedLabelStyle}>{label}</Text>
+        <Text style={resolvedValueStyle}>{value}</Text>
       </View>
       {trailing}
     </View>

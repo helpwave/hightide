@@ -5,10 +5,8 @@ import {
   type DesignTheme as DesignTokensTheme,
   type SemanticColors
 } from '@helpwave/hightide-design'
-import type {
-  MenuActionItemState,
-  MenuTheme
-} from '../types'
+import type { MenuActionItemState, MenuTheme } from '../types'
+import { createStyleResolver, createValueResolver } from '../types/resolver'
 
 export type CreateMenuThemeOptions = {
   semantic: SemanticColors,
@@ -53,26 +51,26 @@ export const createMenuTheme = ({
   })
 
   return {
-    section: () => ({
+    section: createStyleResolver(() => ({
       marginBottom: remToPx('1.25rem'),
       gap: remToPx('0.5rem'),
-    }),
-    sectionTitle: () => ({
+    })),
+    sectionTitle: createStyleResolver(() => ({
       color: semantic.description,
       fontSize: remToPx('0.75rem'),
       fontWeight: '700',
       letterSpacing: 0.4,
       textTransform: 'uppercase',
       paddingHorizontal: remToPx('0.25rem'),
-    }),
-    card: () => ({
+    })),
+    card: createStyleResolver(() => ({
       backgroundColor: semantic.surface,
       borderRadius: remToPx('0.75rem'),
       borderWidth: 1,
       borderColor: component.border,
       overflow: 'hidden',
-    }),
-    item: () => ({
+    })),
+    item: createStyleResolver(() => ({
       flexDirection: 'row' as const,
       alignItems: 'center' as const,
       minHeight: 64,
@@ -81,28 +79,28 @@ export const createMenuTheme = ({
       borderBottomWidth: StyleSheet.hairlineWidth,
       borderBottomColor: component.divider,
       gap: remToPx('0.75rem'),
-    }),
-    itemContent: resolveItemContent,
-    itemLabel: () => ({
+    })),
+    itemContent: createStyleResolver(resolveItemContent),
+    itemLabel: createStyleResolver(() => ({
       color: semantic.description,
       fontSize: remToPx('0.75rem'),
-    }),
-    itemValue: () => ({
+    })),
+    itemValue: createStyleResolver(() => ({
       color: semantic.onSurface,
       fontSize: remToPx('0.9375rem'),
       fontWeight: '500',
-    }),
-    actionItem: resolveActionItem,
-    actionItemContent: resolveItemContent,
-    actionItemLabel: resolveActionLabel,
-    actionItemIcon: resolveActionIcon,
-    navigationItem: resolveActionItem,
-    navigationItemContent: resolveItemContent,
-    navigationItemLabel: resolveActionLabel,
-    navigationItemIcon: resolveActionIcon,
-    navigationItemTrailing: () => ({
+    })),
+    actionItem: createStyleResolver(resolveActionItem),
+    actionItemContent: createStyleResolver(resolveItemContent),
+    actionItemLabel: createStyleResolver(resolveActionLabel),
+    actionItemIcon: createValueResolver(resolveActionIcon),
+    navigationItem: createStyleResolver(resolveActionItem),
+    navigationItemContent: createStyleResolver(resolveItemContent),
+    navigationItemLabel: createStyleResolver(resolveActionLabel),
+    navigationItemIcon: createValueResolver(resolveActionIcon),
+    navigationItemTrailing: createValueResolver(() => ({
       color: semantic.description,
-    }),
+    })),
   }
 }
 

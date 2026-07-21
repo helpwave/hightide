@@ -1,12 +1,12 @@
-import type { ColorValue, FontWeight } from '@helpwave/hightide-design'
-import type { ResolverFunction } from './resolver'
+import type { ColorValue } from '@helpwave/hightide-design'
+import type { StyleProp, TextStyle, ViewStyle } from 'react-native'
+import type { StyleResolverFunction } from './resolver'
 import type {
   SelectMenuStyle,
   SelectOptionState,
   SelectOverlayStyle,
   SelectSearchStyle,
   SelectState,
-  SelectTriggerStyle,
   SelectTriggerTextStyle
 } from './select'
 
@@ -16,35 +16,13 @@ export type MultiSelectState = SelectState & {
 
 export type MultiSelectOptionState = SelectOptionState
 
-export type MultiSelectTriggerStyle = SelectTriggerStyle & {
-  gap: number,
-}
+export type MultiSelectTriggerStyle = StyleProp<ViewStyle>
 
-export type MultiSelectOptionStyle = {
-  paddingHorizontal: number,
-  paddingVertical: number,
-  backgroundColor: ColorValue | 'transparent',
-  opacity: number,
-  flexDirection: 'row',
-  alignItems: 'center',
-  gap: number,
-}
+export type MultiSelectOptionStyle = StyleProp<ViewStyle>
 
-export type MultiSelectOptionTextStyle = {
-  color: ColorValue,
-  fontWeight: FontWeight,
-}
+export type MultiSelectOptionTextStyle = StyleProp<TextStyle>
 
-export type MultiSelectCheckboxStyle = {
-  width: number,
-  height: number,
-  borderRadius: number,
-  borderWidth: number,
-  borderColor: ColorValue,
-  backgroundColor: ColorValue | 'transparent',
-  alignItems: 'center',
-  justifyContent: 'center',
-}
+export type MultiSelectCheckboxStyle = StyleProp<ViewStyle>
 
 export type MultiSelectCheckboxIconStyle = {
   color: ColorValue,
@@ -52,14 +30,14 @@ export type MultiSelectCheckboxIconStyle = {
 }
 
 export type MultiSelectTheme = {
-  trigger: ResolverFunction<MultiSelectState, MultiSelectTriggerStyle>,
-  triggerText: ResolverFunction<MultiSelectState, SelectTriggerTextStyle>,
-  overlay: ResolverFunction<MultiSelectState, SelectOverlayStyle>,
-  menu: ResolverFunction<MultiSelectState, SelectMenuStyle>,
-  search: ResolverFunction<MultiSelectState, SelectSearchStyle>,
-  searchPlaceholderColor: ResolverFunction<MultiSelectState, ColorValue>,
-  option: ResolverFunction<MultiSelectOptionState, MultiSelectOptionStyle>,
-  optionText: ResolverFunction<MultiSelectOptionState, MultiSelectOptionTextStyle>,
-  checkbox: ResolverFunction<MultiSelectOptionState, MultiSelectCheckboxStyle>,
-  checkboxIcon: ResolverFunction<MultiSelectOptionState, MultiSelectCheckboxIconStyle>,
+  trigger: StyleResolverFunction<MultiSelectState, MultiSelectTriggerStyle>,
+  triggerText: StyleResolverFunction<MultiSelectState, SelectTriggerTextStyle>,
+  overlay: StyleResolverFunction<MultiSelectState, SelectOverlayStyle>,
+  menu: StyleResolverFunction<MultiSelectState, SelectMenuStyle>,
+  search: StyleResolverFunction<MultiSelectState, SelectSearchStyle>,
+  searchPlaceholderColor: StyleResolverFunction<MultiSelectState, ColorValue>,
+  option: StyleResolverFunction<MultiSelectOptionState, MultiSelectOptionStyle>,
+  optionText: StyleResolverFunction<MultiSelectOptionState, MultiSelectOptionTextStyle>,
+  checkbox: StyleResolverFunction<MultiSelectOptionState, MultiSelectCheckboxStyle>,
+  checkboxIcon: StyleResolverFunction<MultiSelectOptionState, MultiSelectCheckboxIconStyle>,
 }

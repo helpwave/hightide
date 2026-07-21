@@ -10,11 +10,15 @@ import {
   Text,
   type PressableProps,
   type StyleProp,
-  type TextStyle,
   type ViewStyle
 } from 'react-native'
 import { useTheme } from '../../global-contexts/theme'
-import type { ButtonState, ButtonStyle, ButtonTextStyle } from '../../theme'
+import type {
+  ButtonState,
+  ButtonStyle,
+  ButtonTextStyle,
+  StyleOverwrite
+} from '../../theme'
 
 export type ButtonSize = ElementSize
 
@@ -32,8 +36,8 @@ export type ButtonProps = Omit<PressableProps, 'children' | 'style'> & {
   coloringStyle?: ButtonColoringStyle,
   children?: ReactNode,
   style?: StyleProp<ViewStyle>,
-  buttonStyle?: StyleProp<ViewStyle> | ((style: ButtonStyle) => StyleProp<ViewStyle>),
-  textStyle?: StyleProp<TextStyle> | ((style: ButtonTextStyle) => StyleProp<TextStyle>),
+  buttonStyle?: StyleOverwrite<ButtonState, ButtonStyle>,
+  textStyle?: StyleOverwrite<ButtonState, ButtonTextStyle>,
 }
 
 type PressableInteraction = {
@@ -55,25 +59,15 @@ export const Button = forwardRef<React.ComponentRef<typeof Pressable>, ButtonPro
 }, ref) {
   const { theme } = useTheme()
 
-  const resolveStyles = (interaction: PressableInteraction) => {
-    const state: ButtonState = {
-      size,
-      color,
-      coloringStyle,
-      isDisabled: !!disabled,
-      isPressed: interaction.pressed,
-      isHovered: !!interaction.hovered,
-      isFocused: !!interaction.focused,
-    }
-
-    const resolvedButton = theme.components.button.button(state)
-    const resolvedText = theme.components.button.text(state)
-
-    return {
-      button: typeof buttonStyle === 'function' ? buttonStyle(resolvedButton) : [resolvedButton, buttonStyle],
-      text: typeof textStyle === 'function' ? textStyle(resolvedText) : [resolvedText, textStyle],
-    }
-  }
+  const resolveState = (interaction: PressableInteraction): ButtonState => ({
+    size,
+    color,
+    coloringStyle,
+    isDisabled: !!disabled,
+    isPressed: interaction.pressed,
+    isHovered: !!interaction.hovered,
+    isFocused: !!interaction.focused,
+  })
 
   return (
     <Pressable
@@ -81,17 +75,16 @@ export const Button = forwardRef<React.ComponentRef<typeof Pressable>, ButtonPro
       ref={ref}
       disabled={disabled}
       style={(pressableState) => {
-        const interaction = pressableState as PressableInteraction
-        const resolved = resolveStyles(interaction)
-
-        return [resolved.button, style]
+        const state = resolveState(pressableState as PressableInteraction)
+        return [theme.components.button.button(state, buttonStyle), style]
       }}
     >
       {(pressableState) => {
-        const resolved = resolveStyles(pressableState as PressableInteraction)
+        const state = resolveState(pressableState as PressableInteraction)
+        const resolvedText = theme.components.button.text(state, textStyle)
 
         if (typeof children === 'string' || typeof children === 'number') {
-          return <Text style={resolved.text}>{children}</Text>
+          return <Text style={resolvedText}>{children}</Text>
         }
 
         return children

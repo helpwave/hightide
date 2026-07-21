@@ -1,10 +1,6 @@
-import type {
-  ButtonColoringStyle,
-  ColorValue,
-  ColoringType,
-  ElementSize
-} from '@helpwave/hightide-design'
-import type { InteractionState, ResolverFunction } from './resolver'
+import type { ButtonColoringStyle, ColorValue, ColoringType, ElementSize } from '@helpwave/hightide-design'
+import type { StyleProp, ViewStyle } from 'react-native'
+import type { InteractionState, StyleResolverFunction } from './resolver'
 
 export type IconButtonState = InteractionState & {
   size?: ElementSize,
@@ -12,23 +8,13 @@ export type IconButtonState = InteractionState & {
   coloringStyle?: ButtonColoringStyle,
 }
 
-export type IconButtonStyle = {
-  alignItems: 'center',
-  justifyContent: 'center',
-  backgroundColor: ColorValue | 'transparent',
-  borderColor?: ColorValue,
-  borderWidth: number,
-  width: number,
-  height: number,
-  borderRadius: number,
-  opacity: number,
-}
+export type IconButtonStyle = StyleProp<ViewStyle>
 
 export type IconButtonIconStyle = {
   color: ColorValue,
 }
 
 export type IconButtonTheme = {
-  button: ResolverFunction<IconButtonState, IconButtonStyle>,
-  icon: ResolverFunction<IconButtonState, IconButtonIconStyle>,
+  button: StyleResolverFunction<IconButtonState, IconButtonStyle>,
+  icon: StyleResolverFunction<IconButtonState, IconButtonIconStyle>,
 }

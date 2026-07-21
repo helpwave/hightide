@@ -1,5 +1,6 @@
 import type { ColorValue, ElementSize } from '@helpwave/hightide-design'
-import type { InteractionState, ResolverFunction } from './resolver'
+import type { StyleProp, ViewStyle } from 'react-native'
+import type { InteractionState, StyleResolverFunction } from './resolver'
 
 export type CheckboxSize = 'sm' | 'md' | 'lg'
 
@@ -12,17 +13,7 @@ export type CheckboxState = InteractionState & {
   alwaysShowCheckIcon?: boolean,
 }
 
-export type CheckboxStyle = {
-  width: number,
-  height: number,
-  alignItems: 'center',
-  justifyContent: 'center',
-  borderWidth: number,
-  borderColor: ColorValue,
-  borderRadius: number,
-  backgroundColor: ColorValue,
-  opacity: number,
-}
+export type CheckboxStyle = StyleProp<ViewStyle>
 
 export type CheckboxIconStyle = {
   color: ColorValue,
@@ -31,6 +22,6 @@ export type CheckboxIconStyle = {
 }
 
 export type CheckboxTheme = {
-  checkbox: ResolverFunction<CheckboxState, CheckboxStyle>,
-  icon: ResolverFunction<CheckboxState, CheckboxIconStyle>,
+  checkbox: StyleResolverFunction<CheckboxState, CheckboxStyle>,
+  icon: StyleResolverFunction<CheckboxState, CheckboxIconStyle>,
 }

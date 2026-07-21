@@ -3,10 +3,10 @@ import {
   useDelay,
   type UseDelayOptionsResolved
 } from '@helpwave/hightide-utils/hooks'
-import { forwardRef } from 'react'
+import { forwardRef, useMemo } from 'react'
 import { TextInput, type StyleProp, type TextInputProps, type TextStyle } from 'react-native'
 import { useTheme } from '../../global-contexts/theme'
-import type { InputState, InputStyle } from '../../theme'
+import type { InputState, InputStyle, StyleOverwrite } from '../../theme'
 import type { FormFieldDataHandling, FormFieldInteractionStates } from '../../types/formField'
 
 export type EditCompleteOptionsResolved = {
@@ -31,7 +31,7 @@ export type InputProps = Omit<TextInputProps, 'value' | 'style'>
     editCompleteOptions?: EditCompleteOptions,
     initialValue?: string,
     style?: StyleProp<TextStyle>,
-    inputStyle?: StyleProp<TextStyle> | ((style: InputStyle) => StyleProp<TextStyle>),
+    inputStyle?: StyleOverwrite<InputState, InputStyle>,
   }
 
 export const Input = forwardRef<TextInput, InputProps>(function Input({
@@ -68,16 +68,20 @@ export const Input = forwardRef<TextInput, InputProps>(function Input({
     disabled: !afterDelay || disabled || readOnly,
   })
 
-  const state: InputState = {
+  const state = useMemo((): InputState => ({
     isDisabled: disabled,
     isInvalid: invalid,
     isReadOnly: readOnly,
-  }
+  }), [disabled, invalid, readOnly])
 
-  const resolvedInput = theme.components.input.input(state)
-  const appliedInputStyle = typeof inputStyle === 'function'
-    ? inputStyle(resolvedInput)
-    : [resolvedInput, inputStyle]
+  const resolvedInputStyle = useMemo(
+    () => theme.components.input.input(state, inputStyle),
+    [theme, state, inputStyle]
+  )
+  const placeholderColor = useMemo(
+    () => theme.components.input.placeholderColor(state),
+    [theme, state]
+  )
 
   return (
     <TextInput
@@ -106,8 +110,8 @@ export const Input = forwardRef<TextInput, InputProps>(function Input({
           clearTimer()
         }
       }}
-      placeholderTextColor={theme.components.input.placeholderColor(state)}
-      style={[appliedInputStyle, style]}
+      placeholderTextColor={placeholderColor}
+      style={[resolvedInputStyle, style]}
       accessibilityState={{ disabled, selected: required }}
     />
   )

@@ -1,9 +1,8 @@
-import type { ReactNode } from 'react'
+import { useMemo, type ReactNode } from 'react'
 import {
   TextInput,
   View,
   type StyleProp,
-  type TextStyle,
   type ViewProps,
   type ViewStyle
 } from 'react-native'
@@ -11,7 +10,11 @@ import { SendHorizontal } from 'lucide-react-native'
 import { useControlledState } from '@helpwave/hightide-utils/hooks'
 import { IconButton } from '../user-interaction/IconButton'
 import { useTheme } from '../../global-contexts/theme'
-import type { ChatMessageComposerStyle } from '../../theme'
+import type {
+  ChatMessageComposerInputStyle,
+  ChatMessageComposerStyle,
+  StyleOverwrite
+} from '../../theme'
 
 export type ChatMessageComposerProps = Omit<ViewProps, 'style'> & {
   value?: string,
@@ -24,8 +27,8 @@ export type ChatMessageComposerProps = Omit<ViewProps, 'style'> & {
   actions?: ReactNode,
   trailing?: ReactNode,
   style?: StyleProp<ViewStyle>,
-  composerStyle?: StyleProp<ViewStyle> | ((style: ChatMessageComposerStyle) => StyleProp<ViewStyle>),
-  inputStyle?: StyleProp<TextStyle>,
+  composerStyle?: StyleOverwrite<Record<string, never>, ChatMessageComposerStyle>,
+  inputStyle?: StyleOverwrite<Record<string, never>, ChatMessageComposerInputStyle>,
 }
 
 export const ChatMessageComposer = ({
@@ -49,14 +52,20 @@ export const ChatMessageComposer = ({
     onValueChange,
     defaultValue: initialValue ?? '',
   })
+  const state = useMemo(() => ({}), [])
 
-  const resolvedComposer = theme.components.chat.messageComposer({})
-  const resolvedInput = theme.components.chat.messageComposerInput({})
-  const placeholderColor = theme.components.chat.messageComposerPlaceholderColor({})
-
-  const appliedComposer = typeof composerStyle === 'function'
-    ? composerStyle(resolvedComposer)
-    : [resolvedComposer, composerStyle]
+  const resolvedComposerStyle = useMemo(
+    () => theme.components.chat.messageComposer(state, composerStyle),
+    [theme, state, composerStyle]
+  )
+  const resolvedInputStyle = useMemo(
+    () => theme.components.chat.messageComposerInput(state, inputStyle),
+    [theme, state, inputStyle]
+  )
+  const placeholderColor = useMemo(
+    () => theme.components.chat.messageComposerPlaceholderColor(state),
+    [theme, state]
+  )
 
   const send = () => {
     const trimmed = (value ?? '').trim()
@@ -68,7 +77,7 @@ export const ChatMessageComposer = ({
   }
 
   return (
-    <View {...props} style={[appliedComposer, style]}>
+    <View {...props} style={[resolvedComposerStyle, style]}>
       {actions != null && (
         <View style={{ flexDirection: 'row', alignItems: 'flex-start' }}>
           {actions}
@@ -81,7 +90,7 @@ export const ChatMessageComposer = ({
         placeholderTextColor={placeholderColor}
         editable={!disabled}
         multiline
-        style={[resolvedInput, inputStyle]}
+        style={resolvedInputStyle}
         onSubmitEditing={send}
         returnKeyType="send"
       />
@@ -94,10 +103,7 @@ export const ChatMessageComposer = ({
         size="md"
         onPress={send}
         icon={SendHorizontal}
-        buttonStyle={(buttonStyle) => ({
-          ...buttonStyle,
-          borderRadius: 999,
-        })}
+        buttonStyle={(prev) => [prev, { borderRadius: 999 }]}
       />
     </View>
   )

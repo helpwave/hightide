@@ -9,6 +9,7 @@ import type {
   MultiSelectState,
   MultiSelectTheme
 } from '../types'
+import { createStyleResolver, createValueResolver } from '../types/resolver'
 
 export type CreateMultiSelectThemeOptions = {
   semantic: SemanticColors,
@@ -20,7 +21,7 @@ export const createMultiSelectTheme = ({
   component,
 }: CreateMultiSelectThemeOptions): MultiSelectTheme => {
   return {
-    trigger: (state: MultiSelectState) => ({
+    trigger: createStyleResolver((state: MultiSelectState) => ({
       minHeight: 44,
       paddingHorizontal: remToPx('0.75rem'),
       paddingVertical: remToPx('0.5rem'),
@@ -31,33 +32,33 @@ export const createMultiSelectTheme = ({
       justifyContent: 'center',
       gap: 8,
       opacity: state.isDisabled ? 0.6 : 1,
-    }),
-    triggerText: () => ({
+    })),
+    triggerText: createStyleResolver(() => ({
       color: semantic.placeholder,
-    }),
-    overlay: () => ({
+    })),
+    overlay: createStyleResolver(() => ({
       flex: 1,
       backgroundColor: '#00000059',
       justifyContent: 'center',
       padding: 24,
-    }),
-    menu: () => ({
+    })),
+    menu: createStyleResolver(() => ({
       maxHeight: 360,
       borderRadius: 12,
       backgroundColor: component.menu.background,
       borderWidth: 1,
       borderColor: component.menu.border,
       overflow: 'hidden',
-    }),
-    search: () => ({
+    })),
+    search: createStyleResolver(() => ({
       paddingHorizontal: 16,
       paddingVertical: 12,
       borderBottomWidth: 1,
       borderBottomColor: component.menu.border,
       color: component.menu.text,
-    }),
-    searchPlaceholderColor: () => semantic.placeholder,
-    option: (state: MultiSelectOptionState) => ({
+    })),
+    searchPlaceholderColor: createValueResolver(() => semantic.placeholder),
+    option: createStyleResolver((state: MultiSelectOptionState) => ({
       paddingHorizontal: 16,
       paddingVertical: 12,
       backgroundColor: state.isHighlighted ? component.table.rowHoverBackground : 'transparent',
@@ -65,12 +66,12 @@ export const createMultiSelectTheme = ({
       flexDirection: 'row',
       alignItems: 'center',
       gap: 10,
-    }),
-    optionText: (state: MultiSelectOptionState) => ({
+    })),
+    optionText: createStyleResolver((state: MultiSelectOptionState) => ({
       color: state.isSelected ? semantic.primary : component.menu.text,
       fontWeight: state.isSelected ? '600' : '400',
-    }),
-    checkbox: (state: MultiSelectOptionState) => ({
+    })),
+    checkbox: createStyleResolver((state: MultiSelectOptionState) => ({
       width: 18,
       height: 18,
       borderRadius: 4,
@@ -79,11 +80,11 @@ export const createMultiSelectTheme = ({
       backgroundColor: state.isSelected ? semantic.primary : 'transparent',
       alignItems: 'center',
       justifyContent: 'center',
-    }),
-    checkboxIcon: (state: MultiSelectOptionState) => ({
+    })),
+    checkboxIcon: createValueResolver((state: MultiSelectOptionState) => ({
       color: semantic.onPrimary,
       visible: !!state.isSelected,
-    }),
+    })),
   }
 }
 

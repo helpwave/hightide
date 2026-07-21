@@ -60,23 +60,48 @@ export const MultiSelect = ({
       .map((option) => option.label ?? option.id)
   }, [multiSelect, options])
 
-  const state: MultiSelectState = {
+  const state = useMemo((): MultiSelectState => ({
     isDisabled: disabled,
     isReadOnly: readOnly,
     isInvalid: invalid,
     isOpen: multiSelect.isOpen,
     hasSelections: selectedLabels.length > 0,
     hasValue: selectedLabels.length > 0,
-  }
+  }), [disabled, invalid, multiSelect.isOpen, readOnly, selectedLabels.length])
 
   const multiSelectTheme = theme.components.multiSelect
+
+  const resolvedTriggerStyle = useMemo(
+    () => multiSelectTheme.trigger(state),
+    [multiSelectTheme, state]
+  )
+  const resolvedTriggerTextStyle = useMemo(
+    () => multiSelectTheme.triggerText(state),
+    [multiSelectTheme, state]
+  )
+  const resolvedOverlayStyle = useMemo(
+    () => multiSelectTheme.overlay(state),
+    [multiSelectTheme, state]
+  )
+  const resolvedMenuStyle = useMemo(
+    () => multiSelectTheme.menu(state),
+    [multiSelectTheme, state]
+  )
+  const resolvedSearchStyle = useMemo(
+    () => multiSelectTheme.search(state),
+    [multiSelectTheme, state]
+  )
+  const searchPlaceholderColor = useMemo(
+    () => multiSelectTheme.searchPlaceholderColor(state),
+    [multiSelectTheme, state]
+  )
 
   return (
     <View style={style}>
       <Pressable
         disabled={!interactive}
         onPress={() => multiSelect.toggleOpen()}
-        style={multiSelectTheme.trigger(state)}
+        style={resolvedTriggerStyle}
       >
         {selectedLabels.length > 0
           ? (
@@ -88,7 +113,7 @@ export const MultiSelect = ({
               ))}
             </View>
           )
-          : <Text style={multiSelectTheme.triggerText(state)}>{placeholder}</Text>}
+          : <Text style={resolvedTriggerTextStyle}>{placeholder}</Text>}
       </Pressable>
 
       <Modal
@@ -98,11 +123,11 @@ export const MultiSelect = ({
         onRequestClose={() => multiSelect.setIsOpen(false)}
       >
         <Pressable
-          style={multiSelectTheme.overlay(state)}
+          style={resolvedOverlayStyle}
           onPress={() => multiSelect.setIsOpen(false)}
         >
           <Pressable
-            style={multiSelectTheme.menu(state)}
+            style={resolvedMenuStyle}
             onPress={(event) => event.stopPropagation()}
           >
             {showSearch && (
@@ -110,8 +135,8 @@ export const MultiSelect = ({
                 value={multiSelect.searchQuery}
                 onChangeText={multiSelect.setSearchQuery}
                 placeholder="Search…"
-                placeholderTextColor={multiSelectTheme.searchPlaceholderColor(state)}
-                style={multiSelectTheme.search(state)}
+                placeholderTextColor={searchPlaceholderColor}
+                style={resolvedSearchStyle}
               />
             )}
             <FlatList

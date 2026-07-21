@@ -4,21 +4,22 @@ import {
   Text,
   type PressableProps,
   type StyleProp,
-  type TextStyle,
   type ViewStyle
 } from 'react-native'
 import { useTheme } from '../../global-contexts/theme'
 import type {
+  ChatQuickReplyChipState,
   ChatQuickReplyChipStyle,
-  ChatQuickReplyChipTextStyle
+  ChatQuickReplyChipTextStyle,
+  StyleOverwrite
 } from '../../theme'
 
 export type ChatQuickReplyChipProps = Omit<PressableProps, 'children' | 'style'> & {
   isActive?: boolean,
   children?: ReactNode,
   style?: StyleProp<ViewStyle>,
-  chipStyle?: StyleProp<ViewStyle> | ((style: ChatQuickReplyChipStyle) => StyleProp<ViewStyle>),
-  textStyle?: StyleProp<TextStyle> | ((style: ChatQuickReplyChipTextStyle) => StyleProp<TextStyle>),
+  chipStyle?: StyleOverwrite<ChatQuickReplyChipState, ChatQuickReplyChipStyle>,
+  textStyle?: StyleOverwrite<ChatQuickReplyChipState, ChatQuickReplyChipTextStyle>,
 }
 
 type PressableInteraction = {
@@ -38,38 +39,29 @@ export const ChatQuickReplyChip = ({
 }: ChatQuickReplyChipProps) => {
   const { theme } = useTheme()
 
-  const resolveStyles = (interaction: PressableInteraction) => {
-    const state = {
-      isActive,
-      isDisabled: !!disabled,
-      isPressed: interaction.pressed,
-      isHovered: !!interaction.hovered,
-      isFocused: !!interaction.focused,
-    }
-
-    const resolvedChip = theme.components.chat.quickReplyChip(state)
-    const resolvedText = theme.components.chat.quickReplyChipText(state)
-
-    return {
-      chip: typeof chipStyle === 'function' ? chipStyle(resolvedChip) : [resolvedChip, chipStyle],
-      text: typeof textStyle === 'function' ? textStyle(resolvedText) : [resolvedText, textStyle],
-    }
-  }
+  const resolveState = (interaction: PressableInteraction): ChatQuickReplyChipState => ({
+    isActive,
+    isDisabled: !!disabled,
+    isPressed: interaction.pressed,
+    isHovered: !!interaction.hovered,
+    isFocused: !!interaction.focused,
+  })
 
   return (
     <Pressable
       {...props}
       disabled={disabled}
       style={(pressableState) => {
-        const resolved = resolveStyles(pressableState as PressableInteraction)
-        return [resolved.chip, style]
+        const state = resolveState(pressableState as PressableInteraction)
+        return [theme.components.chat.quickReplyChip(state, chipStyle), style]
       }}
     >
       {(pressableState) => {
-        const resolved = resolveStyles(pressableState as PressableInteraction)
+        const state = resolveState(pressableState as PressableInteraction)
+        const resolvedText = theme.components.chat.quickReplyChipText(state, textStyle)
 
         if (typeof children === 'string' || typeof children === 'number') {
-          return <Text style={resolved.text}>{children}</Text>
+          return <Text style={resolvedText}>{children}</Text>
         }
 
         return children

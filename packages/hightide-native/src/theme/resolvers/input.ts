@@ -5,7 +5,9 @@ import {
   type DesignTheme as DesignTokensTheme,
   type SemanticColors
 } from '@helpwave/hightide-design'
-import type { InputState, InputStyle, InputTheme } from '../types'
+import type { TextStyle } from 'react-native'
+import type { InputState, InputTheme } from '../types'
+import { createStyleResolver, createValueResolver } from '../types/resolver'
 
 export type CreateInputThemeOptions = {
   semantic: SemanticColors,
@@ -16,7 +18,7 @@ export const createInputTheme = ({
   semantic,
   component,
 }: CreateInputThemeOptions): InputTheme => {
-  const resolveInput = (state: InputState): InputStyle => {
+  const resolveInput = (state: InputState): TextStyle => {
     const sizing = inputElementSizes.md
     const borderColor = state.isInvalid ? semantic.negative : component.border
 
@@ -35,8 +37,8 @@ export const createInputTheme = ({
   }
 
   return {
-    input: resolveInput,
-    placeholderColor: () => semantic.placeholder,
+    input: createStyleResolver(resolveInput),
+    placeholderColor: createValueResolver(() => semantic.placeholder),
   }
 }
 

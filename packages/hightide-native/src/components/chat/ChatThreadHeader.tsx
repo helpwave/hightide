@@ -1,7 +1,12 @@
-import type { ReactNode } from 'react'
-import { Text, View, type StyleProp, type TextStyle, type ViewProps, type ViewStyle } from 'react-native'
+import { useMemo, type ReactNode } from 'react'
+import { Text, View, type StyleProp, type ViewProps, type ViewStyle } from 'react-native'
 import { useTheme } from '../../global-contexts/theme'
-import type { ChatThreadHeaderStyle } from '../../theme'
+import type {
+  ChatThreadHeaderStyle,
+  ChatThreadHeaderSubtitleStyle,
+  ChatThreadHeaderTitleStyle,
+  StyleOverwrite
+} from '../../theme'
 
 export type ChatThreadHeaderProps = Omit<ViewProps, 'style'> & {
   avatar?: ReactNode,
@@ -10,9 +15,9 @@ export type ChatThreadHeaderProps = Omit<ViewProps, 'style'> & {
   leftActions?: ReactNode,
   rightActions?: ReactNode,
   style?: StyleProp<ViewStyle>,
-  headerStyle?: StyleProp<ViewStyle> | ((style: ChatThreadHeaderStyle) => StyleProp<ViewStyle>),
-  titleStyle?: StyleProp<TextStyle>,
-  subtitleStyle?: StyleProp<TextStyle>,
+  headerStyle?: StyleOverwrite<Record<string, never>, ChatThreadHeaderStyle>,
+  titleStyle?: StyleOverwrite<Record<string, never>, ChatThreadHeaderTitleStyle>,
+  subtitleStyle?: StyleOverwrite<Record<string, never>, ChatThreadHeaderSubtitleStyle>,
 }
 
 export const ChatThreadHeader = ({
@@ -28,16 +33,23 @@ export const ChatThreadHeader = ({
   ...props
 }: ChatThreadHeaderProps) => {
   const { theme } = useTheme()
-  const resolvedHeader = theme.components.chat.threadHeader({})
-  const resolvedTitle = theme.components.chat.threadHeaderTitle({})
-  const resolvedSubtitle = theme.components.chat.threadHeaderSubtitle({})
+  const state = useMemo(() => ({}), [])
 
-  const appliedHeader = typeof headerStyle === 'function'
-    ? headerStyle(resolvedHeader)
-    : [resolvedHeader, headerStyle]
+  const resolvedHeaderStyle = useMemo(
+    () => theme.components.chat.threadHeader(state, headerStyle),
+    [theme, state, headerStyle]
+  )
+  const resolvedTitleStyle = useMemo(
+    () => theme.components.chat.threadHeaderTitle(state, titleStyle),
+    [theme, state, titleStyle]
+  )
+  const resolvedSubtitleStyle = useMemo(
+    () => theme.components.chat.threadHeaderSubtitle(state, subtitleStyle),
+    [theme, state, subtitleStyle]
+  )
 
   return (
-    <View {...props} style={[appliedHeader, style]}>
+    <View {...props} style={[resolvedHeaderStyle, style]}>
       {leftActions != null && (
         <View style={{ flexDirection: 'row', alignItems: 'center', flexShrink: 0 }}>
           {leftActions}
@@ -46,13 +58,13 @@ export const ChatThreadHeader = ({
       {avatar}
       <View style={{ flex: 1, minWidth: 0, gap: 2 }}>
         {typeof title === 'string' || typeof title === 'number' ? (
-          <Text style={[resolvedTitle, titleStyle]} numberOfLines={1}>{title}</Text>
+          <Text style={resolvedTitleStyle} numberOfLines={1}>{title}</Text>
         ) : (
           title
         )}
         {subtitle != null && (
           typeof subtitle === 'string' || typeof subtitle === 'number' ? (
-            <Text style={[resolvedSubtitle, subtitleStyle]} numberOfLines={1}>{subtitle}</Text>
+            <Text style={resolvedSubtitleStyle} numberOfLines={1}>{subtitle}</Text>
           ) : (
             subtitle
           )

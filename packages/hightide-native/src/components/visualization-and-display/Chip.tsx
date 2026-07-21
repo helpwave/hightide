@@ -4,17 +4,16 @@ import {
   type ColoringType,
   type ElementSize
 } from '@helpwave/hightide-design'
-import type { ReactNode } from 'react'
+import { useMemo, type ReactNode } from 'react'
 import {
   Text,
   View,
   type StyleProp,
-  type TextStyle,
   type ViewProps,
   type ViewStyle
 } from 'react-native'
 import { useTheme } from '../../global-contexts/theme'
-import type { ChipState, ChipStyle, ChipTextStyle } from '../../theme'
+import type { ChipState, ChipStyle, ChipTextStyle, StyleOverwrite } from '../../theme'
 
 export type ChipSize = ElementSize
 
@@ -32,8 +31,8 @@ export type ChipProps = Omit<ViewProps, 'children' | 'style'> & {
   size?: ChipSize,
   children?: ReactNode,
   style?: StyleProp<ViewStyle>,
-  chipStyle?: StyleProp<ViewStyle> | ((style: ChipStyle) => StyleProp<ViewStyle>),
-  textStyle?: StyleProp<TextStyle> | ((style: ChipTextStyle) => StyleProp<TextStyle>),
+  chipStyle?: StyleOverwrite<ChipState, ChipStyle>,
+  textStyle?: StyleOverwrite<ChipState, ChipTextStyle>,
 }
 
 export const Chip = ({
@@ -47,24 +46,29 @@ export const Chip = ({
   ...props
 }: ChipProps) => {
   const { theme } = useTheme()
-  const state: ChipState = {
+
+  const state = useMemo((): ChipState => ({
     size,
     color,
     coloringStyle,
-  }
+  }), [size, color, coloringStyle])
 
-  const resolvedChip = theme.components.chip.chip(state)
-  const resolvedText = theme.components.chip.text(state)
-  const appliedChipStyle = typeof chipStyle === 'function' ? chipStyle(resolvedChip) : [resolvedChip, chipStyle]
-  const appliedTextStyle = typeof textStyle === 'function' ? textStyle(resolvedText) : [resolvedText, textStyle]
+  const resolvedChipStyle = useMemo(
+    () => theme.components.chip.chip(state, chipStyle),
+    [theme, state, chipStyle]
+  )
+  const resolvedTextStyle = useMemo(
+    () => theme.components.chip.text(state, textStyle),
+    [theme, state, textStyle]
+  )
 
   return (
     <View
       {...props}
-      style={[appliedChipStyle, style]}
+      style={[resolvedChipStyle, style]}
     >
       {typeof children === 'string' || typeof children === 'number'
-        ? <Text style={appliedTextStyle}>{children}</Text>
+        ? <Text style={resolvedTextStyle}>{children}</Text>
         : children}
     </View>
   )

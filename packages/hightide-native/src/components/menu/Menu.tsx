@@ -1,19 +1,20 @@
-import type { ReactNode } from 'react'
-import { Text, View, type StyleProp, type TextStyle, type ViewProps, type ViewStyle } from 'react-native'
+import { useMemo, type ReactNode } from 'react'
+import { Text, View, type StyleProp, type ViewProps, type ViewStyle } from 'react-native'
 import { useTheme } from '../../global-contexts/theme'
 import type {
   MenuCardStyle,
   MenuSectionStyle,
-  MenuSectionTitleStyle
+  MenuSectionTitleStyle,
+  StyleOverwrite
 } from '../../theme'
 
 export type MenuProps = Omit<ViewProps, 'children' | 'style'> & {
   title: string,
   children?: ReactNode,
   style?: StyleProp<ViewStyle>,
-  sectionStyle?: StyleProp<ViewStyle> | ((style: MenuSectionStyle) => StyleProp<ViewStyle>),
-  titleStyle?: StyleProp<TextStyle> | ((style: MenuSectionTitleStyle) => StyleProp<TextStyle>),
-  cardStyle?: StyleProp<ViewStyle> | ((style: MenuCardStyle) => StyleProp<ViewStyle>),
+  sectionStyle?: StyleOverwrite<Record<string, never>, MenuSectionStyle>,
+  titleStyle?: StyleOverwrite<Record<string, never>, MenuSectionTitleStyle>,
+  cardStyle?: StyleOverwrite<Record<string, never>, MenuCardStyle>,
 }
 
 export const Menu = ({
@@ -26,24 +27,25 @@ export const Menu = ({
   ...props
 }: MenuProps) => {
   const { theme } = useTheme()
-  const resolvedSection = theme.components.menu.section({})
-  const resolvedTitle = theme.components.menu.sectionTitle({})
-  const resolvedCard = theme.components.menu.card({})
+  const state = useMemo(() => ({}), [])
 
-  const appliedSection = typeof sectionStyle === 'function'
-    ? sectionStyle(resolvedSection)
-    : [resolvedSection, sectionStyle]
-  const appliedTitle = typeof titleStyle === 'function'
-    ? titleStyle(resolvedTitle)
-    : [resolvedTitle, titleStyle]
-  const appliedCard = typeof cardStyle === 'function'
-    ? cardStyle(resolvedCard)
-    : [resolvedCard, cardStyle]
+  const resolvedSectionStyle = useMemo(
+    () => theme.components.menu.section(state, sectionStyle),
+    [theme, state, sectionStyle]
+  )
+  const resolvedTitleStyle = useMemo(
+    () => theme.components.menu.sectionTitle(state, titleStyle),
+    [theme, state, titleStyle]
+  )
+  const resolvedCardStyle = useMemo(
+    () => theme.components.menu.card(state, cardStyle),
+    [theme, state, cardStyle]
+  )
 
   return (
-    <View {...props} style={[appliedSection, style]}>
-      <Text style={appliedTitle}>{title}</Text>
-      <View style={appliedCard}>{children}</View>
+    <View {...props} style={[resolvedSectionStyle, style]}>
+      <Text style={resolvedTitleStyle}>{title}</Text>
+      <View style={resolvedCardStyle}>{children}</View>
     </View>
   )
 }

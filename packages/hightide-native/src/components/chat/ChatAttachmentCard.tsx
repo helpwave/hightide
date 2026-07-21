@@ -1,10 +1,14 @@
-import type { ReactNode } from 'react'
-import { Text, View, type StyleProp, type TextStyle, type ViewProps, type ViewStyle } from 'react-native'
+import { useMemo, type ReactNode } from 'react'
+import { Text, View, type StyleProp, type ViewProps, type ViewStyle } from 'react-native'
 import { Download, FileText } from 'lucide-react-native'
 import { useTheme } from '../../global-contexts/theme'
 import type {
+  ChatAttachmentCardMetadataStyle,
+  ChatAttachmentCardNameStyle,
+  ChatAttachmentCardState,
   ChatAttachmentCardStyle,
-  ChatMessageDirection
+  ChatMessageDirection,
+  StyleOverwrite
 } from '../../theme'
 import { IconButton } from '../user-interaction'
 
@@ -16,9 +20,9 @@ export type ChatAttachmentCardProps = Omit<ViewProps, 'style'> & {
   downloadLabel?: string,
   onDownload?: () => void,
   style?: StyleProp<ViewStyle>,
-  cardStyle?: StyleProp<ViewStyle> | ((style: ChatAttachmentCardStyle) => StyleProp<ViewStyle>),
-  nameStyle?: StyleProp<TextStyle>,
-  metadataStyle?: StyleProp<TextStyle>,
+  cardStyle?: StyleOverwrite<ChatAttachmentCardState, ChatAttachmentCardStyle>,
+  nameStyle?: StyleOverwrite<Record<string, never>, ChatAttachmentCardNameStyle>,
+  metadataStyle?: StyleOverwrite<Record<string, never>, ChatAttachmentCardMetadataStyle>,
 }
 
 export const ChatAttachmentCard = ({
@@ -35,31 +39,44 @@ export const ChatAttachmentCard = ({
   ...props
 }: ChatAttachmentCardProps) => {
   const { theme } = useTheme()
-  const state = { direction }
-  const resolvedCard = theme.components.chat.attachmentCard(state)
-  const resolvedIcon = theme.components.chat.attachmentCardIcon({})
-  const resolvedIconColor = theme.components.chat.attachmentCardIconColor({})
-  const resolvedName = theme.components.chat.attachmentCardName({})
-  const resolvedMetadata = theme.components.chat.attachmentCardMetadata({})
+  const state = useMemo(() => ({ direction }), [direction])
+  const staticState = useMemo(() => ({}), [])
 
-  const appliedCard = typeof cardStyle === 'function'
-    ? cardStyle(resolvedCard)
-    : [resolvedCard, cardStyle]
+  const resolvedCardStyle = useMemo(
+    () => theme.components.chat.attachmentCard(state, cardStyle),
+    [theme, state, cardStyle]
+  )
+  const resolvedIconStyle = useMemo(
+    () => theme.components.chat.attachmentCardIcon(staticState),
+    [theme, staticState]
+  )
+  const resolvedIconColor = useMemo(
+    () => theme.components.chat.attachmentCardIconColor(staticState),
+    [theme, staticState]
+  )
+  const resolvedNameStyle = useMemo(
+    () => theme.components.chat.attachmentCardName(staticState, nameStyle),
+    [theme, staticState, nameStyle]
+  )
+  const resolvedMetadataStyle = useMemo(
+    () => theme.components.chat.attachmentCardMetadata(staticState, metadataStyle),
+    [theme, staticState, metadataStyle]
+  )
 
   return (
-    <View {...props} style={[appliedCard, style]}>
-      <View style={resolvedIcon}>
+    <View {...props} style={[resolvedCardStyle, style]}>
+      <View style={resolvedIconStyle}>
         {icon ?? <FileText size={22} color={resolvedIconColor.color} />}
       </View>
       <View style={{ flex: 1, minWidth: 0, gap: 2 }}>
         {typeof name === 'string' || typeof name === 'number' ? (
-          <Text style={[resolvedName, nameStyle]} numberOfLines={1}>{name}</Text>
+          <Text style={resolvedNameStyle} numberOfLines={1}>{name}</Text>
         ) : (
           name
         )}
         {metadata != null && (
           typeof metadata === 'string' || typeof metadata === 'number' ? (
-            <Text style={[resolvedMetadata, metadataStyle]}>{metadata}</Text>
+            <Text style={resolvedMetadataStyle}>{metadata}</Text>
           ) : (
             metadata
           )

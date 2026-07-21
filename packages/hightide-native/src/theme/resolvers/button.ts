@@ -6,7 +6,9 @@ import {
   type ElementSize,
   type SemanticColors
 } from '@helpwave/hightide-design'
-import type { ButtonState, ButtonStyle, ButtonTextStyle, ButtonTheme } from '../types'
+import type { ViewStyle, TextStyle } from 'react-native'
+import type { ButtonState, ButtonTheme } from '../types'
+import { createStyleResolver } from '../types/resolver'
 import { isOutlineColoringStyle, resolveColoringStyles } from './coloring'
 
 const buttonFontSizes: Record<ElementSize, number> = {
@@ -35,7 +37,7 @@ export const createButtonTheme = ({
     const sizing = componentLayouts.element[size]
     const outlinePadding = isOutlineColoringStyle(coloringStyle)
 
-    const button: ButtonStyle = {
+    const button: ViewStyle = {
       flexDirection: 'row',
       alignItems: 'center',
       justifyContent: 'center',
@@ -51,7 +53,7 @@ export const createButtonTheme = ({
       opacity: state.isDisabled ? 0.6 : 1,
     }
 
-    const text: ButtonTextStyle = {
+    const text: TextStyle = {
       color: resolved.color,
       fontSize: buttonFontSizes[size],
       fontWeight: '600',
@@ -61,8 +63,8 @@ export const createButtonTheme = ({
   }
 
   return {
-    button: (state) => resolveState(state).button,
-    text: (state) => resolveState(state).text,
+    button: createStyleResolver((state) => resolveState(state).button),
+    text: createStyleResolver((state) => resolveState(state).text),
   }
 }
 

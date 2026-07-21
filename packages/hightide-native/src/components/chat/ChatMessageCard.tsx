@@ -1,10 +1,14 @@
-import type { ReactNode } from 'react'
-import { Text, View, type StyleProp, type TextStyle, type ViewProps, type ViewStyle } from 'react-native'
+import { useMemo, type ReactNode } from 'react'
+import { Text, View, type StyleProp, type ViewProps, type ViewStyle } from 'react-native'
 import type { ColoringType } from '@helpwave/hightide-design'
 import { useTheme } from '../../global-contexts/theme'
 import type {
+  ChatMessageCardState,
   ChatMessageCardStyle,
-  ChatMessageDirection
+  ChatMessageCardSubtitleStyle,
+  ChatMessageCardTitleStyle,
+  ChatMessageDirection,
+  StyleOverwrite
 } from '../../theme'
 
 export type ChatMessageCardProps = Omit<ViewProps, 'children' | 'style'> & {
@@ -17,9 +21,9 @@ export type ChatMessageCardProps = Omit<ViewProps, 'children' | 'style'> & {
   direction?: ChatMessageDirection,
   children?: ReactNode,
   style?: StyleProp<ViewStyle>,
-  cardStyle?: StyleProp<ViewStyle> | ((style: ChatMessageCardStyle) => StyleProp<ViewStyle>),
-  titleStyle?: StyleProp<TextStyle>,
-  subtitleStyle?: StyleProp<TextStyle>,
+  cardStyle?: StyleOverwrite<ChatMessageCardState, ChatMessageCardStyle>,
+  titleStyle?: StyleOverwrite<ChatMessageCardState, ChatMessageCardTitleStyle>,
+  subtitleStyle?: StyleOverwrite<Record<string, never>, ChatMessageCardSubtitleStyle>,
 }
 
 export const ChatMessageCard = ({
@@ -38,34 +42,53 @@ export const ChatMessageCard = ({
   ...props
 }: ChatMessageCardProps) => {
   const { theme } = useTheme()
-  const state = { direction, color }
-  const resolvedCard = theme.components.chat.messageCard(state)
-  const resolvedHeader = theme.components.chat.messageCardHeader({})
-  const resolvedIcon = theme.components.chat.messageCardIcon(state)
-  const resolvedTitle = theme.components.chat.messageCardTitle(state)
-  const resolvedSubtitle = theme.components.chat.messageCardSubtitle({})
-  const resolvedBody = theme.components.chat.messageCardBody({})
-  const resolvedActions = theme.components.chat.messageCardActions({})
+  const state = useMemo(() => ({ direction, color }), [direction, color])
+  const staticState = useMemo(() => ({}), [])
 
-  const appliedCard = typeof cardStyle === 'function'
-    ? cardStyle(resolvedCard)
-    : [resolvedCard, cardStyle]
+  const resolvedCardStyle = useMemo(
+    () => theme.components.chat.messageCard(state, cardStyle),
+    [theme, state, cardStyle]
+  )
+  const resolvedHeaderStyle = useMemo(
+    () => theme.components.chat.messageCardHeader(staticState),
+    [theme, staticState]
+  )
+  const resolvedIconStyle = useMemo(
+    () => theme.components.chat.messageCardIcon(state),
+    [theme, state]
+  )
+  const resolvedTitleStyle = useMemo(
+    () => theme.components.chat.messageCardTitle(state, titleStyle),
+    [theme, state, titleStyle]
+  )
+  const resolvedSubtitleStyle = useMemo(
+    () => theme.components.chat.messageCardSubtitle(staticState, subtitleStyle),
+    [theme, staticState, subtitleStyle]
+  )
+  const resolvedBodyStyle = useMemo(
+    () => theme.components.chat.messageCardBody(staticState),
+    [theme, staticState]
+  )
+  const resolvedActionsStyle = useMemo(
+    () => theme.components.chat.messageCardActions(staticState),
+    [theme, staticState]
+  )
 
   return (
-    <View {...props} style={[appliedCard, style]}>
-      <View style={resolvedHeader}>
+    <View {...props} style={[resolvedCardStyle, style]}>
+      <View style={resolvedHeaderStyle}>
         {icon != null && (
-          <View style={resolvedIcon}>{icon}</View>
+          <View style={resolvedIconStyle}>{icon}</View>
         )}
         <View style={{ flex: 1, minWidth: 0, gap: 2 }}>
           {typeof title === 'string' || typeof title === 'number' ? (
-            <Text style={[resolvedTitle, titleStyle]}>{title}</Text>
+            <Text style={resolvedTitleStyle}>{title}</Text>
           ) : (
             title
           )}
           {subtitle != null && (
             typeof subtitle === 'string' || typeof subtitle === 'number' ? (
-              <Text style={[resolvedSubtitle, subtitleStyle]}>{subtitle}</Text>
+              <Text style={resolvedSubtitleStyle}>{subtitle}</Text>
             ) : (
               subtitle
             )
@@ -74,10 +97,10 @@ export const ChatMessageCard = ({
         {badge}
       </View>
       {children != null && (
-        <View style={resolvedBody}>{children}</View>
+        <View style={resolvedBodyStyle}>{children}</View>
       )}
       {actions != null && (
-        <View style={resolvedActions}>{actions}</View>
+        <View style={resolvedActionsStyle}>{actions}</View>
       )}
     </View>
   )

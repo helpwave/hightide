@@ -1,4 +1,4 @@
-import { useEffect, useRef, type ReactNode } from 'react'
+import { useEffect, useMemo, useRef, type ReactNode } from 'react'
 import {
   ScrollView,
   type NativeScrollEvent,
@@ -7,13 +7,13 @@ import {
   type ViewStyle
 } from 'react-native'
 import { useTheme } from '../../global-contexts/theme'
-import type { ChatMessageListStyle } from '../../theme'
+import type { ChatMessageListStyle, StyleOverwrite } from '../../theme'
 
 export type ChatMessageListProps = {
   autoScroll?: boolean,
   children?: ReactNode,
   style?: StyleProp<ViewStyle>,
-  listStyle?: StyleProp<ViewStyle> | ((style: ChatMessageListStyle) => StyleProp<ViewStyle>),
+  listStyle?: StyleOverwrite<Record<string, never>, ChatMessageListStyle>,
   contentContainerStyle?: StyleProp<ViewStyle>,
   onScroll?: (event: NativeSyntheticEvent<NativeScrollEvent>) => void,
 }
@@ -28,11 +28,16 @@ export const ChatMessageList = ({
 }: ChatMessageListProps) => {
   const { theme } = useTheme()
   const scrollRef = useRef<ScrollView>(null)
-  const resolvedList = theme.components.chat.messageList({})
+  const state = useMemo(() => ({}), [])
 
-  const appliedList = typeof listStyle === 'function'
-    ? listStyle(resolvedList)
-    : [resolvedList, listStyle]
+  const resolvedListStyle = useMemo(
+    () => theme.components.chat.messageList(state, listStyle),
+    [theme, state, listStyle]
+  )
+  const listGap = useMemo(
+    () => (theme.components.chat.messageList(state) as ViewStyle).gap,
+    [theme, state]
+  )
 
   useEffect(() => {
     if (autoScroll) {
@@ -43,8 +48,8 @@ export const ChatMessageList = ({
   return (
     <ScrollView
       ref={scrollRef}
-      style={[appliedList, style]}
-      contentContainerStyle={[{ gap: resolvedList.gap }, contentContainerStyle]}
+      style={[resolvedListStyle, style]}
+      contentContainerStyle={[{ gap: listGap }, contentContainerStyle]}
       onScroll={onScroll}
       scrollEventThrottle={16}
     >

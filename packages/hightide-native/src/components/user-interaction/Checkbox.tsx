@@ -1,6 +1,6 @@
 import { useControlledState, useEventCallbackStabilizer } from '@helpwave/hightide-utils/hooks'
 import { Check, Minus } from 'lucide-react-native'
-import { useCallback } from 'react'
+import { useCallback, useMemo } from 'react'
 import {
   Pressable,
   type PressableProps,
@@ -9,7 +9,7 @@ import {
 } from 'react-native'
 import { Icon } from '../../icons/Icon'
 import { useTheme } from '../../global-contexts/theme'
-import type { CheckboxSize, CheckboxState, CheckboxStyle } from '../../theme'
+import type { CheckboxSize, CheckboxState, CheckboxStyle, StyleOverwrite } from '../../theme'
 import type { FormFieldDataHandling, FormFieldInteractionStates } from '../../types/formField'
 
 export type { CheckboxSize }
@@ -24,7 +24,7 @@ export type CheckboxProps = Omit<PressableProps, 'children' | 'style'>
     alwaysShowCheckIcon?: boolean,
     isRounded?: boolean,
     style?: StyleProp<ViewStyle>,
-    checkboxStyle?: StyleProp<ViewStyle> | ((style: CheckboxStyle) => StyleProp<ViewStyle>),
+    checkboxStyle?: StyleOverwrite<CheckboxState, CheckboxStyle>,
   }
 
 export const Checkbox = ({
@@ -60,7 +60,7 @@ export const Checkbox = ({
     defaultValue: initialValue,
   })
 
-  const state: CheckboxState = {
+  const state = useMemo((): CheckboxState => ({
     size,
     isChecked: value,
     isIndeterminate: indeterminate,
@@ -68,13 +68,16 @@ export const Checkbox = ({
     isDisabled: disabled,
     isRounded,
     alwaysShowCheckIcon,
-  }
+  }), [alwaysShowCheckIcon, disabled, indeterminate, invalid, isRounded, size, value])
 
-  const resolvedCheckbox = theme.components.checkbox.checkbox(state)
-  const resolvedIcon = theme.components.checkbox.icon(state)
-  const appliedCheckboxStyle = typeof checkboxStyle === 'function'
-    ? checkboxStyle(resolvedCheckbox)
-    : [resolvedCheckbox, checkboxStyle]
+  const resolvedCheckboxStyle = useMemo(
+    () => theme.components.checkbox.checkbox(state, checkboxStyle),
+    [theme, state, checkboxStyle]
+  )
+  const resolvedIcon = useMemo(
+    () => theme.components.checkbox.icon(state),
+    [theme, state]
+  )
 
   return (
     <Pressable
@@ -91,7 +94,7 @@ export const Checkbox = ({
         }
         props.onPress?.(event)
       }}
-      style={[appliedCheckboxStyle, style]}
+      style={[resolvedCheckboxStyle, style]}
     >
       {resolvedIcon.visible && (
         indeterminate

@@ -16,6 +16,7 @@ import type {
   ChatSystemLineState,
   ChatTheme
 } from '../types'
+import { createStyleResolver, createValueResolver } from '../types/resolver'
 
 export type CreateChatThemeOptions = {
   semantic: SemanticColors,
@@ -50,26 +51,26 @@ export const createChatTheme = ({
   }
 
   return {
-    conversationRow: resolveConversationRow,
-    conversationRowTitle: (state) => ({
+    conversationRow: createStyleResolver(resolveConversationRow),
+    conversationRowTitle: createStyleResolver((state) => ({
       flex: 1,
       color: semantic.onSurface,
       fontSize: remToPx('1rem'),
       fontWeight: state.isUnread ? '700' : '500',
-    }),
-    conversationRowTimestamp: (state) => ({
+    })),
+    conversationRowTimestamp: createStyleResolver((state) => ({
       color: state.isUnread ? semantic.primary : semantic.description,
       fontSize: remToPx('0.75rem'),
       fontWeight: state.isUnread ? '500' : '400',
       flexShrink: 0,
-    }),
-    conversationRowPreview: (state) => ({
+    })),
+    conversationRowPreview: createStyleResolver((state) => ({
       flex: 1,
       color: state.isUnread ? semantic.onSurface : semantic.description,
       fontSize: remToPx('0.875rem'),
       fontWeight: '300',
-    }),
-    conversationRowUnreadBadge: () => ({
+    })),
+    conversationRowUnreadBadge: createStyleResolver(() => ({
       minWidth: remToPx('1.25rem'),
       height: remToPx('1.25rem'),
       paddingHorizontal: remToPx('0.375rem'),
@@ -77,29 +78,29 @@ export const createChatTheme = ({
       backgroundColor: semantic.primary,
       alignItems: 'center',
       justifyContent: 'center',
-    }),
-    conversationRowUnreadBadgeText: () => ({
+    })),
+    conversationRowUnreadBadgeText: createStyleResolver(() => ({
       color: semantic.onPrimary,
       fontSize: remToPx('0.6875rem'),
       fontWeight: '700',
-    }),
-    conversationRowSentIndicator: () => ({
+    })),
+    conversationRowSentIndicator: createValueResolver(() => ({
       color: semantic.primary,
-    }),
-    conversationList: () => ({
+    })),
+    conversationList: createStyleResolver(() => ({
       flex: 1,
       backgroundColor: semantic.surface,
-    }),
-    conversationListHeader: () => ({
+    })),
+    conversationListHeader: createStyleResolver(() => ({
       paddingHorizontal: remToPx('0.875rem'),
       paddingVertical: remToPx('0.875rem'),
       gap: remToPx('0.75rem'),
-    }),
-    conversationListFooter: () => ({
+    })),
+    conversationListFooter: createStyleResolver(() => ({
       paddingHorizontal: remToPx('0.875rem'),
       paddingVertical: remToPx('0.5rem'),
-    }),
-    threadHeader: () => ({
+    })),
+    threadHeader: createStyleResolver(() => ({
       flexDirection: 'row',
       alignItems: 'center',
       gap: remToPx('0.75rem'),
@@ -108,31 +109,31 @@ export const createChatTheme = ({
       borderBottomWidth: StyleSheet.hairlineWidth,
       borderBottomColor: component.divider,
       backgroundColor: semantic.surface,
-    }),
-    threadHeaderTitle: () => ({
+    })),
+    threadHeaderTitle: createStyleResolver(() => ({
       color: semantic.onSurface,
       fontSize: remToPx('1rem'),
       fontWeight: '700',
-    }),
-    threadHeaderSubtitle: () => ({
+    })),
+    threadHeaderSubtitle: createStyleResolver(() => ({
       color: semantic.description,
       fontSize: remToPx('0.75rem'),
       fontWeight: '300',
-    }),
-    messageList: () => ({
+    })),
+    messageList: createStyleResolver(() => ({
       flex: 1,
       paddingHorizontal: remToPx('1rem'),
       paddingVertical: remToPx('1.125rem'),
       gap: remToPx('0.75rem'),
       backgroundColor: semantic.background,
-    }),
-    messageBubbleContainer: (state: ChatMessageBubbleState) => ({
+    })),
+    messageBubbleContainer: createStyleResolver((state: ChatMessageBubbleState) => ({
       maxWidth: remToPx('17.5rem'),
       gap: remToPx('0.25rem'),
       alignSelf: state.direction === 'outgoing' ? 'flex-end' : 'flex-start',
       alignItems: state.direction === 'outgoing' ? 'flex-end' : 'flex-start',
-    }),
-    messageBubble: (state: ChatMessageBubbleState) => {
+    })),
+    messageBubble: createStyleResolver((state: ChatMessageBubbleState) => {
       const outgoing = state.direction === 'outgoing'
       const radius = remToPx('0.75rem')
       const corner = remToPx('0.25rem')
@@ -146,14 +147,14 @@ export const createChatTheme = ({
         borderBottomLeftRadius: outgoing ? radius : corner,
         borderBottomRightRadius: outgoing ? corner : radius,
       }
-    },
-    messageBubbleContent: (state: ChatMessageBubbleState) => ({
+    }),
+    messageBubbleContent: createStyleResolver((state: ChatMessageBubbleState) => ({
       color: state.direction === 'outgoing' ? semantic.onPrimary : semantic.onNeutral,
       fontSize: remToPx('1rem'),
       fontWeight: '300',
       lineHeight: remToPx('1.4rem'),
-    }),
-    messageBubbleTimestamp: (state: ChatMessageBubbleState) => ({
+    })),
+    messageBubbleTimestamp: createStyleResolver((state: ChatMessageBubbleState) => ({
       marginTop: remToPx('0.3125rem'),
       color: state.direction === 'outgoing'
         ? hexWithAlpha(semantic.onPrimary, 0.75)
@@ -161,21 +162,21 @@ export const createChatTheme = ({
       fontSize: remToPx('0.6875rem'),
       fontWeight: '500',
       textAlign: 'right',
-    }),
-    messageBubbleReceipt: () => ({
+    })),
+    messageBubbleReceipt: createStyleResolver(() => ({
       flexDirection: 'row',
       alignItems: 'center',
       gap: remToPx('0.3125rem'),
-    }),
-    messageBubbleReceiptText: () => ({
+    })),
+    messageBubbleReceiptText: createStyleResolver(() => ({
       color: semantic.description,
       fontSize: remToPx('0.6875rem'),
       fontWeight: '500',
-    }),
-    messageBubbleReceiptIcon: () => ({
+    })),
+    messageBubbleReceiptIcon: createValueResolver(() => ({
       color: semantic.primary,
-    }),
-    messageCard: (state: ChatMessageCardState) => {
+    })),
+    messageCard: createStyleResolver((state: ChatMessageCardState) => {
       const outgoing = state.direction === 'outgoing'
       const radius = remToPx('0.75rem')
       const corner = remToPx('0.25rem')
@@ -193,8 +194,8 @@ export const createChatTheme = ({
         overflow: 'hidden',
         alignSelf: outgoing ? 'flex-end' : 'flex-start',
       }
-    },
-    messageCardHeader: () => ({
+    }),
+    messageCardHeader: createStyleResolver(() => ({
       flexDirection: 'row',
       alignItems: 'center',
       gap: remToPx('0.625rem'),
@@ -202,8 +203,8 @@ export const createChatTheme = ({
       paddingVertical: remToPx('0.75rem'),
       borderBottomWidth: StyleSheet.hairlineWidth,
       borderBottomColor: component.divider,
-    }),
-    messageCardIcon: (state: ChatMessageCardState) => {
+    })),
+    messageCardIcon: createStyleResolver((state: ChatMessageCardState) => {
       const color = state.color ?? 'primary'
       const tokens = coloring[color]
 
@@ -215,16 +216,16 @@ export const createChatTheme = ({
         justifyContent: 'center',
         backgroundColor: hexWithAlpha(tokens.tonalBackground ?? tokens.color, 0.2),
       }
-    },
-    messageCardIconColor: (state: ChatMessageCardState) => {
+    }),
+    messageCardIconColor: createValueResolver((state: ChatMessageCardState) => {
       const color = state.color ?? 'primary'
       const tokens = coloring[color]
 
       return {
         color: tokens.tonalText ?? tokens.color,
       }
-    },
-    messageCardTitle: (state: ChatMessageCardState) => {
+    }),
+    messageCardTitle: createStyleResolver((state: ChatMessageCardState) => {
       const color = state.color ?? 'primary'
       const tokens = coloring[color]
 
@@ -233,23 +234,23 @@ export const createChatTheme = ({
         fontSize: remToPx('0.875rem'),
         fontWeight: '700',
       }
-    },
-    messageCardSubtitle: () => ({
+    }),
+    messageCardSubtitle: createStyleResolver(() => ({
       color: semantic.description,
       fontSize: remToPx('0.75rem'),
-    }),
-    messageCardBody: () => ({
+    })),
+    messageCardBody: createStyleResolver(() => ({
       paddingHorizontal: remToPx('0.9375rem'),
       paddingVertical: remToPx('0.75rem'),
       gap: remToPx('0.25rem'),
-    }),
-    messageCardActions: () => ({
+    })),
+    messageCardActions: createStyleResolver(() => ({
       flexDirection: 'row',
       gap: remToPx('0.625rem'),
       paddingHorizontal: remToPx('0.9375rem'),
       paddingBottom: remToPx('0.9375rem'),
-    }),
-    attachmentCard: (state: ChatAttachmentCardState) => {
+    })),
+    attachmentCard: createStyleResolver((state: ChatAttachmentCardState) => {
       const outgoing = state.direction === 'outgoing'
       const radius = remToPx('0.75rem')
       const corner = remToPx('0.25rem')
@@ -269,35 +270,35 @@ export const createChatTheme = ({
         borderBottomRightRadius: outgoing ? corner : radius,
         alignSelf: outgoing ? 'flex-end' : 'flex-start',
       }
-    },
-    attachmentCardIcon: () => ({
+    }),
+    attachmentCardIcon: createStyleResolver(() => ({
       width: remToPx('2.75rem'),
       height: remToPx('2.75rem'),
       borderRadius: remToPx('0.375rem'),
       alignItems: 'center',
       justifyContent: 'center',
       backgroundColor: hexWithAlpha(semantic.negative, 0.2),
-    }),
-    attachmentCardIconColor: () => ({
+    })),
+    attachmentCardIconColor: createValueResolver(() => ({
       color: semantic.negative,
-    }),
-    attachmentCardName: () => ({
+    })),
+    attachmentCardName: createStyleResolver(() => ({
       color: semantic.onSurface,
       fontSize: remToPx('0.875rem'),
       fontWeight: '500',
-    }),
-    attachmentCardMetadata: () => ({
+    })),
+    attachmentCardMetadata: createStyleResolver(() => ({
       color: semantic.description,
       fontSize: remToPx('0.75rem'),
-    }),
-    systemLine: () => ({
+    })),
+    systemLine: createStyleResolver(() => ({
       flexDirection: 'row',
       alignItems: 'center',
       justifyContent: 'center',
       alignSelf: 'center',
       gap: remToPx('0.375rem'),
-    }),
-    systemLineText: (state: ChatSystemLineState) => {
+    })),
+    systemLineText: createStyleResolver((state: ChatSystemLineState) => {
       const color = state.color ?? 'primary'
       const tokens = coloring[color]
 
@@ -306,28 +307,28 @@ export const createChatTheme = ({
         fontSize: remToPx('0.75rem'),
         fontWeight: '500',
       }
-    },
-    systemLineIcon: (state: ChatSystemLineState) => {
+    }),
+    systemLineIcon: createValueResolver((state: ChatSystemLineState) => {
       const color = state.color ?? 'primary'
       const tokens = coloring[color]
 
       return {
         color: tokens.text ?? tokens.color,
       }
-    },
-    dateDivider: () => ({
+    }),
+    dateDivider: createStyleResolver(() => ({
       alignSelf: 'center',
       paddingHorizontal: remToPx('0.875rem'),
       paddingVertical: remToPx('0.25rem'),
       borderRadius: 999,
       backgroundColor: semantic.surface,
-    }),
-    dateDividerText: () => ({
+    })),
+    dateDividerText: createStyleResolver(() => ({
       color: semantic.description,
       fontSize: remToPx('0.75rem'),
       fontWeight: '500',
-    }),
-    quickReplyChip: (state: ChatQuickReplyChipState) => {
+    })),
+    quickReplyChip: createStyleResolver((state: ChatQuickReplyChipState) => {
       const pressed = !!state.isPressed && !state.isDisabled
 
       return {
@@ -342,13 +343,13 @@ export const createChatTheme = ({
         borderColor: state.isActive ? semantic.primary : component.divider,
         backgroundColor: pressed ? semantic.surfaceHover : semantic.surface,
       }
-    },
-    quickReplyChipText: (state: ChatQuickReplyChipState) => ({
+    }),
+    quickReplyChipText: createStyleResolver((state: ChatQuickReplyChipState) => ({
       color: state.isActive ? semantic.primary : semantic.description,
       fontSize: remToPx('0.875rem'),
       fontWeight: '500',
-    }),
-    messageComposer: () => ({
+    })),
+    messageComposer: createStyleResolver(() => ({
       flexDirection: 'row',
       alignItems: 'flex-end',
       width: '100%',
@@ -358,8 +359,8 @@ export const createChatTheme = ({
       backgroundColor: semantic.surface,
       borderTopWidth: StyleSheet.hairlineWidth,
       borderTopColor: component.divider,
-    }),
-    messageComposerInput: () => ({
+    })),
+    messageComposerInput: createStyleResolver(() => ({
       flex: 1,
       minHeight: remToPx('2.75rem'),
       maxHeight: remToPx('2.75rem') * 7,
@@ -369,8 +370,8 @@ export const createChatTheme = ({
       backgroundColor: semantic.surfaceVariant,
       color: semantic.onSurface,
       fontSize: remToPx('0.9375rem'),
-    }),
-    messageComposerPlaceholderColor: () => semantic.placeholder,
+    })),
+    messageComposerPlaceholderColor: createValueResolver(() => semantic.placeholder),
   }
 }
 
