@@ -1,15 +1,28 @@
+import type {
+  TextStyle,
+  ViewStyle
+} from 'react-native'
+
 import {
   componentLayouts,
-  toPx,
-  type ColoringTokensDefinitions,
-  type DesignTheme as DesignTokensTheme,
-  type ElementSize,
-  type SemanticColors
-} from '@helpwave/hightide-design'
-import type { ViewStyle, TextStyle } from 'react-native'
-import type { ButtonState, ButtonTheme } from '../types'
-import { createStyleResolver } from '../types/resolver'
-import { isOutlineColoringStyle, resolveColoringStyles } from './coloring'
+  fontWeights
+} from '@helpwave/hightide-design/tokens'
+import type {
+  HightideDesignTokens as DesignTokensTheme,
+  ElementSize
+} from '@helpwave/hightide-design/types'
+
+import {
+  isOutlineColoringStyle,
+  resolveColoringStyles
+} from '@/src/theme/resolvers/coloring'
+import type { HightideSemanticColors } from '@/src/theme/types/color'
+import type {
+  ButtonState,
+  ButtonTheme
+} from '@/src/theme/types/components/button'
+import type { HightideComponentThemes } from '@/src/theme/types/components/hightide'
+import { createStyleResolver } from '@/src/theme/types/resolver'
 
 const buttonFontSizes: Record<ElementSize, number> = {
   xs: 12,
@@ -19,8 +32,8 @@ const buttonFontSizes: Record<ElementSize, number> = {
 }
 
 export type CreateButtonThemeOptions = {
-  semantic: SemanticColors,
-  coloring: ColoringTokensDefinitions,
+  semantic: HightideSemanticColors,
+  coloring: HightideComponentThemes['coloring'],
 }
 
 export const createButtonTheme = ({
@@ -44,19 +57,19 @@ export const createButtonTheme = ({
       backgroundColor: resolved.backgroundColor,
       borderColor: resolved.borderColor,
       borderWidth: resolved.borderWidth,
-      paddingVertical: toPx(outlinePadding ? padding.paddingYOutline : padding.paddingY),
-      paddingHorizontal: toPx(outlinePadding ? padding.paddingXOutline : padding.paddingX),
-      gap: toPx(padding.gap),
-      minWidth: toPx(padding.minWidth),
-      minHeight: toPx(sizing.height),
-      borderRadius: toPx(padding.borderRadius),
+      paddingVertical: outlinePadding ? padding.paddingYOutline : padding.paddingY,
+      paddingHorizontal: outlinePadding ? padding.paddingXOutline : padding.paddingX,
+      gap: padding.gap,
+      minWidth: padding.minWidth,
+      minHeight: sizing.height,
+      borderRadius: padding.borderRadius,
       opacity: state.isDisabled ? 0.6 : 1,
     }
 
     const text: TextStyle = {
       color: resolved.color,
       fontSize: buttonFontSizes[size],
-      fontWeight: '600',
+      fontWeight: fontWeights.semibold,
     }
 
     return { button, text }
@@ -70,7 +83,7 @@ export const createButtonTheme = ({
 
 export const createButtonThemeFromDesign = (theme: DesignTokensTheme): ButtonTheme => {
   return createButtonTheme({
-    semantic: theme.semantic,
-    coloring: theme.coloring,
+    semantic: theme.semanticColors,
+    coloring: theme.coloring as HightideComponentThemes['coloring'],
   })
 }

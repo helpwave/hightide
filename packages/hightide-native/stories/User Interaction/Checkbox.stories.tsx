@@ -1,5 +1,9 @@
-import type { Meta, StoryObj } from '@storybook/react-native-web-vite'
+import type {
+  Meta,
+  StoryObj
+} from '@storybook/react-native-web-vite'
 import { action } from 'storybook/actions'
+
 import { Checkbox } from '@/src/components/user-interaction/Checkbox'
 
 const meta = {

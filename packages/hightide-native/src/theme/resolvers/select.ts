@@ -1,19 +1,23 @@
-import {
-  remToPx,
-  type ComponentColors,
-  type DesignTheme as DesignTokensTheme,
-  type SemanticColors
-} from '@helpwave/hightide-design'
+import { fontWeights } from '@helpwave/hightide-design/tokens'
+import type {
+  ComponentColorTokens,
+  HightideDesignTokens as DesignTokensTheme
+} from '@helpwave/hightide-design/types'
+
+import type { HightideSemanticColors } from '@/src/theme/types/color'
 import type {
   SelectOptionState,
   SelectState,
   SelectTheme
-} from '../types'
-import { createStyleResolver, createValueResolver } from '../types/resolver'
+} from '@/src/theme/types/components/select'
+import {
+  createStyleResolver,
+  createValueResolver
+} from '@/src/theme/types/resolver'
 
 export type CreateSelectThemeOptions = {
-  semantic: SemanticColors,
-  component: ComponentColors,
+  semantic: HightideSemanticColors,
+  component: ComponentColorTokens,
 }
 
 export const createSelectTheme = ({
@@ -23,9 +27,9 @@ export const createSelectTheme = ({
   return {
     trigger: createStyleResolver((state: SelectState) => ({
       minHeight: 44,
-      paddingHorizontal: remToPx('0.75rem'),
-      paddingVertical: remToPx('0.5rem'),
-      borderRadius: remToPx('0.375rem'),
+      paddingHorizontal: 12,
+      paddingVertical: 8,
+      borderRadius: 6,
       borderWidth: 1,
       borderColor: state.isInvalid ? semantic.negative : component.border,
       backgroundColor: state.isDisabled ? semantic.disabled : component.input.background,
@@ -65,14 +69,14 @@ export const createSelectTheme = ({
     })),
     optionText: createStyleResolver((state: SelectOptionState) => ({
       color: state.isSelected ? semantic.primary : component.menu.text,
-      fontWeight: state.isSelected ? '600' : '400',
+      fontWeight: state.isSelected ? fontWeights.semibold : fontWeights.base,
     })),
   }
 }
 
 export const createSelectThemeFromDesign = (theme: DesignTokensTheme): SelectTheme => {
   return createSelectTheme({
-    semantic: theme.semantic,
-    component: theme.component,
+    semantic: theme.semanticColors,
+    component: theme.componentColors,
   })
 }

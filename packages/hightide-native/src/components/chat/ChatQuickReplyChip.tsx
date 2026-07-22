@@ -6,13 +6,14 @@ import {
   type StyleProp,
   type ViewStyle
 } from 'react-native'
-import { useTheme } from '../../global-contexts/theme'
+
+import { useTheme } from '@/src/global-contexts/theme/ThemeContext'
 import type {
   ChatQuickReplyChipState,
   ChatQuickReplyChipStyle,
-  ChatQuickReplyChipTextStyle,
-  StyleOverwrite
-} from '../../theme'
+  ChatQuickReplyChipTextStyle
+} from '@/src/theme/types/components/chat'
+import type { StyleOverwrite } from '@/src/theme/types/resolver'
 
 export type ChatQuickReplyChipProps = Omit<PressableProps, 'children' | 'style'> & {
   isActive?: boolean,
@@ -53,12 +54,12 @@ export const ChatQuickReplyChip = ({
       disabled={disabled}
       style={(pressableState) => {
         const state = resolveState(pressableState as PressableInteraction)
-        return [theme.components.chat.quickReplyChip(state, chipStyle), style]
+        return [theme.components.chat.quickReplyChip.container(state, chipStyle), style]
       }}
     >
       {(pressableState) => {
         const state = resolveState(pressableState as PressableInteraction)
-        const resolvedText = theme.components.chat.quickReplyChipText(state, textStyle)
+        const resolvedText = theme.components.chat.quickReplyChip.text(state, textStyle)
 
         if (typeof children === 'string' || typeof children === 'number') {
           return <Text style={resolvedText}>{children}</Text>

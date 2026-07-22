@@ -1,3 +1,6 @@
-export * from './palettes'
+export * from './animation'
+export * from './color-palettes'
+export * from './decoration'
+export * from './layout'
 export * from './themes'
-export { componentLayouts } from './layouts/component-layouts'
+export * from './typography'

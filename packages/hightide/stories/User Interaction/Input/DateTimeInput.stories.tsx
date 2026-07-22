@@ -48,7 +48,10 @@ export const dateTimeInput: Story = {
       <LocalizationContext.Provider value={{
         locale: 'de-DE',
         setLocale: () => {},
-        supportedLocales: [{ locale: 'de-DE', localName: 'Deutsch' }, { locale: 'en-US', localName: 'English (US)' }],
+        supportedLocales: {
+          'de-DE': { localName: 'Deutsch' },
+          'en-US': { localName: 'English (US)' },
+        },
         is24HourFormat,
         setIs24HourFormat: () => {},
         timeZone: timeZone || undefined,

@@ -1,5 +1,12 @@
-import type { Meta, StoryObj } from '@storybook/react-native-web-vite'
-import { Chip, ChipUtil } from '@/src/components/visualization-and-display/Chip'
+import type {
+  Meta,
+  StoryObj
+} from '@storybook/react-native-web-vite'
+
+import {
+  Chip,
+  ChipUtil
+} from '@/src/components/visualization-and-display/Chip'
 
 const meta = {
   component: Chip,

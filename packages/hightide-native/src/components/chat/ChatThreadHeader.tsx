@@ -1,12 +1,22 @@
-import { useMemo, type ReactNode } from 'react'
-import { Text, View, type StyleProp, type ViewProps, type ViewStyle } from 'react-native'
-import { useTheme } from '../../global-contexts/theme'
+import {
+  useMemo,
+  type ReactNode
+} from 'react'
+import {
+  Text,
+  View,
+  type StyleProp,
+  type ViewProps,
+  type ViewStyle
+} from 'react-native'
+
+import { useTheme } from '@/src/global-contexts/theme/ThemeContext'
 import type {
   ChatThreadHeaderStyle,
   ChatThreadHeaderSubtitleStyle,
-  ChatThreadHeaderTitleStyle,
-  StyleOverwrite
-} from '../../theme'
+  ChatThreadHeaderTitleStyle
+} from '@/src/theme/types/components/chat'
+import type { StyleOverwrite } from '@/src/theme/types/resolver'
 
 export type ChatThreadHeaderProps = Omit<ViewProps, 'style'> & {
   avatar?: ReactNode,
@@ -36,15 +46,15 @@ export const ChatThreadHeader = ({
   const state = useMemo(() => ({}), [])
 
   const resolvedHeaderStyle = useMemo(
-    () => theme.components.chat.threadHeader(state, headerStyle),
+    () => theme.components.chat.threadHeader.container(state, headerStyle),
     [theme, state, headerStyle]
   )
   const resolvedTitleStyle = useMemo(
-    () => theme.components.chat.threadHeaderTitle(state, titleStyle),
+    () => theme.components.chat.threadHeader.title(state, titleStyle),
     [theme, state, titleStyle]
   )
   const resolvedSubtitleStyle = useMemo(
-    () => theme.components.chat.threadHeaderSubtitle(state, subtitleStyle),
+    () => theme.components.chat.threadHeader.subtitle(state, subtitleStyle),
     [theme, state, subtitleStyle]
   )
 

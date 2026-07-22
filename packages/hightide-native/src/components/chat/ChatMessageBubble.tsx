@@ -1,16 +1,26 @@
-import { useMemo, type ReactNode } from 'react'
-import { Text, View, type StyleProp, type ViewProps, type ViewStyle } from 'react-native'
+import {
+  useMemo,
+  type ReactNode
+} from 'react'
+import {
+  Text,
+  View,
+  type StyleProp,
+  type ViewProps,
+  type ViewStyle
+} from 'react-native'
 import { CheckCheck } from 'lucide-react-native'
-import { useTheme } from '../../global-contexts/theme'
+
+import { useTheme } from '@/src/global-contexts/theme/ThemeContext'
 import type {
   ChatMessageBubbleContainerStyle,
   ChatMessageBubbleContentStyle,
   ChatMessageBubbleState,
   ChatMessageBubbleStyle,
   ChatMessageBubbleTimestampStyle,
-  ChatMessageDirection,
-  StyleOverwrite
-} from '../../theme'
+  ChatMessageDirection
+} from '@/src/theme/types/components/chat'
+import type { StyleOverwrite } from '@/src/theme/types/resolver'
 
 export type { ChatMessageDirection }
 
@@ -43,31 +53,31 @@ export const ChatMessageBubble = ({
   const staticState = useMemo(() => ({}), [])
 
   const resolvedContainerStyle = useMemo(
-    () => theme.components.chat.messageBubbleContainer(state, containerStyle),
+    () => theme.components.chat.messageBubble.container(state, containerStyle),
     [theme, state, containerStyle]
   )
   const resolvedBubbleStyle = useMemo(
-    () => theme.components.chat.messageBubble(state, bubbleStyle),
+    () => theme.components.chat.messageBubble.bubble(state, bubbleStyle),
     [theme, state, bubbleStyle]
   )
   const resolvedContentStyle = useMemo(
-    () => theme.components.chat.messageBubbleContent(state, contentStyle),
+    () => theme.components.chat.messageBubble.content(state, contentStyle),
     [theme, state, contentStyle]
   )
   const resolvedTimestampStyle = useMemo(
-    () => theme.components.chat.messageBubbleTimestamp(state, timestampStyle),
+    () => theme.components.chat.messageBubble.timestamp(state, timestampStyle),
     [theme, state, timestampStyle]
   )
   const resolvedReceiptStyle = useMemo(
-    () => theme.components.chat.messageBubbleReceipt(staticState),
+    () => theme.components.chat.messageBubble.receipt(staticState),
     [theme, staticState]
   )
   const resolvedReceiptTextStyle = useMemo(
-    () => theme.components.chat.messageBubbleReceiptText(staticState),
+    () => theme.components.chat.messageBubble.receiptText(staticState),
     [theme, staticState]
   )
   const resolvedReceiptIcon = useMemo(
-    () => theme.components.chat.messageBubbleReceiptIcon(staticState),
+    () => theme.components.chat.messageBubble.receiptIcon(staticState),
     [theme, staticState]
   )
 

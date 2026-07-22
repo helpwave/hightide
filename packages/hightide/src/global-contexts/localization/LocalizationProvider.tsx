@@ -1,7 +1,7 @@
 import type { PropsWithChildren } from 'react'
 import {
   LocalizationProvider as LocalizationProviderBase,
-  type LocaleInformation,
+  type SupportedLocalesConfig,
   type LocalizationProviderProps as LocalizationProviderPropsBase
 } from '@helpwave/hightide-utils/context/localization'
 import { useBrowserKeyValueStore } from '@helpwave/hightide-utils/hooks'
@@ -13,16 +13,16 @@ export type LocalizationProviderProps = PropsWithChildren
   & Omit<LocalizationProviderPropsBase, 'store' | 'systemLocale' | 'fallbackLocale' | 'supportedLocales'>
   & Partial<Pick<LocalizationProviderPropsBase, 'fallbackLocale' | 'supportedLocales' | 'store'>>
 
-const detectWebSystemLocale = (supportedLocales: readonly LocaleInformation[]): string | undefined => {
+const detectWebSystemLocale = (supportedLocales: SupportedLocalesConfig): string | undefined => {
   if (typeof window === 'undefined') return undefined
   return LocalizationUtils.matchBrowserLocales(
     window.navigator.languages,
-    supportedLocales.map((value) => value.locale),
+    Object.keys(supportedLocales),
     LocalizationUtils.isoLocaleToLanguageShort
   )
 }
 
-const useWebSystemLocale = (supportedLocales: readonly LocaleInformation[]) => {
+const useWebSystemLocale = (supportedLocales: SupportedLocalesConfig) => {
   const [systemLocale, setSystemLocale] = useState<string | undefined>(() =>
     detectWebSystemLocale(supportedLocales))
 

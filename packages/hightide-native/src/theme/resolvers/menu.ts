@@ -1,16 +1,24 @@
 import { StyleSheet } from 'react-native'
+
+import { fontWeights } from '@helpwave/hightide-design/tokens'
+import type {
+  ComponentColorTokens,
+  HightideDesignTokens as DesignTokensTheme
+} from '@helpwave/hightide-design/types'
+
+import type { HightideSemanticColors } from '@/src/theme/types/color'
+import type {
+  MenuActionItemState,
+  MenuTheme
+} from '@/src/theme/types/components/menu'
 import {
-  remToPx,
-  type ComponentColors,
-  type DesignTheme as DesignTokensTheme,
-  type SemanticColors
-} from '@helpwave/hightide-design'
-import type { MenuActionItemState, MenuTheme } from '../types'
-import { createStyleResolver, createValueResolver } from '../types/resolver'
+  createStyleResolver,
+  createValueResolver
+} from '@/src/theme/types/resolver'
 
 export type CreateMenuThemeOptions = {
-  semantic: SemanticColors,
-  component: ComponentColors,
+  semantic: HightideSemanticColors,
+  component: ComponentColorTokens,
 }
 
 export const createMenuTheme = ({
@@ -24,9 +32,9 @@ export const createMenuTheme = ({
       flexDirection: 'row' as const,
       alignItems: 'center' as const,
       minHeight: 64,
-      gap: remToPx('0.75rem'),
-      paddingHorizontal: remToPx('1rem'),
-      paddingVertical: remToPx('0.5rem'),
+      gap: 12,
+      paddingHorizontal: 16,
+      paddingVertical: 8,
       borderBottomWidth: StyleSheet.hairlineWidth,
       borderBottomColor: component.divider,
       backgroundColor: pressed ? semantic.surfaceHover : ('transparent' as const),
@@ -36,14 +44,14 @@ export const createMenuTheme = ({
 
   const resolveItemContent = () => ({
     flex: 1,
-    gap: remToPx('0.25rem'),
+    gap: 4,
     justifyContent: 'center' as const,
   })
 
   const resolveActionLabel = (state: MenuActionItemState) => ({
     color: state.isDanger ? semantic.negative : semantic.onSurface,
-    fontSize: remToPx('0.9375rem'),
-    fontWeight: '500' as const,
+    fontSize: 15,
+    fontWeight: fontWeights.medium,
   })
 
   const resolveActionIcon = (state: MenuActionItemState) => ({
@@ -52,20 +60,20 @@ export const createMenuTheme = ({
 
   return {
     section: createStyleResolver(() => ({
-      marginBottom: remToPx('1.25rem'),
-      gap: remToPx('0.5rem'),
+      marginBottom: 20,
+      gap: 8,
     })),
     sectionTitle: createStyleResolver(() => ({
       color: semantic.description,
-      fontSize: remToPx('0.75rem'),
-      fontWeight: '700',
+      fontSize: 12,
+      fontWeight: fontWeights.bold,
       letterSpacing: 0.4,
       textTransform: 'uppercase',
-      paddingHorizontal: remToPx('0.25rem'),
+      paddingHorizontal: 4,
     })),
     card: createStyleResolver(() => ({
       backgroundColor: semantic.surface,
-      borderRadius: remToPx('0.75rem'),
+      borderRadius: 12,
       borderWidth: 1,
       borderColor: component.border,
       overflow: 'hidden',
@@ -74,21 +82,21 @@ export const createMenuTheme = ({
       flexDirection: 'row' as const,
       alignItems: 'center' as const,
       minHeight: 64,
-      paddingHorizontal: remToPx('1rem'),
-      paddingVertical: remToPx('0.5rem'),
+      paddingHorizontal: 16,
+      paddingVertical: 8,
       borderBottomWidth: StyleSheet.hairlineWidth,
       borderBottomColor: component.divider,
-      gap: remToPx('0.75rem'),
+      gap: 12,
     })),
     itemContent: createStyleResolver(resolveItemContent),
     itemLabel: createStyleResolver(() => ({
       color: semantic.description,
-      fontSize: remToPx('0.75rem'),
+      fontSize: 12,
     })),
     itemValue: createStyleResolver(() => ({
       color: semantic.onSurface,
-      fontSize: remToPx('0.9375rem'),
-      fontWeight: '500',
+      fontSize: 15,
+      fontWeight: fontWeights.medium,
     })),
     actionItem: createStyleResolver(resolveActionItem),
     actionItemContent: createStyleResolver(resolveItemContent),
@@ -106,7 +114,7 @@ export const createMenuTheme = ({
 
 export const createMenuThemeFromDesign = (theme: DesignTokensTheme): MenuTheme => {
   return createMenuTheme({
-    semantic: theme.semantic,
-    component: theme.component,
+    semantic: theme.semanticColors,
+    component: theme.componentColors,
   })
 }

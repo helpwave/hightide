@@ -1,5 +1,9 @@
-import type { Meta, StoryObj } from '@storybook/react-native-web-vite'
 import { View } from 'react-native'
+import type {
+  Meta,
+  StoryObj
+} from '@storybook/react-native-web-vite'
+
 import { ChatDateDivider } from '@/src/components/chat/ChatDateDivider'
 import { ChatMessageBubble } from '@/src/components/chat/ChatMessageBubble'
 import { ChatMessageList } from '@/src/components/chat/ChatMessageList'

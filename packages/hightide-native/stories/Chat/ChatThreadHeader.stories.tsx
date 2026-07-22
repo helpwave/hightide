@@ -1,7 +1,14 @@
-import type { Meta, StoryObj } from '@storybook/react-native-web-vite'
-import { Text, View } from 'react-native'
+import {
+  Text,
+  View
+} from 'react-native'
+import type {
+  Meta,
+  StoryObj
+} from '@storybook/react-native-web-vite'
+
 import { ChatThreadHeader } from '@/src/components/chat/ChatThreadHeader'
-import { useTheme } from '@/src/global-contexts/theme'
+import { useTheme } from '@/src/global-contexts/theme/ThemeContext'
 
 const meta = {
   component: ChatThreadHeader,

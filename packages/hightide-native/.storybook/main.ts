@@ -1,6 +1,6 @@
+import type { StorybookConfig } from '@storybook/react-native-web-vite'
 import path from 'node:path'
 import { fileURLToPath } from 'node:url'
-import type { StorybookConfig } from '@storybook/react-native-web-vite'
 
 const dirname = path.dirname(fileURLToPath(import.meta.url))
 

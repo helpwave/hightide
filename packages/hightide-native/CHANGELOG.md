@@ -5,6 +5,54 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [0.0.5] - 2026-07-22
+
+### Added
+
+- Storybook demos under `stories/Internationalization/ExtendTranslations.stories.tsx` for overlaying custom translation keys and registering a new locale (`fr-FR`) via `HightideProvider`
+
+### Changed
+
+- `defaultSupportedLocales` is a `SupportedLocalesConfig` record keyed by locale id with `{ localName }`
+
+## [0.0.4] - 2026-07-22
+
+### Added
+
+- Storybook Theme demos under `stories/Theme/` for component extension, full theme extension via `constructTheme` + `createTheme`, and primary-color overrides
+- Shared `ThemeSelect` / `ThemeStoryFrame` helpers for theme stories
+- `Icon` under visualization-and-display components
+- `createTheme` factory consuming `HightideDesignTokens` from `@helpwave/hightide-design`
+
+### Changed
+
+- Renamed runtime theme type from `DesignTheme` to `Theme`; `useTheme` returns the new shape
+- Theme types reorganized under `theme/types/components/*` with `HightideComponentThemes`
+- Component resolvers and stories updated for design-token imports and the record-based `supportedThemes` / `preferredThemeMode` theme context API
+- `HightideProvider` / `ThemeProvider` align with `SupportedThemesConfig<Theme>` from hightide-utils
+
+### Removed
+
+- `src/icons/Icon.tsx` (replaced by `components/visualization-and-display/Icon.tsx`)
+
+## [0.0.3] - 2026-07-21
+
+### Added
+
+- Native-owned `DesignTheme` types (`Color`, `ColorPalette`, `TextStyle`) that no longer import theme shapes from `@helpwave/hightide-design`
+- Forced hightide shapes on `DesignTheme`: `HightideColors`, `HightideSemanticColors`, `HightideTypography`, `HightideLayout`, `HightideDecoration`, and `HightideComponentThemes`
+- `layout` and `decoration` fields on `DesignTheme`
+- Theme adapter unwraps design palette tokens (`singleValue` / `basic` / `detailed`) into flat `Color` / `ColorPalette` values
+
+### Changed
+
+- `DesignTheme` is no longer generic; `useTheme` returns a fixed `DesignTheme`
+- `ComponentThemes` is now a loose `Record<string, unknown>`; required resolvers live on `HightideComponentThemes`
+- Coloring definitions moved under `theme.components.coloring` (no longer top-level `theme.coloring`)
+- Top-level `palettes` renamed to `colors`
+- `createDesignTheme` consumes `HightideDesignTokens` and maps `semanticColors` / `componentColors` / `decorcation`
+- Imports switched to `@helpwave/hightide-design/types` and `@helpwave/hightide-design/tokens` subpaths
+
 ## [0.0.2] - 2026-07-21
 
 ### Added

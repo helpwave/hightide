@@ -1,6 +1,10 @@
-import type { Meta, StoryObj } from '@storybook/react-native-web-vite'
-import { action } from 'storybook/actions'
 import { View } from 'react-native'
+import type {
+  Meta,
+  StoryObj
+} from '@storybook/react-native-web-vite'
+import { action } from 'storybook/actions'
+
 import { ChatAttachmentCard } from '@/src/components/chat/ChatAttachmentCard'
 
 const meta = {

@@ -1,16 +1,21 @@
 import { createContext } from 'react'
 
+export type Locale = 'de-DE' | 'en-US' | string
+
+export type TimeZone = string
+
 export type LocaleInformation = {
-  locale: string,
   localName: string,
 }
 
+export type SupportedLocalesConfig = Record<string, LocaleInformation>
+
 export type LocalizationContextValue = {
-  locale: string,
-  setLocale: (locale: string) => void,
-  supportedLocales: readonly LocaleInformation[],
-  timeZone: string | undefined,
-  setTimeZone: (timeZone: string | null) => void,
+  locale: Locale,
+  setLocale: (locale: Locale) => void,
+  supportedLocales: SupportedLocalesConfig,
+  timeZone: TimeZone | undefined,
+  setTimeZone: (timeZone: TimeZone | null) => void,
   is24HourFormat: boolean | undefined,
   setIs24HourFormat: (is24HourFormat: boolean | null) => void,
   isInitialized: boolean,

@@ -1,14 +1,24 @@
-import type { Meta, StoryObj } from '@storybook/react-native-web-vite'
-import { action } from 'storybook/actions'
-import { Bell, Building2, LogOut, UserRound } from 'lucide-react-native'
-import { Switch, View } from 'react-native'
 import {
-  Menu,
-  MenuActionItem,
-  MenuItem,
-  MenuNavigationItem
-} from '@/src/components/menu'
-import { useTheme } from '@/src/global-contexts/theme'
+  Switch,
+  View
+} from 'react-native'
+import type {
+  Meta,
+  StoryObj
+} from '@storybook/react-native-web-vite'
+import {
+  Bell,
+  Building2,
+  LogOut,
+  UserRound
+} from 'lucide-react-native'
+import { action } from 'storybook/actions'
+
+import { Menu } from '@/src/components/menu/Menu'
+import { MenuActionItem } from '@/src/components/menu/MenuActionItem'
+import { MenuItem } from '@/src/components/menu/MenuItem'
+import { MenuNavigationItem } from '@/src/components/menu/MenuNavigationItem'
+import { useTheme } from '@/src/global-contexts/theme/ThemeContext'
 
 const meta = {
   component: Menu,

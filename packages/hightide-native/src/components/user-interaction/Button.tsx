@@ -1,10 +1,7 @@
 import {
-  coloringColors,
-  type ButtonColoringStyle,
-  type ColoringType,
-  type ElementSize
-} from '@helpwave/hightide-design'
-import { forwardRef, type ReactNode } from 'react'
+  forwardRef,
+  type ReactNode
+} from 'react'
 import {
   Pressable,
   Text,
@@ -12,20 +9,30 @@ import {
   type StyleProp,
   type ViewStyle
 } from 'react-native'
-import { useTheme } from '../../global-contexts/theme'
+
+import {
+  coloringTypes,
+  type ColoringType
+} from '@helpwave/hightide-design/helpers'
+import type {
+  ButtonColoringStyle,
+  ElementSize
+} from '@helpwave/hightide-design/types'
+
+import { useTheme } from '@/src/global-contexts/theme/ThemeContext'
 import type {
   ButtonState,
   ButtonStyle,
-  ButtonTextStyle,
-  StyleOverwrite
-} from '../../theme'
+  ButtonTextStyle
+} from '@/src/theme/types/components/button'
+import type { StyleOverwrite } from '@/src/theme/types/resolver'
 
 export type ButtonSize = ElementSize
 
 export type ButtonColor = ColoringType
 
 export const ButtonUtil = {
-  colors: coloringColors,
+  colors: coloringTypes,
   sizes: ['xs', 'sm', 'md', 'lg'] as const satisfies readonly ElementSize[],
   coloringStyles: ['outline', 'solid', 'text', 'tonal', 'tonal-outline'] as const satisfies readonly ButtonColoringStyle[],
 }

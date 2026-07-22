@@ -10,29 +10,50 @@
     "access": "public"
   },
   "license": "AGPL-3.0-only",
-  "version": "0.0.1",
+  "version": "0.0.3",
   "type": "module",
   "files": [
     "src"
   ],
-  "types": "./src/index.ts",
   "exports": {
-    ".": {
-      "types": "./src/index.ts",
-      "default": "./src/index.ts"
+    "./helpers": {
+      "types": "./src/helpers/index.ts",
+      "default": "./src/helpers/index.ts"
+    },
+    "./hooks": {
+      "types": "./src/hooks/index.ts",
+      "default": "./src/hooks/index.ts"
+    },
+    "./tokens": {
+      "types": "./src/tokens/index.ts",
+      "default": "./src/tokens/index.ts"
+    },
+    "./types": {
+      "types": "./src/types/index.ts",
+      "default": "./src/types/index.ts"
     }
   },
   "scripts": {
-    "clean": "rm -rf node_modules",
-    "init": "node -e \"process.exit(0)\"",
-    "build": "node -e \"process.exit(0)\"",
+    "clean": "pnpm run barrel && rm -rf node_modules",
+    "init": "pnpm run barrel",
+    "barrel": "node node_modules/@helpwave/hightide-utils/scripts/barrel.js",
+    "barrel:check": "pnpm run barrel --check",
+    "build": "pnpm run barrel",
     "lint": "eslint .",
-    "test": "node -e \"process.exit(0)\""
+    "test": "pnpm run barrel:check"
+  },
+  "dependencies": {
+    "@helpwave/hightide-utils": "workspace:*"
+  },
+  "peerDependencies": {
+    "react": "^19.0.0"
   },
   "devDependencies": {
     "@helpwave/eslint-config": "0.0.11",
     "@types/node": "20.19.43",
+    "@types/react": "19.2.3",
     "eslint": "9.31.0",
+    "react": "19.2.3",
     "typescript": "5.7.2"
   },
   "keywords": [

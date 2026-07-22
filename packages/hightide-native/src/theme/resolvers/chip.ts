@@ -1,18 +1,26 @@
+import type {
+  TextStyle,
+  ViewStyle
+} from 'react-native'
+
 import {
   componentLayouts,
-  toPx,
-  type ColoringTokensDefinitions,
-  type DesignTheme as DesignTokensTheme,
-  type SemanticColors
-} from '@helpwave/hightide-design'
-import type { TextStyle, ViewStyle } from 'react-native'
-import type { ChipState, ChipTheme } from '../types'
-import { createStyleResolver } from '../types/resolver'
-import { resolveColoringStyles } from './coloring'
+  fontWeights
+} from '@helpwave/hightide-design/tokens'
+import type { HightideDesignTokens as DesignTokensTheme } from '@helpwave/hightide-design/types'
+
+import { resolveColoringStyles } from '@/src/theme/resolvers/coloring'
+import type { HightideSemanticColors } from '@/src/theme/types/color'
+import type {
+  ChipState,
+  ChipTheme
+} from '@/src/theme/types/components/chip'
+import type { HightideComponentThemes } from '@/src/theme/types/components/hightide'
+import { createStyleResolver } from '@/src/theme/types/resolver'
 
 export type CreateChipThemeOptions = {
-  semantic: SemanticColors,
-  coloring: ColoringTokensDefinitions,
+  semantic: HightideSemanticColors,
+  coloring: HightideComponentThemes['coloring'],
 }
 
 export const createChipTheme = ({
@@ -35,18 +43,18 @@ export const createChipTheme = ({
       backgroundColor: resolved.backgroundColor,
       borderColor: resolved.borderColor,
       borderWidth: resolved.borderWidth,
-      paddingVertical: toPx(layout.paddingVertical),
-      paddingHorizontal: toPx(layout.paddingHorizontal),
-      gap: toPx(layout.gap),
-      minHeight: toPx(layout.minHeight),
-      borderRadius: toPx(layout.borderRadius),
+      paddingVertical: layout.paddingVertical,
+      paddingHorizontal: layout.paddingHorizontal,
+      gap: layout.gap,
+      minHeight: layout.minHeight,
+      borderRadius: layout.borderRadius,
       opacity: state.isDisabled ? 0.6 : 1,
     }
 
     const text: TextStyle = {
       color: resolved.color,
-      fontSize: toPx(layout.fontSize),
-      fontWeight: '600',
+      fontSize: layout.fontSize,
+      fontWeight: fontWeights.semibold,
     }
 
     return { chip, text }
@@ -60,7 +68,7 @@ export const createChipTheme = ({
 
 export const createChipThemeFromDesign = (theme: DesignTokensTheme): ChipTheme => {
   return createChipTheme({
-    semantic: theme.semantic,
-    coloring: theme.coloring,
+    semantic: theme.semanticColors,
+    coloring: theme.coloring as HightideComponentThemes['coloring'],
   })
 }

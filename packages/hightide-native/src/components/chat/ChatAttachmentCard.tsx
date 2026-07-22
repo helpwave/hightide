@@ -1,16 +1,29 @@
-import { useMemo, type ReactNode } from 'react'
-import { Text, View, type StyleProp, type ViewProps, type ViewStyle } from 'react-native'
-import { Download, FileText } from 'lucide-react-native'
-import { useTheme } from '../../global-contexts/theme'
+import {
+  useMemo,
+  type ReactNode
+} from 'react'
+import {
+  Text,
+  View,
+  type StyleProp,
+  type ViewProps,
+  type ViewStyle
+} from 'react-native'
+import {
+  Download,
+  FileText
+} from 'lucide-react-native'
+
+import { IconButton } from '@/src/components/user-interaction/IconButton'
+import { useTheme } from '@/src/global-contexts/theme/ThemeContext'
 import type {
   ChatAttachmentCardMetadataStyle,
   ChatAttachmentCardNameStyle,
   ChatAttachmentCardState,
   ChatAttachmentCardStyle,
-  ChatMessageDirection,
-  StyleOverwrite
-} from '../../theme'
-import { IconButton } from '../user-interaction'
+  ChatMessageDirection
+} from '@/src/theme/types/components/chat'
+import type { StyleOverwrite } from '@/src/theme/types/resolver'
 
 export type ChatAttachmentCardProps = Omit<ViewProps, 'style'> & {
   name: ReactNode,
@@ -43,23 +56,23 @@ export const ChatAttachmentCard = ({
   const staticState = useMemo(() => ({}), [])
 
   const resolvedCardStyle = useMemo(
-    () => theme.components.chat.attachmentCard(state, cardStyle),
+    () => theme.components.chat.attachmentCard.container(state, cardStyle),
     [theme, state, cardStyle]
   )
   const resolvedIconStyle = useMemo(
-    () => theme.components.chat.attachmentCardIcon(staticState),
+    () => theme.components.chat.attachmentCard.icon(staticState),
     [theme, staticState]
   )
   const resolvedIconColor = useMemo(
-    () => theme.components.chat.attachmentCardIconColor(staticState),
+    () => theme.components.chat.attachmentCard.iconColor(staticState),
     [theme, staticState]
   )
   const resolvedNameStyle = useMemo(
-    () => theme.components.chat.attachmentCardName(staticState, nameStyle),
+    () => theme.components.chat.attachmentCard.name(staticState, nameStyle),
     [theme, staticState, nameStyle]
   )
   const resolvedMetadataStyle = useMemo(
-    () => theme.components.chat.attachmentCardMetadata(staticState, metadataStyle),
+    () => theme.components.chat.attachmentCard.metadata(staticState, metadataStyle),
     [theme, staticState, metadataStyle]
   )
 

@@ -1,10 +1,7 @@
 import {
-  coloringColors,
-  type ChipColoringStyle,
-  type ColoringType,
-  type ElementSize
-} from '@helpwave/hightide-design'
-import { useMemo, type ReactNode } from 'react'
+  useMemo,
+  type ReactNode
+} from 'react'
 import {
   Text,
   View,
@@ -12,15 +9,30 @@ import {
   type ViewProps,
   type ViewStyle
 } from 'react-native'
-import { useTheme } from '../../global-contexts/theme'
-import type { ChipState, ChipStyle, ChipTextStyle, StyleOverwrite } from '../../theme'
+
+import {
+  coloringTypes,
+  type ColoringType
+} from '@helpwave/hightide-design/helpers'
+import type {
+  ChipColoringStyle,
+  ElementSize
+} from '@helpwave/hightide-design/types'
+
+import { useTheme } from '@/src/global-contexts/theme/ThemeContext'
+import type {
+  ChipState,
+  ChipStyle,
+  ChipTextStyle
+} from '@/src/theme/types/components/chip'
+import type { StyleOverwrite } from '@/src/theme/types/resolver'
 
 export type ChipSize = ElementSize
 
 export type ChipColor = ColoringType
 
 export const ChipUtil = {
-  colors: coloringColors,
+  colors: coloringTypes,
   sizes: ['xs', 'sm', 'md', 'lg'] as const satisfies readonly ElementSize[],
   coloringStyles: ['solid', 'tonal', 'outline', 'tonal-outline'] as const satisfies readonly ChipColoringStyle[],
 }

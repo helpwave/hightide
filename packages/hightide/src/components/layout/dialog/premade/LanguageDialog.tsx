@@ -27,7 +27,7 @@ export const LanguageSelect = ({ ...props }: LanguageSelectProps) => {
         className: clsx('min-w-40 w-fit', props.buttonProps?.className),
       }}
     >
-      {supportedLocales.map(({ locale: supportedLocale, localName }) => (
+      {Object.entries(supportedLocales).map(([supportedLocale, { localName }]) => (
         <SelectOption
           key={supportedLocale}
           value={supportedLocale}

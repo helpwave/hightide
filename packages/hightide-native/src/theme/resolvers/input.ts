@@ -1,17 +1,24 @@
-import {
-  inputElementSizes,
-  remToPx,
-  type ComponentColors,
-  type DesignTheme as DesignTokensTheme,
-  type SemanticColors
-} from '@helpwave/hightide-design'
 import type { TextStyle } from 'react-native'
-import type { InputState, InputTheme } from '../types'
-import { createStyleResolver, createValueResolver } from '../types/resolver'
+
+import { componentLayouts } from '@helpwave/hightide-design/tokens'
+import type {
+  ComponentColorTokens,
+  HightideDesignTokens as DesignTokensTheme
+} from '@helpwave/hightide-design/types'
+
+import type { HightideSemanticColors } from '@/src/theme/types/color'
+import type {
+  InputState,
+  InputTheme
+} from '@/src/theme/types/components/input'
+import {
+  createStyleResolver,
+  createValueResolver
+} from '@/src/theme/types/resolver'
 
 export type CreateInputThemeOptions = {
-  semantic: SemanticColors,
-  component: ComponentColors,
+  semantic: HightideSemanticColors,
+  component: ComponentColorTokens,
 }
 
 export const createInputTheme = ({
@@ -19,14 +26,14 @@ export const createInputTheme = ({
   component,
 }: CreateInputThemeOptions): InputTheme => {
   const resolveInput = (state: InputState): TextStyle => {
-    const sizing = inputElementSizes.md
+    const sizing = componentLayouts.input.md
     const borderColor = state.isInvalid ? semantic.negative : component.border
 
     return {
-      minHeight: remToPx(sizing.height),
-      paddingHorizontal: remToPx(sizing.paddingX),
-      paddingVertical: remToPx(sizing.paddingY),
-      borderRadius: remToPx(sizing.borderRadius),
+      minHeight: sizing.height,
+      paddingHorizontal: sizing.paddingX,
+      paddingVertical: sizing.paddingY,
+      borderRadius: sizing.borderRadius,
       borderWidth: 1,
       borderColor,
       backgroundColor: state.isDisabled ? semantic.disabled : component.input.background,
@@ -44,7 +51,7 @@ export const createInputTheme = ({
 
 export const createInputThemeFromDesign = (theme: DesignTokensTheme): InputTheme => {
   return createInputTheme({
-    semantic: theme.semantic,
-    component: theme.component,
+    semantic: theme.semanticColors,
+    component: theme.componentColors,
   })
 }

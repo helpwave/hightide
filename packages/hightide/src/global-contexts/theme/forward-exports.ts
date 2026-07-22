@@ -1,6 +1,5 @@
 export {
   useCreateThemeConfig,
-  type ThemeInformation,
   type ThemeConfigValue,
   type SystemTheme,
   type UseCreateThemeConfigProps,

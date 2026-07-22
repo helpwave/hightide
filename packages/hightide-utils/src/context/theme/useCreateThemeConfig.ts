@@ -2,43 +2,47 @@ import { useCallback, useEffect, useMemo } from 'react'
 import { useEventCallbackStabilizer } from '../../hooks/useEventCallbackStabelizer'
 import type { SimpleValueStore } from '../../hooks/useSimpleStoreSyncedValue'
 import { useSimpleStoreSyncedValue } from '../../hooks/useSimpleStoreSyncedValue'
-import { StringUnionUtils } from '../../utils'
-
-export type ThemeInformation = {
-  theme: string,
-  nameTranslations: Record<string, string>,
-}
-
-export type ThemeConfigValue = {
-  preferredTheme: string | null,
-  theme: string,
-  setTheme: (theme: string | null) => void,
-  supportedThemes: readonly ThemeInformation[],
-}
+import type { Locale } from '../localization'
 
 export type SystemTheme = 'dark' | 'light'
 
-export type UseCreateThemeConfigProps = {
-  store: SimpleValueStore,
-  fallbackTheme: string,
-  supportedThemes: readonly ThemeInformation[],
-  theme?: string | null,
-  systemTheme?: SystemTheme,
-  onChangedTheme?: (theme: string) => void,
+export type ThemeMode = SystemTheme | string
+
+export type ThemeInformation<T = unknown> = {
+  nameTranslations: Record<Locale, string>,
+  theme: T,
 }
 
-export const useCreateThemeConfig = ({
+export type SupportedThemesConfig<T> =  Record<SystemTheme, ThemeInformation<T>> & Record<ThemeMode, ThemeInformation<T>>
+
+export type ThemeConfigValue<T> = {
+  themeMode: ThemeMode,
+  preferredThemeMode: ThemeMode | null,
+  setTheme: (theme: ThemeMode | null) => void,
+  supportedThemes: SupportedThemesConfig<T>,
+  theme: T,
+}
+
+export type UseCreateThemeConfigProps<T> = {
+  store: SimpleValueStore,
+  fallbackTheme: ThemeMode,
+  supportedThemes: SupportedThemesConfig<T>,
+  theme?: ThemeMode | null,
+  systemTheme?: SystemTheme,
+  onChangedTheme?: (theme: ThemeMode) => void,
+}
+
+export const useCreateThemeConfig = <T>({
   store,
   fallbackTheme,
   supportedThemes,
   theme,
   systemTheme,
   onChangedTheme,
-}: UseCreateThemeConfigProps): ThemeConfigValue => {
-  const supportedThemeKeys = useMemo(
-    () => supportedThemes.map((value) => value.theme),
-    [supportedThemes]
-  )
+}: UseCreateThemeConfigProps<T>): ThemeConfigValue<T> => {
+  if(Object.keys(supportedThemes).length === 0) {
+    throw new Error('useCreateThemeConfig: supportedThemes must contain at least one theme')
+  }
 
   const {
     value: storedTheme,
@@ -48,43 +52,49 @@ export const useCreateThemeConfig = ({
     store,
     key: 'theme',
     decode: useCallback((value: string) => {
-      if (StringUnionUtils.isUnionValue(value, supportedThemeKeys)) return value
+      if (supportedThemes[value]) return value
       return null
-    }, [supportedThemeKeys]),
+    }, [supportedThemes]),
     encode: useCallback((value) => value, []),
   })
 
-  const preferredTheme = useMemo((): string | null => {
+  const preferredThemeMode = useMemo((): string | null => {
     if (theme !== undefined) {
       return theme
     }
     return storedTheme
   }, [storedTheme, theme])
 
-  const resolvedTheme = useMemo(() => {
-    if (preferredTheme !== null && StringUnionUtils.isUnionValue(preferredTheme, supportedThemeKeys)) {
-      return preferredTheme
+  const resolvedThemeMode = useMemo(() => {
+    if (preferredThemeMode !== null && supportedThemes[preferredThemeMode]) {
+      return preferredThemeMode
     }
-    if (systemTheme && StringUnionUtils.isUnionValue(systemTheme, supportedThemeKeys)) {
+    if (systemTheme && supportedThemes[systemTheme]) {
       return systemTheme
     }
-    return fallbackTheme
-  }, [fallbackTheme, preferredTheme, supportedThemeKeys, systemTheme])
+    if(supportedThemes[fallbackTheme]) {
+      console.log('useCreateThemeConfig: fallbackTheme not found in the supported themes')
+      return fallbackTheme
+    }
+    return Object.keys(supportedThemes)[0]
+  }, [fallbackTheme, preferredThemeMode, supportedThemes, systemTheme])
+
+  const resolvedTheme: T = useMemo(() => supportedThemes[resolvedThemeMode].theme, [resolvedThemeMode, supportedThemes])
 
   useEffect(() => {
     if (theme === undefined) return
     if (theme === null) {
       deleteStoredTheme()
-    } else if (StringUnionUtils.isUnionValue(theme, supportedThemeKeys)) {
+    } else if (supportedThemes[theme]) {
       setStoredTheme(theme)
     }
-  }, [deleteStoredTheme, setStoredTheme, supportedThemeKeys, theme])
+  }, [deleteStoredTheme, setStoredTheme, supportedThemes, theme])
 
   const onChangeRef = useEventCallbackStabilizer(onChangedTheme)
 
   useEffect(() => {
-    onChangeRef?.(resolvedTheme)
-  }, [onChangeRef, resolvedTheme])
+    onChangeRef?.(resolvedThemeMode)
+  }, [onChangeRef, resolvedThemeMode])
 
   const setTheme = useCallback((newTheme: string | null) => {
     if (theme !== undefined) {
@@ -98,13 +108,14 @@ export const useCreateThemeConfig = ({
       deleteStoredTheme()
       return
     }
-    if (!StringUnionUtils.isUnionValue(newTheme, supportedThemeKeys)) return
+    if (!supportedThemes[newTheme]) return
     setStoredTheme(newTheme)
-  }, [deleteStoredTheme, setStoredTheme, supportedThemeKeys, theme])
+  }, [deleteStoredTheme, setStoredTheme, supportedThemes, theme])
 
   return {
-    preferredTheme,
     theme: resolvedTheme,
+    preferredThemeMode: preferredThemeMode,
+    themeMode: resolvedThemeMode,
     setTheme,
     supportedThemes,
   }

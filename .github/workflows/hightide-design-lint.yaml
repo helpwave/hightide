@@ -1,0 +1,37 @@
+name: hightide-design Lint
+
+on:
+  push:
+    branches:
+      - main
+    paths:
+      - "packages/hightide-design/**"
+      - "packages/hightide-utils/**"
+      - ".github/workflows/hightide-design-lint.yaml"
+  pull_request:
+    branches:
+      - "**"
+    paths:
+      - "packages/hightide-design/**"
+      - "packages/hightide-utils/**"
+      - ".github/workflows/hightide-design-lint.yaml"
+
+jobs:
+  lint:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: pnpm/action-setup@v4
+        with:
+          version: 11.13.0
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 24
+          cache: pnpm
+
+      - run: pnpm install --frozen-lockfile
+      - run: pnpm --filter @helpwave/hightide-utils run init
+      - run: pnpm --filter @helpwave/hightide-design run init
+      - run: pnpm --filter @helpwave/hightide-design lint

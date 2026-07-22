@@ -1,18 +1,26 @@
-import {
-  componentLayouts,
-  toPx,
-  type ColoringTokensDefinitions,
-  type DesignTheme as DesignTokensTheme,
-  type SemanticColors
-} from '@helpwave/hightide-design'
 import type { ViewStyle } from 'react-native'
-import type { IconButtonState, IconButtonTheme } from '../types'
-import { createStyleResolver, createValueResolver } from '../types/resolver'
-import { isOutlineColoringStyle, resolveColoringStyles } from './coloring'
+
+import { componentLayouts } from '@helpwave/hightide-design/tokens'
+import type { HightideDesignTokens as DesignTokensTheme } from '@helpwave/hightide-design/types'
+
+import {
+  isOutlineColoringStyle,
+  resolveColoringStyles
+} from '@/src/theme/resolvers/coloring'
+import type { HightideSemanticColors } from '@/src/theme/types/color'
+import type { HightideComponentThemes } from '@/src/theme/types/components/hightide'
+import type {
+  IconButtonState,
+  IconButtonTheme
+} from '@/src/theme/types/components/iconButton'
+import {
+  createStyleResolver,
+  createValueResolver
+} from '@/src/theme/types/resolver'
 
 export type CreateIconButtonThemeOptions = {
-  semantic: SemanticColors,
-  coloring: ColoringTokensDefinitions,
+  semantic: HightideSemanticColors,
+  coloring: HightideComponentThemes['coloring'],
 }
 
 export const createIconButtonTheme = ({
@@ -26,8 +34,8 @@ export const createIconButtonTheme = ({
     const tokens = coloring[color]
     const resolved = resolveColoringStyles(tokens, coloringStyle, semantic, state)
     const sizing = componentLayouts.element[size]
-    const outlineWidth = toPx(componentLayouts.shared.coloringOutlineWidth)
-    const dimension = toPx(sizing.height)
+    const outlineWidth = componentLayouts.shared.coloringOutlineWidth
+    const dimension = sizing.height
     const borderWidth = resolved.borderWidth > 0
       ? resolved.borderWidth
       : (isOutlineColoringStyle(coloringStyle) ? outlineWidth : 0)
@@ -40,7 +48,7 @@ export const createIconButtonTheme = ({
       borderWidth,
       width: dimension,
       height: dimension,
-      borderRadius: toPx(componentLayouts.button[size].borderRadius),
+      borderRadius: componentLayouts.button[size].borderRadius,
       opacity: state.isDisabled ? 0.6 : 1,
     }
 
@@ -58,7 +66,7 @@ export const createIconButtonTheme = ({
 
 export const createIconButtonThemeFromDesign = (theme: DesignTokensTheme): IconButtonTheme => {
   return createIconButtonTheme({
-    semantic: theme.semantic,
-    coloring: theme.coloring,
+    semantic: theme.semanticColors,
+    coloring: theme.coloring as HightideComponentThemes['coloring'],
   })
 }

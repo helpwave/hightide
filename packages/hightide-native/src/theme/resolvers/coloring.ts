@@ -1,20 +1,24 @@
 import {
-  componentLayouts,
-  hexWithAlpha,
-  toPx,
-  type ButtonColoringStyle,
-  type ChipColoringStyle,
-  type ColorValue,
-  type ColoringToken,
-  type ColoringStyle,
-  type SemanticColors
-} from '@helpwave/hightide-design'
-import type { InteractionState } from '../types'
+  hexWithAlpha
+} from '@helpwave/hightide-design/helpers'
+import { componentLayouts } from '@helpwave/hightide-design/tokens'
+import type {
+  ButtonColoringStyle,
+  ChipColoringStyle,
+  ColoringStyle
+} from '@helpwave/hightide-design/types'
+
+import type {
+  Color,
+  HightideSemanticColors
+} from '@/src/theme/types/color'
+import type { ColoringDefinition } from '@/src/theme/types/components/hightide'
+import type { InteractionState } from '@/src/theme/types/resolver'
 
 export type ResolvedColoringStyles = {
-  backgroundColor: ColorValue | 'transparent',
-  color: ColorValue,
-  borderColor?: ColorValue,
+  backgroundColor: Color | 'transparent',
+  color: Color,
+  borderColor?: Color,
   borderWidth: number,
 }
 
@@ -23,12 +27,12 @@ const usesHover = (state: InteractionState): boolean => {
 }
 
 export const resolveColoringStyles = (
-  tokens: ColoringToken,
+  tokens: ColoringDefinition,
   coloringStyle: ColoringStyle,
-  semantic: SemanticColors,
+  semantic: HightideSemanticColors,
   state: InteractionState = {}
 ): ResolvedColoringStyles => {
-  const outlineWidth = toPx(componentLayouts.shared.coloringOutlineWidth)
+  const outlineWidth = componentLayouts.shared.coloringOutlineWidth
   const hovered = usesHover(state)
 
   if (state.isDisabled) {

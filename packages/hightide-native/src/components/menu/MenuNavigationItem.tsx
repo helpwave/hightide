@@ -1,5 +1,8 @@
-import { ChevronRight } from 'lucide-react-native'
-import { Fragment, useMemo, type ReactNode } from 'react'
+import {
+  Fragment,
+  useMemo,
+  type ReactNode
+} from 'react'
 import {
   Pressable,
   Text,
@@ -8,13 +11,15 @@ import {
   type StyleProp,
   type ViewStyle
 } from 'react-native'
-import { useTheme } from '../../global-contexts/theme'
+import { ChevronRight } from 'lucide-react-native'
+
+import { useTheme } from '@/src/global-contexts/theme/ThemeContext'
 import type {
   MenuActionItemLabelStyle,
   MenuActionItemState,
-  MenuActionItemStyle,
-  StyleOverwrite
-} from '../../theme'
+  MenuActionItemStyle
+} from '@/src/theme/types/components/menu'
+import type { StyleOverwrite } from '@/src/theme/types/resolver'
 
 export type MenuNavigationItemProps = Omit<PressableProps, 'children' | 'style'> & {
   label: string,

@@ -1,13 +1,30 @@
 import {
+  forwardRef,
+  useMemo
+} from 'react'
+import {
+  TextInput,
+  type StyleProp,
+  type TextInputProps,
+  type TextStyle
+} from 'react-native'
+
+import {
   useControlledState,
   useDelay,
   type UseDelayOptionsResolved
 } from '@helpwave/hightide-utils/hooks'
-import { forwardRef, useMemo } from 'react'
-import { TextInput, type StyleProp, type TextInputProps, type TextStyle } from 'react-native'
-import { useTheme } from '../../global-contexts/theme'
-import type { InputState, InputStyle, StyleOverwrite } from '../../theme'
-import type { FormFieldDataHandling, FormFieldInteractionStates } from '../../types/formField'
+
+import { useTheme } from '@/src/global-contexts/theme/ThemeContext'
+import type {
+  InputState,
+  InputStyle
+} from '@/src/theme/types/components/input'
+import type { StyleOverwrite } from '@/src/theme/types/resolver'
+import type {
+  FormFieldDataHandling,
+  FormFieldInteractionStates
+} from '@/src/types/formField'
 
 export type EditCompleteOptionsResolved = {
   onBlur: boolean,

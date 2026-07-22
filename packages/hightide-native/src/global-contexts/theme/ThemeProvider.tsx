@@ -1,25 +1,32 @@
-import { useEffect, useMemo, useState, type PropsWithChildren } from 'react'
+import {
+  useEffect,
+  useMemo,
+  useState,
+  type PropsWithChildren
+} from 'react'
 import { Appearance } from 'react-native'
-import { useNativeKeyValueStore } from '../../hooks/useNativeKeyValueStore'
-import { getTheme, themes, type ThemeMode } from '../../theme'
-import { HightideConfigUtils } from '../hightide-config/HightideConfigUtils'
-import type { SystemTheme, ThemeInformation } from './forward-exports'
-import { useCreateThemeConfig } from './forward-exports'
-import { ThemeContext, useTheme, type ThemeContextValue } from './ThemeContext'
 
-export type ThemeProviderProps = PropsWithChildren & {
-  theme?: string | null,
-  systemTheme?: SystemTheme,
+import type { SupportedThemesConfig } from '@helpwave/hightide-utils/context'
+
+import { HightideConfigUtils } from '@/src/global-contexts/hightide-config/HightideConfigUtils'
+import {
+  ThemeContext,
+  useTheme,
+  type ThemeContextValue
+} from '@/src/global-contexts/theme/ThemeContext'
+import {
+  useCreateThemeConfig,
+  type SystemTheme
+} from '@/src/global-contexts/theme/forward-exports'
+import { useNativeKeyValueStore } from '@/src/hooks/useNativeKeyValueStore'
+import type { ThemeMode } from '@/src/theme/themes/nativeThemes'
+import type { Theme } from '@/src/theme/types/theme'
+
+export type ThemeProviderProps<T> = PropsWithChildren & {
+  theme?: ThemeMode | null,
   fallbackTheme?: ThemeMode,
-  supportedThemes?: readonly ThemeInformation[],
-  onChangedTheme?: (theme: string) => void,
-}
-
-const resolveThemeMode = (theme: string): ThemeMode => {
-  if (theme in themes) {
-    return theme as ThemeMode
-  }
-  return 'light'
+  supportedThemes?: SupportedThemesConfig<T>,
+  onChangedTheme?: (themeMode: string) => void,
 }
 
 export const useThemeMode = (): ThemeMode => {
@@ -34,7 +41,7 @@ const detectNativeSystemTheme = (): SystemTheme | undefined => {
   return undefined
 }
 
-const useNativeSystemTheme = (enabled: boolean) => {
+const useNativeSystemTheme = (enabled: boolean = true) => {
   const [systemTheme, setSystemTheme] = useState<SystemTheme | undefined>(() =>
     (enabled ? detectNativeSystemTheme() : undefined))
 
@@ -57,13 +64,11 @@ export const ThemeProvider = ({
   children,
   theme,
   fallbackTheme = 'light',
-  systemTheme: systemThemeOverride,
   supportedThemes = HightideConfigUtils.defaultSupportedThemes,
   onChangedTheme,
-}: ThemeProviderProps) => {
+}: ThemeProviderProps<Theme>) => {
   const store = useNativeKeyValueStore()
-  const detectedSystemTheme = useNativeSystemTheme(systemThemeOverride === undefined)
-  const systemTheme = systemThemeOverride ?? detectedSystemTheme
+  const systemTheme = useNativeSystemTheme()
 
   const themeConfig = useCreateThemeConfig({
     store,
@@ -74,27 +79,19 @@ export const ThemeProvider = ({
     onChangedTheme,
   })
 
-  const value = useMemo((): ThemeContextValue => {
-    const themeMode = resolveThemeMode(themeConfig.theme)
-
+  const contextValue = useMemo((): ThemeContextValue => {
     return {
-      preferredTheme: themeConfig.preferredTheme,
+      preferredThemeMode: themeConfig.preferredThemeMode,
       setTheme: themeConfig.setTheme,
       supportedThemes: themeConfig.supportedThemes,
-      themeMode,
-      theme: getTheme(themeMode),
+      themeMode: themeConfig.themeMode,
+      theme: themeConfig.theme,
       isInitialized: store.isInitialized,
     }
-  }, [
-    store.isInitialized,
-    themeConfig.preferredTheme,
-    themeConfig.setTheme,
-    themeConfig.supportedThemes,
-    themeConfig.theme,
-  ])
+  }, [store.isInitialized, themeConfig.preferredThemeMode, themeConfig.setTheme, themeConfig.supportedThemes, themeConfig.theme, themeConfig.themeMode])
 
   return (
-    <ThemeContext.Provider value={value}>
+    <ThemeContext.Provider value={contextValue}>
       {children}
     </ThemeContext.Provider>
   )

@@ -1,4 +1,8 @@
-import { Fragment, useMemo, type ReactNode } from 'react'
+import {
+  Fragment,
+  useMemo,
+  type ReactNode
+} from 'react'
 import {
   Pressable,
   Text,
@@ -7,16 +11,20 @@ import {
   type StyleProp,
   type ViewStyle
 } from 'react-native'
-import { Check, CheckCheck } from 'lucide-react-native'
-import { useTheme } from '../../global-contexts/theme'
+import {
+  Check,
+  CheckCheck
+} from 'lucide-react-native'
+
+import { useTheme } from '@/src/global-contexts/theme/ThemeContext'
 import type {
   ChatConversationRowPreviewStyle,
   ChatConversationRowState,
   ChatConversationRowStyle,
   ChatConversationRowTimestampStyle,
-  ChatConversationRowTitleStyle,
-  StyleOverwrite
-} from '../../theme'
+  ChatConversationRowTitleStyle
+} from '@/src/theme/types/components/chat'
+import type { StyleOverwrite } from '@/src/theme/types/resolver'
 
 export type ChatConversationSentIndicator = 'sent' | 'sentAndReceived'
 
@@ -72,15 +80,15 @@ export const ChatConversationRow = ({
 
   const staticState = useMemo(() => ({}), [])
   const unreadBadge = useMemo(
-    () => theme.components.chat.conversationRowUnreadBadge(staticState),
+    () => theme.components.chat.conversationRow.unreadBadge(staticState),
     [theme, staticState]
   )
   const unreadBadgeText = useMemo(
-    () => theme.components.chat.conversationRowUnreadBadgeText(staticState),
+    () => theme.components.chat.conversationRow.unreadBadgeText(staticState),
     [theme, staticState]
   )
   const sentIndicatorColor = useMemo(
-    () => theme.components.chat.conversationRowSentIndicator(staticState).color,
+    () => theme.components.chat.conversationRow.sentIndicator(staticState).color,
     [theme, staticState]
   )
 
@@ -90,14 +98,14 @@ export const ChatConversationRow = ({
       disabled={disabled}
       style={(pressableState) => {
         const state = resolveState(pressableState as PressableInteraction)
-        return [theme.components.chat.conversationRow(state, rowStyle), style]
+        return [theme.components.chat.conversationRow.container(state, rowStyle), style]
       }}
     >
       {(pressableState) => {
         const state = resolveState(pressableState as PressableInteraction)
-        const resolvedTitle = theme.components.chat.conversationRowTitle(state, titleStyle)
-        const resolvedTimestamp = theme.components.chat.conversationRowTimestamp(state, timestampStyle)
-        const resolvedPreview = theme.components.chat.conversationRowPreview(state, previewStyle)
+        const resolvedTitle = theme.components.chat.conversationRow.title(state, titleStyle)
+        const resolvedTimestamp = theme.components.chat.conversationRow.timestamp(state, timestampStyle)
+        const resolvedPreview = theme.components.chat.conversationRow.preview(state, previewStyle)
 
         return (
           <Fragment>

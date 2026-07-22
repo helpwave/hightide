@@ -1,5 +1,9 @@
-import type { Meta, StoryObj } from '@storybook/react-native-web-vite'
 import { View } from 'react-native'
+import type {
+  Meta,
+  StoryObj
+} from '@storybook/react-native-web-vite'
+
 import { ChatSystemLine } from '@/src/components/chat/ChatSystemLine'
 
 const meta = {

@@ -1,23 +1,27 @@
-import {
-  remToPx,
-  spacing,
-  type ComponentColors,
-  type DesignTheme as DesignTokensTheme,
-  type ElementSize,
-  type SemanticColors
-} from '@helpwave/hightide-design'
 import type { ViewStyle } from 'react-native'
+
+import { componentLayouts } from '@helpwave/hightide-design/tokens'
+import type {
+  ComponentColorTokens,
+  HightideDesignTokens as DesignTokensTheme,
+  ElementSize
+} from '@helpwave/hightide-design/types'
+
+import type { HightideSemanticColors } from '@/src/theme/types/color'
 import type {
   CheckboxSize,
   CheckboxState,
   CheckboxTheme
-} from '../types'
-import { createStyleResolver, createValueResolver } from '../types/resolver'
+} from '@/src/theme/types/components/checkbox'
+import {
+  createStyleResolver,
+  createValueResolver
+} from '@/src/theme/types/resolver'
 
 const checkboxSizes: Record<CheckboxSize, number> = {
-  sm: remToPx('1.25rem'),
-  md: remToPx('1.5rem'),
-  lg: remToPx('2rem'),
+  sm: 20,
+  md: 24,
+  lg: 32,
 }
 
 const checkboxIconSizes: Record<CheckboxSize, Exclude<ElementSize, 'xs'>> = {
@@ -27,8 +31,8 @@ const checkboxIconSizes: Record<CheckboxSize, Exclude<ElementSize, 'xs'>> = {
 }
 
 export type CreateCheckboxThemeOptions = {
-  semantic: SemanticColors,
-  component: ComponentColors,
+  semantic: HightideSemanticColors,
+  component: ComponentColorTokens,
 }
 
 export const createCheckboxTheme = ({
@@ -56,7 +60,7 @@ export const createCheckboxTheme = ({
       height: dimension,
       alignItems: 'center',
       justifyContent: 'center',
-      borderWidth: remToPx(spacing.coloringOutlineWidth),
+      borderWidth: componentLayouts.shared.coloringOutlineWidth,
       borderColor,
       borderRadius: state.isRounded ? dimension / 2 : 6,
       backgroundColor,
@@ -81,7 +85,7 @@ export const createCheckboxTheme = ({
 
 export const createCheckboxThemeFromDesign = (theme: DesignTokensTheme): CheckboxTheme => {
   return createCheckboxTheme({
-    semantic: theme.semantic,
-    component: theme.component,
+    semantic: theme.semanticColors,
+    component: theme.componentColors,
   })
 }

@@ -1,12 +1,22 @@
-import { useMemo, type ReactNode } from 'react'
-import { Text, View, type StyleProp, type ViewProps, type ViewStyle } from 'react-native'
-import { useTheme } from '../../global-contexts/theme'
+import {
+  useMemo,
+  type ReactNode
+} from 'react'
+import {
+  Text,
+  View,
+  type StyleProp,
+  type ViewProps,
+  type ViewStyle
+} from 'react-native'
+
+import { useTheme } from '@/src/global-contexts/theme/ThemeContext'
 import type {
   MenuItemLabelStyle,
   MenuItemStyle,
-  MenuItemValueStyle,
-  StyleOverwrite
-} from '../../theme'
+  MenuItemValueStyle
+} from '@/src/theme/types/components/menu'
+import type { StyleOverwrite } from '@/src/theme/types/resolver'
 
 export type MenuItemProps = Omit<ViewProps, 'style'> & {
   label: string,

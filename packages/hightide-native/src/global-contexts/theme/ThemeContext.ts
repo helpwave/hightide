@@ -1,12 +1,17 @@
-import { createContext, useContext } from 'react'
-import type { ThemeConfigValue, ThemeInformation } from './forward-exports'
-import type { DesignTheme, ThemeMode } from '../../theme'
+import {
+  createContext,
+  useContext
+} from 'react'
+
+import type {
+  ThemeConfigValue,
+  ThemeInformation
+} from '@/src/global-contexts/theme/forward-exports'
+import type { Theme } from '@/src/theme/types/theme'
 
 export type { ThemeInformation }
 
-export type ThemeContextValue = Omit<ThemeConfigValue, 'theme'> & {
-  themeMode: ThemeMode,
-  theme: DesignTheme,
+export type ThemeContextValue = ThemeConfigValue<Theme> & {
   isInitialized: boolean,
 }
 

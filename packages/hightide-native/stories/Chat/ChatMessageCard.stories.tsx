@@ -1,9 +1,16 @@
-import type { Meta, StoryObj } from '@storybook/react-native-web-vite'
-import { Text, View } from 'react-native'
+import {
+  Text,
+  View
+} from 'react-native'
+import type {
+  Meta,
+  StoryObj
+} from '@storybook/react-native-web-vite'
 import { CalendarDays } from 'lucide-react-native'
-import { Button } from '@/src/components/user-interaction/Button'
+
 import { ChatMessageCard } from '@/src/components/chat/ChatMessageCard'
-import { useTheme } from '@/src/global-contexts/theme'
+import { Button } from '@/src/components/user-interaction/Button'
+import { useTheme } from '@/src/global-contexts/theme/ThemeContext'
 
 const meta = {
   component: ChatMessageCard,

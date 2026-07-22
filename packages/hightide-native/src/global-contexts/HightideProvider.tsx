@@ -1,14 +1,26 @@
-import { useMemo, type PropsWithChildren } from 'react'
-import { ArrayUtil } from '@helpwave/hightide-utils/utils'
-import { hightideTranslation } from '@helpwave/hightide-utils/i18n'
+import {
+  useMemo,
+  type PropsWithChildren
+} from 'react'
+
 import { useLocalization } from '@helpwave/hightide-utils/context/localization'
-import { HightideContext } from './HightideContext'
-import type { LocalizationProviderProps } from './localization'
-import { LocalizationProvider } from './localization'
-import type { ThemeProviderProps } from './theme'
-import { ThemeProvider, useTheme } from './theme'
-import type { TranslationProviderProps } from './translation'
-import { TranslationProvider } from './translation'
+import { hightideTranslation } from '@helpwave/hightide-utils/i18n'
+import { ArrayUtil } from '@helpwave/hightide-utils/utils'
+
+import { HightideContext } from '@/src/global-contexts/HightideContext'
+import {
+  LocalizationProvider,
+  type LocalizationProviderProps
+} from '@/src/global-contexts/localization/LocalizationProvider'
+import { useTheme } from '@/src/global-contexts/theme/ThemeContext'
+import {
+  ThemeProvider,
+  type ThemeProviderProps
+} from '@/src/global-contexts/theme/ThemeProvider'
+import {
+  TranslationProvider,
+  type TranslationProviderProps
+} from '@/src/global-contexts/translation/forward-exports'
 
 export type HightideProviderProps = PropsWithChildren & {
   theme?: Omit<ThemeProviderProps, 'children'>,

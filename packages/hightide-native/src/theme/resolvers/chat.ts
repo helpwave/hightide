@@ -1,12 +1,20 @@
-import { StyleSheet } from 'react-native'
 import {
-  hexWithAlpha,
-  remToPx,
-  type ColoringTokensDefinitions,
-  type ComponentColors,
-  type DesignTheme as DesignTokensTheme,
-  type SemanticColors
-} from '@helpwave/hightide-design'
+  StyleSheet,
+  type TextStyle,
+  type ViewStyle
+} from 'react-native'
+
+import { hexWithAlpha } from '@helpwave/hightide-design/helpers'
+import { fontWeights } from '@helpwave/hightide-design/tokens'
+import type {
+  ComponentColorTokens,
+  HightideDesignTokens as DesignTokensTheme
+} from '@helpwave/hightide-design/types'
+
+import type {
+  Color,
+  HightideSemanticColors
+} from '@/src/theme/types/color'
 import type {
   ChatAttachmentCardState,
   ChatConversationRowState,
@@ -15,13 +23,17 @@ import type {
   ChatQuickReplyChipState,
   ChatSystemLineState,
   ChatTheme
-} from '../types'
-import { createStyleResolver, createValueResolver } from '../types/resolver'
+} from '@/src/theme/types/components/chat'
+import type { HightideComponentThemes } from '@/src/theme/types/components/hightide'
+import {
+  createStyleResolver,
+  createValueResolver
+} from '@/src/theme/types/resolver'
 
 export type CreateChatThemeOptions = {
-  semantic: SemanticColors,
-  component: ComponentColors,
-  coloring: ColoringTokensDefinitions,
+  semantic: HightideSemanticColors,
+  component: ComponentColorTokens,
+  coloring: HightideComponentThemes['coloring'],
 }
 
 export const createChatTheme = ({
@@ -29,356 +41,378 @@ export const createChatTheme = ({
   component,
   coloring,
 }: CreateChatThemeOptions): ChatTheme => {
-  const resolveConversationRow = (state: ChatConversationRowState) => {
+  const resolveConversationRow = (state: ChatConversationRowState): ViewStyle => {
     const pressed = !!state.isPressed && !state.isDisabled
 
     return {
-      flexDirection: 'row' as const,
-      alignItems: 'center' as const,
-      gap: remToPx('0.75rem'),
-      width: '100%' as const,
-      paddingHorizontal: remToPx('0.875rem'),
-      paddingVertical: remToPx('0.75rem'),
+      flexDirection: 'row',
+      alignItems: 'center',
+      gap: 12,
+      width: '100%',
+      paddingHorizontal: 14,
+      paddingVertical: 12,
       backgroundColor: state.isSelected
         ? semantic.background
         : pressed
           ? semantic.surfaceHover
-          : ('transparent' as const),
-      borderLeftWidth: state.isSelected ? remToPx('0.25rem') : 0,
-      borderLeftColor: state.isSelected ? semantic.primary : ('transparent' as const),
-      borderRadius: remToPx('0.375rem'),
+          : 'transparent',
+      borderLeftWidth: state.isSelected ? 4 : 0,
+      borderLeftColor: state.isSelected ? semantic.primary : 'transparent',
+      borderRadius: 6,
     }
   }
 
   return {
-    conversationRow: createStyleResolver(resolveConversationRow),
-    conversationRowTitle: createStyleResolver((state) => ({
-      flex: 1,
-      color: semantic.onSurface,
-      fontSize: remToPx('1rem'),
-      fontWeight: state.isUnread ? '700' : '500',
-    })),
-    conversationRowTimestamp: createStyleResolver((state) => ({
-      color: state.isUnread ? semantic.primary : semantic.description,
-      fontSize: remToPx('0.75rem'),
-      fontWeight: state.isUnread ? '500' : '400',
-      flexShrink: 0,
-    })),
-    conversationRowPreview: createStyleResolver((state) => ({
-      flex: 1,
-      color: state.isUnread ? semantic.onSurface : semantic.description,
-      fontSize: remToPx('0.875rem'),
-      fontWeight: '300',
-    })),
-    conversationRowUnreadBadge: createStyleResolver(() => ({
-      minWidth: remToPx('1.25rem'),
-      height: remToPx('1.25rem'),
-      paddingHorizontal: remToPx('0.375rem'),
-      borderRadius: 999,
-      backgroundColor: semantic.primary,
-      alignItems: 'center',
-      justifyContent: 'center',
-    })),
-    conversationRowUnreadBadgeText: createStyleResolver(() => ({
-      color: semantic.onPrimary,
-      fontSize: remToPx('0.6875rem'),
-      fontWeight: '700',
-    })),
-    conversationRowSentIndicator: createValueResolver(() => ({
-      color: semantic.primary,
-    })),
-    conversationList: createStyleResolver(() => ({
-      flex: 1,
-      backgroundColor: semantic.surface,
-    })),
-    conversationListHeader: createStyleResolver(() => ({
-      paddingHorizontal: remToPx('0.875rem'),
-      paddingVertical: remToPx('0.875rem'),
-      gap: remToPx('0.75rem'),
-    })),
-    conversationListFooter: createStyleResolver(() => ({
-      paddingHorizontal: remToPx('0.875rem'),
-      paddingVertical: remToPx('0.5rem'),
-    })),
-    threadHeader: createStyleResolver(() => ({
-      flexDirection: 'row',
-      alignItems: 'center',
-      gap: remToPx('0.75rem'),
-      paddingHorizontal: remToPx('0.875rem'),
-      paddingVertical: remToPx('0.75rem'),
-      borderBottomWidth: StyleSheet.hairlineWidth,
-      borderBottomColor: component.divider,
-      backgroundColor: semantic.surface,
-    })),
-    threadHeaderTitle: createStyleResolver(() => ({
-      color: semantic.onSurface,
-      fontSize: remToPx('1rem'),
-      fontWeight: '700',
-    })),
-    threadHeaderSubtitle: createStyleResolver(() => ({
-      color: semantic.description,
-      fontSize: remToPx('0.75rem'),
-      fontWeight: '300',
-    })),
-    messageList: createStyleResolver(() => ({
-      flex: 1,
-      paddingHorizontal: remToPx('1rem'),
-      paddingVertical: remToPx('1.125rem'),
-      gap: remToPx('0.75rem'),
-      backgroundColor: semantic.background,
-    })),
-    messageBubbleContainer: createStyleResolver((state: ChatMessageBubbleState) => ({
-      maxWidth: remToPx('17.5rem'),
-      gap: remToPx('0.25rem'),
-      alignSelf: state.direction === 'outgoing' ? 'flex-end' : 'flex-start',
-      alignItems: state.direction === 'outgoing' ? 'flex-end' : 'flex-start',
-    })),
-    messageBubble: createStyleResolver((state: ChatMessageBubbleState) => {
-      const outgoing = state.direction === 'outgoing'
-      const radius = remToPx('0.75rem')
-      const corner = remToPx('0.25rem')
-
-      return {
-        paddingHorizontal: remToPx('0.9375rem'),
-        paddingVertical: remToPx('0.6875rem'),
-        backgroundColor: outgoing ? semantic.primary : semantic.neutral,
-        borderTopLeftRadius: radius,
-        borderTopRightRadius: radius,
-        borderBottomLeftRadius: outgoing ? radius : corner,
-        borderBottomRightRadius: outgoing ? corner : radius,
-      }
-    }),
-    messageBubbleContent: createStyleResolver((state: ChatMessageBubbleState) => ({
-      color: state.direction === 'outgoing' ? semantic.onPrimary : semantic.onNeutral,
-      fontSize: remToPx('1rem'),
-      fontWeight: '300',
-      lineHeight: remToPx('1.4rem'),
-    })),
-    messageBubbleTimestamp: createStyleResolver((state: ChatMessageBubbleState) => ({
-      marginTop: remToPx('0.3125rem'),
-      color: state.direction === 'outgoing'
-        ? hexWithAlpha(semantic.onPrimary, 0.75)
-        : semantic.description,
-      fontSize: remToPx('0.6875rem'),
-      fontWeight: '500',
-      textAlign: 'right',
-    })),
-    messageBubbleReceipt: createStyleResolver(() => ({
-      flexDirection: 'row',
-      alignItems: 'center',
-      gap: remToPx('0.3125rem'),
-    })),
-    messageBubbleReceiptText: createStyleResolver(() => ({
-      color: semantic.description,
-      fontSize: remToPx('0.6875rem'),
-      fontWeight: '500',
-    })),
-    messageBubbleReceiptIcon: createValueResolver(() => ({
-      color: semantic.primary,
-    })),
-    messageCard: createStyleResolver((state: ChatMessageCardState) => {
-      const outgoing = state.direction === 'outgoing'
-      const radius = remToPx('0.75rem')
-      const corner = remToPx('0.25rem')
-
-      return {
-        width: remToPx('18.125rem'),
-        maxWidth: remToPx('18.75rem'),
-        backgroundColor: semantic.surface,
-        borderWidth: 1,
-        borderColor: component.divider,
-        borderTopLeftRadius: radius,
-        borderTopRightRadius: radius,
-        borderBottomLeftRadius: outgoing ? radius : corner,
-        borderBottomRightRadius: outgoing ? corner : radius,
-        overflow: 'hidden',
-        alignSelf: outgoing ? 'flex-end' : 'flex-start',
-      }
-    }),
-    messageCardHeader: createStyleResolver(() => ({
-      flexDirection: 'row',
-      alignItems: 'center',
-      gap: remToPx('0.625rem'),
-      paddingHorizontal: remToPx('0.9375rem'),
-      paddingVertical: remToPx('0.75rem'),
-      borderBottomWidth: StyleSheet.hairlineWidth,
-      borderBottomColor: component.divider,
-    })),
-    messageCardIcon: createStyleResolver((state: ChatMessageCardState) => {
-      const color = state.color ?? 'primary'
-      const tokens = coloring[color]
-
-      return {
-        width: remToPx('2.25rem'),
-        height: remToPx('2.25rem'),
-        borderRadius: remToPx('0.375rem'),
+    conversationRow: {
+      container: createStyleResolver<ChatConversationRowState, ViewStyle>(resolveConversationRow),
+      title: createStyleResolver<ChatConversationRowState, TextStyle>((state) => ({
+        flex: 1,
+        color: semantic.onSurface,
+        fontSize: 16,
+        fontWeight: state.isUnread ? fontWeights.bold : fontWeights.medium,
+      })),
+      timestamp: createStyleResolver<ChatConversationRowState, TextStyle>((state) => ({
+        color: state.isUnread ? semantic.primary : semantic.description,
+        fontSize: 12,
+        fontWeight: state.isUnread ? fontWeights.medium : fontWeights.base,
+        flexShrink: 0,
+      })),
+      preview: createStyleResolver<ChatConversationRowState, TextStyle>((state) => ({
+        flex: 1,
+        color: state.isUnread ? semantic.onSurface : semantic.description,
+        fontSize: 14,
+        fontWeight: fontWeights.light,
+      })),
+      unreadBadge: createStyleResolver<Record<string, never>, ViewStyle>(() => ({
+        minWidth: 20,
+        height: 20,
+        paddingHorizontal: 6,
+        borderRadius: 999,
+        backgroundColor: semantic.primary,
         alignItems: 'center',
         justifyContent: 'center',
-        backgroundColor: hexWithAlpha(tokens.tonalBackground ?? tokens.color, 0.2),
-      }
-    }),
-    messageCardIconColor: createValueResolver((state: ChatMessageCardState) => {
-      const color = state.color ?? 'primary'
-      const tokens = coloring[color]
-
-      return {
-        color: tokens.tonalText ?? tokens.color,
-      }
-    }),
-    messageCardTitle: createStyleResolver((state: ChatMessageCardState) => {
-      const color = state.color ?? 'primary'
-      const tokens = coloring[color]
-
-      return {
-        color: tokens.text ?? tokens.color,
-        fontSize: remToPx('0.875rem'),
-        fontWeight: '700',
-      }
-    }),
-    messageCardSubtitle: createStyleResolver(() => ({
-      color: semantic.description,
-      fontSize: remToPx('0.75rem'),
-    })),
-    messageCardBody: createStyleResolver(() => ({
-      paddingHorizontal: remToPx('0.9375rem'),
-      paddingVertical: remToPx('0.75rem'),
-      gap: remToPx('0.25rem'),
-    })),
-    messageCardActions: createStyleResolver(() => ({
-      flexDirection: 'row',
-      gap: remToPx('0.625rem'),
-      paddingHorizontal: remToPx('0.9375rem'),
-      paddingBottom: remToPx('0.9375rem'),
-    })),
-    attachmentCard: createStyleResolver((state: ChatAttachmentCardState) => {
-      const outgoing = state.direction === 'outgoing'
-      const radius = remToPx('0.75rem')
-      const corner = remToPx('0.25rem')
-
-      return {
-        flexDirection: 'row',
-        alignItems: 'center',
-        gap: remToPx('0.75rem'),
-        maxWidth: remToPx('17.5rem'),
-        padding: remToPx('0.75rem'),
+      })),
+      unreadBadgeText: createStyleResolver<Record<string, never>, TextStyle>(() => ({
+        color: semantic.onPrimary,
+        fontSize: 11,
+        fontWeight: fontWeights.bold,
+      })),
+      sentIndicator: createValueResolver<Record<string, never>, { color: Color }>(() => ({
+        color: semantic.primary,
+      })),
+    },
+    conversationList: {
+      container: createStyleResolver<Record<string, never>, ViewStyle>(() => ({
+        flex: 1,
         backgroundColor: semantic.surface,
-        borderWidth: 1,
-        borderColor: component.divider,
-        borderTopLeftRadius: radius,
-        borderTopRightRadius: radius,
-        borderBottomLeftRadius: outgoing ? radius : corner,
-        borderBottomRightRadius: outgoing ? corner : radius,
-        alignSelf: outgoing ? 'flex-end' : 'flex-start',
-      }
-    }),
-    attachmentCardIcon: createStyleResolver(() => ({
-      width: remToPx('2.75rem'),
-      height: remToPx('2.75rem'),
-      borderRadius: remToPx('0.375rem'),
-      alignItems: 'center',
-      justifyContent: 'center',
-      backgroundColor: hexWithAlpha(semantic.negative, 0.2),
-    })),
-    attachmentCardIconColor: createValueResolver(() => ({
-      color: semantic.negative,
-    })),
-    attachmentCardName: createStyleResolver(() => ({
-      color: semantic.onSurface,
-      fontSize: remToPx('0.875rem'),
-      fontWeight: '500',
-    })),
-    attachmentCardMetadata: createStyleResolver(() => ({
-      color: semantic.description,
-      fontSize: remToPx('0.75rem'),
-    })),
-    systemLine: createStyleResolver(() => ({
-      flexDirection: 'row',
-      alignItems: 'center',
-      justifyContent: 'center',
-      alignSelf: 'center',
-      gap: remToPx('0.375rem'),
-    })),
-    systemLineText: createStyleResolver((state: ChatSystemLineState) => {
-      const color = state.color ?? 'primary'
-      const tokens = coloring[color]
-
-      return {
-        color: tokens.text ?? tokens.color,
-        fontSize: remToPx('0.75rem'),
-        fontWeight: '500',
-      }
-    }),
-    systemLineIcon: createValueResolver((state: ChatSystemLineState) => {
-      const color = state.color ?? 'primary'
-      const tokens = coloring[color]
-
-      return {
-        color: tokens.text ?? tokens.color,
-      }
-    }),
-    dateDivider: createStyleResolver(() => ({
-      alignSelf: 'center',
-      paddingHorizontal: remToPx('0.875rem'),
-      paddingVertical: remToPx('0.25rem'),
-      borderRadius: 999,
-      backgroundColor: semantic.surface,
-    })),
-    dateDividerText: createStyleResolver(() => ({
-      color: semantic.description,
-      fontSize: remToPx('0.75rem'),
-      fontWeight: '500',
-    })),
-    quickReplyChip: createStyleResolver((state: ChatQuickReplyChipState) => {
-      const pressed = !!state.isPressed && !state.isDisabled
-
-      return {
+      })),
+      header: createStyleResolver<Record<string, never>, ViewStyle>(() => ({
+        paddingHorizontal: 14,
+        paddingVertical: 14,
+        gap: 12,
+      })),
+      footer: createStyleResolver<Record<string, never>, ViewStyle>(() => ({
+        paddingHorizontal: 14,
+        paddingVertical: 8,
+      })),
+    },
+    threadHeader: {
+      container: createStyleResolver<Record<string, never>, ViewStyle>(() => ({
         flexDirection: 'row',
         alignItems: 'center',
-        alignSelf: 'flex-start',
-        gap: remToPx('0.375rem'),
-        paddingHorizontal: remToPx('0.875rem'),
-        paddingVertical: remToPx('0.375rem'),
+        gap: 12,
+        paddingHorizontal: 14,
+        paddingVertical: 12,
+        borderBottomWidth: StyleSheet.hairlineWidth,
+        borderBottomColor: component.divider,
+        backgroundColor: semantic.surface,
+      })),
+      title: createStyleResolver<Record<string, never>, TextStyle>(() => ({
+        color: semantic.onSurface,
+        fontSize: 16,
+        fontWeight: fontWeights.bold,
+      })),
+      subtitle: createStyleResolver<Record<string, never>, TextStyle>(() => ({
+        color: semantic.description,
+        fontSize: 12,
+        fontWeight: fontWeights.light,
+      })),
+    },
+    messageList: {
+      container: createStyleResolver<Record<string, never>, ViewStyle>(() => ({
+        flex: 1,
+        paddingHorizontal: 16,
+        paddingVertical: 18,
+        gap: 12,
+        backgroundColor: semantic.background,
+      })),
+    },
+    messageBubble: {
+      container: createStyleResolver<ChatMessageBubbleState, ViewStyle>((state) => ({
+        maxWidth: 280,
+        gap: 4,
+        alignSelf: state.direction === 'outgoing' ? 'flex-end' : 'flex-start',
+        alignItems: state.direction === 'outgoing' ? 'flex-end' : 'flex-start',
+      })),
+      bubble: createStyleResolver<ChatMessageBubbleState, ViewStyle>((state) => {
+        const outgoing = state.direction === 'outgoing'
+        const radius = 12
+        const corner = 4
+
+        return {
+          paddingHorizontal: 15,
+          paddingVertical: 11,
+          backgroundColor: outgoing ? semantic.primary : semantic.neutral,
+          borderTopLeftRadius: radius,
+          borderTopRightRadius: radius,
+          borderBottomLeftRadius: outgoing ? radius : corner,
+          borderBottomRightRadius: outgoing ? corner : radius,
+        }
+      }),
+      content: createStyleResolver<ChatMessageBubbleState, TextStyle>((state) => ({
+        color: state.direction === 'outgoing' ? semantic.onPrimary : semantic.onNeutral,
+        fontSize: 16,
+        fontWeight: fontWeights.light,
+        lineHeight: 22.4,
+      })),
+      timestamp: createStyleResolver<ChatMessageBubbleState, TextStyle>((state) => ({
+        marginTop: 5,
+        color: state.direction === 'outgoing'
+          ? hexWithAlpha(semantic.onPrimary, 0.75)
+          : semantic.description,
+        fontSize: 11,
+        fontWeight: fontWeights.medium,
+        textAlign: 'right',
+      })),
+      receipt: createStyleResolver<Record<string, never>, ViewStyle>(() => ({
+        flexDirection: 'row',
+        alignItems: 'center',
+        gap: 5,
+      })),
+      receiptText: createStyleResolver<Record<string, never>, TextStyle>(() => ({
+        color: semantic.description,
+        fontSize: 11,
+        fontWeight: fontWeights.medium,
+      })),
+      receiptIcon: createValueResolver<Record<string, never>, { color: Color }>(() => ({
+        color: semantic.primary,
+      })),
+    },
+    messageCard: {
+      container: createStyleResolver<ChatMessageCardState, ViewStyle>((state) => {
+        const outgoing = state.direction === 'outgoing'
+        const radius = 12
+        const corner = 4
+
+        return {
+          width: 290,
+          maxWidth: 300,
+          backgroundColor: semantic.surface,
+          borderWidth: 1,
+          borderColor: component.divider,
+          borderTopLeftRadius: radius,
+          borderTopRightRadius: radius,
+          borderBottomLeftRadius: outgoing ? radius : corner,
+          borderBottomRightRadius: outgoing ? corner : radius,
+          overflow: 'hidden',
+          alignSelf: outgoing ? 'flex-end' : 'flex-start',
+        }
+      }),
+      header: createStyleResolver<Record<string, never>, ViewStyle>(() => ({
+        flexDirection: 'row',
+        alignItems: 'center',
+        gap: 10,
+        paddingHorizontal: 15,
+        paddingVertical: 12,
+        borderBottomWidth: StyleSheet.hairlineWidth,
+        borderBottomColor: component.divider,
+      })),
+      icon: createStyleResolver<ChatMessageCardState, ViewStyle>((state) => {
+        const color = state.color ?? 'primary'
+        const tokens = coloring[color]
+
+        return {
+          width: 36,
+          height: 36,
+          borderRadius: 6,
+          alignItems: 'center',
+          justifyContent: 'center',
+          backgroundColor: hexWithAlpha(tokens.tonalBackground ?? tokens.color, 0.2),
+        }
+      }),
+      iconColor: createValueResolver<ChatMessageCardState, { color: Color }>((state) => {
+        const color = state.color ?? 'primary'
+        const tokens = coloring[color]
+
+        return {
+          color: tokens.tonalText ?? tokens.color,
+        }
+      }),
+      title: createStyleResolver<ChatMessageCardState, TextStyle>((state) => {
+        const color = state.color ?? 'primary'
+        const tokens = coloring[color]
+
+        return {
+          color: tokens.text ?? tokens.color,
+          fontSize: 14,
+          fontWeight: fontWeights.bold,
+        }
+      }),
+      subtitle: createStyleResolver<Record<string, never>, TextStyle>(() => ({
+        color: semantic.description,
+        fontSize: 12,
+      })),
+      body: createStyleResolver<Record<string, never>, ViewStyle>(() => ({
+        paddingHorizontal: 15,
+        paddingVertical: 12,
+        gap: 4,
+      })),
+      actions: createStyleResolver<Record<string, never>, ViewStyle>(() => ({
+        flexDirection: 'row',
+        gap: 10,
+        paddingHorizontal: 15,
+        paddingBottom: 15,
+      })),
+    },
+    attachmentCard: {
+      container: createStyleResolver<ChatAttachmentCardState, ViewStyle>((state) => {
+        const outgoing = state.direction === 'outgoing'
+        const radius = 12
+        const corner = 4
+
+        return {
+          flexDirection: 'row',
+          alignItems: 'center',
+          gap: 12,
+          maxWidth: 280,
+          padding: 12,
+          backgroundColor: semantic.surface,
+          borderWidth: 1,
+          borderColor: component.divider,
+          borderTopLeftRadius: radius,
+          borderTopRightRadius: radius,
+          borderBottomLeftRadius: outgoing ? radius : corner,
+          borderBottomRightRadius: outgoing ? corner : radius,
+          alignSelf: outgoing ? 'flex-end' : 'flex-start',
+        }
+      }),
+      icon: createStyleResolver<Record<string, never>, ViewStyle>(() => ({
+        width: 44,
+        height: 44,
+        borderRadius: 6,
+        alignItems: 'center',
+        justifyContent: 'center',
+        backgroundColor: hexWithAlpha(semantic.negative, 0.2),
+      })),
+      iconColor: createValueResolver<Record<string, never>, { color: Color }>(() => ({
+        color: semantic.negative,
+      })),
+      name: createStyleResolver<Record<string, never>, TextStyle>(() => ({
+        color: semantic.onSurface,
+        fontSize: 14,
+        fontWeight: fontWeights.medium,
+      })),
+      metadata: createStyleResolver<Record<string, never>, TextStyle>(() => ({
+        color: semantic.description,
+        fontSize: 12,
+      })),
+    },
+    systemLine: {
+      container: createStyleResolver<ChatSystemLineState, ViewStyle>(() => ({
+        flexDirection: 'row',
+        alignItems: 'center',
+        justifyContent: 'center',
+        alignSelf: 'center',
+        gap: 6,
+      })),
+      text: createStyleResolver<ChatSystemLineState, TextStyle>((state) => {
+        const color = state.color ?? 'primary'
+        const tokens = coloring[color]
+
+        return {
+          color: tokens.text ?? tokens.color,
+          fontSize: 12,
+          fontWeight: fontWeights.medium,
+        }
+      }),
+      icon: createValueResolver<ChatSystemLineState, { color: Color }>((state) => {
+        const color = state.color ?? 'primary'
+        const tokens = coloring[color]
+
+        return {
+          color: tokens.text ?? tokens.color,
+        }
+      }),
+    },
+    dateDivider: {
+      container: createStyleResolver<Record<string, never>, ViewStyle>(() => ({
+        alignSelf: 'center',
+        paddingHorizontal: 14,
+        paddingVertical: 4,
         borderRadius: 999,
-        borderWidth: 1,
-        borderColor: state.isActive ? semantic.primary : component.divider,
-        backgroundColor: pressed ? semantic.surfaceHover : semantic.surface,
-      }
-    }),
-    quickReplyChipText: createStyleResolver((state: ChatQuickReplyChipState) => ({
-      color: state.isActive ? semantic.primary : semantic.description,
-      fontSize: remToPx('0.875rem'),
-      fontWeight: '500',
-    })),
-    messageComposer: createStyleResolver(() => ({
-      flexDirection: 'row',
-      alignItems: 'flex-end',
-      width: '100%',
-      gap: remToPx('0.5rem'),
-      paddingHorizontal: remToPx('0.875rem'),
-      paddingVertical: remToPx('0.75rem'),
-      backgroundColor: semantic.surface,
-      borderTopWidth: StyleSheet.hairlineWidth,
-      borderTopColor: component.divider,
-    })),
-    messageComposerInput: createStyleResolver(() => ({
-      flex: 1,
-      minHeight: remToPx('2.75rem'),
-      maxHeight: remToPx('2.75rem') * 7,
-      paddingHorizontal: remToPx('0.75rem'),
-      paddingVertical: remToPx('0.75rem'),
-      borderRadius: remToPx('0.375rem'),
-      backgroundColor: semantic.surfaceVariant,
-      color: semantic.onSurface,
-      fontSize: remToPx('0.9375rem'),
-    })),
-    messageComposerPlaceholderColor: createValueResolver(() => semantic.placeholder),
+        backgroundColor: semantic.surface,
+      })),
+      text: createStyleResolver<Record<string, never>, TextStyle>(() => ({
+        color: semantic.description,
+        fontSize: 12,
+        fontWeight: fontWeights.medium,
+      })),
+    },
+    quickReplyChip: {
+      container: createStyleResolver<ChatQuickReplyChipState, ViewStyle>((state) => {
+        const pressed = !!state.isPressed && !state.isDisabled
+
+        return {
+          flexDirection: 'row',
+          alignItems: 'center',
+          alignSelf: 'flex-start',
+          gap: 6,
+          paddingHorizontal: 14,
+          paddingVertical: 6,
+          borderRadius: 999,
+          borderWidth: 1,
+          borderColor: state.isActive ? semantic.primary : component.divider,
+          backgroundColor: pressed ? semantic.surfaceHover : semantic.surface,
+        }
+      }),
+      text: createStyleResolver<ChatQuickReplyChipState, TextStyle>((state) => ({
+        color: state.isActive ? semantic.primary : semantic.description,
+        fontSize: 14,
+        fontWeight: fontWeights.medium,
+      })),
+    },
+    messageComposer: {
+      container: createStyleResolver<Record<string, never>, ViewStyle>(() => ({
+        flexDirection: 'row',
+        alignItems: 'flex-end',
+        width: '100%',
+        gap: 8,
+        paddingHorizontal: 14,
+        paddingVertical: 12,
+        backgroundColor: semantic.surface,
+        borderTopWidth: StyleSheet.hairlineWidth,
+        borderTopColor: component.divider,
+      })),
+      input: createStyleResolver<Record<string, never>, TextStyle>(() => ({
+        flex: 1,
+        minHeight: 44,
+        maxHeight: 44 * 7,
+        paddingHorizontal: 12,
+        paddingVertical: 12,
+        borderRadius: 6,
+        backgroundColor: semantic.surfaceVariant,
+        color: semantic.onSurface,
+        fontSize: 15,
+      })),
+      placeholderColor: createValueResolver<Record<string, never>, Color>(() => semantic.placeholder),
+    },
   }
 }
 
 export const createChatThemeFromDesign = (theme: DesignTokensTheme): ChatTheme => {
   return createChatTheme({
-    semantic: theme.semantic,
-    component: theme.component,
-    coloring: theme.coloring,
+    semantic: theme.semanticColors,
+    component: theme.componentColors,
+    coloring: theme.coloring as HightideComponentThemes['coloring'],
   })
 }
