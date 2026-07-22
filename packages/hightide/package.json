@@ -10,7 +10,7 @@
     "access": "public"
   },
   "license": "AGPL-3.0-only",
-  "version": "0.15.2",
+  "version": "0.15.3",
   "browserslist": [
     "> 0.2%",
     "last 3 versions",

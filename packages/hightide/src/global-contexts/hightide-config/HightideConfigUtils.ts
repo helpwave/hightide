@@ -1,11 +1,11 @@
-import type { LocaleInformation } from '../localization/forward-exports'
+import type { SupportedLocalesConfig } from '../localization/forward-exports'
 import type { SupportedThemesConfig } from '../theme'
 
 export const HightideConfigUtils = {
-  defaultSupportedLocales: [
-    { locale: 'de-DE', localName: 'Deutsch' },
-    { locale: 'en-US', localName: 'English (US)' },
-  ] as const satisfies readonly LocaleInformation[],
+  defaultSupportedLocales: {
+    'de-DE': { localName: 'Deutsch' },
+    'en-US': { localName: 'English (US)' },
+  } as const satisfies SupportedLocalesConfig,
   defaultSupportedThemes: {
     light: {
       nameTranslations: {

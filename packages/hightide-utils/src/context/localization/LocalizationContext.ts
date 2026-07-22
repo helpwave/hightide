@@ -5,14 +5,15 @@ export type Locale = 'de-DE' | 'en-US' | string
 export type TimeZone = string
 
 export type LocaleInformation = {
-  locale: Locale,
   localName: string,
 }
+
+export type SupportedLocalesConfig = Record<string, LocaleInformation>
 
 export type LocalizationContextValue = {
   locale: Locale,
   setLocale: (locale: Locale) => void,
-  supportedLocales: readonly LocaleInformation[],
+  supportedLocales: SupportedLocalesConfig,
   timeZone: TimeZone | undefined,
   setTimeZone: (timeZone: TimeZone | null) => void,
   is24HourFormat: boolean | undefined,

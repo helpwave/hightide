@@ -1,7 +1,7 @@
 import { useCallback, useEffect, useMemo } from 'react'
 import { useEventCallbackStabilizer } from '../../hooks/useEventCallbackStabelizer'
 import { useSimpleStoreSyncedValue, type SimpleValueStore } from '../../hooks/useSimpleStoreSyncedValue'
-import type { LocaleInformation, LocalizationContextValue } from './LocalizationContext'
+import type { LocalizationContextValue, SupportedLocalesConfig } from './LocalizationContext'
 import { StringUnionUtils } from '../../utils'
 
 const localizationHourFormats = ['24h', '12h'] as const
@@ -10,7 +10,7 @@ type LocalizationHourFormat = typeof localizationHourFormats[number]
 export type UseCreateLocalizationContextProps = {
   store: SimpleValueStore,
   fallbackLocale: string,
-  supportedLocales: readonly LocaleInformation[],
+  supportedLocales: SupportedLocalesConfig,
   fallbackTimeZone?: string,
   fallbackIs24HourFormat?: boolean,
   locale?: string,
@@ -37,7 +37,7 @@ export const useCreateLocalizationContext = ({
   onChangedIs24HourFormat,
 }: UseCreateLocalizationContextProps): LocalizationContextValue => {
   const supportedLocaleKeys = useMemo(
-    () => supportedLocales.map((value) => value.locale),
+    () => Object.keys(supportedLocales),
     [supportedLocales]
   )
 

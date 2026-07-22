@@ -5,6 +5,18 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/)
 and adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [0.15.3] - 2026-07-22
+
+### Added
+
+- Deep merge helper for `supportedLocales` records in `HightideConfigProvider`
+- Storybook demos under `stories/Internationalization/ExtendTranslations.stories.tsx` for overlaying custom translation keys and registering a new locale (`fr-FR`) via `HightideProvider`
+
+### Changed
+
+- `supportedLocales` is now a `SupportedLocalesConfig` record keyed by locale id with `{ localName }` (no `locale` field on the value)
+- `LanguageSelect` iterates `Object.entries(supportedLocales)`
+
 ## [0.15.2] - 2026-07-22
 
 ### Added

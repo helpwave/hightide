@@ -3,13 +3,13 @@
 import { act, renderHook } from '@testing-library/react'
 import { useMemoryKeyValueStore } from '../../../src/hooks/useMemoryKeyValueStore'
 import { useCreateLocalizationContext } from '../../../src/context/localization/useCreateLocalizationContext'
-import type { LocaleInformation } from '../../../src/context/localization/LocalizationContext'
+import type { SupportedLocalesConfig } from '../../../src/context/localization/LocalizationContext'
 
 describe('useCreateLocalizationContext', () => {
-  const supportedLocales: readonly LocaleInformation[] = [
-    { locale: 'en-US', localName: 'English (US)' },
-    { locale: 'de-DE', localName: 'Deutsch' },
-  ]
+  const supportedLocales: SupportedLocalesConfig = {
+    'en-US': { localName: 'English (US)' },
+    'de-DE': { localName: 'Deutsch' },
+  }
 
   test('resolves locale from controlled prop', () => {
     const store = useMemoryKeyValueStore()
