@@ -1,8 +1,8 @@
 import { createContext, type PropsWithChildren, useContext, useState } from 'react'
 import type { DeepPartial } from '@helpwave/hightide-utils/utils'
 import type { LocaleInformation } from '../localization/forward-exports'
-import type { ThemeInformation } from '../theme/forward-exports'
 import { HightideConfigUtils } from './HightideConfigUtils'
+import { type SupportedThemesConfig } from '../theme'
 
 export type TooltipConfig = {
   appearDelay: number,
@@ -12,7 +12,7 @@ export type TooltipConfig = {
 
 export type ThemeConfig = {
   initialTheme: string,
-  supportedThemes: readonly ThemeInformation[],
+  supportedThemes: SupportedThemesConfig,
 }
 
 export type LocalizationConfig = {
@@ -42,12 +42,36 @@ const defaultConfig: HightideConfig = {
   },
 }
 
+const mergeSupportedThemesConfig = (config: SupportedThemesConfig, overwrite: DeepPartial<SupportedThemesConfig> | undefined) : SupportedThemesConfig => {
+  if(overwrite === undefined) return config
+  const result: SupportedThemesConfig = { ...config }
+  for(const themeMode of Object.keys(overwrite)) {
+    const info = overwrite[themeMode]
+    result[themeMode] = {
+      ...(result[themeMode] ?? {}),
+      ...info,
+      nameTranslations: {
+        ...(result[themeMode]?.nameTranslations ?? {}),
+        ...(((partialTranslation: Record<string, string | undefined> | undefined): Record<string, string> => {
+          if(partialTranslation === undefined) return {}
+          const result: Record<string, string> = {}
+          for(const key in partialTranslation) {
+            if(partialTranslation[key] !== undefined) result[key] = partialTranslation[key]
+          }
+          return result
+        })(info?.nameTranslations) ?? {}),
+      }
+    }
+  }
+  return result
+}
+
 function mergeConfig(config: HightideConfig, overwrite: DeepPartial<HightideConfig>): HightideConfig {
   return {
     theme: {
       ...config.theme,
       ...overwrite.theme,
-      supportedThemes: [...config.theme.supportedThemes, ...config.theme.supportedThemes]
+      supportedThemes: mergeSupportedThemesConfig(config.theme.supportedThemes, overwrite.theme?.supportedThemes)
     },
     tooltip: {
       ...config.tooltip,

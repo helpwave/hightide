@@ -1,11 +1,11 @@
 import { createContext, useContext } from 'react'
 import type { ThemeConfigValue } from './forward-exports'
 
-export type { ThemeConfigValue as ThemeContextValue, ThemeInformation } from './forward-exports'
+export type { ThemeConfigValue as ThemeContextValue } from './forward-exports'
 
-export const ThemeContext = createContext<ThemeConfigValue | null>(null)
+export const ThemeContext = createContext<ThemeConfigValue<unknown> | null>(null)
 
-export const useTheme = (): ThemeConfigValue => {
+export const useTheme = (): ThemeConfigValue<unknown> => {
   const context = useContext(ThemeContext)
   if (!context) {
     throw new Error(
