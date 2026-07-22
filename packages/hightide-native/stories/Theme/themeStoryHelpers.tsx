@@ -23,7 +23,7 @@ export const ThemeSelect = () => {
       id,
       label: info.nameTranslations['en-US'] ?? id,
     })),
-    [supportedThemes],
+    [supportedThemes]
   )
 
   return (
