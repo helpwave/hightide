@@ -1,6 +1,6 @@
-import type { ColorValue } from '@helpwave/hightide-design/types'
 import type { TextStyle, ViewStyle } from 'react-native'
-import type { InteractionState, StyleResolverFunction } from './resolver'
+import type { Color } from '../color'
+import type { InteractionState, StyleResolverFunction } from '../resolver'
 
 export type SelectState = InteractionState & {
   isInvalid?: boolean,
@@ -34,7 +34,7 @@ export type SelectTheme = {
   overlay: StyleResolverFunction<SelectState, SelectOverlayStyle>,
   menu: StyleResolverFunction<SelectState, SelectMenuStyle>,
   search: StyleResolverFunction<SelectState, SelectSearchStyle>,
-  searchPlaceholderColor: StyleResolverFunction<SelectState, ColorValue>,
+  searchPlaceholderColor: StyleResolverFunction<SelectState, Color>,
   option: StyleResolverFunction<SelectOptionState, SelectOptionStyle>,
   optionText: StyleResolverFunction<SelectOptionState, SelectOptionTextStyle>,
 }

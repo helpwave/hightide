@@ -1,16 +1,16 @@
 import { remToPx } from '@helpwave/hightide-design/helpers'
 import { spacing } from '@helpwave/hightide-design/tokens'
 import {
-  type ComponentColors,
-  type DesignTokens as DesignTokensTheme,
-  type ElementSize,
-  type SemanticColors
+  type ComponentColorTokens,
+  type HightideDesignTokens as DesignTokensTheme,
+  type ElementSize
 } from '@helpwave/hightide-design/types'
 import type { ViewStyle } from 'react-native'
 import type {
   CheckboxSize,
   CheckboxState,
-  CheckboxTheme
+  CheckboxTheme,
+  HightideSemanticColors
 } from '../types'
 import { createStyleResolver, createValueResolver } from '../types/resolver'
 
@@ -27,8 +27,8 @@ const checkboxIconSizes: Record<CheckboxSize, Exclude<ElementSize, 'xs'>> = {
 }
 
 export type CreateCheckboxThemeOptions = {
-  semantic: SemanticColors,
-  component: ComponentColors,
+  semantic: HightideSemanticColors,
+  component: ComponentColorTokens,
 }
 
 export const createCheckboxTheme = ({
@@ -81,7 +81,7 @@ export const createCheckboxTheme = ({
 
 export const createCheckboxThemeFromDesign = (theme: DesignTokensTheme): CheckboxTheme => {
   return createCheckboxTheme({
-    semantic: theme.semantic,
-    component: theme.component,
+    semantic: theme.semanticColors,
+    component: theme.componentColors,
   })
 }

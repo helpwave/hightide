@@ -1,5 +1,3 @@
-export type BorderRadiusToken = number | 'full'
-
 export type ScalingUnitToken = number
 
 export type FixedUnitToken = number

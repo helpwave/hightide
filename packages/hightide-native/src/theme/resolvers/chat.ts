@@ -2,10 +2,8 @@ import { StyleSheet } from 'react-native'
 import { hexWithAlpha, remToPx } from '@helpwave/hightide-design/helpers'
 import { fontWeights } from '@helpwave/hightide-design/tokens'
 import type {
-  ColoringDefintionTokens,
-  ComponentColors,
-  DesignTokens as DesignTokensTheme,
-  SemanticColors
+  ComponentColorTokens,
+  HightideDesignTokens as DesignTokensTheme
 } from '@helpwave/hightide-design/types'
 import type {
   ChatAttachmentCardState,
@@ -14,14 +12,16 @@ import type {
   ChatMessageCardState,
   ChatQuickReplyChipState,
   ChatSystemLineState,
-  ChatTheme
+  ChatTheme,
+  HightideComponentThemes,
+  HightideSemanticColors
 } from '../types'
 import { createStyleResolver, createValueResolver } from '../types/resolver'
 
 export type CreateChatThemeOptions = {
-  semantic: SemanticColors,
-  component: ComponentColors,
-  coloring: ColoringDefintionTokens,
+  semantic: HightideSemanticColors,
+  component: ComponentColorTokens,
+  coloring: HightideComponentThemes['coloring'],
 }
 
 export const createChatTheme = ({
@@ -377,8 +377,8 @@ export const createChatTheme = ({
 
 export const createChatThemeFromDesign = (theme: DesignTokensTheme): ChatTheme => {
   return createChatTheme({
-    semantic: theme.semantic,
-    component: theme.component,
-    coloring: theme.coloring,
+    semantic: theme.semanticColors,
+    component: theme.componentColors,
+    coloring: theme.coloring as HightideComponentThemes['coloring'],
   })
 }

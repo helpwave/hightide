@@ -1,17 +1,16 @@
 import { remToPx } from '@helpwave/hightide-design/helpers'
 import { inputElementSizes } from '@helpwave/hightide-design/tokens'
 import {
-  type ComponentColors,
-  type DesignTokens as DesignTokensTheme,
-  type SemanticColors
+  type ComponentColorTokens,
+  type HightideDesignTokens as DesignTokensTheme
 } from '@helpwave/hightide-design/types'
 import type { TextStyle } from 'react-native'
-import type { InputState, InputTheme } from '../types'
+import type { HightideSemanticColors, InputState, InputTheme } from '../types'
 import { createStyleResolver, createValueResolver } from '../types/resolver'
 
 export type CreateInputThemeOptions = {
-  semantic: SemanticColors,
-  component: ComponentColors,
+  semantic: HightideSemanticColors,
+  component: ComponentColorTokens,
 }
 
 export const createInputTheme = ({
@@ -44,7 +43,7 @@ export const createInputTheme = ({
 
 export const createInputThemeFromDesign = (theme: DesignTokensTheme): InputTheme => {
   return createInputTheme({
-    semantic: theme.semantic,
-    component: theme.component,
+    semantic: theme.semanticColors,
+    component: theme.componentColors,
   })
 }

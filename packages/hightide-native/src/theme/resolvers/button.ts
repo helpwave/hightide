@@ -1,13 +1,16 @@
 import { toPx } from '@helpwave/hightide-design/helpers'
 import { componentLayouts, fontWeights } from '@helpwave/hightide-design/tokens'
 import {
-  type ColoringDefintionTokens,
-  type DesignTokens as DesignTokensTheme,
-  type ElementSize,
-  type SemanticColors
+  type HightideDesignTokens as DesignTokensTheme,
+  type ElementSize
 } from '@helpwave/hightide-design/types'
 import type { ViewStyle, TextStyle } from 'react-native'
-import type { ButtonState, ButtonTheme } from '../types'
+import type {
+  ButtonState,
+  ButtonTheme,
+  HightideComponentThemes,
+  HightideSemanticColors
+} from '../types'
 import { createStyleResolver } from '../types/resolver'
 import { isOutlineColoringStyle, resolveColoringStyles } from './coloring'
 
@@ -19,8 +22,8 @@ const buttonFontSizes: Record<ElementSize, number> = {
 }
 
 export type CreateButtonThemeOptions = {
-  semantic: SemanticColors,
-  coloring: ColoringDefintionTokens,
+  semantic: HightideSemanticColors,
+  coloring: HightideComponentThemes['coloring'],
 }
 
 export const createButtonTheme = ({
@@ -70,7 +73,7 @@ export const createButtonTheme = ({
 
 export const createButtonThemeFromDesign = (theme: DesignTokensTheme): ButtonTheme => {
   return createButtonTheme({
-    semantic: theme.semantic,
-    coloring: theme.coloring,
+    semantic: theme.semanticColors,
+    coloring: theme.coloring as HightideComponentThemes['coloring'],
   })
 }

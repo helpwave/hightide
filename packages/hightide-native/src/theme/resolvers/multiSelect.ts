@@ -1,11 +1,11 @@
 import { remToPx } from '@helpwave/hightide-design/helpers'
 import { fontWeights } from '@helpwave/hightide-design/tokens'
 import {
-  type ComponentColors,
-  type DesignTokens as DesignTokensTheme,
-  type SemanticColors
+  type ComponentColorTokens,
+  type HightideDesignTokens as DesignTokensTheme
 } from '@helpwave/hightide-design/types'
 import type {
+  HightideSemanticColors,
   MultiSelectOptionState,
   MultiSelectState,
   MultiSelectTheme
@@ -13,8 +13,8 @@ import type {
 import { createStyleResolver, createValueResolver } from '../types/resolver'
 
 export type CreateMultiSelectThemeOptions = {
-  semantic: SemanticColors,
-  component: ComponentColors,
+  semantic: HightideSemanticColors,
+  component: ComponentColorTokens,
 }
 
 export const createMultiSelectTheme = ({
@@ -91,7 +91,7 @@ export const createMultiSelectTheme = ({
 
 export const createMultiSelectThemeFromDesign = (theme: DesignTokensTheme): MultiSelectTheme => {
   return createMultiSelectTheme({
-    semantic: theme.semantic,
-    component: theme.component,
+    semantic: theme.semanticColors,
+    component: theme.componentColors,
   })
 }

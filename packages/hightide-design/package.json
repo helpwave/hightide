@@ -30,10 +30,10 @@
     }
   },
   "scripts": {
-    "clean": "pnpm run barrel -- --clean && rm -rf node_modules",
+    "clean": "pnpm run barrel && rm -rf node_modules",
     "init": "pnpm run barrel",
     "barrel": "node node_modules/@helpwave/hightide-utils/scripts/barrel.js",
-    "barrel:check": "node node_modules/@helpwave/hightide-utils/scripts/barrel.js --check",
+    "barrel:check": "pnpm run barrel --check",
     "build": "pnpm run barrel",
     "lint": "eslint .",
     "test": "pnpm run barrel:check"

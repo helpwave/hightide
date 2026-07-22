@@ -1,4 +1,7 @@
-import type { DesignTokens as DesignTokensTheme } from '@helpwave/hightide-design/types'
+import type {
+  ColorPaletteToken,
+  HightideDesignTokens
+} from '@helpwave/hightide-design/types'
 import {
   createButtonThemeFromDesign,
   createChatThemeFromDesign,
@@ -10,14 +13,36 @@ import {
   createMultiSelectThemeFromDesign,
   createSelectThemeFromDesign
 } from '../resolvers'
-import type { DesignTheme } from '../types'
+import type {
+  Color,
+  ColorPalette,
+  HightideColors,
+  Theme
+} from '../types'
 
-export const createDesignTheme = (tokens: DesignTokensTheme): DesignTheme => ({
-  palettes: tokens.palettes,
-  semantic: tokens.semantic,
-  coloring: tokens.coloring,
+const unwrapColorPaletteToken = (token: ColorPaletteToken): Color | ColorPalette => {
+  if (token.type === 'singleValue') {
+    return token.value
+  }
+  return token.value
+}
+
+const unwrapColors = (colors: HightideDesignTokens['colors']): HightideColors & Record<string, Color | ColorPalette> => {
+  const result: Record<string, Color | ColorPalette> = {}
+  for (const [key, token] of Object.entries(colors)) {
+    result[key] = unwrapColorPaletteToken(token)
+  }
+  return result as HightideColors & Record<string, Color | ColorPalette>
+}
+
+export const createTheme = (tokens: HightideDesignTokens): Theme => ({
+  colors: unwrapColors(tokens.colors),
+  semantic: tokens.semanticColors,
   typography: tokens.typography,
+  layout: tokens.layout,
+  decoration: tokens.decorcation,
   components: {
+    coloring: tokens.coloring,
     button: createButtonThemeFromDesign(tokens),
     iconButton: createIconButtonThemeFromDesign(tokens),
     chip: createChipThemeFromDesign(tokens),

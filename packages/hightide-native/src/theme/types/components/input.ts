@@ -1,4 +1,4 @@
-import type { ColorValue } from '@helpwave/hightide-design/types'
+import type { Color } from './color'
 import type { TextStyle } from 'react-native'
 import type { InteractionState, StyleResolverFunction } from './resolver'
 
@@ -11,5 +11,5 @@ export type InputStyle = TextStyle
 
 export type InputTheme = {
   input: StyleResolverFunction<InputState, InputStyle>,
-  placeholderColor: StyleResolverFunction<InputState, ColorValue>,
+  placeholderColor: StyleResolverFunction<InputState, Color>,
 }

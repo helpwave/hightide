@@ -1,5 +1,5 @@
-import type { ColorValue } from '@helpwave/hightide-design/types'
 import type { TextStyle, ViewStyle } from 'react-native'
+import type { Color } from './color'
 import type { InteractionState, StyleResolverFunction } from './resolver'
 
 export type MenuSectionStyle = ViewStyle
@@ -27,7 +27,7 @@ export type MenuActionItemContentStyle = ViewStyle
 export type MenuActionItemLabelStyle = TextStyle
 
 export type MenuActionItemIconColor = {
-  color: ColorValue,
+  color: Color,
 }
 
 export type MenuTheme = {

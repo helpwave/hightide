@@ -1,7 +1,7 @@
 import type { ColoringType } from '@helpwave/hightide-design/helpers'
-import type { ColorValue } from '@helpwave/hightide-design/types'
 import type { TextStyle, ViewStyle } from 'react-native'
-import type { InteractionState, StyleResolverFunction } from './resolver'
+import type { Color } from '../color'
+import type { InteractionState, StyleResolverFunction } from '../resolver'
 
 export type ChatMessageDirection = 'incoming' | 'outgoing'
 
@@ -36,7 +36,7 @@ export type ChatMessageBubbleReceiptStyle = ViewStyle
 export type ChatMessageBubbleReceiptTextStyle = TextStyle
 
 export type ChatMessageBubbleReceiptIconStyle = {
-  color: ColorValue,
+  color: Color,
 }
 
 export type ChatMessageCardState = {
@@ -49,7 +49,7 @@ export type ChatMessageCardHeaderStyle = ViewStyle
 export type ChatMessageCardIconStyle = ViewStyle
 
 export type ChatMessageCardIconColor = {
-  color: ColorValue,
+  color: Color,
 }
 
 export type ChatMessageCardTitleStyle = TextStyle
@@ -65,7 +65,7 @@ export type ChatAttachmentCardStyle = ViewStyle
 export type ChatAttachmentCardIconStyle = ViewStyle
 
 export type ChatAttachmentCardIconColor = {
-  color: ColorValue,
+  color: Color,
 }
 
 export type ChatAttachmentCardNameStyle = TextStyle
@@ -79,7 +79,7 @@ export type ChatSystemLineStyle = ViewStyle
 export type ChatSystemLineTextStyle = TextStyle
 
 export type ChatSystemLineIconStyle = {
-  color: ColorValue,
+  color: Color,
 }
 
 export type ChatDateDividerStyle = ViewStyle
@@ -138,5 +138,5 @@ export type ChatTheme = {
   quickReplyChipText: StyleResolverFunction<ChatQuickReplyChipState, ChatQuickReplyChipTextStyle>,
   messageComposer: StyleResolverFunction<Record<string, never>, ChatMessageComposerStyle>,
   messageComposerInput: StyleResolverFunction<Record<string, never>, ChatMessageComposerInputStyle>,
-  messageComposerPlaceholderColor: StyleResolverFunction<Record<string, never>, ColorValue>,
+  messageComposerPlaceholderColor: StyleResolverFunction<Record<string, never>, Color>,
 }

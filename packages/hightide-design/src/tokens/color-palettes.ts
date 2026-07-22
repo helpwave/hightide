@@ -1,4 +1,4 @@
-import type { ColorPaletteBasicToken, ColorPaletteDetailedToken, ColorPaletteSingleValueToken, ColorPaletteTokens } from '../types'
+import type { ColorPaletteBasicToken, ColorPaletteDetailedToken, ColorPaletteSingleValueToken, HightideColorPalleteTokens } from '../types'
 
 export const colorPalettes = {
   white: {
@@ -117,4 +117,4 @@ export const colorPalettes = {
       950: '#2e1317',
     }
   } as const satisfies ColorPaletteBasicToken,
-} as const satisfies ColorPaletteTokens
+} as const satisfies HightideColorPalleteTokens

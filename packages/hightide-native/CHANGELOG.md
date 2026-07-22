@@ -5,6 +5,24 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [0.0.3] - 2026-07-21
+
+### Added
+
+- Native-owned `DesignTheme` types (`Color`, `ColorPalette`, `TextStyle`) that no longer import theme shapes from `@helpwave/hightide-design`
+- Forced hightide shapes on `DesignTheme`: `HightideColors`, `HightideSemanticColors`, `HightideTypography`, `HightideLayout`, `HightideDecoration`, and `HightideComponentThemes`
+- `layout` and `decoration` fields on `DesignTheme`
+- Theme adapter unwraps design palette tokens (`singleValue` / `basic` / `detailed`) into flat `Color` / `ColorPalette` values
+
+### Changed
+
+- `DesignTheme` is no longer generic; `useTheme` returns a fixed `DesignTheme`
+- `ComponentThemes` is now a loose `Record<string, unknown>`; required resolvers live on `HightideComponentThemes`
+- Coloring definitions moved under `theme.components.coloring` (no longer top-level `theme.coloring`)
+- Top-level `palettes` renamed to `colors`
+- `createDesignTheme` consumes `HightideDesignTokens` and maps `semanticColors` / `componentColors` / `decorcation`
+- Imports switched to `@helpwave/hightide-design/types` and `@helpwave/hightide-design/tokens` subpaths
+
 ## [0.0.2] - 2026-07-21
 
 ### Added

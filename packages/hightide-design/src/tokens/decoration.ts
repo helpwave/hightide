@@ -1,4 +1,4 @@
-import type { DecorationTokens } from '../types/decoration'
+import type { HightideDecorationTokens } from '../types/hightide'
 
 export const decorationTokens = {
   borderRadius: {
@@ -8,4 +8,4 @@ export const decorationTokens = {
     lg: 1,
     xl: 2
   }
-} as const satisfies DecorationTokens
+} as const satisfies HightideDecorationTokens

@@ -1,6 +1,6 @@
 import { colorPalettes } from '../color-palettes'
 import { createColoringTokensDefinitions } from '../../helpers/style-resolvers/coloring'
-import type { DesignTokens, SemanticColorTokens } from '../../types'
+import type { HightideDesignTokens, HightideSemanticColorTokens } from '../../types'
 import type { ComponentColorTokens } from '@/src/types/component-colors'
 import { animationTokens } from '../animation'
 import { componentLayouts } from '../layout'
@@ -53,7 +53,7 @@ const semantic = {
   neutralTonalBackground: gray.value[400],
   faded: gray.value[650],
   highlight: blue.value[500],
-} as const satisfies SemanticColorTokens
+} as const satisfies HightideSemanticColorTokens
 
 const component = {
   carouselDot: {
@@ -159,4 +159,4 @@ export const darkTheme = {
   animation: animationTokens,
   layout: componentLayouts,
   decorcation: decorationTokens,
-} as const satisfies DesignTokens
+} as const satisfies HightideDesignTokens

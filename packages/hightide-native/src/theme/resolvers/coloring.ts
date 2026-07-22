@@ -3,17 +3,14 @@ import { componentLayouts } from '@helpwave/hightide-design/tokens'
 import {
   type ButtonColoringStyle,
   type ChipColoringStyle,
-  type ColorValue,
-  type ColoringDefinitionToken,
-  type ColoringStyle,
-  type SemanticColors
+  type ColoringStyle
 } from '@helpwave/hightide-design/types'
-import type { InteractionState } from '../types'
+import type { Color, ColoringDefinition, HightideSemanticColors, InteractionState } from '../types'
 
 export type ResolvedColoringStyles = {
-  backgroundColor: ColorValue | 'transparent',
-  color: ColorValue,
-  borderColor?: ColorValue,
+  backgroundColor: Color | 'transparent',
+  color: Color,
+  borderColor?: Color,
   borderWidth: number,
 }
 
@@ -22,9 +19,9 @@ const usesHover = (state: InteractionState): boolean => {
 }
 
 export const resolveColoringStyles = (
-  tokens: ColoringDefinitionToken,
+  tokens: ColoringDefinition,
   coloringStyle: ColoringStyle,
-  semantic: SemanticColors,
+  semantic: HightideSemanticColors,
   state: InteractionState = {}
 ): ResolvedColoringStyles => {
   const outlineWidth = toPx(componentLayouts.shared.coloringOutlineWidth)

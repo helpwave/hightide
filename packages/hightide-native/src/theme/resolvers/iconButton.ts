@@ -1,18 +1,19 @@
 import { toPx } from '@helpwave/hightide-design/helpers'
 import { componentLayouts } from '@helpwave/hightide-design/tokens'
-import {
-  type ColoringDefintionTokens,
-  type DesignTokens as DesignTokensTheme,
-  type SemanticColors
-} from '@helpwave/hightide-design/types'
+import { type HightideDesignTokens as DesignTokensTheme } from '@helpwave/hightide-design/types'
 import type { ViewStyle } from 'react-native'
-import type { IconButtonState, IconButtonTheme } from '../types'
+import type {
+  HightideComponentThemes,
+  HightideSemanticColors,
+  IconButtonState,
+  IconButtonTheme
+} from '../types'
 import { createStyleResolver, createValueResolver } from '../types/resolver'
 import { isOutlineColoringStyle, resolveColoringStyles } from './coloring'
 
 export type CreateIconButtonThemeOptions = {
-  semantic: SemanticColors,
-  coloring: ColoringDefintionTokens,
+  semantic: HightideSemanticColors,
+  coloring: HightideComponentThemes['coloring'],
 }
 
 export const createIconButtonTheme = ({
@@ -58,7 +59,7 @@ export const createIconButtonTheme = ({
 
 export const createIconButtonThemeFromDesign = (theme: DesignTokensTheme): IconButtonTheme => {
   return createIconButtonTheme({
-    semantic: theme.semantic,
-    coloring: theme.coloring,
+    semantic: theme.semanticColors,
+    coloring: theme.coloring as HightideComponentThemes['coloring'],
   })
 }

@@ -1,6 +1,7 @@
-import type { ColorValue, ElementSize } from '@helpwave/hightide-design/types'
+import type { ElementSize } from '@helpwave/hightide-design/types'
 import type { ViewStyle } from 'react-native'
-import type { InteractionState, StyleResolverFunction } from './resolver'
+import type { Color } from '../color'
+import type { InteractionState, StyleResolverFunction } from '../resolver'
 
 export type CheckboxSize = 'sm' | 'md' | 'lg'
 
@@ -16,7 +17,7 @@ export type CheckboxState = InteractionState & {
 export type CheckboxStyle = ViewStyle
 
 export type CheckboxIconStyle = {
-  color: ColorValue,
+  color: Color,
   size: Exclude<ElementSize, 'xs'>,
   visible: boolean,
 }

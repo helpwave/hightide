@@ -2,16 +2,15 @@ import { StyleSheet } from 'react-native'
 import { remToPx } from '@helpwave/hightide-design/helpers'
 import { fontWeights } from '@helpwave/hightide-design/tokens'
 import type {
-  ComponentColors,
-  DesignTokens as DesignTokensTheme,
-  SemanticColors
+  ComponentColorTokens,
+  HightideDesignTokens as DesignTokensTheme
 } from '@helpwave/hightide-design/types'
-import type { MenuActionItemState, MenuTheme } from '../types'
+import type { HightideSemanticColors, MenuActionItemState, MenuTheme } from '../types'
 import { createStyleResolver, createValueResolver } from '../types/resolver'
 
 export type CreateMenuThemeOptions = {
-  semantic: SemanticColors,
-  component: ComponentColors,
+  semantic: HightideSemanticColors,
+  component: ComponentColorTokens,
 }
 
 export const createMenuTheme = ({
@@ -107,7 +106,7 @@ export const createMenuTheme = ({
 
 export const createMenuThemeFromDesign = (theme: DesignTokensTheme): MenuTheme => {
   return createMenuTheme({
-    semantic: theme.semantic,
-    component: theme.component,
+    semantic: theme.semanticColors,
+    component: theme.componentColors,
   })
 }

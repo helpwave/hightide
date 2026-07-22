@@ -1,10 +1,15 @@
-import type { ColoringDefinitionToken, ColoringDefintionTokens, SemanticColorTokens } from '../../types'
+import type {
+  ColoringDefinitionToken,
+  ColoringDefintionTokens,
+  HightideColoringTokens,
+  HightideSemanticColorTokens
+} from '../../types'
 
 export const coloringTypes = ['primary', 'secondary', 'positive', 'warning', 'negative', 'neutral'] as const
 
 export type ColoringType = typeof coloringTypes[number]
 
-export const createColoringTokensDefinitions = (semantic: SemanticColorTokens): Record<ColoringType, ColoringDefinitionToken> => ({
+export const createColoringTokensDefinitions = (semantic: HightideSemanticColorTokens): HightideColoringTokens => ({
   primary: {
     color: semantic.primary,
     onColor: semantic.onPrimary,
