@@ -11,6 +11,13 @@ and adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
 - `useUnstableMapperWarning` hook to warn when a mapper identity changes within 1s (`hookName` required, optional `disabled`)
 - Subpath export `@helpwave/hightide-utils/hooks/useUnstableMapperWarning`
+- Generic theme config types: `ThemeMode`, `ThemeInformation<T>`, `SupportedThemesConfig<T>`, `ThemeConfigValue<T>`
+
+### Changed
+
+- `useCreateThemeConfig` now takes a `SupportedThemesConfig<T>` record (keyed by theme mode) instead of a `ThemeInformation[]` array
+- Context fields renamed: `preferredTheme` → `preferredThemeMode`, resolved mode exposed as `themeMode`, and `theme` is the resolved payload `T` from `supportedThemes[themeMode].theme`
+- Localization context typing aligned with the updated theme/locale utilities
 
 ## [0.0.1] - 2026-07-20
 

@@ -5,6 +5,24 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/)
 and adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [0.15.2] - 2026-07-22
+
+### Added
+
+- `SupportedThemesConfig` / `ThemeInformation` web types that allow optional `theme` payloads (translations-only theme modes for CSS `data-theme` styling)
+- Deep merge helper for `supportedThemes` records in `HightideConfigProvider`
+
+### Changed
+
+- `supportedThemes` is now a record keyed by theme mode (`light` / `dark` / …) with `nameTranslations`, replacing the previous array of `{ theme, nameTranslations }`
+- `ThemeProvider` maps translation-only configs into `useCreateThemeConfig` and sets `data-theme` from `themeMode`
+- `useTheme` returns `ThemeConfigValue<unknown>` with `preferredThemeMode` / `themeMode` (replacing `preferredTheme`)
+- `ThemeSelect` iterates `Object.entries(supportedThemes)` and uses `preferredThemeMode`
+
+### Removed
+
+- `ThemeIcon` component and its Storybook story (icons removed from `ThemeSelect` options)
+
 ## [0.15.1] - 2026-07-08
 
 ### Added

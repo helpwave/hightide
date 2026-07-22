@@ -5,6 +5,26 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [0.0.4] - 2026-07-22
+
+### Added
+
+- Storybook Theme demos under `stories/Theme/` for component extension, full theme extension via `constructTheme` + `createTheme`, and primary-color overrides
+- Shared `ThemeSelect` / `ThemeStoryFrame` helpers for theme stories
+- `Icon` under visualization-and-display components
+- `createTheme` factory consuming `HightideDesignTokens` from `@helpwave/hightide-design`
+
+### Changed
+
+- Renamed runtime theme type from `DesignTheme` to `Theme`; `useTheme` returns the new shape
+- Theme types reorganized under `theme/types/components/*` with `HightideComponentThemes`
+- Component resolvers and stories updated for design-token imports and the record-based `supportedThemes` / `preferredThemeMode` theme context API
+- `HightideProvider` / `ThemeProvider` align with `SupportedThemesConfig<Theme>` from hightide-utils
+
+### Removed
+
+- `src/icons/Icon.tsx` (replaced by `components/visualization-and-display/Icon.tsx`)
+
 ## [0.0.3] - 2026-07-21
 
 ### Added
