@@ -1,6 +1,10 @@
-import type { Meta, StoryObj } from '@storybook/react-native-web-vite'
-import { action } from 'storybook/actions'
+import type {
+  Meta,
+  StoryObj
+} from '@storybook/react-native-web-vite'
 import { Minus } from 'lucide-react-native'
+import { action } from 'storybook/actions'
+
 import { ButtonUtil } from '@/src/components/user-interaction/Button'
 import { IconButton } from '@/src/components/user-interaction/IconButton'
 

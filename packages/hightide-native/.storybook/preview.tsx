@@ -1,6 +1,7 @@
 import type { Preview } from '@storybook/react-native-web-vite'
-import { HightideProvider } from '../src/global-contexts/HightideProvider'
-import { themes } from '../src/theme'
+
+import { HightideProvider } from '@/src/global-contexts/HightideProvider'
+import { themes } from '@/src/theme/themes/nativeThemes'
 
 const lightBackground = themes.light.semantic.background
 const lightOnBackground = themes.light.semantic.onBackground

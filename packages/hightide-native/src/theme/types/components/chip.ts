@@ -1,7 +1,18 @@
+import type {
+  TextStyle,
+  ViewStyle
+} from 'react-native'
+
 import type { ColoringType } from '@helpwave/hightide-design/helpers'
-import type { ChipColoringStyle, ElementSize } from '@helpwave/hightide-design/types'
-import type { TextStyle, ViewStyle } from 'react-native'
-import type { InteractionState, StyleResolverFunction } from '../resolver'
+import type {
+  ChipColoringStyle,
+  ElementSize
+} from '@helpwave/hightide-design/types'
+
+import type {
+  InteractionState,
+  StyleResolverFunction
+} from '@/src/theme/types/resolver'
 
 export type ChipState = InteractionState & {
   size?: ElementSize,

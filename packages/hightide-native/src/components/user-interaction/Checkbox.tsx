@@ -1,16 +1,35 @@
-import { useControlledState, useEventCallbackStabilizer } from '@helpwave/hightide-utils/hooks'
-import { Check, Minus } from 'lucide-react-native'
-import { useCallback, useMemo } from 'react'
+import {
+  useCallback,
+  useMemo
+} from 'react'
 import {
   Pressable,
   type PressableProps,
   type StyleProp,
   type ViewStyle
 } from 'react-native'
-import { Icon } from '../../icons/Icon'
-import { useTheme } from '../../global-contexts/theme'
-import type { CheckboxSize, CheckboxState, CheckboxStyle, StyleOverwrite } from '../../theme'
-import type { FormFieldDataHandling, FormFieldInteractionStates } from '../../types/formField'
+import {
+  Check,
+  Minus
+} from 'lucide-react-native'
+
+import {
+  useControlledState,
+  useEventCallbackStabilizer
+} from '@helpwave/hightide-utils/hooks'
+
+import { Icon } from '@/src/components/visualization-and-display/Icon'
+import { useTheme } from '@/src/global-contexts/theme/ThemeContext'
+import type {
+  CheckboxSize,
+  CheckboxState,
+  CheckboxStyle
+} from '@/src/theme/types/components/checkbox'
+import type { StyleOverwrite } from '@/src/theme/types/resolver'
+import type {
+  FormFieldDataHandling,
+  FormFieldInteractionStates
+} from '@/src/types/formField'
 
 export type { CheckboxSize }
 

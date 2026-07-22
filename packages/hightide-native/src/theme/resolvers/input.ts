@@ -1,12 +1,20 @@
-import { remToPx } from '@helpwave/hightide-design/helpers'
-import { inputElementSizes } from '@helpwave/hightide-design/tokens'
-import {
-  type ComponentColorTokens,
-  type HightideDesignTokens as DesignTokensTheme
-} from '@helpwave/hightide-design/types'
 import type { TextStyle } from 'react-native'
-import type { HightideSemanticColors, InputState, InputTheme } from '../types'
-import { createStyleResolver, createValueResolver } from '../types/resolver'
+
+import { componentLayouts } from '@helpwave/hightide-design/tokens'
+import type {
+  ComponentColorTokens,
+  HightideDesignTokens as DesignTokensTheme
+} from '@helpwave/hightide-design/types'
+
+import type { HightideSemanticColors } from '@/src/theme/types/color'
+import type {
+  InputState,
+  InputTheme
+} from '@/src/theme/types/components/input'
+import {
+  createStyleResolver,
+  createValueResolver
+} from '@/src/theme/types/resolver'
 
 export type CreateInputThemeOptions = {
   semantic: HightideSemanticColors,
@@ -18,14 +26,14 @@ export const createInputTheme = ({
   component,
 }: CreateInputThemeOptions): InputTheme => {
   const resolveInput = (state: InputState): TextStyle => {
-    const sizing = inputElementSizes.md
+    const sizing = componentLayouts.input.md
     const borderColor = state.isInvalid ? semantic.negative : component.border
 
     return {
-      minHeight: remToPx(sizing.height),
-      paddingHorizontal: remToPx(sizing.paddingX),
-      paddingVertical: remToPx(sizing.paddingY),
-      borderRadius: remToPx(sizing.borderRadius),
+      minHeight: sizing.height,
+      paddingHorizontal: sizing.paddingX,
+      paddingVertical: sizing.paddingY,
+      borderRadius: sizing.borderRadius,
       borderWidth: 1,
       borderColor,
       backgroundColor: state.isDisabled ? semantic.disabled : component.input.background,

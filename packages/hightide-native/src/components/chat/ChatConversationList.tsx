@@ -1,4 +1,7 @@
-import { useMemo, type ReactNode } from 'react'
+import {
+  useMemo,
+  type ReactNode
+} from 'react'
 import {
   ScrollView,
   View,
@@ -6,13 +9,14 @@ import {
   type ViewProps,
   type ViewStyle
 } from 'react-native'
-import { useTheme } from '../../global-contexts/theme'
+
+import { useTheme } from '@/src/global-contexts/theme/ThemeContext'
 import type {
   ChatConversationListFooterStyle,
   ChatConversationListHeaderStyle,
-  ChatConversationListStyle,
-  StyleOverwrite
-} from '../../theme'
+  ChatConversationListStyle
+} from '@/src/theme/types/components/chat'
+import type { StyleOverwrite } from '@/src/theme/types/resolver'
 
 export type ChatConversationListProps = Omit<ViewProps, 'children' | 'style'> & {
   header?: ReactNode,
@@ -40,15 +44,15 @@ export const ChatConversationList = ({
   const state = useMemo(() => ({}), [])
 
   const resolvedListStyle = useMemo(
-    () => theme.components.chat.conversationList(state, listStyle),
+    () => theme.components.chat.conversationList.container(state, listStyle),
     [theme, state, listStyle]
   )
   const resolvedHeaderStyle = useMemo(
-    () => theme.components.chat.conversationListHeader(state, headerStyle),
+    () => theme.components.chat.conversationList.header(state, headerStyle),
     [theme, state, headerStyle]
   )
   const resolvedFooterStyle = useMemo(
-    () => theme.components.chat.conversationListFooter(state, footerStyle),
+    () => theme.components.chat.conversationList.footer(state, footerStyle),
     [theme, state, footerStyle]
   )
 

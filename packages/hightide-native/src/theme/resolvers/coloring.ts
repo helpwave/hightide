@@ -1,11 +1,20 @@
-import { hexWithAlpha, toPx } from '@helpwave/hightide-design/helpers'
-import { componentLayouts } from '@helpwave/hightide-design/tokens'
 import {
-  type ButtonColoringStyle,
-  type ChipColoringStyle,
-  type ColoringStyle
+  hexWithAlpha,
+  toPx
+} from '@helpwave/hightide-design/helpers'
+import { componentLayouts } from '@helpwave/hightide-design/tokens'
+import type {
+  ButtonColoringStyle,
+  ChipColoringStyle,
+  ColoringStyle
 } from '@helpwave/hightide-design/types'
-import type { Color, ColoringDefinition, HightideSemanticColors, InteractionState } from '../types'
+
+import type {
+  Color,
+  HightideSemanticColors
+} from '@/src/theme/types/color'
+import type { ColoringDefinition } from '@/src/theme/types/components/hightide'
+import type { InteractionState } from '@/src/theme/types/resolver'
 
 export type ResolvedColoringStyles = {
   backgroundColor: Color | 'transparent',

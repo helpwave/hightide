@@ -1,14 +1,25 @@
-import { useMemo, type ReactNode } from 'react'
-import { Text, View, type StyleProp, type ViewProps, type ViewStyle } from 'react-native'
+import {
+  useMemo,
+  type ReactNode
+} from 'react'
+import {
+  Text,
+  View,
+  type StyleProp,
+  type ViewProps,
+  type ViewStyle
+} from 'react-native'
 import { CheckCheck } from 'lucide-react-native'
+
 import type { ColoringType } from '@helpwave/hightide-design/helpers'
-import { useTheme } from '../../global-contexts/theme'
+
+import { useTheme } from '@/src/global-contexts/theme/ThemeContext'
 import type {
   ChatSystemLineState,
   ChatSystemLineStyle,
-  ChatSystemLineTextStyle,
-  StyleOverwrite
-} from '../../theme'
+  ChatSystemLineTextStyle
+} from '@/src/theme/types/components/chat'
+import type { StyleOverwrite } from '@/src/theme/types/resolver'
 
 export type ChatSystemLineProps = Omit<ViewProps, 'children' | 'style'> & {
   icon?: ReactNode,
@@ -32,15 +43,15 @@ export const ChatSystemLine = ({
   const state = useMemo(() => ({ color }), [color])
 
   const resolvedLineStyle = useMemo(
-    () => theme.components.chat.systemLine(state, lineStyle),
+    () => theme.components.chat.systemLine.container(state, lineStyle),
     [theme, state, lineStyle]
   )
   const resolvedTextStyle = useMemo(
-    () => theme.components.chat.systemLineText(state, textStyle),
+    () => theme.components.chat.systemLine.text(state, textStyle),
     [theme, state, textStyle]
   )
   const resolvedIcon = useMemo(
-    () => theme.components.chat.systemLineIcon(state),
+    () => theme.components.chat.systemLine.icon(state),
     [theme, state]
   )
 

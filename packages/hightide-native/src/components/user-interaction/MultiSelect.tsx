@@ -1,4 +1,3 @@
-import { Check } from 'lucide-react-native'
 import { useMemo } from 'react'
 import {
   FlatList,
@@ -10,12 +9,20 @@ import {
   type StyleProp,
   type ViewStyle
 } from 'react-native'
-import { Icon } from '../../icons/Icon'
-import { useMultiSelect, type UseMultiSelectOption } from '../../hooks/useMultiSelect'
-import { useTheme } from '../../global-contexts/theme'
-import type { MultiSelectState } from '../../theme'
-import type { FormFieldDataHandling, FormFieldInteractionStates } from '../../types/formField'
-import { Chip } from '../visualization-and-display'
+import { Check } from 'lucide-react-native'
+
+import { Chip } from '@/src/components/visualization-and-display/Chip'
+import { Icon } from '@/src/components/visualization-and-display/Icon'
+import { useTheme } from '@/src/global-contexts/theme/ThemeContext'
+import {
+  useMultiSelect,
+  type UseMultiSelectOption
+} from '@/src/hooks/useMultiSelect'
+import type { MultiSelectState } from '@/src/theme/types/components/multiSelect'
+import type {
+  FormFieldDataHandling,
+  FormFieldInteractionStates
+} from '@/src/types/formField'
 
 export type MultiSelectOption = UseMultiSelectOption
 

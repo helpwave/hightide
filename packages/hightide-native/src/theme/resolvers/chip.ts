@@ -1,15 +1,23 @@
+import type {
+  TextStyle,
+  ViewStyle
+} from 'react-native'
+
 import { toPx } from '@helpwave/hightide-design/helpers'
-import { componentLayouts, fontWeights } from '@helpwave/hightide-design/tokens'
-import { type HightideDesignTokens as DesignTokensTheme } from '@helpwave/hightide-design/types'
-import type { TextStyle, ViewStyle } from 'react-native'
+import {
+  componentLayouts,
+  fontWeights
+} from '@helpwave/hightide-design/tokens'
+import type { HightideDesignTokens as DesignTokensTheme } from '@helpwave/hightide-design/types'
+
+import { resolveColoringStyles } from '@/src/theme/resolvers/coloring'
+import type { HightideSemanticColors } from '@/src/theme/types/color'
 import type {
   ChipState,
-  ChipTheme,
-  HightideComponentThemes,
-  HightideSemanticColors
-} from '../types'
-import { createStyleResolver } from '../types/resolver'
-import { resolveColoringStyles } from './coloring'
+  ChipTheme
+} from '@/src/theme/types/components/chip'
+import type { HightideComponentThemes } from '@/src/theme/types/components/hightide'
+import { createStyleResolver } from '@/src/theme/types/resolver'
 
 export type CreateChipThemeOptions = {
   semantic: HightideSemanticColors,

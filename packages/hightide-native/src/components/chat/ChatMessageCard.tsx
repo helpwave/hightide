@@ -1,15 +1,26 @@
-import { useMemo, type ReactNode } from 'react'
-import { Text, View, type StyleProp, type ViewProps, type ViewStyle } from 'react-native'
+import {
+  useMemo,
+  type ReactNode
+} from 'react'
+import {
+  Text,
+  View,
+  type StyleProp,
+  type ViewProps,
+  type ViewStyle
+} from 'react-native'
+
 import type { ColoringType } from '@helpwave/hightide-design/helpers'
-import { useTheme } from '../../global-contexts/theme'
+
+import { useTheme } from '@/src/global-contexts/theme/ThemeContext'
 import type {
   ChatMessageCardState,
   ChatMessageCardStyle,
   ChatMessageCardSubtitleStyle,
   ChatMessageCardTitleStyle,
-  ChatMessageDirection,
-  StyleOverwrite
-} from '../../theme'
+  ChatMessageDirection
+} from '@/src/theme/types/components/chat'
+import type { StyleOverwrite } from '@/src/theme/types/resolver'
 
 export type ChatMessageCardProps = Omit<ViewProps, 'children' | 'style'> & {
   icon?: ReactNode,
@@ -46,31 +57,31 @@ export const ChatMessageCard = ({
   const staticState = useMemo(() => ({}), [])
 
   const resolvedCardStyle = useMemo(
-    () => theme.components.chat.messageCard(state, cardStyle),
+    () => theme.components.chat.messageCard.container(state, cardStyle),
     [theme, state, cardStyle]
   )
   const resolvedHeaderStyle = useMemo(
-    () => theme.components.chat.messageCardHeader(staticState),
+    () => theme.components.chat.messageCard.header(staticState),
     [theme, staticState]
   )
   const resolvedIconStyle = useMemo(
-    () => theme.components.chat.messageCardIcon(state),
+    () => theme.components.chat.messageCard.icon(state),
     [theme, state]
   )
   const resolvedTitleStyle = useMemo(
-    () => theme.components.chat.messageCardTitle(state, titleStyle),
+    () => theme.components.chat.messageCard.title(state, titleStyle),
     [theme, state, titleStyle]
   )
   const resolvedSubtitleStyle = useMemo(
-    () => theme.components.chat.messageCardSubtitle(staticState, subtitleStyle),
+    () => theme.components.chat.messageCard.subtitle(staticState, subtitleStyle),
     [theme, staticState, subtitleStyle]
   )
   const resolvedBodyStyle = useMemo(
-    () => theme.components.chat.messageCardBody(staticState),
+    () => theme.components.chat.messageCard.body(staticState),
     [theme, staticState]
   )
   const resolvedActionsStyle = useMemo(
-    () => theme.components.chat.messageCardActions(staticState),
+    () => theme.components.chat.messageCard.actions(staticState),
     [theme, staticState]
   )
 

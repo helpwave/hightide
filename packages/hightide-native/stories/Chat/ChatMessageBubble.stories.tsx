@@ -1,7 +1,13 @@
-import type { Meta, StoryObj } from '@storybook/react-native-web-vite'
 import { View } from 'react-native'
-import { ChatMessageBubble } from '@/src/components/chat/ChatMessageBubble'
-import type { ChatMessageDirection } from '@/src/components/chat/ChatMessageBubble'
+import type {
+  Meta,
+  StoryObj
+} from '@storybook/react-native-web-vite'
+
+import {
+  ChatMessageBubble,
+  type ChatMessageDirection
+} from '@/src/components/chat/ChatMessageBubble'
 
 const meta = {
   component: ChatMessageBubble,

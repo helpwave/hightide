@@ -1,14 +1,13 @@
-
-import type { Color } from './color'
-import type { ButtonTheme } from './components/button'
-import type { ChatTheme } from './components/chat'
-import type { CheckboxTheme } from './components/checkbox'
-import type { ChipTheme } from './components/chip'
-import type { IconButtonTheme } from './components/iconButton'
-import type { InputTheme } from './components/input'
-import type { MenuTheme } from './components/menu'
-import type { MultiSelectTheme } from './components/multiSelect'
-import type { SelectTheme } from './components/select'
+import type { Color } from '@/src/theme/types/color'
+import type { ButtonTheme } from '@/src/theme/types/components/button'
+import type { ChatTheme } from '@/src/theme/types/components/chat'
+import type { CheckboxTheme } from '@/src/theme/types/components/checkbox'
+import type { ChipTheme } from '@/src/theme/types/components/chip'
+import type { IconButtonTheme } from '@/src/theme/types/components/iconButton'
+import type { InputTheme } from '@/src/theme/types/components/input'
+import type { MenuTheme } from '@/src/theme/types/components/menu'
+import type { MultiSelectTheme } from '@/src/theme/types/components/multiSelect'
+import type { SelectTheme } from '@/src/theme/types/components/select'
 
 export type ColoringDefinition = {
   color: Color,

@@ -1,18 +1,28 @@
-import { toPx } from '@helpwave/hightide-design/helpers'
-import { componentLayouts, fontWeights } from '@helpwave/hightide-design/tokens'
+import type {
+  TextStyle,
+  ViewStyle
+} from 'react-native'
+
 import {
-  type HightideDesignTokens as DesignTokensTheme,
-  type ElementSize
+  componentLayouts,
+  fontWeights
+} from '@helpwave/hightide-design/tokens'
+import type {
+  HightideDesignTokens as DesignTokensTheme,
+  ElementSize
 } from '@helpwave/hightide-design/types'
-import type { ViewStyle, TextStyle } from 'react-native'
+
+import {
+  isOutlineColoringStyle,
+  resolveColoringStyles
+} from '@/src/theme/resolvers/coloring'
+import type { HightideSemanticColors } from '@/src/theme/types/color'
 import type {
   ButtonState,
-  ButtonTheme,
-  HightideComponentThemes,
-  HightideSemanticColors
-} from '../types'
-import { createStyleResolver } from '../types/resolver'
-import { isOutlineColoringStyle, resolveColoringStyles } from './coloring'
+  ButtonTheme
+} from '@/src/theme/types/components/button'
+import type { HightideComponentThemes } from '@/src/theme/types/components/hightide'
+import { createStyleResolver } from '@/src/theme/types/resolver'
 
 const buttonFontSizes: Record<ElementSize, number> = {
   xs: 12,
@@ -47,12 +57,12 @@ export const createButtonTheme = ({
       backgroundColor: resolved.backgroundColor,
       borderColor: resolved.borderColor,
       borderWidth: resolved.borderWidth,
-      paddingVertical: toPx(outlinePadding ? padding.paddingYOutline : padding.paddingY),
-      paddingHorizontal: toPx(outlinePadding ? padding.paddingXOutline : padding.paddingX),
-      gap: toPx(padding.gap),
-      minWidth: toPx(padding.minWidth),
-      minHeight: toPx(sizing.height),
-      borderRadius: toPx(padding.borderRadius),
+      paddingVertical: outlinePadding ? padding.paddingYOutline : padding.paddingY,
+      paddingHorizontal: outlinePadding ? padding.paddingXOutline : padding.paddingX,
+      gap: padding.gap,
+      minWidth: padding.minWidth,
+      minHeight: sizing.height,
+      borderRadius: padding.borderRadius,
       opacity: state.isDisabled ? 0.6 : 1,
     }
 

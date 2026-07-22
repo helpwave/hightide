@@ -1,16 +1,19 @@
-import { remToPx } from '@helpwave/hightide-design/helpers'
 import { fontWeights } from '@helpwave/hightide-design/tokens'
-import {
-  type ComponentColorTokens,
-  type HightideDesignTokens as DesignTokensTheme
-} from '@helpwave/hightide-design/types'
 import type {
-  HightideSemanticColors,
+  ComponentColorTokens,
+  HightideDesignTokens as DesignTokensTheme
+} from '@helpwave/hightide-design/types'
+
+import type { HightideSemanticColors } from '@/src/theme/types/color'
+import type {
   SelectOptionState,
   SelectState,
   SelectTheme
-} from '../types'
-import { createStyleResolver, createValueResolver } from '../types/resolver'
+} from '@/src/theme/types/components/select'
+import {
+  createStyleResolver,
+  createValueResolver
+} from '@/src/theme/types/resolver'
 
 export type CreateSelectThemeOptions = {
   semantic: HightideSemanticColors,
@@ -24,9 +27,9 @@ export const createSelectTheme = ({
   return {
     trigger: createStyleResolver((state: SelectState) => ({
       minHeight: 44,
-      paddingHorizontal: remToPx('0.75rem'),
-      paddingVertical: remToPx('0.5rem'),
-      borderRadius: remToPx('0.375rem'),
+      paddingHorizontal: 12,
+      paddingVertical: 8,
+      borderRadius: 6,
       borderWidth: 1,
       borderColor: state.isInvalid ? semantic.negative : component.border,
       backgroundColor: state.isDisabled ? semantic.disabled : component.input.background,

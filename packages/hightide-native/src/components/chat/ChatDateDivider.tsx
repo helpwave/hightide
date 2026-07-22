@@ -1,11 +1,21 @@
-import { useMemo, type ReactNode } from 'react'
-import { Text, View, type StyleProp, type ViewProps, type ViewStyle } from 'react-native'
-import { useTheme } from '../../global-contexts/theme'
+import {
+  useMemo,
+  type ReactNode
+} from 'react'
+import {
+  Text,
+  View,
+  type StyleProp,
+  type ViewProps,
+  type ViewStyle
+} from 'react-native'
+
+import { useTheme } from '@/src/global-contexts/theme/ThemeContext'
 import type {
   ChatDateDividerStyle,
-  ChatDateDividerTextStyle,
-  StyleOverwrite
-} from '../../theme'
+  ChatDateDividerTextStyle
+} from '@/src/theme/types/components/chat'
+import type { StyleOverwrite } from '@/src/theme/types/resolver'
 
 export type ChatDateDividerProps = Omit<ViewProps, 'children' | 'style'> & {
   children?: ReactNode,
@@ -25,11 +35,11 @@ export const ChatDateDivider = ({
   const state = useMemo(() => ({}), [])
 
   const resolvedDividerStyle = useMemo(
-    () => theme.components.chat.dateDivider(state, dividerStyle),
+    () => theme.components.chat.dateDivider.container(state, dividerStyle),
     [theme, state, dividerStyle]
   )
   const resolvedTextStyle = useMemo(
-    () => theme.components.chat.dateDividerText(state, textStyle),
+    () => theme.components.chat.dateDivider.text(state, textStyle),
     [theme, state, textStyle]
   )
 

@@ -1,6 +1,9 @@
-import type { TextStyle, ViewStyle } from 'react-native'
-import type { Color } from './color'
-import type { StyleResolverFunction } from './resolver'
+import type {
+  TextStyle,
+  ViewStyle
+} from 'react-native'
+
+import type { Color } from '@/src/theme/types/color'
 import type {
   SelectMenuStyle,
   SelectOptionState,
@@ -8,7 +11,8 @@ import type {
   SelectSearchStyle,
   SelectState,
   SelectTriggerTextStyle
-} from './select'
+} from '@/src/theme/types/components/select'
+import type { StyleResolverFunction } from '@/src/theme/types/resolver'
 
 export type MultiSelectState = SelectState & {
   hasSelections?: boolean,

@@ -1,7 +1,15 @@
+import type {
+  TextStyle,
+  ViewStyle
+} from 'react-native'
+
 import type { ColoringType } from '@helpwave/hightide-design/helpers'
-import type { TextStyle, ViewStyle } from 'react-native'
-import type { Color } from '../color'
-import type { InteractionState, StyleResolverFunction } from '../resolver'
+
+import type { Color } from '@/src/theme/types/color'
+import type {
+  InteractionState,
+  StyleResolverFunction
+} from '@/src/theme/types/resolver'
 
 export type ChatMessageDirection = 'incoming' | 'outgoing'
 
@@ -16,12 +24,15 @@ export type ChatConversationRowTimestampStyle = TextStyle
 export type ChatConversationRowPreviewStyle = TextStyle
 export type ChatConversationRowUnreadBadgeStyle = ViewStyle
 export type ChatConversationRowUnreadBadgeTextStyle = TextStyle
+
 export type ChatConversationListStyle = ViewStyle
 export type ChatConversationListHeaderStyle = ViewStyle
 export type ChatConversationListFooterStyle = ViewStyle
+
 export type ChatThreadHeaderStyle = ViewStyle
 export type ChatThreadHeaderTitleStyle = TextStyle
 export type ChatThreadHeaderSubtitleStyle = TextStyle
+
 export type ChatMessageListStyle = ViewStyle
 
 export type ChatMessageBubbleState = {
@@ -91,52 +102,97 @@ export type ChatQuickReplyChipState = InteractionState & {
 
 export type ChatQuickReplyChipStyle = ViewStyle
 export type ChatQuickReplyChipTextStyle = TextStyle
+
 export type ChatMessageComposerStyle = ViewStyle
 export type ChatMessageComposerInputStyle = TextStyle
 
+export type ChatConversationRowTheme = {
+  container: StyleResolverFunction<ChatConversationRowState, ChatConversationRowStyle>,
+  title: StyleResolverFunction<ChatConversationRowState, ChatConversationRowTitleStyle>,
+  timestamp: StyleResolverFunction<ChatConversationRowState, ChatConversationRowTimestampStyle>,
+  preview: StyleResolverFunction<ChatConversationRowState, ChatConversationRowPreviewStyle>,
+  unreadBadge: StyleResolverFunction<Record<string, never>, ChatConversationRowUnreadBadgeStyle>,
+  unreadBadgeText: StyleResolverFunction<Record<string, never>, ChatConversationRowUnreadBadgeTextStyle>,
+  sentIndicator: StyleResolverFunction<Record<string, never>, ChatMessageBubbleReceiptIconStyle>,
+}
+
+export type ChatConversationListTheme = {
+  container: StyleResolverFunction<Record<string, never>, ChatConversationListStyle>,
+  header: StyleResolverFunction<Record<string, never>, ChatConversationListHeaderStyle>,
+  footer: StyleResolverFunction<Record<string, never>, ChatConversationListFooterStyle>,
+}
+
+export type ChatThreadHeaderTheme = {
+  container: StyleResolverFunction<Record<string, never>, ChatThreadHeaderStyle>,
+  title: StyleResolverFunction<Record<string, never>, ChatThreadHeaderTitleStyle>,
+  subtitle: StyleResolverFunction<Record<string, never>, ChatThreadHeaderSubtitleStyle>,
+}
+
+export type ChatMessageListTheme = {
+  container: StyleResolverFunction<Record<string, never>, ChatMessageListStyle>,
+}
+
+export type ChatMessageBubbleTheme = {
+  container: StyleResolverFunction<ChatMessageBubbleState, ChatMessageBubbleContainerStyle>,
+  bubble: StyleResolverFunction<ChatMessageBubbleState, ChatMessageBubbleStyle>,
+  content: StyleResolverFunction<ChatMessageBubbleState, ChatMessageBubbleContentStyle>,
+  timestamp: StyleResolverFunction<ChatMessageBubbleState, ChatMessageBubbleTimestampStyle>,
+  receipt: StyleResolverFunction<Record<string, never>, ChatMessageBubbleReceiptStyle>,
+  receiptText: StyleResolverFunction<Record<string, never>, ChatMessageBubbleReceiptTextStyle>,
+  receiptIcon: StyleResolverFunction<Record<string, never>, ChatMessageBubbleReceiptIconStyle>,
+}
+
+export type ChatMessageCardTheme = {
+  container: StyleResolverFunction<ChatMessageCardState, ChatMessageCardStyle>,
+  header: StyleResolverFunction<Record<string, never>, ChatMessageCardHeaderStyle>,
+  icon: StyleResolverFunction<ChatMessageCardState, ChatMessageCardIconStyle>,
+  iconColor: StyleResolverFunction<ChatMessageCardState, ChatMessageCardIconColor>,
+  title: StyleResolverFunction<ChatMessageCardState, ChatMessageCardTitleStyle>,
+  subtitle: StyleResolverFunction<Record<string, never>, ChatMessageCardSubtitleStyle>,
+  body: StyleResolverFunction<Record<string, never>, ChatMessageCardBodyStyle>,
+  actions: StyleResolverFunction<Record<string, never>, ChatMessageCardActionsStyle>,
+}
+
+export type ChatAttachmentCardTheme = {
+  container: StyleResolverFunction<ChatAttachmentCardState, ChatAttachmentCardStyle>,
+  icon: StyleResolverFunction<Record<string, never>, ChatAttachmentCardIconStyle>,
+  iconColor: StyleResolverFunction<Record<string, never>, ChatAttachmentCardIconColor>,
+  name: StyleResolverFunction<Record<string, never>, ChatAttachmentCardNameStyle>,
+  metadata: StyleResolverFunction<Record<string, never>, ChatAttachmentCardMetadataStyle>,
+}
+
+export type ChatSystemLineTheme = {
+  container: StyleResolverFunction<ChatSystemLineState, ChatSystemLineStyle>,
+  text: StyleResolverFunction<ChatSystemLineState, ChatSystemLineTextStyle>,
+  icon: StyleResolverFunction<ChatSystemLineState, ChatSystemLineIconStyle>,
+}
+
+export type ChatDateDividerTheme = {
+  container: StyleResolverFunction<Record<string, never>, ChatDateDividerStyle>,
+  text: StyleResolverFunction<Record<string, never>, ChatDateDividerTextStyle>,
+}
+
+export type ChatQuickReplyChipTheme = {
+  container: StyleResolverFunction<ChatQuickReplyChipState, ChatQuickReplyChipStyle>,
+  text: StyleResolverFunction<ChatQuickReplyChipState, ChatQuickReplyChipTextStyle>,
+}
+
+export type ChatMessageComposerTheme = {
+  container: StyleResolverFunction<Record<string, never>, ChatMessageComposerStyle>,
+  input: StyleResolverFunction<Record<string, never>, ChatMessageComposerInputStyle>,
+  placeholderColor: StyleResolverFunction<Record<string, never>, Color>,
+}
+
 export type ChatTheme = {
-  conversationRow: StyleResolverFunction<ChatConversationRowState, ChatConversationRowStyle>,
-  conversationRowTitle: StyleResolverFunction<ChatConversationRowState, ChatConversationRowTitleStyle>,
-  conversationRowTimestamp: StyleResolverFunction<ChatConversationRowState, ChatConversationRowTimestampStyle>,
-  conversationRowPreview: StyleResolverFunction<ChatConversationRowState, ChatConversationRowPreviewStyle>,
-  conversationRowUnreadBadge: StyleResolverFunction<Record<string, never>, ChatConversationRowUnreadBadgeStyle>,
-  conversationRowUnreadBadgeText: StyleResolverFunction<Record<string, never>, ChatConversationRowUnreadBadgeTextStyle>,
-  conversationRowSentIndicator: StyleResolverFunction<Record<string, never>, ChatMessageBubbleReceiptIconStyle>,
-  conversationList: StyleResolverFunction<Record<string, never>, ChatConversationListStyle>,
-  conversationListHeader: StyleResolverFunction<Record<string, never>, ChatConversationListHeaderStyle>,
-  conversationListFooter: StyleResolverFunction<Record<string, never>, ChatConversationListFooterStyle>,
-  threadHeader: StyleResolverFunction<Record<string, never>, ChatThreadHeaderStyle>,
-  threadHeaderTitle: StyleResolverFunction<Record<string, never>, ChatThreadHeaderTitleStyle>,
-  threadHeaderSubtitle: StyleResolverFunction<Record<string, never>, ChatThreadHeaderSubtitleStyle>,
-  messageList: StyleResolverFunction<Record<string, never>, ChatMessageListStyle>,
-  messageBubbleContainer: StyleResolverFunction<ChatMessageBubbleState, ChatMessageBubbleContainerStyle>,
-  messageBubble: StyleResolverFunction<ChatMessageBubbleState, ChatMessageBubbleStyle>,
-  messageBubbleContent: StyleResolverFunction<ChatMessageBubbleState, ChatMessageBubbleContentStyle>,
-  messageBubbleTimestamp: StyleResolverFunction<ChatMessageBubbleState, ChatMessageBubbleTimestampStyle>,
-  messageBubbleReceipt: StyleResolverFunction<Record<string, never>, ChatMessageBubbleReceiptStyle>,
-  messageBubbleReceiptText: StyleResolverFunction<Record<string, never>, ChatMessageBubbleReceiptTextStyle>,
-  messageBubbleReceiptIcon: StyleResolverFunction<Record<string, never>, ChatMessageBubbleReceiptIconStyle>,
-  messageCard: StyleResolverFunction<ChatMessageCardState, ChatMessageCardStyle>,
-  messageCardHeader: StyleResolverFunction<Record<string, never>, ChatMessageCardHeaderStyle>,
-  messageCardIcon: StyleResolverFunction<ChatMessageCardState, ChatMessageCardIconStyle>,
-  messageCardIconColor: StyleResolverFunction<ChatMessageCardState, ChatMessageCardIconColor>,
-  messageCardTitle: StyleResolverFunction<ChatMessageCardState, ChatMessageCardTitleStyle>,
-  messageCardSubtitle: StyleResolverFunction<Record<string, never>, ChatMessageCardSubtitleStyle>,
-  messageCardBody: StyleResolverFunction<Record<string, never>, ChatMessageCardBodyStyle>,
-  messageCardActions: StyleResolverFunction<Record<string, never>, ChatMessageCardActionsStyle>,
-  attachmentCard: StyleResolverFunction<ChatAttachmentCardState, ChatAttachmentCardStyle>,
-  attachmentCardIcon: StyleResolverFunction<Record<string, never>, ChatAttachmentCardIconStyle>,
-  attachmentCardIconColor: StyleResolverFunction<Record<string, never>, ChatAttachmentCardIconColor>,
-  attachmentCardName: StyleResolverFunction<Record<string, never>, ChatAttachmentCardNameStyle>,
-  attachmentCardMetadata: StyleResolverFunction<Record<string, never>, ChatAttachmentCardMetadataStyle>,
-  systemLine: StyleResolverFunction<ChatSystemLineState, ChatSystemLineStyle>,
-  systemLineText: StyleResolverFunction<ChatSystemLineState, ChatSystemLineTextStyle>,
-  systemLineIcon: StyleResolverFunction<ChatSystemLineState, ChatSystemLineIconStyle>,
-  dateDivider: StyleResolverFunction<Record<string, never>, ChatDateDividerStyle>,
-  dateDividerText: StyleResolverFunction<Record<string, never>, ChatDateDividerTextStyle>,
-  quickReplyChip: StyleResolverFunction<ChatQuickReplyChipState, ChatQuickReplyChipStyle>,
-  quickReplyChipText: StyleResolverFunction<ChatQuickReplyChipState, ChatQuickReplyChipTextStyle>,
-  messageComposer: StyleResolverFunction<Record<string, never>, ChatMessageComposerStyle>,
-  messageComposerInput: StyleResolverFunction<Record<string, never>, ChatMessageComposerInputStyle>,
-  messageComposerPlaceholderColor: StyleResolverFunction<Record<string, never>, Color>,
+  conversationRow: ChatConversationRowTheme,
+  conversationList: ChatConversationListTheme,
+  threadHeader: ChatThreadHeaderTheme,
+  messageList: ChatMessageListTheme,
+  messageBubble: ChatMessageBubbleTheme,
+  messageCard: ChatMessageCardTheme,
+  attachmentCard: ChatAttachmentCardTheme,
+  systemLine: ChatSystemLineTheme,
+  dateDivider: ChatDateDividerTheme,
+  quickReplyChip: ChatQuickReplyChipTheme,
+  messageComposer: ChatMessageComposerTheme,
 }

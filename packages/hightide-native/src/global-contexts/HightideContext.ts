@@ -1,4 +1,7 @@
-import { createContext, useContext } from 'react'
+import {
+  createContext,
+  useContext
+} from 'react'
 
 export type HightideContextValue = {
   isLocalizationInitialized: boolean,

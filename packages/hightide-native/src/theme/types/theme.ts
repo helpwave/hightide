@@ -1,8 +1,11 @@
-import type { HightideColors, HightideSemanticColors } from './color'
-import type { HightideComponentThemes } from './components'
-import type { HightideDecoration } from './decoration'
-import type { HightideLayout } from './layout'
-import type { HightideTypography } from './typography'
+import type {
+  HightideColors,
+  HightideSemanticColors
+} from '@/src/theme/types/color'
+import type { HightideComponentThemes } from '@/src/theme/types/components/hightide'
+import type { HightideDecoration } from '@/src/theme/types/decoration'
+import type { HightideLayout } from '@/src/theme/types/layout'
+import type { HightideTypography } from '@/src/theme/types/typography'
 
 export type Theme = {
   colors: Record<string, unknown> & HightideColors,

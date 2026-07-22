@@ -1,5 +1,6 @@
 import { Themes as designThemes } from '@helpwave/hightide-design/tokens'
-import { createTheme } from './createTheme'
+
+import { createTheme } from '@/src/theme/themes/createTheme'
 
 export const lightTheme = createTheme(designThemes.light)
 
@@ -10,6 +11,6 @@ export const themes = {
   dark: darkTheme,
 } as const
 
-export type ThemeMode = keyof typeof themes
+export type HightideThemeModes = 'dark' | 'light'
 
-export const getTheme = (mode: ThemeMode) => themes[mode]
+export type ThemeMode = string | HightideThemeModes

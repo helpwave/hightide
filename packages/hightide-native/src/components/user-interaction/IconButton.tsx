@@ -1,11 +1,28 @@
-import { type ColoringType } from '@helpwave/hightide-design/helpers'
-import { type ButtonColoringStyle, type ElementSize } from '@helpwave/hightide-design/types'
+import {
+  forwardRef,
+  type ReactNode
+} from 'react'
+import {
+  Pressable,
+  type PressableProps,
+  type StyleProp,
+  type ViewStyle
+} from 'react-native'
 import type { LucideIcon } from 'lucide-react-native'
-import { forwardRef, type ReactNode } from 'react'
-import { Pressable, type PressableProps, type StyleProp, type ViewStyle } from 'react-native'
-import { Icon } from '../../icons/Icon'
-import { useTheme } from '../../global-contexts/theme'
-import type { IconButtonState, IconButtonStyle, StyleOverwrite } from '../../theme'
+
+import type { ColoringType } from '@helpwave/hightide-design/helpers'
+import type {
+  ButtonColoringStyle,
+  ElementSize
+} from '@helpwave/hightide-design/types'
+
+import { Icon } from '@/src/components/visualization-and-display/Icon'
+import { useTheme } from '@/src/global-contexts/theme/ThemeContext'
+import type {
+  IconButtonState,
+  IconButtonStyle
+} from '@/src/theme/types/components/iconButton'
+import type { StyleOverwrite } from '@/src/theme/types/resolver'
 
 export type IconButtonSize = ElementSize
 
