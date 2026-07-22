@@ -3,7 +3,6 @@ import type {
   ViewStyle
 } from 'react-native'
 
-import { toPx } from '@helpwave/hightide-design/helpers'
 import {
   componentLayouts,
   fontWeights
@@ -44,17 +43,17 @@ export const createChipTheme = ({
       backgroundColor: resolved.backgroundColor,
       borderColor: resolved.borderColor,
       borderWidth: resolved.borderWidth,
-      paddingVertical: toPx(layout.paddingVertical),
-      paddingHorizontal: toPx(layout.paddingHorizontal),
-      gap: toPx(layout.gap),
-      minHeight: toPx(layout.minHeight),
-      borderRadius: toPx(layout.borderRadius),
+      paddingVertical: layout.paddingVertical,
+      paddingHorizontal: layout.paddingHorizontal,
+      gap: layout.gap,
+      minHeight: layout.minHeight,
+      borderRadius: layout.borderRadius,
       opacity: state.isDisabled ? 0.6 : 1,
     }
 
     const text: TextStyle = {
       color: resolved.color,
-      fontSize: toPx(layout.fontSize),
+      fontSize: layout.fontSize,
       fontWeight: fontWeights.semibold,
     }
 

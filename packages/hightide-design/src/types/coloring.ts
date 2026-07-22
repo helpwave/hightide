@@ -1,10 +1,11 @@
 import type { ColorToken } from './color'
 
-export type ColoringStyle = 'outline' | 'solid' | 'text' | 'tonal' | 'tonal-outline'
+export type ColoringStyleBase = 'outline' | 'solid' | 'tonal' | 'tonal-outline'
+export type ColoringStyle = ColoringStyleBase | 'text'
 
 export type ButtonColoringStyle = ColoringStyle
 
-export type ChipColoringStyle = Omit<ColoringStyle, 'text'>
+export type ChipColoringStyle = ColoringStyleBase
 
 export type ColoringDefinitionToken = {
   color: ColorToken,

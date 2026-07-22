@@ -1,6 +1,5 @@
 import type { ViewStyle } from 'react-native'
 
-import { toPx } from '@helpwave/hightide-design/helpers'
 import { componentLayouts } from '@helpwave/hightide-design/tokens'
 import type { HightideDesignTokens as DesignTokensTheme } from '@helpwave/hightide-design/types'
 
@@ -35,8 +34,8 @@ export const createIconButtonTheme = ({
     const tokens = coloring[color]
     const resolved = resolveColoringStyles(tokens, coloringStyle, semantic, state)
     const sizing = componentLayouts.element[size]
-    const outlineWidth = toPx(componentLayouts.shared.coloringOutlineWidth)
-    const dimension = toPx(sizing.height)
+    const outlineWidth = componentLayouts.shared.coloringOutlineWidth
+    const dimension = sizing.height
     const borderWidth = resolved.borderWidth > 0
       ? resolved.borderWidth
       : (isOutlineColoringStyle(coloringStyle) ? outlineWidth : 0)
@@ -49,7 +48,7 @@ export const createIconButtonTheme = ({
       borderWidth,
       width: dimension,
       height: dimension,
-      borderRadius: toPx(componentLayouts.button[size].borderRadius),
+      borderRadius: componentLayouts.button[size].borderRadius,
       opacity: state.isDisabled ? 0.6 : 1,
     }
 

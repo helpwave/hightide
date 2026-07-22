@@ -1,6 +1,5 @@
 import {
-  hexWithAlpha,
-  toPx
+  hexWithAlpha
 } from '@helpwave/hightide-design/helpers'
 import { componentLayouts } from '@helpwave/hightide-design/tokens'
 import type {
@@ -33,7 +32,7 @@ export const resolveColoringStyles = (
   semantic: HightideSemanticColors,
   state: InteractionState = {}
 ): ResolvedColoringStyles => {
-  const outlineWidth = toPx(componentLayouts.shared.coloringOutlineWidth)
+  const outlineWidth = componentLayouts.shared.coloringOutlineWidth
   const hovered = usesHover(state)
 
   if (state.isDisabled) {
