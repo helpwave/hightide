@@ -1,6 +1,6 @@
 import type { Meta, StoryObj } from '@storybook/nextjs-vite'
 import { action } from 'storybook/actions'
-import { ChatAttachmentCard } from '@/src/components/chat/ChatAttachmentCard'
+import { ChatAttachmentCard } from '../../src/components/chat/ChatAttachmentCard'
 
 const meta: Meta<typeof ChatAttachmentCard> = {
   component: ChatAttachmentCard,

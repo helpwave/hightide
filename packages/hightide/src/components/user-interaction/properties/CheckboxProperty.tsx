@@ -1,7 +1,7 @@
 import { Check } from 'lucide-react'
 import { PropertyBase, type PropertyField } from './PropertyBase'
 import { useHightideTranslation } from '@helpwave/hightide-utils/context/translation'
-import { Button } from '@/src/components/user-interaction/Button'
+import { Button } from '../Button'
 
 
 export type CheckboxPropertyProps = PropertyField<boolean>

@@ -10,16 +10,16 @@ import {
   type ViewStyle
 } from 'react-native'
 
-import { useTheme } from '@/src/global-contexts/theme/ThemeContext'
+import { useTheme } from '../../global-contexts/theme/ThemeContext'
 import {
   useSelect,
   type UseSelectOption
-} from '@/src/hooks/useSelect'
-import type { SelectState } from '@/src/theme/types/components/select'
+} from '../../hooks/useSelect'
+import type { SelectState } from '../../theme/types/components/select'
 import type {
   FormFieldDataHandling,
   FormFieldInteractionStates
-} from '@/src/types/formField'
+} from '../../types/formField'
 
 export type SelectOption<T extends string = string> = UseSelectOption & {
   value?: T,

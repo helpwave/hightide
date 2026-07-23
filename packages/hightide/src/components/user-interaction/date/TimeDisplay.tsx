@@ -1,5 +1,8 @@
 import { useHightideTranslation } from '@helpwave/hightide-utils/context/translation'
-import { useDateTimeFormat, useLocalization } from '@/src/global-contexts/localization'
+import {
+  useDateTimeFormat,
+  useLocalization
+} from '../../../global-contexts/localization/forward-exports'
 import { DateUtils } from '@helpwave/hightide-utils/utils'
 
 type TimeDisplayMode = 'daysFromToday' | 'date' | 'time'

@@ -1,8 +1,8 @@
 import type { ElementType, HTMLAttributeAnchorTarget, ReactNode } from 'react'
 import { useId, useRef } from 'react'
 import { ExternalLink } from 'lucide-react'
-import { ExpansionIcon } from '@/src/components/display-and-visualization/ExpansionIcon'
-import { IconButton } from '@/src/components/user-interaction/IconButton'
+import { ExpansionIcon } from '../../../display-and-visualization/ExpansionIcon'
+import { IconButton } from '../../../user-interaction/IconButton'
 import { useNavigationItem } from './NavigationContext'
 import type { NavigationItemData } from './types'
 

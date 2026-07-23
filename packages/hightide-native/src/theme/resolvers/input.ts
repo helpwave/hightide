@@ -6,15 +6,15 @@ import type {
   HightideDesignTokens as DesignTokensTheme
 } from '@helpwave/hightide-design/types'
 
-import type { HightideSemanticColors } from '@/src/theme/types/color'
+import type { HightideSemanticColors } from '../types/color'
 import type {
   InputState,
   InputTheme
-} from '@/src/theme/types/components/input'
+} from '../types/components/input'
 import {
   createStyleResolver,
   createValueResolver
-} from '@/src/theme/types/resolver'
+} from '../types/resolver'
 
 export type CreateInputThemeOptions = {
   semantic: HightideSemanticColors,

@@ -2,7 +2,7 @@ import { createContext, type PropsWithChildren, useContext, useState } from 'rea
 import type { DeepPartial } from '@helpwave/hightide-utils/utils'
 
 import type { SupportedLocalesConfig } from '../localization/forward-exports'
-import { type SupportedThemesConfig } from '../theme'
+import { type SupportedThemesConfig } from '../theme/ThemeProvider'
 import { HightideConfigUtils } from './HightideConfigUtils'
 
 export type TooltipConfig = {

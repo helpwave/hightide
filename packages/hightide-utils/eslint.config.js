@@ -13,6 +13,17 @@ export default [
           forbid: ['**/index', '**/index.ts', '**/index.tsx'],
         },
       ],
+      'no-restricted-imports': [
+        'error',
+        {
+          patterns: [
+            {
+              group: ['@/*', '@/'],
+              message: 'Use relative imports within the package instead of the @/ alias.',
+            },
+          ],
+        },
+      ],
     },
   },
   {

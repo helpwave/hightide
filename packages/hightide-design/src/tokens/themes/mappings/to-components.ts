@@ -1,5 +1,8 @@
 import type { ComponentColorTokens } from '../../../types/component-colors'
-import type { HightideColorPalleteTokens, HightideSemanticColorTokens } from '../../../types'
+import type {
+  HightideColorPalleteTokens,
+  HightideSemanticColorTokens
+} from '../../../types/hightide'
 
 export type ToComponentsArgs<PrimitiveTokens, SemanticTokens> = {
   themeName: string,

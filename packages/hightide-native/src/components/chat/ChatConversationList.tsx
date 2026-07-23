@@ -10,13 +10,13 @@ import {
   type ViewStyle
 } from 'react-native'
 
-import { useTheme } from '@/src/global-contexts/theme/ThemeContext'
+import { useTheme } from '../../global-contexts/theme/ThemeContext'
 import type {
   ChatConversationListFooterStyle,
   ChatConversationListHeaderStyle,
   ChatConversationListStyle
-} from '@/src/theme/types/components/chat'
-import type { StyleOverwrite } from '@/src/theme/types/resolver'
+} from '../../theme/types/components/chat'
+import type { StyleOverwrite } from '../../theme/types/resolver'
 
 export type ChatConversationListProps = Omit<ViewProps, 'children' | 'style'> & {
   header?: ReactNode,

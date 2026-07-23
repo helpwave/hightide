@@ -1,6 +1,6 @@
 import type { ButtonHTMLAttributes } from 'react'
 import clsx from 'clsx'
-import { PropsUtil } from '@/src/utils/propsUtil'
+import { PropsUtil } from '../../utils/propsUtil'
 
 export type ChatQuickReplyChipProps = ButtonHTMLAttributes<HTMLButtonElement> & {
   isActive?: boolean,

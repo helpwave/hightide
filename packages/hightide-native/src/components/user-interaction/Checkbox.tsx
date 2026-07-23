@@ -18,18 +18,18 @@ import {
   useEventCallbackStabilizer
 } from '@helpwave/hightide-utils/hooks'
 
-import { Icon } from '@/src/components/visualization-and-display/Icon'
-import { useTheme } from '@/src/global-contexts/theme/ThemeContext'
+import { Icon } from '../visualization-and-display/Icon'
+import { useTheme } from '../../global-contexts/theme/ThemeContext'
 import type {
   CheckboxSize,
   CheckboxState,
   CheckboxStyle
-} from '@/src/theme/types/components/checkbox'
-import type { StyleOverwrite } from '@/src/theme/types/resolver'
+} from '../../theme/types/components/checkbox'
+import type { StyleOverwrite } from '../../theme/types/resolver'
 import type {
   FormFieldDataHandling,
   FormFieldInteractionStates
-} from '@/src/types/formField'
+} from '../../types/formField'
 
 export type { CheckboxSize }
 

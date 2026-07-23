@@ -8,8 +8,8 @@ import type {
 } from '@storybook/react-native-web-vite'
 import { action } from 'storybook/actions'
 
-import { ChatConversationRow } from '@/src/components/chat/ChatConversationRow'
-import { useTheme } from '@/src/global-contexts/theme/ThemeContext'
+import { ChatConversationRow } from '../../src/components/chat/ChatConversationRow'
+import { useTheme } from '../../src/global-contexts/theme/ThemeContext'
 
 const meta = {
   component: ChatConversationRow,

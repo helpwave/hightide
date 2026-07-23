@@ -7,8 +7,8 @@ import {
   View
 } from 'react-native'
 
-import { Select } from '@/src/components/user-interaction/Select'
-import { useTheme } from '@/src/global-contexts/theme/ThemeContext'
+import { Select } from '../../src/components/user-interaction/Select'
+import { useTheme } from '../../src/global-contexts/theme/ThemeContext'
 
 export const ThemeSelect = () => {
   const {

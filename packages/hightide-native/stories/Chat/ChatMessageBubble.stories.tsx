@@ -7,7 +7,7 @@ import type {
 import {
   ChatMessageBubble,
   type ChatMessageDirection
-} from '@/src/components/chat/ChatMessageBubble'
+} from '../../src/components/chat/ChatMessageBubble'
 
 const meta = {
   component: ChatMessageBubble,

@@ -1,11 +1,11 @@
 import { List } from 'lucide-react'
 import type { PropsWithChildren } from 'react'
-import type { PropertyField } from '@/src/components/user-interaction/properties/PropertyBase'
-import { PropertyBase } from '@/src/components/user-interaction/properties/PropertyBase'
-import { PropsUtil } from '@/src/utils/propsUtil'
-import { SelectRoot } from '@/src/components/user-interaction/Select/SelectRoot'
-import { SelectButton } from '@/src/components/user-interaction/Select/SelectButton'
-import { SelectContent } from '@/src/components/user-interaction/Select/SelectContent'
+import type { PropertyField } from './PropertyBase'
+import { PropertyBase } from './PropertyBase'
+import { PropsUtil } from '../../../utils/propsUtil'
+import { SelectRoot } from '../Select/SelectRoot'
+import { SelectButton } from '../Select/SelectButton'
+import { SelectContent } from '../Select/SelectContent'
 
 export interface SingleSelectPropertyProps extends PropertyField<string>, PropsWithChildren {}
 

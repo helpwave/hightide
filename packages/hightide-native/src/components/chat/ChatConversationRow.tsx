@@ -16,15 +16,15 @@ import {
   CheckCheck
 } from 'lucide-react-native'
 
-import { useTheme } from '@/src/global-contexts/theme/ThemeContext'
+import { useTheme } from '../../global-contexts/theme/ThemeContext'
 import type {
   ChatConversationRowPreviewStyle,
   ChatConversationRowState,
   ChatConversationRowStyle,
   ChatConversationRowTimestampStyle,
   ChatConversationRowTitleStyle
-} from '@/src/theme/types/components/chat'
-import type { StyleOverwrite } from '@/src/theme/types/resolver'
+} from '../../theme/types/components/chat'
+import type { StyleOverwrite } from '../../theme/types/resolver'
 
 export type ChatConversationSentIndicator = 'sent' | 'sentAndReceived'
 

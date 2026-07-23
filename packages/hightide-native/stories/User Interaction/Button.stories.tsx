@@ -7,7 +7,7 @@ import { action } from 'storybook/actions'
 import {
   Button,
   ButtonUtil
-} from '@/src/components/user-interaction/Button'
+} from '../../src/components/user-interaction/Button'
 
 const meta = {
   component: Button,

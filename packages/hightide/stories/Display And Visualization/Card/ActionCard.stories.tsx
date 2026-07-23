@@ -1,6 +1,6 @@
 import type { Meta, StoryObj } from '@storybook/nextjs-vite'
 import { BadgeCheck, ChevronRight } from 'lucide-react'
-import { ActionCard } from '@/src/components/display-and-visualization/Card'
+import { ActionCard } from '../../../src/components/display-and-visualization/Card'
 import { action } from 'storybook/actions'
 
 const meta: Meta<typeof ActionCard> = {

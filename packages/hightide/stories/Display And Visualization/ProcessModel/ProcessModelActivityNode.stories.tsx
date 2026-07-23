@@ -2,11 +2,11 @@ import type { Meta, StoryObj } from '@storybook/nextjs-vite'
 import { Check, Plus } from 'lucide-react'
 import { useMemo, useState } from 'react'
 import { action } from 'storybook/actions'
-import { ProcessModelActivityNode } from '@/src/components/display-and-visualization/process-model/ProcessModelActivityNode'
-import { processModelLibrary } from '@/src/components/display-and-visualization/process-model/processModelLibrary'
-import type { ProcessModelGraphActivityNode } from '@/src/components/display-and-visualization/process-model/types'
-import { Select } from '@/src/components/user-interaction/Select/Select'
-import { SelectOption } from '@/src/components/user-interaction/Select/SelectOption'
+import { ProcessModelActivityNode } from '../../../src/components/display-and-visualization/process-model/ProcessModelActivityNode'
+import { processModelLibrary } from '../../../src/components/display-and-visualization/process-model/processModelLibrary'
+import type { ProcessModelGraphActivityNode } from '../../../src/components/display-and-visualization/process-model/types'
+import { Select } from '../../../src/components/user-interaction/Select/Select'
+import { SelectOption } from '../../../src/components/user-interaction/Select/SelectOption'
 
 type ActivityNodeExample = {
   id: string,

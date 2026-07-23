@@ -1,13 +1,13 @@
 import type { Meta, StoryObj } from '@storybook/nextjs-vite'
 import { CalendarDays } from 'lucide-react'
-import { ChatMessageList } from '@/src/components/chat/ChatMessageList'
-import { ChatMessageBubble } from '@/src/components/chat/ChatMessageBubble'
-import { ChatMessageCard } from '@/src/components/chat/ChatMessageCard'
-import { ChatAttachmentCard } from '@/src/components/chat/ChatAttachmentCard'
-import { ChatDateDivider } from '@/src/components/chat/ChatDateDivider'
-import { ChatSystemLine } from '@/src/components/chat/ChatSystemLine'
-import { Chip } from '@/src/components/display-and-visualization/Chip'
-import { Button } from '@/src/components/user-interaction/Button'
+import { ChatMessageList } from '../../src/components/chat/ChatMessageList'
+import { ChatMessageBubble } from '../../src/components/chat/ChatMessageBubble'
+import { ChatMessageCard } from '../../src/components/chat/ChatMessageCard'
+import { ChatAttachmentCard } from '../../src/components/chat/ChatAttachmentCard'
+import { ChatDateDivider } from '../../src/components/chat/ChatDateDivider'
+import { ChatSystemLine } from '../../src/components/chat/ChatSystemLine'
+import { Chip } from '../../src/components/display-and-visualization/Chip'
+import { Button } from '../../src/components/user-interaction/Button'
 
 const meta: Meta<typeof ChatMessageList> = {
   component: ChatMessageList,

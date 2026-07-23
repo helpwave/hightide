@@ -13,13 +13,13 @@ import { SendHorizontal } from 'lucide-react-native'
 
 import { useControlledState } from '@helpwave/hightide-utils/hooks'
 
-import { IconButton } from '@/src/components/user-interaction/IconButton'
-import { useTheme } from '@/src/global-contexts/theme/ThemeContext'
+import { IconButton } from '../user-interaction/IconButton'
+import { useTheme } from '../../global-contexts/theme/ThemeContext'
 import type {
   ChatMessageComposerInputStyle,
   ChatMessageComposerStyle
-} from '@/src/theme/types/components/chat'
-import type { StyleOverwrite } from '@/src/theme/types/resolver'
+} from '../../theme/types/components/chat'
+import type { StyleOverwrite } from '../../theme/types/resolver'
 
 export type ChatMessageComposerProps = Omit<ViewProps, 'style'> & {
   value?: string,

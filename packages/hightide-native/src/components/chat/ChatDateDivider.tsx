@@ -10,12 +10,12 @@ import {
   type ViewStyle
 } from 'react-native'
 
-import { useTheme } from '@/src/global-contexts/theme/ThemeContext'
+import { useTheme } from '../../global-contexts/theme/ThemeContext'
 import type {
   ChatDateDividerStyle,
   ChatDateDividerTextStyle
-} from '@/src/theme/types/components/chat'
-import type { StyleOverwrite } from '@/src/theme/types/resolver'
+} from '../../theme/types/components/chat'
+import type { StyleOverwrite } from '../../theme/types/resolver'
 
 export type ChatDateDividerProps = Omit<ViewProps, 'children' | 'style'> & {
   children?: ReactNode,

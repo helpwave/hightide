@@ -4,10 +4,10 @@ import type {
   StoryObj
 } from '@storybook/react-native-web-vite'
 
-import { ChatDateDivider } from '@/src/components/chat/ChatDateDivider'
-import { ChatMessageBubble } from '@/src/components/chat/ChatMessageBubble'
-import { ChatMessageList } from '@/src/components/chat/ChatMessageList'
-import { ChatSystemLine } from '@/src/components/chat/ChatSystemLine'
+import { ChatDateDivider } from '../../src/components/chat/ChatDateDivider'
+import { ChatMessageBubble } from '../../src/components/chat/ChatMessageBubble'
+import { ChatMessageList } from '../../src/components/chat/ChatMessageList'
+import { ChatSystemLine } from '../../src/components/chat/ChatSystemLine'
 
 const meta = {
   component: ChatMessageList,

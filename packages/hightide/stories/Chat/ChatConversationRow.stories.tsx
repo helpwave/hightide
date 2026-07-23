@@ -1,6 +1,6 @@
 import type { Meta, StoryObj } from '@storybook/nextjs-vite'
 import { action } from 'storybook/actions'
-import { ChatConversationRow } from '@/src/components/chat/ChatConversationRow'
+import { ChatConversationRow } from '../../src/components/chat/ChatConversationRow'
 
 const meta: Meta<typeof ChatConversationRow> = {
   component: ChatConversationRow,

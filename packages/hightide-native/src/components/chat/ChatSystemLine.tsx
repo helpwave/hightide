@@ -13,13 +13,13 @@ import { CheckCheck } from 'lucide-react-native'
 
 import type { ColoringType } from '@helpwave/hightide-design/helpers'
 
-import { useTheme } from '@/src/global-contexts/theme/ThemeContext'
+import { useTheme } from '../../global-contexts/theme/ThemeContext'
 import type {
   ChatSystemLineState,
   ChatSystemLineStyle,
   ChatSystemLineTextStyle
-} from '@/src/theme/types/components/chat'
-import type { StyleOverwrite } from '@/src/theme/types/resolver'
+} from '../../theme/types/components/chat'
+import type { StyleOverwrite } from '../../theme/types/resolver'
 
 export type ChatSystemLineProps = Omit<ViewProps, 'children' | 'style'> & {
   icon?: ReactNode,

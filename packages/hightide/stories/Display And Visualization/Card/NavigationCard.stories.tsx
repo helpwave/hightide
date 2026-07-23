@@ -1,6 +1,6 @@
 import type { Meta, StoryObj } from '@storybook/nextjs-vite'
 import { BadgeCheck } from 'lucide-react'
-import { NavigationCard } from '@/src/components/display-and-visualization/Card'
+import { NavigationCard } from '../../../src/components/display-and-visualization/Card'
 
 const meta: Meta<typeof NavigationCard> = {
   component: NavigationCard,

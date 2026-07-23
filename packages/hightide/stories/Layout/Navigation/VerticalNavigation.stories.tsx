@@ -19,8 +19,8 @@ import {
   Users,
   UsersRound
 } from 'lucide-react'
-import { VerticalNavigationMenu } from '@/src/components/layout/navigation/navigation-menus/VerticalNavigationMenu'
-import type { NavigationItemData } from '@/src/components/layout/navigation/navigation-menus/types'
+import { VerticalNavigationMenu } from '../../../src/components/layout/navigation/navigation-menus/VerticalNavigationMenu'
+import type { NavigationItemData } from '../../../src/components/layout/navigation/navigation-menus/types'
 
 function navigationLabel(icon: ReactNode, label: string) {
   return (

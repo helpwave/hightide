@@ -1,7 +1,7 @@
 import { Check, ChevronLeft, ChevronRight } from 'lucide-react'
 import { useHightideTranslation } from '@helpwave/hightide-utils/context/translation'
 import { range } from '@helpwave/hightide-utils/utils'
-import { Button } from '@/src/components/user-interaction/Button'
+import { Button } from '../../user-interaction/Button'
 import clsx from 'clsx'
 import { useControlledState } from '@helpwave/hightide-utils/hooks'
 

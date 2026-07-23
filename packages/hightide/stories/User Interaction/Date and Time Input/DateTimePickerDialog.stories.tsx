@@ -1,7 +1,7 @@
 import type { Meta, StoryObj } from '@storybook/nextjs-vite'
 import { action } from 'storybook/actions'
 import { useEffect, useState } from 'react'
-import { DateTimePickerDialog } from '@/src/components/user-interaction/date/DateTimePickerDialog'
+import { DateTimePickerDialog } from '../../../src/components/user-interaction/date/DateTimePickerDialog'
 import { DateUtils } from '@helpwave/hightide-utils/utils'
 
 const meta: Meta<typeof DateTimePickerDialog> = {

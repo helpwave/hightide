@@ -1,8 +1,8 @@
 import type { Meta, StoryObj } from '@storybook/nextjs-vite'
 import { action } from 'storybook/actions'
 import { useEffect, useState } from 'react'
-import { Select } from '@/src/components/user-interaction/Select/Select'
-import { SelectOption } from '@/src/components/user-interaction/Select/SelectOption'
+import { Select } from '../../../src/components/user-interaction/Select/Select'
+import { SelectOption } from '../../../src/components/user-interaction/Select/SelectOption'
 
 const meta: Meta<typeof Select> = {
   component: Select,

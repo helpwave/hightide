@@ -1,10 +1,10 @@
 import type { Meta, StoryObj } from '@storybook/nextjs-vite'
 import { useState } from 'react'
 import { action } from 'storybook/actions'
-import { StorybookHelper } from '@/src/storybook/helper'
+import { StorybookHelper } from '../../../src/storybook/helper'
 import clsx from 'clsx'
-import { SingleSelectProperty } from '@/src/components/user-interaction/properties/SelectProperty'
-import { SelectOption } from '@/src/components/user-interaction/Select/SelectOption'
+import { SingleSelectProperty } from '../../../src/components/user-interaction/properties/SelectProperty'
+import { SelectOption } from '../../../src/components/user-interaction/Select/SelectOption'
 const options = [...StorybookHelper.selectValues]
 
 

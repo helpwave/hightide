@@ -1,6 +1,6 @@
 import type { MouseEventHandler, PointerEventHandler, ReactNode } from 'react'
 import clsx from 'clsx'
-import { PropsUtil } from '@/src/utils/propsUtil'
+import { PropsUtil } from '../../../utils/propsUtil'
 
 export type ProcessModelActivityNodeKind = 'activity' | 'terminal'
 

@@ -3,7 +3,7 @@ import { forwardRef, useEffect, useRef } from 'react'
 import type { SelectOptionType } from './SelectContext'
 import { useSelectContext } from './SelectContext'
 import { useHightideTranslation } from '@helpwave/hightide-utils/context/translation'
-import { ExpansionIcon } from '@/src/components/display-and-visualization/ExpansionIcon'
+import { ExpansionIcon } from '../../display-and-visualization/ExpansionIcon'
 import { SelectOptionDisplayContext } from './SelectOption'
 import { ReactUtils } from '@helpwave/hightide-utils/utils'
 

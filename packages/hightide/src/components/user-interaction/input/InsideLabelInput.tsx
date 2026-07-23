@@ -2,8 +2,8 @@ import type { ReactNode } from 'react'
 import { useId } from 'react'
 import { forwardRef, useState } from 'react'
 import clsx from 'clsx'
-import type { InputProps } from '@/src/components/user-interaction/input/Input'
-import { Input } from '@/src/components/user-interaction/input/Input'
+import type { InputProps } from './Input'
+import { Input } from './Input'
 import { useControlledState } from '@helpwave/hightide-utils/hooks'
 
 type InsideLabelInputProps = Omit<InputProps, 'aria-label' | 'aria-labelledby' | 'placeholder'> & {

@@ -4,8 +4,8 @@ import type {
 } from '@storybook/react-native-web-vite'
 import { action } from 'storybook/actions'
 
-import { Select } from '@/src/components/user-interaction/Select'
-import { StorybookHelper } from '@/src/storybook/helper'
+import { Select } from '../../src/components/user-interaction/Select'
+import { StorybookHelper } from '../../src/storybook/helper'
 
 const fruitOptions = StorybookHelper.selectValues
   .map((value) => ({

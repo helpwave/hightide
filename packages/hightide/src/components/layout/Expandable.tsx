@@ -5,7 +5,7 @@ import { createContext, forwardRef, useCallback, useContext, useId, useMemo } fr
 import clsx from 'clsx'
 import { Visibility } from './Visibility'
 import { ExpansionIcon } from '../display-and-visualization/ExpansionIcon'
-import { useTransitionState } from '@/src/hooks/useTransitionState'
+import { useTransitionState } from '../../hooks/useTransitionState'
 import { useControlledState } from '@helpwave/hightide-utils/hooks'
 import { ReactUtils } from '@helpwave/hightide-utils/utils'
 

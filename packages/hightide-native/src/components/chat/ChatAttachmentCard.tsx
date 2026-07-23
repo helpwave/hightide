@@ -14,16 +14,16 @@ import {
   FileText
 } from 'lucide-react-native'
 
-import { IconButton } from '@/src/components/user-interaction/IconButton'
-import { useTheme } from '@/src/global-contexts/theme/ThemeContext'
+import { IconButton } from '../user-interaction/IconButton'
+import { useTheme } from '../../global-contexts/theme/ThemeContext'
 import type {
   ChatAttachmentCardMetadataStyle,
   ChatAttachmentCardNameStyle,
   ChatAttachmentCardState,
   ChatAttachmentCardStyle,
   ChatMessageDirection
-} from '@/src/theme/types/components/chat'
-import type { StyleOverwrite } from '@/src/theme/types/resolver'
+} from '../../theme/types/components/chat'
+import type { StyleOverwrite } from '../../theme/types/resolver'
 
 export type ChatAttachmentCardProps = Omit<ViewProps, 'style'> & {
   name: ReactNode,

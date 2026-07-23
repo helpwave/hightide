@@ -6,11 +6,11 @@ import type {
   ElementSize
 } from '@helpwave/hightide-design/types'
 
-import type { Color } from '@/src/theme/types/color'
+import type { Color } from '../color'
 import type {
   InteractionState,
   StyleResolverFunction
-} from '@/src/theme/types/resolver'
+} from '../resolver'
 
 export type IconButtonState = InteractionState & {
   size?: ElementSize,

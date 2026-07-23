@@ -31,18 +31,6 @@ const config: StorybookConfig = {
   core: {
     disableTelemetry: true,
   },
-  viteFinal: async (config) => {
-    const { mergeConfig } = await import('vite')
-    const projectRoot = path.resolve(dirname, '..')
-
-    return mergeConfig(config, {
-      resolve: {
-        alias: {
-          '@': projectRoot,
-        },
-      },
-    })
-  },
 }
 
 export default config

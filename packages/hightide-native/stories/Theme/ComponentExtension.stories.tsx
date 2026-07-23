@@ -10,24 +10,24 @@ import type {
   StoryObj
 } from '@storybook/react-native-vite'
 
-import { Checkbox } from '@/src/components/user-interaction/Checkbox'
-import { HightideConfigUtils } from '@/src/global-contexts/hightide-config/HightideConfigUtils'
+import { Checkbox } from '../../src/components/user-interaction/Checkbox'
+import { HightideConfigUtils } from '../../src/global-contexts/hightide-config/HightideConfigUtils'
 import {
   useTheme,
   type ThemeContextValue
-} from '@/src/global-contexts/theme/ThemeContext'
-import { ThemeProvider } from '@/src/global-contexts/theme/ThemeProvider'
-import { themes } from '@/src/theme/themes/nativeThemes'
-import type { Theme } from '@/src/theme/types/theme'
+} from '../../src/global-contexts/theme/ThemeContext'
+import { ThemeProvider } from '../../src/global-contexts/theme/ThemeProvider'
+import { themes } from '../../src/theme/themes/nativeThemes'
+import type { Theme } from '../../src/theme/types/theme'
 import {
   createStyleResolver,
   type InteractionState,
   type StyleResolverFunction
-} from '@/src/theme/types/resolver'
+} from '../../src/theme/types/resolver'
 import {
   ThemeSelect,
   ThemeStoryFrame
-} from '@/stories/Theme/themeStoryHelpers'
+} from './themeStoryHelpers'
 
 type CalloutState = InteractionState & {
   tone?: 'info' | 'warning',

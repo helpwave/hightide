@@ -1,6 +1,6 @@
 import { useHightideTranslation } from '@helpwave/hightide-utils/context/translation'
-import type { FilterOperator } from '@/src/components/user-interaction/data/FilterOperator'
-import { FilterOperatorUtils } from '@/src/components/user-interaction/data/FilterOperator'
+import type { FilterOperator } from './FilterOperator'
+import { FilterOperatorUtils } from './FilterOperator'
 
 export type FilterOperatorLabelProps = {
     operator: FilterOperator,

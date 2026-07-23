@@ -1,5 +1,5 @@
 import type { Meta, StoryObj } from '@storybook/nextjs-vite'
-import { AppZumDocBadge } from '@/src/components/branding/AppZumDocBadge'
+import { AppZumDocBadge } from '../../src/components/branding/AppZumDocBadge'
 
 const meta = {
   component: AppZumDocBadge,

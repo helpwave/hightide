@@ -1,8 +1,8 @@
 import type { SupportedThemesConfig } from '@helpwave/hightide-utils/context'
 
-import type { SupportedLocalesConfig } from '@/src/global-contexts/localization/forward-exports'
-import { themes } from '@/src/theme/themes/nativeThemes'
-import type { Theme } from '@/src/theme/types/theme'
+import type { SupportedLocalesConfig } from '../localization/forward-exports'
+import { themes } from '../../theme/themes/nativeThemes'
+import type { Theme } from '../../theme/types/theme'
 
 export const HightideConfigUtils = {
   defaultSupportedLocales: {

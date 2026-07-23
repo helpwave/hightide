@@ -6,9 +6,9 @@ import {
   useState
 } from 'react'
 import clsx from 'clsx'
-import { Button } from '@/src/components/user-interaction/Button'
-import { Select } from '@/src/components/user-interaction/Select/Select'
-import { SelectOption } from '@/src/components/user-interaction/Select/SelectOption'
+import { Button } from '../../user-interaction/Button'
+import { Select } from '../../user-interaction/Select/Select'
+import { SelectOption } from '../../user-interaction/Select/SelectOption'
 import { ProcessModelCanvas } from './ProcessModelCanvas'
 import { ProcessModelLayoutUtilities } from './layoutProcessModel'
 import type { ProcessModelGraphWithTraces, ProcessModelTrace } from './types'

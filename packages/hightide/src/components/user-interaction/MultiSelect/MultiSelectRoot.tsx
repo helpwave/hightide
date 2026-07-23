@@ -3,10 +3,10 @@ import { useCallback, useEffect, useId, useMemo, useState } from 'react'
 import { MultiSelectContext } from './MultiSelectContext'
 import type { MultiSelectContextType, MultiSelectIconAppearance, MultiSelectOptionType } from './MultiSelectContext'
 import { useMultiSelect } from './useMultiSelect'
-import { DOMUtils } from '@/src/utils/dom'
-import type { FormFieldDataHandling } from '@/src/components/form/FormField'
-import type { FormFieldInteractionStates } from '@/src/components/form/FieldLayout'
-import { PopUpContext } from '@/src/components/layout/popup/PopUpContext'
+import { DOMUtils } from '../../../utils/dom'
+import type { FormFieldDataHandling } from '../../form/FormField'
+import type { FormFieldInteractionStates } from '../../form/FieldLayout'
+import { PopUpContext } from '../../layout/popup/PopUpContext'
 
 export interface MultiSelectIds {
   trigger: string,

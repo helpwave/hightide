@@ -1,7 +1,11 @@
 import { fontSizes } from './font-sizes'
 import { fontWeights } from './font-weights'
 import { lineHeights } from './line-heights'
-import type { FontFamilyToken, TypographyTokens, TypographyStyleToken } from '../../types'
+import type {
+  FontFamilyToken,
+  TypographyTokens,
+  TypographyStyleToken
+} from '../../types/typography'
 
 export type { TypographyTokens as TypographyScale, TypographyStyleToken as TypographyStyle }
 

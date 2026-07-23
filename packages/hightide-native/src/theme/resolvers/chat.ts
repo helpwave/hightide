@@ -14,7 +14,7 @@ import type {
 import type {
   Color,
   HightideSemanticColors
-} from '@/src/theme/types/color'
+} from '../types/color'
 import type {
   ChatAttachmentCardState,
   ChatConversationRowState,
@@ -23,12 +23,12 @@ import type {
   ChatQuickReplyChipState,
   ChatSystemLineState,
   ChatTheme
-} from '@/src/theme/types/components/chat'
-import type { HightideComponentThemes } from '@/src/theme/types/components/hightide'
+} from '../types/components/chat'
+import type { HightideComponentThemes } from '../types/components/hightide'
 import {
   createStyleResolver,
   createValueResolver
-} from '@/src/theme/types/resolver'
+} from '../types/resolver'
 
 export type CreateChatThemeOptions = {
   semantic: HightideSemanticColors,

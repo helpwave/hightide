@@ -3,7 +3,7 @@ import clsx from 'clsx'
 import { AlertTriangle, Trash, X } from 'lucide-react'
 import { useHightideTranslation } from '@helpwave/hightide-utils/context/translation'
 import { Tooltip } from '../Tooltip'
-import { PropsUtil } from '@/src/utils/propsUtil'
+import { PropsUtil } from '../../../utils/propsUtil'
 import { IconButton } from '../IconButton'
 
 export type PropertyField<T> = {

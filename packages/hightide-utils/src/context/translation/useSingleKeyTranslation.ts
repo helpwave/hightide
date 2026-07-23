@@ -1,7 +1,7 @@
 import { useMemo } from 'react'
-import { ArrayUtil } from '../../utils'
-import type { SingleOrArray } from '../../utils'
-import { useLocalization } from '../localization'
+import { ArrayUtil } from '../../utils/array'
+import type { SingleOrArray } from '../../utils/typing'
+import { useLocalization } from '../localization/useLocalization'
 
 export function useSingleKeyTranslation(
   translations: SingleOrArray<Record<string, string>>

@@ -1,5 +1,5 @@
 import { type ComponentProps, forwardRef, useCallback } from 'react'
-import { Input } from '@/src/components/user-interaction/input/Input'
+import { Input } from '../input/Input'
 import { useHightideTranslation } from '@helpwave/hightide-utils/context/translation'
 import { useComboboxContext } from './ComboboxContext'
 

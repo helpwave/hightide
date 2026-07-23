@@ -8,19 +8,19 @@ import { Appearance } from 'react-native'
 
 import type { SupportedThemesConfig } from '@helpwave/hightide-utils/context'
 
-import { HightideConfigUtils } from '@/src/global-contexts/hightide-config/HightideConfigUtils'
+import { HightideConfigUtils } from '../hightide-config/HightideConfigUtils'
 import {
   ThemeContext,
   useTheme,
   type ThemeContextValue
-} from '@/src/global-contexts/theme/ThemeContext'
+} from './ThemeContext'
 import {
   useCreateThemeConfig,
   type SystemTheme
-} from '@/src/global-contexts/theme/forward-exports'
-import { useNativeKeyValueStore } from '@/src/hooks/useNativeKeyValueStore'
-import type { ThemeMode } from '@/src/theme/themes/nativeThemes'
-import type { Theme } from '@/src/theme/types/theme'
+} from './forward-exports'
+import { useNativeKeyValueStore } from '../../hooks/useNativeKeyValueStore'
+import type { ThemeMode } from '../../theme/themes/nativeThemes'
+import type { Theme } from '../../theme/types/theme'
 
 export type ThemeProviderProps<T> = PropsWithChildren & {
   theme?: ThemeMode | null,

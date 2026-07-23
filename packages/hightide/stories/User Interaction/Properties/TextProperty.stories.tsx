@@ -1,6 +1,6 @@
 import type { Meta, StoryObj } from '@storybook/nextjs-vite'
 import { useEffect, useState } from 'react'
-import { TextProperty } from '@/src/components/user-interaction/properties/TextProperty'
+import { TextProperty } from '../../../src/components/user-interaction/properties/TextProperty'
 import { action } from 'storybook/actions'
 
 const meta: Meta<typeof TextProperty> = {

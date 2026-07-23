@@ -1,6 +1,6 @@
 import type { PropsWithChildren, ReactNode } from 'react'
 import { useState } from 'react'
-import { LoadingContainer } from '@/src/components/layout/loading/LoadingContainer'
+import { LoadingContainer } from './LoadingContainer'
 import { clsx } from 'clsx'
 
 export type LoadingAndErrorComponentProps = PropsWithChildren<{

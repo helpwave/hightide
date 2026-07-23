@@ -1,8 +1,8 @@
 import type { Meta, StoryObj } from '@storybook/nextjs-vite'
 import { action } from 'storybook/actions'
 import { Camera, Paperclip } from 'lucide-react'
-import { ChatMessageComposer } from '@/src/components/chat/ChatMessageComposer'
-import { IconButton } from '@/src/components/user-interaction/IconButton'
+import { ChatMessageComposer } from '../../src/components/chat/ChatMessageComposer'
+import { IconButton } from '../../src/components/user-interaction/IconButton'
 
 const meta: Meta<typeof ChatMessageComposer> = {
   component: ChatMessageComposer,

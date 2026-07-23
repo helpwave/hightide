@@ -1,4 +1,4 @@
-import type { ComponentLayoutTokens } from '../types'
+import type { ComponentLayoutTokens } from '../types/layout'
 
 const spacingBase = 4
 const outlineWidth = 2

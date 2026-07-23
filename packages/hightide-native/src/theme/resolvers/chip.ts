@@ -9,14 +9,14 @@ import {
 } from '@helpwave/hightide-design/tokens'
 import type { HightideDesignTokens as DesignTokensTheme } from '@helpwave/hightide-design/types'
 
-import { resolveColoringStyles } from '@/src/theme/resolvers/coloring'
-import type { HightideSemanticColors } from '@/src/theme/types/color'
+import { resolveColoringStyles } from './coloring'
+import type { HightideSemanticColors } from '../types/color'
 import type {
   ChipState,
   ChipTheme
-} from '@/src/theme/types/components/chip'
-import type { HightideComponentThemes } from '@/src/theme/types/components/hightide'
-import { createStyleResolver } from '@/src/theme/types/resolver'
+} from '../types/components/chip'
+import type { HightideComponentThemes } from '../types/components/hightide'
+import { createStyleResolver } from '../types/resolver'
 
 export type CreateChipThemeOptions = {
   semantic: HightideSemanticColors,

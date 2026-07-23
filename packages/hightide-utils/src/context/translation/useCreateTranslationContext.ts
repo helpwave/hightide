@@ -2,7 +2,8 @@ import type { PartialTranslation, TranslationEntries } from '@helpwave/internati
 import { combineTranslation } from '@helpwave/internationalization'
 import { useMemo } from 'react'
 import { useLocalization } from '../localization/useLocalization'
-import { ArrayUtil, type SingleOrArray } from '../../utils'
+import { ArrayUtil } from '../../utils/array'
+import { type SingleOrArray } from '../../utils/typing'
 
 export type UseCreateTranslationContextProps = {
   translation: SingleOrArray<PartialTranslation<string, TranslationEntries>>,

@@ -1,6 +1,6 @@
 import type { Meta, StoryObj } from '@storybook/nextjs-vite'
 import { action } from 'storybook/actions'
-import { YearMonthPicker } from '@/src/components/user-interaction/date/YearMonthPicker'
+import { YearMonthPicker } from '../../../src/components/user-interaction/date/YearMonthPicker'
 import { DateUtils } from '@helpwave/hightide-utils/utils'
 
 const meta = {

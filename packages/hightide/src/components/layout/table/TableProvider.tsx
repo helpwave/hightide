@@ -9,7 +9,7 @@ import type { ColumnDef, InitialTableState, Row, TableOptions, TableState , Tabl
 import { getCoreRowModel, getFilteredRowModel, getPaginationRowModel, getSortedRowModel, useReactTable } from '@tanstack/react-table'
 import { TableCell } from './TableCell'
 import { ColumnSizingWithTargetFeature } from './ColumnSizingWithTargetFeature'
-import { useWindowResizeObserver } from '@/src/hooks/useWindowResizeObserver'
+import { useWindowResizeObserver } from '../../../hooks/useWindowResizeObserver'
 import { AutoColumnOrderFeature } from './AutoColumnOrderFeature'
 import { useHightideTranslation } from '@helpwave/hightide-utils/context/translation'
 import { createNoColumnPlaceholderColumn, hasNonExcludedColumns } from './placeholderColumn'

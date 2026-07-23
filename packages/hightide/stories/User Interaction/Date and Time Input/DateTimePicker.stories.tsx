@@ -1,5 +1,5 @@
 import type { Meta, StoryObj } from '@storybook/nextjs-vite'
-import { DateTimePicker } from '@/src/components/user-interaction/date/DateTimePicker'
+import { DateTimePicker } from '../../../src/components/user-interaction/date/DateTimePicker'
 import { DateUtils } from '@helpwave/hightide-utils/utils'
 import { action } from 'storybook/actions'
 

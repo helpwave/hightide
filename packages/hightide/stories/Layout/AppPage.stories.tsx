@@ -1,9 +1,9 @@
 import type { Meta, StoryObj } from '@storybook/nextjs-vite'
 import { Bell, File, Folder, Package, Settings } from 'lucide-react'
-import type { AppPageNavigationItem } from '@/src/components/layout/app/AppPage'
-import { AppPage } from '@/src/components/layout/app/AppPage'
-import { HelpwaveBadge } from '@/src/components/branding/HelpwaveBadge'
-import { IconButton } from '@/src/components/user-interaction/IconButton'
+import type { AppPageNavigationItem } from '../../src/components/layout/app/AppPage'
+import { AppPage } from '../../src/components/layout/app/AppPage'
+import { HelpwaveBadge } from '../../src/components/branding/HelpwaveBadge'
+import { IconButton } from '../../src/components/user-interaction/IconButton'
 import { useEffect, useState } from 'react'
 
 const initialNavigationItems: AppPageNavigationItem[] = [

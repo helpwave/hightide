@@ -10,7 +10,7 @@ import {
   CircleDashed,
   CircleDot
 } from 'lucide-react'
-import type { DataType } from '@/src/components/user-interaction/data/data-types'
+import type { DataType } from './data-types'
 import type { ReactNode } from 'react'
 
 const filterOperators = [

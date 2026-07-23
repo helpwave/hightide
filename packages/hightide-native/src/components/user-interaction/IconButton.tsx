@@ -16,13 +16,13 @@ import type {
   ElementSize
 } from '@helpwave/hightide-design/types'
 
-import { Icon } from '@/src/components/visualization-and-display/Icon'
-import { useTheme } from '@/src/global-contexts/theme/ThemeContext'
+import { Icon } from '../visualization-and-display/Icon'
+import { useTheme } from '../../global-contexts/theme/ThemeContext'
 import type {
   IconButtonState,
   IconButtonStyle
-} from '@/src/theme/types/components/iconButton'
-import type { StyleOverwrite } from '@/src/theme/types/resolver'
+} from '../../theme/types/components/iconButton'
+import type { StyleOverwrite } from '../../theme/types/resolver'
 
 export type IconButtonSize = ElementSize
 

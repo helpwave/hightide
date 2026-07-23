@@ -13,13 +13,13 @@ import {
 } from 'react-native'
 import { ChevronRight } from 'lucide-react-native'
 
-import { useTheme } from '@/src/global-contexts/theme/ThemeContext'
+import { useTheme } from '../../global-contexts/theme/ThemeContext'
 import type {
   MenuActionItemLabelStyle,
   MenuActionItemState,
   MenuActionItemStyle
-} from '@/src/theme/types/components/menu'
-import type { StyleOverwrite } from '@/src/theme/types/resolver'
+} from '../../theme/types/components/menu'
+import type { StyleOverwrite } from '../../theme/types/resolver'
 
 export type MenuNavigationItemProps = Omit<PressableProps, 'children' | 'style'> & {
   label: string,

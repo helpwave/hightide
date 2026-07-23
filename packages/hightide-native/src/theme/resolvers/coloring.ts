@@ -11,9 +11,9 @@ import type {
 import type {
   Color,
   HightideSemanticColors
-} from '@/src/theme/types/color'
-import type { ColoringDefinition } from '@/src/theme/types/components/hightide'
-import type { InteractionState } from '@/src/theme/types/resolver'
+} from '../types/color'
+import type { ColoringDefinition } from '../types/components/hightide'
+import type { InteractionState } from '../types/resolver'
 
 export type ResolvedColoringStyles = {
   backgroundColor: Color | 'transparent',

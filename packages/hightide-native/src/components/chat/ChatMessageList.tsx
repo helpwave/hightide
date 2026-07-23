@@ -12,9 +12,9 @@ import {
   type ViewStyle
 } from 'react-native'
 
-import { useTheme } from '@/src/global-contexts/theme/ThemeContext'
-import type { ChatMessageListStyle } from '@/src/theme/types/components/chat'
-import type { StyleOverwrite } from '@/src/theme/types/resolver'
+import { useTheme } from '../../global-contexts/theme/ThemeContext'
+import type { ChatMessageListStyle } from '../../theme/types/components/chat'
+import type { StyleOverwrite } from '../../theme/types/resolver'
 
 export type ChatMessageListProps = {
   autoScroll?: boolean,

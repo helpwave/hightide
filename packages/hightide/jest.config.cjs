@@ -6,7 +6,6 @@ module.exports = {
   extensionsToTreatAsEsm: ['.ts', '.tsx'],
   moduleNameMapper: {
     '^@helpwave/hightide-utils/(.*)$': '<rootDir>/../hightide-utils/src/$1',
-    '^@/(.*)$': '<rootDir>/$1',
   },
   transform: {
     '^.+\\.tsx?$': [

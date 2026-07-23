@@ -3,9 +3,9 @@ import { forwardRef, useCallback, useEffect, useRef } from 'react'
 import { useMultiSelectContext } from './MultiSelectContext'
 import clsx from 'clsx'
 import { useHightideTranslation } from '@helpwave/hightide-utils/context/translation'
-import { PopUp, type PopUpProps } from '@/src/components/layout/popup/PopUp'
-import { Input } from '@/src/components/user-interaction/input/Input'
-import { Visibility } from '@/src/components/layout/Visibility'
+import { PopUp, type PopUpProps } from '../../layout/popup/PopUp'
+import { Input } from '../input/Input'
+import { Visibility } from '../../layout/Visibility'
 import { ReactUtils } from '@helpwave/hightide-utils/utils'
 
 export interface MultiSelectContentProps extends PopUpProps {

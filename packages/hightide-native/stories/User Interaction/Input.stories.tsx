@@ -4,7 +4,7 @@ import type {
 } from '@storybook/react-native-web-vite'
 import { action } from 'storybook/actions'
 
-import { Input } from '@/src/components/user-interaction/Input'
+import { Input } from '../../src/components/user-interaction/Input'
 
 const meta = {
   component: Input,

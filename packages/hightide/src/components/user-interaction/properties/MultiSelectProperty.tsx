@@ -1,8 +1,8 @@
 import { List } from 'lucide-react'
-import { PropertyBase, type PropertyField } from '@/src/components/user-interaction/properties/PropertyBase'
+import { PropertyBase, type PropertyField } from './PropertyBase'
 import type { PropsWithChildren } from 'react'
-import { PropsUtil } from '@/src/utils/propsUtil'
-import { MultiSelectChipDisplay } from '@/src/components/user-interaction/MultiSelect/MultiSelectChipDisplay'
+import { PropsUtil } from '../../../utils/propsUtil'
+import { MultiSelectChipDisplay } from '../MultiSelect/MultiSelectChipDisplay'
 
 export interface MultiSelectPropertyProps extends PropertyField<string[]>, PropsWithChildren {}
 /**

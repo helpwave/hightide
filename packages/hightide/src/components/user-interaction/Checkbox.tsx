@@ -1,7 +1,7 @@
 import { Check, Minus } from 'lucide-react'
 import { useCallback, type HTMLAttributes } from 'react'
 import { Visibility } from '../layout/Visibility'
-import { PropsUtil } from '@/src/utils/propsUtil'
+import { PropsUtil } from '../../utils/propsUtil'
 import type { FormFieldInteractionStates } from '../form/FieldLayout'
 import type { FormFieldDataHandling } from '../form/FormField'
 import { useControlledState } from '@helpwave/hightide-utils/hooks'

@@ -1,6 +1,6 @@
 import { useHightideTranslation } from '@helpwave/hightide-utils/context/translation'
 import clsx from 'clsx'
-import { HelpwaveLogo } from '@/src/components/branding/HelpwaveLogo'
+import { HelpwaveLogo } from '../../branding/HelpwaveLogo'
 
 export type LoadingAnimationProps = {
   loadingText?: string,

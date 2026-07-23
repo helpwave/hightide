@@ -1,10 +1,10 @@
 import type { Meta, StoryObj } from '@storybook/nextjs-vite'
-import { Dialog } from '@/src/components/layout/dialog/Dialog'
-import { Button } from '@/src/components/user-interaction/Button'
-import type { DialogPosition } from '@/src/components/layout/dialog/Dialog'
-import { DialogRoot } from '@/src/components/layout/dialog/DialogRoot'
-import { DialogOpenerWrapper } from '@/src/components/layout/dialog/DialogOpener'
-import { DialogContext } from '@/src/components/layout/dialog/DialogContext'
+import { Dialog } from '../../../src/components/layout/dialog/Dialog'
+import { Button } from '../../../src/components/user-interaction/Button'
+import type { DialogPosition } from '../../../src/components/layout/dialog/Dialog'
+import { DialogRoot } from '../../../src/components/layout/dialog/DialogRoot'
+import { DialogOpenerWrapper } from '../../../src/components/layout/dialog/DialogOpener'
+import { DialogContext } from '../../../src/components/layout/dialog/DialogContext'
 
 type StoryArgs = {
   position: DialogPosition,

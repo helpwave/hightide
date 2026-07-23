@@ -15,14 +15,14 @@ import type {
 import {
   isOutlineColoringStyle,
   resolveColoringStyles
-} from '@/src/theme/resolvers/coloring'
-import type { HightideSemanticColors } from '@/src/theme/types/color'
+} from './coloring'
+import type { HightideSemanticColors } from '../types/color'
 import type {
   ButtonState,
   ButtonTheme
-} from '@/src/theme/types/components/button'
-import type { HightideComponentThemes } from '@/src/theme/types/components/hightide'
-import { createStyleResolver } from '@/src/theme/types/resolver'
+} from '../types/components/button'
+import type { HightideComponentThemes } from '../types/components/hightide'
+import { createStyleResolver } from '../types/resolver'
 
 const buttonFontSizes: Record<ElementSize, number> = {
   xs: 12,

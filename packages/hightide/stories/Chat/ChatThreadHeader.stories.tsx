@@ -1,8 +1,8 @@
 import type { Meta, StoryObj } from '@storybook/nextjs-vite'
 import { action } from 'storybook/actions'
 import { ChevronLeft, EllipsisVertical, Phone, UserRoundPlus } from 'lucide-react'
-import { ChatThreadHeader } from '@/src/components/chat/ChatThreadHeader'
-import { IconButton } from '@/src/components/user-interaction/IconButton'
+import { ChatThreadHeader } from '../../src/components/chat/ChatThreadHeader'
+import { IconButton } from '../../src/components/user-interaction/IconButton'
 
 const meta: Meta<typeof ChatThreadHeader> = {
   component: ChatThreadHeader,

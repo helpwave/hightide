@@ -4,7 +4,7 @@ import type {
   StoryObj
 } from '@storybook/react-native-web-vite'
 
-import { ChatSystemLine } from '@/src/components/chat/ChatSystemLine'
+import { ChatSystemLine } from '../../src/components/chat/ChatSystemLine'
 
 const meta = {
   component: ChatSystemLine,

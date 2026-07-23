@@ -1,5 +1,5 @@
 import type { HTMLAttributes } from 'react'
-import { ButtonUtil } from '@/src/components/user-interaction/Button'
+import { ButtonUtil } from '../user-interaction/Button'
 
 type ChipSize = 'xs' | 'sm' | 'md' | 'lg' | null
 

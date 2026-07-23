@@ -1,4 +1,7 @@
-import type { HightideColorPalleteTokens, HightideSemanticColorTokens } from '../../../types'
+import type {
+  HightideColorPalleteTokens,
+  HightideSemanticColorTokens
+} from '../../../types/hightide'
 
 export type ToSemanticArgs<PrimitiveTokens> = {
   themeName: string,

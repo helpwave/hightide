@@ -1,8 +1,8 @@
 import type { Meta, StoryObj } from '@storybook/nextjs-vite'
 import { action } from 'storybook/actions'
-import { ChatConversationList } from '@/src/components/chat/ChatConversationList'
-import { ChatConversationRow } from '@/src/components/chat/ChatConversationRow'
-import { IconButton } from '@/src/components/user-interaction/IconButton'
+import { ChatConversationList } from '../../src/components/chat/ChatConversationList'
+import { ChatConversationRow } from '../../src/components/chat/ChatConversationRow'
+import { IconButton } from '../../src/components/user-interaction/IconButton'
 import { Plus } from 'lucide-react'
 import clsx from 'clsx'
 

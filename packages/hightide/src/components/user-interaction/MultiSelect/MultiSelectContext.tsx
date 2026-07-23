@@ -1,6 +1,6 @@
 import type { Dispatch, ReactNode, RefObject, SetStateAction } from 'react'
 import { createContext, useContext } from 'react'
-import type { FormFieldInteractionStates } from '@/src/components/form/FieldLayout'
+import type { FormFieldInteractionStates } from '../../form/FieldLayout'
 import type { UseMultiSelectFirstHighlightBehavior } from './useMultiSelect'
 
 export interface MultiSelectOptionType<T = string> {

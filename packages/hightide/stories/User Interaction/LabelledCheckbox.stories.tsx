@@ -1,5 +1,5 @@
 import type { Meta, StoryObj } from '@storybook/nextjs-vite'
-import { LabelledCheckbox } from '@/src/components/user-interaction/LabelledCheckbox'
+import { LabelledCheckbox } from '../../src/components/user-interaction/LabelledCheckbox'
 import { action } from 'storybook/actions'
 
 const meta: Meta<typeof LabelledCheckbox> = {

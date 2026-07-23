@@ -1,13 +1,13 @@
 import type { Meta, StoryObj } from '@storybook/nextjs-vite'
 import { useMemo, useState } from 'react'
-import { ProcessModelTraceReplay } from '@/src/components/display-and-visualization/process-model/ProcessModelTraceReplay'
+import { ProcessModelTraceReplay } from '../../../src/components/display-and-visualization/process-model/ProcessModelTraceReplay'
 import {
   getProcessModelLibraryEntry,
   processModelLibrary
-} from '@/src/components/display-and-visualization/process-model/processModelLibrary'
-import type { ProcessModelGraphWithTraces } from '@/src/components/display-and-visualization/process-model/types'
-import { Select } from '@/src/components/user-interaction/Select/Select'
-import { SelectOption } from '@/src/components/user-interaction/Select/SelectOption'
+} from '../../../src/components/display-and-visualization/process-model/processModelLibrary'
+import type { ProcessModelGraphWithTraces } from '../../../src/components/display-and-visualization/process-model/types'
+import { Select } from '../../../src/components/user-interaction/Select/Select'
+import { SelectOption } from '../../../src/components/user-interaction/Select/SelectOption'
 
 const meta: Meta<typeof ProcessModelTraceReplay> = {
   component: ProcessModelTraceReplay,

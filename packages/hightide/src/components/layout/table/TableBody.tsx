@@ -5,7 +5,7 @@ import { FillerCell } from './FillerCell'
 import React from 'react'
 import { useTableStateWithoutSizingContext } from './TableContext'
 import clsx from 'clsx'
-import { PropsUtil } from '@/src/utils/propsUtil'
+import { PropsUtil } from '../../../utils/propsUtil'
 import { Visibility } from '../Visibility'
 
 export const TableBody = React.memo(function TableBodyVisual() {

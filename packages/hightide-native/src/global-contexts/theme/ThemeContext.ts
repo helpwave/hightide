@@ -6,8 +6,8 @@ import {
 import type {
   ThemeConfigValue,
   ThemeInformation
-} from '@/src/global-contexts/theme/forward-exports'
-import type { Theme } from '@/src/theme/types/theme'
+} from './forward-exports'
+import type { Theme } from '../../theme/types/theme'
 
 export type { ThemeInformation }
 

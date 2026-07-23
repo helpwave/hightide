@@ -1,6 +1,6 @@
 import type { Meta, StoryObj } from '@storybook/nextjs-vite'
 import { useEffect, useState } from 'react'
-import { NumberStepperInput } from '@/src/components/user-interaction/input/NumberStepperInput'
+import { NumberStepperInput } from '../../../src/components/user-interaction/input/NumberStepperInput'
 import { action } from 'storybook/actions'
 
 const meta: Meta<typeof NumberStepperInput> = {

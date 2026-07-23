@@ -1,9 +1,9 @@
 import type { PropsWithChildren } from 'react'
 import { useEffect, useMemo } from 'react'
 import { useBrowserKeyValueStore } from '@helpwave/hightide-utils/hooks'
-import type { ThemeConfig as HightideThemeConfig } from '@/src/global-contexts/hightide-config/HightideConfigContext'
-import { useHightideConfig } from '@/src/global-contexts/hightide-config/HightideConfigContext'
-import { useWebSystemTheme } from '@/src/hooks/useWebSystemTheme'
+import type { ThemeConfig as HightideThemeConfig } from '../hightide-config/HightideConfigContext'
+import { useHightideConfig } from '../hightide-config/HightideConfigContext'
+import { useWebSystemTheme } from '../../hooks/useWebSystemTheme'
 import type {
   ThemeMode,
   SupportedThemesConfig as SupportedThemesConfigBase,
@@ -11,7 +11,7 @@ import type {
   SystemTheme
 } from '@helpwave/hightide-utils/context/theme'
 import { useCreateThemeConfig } from '@helpwave/hightide-utils/context/theme'
-import { ThemeContext } from '@/src/global-contexts/theme/ThemeContext'
+import { ThemeContext } from './ThemeContext'
 
 export type ThemeInformation = Omit<ThemeInformationBase<unknown>, 'theme'> & { theme?: unknown }
 export type SupportedThemesConfig = Record<SystemTheme, ThemeInformation> & Record<string, ThemeInformation>

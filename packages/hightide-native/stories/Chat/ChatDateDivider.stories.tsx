@@ -4,7 +4,7 @@ import type {
   StoryObj
 } from '@storybook/react-native-web-vite'
 
-import { ChatDateDivider } from '@/src/components/chat/ChatDateDivider'
+import { ChatDateDivider } from '../../src/components/chat/ChatDateDivider'
 
 const meta = {
   component: ChatDateDivider,

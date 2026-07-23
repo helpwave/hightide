@@ -15,16 +15,16 @@ import {
   type UseDelayOptionsResolved
 } from '@helpwave/hightide-utils/hooks'
 
-import { useTheme } from '@/src/global-contexts/theme/ThemeContext'
+import { useTheme } from '../../global-contexts/theme/ThemeContext'
 import type {
   InputState,
   InputStyle
-} from '@/src/theme/types/components/input'
-import type { StyleOverwrite } from '@/src/theme/types/resolver'
+} from '../../theme/types/components/input'
+import type { StyleOverwrite } from '../../theme/types/resolver'
 import type {
   FormFieldDataHandling,
   FormFieldInteractionStates
-} from '@/src/types/formField'
+} from '../../types/formField'
 
 export type EditCompleteOptionsResolved = {
   onBlur: boolean,
