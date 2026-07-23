@@ -5,6 +5,28 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/)
 and adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [0.0.5] - 2026-07-23
+
+### Added
+
+- Avatar layout tokens (`avatar` sizes and `avatarGroup` overlap / maxShown / gap) on `componentLayouts`
+- `@helpwave/hightide-design/utils` export with `constructThemeTokens`, `hexWithAlpha`, `coloringTypes`, and `ColoringType`
+
+### Changed
+
+- Renamed `HightideDesignTokens` to `HightideThemeTokens`
+- Renamed `Themes` to `ThemeTokens`
+- Renamed `constructTheme` to `constructThemeTokens` and `ThemeConstructorOptions` to `ThemeTokenConstructorOptions`
+- Moved `constructThemeTokens` from `hooks/` to `utils/`
+- Moved `hexWithAlpha` and coloring helpers (`coloringTypes`, `ColoringType`, `getColoringToken`) into `utils/`
+- Inlined `createColoringTokensDefinitions` into `tokens/mappings/to-theme.ts`
+
+### Removed
+
+- `useThemeTokenConstructor` and the `@helpwave/hightide-design/hooks` export
+- `@helpwave/hightide-design/helpers` export
+- React peer dependency (and related React / `@types/react` devDependencies)
+
 ## [0.0.4] - 2026-07-23
 
 ### Changed

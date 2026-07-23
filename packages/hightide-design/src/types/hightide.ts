@@ -83,7 +83,7 @@ export type HightideColoringTokens = {
   neutral: ColoringDefinitionToken,
 }
 
-export type HightideDesignTokens = {
+export type HightideThemeTokens = {
   colors: HightideColorPalleteTokens & DesignTokens['colors'],
   semanticColors: HightideSemanticColorTokens & DesignTokens['semanticColors'],
   componentColors: ComponentColorTokens & DesignTokens['componentColors'],

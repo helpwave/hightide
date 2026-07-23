@@ -1,8 +1,9 @@
 import type {
   ColorPaletteToken,
-  HightideDesignTokens
+  HightideThemeTokens
 } from '@helpwave/hightide-design/types'
 
+import { createAvatarThemeFromDesign } from '../resolvers/avatar'
 import { createButtonThemeFromDesign } from '../resolvers/button'
 import { createChatThemeFromDesign } from '../resolvers/chat'
 import { createCheckboxThemeFromDesign } from '../resolvers/checkbox'
@@ -17,7 +18,7 @@ import type {
   ColorPalette,
   HightideColors
 } from '../types/color'
-import type { Theme } from '../types/theme'
+import type { HightideTheme } from '../types/theme'
 
 const unwrapColorPaletteToken = (token: ColorPaletteToken): Color | ColorPalette => {
   if (token.type === 'singleValue') {
@@ -26,7 +27,7 @@ const unwrapColorPaletteToken = (token: ColorPaletteToken): Color | ColorPalette
   return token.value
 }
 
-const unwrapColors = (colors: HightideDesignTokens['colors']): HightideColors & Record<string, Color | ColorPalette> => {
+const unwrapColors = (colors: HightideThemeTokens['colors']): HightideColors & Record<string, Color | ColorPalette> => {
   const result: Record<string, Color | ColorPalette> = {}
   for (const [key, token] of Object.entries(colors)) {
     result[key] = unwrapColorPaletteToken(token)
@@ -34,7 +35,7 @@ const unwrapColors = (colors: HightideDesignTokens['colors']): HightideColors & 
   return result as HightideColors & Record<string, Color | ColorPalette>
 }
 
-export const createTheme = (tokens: HightideDesignTokens): Theme => ({
+export const createHightideTheme = (tokens: HightideThemeTokens): HightideTheme => ({
   colors: unwrapColors(tokens.colors),
   semantic: tokens.semanticColors,
   typography: tokens.typography,
@@ -51,5 +52,6 @@ export const createTheme = (tokens: HightideDesignTokens): Theme => ({
     multiSelect: createMultiSelectThemeFromDesign(tokens),
     chat: createChatThemeFromDesign(tokens),
     menu: createMenuThemeFromDesign(tokens),
+    avatar: createAvatarThemeFromDesign(tokens),
   },
 })

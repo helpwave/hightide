@@ -8,7 +8,6 @@
     "moduleResolution": "bundler",
     "module": "ESNext",
     "declaration": false,
-    "jsx": "react-jsx",
     "esModuleInterop": true,
     "skipLibCheck": true,
     "strict": true

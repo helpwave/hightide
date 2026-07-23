@@ -17,8 +17,8 @@ import {
   type ThemeContextValue
 } from '../../src/global-contexts/theme/ThemeContext'
 import { ThemeProvider } from '../../src/global-contexts/theme/ThemeProvider'
-import { themes } from '../../src/theme/themes/nativeThemes'
-import type { Theme } from '../../src/theme/types/theme'
+import { themes } from '../../src/theme/themes/hightideThemes'
+import type { HightideTheme } from '../../src/theme/types/theme'
 import {
   createStyleResolver,
   type InteractionState,
@@ -38,8 +38,8 @@ type CalloutTheme = {
   text: StyleResolverFunction<CalloutState, TextStyle>,
 }
 
-type ExtendedTheme = Theme & {
-  components: Theme['components'] & {
+type ExtendedTheme = HightideTheme & {
+  components: HightideTheme['components'] & {
     callout: CalloutTheme,
   },
 }
@@ -48,7 +48,7 @@ type ExtendedThemeContextValue = Omit<ThemeContextValue, 'theme'> & {
   theme: ExtendedTheme,
 }
 
-const createCalloutTheme = (theme: Theme): CalloutTheme => {
+const createCalloutTheme = (theme: HightideTheme): CalloutTheme => {
   const resolveState = (state: CalloutState) => {
     const tone = state.tone ?? 'info'
     const backgroundColor = tone === 'warning'
@@ -86,7 +86,7 @@ const createCalloutTheme = (theme: Theme): CalloutTheme => {
   }
 }
 
-const extendTheme = (base: Theme): ExtendedTheme => ({
+const extendTheme = (base: HightideTheme): ExtendedTheme => ({
   ...base,
   components: {
     ...base.components,

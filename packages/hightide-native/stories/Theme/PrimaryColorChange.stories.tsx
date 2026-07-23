@@ -6,20 +6,20 @@ import type {
   Meta,
   StoryObj
 } from '@storybook/react-native-web-vite'
-import { constructTheme } from '@helpwave/hightide-design/hooks'
+import { constructThemeTokens } from '@helpwave/hightide-design/utils'
 import {
   colorPalettes,
   toHightideComponentTokens,
   toHightideSemanticTokens,
   toHightideTheme
 } from '@helpwave/hightide-design/tokens'
-import type { HightideDesignTokens } from '@helpwave/hightide-design/types'
+import type { HightideThemeTokens } from '@helpwave/hightide-design/types'
 
 import { Button } from '../../src/components/user-interaction/Button'
 import { HightideConfigUtils } from '../../src/global-contexts/hightide-config/HightideConfigUtils'
 import { useTheme } from '../../src/global-contexts/theme/ThemeContext'
 import { ThemeProvider } from '../../src/global-contexts/theme/ThemeProvider'
-import { createTheme } from '../../src/theme/themes/createTheme'
+import { createHightideTheme } from '../../src/theme/themes/createHightideTheme'
 import {
   ThemeSelect,
   ThemeStoryFrame
@@ -31,24 +31,24 @@ const toBluePrimarySemantic: typeof toHightideSemanticTokens = (args) => ({
   primaryHover: args.primitiveTokens.blue.value[600],
 })
 
-const bluePrimaryDesignTokens = constructTheme({
+const bluePrimaryDesignTokens = constructThemeTokens({
   themeName: 'blue-primary',
   primitiveTokens: colorPalettes,
   toSemantic: toBluePrimarySemantic,
   toComponents: toHightideComponentTokens,
   toTheme: toHightideTheme,
-}) satisfies HightideDesignTokens
+}) satisfies HightideThemeTokens
 
-const bluePrimaryDarkDesignTokens = constructTheme({
+const bluePrimaryDarkDesignTokens = constructThemeTokens({
   themeName: 'dark',
   primitiveTokens: colorPalettes,
   toSemantic: toBluePrimarySemantic,
   toComponents: toHightideComponentTokens,
   toTheme: toHightideTheme,
-}) satisfies HightideDesignTokens
+}) satisfies HightideThemeTokens
 
-const bluePrimaryTheme = createTheme(bluePrimaryDesignTokens)
-const bluePrimaryDarkTheme = createTheme(bluePrimaryDarkDesignTokens)
+const bluePrimaryTheme = createHightideTheme(bluePrimaryDesignTokens)
+const bluePrimaryDarkTheme = createHightideTheme(bluePrimaryDarkDesignTokens)
 
 const bluePrimarySupportedThemes = {
   ...HightideConfigUtils.defaultSupportedThemes,

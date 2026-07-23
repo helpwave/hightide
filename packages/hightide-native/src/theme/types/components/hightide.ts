@@ -1,4 +1,5 @@
 import type { Color } from '../color'
+import type { AvatarTheme } from './avatar'
 import type { ButtonTheme } from './button'
 import type { ChatTheme } from './chat'
 import type { CheckboxTheme } from './checkbox'
@@ -39,4 +40,5 @@ export type HightideComponentThemes = {
   multiSelect: MultiSelectTheme,
   chat: ChatTheme,
   menu: MenuTheme,
+  avatar: AvatarTheme,
 }

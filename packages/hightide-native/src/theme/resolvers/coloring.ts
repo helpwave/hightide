@@ -1,6 +1,6 @@
 import {
   hexWithAlpha
-} from '@helpwave/hightide-design/helpers'
+} from '@helpwave/hightide-design/utils'
 import { componentLayouts } from '@helpwave/hightide-design/tokens'
 import type {
   ButtonColoringStyle,

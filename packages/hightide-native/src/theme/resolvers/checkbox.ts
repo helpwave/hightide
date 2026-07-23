@@ -3,7 +3,7 @@ import type { ViewStyle } from 'react-native'
 import { componentLayouts } from '@helpwave/hightide-design/tokens'
 import type {
   ComponentColorTokens,
-  HightideDesignTokens as DesignTokensTheme,
+  HightideThemeTokens as DesignTokensTheme,
   ElementSize
 } from '@helpwave/hightide-design/types'
 

@@ -7,11 +7,11 @@ import type {
   ThemeConfigValue,
   ThemeInformation
 } from './forward-exports'
-import type { Theme } from '../../theme/types/theme'
+import type { HightideTheme } from '../../theme/types/theme'
 
 export type { ThemeInformation }
 
-export type ThemeContextValue = ThemeConfigValue<Theme> & {
+export type ThemeContextValue = ThemeConfigValue<HightideTheme> & {
   isInitialized: boolean,
 }
 

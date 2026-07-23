@@ -5,6 +5,21 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [0.0.7] - 2026-07-23
+
+### Added
+
+- `Avatar`, `AvatarGroup`, `AvatarWithStatus`, and `AvatarWithLabel` under visualization-and-display
+- Avatar theme types and `createAvatarTheme` / `createAvatarThemeFromDesign` resolvers on `theme.components.avatar`
+- Storybook demos under `stories/Display And Visualization/Avatar/`
+
+### Changed
+
+- Renamed `createTheme` to `createHightideTheme` and `nativeThemes` to `hightideThemes`
+- Split runtime theme typing into a loose `Theme` and a strict `HightideTheme`
+- Chat Storybook demos now use `AvatarWithStatus` instead of local placeholders
+- Fallback initials / icon hide once the avatar image has loaded
+
 ## [0.0.6] - 2026-07-23
 
 ### Changed
