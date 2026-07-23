@@ -2,7 +2,7 @@ import type { CSSProperties, Dispatch, HTMLAttributes, KeyboardEvent, PropsWithC
 import { useCallback, useId, useState } from 'react'
 import { createContext, useContext, useEffect, useRef } from 'react'
 import clsx from 'clsx'
-import { PropsUtil } from '@/src/utils/propsUtil'
+import { PropsUtil } from '../../utils/propsUtil'
 import { resolveSetState } from '@helpwave/hightide-utils/utils'
 import { createPortal } from 'react-dom'
 import { Visibility } from './Visibility'

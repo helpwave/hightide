@@ -7,8 +7,8 @@ import type {
   StoryObj
 } from '@storybook/react-native-web-vite'
 
-import { ChatThreadHeader } from '@/src/components/chat/ChatThreadHeader'
-import { useTheme } from '@/src/global-contexts/theme/ThemeContext'
+import { ChatThreadHeader } from '../../src/components/chat/ChatThreadHeader'
+import { useTheme } from '../../src/global-contexts/theme/ThemeContext'
 
 const meta = {
   component: ChatThreadHeader,

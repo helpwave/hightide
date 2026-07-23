@@ -5,7 +5,7 @@ import type {
 } from '@storybook/react-native-web-vite'
 import { action } from 'storybook/actions'
 
-import { ChatQuickReplyChip } from '@/src/components/chat/ChatQuickReplyChip'
+import { ChatQuickReplyChip } from '../../src/components/chat/ChatQuickReplyChip'
 
 const meta = {
   component: ChatQuickReplyChip,

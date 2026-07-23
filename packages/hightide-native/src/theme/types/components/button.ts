@@ -12,7 +12,7 @@ import type {
 import type {
   InteractionState,
   StyleResolverFunction
-} from '@/src/theme/types/resolver'
+} from '../resolver'
 
 export type ButtonState = InteractionState & {
   size?: ElementSize,

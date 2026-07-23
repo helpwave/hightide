@@ -1,8 +1,8 @@
 import { forwardRef, useEffect, useRef, useState } from 'react'
 import { Pencil } from 'lucide-react'
 import clsx from 'clsx'
-import type { EditCompleteOptions, InputProps } from '@/src/components/user-interaction/input/Input'
-import { Input } from '@/src/components/user-interaction/input/Input'
+import type { EditCompleteOptions, InputProps } from './Input'
+import { Input } from './Input'
 import { useControlledState } from '@helpwave/hightide-utils/hooks'
 import { ReactUtils } from '@helpwave/hightide-utils/utils'
 

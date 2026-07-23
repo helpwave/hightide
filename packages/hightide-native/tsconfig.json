@@ -6,12 +6,7 @@
     "module": "ESNext",
     "jsx": "react-native",
     "esModuleInterop": true,
-    "skipLibCheck": true,
-    "paths": {
-      "@/*": [
-        "./*"
-      ]
-    }
+    "skipLibCheck": true
   },
   "include": [
     "src",

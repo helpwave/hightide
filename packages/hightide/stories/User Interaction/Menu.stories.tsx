@@ -1,7 +1,7 @@
 import type { Meta, StoryObj } from '@storybook/nextjs-vite'
-import { Menu, MenuItem } from '@/src/components/user-interaction/Menu'
+import { Menu, MenuItem } from '../../src/components/user-interaction/Menu'
 import { action } from 'storybook/actions'
-import { Button } from '@/src/components/user-interaction/Button'
+import { Button } from '../../src/components/user-interaction/Button'
 import { range } from '@helpwave/hightide-utils/utils'
 
 const meta = {

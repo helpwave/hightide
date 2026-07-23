@@ -29,11 +29,6 @@ const config: StorybookConfig = {
       css: {
         postcss: path.resolve(projectRoot, 'postcss.config.mjs'),
       },
-      resolve: {
-        alias: {
-          '@': projectRoot,
-        },
-      },
     })
   },
 }

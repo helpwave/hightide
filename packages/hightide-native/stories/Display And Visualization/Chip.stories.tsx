@@ -6,7 +6,7 @@ import type {
 import {
   Chip,
   ChipUtil
-} from '@/src/components/visualization-and-display/Chip'
+} from '../../src/components/visualization-and-display/Chip'
 
 const meta = {
   component: Chip,

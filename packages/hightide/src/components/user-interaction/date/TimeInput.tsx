@@ -1,12 +1,12 @@
 import clsx from 'clsx'
 import { useCallback, useMemo, useRef } from 'react'
-import type { FormFieldDataHandling } from '@/src/components/form/FormField'
+import type { FormFieldDataHandling } from '../../form/FormField'
 import { useControlledState } from '@helpwave/hightide-utils/hooks'
 import type { DateTimePrecision } from '@helpwave/hightide-utils/utils'
-import { useDateTimeFormat } from '@/src/global-contexts/localization'
-import { Visibility } from '@/src/components/layout/Visibility'
-import { Button } from '@/src/components/user-interaction/Button'
-import { NumberStepperInput } from '@/src/components/user-interaction/input/NumberStepperInput'
+import { useDateTimeFormat } from '../../../global-contexts/localization/forward-exports'
+import { Visibility } from '../../layout/Visibility'
+import { Button } from '../Button'
+import { NumberStepperInput } from '../input/NumberStepperInput'
 import type {
   TimePickerMillisecondIncrement,
   TimePickerMinuteIncrement,

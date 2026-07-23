@@ -1,6 +1,6 @@
 import type { Meta, StoryObj } from '@storybook/nextjs-vite'
 import { useEffect, useState } from 'react'
-import { NumberProperty } from '@/src/components/user-interaction/properties/NumberProperty'
+import { NumberProperty } from '../../../src/components/user-interaction/properties/NumberProperty'
 import { action } from 'storybook/actions'
 
 const meta: Meta<typeof NumberProperty> = {

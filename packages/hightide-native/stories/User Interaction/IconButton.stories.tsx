@@ -5,8 +5,8 @@ import type {
 import { Minus } from 'lucide-react-native'
 import { action } from 'storybook/actions'
 
-import { ButtonUtil } from '@/src/components/user-interaction/Button'
-import { IconButton } from '@/src/components/user-interaction/IconButton'
+import { ButtonUtil } from '../../src/components/user-interaction/Button'
+import { IconButton } from '../../src/components/user-interaction/IconButton'
 
 const meta = {
   component: IconButton,

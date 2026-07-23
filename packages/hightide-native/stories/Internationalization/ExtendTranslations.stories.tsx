@@ -12,14 +12,14 @@ import type {
 } from '@storybook/react-native-web-vite'
 import { useLocalization } from '@helpwave/hightide-utils/context/localization'
 
-import { Select } from '@/src/components/user-interaction/Select'
-import { HightideProvider } from '@/src/global-contexts/HightideProvider'
-import { HightideConfigUtils } from '@/src/global-contexts/hightide-config/HightideConfigUtils'
-import { useTheme } from '@/src/global-contexts/theme/ThemeContext'
+import { Select } from '../../src/components/user-interaction/Select'
+import { HightideProvider } from '../../src/global-contexts/HightideProvider'
+import { HightideConfigUtils } from '../../src/global-contexts/hightide-config/HightideConfigUtils'
+import { useTheme } from '../../src/global-contexts/theme/ThemeContext'
 import {
   type DemoTranslationEntries,
   useExtendedTranslation
-} from '@/stories/Internationalization/useExtendedTranslation'
+} from './useExtendedTranslation'
 
 const demoTranslations = {
   'en-US': {

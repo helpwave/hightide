@@ -5,7 +5,7 @@ import type {
 } from '@storybook/react-native-web-vite'
 import { action } from 'storybook/actions'
 
-import { ChatMessageComposer } from '@/src/components/chat/ChatMessageComposer'
+import { ChatMessageComposer } from '../../src/components/chat/ChatMessageComposer'
 
 const meta = {
   component: ChatMessageComposer,

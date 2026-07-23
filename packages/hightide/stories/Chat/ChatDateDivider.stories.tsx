@@ -1,6 +1,6 @@
 import type { Meta, StoryObj } from '@storybook/nextjs-vite'
-import { ChatDateDivider } from '@/src/components/chat/ChatDateDivider'
-import { TimeDisplay } from '@/src/components/user-interaction/date/TimeDisplay'
+import { ChatDateDivider } from '../../src/components/chat/ChatDateDivider'
+import { TimeDisplay } from '../../src/components/user-interaction/date/TimeDisplay'
 
 const meta: Meta<typeof ChatDateDivider> = {
   component: ChatDateDivider,

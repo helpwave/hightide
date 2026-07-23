@@ -1,6 +1,6 @@
 import type { Meta, StoryObj } from '@storybook/nextjs-vite'
-import type { AvatarProps } from '@/src/components/display-and-visualization/Avatar'
-import  { AvatarGroup } from '@/src/components/display-and-visualization/Avatar'
+import type { AvatarProps } from '../../../src/components/display-and-visualization/Avatar'
+import  { AvatarGroup } from '../../../src/components/display-and-visualization/Avatar'
 import { range } from '@helpwave/hightide-utils/utils'
 import { faker } from '@faker-js/faker'
 

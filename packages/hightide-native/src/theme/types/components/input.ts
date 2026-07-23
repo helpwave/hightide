@@ -1,10 +1,10 @@
 import type { TextStyle } from 'react-native'
 
-import type { Color } from '@/src/theme/types/color'
+import type { Color } from '../color'
 import type {
   InteractionState,
   StyleResolverFunction
-} from '@/src/theme/types/resolver'
+} from '../resolver'
 
 export type InputState = InteractionState & {
   isInvalid?: boolean,

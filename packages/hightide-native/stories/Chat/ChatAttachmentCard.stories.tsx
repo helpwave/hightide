@@ -5,7 +5,7 @@ import type {
 } from '@storybook/react-native-web-vite'
 import { action } from 'storybook/actions'
 
-import { ChatAttachmentCard } from '@/src/components/chat/ChatAttachmentCard'
+import { ChatAttachmentCard } from '../../src/components/chat/ChatAttachmentCard'
 
 const meta = {
   component: ChatAttachmentCard,

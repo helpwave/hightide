@@ -5,6 +5,14 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/)
 and adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [0.15.4] - 2026-07-23
+
+### Changed
+
+- Same-package imports now use relative paths instead of the `@/` alias; directory barrel imports were rewritten to concrete modules
+- Removed `@/*` TypeScript path mapping, Storybook Vite `@` alias, and Jest `@/` mapper
+- ESLint bans `@/` imports via `no-restricted-imports`
+
 ## [0.15.3] - 2026-07-22
 
 ### Added

@@ -3,7 +3,7 @@ import type { FormFieldInteractionStates } from '../form/FieldLayout'
 import type { FormFieldDataHandling } from '../form/FormField'
 import { useControlledState } from '@helpwave/hightide-utils/hooks'
 import { useEventCallbackStabilizer } from '@helpwave/hightide-utils/hooks'
-import { PropsUtil } from '@/src/utils/propsUtil'
+import { PropsUtil } from '../../utils/propsUtil'
 
 export type SwitchProps = HTMLAttributes<HTMLDivElement>
   & Partial<FormFieldInteractionStates>

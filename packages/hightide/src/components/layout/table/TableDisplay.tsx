@@ -7,7 +7,7 @@ import { TableHeader } from './TableHeader'
 import { useTableContainerContext, useTableStateContext } from './TableContext'
 import type { TableVirtualizationOptions } from './VirtualizedTableBody'
 import { VirtualizedTableBody } from './VirtualizedTableBody'
-import { useScrollbarState } from '@/src/hooks/useScrollbarState'
+import { useScrollbarState } from '../../../hooks/useScrollbarState'
 import { useNaturalColumnWidthLock } from './useNaturalColumnWidthLock'
 
 export interface TableDisplayProps extends TableHTMLAttributes<HTMLTableElement> {

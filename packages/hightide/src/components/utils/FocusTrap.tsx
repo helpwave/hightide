@@ -3,8 +3,8 @@
 import type { HTMLAttributes, PropsWithChildren } from 'react'
 import { useRef } from 'react'
 import { forwardRef } from 'react'
-import type { UseFocusTrapProps } from '@/src/hooks/focus/useFocusTrap'
-import { useFocusTrap } from '@/src/hooks/focus/useFocusTrap'
+import type { UseFocusTrapProps } from '../../hooks/focus/useFocusTrap'
+import { useFocusTrap } from '../../hooks/focus/useFocusTrap'
 
 export interface FocusTrapProps extends PropsWithChildren, UseFocusTrapProps {}
 

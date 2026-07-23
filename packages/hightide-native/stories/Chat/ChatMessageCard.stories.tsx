@@ -8,9 +8,9 @@ import type {
 } from '@storybook/react-native-web-vite'
 import { CalendarDays } from 'lucide-react-native'
 
-import { ChatMessageCard } from '@/src/components/chat/ChatMessageCard'
-import { Button } from '@/src/components/user-interaction/Button'
-import { useTheme } from '@/src/global-contexts/theme/ThemeContext'
+import { ChatMessageCard } from '../../src/components/chat/ChatMessageCard'
+import { Button } from '../../src/components/user-interaction/Button'
+import { useTheme } from '../../src/global-contexts/theme/ThemeContext'
 
 const meta = {
   component: ChatMessageCard,

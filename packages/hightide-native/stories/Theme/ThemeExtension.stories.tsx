@@ -12,16 +12,16 @@ import {
 } from '@helpwave/hightide-design/tokens'
 import type { HightideDesignTokens } from '@helpwave/hightide-design/types'
 
-import { Button } from '@/src/components/user-interaction/Button'
-import { Chip } from '@/src/components/visualization-and-display/Chip'
-import { HightideConfigUtils } from '@/src/global-contexts/hightide-config/HightideConfigUtils'
-import { useTheme } from '@/src/global-contexts/theme/ThemeContext'
-import { ThemeProvider } from '@/src/global-contexts/theme/ThemeProvider'
-import { createTheme } from '@/src/theme/themes/createTheme'
+import { Button } from '../../src/components/user-interaction/Button'
+import { Chip } from '../../src/components/visualization-and-display/Chip'
+import { HightideConfigUtils } from '../../src/global-contexts/hightide-config/HightideConfigUtils'
+import { useTheme } from '../../src/global-contexts/theme/ThemeContext'
+import { ThemeProvider } from '../../src/global-contexts/theme/ThemeProvider'
+import { createTheme } from '../../src/theme/themes/createTheme'
 import {
   ThemeSelect,
   ThemeStoryFrame
-} from '@/stories/Theme/themeStoryHelpers'
+} from './themeStoryHelpers'
 
 const toOceanSemantic: typeof toHightideSemanticTokens = (args) => {
   const { blue } = args.primitiveTokens

@@ -3,21 +3,21 @@ import type {
   HightideDesignTokens
 } from '@helpwave/hightide-design/types'
 
-import { createButtonThemeFromDesign } from '@/src/theme/resolvers/button'
-import { createChatThemeFromDesign } from '@/src/theme/resolvers/chat'
-import { createCheckboxThemeFromDesign } from '@/src/theme/resolvers/checkbox'
-import { createChipThemeFromDesign } from '@/src/theme/resolvers/chip'
-import { createIconButtonThemeFromDesign } from '@/src/theme/resolvers/iconButton'
-import { createInputThemeFromDesign } from '@/src/theme/resolvers/input'
-import { createMenuThemeFromDesign } from '@/src/theme/resolvers/menu'
-import { createMultiSelectThemeFromDesign } from '@/src/theme/resolvers/multiSelect'
-import { createSelectThemeFromDesign } from '@/src/theme/resolvers/select'
+import { createButtonThemeFromDesign } from '../resolvers/button'
+import { createChatThemeFromDesign } from '../resolvers/chat'
+import { createCheckboxThemeFromDesign } from '../resolvers/checkbox'
+import { createChipThemeFromDesign } from '../resolvers/chip'
+import { createIconButtonThemeFromDesign } from '../resolvers/iconButton'
+import { createInputThemeFromDesign } from '../resolvers/input'
+import { createMenuThemeFromDesign } from '../resolvers/menu'
+import { createMultiSelectThemeFromDesign } from '../resolvers/multiSelect'
+import { createSelectThemeFromDesign } from '../resolvers/select'
 import type {
   Color,
   ColorPalette,
   HightideColors
-} from '@/src/theme/types/color'
-import type { Theme } from '@/src/theme/types/theme'
+} from '../types/color'
+import type { Theme } from '../types/theme'
 
 const unwrapColorPaletteToken = (token: ColorPaletteToken): Color | ColorPalette => {
   if (token.type === 'singleValue') {

@@ -1,7 +1,7 @@
 import type { Meta, StoryObj } from '@storybook/nextjs-vite'
 import { useState } from 'react'
-import { ChangingNumber } from '@/src/components/display-and-visualization/ChangingNumber'
-import { Button } from '@/src/components/user-interaction/Button'
+import { ChangingNumber } from '../../src/components/display-and-visualization/ChangingNumber'
+import { Button } from '../../src/components/user-interaction/Button'
 
 const meta: Meta<typeof ChangingNumber> = {
   component: ChangingNumber,

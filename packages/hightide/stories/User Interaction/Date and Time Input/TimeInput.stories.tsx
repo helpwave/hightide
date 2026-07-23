@@ -1,5 +1,5 @@
 import type { Meta, StoryObj } from '@storybook/nextjs-vite'
-import { TimeInput } from '@/src/components/user-interaction/date/TimeInput'
+import { TimeInput } from '../../../src/components/user-interaction/date/TimeInput'
 import { action } from 'storybook/actions'
 
 const meta: Meta<typeof TimeInput> = {

@@ -1,6 +1,6 @@
 import type { Meta, StoryObj } from '@storybook/nextjs-vite'
-import type { ChatMessageDirection } from '@/src/components/chat/ChatMessageBubble'
-import { ChatMessageBubble } from '@/src/components/chat/ChatMessageBubble'
+import type { ChatMessageDirection } from '../../src/components/chat/ChatMessageBubble'
+import { ChatMessageBubble } from '../../src/components/chat/ChatMessageBubble'
 
 const meta: Meta<typeof ChatMessageBubble> = {
   component: ChatMessageBubble,

@@ -1,5 +1,5 @@
 import type { Meta, StoryObj } from '@storybook/nextjs-vite'
-import { Switch as SwitchComponent } from '@/src/components/user-interaction/Switch'
+import { Switch as SwitchComponent } from '../../src/components/user-interaction/Switch'
 import { action } from 'storybook/actions'
 
 const meta = {

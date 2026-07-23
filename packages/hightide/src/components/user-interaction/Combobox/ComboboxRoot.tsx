@@ -4,7 +4,7 @@ import { ComboboxContext } from './ComboboxContext'
 import type { ComboboxContextConfig, ComboboxContextIds, ComboboxContextLayout, ComboboxContextType, ComboboxOptionType } from './ComboboxContext'
 import type { UseComboboxOptions } from './useCombobox'
 import { useCombobox } from './useCombobox'
-import { DOMUtils } from '@/src/utils/dom'
+import { DOMUtils } from '../../../utils/dom'
 
 export interface ComboboxRootProps<T = string> extends Omit<UseComboboxOptions, 'options'> {
   children: ReactNode,

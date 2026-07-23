@@ -1,9 +1,9 @@
 import { Binary } from 'lucide-react'
-import { Input } from '@/src/components/user-interaction/input/Input'
+import { Input } from '../input/Input'
 import { useHightideTranslation } from '@helpwave/hightide-utils/context/translation'
 import type { PropertyField } from './PropertyBase'
 import { PropertyBase } from './PropertyBase'
-import { PropsUtil } from '@/src/utils/propsUtil'
+import { PropsUtil } from '../../../utils/propsUtil'
 
 export type NumberPropertyProps = PropertyField<number>
 & { suffix?: string }

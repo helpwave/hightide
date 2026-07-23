@@ -11,18 +11,18 @@ import {
 } from 'react-native'
 import { Check } from 'lucide-react-native'
 
-import { Chip } from '@/src/components/visualization-and-display/Chip'
-import { Icon } from '@/src/components/visualization-and-display/Icon'
-import { useTheme } from '@/src/global-contexts/theme/ThemeContext'
+import { Chip } from '../visualization-and-display/Chip'
+import { Icon } from '../visualization-and-display/Icon'
+import { useTheme } from '../../global-contexts/theme/ThemeContext'
 import {
   useMultiSelect,
   type UseMultiSelectOption
-} from '@/src/hooks/useMultiSelect'
-import type { MultiSelectState } from '@/src/theme/types/components/multiSelect'
+} from '../../hooks/useMultiSelect'
+import type { MultiSelectState } from '../../theme/types/components/multiSelect'
 import type {
   FormFieldDataHandling,
   FormFieldInteractionStates
-} from '@/src/types/formField'
+} from '../../types/formField'
 
 export type MultiSelectOption = UseMultiSelectOption
 

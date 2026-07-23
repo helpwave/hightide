@@ -1,5 +1,5 @@
 import type { Meta, StoryObj } from '@storybook/nextjs-vite'
-import { AppZumDocLogo } from '@/src/components/branding/AppZumDocLogo'
+import { AppZumDocLogo } from '../../src/components/branding/AppZumDocLogo'
 
 const meta = {
   component: AppZumDocLogo,

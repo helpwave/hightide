@@ -1,4 +1,9 @@
-import type { ColorPaletteBasicToken, ColorPaletteDetailedToken, ColorPaletteSingleValueToken, HightideColorPalleteTokens } from '../types'
+import type {
+  ColorPaletteBasicToken,
+  ColorPaletteDetailedToken,
+  ColorPaletteSingleValueToken
+} from '../types/color'
+import type { HightideColorPalleteTokens } from '../types/hightide'
 
 export const colorPalettes = {
   white: {

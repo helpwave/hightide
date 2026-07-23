@@ -1,6 +1,6 @@
 import type { Meta, StoryObj } from '@storybook/nextjs-vite'
 import { action } from 'storybook/actions'
-import { ChatQuickReplyChip } from '@/src/components/chat/ChatQuickReplyChip'
+import { ChatQuickReplyChip } from '../../src/components/chat/ChatQuickReplyChip'
 
 const meta: Meta<typeof ChatQuickReplyChip> = {
   component: ChatQuickReplyChip,

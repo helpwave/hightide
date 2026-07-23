@@ -2,12 +2,12 @@ import type { ReactNode, RefObject } from 'react'
 import { useCallback, useEffect, useId, useMemo, useState } from 'react'
 import { SelectContext } from './SelectContext'
 import type { SelectContextConfig, SelectContextLayout, SelectOptionType } from './SelectContext'
-import { useSelect } from '@/src/components/user-interaction/Select/useSelect'
-import { DOMUtils } from '@/src/utils/dom'
-import type { FormFieldDataHandling } from '@/src/components/form/FormField'
+import { useSelect } from './useSelect'
+import { DOMUtils } from '../../../utils/dom'
+import type { FormFieldDataHandling } from '../../form/FormField'
 import { useEventCallbackStabilizer } from '@helpwave/hightide-utils/hooks'
-import type { FormFieldInteractionStates } from '@/src/components/form/FieldLayout'
-import { PopUpContext } from '@/src/components/layout/popup/PopUpContext'
+import type { FormFieldInteractionStates } from '../../form/FieldLayout'
+import { PopUpContext } from '../../layout/popup/PopUpContext'
 
 export interface SelectIds {
   trigger: string,

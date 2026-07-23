@@ -5,9 +5,6 @@
     "jsx": "react-jsx",
     "rootDir": ".",
     "baseUrl": ".",
-    "paths": {
-      "@/*": ["./*"]
-    },
     "moduleResolution": "bundler",
     "noEmit": true,
     "types": [

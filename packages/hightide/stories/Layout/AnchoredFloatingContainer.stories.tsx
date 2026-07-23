@@ -1,8 +1,8 @@
 import type { Meta, StoryObj } from '@storybook/nextjs-vite'
-import type { AnchoredFloatingContainerProps } from '@/src/components/layout/AnchoredFloatingContainer'
-import { AnchoredFloatingContainer } from '@/src/components/layout/AnchoredFloatingContainer'
+import type { AnchoredFloatingContainerProps } from '../../src/components/layout/AnchoredFloatingContainer'
+import { AnchoredFloatingContainer } from '../../src/components/layout/AnchoredFloatingContainer'
 import { useRef } from 'react'
-import type { UseAnchoredPositionOptions } from '@/src/hooks/useAnchoredPosition'
+import type { UseAnchoredPositionOptions } from '../../src/hooks/useAnchoredPosition'
 
 type StoryArgs = Omit<AnchoredFloatingContainerProps, 'options'> & UseAnchoredPositionOptions & {
   isAnchored?: boolean,

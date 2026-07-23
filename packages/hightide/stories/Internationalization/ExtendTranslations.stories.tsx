@@ -3,13 +3,13 @@ import type {
   StoryObj
 } from '@storybook/nextjs-vite'
 
-import { LanguageSelect } from '@/src/components/layout/dialog/premade/LanguageDialog'
-import { HightideProvider } from '@/src/global-contexts/HightideProvider'
-import { HightideConfigUtils } from '@/src/global-contexts/hightide-config/HightideConfigUtils'
+import { LanguageSelect } from '../../src/components/layout/dialog/premade/LanguageDialog'
+import { HightideProvider } from '../../src/global-contexts/HightideProvider'
+import { HightideConfigUtils } from '../../src/global-contexts/hightide-config/HightideConfigUtils'
 import {
   type DemoTranslationEntries,
   useExtendedTranslation
-} from '@/stories/Internationalization/useExtendedTranslation'
+} from './useExtendedTranslation'
 
 const demoTranslations = {
   'en-US': {

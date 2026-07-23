@@ -2,7 +2,7 @@ import { useCallback, useEffect, useMemo } from 'react'
 import { useEventCallbackStabilizer } from '../../hooks/useEventCallbackStabelizer'
 import type { SimpleValueStore } from '../../hooks/useSimpleStoreSyncedValue'
 import { useSimpleStoreSyncedValue } from '../../hooks/useSimpleStoreSyncedValue'
-import type { Locale } from '../localization'
+import type { Locale } from '../localization/LocalizationContext'
 
 export type SystemTheme = 'dark' | 'light'
 

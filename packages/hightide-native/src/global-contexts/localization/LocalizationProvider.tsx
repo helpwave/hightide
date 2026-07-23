@@ -5,8 +5,8 @@ import {
   type LocalizationProviderProps as LocalizationProviderPropsBase
 } from '@helpwave/hightide-utils/context/localization'
 
-import { HightideConfigUtils } from '@/src/global-contexts/hightide-config/HightideConfigUtils'
-import { useNativeKeyValueStore } from '@/src/hooks/useNativeKeyValueStore'
+import { HightideConfigUtils } from '../hightide-config/HightideConfigUtils'
+import { useNativeKeyValueStore } from '../../hooks/useNativeKeyValueStore'
 
 export type LocalizationProviderProps = PropsWithChildren
   & Omit<LocalizationProviderPropsBase, 'store' | 'fallbackLocale' | 'supportedLocales'>

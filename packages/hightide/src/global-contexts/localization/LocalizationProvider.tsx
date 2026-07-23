@@ -7,7 +7,7 @@ import {
 import { useBrowserKeyValueStore } from '@helpwave/hightide-utils/hooks'
 import { LocalizationUtils } from '@helpwave/hightide-utils/utils'
 import { useEffect, useState } from 'react'
-import { useHightideConfig } from '../hightide-config'
+import { useHightideConfig } from '../hightide-config/HightideConfigContext'
 
 export type LocalizationProviderProps = PropsWithChildren
   & Omit<LocalizationProviderPropsBase, 'store' | 'systemLocale' | 'fallbackLocale' | 'supportedLocales'>

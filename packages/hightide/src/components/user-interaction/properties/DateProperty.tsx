@@ -1,7 +1,7 @@
 import { CalendarDays } from 'lucide-react'
 import { PropertyBase, type PropertyField } from './PropertyBase'
 import { DateTimeInput, type DateTimeInputProps } from '../input/DateTimeInput'
-import { PropsUtil } from '@/src/utils/propsUtil'
+import { PropsUtil } from '../../../utils/propsUtil'
 
 export type DatePropertyProps =
   Pick<PropertyField<Date | null>, 'name' | 'onRemove' | 'onValueClear'>

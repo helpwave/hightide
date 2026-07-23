@@ -1,9 +1,11 @@
 import type {
   ColoringDefinitionToken,
-  ColoringDefintionTokens,
+  ColoringDefintionTokens
+} from '../../types/coloring'
+import type {
   HightideColoringTokens,
   HightideSemanticColorTokens
-} from '../../types'
+} from '../../types/hightide'
 
 export const coloringTypes = ['primary', 'secondary', 'positive', 'warning', 'negative', 'neutral'] as const
 

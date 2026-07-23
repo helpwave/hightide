@@ -1,8 +1,8 @@
 import type { Meta, StoryObj } from '@storybook/nextjs-vite'
 import { CalendarDays, Pill, Send } from 'lucide-react'
-import { ChatMessageCard } from '@/src/components/chat/ChatMessageCard'
-import { Chip } from '@/src/components/display-and-visualization/Chip'
-import { Button } from '@/src/components/user-interaction/Button'
+import { ChatMessageCard } from '../../src/components/chat/ChatMessageCard'
+import { Chip } from '../../src/components/display-and-visualization/Chip'
+import { Button } from '../../src/components/user-interaction/Button'
 
 const meta: Meta<typeof ChatMessageCard> = {
   component: ChatMessageCard,

@@ -2,8 +2,8 @@ import type { Meta, StoryObj } from '@storybook/nextjs-vite'
 import { useCallback, useEffect, useMemo, useRef, useState } from 'react'
 import { faker } from '@faker-js/faker'
 import { range } from '@helpwave/hightide-utils/utils'
-import { VirtualizedCardGrid } from '@/src/components/layout/virtualization/VirtualizedCardGrid'
-import { Chip } from '@/src/components/display-and-visualization/Chip'
+import { VirtualizedCardGrid } from '../../../src/components/layout/virtualization/VirtualizedCardGrid'
+import { Chip } from '../../../src/components/display-and-visualization/Chip'
 
 type Item = {
   id: string,

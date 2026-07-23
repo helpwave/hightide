@@ -3,7 +3,7 @@ import clsx from 'clsx'
 import { Check, CheckCheck } from 'lucide-react'
 import type { AvatarWithStatusProps } from '../display-and-visualization/Avatar'
 import { AvatarWithStatus } from '../display-and-visualization/Avatar'
-import { PropsUtil } from '@/src/utils/propsUtil'
+import { PropsUtil } from '../../utils/propsUtil'
 
 export type ChatConversationSentIndicator = 'sent' | 'sentAndReceived'
 

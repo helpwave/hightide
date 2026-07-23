@@ -1,8 +1,8 @@
 import type { Meta, StoryObj } from '@storybook/nextjs-vite'
 import type { ReactNode } from 'react'
 import { useState } from 'react'
-import { Button } from '@/src/components/user-interaction/Button'
-import { HelpwaveLogo } from '@/src/components/branding/HelpwaveLogo'
+import { Button } from '../../src/components/user-interaction/Button'
+import { HelpwaveLogo } from '../../src/components/branding/HelpwaveLogo'
 
 type DemoSectionProps = {
   title: string,

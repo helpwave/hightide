@@ -1,11 +1,11 @@
 import { useEffect, useMemo, useRef } from 'react'
 import { closestMatch, range } from '@helpwave/hightide-utils/utils'
-import { Button } from '@/src/components/user-interaction/Button'
-import type { FormFieldDataHandling } from '@/src/components/form/FormField'
+import { Button } from '../Button'
+import type { FormFieldDataHandling } from '../../form/FormField'
 import { useControlledState } from '@helpwave/hightide-utils/hooks'
 import type { DateTimePrecision } from '@helpwave/hightide-utils/utils'
-import { Visibility } from '@/src/components/layout/Visibility'
-import { useDateTimeFormat } from '@/src/global-contexts/localization'
+import { Visibility } from '../../layout/Visibility'
+import { useDateTimeFormat } from '../../../global-contexts/localization/forward-exports'
 
 export type TimePickerMinuteIncrement = '1min' | '5min' | '10min' | '15min' | '30min'
 

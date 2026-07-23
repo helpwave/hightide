@@ -1,5 +1,5 @@
 import type { SupportedLocalesConfig } from '../localization/forward-exports'
-import type { SupportedThemesConfig } from '../theme'
+import type { SupportedThemesConfig } from '../theme/ThemeProvider'
 
 export const HightideConfigUtils = {
   defaultSupportedLocales: {

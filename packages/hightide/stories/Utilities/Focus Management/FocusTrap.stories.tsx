@@ -1,10 +1,10 @@
 import type { Meta, StoryObj } from '@storybook/nextjs-vite'
 import { useRef, useState } from 'react'
-import { Input } from '@/src/components/user-interaction/input/Input'
-import { FocusTrapWrapper } from '@/src/components/utils/FocusTrap'
+import { Input } from '../../../src/components/user-interaction/input/Input'
+import { FocusTrapWrapper } from '../../../src/components/utils/FocusTrap'
 import { clsx } from 'clsx'
-import { Dialog } from '@/src/components/layout/dialog/Dialog'
-import { Button } from '@/src/components/user-interaction/Button'
+import { Dialog } from '../../../src/components/layout/dialog/Dialog'
+import { Button } from '../../../src/components/user-interaction/Button'
 
 type StoryArgs = unknown
 

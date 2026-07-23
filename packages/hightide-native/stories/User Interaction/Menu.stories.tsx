@@ -14,11 +14,11 @@ import {
 } from 'lucide-react-native'
 import { action } from 'storybook/actions'
 
-import { Menu } from '@/src/components/menu/Menu'
-import { MenuActionItem } from '@/src/components/menu/MenuActionItem'
-import { MenuItem } from '@/src/components/menu/MenuItem'
-import { MenuNavigationItem } from '@/src/components/menu/MenuNavigationItem'
-import { useTheme } from '@/src/global-contexts/theme/ThemeContext'
+import { Menu } from '../../src/components/menu/Menu'
+import { MenuActionItem } from '../../src/components/menu/MenuActionItem'
+import { MenuItem } from '../../src/components/menu/MenuItem'
+import { MenuNavigationItem } from '../../src/components/menu/MenuNavigationItem'
+import { useTheme } from '../../src/global-contexts/theme/ThemeContext'
 
 const meta = {
   component: Menu,

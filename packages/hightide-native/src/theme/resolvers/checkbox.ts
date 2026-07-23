@@ -7,16 +7,16 @@ import type {
   ElementSize
 } from '@helpwave/hightide-design/types'
 
-import type { HightideSemanticColors } from '@/src/theme/types/color'
+import type { HightideSemanticColors } from '../types/color'
 import type {
   CheckboxSize,
   CheckboxState,
   CheckboxTheme
-} from '@/src/theme/types/components/checkbox'
+} from '../types/components/checkbox'
 import {
   createStyleResolver,
   createValueResolver
-} from '@/src/theme/types/resolver'
+} from '../types/resolver'
 
 const checkboxSizes: Record<CheckboxSize, number> = {
   sm: 20,

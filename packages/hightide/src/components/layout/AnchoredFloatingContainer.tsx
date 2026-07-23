@@ -1,7 +1,7 @@
 import type { HTMLAttributes, RefObject } from 'react'
 import { forwardRef, useRef } from 'react'
-import type { UseAnchoredPositionOptions } from '@/src/hooks/useAnchoredPosition'
-import { useAnchoredPosition as useAnchoredPosition } from '@/src/hooks/useAnchoredPosition'
+import type { UseAnchoredPositionOptions } from '../../hooks/useAnchoredPosition'
+import { useAnchoredPosition as useAnchoredPosition } from '../../hooks/useAnchoredPosition'
 import { ReactUtils } from '@helpwave/hightide-utils/utils'
 
 export type BackgroundOverlayProps = HTMLAttributes<HTMLDivElement>

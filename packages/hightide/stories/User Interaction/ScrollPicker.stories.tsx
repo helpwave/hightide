@@ -1,6 +1,6 @@
 import type { Meta, StoryObj } from '@storybook/nextjs-vite'
 import { range } from '@helpwave/hightide-utils/utils'
-import { ScrollPicker } from '@/src/components/user-interaction/ScrollPicker'
+import { ScrollPicker } from '../../src/components/user-interaction/ScrollPicker'
 
 const meta = {
   component: ScrollPicker<number>,

@@ -1,6 +1,6 @@
 import type { Meta, StoryObj } from '@storybook/nextjs-vite'
-import { ScrollableList } from '@/src/components/layout/ScrollableList'
-import { Button } from '@/src/components/user-interaction/Button'
+import { ScrollableList } from '../../src/components/layout/ScrollableList'
+import { Button } from '../../src/components/user-interaction/Button'
 
 const listItems = [
   'Alpha',

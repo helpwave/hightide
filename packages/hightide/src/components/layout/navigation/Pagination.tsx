@@ -1,6 +1,6 @@
 import { ChevronFirst, ChevronLast, ChevronLeft, ChevronRight } from 'lucide-react'
 import clsx from 'clsx'
-import { Input } from '@/src/components/user-interaction/input/Input'
+import { Input } from '../../user-interaction/input/Input'
 import { MathUtil } from '@helpwave/hightide-utils/utils'
 import type { HTMLAttributes } from 'react'
 import { useEffect, useState } from 'react'

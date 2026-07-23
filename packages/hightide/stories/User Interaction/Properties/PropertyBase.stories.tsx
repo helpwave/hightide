@@ -1,6 +1,6 @@
 import type { Meta, StoryObj } from '@storybook/nextjs-vite'
 import clsx from 'clsx'
-import { PropertyBase } from '@/src/components/user-interaction/properties/PropertyBase'
+import { PropertyBase } from '../../../src/components/user-interaction/properties/PropertyBase'
 import { Text } from 'lucide-react'
 import { action } from 'storybook/actions'
 

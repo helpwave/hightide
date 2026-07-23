@@ -6,17 +6,17 @@ import type { HightideDesignTokens as DesignTokensTheme } from '@helpwave/highti
 import {
   isOutlineColoringStyle,
   resolveColoringStyles
-} from '@/src/theme/resolvers/coloring'
-import type { HightideSemanticColors } from '@/src/theme/types/color'
-import type { HightideComponentThemes } from '@/src/theme/types/components/hightide'
+} from './coloring'
+import type { HightideSemanticColors } from '../types/color'
+import type { HightideComponentThemes } from '../types/components/hightide'
 import type {
   IconButtonState,
   IconButtonTheme
-} from '@/src/theme/types/components/iconButton'
+} from '../types/components/iconButton'
 import {
   createStyleResolver,
   createValueResolver
-} from '@/src/theme/types/resolver'
+} from '../types/resolver'
 
 export type CreateIconButtonThemeOptions = {
   semantic: HightideSemanticColors,

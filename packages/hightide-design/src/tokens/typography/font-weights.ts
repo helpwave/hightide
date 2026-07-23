@@ -1,4 +1,4 @@
-import type { FontWeightVariableTokens } from '@/src/types'
+import type { FontWeightVariableTokens } from '../../types/typography'
 
 export const fontWeights = {
   thin: '100',

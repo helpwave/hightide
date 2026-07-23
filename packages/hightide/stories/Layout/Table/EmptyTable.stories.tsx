@@ -1,9 +1,9 @@
 import type { Meta, StoryObj } from '@storybook/nextjs-vite'
 import { useState } from 'react'
 import type { RowSelectionState } from '@tanstack/react-table'
-import type { TableProviderProps } from '@/src/components/layout/table/TableProvider'
-import type { TableWithSelectionProviderProps } from '@/src/components/layout/table/TableWithSelectionProvider'
-import { Table, TableWithSelection } from '@/src/components/layout/table/Table'
+import type { TableProviderProps } from '../../../src/components/layout/table/TableProvider'
+import type { TableWithSelectionProviderProps } from '../../../src/components/layout/table/TableWithSelectionProvider'
+import { Table, TableWithSelection } from '../../../src/components/layout/table/Table'
 
 type EmptyRow = Record<string, never>
 

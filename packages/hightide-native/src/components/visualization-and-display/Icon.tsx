@@ -2,7 +2,7 @@ import type { LucideIcon } from 'lucide-react-native'
 
 import type { ElementSize } from '@helpwave/hightide-design/types'
 
-import { useTheme } from '@/src/global-contexts/theme/ThemeContext'
+import { useTheme } from '../../global-contexts/theme/ThemeContext'
 
 export type IconProps = {
   icon: LucideIcon,

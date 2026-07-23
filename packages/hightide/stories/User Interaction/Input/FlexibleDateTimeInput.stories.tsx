@@ -1,9 +1,9 @@
 import type { Meta, StoryObj } from '@storybook/nextjs-vite'
 import { action } from 'storybook/actions'
 import { useEffect, useState } from 'react'
-import { FlexibleDateTimeInput } from '@/src/components/user-interaction/input/FlexibleDateTimeInput'
-import { TimeDisplay } from '@/src/components/user-interaction/date/TimeDisplay'
-import { LocalizationContext } from '@/src/global-contexts/localization'
+import { FlexibleDateTimeInput } from '../../../src/components/user-interaction/input/FlexibleDateTimeInput'
+import { TimeDisplay } from '../../../src/components/user-interaction/date/TimeDisplay'
+import { LocalizationContext } from '../../../src/global-contexts/localization/forward-exports'
 
 const timeZones = ['', 'UTC', 'America/New_York', 'Europe/Berlin', 'Asia/Tokyo', 'Pacific/Kiritimati']
 

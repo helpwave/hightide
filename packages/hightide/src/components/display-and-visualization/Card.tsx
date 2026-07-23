@@ -3,7 +3,7 @@ import { forwardRef, useId } from 'react'
 import clsx from 'clsx'
 import { ChevronRight, ExternalLink } from 'lucide-react'
 import { Visibility } from '../layout/Visibility'
-import { PropsUtil } from '@/src/utils/propsUtil'
+import { PropsUtil } from '../../utils/propsUtil'
 
 export type CardSize = 'sm' | 'md' | 'lg'
 

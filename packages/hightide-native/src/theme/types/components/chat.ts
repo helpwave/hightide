@@ -5,11 +5,11 @@ import type {
 
 import type { ColoringType } from '@helpwave/hightide-design/helpers'
 
-import type { Color } from '@/src/theme/types/color'
+import type { Color } from '../color'
 import type {
   InteractionState,
   StyleResolverFunction
-} from '@/src/theme/types/resolver'
+} from '../resolver'
 
 export type ChatMessageDirection = 'incoming' | 'outgoing'
 

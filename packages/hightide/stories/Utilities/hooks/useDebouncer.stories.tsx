@@ -2,8 +2,8 @@ import type { Meta, StoryObj } from '@storybook/nextjs-vite'
 import { action } from 'storybook/actions'
 import { useState } from 'react'
 
-import { Button } from '@/src/components/user-interaction/Button'
-import { Input } from '@/src/components/user-interaction/input/Input'
+import { Button } from '../../../src/components/user-interaction/Button'
+import { Input } from '../../../src/components/user-interaction/input/Input'
 import { useDebouncer } from '@helpwave/hightide-utils/hooks'
 
 type StoryArgs = {

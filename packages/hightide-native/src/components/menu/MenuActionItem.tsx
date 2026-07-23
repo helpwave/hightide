@@ -12,13 +12,13 @@ import {
   type ViewStyle
 } from 'react-native'
 
-import { useTheme } from '@/src/global-contexts/theme/ThemeContext'
+import { useTheme } from '../../global-contexts/theme/ThemeContext'
 import type {
   MenuActionItemLabelStyle,
   MenuActionItemState,
   MenuActionItemStyle
-} from '@/src/theme/types/components/menu'
-import type { StyleOverwrite } from '@/src/theme/types/resolver'
+} from '../../theme/types/components/menu'
+import type { StyleOverwrite } from '../../theme/types/resolver'
 
 export type MenuActionItemProps = Omit<PressableProps, 'children' | 'style'> & {
   label: string,

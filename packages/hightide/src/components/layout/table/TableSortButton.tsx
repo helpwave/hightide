@@ -1,10 +1,10 @@
 import { ChevronDown, ChevronsUpDown, ChevronUp } from 'lucide-react'
 import clsx from 'clsx'
 import type { SortDirection } from '@tanstack/react-table'
-import { Visibility } from '@/src/components/layout/Visibility'
+import { Visibility } from '../Visibility'
 import { useHightideTranslation } from '@helpwave/hightide-utils/context/translation'
-import type { IconButtonProps } from '@/src/components/user-interaction/IconButton'
-import { IconButton } from '@/src/components/user-interaction/IconButton'
+import type { IconButtonProps } from '../../user-interaction/IconButton'
+import { IconButton } from '../../user-interaction/IconButton'
 
 type SortingIndexDisplay = {
   index: number,

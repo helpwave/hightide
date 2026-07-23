@@ -1,6 +1,6 @@
 import type { HTMLAttributes, ReactNode } from 'react'
 import { useId, useMemo, forwardRef } from 'react'
-import type { FormFieldInteractionStates } from '@/src/utils/propsUtil'
+import type { FormFieldInteractionStates } from '../../utils/propsUtil'
 
 export type { FormFieldInteractionStates }
 

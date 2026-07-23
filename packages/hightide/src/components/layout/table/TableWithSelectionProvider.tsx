@@ -1,4 +1,4 @@
-import { Checkbox } from '@/src/components/user-interaction/Checkbox'
+import { Checkbox } from '../../user-interaction/Checkbox'
 import { FillerCell } from './FillerCell'
 import type { TableProviderProps } from './TableProvider'
 import { TableProvider } from './TableProvider'

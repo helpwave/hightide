@@ -1,9 +1,9 @@
 import { Text } from 'lucide-react'
 import { useHightideTranslation } from '@helpwave/hightide-utils/context/translation'
-import { Textarea } from '@/src/components/user-interaction/Textarea'
+import { Textarea } from '../Textarea'
 import type { PropertyField } from './PropertyBase'
 import { PropertyBase } from './PropertyBase'
-import { PropsUtil } from '@/src/utils/propsUtil'
+import { PropsUtil } from '../../../utils/propsUtil'
 
 export type TextPropertyProps = PropertyField<string>
 

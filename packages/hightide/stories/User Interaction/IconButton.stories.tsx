@@ -1,7 +1,7 @@
 import type { Meta, StoryObj } from '@storybook/nextjs-vite'
-import { StorybookStyling } from '@/src/storybook/styling'
+import { StorybookStyling } from '../../src/storybook/styling'
 import { action } from 'storybook/actions'
-import { IconButton } from '@/src/components/user-interaction/IconButton'
+import { IconButton } from '../../src/components/user-interaction/IconButton'
 import { MinusIcon } from 'lucide-react'
 
 const meta = {

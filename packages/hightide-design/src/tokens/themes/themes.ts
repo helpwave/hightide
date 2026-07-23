@@ -1,4 +1,4 @@
-import type { HightideDesignTokens } from '@/src/types'
+import type { HightideDesignTokens } from '../../types/hightide'
 import { darkTheme } from './dark'
 import { lightTheme } from './light'
 

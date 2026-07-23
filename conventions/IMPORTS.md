@@ -2,23 +2,21 @@
 
 Applies to all packages in this monorepo (`hightide`, `hightide-native`, `hightide-design`, `hightide-utils`).
 
-## Absolute package imports
+## Relative package imports
 
-Imports from **within the same package** must use the `@/` path alias (absolute from the package root), never relative paths such as `../` or `./`.
+Imports from **within the same package** must use relative paths (`./` or `../`), never use path alias like `@/`.
 
 ```ts
 // Prefer
-import { useTheme } from '@/src/global-contexts/theme/ThemeContext'
-import type { ChatTheme } from '@/src/theme/types/components/chat'
+import { useTheme } from '../../global-contexts/theme/ThemeContext'
+import type { ChatTheme } from '../../theme/types/components/chat'
 
 // Avoid
-import { useTheme } from '../../global-contexts/theme'
-import type { ChatTheme } from '../types/components/chat'
+import { useTheme } from '@/src/global-contexts/theme/ThemeContext'
+import type { ChatTheme } from '@/src/theme/types/components/chat'
 ```
 
-`@/*` maps to the package root (see each package's `tsconfig.json` `paths`). Prefer paths under `@/src/…` for source modules.
-
-Cross-package imports (for example `@helpwave/hightide-design/tokens` or `@helpwave/hightide-utils/hooks`) keep their published package names. Do not rewrite those to `@/`.
+Cross-package imports (for example `@helpwave/hightide-design/tokens` or `@helpwave/hightide-utils/hooks`) keep their published package names. Do not rewrite those to relative paths across package boundaries.
 
 ## No index / barrel imports
 
@@ -26,14 +24,14 @@ Local package imports must target the **concrete module file**, never a folder `
 
 ```ts
 // Prefer
-import { useTheme } from '@/src/global-contexts/theme/ThemeContext'
-import type { StyleOverwrite } from '@/src/theme/types/resolver'
-import { Button } from '@/src/components/user-interaction/Button'
+import { useTheme } from '../../global-contexts/theme/ThemeContext'
+import type { StyleOverwrite } from '../../theme/types/resolver'
+import { Button } from '../user-interaction/Button'
 
 // Avoid
-import { useTheme } from '@/src/global-contexts/theme'
-import type { StyleOverwrite } from '@/src/theme'
-import { Button } from '@/src/components/user-interaction'
+import { useTheme } from '../../global-contexts/theme'
+import type { StyleOverwrite } from '../../theme'
+import { Button } from '../user-interaction'
 ```
 
 Barrel `index.ts` files may still exist for package **public** entrypoints. Do not import through them from other files inside this package.
@@ -66,7 +64,7 @@ Group and order imports from most external to most local:
 
 1. **External dependencies** — `react`, `react-native`, third-party libraries, Node built-ins
 2. **Workspace / sibling packages** — `@helpwave/…` (and other monorepo packages)
-3. **Internal package imports** — `@/…`
+3. **Internal package imports** — relative `./` / `../` paths
 
 Separate groups with a blank line. Within a group, keep a stable alphabetical order when practical.
 
@@ -86,6 +84,6 @@ import { Check } from 'lucide-react-native'
 import { hexWithAlpha } from '@helpwave/hightide-design/helpers'
 import { fontWeights } from '@helpwave/hightide-design/tokens'
 
-import { useTheme } from '@/src/global-contexts/theme/ThemeContext'
-import type { ChatTheme } from '@/src/theme/types/components/chat'
+import { useTheme } from '../../global-contexts/theme/ThemeContext'
+import type { ChatTheme } from '../../theme/types/components/chat'
 ```

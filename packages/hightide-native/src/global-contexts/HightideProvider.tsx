@@ -7,20 +7,20 @@ import { useLocalization } from '@helpwave/hightide-utils/context/localization'
 import { hightideTranslation } from '@helpwave/hightide-utils/i18n'
 import { ArrayUtil } from '@helpwave/hightide-utils/utils'
 
-import { HightideContext } from '@/src/global-contexts/HightideContext'
+import { HightideContext } from './HightideContext'
 import {
   LocalizationProvider,
   type LocalizationProviderProps
-} from '@/src/global-contexts/localization/LocalizationProvider'
-import { useTheme } from '@/src/global-contexts/theme/ThemeContext'
+} from './localization/LocalizationProvider'
+import { useTheme } from './theme/ThemeContext'
 import {
   ThemeProvider,
   type ThemeProviderProps
-} from '@/src/global-contexts/theme/ThemeProvider'
+} from './theme/ThemeProvider'
 import {
   TranslationProvider,
   type TranslationProviderProps
-} from '@/src/global-contexts/translation/forward-exports'
+} from './translation/forward-exports'
 
 export type HightideProviderProps = PropsWithChildren & {
   theme?: Omit<ThemeProviderProps, 'children'>,

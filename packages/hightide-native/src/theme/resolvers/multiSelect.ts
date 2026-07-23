@@ -4,16 +4,16 @@ import type {
   HightideDesignTokens as DesignTokensTheme
 } from '@helpwave/hightide-design/types'
 
-import type { HightideSemanticColors } from '@/src/theme/types/color'
+import type { HightideSemanticColors } from '../types/color'
 import type {
   MultiSelectOptionState,
   MultiSelectState,
   MultiSelectTheme
-} from '@/src/theme/types/components/multiSelect'
+} from '../types/components/multiSelect'
 import {
   createStyleResolver,
   createValueResolver
-} from '@/src/theme/types/resolver'
+} from '../types/resolver'
 
 export type CreateMultiSelectThemeOptions = {
   semantic: HightideSemanticColors,

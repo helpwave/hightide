@@ -1,4 +1,4 @@
-import { PropsUtil } from '@/src/utils/propsUtil'
+import { PropsUtil } from '../../../utils/propsUtil'
 import { flexRender } from '@tanstack/react-table'
 import clsx from 'clsx'
 import { Visibility } from '../Visibility'
