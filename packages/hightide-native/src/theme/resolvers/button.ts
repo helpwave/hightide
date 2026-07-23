@@ -8,7 +8,7 @@ import {
   fontWeights
 } from '@helpwave/hightide-design/tokens'
 import type {
-  HightideDesignTokens as DesignTokensTheme,
+  HightideThemeTokens as DesignTokensTheme,
   ElementSize
 } from '@helpwave/hightide-design/types'
 

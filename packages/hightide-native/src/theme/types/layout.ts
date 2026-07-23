@@ -43,4 +43,16 @@ export type HightideLayout = {
     borderRadius: number,
     fontSize: number,
   }>,
+  avatar: Record<ElementSize, {
+    size: number,
+    padding: number,
+    fontSize: number,
+    statusDotSize: number,
+    statusDotBorderWidth: number,
+  }>,
+  avatarGroup: {
+    overlap: number,
+    maxShown: number,
+    gap: number,
+  },
 }

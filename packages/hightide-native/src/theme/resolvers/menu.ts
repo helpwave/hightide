@@ -3,7 +3,7 @@ import { StyleSheet } from 'react-native'
 import { fontWeights } from '@helpwave/hightide-design/tokens'
 import type {
   ComponentColorTokens,
-  HightideDesignTokens as DesignTokensTheme
+  HightideThemeTokens as DesignTokensTheme
 } from '@helpwave/hightide-design/types'
 
 import type { HightideSemanticColors } from '../types/color'

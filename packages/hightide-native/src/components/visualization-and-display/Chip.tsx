@@ -13,7 +13,7 @@ import {
 import {
   coloringTypes,
   type ColoringType
-} from '@helpwave/hightide-design/helpers'
+} from '@helpwave/hightide-design/utils'
 import type {
   ChipColoringStyle,
   ElementSize

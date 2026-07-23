@@ -1,8 +1,8 @@
-export type ThemeConstructorOptions<
+export type ThemeTokenConstructorOptions<
   PrimitiveTokens,
   SemanticTokens,
   ComponentTokens,
-  Theme
+  ThemeTokens
 > = {
   themeName: string,
   primitiveTokens: PrimitiveTokens,
@@ -20,22 +20,22 @@ export type ThemeConstructorOptions<
     primitiveTokens: PrimitiveTokens,
     semanticTokens: SemanticTokens,
     componentTokens: ComponentTokens,
-  }) => Theme,
+  }) => ThemeTokens,
 }
 
-export const constructTheme = <
+export const constructThemeTokens = <
   PrimitiveTokens,
   SemanticTokens,
   ComponentTokens,
-  Theme
+  ThemeTokens
 >(
-    options: ThemeConstructorOptions<
+    options: ThemeTokenConstructorOptions<
     PrimitiveTokens,
     SemanticTokens,
     ComponentTokens,
-    Theme
+    ThemeTokens
   >
-  ): Theme => {
+  ): ThemeTokens => {
   const {
     themeName,
     primitiveTokens,

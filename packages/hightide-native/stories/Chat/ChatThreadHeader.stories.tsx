@@ -1,14 +1,11 @@
-import {
-  Text,
-  View
-} from 'react-native'
+import { View } from 'react-native'
 import type {
   Meta,
   StoryObj
 } from '@storybook/react-native-web-vite'
 
 import { ChatThreadHeader } from '../../src/components/chat/ChatThreadHeader'
-import { useTheme } from '../../src/global-contexts/theme/ThemeContext'
+import { AvatarWithStatus } from '../../src/components/visualization-and-display/Avatar'
 
 const meta = {
   component: ChatThreadHeader,
@@ -17,28 +14,15 @@ const meta = {
 export default meta
 type Story = StoryObj<typeof meta>
 
-const AvatarPlaceholder = () => {
-  const { theme } = useTheme()
-
-  return (
-    <View
-      style={{
-        width: 40,
-        height: 40,
-        borderRadius: 20,
-        backgroundColor: theme.semantic.primary,
-        alignItems: 'center',
-        justifyContent: 'center',
-      }}
-    >
-      <Text style={{ color: theme.semantic.onPrimary, fontWeight: '700' }}>AW</Text>
-    </View>
-  )
-}
-
 export const chatThreadHeader: Story = {
   args: {
-    avatar: <AvatarPlaceholder />,
+    avatar: (
+      <AvatarWithStatus
+        name="Anna Wellermann"
+        status="online"
+        size="md"
+      />
+    ),
     title: 'Dr. Anna Wellermann',
     subtitle: 'Online',
   },

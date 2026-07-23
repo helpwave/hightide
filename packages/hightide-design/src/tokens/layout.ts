@@ -91,4 +91,15 @@ export const componentLayouts = {
     md: { minHeight: 40, paddingVertical: 8, paddingHorizontal: 12, gap: 8, borderRadius: 6, fontSize: 14 },
     lg: { minHeight: 48, paddingVertical: 10, paddingHorizontal: 16, gap: 8, borderRadius: 6, fontSize: 14 },
   },
+  avatar: {
+    xs: { size: 24, padding: 2, fontSize: 12, statusDotSize: 12, statusDotBorderWidth: 1.5 },
+    sm: { size: 32, padding: 4, fontSize: 12, statusDotSize: 14, statusDotBorderWidth: 2 },
+    md: { size: 40, padding: 6, fontSize: 18, statusDotSize: 16, statusDotBorderWidth: 2 },
+    lg: { size: 48, padding: 8, fontSize: 22, statusDotSize: 20, statusDotBorderWidth: 2 },
+  },
+  avatarGroup: {
+    overlap: 0.5,
+    maxShown: 5,
+    gap: 8,
+  },
 } as const satisfies ComponentLayoutTokens

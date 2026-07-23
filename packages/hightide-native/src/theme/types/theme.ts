@@ -8,10 +8,19 @@ import type { HightideLayout } from './layout'
 import type { HightideTypography } from './typography'
 
 export type Theme = {
-  colors: Record<string, unknown> & HightideColors,
-  semantic: Record<string, unknown> & HightideSemanticColors,
-  components: Record<string, unknown>  & HightideComponentThemes,
-  typography: Record<string, unknown> & HightideTypography,
-  layout: Record<string, unknown> & HightideLayout,
-  decoration: Record<string, unknown> & HightideDecoration,
+  colors: Record<string, unknown>,
+  semantic: Record<string, unknown>,
+  components: Record<string, unknown>,
+  typography: Record<string, unknown>,
+  layout: Record<string, unknown>,
+  decoration: Record<string, unknown>,
+}
+
+export type HightideTheme = Theme & {
+  colors: HightideColors & Theme['colors'],
+  semantic: HightideSemanticColors & Theme['semantic'],
+  components: HightideComponentThemes & Theme['components'],
+  typography: HightideTypography & Theme['typography'],
+  layout: HightideLayout & Theme['layout'],
+  decoration: HightideDecoration & Theme['decoration'],
 }

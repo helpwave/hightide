@@ -11,7 +11,7 @@ import {
 } from 'react-native'
 import { CheckCheck } from 'lucide-react-native'
 
-import type { ColoringType } from '@helpwave/hightide-design/helpers'
+import type { ColoringType } from '@helpwave/hightide-design/utils'
 
 import { useTheme } from '../../global-contexts/theme/ThemeContext'
 import type {

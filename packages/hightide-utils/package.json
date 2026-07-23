@@ -10,7 +10,7 @@
     "access": "public"
   },
   "license": "AGPL-3.0-only",
-  "version": "0.0.4",
+  "version": "0.0.5",
   "type": "module",
   "files": [
     "src",
@@ -36,10 +36,6 @@
     "./hooks": {
       "types": "./src/hooks/index.ts",
       "default": "./src/hooks/index.ts"
-    },
-    "./hooks/useUnstableMapperWarning": {
-      "types": "./src/hooks/useUnstableMapperWarning.ts",
-      "default": "./src/hooks/useUnstableMapperWarning.ts"
     },
     "./i18n": {
       "types": "./src/i18n/index.ts",

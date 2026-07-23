@@ -19,8 +19,8 @@ import {
   type SystemTheme
 } from './forward-exports'
 import { useNativeKeyValueStore } from '../../hooks/useNativeKeyValueStore'
-import type { ThemeMode } from '../../theme/themes/nativeThemes'
-import type { Theme } from '../../theme/types/theme'
+import type { ThemeMode } from '../../theme/themes/hightideThemes'
+import type { HightideTheme } from '../../theme/types/theme'
 
 export type ThemeProviderProps<T> = PropsWithChildren & {
   theme?: ThemeMode | null,
@@ -66,7 +66,7 @@ export const ThemeProvider = ({
   fallbackTheme = 'light',
   supportedThemes = HightideConfigUtils.defaultSupportedThemes,
   onChangedTheme,
-}: ThemeProviderProps<Theme>) => {
+}: ThemeProviderProps<HightideTheme>) => {
   const store = useNativeKeyValueStore()
   const systemTheme = useNativeSystemTheme()
 

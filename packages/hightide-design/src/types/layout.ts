@@ -71,6 +71,22 @@ export type ChipLayoutTokenMap = {
 
 export type ChipLayoutTokens = Record<ElementSize, ChipLayoutTokenMap>
 
+export type AvatarLayoutTokenMap = {
+  size: ScalingUnitToken,
+  padding: ScalingUnitToken,
+  fontSize: FixedUnitToken,
+  statusDotSize: ScalingUnitToken,
+  statusDotBorderWidth: FixedUnitToken,
+}
+
+export type AvatarLayoutTokens = Record<ElementSize, AvatarLayoutTokenMap>
+
+export type AvatarGroupLayoutTokens = {
+  overlap: number,
+  maxShown: number,
+  gap: ScalingUnitToken,
+}
+
 export type ComponentLayoutTokens = {
   shared: SharedLayoutTokens,
   element: ElementLayoutTokens,
@@ -80,4 +96,6 @@ export type ComponentLayoutTokens = {
   icon: IconLayoutTokens,
   input: Record<'md', InputLayoutTokenMap>,
   chip: ChipLayoutTokens,
+  avatar: AvatarLayoutTokens,
+  avatarGroup: AvatarGroupLayoutTokens,
 }

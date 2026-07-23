@@ -10,6 +10,7 @@ import { action } from 'storybook/actions'
 
 import { ChatConversationList } from '../../src/components/chat/ChatConversationList'
 import { ChatConversationRow } from '../../src/components/chat/ChatConversationRow'
+import { AvatarWithStatus } from '../../src/components/visualization-and-display/Avatar'
 import { useTheme } from '../../src/global-contexts/theme/ThemeContext'
 
 const meta = {
@@ -18,25 +19,6 @@ const meta = {
 
 export default meta
 type Story = StoryObj<typeof meta>
-
-const AvatarPlaceholder = ({ initials }: { initials: string }) => {
-  const { theme } = useTheme()
-
-  return (
-    <View
-      style={{
-        width: 52,
-        height: 52,
-        borderRadius: 26,
-        backgroundColor: theme.semantic.primary,
-        alignItems: 'center',
-        justifyContent: 'center',
-      }}
-    >
-      <Text style={{ color: theme.semantic.onPrimary, fontWeight: '700' }}>{initials}</Text>
-    </View>
-  )
-}
 
 const ConversationListDemo = () => {
   const { theme } = useTheme()
@@ -51,7 +33,13 @@ const ConversationListDemo = () => {
         )}
       >
         <ChatConversationRow
-          avatar={<AvatarPlaceholder initials="AW" />}
+          avatar={(
+            <AvatarWithStatus
+              name="Anna Wellermann"
+              status="online"
+              size="lg"
+            />
+          )}
           title="Dr. Anna Wellermann"
           timestamp="09:24"
           preview="Perfekt, ich habe den Befund erhalten."
@@ -59,7 +47,13 @@ const ConversationListDemo = () => {
           onPress={action('row-1')}
         />
         <ChatConversationRow
-          avatar={<AvatarPlaceholder initials="JP" />}
+          avatar={(
+            <AvatarWithStatus
+              name="Jonas Parker"
+              status="offline"
+              size="lg"
+            />
+          )}
           title="Praxis am Park"
           timestamp="Gestern"
           preview="Ihr Termin wurde bestätigt."

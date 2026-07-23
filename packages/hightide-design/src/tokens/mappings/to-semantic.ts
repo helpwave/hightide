@@ -1,7 +1,7 @@
 import type {
   HightideColorPalleteTokens,
   HightideSemanticColorTokens
-} from '../../../types/hightide'
+} from '../../types/hightide'
 
 export type ToSemanticArgs<PrimitiveTokens> = {
   themeName: string,

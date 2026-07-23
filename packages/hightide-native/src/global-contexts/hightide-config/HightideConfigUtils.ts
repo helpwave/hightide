@@ -1,8 +1,8 @@
 import type { SupportedThemesConfig } from '@helpwave/hightide-utils/context'
 
 import type { SupportedLocalesConfig } from '../localization/forward-exports'
-import { themes } from '../../theme/themes/nativeThemes'
-import type { Theme } from '../../theme/types/theme'
+import { themes } from '../../theme/themes/hightideThemes'
+import type { HightideTheme } from '../../theme/types/theme'
 
 export const HightideConfigUtils = {
   defaultSupportedLocales: {
@@ -24,5 +24,5 @@ export const HightideConfigUtils = {
       },
       theme: themes.dark,
     },
-  } as const satisfies SupportedThemesConfig<Theme>,
+  } as const satisfies SupportedThemesConfig<HightideTheme>,
 }

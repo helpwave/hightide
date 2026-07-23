@@ -7,7 +7,7 @@ import {
   componentLayouts,
   fontWeights
 } from '@helpwave/hightide-design/tokens'
-import type { HightideDesignTokens as DesignTokensTheme } from '@helpwave/hightide-design/types'
+import type { HightideThemeTokens as DesignTokensTheme } from '@helpwave/hightide-design/types'
 
 import { resolveColoringStyles } from './coloring'
 import type { HightideSemanticColors } from '../types/color'

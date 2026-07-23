@@ -13,21 +13,21 @@ pnpm add @helpwave/hightide-design
 There is **no package root export**. Import from folder entry points:
 
 ```ts
-import { Themes, colorPalettes, componentLayouts, typography } from "@helpwave/hightide-design/tokens";
-import { hexWithAlpha } from "@helpwave/hightide-design/helpers";
-import type { DesignTokens, ElementSize } from "@helpwave/hightide-design/types";
+import { ThemeTokens, colorPalettes, componentLayouts, typography } from "@helpwave/hightide-design/tokens";
+import { coloringTypes, constructThemeTokens, hexWithAlpha } from "@helpwave/hightide-design/utils";
+import type { HightideThemeTokens, ElementSize } from "@helpwave/hightide-design/types";
 
-const theme = Themes.dark;
+const theme = ThemeTokens.dark;
 const background = theme.semanticColors.background;
 const buttonHeight = componentLayouts.element.md.height;
-const headline = typography.headline.large;
+const headline = typography.scales.headline.large;
 ```
 
 | Subpath | Contents |
 | --- | --- |
 | `@helpwave/hightide-design/tokens` | Static token values (palettes, themes, layout, typography) |
 | `@helpwave/hightide-design/types` | Token type definitions |
-| `@helpwave/hightide-design/helpers` | Runtime helpers and style resolvers |
+| `@helpwave/hightide-design/utils` | Theme construction and color utilities |
 
 ## Structure
 
@@ -35,7 +35,7 @@ const headline = typography.headline.large;
 src/
   types/          Token type definitions
   tokens/         Fully static token values
-  helpers/        Runtime helpers and style resolvers
+  utils/          Theme construction and color utilities
 ```
 
 ### Token types
@@ -54,11 +54,13 @@ src/
 - `tokens/themes/light.ts`, `tokens/themes/dark.ts` — complete themes
 - `tokens/layout.ts` — component layout definitions
 - `tokens/typography/` — font weights, sizes, line heights, and the composed `typography` scale
+- `tokens/mappings/` — semantic / component / theme mappers
 
-### Helpers
+### Utils
 
-- `helpers/color.ts` — `hexWithAlpha`
-- `helpers/style-resolvers/` — coloring token helpers for React Native
+- `utils/color.ts` — `hexWithAlpha`
+- `utils/coloring.ts` — `coloringTypes`, `ColoringType`, `getColoringToken`
+- `utils/constructThemeTokens.ts` — theme token construction pipeline
 
 ## Source of truth
 
