@@ -9,6 +9,7 @@ import type { InputTheme } from './input'
 import type { MenuTheme } from './menu'
 import type { MultiSelectTheme } from './multiSelect'
 import type { SelectTheme } from './select'
+import type { SwitchTheme } from './switch'
 
 export type ColoringDefinition = {
   color: Color,
@@ -35,6 +36,7 @@ export type HightideComponentThemes = {
   iconButton: IconButtonTheme,
   chip: ChipTheme,
   checkbox: CheckboxTheme,
+  switch: SwitchTheme,
   input: InputTheme,
   select: SelectTheme,
   multiSelect: MultiSelectTheme,
