@@ -60,9 +60,16 @@ export type ComponentColorTokens = {
     normal: ColorToken,
     disabled: ColorToken,
   },
-  switchThumb: {
-    inactive: ColorToken,
-    active: ColorToken,
+  switch: {
+    track: {
+      inactive: ColorToken,
+      active: ColorToken,
+    },
+    thumb: {
+      inactive: ColorToken,
+      active: ColorToken,
+    },
+    borderColor: ColorToken,
   },
   table: {
     background: ColorToken,
