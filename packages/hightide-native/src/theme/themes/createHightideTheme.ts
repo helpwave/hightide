@@ -8,6 +8,7 @@ import { createButtonThemeFromDesign } from '../resolvers/button'
 import { createChatThemeFromDesign } from '../resolvers/chat'
 import { createCheckboxThemeFromDesign } from '../resolvers/checkbox'
 import { createChipThemeFromDesign } from '../resolvers/chip'
+import { createSwitchThemeFromDesign } from '../resolvers/switch'
 import { createIconButtonThemeFromDesign } from '../resolvers/iconButton'
 import { createInputThemeFromDesign } from '../resolvers/input'
 import { createMenuThemeFromDesign } from '../resolvers/menu'
@@ -47,6 +48,7 @@ export const createHightideTheme = (tokens: HightideThemeTokens): HightideTheme 
     iconButton: createIconButtonThemeFromDesign(tokens),
     chip: createChipThemeFromDesign(tokens),
     checkbox: createCheckboxThemeFromDesign(tokens),
+    switch: createSwitchThemeFromDesign(tokens),
     input: createInputThemeFromDesign(tokens),
     select: createSelectThemeFromDesign(tokens),
     multiSelect: createMultiSelectThemeFromDesign(tokens),

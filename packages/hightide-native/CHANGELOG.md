@@ -5,6 +5,14 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [0.0.8] - 2026-07-24
+
+### Added
+
+- Custom `Switch` under user-interaction built from `Pressable` + `View` with animated thumb translate/size, inactive track border, and `accessibilityRole` / `accessibilityState` for checked and disabled
+- Switch theme types and `createSwitchTheme` / `createSwitchThemeFromDesign` resolvers on `theme.components.switch` (`trackColor`, `borderColor`, `thumbColor`)
+- Storybook demo under `stories/User Interaction/Switch.stories.tsx`
+
 ## [0.0.7] - 2026-07-23
 
 ### Added

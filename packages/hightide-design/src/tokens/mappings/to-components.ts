@@ -79,9 +79,16 @@ export const toHightideComponentTokens = ({
         normal: purple.value[100],
         disabled: semantic.description,
       },
-      switchThumb: {
-        inactive: semantic.onSurface,
-        active: semantic.onSurface,
+      switch: {
+        track: {
+          inactive: semantic.surfaceVariant,
+          active: semantic.primary,
+        },
+        thumb: {
+          inactive: gray.value[400],
+          active: semantic.onSurface,
+        },
+        borderColor: gray.value[600],
       },
       table: {
         background: semantic.surface,
@@ -175,9 +182,16 @@ export const toHightideComponentTokens = ({
       normal: purple.value[100],
       disabled: semantic.description,
     },
-    switchThumb: {
-      inactive: semantic.onSurface,
-      active: white.value,
+    switch: {
+      track: {
+        inactive: semantic.surfaceVariant,
+        active: semantic.primary,
+      },
+      thumb: {
+        inactive: gray.value[400],
+        active: white.value,
+      },
+      borderColor: gray.value[200],
     },
     table: {
       background: semantic.surface,

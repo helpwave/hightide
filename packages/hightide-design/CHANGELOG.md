@@ -5,6 +5,12 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/)
 and adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [0.0.6] - 2026-07-24
+
+### Changed
+
+- Replaced `componentColors.switchThumb` with nested `componentColors.switch` (`track` / `thumb`, each with `inactive` / `active`, plus `borderColor` defaulting to the shared border color) so track and border colors are first-class design tokens alongside thumb
+
 ## [0.0.5] - 2026-07-23
 
 ### Added

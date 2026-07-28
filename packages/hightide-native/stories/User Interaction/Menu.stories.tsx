@@ -1,5 +1,4 @@
 import {
-  Switch,
   View
 } from 'react-native'
 import type {
@@ -18,6 +17,7 @@ import { Menu } from '../../src/components/menu/Menu'
 import { MenuActionItem } from '../../src/components/menu/MenuActionItem'
 import { MenuItem } from '../../src/components/menu/MenuItem'
 import { MenuNavigationItem } from '../../src/components/menu/MenuNavigationItem'
+import { Switch } from '../../src/components/user-interaction/Switch'
 import { useTheme } from '../../src/global-contexts/theme/ThemeContext'
 
 const meta = {
