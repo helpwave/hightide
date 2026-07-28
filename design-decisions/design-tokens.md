@@ -26,7 +26,7 @@ ComponentTokens
 ThemeTokens
 ```
 
-In code this pipeline is `constructThemeTokens` in `@helpwave/hightide-design/utils`. Default hightide mappers live under `packages/hightide-design/src/tokens/mappings/`.
+In code this pipeline is `constructThemeTokens` in `@helpwave/hightide-design/theme`. Default hightide mappers live under `packages/hightide-design/src/semantic/` and `packages/hightide-design/src/theme/`.
 
 ### 1. PrimitiveTokens
 
@@ -37,7 +37,7 @@ Examples:
 - Color palettes (`gray`, `purple`, `blue`, …) as typed `{ type, value }` wrappers
 - Shared layout numbers, typography scales, decoration, and animation tokens that are not theme-mode specific
 
-Hightide’s default primitives are `colorPalettes` plus the static layout/typography/decoration/animation modules in `@helpwave/hightide-design/tokens`.
+Hightide’s default primitives are `colorPalettes` plus the static layout/typography/decoration/animation modules in `@helpwave/hightide-design/primitive`.
 
 ### 2. SemanticTokens
 
@@ -49,7 +49,7 @@ Examples:
 - `primary` / `onPrimary` / `primaryHover`
 - `surface`, `disabled`, `warning`, …
 
-Mapper: `toHightideSemanticTokens` (`tokens/mappings/to-semantic.ts`).
+Mapper: `toHightideSemanticTokens` (`semantic/to-semantic.ts`).
 
 Semantics are the layer you usually override when branding (for example “use blue as primary”).
 
@@ -62,7 +62,7 @@ Examples:
 - `input.background`, `menu.background`
 - Chat / carousel / other component-specific slots
 
-Mapper: `toHightideComponentTokens` (`tokens/mappings/to-components.ts`).
+Mapper: `toHightideComponentTokens` (`theme/to-components.ts`).
 
 Prefer changing semantics first; use component tokens when a control needs a deliberate exception.
 
@@ -76,7 +76,7 @@ The assembled, platform-agnostic design package for one theme mode. Hightide’s
 - `coloring` — solid/outline/tonal style definitions derived from semantics
 - `typography`, `layout`, `animation`, `decorcation`
 
-Mapper: `toHightideTheme` (`tokens/mappings/to-theme.ts`), which also attaches shared layout/typography/animation/decoration and builds `coloring`.
+Mapper: `toHightideTheme` (`theme/to-theme.ts`), which also attaches shared layout/typography/animation/decoration and builds `coloring`.
 
 `ThemeTokens` are still data. They are not yet React Native `StyleSheet` values or web CSS variables applied to components.
 
@@ -151,8 +151,8 @@ Extension pattern:
 
 | Concern | Package |
 | --- | --- |
-| Primitive / semantic / component / theme token types and default mappers | `@helpwave/hightide-design` |
-| `constructThemeTokens`, `hexWithAlpha`, coloring helpers | `@helpwave/hightide-design/utils` |
+| Primitive / semantic / component / theme token types and default mappers | `@helpwave/hightide-design` (`/primitive`, `/semantic`, `/theme`) |
+| `constructThemeTokens`, `hexWithAlpha`, coloring helpers | `@helpwave/hightide-design/theme` |
 | ThemeTokens → native Theme + style resolvers | `@helpwave/hightide-native` |
 | ThemeTokens → web Theme (future) | `@helpwave/hightide` |
 | Theme mode storage / shared theme context utilities | `@helpwave/hightide-utils` + platform ThemeProvider |

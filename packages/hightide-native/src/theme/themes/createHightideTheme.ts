@@ -1,7 +1,5 @@
-import type {
-  ColorPaletteToken,
-  HightideThemeTokens
-} from '@helpwave/hightide-design/types'
+import type { ColorPaletteToken } from '@helpwave/hightide-design/primitive'
+import type { HightideThemeTokens } from '@helpwave/hightide-design/theme'
 
 import { createAvatarThemeFromDesign } from '../resolvers/avatar'
 import { createButtonThemeFromDesign } from '../resolvers/button'

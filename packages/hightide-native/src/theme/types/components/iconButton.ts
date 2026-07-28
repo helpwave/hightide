@@ -1,10 +1,10 @@
 import type { ViewStyle } from 'react-native'
 
-import type { ColoringType } from '@helpwave/hightide-design/utils'
+import type { ElementSize } from '@helpwave/hightide-design/primitive'
 import type {
-  ButtonColoringStyle,
-  ElementSize
-} from '@helpwave/hightide-design/types'
+  ColoringType,
+  ButtonColoringStyle
+} from '@helpwave/hightide-design/theme'
 
 import type { Color } from '../color'
 import type {

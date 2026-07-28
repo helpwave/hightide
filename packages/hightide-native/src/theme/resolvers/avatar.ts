@@ -6,13 +6,11 @@ import type {
 
 import {
   componentLayouts,
-  fontWeights
-} from '@helpwave/hightide-design/tokens'
-import type {
-  ElementSize,
-  HightideThemeTokens as DesignTokensTheme,
-  TypographyTokens
-} from '@helpwave/hightide-design/types'
+  fontWeights,
+  type ElementSize
+} from '@helpwave/hightide-design/primitive'
+import type { TypographyTokens } from '@helpwave/hightide-design/semantic'
+import type { HightideThemeTokens as DesignTokensTheme } from '@helpwave/hightide-design/theme'
 
 import { resolveColoringStyles } from './coloring'
 import type {

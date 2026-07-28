@@ -10,11 +10,11 @@ import {
 } from 'react-native'
 import type { LucideIcon } from 'lucide-react-native'
 
-import type { ColoringType } from '@helpwave/hightide-design/utils'
+import type { ElementSize } from '@helpwave/hightide-design/primitive'
 import type {
-  ButtonColoringStyle,
-  ElementSize
-} from '@helpwave/hightide-design/types'
+  ColoringType,
+  ButtonColoringStyle
+} from '@helpwave/hightide-design/theme'
 
 import { Icon } from '../visualization-and-display/Icon'
 import { useTheme } from '../../global-contexts/theme/ThemeContext'

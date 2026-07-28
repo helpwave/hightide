@@ -5,12 +5,10 @@ import type {
 
 import {
   componentLayouts,
-  fontWeights
-} from '@helpwave/hightide-design/tokens'
-import type {
-  HightideThemeTokens as DesignTokensTheme,
-  ElementSize
-} from '@helpwave/hightide-design/types'
+  fontWeights,
+  type ElementSize
+} from '@helpwave/hightide-design/primitive'
+import type { HightideThemeTokens as DesignTokensTheme } from '@helpwave/hightide-design/theme'
 
 import {
   isOutlineColoringStyle,

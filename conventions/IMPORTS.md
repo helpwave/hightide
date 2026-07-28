@@ -16,7 +16,7 @@ import { useTheme } from '@/src/global-contexts/theme/ThemeContext'
 import type { ChatTheme } from '@/src/theme/types/components/chat'
 ```
 
-Cross-package imports (for example `@helpwave/hightide-design/tokens` or `@helpwave/hightide-utils/hooks`) keep their published package names. Do not rewrite those to relative paths across package boundaries.
+Cross-package imports (for example `@helpwave/hightide-design/primitive` or `@helpwave/hightide-utils/hooks`) keep their published package names. Do not rewrite those to relative paths across package boundaries.
 
 ## No index / barrel imports
 
@@ -81,8 +81,8 @@ import {
 } from 'react-native'
 import { Check } from 'lucide-react-native'
 
-import { hexWithAlpha } from '@helpwave/hightide-design/utils'
-import { fontWeights } from '@helpwave/hightide-design/tokens'
+import { fontWeights } from '@helpwave/hightide-design/primitive'
+import { hexWithAlpha } from '@helpwave/hightide-design/theme'
 
 import { useTheme } from '../../global-contexts/theme/ThemeContext'
 import type { ChatTheme } from '../../theme/types/components/chat'

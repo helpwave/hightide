@@ -1,6 +1,6 @@
 import type { ViewStyle } from 'react-native'
 
-import type { ElementSize } from '@helpwave/hightide-design/types'
+import type { ElementSize } from '@helpwave/hightide-design/primitive'
 
 import type { Color } from '../color'
 import type {

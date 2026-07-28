@@ -1,7 +1,7 @@
 import type { ViewStyle } from 'react-native'
 
-import { componentLayouts } from '@helpwave/hightide-design/tokens'
-import type { HightideThemeTokens as DesignTokensTheme } from '@helpwave/hightide-design/types'
+import { componentLayouts } from '@helpwave/hightide-design/primitive'
+import type { HightideThemeTokens as DesignTokensTheme } from '@helpwave/hightide-design/theme'
 
 import {
   isOutlineColoringStyle,

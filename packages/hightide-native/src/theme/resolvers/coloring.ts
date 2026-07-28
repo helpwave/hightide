@@ -1,12 +1,10 @@
+import { componentLayouts } from '@helpwave/hightide-design/primitive'
 import {
-  hexWithAlpha
-} from '@helpwave/hightide-design/utils'
-import { componentLayouts } from '@helpwave/hightide-design/tokens'
-import type {
-  ButtonColoringStyle,
-  ChipColoringStyle,
-  ColoringStyle
-} from '@helpwave/hightide-design/types'
+  hexWithAlpha,
+  type ButtonColoringStyle,
+  type ChipColoringStyle,
+  type ColoringStyle
+} from '@helpwave/hightide-design/theme'
 
 import type {
   Color,

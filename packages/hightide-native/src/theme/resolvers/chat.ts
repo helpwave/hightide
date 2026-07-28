@@ -4,12 +4,12 @@ import {
   type ViewStyle
 } from 'react-native'
 
-import { hexWithAlpha } from '@helpwave/hightide-design/utils'
-import { fontWeights } from '@helpwave/hightide-design/tokens'
-import type {
-  ComponentColorTokens,
-  HightideThemeTokens as DesignTokensTheme
-} from '@helpwave/hightide-design/types'
+import { fontWeights } from '@helpwave/hightide-design/primitive'
+import {
+  hexWithAlpha,
+  type ComponentColorTokens,
+  type HightideThemeTokens as DesignTokensTheme
+} from '@helpwave/hightide-design/theme'
 
 import type {
   Color,

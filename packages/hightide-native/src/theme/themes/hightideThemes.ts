@@ -1,4 +1,4 @@
-import { ThemeTokens as designThemes } from '@helpwave/hightide-design/tokens'
+import { ThemeTokens as designThemes } from '@helpwave/hightide-design/theme'
 import { createHightideTheme } from './createHightideTheme'
 
 export const lightTheme = createHightideTheme(designThemes.light)

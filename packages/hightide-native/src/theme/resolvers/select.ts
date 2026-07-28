@@ -1,8 +1,8 @@
-import { fontWeights } from '@helpwave/hightide-design/tokens'
+import { fontWeights } from '@helpwave/hightide-design/primitive'
 import type {
   ComponentColorTokens,
   HightideThemeTokens as DesignTokensTheme
-} from '@helpwave/hightide-design/types'
+} from '@helpwave/hightide-design/theme'
 
 import type { HightideSemanticColors } from '../types/color'
 import type {

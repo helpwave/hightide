@@ -3,14 +3,14 @@ import type {
   Meta,
   StoryObj
 } from '@storybook/react-native-web-vite'
-import { constructThemeTokens } from '@helpwave/hightide-design/utils'
+import { colorPalettes } from '@helpwave/hightide-design/primitive'
+import { toHightideSemanticTokens } from '@helpwave/hightide-design/semantic'
 import {
-  colorPalettes,
+  constructThemeTokens,
   toHightideComponentTokens,
-  toHightideSemanticTokens,
-  toHightideTheme
-} from '@helpwave/hightide-design/tokens'
-import type { HightideThemeTokens } from '@helpwave/hightide-design/types'
+  toHightideTheme,
+  type HightideThemeTokens
+} from '@helpwave/hightide-design/theme'
 
 import { Button } from '../../src/components/user-interaction/Button'
 import { Chip } from '../../src/components/visualization-and-display/Chip'

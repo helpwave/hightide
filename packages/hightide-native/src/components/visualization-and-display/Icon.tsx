@@ -1,6 +1,6 @@
 import type { LucideIcon } from 'lucide-react-native'
 
-import type { ElementSize } from '@helpwave/hightide-design/types'
+import type { ElementSize } from '@helpwave/hightide-design/primitive'
 
 import { useTheme } from '../../global-contexts/theme/ThemeContext'
 

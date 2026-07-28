@@ -13,9 +13,15 @@ pnpm add @helpwave/hightide-design
 There is **no package root export**. Import from folder entry points:
 
 ```ts
-import { ThemeTokens, colorPalettes, componentLayouts, typography } from "@helpwave/hightide-design/tokens";
-import { coloringTypes, constructThemeTokens, hexWithAlpha } from "@helpwave/hightide-design/utils";
-import type { HightideThemeTokens, ElementSize } from "@helpwave/hightide-design/types";
+import { colorPalettes, componentLayouts, type ElementSize } from "@helpwave/hightide-design/primitive";
+import { toHightideSemanticTokens, typography } from "@helpwave/hightide-design/semantic";
+import {
+  ThemeTokens,
+  coloringTypes,
+  constructThemeTokens,
+  hexWithAlpha,
+  type HightideThemeTokens,
+} from "@helpwave/hightide-design/theme";
 
 const theme = ThemeTokens.dark;
 const background = theme.semanticColors.background;
@@ -25,42 +31,39 @@ const headline = typography.scales.headline.large;
 
 | Subpath | Contents |
 | --- | --- |
-| `@helpwave/hightide-design/tokens` | Static token values (palettes, themes, layout, typography) |
-| `@helpwave/hightide-design/types` | Token type definitions |
-| `@helpwave/hightide-design/utils` | Theme construction and color utilities |
+| `@helpwave/hightide-design/primitive` | Raw palettes, layout, decoration, animation, and typography scales |
+| `@helpwave/hightide-design/semantic` | Semantic color mapper and composed typography styles |
+| `@helpwave/hightide-design/theme` | Component tokens, theme assembly, themes, and color utilities |
 
 ## Structure
 
 ```
 src/
-  types/          Token type definitions
-  tokens/         Fully static token values
-  utils/          Theme construction and color utilities
+  primitive/      Mode-agnostic token values and type definitions
+  semantic/       Named semantic roles, mapper, and typography composition
+  theme/          Component tokens, theme construction, themes, and utilities
 ```
 
-### Token types
+### Primitive
 
-- `ColorPaletteBasic`, `ColorPaletteDetailed` — palette steps using `#hex` values
-- `ScalingUnitToken` — unitless layout numbers (reference pixels at 16px root)
-- `FixedUnitToken` — unitless fixed values (stroke widths, font sizes, etc.)
-- `SemanticColorTokens` — fixed semantic color set per theme
-- `ComponentColorTokens` — component colors grouped by component (e.g. `menu.background`, `input.text`)
-- `ComponentLayoutTokens` — per-component sizes, padding, radii, and shared spacing
-- `TypographyTokens` / `TypographyStyleToken` — semantic typography styles
+- `color.ts` / `color-palettes.ts` — palette types and shared color palettes
+- `layout.ts` — component layout definitions and `ElementSize`
+- `decoration.ts` / `animation.ts` — border radii and motion durations
+- `typography/` — font sizes, weights, and line heights
 
-### Static tokens
+### Semantic
 
-- `tokens/color-palettes.ts` — color palettes shared across themes
-- `tokens/themes/light.ts`, `tokens/themes/dark.ts` — complete themes
-- `tokens/layout.ts` — component layout definitions
-- `tokens/typography/` — font weights, sizes, line heights, and the composed `typography` scale
-- `tokens/mappings/` — semantic / component / theme mappers
+- `to-semantic.ts` — `toHightideSemanticTokens`
+- `typography.ts` — composed typography scale (`headline.large`, `body.medium`, …)
+- `hightide.ts` / `color.ts` — semantic color type definitions
 
-### Utils
+### Theme
 
-- `utils/color.ts` — `hexWithAlpha`
-- `utils/coloring.ts` — `coloringTypes`, `ColoringType`, `getColoringToken`
-- `utils/constructThemeTokens.ts` — theme token construction pipeline
+- `to-components.ts` / `to-theme.ts` — component and theme mappers
+- `themes/` — `lightTheme`, `darkTheme`, and `ThemeTokens`
+- `constructThemeTokens.ts` — theme token construction pipeline
+- `color.ts` / `coloring-utils.ts` — `hexWithAlpha`, `coloringTypes`, `getColoringToken`
+- `hightide.ts` / `component-colors.ts` / `coloring.ts` / `design.ts` — theme type definitions
 
 ## Source of truth
 

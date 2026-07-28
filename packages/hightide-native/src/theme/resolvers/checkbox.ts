@@ -1,11 +1,13 @@
 import type { ViewStyle } from 'react-native'
 
-import { componentLayouts } from '@helpwave/hightide-design/tokens'
+import {
+  componentLayouts,
+  type ElementSize
+} from '@helpwave/hightide-design/primitive'
 import type {
   ComponentColorTokens,
-  HightideThemeTokens as DesignTokensTheme,
-  ElementSize
-} from '@helpwave/hightide-design/types'
+  HightideThemeTokens as DesignTokensTheme
+} from '@helpwave/hightide-design/theme'
 
 import type { HightideSemanticColors } from '../types/color'
 import type {
