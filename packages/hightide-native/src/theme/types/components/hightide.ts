@@ -6,7 +6,7 @@ import type { CheckboxTheme } from './checkbox'
 import type { ChipTheme } from './chip'
 import type { IconButtonTheme } from './iconButton'
 import type { InputTheme } from './input'
-import type { MenuTheme } from './menu'
+import type { CardTheme } from './card'
 import type { MultiSelectTheme } from './multiSelect'
 import type { SelectTheme } from './select'
 import type { SwitchTheme } from './switch'
@@ -41,6 +41,6 @@ export type HightideComponentThemes = {
   select: SelectTheme,
   multiSelect: MultiSelectTheme,
   chat: ChatTheme,
-  menu: MenuTheme,
+  card: CardTheme,
   avatar: AvatarTheme,
 }

@@ -11,23 +11,22 @@ import {
   type StyleProp,
   type ViewStyle
 } from 'react-native'
+import { ChevronRight } from 'lucide-react-native'
 
 import { useTheme } from '../../global-contexts/theme/ThemeContext'
 import type {
-  MenuActionItemLabelStyle,
-  MenuActionItemState,
-  MenuActionItemStyle
-} from '../../theme/types/components/menu'
+  CardActionItemLabelStyle,
+  CardActionItemState,
+  CardActionItemStyle
+} from '../../theme/types/components/card'
 import type { StyleOverwrite } from '../../theme/types/resolver'
 
-export type MenuActionItemProps = Omit<PressableProps, 'children' | 'style'> & {
+export type CardNavigationItemProps = Omit<PressableProps, 'children' | 'style'> & {
   label: string,
   leading?: ReactNode,
-  trailing?: ReactNode,
-  danger?: boolean,
   style?: StyleProp<ViewStyle>,
-  itemStyle?: StyleOverwrite<MenuActionItemState, MenuActionItemStyle>,
-  labelStyle?: StyleOverwrite<MenuActionItemState, MenuActionItemLabelStyle>,
+  itemStyle?: StyleOverwrite<CardActionItemState, CardActionItemStyle>,
+  labelStyle?: StyleOverwrite<CardActionItemState, CardActionItemLabelStyle>,
 }
 
 type PressableInteraction = {
@@ -36,21 +35,18 @@ type PressableInteraction = {
   focused?: boolean,
 }
 
-export const MenuActionItem = ({
+export const CardNavigationItem = ({
   label,
   leading,
-  trailing,
-  danger = false,
   disabled,
   style,
   itemStyle,
   labelStyle,
   ...props
-}: MenuActionItemProps) => {
+}: CardNavigationItemProps) => {
   const { theme } = useTheme()
 
-  const resolveState = (interaction: PressableInteraction): MenuActionItemState => ({
-    isDanger: danger,
+  const resolveState = (interaction: PressableInteraction): CardActionItemState => ({
     isDisabled: !!disabled,
     isPressed: interaction.pressed,
     isHovered: !!interaction.hovered,
@@ -58,7 +54,11 @@ export const MenuActionItem = ({
   })
 
   const resolvedContentStyle = useMemo(
-    () => theme.components.menu.actionItemContent({}),
+    () => theme.components.card.navigationItemContent({}),
+    [theme]
+  )
+  const trailingColor = useMemo(
+    () => theme.components.card.navigationItemTrailing({}).color,
     [theme]
   )
 
@@ -68,12 +68,12 @@ export const MenuActionItem = ({
       disabled={disabled}
       style={(pressableState) => {
         const state = resolveState(pressableState as PressableInteraction)
-        return [theme.components.menu.actionItem(state, itemStyle), style]
+        return [theme.components.card.navigationItem(state, itemStyle), style]
       }}
     >
       {(pressableState) => {
         const state = resolveState(pressableState as PressableInteraction)
-        const resolvedLabelStyle = theme.components.menu.actionItemLabel(state, labelStyle)
+        const resolvedLabelStyle = theme.components.card.navigationItemLabel(state, labelStyle)
 
         return (
           <Fragment>
@@ -81,7 +81,7 @@ export const MenuActionItem = ({
             <View style={resolvedContentStyle}>
               <Text style={resolvedLabelStyle}>{label}</Text>
             </View>
-            {trailing}
+            <ChevronRight size={16} color={trailingColor} />
           </Fragment>
         )
       }}

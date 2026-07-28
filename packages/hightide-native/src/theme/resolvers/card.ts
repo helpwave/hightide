@@ -8,24 +8,24 @@ import type {
 
 import type { HightideSemanticColors } from '../types/color'
 import type {
-  MenuActionItemState,
-  MenuTheme
-} from '../types/components/menu'
+  CardActionItemState,
+  CardTheme
+} from '../types/components/card'
 import {
   createStyleResolver,
   createValueResolver
 } from '../types/resolver'
 
-export type CreateMenuThemeOptions = {
+export type CreateCardThemeOptions = {
   semantic: HightideSemanticColors,
   component: ComponentColorTokens,
 }
 
-export const createMenuTheme = ({
+export const createCardTheme = ({
   semantic,
   component,
-}: CreateMenuThemeOptions): MenuTheme => {
-  const resolveActionItem = (state: MenuActionItemState) => {
+}: CreateCardThemeOptions): CardTheme => {
+  const resolveActionItem = (state: CardActionItemState) => {
     const pressed = !!state.isPressed && !state.isDisabled
 
     return {
@@ -48,29 +48,17 @@ export const createMenuTheme = ({
     justifyContent: 'center' as const,
   })
 
-  const resolveActionLabel = (state: MenuActionItemState) => ({
+  const resolveActionLabel = (state: CardActionItemState) => ({
     color: state.isDanger ? semantic.negative : semantic.onSurface,
     fontSize: 15,
     fontWeight: fontWeights.medium,
   })
 
-  const resolveActionIcon = (state: MenuActionItemState) => ({
+  const resolveActionIcon = (state: CardActionItemState) => ({
     color: state.isDanger ? semantic.negative : semantic.primary,
   })
 
   return {
-    section: createStyleResolver(() => ({
-      marginBottom: 20,
-      gap: 8,
-    })),
-    sectionTitle: createStyleResolver(() => ({
-      color: semantic.description,
-      fontSize: 12,
-      fontWeight: fontWeights.bold,
-      letterSpacing: 0.4,
-      textTransform: 'uppercase',
-      paddingHorizontal: 4,
-    })),
     card: createStyleResolver(() => ({
       backgroundColor: semantic.surface,
       borderRadius: 12,
@@ -112,8 +100,8 @@ export const createMenuTheme = ({
   }
 }
 
-export const createMenuThemeFromDesign = (theme: DesignTokensTheme): MenuTheme => {
-  return createMenuTheme({
+export const createCardThemeFromDesign = (theme: DesignTokensTheme): CardTheme => {
+  return createCardTheme({
     semantic: theme.semanticColors,
     component: theme.componentColors,
   })

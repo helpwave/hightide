@@ -12,24 +12,24 @@ import {
 
 import { useTheme } from '../../global-contexts/theme/ThemeContext'
 import type {
-  MenuItemLabelStyle,
-  MenuItemStyle,
-  MenuItemValueStyle
-} from '../../theme/types/components/menu'
+  CardItemLabelStyle,
+  CardItemStyle,
+  CardItemValueStyle
+} from '../../theme/types/components/card'
 import type { StyleOverwrite } from '../../theme/types/resolver'
 
-export type MenuItemProps = Omit<ViewProps, 'style'> & {
+export type CardItemProps = Omit<ViewProps, 'style'> & {
   label: string,
   value: string,
   leading?: ReactNode,
   trailing?: ReactNode,
   style?: StyleProp<ViewStyle>,
-  itemStyle?: StyleOverwrite<Record<string, never>, MenuItemStyle>,
-  labelStyle?: StyleOverwrite<Record<string, never>, MenuItemLabelStyle>,
-  valueStyle?: StyleOverwrite<Record<string, never>, MenuItemValueStyle>,
+  itemStyle?: StyleOverwrite<Record<string, never>, CardItemStyle>,
+  labelStyle?: StyleOverwrite<Record<string, never>, CardItemLabelStyle>,
+  valueStyle?: StyleOverwrite<Record<string, never>, CardItemValueStyle>,
 }
 
-export const MenuItem = ({
+export const CardItem = ({
   label,
   value,
   leading,
@@ -39,24 +39,24 @@ export const MenuItem = ({
   labelStyle,
   valueStyle,
   ...props
-}: MenuItemProps) => {
+}: CardItemProps) => {
   const { theme } = useTheme()
   const state = useMemo(() => ({}), [])
 
   const resolvedItemStyle = useMemo(
-    () => theme.components.menu.item(state, itemStyle),
+    () => theme.components.card.item(state, itemStyle),
     [theme, state, itemStyle]
   )
   const resolvedContentStyle = useMemo(
-    () => theme.components.menu.itemContent(state),
+    () => theme.components.card.itemContent(state),
     [theme, state]
   )
   const resolvedLabelStyle = useMemo(
-    () => theme.components.menu.itemLabel(state, labelStyle),
+    () => theme.components.card.itemLabel(state, labelStyle),
     [theme, state, labelStyle]
   )
   const resolvedValueStyle = useMemo(
-    () => theme.components.menu.itemValue(state, valueStyle),
+    () => theme.components.card.itemValue(state, valueStyle),
     [theme, state, valueStyle]
   )
 

@@ -11,7 +11,7 @@ import { createChipThemeFromDesign } from '../resolvers/chip'
 import { createSwitchThemeFromDesign } from '../resolvers/switch'
 import { createIconButtonThemeFromDesign } from '../resolvers/iconButton'
 import { createInputThemeFromDesign } from '../resolvers/input'
-import { createMenuThemeFromDesign } from '../resolvers/menu'
+import { createCardThemeFromDesign } from '../resolvers/card'
 import { createMultiSelectThemeFromDesign } from '../resolvers/multiSelect'
 import { createSelectThemeFromDesign } from '../resolvers/select'
 import type {
@@ -53,7 +53,7 @@ export const createHightideTheme = (tokens: HightideThemeTokens): HightideTheme 
     select: createSelectThemeFromDesign(tokens),
     multiSelect: createMultiSelectThemeFromDesign(tokens),
     chat: createChatThemeFromDesign(tokens),
-    menu: createMenuThemeFromDesign(tokens),
+    card: createCardThemeFromDesign(tokens),
     avatar: createAvatarThemeFromDesign(tokens),
   },
 })
