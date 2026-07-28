@@ -4,7 +4,7 @@ import {
   type ViewStyle
 } from 'react-native'
 
-import { fontWeights } from '@helpwave/hightide-design/primitive'
+import { hightideTypography } from '@helpwave/hightide-design/primitive'
 import {
   hexWithAlpha,
   type ComponentColorTokens,
@@ -69,19 +69,19 @@ export const createChatTheme = ({
         flex: 1,
         color: semantic.onSurface,
         fontSize: 16,
-        fontWeight: state.isUnread ? fontWeights.bold : fontWeights.medium,
+        fontWeight: state.isUnread ? hightideTypography.fontWeight.bold : hightideTypography.fontWeight.medium,
       })),
       timestamp: createStyleResolver<ChatConversationRowState, TextStyle>((state) => ({
         color: state.isUnread ? semantic.primary : semantic.description,
         fontSize: 12,
-        fontWeight: state.isUnread ? fontWeights.medium : fontWeights.base,
+        fontWeight: state.isUnread ? hightideTypography.fontWeight.medium : hightideTypography.fontWeight.base,
         flexShrink: 0,
       })),
       preview: createStyleResolver<ChatConversationRowState, TextStyle>((state) => ({
         flex: 1,
         color: state.isUnread ? semantic.onSurface : semantic.description,
         fontSize: 14,
-        fontWeight: fontWeights.light,
+        fontWeight: hightideTypography.fontWeight.light,
       })),
       unreadBadge: createStyleResolver<Record<string, never>, ViewStyle>(() => ({
         minWidth: 20,
@@ -95,7 +95,7 @@ export const createChatTheme = ({
       unreadBadgeText: createStyleResolver<Record<string, never>, TextStyle>(() => ({
         color: semantic.onPrimary,
         fontSize: 11,
-        fontWeight: fontWeights.bold,
+        fontWeight: hightideTypography.fontWeight.bold,
       })),
       sentIndicator: createValueResolver<Record<string, never>, { color: Color }>(() => ({
         color: semantic.primary,
@@ -130,12 +130,12 @@ export const createChatTheme = ({
       title: createStyleResolver<Record<string, never>, TextStyle>(() => ({
         color: semantic.onSurface,
         fontSize: 16,
-        fontWeight: fontWeights.bold,
+        fontWeight: hightideTypography.fontWeight.bold,
       })),
       subtitle: createStyleResolver<Record<string, never>, TextStyle>(() => ({
         color: semantic.description,
         fontSize: 12,
-        fontWeight: fontWeights.light,
+        fontWeight: hightideTypography.fontWeight.light,
       })),
     },
     messageList: {
@@ -172,7 +172,7 @@ export const createChatTheme = ({
       content: createStyleResolver<ChatMessageBubbleState, TextStyle>((state) => ({
         color: state.direction === 'outgoing' ? semantic.onPrimary : semantic.onNeutral,
         fontSize: 16,
-        fontWeight: fontWeights.light,
+        fontWeight: hightideTypography.fontWeight.light,
         lineHeight: 22.4,
       })),
       timestamp: createStyleResolver<ChatMessageBubbleState, TextStyle>((state) => ({
@@ -181,7 +181,7 @@ export const createChatTheme = ({
           ? hexWithAlpha(semantic.onPrimary, 0.75)
           : semantic.description,
         fontSize: 11,
-        fontWeight: fontWeights.medium,
+        fontWeight: hightideTypography.fontWeight.medium,
         textAlign: 'right',
       })),
       receipt: createStyleResolver<Record<string, never>, ViewStyle>(() => ({
@@ -192,7 +192,7 @@ export const createChatTheme = ({
       receiptText: createStyleResolver<Record<string, never>, TextStyle>(() => ({
         color: semantic.description,
         fontSize: 11,
-        fontWeight: fontWeights.medium,
+        fontWeight: hightideTypography.fontWeight.medium,
       })),
       receiptIcon: createValueResolver<Record<string, never>, { color: Color }>(() => ({
         color: semantic.primary,
@@ -255,7 +255,7 @@ export const createChatTheme = ({
         return {
           color: tokens.text ?? tokens.color,
           fontSize: 14,
-          fontWeight: fontWeights.bold,
+          fontWeight: hightideTypography.fontWeight.bold,
         }
       }),
       subtitle: createStyleResolver<Record<string, never>, TextStyle>(() => ({
@@ -310,7 +310,7 @@ export const createChatTheme = ({
       name: createStyleResolver<Record<string, never>, TextStyle>(() => ({
         color: semantic.onSurface,
         fontSize: 14,
-        fontWeight: fontWeights.medium,
+        fontWeight: hightideTypography.fontWeight.medium,
       })),
       metadata: createStyleResolver<Record<string, never>, TextStyle>(() => ({
         color: semantic.description,
@@ -332,7 +332,7 @@ export const createChatTheme = ({
         return {
           color: tokens.text ?? tokens.color,
           fontSize: 12,
-          fontWeight: fontWeights.medium,
+          fontWeight: hightideTypography.fontWeight.medium,
         }
       }),
       icon: createValueResolver<ChatSystemLineState, { color: Color }>((state) => {
@@ -355,7 +355,7 @@ export const createChatTheme = ({
       text: createStyleResolver<Record<string, never>, TextStyle>(() => ({
         color: semantic.description,
         fontSize: 12,
-        fontWeight: fontWeights.medium,
+        fontWeight: hightideTypography.fontWeight.medium,
       })),
     },
     quickReplyChip: {
@@ -378,7 +378,7 @@ export const createChatTheme = ({
       text: createStyleResolver<ChatQuickReplyChipState, TextStyle>((state) => ({
         color: state.isActive ? semantic.primary : semantic.description,
         fontSize: 14,
-        fontWeight: fontWeights.medium,
+        fontWeight: hightideTypography.fontWeight.medium,
       })),
     },
     messageComposer: {

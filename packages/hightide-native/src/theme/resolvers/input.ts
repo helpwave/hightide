@@ -1,6 +1,12 @@
 import type { TextStyle } from 'react-native'
 
-import { componentLayouts } from '@helpwave/hightide-design/primitive'
+import {
+  hightideBorder,
+  hightideElements,
+  hightideRadius,
+  hightideSpacing,
+  hightideTypography
+} from '@helpwave/hightide-design/primitive'
 import type {
   ComponentColorTokens,
   HightideThemeTokens as DesignTokensTheme
@@ -26,19 +32,19 @@ export const createInputTheme = ({
   component,
 }: CreateInputThemeOptions): InputTheme => {
   const resolveInput = (state: InputState): TextStyle => {
-    const sizing = componentLayouts.input.md
+    const element = hightideElements.md
     const borderColor = state.isInvalid ? semantic.negative : component.border
 
     return {
-      minHeight: sizing.height,
-      paddingHorizontal: sizing.paddingX,
-      paddingVertical: sizing.paddingY,
-      borderRadius: sizing.borderRadius,
-      borderWidth: 1,
+      minHeight: element.size,
+      paddingHorizontal: hightideSpacing.md,
+      paddingVertical: hightideSpacing.sm,
+      borderRadius: Number(hightideRadius.sm),
+      borderWidth: hightideBorder.thin,
       borderColor,
       backgroundColor: state.isDisabled ? semantic.disabled : component.input.background,
       color: state.isDisabled ? semantic.onDisabled : component.input.text,
-      fontSize: 14,
+      fontSize: Number(hightideTypography.fontSize.sm),
       opacity: state.isDisabled ? 0.6 : 1,
     }
   }

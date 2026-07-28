@@ -4,8 +4,10 @@ import type {
 } from 'react-native'
 
 import {
-  componentLayouts,
-  fontWeights
+  hightideElements,
+  hightideRadius,
+  hightideSpacing,
+  hightideTypography
 } from '@helpwave/hightide-design/primitive'
 import type { HightideThemeTokens as DesignTokensTheme } from '@helpwave/hightide-design/theme'
 
@@ -33,7 +35,10 @@ export const createChipTheme = ({
     const coloringStyle = state.coloringStyle ?? 'solid'
     const tokens = coloring[color]
     const resolved = resolveColoringStyles(tokens, coloringStyle, semantic, state)
-    const layout = componentLayouts.chip[size]
+    const element = hightideElements[size]
+    const gap = size === 'xs' || size === 'sm' ? hightideSpacing.xs : hightideSpacing.sm
+    const horizontalInset = Math.max(Math.round(element.inset * 0.8), hightideSpacing.xs)
+    const verticalInset = Math.max(Math.round(element.inset * 0.5), 3)
 
     const chip: ViewStyle = {
       flexDirection: 'row',
@@ -43,18 +48,18 @@ export const createChipTheme = ({
       backgroundColor: resolved.backgroundColor,
       borderColor: resolved.borderColor,
       borderWidth: resolved.borderWidth,
-      paddingVertical: layout.paddingVertical,
-      paddingHorizontal: layout.paddingHorizontal,
-      gap: layout.gap,
-      minHeight: layout.minHeight,
-      borderRadius: layout.borderRadius,
+      paddingVertical: verticalInset,
+      paddingHorizontal: horizontalInset,
+      gap,
+      minHeight: Math.max(element.size - hightideSpacing.xs, 24),
+      borderRadius: Number(hightideRadius[size === 'xl' ? 'md' : size === 'lg' ? 'md' : size]),
       opacity: state.isDisabled ? 0.6 : 1,
     }
 
     const text: TextStyle = {
       color: resolved.color,
-      fontSize: layout.fontSize,
-      fontWeight: fontWeights.semibold,
+      fontSize: Number(hightideTypography.fontSize.sm),
+      fontWeight: hightideTypography.fontWeight.semibold,
     }
 
     return { chip, text }

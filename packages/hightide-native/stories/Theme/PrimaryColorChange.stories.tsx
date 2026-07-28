@@ -6,8 +6,14 @@ import type {
   Meta,
   StoryObj
 } from '@storybook/react-native-web-vite'
-import { colorPalettes } from '@helpwave/hightide-design/primitive'
-import { toHightideSemanticTokens } from '@helpwave/hightide-design/semantic'
+import {
+  hightidePrimitiveTokens,
+  type ColorToken
+} from '@helpwave/hightide-design/primitive'
+import {
+  toHightideSemanticTokens,
+  type HightideColorPalettes
+} from '@helpwave/hightide-design/semantic'
 import {
   constructThemeTokens,
   toHightideComponentTokens,
@@ -25,15 +31,19 @@ import {
   ThemeStoryFrame
 } from './themeStoryHelpers'
 
-const toBluePrimarySemantic: typeof toHightideSemanticTokens = (args) => ({
-  ...toHightideSemanticTokens(args),
-  primary: args.primitiveTokens.blue.value[500],
-  primaryHover: args.primitiveTokens.blue.value[600],
-})
+const toBluePrimarySemantic: typeof toHightideSemanticTokens = (args) => {
+  const { blue } = args.primitiveTokens.color.palettes as HightideColorPalettes
+
+  return {
+    ...toHightideSemanticTokens(args),
+    primary: blue.value[500] as ColorToken,
+    primaryHover: blue.value[600] as ColorToken,
+  }
+}
 
 const bluePrimaryDesignTokens = constructThemeTokens({
   themeName: 'blue-primary',
-  primitiveTokens: colorPalettes,
+  primitiveTokens: hightidePrimitiveTokens,
   toSemantic: toBluePrimarySemantic,
   toComponents: toHightideComponentTokens,
   toTheme: toHightideTheme,
@@ -41,7 +51,7 @@ const bluePrimaryDesignTokens = constructThemeTokens({
 
 const bluePrimaryDarkDesignTokens = constructThemeTokens({
   themeName: 'dark',
-  primitiveTokens: colorPalettes,
+  primitiveTokens: hightidePrimitiveTokens,
   toSemantic: toBluePrimarySemantic,
   toComponents: toHightideComponentTokens,
   toTheme: toHightideTheme,

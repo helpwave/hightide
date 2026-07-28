@@ -5,8 +5,11 @@ import type {
 } from 'react-native'
 
 import {
-  componentLayouts,
-  fontWeights,
+  hightideBorder,
+  hightideElements,
+  hightideShadow,
+  hightideSpacing,
+  hightideTypography,
   type ElementSize
 } from '@helpwave/hightide-design/primitive'
 import type { TypographyTokens } from '@helpwave/hightide-design/semantic'
@@ -29,12 +32,50 @@ import type {
 import type { HightideComponentThemes } from '../types/components/hightide'
 import { createStyleResolver } from '../types/resolver'
 
-const avatarFontWeights: Record<ElementSize, string> = {
-  xs: fontWeights.semibold,
-  sm: fontWeights.semibold,
-  md: fontWeights.semibold,
-  lg: fontWeights.bold,
+const avatarGroupMaxShown = 5
+const avatarGroupOverlap = 0.5
+
+const avatarSize = (size: ElementSize): number => hightideElements[size].size - hightideSpacing.xs
+
+const avatarPadding = (size: ElementSize): number => Math.max(Math.round(hightideElements[size].inset / 2), 2)
+
+const avatarFontSize = (size: ElementSize): number => {
+  switch (size) {
+  case 'xs':
+  case 'sm':
+    return Number(hightideTypography.fontSize.xs)
+  case 'md':
+    return Number(hightideTypography.fontSize.lg)
+  case 'lg':
+  case 'xl':
+    return Number(hightideTypography.fontSize['2xl'])
+  }
 }
+
+const avatarFontWeights: Record<ElementSize, number> = {
+  xs: hightideTypography.fontWeight.semibold,
+  sm: hightideTypography.fontWeight.semibold,
+  md: hightideTypography.fontWeight.semibold,
+  lg: hightideTypography.fontWeight.bold,
+  xl: hightideTypography.fontWeight.bold,
+}
+
+const iconSizeFor = (size: ElementSize): number => {
+  switch (size) {
+  case 'xs':
+    return hightideSpacing.md
+  case 'sm':
+    return hightideSpacing.md + hightideSpacing.xs / 2
+  case 'md':
+    return hightideSpacing.lg
+  case 'lg':
+    return hightideSpacing.xl - hightideSpacing.xs
+  case 'xl':
+    return hightideSpacing.xl
+  }
+}
+
+const statusDotSizeFor = (size: ElementSize): number => Math.round(avatarSize(size) / 2)
 
 const statusColor = (
   status: AvatarStatus,
@@ -70,30 +111,30 @@ export const createAvatarTheme = ({
 }: CreateAvatarThemeOptions): AvatarTheme => {
   const resolveAvatar = (state: AvatarState) => {
     const size = state.size ?? 'md'
-    const layout = componentLayouts.avatar[size]
-    const groupLayout = componentLayouts.avatarGroup
+    const dimension = avatarSize(size)
     const resolved = resolveColoringStyles(coloring.primary, 'solid', semantic)
-    const borderRadius = layout.size / 2
+    const borderRadius = dimension / 2
+    const shadow = hightideShadow.avatar
 
     const avatar: ViewStyle = {
       position: state.isGrouped ? 'absolute' : 'relative',
       flexDirection: 'row',
       alignItems: 'center',
       justifyContent: 'center',
-      width: layout.size,
-      height: layout.size,
-      padding: layout.padding,
+      width: dimension,
+      height: dimension,
+      padding: avatarPadding(size),
       borderRadius,
       backgroundColor: resolved.backgroundColor,
       overflow: 'hidden',
       ...(state.isGrouped ? {
-        left: (state.groupIndex ?? 0) * layout.size * groupLayout.overlap,
-        zIndex: groupLayout.maxShown - (state.groupIndex ?? 0),
+        left: (state.groupIndex ?? 0) * dimension * avatarGroupOverlap,
+        zIndex: avatarGroupMaxShown - (state.groupIndex ?? 0),
         shadowColor: '#000000',
-        shadowOffset: { width: 4, height: 0 },
+        shadowOffset: { width: shadow.x, height: shadow.y },
         shadowOpacity: 0.2,
-        shadowRadius: 4,
-        elevation: 4,
+        shadowRadius: shadow.blur,
+        elevation: shadow.blur,
       } : {}),
     }
 
@@ -101,21 +142,21 @@ export const createAvatarTheme = ({
       position: 'absolute',
       left: 0,
       top: 0,
-      width: layout.size,
-      height: layout.size,
+      width: dimension,
+      height: dimension,
       borderRadius,
     }
 
     const text: TextStyle = {
       color: resolved.color,
-      fontSize: layout.fontSize,
+      fontSize: avatarFontSize(size),
       fontWeight: avatarFontWeights[size] as TextStyle['fontWeight'],
       textAlign: 'center',
     }
 
     const icon: AvatarIconStyle = {
-      size: componentLayouts.icon[size].size,
-      strokeWidth: componentLayouts.icon[size].strokeWidth,
+      size: iconSizeFor(size),
+      strokeWidth: hightideBorder.base,
       color: resolved.color,
     }
 
@@ -125,7 +166,7 @@ export const createAvatarTheme = ({
   const resolveWithStatus = (state: AvatarWithStatusState) => {
     const size = state.size ?? 'md'
     const status = state.status ?? 'unknown'
-    const layout = componentLayouts.avatar[size]
+    const statusDotSize = statusDotSizeFor(size)
 
     const container: ViewStyle = {
       position: 'relative',
@@ -137,10 +178,10 @@ export const createAvatarTheme = ({
       right: 0,
       bottom: 0,
       zIndex: 1,
-      width: layout.statusDotSize,
-      height: layout.statusDotSize,
-      borderRadius: layout.statusDotSize / 2,
-      borderWidth: layout.statusDotBorderWidth,
+      width: statusDotSize,
+      height: statusDotSize,
+      borderRadius: statusDotSize / 2,
+      borderWidth: size === 'xs' ? hightideBorder.thin + 0.5 : hightideBorder.base,
       borderColor: semantic.background,
       backgroundColor: statusColor(status, semantic, gray),
     }
@@ -154,13 +195,15 @@ export const createAvatarTheme = ({
     const container: ViewStyle = {
       flexDirection: 'row',
       alignItems: 'center',
-      gap: componentLayouts.avatarGroup.gap,
+      gap: hightideSpacing.sm,
     }
 
     const text: TextStyle = {
-      fontSize: bodyMedium.fontSize,
+      fontSize: Number(bodyMedium.fontSize),
       fontWeight: bodyMedium.fontWeight as TextStyle['fontWeight'],
-      lineHeight: bodyMedium.lineHeight,
+      lineHeight: typeof bodyMedium.lineHeight === 'number'
+        ? bodyMedium.lineHeight
+        : Number(bodyMedium.lineHeight),
       color: semantic.onBackground,
       flexShrink: 1,
     }
@@ -170,27 +213,26 @@ export const createAvatarTheme = ({
 
   const resolveGroup = (state: AvatarGroupState) => {
     const size = state.size ?? 'md'
-    const layout = componentLayouts.avatar[size]
-    const groupLayout = componentLayouts.avatarGroup
-    const visibleCount = Math.min(state.count ?? groupLayout.maxShown, groupLayout.maxShown)
-    const stackWidth = layout.size * (groupLayout.overlap * Math.max(visibleCount - 1, 0) + 1)
+    const dimension = avatarSize(size)
+    const visibleCount = Math.min(state.count ?? avatarGroupMaxShown, avatarGroupMaxShown)
+    const stackWidth = dimension * (avatarGroupOverlap * Math.max(visibleCount - 1, 0) + 1)
 
     const container: ViewStyle = {
       flexDirection: 'row',
       alignItems: 'center',
-      gap: groupLayout.gap,
-      height: layout.size,
+      gap: hightideSpacing.sm,
+      height: dimension,
       alignSelf: 'flex-start',
     }
 
     const stack: ViewStyle = {
       position: 'relative',
       width: stackWidth,
-      height: layout.size,
+      height: dimension,
     }
 
     const more: TextStyle = {
-      fontSize: (layout.size * 2) / 3,
+      fontSize: (dimension * 2) / 3,
       color: semantic.onBackground,
       flexShrink: 1,
     }
@@ -227,3 +269,5 @@ export const createAvatarThemeFromDesign = (theme: DesignTokensTheme): AvatarThe
     typography: theme.typography,
   })
 }
+
+export { avatarGroupMaxShown }

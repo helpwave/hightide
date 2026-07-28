@@ -1,6 +1,10 @@
 import type { ViewStyle } from 'react-native'
 
-import { componentLayouts } from '@helpwave/hightide-design/primitive'
+import {
+  hightideBorder,
+  hightideElements,
+  hightideRadius
+} from '@helpwave/hightide-design/primitive'
 import type { HightideThemeTokens as DesignTokensTheme } from '@helpwave/hightide-design/theme'
 
 import {
@@ -33,12 +37,11 @@ export const createIconButtonTheme = ({
     const coloringStyle = state.coloringStyle ?? 'solid'
     const tokens = coloring[color]
     const resolved = resolveColoringStyles(tokens, coloringStyle, semantic, state)
-    const sizing = componentLayouts.element[size]
-    const outlineWidth = componentLayouts.shared.coloringOutlineWidth
-    const dimension = sizing.height
+    const element = hightideElements[size]
+    const dimension = element.size
     const borderWidth = resolved.borderWidth > 0
       ? resolved.borderWidth
-      : (isOutlineColoringStyle(coloringStyle) ? outlineWidth : 0)
+      : (isOutlineColoringStyle(coloringStyle) ? hightideBorder.base : 0)
 
     const button: ViewStyle = {
       alignItems: 'center',
@@ -48,7 +51,7 @@ export const createIconButtonTheme = ({
       borderWidth,
       width: dimension,
       height: dimension,
-      borderRadius: componentLayouts.button[size].borderRadius,
+      borderRadius: Number(hightideRadius[size === 'xl' ? 'lg' : size === 'lg' ? 'md' : size]),
       opacity: state.isDisabled ? 0.6 : 1,
     }
 

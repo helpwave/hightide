@@ -1,21 +1,15 @@
-import { fontSizes } from '../primitive/typography/font-sizes'
-import { fontWeights } from '../primitive/typography/font-weights'
-import { lineHeights } from '../primitive/typography/line-heights'
-import type {
-  FontFamilyToken,
-  FontWeightToken,
-  FontWeightVariableTokens
-} from '../primitive/typography/font-weight'
+import type { FontSizeKey, FontWeightKey } from '../primitive/typography'
+import { hightideTypography } from '../primitive/typography'
 
 export type TypographyStyleToken = {
-  fontSize: number,
-  lineHeight: number,
-  fontWeight: FontWeightToken,
+  fontSize: string,
+  lineHeight: number | string,
+  fontWeight: number,
   fontFamily?: string,
 }
 
 export type TypographyTokens = {
-  fontWeights: FontWeightVariableTokens,
+  fontWeights: typeof hightideTypography.fontWeight,
   scales: {
     headline: {
       large: TypographyStyleToken,
@@ -51,18 +45,18 @@ export type TypographyTokens = {
 export type { TypographyTokens as TypographyScale, TypographyStyleToken as TypographyStyle }
 
 const createTypographyStyle = (
-  size: keyof typeof fontSizes,
-  weight: keyof typeof fontWeights,
-  fontFamily?: FontFamilyToken
+  size: FontSizeKey,
+  weight: FontWeightKey,
+  fontFamily?: string
 ): TypographyStyleToken => ({
-  fontSize: fontSizes[size],
-  lineHeight: lineHeights[size],
-  fontWeight: fontWeights[weight],
-  fontFamily
+  fontSize: hightideTypography.fontSize[size],
+  lineHeight: hightideTypography.lineHeight[size],
+  fontWeight: hightideTypography.fontWeight[weight],
+  fontFamily,
 })
 
 export const typography = {
-  fontWeights,
+  fontWeights: hightideTypography.fontWeight,
   scales: {
     headline: {
       large: createTypographyStyle('4xl', 'bold', 'space'),

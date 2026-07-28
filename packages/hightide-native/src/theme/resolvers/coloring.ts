@@ -1,4 +1,4 @@
-import { componentLayouts } from '@helpwave/hightide-design/primitive'
+import { hightideBorder } from '@helpwave/hightide-design/primitive'
 import {
   hexWithAlpha,
   type ButtonColoringStyle,
@@ -30,7 +30,7 @@ export const resolveColoringStyles = (
   semantic: HightideSemanticColors,
   state: InteractionState = {}
 ): ResolvedColoringStyles => {
-  const outlineWidth = componentLayouts.shared.coloringOutlineWidth
+  const outlineWidth = hightideBorder.base
   const hovered = usesHover(state)
 
   if (state.isDisabled) {

@@ -175,7 +175,7 @@ export const AvatarGroup = ({
   ...props
 }: AvatarGroupProps) => {
   const { theme } = useTheme()
-  const maxShownProfiles = theme.layout.avatarGroup.maxShown
+  const maxShownProfiles = 5
   const displayedProfiles = avatars.length < maxShownProfiles ? avatars : avatars.slice(0, maxShownProfiles)
   const notDisplayedProfiles = avatars.length - maxShownProfiles
 

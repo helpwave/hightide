@@ -1,12 +1,12 @@
 export type TextStyle = {
-  fontSize: number,
-  lineHeight: number,
-  fontWeight: string,
+  fontSize: string,
+  lineHeight: number | string,
+  fontWeight: number,
   fontFamily?: string,
 }
 
 export type HightideTypography = {
-  fontWeights: Record<string, string>,
+  fontWeights: Record<string, number>,
   scales: {
     headline: { large: TextStyle, medium: TextStyle, small: TextStyle },
     title: { large: TextStyle, medium: TextStyle, small: TextStyle },

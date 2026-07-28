@@ -1,7 +1,8 @@
 import type { ViewStyle } from 'react-native'
 
 import {
-  componentLayouts,
+  hightideBorder,
+  hightideRadius,
   type ElementSize
 } from '@helpwave/hightide-design/primitive'
 import type {
@@ -62,9 +63,9 @@ export const createCheckboxTheme = ({
       height: dimension,
       alignItems: 'center',
       justifyContent: 'center',
-      borderWidth: componentLayouts.shared.coloringOutlineWidth,
+      borderWidth: hightideBorder.base,
       borderColor,
-      borderRadius: state.isRounded ? dimension / 2 : 6,
+      borderRadius: state.isRounded ? dimension / 2 : Number(hightideRadius.sm),
       backgroundColor,
       opacity: state.isDisabled ? 0.6 : 1,
     }

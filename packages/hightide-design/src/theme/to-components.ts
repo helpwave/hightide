@@ -1,10 +1,11 @@
-import type { ComponentColorTokens } from './component-colors'
-import type { HightideColorPalleteTokens } from '../primitive/hightide'
+import type { PrimitiveTokens } from '../primitive/primitive-tokens'
+import type { HightideColorPalettes } from '../semantic/to-semantic'
 import type { HightideSemanticColorTokens } from '../semantic/hightide'
+import type { ComponentColorTokens } from './component-colors'
 
-export type ToComponentsArgs<PrimitiveTokens, SemanticTokens> = {
+export type ToComponentsArgs<Tokens extends PrimitiveTokens = PrimitiveTokens, SemanticTokens = HightideSemanticColorTokens> = {
   themeName: string,
-  primitiveTokens: PrimitiveTokens,
+  primitiveTokens: Tokens,
   semanticTokens: SemanticTokens,
 }
 
@@ -12,8 +13,8 @@ export const toHightideComponentTokens = ({
   themeName,
   primitiveTokens,
   semanticTokens,
-}: ToComponentsArgs<HightideColorPalleteTokens, HightideSemanticColorTokens>): ComponentColorTokens => {
-  const { gray, purple, blue, white } = primitiveTokens
+}: ToComponentsArgs): ComponentColorTokens => {
+  const { gray, purple, blue, white } = primitiveTokens.color.palettes as HightideColorPalettes
   const semantic = semanticTokens
 
   if (themeName === 'dark') {

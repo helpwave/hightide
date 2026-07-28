@@ -1,4 +1,4 @@
-import { fontWeights } from '@helpwave/hightide-design/primitive'
+import { hightideTypography } from '@helpwave/hightide-design/primitive'
 import type {
   ComponentColorTokens,
   HightideThemeTokens as DesignTokensTheme
@@ -69,7 +69,7 @@ export const createSelectTheme = ({
     })),
     optionText: createStyleResolver((state: SelectOptionState) => ({
       color: state.isSelected ? semantic.primary : component.menu.text,
-      fontWeight: state.isSelected ? fontWeights.semibold : fontWeights.base,
+      fontWeight: state.isSelected ? hightideTypography.fontWeight.semibold : hightideTypography.fontWeight.base,
     })),
   }
 }

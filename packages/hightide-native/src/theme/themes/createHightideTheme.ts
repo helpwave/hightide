@@ -1,4 +1,4 @@
-import type { ColorPaletteToken } from '@helpwave/hightide-design/primitive'
+import type { ColorPalette } from '@helpwave/hightide-design/primitive'
 import type { HightideThemeTokens } from '@helpwave/hightide-design/theme'
 
 import { createAvatarThemeFromDesign } from '../resolvers/avatar'
@@ -14,32 +14,37 @@ import { createMultiSelectThemeFromDesign } from '../resolvers/multiSelect'
 import { createSelectThemeFromDesign } from '../resolvers/select'
 import type {
   Color,
-  ColorPalette,
+  ColorPalette as UnwrappedColorPalette,
   HightideColors
 } from '../types/color'
 import type { HightideTheme } from '../types/theme'
 
-const unwrapColorPaletteToken = (token: ColorPaletteToken): Color | ColorPalette => {
+const unwrapColorPaletteToken = (token: ColorPalette): Color | UnwrappedColorPalette => {
   if (token.type === 'singleValue') {
     return token.value
   }
   return token.value
 }
 
-const unwrapColors = (colors: HightideThemeTokens['colors']): HightideColors & Record<string, Color | ColorPalette> => {
-  const result: Record<string, Color | ColorPalette> = {}
+const unwrapColors = (colors: HightideThemeTokens['colors']): HightideColors & Record<string, Color | UnwrappedColorPalette> => {
+  const result: Record<string, Color | UnwrappedColorPalette> = {}
   for (const [key, token] of Object.entries(colors)) {
     result[key] = unwrapColorPaletteToken(token)
   }
-  return result as HightideColors & Record<string, Color | ColorPalette>
+  return result as HightideColors & Record<string, Color | UnwrappedColorPalette>
 }
 
 export const createHightideTheme = (tokens: HightideThemeTokens): HightideTheme => ({
   colors: unwrapColors(tokens.colors),
   semantic: tokens.semanticColors,
   typography: tokens.typography,
-  layout: tokens.layout,
-  decoration: tokens.decorcation,
+  spacing: tokens.spacing,
+  elements: tokens.elements,
+  breakpoint: tokens.breakpoint,
+  radius: tokens.radius,
+  border: tokens.border,
+  shadow: tokens.shadow,
+  motion: tokens.motion,
   components: {
     coloring: tokens.coloring,
     button: createButtonThemeFromDesign(tokens),

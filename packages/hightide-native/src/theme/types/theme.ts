@@ -3,8 +3,15 @@ import type {
   HightideSemanticColors
 } from './color'
 import type { HightideComponentThemes } from './components/hightide'
-import type { HightideDecoration } from './decoration'
-import type { HightideLayout } from './layout'
+import type {
+  HightideBorder,
+  HightideBreakpoint,
+  HightideElements,
+  HightideMotion,
+  HightideRadius,
+  HightideShadow,
+  HightideSpacing
+} from './layout'
 import type { HightideTypography } from './typography'
 
 export type Theme = {
@@ -12,8 +19,13 @@ export type Theme = {
   semantic: Record<string, unknown>,
   components: Record<string, unknown>,
   typography: Record<string, unknown>,
-  layout: Record<string, unknown>,
-  decoration: Record<string, unknown>,
+  spacing: Record<string, unknown>,
+  elements: Record<string, unknown>,
+  breakpoint: Record<string, unknown>,
+  radius: Record<string, unknown>,
+  border: Record<string, unknown>,
+  shadow: Record<string, unknown>,
+  motion: Record<string, unknown>,
 }
 
 export type HightideTheme = Theme & {
@@ -21,6 +33,11 @@ export type HightideTheme = Theme & {
   semantic: HightideSemanticColors & Theme['semantic'],
   components: HightideComponentThemes & Theme['components'],
   typography: HightideTypography & Theme['typography'],
-  layout: HightideLayout & Theme['layout'],
-  decoration: HightideDecoration & Theme['decoration'],
+  spacing: HightideSpacing & Theme['spacing'],
+  elements: HightideElements & Theme['elements'],
+  breakpoint: HightideBreakpoint & Theme['breakpoint'],
+  radius: HightideRadius & Theme['radius'],
+  border: HightideBorder & Theme['border'],
+  shadow: HightideShadow & Theme['shadow'],
+  motion: HightideMotion & Theme['motion'],
 }

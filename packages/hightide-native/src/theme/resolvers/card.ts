@@ -1,6 +1,6 @@
 import { StyleSheet } from 'react-native'
 
-import { fontWeights } from '@helpwave/hightide-design/primitive'
+import { hightideTypography } from '@helpwave/hightide-design/primitive'
 import type {
   ComponentColorTokens,
   HightideThemeTokens as DesignTokensTheme
@@ -51,7 +51,7 @@ export const createCardTheme = ({
   const resolveActionLabel = (state: CardActionItemState) => ({
     color: state.isDanger ? semantic.negative : semantic.onSurface,
     fontSize: 15,
-    fontWeight: fontWeights.medium,
+    fontWeight: hightideTypography.fontWeight.medium,
   })
 
   const resolveActionIcon = (state: CardActionItemState) => ({
@@ -84,7 +84,7 @@ export const createCardTheme = ({
     itemValue: createStyleResolver(() => ({
       color: semantic.onSurface,
       fontSize: 15,
-      fontWeight: fontWeights.medium,
+      fontWeight: hightideTypography.fontWeight.medium,
     })),
     actionItem: createStyleResolver(resolveActionItem),
     actionItemContent: createStyleResolver(resolveItemContent),

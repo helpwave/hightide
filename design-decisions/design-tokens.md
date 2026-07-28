@@ -34,10 +34,10 @@ Raw, mode-agnostic building blocks. They have no product meaning by themselves.
 
 Examples:
 
-- Color palettes (`gray`, `purple`, `blue`, …) as typed `{ type, value }` wrappers
-- Shared layout numbers, typography scales, decoration, and animation tokens that are not theme-mode specific
+- Color palettes (`gray`, `purple`, `blue`, …) as typed `{ type, value }` wrappers under `color.palettes`
+- Spacing, elements, typography, radius, border, shadow, motion, and breakpoint scales
 
-Hightide’s default primitives are `colorPalettes` plus the static layout/typography/decoration/animation modules in `@helpwave/hightide-design/primitive`.
+Hightide’s default primitives are `hightidePrimitiveTokens` in `@helpwave/hightide-design/primitive`.
 
 ### 2. SemanticTokens
 
@@ -70,13 +70,13 @@ Prefer changing semantics first; use component tokens when a control needs a del
 
 The assembled, platform-agnostic design package for one theme mode. Hightide’s shape is `HightideThemeTokens`:
 
-- `colors` — primitives
+- `colors` — palette primitives
 - `semanticColors` — semantics
 - `componentColors` — component tokens
 - `coloring` — solid/outline/tonal style definitions derived from semantics
-- `typography`, `layout`, `animation`, `decorcation`
+- `typography`, `spacing`, `elements`, `breakpoint`, `radius`, `border`, `shadow`, `motion`
 
-Mapper: `toHightideTheme` (`theme/to-theme.ts`), which also attaches shared layout/typography/animation/decoration and builds `coloring`.
+Mapper: `toHightideTheme` (`theme/to-theme.ts`), which attaches primitive scales and builds `coloring`.
 
 `ThemeTokens` are still data. They are not yet React Native `StyleSheet` values or web CSS variables applied to components.
 
@@ -93,7 +93,7 @@ ThemeTokens  ──createHightideTheme──►  Theme  ──ThemeProvider─�
 `createHightideTheme` in `@helpwave/hightide-native`:
 
 1. Unwraps palette tokens into flat `Color` / `ColorPalette` values.
-2. Exposes `semantic`, `typography`, `layout`, and `decoration` for direct use.
+2. Exposes `semantic`, `typography`, `spacing`, `elements`, `breakpoint`, `radius`, `border`, `shadow`, and `motion` for direct use.
 3. Builds `components.*` style resolvers (button, chip, chat, avatar, …) from the design tokens.
 
 The result is a `HightideTheme` (a strict form of the loose `Theme` type) that native components read via `useTheme()`.
@@ -139,7 +139,7 @@ Extension pattern:
 ## Practical recipe
 
 ```text
-1. Start from PrimitiveTokens (colorPalettes, …)
+1. Start from PrimitiveTokens (`hightidePrimitiveTokens`, …)
 2. Optionally customize toSemantic / toComponents / toTheme
 3. constructThemeTokens(...) → ThemeTokens
 4. createHightideTheme(themeTokens) → Theme   // native; web equivalent later

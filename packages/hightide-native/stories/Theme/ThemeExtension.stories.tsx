@@ -3,8 +3,14 @@ import type {
   Meta,
   StoryObj
 } from '@storybook/react-native-web-vite'
-import { colorPalettes } from '@helpwave/hightide-design/primitive'
-import { toHightideSemanticTokens } from '@helpwave/hightide-design/semantic'
+import {
+  hightidePrimitiveTokens,
+  type ColorToken
+} from '@helpwave/hightide-design/primitive'
+import {
+  toHightideSemanticTokens,
+  type HightideColorPalettes
+} from '@helpwave/hightide-design/semantic'
 import {
   constructThemeTokens,
   toHightideComponentTokens,
@@ -24,26 +30,26 @@ import {
 } from './themeStoryHelpers'
 
 const toOceanSemantic: typeof toHightideSemanticTokens = (args) => {
-  const { blue } = args.primitiveTokens
+  const { blue, white } = args.primitiveTokens.color.palettes as HightideColorPalettes
 
   return {
     ...toHightideSemanticTokens(args),
-    background: blue.value[100],
-    onBackground: blue.value[900],
-    surface: blue.value[50],
-    onSurface: blue.value[900],
-    surfaceHover: blue.value[100],
-    surfaceVariant: blue.value[200],
-    onSurfaceVariant: blue.value[900],
-    primary: blue.value[500],
-    onPrimary: args.primitiveTokens.white.value,
-    primaryHover: blue.value[600],
+    background: blue.value[100] as ColorToken,
+    onBackground: blue.value[900] as ColorToken,
+    surface: blue.value[50] as ColorToken,
+    onSurface: blue.value[900] as ColorToken,
+    surfaceHover: blue.value[100] as ColorToken,
+    surfaceVariant: blue.value[200] as ColorToken,
+    onSurfaceVariant: blue.value[900] as ColorToken,
+    primary: blue.value[500] as ColorToken,
+    onPrimary: white.value as ColorToken,
+    primaryHover: blue.value[600] as ColorToken,
   }
 }
 
 const oceanDesignTokens = constructThemeTokens({
   themeName: 'ocean',
-  primitiveTokens: colorPalettes,
+  primitiveTokens: hightidePrimitiveTokens,
   toSemantic: toOceanSemantic,
   toComponents: toHightideComponentTokens,
   toTheme: toHightideTheme,

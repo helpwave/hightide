@@ -81,7 +81,7 @@ import {
 } from 'react-native'
 import { Check } from 'lucide-react-native'
 
-import { fontWeights } from '@helpwave/hightide-design/primitive'
+import { hightideTypography } from '@helpwave/hightide-design/primitive'
 import { hexWithAlpha } from '@helpwave/hightide-design/theme'
 
 import { useTheme } from '../../global-contexts/theme/ThemeContext'

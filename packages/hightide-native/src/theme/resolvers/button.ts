@@ -4,8 +4,11 @@ import type {
 } from 'react-native'
 
 import {
-  componentLayouts,
-  fontWeights,
+  hightideBorder,
+  hightideElements,
+  hightideRadius,
+  hightideSpacing,
+  hightideTypography,
   type ElementSize
 } from '@helpwave/hightide-design/primitive'
 import type { HightideThemeTokens as DesignTokensTheme } from '@helpwave/hightide-design/theme'
@@ -23,10 +26,19 @@ import type { HightideComponentThemes } from '../types/components/hightide'
 import { createStyleResolver } from '../types/resolver'
 
 const buttonFontSizes: Record<ElementSize, number> = {
-  xs: 12,
-  sm: 14,
-  md: 14,
-  lg: 18,
+  xs: Number(hightideTypography.fontSize.xs),
+  sm: Number(hightideTypography.fontSize.sm),
+  md: Number(hightideTypography.fontSize.sm),
+  lg: Number(hightideTypography.fontSize.lg),
+  xl: Number(hightideTypography.fontSize.xl),
+}
+
+const buttonMinWidths: Record<ElementSize, number> = {
+  xs: 80,
+  sm: 112,
+  md: 144,
+  lg: 180,
+  xl: 200,
 }
 
 export type CreateButtonThemeOptions = {
@@ -44,9 +56,12 @@ export const createButtonTheme = ({
     const coloringStyle = state.coloringStyle ?? 'solid'
     const tokens = coloring[color]
     const resolved = resolveColoringStyles(tokens, coloringStyle, semantic, state)
-    const padding = componentLayouts.button[size]
-    const sizing = componentLayouts.element[size]
+    const element = hightideElements[size]
     const outlinePadding = isOutlineColoringStyle(coloringStyle)
+    const outlineInset = Math.max(element.inset - hightideBorder.base, 0)
+    const horizontalInset = size === 'xs' || size === 'sm'
+      ? element.inset + hightideSpacing.xs
+      : element.inset + hightideSpacing.md
 
     const button: ViewStyle = {
       flexDirection: 'row',
@@ -55,19 +70,21 @@ export const createButtonTheme = ({
       backgroundColor: resolved.backgroundColor,
       borderColor: resolved.borderColor,
       borderWidth: resolved.borderWidth,
-      paddingVertical: outlinePadding ? padding.paddingYOutline : padding.paddingY,
-      paddingHorizontal: outlinePadding ? padding.paddingXOutline : padding.paddingX,
-      gap: padding.gap,
-      minWidth: padding.minWidth,
-      minHeight: sizing.height,
-      borderRadius: padding.borderRadius,
+      paddingVertical: outlinePadding ? outlineInset : element.inset,
+      paddingHorizontal: outlinePadding
+        ? Math.max(horizontalInset - hightideBorder.base, 0)
+        : horizontalInset,
+      gap: size === 'xs' || size === 'sm' ? hightideSpacing.xs : hightideSpacing.sm,
+      minWidth: buttonMinWidths[size],
+      minHeight: element.size,
+      borderRadius: Number(hightideRadius[size === 'xl' ? 'lg' : size === 'lg' ? 'md' : size]),
       opacity: state.isDisabled ? 0.6 : 1,
     }
 
     const text: TextStyle = {
       color: resolved.color,
       fontSize: buttonFontSizes[size],
-      fontWeight: fontWeights.semibold,
+      fontWeight: hightideTypography.fontWeight.semibold,
     }
 
     return { button, text }

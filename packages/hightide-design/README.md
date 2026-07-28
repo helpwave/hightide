@@ -13,7 +13,11 @@ pnpm add @helpwave/hightide-design
 There is **no package root export**. Import from folder entry points:
 
 ```ts
-import { colorPalettes, componentLayouts, type ElementSize } from "@helpwave/hightide-design/primitive";
+import {
+  hightidePrimitiveTokens,
+  type ElementSize,
+  type PrimitiveTokens,
+} from "@helpwave/hightide-design/primitive";
 import { toHightideSemanticTokens, typography } from "@helpwave/hightide-design/semantic";
 import {
   ThemeTokens,
@@ -25,13 +29,13 @@ import {
 
 const theme = ThemeTokens.dark;
 const background = theme.semanticColors.background;
-const buttonHeight = componentLayouts.element.md.height;
+const buttonHeight = hightidePrimitiveTokens.elements.md.size;
 const headline = typography.scales.headline.large;
 ```
 
 | Subpath | Contents |
 | --- | --- |
-| `@helpwave/hightide-design/primitive` | Raw palettes, layout, decoration, animation, and typography scales |
+| `@helpwave/hightide-design/primitive` | Structured `PrimitiveTokens` (color, spacing, elements, typography, radius, border, shadow, motion, breakpoint) |
 | `@helpwave/hightide-design/semantic` | Semantic color mapper and composed typography styles |
 | `@helpwave/hightide-design/theme` | Component tokens, theme assembly, themes, and color utilities |
 
@@ -39,17 +43,21 @@ const headline = typography.scales.headline.large;
 
 ```
 src/
-  primitive/      Mode-agnostic token values and type definitions
+  primitive/      Mode-agnostic PrimitiveTokens type + hightide defaults
   semantic/       Named semantic roles, mapper, and typography composition
   theme/          Component tokens, theme construction, themes, and utilities
 ```
 
 ### Primitive
 
-- `color.ts` / `color-palettes.ts` — palette types and shared color palettes
-- `layout.ts` — component layout definitions and `ElementSize`
-- `decoration.ts` / `animation.ts` — border radii and motion durations
-- `typography/` — font sizes, weights, and line heights
+Each top-level `PrimitiveTokens` key lives in its own file with a hightide default:
+
+- `color.ts` — palettes and `ColorPalette` token types
+- `spacing.ts` / `elements.ts` / `breakpoint.ts` — layout scales
+- `typography.ts` — font family, size, weight, line height
+- `radius.ts` / `border.ts` / `shadow.ts` / `motion.ts`
+- `units.ts` — `ScalingUnitToken`, `FixedUnitToken`
+- `primitive-tokens.ts` — `PrimitiveTokens` + `hightidePrimitiveTokens`
 
 ### Semantic
 
