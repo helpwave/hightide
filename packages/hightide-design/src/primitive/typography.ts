@@ -16,11 +16,7 @@ export type FontSizeKey =
 export type FontWeightKey = 'thin' | 'light' | 'base' | 'medium' | 'semibold' | 'bold'
 
 export type TypographyPrimitiveTokens = {
-  fontFamily: {
-    sans: string,
-    serif: string,
-    mono: string,
-  } & Record<string, string>,
+  fontFamily: Record<string, string>,
   fontSize: Record<FontSizeKey, string> & Record<string, string>,
   fontWeight: Record<FontWeightKey, number> & Record<string, number>,
   lineHeight: Record<FontSizeKey, number | string> & Record<string, number | string>,
@@ -28,10 +24,8 @@ export type TypographyPrimitiveTokens = {
 
 export const hightideTypography = {
   fontFamily: {
-    sans: 'system',
-    serif: 'serif',
-    mono: 'mono',
-    space: 'space',
+    inter: 'Inter',
+    spaceGrotesk: 'Space Grotesk',
   },
   fontSize: {
     xs: '12',

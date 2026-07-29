@@ -5,9 +5,9 @@ import type { MotionPrimitiveTokens } from '../primitive/motion'
 import type { RadiusPrimitiveTokens } from '../primitive/radius'
 import type { ShadowPrimitiveTokens } from '../primitive/shadow'
 import type { SpacingPrimitiveTokens } from '../primitive/spacing'
-import type { TypographyPrimitiveTokens } from '../primitive/typography'
 import type { HightideSemanticColorTokens } from '../semantic/hightide'
 import type { ColoringTokens } from './coloring'
+import type { ThemeTypographyTokens } from './typography'
 
 export type ThemeColorTokens = HightideSemanticColorTokens
 
@@ -16,7 +16,7 @@ export type ThemeTokens = {
   coloring: ColoringTokens,
   spacing: SpacingPrimitiveTokens,
   elements: ElementPrimitiveTokens,
-  typography: TypographyPrimitiveTokens,
+  typography: ThemeTypographyTokens,
   radius: RadiusPrimitiveTokens,
   border: BorderPrimitiveTokens,
   shadow: ShadowPrimitiveTokens,

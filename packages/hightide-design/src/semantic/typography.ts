@@ -62,14 +62,14 @@ export const createTypographyTokens = (
   fontWeights: typography.fontWeight,
   scales: {
     headline: {
-      large: createTypographyStyle(typography, '4xl', 'bold', typography.fontFamily.space ?? 'space'),
-      medium: createTypographyStyle(typography, '3xl', 'semibold', typography.fontFamily.space ?? 'space'),
-      small: createTypographyStyle(typography, '2xl', 'bold', typography.fontFamily.space ?? 'space'),
+      large: createTypographyStyle(typography, '4xl', 'bold', typography.fontFamily.accent),
+      medium: createTypographyStyle(typography, '3xl', 'semibold', typography.fontFamily.accent),
+      small: createTypographyStyle(typography, '2xl', 'bold', typography.fontFamily.accent),
     },
     title: {
-      large: createTypographyStyle(typography, '2xl', 'semibold', typography.fontFamily.space ?? 'space'),
-      medium: createTypographyStyle(typography, 'lg', 'semibold', typography.fontFamily.space ?? 'space'),
-      small: createTypographyStyle(typography, 'base', 'medium', typography.fontFamily.space ?? 'space'),
+      large: createTypographyStyle(typography, '2xl', 'semibold', typography.fontFamily.accent),
+      medium: createTypographyStyle(typography, 'lg', 'semibold', typography.fontFamily.accent),
+      small: createTypographyStyle(typography, 'base', 'medium', typography.fontFamily.accent),
     },
     body: {
       large: createTypographyStyle(typography, 'lg', 'base'),

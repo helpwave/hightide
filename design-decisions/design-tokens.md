@@ -50,7 +50,8 @@ Produced by `toLightThemeTokens` / `toDarkThemeTokens` (`@helpwave/hightide-desi
 
 - `color` — high-level named colors (no palettes)
 - `coloring` — style → role → `StateBasedProperty<ColorState>` packs (`filled`, `outline`, `tonal`, `tonal-outline`, `text`)
-- Non-color scales passthrough from primitives
+- `typography.fontFamily` — remapped roles `default` / `accent` / `mono` from primitive font registry
+- Other non-color scales passthrough from primitives
 
 `ColorState` = `{ background, foreground, border }`. Resolve with `resolveStateBasedProperty` in order `base → focused → hover → pressed → disabled`.
 
