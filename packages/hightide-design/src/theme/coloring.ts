@@ -1,8 +1,14 @@
 import type { ColorToken } from '../primitive/color'
-import type { HightideSemanticColorTokens } from '../semantic/hightide'
+import type {
+  HightideSemanticColorTokens,
+  ThemeRoleColorTokens
+} from '../semantic/hightide'
 import type { ColorState } from './color-state'
 import { HexColorUtils } from '../utils/hex'
 import type { StateBasedProperty } from './state-based-property'
+
+type ColorSchemeInput = HightideSemanticColorTokens & ThemeRoleColorTokens
+
 
 export const coloringTypes = ['primary', 'secondary', 'positive', 'warning', 'negative', 'neutral'] as const
 
@@ -36,7 +42,7 @@ type RoleColors = {
   tonalBackground: ColorToken,
 }
 
-const roleColorsFromTheme = (colors: HightideSemanticColorTokens): Record<ColoringType, RoleColors> => ({
+const roleColorsFromTheme = (colors: ColorSchemeInput): Record<ColoringType, RoleColors> => ({
   primary: {
     color: colors.primary,
     onColor: colors.onPrimary,
@@ -234,7 +240,7 @@ const schemeFor = (
   text: createText(role, disabled, onDisabled, transparent),
 })
 
-export const createColorSchemes = (colors: HightideSemanticColorTokens): ColorSchemes => {
+export const createColorSchemes = (colors: ColorSchemeInput): ColorSchemes => {
   const roles = roleColorsFromTheme(colors)
   const { disabled, onDisabled, transparent } = colors
 

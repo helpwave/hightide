@@ -2,6 +2,7 @@ import type { ComponentTokens } from '@helpwave/hightide-design/components'
 import type { DesignSystemTokens as DesignTokensTheme } from '@helpwave/hightide-design/design-system'
 
 import type { HightideSemanticColors } from '../types/color'
+import type { HightideComponentThemes } from '../types/components/hightide'
 import type {
   SwitchState,
   SwitchTheme
@@ -10,11 +11,13 @@ import { createValueResolver } from '../types/resolver'
 
 export type CreateSwitchThemeOptions = {
   semantic: HightideSemanticColors,
+  colorSchemes: HightideComponentThemes['colorSchemes'],
   switchTokens: ComponentTokens['switch'],
 }
 
 export const createSwitchTheme = ({
   semantic,
+  colorSchemes,
   switchTokens,
 }: CreateSwitchThemeOptions): SwitchTheme => {
   const resolveState = (state: SwitchState) => {
@@ -30,7 +33,7 @@ export const createSwitchTheme = ({
     const borderColor = state.isDisabled
       ? semantic.disabled
       : state.isInvalid
-        ? semantic.negative
+        ? colorSchemes.negative.text.base.foreground
         : state.isActive
           ? trackActive
           : switchTokens.borderColor
@@ -58,6 +61,7 @@ export const createSwitchTheme = ({
 export const createSwitchThemeFromDesign = (theme: DesignTokensTheme): SwitchTheme => {
   return createSwitchTheme({
     semantic: theme.semantic.colors,
+    colorSchemes: theme.semantic.colorSchemes,
     switchTokens: theme.components.switch,
   })
 }

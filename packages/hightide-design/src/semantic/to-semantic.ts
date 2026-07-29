@@ -1,6 +1,9 @@
 import type { ThemeTokens } from '../theme/theme-tokens'
 import type { ColorSchemes } from '../theme/coloring'
-import type { HightideSemanticColorTokens } from './hightide'
+import {
+  hightideSemanticColorKeys,
+  type HightideSemanticColorTokens
+} from './hightide'
 import {
   toHightideElevationShadow,
   type ElevationShadowTokens
@@ -31,10 +34,20 @@ export type ToSemanticArgs<Tokens extends ThemeTokens = ThemeTokens> = {
   themeTokens: Tokens,
 }
 
+const toSemanticColors = (color: ThemeTokens['color']): HightideSemanticColorTokens => {
+  const colors = {} as HightideSemanticColorTokens
+
+  for (const key of hightideSemanticColorKeys) {
+    colors[key] = color[key]
+  }
+
+  return colors
+}
+
 export const toHightideSemanticTokens = ({
   themeTokens,
 }: ToSemanticArgs): SemanticTokens => ({
-  colors: themeTokens.color,
+  colors: toSemanticColors(themeTokens.color),
   colorSchemes: themeTokens.colorSchemes,
   typography: createTypographyTokens(themeTokens.typography),
   spacing: themeTokens.spacing,

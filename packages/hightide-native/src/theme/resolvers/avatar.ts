@@ -38,16 +38,16 @@ const avatarFontWeights: Record<'xs' | 'sm' | 'md' | 'lg' | 'xl', 'semibold' | '
 
 const statusColor = (
   status: AvatarStatus,
-  semantic: HightideSemanticColors,
+  colorSchemes: HightideComponentThemes['colorSchemes'],
   gray: ColorPalette
 ): string => {
   switch (status) {
   case 'online':
-    return semantic.positive
+    return colorSchemes.positive.filled.base.background
   case 'busy':
-    return semantic.negative
+    return colorSchemes.negative.filled.base.background
   case 'away':
-    return semantic.warning
+    return colorSchemes.warning.filled.base.background
   case 'offline':
   case 'unknown':
   default:
@@ -160,7 +160,7 @@ export const createAvatarTheme = ({
       borderRadius: statusDotSize / 2,
       borderWidth: avatar[size].statusDotBorderWidth,
       borderColor: semantic.background,
-      backgroundColor: statusColor(status, semantic, gray),
+      backgroundColor: statusColor(status, colorSchemes, gray),
     }
 
     return { container, statusDot }

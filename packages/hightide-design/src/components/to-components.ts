@@ -48,6 +48,7 @@ export const toHightideComponentTokens = ({
   semanticTokens,
 }: ToComponentsArgs): ComponentTokens => {
   const colors = semanticTokens.colors
+  const colorSchemes = semanticTokens.colorSchemes
   const semantic = semanticTokens
 
   const element = Object.fromEntries(
@@ -151,13 +152,13 @@ export const toHightideComponentTokens = ({
       border: colors.menuBorder,
     },
     progressIndicator: {
-      fill: colors.primary,
+      fill: colorSchemes.primary.filled.base.background,
       background: colors.progressTrack,
     },
     switch: {
       track: {
         inactive: colors.surfaceVariant,
-        active: colors.primary,
+        active: colorSchemes.primary.filled.base.background,
       },
       thumb: {
         inactive: colors.switchThumbInactive,

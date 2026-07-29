@@ -27,7 +27,7 @@ const CardStory = () => {
       direction="incoming"
       title="Terminbestätigung"
       subtitle="Hausarztpraxis"
-      icon={<CalendarDays size={18} color={theme.semantic.primary} />}
+      icon={<CalendarDays size={18} color={theme.components.colorSchemes.primary.text.base.foreground} />}
       actions={(
         <View style={{ flexDirection: 'row', gap: 10, flex: 1 }}>
           <Button size="sm" coloringStyle="tonal" style={{ flex: 1 }}>Ablehnen</Button>

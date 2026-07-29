@@ -48,7 +48,7 @@ Raw, mode-agnostic building blocks under `@helpwave/hightide-design/primitive`.
 
 Produced by `toLightThemeTokens` / `toDarkThemeTokens` (`@helpwave/hightide-design/theme`):
 
-- `color` — high-level named colors (no palettes)
+- `color` — `HightideSemanticColorTokens` + `ThemeRoleColorTokens` (role inputs for schemes)
 - `colorSchemes` — role → style → `StateBasedProperty<ColorState>` packs (`filled`, `outline`, `tonal`, `tonal-outline`, `text`)
 - `typography.fontFamily` — remapped roles `default` / `accent` / `mono` from primitive font registry
 - Other non-color scales passthrough from primitives
@@ -57,7 +57,7 @@ Produced by `toLightThemeTokens` / `toDarkThemeTokens` (`@helpwave/hightide-desi
 
 ### 3. SemanticTokens
 
-From `toHightideSemanticTokens` — passthrough `colors` + `colorSchemes` from theme; compose typography; passthrough non-color scales.
+From `toHightideSemanticTokens` — pick pruned `colors` from theme (no role scheme inputs); passthrough `colorSchemes`; compose typography; passthrough non-color scales.
 
 ### 4. ComponentTokens
 

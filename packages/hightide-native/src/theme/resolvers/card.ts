@@ -8,6 +8,7 @@ import type {
   CardActionItemState,
   CardTheme
 } from '../types/components/card'
+import type { HightideComponentThemes } from '../types/components/hightide'
 import {
   createStyleResolver,
   createValueResolver
@@ -15,10 +16,12 @@ import {
 
 export type CreateCardThemeOptions = {
   semantic: HightideSemanticColors,
+  colorSchemes: HightideComponentThemes['colorSchemes'],
 }
 
 export const createCardTheme = ({
   semantic,
+  colorSchemes,
 }: CreateCardThemeOptions): CardTheme => {
   const resolveActionItem = (state: CardActionItemState) => {
     const pressed = !!state.isPressed && !state.isDisabled
@@ -44,13 +47,17 @@ export const createCardTheme = ({
   })
 
   const resolveActionLabel = (state: CardActionItemState) => ({
-    color: state.isDanger ? semantic.negative : semantic.onSurface,
+    color: state.isDanger
+      ? colorSchemes.negative.text.base.foreground
+      : semantic.onSurface,
     fontSize: 15,
     fontWeight: hightideTypography.fontWeight.medium,
   })
 
   const resolveActionIcon = (state: CardActionItemState) => ({
-    color: state.isDanger ? semantic.negative : semantic.primary,
+    color: state.isDanger
+      ? colorSchemes.negative.text.base.foreground
+      : colorSchemes.primary.text.base.foreground,
   })
 
   return {
@@ -98,5 +105,6 @@ export const createCardTheme = ({
 export const createCardThemeFromDesign = (theme: DesignTokensTheme): CardTheme => {
   return createCardTheme({
     semantic: theme.semantic.colors,
+    colorSchemes: theme.semantic.colorSchemes,
   })
 }

@@ -3,6 +3,7 @@ import type { ComponentTokens } from '@helpwave/hightide-design/components'
 import type { DesignSystemTokens as DesignTokensTheme } from '@helpwave/hightide-design/design-system'
 
 import type { HightideSemanticColors } from '../types/color'
+import type { HightideComponentThemes } from '../types/components/hightide'
 import type {
   MultiSelectOptionState,
   MultiSelectState,
@@ -15,15 +16,19 @@ import {
 
 export type CreateMultiSelectThemeOptions = {
   semantic: HightideSemanticColors,
+  colorSchemes: HightideComponentThemes['colorSchemes'],
   input: ComponentTokens['input'],
   menu: ComponentTokens['menu'],
 }
 
 export const createMultiSelectTheme = ({
   semantic,
+  colorSchemes,
   input,
   menu,
 }: CreateMultiSelectThemeOptions): MultiSelectTheme => {
+  const primary = colorSchemes.primary.filled.base
+
   return {
     trigger: createStyleResolver((state: MultiSelectState) => ({
       minHeight: 44,
@@ -31,7 +36,9 @@ export const createMultiSelectTheme = ({
       paddingVertical: 8,
       borderRadius: 6,
       borderWidth: 1,
-      borderColor: state.isInvalid ? semantic.negative : semantic.border,
+      borderColor: state.isInvalid
+        ? colorSchemes.negative.text.base.foreground
+        : semantic.border,
       backgroundColor: state.isDisabled ? semantic.disabled : input.background,
       justifyContent: 'center',
       gap: 8,
@@ -72,7 +79,7 @@ export const createMultiSelectTheme = ({
       gap: 10,
     })),
     optionText: createStyleResolver((state: MultiSelectOptionState) => ({
-      color: state.isSelected ? semantic.primary : menu.text,
+      color: state.isSelected ? colorSchemes.primary.text.base.foreground : menu.text,
       fontWeight: state.isSelected ? hightideTypography.fontWeight.semibold : hightideTypography.fontWeight.base,
     })),
     checkbox: createStyleResolver((state: MultiSelectOptionState) => ({
@@ -80,13 +87,13 @@ export const createMultiSelectTheme = ({
       height: 18,
       borderRadius: 4,
       borderWidth: 1,
-      borderColor: state.isSelected ? semantic.primary : semantic.border,
-      backgroundColor: state.isSelected ? semantic.primary : semantic.transparent,
+      borderColor: state.isSelected ? primary.background : semantic.border,
+      backgroundColor: state.isSelected ? primary.background : semantic.transparent,
       alignItems: 'center',
       justifyContent: 'center',
     })),
     checkboxIcon: createValueResolver((state: MultiSelectOptionState) => ({
-      color: semantic.onPrimary,
+      color: primary.foreground,
       visible: !!state.isSelected,
     })),
   }
@@ -95,6 +102,7 @@ export const createMultiSelectTheme = ({
 export const createMultiSelectThemeFromDesign = (theme: DesignTokensTheme): MultiSelectTheme => {
   return createMultiSelectTheme({
     semantic: theme.semantic.colors,
+    colorSchemes: theme.semantic.colorSchemes,
     input: theme.components.input,
     menu: theme.components.menu,
   })

@@ -14,6 +14,7 @@ import type {
   CheckboxState,
   CheckboxTheme
 } from '../types/components/checkbox'
+import type { HightideComponentThemes } from '../types/components/hightide'
 import {
   createStyleResolver,
   createValueResolver
@@ -33,11 +34,13 @@ const checkboxIconSizes: Record<CheckboxSize, Exclude<ElementSize, 'xs'>> = {
 
 export type CreateCheckboxThemeOptions = {
   semantic: HightideSemanticColors,
+  colorSchemes: HightideComponentThemes['colorSchemes'],
   input: ComponentTokens['input'],
 }
 
 export const createCheckboxTheme = ({
   semantic,
+  colorSchemes,
   input,
 }: CreateCheckboxThemeOptions): CheckboxTheme => {
   const resolveState = (state: CheckboxState) => {
@@ -45,16 +48,18 @@ export const createCheckboxTheme = ({
     const dimension = checkboxSizes[size]
     const isActive = !!(state.isChecked || state.isIndeterminate)
     const showIndicator = !!(state.isIndeterminate || state.alwaysShowCheckIcon || state.isChecked)
+    const primary = colorSchemes.primary.filled.base
+    const negative = colorSchemes.negative.text.base.foreground
 
     const borderColor = state.isDisabled
       ? semantic.disabled
       : state.isInvalid
-        ? semantic.negative
-        : (isActive ? semantic.primary : semantic.border)
+        ? negative
+        : (isActive ? primary.background : semantic.border)
 
     const backgroundColor = state.isDisabled
       ? semantic.disabled
-      : (isActive ? semantic.primary : input.background)
+      : (isActive ? primary.background : input.background)
 
     const checkbox: ViewStyle = {
       width: dimension,
@@ -71,7 +76,7 @@ export const createCheckboxTheme = ({
     return {
       checkbox,
       icon: {
-        color: isActive ? semantic.onPrimary : semantic.primary,
+        color: isActive ? primary.foreground : colorSchemes.primary.text.base.foreground,
         size: checkboxIconSizes[size],
         visible: showIndicator,
       },
@@ -87,6 +92,7 @@ export const createCheckboxTheme = ({
 export const createCheckboxThemeFromDesign = (theme: DesignTokensTheme): CheckboxTheme => {
   return createCheckboxTheme({
     semantic: theme.semantic.colors,
+    colorSchemes: theme.semantic.colorSchemes,
     input: theme.components.input,
   })
 }

@@ -4,6 +4,7 @@ import type { ComponentTokens } from '@helpwave/hightide-design/components'
 import type { DesignSystemTokens as DesignTokensTheme } from '@helpwave/hightide-design/design-system'
 
 import type { HightideSemanticColors } from '../types/color'
+import type { HightideComponentThemes } from '../types/components/hightide'
 import type {
   InputState,
   InputTheme
@@ -15,15 +16,19 @@ import {
 
 export type CreateInputThemeOptions = {
   semantic: HightideSemanticColors,
+  colorSchemes: HightideComponentThemes['colorSchemes'],
   input: ComponentTokens['input'],
 }
 
 export const createInputTheme = ({
   semantic,
+  colorSchemes,
   input,
 }: CreateInputThemeOptions): InputTheme => {
   const resolveInput = (state: InputState): TextStyle => {
-    const borderColor = state.isInvalid ? semantic.negative : semantic.border
+    const borderColor = state.isInvalid
+      ? colorSchemes.negative.text.base.foreground
+      : semantic.border
 
     return {
       minHeight: input.size,
@@ -48,6 +53,7 @@ export const createInputTheme = ({
 export const createInputThemeFromDesign = (theme: DesignTokensTheme): InputTheme => {
   return createInputTheme({
     semantic: theme.semantic.colors,
+    colorSchemes: theme.semantic.colorSchemes,
     input: theme.components.input,
   })
 }

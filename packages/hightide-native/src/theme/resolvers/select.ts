@@ -3,6 +3,7 @@ import type { ComponentTokens } from '@helpwave/hightide-design/components'
 import type { DesignSystemTokens as DesignTokensTheme } from '@helpwave/hightide-design/design-system'
 
 import type { HightideSemanticColors } from '../types/color'
+import type { HightideComponentThemes } from '../types/components/hightide'
 import type {
   SelectOptionState,
   SelectState,
@@ -15,12 +16,14 @@ import {
 
 export type CreateSelectThemeOptions = {
   semantic: HightideSemanticColors,
+  colorSchemes: HightideComponentThemes['colorSchemes'],
   input: ComponentTokens['input'],
   menu: ComponentTokens['menu'],
 }
 
 export const createSelectTheme = ({
   semantic,
+  colorSchemes,
   input,
   menu,
 }: CreateSelectThemeOptions): SelectTheme => {
@@ -31,7 +34,9 @@ export const createSelectTheme = ({
       paddingVertical: 8,
       borderRadius: 6,
       borderWidth: 1,
-      borderColor: state.isInvalid ? semantic.negative : semantic.border,
+      borderColor: state.isInvalid
+        ? colorSchemes.negative.text.base.foreground
+        : semantic.border,
       backgroundColor: state.isDisabled ? semantic.disabled : input.background,
       justifyContent: 'center',
       opacity: state.isDisabled ? 0.6 : 1,
@@ -68,7 +73,7 @@ export const createSelectTheme = ({
       opacity: state.isDisabled ? 0.5 : 1,
     })),
     optionText: createStyleResolver((state: SelectOptionState) => ({
-      color: state.isSelected ? semantic.primary : menu.text,
+      color: state.isSelected ? colorSchemes.primary.text.base.foreground : menu.text,
       fontWeight: state.isSelected ? hightideTypography.fontWeight.semibold : hightideTypography.fontWeight.base,
     })),
   }
@@ -77,6 +82,7 @@ export const createSelectTheme = ({
 export const createSelectThemeFromDesign = (theme: DesignTokensTheme): SelectTheme => {
   return createSelectTheme({
     semantic: theme.semantic.colors,
+    colorSchemes: theme.semantic.colorSchemes,
     input: theme.components.input,
     menu: theme.components.menu,
   })

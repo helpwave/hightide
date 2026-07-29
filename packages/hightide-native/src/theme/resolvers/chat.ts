@@ -52,7 +52,7 @@ export const createChatTheme = ({
           ? semantic.surfaceHover
           : semantic.transparent,
       borderLeftWidth: state.isSelected ? 4 : 0,
-      borderLeftColor: state.isSelected ? semantic.primary : semantic.transparent,
+      borderLeftColor: state.isSelected ? colorSchemes.primary.filled.base.background : semantic.transparent,
       borderRadius: 6,
     }
   }
@@ -67,7 +67,7 @@ export const createChatTheme = ({
         fontWeight: state.isUnread ? hightideTypography.fontWeight.bold : hightideTypography.fontWeight.medium,
       })),
       timestamp: createStyleResolver<ChatConversationRowState, TextStyle>((state) => ({
-        color: state.isUnread ? semantic.primary : semantic.description,
+        color: state.isUnread ? colorSchemes.primary.text.base.foreground : semantic.description,
         fontSize: 12,
         fontWeight: state.isUnread ? hightideTypography.fontWeight.medium : hightideTypography.fontWeight.base,
         flexShrink: 0,
@@ -83,17 +83,17 @@ export const createChatTheme = ({
         height: 20,
         paddingHorizontal: 6,
         borderRadius: 999,
-        backgroundColor: semantic.primary,
+        backgroundColor: colorSchemes.primary.filled.base.background,
         alignItems: 'center',
         justifyContent: 'center',
       })),
       unreadBadgeText: createStyleResolver<Record<string, never>, TextStyle>(() => ({
-        color: semantic.onPrimary,
+        color: colorSchemes.primary.filled.base.foreground,
         fontSize: 11,
         fontWeight: hightideTypography.fontWeight.bold,
       })),
       sentIndicator: createValueResolver<Record<string, never>, { color: Color }>(() => ({
-        color: semantic.primary,
+        color: colorSchemes.primary.text.base.foreground,
       })),
     },
     conversationList: {
@@ -157,7 +157,9 @@ export const createChatTheme = ({
         return {
           paddingHorizontal: 15,
           paddingVertical: 11,
-          backgroundColor: outgoing ? semantic.primary : semantic.neutral,
+          backgroundColor: outgoing
+            ? colorSchemes.primary.filled.base.background
+            : colorSchemes.neutral.filled.base.background,
           borderTopLeftRadius: radius,
           borderTopRightRadius: radius,
           borderBottomLeftRadius: outgoing ? radius : corner,
@@ -165,7 +167,9 @@ export const createChatTheme = ({
         }
       }),
       content: createStyleResolver<ChatMessageBubbleState, TextStyle>((state) => ({
-        color: state.direction === 'outgoing' ? semantic.onPrimary : semantic.onNeutral,
+        color: state.direction === 'outgoing'
+          ? colorSchemes.primary.filled.base.foreground
+          : colorSchemes.neutral.filled.base.foreground,
         fontSize: 16,
         fontWeight: hightideTypography.fontWeight.light,
         lineHeight: 22.4,
@@ -173,7 +177,7 @@ export const createChatTheme = ({
       timestamp: createStyleResolver<ChatMessageBubbleState, TextStyle>((state) => ({
         marginTop: 5,
         color: state.direction === 'outgoing'
-          ? HexColorUtils.hexWithAlpha(semantic.onPrimary, 0.75)
+          ? HexColorUtils.hexWithAlpha(colorSchemes.primary.filled.base.foreground, 0.75)
           : semantic.description,
         fontSize: 11,
         fontWeight: hightideTypography.fontWeight.medium,
@@ -190,7 +194,7 @@ export const createChatTheme = ({
         fontWeight: hightideTypography.fontWeight.medium,
       })),
       receiptIcon: createValueResolver<Record<string, never>, { color: Color }>(() => ({
-        color: semantic.primary,
+        color: colorSchemes.primary.text.base.foreground,
       })),
     },
     messageCard: {
@@ -295,10 +299,10 @@ export const createChatTheme = ({
         borderRadius: 6,
         alignItems: 'center',
         justifyContent: 'center',
-        backgroundColor: HexColorUtils.hexWithAlpha(semantic.negative, 0.2),
+        backgroundColor: HexColorUtils.hexWithAlpha(colorSchemes.negative.filled.base.background, 0.2),
       })),
       iconColor: createValueResolver<Record<string, never>, { color: Color }>(() => ({
-        color: semantic.negative,
+        color: colorSchemes.negative.text.base.foreground,
       })),
       name: createStyleResolver<Record<string, never>, TextStyle>(() => ({
         color: semantic.onSurface,
@@ -362,12 +366,12 @@ export const createChatTheme = ({
           paddingVertical: 6,
           borderRadius: 999,
           borderWidth: 1,
-          borderColor: state.isActive ? semantic.primary : semantic.divider,
+          borderColor: state.isActive ? colorSchemes.primary.filled.base.background : semantic.divider,
           backgroundColor: pressed ? semantic.surfaceHover : semantic.surface,
         }
       }),
       text: createStyleResolver<ChatQuickReplyChipState, TextStyle>((state) => ({
-        color: state.isActive ? semantic.primary : semantic.description,
+        color: state.isActive ? colorSchemes.primary.text.base.foreground : semantic.description,
         fontSize: 14,
         fontWeight: hightideTypography.fontWeight.medium,
       })),

@@ -45,7 +45,7 @@ const translucent = HexColorUtils.hexWithAlpha(background, 0.5);
 | --- | --- |
 | `@helpwave/hightide-design/primitive` | Structured `PrimitiveTokens` |
 | `@helpwave/hightide-design/theme` | `ThemeTokens`, light/dark theme adapters, `StateBasedProperty`, color schemes |
-| `@helpwave/hightide-design/semantic` | Semantic mapper (passthrough color schemes + composed typography) |
+| `@helpwave/hightide-design/semantic` | Semantic mapper (pruned `colors` + `colorSchemes` + composed typography) |
 | `@helpwave/hightide-design/components` | Component colors/layouts + `toHightideComponentTokens` |
 | `@helpwave/hightide-design/design-system` | `designSystem`, `constructThemeTokens`, coloring helpers |
 | `@helpwave/hightide-design/utils` | `HexColorUtils` |
@@ -73,6 +73,8 @@ Color scheme shape (role → style → state):
 semantic.colorSchemes.primary.filled // StateBasedProperty<ColorState>
 semantic.colorSchemes.neutral.outline
 ```
+
+`semantic.colors` is a pruned set (surfaces, chrome, disabled, component inputs). Role colors (`primary`, `secondary`, …) live only on `ThemeTokens.color` as scheme build inputs and are exposed to consumers via `semantic.colorSchemes`.
 
 `ColorState` = `{ background, foreground, border }`. Resolve with `resolveStateBasedProperty(property, states)` in order `base → focused → hover → pressed → disabled`.
 

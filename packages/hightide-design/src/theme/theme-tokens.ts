@@ -3,12 +3,15 @@ import type { ElementPrimitiveTokens } from '../primitive/elements'
 import type { MotionPrimitiveTokens } from '../primitive/motion'
 import type { RadiusPrimitiveTokens } from '../primitive/radius'
 import type { SpacingPrimitiveTokens } from '../primitive/spacing'
-import type { HightideSemanticColorTokens } from '../semantic/hightide'
+import type {
+  HightideSemanticColorTokens,
+  ThemeRoleColorTokens
+} from '../semantic/hightide'
 import type { ColorSchemes } from './coloring'
 import type { ThemeShadowTokens } from './shadow'
 import type { ThemeTypographyTokens } from './typography'
 
-export type ThemeColorTokens = HightideSemanticColorTokens
+export type ThemeColorTokens = HightideSemanticColorTokens & ThemeRoleColorTokens
 
 export type ThemeTokens = {
   color: ThemeColorTokens,
