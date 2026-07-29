@@ -1,5 +1,6 @@
 import type { HightideColorPalettes } from '../primitive/color'
-import { createColorSchemes } from './coloring'
+import { HexColorUtils } from '../utils/hex'
+import { createColorSchemes } from './color-scheme'
 import type { ToThemeTokensArgs } from './to-theme-tokens-args'
 import type {
   ThemeColorTokens,
@@ -41,30 +42,48 @@ const toLightThemeColors = (palettes: HightideColorPalettes): ThemeColorTokens =
     switchBorder: gray.value[200],
     border: gray.value[200],
     divider: gray.value[100],
-    primary: purple.value[500],
-    onPrimary: white.value,
-    primaryHover: purple.value[600],
-    secondary: blue.value[500],
-    onSecondary: white.value,
-    secondaryHover: blue.value[600],
-    positive: green.value[500],
-    onPositive: white.value,
-    positiveHover: green.value[600],
-    warning: orange.value[500],
-    onWarning: white.value,
-    warningHover: orange.value[600],
-    negative: red.value[500],
-    onNegative: white.value,
-    negativeHover: red.value[600],
-    neutral: gray.value[150],
-    onNeutral: black.value,
-    neutralHover: gray.value[200],
-    neutralText: black.value,
-    neutralTextHover: gray.value[500],
-    neutralOutline: black.value,
-    neutralOutlineHover: gray.value[600],
-    neutralTonalText: black.value,
-    neutralTonalBackground: gray.value[300],
+    primary: {
+      color: purple.value[500],
+      onColor: white.value,
+      emphasis: purple.value[600],
+      tint: HexColorUtils.hexWithAlpha(purple.value[500], 0.2),
+      tintEmphasis: HexColorUtils.hexWithAlpha(purple.value[500], 0.28),
+    },
+    secondary: {
+      color: blue.value[500],
+      onColor: white.value,
+      emphasis: blue.value[600],
+      tint: HexColorUtils.hexWithAlpha(blue.value[500], 0.2),
+      tintEmphasis: HexColorUtils.hexWithAlpha(blue.value[500], 0.28),
+    },
+    positive: {
+      color: green.value[500],
+      onColor: white.value,
+      emphasis: green.value[600],
+      tint: HexColorUtils.hexWithAlpha(green.value[500], 0.2),
+      tintEmphasis: HexColorUtils.hexWithAlpha(green.value[500], 0.28),
+    },
+    warning: {
+      color: orange.value[500],
+      onColor: white.value,
+      emphasis: orange.value[600],
+      tint: HexColorUtils.hexWithAlpha(orange.value[500], 0.2),
+      tintEmphasis: HexColorUtils.hexWithAlpha(orange.value[500], 0.28),
+    },
+    negative: {
+      color: red.value[500],
+      onColor: white.value,
+      emphasis: red.value[600],
+      tint: HexColorUtils.hexWithAlpha(red.value[500], 0.2),
+      tintEmphasis: HexColorUtils.hexWithAlpha(red.value[500], 0.28),
+    },
+    neutral: {
+      color: gray.value[150],
+      onColor: black.value,
+      emphasis: gray.value[200],
+      tint: HexColorUtils.hexWithAlpha(gray.value[300], 0.2),
+      tintEmphasis: HexColorUtils.hexWithAlpha(gray.value[300], 0.28),
+    },
   }
 }
 

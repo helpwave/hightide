@@ -1,5 +1,5 @@
 import type { ThemeTokens } from '../theme/theme-tokens'
-import type { ColorSchemes } from '../theme/coloring'
+import type { ColorSchemes } from '../theme/color-scheme'
 import {
   hightideSemanticColorKeys,
   type HightideSemanticColorTokens

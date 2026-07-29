@@ -1,5 +1,6 @@
 import type { HightideColorPalettes } from '../primitive/color'
-import { createColorSchemes } from './coloring'
+import { HexColorUtils } from '../utils/hex'
+import { createColorSchemes } from './color-scheme'
 import type { ToThemeTokensArgs } from './to-theme-tokens-args'
 import type {
   ThemeColorTokens,
@@ -40,30 +41,48 @@ const toDarkThemeColors = (palettes: HightideColorPalettes): ThemeColorTokens =>
     switchBorder: gray.value[600],
     border: gray.value[600],
     divider: gray.value[700],
-    primary: purple.value[400],
-    onPrimary: white.value,
-    primaryHover: purple.value[500],
-    secondary: blue.value[500],
-    onSecondary: white.value,
-    secondaryHover: blue.value[600],
-    positive: green.value[700],
-    onPositive: white.value,
-    positiveHover: green.value[600],
-    warning: orange.value[500],
-    onWarning: white.value,
-    warningHover: orange.value[600],
-    negative: red.value[500],
-    onNegative: white.value,
-    negativeHover: red.value[600],
-    neutral: gray.value[750],
-    onNeutral: white.value,
-    neutralHover: gray.value[600],
-    neutralText: white.value,
-    neutralTextHover: gray.value[500],
-    neutralOutline: gray.value[200],
-    neutralOutlineHover: gray.value[400],
-    neutralTonalText: white.value,
-    neutralTonalBackground: gray.value[400],
+    primary: {
+      color: purple.value[400],
+      onColor: white.value,
+      emphasis: purple.value[500],
+      tint: HexColorUtils.hexWithAlpha(purple.value[400], 0.2),
+      tintEmphasis: HexColorUtils.hexWithAlpha(purple.value[400], 0.28),
+    },
+    secondary: {
+      color: blue.value[500],
+      onColor: white.value,
+      emphasis: blue.value[600],
+      tint: HexColorUtils.hexWithAlpha(blue.value[500], 0.2),
+      tintEmphasis: HexColorUtils.hexWithAlpha(blue.value[500], 0.28),
+    },
+    positive: {
+      color: green.value[700],
+      onColor: white.value,
+      emphasis: green.value[600],
+      tint: HexColorUtils.hexWithAlpha(green.value[700], 0.2),
+      tintEmphasis: HexColorUtils.hexWithAlpha(green.value[700], 0.28),
+    },
+    warning: {
+      color: orange.value[500],
+      onColor: white.value,
+      emphasis: orange.value[600],
+      tint: HexColorUtils.hexWithAlpha(orange.value[500], 0.2),
+      tintEmphasis: HexColorUtils.hexWithAlpha(orange.value[500], 0.28),
+    },
+    negative: {
+      color: red.value[500],
+      onColor: white.value,
+      emphasis: red.value[600],
+      tint: HexColorUtils.hexWithAlpha(red.value[500], 0.2),
+      tintEmphasis: HexColorUtils.hexWithAlpha(red.value[500], 0.28),
+    },
+    neutral: {
+      color: gray.value[750],
+      onColor: white.value,
+      emphasis: gray.value[600],
+      tint: HexColorUtils.hexWithAlpha(gray.value[400], 0.2),
+      tintEmphasis: HexColorUtils.hexWithAlpha(gray.value[400], 0.28),
+    },
   }
 }
 

@@ -19,6 +19,7 @@ import {
   toLightThemeTokens,
   type ThemeTokens
 } from '@helpwave/hightide-design/theme'
+import { HexColorUtils } from '@helpwave/hightide-design/utils'
 
 import { Button } from '../../src/components/user-interaction/Button'
 import { Chip } from '../../src/components/visualization-and-display/Chip'
@@ -46,10 +47,13 @@ const toOceanThemeTokens = ({
     onSurface: blue.value[900] as ColorToken,
     surfaceHover: blue.value[100] as ColorToken,
     surfaceVariant: blue.value[200] as ColorToken,
-    onSurfaceVariant: blue.value[900] as ColorToken,
-    primary: blue.value[500] as ColorToken,
-    onPrimary: white.value as ColorToken,
-    primaryHover: blue.value[600] as ColorToken,
+    primary: {
+      color: blue.value[500] as ColorToken,
+      onColor: white.value as ColorToken,
+      emphasis: blue.value[600] as ColorToken,
+      tint: HexColorUtils.hexWithAlpha(blue.value[500] as ColorToken, 0.2),
+      tintEmphasis: HexColorUtils.hexWithAlpha(blue.value[500] as ColorToken, 0.28),
+    },
   }
 
   return {

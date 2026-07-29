@@ -1,31 +1,17 @@
 import type { ColorToken } from '../primitive/color'
 
-export type ThemeRoleColorTokens = {
-  primary: ColorToken,
-  onPrimary: ColorToken,
-  primaryHover: ColorToken,
-  secondary: ColorToken,
-  onSecondary: ColorToken,
-  secondaryHover: ColorToken,
-  positive: ColorToken,
-  onPositive: ColorToken,
-  positiveHover: ColorToken,
-  warning: ColorToken,
-  onWarning: ColorToken,
-  warningHover: ColorToken,
-  negative: ColorToken,
-  onNegative: ColorToken,
-  negativeHover: ColorToken,
-  neutral: ColorToken,
-  onNeutral: ColorToken,
-  neutralHover: ColorToken,
-  neutralText: ColorToken,
-  neutralTextHover: ColorToken,
-  neutralOutline: ColorToken,
-  neutralOutlineHover: ColorToken,
-  neutralTonalText: ColorToken,
-  neutralTonalBackground: ColorToken,
+export type ThemeRoleColorToken = {
+  color: ColorToken,
+  onColor: ColorToken,
+  emphasis: ColorToken,
+  tint: ColorToken,
+  tintEmphasis: ColorToken,
 }
+
+export type ThemeRoleColorTokens = Record<
+  'primary' | 'secondary' | 'positive' | 'warning' | 'negative' | 'neutral',
+  ThemeRoleColorToken
+>
 
 export type HightideSemanticColorTokens = {
   transparent: ColorToken,

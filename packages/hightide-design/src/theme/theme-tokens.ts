@@ -7,7 +7,7 @@ import type {
   HightideSemanticColorTokens,
   ThemeRoleColorTokens
 } from '../semantic/hightide'
-import type { ColorSchemes } from './coloring'
+import type { ColorSchemes } from './color-scheme'
 import type { ThemeShadowTokens } from './shadow'
 import type { ThemeTypographyTokens } from './typography'
 

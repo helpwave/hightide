@@ -23,6 +23,7 @@ import {
   toLightThemeTokens,
   type ThemeTokens
 } from '@helpwave/hightide-design/theme'
+import { HexColorUtils } from '@helpwave/hightide-design/utils'
 
 import { Button } from '../../src/components/user-interaction/Button'
 import { HightideConfigUtils } from '../../src/global-contexts/hightide-config/HightideConfigUtils'
@@ -35,11 +36,16 @@ import {
 } from './themeStoryHelpers'
 
 const withBluePrimary = (themeTokens: ThemeTokens): ThemeTokens => {
-  const { blue } = hightidePrimitiveTokens.color.palettes as HightideColorPalettes
+  const { blue, white } = hightidePrimitiveTokens.color.palettes as HightideColorPalettes
   const color = {
     ...themeTokens.color,
-    primary: blue.value[500] as ColorToken,
-    primaryHover: blue.value[600] as ColorToken,
+    primary: {
+      color: blue.value[500] as ColorToken,
+      onColor: white.value as ColorToken,
+      emphasis: blue.value[600] as ColorToken,
+      tint: HexColorUtils.hexWithAlpha(blue.value[500] as ColorToken, 0.2),
+      tintEmphasis: HexColorUtils.hexWithAlpha(blue.value[500] as ColorToken, 0.28),
+    },
   }
 
   return {
