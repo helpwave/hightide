@@ -6,6 +6,7 @@ import type {
   ThemeTokens
 } from './theme-tokens'
 import { toHightideThemeTypography } from './typography'
+import { toHightideThemeShadow } from './shadow'
 
 const toDarkThemeColors = (palettes: HightideColorPalettes): ThemeColorTokens => {
   const {
@@ -106,7 +107,7 @@ export const toDarkThemeTokens = ({
     typography: toHightideThemeTypography(primitiveTokens.typography),
     radius: primitiveTokens.radius,
     border: primitiveTokens.border,
-    shadow: primitiveTokens.shadow,
+    shadow: toHightideThemeShadow(primitiveTokens.shadow),
     motion: primitiveTokens.motion,
   }
 }

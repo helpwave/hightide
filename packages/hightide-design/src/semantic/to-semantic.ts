@@ -2,6 +2,10 @@ import type { ThemeTokens } from '../theme/theme-tokens'
 import type { ColoringTokens } from '../theme/coloring'
 import type { HightideSemanticColorTokens } from './hightide'
 import {
+  toHightideElevationShadow,
+  type ElevationShadowTokens
+} from './shadow'
+import {
   createTypographyTokens,
   type TypographyTokens
 } from './typography'
@@ -9,7 +13,6 @@ import type { BorderPrimitiveTokens } from '../primitive/border'
 import type { ElementPrimitiveTokens } from '../primitive/elements'
 import type { MotionPrimitiveTokens } from '../primitive/motion'
 import type { RadiusPrimitiveTokens } from '../primitive/radius'
-import type { ShadowPrimitiveTokens } from '../primitive/shadow'
 import type { SpacingPrimitiveTokens } from '../primitive/spacing'
 
 export type SemanticTokens = {
@@ -20,7 +23,7 @@ export type SemanticTokens = {
   elements: ElementPrimitiveTokens,
   radius: RadiusPrimitiveTokens,
   border: BorderPrimitiveTokens,
-  shadow: ShadowPrimitiveTokens,
+  shadow: ElevationShadowTokens,
   motion: MotionPrimitiveTokens,
 }
 
@@ -38,6 +41,6 @@ export const toHightideSemanticTokens = ({
   elements: themeTokens.elements,
   radius: themeTokens.radius,
   border: themeTokens.border,
-  shadow: themeTokens.shadow,
+  shadow: toHightideElevationShadow(themeTokens.shadow),
   motion: themeTokens.motion,
 })

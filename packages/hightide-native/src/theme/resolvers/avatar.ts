@@ -4,9 +4,11 @@ import type {
   ViewStyle
 } from 'react-native'
 
-import { hightideShadow } from '@helpwave/hightide-design/primitive'
 import type { ComponentTokens } from '@helpwave/hightide-design/components'
-import type { TypographyTokens } from '@helpwave/hightide-design/semantic'
+import type {
+  ElevationShadowTokens,
+  TypographyTokens
+} from '@helpwave/hightide-design/semantic'
 import type { DesignSystemTokens as DesignTokensTheme } from '@helpwave/hightide-design/design-system'
 
 import { resolveColoringStyles } from './coloring'
@@ -61,6 +63,7 @@ export type CreateAvatarThemeOptions = {
   avatar: ComponentTokens['avatar'],
   icon: ComponentTokens['icon'],
   avatarGroup: ComponentTokens['avatarGroup'],
+  shadow: ElevationShadowTokens,
 }
 
 export const createAvatarTheme = ({
@@ -71,6 +74,7 @@ export const createAvatarTheme = ({
   avatar,
   icon,
   avatarGroup,
+  shadow,
 }: CreateAvatarThemeOptions): AvatarTheme => {
   const resolveAvatar = (state: AvatarState) => {
     const size = state.size ?? 'md'
@@ -82,7 +86,7 @@ export const createAvatarTheme = ({
       0
     )
     const borderRadius = dimension / 2
-    const shadow = hightideShadow.avatar
+    const raisedShadow = shadow.raised
 
     const avatarStyle: ViewStyle = {
       position: state.isGrouped ? 'absolute' : 'relative',
@@ -98,11 +102,11 @@ export const createAvatarTheme = ({
       ...(state.isGrouped ? {
         left: (state.groupIndex ?? 0) * dimension * avatarGroup.overlap,
         zIndex: avatarGroup.maxShown - (state.groupIndex ?? 0),
-        shadowColor: '#000000',
-        shadowOffset: { width: shadow.x, height: shadow.y },
-        shadowOpacity: 0.2,
-        shadowRadius: shadow.blur,
-        elevation: shadow.blur,
+        shadowColor: raisedShadow.color,
+        shadowOffset: { width: raisedShadow.x, height: raisedShadow.y },
+        shadowOpacity: 1,
+        shadowRadius: raisedShadow.blur,
+        elevation: raisedShadow.blur,
       } : {}),
     }
 
@@ -246,5 +250,6 @@ export const createAvatarThemeFromDesign = (
     avatar: theme.components.avatar,
     icon: theme.components.icon,
     avatarGroup: theme.components.avatarGroup,
+    shadow: theme.semantic.shadow,
   })
 }

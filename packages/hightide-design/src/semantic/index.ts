@@ -1,4 +1,5 @@
 export * from './color'
 export * from './hightide'
+export * from './shadow'
 export * from './to-semantic'
 export * from './typography'

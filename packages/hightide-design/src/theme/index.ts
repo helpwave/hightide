@@ -1,5 +1,6 @@
 export * from './color-state'
 export * from './coloring'
+export * from './shadow'
 export * from './state-based-property'
 export * from './theme-tokens'
 export * from './to-dark-theme'
