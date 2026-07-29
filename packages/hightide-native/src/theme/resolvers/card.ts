@@ -1,7 +1,6 @@
 import { StyleSheet } from 'react-native'
 
 import { hightideTypography } from '@helpwave/hightide-design/primitive'
-import type { ComponentColorTokens } from '@helpwave/hightide-design/components'
 import type { DesignSystemTokens as DesignTokensTheme } from '@helpwave/hightide-design/design-system'
 
 import type { HightideSemanticColors } from '../types/color'
@@ -16,12 +15,10 @@ import {
 
 export type CreateCardThemeOptions = {
   semantic: HightideSemanticColors,
-  component: ComponentColorTokens,
 }
 
 export const createCardTheme = ({
   semantic,
-  component,
 }: CreateCardThemeOptions): CardTheme => {
   const resolveActionItem = (state: CardActionItemState) => {
     const pressed = !!state.isPressed && !state.isDisabled
@@ -34,7 +31,7 @@ export const createCardTheme = ({
       paddingHorizontal: 16,
       paddingVertical: 8,
       borderBottomWidth: StyleSheet.hairlineWidth,
-      borderBottomColor: component.divider,
+      borderBottomColor: semantic.divider,
       backgroundColor: pressed ? semantic.surfaceHover : semantic.transparent,
       opacity: state.isDisabled ? 0.6 : 1,
     }
@@ -61,7 +58,7 @@ export const createCardTheme = ({
       backgroundColor: semantic.surface,
       borderRadius: 12,
       borderWidth: 1,
-      borderColor: component.border,
+      borderColor: semantic.border,
       overflow: 'hidden',
     })),
     item: createStyleResolver(() => ({
@@ -71,7 +68,7 @@ export const createCardTheme = ({
       paddingHorizontal: 16,
       paddingVertical: 8,
       borderBottomWidth: StyleSheet.hairlineWidth,
-      borderBottomColor: component.divider,
+      borderBottomColor: semantic.divider,
       gap: 12,
     })),
     itemContent: createStyleResolver(resolveItemContent),
@@ -101,6 +98,5 @@ export const createCardTheme = ({
 export const createCardThemeFromDesign = (theme: DesignTokensTheme): CardTheme => {
   return createCardTheme({
     semantic: theme.semantic.colors,
-    component: theme.components.colors,
   })
 }

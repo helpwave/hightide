@@ -3,7 +3,7 @@ import type {
   ViewStyle
 } from 'react-native'
 
-import type { ComponentLayoutTokens } from '@helpwave/hightide-design/components'
+import type { ComponentTokens } from '@helpwave/hightide-design/components'
 import type { DesignSystemTokens as DesignTokensTheme } from '@helpwave/hightide-design/design-system'
 
 import {
@@ -19,7 +19,7 @@ import { createStyleResolver } from '../types/resolver'
 
 export type CreateButtonThemeOptions = {
   coloring: HightideComponentThemes['coloring'],
-  layout: ComponentLayoutTokens['button'],
+  layout: ComponentTokens['button']['layout'],
   fontWeight: number,
   borderWidth: number,
 }
@@ -81,7 +81,7 @@ export const createButtonTheme = ({
 export const createButtonThemeFromDesign = (theme: DesignTokensTheme): ButtonTheme => {
   return createButtonTheme({
     coloring: theme.semantic.coloring,
-    layout: theme.components.layout.button,
+    layout: theme.components.button.layout,
     fontWeight: theme.semantic.typography.fontWeights.semibold,
     borderWidth: theme.semantic.border.base,
   })

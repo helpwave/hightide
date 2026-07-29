@@ -5,7 +5,7 @@ import {
   hightideRadius,
   type ElementSize
 } from '@helpwave/hightide-design/primitive'
-import type { ComponentColorTokens } from '@helpwave/hightide-design/components'
+import type { ComponentTokens } from '@helpwave/hightide-design/components'
 import type { DesignSystemTokens as DesignTokensTheme } from '@helpwave/hightide-design/design-system'
 
 import type { HightideSemanticColors } from '../types/color'
@@ -33,12 +33,12 @@ const checkboxIconSizes: Record<CheckboxSize, Exclude<ElementSize, 'xs'>> = {
 
 export type CreateCheckboxThemeOptions = {
   semantic: HightideSemanticColors,
-  component: ComponentColorTokens,
+  input: ComponentTokens['input'],
 }
 
 export const createCheckboxTheme = ({
   semantic,
-  component,
+  input,
 }: CreateCheckboxThemeOptions): CheckboxTheme => {
   const resolveState = (state: CheckboxState) => {
     const size = state.size ?? 'md'
@@ -50,11 +50,11 @@ export const createCheckboxTheme = ({
       ? semantic.disabled
       : state.isInvalid
         ? semantic.negative
-        : (isActive ? semantic.primary : component.border)
+        : (isActive ? semantic.primary : semantic.border)
 
     const backgroundColor = state.isDisabled
       ? semantic.disabled
-      : (isActive ? semantic.primary : component.input.background)
+      : (isActive ? semantic.primary : input.background)
 
     const checkbox: ViewStyle = {
       width: dimension,
@@ -87,6 +87,6 @@ export const createCheckboxTheme = ({
 export const createCheckboxThemeFromDesign = (theme: DesignTokensTheme): CheckboxTheme => {
   return createCheckboxTheme({
     semantic: theme.semantic.colors,
-    component: theme.components.colors,
+    input: theme.components.input,
   })
 }

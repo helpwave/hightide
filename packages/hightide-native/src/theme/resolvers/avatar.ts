@@ -5,7 +5,7 @@ import type {
 } from 'react-native'
 
 import { hightideShadow } from '@helpwave/hightide-design/primitive'
-import type { ComponentLayoutTokens } from '@helpwave/hightide-design/components'
+import type { ComponentTokens } from '@helpwave/hightide-design/components'
 import type { TypographyTokens } from '@helpwave/hightide-design/semantic'
 import type { DesignSystemTokens as DesignTokensTheme } from '@helpwave/hightide-design/design-system'
 
@@ -58,7 +58,9 @@ export type CreateAvatarThemeOptions = {
   coloring: HightideComponentThemes['coloring'],
   gray: ColorPalette,
   typography: TypographyTokens,
-  layout: ComponentLayoutTokens,
+  avatar: ComponentTokens['avatar'],
+  icon: ComponentTokens['icon'],
+  avatarGroup: ComponentTokens['avatarGroup'],
 }
 
 export const createAvatarTheme = ({
@@ -66,14 +68,10 @@ export const createAvatarTheme = ({
   coloring,
   gray,
   typography,
-  layout,
+  avatar,
+  icon,
+  avatarGroup,
 }: CreateAvatarThemeOptions): AvatarTheme => {
-  const {
-    avatar,
-    icon,
-    avatarGroup,
-  } = layout
-
   const resolveAvatar = (state: AvatarState) => {
     const size = state.size ?? 'md'
     const dimension = avatar[size].size
@@ -245,6 +243,8 @@ export const createAvatarThemeFromDesign = (
     coloring: theme.semantic.coloring as HightideComponentThemes['coloring'],
     gray: colors.gray,
     typography: theme.semantic.typography,
-    layout: theme.components.layout,
+    avatar: theme.components.avatar,
+    icon: theme.components.icon,
+    avatarGroup: theme.components.avatarGroup,
   })
 }

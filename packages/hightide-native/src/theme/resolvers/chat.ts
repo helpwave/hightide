@@ -5,7 +5,6 @@ import {
 } from 'react-native'
 
 import { hightideTypography } from '@helpwave/hightide-design/primitive'
-import type { ComponentColorTokens } from '@helpwave/hightide-design/components'
 import type { DesignSystemTokens as DesignTokensTheme } from '@helpwave/hightide-design/design-system'
 import { HexColorUtils } from '@helpwave/hightide-design/utils'
 
@@ -30,13 +29,11 @@ import {
 
 export type CreateChatThemeOptions = {
   semantic: HightideSemanticColors,
-  component: ComponentColorTokens,
   coloring: HightideComponentThemes['coloring'],
 }
 
 export const createChatTheme = ({
   semantic,
-  component,
   coloring,
 }: CreateChatThemeOptions): ChatTheme => {
   const resolveConversationRow = (state: ChatConversationRowState): ViewStyle => {
@@ -122,7 +119,7 @@ export const createChatTheme = ({
         paddingHorizontal: 14,
         paddingVertical: 12,
         borderBottomWidth: StyleSheet.hairlineWidth,
-        borderBottomColor: component.divider,
+        borderBottomColor: semantic.divider,
         backgroundColor: semantic.surface,
       })),
       title: createStyleResolver<Record<string, never>, TextStyle>(() => ({
@@ -207,7 +204,7 @@ export const createChatTheme = ({
           maxWidth: 300,
           backgroundColor: semantic.surface,
           borderWidth: 1,
-          borderColor: component.divider,
+          borderColor: semantic.divider,
           borderTopLeftRadius: radius,
           borderTopRightRadius: radius,
           borderBottomLeftRadius: outgoing ? radius : corner,
@@ -223,7 +220,7 @@ export const createChatTheme = ({
         paddingHorizontal: 15,
         paddingVertical: 12,
         borderBottomWidth: StyleSheet.hairlineWidth,
-        borderBottomColor: component.divider,
+        borderBottomColor: semantic.divider,
       })),
       icon: createStyleResolver<ChatMessageCardState, ViewStyle>((state) => {
         const color = state.color ?? 'primary'
@@ -284,7 +281,7 @@ export const createChatTheme = ({
           padding: 12,
           backgroundColor: semantic.surface,
           borderWidth: 1,
-          borderColor: component.divider,
+          borderColor: semantic.divider,
           borderTopLeftRadius: radius,
           borderTopRightRadius: radius,
           borderBottomLeftRadius: outgoing ? radius : corner,
@@ -365,7 +362,7 @@ export const createChatTheme = ({
           paddingVertical: 6,
           borderRadius: 999,
           borderWidth: 1,
-          borderColor: state.isActive ? semantic.primary : component.divider,
+          borderColor: state.isActive ? semantic.primary : semantic.divider,
           backgroundColor: pressed ? semantic.surfaceHover : semantic.surface,
         }
       }),
@@ -385,7 +382,7 @@ export const createChatTheme = ({
         paddingVertical: 12,
         backgroundColor: semantic.surface,
         borderTopWidth: StyleSheet.hairlineWidth,
-        borderTopColor: component.divider,
+        borderTopColor: semantic.divider,
       })),
       input: createStyleResolver<Record<string, never>, TextStyle>(() => ({
         flex: 1,
@@ -406,7 +403,6 @@ export const createChatTheme = ({
 export const createChatThemeFromDesign = (theme: DesignTokensTheme): ChatTheme => {
   return createChatTheme({
     semantic: theme.semantic.colors,
-    component: theme.components.colors,
     coloring: theme.semantic.coloring as HightideComponentThemes['coloring'],
   })
 }

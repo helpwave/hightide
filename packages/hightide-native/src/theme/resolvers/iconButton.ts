@@ -1,6 +1,6 @@
 import type { ViewStyle } from 'react-native'
 
-import type { ComponentLayoutTokens } from '@helpwave/hightide-design/components'
+import type { ComponentTokens } from '@helpwave/hightide-design/components'
 import type { DesignSystemTokens as DesignTokensTheme } from '@helpwave/hightide-design/design-system'
 
 import {
@@ -19,7 +19,7 @@ import {
 
 export type CreateIconButtonThemeOptions = {
   coloring: HightideComponentThemes['coloring'],
-  layout: ComponentLayoutTokens['iconButton'],
+  layout: ComponentTokens['iconButton']['layout'],
   borderWidth: number,
 }
 
@@ -72,7 +72,7 @@ export const createIconButtonTheme = ({
 export const createIconButtonThemeFromDesign = (theme: DesignTokensTheme): IconButtonTheme => {
   return createIconButtonTheme({
     coloring: theme.semantic.coloring,
-    layout: theme.components.layout.iconButton,
+    layout: theme.components.iconButton.layout,
     borderWidth: theme.semantic.border.base,
   })
 }

@@ -1,4 +1,4 @@
-import type { ComponentColorTokens } from '@helpwave/hightide-design/components'
+import type { ComponentTokens } from '@helpwave/hightide-design/components'
 import type { DesignSystemTokens as DesignTokensTheme } from '@helpwave/hightide-design/design-system'
 
 import type { HightideSemanticColors } from '../types/color'
@@ -10,20 +10,20 @@ import { createValueResolver } from '../types/resolver'
 
 export type CreateSwitchThemeOptions = {
   semantic: HightideSemanticColors,
-  component: ComponentColorTokens,
+  switchTokens: ComponentTokens['switch'],
 }
 
 export const createSwitchTheme = ({
   semantic,
-  component,
+  switchTokens,
 }: CreateSwitchThemeOptions): SwitchTheme => {
   const resolveState = (state: SwitchState) => {
     const trackInactive = state.isDisabled
       ? semantic.disabled
-      : component.switch.track.inactive
+      : switchTokens.track.inactive
     const trackActive = state.isDisabled
       ? semantic.disabled
-      : component.switch.track.active
+      : switchTokens.track.active
 
     const trackColor = state.isActive ? trackActive : trackInactive
 
@@ -33,13 +33,13 @@ export const createSwitchTheme = ({
         ? semantic.negative
         : state.isActive
           ? trackActive
-          : component.switch.borderColor
+          : switchTokens.borderColor
 
     const thumbColor = state.isDisabled
       ? semantic.onDisabled
       : state.isActive
-        ? component.switch.thumb.active
-        : component.switch.thumb.inactive
+        ? switchTokens.thumb.active
+        : switchTokens.thumb.inactive
 
     return {
       trackColor,
@@ -58,6 +58,6 @@ export const createSwitchTheme = ({
 export const createSwitchThemeFromDesign = (theme: DesignTokensTheme): SwitchTheme => {
   return createSwitchTheme({
     semantic: theme.semantic.colors,
-    component: theme.components.colors,
+    switchTokens: theme.components.switch,
   })
 }

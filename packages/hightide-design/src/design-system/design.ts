@@ -1,4 +1,4 @@
-import type { ComponentTokens } from '../components/to-components'
+import type { ComponentTokens } from '../components/component-tokens'
 import type { PrimitiveTokens } from '../primitive/primitive-tokens'
 import type { SemanticTokens } from '../semantic/to-semantic'
 

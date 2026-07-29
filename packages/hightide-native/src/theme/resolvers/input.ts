@@ -1,9 +1,6 @@
 import type { TextStyle } from 'react-native'
 
-import type {
-  ComponentColorTokens,
-  ComponentLayoutTokens
-} from '@helpwave/hightide-design/components'
+import type { ComponentTokens } from '@helpwave/hightide-design/components'
 import type { DesignSystemTokens as DesignTokensTheme } from '@helpwave/hightide-design/design-system'
 
 import type { HightideSemanticColors } from '../types/color'
@@ -18,28 +15,26 @@ import {
 
 export type CreateInputThemeOptions = {
   semantic: HightideSemanticColors,
-  component: ComponentColorTokens,
-  layout: ComponentLayoutTokens['input']['md'],
+  input: ComponentTokens['input'],
 }
 
 export const createInputTheme = ({
   semantic,
-  component,
-  layout,
+  input,
 }: CreateInputThemeOptions): InputTheme => {
   const resolveInput = (state: InputState): TextStyle => {
-    const borderColor = state.isInvalid ? semantic.negative : component.border
+    const borderColor = state.isInvalid ? semantic.negative : semantic.border
 
     return {
-      minHeight: layout.size,
-      paddingHorizontal: layout.horizontalInset,
-      paddingVertical: layout.inset,
-      borderRadius: layout.radius,
-      borderWidth: layout.border,
+      minHeight: input.size,
+      paddingHorizontal: input.horizontalInset,
+      paddingVertical: input.inset,
+      borderRadius: input.radius,
+      borderWidth: input.border,
       borderColor,
-      backgroundColor: state.isDisabled ? semantic.disabled : component.input.background,
-      color: state.isDisabled ? semantic.onDisabled : component.input.text,
-      fontSize: layout.fontSize,
+      backgroundColor: state.isDisabled ? semantic.disabled : input.background,
+      color: state.isDisabled ? semantic.onDisabled : input.text,
+      fontSize: input.fontSize,
       opacity: state.isDisabled ? 0.6 : 1,
     }
   }
@@ -53,7 +48,6 @@ export const createInputTheme = ({
 export const createInputThemeFromDesign = (theme: DesignTokensTheme): InputTheme => {
   return createInputTheme({
     semantic: theme.semantic.colors,
-    component: theme.components.colors,
-    layout: theme.components.layout.input.md,
+    input: theme.components.input,
   })
 }

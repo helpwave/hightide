@@ -37,7 +37,7 @@ import { HexColorUtils } from "@helpwave/hightide-design/utils";
 const light = designSystem.themes.light;
 const background = light.semantic.colors.background;
 const filledPrimary = light.semantic.coloring.filled.primary;
-const buttonHeight = light.components.layout.button.md.size;
+const buttonHeight = light.components.button.layout.md.size;
 const translucent = HexColorUtils.hexWithAlpha(background, 0.5);
 ```
 

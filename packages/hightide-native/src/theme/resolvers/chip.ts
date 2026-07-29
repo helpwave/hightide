@@ -3,7 +3,7 @@ import type {
   ViewStyle
 } from 'react-native'
 
-import type { ComponentLayoutTokens } from '@helpwave/hightide-design/components'
+import type { ComponentTokens } from '@helpwave/hightide-design/components'
 import type { DesignSystemTokens as DesignTokensTheme } from '@helpwave/hightide-design/design-system'
 
 import { resolveColoringStyles } from './coloring'
@@ -16,7 +16,7 @@ import { createStyleResolver } from '../types/resolver'
 
 export type CreateChipThemeOptions = {
   coloring: HightideComponentThemes['coloring'],
-  layout: ComponentLayoutTokens['chip'],
+  layout: ComponentTokens['chip']['layout'],
   fontWeight: number,
   borderWidth: number,
 }
@@ -74,7 +74,7 @@ export const createChipTheme = ({
 export const createChipThemeFromDesign = (theme: DesignTokensTheme): ChipTheme => {
   return createChipTheme({
     coloring: theme.semantic.coloring,
-    layout: theme.components.layout.chip,
+    layout: theme.components.chip.layout,
     fontWeight: theme.semantic.typography.fontWeights.semibold,
     borderWidth: theme.semantic.border.base,
   })

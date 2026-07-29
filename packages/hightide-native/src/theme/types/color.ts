@@ -59,4 +59,6 @@ export type HightideSemanticColors = {
   neutralTonalBackground: Color,
   faded: Color,
   highlight: Color,
+  border: Color,
+  divider: Color,
 }

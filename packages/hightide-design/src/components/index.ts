@@ -1,3 +1,2 @@
-export * from './component-colors'
-export * from './component-layouts'
+export * from './component-tokens'
 export * from './to-components'
