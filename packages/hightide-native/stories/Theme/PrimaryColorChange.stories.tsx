@@ -8,17 +8,20 @@ import type {
 } from '@storybook/react-native-web-vite'
 import {
   hightidePrimitiveTokens,
-  type ColorToken
-} from '@helpwave/hightide-design/primitive'
-import {
-  toHightideSemanticTokens,
+  type ColorToken,
   type HightideColorPalettes
-} from '@helpwave/hightide-design/semantic'
+} from '@helpwave/hightide-design/primitive'
+import { toHightideSemanticTokens } from '@helpwave/hightide-design/semantic'
+import { toHightideComponentTokens } from '@helpwave/hightide-design/components'
 import {
   constructThemeTokens,
-  toHightideComponentTokens,
-  toHightideTheme,
-  type HightideThemeTokens
+  type DesignSystemTokens
+} from '@helpwave/hightide-design/design-system'
+import {
+  createColoringTokens,
+  toDarkThemeTokens,
+  toLightThemeTokens,
+  type ThemeTokens
 } from '@helpwave/hightide-design/theme'
 
 import { Button } from '../../src/components/user-interaction/Button'
@@ -31,31 +34,34 @@ import {
   ThemeStoryFrame
 } from './themeStoryHelpers'
 
-const toBluePrimarySemantic: typeof toHightideSemanticTokens = (args) => {
-  const { blue } = args.primitiveTokens.color.palettes as HightideColorPalettes
-
-  return {
-    ...toHightideSemanticTokens(args),
+const withBluePrimary = (themeTokens: ThemeTokens): ThemeTokens => {
+  const { blue } = hightidePrimitiveTokens.color.palettes as HightideColorPalettes
+  const color = {
+    ...themeTokens.color,
     primary: blue.value[500] as ColorToken,
     primaryHover: blue.value[600] as ColorToken,
+  }
+
+  return {
+    ...themeTokens,
+    color,
+    coloring: createColoringTokens(color),
   }
 }
 
 const bluePrimaryDesignTokens = constructThemeTokens({
-  themeName: 'blue-primary',
   primitiveTokens: hightidePrimitiveTokens,
-  toSemantic: toBluePrimarySemantic,
+  toThemeTokens: (args) => withBluePrimary(toLightThemeTokens(args)),
+  toSemantic: toHightideSemanticTokens,
   toComponents: toHightideComponentTokens,
-  toTheme: toHightideTheme,
-}) satisfies HightideThemeTokens
+}) satisfies DesignSystemTokens
 
 const bluePrimaryDarkDesignTokens = constructThemeTokens({
-  themeName: 'dark',
   primitiveTokens: hightidePrimitiveTokens,
-  toSemantic: toBluePrimarySemantic,
+  toThemeTokens: (args) => withBluePrimary(toDarkThemeTokens(args)),
+  toSemantic: toHightideSemanticTokens,
   toComponents: toHightideComponentTokens,
-  toTheme: toHightideTheme,
-}) satisfies HightideThemeTokens
+}) satisfies DesignSystemTokens
 
 const bluePrimaryTheme = createHightideTheme(bluePrimaryDesignTokens)
 const bluePrimaryDarkTheme = createHightideTheme(bluePrimaryDarkDesignTokens)

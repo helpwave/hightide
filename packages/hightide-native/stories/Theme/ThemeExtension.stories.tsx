@@ -5,17 +5,19 @@ import type {
 } from '@storybook/react-native-web-vite'
 import {
   hightidePrimitiveTokens,
-  type ColorToken
-} from '@helpwave/hightide-design/primitive'
-import {
-  toHightideSemanticTokens,
+  type ColorToken,
   type HightideColorPalettes
-} from '@helpwave/hightide-design/semantic'
+} from '@helpwave/hightide-design/primitive'
+import { toHightideSemanticTokens } from '@helpwave/hightide-design/semantic'
+import { toHightideComponentTokens } from '@helpwave/hightide-design/components'
 import {
   constructThemeTokens,
-  toHightideComponentTokens,
-  toHightideTheme,
-  type HightideThemeTokens
+  type DesignSystemTokens
+} from '@helpwave/hightide-design/design-system'
+import {
+  createColoringTokens,
+  toLightThemeTokens,
+  type ThemeTokens
 } from '@helpwave/hightide-design/theme'
 
 import { Button } from '../../src/components/user-interaction/Button'
@@ -29,11 +31,15 @@ import {
   ThemeStoryFrame
 } from './themeStoryHelpers'
 
-const toOceanSemantic: typeof toHightideSemanticTokens = (args) => {
-  const { blue, white } = args.primitiveTokens.color.palettes as HightideColorPalettes
-
-  return {
-    ...toHightideSemanticTokens(args),
+const toOceanThemeTokens = ({
+  primitiveTokens,
+}: {
+  primitiveTokens: typeof hightidePrimitiveTokens,
+}): ThemeTokens => {
+  const themeTokens = toLightThemeTokens({ primitiveTokens })
+  const { blue, white } = primitiveTokens.color.palettes as HightideColorPalettes
+  const color = {
+    ...themeTokens.color,
     background: blue.value[100] as ColorToken,
     onBackground: blue.value[900] as ColorToken,
     surface: blue.value[50] as ColorToken,
@@ -45,15 +51,20 @@ const toOceanSemantic: typeof toHightideSemanticTokens = (args) => {
     onPrimary: white.value as ColorToken,
     primaryHover: blue.value[600] as ColorToken,
   }
+
+  return {
+    ...themeTokens,
+    color,
+    coloring: createColoringTokens(color),
+  }
 }
 
 const oceanDesignTokens = constructThemeTokens({
-  themeName: 'ocean',
   primitiveTokens: hightidePrimitiveTokens,
-  toSemantic: toOceanSemantic,
+  toThemeTokens: toOceanThemeTokens,
+  toSemantic: toHightideSemanticTokens,
   toComponents: toHightideComponentTokens,
-  toTheme: toHightideTheme,
-}) satisfies HightideThemeTokens
+}) satisfies DesignSystemTokens
 
 const oceanTheme = createHightideTheme(oceanDesignTokens)
 

@@ -10,7 +10,7 @@ import {
   type ViewStyle
 } from 'react-native'
 
-import type { ColoringType } from '@helpwave/hightide-design/theme'
+import type { ColoringType } from '@helpwave/hightide-design/design-system'
 
 import { useTheme } from '../../global-contexts/theme/ThemeContext'
 import type {

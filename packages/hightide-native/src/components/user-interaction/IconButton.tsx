@@ -14,7 +14,7 @@ import type { ElementSize } from '@helpwave/hightide-design/primitive'
 import type {
   ColoringType,
   ButtonColoringStyle
-} from '@helpwave/hightide-design/theme'
+} from '@helpwave/hightide-design/design-system'
 
 import { Icon } from '../visualization-and-display/Icon'
 import { useTheme } from '../../global-contexts/theme/ThemeContext'
@@ -50,7 +50,7 @@ export const IconButton = forwardRef<React.ComponentRef<typeof Pressable>, IconB
   iconSize,
   size = 'md',
   color = 'neutral',
-  coloringStyle = 'solid',
+  coloringStyle = 'filled',
   disabled,
   accessibilityLabel,
   style,

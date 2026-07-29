@@ -15,7 +15,7 @@ import {
   coloringTypes,
   type ColoringType,
   type ButtonColoringStyle
-} from '@helpwave/hightide-design/theme'
+} from '@helpwave/hightide-design/design-system'
 
 import { useTheme } from '../../global-contexts/theme/ThemeContext'
 import type {
@@ -32,7 +32,7 @@ export type ButtonColor = ColoringType
 export const ButtonUtil = {
   colors: coloringTypes,
   sizes: ['xs', 'sm', 'md', 'lg'] as const satisfies readonly ElementSize[],
-  coloringStyles: ['outline', 'solid', 'text', 'tonal', 'tonal-outline'] as const satisfies readonly ButtonColoringStyle[],
+  coloringStyles: ['outline', 'filled', 'text', 'tonal', 'tonal-outline'] as const satisfies readonly ButtonColoringStyle[],
 }
 
 export type ButtonProps = Omit<PressableProps, 'children' | 'style'> & {
@@ -55,7 +55,7 @@ export const Button = forwardRef<React.ComponentRef<typeof Pressable>, ButtonPro
   children,
   size = 'md',
   color = 'primary',
-  coloringStyle = 'solid',
+  coloringStyle = 'filled',
   disabled,
   style,
   buttonStyle,

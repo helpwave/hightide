@@ -103,7 +103,7 @@ export const ChatMessageComposer = ({
       <IconButton
         accessibilityLabel={sendLabel}
         color="primary"
-        coloringStyle="solid"
+        coloringStyle="filled"
         disabled={disabled || !(value ?? '').trim()}
         size="md"
         onPress={send}

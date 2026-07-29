@@ -1,5 +1,5 @@
 import type { FontSizeKey, FontWeightKey } from '../primitive/typography'
-import { hightideTypography } from '../primitive/typography'
+import type { ThemeTokens } from '../theme/theme-tokens'
 
 export type TypographyStyleToken = {
   fontSize: string,
@@ -9,7 +9,7 @@ export type TypographyStyleToken = {
 }
 
 export type TypographyTokens = {
-  fontWeights: typeof hightideTypography.fontWeight,
+  fontWeights: ThemeTokens['typography']['fontWeight'],
   scales: {
     headline: {
       large: TypographyStyleToken,
@@ -44,47 +44,50 @@ export type TypographyTokens = {
 
 export type { TypographyTokens as TypographyScale, TypographyStyleToken as TypographyStyle }
 
-const createTypographyStyle = (
+export const createTypographyStyle = (
+  typography: ThemeTokens['typography'],
   size: FontSizeKey,
   weight: FontWeightKey,
   fontFamily?: string
 ): TypographyStyleToken => ({
-  fontSize: hightideTypography.fontSize[size],
-  lineHeight: hightideTypography.lineHeight[size],
-  fontWeight: hightideTypography.fontWeight[weight],
+  fontSize: typography.fontSize[size],
+  lineHeight: typography.lineHeight[size],
+  fontWeight: typography.fontWeight[weight],
   fontFamily,
 })
 
-export const typography = {
-  fontWeights: hightideTypography.fontWeight,
+export const createTypographyTokens = (
+  typography: ThemeTokens['typography']
+): TypographyTokens => ({
+  fontWeights: typography.fontWeight,
   scales: {
     headline: {
-      large: createTypographyStyle('4xl', 'bold', 'space'),
-      medium: createTypographyStyle('3xl', 'semibold', 'space'),
-      small: createTypographyStyle('2xl', 'bold', 'space'),
+      large: createTypographyStyle(typography, '4xl', 'bold', typography.fontFamily.space ?? 'space'),
+      medium: createTypographyStyle(typography, '3xl', 'semibold', typography.fontFamily.space ?? 'space'),
+      small: createTypographyStyle(typography, '2xl', 'bold', typography.fontFamily.space ?? 'space'),
     },
     title: {
-      large: createTypographyStyle('2xl', 'semibold', 'space'),
-      medium: createTypographyStyle('lg', 'semibold', 'space'),
-      small: createTypographyStyle('base', 'medium', 'space'),
+      large: createTypographyStyle(typography, '2xl', 'semibold', typography.fontFamily.space ?? 'space'),
+      medium: createTypographyStyle(typography, 'lg', 'semibold', typography.fontFamily.space ?? 'space'),
+      small: createTypographyStyle(typography, 'base', 'medium', typography.fontFamily.space ?? 'space'),
     },
     body: {
-      large: createTypographyStyle('lg', 'base'),
-      medium: createTypographyStyle('base', 'base'),
+      large: createTypographyStyle(typography, 'lg', 'base'),
+      medium: createTypographyStyle(typography, 'base', 'base'),
     },
     label: {
-      large: createTypographyStyle('base', 'semibold'),
-      medium: createTypographyStyle('sm', 'medium'),
+      large: createTypographyStyle(typography, 'base', 'semibold'),
+      medium: createTypographyStyle(typography, 'sm', 'medium'),
     },
     caption: {
-      large: createTypographyStyle('lg', 'base'),
-      medium: createTypographyStyle('base', 'medium'),
-      small: createTypographyStyle('sm', 'base'),
+      large: createTypographyStyle(typography, 'lg', 'base'),
+      medium: createTypographyStyle(typography, 'base', 'medium'),
+      small: createTypographyStyle(typography, 'sm', 'base'),
     },
     button: {
-      large: createTypographyStyle('lg', 'semibold'),
-      medium: createTypographyStyle('base', 'semibold'),
-      small: createTypographyStyle('sm', 'base'),
+      large: createTypographyStyle(typography, 'lg', 'semibold'),
+      medium: createTypographyStyle(typography, 'base', 'semibold'),
+      small: createTypographyStyle(typography, 'sm', 'base'),
     },
-  }
-} as const satisfies TypographyTokens
+  },
+})

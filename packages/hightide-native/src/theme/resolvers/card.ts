@@ -1,10 +1,8 @@
 import { StyleSheet } from 'react-native'
 
 import { hightideTypography } from '@helpwave/hightide-design/primitive'
-import type {
-  ComponentColorTokens,
-  HightideThemeTokens as DesignTokensTheme
-} from '@helpwave/hightide-design/theme'
+import type { ComponentColorTokens } from '@helpwave/hightide-design/components'
+import type { DesignSystemTokens as DesignTokensTheme } from '@helpwave/hightide-design/design-system'
 
 import type { HightideSemanticColors } from '../types/color'
 import type {
@@ -37,7 +35,7 @@ export const createCardTheme = ({
       paddingVertical: 8,
       borderBottomWidth: StyleSheet.hairlineWidth,
       borderBottomColor: component.divider,
-      backgroundColor: pressed ? semantic.surfaceHover : ('transparent' as const),
+      backgroundColor: pressed ? semantic.surfaceHover : semantic.transparent,
       opacity: state.isDisabled ? 0.6 : 1,
     }
   }
@@ -102,7 +100,7 @@ export const createCardTheme = ({
 
 export const createCardThemeFromDesign = (theme: DesignTokensTheme): CardTheme => {
   return createCardTheme({
-    semantic: theme.semanticColors,
-    component: theme.componentColors,
+    semantic: theme.semantic.colors,
+    component: theme.components.colors,
   })
 }

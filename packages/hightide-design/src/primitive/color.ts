@@ -55,6 +55,10 @@ export const hightideColor = {
       type: 'singleValue',
       value: '#000000',
     } as const satisfies ColorPaletteSingleValueToken,
+    transparent: {
+      type: 'singleValue',
+      value: '#00000000',
+    } as const satisfies ColorPaletteSingleValueToken,
     gray: {
       type: 'detailed',
       value: {

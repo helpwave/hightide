@@ -1,4 +1,4 @@
-import type { Color } from '../color'
+import type { ColoringTokens } from '@helpwave/hightide-design/theme'
 import type { AvatarTheme } from './avatar'
 import type { ButtonTheme } from './button'
 import type { ChatTheme } from './chat'
@@ -11,27 +11,8 @@ import type { MultiSelectTheme } from './multiSelect'
 import type { SelectTheme } from './select'
 import type { SwitchTheme } from './switch'
 
-export type ColoringDefinition = {
-  color: Color,
-  onColor: Color,
-  hover: Color,
-  text?: Color,
-  textHover?: Color,
-  outline?: Color,
-  outlineHover?: Color,
-  tonalText?: Color,
-  tonalBackground?: Color,
-}
-
 export type HightideComponentThemes = {
-  coloring: {
-    primary: ColoringDefinition,
-    secondary: ColoringDefinition,
-    positive: ColoringDefinition,
-    warning: ColoringDefinition,
-    negative: ColoringDefinition,
-    neutral: ColoringDefinition,
-  } & Record<string, ColoringDefinition>,
+  coloring: ColoringTokens,
   button: ButtonTheme,
   iconButton: IconButtonTheme,
   chip: ChipTheme,

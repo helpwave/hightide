@@ -5,6 +5,7 @@ export type ColorPalette = Record<number, Color>
 export type HightideColors = {
   white: Color,
   black: Color,
+  transparent: Color,
   gray: ColorPalette,
   green: ColorPalette,
   orange: ColorPalette,
@@ -14,6 +15,7 @@ export type HightideColors = {
 }
 
 export type HightideSemanticColors = {
+  transparent: Color,
   background: Color,
   onBackground: Color,
   warning: Color,

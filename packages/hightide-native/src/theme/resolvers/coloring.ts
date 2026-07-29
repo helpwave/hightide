@@ -1,87 +1,68 @@
-import { hightideBorder } from '@helpwave/hightide-design/primitive'
+import { hightideColor } from '@helpwave/hightide-design/primitive'
 import {
-  hexWithAlpha,
+  resolveStateBasedProperty,
   type ButtonColoringStyle,
   type ChipColoringStyle,
-  type ColoringStyle
+  type ColorState,
+  type ColoringStyle,
+  type ColoringTokens,
+  type ColoringType,
+  type ElementState
 } from '@helpwave/hightide-design/theme'
 
-import type {
-  Color,
-  HightideSemanticColors
-} from '../types/color'
-import type { ColoringDefinition } from '../types/components/hightide'
+import type { Color } from '../types/color'
 import type { InteractionState } from '../types/resolver'
 
 export type ResolvedColoringStyles = {
-  backgroundColor: Color | 'transparent',
+  backgroundColor: Color,
   color: Color,
   borderColor?: Color,
   borderWidth: number,
 }
 
-const usesHover = (state: InteractionState): boolean => {
-  return !!(state.isHovered || state.isPressed) && !state.isDisabled
+const transparent = hightideColor.palettes.transparent.value
+
+const interactionStatesToElementStates = (
+  state: InteractionState
+): ReadonlySet<ElementState> => {
+  const states = new Set<ElementState>()
+
+  if (state.isFocused) {
+    states.add('focused')
+  }
+  if (state.isHovered) {
+    states.add('hover')
+  }
+  if (state.isPressed) {
+    states.add('pressed')
+  }
+  if (state.isDisabled) {
+    states.add('disabled')
+  }
+
+  return states
 }
 
 export const resolveColoringStyles = (
-  tokens: ColoringDefinition,
+  coloring: ColoringTokens,
+  color: ColoringType,
   coloringStyle: ColoringStyle,
-  semantic: HightideSemanticColors,
+  borderWidth: number,
   state: InteractionState = {}
 ): ResolvedColoringStyles => {
-  const outlineWidth = hightideBorder.base
-  const hovered = usesHover(state)
+  const pack = coloring[coloringStyle][color]
+  const resolved: ColorState = resolveStateBasedProperty(
+    pack,
+    interactionStatesToElementStates(state)
+  )
 
-  if (state.isDisabled) {
-    return {
-      backgroundColor: semantic.disabled,
-      color: semantic.onDisabled,
-      borderWidth: 0,
-    }
-  }
+  const isOutline = coloringStyle === 'outline' || coloringStyle === 'tonal-outline'
 
-  switch (coloringStyle) {
-  case 'solid':
-    return {
-      backgroundColor: hovered ? tokens.hover : tokens.color,
-      color: tokens.onColor,
-      borderWidth: 0,
-    }
-  case 'text':
-    return {
-      backgroundColor: 'transparent',
-      color: hovered
-        ? (tokens.textHover ?? tokens.hover)
-        : (tokens.text ?? tokens.color),
-      borderWidth: 0,
-    }
-  case 'outline':
-    return {
-      backgroundColor: 'transparent',
-      color: hovered
-        ? (tokens.outlineHover ?? tokens.hover)
-        : (tokens.outline ?? tokens.color),
-      borderColor: hovered
-        ? (tokens.outlineHover ?? tokens.hover)
-        : (tokens.outline ?? tokens.color),
-      borderWidth: outlineWidth,
-    }
-  case 'tonal':
-    return {
-      backgroundColor: hexWithAlpha(tokens.tonalBackground ?? tokens.color, hovered ? 0.28 : 0.2),
-      color: tokens.tonalText ?? tokens.color,
-      borderWidth: 0,
-    }
-  case 'tonal-outline':
-    return {
-      backgroundColor: hexWithAlpha(tokens.tonalBackground ?? tokens.color, hovered ? 0.28 : 0.2),
-      color: tokens.tonalText ?? tokens.color,
-      borderColor: hovered
-        ? (tokens.outlineHover ?? tokens.hover)
-        : (tokens.outline ?? tokens.color),
-      borderWidth: outlineWidth,
-    }
+  return {
+    backgroundColor: resolved.background,
+    color: resolved.foreground,
+    borderColor: resolved.border === transparent ? undefined : resolved.border,
+    borderWidth: isOutline ? borderWidth : 0,
   }
 }
 

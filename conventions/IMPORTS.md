@@ -18,6 +18,8 @@ import type { ChatTheme } from '@/src/theme/types/components/chat'
 
 Cross-package imports (for example `@helpwave/hightide-design/primitive` or `@helpwave/hightide-utils/hooks`) keep their published package names. Do not rewrite those to relative paths across package boundaries.
 
+Design tokens: import primitives from `@helpwave/hightide-design/primitive`, theme adapters / `StateBasedProperty` from `/theme`, semantic mappers from `/semantic`, component tokens from `/components`, `designSystem` / construction helpers from `/design-system`, and `HexColorUtils` from `/utils`.
+
 ## No index / barrel imports
 
 Local package imports must target the **concrete module file**, never a folder `index` barrel.
@@ -82,7 +84,7 @@ import {
 import { Check } from 'lucide-react-native'
 
 import { hightideTypography } from '@helpwave/hightide-design/primitive'
-import { hexWithAlpha } from '@helpwave/hightide-design/theme'
+import { HexColorUtils } from '@helpwave/hightide-design/utils'
 
 import { useTheme } from '../../global-contexts/theme/ThemeContext'
 import type { ChatTheme } from '../../theme/types/components/chat'

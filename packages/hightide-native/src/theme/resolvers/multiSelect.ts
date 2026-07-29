@@ -1,8 +1,6 @@
 import { hightideTypography } from '@helpwave/hightide-design/primitive'
-import type {
-  ComponentColorTokens,
-  HightideThemeTokens as DesignTokensTheme
-} from '@helpwave/hightide-design/theme'
+import type { ComponentColorTokens } from '@helpwave/hightide-design/components'
+import type { DesignSystemTokens as DesignTokensTheme } from '@helpwave/hightide-design/design-system'
 
 import type { HightideSemanticColors } from '../types/color'
 import type {
@@ -65,7 +63,7 @@ export const createMultiSelectTheme = ({
     option: createStyleResolver((state: MultiSelectOptionState) => ({
       paddingHorizontal: 16,
       paddingVertical: 12,
-      backgroundColor: state.isHighlighted ? component.table.rowHoverBackground : 'transparent',
+      backgroundColor: state.isHighlighted ? component.table.rowHoverBackground : semantic.transparent,
       opacity: state.isDisabled ? 0.5 : 1,
       flexDirection: 'row',
       alignItems: 'center',
@@ -81,7 +79,7 @@ export const createMultiSelectTheme = ({
       borderRadius: 4,
       borderWidth: 1,
       borderColor: state.isSelected ? semantic.primary : component.border,
-      backgroundColor: state.isSelected ? semantic.primary : 'transparent',
+      backgroundColor: state.isSelected ? semantic.primary : semantic.transparent,
       alignItems: 'center',
       justifyContent: 'center',
     })),
@@ -94,7 +92,7 @@ export const createMultiSelectTheme = ({
 
 export const createMultiSelectThemeFromDesign = (theme: DesignTokensTheme): MultiSelectTheme => {
   return createMultiSelectTheme({
-    semantic: theme.semanticColors,
-    component: theme.componentColors,
+    semantic: theme.semantic.colors,
+    component: theme.components.colors,
   })
 }

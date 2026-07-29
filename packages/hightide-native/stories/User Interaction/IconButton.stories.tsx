@@ -26,7 +26,7 @@ export const iconButton: Story = {
     disabled: false,
     color: 'primary',
     size: 'md',
-    coloringStyle: 'solid',
+    coloringStyle: 'filled',
     accessibilityLabel: 'Subtract',
     icon: Minus,
     onPress: action('Pressed'),

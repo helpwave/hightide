@@ -53,12 +53,10 @@ const createCalloutTheme = (theme: HightideTheme): CalloutTheme => {
     const tone = state.tone ?? 'info'
     const backgroundColor = tone === 'warning'
       ? theme.semantic.surfaceWarning
-      : theme.components.coloring.primary.tonalBackground
-        ?? theme.semantic.surfaceVariant
+      : theme.components.coloring.tonal.primary.base.background
     const color = tone === 'warning'
       ? theme.semantic.onSurfaceWarning
-      : theme.components.coloring.primary.tonalText
-        ?? theme.semantic.primary
+      : theme.components.coloring.tonal.primary.base.foreground
 
     const container: ViewStyle = {
       backgroundColor,

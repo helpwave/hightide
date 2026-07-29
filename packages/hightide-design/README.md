@@ -18,71 +18,72 @@ import {
   type ElementSize,
   type PrimitiveTokens,
 } from "@helpwave/hightide-design/primitive";
-import { toHightideSemanticTokens, typography } from "@helpwave/hightide-design/semantic";
 import {
-  ThemeTokens,
+  toLightThemeTokens,
+  toDarkThemeTokens,
+  resolveStateBasedProperty,
+  type ThemeTokens,
+} from "@helpwave/hightide-design/theme";
+import { toHightideSemanticTokens } from "@helpwave/hightide-design/semantic";
+import { toHightideComponentTokens } from "@helpwave/hightide-design/components";
+import {
+  designSystem,
   coloringTypes,
   constructThemeTokens,
-  hexWithAlpha,
-  type HightideThemeTokens,
-} from "@helpwave/hightide-design/theme";
+  type DesignSystemTokens,
+} from "@helpwave/hightide-design/design-system";
+import { HexColorUtils } from "@helpwave/hightide-design/utils";
 
-const theme = ThemeTokens.dark;
-const background = theme.semanticColors.background;
-const buttonHeight = hightidePrimitiveTokens.elements.md.size;
-const headline = typography.scales.headline.large;
+const light = designSystem.themes.light;
+const background = light.semantic.colors.background;
+const filledPrimary = light.semantic.coloring.filled.primary;
+const buttonHeight = light.components.layout.button.md.size;
+const translucent = HexColorUtils.hexWithAlpha(background, 0.5);
 ```
 
 | Subpath | Contents |
 | --- | --- |
-| `@helpwave/hightide-design/primitive` | Structured `PrimitiveTokens` (color, spacing, elements, typography, radius, border, shadow, motion, breakpoint) |
-| `@helpwave/hightide-design/semantic` | Semantic color mapper and composed typography styles |
-| `@helpwave/hightide-design/theme` | Component tokens, theme assembly, themes, and color utilities |
+| `@helpwave/hightide-design/primitive` | Structured `PrimitiveTokens` |
+| `@helpwave/hightide-design/theme` | `ThemeTokens`, light/dark theme adapters, `StateBasedProperty`, coloring packs |
+| `@helpwave/hightide-design/semantic` | Semantic mapper (passthrough coloring + composed typography) |
+| `@helpwave/hightide-design/components` | Component colors/layouts + `toHightideComponentTokens` |
+| `@helpwave/hightide-design/design-system` | `designSystem`, `constructThemeTokens`, coloring helpers |
+| `@helpwave/hightide-design/utils` | `HexColorUtils` |
+
+## Pipeline
+
+```text
+PrimitiveTokens
+      │
+      ▼  toLightThemeTokens / toDarkThemeTokens   // @theme — palettes + coloring packs
+ThemeTokens
+      │
+      ▼  toSemantic({ themeTokens })               // @semantic
+SemanticTokens
+      │
+      ▼  toComponents({ semanticTokens })          // @components
+ComponentTokens
+      │
+      ▼  DesignSystemTokens { semantic, components }
+```
+
+Coloring shape (style → role → state):
+
+```ts
+semantic.coloring.filled.primary // StateBasedProperty<ColorState>
+semantic.coloring.outline.neutral
+```
+
+`ColorState` = `{ background, foreground, border }`. Resolve with `resolveStateBasedProperty(property, states)` in order `base → focused → hover → pressed → disabled`.
 
 ## Structure
 
 ```
 src/
-  primitive/      Mode-agnostic PrimitiveTokens type + hightide defaults
-  semantic/       Named semantic roles, mapper, and typography composition
-  theme/          Component tokens, theme construction, themes, and utilities
+  primitive/
+  theme/           ThemeTokens, light/dark adapters, StateBasedProperty, coloring
+  semantic/        toSemantic + typography
+  components/      toComponents + component colors/layouts
+  design-system/   designSystem assembly + constructThemeTokens
+  utils/           HexColorUtils
 ```
-
-### Primitive
-
-Each top-level `PrimitiveTokens` key lives in its own file with a hightide default:
-
-- `color.ts` — palettes and `ColorPalette` token types
-- `spacing.ts` / `elements.ts` / `breakpoint.ts` — layout scales
-- `typography.ts` — font family, size, weight, line height
-- `radius.ts` / `border.ts` / `shadow.ts` / `motion.ts`
-- `units.ts` — `ScalingUnitToken`, `FixedUnitToken`
-- `primitive-tokens.ts` — `PrimitiveTokens` + `hightidePrimitiveTokens`
-
-### Semantic
-
-- `to-semantic.ts` — `toHightideSemanticTokens`
-- `typography.ts` — composed typography scale (`headline.large`, `body.medium`, …)
-- `hightide.ts` / `color.ts` — semantic color type definitions
-
-### Theme
-
-- `to-components.ts` / `to-theme.ts` — component and theme mappers
-- `themes/` — `lightTheme`, `darkTheme`, and `ThemeTokens`
-- `constructThemeTokens.ts` — theme token construction pipeline
-- `color.ts` / `coloring-utils.ts` — `hexWithAlpha`, `coloringTypes`, `getColoringToken`
-- `hightide.ts` / `component-colors.ts` / `coloring.ts` / `design.ts` — theme type definitions
-
-## Source of truth
-
-Tokens mirror:
-
-- `packages/hightide/src/style/theme/colors/basic.css`
-- `packages/hightide/src/style/theme/colors/semantic.css`
-- `packages/hightide/src/style/theme/colors/component.css`
-- `packages/hightide/src/style/theme/variables.css`
-- `packages/hightide/src/style/theme/element.css`
-- `packages/hightide/src/style/theme/typography.css`
-- `packages/hightide/src/style/theme/components/button.css`
-- `packages/hightide/src/style/theme/components/chip.css`
-- `packages/hightide/src/style/theme/components/input-elements.css`

@@ -36,7 +36,7 @@ export const button: Story = {
     disabled: false,
     color: 'primary',
     size: 'md',
-    coloringStyle: 'solid',
+    coloringStyle: 'filled',
     onPress: action('Pressed'),
   },
 }

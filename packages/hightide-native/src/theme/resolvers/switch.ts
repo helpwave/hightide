@@ -1,7 +1,5 @@
-import type {
-  ComponentColorTokens,
-  HightideThemeTokens as DesignTokensTheme
-} from '@helpwave/hightide-design/theme'
+import type { ComponentColorTokens } from '@helpwave/hightide-design/components'
+import type { DesignSystemTokens as DesignTokensTheme } from '@helpwave/hightide-design/design-system'
 
 import type { HightideSemanticColors } from '../types/color'
 import type {
@@ -59,7 +57,7 @@ export const createSwitchTheme = ({
 
 export const createSwitchThemeFromDesign = (theme: DesignTokensTheme): SwitchTheme => {
   return createSwitchTheme({
-    semantic: theme.semanticColors,
-    component: theme.componentColors,
+    semantic: theme.semantic.colors,
+    component: theme.components.colors,
   })
 }

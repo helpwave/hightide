@@ -5,11 +5,9 @@ import {
 } from 'react-native'
 
 import { hightideTypography } from '@helpwave/hightide-design/primitive'
-import {
-  hexWithAlpha,
-  type ComponentColorTokens,
-  type HightideThemeTokens as DesignTokensTheme
-} from '@helpwave/hightide-design/theme'
+import type { ComponentColorTokens } from '@helpwave/hightide-design/components'
+import type { DesignSystemTokens as DesignTokensTheme } from '@helpwave/hightide-design/design-system'
+import { HexColorUtils } from '@helpwave/hightide-design/utils'
 
 import type {
   Color,
@@ -55,9 +53,9 @@ export const createChatTheme = ({
         ? semantic.background
         : pressed
           ? semantic.surfaceHover
-          : 'transparent',
+          : semantic.transparent,
       borderLeftWidth: state.isSelected ? 4 : 0,
-      borderLeftColor: state.isSelected ? semantic.primary : 'transparent',
+      borderLeftColor: state.isSelected ? semantic.primary : semantic.transparent,
       borderRadius: 6,
     }
   }
@@ -178,7 +176,7 @@ export const createChatTheme = ({
       timestamp: createStyleResolver<ChatMessageBubbleState, TextStyle>((state) => ({
         marginTop: 5,
         color: state.direction === 'outgoing'
-          ? hexWithAlpha(semantic.onPrimary, 0.75)
+          ? HexColorUtils.hexWithAlpha(semantic.onPrimary, 0.75)
           : semantic.description,
         fontSize: 11,
         fontWeight: hightideTypography.fontWeight.medium,
@@ -229,7 +227,7 @@ export const createChatTheme = ({
       })),
       icon: createStyleResolver<ChatMessageCardState, ViewStyle>((state) => {
         const color = state.color ?? 'primary'
-        const tokens = coloring[color]
+        const tonal = coloring.tonal[color].base
 
         return {
           width: 36,
@@ -237,23 +235,21 @@ export const createChatTheme = ({
           borderRadius: 6,
           alignItems: 'center',
           justifyContent: 'center',
-          backgroundColor: hexWithAlpha(tokens.tonalBackground ?? tokens.color, 0.2),
+          backgroundColor: tonal.background,
         }
       }),
       iconColor: createValueResolver<ChatMessageCardState, { color: Color }>((state) => {
         const color = state.color ?? 'primary'
-        const tokens = coloring[color]
 
         return {
-          color: tokens.tonalText ?? tokens.color,
+          color: coloring.tonal[color].base.foreground,
         }
       }),
       title: createStyleResolver<ChatMessageCardState, TextStyle>((state) => {
         const color = state.color ?? 'primary'
-        const tokens = coloring[color]
 
         return {
-          color: tokens.text ?? tokens.color,
+          color: coloring.text[color].base.foreground,
           fontSize: 14,
           fontWeight: hightideTypography.fontWeight.bold,
         }
@@ -302,7 +298,7 @@ export const createChatTheme = ({
         borderRadius: 6,
         alignItems: 'center',
         justifyContent: 'center',
-        backgroundColor: hexWithAlpha(semantic.negative, 0.2),
+        backgroundColor: HexColorUtils.hexWithAlpha(semantic.negative, 0.2),
       })),
       iconColor: createValueResolver<Record<string, never>, { color: Color }>(() => ({
         color: semantic.negative,
@@ -327,20 +323,18 @@ export const createChatTheme = ({
       })),
       text: createStyleResolver<ChatSystemLineState, TextStyle>((state) => {
         const color = state.color ?? 'primary'
-        const tokens = coloring[color]
 
         return {
-          color: tokens.text ?? tokens.color,
+          color: coloring.text[color].base.foreground,
           fontSize: 12,
           fontWeight: hightideTypography.fontWeight.medium,
         }
       }),
       icon: createValueResolver<ChatSystemLineState, { color: Color }>((state) => {
         const color = state.color ?? 'primary'
-        const tokens = coloring[color]
 
         return {
-          color: tokens.text ?? tokens.color,
+          color: coloring.text[color].base.foreground,
         }
       }),
     },
@@ -411,8 +405,8 @@ export const createChatTheme = ({
 
 export const createChatThemeFromDesign = (theme: DesignTokensTheme): ChatTheme => {
   return createChatTheme({
-    semantic: theme.semanticColors,
-    component: theme.componentColors,
-    coloring: theme.coloring as HightideComponentThemes['coloring'],
+    semantic: theme.semantic.colors,
+    component: theme.components.colors,
+    coloring: theme.semantic.coloring as HightideComponentThemes['coloring'],
   })
 }

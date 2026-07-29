@@ -15,7 +15,7 @@ import {
   coloringTypes,
   type ColoringType,
   type ChipColoringStyle
-} from '@helpwave/hightide-design/theme'
+} from '@helpwave/hightide-design/design-system'
 
 import { useTheme } from '../../global-contexts/theme/ThemeContext'
 import type {
@@ -32,7 +32,7 @@ export type ChipColor = ColoringType
 export const ChipUtil = {
   colors: coloringTypes,
   sizes: ['xs', 'sm', 'md', 'lg'] as const satisfies readonly ElementSize[],
-  coloringStyles: ['solid', 'tonal', 'outline', 'tonal-outline'] as const satisfies readonly ChipColoringStyle[],
+  coloringStyles: ['filled', 'tonal', 'outline', 'tonal-outline'] as const satisfies readonly ChipColoringStyle[],
 }
 
 export type ChipProps = Omit<ViewProps, 'children' | 'style'> & {
@@ -48,7 +48,7 @@ export type ChipProps = Omit<ViewProps, 'children' | 'style'> & {
 export const Chip = ({
   children,
   color = 'neutral',
-  coloringStyle = 'solid',
+  coloringStyle = 'filled',
   size = 'md',
   style,
   chipStyle,

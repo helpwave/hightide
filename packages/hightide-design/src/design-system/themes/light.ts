@@ -1,14 +1,13 @@
 import { hightidePrimitiveTokens } from '../../primitive/primitive-tokens'
+import { toHightideComponentTokens } from '../../components/to-components'
 import { toHightideSemanticTokens } from '../../semantic/to-semantic'
+import { toLightThemeTokens } from '../../theme/to-light-theme'
 import { constructThemeTokens } from '../constructThemeTokens'
-import type { HightideThemeTokens } from '../hightide'
-import { toHightideComponentTokens } from '../to-components'
-import { toHightideTheme } from '../to-theme'
+import type { DesignSystemTokens } from '../design'
 
-export const darkTheme = constructThemeTokens({
-  themeName: 'dark',
+export const lightTheme = constructThemeTokens({
   primitiveTokens: hightidePrimitiveTokens,
+  toThemeTokens: toLightThemeTokens,
   toSemantic: toHightideSemanticTokens,
   toComponents: toHightideComponentTokens,
-  toTheme: toHightideTheme,
-}) satisfies HightideThemeTokens
+}) satisfies DesignSystemTokens

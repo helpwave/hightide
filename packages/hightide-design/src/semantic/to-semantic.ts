@@ -1,120 +1,46 @@
-import type { HightideColorPalettes } from '../primitive/color'
-import type { PrimitiveTokens } from '../primitive/primitive-tokens'
+import type { ThemeTokens } from '../theme/theme-tokens'
+import type { ColoringTokens } from '../theme/coloring'
 import type { HightideSemanticColorTokens } from './hightide'
+import {
+  createTypographyTokens,
+  type TypographyTokens
+} from './typography'
+import type { BorderPrimitiveTokens } from '../primitive/border'
+import type { BreakpointPrimitiveTokens } from '../primitive/breakpoint'
+import type { ElementPrimitiveTokens } from '../primitive/elements'
+import type { MotionPrimitiveTokens } from '../primitive/motion'
+import type { RadiusPrimitiveTokens } from '../primitive/radius'
+import type { ShadowPrimitiveTokens } from '../primitive/shadow'
+import type { SpacingPrimitiveTokens } from '../primitive/spacing'
 
-export type { HightideColorPalettes }
+export type SemanticTokens = {
+  colors: HightideSemanticColorTokens,
+  coloring: ColoringTokens,
+  typography: TypographyTokens,
+  spacing: SpacingPrimitiveTokens,
+  elements: ElementPrimitiveTokens,
+  breakpoint: BreakpointPrimitiveTokens,
+  radius: RadiusPrimitiveTokens,
+  border: BorderPrimitiveTokens,
+  shadow: ShadowPrimitiveTokens,
+  motion: MotionPrimitiveTokens,
+}
 
-export type ToSemanticArgs<Tokens extends PrimitiveTokens = PrimitiveTokens> = {
-  themeName: string,
-  primitiveTokens: Tokens,
+export type ToSemanticArgs<Tokens extends ThemeTokens = ThemeTokens> = {
+  themeTokens: Tokens,
 }
 
 export const toHightideSemanticTokens = ({
-  themeName,
-  primitiveTokens,
-}: ToSemanticArgs): HightideSemanticColorTokens => {
-  const {
-    gray,
-    green,
-    orange,
-    red,
-    purple,
-    blue,
-    white,
-    black,
-  } = primitiveTokens.color.palettes as HightideColorPalettes
-
-  if (themeName === 'dark') {
-    return {
-      background: gray.value[850],
-      onBackground: gray.value[100],
-      warning: orange.value[500],
-      onWarning: white.value,
-      warningHover: orange.value[600],
-      positive: green.value[700],
-      onPositive: white.value,
-      positiveHover: green.value[600],
-      negative: red.value[500],
-      onNegative: white.value,
-      negativeHover: red.value[600],
-      disabled: gray.value[500],
-      onDisabled: gray.value[300],
-      surface: gray.value[800],
-      onSurface: gray.value[100],
-      surfaceHover: gray.value[700],
-      surfaceVariant: gray.value[900],
-      onSurfaceVariant: gray.value[100],
-      surfaceWarning: orange.value[900],
-      onSurfaceWarning: orange.value[500],
-      textPrimary: gray.value[100],
-      textSecondary: gray.value[400],
-      textTertiary: gray.value[600],
-      placeholder: gray.value[500],
-      description: gray.value[400],
-      label: gray.value[300],
-      primary: purple.value[400],
-      onPrimary: white.value,
-      primaryHover: purple.value[500],
-      secondary: blue.value[500],
-      onSecondary: white.value,
-      secondaryHover: blue.value[600],
-      neutral: gray.value[750],
-      onNeutral: white.value,
-      neutralHover: gray.value[600],
-      neutralText: white.value,
-      neutralTextHover: gray.value[500],
-      neutralOutline: gray.value[200],
-      neutralOutlineHover: gray.value[400],
-      neutralTonalText: white.value,
-      neutralTonalBackground: gray.value[400],
-      faded: gray.value[650],
-      highlight: blue.value[500],
-    }
-  }
-
-  return {
-    background: gray.value[75],
-    onBackground: gray.value[900],
-    warning: orange.value[500],
-    onWarning: white.value,
-    warningHover: orange.value[600],
-    positive: green.value[500],
-    onPositive: white.value,
-    positiveHover: green.value[600],
-    negative: red.value[500],
-    onNegative: white.value,
-    negativeHover: red.value[600],
-    disabled: gray.value[300],
-    onDisabled: gray.value[500],
-    surface: gray.value[25],
-    onSurface: gray.value[900],
-    surfaceHover: white.value,
-    surfaceVariant: white.value,
-    onSurfaceVariant: gray.value[900],
-    surfaceWarning: orange.value[100],
-    onSurfaceWarning: orange.value[500],
-    textPrimary: gray.value[900],
-    textSecondary: gray.value[600],
-    textTertiary: gray.value[300],
-    placeholder: gray.value[500],
-    description: gray.value[600],
-    label: gray.value[700],
-    primary: purple.value[500],
-    onPrimary: white.value,
-    primaryHover: purple.value[600],
-    secondary: blue.value[500],
-    onSecondary: white.value,
-    secondaryHover: blue.value[600],
-    neutral: gray.value[150],
-    onNeutral: black.value,
-    neutralHover: gray.value[200],
-    neutralText: black.value,
-    neutralTextHover: gray.value[500],
-    neutralOutline: black.value,
-    neutralOutlineHover: gray.value[600],
-    neutralTonalText: black.value,
-    neutralTonalBackground: gray.value[300],
-    faded: gray.value[250],
-    highlight: blue.value[500],
-  }
-}
+  themeTokens,
+}: ToSemanticArgs): SemanticTokens => ({
+  colors: themeTokens.color,
+  coloring: themeTokens.coloring,
+  typography: createTypographyTokens(themeTokens.typography),
+  spacing: themeTokens.spacing,
+  elements: themeTokens.elements,
+  breakpoint: themeTokens.breakpoint,
+  radius: themeTokens.radius,
+  border: themeTokens.border,
+  shadow: themeTokens.shadow,
+  motion: themeTokens.motion,
+})

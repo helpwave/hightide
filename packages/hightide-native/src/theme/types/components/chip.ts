@@ -7,7 +7,7 @@ import type { ElementSize } from '@helpwave/hightide-design/primitive'
 import type {
   ColoringType,
   ChipColoringStyle
-} from '@helpwave/hightide-design/theme'
+} from '@helpwave/hightide-design/design-system'
 
 import type {
   InteractionState,

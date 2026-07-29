@@ -20,13 +20,25 @@
       "types": "./src/primitive/index.ts",
       "default": "./src/primitive/index.ts"
     },
+    "./theme": {
+      "types": "./src/theme/index.ts",
+      "default": "./src/theme/index.ts"
+    },
     "./semantic": {
       "types": "./src/semantic/index.ts",
       "default": "./src/semantic/index.ts"
     },
-    "./theme": {
-      "types": "./src/theme/index.ts",
-      "default": "./src/theme/index.ts"
+    "./components": {
+      "types": "./src/components/index.ts",
+      "default": "./src/components/index.ts"
+    },
+    "./design-system": {
+      "types": "./src/design-system/index.ts",
+      "default": "./src/design-system/index.ts"
+    },
+    "./utils": {
+      "types": "./src/utils/index.ts",
+      "default": "./src/utils/index.ts"
     }
   },
   "scripts": {

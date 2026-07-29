@@ -1,8 +1,6 @@
 import { hightideTypography } from '@helpwave/hightide-design/primitive'
-import type {
-  ComponentColorTokens,
-  HightideThemeTokens as DesignTokensTheme
-} from '@helpwave/hightide-design/theme'
+import type { ComponentColorTokens } from '@helpwave/hightide-design/components'
+import type { DesignSystemTokens as DesignTokensTheme } from '@helpwave/hightide-design/design-system'
 
 import type { HightideSemanticColors } from '../types/color'
 import type {
@@ -64,7 +62,7 @@ export const createSelectTheme = ({
     option: createStyleResolver((state: SelectOptionState) => ({
       paddingHorizontal: 16,
       paddingVertical: 12,
-      backgroundColor: state.isHighlighted ? component.table.rowHoverBackground : 'transparent',
+      backgroundColor: state.isHighlighted ? component.table.rowHoverBackground : semantic.transparent,
       opacity: state.isDisabled ? 0.5 : 1,
     })),
     optionText: createStyleResolver((state: SelectOptionState) => ({
@@ -76,7 +74,7 @@ export const createSelectTheme = ({
 
 export const createSelectThemeFromDesign = (theme: DesignTokensTheme): SelectTheme => {
   return createSelectTheme({
-    semantic: theme.semanticColors,
-    component: theme.componentColors,
+    semantic: theme.semantic.colors,
+    component: theme.components.colors,
   })
 }
