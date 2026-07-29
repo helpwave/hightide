@@ -36,7 +36,7 @@ import { HexColorUtils } from "@helpwave/hightide-design/utils";
 
 const light = designSystem.themes.light;
 const background = light.semantic.colors.background;
-const filledPrimary = light.semantic.coloring.filled.primary;
+const filledPrimary = light.semantic.colorSchemes.primary.filled;
 const buttonHeight = light.components.button.layout.md.size;
 const translucent = HexColorUtils.hexWithAlpha(background, 0.5);
 ```
@@ -44,8 +44,8 @@ const translucent = HexColorUtils.hexWithAlpha(background, 0.5);
 | Subpath | Contents |
 | --- | --- |
 | `@helpwave/hightide-design/primitive` | Structured `PrimitiveTokens` |
-| `@helpwave/hightide-design/theme` | `ThemeTokens`, light/dark theme adapters, `StateBasedProperty`, coloring packs |
-| `@helpwave/hightide-design/semantic` | Semantic mapper (passthrough coloring + composed typography) |
+| `@helpwave/hightide-design/theme` | `ThemeTokens`, light/dark theme adapters, `StateBasedProperty`, color schemes |
+| `@helpwave/hightide-design/semantic` | Semantic mapper (passthrough color schemes + composed typography) |
 | `@helpwave/hightide-design/components` | Component colors/layouts + `toHightideComponentTokens` |
 | `@helpwave/hightide-design/design-system` | `designSystem`, `constructThemeTokens`, coloring helpers |
 | `@helpwave/hightide-design/utils` | `HexColorUtils` |
@@ -55,7 +55,7 @@ const translucent = HexColorUtils.hexWithAlpha(background, 0.5);
 ```text
 PrimitiveTokens
       │
-      ▼  toLightThemeTokens / toDarkThemeTokens   // @theme — palettes + coloring packs
+      ▼  toLightThemeTokens / toDarkThemeTokens   // @theme — palettes + color schemes
 ThemeTokens
       │
       ▼  toSemantic({ themeTokens })               // @semantic
@@ -67,11 +67,11 @@ ComponentTokens
       ▼  DesignSystemTokens { semantic, components }
 ```
 
-Coloring shape (style → role → state):
+Color scheme shape (role → style → state):
 
 ```ts
-semantic.coloring.filled.primary // StateBasedProperty<ColorState>
-semantic.coloring.outline.neutral
+semantic.colorSchemes.primary.filled // StateBasedProperty<ColorState>
+semantic.colorSchemes.neutral.outline
 ```
 
 `ColorState` = `{ background, foreground, border }`. Resolve with `resolveStateBasedProperty(property, states)` in order `base → focused → hover → pressed → disabled`.
@@ -81,7 +81,7 @@ semantic.coloring.outline.neutral
 ```
 src/
   primitive/
-  theme/           ThemeTokens, light/dark adapters, StateBasedProperty, coloring
+  theme/           ThemeTokens, light/dark adapters, StateBasedProperty, color schemes
   semantic/        toSemantic + typography
   components/      toComponents + component colors/layouts
   design-system/   designSystem assembly + constructThemeTokens

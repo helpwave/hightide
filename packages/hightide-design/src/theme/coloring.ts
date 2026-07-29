@@ -14,15 +14,15 @@ export type ColoringStyle = ColoringStyleBase | 'text'
 export type ButtonColoringStyle = ColoringStyle
 export type ChipColoringStyle = ColoringStyleBase
 
-export type RoleColoringTokens = Record<ColoringType, StateBasedProperty<ColorState>>
-
-export type ColoringTokens = {
-  'filled': RoleColoringTokens,
-  'outline': RoleColoringTokens,
-  'tonal': RoleColoringTokens,
-  'tonal-outline': RoleColoringTokens,
-  'text': RoleColoringTokens,
+export type ColorScheme = {
+  filled: StateBasedProperty<ColorState>,
+  outline: StateBasedProperty<ColorState>,
+  tonal: StateBasedProperty<ColorState>,
+  'tonal-outline': StateBasedProperty<ColorState>,
+  text: StateBasedProperty<ColorState>,
 }
+
+export type ColorSchemes = Record<ColoringType, ColorScheme>
 
 type RoleColors = {
   color: ColorToken,
@@ -221,27 +221,29 @@ const createTonalOutline = (
   },
 })
 
-const mapRoles = (
-  roles: Record<ColoringType, RoleColors>,
-  create: (role: RoleColors) => StateBasedProperty<ColorState>
-): RoleColoringTokens => ({
-  primary: create(roles.primary),
-  secondary: create(roles.secondary),
-  positive: create(roles.positive),
-  warning: create(roles.warning),
-  negative: create(roles.negative),
-  neutral: create(roles.neutral),
+const schemeFor = (
+  role: RoleColors,
+  disabled: ColorToken,
+  onDisabled: ColorToken,
+  transparent: ColorToken
+): ColorScheme => ({
+  filled: createFilled(role, disabled, onDisabled, transparent),
+  outline: createOutline(role, disabled, onDisabled, transparent),
+  tonal: createTonal(role, disabled, onDisabled, transparent),
+  'tonal-outline': createTonalOutline(role, disabled, onDisabled),
+  text: createText(role, disabled, onDisabled, transparent),
 })
 
-export const createColoringTokens = (colors: HightideSemanticColorTokens): ColoringTokens => {
+export const createColorSchemes = (colors: HightideSemanticColorTokens): ColorSchemes => {
   const roles = roleColorsFromTheme(colors)
   const { disabled, onDisabled, transparent } = colors
 
   return {
-    'filled': mapRoles(roles, (role) => createFilled(role, disabled, onDisabled, transparent)),
-    'outline': mapRoles(roles, (role) => createOutline(role, disabled, onDisabled, transparent)),
-    'tonal': mapRoles(roles, (role) => createTonal(role, disabled, onDisabled, transparent)),
-    'tonal-outline': mapRoles(roles, (role) => createTonalOutline(role, disabled, onDisabled)),
-    'text': mapRoles(roles, (role) => createText(role, disabled, onDisabled, transparent)),
+    primary: schemeFor(roles.primary, disabled, onDisabled, transparent),
+    secondary: schemeFor(roles.secondary, disabled, onDisabled, transparent),
+    positive: schemeFor(roles.positive, disabled, onDisabled, transparent),
+    warning: schemeFor(roles.warning, disabled, onDisabled, transparent),
+    negative: schemeFor(roles.negative, disabled, onDisabled, transparent),
+    neutral: schemeFor(roles.neutral, disabled, onDisabled, transparent),
   }
 }

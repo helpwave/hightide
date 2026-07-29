@@ -1,16 +1,17 @@
 import type { ColoringType } from '../theme/coloring'
-import type { ColoringTokens } from '../theme/coloring'
+import type { ColoringStyle } from '../theme/coloring'
+import type { ColorSchemes } from '../theme/coloring'
 
 export type {
   ButtonColoringStyle,
   ChipColoringStyle,
+  ColorScheme,
+  ColorSchemes,
   ColoringStyle,
   ColoringStyleBase,
-  ColoringTokens,
-  ColoringType,
-  RoleColoringTokens
+  ColoringType
 } from '../theme/coloring'
-export { coloringTypes, createColoringTokens } from '../theme/coloring'
+export { coloringTypes, createColorSchemes } from '../theme/coloring'
 export type { ColorState } from '../theme/color-state'
 export type {
   ElementState,
@@ -18,8 +19,8 @@ export type {
 } from '../theme/state-based-property'
 export { resolveStateBasedProperty } from '../theme/state-based-property'
 
-export const getColoringToken = <Style extends keyof ColoringTokens>(
-  style: Style,
+export const getColoringToken = (
+  style: ColoringStyle,
   color: ColoringType,
-  definitions: ColoringTokens
-) => definitions[style][color]
+  definitions: ColorSchemes
+) => definitions[color][style]

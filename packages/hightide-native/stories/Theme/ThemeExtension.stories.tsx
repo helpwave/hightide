@@ -15,7 +15,7 @@ import {
   type DesignSystemTokens
 } from '@helpwave/hightide-design/design-system'
 import {
-  createColoringTokens,
+  createColorSchemes,
   toLightThemeTokens,
   type ThemeTokens
 } from '@helpwave/hightide-design/theme'
@@ -55,7 +55,7 @@ const toOceanThemeTokens = ({
   return {
     ...themeTokens,
     color,
-    coloring: createColoringTokens(color),
+    colorSchemes: createColorSchemes(color),
   }
 }
 

@@ -29,12 +29,12 @@ import {
 
 export type CreateChatThemeOptions = {
   semantic: HightideSemanticColors,
-  coloring: HightideComponentThemes['coloring'],
+  colorSchemes: HightideComponentThemes['colorSchemes'],
 }
 
 export const createChatTheme = ({
   semantic,
-  coloring,
+  colorSchemes,
 }: CreateChatThemeOptions): ChatTheme => {
   const resolveConversationRow = (state: ChatConversationRowState): ViewStyle => {
     const pressed = !!state.isPressed && !state.isDisabled
@@ -224,7 +224,7 @@ export const createChatTheme = ({
       })),
       icon: createStyleResolver<ChatMessageCardState, ViewStyle>((state) => {
         const color = state.color ?? 'primary'
-        const tonal = coloring.tonal[color].base
+        const tonal = colorSchemes[color].tonal.base
 
         return {
           width: 36,
@@ -239,14 +239,14 @@ export const createChatTheme = ({
         const color = state.color ?? 'primary'
 
         return {
-          color: coloring.tonal[color].base.foreground,
+          color: colorSchemes[color].tonal.base.foreground,
         }
       }),
       title: createStyleResolver<ChatMessageCardState, TextStyle>((state) => {
         const color = state.color ?? 'primary'
 
         return {
-          color: coloring.text[color].base.foreground,
+          color: colorSchemes[color].text.base.foreground,
           fontSize: 14,
           fontWeight: hightideTypography.fontWeight.bold,
         }
@@ -322,7 +322,7 @@ export const createChatTheme = ({
         const color = state.color ?? 'primary'
 
         return {
-          color: coloring.text[color].base.foreground,
+          color: colorSchemes[color].text.base.foreground,
           fontSize: 12,
           fontWeight: hightideTypography.fontWeight.medium,
         }
@@ -331,7 +331,7 @@ export const createChatTheme = ({
         const color = state.color ?? 'primary'
 
         return {
-          color: coloring.text[color].base.foreground,
+          color: colorSchemes[color].text.base.foreground,
         }
       }),
     },
@@ -403,6 +403,6 @@ export const createChatTheme = ({
 export const createChatThemeFromDesign = (theme: DesignTokensTheme): ChatTheme => {
   return createChatTheme({
     semantic: theme.semantic.colors,
-    coloring: theme.semantic.coloring as HightideComponentThemes['coloring'],
+    colorSchemes: theme.semantic.colorSchemes as HightideComponentThemes['colorSchemes'],
   })
 }

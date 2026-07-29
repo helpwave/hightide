@@ -15,7 +15,7 @@ This document describes how hightide structures design tokens, how they are asse
 PrimitiveTokens
       │
       ▼  toLightThemeTokens / toDarkThemeTokens   // only layer that reads palettes
-ThemeTokens   // includes color + coloring (StateBasedProperty packs)
+ThemeTokens   // includes color + colorSchemes (StateBasedProperty packs)
       │
       ▼  toSemantic({ themeTokens })
 SemanticTokens
@@ -49,7 +49,7 @@ Raw, mode-agnostic building blocks under `@helpwave/hightide-design/primitive`.
 Produced by `toLightThemeTokens` / `toDarkThemeTokens` (`@helpwave/hightide-design/theme`):
 
 - `color` — high-level named colors (no palettes)
-- `coloring` — style → role → `StateBasedProperty<ColorState>` packs (`filled`, `outline`, `tonal`, `tonal-outline`, `text`)
+- `colorSchemes` — role → style → `StateBasedProperty<ColorState>` packs (`filled`, `outline`, `tonal`, `tonal-outline`, `text`)
 - `typography.fontFamily` — remapped roles `default` / `accent` / `mono` from primitive font registry
 - Other non-color scales passthrough from primitives
 
@@ -57,7 +57,7 @@ Produced by `toLightThemeTokens` / `toDarkThemeTokens` (`@helpwave/hightide-desi
 
 ### 3. SemanticTokens
 
-From `toHightideSemanticTokens` — passthrough `colors` + `coloring` from theme; compose typography; passthrough non-color scales.
+From `toHightideSemanticTokens` — passthrough `colors` + `colorSchemes` from theme; compose typography; passthrough non-color scales.
 
 ### 4. ComponentTokens
 
@@ -75,14 +75,14 @@ From `toHightideComponentTokens` (`@helpwave/hightide-design/components`) — co
 DesignSystemTokens  ──createHightideTheme──►  Theme  ──ThemeProvider──►  components
 ```
 
-Native `resolveColoringStyles` maps `InteractionState` → `Set<ElementState>` and calls `resolveStateBasedProperty` on `semantic.coloring[style][role]`.
+Native `resolveColoringStyles` maps `InteractionState` → `Set<ElementState>` and calls `resolveStateBasedProperty` on `semantic.colorSchemes[role][style]`.
 
 ## Package ownership
 
 | Concern | Package entry |
 | --- | --- |
 | Primitives | `/primitive` |
-| ThemeTokens, light/dark adapters, StateBasedProperty, coloring | `/theme` |
+| ThemeTokens, light/dark adapters, StateBasedProperty, color schemes | `/theme` |
 | Semantic mapper + typography | `/semantic` |
 | Component tokens + `toComponents` | `/components` |
 | `designSystem`, `constructThemeTokens`, helpers | `/design-system` |
@@ -93,5 +93,5 @@ Native `resolveColoringStyles` maps `InteractionState` → `Set<ElementState>` a
 
 - Do not skip layers: `toSemantic` / `toComponents` must never read color palettes.
 - All light/dark branching lives in `toLightThemeTokens` / `toDarkThemeTokens`.
-- Coloring is declarative at theme build time (including baked tonal alphas).
+- Color schemes are declarative at theme build time (including baked tonal alphas).
 - Prefer extending themes through context registration over branching inside components.

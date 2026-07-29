@@ -1,5 +1,5 @@
 import type { HightideColorPalettes } from '../primitive/color'
-import { createColoringTokens } from './coloring'
+import { createColorSchemes } from './coloring'
 import type { ToThemeTokensArgs } from './to-theme-tokens-args'
 import type {
   ThemeColorTokens,
@@ -102,7 +102,7 @@ export const toLightThemeTokens = ({
 
   return {
     color,
-    coloring: createColoringTokens(color),
+    colorSchemes: createColorSchemes(color),
     spacing: primitiveTokens.spacing,
     elements: primitiveTokens.elements,
     typography: toHightideThemeTypography(primitiveTokens.typography),

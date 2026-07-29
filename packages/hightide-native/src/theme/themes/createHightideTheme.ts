@@ -57,7 +57,7 @@ export const createHightideTheme = (
     shadow: tokens.semantic.shadow,
     motion: tokens.semantic.motion,
     components: {
-      coloring: tokens.semantic.coloring,
+      colorSchemes: tokens.semantic.colorSchemes,
       button: createButtonThemeFromDesign(tokens),
       iconButton: createIconButtonThemeFromDesign(tokens),
       chip: createChipThemeFromDesign(tokens),

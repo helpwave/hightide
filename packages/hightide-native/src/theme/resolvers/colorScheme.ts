@@ -4,8 +4,8 @@ import {
   type ButtonColoringStyle,
   type ChipColoringStyle,
   type ColorState,
+  type ColorSchemes,
   type ColoringStyle,
-  type ColoringTokens,
   type ColoringType,
   type ElementState
 } from '@helpwave/hightide-design/theme'
@@ -44,13 +44,13 @@ const interactionStatesToElementStates = (
 }
 
 export const resolveColoringStyles = (
-  coloring: ColoringTokens,
+  colorSchemes: ColorSchemes,
   color: ColoringType,
   coloringStyle: ColoringStyle,
   borderWidth: number,
   state: InteractionState = {}
 ): ResolvedColoringStyles => {
-  const pack = coloring[coloringStyle][color]
+  const pack = colorSchemes[color][coloringStyle]
   const resolved: ColorState = resolveStateBasedProperty(
     pack,
     interactionStatesToElementStates(state)

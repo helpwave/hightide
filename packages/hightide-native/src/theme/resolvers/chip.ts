@@ -6,7 +6,7 @@ import type {
 import type { ComponentTokens } from '@helpwave/hightide-design/components'
 import type { DesignSystemTokens as DesignTokensTheme } from '@helpwave/hightide-design/design-system'
 
-import { resolveColoringStyles } from './coloring'
+import { resolveColoringStyles } from './colorScheme'
 import type {
   ChipState,
   ChipTheme
@@ -15,14 +15,14 @@ import type { HightideComponentThemes } from '../types/components/hightide'
 import { createStyleResolver } from '../types/resolver'
 
 export type CreateChipThemeOptions = {
-  coloring: HightideComponentThemes['coloring'],
+  colorSchemes: HightideComponentThemes['colorSchemes'],
   layout: ComponentTokens['chip']['layout'],
   fontWeight: number,
   borderWidth: number,
 }
 
 export const createChipTheme = ({
-  coloring,
+  colorSchemes,
   layout,
   fontWeight,
   borderWidth,
@@ -32,7 +32,7 @@ export const createChipTheme = ({
     const color = state.color ?? 'neutral'
     const coloringStyle = state.coloringStyle ?? 'filled'
     const resolved = resolveColoringStyles(
-      coloring,
+      colorSchemes,
       color,
       coloringStyle,
       borderWidth,
@@ -73,7 +73,7 @@ export const createChipTheme = ({
 
 export const createChipThemeFromDesign = (theme: DesignTokensTheme): ChipTheme => {
   return createChipTheme({
-    coloring: theme.semantic.coloring,
+    colorSchemes: theme.semantic.colorSchemes,
     layout: theme.components.chip.layout,
     fontWeight: theme.semantic.typography.fontWeights.semibold,
     borderWidth: theme.semantic.border.base,
