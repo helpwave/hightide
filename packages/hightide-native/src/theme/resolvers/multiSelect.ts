@@ -63,7 +63,7 @@ export const createMultiSelectTheme = ({
     option: createStyleResolver((state: MultiSelectOptionState) => ({
       paddingHorizontal: 16,
       paddingVertical: 12,
-      backgroundColor: state.isHighlighted ? component.table.rowHoverBackground : semantic.transparent,
+      backgroundColor: state.isHighlighted ? semantic.surfaceHover : semantic.transparent,
       opacity: state.isDisabled ? 0.5 : 1,
       flexDirection: 'row',
       alignItems: 'center',

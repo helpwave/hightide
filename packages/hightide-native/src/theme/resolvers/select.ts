@@ -62,7 +62,7 @@ export const createSelectTheme = ({
     option: createStyleResolver((state: SelectOptionState) => ({
       paddingHorizontal: 16,
       paddingVertical: 12,
-      backgroundColor: state.isHighlighted ? component.table.rowHoverBackground : semantic.transparent,
+      backgroundColor: state.isHighlighted ? semantic.surfaceHover : semantic.transparent,
       opacity: state.isDisabled ? 0.5 : 1,
     })),
     optionText: createStyleResolver((state: SelectOptionState) => ({
