@@ -10,7 +10,7 @@ import {
 } from 'react-native'
 import type { LucideIcon } from 'lucide-react-native'
 
-import type { ElementSize } from '@helpwave/hightide-design/primitive'
+import type { ComponentSize } from '@helpwave/hightide-design/theme'
 import type {
   ColoringType,
   ButtonColoringStyle
@@ -24,14 +24,14 @@ import type {
 } from '../../theme/types/components/iconButton'
 import type { StyleOverwrite } from '../../theme/types/resolver'
 
-export type IconButtonSize = ElementSize
+export type IconButtonSize = ComponentSize
 
 export type IconButtonProps = Omit<PressableProps, 'children' | 'style'> & {
   size?: IconButtonSize,
   color?: ColoringType,
   coloringStyle?: ButtonColoringStyle,
   icon?: LucideIcon,
-  iconSize?: ElementSize,
+  iconSize?: ComponentSize,
   children?: ReactNode,
   accessibilityLabel: string,
   style?: StyleProp<ViewStyle>,

@@ -7,10 +7,6 @@ import {
   type ColorPrimitiveTokens
 } from './color'
 import {
-  hightideElements,
-  type ElementPrimitiveTokens
-} from './elements'
-import {
   hightideMotion,
   type MotionPrimitiveTokens
 } from './motion'
@@ -23,6 +19,10 @@ import {
   type ShadowPrimitiveTokens
 } from './shadow'
 import {
+  hightideSizes,
+  type SizePrimitiveTokens
+} from './size'
+import {
   hightideSpacing,
   type SpacingPrimitiveTokens
 } from './spacing'
@@ -34,7 +34,7 @@ import {
 export type PrimitiveTokens = {
   color: ColorPrimitiveTokens,
   spacing: SpacingPrimitiveTokens,
-  elements: ElementPrimitiveTokens,
+  sizes: SizePrimitiveTokens,
   typography: TypographyPrimitiveTokens,
   radius: RadiusPrimitiveTokens,
   border: BorderPrimitiveTokens,
@@ -45,7 +45,7 @@ export type PrimitiveTokens = {
 export const hightidePrimitiveTokens = {
   color: hightideColor,
   spacing: hightideSpacing,
-  elements: hightideElements,
+  sizes: hightideSizes,
   typography: hightideTypography,
   radius: hightideRadius,
   border: hightideBorder,

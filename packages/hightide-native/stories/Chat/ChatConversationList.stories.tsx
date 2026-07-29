@@ -27,7 +27,7 @@ const ConversationListDemo = () => {
     <View style={{ height: 420, maxWidth: 420 }}>
       <ChatConversationList
         header={(
-          <Text style={{ color: theme.components.colorSchemes.primary.text.base.foreground, fontSize: 20, fontWeight: '700' }}>
+          <Text style={{ color: theme.colorSchemes.primary.text.base.foreground, fontSize: 20, fontWeight: '700' }}>
             Chats
           </Text>
         )}

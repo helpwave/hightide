@@ -1,27 +1,12 @@
 import type { LucideIcon } from 'lucide-react-native'
 
-import type { ElementSize } from '@helpwave/hightide-design/primitive'
+import type { ComponentSize } from '@helpwave/hightide-design/theme'
 
 import { useTheme } from '../../global-contexts/theme/ThemeContext'
 
-const iconSizeFor = (size: ElementSize, spacing: Record<string, number>): number => {
-  switch (size) {
-  case 'xs':
-    return spacing.md
-  case 'sm':
-    return spacing.md + spacing.xs / 2
-  case 'md':
-    return spacing.lg
-  case 'lg':
-    return spacing.xl - spacing.xs
-  case 'xl':
-    return spacing.xl
-  }
-}
-
 export type IconProps = {
   icon: LucideIcon,
-  size?: ElementSize,
+  size?: ComponentSize,
   color?: string,
 }
 
@@ -31,11 +16,12 @@ export const Icon = ({
   color,
 }: IconProps) => {
   const { theme } = useTheme()
+  const iconToken = theme.components.icon[size]
 
   return (
     <IconComponent
-      size={iconSizeFor(size, theme.spacing)}
-      strokeWidth={theme.border.base}
+      size={iconToken.size}
+      strokeWidth={iconToken.strokeWidth}
       color={color}
     />
   )

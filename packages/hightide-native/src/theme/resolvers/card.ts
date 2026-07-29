@@ -2,13 +2,13 @@ import { StyleSheet } from 'react-native'
 
 import { hightideTypography } from '@helpwave/hightide-design/primitive'
 import type { DesignSystemTokens as DesignTokensTheme } from '@helpwave/hightide-design/design-system'
+import type { ColorSchemes } from '@helpwave/hightide-design/theme'
 
 import type { HightideSemanticColors } from '../types/color'
 import type {
   CardActionItemState,
   CardTheme
 } from '../types/components/card'
-import type { HightideComponentThemes } from '../types/components/hightide'
 import {
   createStyleResolver,
   createValueResolver
@@ -16,7 +16,7 @@ import {
 
 export type CreateCardThemeOptions = {
   semantic: HightideSemanticColors,
-  colorSchemes: HightideComponentThemes['colorSchemes'],
+  colorSchemes: ColorSchemes,
 }
 
 export const createCardTheme = ({

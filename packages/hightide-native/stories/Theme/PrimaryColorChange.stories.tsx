@@ -97,17 +97,17 @@ const PrimarySwatch = () => {
     <View style={{ gap: 8 }}>
       <View
         style={{
-          backgroundColor: theme.components.colorSchemes.primary.filled.base.background,
+          backgroundColor: theme.colorSchemes.primary.filled.base.background,
           borderRadius: 8,
           padding: 12,
         }}
       >
-        <Text style={{ color: theme.components.colorSchemes.primary.filled.base.foreground }}>
+        <Text style={{ color: theme.colorSchemes.primary.filled.base.foreground }}>
           primary / onPrimary
         </Text>
       </View>
       <Text style={{ color: theme.semantic.onBackground }}>
-        {`primary: ${theme.components.colorSchemes.primary.filled.base.background}`}
+        {`primary: ${theme.colorSchemes.primary.filled.base.background}`}
       </Text>
     </View>
   )

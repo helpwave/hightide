@@ -10,6 +10,7 @@ import type {
   TypographyTokens
 } from '@helpwave/hightide-design/semantic'
 import type { DesignSystemTokens as DesignTokensTheme } from '@helpwave/hightide-design/design-system'
+import type { ColorSchemes } from '@helpwave/hightide-design/theme'
 
 import { resolveColoringStyles } from './colorScheme'
 import type {
@@ -25,7 +26,6 @@ import type {
   AvatarWithLabelState,
   AvatarWithStatusState
 } from '../types/components/avatar'
-import type { HightideComponentThemes } from '../types/components/hightide'
 import { createStyleResolver } from '../types/resolver'
 
 const avatarFontWeights: Record<'xs' | 'sm' | 'md' | 'lg' | 'xl', 'semibold' | 'bold'> = {
@@ -38,7 +38,7 @@ const avatarFontWeights: Record<'xs' | 'sm' | 'md' | 'lg' | 'xl', 'semibold' | '
 
 const statusColor = (
   status: AvatarStatus,
-  colorSchemes: HightideComponentThemes['colorSchemes'],
+  colorSchemes: ColorSchemes,
   gray: ColorPalette
 ): string => {
   switch (status) {
@@ -57,7 +57,7 @@ const statusColor = (
 
 export type CreateAvatarThemeOptions = {
   semantic: HightideSemanticColors,
-  colorSchemes: HightideComponentThemes['colorSchemes'],
+  colorSchemes: ColorSchemes,
   gray: ColorPalette,
   typography: TypographyTokens,
   avatar: ComponentTokens['avatar'],
@@ -244,7 +244,7 @@ export const createAvatarThemeFromDesign = (
 ): AvatarTheme => {
   return createAvatarTheme({
     semantic: theme.semantic.colors,
-    colorSchemes: theme.semantic.colorSchemes as HightideComponentThemes['colorSchemes'],
+    colorSchemes: theme.semantic.colorSchemes as ColorSchemes,
     gray: colors.gray,
     typography: theme.semantic.typography,
     avatar: theme.components.avatar,

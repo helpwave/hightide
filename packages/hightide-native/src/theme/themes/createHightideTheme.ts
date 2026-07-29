@@ -49,15 +49,15 @@ export const createHightideTheme = (
   return {
     colors,
     semantic: tokens.semantic.colors,
+    colorSchemes: tokens.semantic.colorSchemes,
     typography: tokens.semantic.typography,
     spacing: tokens.semantic.spacing,
-    elements: tokens.semantic.elements,
+    elements: tokens.semantic.elementLayout,
     radius: tokens.semantic.radius,
     border: tokens.semantic.border,
     shadow: tokens.semantic.shadow,
     motion: tokens.semantic.motion,
     components: {
-      colorSchemes: tokens.semantic.colorSchemes,
       button: createButtonThemeFromDesign(tokens),
       iconButton: createIconButtonThemeFromDesign(tokens),
       chip: createChipThemeFromDesign(tokens),
@@ -69,6 +69,7 @@ export const createHightideTheme = (
       chat: createChatThemeFromDesign(tokens),
       card: createCardThemeFromDesign(tokens),
       avatar: createAvatarThemeFromDesign(tokens, { gray: colors.gray }),
+      icon: tokens.components.icon,
     },
   }
 }

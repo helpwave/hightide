@@ -1,5 +1,9 @@
-import type { ElementSize } from '../primitive/elements'
-import type { SemanticTokens } from '../semantic/to-semantic'
+import type { SemanticTokens } from '../semantic/semantic-tokens'
+import type {
+  ComponentSize,
+  ComponentSizeBasic
+} from '../theme/layout'
+import { componentSizes } from '../theme/layout'
 import type {
   ComponentElementLayout,
   ComponentTokens
@@ -9,17 +13,7 @@ export type ToComponentsArgs<Tokens extends SemanticTokens = SemanticTokens> = {
   semanticTokens: Tokens,
 }
 
-const elementSizes: ElementSize[] = ['xs', 'sm', 'md', 'lg', 'xl']
-
-const buttonMinWidths: Record<ElementSize, number> = {
-  xs: 80,
-  sm: 112,
-  md: 144,
-  lg: 180,
-  xl: 200,
-}
-
-const buttonFontSizes: Record<ElementSize, number> = {
+const buttonFontSizes: Record<ComponentSize, number> = {
   xs: 12,
   sm: 14,
   md: 14,
@@ -27,7 +21,7 @@ const buttonFontSizes: Record<ElementSize, number> = {
   xl: 20,
 }
 
-const radiusKeyFor = (size: ElementSize): 'xs' | 'sm' | 'md' | 'lg' => {
+const radiusKeyFor = (size: ComponentSize): 'xs' | 'sm' | 'md' | 'lg' => {
   if (size === 'xl') {
     return 'lg'
   }
@@ -37,11 +31,17 @@ const radiusKeyFor = (size: ElementSize): 'xs' | 'sm' | 'md' | 'lg' => {
   return size
 }
 
-const chipRadiusKeyFor = (size: ElementSize): 'xs' | 'sm' | 'md' => {
+const chipRadiusKeyFor = (size: ComponentSize): 'xs' | 'sm' | 'md' => {
   if (size === 'xl' || size === 'lg') {
     return 'md'
   }
   return size
+}
+
+const checkboxControlSize: Record<ComponentSizeBasic, ComponentSize> = {
+  sm: 'xs',
+  md: 'sm',
+  lg: 'md',
 }
 
 export const toHightideComponentTokens = ({
@@ -50,13 +50,11 @@ export const toHightideComponentTokens = ({
   const colors = semanticTokens.colors
   const colorSchemes = semanticTokens.colorSchemes
   const semantic = semanticTokens
+  const control = semantic.elementLayout.control
 
   const element = Object.fromEntries(
-    elementSizes.map((size) => {
-      const token = semantic.elements[size]
-      const horizontalInset = size === 'xs' || size === 'sm'
-        ? token.inset + semantic.spacing.xs
-        : token.inset + semantic.spacing.md
+    componentSizes.map((size) => {
+      const token = control[size]
       const gap = size === 'xs' || size === 'sm' ? semantic.spacing.xs : semantic.spacing.sm
 
       return [size, {
@@ -65,36 +63,23 @@ export const toHightideComponentTokens = ({
         border: token.border,
         radius: Number(semantic.radius[radiusKeyFor(size)]),
         gap,
-        horizontalInset,
-        minWidth: buttonMinWidths[size],
+        horizontalInset: token.horizontalContentPadding ?? token.inset,
+        minWidth: token.minimumWidth ?? token.size,
         fontSize: buttonFontSizes[size],
       } satisfies ComponentElementLayout]
     })
-  ) as Record<ElementSize, ComponentElementLayout>
+  ) as Record<ComponentSize, ComponentElementLayout>
 
   const icon = Object.fromEntries(
-    elementSizes.map((size) => {
-      let iconSize = semantic.spacing.md
-      if (size === 'sm') {
-        iconSize = semantic.spacing.md + semantic.spacing.xs / 2
-      } else if (size === 'md') {
-        iconSize = semantic.spacing.lg
-      } else if (size === 'lg') {
-        iconSize = semantic.spacing.xl - semantic.spacing.xs
-      } else if (size === 'xl') {
-        iconSize = semantic.spacing.xl
-      }
-
-      return [size, {
-        size: iconSize,
-        strokeWidth: semantic.border.base,
-      }]
-    })
+    componentSizes.map((size) => [size, {
+      size: semantic.icon[size].size,
+      strokeWidth: semantic.border.base,
+    }])
   ) as ComponentTokens['icon']
 
   const avatar = Object.fromEntries(
-    elementSizes.map((size) => {
-      const dimension = semantic.elements[size].size - semantic.spacing.xs
+    componentSizes.map((size) => {
+      const dimension = control[size].size - semantic.spacing.xs
       let avatarFontSize = Number(semantic.typography.scales.body.large.fontSize)
       if (size === 'xs' || size === 'sm') {
         avatarFontSize = Number(semantic.typography.scales.caption.small.fontSize)
@@ -104,7 +89,7 @@ export const toHightideComponentTokens = ({
 
       return [size, {
         size: dimension,
-        padding: Math.max(Math.round(semantic.elements[size].inset / 2), 2),
+        padding: Math.max(Math.round(control[size].inset / 2), 2),
         fontSize: avatarFontSize,
         statusDotSize: Math.round(dimension / 2),
         statusDotBorderWidth: size === 'xs' ? semantic.border.thin + 0.5 : semantic.border.base,
@@ -113,7 +98,7 @@ export const toHightideComponentTokens = ({
   ) as ComponentTokens['avatar']
 
   const chipLayout = Object.fromEntries(
-    elementSizes.map((size) => {
+    componentSizes.map((size) => {
       const token = element[size]
       return [size, {
         ...token,
@@ -124,7 +109,16 @@ export const toHightideComponentTokens = ({
         radius: Number(semantic.radius[chipRadiusKeyFor(size)]),
       } satisfies ComponentElementLayout]
     })
-  ) as Record<ElementSize, ComponentElementLayout>
+  ) as Record<ComponentSize, ComponentElementLayout>
+
+  const checkboxLayout = Object.fromEntries(
+    (['sm', 'md', 'lg'] as const).map((size) => {
+      const controlSize = checkboxControlSize[size]
+      return [size, control[controlSize]]
+    })
+  ) as ComponentTokens['checkbox']['layout']
+
+  const inputControl = control.md
 
   return {
     button: {
@@ -137,14 +131,19 @@ export const toHightideComponentTokens = ({
       layout: chipLayout,
     },
     input: {
-      ...element.md,
-      horizontalInset: semantic.spacing.md,
+      size: inputControl.size,
       inset: semantic.spacing.sm,
-      radius: Number(semantic.radius.sm),
       border: semantic.border.thin,
+      radius: Number(semantic.radius.sm),
+      gap: semantic.spacing.sm,
+      horizontalInset: semantic.spacing.md,
+      minWidth: inputControl.minimumWidth ?? inputControl.size,
       fontSize: Number(semantic.typography.scales.label.medium.fontSize),
       background: colors.surfaceVariant,
       text: colors.onSurface,
+    },
+    checkbox: {
+      layout: checkboxLayout,
     },
     menu: {
       background: colors.surfaceVariant,

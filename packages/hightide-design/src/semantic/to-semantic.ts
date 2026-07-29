@@ -1,52 +1,37 @@
 import type { ThemeTokens } from '../theme/theme-tokens'
-import type { BorderTokens } from '../theme/border'
-import type { ColorSchemes } from '../theme/color-scheme'
-import {
-  type HightideSemanticColorTokens
-} from './hightide'
-import {
-  toHightideElevationShadow,
-  type ElevationShadowTokens
-} from './shadow'
-import {
-  createTypographyTokens,
-  type TypographyTokens
-} from './typography'
-import type { ElementPrimitiveTokens } from '../primitive/elements'
-import type { MotionPrimitiveTokens } from '../primitive/motion'
-import type { RadiusPrimitiveTokens } from '../primitive/radius'
-import type { SpacingPrimitiveTokens } from '../primitive/spacing'
-
-export type SemanticTokens = {
-  colors: HightideSemanticColorTokens,
-  colorSchemes: ColorSchemes,
-  typography: TypographyTokens,
-  spacing: SpacingPrimitiveTokens,
-  elements: ElementPrimitiveTokens,
-  radius: RadiusPrimitiveTokens,
-  border: BorderTokens,
-  shadow: ElevationShadowTokens,
-  motion: MotionPrimitiveTokens,
-}
+import type { SemanticColorTokens } from './color'
+import { toHightideElementLayoutFromTheme } from './element-layout'
+import { toHightideElevationShadow } from './shadow'
+import type { SemanticTokens } from './semantic-tokens'
+import { createTypographyTokens } from './typography'
 
 export type ToSemanticArgs<Tokens extends ThemeTokens = ThemeTokens> = {
   themeTokens: Tokens,
 }
 
-const toSemanticColors = (themeColors: ThemeTokens['color']): HightideSemanticColorTokens => {
+const toSemanticColors = (themeColors: ThemeTokens['color']): SemanticColorTokens => {
   return { ...themeColors }
 }
 
 export const toHightideSemanticTokens = ({
   themeTokens,
-}: ToSemanticArgs): SemanticTokens => ({
-  colors: toSemanticColors(themeTokens.color),
-  colorSchemes: themeTokens.colorSchemes,
-  typography: createTypographyTokens(themeTokens.typography),
-  spacing: themeTokens.spacing,
-  elements: themeTokens.elements,
-  radius: themeTokens.radius,
-  border: themeTokens.border,
-  shadow: toHightideElevationShadow(themeTokens.shadow),
-  motion: themeTokens.motion,
-})
+}: ToSemanticArgs): SemanticTokens => {
+  const {
+    elementLayout,
+    border,
+    icon,
+  } = toHightideElementLayoutFromTheme(themeTokens)
+
+  return {
+    colors: toSemanticColors(themeTokens.color),
+    colorSchemes: themeTokens.colorSchemes,
+    typography: createTypographyTokens(themeTokens.typography),
+    spacing: themeTokens.spacing,
+    elementLayout,
+    icon,
+    radius: themeTokens.radius,
+    border,
+    shadow: toHightideElevationShadow(themeTokens.shadow),
+    motion: themeTokens.motion,
+  }
+}

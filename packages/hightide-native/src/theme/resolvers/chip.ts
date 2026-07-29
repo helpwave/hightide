@@ -5,17 +5,17 @@ import type {
 
 import type { ComponentTokens } from '@helpwave/hightide-design/components'
 import type { DesignSystemTokens as DesignTokensTheme } from '@helpwave/hightide-design/design-system'
+import type { ColorSchemes } from '@helpwave/hightide-design/theme'
 
 import { resolveColoringStyles } from './colorScheme'
 import type {
   ChipState,
   ChipTheme
 } from '../types/components/chip'
-import type { HightideComponentThemes } from '../types/components/hightide'
 import { createStyleResolver } from '../types/resolver'
 
 export type CreateChipThemeOptions = {
-  colorSchemes: HightideComponentThemes['colorSchemes'],
+  colorSchemes: ColorSchemes,
   layout: ComponentTokens['chip']['layout'],
   fontWeight: number,
   borderWidth: number,

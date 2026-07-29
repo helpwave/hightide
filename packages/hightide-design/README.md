@@ -15,14 +15,15 @@ There is **no package root export**. Import from folder entry points:
 ```ts
 import {
   hightidePrimitiveTokens,
-  type ElementSize,
   type PrimitiveTokens,
+  type SizeStep,
 } from "@helpwave/hightide-design/primitive";
 import {
   toLightThemeTokens,
   toDarkThemeTokens,
   resolveStateBasedProperty,
   type ThemeTokens,
+  type ComponentSize,
 } from "@helpwave/hightide-design/theme";
 import { toHightideSemanticTokens } from "@helpwave/hightide-design/semantic";
 import { toHightideComponentTokens } from "@helpwave/hightide-design/components";
@@ -38,14 +39,15 @@ const light = designSystem.themes.light;
 const background = light.semantic.colors.background;
 const filledPrimary = light.semantic.colorSchemes.primary.filled;
 const buttonHeight = light.components.button.layout.md.size;
+const controlMd = light.semantic.elementLayout.control.md;
 const translucent = HexColorUtils.hexWithAlpha(background, 0.5);
 ```
 
 | Subpath | Contents |
 | --- | --- |
-| `@helpwave/hightide-design/primitive` | Structured `PrimitiveTokens` |
-| `@helpwave/hightide-design/theme` | `ThemeTokens`, light/dark theme adapters, `StateBasedProperty`, color schemes |
-| `@helpwave/hightide-design/semantic` | Semantic mapper (pruned `colors` + `colorSchemes` + composed typography) |
+| `@helpwave/hightide-design/primitive` | Structured `PrimitiveTokens` (incl. `sizes` 0…160/4, `border` 0…10) |
+| `@helpwave/hightide-design/theme` | `ThemeTokens`, light/dark adapters, layout roles (`size`/`padding`/`border` xs…xl), `StateBasedProperty`, color schemes |
+| `@helpwave/hightide-design/semantic` | Semantic mapper (`elementLayout`, `SemanticBorderTokens`, `icon`, pruned colors + schemes) |
 | `@helpwave/hightide-design/components` | Component colors/layouts + `toHightideComponentTokens` |
 | `@helpwave/hightide-design/design-system` | `designSystem`, `constructThemeTokens`, coloring helpers |
 | `@helpwave/hightide-design/utils` | `HexColorUtils` |
@@ -55,7 +57,7 @@ const translucent = HexColorUtils.hexWithAlpha(background, 0.5);
 ```text
 PrimitiveTokens
       │
-      ▼  toLightThemeTokens / toDarkThemeTokens   // @theme — palettes + color schemes + border roles
+      ▼  toLightThemeTokens / toDarkThemeTokens   // @theme — palettes + color schemes + layout roles
 ThemeTokens
       │
       ▼  toSemantic({ themeTokens })               // @semantic
@@ -76,7 +78,11 @@ semantic.colorSchemes.neutral.outline
 
 `semantic.colors` is a pruned set (surfaces, chrome, disabled, component inputs). Role colors (`primary`, `secondary`, …) live only on `ThemeTokens.color` as scheme build inputs and are exposed to consumers via `semantic.colorSchemes`.
 
-Primitive `border` is steps `0…10`; theme maps to `thin | base | thick` (1 / 2 / 4); semantic passthroughs that scale for components.
+Layout layers:
+
+- Primitive `sizes` steps `0…160` (step 4); primitive `border` steps `0…10`
+- Theme `size` / `padding` / `paddingExtension` / `border` as `ComponentSize` (`xs…xl`) roles
+- Semantic `elementLayout.control|container`, `border` as `thin|base|thick` (from theme `xs`/`md`/`xl`), `icon.size = control.size - 2 * control.inset`
 
 `ColorState` = `{ background, foreground, border }`. Resolve with `resolveStateBasedProperty(property, states)` in order `base → focused → hover → pressed → disabled`.
 
@@ -85,8 +91,8 @@ Primitive `border` is steps `0…10`; theme maps to `thin | base | thick` (1 / 2
 ```
 src/
   primitive/
-  theme/           ThemeTokens, light/dark adapters, StateBasedProperty, color schemes
-  semantic/        toSemantic + typography
+  theme/           ThemeTokens, light/dark adapters, StateBasedProperty, color schemes, layout roles
+  semantic/        toSemantic + typography + elementLayout + icon
   components/      toComponents + component colors/layouts
   design-system/   designSystem assembly + constructThemeTokens
   utils/           HexColorUtils

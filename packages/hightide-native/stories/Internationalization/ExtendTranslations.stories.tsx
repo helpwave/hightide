@@ -97,7 +97,7 @@ const DemoStrings = ({ showWelcome = false }: { showWelcome?: boolean }) => {
         {translation('featureHint')}
       </Text>
       {showWelcome ? (
-        <Text style={{ color: theme.components.colorSchemes.primary.text.base.foreground }}>
+        <Text style={{ color: theme.colorSchemes.primary.text.base.foreground }}>
           {translation('welcome')}
         </Text>
       ) : null}

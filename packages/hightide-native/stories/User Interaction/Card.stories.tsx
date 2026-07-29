@@ -52,7 +52,7 @@ const CardDemo = () => {
           <CardItem label="Practice" value="Praxis am Park" />
           <CardNavigationItem
             label="Practice details"
-            leading={<Building2 size={18} color={theme.components.colorSchemes.primary.text.base.foreground} />}
+            leading={<Building2 size={18} color={theme.colorSchemes.primary.text.base.foreground} />}
             onPress={action('practice-details')}
           />
         </Card>
@@ -65,7 +65,7 @@ const CardDemo = () => {
         <Card>
           <CardActionItem
             label="Notifications"
-            leading={<Bell size={18} color={theme.components.colorSchemes.primary.text.base.foreground} />}
+            leading={<Bell size={18} color={theme.colorSchemes.primary.text.base.foreground} />}
             trailing={(
               <Switch
                 value={true}
@@ -75,13 +75,13 @@ const CardDemo = () => {
           />
           <CardNavigationItem
             label="Account"
-            leading={<UserRound size={18} color={theme.components.colorSchemes.primary.text.base.foreground} />}
+            leading={<UserRound size={18} color={theme.colorSchemes.primary.text.base.foreground} />}
             onPress={action('account')}
           />
           <CardActionItem
             label="Log out"
             danger
-            leading={<LogOut size={18} color={theme.components.colorSchemes.negative.text.base.foreground} />}
+            leading={<LogOut size={18} color={theme.colorSchemes.negative.text.base.foreground} />}
             onPress={action('logout')}
           />
         </Card>

@@ -12,13 +12,13 @@ This document describes how hightide structures design tokens, how they are asse
 ## Token layers
 
 ```text
-PrimitiveTokens
+PrimitiveTokens   // sizes 0…160/4, border 0…10
       │
       ▼  toLightThemeTokens / toDarkThemeTokens   // only layer that reads palettes
-ThemeTokens   // includes color + colorSchemes (StateBasedProperty packs)
+ThemeTokens   // color + colorSchemes + size/padding/paddingExtension/border (xs…xl)
       │
       ▼  toSemantic({ themeTokens })
-SemanticTokens
+SemanticTokens   // elementLayout, SemanticBorderTokens, icon, pruned colors + schemes
       │
       ▼  toComponents({ semanticTokens })
 ComponentTokens
@@ -44,13 +44,15 @@ designSystem = {
 
 Raw, mode-agnostic building blocks under `@helpwave/hightide-design/primitive`.
 
+Includes `sizes` (`0…160`, step 4) and `border` (`0…10`). There is no primitive `elements` map.
+
 ### 2. ThemeTokens
 
 Produced by `toLightThemeTokens` / `toDarkThemeTokens` (`@helpwave/hightide-design/theme`):
 
-- `color` — `HightideSemanticColorTokens` + `ThemeRoleColorTokens` (role inputs for schemes)
+- `color` — `SemanticColorTokens` + `ThemeRoleColorTokens` (role inputs for schemes)
 - `colorSchemes` — role → style → `StateBasedProperty<ColorState>` packs (`filled`, `outline`, `tonal`, `tonal-outline`, `text`)
-- `border` — `thin | base | thick`, mapped from primitive steps `0…10` (`1` → thin, `2` → base, `4` → thick)
+- `size` / `padding` / `paddingExtension` / `border` — each `Record<ComponentSize, number>` (`xs…xl`); theme `border` is size roles only (not `thin|base|thick`)
 - `typography.fontFamily` — remapped roles `default` / `accent` / `mono` from primitive font registry
 - Other non-color scales passthrough from primitives
 
@@ -58,11 +60,22 @@ Produced by `toLightThemeTokens` / `toDarkThemeTokens` (`@helpwave/hightide-desi
 
 ### 3. SemanticTokens
 
-From `toHightideSemanticTokens` — pick pruned `colors` from theme (no role scheme inputs); passthrough `colorSchemes` and `border`; compose typography; passthrough other non-color scales.
+From `toHightideSemanticTokens`:
+
+- pruned `colors` from theme (no role scheme inputs); passthrough `colorSchemes`
+- `elementLayout: { control, container }` from theme size/padding/paddingExtension/border
+- `border: SemanticBorderTokens` (`thin ← xs`, `base ← md`, `thick ← xl`)
+- `icon: IconThemeTokens` where `size = control.size - 2 * control.inset`
+- compose typography; passthrough spacing/radius/shadow/motion
 
 ### 4. ComponentTokens
 
 From `toHightideComponentTokens` (`@helpwave/hightide-design/components`) — colors + layouts from semantic only.
+
+- button / iconButton / chip: full `ComponentSize` from `elementLayout.control` (chip adjusted)
+- input: single layout from `control.md`
+- checkbox: `ComponentSizeBasic` mapped one step down (`sm→xs`, `md→sm`, `lg→md`)
+- icon: `semantic.icon` sizes + `semantic.border.base` stroke
 
 ### 5. DesignSystemTokens
 
@@ -76,7 +89,7 @@ From `toHightideComponentTokens` (`@helpwave/hightide-design/components`) — co
 DesignSystemTokens  ──createHightideTheme──►  Theme  ──ThemeProvider──►  components
 ```
 
-Native `resolveColoringStyles` maps `InteractionState` → `Set<ElementState>` and calls `resolveStateBasedProperty` on `semantic.colorSchemes[role][style]`.
+Native `resolveColoringStyles` maps `InteractionState` → `Set<ElementState>` and calls `resolveStateBasedProperty` on `theme.colorSchemes[role][style]`.
 
 ## Package ownership
 

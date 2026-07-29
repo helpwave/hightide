@@ -1,6 +1,6 @@
 import type { ViewStyle } from 'react-native'
 
-import type { ElementSize } from '@helpwave/hightide-design/primitive'
+import type { ComponentSize } from '@helpwave/hightide-design/theme'
 import type {
   ColoringType,
   ButtonColoringStyle
@@ -13,7 +13,7 @@ import type {
 } from '../resolver'
 
 export type IconButtonState = InteractionState & {
-  size?: ElementSize,
+  size?: ComponentSize,
   color?: ColoringType,
   coloringStyle?: ButtonColoringStyle,
 }

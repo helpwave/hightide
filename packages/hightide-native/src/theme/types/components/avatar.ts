@@ -4,29 +4,29 @@ import type {
   ViewStyle
 } from 'react-native'
 
-import type { ElementSize } from '@helpwave/hightide-design/primitive'
+import type { ComponentSize } from '@helpwave/hightide-design/theme'
 
 import type { StyleResolverFunction } from '../resolver'
 
 export type AvatarStatus = 'online' | 'offline' | 'away' | 'busy' | 'unknown'
 
 export type AvatarState = {
-  size?: ElementSize,
+  size?: ComponentSize,
   isGrouped?: boolean,
   groupIndex?: number,
 }
 
 export type AvatarWithStatusState = {
-  size?: ElementSize,
+  size?: ComponentSize,
   status?: AvatarStatus,
 }
 
 export type AvatarWithLabelState = {
-  size?: ElementSize,
+  size?: ComponentSize,
 }
 
 export type AvatarGroupState = {
-  size?: ElementSize,
+  size?: ComponentSize,
   count?: number,
 }
 

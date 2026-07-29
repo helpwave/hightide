@@ -1,6 +1,6 @@
 import type { ComponentTokens } from '../components/component-tokens'
 import type { PrimitiveTokens } from '../primitive/primitive-tokens'
-import type { SemanticTokens } from '../semantic/to-semantic'
+import type { SemanticTokens } from '../semantic/semantic-tokens'
 
 export type DesignSystemTokens = {
   semantic: SemanticTokens,

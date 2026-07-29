@@ -5,6 +5,7 @@ import type {
 
 import type { ComponentTokens } from '@helpwave/hightide-design/components'
 import type { DesignSystemTokens as DesignTokensTheme } from '@helpwave/hightide-design/design-system'
+import type { ColorSchemes } from '@helpwave/hightide-design/theme'
 
 import {
   isOutlineColoringStyle,
@@ -14,11 +15,10 @@ import type {
   ButtonState,
   ButtonTheme
 } from '../types/components/button'
-import type { HightideComponentThemes } from '../types/components/hightide'
 import { createStyleResolver } from '../types/resolver'
 
 export type CreateButtonThemeOptions = {
-  colorSchemes: HightideComponentThemes['colorSchemes'],
+  colorSchemes: ColorSchemes,
   layout: ComponentTokens['button']['layout'],
   fontWeight: number,
   borderWidth: number,

@@ -1,5 +1,9 @@
 import type { ColorToken } from '../primitive/color'
-import type { ElementSize } from '../primitive/elements'
+import type {
+  ComponentSize,
+  ComponentSizeBasic
+} from '../theme/layout'
+import type { ControlElementLayoutToken } from '../semantic/element-layout'
 
 export type ComponentElementLayout = {
   size: number,
@@ -14,17 +18,20 @@ export type ComponentElementLayout = {
 
 export type ComponentTokens = {
   button: {
-    layout: Record<ElementSize, ComponentElementLayout>,
+    layout: Record<ComponentSize, ComponentElementLayout>,
   },
   iconButton: {
-    layout: Record<ElementSize, ComponentElementLayout>,
+    layout: Record<ComponentSize, ComponentElementLayout>,
   },
   chip: {
-    layout: Record<ElementSize, ComponentElementLayout>,
+    layout: Record<ComponentSize, ComponentElementLayout>,
   },
   input: ComponentElementLayout & {
     background: ColorToken,
     text: ColorToken,
+  },
+  checkbox: {
+    layout: Record<ComponentSizeBasic, ControlElementLayoutToken>,
   },
   menu: {
     background: ColorToken,
@@ -46,8 +53,8 @@ export type ComponentTokens = {
     },
     borderColor: ColorToken,
   },
-  icon: Record<ElementSize, { size: number, strokeWidth: number }>,
-  avatar: Record<ElementSize, {
+  icon: Record<ComponentSize, { size: number, strokeWidth: number }>,
+  avatar: Record<ComponentSize, {
     size: number,
     padding: number,
     fontSize: number,

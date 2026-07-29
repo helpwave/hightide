@@ -6,6 +6,7 @@ import {
 
 import { hightideTypography } from '@helpwave/hightide-design/primitive'
 import type { DesignSystemTokens as DesignTokensTheme } from '@helpwave/hightide-design/design-system'
+import type { ColorSchemes } from '@helpwave/hightide-design/theme'
 import { HexColorUtils } from '@helpwave/hightide-design/utils'
 
 import type {
@@ -21,7 +22,6 @@ import type {
   ChatSystemLineState,
   ChatTheme
 } from '../types/components/chat'
-import type { HightideComponentThemes } from '../types/components/hightide'
 import {
   createStyleResolver,
   createValueResolver
@@ -29,7 +29,7 @@ import {
 
 export type CreateChatThemeOptions = {
   semantic: HightideSemanticColors,
-  colorSchemes: HightideComponentThemes['colorSchemes'],
+  colorSchemes: ColorSchemes,
 }
 
 export const createChatTheme = ({
@@ -407,6 +407,6 @@ export const createChatTheme = ({
 export const createChatThemeFromDesign = (theme: DesignTokensTheme): ChatTheme => {
   return createChatTheme({
     semantic: theme.semantic.colors,
-    colorSchemes: theme.semantic.colorSchemes as HightideComponentThemes['colorSchemes'],
+    colorSchemes: theme.semantic.colorSchemes as ColorSchemes,
   })
 }
