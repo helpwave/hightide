@@ -1,5 +1,4 @@
 import type { BorderPrimitiveTokens } from '../primitive/border'
-import type { BreakpointPrimitiveTokens } from '../primitive/breakpoint'
 import type { ElementPrimitiveTokens } from '../primitive/elements'
 import type { MotionPrimitiveTokens } from '../primitive/motion'
 import type { RadiusPrimitiveTokens } from '../primitive/radius'
@@ -21,5 +20,4 @@ export type ThemeTokens = {
   border: BorderPrimitiveTokens,
   shadow: ShadowPrimitiveTokens,
   motion: MotionPrimitiveTokens,
-  breakpoint: BreakpointPrimitiveTokens,
 }

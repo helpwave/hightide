@@ -3,10 +3,6 @@ import {
   type BorderPrimitiveTokens
 } from './border'
 import {
-  hightideBreakpoint,
-  type BreakpointPrimitiveTokens
-} from './breakpoint'
-import {
   hightideColor,
   type ColorPrimitiveTokens
 } from './color'
@@ -44,7 +40,6 @@ export type PrimitiveTokens = {
   border: BorderPrimitiveTokens,
   shadow: ShadowPrimitiveTokens,
   motion: MotionPrimitiveTokens,
-  breakpoint: BreakpointPrimitiveTokens,
 }
 
 export const hightidePrimitiveTokens = {
@@ -56,5 +51,4 @@ export const hightidePrimitiveTokens = {
   border: hightideBorder,
   shadow: hightideShadow,
   motion: hightideMotion,
-  breakpoint: hightideBreakpoint,
 } as const satisfies PrimitiveTokens

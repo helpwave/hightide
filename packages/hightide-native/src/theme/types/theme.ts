@@ -5,7 +5,6 @@ import type {
 import type { HightideComponentThemes } from './components/hightide'
 import type {
   HightideBorder,
-  HightideBreakpoint,
   HightideElements,
   HightideMotion,
   HightideRadius,
@@ -21,7 +20,6 @@ export type Theme = {
   typography: Record<string, unknown>,
   spacing: Record<string, unknown>,
   elements: Record<string, unknown>,
-  breakpoint: Record<string, unknown>,
   radius: Record<string, unknown>,
   border: Record<string, unknown>,
   shadow: Record<string, unknown>,
@@ -35,7 +33,6 @@ export type HightideTheme = Theme & {
   typography: HightideTypography & Theme['typography'],
   spacing: HightideSpacing & Theme['spacing'],
   elements: HightideElements & Theme['elements'],
-  breakpoint: HightideBreakpoint & Theme['breakpoint'],
   radius: HightideRadius & Theme['radius'],
   border: HightideBorder & Theme['border'],
   shadow: HightideShadow & Theme['shadow'],

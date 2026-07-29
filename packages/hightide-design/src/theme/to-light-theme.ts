@@ -109,6 +109,5 @@ export const toLightThemeTokens = ({
     border: primitiveTokens.border,
     shadow: primitiveTokens.shadow,
     motion: primitiveTokens.motion,
-    breakpoint: primitiveTokens.breakpoint,
   }
 }

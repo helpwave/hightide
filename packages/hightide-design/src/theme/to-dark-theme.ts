@@ -108,6 +108,5 @@ export const toDarkThemeTokens = ({
     border: primitiveTokens.border,
     shadow: primitiveTokens.shadow,
     motion: primitiveTokens.motion,
-    breakpoint: primitiveTokens.breakpoint,
   }
 }

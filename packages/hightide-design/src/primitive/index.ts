@@ -1,5 +1,4 @@
 export * from './border'
-export * from './breakpoint'
 export * from './color'
 export * from './elements'
 export * from './motion'

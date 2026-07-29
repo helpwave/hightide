@@ -52,7 +52,6 @@ export const createHightideTheme = (
     typography: tokens.semantic.typography,
     spacing: tokens.semantic.spacing,
     elements: tokens.semantic.elements,
-    breakpoint: tokens.semantic.breakpoint,
     radius: tokens.semantic.radius,
     border: tokens.semantic.border,
     shadow: tokens.semantic.shadow,

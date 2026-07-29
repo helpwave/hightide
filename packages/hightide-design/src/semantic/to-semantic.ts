@@ -6,7 +6,6 @@ import {
   type TypographyTokens
 } from './typography'
 import type { BorderPrimitiveTokens } from '../primitive/border'
-import type { BreakpointPrimitiveTokens } from '../primitive/breakpoint'
 import type { ElementPrimitiveTokens } from '../primitive/elements'
 import type { MotionPrimitiveTokens } from '../primitive/motion'
 import type { RadiusPrimitiveTokens } from '../primitive/radius'
@@ -19,7 +18,6 @@ export type SemanticTokens = {
   typography: TypographyTokens,
   spacing: SpacingPrimitiveTokens,
   elements: ElementPrimitiveTokens,
-  breakpoint: BreakpointPrimitiveTokens,
   radius: RadiusPrimitiveTokens,
   border: BorderPrimitiveTokens,
   shadow: ShadowPrimitiveTokens,
@@ -38,7 +36,6 @@ export const toHightideSemanticTokens = ({
   typography: createTypographyTokens(themeTokens.typography),
   spacing: themeTokens.spacing,
   elements: themeTokens.elements,
-  breakpoint: themeTokens.breakpoint,
   radius: themeTokens.radius,
   border: themeTokens.border,
   shadow: themeTokens.shadow,

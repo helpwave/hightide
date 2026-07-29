@@ -1,6 +1,5 @@
 import type {
   BorderPrimitiveTokens,
-  BreakpointPrimitiveTokens,
   ElementPrimitiveTokens,
   ElementSize,
   MotionPrimitiveTokens,
@@ -13,7 +12,6 @@ export type { ElementSize }
 
 export type HightideSpacing = SpacingPrimitiveTokens
 export type HightideElements = ElementPrimitiveTokens
-export type HightideBreakpoint = BreakpointPrimitiveTokens
 export type HightideRadius = RadiusPrimitiveTokens
 export type HightideBorder = BorderPrimitiveTokens
 export type HightideShadow = ShadowPrimitiveTokens
