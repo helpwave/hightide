@@ -1,7 +1,7 @@
 import type { ThemeTokens } from '../theme/theme-tokens'
+import type { BorderTokens } from '../theme/border'
 import type { ColorSchemes } from '../theme/color-scheme'
 import {
-  hightideSemanticColorKeys,
   type HightideSemanticColorTokens
 } from './hightide'
 import {
@@ -12,7 +12,6 @@ import {
   createTypographyTokens,
   type TypographyTokens
 } from './typography'
-import type { BorderPrimitiveTokens } from '../primitive/border'
 import type { ElementPrimitiveTokens } from '../primitive/elements'
 import type { MotionPrimitiveTokens } from '../primitive/motion'
 import type { RadiusPrimitiveTokens } from '../primitive/radius'
@@ -25,7 +24,7 @@ export type SemanticTokens = {
   spacing: SpacingPrimitiveTokens,
   elements: ElementPrimitiveTokens,
   radius: RadiusPrimitiveTokens,
-  border: BorderPrimitiveTokens,
+  border: BorderTokens,
   shadow: ElevationShadowTokens,
   motion: MotionPrimitiveTokens,
 }
@@ -34,14 +33,8 @@ export type ToSemanticArgs<Tokens extends ThemeTokens = ThemeTokens> = {
   themeTokens: Tokens,
 }
 
-const toSemanticColors = (color: ThemeTokens['color']): HightideSemanticColorTokens => {
-  const colors = {} as HightideSemanticColorTokens
-
-  for (const key of hightideSemanticColorKeys) {
-    colors[key] = color[key]
-  }
-
-  return colors
+const toSemanticColors = (themeColors: ThemeTokens['color']): HightideSemanticColorTokens => {
+  return { ...themeColors }
 }
 
 export const toHightideSemanticTokens = ({

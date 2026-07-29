@@ -55,7 +55,7 @@ const translucent = HexColorUtils.hexWithAlpha(background, 0.5);
 ```text
 PrimitiveTokens
       │
-      ▼  toLightThemeTokens / toDarkThemeTokens   // @theme — palettes + color schemes
+      ▼  toLightThemeTokens / toDarkThemeTokens   // @theme — palettes + color schemes + border roles
 ThemeTokens
       │
       ▼  toSemantic({ themeTokens })               // @semantic
@@ -75,6 +75,8 @@ semantic.colorSchemes.neutral.outline
 ```
 
 `semantic.colors` is a pruned set (surfaces, chrome, disabled, component inputs). Role colors (`primary`, `secondary`, …) live only on `ThemeTokens.color` as scheme build inputs and are exposed to consumers via `semantic.colorSchemes`.
+
+Primitive `border` is steps `0…10`; theme maps to `thin | base | thick` (1 / 2 / 4); semantic passthroughs that scale for components.
 
 `ColorState` = `{ background, foreground, border }`. Resolve with `resolveStateBasedProperty(property, states)` in order `base → focused → hover → pressed → disabled`.
 

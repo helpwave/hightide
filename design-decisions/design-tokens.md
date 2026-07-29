@@ -50,6 +50,7 @@ Produced by `toLightThemeTokens` / `toDarkThemeTokens` (`@helpwave/hightide-desi
 
 - `color` — `HightideSemanticColorTokens` + `ThemeRoleColorTokens` (role inputs for schemes)
 - `colorSchemes` — role → style → `StateBasedProperty<ColorState>` packs (`filled`, `outline`, `tonal`, `tonal-outline`, `text`)
+- `border` — `thin | base | thick`, mapped from primitive steps `0…10` (`1` → thin, `2` → base, `4` → thick)
 - `typography.fontFamily` — remapped roles `default` / `accent` / `mono` from primitive font registry
 - Other non-color scales passthrough from primitives
 
@@ -57,7 +58,7 @@ Produced by `toLightThemeTokens` / `toDarkThemeTokens` (`@helpwave/hightide-desi
 
 ### 3. SemanticTokens
 
-From `toHightideSemanticTokens` — pick pruned `colors` from theme (no role scheme inputs); passthrough `colorSchemes`; compose typography; passthrough non-color scales.
+From `toHightideSemanticTokens` — pick pruned `colors` from theme (no role scheme inputs); passthrough `colorSchemes` and `border`; compose typography; passthrough other non-color scales.
 
 ### 4. ComponentTokens
 

@@ -1,7 +1,6 @@
 import type { ViewStyle } from 'react-native'
 
 import {
-  hightideBorder,
   hightideRadius,
   type ElementSize
 } from '@helpwave/hightide-design/primitive'
@@ -36,12 +35,14 @@ export type CreateCheckboxThemeOptions = {
   semantic: HightideSemanticColors,
   colorSchemes: HightideComponentThemes['colorSchemes'],
   input: ComponentTokens['input'],
+  borderWidth: number,
 }
 
 export const createCheckboxTheme = ({
   semantic,
   colorSchemes,
   input,
+  borderWidth,
 }: CreateCheckboxThemeOptions): CheckboxTheme => {
   const resolveState = (state: CheckboxState) => {
     const size = state.size ?? 'md'
@@ -66,7 +67,7 @@ export const createCheckboxTheme = ({
       height: dimension,
       alignItems: 'center',
       justifyContent: 'center',
-      borderWidth: hightideBorder.base,
+      borderWidth,
       borderColor,
       borderRadius: state.isRounded ? dimension / 2 : Number(hightideRadius.sm),
       backgroundColor,
@@ -94,5 +95,6 @@ export const createCheckboxThemeFromDesign = (theme: DesignTokensTheme): Checkbo
     semantic: theme.semantic.colors,
     colorSchemes: theme.semantic.colorSchemes,
     input: theme.components.input,
+    borderWidth: theme.semantic.border.base,
   })
 }

@@ -1,4 +1,3 @@
-import type { BorderPrimitiveTokens } from '../primitive/border'
 import type { ElementPrimitiveTokens } from '../primitive/elements'
 import type { MotionPrimitiveTokens } from '../primitive/motion'
 import type { RadiusPrimitiveTokens } from '../primitive/radius'
@@ -7,6 +6,7 @@ import type {
   HightideSemanticColorTokens,
   ThemeRoleColorTokens
 } from '../semantic/hightide'
+import type { BorderTokens } from './border'
 import type { ColorSchemes } from './color-scheme'
 import type { ThemeShadowTokens } from './shadow'
 import type { ThemeTypographyTokens } from './typography'
@@ -20,7 +20,7 @@ export type ThemeTokens = {
   elements: ElementPrimitiveTokens,
   typography: ThemeTypographyTokens,
   radius: RadiusPrimitiveTokens,
-  border: BorderPrimitiveTokens,
+  border: BorderTokens,
   shadow: ThemeShadowTokens,
   motion: MotionPrimitiveTokens,
 }

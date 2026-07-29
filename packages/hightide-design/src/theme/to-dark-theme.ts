@@ -1,5 +1,6 @@
 import type { HightideColorPalettes } from '../primitive/color'
 import { HexColorUtils } from '../utils/hex'
+import { toHightideThemeBorder } from './border'
 import { createColorSchemes } from './color-scheme'
 import type { ToThemeTokensArgs } from './to-theme-tokens-args'
 import type {
@@ -99,7 +100,7 @@ export const toDarkThemeTokens = ({
     elements: primitiveTokens.elements,
     typography: toHightideThemeTypography(primitiveTokens.typography),
     radius: primitiveTokens.radius,
-    border: primitiveTokens.border,
+    border: toHightideThemeBorder(primitiveTokens.border),
     shadow: toHightideThemeShadow(primitiveTokens.shadow),
     motion: primitiveTokens.motion,
   }

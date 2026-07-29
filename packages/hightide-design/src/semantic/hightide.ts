@@ -34,25 +34,3 @@ export type HightideSemanticColorTokens = {
   border: ColorToken,
   divider: ColorToken,
 }
-
-export const hightideSemanticColorKeys = [
-  'transparent',
-  'background',
-  'onBackground',
-  'disabled',
-  'onDisabled',
-  'surface',
-  'onSurface',
-  'surfaceHover',
-  'surfaceVariant',
-  'placeholder',
-  'description',
-  'faded',
-  'menuBorder',
-  'progressTrack',
-  'switchThumbInactive',
-  'switchThumbActive',
-  'switchBorder',
-  'border',
-  'divider',
-] as const satisfies readonly (keyof HightideSemanticColorTokens)[]

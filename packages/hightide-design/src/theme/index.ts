@@ -1,3 +1,4 @@
+export * from './border'
 export * from './color-scheme'
 export * from './color-state'
 export * from './shadow'
