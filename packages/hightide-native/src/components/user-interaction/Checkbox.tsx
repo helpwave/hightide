@@ -18,7 +18,6 @@ import {
   useEventCallbackStabilizer
 } from '@helpwave/hightide-utils/hooks'
 
-import { Icon } from '../visualization-and-display/Icon'
 import { useTheme } from '../../global-contexts/theme/ThemeContext'
 import type {
   CheckboxSize,
@@ -30,8 +29,6 @@ import type {
   FormFieldDataHandling,
   FormFieldInteractionStates
 } from '../../types/formField'
-
-export type { CheckboxSize }
 
 export type CheckboxProps = Omit<PressableProps, 'children' | 'style'>
   & Partial<FormFieldInteractionStates>
@@ -98,6 +95,8 @@ export const Checkbox = ({
     [theme, state]
   )
 
+  const IconComponent = indeterminate ? Minus : Check
+
   return (
     <Pressable
       {...props}
@@ -116,9 +115,10 @@ export const Checkbox = ({
       style={[resolvedCheckboxStyle, style]}
     >
       {resolvedIcon.visible && (
-        indeterminate
-          ? <Icon icon={Minus} size={resolvedIcon.size} color={resolvedIcon.color} />
-          : <Icon icon={Check} size={resolvedIcon.size} color={resolvedIcon.color} />
+        <IconComponent
+          size={resolvedIcon.size}
+          color={resolvedIcon.color}
+        />
       )}
     </Pressable>
   )

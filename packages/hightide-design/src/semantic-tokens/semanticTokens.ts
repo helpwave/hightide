@@ -1,10 +1,12 @@
 import type { HightideColorSchemes } from './colorScheme'
-import type { HightideRadiusPrimitiveTokens } from '../primitive-tokens/radius'
-import type { HightideSpacingPrimitiveTokens } from '../primitive-tokens/spacing'
+import type {
+  HightideThemeBorderRadiusTokens,
+  HightideThemeBorderWidthTokens,
+  HightideThemeSpacingTokens
+} from '../theme-tokens/layout'
 import type {
   HightideElementLayoutTokens,
-  HightideIconThemeTokens,
-  HightideSemanticBorderTokens
+  HightideIconThemeTokens
 } from './elementLayout'
 import type { HightideSemanticColorTokens } from './color'
 import type { HightideElevationShadowTokens } from './shadow'
@@ -14,10 +16,10 @@ export type HightideSemanticTokens = {
   colors: HightideSemanticColorTokens,
   colorSchemes: HightideColorSchemes,
   typography: HightideTypographyTokens,
-  spacing: HightideSpacingPrimitiveTokens,
+  spacing: HightideThemeSpacingTokens,
   elementLayout: HightideElementLayoutTokens,
   icon: HightideIconThemeTokens,
-  radius: HightideRadiusPrimitiveTokens,
-  border: HightideSemanticBorderTokens,
+  radius: HightideThemeBorderRadiusTokens,
+  border: HightideThemeBorderWidthTokens,
   shadow: HightideElevationShadowTokens,
 }

@@ -50,7 +50,7 @@ export function useSimpleStoreSyncedValue<T>({
     try {
       return decode(storeValue)
     } catch (e) {
-      console.log(e)
+      console.warn('useSimpleStoreSyncedValue: failed to decode value:', e)
       return null
     }
   }, [decode, key, store])

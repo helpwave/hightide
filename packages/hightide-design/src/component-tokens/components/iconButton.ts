@@ -49,7 +49,7 @@ export const toIconButtonTokens = (
         size: token.size,
         inset: token.inset,
         border: token.border,
-        radius: Number(semanticTokens.radius[radiusKeyFor(size)]),
+        radius: semanticTokens.radius[radiusKeyFor(size)],
         gap,
         horizontalInset: token.horizontalContentPadding ?? token.inset,
         minWidth: token.minimumWidth ?? token.size,

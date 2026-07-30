@@ -1,25 +1,23 @@
-import type { HightideRadiusPrimitiveTokens } from '../primitive-tokens/radius'
-import type { HightideSpacingPrimitiveTokens } from '../primitive-tokens/spacing'
 import type { HightideThemeColorTokens } from './color'
 import type {
-  HightideThemeBorderTokens,
+  HightideThemeBorderRadiusTokens,
+  HightideThemeBorderWidthTokens,
   HightideThemePaddingExtensionTokens,
   HightideThemePaddingTokens,
-  HightideThemeSizeTokens
+  HightideThemeSizeTokens,
+  HightideThemeSpacingTokens
 } from './layout'
 import type { HightideThemeShadowTokens } from './shadow'
 import type { HightideThemeTypographyTokens } from './typography'
 
-export type { HightideThemeColorTokens, HightideThemeRoleColorToken } from './color'
-
 export type HightideThemeTokens = {
   color: HightideThemeColorTokens,
-  spacing: HightideSpacingPrimitiveTokens,
+  spacing: HightideThemeSpacingTokens,
   size: HightideThemeSizeTokens,
   padding: HightideThemePaddingTokens,
   paddingExtension: HightideThemePaddingExtensionTokens,
   typography: HightideThemeTypographyTokens,
-  radius: HightideRadiusPrimitiveTokens,
-  border: HightideThemeBorderTokens,
+  radius: HightideThemeBorderRadiusTokens,
+  border: HightideThemeBorderWidthTokens,
   shadow: HightideThemeShadowTokens,
 }

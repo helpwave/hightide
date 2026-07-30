@@ -1,6 +1,6 @@
 import type {
   ComponentSize,
-  HightideThemeBorderTokens,
+  HightideThemeBorderWidthTokens,
   HightideThemePaddingExtensionTokens,
   HightideThemePaddingTokens,
   HightideThemeSizeTokens
@@ -28,12 +28,6 @@ export type HightideElementLayoutTokens = {
   container: Record<ComponentSize, HightideContainerLayoutToken>,
 }
 
-export type HightideSemanticBorderTokens = {
-  thin: number,
-  base: number,
-  thick: number,
-}
-
 export type HightideIconTheme = {
   size: number,
 }
@@ -50,14 +44,6 @@ const controlMinimumWidths: Record<ComponentSize, number> = {
 
 const componentSizes: ComponentSize[] = ['xs', 'sm', 'md', 'lg', 'xl']
 
-export const toHightideSemanticBorder = (
-  border: HightideThemeBorderTokens
-): HightideSemanticBorderTokens => ({
-  thin: border.xs,
-  base: border.md,
-  thick: border.xl,
-})
-
 export const toHightideElementLayout = ({
   size,
   padding,
@@ -67,7 +53,7 @@ export const toHightideElementLayout = ({
   size: HightideThemeSizeTokens,
   padding: HightideThemePaddingTokens,
   paddingExtension: HightideThemePaddingExtensionTokens,
-  border: HightideThemeBorderTokens,
+  border: HightideThemeBorderWidthTokens,
 }): HightideElementLayoutTokens => {
   const control = Object.fromEntries(
     componentSizes.map((key) => {
@@ -75,7 +61,7 @@ export const toHightideElementLayout = ({
       return [key, {
         size: size[key],
         inset,
-        border: border[key],
+        border: border.normal,
         minimumWidth: controlMinimumWidths[key],
         horizontalContentPadding: inset + paddingExtension[key],
       } satisfies HightideControlElementLayoutToken]
@@ -115,7 +101,7 @@ export const toHightideElementLayoutFromTheme = (
   themeTokens: HightideThemeTokens
 ): {
   elementLayout: HightideElementLayoutTokens,
-  border: HightideSemanticBorderTokens,
+  border: HightideThemeBorderWidthTokens,
   icon: HightideIconThemeTokens,
 } => {
   const elementLayout = toHightideElementLayout({
@@ -127,7 +113,7 @@ export const toHightideElementLayoutFromTheme = (
 
   return {
     elementLayout,
-    border: toHightideSemanticBorder(themeTokens.border),
+    border: themeTokens.border,
     icon: toHightideIconTheme(elementLayout.control),
   }
 }

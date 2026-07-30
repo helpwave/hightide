@@ -25,16 +25,6 @@ const buttonFontSizes: Record<ComponentSize, number> = {
   xl: 20,
 }
 
-const radiusKeyFor = (size: ComponentSize): 'xs' | 'sm' | 'md' | 'lg' => {
-  if (size === 'xl') {
-    return 'lg'
-  }
-  if (size === 'lg') {
-    return 'md'
-  }
-  return size
-}
-
 export const toButtonTokens = (
   semanticTokens: HightideSemanticTokens
 ): HightideButtonTokens => {
@@ -49,7 +39,7 @@ export const toButtonTokens = (
         size: token.size,
         inset: token.inset,
         border: token.border,
-        radius: Number(semanticTokens.radius[radiusKeyFor(size)]),
+        radius: semanticTokens.radius[size],
         gap,
         horizontalInset: token.horizontalContentPadding ?? token.inset,
         minWidth: token.minimumWidth ?? token.size,

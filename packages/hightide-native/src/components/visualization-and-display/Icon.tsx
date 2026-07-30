@@ -6,7 +6,7 @@ import { useTheme } from '../../global-contexts/theme/ThemeContext'
 
 export type IconProps = {
   icon: LucideIcon,
-  size?: ComponentSize,
+  size?: ComponentSize | number,
   color?: string,
 }
 
@@ -16,7 +16,12 @@ export const Icon = ({
   color,
 }: IconProps) => {
   const { theme } = useTheme()
-  const iconToken = theme.components.icon[size]
+  const iconToken = typeof size === 'number'
+    ? {
+      size,
+      strokeWidth: theme.components.icon.md.strokeWidth,
+    }
+    : theme.components.icon[size]
 
   return (
     <IconComponent

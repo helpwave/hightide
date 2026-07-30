@@ -30,7 +30,7 @@ export const toAvatarTokens = (
         padding: Math.max(Math.round(control[size].inset / 2), 2),
         fontSize: avatarFontSize,
         statusDotSize: Math.round(dimension / 2),
-        statusDotBorderWidth: size === 'xs' ? semanticTokens.border.thin + 0.5 : semanticTokens.border.base,
+        statusDotBorderWidth: size === 'xs' ? semanticTokens.border.thin + 0.5 : semanticTokens.border.normal,
       }]
     })
   ) as HightideAvatarTokens

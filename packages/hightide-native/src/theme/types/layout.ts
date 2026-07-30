@@ -1,21 +1,19 @@
 import type {
-  HightideRadiusPrimitiveTokens,
-  HightideSpacingPrimitiveTokens
-} from '@helpwave/hightide-design/primitive-tokens'
-import type {
   HightideElevationShadowTokens,
-  HightideElementLayoutTokens,
-  HightideSemanticBorderTokens
+  HightideElementLayoutTokens
 } from '@helpwave/hightide-design/semantic-tokens'
 import type {
   ComponentSize,
-  ComponentSizeBasic
+  ComponentSizeBasic,
+  HightideThemeBorderRadiusTokens,
+  HightideThemeBorderWidthTokens,
+  HightideThemeSpacingTokens
 } from '@helpwave/hightide-design/theme-tokens'
 
 export type { ComponentSize, ComponentSizeBasic }
 
-export type HightideSpacing = HightideSpacingPrimitiveTokens
+export type HightideSpacing = HightideThemeSpacingTokens
 export type HightideElements = HightideElementLayoutTokens
-export type HightideRadius = HightideRadiusPrimitiveTokens
-export type HightideBorder = HightideSemanticBorderTokens
+export type HightideRadius = HightideThemeBorderRadiusTokens
+export type HightideBorder = HightideThemeBorderWidthTokens
 export type HightideShadow = HightideElevationShadowTokens

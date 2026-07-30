@@ -41,7 +41,7 @@ export const toChipTokens = (
         size: Math.max(sizeValue - semanticTokens.spacing.xs, 24),
         inset: Math.max(Math.round(inset * 0.5), 3),
         border: token.border,
-        radius: Number(semanticTokens.radius[chipRadiusKeyFor(size)]),
+        radius: semanticTokens.radius[chipRadiusKeyFor(size)],
         gap,
         horizontalInset: Math.max(Math.round(horizontalInset * 0.8), semanticTokens.spacing.xs),
         minWidth: token.minimumWidth ?? token.size,

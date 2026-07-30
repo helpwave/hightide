@@ -13,7 +13,7 @@ export const toIconTokens = (
   Object.fromEntries(
     componentSizes.map((size) => [size, {
       size: semanticTokens.icon[size].size,
-      strokeWidth: semanticTokens.border.base,
+      strokeWidth: semanticTokens.border.normal,
     }])
   ) as HightideIconTokens
 )

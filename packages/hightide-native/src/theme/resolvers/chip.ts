@@ -76,6 +76,6 @@ export const createChipThemeFromDesign = (theme: DesignTokensTheme): ChipTheme =
     colorSchemes: theme.semantic.colorSchemes,
     layout: theme.components.chip.layout,
     fontWeight: theme.semantic.typography.fontWeights.semibold,
-    borderWidth: theme.semantic.border.base,
+    borderWidth: theme.semantic.border.normal,
   })
 }

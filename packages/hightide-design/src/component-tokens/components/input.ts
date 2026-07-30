@@ -26,7 +26,7 @@ export const toInputTokens = (
     size: inputControl.size,
     inset: semanticTokens.spacing.sm,
     border: semanticTokens.border.thin,
-    radius: Number(semanticTokens.radius.sm),
+    radius: semanticTokens.radius.sm,
     gap: semanticTokens.spacing.sm,
     horizontalInset: semanticTokens.spacing.md,
     minWidth: inputControl.minimumWidth ?? inputControl.size,

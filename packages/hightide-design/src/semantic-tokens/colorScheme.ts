@@ -34,21 +34,26 @@ export type HightideColorSchemes = Record<ColoringType, HightideColorScheme>
 const createFilled = (
   role: HightideThemeRoleColorToken,
   disabled: ColorToken,
-  onDisabled: ColorToken,
-  transparent: ColorToken
+  onDisabled: ColorToken
 ): StateBasedProperty<ColorState> => ({
   base: {
     background: role.color,
     foreground: role.onColor,
-    border: transparent,
+    border: role.color,
   },
   focused: undefined,
-  hover: { background: role.emphasis },
-  pressed: { background: role.emphasis },
+  hover: {
+    background: role.emphasis,
+    border: role.emphasis,
+  },
+  pressed: {
+    background: role.emphasis,
+    border: role.emphasis,
+  },
   disabled: {
     background: disabled,
     foreground: onDisabled,
-    border: transparent,
+    border: disabled,
   },
 })
 
@@ -103,21 +108,26 @@ const createText = (
 const createTonal = (
   role: HightideThemeRoleColorToken,
   disabled: ColorToken,
-  onDisabled: ColorToken,
-  transparent: ColorToken
+  onDisabled: ColorToken
 ): StateBasedProperty<ColorState> => ({
   base: {
     background: role.tint,
     foreground: role.color,
-    border: transparent,
+    border: role.tint,
   },
   focused: undefined,
-  hover: { background: role.tintEmphasis },
-  pressed: { background: role.tintEmphasis },
+  hover: {
+    background: role.tintEmphasis,
+    border: role.tintEmphasis,
+  },
+  pressed: {
+    background: role.tintEmphasis,
+    border: role.tintEmphasis,
+  },
   disabled: {
     background: disabled,
     foreground: onDisabled,
-    border: transparent,
+    border: disabled,
   },
 })
 
@@ -129,16 +139,16 @@ const createTonalOutline = (
   base: {
     background: role.tint,
     foreground: role.color,
-    border: role.color,
+    border: role.tint,
   },
   focused: undefined,
   hover: {
     background: role.tintEmphasis,
-    border: role.emphasis,
+    border: role.tintEmphasis,
   },
   pressed: {
     background: role.tintEmphasis,
-    border: role.emphasis,
+    border: role.tintEmphasis,
   },
   disabled: {
     background: disabled,
@@ -153,9 +163,9 @@ const schemeFor = (
   onDisabled: ColorToken,
   transparent: ColorToken
 ): HightideColorScheme => ({
-  'filled': createFilled(role, disabled, onDisabled, transparent),
+  'filled': createFilled(role, disabled, onDisabled),
   'outline': createOutline(role, disabled, onDisabled, transparent),
-  'tonal': createTonal(role, disabled, onDisabled, transparent),
+  'tonal': createTonal(role, disabled, onDisabled),
   'tonal-outline': createTonalOutline(role, disabled, onDisabled),
   'text': createText(role, disabled, onDisabled, transparent),
 })

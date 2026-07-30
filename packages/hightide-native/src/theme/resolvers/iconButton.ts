@@ -4,10 +4,7 @@ import type { HightideComponentTokens } from '@helpwave/hightide-design/componen
 import type { HightideDesignSystemTokens as DesignTokensTheme } from '@helpwave/hightide-design/design-system'
 import type { HightideColorSchemes } from '@helpwave/hightide-design/semantic-tokens'
 
-import {
-  isOutlineColoringStyle,
-  resolveColoringStyles
-} from './colorScheme'
+import { resolveColoringStyles } from './colorScheme'
 import type {
   IconButtonState,
   IconButtonTheme
@@ -41,16 +38,13 @@ export const createIconButtonTheme = ({
     )
     const element = layout[size]
     const dimension = element.size
-    const resolvedBorderWidth = resolved.borderWidth > 0
-      ? resolved.borderWidth
-      : (isOutlineColoringStyle(coloringStyle) ? borderWidth : 0)
 
     const button: ViewStyle = {
       alignItems: 'center',
       justifyContent: 'center',
       backgroundColor: resolved.backgroundColor,
       borderColor: resolved.borderColor,
-      borderWidth: resolvedBorderWidth,
+      borderWidth: resolved.borderWidth,
       width: dimension,
       height: dimension,
       borderRadius: element.radius,
@@ -73,6 +67,6 @@ export const createIconButtonThemeFromDesign = (theme: DesignTokensTheme): IconB
   return createIconButtonTheme({
     colorSchemes: theme.semantic.colorSchemes,
     layout: theme.components.iconButton.layout,
-    borderWidth: theme.semantic.border.base,
+    borderWidth: theme.semantic.border.normal,
   })
 }

@@ -1,4 +1,3 @@
-import { hightideColor } from '@helpwave/hightide-design/primitive-tokens'
 import {
   resolveStateBasedProperty,
   type ElementState
@@ -21,8 +20,6 @@ export type ResolvedColoringStyles = {
   borderColor?: Color,
   borderWidth: number,
 }
-
-const transparent = hightideColor.palettes.transparent.value
 
 const interactionStatesToElementStates = (
   state: InteractionState
@@ -58,13 +55,11 @@ export const resolveColoringStyles = (
     interactionStatesToElementStates(state)
   )
 
-  const isOutline = coloringStyle === 'outline' || coloringStyle === 'tonal-outline'
-
   return {
     backgroundColor: resolved.background,
     color: resolved.foreground,
-    borderColor: resolved.border === transparent ? undefined : resolved.border,
-    borderWidth: isOutline ? borderWidth : 0,
+    borderColor: resolved.border,
+    borderWidth,
   }
 }
 

@@ -1,31 +1,34 @@
 import type { HightideColorPalettes } from '../primitive-tokens/color'
 import { hightidePrimitiveTokens } from '../primitive-tokens/hightide'
 import { HexColorUtils } from '../utils/hex'
-import type { HightideThemeColorTokens, HightideThemeTokens } from './themeTokens'
+import type { HightideThemeTokens } from './themeTokens'
 import {
-  hightideThemeBorderTokens,
+  hightideThemeBorderRadiusTokens,
+  hightideThemeBorderWidthTokens,
   hightideThemePaddingExtensionTokens,
   hightideThemePaddingTokens,
-  hightideThemeSizeTokens
+  hightideThemeSizeTokens,
+  hightideThemeSpacingTokens
 } from './layout'
 import {
   hightideDarkThemeShadowTokens,
   hightideLightThemeShadowTokens
 } from './shadow'
 import { hightideThemeTypographyTokens } from './typography'
+import type { HightideThemeColorTokens } from './color'
 
 export type HightideSharedThemeTokens = Omit<HightideThemeTokens, 'color' | 'shadow'>
 
 const palettes = hightidePrimitiveTokens.color.palettes as HightideColorPalettes
 
 export const hightideSharedThemeTokens: HightideSharedThemeTokens = {
-  spacing: hightidePrimitiveTokens.spacing,
+  spacing: hightideThemeSpacingTokens,
   size: hightideThemeSizeTokens,
   padding: hightideThemePaddingTokens,
   paddingExtension: hightideThemePaddingExtensionTokens,
   typography: hightideThemeTypographyTokens,
-  radius: hightidePrimitiveTokens.radius,
-  border: hightideThemeBorderTokens,
+  radius: hightideThemeBorderRadiusTokens,
+  border: hightideThemeBorderWidthTokens,
 }
 
 const {

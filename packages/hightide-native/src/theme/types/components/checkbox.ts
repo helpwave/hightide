@@ -1,9 +1,6 @@
 import type { ViewStyle } from 'react-native'
 
-import type {
-  ComponentSize,
-  ComponentSizeBasic
-} from '@helpwave/hightide-design/theme-tokens'
+import type { ComponentSizeBasic } from '@helpwave/hightide-design/theme-tokens'
 
 import type { Color } from '../color'
 import type {
@@ -26,7 +23,7 @@ export type CheckboxStyle = ViewStyle
 
 export type CheckboxIconStyle = {
   color: Color,
-  size: ComponentSize,
+  size: number,
   visible: boolean,
 }
 

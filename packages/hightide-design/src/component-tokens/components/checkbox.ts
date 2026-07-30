@@ -1,31 +1,66 @@
-import type { HightideControlElementLayoutToken } from '../../semantic-tokens/elementLayout'
+import type { ColorToken } from '../../primitive-tokens/color'
 import type { HightideSemanticTokens } from '../../semantic-tokens/semanticTokens'
-import type {
-  ComponentSize,
-  ComponentSizeBasic
-} from '../../theme-tokens/layout'
+import type { ComponentSizeBasic } from '../../theme-tokens/layout'
+
+export type CheckboxBoxLayoutToken = {
+  size: number,
+  inset: number,
+  borderWidth: number,
+  borderRadius: number,
+}
+
+export type CheckboxIconLayoutToken = {
+  size: number,
+}
 
 export type HightideCheckboxTokens = {
-  layout: Record<ComponentSizeBasic, HightideControlElementLayoutToken>,
+  background: ColorToken,
+  box: {
+    layout: Record<ComponentSizeBasic, CheckboxBoxLayoutToken>,
+  },
+  icon: {
+    layout: Record<ComponentSizeBasic, CheckboxIconLayoutToken>,
+  },
 }
 
-const checkboxControlSize: Record<ComponentSizeBasic, ComponentSize> = {
-  sm: 'xs',
-  md: 'sm',
-  lg: 'md',
-}
+const checkboxSizes = ['sm', 'md', 'lg'] as const satisfies readonly ComponentSizeBasic[]
 
 export const toCheckboxTokens = (
   semanticTokens: HightideSemanticTokens
 ): HightideCheckboxTokens => {
   const control = semanticTokens.elementLayout.control
 
-  const layout = Object.fromEntries(
-    (['sm', 'md', 'lg'] as const).map((size) => {
-      const controlSize = checkboxControlSize[size]
-      return [size, control[controlSize]]
+  const boxLayout = Object.fromEntries(
+    checkboxSizes.map((size) => {
+      const token = control[size]
+      console.log({ size, control: control[size],res: token.size - 2 * token.inset - 2 * token.border })
+      return [size, {
+        size: token.size - 2 * token.inset - 2 * token.border,
+        inset: semanticTokens.elementLayout.control.xs.inset,
+        borderWidth: semanticTokens.border.normal,
+        borderRadius: semanticTokens.radius.sm,
+      } satisfies CheckboxBoxLayoutToken]
     })
-  ) as HightideCheckboxTokens['layout']
+  ) as HightideCheckboxTokens['box']['layout']
 
-  return { layout }
+  console.log(boxLayout, control)
+
+  const iconLayout = Object.fromEntries(
+    checkboxSizes.map((size) => {
+      const box = boxLayout[size]
+      return [size, {
+        size: box.size - 2 * box.inset - 2 * box.borderWidth,
+      } satisfies CheckboxIconLayoutToken]
+    })
+  ) as HightideCheckboxTokens['icon']['layout']
+
+  return {
+    background: semanticTokens.colors.surface,
+    box: {
+      layout: boxLayout,
+    },
+    icon: {
+      layout: iconLayout,
+    },
+  }
 }
