@@ -12,12 +12,7 @@ export type SemanticColorTokens = {
   surfaceVariant: ColorToken,
   placeholder: ColorToken,
   description: ColorToken,
-  faded: ColorToken,
-  menuBorder: ColorToken,
-  progressTrack: ColorToken,
-  switchThumbInactive: ColorToken,
-  switchThumbActive: ColorToken,
-  switchBorder: ColorToken,
+  subtle: ColorToken,
   border: ColorToken,
   divider: ColorToken,
 }

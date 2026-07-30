@@ -21,16 +21,11 @@ const toSemanticColors = (themeColors: ThemeTokens['color']): SemanticColorToken
     onSurface: themeColors.onSurface,
     surfaceHover: themeColors.surfaceHover,
     surfaceVariant: themeColors.surfaceVariant,
-    placeholder: themeColors.placeholder,
-    description: themeColors.description,
-    faded: themeColors.faded,
-    menuBorder: themeColors.menuBorder,
-    progressTrack: themeColors.progressTrack,
-    switchThumbInactive: themeColors.switchThumbInactive,
-    switchThumbActive: themeColors.switchThumbActive,
-    switchBorder: themeColors.switchBorder,
-    border: themeColors.border,
-    divider: themeColors.divider,
+    placeholder: themeColors.subtle,
+    description: themeColors.subtle,
+    subtle: themeColors.subtle,
+    border: themeColors.faded,
+    divider: themeColors.faded,
   }
 }
 

@@ -148,11 +148,11 @@ export const toHightideComponentTokens = ({
     menu: {
       background: colors.surfaceVariant,
       text: colors.onSurface,
-      border: colors.menuBorder,
+      border: colors.border,
     },
     progressIndicator: {
       fill: colorSchemes.primary.filled.base.background,
-      background: colors.progressTrack,
+      background: colors.subtle,
     },
     switch: {
       track: {
@@ -160,10 +160,10 @@ export const toHightideComponentTokens = ({
         active: colorSchemes.primary.filled.base.background,
       },
       thumb: {
-        inactive: colors.switchThumbInactive,
-        active: colors.switchThumbActive,
+        inactive: colors.subtle,
+        active: colorSchemes.primary.filled.base.foreground,
       },
-      borderColor: colors.switchBorder,
+      borderColor: colors.border,
     },
     icon,
     avatar,
