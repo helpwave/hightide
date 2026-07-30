@@ -28,7 +28,7 @@ export const ThemeSelect = () => {
 
   return (
     <View style={{ gap: 8, marginBottom: 16, maxWidth: 320 }}>
-      <Text style={{ color: theme.semantic.onBackground }}>Theme</Text>
+      <Text style={{ color: theme.colors.onBackground }}>Theme</Text>
       <Select
         options={options}
         value={themeMode}
@@ -47,7 +47,7 @@ export const ThemeStoryFrame = ({ children }: { children: ReactNode }) => {
       style={{
         gap: 16,
         maxWidth: 420,
-        backgroundColor: theme.semantic.background,
+        backgroundColor: theme.colors.background,
         borderRadius: 12,
         padding: 16,
       }}

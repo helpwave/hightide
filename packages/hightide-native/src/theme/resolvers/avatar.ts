@@ -6,17 +6,16 @@ import type {
 
 import type { ComponentTokens } from '@helpwave/hightide-design/components'
 import type {
+  ColorSchemes,
   ElevationShadowTokens,
+  SemanticColorTokens,
   TypographyTokens
 } from '@helpwave/hightide-design/semantic'
 import type { DesignSystemTokens as DesignTokensTheme } from '@helpwave/hightide-design/design-system'
-import type { ColorSchemes } from '@helpwave/hightide-design/semantic'
 
 import { resolveColoringStyles } from './colorScheme'
-import type {
-  ColorPalette,
-  HightideSemanticColors
-} from '../types/color'
+
+import type { ColorPalette } from '../types/color'
 import type {
   AvatarGroupState,
   AvatarIconStyle,
@@ -56,7 +55,7 @@ const statusColor = (
 }
 
 export type CreateAvatarThemeOptions = {
-  semantic: HightideSemanticColors,
+  colors: SemanticColorTokens,
   colorSchemes: ColorSchemes,
   gray: ColorPalette,
   typography: TypographyTokens,
@@ -67,7 +66,7 @@ export type CreateAvatarThemeOptions = {
 }
 
 export const createAvatarTheme = ({
-  semantic,
+  colors,
   colorSchemes,
   gray,
   typography,
@@ -159,7 +158,7 @@ export const createAvatarTheme = ({
       height: statusDotSize,
       borderRadius: statusDotSize / 2,
       borderWidth: avatar[size].statusDotBorderWidth,
-      borderColor: semantic.background,
+      borderColor: colors.background,
       backgroundColor: statusColor(status, colorSchemes, gray),
     }
 
@@ -181,7 +180,7 @@ export const createAvatarTheme = ({
       lineHeight: typeof bodyMedium.lineHeight === 'number'
         ? bodyMedium.lineHeight
         : Number(bodyMedium.lineHeight),
-      color: semantic.onBackground,
+      color: colors.onBackground,
       flexShrink: 1,
     }
 
@@ -210,7 +209,7 @@ export const createAvatarTheme = ({
 
     const more: TextStyle = {
       fontSize: (dimension * 2) / 3,
-      color: semantic.onBackground,
+      color: colors.onBackground,
       flexShrink: 1,
     }
 
@@ -240,12 +239,12 @@ export const createAvatarTheme = ({
 
 export const createAvatarThemeFromDesign = (
   theme: DesignTokensTheme,
-  colors: { gray: ColorPalette }
+  { gray }: { gray: ColorPalette }
 ): AvatarTheme => {
   return createAvatarTheme({
-    semantic: theme.semantic.colors,
+    colors: theme.semantic.colors,
     colorSchemes: theme.semantic.colorSchemes as ColorSchemes,
-    gray: colors.gray,
+    gray,
     typography: theme.semantic.typography,
     avatar: theme.components.avatar,
     icon: theme.components.icon,

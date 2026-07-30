@@ -34,7 +34,7 @@ const CardDemo = () => {
   return (
     <View style={{ padding: 16, gap: 20, maxWidth: 420 }}>
       <View style={{ gap: 8 }}>
-        <Text style={{ color: theme.semantic.description, fontSize: 12, fontWeight: '700', letterSpacing: 0.4, textTransform: 'uppercase', paddingHorizontal: 4 }}>
+        <Text style={{ color: theme.colors.description, fontSize: 12, fontWeight: '700', letterSpacing: 0.4, textTransform: 'uppercase', paddingHorizontal: 4 }}>
           Personal data
         </Text>
         <Card>
@@ -45,7 +45,7 @@ const CardDemo = () => {
       </View>
 
       <View style={{ gap: 8 }}>
-        <Text style={{ color: theme.semantic.description, fontSize: 12, fontWeight: '700', letterSpacing: 0.4, textTransform: 'uppercase', paddingHorizontal: 4 }}>
+        <Text style={{ color: theme.colors.description, fontSize: 12, fontWeight: '700', letterSpacing: 0.4, textTransform: 'uppercase', paddingHorizontal: 4 }}>
           Practice
         </Text>
         <Card>
@@ -59,7 +59,7 @@ const CardDemo = () => {
       </View>
 
       <View style={{ gap: 8 }}>
-        <Text style={{ color: theme.semantic.description, fontSize: 12, fontWeight: '700', letterSpacing: 0.4, textTransform: 'uppercase', paddingHorizontal: 4 }}>
+        <Text style={{ color: theme.colors.description, fontSize: 12, fontWeight: '700', letterSpacing: 0.4, textTransform: 'uppercase', paddingHorizontal: 4 }}>
           Settings
         </Text>
         <Card>

@@ -76,7 +76,7 @@ semantic.colorSchemes.primary.filled // StateBasedProperty<ColorState>
 semantic.colorSchemes.neutral.outline
 ```
 
-`semantic.colors` is a pruned set (surfaces, chrome, disabled, component inputs). Role colors (`primary`, `secondary`, …) live only on `ThemeTokens.color` as scheme build inputs; `toSemantic` builds `semantic.colorSchemes` from them.
+`ThemeColorTokens` is an independent theme-layer type (surface colors + inlined role colors). `semantic.colors` is a pruned surface set; `toSemantic` builds `semantic.colorSchemes` from theme role colors. Platform themes read surfaces from `semantic.colors` and roles from `semantic.colorSchemes`.
 
 Layout layers:
 

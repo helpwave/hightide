@@ -35,10 +35,10 @@ const CardStory = () => {
         </View>
       )}
     >
-      <Text style={{ color: theme.semantic.onSurface, fontSize: 14, fontWeight: '500' }}>
+      <Text style={{ color: theme.colors.onSurface, fontSize: 14, fontWeight: '500' }}>
         Mittwoch, 15:30 Uhr
       </Text>
-      <Text style={{ color: theme.semantic.description, fontSize: 12 }}>
+      <Text style={{ color: theme.colors.description, fontSize: 12 }}>
         Praxis am Park, Zimmer 2
       </Text>
     </ChatMessageCard>

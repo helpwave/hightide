@@ -1,9 +1,8 @@
 import { hightideTypography } from '@helpwave/hightide-design/primitive'
 import type { ComponentTokens } from '@helpwave/hightide-design/components'
 import type { DesignSystemTokens as DesignTokensTheme } from '@helpwave/hightide-design/design-system'
-import type { ColorSchemes } from '@helpwave/hightide-design/semantic'
+import type { ColorSchemes, SemanticColorTokens } from '@helpwave/hightide-design/semantic'
 
-import type { HightideSemanticColors } from '../types/color'
 import type {
   MultiSelectOptionState,
   MultiSelectState,
@@ -15,14 +14,14 @@ import {
 } from '../types/resolver'
 
 export type CreateMultiSelectThemeOptions = {
-  semantic: HightideSemanticColors,
+  colors: SemanticColorTokens,
   colorSchemes: ColorSchemes,
   input: ComponentTokens['input'],
   menu: ComponentTokens['menu'],
 }
 
 export const createMultiSelectTheme = ({
-  semantic,
+  colors,
   colorSchemes,
   input,
   menu,
@@ -38,14 +37,14 @@ export const createMultiSelectTheme = ({
       borderWidth: 1,
       borderColor: state.isInvalid
         ? colorSchemes.negative.text.base.foreground
-        : semantic.border,
-      backgroundColor: state.isDisabled ? semantic.disabled : input.background,
+        : colors.border,
+      backgroundColor: state.isDisabled ? colors.disabled : input.background,
       justifyContent: 'center',
       gap: 8,
       opacity: state.isDisabled ? 0.6 : 1,
     })),
     triggerText: createStyleResolver(() => ({
-      color: semantic.placeholder,
+      color: colors.placeholder,
     })),
     overlay: createStyleResolver(() => ({
       flex: 1,
@@ -68,11 +67,11 @@ export const createMultiSelectTheme = ({
       borderBottomColor: menu.border,
       color: menu.text,
     })),
-    searchPlaceholderColor: createValueResolver(() => semantic.placeholder),
+    searchPlaceholderColor: createValueResolver(() => colors.placeholder),
     option: createStyleResolver((state: MultiSelectOptionState) => ({
       paddingHorizontal: 16,
       paddingVertical: 12,
-      backgroundColor: state.isHighlighted ? semantic.surfaceHover : semantic.transparent,
+      backgroundColor: state.isHighlighted ? colors.surfaceHover : colors.transparent,
       opacity: state.isDisabled ? 0.5 : 1,
       flexDirection: 'row',
       alignItems: 'center',
@@ -87,8 +86,8 @@ export const createMultiSelectTheme = ({
       height: 18,
       borderRadius: 4,
       borderWidth: 1,
-      borderColor: state.isSelected ? primary.background : semantic.border,
-      backgroundColor: state.isSelected ? primary.background : semantic.transparent,
+      borderColor: state.isSelected ? primary.background : colors.border,
+      backgroundColor: state.isSelected ? primary.background : colors.transparent,
       alignItems: 'center',
       justifyContent: 'center',
     })),
@@ -101,7 +100,7 @@ export const createMultiSelectTheme = ({
 
 export const createMultiSelectThemeFromDesign = (theme: DesignTokensTheme): MultiSelectTheme => {
   return createMultiSelectTheme({
-    semantic: theme.semantic.colors,
+    colors: theme.semantic.colors,
     colorSchemes: theme.semantic.colorSchemes,
     input: theme.components.input,
     menu: theme.components.menu,

@@ -66,7 +66,7 @@ const LocaleSelect = () => {
 
   return (
     <View style={{ gap: 8, maxWidth: 320 }}>
-      <Text style={{ color: theme.semantic.onBackground }}>Locale</Text>
+      <Text style={{ color: theme.colors.onBackground }}>Locale</Text>
       <Select
         options={options}
         value={locale}
@@ -85,15 +85,15 @@ const DemoStrings = ({ showWelcome = false }: { showWelcome?: boolean }) => {
     <View
       style={{
         gap: 8,
-        backgroundColor: theme.semantic.surface,
+        backgroundColor: theme.colors.surface,
         borderRadius: 8,
         padding: 12,
       }}
     >
-      <Text style={{ color: theme.semantic.onSurface, fontWeight: '600' }}>
+      <Text style={{ color: theme.colors.onSurface, fontWeight: '600' }}>
         {translation('featureTitle')}
       </Text>
-      <Text style={{ color: theme.semantic.onSurface }}>
+      <Text style={{ color: theme.colors.onSurface }}>
         {translation('featureHint')}
       </Text>
       {showWelcome ? (
@@ -113,7 +113,7 @@ const StoryFrame = ({ children }: { children: ReactNode }) => {
       style={{
         gap: 16,
         maxWidth: 420,
-        backgroundColor: theme.semantic.background,
+        backgroundColor: theme.colors.background,
         borderRadius: 12,
         padding: 16,
       }}

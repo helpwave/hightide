@@ -1,8 +1,7 @@
 import type { ComponentTokens } from '@helpwave/hightide-design/components'
 import type { DesignSystemTokens as DesignTokensTheme } from '@helpwave/hightide-design/design-system'
-import type { ColorSchemes } from '@helpwave/hightide-design/semantic'
+import type { ColorSchemes, SemanticColorTokens } from '@helpwave/hightide-design/semantic'
 
-import type { HightideSemanticColors } from '../types/color'
 import type {
   SwitchState,
   SwitchTheme
@@ -10,28 +9,28 @@ import type {
 import { createValueResolver } from '../types/resolver'
 
 export type CreateSwitchThemeOptions = {
-  semantic: HightideSemanticColors,
+  colors: SemanticColorTokens,
   colorSchemes: ColorSchemes,
   switchTokens: ComponentTokens['switch'],
 }
 
 export const createSwitchTheme = ({
-  semantic,
+  colors,
   colorSchemes,
   switchTokens,
 }: CreateSwitchThemeOptions): SwitchTheme => {
   const resolveState = (state: SwitchState) => {
     const trackInactive = state.isDisabled
-      ? semantic.disabled
+      ? colors.disabled
       : switchTokens.track.inactive
     const trackActive = state.isDisabled
-      ? semantic.disabled
+      ? colors.disabled
       : switchTokens.track.active
 
     const trackColor = state.isActive ? trackActive : trackInactive
 
     const borderColor = state.isDisabled
-      ? semantic.disabled
+      ? colors.disabled
       : state.isInvalid
         ? colorSchemes.negative.text.base.foreground
         : state.isActive
@@ -39,7 +38,7 @@ export const createSwitchTheme = ({
           : switchTokens.borderColor
 
     const thumbColor = state.isDisabled
-      ? semantic.onDisabled
+      ? colors.onDisabled
       : state.isActive
         ? switchTokens.thumb.active
         : switchTokens.thumb.inactive
@@ -60,7 +59,7 @@ export const createSwitchTheme = ({
 
 export const createSwitchThemeFromDesign = (theme: DesignTokensTheme): SwitchTheme => {
   return createSwitchTheme({
-    semantic: theme.semantic.colors,
+    colors: theme.semantic.colors,
     colorSchemes: theme.semantic.colorSchemes,
     switchTokens: theme.components.switch,
   })

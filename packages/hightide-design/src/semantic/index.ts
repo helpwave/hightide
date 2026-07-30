@@ -1,7 +1,6 @@
 export * from './color'
 export * from './color-scheme'
 export * from './element-layout'
-export * from './hightide'
 export * from './semantic-tokens'
 export * from './shadow'
 export * from './to-semantic'

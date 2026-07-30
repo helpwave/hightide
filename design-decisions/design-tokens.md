@@ -50,7 +50,7 @@ Includes `sizes` (`0…160`, step 4) and `border` (`0…10`). There is no primit
 
 Produced by `toLightThemeTokens` / `toDarkThemeTokens` (`@helpwave/hightide-design/theme`):
 
-- `color` — `ThemeColorTokens` (`SemanticColorTokens` fields + `ThemeRoleColorTokens` as scheme build inputs)
+- `color` — `ThemeColorTokens` (independent surface colors + inlined role colors for scheme build inputs)
 - `size` / `padding` / `paddingExtension` / `border` — each `Record<ComponentSize, number>` (`xs…xl`); theme `border` is size roles only (not `thin|base|thick`)
 - `typography.fontFamily` — remapped roles `default` / `accent` / `mono` from primitive font registry
 - Other non-color scales passthrough from primitives
@@ -89,7 +89,7 @@ From `toHightideComponentTokens` (`@helpwave/hightide-design/components`) — co
 DesignSystemTokens  ──createHightideTheme──►  Theme  ──ThemeProvider──►  components
 ```
 
-Native `resolveColoringStyles` maps `InteractionState` → `Set<ElementState>` and calls `resolveStateBasedProperty` on `theme.colorSchemes[role][style]`.
+Native `createHightideTheme` maps `tokens.semantic.colors` → `theme.colors` and flattens semantic layout/schemes onto the runtime theme. `resolveColoringStyles` maps `InteractionState` → `Set<ElementState>` and calls `resolveStateBasedProperty` on `theme.colorSchemes[role][style]`.
 
 ## Package ownership
 

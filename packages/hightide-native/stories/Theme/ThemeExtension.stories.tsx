@@ -87,7 +87,7 @@ const OceanPreview = () => {
   return (
     <ThemeStoryFrame>
       <ThemeSelect />
-      <Text style={{ color: theme.semantic.onBackground }}>
+      <Text style={{ color: theme.colors.onBackground }}>
         Ocean theme uses blue background, surface, and primary tokens
       </Text>
       <Button color="primary" onPress={() => undefined}>

@@ -2,9 +2,8 @@ import { StyleSheet } from 'react-native'
 
 import { hightideTypography } from '@helpwave/hightide-design/primitive'
 import type { DesignSystemTokens as DesignTokensTheme } from '@helpwave/hightide-design/design-system'
-import type { ColorSchemes } from '@helpwave/hightide-design/semantic'
+import type { ColorSchemes, SemanticColorTokens } from '@helpwave/hightide-design/semantic'
 
-import type { HightideSemanticColors } from '../types/color'
 import type {
   CardActionItemState,
   CardTheme
@@ -15,12 +14,12 @@ import {
 } from '../types/resolver'
 
 export type CreateCardThemeOptions = {
-  semantic: HightideSemanticColors,
+  colors: SemanticColorTokens,
   colorSchemes: ColorSchemes,
 }
 
 export const createCardTheme = ({
-  semantic,
+  colors,
   colorSchemes,
 }: CreateCardThemeOptions): CardTheme => {
   const resolveActionItem = (state: CardActionItemState) => {
@@ -34,8 +33,8 @@ export const createCardTheme = ({
       paddingHorizontal: 16,
       paddingVertical: 8,
       borderBottomWidth: StyleSheet.hairlineWidth,
-      borderBottomColor: semantic.divider,
-      backgroundColor: pressed ? semantic.surfaceHover : semantic.transparent,
+      borderBottomColor: colors.divider,
+      backgroundColor: pressed ? colors.surfaceHover : colors.transparent,
       opacity: state.isDisabled ? 0.6 : 1,
     }
   }
@@ -49,7 +48,7 @@ export const createCardTheme = ({
   const resolveActionLabel = (state: CardActionItemState) => ({
     color: state.isDanger
       ? colorSchemes.negative.text.base.foreground
-      : semantic.onSurface,
+      : colors.onSurface,
     fontSize: 15,
     fontWeight: hightideTypography.fontWeight.medium,
   })
@@ -62,10 +61,10 @@ export const createCardTheme = ({
 
   return {
     card: createStyleResolver(() => ({
-      backgroundColor: semantic.surface,
+      backgroundColor: colors.surface,
       borderRadius: 12,
       borderWidth: 1,
-      borderColor: semantic.border,
+      borderColor: colors.border,
       overflow: 'hidden',
     })),
     item: createStyleResolver(() => ({
@@ -75,16 +74,16 @@ export const createCardTheme = ({
       paddingHorizontal: 16,
       paddingVertical: 8,
       borderBottomWidth: StyleSheet.hairlineWidth,
-      borderBottomColor: semantic.divider,
+      borderBottomColor: colors.divider,
       gap: 12,
     })),
     itemContent: createStyleResolver(resolveItemContent),
     itemLabel: createStyleResolver(() => ({
-      color: semantic.description,
+      color: colors.description,
       fontSize: 12,
     })),
     itemValue: createStyleResolver(() => ({
-      color: semantic.onSurface,
+      color: colors.onSurface,
       fontSize: 15,
       fontWeight: hightideTypography.fontWeight.medium,
     })),
@@ -97,14 +96,14 @@ export const createCardTheme = ({
     navigationItemLabel: createStyleResolver(resolveActionLabel),
     navigationItemIcon: createValueResolver(resolveActionIcon),
     navigationItemTrailing: createValueResolver(() => ({
-      color: semantic.description,
+      color: colors.description,
     })),
   }
 }
 
 export const createCardThemeFromDesign = (theme: DesignTokensTheme): CardTheme => {
   return createCardTheme({
-    semantic: theme.semantic.colors,
+    colors: theme.semantic.colors,
     colorSchemes: theme.semantic.colorSchemes,
   })
 }

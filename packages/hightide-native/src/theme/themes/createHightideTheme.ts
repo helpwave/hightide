@@ -16,39 +16,26 @@ import { createInputThemeFromDesign } from '../resolvers/input'
 import { createCardThemeFromDesign } from '../resolvers/card'
 import { createMultiSelectThemeFromDesign } from '../resolvers/multiSelect'
 import { createSelectThemeFromDesign } from '../resolvers/select'
-import type {
-  Color,
-  ColorPalette as UnwrappedColorPalette,
-  HightideColors
-} from '../types/color'
+import type { ColorPalette as UnwrappedColorPalette } from '../types/color'
 import type { HightideTheme } from '../types/theme'
 
-const unwrapColorPaletteToken = (token: ColorPalette): Color | UnwrappedColorPalette => {
-  if (token.type === 'singleValue') {
-    return token.value
+const unwrapGrayPalette = (
+  gray: ColorPalette
+): UnwrappedColorPalette => {
+  if (gray.type === 'singleValue') {
+    throw new Error('Expected gray palette scale, got singleValue')
   }
-  return token.value
-}
-
-const unwrapColors = (
-  palettes: PrimitiveTokens['color']['palettes']
-): HightideColors & Record<string, Color | UnwrappedColorPalette> => {
-  const result: Record<string, Color | UnwrappedColorPalette> = {}
-  for (const [key, token] of Object.entries(palettes)) {
-    result[key] = unwrapColorPaletteToken(token)
-  }
-  return result as HightideColors & Record<string, Color | UnwrappedColorPalette>
+  return gray.value
 }
 
 export const createHightideTheme = (
   tokens: DesignSystemTokens,
   primitives: PrimitiveTokens = hightidePrimitiveTokens
 ): HightideTheme => {
-  const colors = unwrapColors(primitives.color.palettes)
+  const gray = unwrapGrayPalette(primitives.color.palettes.gray)
 
   return {
-    colors,
-    semantic: tokens.semantic.colors,
+    colors: tokens.semantic.colors,
     colorSchemes: tokens.semantic.colorSchemes,
     typography: tokens.semantic.typography,
     spacing: tokens.semantic.spacing,
@@ -67,7 +54,7 @@ export const createHightideTheme = (
       multiSelect: createMultiSelectThemeFromDesign(tokens),
       chat: createChatThemeFromDesign(tokens),
       card: createCardThemeFromDesign(tokens),
-      avatar: createAvatarThemeFromDesign(tokens, { gray: colors.gray }),
+      avatar: createAvatarThemeFromDesign(tokens, { gray }),
       icon: tokens.components.icon,
     },
   }

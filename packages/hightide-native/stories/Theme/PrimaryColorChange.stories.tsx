@@ -104,7 +104,7 @@ const PrimarySwatch = () => {
           primary / onPrimary
         </Text>
       </View>
-      <Text style={{ color: theme.semantic.onBackground }}>
+      <Text style={{ color: theme.colors.onBackground }}>
         {`primary: ${theme.colorSchemes.primary.filled.base.background}`}
       </Text>
     </View>

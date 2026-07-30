@@ -1,9 +1,8 @@
 import { hightideTypography } from '@helpwave/hightide-design/primitive'
 import type { ComponentTokens } from '@helpwave/hightide-design/components'
 import type { DesignSystemTokens as DesignTokensTheme } from '@helpwave/hightide-design/design-system'
-import type { ColorSchemes } from '@helpwave/hightide-design/semantic'
+import type { ColorSchemes, SemanticColorTokens } from '@helpwave/hightide-design/semantic'
 
-import type { HightideSemanticColors } from '../types/color'
 import type {
   SelectOptionState,
   SelectState,
@@ -15,14 +14,14 @@ import {
 } from '../types/resolver'
 
 export type CreateSelectThemeOptions = {
-  semantic: HightideSemanticColors,
+  colors: SemanticColorTokens,
   colorSchemes: ColorSchemes,
   input: ComponentTokens['input'],
   menu: ComponentTokens['menu'],
 }
 
 export const createSelectTheme = ({
-  semantic,
+  colors,
   colorSchemes,
   input,
   menu,
@@ -36,13 +35,13 @@ export const createSelectTheme = ({
       borderWidth: 1,
       borderColor: state.isInvalid
         ? colorSchemes.negative.text.base.foreground
-        : semantic.border,
-      backgroundColor: state.isDisabled ? semantic.disabled : input.background,
+        : colors.border,
+      backgroundColor: state.isDisabled ? colors.disabled : input.background,
       justifyContent: 'center',
       opacity: state.isDisabled ? 0.6 : 1,
     })),
     triggerText: createStyleResolver((state: SelectState) => ({
-      color: state.hasValue ? input.text : semantic.placeholder,
+      color: state.hasValue ? input.text : colors.placeholder,
     })),
     overlay: createStyleResolver(() => ({
       flex: 1,
@@ -65,11 +64,11 @@ export const createSelectTheme = ({
       borderBottomColor: menu.border,
       color: menu.text,
     })),
-    searchPlaceholderColor: createValueResolver(() => semantic.placeholder),
+    searchPlaceholderColor: createValueResolver(() => colors.placeholder),
     option: createStyleResolver((state: SelectOptionState) => ({
       paddingHorizontal: 16,
       paddingVertical: 12,
-      backgroundColor: state.isHighlighted ? semantic.surfaceHover : semantic.transparent,
+      backgroundColor: state.isHighlighted ? colors.surfaceHover : colors.transparent,
       opacity: state.isDisabled ? 0.5 : 1,
     })),
     optionText: createStyleResolver((state: SelectOptionState) => ({
@@ -81,7 +80,7 @@ export const createSelectTheme = ({
 
 export const createSelectThemeFromDesign = (theme: DesignTokensTheme): SelectTheme => {
   return createSelectTheme({
-    semantic: theme.semantic.colors,
+    colors: theme.semantic.colors,
     colorSchemes: theme.semantic.colorSchemes,
     input: theme.components.input,
     menu: theme.components.menu,

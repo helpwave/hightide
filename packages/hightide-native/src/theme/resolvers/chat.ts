@@ -6,13 +6,10 @@ import {
 
 import { hightideTypography } from '@helpwave/hightide-design/primitive'
 import type { DesignSystemTokens as DesignTokensTheme } from '@helpwave/hightide-design/design-system'
-import type { ColorSchemes } from '@helpwave/hightide-design/semantic'
+import type { ColorSchemes, SemanticColorTokens } from '@helpwave/hightide-design/semantic'
 import { HexColorUtils } from '@helpwave/hightide-design/utils'
 
-import type {
-  Color,
-  HightideSemanticColors
-} from '../types/color'
+import type { Color } from '../types/color'
 import type {
   ChatAttachmentCardState,
   ChatConversationRowState,
@@ -28,12 +25,12 @@ import {
 } from '../types/resolver'
 
 export type CreateChatThemeOptions = {
-  semantic: HightideSemanticColors,
+  colors: SemanticColorTokens,
   colorSchemes: ColorSchemes,
 }
 
 export const createChatTheme = ({
-  semantic,
+  colors,
   colorSchemes,
 }: CreateChatThemeOptions): ChatTheme => {
   const resolveConversationRow = (state: ChatConversationRowState): ViewStyle => {
@@ -47,12 +44,12 @@ export const createChatTheme = ({
       paddingHorizontal: 14,
       paddingVertical: 12,
       backgroundColor: state.isSelected
-        ? semantic.background
+        ? colors.background
         : pressed
-          ? semantic.surfaceHover
-          : semantic.transparent,
+          ? colors.surfaceHover
+          : colors.transparent,
       borderLeftWidth: state.isSelected ? 4 : 0,
-      borderLeftColor: state.isSelected ? colorSchemes.primary.filled.base.background : semantic.transparent,
+      borderLeftColor: state.isSelected ? colorSchemes.primary.filled.base.background : colors.transparent,
       borderRadius: 6,
     }
   }
@@ -62,19 +59,19 @@ export const createChatTheme = ({
       container: createStyleResolver<ChatConversationRowState, ViewStyle>(resolveConversationRow),
       title: createStyleResolver<ChatConversationRowState, TextStyle>((state) => ({
         flex: 1,
-        color: semantic.onSurface,
+        color: colors.onSurface,
         fontSize: 16,
         fontWeight: state.isUnread ? hightideTypography.fontWeight.bold : hightideTypography.fontWeight.medium,
       })),
       timestamp: createStyleResolver<ChatConversationRowState, TextStyle>((state) => ({
-        color: state.isUnread ? colorSchemes.primary.text.base.foreground : semantic.description,
+        color: state.isUnread ? colorSchemes.primary.text.base.foreground : colors.description,
         fontSize: 12,
         fontWeight: state.isUnread ? hightideTypography.fontWeight.medium : hightideTypography.fontWeight.base,
         flexShrink: 0,
       })),
       preview: createStyleResolver<ChatConversationRowState, TextStyle>((state) => ({
         flex: 1,
-        color: state.isUnread ? semantic.onSurface : semantic.description,
+        color: state.isUnread ? colors.onSurface : colors.description,
         fontSize: 14,
         fontWeight: hightideTypography.fontWeight.light,
       })),
@@ -99,7 +96,7 @@ export const createChatTheme = ({
     conversationList: {
       container: createStyleResolver<Record<string, never>, ViewStyle>(() => ({
         flex: 1,
-        backgroundColor: semantic.surface,
+        backgroundColor: colors.surface,
       })),
       header: createStyleResolver<Record<string, never>, ViewStyle>(() => ({
         paddingHorizontal: 14,
@@ -119,16 +116,16 @@ export const createChatTheme = ({
         paddingHorizontal: 14,
         paddingVertical: 12,
         borderBottomWidth: StyleSheet.hairlineWidth,
-        borderBottomColor: semantic.divider,
-        backgroundColor: semantic.surface,
+        borderBottomColor: colors.divider,
+        backgroundColor: colors.surface,
       })),
       title: createStyleResolver<Record<string, never>, TextStyle>(() => ({
-        color: semantic.onSurface,
+        color: colors.onSurface,
         fontSize: 16,
         fontWeight: hightideTypography.fontWeight.bold,
       })),
       subtitle: createStyleResolver<Record<string, never>, TextStyle>(() => ({
-        color: semantic.description,
+        color: colors.description,
         fontSize: 12,
         fontWeight: hightideTypography.fontWeight.light,
       })),
@@ -139,7 +136,7 @@ export const createChatTheme = ({
         paddingHorizontal: 16,
         paddingVertical: 18,
         gap: 12,
-        backgroundColor: semantic.background,
+        backgroundColor: colors.background,
       })),
     },
     messageBubble: {
@@ -178,7 +175,7 @@ export const createChatTheme = ({
         marginTop: 5,
         color: state.direction === 'outgoing'
           ? HexColorUtils.hexWithAlpha(colorSchemes.primary.filled.base.foreground, 0.75)
-          : semantic.description,
+          : colors.description,
         fontSize: 11,
         fontWeight: hightideTypography.fontWeight.medium,
         textAlign: 'right',
@@ -189,7 +186,7 @@ export const createChatTheme = ({
         gap: 5,
       })),
       receiptText: createStyleResolver<Record<string, never>, TextStyle>(() => ({
-        color: semantic.description,
+        color: colors.description,
         fontSize: 11,
         fontWeight: hightideTypography.fontWeight.medium,
       })),
@@ -206,9 +203,9 @@ export const createChatTheme = ({
         return {
           width: 290,
           maxWidth: 300,
-          backgroundColor: semantic.surface,
+          backgroundColor: colors.surface,
           borderWidth: 1,
-          borderColor: semantic.divider,
+          borderColor: colors.divider,
           borderTopLeftRadius: radius,
           borderTopRightRadius: radius,
           borderBottomLeftRadius: outgoing ? radius : corner,
@@ -224,7 +221,7 @@ export const createChatTheme = ({
         paddingHorizontal: 15,
         paddingVertical: 12,
         borderBottomWidth: StyleSheet.hairlineWidth,
-        borderBottomColor: semantic.divider,
+        borderBottomColor: colors.divider,
       })),
       icon: createStyleResolver<ChatMessageCardState, ViewStyle>((state) => {
         const color = state.color ?? 'primary'
@@ -256,7 +253,7 @@ export const createChatTheme = ({
         }
       }),
       subtitle: createStyleResolver<Record<string, never>, TextStyle>(() => ({
-        color: semantic.description,
+        color: colors.description,
         fontSize: 12,
       })),
       body: createStyleResolver<Record<string, never>, ViewStyle>(() => ({
@@ -283,9 +280,9 @@ export const createChatTheme = ({
           gap: 12,
           maxWidth: 280,
           padding: 12,
-          backgroundColor: semantic.surface,
+          backgroundColor: colors.surface,
           borderWidth: 1,
-          borderColor: semantic.divider,
+          borderColor: colors.divider,
           borderTopLeftRadius: radius,
           borderTopRightRadius: radius,
           borderBottomLeftRadius: outgoing ? radius : corner,
@@ -305,12 +302,12 @@ export const createChatTheme = ({
         color: colorSchemes.negative.text.base.foreground,
       })),
       name: createStyleResolver<Record<string, never>, TextStyle>(() => ({
-        color: semantic.onSurface,
+        color: colors.onSurface,
         fontSize: 14,
         fontWeight: hightideTypography.fontWeight.medium,
       })),
       metadata: createStyleResolver<Record<string, never>, TextStyle>(() => ({
-        color: semantic.description,
+        color: colors.description,
         fontSize: 12,
       })),
     },
@@ -345,10 +342,10 @@ export const createChatTheme = ({
         paddingHorizontal: 14,
         paddingVertical: 4,
         borderRadius: 999,
-        backgroundColor: semantic.surface,
+        backgroundColor: colors.surface,
       })),
       text: createStyleResolver<Record<string, never>, TextStyle>(() => ({
-        color: semantic.description,
+        color: colors.description,
         fontSize: 12,
         fontWeight: hightideTypography.fontWeight.medium,
       })),
@@ -366,12 +363,12 @@ export const createChatTheme = ({
           paddingVertical: 6,
           borderRadius: 999,
           borderWidth: 1,
-          borderColor: state.isActive ? colorSchemes.primary.filled.base.background : semantic.divider,
-          backgroundColor: pressed ? semantic.surfaceHover : semantic.surface,
+          borderColor: state.isActive ? colorSchemes.primary.filled.base.background : colors.divider,
+          backgroundColor: pressed ? colors.surfaceHover : colors.surface,
         }
       }),
       text: createStyleResolver<ChatQuickReplyChipState, TextStyle>((state) => ({
-        color: state.isActive ? colorSchemes.primary.text.base.foreground : semantic.description,
+        color: state.isActive ? colorSchemes.primary.text.base.foreground : colors.description,
         fontSize: 14,
         fontWeight: hightideTypography.fontWeight.medium,
       })),
@@ -384,9 +381,9 @@ export const createChatTheme = ({
         gap: 8,
         paddingHorizontal: 14,
         paddingVertical: 12,
-        backgroundColor: semantic.surface,
+        backgroundColor: colors.surface,
         borderTopWidth: StyleSheet.hairlineWidth,
-        borderTopColor: semantic.divider,
+        borderTopColor: colors.divider,
       })),
       input: createStyleResolver<Record<string, never>, TextStyle>(() => ({
         flex: 1,
@@ -395,18 +392,18 @@ export const createChatTheme = ({
         paddingHorizontal: 12,
         paddingVertical: 12,
         borderRadius: 6,
-        backgroundColor: semantic.surfaceVariant,
-        color: semantic.onSurface,
+        backgroundColor: colors.surfaceVariant,
+        color: colors.onSurface,
         fontSize: 15,
       })),
-      placeholderColor: createValueResolver<Record<string, never>, Color>(() => semantic.placeholder),
+      placeholderColor: createValueResolver<Record<string, never>, Color>(() => colors.placeholder),
     },
   }
 }
 
 export const createChatThemeFromDesign = (theme: DesignTokensTheme): ChatTheme => {
   return createChatTheme({
-    semantic: theme.semantic.colors,
+    colors: theme.semantic.colors,
     colorSchemes: theme.semantic.colorSchemes as ColorSchemes,
   })
 }

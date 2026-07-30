@@ -121,7 +121,7 @@ const CalloutStateCheckbox = ({
   return (
     <View style={{ flexDirection: 'row', alignItems: 'center', gap: 8 }}>
       <Checkbox value={value} onValueChange={onValueChange} />
-      <Text style={{ color: theme.semantic.onBackground }}>{label}</Text>
+      <Text style={{ color: theme.colors.onBackground }}>{label}</Text>
     </View>
   )
 }

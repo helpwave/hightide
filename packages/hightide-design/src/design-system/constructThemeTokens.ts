@@ -1,6 +1,6 @@
 export type ThemeTokenConstructorOptions<
   PrimitiveTokens,
-  ThemeTokens,
+  ThemeTokens extends { color: unknown },
   SemanticTokens,
   ComponentTokens,
   DesignSystemTokens
@@ -16,6 +16,7 @@ export type ThemeTokenConstructorOptions<
     semanticTokens: SemanticTokens,
   }) => ComponentTokens,
   toDesignSystemTheme?: (args: {
+    themeTokens: ThemeTokens,
     semanticTokens: SemanticTokens,
     componentTokens: ComponentTokens,
   }) => DesignSystemTokens,
@@ -23,7 +24,7 @@ export type ThemeTokenConstructorOptions<
 
 export const constructThemeTokens = <
   PrimitiveTokens,
-  ThemeTokens,
+  ThemeTokens extends { color: unknown },
   SemanticTokens,
   ComponentTokens,
   DesignSystemTokens = {
@@ -31,14 +32,14 @@ export const constructThemeTokens = <
     components: ComponentTokens,
   }
 >(
-    options: ThemeTokenConstructorOptions<
+  options: ThemeTokenConstructorOptions<
     PrimitiveTokens,
     ThemeTokens,
     SemanticTokens,
     ComponentTokens,
     DesignSystemTokens
   >
-  ): DesignSystemTokens => {
+): DesignSystemTokens => {
   const {
     primitiveTokens,
     toThemeTokens,
@@ -52,7 +53,11 @@ export const constructThemeTokens = <
   const componentTokens = toComponents({ semanticTokens })
 
   if (toDesignSystemTheme) {
-    return toDesignSystemTheme({ semanticTokens, componentTokens })
+    return toDesignSystemTheme({
+      themeTokens,
+      semanticTokens,
+      componentTokens,
+    })
   }
 
   return {

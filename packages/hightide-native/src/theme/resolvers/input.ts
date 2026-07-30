@@ -2,9 +2,8 @@ import type { TextStyle } from 'react-native'
 
 import type { ComponentTokens } from '@helpwave/hightide-design/components'
 import type { DesignSystemTokens as DesignTokensTheme } from '@helpwave/hightide-design/design-system'
-import type { ColorSchemes } from '@helpwave/hightide-design/semantic'
+import type { ColorSchemes, SemanticColorTokens } from '@helpwave/hightide-design/semantic'
 
-import type { HightideSemanticColors } from '../types/color'
 import type {
   InputState,
   InputTheme
@@ -15,20 +14,20 @@ import {
 } from '../types/resolver'
 
 export type CreateInputThemeOptions = {
-  semantic: HightideSemanticColors,
+  colors: SemanticColorTokens,
   colorSchemes: ColorSchemes,
   input: ComponentTokens['input'],
 }
 
 export const createInputTheme = ({
-  semantic,
+  colors,
   colorSchemes,
   input,
 }: CreateInputThemeOptions): InputTheme => {
   const resolveInput = (state: InputState): TextStyle => {
     const borderColor = state.isInvalid
       ? colorSchemes.negative.text.base.foreground
-      : semantic.border
+      : colors.border
 
     return {
       minHeight: input.size,
@@ -37,8 +36,8 @@ export const createInputTheme = ({
       borderRadius: input.radius,
       borderWidth: input.border,
       borderColor,
-      backgroundColor: state.isDisabled ? semantic.disabled : input.background,
-      color: state.isDisabled ? semantic.onDisabled : input.text,
+      backgroundColor: state.isDisabled ? colors.disabled : input.background,
+      color: state.isDisabled ? colors.onDisabled : input.text,
       fontSize: input.fontSize,
       opacity: state.isDisabled ? 0.6 : 1,
     }
@@ -46,13 +45,13 @@ export const createInputTheme = ({
 
   return {
     input: createStyleResolver(resolveInput),
-    placeholderColor: createValueResolver(() => semantic.placeholder),
+    placeholderColor: createValueResolver(() => colors.placeholder),
   }
 }
 
 export const createInputThemeFromDesign = (theme: DesignTokensTheme): InputTheme => {
   return createInputTheme({
-    semantic: theme.semantic.colors,
+    colors: theme.semantic.colors,
     colorSchemes: theme.semantic.colorSchemes,
     input: theme.components.input,
   })
