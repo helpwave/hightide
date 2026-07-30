@@ -1,64 +1,64 @@
 import type { FontSizeKey, FontWeightKey } from '../primitive/typography'
-import type { ThemeTokens } from '../theme/theme-tokens'
+import type { HightideThemeTokens } from '../theme/themeTokens'
 
-export type TypographyStyleToken = {
+export type HightideTypographyStyleToken = {
   fontSize: string,
   lineHeight: number | string,
   fontWeight: number,
   fontFamily?: string,
 }
 
-export type TypographyTokens = {
-  fontWeights: ThemeTokens['typography']['fontWeight'],
+export type HightideTypographyTokens = {
+  fontWeights: HightideThemeTokens['typography']['fontWeight'],
   scales: {
     headline: {
-      large: TypographyStyleToken,
-      medium: TypographyStyleToken,
-      small: TypographyStyleToken,
+      large: HightideTypographyStyleToken,
+      medium: HightideTypographyStyleToken,
+      small: HightideTypographyStyleToken,
     },
     title: {
-      large: TypographyStyleToken,
-      medium: TypographyStyleToken,
-      small: TypographyStyleToken,
+      large: HightideTypographyStyleToken,
+      medium: HightideTypographyStyleToken,
+      small: HightideTypographyStyleToken,
     },
     body: {
-      large: TypographyStyleToken,
-      medium: TypographyStyleToken,
+      large: HightideTypographyStyleToken,
+      medium: HightideTypographyStyleToken,
     },
     label: {
-      large: TypographyStyleToken,
-      medium: TypographyStyleToken,
+      large: HightideTypographyStyleToken,
+      medium: HightideTypographyStyleToken,
     },
     caption: {
-      large: TypographyStyleToken,
-      medium: TypographyStyleToken,
-      small: TypographyStyleToken,
+      large: HightideTypographyStyleToken,
+      medium: HightideTypographyStyleToken,
+      small: HightideTypographyStyleToken,
     },
     button: {
-      large: TypographyStyleToken,
-      medium: TypographyStyleToken,
-      small: TypographyStyleToken,
+      large: HightideTypographyStyleToken,
+      medium: HightideTypographyStyleToken,
+      small: HightideTypographyStyleToken,
     },
   },
 }
 
-export type { TypographyTokens as TypographyScale, TypographyStyleToken as TypographyStyle }
+export type { HightideTypographyTokens as TypographyScale, HightideTypographyStyleToken as TypographyStyle }
 
 export const createTypographyStyle = (
-  typography: ThemeTokens['typography'],
+  typography: HightideThemeTokens['typography'],
   size: FontSizeKey,
   weight: FontWeightKey,
   fontFamily?: string
-): TypographyStyleToken => ({
+): HightideTypographyStyleToken => ({
   fontSize: typography.fontSize[size],
   lineHeight: typography.lineHeight[size],
   fontWeight: typography.fontWeight[weight],
   fontFamily,
 })
 
-export const createTypographyTokens = (
-  typography: ThemeTokens['typography']
-): TypographyTokens => ({
+export const createHightideTypographyTokens = (
+  typography: HightideThemeTokens['typography']
+): HightideTypographyTokens => ({
   fontWeights: typography.fontWeight,
   scales: {
     headline: {

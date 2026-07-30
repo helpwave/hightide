@@ -5,8 +5,8 @@ import {
 } from 'react-native'
 
 import { hightideTypography } from '@helpwave/hightide-design/primitive'
-import type { DesignSystemTokens as DesignTokensTheme } from '@helpwave/hightide-design/design-system'
-import type { ColorSchemes, SemanticColorTokens } from '@helpwave/hightide-design/semantic'
+import type { HightideDesignSystemTokens as DesignTokensTheme } from '@helpwave/hightide-design/design-system'
+import type { HightideColorSchemes, HightideSemanticColorTokens } from '@helpwave/hightide-design/semantic'
 import { HexColorUtils } from '@helpwave/hightide-design/utils'
 
 import type { Color } from '../types/color'
@@ -25,8 +25,8 @@ import {
 } from '../types/resolver'
 
 export type CreateChatThemeOptions = {
-  colors: SemanticColorTokens,
-  colorSchemes: ColorSchemes,
+  colors: HightideSemanticColorTokens,
+  colorSchemes: HightideColorSchemes,
 }
 
 export const createChatTheme = ({
@@ -404,6 +404,6 @@ export const createChatTheme = ({
 export const createChatThemeFromDesign = (theme: DesignTokensTheme): ChatTheme => {
   return createChatTheme({
     colors: theme.semantic.colors,
-    colorSchemes: theme.semantic.colorSchemes as ColorSchemes,
+    colorSchemes: theme.semantic.colorSchemes as HightideColorSchemes,
   })
 }

@@ -1,7 +1,7 @@
 import type { ColorToken } from '../primitive/color'
 import type {
   ShadowLayoutToken,
-  ShadowPrimitiveTokens,
+  HightideShadowPrimitiveTokens,
   ShadowSizeKey
 } from '../primitive/shadow'
 
@@ -9,14 +9,14 @@ export type ShadowToken = ShadowLayoutToken & {
   color: ColorToken,
 }
 
-export type ThemeShadowTokens = {
+export type HightideThemeShadowTokens = {
   sizes: Record<ShadowSizeKey, ShadowLayoutToken>,
   colors: Record<'light' | 'base' | 'dark', ColorToken>,
 }
 
 export const toHightideThemeShadow = (
-  shadow: ShadowPrimitiveTokens
-): ThemeShadowTokens => ({
+  shadow: HightideShadowPrimitiveTokens
+): HightideThemeShadowTokens => ({
   sizes: shadow.layout.bottom,
   colors: {
     light: shadow.colors['2%'],

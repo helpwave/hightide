@@ -2,7 +2,7 @@ import type { FixedUnitToken } from './units'
 
 export type BorderWidthStep = 0 | 1 | 2 | 3 | 4 | 5 | 6 | 7 | 8 | 9 | 10
 
-export type BorderPrimitiveTokens = Record<BorderWidthStep, FixedUnitToken>
+export type HightideBorderPrimitiveTokens = Record<BorderWidthStep, FixedUnitToken>
 
 export const hightideBorder = {
   0: 0,
@@ -16,4 +16,4 @@ export const hightideBorder = {
   8: 8,
   9: 9,
   10: 10,
-} as const satisfies BorderPrimitiveTokens
+} as const satisfies HightideBorderPrimitiveTokens

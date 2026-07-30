@@ -1,6 +1,6 @@
 import type { ColorToken } from '../primitive/color'
 
-export type SemanticColorTokens = {
+export type HightideSemanticColorTokens = {
   transparent: ColorToken,
   background: ColorToken,
   onBackground: ColorToken,

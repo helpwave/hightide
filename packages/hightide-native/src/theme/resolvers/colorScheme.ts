@@ -7,7 +7,7 @@ import {
 import type {
   ButtonColoringStyle,
   ChipColoringStyle,
-  ColorSchemes,
+  HightideColorSchemes,
   ColoringStyle,
   ColoringType
 } from '@helpwave/hightide-design/semantic'
@@ -46,7 +46,7 @@ const interactionStatesToElementStates = (
 }
 
 export const resolveColoringStyles = (
-  colorSchemes: ColorSchemes,
+  colorSchemes: HightideColorSchemes,
   color: ColoringType,
   coloringStyle: ColoringStyle,
   borderWidth: number,

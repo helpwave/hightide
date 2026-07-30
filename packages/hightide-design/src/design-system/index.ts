@@ -1,4 +1,3 @@
-export * from '../semantic/color-scheme'
-export * from './constructThemeTokens'
+export * from '../semantic/colorScheme'
 export * from './design'
-export * from './themes'
+export * from './hightide'

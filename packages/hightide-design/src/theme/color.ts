@@ -1,6 +1,6 @@
 import type { ColorToken } from '../primitive/color'
 
-export type ThemeRoleColorToken = {
+export type HightideThemeRoleColorToken = {
   color: ColorToken,
   onColor: ColorToken,
   emphasis: ColorToken,
@@ -8,7 +8,7 @@ export type ThemeRoleColorToken = {
   tintEmphasis: ColorToken,
 }
 
-export type ThemeColorTokens = {
+export type HightideThemeColorTokens = {
   transparent: ColorToken,
   background: ColorToken,
   onBackground: ColorToken,
@@ -20,10 +20,10 @@ export type ThemeColorTokens = {
   surfaceVariant: ColorToken,
   subtle: ColorToken,
   faded: ColorToken,
-  primary: ThemeRoleColorToken,
-  secondary: ThemeRoleColorToken,
-  positive: ThemeRoleColorToken,
-  warning: ThemeRoleColorToken,
-  negative: ThemeRoleColorToken,
-  neutral: ThemeRoleColorToken,
+  primary: HightideThemeRoleColorToken,
+  secondary: HightideThemeRoleColorToken,
+  positive: HightideThemeRoleColorToken,
+  warning: HightideThemeRoleColorToken,
+  negative: HightideThemeRoleColorToken,
+  neutral: HightideThemeRoleColorToken,
 }

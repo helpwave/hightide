@@ -1,9 +1,9 @@
 import type {
   ShadowToken,
-  ThemeShadowTokens
+  HightideThemeShadowTokens
 } from '../theme/shadow'
 
-export type ElevationShadowTokens = {
+export type HightideElevationShadowTokens = {
   raised: ShadowToken,
   container: ShadowToken,
   popover: ShadowToken,
@@ -11,8 +11,8 @@ export type ElevationShadowTokens = {
 }
 
 export const toHightideElevationShadow = (
-  shadow: ThemeShadowTokens
-): ElevationShadowTokens => {
+  shadow: HightideThemeShadowTokens
+): HightideElevationShadowTokens => {
   const color = shadow.colors.base
 
   return {

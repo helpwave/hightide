@@ -1,16 +1,16 @@
-import { createColorSchemes } from './color-scheme'
-import type { ThemeTokens } from '../theme/theme-tokens'
-import type { SemanticColorTokens } from './color'
-import { toHightideElementLayoutFromTheme } from './element-layout'
+import { createHightideColorSchemes } from './colorScheme'
+import type { HightideThemeTokens } from '../theme/themeTokens'
+import type { HightideSemanticColorTokens } from './color'
+import { toHightideElementLayoutFromTheme } from './elementLayout'
 import { toHightideElevationShadow } from './shadow'
-import type { SemanticTokens } from './semantic-tokens'
-import { createTypographyTokens } from './typography'
+import type { HightideSemanticTokens } from './semanticTokens'
+import { createHightideTypographyTokens } from './typography'
 
-export type ToSemanticArgs<Tokens extends ThemeTokens = ThemeTokens> = {
+export type ToHightideSemanticArgs<Tokens extends HightideThemeTokens = HightideThemeTokens> = {
   themeTokens: Tokens,
 }
 
-const toSemanticColors = (themeColors: ThemeTokens['color']): SemanticColorTokens => {
+const toSemanticColors = (themeColors: HightideThemeTokens['color']): HightideSemanticColorTokens => {
   return {
     transparent: themeColors.transparent,
     background: themeColors.background,
@@ -31,7 +31,7 @@ const toSemanticColors = (themeColors: ThemeTokens['color']): SemanticColorToken
 
 export const toHightideSemanticTokens = ({
   themeTokens,
-}: ToSemanticArgs): SemanticTokens => {
+}: ToHightideSemanticArgs): HightideSemanticTokens => {
   const {
     elementLayout,
     border,
@@ -40,8 +40,8 @@ export const toHightideSemanticTokens = ({
 
   return {
     colors: toSemanticColors(themeTokens.color),
-    colorSchemes: createColorSchemes(themeTokens.color),
-    typography: createTypographyTokens(themeTokens.typography),
+    colorSchemes: createHightideColorSchemes(themeTokens.color),
+    typography: createHightideTypographyTokens(themeTokens.typography),
     spacing: themeTokens.spacing,
     elementLayout,
     icon,

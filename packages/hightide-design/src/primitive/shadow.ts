@@ -22,7 +22,7 @@ export type ShadowOpacityKey =
   | '9%'
   | '10%'
 
-export type ShadowPrimitiveTokens = {
+export type HightideShadowPrimitiveTokens = {
   layout: Record<string, unknown> & {
     around: Record<ShadowSizeKey, ShadowLayoutToken>,
     bottom: Record<ShadowSizeKey, ShadowLayoutToken>,
@@ -59,4 +59,4 @@ export const hightideShadow = {
     '9%': '#00000017',
     '10%': '#0000001a',
   },
-} as const satisfies ShadowPrimitiveTokens
+} as const satisfies HightideShadowPrimitiveTokens

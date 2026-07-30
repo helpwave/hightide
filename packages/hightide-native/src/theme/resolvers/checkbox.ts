@@ -1,10 +1,10 @@
 import type { ViewStyle } from 'react-native'
 
 import { hightideRadius } from '@helpwave/hightide-design/primitive'
-import type { ComponentTokens } from '@helpwave/hightide-design/components'
-import type { DesignSystemTokens as DesignTokensTheme } from '@helpwave/hightide-design/design-system'
+import type { HightideComponentTokens } from '@helpwave/hightide-design/components'
+import type { HightideDesignSystemTokens as DesignTokensTheme } from '@helpwave/hightide-design/design-system'
 import type { ComponentSize } from '@helpwave/hightide-design/theme'
-import type { ColorSchemes, SemanticColorTokens } from '@helpwave/hightide-design/semantic'
+import type { HightideColorSchemes, HightideSemanticColorTokens } from '@helpwave/hightide-design/semantic'
 
 import type {
   CheckboxSize,
@@ -23,10 +23,10 @@ const checkboxIconComponentSize: Record<CheckboxSize, ComponentSize> = {
 }
 
 export type CreateCheckboxThemeOptions = {
-  colors: SemanticColorTokens,
-  colorSchemes: ColorSchemes,
-  input: ComponentTokens['input'],
-  layout: ComponentTokens['checkbox']['layout'],
+  colors: HightideSemanticColorTokens,
+  colorSchemes: HightideColorSchemes,
+  input: HightideComponentTokens['input'],
+  layout: HightideComponentTokens['checkbox']['layout'],
 }
 
 export const createCheckboxTheme = ({

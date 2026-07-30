@@ -1,6 +1,6 @@
 export * from './border'
 export * from './color'
-export * from './primitive-tokens'
+export * from './primitiveTokens'
 export * from './radius'
 export * from './shadow'
 export * from './size'

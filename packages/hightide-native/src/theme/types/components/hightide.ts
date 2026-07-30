@@ -1,4 +1,4 @@
-import type { ComponentTokens } from '@helpwave/hightide-design/components'
+import type { HightideComponentTokens } from '@helpwave/hightide-design/components'
 import type { AvatarTheme } from './avatar'
 import type { ButtonTheme } from './button'
 import type { ChatTheme } from './chat'
@@ -23,5 +23,5 @@ export type HightideComponentThemes = {
   chat: ChatTheme,
   card: CardTheme,
   avatar: AvatarTheme,
-  icon: ComponentTokens['icon'],
+  icon: HightideComponentTokens['icon'],
 }

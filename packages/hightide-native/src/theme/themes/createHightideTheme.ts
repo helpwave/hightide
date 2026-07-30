@@ -1,9 +1,9 @@
 import {
   hightidePrimitiveTokens,
   type ColorPalette,
-  type PrimitiveTokens
+  type HightidePrimitiveTokens
 } from '@helpwave/hightide-design/primitive'
-import type { DesignSystemTokens } from '@helpwave/hightide-design/design-system'
+import type { HightideDesignSystemTokens } from '@helpwave/hightide-design/design-system'
 
 import { createAvatarThemeFromDesign } from '../resolvers/avatar'
 import { createButtonThemeFromDesign } from '../resolvers/button'
@@ -29,8 +29,8 @@ const unwrapGrayPalette = (
 }
 
 export const createHightideTheme = (
-  tokens: DesignSystemTokens,
-  primitives: PrimitiveTokens = hightidePrimitiveTokens
+  tokens: HightideDesignSystemTokens,
+  primitives: HightidePrimitiveTokens = hightidePrimitiveTokens
 ): HightideTheme => {
   const gray = unwrapGrayPalette(primitives.color.palettes.gray)
 

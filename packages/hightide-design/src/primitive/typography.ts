@@ -15,7 +15,7 @@ export type FontSizeKey =
 
 export type FontWeightKey = 'thin' | 'light' | 'base' | 'medium' | 'semibold' | 'bold'
 
-export type TypographyPrimitiveTokens = {
+export type HightideTypographyPrimitiveTokens = {
   fontFamily: Record<string, string>,
   fontSize: Record<FontSizeKey, string> & Record<string, string>,
   fontWeight: Record<FontWeightKey, number> & Record<string, number>,
@@ -65,4 +65,4 @@ export const hightideTypography = {
     '8xl': 96,
     '9xl': 128,
   },
-} as const satisfies TypographyPrimitiveTokens
+} as const satisfies HightideTypographyPrimitiveTokens

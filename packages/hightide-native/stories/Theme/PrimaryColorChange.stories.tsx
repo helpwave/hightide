@@ -13,14 +13,11 @@ import {
 } from '@helpwave/hightide-design/primitive'
 import { toHightideSemanticTokens } from '@helpwave/hightide-design/semantic'
 import { toHightideComponentTokens } from '@helpwave/hightide-design/components'
+import { type HightideDesignSystemTokens } from '@helpwave/hightide-design/design-system'
 import {
-  constructThemeTokens,
-  type DesignSystemTokens
-} from '@helpwave/hightide-design/design-system'
-import {
-  toDarkThemeTokens,
-  toLightThemeTokens,
-  type ThemeTokens
+  hightideDarkThemeTokens,
+  hightideLightThemeTokens,
+  type HightideThemeTokens
 } from '@helpwave/hightide-design/theme'
 import { HexColorUtils } from '@helpwave/hightide-design/utils'
 
@@ -34,7 +31,7 @@ import {
   ThemeStoryFrame
 } from './themeStoryHelpers'
 
-const withBluePrimary = (themeTokens: ThemeTokens): ThemeTokens => {
+const withBluePrimary = (themeTokens: HightideThemeTokens): HightideThemeTokens => {
   const { blue, white } = hightidePrimitiveTokens.color.palettes as HightideColorPalettes
   const color = {
     ...themeTokens.color,
@@ -53,19 +50,17 @@ const withBluePrimary = (themeTokens: ThemeTokens): ThemeTokens => {
   }
 }
 
-const bluePrimaryDesignTokens = constructThemeTokens({
-  primitiveTokens: hightidePrimitiveTokens,
-  toThemeTokens: (args) => withBluePrimary(toLightThemeTokens(args)),
-  toSemantic: toHightideSemanticTokens,
-  toComponents: toHightideComponentTokens,
-}) satisfies DesignSystemTokens
+const toHightideDesignSystemTokens = (themeTokens: HightideThemeTokens): HightideDesignSystemTokens => {
+  const semantic = toHightideSemanticTokens({ themeTokens })
+  return {
+    theme: themeTokens,
+    semantic,
+    components: toHightideComponentTokens({ semanticTokens: semantic }),
+  }
+}
 
-const bluePrimaryDarkDesignTokens = constructThemeTokens({
-  primitiveTokens: hightidePrimitiveTokens,
-  toThemeTokens: (args) => withBluePrimary(toDarkThemeTokens(args)),
-  toSemantic: toHightideSemanticTokens,
-  toComponents: toHightideComponentTokens,
-}) satisfies DesignSystemTokens
+const bluePrimaryDesignTokens = toHightideDesignSystemTokens(withBluePrimary(hightideLightThemeTokens))
+const bluePrimaryDarkDesignTokens = toHightideDesignSystemTokens(withBluePrimary(hightideDarkThemeTokens))
 
 const bluePrimaryTheme = createHightideTheme(bluePrimaryDesignTokens)
 const bluePrimaryDarkTheme = createHightideTheme(bluePrimaryDarkDesignTokens)

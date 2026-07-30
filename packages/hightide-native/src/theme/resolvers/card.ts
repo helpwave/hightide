@@ -1,8 +1,8 @@
 import { StyleSheet } from 'react-native'
 
 import { hightideTypography } from '@helpwave/hightide-design/primitive'
-import type { DesignSystemTokens as DesignTokensTheme } from '@helpwave/hightide-design/design-system'
-import type { ColorSchemes, SemanticColorTokens } from '@helpwave/hightide-design/semantic'
+import type { HightideDesignSystemTokens as DesignTokensTheme } from '@helpwave/hightide-design/design-system'
+import type { HightideColorSchemes, HightideSemanticColorTokens } from '@helpwave/hightide-design/semantic'
 
 import type {
   CardActionItemState,
@@ -14,8 +14,8 @@ import {
 } from '../types/resolver'
 
 export type CreateCardThemeOptions = {
-  colors: SemanticColorTokens,
-  colorSchemes: ColorSchemes,
+  colors: HightideSemanticColorTokens,
+  colorSchemes: HightideColorSchemes,
 }
 
 export const createCardTheme = ({

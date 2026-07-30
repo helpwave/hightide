@@ -2,7 +2,7 @@ import type { ScalingUnitToken } from './units'
 
 export type SpacingSize = 'xs' | 'sm' | 'md' | 'lg' | 'xl'
 
-export type SpacingPrimitiveTokens = Record<SpacingSize, ScalingUnitToken> & Record<string, ScalingUnitToken>
+export type HightideSpacingPrimitiveTokens = Record<SpacingSize, ScalingUnitToken> & Record<string, ScalingUnitToken>
 
 export const hightideSpacing = {
   xs: 4,
@@ -10,4 +10,4 @@ export const hightideSpacing = {
   md: 12,
   lg: 16,
   xl: 24,
-} as const satisfies SpacingPrimitiveTokens
+} as const satisfies HightideSpacingPrimitiveTokens

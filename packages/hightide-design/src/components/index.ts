@@ -1,2 +1,3 @@
-export * from './component-tokens'
-export * from './to-components'
+export * from './componentTokens'
+export * from './hightide'
+export * from './toComponentTokens'

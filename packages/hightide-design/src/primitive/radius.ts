@@ -1,6 +1,6 @@
 export type RadiusSize = 'xs' | 'sm' | 'md' | 'lg' | 'xl'
 
-export type RadiusPrimitiveTokens = Record<RadiusSize, string> & Record<string, string>
+export type HightideRadiusPrimitiveTokens = Record<RadiusSize, string> & Record<string, string>
 
 export const hightideRadius = {
   xs: '2',
@@ -8,4 +8,4 @@ export const hightideRadius = {
   md: '8',
   lg: '16',
   xl: '32',
-} as const satisfies RadiusPrimitiveTokens
+} as const satisfies HightideRadiusPrimitiveTokens

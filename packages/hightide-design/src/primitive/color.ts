@@ -41,7 +41,7 @@ export type ColorPalette = ColorPaletteBasicToken | ColorPaletteDetailedToken | 
 
 export type ColorPaletteToken = ColorPalette
 
-export type ColorPrimitiveTokens = {
+export type HightideColorPrimitiveTokens = {
   palettes: Record<string, ColorPalette>,
 } & Record<string, unknown>
 
@@ -168,6 +168,6 @@ export const hightideColor = {
       }
     } as const satisfies ColorPaletteBasicToken,
   },
-} as const satisfies ColorPrimitiveTokens
+} as const satisfies HightideColorPrimitiveTokens
 
 export type HightideColorPalettes = typeof hightideColor.palettes

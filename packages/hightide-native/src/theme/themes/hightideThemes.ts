@@ -1,18 +1,18 @@
-import { designSystem } from '@helpwave/hightide-design/design-system'
+import { hightideDesignSystem } from '@helpwave/hightide-design/design-system'
 import { createHightideTheme } from './createHightideTheme'
 
-export const lightTheme = createHightideTheme(
-  designSystem.themes.light,
-  designSystem.primitives
+export const hightideLightTheme = createHightideTheme(
+  hightideDesignSystem.themes.light,
+  hightideDesignSystem.primitives
 )
-export const darkTheme = createHightideTheme(
-  designSystem.themes.dark,
-  designSystem.primitives
+export const hightideDarkTheme = createHightideTheme(
+  hightideDesignSystem.themes.dark,
+  hightideDesignSystem.primitives
 )
 
 export const themes = {
-  light: lightTheme,
-  dark: darkTheme,
+  light: hightideLightTheme,
+  dark: hightideDarkTheme,
 } as const
 
 export type HightideThemeModes = 'dark' | 'light'

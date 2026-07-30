@@ -4,14 +4,14 @@ import type {
   ViewStyle
 } from 'react-native'
 
-import type { ComponentTokens } from '@helpwave/hightide-design/components'
+import type { HightideComponentTokens } from '@helpwave/hightide-design/components'
 import type {
-  ColorSchemes,
-  ElevationShadowTokens,
-  SemanticColorTokens,
-  TypographyTokens
+  HightideColorSchemes,
+  HightideElevationShadowTokens,
+  HightideSemanticColorTokens,
+  HightideTypographyTokens
 } from '@helpwave/hightide-design/semantic'
-import type { DesignSystemTokens as DesignTokensTheme } from '@helpwave/hightide-design/design-system'
+import type { HightideDesignSystemTokens as DesignTokensTheme } from '@helpwave/hightide-design/design-system'
 
 import { resolveColoringStyles } from './colorScheme'
 
@@ -37,7 +37,7 @@ const avatarFontWeights: Record<'xs' | 'sm' | 'md' | 'lg' | 'xl', 'semibold' | '
 
 const statusColor = (
   status: AvatarStatus,
-  colorSchemes: ColorSchemes,
+  colorSchemes: HightideColorSchemes,
   gray: ColorPalette
 ): string => {
   switch (status) {
@@ -55,14 +55,14 @@ const statusColor = (
 }
 
 export type CreateAvatarThemeOptions = {
-  colors: SemanticColorTokens,
-  colorSchemes: ColorSchemes,
+  colors: HightideSemanticColorTokens,
+  colorSchemes: HightideColorSchemes,
   gray: ColorPalette,
-  typography: TypographyTokens,
-  avatar: ComponentTokens['avatar'],
-  icon: ComponentTokens['icon'],
-  avatarGroup: ComponentTokens['avatarGroup'],
-  shadow: ElevationShadowTokens,
+  typography: HightideTypographyTokens,
+  avatar: HightideComponentTokens['avatar'],
+  icon: HightideComponentTokens['icon'],
+  avatarGroup: HightideComponentTokens['avatarGroup'],
+  shadow: HightideElevationShadowTokens,
 }
 
 export const createAvatarTheme = ({
@@ -243,7 +243,7 @@ export const createAvatarThemeFromDesign = (
 ): AvatarTheme => {
   return createAvatarTheme({
     colors: theme.semantic.colors,
-    colorSchemes: theme.semantic.colorSchemes as ColorSchemes,
+    colorSchemes: theme.semantic.colorSchemes as HightideColorSchemes,
     gray,
     typography: theme.semantic.typography,
     avatar: theme.components.avatar,

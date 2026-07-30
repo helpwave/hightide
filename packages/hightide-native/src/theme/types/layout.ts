@@ -1,11 +1,11 @@
 import type {
-  RadiusPrimitiveTokens,
-  SpacingPrimitiveTokens
+  HightideRadiusPrimitiveTokens,
+  HightideSpacingPrimitiveTokens
 } from '@helpwave/hightide-design/primitive'
 import type {
-  ElevationShadowTokens,
-  ElementLayoutTokens,
-  SemanticBorderTokens
+  HightideElevationShadowTokens,
+  HightideElementLayoutTokens,
+  HightideSemanticBorderTokens
 } from '@helpwave/hightide-design/semantic'
 import type {
   ComponentSize,
@@ -14,8 +14,8 @@ import type {
 
 export type { ComponentSize, ComponentSizeBasic }
 
-export type HightideSpacing = SpacingPrimitiveTokens
-export type HightideElements = ElementLayoutTokens
-export type HightideRadius = RadiusPrimitiveTokens
-export type HightideBorder = SemanticBorderTokens
-export type HightideShadow = ElevationShadowTokens
+export type HightideSpacing = HightideSpacingPrimitiveTokens
+export type HightideElements = HightideElementLayoutTokens
+export type HightideRadius = HightideRadiusPrimitiveTokens
+export type HightideBorder = HightideSemanticBorderTokens
+export type HightideShadow = HightideElevationShadowTokens

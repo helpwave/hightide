@@ -1,4 +1,4 @@
-import type { ColorSchemes, SemanticColorTokens } from '@helpwave/hightide-design/semantic'
+import type { HightideColorSchemes, HightideSemanticColorTokens } from '@helpwave/hightide-design/semantic'
 
 import type { HightideComponentThemes } from './components/hightide'
 import type {
@@ -23,8 +23,8 @@ export type Theme = {
 }
 
 export type HightideTheme = Theme & {
-  colors: SemanticColorTokens & Theme['colors'],
-  colorSchemes: ColorSchemes & Theme['colorSchemes'],
+  colors: HightideSemanticColorTokens & Theme['colors'],
+  colorSchemes: HightideColorSchemes & Theme['colorSchemes'],
   components: HightideComponentThemes & Theme['components'],
   typography: HightideTypography & Theme['typography'],
   spacing: HightideSpacing & Theme['spacing'],

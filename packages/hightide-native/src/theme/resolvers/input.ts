@@ -1,8 +1,8 @@
 import type { TextStyle } from 'react-native'
 
-import type { ComponentTokens } from '@helpwave/hightide-design/components'
-import type { DesignSystemTokens as DesignTokensTheme } from '@helpwave/hightide-design/design-system'
-import type { ColorSchemes, SemanticColorTokens } from '@helpwave/hightide-design/semantic'
+import type { HightideComponentTokens } from '@helpwave/hightide-design/components'
+import type { HightideDesignSystemTokens as DesignTokensTheme } from '@helpwave/hightide-design/design-system'
+import type { HightideColorSchemes, HightideSemanticColorTokens } from '@helpwave/hightide-design/semantic'
 
 import type {
   InputState,
@@ -14,9 +14,9 @@ import {
 } from '../types/resolver'
 
 export type CreateInputThemeOptions = {
-  colors: SemanticColorTokens,
-  colorSchemes: ColorSchemes,
-  input: ComponentTokens['input'],
+  colors: HightideSemanticColorTokens,
+  colorSchemes: HightideColorSchemes,
+  input: HightideComponentTokens['input'],
 }
 
 export const createInputTheme = ({

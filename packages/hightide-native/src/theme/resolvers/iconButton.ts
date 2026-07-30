@@ -1,8 +1,8 @@
 import type { ViewStyle } from 'react-native'
 
-import type { ComponentTokens } from '@helpwave/hightide-design/components'
-import type { DesignSystemTokens as DesignTokensTheme } from '@helpwave/hightide-design/design-system'
-import type { ColorSchemes } from '@helpwave/hightide-design/semantic'
+import type { HightideComponentTokens } from '@helpwave/hightide-design/components'
+import type { HightideDesignSystemTokens as DesignTokensTheme } from '@helpwave/hightide-design/design-system'
+import type { HightideColorSchemes } from '@helpwave/hightide-design/semantic'
 
 import {
   isOutlineColoringStyle,
@@ -18,8 +18,8 @@ import {
 } from '../types/resolver'
 
 export type CreateIconButtonThemeOptions = {
-  colorSchemes: ColorSchemes,
-  layout: ComponentTokens['iconButton']['layout'],
+  colorSchemes: HightideColorSchemes,
+  layout: HightideComponentTokens['iconButton']['layout'],
   borderWidth: number,
 }
 

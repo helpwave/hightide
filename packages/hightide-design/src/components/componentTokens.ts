@@ -3,9 +3,9 @@ import type {
   ComponentSize,
   ComponentSizeBasic
 } from '../theme/layout'
-import type { ControlElementLayoutToken } from '../semantic/element-layout'
+import type { HightideControlElementLayoutToken } from '../semantic/elementLayout'
 
-export type ComponentElementLayout = {
+export type HightideComponentElementLayout = {
   size: number,
   inset: number,
   border: number,
@@ -16,22 +16,22 @@ export type ComponentElementLayout = {
   fontSize: number,
 }
 
-export type ComponentTokens = {
+export type HightideComponentTokens = {
   button: {
-    layout: Record<ComponentSize, ComponentElementLayout>,
+    layout: Record<ComponentSize, HightideComponentElementLayout>,
   },
   iconButton: {
-    layout: Record<ComponentSize, ComponentElementLayout>,
+    layout: Record<ComponentSize, HightideComponentElementLayout>,
   },
   chip: {
-    layout: Record<ComponentSize, ComponentElementLayout>,
+    layout: Record<ComponentSize, HightideComponentElementLayout>,
   },
-  input: ComponentElementLayout & {
+  input: HightideComponentElementLayout & {
     background: ColorToken,
     text: ColorToken,
   },
   checkbox: {
-    layout: Record<ComponentSizeBasic, ControlElementLayoutToken>,
+    layout: Record<ComponentSizeBasic, HightideControlElementLayoutToken>,
   },
   menu: {
     background: ColorToken,

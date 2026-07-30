@@ -42,5 +42,5 @@ export const hightideSizes = {
   160: 160,
 } as const
 
-export type SizePrimitiveTokens = typeof hightideSizes
+export type HightideSizePrimitiveTokens = typeof hightideSizes
 export type SizeStep = keyof typeof hightideSizes

@@ -1,9 +1,9 @@
 import type { ColorToken } from '../primitive/color'
-import type { ColorState } from '../theme/color-state'
-import type { StateBasedProperty } from '../theme/state-based-property'
+import type { ColorState } from '../theme/colorState'
+import type { StateBasedProperty } from '../theme/stateBasedProperty'
 import type {
-  ThemeColorTokens,
-  ThemeRoleColorToken
+  HightideThemeColorTokens,
+  HightideThemeRoleColorToken
 } from '../theme/color'
 
 export const coloringTypes = ['primary', 'secondary', 'positive', 'warning', 'negative', 'neutral'] as const
@@ -16,7 +16,7 @@ export type ColoringStyle = ColoringStyleBase | 'text'
 export type ButtonColoringStyle = ColoringStyle
 export type ChipColoringStyle = ColoringStyleBase
 
-export type ColorScheme = {
+export type HightideColorScheme = {
   'filled': StateBasedProperty<ColorState>,
   'outline': StateBasedProperty<ColorState>,
   'tonal': StateBasedProperty<ColorState>,
@@ -24,10 +24,10 @@ export type ColorScheme = {
   'text': StateBasedProperty<ColorState>,
 }
 
-export type ColorSchemes = Record<ColoringType, ColorScheme>
+export type HightideColorSchemes = Record<ColoringType, HightideColorScheme>
 
 const createFilled = (
-  role: ThemeRoleColorToken,
+  role: HightideThemeRoleColorToken,
   disabled: ColorToken,
   onDisabled: ColorToken,
   transparent: ColorToken
@@ -48,7 +48,7 @@ const createFilled = (
 })
 
 const createOutline = (
-  role: ThemeRoleColorToken,
+  role: HightideThemeRoleColorToken,
   disabled: ColorToken,
   onDisabled: ColorToken,
   transparent: ColorToken
@@ -75,7 +75,7 @@ const createOutline = (
 })
 
 const createText = (
-  role: ThemeRoleColorToken,
+  role: HightideThemeRoleColorToken,
   disabled: ColorToken,
   onDisabled: ColorToken,
   transparent: ColorToken
@@ -96,7 +96,7 @@ const createText = (
 })
 
 const createTonal = (
-  role: ThemeRoleColorToken,
+  role: HightideThemeRoleColorToken,
   disabled: ColorToken,
   onDisabled: ColorToken,
   transparent: ColorToken
@@ -117,7 +117,7 @@ const createTonal = (
 })
 
 const createTonalOutline = (
-  role: ThemeRoleColorToken,
+  role: HightideThemeRoleColorToken,
   disabled: ColorToken,
   onDisabled: ColorToken
 ): StateBasedProperty<ColorState> => ({
@@ -143,11 +143,11 @@ const createTonalOutline = (
 })
 
 const schemeFor = (
-  role: ThemeRoleColorToken,
+  role: HightideThemeRoleColorToken,
   disabled: ColorToken,
   onDisabled: ColorToken,
   transparent: ColorToken
-): ColorScheme => ({
+): HightideColorScheme => ({
   'filled': createFilled(role, disabled, onDisabled, transparent),
   'outline': createOutline(role, disabled, onDisabled, transparent),
   'tonal': createTonal(role, disabled, onDisabled, transparent),
@@ -155,7 +155,7 @@ const schemeFor = (
   'text': createText(role, disabled, onDisabled, transparent),
 })
 
-export const createColorSchemes = (colors: ThemeColorTokens): ColorSchemes => {
+export const createHightideColorSchemes = (colors: HightideThemeColorTokens): HightideColorSchemes => {
   const { disabled, onDisabled, transparent } = colors
 
   return {

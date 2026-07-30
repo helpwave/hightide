@@ -3,9 +3,9 @@ import type {
   ViewStyle
 } from 'react-native'
 
-import type { ComponentTokens } from '@helpwave/hightide-design/components'
-import type { DesignSystemTokens as DesignTokensTheme } from '@helpwave/hightide-design/design-system'
-import type { ColorSchemes } from '@helpwave/hightide-design/semantic'
+import type { HightideComponentTokens } from '@helpwave/hightide-design/components'
+import type { HightideDesignSystemTokens as DesignTokensTheme } from '@helpwave/hightide-design/design-system'
+import type { HightideColorSchemes } from '@helpwave/hightide-design/semantic'
 
 import {
   isOutlineColoringStyle,
@@ -18,8 +18,8 @@ import type {
 import { createStyleResolver } from '../types/resolver'
 
 export type CreateButtonThemeOptions = {
-  colorSchemes: ColorSchemes,
-  layout: ComponentTokens['button']['layout'],
+  colorSchemes: HightideColorSchemes,
+  layout: HightideComponentTokens['button']['layout'],
   fontWeight: number,
   borderWidth: number,
 }

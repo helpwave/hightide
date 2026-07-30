@@ -1,17 +1,17 @@
-import type { BorderPrimitiveTokens } from '../primitive/border'
-import type { SizePrimitiveTokens } from '../primitive/size'
+import type { HightideBorderPrimitiveTokens } from '../primitive/border'
+import type { HightideSizePrimitiveTokens } from '../primitive/size'
 
 export type ComponentSizeBasic = 'sm' | 'md' | 'lg'
 export type ComponentSize = ComponentSizeBasic | 'xs' | 'xl'
 
 export const componentSizes: ComponentSize[] = ['xs', 'sm', 'md', 'lg', 'xl']
 
-export type ThemeSizeTokens = Record<ComponentSize, number>
-export type ThemePaddingTokens = Record<ComponentSize, number>
-export type ThemePaddingExtensionTokens = Record<ComponentSize, number>
-export type ThemeBorderTokens = Record<ComponentSize, number>
+export type HightideThemeSizeTokens = Record<ComponentSize, number>
+export type HightideThemePaddingTokens = Record<ComponentSize, number>
+export type HightideThemePaddingExtensionTokens = Record<ComponentSize, number>
+export type HightideThemeBorderTokens = Record<ComponentSize, number>
 
-export const toHightideThemeSize = (sizes: SizePrimitiveTokens): ThemeSizeTokens => ({
+export const toHightideThemeSize = (sizes: HightideSizePrimitiveTokens): HightideThemeSizeTokens => ({
   xs: sizes[28],
   sm: sizes[36],
   md: sizes[44],
@@ -19,7 +19,7 @@ export const toHightideThemeSize = (sizes: SizePrimitiveTokens): ThemeSizeTokens
   xl: sizes[60],
 })
 
-export const toHightideThemePadding = (): ThemePaddingTokens => ({
+export const toHightideThemePadding = (): HightideThemePaddingTokens => ({
   xs: 6,
   sm: 6,
   md: 10,
@@ -27,7 +27,7 @@ export const toHightideThemePadding = (): ThemePaddingTokens => ({
   xl: 12,
 })
 
-export const toHightideThemePaddingExtension = (sizes: SizePrimitiveTokens): ThemePaddingExtensionTokens => ({
+export const toHightideThemePaddingExtension = (sizes: HightideSizePrimitiveTokens): HightideThemePaddingExtensionTokens => ({
   xs: sizes[4],
   sm: sizes[4],
   md: sizes[12],
@@ -35,7 +35,7 @@ export const toHightideThemePaddingExtension = (sizes: SizePrimitiveTokens): The
   xl: sizes[12],
 })
 
-export const toHightideThemeBorder = (border: BorderPrimitiveTokens): ThemeBorderTokens => ({
+export const toHightideThemeBorder = (border: HightideBorderPrimitiveTokens): HightideThemeBorderTokens => ({
   xs: border[1],
   sm: border[1],
   md: border[2],

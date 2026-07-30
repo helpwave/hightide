@@ -1,15 +1,15 @@
-import type { SemanticTokens } from '../semantic/semantic-tokens'
+import type { HightideSemanticTokens } from '../semantic/semanticTokens'
 import type {
   ComponentSize,
   ComponentSizeBasic
 } from '../theme/layout'
 import { componentSizes } from '../theme/layout'
 import type {
-  ComponentElementLayout,
-  ComponentTokens
-} from './component-tokens'
+  HightideComponentElementLayout,
+  HightideComponentTokens
+} from './componentTokens'
 
-export type ToComponentsArgs<Tokens extends SemanticTokens = SemanticTokens> = {
+export type ToHightideComponentTokensArgs<Tokens extends HightideSemanticTokens = HightideSemanticTokens> = {
   semanticTokens: Tokens,
 }
 
@@ -46,7 +46,7 @@ const checkboxControlSize: Record<ComponentSizeBasic, ComponentSize> = {
 
 export const toHightideComponentTokens = ({
   semanticTokens,
-}: ToComponentsArgs): ComponentTokens => {
+}: ToHightideComponentTokensArgs): HightideComponentTokens => {
   const colors = semanticTokens.colors
   const colorSchemes = semanticTokens.colorSchemes
   const semantic = semanticTokens
@@ -66,16 +66,16 @@ export const toHightideComponentTokens = ({
         horizontalInset: token.horizontalContentPadding ?? token.inset,
         minWidth: token.minimumWidth ?? token.size,
         fontSize: buttonFontSizes[size],
-      } satisfies ComponentElementLayout]
+      } satisfies HightideComponentElementLayout]
     })
-  ) as Record<ComponentSize, ComponentElementLayout>
+  ) as Record<ComponentSize, HightideComponentElementLayout>
 
   const icon = Object.fromEntries(
     componentSizes.map((size) => [size, {
       size: semantic.icon[size].size,
       strokeWidth: semantic.border.base,
     }])
-  ) as ComponentTokens['icon']
+  ) as HightideComponentTokens['icon']
 
   const avatar = Object.fromEntries(
     componentSizes.map((size) => {
@@ -95,7 +95,7 @@ export const toHightideComponentTokens = ({
         statusDotBorderWidth: size === 'xs' ? semantic.border.thin + 0.5 : semantic.border.base,
       }]
     })
-  ) as ComponentTokens['avatar']
+  ) as HightideComponentTokens['avatar']
 
   const chipLayout = Object.fromEntries(
     componentSizes.map((size) => {
@@ -107,16 +107,16 @@ export const toHightideComponentTokens = ({
         horizontalInset: Math.max(Math.round(token.horizontalInset * 0.8), semantic.spacing.xs),
         fontSize: Number(semantic.typography.scales.label.medium.fontSize),
         radius: Number(semantic.radius[chipRadiusKeyFor(size)]),
-      } satisfies ComponentElementLayout]
+      } satisfies HightideComponentElementLayout]
     })
-  ) as Record<ComponentSize, ComponentElementLayout>
+  ) as Record<ComponentSize, HightideComponentElementLayout>
 
   const checkboxLayout = Object.fromEntries(
     (['sm', 'md', 'lg'] as const).map((size) => {
       const controlSize = checkboxControlSize[size]
       return [size, control[controlSize]]
     })
-  ) as ComponentTokens['checkbox']['layout']
+  ) as HightideComponentTokens['checkbox']['layout']
 
   const inputControl = control.md
 

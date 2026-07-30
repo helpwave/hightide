@@ -15,27 +15,33 @@ There is **no package root export**. Import from folder entry points:
 ```ts
 import {
   hightidePrimitiveTokens,
-  type PrimitiveTokens,
+  type HightidePrimitiveTokens,
   type SizeStep,
 } from "@helpwave/hightide-design/primitive";
 import {
-  toLightThemeTokens,
-  toDarkThemeTokens,
+  hightideLightThemeTokens,
+  hightideDarkThemeTokens,
+  hightideSharedThemeTokens,
   resolveStateBasedProperty,
-  type ThemeTokens,
+  type HightideThemeTokens,
   type ComponentSize,
 } from "@helpwave/hightide-design/theme";
-import { toHightideSemanticTokens } from "@helpwave/hightide-design/semantic";
-import { toHightideComponentTokens } from "@helpwave/hightide-design/components";
 import {
-  designSystem,
+  hightideLightSemanticTokens,
+  toHightideSemanticTokens,
+} from "@helpwave/hightide-design/semantic";
+import {
+  hightideLightComponentTokens,
+  toHightideComponentTokens,
+} from "@helpwave/hightide-design/components";
+import {
+  hightideDesignSystem,
   coloringTypes,
-  constructThemeTokens,
-  type DesignSystemTokens,
+  type HightideDesignSystemTokens,
 } from "@helpwave/hightide-design/design-system";
 import { HexColorUtils } from "@helpwave/hightide-design/utils";
 
-const light = designSystem.themes.light;
+const light = hightideDesignSystem.themes.light;
 const background = light.semantic.colors.background;
 const filledPrimary = light.semantic.colorSchemes.primary.filled;
 const buttonHeight = light.components.button.layout.md.size;
@@ -45,28 +51,28 @@ const translucent = HexColorUtils.hexWithAlpha(background, 0.5);
 
 | Subpath | Contents |
 | --- | --- |
-| `@helpwave/hightide-design/primitive` | Structured `PrimitiveTokens` (incl. `sizes` 0…160/4, `border` 0…10) |
-| `@helpwave/hightide-design/theme` | `ThemeTokens`, light/dark adapters, layout roles, `StateBasedProperty` |
-| `@helpwave/hightide-design/semantic` | Semantic mapper (`elementLayout`, `createColorSchemes`, pruned colors + `colorSchemes`) |
-| `@helpwave/hightide-design/components` | Component colors/layouts + `toHightideComponentTokens` |
-| `@helpwave/hightide-design/design-system` | `designSystem`, `constructThemeTokens`, coloring helpers |
+| `@helpwave/hightide-design/primitive` | Structured `HightidePrimitiveTokens` (incl. `sizes` 0…160/4, `border` 0…10) |
+| `@helpwave/hightide-design/theme` | `HightideThemeTokens`, shared/light/dark constants, layout roles, `StateBasedProperty` |
+| `@helpwave/hightide-design/semantic` | Semantic mapper + precomputed light/dark semantic tokens + `colorSchemes` |
+| `@helpwave/hightide-design/components` | Component mapper + precomputed light/dark component tokens |
+| `@helpwave/hightide-design/design-system` | `hightideDesignSystem`, coloring helpers |
 | `@helpwave/hightide-design/utils` | `HexColorUtils` |
 
 ## Pipeline
 
 ```text
-PrimitiveTokens
+HightidePrimitiveTokens
       │
-      ▼  toLightThemeTokens / toDarkThemeTokens   // @theme — palettes + layout roles
-ThemeTokens
+      ▼  hightideSharedThemeTokens + light/dark color maps   // @theme
+HightideThemeTokens   // hightideLightThemeTokens / hightideDarkThemeTokens
       │
-      ▼  toSemantic({ themeTokens })               // @semantic — prune colors + build colorSchemes
-SemanticTokens
+      ▼  toHightideSemanticTokens({ themeTokens })           // @semantic
+HightideSemanticTokens   // hightideLightSemanticTokens / hightideDarkSemanticTokens
       │
-      ▼  toComponents({ semanticTokens })          // @components
-ComponentTokens
+      ▼  toHightideComponentTokens({ semanticTokens })       // @components
+HightideComponentTokens   // hightideLightComponentTokens / hightideDarkComponentTokens
       │
-      ▼  DesignSystemTokens { semantic, components }
+      ▼  HightideDesignSystemTokens { theme, semantic, components }
 ```
 
 Color scheme shape (role → style → state):
@@ -76,7 +82,7 @@ semantic.colorSchemes.primary.filled // StateBasedProperty<ColorState>
 semantic.colorSchemes.neutral.outline
 ```
 
-`ThemeColorTokens` is an independent theme-layer type (surface colors + inlined role colors). `semantic.colors` is a pruned surface set; `toSemantic` builds `semantic.colorSchemes` from theme role colors. Platform themes read surfaces from `semantic.colors` and roles from `semantic.colorSchemes`.
+`HightideThemeColorTokens` is an independent theme-layer type (surface colors + inlined role colors). `semantic.colors` is a pruned surface set; `toSemantic` builds `semantic.colorSchemes` from theme role colors. Platform themes read surfaces from `semantic.colors` and roles from `semantic.colorSchemes`.
 
 Layout layers:
 
@@ -91,9 +97,9 @@ Layout layers:
 ```
 src/
   primitive/
-  theme/           ThemeTokens, light/dark adapters, StateBasedProperty, layout roles
-  semantic/        toSemantic + colorSchemes + typography + elementLayout + icon
-  components/      toComponents + component colors/layouts
-  design-system/   designSystem assembly + constructThemeTokens
+  theme/           HightideThemeTokens, shared/light/dark constants, StateBasedProperty, layout roles
+  semantic/        toSemantic + precomputed semantic constants + colorSchemes + typography
+  components/      toComponents + precomputed component constants
+  design-system/   hightideDesignSystem assembly
   utils/           HexColorUtils
 ```
