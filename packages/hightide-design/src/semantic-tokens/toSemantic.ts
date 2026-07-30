@@ -6,8 +6,8 @@ import { toHightideElevationShadow } from './shadow'
 import type { HightideSemanticTokens } from './semanticTokens'
 import { createHightideTypographyTokens } from './typography'
 
-export type ToHightideSemanticArgs<Tokens extends HightideThemeTokens = HightideThemeTokens> = {
-  themeTokens: Tokens,
+export type ToHightideSemanticArgs = {
+  themeTokens: HightideThemeTokens,
 }
 
 const toSemanticColors = (themeColors: HightideThemeTokens['color']): HightideSemanticColorTokens => {

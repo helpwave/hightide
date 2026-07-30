@@ -1,29 +1,31 @@
 import type { HightideColorPalettes } from '../primitive-tokens/color'
-import { hightidePrimitiveTokens } from '../primitive-tokens/primitiveTokens'
+import { hightidePrimitiveTokens } from '../primitive-tokens/hightide'
 import { HexColorUtils } from '../utils/hex'
 import type { HightideThemeColorTokens, HightideThemeTokens } from './themeTokens'
 import {
-  toHightideThemeBorder,
-  toHightideThemePadding,
-  toHightideThemePaddingExtension,
-  toHightideThemeSize
+  hightideThemeBorderTokens,
+  hightideThemePaddingExtensionTokens,
+  hightideThemePaddingTokens,
+  hightideThemeSizeTokens
 } from './layout'
-import { toHightideThemeShadow } from './shadow'
-import { toHightideThemeTypography } from './typography'
+import {
+  hightideDarkThemeShadowTokens,
+  hightideLightThemeShadowTokens
+} from './shadow'
+import { hightideThemeTypographyTokens } from './typography'
 
-export type HightideSharedThemeTokens = Omit<HightideThemeTokens, 'color'>
+export type HightideSharedThemeTokens = Omit<HightideThemeTokens, 'color' | 'shadow'>
 
 const palettes = hightidePrimitiveTokens.color.palettes as HightideColorPalettes
 
 export const hightideSharedThemeTokens: HightideSharedThemeTokens = {
   spacing: hightidePrimitiveTokens.spacing,
-  size: toHightideThemeSize(hightidePrimitiveTokens.sizes),
-  padding: toHightideThemePadding(),
-  paddingExtension: toHightideThemePaddingExtension(hightidePrimitiveTokens.sizes),
-  typography: toHightideThemeTypography(hightidePrimitiveTokens.typography),
+  size: hightideThemeSizeTokens,
+  padding: hightideThemePaddingTokens,
+  paddingExtension: hightideThemePaddingExtensionTokens,
+  typography: hightideThemeTypographyTokens,
   radius: hightidePrimitiveTokens.radius,
-  border: toHightideThemeBorder(hightidePrimitiveTokens.border),
-  shadow: toHightideThemeShadow(hightidePrimitiveTokens.shadow),
+  border: hightideThemeBorderTokens,
 }
 
 const {
@@ -153,9 +155,11 @@ const hightideDarkThemeColors: HightideThemeColorTokens = {
 export const hightideLightThemeTokens: HightideThemeTokens = {
   ...hightideSharedThemeTokens,
   color: hightideLightThemeColors,
+  shadow: hightideLightThemeShadowTokens,
 }
 
 export const hightideDarkThemeTokens: HightideThemeTokens = {
   ...hightideSharedThemeTokens,
   color: hightideDarkThemeColors,
+  shadow: hightideDarkThemeShadowTokens,
 }

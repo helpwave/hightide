@@ -1,5 +1,5 @@
 import { hightideDarkComponentTokens, hightideLightComponentTokens } from '../component-tokens/hightide'
-import { hightidePrimitiveTokens } from '../primitive-tokens/primitiveTokens'
+import { hightidePrimitiveTokens } from '../primitive-tokens/hightide'
 import { hightideDarkSemanticTokens, hightideLightSemanticTokens } from '../semantic-tokens/hightide'
 import { hightideDarkThemeTokens, hightideLightThemeTokens } from '../theme-tokens/hightide'
 import type { HightideDesignSystem, HightideDesignSystemTokens } from './design'

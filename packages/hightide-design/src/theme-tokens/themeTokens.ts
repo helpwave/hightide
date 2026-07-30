@@ -8,7 +8,7 @@ import type {
   HightideThemeSizeTokens
 } from './layout'
 import type { HightideThemeShadowTokens } from './shadow'
-import type { HightideThemeHightideTypographyTokens } from './typography'
+import type { HightideThemeTypographyTokens } from './typography'
 
 export type { HightideThemeColorTokens, HightideThemeRoleColorToken } from './color'
 
@@ -18,7 +18,7 @@ export type HightideThemeTokens = {
   size: HightideThemeSizeTokens,
   padding: HightideThemePaddingTokens,
   paddingExtension: HightideThemePaddingExtensionTokens,
-  typography: HightideThemeHightideTypographyTokens,
+  typography: HightideThemeTypographyTokens,
   radius: HightideRadiusPrimitiveTokens,
   border: HightideThemeBorderTokens,
   shadow: HightideThemeShadowTokens,

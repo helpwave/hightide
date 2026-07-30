@@ -1,5 +1,4 @@
 export * from './color'
-export * from './colorState'
 export * from './hightide'
 export * from './layout'
 export * from './shadow'

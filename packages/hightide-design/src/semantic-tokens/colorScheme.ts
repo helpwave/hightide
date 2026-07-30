@@ -1,10 +1,15 @@
 import type { ColorToken } from '../primitive-tokens/color'
-import type { ColorState } from '../theme-tokens/colorState'
 import type { StateBasedProperty } from '../theme-tokens/stateBasedProperty'
 import type {
   HightideThemeColorTokens,
   HightideThemeRoleColorToken
 } from '../theme-tokens/color'
+
+export type ColorState = {
+  background: ColorToken,
+  foreground: ColorToken,
+  border: ColorToken,
+}
 
 export const coloringTypes = ['primary', 'secondary', 'positive', 'warning', 'negative', 'neutral'] as const
 

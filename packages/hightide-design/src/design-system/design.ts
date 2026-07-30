@@ -1,5 +1,5 @@
 import type { HightideComponentTokens } from '../component-tokens/componentTokens'
-import type { HightidePrimitiveTokens } from '../primitive-tokens/primitiveTokens'
+import type { HightidePrimitiveTokens } from '../primitive-tokens/hightide'
 import type { HightideSemanticTokens } from '../semantic-tokens/semanticTokens'
 import type { HightideThemeTokens } from '../theme-tokens'
 

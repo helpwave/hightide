@@ -1,25 +1,23 @@
-import type { HightideTypographyPrimitiveTokens } from '../primitive-tokens/typography'
+import { hightideTypography } from '../primitive-tokens/typography'
 
-export type HightideThemeHightideTypographyTokens = {
+export type HightideThemeTypographyTokens = {
   fontFamily: {
     default: string,
     accent: string,
     mono: string,
   },
-  fontSize: HightideTypographyPrimitiveTokens['fontSize'],
-  fontWeight: HightideTypographyPrimitiveTokens['fontWeight'],
-  lineHeight: HightideTypographyPrimitiveTokens['lineHeight'],
+  fontSize: typeof hightideTypography.fontSize,
+  fontWeight: typeof hightideTypography.fontWeight,
+  lineHeight: typeof hightideTypography.lineHeight,
 }
 
-export const toHightideThemeTypography = (
-  typography: HightideTypographyPrimitiveTokens
-): HightideThemeHightideTypographyTokens => ({
+export const hightideThemeTypographyTokens: HightideThemeTypographyTokens = {
   fontFamily: {
-    default: typography.fontFamily.inter,
-    accent: typography.fontFamily.spaceGrotesk,
-    mono: typography.fontFamily.inter,
+    default: hightideTypography.fontFamily.inter,
+    accent: hightideTypography.fontFamily.spaceGrotesk,
+    mono: hightideTypography.fontFamily.inter,
   },
-  fontSize: typography.fontSize,
-  fontWeight: typography.fontWeight,
-  lineHeight: typography.lineHeight,
-})
+  fontSize: hightideTypography.fontSize,
+  fontWeight: hightideTypography.fontWeight,
+  lineHeight: hightideTypography.lineHeight,
+}
