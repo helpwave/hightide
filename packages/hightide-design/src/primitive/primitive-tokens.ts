@@ -7,10 +7,6 @@ import {
   type ColorPrimitiveTokens
 } from './color'
 import {
-  hightideMotion,
-  type MotionPrimitiveTokens
-} from './motion'
-import {
   hightideRadius,
   type RadiusPrimitiveTokens
 } from './radius'
@@ -39,7 +35,6 @@ export type PrimitiveTokens = {
   radius: RadiusPrimitiveTokens,
   border: BorderPrimitiveTokens,
   shadow: ShadowPrimitiveTokens,
-  motion: MotionPrimitiveTokens,
 }
 
 export const hightidePrimitiveTokens = {
@@ -50,5 +45,4 @@ export const hightidePrimitiveTokens = {
   radius: hightideRadius,
   border: hightideBorder,
   shadow: hightideShadow,
-  motion: hightideMotion,
 } as const satisfies PrimitiveTokens

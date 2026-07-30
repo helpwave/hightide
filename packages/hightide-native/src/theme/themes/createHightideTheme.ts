@@ -56,7 +56,6 @@ export const createHightideTheme = (
     radius: tokens.semantic.radius,
     border: tokens.semantic.border,
     shadow: tokens.semantic.shadow,
-    motion: tokens.semantic.motion,
     components: {
       button: createButtonThemeFromDesign(tokens),
       iconButton: createIconButtonThemeFromDesign(tokens),

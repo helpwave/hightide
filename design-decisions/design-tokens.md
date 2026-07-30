@@ -66,7 +66,7 @@ From `toHightideSemanticTokens`:
 - `elementLayout: { control, container }` from theme size/padding/paddingExtension/border
 - `border: SemanticBorderTokens` (`thin ← xs`, `base ← md`, `thick ← xl`)
 - `icon: IconThemeTokens` where `size = control.size - 2 * control.inset`
-- compose typography; passthrough spacing/radius/shadow/motion
+- compose typography; passthrough spacing/radius/shadow
 
 ### 4. ComponentTokens
 

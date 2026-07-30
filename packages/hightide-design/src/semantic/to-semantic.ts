@@ -53,6 +53,5 @@ export const toHightideSemanticTokens = ({
     radius: themeTokens.radius,
     border,
     shadow: toHightideElevationShadow(themeTokens.shadow),
-    motion: themeTokens.motion,
   }
 }

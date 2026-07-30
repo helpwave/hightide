@@ -109,6 +109,5 @@ export const toLightThemeTokens = ({
     radius: primitiveTokens.radius,
     border: toHightideThemeBorder(primitiveTokens.border),
     shadow: toHightideThemeShadow(primitiveTokens.shadow),
-    motion: primitiveTokens.motion,
   }
 }

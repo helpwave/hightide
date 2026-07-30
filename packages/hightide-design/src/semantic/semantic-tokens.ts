@@ -1,5 +1,4 @@
 import type { ColorSchemes } from './color-scheme'
-import type { MotionPrimitiveTokens } from '../primitive/motion'
 import type { RadiusPrimitiveTokens } from '../primitive/radius'
 import type { SpacingPrimitiveTokens } from '../primitive/spacing'
 import type {
@@ -21,5 +20,4 @@ export type SemanticTokens = {
   radius: RadiusPrimitiveTokens,
   border: SemanticBorderTokens,
   shadow: ElevationShadowTokens,
-  motion: MotionPrimitiveTokens,
 }

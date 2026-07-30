@@ -1,5 +1,4 @@
 import type {
-  MotionPrimitiveTokens,
   RadiusPrimitiveTokens,
   SpacingPrimitiveTokens
 } from '@helpwave/hightide-design/primitive'
@@ -20,4 +19,3 @@ export type HightideElements = ElementLayoutTokens
 export type HightideRadius = RadiusPrimitiveTokens
 export type HightideBorder = SemanticBorderTokens
 export type HightideShadow = ElevationShadowTokens
-export type HightideMotion = MotionPrimitiveTokens
