@@ -32,6 +32,10 @@
       "types": "./src/component-tokens/index.ts",
       "default": "./src/component-tokens/index.ts"
     },
+    "./design-tokens": {
+      "types": "./src/design-tokens/index.ts",
+      "default": "./src/design-tokens/index.ts"
+    },
     "./design-system": {
       "types": "./src/design-system/index.ts",
       "default": "./src/design-system/index.ts"

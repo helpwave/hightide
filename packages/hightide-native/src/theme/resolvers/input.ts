@@ -51,8 +51,8 @@ export const createInputTheme = ({
 
 export const createInputThemeFromDesign = (theme: DesignTokensTheme): InputTheme => {
   return createInputTheme({
-    colors: theme.semantic.colors,
-    colorSchemes: theme.semantic.colorSchemes,
+    colors: theme.colors,
+    colorSchemes: theme.colorSchemes,
     input: theme.components.input,
   })
 }

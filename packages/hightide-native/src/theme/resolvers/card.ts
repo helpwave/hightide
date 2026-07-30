@@ -103,7 +103,7 @@ export const createCardTheme = ({
 
 export const createCardThemeFromDesign = (theme: DesignTokensTheme): CardTheme => {
   return createCardTheme({
-    colors: theme.semantic.colors,
-    colorSchemes: theme.semantic.colorSchemes,
+    colors: theme.colors,
+    colorSchemes: theme.colorSchemes,
   })
 }

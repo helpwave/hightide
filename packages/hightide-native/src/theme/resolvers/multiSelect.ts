@@ -100,8 +100,8 @@ export const createMultiSelectTheme = ({
 
 export const createMultiSelectThemeFromDesign = (theme: DesignTokensTheme): MultiSelectTheme => {
   return createMultiSelectTheme({
-    colors: theme.semantic.colors,
-    colorSchemes: theme.semantic.colorSchemes,
+    colors: theme.colors,
+    colorSchemes: theme.colorSchemes,
     input: theme.components.input,
     menu: theme.components.menu,
   })

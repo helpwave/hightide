@@ -55,7 +55,7 @@ const oceanSemanticTokens = toHightideSemanticTokens({ themeTokens: oceanThemeTo
 
 const oceanDesignTokens = {
   theme: oceanThemeTokens,
-  semantic: oceanSemanticTokens,
+  ...oceanSemanticTokens,
   components: toHightideComponentTokens({ semanticTokens: oceanSemanticTokens }),
 } satisfies HightideDesignSystemTokens
 

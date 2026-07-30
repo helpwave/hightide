@@ -75,8 +75,8 @@ export const createCheckboxTheme = ({
 
 export const createCheckboxThemeFromDesign = (theme: DesignTokensTheme): CheckboxTheme => {
   return createCheckboxTheme({
-    colors: theme.semantic.colors,
-    colorSchemes: theme.semantic.colorSchemes,
+    colors: theme.colors,
+    colorSchemes: theme.colorSchemes,
     checkbox: theme.components.checkbox,
   })
 }

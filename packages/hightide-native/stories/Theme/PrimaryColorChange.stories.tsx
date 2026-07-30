@@ -54,7 +54,7 @@ const toHightideDesignSystemTokens = (themeTokens: HightideThemeTokens): Hightid
   const semantic = toHightideSemanticTokens({ themeTokens })
   return {
     theme: themeTokens,
-    semantic,
+    ...semantic,
     components: toHightideComponentTokens({ semanticTokens: semantic }),
   }
 }

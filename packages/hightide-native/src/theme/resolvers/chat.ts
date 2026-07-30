@@ -403,7 +403,7 @@ export const createChatTheme = ({
 
 export const createChatThemeFromDesign = (theme: DesignTokensTheme): ChatTheme => {
   return createChatTheme({
-    colors: theme.semantic.colors,
-    colorSchemes: theme.semantic.colorSchemes as HightideColorSchemes,
+    colors: theme.colors,
+    colorSchemes: theme.colorSchemes,
   })
 }

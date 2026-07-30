@@ -10,8 +10,6 @@ import type {
 } from '../resolver'
 
 export type SelectState = InteractionState & {
-  isInvalid?: boolean,
-  isReadOnly?: boolean,
   isOpen?: boolean,
   hasValue?: boolean,
 }

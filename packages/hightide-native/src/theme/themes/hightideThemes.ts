@@ -2,12 +2,10 @@ import { hightideDesignSystem } from '@helpwave/hightide-design/design-system'
 import { createHightideTheme } from './createHightideTheme'
 
 export const hightideLightTheme = createHightideTheme(
-  hightideDesignSystem.themes.light,
-  hightideDesignSystem.primitives
+  hightideDesignSystem.tokenThemes.light
 )
 export const hightideDarkTheme = createHightideTheme(
-  hightideDesignSystem.themes.dark,
-  hightideDesignSystem.primitives
+  hightideDesignSystem.tokenThemes.dark
 )
 
 export const themes = {

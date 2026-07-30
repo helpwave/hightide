@@ -15,7 +15,6 @@ import type { HightideDesignSystemTokens as DesignTokensTheme } from '@helpwave/
 
 import { resolveColoringStyles } from './colorScheme'
 
-import type { ColorPalette } from '../types/color'
 import type {
   AvatarGroupState,
   AvatarIconStyle,
@@ -38,7 +37,7 @@ const avatarFontWeights: Record<'xs' | 'sm' | 'md' | 'lg' | 'xl', 'semibold' | '
 const statusColor = (
   status: AvatarStatus,
   colorSchemes: HightideColorSchemes,
-  gray: ColorPalette
+  semanticColors: HightideSemanticColorTokens
 ): string => {
   switch (status) {
   case 'online':
@@ -50,14 +49,13 @@ const statusColor = (
   case 'offline':
   case 'unknown':
   default:
-    return gray[500]
+    return semanticColors.disabled
   }
 }
 
 export type CreateAvatarThemeOptions = {
   colors: HightideSemanticColorTokens,
   colorSchemes: HightideColorSchemes,
-  gray: ColorPalette,
   typography: HightideTypographyTokens,
   avatar: HightideComponentTokens['avatar'],
   icon: HightideComponentTokens['icon'],
@@ -68,7 +66,6 @@ export type CreateAvatarThemeOptions = {
 export const createAvatarTheme = ({
   colors,
   colorSchemes,
-  gray,
   typography,
   avatar,
   icon,
@@ -159,7 +156,7 @@ export const createAvatarTheme = ({
       borderRadius: statusDotSize / 2,
       borderWidth: avatar[size].statusDotBorderWidth,
       borderColor: colors.background,
-      backgroundColor: statusColor(status, colorSchemes, gray),
+      backgroundColor: statusColor(status, colorSchemes, colors),
     }
 
     return { container, statusDot }
@@ -238,17 +235,15 @@ export const createAvatarTheme = ({
 }
 
 export const createAvatarThemeFromDesign = (
-  theme: DesignTokensTheme,
-  { gray }: { gray: ColorPalette }
+  theme: DesignTokensTheme
 ): AvatarTheme => {
   return createAvatarTheme({
-    colors: theme.semantic.colors,
-    colorSchemes: theme.semantic.colorSchemes as HightideColorSchemes,
-    gray,
-    typography: theme.semantic.typography,
+    colors: theme.colors,
+    colorSchemes: theme.colorSchemes as HightideColorSchemes,
+    typography: theme.typography,
     avatar: theme.components.avatar,
     icon: theme.components.icon,
     avatarGroup: theme.components.avatarGroup,
-    shadow: theme.semantic.shadow,
+    shadow: theme.shadow,
   })
 }

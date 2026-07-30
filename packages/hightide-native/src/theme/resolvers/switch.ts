@@ -59,8 +59,8 @@ export const createSwitchTheme = ({
 
 export const createSwitchThemeFromDesign = (theme: DesignTokensTheme): SwitchTheme => {
   return createSwitchTheme({
-    colors: theme.semantic.colors,
-    colorSchemes: theme.semantic.colorSchemes,
+    colors: theme.colors,
+    colorSchemes: theme.colorSchemes,
     switchTokens: theme.components.switch,
   })
 }

@@ -80,9 +80,9 @@ export const createButtonTheme = ({
 
 export const createButtonThemeFromDesign = (theme: DesignTokensTheme): ButtonTheme => {
   return createButtonTheme({
-    colorSchemes: theme.semantic.colorSchemes,
+    colorSchemes: theme.colorSchemes,
     layout: theme.components.button.layout,
-    fontWeight: theme.semantic.typography.fontWeights.semibold,
-    borderWidth: theme.semantic.border.normal,
+    fontWeight: theme.typography.fontWeights.semibold,
+    borderWidth: theme.border.normal,
   })
 }

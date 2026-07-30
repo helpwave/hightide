@@ -1,25 +1,25 @@
-import { hightideDarkComponentTokens, hightideLightComponentTokens } from '../component-tokens/hightide'
+import {
+  hightideDarkDesignTokens,
+  hightideLightDesignTokens
+} from '../design-tokens/hightide'
 import { hightidePrimitiveTokens } from '../primitive-tokens/hightide'
-import { hightideDarkSemanticTokens, hightideLightSemanticTokens } from '../semantic-tokens/hightide'
 import { hightideDarkThemeTokens, hightideLightThemeTokens } from '../theme-tokens/hightide'
 import type { HightideDesignSystem, HightideDesignSystemTokens } from './design'
 
-export const hightideLightTheme = {
+export const hightideLightDesignSystemTokens = {
   theme: hightideLightThemeTokens,
-  semantic: hightideLightSemanticTokens,
-  components: hightideLightComponentTokens,
+  ...hightideLightDesignTokens,
 } as const satisfies HightideDesignSystemTokens
 
-export const hightideDarkTheme = {
+export const hightideDarkDesignSystemTokens = {
   theme: hightideDarkThemeTokens,
-  semantic: hightideDarkSemanticTokens,
-  components: hightideDarkComponentTokens,
+  ...hightideDarkDesignTokens,
 } as const satisfies HightideDesignSystemTokens
 
 export const hightideDesignSystem = {
   primitives: hightidePrimitiveTokens,
-  themes: {
-    light: hightideLightTheme,
-    dark: hightideDarkTheme,
+  tokenThemes: {
+    light: hightideLightDesignSystemTokens,
+    dark: hightideDarkDesignSystemTokens,
   },
 } as const satisfies HightideDesignSystem
