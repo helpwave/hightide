@@ -46,8 +46,8 @@ const translucent = HexColorUtils.hexWithAlpha(background, 0.5);
 | Subpath | Contents |
 | --- | --- |
 | `@helpwave/hightide-design/primitive` | Structured `PrimitiveTokens` (incl. `sizes` 0…160/4, `border` 0…10) |
-| `@helpwave/hightide-design/theme` | `ThemeTokens`, light/dark adapters, layout roles (`size`/`padding`/`border` xs…xl), `StateBasedProperty`, color schemes |
-| `@helpwave/hightide-design/semantic` | Semantic mapper (`elementLayout`, `SemanticBorderTokens`, `icon`, pruned colors + schemes) |
+| `@helpwave/hightide-design/theme` | `ThemeTokens`, light/dark adapters, layout roles, `StateBasedProperty`, `createColorSchemes` |
+| `@helpwave/hightide-design/semantic` | Semantic mapper (`elementLayout`, `SemanticBorderTokens`, `icon`, pruned colors + `colorSchemes`) |
 | `@helpwave/hightide-design/components` | Component colors/layouts + `toHightideComponentTokens` |
 | `@helpwave/hightide-design/design-system` | `designSystem`, `constructThemeTokens`, coloring helpers |
 | `@helpwave/hightide-design/utils` | `HexColorUtils` |
@@ -57,10 +57,10 @@ const translucent = HexColorUtils.hexWithAlpha(background, 0.5);
 ```text
 PrimitiveTokens
       │
-      ▼  toLightThemeTokens / toDarkThemeTokens   // @theme — palettes + color schemes + layout roles
+      ▼  toLightThemeTokens / toDarkThemeTokens   // @theme — palettes + layout roles
 ThemeTokens
       │
-      ▼  toSemantic({ themeTokens })               // @semantic
+      ▼  toSemantic({ themeTokens })               // @semantic — prune colors + build colorSchemes
 SemanticTokens
       │
       ▼  toComponents({ semanticTokens })          // @components
@@ -76,7 +76,7 @@ semantic.colorSchemes.primary.filled // StateBasedProperty<ColorState>
 semantic.colorSchemes.neutral.outline
 ```
 
-`semantic.colors` is a pruned set (surfaces, chrome, disabled, component inputs). Role colors (`primary`, `secondary`, …) live only on `ThemeTokens.color` as scheme build inputs and are exposed to consumers via `semantic.colorSchemes`.
+`semantic.colors` is a pruned set (surfaces, chrome, disabled, component inputs). Role colors (`primary`, `secondary`, …) live only on `ThemeTokens.color` as scheme build inputs; `toSemantic` builds `semantic.colorSchemes` from them.
 
 Layout layers:
 

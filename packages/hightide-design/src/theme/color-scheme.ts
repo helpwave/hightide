@@ -1,13 +1,10 @@
 import type { ColorToken } from '../primitive/color'
-import type { SemanticColorTokens } from '../semantic/color'
 import type {
-  ThemeRoleColorToken,
-  ThemeRoleColorTokens
+  ThemeRoleColorToken
 } from '../semantic/hightide'
 import type { ColorState } from './color-state'
 import type { StateBasedProperty } from './state-based-property'
-
-type ColorSchemeInput = SemanticColorTokens & ThemeRoleColorTokens
+import type { ThemeColorTokens } from './theme-tokens'
 
 export const coloringTypes = ['primary', 'secondary', 'positive', 'warning', 'negative', 'neutral'] as const
 
@@ -158,7 +155,7 @@ const schemeFor = (
   'text': createText(role, disabled, onDisabled, transparent),
 })
 
-export const createColorSchemes = (colors: ColorSchemeInput): ColorSchemes => {
+export const createColorSchemes = (colors: ThemeColorTokens): ColorSchemes => {
   const { disabled, onDisabled, transparent } = colors
 
   return {

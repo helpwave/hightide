@@ -1,3 +1,4 @@
+import { createColorSchemes } from '../theme/color-scheme'
 import type { ThemeTokens } from '../theme/theme-tokens'
 import type { SemanticColorTokens } from './color'
 import { toHightideElementLayoutFromTheme } from './element-layout'
@@ -10,7 +11,27 @@ export type ToSemanticArgs<Tokens extends ThemeTokens = ThemeTokens> = {
 }
 
 const toSemanticColors = (themeColors: ThemeTokens['color']): SemanticColorTokens => {
-  return { ...themeColors }
+  return {
+    transparent: themeColors.transparent,
+    background: themeColors.background,
+    onBackground: themeColors.onBackground,
+    disabled: themeColors.disabled,
+    onDisabled: themeColors.onDisabled,
+    surface: themeColors.surface,
+    onSurface: themeColors.onSurface,
+    surfaceHover: themeColors.surfaceHover,
+    surfaceVariant: themeColors.surfaceVariant,
+    placeholder: themeColors.placeholder,
+    description: themeColors.description,
+    faded: themeColors.faded,
+    menuBorder: themeColors.menuBorder,
+    progressTrack: themeColors.progressTrack,
+    switchThumbInactive: themeColors.switchThumbInactive,
+    switchThumbActive: themeColors.switchThumbActive,
+    switchBorder: themeColors.switchBorder,
+    border: themeColors.border,
+    divider: themeColors.divider,
+  }
 }
 
 export const toHightideSemanticTokens = ({
@@ -24,7 +45,7 @@ export const toHightideSemanticTokens = ({
 
   return {
     colors: toSemanticColors(themeTokens.color),
-    colorSchemes: themeTokens.colorSchemes,
+    colorSchemes: createColorSchemes(themeTokens.color),
     typography: createTypographyTokens(themeTokens.typography),
     spacing: themeTokens.spacing,
     elementLayout,

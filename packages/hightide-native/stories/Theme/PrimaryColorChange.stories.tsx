@@ -18,7 +18,6 @@ import {
   type DesignSystemTokens
 } from '@helpwave/hightide-design/design-system'
 import {
-  createColorSchemes,
   toDarkThemeTokens,
   toLightThemeTokens,
   type ThemeTokens
@@ -51,7 +50,6 @@ const withBluePrimary = (themeTokens: ThemeTokens): ThemeTokens => {
   return {
     ...themeTokens,
     color,
-    colorSchemes: createColorSchemes(color),
   }
 }
 

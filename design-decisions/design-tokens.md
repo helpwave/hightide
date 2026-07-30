@@ -15,10 +15,10 @@ This document describes how hightide structures design tokens, how they are asse
 PrimitiveTokens   // sizes 0…160/4, border 0…10
       │
       ▼  toLightThemeTokens / toDarkThemeTokens   // only layer that reads palettes
-ThemeTokens   // color + colorSchemes + size/padding/paddingExtension/border (xs…xl)
+ThemeTokens   // color (ThemeColorTokens) + size/padding/paddingExtension/border (xs…xl)
       │
       ▼  toSemantic({ themeTokens })
-SemanticTokens   // elementLayout, SemanticBorderTokens, icon, pruned colors + schemes
+SemanticTokens   // pruned colors, colorSchemes, elementLayout, SemanticBorderTokens, icon
       │
       ▼  toComponents({ semanticTokens })
 ComponentTokens
@@ -50,8 +50,7 @@ Includes `sizes` (`0…160`, step 4) and `border` (`0…10`). There is no primit
 
 Produced by `toLightThemeTokens` / `toDarkThemeTokens` (`@helpwave/hightide-design/theme`):
 
-- `color` — `SemanticColorTokens` + `ThemeRoleColorTokens` (role inputs for schemes)
-- `colorSchemes` — role → style → `StateBasedProperty<ColorState>` packs (`filled`, `outline`, `tonal`, `tonal-outline`, `text`)
+- `color` — `ThemeColorTokens` (`SemanticColorTokens` fields + `ThemeRoleColorTokens` as scheme build inputs)
 - `size` / `padding` / `paddingExtension` / `border` — each `Record<ComponentSize, number>` (`xs…xl`); theme `border` is size roles only (not `thin|base|thick`)
 - `typography.fontFamily` — remapped roles `default` / `accent` / `mono` from primitive font registry
 - Other non-color scales passthrough from primitives
@@ -62,7 +61,8 @@ Produced by `toLightThemeTokens` / `toDarkThemeTokens` (`@helpwave/hightide-desi
 
 From `toHightideSemanticTokens`:
 
-- pruned `colors` from theme (no role scheme inputs); passthrough `colorSchemes`
+- pruned `colors` (`SemanticColorTokens`) from theme (no role scheme inputs)
+- `colorSchemes` — built via `createColorSchemes(themeTokens.color)` (`filled`, `outline`, `tonal`, `tonal-outline`, `text`)
 - `elementLayout: { control, container }` from theme size/padding/paddingExtension/border
 - `border: SemanticBorderTokens` (`thin ← xs`, `base ← md`, `thick ← xl`)
 - `icon: IconThemeTokens` where `size = control.size - 2 * control.inset`
@@ -96,7 +96,7 @@ Native `resolveColoringStyles` maps `InteractionState` → `Set<ElementState>` a
 | Concern | Package entry |
 | --- | --- |
 | Primitives | `/primitive` |
-| ThemeTokens, light/dark adapters, StateBasedProperty, color schemes | `/theme` |
+| ThemeTokens, light/dark adapters, StateBasedProperty, `createColorSchemes` | `/theme` |
 | Semantic mapper + typography | `/semantic` |
 | Component tokens + `toComponents` | `/components` |
 | `designSystem`, `constructThemeTokens`, helpers | `/design-system` |

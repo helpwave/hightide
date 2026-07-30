@@ -3,7 +3,6 @@ import type { RadiusPrimitiveTokens } from '../primitive/radius'
 import type { SpacingPrimitiveTokens } from '../primitive/spacing'
 import type { SemanticColorTokens } from '../semantic/color'
 import type { ThemeRoleColorTokens } from '../semantic/hightide'
-import type { ColorSchemes } from './color-scheme'
 import type {
   ThemeBorderTokens,
   ThemePaddingExtensionTokens,
@@ -17,7 +16,6 @@ export type ThemeColorTokens = SemanticColorTokens & ThemeRoleColorTokens
 
 export type ThemeTokens = {
   color: ThemeColorTokens,
-  colorSchemes: ColorSchemes,
   spacing: SpacingPrimitiveTokens,
   size: ThemeSizeTokens,
   padding: ThemePaddingTokens,

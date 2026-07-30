@@ -1,6 +1,5 @@
 import type { HightideColorPalettes } from '../primitive/color'
 import { HexColorUtils } from '../utils/hex'
-import { createColorSchemes } from './color-scheme'
 import {
   toHightideThemeBorder,
   toHightideThemePadding,
@@ -102,7 +101,6 @@ export const toLightThemeTokens = ({
 
   return {
     color,
-    colorSchemes: createColorSchemes(color),
     spacing: primitiveTokens.spacing,
     size: toHightideThemeSize(primitiveTokens.sizes),
     padding: toHightideThemePadding(),
