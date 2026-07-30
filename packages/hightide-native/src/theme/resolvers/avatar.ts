@@ -4,13 +4,13 @@ import type {
   ViewStyle
 } from 'react-native'
 
-import type { HightideComponentTokens } from '@helpwave/hightide-design/components'
+import type { HightideComponentTokens } from '@helpwave/hightide-design/component-tokens'
 import type {
   HightideColorSchemes,
   HightideElevationShadowTokens,
   HightideSemanticColorTokens,
   HightideTypographyTokens
-} from '@helpwave/hightide-design/semantic'
+} from '@helpwave/hightide-design/semantic-tokens'
 import type { HightideDesignSystemTokens as DesignTokensTheme } from '@helpwave/hightide-design/design-system'
 
 import { resolveColoringStyles } from './colorScheme'

@@ -1,4 +1,4 @@
-import type { HightideComponentTokens } from '@helpwave/hightide-design/components'
+import type { HightideComponentTokens } from '@helpwave/hightide-design/component-tokens'
 import type { AvatarTheme } from './avatar'
 import type { ButtonTheme } from './button'
 import type { ChatTheme } from './chat'

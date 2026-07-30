@@ -17,7 +17,7 @@ import {
   hightidePrimitiveTokens,
   type HightidePrimitiveTokens,
   type SizeStep,
-} from "@helpwave/hightide-design/primitive";
+} from "@helpwave/hightide-design/primitive-tokens";
 import {
   hightideLightThemeTokens,
   hightideDarkThemeTokens,
@@ -25,15 +25,15 @@ import {
   resolveStateBasedProperty,
   type HightideThemeTokens,
   type ComponentSize,
-} from "@helpwave/hightide-design/theme";
+} from "@helpwave/hightide-design/theme-tokens";
 import {
   hightideLightSemanticTokens,
   toHightideSemanticTokens,
-} from "@helpwave/hightide-design/semantic";
+} from "@helpwave/hightide-design/semantic-tokens";
 import {
   hightideLightComponentTokens,
   toHightideComponentTokens,
-} from "@helpwave/hightide-design/components";
+} from "@helpwave/hightide-design/component-tokens";
 import {
   hightideDesignSystem,
   coloringTypes,
@@ -51,10 +51,10 @@ const translucent = HexColorUtils.hexWithAlpha(background, 0.5);
 
 | Subpath | Contents |
 | --- | --- |
-| `@helpwave/hightide-design/primitive` | Structured `HightidePrimitiveTokens` (incl. `sizes` 0…160/4, `border` 0…10) |
-| `@helpwave/hightide-design/theme` | `HightideThemeTokens`, shared/light/dark constants, layout roles, `StateBasedProperty` |
-| `@helpwave/hightide-design/semantic` | Semantic mapper + precomputed light/dark semantic tokens + `colorSchemes` |
-| `@helpwave/hightide-design/components` | Component mapper + precomputed light/dark component tokens |
+| `@helpwave/hightide-design/primitive-tokens` | Structured `HightidePrimitiveTokens` (incl. `sizes` 0…160/4, `border` 0…10) |
+| `@helpwave/hightide-design/theme-tokens` | `HightideThemeTokens`, shared/light/dark constants, layout roles, `StateBasedProperty` |
+| `@helpwave/hightide-design/semantic-tokens` | Semantic mapper + precomputed light/dark semantic tokens + `colorSchemes` |
+| `@helpwave/hightide-design/component-tokens` | Component mapper + precomputed light/dark component tokens |
 | `@helpwave/hightide-design/design-system` | `hightideDesignSystem`, coloring helpers |
 | `@helpwave/hightide-design/utils` | `HexColorUtils` |
 
@@ -96,10 +96,10 @@ Layout layers:
 
 ```
 src/
-  primitive/
-  theme/           HightideThemeTokens, shared/light/dark constants, StateBasedProperty, layout roles
-  semantic/        toSemantic + precomputed semantic constants + colorSchemes + typography
-  components/      toComponents + precomputed component constants
+  primitive-tokens/
+  theme-tokens/      HightideThemeTokens, shared/light/dark constants, StateBasedProperty, layout roles
+  semantic-tokens/   toSemantic + precomputed semantic constants + colorSchemes + typography
+  component-tokens/  toComponents + precomputed component constants
   design-system/   hightideDesignSystem assembly
   utils/           HexColorUtils
 ```

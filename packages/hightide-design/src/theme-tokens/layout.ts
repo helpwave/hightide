@@ -1,5 +1,5 @@
-import type { HightideBorderPrimitiveTokens } from '../primitive/border'
-import type { HightideSizePrimitiveTokens } from '../primitive/size'
+import type { HightideBorderPrimitiveTokens } from '../primitive-tokens/border'
+import type { HightideSizePrimitiveTokens } from '../primitive-tokens/size'
 
 export type ComponentSizeBasic = 'sm' | 'md' | 'lg'
 export type ComponentSize = ComponentSizeBasic | 'xs' | 'xl'

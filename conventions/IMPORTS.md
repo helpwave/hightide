@@ -16,9 +16,9 @@ import { useTheme } from '@/src/global-contexts/theme/ThemeContext'
 import type { ChatTheme } from '@/src/theme/types/components/chat'
 ```
 
-Cross-package imports (for example `@helpwave/hightide-design/primitive` or `@helpwave/hightide-utils/hooks`) keep their published package names. Do not rewrite those to relative paths across package boundaries.
+Cross-package imports (for example `@helpwave/hightide-design/primitive-tokens` or `@helpwave/hightide-utils/hooks`) keep their published package names. Do not rewrite those to relative paths across package boundaries.
 
-Design tokens: import primitives from `@helpwave/hightide-design/primitive`, theme adapters / `StateBasedProperty` from `/theme`, semantic mappers from `/semantic`, component tokens from `/components`, `designSystem` / construction helpers from `/design-system`, and `HexColorUtils` from `/utils`.
+Design tokens: import primitives from `@helpwave/hightide-design/primitive-tokens`, theme adapters / `StateBasedProperty` from `/theme-tokens`, semantic mappers from `/semantic-tokens`, component tokens from `/component-tokens`, `designSystem` / construction helpers from `/design-system`, and `HexColorUtils` from `/utils`.
 
 ## No index / barrel imports
 
@@ -83,7 +83,7 @@ import {
 } from 'react-native'
 import { Check } from 'lucide-react-native'
 
-import { hightideTypography } from '@helpwave/hightide-design/primitive'
+import { hightideTypography } from '@helpwave/hightide-design/primitive-tokens'
 import { HexColorUtils } from '@helpwave/hightide-design/utils'
 
 import { useTheme } from '../../global-contexts/theme/ThemeContext'

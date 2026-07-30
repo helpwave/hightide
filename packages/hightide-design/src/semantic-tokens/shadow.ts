@@ -1,7 +1,7 @@
 import type {
   ShadowToken,
   HightideThemeShadowTokens
-} from '../theme/shadow'
+} from '../theme-tokens/shadow'
 
 export type HightideElevationShadowTokens = {
   raised: ShadowToken,

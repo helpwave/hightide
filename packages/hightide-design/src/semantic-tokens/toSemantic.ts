@@ -1,5 +1,5 @@
 import { createHightideColorSchemes } from './colorScheme'
-import type { HightideThemeTokens } from '../theme/themeTokens'
+import type { HightideThemeTokens } from '../theme-tokens/themeTokens'
 import type { HightideSemanticColorTokens } from './color'
 import { toHightideElementLayoutFromTheme } from './elementLayout'
 import { toHightideElevationShadow } from './shadow'

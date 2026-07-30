@@ -1,6 +1,6 @@
 import type { HightideColorSchemes } from './colorScheme'
-import type { HightideRadiusPrimitiveTokens } from '../primitive/radius'
-import type { HightideSpacingPrimitiveTokens } from '../primitive/spacing'
+import type { HightideRadiusPrimitiveTokens } from '../primitive-tokens/radius'
+import type { HightideSpacingPrimitiveTokens } from '../primitive-tokens/spacing'
 import type {
   HightideElementLayoutTokens,
   HightideIconThemeTokens,

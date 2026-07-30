@@ -1,7 +1,7 @@
-import type { HightideComponentTokens } from '../components/componentTokens'
-import type { HightidePrimitiveTokens } from '../primitive/primitiveTokens'
-import type { HightideSemanticTokens } from '../semantic/semanticTokens'
-import type { HightideThemeTokens } from '../theme'
+import type { HightideComponentTokens } from '../component-tokens/componentTokens'
+import type { HightidePrimitiveTokens } from '../primitive-tokens/primitiveTokens'
+import type { HightideSemanticTokens } from '../semantic-tokens/semanticTokens'
+import type { HightideThemeTokens } from '../theme-tokens'
 
 export type HightideDesignSystemTokens = {
   theme: HightideThemeTokens,

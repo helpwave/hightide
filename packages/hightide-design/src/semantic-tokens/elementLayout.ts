@@ -4,8 +4,8 @@ import type {
   HightideThemePaddingExtensionTokens,
   HightideThemePaddingTokens,
   HightideThemeSizeTokens
-} from '../theme/layout'
-import type { HightideThemeTokens } from '../theme/themeTokens'
+} from '../theme-tokens/layout'
+import type { HightideThemeTokens } from '../theme-tokens/themeTokens'
 
 export type HightideControlElementLayoutToken = {
   size: number,

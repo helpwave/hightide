@@ -7,14 +7,14 @@ import {
   hightidePrimitiveTokens,
   type ColorToken,
   type HightideColorPalettes
-} from '@helpwave/hightide-design/primitive'
-import { toHightideSemanticTokens } from '@helpwave/hightide-design/semantic'
-import { toHightideComponentTokens } from '@helpwave/hightide-design/components'
+} from '@helpwave/hightide-design/primitive-tokens'
+import { toHightideSemanticTokens } from '@helpwave/hightide-design/semantic-tokens'
+import { toHightideComponentTokens } from '@helpwave/hightide-design/component-tokens'
 import { type HightideDesignSystemTokens } from '@helpwave/hightide-design/design-system'
 import {
   hightideLightThemeTokens,
   type HightideThemeTokens
-} from '@helpwave/hightide-design/theme'
+} from '@helpwave/hightide-design/theme-tokens'
 import { HexColorUtils } from '@helpwave/hightide-design/utils'
 
 import { Button } from '../../src/components/user-interaction/Button'

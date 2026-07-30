@@ -2,7 +2,7 @@ import {
   hightidePrimitiveTokens,
   type ColorPalette,
   type HightidePrimitiveTokens
-} from '@helpwave/hightide-design/primitive'
+} from '@helpwave/hightide-design/primitive-tokens'
 import type { HightideDesignSystemTokens } from '@helpwave/hightide-design/design-system'
 
 import { createAvatarThemeFromDesign } from '../resolvers/avatar'

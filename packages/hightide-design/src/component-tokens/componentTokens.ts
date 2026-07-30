@@ -1,9 +1,9 @@
-import type { ColorToken } from '../primitive/color'
+import type { ColorToken } from '../primitive-tokens/color'
 import type {
   ComponentSize,
   ComponentSizeBasic
-} from '../theme/layout'
-import type { HightideControlElementLayoutToken } from '../semantic/elementLayout'
+} from '../theme-tokens/layout'
+import type { HightideControlElementLayoutToken } from '../semantic-tokens/elementLayout'
 
 export type HightideComponentElementLayout = {
   size: number,

@@ -1,10 +1,10 @@
 import type { ViewStyle } from 'react-native'
 
-import { hightideRadius } from '@helpwave/hightide-design/primitive'
-import type { HightideComponentTokens } from '@helpwave/hightide-design/components'
+import { hightideRadius } from '@helpwave/hightide-design/primitive-tokens'
+import type { HightideComponentTokens } from '@helpwave/hightide-design/component-tokens'
 import type { HightideDesignSystemTokens as DesignTokensTheme } from '@helpwave/hightide-design/design-system'
-import type { ComponentSize } from '@helpwave/hightide-design/theme'
-import type { HightideColorSchemes, HightideSemanticColorTokens } from '@helpwave/hightide-design/semantic'
+import type { ComponentSize } from '@helpwave/hightide-design/theme-tokens'
+import type { HightideColorSchemes, HightideSemanticColorTokens } from '@helpwave/hightide-design/semantic-tokens'
 
 import type {
   CheckboxSize,

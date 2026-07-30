@@ -1,7 +1,7 @@
-import { hightideDarkComponentTokens, hightideLightComponentTokens } from '../components/hightide'
-import { hightidePrimitiveTokens } from '../primitive/primitiveTokens'
-import { hightideDarkSemanticTokens, hightideLightSemanticTokens } from '../semantic/hightide'
-import { hightideDarkThemeTokens, hightideLightThemeTokens } from '../theme/hightide'
+import { hightideDarkComponentTokens, hightideLightComponentTokens } from '../component-tokens/hightide'
+import { hightidePrimitiveTokens } from '../primitive-tokens/primitiveTokens'
+import { hightideDarkSemanticTokens, hightideLightSemanticTokens } from '../semantic-tokens/hightide'
+import { hightideDarkThemeTokens, hightideLightThemeTokens } from '../theme-tokens/hightide'
 import type { HightideDesignSystem, HightideDesignSystemTokens } from './design'
 
 export const hightideLightTheme = {

@@ -1,4 +1,4 @@
-import type { ColorToken } from '../primitive/color'
+import type { ColorToken } from '../primitive-tokens/color'
 
 const expandHex = (hex: string): string => {
   const normalized = hex.startsWith('#') ? hex.slice(1) : hex

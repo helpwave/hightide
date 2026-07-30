@@ -1,16 +1,16 @@
 import type {
   HightideRadiusPrimitiveTokens,
   HightideSpacingPrimitiveTokens
-} from '@helpwave/hightide-design/primitive'
+} from '@helpwave/hightide-design/primitive-tokens'
 import type {
   HightideElevationShadowTokens,
   HightideElementLayoutTokens,
   HightideSemanticBorderTokens
-} from '@helpwave/hightide-design/semantic'
+} from '@helpwave/hightide-design/semantic-tokens'
 import type {
   ComponentSize,
   ComponentSizeBasic
-} from '@helpwave/hightide-design/theme'
+} from '@helpwave/hightide-design/theme-tokens'
 
 export type { ComponentSize, ComponentSizeBasic }
 

@@ -1,5 +1,5 @@
-import type { FontSizeKey, FontWeightKey } from '../primitive/typography'
-import type { HightideThemeTokens } from '../theme/themeTokens'
+import type { FontSizeKey, FontWeightKey } from '../primitive-tokens/typography'
+import type { HightideThemeTokens } from '../theme-tokens/themeTokens'
 
 export type HightideTypographyStyleToken = {
   fontSize: string,

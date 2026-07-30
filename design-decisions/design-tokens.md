@@ -42,13 +42,13 @@ hightideDesignSystem = {
 
 ### 1. HightidePrimitiveTokens
 
-Raw, mode-agnostic building blocks under `@helpwave/hightide-design/primitive`.
+Raw, mode-agnostic building blocks under `@helpwave/hightide-design/primitive-tokens`.
 
 Includes `sizes` (`0…160`, step 4) and `border` (`0…10`). There is no primitive `elements` map.
 
 ### 2. HightideThemeTokens
 
-Precomputed as `hightideLightThemeTokens` / `hightideDarkThemeTokens` (`@helpwave/hightide-design/theme`):
+Precomputed as `hightideLightThemeTokens` / `hightideDarkThemeTokens` (`@helpwave/hightide-design/theme-tokens`):
 
 - Shared non-color fields live in `hightideSharedThemeTokens` (`Omit<HightideThemeTokens, 'color'>`)
 - `color` — `HightideThemeColorTokens` (surface colors + inlined role colors for scheme build inputs); only layer that differs by light/dark
@@ -96,10 +96,10 @@ Native `createHightideTheme` maps `tokens.semantic.colors` → `theme.colors` an
 
 | Concern | Package entry |
 | --- | --- |
-| Primitives | `/primitive` |
-| HightideThemeTokens, shared/light/dark constants, StateBasedProperty | `/theme` |
-| Semantic mapper + precomputed semantic constants + `createHightideColorSchemes` | `/semantic` |
-| Component tokens + precomputed component constants | `/components` |
+| Primitives | `/primitive-tokens` |
+| HightideThemeTokens, shared/light/dark constants, StateBasedProperty | `/theme-tokens` |
+| Semantic mapper + precomputed semantic constants + `createHightideColorSchemes` | `/semantic-tokens` |
+| Component tokens + precomputed component constants | `/component-tokens` |
 | `hightideDesignSystem` assembly | `/design-system` |
 | `HexColorUtils` | `/utils` |
 | HightideDesignSystemTokens → native Theme | `@helpwave/hightide-native` |

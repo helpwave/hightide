@@ -1,16 +1,16 @@
-import { hightideColor } from '@helpwave/hightide-design/primitive'
+import { hightideColor } from '@helpwave/hightide-design/primitive-tokens'
 import {
   resolveStateBasedProperty,
   type ColorState,
   type ElementState
-} from '@helpwave/hightide-design/theme'
+} from '@helpwave/hightide-design/theme-tokens'
 import type {
   ButtonColoringStyle,
   ChipColoringStyle,
   HightideColorSchemes,
   ColoringStyle,
   ColoringType
-} from '@helpwave/hightide-design/semantic'
+} from '@helpwave/hightide-design/semantic-tokens'
 
 import type { Color } from '../types/color'
 import type { InteractionState } from '../types/resolver'

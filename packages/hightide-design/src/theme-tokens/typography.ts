@@ -1,4 +1,4 @@
-import type { HightideTypographyPrimitiveTokens } from '../primitive/typography'
+import type { HightideTypographyPrimitiveTokens } from '../primitive-tokens/typography'
 
 export type HightideThemeHightideTypographyTokens = {
   fontFamily: {

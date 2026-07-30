@@ -3,7 +3,7 @@ import type { ViewStyle } from 'react-native'
 import type {
   ComponentSize,
   ComponentSizeBasic
-} from '@helpwave/hightide-design/theme'
+} from '@helpwave/hightide-design/theme-tokens'
 
 import type { Color } from '../color'
 import type {

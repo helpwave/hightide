@@ -1,7 +1,7 @@
 import {
   hightideDarkThemeTokens,
   hightideLightThemeTokens
-} from '../theme/hightide'
+} from '../theme-tokens/hightide'
 import { toHightideSemanticTokens } from './toSemantic'
 
 export const hightideLightSemanticTokens = toHightideSemanticTokens({

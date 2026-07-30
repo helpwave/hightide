@@ -1,7 +1,7 @@
-import { hightideTypography } from '@helpwave/hightide-design/primitive'
-import type { HightideComponentTokens } from '@helpwave/hightide-design/components'
+import { hightideTypography } from '@helpwave/hightide-design/primitive-tokens'
+import type { HightideComponentTokens } from '@helpwave/hightide-design/component-tokens'
 import type { HightideDesignSystemTokens as DesignTokensTheme } from '@helpwave/hightide-design/design-system'
-import type { HightideColorSchemes, HightideSemanticColorTokens } from '@helpwave/hightide-design/semantic'
+import type { HightideColorSchemes, HightideSemanticColorTokens } from '@helpwave/hightide-design/semantic-tokens'
 
 import type {
   MultiSelectOptionState,

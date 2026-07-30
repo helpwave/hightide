@@ -1,5 +1,5 @@
-import type { HightideColorPalettes } from '../primitive/color'
-import { hightidePrimitiveTokens } from '../primitive/primitiveTokens'
+import type { HightideColorPalettes } from '../primitive-tokens/color'
+import { hightidePrimitiveTokens } from '../primitive-tokens/primitiveTokens'
 import { HexColorUtils } from '../utils/hex'
 import type { HightideThemeColorTokens, HightideThemeTokens } from './themeTokens'
 import {

@@ -1,9 +1,9 @@
-import type { ColorToken } from '../primitive/color'
+import type { ColorToken } from '../primitive-tokens/color'
 import type {
   ShadowLayoutToken,
   HightideShadowPrimitiveTokens,
   ShadowSizeKey
-} from '../primitive/shadow'
+} from '../primitive-tokens/shadow'
 
 export type ShadowToken = ShadowLayoutToken & {
   color: ColorToken,

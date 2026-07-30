@@ -1,9 +1,9 @@
-import type { HightideSemanticTokens } from '../semantic/semanticTokens'
+import type { HightideSemanticTokens } from '../semantic-tokens/semanticTokens'
 import type {
   ComponentSize,
   ComponentSizeBasic
-} from '../theme/layout'
-import { componentSizes } from '../theme/layout'
+} from '../theme-tokens/layout'
+import { componentSizes } from '../theme-tokens/layout'
 import type {
   HightideComponentElementLayout,
   HightideComponentTokens

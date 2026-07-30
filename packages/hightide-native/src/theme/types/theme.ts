@@ -1,4 +1,4 @@
-import type { HightideColorSchemes, HightideSemanticColorTokens } from '@helpwave/hightide-design/semantic'
+import type { HightideColorSchemes, HightideSemanticColorTokens } from '@helpwave/hightide-design/semantic-tokens'
 
 import type { HightideComponentThemes } from './components/hightide'
 import type {

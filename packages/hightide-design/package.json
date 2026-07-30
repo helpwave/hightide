@@ -16,21 +16,21 @@
     "src"
   ],
   "exports": {
-    "./primitive": {
-      "types": "./src/primitive/index.ts",
-      "default": "./src/primitive/index.ts"
+    "./primitive-tokens": {
+      "types": "./src/primitive-tokens/index.ts",
+      "default": "./src/primitive-tokens/index.ts"
     },
-    "./theme": {
-      "types": "./src/theme/index.ts",
-      "default": "./src/theme/index.ts"
+    "./theme-tokens": {
+      "types": "./src/theme-tokens/index.ts",
+      "default": "./src/theme-tokens/index.ts"
     },
-    "./semantic": {
-      "types": "./src/semantic/index.ts",
-      "default": "./src/semantic/index.ts"
+    "./semantic-tokens": {
+      "types": "./src/semantic-tokens/index.ts",
+      "default": "./src/semantic-tokens/index.ts"
     },
-    "./components": {
-      "types": "./src/components/index.ts",
-      "default": "./src/components/index.ts"
+    "./component-tokens": {
+      "types": "./src/component-tokens/index.ts",
+      "default": "./src/component-tokens/index.ts"
     },
     "./design-system": {
       "types": "./src/design-system/index.ts",
