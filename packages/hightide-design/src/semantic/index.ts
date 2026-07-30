@@ -1,4 +1,5 @@
 export * from './color'
+export * from './color-scheme'
 export * from './element-layout'
 export * from './hightide'
 export * from './semantic-tokens'

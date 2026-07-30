@@ -1,4 +1,4 @@
-import type { ColorSchemes } from '@helpwave/hightide-design/theme'
+import type { ColorSchemes } from '@helpwave/hightide-design/semantic'
 
 import type {
   HightideColors,

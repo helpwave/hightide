@@ -96,8 +96,8 @@ Native `resolveColoringStyles` maps `InteractionState` → `Set<ElementState>` a
 | Concern | Package entry |
 | --- | --- |
 | Primitives | `/primitive` |
-| ThemeTokens, light/dark adapters, StateBasedProperty, `createColorSchemes` | `/theme` |
-| Semantic mapper + typography | `/semantic` |
+| ThemeTokens, light/dark adapters, StateBasedProperty | `/theme` |
+| Semantic mapper + typography + `createColorSchemes` | `/semantic` |
 | Component tokens + `toComponents` | `/components` |
 | `designSystem`, `constructThemeTokens`, helpers | `/design-system` |
 | `HexColorUtils` | `/utils` |

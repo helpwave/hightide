@@ -1,4 +1,4 @@
-import type { ColorSchemes } from '../theme/color-scheme'
+import type { ColorSchemes } from './color-scheme'
 import type { MotionPrimitiveTokens } from '../primitive/motion'
 import type { RadiusPrimitiveTokens } from '../primitive/radius'
 import type { SpacingPrimitiveTokens } from '../primitive/spacing'

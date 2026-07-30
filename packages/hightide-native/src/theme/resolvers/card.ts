@@ -2,7 +2,7 @@ import { StyleSheet } from 'react-native'
 
 import { hightideTypography } from '@helpwave/hightide-design/primitive'
 import type { DesignSystemTokens as DesignTokensTheme } from '@helpwave/hightide-design/design-system'
-import type { ColorSchemes } from '@helpwave/hightide-design/theme'
+import type { ColorSchemes } from '@helpwave/hightide-design/semantic'
 
 import type { HightideSemanticColors } from '../types/color'
 import type {

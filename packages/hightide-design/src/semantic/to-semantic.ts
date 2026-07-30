@@ -1,4 +1,4 @@
-import { createColorSchemes } from '../theme/color-scheme'
+import { createColorSchemes } from './color-scheme'
 import type { ThemeTokens } from '../theme/theme-tokens'
 import type { SemanticColorTokens } from './color'
 import { toHightideElementLayoutFromTheme } from './element-layout'

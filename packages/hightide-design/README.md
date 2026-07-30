@@ -46,8 +46,8 @@ const translucent = HexColorUtils.hexWithAlpha(background, 0.5);
 | Subpath | Contents |
 | --- | --- |
 | `@helpwave/hightide-design/primitive` | Structured `PrimitiveTokens` (incl. `sizes` 0…160/4, `border` 0…10) |
-| `@helpwave/hightide-design/theme` | `ThemeTokens`, light/dark adapters, layout roles, `StateBasedProperty`, `createColorSchemes` |
-| `@helpwave/hightide-design/semantic` | Semantic mapper (`elementLayout`, `SemanticBorderTokens`, `icon`, pruned colors + `colorSchemes`) |
+| `@helpwave/hightide-design/theme` | `ThemeTokens`, light/dark adapters, layout roles, `StateBasedProperty` |
+| `@helpwave/hightide-design/semantic` | Semantic mapper (`elementLayout`, `createColorSchemes`, pruned colors + `colorSchemes`) |
 | `@helpwave/hightide-design/components` | Component colors/layouts + `toHightideComponentTokens` |
 | `@helpwave/hightide-design/design-system` | `designSystem`, `constructThemeTokens`, coloring helpers |
 | `@helpwave/hightide-design/utils` | `HexColorUtils` |
@@ -91,8 +91,8 @@ Layout layers:
 ```
 src/
   primitive/
-  theme/           ThemeTokens, light/dark adapters, StateBasedProperty, color schemes, layout roles
-  semantic/        toSemantic + typography + elementLayout + icon
+  theme/           ThemeTokens, light/dark adapters, StateBasedProperty, layout roles
+  semantic/        toSemantic + colorSchemes + typography + elementLayout + icon
   components/      toComponents + component colors/layouts
   design-system/   designSystem assembly + constructThemeTokens
   utils/           HexColorUtils

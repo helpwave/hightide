@@ -10,7 +10,7 @@ import type {
   TypographyTokens
 } from '@helpwave/hightide-design/semantic'
 import type { DesignSystemTokens as DesignTokensTheme } from '@helpwave/hightide-design/design-system'
-import type { ColorSchemes } from '@helpwave/hightide-design/theme'
+import type { ColorSchemes } from '@helpwave/hightide-design/semantic'
 
 import { resolveColoringStyles } from './colorScheme'
 import type {

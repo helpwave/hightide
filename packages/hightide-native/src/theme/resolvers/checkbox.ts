@@ -3,10 +3,8 @@ import type { ViewStyle } from 'react-native'
 import { hightideRadius } from '@helpwave/hightide-design/primitive'
 import type { ComponentTokens } from '@helpwave/hightide-design/components'
 import type { DesignSystemTokens as DesignTokensTheme } from '@helpwave/hightide-design/design-system'
-import type {
-  ComponentSize,
-  ColorSchemes
-} from '@helpwave/hightide-design/theme'
+import type { ComponentSize } from '@helpwave/hightide-design/theme'
+import type { ColorSchemes } from '@helpwave/hightide-design/semantic'
 
 import type { HightideSemanticColors } from '../types/color'
 import type {
