@@ -14,7 +14,7 @@ import type { ComponentSize } from '@helpwave/hightide-design/theme-tokens'
 import type {
   ColoringType,
   ButtonColoringStyle
-} from '@helpwave/hightide-design/design-system'
+} from '@helpwave/hightide-design/semantic-tokens'
 
 import { Icon } from '../visualization-and-display/Icon'
 import { useTheme } from '../../global-contexts/theme/ThemeContext'

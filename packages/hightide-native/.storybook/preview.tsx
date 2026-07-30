@@ -3,10 +3,10 @@ import type { Preview } from '@storybook/react-native-web-vite'
 import { HightideProvider } from '../src/global-contexts/HightideProvider'
 import { themes } from '../src/theme/themes/hightideThemes'
 
-const lightBackground = themes.light.semantic.background
-const lightOnBackground = themes.light.semantic.onBackground
-const darkBackground = themes.dark.semantic.background
-const darkOnBackground = themes.dark.semantic.onBackground
+const lightBackground = themes.light.colors.background
+const lightOnBackground = themes.light.colors.onBackground
+const darkBackground = themes.dark.colors.background
+const darkOnBackground = themes.dark.colors.onBackground
 
 const preview: Preview = {
   parameters: {

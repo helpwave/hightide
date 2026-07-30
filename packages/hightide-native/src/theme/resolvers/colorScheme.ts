@@ -1,12 +1,12 @@
 import { hightideColor } from '@helpwave/hightide-design/primitive-tokens'
 import {
   resolveStateBasedProperty,
-  type ColorState,
   type ElementState
 } from '@helpwave/hightide-design/theme-tokens'
 import type {
   ButtonColoringStyle,
   ChipColoringStyle,
+  ColorState,
   HightideColorSchemes,
   ColoringStyle,
   ColoringType

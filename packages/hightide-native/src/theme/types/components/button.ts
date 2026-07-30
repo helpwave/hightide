@@ -7,7 +7,7 @@ import type { ComponentSize } from '@helpwave/hightide-design/theme-tokens'
 import type {
   ColoringType,
   ButtonColoringStyle
-} from '@helpwave/hightide-design/design-system'
+} from '@helpwave/hightide-design/semantic-tokens'
 
 import type {
   InteractionState,

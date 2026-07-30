@@ -15,7 +15,7 @@ import {
   coloringTypes,
   type ColoringType,
   type ButtonColoringStyle
-} from '@helpwave/hightide-design/design-system'
+} from '@helpwave/hightide-design/semantic-tokens'
 
 import { useTheme } from '../../global-contexts/theme/ThemeContext'
 import type {
