@@ -4,11 +4,16 @@ import type {
   ViewStyle
 } from 'react-native'
 
-import type { ComponentSize } from '@helpwave/hightide-design/component-tokens'
+import {
+  avatarStatus,
+  type AvatarStatus,
+  type ComponentSize
+} from '@helpwave/hightide-design/component-tokens'
 
 import type { StyleResolverFunction } from '../resolver'
 
-export type AvatarStatus = 'online' | 'offline' | 'away' | 'busy' | 'unknown'
+export type { AvatarStatus }
+export { avatarStatus }
 
 export type AvatarState = {
   size?: ComponentSize,

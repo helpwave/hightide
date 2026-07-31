@@ -77,7 +77,7 @@ Precomputed as `hightideLightComponentTokens` / `hightideDarkComponentTokens` vi
 - input: single layout from `control.md` with `textStyle` from `label.md`
 - checkbox: `ComponentSize` mapped via `insideControl` / one step denser nesting
 - icon: `insideControl` sizes + border stroke
-- avatar: `textStyle` from `typography.label[size]` with `fontWeights.bold`
+- avatar: per size `container` (`size`, `padding`, `color`), `text` (`textStyle` from `typography.label[size]` with `fontWeights.bold`, `color`), and `statusDot` (`size`, `borderWidth`, status colors: online→positive, busy→negative, away→warning, offline/unknown→disabled)
 
 ### 5. HightideDesignSystemTokens
 

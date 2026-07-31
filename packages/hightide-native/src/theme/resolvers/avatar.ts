@@ -4,10 +4,6 @@ import type {
 } from 'react-native'
 
 import type { HightideDesignSystemTokens } from '@helpwave/hightide-design/design-system'
-import type {
-  HightideSematicColorSchemeTokens,
-  HightideSemanticColorTokens
-} from '@helpwave/hightide-design/semantic-tokens'
 
 import type {
   AvatarGroupContainerStyle,
@@ -17,7 +13,6 @@ import type {
   AvatarIconStyle,
   AvatarImageStyle,
   AvatarState,
-  AvatarStatus,
   AvatarStatusDotStyle,
   AvatarStyle,
   AvatarTextStyle,
@@ -30,35 +25,15 @@ import type {
 } from '../types/components/avatar'
 import { createStyleResolver } from '../types/resolver'
 
-const statusColor = (
-  status: AvatarStatus,
-  colorSchemes: HightideSematicColorSchemeTokens,
-  semanticColors: HightideSemanticColorTokens
-): string => {
-  switch (status) {
-  case 'online':
-    return colorSchemes.positive.filled.base.color
-  case 'busy':
-    return colorSchemes.negative.filled.base.color
-  case 'away':
-    return colorSchemes.warning.filled.base.color
-  case 'offline':
-  case 'unknown':
-  default:
-    return semanticColors.disabled
-  }
-}
-
 export const createAvatarContainerTheme = (theme: HightideDesignSystemTokens) => {
-  const { colorSchemes, components, shadow } = theme
+  const { components, shadow } = theme
   const avatar = components.avatar
   const avatarGroup = components.avatarGroup
 
   return createStyleResolver((state: AvatarState): AvatarStyle => {
     const size = state.size ?? 'md'
-    const dimension = avatar[size].size
-    const primaryFilled = colorSchemes.primary.filled.base
-    const borderRadius = dimension / 2
+    const { container } = avatar[size]
+    const dimension = container.size
     const raisedShadow = shadow.raised
 
     return {
@@ -68,9 +43,13 @@ export const createAvatarContainerTheme = (theme: HightideDesignSystemTokens) =>
       justifyContent: 'center',
       width: dimension,
       height: dimension,
-      padding: avatar[size].padding,
-      borderRadius,
-      backgroundColor: primaryFilled.color,
+      minWidth: dimension,
+      maxWidth: dimension,
+      minHeight: dimension,
+      maxHeight: dimension,
+      padding: container.padding,
+      borderRadius: container.borderRadius,
+      backgroundColor: container.color,
       overflow: 'hidden',
       ...(state.isGrouped ? {
         left: (state.groupIndex ?? 0) * dimension * avatarGroup.overlap,
@@ -90,8 +69,7 @@ export const createAvatarImageTheme = (theme: HightideDesignSystemTokens) => {
 
   return createStyleResolver((state: AvatarState): AvatarImageStyle => {
     const size = state.size ?? 'md'
-    const dimension = avatar[size].size
-    const borderRadius = dimension / 2
+    const { size: dimension, borderRadius } = avatar[size].container
 
     return {
       position: 'absolute',
@@ -105,16 +83,14 @@ export const createAvatarImageTheme = (theme: HightideDesignSystemTokens) => {
 }
 
 export const createAvatarTextTheme = (theme: HightideDesignSystemTokens) => {
-  const { colorSchemes, components } = theme
-  const avatar = components.avatar
+  const avatar = theme.components.avatar
 
   return createStyleResolver((state: AvatarState): AvatarTextStyle => {
     const size = state.size ?? 'md'
-    const primaryFilled = colorSchemes.primary.filled.base
-    const { textStyle } = avatar[size]
+    const { textStyle, color } = avatar[size].text
 
     return {
-      color: primaryFilled.foreground,
+      color,
       fontSize: Number(textStyle.fontSize),
       fontWeight: textStyle.fontWeight as TextStyle['fontWeight'],
       fontFamily: textStyle.fontFamily,
@@ -127,48 +103,61 @@ export const createAvatarTextTheme = (theme: HightideDesignSystemTokens) => {
 }
 
 export const createAvatarIconTheme = (theme: HightideDesignSystemTokens) => {
-  const { colorSchemes, components } = theme
+  const { components } = theme
   const icon = components.icon
+  const avatar = components.avatar
 
   return createStyleResolver((state: AvatarState): AvatarIconStyle => {
     const size = state.size ?? 'md'
-    const primaryFilled = colorSchemes.primary.filled.base
 
     return {
       size: icon[size].size,
       strokeWidth: icon[size].strokeWidth,
-      color: primaryFilled.foreground,
+      color: avatar[size].text.color,
     }
   })
 }
 
-export const createAvatarWithStatusContainerTheme = (_theme: HightideDesignSystemTokens) => {
-  return createStyleResolver((_state: AvatarWithStatusState): AvatarWithStatusContainerStyle => ({
-    position: 'relative',
-    alignSelf: 'flex-start',
-  }))
+export const createAvatarWithStatusContainerTheme = (theme: HightideDesignSystemTokens) => {
+  const avatar = theme.components.avatar
+
+  return createStyleResolver((state: AvatarWithStatusState): AvatarWithStatusContainerStyle => {
+    const size = state.size ?? 'md'
+    const dimension = avatar[size].container.size
+
+    return {
+      position: 'relative',
+      alignSelf: 'flex-start',
+      width: dimension,
+      height: dimension,
+      minWidth: dimension,
+      maxWidth: dimension,
+      minHeight: dimension,
+      maxHeight: dimension,
+    }
+  })
 }
 
 export const createAvatarWithStatusStatusDotTheme = (theme: HightideDesignSystemTokens) => {
-  const { colors, colorSchemes, components } = theme
+  const { colors, components } = theme
   const avatar = components.avatar
 
   return createStyleResolver((state: AvatarWithStatusState): AvatarStatusDotStyle => {
     const size = state.size ?? 'md'
     const status = state.status ?? 'unknown'
-    const statusDotSize = avatar[size].statusDotSize
+    const statusDot = avatar[size].statusDot
 
     return {
       position: 'absolute',
       right: 0,
       bottom: 0,
       zIndex: 1,
-      width: statusDotSize,
-      height: statusDotSize,
-      borderRadius: statusDotSize / 2,
-      borderWidth: avatar[size].statusDotBorderWidth,
+      width: statusDot.size,
+      height: statusDot.size,
+      borderRadius: statusDot.borderRadius,
+      borderWidth: statusDot.borderWidth,
       borderColor: colors.background,
-      backgroundColor: statusColor(status, colorSchemes, colors),
+      backgroundColor: statusDot.color[status],
     }
   })
 }
@@ -216,7 +205,7 @@ export const createAvatarGroupContainerTheme = (theme: HightideDesignSystemToken
 
   return createStyleResolver((state: AvatarGroupState): AvatarGroupContainerStyle => {
     const size = state.size ?? 'md'
-    const dimension = avatar[size].size
+    const dimension = avatar[size].container.size
 
     return {
       flexDirection: 'row',
@@ -235,7 +224,7 @@ export const createAvatarGroupStackTheme = (theme: HightideDesignSystemTokens) =
 
   return createStyleResolver((state: AvatarGroupState): AvatarGroupStackStyle => {
     const size = state.size ?? 'md'
-    const dimension = avatar[size].size
+    const dimension = avatar[size].container.size
     const visibleCount = Math.min(state.count ?? avatarGroup.maxShown, avatarGroup.maxShown)
     const stackWidth = dimension * (avatarGroup.overlap * Math.max(visibleCount - 1, 0) + 1)
 
@@ -243,6 +232,10 @@ export const createAvatarGroupStackTheme = (theme: HightideDesignSystemTokens) =
       position: 'relative',
       width: stackWidth,
       height: dimension,
+      minWidth: stackWidth,
+      maxWidth: stackWidth,
+      minHeight: dimension,
+      maxHeight: dimension,
     }
   })
 }
@@ -253,7 +246,7 @@ export const createAvatarGroupMoreTheme = (theme: HightideDesignSystemTokens) =>
 
   return createStyleResolver((state: AvatarGroupState): AvatarGroupMoreStyle => {
     const size = state.size ?? 'md'
-    const dimension = avatar[size].size
+    const dimension = avatar[size].container.size
 
     return {
       fontSize: (dimension * 2) / 3,

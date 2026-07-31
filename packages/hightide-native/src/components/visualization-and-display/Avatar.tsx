@@ -32,6 +32,7 @@ import type {
   AvatarWithStatusContainerStyle,
   AvatarStatusDotStyle
 } from '../../theme/types/components/avatar'
+import { avatarStatus } from '../../theme/types/components/avatar'
 import type { StyleOverwrite } from '../../theme/types/resolver'
 
 export type AvatarSize = ComponentSize
@@ -55,7 +56,7 @@ const DefaultAvatarImage: ComponentType<AvatarImageProps> = ({ alt, ...props }) 
 
 export const AvatarUtil = {
   sizes: ['sm', 'md', 'lg'] as const satisfies readonly ComponentSize[],
-  statuses: ['online', 'offline', 'away', 'busy', 'unknown'] as const satisfies readonly AvatarStatus[],
+  statuses: avatarStatus,
 }
 
 export type AvatarProps = Omit<ViewProps, 'children' | 'style'> & {
