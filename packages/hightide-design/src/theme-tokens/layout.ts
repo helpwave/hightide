@@ -27,7 +27,7 @@ export const hightideThemePaddingTokens: HightideThemePaddingTokens = {
   sm: 4,
   md: 6,
   lg: 8,
-  xl: 12,
+  xl: 10,
 }
 
 export const hightideThemePaddingExtensionTokens: HightideThemePaddingExtensionTokens = {
@@ -53,9 +53,9 @@ export const hightideThemeBorderWidthTokens: HightideThemeBorderWidthTokens = {
 }
 
 export const hightideThemeBorderRadiusTokens: HightideThemeBorderRadiusTokens = {
-  xs: 2,
-  sm: 4,
-  md: 6,
-  lg: 8,
-  xl: 12,
+  xs: 4,
+  sm: 6,
+  md: 8,
+  lg: 10,
+  xl: 14,
 }

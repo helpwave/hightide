@@ -82,6 +82,6 @@ export const createButtonThemeFromDesign = (theme: DesignTokensTheme): ButtonThe
     colorSchemes: theme.components.button.colorSchemes,
     layout: theme.components.button.layout,
     fontWeight: theme.typography.fontWeights.semibold,
-    borderWidth: theme.border.normal,
+    borderWidth: theme.borderWidth.normal,
   })
 }

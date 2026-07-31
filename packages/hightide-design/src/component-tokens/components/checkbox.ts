@@ -33,7 +33,6 @@ export const toCheckboxTokens = (
   const boxLayout = Object.fromEntries(
     checkboxSizes.map((size) => {
       const token = control[size]
-      console.log({ size, control: control[size],res: token.size - 2 * token.inset - 2 * token.border })
       return [size, {
         size: token.size - 2 * token.inset - 2 * token.border,
         inset: semanticTokens.elementLayout.control.xs.inset,
@@ -42,8 +41,6 @@ export const toCheckboxTokens = (
       } satisfies CheckboxBoxLayoutToken]
     })
   ) as HightideCheckboxTokens['box']['layout']
-
-  console.log(boxLayout, control)
 
   const iconLayout = Object.fromEntries(
     checkboxSizes.map((size) => {

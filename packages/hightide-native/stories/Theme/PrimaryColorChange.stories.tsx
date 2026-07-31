@@ -6,11 +6,7 @@ import type {
   Meta,
   StoryObj
 } from '@storybook/react-native-web-vite'
-import {
-  hightidePrimitiveTokens,
-  type ColorToken,
-  type HightideColorPalettes
-} from '@helpwave/hightide-design/primitive-tokens'
+import { hightidePrimitiveTokens } from '@helpwave/hightide-design/primitive-tokens'
 import { toHightideSemanticTokens } from '@helpwave/hightide-design/semantic-tokens'
 import { toHightideComponentTokens } from '@helpwave/hightide-design/component-tokens'
 import { type HightideDesignSystemTokens } from '@helpwave/hightide-design/design-system'
@@ -32,21 +28,21 @@ import {
 } from './themeStoryHelpers'
 
 const withBluePrimary = (themeTokens: HightideThemeTokens): HightideThemeTokens => {
-  const { blue, white } = hightidePrimitiveTokens.color.palettes as HightideColorPalettes
-  const color = {
-    ...themeTokens.color,
+  const { blue, white } = hightidePrimitiveTokens.color.palettes
+  const colors = {
+    ...themeTokens.colors,
     primary: {
-      color: blue.value[500] as ColorToken,
-      onColor: white.value as ColorToken,
-      emphasis: blue.value[600] as ColorToken,
-      tint: HexColorUtils.hexWithAlpha(blue.value[500] as ColorToken, 0.2),
-      tintEmphasis: HexColorUtils.hexWithAlpha(blue.value[500] as ColorToken, 0.28),
+      color: blue.value[500],
+      onColor: white.value,
+      emphasis: blue.value[600],
+      tint: HexColorUtils.hexWithAlpha(blue.value[500], 0.2),
+      tintEmphasis: HexColorUtils.hexWithAlpha(blue.value[500], 0.28),
     },
   }
 
   return {
     ...themeTokens,
-    color,
+    colors,
   }
 }
 

@@ -32,8 +32,8 @@ const oceanThemeTokens = ((): HightideThemeTokens => {
   const { blue, white } = hightidePrimitiveTokens.color.palettes as HightideColorPalettes
   return {
     ...hightideLightThemeTokens,
-    color: {
-      ...hightideLightThemeTokens.color,
+    colors: {
+      ...hightideLightThemeTokens.colors,
       background: blue.value[100] as ColorToken,
       onBackground: blue.value[900] as ColorToken,
       surface: blue.value[50] as ColorToken,

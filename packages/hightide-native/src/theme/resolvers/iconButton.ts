@@ -66,6 +66,6 @@ export const createIconButtonThemeFromDesign = (theme: DesignTokensTheme): IconB
   return createIconButtonTheme({
     colorSchemes: theme.components.iconButton.colorSchemes,
     layout: theme.components.iconButton.layout,
-    borderWidth: theme.border.normal,
+    borderWidth: theme.borderWidth.normal,
   })
 }
