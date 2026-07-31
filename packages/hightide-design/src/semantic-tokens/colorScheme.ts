@@ -45,7 +45,7 @@ export type HightideColorScheme = {
   'text': SemanticStateProperty<ColorState>,
 }
 
-export type HightideColorSchemes = Record<ColoringType, HightideColorScheme>
+export type HightideSematicColorSchemes = Record<ColoringType, HightideColorScheme>
 
 const createFilled = (
   role: HightideThemeRoleColorToken
@@ -166,7 +166,7 @@ const disabledScheme = (
   }
 }
 
-export const createHightideColorSchemes = (colors: HightideThemeColorTokens): HightideColorSchemes => {
+export const createHightideColorSchemes = (colors: HightideThemeColorTokens): HightideSematicColorSchemes => {
   const { disabled, onDisabled, transparent } = colors
 
   return {

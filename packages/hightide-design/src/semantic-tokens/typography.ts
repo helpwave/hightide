@@ -8,7 +8,7 @@ export type HightideTypographyStyleToken = {
   fontFamily?: string,
 }
 
-export type HightideTypographyTokens = {
+export type HightideSemanticTypographyTokens = {
   fontWeights: HightideThemeTokens['typography']['fontWeight'],
   scales: {
     headline: {
@@ -42,7 +42,7 @@ export type HightideTypographyTokens = {
   },
 }
 
-export type { HightideTypographyTokens as TypographyScale, HightideTypographyStyleToken as TypographyStyle }
+export type { HightideSemanticTypographyTokens as TypographyScale, HightideTypographyStyleToken as TypographyStyle }
 
 export const createTypographyStyle = (
   typography: HightideThemeTokens['typography'],
@@ -58,7 +58,7 @@ export const createTypographyStyle = (
 
 export const createHightideTypographyTokens = (
   typography: HightideThemeTokens['typography']
-): HightideTypographyTokens => ({
+): HightideSemanticTypographyTokens => ({
   fontWeights: typography.fontWeight,
   scales: {
     headline: {

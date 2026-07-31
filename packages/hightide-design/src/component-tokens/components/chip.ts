@@ -2,7 +2,7 @@ import type {
   ContainerColoringStyle,
   ColorStateFull,
   ColoringType,
-  HightideColorSchemes
+  HightideSematicColorSchemes
 } from '../../semantic-tokens/colorScheme'
 import { colorSchemeTypes } from '../../semantic-tokens/colorScheme'
 import type { HightideSemanticTokens } from '../../semantic-tokens/semanticTokens'
@@ -43,7 +43,7 @@ const chipColoringStyles = [
 ] as const satisfies readonly ContainerColoringStyle[]
 
 const toChipColorSchemes = (
-  colorSchemes: HightideColorSchemes
+  colorSchemes: HightideSematicColorSchemes
 ): Record<ContainerColoringStyle, ChipColorScheme> => {
   const transparent = colorSchemes.primary.text.base.color
 
