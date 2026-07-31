@@ -84,20 +84,20 @@ export const Select = ({
     [selectTheme, state]
   )
   const resolvedOverlayStyle = useMemo(
-    () => selectTheme.overlay(state),
-    [selectTheme, state]
+    () => selectTheme.overlay({}),
+    [selectTheme]
   )
   const resolvedMenuStyle = useMemo(
-    () => selectTheme.menu(state),
-    [selectTheme, state]
+    () => selectTheme.menu({}),
+    [selectTheme]
   )
   const resolvedSearchStyle = useMemo(
-    () => selectTheme.search(state),
-    [selectTheme, state]
+    () => selectTheme.search({}),
+    [selectTheme]
   )
   const searchPlaceholderColor = useMemo(
-    () => selectTheme.searchPlaceholderColor(state),
-    [selectTheme, state]
+    () => selectTheme.searchPlaceholderColor({}),
+    [selectTheme]
   )
 
   return (

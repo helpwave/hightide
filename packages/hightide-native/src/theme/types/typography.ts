@@ -1,18 +1,17 @@
-export type TextStyle = {
-  fontSize: string,
-  lineHeight: number | string,
-  fontWeight: number,
-  fontFamily?: string,
-}
+import type {
+  HightideSemanticTypographyTokens,
+  HightideTypographyStyleToken,
+  SemanticFontFamilies,
+  SemanticFontWeightTokens,
+  TypographySizes
+} from '@helpwave/hightide-design/semantic-tokens'
 
-export type HightideTypography = {
-  fontWeights: Record<string, number>,
-  scales: {
-    headline: { large: TextStyle, medium: TextStyle, small: TextStyle },
-    title: { large: TextStyle, medium: TextStyle, small: TextStyle },
-    body: { large: TextStyle, medium: TextStyle },
-    label: { large: TextStyle, medium: TextStyle },
-    caption: { large: TextStyle, medium: TextStyle, small: TextStyle },
-    button: { large: TextStyle, medium: TextStyle, small: TextStyle },
-  },
+export type TextStyle = HightideTypographyStyleToken
+
+export type HightideTypography = HightideSemanticTypographyTokens
+
+export type {
+  SemanticFontFamilies,
+  SemanticFontWeightTokens,
+  TypographySizes
 }

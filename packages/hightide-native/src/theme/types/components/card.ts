@@ -6,6 +6,7 @@ import type {
 import type { Color } from '../color'
 import type {
   InteractionState,
+  SimpleStyleResolver,
   StyleResolverFunction
 } from '../resolver'
 
@@ -34,18 +35,18 @@ export type CardActionItemIconColor = {
 }
 
 export type CardTheme = {
-  card: StyleResolverFunction<Record<string, never>, CardStyle>,
-  item: StyleResolverFunction<Record<string, never>, CardItemStyle>,
-  itemContent: StyleResolverFunction<Record<string, never>, CardItemContentStyle>,
-  itemLabel: StyleResolverFunction<Record<string, never>, CardItemLabelStyle>,
-  itemValue: StyleResolverFunction<Record<string, never>, CardItemValueStyle>,
+  card: SimpleStyleResolver<CardStyle>,
+  item: SimpleStyleResolver<CardItemStyle>,
+  itemContent: SimpleStyleResolver<CardItemContentStyle>,
+  itemLabel: SimpleStyleResolver<CardItemLabelStyle>,
+  itemValue: SimpleStyleResolver<CardItemValueStyle>,
   actionItem: StyleResolverFunction<CardActionItemState, CardActionItemStyle>,
-  actionItemContent: StyleResolverFunction<Record<string, never>, CardActionItemContentStyle>,
+  actionItemContent: SimpleStyleResolver<CardActionItemContentStyle>,
   actionItemLabel: StyleResolverFunction<CardActionItemState, CardActionItemLabelStyle>,
   actionItemIcon: StyleResolverFunction<CardActionItemState, CardActionItemIconColor>,
   navigationItem: StyleResolverFunction<CardActionItemState, CardActionItemStyle>,
-  navigationItemContent: StyleResolverFunction<Record<string, never>, CardActionItemContentStyle>,
+  navigationItemContent: SimpleStyleResolver<CardActionItemContentStyle>,
   navigationItemLabel: StyleResolverFunction<CardActionItemState, CardActionItemLabelStyle>,
   navigationItemIcon: StyleResolverFunction<CardActionItemState, CardActionItemIconColor>,
-  navigationItemTrailing: StyleResolverFunction<Record<string, never>, CardActionItemIconColor>,
+  navigationItemTrailing: SimpleStyleResolver<CardActionItemIconColor>,
 }

@@ -8,38 +8,31 @@ export type HightideTypographyStyleToken = {
   fontFamily: string,
 }
 
+export const typographySizes = ['sm', 'md', 'lg'] as const
+export type TypographySizes = typeof typographySizes[number]
+
+export type SemanticFontWeightTokens = {
+  thin: number,
+  light: number,
+  base: number,
+  medium: number,
+  semibold: number,
+  bold: number,
+}
+
+export type SemanticFontFamilies = {
+  default: string,
+  accent: string,
+  mono: string,
+}
+
 export type HightideSemanticTypographyTokens = {
-  fontWeights: HightideThemeTokens['typography']['fontWeight'],
-  scales: {
-    headline: {
-      large: HightideTypographyStyleToken,
-      medium: HightideTypographyStyleToken,
-      small: HightideTypographyStyleToken,
-    },
-    title: {
-      large: HightideTypographyStyleToken,
-      medium: HightideTypographyStyleToken,
-      small: HightideTypographyStyleToken,
-    },
-    body: {
-      large: HightideTypographyStyleToken,
-      medium: HightideTypographyStyleToken,
-    },
-    label: {
-      large: HightideTypographyStyleToken,
-      medium: HightideTypographyStyleToken,
-    },
-    caption: {
-      large: HightideTypographyStyleToken,
-      medium: HightideTypographyStyleToken,
-      small: HightideTypographyStyleToken,
-    },
-    button: {
-      large: HightideTypographyStyleToken,
-      medium: HightideTypographyStyleToken,
-      small: HightideTypographyStyleToken,
-    },
-  },
+  fontWeights: SemanticFontWeightTokens,
+  fontFamilies: SemanticFontFamilies,
+  display: HightideTypographyStyleToken,
+  heading: Record<TypographySizes, HightideTypographyStyleToken>,
+  body: Record<TypographySizes, HightideTypographyStyleToken>,
+  label: Record<TypographySizes, HightideTypographyStyleToken>,
 }
 
 export const createTypographyStyle = (
@@ -58,37 +51,37 @@ export const createHightideTypographyTokens = (
   themeTokens: HightideThemeTokens
 ): HightideSemanticTypographyTokens => {
   const { typography } = themeTokens
-  return ({
-    fontWeights: typography.fontWeight,
-    scales: {
-      headline: {
-        large: createTypographyStyle(typography, '4xl', 'bold', typography.fontFamily.accent),
-        medium: createTypographyStyle(typography, '3xl', 'semibold', typography.fontFamily.accent),
-        small: createTypographyStyle(typography, '2xl', 'bold', typography.fontFamily.accent),
-      },
-      title: {
-        large: createTypographyStyle(typography, '2xl', 'semibold', typography.fontFamily.accent),
-        medium: createTypographyStyle(typography, 'lg', 'semibold', typography.fontFamily.accent),
-        small: createTypographyStyle(typography, 'base', 'medium', typography.fontFamily.accent),
-      },
-      body: {
-        large: createTypographyStyle(typography, 'lg', 'base', typography.fontFamily.default),
-        medium: createTypographyStyle(typography, 'base', 'base', typography.fontFamily.default),
-      },
-      label: {
-        large: createTypographyStyle(typography, 'base', 'semibold', typography.fontFamily.default),
-        medium: createTypographyStyle(typography, 'sm', 'medium', typography.fontFamily.default),
-      },
-      caption: {
-        large: createTypographyStyle(typography, 'lg', 'base', typography.fontFamily.default),
-        medium: createTypographyStyle(typography, 'base', 'medium', typography.fontFamily.default),
-        small: createTypographyStyle(typography, 'sm', 'base', typography.fontFamily.default),
-      },
-      button: {
-        large: createTypographyStyle(typography, 'lg', 'semibold', typography.fontFamily.default),
-        medium: createTypographyStyle(typography, 'base', 'semibold', typography.fontFamily.default),
-        small: createTypographyStyle(typography, 'sm', 'base', typography.fontFamily.default),
-      },
+  const { fontFamily, fontWeight } = typography
+
+  return {
+    fontWeights: {
+      thin: fontWeight.thin,
+      light: fontWeight.light,
+      base: fontWeight.base,
+      medium: fontWeight.medium,
+      semibold: fontWeight.semibold,
+      bold: fontWeight.bold,
     },
-  })
+    fontFamilies: {
+      default: fontFamily.default,
+      accent: fontFamily.accent,
+      mono: fontFamily.mono,
+    },
+    display: createTypographyStyle(typography, '4xl', 'bold', fontFamily.accent),
+    heading: {
+      lg: createTypographyStyle(typography, '2xl', 'semibold', fontFamily.accent),
+      md: createTypographyStyle(typography, 'lg', 'semibold', fontFamily.accent),
+      sm: createTypographyStyle(typography, 'base', 'medium', fontFamily.accent),
+    },
+    body: {
+      lg: createTypographyStyle(typography, 'lg', 'base', fontFamily.default),
+      md: createTypographyStyle(typography, 'base', 'base', fontFamily.default),
+      sm: createTypographyStyle(typography, 'sm', 'base', fontFamily.default),
+    },
+    label: {
+      lg: createTypographyStyle(typography, 'lg', 'semibold', fontFamily.default),
+      md: createTypographyStyle(typography, 'base', 'semibold', fontFamily.default),
+      sm: createTypographyStyle(typography, 'sm', 'medium', fontFamily.default),
+    },
+  }
 }

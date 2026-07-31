@@ -15,6 +15,8 @@ export type StyleResolverFunction<TState, TStyle> = (
   overwrite?: StyleOverwrite<TState, TStyle>,
 ) => TStyle
 
+export type SimpleStyleResolver<TStyle> = StyleResolverFunction<Record<string, never>, TStyle>
+
 export const createStyleResolver = <TState, TStyle>(
   resolve: (props: TState) => TStyle
 ): StyleResolverFunction<TState, TStyle> => {
@@ -33,6 +35,12 @@ export const createStyleResolver = <TState, TStyle>(
   }
 }
 
+export const createSimpleStyleResolver = <TStyle>(
+  resolve: () => TStyle
+): SimpleStyleResolver<TStyle> => {
+  return createStyleResolver<Record<string, never>, TStyle>(resolve)
+}
+
 export const createValueResolver = <TState, TValue>(
   resolve: (props: TState) => TValue
 ): StyleResolverFunction<TState, TValue> => {
@@ -49,4 +57,10 @@ export const createValueResolver = <TState, TValue>(
 
     return overwrite
   }
+}
+
+export const createSimpleValueResolver = <TValue>(
+  resolve: () => TValue
+): SimpleStyleResolver<TValue> => {
+  return createValueResolver<Record<string, never>, TValue>(resolve)
 }

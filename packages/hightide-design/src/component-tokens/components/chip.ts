@@ -5,6 +5,7 @@ import type {
   HightideSematicColorSchemeTokens
 } from '../../semantic-tokens/colorScheme'
 import { colorSchemeTypes } from '../../semantic-tokens/colorScheme'
+import type { HightideTypographyStyleToken } from '../../semantic-tokens/typography'
 import type { HightideSemanticTokens } from '../../semantic-tokens/semanticTokens'
 import type { ComponentSize } from '../componentSize'
 import { toColorStateFull } from './pressable'
@@ -17,7 +18,7 @@ export type ChipLayoutToken = {
   gap: number,
   horizontalInset: number,
   minWidth: number,
-  fontSize: number,
+  textStyle: HightideTypographyStyleToken,
 }
 
 export type ChipColorScheme = Record<ColoringType, ColorStateFull>
@@ -73,7 +74,7 @@ export const toChipTokens = (
         gap,
         horizontalInset: inside.inset + inside.paddingExtension,
         minWidth: token.minimumWidth ?? token.size,
-        fontSize: Number(semanticTokens.typography.scales.label.medium.fontSize),
+        textStyle: semanticTokens.typography.label[size],
       } satisfies ChipLayoutToken]
     })
   ) as Record<ComponentSize, ChipLayoutToken>

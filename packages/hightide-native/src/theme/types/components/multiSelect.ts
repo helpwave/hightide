@@ -12,7 +12,10 @@ import type {
   SelectState,
   SelectTriggerTextStyle
 } from './select'
-import type { StyleResolverFunction } from '../resolver'
+import type {
+  SimpleStyleResolver,
+  StyleResolverFunction
+} from '../resolver'
 
 export type MultiSelectState = SelectState & {
   hasSelections?: boolean,
@@ -35,11 +38,11 @@ export type MultiSelectCheckboxIconStyle = {
 
 export type MultiSelectTheme = {
   trigger: StyleResolverFunction<MultiSelectState, MultiSelectTriggerStyle>,
-  triggerText: StyleResolverFunction<MultiSelectState, SelectTriggerTextStyle>,
-  overlay: StyleResolverFunction<MultiSelectState, SelectOverlayStyle>,
-  menu: StyleResolverFunction<MultiSelectState, SelectMenuStyle>,
-  search: StyleResolverFunction<MultiSelectState, SelectSearchStyle>,
-  searchPlaceholderColor: StyleResolverFunction<MultiSelectState, Color>,
+  triggerText: SimpleStyleResolver<SelectTriggerTextStyle>,
+  overlay: SimpleStyleResolver<SelectOverlayStyle>,
+  menu: SimpleStyleResolver<SelectMenuStyle>,
+  search: SimpleStyleResolver<SelectSearchStyle>,
+  searchPlaceholderColor: SimpleStyleResolver<Color>,
   option: StyleResolverFunction<MultiSelectOptionState, MultiSelectOptionStyle>,
   optionText: StyleResolverFunction<MultiSelectOptionState, MultiSelectOptionTextStyle>,
   checkbox: StyleResolverFunction<MultiSelectOptionState, MultiSelectCheckboxStyle>,

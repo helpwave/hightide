@@ -6,6 +6,7 @@ import type {
 import type { Color } from '../color'
 import type {
   InteractionState,
+  SimpleStyleResolver,
   StyleResolverFunction
 } from '../resolver'
 
@@ -36,10 +37,10 @@ export type SelectOptionTextStyle = TextStyle
 export type SelectTheme = {
   trigger: StyleResolverFunction<SelectState, SelectTriggerStyle>,
   triggerText: StyleResolverFunction<SelectState, SelectTriggerTextStyle>,
-  overlay: StyleResolverFunction<SelectState, SelectOverlayStyle>,
-  menu: StyleResolverFunction<SelectState, SelectMenuStyle>,
-  search: StyleResolverFunction<SelectState, SelectSearchStyle>,
-  searchPlaceholderColor: StyleResolverFunction<SelectState, Color>,
+  overlay: SimpleStyleResolver<SelectOverlayStyle>,
+  menu: SimpleStyleResolver<SelectMenuStyle>,
+  search: SimpleStyleResolver<SelectSearchStyle>,
+  searchPlaceholderColor: SimpleStyleResolver<Color>,
   option: StyleResolverFunction<SelectOptionState, SelectOptionStyle>,
   optionText: StyleResolverFunction<SelectOptionState, SelectOptionTextStyle>,
 }

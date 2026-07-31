@@ -1,4 +1,7 @@
-import type { ViewStyle } from 'react-native'
+import type {
+  TextStyle,
+  ViewStyle
+} from 'react-native'
 
 import type { ComponentSize } from '@helpwave/hightide-design/component-tokens'
 import type {
@@ -24,7 +27,10 @@ export type IconButtonIconStyle = {
   color: Color,
 }
 
+export type IconButtonTextStyle = TextStyle
+
 export type IconButtonTheme = {
   button: StyleResolverFunction<IconButtonState, IconButtonStyle>,
   icon: StyleResolverFunction<IconButtonState, IconButtonIconStyle>,
+  text: StyleResolverFunction<IconButtonState, IconButtonTextStyle>,
 }

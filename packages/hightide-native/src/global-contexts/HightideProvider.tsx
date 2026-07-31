@@ -50,8 +50,8 @@ const toNativeTextStyle = (style: {
 const ContentThemeFromTheme = ({ children }: PropsWithChildren) => {
   const { theme } = useTheme()
   const textStyle = useMemo(
-    () => toNativeTextStyle(theme.typography.scales.body.medium),
-    [theme.typography.scales.body.medium]
+    () => toNativeTextStyle(theme.typography.body.md),
+    [theme.typography.body.md]
   )
 
   return (

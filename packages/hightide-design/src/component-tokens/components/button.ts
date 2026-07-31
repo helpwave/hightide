@@ -1,3 +1,4 @@
+import type { HightideTypographyStyleToken } from '../../semantic-tokens/typography'
 import type { HightideSemanticTokens } from '../../semantic-tokens/semanticTokens'
 import type { ComponentSize } from '../componentSize'
 import type {
@@ -15,7 +16,7 @@ export type ButtonLayoutToken = {
   gap: number,
   horizontalInset: number,
   minWidth: number,
-  fontSize: number,
+  textStyle: HightideTypographyStyleToken,
 }
 
 export type ButtonState = PressableState
@@ -30,12 +31,6 @@ export type HightideButtonTokens = {
 }
 
 const buttonSizes = ['sm', 'md', 'lg'] as const satisfies readonly ComponentSize[]
-
-const buttonFontSizes: Record<ComponentSize, number> = {
-  sm: 14,
-  md: 14,
-  lg: 18,
-}
 
 export const toButtonTokens = (
   semanticTokens: HightideSemanticTokens
@@ -55,7 +50,7 @@ export const toButtonTokens = (
         gap,
         horizontalInset: token.horizontalContentPadding ?? token.inset,
         minWidth: token.minimumWidth ?? token.size,
-        fontSize: buttonFontSizes[size],
+        textStyle: semanticTokens.typography.label[size],
       } satisfies ButtonLayoutToken]
     })
   ) as Record<ComponentSize, ButtonLayoutToken>

@@ -1,16 +1,16 @@
 import type { HightideDesignSystemTokens } from '@helpwave/hightide-design/design-system'
 
-import { createAvatarThemeFromDesign } from '../resolvers/avatar'
-import { createButtonThemeFromDesign } from '../resolvers/button'
-import { createChatThemeFromDesign } from '../resolvers/chat'
-import { createCheckboxThemeFromDesign } from '../resolvers/checkbox'
-import { createChipThemeFromDesign } from '../resolvers/chip'
-import { createSwitchThemeFromDesign } from '../resolvers/switch'
-import { createIconButtonThemeFromDesign } from '../resolvers/iconButton'
-import { createInputThemeFromDesign } from '../resolvers/input'
-import { createCardThemeFromDesign } from '../resolvers/card'
-import { createMultiSelectThemeFromDesign } from '../resolvers/multiSelect'
-import { createSelectThemeFromDesign } from '../resolvers/select'
+import { createAvatarTheme } from '../resolvers/avatar'
+import { createButtonTheme } from '../resolvers/button'
+import { createChatTheme } from '../resolvers/chat'
+import { createCheckboxTheme } from '../resolvers/checkbox'
+import { createChipTheme } from '../resolvers/chip'
+import { createSwitchTheme } from '../resolvers/switch'
+import { createIconButtonTheme } from '../resolvers/iconButton'
+import { createInputTheme } from '../resolvers/input'
+import { createCardTheme } from '../resolvers/card'
+import { createMultiSelectTheme } from '../resolvers/multiSelect'
+import { createSelectTheme } from '../resolvers/select'
 import type { HightideTheme } from '../types/theme'
 
 export const createHightideTheme = (
@@ -26,17 +26,17 @@ export const createHightideTheme = (
     border: tokens.borderWidth,
     shadow: tokens.shadow,
     components: {
-      button: createButtonThemeFromDesign(tokens),
-      iconButton: createIconButtonThemeFromDesign(tokens),
-      chip: createChipThemeFromDesign(tokens),
-      checkbox: createCheckboxThemeFromDesign(tokens),
-      switch: createSwitchThemeFromDesign(tokens),
-      input: createInputThemeFromDesign(tokens),
-      select: createSelectThemeFromDesign(tokens),
-      multiSelect: createMultiSelectThemeFromDesign(tokens),
-      chat: createChatThemeFromDesign(tokens),
-      card: createCardThemeFromDesign(tokens),
-      avatar: createAvatarThemeFromDesign(tokens),
+      button: createButtonTheme(tokens),
+      iconButton: createIconButtonTheme(tokens),
+      chip: createChipTheme(tokens),
+      checkbox: createCheckboxTheme(tokens),
+      switch: createSwitchTheme(tokens),
+      input: createInputTheme(tokens),
+      select: createSelectTheme(tokens),
+      multiSelect: createMultiSelectTheme(tokens),
+      chat: createChatTheme(tokens),
+      card: createCardTheme(tokens),
+      avatar: createAvatarTheme(tokens),
       icon: tokens.components.icon,
     },
   }

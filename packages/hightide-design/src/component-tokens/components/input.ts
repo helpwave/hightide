@@ -1,4 +1,5 @@
 import type { ColorToken } from '../../primitive-tokens/color'
+import type { HightideTypographyStyleToken } from '../../semantic-tokens/typography'
 import type { HightideSemanticTokens } from '../../semantic-tokens/semanticTokens'
 
 export type InputLayoutToken = {
@@ -9,7 +10,7 @@ export type InputLayoutToken = {
   gap: number,
   horizontalInset: number,
   minWidth: number,
-  fontSize: number,
+  textStyle: HightideTypographyStyleToken,
 }
 
 export type HightideInputTokens = InputLayoutToken & {
@@ -30,7 +31,7 @@ export const toInputTokens = (
     gap: semanticTokens.spacing.sm,
     horizontalInset: semanticTokens.spacing.md,
     minWidth: inputControl.minimumWidth ?? inputControl.size,
-    fontSize: Number(semanticTokens.typography.scales.label.medium.fontSize),
+    textStyle: semanticTokens.typography.label.md,
     background: semanticTokens.colors.surfaceVariant,
     text: semanticTokens.colors.onSurface,
   }

@@ -1,30 +1,29 @@
 import type { TextStyle } from 'react-native'
 
-import type { HightideComponentTokens } from '@helpwave/hightide-design/component-tokens'
-import type { HightideDesignSystemTokens as DesignTokensTheme } from '@helpwave/hightide-design/design-system'
-import type { HightideSematicColorSchemeTokens, HightideSemanticColorTokens } from '@helpwave/hightide-design/semantic-tokens'
+import type { HightideDesignSystemTokens } from '@helpwave/hightide-design/design-system'
 
 import type {
   InputState,
+  InputStyle,
   InputTheme
 } from '../types/components/input'
+import type { Color } from '../types/color'
+import type {
+  SimpleStyleResolver,
+  StyleResolverFunction
+} from '../types/resolver'
 import {
-  createStyleResolver,
-  createValueResolver
+  createSimpleValueResolver,
+  createStyleResolver
 } from '../types/resolver'
 
-export type CreateInputThemeOptions = {
-  colors: HightideSemanticColorTokens,
-  colorSchemes: HightideSematicColorSchemeTokens,
-  input: HightideComponentTokens['input'],
-}
+export const createInputContainerTheme = (
+  theme: HightideDesignSystemTokens
+): StyleResolverFunction<InputState, InputStyle> => {
+  const { colors, colorSchemes, components } = theme
+  const input = components.input
 
-export const createInputTheme = ({
-  colors,
-  colorSchemes,
-  input,
-}: CreateInputThemeOptions): InputTheme => {
-  const resolveInput = (state: InputState): TextStyle => {
+  return createStyleResolver((state: InputState): InputStyle => {
     const borderColor = state.isInvalid
       ? colorSchemes.negative.text.base.foreground
       : colors.border
@@ -38,21 +37,24 @@ export const createInputTheme = ({
       borderColor,
       backgroundColor: state.isDisabled ? colors.disabled : input.background,
       color: state.isDisabled ? colors.onDisabled : input.text,
-      fontSize: input.fontSize,
+      fontSize: Number(input.textStyle.fontSize),
+      fontWeight: input.textStyle.fontWeight as TextStyle['fontWeight'],
+      fontFamily: input.textStyle.fontFamily,
+      lineHeight: typeof input.textStyle.lineHeight === 'number'
+        ? input.textStyle.lineHeight
+        : Number(input.textStyle.lineHeight),
       opacity: state.isDisabled ? 0.6 : 1,
     }
-  }
-
-  return {
-    input: createStyleResolver(resolveInput),
-    placeholderColor: createValueResolver(() => colors.placeholder),
-  }
-}
-
-export const createInputThemeFromDesign = (theme: DesignTokensTheme): InputTheme => {
-  return createInputTheme({
-    colors: theme.colors,
-    colorSchemes: theme.colorSchemes,
-    input: theme.components.input,
   })
 }
+
+export const createInputPlaceholderColorTheme = (
+  theme: HightideDesignSystemTokens
+): SimpleStyleResolver<Color> => {
+  return createSimpleValueResolver((): Color => theme.colors.placeholder)
+}
+
+export const createInputTheme = (theme: HightideDesignSystemTokens): InputTheme => ({
+  input: createInputContainerTheme(theme),
+  placeholderColor: createInputPlaceholderColorTheme(theme),
+})

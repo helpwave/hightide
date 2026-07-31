@@ -1,3 +1,4 @@
+import type { HightideTypographyStyleToken } from '../../semantic-tokens/typography'
 import type { HightideSemanticTokens } from '../../semantic-tokens/semanticTokens'
 import {
   componentSizes,
@@ -15,7 +16,7 @@ export type IconButtonLayoutToken = {
   inset: number,
   borderWidth: number,
   borderRadius: number,
-  fontSize: number,
+  textStyle: HightideTypographyStyleToken,
 }
 
 export type IconButtonState = PressableState
@@ -27,12 +28,6 @@ export type IconButtonColorSchemes = PressableColorSchemes
 export type HightideIconButtonTokens = {
   layout: Record<ComponentSize, IconButtonLayoutToken>,
   colorSchemes: IconButtonColorSchemes,
-}
-
-const buttonFontSizes: Record<ComponentSize, number> = {
-  sm: 14,
-  md: 14,
-  lg: 18,
 }
 
 export const toIconButtonTokens = (
@@ -49,7 +44,7 @@ export const toIconButtonTokens = (
         inset: token.inset,
         borderWidth: token.borderWidth,
         borderRadius: token.borderRadius,
-        fontSize: buttonFontSizes[size],
+        textStyle: semanticTokens.typography.label[size],
       } satisfies IconButtonLayoutToken]
     })
   ) as Record<ComponentSize, IconButtonLayoutToken>

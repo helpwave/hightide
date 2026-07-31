@@ -1,25 +1,17 @@
-import type { HightideComponentTokens } from '@helpwave/hightide-design/component-tokens'
-import type { HightideDesignSystemTokens as DesignTokensTheme } from '@helpwave/hightide-design/design-system'
-import type { HightideSematicColorSchemeTokens, HightideSemanticColorTokens } from '@helpwave/hightide-design/semantic-tokens'
+import type { HightideDesignSystemTokens } from '@helpwave/hightide-design/design-system'
 
 import type {
   SwitchState,
   SwitchTheme
 } from '../types/components/switch'
+import type { Color } from '../types/color'
 import { createValueResolver } from '../types/resolver'
 
-export type CreateSwitchThemeOptions = {
-  colors: HightideSemanticColorTokens,
-  colorSchemes: HightideSematicColorSchemeTokens,
-  switchTokens: HightideComponentTokens['switch'],
-}
+export const createSwitchTrackColorTheme = (theme: HightideDesignSystemTokens) => {
+  const { colors, components } = theme
+  const switchTokens = components.switch
 
-export const createSwitchTheme = ({
-  colors,
-  colorSchemes,
-  switchTokens,
-}: CreateSwitchThemeOptions): SwitchTheme => {
-  const resolveState = (state: SwitchState) => {
+  return createValueResolver((state: SwitchState): Color => {
     const trackInactive = state.isDisabled
       ? colors.disabled
       : switchTokens.track.inactive
@@ -27,40 +19,44 @@ export const createSwitchTheme = ({
       ? colors.disabled
       : switchTokens.track.active
 
-    const trackColor = state.isActive ? trackActive : trackInactive
+    return state.isActive ? trackActive : trackInactive
+  })
+}
 
-    const borderColor = state.isDisabled
+export const createSwitchBorderColorTheme = (theme: HightideDesignSystemTokens) => {
+  const { colors, colorSchemes, components } = theme
+  const switchTokens = components.switch
+
+  return createValueResolver((state: SwitchState): Color => {
+    const trackActive = state.isDisabled
+      ? colors.disabled
+      : switchTokens.track.active
+
+    return state.isDisabled
       ? colors.disabled
       : state.isInvalid
         ? colorSchemes.negative.text.base.foreground
         : state.isActive
           ? trackActive
           : switchTokens.borderColor
+  })
+}
 
-    const thumbColor = state.isDisabled
+export const createSwitchThumbColorTheme = (theme: HightideDesignSystemTokens) => {
+  const { colors, components } = theme
+  const switchTokens = components.switch
+
+  return createValueResolver((state: SwitchState): Color => (
+    state.isDisabled
       ? colors.onDisabled
       : state.isActive
         ? switchTokens.thumb.active
         : switchTokens.thumb.inactive
-
-    return {
-      trackColor,
-      borderColor,
-      thumbColor,
-    }
-  }
-
-  return {
-    trackColor: createValueResolver((state) => resolveState(state).trackColor),
-    borderColor: createValueResolver((state) => resolveState(state).borderColor),
-    thumbColor: createValueResolver((state) => resolveState(state).thumbColor),
-  }
+  ))
 }
 
-export const createSwitchThemeFromDesign = (theme: DesignTokensTheme): SwitchTheme => {
-  return createSwitchTheme({
-    colors: theme.colors,
-    colorSchemes: theme.colorSchemes,
-    switchTokens: theme.components.switch,
-  })
-}
+export const createSwitchTheme = (theme: HightideDesignSystemTokens): SwitchTheme => ({
+  trackColor: createSwitchTrackColorTheme(theme),
+  borderColor: createSwitchBorderColorTheme(theme),
+  thumbColor: createSwitchThumbColorTheme(theme),
+})

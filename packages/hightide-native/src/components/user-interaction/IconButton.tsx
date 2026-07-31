@@ -6,7 +6,6 @@ import {
   Pressable,
   type PressableProps,
   type StyleProp,
-  type TextStyle,
   type ViewStyle
 } from 'react-native'
 import type { ComponentSize } from '@helpwave/hightide-design/component-tokens'
@@ -81,12 +80,12 @@ export const IconButton = forwardRef<React.ComponentRef<typeof Pressable>, IconB
       {(pressableState) => {
         const state = resolveState(pressableState as PressableInteraction)
         const resolvedIcon = theme.components.iconButton.icon(state)
-        const textStyle: TextStyle = { color: resolvedIcon.color }
+        const resolvedText = theme.components.iconButton.text(state)
 
         return (
           <ContentThemeProvider
             foregroundColor={resolvedIcon.color}
-            textStyle={textStyle}
+            textStyle={resolvedText}
           >
             {children}
           </ContentThemeProvider>

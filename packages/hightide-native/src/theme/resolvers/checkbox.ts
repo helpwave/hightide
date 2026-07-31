@@ -1,11 +1,9 @@
-import type { ViewStyle } from 'react-native'
-
-import type { HightideComponentTokens } from '@helpwave/hightide-design/component-tokens'
-import type { HightideDesignSystemTokens as DesignTokensTheme } from '@helpwave/hightide-design/design-system'
-import type { HightideSematicColorSchemeTokens, HightideSemanticColorTokens } from '@helpwave/hightide-design/semantic-tokens'
+import type { HightideDesignSystemTokens } from '@helpwave/hightide-design/design-system'
 
 import type {
+  CheckboxIconStyle,
   CheckboxState,
+  CheckboxStyle,
   CheckboxTheme
 } from '../types/components/checkbox'
 import {
@@ -13,24 +11,15 @@ import {
   createValueResolver
 } from '../types/resolver'
 
-export type CreateCheckboxThemeOptions = {
-  colors: HightideSemanticColorTokens,
-  colorSchemes: HightideSematicColorSchemeTokens,
-  checkbox: HightideComponentTokens['checkbox'],
-}
+export const createCheckboxContainerTheme = (theme: HightideDesignSystemTokens) => {
+  const { colors, colorSchemes, components } = theme
+  const checkboxTokens = components.checkbox
 
-export const createCheckboxTheme = ({
-  colors,
-  colorSchemes,
-  checkbox: checkboxTokens,
-}: CreateCheckboxThemeOptions): CheckboxTheme => {
-  const resolveState = (state: CheckboxState) => {
+  return createStyleResolver((state: CheckboxState): CheckboxStyle => {
     const size = state.size ?? 'md'
     const box = checkboxTokens.box.layout[size]
-    const icon = checkboxTokens.icon.layout[size]
     const dimension = box.size
     const isActive = !!(state.isChecked || state.isIndeterminate)
-    const showIndicator = !!(state.isIndeterminate || state.alwaysShowCheckIcon || state.isChecked)
     const primary = colorSchemes.primary.filled.base
     const negative = colorSchemes.negative.text.base.foreground
 
@@ -44,7 +33,7 @@ export const createCheckboxTheme = ({
       ? colors.disabled
       : (isActive ? primary.color : checkboxTokens.background)
 
-    const checkbox: ViewStyle = {
+    return {
       width: dimension,
       height: dimension,
       alignItems: 'center',
@@ -56,27 +45,29 @@ export const createCheckboxTheme = ({
       backgroundColor,
       opacity: state.isDisabled ? 0.6 : 1,
     }
-
-    return {
-      checkbox,
-      icon: {
-        color: isActive ? primary.foreground : colorSchemes.primary.text.base.foreground,
-        size: icon.size,
-        visible: showIndicator,
-      },
-    }
-  }
-
-  return {
-    checkbox: createStyleResolver((state) => resolveState(state).checkbox),
-    icon: createValueResolver((state) => resolveState(state).icon),
-  }
-}
-
-export const createCheckboxThemeFromDesign = (theme: DesignTokensTheme): CheckboxTheme => {
-  return createCheckboxTheme({
-    colors: theme.colors,
-    colorSchemes: theme.colorSchemes,
-    checkbox: theme.components.checkbox,
   })
 }
+
+export const createCheckboxIconTheme = (theme: HightideDesignSystemTokens) => {
+  const { colorSchemes, components } = theme
+  const checkboxTokens = components.checkbox
+
+  return createValueResolver((state: CheckboxState): CheckboxIconStyle => {
+    const size = state.size ?? 'md'
+    const icon = checkboxTokens.icon.layout[size]
+    const isActive = !!(state.isChecked || state.isIndeterminate)
+    const showIndicator = !!(state.isIndeterminate || state.alwaysShowCheckIcon || state.isChecked)
+    const primary = colorSchemes.primary.filled.base
+
+    return {
+      color: isActive ? primary.foreground : colorSchemes.primary.text.base.foreground,
+      size: icon.size,
+      visible: showIndicator,
+    }
+  })
+}
+
+export const createCheckboxTheme = (theme: HightideDesignSystemTokens): CheckboxTheme => ({
+  checkbox: createCheckboxContainerTheme(theme),
+  icon: createCheckboxIconTheme(theme),
+})

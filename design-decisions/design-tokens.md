@@ -64,19 +64,20 @@ Precomputed as `hightideLightSemanticTokens` / `hightideDarkSemanticTokens` via 
 
 - pruned `colors` (`HightideSemanticColorTokens`) from theme (no role scheme inputs)
 - `colorSchemes` — built via `createHightideColorSchemes(themeTokens.color)` (`filled`, `outline`, `tonal`, `tonal-outline`, `text`)
-- `elementLayout: { control, container }` from theme size/padding/paddingExtension/border
+- `elementLayout: { control, container, insideControl }` from theme size/padding/paddingExtension/border
 - `border: HightideSemanticBorderTokens` (`thin ← xs`, `base ← md`, `thick ← xl`)
-- `icon: HightideIconThemeTokens` where `size = control.size - 2 * control.inset`
-- compose typography; passthrough spacing/radius/shadow
+- `typography` — `fontWeights`, `fontFamilies` (`default` / `accent` / `mono`), plus roles `display`, `heading` / `body` / `label` (`sm`–`lg`); see [typography.md](./typography.md)
+- passthrough spacing/radius/shadow
 
 ### 4. HightideComponentTokens
 
 Precomputed as `hightideLightComponentTokens` / `hightideDarkComponentTokens` via `toHightideComponentTokens` — colors + layouts from semantic only.
 
-- button / iconButton / chip: `ComponentSize` (`sm…lg`) from `elementLayout.control` (chip adjusted)
-- input: single layout from `control.md`
+- button / iconButton / chip: `ComponentSize` (`sm…lg`) from `elementLayout.control` (chip adjusted); layout includes `textStyle` from `typography.label[size]`
+- input: single layout from `control.md` with `textStyle` from `label.md`
 - checkbox: `ComponentSize` mapped via `insideControl` / one step denser nesting
 - icon: `insideControl` sizes + border stroke
+- avatar: `textStyle` from `typography.label[size]` with `fontWeights.bold`
 
 ### 5. HightideDesignSystemTokens
 

@@ -96,8 +96,8 @@ export const Input = forwardRef<TextInput, InputProps>(function Input({
     [theme, state, inputStyle]
   )
   const placeholderColor = useMemo(
-    () => theme.components.input.placeholderColor(state),
-    [theme, state]
+    () => theme.components.input.placeholderColor({}),
+    [theme]
   )
 
   return (

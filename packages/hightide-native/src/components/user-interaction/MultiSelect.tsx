@@ -82,24 +82,24 @@ export const MultiSelect = ({
     [multiSelectTheme, state]
   )
   const resolvedTriggerTextStyle = useMemo(
-    () => multiSelectTheme.triggerText(state),
-    [multiSelectTheme, state]
+    () => multiSelectTheme.triggerText({}),
+    [multiSelectTheme]
   )
   const resolvedOverlayStyle = useMemo(
-    () => multiSelectTheme.overlay(state),
-    [multiSelectTheme, state]
+    () => multiSelectTheme.overlay({}),
+    [multiSelectTheme]
   )
   const resolvedMenuStyle = useMemo(
-    () => multiSelectTheme.menu(state),
-    [multiSelectTheme, state]
+    () => multiSelectTheme.menu({}),
+    [multiSelectTheme]
   )
   const resolvedSearchStyle = useMemo(
-    () => multiSelectTheme.search(state),
-    [multiSelectTheme, state]
+    () => multiSelectTheme.search({}),
+    [multiSelectTheme]
   )
   const searchPlaceholderColor = useMemo(
-    () => multiSelectTheme.searchPlaceholderColor(state),
-    [multiSelectTheme, state]
+    () => multiSelectTheme.searchPlaceholderColor({}),
+    [multiSelectTheme]
   )
 
   return (

@@ -1,34 +1,34 @@
 import type {
   ImageStyle,
-  TextStyle,
-  ViewStyle
+  TextStyle
 } from 'react-native'
 
-import type { HightideComponentTokens } from '@helpwave/hightide-design/component-tokens'
+import type { HightideDesignSystemTokens } from '@helpwave/hightide-design/design-system'
 import type {
   HightideSematicColorSchemeTokens,
-  HightideSemanticShadowTokens,
-  HightideSemanticColorTokens,
-  HightideSemanticTypographyTokens
+  HightideSemanticColorTokens
 } from '@helpwave/hightide-design/semantic-tokens'
-import type { HightideDesignSystemTokens as DesignTokensTheme } from '@helpwave/hightide-design/design-system'
 
 import type {
+  AvatarGroupContainerStyle,
+  AvatarGroupMoreStyle,
+  AvatarGroupStackStyle,
   AvatarGroupState,
   AvatarIconStyle,
+  AvatarImageStyle,
   AvatarState,
   AvatarStatus,
+  AvatarStatusDotStyle,
+  AvatarStyle,
+  AvatarTextStyle,
   AvatarTheme,
+  AvatarWithLabelContainerStyle,
   AvatarWithLabelState,
+  AvatarWithLabelTextStyle,
+  AvatarWithStatusContainerStyle,
   AvatarWithStatusState
 } from '../types/components/avatar'
 import { createStyleResolver } from '../types/resolver'
-
-const avatarFontWeights: Record<'sm' | 'md' | 'lg', 'semibold' | 'bold'> = {
-  sm: 'semibold',
-  md: 'semibold',
-  lg: 'bold',
-}
 
 const statusColor = (
   status: AvatarStatus,
@@ -49,33 +49,19 @@ const statusColor = (
   }
 }
 
-export type CreateAvatarThemeOptions = {
-  colors: HightideSemanticColorTokens,
-  colorSchemes: HightideSematicColorSchemeTokens,
-  typography: HightideSemanticTypographyTokens,
-  avatar: HightideComponentTokens['avatar'],
-  icon: HightideComponentTokens['icon'],
-  avatarGroup: HightideComponentTokens['avatarGroup'],
-  shadow: HightideSemanticShadowTokens,
-}
+export const createAvatarContainerTheme = (theme: HightideDesignSystemTokens) => {
+  const { colorSchemes, components, shadow } = theme
+  const avatar = components.avatar
+  const avatarGroup = components.avatarGroup
 
-export const createAvatarTheme = ({
-  colors,
-  colorSchemes,
-  typography,
-  avatar,
-  icon,
-  avatarGroup,
-  shadow,
-}: CreateAvatarThemeOptions): AvatarTheme => {
-  const resolveAvatar = (state: AvatarState) => {
+  return createStyleResolver((state: AvatarState): AvatarStyle => {
     const size = state.size ?? 'md'
     const dimension = avatar[size].size
     const primaryFilled = colorSchemes.primary.filled.base
     const borderRadius = dimension / 2
     const raisedShadow = shadow.raised
 
-    const avatarStyle: ViewStyle = {
+    return {
       position: state.isGrouped ? 'absolute' : 'relative',
       flexDirection: 'row',
       alignItems: 'center',
@@ -96,48 +82,83 @@ export const createAvatarTheme = ({
         elevation: raisedShadow.blur,
       } : {}),
     }
+  })
+}
 
-    const image: ImageStyle = {
+export const createAvatarImageTheme = (theme: HightideDesignSystemTokens) => {
+  const avatar = theme.components.avatar
+
+  return createStyleResolver((state: AvatarState): AvatarImageStyle => {
+    const size = state.size ?? 'md'
+    const dimension = avatar[size].size
+    const borderRadius = dimension / 2
+
+    return {
       position: 'absolute',
       left: 0,
       top: 0,
       width: dimension,
       height: dimension,
       borderRadius,
-    }
+    } satisfies ImageStyle
+  })
+}
 
-    const text: TextStyle = {
+export const createAvatarTextTheme = (theme: HightideDesignSystemTokens) => {
+  const { colorSchemes, components } = theme
+  const avatar = components.avatar
+
+  return createStyleResolver((state: AvatarState): AvatarTextStyle => {
+    const size = state.size ?? 'md'
+    const primaryFilled = colorSchemes.primary.filled.base
+    const { textStyle } = avatar[size]
+
+    return {
       color: primaryFilled.foreground,
-      fontSize: avatar[size].fontSize,
-      fontWeight: typography.fontWeights[avatarFontWeights[size]] as TextStyle['fontWeight'],
+      fontSize: Number(textStyle.fontSize),
+      fontWeight: textStyle.fontWeight as TextStyle['fontWeight'],
+      fontFamily: textStyle.fontFamily,
+      lineHeight: typeof textStyle.lineHeight === 'number'
+        ? textStyle.lineHeight
+        : Number(textStyle.lineHeight),
       textAlign: 'center',
     }
+  })
+}
 
-    const iconStyle: AvatarIconStyle = {
+export const createAvatarIconTheme = (theme: HightideDesignSystemTokens) => {
+  const { colorSchemes, components } = theme
+  const icon = components.icon
+
+  return createStyleResolver((state: AvatarState): AvatarIconStyle => {
+    const size = state.size ?? 'md'
+    const primaryFilled = colorSchemes.primary.filled.base
+
+    return {
       size: icon[size].size,
       strokeWidth: icon[size].strokeWidth,
       color: primaryFilled.foreground,
     }
+  })
+}
 
-    return {
-      avatar: avatarStyle,
-      image,
-      text,
-      icon: iconStyle,
-    }
-  }
+export const createAvatarWithStatusContainerTheme = (_theme: HightideDesignSystemTokens) => {
+  return createStyleResolver((_state: AvatarWithStatusState): AvatarWithStatusContainerStyle => ({
+    position: 'relative',
+    alignSelf: 'flex-start',
+  }))
+}
 
-  const resolveWithStatus = (state: AvatarWithStatusState) => {
+export const createAvatarWithStatusStatusDotTheme = (theme: HightideDesignSystemTokens) => {
+  const { colors, colorSchemes, components } = theme
+  const avatar = components.avatar
+
+  return createStyleResolver((state: AvatarWithStatusState): AvatarStatusDotStyle => {
     const size = state.size ?? 'md'
     const status = state.status ?? 'unknown'
     const statusDotSize = avatar[size].statusDotSize
 
-    const container: ViewStyle = {
-      position: 'relative',
-      alignSelf: 'flex-start',
-    }
-
-    const statusDot: ViewStyle = {
+    return {
       position: 'absolute',
       right: 0,
       bottom: 0,
@@ -149,92 +170,111 @@ export const createAvatarTheme = ({
       borderColor: colors.background,
       backgroundColor: statusColor(status, colorSchemes, colors),
     }
+  })
+}
 
-    return { container, statusDot }
-  }
+export const createAvatarWithStatusTheme = (theme: HightideDesignSystemTokens) => ({
+  container: createAvatarWithStatusContainerTheme(theme),
+  statusDot: createAvatarWithStatusStatusDotTheme(theme),
+})
 
-  const resolveWithLabel = (_state: AvatarWithLabelState) => {
-    const bodyMedium = typography.scales.body.medium
+export const createAvatarWithLabelContainerTheme = (theme: HightideDesignSystemTokens) => {
+  const avatarGroup = theme.components.avatarGroup
 
-    const container: ViewStyle = {
-      flexDirection: 'row',
-      alignItems: 'center',
-      gap: avatarGroup.gap,
-    }
+  return createStyleResolver((_state: AvatarWithLabelState): AvatarWithLabelContainerStyle => ({
+    flexDirection: 'row',
+    alignItems: 'center',
+    gap: avatarGroup.gap,
+  }))
+}
 
-    const text: TextStyle = {
-      fontSize: Number(bodyMedium.fontSize),
-      fontWeight: bodyMedium.fontWeight as TextStyle['fontWeight'],
-      lineHeight: typeof bodyMedium.lineHeight === 'number'
-        ? bodyMedium.lineHeight
-        : Number(bodyMedium.lineHeight),
-      color: colors.onBackground,
-      flexShrink: 1,
-    }
+export const createAvatarWithLabelTextTheme = (theme: HightideDesignSystemTokens) => {
+  const { colors, typography } = theme
+  const body = typography.body.md
 
-    return { container, text }
-  }
+  return createStyleResolver((_state: AvatarWithLabelState): AvatarWithLabelTextStyle => ({
+    fontSize: Number(body.fontSize),
+    fontWeight: body.fontWeight as TextStyle['fontWeight'],
+    fontFamily: body.fontFamily,
+    lineHeight: typeof body.lineHeight === 'number'
+      ? body.lineHeight
+      : Number(body.lineHeight),
+    color: colors.onBackground,
+    flexShrink: 1,
+  }))
+}
 
-  const resolveGroup = (state: AvatarGroupState) => {
+export const createAvatarWithLabelTheme = (theme: HightideDesignSystemTokens) => ({
+  container: createAvatarWithLabelContainerTheme(theme),
+  text: createAvatarWithLabelTextTheme(theme),
+})
+
+export const createAvatarGroupContainerTheme = (theme: HightideDesignSystemTokens) => {
+  const { components } = theme
+  const avatar = components.avatar
+  const avatarGroup = components.avatarGroup
+
+  return createStyleResolver((state: AvatarGroupState): AvatarGroupContainerStyle => {
     const size = state.size ?? 'md'
     const dimension = avatar[size].size
-    const visibleCount = Math.min(state.count ?? avatarGroup.maxShown, avatarGroup.maxShown)
-    const stackWidth = dimension * (avatarGroup.overlap * Math.max(visibleCount - 1, 0) + 1)
 
-    const container: ViewStyle = {
+    return {
       flexDirection: 'row',
       alignItems: 'center',
       gap: avatarGroup.gap,
       height: dimension,
       alignSelf: 'flex-start',
     }
+  })
+}
 
-    const stack: ViewStyle = {
+export const createAvatarGroupStackTheme = (theme: HightideDesignSystemTokens) => {
+  const { components } = theme
+  const avatar = components.avatar
+  const avatarGroup = components.avatarGroup
+
+  return createStyleResolver((state: AvatarGroupState): AvatarGroupStackStyle => {
+    const size = state.size ?? 'md'
+    const dimension = avatar[size].size
+    const visibleCount = Math.min(state.count ?? avatarGroup.maxShown, avatarGroup.maxShown)
+    const stackWidth = dimension * (avatarGroup.overlap * Math.max(visibleCount - 1, 0) + 1)
+
+    return {
       position: 'relative',
       width: stackWidth,
       height: dimension,
     }
+  })
+}
 
-    const more: TextStyle = {
+export const createAvatarGroupMoreTheme = (theme: HightideDesignSystemTokens) => {
+  const { colors, components } = theme
+  const avatar = components.avatar
+
+  return createStyleResolver((state: AvatarGroupState): AvatarGroupMoreStyle => {
+    const size = state.size ?? 'md'
+    const dimension = avatar[size].size
+
+    return {
       fontSize: (dimension * 2) / 3,
       color: colors.onBackground,
       flexShrink: 1,
     }
-
-    return { container, stack, more }
-  }
-
-  return {
-    avatar: createStyleResolver((state) => resolveAvatar(state).avatar),
-    image: createStyleResolver((state) => resolveAvatar(state).image),
-    text: createStyleResolver((state) => resolveAvatar(state).text),
-    icon: createStyleResolver((state) => resolveAvatar(state).icon),
-    withStatus: {
-      container: createStyleResolver((state) => resolveWithStatus(state).container),
-      statusDot: createStyleResolver((state) => resolveWithStatus(state).statusDot),
-    },
-    withLabel: {
-      container: createStyleResolver((state) => resolveWithLabel(state).container),
-      text: createStyleResolver((state) => resolveWithLabel(state).text),
-    },
-    group: {
-      container: createStyleResolver((state) => resolveGroup(state).container),
-      stack: createStyleResolver((state) => resolveGroup(state).stack),
-      more: createStyleResolver((state) => resolveGroup(state).more),
-    },
-  }
-}
-
-export const createAvatarThemeFromDesign = (
-  theme: DesignTokensTheme
-): AvatarTheme => {
-  return createAvatarTheme({
-    colors: theme.colors,
-    colorSchemes: theme.colorSchemes,
-    typography: theme.typography,
-    avatar: theme.components.avatar,
-    icon: theme.components.icon,
-    avatarGroup: theme.components.avatarGroup,
-    shadow: theme.shadow,
   })
 }
+
+export const createAvatarGroupTheme = (theme: HightideDesignSystemTokens) => ({
+  container: createAvatarGroupContainerTheme(theme),
+  stack: createAvatarGroupStackTheme(theme),
+  more: createAvatarGroupMoreTheme(theme),
+})
+
+export const createAvatarTheme = (theme: HightideDesignSystemTokens): AvatarTheme => ({
+  avatar: createAvatarContainerTheme(theme),
+  image: createAvatarImageTheme(theme),
+  text: createAvatarTextTheme(theme),
+  icon: createAvatarIconTheme(theme),
+  withStatus: createAvatarWithStatusTheme(theme),
+  withLabel: createAvatarWithLabelTheme(theme),
+  group: createAvatarGroupTheme(theme),
+})

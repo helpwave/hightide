@@ -1,10 +1,6 @@
-import type {
-  TextStyle,
-  ViewStyle
-} from 'react-native'
+import type { TextStyle } from 'react-native'
 
-import type { HightideComponentTokens } from '@helpwave/hightide-design/component-tokens'
-import type { HightideDesignSystemTokens as DesignTokensTheme } from '@helpwave/hightide-design/design-system'
+import type { HightideDesignSystemTokens } from '@helpwave/hightide-design/design-system'
 
 import {
   isOutlineColoringStyle,
@@ -12,22 +8,16 @@ import {
 } from './colorScheme'
 import type {
   ButtonState,
+  ButtonStyle,
+  ButtonTextStyle,
   ButtonTheme
 } from '../types/components/button'
 import { createStyleResolver } from '../types/resolver'
 
-export type CreateButtonThemeOptions = {
-  colorSchemes: HightideComponentTokens['button']['colorSchemes'],
-  layout: HightideComponentTokens['button']['layout'],
-  fontWeight: number,
-}
+export const createButtonContainerTheme = (theme: HightideDesignSystemTokens) => {
+  const { colorSchemes, layout } = theme.components.button
 
-export const createButtonTheme = ({
-  colorSchemes,
-  layout,
-  fontWeight,
-}: CreateButtonThemeOptions): ButtonTheme => {
-  const resolveState = (state: ButtonState) => {
+  return createStyleResolver((state: ButtonState): ButtonStyle => {
     const size = state.size ?? 'md'
     const color = state.color ?? 'primary'
     const coloringStyle = state.coloringStyle ?? 'filled'
@@ -41,7 +31,7 @@ export const createButtonTheme = ({
     const outlinePadding = isOutlineColoringStyle(coloringStyle)
     const outlineInset = Math.max(element.inset - element.borderWidth, 0)
 
-    const button: ViewStyle = {
+    return {
       flexDirection: 'row',
       alignItems: 'center',
       justifyContent: 'center',
@@ -58,26 +48,37 @@ export const createButtonTheme = ({
       borderRadius: element.borderRadius,
       opacity: state.isDisabled ? 0.6 : 1,
     }
-
-    const text: TextStyle = {
-      color: resolved.color,
-      fontSize: element.fontSize,
-      fontWeight: fontWeight as TextStyle['fontWeight'],
-    }
-
-    return { button, text }
-  }
-
-  return {
-    button: createStyleResolver((state) => resolveState(state).button),
-    text: createStyleResolver((state) => resolveState(state).text),
-  }
-}
-
-export const createButtonThemeFromDesign = (theme: DesignTokensTheme): ButtonTheme => {
-  return createButtonTheme({
-    colorSchemes: theme.components.button.colorSchemes,
-    layout: theme.components.button.layout,
-    fontWeight: theme.typography.fontWeights.semibold,
   })
 }
+
+export const createButtonTextTheme = (theme: HightideDesignSystemTokens) => {
+  const { colorSchemes, layout } = theme.components.button
+
+  return createStyleResolver((state: ButtonState): ButtonTextStyle => {
+    const size = state.size ?? 'md'
+    const color = state.color ?? 'primary'
+    const coloringStyle = state.coloringStyle ?? 'filled'
+    const resolved = resolveColoringStyles(
+      colorSchemes,
+      color,
+      coloringStyle,
+      state
+    )
+    const { textStyle } = layout[size]
+
+    return {
+      color: resolved.color,
+      fontSize: Number(textStyle.fontSize),
+      fontWeight: textStyle.fontWeight as TextStyle['fontWeight'],
+      fontFamily: textStyle.fontFamily,
+      lineHeight: typeof textStyle.lineHeight === 'number'
+        ? textStyle.lineHeight
+        : Number(textStyle.lineHeight),
+    }
+  })
+}
+
+export const createButtonTheme = (theme: HightideDesignSystemTokens): ButtonTheme => ({
+  button: createButtonContainerTheme(theme),
+  text: createButtonTextTheme(theme),
+})

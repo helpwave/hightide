@@ -89,6 +89,7 @@ Layout layers:
 - Primitive `sizes` steps `0…160` (step 4); primitive `border` steps `0…10`
 - Theme `size` / `padding` / `paddingExtension` / `borderRadius` as `ThemeLayoutSizes` (`xs…xl`) roles; component APIs use `ComponentSize` (`sm…lg`) from `/component-tokens`
 - Semantic `elementLayout.control|container|insideControl` include `borderWidth` and `borderRadius`; `insideControl.size = control.size - 2 * control.inset - 2 * control.borderWidth`
+- Semantic typography: `display`, `heading|body|label` (`sm`–`lg`), plus `fontWeights` / `fontFamilies` (`normal` / `accent` / `mono`)
 
 `ColorState` = `{ background, foreground, border }`. Resolve with `resolveStateBasedProperty(property, states)` in order `base → focused → hover → pressed → disabled`.
 
