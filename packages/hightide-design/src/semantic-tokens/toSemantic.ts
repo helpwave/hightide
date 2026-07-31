@@ -1,45 +1,29 @@
-import { createHightideColorSchemes } from './colorScheme'
+import { toSemanticColorSchemeTokens } from './colorScheme'
 import type { HightideThemeTokens } from '../theme-tokens/themeTokens'
-import type { HightideSemanticColorTokens } from './color'
-import { toHightideElementLayoutFromTheme } from './elementLayout'
-import { toHightideElevationShadow } from './shadow'
+import { toSemanticColorTokens } from './color'
+import { toHightideElementLayoutFromTheme as toElementLayoutTokens } from './elementLayout'
+import { toSemanticShadowTokens } from './shadow'
 import type { HightideSemanticTokens } from './semanticTokens'
-import { createHightideTypographyTokens } from './typography'
+import { createHightideTypographyTokens as toSemanticTypographyTokens } from './typography'
+import { toSemanticSpaccingTokens as toSemanticSpacingTokens } from './spacing'
+import { toSemanticBorderRadiusTokens } from './borderRadius'
+import { toSemanticBorderWidthTokens } from './borderWidth'
 
 export type ToHightideSemanticArgs = {
   themeTokens: HightideThemeTokens,
-}
-
-const toSemanticColors = (themeColors: HightideThemeTokens['color']): HightideSemanticColorTokens => {
-  return {
-    transparent: themeColors.transparent,
-    background: themeColors.background,
-    onBackground: themeColors.onBackground,
-    disabled: themeColors.disabled,
-    onDisabled: themeColors.onDisabled,
-    surface: themeColors.surface,
-    onSurface: themeColors.onSurface,
-    surfaceHover: themeColors.surfaceHover,
-    surfaceVariant: themeColors.surfaceVariant,
-    placeholder: themeColors.subtle,
-    description: themeColors.subtle,
-    subtle: themeColors.subtle,
-    border: themeColors.faded,
-    divider: themeColors.faded,
-  }
 }
 
 export const toHightideSemanticTokens = ({
   themeTokens,
 }: ToHightideSemanticArgs): HightideSemanticTokens => {
   return {
-    colors: toSemanticColors(themeTokens.color),
-    colorSchemes: createHightideColorSchemes(themeTokens.color),
-    typography: createHightideTypographyTokens(themeTokens.typography),
-    spacing: themeTokens.spacing,
-    elementLayout: toHightideElementLayoutFromTheme(themeTokens),
-    radius: themeTokens.radius,
-    border: themeTokens.border,
-    shadow: toHightideElevationShadow(themeTokens.shadow),
+    colors: toSemanticColorTokens(themeTokens),
+    colorSchemes: toSemanticColorSchemeTokens(themeTokens),
+    typography: toSemanticTypographyTokens(themeTokens),
+    spacing: toSemanticSpacingTokens(themeTokens),
+    elementLayout: toElementLayoutTokens(themeTokens),
+    borderRadius: toSemanticBorderRadiusTokens(themeTokens),
+    borderWidth: toSemanticBorderWidthTokens(themeTokens),
+    shadow: toSemanticShadowTokens(themeTokens),
   }
 }

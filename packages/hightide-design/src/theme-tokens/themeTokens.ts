@@ -11,7 +11,7 @@ import type { HightideThemeShadowTokens } from './shadow'
 import type { HightideThemeTypographyTokens } from './typography'
 
 export type HightideThemeTokens = {
-  color: HightideThemeColorTokens,
+  colors: HightideThemeColorTokens,
   spacing: HightideThemeSpacingTokens,
   size: HightideThemeSizeTokens,
   padding: HightideThemePaddingTokens,

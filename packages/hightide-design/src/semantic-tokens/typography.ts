@@ -5,7 +5,7 @@ export type HightideTypographyStyleToken = {
   fontSize: string,
   lineHeight: number | string,
   fontWeight: number,
-  fontFamily?: string,
+  fontFamily: string,
 }
 
 export type HightideSemanticTypographyTokens = {
@@ -42,13 +42,11 @@ export type HightideSemanticTypographyTokens = {
   },
 }
 
-export type { HightideSemanticTypographyTokens as TypographyScale, HightideTypographyStyleToken as TypographyStyle }
-
 export const createTypographyStyle = (
   typography: HightideThemeTokens['typography'],
   size: FontSizeKey,
   weight: FontWeightKey,
-  fontFamily?: string
+  fontFamily: string
 ): HightideTypographyStyleToken => ({
   fontSize: typography.fontSize[size],
   lineHeight: typography.lineHeight[size],
@@ -57,37 +55,40 @@ export const createTypographyStyle = (
 })
 
 export const createHightideTypographyTokens = (
-  typography: HightideThemeTokens['typography']
-): HightideSemanticTypographyTokens => ({
-  fontWeights: typography.fontWeight,
-  scales: {
-    headline: {
-      large: createTypographyStyle(typography, '4xl', 'bold', typography.fontFamily.accent),
-      medium: createTypographyStyle(typography, '3xl', 'semibold', typography.fontFamily.accent),
-      small: createTypographyStyle(typography, '2xl', 'bold', typography.fontFamily.accent),
+  themeTokens: HightideThemeTokens
+): HightideSemanticTypographyTokens => {
+  const { typography } = themeTokens
+  return ({
+    fontWeights: typography.fontWeight,
+    scales: {
+      headline: {
+        large: createTypographyStyle(typography, '4xl', 'bold', typography.fontFamily.accent),
+        medium: createTypographyStyle(typography, '3xl', 'semibold', typography.fontFamily.accent),
+        small: createTypographyStyle(typography, '2xl', 'bold', typography.fontFamily.accent),
+      },
+      title: {
+        large: createTypographyStyle(typography, '2xl', 'semibold', typography.fontFamily.accent),
+        medium: createTypographyStyle(typography, 'lg', 'semibold', typography.fontFamily.accent),
+        small: createTypographyStyle(typography, 'base', 'medium', typography.fontFamily.accent),
+      },
+      body: {
+        large: createTypographyStyle(typography, 'lg', 'base', typography.fontFamily.default),
+        medium: createTypographyStyle(typography, 'base', 'base', typography.fontFamily.default),
+      },
+      label: {
+        large: createTypographyStyle(typography, 'base', 'semibold', typography.fontFamily.default),
+        medium: createTypographyStyle(typography, 'sm', 'medium', typography.fontFamily.default),
+      },
+      caption: {
+        large: createTypographyStyle(typography, 'lg', 'base', typography.fontFamily.default),
+        medium: createTypographyStyle(typography, 'base', 'medium', typography.fontFamily.default),
+        small: createTypographyStyle(typography, 'sm', 'base', typography.fontFamily.default),
+      },
+      button: {
+        large: createTypographyStyle(typography, 'lg', 'semibold', typography.fontFamily.default),
+        medium: createTypographyStyle(typography, 'base', 'semibold', typography.fontFamily.default),
+        small: createTypographyStyle(typography, 'sm', 'base', typography.fontFamily.default),
+      },
     },
-    title: {
-      large: createTypographyStyle(typography, '2xl', 'semibold', typography.fontFamily.accent),
-      medium: createTypographyStyle(typography, 'lg', 'semibold', typography.fontFamily.accent),
-      small: createTypographyStyle(typography, 'base', 'medium', typography.fontFamily.accent),
-    },
-    body: {
-      large: createTypographyStyle(typography, 'lg', 'base'),
-      medium: createTypographyStyle(typography, 'base', 'base'),
-    },
-    label: {
-      large: createTypographyStyle(typography, 'base', 'semibold'),
-      medium: createTypographyStyle(typography, 'sm', 'medium'),
-    },
-    caption: {
-      large: createTypographyStyle(typography, 'lg', 'base'),
-      medium: createTypographyStyle(typography, 'base', 'medium'),
-      small: createTypographyStyle(typography, 'sm', 'base'),
-    },
-    button: {
-      large: createTypographyStyle(typography, 'lg', 'semibold'),
-      medium: createTypographyStyle(typography, 'base', 'semibold'),
-      small: createTypographyStyle(typography, 'sm', 'base'),
-    },
-  },
-})
+  })
+}

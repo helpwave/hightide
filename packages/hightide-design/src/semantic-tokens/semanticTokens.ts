@@ -1,4 +1,4 @@
-import type { HightideSematicColorSchemes } from './colorScheme'
+import type { HightideSematicColorSchemeTokens } from './colorScheme'
 import type {
   HightideThemeBorderRadiusTokens,
   HightideThemeBorderWidthTokens,
@@ -6,16 +6,16 @@ import type {
 } from '../theme-tokens/layout'
 import type { HightideSemanticElementLayoutTokens } from './elementLayout'
 import type { HightideSemanticColorTokens } from './color'
-import type { HightideSemanticElevationShadowTokens } from './shadow'
+import type { HightideSemanticShadowTokens } from './shadow'
 import type { HightideSemanticTypographyTokens } from './typography'
 
 export type HightideSemanticTokens = {
   colors: HightideSemanticColorTokens,
-  colorSchemes: HightideSematicColorSchemes,
+  colorSchemes: HightideSematicColorSchemeTokens,
   typography: HightideSemanticTypographyTokens,
   spacing: HightideThemeSpacingTokens,
   elementLayout: HightideSemanticElementLayoutTokens,
-  radius: HightideThemeBorderRadiusTokens,
-  border: HightideThemeBorderWidthTokens,
-  shadow: HightideSemanticElevationShadowTokens,
+  borderRadius: HightideThemeBorderRadiusTokens,
+  borderWidth: HightideThemeBorderWidthTokens,
+  shadow: HightideSemanticShadowTokens,
 }

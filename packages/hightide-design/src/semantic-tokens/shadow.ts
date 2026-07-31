@@ -1,18 +1,17 @@
-import type {
-  ShadowToken,
-  HightideThemeShadowTokens
-} from '../theme-tokens/shadow'
+import type { HightideThemeTokens } from '../theme-tokens'
+import type { ShadowToken } from '../theme-tokens/shadow'
 
-export type HightideSemanticElevationShadowTokens = {
+export type HightideSemanticShadowTokens = {
   raised: ShadowToken,
   container: ShadowToken,
   popover: ShadowToken,
   dialog: ShadowToken,
 }
 
-export const toHightideElevationShadow = (
-  shadow: HightideThemeShadowTokens
-): HightideSemanticElevationShadowTokens => {
+export const toSemanticShadowTokens = (
+  themeTokens: HightideThemeTokens
+): HightideSemanticShadowTokens => {
+  const { shadow } = themeTokens
   const color = shadow.colors.base
 
   return {

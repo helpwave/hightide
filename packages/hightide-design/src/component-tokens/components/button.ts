@@ -52,7 +52,7 @@ export const toButtonTokens = (
         size: token.size,
         inset: token.inset,
         border: token.border,
-        radius: semanticTokens.radius[size],
+        radius: semanticTokens.borderRadius[size],
         gap,
         horizontalInset: token.horizontalContentPadding ?? token.inset,
         minWidth: token.minimumWidth ?? token.size,

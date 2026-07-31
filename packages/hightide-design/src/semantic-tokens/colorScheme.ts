@@ -1,8 +1,6 @@
 import type { ColorToken } from '../primitive-tokens/color'
-import type {
-  HightideThemeColorTokens,
-  HightideThemeRoleColorToken
-} from '../theme-tokens/color'
+import type { HightideThemeTokens } from '../theme-tokens'
+import type { HightideThemeRoleColorToken } from '../theme-tokens/color'
 
 export type ColorState = {
   color: ColorToken,
@@ -45,7 +43,7 @@ export type HightideColorScheme = {
   'text': SemanticStateProperty<ColorState>,
 }
 
-export type HightideSematicColorSchemes = Record<ColoringType, HightideColorScheme>
+export type HightideSematicColorSchemeTokens = Record<ColoringType, HightideColorScheme>
 
 const createFilled = (
   role: HightideThemeRoleColorToken
@@ -166,7 +164,8 @@ const disabledScheme = (
   }
 }
 
-export const createHightideColorSchemes = (colors: HightideThemeColorTokens): HightideSematicColorSchemes => {
+export const toSemanticColorSchemeTokens = (themeTokens: HightideThemeTokens): HightideSematicColorSchemeTokens => {
+  const { colors } = themeTokens
   const { disabled, onDisabled, transparent } = colors
 
   return {

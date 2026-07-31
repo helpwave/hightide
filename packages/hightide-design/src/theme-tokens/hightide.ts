@@ -157,12 +157,12 @@ const hightideDarkThemeColors: HightideThemeColorTokens = {
 
 export const hightideLightThemeTokens: HightideThemeTokens = {
   ...hightideSharedThemeTokens,
-  color: hightideLightThemeColors,
+  colors: hightideLightThemeColors,
   shadow: hightideLightThemeShadowTokens,
 }
 
 export const hightideDarkThemeTokens: HightideThemeTokens = {
   ...hightideSharedThemeTokens,
-  color: hightideDarkThemeColors,
+  colors: hightideDarkThemeColors,
   shadow: hightideDarkThemeShadowTokens,
 }

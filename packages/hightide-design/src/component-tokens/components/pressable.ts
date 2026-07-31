@@ -2,7 +2,7 @@ import type {
   ColorState,
   ColorStateFull,
   ColoringType,
-  HightideSematicColorSchemes,
+  HightideSematicColorSchemeTokens,
   PressableColoringStyle,
   SemanticStateProperty
 } from '../../semantic-tokens/colorScheme'
@@ -65,7 +65,7 @@ export const toColorStateFull = (
 const toPressableStateBasedProperty = (
   property: SemanticStateProperty<ColorState>,
   style: PressableColoringStyle,
-  colorSchemes: HightideSematicColorSchemes,
+  colorSchemes: HightideSematicColorSchemeTokens,
   transparent: ColorToken
 ): PressableStateBasedProperty<ColorStateFull> => ({
   base: toColorStateFull(property.base, style, transparent),
@@ -77,7 +77,7 @@ const toPressableStateBasedProperty = (
 })
 
 export const toPressableColorSchemes = (
-  colorSchemes: HightideSematicColorSchemes
+  colorSchemes: HightideSematicColorSchemeTokens
 ): PressableColorSchemes => {
   const transparent = colorSchemes.primary.text.base.color
 

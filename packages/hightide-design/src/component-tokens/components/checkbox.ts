@@ -37,8 +37,8 @@ export const toCheckboxTokens = (
       return [size, {
         size: token.size - 2 * token.inset - 2 * token.border,
         inset: semanticTokens.elementLayout.control.xs.inset,
-        borderWidth: semanticTokens.border.normal,
-        borderRadius: semanticTokens.radius.sm,
+        borderWidth: semanticTokens.borderWidth.normal,
+        borderRadius: semanticTokens.borderRadius.sm,
       } satisfies CheckboxBoxLayoutToken]
     })
   ) as HightideCheckboxTokens['box']['layout']
