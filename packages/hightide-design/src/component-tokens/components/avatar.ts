@@ -63,7 +63,7 @@ export const toAvatarTokens = (
       const layout = insideControl[size]
       const dimension = layout.size
       const label = semanticTokens.typography.label[size]
-      const statusDotSize = Math.round(dimension / 2)
+      const statusDotSize = Math.round(dimension / 10 * 4)
 
       return [size, {
         container: {
