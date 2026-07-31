@@ -32,21 +32,14 @@ const toSemanticColors = (themeColors: HightideThemeTokens['color']): HightideSe
 export const toHightideSemanticTokens = ({
   themeTokens,
 }: ToHightideSemanticArgs): HightideSemanticTokens => {
-  const {
-    elementLayout,
-    border,
-    icon,
-  } = toHightideElementLayoutFromTheme(themeTokens)
-
   return {
     colors: toSemanticColors(themeTokens.color),
     colorSchemes: createHightideColorSchemes(themeTokens.color),
     typography: createHightideTypographyTokens(themeTokens.typography),
     spacing: themeTokens.spacing,
-    elementLayout,
-    icon,
+    elementLayout: toHightideElementLayoutFromTheme(themeTokens),
     radius: themeTokens.radius,
-    border,
+    border: themeTokens.border,
     shadow: toHightideElevationShadow(themeTokens.shadow),
   }
 }
