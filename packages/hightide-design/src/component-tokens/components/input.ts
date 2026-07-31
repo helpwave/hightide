@@ -4,8 +4,8 @@ import type { HightideSemanticTokens } from '../../semantic-tokens/semanticToken
 export type InputLayoutToken = {
   size: number,
   inset: number,
-  border: number,
-  radius: number,
+  borderWidth: number,
+  borderRadius: number,
   gap: number,
   horizontalInset: number,
   minWidth: number,
@@ -25,8 +25,8 @@ export const toInputTokens = (
   return {
     size: inputControl.size,
     inset: semanticTokens.spacing.sm,
-    border: semanticTokens.borderWidth.thin,
-    radius: semanticTokens.borderRadius.sm,
+    borderWidth: semanticTokens.borderWidth.thin,
+    borderRadius: inputControl.borderRadius,
     gap: semanticTokens.spacing.sm,
     horizontalInset: semanticTokens.spacing.md,
     minWidth: inputControl.minimumWidth ?? inputControl.size,

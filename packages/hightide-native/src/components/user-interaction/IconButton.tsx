@@ -8,14 +8,13 @@ import {
   type StyleProp,
   type ViewStyle
 } from 'react-native'
-import type { LucideIcon } from 'lucide-react-native'
-
-import type { ComponentSize } from '@helpwave/hightide-design/theme-tokens'
+import type { ComponentSize, ComponentSizeBasic } from '@helpwave/hightide-design/theme-tokens'
 import type {
   ColoringType,
   PressableColoringStyle
 } from '@helpwave/hightide-design/semantic-tokens'
 
+import type { IconComponent } from '../../icons/types'
 import { Icon } from '../visualization-and-display/Icon'
 import { useTheme } from '../../global-contexts/theme/ThemeContext'
 import type {
@@ -32,8 +31,8 @@ export type IconButtonProps = Omit<PressableProps, 'children' | 'style'> & {
   size?: IconButtonSize,
   color?: ColoringType,
   coloringStyle?: IconButtonColoringStyle,
-  icon?: LucideIcon,
-  iconSize?: ComponentSize,
+  icon?: IconComponent,
+  iconSize?: ComponentSizeBasic,
   children?: ReactNode,
   accessibilityLabel: string,
   style?: StyleProp<ViewStyle>,
@@ -88,7 +87,13 @@ export const IconButton = forwardRef<React.ComponentRef<typeof Pressable>, IconB
         const resolvedIcon = theme.components.iconButton.icon(state)
 
         if (icon) {
-          return <Icon icon={icon} size={iconSize ?? size} color={resolvedIcon.color} />
+          return (
+            <Icon
+              icon={icon}
+              size={iconSize ?? (size === 'xs' || size === 'xl' ? 'md' : size)}
+              color={resolvedIcon.color}
+            />
+          )
         }
         return children
       }}

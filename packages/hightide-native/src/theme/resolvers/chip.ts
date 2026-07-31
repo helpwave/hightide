@@ -6,7 +6,6 @@ import type {
 import type { HightideComponentTokens } from '@helpwave/hightide-design/component-tokens'
 import type { HightideDesignSystemTokens as DesignTokensTheme } from '@helpwave/hightide-design/design-system'
 
-import { isOutlineColoringStyle } from './colorScheme'
 import type {
   ChipState,
   ChipTheme
@@ -17,14 +16,12 @@ export type CreateChipThemeOptions = {
   colorSchemes: HightideComponentTokens['chip']['colorSchemes'],
   layout: HightideComponentTokens['chip']['layout'],
   fontWeight: number,
-  borderWidth: number,
 }
 
 export const createChipTheme = ({
   colorSchemes,
   layout,
   fontWeight,
-  borderWidth,
 }: CreateChipThemeOptions): ChipTheme => {
   const resolveState = (state: ChipState) => {
     const size = state.size ?? 'md'
@@ -32,24 +29,19 @@ export const createChipTheme = ({
     const coloringStyle = state.coloringStyle ?? 'filled'
     const colorState = colorSchemes[coloringStyle][color]
     const element = layout[size]
-    const outlinePadding = isOutlineColoringStyle(coloringStyle)
-    const outlineInset = Math.max(element.inset - borderWidth, 0)
 
     const chip: ViewStyle = {
       flexDirection: 'row',
       alignItems: 'center',
       justifyContent: 'center',
-      alignSelf: 'flex-start',
       backgroundColor: colorState.color,
       borderColor: colorState.border,
-      borderWidth,
-      paddingVertical: outlinePadding ? outlineInset : element.inset,
-      paddingHorizontal: outlinePadding
-        ? Math.max(element.horizontalInset - borderWidth, 0)
-        : element.horizontalInset,
+      borderWidth: element.borderWidth,
+      paddingVertical: element.inset,
+      paddingHorizontal: element.horizontalInset,
       gap: element.gap,
       minHeight: element.size,
-      borderRadius: element.radius,
+      borderRadius: element.borderRadius,
     }
 
     const text: TextStyle = {
@@ -72,6 +64,5 @@ export const createChipThemeFromDesign = (theme: DesignTokensTheme): ChipTheme =
     colorSchemes: theme.components.chip.colorSchemes,
     layout: theme.components.chip.layout,
     fontWeight: theme.typography.fontWeights.semibold,
-    borderWidth: theme.borderWidth.normal,
   })
 }

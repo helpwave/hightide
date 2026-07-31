@@ -10,7 +10,7 @@ import {
   type ViewStyle
 } from 'react-native'
 
-import type { ComponentSize } from '@helpwave/hightide-design/theme-tokens'
+import type { ComponentSizeBasic } from '@helpwave/hightide-design/theme-tokens'
 import {
   colorSchemeTypes,
   type ColoringType,
@@ -25,13 +25,13 @@ import type {
 } from '../../theme/types/components/button'
 import type { StyleOverwrite } from '../../theme/types/resolver'
 
-export type ButtonSize = ComponentSize
+export type ButtonSize = ComponentSizeBasic
 
 export type ButtonColor = ColoringType
 
 export const ButtonUtil = {
   colors: colorSchemeTypes,
-  sizes: ['xs', 'sm', 'md', 'lg', 'xl'] as const satisfies readonly ComponentSize[],
+  sizes: ['sm', 'md', 'lg'] as const satisfies readonly ComponentSizeBasic[],
   coloringStyles: ['outline', 'filled', 'text', 'tonal', 'tonal-outline'] as const satisfies readonly PressableColoringStyle[],
 }
 

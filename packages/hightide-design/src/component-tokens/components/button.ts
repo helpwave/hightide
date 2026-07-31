@@ -1,6 +1,5 @@
 import type { HightideSemanticTokens } from '../../semantic-tokens/semanticTokens'
-import type { ComponentSize } from '../../theme-tokens/layout'
-import { componentSizes } from '../../theme-tokens/layout'
+import type { ComponentSizeBasic } from '../../theme-tokens/layout'
 import type {
   PressableColorSchemes,
   PressableState,
@@ -11,8 +10,8 @@ import { toPressableColorSchemes } from './pressable'
 export type ButtonLayoutToken = {
   size: number,
   inset: number,
-  border: number,
-  radius: number,
+  borderWidth: number,
+  borderRadius: number,
   gap: number,
   horizontalInset: number,
   minWidth: number,
@@ -26,16 +25,16 @@ export type ButtonStateBasedProperty<P> = PressableStateBasedProperty<P>
 export type ButtonColorSchemes = PressableColorSchemes
 
 export type HightideButtonTokens = {
-  layout: Record<ComponentSize, ButtonLayoutToken>,
+  layout: Record<ComponentSizeBasic, ButtonLayoutToken>,
   colorSchemes: ButtonColorSchemes,
 }
 
-const buttonFontSizes: Record<ComponentSize, number> = {
-  xs: 12,
+const buttonSizes = ['sm', 'md', 'lg'] as const satisfies readonly ComponentSizeBasic[]
+
+const buttonFontSizes: Record<ComponentSizeBasic, number> = {
   sm: 14,
   md: 14,
   lg: 18,
-  xl: 20,
 }
 
 export const toButtonTokens = (
@@ -44,22 +43,22 @@ export const toButtonTokens = (
   const control = semanticTokens.elementLayout.control
 
   const layout = Object.fromEntries(
-    componentSizes.map((size) => {
+    buttonSizes.map((size) => {
       const token = control[size]
-      const gap = size === 'xs' || size === 'sm' ? semanticTokens.spacing.xs : semanticTokens.spacing.sm
+      const gap = size === 'sm' ? semanticTokens.spacing.xs : semanticTokens.spacing.sm
 
       return [size, {
         size: token.size,
         inset: token.inset,
-        border: token.border,
-        radius: semanticTokens.borderRadius[size],
+        borderWidth: token.borderWidth,
+        borderRadius: token.borderRadius,
         gap,
         horizontalInset: token.horizontalContentPadding ?? token.inset,
         minWidth: token.minimumWidth ?? token.size,
         fontSize: buttonFontSizes[size],
       } satisfies ButtonLayoutToken]
     })
-  ) as Record<ComponentSize, ButtonLayoutToken>
+  ) as Record<ComponentSizeBasic, ButtonLayoutToken>
 
   return {
     layout,

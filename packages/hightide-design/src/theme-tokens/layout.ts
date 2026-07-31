@@ -1,6 +1,7 @@
 export type ComponentSizeBasic = 'sm' | 'md' | 'lg'
 export type ComponentSize = ComponentSizeBasic | 'xs' | 'xl'
 
+export const componentSizesBasic: ComponentSizeBasic[] = ['sm', 'md', 'lg']
 export const componentSizes: ComponentSize[] = ['xs', 'sm', 'md', 'lg', 'xl']
 
 export type HightideThemeSizeTokens = Record<ComponentSize, number>

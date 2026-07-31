@@ -1,11 +1,11 @@
-import { Plus } from 'lucide-react-native'
+import { HightideIconRegistry } from '../icons/HightideIconRegistry'
 
 const iconSelect = {
   control: 'select',
   options: ['none', 'icon'],
   mapping: {
     none: undefined,
-    icon: Plus,
+    icon: HightideIconRegistry.Plus,
   },
 } as const
 

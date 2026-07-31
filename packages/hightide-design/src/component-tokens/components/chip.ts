@@ -6,15 +6,14 @@ import type {
 } from '../../semantic-tokens/colorScheme'
 import { colorSchemeTypes } from '../../semantic-tokens/colorScheme'
 import type { HightideSemanticTokens } from '../../semantic-tokens/semanticTokens'
-import type { ComponentSize } from '../../theme-tokens/layout'
-import { componentSizes } from '../../theme-tokens/layout'
+import type { ComponentSizeBasic } from '../../theme-tokens/layout'
 import { toColorStateFull } from './pressable'
 
 export type ChipLayoutToken = {
   size: number,
   inset: number,
-  border: number,
-  radius: number,
+  borderWidth: number,
+  borderRadius: number,
   gap: number,
   horizontalInset: number,
   minWidth: number,
@@ -24,16 +23,11 @@ export type ChipLayoutToken = {
 export type ChipColorScheme = Record<ColoringType, ColorStateFull>
 
 export type HightideChipTokens = {
-  layout: Record<ComponentSize, ChipLayoutToken>,
+  layout: Record<ComponentSizeBasic, ChipLayoutToken>,
   colorSchemes: Record<ContainerColoringStyle, ChipColorScheme>,
 }
 
-const chipRadiusKeyFor = (size: ComponentSize): 'xs' | 'sm' | 'md' => {
-  if (size === 'xl' || size === 'lg') {
-    return 'md'
-  }
-  return size
-}
+const chipSizes = ['sm', 'md', 'lg'] as const satisfies readonly ComponentSizeBasic[]
 
 const chipColoringStyles = [
   'filled',
@@ -64,27 +58,25 @@ export const toChipTokens = (
   semanticTokens: HightideSemanticTokens
 ): HightideChipTokens => {
   const control = semanticTokens.elementLayout.control
+  const insideControl = semanticTokens.elementLayout.insideControl
 
   const layout = Object.fromEntries(
-    componentSizes.map((size) => {
+    chipSizes.map((size) => {
       const token = control[size]
-      const gap = size === 'xs' || size === 'sm' ? semanticTokens.spacing.xs : semanticTokens.spacing.sm
-      const sizeValue = token.size
-      const inset = token.inset
-      const horizontalInset = token.horizontalContentPadding ?? token.inset
-
+      const inside = insideControl[size]
+      const gap = size === 'sm' ? semanticTokens.spacing.xs : semanticTokens.spacing.sm
       return [size, {
-        size: Math.max(sizeValue - semanticTokens.spacing.xs, 24),
-        inset: Math.max(Math.round(inset * 0.5), 3),
-        border: token.border,
-        radius: semanticTokens.borderRadius[chipRadiusKeyFor(size)],
+        size: inside.size,
+        inset: inside.inset,
+        borderWidth: inside.borderWidth,
+        borderRadius: inside.borderRadius,
         gap,
-        horizontalInset: Math.max(Math.round(horizontalInset * 0.8), semanticTokens.spacing.xs),
+        horizontalInset: inside.inset + inside.paddingExtension,
         minWidth: token.minimumWidth ?? token.size,
         fontSize: Number(semanticTokens.typography.scales.label.medium.fontSize),
       } satisfies ChipLayoutToken]
     })
-  ) as Record<ComponentSize, ChipLayoutToken>
+  ) as Record<ComponentSizeBasic, ChipLayoutToken>
 
   return {
     layout,

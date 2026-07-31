@@ -9,10 +9,9 @@ import {
   type StyleProp,
   type ViewStyle
 } from 'react-native'
-import { Check } from 'lucide-react-native'
-
 import { Chip } from '../visualization-and-display/Chip'
 import { Icon } from '../visualization-and-display/Icon'
+import { HightideIconRegistry } from '../../icons/HightideIconRegistry'
 import { useTheme } from '../../global-contexts/theme/ThemeContext'
 import {
   useMultiSelect,
@@ -167,7 +166,7 @@ export const MultiSelect = ({
                   >
                     <View style={multiSelectTheme.checkbox(optionState)}>
                       {checkboxIcon.visible && (
-                        <Icon icon={Check} size="sm" color={checkboxIcon.color} />
+                        <Icon icon={HightideIconRegistry.Check} size="sm" color={checkboxIcon.color} />
                       )}
                     </View>
                     <Text style={multiSelectTheme.optionText(optionState)}>

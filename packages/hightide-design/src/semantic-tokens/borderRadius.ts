@@ -9,5 +9,5 @@ export type SemanticBorderRadiusTokens = {
 }
 
 export const toSemanticBorderRadiusTokens = (themeTokens: HightideThemeTokens) : SemanticBorderRadiusTokens => {
-  return themeTokens.radius
+  return themeTokens.borderRadius
 }

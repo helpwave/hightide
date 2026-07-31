@@ -1,10 +1,11 @@
-import type { ComponentSize } from '../theme-tokens/layout'
+import type { ComponentSize, ComponentSizeBasic } from '../theme-tokens/layout'
 import type { HightideThemeTokens } from '../theme-tokens/themeTokens'
 
 export type HightideControlElementLayoutToken = {
   size: number,
   inset: number,
-  border: number,
+  borderWidth: number,
+  borderRadius: number,
   minimumWidth?: number,
   horizontalContentPadding?: number,
 }
@@ -13,16 +14,21 @@ export type HightideContainerLayoutToken = {
   size?: number,
   insetY: number,
   insetX: number,
+  borderRadius: number,
   minimumWidth?: number,
   minimumHeight?: number,
 }
 
 export type HightideInsideControlElementLayoutToken = {
   size: number,
+  inset: number,
+  borderWidth: number,
+  borderRadius: number,
+  paddingExtension: number,
 }
 
 export type HightideInsideControlElementLayoutTokens = Record<
-  ComponentSize,
+  ComponentSizeBasic,
   HightideInsideControlElementLayoutToken
 >
 
@@ -40,12 +46,13 @@ const controlMinimumWidths: Record<ComponentSize, number> = {
   xl: 200,
 }
 
+const componentSizesReduced: ComponentSizeBasic[] = ['sm', 'md', 'lg']
 const componentSizes: ComponentSize[] = ['xs', 'sm', 'md', 'lg', 'xl']
 
 export const toHightideElementLayoutFromTheme = (
   themeTokens: HightideThemeTokens
 ): HightideSemanticElementLayoutTokens => {
-  const { size, padding, border, paddingExtension } = themeTokens
+  const { size, padding, borderWidth: borderWidthTokens, borderRadius, paddingExtension } = themeTokens
 
   const control = Object.fromEntries(
     componentSizes.map((key) => {
@@ -53,7 +60,8 @@ export const toHightideElementLayoutFromTheme = (
       return [key, {
         size: size[key],
         inset,
-        border: border.normal,
+        borderWidth: borderWidthTokens.normal,
+        borderRadius: borderRadius[key],
         minimumWidth: controlMinimumWidths[key],
         horizontalContentPadding: inset + paddingExtension[key],
       } satisfies HightideControlElementLayoutToken]
@@ -67,6 +75,7 @@ export const toHightideElementLayoutFromTheme = (
         size: size[key],
         insetY: inset,
         insetX: inset + paddingExtension[key],
+        borderRadius: borderRadius[key],
         minimumWidth: controlMinimumWidths[key],
         minimumHeight: size[key],
       } satisfies HightideContainerLayoutToken]
@@ -74,10 +83,16 @@ export const toHightideElementLayoutFromTheme = (
   ) as Record<ComponentSize, HightideContainerLayoutToken>
 
   const insideControl = Object.fromEntries(
-    componentSizes.map((key) => {
+    componentSizesReduced.map((key) => {
+      const smallerKeyMapping: Record<ComponentSizeBasic, ComponentSize> = { sm: 'xs', md: 'sm', lg: 'md' }
+      const smallerKey = smallerKeyMapping[key]
       const token = control[key]
       return [key, {
-        size: token.size - 2 * token.inset - 2 * token.border,
+        size: token.size - 2 * token.inset - 2 * token.borderWidth,
+        inset: padding[smallerKey],
+        borderWidth: borderWidthTokens.thin,
+        borderRadius: borderRadius[smallerKey],
+        paddingExtension: paddingExtension[smallerKey],
       } satisfies HightideInsideControlElementLayoutToken]
     })
   ) as HightideInsideControlElementLayoutTokens

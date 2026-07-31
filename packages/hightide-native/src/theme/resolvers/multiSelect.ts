@@ -18,14 +18,14 @@ export type CreateMultiSelectThemeOptions = {
   colors: HightideSemanticColorTokens,
   colorSchemes: HightideColorSchemes,
   input: HightideComponentTokens['input'],
-  menu: HightideComponentTokens['menu'],
+  card: HightideComponentTokens['card'],
 }
 
 export const createMultiSelectTheme = ({
   colors,
   colorSchemes,
   input,
-  menu,
+  card,
 }: CreateMultiSelectThemeOptions): MultiSelectTheme => {
   const primary = colorSchemes.primary.filled.base
 
@@ -56,17 +56,17 @@ export const createMultiSelectTheme = ({
     menu: createStyleResolver<MultiSelectState, ViewStyle>(() => ({
       maxHeight: 360,
       borderRadius: 12,
-      backgroundColor: menu.background,
+      backgroundColor: card.background,
       borderWidth: 1,
-      borderColor: menu.border,
+      borderColor: card.border,
       overflow: 'hidden',
     })),
     search: createStyleResolver<MultiSelectState, ViewStyle>(() => ({
       paddingHorizontal: 16,
       paddingVertical: 12,
       borderBottomWidth: 1,
-      borderBottomColor: menu.border,
-      color: menu.text,
+      borderBottomColor: card.border,
+      color: card.text,
     })),
     searchPlaceholderColor: createValueResolver(() => colors.placeholder),
     option: createStyleResolver<MultiSelectOptionState, ViewStyle>((state: MultiSelectOptionState) => ({
@@ -79,7 +79,7 @@ export const createMultiSelectTheme = ({
       gap: 10,
     })),
     optionText: createStyleResolver<MultiSelectOptionState, TextStyle>((state: MultiSelectOptionState) => ({
-      color: state.isSelected ? colorSchemes.primary.text.base.foreground : menu.text,
+      color: state.isSelected ? colorSchemes.primary.text.base.foreground : card.text,
       fontWeight: state.isSelected ? hightideTypography.fontWeight.semibold : hightideTypography.fontWeight.base,
     })),
     checkbox: createStyleResolver<MultiSelectOptionState, ViewStyle>((state: MultiSelectOptionState) => ({
@@ -104,6 +104,6 @@ export const createMultiSelectThemeFromDesign = (theme: DesignTokensTheme): Mult
     colors: theme.colors,
     colorSchemes: theme.colorSchemes,
     input: theme.components.input,
-    menu: theme.components.menu,
+    card: theme.components.card,
   })
 }

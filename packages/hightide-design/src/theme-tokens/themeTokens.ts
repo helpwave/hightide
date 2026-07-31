@@ -17,7 +17,7 @@ export type HightideThemeTokens = {
   padding: HightideThemePaddingTokens,
   paddingExtension: HightideThemePaddingExtensionTokens,
   typography: HightideThemeTypographyTokens,
-  radius: HightideThemeBorderRadiusTokens,
-  border: HightideThemeBorderWidthTokens,
+  borderRadius: HightideThemeBorderRadiusTokens,
+  borderWidth: HightideThemeBorderWidthTokens,
   shadow: HightideThemeShadowTokens,
 }

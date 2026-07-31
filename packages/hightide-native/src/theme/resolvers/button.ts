@@ -20,14 +20,12 @@ export type CreateButtonThemeOptions = {
   colorSchemes: HightideComponentTokens['button']['colorSchemes'],
   layout: HightideComponentTokens['button']['layout'],
   fontWeight: number,
-  borderWidth: number,
 }
 
 export const createButtonTheme = ({
   colorSchemes,
   layout,
   fontWeight,
-  borderWidth,
 }: CreateButtonThemeOptions): ButtonTheme => {
   const resolveState = (state: ButtonState) => {
     const size = state.size ?? 'md'
@@ -37,12 +35,11 @@ export const createButtonTheme = ({
       colorSchemes,
       color,
       coloringStyle,
-      borderWidth,
       state
     )
     const element = layout[size]
     const outlinePadding = isOutlineColoringStyle(coloringStyle)
-    const outlineInset = Math.max(element.inset - borderWidth, 0)
+    const outlineInset = Math.max(element.inset - element.borderWidth, 0)
 
     const button: ViewStyle = {
       flexDirection: 'row',
@@ -50,15 +47,15 @@ export const createButtonTheme = ({
       justifyContent: 'center',
       backgroundColor: resolved.backgroundColor,
       borderColor: resolved.borderColor,
-      borderWidth: resolved.borderWidth,
+      borderWidth: element.borderWidth,
       paddingVertical: outlinePadding ? outlineInset : element.inset,
       paddingHorizontal: outlinePadding
-        ? Math.max(element.horizontalInset - borderWidth, 0)
+        ? Math.max(element.horizontalInset - element.borderWidth, 0)
         : element.horizontalInset,
       gap: element.gap,
       minWidth: element.minWidth,
       minHeight: element.size,
-      borderRadius: element.radius,
+      borderRadius: element.borderRadius,
       opacity: state.isDisabled ? 0.6 : 1,
     }
 
@@ -82,6 +79,5 @@ export const createButtonThemeFromDesign = (theme: DesignTokensTheme): ButtonThe
     colorSchemes: theme.components.button.colorSchemes,
     layout: theme.components.button.layout,
     fontWeight: theme.typography.fontWeights.semibold,
-    borderWidth: theme.borderWidth.normal,
   })
 }

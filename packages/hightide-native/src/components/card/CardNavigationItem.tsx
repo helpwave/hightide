@@ -11,8 +11,8 @@ import {
   type StyleProp,
   type ViewStyle
 } from 'react-native'
-import { ChevronRight } from 'lucide-react-native'
-
+import { HightideIconRegistry } from '../../icons/HightideIconRegistry'
+import { Icon } from '../visualization-and-display/Icon'
 import { useTheme } from '../../global-contexts/theme/ThemeContext'
 import type {
   CardActionItemLabelStyle,
@@ -81,7 +81,11 @@ export const CardNavigationItem = ({
             <View style={resolvedContentStyle}>
               <Text style={resolvedLabelStyle}>{label}</Text>
             </View>
-            <ChevronRight size={16} color={trailingColor} />
+            <Icon
+              icon={HightideIconRegistry.ChevronRight}
+              size={16}
+              color={trailingColor}
+            />
           </Fragment>
         )
       }}

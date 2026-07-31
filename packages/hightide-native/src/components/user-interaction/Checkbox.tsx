@@ -9,15 +9,12 @@ import {
   type ViewStyle
 } from 'react-native'
 import {
-  Check,
-  Minus
-} from 'lucide-react-native'
-
-import {
   useControlledState,
   useEventCallbackStabilizer
 } from '@helpwave/hightide-utils/hooks'
 
+import { HightideIconRegistry } from '../../icons/HightideIconRegistry'
+import { Icon } from '../visualization-and-display/Icon'
 import { useTheme } from '../../global-contexts/theme/ThemeContext'
 import type {
   CheckboxSize,
@@ -95,8 +92,6 @@ export const Checkbox = ({
     [theme, state]
   )
 
-  const IconComponent = indeterminate ? Minus : Check
-
   return (
     <Pressable
       {...props}
@@ -115,7 +110,8 @@ export const Checkbox = ({
       style={[resolvedCheckboxStyle, style]}
     >
       {resolvedIcon.visible && (
-        <IconComponent
+        <Icon
+          icon={indeterminate ? HightideIconRegistry.Minus : HightideIconRegistry.Check}
           size={resolvedIcon.size}
           color={resolvedIcon.color}
         />

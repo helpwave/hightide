@@ -2,12 +2,14 @@ import type {
   Meta,
   StoryObj
 } from '@storybook/react-native-web-vite'
-import { Plus } from 'lucide-react-native'
-import { Text } from 'react-native'
+import {
+  Text,
+  View
+} from 'react-native'
 import { action } from 'storybook/actions'
 
+import { HightideIconRegistry } from '../../src/icons/HightideIconRegistry'
 import { Icon } from '../../src/components/visualization-and-display/Icon'
-import { IconConstrainer } from '../../src/components/visualization-and-display/IconConstrainer'
 import {
   Button,
   ButtonUtil
@@ -15,7 +17,7 @@ import {
 import { useTheme } from '../../src/global-contexts/theme/ThemeContext'
 import type { ButtonState } from '../../src/theme/types/components/button'
 
-const iconSizes = ['xs', 'sm', 'md', 'lg', 'xl'] as const
+const iconSizes = ['sm', 'md', 'lg'] as const
 
 const meta = {
   component: Icon,
@@ -38,19 +40,17 @@ const IconDemo = ({
   const { theme } = useTheme()
 
   return (
-    <IconConstrainer size={size}>
-      <Icon
-        icon={Plus}
-        size={size}
-        color={theme.colors.onBackground}
-      />
-    </IconConstrainer>
+    <Icon
+      icon={HightideIconRegistry.Plus}
+      size={size}
+      color={theme.colors.onBackground}
+    />
   )
 }
 
 export const icon: Story = {
   args: {
-    icon: Plus,
+    icon: HightideIconRegistry.Plus,
     size: 'md',
   },
   render: ({ size }) => (
@@ -59,7 +59,7 @@ export const icon: Story = {
 }
 
 type IconInButtonArgs = {
-  size: typeof iconSizes[number],
+  size: typeof ButtonUtil.sizes[number],
   color: typeof ButtonUtil.colors[number],
   coloringStyle: typeof ButtonUtil.coloringStyles[number],
   label: string,
@@ -87,16 +87,14 @@ const IconInButtonDemo = ({
       coloringStyle={coloringStyle}
       onPress={action('Pressed')}
     >
-      <>
-        <IconConstrainer size={size}>
-          <Icon
-            icon={Plus}
-            size={size}
-            color={iconColor}
-          />
-        </IconConstrainer>
+      <View style={{ flexDirection: 'row', alignItems: 'center', gap: 8 }}>
+        <Icon
+          icon={HightideIconRegistry.Plus}
+          size={size}
+          color={iconColor}
+        />
         <Text style={textStyle}>{label}</Text>
-      </>
+      </View>
     </Button>
   )
 }
@@ -105,7 +103,7 @@ export const iconInButton: StoryObj<IconInButtonArgs> = {
   argTypes: {
     size: {
       control: 'select',
-      options: iconSizes,
+      options: ButtonUtil.sizes,
     },
     color: {
       control: 'select',

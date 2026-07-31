@@ -2,12 +2,12 @@ import type {
   HightideAvatarGroupTokens,
   HightideAvatarTokens,
   HightideButtonTokens,
+  HightideCardTokens,
   HightideCheckboxTokens,
   HightideChipTokens,
   HightideIconButtonTokens,
   HightideIconTokens,
   HightideInputTokens,
-  HightideMenuTokens,
   HightideProgressIndicatorTokens,
   HightideSwitchTokens
 } from './components'
@@ -18,7 +18,7 @@ export type HightideComponentTokens = {
   chip: HightideChipTokens,
   input: HightideInputTokens,
   checkbox: HightideCheckboxTokens,
-  menu: HightideMenuTokens,
+  card: HightideCardTokens,
   progressIndicator: HightideProgressIndicatorTokens,
   switch: HightideSwitchTokens,
   icon: HightideIconTokens,

@@ -16,7 +16,6 @@ export type ResolvedColoringStyles = {
   backgroundColor: Color,
   color: Color,
   borderColor?: Color,
-  borderWidth: number,
 }
 
 export type InteractiveColorState = 'disabled' | 'focused' | 'hovered' | 'pressed'
@@ -51,7 +50,6 @@ export const resolveColoringStyles = (
   colorSchemes: InteractiveColorSchemes,
   color: ColoringType,
   coloringStyle: ColoringStyle,
-  borderWidth: number,
   state: InteractionState = {}
 ): ResolvedColoringStyles => {
   const pack = colorSchemes[color][coloringStyle]
@@ -69,7 +67,6 @@ export const resolveColoringStyles = (
         : resolved.color,
     color: resolved.foreground,
     borderColor: border ?? resolved.color,
-    borderWidth,
   }
 }
 

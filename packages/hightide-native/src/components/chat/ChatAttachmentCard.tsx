@@ -9,11 +9,8 @@ import {
   type ViewProps,
   type ViewStyle
 } from 'react-native'
-import {
-  Download,
-  FileText
-} from 'lucide-react-native'
-
+import { HightideIconRegistry } from '../../icons/HightideIconRegistry'
+import { Icon } from '../visualization-and-display/Icon'
 import { IconButton } from '../user-interaction/IconButton'
 import { useTheme } from '../../global-contexts/theme/ThemeContext'
 import type {
@@ -79,7 +76,13 @@ export const ChatAttachmentCard = ({
   return (
     <View {...props} style={[resolvedCardStyle, style]}>
       <View style={resolvedIconStyle}>
-        {icon ?? <FileText size={22} color={resolvedIconColor.color} />}
+        {icon ?? (
+          <Icon
+            icon={HightideIconRegistry.FileText}
+            size={22}
+            color={resolvedIconColor.color}
+          />
+        )}
       </View>
       <View style={{ flex: 1, minWidth: 0, gap: 2 }}>
         {typeof name === 'string' || typeof name === 'number' ? (
@@ -102,7 +105,7 @@ export const ChatAttachmentCard = ({
           color="primary"
           coloringStyle="text"
           onPress={onDownload}
-          icon={Download}
+          icon={HightideIconRegistry.Download}
         />
       )}
     </View>

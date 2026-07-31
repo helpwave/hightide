@@ -10,7 +10,7 @@ import {
   type ViewStyle
 } from 'react-native'
 
-import type { ComponentSize } from '@helpwave/hightide-design/theme-tokens'
+import type { ComponentSizeBasic } from '@helpwave/hightide-design/theme-tokens'
 import {
   colorSchemeTypes,
   type ColoringType,
@@ -25,13 +25,13 @@ import type {
 } from '../../theme/types/components/chip'
 import type { StyleOverwrite } from '../../theme/types/resolver'
 
-export type ChipSize = ComponentSize
+export type ChipSize = ComponentSizeBasic
 
 export type ChipColor = ColoringType
 
 export const ChipUtil = {
   colors: colorSchemeTypes,
-  sizes: ['xs', 'sm', 'md', 'lg', 'xl'] as const satisfies readonly ComponentSize[],
+  sizes: ['sm', 'md', 'lg'] as const satisfies readonly ComponentSizeBasic[],
   coloringStyles: ['filled', 'tonal', 'outline', 'tonal-outline'] as const satisfies readonly ChipColoringStyle[],
 }
 

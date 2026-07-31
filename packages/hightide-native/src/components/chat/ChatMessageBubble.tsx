@@ -9,8 +9,8 @@ import {
   type ViewProps,
   type ViewStyle
 } from 'react-native'
-import { CheckCheck } from 'lucide-react-native'
-
+import { HightideIconRegistry } from '../../icons/HightideIconRegistry'
+import { Icon } from '../visualization-and-display/Icon'
 import { useTheme } from '../../global-contexts/theme/ThemeContext'
 import type {
   ChatMessageBubbleContainerStyle,
@@ -99,7 +99,11 @@ export const ChatMessageBubble = ({
       </View>
       {readReceipt != null && (
         <View style={resolvedReceiptStyle}>
-          <CheckCheck size={14} color={resolvedReceiptIcon.color} />
+          <Icon
+            icon={HightideIconRegistry.CheckCheck}
+            size={14}
+            color={resolvedReceiptIcon.color}
+          />
           {typeof readReceipt === 'string' || typeof readReceipt === 'number' ? (
             <Text style={resolvedReceiptTextStyle}>{readReceipt}</Text>
           ) : (

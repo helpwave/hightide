@@ -7,5 +7,5 @@ export type SemanticBorderWidthTokens = {
 }
 
 export const toSemanticBorderWidthTokens = (themeTokens: HightideThemeTokens) : SemanticBorderWidthTokens => {
-  return themeTokens.border
+  return themeTokens.borderWidth
 }

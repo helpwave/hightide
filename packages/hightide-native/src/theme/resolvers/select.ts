@@ -30,14 +30,14 @@ export type CreateSelectThemeOptions = {
   colors: HightideSemanticColorTokens,
   colorSchemes: HightideColorSchemes,
   input: HightideComponentTokens['input'],
-  menu: HightideComponentTokens['menu'],
+  card: HightideComponentTokens['card'],
 }
 
 export const createSelectTheme = ({
   colors,
   colorSchemes,
   input,
-  menu,
+  card,
 }: CreateSelectThemeOptions): SelectTheme => {
   return {
     trigger: createStyleResolver((state: SelectState): SelectTriggerStyle => {
@@ -75,9 +75,9 @@ export const createSelectTheme = ({
       const style: ViewStyle = {
         maxHeight: 360,
         borderRadius: 12,
-        backgroundColor: menu.background,
+        backgroundColor: card.background,
         borderWidth: 1,
-        borderColor: menu.border,
+        borderColor: card.border,
         overflow: 'hidden',
       }
       return style
@@ -87,8 +87,8 @@ export const createSelectTheme = ({
         paddingHorizontal: 16,
         paddingVertical: 12,
         borderBottomWidth: 1,
-        borderBottomColor: menu.border,
-        color: menu.text,
+        borderBottomColor: card.border,
+        color: card.text,
       }
       return style
     }),
@@ -104,7 +104,7 @@ export const createSelectTheme = ({
     }),
     optionText: createStyleResolver((state: SelectOptionState): SelectOptionTextStyle => {
       const style: TextStyle = {
-        color: state.isSelected ? colorSchemes.primary.text.base.foreground : menu.text,
+        color: state.isSelected ? colorSchemes.primary.text.base.foreground : card.text,
         fontWeight: (state.isSelected
           ? hightideTypography.fontWeight.semibold
           : hightideTypography.fontWeight.base) as TextStyle['fontWeight'],
@@ -119,6 +119,6 @@ export const createSelectThemeFromDesign = (theme: HightideDesignSystemTokens): 
     colors: theme.colors,
     colorSchemes: theme.colorSchemes,
     input: theme.components.input,
-    menu: theme.components.menu,
+    card: theme.components.card,
   })
 }

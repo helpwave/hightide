@@ -1,6 +1,5 @@
 import type { ViewStyle } from 'react-native'
 
-import type { HightideComponentTokens } from '@helpwave/hightide-design/component-tokens'
 import type { HightideDesignSystemTokens as DesignTokensTheme } from '@helpwave/hightide-design/design-system'
 
 import { resolveColoringStyles } from './colorScheme'
@@ -13,17 +12,10 @@ import {
   createValueResolver
 } from '../types/resolver'
 
-export type CreateIconButtonThemeOptions = {
-  colorSchemes: HightideComponentTokens['iconButton']['colorSchemes'],
-  layout: HightideComponentTokens['iconButton']['layout'],
-  borderWidth: number,
-}
+export const createIconButtonThemeFromDesign = (theme: DesignTokensTheme): IconButtonTheme => {
+  const { colorSchemes, components } = theme
+  const layout = components.iconButton.layout
 
-export const createIconButtonTheme = ({
-  colorSchemes,
-  layout,
-  borderWidth,
-}: CreateIconButtonThemeOptions): IconButtonTheme => {
   const resolveState = (state: IconButtonState) => {
     const size = state.size ?? 'md'
     const color = state.color ?? 'neutral'
@@ -32,7 +24,6 @@ export const createIconButtonTheme = ({
       colorSchemes,
       color,
       coloringStyle,
-      borderWidth,
       state
     )
     const element = layout[size]
@@ -43,10 +34,10 @@ export const createIconButtonTheme = ({
       justifyContent: 'center',
       backgroundColor: resolved.backgroundColor,
       borderColor: resolved.borderColor,
-      borderWidth: resolved.borderWidth,
+      borderWidth: element.borderWidth,
       width: dimension,
       height: dimension,
-      borderRadius: element.radius,
+      borderRadius: element.borderRadius,
       opacity: state.isDisabled ? 0.6 : 1,
     }
 
@@ -60,12 +51,4 @@ export const createIconButtonTheme = ({
     button: createStyleResolver((state) => resolveState(state).button),
     icon: createValueResolver((state) => resolveState(state).icon),
   }
-}
-
-export const createIconButtonThemeFromDesign = (theme: DesignTokensTheme): IconButtonTheme => {
-  return createIconButtonTheme({
-    colorSchemes: theme.components.iconButton.colorSchemes,
-    layout: theme.components.iconButton.layout,
-    borderWidth: theme.borderWidth.normal,
-  })
 }

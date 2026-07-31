@@ -1,15 +1,15 @@
 import type { ColorToken } from '../../primitive-tokens/color'
 import type { HightideSemanticTokens } from '../../semantic-tokens/semanticTokens'
 
-export type HightideMenuTokens = {
+export type HightideCardTokens = {
   background: ColorToken,
   text: ColorToken,
   border: ColorToken,
 }
 
-export const toMenuTokens = (
+export const toCardTokens = (
   semanticTokens: HightideSemanticTokens
-): HightideMenuTokens => ({
+): HightideCardTokens => ({
   background: semanticTokens.colors.surfaceVariant,
   text: semanticTokens.colors.onSurface,
   border: semanticTokens.colors.border,

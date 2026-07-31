@@ -3,7 +3,7 @@ import type {
   ViewStyle
 } from 'react-native'
 
-import type { ComponentSize } from '@helpwave/hightide-design/theme-tokens'
+import type { ComponentSizeBasic } from '@helpwave/hightide-design/theme-tokens'
 import type {
   ColoringType,
   ChipColoringStyle
@@ -12,7 +12,7 @@ import type {
 import type { StyleResolverFunction } from '../resolver'
 
 export type ChipState = {
-  size?: ComponentSize,
+  size?: ComponentSizeBasic,
   color?: ColoringType,
   coloringStyle?: ChipColoringStyle,
 }

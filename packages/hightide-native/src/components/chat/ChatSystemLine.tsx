@@ -9,10 +9,11 @@ import {
   type ViewProps,
   type ViewStyle
 } from 'react-native'
-import { CheckCheck } from 'lucide-react-native'
 
 import type { ColoringType } from '@helpwave/hightide-design/semantic-tokens'
 
+import { HightideIconRegistry } from '../../icons/HightideIconRegistry'
+import { Icon } from '../visualization-and-display/Icon'
 import { useTheme } from '../../global-contexts/theme/ThemeContext'
 import type {
   ChatSystemLineState,
@@ -57,7 +58,13 @@ export const ChatSystemLine = ({
 
   return (
     <View {...props} style={[resolvedLineStyle, style]}>
-      {icon ?? <CheckCheck size={14} color={resolvedIcon.color} />}
+      {icon ?? (
+        <Icon
+          icon={HightideIconRegistry.CheckCheck}
+          size={14}
+          color={resolvedIcon.color}
+        />
+      )}
       {typeof children === 'string' || typeof children === 'number' ? (
         <Text style={resolvedTextStyle}>{children}</Text>
       ) : (

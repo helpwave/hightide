@@ -17,7 +17,7 @@ import {
 import { hightideThemeTypographyTokens } from './typography'
 import type { HightideThemeColorTokens } from './color'
 
-export type HightideSharedThemeTokens = Omit<HightideThemeTokens, 'color' | 'shadow'>
+export type HightideSharedThemeTokens = Omit<HightideThemeTokens, 'colors' | 'shadow'>
 
 const palettes = hightidePrimitiveTokens.color.palettes as HightideColorPalettes
 
@@ -27,8 +27,8 @@ export const hightideSharedThemeTokens: HightideSharedThemeTokens = {
   padding: hightideThemePaddingTokens,
   paddingExtension: hightideThemePaddingExtensionTokens,
   typography: hightideThemeTypographyTokens,
-  radius: hightideThemeBorderRadiusTokens,
-  border: hightideThemeBorderWidthTokens,
+  borderRadius: hightideThemeBorderRadiusTokens,
+  borderWidth: hightideThemeBorderWidthTokens,
 }
 
 const {

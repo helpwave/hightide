@@ -1,8 +1,7 @@
 import type { HightideSemanticTokens } from '../../semantic-tokens/semanticTokens'
-import type { ComponentSize } from '../../theme-tokens/layout'
-import { componentSizes } from '../../theme-tokens/layout'
+import type { ComponentSizeBasic } from '../../theme-tokens/layout'
 
-export type HightideAvatarTokens = Record<ComponentSize, {
+export type HightideAvatarTokens = Record<ComponentSizeBasic, {
   size: number,
   padding: number,
   fontSize: number,
@@ -10,18 +9,21 @@ export type HightideAvatarTokens = Record<ComponentSize, {
   statusDotBorderWidth: number,
 }>
 
+const avatarSizes = ['sm', 'md', 'lg'] as const satisfies readonly ComponentSizeBasic[]
+
 export const toAvatarTokens = (
   semanticTokens: HightideSemanticTokens
 ): HightideAvatarTokens => {
   const control = semanticTokens.elementLayout.control
+  const insideControl = semanticTokens.elementLayout.insideControl
 
   return Object.fromEntries(
-    componentSizes.map((size) => {
-      const dimension = control[size].size - semanticTokens.spacing.xs
+    avatarSizes.map((size) => {
+      const dimension = insideControl[size].size
       let avatarFontSize = Number(semanticTokens.typography.scales.body.large.fontSize)
-      if (size === 'xs' || size === 'sm') {
+      if (size === 'sm') {
         avatarFontSize = Number(semanticTokens.typography.scales.caption.small.fontSize)
-      } else if (size === 'lg' || size === 'xl') {
+      } else if (size === 'lg') {
         avatarFontSize = Number(semanticTokens.typography.scales.title.small.fontSize)
       }
 
@@ -30,7 +32,9 @@ export const toAvatarTokens = (
         padding: Math.max(Math.round(control[size].inset / 2), 2),
         fontSize: avatarFontSize,
         statusDotSize: Math.round(dimension / 2),
-        statusDotBorderWidth: size === 'xs' ? semanticTokens.borderWidth.thin + 0.5 : semanticTokens.borderWidth.normal,
+        statusDotBorderWidth: size === 'sm'
+          ? semanticTokens.borderWidth.thin + 0.5
+          : semanticTokens.borderWidth.normal,
       }]
     })
   ) as HightideAvatarTokens

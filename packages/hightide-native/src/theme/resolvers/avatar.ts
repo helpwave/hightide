@@ -24,12 +24,10 @@ import type {
 } from '../types/components/avatar'
 import { createStyleResolver } from '../types/resolver'
 
-const avatarFontWeights: Record<'xs' | 'sm' | 'md' | 'lg' | 'xl', 'semibold' | 'bold'> = {
-  xs: 'semibold',
+const avatarFontWeights: Record<'sm' | 'md' | 'lg', 'semibold' | 'bold'> = {
   sm: 'semibold',
   md: 'semibold',
   lg: 'bold',
-  xl: 'bold',
 }
 
 const statusColor = (

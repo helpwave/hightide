@@ -11,11 +11,8 @@ import {
   type StyleProp,
   type ViewStyle
 } from 'react-native'
-import {
-  Check,
-  CheckCheck
-} from 'lucide-react-native'
-
+import { HightideIconRegistry } from '../../icons/HightideIconRegistry'
+import { Icon } from '../visualization-and-display/Icon'
 import { useTheme } from '../../global-contexts/theme/ThemeContext'
 import type {
   ChatConversationRowPreviewStyle,
@@ -67,7 +64,9 @@ export const ChatConversationRow = ({
 }: ChatConversationRowProps) => {
   const { theme } = useTheme()
   const isUnread = (unreadCount ?? 0) > 0
-  const SentIndicatorIcon = sentIndicator === 'sentAndReceived' ? CheckCheck : Check
+  const sentIndicatorIcon = sentIndicator === 'sentAndReceived'
+    ? HightideIconRegistry.CheckCheck
+    : HightideIconRegistry.Check
 
   const resolveState = (interaction: PressableInteraction): ChatConversationRowState => ({
     isUnread,
@@ -128,7 +127,11 @@ export const ChatConversationRow = ({
               <View style={{ flexDirection: 'row', alignItems: 'center', justifyContent: 'space-between', gap: 8 }}>
                 <View style={{ flex: 1, flexDirection: 'row', alignItems: 'center', gap: 4, minWidth: 0 }}>
                   {sentIndicator && (
-                    <SentIndicatorIcon size={14} color={sentIndicatorColor} />
+                    <Icon
+                      icon={sentIndicatorIcon}
+                      size={14}
+                      color={sentIndicatorColor}
+                    />
                   )}
                   {preview != null && (
                     typeof preview === 'string' || typeof preview === 'number' ? (

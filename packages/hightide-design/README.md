@@ -88,7 +88,7 @@ Layout layers:
 
 - Primitive `sizes` steps `0…160` (step 4); primitive `border` steps `0…10`
 - Theme `size` / `padding` / `paddingExtension` / `border` as `ComponentSize` (`xs…xl`) roles
-- Semantic `elementLayout.control|container|insideControl`, `border` as `thin|base|thick` (from theme `xs`/`md`/`xl`), `insideControl.size = control.size - 2 * control.inset - 2 * control.border`
+- Semantic `elementLayout.control|container|insideControl` include `borderWidth` and `borderRadius`; `insideControl.size = control.size - 2 * control.inset - 2 * control.borderWidth`
 
 `ColorState` = `{ background, foreground, border }`. Resolve with `resolveStateBasedProperty(property, states)` in order `base → focused → hover → pressed → disabled`.
 

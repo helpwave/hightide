@@ -22,8 +22,8 @@ export const createHightideTheme = (
     typography: tokens.typography,
     spacing: tokens.spacing,
     elements: tokens.elementLayout,
-    radius: tokens.radius,
-    border: tokens.border,
+    borderRadius: tokens.borderRadius,
+    border: tokens.borderWidth,
     shadow: tokens.shadow,
     components: {
       button: createButtonThemeFromDesign(tokens),

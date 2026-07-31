@@ -3,12 +3,12 @@ import {
   toAvatarGroupTokens,
   toAvatarTokens,
   toButtonTokens,
+  toCardTokens,
   toCheckboxTokens,
   toChipTokens,
   toIconButtonTokens,
   toIconTokens,
   toInputTokens,
-  toMenuTokens,
   toProgressIndicatorTokens,
   toSwitchTokens
 } from './components'
@@ -26,7 +26,7 @@ export const toHightideComponentTokens = ({
   chip: toChipTokens(semanticTokens),
   input: toInputTokens(semanticTokens),
   checkbox: toCheckboxTokens(semanticTokens),
-  menu: toMenuTokens(semanticTokens),
+  card: toCardTokens(semanticTokens),
   progressIndicator: toProgressIndicatorTokens(semanticTokens),
   switch: toSwitchTokens(semanticTokens),
   icon: toIconTokens(semanticTokens),

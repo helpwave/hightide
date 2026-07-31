@@ -11,8 +11,8 @@ import { toPressableColorSchemes } from './pressable'
 export type IconButtonLayoutToken = {
   size: number,
   inset: number,
-  border: number,
-  radius: number,
+  borderWidth: number,
+  borderRadius: number,
   gap: number,
   horizontalInset: number,
   minWidth: number,
@@ -38,16 +38,6 @@ const buttonFontSizes: Record<ComponentSize, number> = {
   xl: 20,
 }
 
-const radiusKeyFor = (size: ComponentSize): 'xs' | 'sm' | 'md' | 'lg' => {
-  if (size === 'xl') {
-    return 'lg'
-  }
-  if (size === 'lg') {
-    return 'md'
-  }
-  return size
-}
-
 export const toIconButtonTokens = (
   semanticTokens: HightideSemanticTokens
 ): HightideIconButtonTokens => {
@@ -61,8 +51,8 @@ export const toIconButtonTokens = (
       return [size, {
         size: token.size,
         inset: token.inset,
-        border: token.border,
-        radius: semanticTokens.borderRadius[radiusKeyFor(size)],
+        borderWidth: token.borderWidth,
+        borderRadius: token.borderRadius,
         gap,
         horizontalInset: token.horizontalContentPadding ?? token.inset,
         minWidth: token.minimumWidth ?? token.size,

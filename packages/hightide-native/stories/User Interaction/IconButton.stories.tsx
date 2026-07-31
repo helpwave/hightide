@@ -2,7 +2,7 @@ import type {
   Meta,
   StoryObj
 } from '@storybook/react-native-web-vite'
-import { Minus } from 'lucide-react-native'
+import { HightideIconRegistry } from '../../src/icons/HightideIconRegistry'
 import { action } from 'storybook/actions'
 
 import { ButtonUtil } from '../../src/components/user-interaction/Button'
@@ -28,7 +28,7 @@ export const iconButton: Story = {
     size: 'md',
     coloringStyle: 'filled',
     accessibilityLabel: 'Subtract',
-    icon: Minus,
+    icon: HightideIconRegistry.Minus,
     onPress: action('Pressed'),
   },
 }
