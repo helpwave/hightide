@@ -6,7 +6,7 @@ import {
 
 import { hightideTypography } from '@helpwave/hightide-design/primitive-tokens'
 import type { HightideDesignSystemTokens as DesignTokensTheme } from '@helpwave/hightide-design/design-system'
-import type { HightideColorSchemes, HightideSemanticColorTokens } from '@helpwave/hightide-design/semantic-tokens'
+import type { HightideSematicColorSchemeTokens, HightideSemanticColorTokens } from '@helpwave/hightide-design/semantic-tokens'
 import { HexColorUtils } from '@helpwave/hightide-design/utils'
 
 import type { Color } from '../types/color'
@@ -26,7 +26,7 @@ import {
 
 export type CreateChatThemeOptions = {
   colors: HightideSemanticColorTokens,
-  colorSchemes: HightideColorSchemes,
+  colorSchemes: HightideSematicColorSchemeTokens,
 }
 
 export const createChatTheme = ({

@@ -4,19 +4,19 @@ import {
 } from 'react'
 import {
   Pressable,
-  Text,
   type PressableProps,
   type StyleProp,
   type ViewStyle
 } from 'react-native'
 
-import type { ComponentSizeBasic } from '@helpwave/hightide-design/theme-tokens'
+import type { ComponentSize } from '@helpwave/hightide-design/component-tokens'
 import {
   colorSchemeTypes,
   type ColoringType,
   type PressableColoringStyle
 } from '@helpwave/hightide-design/semantic-tokens'
 
+import { ContentThemeProvider } from '../../global-contexts/content-theme/ContentThemeProvider'
 import { useTheme } from '../../global-contexts/theme/ThemeContext'
 import type {
   ButtonState,
@@ -24,14 +24,16 @@ import type {
   ButtonTextStyle
 } from '../../theme/types/components/button'
 import type { StyleOverwrite } from '../../theme/types/resolver'
+import { Text } from '../visualization-and-display/Text'
+import type { Color } from '../../theme/types/color'
 
-export type ButtonSize = ComponentSizeBasic
+export type ButtonSize = ComponentSize
 
 export type ButtonColor = ColoringType
 
 export const ButtonUtil = {
   colors: colorSchemeTypes,
-  sizes: ['sm', 'md', 'lg'] as const satisfies readonly ComponentSizeBasic[],
+  sizes: ['sm', 'md', 'lg'] as const satisfies readonly ComponentSize[],
   coloringStyles: ['outline', 'filled', 'text', 'tonal', 'tonal-outline'] as const satisfies readonly PressableColoringStyle[],
 }
 
@@ -88,11 +90,16 @@ export const Button = forwardRef<React.ComponentRef<typeof Pressable>, ButtonPro
         const state = resolveState(pressableState as PressableInteraction)
         const resolvedText = theme.components.button.text(state, textStyle)
 
-        if (typeof children === 'string' || typeof children === 'number') {
-          return <Text style={resolvedText}>{children}</Text>
-        }
-
-        return children
+        return (
+          <ContentThemeProvider
+            foregroundColor={resolvedText.color as Color}
+            textStyle={resolvedText}
+          >
+            {typeof children === 'string' || typeof children === 'number'
+              ? <Text>{children}</Text>
+              : children}
+          </ContentThemeProvider>
+        )
       }}
     </Pressable>
   )

@@ -1,7 +1,7 @@
 import { hightideTypography } from '@helpwave/hightide-design/primitive-tokens'
 import type { HightideComponentTokens } from '@helpwave/hightide-design/component-tokens'
 import type { HightideDesignSystemTokens as DesignTokensTheme } from '@helpwave/hightide-design/design-system'
-import type { HightideColorSchemes, HightideSemanticColorTokens } from '@helpwave/hightide-design/semantic-tokens'
+import type { HightideSematicColorSchemeTokens, HightideSemanticColorTokens } from '@helpwave/hightide-design/semantic-tokens'
 
 import type {
   MultiSelectOptionState,
@@ -16,7 +16,7 @@ import type { TextStyle, ViewStyle } from 'react-native'
 
 export type CreateMultiSelectThemeOptions = {
   colors: HightideSemanticColorTokens,
-  colorSchemes: HightideColorSchemes,
+  colorSchemes: HightideSematicColorSchemeTokens,
   input: HightideComponentTokens['input'],
   card: HightideComponentTokens['card'],
 }

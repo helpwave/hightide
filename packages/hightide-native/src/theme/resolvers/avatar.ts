@@ -6,10 +6,10 @@ import type {
 
 import type { HightideComponentTokens } from '@helpwave/hightide-design/component-tokens'
 import type {
-  HightideColorSchemes,
-  HightideElevationShadowTokens,
+  HightideSematicColorSchemeTokens,
+  HightideSemanticShadowTokens,
   HightideSemanticColorTokens,
-  HightideTypographyTokens
+  HightideSemanticTypographyTokens
 } from '@helpwave/hightide-design/semantic-tokens'
 import type { HightideDesignSystemTokens as DesignTokensTheme } from '@helpwave/hightide-design/design-system'
 
@@ -32,7 +32,7 @@ const avatarFontWeights: Record<'sm' | 'md' | 'lg', 'semibold' | 'bold'> = {
 
 const statusColor = (
   status: AvatarStatus,
-  colorSchemes: HightideColorSchemes,
+  colorSchemes: HightideSematicColorSchemeTokens,
   semanticColors: HightideSemanticColorTokens
 ): string => {
   switch (status) {
@@ -51,12 +51,12 @@ const statusColor = (
 
 export type CreateAvatarThemeOptions = {
   colors: HightideSemanticColorTokens,
-  colorSchemes: HightideColorSchemes,
-  typography: HightideTypographyTokens,
+  colorSchemes: HightideSematicColorSchemeTokens,
+  typography: HightideSemanticTypographyTokens,
   avatar: HightideComponentTokens['avatar'],
   icon: HightideComponentTokens['icon'],
   avatarGroup: HightideComponentTokens['avatarGroup'],
-  shadow: HightideElevationShadowTokens,
+  shadow: HightideSemanticShadowTokens,
 }
 
 export const createAvatarTheme = ({
@@ -230,7 +230,7 @@ export const createAvatarThemeFromDesign = (
 ): AvatarTheme => {
   return createAvatarTheme({
     colors: theme.colors,
-    colorSchemes: theme.colorSchemes as HightideColorSchemes,
+    colorSchemes: theme.colorSchemes,
     typography: theme.typography,
     avatar: theme.components.avatar,
     icon: theme.components.icon,

@@ -1,6 +1,6 @@
 import type { ViewStyle } from 'react-native'
 
-import type { ComponentSizeBasic } from '@helpwave/hightide-design/theme-tokens'
+import type { ComponentSize } from '@helpwave/hightide-design/component-tokens'
 
 import type { Color } from '../color'
 import type {
@@ -8,7 +8,7 @@ import type {
   StyleResolverFunction
 } from '../resolver'
 
-export type CheckboxSize = ComponentSizeBasic
+export type CheckboxSize = ComponentSize
 
 export type CheckboxState = InteractionState & {
   size?: CheckboxSize,

@@ -105,8 +105,9 @@ export const ChatAttachmentCard = ({
           color="primary"
           coloringStyle="text"
           onPress={onDownload}
-          icon={HightideIconRegistry.Download}
-        />
+        >
+          <Icon icon={HightideIconRegistry.Download} />
+        </IconButton>
       )}
     </View>
   )

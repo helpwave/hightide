@@ -1,13 +1,28 @@
+import type { TextStyle } from 'react-native'
 import { StyleSheet } from 'react-native'
 
 import { hightideTypography } from '@helpwave/hightide-design/primitive-tokens'
-import type { HightideDesignSystemTokens as DesignTokensTheme } from '@helpwave/hightide-design/design-system'
-import type { HightideColorSchemes, HightideSemanticColorTokens } from '@helpwave/hightide-design/semantic-tokens'
+import type { HightideComponentTokens } from '@helpwave/hightide-design/component-tokens'
+import type { HightideDesignSystemTokens } from '@helpwave/hightide-design/design-system'
+import type {
+  HightideSematicColorSchemeTokens,
+  HightideSemanticColorTokens
+} from '@helpwave/hightide-design/semantic-tokens'
 
 import type {
+  CardActionItemContentStyle,
+  CardActionItemIconColor,
+  CardActionItemLabelStyle,
   CardActionItemState,
+  CardActionItemStyle,
+  CardItemContentStyle,
+  CardItemLabelStyle,
+  CardItemStyle,
+  CardItemValueStyle,
+  CardStyle,
   CardTheme
 } from '../types/components/card'
+import type { Color } from '../types/color'
 import {
   createStyleResolver,
   createValueResolver
@@ -15,19 +30,21 @@ import {
 
 export type CreateCardThemeOptions = {
   colors: HightideSemanticColorTokens,
-  colorSchemes: HightideColorSchemes,
+  colorSchemes: HightideSematicColorSchemeTokens,
+  card: HightideComponentTokens['card'],
 }
 
 export const createCardTheme = ({
   colors,
   colorSchemes,
+  card,
 }: CreateCardThemeOptions): CardTheme => {
-  const resolveActionItem = (state: CardActionItemState) => {
+  const resolveActionItem = (state: CardActionItemState): CardActionItemStyle => {
     const pressed = !!state.isPressed && !state.isDisabled
 
     return {
-      flexDirection: 'row' as const,
-      alignItems: 'center' as const,
+      flexDirection: 'row',
+      alignItems: 'center',
       minHeight: 64,
       gap: 12,
       paddingHorizontal: 16,
@@ -39,37 +56,37 @@ export const createCardTheme = ({
     }
   }
 
-  const resolveItemContent = () => ({
+  const resolveItemContent = (): CardItemContentStyle => ({
     flex: 1,
     gap: 4,
-    justifyContent: 'center' as const,
+    justifyContent: 'center',
   })
 
-  const resolveActionLabel = (state: CardActionItemState) => ({
+  const resolveActionLabel = (state: CardActionItemState): CardActionItemLabelStyle => ({
     color: state.isDanger
       ? colorSchemes.negative.text.base.foreground
-      : colors.onSurface,
+      : card.text,
     fontSize: 15,
-    fontWeight: hightideTypography.fontWeight.medium,
+    fontWeight: hightideTypography.fontWeight.medium as TextStyle['fontWeight'],
   })
 
-  const resolveActionIcon = (state: CardActionItemState) => ({
-    color: state.isDanger
+  const resolveActionIcon = (state: CardActionItemState): CardActionItemIconColor => ({
+    color: (state.isDanger
       ? colorSchemes.negative.text.base.foreground
-      : colorSchemes.primary.text.base.foreground,
+      : colorSchemes.primary.text.base.foreground) as Color,
   })
 
   return {
-    card: createStyleResolver(() => ({
-      backgroundColor: colors.surface,
+    card: createStyleResolver((): CardStyle => ({
+      backgroundColor: card.background,
       borderRadius: 12,
       borderWidth: 1,
-      borderColor: colors.border,
+      borderColor: card.border,
       overflow: 'hidden',
     })),
-    item: createStyleResolver(() => ({
-      flexDirection: 'row' as const,
-      alignItems: 'center' as const,
+    item: createStyleResolver((): CardItemStyle => ({
+      flexDirection: 'row',
+      alignItems: 'center',
       minHeight: 64,
       paddingHorizontal: 16,
       paddingVertical: 8,
@@ -78,32 +95,33 @@ export const createCardTheme = ({
       gap: 12,
     })),
     itemContent: createStyleResolver(resolveItemContent),
-    itemLabel: createStyleResolver(() => ({
+    itemLabel: createStyleResolver((): CardItemLabelStyle => ({
       color: colors.description,
       fontSize: 12,
     })),
-    itemValue: createStyleResolver(() => ({
-      color: colors.onSurface,
+    itemValue: createStyleResolver((): CardItemValueStyle => ({
+      color: card.text,
       fontSize: 15,
-      fontWeight: hightideTypography.fontWeight.medium,
+      fontWeight: hightideTypography.fontWeight.medium as TextStyle['fontWeight'],
     })),
     actionItem: createStyleResolver(resolveActionItem),
-    actionItemContent: createStyleResolver(resolveItemContent),
+    actionItemContent: createStyleResolver((): CardActionItemContentStyle => resolveItemContent()),
     actionItemLabel: createStyleResolver(resolveActionLabel),
     actionItemIcon: createValueResolver(resolveActionIcon),
     navigationItem: createStyleResolver(resolveActionItem),
-    navigationItemContent: createStyleResolver(resolveItemContent),
+    navigationItemContent: createStyleResolver((): CardActionItemContentStyle => resolveItemContent()),
     navigationItemLabel: createStyleResolver(resolveActionLabel),
     navigationItemIcon: createValueResolver(resolveActionIcon),
-    navigationItemTrailing: createValueResolver(() => ({
-      color: colors.description,
+    navigationItemTrailing: createValueResolver((): CardActionItemIconColor => ({
+      color: colors.description as Color,
     })),
   }
 }
 
-export const createCardThemeFromDesign = (theme: DesignTokensTheme): CardTheme => {
+export const createCardThemeFromDesign = (theme: HightideDesignSystemTokens): CardTheme => {
   return createCardTheme({
     colors: theme.colors,
     colorSchemes: theme.colorSchemes,
+    card: theme.components.card,
   })
 }

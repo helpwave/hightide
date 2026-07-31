@@ -1,7 +1,7 @@
 import type { HightideSemanticTokens } from '../../semantic-tokens/semanticTokens'
-import type { ComponentSizeBasic } from '../../theme-tokens/layout'
+import type { ComponentSize } from '../componentSize'
 
-export type HightideAvatarTokens = Record<ComponentSizeBasic, {
+export type HightideAvatarTokens = Record<ComponentSize, {
   size: number,
   padding: number,
   fontSize: number,
@@ -9,7 +9,7 @@ export type HightideAvatarTokens = Record<ComponentSizeBasic, {
   statusDotBorderWidth: number,
 }>
 
-const avatarSizes = ['sm', 'md', 'lg'] as const satisfies readonly ComponentSizeBasic[]
+const avatarSizes = ['sm', 'md', 'lg'] as const satisfies readonly ComponentSize[]
 
 export const toAvatarTokens = (
   semanticTokens: HightideSemanticTokens

@@ -16,7 +16,7 @@ import {
 } from 'react-native'
 import { HightideIconRegistry } from '../../icons/HightideIconRegistry'
 import { Icon } from './Icon'
-import type { ComponentSizeBasic } from '@helpwave/hightide-design/theme-tokens'
+import type { ComponentSize } from '@helpwave/hightide-design/component-tokens'
 
 import { useTheme } from '../../global-contexts/theme/ThemeContext'
 import type {
@@ -34,7 +34,7 @@ import type {
 } from '../../theme/types/components/avatar'
 import type { StyleOverwrite } from '../../theme/types/resolver'
 
-export type AvatarSize = ComponentSizeBasic
+export type AvatarSize = ComponentSize
 
 type ImageConfig = {
   avatarUrl: string,
@@ -54,7 +54,7 @@ const DefaultAvatarImage: ComponentType<AvatarImageProps> = ({ alt, ...props }) 
 )
 
 export const AvatarUtil = {
-  sizes: ['sm', 'md', 'lg'] as const satisfies readonly ComponentSizeBasic[],
+  sizes: ['sm', 'md', 'lg'] as const satisfies readonly ComponentSize[],
   statuses: ['online', 'offline', 'away', 'busy', 'unknown'] as const satisfies readonly AvatarStatus[],
 }
 
@@ -64,10 +64,10 @@ export type AvatarProps = Omit<ViewProps, 'children' | 'style'> & {
   size?: AvatarSize,
   ImageComponent?: ComponentType<AvatarImageProps>,
   style?: StyleProp<ViewStyle>,
-  avatarStyle?: StyleOverwrite<{ size?: ComponentSizeBasic, isGrouped?: boolean, groupIndex?: number }, AvatarStyle>,
-  imageStyle?: StyleOverwrite<{ size?: ComponentSizeBasic, isGrouped?: boolean, groupIndex?: number }, AvatarImageStyle>,
-  textStyle?: StyleOverwrite<{ size?: ComponentSizeBasic, isGrouped?: boolean, groupIndex?: number }, AvatarTextStyle>,
-  iconStyle?: StyleOverwrite<{ size?: ComponentSizeBasic, isGrouped?: boolean, groupIndex?: number }, AvatarIconStyle>,
+  avatarStyle?: StyleOverwrite<{ size?: ComponentSize, isGrouped?: boolean, groupIndex?: number }, AvatarStyle>,
+  imageStyle?: StyleOverwrite<{ size?: ComponentSize, isGrouped?: boolean, groupIndex?: number }, AvatarImageStyle>,
+  textStyle?: StyleOverwrite<{ size?: ComponentSize, isGrouped?: boolean, groupIndex?: number }, AvatarTextStyle>,
+  iconStyle?: StyleOverwrite<{ size?: ComponentSize, isGrouped?: boolean, groupIndex?: number }, AvatarIconStyle>,
   isGrouped?: boolean,
   groupIndex?: number,
 }
@@ -160,8 +160,8 @@ export type AvatarGroupProps = Omit<ViewProps, 'children' | 'style'> & {
   size?: AvatarSize,
   ImageComponent?: ComponentType<AvatarImageProps>,
   style?: StyleProp<ViewStyle>,
-  stackStyle?: StyleOverwrite<{ size?: ComponentSizeBasic, count?: number }, AvatarGroupStackStyle>,
-  moreStyle?: StyleOverwrite<{ size?: ComponentSizeBasic, count?: number }, AvatarGroupMoreStyle>,
+  stackStyle?: StyleOverwrite<{ size?: ComponentSize, count?: number }, AvatarGroupStackStyle>,
+  moreStyle?: StyleOverwrite<{ size?: ComponentSize, count?: number }, AvatarGroupMoreStyle>,
 }
 
 export const AvatarGroup = ({
@@ -218,8 +218,8 @@ export type { AvatarStatus }
 
 export type AvatarWithStatusProps = AvatarProps & {
   status?: AvatarStatus,
-  containerStyle?: StyleOverwrite<{ size?: ComponentSizeBasic, status?: AvatarStatus }, AvatarWithStatusContainerStyle>,
-  statusDotStyle?: StyleOverwrite<{ size?: ComponentSizeBasic, status?: AvatarStatus }, AvatarStatusDotStyle>,
+  containerStyle?: StyleOverwrite<{ size?: ComponentSize, status?: AvatarStatus }, AvatarWithStatusContainerStyle>,
+  statusDotStyle?: StyleOverwrite<{ size?: ComponentSize, status?: AvatarStatus }, AvatarStatusDotStyle>,
 }
 
 export const AvatarWithStatus = ({
@@ -253,8 +253,8 @@ type AvatarWithLabelPosition = 'left' | 'right'
 export type AvatarWithLabelProps = AvatarProps & {
   label: ReactNode,
   labelPosition?: AvatarWithLabelPosition,
-  containerStyle?: StyleOverwrite<{ size?: ComponentSizeBasic }, AvatarWithLabelContainerStyle>,
-  labelStyle?: StyleOverwrite<{ size?: ComponentSizeBasic }, AvatarWithLabelTextStyle>,
+  containerStyle?: StyleOverwrite<{ size?: ComponentSize }, AvatarWithLabelContainerStyle>,
+  labelStyle?: StyleOverwrite<{ size?: ComponentSize }, AvatarWithLabelTextStyle>,
 }
 
 export const AvatarWithLabel = ({

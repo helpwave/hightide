@@ -1,6 +1,6 @@
 import type { HightideComponentTokens } from '@helpwave/hightide-design/component-tokens'
 import type { HightideDesignSystemTokens as DesignTokensTheme } from '@helpwave/hightide-design/design-system'
-import type { HightideColorSchemes, HightideSemanticColorTokens } from '@helpwave/hightide-design/semantic-tokens'
+import type { HightideSematicColorSchemeTokens, HightideSemanticColorTokens } from '@helpwave/hightide-design/semantic-tokens'
 
 import type {
   SwitchState,
@@ -10,7 +10,7 @@ import { createValueResolver } from '../types/resolver'
 
 export type CreateSwitchThemeOptions = {
   colors: HightideSemanticColorTokens,
-  colorSchemes: HightideColorSchemes,
+  colorSchemes: HightideSematicColorSchemeTokens,
   switchTokens: HightideComponentTokens['switch'],
 }
 

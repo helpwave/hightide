@@ -3,14 +3,15 @@ import {
   type ViewProps
 } from 'react-native'
 
-import type { ComponentSizeBasic } from '@helpwave/hightide-design/theme-tokens'
+import type { ComponentSize } from '@helpwave/hightide-design/component-tokens'
 
 import type { IconComponent } from '../../icons/types'
+import { useContentTheme } from '../../global-contexts/content-theme/ContentThemeContext'
 import { useTheme } from '../../global-contexts/theme/ThemeContext'
 
 export type IconProps = Omit<ViewProps, 'children'> & {
   icon: IconComponent,
-  size?: ComponentSizeBasic | number,
+  size?: ComponentSize | number,
   color?: string,
   strokeWidth?: number,
 }
@@ -24,6 +25,7 @@ export const Icon = ({
   ...props
 }: IconProps) => {
   const { theme } = useTheme()
+  const { foregroundColor } = useContentTheme()
   const iconToken = typeof size === 'number'
     ? {
       size,
@@ -52,7 +54,7 @@ export const Icon = ({
       <Glyph
         size={iconToken.size}
         strokeWidth={iconToken.strokeWidth}
-        color={color}
+        color={color ?? foregroundColor}
       />
     </View>
   )

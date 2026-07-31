@@ -1,19 +1,16 @@
-export type ComponentSizeBasic = 'sm' | 'md' | 'lg'
-export type ComponentSize = ComponentSizeBasic | 'xs' | 'xl'
+export const themeLayoutSizes = ['xs', 'sm', 'md', 'lg', 'xl'] as const
+export type ThemeLayoutSizes = typeof themeLayoutSizes[number]
 
-export const componentSizesBasic: ComponentSizeBasic[] = ['sm', 'md', 'lg']
-export const componentSizes: ComponentSize[] = ['xs', 'sm', 'md', 'lg', 'xl']
-
-export type HightideThemeSizeTokens = Record<ComponentSize, number>
-export type HightideThemePaddingTokens = Record<ComponentSize, number>
-export type HightideThemePaddingExtensionTokens = Record<ComponentSize, number>
-export type HightideThemeSpacingTokens = Record<ComponentSize, number>
+export type HightideThemeSizeTokens = Record<ThemeLayoutSizes, number>
+export type HightideThemePaddingTokens = Record<ThemeLayoutSizes, number>
+export type HightideThemePaddingExtensionTokens = Record<ThemeLayoutSizes, number>
+export type HightideThemeSpacingTokens = Record<ThemeLayoutSizes, number>
 export type HightideThemeBorderWidthTokens = {
   thin: number,
   normal: number,
   thick: number,
 }
-export type HightideThemeBorderRadiusTokens = Record<ComponentSize, number>
+export type HightideThemeBorderRadiusTokens = Record<ThemeLayoutSizes, number>
 
 export const hightideThemeSizeTokens: HightideThemeSizeTokens = {
   xs: 28,

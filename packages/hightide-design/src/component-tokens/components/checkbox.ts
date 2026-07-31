@@ -1,6 +1,6 @@
 import type { ColorToken } from '../../primitive-tokens/color'
 import type { HightideSemanticTokens } from '../../semantic-tokens/semanticTokens'
-import type { ComponentSizeBasic } from '../../theme-tokens/layout'
+import type { ComponentSize } from '../componentSize'
 
 export type CheckboxBoxLayoutToken = {
   size: number,
@@ -16,14 +16,14 @@ export type CheckboxIconLayoutToken = {
 export type HightideCheckboxTokens = {
   background: ColorToken,
   box: {
-    layout: Record<ComponentSizeBasic, CheckboxBoxLayoutToken>,
+    layout: Record<ComponentSize, CheckboxBoxLayoutToken>,
   },
   icon: {
-    layout: Record<ComponentSizeBasic, CheckboxIconLayoutToken>,
+    layout: Record<ComponentSize, CheckboxIconLayoutToken>,
   },
 }
 
-const checkboxSizes = ['sm', 'md', 'lg'] as const satisfies readonly ComponentSizeBasic[]
+const checkboxSizes = ['sm', 'md', 'lg'] as const satisfies readonly ComponentSize[]
 
 export const toCheckboxTokens = (
   semanticTokens: HightideSemanticTokens

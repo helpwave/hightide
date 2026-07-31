@@ -52,7 +52,7 @@ Precomputed as `hightideLightThemeTokens` / `hightideDarkThemeTokens` (`@helpwav
 
 - Shared non-color fields live in `hightideSharedThemeTokens` (`Omit<HightideThemeTokens, 'color'>`)
 - `color` — `HightideThemeColorTokens` (surface colors + inlined role colors for scheme build inputs); only layer that differs by light/dark
-- `size` / `padding` / `paddingExtension` / `border` — each `Record<ComponentSize, number>` (`xs…xl`); theme `border` is size roles only (not `thin|base|thick`)
+- `size` / `padding` / `paddingExtension` / `borderRadius` — each `Record<ThemeLayoutSizes, number>` (`xs…xl`); theme `borderWidth` uses `thin|normal|thick`
 - `typography.fontFamily` — remapped roles `default` / `accent` / `mono` from primitive font registry
 - Other non-color scales passthrough from primitives
 
@@ -73,10 +73,10 @@ Precomputed as `hightideLightSemanticTokens` / `hightideDarkSemanticTokens` via 
 
 Precomputed as `hightideLightComponentTokens` / `hightideDarkComponentTokens` via `toHightideComponentTokens` — colors + layouts from semantic only.
 
-- button / iconButton / chip: full `ComponentSize` from `elementLayout.control` (chip adjusted)
+- button / iconButton / chip: `ComponentSize` (`sm…lg`) from `elementLayout.control` (chip adjusted)
 - input: single layout from `control.md`
-- checkbox: `ComponentSizeBasic` mapped one step down (`sm→xs`, `md→sm`, `lg→md`)
-- icon: `semantic.icon` sizes + `semantic.border.base` stroke
+- checkbox: `ComponentSize` mapped via `insideControl` / one step denser nesting
+- icon: `insideControl` sizes + border stroke
 
 ### 5. HightideDesignSystemTokens
 

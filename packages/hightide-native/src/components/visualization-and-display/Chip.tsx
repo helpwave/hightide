@@ -3,20 +3,20 @@ import {
   type ReactNode
 } from 'react'
 import {
-  Text,
   View,
   type StyleProp,
   type ViewProps,
   type ViewStyle
 } from 'react-native'
 
-import type { ComponentSizeBasic } from '@helpwave/hightide-design/theme-tokens'
+import type { ComponentSize } from '@helpwave/hightide-design/component-tokens'
 import {
   colorSchemeTypes,
   type ColoringType,
   type ChipColoringStyle
 } from '@helpwave/hightide-design/semantic-tokens'
 
+import { ContentThemeProvider } from '../../global-contexts/content-theme/ContentThemeProvider'
 import { useTheme } from '../../global-contexts/theme/ThemeContext'
 import type {
   ChipState,
@@ -24,14 +24,16 @@ import type {
   ChipTextStyle
 } from '../../theme/types/components/chip'
 import type { StyleOverwrite } from '../../theme/types/resolver'
+import type { Color } from '../../theme/types/color'
+import { Text } from './Text'
 
-export type ChipSize = ComponentSizeBasic
+export type ChipSize = ComponentSize
 
 export type ChipColor = ColoringType
 
 export const ChipUtil = {
   colors: colorSchemeTypes,
-  sizes: ['sm', 'md', 'lg'] as const satisfies readonly ComponentSizeBasic[],
+  sizes: ['sm', 'md', 'lg'] as const satisfies readonly ComponentSize[],
   coloringStyles: ['filled', 'tonal', 'outline', 'tonal-outline'] as const satisfies readonly ChipColoringStyle[],
 }
 
@@ -77,9 +79,14 @@ export const Chip = ({
       {...props}
       style={[resolvedChipStyle, style]}
     >
-      {typeof children === 'string' || typeof children === 'number'
-        ? <Text style={resolvedTextStyle}>{children}</Text>
-        : children}
+      <ContentThemeProvider
+        foregroundColor={resolvedTextStyle.color as Color}
+        textStyle={resolvedTextStyle}
+      >
+        {typeof children === 'string' || typeof children === 'number'
+          ? <Text>{children}</Text>
+          : children}
+      </ContentThemeProvider>
     </View>
   )
 }

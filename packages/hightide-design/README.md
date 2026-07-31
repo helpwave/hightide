@@ -24,7 +24,6 @@ import {
   hightideSharedThemeTokens,
   resolveStateBasedProperty,
   type HightideThemeTokens,
-  type ComponentSize,
 } from "@helpwave/hightide-design/theme-tokens";
 import {
   hightideLightSemanticTokens,
@@ -33,6 +32,7 @@ import {
 import {
   hightideLightComponentTokens,
   toHightideComponentTokens,
+  type ComponentSize,
 } from "@helpwave/hightide-design/component-tokens";
 import {
   hightideDesignSystem,
@@ -87,7 +87,7 @@ semantic.colorSchemes.neutral.outline
 Layout layers:
 
 - Primitive `sizes` steps `0…160` (step 4); primitive `border` steps `0…10`
-- Theme `size` / `padding` / `paddingExtension` / `border` as `ComponentSize` (`xs…xl`) roles
+- Theme `size` / `padding` / `paddingExtension` / `borderRadius` as `ThemeLayoutSizes` (`xs…xl`) roles; component APIs use `ComponentSize` (`sm…lg`) from `/component-tokens`
 - Semantic `elementLayout.control|container|insideControl` include `borderWidth` and `borderRadius`; `insideControl.size = control.size - 2 * control.inset - 2 * control.borderWidth`
 
 `ColorState` = `{ background, foreground, border }`. Resolve with `resolveStateBasedProperty(property, states)` in order `base → focused → hover → pressed → disabled`.

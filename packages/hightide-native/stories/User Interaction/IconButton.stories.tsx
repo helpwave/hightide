@@ -7,6 +7,7 @@ import { action } from 'storybook/actions'
 
 import { ButtonUtil } from '../../src/components/user-interaction/Button'
 import { IconButton } from '../../src/components/user-interaction/IconButton'
+import { Icon } from '../../src/components/visualization-and-display/Icon'
 
 const meta = {
   component: IconButton,
@@ -28,7 +29,7 @@ export const iconButton: Story = {
     size: 'md',
     coloringStyle: 'filled',
     accessibilityLabel: 'Subtract',
-    icon: HightideIconRegistry.Minus,
     onPress: action('Pressed'),
+    children: <Icon icon={HightideIconRegistry.Minus} />,
   },
 }

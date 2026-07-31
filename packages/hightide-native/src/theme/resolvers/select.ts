@@ -6,7 +6,7 @@ import type {
 import { hightideTypography } from '@helpwave/hightide-design/primitive-tokens'
 import type { HightideComponentTokens } from '@helpwave/hightide-design/component-tokens'
 import type { HightideDesignSystemTokens } from '@helpwave/hightide-design/design-system'
-import type { HightideColorSchemes, HightideSemanticColorTokens } from '@helpwave/hightide-design/semantic-tokens'
+import type { HightideSematicColorSchemeTokens, HightideSemanticColorTokens } from '@helpwave/hightide-design/semantic-tokens'
 
 import type {
   SelectOptionState,
@@ -28,7 +28,7 @@ import {
 
 export type CreateSelectThemeOptions = {
   colors: HightideSemanticColorTokens,
-  colorSchemes: HightideColorSchemes,
+  colorSchemes: HightideSematicColorSchemeTokens,
   input: HightideComponentTokens['input'],
   card: HightideComponentTokens['card'],
 }

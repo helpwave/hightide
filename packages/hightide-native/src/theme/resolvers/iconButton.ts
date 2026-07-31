@@ -38,6 +38,7 @@ export const createIconButtonThemeFromDesign = (theme: DesignTokensTheme): IconB
       width: dimension,
       height: dimension,
       borderRadius: element.borderRadius,
+      overflow: 'hidden',
       opacity: state.isDisabled ? 0.6 : 1,
     }
 

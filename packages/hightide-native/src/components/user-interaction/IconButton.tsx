@@ -6,16 +6,16 @@ import {
   Pressable,
   type PressableProps,
   type StyleProp,
+  type TextStyle,
   type ViewStyle
 } from 'react-native'
-import type { ComponentSize, ComponentSizeBasic } from '@helpwave/hightide-design/theme-tokens'
+import type { ComponentSize } from '@helpwave/hightide-design/component-tokens'
 import type {
   ColoringType,
   PressableColoringStyle
 } from '@helpwave/hightide-design/semantic-tokens'
 
-import type { IconComponent } from '../../icons/types'
-import { Icon } from '../visualization-and-display/Icon'
+import { ContentThemeProvider } from '../../global-contexts/content-theme/ContentThemeProvider'
 import { useTheme } from '../../global-contexts/theme/ThemeContext'
 import type {
   IconButtonState,
@@ -31,8 +31,6 @@ export type IconButtonProps = Omit<PressableProps, 'children' | 'style'> & {
   size?: IconButtonSize,
   color?: ColoringType,
   coloringStyle?: IconButtonColoringStyle,
-  icon?: IconComponent,
-  iconSize?: ComponentSizeBasic,
   children?: ReactNode,
   accessibilityLabel: string,
   style?: StyleProp<ViewStyle>,
@@ -47,8 +45,6 @@ type PressableInteraction = {
 
 export const IconButton = forwardRef<React.ComponentRef<typeof Pressable>, IconButtonProps>(function IconButton({
   children,
-  icon,
-  iconSize,
   size = 'md',
   color = 'neutral',
   coloringStyle = 'filled',
@@ -85,17 +81,16 @@ export const IconButton = forwardRef<React.ComponentRef<typeof Pressable>, IconB
       {(pressableState) => {
         const state = resolveState(pressableState as PressableInteraction)
         const resolvedIcon = theme.components.iconButton.icon(state)
+        const textStyle: TextStyle = { color: resolvedIcon.color }
 
-        if (icon) {
-          return (
-            <Icon
-              icon={icon}
-              size={iconSize ?? (size === 'xs' || size === 'xl' ? 'md' : size)}
-              color={resolvedIcon.color}
-            />
-          )
-        }
-        return children
+        return (
+          <ContentThemeProvider
+            foregroundColor={resolvedIcon.color}
+            textStyle={textStyle}
+          >
+            {children}
+          </ContentThemeProvider>
+        )
       }}
     </Pressable>
   )
