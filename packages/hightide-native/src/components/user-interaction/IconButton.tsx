@@ -13,7 +13,7 @@ import type { LucideIcon } from 'lucide-react-native'
 import type { ComponentSize } from '@helpwave/hightide-design/theme-tokens'
 import type {
   ColoringType,
-  ButtonColoringStyle
+  PressableColoringStyle
 } from '@helpwave/hightide-design/semantic-tokens'
 
 import { Icon } from '../visualization-and-display/Icon'
@@ -26,10 +26,12 @@ import type { StyleOverwrite } from '../../theme/types/resolver'
 
 export type IconButtonSize = ComponentSize
 
+export type IconButtonColoringStyle = PressableColoringStyle
+
 export type IconButtonProps = Omit<PressableProps, 'children' | 'style'> & {
   size?: IconButtonSize,
   color?: ColoringType,
-  coloringStyle?: ButtonColoringStyle,
+  coloringStyle?: IconButtonColoringStyle,
   icon?: LucideIcon,
   iconSize?: ComponentSize,
   children?: ReactNode,

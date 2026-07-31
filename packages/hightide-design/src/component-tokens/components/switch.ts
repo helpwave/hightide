@@ -17,8 +17,8 @@ export const toSwitchTokens = (
   semanticTokens: HightideSemanticTokens
 ): HightideSwitchTokens => ({
   track: {
-    inactive: semanticTokens.colors.surfaceVariant,
-    active: semanticTokens.colorSchemes.primary.filled.base.background,
+    inactive: semanticTokens.colors.surface,
+    active: semanticTokens.colorSchemes.primary.filled.base.color,
   },
   thumb: {
     inactive: semanticTokens.colors.subtle,

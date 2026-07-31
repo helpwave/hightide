@@ -6,7 +6,7 @@ import type {
 import type { ComponentSize } from '@helpwave/hightide-design/theme-tokens'
 import type {
   ColoringType,
-  ButtonColoringStyle
+  PressableColoringStyle
 } from '@helpwave/hightide-design/semantic-tokens'
 
 import type {
@@ -17,7 +17,7 @@ import type {
 export type ButtonState = InteractionState & {
   size?: ComponentSize,
   color?: ColoringType,
-  coloringStyle?: ButtonColoringStyle,
+  coloringStyle?: PressableColoringStyle,
 }
 
 export type ButtonStyle = ViewStyle

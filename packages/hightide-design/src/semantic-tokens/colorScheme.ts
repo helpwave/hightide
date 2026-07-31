@@ -1,184 +1,181 @@
 import type { ColorToken } from '../primitive-tokens/color'
-import type { StateBasedProperty } from '../theme-tokens/stateBasedProperty'
 import type {
   HightideThemeColorTokens,
   HightideThemeRoleColorToken
 } from '../theme-tokens/color'
 
 export type ColorState = {
-  background: ColorToken,
+  color: ColorToken,
   foreground: ColorToken,
+}
+
+export type ColorStateFull = ColorState & {
   border: ColorToken,
 }
 
-export const coloringTypes = ['primary', 'secondary', 'positive', 'warning', 'negative', 'neutral'] as const
+export type SemanticStateProperty<P> = {
+  base: P,
+  emphasisOverride: P,
+}
 
-export type ColoringType = typeof coloringTypes[number]
+export const colorSchemeTypes = [
+  'primary',
+  'secondary',
+  'positive',
+  'warning',
+  'negative',
+  'neutral',
+  'disabled',
+] as const
+
+export type ColoringType = typeof colorSchemeTypes[number]
 
 export type ColoringStyleBase = 'outline' | 'filled' | 'tonal' | 'tonal-outline'
 export type ColoringStyle = ColoringStyleBase | 'text'
 
-export type ButtonColoringStyle = ColoringStyle
-export type ChipColoringStyle = ColoringStyleBase
+export type PressableColoringStyle = ColoringStyle
+export type ContainerColoringStyle = ColoringStyleBase
+export type ChipColoringStyle = ContainerColoringStyle
 
 export type HightideColorScheme = {
-  'filled': StateBasedProperty<ColorState>,
-  'outline': StateBasedProperty<ColorState>,
-  'tonal': StateBasedProperty<ColorState>,
-  'tonal-outline': StateBasedProperty<ColorState>,
-  'text': StateBasedProperty<ColorState>,
+  'filled': SemanticStateProperty<ColorState>,
+  'outline': SemanticStateProperty<ColorState>,
+  'tonal': SemanticStateProperty<ColorState>,
+  'tonal-outline': SemanticStateProperty<ColorState>,
+  'text': SemanticStateProperty<ColorState>,
 }
 
 export type HightideColorSchemes = Record<ColoringType, HightideColorScheme>
 
 const createFilled = (
-  role: HightideThemeRoleColorToken,
-  disabled: ColorToken,
-  onDisabled: ColorToken
-): StateBasedProperty<ColorState> => ({
+  role: HightideThemeRoleColorToken
+): SemanticStateProperty<ColorState> => ({
   base: {
-    background: role.color,
+    color: role.color,
     foreground: role.onColor,
-    border: role.color,
   },
-  focused: undefined,
-  hover: {
-    background: role.emphasis,
-    border: role.emphasis,
-  },
-  pressed: {
-    background: role.emphasis,
-    border: role.emphasis,
-  },
-  disabled: {
-    background: disabled,
-    foreground: onDisabled,
-    border: disabled,
+  emphasisOverride: {
+    color: role.emphasis,
+    foreground: role.onColor,
   },
 })
 
 const createOutline = (
-  role: HightideThemeRoleColorToken,
-  disabled: ColorToken,
-  onDisabled: ColorToken,
-  transparent: ColorToken
-): StateBasedProperty<ColorState> => ({
+  role: HightideThemeRoleColorToken
+): SemanticStateProperty<ColorState> => ({
   base: {
-    background: transparent,
+    color: role.color,
     foreground: role.color,
-    border: role.color,
   },
-  focused: undefined,
-  hover: {
+  emphasisOverride: {
+    color: role.emphasis,
     foreground: role.emphasis,
-    border: role.emphasis,
-  },
-  pressed: {
-    foreground: role.emphasis,
-    border: role.emphasis,
-  },
-  disabled: {
-    background: transparent,
-    foreground: onDisabled,
-    border: disabled,
   },
 })
 
 const createText = (
   role: HightideThemeRoleColorToken,
-  disabled: ColorToken,
-  onDisabled: ColorToken,
   transparent: ColorToken
-): StateBasedProperty<ColorState> => ({
+): SemanticStateProperty<ColorState> => ({
   base: {
-    background: transparent,
+    color: transparent,
     foreground: role.color,
-    border: transparent,
   },
-  focused: undefined,
-  hover: { foreground: role.emphasis },
-  pressed: { foreground: role.emphasis },
-  disabled: {
-    background: transparent,
-    foreground: onDisabled,
-    border: transparent,
+  emphasisOverride: {
+    color: transparent,
+    foreground: role.emphasis,
   },
 })
 
 const createTonal = (
-  role: HightideThemeRoleColorToken,
-  disabled: ColorToken,
-  onDisabled: ColorToken
-): StateBasedProperty<ColorState> => ({
+  role: HightideThemeRoleColorToken
+): SemanticStateProperty<ColorState> => ({
   base: {
-    background: role.tint,
+    color: role.tint,
     foreground: role.color,
-    border: role.tint,
   },
-  focused: undefined,
-  hover: {
-    background: role.tintEmphasis,
-    border: role.tintEmphasis,
-  },
-  pressed: {
-    background: role.tintEmphasis,
-    border: role.tintEmphasis,
-  },
-  disabled: {
-    background: disabled,
-    foreground: onDisabled,
-    border: disabled,
+  emphasisOverride: {
+    color: role.tintEmphasis,
+    foreground: role.color,
   },
 })
 
 const createTonalOutline = (
-  role: HightideThemeRoleColorToken,
-  disabled: ColorToken,
-  onDisabled: ColorToken
-): StateBasedProperty<ColorState> => ({
+  role: HightideThemeRoleColorToken
+): SemanticStateProperty<ColorState> => ({
   base: {
-    background: role.tint,
+    color: role.tint,
     foreground: role.color,
-    border: role.tint,
   },
-  focused: undefined,
-  hover: {
-    background: role.tintEmphasis,
-    border: role.tintEmphasis,
-  },
-  pressed: {
-    background: role.tintEmphasis,
-    border: role.tintEmphasis,
-  },
-  disabled: {
-    background: disabled,
-    foreground: onDisabled,
-    border: disabled,
+  emphasisOverride: {
+    color: role.tintEmphasis,
+    foreground: role.color,
   },
 })
 
 const schemeFor = (
   role: HightideThemeRoleColorToken,
+  transparent: ColorToken
+): HightideColorScheme => ({
+  'filled': createFilled(role),
+  'outline': createOutline(role),
+  'tonal': createTonal(role),
+  'tonal-outline': createTonalOutline(role),
+  'text': createText(role, transparent),
+})
+
+const disabledScheme = (
   disabled: ColorToken,
   onDisabled: ColorToken,
   transparent: ColorToken
-): HightideColorScheme => ({
-  'filled': createFilled(role, disabled, onDisabled),
-  'outline': createOutline(role, disabled, onDisabled, transparent),
-  'tonal': createTonal(role, disabled, onDisabled),
-  'tonal-outline': createTonalOutline(role, disabled, onDisabled),
-  'text': createText(role, disabled, onDisabled, transparent),
-})
+): HightideColorScheme => {
+  const filledBase: ColorState = {
+    color: disabled,
+    foreground: onDisabled,
+  }
+  const outlineBase: ColorState = {
+    color: disabled,
+    foreground: onDisabled,
+  }
+  const textBase: ColorState = {
+    color: transparent,
+    foreground: onDisabled,
+  }
+
+  return {
+    'filled': {
+      base: filledBase,
+      emphasisOverride: filledBase,
+    },
+    'outline': {
+      base: outlineBase,
+      emphasisOverride: outlineBase,
+    },
+    'tonal': {
+      base: filledBase,
+      emphasisOverride: filledBase,
+    },
+    'tonal-outline': {
+      base: filledBase,
+      emphasisOverride: filledBase,
+    },
+    'text': {
+      base: textBase,
+      emphasisOverride: textBase,
+    },
+  }
+}
 
 export const createHightideColorSchemes = (colors: HightideThemeColorTokens): HightideColorSchemes => {
   const { disabled, onDisabled, transparent } = colors
 
   return {
-    primary: schemeFor(colors.primary, disabled, onDisabled, transparent),
-    secondary: schemeFor(colors.secondary, disabled, onDisabled, transparent),
-    positive: schemeFor(colors.positive, disabled, onDisabled, transparent),
-    warning: schemeFor(colors.warning, disabled, onDisabled, transparent),
-    negative: schemeFor(colors.negative, disabled, onDisabled, transparent),
-    neutral: schemeFor(colors.neutral, disabled, onDisabled, transparent),
+    primary: schemeFor(colors.primary, transparent),
+    secondary: schemeFor(colors.secondary, transparent),
+    positive: schemeFor(colors.positive, transparent),
+    warning: schemeFor(colors.warning, transparent),
+    negative: schemeFor(colors.negative, transparent),
+    neutral: schemeFor(colors.neutral, transparent),
+    disabled: disabledScheme(disabled, onDisabled, transparent),
   }
 }

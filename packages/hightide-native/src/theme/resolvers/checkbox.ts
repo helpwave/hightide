@@ -38,11 +38,11 @@ export const createCheckboxTheme = ({
       ? colors.disabled
       : state.isInvalid
         ? negative
-        : (isActive ? primary.background : colors.border)
+        : (isActive ? primary.color : colors.border)
 
     const backgroundColor = state.isDisabled
       ? colors.disabled
-      : (isActive ? primary.background : checkboxTokens.background)
+      : (isActive ? primary.color : checkboxTokens.background)
 
     const checkbox: ViewStyle = {
       width: dimension,

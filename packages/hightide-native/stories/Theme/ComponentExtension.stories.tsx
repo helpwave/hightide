@@ -52,8 +52,8 @@ const createCalloutTheme = (theme: HightideTheme): CalloutTheme => {
   const resolveState = (state: CalloutState) => {
     const tone = state.tone ?? 'info'
     const backgroundColor = tone === 'warning'
-      ? theme.colorSchemes.warning.tonal.base.background
-      : theme.colorSchemes.primary.tonal.base.background
+      ? theme.colorSchemes.warning.tonal.base.color
+      : theme.colorSchemes.primary.tonal.base.color
     const color = tone === 'warning'
       ? theme.colorSchemes.warning.tonal.base.foreground
       : theme.colorSchemes.primary.tonal.base.foreground

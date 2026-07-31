@@ -5,9 +5,8 @@ import type {
 
 import type { HightideComponentTokens } from '@helpwave/hightide-design/component-tokens'
 import type { HightideDesignSystemTokens as DesignTokensTheme } from '@helpwave/hightide-design/design-system'
-import type { HightideColorSchemes } from '@helpwave/hightide-design/semantic-tokens'
 
-import { resolveColoringStyles } from './colorScheme'
+import { isOutlineColoringStyle } from './colorScheme'
 import type {
   ChipState,
   ChipTheme
@@ -15,7 +14,7 @@ import type {
 import { createStyleResolver } from '../types/resolver'
 
 export type CreateChipThemeOptions = {
-  colorSchemes: HightideColorSchemes,
+  colorSchemes: HightideComponentTokens['chip']['colorSchemes'],
   layout: HightideComponentTokens['chip']['layout'],
   fontWeight: number,
   borderWidth: number,
@@ -31,33 +30,30 @@ export const createChipTheme = ({
     const size = state.size ?? 'md'
     const color = state.color ?? 'neutral'
     const coloringStyle = state.coloringStyle ?? 'filled'
-    const resolved = resolveColoringStyles(
-      colorSchemes,
-      color,
-      coloringStyle,
-      borderWidth,
-      state
-    )
+    const colorState = colorSchemes[coloringStyle][color]
     const element = layout[size]
+    const outlinePadding = isOutlineColoringStyle(coloringStyle)
+    const outlineInset = Math.max(element.inset - borderWidth, 0)
 
     const chip: ViewStyle = {
       flexDirection: 'row',
       alignItems: 'center',
       justifyContent: 'center',
       alignSelf: 'flex-start',
-      backgroundColor: resolved.backgroundColor,
-      borderColor: resolved.borderColor,
-      borderWidth: resolved.borderWidth,
-      paddingVertical: element.inset,
-      paddingHorizontal: element.horizontalInset,
+      backgroundColor: colorState.color,
+      borderColor: colorState.border,
+      borderWidth,
+      paddingVertical: outlinePadding ? outlineInset : element.inset,
+      paddingHorizontal: outlinePadding
+        ? Math.max(element.horizontalInset - borderWidth, 0)
+        : element.horizontalInset,
       gap: element.gap,
       minHeight: element.size,
       borderRadius: element.radius,
-      opacity: state.isDisabled ? 0.6 : 1,
     }
 
     const text: TextStyle = {
-      color: resolved.color,
+      color: colorState.foreground,
       fontSize: element.fontSize,
       fontWeight: fontWeight as TextStyle['fontWeight'],
     }
@@ -73,7 +69,7 @@ export const createChipTheme = ({
 
 export const createChipThemeFromDesign = (theme: DesignTokensTheme): ChipTheme => {
   return createChipTheme({
-    colorSchemes: theme.colorSchemes,
+    colorSchemes: theme.components.chip.colorSchemes,
     layout: theme.components.chip.layout,
     fontWeight: theme.typography.fontWeights.semibold,
     borderWidth: theme.border.normal,

@@ -12,9 +12,9 @@ import {
 
 import type { ComponentSize } from '@helpwave/hightide-design/theme-tokens'
 import {
-  coloringTypes,
+  colorSchemeTypes,
   type ColoringType,
-  type ButtonColoringStyle
+  type PressableColoringStyle
 } from '@helpwave/hightide-design/semantic-tokens'
 
 import { useTheme } from '../../global-contexts/theme/ThemeContext'
@@ -30,15 +30,15 @@ export type ButtonSize = ComponentSize
 export type ButtonColor = ColoringType
 
 export const ButtonUtil = {
-  colors: coloringTypes,
-  sizes: ['xs', 'sm', 'md', 'lg'] as const satisfies readonly ComponentSize[],
-  coloringStyles: ['outline', 'filled', 'text', 'tonal', 'tonal-outline'] as const satisfies readonly ButtonColoringStyle[],
+  colors: colorSchemeTypes,
+  sizes: ['xs', 'sm', 'md', 'lg', 'xl'] as const satisfies readonly ComponentSize[],
+  coloringStyles: ['outline', 'filled', 'text', 'tonal', 'tonal-outline'] as const satisfies readonly PressableColoringStyle[],
 }
 
 export type ButtonProps = Omit<PressableProps, 'children' | 'style'> & {
   size?: ButtonSize,
   color?: ButtonColor,
-  coloringStyle?: ButtonColoringStyle,
+  coloringStyle?: PressableColoringStyle,
   children?: ReactNode,
   style?: StyleProp<ViewStyle>,
   buttonStyle?: StyleOverwrite<ButtonState, ButtonStyle>,

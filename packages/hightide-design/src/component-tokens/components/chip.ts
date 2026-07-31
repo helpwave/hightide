@@ -1,6 +1,14 @@
+import type {
+  ContainerColoringStyle,
+  ColorStateFull,
+  ColoringType,
+  HightideColorSchemes
+} from '../../semantic-tokens/colorScheme'
+import { colorSchemeTypes } from '../../semantic-tokens/colorScheme'
 import type { HightideSemanticTokens } from '../../semantic-tokens/semanticTokens'
 import type { ComponentSize } from '../../theme-tokens/layout'
 import { componentSizes } from '../../theme-tokens/layout'
+import { toColorStateFull } from './pressable'
 
 export type ChipLayoutToken = {
   size: number,
@@ -13,8 +21,11 @@ export type ChipLayoutToken = {
   fontSize: number,
 }
 
+export type ChipColorScheme = Record<ColoringType, ColorStateFull>
+
 export type HightideChipTokens = {
   layout: Record<ComponentSize, ChipLayoutToken>,
+  colorSchemes: Record<ContainerColoringStyle, ChipColorScheme>,
 }
 
 const chipRadiusKeyFor = (size: ComponentSize): 'xs' | 'sm' | 'md' => {
@@ -22,6 +33,31 @@ const chipRadiusKeyFor = (size: ComponentSize): 'xs' | 'sm' | 'md' => {
     return 'md'
   }
   return size
+}
+
+const chipColoringStyles = [
+  'filled',
+  'outline',
+  'tonal',
+  'tonal-outline',
+] as const satisfies readonly ContainerColoringStyle[]
+
+const toChipColorSchemes = (
+  colorSchemes: HightideColorSchemes
+): Record<ContainerColoringStyle, ChipColorScheme> => {
+  const transparent = colorSchemes.primary.text.base.color
+
+  return Object.fromEntries(
+    chipColoringStyles.map((style) => [
+      style,
+      Object.fromEntries(
+        colorSchemeTypes.map((type) => [
+          type,
+          toColorStateFull(colorSchemes[type][style].base, style, transparent),
+        ])
+      ) as ChipColorScheme,
+    ])
+  ) as Record<ContainerColoringStyle, ChipColorScheme>
 }
 
 export const toChipTokens = (
@@ -50,5 +86,8 @@ export const toChipTokens = (
     })
   ) as Record<ComponentSize, ChipLayoutToken>
 
-  return { layout }
+  return {
+    layout,
+    colorSchemes: toChipColorSchemes(semanticTokens.colorSchemes),
+  }
 }

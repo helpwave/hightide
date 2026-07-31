@@ -1,6 +1,12 @@
 import type { HightideSemanticTokens } from '../../semantic-tokens/semanticTokens'
 import type { ComponentSize } from '../../theme-tokens/layout'
 import { componentSizes } from '../../theme-tokens/layout'
+import type {
+  PressableColorSchemes,
+  PressableState,
+  PressableStateBasedProperty
+} from './pressable'
+import { toPressableColorSchemes } from './pressable'
 
 export type ButtonLayoutToken = {
   size: number,
@@ -13,8 +19,15 @@ export type ButtonLayoutToken = {
   fontSize: number,
 }
 
+export type ButtonState = PressableState
+
+export type ButtonStateBasedProperty<P> = PressableStateBasedProperty<P>
+
+export type ButtonColorSchemes = PressableColorSchemes
+
 export type HightideButtonTokens = {
   layout: Record<ComponentSize, ButtonLayoutToken>,
+  colorSchemes: ButtonColorSchemes,
 }
 
 const buttonFontSizes: Record<ComponentSize, number> = {
@@ -48,5 +61,8 @@ export const toButtonTokens = (
     })
   ) as Record<ComponentSize, ButtonLayoutToken>
 
-  return { layout }
+  return {
+    layout,
+    colorSchemes: toPressableColorSchemes(semanticTokens.colorSchemes),
+  }
 }

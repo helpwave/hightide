@@ -1,20 +1,33 @@
-export type ElementState = 'focused' | 'hover' | 'pressed' | 'disabled'
+export type StateBasedPropertyOverride<S extends string, P> = {
+  condition: S[],
+  value: Partial<P>,
+}
 
-export type StateBasedProperty<P> = {
+export type StateBasedProperty<S extends string, P> = {
   base: P,
-} & Record<ElementState, Partial<P> | undefined>
+  overrides?: StateBasedPropertyOverride<S, P>[],
+}
 
-const elementStateOrder: ElementState[] = ['focused', 'hover', 'pressed', 'disabled']
+export const matchesStateConditions = <S extends string>(
+  active: ReadonlySet<S>,
+  condition: readonly S[]
+): boolean => {
+  if (condition.length === 0) {
+    return true
+  }
 
-export const resolveStateBasedProperty = <P extends object>(
-  property: StateBasedProperty<P>,
-  states: ReadonlySet<ElementState>
+  return condition.every((state) => active.has(state))
+}
+
+export const resolveStateBasedProperty = <S extends string, P extends object>(
+  property: StateBasedProperty<S, P>,
+  activeStates: ReadonlySet<S>
 ): P => {
   let result: P = { ...property.base }
 
-  for (const key of elementStateOrder) {
-    if (states.has(key) && property[key]) {
-      result = { ...result, ...property[key] }
+  for (const override of property.overrides ?? []) {
+    if (matchesStateConditions(activeStates, override.condition)) {
+      result = { ...result, ...override.value }
     }
   }
 

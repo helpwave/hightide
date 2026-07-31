@@ -1,12 +1,10 @@
-import {
-  resolveStateBasedProperty,
-  type ElementState
-} from '@helpwave/hightide-design/theme-tokens'
+import { resolveStateBasedProperty } from '@helpwave/hightide-design/theme-tokens'
+import type { StateBasedProperty } from '@helpwave/hightide-design/theme-tokens'
 import type {
-  ButtonColoringStyle,
-  ChipColoringStyle,
+  ContainerColoringStyle,
+  PressableColoringStyle,
   ColorState,
-  HightideColorSchemes,
+  ColorStateFull,
   ColoringStyle,
   ColoringType
 } from '@helpwave/hightide-design/semantic-tokens'
@@ -21,16 +19,23 @@ export type ResolvedColoringStyles = {
   borderWidth: number,
 }
 
-const interactionStatesToElementStates = (
+export type InteractiveColorState = 'disabled' | 'focused' | 'hovered' | 'pressed'
+
+export type InteractiveColorSchemes = Record<
+  ColoringType,
+  Record<string, StateBasedProperty<InteractiveColorState, ColorState | ColorStateFull>>
+>
+
+export const interactionStatesToInteractiveStates = (
   state: InteractionState
-): ReadonlySet<ElementState> => {
-  const states = new Set<ElementState>()
+): ReadonlySet<InteractiveColorState> => {
+  const states = new Set<InteractiveColorState>()
 
   if (state.isFocused) {
     states.add('focused')
   }
   if (state.isHovered) {
-    states.add('hover')
+    states.add('hovered')
   }
   if (state.isPressed) {
     states.add('pressed')
@@ -43,28 +48,33 @@ const interactionStatesToElementStates = (
 }
 
 export const resolveColoringStyles = (
-  colorSchemes: HightideColorSchemes,
+  colorSchemes: InteractiveColorSchemes,
   color: ColoringType,
   coloringStyle: ColoringStyle,
   borderWidth: number,
   state: InteractionState = {}
 ): ResolvedColoringStyles => {
   const pack = colorSchemes[color][coloringStyle]
-  const resolved: ColorState = resolveStateBasedProperty(
+  const resolved = resolveStateBasedProperty(
     pack,
-    interactionStatesToElementStates(state)
+    interactionStatesToInteractiveStates(state)
   )
+  const border = 'border' in resolved ? resolved.border : undefined
 
   return {
-    backgroundColor: resolved.background,
+    backgroundColor: border !== undefined
+      ? resolved.color
+      : (coloringStyle === 'outline' || coloringStyle === 'text')
+        ? 'transparent'
+        : resolved.color,
     color: resolved.foreground,
-    borderColor: resolved.border,
+    borderColor: border ?? resolved.color,
     borderWidth,
   }
 }
 
 export const isOutlineColoringStyle = (
-  coloringStyle: ButtonColoringStyle | ChipColoringStyle
+  coloringStyle: PressableColoringStyle | ContainerColoringStyle
 ): boolean => {
   return coloringStyle === 'outline' || coloringStyle === 'tonal-outline'
 }

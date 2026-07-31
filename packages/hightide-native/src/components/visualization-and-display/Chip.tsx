@@ -12,7 +12,7 @@ import {
 
 import type { ComponentSize } from '@helpwave/hightide-design/theme-tokens'
 import {
-  coloringTypes,
+  colorSchemeTypes,
   type ColoringType,
   type ChipColoringStyle
 } from '@helpwave/hightide-design/semantic-tokens'
@@ -30,8 +30,8 @@ export type ChipSize = ComponentSize
 export type ChipColor = ColoringType
 
 export const ChipUtil = {
-  colors: coloringTypes,
-  sizes: ['xs', 'sm', 'md', 'lg'] as const satisfies readonly ComponentSize[],
+  colors: colorSchemeTypes,
+  sizes: ['xs', 'sm', 'md', 'lg', 'xl'] as const satisfies readonly ComponentSize[],
   coloringStyles: ['filled', 'tonal', 'outline', 'tonal-outline'] as const satisfies readonly ChipColoringStyle[],
 }
 

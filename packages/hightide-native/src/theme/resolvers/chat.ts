@@ -49,7 +49,7 @@ export const createChatTheme = ({
           ? colors.surfaceHover
           : colors.transparent,
       borderLeftWidth: state.isSelected ? 4 : 0,
-      borderLeftColor: state.isSelected ? colorSchemes.primary.filled.base.background : colors.transparent,
+      borderLeftColor: state.isSelected ? colorSchemes.primary.filled.base.color : colors.transparent,
       borderRadius: 6,
     }
   }
@@ -80,7 +80,7 @@ export const createChatTheme = ({
         height: 20,
         paddingHorizontal: 6,
         borderRadius: 999,
-        backgroundColor: colorSchemes.primary.filled.base.background,
+        backgroundColor: colorSchemes.primary.filled.base.color,
         alignItems: 'center',
         justifyContent: 'center',
       })),
@@ -155,8 +155,8 @@ export const createChatTheme = ({
           paddingHorizontal: 15,
           paddingVertical: 11,
           backgroundColor: outgoing
-            ? colorSchemes.primary.filled.base.background
-            : colorSchemes.neutral.filled.base.background,
+            ? colorSchemes.primary.filled.base.color
+            : colorSchemes.neutral.filled.base.color,
           borderTopLeftRadius: radius,
           borderTopRightRadius: radius,
           borderBottomLeftRadius: outgoing ? radius : corner,
@@ -233,7 +233,7 @@ export const createChatTheme = ({
           borderRadius: 6,
           alignItems: 'center',
           justifyContent: 'center',
-          backgroundColor: tonal.background,
+          backgroundColor: tonal.color,
         }
       }),
       iconColor: createValueResolver<ChatMessageCardState, { color: Color }>((state) => {
@@ -296,7 +296,7 @@ export const createChatTheme = ({
         borderRadius: 6,
         alignItems: 'center',
         justifyContent: 'center',
-        backgroundColor: HexColorUtils.hexWithAlpha(colorSchemes.negative.filled.base.background, 0.2),
+        backgroundColor: HexColorUtils.hexWithAlpha(colorSchemes.negative.filled.base.color, 0.2),
       })),
       iconColor: createValueResolver<Record<string, never>, { color: Color }>(() => ({
         color: colorSchemes.negative.text.base.foreground,
@@ -363,7 +363,7 @@ export const createChatTheme = ({
           paddingVertical: 6,
           borderRadius: 999,
           borderWidth: 1,
-          borderColor: state.isActive ? colorSchemes.primary.filled.base.background : colors.divider,
+          borderColor: state.isActive ? colorSchemes.primary.filled.base.color : colors.divider,
           backgroundColor: pressed ? colors.surfaceHover : colors.surface,
         }
       }),

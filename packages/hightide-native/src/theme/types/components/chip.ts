@@ -9,12 +9,9 @@ import type {
   ChipColoringStyle
 } from '@helpwave/hightide-design/semantic-tokens'
 
-import type {
-  InteractionState,
-  StyleResolverFunction
-} from '../resolver'
+import type { StyleResolverFunction } from '../resolver'
 
-export type ChipState = InteractionState & {
+export type ChipState = {
   size?: ComponentSize,
   color?: ColoringType,
   coloringStyle?: ChipColoringStyle,

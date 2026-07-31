@@ -9,6 +9,6 @@ export type HightideProgressIndicatorTokens = {
 export const toProgressIndicatorTokens = (
   semanticTokens: HightideSemanticTokens
 ): HightideProgressIndicatorTokens => ({
-  fill: semanticTokens.colorSchemes.primary.filled.base.background,
+  fill: semanticTokens.colorSchemes.primary.filled.base.color,
   background: semanticTokens.colors.subtle,
 })

@@ -90,7 +90,7 @@ const PrimarySwatch = () => {
     <View style={{ gap: 8 }}>
       <View
         style={{
-          backgroundColor: theme.colorSchemes.primary.filled.base.background,
+          backgroundColor: theme.colorSchemes.primary.filled.base.color,
           borderRadius: 8,
           padding: 12,
         }}
@@ -100,7 +100,7 @@ const PrimarySwatch = () => {
         </Text>
       </View>
       <Text style={{ color: theme.colors.onBackground }}>
-        {`primary: ${theme.colorSchemes.primary.filled.base.background}`}
+        {`primary: ${theme.colorSchemes.primary.filled.base.color}`}
       </Text>
     </View>
   )

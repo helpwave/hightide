@@ -12,6 +12,7 @@ import {
   createStyleResolver,
   createValueResolver
 } from '../types/resolver'
+import type { TextStyle, ViewStyle } from 'react-native'
 
 export type CreateMultiSelectThemeOptions = {
   colors: HightideSemanticColorTokens,
@@ -29,7 +30,7 @@ export const createMultiSelectTheme = ({
   const primary = colorSchemes.primary.filled.base
 
   return {
-    trigger: createStyleResolver((state: MultiSelectState) => ({
+    trigger: createStyleResolver<MultiSelectState, ViewStyle>((state: MultiSelectState) => ({
       minHeight: 44,
       paddingHorizontal: 12,
       paddingVertical: 8,
@@ -43,16 +44,16 @@ export const createMultiSelectTheme = ({
       gap: 8,
       opacity: state.isDisabled ? 0.6 : 1,
     })),
-    triggerText: createStyleResolver(() => ({
+    triggerText: createStyleResolver<MultiSelectState, TextStyle>(() => ({
       color: colors.placeholder,
     })),
-    overlay: createStyleResolver(() => ({
+    overlay: createStyleResolver<MultiSelectState, ViewStyle>(() => ({
       flex: 1,
       backgroundColor: '#00000059',
       justifyContent: 'center',
       padding: 24,
     })),
-    menu: createStyleResolver(() => ({
+    menu: createStyleResolver<MultiSelectState, ViewStyle>(() => ({
       maxHeight: 360,
       borderRadius: 12,
       backgroundColor: menu.background,
@@ -60,7 +61,7 @@ export const createMultiSelectTheme = ({
       borderColor: menu.border,
       overflow: 'hidden',
     })),
-    search: createStyleResolver(() => ({
+    search: createStyleResolver<MultiSelectState, ViewStyle>(() => ({
       paddingHorizontal: 16,
       paddingVertical: 12,
       borderBottomWidth: 1,
@@ -68,7 +69,7 @@ export const createMultiSelectTheme = ({
       color: menu.text,
     })),
     searchPlaceholderColor: createValueResolver(() => colors.placeholder),
-    option: createStyleResolver((state: MultiSelectOptionState) => ({
+    option: createStyleResolver<MultiSelectOptionState, ViewStyle>((state: MultiSelectOptionState) => ({
       paddingHorizontal: 16,
       paddingVertical: 12,
       backgroundColor: state.isHighlighted ? colors.surfaceHover : colors.transparent,
@@ -77,17 +78,17 @@ export const createMultiSelectTheme = ({
       alignItems: 'center',
       gap: 10,
     })),
-    optionText: createStyleResolver((state: MultiSelectOptionState) => ({
+    optionText: createStyleResolver<MultiSelectOptionState, TextStyle>((state: MultiSelectOptionState) => ({
       color: state.isSelected ? colorSchemes.primary.text.base.foreground : menu.text,
       fontWeight: state.isSelected ? hightideTypography.fontWeight.semibold : hightideTypography.fontWeight.base,
     })),
-    checkbox: createStyleResolver((state: MultiSelectOptionState) => ({
+    checkbox: createStyleResolver<MultiSelectOptionState, ViewStyle>((state: MultiSelectOptionState) => ({
       width: 18,
       height: 18,
       borderRadius: 4,
       borderWidth: 1,
-      borderColor: state.isSelected ? primary.background : colors.border,
-      backgroundColor: state.isSelected ? primary.background : colors.transparent,
+      borderColor: state.isSelected ? primary.color : colors.border,
+      backgroundColor: state.isSelected ? primary.color : colors.transparent,
       alignItems: 'center',
       justifyContent: 'center',
     })),

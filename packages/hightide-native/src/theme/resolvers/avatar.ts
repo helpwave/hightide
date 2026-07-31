@@ -13,8 +13,6 @@ import type {
 } from '@helpwave/hightide-design/semantic-tokens'
 import type { HightideDesignSystemTokens as DesignTokensTheme } from '@helpwave/hightide-design/design-system'
 
-import { resolveColoringStyles } from './colorScheme'
-
 import type {
   AvatarGroupState,
   AvatarIconStyle,
@@ -41,11 +39,11 @@ const statusColor = (
 ): string => {
   switch (status) {
   case 'online':
-    return colorSchemes.positive.filled.base.background
+    return colorSchemes.positive.filled.base.color
   case 'busy':
-    return colorSchemes.negative.filled.base.background
+    return colorSchemes.negative.filled.base.color
   case 'away':
-    return colorSchemes.warning.filled.base.background
+    return colorSchemes.warning.filled.base.color
   case 'offline':
   case 'unknown':
   default:
@@ -75,12 +73,7 @@ export const createAvatarTheme = ({
   const resolveAvatar = (state: AvatarState) => {
     const size = state.size ?? 'md'
     const dimension = avatar[size].size
-    const resolved = resolveColoringStyles(
-      colorSchemes,
-      'primary',
-      'filled',
-      0
-    )
+    const primaryFilled = colorSchemes.primary.filled.base
     const borderRadius = dimension / 2
     const raisedShadow = shadow.raised
 
@@ -93,7 +86,7 @@ export const createAvatarTheme = ({
       height: dimension,
       padding: avatar[size].padding,
       borderRadius,
-      backgroundColor: resolved.backgroundColor,
+      backgroundColor: primaryFilled.color,
       overflow: 'hidden',
       ...(state.isGrouped ? {
         left: (state.groupIndex ?? 0) * dimension * avatarGroup.overlap,
@@ -116,7 +109,7 @@ export const createAvatarTheme = ({
     }
 
     const text: TextStyle = {
-      color: resolved.color,
+      color: primaryFilled.foreground,
       fontSize: avatar[size].fontSize,
       fontWeight: typography.fontWeights[avatarFontWeights[size]] as TextStyle['fontWeight'],
       textAlign: 'center',
@@ -125,7 +118,7 @@ export const createAvatarTheme = ({
     const iconStyle: AvatarIconStyle = {
       size: icon[size].size,
       strokeWidth: icon[size].strokeWidth,
-      color: resolved.color,
+      color: primaryFilled.foreground,
     }
 
     return {

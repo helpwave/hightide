@@ -3,7 +3,7 @@ import type { ViewStyle } from 'react-native'
 import type { ComponentSize } from '@helpwave/hightide-design/theme-tokens'
 import type {
   ColoringType,
-  ButtonColoringStyle
+  PressableColoringStyle
 } from '@helpwave/hightide-design/semantic-tokens'
 
 import type { Color } from '../color'
@@ -15,7 +15,7 @@ import type {
 export type IconButtonState = InteractionState & {
   size?: ComponentSize,
   color?: ColoringType,
-  coloringStyle?: ButtonColoringStyle,
+  coloringStyle?: PressableColoringStyle,
 }
 
 export type IconButtonStyle = ViewStyle
