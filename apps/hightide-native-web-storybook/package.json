@@ -1,0 +1,57 @@
+{
+  "name": "@helpwave/hightide-native-web-storybook",
+  "description": "Web Storybook host for hightide-native (react-native-web)",
+  "author": "helpwave <support@helpwave.de> (https://helpwave.de)",
+  "homepage": "https://helpwave.de",
+  "repository": {
+    "url": "git+https://github.com/helpwave/hightide.git"
+  },
+  "private": true,
+  "license": "AGPL-3.0-only",
+  "version": "0.0.0",
+  "type": "module",
+  "scripts": {
+    "clean": "rm -rf node_modules storybook-static",
+    "init": "node -e \"process.exit(0)\"",
+    "build": "node -e \"process.exit(0)\"",
+    "storybook": "storybook dev -p 6007",
+    "build-storybook": "storybook build",
+    "lint": "eslint .",
+    "test": "node -e \"process.exit(0)\""
+  },
+  "dependencies": {
+    "@helpwave/hightide-design": "workspace:*",
+    "@helpwave/hightide-native": "workspace:*",
+    "@helpwave/hightide-utils": "workspace:*",
+    "@react-native-async-storage/async-storage": "2.2.0",
+    "lucide-react-native": "0.561.0",
+    "react": "19.2.3",
+    "react-dom": "19.2.3",
+    "react-native": "0.79.2",
+    "react-native-svg": "15.12.0",
+    "react-native-web": "0.20.0"
+  },
+  "devDependencies": {
+    "@helpwave/eslint-config": "0.0.11",
+    "@storybook/addon-docs": "10.4.5",
+    "@storybook/addon-links": "10.4.5",
+    "@storybook/react": "10.4.5",
+    "@storybook/react-native-web-vite": "10.4.5",
+    "@types/react": "19.2.3",
+    "@types/react-dom": "19.2.3",
+    "eslint": "9.31.0",
+    "eslint-plugin-import": "2.32.0",
+    "eslint-plugin-storybook": "10.4.5",
+    "storybook": "10.4.5",
+    "typescript": "5.7.2",
+    "vite": "7.3.5"
+  },
+  "keywords": [
+    "react-native",
+    "storybook",
+    "react-native-web"
+  ],
+  "bugs": {
+    "url": "https://github.com/helpwave/hightide/issues"
+  }
+}

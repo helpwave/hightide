@@ -1,0 +1,56 @@
+import {
+  Text,
+  View
+} from 'react-native'
+import type {
+  Meta,
+  StoryObj
+} from '@storybook/react'
+import { CalendarDays } from 'lucide-react-native'
+
+import { ChatMessageCard, Button } from '@helpwave/hightide-native/components'
+import { useTheme } from '@helpwave/hightide-native/global-contexts'
+
+const meta = {
+  component: ChatMessageCard,
+} satisfies Meta<typeof ChatMessageCard>
+
+export default meta
+type Story = StoryObj<typeof meta>
+
+const CardStory = () => {
+  const { theme } = useTheme()
+
+  return (
+    <ChatMessageCard
+      direction="incoming"
+      title="Terminbestätigung"
+      subtitle="Hausarztpraxis"
+      icon={<CalendarDays size={18} color={theme.colorSchemes.primary.text.base.foreground} />}
+      actions={(
+        <View style={{ flexDirection: 'row', gap: 10, flex: 1 }}>
+          <Button size="sm" coloringStyle="tonal" style={{ flex: 1 }}>Ablehnen</Button>
+          <Button size="sm" style={{ flex: 1 }}>Annehmen</Button>
+        </View>
+      )}
+    >
+      <Text style={{ color: theme.colors.onSurface, fontSize: 14, fontWeight: '500' }}>
+        Mittwoch, 15:30 Uhr
+      </Text>
+      <Text style={{ color: theme.colors.description, fontSize: 12 }}>
+        Praxis am Park, Zimmer 2
+      </Text>
+    </ChatMessageCard>
+  )
+}
+
+export const chatMessageCard: Story = {
+  args: {
+    title: 'Terminbestätigung',
+  },
+  render: () => (
+    <View style={{ padding: 16 }}>
+      <CardStory />
+    </View>
+  ),
+}
