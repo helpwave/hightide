@@ -62,7 +62,7 @@ export const toAvatarTokens = (
     avatarSizes.map((size) => {
       const layout = insideControl[size]
       const dimension = layout.size
-      const label = semanticTokens.typography.label[size]
+      const label = semanticTokens.typography.label['sm']
       const statusDotSize = Math.round(dimension / 10 * 4)
 
       return [size, {
