@@ -3,7 +3,7 @@ import type {
   ViewStyle
 } from 'react-native'
 
-import type { ColoringType } from '@helpwave/hightide-design/semantic-tokens'
+import type { ColoringType } from '@helpwave/hightide-design/theme-tokens'
 
 import type { Color } from '../color'
 import type {

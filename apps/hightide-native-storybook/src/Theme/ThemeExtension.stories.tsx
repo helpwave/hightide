@@ -8,20 +8,13 @@ import {
   type ColorToken,
   type HightideColorPalettes
 } from '@helpwave/hightide-design/primitive-tokens'
-import { toHightideSemanticTokens } from '@helpwave/hightide-design/semantic-tokens'
-import { toHightideComponentTokens } from '@helpwave/hightide-design/component-tokens'
-import { type HightideDesignSystemTokens } from '@helpwave/hightide-design/design-system'
-import {
-  hightideLightThemeTokens,
-  type HightideThemeTokens
-} from '@helpwave/hightide-design/theme-tokens'
-import { HexColorUtils } from '@helpwave/hightide-design/utils'
+import { createLightThemeTokens } from '@helpwave/hightide-design/theme-tokens'
 
 import { Button, Chip } from '@helpwave/hightide-native/components'
 import {
   HightideConfigUtils,
   useTheme,
-  ThemeProvider,
+  ThemeProvider
 } from '@helpwave/hightide-native/global-contexts'
 import { createHightideTheme } from '@helpwave/hightide-native/theme'
 import {
@@ -29,38 +22,25 @@ import {
   ThemeStoryFrame
 } from './themeStoryHelpers'
 
-const oceanThemeTokens = ((): HightideThemeTokens => {
-  const { blue, white } = hightidePrimitiveTokens.color.palettes as HightideColorPalettes
-  return {
-    ...hightideLightThemeTokens,
-    colors: {
-      ...hightideLightThemeTokens.colors,
-      background: blue.value[100] as ColorToken,
-      onBackground: blue.value[900] as ColorToken,
-      surface: blue.value[50] as ColorToken,
-      onSurface: blue.value[900] as ColorToken,
-      surfaceHover: blue.value[100] as ColorToken,
-      surfaceVariant: blue.value[200] as ColorToken,
-      primary: {
-        color: blue.value[500] as ColorToken,
-        onColor: white.value as ColorToken,
-        emphasis: blue.value[600] as ColorToken,
-        tint: HexColorUtils.hexWithAlpha(blue.value[500] as ColorToken, 0.2),
-        tintEmphasis: HexColorUtils.hexWithAlpha(blue.value[500] as ColorToken, 0.28),
-      },
+const { blue, white } = hightidePrimitiveTokens.color.palettes as HightideColorPalettes
+const whiteColor = white.value as ColorToken
+
+const oceanTheme = createHightideTheme(createLightThemeTokens({
+  colors: {
+    primary: {
+      color: blue.value[500] as ColorToken,
+      onColor: whiteColor,
     },
-  }
-})()
-
-const oceanSemanticTokens = toHightideSemanticTokens({ themeTokens: oceanThemeTokens })
-
-const oceanDesignTokens = {
-  theme: oceanThemeTokens,
-  ...oceanSemanticTokens,
-  components: toHightideComponentTokens({ semanticTokens: oceanSemanticTokens }),
-} satisfies HightideDesignSystemTokens
-
-const oceanTheme = createHightideTheme(oceanDesignTokens)
+    background: {
+      color: blue.value[100] as ColorToken,
+      onColor: blue.value[900] as ColorToken,
+    },
+    surface: {
+      color: blue.value[50] as ColorToken,
+      onColor: blue.value[900] as ColorToken,
+    },
+  },
+}))
 
 const oceanSupportedThemes = {
   ...HightideConfigUtils.defaultSupportedThemes,

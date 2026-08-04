@@ -1,13 +1,10 @@
-import type {
-  TextStyle,
-  ViewStyle
-} from 'react-native'
+import type { ViewStyle, TextStyle } from 'react-native'
 
-import type { ComponentSize } from '@helpwave/hightide-design/component-tokens'
+import type { ComponentSize } from '@helpwave/hightide-design/theme-tokens'
 import type {
   ColoringType,
   PressableColoringStyle
-} from '@helpwave/hightide-design/semantic-tokens'
+} from '@helpwave/hightide-design/theme-tokens'
 
 import type {
   InteractionState,
@@ -25,6 +22,6 @@ export type ButtonStyle = ViewStyle
 export type ButtonTextStyle = TextStyle
 
 export type ButtonTheme = {
-  button: StyleResolverFunction<ButtonState, ButtonStyle>,
+  container: StyleResolverFunction<ButtonState, ButtonStyle>,
   text: StyleResolverFunction<ButtonState, ButtonTextStyle>,
 }

@@ -3,11 +3,11 @@ import type {
   ViewStyle
 } from 'react-native'
 
-import type { ComponentSize } from '@helpwave/hightide-design/component-tokens'
 import type {
+  ChipColoringStyle,
   ColoringType,
-  ChipColoringStyle
-} from '@helpwave/hightide-design/semantic-tokens'
+  ComponentSize
+} from '@helpwave/hightide-design/theme-tokens'
 
 import type { StyleResolverFunction } from '../resolver'
 

@@ -10,7 +10,7 @@ import {
   type ViewStyle
 } from 'react-native'
 
-import type { ColoringType } from '@helpwave/hightide-design/semantic-tokens'
+import type { ColoringType } from '@helpwave/hightide-design/theme-tokens'
 
 import { HightideIconRegistry } from '../../icons/HightideIconRegistry'
 import { Icon } from '../visualization-and-display/Icon'

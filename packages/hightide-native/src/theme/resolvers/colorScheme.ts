@@ -1,13 +1,13 @@
 import { resolveStateBasedProperty } from '@helpwave/hightide-design/theme-tokens'
-import type { StateBasedProperty } from '@helpwave/hightide-design/theme-tokens'
 import type {
-  ContainerColoringStyle,
-  PressableColoringStyle,
   ColorState,
   ColorStateFull,
   ColoringStyle,
-  ColoringType
-} from '@helpwave/hightide-design/semantic-tokens'
+  ColoringType,
+  ContainerColoringStyle,
+  PressableColoringStyle,
+  StateBasedProperty
+} from '@helpwave/hightide-design/theme-tokens'
 
 import type { Color } from '../types/color'
 import type { InteractionState } from '../types/resolver'
@@ -60,11 +60,7 @@ export const resolveColoringStyles = (
   const border = 'border' in resolved ? resolved.border : undefined
 
   return {
-    backgroundColor: border !== undefined
-      ? resolved.color
-      : (coloringStyle === 'outline' || coloringStyle === 'text')
-        ? 'transparent'
-        : resolved.color,
+    backgroundColor: resolved.color,
     color: resolved.foreground,
     borderColor: border ?? resolved.color,
   }

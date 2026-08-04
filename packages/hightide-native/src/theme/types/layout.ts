@@ -1,15 +1,24 @@
 import type {
-  HightideSemanticElementLayoutTokens,
-  HightideSemanticShadowTokens
-} from '@helpwave/hightide-design/semantic-tokens'
-import type {
-  HightideThemeBorderRadiusTokens,
-  HightideThemeBorderWidthTokens,
-  HightideThemeSpacingTokens
+  ElementLayoutTokens,
+  ThemeBordersTokens,
+  ThemeElevationTokens,
+  ThemeShapeTokens,
+  ThemeSpacingTokens
 } from '@helpwave/hightide-design/theme-tokens'
 
-export type HightideSpacing = HightideThemeSpacingTokens
-export type HightideElements = HightideSemanticElementLayoutTokens
-export type HightideBorderRadius = HightideThemeBorderRadiusTokens
-export type HightideBorder = HightideThemeBorderWidthTokens
-export type HightideShadow = HightideSemanticShadowTokens
+export type HightideSpacing = ThemeSpacingTokens
+
+export type HightideElements = ElementLayoutTokens
+
+export type HightideBorderRadius = ThemeShapeTokens['borderRadius']
+
+export type HightideBorder = ThemeBordersTokens['borderWidths']
+
+export type HightideShadowToken = ThemeElevationTokens[keyof ThemeElevationTokens]
+
+export type HightideShadow = {
+  raised: HightideShadowToken,
+  container: HightideShadowToken,
+  popover: HightideShadowToken,
+  dialog: HightideShadowToken,
+}

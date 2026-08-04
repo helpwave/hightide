@@ -1,4 +1,6 @@
-import type { HightideComponentTokens } from '@helpwave/hightide-design/component-tokens'
+import type { ComponentSize } from '@helpwave/hightide-design/theme-tokens'
+import type { IconThemeTokens } from '@helpwave/hightide-design/component-token-resolvers'
+
 import type { AvatarTheme } from './avatar'
 import type { ButtonTheme } from './button'
 import type { ChatTheme } from './chat'
@@ -10,6 +12,8 @@ import type { CardTheme } from './card'
 import type { MultiSelectTheme } from './multiSelect'
 import type { SelectTheme } from './select'
 import type { SwitchTheme } from './switch'
+
+export type IconTheme = Record<ComponentSize, IconThemeTokens>
 
 export type HightideComponentThemes = {
   button: ButtonTheme,
@@ -23,5 +27,5 @@ export type HightideComponentThemes = {
   chat: ChatTheme,
   card: CardTheme,
   avatar: AvatarTheme,
-  icon: HightideComponentTokens['icon'],
+  icon: IconTheme,
 }

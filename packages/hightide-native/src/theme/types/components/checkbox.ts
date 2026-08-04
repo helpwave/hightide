@@ -1,6 +1,6 @@
 import type { ViewStyle } from 'react-native'
 
-import type { ComponentSize } from '@helpwave/hightide-design/component-tokens'
+import type { ComponentSize } from '@helpwave/hightide-design/theme-tokens'
 
 import type { Color } from '../color'
 import type {

@@ -1,8 +1,8 @@
-import type { TextStyle } from 'react-native'
+import { hightideIconButtonTokenResolver } from '@helpwave/hightide-design/component-token-resolvers'
+import type { IconButtonState as IconButtonTokenState } from '@helpwave/hightide-design/component-token-resolvers'
+import type { ThemeTokens } from '@helpwave/hightide-design/theme-tokens'
 
-import type { HightideDesignSystemTokens } from '@helpwave/hightide-design/design-system'
-
-import { resolveColoringStyles } from './colorScheme'
+import { toTextStyle } from '../adapters/style-adapters'
 import type {
   IconButtonIconStyle,
   IconButtonState,
@@ -15,85 +15,37 @@ import {
   createValueResolver
 } from '../types/resolver'
 
-export const createIconButtonContainerTheme = (theme: HightideDesignSystemTokens) => {
-  const { colorSchemes } = theme
-  const layout = theme.components.iconButton.layout
+const toTokenState = (state: IconButtonState): IconButtonTokenState => ({
+  size: state.size,
+  color: state.color,
+  coloringStyle: state.coloringStyle,
+  isDisabled: state.isDisabled,
+  isHovered: state.isHovered,
+  isFocused: state.isFocused,
+  isPressed: state.isPressed,
+})
 
-  return createStyleResolver((state: IconButtonState): IconButtonStyle => {
-    const size = state.size ?? 'md'
-    const color = state.color ?? 'neutral'
-    const coloringStyle = state.coloringStyle ?? 'filled'
-    const resolved = resolveColoringStyles(
-      colorSchemes,
-      color,
-      coloringStyle,
-      state
-    )
-    const element = layout[size]
-    const dimension = element.size
+export const toIconButtonTheme = (themeTokens: ThemeTokens): IconButtonTheme => ({
+  button: createStyleResolver((state: IconButtonState): IconButtonStyle => {
+    const { container } = hightideIconButtonTokenResolver({
+      themeTokens,
+      state: toTokenState(state),
+    })
 
-    return {
-      alignItems: 'center',
-      justifyContent: 'center',
-      backgroundColor: resolved.backgroundColor,
-      borderColor: resolved.borderColor,
-      borderWidth: element.borderWidth,
-      width: dimension,
-      height: dimension,
-      borderRadius: element.borderRadius,
-      overflow: 'hidden',
-      opacity: state.isDisabled ? 0.6 : 1,
-    }
-  })
-}
+    return { ...container }
+  }),
+  icon: createValueResolver((state: IconButtonState): IconButtonIconStyle => {
+    const { icon } = hightideIconButtonTokenResolver({
+      themeTokens,
+      state: toTokenState(state),
+    })
 
-export const createIconButtonIconTheme = (theme: HightideDesignSystemTokens) => {
-  const { colorSchemes } = theme
-
-  return createValueResolver((state: IconButtonState): IconButtonIconStyle => {
-    const color = state.color ?? 'neutral'
-    const coloringStyle = state.coloringStyle ?? 'filled'
-    const resolved = resolveColoringStyles(
-      colorSchemes,
-      color,
-      coloringStyle,
-      state
-    )
-
-    return { color: resolved.color }
-  })
-}
-
-export const createIconButtonTextTheme = (theme: HightideDesignSystemTokens) => {
-  const { colorSchemes } = theme
-  const layout = theme.components.iconButton.layout
-
-  return createStyleResolver((state: IconButtonState): IconButtonTextStyle => {
-    const size = state.size ?? 'md'
-    const color = state.color ?? 'neutral'
-    const coloringStyle = state.coloringStyle ?? 'filled'
-    const resolved = resolveColoringStyles(
-      colorSchemes,
-      color,
-      coloringStyle,
-      state
-    )
-    const { textStyle } = layout[size]
-
-    return {
-      color: resolved.color,
-      fontSize: Number(textStyle.fontSize),
-      fontWeight: textStyle.fontWeight as TextStyle['fontWeight'],
-      fontFamily: textStyle.fontFamily,
-      lineHeight: typeof textStyle.lineHeight === 'number'
-        ? textStyle.lineHeight
-        : Number(textStyle.lineHeight),
-    }
-  })
-}
-
-export const createIconButtonTheme = (theme: HightideDesignSystemTokens): IconButtonTheme => ({
-  button: createIconButtonContainerTheme(theme),
-  icon: createIconButtonIconTheme(theme),
-  text: createIconButtonTextTheme(theme),
+    return { color: icon.color }
+  }),
+  text: createStyleResolver((state: IconButtonState): IconButtonTextStyle => (
+    toTextStyle(hightideIconButtonTokenResolver({
+      themeTokens,
+      state: toTokenState(state),
+    }).text)
+  )),
 })

@@ -3,7 +3,7 @@ import {
   type ViewProps
 } from 'react-native'
 
-import type { ComponentSize } from '@helpwave/hightide-design/component-tokens'
+import type { ComponentSize } from '@helpwave/hightide-design/theme-tokens'
 
 import type { IconComponent } from '../../icons/types'
 import { useContentTheme } from '../../global-contexts/content-theme/ContentThemeContext'

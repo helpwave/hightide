@@ -1,0 +1,77 @@
+import type { ColorToken } from '../primitive-tokens/color'
+import type { ShadowLayoutToken } from '../primitive-tokens/shadow'
+import type { TypographyStyleToken } from './typography-style-token'
+
+export type ThemeMode = 'light' | 'dark'
+
+export type ColorPairToken = {
+  color: ColorToken,
+  onColor: ColorToken,
+}
+
+export type TintConfig = {
+  light: number,
+  normal: number,
+  emphasis: number,
+  strong: number,
+}
+
+export type ThemeLayoutSize = 'xs' | 'sm' | 'md' | 'lg' | 'xl'
+export type ThemeSpacingSize = 'xxs' | 'xs' | 'sm' | 'md' | 'lg' | 'xl' | 'xxl'
+export type ThemeTypographySize = 'sm' | 'md' | 'lg'
+export type ThemeBorderWidthKey = 'thin' | 'normal' | 'thick'
+export type ThemeElevationLevel = 'level1' | 'level2' | 'level3' | 'level4' | 'level5'
+export type ThemeMotionDurationKey = 'fast' | 'normal' | 'slow'
+
+export type ThemeTokensTypographyConfig = {
+  fontFamilies?: {
+    default?: string,
+    accent?: string,
+    mono?: string,
+  },
+  fontWeights?: {
+    thin?: TypographyStyleToken['fontWeight'],
+    light?: TypographyStyleToken['fontWeight'],
+    base?: TypographyStyleToken['fontWeight'],
+    medium?: TypographyStyleToken['fontWeight'],
+    semibold?: TypographyStyleToken['fontWeight'],
+    bold?: TypographyStyleToken['fontWeight'],
+  },
+  display?: TypographyStyleToken,
+  heading?: Partial<Record<ThemeTypographySize, TypographyStyleToken>>,
+  body?: Partial<Record<ThemeTypographySize, TypographyStyleToken>>,
+  label?: Partial<Record<ThemeTypographySize, TypographyStyleToken>>,
+}
+
+export type ThemeTokensConfig = {
+  themeMode: ThemeMode,
+  colors: {
+    primary: ColorPairToken,
+    secondary?: ColorPairToken,
+    tertiary?: ColorPairToken,
+    negative?: ColorPairToken,
+    warning?: ColorPairToken,
+    positive?: ColorPairToken,
+    background?: ColorPairToken,
+    surface?: ColorPairToken,
+    subtle?: ColorToken,
+    faded?: ColorToken,
+    tintConfig?: TintConfig,
+  },
+  typography?: ThemeTokensTypographyConfig,
+  size?: Partial<Record<ThemeLayoutSize, number>>,
+  spacing?: Partial<Record<ThemeSpacingSize, number>>,
+  shape?: {
+    borderRadius?: Partial<Record<ThemeLayoutSize, number>>,
+    padding?: Partial<Record<ThemeSpacingSize, number>>,
+  },
+  borders?: {
+    borderWidths?: Partial<Record<ThemeBorderWidthKey, number>>,
+  },
+  elevation?: Partial<Record<ThemeElevationLevel, ShadowLayoutToken>>,
+  motion?: {
+    durations?: Partial<Record<ThemeMotionDurationKey, number>>,
+  },
+}
+
+export type ThemeTokensModeConfig = Omit<ThemeTokensConfig, 'themeMode'>

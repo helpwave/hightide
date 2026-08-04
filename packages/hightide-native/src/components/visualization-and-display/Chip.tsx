@@ -9,12 +9,12 @@ import {
   type ViewStyle
 } from 'react-native'
 
-import type { ComponentSize } from '@helpwave/hightide-design/component-tokens'
 import {
   colorSchemeTypes,
+  type ChipColoringStyle,
   type ColoringType,
-  type ChipColoringStyle
-} from '@helpwave/hightide-design/semantic-tokens'
+  type ComponentSize
+} from '@helpwave/hightide-design/theme-tokens'
 
 import { ContentThemeProvider } from '../../global-contexts/content-theme/ContentThemeProvider'
 import { useTheme } from '../../global-contexts/theme/ThemeContext'

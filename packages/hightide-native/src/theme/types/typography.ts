@@ -1,17 +1,17 @@
 import type {
-  HightideSemanticTypographyTokens,
-  HightideTypographyStyleToken,
-  SemanticFontFamilies,
-  SemanticFontWeightTokens,
-  TypographySizes
-} from '@helpwave/hightide-design/semantic-tokens'
+  ThemeTypographyTokens,
+  ThemeTypographySize,
+  TypographyStyleToken
+} from '@helpwave/hightide-design/theme-tokens'
 
-export type TextStyle = HightideTypographyStyleToken
+export type TextStyle = TypographyStyleToken
 
-export type HightideTypography = HightideSemanticTypographyTokens
+export type HightideTypography = ThemeTypographyTokens
 
-export type {
-  SemanticFontFamilies,
-  SemanticFontWeightTokens,
-  TypographySizes
-}
+export type HightideFontFamilies = ThemeTypographyTokens['fontFamilies']
+
+export type HightideFontWeights = ThemeTypographyTokens['fontWeights']
+
+export type TypographySizes = ThemeTypographySize
+
+export type { TypographyStyleToken }

@@ -24,17 +24,9 @@
       "types": "./src/theme-tokens/index.ts",
       "default": "./src/theme-tokens/index.ts"
     },
-    "./semantic-tokens": {
-      "types": "./src/semantic-tokens/index.ts",
-      "default": "./src/semantic-tokens/index.ts"
-    },
-    "./component-tokens": {
-      "types": "./src/component-tokens/index.ts",
-      "default": "./src/component-tokens/index.ts"
-    },
-    "./design-tokens": {
-      "types": "./src/design-tokens/index.ts",
-      "default": "./src/design-tokens/index.ts"
+    "./component-token-resolvers": {
+      "types": "./src/component-token-resolvers/index.ts",
+      "default": "./src/component-token-resolvers/index.ts"
     },
     "./design-system": {
       "types": "./src/design-system/index.ts",

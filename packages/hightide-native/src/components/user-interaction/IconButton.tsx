@@ -8,11 +8,11 @@ import {
   type StyleProp,
   type ViewStyle
 } from 'react-native'
-import type { ComponentSize } from '@helpwave/hightide-design/component-tokens'
 import type {
   ColoringType,
+  ComponentSize,
   PressableColoringStyle
-} from '@helpwave/hightide-design/semantic-tokens'
+} from '@helpwave/hightide-design/theme-tokens'
 
 import { ContentThemeProvider } from '../../global-contexts/content-theme/ContentThemeProvider'
 import { useTheme } from '../../global-contexts/theme/ThemeContext'

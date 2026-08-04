@@ -6,22 +6,21 @@ import type {
   Meta,
   StoryObj
 } from '@storybook/react'
-import { hightidePrimitiveTokens } from '@helpwave/hightide-design/primitive-tokens'
-import { toHightideSemanticTokens } from '@helpwave/hightide-design/semantic-tokens'
-import { toHightideComponentTokens } from '@helpwave/hightide-design/component-tokens'
-import { type HightideDesignSystemTokens } from '@helpwave/hightide-design/design-system'
 import {
-  hightideDarkThemeTokens,
-  hightideLightThemeTokens,
-  type HightideThemeTokens
+  hightidePrimitiveTokens,
+  type ColorToken,
+  type HightideColorPalettes
+} from '@helpwave/hightide-design/primitive-tokens'
+import {
+  createDarkThemeTokens,
+  createLightThemeTokens
 } from '@helpwave/hightide-design/theme-tokens'
-import { HexColorUtils } from '@helpwave/hightide-design/utils'
 
 import { Button } from '@helpwave/hightide-native/components'
 import {
   HightideConfigUtils,
   useTheme,
-  ThemeProvider,
+  ThemeProvider
 } from '@helpwave/hightide-native/global-contexts'
 import { createHightideTheme } from '@helpwave/hightide-native/theme'
 import {
@@ -29,39 +28,26 @@ import {
   ThemeStoryFrame
 } from './themeStoryHelpers'
 
-const withBluePrimary = (themeTokens: HightideThemeTokens): HightideThemeTokens => {
-  const { blue, white } = hightidePrimitiveTokens.color.palettes
-  const colors = {
-    ...themeTokens.colors,
+const { blue, white } = hightidePrimitiveTokens.color.palettes as HightideColorPalettes
+const whiteColor = white.value as ColorToken
+
+const bluePrimaryTheme = createHightideTheme(createLightThemeTokens({
+  colors: {
     primary: {
-      color: blue.value[500],
-      onColor: white.value,
-      emphasis: blue.value[600],
-      tint: HexColorUtils.hexWithAlpha(blue.value[500], 0.2),
-      tintEmphasis: HexColorUtils.hexWithAlpha(blue.value[500], 0.28),
+      color: blue.value[500] as ColorToken,
+      onColor: whiteColor,
     },
-  }
+  },
+}))
 
-  return {
-    ...themeTokens,
-    colors,
-  }
-}
-
-const toHightideDesignSystemTokens = (themeTokens: HightideThemeTokens): HightideDesignSystemTokens => {
-  const semantic = toHightideSemanticTokens({ themeTokens })
-  return {
-    theme: themeTokens,
-    ...semantic,
-    components: toHightideComponentTokens({ semanticTokens: semantic }),
-  }
-}
-
-const bluePrimaryDesignTokens = toHightideDesignSystemTokens(withBluePrimary(hightideLightThemeTokens))
-const bluePrimaryDarkDesignTokens = toHightideDesignSystemTokens(withBluePrimary(hightideDarkThemeTokens))
-
-const bluePrimaryTheme = createHightideTheme(bluePrimaryDesignTokens)
-const bluePrimaryDarkTheme = createHightideTheme(bluePrimaryDarkDesignTokens)
+const bluePrimaryDarkTheme = createHightideTheme(createDarkThemeTokens({
+  colors: {
+    primary: {
+      color: blue.value[400] as ColorToken,
+      onColor: whiteColor,
+    },
+  },
+}))
 
 const bluePrimarySupportedThemes = {
   ...HightideConfigUtils.defaultSupportedThemes,

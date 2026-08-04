@@ -4,16 +4,17 @@ import type {
   ViewStyle
 } from 'react-native'
 
+import type { ComponentSize } from '@helpwave/hightide-design/theme-tokens'
 import {
-  avatarStatus,
-  type AvatarStatus,
-  type ComponentSize
-} from '@helpwave/hightide-design/component-tokens'
+  avatarStatuses,
+  type AvatarStatus
+} from '@helpwave/hightide-design/component-token-resolvers'
 
+import type { Color } from '../color'
 import type { StyleResolverFunction } from '../resolver'
 
 export type { AvatarStatus }
-export { avatarStatus }
+export { avatarStatuses }
 
 export type AvatarState = {
   size?: ComponentSize,
@@ -44,7 +45,7 @@ export type AvatarTextStyle = TextStyle
 export type AvatarIconStyle = {
   size: number,
   strokeWidth: number,
-  color: string,
+  color: Color,
 }
 
 export type AvatarStatusDotStyle = ViewStyle

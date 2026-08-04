@@ -16,7 +16,7 @@ import {
 } from 'react-native'
 import { HightideIconRegistry } from '../../icons/HightideIconRegistry'
 import { Icon } from './Icon'
-import type { ComponentSize } from '@helpwave/hightide-design/component-tokens'
+import type { ComponentSize } from '@helpwave/hightide-design/theme-tokens'
 
 import { useTheme } from '../../global-contexts/theme/ThemeContext'
 import type {
@@ -32,7 +32,7 @@ import type {
   AvatarWithStatusContainerStyle,
   AvatarStatusDotStyle
 } from '../../theme/types/components/avatar'
-import { avatarStatus } from '../../theme/types/components/avatar'
+import { avatarStatuses } from '../../theme/types/components/avatar'
 import type { StyleOverwrite } from '../../theme/types/resolver'
 
 export type AvatarSize = ComponentSize
@@ -56,7 +56,7 @@ const DefaultAvatarImage: ComponentType<AvatarImageProps> = ({ alt, ...props }) 
 
 export const AvatarUtil = {
   sizes: ['sm', 'md', 'lg'] as const satisfies readonly ComponentSize[],
-  statuses: avatarStatus,
+  statuses: avatarStatuses,
 }
 
 export type AvatarProps = Omit<ViewProps, 'children' | 'style'> & {

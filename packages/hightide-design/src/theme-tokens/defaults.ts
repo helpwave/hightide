@@ -1,0 +1,303 @@
+import type { ColorToken } from '../primitive-tokens/color'
+import { hightideTypography } from '../primitive-tokens/typography'
+import type { ShadowLayoutToken } from '../primitive-tokens/shadow'
+import { hightideShadow } from '../primitive-tokens/shadow'
+import { HexColorUtils } from '../utils/hex'
+import type {
+  ColorPairToken,
+  ThemeTokensModeConfig,
+  TintConfig
+} from './theme-tokens-config'
+import type {
+  RoleColorToken,
+  ThemeBordersTokens,
+  ThemeColorTokens,
+  ThemeElevationTokens,
+  ThemeMotionTokens,
+  ThemeShapeTokens,
+  ThemeSizeTokens,
+  ThemeSpacingTokens,
+  ThemeTokens,
+  ThemeTypographyTokens
+} from './theme-tokens'
+import type { TypographyStyleToken } from './typography-style-token'
+
+export const defaultTintConfig: TintConfig = {
+  light: 0.12,
+  normal: 0.2,
+  emphasis: 0.28,
+  strong: 0.4,
+}
+
+export const tertiaryLightColor = '#057986' as const satisfies ColorToken
+export const tertiaryDarkColor = HexColorUtils.mixWithWhite(tertiaryLightColor, 0.35)
+
+export const expandRoleColor = (
+  pair: ColorPairToken,
+  tintConfig: TintConfig,
+  emphasis?: ColorToken
+): RoleColorToken => ({
+  color: pair.color,
+  onColor: pair.onColor,
+  emphasis: emphasis ?? HexColorUtils.mixWithBlack(pair.color, 0.15),
+  tint: HexColorUtils.hexWithAlpha(pair.color, tintConfig.normal),
+  tintEmphasis: HexColorUtils.hexWithAlpha(pair.color, tintConfig.emphasis),
+})
+
+const createTypographyStyle = (
+  fontSize: number,
+  lineHeight: number,
+  fontWeight: TypographyStyleToken['fontWeight'],
+  fontFamily: string
+): TypographyStyleToken => ({
+  fontSize,
+  lineHeight,
+  fontWeight,
+  fontFamily,
+})
+
+export const defaultTypographyTokens = (): ThemeTypographyTokens => {
+  const { fontFamily, fontSize, fontWeight, lineHeight } = hightideTypography
+  const defaultFamily = fontFamily.inter
+  const accentFamily = fontFamily.spaceGrotesk
+
+  return {
+    fontFamilies: {
+      default: defaultFamily,
+      accent: accentFamily,
+      mono: defaultFamily,
+    },
+    fontWeights: {
+      thin: fontWeight.thin,
+      light: fontWeight.light,
+      base: fontWeight.base,
+      medium: fontWeight.medium,
+      semibold: fontWeight.semibold,
+      bold: fontWeight.bold,
+    },
+    display: createTypographyStyle(fontSize['4xl'], Number(lineHeight['4xl']), fontWeight.bold, accentFamily),
+    heading: {
+      lg: createTypographyStyle(fontSize['2xl'], Number(lineHeight['2xl']), fontWeight.semibold, accentFamily),
+      md: createTypographyStyle(fontSize.lg, Number(lineHeight.lg), fontWeight.semibold, accentFamily),
+      sm: createTypographyStyle(fontSize.base, Number(lineHeight.base), fontWeight.medium, accentFamily),
+    },
+    body: {
+      lg: createTypographyStyle(fontSize.lg, Number(lineHeight.lg), fontWeight.base, defaultFamily),
+      md: createTypographyStyle(fontSize.base, Number(lineHeight.base), fontWeight.base, defaultFamily),
+      sm: createTypographyStyle(fontSize.sm, Number(lineHeight.sm), fontWeight.base, defaultFamily),
+    },
+    label: {
+      lg: createTypographyStyle(fontSize.lg, Number(lineHeight.lg), fontWeight.semibold, defaultFamily),
+      md: createTypographyStyle(fontSize.base, Number(lineHeight.base), fontWeight.semibold, defaultFamily),
+      sm: createTypographyStyle(fontSize.sm, Number(lineHeight.sm), fontWeight.medium, defaultFamily),
+    },
+  }
+}
+
+export const defaultSizeTokens = (): ThemeSizeTokens => ({
+  xs: 28,
+  sm: 36,
+  md: 44,
+  lg: 52,
+  xl: 60,
+})
+
+export const defaultSpacingTokens = (): ThemeSpacingTokens => ({
+  xxs: 1,
+  xs: 2,
+  sm: 4,
+  md: 8,
+  lg: 16,
+  xl: 24,
+  xxl: 32,
+})
+
+export const defaultShapeTokens = (): ThemeShapeTokens => ({
+  borderRadius: {
+    xs: 4,
+    sm: 6,
+    md: 8,
+    lg: 10,
+    xl: 14,
+  },
+  padding: {
+    xxs: 1,
+    xs: 2,
+    sm: 4,
+    md: 6,
+    lg: 8,
+    xl: 10,
+    xxl: 12,
+  },
+})
+
+export const defaultBordersTokens = (): ThemeBordersTokens => ({
+  borderWidths: {
+    thin: 1,
+    normal: 2,
+    thick: 4,
+  },
+})
+
+export const defaultMotionTokens = (): ThemeMotionTokens => ({
+  durations: {
+    fast: 100,
+    normal: 200,
+    slow: 300,
+  },
+})
+
+const withShadowColor = (
+  layout: ShadowLayoutToken,
+  color: ColorToken
+): ShadowLayoutToken & { color: ColorToken } => ({
+  ...layout,
+  color,
+})
+
+export const defaultLightElevationTokens = (): ThemeElevationTokens => {
+  const sizes = hightideShadow.layout.bottom
+  const color = hightideShadow.colors['5%']
+  return {
+    level1: withShadowColor(sizes.xs, color),
+    level2: withShadowColor(sizes.sm, color),
+    level3: withShadowColor(sizes.md, color),
+    level4: withShadowColor(sizes.lg, color),
+    level5: withShadowColor(sizes.xl, color),
+  }
+}
+
+export const defaultDarkElevationTokens = (): ThemeElevationTokens => {
+  const sizes = hightideShadow.layout.bottom
+  const color = hightideShadow.colors['10%']
+  return {
+    level1: withShadowColor(sizes.xs, color),
+    level2: withShadowColor(sizes.sm, color),
+    level3: withShadowColor(sizes.md, color),
+    level4: withShadowColor(sizes.lg, color),
+    level5: withShadowColor(sizes.xl, color),
+  }
+}
+
+export const mergeTypography = (
+  defaults: ThemeTypographyTokens,
+  override?: ThemeTokensModeConfig['typography']
+): ThemeTypographyTokens => {
+  if (!override) {
+    return defaults
+  }
+
+  return {
+    fontFamilies: {
+      ...defaults.fontFamilies,
+      ...override.fontFamilies,
+    },
+    fontWeights: {
+      ...defaults.fontWeights,
+      ...override.fontWeights,
+    },
+    display: override.display ?? defaults.display,
+    heading: {
+      ...defaults.heading,
+      ...override.heading,
+    },
+    body: {
+      ...defaults.body,
+      ...override.body,
+    },
+    label: {
+      ...defaults.label,
+      ...override.label,
+    },
+  }
+}
+
+export const buildColorTokens = (params: {
+  transparent: ColorToken,
+  background: ColorPairToken,
+  surface: ColorPairToken,
+  surfaceHover: ColorToken,
+  surfaceVariant: ColorToken,
+  disabled: ColorToken,
+  onDisabled: ColorToken,
+  subtle: ColorToken,
+  faded: ColorToken,
+  primary: RoleColorToken,
+  secondary: RoleColorToken,
+  tertiary: RoleColorToken,
+  positive: RoleColorToken,
+  warning: RoleColorToken,
+  negative: RoleColorToken,
+  neutral: RoleColorToken,
+}): ThemeColorTokens => ({
+  transparent: params.transparent,
+  background: params.background.color,
+  onBackground: params.background.onColor,
+  disabled: params.disabled,
+  onDisabled: params.onDisabled,
+  surface: params.surface.color,
+  onSurface: params.surface.onColor,
+  surfaceHover: params.surfaceHover,
+  surfaceVariant: params.surfaceVariant,
+  subtle: params.subtle,
+  faded: params.faded,
+  placeholder: params.subtle,
+  description: params.subtle,
+  border: params.faded,
+  divider: params.faded,
+  primary: params.primary,
+  secondary: params.secondary,
+  tertiary: params.tertiary,
+  positive: params.positive,
+  warning: params.warning,
+  negative: params.negative,
+  neutral: params.neutral,
+})
+
+export const resolveSharedGroups = (
+  config: ThemeTokensModeConfig,
+  elevationDefaults: ThemeElevationTokens
+): Pick<ThemeTokens, 'typography' | 'size' | 'spacing' | 'shape' | 'borders' | 'elevation' | 'motion'> => ({
+  typography: mergeTypography(defaultTypographyTokens(), config.typography),
+  size: {
+    ...defaultSizeTokens(),
+    ...config.size,
+  },
+  spacing: {
+    ...defaultSpacingTokens(),
+    ...config.spacing,
+  },
+  shape: {
+    borderRadius: {
+      ...defaultShapeTokens().borderRadius,
+      ...config.shape?.borderRadius,
+    },
+    padding: {
+      ...defaultShapeTokens().padding,
+      ...config.shape?.padding,
+    },
+  },
+  borders: {
+    borderWidths: {
+      ...defaultBordersTokens().borderWidths,
+      ...config.borders?.borderWidths,
+    },
+  },
+  elevation: {
+    ...elevationDefaults,
+    ...Object.fromEntries(
+      Object.entries(config.elevation ?? {}).map(([level, layout]) => [
+        level,
+        layout
+          ? withShadowColor(layout, elevationDefaults[level as keyof ThemeElevationTokens].color)
+          : elevationDefaults[level as keyof ThemeElevationTokens],
+      ])
+    ) as ThemeElevationTokens,
+  },
+  motion: {
+    durations: {
+      ...defaultMotionTokens().durations,
+      ...config.motion?.durations,
+    },
+  },
+})

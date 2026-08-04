@@ -9,12 +9,12 @@ import {
   type ViewStyle
 } from 'react-native'
 
-import type { ComponentSize } from '@helpwave/hightide-design/component-tokens'
 import {
   colorSchemeTypes,
   type ColoringType,
+  type ComponentSize,
   type PressableColoringStyle
-} from '@helpwave/hightide-design/semantic-tokens'
+} from '@helpwave/hightide-design/theme-tokens'
 
 import { ContentThemeProvider } from '../../global-contexts/content-theme/ContentThemeProvider'
 import { useTheme } from '../../global-contexts/theme/ThemeContext'
@@ -83,7 +83,7 @@ export const Button = forwardRef<React.ComponentRef<typeof Pressable>, ButtonPro
       disabled={disabled}
       style={(pressableState) => {
         const state = resolveState(pressableState as PressableInteraction)
-        return [theme.components.button.button(state, buttonStyle), style]
+        return [theme.components.button.container(state, buttonStyle), style]
       }}
     >
       {(pressableState) => {
