@@ -44,19 +44,23 @@ export const hightideChipTokenResolver: ComponentTokenResolver<
 
   return {
     container: {
-      flexDirection: 'row',
-      alignItems: 'center',
-      justifyContent: 'center',
       backgroundColor: colorState.color,
-      borderColor: colorState.border,
-      borderWidth: layout.borderWidth,
-      paddingVertical: layout.inset,
-      paddingHorizontal: layout.inset + layout.paddingExtension,
-      gap,
-      minWidth: 0,
-      minHeight: layout.size,
-      borderRadius: layout.borderRadius,
-      opacity: 1,
+      border: {
+        width: layout.borderWidth,
+        color: colorState.border,
+      },
+      size: {
+        minWidth: 0,
+        minHeight: layout.size,
+      },
+      shape: {
+        borderRadius: layout.borderRadius,
+        padding: {
+          vertical: layout.inset,
+          horizontal: layout.inset + layout.paddingExtension,
+        },
+      },
+      layout: { gap },
     },
     text: {
       ...textStyle,

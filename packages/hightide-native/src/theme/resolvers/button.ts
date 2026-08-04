@@ -22,12 +22,13 @@ const toTokenState = (state: ButtonState): ButtonTokenState => ({
 })
 
 export const toButtonTheme = (themeTokens: ThemeTokens): ButtonTheme => ({
-  container: createStyleResolver((state: ButtonState): ButtonStyle => (
-    toContainerStyle(hightideButtonTokenResolver({
+  container: createStyleResolver((state: ButtonState): ButtonStyle => ({
+    ...toContainerStyle(hightideButtonTokenResolver({
       themeTokens,
       state: toTokenState(state),
-    }).container)
-  )),
+    }).container),
+    opacity: state.isDisabled ? 0.6 : 1,
+  })),
   text: createStyleResolver((state: ButtonState): ButtonTextStyle => (
     toTextStyle(hightideButtonTokenResolver({
       themeTokens,

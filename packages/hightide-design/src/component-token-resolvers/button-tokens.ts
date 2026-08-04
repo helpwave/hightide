@@ -55,21 +55,25 @@ export const hightideButtonTokenResolver: ComponentTokenResolver<
 
   return {
     container: {
-      flexDirection: 'row',
-      alignItems: 'center',
-      justifyContent: 'center',
       backgroundColor: resolved.color,
-      borderColor: resolved.border,
-      borderWidth: layout.borderWidth,
-      paddingVertical: outlinePadding ? outlineInset : layout.inset,
-      paddingHorizontal: outlinePadding
-        ? Math.max(layout.horizontalContentPadding - layout.borderWidth, 0)
-        : layout.horizontalContentPadding,
-      gap,
-      minWidth: layout.minimumWidth,
-      minHeight: layout.size,
-      borderRadius: layout.borderRadius,
-      opacity: state.isDisabled ? 0.6 : 1,
+      border: {
+        width: layout.borderWidth,
+        color: resolved.border,
+      },
+      size: {
+        minWidth: layout.minimumWidth,
+        minHeight: layout.size,
+      },
+      shape: {
+        borderRadius: layout.borderRadius,
+        padding: {
+          vertical: outlinePadding ? outlineInset : layout.inset,
+          horizontal: outlinePadding
+            ? Math.max(layout.horizontalContentPadding - layout.borderWidth, 0)
+            : layout.horizontalContentPadding,
+        },
+      },
+      layout: { gap },
     },
     text: {
       color: resolved.foreground,

@@ -1,6 +1,10 @@
 import type { ColorToken } from '../primitive-tokens/color'
-import type { TypographyStyleToken } from '../theme-tokens/typography-style-token'
+import type { FontWeightToken } from '../primitive-tokens/typography'
 
-export type TextStyleTokens = TypographyStyleToken & {
-  color: ColorToken,
+export type TextStyleTokens = {
+  color?: ColorToken,
+  fontSize?: number,
+  lineHeight?: number,
+  fontWeight?: FontWeightToken,
+  fontFamily?: string,
 }
