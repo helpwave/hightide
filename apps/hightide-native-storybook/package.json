@@ -1,0 +1,67 @@
+{
+  "name": "@helpwave/hightide-native-storybook",
+  "description": "Expo on-device Storybook app for hightide-native",
+  "author": "helpwave <support@helpwave.de> (https://helpwave.de)",
+  "homepage": "https://helpwave.de",
+  "repository": {
+    "url": "git+https://github.com/helpwave/hightide.git"
+  },
+  "private": true,
+  "license": "AGPL-3.0-only",
+  "version": "0.0.0",
+  "main": "index.js",
+  "scripts": {
+    "clean": "rm -rf node_modules .expo dist",
+    "init": "node -e \"process.exit(0)\"",
+    "build": "node -e \"process.exit(0)\"",
+    "start": "expo start",
+    "storybook": "EXPO_PUBLIC_STORYBOOK_ENABLED=true expo start",
+    "storybook:ios": "EXPO_PUBLIC_STORYBOOK_ENABLED=true expo start --ios",
+    "storybook:android": "EXPO_PUBLIC_STORYBOOK_ENABLED=true expo start --android",
+    "storybook-generate": "sb-rn-get-stories",
+    "lint": "eslint .",
+    "test": "node -e \"process.exit(0)\""
+  },
+  "dependencies": {
+    "@babel/runtime": "8.0.0",
+    "@helpwave/hightide-design": "workspace:*",
+    "@helpwave/hightide-native": "workspace:*",
+    "@helpwave/hightide-utils": "workspace:*",
+    "@react-native-async-storage/async-storage": "2.1.2",
+    "@storybook/addon-ondevice-actions": "10.4.5",
+    "@storybook/addon-ondevice-controls": "10.4.5",
+    "@storybook/react": "10.4.5",
+    "@storybook/react-native": "10.4.5",
+    "@storybook/react-native-theming": "10.4.5",
+    "@storybook/react-native-ui": "10.4.5",
+    "@storybook/react-native-ui-common": "10.4.5",
+    "expo": "~53.0.22",
+    "expo-status-bar": "~2.2.3",
+    "lucide-react-native": "0.561.0",
+    "react": "19.0.0",
+    "react-native": "0.79.6",
+    "react-native-gesture-handler": "~2.24.0",
+    "react-native-reanimated": "~3.17.4",
+    "react-native-safe-area-context": "5.4.0",
+    "react-native-svg": "15.11.2",
+    "storybook": "10.4.5",
+    "valibot": "1.4.2"
+  },
+  "devDependencies": {
+    "@babel/core": "7.29.7",
+    "@helpwave/eslint-config": "0.0.11",
+    "@types/react": "~19.0.10",
+    "eslint": "9.31.0",
+    "eslint-plugin-import": "2.32.0",
+    "eslint-plugin-storybook": "10.4.5",
+    "typescript": "~5.8.3"
+  },
+  "keywords": [
+    "react-native",
+    "expo",
+    "storybook"
+  ],
+  "bugs": {
+    "url": "https://github.com/helpwave/hightide/issues"
+  }
+}

@@ -1,0 +1,23 @@
+{
+  "expo": {
+    "name": "hightide-native-storybook",
+    "slug": "hightide-native-storybook",
+    "version": "0.0.0",
+    "orientation": "portrait",
+    "userInterfaceStyle": "automatic",
+    "newArchEnabled": true,
+    "ios": {
+      "supportsTablet": true,
+      "bundleIdentifier": "de.helpwave.hightide.native.storybook"
+    },
+    "android": {
+      "adaptiveIcon": {
+        "backgroundColor": "#ffffff"
+      },
+      "package": "de.helpwave.hightide.native.storybook"
+    },
+    "web": {
+      "bundler": "metro"
+    }
+  }
+}

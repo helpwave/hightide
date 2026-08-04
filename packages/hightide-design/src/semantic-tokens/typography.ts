@@ -1,10 +1,10 @@
-import type { FontSizeKey, FontWeightKey } from '../primitive-tokens/typography'
+import type { FontSizeKey, FontWeightKey, FontWeightToken } from '../primitive-tokens/typography'
 import type { HightideThemeTokens } from '../theme-tokens/themeTokens'
 
 export type HightideTypographyStyleToken = {
-  fontSize: string,
-  lineHeight: number | string,
-  fontWeight: number,
+  fontSize: number,
+  lineHeight: number,
+  fontWeight: FontWeightToken,
   fontFamily: string,
 }
 
@@ -12,12 +12,12 @@ export const typographySizes = ['sm', 'md', 'lg'] as const
 export type TypographySizes = typeof typographySizes[number]
 
 export type SemanticFontWeightTokens = {
-  thin: number,
-  light: number,
-  base: number,
-  medium: number,
-  semibold: number,
-  bold: number,
+  thin: FontWeightToken,
+  light: FontWeightToken,
+  base: FontWeightToken,
+  medium: FontWeightToken,
+  semibold: FontWeightToken,
+  bold: FontWeightToken,
 }
 
 export type SemanticFontFamilies = {
