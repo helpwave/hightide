@@ -3,3 +3,5 @@ storybook-static/
 *.tsbuildinfo
 .DS_Store
 debug-storybook.log
+src/**
+!src/.gitkeep

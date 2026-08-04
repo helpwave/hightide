@@ -20,6 +20,7 @@
     "lint": "pnpm -r run lint",
     "storybook-web": "pnpm --filter @helpwave/hightide-utils run build && pnpm --filter @helpwave/hightide run build && pnpm --filter @helpwave/hightide run storybook",
     "build-storybook-web": "pnpm --filter @helpwave/hightide-utils run build && pnpm --filter @helpwave/hightide run build && pnpm --filter @helpwave/hightide run build-storybook",
+    "sync-native-stories": "pnpm --filter @helpwave/hightide-native-web-storybook run sync-stories",
     "storybook-native": "pnpm --filter @helpwave/hightide-utils run build && pnpm --filter @helpwave/hightide-design run build && pnpm --filter @helpwave/hightide-native run build && pnpm --filter @helpwave/hightide-native-storybook run storybook",
     "storybook-native-web": "pnpm --filter @helpwave/hightide-utils run build && pnpm --filter @helpwave/hightide-design run build && pnpm --filter @helpwave/hightide-native run build && pnpm --filter @helpwave/hightide-native-web-storybook run storybook",
     "build-storybook-native-web": "pnpm --filter @helpwave/hightide-utils run build && pnpm --filter @helpwave/hightide-design run build && pnpm --filter @helpwave/hightide-native run build && pnpm --filter @helpwave/hightide-native-web-storybook run build-storybook"

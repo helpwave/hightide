@@ -12,8 +12,9 @@
   "type": "module",
   "scripts": {
     "clean": "rm -rf node_modules storybook-static",
-    "init": "node -e \"process.exit(0)\"",
+    "init": "pnpm run sync-stories",
     "build": "node -e \"process.exit(0)\"",
+    "sync-stories": "node ./scripts/sync-stories.mjs",
     "storybook": "storybook dev -p 6007",
     "build-storybook": "storybook build",
     "lint": "eslint .",
