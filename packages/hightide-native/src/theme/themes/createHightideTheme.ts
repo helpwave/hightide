@@ -1,7 +1,5 @@
-import {
-  createColorSchemeTokensFromThemeTokens,
-  createElementLayoutTokens
-} from '@helpwave/hightide-design/theme-tokens'
+import { hightideSemanticTokenResolvers } from '@helpwave/hightide-design/semantic-token-resolvers'
+import { createElementLayoutTokens } from '@helpwave/hightide-design/theme-tokens'
 import type { ThemeTokens } from '@helpwave/hightide-design/theme-tokens'
 
 import { toAvatarTheme } from '../resolvers/avatar'
@@ -10,17 +8,47 @@ import { toCardTheme } from '../resolvers/card'
 import { toChatTheme } from '../resolvers/chat'
 import { toCheckboxTheme } from '../resolvers/checkbox'
 import { toChipTheme } from '../resolvers/chip'
+import { createColorSchemes } from '../resolvers/colorScheme'
 import { toIconTheme } from '../resolvers/icon'
 import { toIconButtonTheme } from '../resolvers/iconButton'
 import { toInputTheme } from '../resolvers/input'
 import { toMultiSelectTheme } from '../resolvers/multiSelect'
 import { toSelectTheme } from '../resolvers/select'
 import { toSwitchTheme } from '../resolvers/switch'
+import type { HightideThemeSemantics } from '../types/semantics'
 import type { HightideTheme } from '../types/theme'
+
+const bindSemantics = (themeTokens: ThemeTokens): HightideThemeSemantics => ({
+  colorScheme: (parameter) => hightideSemanticTokenResolvers.colorScheme({
+    theme: themeTokens,
+    parameter,
+  }),
+  coloringStyle: (parameter) => hightideSemanticTokenResolvers.coloringStyle({
+    theme: themeTokens,
+    parameter,
+  }),
+  tintedSurface: (parameter) => hightideSemanticTokenResolvers.tintedSurface({
+    theme: themeTokens,
+    parameter,
+  }),
+  withAppearance: (parameter) => hightideSemanticTokenResolvers.withAppearance({
+    theme: themeTokens,
+    parameter,
+  }),
+  asFaded: (parameter) => hightideSemanticTokenResolvers.asFaded({
+    theme: themeTokens,
+    parameter,
+  }),
+  asDescription: (parameter) => hightideSemanticTokenResolvers.asDescription({
+    theme: themeTokens,
+    parameter,
+  }),
+})
 
 export const createHightideTheme = (themeTokens: ThemeTokens): HightideTheme => ({
   colors: themeTokens.color,
-  colorSchemes: createColorSchemeTokensFromThemeTokens(themeTokens),
+  colorSchemes: createColorSchemes(themeTokens),
+  semantics: bindSemantics(themeTokens),
   typography: themeTokens.typography,
   spacing: themeTokens.spacing,
   elements: createElementLayoutTokens(themeTokens),

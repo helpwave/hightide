@@ -3,14 +3,14 @@ import {
   type ReactNode
 } from 'react'
 import {
-  Text,
   View,
   type StyleProp,
   type ViewProps,
   type ViewStyle
 } from 'react-native'
 import { HightideIconRegistry } from '../../icons/HightideIconRegistry'
-import { Icon } from '../visualization-and-display/Icon'
+import { ThemedIcon } from '../visualization-and-display/ThemedIcon'
+import { ThemedText } from '../visualization-and-display/ThemedText'
 import { useTheme } from '../../global-contexts/theme/ThemeContext'
 import type {
   ChatMessageBubbleContainerStyle,
@@ -85,13 +85,13 @@ export const ChatMessageBubble = ({
     <View {...props} style={[resolvedContainerStyle, style]}>
       <View style={resolvedBubbleStyle}>
         {typeof children === 'string' || typeof children === 'number' ? (
-          <Text style={resolvedContentStyle}>{children}</Text>
+          <ThemedText style={resolvedContentStyle}>{children}</ThemedText>
         ) : (
           children
         )}
         {timestamp != null && (
           typeof timestamp === 'string' || typeof timestamp === 'number' ? (
-            <Text style={resolvedTimestampStyle}>{timestamp}</Text>
+            <ThemedText style={resolvedTimestampStyle}>{timestamp}</ThemedText>
           ) : (
             timestamp
           )
@@ -99,13 +99,13 @@ export const ChatMessageBubble = ({
       </View>
       {readReceipt != null && (
         <View style={resolvedReceiptStyle}>
-          <Icon
+          <ThemedIcon
             icon={HightideIconRegistry.CheckCheck}
             size={14}
             color={resolvedReceiptIcon.color}
           />
           {typeof readReceipt === 'string' || typeof readReceipt === 'number' ? (
-            <Text style={resolvedReceiptTextStyle}>{readReceipt}</Text>
+            <ThemedText style={resolvedReceiptTextStyle}>{readReceipt}</ThemedText>
           ) : (
             readReceipt
           )}

@@ -1,11 +1,8 @@
-import {
-  Text,
-  View
-} from 'react-native'
+import { View } from 'react-native'
 import type {
   Meta,
   StoryObj
-} from '@storybook/react'
+} from '@storybook/react-native'
 import {
   hightidePrimitiveTokens,
   type ColorToken,
@@ -16,7 +13,10 @@ import {
   createLightThemeTokens
 } from '@helpwave/hightide-design/theme-tokens'
 
-import { Button } from '@helpwave/hightide-native/components'
+import {
+  Button,
+  ThemedText
+} from '@helpwave/hightide-native/components'
 import {
   HightideConfigUtils,
   useTheme,
@@ -79,13 +79,13 @@ const PrimarySwatch = () => {
           padding: 12,
         }}
       >
-        <Text style={{ color: theme.colorSchemes.primary.filled.base.foreground }}>
+        <ThemedText style={{ color: theme.colorSchemes.primary.filled.base.foreground }}>
           primary / onPrimary
-        </Text>
+        </ThemedText>
       </View>
-      <Text style={{ color: theme.colors.onBackground }}>
+      <ThemedText>
         {`primary: ${theme.colorSchemes.primary.filled.base.color}`}
-      </Text>
+      </ThemedText>
     </View>
   )
 }
@@ -98,7 +98,7 @@ const PrimaryColorChangeDemo = () => (
     <ThemeStoryFrame>
       <ThemeSelect />
       <PrimarySwatch />
-      <Button color="primary" onPress={() => undefined}>
+      <Button onPress={() => undefined}>
         Primary button
       </Button>
     </ThemeStoryFrame>

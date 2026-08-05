@@ -1,5 +1,22 @@
 import { HightideIconRegistry } from '@helpwave/hightide-native/icons'
 
+export const colorPairKeys = [
+  'primary',
+  'secondary',
+  'tertiary',
+  'positive',
+  'warning',
+  'negative',
+  'neutral',
+] as const
+
+export type ColorPairKey = typeof colorPairKeys[number]
+
+const colorPairSelect = {
+  control: 'select',
+  options: colorPairKeys,
+} as const
+
 const iconSelect = {
   control: 'select',
   options: ['none', 'icon'],
@@ -31,6 +48,7 @@ const exampleSelectValues = [
 export type StorybookHelperSelectType = typeof exampleSelectValues[number]
 
 export const StorybookHelper = {
+  colorPairSelect,
   iconSelect,
   selectValues: exampleSelectValues,
 }

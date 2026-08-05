@@ -1,5 +1,6 @@
 import { hightideInputTokenResolver } from '@helpwave/hightide-design/component-token-resolvers'
 import type { InputState as InputTokenState } from '@helpwave/hightide-design/component-token-resolvers'
+import { hightideSemanticTokenResolvers } from '@helpwave/hightide-design/semantic-token-resolvers'
 import type { ThemeTokens } from '@helpwave/hightide-design/theme-tokens'
 
 import type { Color } from '../types/color'
@@ -20,16 +21,19 @@ const toTokenState = (state: InputState): InputTokenState => ({
   isReadOnly: state.isReadOnly,
 })
 
-export const toInputTheme = (themeTokens: ThemeTokens): InputTheme => ({
-  input: createStyleResolver((state: InputState): InputStyle => {
-    const { input } = hightideInputTokenResolver({
-      themeTokens,
-      state: toTokenState(state),
-    })
+export const toInputTheme = (themeTokens: ThemeTokens): InputTheme => {
+  const resolve = (state: InputTokenState) => hightideInputTokenResolver({
+    themeTokens,
+    semanticResolvers: hightideSemanticTokenResolvers,
+    state,
+  })
 
-    return { ...input }
-  }),
-  placeholderColor: createSimpleValueResolver((): Color => (
-    hightideInputTokenResolver({ themeTokens, state: {} }).placeholderColor
-  )),
-})
+  return {
+    input: createStyleResolver((state: InputState): InputStyle => ({
+      ...resolve(toTokenState(state)).input,
+    })),
+    placeholderColor: createSimpleValueResolver((): Color => (
+      resolve({}).placeholderColor
+    )),
+  }
+}

@@ -1,5 +1,6 @@
 import { hightideSelectTokenResolver } from '@helpwave/hightide-design/component-token-resolvers'
 import type { SelectState as SelectTokenState } from '@helpwave/hightide-design/component-token-resolvers'
+import { hightideSemanticTokenResolvers } from '@helpwave/hightide-design/semantic-token-resolvers'
 import type { ThemeTokens } from '@helpwave/hightide-design/theme-tokens'
 
 import { toTextStyle } from '../adapters/style-adapters'
@@ -36,7 +37,11 @@ const toOptionTokenState = (state: SelectOptionState): SelectTokenState => ({
 })
 
 export const toSelectTheme = (themeTokens: ThemeTokens): SelectTheme => {
-  const resolve = (state: SelectTokenState) => hightideSelectTokenResolver({ themeTokens, state })
+  const resolve = (state: SelectTokenState) => hightideSelectTokenResolver({
+    themeTokens,
+    semanticResolvers: hightideSemanticTokenResolvers,
+    state,
+  })
 
   return {
     trigger: createStyleResolver((state: SelectState): SelectTriggerStyle => ({

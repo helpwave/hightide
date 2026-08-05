@@ -3,17 +3,17 @@ import {
   type ReactNode
 } from 'react'
 import {
-  Text,
   View,
   type StyleProp,
   type ViewProps,
   type ViewStyle
 } from 'react-native'
 
-import type { ColoringType } from '@helpwave/hightide-design/theme-tokens'
+import type { ColorPairToken } from '@helpwave/hightide-design/theme-tokens'
 
 import { HightideIconRegistry } from '../../icons/HightideIconRegistry'
-import { Icon } from '../visualization-and-display/Icon'
+import { ThemedIcon } from '../visualization-and-display/ThemedIcon'
+import { ThemedText } from '../visualization-and-display/ThemedText'
 import { useTheme } from '../../global-contexts/theme/ThemeContext'
 import type {
   ChatSystemLineState,
@@ -24,7 +24,7 @@ import type { StyleOverwrite } from '../../theme/types/resolver'
 
 export type ChatSystemLineProps = Omit<ViewProps, 'children' | 'style'> & {
   icon?: ReactNode,
-  color?: ColoringType,
+  color?: ColorPairToken,
   children?: ReactNode,
   style?: StyleProp<ViewStyle>,
   lineStyle?: StyleOverwrite<ChatSystemLineState, ChatSystemLineStyle>,
@@ -33,7 +33,7 @@ export type ChatSystemLineProps = Omit<ViewProps, 'children' | 'style'> & {
 
 export const ChatSystemLine = ({
   icon,
-  color = 'primary',
+  color,
   children,
   style,
   lineStyle,
@@ -59,14 +59,14 @@ export const ChatSystemLine = ({
   return (
     <View {...props} style={[resolvedLineStyle, style]}>
       {icon ?? (
-        <Icon
+        <ThemedIcon
           icon={HightideIconRegistry.CheckCheck}
           size={14}
           color={resolvedIcon.color}
         />
       )}
       {typeof children === 'string' || typeof children === 'number' ? (
-        <Text style={resolvedTextStyle}>{children}</Text>
+        <ThemedText style={resolvedTextStyle}>{children}</ThemedText>
       ) : (
         children
       )}

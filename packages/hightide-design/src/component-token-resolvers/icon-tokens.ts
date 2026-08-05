@@ -29,7 +29,6 @@ export const createIconSizeTokens = (
 }
 
 export const hightideIconTokenResolver: ComponentTokenResolver<
-  ThemeTokens,
   IconState,
   IconThemeTokens
 > = ({ themeTokens, state }) => createIconSizeTokens(themeTokens)[state.size ?? 'md']

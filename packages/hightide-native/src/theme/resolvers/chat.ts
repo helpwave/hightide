@@ -1,5 +1,6 @@
 import { hightideChatTokenResolver } from '@helpwave/hightide-design/component-token-resolvers'
 import type { ChatState as ChatTokenState } from '@helpwave/hightide-design/component-token-resolvers'
+import { hightideSemanticTokenResolvers } from '@helpwave/hightide-design/semantic-token-resolvers'
 import type { ThemeTokens } from '@helpwave/hightide-design/theme-tokens'
 
 import type { Color } from '../types/color'
@@ -260,7 +261,11 @@ const toMessageComposerTheme = (resolve: ChatTokenResolver): ChatMessageComposer
 })
 
 export const toChatTheme = (themeTokens: ThemeTokens): ChatTheme => {
-  const resolve: ChatTokenResolver = (state) => hightideChatTokenResolver({ themeTokens, state })
+  const resolve: ChatTokenResolver = (state) => hightideChatTokenResolver({
+    themeTokens,
+    semanticResolvers: hightideSemanticTokenResolvers,
+    state,
+  })
 
   return {
     conversationRow: toConversationRowTheme(resolve),

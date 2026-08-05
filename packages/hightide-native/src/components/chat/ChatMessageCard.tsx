@@ -3,16 +3,16 @@ import {
   type ReactNode
 } from 'react'
 import {
-  Text,
   View,
   type StyleProp,
   type ViewProps,
   type ViewStyle
 } from 'react-native'
 
-import type { ColoringType } from '@helpwave/hightide-design/theme-tokens'
+import type { ColorPairToken } from '@helpwave/hightide-design/theme-tokens'
 
 import { useTheme } from '../../global-contexts/theme/ThemeContext'
+import { ThemedText } from '../visualization-and-display/ThemedText'
 import type {
   ChatMessageCardState,
   ChatMessageCardStyle,
@@ -28,7 +28,7 @@ export type ChatMessageCardProps = Omit<ViewProps, 'children' | 'style'> & {
   subtitle?: ReactNode,
   badge?: ReactNode,
   actions?: ReactNode,
-  color?: ColoringType,
+  color?: ColorPairToken,
   direction?: ChatMessageDirection,
   children?: ReactNode,
   style?: StyleProp<ViewStyle>,
@@ -43,7 +43,7 @@ export const ChatMessageCard = ({
   subtitle,
   badge,
   actions,
-  color = 'primary',
+  color,
   direction = 'incoming',
   children,
   style,
@@ -93,13 +93,13 @@ export const ChatMessageCard = ({
         )}
         <View style={{ flex: 1, minWidth: 0, gap: 2 }}>
           {typeof title === 'string' || typeof title === 'number' ? (
-            <Text style={resolvedTitleStyle}>{title}</Text>
+            <ThemedText style={resolvedTitleStyle}>{title}</ThemedText>
           ) : (
             title
           )}
           {subtitle != null && (
             typeof subtitle === 'string' || typeof subtitle === 'number' ? (
-              <Text style={resolvedSubtitleStyle}>{subtitle}</Text>
+              <ThemedText style={resolvedSubtitleStyle}>{subtitle}</ThemedText>
             ) : (
               subtitle
             )

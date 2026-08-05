@@ -9,11 +9,10 @@ import {
   type ViewStyle
 } from 'react-native'
 
-import {
-  colorSchemeTypes,
-  type ColoringType,
-  type ComponentSize,
-  type PressableColoringStyle
+import type {
+  ColorPairToken,
+  ComponentSize,
+  PressableColoringStyle
 } from '@helpwave/hightide-design/theme-tokens'
 
 import { ContentThemeProvider } from '../../global-contexts/content-theme/ContentThemeProvider'
@@ -24,15 +23,14 @@ import type {
   ButtonTextStyle
 } from '../../theme/types/components/button'
 import type { StyleOverwrite } from '../../theme/types/resolver'
-import { Text } from '../visualization-and-display/Text'
+import { ThemedText } from '../visualization-and-display/ThemedText'
 import type { Color } from '../../theme/types/color'
 
 export type ButtonSize = ComponentSize
 
-export type ButtonColor = ColoringType
+export type ButtonColor = ColorPairToken
 
 export const ButtonUtil = {
-  colors: colorSchemeTypes,
   sizes: ['sm', 'md', 'lg'] as const satisfies readonly ComponentSize[],
   coloringStyles: ['outline', 'filled', 'text', 'tonal', 'tonal-outline'] as const satisfies readonly PressableColoringStyle[],
 }
@@ -56,7 +54,7 @@ type PressableInteraction = {
 export const Button = forwardRef<React.ComponentRef<typeof Pressable>, ButtonProps>(function Button({
   children,
   size = 'md',
-  color = 'primary',
+  color,
   coloringStyle = 'filled',
   disabled,
   style,
@@ -96,7 +94,7 @@ export const Button = forwardRef<React.ComponentRef<typeof Pressable>, ButtonPro
             textStyle={resolvedText}
           >
             {typeof children === 'string' || typeof children === 'number'
-              ? <Text>{children}</Text>
+              ? <ThemedText>{children}</ThemedText>
               : children}
           </ContentThemeProvider>
         )

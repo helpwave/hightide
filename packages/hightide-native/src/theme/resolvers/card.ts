@@ -1,5 +1,6 @@
 import { hightideCardTokenResolver } from '@helpwave/hightide-design/component-token-resolvers'
 import type { CardState as CardTokenState } from '@helpwave/hightide-design/component-token-resolvers'
+import { hightideSemanticTokenResolvers } from '@helpwave/hightide-design/semantic-token-resolvers'
 import type { ThemeTokens } from '@helpwave/hightide-design/theme-tokens'
 
 import { toTextStyle } from '../adapters/style-adapters'
@@ -30,7 +31,11 @@ const toTokenState = (state: CardActionItemState): CardTokenState => ({
 })
 
 export const toCardTheme = (themeTokens: ThemeTokens): CardTheme => {
-  const resolve = (state: CardTokenState) => hightideCardTokenResolver({ themeTokens, state })
+  const resolve = (state: CardTokenState) => hightideCardTokenResolver({
+    themeTokens,
+    semanticResolvers: hightideSemanticTokenResolvers,
+    state,
+  })
 
   return {
     card: createSimpleStyleResolver((): CardStyle => ({

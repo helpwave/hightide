@@ -14,7 +14,7 @@ import {
 } from '@helpwave/hightide-utils/hooks'
 
 import { HightideIconRegistry } from '../../icons/HightideIconRegistry'
-import { Icon } from '../visualization-and-display/Icon'
+import { ThemedIcon } from '../visualization-and-display/ThemedIcon'
 import { useTheme } from '../../global-contexts/theme/ThemeContext'
 import type {
   CheckboxSize,
@@ -110,7 +110,7 @@ export const Checkbox = ({
       style={[resolvedCheckboxStyle, style]}
     >
       {resolvedIcon.visible && (
-        <Icon
+        <ThemedIcon
           icon={indeterminate ? HightideIconRegistry.Minus : HightideIconRegistry.Check}
           size={resolvedIcon.size}
           color={resolvedIcon.color}

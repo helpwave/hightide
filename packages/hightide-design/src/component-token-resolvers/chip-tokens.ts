@@ -1,21 +1,17 @@
-import type { ThemeTokens } from '../theme-tokens/theme-tokens'
-import { createColorSchemeTokensFromThemeTokens } from '../theme-tokens/color-scheme'
-import type {
-  ChipColoringStyle,
-  ColoringType
-} from '../theme-tokens/color-scheme'
+import type { ChipColoringStyle } from '../semantic-token-resolvers/types'
+import type { ColorPairToken } from '../theme-tokens/theme-tokens-config'
 import {
   createElementLayoutTokens,
   type ComponentSize
 } from '../theme-tokens/element-layout'
+import { resolveColorPairColoring } from './coloring'
 import type { ComponentTokenResolver } from './component-token-resolver'
 import type { ContainerTokens } from './container-tokens'
 import type { TextStyleTokens } from './text-style-tokens'
-import { toColorStateFull } from './pressable'
 
 export type ChipState = {
   size?: ComponentSize,
-  color?: ColoringType,
+  color?: ColorPairToken,
   coloringStyle?: ChipColoringStyle,
 }
 
@@ -25,29 +21,26 @@ export type ChipThemeTokens = {
 }
 
 export const hightideChipTokenResolver: ComponentTokenResolver<
-  ThemeTokens,
   ChipState,
   ChipThemeTokens
-> = ({ themeTokens, state }) => {
+> = ({ themeTokens, semanticResolvers, state }) => {
   const size = state.size ?? 'md'
-  const color = state.color ?? 'neutral'
-  const coloringStyle = state.coloringStyle ?? 'filled'
-  const colorSchemes = createColorSchemeTokensFromThemeTokens(themeTokens)
-  const colorState = toColorStateFull(
-    colorSchemes[color][coloringStyle].base,
-    coloringStyle,
-    themeTokens.color.transparent
-  )
+  const coloring = resolveColorPairColoring({
+    themeTokens,
+    semanticResolvers,
+    colorPair: state.color ?? themeTokens.color.primary,
+    style: state.coloringStyle ?? 'filled',
+  })
   const layout = createElementLayoutTokens(themeTokens).insideControl[size]
   const textStyle = themeTokens.typography.label[size]
   const gap = size === 'sm' ? themeTokens.spacing.xs : themeTokens.spacing.sm
 
   return {
     container: {
-      backgroundColor: colorState.color,
+      backgroundColor: coloring.color,
       border: {
         width: layout.borderWidth,
-        color: colorState.border,
+        color: coloring.outlineColor ?? coloring.borderColor,
       },
       size: {
         minWidth: 0,
@@ -64,7 +57,7 @@ export const hightideChipTokenResolver: ComponentTokenResolver<
     },
     text: {
       ...textStyle,
-      color: colorState.foreground,
+      color: coloring.onColor,
     },
   }
 }

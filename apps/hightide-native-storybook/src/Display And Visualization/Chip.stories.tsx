@@ -1,8 +1,7 @@
 import type {
   Meta,
   StoryObj
-} from '@storybook/react'
-import { Text } from 'react-native'
+} from '@storybook/react-native'
 import { action } from 'storybook/actions'
 
 import {
@@ -10,45 +9,77 @@ import {
   ChipUtil,
   Button,
   ButtonUtil,
+  ThemedText
 } from '@helpwave/hightide-native/components'
 import { useTheme } from '@helpwave/hightide-native/global-contexts'
 import type { ButtonState } from '@helpwave/hightide-native/theme'
 
+import {
+  type ColorPairKey,
+  StorybookHelper
+} from '../helper'
+
 const meta = {
   component: Chip,
+} satisfies Meta<typeof Chip>
+
+export default meta
+
+type ChipArgs = {
+  label: string,
+  color: ColorPairKey,
+  coloringStyle: typeof ChipUtil.coloringStyles[number],
+  size: typeof ChipUtil.sizes[number],
+}
+
+const ChipDemo = ({
+  label,
+  color,
+  coloringStyle,
+  size,
+}: ChipArgs) => {
+  const { theme } = useTheme()
+
+  return (
+    <Chip
+      color={theme.colors[color]}
+      coloringStyle={coloringStyle}
+      size={size}
+    >
+      {label}
+    </Chip>
+  )
+}
+
+export const chip: StoryObj<ChipArgs> = {
   argTypes: {
-    color: {
+    label: {
+      control: 'text',
+    },
+    color: StorybookHelper.colorPairSelect,
+    coloringStyle: {
       control: 'select',
-      options: ChipUtil.colors,
+      options: ChipUtil.coloringStyles,
     },
     size: {
       control: 'select',
       options: ChipUtil.sizes,
     },
-    coloringStyle: {
-      control: 'select',
-      options: ChipUtil.coloringStyles,
-    },
   },
-} satisfies Meta<typeof Chip>
-
-export default meta
-type Story = StoryObj<typeof meta>
-
-export const chip: Story = {
   args: {
+    label: 'Label',
     color: 'primary',
     coloringStyle: 'filled',
     size: 'md',
-    children: 'Label',
   },
+  render: (args) => <ChipDemo {...args} />,
 }
 
 type ChipInButtonArgs = {
   size: typeof ButtonUtil.sizes[number],
-  color: typeof ButtonUtil.colors[number],
+  color: ColorPairKey,
   coloringStyle: typeof ButtonUtil.coloringStyles[number],
-  chipColor: typeof ChipUtil.colors[number],
+  chipColor: ColorPairKey,
   chipColoringStyle: typeof ChipUtil.coloringStyles[number],
   chipSize: typeof ChipUtil.sizes[number],
   chipLabel: string,
@@ -68,7 +99,7 @@ const ChipInButtonDemo = ({
   const { theme } = useTheme()
   const state: ButtonState = {
     size,
-    color,
+    color: theme.colors[color],
     coloringStyle,
   }
   const textStyle = theme.components.button.text(state)
@@ -76,19 +107,19 @@ const ChipInButtonDemo = ({
   return (
     <Button
       size={size}
-      color={color}
+      color={theme.colors[color]}
       coloringStyle={coloringStyle}
       onPress={action('Pressed')}
     >
       <>
         <Chip
-          color={chipColor}
+          color={theme.colors[chipColor]}
           coloringStyle={chipColoringStyle}
           size={chipSize}
         >
           {chipLabel}
         </Chip>
-        <Text style={textStyle}>{label}</Text>
+        <ThemedText style={textStyle}>{label}</ThemedText>
       </>
     </Button>
   )
@@ -100,18 +131,12 @@ export const chipInButton: StoryObj<ChipInButtonArgs> = {
       control: 'select',
       options: ButtonUtil.sizes,
     },
-    color: {
-      control: 'select',
-      options: ButtonUtil.colors,
-    },
+    color: StorybookHelper.colorPairSelect,
     coloringStyle: {
       control: 'select',
       options: ButtonUtil.coloringStyles,
     },
-    chipColor: {
-      control: 'select',
-      options: ChipUtil.colors,
-    },
+    chipColor: StorybookHelper.colorPairSelect,
     chipColoringStyle: {
       control: 'select',
       options: ChipUtil.coloringStyles,

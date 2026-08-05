@@ -1,8 +1,7 @@
 import type { ColorToken } from '../primitive-tokens/color'
-import type { ThemeTokens } from '../theme-tokens/theme-tokens'
-import { createColorSchemeTokensFromThemeTokens } from '../theme-tokens/color-scheme'
-import type { ColoringType } from '../theme-tokens/color-scheme'
+import type { ColorPairToken } from '../theme-tokens/theme-tokens-config'
 import { HexColorUtils } from '../utils/hex'
+import { resolveColorPairColoring } from './coloring'
 import type { ComponentTokenResolver } from './component-token-resolver'
 import type { TextStyleTokens } from './text-style-tokens'
 
@@ -10,7 +9,7 @@ export type ChatMessageDirection = 'incoming' | 'outgoing'
 
 export type ChatState = {
   direction?: ChatMessageDirection,
-  color?: ColoringType,
+  color?: ColorPairToken,
   isPressed?: boolean,
   isDisabled?: boolean,
   isUnread?: boolean,
@@ -283,13 +282,39 @@ const messageCardMaxWidth = 300
 const composerMaxLines = 7
 
 export const hightideChatTokenResolver: ComponentTokenResolver<
-  ThemeTokens,
   ChatState,
   ChatThemeTokens
-> = ({ themeTokens, state }) => {
+> = ({ themeTokens, semanticResolvers, state }) => {
   const { color, size, spacing, shape, borders, typography } = themeTokens
-  const colorSchemes = createColorSchemeTokensFromThemeTokens(themeTokens)
-  const accent = colorSchemes[state.color ?? 'primary']
+  const descriptionColor = semanticResolvers.asDescription({
+    theme: themeTokens,
+    parameter: { color: color.surface.onColor },
+  })
+  const fadedBorder = semanticResolvers.asFaded({
+    theme: themeTokens,
+    parameter: { color: color.surface.onColor },
+  })
+  const placeholderColor = descriptionColor
+  const accentPair = state.color ?? color.primary
+  const accentTonal = resolveColorPairColoring({
+    themeTokens,
+    semanticResolvers,
+    colorPair: accentPair,
+    style: 'tonal',
+  })
+  const accentText = resolveColorPairColoring({
+    themeTokens,
+    semanticResolvers,
+    colorPair: accentPair,
+    style: 'text',
+  })
+  const hoverColor = resolveColorPairColoring({
+    themeTokens,
+    semanticResolvers,
+    colorPair: color.surface,
+    style: 'filled',
+    state: { isHovered: true },
+  }).color
   const isOutgoing = state.direction === 'outgoing'
   const isPressed = !!state.isPressed && !state.isDisabled
   const alignment: ChatAlignment = isOutgoing ? 'flex-end' : 'flex-start'
@@ -316,28 +341,28 @@ export const hightideChatTokenResolver: ComponentTokenResolver<
         paddingVertical: shape.padding.xxl,
         paddingHorizontal: spacing.lg,
         backgroundColor: state.isSelected
-          ? color.background
-          : isPressed ? color.surfaceHover : color.transparent,
+          ? color.background.color
+          : isPressed ? hoverColor : 'transparent',
         borderLeftWidth: state.isSelected ? borders.borderWidths.thick : 0,
-        borderLeftColor: state.isSelected ? color.primary.color : color.transparent,
+        borderLeftColor: state.isSelected ? color.primary.color : 'transparent',
         borderRadius: shape.borderRadius.sm,
       },
       title: {
         ...typography.body.md,
         fontWeight: state.isUnread ? typography.fontWeights.bold : typography.fontWeights.medium,
-        color: color.onSurface,
+        color: color.surface.onColor,
         flex: 1,
       },
       timestamp: {
         ...typography.body.sm,
         fontWeight: state.isUnread ? typography.fontWeights.medium : typography.fontWeights.base,
-        color: state.isUnread ? color.primary.color : color.description,
+        color: state.isUnread ? color.primary.color : descriptionColor,
         flexShrink: 0,
       },
       preview: {
         ...typography.body.sm,
         fontWeight: typography.fontWeights.light,
-        color: state.isUnread ? color.onSurface : color.description,
+        color: state.isUnread ? color.surface.onColor : descriptionColor,
         flex: 1,
       },
       unreadBadge: {
@@ -361,7 +386,7 @@ export const hightideChatTokenResolver: ComponentTokenResolver<
     conversationList: {
       container: {
         flex: 1,
-        backgroundColor: color.surface,
+        backgroundColor: color.surface.color,
       },
       header: {
         paddingVertical: spacing.lg,
@@ -381,18 +406,18 @@ export const hightideChatTokenResolver: ComponentTokenResolver<
         paddingVertical: shape.padding.xxl,
         paddingHorizontal: spacing.lg,
         borderBottomWidth: hairline,
-        borderBottomColor: color.divider,
-        backgroundColor: color.surface,
+        borderBottomColor: fadedBorder,
+        backgroundColor: color.surface.color,
       },
       title: {
         ...typography.body.md,
         fontWeight: typography.fontWeights.bold,
-        color: color.onSurface,
+        color: color.surface.onColor,
       },
       subtitle: {
         ...typography.body.sm,
         fontWeight: typography.fontWeights.light,
-        color: color.description,
+        color: descriptionColor,
       },
     },
     messageList: {
@@ -401,7 +426,7 @@ export const hightideChatTokenResolver: ComponentTokenResolver<
         paddingVertical: spacing.lg + spacing.xs,
         paddingHorizontal: spacing.lg,
         gap: shape.padding.xxl,
-        backgroundColor: color.background,
+        backgroundColor: color.background.color,
       },
     },
     messageBubble: {
@@ -427,7 +452,7 @@ export const hightideChatTokenResolver: ComponentTokenResolver<
         fontWeight: typography.fontWeights.medium,
         color: isOutgoing
           ? HexColorUtils.hexWithAlpha(color.primary.onColor, 0.75)
-          : color.description,
+          : descriptionColor,
         marginTop: spacing.sm,
         textAlign: 'right',
       },
@@ -439,7 +464,7 @@ export const hightideChatTokenResolver: ComponentTokenResolver<
       receiptText: {
         ...typography.body.sm,
         fontWeight: typography.fontWeights.medium,
-        color: color.description,
+        color: descriptionColor,
       },
       receiptIcon: {
         color: color.primary.color,
@@ -450,9 +475,9 @@ export const hightideChatTokenResolver: ComponentTokenResolver<
         ...messageCorners,
         width: messageCardWidth,
         maxWidth: messageCardMaxWidth,
-        backgroundColor: color.surface,
+        backgroundColor: color.surface.color,
         borderWidth: hairline,
-        borderColor: color.divider,
+        borderColor: fadedBorder,
         overflow: 'hidden',
         alignSelf: alignment,
       },
@@ -463,7 +488,7 @@ export const hightideChatTokenResolver: ComponentTokenResolver<
         paddingVertical: shape.padding.xxl,
         paddingHorizontal: spacing.lg,
         borderBottomWidth: hairline,
-        borderBottomColor: color.divider,
+        borderBottomColor: fadedBorder,
       },
       icon: {
         alignItems: 'center',
@@ -471,19 +496,19 @@ export const hightideChatTokenResolver: ComponentTokenResolver<
         width: size.xs + spacing.md,
         height: size.xs + spacing.md,
         borderRadius: shape.borderRadius.sm,
-        backgroundColor: accent.tonal.base.color,
+        backgroundColor: accentTonal.color,
       },
       iconColor: {
-        color: accent.tonal.base.foreground,
+        color: accentTonal.onColor,
       },
       title: {
         ...typography.body.sm,
         fontWeight: typography.fontWeights.bold,
-        color: accent.text.base.foreground,
+        color: accentText.onColor,
       },
       subtitle: {
         ...typography.body.sm,
-        color: color.description,
+        color: descriptionColor,
       },
       body: {
         paddingVertical: shape.padding.xxl,
@@ -505,9 +530,9 @@ export const hightideChatTokenResolver: ComponentTokenResolver<
         gap: shape.padding.xxl,
         maxWidth: bubbleMaxWidth,
         padding: shape.padding.xxl,
-        backgroundColor: color.surface,
+        backgroundColor: color.surface.color,
         borderWidth: hairline,
-        borderColor: color.divider,
+        borderColor: fadedBorder,
         alignSelf: alignment,
       },
       icon: {
@@ -524,11 +549,11 @@ export const hightideChatTokenResolver: ComponentTokenResolver<
       name: {
         ...typography.body.sm,
         fontWeight: typography.fontWeights.medium,
-        color: color.onSurface,
+        color: color.surface.onColor,
       },
       metadata: {
         ...typography.body.sm,
-        color: color.description,
+        color: descriptionColor,
       },
     },
     systemLine: {
@@ -542,10 +567,10 @@ export const hightideChatTokenResolver: ComponentTokenResolver<
       text: {
         ...typography.body.sm,
         fontWeight: typography.fontWeights.medium,
-        color: accent.text.base.foreground,
+        color: accentText.onColor,
       },
       icon: {
-        color: accent.text.base.foreground,
+        color: accentText.onColor,
       },
     },
     dateDivider: {
@@ -554,12 +579,12 @@ export const hightideChatTokenResolver: ComponentTokenResolver<
         paddingVertical: spacing.sm,
         paddingHorizontal: spacing.lg,
         borderRadius: pillBorderRadius,
-        backgroundColor: color.surface,
+        backgroundColor: color.surface.color,
       },
       text: {
         ...typography.body.sm,
         fontWeight: typography.fontWeights.medium,
-        color: color.description,
+        color: descriptionColor,
       },
     },
     quickReplyChip: {
@@ -572,13 +597,13 @@ export const hightideChatTokenResolver: ComponentTokenResolver<
         paddingHorizontal: spacing.lg,
         borderRadius: pillBorderRadius,
         borderWidth: hairline,
-        borderColor: state.isActive ? color.primary.color : color.divider,
-        backgroundColor: isPressed ? color.surfaceHover : color.surface,
+        borderColor: state.isActive ? color.primary.color : fadedBorder,
+        backgroundColor: isPressed ? hoverColor : color.surface.color,
       },
       text: {
         ...typography.body.sm,
         fontWeight: typography.fontWeights.medium,
-        color: state.isActive ? color.primary.color : color.description,
+        color: state.isActive ? color.primary.color : descriptionColor,
       },
     },
     messageComposer: {
@@ -589,9 +614,9 @@ export const hightideChatTokenResolver: ComponentTokenResolver<
         gap: spacing.md,
         paddingVertical: shape.padding.xxl,
         paddingHorizontal: spacing.lg,
-        backgroundColor: color.surface,
+        backgroundColor: color.surface.color,
         borderTopWidth: hairline,
-        borderTopColor: color.divider,
+        borderTopColor: fadedBorder,
       },
       input: {
         ...typography.body.md,
@@ -601,10 +626,11 @@ export const hightideChatTokenResolver: ComponentTokenResolver<
         paddingVertical: shape.padding.xxl,
         paddingHorizontal: shape.padding.xxl,
         borderRadius: shape.borderRadius.sm,
-        backgroundColor: color.surfaceVariant,
-        color: color.onSurface,
+        backgroundColor: color.surfaceVariant.color,
+        color: color.surface.onColor,
       },
-      placeholderColor: color.placeholder,
+      placeholderColor,
+
     },
   }
 }

@@ -3,14 +3,14 @@ import {
   FlatList,
   Modal,
   Pressable,
-  Text,
   TextInput,
   View,
   type StyleProp,
   type ViewStyle
 } from 'react-native'
 import { Chip } from '../visualization-and-display/Chip'
-import { Icon } from '../visualization-and-display/Icon'
+import { ThemedText } from '../visualization-and-display/ThemedText'
+import { ThemedIcon } from '../visualization-and-display/ThemedIcon'
 import { HightideIconRegistry } from '../../icons/HightideIconRegistry'
 import { useTheme } from '../../global-contexts/theme/ThemeContext'
 import {
@@ -113,13 +113,13 @@ export const MultiSelect = ({
           ? (
             <View style={{ flexDirection: 'row', flexWrap: 'wrap', gap: 6 }}>
               {selectedLabels.map((label) => (
-                <Chip key={label} size="sm" color="primary" coloringStyle="tonal">
+                <Chip key={label} size="sm" coloringStyle="tonal">
                   {label}
                 </Chip>
               ))}
             </View>
           )
-          : <Text style={resolvedTriggerTextStyle}>{placeholder}</Text>}
+          : <ThemedText style={resolvedTriggerTextStyle}>{placeholder}</ThemedText>}
       </Pressable>
 
       <Modal
@@ -166,12 +166,12 @@ export const MultiSelect = ({
                   >
                     <View style={multiSelectTheme.checkbox(optionState)}>
                       {checkboxIcon.visible && (
-                        <Icon icon={HightideIconRegistry.Check} size="sm" color={checkboxIcon.color} />
+                        <ThemedIcon icon={HightideIconRegistry.Check} size="sm" color={checkboxIcon.color} />
                       )}
                     </View>
-                    <Text style={multiSelectTheme.optionText(optionState)}>
+                    <ThemedText style={multiSelectTheme.optionText(optionState)}>
                       {item.label}
-                    </Text>
+                    </ThemedText>
                   </Pressable>
                 )
               }}

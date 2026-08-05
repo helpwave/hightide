@@ -1,13 +1,13 @@
 import type {
   Meta,
   StoryObj
-} from '@storybook/react'
+} from '@storybook/react-native'
 
 import {
   AvatarGroup,
   AvatarUtil,
   type AvatarGroupProps,
-  type AvatarProps,
+  type AvatarProps
 } from '@helpwave/hightide-native/components'
 
 const avatars: AvatarProps[] = [

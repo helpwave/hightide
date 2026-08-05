@@ -1,5 +1,6 @@
 import { hightideMultiSelectTokenResolver } from '@helpwave/hightide-design/component-token-resolvers'
 import type { MultiSelectState as MultiSelectTokenState } from '@helpwave/hightide-design/component-token-resolvers'
+import { hightideSemanticTokenResolvers } from '@helpwave/hightide-design/semantic-token-resolvers'
 import type { ThemeTokens } from '@helpwave/hightide-design/theme-tokens'
 
 import { toTextStyle } from '../adapters/style-adapters'
@@ -41,7 +42,11 @@ const toOptionTokenState = (state: MultiSelectOptionState): MultiSelectTokenStat
 })
 
 export const toMultiSelectTheme = (themeTokens: ThemeTokens): MultiSelectTheme => {
-  const resolve = (state: MultiSelectTokenState) => hightideMultiSelectTokenResolver({ themeTokens, state })
+  const resolve = (state: MultiSelectTokenState) => hightideMultiSelectTokenResolver({
+    themeTokens,
+    semanticResolvers: hightideSemanticTokenResolvers,
+    state,
+  })
 
   return {
     trigger: createStyleResolver((state: MultiSelectState): MultiSelectTriggerStyle => ({

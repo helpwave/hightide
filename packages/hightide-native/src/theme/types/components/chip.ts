@@ -5,7 +5,7 @@ import type {
 
 import type {
   ChipColoringStyle,
-  ColoringType,
+  ColorPairToken,
   ComponentSize
 } from '@helpwave/hightide-design/theme-tokens'
 
@@ -13,7 +13,7 @@ import type { StyleResolverFunction } from '../resolver'
 
 export type ChipState = {
   size?: ComponentSize,
-  color?: ColoringType,
+  color?: ColorPairToken,
   coloringStyle?: ChipColoringStyle,
 }
 

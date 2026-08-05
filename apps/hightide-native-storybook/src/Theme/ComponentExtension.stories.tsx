@@ -1,6 +1,5 @@
 import { useState } from 'react'
 import {
-  Text,
   View,
   type TextStyle,
   type ViewStyle
@@ -8,20 +7,23 @@ import {
 import type {
   Meta,
   StoryObj
-} from '@storybook/react'
+} from '@storybook/react-native'
 
-import { Checkbox } from '@helpwave/hightide-native/components'
+import {
+  Checkbox,
+  ThemedText
+} from '@helpwave/hightide-native/components'
 import {
   HightideConfigUtils,
   useTheme,
   ThemeProvider,
-  type ThemeContextValue,
+  type ThemeContextValue
 } from '@helpwave/hightide-native/global-contexts'
 import {
   themes,
   createStyleResolver,
   type InteractionState,
-  type StyleResolverFunction,
+  type StyleResolverFunction
 } from '@helpwave/hightide-native/theme'
 import type { HightideTheme } from '@helpwave/hightide-native/theme'
 import {
@@ -115,16 +117,12 @@ const CalloutStateCheckbox = ({
   label: string,
   value: boolean,
   onValueChange: (value: boolean) => void,
-}) => {
-  const { theme } = useExtendedTheme()
-
-  return (
-    <View style={{ flexDirection: 'row', alignItems: 'center', gap: 8 }}>
-      <Checkbox value={value} onValueChange={onValueChange} />
-      <Text style={{ color: theme.colors.onBackground }}>{label}</Text>
-    </View>
-  )
-}
+}) => (
+  <View style={{ flexDirection: 'row', alignItems: 'center', gap: 8 }}>
+    <Checkbox value={value} onValueChange={onValueChange} />
+    <ThemedText>{label}</ThemedText>
+  </View>
+)
 
 const CalloutDemo = () => {
   const { theme } = useExtendedTheme()
@@ -153,9 +151,9 @@ const CalloutDemo = () => {
         />
       </View>
       <View style={containerStyle}>
-        <Text style={textStyle}>
+        <ThemedText style={textStyle}>
           Callout styles come from theme.components.callout
-        </Text>
+        </ThemedText>
       </View>
     </View>
   )

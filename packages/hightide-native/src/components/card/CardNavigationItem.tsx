@@ -5,14 +5,14 @@ import {
 } from 'react'
 import {
   Pressable,
-  Text,
   View,
   type PressableProps,
   type StyleProp,
   type ViewStyle
 } from 'react-native'
 import { HightideIconRegistry } from '../../icons/HightideIconRegistry'
-import { Icon } from '../visualization-and-display/Icon'
+import { ThemedIcon } from '../visualization-and-display/ThemedIcon'
+import { ThemedText } from '../visualization-and-display/ThemedText'
 import { useTheme } from '../../global-contexts/theme/ThemeContext'
 import type {
   CardActionItemLabelStyle,
@@ -79,9 +79,9 @@ export const CardNavigationItem = ({
           <Fragment>
             {leading}
             <View style={resolvedContentStyle}>
-              <Text style={resolvedLabelStyle}>{label}</Text>
+              <ThemedText style={resolvedLabelStyle}>{label}</ThemedText>
             </View>
-            <Icon
+            <ThemedIcon
               icon={HightideIconRegistry.ChevronRight}
               size={16}
               color={trailingColor}

@@ -1,5 +1,5 @@
 import type { ColorToken } from '../primitive-tokens/color'
-import type { ThemeTokens } from '../theme-tokens/theme-tokens'
+import { resolveColorPairColoring } from './coloring'
 import type { ComponentTokenResolver } from './component-token-resolver'
 import type { TextStyleTokens } from './text-style-tokens'
 
@@ -61,12 +61,26 @@ export type CardThemeTokens = {
 }
 
 export const hightideCardTokenResolver: ComponentTokenResolver<
-  ThemeTokens,
   CardState,
   CardThemeTokens
-> = ({ themeTokens, state }) => {
+> = ({ themeTokens, semanticResolvers, state }) => {
   const { color, size, spacing, shape, borders, typography } = themeTokens
+  const descriptionColor = semanticResolvers.asDescription({
+    theme: themeTokens,
+    parameter: { color: color.surface.onColor },
+  })
+  const fadedBorder = semanticResolvers.asFaded({
+    theme: themeTokens,
+    parameter: { color: color.surface.onColor },
+  })
   const isPressed = !!state.isPressed && !state.isDisabled
+  const hoverColor = resolveColorPairColoring({
+    themeTokens,
+    semanticResolvers,
+    colorPair: themeTokens.color.surface,
+    style: 'filled',
+    state: { isHovered: true },
+  }).color
 
   const item: CardItemTokens = {
     flexDirection: 'row',
@@ -75,7 +89,7 @@ export const hightideCardTokenResolver: ComponentTokenResolver<
     paddingVertical: spacing.md,
     paddingHorizontal: spacing.lg,
     borderBottomWidth: borders.borderWidths.thin,
-    borderBottomColor: color.divider,
+    borderBottomColor: fadedBorder,
     gap: shape.padding.xxl,
   }
 
@@ -87,14 +101,14 @@ export const hightideCardTokenResolver: ComponentTokenResolver<
 
   const actionItem: CardActionItemTokens = {
     ...item,
-    backgroundColor: isPressed ? color.surfaceHover : color.transparent,
+    backgroundColor: isPressed ? hoverColor : 'transparent',
     opacity: state.isDisabled ? 0.6 : 1,
   }
 
   const actionItemLabel: TextStyleTokens = {
     ...typography.body.md,
     fontWeight: typography.fontWeights.medium,
-    color: state.isDanger ? color.negative.color : color.onSurface,
+    color: state.isDanger ? color.negative.color : color.surface.onColor,
   }
 
   const actionItemIcon: CardIconTokens = {
@@ -103,8 +117,8 @@ export const hightideCardTokenResolver: ComponentTokenResolver<
 
   return {
     container: {
-      backgroundColor: color.surfaceVariant,
-      borderColor: color.border,
+      backgroundColor: color.surfaceVariant.color,
+      borderColor: fadedBorder,
       borderWidth: borders.borderWidths.thin,
       borderRadius: shape.borderRadius.lg,
       overflow: 'hidden',
@@ -113,12 +127,12 @@ export const hightideCardTokenResolver: ComponentTokenResolver<
     itemContent,
     itemLabel: {
       ...typography.body.sm,
-      color: color.description,
+      color: descriptionColor,
     },
     itemValue: {
       ...typography.body.md,
       fontWeight: typography.fontWeights.medium,
-      color: color.onSurface,
+      color: color.surface.onColor,
     },
     actionItem,
     actionItemContent: itemContent,
@@ -129,7 +143,7 @@ export const hightideCardTokenResolver: ComponentTokenResolver<
     navigationItemLabel: actionItemLabel,
     navigationItemIcon: actionItemIcon,
     navigationItemTrailing: {
-      color: color.description,
+      color: descriptionColor,
     },
   }
 }

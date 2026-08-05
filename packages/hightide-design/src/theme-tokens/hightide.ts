@@ -1,4 +1,3 @@
-import type { ColorToken } from '../primitive-tokens/color'
 import { hightidePrimitiveTokens } from '../primitive-tokens/hightide'
 import type { HightideColorPalettes } from '../primitive-tokens/color'
 import { createDarkThemeTokens } from './create-dark-theme-tokens'
@@ -13,7 +12,7 @@ const {
   white,
 } = palettes
 
-const whiteColor = white.value as ColorToken
+const whiteColor = white.value
 
 export const hightideLightThemeTokens = createLightThemeTokens({
   colors: {

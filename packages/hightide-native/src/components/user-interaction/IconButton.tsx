@@ -9,7 +9,7 @@ import {
   type ViewStyle
 } from 'react-native'
 import type {
-  ColoringType,
+  ColorPairToken,
   ComponentSize,
   PressableColoringStyle
 } from '@helpwave/hightide-design/theme-tokens'
@@ -28,7 +28,7 @@ export type IconButtonColoringStyle = PressableColoringStyle
 
 export type IconButtonProps = Omit<PressableProps, 'children' | 'style'> & {
   size?: IconButtonSize,
-  color?: ColoringType,
+  color?: ColorPairToken,
   coloringStyle?: IconButtonColoringStyle,
   children?: ReactNode,
   accessibilityLabel: string,
@@ -45,7 +45,7 @@ type PressableInteraction = {
 export const IconButton = forwardRef<React.ComponentRef<typeof Pressable>, IconButtonProps>(function IconButton({
   children,
   size = 'md',
-  color = 'neutral',
+  color,
   coloringStyle = 'filled',
   disabled,
   accessibilityLabel,

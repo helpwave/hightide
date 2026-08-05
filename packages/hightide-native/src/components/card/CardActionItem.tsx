@@ -5,7 +5,6 @@ import {
 } from 'react'
 import {
   Pressable,
-  Text,
   View,
   type PressableProps,
   type StyleProp,
@@ -13,6 +12,7 @@ import {
 } from 'react-native'
 
 import { useTheme } from '../../global-contexts/theme/ThemeContext'
+import { ThemedText } from '../visualization-and-display/ThemedText'
 import type {
   CardActionItemLabelStyle,
   CardActionItemState,
@@ -79,7 +79,7 @@ export const CardActionItem = ({
           <Fragment>
             {leading}
             <View style={resolvedContentStyle}>
-              <Text style={resolvedLabelStyle}>{label}</Text>
+              <ThemedText style={resolvedLabelStyle}>{label}</ThemedText>
             </View>
             {trailing}
           </Fragment>

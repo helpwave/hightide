@@ -1,25 +1,18 @@
-import type { ThemeTokens } from '../theme-tokens/theme-tokens'
-import {
-  createColorSchemeTokensFromThemeTokens
-} from '../theme-tokens/color-scheme'
-import type {
-  ColoringType,
-  PressableColoringStyle
-} from '../theme-tokens/color-scheme'
+import type { PressableColoringStyle } from '../semantic-token-resolvers/types'
+import type { ColorPairToken } from '../theme-tokens/theme-tokens-config'
 import {
   createElementLayoutTokens,
   type ComponentSize
 } from '../theme-tokens/element-layout'
-import { resolveStateBasedProperty } from '../theme-tokens/stateBasedProperty'
+import { resolveColorPairColoring } from './coloring'
 import type { ComponentTokenResolver } from './component-token-resolver'
 import type { ContainerTokens } from './container-tokens'
 import type { TextStyleTokens } from './text-style-tokens'
 import type { PressableInteractionState } from './pressable'
-import { toActivePressableStates, toPressableColorSchemes } from './pressable'
 
 export type ButtonState = PressableInteractionState & {
   size?: ComponentSize,
-  color?: ColoringType,
+  color?: ColorPairToken,
   coloringStyle?: PressableColoringStyle,
 }
 
@@ -33,32 +26,31 @@ const isOutlineColoringStyle = (style: PressableColoringStyle): boolean => (
 )
 
 export const hightideButtonTokenResolver: ComponentTokenResolver<
-  ThemeTokens,
   ButtonState,
   ButtonThemeTokens
-> = ({ themeTokens, state }) => {
+> = ({ themeTokens, semanticResolvers, state }) => {
   const size = state.size ?? 'md'
-  const color = state.color ?? 'primary'
   const coloringStyle = state.coloringStyle ?? 'filled'
-  const colorSchemes = toPressableColorSchemes(
-    createColorSchemeTokensFromThemeTokens(themeTokens)
-  )
+  const coloring = resolveColorPairColoring({
+    themeTokens,
+    semanticResolvers,
+    colorPair: state.color ?? themeTokens.color.primary,
+    style: coloringStyle,
+    state,
+  })
+  const borderColor = coloring.outlineColor ?? coloring.borderColor
   const layout = createElementLayoutTokens(themeTokens).control[size]
-  const resolved = resolveStateBasedProperty(
-    colorSchemes[color][coloringStyle],
-    toActivePressableStates(state)
-  )
   const outlinePadding = isOutlineColoringStyle(coloringStyle)
   const outlineInset = Math.max(layout.inset - layout.borderWidth, 0)
   const textStyle = themeTokens.typography.label[size]
-  const gap = size === 'sm' ? themeTokens.spacing.xs : themeTokens.spacing.sm
+  const gap = themeTokens.spacing[size]
 
   return {
     container: {
-      backgroundColor: resolved.color,
+      backgroundColor: coloring.color,
       border: {
-        width: layout.borderWidth,
-        color: resolved.border,
+        width: borderColor !== undefined ? layout.borderWidth : 0,
+        color: borderColor,
       },
       size: {
         minWidth: layout.minimumWidth,
@@ -76,7 +68,7 @@ export const hightideButtonTokenResolver: ComponentTokenResolver<
       layout: { gap },
     },
     text: {
-      color: resolved.foreground,
+      color: coloring.onColor,
       fontSize: textStyle.fontSize,
       fontWeight: textStyle.fontWeight,
       fontFamily: textStyle.fontFamily,

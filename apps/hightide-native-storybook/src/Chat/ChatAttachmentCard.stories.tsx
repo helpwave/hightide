@@ -2,7 +2,7 @@ import { View } from 'react-native'
 import type {
   Meta,
   StoryObj
-} from '@storybook/react'
+} from '@storybook/react-native'
 import { action } from 'storybook/actions'
 
 import { ChatAttachmentCard } from '@helpwave/hightide-native/components'

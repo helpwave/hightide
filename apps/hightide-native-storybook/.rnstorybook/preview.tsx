@@ -4,8 +4,8 @@ import type { Preview } from '@storybook/react-native'
 import { HightideProvider } from '@helpwave/hightide-native/global-contexts'
 import { themes } from '@helpwave/hightide-native/theme'
 
-const lightBackground = themes.light.colors.background
-const darkBackground = themes.dark.colors.background
+const lightBackground = themes.light.colors.background.color
+const darkBackground = themes.dark.colors.background.color
 
 const preview: Preview = {
   parameters: {

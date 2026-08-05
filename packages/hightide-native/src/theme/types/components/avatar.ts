@@ -4,7 +4,10 @@ import type {
   ViewStyle
 } from 'react-native'
 
-import type { ComponentSize } from '@helpwave/hightide-design/theme-tokens'
+import type {
+  ColorPairToken,
+  ComponentSize
+} from '@helpwave/hightide-design/theme-tokens'
 import {
   avatarStatuses,
   type AvatarStatus
@@ -20,6 +23,7 @@ export type AvatarState = {
   size?: ComponentSize,
   isGrouped?: boolean,
   groupIndex?: number,
+  color?: ColorPairToken,
 }
 
 export type AvatarWithStatusState = {
@@ -63,7 +67,7 @@ export type AvatarGroupStackStyle = ViewStyle
 export type AvatarGroupMoreStyle = TextStyle
 
 export type AvatarTheme = {
-  avatar: StyleResolverFunction<AvatarState, AvatarStyle>,
+  container: StyleResolverFunction<AvatarState, AvatarStyle>,
   image: StyleResolverFunction<AvatarState, AvatarImageStyle>,
   text: StyleResolverFunction<AvatarState, AvatarTextStyle>,
   icon: StyleResolverFunction<AvatarState, AvatarIconStyle>,

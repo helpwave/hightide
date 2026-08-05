@@ -3,7 +3,6 @@ import {
   FlatList,
   Modal,
   Pressable,
-  Text,
   TextInput,
   View,
   type StyleProp,
@@ -11,6 +10,7 @@ import {
 } from 'react-native'
 
 import { useTheme } from '../../global-contexts/theme/ThemeContext'
+import { ThemedText } from '../visualization-and-display/ThemedText'
 import {
   useSelect,
   type UseSelectOption
@@ -107,9 +107,9 @@ export const Select = ({
         onPress={() => select.toggleOpen()}
         style={resolvedTriggerStyle}
       >
-        <Text style={resolvedTriggerTextStyle}>
+        <ThemedText style={resolvedTriggerTextStyle}>
           {selectedLabel}
-        </Text>
+        </ThemedText>
       </Pressable>
 
       <Modal
@@ -153,9 +153,9 @@ export const Select = ({
                     onPress={() => select.selectValue(item.id)}
                     style={selectTheme.option(optionState)}
                   >
-                    <Text style={selectTheme.optionText(optionState)}>
+                    <ThemedText style={selectTheme.optionText(optionState)}>
                       {item.label}
-                    </Text>
+                    </ThemedText>
                   </Pressable>
                 )
               }}

@@ -3,7 +3,7 @@ import type {
   ViewStyle
 } from 'react-native'
 
-import type { ColoringType } from '@helpwave/hightide-design/theme-tokens'
+import type { ColorPairToken } from '@helpwave/hightide-design/theme-tokens'
 
 import type { Color } from '../color'
 import type {
@@ -52,7 +52,7 @@ export type ChatMessageBubbleReceiptIconStyle = {
 
 export type ChatMessageCardState = {
   direction: ChatMessageDirection,
-  color?: ColoringType,
+  color?: ColorPairToken,
 }
 
 export type ChatMessageCardStyle = ViewStyle
@@ -83,7 +83,7 @@ export type ChatAttachmentCardNameStyle = TextStyle
 export type ChatAttachmentCardMetadataStyle = TextStyle
 
 export type ChatSystemLineState = {
-  color?: ColoringType,
+  color?: ColorPairToken,
 }
 
 export type ChatSystemLineStyle = ViewStyle

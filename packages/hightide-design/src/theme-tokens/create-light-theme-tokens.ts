@@ -1,13 +1,11 @@
-import type { ColorToken } from '../primitive-tokens/color'
 import { hightidePrimitiveTokens } from '../primitive-tokens/hightide'
 import type { HightideColorPalettes } from '../primitive-tokens/color'
-import type { ThemeTokensModeConfig } from './theme-tokens-config'
+import type { ColorPairToken, ThemeTokensModeConfig } from './theme-tokens-config'
 import type { ThemeTokens } from './theme-tokens'
 import {
   buildColorTokens,
   defaultLightElevationTokens,
   defaultTintConfig,
-  expandRoleColor,
   resolveSharedGroups,
   tertiaryLightColor
 } from './defaults'
@@ -22,88 +20,64 @@ const {
   blue,
   white,
   black,
-  transparent,
 } = palettes
 
 export const createLightThemeTokens = (
   config: ThemeTokensModeConfig
 ): ThemeTokens => {
   const tintConfig = config.colors.tintConfig ?? defaultTintConfig
-  const whiteColor = white.value as ColorToken
-  const blackColor = black.value as ColorToken
+  const whiteColor = white.value
+  const blackColor = black.value
 
-  const primary = expandRoleColor(
-    config.colors.primary,
-    tintConfig
-  )
-  const secondary = expandRoleColor(
-    config.colors.secondary ?? {
-      color: blue.value[500],
-      onColor: whiteColor,
-    },
-    tintConfig,
-    config.colors.secondary ? undefined : blue.value[600]
-  )
-  const tertiary = expandRoleColor(
-    config.colors.tertiary ?? {
-      color: tertiaryLightColor,
-      onColor: whiteColor,
-    },
-    tintConfig
-  )
-  const positive = expandRoleColor(
-    config.colors.positive ?? {
-      color: green.value[500],
-      onColor: whiteColor,
-    },
-    tintConfig,
-    config.colors.positive ? undefined : green.value[600]
-  )
-  const warning = expandRoleColor(
-    config.colors.warning ?? {
-      color: orange.value[500],
-      onColor: whiteColor,
-    },
-    tintConfig,
-    config.colors.warning ? undefined : orange.value[600]
-  )
-  const negative = expandRoleColor(
-    config.colors.negative ?? {
-      color: red.value[500],
-      onColor: whiteColor,
-    },
-    tintConfig,
-    config.colors.negative ? undefined : red.value[600]
-  )
-  const neutral = expandRoleColor(
-    {
-      color: gray.value[150],
-      onColor: blackColor,
-    },
-    tintConfig,
-    gray.value[200]
-  )
-
-  const background = config.colors.background ?? {
+  const primary = config.colors.primary
+  const secondary: ColorPairToken = config.colors.secondary ?? {
+    color: blue.value[500],
+    onColor: whiteColor,
+  }
+  const tertiary: ColorPairToken = config.colors.tertiary ?? {
+    color: tertiaryLightColor,
+    onColor: whiteColor,
+  }
+  const positive: ColorPairToken = config.colors.positive ?? {
+    color: green.value[500],
+    onColor: whiteColor,
+  }
+  const warning: ColorPairToken = config.colors.warning ?? {
+    color: orange.value[500],
+    onColor: whiteColor,
+  }
+  const negative: ColorPairToken = config.colors.negative ?? {
+    color: red.value[500],
+    onColor: whiteColor,
+  }
+  const neutral: ColorPairToken = {
+    color: gray.value[150],
+    onColor: blackColor,
+  }
+  const background: ColorPairToken = config.colors.background ?? {
     color: gray.value[75],
     onColor: gray.value[900],
   }
-  const surface = config.colors.surface ?? {
+  const surface: ColorPairToken = config.colors.surface ?? {
     color: gray.value[25],
     onColor: gray.value[900],
+  }
+  const surfaceVariant: ColorPairToken = config.colors.surfaceVariant ?? {
+    color: whiteColor,
+    onColor: gray.value[900],
+  }
+  const disabled: ColorPairToken = config.colors.disabled ?? {
+    color: gray.value[300],
+    onColor: gray.value[500],
   }
 
   return {
     color: buildColorTokens({
-      transparent: transparent.value,
+      tintConfig,
       background,
       surface,
-      surfaceHover: whiteColor,
-      surfaceVariant: whiteColor,
-      disabled: gray.value[300],
-      onDisabled: gray.value[500],
-      subtle: config.colors.subtle ?? gray.value[600],
-      faded: config.colors.faded ?? gray.value[200],
+      surfaceVariant,
+      disabled,
       primary,
       secondary,
       tertiary,

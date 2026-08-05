@@ -94,7 +94,7 @@ export const ThemeProvider = ({
   return (
     <ThemeContext.Provider value={contextValue}>
       <ContentThemeProvider
-        foregroundColor={contextValue.theme.colors.onSurface}
+        foregroundColor={contextValue.theme.colors.surface.onColor}
         textStyle={contextValue.theme.typography.body.md}
       >
         {children}

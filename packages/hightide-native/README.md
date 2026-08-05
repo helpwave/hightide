@@ -31,18 +31,18 @@ import { HightideProvider } from "@helpwave/hightide-native/global-contexts";
 Import from the package subpaths (there is no root export):
 
 ```tsx
-import { Button, Input, Select } from "@helpwave/hightide-native/components";
+import { Button, Input, Select, ThemedIcon } from "@helpwave/hightide-native/components";
 import { HightideProvider } from "@helpwave/hightide-native/global-contexts";
 import { useSelect } from "@helpwave/hightide-native/hooks";
-import { Icon } from "@helpwave/hightide-native/icons";
+import { HightideIconRegistry } from "@helpwave/hightide-native/icons";
 ```
 
 | Subpath | Contents |
 | --- | --- |
-| `@helpwave/hightide-native/components` | UI components (`Button`, `Checkbox`, `Chip`, `Input`, …) |
+| `@helpwave/hightide-native/components` | UI components (`Button`, `Checkbox`, `Chip`, `Input`, `ThemedText`, `ThemedIcon`, …) |
 | `@helpwave/hightide-native/global-contexts` | `HightideProvider` and related context providers |
 | `@helpwave/hightide-native/hooks` | Native hooks (`useSelect`, `useMultiSelect`, …) |
-| `@helpwave/hightide-native/icons` | Icon components |
+| `@helpwave/hightide-native/icons` | Icon registry (`HightideIconRegistry`) |
 | `@helpwave/hightide-native/theme` | Theme factories and style resolvers |
 | `@helpwave/hightide-native/types` | Shared TypeScript types |
 

@@ -1,23 +1,18 @@
 import type { ColorToken } from '../primitive-tokens/color'
-import type { ThemeTokens } from '../theme-tokens/theme-tokens'
-import { createColorSchemeTokensFromThemeTokens } from '../theme-tokens/color-scheme'
-import type {
-  ColoringType,
-  PressableColoringStyle
-} from '../theme-tokens/color-scheme'
+import type { PressableColoringStyle } from '../semantic-token-resolvers/types'
+import type { ColorPairToken } from '../theme-tokens/theme-tokens-config'
 import {
   createElementLayoutTokens,
   type ComponentSize
 } from '../theme-tokens/element-layout'
-import { resolveStateBasedProperty } from '../theme-tokens/stateBasedProperty'
+import { resolveColorPairColoring } from './coloring'
 import type { ComponentTokenResolver } from './component-token-resolver'
 import type { TextStyleTokens } from './text-style-tokens'
 import type { PressableInteractionState } from './pressable'
-import { toActivePressableStates, toPressableColorSchemes } from './pressable'
 
 export type IconButtonState = PressableInteractionState & {
   size?: ComponentSize,
-  color?: ColoringType,
+  color?: ColorPairToken,
   coloringStyle?: PressableColoringStyle,
 }
 
@@ -31,7 +26,6 @@ export type IconButtonContainerTokens = {
   height: number,
   borderRadius: number,
   overflow: 'hidden',
-  opacity: number,
 }
 
 export type IconButtonIconTokens = {
@@ -45,42 +39,39 @@ export type IconButtonThemeTokens = {
 }
 
 export const hightideIconButtonTokenResolver: ComponentTokenResolver<
-  ThemeTokens,
   IconButtonState,
   IconButtonThemeTokens
-> = ({ themeTokens, state }) => {
+> = ({ themeTokens, semanticResolvers, state }) => {
   const size = state.size ?? 'md'
-  const color = state.color ?? 'neutral'
-  const coloringStyle = state.coloringStyle ?? 'filled'
-  const colorSchemes = toPressableColorSchemes(
-    createColorSchemeTokensFromThemeTokens(themeTokens)
-  )
+  const coloring = resolveColorPairColoring({
+    themeTokens,
+    semanticResolvers,
+    colorPair: state.color ?? themeTokens.color.primary,
+    style: state.coloringStyle ?? 'filled',
+    state,
+  })
+  const borderColor = coloring.outlineColor ?? coloring.borderColor
   const layout = createElementLayoutTokens(themeTokens).control[size]
-  const resolved = resolveStateBasedProperty(
-    colorSchemes[color][coloringStyle],
-    toActivePressableStates(state)
-  )
   const textStyle = themeTokens.typography.label[size]
 
   return {
     container: {
       alignItems: 'center',
       justifyContent: 'center',
-      backgroundColor: resolved.color,
-      borderColor: resolved.border,
-      borderWidth: layout.borderWidth,
+      backgroundColor: coloring.color,
+      borderColor: borderColor ?? 'transparent',
+      borderWidth: borderColor !== undefined ? layout.borderWidth : 0,
       width: layout.size,
       height: layout.size,
       borderRadius: layout.borderRadius,
       overflow: 'hidden',
-      opacity: state.isDisabled ? 0.6 : 1,
     },
     icon: {
-      color: resolved.foreground,
+      color: coloring.onColor,
     },
     text: {
       ...textStyle,
-      color: resolved.foreground,
+      color: coloring.onColor,
     },
   }
 }

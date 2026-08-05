@@ -1,20 +1,21 @@
-import type { ColorToken } from '../primitive-tokens/color'
+import type { HexColorToken } from '../primitive-tokens/color'
 import type { ShadowLayoutToken } from '../primitive-tokens/shadow'
 import type { TypographyStyleToken } from './typography-style-token'
 
 export type ThemeMode = 'light' | 'dark'
 
 export type ColorPairToken = {
-  color: ColorToken,
-  onColor: ColorToken,
+  color: HexColorToken,
+  onColor: HexColorToken,
 }
 
 export type TintConfig = {
   light: number,
   normal: number,
-  emphasis: number,
   strong: number,
 }
+
+export type TintStrength = keyof TintConfig
 
 export type ThemeLayoutSize = 'xs' | 'sm' | 'md' | 'lg' | 'xl'
 export type ThemeSpacingSize = 'xxs' | 'xs' | 'sm' | 'md' | 'lg' | 'xl' | 'xxl'
@@ -54,9 +55,16 @@ export type ThemeTokensConfig = {
     positive?: ColorPairToken,
     background?: ColorPairToken,
     surface?: ColorPairToken,
-    subtle?: ColorToken,
-    faded?: ColorToken,
+    surfaceVariant?: ColorPairToken,
+    disabled?: ColorPairToken,
     tintConfig?: TintConfig,
+  },
+  decoration?: {
+    appearancePercentages?: {
+      normal?: number,
+      subtle?: number,
+      faded?: number,
+    },
   },
   typography?: ThemeTokensTypographyConfig,
   size?: Partial<Record<ThemeLayoutSize, number>>,

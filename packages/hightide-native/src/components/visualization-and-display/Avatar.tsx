@@ -7,7 +7,6 @@ import {
 } from 'react'
 import {
   Image,
-  Text,
   View,
   type ImageProps,
   type StyleProp,
@@ -15,8 +14,12 @@ import {
   type ViewStyle
 } from 'react-native'
 import { HightideIconRegistry } from '../../icons/HightideIconRegistry'
-import { Icon } from './Icon'
-import type { ComponentSize } from '@helpwave/hightide-design/theme-tokens'
+import { ThemedIcon } from './ThemedIcon'
+import { ThemedText } from './ThemedText'
+import type {
+  ColorPairToken,
+  ComponentSize
+} from '@helpwave/hightide-design/theme-tokens'
 
 import { useTheme } from '../../global-contexts/theme/ThemeContext'
 import type {
@@ -63,12 +66,13 @@ export type AvatarProps = Omit<ViewProps, 'children' | 'style'> & {
   image?: ImageConfig,
   name?: string,
   size?: AvatarSize,
+  color?: ColorPairToken,
   ImageComponent?: ComponentType<AvatarImageProps>,
   style?: StyleProp<ViewStyle>,
-  avatarStyle?: StyleOverwrite<{ size?: ComponentSize, isGrouped?: boolean, groupIndex?: number }, AvatarStyle>,
-  imageStyle?: StyleOverwrite<{ size?: ComponentSize, isGrouped?: boolean, groupIndex?: number }, AvatarImageStyle>,
-  textStyle?: StyleOverwrite<{ size?: ComponentSize, isGrouped?: boolean, groupIndex?: number }, AvatarTextStyle>,
-  iconStyle?: StyleOverwrite<{ size?: ComponentSize, isGrouped?: boolean, groupIndex?: number }, AvatarIconStyle>,
+  avatarStyle?: StyleOverwrite<{ size?: ComponentSize, isGrouped?: boolean, groupIndex?: number, color?: ColorPairToken }, AvatarStyle>,
+  imageStyle?: StyleOverwrite<{ size?: ComponentSize, isGrouped?: boolean, groupIndex?: number, color?: ColorPairToken }, AvatarImageStyle>,
+  textStyle?: StyleOverwrite<{ size?: ComponentSize, isGrouped?: boolean, groupIndex?: number, color?: ColorPairToken }, AvatarTextStyle>,
+  iconStyle?: StyleOverwrite<{ size?: ComponentSize, isGrouped?: boolean, groupIndex?: number, color?: ColorPairToken }, AvatarIconStyle>,
   isGrouped?: boolean,
   groupIndex?: number,
 }
@@ -77,6 +81,7 @@ export const Avatar = ({
   image: initialImage,
   name,
   size = 'md',
+  color,
   ImageComponent = DefaultAvatarImage,
   style,
   avatarStyle,
@@ -97,7 +102,8 @@ export const Avatar = ({
     size,
     isGrouped,
     groupIndex,
-  }), [size, isGrouped, groupIndex])
+    color,
+  }), [size, isGrouped, groupIndex, color])
 
   const displayName = useMemo(() => {
     const maxLetters = size === 'sm' ? 1 : 2
@@ -120,7 +126,7 @@ export const Avatar = ({
     setImage(initialImage)
   }, [image?.avatarUrl, initialImage])
 
-  const resolvedAvatar = theme.components.avatar.avatar(state, avatarStyle)
+  const resolvedAvatar = theme.components.avatar.container(state, avatarStyle)
   const resolvedImage = theme.components.avatar.image(state, imageStyle)
   const resolvedText = theme.components.avatar.text(state, textStyle)
   const resolvedIcon = theme.components.avatar.icon(state, iconStyle)
@@ -142,9 +148,9 @@ export const Avatar = ({
       )}
       {isShowingFallback && (
         name ? (
-          <Text style={resolvedText}>{displayName}</Text>
+          <ThemedText style={resolvedText}>{displayName}</ThemedText>
         ) : (
-          <Icon
+          <ThemedIcon
             icon={HightideIconRegistry.User}
             size={resolvedIcon.size}
             color={resolvedIcon.color}
@@ -207,9 +213,9 @@ export const AvatarGroup = ({
         ))}
       </View>
       {showTotalNumber && notDisplayedProfiles > 0 && (
-        <Text style={resolvedMore}>
+        <ThemedText style={resolvedMore}>
           {`+ ${notDisplayedProfiles}`}
-        </Text>
+        </ThemedText>
       )}
     </View>
   )
@@ -275,7 +281,7 @@ export const AvatarWithLabel = ({
 
   const avatar = <Avatar {...avatarProps} size={size} />
   const labelElement = typeof label === 'string' || typeof label === 'number'
-    ? <Text style={resolvedLabel}>{label}</Text>
+    ? <ThemedText style={resolvedLabel}>{label}</ThemedText>
     : label
 
   return (

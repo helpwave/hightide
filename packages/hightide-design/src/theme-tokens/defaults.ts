@@ -1,4 +1,4 @@
-import type { ColorToken } from '../primitive-tokens/color'
+import type { ColorToken, HexColorToken } from '../primitive-tokens/color'
 import { hightideTypography } from '../primitive-tokens/typography'
 import type { ShadowLayoutToken } from '../primitive-tokens/shadow'
 import { hightideShadow } from '../primitive-tokens/shadow'
@@ -9,7 +9,7 @@ import type {
   TintConfig
 } from './theme-tokens-config'
 import type {
-  RoleColorToken,
+  ThemeAppearancePercentages,
   ThemeBordersTokens,
   ThemeColorTokens,
   ThemeElevationTokens,
@@ -23,26 +23,13 @@ import type {
 import type { TypographyStyleToken } from './typography-style-token'
 
 export const defaultTintConfig: TintConfig = {
-  light: 0.12,
-  normal: 0.2,
-  emphasis: 0.28,
-  strong: 0.4,
+  light: 0.08,
+  normal: 0.12,
+  strong: 0.16,
 }
 
-export const tertiaryLightColor = '#057986' as const satisfies ColorToken
+export const tertiaryLightColor = '#057986' as const satisfies HexColorToken
 export const tertiaryDarkColor = HexColorUtils.mixWithWhite(tertiaryLightColor, 0.35)
-
-export const expandRoleColor = (
-  pair: ColorPairToken,
-  tintConfig: TintConfig,
-  emphasis?: ColorToken
-): RoleColorToken => ({
-  color: pair.color,
-  onColor: pair.onColor,
-  emphasis: emphasis ?? HexColorUtils.mixWithBlack(pair.color, 0.15),
-  tint: HexColorUtils.hexWithAlpha(pair.color, tintConfig.normal),
-  tintEmphasis: HexColorUtils.hexWithAlpha(pair.color, tintConfig.emphasis),
-})
 
 const createTypographyStyle = (
   fontSize: number,
@@ -212,39 +199,31 @@ export const mergeTypography = (
   }
 }
 
+export const defaultAppearancePercentages = (): ThemeAppearancePercentages => ({
+  normal: 1,
+  subtle: 0.7,
+  faded: 0.4,
+})
+
 export const buildColorTokens = (params: {
-  transparent: ColorToken,
+  tintConfig: TintConfig,
   background: ColorPairToken,
   surface: ColorPairToken,
-  surfaceHover: ColorToken,
-  surfaceVariant: ColorToken,
-  disabled: ColorToken,
-  onDisabled: ColorToken,
-  subtle: ColorToken,
-  faded: ColorToken,
-  primary: RoleColorToken,
-  secondary: RoleColorToken,
-  tertiary: RoleColorToken,
-  positive: RoleColorToken,
-  warning: RoleColorToken,
-  negative: RoleColorToken,
-  neutral: RoleColorToken,
+  surfaceVariant: ColorPairToken,
+  disabled: ColorPairToken,
+  primary: ColorPairToken,
+  secondary: ColorPairToken,
+  tertiary: ColorPairToken,
+  positive: ColorPairToken,
+  warning: ColorPairToken,
+  negative: ColorPairToken,
+  neutral: ColorPairToken,
 }): ThemeColorTokens => ({
-  transparent: params.transparent,
-  background: params.background.color,
-  onBackground: params.background.onColor,
-  disabled: params.disabled,
-  onDisabled: params.onDisabled,
-  surface: params.surface.color,
-  onSurface: params.surface.onColor,
-  surfaceHover: params.surfaceHover,
+  tintConfig: params.tintConfig,
+  background: params.background,
+  surface: params.surface,
   surfaceVariant: params.surfaceVariant,
-  subtle: params.subtle,
-  faded: params.faded,
-  placeholder: params.subtle,
-  description: params.subtle,
-  border: params.faded,
-  divider: params.faded,
+  disabled: params.disabled,
   primary: params.primary,
   secondary: params.secondary,
   tertiary: params.tertiary,
@@ -257,47 +236,58 @@ export const buildColorTokens = (params: {
 export const resolveSharedGroups = (
   config: ThemeTokensModeConfig,
   elevationDefaults: ThemeElevationTokens
-): Pick<ThemeTokens, 'typography' | 'size' | 'spacing' | 'shape' | 'borders' | 'elevation' | 'motion'> => ({
-  typography: mergeTypography(defaultTypographyTokens(), config.typography),
-  size: {
-    ...defaultSizeTokens(),
-    ...config.size,
-  },
-  spacing: {
-    ...defaultSpacingTokens(),
-    ...config.spacing,
-  },
-  shape: {
-    borderRadius: {
-      ...defaultShapeTokens().borderRadius,
-      ...config.shape?.borderRadius,
+): Pick<ThemeTokens, 'decoration' | 'typography' | 'size' | 'spacing' | 'shape' | 'borders' | 'elevation' | 'motion'> => {
+  const appearanceDefaults = defaultAppearancePercentages()
+
+  return {
+    decoration: {
+      appearancePercentages: {
+        normal: config.decoration?.appearancePercentages?.normal ?? appearanceDefaults.normal,
+        subtle: config.decoration?.appearancePercentages?.subtle ?? appearanceDefaults.subtle,
+        faded: config.decoration?.appearancePercentages?.faded ?? appearanceDefaults.faded,
+      },
     },
-    padding: {
-      ...defaultShapeTokens().padding,
-      ...config.shape?.padding,
+    typography: mergeTypography(defaultTypographyTokens(), config.typography),
+    size: {
+      ...defaultSizeTokens(),
+      ...config.size,
     },
-  },
-  borders: {
-    borderWidths: {
-      ...defaultBordersTokens().borderWidths,
-      ...config.borders?.borderWidths,
+    spacing: {
+      ...defaultSpacingTokens(),
+      ...config.spacing,
     },
-  },
-  elevation: {
-    ...elevationDefaults,
-    ...Object.fromEntries(
-      Object.entries(config.elevation ?? {}).map(([level, layout]) => [
-        level,
-        layout
-          ? withShadowColor(layout, elevationDefaults[level as keyof ThemeElevationTokens].color)
-          : elevationDefaults[level as keyof ThemeElevationTokens],
-      ])
-    ) as ThemeElevationTokens,
-  },
-  motion: {
-    durations: {
-      ...defaultMotionTokens().durations,
-      ...config.motion?.durations,
+    shape: {
+      borderRadius: {
+        ...defaultShapeTokens().borderRadius,
+        ...config.shape?.borderRadius,
+      },
+      padding: {
+        ...defaultShapeTokens().padding,
+        ...config.shape?.padding,
+      },
     },
-  },
-})
+    borders: {
+      borderWidths: {
+        ...defaultBordersTokens().borderWidths,
+        ...config.borders?.borderWidths,
+      },
+    },
+    elevation: {
+      ...elevationDefaults,
+      ...Object.fromEntries(
+        Object.entries(config.elevation ?? {}).map(([level, layout]) => [
+          level,
+          layout
+            ? withShadowColor(layout, elevationDefaults[level as keyof ThemeElevationTokens].color)
+            : elevationDefaults[level as keyof ThemeElevationTokens],
+        ])
+      ) as ThemeElevationTokens,
+    },
+    motion: {
+      durations: {
+        ...defaultMotionTokens().durations,
+        ...config.motion?.durations,
+      },
+    },
+  }
+}

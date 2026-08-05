@@ -1,5 +1,4 @@
 import type { ColorToken } from '../primitive-tokens/color'
-import type { ThemeTokens } from '../theme-tokens/theme-tokens'
 import { createElementLayoutTokens } from '../theme-tokens/element-layout'
 import type { ComponentTokenResolver } from './component-token-resolver'
 import type { TextStyleTokens } from './text-style-tokens'
@@ -28,13 +27,21 @@ export type InputThemeTokens = {
 }
 
 export const hightideInputTokenResolver: ComponentTokenResolver<
-  ThemeTokens,
   InputState,
   InputThemeTokens
-> = ({ themeTokens, state }) => {
+> = ({ themeTokens, semanticResolvers, state }) => {
   const { color, spacing, borders, typography } = themeTokens
   const layout = createElementLayoutTokens(themeTokens).control.md
   const textStyle = typography.label.md
+  const onColor = color.surface.onColor
+  const borderColor = semanticResolvers.asFaded({
+    theme: themeTokens,
+    parameter: { color: onColor },
+  })
+  const placeholderColor = semanticResolvers.asDescription({
+    theme: themeTokens,
+    parameter: { color: onColor },
+  })
 
   return {
     input: {
@@ -44,11 +51,11 @@ export const hightideInputTokenResolver: ComponentTokenResolver<
       paddingHorizontal: spacing.md,
       borderRadius: layout.borderRadius,
       borderWidth: borders.borderWidths.thin,
-      borderColor: state.isInvalid ? color.negative.color : color.border,
-      backgroundColor: state.isDisabled ? color.disabled : color.surfaceVariant,
-      color: state.isDisabled ? color.onDisabled : color.onSurface,
+      borderColor: state.isInvalid ? color.negative.color : borderColor,
+      backgroundColor: state.isDisabled ? color.disabled.color : color.surfaceVariant.color,
+      color: state.isDisabled ? color.disabled.onColor : onColor,
       opacity: state.isDisabled ? 0.6 : 1,
     },
-    placeholderColor: color.placeholder,
+    placeholderColor,
   }
 }

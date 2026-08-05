@@ -1,11 +1,8 @@
-import {
-  Text,
-  View
-} from 'react-native'
+import { View } from 'react-native'
 import type {
   Meta,
   StoryObj
-} from '@storybook/react'
+} from '@storybook/react-native'
 import {
   Bell,
   Building2,
@@ -20,6 +17,7 @@ import {
   CardItem,
   CardNavigationItem,
   Switch,
+  ThemedText
 } from '@helpwave/hightide-native/components'
 import { useTheme } from '@helpwave/hightide-native/global-contexts'
 
@@ -36,9 +34,9 @@ const CardDemo = () => {
   return (
     <View style={{ padding: 16, gap: 20, maxWidth: 420 }}>
       <View style={{ gap: 8 }}>
-        <Text style={{ color: theme.colors.description, fontSize: 12, fontWeight: '700', letterSpacing: 0.4, textTransform: 'uppercase', paddingHorizontal: 4 }}>
+        <ThemedText appearance="description" style={{ fontSize: 12, fontWeight: '700', letterSpacing: 0.4, textTransform: 'uppercase', paddingHorizontal: 4 }}>
           Personal data
-        </Text>
+        </ThemedText>
         <Card>
           <CardItem label="Name" value="Anna Müller" />
           <CardItem label="Date of birth" value="12.03.1988" />
@@ -47,9 +45,9 @@ const CardDemo = () => {
       </View>
 
       <View style={{ gap: 8 }}>
-        <Text style={{ color: theme.colors.description, fontSize: 12, fontWeight: '700', letterSpacing: 0.4, textTransform: 'uppercase', paddingHorizontal: 4 }}>
+        <ThemedText appearance="description" style={{ fontSize: 12, fontWeight: '700', letterSpacing: 0.4, textTransform: 'uppercase', paddingHorizontal: 4 }}>
           Practice
-        </Text>
+        </ThemedText>
         <Card>
           <CardItem label="Practice" value="Praxis am Park" />
           <CardNavigationItem
@@ -61,9 +59,9 @@ const CardDemo = () => {
       </View>
 
       <View style={{ gap: 8 }}>
-        <Text style={{ color: theme.colors.description, fontSize: 12, fontWeight: '700', letterSpacing: 0.4, textTransform: 'uppercase', paddingHorizontal: 4 }}>
+        <ThemedText appearance="description" style={{ fontSize: 12, fontWeight: '700', letterSpacing: 0.4, textTransform: 'uppercase', paddingHorizontal: 4 }}>
           Settings
-        </Text>
+        </ThemedText>
         <Card>
           <CardActionItem
             label="Notifications"

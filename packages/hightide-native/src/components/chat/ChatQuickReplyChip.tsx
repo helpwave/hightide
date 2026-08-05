@@ -1,13 +1,13 @@
 import type { ReactNode } from 'react'
 import {
   Pressable,
-  Text,
   type PressableProps,
   type StyleProp,
   type ViewStyle
 } from 'react-native'
 
 import { useTheme } from '../../global-contexts/theme/ThemeContext'
+import { ThemedText } from '../visualization-and-display/ThemedText'
 import type {
   ChatQuickReplyChipState,
   ChatQuickReplyChipStyle,
@@ -62,7 +62,7 @@ export const ChatQuickReplyChip = ({
         const resolvedText = theme.components.chat.quickReplyChip.text(state, textStyle)
 
         if (typeof children === 'string' || typeof children === 'number') {
-          return <Text style={resolvedText}>{children}</Text>
+          return <ThemedText style={resolvedText}>{children}</ThemedText>
         }
 
         return children

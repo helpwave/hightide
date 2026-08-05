@@ -1,5 +1,6 @@
 import { hightideChipTokenResolver } from '@helpwave/hightide-design/component-token-resolvers'
 import type { ChipState as ChipTokenState } from '@helpwave/hightide-design/component-token-resolvers'
+import { hightideSemanticTokenResolvers } from '@helpwave/hightide-design/semantic-token-resolvers'
 import type { ThemeTokens } from '@helpwave/hightide-design/theme-tokens'
 
 import { toContainerStyle, toTextStyle } from '../adapters/style-adapters'
@@ -17,17 +18,19 @@ const toTokenState = (state: ChipState): ChipTokenState => ({
   coloringStyle: state.coloringStyle,
 })
 
-export const toChipTheme = (themeTokens: ThemeTokens): ChipTheme => ({
-  chip: createStyleResolver((state: ChipState): ChipStyle => (
-    toContainerStyle(hightideChipTokenResolver({
-      themeTokens,
-      state: toTokenState(state),
-    }).container)
-  )),
-  text: createStyleResolver((state: ChipState): ChipTextStyle => (
-    toTextStyle(hightideChipTokenResolver({
-      themeTokens,
-      state: toTokenState(state),
-    }).text)
-  )),
-})
+export const toChipTheme = (themeTokens: ThemeTokens): ChipTheme => {
+  const resolve = (state: ChipState) => hightideChipTokenResolver({
+    themeTokens,
+    semanticResolvers: hightideSemanticTokenResolvers,
+    state: toTokenState(state),
+  })
+
+  return {
+    chip: createStyleResolver((state: ChipState): ChipStyle => (
+      toContainerStyle(resolve(state).container)
+    )),
+    text: createStyleResolver((state: ChipState): ChipTextStyle => (
+      toTextStyle(resolve(state).text)
+    )),
+  }
+}

@@ -1,14 +1,15 @@
-import {
-  Text,
-  View
-} from 'react-native'
+import { View } from 'react-native'
 import type {
   Meta,
   StoryObj
-} from '@storybook/react'
+} from '@storybook/react-native'
 import { CalendarDays } from 'lucide-react-native'
 
-import { ChatMessageCard, Button } from '@helpwave/hightide-native/components'
+import {
+  ChatMessageCard,
+  Button,
+  ThemedText
+} from '@helpwave/hightide-native/components'
 import { useTheme } from '@helpwave/hightide-native/global-contexts'
 
 const meta = {
@@ -34,12 +35,12 @@ const CardStory = () => {
         </View>
       )}
     >
-      <Text style={{ color: theme.colors.onSurface, fontSize: 14, fontWeight: '500' }}>
+      <ThemedText style={{ fontSize: 14, fontWeight: '500' }}>
         Mittwoch, 15:30 Uhr
-      </Text>
-      <Text style={{ color: theme.colors.description, fontSize: 12 }}>
+      </ThemedText>
+      <ThemedText appearance="description" style={{ fontSize: 12 }}>
         Praxis am Park, Zimmer 2
-      </Text>
+      </ThemedText>
     </ChatMessageCard>
   )
 }

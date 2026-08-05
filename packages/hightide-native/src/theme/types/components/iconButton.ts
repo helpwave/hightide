@@ -4,7 +4,7 @@ import type {
 } from 'react-native'
 
 import type {
-  ColoringType,
+  ColorPairToken,
   ComponentSize,
   PressableColoringStyle
 } from '@helpwave/hightide-design/theme-tokens'
@@ -17,7 +17,7 @@ import type {
 
 export type IconButtonState = InteractionState & {
   size?: ComponentSize,
-  color?: ColoringType,
+  color?: ColorPairToken,
   coloringStyle?: PressableColoringStyle,
 }
 

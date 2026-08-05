@@ -9,11 +9,10 @@ import {
   type ViewStyle
 } from 'react-native'
 
-import {
-  colorSchemeTypes,
-  type ChipColoringStyle,
-  type ColoringType,
-  type ComponentSize
+import type {
+  ChipColoringStyle,
+  ColorPairToken,
+  ComponentSize
 } from '@helpwave/hightide-design/theme-tokens'
 
 import { ContentThemeProvider } from '../../global-contexts/content-theme/ContentThemeProvider'
@@ -25,14 +24,13 @@ import type {
 } from '../../theme/types/components/chip'
 import type { StyleOverwrite } from '../../theme/types/resolver'
 import type { Color } from '../../theme/types/color'
-import { Text } from './Text'
+import { ThemedText } from './ThemedText'
 
 export type ChipSize = ComponentSize
 
-export type ChipColor = ColoringType
+export type ChipColor = ColorPairToken
 
 export const ChipUtil = {
-  colors: colorSchemeTypes,
   sizes: ['sm', 'md', 'lg'] as const satisfies readonly ComponentSize[],
   coloringStyles: ['filled', 'tonal', 'outline', 'tonal-outline'] as const satisfies readonly ChipColoringStyle[],
 }
@@ -49,7 +47,7 @@ export type ChipProps = Omit<ViewProps, 'children' | 'style'> & {
 
 export const Chip = ({
   children,
-  color = 'neutral',
+  color,
   coloringStyle = 'filled',
   size = 'md',
   style,
@@ -84,7 +82,7 @@ export const Chip = ({
         textStyle={resolvedTextStyle}
       >
         {typeof children === 'string' || typeof children === 'number'
-          ? <Text>{children}</Text>
+          ? <ThemedText>{children}</ThemedText>
           : children}
       </ContentThemeProvider>
     </View>

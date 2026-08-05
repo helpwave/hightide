@@ -2,7 +2,7 @@ import type { ViewStyle, TextStyle } from 'react-native'
 
 import type { ComponentSize } from '@helpwave/hightide-design/theme-tokens'
 import type {
-  ColoringType,
+  ColorPairToken,
   PressableColoringStyle
 } from '@helpwave/hightide-design/theme-tokens'
 
@@ -13,7 +13,7 @@ import type {
 
 export type ButtonState = InteractionState & {
   size?: ComponentSize,
-  color?: ColoringType,
+  color?: ColorPairToken,
   coloringStyle?: PressableColoringStyle,
 }
 

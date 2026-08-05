@@ -1,5 +1,6 @@
 import type { ColorToken } from '../primitive-tokens/color'
 import type { ThemeTokens } from '../theme-tokens/theme-tokens'
+import type { ColorPairToken } from '../theme-tokens/theme-tokens-config'
 import {
   createElementLayoutTokens,
   type ComponentSize
@@ -27,6 +28,7 @@ export type AvatarState = {
   isGrouped?: boolean,
   groupIndex?: number,
   groupCount?: number,
+  color?: ColorPairToken,
 }
 
 export type AvatarShadowTokens = {
@@ -151,13 +153,12 @@ const statusColors = (themeTokens: ThemeTokens): Record<AvatarStatus, ColorToken
     online: color.positive.color,
     busy: color.negative.color,
     away: color.warning.color,
-    offline: color.disabled,
-    unknown: color.disabled,
+    offline: color.disabled.color,
+    unknown: color.disabled.color,
   }
 }
 
 export const hightideAvatarTokenResolver: ComponentTokenResolver<
-  ThemeTokens,
   AvatarState,
   AvatarThemeTokens
 > = ({ themeTokens, state }) => {
@@ -165,6 +166,7 @@ export const hightideAvatarTokenResolver: ComponentTokenResolver<
   const status = state.status ?? 'unknown'
   const groupIndex = state.groupIndex ?? 0
   const { color, spacing, borders, typography, elevation } = themeTokens
+  const colorPair = state.color ?? color.primary
   const layout = createElementLayoutTokens(themeTokens).insideControl[size]
   const iconTokens = createIconSizeTokens(themeTokens)[size]
   const dimension = layout.size
@@ -185,7 +187,7 @@ export const hightideAvatarTokenResolver: ComponentTokenResolver<
       height: dimension,
       padding: layout.inset,
       borderRadius,
-      backgroundColor: color.primary.color,
+      backgroundColor: colorPair.color,
       overflow: 'hidden',
       ...(state.isGrouped ? {
         left: groupIndex * dimension * avatarGroupOverlap,
@@ -210,13 +212,13 @@ export const hightideAvatarTokenResolver: ComponentTokenResolver<
     text: {
       ...typography.label.sm,
       fontWeight: typography.fontWeights.bold,
-      color: color.primary.onColor,
+      color: colorPair.onColor,
       textAlign: 'center',
     },
     icon: {
       size: iconTokens.size,
       strokeWidth: iconTokens.strokeWidth,
-      color: color.primary.onColor,
+      color: colorPair.onColor,
     },
     withStatus: {
       container: {
@@ -234,7 +236,7 @@ export const hightideAvatarTokenResolver: ComponentTokenResolver<
         height: statusDotSize,
         borderRadius: statusDotSize / 2,
         borderWidth: borders.borderWidths.thin,
-        borderColor: color.background,
+        borderColor: color.background.color,
         backgroundColor: statusColors(themeTokens)[status],
       },
     },
@@ -246,7 +248,7 @@ export const hightideAvatarTokenResolver: ComponentTokenResolver<
       },
       text: {
         ...typography.body.md,
-        color: color.onBackground,
+        color: color.background.onColor,
         flexShrink: 1,
       },
     },
@@ -265,7 +267,7 @@ export const hightideAvatarTokenResolver: ComponentTokenResolver<
       },
       more: {
         fontSize: dimension * 2 / 3,
-        color: color.onBackground,
+        color: color.background.onColor,
         flexShrink: 1,
       },
       overlap: avatarGroupOverlap,

@@ -1,3 +1,3 @@
-export type Color = `#${string}`
+import type { ColorToken } from '@helpwave/hightide-design/primitive-tokens'
 
-export type ColorPalette = Record<number, Color>
+export type Color = ColorToken

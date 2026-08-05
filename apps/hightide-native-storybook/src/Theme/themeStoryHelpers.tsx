@@ -2,17 +2,13 @@ import {
   type ReactNode,
   useMemo
 } from 'react'
-import {
-  Text,
-  View
-} from 'react-native'
+import { View } from 'react-native'
 
-import { Select } from '@helpwave/hightide-native/components'
+import { Select, ThemedText } from '@helpwave/hightide-native/components'
 import { useTheme } from '@helpwave/hightide-native/global-contexts'
 
 export const ThemeSelect = () => {
   const {
-    theme,
     themeMode,
     setTheme,
     supportedThemes,
@@ -28,7 +24,7 @@ export const ThemeSelect = () => {
 
   return (
     <View style={{ gap: 8, marginBottom: 16, maxWidth: 320 }}>
-      <Text style={{ color: theme.colors.onBackground }}>Theme</Text>
+      <ThemedText>Theme</ThemedText>
       <Select
         options={options}
         value={themeMode}
@@ -47,7 +43,7 @@ export const ThemeStoryFrame = ({ children }: { children: ReactNode }) => {
       style={{
         gap: 16,
         maxWidth: 420,
-        backgroundColor: theme.colors.background,
+        backgroundColor: theme.colors.background.color,
         borderRadius: 12,
         padding: 16,
       }}

@@ -1,12 +1,12 @@
 import type {
   Meta,
   StoryObj
-} from '@storybook/react'
+} from '@storybook/react-native'
 
 import {
   AvatarUtil,
   AvatarWithLabel,
-  type AvatarWithLabelProps,
+  type AvatarWithLabelProps
 } from '@helpwave/hightide-native/components'
 
 type StoryArgs = AvatarWithLabelProps & {

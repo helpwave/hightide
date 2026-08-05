@@ -3,14 +3,14 @@ import {
   type ReactNode
 } from 'react'
 import {
-  Text,
   View,
   type StyleProp,
   type ViewProps,
   type ViewStyle
 } from 'react-native'
 import { HightideIconRegistry } from '../../icons/HightideIconRegistry'
-import { Icon } from '../visualization-and-display/Icon'
+import { ThemedIcon } from '../visualization-and-display/ThemedIcon'
+import { ThemedText } from '../visualization-and-display/ThemedText'
 import { IconButton } from '../user-interaction/IconButton'
 import { useTheme } from '../../global-contexts/theme/ThemeContext'
 import type {
@@ -77,7 +77,7 @@ export const ChatAttachmentCard = ({
     <View {...props} style={[resolvedCardStyle, style]}>
       <View style={resolvedIconStyle}>
         {icon ?? (
-          <Icon
+          <ThemedIcon
             icon={HightideIconRegistry.FileText}
             size={22}
             color={resolvedIconColor.color}
@@ -86,13 +86,13 @@ export const ChatAttachmentCard = ({
       </View>
       <View style={{ flex: 1, minWidth: 0, gap: 2 }}>
         {typeof name === 'string' || typeof name === 'number' ? (
-          <Text style={resolvedNameStyle} numberOfLines={1}>{name}</Text>
+          <ThemedText style={resolvedNameStyle} numberOfLines={1}>{name}</ThemedText>
         ) : (
           name
         )}
         {metadata != null && (
           typeof metadata === 'string' || typeof metadata === 'number' ? (
-            <Text style={resolvedMetadataStyle}>{metadata}</Text>
+            <ThemedText style={resolvedMetadataStyle}>{metadata}</ThemedText>
           ) : (
             metadata
           )
@@ -102,11 +102,10 @@ export const ChatAttachmentCard = ({
         <IconButton
           accessibilityLabel={downloadLabel}
           size="sm"
-          color="primary"
           coloringStyle="text"
           onPress={onDownload}
         >
-          <Icon icon={HightideIconRegistry.Download} />
+          <ThemedIcon icon={HightideIconRegistry.Download} />
         </IconButton>
       )}
     </View>

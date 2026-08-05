@@ -3,7 +3,6 @@ import {
   type ReactNode
 } from 'react'
 import {
-  Text,
   View,
   type StyleProp,
   type ViewProps,
@@ -11,6 +10,7 @@ import {
 } from 'react-native'
 
 import { useTheme } from '../../global-contexts/theme/ThemeContext'
+import { ThemedText } from '../visualization-and-display/ThemedText'
 import type {
   CardItemLabelStyle,
   CardItemStyle,
@@ -64,8 +64,8 @@ export const CardItem = ({
     <View {...props} style={[resolvedItemStyle, style]}>
       {leading}
       <View style={resolvedContentStyle}>
-        <Text style={resolvedLabelStyle}>{label}</Text>
-        <Text style={resolvedValueStyle}>{value}</Text>
+        <ThemedText style={resolvedLabelStyle}>{label}</ThemedText>
+        <ThemedText style={resolvedValueStyle}>{value}</ThemedText>
       </View>
       {trailing}
     </View>

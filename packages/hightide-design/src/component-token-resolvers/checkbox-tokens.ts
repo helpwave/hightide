@@ -1,5 +1,4 @@
 import type { ColorToken } from '../primitive-tokens/color'
-import type { ThemeTokens } from '../theme-tokens/theme-tokens'
 import {
   createElementLayoutTokens,
   type ComponentSize
@@ -41,10 +40,9 @@ export type CheckboxThemeTokens = {
 }
 
 export const hightideCheckboxTokenResolver: ComponentTokenResolver<
-  ThemeTokens,
   CheckboxState,
   CheckboxThemeTokens
-> = ({ themeTokens, state }) => {
+> = ({ themeTokens, semanticResolvers, state }) => {
   const size = state.size ?? 'md'
   const { color, borders } = themeTokens
   const control = createElementLayoutTokens(themeTokens).control
@@ -53,16 +51,20 @@ export const hightideCheckboxTokenResolver: ComponentTokenResolver<
   const inset = control.xs.inset
   const dimension = element.size - 2 * element.inset - 2 * element.borderWidth
   const isActive = !!(state.isChecked || state.isIndeterminate)
+  const fadedBorder = semanticResolvers.asFaded({
+    theme: themeTokens,
+    parameter: { color: color.surface.onColor },
+  })
 
   const borderColor = state.isDisabled
-    ? color.disabled
+    ? color.disabled.color
     : state.isInvalid
       ? color.negative.color
-      : isActive ? color.primary.color : color.border
+      : isActive ? color.primary.color : fadedBorder
 
   const backgroundColor = state.isDisabled
-    ? color.disabled
-    : isActive ? color.primary.color : color.surface
+    ? color.disabled.color
+    : isActive ? color.primary.color : color.surface.color
 
   return {
     box: {

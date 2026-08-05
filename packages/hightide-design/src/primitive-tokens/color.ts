@@ -1,4 +1,5 @@
-export type ColorToken = `#${string}`
+export type HexColorToken = `#${string}`
+export type ColorToken = HexColorToken | 'transparent'
 
 const colorPaletteBasicSteps = [50, 100, 200, 300, 400, 500, 600, 700, 800, 900, 950] as const
 export type ColorPaletteBasicStep = typeof colorPaletteBasicSteps[number]
@@ -16,7 +17,7 @@ export const ColorPaletteUtils = {
   detailedSteps: colorPaletteDetailedSteps,
 }
 
-export type ColorPaletteScale<Steps extends number> = Record<Steps, ColorToken>
+export type ColorPaletteScale<Steps extends number> = Record<Steps, HexColorToken>
 
 export type ColorPaletteBasic = ColorPaletteScale<ColorPaletteBasicStep>
 
@@ -34,7 +35,7 @@ export type ColorPaletteDetailedToken = {
 
 export type ColorPaletteSingleValueToken = {
   type: 'singleValue',
-  value: ColorToken,
+  value: HexColorToken,
 }
 
 export type ColorPalette = ColorPaletteBasicToken | ColorPaletteDetailedToken | ColorPaletteSingleValueToken
@@ -54,10 +55,6 @@ export const hightideColor = {
     black: {
       type: 'singleValue',
       value: '#000000',
-    } as const satisfies ColorPaletteSingleValueToken,
-    transparent: {
-      type: 'singleValue',
-      value: '#00000000',
     } as const satisfies ColorPaletteSingleValueToken,
     gray: {
       type: 'detailed',

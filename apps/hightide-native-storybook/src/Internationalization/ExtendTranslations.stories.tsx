@@ -2,21 +2,21 @@ import {
   useMemo,
   type ReactNode
 } from 'react'
-import {
-  Text,
-  View
-} from 'react-native'
+import { View } from 'react-native'
 import type {
   Meta,
   StoryObj
-} from '@storybook/react'
+} from '@storybook/react-native'
 import { useLocalization } from '@helpwave/hightide-utils/context/localization'
 
-import { Select } from '@helpwave/hightide-native/components'
+import {
+  Select,
+  ThemedText
+} from '@helpwave/hightide-native/components'
 import {
   HightideProvider,
   HightideConfigUtils,
-  useTheme,
+  useTheme
 } from '@helpwave/hightide-native/global-contexts'
 import {
   type DemoTranslationEntries,
@@ -56,7 +56,6 @@ const LocaleSelect = () => {
     setLocale,
     supportedLocales,
   } = useLocalization()
-  const { theme } = useTheme()
 
   const options = useMemo(
     () => Object.entries(supportedLocales).map(([id, info]) => ({
@@ -68,7 +67,7 @@ const LocaleSelect = () => {
 
   return (
     <View style={{ gap: 8, maxWidth: 320 }}>
-      <Text style={{ color: theme.colors.onBackground }}>Locale</Text>
+      <ThemedText>Locale</ThemedText>
       <Select
         options={options}
         value={locale}
@@ -87,21 +86,21 @@ const DemoStrings = ({ showWelcome = false }: { showWelcome?: boolean }) => {
     <View
       style={{
         gap: 8,
-        backgroundColor: theme.colors.surface,
+        backgroundColor: theme.colors.surface.color,
         borderRadius: 8,
         padding: 12,
       }}
     >
-      <Text style={{ color: theme.colors.onSurface, fontWeight: '600' }}>
+      <ThemedText style={{ fontWeight: '600' }}>
         {translation('featureTitle')}
-      </Text>
-      <Text style={{ color: theme.colors.onSurface }}>
+      </ThemedText>
+      <ThemedText>
         {translation('featureHint')}
-      </Text>
+      </ThemedText>
       {showWelcome ? (
-        <Text style={{ color: theme.colorSchemes.primary.text.base.foreground }}>
+        <ThemedText style={{ color: theme.colorSchemes.primary.text.base.foreground }}>
           {translation('welcome')}
-        </Text>
+        </ThemedText>
       ) : null}
     </View>
   )
@@ -115,7 +114,7 @@ const StoryFrame = ({ children }: { children: ReactNode }) => {
       style={{
         gap: 16,
         maxWidth: 420,
-        backgroundColor: theme.colors.background,
+        backgroundColor: theme.colors.background.color,
         borderRadius: 12,
         padding: 16,
       }}

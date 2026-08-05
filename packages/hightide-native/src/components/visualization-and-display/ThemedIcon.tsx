@@ -3,27 +3,34 @@ import {
   type ViewProps
 } from 'react-native'
 
+import type { HexColorToken } from '@helpwave/hightide-design/primitive-tokens'
 import type { ComponentSize } from '@helpwave/hightide-design/theme-tokens'
+import type { Appearance } from '@helpwave/hightide-design/semantic-token-resolvers'
 
 import type { IconComponent } from '../../icons/types'
 import { useContentTheme } from '../../global-contexts/content-theme/ContentThemeContext'
 import { useTheme } from '../../global-contexts/theme/ThemeContext'
+import type { Color } from '../../theme/types/color'
 
-export type IconProps = Omit<ViewProps, 'children'> & {
+export type ThemedIconAppearance = Appearance
+
+export type ThemedIconProps = Omit<ViewProps, 'children'> & {
   icon: IconComponent,
   size?: ComponentSize | number,
-  color?: string,
+  color?: Color,
   strokeWidth?: number,
+  appearance?: ThemedIconAppearance,
 }
 
-export const Icon = ({
+export const ThemedIcon = ({
   icon: Glyph,
   size = 'md',
   color,
   strokeWidth,
+  appearance = 'normal',
   style,
   ...props
-}: IconProps) => {
+}: ThemedIconProps) => {
   const { theme } = useTheme()
   const { foregroundColor } = useContentTheme()
   const iconToken = typeof size === 'number'
@@ -32,6 +39,11 @@ export const Icon = ({
       strokeWidth: strokeWidth ?? theme.components.icon.md.strokeWidth,
     }
     : theme.components.icon[size]
+
+  const baseColor = (color ?? foregroundColor) as HexColorToken
+  const resolvedColor = appearance === 'normal'
+    ? baseColor
+    : theme.semantics.withAppearance({ color: baseColor, appearance })
 
   return (
     <View
@@ -54,7 +66,7 @@ export const Icon = ({
       <Glyph
         size={iconToken.size}
         strokeWidth={iconToken.strokeWidth}
-        color={color ?? foregroundColor}
+        color={resolvedColor}
       />
     </View>
   )

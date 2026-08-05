@@ -1,16 +1,29 @@
-import { resolveStateBasedProperty } from '@helpwave/hightide-design/theme-tokens'
+import {
+  pressableColoringStyles,
+  resolveColorPairColoring
+} from '@helpwave/hightide-design/component-token-resolvers'
+import { hightideSemanticTokenResolvers } from '@helpwave/hightide-design/semantic-token-resolvers'
 import type {
-  ColorState,
-  ColorStateFull,
   ColoringStyle,
-  ColoringType,
+  ColorPairToken,
   ContainerColoringStyle,
   PressableColoringStyle,
-  StateBasedProperty
+  ThemeTokens
 } from '@helpwave/hightide-design/theme-tokens'
 
 import type { Color } from '../types/color'
 import type { InteractionState } from '../types/resolver'
+
+const colorSchemeKeys = [
+  'primary',
+  'secondary',
+  'tertiary',
+  'positive',
+  'warning',
+  'negative',
+  'neutral',
+  'disabled',
+] as const
 
 export type ResolvedColoringStyles = {
   backgroundColor: Color,
@@ -18,53 +31,87 @@ export type ResolvedColoringStyles = {
   borderColor?: Color,
 }
 
-export type InteractiveColorState = 'disabled' | 'focused' | 'hovered' | 'pressed'
+export type ColoringState = {
+  color: Color,
+  foreground: Color,
+  border: Color,
+}
 
-export type InteractiveColorSchemes = Record<
-  ColoringType,
-  Record<string, StateBasedProperty<InteractiveColorState, ColorState | ColorStateFull>>
->
+export type ColoringStateProperty = {
+  base: ColoringState,
+  emphasisOverride: ColoringState,
+}
 
-export const interactionStatesToInteractiveStates = (
-  state: InteractionState
-): ReadonlySet<InteractiveColorState> => {
-  const states = new Set<InteractiveColorState>()
+export type HightideColorScheme = Record<PressableColoringStyle, ColoringStateProperty>
 
-  if (state.isFocused) {
-    states.add('focused')
-  }
-  if (state.isHovered) {
-    states.add('hovered')
-  }
-  if (state.isPressed) {
-    states.add('pressed')
-  }
-  if (state.isDisabled) {
-    states.add('disabled')
-  }
-
-  return states
+export type HightideColorSchemes = {
+  primary: HightideColorScheme,
+  secondary: HightideColorScheme,
+  tertiary: HightideColorScheme,
+  positive: HightideColorScheme,
+  warning: HightideColorScheme,
+  negative: HightideColorScheme,
+  neutral: HightideColorScheme,
+  disabled: HightideColorScheme,
 }
 
 export const resolveColoringStyles = (
-  colorSchemes: InteractiveColorSchemes,
-  color: ColoringType,
+  themeTokens: ThemeTokens,
+  colorPair: ColorPairToken,
   coloringStyle: ColoringStyle,
   state: InteractionState = {}
 ): ResolvedColoringStyles => {
-  const pack = colorSchemes[color][coloringStyle]
-  const resolved = resolveStateBasedProperty(
-    pack,
-    interactionStatesToInteractiveStates(state)
-  )
-  const border = 'border' in resolved ? resolved.border : undefined
+  const coloring = resolveColorPairColoring({
+    themeTokens,
+    semanticResolvers: hightideSemanticTokenResolvers,
+    colorPair,
+    style: coloringStyle,
+    state,
+  })
 
   return {
-    backgroundColor: resolved.color,
-    color: resolved.foreground,
-    borderColor: border ?? resolved.color,
+    backgroundColor: coloring.color,
+    color: coloring.onColor,
+    borderColor: coloring.outlineColor ?? coloring.borderColor ?? coloring.color,
   }
 }
+
+const toColoringState = (
+  themeTokens: ThemeTokens,
+  colorPair: ColorPairToken,
+  coloringStyle: PressableColoringStyle,
+  state: InteractionState
+): ColoringState => {
+  const resolved = resolveColoringStyles(themeTokens, colorPair, coloringStyle, state)
+
+  return {
+    color: resolved.backgroundColor,
+    foreground: resolved.color,
+    border: resolved.borderColor ?? resolved.backgroundColor,
+  }
+}
+
+export const createColorSchemes = (themeTokens: ThemeTokens): HightideColorSchemes => (
+  Object.fromEntries(
+    colorSchemeKeys.map((key) => [
+      key,
+      Object.fromEntries(
+        pressableColoringStyles.map((coloringStyle) => [
+          coloringStyle,
+          {
+            base: toColoringState(themeTokens, themeTokens.color[key], coloringStyle, {}),
+            emphasisOverride: toColoringState(
+              themeTokens,
+              themeTokens.color[key],
+              coloringStyle,
+              { isHovered: true }
+            ),
+          } satisfies ColoringStateProperty,
+        ])
+      ),
+    ])
+  ) as HightideColorSchemes
+)
 
 export const isOutlineColoringStyle = (
   coloringStyle: PressableColoringStyle | ContainerColoringStyle

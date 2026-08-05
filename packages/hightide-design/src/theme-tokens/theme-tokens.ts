@@ -1,46 +1,40 @@
 import type { ColorToken } from '../primitive-tokens/color'
 import type { ShadowLayoutToken } from '../primitive-tokens/shadow'
 import type {
+  ColorPairToken,
   ThemeBorderWidthKey,
   ThemeElevationLevel,
   ThemeLayoutSize,
   ThemeMotionDurationKey,
   ThemeSpacingSize,
-  ThemeTypographySize
+  ThemeTypographySize,
+  TintConfig
 } from './theme-tokens-config'
 import type { TypographyStyleToken } from './typography-style-token'
 
-export type RoleColorToken = {
-  color: ColorToken,
-  onColor: ColorToken,
-  emphasis: ColorToken,
-  tint: ColorToken,
-  tintEmphasis: ColorToken,
+export type ThemeColorTokens = {
+  tintConfig: TintConfig,
+  background: ColorPairToken,
+  surface: ColorPairToken,
+  surfaceVariant: ColorPairToken,
+  disabled: ColorPairToken,
+  primary: ColorPairToken,
+  secondary: ColorPairToken,
+  tertiary: ColorPairToken,
+  positive: ColorPairToken,
+  warning: ColorPairToken,
+  negative: ColorPairToken,
+  neutral: ColorPairToken,
 }
 
-export type ThemeColorTokens = {
-  transparent: ColorToken,
-  background: ColorToken,
-  onBackground: ColorToken,
-  disabled: ColorToken,
-  onDisabled: ColorToken,
-  surface: ColorToken,
-  onSurface: ColorToken,
-  surfaceHover: ColorToken,
-  surfaceVariant: ColorToken,
-  subtle: ColorToken,
-  faded: ColorToken,
-  placeholder: ColorToken,
-  description: ColorToken,
-  border: ColorToken,
-  divider: ColorToken,
-  primary: RoleColorToken,
-  secondary: RoleColorToken,
-  tertiary: RoleColorToken,
-  positive: RoleColorToken,
-  warning: RoleColorToken,
-  negative: RoleColorToken,
-  neutral: RoleColorToken,
+export type ThemeAppearancePercentages = {
+  normal: number,
+  subtle: number,
+  faded: number,
+}
+
+export type ThemeDecorationTokens = {
+  appearancePercentages: ThemeAppearancePercentages,
 }
 
 export type ThemeTypographyTokens = {
@@ -84,6 +78,7 @@ export type ThemeMotionTokens = {
 
 export type ThemeTokens = {
   color: ThemeColorTokens,
+  decoration: ThemeDecorationTokens,
   typography: ThemeTypographyTokens,
   size: ThemeSizeTokens,
   spacing: ThemeSpacingTokens,

@@ -1,7 +1,7 @@
 import type { ColorToken } from '../primitive-tokens/color'
-import type { ThemeTokens } from '../theme-tokens/theme-tokens'
 import { createElementLayoutTokens } from '../theme-tokens/element-layout'
 import { HexColorUtils } from '../utils/hex'
+import { resolveColorPairColoring } from './coloring'
 import type { ComponentTokenResolver } from './component-token-resolver'
 import type { TextStyleTokens } from './text-style-tokens'
 
@@ -71,12 +71,27 @@ export type SelectThemeTokens = {
 export const selectOverlayColor = HexColorUtils.hexWithAlpha('#000000', 0.35)
 
 export const hightideSelectTokenResolver: ComponentTokenResolver<
-  ThemeTokens,
   SelectState,
   SelectThemeTokens
-> = ({ themeTokens, state }) => {
+> = ({ themeTokens, semanticResolvers, state }) => {
   const { color, spacing, shape, borders, typography } = themeTokens
   const layout = createElementLayoutTokens(themeTokens).control.md
+  const onColor = color.surface.onColor
+  const fadedBorder = semanticResolvers.asFaded({
+    theme: themeTokens,
+    parameter: { color: onColor },
+  })
+  const placeholderColor = semanticResolvers.asDescription({
+    theme: themeTokens,
+    parameter: { color: onColor },
+  })
+  const hoverColor = resolveColorPairColoring({
+    themeTokens,
+    semanticResolvers,
+    colorPair: themeTokens.color.surface,
+    style: 'filled',
+    state: { isHovered: true },
+  }).color
 
   return {
     trigger: {
@@ -86,13 +101,13 @@ export const hightideSelectTokenResolver: ComponentTokenResolver<
       paddingHorizontal: shape.padding.xxl,
       borderRadius: shape.borderRadius.sm,
       borderWidth: borders.borderWidths.thin,
-      borderColor: state.isInvalid ? color.negative.color : color.border,
-      backgroundColor: state.isDisabled ? color.disabled : color.surfaceVariant,
+      borderColor: state.isInvalid ? color.negative.color : fadedBorder,
+      backgroundColor: state.isDisabled ? color.disabled.color : color.surfaceVariant.color,
       opacity: state.isDisabled ? 0.6 : 1,
     },
     triggerText: {
       ...typography.body.md,
-      color: state.hasValue ? color.onSurface : color.placeholder,
+      color: state.hasValue ? onColor : placeholderColor,
     },
     overlay: {
       flex: 1,
@@ -104,22 +119,22 @@ export const hightideSelectTokenResolver: ComponentTokenResolver<
       maxHeight: 360,
       borderRadius: shape.borderRadius.lg,
       borderWidth: borders.borderWidths.thin,
-      borderColor: color.border,
-      backgroundColor: color.surfaceVariant,
+      borderColor: fadedBorder,
+      backgroundColor: color.surfaceVariant.color,
       overflow: 'hidden',
     },
     search: {
       paddingVertical: shape.padding.xxl,
       paddingHorizontal: spacing.lg,
       borderBottomWidth: borders.borderWidths.thin,
-      borderBottomColor: color.border,
-      color: color.onSurface,
+      borderBottomColor: fadedBorder,
+      color: onColor,
     },
-    searchPlaceholderColor: color.placeholder,
+    searchPlaceholderColor: placeholderColor,
     option: {
       paddingVertical: shape.padding.xxl,
       paddingHorizontal: spacing.lg,
-      backgroundColor: state.isHighlighted ? color.surfaceHover : color.transparent,
+      backgroundColor: state.isHighlighted ? hoverColor : 'transparent',
       opacity: state.isDisabled ? 0.5 : 1,
     },
     optionText: {
@@ -127,7 +142,7 @@ export const hightideSelectTokenResolver: ComponentTokenResolver<
       fontWeight: state.isSelected
         ? typography.fontWeights.semibold
         : typography.fontWeights.base,
-      color: state.isSelected ? color.primary.color : color.onSurface,
+      color: state.isSelected ? color.primary.color : color.surface.onColor,
     },
   }
 }

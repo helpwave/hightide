@@ -24,6 +24,10 @@
       "types": "./src/theme-tokens/index.ts",
       "default": "./src/theme-tokens/index.ts"
     },
+    "./semantic-token-resolvers": {
+      "types": "./src/semantic-token-resolvers/index.ts",
+      "default": "./src/semantic-token-resolvers/index.ts"
+    },
     "./component-token-resolvers": {
       "types": "./src/component-token-resolvers/index.ts",
       "default": "./src/component-token-resolvers/index.ts"

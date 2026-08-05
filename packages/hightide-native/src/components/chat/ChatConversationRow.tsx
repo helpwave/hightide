@@ -5,14 +5,14 @@ import {
 } from 'react'
 import {
   Pressable,
-  Text,
   View,
   type PressableProps,
   type StyleProp,
   type ViewStyle
 } from 'react-native'
 import { HightideIconRegistry } from '../../icons/HightideIconRegistry'
-import { Icon } from '../visualization-and-display/Icon'
+import { ThemedIcon } from '../visualization-and-display/ThemedIcon'
+import { ThemedText } from '../visualization-and-display/ThemedText'
 import { useTheme } from '../../global-contexts/theme/ThemeContext'
 import type {
   ChatConversationRowPreviewStyle,
@@ -112,13 +112,13 @@ export const ChatConversationRow = ({
             <View style={{ flex: 1, minWidth: 0, gap: 5 }}>
               <View style={{ flexDirection: 'row', alignItems: 'baseline', justifyContent: 'space-between', gap: 8 }}>
                 {typeof title === 'string' || typeof title === 'number' ? (
-                  <Text style={resolvedTitle} numberOfLines={1}>{title}</Text>
+                  <ThemedText style={resolvedTitle} numberOfLines={1}>{title}</ThemedText>
                 ) : (
                   title
                 )}
                 {timestamp != null && (
                   typeof timestamp === 'string' || typeof timestamp === 'number' ? (
-                    <Text style={resolvedTimestamp}>{timestamp}</Text>
+                    <ThemedText style={resolvedTimestamp}>{timestamp}</ThemedText>
                   ) : (
                     timestamp
                   )
@@ -127,7 +127,7 @@ export const ChatConversationRow = ({
               <View style={{ flexDirection: 'row', alignItems: 'center', justifyContent: 'space-between', gap: 8 }}>
                 <View style={{ flex: 1, flexDirection: 'row', alignItems: 'center', gap: 4, minWidth: 0 }}>
                   {sentIndicator && (
-                    <Icon
+                    <ThemedIcon
                       icon={sentIndicatorIcon}
                       size={14}
                       color={sentIndicatorColor}
@@ -135,7 +135,7 @@ export const ChatConversationRow = ({
                   )}
                   {preview != null && (
                     typeof preview === 'string' || typeof preview === 'number' ? (
-                      <Text style={resolvedPreview} numberOfLines={1}>{preview}</Text>
+                      <ThemedText style={resolvedPreview} numberOfLines={1}>{preview}</ThemedText>
                     ) : (
                       preview
                     )
@@ -143,7 +143,7 @@ export const ChatConversationRow = ({
                 </View>
                 {isUnread && (
                   <View style={unreadBadge}>
-                    <Text style={unreadBadgeText}>{unreadCount}</Text>
+                    <ThemedText style={unreadBadgeText}>{unreadCount}</ThemedText>
                   </View>
                 )}
               </View>

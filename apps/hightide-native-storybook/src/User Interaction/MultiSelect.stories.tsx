@@ -1,7 +1,7 @@
 import type {
   Meta,
   StoryObj
-} from '@storybook/react'
+} from '@storybook/react-native'
 import { action } from 'storybook/actions'
 
 import { MultiSelect } from '@helpwave/hightide-native/components'

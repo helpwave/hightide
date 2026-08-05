@@ -3,7 +3,6 @@ import {
   type ReactNode
 } from 'react'
 import {
-  Text,
   View,
   type StyleProp,
   type ViewProps,
@@ -11,6 +10,7 @@ import {
 } from 'react-native'
 
 import { useTheme } from '../../global-contexts/theme/ThemeContext'
+import { ThemedText } from '../visualization-and-display/ThemedText'
 import type {
   ChatThreadHeaderStyle,
   ChatThreadHeaderSubtitleStyle,
@@ -68,13 +68,13 @@ export const ChatThreadHeader = ({
       {avatar}
       <View style={{ flex: 1, minWidth: 0, gap: 2 }}>
         {typeof title === 'string' || typeof title === 'number' ? (
-          <Text style={resolvedTitleStyle} numberOfLines={1}>{title}</Text>
+          <ThemedText style={resolvedTitleStyle} numberOfLines={1}>{title}</ThemedText>
         ) : (
           title
         )}
         {subtitle != null && (
           typeof subtitle === 'string' || typeof subtitle === 'number' ? (
-            <Text style={resolvedSubtitleStyle} numberOfLines={1}>{subtitle}</Text>
+            <ThemedText style={resolvedSubtitleStyle} numberOfLines={1}>{subtitle}</ThemedText>
           ) : (
             subtitle
           )

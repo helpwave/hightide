@@ -1,8 +1,7 @@
-import { Text } from 'react-native'
 import type {
   Meta,
   StoryObj
-} from '@storybook/react'
+} from '@storybook/react-native'
 import {
   hightidePrimitiveTokens,
   type ColorToken,
@@ -10,7 +9,11 @@ import {
 } from '@helpwave/hightide-design/primitive-tokens'
 import { createLightThemeTokens } from '@helpwave/hightide-design/theme-tokens'
 
-import { Button, Chip } from '@helpwave/hightide-native/components'
+import {
+  Button,
+  Chip,
+  ThemedText
+} from '@helpwave/hightide-native/components'
 import {
   HightideConfigUtils,
   useTheme,
@@ -59,13 +62,13 @@ const OceanPreview = () => {
   return (
     <ThemeStoryFrame>
       <ThemeSelect />
-      <Text style={{ color: theme.colors.onBackground }}>
+      <ThemedText>
         Ocean theme uses blue background, surface, and primary tokens
-      </Text>
-      <Button color="primary" onPress={() => undefined}>
+      </ThemedText>
+      <Button color={theme.colors.primary} onPress={() => undefined}>
         Primary button
       </Button>
-      <Chip color="primary">Primary chip</Chip>
+      <Chip color={theme.colors.primary}>Primary chip</Chip>
     </ThemeStoryFrame>
   )
 }

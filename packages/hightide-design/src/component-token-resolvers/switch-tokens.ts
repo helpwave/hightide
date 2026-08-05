@@ -1,5 +1,4 @@
 import type { ColorToken } from '../primitive-tokens/color'
-import type { ThemeTokens } from '../theme-tokens/theme-tokens'
 import type { ComponentTokenResolver } from './component-token-resolver'
 
 export type SwitchState = {
@@ -15,23 +14,38 @@ export type SwitchThemeTokens = {
 }
 
 export const hightideSwitchTokenResolver: ComponentTokenResolver<
-  ThemeTokens,
   SwitchState,
   SwitchThemeTokens
-> = ({ themeTokens, state }) => {
+> = ({ themeTokens, semanticResolvers, state }) => {
   const { color } = themeTokens
-  const trackActive = state.isDisabled ? color.disabled : color.primary.color
-  const trackInactive = state.isDisabled ? color.disabled : color.surface
+  const onColor = color.surface.onColor
+  const fadedBorder = semanticResolvers.asFaded({
+    theme: themeTokens,
+    parameter: { color: onColor },
+  })
+  const subtleThumb = semanticResolvers.withAppearance({
+    theme: themeTokens,
+    parameter: { color: onColor, appearance: 'subtle' },
+  })
+  const disabledTrack = semanticResolvers.tintedSurface({
+    theme: themeTokens,
+    parameter: {
+      tintColor: color.disabled.color,
+      tintStrength: 'strong',
+    },
+  })
+  const trackActive = state.isDisabled ? disabledTrack : color.primary.color
+  const trackInactive = state.isDisabled ? disabledTrack : color.surface.color
 
   const borderColor = state.isDisabled
-    ? color.disabled
+    ? disabledTrack
     : state.isInvalid
       ? color.negative.color
-      : state.isActive ? trackActive : color.border
+      : state.isActive ? trackActive : fadedBorder
 
   const thumbColor = state.isDisabled
-    ? color.onDisabled
-    : state.isActive ? color.primary.onColor : color.subtle
+    ? color.disabled.onColor
+    : state.isActive ? color.primary.onColor : subtleThumb
 
   return {
     trackColor: state.isActive ? trackActive : trackInactive,

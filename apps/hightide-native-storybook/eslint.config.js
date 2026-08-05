@@ -23,6 +23,7 @@ export default [
       'dist/**',
       '.rnstorybook/storybook.requires.ts',
       '.rnstorybook/storybook.requires.js',
+      'metro.config.js'
     ],
   },
   ...config.recommended,
