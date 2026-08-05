@@ -68,10 +68,12 @@ export type ChatMessageCardTokens = {
   },
 }
 
-export const hightideChatMessageCardTokenResolver: ComponentTokenResolver<
+export type ChatMessageCardTokenResolver = ComponentTokenResolver<
   ChatMessageCardComponentResolverProps,
   ChatMessageCardTokens
-> = ({ themeTokens, semanticResolvers, config, overrides }) => {
+>
+
+export const chatMessageCardTokenResolver: ChatMessageCardTokenResolver = ({ themeTokens, semanticResolvers, config, overrides }) => {
   const { color, size, spacing, shape, borders, typography } = themeTokens
   const descriptionColor = resolveDescriptionColor({ themeTokens, semanticResolvers })
   const fadedBorder = resolveFadedBorder({ themeTokens, semanticResolvers })

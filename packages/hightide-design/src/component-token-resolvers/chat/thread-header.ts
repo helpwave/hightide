@@ -21,10 +21,12 @@ export type ChatThreadHeaderTokens = {
   subtitle: TextStyleTokens,
 }
 
-export const hightideChatThreadHeaderTokenResolver: ComponentTokenResolver<
-  {},
+export type ChatThreadHeaderTokenResolver = ComponentTokenResolver<
+  Record<string, never>,
   ChatThreadHeaderTokens
-> = ({ themeTokens, semanticResolvers }) => {
+>
+
+export const chatThreadHeaderTokenResolver: ChatThreadHeaderTokenResolver = ({ themeTokens, semanticResolvers }) => {
   const { color, spacing, shape, borders, typography } = themeTokens
   const descriptionColor = resolveDescriptionColor({ themeTokens, semanticResolvers })
   const fadedBorder = resolveFadedBorder({ themeTokens, semanticResolvers })

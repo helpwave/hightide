@@ -1,8 +1,3 @@
-import { hightideMultiSelectTokenResolver } from '@helpwave/hightide-design/component-token-resolvers'
-import type { MultiSelectComponentResolverProps } from '@helpwave/hightide-design/component-token-resolvers'
-import { hightideSemanticTokenResolvers } from '@helpwave/hightide-design/semantic-token-resolvers'
-import type { ThemeTokens } from '@helpwave/hightide-design/theme-tokens'
-
 import { toTextStyle } from '../adapters/style-adapters'
 import type { Color } from '../types/color'
 import type {
@@ -12,7 +7,7 @@ import type {
   MultiSelectOptionStyle,
   MultiSelectOptionTextStyle,
   MultiSelectState,
-  MultiSelectTheme,
+  MultiSelectThemeResolvers,
   MultiSelectTriggerStyle
 } from '../types/components/multiSelect'
 import type {
@@ -25,67 +20,79 @@ import {
   createSimpleStyleResolver,
   createSimpleValueResolver,
   createStyleResolver,
-  createValueResolver
+  createValueResolver,
+  type ComponentThemeResolver
 } from '../types/resolver'
 
-const emptyProps = (): MultiSelectComponentResolverProps => ({
-  state: {},
-})
-
-const toTriggerTokenProps = (state: MultiSelectState): MultiSelectComponentResolverProps => ({
-  state: {
-    isDisabled: state.isDisabled,
-    isInvalid: state.isInvalid,
-    isOpen: state.isOpen,
-    hasSelections: state.hasSelections,
-  },
-})
-
-const toOptionTokenProps = (state: MultiSelectOptionState): MultiSelectComponentResolverProps => ({
-  state: {
-    isDisabled: state.isDisabled,
-    isSelected: state.isSelected,
-    isHighlighted: state.isHighlighted,
-  },
-})
-
-export const toMultiSelectTheme = (themeTokens: ThemeTokens): MultiSelectTheme => {
-  const resolve = (props: MultiSelectComponentResolverProps) => hightideMultiSelectTokenResolver({
+export const toMultiSelectThemeResolvers: ComponentThemeResolver<MultiSelectThemeResolvers> = ({
+  themeTokens,
+  semanticTokens,
+  componentTokens,
+}) => {
+  const resolve = (state: {
+    isDisabled?: boolean,
+    isInvalid?: boolean,
+    isOpen?: boolean,
+    hasSelections?: boolean,
+    isSelected?: boolean,
+    isHighlighted?: boolean,
+  } = {}) => componentTokens.multiSelect({
     themeTokens,
-    semanticResolvers: hightideSemanticTokenResolvers,
-    ...props,
+    semanticResolvers: semanticTokens,
+    state,
   })
 
   return {
     trigger: createStyleResolver((state: MultiSelectState): MultiSelectTriggerStyle => ({
-      ...resolve(toTriggerTokenProps(state)).trigger,
+      ...resolve({
+        isDisabled: state.isDisabled,
+        isInvalid: state.isInvalid,
+        isOpen: state.isOpen,
+        hasSelections: state.hasSelections,
+      }).trigger,
     })),
     triggerText: createSimpleStyleResolver((): SelectTriggerTextStyle => (
-      toTextStyle(resolve(emptyProps()).triggerText)
+      toTextStyle(resolve().triggerText)
     )),
     overlay: createSimpleStyleResolver((): SelectOverlayStyle => ({
-      ...resolve(emptyProps()).overlay,
+      ...resolve().overlay,
     })),
     menu: createSimpleStyleResolver((): SelectMenuStyle => ({
-      ...resolve(emptyProps()).menu,
+      ...resolve().menu,
     })),
     search: createSimpleStyleResolver((): SelectSearchStyle => ({
-      ...resolve(emptyProps()).search,
+      ...resolve().search,
     })),
     searchPlaceholderColor: createSimpleValueResolver((): Color => (
-      resolve(emptyProps()).searchPlaceholderColor
+      resolve().searchPlaceholderColor
     )),
     option: createStyleResolver((state: MultiSelectOptionState): MultiSelectOptionStyle => ({
-      ...resolve(toOptionTokenProps(state)).option,
+      ...resolve({
+        isDisabled: state.isDisabled,
+        isSelected: state.isSelected,
+        isHighlighted: state.isHighlighted,
+      }).option,
     })),
     optionText: createStyleResolver((state: MultiSelectOptionState): MultiSelectOptionTextStyle => (
-      toTextStyle(resolve(toOptionTokenProps(state)).optionText)
+      toTextStyle(resolve({
+        isDisabled: state.isDisabled,
+        isSelected: state.isSelected,
+        isHighlighted: state.isHighlighted,
+      }).optionText)
     )),
     checkbox: createStyleResolver((state: MultiSelectOptionState): MultiSelectCheckboxStyle => ({
-      ...resolve(toOptionTokenProps(state)).checkbox,
+      ...resolve({
+        isDisabled: state.isDisabled,
+        isSelected: state.isSelected,
+        isHighlighted: state.isHighlighted,
+      }).checkbox,
     })),
     checkboxIcon: createValueResolver((state: MultiSelectOptionState): MultiSelectCheckboxIconStyle => {
-      const { checkboxIcon } = resolve(toOptionTokenProps(state))
+      const { checkboxIcon } = resolve({
+        isDisabled: state.isDisabled,
+        isSelected: state.isSelected,
+        isHighlighted: state.isHighlighted,
+      })
 
       return {
         color: checkboxIcon.color,

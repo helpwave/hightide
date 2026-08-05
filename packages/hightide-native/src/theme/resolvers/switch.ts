@@ -1,28 +1,26 @@
-import { hightideSwitchTokenResolver } from '@helpwave/hightide-design/component-token-resolvers'
-import type { SwitchComponentResolverProps } from '@helpwave/hightide-design/component-token-resolvers'
-import { hightideSemanticTokenResolvers } from '@helpwave/hightide-design/semantic-token-resolvers'
-import type { ThemeTokens } from '@helpwave/hightide-design/theme-tokens'
-
 import type { Color } from '../types/color'
 import type {
   SwitchState,
-  SwitchTheme
+  SwitchThemeResolvers
 } from '../types/components/switch'
-import { createValueResolver } from '../types/resolver'
+import {
+  createValueResolver,
+  type ComponentThemeResolver
+} from '../types/resolver'
 
-const toTokenProps = (state: SwitchState): SwitchComponentResolverProps => ({
-  state: {
-    isActive: state.isActive,
-    isDisabled: state.isDisabled,
-    isInvalid: state.isInvalid,
-  },
-})
-
-export const toSwitchTheme = (themeTokens: ThemeTokens): SwitchTheme => {
-  const resolve = (state: SwitchState) => hightideSwitchTokenResolver({
+export const toSwitchThemeResolvers: ComponentThemeResolver<SwitchThemeResolvers> = ({
+  themeTokens,
+  semanticTokens,
+  componentTokens,
+}) => {
+  const resolve = (state: SwitchState) => componentTokens.switch({
     themeTokens,
-    semanticResolvers: hightideSemanticTokenResolvers,
-    ...toTokenProps(state),
+    semanticResolvers: semanticTokens,
+    state: {
+      isActive: state.isActive,
+      isDisabled: state.isDisabled,
+      isInvalid: state.isInvalid,
+    },
   })
 
   return {

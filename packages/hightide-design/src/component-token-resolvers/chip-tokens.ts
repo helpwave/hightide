@@ -17,15 +17,17 @@ export type ChipComponentResolverProps = {
   },
 }
 
-export type ChipThemeTokens = {
+export type ChipTokens = {
   container: ContainerTokens,
   text: TextStyleTokens,
 }
 
-export const hightideChipTokenResolver: ComponentTokenResolver<
+export type ChipTokenResolver = ComponentTokenResolver<
   ChipComponentResolverProps,
-  ChipThemeTokens
-> = ({ themeTokens, semanticResolvers, overrides }) => {
+  ChipTokens
+>
+
+export const chipTokenResolver: ChipTokenResolver = ({ themeTokens, semanticResolvers, overrides }) => {
   const size = overrides.size ?? 'md'
   const coloring = resolveColorPairColoring({
     themeTokens,

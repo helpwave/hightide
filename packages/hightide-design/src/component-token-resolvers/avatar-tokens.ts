@@ -132,7 +132,7 @@ export type AvatarGroupMoreTokens = {
   flexShrink: number,
 }
 
-export type AvatarThemeTokens = {
+export type AvatarTokens = {
   container: AvatarContainerTokens,
   image: AvatarImageTokens,
   text: AvatarTextTokens,
@@ -166,10 +166,12 @@ const statusColors = (themeTokens: ThemeTokens): Record<AvatarStatus, ColorToken
   }
 }
 
-export const hightideAvatarTokenResolver: ComponentTokenResolver<
+export type AvatarTokenResolver = ComponentTokenResolver<
   AvatarComponentResolverProps,
-  AvatarThemeTokens
-> = ({ themeTokens, config, overrides, state }) => {
+  AvatarTokens
+>
+
+export const avatarTokenResolver: AvatarTokenResolver = ({ themeTokens, config, overrides, state }) => {
   const size = overrides.size ?? 'md'
   const status = state.status ?? 'unknown'
   const groupIndex = config.groupIndex ?? 0

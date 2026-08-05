@@ -1,36 +1,34 @@
-import { hightideButtonTokenResolver } from '@helpwave/hightide-design/component-token-resolvers'
-import type { ButtonComponentResolverProps } from '@helpwave/hightide-design/component-token-resolvers'
-import { hightideSemanticTokenResolvers } from '@helpwave/hightide-design/semantic-token-resolvers'
-import type { ThemeTokens } from '@helpwave/hightide-design/theme-tokens'
-
 import { toContainerStyle, toTextStyle } from '../adapters/style-adapters'
 import type {
   ButtonState,
   ButtonStyle,
   ButtonTextStyle,
-  ButtonTheme
+  ButtonThemeResolvers
 } from '../types/components/button'
-import { createStyleResolver } from '../types/resolver'
+import {
+  createStyleResolver,
+  type ComponentThemeResolver
+} from '../types/resolver'
 
-const toTokenProps = (state: ButtonState): ButtonComponentResolverProps => ({
-  overrides: {
-    size: state.size,
-    color: state.color,
-    coloringStyle: state.coloringStyle,
-  },
-  state: {
-    isDisabled: state.isDisabled,
-    isHovered: state.isHovered,
-    isFocused: state.isFocused,
-    isPressed: state.isPressed,
-  },
-})
-
-export const toButtonTheme = (themeTokens: ThemeTokens): ButtonTheme => {
-  const resolve = (state: ButtonState) => hightideButtonTokenResolver({
+export const toButtonThemeResolvers: ComponentThemeResolver<ButtonThemeResolvers> = ({
+  themeTokens,
+  semanticTokens,
+  componentTokens,
+}) => {
+  const resolve = (state: ButtonState) => componentTokens.button({
     themeTokens,
-    semanticResolvers: hightideSemanticTokenResolvers,
-    ...toTokenProps(state),
+    semanticResolvers: semanticTokens,
+    overrides: {
+      size: state.size,
+      color: state.color,
+      coloringStyle: state.coloringStyle,
+    },
+    state: {
+      isDisabled: state.isDisabled,
+      isHovered: state.isHovered,
+      isFocused: state.isFocused,
+      isPressed: state.isPressed,
+    },
   })
 
   return {

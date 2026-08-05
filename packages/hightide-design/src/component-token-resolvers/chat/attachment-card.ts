@@ -14,7 +14,7 @@ import {
   type ChatAlignment
 } from './shared'
 
-export type ChatAttachmentCardComponentResolverProps = {
+export type ChatAttachmentCardResolverProps = {
   config: {
     direction?: ChatMessageDirection,
   },
@@ -45,11 +45,13 @@ export type ChatAttachmentCardTokens = {
   metadata: TextStyleTokens,
 }
 
-export const hightideChatAttachmentCardTokenResolver: ComponentTokenResolver<
-  ChatAttachmentCardComponentResolverProps,
+export type ChatAttachmentCardTokenResolver = ComponentTokenResolver<
+  ChatAttachmentCardResolverProps,
   ChatAttachmentCardTokens
-> = ({ themeTokens, semanticResolvers, config }) => {
-  const { color, size, spacing, shape, borders, typography } = themeTokens
+>
+
+export const chatAttachmentCardTokenResolver: ChatAttachmentCardTokenResolver = ({ themeTokens, semanticResolvers, config }) => {
+  const { color, size, shape, borders, typography } = themeTokens
   const descriptionColor = resolveDescriptionColor({ themeTokens, semanticResolvers })
   const fadedBorder = resolveFadedBorder({ themeTokens, semanticResolvers })
   const alignment = resolveAlignment(config.direction)

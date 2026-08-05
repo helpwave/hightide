@@ -21,7 +21,7 @@ export type ChipStyle = ViewStyle
 
 export type ChipTextStyle = TextStyle
 
-export type ChipTheme = {
+export type ChipThemeResolvers = {
   chip: StyleResolverFunction<ChipState, ChipStyle>,
   text: StyleResolverFunction<ChipState, ChipTextStyle>,
 }

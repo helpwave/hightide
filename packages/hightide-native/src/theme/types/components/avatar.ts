@@ -66,7 +66,7 @@ export type AvatarGroupStackStyle = ViewStyle
 
 export type AvatarGroupMoreStyle = TextStyle
 
-export type AvatarTheme = {
+export type AvatarThemeResolvers = {
   container: StyleResolverFunction<AvatarState, AvatarStyle>,
   image: StyleResolverFunction<AvatarState, AvatarImageStyle>,
   text: StyleResolverFunction<AvatarState, AvatarTextStyle>,

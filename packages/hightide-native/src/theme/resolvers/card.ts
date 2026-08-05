@@ -1,8 +1,3 @@
-import { hightideCardTokenResolver } from '@helpwave/hightide-design/component-token-resolvers'
-import type { CardComponentResolverProps } from '@helpwave/hightide-design/component-token-resolvers'
-import { hightideSemanticTokenResolvers } from '@helpwave/hightide-design/semantic-token-resolvers'
-import type { ThemeTokens } from '@helpwave/hightide-design/theme-tokens'
-
 import { toTextStyle } from '../adapters/style-adapters'
 import type {
   CardActionItemContentStyle,
@@ -15,76 +10,97 @@ import type {
   CardItemStyle,
   CardItemValueStyle,
   CardStyle,
-  CardTheme
+  CardThemeResolvers
 } from '../types/components/card'
 import {
   createSimpleStyleResolver,
   createSimpleValueResolver,
   createStyleResolver,
-  createValueResolver
+  createValueResolver,
+  type ComponentThemeResolver
 } from '../types/resolver'
 
-const emptyProps = (): CardComponentResolverProps => ({
-  state: {},
-})
-
-const toTokenProps = (state: CardActionItemState): CardComponentResolverProps => ({
-  state: {
-    isPressed: state.isPressed,
-    isDisabled: state.isDisabled,
-    isDanger: state.isDanger,
-  },
-})
-
-export const toCardTheme = (themeTokens: ThemeTokens): CardTheme => {
-  const resolve = (props: CardComponentResolverProps) => hightideCardTokenResolver({
+export const toCardThemeResolvers: ComponentThemeResolver<CardThemeResolvers> = ({
+  themeTokens,
+  semanticTokens,
+  componentTokens,
+}) => {
+  const resolve = (state: {
+    isPressed?: boolean,
+    isDisabled?: boolean,
+    isDanger?: boolean,
+  } = {}) => componentTokens.card({
     themeTokens,
-    semanticResolvers: hightideSemanticTokenResolvers,
-    ...props,
+    semanticResolvers: semanticTokens,
+    state,
   })
 
   return {
     card: createSimpleStyleResolver((): CardStyle => ({
-      ...resolve(emptyProps()).container,
+      ...resolve().container,
     })),
     item: createSimpleStyleResolver((): CardItemStyle => ({
-      ...resolve(emptyProps()).item,
+      ...resolve().item,
     })),
     itemContent: createSimpleStyleResolver((): CardItemContentStyle => ({
-      ...resolve(emptyProps()).itemContent,
+      ...resolve().itemContent,
     })),
     itemLabel: createSimpleStyleResolver((): CardItemLabelStyle => (
-      toTextStyle(resolve(emptyProps()).itemLabel)
+      toTextStyle(resolve().itemLabel)
     )),
     itemValue: createSimpleStyleResolver((): CardItemValueStyle => (
-      toTextStyle(resolve(emptyProps()).itemValue)
+      toTextStyle(resolve().itemValue)
     )),
     actionItem: createStyleResolver((state: CardActionItemState): CardActionItemStyle => ({
-      ...resolve(toTokenProps(state)).actionItem,
+      ...resolve({
+        isPressed: state.isPressed,
+        isDisabled: state.isDisabled,
+        isDanger: state.isDanger,
+      }).actionItem,
     })),
     actionItemContent: createSimpleStyleResolver((): CardActionItemContentStyle => ({
-      ...resolve(emptyProps()).actionItemContent,
+      ...resolve().actionItemContent,
     })),
     actionItemLabel: createStyleResolver((state: CardActionItemState): CardActionItemLabelStyle => (
-      toTextStyle(resolve(toTokenProps(state)).actionItemLabel)
+      toTextStyle(resolve({
+        isPressed: state.isPressed,
+        isDisabled: state.isDisabled,
+        isDanger: state.isDanger,
+      }).actionItemLabel)
     )),
     actionItemIcon: createValueResolver((state: CardActionItemState): CardActionItemIconColor => ({
-      color: resolve(toTokenProps(state)).actionItemIcon.color,
+      color: resolve({
+        isPressed: state.isPressed,
+        isDisabled: state.isDisabled,
+        isDanger: state.isDanger,
+      }).actionItemIcon.color,
     })),
     navigationItem: createStyleResolver((state: CardActionItemState): CardActionItemStyle => ({
-      ...resolve(toTokenProps(state)).navigationItem,
+      ...resolve({
+        isPressed: state.isPressed,
+        isDisabled: state.isDisabled,
+        isDanger: state.isDanger,
+      }).navigationItem,
     })),
     navigationItemContent: createSimpleStyleResolver((): CardActionItemContentStyle => ({
-      ...resolve(emptyProps()).navigationItemContent,
+      ...resolve().navigationItemContent,
     })),
     navigationItemLabel: createStyleResolver((state: CardActionItemState): CardActionItemLabelStyle => (
-      toTextStyle(resolve(toTokenProps(state)).navigationItemLabel)
+      toTextStyle(resolve({
+        isPressed: state.isPressed,
+        isDisabled: state.isDisabled,
+        isDanger: state.isDanger,
+      }).navigationItemLabel)
     )),
     navigationItemIcon: createValueResolver((state: CardActionItemState): CardActionItemIconColor => ({
-      color: resolve(toTokenProps(state)).navigationItemIcon.color,
+      color: resolve({
+        isPressed: state.isPressed,
+        isDisabled: state.isDisabled,
+        isDanger: state.isDanger,
+      }).navigationItemIcon.color,
     })),
     navigationItemTrailing: createSimpleValueResolver((): CardActionItemIconColor => ({
-      color: resolve(emptyProps()).navigationItemTrailing.color,
+      color: resolve().navigationItemTrailing.color,
     })),
   }
 }

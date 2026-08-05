@@ -61,7 +61,7 @@ export type SelectOptionTokens = {
   opacity: number,
 }
 
-export type SelectThemeTokens = {
+export type SelectTokens = {
   trigger: SelectTriggerTokens,
   triggerText: TextStyleTokens,
   overlay: SelectOverlayTokens,
@@ -74,10 +74,12 @@ export type SelectThemeTokens = {
 
 export const selectOverlayColor = HexColorUtils.hexWithAlpha('#000000', 0.35)
 
-export const hightideSelectTokenResolver: ComponentTokenResolver<
+export type SelectTokenResolver = ComponentTokenResolver<
   SelectComponentResolverProps,
-  SelectThemeTokens
-> = ({ themeTokens, semanticResolvers, state }) => {
+  SelectTokens
+>
+
+export const selectTokenResolver: SelectTokenResolver = ({ themeTokens, semanticResolvers, state }) => {
   const { color, spacing, shape, borders, typography } = themeTokens
   const layout = createElementLayoutTokens(themeTokens).control.md
   const onColor = color.surface.onColor

@@ -34,10 +34,12 @@ export type ChatQuickReplyChipTokens = {
   text: TextStyleTokens,
 }
 
-export const hightideChatQuickReplyChipTokenResolver: ComponentTokenResolver<
+export type ChatQuickReplyChipTokenResolver = ComponentTokenResolver<
   ChatQuickReplyChipComponentResolverProps,
   ChatQuickReplyChipTokens
-> = ({ themeTokens, semanticResolvers, state }) => {
+>
+
+export const chatQuickReplyChipTokenResolver: ChatQuickReplyChipTokenResolver = ({ themeTokens, semanticResolvers, state }) => {
   const { color, spacing, shape, borders, typography } = themeTokens
   const descriptionColor = resolveDescriptionColor({ themeTokens, semanticResolvers })
   const fadedBorder = resolveFadedBorder({ themeTokens, semanticResolvers })

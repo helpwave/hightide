@@ -21,7 +21,7 @@ export type ButtonStyle = ViewStyle
 
 export type ButtonTextStyle = TextStyle
 
-export type ButtonTheme = {
+export type ButtonThemeResolvers = {
   container: StyleResolverFunction<ButtonState, ButtonStyle>,
   text: StyleResolverFunction<ButtonState, ButtonTextStyle>,
 }

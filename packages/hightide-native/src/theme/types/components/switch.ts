@@ -8,7 +8,7 @@ export type SwitchState = InteractionState & {
   isActive?: boolean,
 }
 
-export type SwitchTheme = {
+export type SwitchThemeResolvers = {
   trackColor: StyleResolverFunction<SwitchState, Color>,
   borderColor: StyleResolverFunction<SwitchState, Color>,
   thumbColor: StyleResolverFunction<SwitchState, Color>,

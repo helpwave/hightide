@@ -34,7 +34,7 @@ export type CardActionItemIconColor = {
   color: Color,
 }
 
-export type CardTheme = {
+export type CardThemeResolvers = {
   card: SimpleStyleResolver<CardStyle>,
   item: SimpleStyleResolver<CardItemStyle>,
   itemContent: SimpleStyleResolver<CardItemContentStyle>,

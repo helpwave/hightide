@@ -52,10 +52,12 @@ export type ChatConversationRowTokens = {
   sentIndicator: ChatIconTokens,
 }
 
-export const hightideChatConversationRowTokenResolver: ComponentTokenResolver<
+export type ChatConversationRowTokenResolver = ComponentTokenResolver<
   ChatConversationRowComponentResolverProps,
   ChatConversationRowTokens
-> = ({ themeTokens, semanticResolvers, state }) => {
+>
+
+export const chatConversationRowTokenResolver: ChatConversationRowTokenResolver = ({ themeTokens, semanticResolvers, state }) => {
   const { color, spacing, shape, borders, typography } = themeTokens
   const descriptionColor = resolveDescriptionColor({ themeTokens, semanticResolvers })
   const hoverColor = resolveHoverColor({ themeTokens, semanticResolvers })

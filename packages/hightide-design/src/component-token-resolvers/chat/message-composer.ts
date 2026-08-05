@@ -31,10 +31,12 @@ export type ChatMessageComposerTokens = {
   placeholderColor: ColorToken,
 }
 
-export const hightideChatMessageComposerTokenResolver: ComponentTokenResolver<
-  {},
+export type ChatMessageComposerTokenResolver = ComponentTokenResolver<
+  Record<string, never>,
   ChatMessageComposerTokens
-> = ({ themeTokens, semanticResolvers }) => {
+>
+
+export const chatMessageComposerTokenResolver: ChatMessageComposerTokenResolver = ({ themeTokens, semanticResolvers }) => {
   const { color, size, spacing, shape, borders, typography } = themeTokens
   const placeholderColor = resolveDescriptionColor({ themeTokens, semanticResolvers })
   const fadedBorder = resolveFadedBorder({ themeTokens, semanticResolvers })

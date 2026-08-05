@@ -34,7 +34,7 @@ export type SelectOptionStyle = ViewStyle
 
 export type SelectOptionTextStyle = TextStyle
 
-export type SelectTheme = {
+export type SelectThemeResolvers = {
   trigger: StyleResolverFunction<SelectState, SelectTriggerStyle>,
   triggerText: StyleResolverFunction<SelectState, SelectTriggerTextStyle>,
   overlay: SimpleStyleResolver<SelectOverlayStyle>,

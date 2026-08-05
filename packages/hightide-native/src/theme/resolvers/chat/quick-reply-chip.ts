@@ -1,19 +1,22 @@
-import { hightideChatQuickReplyChipTokenResolver } from '@helpwave/hightide-design/component-token-resolvers'
-import { hightideSemanticTokenResolvers } from '@helpwave/hightide-design/semantic-token-resolvers'
-import type { ThemeTokens } from '@helpwave/hightide-design/theme-tokens'
-
 import type {
   ChatQuickReplyChipState,
   ChatQuickReplyChipStyle,
   ChatQuickReplyChipTextStyle,
-  ChatQuickReplyChipTheme
+  ChatQuickReplyChipThemeResolvers
 } from '../../types/components/chat'
-import { createStyleResolver } from '../../types/resolver'
+import {
+  createStyleResolver,
+  type ComponentThemeResolver
+} from '../../types/resolver'
 
-export const toQuickReplyChipTheme = (themeTokens: ThemeTokens): ChatQuickReplyChipTheme => {
-  const resolve = (state: ChatQuickReplyChipState) => hightideChatQuickReplyChipTokenResolver({
+export const toChatQuickReplyChipThemeResolvers: ComponentThemeResolver<ChatQuickReplyChipThemeResolvers> = ({
+  themeTokens,
+  semanticTokens,
+  componentTokens,
+}) => {
+  const resolve = (state: ChatQuickReplyChipState) => componentTokens({
     themeTokens,
-    semanticResolvers: hightideSemanticTokenResolvers,
+    semanticResolvers: semanticTokens,
     state: {
       isPressed: state.isPressed,
       isDisabled: state.isDisabled,

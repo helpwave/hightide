@@ -1,3 +1,7 @@
+import type { ThemeTokens } from '@helpwave/hightide-design/theme-tokens'
+import type { SemanticTokenResolvers } from '@helpwave/hightide-design/semantic-token-resolvers'
+import type { ComponentTokenResolvers } from '@helpwave/hightide-design/component-token-resolvers'
+
 export type InteractionState = {
   isDisabled?: boolean,
   isHovered?: boolean,
@@ -16,6 +20,12 @@ export type StyleResolverFunction<TState, TStyle> = (
 ) => TStyle
 
 export type SimpleStyleResolver<TStyle> = StyleResolverFunction<Record<string, never>, TStyle>
+
+export type ComponentThemeResolver<TTheme> = (params: {
+  themeTokens: ThemeTokens,
+  semanticTokens: SemanticTokenResolvers,
+  componentTokens: ComponentTokenResolvers,
+}) => TTheme
 
 export const createStyleResolver = <TState, TStyle>(
   resolve: (props: TState) => TStyle

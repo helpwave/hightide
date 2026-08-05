@@ -11,10 +11,12 @@ export type ChatMessageListTokens = {
   },
 }
 
-export const hightideChatMessageListTokenResolver: ComponentTokenResolver<
-  {},
+export type ChatMessageListTokenResolver = ComponentTokenResolver<
+  Record<string, never>,
   ChatMessageListTokens
-> = ({ themeTokens }) => {
+>
+
+export const chatMessageListTokenResolver: ChatMessageListTokenResolver = ({ themeTokens }) => {
   const { color, spacing, shape } = themeTokens
 
   return {

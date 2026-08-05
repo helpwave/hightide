@@ -25,15 +25,17 @@ export type InputContainerTokens = TextStyleTokens & {
   opacity: number,
 }
 
-export type InputThemeTokens = {
+export type InputTokens = {
   input: InputContainerTokens,
   placeholderColor: ColorToken,
 }
 
-export const hightideInputTokenResolver: ComponentTokenResolver<
+export type InputTokenResolver = ComponentTokenResolver<
   InputComponentResolverProps,
-  InputThemeTokens
-> = ({ themeTokens, semanticResolvers, state }) => {
+  InputTokens
+>
+
+export const inputTokenResolver: InputTokenResolver = ({ themeTokens, semanticResolvers, state }) => {
   const { color, spacing, borders, typography } = themeTokens
   const layout = createElementLayoutTokens(themeTokens).control.md
   const textStyle = typography.label.md

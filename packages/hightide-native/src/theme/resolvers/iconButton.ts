@@ -1,40 +1,36 @@
-import { hightideIconButtonTokenResolver } from '@helpwave/hightide-design/component-token-resolvers'
-import type { IconButtonComponentResolverProps } from '@helpwave/hightide-design/component-token-resolvers'
-import { hightideSemanticTokenResolvers } from '@helpwave/hightide-design/semantic-token-resolvers'
-import type { ThemeTokens } from '@helpwave/hightide-design/theme-tokens'
-
 import { toTextStyle } from '../adapters/style-adapters'
 import type {
   IconButtonIconStyle,
   IconButtonState,
   IconButtonStyle,
   IconButtonTextStyle,
-  IconButtonTheme
+  IconButtonThemeResolvers
 } from '../types/components/iconButton'
 import {
   createStyleResolver,
-  createValueResolver
+  createValueResolver,
+  type ComponentThemeResolver
 } from '../types/resolver'
 
-const toTokenProps = (state: IconButtonState): IconButtonComponentResolverProps => ({
-  overrides: {
-    size: state.size,
-    color: state.color,
-    coloringStyle: state.coloringStyle,
-  },
-  state: {
-    isDisabled: state.isDisabled,
-    isHovered: state.isHovered,
-    isFocused: state.isFocused,
-    isPressed: state.isPressed,
-  },
-})
-
-export const toIconButtonTheme = (themeTokens: ThemeTokens): IconButtonTheme => {
-  const resolve = (state: IconButtonState) => hightideIconButtonTokenResolver({
+export const toIconButtonThemeResolvers: ComponentThemeResolver<IconButtonThemeResolvers> = ({
+  themeTokens,
+  semanticTokens,
+  componentTokens,
+}) => {
+  const resolve = (state: IconButtonState) => componentTokens.iconButton({
     themeTokens,
-    semanticResolvers: hightideSemanticTokenResolvers,
-    ...toTokenProps(state),
+    semanticResolvers: semanticTokens,
+    overrides: {
+      size: state.size,
+      color: state.color,
+      coloringStyle: state.coloringStyle,
+    },
+    state: {
+      isDisabled: state.isDisabled,
+      isHovered: state.isHovered,
+      isFocused: state.isFocused,
+      isPressed: state.isPressed,
+    },
   })
 
   return {

@@ -1,7 +1,4 @@
-import { hightideChatAttachmentCardTokenResolver } from '@helpwave/hightide-design/component-token-resolvers'
 import type { ChatMessageDirection } from '@helpwave/hightide-design/component-token-resolvers'
-import { hightideSemanticTokenResolvers } from '@helpwave/hightide-design/semantic-token-resolvers'
-import type { ThemeTokens } from '@helpwave/hightide-design/theme-tokens'
 
 import type {
   ChatAttachmentCardIconColor,
@@ -10,18 +7,23 @@ import type {
   ChatAttachmentCardNameStyle,
   ChatAttachmentCardState,
   ChatAttachmentCardStyle,
-  ChatAttachmentCardTheme
+  ChatAttachmentCardThemeResolvers
 } from '../../types/components/chat'
 import {
   createSimpleStyleResolver,
   createSimpleValueResolver,
-  createStyleResolver
+  createStyleResolver,
+  type ComponentThemeResolver
 } from '../../types/resolver'
 
-export const toAttachmentCardTheme = (themeTokens: ThemeTokens): ChatAttachmentCardTheme => {
-  const resolve = (direction?: ChatMessageDirection) => hightideChatAttachmentCardTokenResolver({
+export const toChatAttachmentCardThemeResolvers: ComponentThemeResolver<ChatAttachmentCardThemeResolvers> = ({
+  themeTokens,
+  semanticTokens,
+  componentTokens,
+}) => {
+  const resolve = (direction?: ChatMessageDirection) => componentTokens({
     themeTokens,
-    semanticResolvers: hightideSemanticTokenResolvers,
+    semanticResolvers: semanticTokens,
     config: { direction },
   })
 

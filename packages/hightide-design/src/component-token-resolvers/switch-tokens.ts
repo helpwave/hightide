@@ -11,16 +11,18 @@ export type SwitchComponentResolverProps = {
   state: SwitchState,
 }
 
-export type SwitchThemeTokens = {
+export type SwitchTokens = {
   trackColor: ColorToken,
   borderColor: ColorToken,
   thumbColor: ColorToken,
 }
 
-export const hightideSwitchTokenResolver: ComponentTokenResolver<
+export type SwitchTokenResolver = ComponentTokenResolver<
   SwitchComponentResolverProps,
-  SwitchThemeTokens
-> = ({ themeTokens, semanticResolvers, state }) => {
+  SwitchTokens
+>
+
+export const switchTokenResolver: SwitchTokenResolver = ({ themeTokens, semanticResolvers, state }) => {
   const { color } = themeTokens
   const onColor = color.surface.onColor
   const fadedBorder = semanticResolvers.asFaded({

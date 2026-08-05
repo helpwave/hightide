@@ -1,12 +1,8 @@
-import { hightideChatConversationRowTokenResolver } from '@helpwave/hightide-design/component-token-resolvers'
-import { hightideSemanticTokenResolvers } from '@helpwave/hightide-design/semantic-token-resolvers'
-import type { ThemeTokens } from '@helpwave/hightide-design/theme-tokens'
-
 import type {
   ChatConversationRowPreviewStyle,
   ChatConversationRowState,
   ChatConversationRowStyle,
-  ChatConversationRowTheme,
+  ChatConversationRowThemeResolvers,
   ChatConversationRowTimestampStyle,
   ChatConversationRowTitleStyle,
   ChatConversationRowUnreadBadgeStyle,
@@ -16,13 +12,18 @@ import type {
 import {
   createSimpleStyleResolver,
   createSimpleValueResolver,
-  createStyleResolver
+  createStyleResolver,
+  type ComponentThemeResolver
 } from '../../types/resolver'
 
-export const toConversationRowTheme = (themeTokens: ThemeTokens): ChatConversationRowTheme => {
-  const resolve = (state: ChatConversationRowState = {}) => hightideChatConversationRowTokenResolver({
+export const toChatConversationRowThemeResolvers: ComponentThemeResolver<ChatConversationRowThemeResolvers> = ({
+  themeTokens,
+  semanticTokens,
+  componentTokens,
+}) => {
+  const resolve = (state: ChatConversationRowState = {}) => componentTokens({
     themeTokens,
-    semanticResolvers: hightideSemanticTokenResolvers,
+    semanticResolvers: semanticTokens,
     state: {
       isPressed: state.isPressed,
       isDisabled: state.isDisabled,

@@ -21,7 +21,7 @@ export type ButtonComponentResolverProps = {
   state: ButtonState,
 }
 
-export type ButtonThemeTokens = {
+export type ButtonTokens = {
   container: ContainerTokens,
   text: TextStyleTokens,
 }
@@ -30,10 +30,12 @@ const isOutlineColoringStyle = (style: PressableColoringStyle): boolean => (
   style === 'outline' || style === 'tonal-outline'
 )
 
-export const hightideButtonTokenResolver: ComponentTokenResolver<
+export type ButtonTokenResolver = ComponentTokenResolver<
   ButtonComponentResolverProps,
-  ButtonThemeTokens
-> = ({ themeTokens, semanticResolvers, overrides, state }) => {
+  ButtonTokens
+>
+
+export const buttonTokenResolver: ButtonTokenResolver = ({ themeTokens, semanticResolvers, overrides, state }) => {
   const size = overrides.size ?? 'md'
   const coloringStyle = overrides.coloringStyle ?? 'filled'
   const coloring = resolveColorPairColoring({

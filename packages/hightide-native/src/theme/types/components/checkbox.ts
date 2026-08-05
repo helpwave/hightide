@@ -27,7 +27,7 @@ export type CheckboxIconStyle = {
   visible: boolean,
 }
 
-export type CheckboxTheme = {
+export type CheckboxThemeResolvers = {
   checkbox: StyleResolverFunction<CheckboxState, CheckboxStyle>,
   icon: StyleResolverFunction<CheckboxState, CheckboxIconStyle>,
 }

@@ -1,13 +1,9 @@
-import { hightideAvatarTokenResolver } from '@helpwave/hightide-design/component-token-resolvers'
 import type {
-  AvatarComponentResolverProps,
   AvatarContainerTokens
 } from '@helpwave/hightide-design/component-token-resolvers'
-import { hightideSemanticTokenResolvers } from '@helpwave/hightide-design/semantic-token-resolvers'
 import type {
   ColorPairToken,
-  ComponentSize,
-  ThemeTokens
+  ComponentSize
 } from '@helpwave/hightide-design/theme-tokens'
 
 import { toTextStyle } from '../adapters/style-adapters'
@@ -23,63 +19,65 @@ import type {
   AvatarStatusDotStyle,
   AvatarStyle,
   AvatarTextStyle,
-  AvatarTheme,
+  AvatarThemeResolvers,
   AvatarWithLabelContainerStyle,
   AvatarWithLabelState,
   AvatarWithLabelTextStyle,
   AvatarWithStatusContainerStyle,
   AvatarWithStatusState
 } from '../types/components/avatar'
-import { createStyleResolver, createValueResolver } from '../types/resolver'
+import {
+  createStyleResolver,
+  createValueResolver,
+  type ComponentThemeResolver
+} from '../types/resolver'
 
-const toAvatarStyle = (tokens: AvatarContainerTokens): AvatarStyle => {
-  const { shadow, ...container } = tokens
+export const toAvatarThemeResolvers: ComponentThemeResolver<AvatarThemeResolvers> = ({
+  themeTokens,
+  semanticTokens,
+  componentTokens,
+}) => {
+  const toAvatarStyle = (tokens: AvatarContainerTokens): AvatarStyle => {
+    const { shadow, ...container } = tokens
 
-  return {
-    ...container,
-    minWidth: container.width,
-    maxWidth: container.width,
-    minHeight: container.height,
-    maxHeight: container.height,
-    ...(shadow ? {
-      shadowColor: shadow.color,
-      shadowOffset: { width: shadow.offsetX, height: shadow.offsetY },
-      shadowOpacity: 1,
-      shadowRadius: shadow.blur,
-      elevation: shadow.elevation,
-    } : {}),
+    return {
+      ...container,
+      minWidth: container.width,
+      maxWidth: container.width,
+      minHeight: container.height,
+      maxHeight: container.height,
+      ...(shadow ? {
+        shadowColor: shadow.color,
+        shadowOffset: { width: shadow.offsetX, height: shadow.offsetY },
+        shadowOpacity: 1,
+        shadowRadius: shadow.blur,
+        elevation: shadow.elevation,
+      } : {}),
+    }
   }
-}
 
-type AvatarResolveInput = {
-  size?: ComponentSize,
-  color?: ColorPairToken,
-  status?: AvatarStatus,
-  isGrouped?: boolean,
-  groupIndex?: number,
-  groupCount?: number,
-}
-
-const toTokenProps = (input: AvatarResolveInput): AvatarComponentResolverProps => ({
-  config: {
-    isGrouped: input.isGrouped,
-    groupIndex: input.groupIndex,
-    groupCount: input.groupCount,
-  },
-  overrides: {
-    color: input.color,
-    size: input.size,
-  },
-  state: {
-    status: input.status,
-  },
-})
-
-export const toAvatarTheme = (themeTokens: ThemeTokens): AvatarTheme => {
-  const resolve = (input: AvatarResolveInput = {}) => hightideAvatarTokenResolver({
+  const resolve = (input: {
+    size?: ComponentSize,
+    color?: ColorPairToken,
+    status?: AvatarStatus,
+    isGrouped?: boolean,
+    groupIndex?: number,
+    groupCount?: number,
+  } = {}) => componentTokens.avatar({
     themeTokens,
-    semanticResolvers: hightideSemanticTokenResolvers,
-    ...toTokenProps(input),
+    semanticResolvers: semanticTokens,
+    config: {
+      isGrouped: input.isGrouped,
+      groupIndex: input.groupIndex,
+      groupCount: input.groupCount,
+    },
+    overrides: {
+      color: input.color,
+      size: input.size,
+    },
+    state: {
+      status: input.status,
+    },
   })
 
   return {

@@ -29,7 +29,7 @@ export type IconButtonIconStyle = {
 
 export type IconButtonTextStyle = TextStyle
 
-export type IconButtonTheme = {
+export type IconButtonThemeResolvers = {
   button: StyleResolverFunction<IconButtonState, IconButtonStyle>,
   icon: StyleResolverFunction<IconButtonState, IconButtonIconStyle>,
   text: StyleResolverFunction<IconButtonState, IconButtonTextStyle>,

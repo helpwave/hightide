@@ -1,7 +1,3 @@
-import { hightideChatMessageCardTokenResolver } from '@helpwave/hightide-design/component-token-resolvers'
-import { hightideSemanticTokenResolvers } from '@helpwave/hightide-design/semantic-token-resolvers'
-import type { ThemeTokens } from '@helpwave/hightide-design/theme-tokens'
-
 import type {
   ChatMessageCardActionsStyle,
   ChatMessageCardBodyStyle,
@@ -11,19 +7,24 @@ import type {
   ChatMessageCardState,
   ChatMessageCardStyle,
   ChatMessageCardSubtitleStyle,
-  ChatMessageCardTheme,
+  ChatMessageCardThemeResolvers,
   ChatMessageCardTitleStyle
 } from '../../types/components/chat'
 import {
   createSimpleStyleResolver,
   createStyleResolver,
-  createValueResolver
+  createValueResolver,
+  type ComponentThemeResolver
 } from '../../types/resolver'
 
-export const toMessageCardTheme = (themeTokens: ThemeTokens): ChatMessageCardTheme => {
-  const resolve = (state?: Partial<ChatMessageCardState>) => hightideChatMessageCardTokenResolver({
+export const toChatMessageCardThemeResolvers: ComponentThemeResolver<ChatMessageCardThemeResolvers> = ({
+  themeTokens,
+  semanticTokens,
+  componentTokens,
+}) => {
+  const resolve = (state?: Partial<ChatMessageCardState>) => componentTokens({
     themeTokens,
-    semanticResolvers: hightideSemanticTokenResolvers,
+    semanticResolvers: semanticTokens,
     config: {
       direction: state?.direction,
     },

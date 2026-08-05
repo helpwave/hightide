@@ -35,8 +35,6 @@ export const resolveColorPairColoring = (
     colorPair: usedColorPair,
   })
 
-  console.log({ usedColorPair, colorScheme })
-
   return semanticResolvers.coloringStyle({
     themeTokens,
     semanticResolvers,

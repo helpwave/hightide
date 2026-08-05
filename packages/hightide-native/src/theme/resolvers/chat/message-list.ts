@@ -1,17 +1,20 @@
-import { hightideChatMessageListTokenResolver } from '@helpwave/hightide-design/component-token-resolvers'
-import { hightideSemanticTokenResolvers } from '@helpwave/hightide-design/semantic-token-resolvers'
-import type { ThemeTokens } from '@helpwave/hightide-design/theme-tokens'
-
 import type {
   ChatMessageListStyle,
-  ChatMessageListTheme
+  ChatMessageListThemeResolvers
 } from '../../types/components/chat'
-import { createSimpleStyleResolver } from '../../types/resolver'
+import {
+  createSimpleStyleResolver,
+  type ComponentThemeResolver
+} from '../../types/resolver'
 
-export const toMessageListTheme = (themeTokens: ThemeTokens): ChatMessageListTheme => {
-  const resolve = () => hightideChatMessageListTokenResolver({
+export const toChatMessageListThemeResolvers: ComponentThemeResolver<ChatMessageListThemeResolvers> = ({
+  themeTokens,
+  semanticTokens,
+  componentTokens,
+}) => {
+  const resolve = () => componentTokens({
     themeTokens,
-    semanticResolvers: hightideSemanticTokenResolvers,
+    semanticResolvers: semanticTokens,
   })
 
   return {

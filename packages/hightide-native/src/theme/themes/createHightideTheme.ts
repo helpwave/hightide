@@ -1,20 +1,21 @@
+import { componentTokenResolvers } from '@helpwave/hightide-design/component-token-resolvers'
 import { hightideSemanticTokenResolvers } from '@helpwave/hightide-design/semantic-token-resolvers'
 import { createElementLayoutTokens } from '@helpwave/hightide-design/theme-tokens'
 import type { ThemeTokens } from '@helpwave/hightide-design/theme-tokens'
 
-import { toAvatarTheme } from '../resolvers/avatar'
-import { toButtonTheme } from '../resolvers/button'
-import { toCardTheme } from '../resolvers/card'
-import { toChatTheme } from '../resolvers/chat/chat-theme'
-import { toCheckboxTheme } from '../resolvers/checkbox'
-import { toChipTheme } from '../resolvers/chip'
+import { toAvatarThemeResolvers } from '../resolvers/avatar'
+import { toButtonThemeResolvers } from '../resolvers/button'
+import { toCardThemeResolvers } from '../resolvers/card'
+import { toChatThemeResolvers } from '../resolvers/chat/chat-theme'
+import { toCheckboxThemeResolvers } from '../resolvers/checkbox'
+import { toChipThemeResolvers } from '../resolvers/chip'
 import { createColorSchemes } from '../resolvers/colorScheme'
-import { toIconTheme } from '../resolvers/icon'
-import { toIconButtonTheme } from '../resolvers/iconButton'
-import { toInputTheme } from '../resolvers/input'
-import { toMultiSelectTheme } from '../resolvers/multiSelect'
-import { toSelectTheme } from '../resolvers/select'
-import { toSwitchTheme } from '../resolvers/switch'
+import { toIconThemeResolvers } from '../resolvers/icon'
+import { toIconButtonThemeResolvers } from '../resolvers/iconButton'
+import { toInputThemeResolvers } from '../resolvers/input'
+import { toMultiSelectThemeResolvers } from '../resolvers/multiSelect'
+import { toSelectThemeResolvers } from '../resolvers/select'
+import { toSwitchThemeResolvers } from '../resolvers/switch'
 import type { HightideThemeSemantics } from '../types/semantics'
 import type { HightideTheme } from '../types/theme'
 
@@ -67,17 +68,65 @@ export const createHightideTheme = (themeTokens: ThemeTokens): HightideTheme => 
     dialog: themeTokens.elevation.level4,
   },
   components: {
-    button: toButtonTheme(themeTokens),
-    iconButton: toIconButtonTheme(themeTokens),
-    chip: toChipTheme(themeTokens),
-    checkbox: toCheckboxTheme(themeTokens),
-    switch: toSwitchTheme(themeTokens),
-    input: toInputTheme(themeTokens),
-    select: toSelectTheme(themeTokens),
-    multiSelect: toMultiSelectTheme(themeTokens),
-    chat: toChatTheme(themeTokens),
-    card: toCardTheme(themeTokens),
-    avatar: toAvatarTheme(themeTokens),
-    icon: toIconTheme(themeTokens),
+    button: toButtonThemeResolvers({
+      themeTokens,
+      semanticTokens: hightideSemanticTokenResolvers,
+      componentTokens: componentTokenResolvers.button,
+    }),
+    iconButton: toIconButtonThemeResolvers({
+      themeTokens,
+      semanticTokens: hightideSemanticTokenResolvers,
+      componentTokens: componentTokenResolvers.iconButton,
+    }),
+    chip: toChipThemeResolvers({
+      themeTokens,
+      semanticTokens: hightideSemanticTokenResolvers,
+      componentTokens: componentTokenResolvers.chip,
+    }),
+    checkbox: toCheckboxThemeResolvers({
+      themeTokens,
+      semanticTokens: hightideSemanticTokenResolvers,
+      componentTokens: componentTokenResolvers.checkbox,
+    }),
+    switch: toSwitchThemeResolvers({
+      themeTokens,
+      semanticTokens: hightideSemanticTokenResolvers,
+      componentTokens: componentTokenResolvers.switch,
+    }),
+    input: toInputThemeResolvers({
+      themeTokens,
+      semanticTokens: hightideSemanticTokenResolvers,
+      componentTokens: componentTokenResolvers.input,
+    }),
+    select: toSelectThemeResolvers({
+      themeTokens,
+      semanticTokens: hightideSemanticTokenResolvers,
+      componentTokens: componentTokenResolvers.select,
+    }),
+    multiSelect: toMultiSelectThemeResolvers({
+      themeTokens,
+      semanticTokens: hightideSemanticTokenResolvers,
+      componentTokens: componentTokenResolvers.multiSelect,
+    }),
+    chat: toChatThemeResolvers({
+      themeTokens,
+      semanticTokens: hightideSemanticTokenResolvers,
+      componentTokens: componentTokenResolvers.chat,
+    }),
+    card: toCardThemeResolvers({
+      themeTokens,
+      semanticTokens: hightideSemanticTokenResolvers,
+      componentTokens: componentTokenResolvers.card,
+    }),
+    avatar: toAvatarThemeResolvers({
+      themeTokens,
+      semanticTokens: hightideSemanticTokenResolvers,
+      componentTokens: componentTokenResolvers.avatar,
+    }),
+    icon: toIconThemeResolvers({
+      themeTokens,
+      semanticTokens: hightideSemanticTokenResolvers,
+      componentTokens: componentTokenResolvers.icon,
+    }),
   },
 })

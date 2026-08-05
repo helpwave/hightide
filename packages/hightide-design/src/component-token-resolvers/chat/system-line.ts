@@ -24,10 +24,12 @@ export type ChatSystemLineTokens = {
   icon: ChatIconTokens,
 }
 
-export const hightideChatSystemLineTokenResolver: ComponentTokenResolver<
+export type ChatSystemLineTokenResolver = ComponentTokenResolver<
   ChatSystemLineComponentResolverProps,
   ChatSystemLineTokens
-> = ({ themeTokens, semanticResolvers, overrides }) => {
+>
+
+export const chatSystemLineTokenResolver: ChatSystemLineTokenResolver = ({ themeTokens, semanticResolvers, overrides }) => {
   const { shape, typography } = themeTokens
   const { accentText } = resolveAccentColoring({
     themeTokens,

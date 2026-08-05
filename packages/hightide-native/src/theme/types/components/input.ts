@@ -14,7 +14,7 @@ export type InputState = InteractionState & {
 
 export type InputStyle = TextStyle
 
-export type InputTheme = {
+export type InputThemeResolvers = {
   input: StyleResolverFunction<InputState, InputStyle>,
   placeholderColor: SimpleStyleResolver<Color>,
 }

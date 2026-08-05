@@ -1,18 +1,21 @@
-import { hightideChatDateDividerTokenResolver } from '@helpwave/hightide-design/component-token-resolvers'
-import { hightideSemanticTokenResolvers } from '@helpwave/hightide-design/semantic-token-resolvers'
-import type { ThemeTokens } from '@helpwave/hightide-design/theme-tokens'
-
 import type {
   ChatDateDividerStyle,
   ChatDateDividerTextStyle,
-  ChatDateDividerTheme
+  ChatDateDividerThemeResolvers
 } from '../../types/components/chat'
-import { createSimpleStyleResolver } from '../../types/resolver'
+import {
+  createSimpleStyleResolver,
+  type ComponentThemeResolver
+} from '../../types/resolver'
 
-export const toDateDividerTheme = (themeTokens: ThemeTokens): ChatDateDividerTheme => {
-  const resolve = () => hightideChatDateDividerTokenResolver({
+export const toChatDateDividerThemeResolvers: ComponentThemeResolver<ChatDateDividerThemeResolvers> = ({
+  themeTokens,
+  semanticTokens,
+  componentTokens,
+}) => {
+  const resolve = () => componentTokens({
     themeTokens,
-    semanticResolvers: hightideSemanticTokenResolvers,
+    semanticResolvers: semanticTokens,
   })
 
   return {

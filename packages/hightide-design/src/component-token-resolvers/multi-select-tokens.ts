@@ -54,7 +54,7 @@ export type MultiSelectCheckboxIconTokens = {
   isVisible: boolean,
 }
 
-export type MultiSelectThemeTokens = {
+export type MultiSelectTokens = {
   trigger: MultiSelectTriggerTokens,
   triggerText: TextStyleTokens,
   overlay: SelectOverlayTokens,
@@ -67,10 +67,12 @@ export type MultiSelectThemeTokens = {
   checkboxIcon: MultiSelectCheckboxIconTokens,
 }
 
-export const hightideMultiSelectTokenResolver: ComponentTokenResolver<
+export type MultiSelectTokenResolver = ComponentTokenResolver<
   MultiSelectComponentResolverProps,
-  MultiSelectThemeTokens
-> = ({ themeTokens, semanticResolvers, state }) => {
+  MultiSelectTokens
+>
+
+export const multiSelectTokenResolver: MultiSelectTokenResolver = ({ themeTokens, semanticResolvers, state }) => {
   const { color, spacing, shape, borders, typography } = themeTokens
   const layout = createElementLayoutTokens(themeTokens).control.md
   const checkboxSize = spacing.lg + spacing.xs

@@ -106,7 +106,7 @@ export type ChatQuickReplyChipTextStyle = TextStyle
 export type ChatMessageComposerStyle = ViewStyle
 export type ChatMessageComposerInputStyle = TextStyle
 
-export type ChatConversationRowTheme = {
+export type ChatConversationRowThemeResolvers = {
   container: StyleResolverFunction<ChatConversationRowState, ChatConversationRowStyle>,
   title: StyleResolverFunction<ChatConversationRowState, ChatConversationRowTitleStyle>,
   timestamp: StyleResolverFunction<ChatConversationRowState, ChatConversationRowTimestampStyle>,
@@ -116,23 +116,23 @@ export type ChatConversationRowTheme = {
   sentIndicator: StyleResolverFunction<Record<string, never>, ChatMessageBubbleReceiptIconStyle>,
 }
 
-export type ChatConversationListTheme = {
+export type ChatConversationListThemeResolvers = {
   container: StyleResolverFunction<Record<string, never>, ChatConversationListStyle>,
   header: StyleResolverFunction<Record<string, never>, ChatConversationListHeaderStyle>,
   footer: StyleResolverFunction<Record<string, never>, ChatConversationListFooterStyle>,
 }
 
-export type ChatThreadHeaderTheme = {
+export type ChatThreadHeaderThemeResolvers = {
   container: StyleResolverFunction<Record<string, never>, ChatThreadHeaderStyle>,
   title: StyleResolverFunction<Record<string, never>, ChatThreadHeaderTitleStyle>,
   subtitle: StyleResolverFunction<Record<string, never>, ChatThreadHeaderSubtitleStyle>,
 }
 
-export type ChatMessageListTheme = {
+export type ChatMessageListThemeResolvers = {
   container: StyleResolverFunction<Record<string, never>, ChatMessageListStyle>,
 }
 
-export type ChatMessageBubbleTheme = {
+export type ChatMessageBubbleThemeResolvers = {
   container: StyleResolverFunction<ChatMessageBubbleState, ChatMessageBubbleContainerStyle>,
   bubble: StyleResolverFunction<ChatMessageBubbleState, ChatMessageBubbleStyle>,
   content: StyleResolverFunction<ChatMessageBubbleState, ChatMessageBubbleContentStyle>,
@@ -142,7 +142,7 @@ export type ChatMessageBubbleTheme = {
   receiptIcon: StyleResolverFunction<Record<string, never>, ChatMessageBubbleReceiptIconStyle>,
 }
 
-export type ChatMessageCardTheme = {
+export type ChatMessageCardThemeResolvers = {
   container: StyleResolverFunction<ChatMessageCardState, ChatMessageCardStyle>,
   header: StyleResolverFunction<Record<string, never>, ChatMessageCardHeaderStyle>,
   icon: StyleResolverFunction<ChatMessageCardState, ChatMessageCardIconStyle>,
@@ -153,7 +153,7 @@ export type ChatMessageCardTheme = {
   actions: StyleResolverFunction<Record<string, never>, ChatMessageCardActionsStyle>,
 }
 
-export type ChatAttachmentCardTheme = {
+export type ChatAttachmentCardThemeResolvers = {
   container: StyleResolverFunction<ChatAttachmentCardState, ChatAttachmentCardStyle>,
   icon: StyleResolverFunction<Record<string, never>, ChatAttachmentCardIconStyle>,
   iconColor: StyleResolverFunction<Record<string, never>, ChatAttachmentCardIconColor>,
@@ -161,38 +161,38 @@ export type ChatAttachmentCardTheme = {
   metadata: StyleResolverFunction<Record<string, never>, ChatAttachmentCardMetadataStyle>,
 }
 
-export type ChatSystemLineTheme = {
+export type ChatSystemLineThemeResolvers = {
   container: StyleResolverFunction<ChatSystemLineState, ChatSystemLineStyle>,
   text: StyleResolverFunction<ChatSystemLineState, ChatSystemLineTextStyle>,
   icon: StyleResolverFunction<ChatSystemLineState, ChatSystemLineIconStyle>,
 }
 
-export type ChatDateDividerTheme = {
+export type ChatDateDividerThemeResolvers = {
   container: StyleResolverFunction<Record<string, never>, ChatDateDividerStyle>,
   text: StyleResolverFunction<Record<string, never>, ChatDateDividerTextStyle>,
 }
 
-export type ChatQuickReplyChipTheme = {
+export type ChatQuickReplyChipThemeResolvers = {
   container: StyleResolverFunction<ChatQuickReplyChipState, ChatQuickReplyChipStyle>,
   text: StyleResolverFunction<ChatQuickReplyChipState, ChatQuickReplyChipTextStyle>,
 }
 
-export type ChatMessageComposerTheme = {
+export type ChatMessageComposerThemeResolvers = {
   container: StyleResolverFunction<Record<string, never>, ChatMessageComposerStyle>,
   input: StyleResolverFunction<Record<string, never>, ChatMessageComposerInputStyle>,
   placeholderColor: StyleResolverFunction<Record<string, never>, Color>,
 }
 
-export type ChatTheme = {
-  conversationRow: ChatConversationRowTheme,
-  conversationList: ChatConversationListTheme,
-  threadHeader: ChatThreadHeaderTheme,
-  messageList: ChatMessageListTheme,
-  messageBubble: ChatMessageBubbleTheme,
-  messageCard: ChatMessageCardTheme,
-  attachmentCard: ChatAttachmentCardTheme,
-  systemLine: ChatSystemLineTheme,
-  dateDivider: ChatDateDividerTheme,
-  quickReplyChip: ChatQuickReplyChipTheme,
-  messageComposer: ChatMessageComposerTheme,
+export type ChatThemeResolvers = {
+  conversationRow: ChatConversationRowThemeResolvers,
+  conversationList: ChatConversationListThemeResolvers,
+  threadHeader: ChatThreadHeaderThemeResolvers,
+  messageList: ChatMessageListThemeResolvers,
+  messageBubble: ChatMessageBubbleThemeResolvers,
+  messageCard: ChatMessageCardThemeResolvers,
+  attachmentCard: ChatAttachmentCardThemeResolvers,
+  systemLine: ChatSystemLineThemeResolvers,
+  dateDivider: ChatDateDividerThemeResolvers,
+  quickReplyChip: ChatQuickReplyChipThemeResolvers,
+  messageComposer: ChatMessageComposerThemeResolvers,
 }

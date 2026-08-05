@@ -1,28 +1,75 @@
-import type { ThemeTokens } from '@helpwave/hightide-design/theme-tokens'
+import type { ChatThemeResolvers } from '../../types/components/chat'
+import type { ComponentThemeResolver } from '../../types/resolver'
+import { toChatAttachmentCardThemeResolvers } from './attachment-card'
+import { toChatConversationListThemeResolvers } from './conversation-list'
+import { toChatConversationRowThemeResolvers } from './conversation-row'
+import { toChatDateDividerThemeResolvers } from './date-divider'
+import { toChatMessageBubbleThemeResolvers } from './message-bubble'
+import { toChatMessageCardThemeResolvers } from './message-card'
+import { toChatMessageComposerThemeResolvers } from './message-composer'
+import { toChatMessageListThemeResolvers } from './message-list'
+import { toChatQuickReplyChipThemeResolvers } from './quick-reply-chip'
+import { toChatSystemLineThemeResolvers } from './system-line'
+import { toChatThreadHeaderThemeResolvers } from './thread-header'
 
-import type { ChatTheme } from '../../types/components/chat'
-import { toAttachmentCardTheme } from './attachment-card'
-import { toConversationListTheme } from './conversation-list'
-import { toConversationRowTheme } from './conversation-row'
-import { toDateDividerTheme } from './date-divider'
-import { toMessageBubbleTheme } from './message-bubble'
-import { toMessageCardTheme } from './message-card'
-import { toMessageComposerTheme } from './message-composer'
-import { toMessageListTheme } from './message-list'
-import { toQuickReplyChipTheme } from './quick-reply-chip'
-import { toSystemLineTheme } from './system-line'
-import { toThreadHeaderTheme } from './thread-header'
-
-export const toChatTheme = (themeTokens: ThemeTokens): ChatTheme => ({
-  conversationRow: toConversationRowTheme(themeTokens),
-  conversationList: toConversationListTheme(themeTokens),
-  threadHeader: toThreadHeaderTheme(themeTokens),
-  messageList: toMessageListTheme(themeTokens),
-  messageBubble: toMessageBubbleTheme(themeTokens),
-  messageCard: toMessageCardTheme(themeTokens),
-  attachmentCard: toAttachmentCardTheme(themeTokens),
-  systemLine: toSystemLineTheme(themeTokens),
-  dateDivider: toDateDividerTheme(themeTokens),
-  quickReplyChip: toQuickReplyChipTheme(themeTokens),
-  messageComposer: toMessageComposerTheme(themeTokens),
+export const toChatThemeResolvers: ComponentThemeResolver<ChatThemeResolvers> = ({
+  themeTokens,
+  semanticTokens,
+  componentTokens,
+}) => ({
+  conversationRow: toChatConversationRowThemeResolvers({
+    themeTokens,
+    semanticTokens,
+    componentTokens: componentTokens.conversationRow,
+  }),
+  conversationList: toChatConversationListThemeResolvers({
+    themeTokens,
+    semanticTokens,
+    componentTokens: componentTokens.conversationList,
+  }),
+  threadHeader: toChatThreadHeaderThemeResolvers({
+    themeTokens,
+    semanticTokens,
+    componentTokens: componentTokens.threadHeader,
+  }),
+  messageList: toChatMessageListThemeResolvers({
+    themeTokens,
+    semanticTokens,
+    componentTokens: componentTokens.messageList,
+  }),
+  messageBubble: toChatMessageBubbleThemeResolvers({
+    themeTokens,
+    semanticTokens,
+    componentTokens: componentTokens.messageBubble,
+  }),
+  messageCard: toChatMessageCardThemeResolvers({
+    themeTokens,
+    semanticTokens,
+    componentTokens: componentTokens.messageCard,
+  }),
+  attachmentCard: toChatAttachmentCardThemeResolvers({
+    themeTokens,
+    semanticTokens,
+    componentTokens: componentTokens.attachmentCard,
+  }),
+  systemLine: toChatSystemLineThemeResolvers({
+    themeTokens,
+    semanticTokens,
+    componentTokens: componentTokens.systemLine,
+  }),
+  dateDivider: toChatDateDividerThemeResolvers({
+    themeTokens,
+    semanticTokens,
+    componentTokens: componentTokens.dateDivider,
+  }),
+  quickReplyChip: toChatQuickReplyChipThemeResolvers({
+    themeTokens,
+    semanticTokens,
+    componentTokens: componentTokens.quickReplyChip,
+  }),
+  messageComposer: toChatMessageComposerThemeResolvers({
+    themeTokens,
+    semanticTokens,
+    componentTokens: componentTokens.messageComposer,
+  }),
 })

@@ -37,16 +37,18 @@ export type IconButtonIconTokens = {
   color: ColorToken,
 }
 
-export type IconButtonThemeTokens = {
+export type IconButtonTokens = {
   container: IconButtonContainerTokens,
   icon: IconButtonIconTokens,
   text: TextStyleTokens,
 }
 
-export const hightideIconButtonTokenResolver: ComponentTokenResolver<
+export type IconButtonTokenResolver = ComponentTokenResolver<
   IconButtonComponentResolverProps,
-  IconButtonThemeTokens
-> = ({ themeTokens, semanticResolvers, overrides, state }) => {
+  IconButtonTokens
+>
+
+export const iconButtonTokenResolver: IconButtonTokenResolver = ({ themeTokens, semanticResolvers, overrides, state }) => {
   const size = overrides.size ?? 'md'
   const coloring = resolveColorPairColoring({
     themeTokens,

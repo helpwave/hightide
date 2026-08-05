@@ -47,7 +47,7 @@ export type CardIconTokens = {
   color: ColorToken,
 }
 
-export type CardThemeTokens = {
+export type CardTokens = {
   container: CardContainerTokens,
   item: CardItemTokens,
   itemContent: CardItemContentTokens,
@@ -64,10 +64,12 @@ export type CardThemeTokens = {
   navigationItemTrailing: CardIconTokens,
 }
 
-export const hightideCardTokenResolver: ComponentTokenResolver<
+export type CardTokenResolver = ComponentTokenResolver<
   CardComponentResolverProps,
-  CardThemeTokens
-> = ({ themeTokens, semanticResolvers, state }) => {
+  CardTokens
+>
+
+export const cardTokenResolver: CardTokenResolver = ({ themeTokens, semanticResolvers, state }) => {
   const { color, size, spacing, shape, borders, typography } = themeTokens
   const descriptionColor = semanticResolvers.asDescription({
     themeTokens,

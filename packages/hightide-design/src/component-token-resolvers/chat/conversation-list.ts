@@ -17,10 +17,12 @@ export type ChatConversationListTokens = {
   },
 }
 
-export const hightideChatConversationListTokenResolver: ComponentTokenResolver<
-  {},
+export type ChatConversationListTokenResolver = ComponentTokenResolver<
+  Record<string, never>,
   ChatConversationListTokens
-> = ({ themeTokens }) => {
+>
+
+export const chatConversationListTokenResolver: ChatConversationListTokenResolver = ({ themeTokens }) => {
   const { color, spacing, shape } = themeTokens
 
   return {

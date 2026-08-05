@@ -12,25 +12,27 @@ export type IconComponentResolverProps = {
   },
 }
 
-export type IconThemeTokens = {
+export type IconTokens = {
   size: number,
   strokeWidth: number,
 }
 
 export const createIconSizeTokens = (
   themeTokens: ThemeTokens
-): Record<ComponentSize, IconThemeTokens> => {
+): Record<ComponentSize, IconTokens> => {
   const insideControl = createElementLayoutTokens(themeTokens).insideControl
 
   return Object.fromEntries(
     componentSizes.map((size) => [size, {
       size: insideControl[size].size - 2 * themeTokens.spacing.xs,
       strokeWidth: themeTokens.borders.borderWidths.normal,
-    } satisfies IconThemeTokens])
-  ) as Record<ComponentSize, IconThemeTokens>
+    } satisfies IconTokens])
+  ) as Record<ComponentSize, IconTokens>
 }
 
-export const hightideIconTokenResolver: ComponentTokenResolver<
+export type IconTokenResolver = ComponentTokenResolver<
   IconComponentResolverProps,
-  IconThemeTokens
-> = ({ themeTokens, overrides }) => createIconSizeTokens(themeTokens)[overrides.size ?? 'md']
+  IconTokens
+>
+
+export const iconTokenResolver: IconTokenResolver = ({ themeTokens, overrides }) => createIconSizeTokens(themeTokens)[overrides.size ?? 'md']

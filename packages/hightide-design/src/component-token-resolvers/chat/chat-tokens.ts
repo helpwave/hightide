@@ -23,7 +23,7 @@ import type { ChatDateDividerTokens } from './date-divider'
 import type { ChatQuickReplyChipTokens } from './quick-reply-chip'
 import type { ChatMessageComposerTokens } from './message-composer'
 
-export type ChatThemeTokens = {
+export type ChatTokens = {
   conversationRow: ChatConversationRowTokens,
   conversationList: ChatConversationListTokens,
   threadHeader: ChatThreadHeaderTokens,

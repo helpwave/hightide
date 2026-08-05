@@ -17,10 +17,12 @@ export type ChatDateDividerTokens = {
   text: TextStyleTokens,
 }
 
-export const hightideChatDateDividerTokenResolver: ComponentTokenResolver<
-  {},
+export type ChatDateDividerTokenResolver = ComponentTokenResolver<
+  Record<string, never>,
   ChatDateDividerTokens
-> = ({ themeTokens, semanticResolvers }) => {
+>
+
+export const chatDateDividerTokenResolver: ChatDateDividerTokenResolver = ({ themeTokens, semanticResolvers }) => {
   const { color, spacing, typography } = themeTokens
   const descriptionColor = resolveDescriptionColor({ themeTokens, semanticResolvers })
 

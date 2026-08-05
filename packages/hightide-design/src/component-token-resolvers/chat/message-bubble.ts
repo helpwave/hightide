@@ -45,10 +45,12 @@ export type ChatMessageBubbleTokens = {
   receiptIcon: ChatIconTokens,
 }
 
-export const hightideChatMessageBubbleTokenResolver: ComponentTokenResolver<
+export type ChatMessageBubbleTokenResolver = ComponentTokenResolver<
   ChatMessageBubbleComponentResolverProps,
   ChatMessageBubbleTokens
-> = ({ themeTokens, semanticResolvers, config }) => {
+>
+
+export const chatMessageBubbleTokenResolver: ChatMessageBubbleTokenResolver = ({ themeTokens, semanticResolvers, config }) => {
   const { color, spacing, shape, typography } = themeTokens
   const descriptionColor = resolveDescriptionColor({ themeTokens, semanticResolvers })
   const isOutgoing = config.direction === 'outgoing'

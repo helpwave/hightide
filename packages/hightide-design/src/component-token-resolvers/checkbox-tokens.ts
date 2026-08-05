@@ -42,15 +42,17 @@ export type CheckboxIconTokens = {
   isVisible: boolean,
 }
 
-export type CheckboxThemeTokens = {
+export type CheckboxTokens = {
   box: CheckboxBoxTokens,
   icon: CheckboxIconTokens,
 }
 
-export const hightideCheckboxTokenResolver: ComponentTokenResolver<
+export type CheckboxTokenResolver = ComponentTokenResolver<
   CheckboxComponentResolverProps,
-  CheckboxThemeTokens
-> = ({ themeTokens, semanticResolvers, config, overrides, state }) => {
+  CheckboxTokens
+>
+
+export const checkboxTokenResolver: CheckboxTokenResolver = ({ themeTokens, semanticResolvers, config, overrides, state }) => {
   const size = overrides.size ?? 'md'
   const { color, borders } = themeTokens
   const control = createElementLayoutTokens(themeTokens).control
