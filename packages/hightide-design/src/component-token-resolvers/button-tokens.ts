@@ -10,10 +10,15 @@ import type { ContainerTokens } from './container-tokens'
 import type { TextStyleTokens } from './text-style-tokens'
 import type { PressableInteractionState } from './pressable'
 
-export type ButtonState = PressableInteractionState & {
-  size?: ComponentSize,
-  color?: ColorPairToken,
-  coloringStyle?: PressableColoringStyle,
+export type ButtonState = PressableInteractionState
+
+export type ButtonComponentResolverProps = {
+  overrides: {
+    size?: ComponentSize,
+    color?: ColorPairToken,
+    coloringStyle?: PressableColoringStyle,
+  },
+  state: ButtonState,
 }
 
 export type ButtonThemeTokens = {
@@ -26,15 +31,15 @@ const isOutlineColoringStyle = (style: PressableColoringStyle): boolean => (
 )
 
 export const hightideButtonTokenResolver: ComponentTokenResolver<
-  ButtonState,
+  ButtonComponentResolverProps,
   ButtonThemeTokens
-> = ({ themeTokens, semanticResolvers, state }) => {
-  const size = state.size ?? 'md'
-  const coloringStyle = state.coloringStyle ?? 'filled'
+> = ({ themeTokens, semanticResolvers, overrides, state }) => {
+  const size = overrides.size ?? 'md'
+  const coloringStyle = overrides.coloringStyle ?? 'filled'
   const coloring = resolveColorPairColoring({
     themeTokens,
     semanticResolvers,
-    colorPair: state.color ?? themeTokens.color.primary,
+    colorPair: overrides.color ?? themeTokens.color.primary,
     style: coloringStyle,
     state,
   })

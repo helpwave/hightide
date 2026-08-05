@@ -1,10 +1,10 @@
 import type { PressableState } from '../component-token-resolvers/pressable'
 import type { ThemeTokens } from '../theme-tokens/theme-tokens'
-import { resolveColorScheme } from './color-scheme'
 import type {
   ColorSchemeToken,
   ColoringStyle,
-  ColoringTokens
+  ColoringTokens,
+  SemanticTokenResolvers
 } from './types'
 
 const baseForStyle = (
@@ -88,33 +88,38 @@ const applyFeedback = (
 }
 
 export const resolveColoringStyle = (params: {
-  theme: ThemeTokens,
-  parameter: {
-    colorScheme: ColorSchemeToken,
-    style: ColoringStyle,
-    state: ReadonlySet<PressableState>,
-  },
+  themeTokens: ThemeTokens,
+  semanticResolvers: SemanticTokenResolvers,
+  colorScheme: ColorSchemeToken,
+  style: ColoringStyle,
+  state: ReadonlySet<PressableState>,
 }): ColoringTokens => {
-  const { theme, parameter } = params
-  const { style, state } = parameter
+  const {
+    themeTokens,
+    semanticResolvers,
+    colorScheme,
+    style,
+    state,
+  } = params
 
   if (state.has('disabled')) {
-    const disabledScheme = resolveColorScheme({
-      theme,
-      parameter: { colorPair: theme.color.disabled },
+    const disabledScheme = semanticResolvers.colorScheme({
+      themeTokens,
+      semanticResolvers,
+      colorPair: themeTokens.color.disabled,
     })
     return baseForStyle(disabledScheme, style)
   }
 
-  let tokens = baseForStyle(parameter.colorScheme, style)
+  let tokens = baseForStyle(colorScheme, style)
 
   if (state.has('pressed')) {
-    tokens = applyFeedback(tokens, parameter.colorScheme, style, 'normal')
+    tokens = applyFeedback(tokens, colorScheme, style, 'normal')
   } else if (state.has('focused')) {
-    tokens = applyFeedback(tokens, parameter.colorScheme, style, 'normal')
-    tokens.outlineColor = parameter.colorScheme.color
+    tokens = applyFeedback(tokens, colorScheme, style, 'normal')
+    tokens.outlineColor = colorScheme.color
   } else if (state.has('hovered')) {
-    tokens = applyFeedback(tokens, parameter.colorScheme, style, 'subtle')
+    tokens = applyFeedback(tokens, colorScheme, style, 'subtle')
   }
 
   return tokens

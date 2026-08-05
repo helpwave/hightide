@@ -9,10 +9,12 @@ import type { ComponentTokenResolver } from './component-token-resolver'
 import type { ContainerTokens } from './container-tokens'
 import type { TextStyleTokens } from './text-style-tokens'
 
-export type ChipState = {
-  size?: ComponentSize,
-  color?: ColorPairToken,
-  coloringStyle?: ChipColoringStyle,
+export type ChipComponentResolverProps = {
+  overrides: {
+    size?: ComponentSize,
+    color?: ColorPairToken,
+    coloringStyle?: ChipColoringStyle,
+  },
 }
 
 export type ChipThemeTokens = {
@@ -21,15 +23,15 @@ export type ChipThemeTokens = {
 }
 
 export const hightideChipTokenResolver: ComponentTokenResolver<
-  ChipState,
+  ChipComponentResolverProps,
   ChipThemeTokens
-> = ({ themeTokens, semanticResolvers, state }) => {
-  const size = state.size ?? 'md'
+> = ({ themeTokens, semanticResolvers, overrides }) => {
+  const size = overrides.size ?? 'md'
   const coloring = resolveColorPairColoring({
     themeTokens,
     semanticResolvers,
-    colorPair: state.color ?? themeTokens.color.primary,
-    style: state.coloringStyle ?? 'filled',
+    colorPair: overrides.color ?? themeTokens.color.primary,
+    style: overrides.coloringStyle ?? 'filled',
   })
   const layout = createElementLayoutTokens(themeTokens).insideControl[size]
   const textStyle = themeTokens.typography.label[size]

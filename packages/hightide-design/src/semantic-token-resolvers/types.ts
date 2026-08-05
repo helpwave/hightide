@@ -4,10 +4,10 @@ import type { ThemeTokens } from '../theme-tokens/theme-tokens'
 import type { PressableState } from '../component-token-resolvers/pressable'
 import type { Appearance } from './with-appearance'
 
-export type SemanticTokenResolver<TParameter, TResult> = (params: {
-  theme: ThemeTokens,
-  parameter: TParameter,
-}) => TResult
+export type SemanticTokenResolver<TProps, TResult> = (params: {
+  themeTokens: ThemeTokens,
+  semanticResolvers: SemanticTokenResolvers,
+} & TProps) => TResult
 
 export type ColorSchemeToken = {
   color: ColorToken,

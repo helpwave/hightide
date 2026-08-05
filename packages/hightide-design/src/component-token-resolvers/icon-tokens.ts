@@ -6,8 +6,10 @@ import {
 } from '../theme-tokens/element-layout'
 import type { ComponentTokenResolver } from './component-token-resolver'
 
-export type IconState = {
-  size?: ComponentSize,
+export type IconComponentResolverProps = {
+  overrides: {
+    size?: ComponentSize,
+  },
 }
 
 export type IconThemeTokens = {
@@ -29,6 +31,6 @@ export const createIconSizeTokens = (
 }
 
 export const hightideIconTokenResolver: ComponentTokenResolver<
-  IconState,
+  IconComponentResolverProps,
   IconThemeTokens
-> = ({ themeTokens, state }) => createIconSizeTokens(themeTokens)[state.size ?? 'md']
+> = ({ themeTokens, overrides }) => createIconSizeTokens(themeTokens)[overrides.size ?? 'md']

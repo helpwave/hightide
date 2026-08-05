@@ -20,16 +20,16 @@ export const resolveColorPairColoring = (
 ): ColoringTokens => {
   const { themeTokens, semanticResolvers, colorPair, style, state } = params
   const colorScheme = semanticResolvers.colorScheme({
-    theme: themeTokens,
-    parameter: { colorPair },
+    themeTokens,
+    semanticResolvers,
+    colorPair,
   })
 
   return semanticResolvers.coloringStyle({
-    theme: themeTokens,
-    parameter: {
-      colorScheme,
-      style,
-      state: toActivePressableStates(state ?? {}),
-    },
+    themeTokens,
+    semanticResolvers,
+    colorScheme,
+    style,
+    state: toActivePressableStates(state ?? {}),
   })
 }

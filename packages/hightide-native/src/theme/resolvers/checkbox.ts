@@ -1,5 +1,5 @@
 import { hightideCheckboxTokenResolver } from '@helpwave/hightide-design/component-token-resolvers'
-import type { CheckboxState as CheckboxTokenState } from '@helpwave/hightide-design/component-token-resolvers'
+import type { CheckboxComponentResolverProps } from '@helpwave/hightide-design/component-token-resolvers'
 import { hightideSemanticTokenResolvers } from '@helpwave/hightide-design/semantic-token-resolvers'
 import type { ThemeTokens } from '@helpwave/hightide-design/theme-tokens'
 
@@ -14,21 +14,27 @@ import {
   createValueResolver
 } from '../types/resolver'
 
-const toTokenState = (state: CheckboxState): CheckboxTokenState => ({
-  size: state.size,
-  isDisabled: state.isDisabled,
-  isChecked: state.isChecked,
-  isIndeterminate: state.isIndeterminate,
-  isInvalid: state.isInvalid,
-  isRounded: state.isRounded,
-  alwaysShowCheckIcon: state.alwaysShowCheckIcon,
+const toTokenProps = (state: CheckboxState): CheckboxComponentResolverProps => ({
+  config: {
+    alwaysShowCheckIcon: state.alwaysShowCheckIcon,
+  },
+  overrides: {
+    size: state.size,
+    isRounded: state.isRounded,
+  },
+  state: {
+    isDisabled: state.isDisabled,
+    isChecked: state.isChecked,
+    isIndeterminate: state.isIndeterminate,
+    isInvalid: state.isInvalid,
+  },
 })
 
 export const toCheckboxTheme = (themeTokens: ThemeTokens): CheckboxTheme => {
   const resolve = (state: CheckboxState) => hightideCheckboxTokenResolver({
     themeTokens,
     semanticResolvers: hightideSemanticTokenResolvers,
-    state: toTokenState(state),
+    ...toTokenProps(state),
   })
 
   return {

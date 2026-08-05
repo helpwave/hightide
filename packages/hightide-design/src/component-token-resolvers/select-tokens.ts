@@ -14,6 +14,10 @@ export type SelectState = {
   isHighlighted?: boolean,
 }
 
+export type SelectComponentResolverProps = {
+  state: SelectState,
+}
+
 export type SelectTriggerTokens = {
   justifyContent: 'center',
   minHeight: number,
@@ -71,19 +75,21 @@ export type SelectThemeTokens = {
 export const selectOverlayColor = HexColorUtils.hexWithAlpha('#000000', 0.35)
 
 export const hightideSelectTokenResolver: ComponentTokenResolver<
-  SelectState,
+  SelectComponentResolverProps,
   SelectThemeTokens
 > = ({ themeTokens, semanticResolvers, state }) => {
   const { color, spacing, shape, borders, typography } = themeTokens
   const layout = createElementLayoutTokens(themeTokens).control.md
   const onColor = color.surface.onColor
   const fadedBorder = semanticResolvers.asFaded({
-    theme: themeTokens,
-    parameter: { color: onColor },
+    themeTokens,
+    semanticResolvers,
+    color: onColor,
   })
   const placeholderColor = semanticResolvers.asDescription({
-    theme: themeTokens,
-    parameter: { color: onColor },
+    themeTokens,
+    semanticResolvers,
+    color: onColor,
   })
   const hoverColor = resolveColorPairColoring({
     themeTokens,

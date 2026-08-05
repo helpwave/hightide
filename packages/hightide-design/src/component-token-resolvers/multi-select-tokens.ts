@@ -20,6 +20,10 @@ export type MultiSelectState = {
   isHighlighted?: boolean,
 }
 
+export type MultiSelectComponentResolverProps = {
+  state: MultiSelectState,
+}
+
 export type MultiSelectTriggerTokens = SelectTriggerTokens & {
   gap: number,
 }
@@ -64,7 +68,7 @@ export type MultiSelectThemeTokens = {
 }
 
 export const hightideMultiSelectTokenResolver: ComponentTokenResolver<
-  MultiSelectState,
+  MultiSelectComponentResolverProps,
   MultiSelectThemeTokens
 > = ({ themeTokens, semanticResolvers, state }) => {
   const { color, spacing, shape, borders, typography } = themeTokens
@@ -72,12 +76,14 @@ export const hightideMultiSelectTokenResolver: ComponentTokenResolver<
   const checkboxSize = spacing.lg + spacing.xs
   const onColor = color.surface.onColor
   const fadedBorder = semanticResolvers.asFaded({
-    theme: themeTokens,
-    parameter: { color: onColor },
+    themeTokens,
+    semanticResolvers,
+    color: onColor,
   })
   const placeholderColor = semanticResolvers.asDescription({
-    theme: themeTokens,
-    parameter: { color: onColor },
+    themeTokens,
+    semanticResolvers,
+    color: onColor,
   })
   const hoverColor = resolveColorPairColoring({
     themeTokens,

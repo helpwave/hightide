@@ -1,5 +1,5 @@
 import { hightideSelectTokenResolver } from '@helpwave/hightide-design/component-token-resolvers'
-import type { SelectState as SelectTokenState } from '@helpwave/hightide-design/component-token-resolvers'
+import type { SelectComponentResolverProps } from '@helpwave/hightide-design/component-token-resolvers'
 import { hightideSemanticTokenResolvers } from '@helpwave/hightide-design/semantic-token-resolvers'
 import type { ThemeTokens } from '@helpwave/hightide-design/theme-tokens'
 
@@ -23,50 +23,58 @@ import {
   createStyleResolver
 } from '../types/resolver'
 
-const toTriggerTokenState = (state: SelectState): SelectTokenState => ({
-  isDisabled: state.isDisabled,
-  isInvalid: state.isInvalid,
-  isOpen: state.isOpen,
-  hasValue: state.hasValue,
+const emptyProps = (): SelectComponentResolverProps => ({
+  state: {},
 })
 
-const toOptionTokenState = (state: SelectOptionState): SelectTokenState => ({
-  isDisabled: state.isDisabled,
-  isSelected: state.isSelected,
-  isHighlighted: state.isHighlighted,
+const toTriggerTokenProps = (state: SelectState): SelectComponentResolverProps => ({
+  state: {
+    isDisabled: state.isDisabled,
+    isInvalid: state.isInvalid,
+    isOpen: state.isOpen,
+    hasValue: state.hasValue,
+  },
+})
+
+const toOptionTokenProps = (state: SelectOptionState): SelectComponentResolverProps => ({
+  state: {
+    isDisabled: state.isDisabled,
+    isSelected: state.isSelected,
+    isHighlighted: state.isHighlighted,
+  },
 })
 
 export const toSelectTheme = (themeTokens: ThemeTokens): SelectTheme => {
-  const resolve = (state: SelectTokenState) => hightideSelectTokenResolver({
+  const resolve = (props: SelectComponentResolverProps) => hightideSelectTokenResolver({
     themeTokens,
     semanticResolvers: hightideSemanticTokenResolvers,
-    state,
+    ...props,
   })
 
   return {
     trigger: createStyleResolver((state: SelectState): SelectTriggerStyle => ({
-      ...resolve(toTriggerTokenState(state)).trigger,
+      ...resolve(toTriggerTokenProps(state)).trigger,
     })),
     triggerText: createStyleResolver((state: SelectState): SelectTriggerTextStyle => (
-      toTextStyle(resolve(toTriggerTokenState(state)).triggerText)
+      toTextStyle(resolve(toTriggerTokenProps(state)).triggerText)
     )),
     overlay: createSimpleStyleResolver((): SelectOverlayStyle => ({
-      ...resolve({}).overlay,
+      ...resolve(emptyProps()).overlay,
     })),
     menu: createSimpleStyleResolver((): SelectMenuStyle => ({
-      ...resolve({}).menu,
+      ...resolve(emptyProps()).menu,
     })),
     search: createSimpleStyleResolver((): SelectSearchStyle => ({
-      ...resolve({}).search,
+      ...resolve(emptyProps()).search,
     })),
     searchPlaceholderColor: createSimpleValueResolver((): Color => (
-      resolve({}).searchPlaceholderColor
+      resolve(emptyProps()).searchPlaceholderColor
     )),
     option: createStyleResolver((state: SelectOptionState): SelectOptionStyle => ({
-      ...resolve(toOptionTokenState(state)).option,
+      ...resolve(toOptionTokenProps(state)).option,
     })),
     optionText: createStyleResolver((state: SelectOptionState): SelectOptionTextStyle => (
-      toTextStyle(resolve(toOptionTokenState(state)).optionText)
+      toTextStyle(resolve(toOptionTokenProps(state)).optionText)
     )),
   }
 }

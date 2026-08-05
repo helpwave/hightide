@@ -27,7 +27,7 @@ import type {
   FormFieldInteractionStates
 } from '../../types/formField'
 
-const TRACK_WIDTH = 48
+const TRACK_WIDTH = 44
 const TRACK_HEIGHT = 28
 const TRACK_BORDER_WIDTH = 2
 const TRACK_PADDING = 4
@@ -144,7 +144,13 @@ export const Switch = ({
         }
         props.onPress?.(event)
       }}
-      style={style}
+      style={[
+        {
+          width: 44,
+          height: 44,
+        },
+        style
+      ]}
     >
       <View
         style={{

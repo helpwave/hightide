@@ -7,6 +7,10 @@ export type SwitchState = {
   isInvalid?: boolean,
 }
 
+export type SwitchComponentResolverProps = {
+  state: SwitchState,
+}
+
 export type SwitchThemeTokens = {
   trackColor: ColorToken,
   borderColor: ColorToken,
@@ -14,25 +18,27 @@ export type SwitchThemeTokens = {
 }
 
 export const hightideSwitchTokenResolver: ComponentTokenResolver<
-  SwitchState,
+  SwitchComponentResolverProps,
   SwitchThemeTokens
 > = ({ themeTokens, semanticResolvers, state }) => {
   const { color } = themeTokens
   const onColor = color.surface.onColor
   const fadedBorder = semanticResolvers.asFaded({
-    theme: themeTokens,
-    parameter: { color: onColor },
+    themeTokens,
+    semanticResolvers,
+    color: onColor,
   })
   const subtleThumb = semanticResolvers.withAppearance({
-    theme: themeTokens,
-    parameter: { color: onColor, appearance: 'subtle' },
+    themeTokens,
+    semanticResolvers,
+    color: onColor,
+    appearance: 'subtle',
   })
   const disabledTrack = semanticResolvers.tintedSurface({
-    theme: themeTokens,
-    parameter: {
-      tintColor: color.disabled.color,
-      tintStrength: 'strong',
-    },
+    themeTokens,
+    semanticResolvers,
+    tintColor: color.disabled.color,
+    tintStrength: 'strong',
   })
   const trackActive = state.isDisabled ? disabledTrack : color.primary.color
   const trackInactive = state.isDisabled ? disabledTrack : color.surface.color

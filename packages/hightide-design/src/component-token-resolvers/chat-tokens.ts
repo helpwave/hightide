@@ -8,13 +8,21 @@ import type { TextStyleTokens } from './text-style-tokens'
 export type ChatMessageDirection = 'incoming' | 'outgoing'
 
 export type ChatState = {
-  direction?: ChatMessageDirection,
-  color?: ColorPairToken,
   isPressed?: boolean,
   isDisabled?: boolean,
   isUnread?: boolean,
   isSelected?: boolean,
   isActive?: boolean,
+}
+
+export type ChatComponentResolverProps = {
+  config: {
+    direction?: ChatMessageDirection,
+  },
+  overrides: {
+    color?: ColorPairToken,
+  },
+  state: ChatState,
 }
 
 export type ChatAlignment = 'flex-start' | 'flex-end'
@@ -282,20 +290,22 @@ const messageCardMaxWidth = 300
 const composerMaxLines = 7
 
 export const hightideChatTokenResolver: ComponentTokenResolver<
-  ChatState,
+  ChatComponentResolverProps,
   ChatThemeTokens
-> = ({ themeTokens, semanticResolvers, state }) => {
+> = ({ themeTokens, semanticResolvers, config, overrides, state }) => {
   const { color, size, spacing, shape, borders, typography } = themeTokens
   const descriptionColor = semanticResolvers.asDescription({
-    theme: themeTokens,
-    parameter: { color: color.surface.onColor },
+    themeTokens,
+    semanticResolvers,
+    color: color.surface.onColor,
   })
   const fadedBorder = semanticResolvers.asFaded({
-    theme: themeTokens,
-    parameter: { color: color.surface.onColor },
+    themeTokens,
+    semanticResolvers,
+    color: color.surface.onColor,
   })
   const placeholderColor = descriptionColor
-  const accentPair = state.color ?? color.primary
+  const accentPair = overrides.color ?? color.primary
   const accentTonal = resolveColorPairColoring({
     themeTokens,
     semanticResolvers,
@@ -315,7 +325,7 @@ export const hightideChatTokenResolver: ComponentTokenResolver<
     style: 'filled',
     state: { isHovered: true },
   }).color
-  const isOutgoing = state.direction === 'outgoing'
+  const isOutgoing = config.direction === 'outgoing'
   const isPressed = !!state.isPressed && !state.isDisabled
   const alignment: ChatAlignment = isOutgoing ? 'flex-end' : 'flex-start'
   const radius = shape.borderRadius.lg

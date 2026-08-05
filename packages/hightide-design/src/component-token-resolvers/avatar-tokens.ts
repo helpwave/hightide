@@ -23,12 +23,20 @@ export const avatarGroupOverlap = 0.5
 export const avatarGroupMaxShown = 5
 
 export type AvatarState = {
-  size?: ComponentSize,
   status?: AvatarStatus,
-  isGrouped?: boolean,
-  groupIndex?: number,
-  groupCount?: number,
-  color?: ColorPairToken,
+}
+
+export type AvatarComponentResolverProps = {
+  config: {
+    isGrouped?: boolean,
+    groupIndex?: number,
+    groupCount?: number,
+  },
+  overrides: {
+    color?: ColorPairToken,
+    size?: ComponentSize,
+  },
+  state: AvatarState,
 }
 
 export type AvatarShadowTokens = {
@@ -159,14 +167,14 @@ const statusColors = (themeTokens: ThemeTokens): Record<AvatarStatus, ColorToken
 }
 
 export const hightideAvatarTokenResolver: ComponentTokenResolver<
-  AvatarState,
+  AvatarComponentResolverProps,
   AvatarThemeTokens
-> = ({ themeTokens, state }) => {
-  const size = state.size ?? 'md'
+> = ({ themeTokens, config, overrides, state }) => {
+  const size = overrides.size ?? 'md'
   const status = state.status ?? 'unknown'
-  const groupIndex = state.groupIndex ?? 0
+  const groupIndex = config.groupIndex ?? 0
   const { color, spacing, borders, typography, elevation } = themeTokens
-  const colorPair = state.color ?? color.primary
+  const colorPair = overrides.color ?? color.primary
   const layout = createElementLayoutTokens(themeTokens).insideControl[size]
   const iconTokens = createIconSizeTokens(themeTokens)[size]
   const dimension = layout.size
@@ -174,12 +182,12 @@ export const hightideAvatarTokenResolver: ComponentTokenResolver<
   const statusDotSize = Math.round(dimension / 10 * 4)
   const raised = elevation.level1
   const gap = spacing.sm
-  const visibleCount = Math.min(state.groupCount ?? avatarGroupMaxShown, avatarGroupMaxShown)
+  const visibleCount = Math.min(config.groupCount ?? avatarGroupMaxShown, avatarGroupMaxShown)
   const stackWidth = dimension * (avatarGroupOverlap * Math.max(visibleCount - 1, 0) + 1)
 
   return {
     container: {
-      position: state.isGrouped ? 'absolute' : 'relative',
+      position: config.isGrouped ? 'absolute' : 'relative',
       flexDirection: 'row',
       alignItems: 'center',
       justifyContent: 'center',
@@ -189,7 +197,7 @@ export const hightideAvatarTokenResolver: ComponentTokenResolver<
       borderRadius,
       backgroundColor: colorPair.color,
       overflow: 'hidden',
-      ...(state.isGrouped ? {
+      ...(config.isGrouped ? {
         left: groupIndex * dimension * avatarGroupOverlap,
         zIndex: avatarGroupMaxShown - groupIndex,
         shadow: {

@@ -6,13 +6,21 @@ import {
 import type { ComponentTokenResolver } from './component-token-resolver'
 
 export type CheckboxState = {
-  size?: ComponentSize,
   isDisabled?: boolean,
   isChecked?: boolean,
   isIndeterminate?: boolean,
   isInvalid?: boolean,
-  isRounded?: boolean,
-  alwaysShowCheckIcon?: boolean,
+}
+
+export type CheckboxComponentResolverProps = {
+  config: {
+    alwaysShowCheckIcon?: boolean,
+  },
+  overrides: {
+    size?: ComponentSize,
+    isRounded?: boolean,
+  },
+  state: CheckboxState,
 }
 
 export type CheckboxBoxTokens = {
@@ -40,10 +48,10 @@ export type CheckboxThemeTokens = {
 }
 
 export const hightideCheckboxTokenResolver: ComponentTokenResolver<
-  CheckboxState,
+  CheckboxComponentResolverProps,
   CheckboxThemeTokens
-> = ({ themeTokens, semanticResolvers, state }) => {
-  const size = state.size ?? 'md'
+> = ({ themeTokens, semanticResolvers, config, overrides, state }) => {
+  const size = overrides.size ?? 'md'
   const { color, borders } = themeTokens
   const control = createElementLayoutTokens(themeTokens).control
   const element = control[size]
@@ -52,8 +60,9 @@ export const hightideCheckboxTokenResolver: ComponentTokenResolver<
   const dimension = element.size - 2 * element.inset - 2 * element.borderWidth
   const isActive = !!(state.isChecked || state.isIndeterminate)
   const fadedBorder = semanticResolvers.asFaded({
-    theme: themeTokens,
-    parameter: { color: color.surface.onColor },
+    themeTokens,
+    semanticResolvers,
+    color: color.surface.onColor,
   })
 
   const borderColor = state.isDisabled
@@ -75,14 +84,14 @@ export const hightideCheckboxTokenResolver: ComponentTokenResolver<
       padding: inset,
       borderWidth,
       borderColor,
-      borderRadius: state.isRounded ? dimension / 2 : element.borderRadius,
+      borderRadius: overrides.isRounded ? dimension / 2 : element.borderRadius,
       backgroundColor,
       opacity: state.isDisabled ? 0.6 : 1,
     },
     icon: {
       color: isActive ? color.primary.onColor : color.primary.color,
       size: dimension - 2 * inset - 2 * borderWidth,
-      isVisible: !!(state.isIndeterminate || state.alwaysShowCheckIcon || state.isChecked),
+      isVisible: !!(state.isIndeterminate || config.alwaysShowCheckIcon || state.isChecked),
     },
   }
 }

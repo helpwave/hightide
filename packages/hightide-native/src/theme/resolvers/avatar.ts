@@ -1,10 +1,14 @@
 import { hightideAvatarTokenResolver } from '@helpwave/hightide-design/component-token-resolvers'
 import type {
-  AvatarContainerTokens,
-  AvatarState as AvatarTokenState
+  AvatarComponentResolverProps,
+  AvatarContainerTokens
 } from '@helpwave/hightide-design/component-token-resolvers'
 import { hightideSemanticTokenResolvers } from '@helpwave/hightide-design/semantic-token-resolvers'
-import type { ThemeTokens } from '@helpwave/hightide-design/theme-tokens'
+import type {
+  ColorPairToken,
+  ComponentSize,
+  ThemeTokens
+} from '@helpwave/hightide-design/theme-tokens'
 
 import { toTextStyle } from '../adapters/style-adapters'
 import type {
@@ -15,6 +19,7 @@ import type {
   AvatarIconStyle,
   AvatarImageStyle,
   AvatarState,
+  AvatarStatus,
   AvatarStatusDotStyle,
   AvatarStyle,
   AvatarTextStyle,
@@ -46,11 +51,35 @@ const toAvatarStyle = (tokens: AvatarContainerTokens): AvatarStyle => {
   }
 }
 
+type AvatarResolveInput = {
+  size?: ComponentSize,
+  color?: ColorPairToken,
+  status?: AvatarStatus,
+  isGrouped?: boolean,
+  groupIndex?: number,
+  groupCount?: number,
+}
+
+const toTokenProps = (input: AvatarResolveInput): AvatarComponentResolverProps => ({
+  config: {
+    isGrouped: input.isGrouped,
+    groupIndex: input.groupIndex,
+    groupCount: input.groupCount,
+  },
+  overrides: {
+    color: input.color,
+    size: input.size,
+  },
+  state: {
+    status: input.status,
+  },
+})
+
 export const toAvatarTheme = (themeTokens: ThemeTokens): AvatarTheme => {
-  const resolve = (state: AvatarTokenState) => hightideAvatarTokenResolver({
+  const resolve = (input: AvatarResolveInput = {}) => hightideAvatarTokenResolver({
     themeTokens,
     semanticResolvers: hightideSemanticTokenResolvers,
-    state,
+    ...toTokenProps(input),
   })
 
   return {

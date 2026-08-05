@@ -9,6 +9,10 @@ export type CardState = {
   isDanger?: boolean,
 }
 
+export type CardComponentResolverProps = {
+  state: CardState,
+}
+
 export type CardContainerTokens = {
   backgroundColor: ColorToken,
   borderColor: ColorToken,
@@ -61,17 +65,19 @@ export type CardThemeTokens = {
 }
 
 export const hightideCardTokenResolver: ComponentTokenResolver<
-  CardState,
+  CardComponentResolverProps,
   CardThemeTokens
 > = ({ themeTokens, semanticResolvers, state }) => {
   const { color, size, spacing, shape, borders, typography } = themeTokens
   const descriptionColor = semanticResolvers.asDescription({
-    theme: themeTokens,
-    parameter: { color: color.surface.onColor },
+    themeTokens,
+    semanticResolvers,
+    color: color.surface.onColor,
   })
   const fadedBorder = semanticResolvers.asFaded({
-    theme: themeTokens,
-    parameter: { color: color.surface.onColor },
+    themeTokens,
+    semanticResolvers,
+    color: color.surface.onColor,
   })
   const isPressed = !!state.isPressed && !state.isDisabled
   const hoverColor = resolveColorPairColoring({

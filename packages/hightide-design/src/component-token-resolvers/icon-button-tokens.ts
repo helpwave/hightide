@@ -10,10 +10,15 @@ import type { ComponentTokenResolver } from './component-token-resolver'
 import type { TextStyleTokens } from './text-style-tokens'
 import type { PressableInteractionState } from './pressable'
 
-export type IconButtonState = PressableInteractionState & {
-  size?: ComponentSize,
-  color?: ColorPairToken,
-  coloringStyle?: PressableColoringStyle,
+export type IconButtonState = PressableInteractionState
+
+export type IconButtonComponentResolverProps = {
+  overrides: {
+    size?: ComponentSize,
+    color?: ColorPairToken,
+    coloringStyle?: PressableColoringStyle,
+  },
+  state: IconButtonState,
 }
 
 export type IconButtonContainerTokens = {
@@ -39,15 +44,15 @@ export type IconButtonThemeTokens = {
 }
 
 export const hightideIconButtonTokenResolver: ComponentTokenResolver<
-  IconButtonState,
+  IconButtonComponentResolverProps,
   IconButtonThemeTokens
-> = ({ themeTokens, semanticResolvers, state }) => {
-  const size = state.size ?? 'md'
+> = ({ themeTokens, semanticResolvers, overrides, state }) => {
+  const size = overrides.size ?? 'md'
   const coloring = resolveColorPairColoring({
     themeTokens,
     semanticResolvers,
-    colorPair: state.color ?? themeTokens.color.primary,
-    style: state.coloringStyle ?? 'filled',
+    colorPair: overrides.color ?? themeTokens.color.primary,
+    style: overrides.coloringStyle ?? 'filled',
     state,
   })
   const borderColor = coloring.outlineColor ?? coloring.borderColor

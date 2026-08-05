@@ -10,6 +10,10 @@ export type InputState = {
   isReadOnly?: boolean,
 }
 
+export type InputComponentResolverProps = {
+  state: InputState,
+}
+
 export type InputContainerTokens = TextStyleTokens & {
   minHeight: number,
   paddingVertical: number,
@@ -27,7 +31,7 @@ export type InputThemeTokens = {
 }
 
 export const hightideInputTokenResolver: ComponentTokenResolver<
-  InputState,
+  InputComponentResolverProps,
   InputThemeTokens
 > = ({ themeTokens, semanticResolvers, state }) => {
   const { color, spacing, borders, typography } = themeTokens
@@ -35,12 +39,14 @@ export const hightideInputTokenResolver: ComponentTokenResolver<
   const textStyle = typography.label.md
   const onColor = color.surface.onColor
   const borderColor = semanticResolvers.asFaded({
-    theme: themeTokens,
-    parameter: { color: onColor },
+    themeTokens,
+    semanticResolvers,
+    color: onColor,
   })
   const placeholderColor = semanticResolvers.asDescription({
-    theme: themeTokens,
-    parameter: { color: onColor },
+    themeTokens,
+    semanticResolvers,
+    color: onColor,
   })
 
   return {

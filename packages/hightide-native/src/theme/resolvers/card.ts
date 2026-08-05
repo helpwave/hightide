@@ -1,5 +1,5 @@
 import { hightideCardTokenResolver } from '@helpwave/hightide-design/component-token-resolvers'
-import type { CardState as CardTokenState } from '@helpwave/hightide-design/component-token-resolvers'
+import type { CardComponentResolverProps } from '@helpwave/hightide-design/component-token-resolvers'
 import { hightideSemanticTokenResolvers } from '@helpwave/hightide-design/semantic-token-resolvers'
 import type { ThemeTokens } from '@helpwave/hightide-design/theme-tokens'
 
@@ -24,61 +24,67 @@ import {
   createValueResolver
 } from '../types/resolver'
 
-const toTokenState = (state: CardActionItemState): CardTokenState => ({
-  isPressed: state.isPressed,
-  isDisabled: state.isDisabled,
-  isDanger: state.isDanger,
+const emptyProps = (): CardComponentResolverProps => ({
+  state: {},
+})
+
+const toTokenProps = (state: CardActionItemState): CardComponentResolverProps => ({
+  state: {
+    isPressed: state.isPressed,
+    isDisabled: state.isDisabled,
+    isDanger: state.isDanger,
+  },
 })
 
 export const toCardTheme = (themeTokens: ThemeTokens): CardTheme => {
-  const resolve = (state: CardTokenState) => hightideCardTokenResolver({
+  const resolve = (props: CardComponentResolverProps) => hightideCardTokenResolver({
     themeTokens,
     semanticResolvers: hightideSemanticTokenResolvers,
-    state,
+    ...props,
   })
 
   return {
     card: createSimpleStyleResolver((): CardStyle => ({
-      ...resolve({}).container,
+      ...resolve(emptyProps()).container,
     })),
     item: createSimpleStyleResolver((): CardItemStyle => ({
-      ...resolve({}).item,
+      ...resolve(emptyProps()).item,
     })),
     itemContent: createSimpleStyleResolver((): CardItemContentStyle => ({
-      ...resolve({}).itemContent,
+      ...resolve(emptyProps()).itemContent,
     })),
     itemLabel: createSimpleStyleResolver((): CardItemLabelStyle => (
-      toTextStyle(resolve({}).itemLabel)
+      toTextStyle(resolve(emptyProps()).itemLabel)
     )),
     itemValue: createSimpleStyleResolver((): CardItemValueStyle => (
-      toTextStyle(resolve({}).itemValue)
+      toTextStyle(resolve(emptyProps()).itemValue)
     )),
     actionItem: createStyleResolver((state: CardActionItemState): CardActionItemStyle => ({
-      ...resolve(toTokenState(state)).actionItem,
+      ...resolve(toTokenProps(state)).actionItem,
     })),
     actionItemContent: createSimpleStyleResolver((): CardActionItemContentStyle => ({
-      ...resolve({}).actionItemContent,
+      ...resolve(emptyProps()).actionItemContent,
     })),
     actionItemLabel: createStyleResolver((state: CardActionItemState): CardActionItemLabelStyle => (
-      toTextStyle(resolve(toTokenState(state)).actionItemLabel)
+      toTextStyle(resolve(toTokenProps(state)).actionItemLabel)
     )),
     actionItemIcon: createValueResolver((state: CardActionItemState): CardActionItemIconColor => ({
-      color: resolve(toTokenState(state)).actionItemIcon.color,
+      color: resolve(toTokenProps(state)).actionItemIcon.color,
     })),
     navigationItem: createStyleResolver((state: CardActionItemState): CardActionItemStyle => ({
-      ...resolve(toTokenState(state)).navigationItem,
+      ...resolve(toTokenProps(state)).navigationItem,
     })),
     navigationItemContent: createSimpleStyleResolver((): CardActionItemContentStyle => ({
-      ...resolve({}).navigationItemContent,
+      ...resolve(emptyProps()).navigationItemContent,
     })),
     navigationItemLabel: createStyleResolver((state: CardActionItemState): CardActionItemLabelStyle => (
-      toTextStyle(resolve(toTokenState(state)).navigationItemLabel)
+      toTextStyle(resolve(toTokenProps(state)).navigationItemLabel)
     )),
     navigationItemIcon: createValueResolver((state: CardActionItemState): CardActionItemIconColor => ({
-      color: resolve(toTokenState(state)).navigationItemIcon.color,
+      color: resolve(toTokenProps(state)).navigationItemIcon.color,
     })),
     navigationItemTrailing: createSimpleValueResolver((): CardActionItemIconColor => ({
-      color: resolve({}).navigationItemTrailing.color,
+      color: resolve(emptyProps()).navigationItemTrailing.color,
     })),
   }
 }
