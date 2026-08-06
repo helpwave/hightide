@@ -10,6 +10,10 @@ import {
   type ViewStyle
 } from 'react-native'
 
+import type {
+  ListItemAppearance,
+  ListPositionToken
+} from '@helpwave/hightide-design/component-token-resolvers'
 import type { ColorPairToken } from '@helpwave/hightide-design/theme-tokens'
 
 import { useTheme } from '../../global-contexts/theme/ThemeContext'
@@ -26,6 +30,8 @@ export type ListActionItemProps = Omit<PressableProps, 'children' | 'style'> & {
   leading?: ReactNode,
   trailing?: ReactNode,
   color?: ColorPairToken,
+  position?: ListPositionToken,
+  appearance?: ListItemAppearance,
   style?: StyleProp<ViewStyle>,
   itemStyle?: StyleOverwrite<ListActionItemState, ListActionItemStyle>,
   labelStyle?: StyleOverwrite<ListActionItemState, ListActionItemTitleStyle>,
@@ -42,6 +48,8 @@ export const ListActionItem = ({
   leading,
   trailing,
   color,
+  position,
+  appearance,
   disabled,
   style,
   itemStyle,
@@ -52,6 +60,8 @@ export const ListActionItem = ({
 
   const resolveState = (interaction: PressableInteraction): ListActionItemState => ({
     color,
+    position,
+    appearance,
     isDisabled: !!disabled,
     isPressed: interaction.pressed,
     isHovered: !!interaction.hovered,

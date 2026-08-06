@@ -24,7 +24,9 @@ export type IconButtonState = InteractionState & {
 export type IconButtonStyle = ViewStyle
 
 export type IconButtonIconStyle = {
-  color: Color,
+  size?: number,
+  strokeWidth?: number,
+  color?: Color,
 }
 
 export type IconButtonTextStyle = TextStyle

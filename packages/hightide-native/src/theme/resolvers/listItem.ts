@@ -13,13 +13,7 @@ import type {
   ListItemState,
   ListItemStyle,
   ListItemThemeResolvers,
-  ListItemTitleStyle,
-  ListNavigationItemContentStyle,
-  ListNavigationItemIconStyle,
-  ListNavigationItemState,
-  ListNavigationItemStyle,
-  ListNavigationItemThemeResolvers,
-  ListNavigationItemTitleStyle
+  ListItemTitleStyle
 } from '../types/components/listItem'
 import {
   createStyleResolver,
@@ -37,6 +31,12 @@ const toListItemDefaultThemeResolvers: ComponentThemeResolver<ListItemDefaultThe
     semanticResolvers: semanticTokens,
     overrides: {
       color: state.color,
+    },
+    config: {
+      appearance: state.appearance,
+    },
+    state: {
+      position: state.position,
     },
   })
 
@@ -77,19 +77,22 @@ const toListActionItemThemeResolvers: ComponentThemeResolver<ListActionItemTheme
     overrides: {
       color: state.color,
     },
+    config: {
+      appearance: state.appearance,
+    },
     state: {
       isDisabled: state.isDisabled,
       isHovered: state.isHovered,
       isFocused: state.isFocused,
       isPressed: state.isPressed,
+      position: state.position,
     },
   })
 
   return {
-    container: createStyleResolver((state: ListActionItemState): ListActionItemStyle => ({
-      ...toContainerStyle(resolve(state).container),
-      opacity: state.isDisabled ? 0.6 : 1,
-    })),
+    container: createStyleResolver((state: ListActionItemState): ListActionItemStyle => (
+      toContainerStyle(resolve(state).container)
+    )),
     content: createStyleResolver((state: ListActionItemState): ListActionItemContentStyle => ({
       ...toContainerStyle(resolve(state).content),
       flex: 1,
@@ -109,51 +112,12 @@ const toListActionItemThemeResolvers: ComponentThemeResolver<ListActionItemTheme
   }
 }
 
-const toListNavigationItemThemeResolvers: ComponentThemeResolver<ListNavigationItemThemeResolvers> = ({
-  themeTokens,
-  semanticTokens,
-  componentTokens,
-}) => {
-  const resolve = (state: ListNavigationItemState = {}) => componentTokens.listItem.navigation({
-    themeTokens,
-    semanticResolvers: semanticTokens,
-    overrides: {
-      color: state.color,
-    },
-    state: {
-      isDisabled: state.isDisabled,
-      isHovered: state.isHovered,
-      isFocused: state.isFocused,
-      isPressed: state.isPressed,
-    },
-  })
+export const toListItemThemeResolvers: ComponentThemeResolver<ListItemThemeResolvers> = (params) => {
+  const action = toListActionItemThemeResolvers(params)
 
   return {
-    container: createStyleResolver((state: ListNavigationItemState): ListNavigationItemStyle => ({
-      ...toContainerStyle(resolve(state).container),
-      opacity: state.isDisabled ? 0.6 : 1,
-    })),
-    content: createStyleResolver((state: ListNavigationItemState): ListNavigationItemContentStyle => ({
-      ...toContainerStyle(resolve(state).content),
-      flex: 1,
-    })),
-    titleText: createStyleResolver((state: ListNavigationItemState): ListNavigationItemTitleStyle => (
-      toTextStyle(resolve(state).titleText)
-    )),
-    icon: createValueResolver((state: ListNavigationItemState): ListNavigationItemIconStyle => {
-      const { icon } = resolve(state)
-
-      return {
-        size: icon.size,
-        strokeWidth: icon.strokeWidth,
-        color: icon.color,
-      }
-    }),
+    default: toListItemDefaultThemeResolvers(params),
+    action,
+    navigation: action,
   }
 }
-
-export const toListItemThemeResolvers: ComponentThemeResolver<ListItemThemeResolvers> = (params) => ({
-  default: toListItemDefaultThemeResolvers(params),
-  action: toListActionItemThemeResolvers(params),
-  navigation: toListNavigationItemThemeResolvers(params),
-})

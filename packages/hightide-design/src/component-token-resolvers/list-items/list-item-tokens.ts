@@ -1,3 +1,4 @@
+import { createElementLayoutTokens } from '../../theme-tokens'
 import type { ColorPairToken } from '../../theme-tokens/theme-tokens-config'
 import { resolveColorPairColoring } from '../coloring'
 import type { ComponentTokenResolver } from '../component-token-resolver'
@@ -5,10 +6,24 @@ import type { ContainerTokens } from '../container-tokens'
 import { createIconSizeTokens, type IconTokens } from '../icon-tokens'
 import type { TextStyleTokens } from '../text-style-tokens'
 
+export type ListPositionToken = 'first' | 'middle' | 'last'
+
+export type ListItemAppearance = 'listItem' | 'independent'
+
+export type ListItemState = {
+  position?: ListPositionToken,
+}
+
+export type ListItemConfig = {
+  appearance?: ListItemAppearance,
+}
+
 export type ListItemComponentResolverProps = {
   overrides?: {
     color?: ColorPairToken,
   },
+  config?: ListItemConfig,
+  state?: ListItemState,
 }
 
 export type ListItemTokens = {
@@ -28,14 +43,21 @@ export const listItemTokenResolver: ListItemTokenResolver = ({
   themeTokens,
   semanticResolvers,
   overrides,
+  config,
+  state,
 }) => {
-  const { color, size, spacing, typography } = themeTokens
+  const { color, spacing, typography, borders } = themeTokens
   const iconSizeTokens = createIconSizeTokens(themeTokens).md
   const descriptionColor = semanticResolvers.asDescription({
     themeTokens,
     semanticResolvers,
     color: color.surface.onColor,
   })
+  const layout = createElementLayoutTokens(themeTokens).control.md
+  const appearance = config?.appearance ?? 'listItem'
+  const position = state?.position ?? 'middle'
+  const isIndependent = appearance === 'independent'
+  const showSeparator = appearance === 'listItem' && position !== 'last'
 
   const tonal = overrides?.color !== undefined
     ? resolveColorPairColoring({
@@ -55,14 +77,26 @@ export const listItemTokenResolver: ListItemTokenResolver = ({
       backgroundColor: tonal?.color,
       size: {
         width: '100%',
-        minHeight: size.xl + spacing.sm,
+        minWidth: layout.size,
+        minHeight: layout.size,
       },
       shape: {
+        borderRadius: isIndependent ? layout.borderRadius : undefined,
         padding: {
-          vertical: spacing.md,
-          horizontal: spacing.lg,
+          vertical: layout.inset,
+          horizontal: layout.horizontalContentPadding,
         },
       },
+      border: showSeparator ? {
+        width: {
+          type: 'physicalSide',
+          bottom: borders.borderWidths.thin,
+        },
+        color: {
+          type: 'physicalSide',
+          bottom: color.border,
+        },
+      } : undefined,
       layout: {
         gap: spacing.md,
         direction: 'horizontal',

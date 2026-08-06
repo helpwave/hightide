@@ -86,6 +86,9 @@ export const resolveColoringStyle = (params: {
     if(style === 'text' || style === 'outline') {
       tokens.color = HexColorUtils.hexWithAlpha(colorScheme.feedbackNormal.color, 0.25)
     }
+    if(style === 'tonal' || style === 'tonal-outline') {
+      tokens.outlineColor = colorScheme.base.onColor
+    }
   } else if (state.has('hovered')) {
     tokens = applyFeedback(colorScheme, style, 'feedbackSubtle')
     if(style === 'text' || style === 'outline') {

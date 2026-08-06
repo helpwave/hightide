@@ -3,6 +3,7 @@ import { hightideTypography } from '../primitive-tokens/typography'
 import type { ShadowLayoutToken } from '../primitive-tokens/shadow'
 import { hightideShadow } from '../primitive-tokens/shadow'
 import { HexColorUtils } from '../utils/hex'
+import { OKLCHUtils } from '../utils/oklch'
 import type {
   ColorPairToken,
   ThemeTokensModeConfig,
@@ -23,7 +24,7 @@ import type {
 import type { TypographyStyleToken } from './typography-style-token'
 
 export const defaultTintConfig: TintConfig = {
-  light: 0.08,
+  light: 0.06,
   normal: 0.12,
   strong: 0.16,
 }
@@ -231,6 +232,7 @@ export const buildColorTokens = (params: {
   warning: params.warning,
   negative: params.negative,
   neutral: params.neutral,
+  border: OKLCHUtils.changeLightness(params.surface.onColor, 0.8),
 })
 
 export const resolveSharedGroups = (

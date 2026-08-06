@@ -51,13 +51,21 @@ export const buttonTokenResolver: ButtonTokenResolver = ({ themeTokens, semantic
     container: {
       backgroundColor: coloring.color,
       border: hasBorder ? {
-        width: layout.borderWidth,
-        color: coloring.borderColor,
+        width: {
+          type: 'all',
+          value: layout.borderWidth,
+        },
+        color: {
+          type: 'all',
+          value: coloring.borderColor,
+        },
       } : undefined,
       outline: coloring.outlineColor !== undefined ? {
         // TODO dont use a hardcode 2 here create a outline style instead and use it here
         width:  2,
         color: coloring.outlineColor,
+        offset: 2,
+        style: 'solid',
       } : undefined,
       size: {
         minWidth: layout.minimumWidth,

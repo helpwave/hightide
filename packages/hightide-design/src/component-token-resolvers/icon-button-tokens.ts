@@ -1,4 +1,3 @@
-import type { ColorToken } from '../primitive-tokens/color'
 import type { PressableColoringStyle } from '../semantic-token-resolvers/types'
 import type { ColorPairToken } from '../theme-tokens/theme-tokens-config'
 import {
@@ -7,6 +6,8 @@ import {
 } from '../theme-tokens/element-layout'
 import { resolveColorPairColoring } from './coloring'
 import type { ComponentTokenResolver } from './component-token-resolver'
+import type { ContainerTokens } from './container-tokens'
+import { createIconSizeTokens, type IconTokens } from './icon-tokens'
 import type { TextStyleTokens } from './text-style-tokens'
 import type { PressableInteractionState } from './pressable'
 
@@ -21,25 +22,9 @@ export type IconButtonComponentResolverProps = {
   state: IconButtonState,
 }
 
-export type IconButtonContainerTokens = {
-  alignItems: 'center',
-  justifyContent: 'center',
-  backgroundColor: ColorToken,
-  borderColor: ColorToken,
-  borderWidth: number,
-  width: number,
-  height: number,
-  borderRadius: number,
-  overflow: 'hidden',
-}
-
-export type IconButtonIconTokens = {
-  color: ColorToken,
-}
-
 export type IconButtonTokens = {
-  container: IconButtonContainerTokens,
-  icon: IconButtonIconTokens,
+  container: ContainerTokens,
+  icon: IconTokens,
   text: TextStyleTokens,
 }
 
@@ -48,7 +33,12 @@ export type IconButtonTokenResolver = ComponentTokenResolver<
   IconButtonTokens
 >
 
-export const iconButtonTokenResolver: IconButtonTokenResolver = ({ themeTokens, semanticResolvers, overrides, state }) => {
+export const iconButtonTokenResolver: IconButtonTokenResolver = ({
+  themeTokens,
+  semanticResolvers,
+  overrides,
+  state,
+}) => {
   const size = overrides.size ?? 'md'
   const coloring = resolveColorPairColoring({
     themeTokens,
@@ -59,21 +49,38 @@ export const iconButtonTokenResolver: IconButtonTokenResolver = ({ themeTokens, 
   })
   const borderColor = coloring.outlineColor ?? coloring.borderColor
   const layout = createElementLayoutTokens(themeTokens).control[size]
+  const iconSizeTokens = createIconSizeTokens(themeTokens)[size]
   const textStyle = themeTokens.typography.label[size]
 
   return {
     container: {
-      alignItems: 'center',
-      justifyContent: 'center',
       backgroundColor: coloring.color,
-      borderColor: borderColor ?? 'transparent',
-      borderWidth: borderColor !== undefined ? layout.borderWidth : 0,
-      width: layout.size,
-      height: layout.size,
-      borderRadius: layout.borderRadius,
-      overflow: 'hidden',
+      border: borderColor !== undefined ? {
+        width: {
+          type: 'all',
+          value: layout.borderWidth,
+        },
+        color: {
+          type: 'all',
+          value: borderColor,
+        },
+      } : undefined,
+      size: {
+        width: layout.size,
+        height: layout.size,
+      },
+      shape: {
+        borderRadius: layout.borderRadius,
+      },
+      layout: {
+        direction: 'horizontal',
+        mainAxisAlignment: 'center',
+        crossAxisAligment: 'center',
+      },
     },
     icon: {
+      size: iconSizeTokens.size,
+      strokeWidth: iconSizeTokens.strokeWidth,
       color: coloring.onColor,
     },
     text: {

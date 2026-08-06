@@ -29,10 +29,17 @@ export type DirectionalToken<T> = {
   blockStart?: T,
   blockEnd?: T,
 }
+export type OutlineStyle = 'dotted' | 'dashed' | 'solid'
+export type OutlineToken = {
+  width?: number,
+  offset?: number,
+  color?: ColorToken,
+  style?: OutlineStyle,
+}
 export type BorderStyleToken = 'dotted' | 'dashed' | 'solid'
 export type BorderToken = {
-  width?: number,
-  color?: ColorToken,
+  width?: DirectionalToken<number>,
+  color?: DirectionalToken<ColorToken>,
   style?: BorderStyleToken,
 }
 
@@ -63,9 +70,5 @@ export type ContainerTokens = {
   decoration?: {
     shadow?: ShadowToken,
   },
-  outline?: {
-    width?: number,
-    offset?: number,
-    color?: ColorToken,
-  },
+  outline?: OutlineToken,
 }

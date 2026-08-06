@@ -38,9 +38,9 @@ const CardDemo = () => {
           Personal data
         </ThemedText>
         <Card>
-          <ListItem label="Name" value="Anna Müller" />
-          <ListItem label="Date of birth" value="12.03.1988" />
-          <ListItem label="Email" value="anna@example.com" />
+          <ListItem label="Name" value="Anna Müller" position="first"/>
+          <ListItem label="Date of birth" value="12.03.1988" position="middle" />
+          <ListItem label="Email" value="anna@example.com" position="last" />
         </Card>
       </View>
 
@@ -49,11 +49,12 @@ const CardDemo = () => {
           Practice
         </ThemedText>
         <Card>
-          <ListItem label="Practice" value="Praxis am Park" />
+          <ListItem label="Practice" value="Praxis am Park" position="first"/>
           <ListNavigationItem
             label="Practice details"
             leading={<Building2 size={18} color={theme.colorSchemes.primary.text.base.foreground} />}
             onPress={action('practice-details')}
+            position="last"
           />
         </Card>
       </View>
@@ -72,17 +73,20 @@ const CardDemo = () => {
                 onValueChange={action('notifications')}
               />
             )}
+            position="first"
           />
           <ListNavigationItem
             label="Account"
             leading={<UserRound size={18} color={theme.colorSchemes.primary.text.base.foreground} />}
             onPress={action('account')}
+            position="middle"
           />
           <ListActionItem
             label="Log out"
             color={theme.colors.negative}
             leading={<LogOut size={18} color={theme.colorSchemes.negative.text.base.foreground} />}
             onPress={action('logout')}
+            position="last"
           />
         </Card>
       </View>
@@ -95,7 +99,7 @@ export const card: Story = {
     children: (
       <>
         <ListItem label="Name" value="Anna Müller" />
-        <ListItem label="Email" value="anna@example.com" />
+        <ListItem label="Email" value="anna@example.com" position="last" />
       </>
     ),
   },

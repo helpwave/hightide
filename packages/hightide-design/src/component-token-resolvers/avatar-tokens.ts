@@ -139,8 +139,14 @@ export const avatarTokenResolver: AvatarTokenResolver = ({ themeTokens, config, 
       statusDot: {
         backgroundColor: statusColors(themeTokens)[status],
         border: {
-          width: borders.borderWidths.thin,
-          color: color.background.color,
+          width: {
+            type: 'all',
+            value: borders.borderWidths.thin,
+          },
+          color: {
+            type: 'all',
+            value: color.background.color,
+          },
         },
         size: {
           width: statusDotSize,

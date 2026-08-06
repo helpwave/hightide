@@ -43,8 +43,14 @@ export const chipTokenResolver: ChipTokenResolver = ({ themeTokens, semanticReso
     container: {
       backgroundColor: coloring.color,
       border: {
-        width: layout.borderWidth,
-        color: coloring.outlineColor ?? coloring.borderColor,
+        width: {
+          type: 'all',
+          value: layout.borderWidth,
+        },
+        color: {
+          type: 'all',
+          value: coloring.outlineColor ?? coloring.borderColor,
+        },
       },
       size: {
         minWidth: 0,

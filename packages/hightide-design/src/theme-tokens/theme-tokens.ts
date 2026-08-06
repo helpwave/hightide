@@ -25,6 +25,7 @@ export type ThemeColorTokens = {
   warning: ColorPairToken,
   negative: ColorPairToken,
   neutral: ColorPairToken,
+  border: ColorToken,
 }
 
 export type ThemeAppearancePercentages = {

@@ -4,16 +4,21 @@ import type { ComponentTokenResolver } from '../component-token-resolver'
 import type { ButtonState } from '../button-tokens'
 import {
   listItemTokenResolver,
-  type ListItemTokens
+  type ListItemConfig,
+  type ListItemTokens,
+  type ListPositionToken
 } from './list-item-tokens'
 
-export type CardActionState = ButtonState
+export type ListActionItemState = ButtonState & {
+  position?: ListPositionToken,
+}
 
 export type ListActionComponentResolverProps = {
   overrides?: {
     color?: ColorPairToken,
   },
-  state: CardActionState,
+  config?: ListItemConfig,
+  state: ListActionItemState,
 }
 
 export type ListActionTokenResolver = ComponentTokenResolver<
@@ -25,29 +30,53 @@ export const listActionTokenResolver: ListActionTokenResolver = ({
   themeTokens,
   semanticResolvers,
   overrides,
+  config,
   state,
 }) => {
+  const hasColor = overrides?.color !== undefined
+  const coloring = resolveColorPairColoring({
+    themeTokens,
+    semanticResolvers,
+    colorPair: overrides?.color ?? {
+      color: themeTokens.color.surface.onColor,
+      onColor: themeTokens.color.surface.color,
+    },
+    style: hasColor ? 'tonal' : 'text',
+    state,
+  })
   const base = listItemTokenResolver({
     themeTokens,
     semanticResolvers,
-    overrides,
+    config,
+    state: {
+      position: state.position,
+    },
   })
-  const isPressed = !!state.isPressed && !state.isDisabled
-  const hoverColor = resolveColorPairColoring({
-    themeTokens,
-    semanticResolvers,
-    colorPair: overrides?.color ?? themeTokens.color.surface,
-    style: overrides?.color !== undefined ? 'tonal' : 'filled',
-    state: { isHovered: true },
-  }).color
 
   return {
     ...base,
     container: {
       ...base.container,
-      backgroundColor: isPressed
-        ? hoverColor
-        : base.container.backgroundColor ?? 'transparent',
+      backgroundColor: coloring.color,
+      border: base.container.border,
+      outline: coloring.outlineColor !== undefined ? {
+        offset: -themeTokens.borders.borderWidths.normal,
+        width: themeTokens.borders.borderWidths.normal,
+        color: coloring.outlineColor,
+        style: 'solid'
+      } : undefined,
+    },
+    titleText: {
+      ...base.titleText,
+      color: coloring.onColor,
+    },
+    descriptionText: {
+      ...base.descriptionText,
+      color: hasColor ? coloring.onColor : base.descriptionText.color,
+    },
+    icon: {
+      ...base.icon,
+      color: coloring.onColor,
     },
   }
 }

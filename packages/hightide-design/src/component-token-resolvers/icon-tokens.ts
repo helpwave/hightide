@@ -14,9 +14,9 @@ export type IconComponentResolverProps = {
 }
 
 export type IconTokens = {
-  size: number,
-  strokeWidth: number,
-  color: ColorToken,
+  size?: number,
+  strokeWidth?: number,
+  color?: ColorToken,
 }
 
 export const createIconSizeTokens = (
