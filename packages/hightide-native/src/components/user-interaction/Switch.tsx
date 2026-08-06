@@ -125,6 +125,7 @@ export const Switch = ({
         const state = resolveState(pressableState as PressableInteraction)
         return [theme.components.switch.container(state, containerStyle), style]
       }}
+      hitSlop={{ left: 8, right:8 }}
     >
       {(pressableState) => {
         const state = resolveState(pressableState as PressableInteraction)
