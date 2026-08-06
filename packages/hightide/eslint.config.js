@@ -28,7 +28,7 @@ export default [
     },
   },
   {
-    ignores: ['dist/**', 'packages/**', 'node_modules/**'],
+    ignores: ['dist/**', 'packages/**', 'node_modules/**', 'storybook-static/**', '.next/**'],
   },
   ...config.recommended,
   ...storybook.configs['flat/recommended'],

@@ -92,7 +92,7 @@ export const resolveAccentColoring = ({
 
 export const resolveMessageCorners = (
   themeTokens: ThemeTokens,
-  direction?: ChatMessageDirection,
+  direction?: ChatMessageDirection
 ): ChatCornerRadiusTokens => {
   const isOutgoing = direction === 'outgoing'
   const radius = themeTokens.shape.borderRadius.lg
