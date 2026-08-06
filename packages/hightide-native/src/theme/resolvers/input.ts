@@ -1,12 +1,15 @@
-import type { Color } from '../types/color'
+import { toContainerStyle, toTextStyle } from '../adapters/style-adapters'
 import type {
+  InputContainerStyle,
+  InputIconStyle,
+  InputPlaceholderStyle,
   InputState,
-  InputStyle,
+  InputTextStyle,
   InputThemeResolvers
 } from '../types/components/input'
 import {
-  createSimpleValueResolver,
   createStyleResolver,
+  createValueResolver,
   type ComponentThemeResolver
 } from '../types/resolver'
 
@@ -20,18 +23,31 @@ export const toInputThemeResolvers: ComponentThemeResolver<InputThemeResolvers> 
     semanticResolvers: semanticTokens,
     state: {
       isDisabled: state.isDisabled,
+      isHovered: state.isHovered,
       isFocused: state.isFocused,
       isInvalid: state.isInvalid,
-      isReadOnly: state.isReadOnly,
+      isReadonly: state.isReadonly,
     },
   })
 
   return {
-    input: createStyleResolver((state: InputState): InputStyle => ({
-      ...resolve(state).input,
-    })),
-    placeholderColor: createSimpleValueResolver((): Color => (
-      resolve({}).placeholderColor
+    container: createStyleResolver((state: InputState): InputContainerStyle => (
+      toContainerStyle(resolve(state).container)
     )),
+    text: createStyleResolver((state: InputState): InputTextStyle => (
+      toTextStyle(resolve(state).text)
+    )),
+    placeholder: createStyleResolver((state: InputState): InputPlaceholderStyle => (
+      toTextStyle(resolve(state).placeholder)
+    )),
+    icon: createValueResolver((state: InputState): InputIconStyle => {
+      const { icon } = resolve(state)
+
+      return {
+        size: icon.size,
+        strokeWidth: icon.strokeWidth,
+        color: icon.color,
+      }
+    }),
   }
 }

@@ -89,7 +89,7 @@ export const Switch = ({
     isActive: value,
     isInvalid: invalid,
     isDisabled: disabled,
-    isReadOnly: readOnly,
+    isReadonly: readOnly,
   }), [disabled, invalid, readOnly, value])
 
   const trackColor = useMemo(

@@ -17,8 +17,9 @@ import {
 
 import { useTheme } from '../../global-contexts/theme/ThemeContext'
 import type {
+  InputContainerStyle,
   InputState,
-  InputStyle
+  InputTextStyle
 } from '../../theme/types/components/input'
 import type { StyleOverwrite } from '../../theme/types/resolver'
 import type {
@@ -48,7 +49,8 @@ export type InputProps = Omit<TextInputProps, 'value' | 'style'>
     editCompleteOptions?: EditCompleteOptions,
     initialValue?: string,
     style?: StyleProp<TextStyle>,
-    inputStyle?: StyleOverwrite<InputState, InputStyle>,
+    containerStyle?: StyleOverwrite<InputState, InputContainerStyle>,
+    textStyle?: StyleOverwrite<InputState, InputTextStyle>,
   }
 
 export const Input = forwardRef<TextInput, InputProps>(function Input({
@@ -62,7 +64,8 @@ export const Input = forwardRef<TextInput, InputProps>(function Input({
   onEditComplete,
   editCompleteOptions,
   style,
-  inputStyle,
+  containerStyle,
+  textStyle,
   ...props
 }, ref) {
   const { theme } = useTheme()
@@ -88,16 +91,20 @@ export const Input = forwardRef<TextInput, InputProps>(function Input({
   const state = useMemo((): InputState => ({
     isDisabled: disabled,
     isInvalid: invalid,
-    isReadOnly: readOnly,
+    isReadonly: readOnly,
   }), [disabled, invalid, readOnly])
 
-  const resolvedInputStyle = useMemo(
-    () => theme.components.input.input(state, inputStyle),
-    [theme, state, inputStyle]
+  const resolvedContainerStyle = useMemo(
+    () => theme.components.input.container(state, containerStyle),
+    [theme, state, containerStyle]
   )
-  const placeholderColor = useMemo(
-    () => theme.components.input.placeholderColor({}),
-    [theme]
+  const resolvedTextStyle = useMemo(
+    () => theme.components.input.text(state, textStyle),
+    [theme, state, textStyle]
+  )
+  const resolvedPlaceholderStyle = useMemo(
+    () => theme.components.input.placeholder(state),
+    [theme, state]
   )
 
   return (
@@ -127,8 +134,8 @@ export const Input = forwardRef<TextInput, InputProps>(function Input({
           clearTimer()
         }
       }}
-      placeholderTextColor={placeholderColor}
-      style={[resolvedInputStyle, style]}
+      placeholderTextColor={resolvedPlaceholderStyle.color}
+      style={[resolvedContainerStyle, resolvedTextStyle, style]}
       accessibilityState={{ disabled, selected: required }}
     />
   )

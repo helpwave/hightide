@@ -155,6 +155,7 @@ export const toContainerStyle = (tokens: ContainerTokens): ViewStyle => ({
   justifyContent: toJustifyContent(tokens.layout?.mainAxisAlignment),
   alignItems: toAlignItems(tokens.layout?.crossAxisAligment),
   backgroundColor: tokens.backgroundColor,
+  opacity: tokens.opacity,
   ...toBorderStyle(tokens.border),
   height: tokens.size?.height,
   width: tokens.size?.width,

@@ -14,20 +14,21 @@ export type CheckboxState = InteractionState & {
   size?: CheckboxSize,
   isChecked?: boolean,
   isIndeterminate?: boolean,
-  isInvalid?: boolean,
   isRounded?: boolean,
-  alwaysShowCheckIcon?: boolean,
 }
 
 export type CheckboxStyle = ViewStyle
 
+export type CheckboxVisualContainerStyle = ViewStyle
+
 export type CheckboxIconStyle = {
-  color: Color,
-  size: number,
-  visible: boolean,
+  color?: Color,
+  size?: number,
+  strokeWidth?: number,
 }
 
 export type CheckboxThemeResolvers = {
-  checkbox: StyleResolverFunction<CheckboxState, CheckboxStyle>,
+  container: StyleResolverFunction<CheckboxState, CheckboxStyle>,
+  visualContainer: StyleResolverFunction<CheckboxState, CheckboxVisualContainerStyle>,
   icon: StyleResolverFunction<CheckboxState, CheckboxIconStyle>,
 }

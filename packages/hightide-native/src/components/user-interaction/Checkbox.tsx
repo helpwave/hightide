@@ -1,9 +1,9 @@
 import {
-  useCallback,
-  useMemo
+  useCallback
 } from 'react'
 import {
   Pressable,
+  View,
   type PressableProps,
   type StyleProp,
   type ViewStyle
@@ -19,7 +19,8 @@ import { useTheme } from '../../global-contexts/theme/ThemeContext'
 import type {
   CheckboxSize,
   CheckboxState,
-  CheckboxStyle
+  CheckboxStyle,
+  CheckboxVisualContainerStyle
 } from '../../theme/types/components/checkbox'
 import type { StyleOverwrite } from '../../theme/types/resolver'
 import type {
@@ -34,11 +35,17 @@ export type CheckboxProps = Omit<PressableProps, 'children' | 'style'>
     initialValue?: boolean,
     indeterminate?: boolean,
     size?: CheckboxSize,
-    alwaysShowCheckIcon?: boolean,
     isRounded?: boolean,
     style?: StyleProp<ViewStyle>,
-    checkboxStyle?: StyleOverwrite<CheckboxState, CheckboxStyle>,
+    containerStyle?: StyleOverwrite<CheckboxState, CheckboxStyle>,
+    visualContainerStyle?: StyleOverwrite<CheckboxState, CheckboxVisualContainerStyle>,
   }
+
+type PressableInteraction = {
+  pressed: boolean,
+  hovered?: boolean,
+  focused?: boolean,
+}
 
 export const Checkbox = ({
   value: controlledValue,
@@ -50,10 +57,10 @@ export const Checkbox = ({
   onValueChange,
   onEditComplete,
   size = 'md',
-  alwaysShowCheckIcon = false,
   isRounded = false,
   style,
-  checkboxStyle,
+  containerStyle,
+  visualContainerStyle,
   ...props
 }: CheckboxProps) => {
   const { theme } = useTheme()
@@ -73,24 +80,18 @@ export const Checkbox = ({
     defaultValue: initialValue,
   })
 
-  const state = useMemo((): CheckboxState => ({
+  const resolveState = (interaction: PressableInteraction): CheckboxState => ({
     size,
     isChecked: value,
     isIndeterminate: indeterminate,
     isInvalid: invalid,
     isDisabled: disabled,
+    isReadonly: readOnly,
     isRounded,
-    alwaysShowCheckIcon,
-  }), [alwaysShowCheckIcon, disabled, indeterminate, invalid, isRounded, size, value])
-
-  const resolvedCheckboxStyle = useMemo(
-    () => theme.components.checkbox.checkbox(state, checkboxStyle),
-    [theme, state, checkboxStyle]
-  )
-  const resolvedIcon = useMemo(
-    () => theme.components.checkbox.icon(state),
-    [theme, state]
-  )
+    isPressed: interaction.pressed,
+    isHovered: !!interaction.hovered,
+    isFocused: !!interaction.focused,
+  })
 
   return (
     <Pressable
@@ -107,15 +108,32 @@ export const Checkbox = ({
         }
         props.onPress?.(event)
       }}
-      style={[resolvedCheckboxStyle, style]}
+      style={(pressableState) => {
+        const state = resolveState(pressableState as PressableInteraction)
+        return [theme.components.checkbox.container(state, containerStyle), style]
+      }}
     >
-      {resolvedIcon.visible && (
-        <ThemedIcon
-          icon={indeterminate ? HightideIconRegistry.Minus : HightideIconRegistry.Check}
-          size={resolvedIcon.size}
-          color={resolvedIcon.color}
-        />
-      )}
+      {(pressableState) => {
+        const state = resolveState(pressableState as PressableInteraction)
+        const resolvedVisualContainerStyle = theme.components.checkbox.visualContainer(
+          state,
+          visualContainerStyle
+        )
+        const resolvedIcon = theme.components.checkbox.icon(state)
+        const showIcon = !!(indeterminate || value)
+
+        return (
+          <View style={resolvedVisualContainerStyle}>
+            {showIcon && (
+              <ThemedIcon
+                icon={indeterminate ? HightideIconRegistry.Minus : HightideIconRegistry.Check}
+                size={resolvedIcon.size}
+                color={resolvedIcon.color}
+              />
+            )}
+          </View>
+        )
+      }}
     </Pressable>
   )
 }

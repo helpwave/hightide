@@ -1,21 +1,20 @@
-import type { ColorToken } from '../primitive-tokens/color'
 import {
   createElementLayoutTokens,
   type ComponentSize
 } from '../theme-tokens/element-layout'
+import { resolveColorPairColoring } from './coloring'
 import type { ComponentTokenResolver } from './component-token-resolver'
+import type { ContainerTokens } from './container-tokens'
+import type { IconTokens } from './icon-tokens'
+import type { InputState } from './input-tokens'
 
-export type CheckboxState = {
-  isDisabled?: boolean,
+export type CheckboxState = InputState & {
   isChecked?: boolean,
   isIndeterminate?: boolean,
-  isInvalid?: boolean,
+  isPressed?: boolean,
 }
 
 export type CheckboxComponentResolverProps = {
-  config: {
-    alwaysShowCheckIcon?: boolean,
-  },
   overrides: {
     size?: ComponentSize,
     isRounded?: boolean,
@@ -23,28 +22,10 @@ export type CheckboxComponentResolverProps = {
   state: CheckboxState,
 }
 
-export type CheckboxBoxTokens = {
-  alignItems: 'center',
-  justifyContent: 'center',
-  width: number,
-  height: number,
-  padding: number,
-  borderWidth: number,
-  borderColor: ColorToken,
-  borderRadius: number,
-  backgroundColor: ColorToken,
-  opacity: number,
-}
-
-export type CheckboxIconTokens = {
-  color: ColorToken,
-  size: number,
-  isVisible: boolean,
-}
-
 export type CheckboxTokens = {
-  box: CheckboxBoxTokens,
-  icon: CheckboxIconTokens,
+  container: ContainerTokens,
+  visualContainer: ContainerTokens,
+  icon: IconTokens,
 }
 
 export type CheckboxTokenResolver = ComponentTokenResolver<
@@ -52,10 +33,16 @@ export type CheckboxTokenResolver = ComponentTokenResolver<
   CheckboxTokens
 >
 
-export const checkboxTokenResolver: CheckboxTokenResolver = ({ themeTokens, semanticResolvers, config, overrides, state }) => {
+export const checkboxTokenResolver: CheckboxTokenResolver = ({
+  themeTokens,
+  semanticResolvers,
+  overrides,
+  state,
+}) => {
   const size = overrides.size ?? 'md'
   const { color, borders } = themeTokens
   const control = createElementLayoutTokens(themeTokens).control
+  const mediumControl = control.md
   const element = control[size]
   const borderWidth = borders.borderWidths.normal
   const inset = control.xs.inset
@@ -65,6 +52,18 @@ export const checkboxTokenResolver: CheckboxTokenResolver = ({ themeTokens, sema
     themeTokens,
     semanticResolvers,
     color: color.surface.onColor,
+  })
+  const feedbackColoring = resolveColorPairColoring({
+    themeTokens,
+    semanticResolvers,
+    colorPair: themeTokens.color.primary,
+    style: 'text',
+    state: {
+      isDisabled: state.isDisabled,
+      isHovered: state.isHovered,
+      isFocused: state.isFocused,
+      isPressed: state.isPressed,
+    },
   })
 
   const borderColor = state.isDisabled
@@ -78,22 +77,65 @@ export const checkboxTokenResolver: CheckboxTokenResolver = ({ themeTokens, sema
     : isActive ? color.primary.color : color.surface.color
 
   return {
-    box: {
-      alignItems: 'center',
-      justifyContent: 'center',
-      width: dimension,
-      height: dimension,
-      padding: inset,
-      borderWidth,
-      borderColor,
-      borderRadius: overrides.isRounded ? dimension / 2 : element.borderRadius,
+    container: {
+      backgroundColor: feedbackColoring.color,
+      size: {
+        width: mediumControl.size,
+        height: mediumControl.size,
+        minWidth: mediumControl.size,
+        maxWidth: mediumControl.size,
+        minHeight: mediumControl.size,
+        maxHeight: mediumControl.size,
+      },
+      shape: {
+        borderRadius: mediumControl.size / 2,
+      },
+      layout: {
+        direction: 'horizontal',
+        mainAxisAlignment: 'center',
+        crossAxisAligment: 'center',
+      },
+      outline: state.isFocused ? {
+        width: borders.borderWidths.normal,
+        offset: 2,
+        color: color.primary.color,
+        style: 'solid',
+      } : undefined,
+    },
+    visualContainer: {
       backgroundColor,
       opacity: state.isDisabled ? 0.6 : 1,
+      border: {
+        width: {
+          type: 'all',
+          value: borderWidth,
+        },
+        color: {
+          type: 'all',
+          value: borderColor,
+        },
+      },
+      size: {
+        width: dimension,
+        height: dimension,
+      },
+      shape: {
+        borderRadius: overrides.isRounded ? dimension / 2 : themeTokens.shape.borderRadius.sm,
+        padding: {
+          vertical: inset,
+          horizontal: inset,
+        },
+      },
+      layout: {
+        direction: 'horizontal',
+        mainAxisAlignment: 'center',
+        crossAxisAligment: 'center',
+      },
     },
     icon: {
       color: isActive ? color.primary.onColor : color.primary.color,
       size: dimension - 2 * inset - 2 * borderWidth,
-      isVisible: !!(state.isIndeterminate || config.alwaysShowCheckIcon || state.isChecked),
+      strokeWidth: borders.borderWidths.normal,
     },
   }
 }

@@ -7,7 +7,7 @@ export type InteractionState = {
   isHovered?: boolean,
   isFocused?: boolean,
   isPressed?: boolean,
-  isReadOnly?: boolean,
+  isReadonly?: boolean,
   isInvalid?: boolean,
 }
 

@@ -67,7 +67,7 @@ export const Select = ({
 
   const state = useMemo((): SelectState => ({
     isDisabled: disabled,
-    isReadOnly: readOnly,
+    isReadonly: readOnly,
     isInvalid: invalid,
     isOpen: select.isOpen,
     hasValue: !!select.value,

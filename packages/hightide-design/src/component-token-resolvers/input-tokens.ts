@@ -1,33 +1,26 @@
-import type { ColorToken } from '../primitive-tokens/color'
 import { createElementLayoutTokens } from '../theme-tokens/element-layout'
 import type { ComponentTokenResolver } from './component-token-resolver'
+import type { ContainerTokens } from './container-tokens'
+import { createIconSizeTokens, type IconTokens } from './icon-tokens'
 import type { TextStyleTokens } from './text-style-tokens'
 
 export type InputState = {
-  isDisabled?: boolean,
+  isHovered?: boolean,
   isFocused?: boolean,
+  isDisabled?: boolean,
+  isReadonly?: boolean,
   isInvalid?: boolean,
-  isReadOnly?: boolean,
 }
 
 export type InputComponentResolverProps = {
   state: InputState,
 }
 
-export type InputContainerTokens = TextStyleTokens & {
-  minHeight: number,
-  paddingVertical: number,
-  paddingHorizontal: number,
-  borderRadius: number,
-  borderWidth: number,
-  borderColor: ColorToken,
-  backgroundColor: ColorToken,
-  opacity: number,
-}
-
 export type InputTokens = {
-  input: InputContainerTokens,
-  placeholderColor: ColorToken,
+  container: ContainerTokens,
+  text: TextStyleTokens,
+  placeholder: TextStyleTokens,
+  icon: IconTokens,
 }
 
 export type InputTokenResolver = ComponentTokenResolver<
@@ -35,11 +28,17 @@ export type InputTokenResolver = ComponentTokenResolver<
   InputTokens
 >
 
-export const inputTokenResolver: InputTokenResolver = ({ themeTokens, semanticResolvers, state }) => {
+export const inputTokenResolver: InputTokenResolver = ({
+  themeTokens,
+  semanticResolvers,
+  state,
+}) => {
   const { color, spacing, borders, typography } = themeTokens
   const layout = createElementLayoutTokens(themeTokens).control.md
   const textStyle = typography.label.md
+  const iconSizeTokens = createIconSizeTokens(themeTokens).md
   const onColor = color.surface.onColor
+  const textColor = state.isDisabled ? color.disabled.onColor : onColor
   const borderColor = semanticResolvers.asFaded({
     themeTokens,
     semanticResolvers,
@@ -52,18 +51,48 @@ export const inputTokenResolver: InputTokenResolver = ({ themeTokens, semanticRe
   })
 
   return {
-    input: {
-      ...textStyle,
-      minHeight: layout.size,
-      paddingVertical: spacing.sm,
-      paddingHorizontal: spacing.md,
-      borderRadius: layout.borderRadius,
-      borderWidth: borders.borderWidths.thin,
-      borderColor: state.isInvalid ? color.negative.color : borderColor,
+    container: {
       backgroundColor: state.isDisabled ? color.disabled.color : color.surfaceVariant.color,
-      color: state.isDisabled ? color.disabled.onColor : onColor,
-      opacity: state.isDisabled ? 0.6 : 1,
+      border: {
+        width: {
+          type: 'all',
+          value: borders.borderWidths.thin,
+        },
+        color: {
+          type: 'all',
+          value: state.isInvalid ? color.negative.color : borderColor,
+        },
+      },
+      size: {
+        minHeight: layout.size,
+        width: '100%',
+      },
+      shape: {
+        borderRadius: layout.borderRadius,
+        padding: {
+          vertical: spacing.sm,
+          horizontal: spacing.md,
+        },
+      },
+      layout: {
+        direction: 'horizontal',
+        mainAxisAlignment: 'start',
+        crossAxisAligment: 'center',
+        gap: spacing.sm,
+      },
     },
-    placeholderColor,
+    text: {
+      ...textStyle,
+      color: textColor,
+    },
+    placeholder: {
+      ...textStyle,
+      color: placeholderColor,
+    },
+    icon: {
+      size: iconSizeTokens.size,
+      strokeWidth: iconSizeTokens.strokeWidth,
+      color: textColor,
+    },
   }
 }

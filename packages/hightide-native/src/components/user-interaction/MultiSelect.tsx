@@ -68,7 +68,7 @@ export const MultiSelect = ({
 
   const state = useMemo((): MultiSelectState => ({
     isDisabled: disabled,
-    isReadOnly: readOnly,
+    isReadonly: readOnly,
     isInvalid: invalid,
     isOpen: multiSelect.isOpen,
     hasSelections: selectedLabels.length > 0,

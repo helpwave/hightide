@@ -45,6 +45,7 @@ export type BorderToken = {
 
 export type ContainerTokens = {
   backgroundColor?: ColorToken,
+  opacity?: number,
   border?: BorderToken,
   size?: {
     height?: SizeToken,

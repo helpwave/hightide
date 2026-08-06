@@ -1,8 +1,10 @@
+import { toContainerStyle } from '../adapters/style-adapters'
 import type {
   CheckboxIconStyle,
   CheckboxState,
   CheckboxStyle,
-  CheckboxThemeResolvers
+  CheckboxThemeResolvers,
+  CheckboxVisualContainerStyle
 } from '../types/components/checkbox'
 import {
   createStyleResolver,
@@ -18,32 +20,36 @@ export const toCheckboxThemeResolvers: ComponentThemeResolver<CheckboxThemeResol
   const resolve = (state: CheckboxState) => componentTokens.checkbox({
     themeTokens,
     semanticResolvers: semanticTokens,
-    config: {
-      alwaysShowCheckIcon: state.alwaysShowCheckIcon,
-    },
     overrides: {
       size: state.size,
       isRounded: state.isRounded,
     },
     state: {
       isDisabled: state.isDisabled,
+      isHovered: state.isHovered,
+      isFocused: state.isFocused,
+      isPressed: state.isPressed,
+      isReadonly: state.isReadonly,
+      isInvalid: state.isInvalid,
       isChecked: state.isChecked,
       isIndeterminate: state.isIndeterminate,
-      isInvalid: state.isInvalid,
     },
   })
 
   return {
-    checkbox: createStyleResolver((state: CheckboxState): CheckboxStyle => ({
-      ...resolve(state).box,
-    })),
+    container: createStyleResolver((state: CheckboxState): CheckboxStyle => (
+      toContainerStyle(resolve(state).container)
+    )),
+    visualContainer: createStyleResolver((state: CheckboxState): CheckboxVisualContainerStyle => (
+      toContainerStyle(resolve(state).visualContainer)
+    )),
     icon: createValueResolver((state: CheckboxState): CheckboxIconStyle => {
       const { icon } = resolve(state)
 
       return {
         color: icon.color,
         size: icon.size,
-        visible: icon.isVisible,
+        strokeWidth: icon.strokeWidth,
       }
     }),
   }
