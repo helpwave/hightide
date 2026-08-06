@@ -70,6 +70,8 @@ export type ThemeBordersTokens = {
   borderWidths: Record<ThemeBorderWidthKey, number>,
 }
 
+export type ShadowToken = ShadowLayoutToken & { color: ColorToken }
+
 export type ThemeElevationTokens = Record<ThemeElevationLevel, ShadowLayoutToken & { color: ColorToken }>
 
 export type ThemeMotionTokens = {

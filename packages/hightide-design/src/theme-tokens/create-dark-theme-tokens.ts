@@ -45,7 +45,7 @@ export const createDarkThemeTokens = (
     onColor: whiteColor,
   }
   const negative: ColorPairToken = config.colors.negative ?? {
-    color: red.value[500],
+    color: red.value[600],
     onColor: whiteColor,
   }
   const neutral: ColorPairToken = {

@@ -1,4 +1,5 @@
 export * from './attachment-card'
+export * from './chat-token-resolvers'
 export * from './chat-tokens'
 export * from './conversation-list'
 export * from './conversation-row'

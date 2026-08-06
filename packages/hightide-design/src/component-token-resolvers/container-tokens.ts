@@ -1,4 +1,5 @@
 import type { ColorToken } from '../primitive-tokens/color'
+import type { ShadowToken } from '../theme-tokens/theme-tokens'
 
 export type ContainerTokens = {
   backgroundColor?: ColorToken,
@@ -23,5 +24,13 @@ export type ContainerTokens = {
   },
   layout?: {
     gap?: number,
+  },
+  decoration?: {
+    shadow?: ShadowToken,
+  },
+  outline?: {
+    width?: number,
+    offset?: number,
+    color?: ColorToken,
   },
 }

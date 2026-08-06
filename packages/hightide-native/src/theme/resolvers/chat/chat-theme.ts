@@ -20,56 +20,56 @@ export const toChatThemeResolvers: ComponentThemeResolver<ChatThemeResolvers> = 
   conversationRow: toChatConversationRowThemeResolvers({
     themeTokens,
     semanticTokens,
-    componentTokens: componentTokens.conversationRow,
+    componentTokens: componentTokens.chat.conversationRow,
   }),
   conversationList: toChatConversationListThemeResolvers({
     themeTokens,
     semanticTokens,
-    componentTokens: componentTokens.conversationList,
+    componentTokens: componentTokens.chat.conversationList,
   }),
   threadHeader: toChatThreadHeaderThemeResolvers({
     themeTokens,
     semanticTokens,
-    componentTokens: componentTokens.threadHeader,
+    componentTokens: componentTokens.chat.threadHeader,
   }),
   messageList: toChatMessageListThemeResolvers({
     themeTokens,
     semanticTokens,
-    componentTokens: componentTokens.messageList,
+    componentTokens: componentTokens.chat.messageList,
   }),
   messageBubble: toChatMessageBubbleThemeResolvers({
     themeTokens,
     semanticTokens,
-    componentTokens: componentTokens.messageBubble,
+    componentTokens: componentTokens.chat.messageBubble,
   }),
   messageCard: toChatMessageCardThemeResolvers({
     themeTokens,
     semanticTokens,
-    componentTokens: componentTokens.messageCard,
+    componentTokens: componentTokens.chat.messageCard,
   }),
   attachmentCard: toChatAttachmentCardThemeResolvers({
     themeTokens,
     semanticTokens,
-    componentTokens: componentTokens.attachmentCard,
+    componentTokens: componentTokens.chat.attachmentCard,
   }),
   systemLine: toChatSystemLineThemeResolvers({
     themeTokens,
     semanticTokens,
-    componentTokens: componentTokens.systemLine,
+    componentTokens: componentTokens.chat.systemLine,
   }),
   dateDivider: toChatDateDividerThemeResolvers({
     themeTokens,
     semanticTokens,
-    componentTokens: componentTokens.dateDivider,
+    componentTokens: componentTokens.chat.dateDivider,
   }),
   quickReplyChip: toChatQuickReplyChipThemeResolvers({
     themeTokens,
     semanticTokens,
-    componentTokens: componentTokens.quickReplyChip,
+    componentTokens: componentTokens.chat.quickReplyChip,
   }),
   messageComposer: toChatMessageComposerThemeResolvers({
     themeTokens,
     semanticTokens,
-    componentTokens: componentTokens.messageComposer,
+    componentTokens: componentTokens.chat.messageComposer,
   }),
 })

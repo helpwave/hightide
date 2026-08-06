@@ -6,7 +6,9 @@ import {
   type ComponentSize
 } from '../theme-tokens/element-layout'
 import type { ComponentTokenResolver } from './component-token-resolver'
+import type { ContainerTokens } from './container-tokens'
 import type { TextStyleTokens } from './text-style-tokens'
+import type { IconTokens } from './icon-tokens'
 import { createIconSizeTokens } from './icon-tokens'
 
 export const avatarStatuses = [
@@ -39,116 +41,23 @@ export type AvatarComponentResolverProps = {
   state: AvatarState,
 }
 
-export type AvatarShadowTokens = {
-  color: ColorToken,
-  offsetX: number,
-  offsetY: number,
-  blur: number,
-  elevation: number,
-}
-
-export type AvatarContainerTokens = {
-  position: 'absolute' | 'relative',
-  flexDirection: 'row',
-  alignItems: 'center',
-  justifyContent: 'center',
-  width: number,
-  height: number,
-  padding: number,
-  borderRadius: number,
-  backgroundColor: ColorToken,
-  overflow: 'hidden',
-  left?: number,
-  zIndex?: number,
-  shadow?: AvatarShadowTokens,
-}
-
-export type AvatarImageTokens = {
-  position: 'absolute',
-  left: number,
-  top: number,
-  width: number,
-  height: number,
-  borderRadius: number,
-}
-
-export type AvatarTextTokens = TextStyleTokens & {
-  textAlign: 'center',
-}
-
-export type AvatarIconTokens = {
-  size: number,
-  strokeWidth: number,
-  color: ColorToken,
-}
-
-export type AvatarStatusDotTokens = {
-  position: 'absolute',
-  right: number,
-  bottom: number,
-  zIndex: number,
-  width: number,
-  height: number,
-  borderRadius: number,
-  borderWidth: number,
-  borderColor: ColorToken,
-  backgroundColor: ColorToken,
-}
-
-export type AvatarWithStatusContainerTokens = {
-  position: 'relative',
-  alignSelf: 'flex-start',
-  width: number,
-  height: number,
-}
-
-export type AvatarWithLabelContainerTokens = {
-  flexDirection: 'row',
-  alignItems: 'center',
-  gap: number,
-}
-
-export type AvatarWithLabelTextTokens = TextStyleTokens & {
-  flexShrink: number,
-}
-
-export type AvatarGroupContainerTokens = {
-  flexDirection: 'row',
-  alignItems: 'center',
-  alignSelf: 'flex-start',
-  gap: number,
-  height: number,
-}
-
-export type AvatarGroupStackTokens = {
-  position: 'relative',
-  width: number,
-  height: number,
-}
-
-export type AvatarGroupMoreTokens = {
-  fontSize: number,
-  color: ColorToken,
-  flexShrink: number,
-}
-
+// TODO create separate components for AvatarWithStatus, AvatarWithLabel and AvatarGroup
 export type AvatarTokens = {
-  container: AvatarContainerTokens,
-  image: AvatarImageTokens,
-  text: AvatarTextTokens,
-  icon: AvatarIconTokens,
+  container: ContainerTokens,
+  text: TextStyleTokens,
+  icon: IconTokens,
   withStatus: {
-    container: AvatarWithStatusContainerTokens,
-    statusDot: AvatarStatusDotTokens,
+    container: ContainerTokens,
+    statusDot: ContainerTokens,
   },
   withLabel: {
-    container: AvatarWithLabelContainerTokens,
-    text: AvatarWithLabelTextTokens,
+    container: ContainerTokens,
+    text: TextStyleTokens,
   },
   group: {
-    container: AvatarGroupContainerTokens,
-    stack: AvatarGroupStackTokens,
-    more: AvatarGroupMoreTokens,
+    container: ContainerTokens,
+    stack: ContainerTokens,
+    moreText: TextStyleTokens,
     overlap: number,
     maxShown: number,
   },
@@ -174,7 +83,6 @@ export type AvatarTokenResolver = ComponentTokenResolver<
 export const avatarTokenResolver: AvatarTokenResolver = ({ themeTokens, config, overrides, state }) => {
   const size = overrides.size ?? 'md'
   const status = state.status ?? 'unknown'
-  const groupIndex = config.groupIndex ?? 0
   const { color, spacing, borders, typography, elevation } = themeTokens
   const colorPair = overrides.color ?? color.primary
   const layout = createElementLayoutTokens(themeTokens).insideControl[size]
@@ -189,41 +97,32 @@ export const avatarTokenResolver: AvatarTokenResolver = ({ themeTokens, config, 
 
   return {
     container: {
-      position: config.isGrouped ? 'absolute' : 'relative',
-      flexDirection: 'row',
-      alignItems: 'center',
-      justifyContent: 'center',
-      width: dimension,
-      height: dimension,
-      padding: layout.inset,
-      borderRadius,
       backgroundColor: colorPair.color,
-      overflow: 'hidden',
+      size: {
+        width: dimension,
+        height: dimension,
+        minWidth: dimension,
+        minHeight: dimension,
+        maxWidth: dimension,
+        maxHeight: dimension,
+      },
+      shape: {
+        borderRadius,
+        padding: {
+          vertical: layout.inset,
+          horizontal: layout.inset,
+        },
+      },
       ...(config.isGrouped ? {
-        left: groupIndex * dimension * avatarGroupOverlap,
-        zIndex: avatarGroupMaxShown - groupIndex,
-        shadow: {
-          color: raised.color,
-          offsetX: raised.x,
-          offsetY: raised.y,
-          blur: raised.blur,
-          elevation: raised.blur,
+        decoration: {
+          shadow: raised,
         },
       } : {}),
-    },
-    image: {
-      position: 'absolute',
-      left: 0,
-      top: 0,
-      width: dimension,
-      height: dimension,
-      borderRadius,
     },
     text: {
       ...typography.label.sm,
       fontWeight: typography.fontWeights.bold,
       color: colorPair.onColor,
-      textAlign: 'center',
     },
     icon: {
       size: iconTokens.size,
@@ -232,53 +131,51 @@ export const avatarTokenResolver: AvatarTokenResolver = ({ themeTokens, config, 
     },
     withStatus: {
       container: {
-        position: 'relative',
-        alignSelf: 'flex-start',
-        width: dimension,
-        height: dimension,
+        size: {
+          width: dimension,
+          height: dimension,
+        },
       },
       statusDot: {
-        position: 'absolute',
-        right: 0,
-        bottom: 0,
-        zIndex: 1,
-        width: statusDotSize,
-        height: statusDotSize,
-        borderRadius: statusDotSize / 2,
-        borderWidth: borders.borderWidths.thin,
-        borderColor: color.background.color,
         backgroundColor: statusColors(themeTokens)[status],
+        border: {
+          width: borders.borderWidths.thin,
+          color: color.background.color,
+        },
+        size: {
+          width: statusDotSize,
+          height: statusDotSize,
+        },
+        shape: {
+          borderRadius: statusDotSize / 2,
+        },
       },
     },
     withLabel: {
       container: {
-        flexDirection: 'row',
-        alignItems: 'center',
-        gap,
+        layout: { gap },
       },
       text: {
         ...typography.body.md,
         color: color.background.onColor,
-        flexShrink: 1,
       },
     },
     group: {
       container: {
-        flexDirection: 'row',
-        alignItems: 'center',
-        alignSelf: 'flex-start',
-        gap,
-        height: dimension,
+        size: {
+          height: dimension,
+        },
+        layout: { gap },
       },
       stack: {
-        position: 'relative',
-        width: stackWidth,
-        height: dimension,
+        size: {
+          width: stackWidth,
+          height: dimension,
+        },
       },
-      more: {
+      moreText: {
         fontSize: dimension * 2 / 3,
         color: color.background.onColor,
-        flexShrink: 1,
       },
       overlap: avatarGroupOverlap,
       maxShown: avatarGroupMaxShown,

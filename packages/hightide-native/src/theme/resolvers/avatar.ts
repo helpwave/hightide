@@ -1,12 +1,9 @@
 import type {
-  AvatarContainerTokens
-} from '@helpwave/hightide-design/component-token-resolvers'
-import type {
   ColorPairToken,
   ComponentSize
 } from '@helpwave/hightide-design/theme-tokens'
 
-import { toTextStyle } from '../adapters/style-adapters'
+import { toContainerStyle, toTextStyle } from '../adapters/style-adapters'
 import type {
   AvatarGroupContainerStyle,
   AvatarGroupMoreStyle,
@@ -37,25 +34,6 @@ export const toAvatarThemeResolvers: ComponentThemeResolver<AvatarThemeResolvers
   semanticTokens,
   componentTokens,
 }) => {
-  const toAvatarStyle = (tokens: AvatarContainerTokens): AvatarStyle => {
-    const { shadow, ...container } = tokens
-
-    return {
-      ...container,
-      minWidth: container.width,
-      maxWidth: container.width,
-      minHeight: container.height,
-      maxHeight: container.height,
-      ...(shadow ? {
-        shadowColor: shadow.color,
-        shadowOffset: { width: shadow.offsetX, height: shadow.offsetY },
-        shadowOpacity: 1,
-        shadowRadius: shadow.blur,
-        elevation: shadow.elevation,
-      } : {}),
-    }
-  }
-
   const resolve = (input: {
     size?: ComponentSize,
     color?: ColorPairToken,
@@ -81,25 +59,47 @@ export const toAvatarThemeResolvers: ComponentThemeResolver<AvatarThemeResolvers
   })
 
   return {
-    container: createStyleResolver((state: AvatarState): AvatarStyle => (
-      toAvatarStyle(resolve({
+    container: createStyleResolver((state: AvatarState): AvatarStyle => {
+      const tokens = resolve({
         size: state.size,
         isGrouped: state.isGrouped,
         groupIndex: state.groupIndex,
         color: state.color,
-      }).container)
-    )),
-    image: createStyleResolver((state: AvatarState): AvatarImageStyle => ({
-      ...resolve({ size: state.size, color: state.color }).image,
-    })),
-    text: createStyleResolver((state: AvatarState): AvatarTextStyle => {
-      const { text } = resolve({ size: state.size, color: state.color })
+      })
+      const { container } = tokens
+      const width = container.size?.width
+      const overlap = tokens.group.overlap
+      const maxShown = tokens.group.maxShown
+      const groupIndex = state.groupIndex ?? 0
 
       return {
-        ...toTextStyle(text),
-        textAlign: text.textAlign,
+        ...toContainerStyle(container),
+        position: state.isGrouped ? 'absolute' : 'relative',
+        overflow: 'hidden',
+        ...(state.isGrouped && width !== undefined ? {
+          left: groupIndex * width * overlap,
+          zIndex: maxShown - groupIndex,
+        } : {}),
       }
     }),
+    image: createStyleResolver((state: AvatarState): AvatarImageStyle => {
+      const { container } = resolve({ size: state.size, color: state.color })
+      const width = container.size?.width
+      const height = container.size?.height
+
+      return {
+        position: 'absolute',
+        left: 0,
+        top: 0,
+        width,
+        height,
+        borderRadius: container.shape?.borderRadius,
+      }
+    }),
+    text: createStyleResolver((state: AvatarState): AvatarTextStyle => ({
+      ...toTextStyle(resolve({ size: state.size, color: state.color }).text),
+      textAlign: 'center',
+    })),
     icon: createValueResolver((state: AvatarState): AvatarIconStyle => {
       const { icon } = resolve({ size: state.size, color: state.color })
 
@@ -112,49 +112,66 @@ export const toAvatarThemeResolvers: ComponentThemeResolver<AvatarThemeResolvers
     withStatus: {
       container: createStyleResolver((state: AvatarWithStatusState): AvatarWithStatusContainerStyle => {
         const { container } = resolve({ size: state.size }).withStatus
+        const width = container.size?.width
+        const height = container.size?.height
 
         return {
-          ...container,
-          minWidth: container.width,
-          maxWidth: container.width,
-          minHeight: container.height,
-          maxHeight: container.height,
+          ...toContainerStyle(container),
+          position: 'relative',
+          alignSelf: 'flex-start',
+          minWidth: width,
+          maxWidth: width,
+          minHeight: height,
+          maxHeight: height,
         }
       }),
       statusDot: createStyleResolver((state: AvatarWithStatusState): AvatarStatusDotStyle => ({
-        ...resolve({ size: state.size, status: state.status }).withStatus.statusDot,
+        ...toContainerStyle(resolve({ size: state.size, status: state.status }).withStatus.statusDot),
+        position: 'absolute',
+        right: 0,
+        bottom: 0,
+        zIndex: 1,
       })),
     },
     withLabel: {
       container: createStyleResolver((state: AvatarWithLabelState): AvatarWithLabelContainerStyle => ({
-        ...resolve({ size: state.size }).withLabel.container,
+        ...toContainerStyle(resolve({ size: state.size }).withLabel.container),
+        flexDirection: 'row',
+        alignItems: 'center',
       })),
       text: createStyleResolver((state: AvatarWithLabelState): AvatarWithLabelTextStyle => {
         const { text } = resolve({ size: state.size }).withLabel
 
         return {
           ...toTextStyle(text),
-          flexShrink: text.flexShrink,
+          flexShrink: 1,
         }
       }),
     },
     group: {
       container: createStyleResolver((state: AvatarGroupState): AvatarGroupContainerStyle => ({
-        ...resolve({ size: state.size, groupCount: state.count }).group.container,
+        ...toContainerStyle(resolve({ size: state.size, groupCount: state.count }).group.container),
+        flexDirection: 'row',
+        alignItems: 'center',
+        alignSelf: 'flex-start',
       })),
       stack: createStyleResolver((state: AvatarGroupState): AvatarGroupStackStyle => {
         const { stack } = resolve({ size: state.size, groupCount: state.count }).group
+        const width = stack.size?.width
+        const height = stack.size?.height
 
         return {
-          ...stack,
-          minWidth: stack.width,
-          maxWidth: stack.width,
-          minHeight: stack.height,
-          maxHeight: stack.height,
+          ...toContainerStyle(stack),
+          position: 'relative',
+          minWidth: width,
+          maxWidth: width,
+          minHeight: height,
+          maxHeight: height,
         }
       }),
       more: createStyleResolver((state: AvatarGroupState): AvatarGroupMoreStyle => ({
-        ...resolve({ size: state.size, groupCount: state.count }).group.more,
+        ...toTextStyle(resolve({ size: state.size, groupCount: state.count }).group.moreText),
+        flexShrink: 1,
       })),
     },
   }

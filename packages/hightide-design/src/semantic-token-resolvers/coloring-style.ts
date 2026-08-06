@@ -1,5 +1,7 @@
 import type { PressableState } from '../component-token-resolvers/pressable'
 import type { ThemeTokens } from '../theme-tokens/theme-tokens'
+import { HexColorUtils } from '../utils'
+import { OKLCHUtils } from '../utils/oklch'
 import type {
   ColorSchemeToken,
   ColoringStyle,
@@ -7,82 +9,42 @@ import type {
   SemanticTokenResolvers
 } from './types'
 
-const baseForStyle = (
-  scheme: ColorSchemeToken,
-  style: ColoringStyle
-): ColoringTokens => {
-  switch (style) {
-  case 'filled':
-    return {
-      color: scheme.color,
-      onColor: scheme.onColor,
-      borderColor: scheme.color,
-    }
-  case 'outline':
-    return {
-      color: 'transparent',
-      onColor: scheme.color,
-      outlineColor: scheme.color,
-    }
-  case 'tonal':
-    return {
-      color: scheme.feedback.normal,
-      onColor: scheme.feedback.onNormal ?? scheme.color,
-      borderColor: scheme.feedback.normal,
-    }
-  case 'tonal-outline':
-    return {
-      color: scheme.feedback.normal,
-      onColor: scheme.feedback.onNormal ?? scheme.color,
-      borderColor: scheme.feedback.normal,
-      outlineColor: scheme.color,
-    }
-  case 'text':
-    return {
-      color: 'transparent',
-      onColor: scheme.color,
-    }
-  }
-}
-
 const applyFeedback = (
-  tokens: ColoringTokens,
   scheme: ColorSchemeToken,
   style: ColoringStyle,
-  feedback: 'subtle' | 'normal'
+  feedbackType: keyof ColorSchemeToken = 'base'
 ): ColoringTokens => {
-  const surface = feedback === 'subtle' ? scheme.feedback.subtle : scheme.feedback.normal
-  const onSurface = feedback === 'subtle'
-    ? (scheme.feedback.onSubtle ?? scheme.color)
-    : (scheme.feedback.onNormal ?? scheme.color)
+  const color = scheme[feedbackType].color
+  const onColor = scheme[feedbackType].onColor
 
   switch (style) {
   case 'filled':
     return {
-      color: surface,
-      onColor: scheme.onColor,
+      color: color,
+      onColor: onColor,
     }
   case 'outline':
     return {
       color: 'transparent',
-      onColor: onSurface,
-      borderColor: onSurface,
+      onColor: color,
+      borderColor: color,
     }
   case 'tonal':
     return {
-      color: surface,
-      onColor: onSurface,
+      color: color,
+      onColor: onColor,
     }
   case 'tonal-outline':
     return {
-      color: surface,
-      onColor: onSurface,
-      borderColor: surface,
+      color: color,
+      onColor: onColor,
+      // TODO make this configurable
+      borderColor: OKLCHUtils.changeLightness(scheme.base.color, 0.8),
     }
   case 'text':
     return {
       color: 'transparent',
-      onColor: onSurface,
+      onColor: color,
     }
   }
 }
@@ -108,19 +70,31 @@ export const resolveColoringStyle = (params: {
       semanticResolvers,
       colorPair: themeTokens.color.disabled,
     })
-    return baseForStyle(disabledScheme, style)
+    return applyFeedback(disabledScheme, style)
   }
 
-  let tokens = baseForStyle(colorScheme, style)
+  let tokens: ColoringTokens
 
   if (state.has('pressed')) {
-    tokens = applyFeedback(tokens, colorScheme, style, 'normal')
+    tokens = applyFeedback(colorScheme, style, 'feedbackNormal')
+    if(style === 'text' || style === 'outline') {
+      tokens.color = HexColorUtils.hexWithAlpha(colorScheme.feedbackNormal.color, 0.25)
+    }
   } else if (state.has('focused')) {
-    tokens = applyFeedback(tokens, colorScheme, style, 'normal')
-    tokens.outlineColor = colorScheme.color
+    tokens = applyFeedback(colorScheme, style, 'feedbackNormal')
+    tokens.outlineColor = colorScheme.base.color
+    if(style === 'text' || style === 'outline') {
+      tokens.color = HexColorUtils.hexWithAlpha(colorScheme.feedbackNormal.color, 0.25)
+    }
   } else if (state.has('hovered')) {
-    tokens = applyFeedback(tokens, colorScheme, style, 'subtle')
+    tokens = applyFeedback(colorScheme, style, 'feedbackSubtle')
+    if(style === 'text' || style === 'outline') {
+      tokens.color = HexColorUtils.hexWithAlpha(colorScheme.feedbackNormal.color, 0.10)
+    }
+  } else {
+    tokens = applyFeedback(colorScheme, style)
   }
+  // TODO add dragged
 
   return tokens
 }

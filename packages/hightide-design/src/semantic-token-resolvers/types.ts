@@ -10,16 +10,10 @@ export type SemanticTokenResolver<TProps, TResult> = (params: {
 } & TProps) => TResult
 
 export type ColorSchemeToken = {
-  color: ColorToken,
-  onColor: ColorToken,
-  feedback: {
-    subtle: ColorToken,
-    onSubtle?: ColorToken,
-    normal: ColorToken,
-    onNormal?: ColorToken,
-    strong: ColorToken,
-    onStrong?: ColorToken,
-  },
+  base: ColorPairToken,
+  feedbackSubtle: ColorPairToken,
+  feedbackNormal: ColorPairToken,
+  feedbackStrong: ColorPairToken,
 }
 
 export type ColoringTokens = {

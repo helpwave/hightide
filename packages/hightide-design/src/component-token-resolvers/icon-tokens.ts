@@ -5,6 +5,7 @@ import {
   type ComponentSize
 } from '../theme-tokens/element-layout'
 import type { ComponentTokenResolver } from './component-token-resolver'
+import type { ColorToken } from '../primitive-tokens'
 
 export type IconComponentResolverProps = {
   overrides: {
@@ -15,6 +16,7 @@ export type IconComponentResolverProps = {
 export type IconTokens = {
   size: number,
   strokeWidth: number,
+  color: ColorToken,
 }
 
 export const createIconSizeTokens = (
@@ -26,6 +28,7 @@ export const createIconSizeTokens = (
     componentSizes.map((size) => [size, {
       size: insideControl[size].size - 2 * themeTokens.spacing.xs,
       strokeWidth: themeTokens.borders.borderWidths.normal,
+      color: themeTokens.color.primary.color
     } satisfies IconTokens])
   ) as Record<ComponentSize, IconTokens>
 }

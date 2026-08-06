@@ -15,15 +15,18 @@ export const resolveColorScheme = (params: {
   const { color, onColor } = params.colorPair
 
   return {
-    color,
-    onColor,
-    feedback: {
-      subtle: HexColorUtils.blendOver(color, onColor, tintConfig.light),
-      onSubtle: color,
-      normal: HexColorUtils.blendOver(color, onColor, tintConfig.normal),
-      onNormal: color,
-      strong: HexColorUtils.blendOver(color, onColor, tintConfig.strong),
-      onStrong: color,
+    base: params.colorPair,
+    feedbackSubtle: {
+      color: HexColorUtils.blendOver(color, onColor, tintConfig.light),
+      onColor: onColor,
     },
+    feedbackNormal: {
+      color: HexColorUtils.blendOver(color, onColor, tintConfig.normal),
+      onColor: onColor,
+    },
+    feedbackStrong: {
+      color: HexColorUtils.blendOver(color, onColor, tintConfig.strong),
+      onColor: onColor,
+    }
   }
 }

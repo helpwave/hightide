@@ -26,10 +26,6 @@ export type ButtonTokens = {
   text: TextStyleTokens,
 }
 
-const isOutlineColoringStyle = (style: PressableColoringStyle): boolean => (
-  style === 'outline' || style === 'tonal-outline'
-)
-
 export type ButtonTokenResolver = ComponentTokenResolver<
   ButtonComponentResolverProps,
   ButtonTokens
@@ -45,20 +41,24 @@ export const buttonTokenResolver: ButtonTokenResolver = ({ themeTokens, semantic
     style: coloringStyle,
     state,
   })
-  const borderColor = coloring.outlineColor ?? coloring.borderColor
+  const hasBorder = coloring.borderColor !== undefined
   const layout = createElementLayoutTokens(themeTokens).control[size]
-  const outlinePadding = isOutlineColoringStyle(coloringStyle)
-  const outlineInset = Math.max(layout.inset - layout.borderWidth, 0)
+  const insetForBordered = Math.max(layout.inset - layout.borderWidth, 0)
   const textStyle = themeTokens.typography.label[size]
   const gap = themeTokens.spacing[size]
 
   return {
     container: {
       backgroundColor: coloring.color,
-      border: {
-        width: borderColor !== undefined ? layout.borderWidth : 0,
-        color: borderColor,
-      },
+      border: hasBorder ? {
+        width: layout.borderWidth,
+        color: coloring.borderColor,
+      } : undefined,
+      outline: coloring.outlineColor !== undefined ? {
+        // TODO dont use a hardcode 2 here create a outline style instead and use it here
+        width:  2,
+        color: coloring.outlineColor,
+      } : undefined,
       size: {
         minWidth: layout.minimumWidth,
         minHeight: layout.size,
@@ -66,8 +66,8 @@ export const buttonTokenResolver: ButtonTokenResolver = ({ themeTokens, semantic
       shape: {
         borderRadius: layout.borderRadius,
         padding: {
-          vertical: outlinePadding ? outlineInset : layout.inset,
-          horizontal: outlinePadding
+          vertical: hasBorder ? insetForBordered : layout.inset,
+          horizontal: hasBorder
             ? Math.max(layout.horizontalContentPadding - layout.borderWidth, 0)
             : layout.horizontalContentPadding,
         },
