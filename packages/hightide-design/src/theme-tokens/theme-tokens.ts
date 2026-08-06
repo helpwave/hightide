@@ -12,6 +12,15 @@ import type {
 } from './theme-tokens-config'
 import type { TypographyStyleToken } from './typography-style-token'
 
+export type OutlineStyle = 'dotted' | 'dashed' | 'solid'
+
+export type OutlineToken = {
+  width?: number,
+  offset?: number,
+  color?: ColorToken,
+  style?: OutlineStyle,
+}
+
 export type ThemeColorTokens = {
   tintConfig: TintConfig,
   background: ColorPairToken,
@@ -89,4 +98,5 @@ export type ThemeTokens = {
   borders: ThemeBordersTokens,
   elevation: ThemeElevationTokens,
   motion: ThemeMotionTokens,
+  focusOutline: OutlineToken,
 }

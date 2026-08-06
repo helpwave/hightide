@@ -10,6 +10,7 @@ import type {
   TintConfig
 } from './theme-tokens-config'
 import type {
+  OutlineToken,
   ThemeAppearancePercentages,
   ThemeBordersTokens,
   ThemeColorTokens,
@@ -206,6 +207,12 @@ export const defaultAppearancePercentages = (): ThemeAppearancePercentages => ({
   faded: 0.4,
 })
 
+export const defaultFocusOutlineToken = (): OutlineToken => ({
+  width: 2,
+  offset: 2,
+  style: 'solid',
+})
+
 export const buildColorTokens = (params: {
   tintConfig: TintConfig,
   background: ColorPairToken,
@@ -238,8 +245,9 @@ export const buildColorTokens = (params: {
 export const resolveSharedGroups = (
   config: ThemeTokensModeConfig,
   elevationDefaults: ThemeElevationTokens
-): Pick<ThemeTokens, 'decoration' | 'typography' | 'size' | 'spacing' | 'shape' | 'borders' | 'elevation' | 'motion'> => {
+): Pick<ThemeTokens, 'decoration' | 'typography' | 'size' | 'spacing' | 'shape' | 'borders' | 'elevation' | 'motion' | 'focusOutline'> => {
   const appearanceDefaults = defaultAppearancePercentages()
+  const focusOutlineDefaults = defaultFocusOutlineToken()
 
   return {
     decoration: {
@@ -290,6 +298,12 @@ export const resolveSharedGroups = (
         ...defaultMotionTokens().durations,
         ...config.motion?.durations,
       },
+    },
+    focusOutline: {
+      width: config.focusOutline?.width ?? focusOutlineDefaults.width,
+      offset: config.focusOutline?.offset ?? focusOutlineDefaults.offset,
+      style: config.focusOutline?.style ?? focusOutlineDefaults.style,
+      color: config.focusOutline?.color ?? focusOutlineDefaults.color,
     },
   }
 }

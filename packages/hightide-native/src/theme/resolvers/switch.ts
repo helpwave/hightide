@@ -1,10 +1,13 @@
-import type { Color } from '../types/color'
+import { toContainerStyle } from '../adapters/style-adapters'
 import type {
+  SwitchContainerStyle,
   SwitchState,
-  SwitchThemeResolvers
+  SwitchThemeResolvers,
+  SwitchThumbStyle,
+  SwitchTrackStyle
 } from '../types/components/switch'
 import {
-  createValueResolver,
+  createStyleResolver,
   type ComponentThemeResolver
 } from '../types/resolver'
 
@@ -13,19 +16,28 @@ export const toSwitchThemeResolvers: ComponentThemeResolver<SwitchThemeResolvers
   semanticTokens,
   componentTokens,
 }) => {
-  const resolve = (state: SwitchState) => componentTokens.switch({
+  const resolve = (state: SwitchState = {}) => componentTokens.switch({
     themeTokens,
     semanticResolvers: semanticTokens,
     state: {
       isActive: state.isActive,
       isDisabled: state.isDisabled,
+      isHovered: state.isHovered,
+      isFocused: state.isFocused,
+      isReadonly: state.isReadonly,
       isInvalid: state.isInvalid,
     },
   })
 
   return {
-    trackColor: createValueResolver((state: SwitchState): Color => resolve(state).trackColor),
-    borderColor: createValueResolver((state: SwitchState): Color => resolve(state).borderColor),
-    thumbColor: createValueResolver((state: SwitchState): Color => resolve(state).thumbColor),
+    container: createStyleResolver((state: SwitchState): SwitchContainerStyle => (
+      toContainerStyle(resolve(state).container)
+    )),
+    track: createStyleResolver((state: SwitchState): SwitchTrackStyle => (
+      toContainerStyle(resolve(state).track)
+    )),
+    thumb: createStyleResolver((state: SwitchState): SwitchThumbStyle => (
+      toContainerStyle(resolve(state).thumb)
+    )),
   }
 }

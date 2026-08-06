@@ -61,11 +61,10 @@ export const buttonTokenResolver: ButtonTokenResolver = ({ themeTokens, semantic
         },
       } : undefined,
       outline: coloring.outlineColor !== undefined ? {
-        // TODO dont use a hardcode 2 here create a outline style instead and use it here
-        width:  2,
+        width: themeTokens.focusOutline.width,
+        offset: themeTokens.focusOutline.offset,
+        style: themeTokens.focusOutline.style,
         color: coloring.outlineColor,
-        offset: 2,
-        style: 'solid',
       } : undefined,
       size: {
         minWidth: layout.minimumWidth,

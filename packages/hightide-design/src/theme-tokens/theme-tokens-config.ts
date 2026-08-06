@@ -1,5 +1,6 @@
 import type { HexColorToken } from '../primitive-tokens/color'
 import type { ShadowLayoutToken } from '../primitive-tokens/shadow'
+import type { OutlineToken } from './theme-tokens'
 import type { TypographyStyleToken } from './typography-style-token'
 
 export type ThemeMode = 'light' | 'dark'
@@ -80,6 +81,7 @@ export type ThemeTokensConfig = {
   motion?: {
     durations?: Partial<Record<ThemeMotionDurationKey, number>>,
   },
+  focusOutline?: OutlineToken,
 }
 
 export type ThemeTokensModeConfig = Omit<ThemeTokensConfig, 'themeMode'>

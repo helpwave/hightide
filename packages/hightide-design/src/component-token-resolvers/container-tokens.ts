@@ -1,5 +1,9 @@
 import type { ColorToken } from '../primitive-tokens/color'
-import type { ShadowToken } from '../theme-tokens/theme-tokens'
+import type {
+  OutlineStyle,
+  OutlineToken,
+  ShadowToken
+} from '../theme-tokens/theme-tokens'
 
 export type LayoutDirectionToken = 'horizontal' | 'vertical'
 export type LayoutAlignmentToken = 'left-top' | 'left-center' | 'left-bottom' | 'center-top' | 'center-center' | 'center-bottom' | 'right-top' | 'right-center' | 'right-bottom'
@@ -29,13 +33,7 @@ export type DirectionalToken<T> = {
   blockStart?: T,
   blockEnd?: T,
 }
-export type OutlineStyle = 'dotted' | 'dashed' | 'solid'
-export type OutlineToken = {
-  width?: number,
-  offset?: number,
-  color?: ColorToken,
-  style?: OutlineStyle,
-}
+export type { OutlineStyle, OutlineToken }
 export type BorderStyleToken = 'dotted' | 'dashed' | 'solid'
 export type BorderToken = {
   width?: DirectionalToken<number>,

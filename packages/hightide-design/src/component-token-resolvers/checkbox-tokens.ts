@@ -96,10 +96,7 @@ export const checkboxTokenResolver: CheckboxTokenResolver = ({
         crossAxisAligment: 'center',
       },
       outline: state.isFocused ? {
-        width: borders.borderWidths.normal,
-        offset: 2,
-        color: color.primary.color,
-        style: 'solid',
+        color: 'transparent',
       } : undefined,
     },
     visualContainer: {
@@ -131,6 +128,10 @@ export const checkboxTokenResolver: CheckboxTokenResolver = ({
         mainAxisAlignment: 'center',
         crossAxisAligment: 'center',
       },
+      outline: state.isFocused ? {
+        ...themeTokens.focusOutline,
+        color: color.primary.color,
+      } : undefined,
     },
     icon: {
       color: isActive ? color.primary.onColor : color.primary.color,

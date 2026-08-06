@@ -65,6 +65,10 @@ export const iconButtonTokenResolver: IconButtonTokenResolver = ({
           value: borderColor,
         },
       } : undefined,
+      outline: coloring.outlineColor !== undefined ? {
+        ...themeTokens.focusOutline,
+        color: coloring.outlineColor,
+      } : undefined,
       size: {
         width: layout.size,
         height: layout.size,
