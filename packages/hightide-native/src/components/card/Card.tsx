@@ -29,7 +29,7 @@ export const Card = ({
   const state = useMemo(() => ({}), [])
 
   const resolvedCardStyle = useMemo(
-    () => theme.components.card.card(state, cardStyle),
+    () => theme.components.card.container(state, cardStyle),
     [theme, state, cardStyle]
   )
 

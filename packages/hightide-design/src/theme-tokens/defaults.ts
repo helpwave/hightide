@@ -144,7 +144,7 @@ const withShadowColor = (
 
 export const defaultLightElevationTokens = (): ThemeElevationTokens => {
   const sizes = hightideShadow.layout.bottom
-  const color = hightideShadow.colors['5%']
+  const color = hightideShadow.colors['3%']
   return {
     level1: withShadowColor(sizes.xs, color),
     level2: withShadowColor(sizes.sm, color),
@@ -156,7 +156,7 @@ export const defaultLightElevationTokens = (): ThemeElevationTokens => {
 
 export const defaultDarkElevationTokens = (): ThemeElevationTokens => {
   const sizes = hightideShadow.layout.bottom
-  const color = hightideShadow.colors['10%']
+  const color = hightideShadow.colors['8%']
   return {
     level1: withShadowColor(sizes.xs, color),
     level2: withShadowColor(sizes.sm, color),

@@ -148,6 +148,9 @@ export const Switch = ({
         {
           width: 44,
           height: 44,
+          flexDirection: 'column',
+          justifyContent: 'center',
+          alignContent: 'center'
         },
         style
       ]}

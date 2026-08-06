@@ -9,54 +9,59 @@ import {
   type ViewStyle
 } from 'react-native'
 
+import type { ColorPairToken } from '@helpwave/hightide-design/theme-tokens'
+
 import { useTheme } from '../../global-contexts/theme/ThemeContext'
 import { ThemedText } from '../visualization-and-display/ThemedText'
 import type {
-  CardItemLabelStyle,
-  CardItemStyle,
-  CardItemValueStyle
-} from '../../theme/types/components/card'
+  ListItemDescriptionStyle,
+  ListItemState,
+  ListItemStyle,
+  ListItemTitleStyle
+} from '../../theme/types/components/listItem'
 import type { StyleOverwrite } from '../../theme/types/resolver'
 
-export type CardItemProps = Omit<ViewProps, 'style'> & {
+export type ListItemProps = Omit<ViewProps, 'style'> & {
   label: string,
   value: string,
   leading?: ReactNode,
   trailing?: ReactNode,
+  color?: ColorPairToken,
   style?: StyleProp<ViewStyle>,
-  itemStyle?: StyleOverwrite<Record<string, never>, CardItemStyle>,
-  labelStyle?: StyleOverwrite<Record<string, never>, CardItemLabelStyle>,
-  valueStyle?: StyleOverwrite<Record<string, never>, CardItemValueStyle>,
+  itemStyle?: StyleOverwrite<ListItemState, ListItemStyle>,
+  labelStyle?: StyleOverwrite<ListItemState, ListItemDescriptionStyle>,
+  valueStyle?: StyleOverwrite<ListItemState, ListItemTitleStyle>,
 }
 
-export const CardItem = ({
+export const ListItem = ({
   label,
   value,
   leading,
   trailing,
+  color,
   style,
   itemStyle,
   labelStyle,
   valueStyle,
   ...props
-}: CardItemProps) => {
+}: ListItemProps) => {
   const { theme } = useTheme()
-  const state = useMemo(() => ({}), [])
+  const state = useMemo((): ListItemState => ({ color }), [color])
 
   const resolvedItemStyle = useMemo(
-    () => theme.components.card.item(state, itemStyle),
+    () => theme.components.listItem.default.container(state, itemStyle),
     [theme, state, itemStyle]
   )
   const resolvedContentStyle = useMemo(
-    () => theme.components.card.itemContent(state),
+    () => theme.components.listItem.default.content(state),
     [theme, state]
   )
   const resolvedLabelStyle = useMemo(
-    () => theme.components.card.itemLabel(state, labelStyle),
+    () => theme.components.listItem.default.descriptionText(state, labelStyle),
     [theme, state, labelStyle]
   )
   const resolvedValueStyle = useMemo(
-    () => theme.components.card.itemValue(state, valueStyle),
+    () => theme.components.listItem.default.titleText(state, valueStyle),
     [theme, state, valueStyle]
   )
 

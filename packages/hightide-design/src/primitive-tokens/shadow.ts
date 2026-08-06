@@ -40,11 +40,11 @@ export const hightideShadow = {
       xl: { x: 20, y: 20, blur: 20, spread: 0 },
     },
     bottom: {
-      xs: { x: 0, y: 1, blur: 8, spread: 0 },
-      sm: { x: 0, y: 1, blur: 12, spread: 0 },
+      xs: { x: 0, y: 1, blur: 16, spread: 0 },
+      sm: { x: 0, y: 1, blur: 20, spread: 0 },
       md: { x: 0, y: 1, blur: 20, spread: 0 },
-      lg: { x: 0, y: 2, blur: 28, spread: 0 },
-      xl: { x: 0, y: 4, blur: 40, spread: 0 },
+      lg: { x: 0, y: 2, blur: 24, spread: 0 },
+      xl: { x: 0, y: 2, blur: 24, spread: 0 },
     },
   },
   colors: {

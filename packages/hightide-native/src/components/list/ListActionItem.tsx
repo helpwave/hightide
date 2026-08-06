@@ -1,6 +1,5 @@
 import {
   Fragment,
-  useMemo,
   type ReactNode
 } from 'react'
 import {
@@ -11,23 +10,25 @@ import {
   type ViewStyle
 } from 'react-native'
 
+import type { ColorPairToken } from '@helpwave/hightide-design/theme-tokens'
+
 import { useTheme } from '../../global-contexts/theme/ThemeContext'
 import { ThemedText } from '../visualization-and-display/ThemedText'
 import type {
-  CardActionItemLabelStyle,
-  CardActionItemState,
-  CardActionItemStyle
-} from '../../theme/types/components/card'
+  ListActionItemState,
+  ListActionItemStyle,
+  ListActionItemTitleStyle
+} from '../../theme/types/components/listItem'
 import type { StyleOverwrite } from '../../theme/types/resolver'
 
-export type CardActionItemProps = Omit<PressableProps, 'children' | 'style'> & {
+export type ListActionItemProps = Omit<PressableProps, 'children' | 'style'> & {
   label: string,
   leading?: ReactNode,
   trailing?: ReactNode,
-  danger?: boolean,
+  color?: ColorPairToken,
   style?: StyleProp<ViewStyle>,
-  itemStyle?: StyleOverwrite<CardActionItemState, CardActionItemStyle>,
-  labelStyle?: StyleOverwrite<CardActionItemState, CardActionItemLabelStyle>,
+  itemStyle?: StyleOverwrite<ListActionItemState, ListActionItemStyle>,
+  labelStyle?: StyleOverwrite<ListActionItemState, ListActionItemTitleStyle>,
 }
 
 type PressableInteraction = {
@@ -36,31 +37,26 @@ type PressableInteraction = {
   focused?: boolean,
 }
 
-export const CardActionItem = ({
+export const ListActionItem = ({
   label,
   leading,
   trailing,
-  danger = false,
+  color,
   disabled,
   style,
   itemStyle,
   labelStyle,
   ...props
-}: CardActionItemProps) => {
+}: ListActionItemProps) => {
   const { theme } = useTheme()
 
-  const resolveState = (interaction: PressableInteraction): CardActionItemState => ({
-    isDanger: danger,
+  const resolveState = (interaction: PressableInteraction): ListActionItemState => ({
+    color,
     isDisabled: !!disabled,
     isPressed: interaction.pressed,
     isHovered: !!interaction.hovered,
     isFocused: !!interaction.focused,
   })
-
-  const resolvedContentStyle = useMemo(
-    () => theme.components.card.actionItemContent({}),
-    [theme]
-  )
 
   return (
     <Pressable
@@ -68,12 +64,13 @@ export const CardActionItem = ({
       disabled={disabled}
       style={(pressableState) => {
         const state = resolveState(pressableState as PressableInteraction)
-        return [theme.components.card.actionItem(state, itemStyle), style]
+        return [theme.components.listItem.action.container(state, itemStyle), style]
       }}
     >
       {(pressableState) => {
         const state = resolveState(pressableState as PressableInteraction)
-        const resolvedLabelStyle = theme.components.card.actionItemLabel(state, labelStyle)
+        const resolvedContentStyle = theme.components.listItem.action.content(state)
+        const resolvedLabelStyle = theme.components.listItem.action.titleText(state, labelStyle)
 
         return (
           <Fragment>

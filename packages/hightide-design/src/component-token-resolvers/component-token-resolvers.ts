@@ -32,6 +32,10 @@ import {
   type InputTokenResolver
 } from './input-tokens'
 import {
+  listItemTokenResolvers,
+  type ListItemTokenResolvers
+} from './list-items'
+import {
   multiSelectTokenResolver,
   type MultiSelectTokenResolver
 } from './multi-select-tokens'
@@ -54,6 +58,7 @@ export type ComponentTokenResolvers = {
   select: SelectTokenResolver,
   multiSelect: MultiSelectTokenResolver,
   card: CardTokenResolver,
+  listItem: ListItemTokenResolvers,
   avatar: AvatarTokenResolver,
   icon: IconTokenResolver,
   chat: ChatTokenResolvers,
@@ -69,6 +74,7 @@ export const componentTokenResolvers: ComponentTokenResolvers = {
   select: selectTokenResolver,
   multiSelect: multiSelectTokenResolver,
   card: cardTokenResolver,
+  listItem: listItemTokenResolvers,
   avatar: avatarTokenResolver,
   icon: iconTokenResolver,
   chat: chatTokenResolvers,

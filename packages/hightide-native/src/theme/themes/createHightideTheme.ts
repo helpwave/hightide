@@ -13,6 +13,9 @@ import { createColorSchemes } from '../resolvers/colorScheme'
 import { toIconThemeResolvers } from '../resolvers/icon'
 import { toIconButtonThemeResolvers } from '../resolvers/iconButton'
 import { toInputThemeResolvers } from '../resolvers/input'
+import {
+  toListItemThemeResolvers
+} from '../resolvers/listItem'
 import { toMultiSelectThemeResolvers } from '../resolvers/multiSelect'
 import { toSelectThemeResolvers } from '../resolvers/select'
 import { toSwitchThemeResolvers } from '../resolvers/switch'
@@ -114,6 +117,11 @@ export const createHightideTheme = (themeTokens: ThemeTokens): HightideTheme => 
       componentTokens: componentTokenResolvers,
     }),
     card: toCardThemeResolvers({
+      themeTokens,
+      semanticTokens: hightideSemanticTokenResolvers,
+      componentTokens: componentTokenResolvers,
+    }),
+    listItem: toListItemThemeResolvers({
       themeTokens,
       semanticTokens: hightideSemanticTokenResolvers,
       componentTokens: componentTokenResolvers,

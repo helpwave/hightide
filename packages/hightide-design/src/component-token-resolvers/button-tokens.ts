@@ -72,7 +72,12 @@ export const buttonTokenResolver: ButtonTokenResolver = ({ themeTokens, semantic
             : layout.horizontalContentPadding,
         },
       },
-      layout: { gap },
+      layout: {
+        gap,
+        direction: 'horizontal',
+        mainAxisAlignment: 'center',
+        crossAxisAligment: 'center',
+      },
     },
     text: {
       color: coloring.onColor,

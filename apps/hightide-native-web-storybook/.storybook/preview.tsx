@@ -3,10 +3,10 @@ import type { Preview } from '@storybook/react-native-web-vite'
 import { HightideProvider } from '@helpwave/hightide-native/global-contexts'
 import { themes } from '@helpwave/hightide-native/theme'
 
-const lightBackground = themes.light.colors.background
-const lightOnBackground = themes.light.colors.onBackground
-const darkBackground = themes.dark.colors.background
-const darkOnBackground = themes.dark.colors.onBackground
+const lightBackground = themes.light.colors.background.color
+const lightOnBackground = themes.light.colors.background.onColor
+const darkBackground = themes.dark.colors.background.color
+const darkOnBackground = themes.dark.colors.background.onColor
 
 const preview: Preview = {
   parameters: {

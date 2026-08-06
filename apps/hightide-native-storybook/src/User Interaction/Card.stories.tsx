@@ -13,9 +13,9 @@ import { action } from 'storybook/actions'
 
 import {
   Card,
-  CardActionItem,
-  CardItem,
-  CardNavigationItem,
+  ListActionItem,
+  ListItem,
+  ListNavigationItem,
   Switch,
   ThemedText
 } from '@helpwave/hightide-native/components'
@@ -38,9 +38,9 @@ const CardDemo = () => {
           Personal data
         </ThemedText>
         <Card>
-          <CardItem label="Name" value="Anna Müller" />
-          <CardItem label="Date of birth" value="12.03.1988" />
-          <CardItem label="Email" value="anna@example.com" />
+          <ListItem label="Name" value="Anna Müller" />
+          <ListItem label="Date of birth" value="12.03.1988" />
+          <ListItem label="Email" value="anna@example.com" />
         </Card>
       </View>
 
@@ -49,8 +49,8 @@ const CardDemo = () => {
           Practice
         </ThemedText>
         <Card>
-          <CardItem label="Practice" value="Praxis am Park" />
-          <CardNavigationItem
+          <ListItem label="Practice" value="Praxis am Park" />
+          <ListNavigationItem
             label="Practice details"
             leading={<Building2 size={18} color={theme.colorSchemes.primary.text.base.foreground} />}
             onPress={action('practice-details')}
@@ -63,7 +63,7 @@ const CardDemo = () => {
           Settings
         </ThemedText>
         <Card>
-          <CardActionItem
+          <ListActionItem
             label="Notifications"
             leading={<Bell size={18} color={theme.colorSchemes.primary.text.base.foreground} />}
             trailing={(
@@ -73,14 +73,14 @@ const CardDemo = () => {
               />
             )}
           />
-          <CardNavigationItem
+          <ListNavigationItem
             label="Account"
             leading={<UserRound size={18} color={theme.colorSchemes.primary.text.base.foreground} />}
             onPress={action('account')}
           />
-          <CardActionItem
+          <ListActionItem
             label="Log out"
-            danger
+            color={theme.colors.negative}
             leading={<LogOut size={18} color={theme.colorSchemes.negative.text.base.foreground} />}
             onPress={action('logout')}
           />
@@ -93,10 +93,10 @@ const CardDemo = () => {
 export const card: Story = {
   args: {
     children: (
-      <View>
-        <CardItem label="Name" value="Anna Müller" />
-        <CardItem label="Email" value="anna@example.com" />
-      </View>
+      <>
+        <ListItem label="Name" value="Anna Müller" />
+        <ListItem label="Email" value="anna@example.com" />
+      </>
     ),
   },
 }
