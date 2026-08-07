@@ -79,17 +79,14 @@ export const multiSelectTokenResolver: MultiSelectTokenResolver = ({ themeTokens
   const onColor = color.surface.onColor
   const fadedBorder = semanticResolvers.asFaded({
     themeTokens,
-    semanticResolvers,
     color: onColor,
   })
   const placeholderColor = semanticResolvers.asDescription({
     themeTokens,
-    semanticResolvers,
     color: onColor,
   })
   const hoverColor = resolveColorPairColoring({
     themeTokens,
-    semanticResolvers,
     colorPair: themeTokens.color.surface,
     style: 'filled',
     state: { isHovered: true },

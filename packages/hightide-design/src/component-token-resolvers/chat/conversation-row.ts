@@ -60,7 +60,7 @@ export type ChatConversationRowTokenResolver = ComponentTokenResolver<
 export const chatConversationRowTokenResolver: ChatConversationRowTokenResolver = ({ themeTokens, semanticResolvers, state }) => {
   const { color, spacing, shape, borders, typography } = themeTokens
   const descriptionColor = resolveDescriptionColor({ themeTokens, semanticResolvers })
-  const hoverColor = resolveHoverColor({ themeTokens, semanticResolvers })
+  const hoverColor = resolveHoverColor({ themeTokens })
   const isPressed = !!state.isPressed && !state.isDisabled
 
   return {

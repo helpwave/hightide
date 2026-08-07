@@ -41,12 +41,10 @@ export const inputTokenResolver: InputTokenResolver = ({
   const textColor = state.isDisabled ? color.disabled.onColor : onColor
   const borderColor = semanticResolvers.asFaded({
     themeTokens,
-    semanticResolvers,
     color: onColor,
   })
   const placeholderColor = semanticResolvers.asDescription({
     themeTokens,
-    semanticResolvers,
     color: onColor,
   })
 

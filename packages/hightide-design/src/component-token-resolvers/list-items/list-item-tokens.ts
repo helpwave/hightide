@@ -50,7 +50,6 @@ export const listItemTokenResolver: ListItemTokenResolver = ({
   const iconSizeTokens = createIconSizeTokens(themeTokens).md
   const descriptionColor = semanticResolvers.asDescription({
     themeTokens,
-    semanticResolvers,
     color: color.surface.onColor,
   })
   const layout = createElementLayoutTokens(themeTokens).control.md
@@ -62,7 +61,6 @@ export const listItemTokenResolver: ListItemTokenResolver = ({
   const tonal = overrides?.color !== undefined
     ? resolveColorPairColoring({
       themeTokens,
-      semanticResolvers,
       colorPair: overrides.color,
       style: 'tonal',
     })

@@ -6,7 +6,6 @@ import type { Appearance } from './with-appearance'
 
 export type SemanticTokenResolver<TProps, TResult> = (params: {
   themeTokens: ThemeTokens,
-  semanticResolvers: SemanticTokenResolvers,
 } & TProps) => TResult
 
 export type ColorSchemeToken = {

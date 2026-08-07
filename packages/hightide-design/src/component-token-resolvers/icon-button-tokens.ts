@@ -35,14 +35,12 @@ export type IconButtonTokenResolver = ComponentTokenResolver<
 
 export const iconButtonTokenResolver: IconButtonTokenResolver = ({
   themeTokens,
-  semanticResolvers,
   overrides,
   state,
 }) => {
   const size = overrides.size ?? 'md'
   const coloring = resolveColorPairColoring({
     themeTokens,
-    semanticResolvers,
     colorPair: overrides.color ?? themeTokens.color.primary,
     style: overrides.coloringStyle ?? 'filled',
     state,

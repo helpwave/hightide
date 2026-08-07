@@ -2,7 +2,6 @@ import {
   pressableColoringStyles,
   resolveColorPairColoring
 } from '@helpwave/hightide-design/component-token-resolvers'
-import { hightideSemanticTokenResolvers } from '@helpwave/hightide-design/semantic-token-resolvers'
 import type {
   ColoringStyle,
   ColorPairToken,
@@ -63,7 +62,6 @@ export const resolveColoringStyles = (
 ): ResolvedColoringStyles => {
   const coloring = resolveColorPairColoring({
     themeTokens,
-    semanticResolvers: hightideSemanticTokenResolvers,
     colorPair,
     style: coloringStyle,
     state,

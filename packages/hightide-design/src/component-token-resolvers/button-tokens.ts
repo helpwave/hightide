@@ -31,12 +31,11 @@ export type ButtonTokenResolver = ComponentTokenResolver<
   ButtonTokens
 >
 
-export const buttonTokenResolver: ButtonTokenResolver = ({ themeTokens, semanticResolvers, overrides, state }) => {
+export const buttonTokenResolver: ButtonTokenResolver = ({ themeTokens, overrides, state }) => {
   const size = overrides.size ?? 'md'
   const coloringStyle = overrides.coloringStyle ?? 'filled'
   const coloring = resolveColorPairColoring({
     themeTokens,
-    semanticResolvers,
     colorPair: overrides.color ?? themeTokens.color.primary,
     style: coloringStyle,
     state,

@@ -50,12 +50,10 @@ export const checkboxTokenResolver: CheckboxTokenResolver = ({
   const isActive = !!(state.isChecked || state.isIndeterminate)
   const fadedBorder = semanticResolvers.asFaded({
     themeTokens,
-    semanticResolvers,
     color: color.surface.onColor,
   })
   const feedbackColoring = resolveColorPairColoring({
     themeTokens,
-    semanticResolvers,
     colorPair: themeTokens.color.primary,
     style: 'text',
     state: {

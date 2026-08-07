@@ -43,7 +43,7 @@ export const chatQuickReplyChipTokenResolver: ChatQuickReplyChipTokenResolver = 
   const { color, spacing, shape, borders, typography } = themeTokens
   const descriptionColor = resolveDescriptionColor({ themeTokens, semanticResolvers })
   const fadedBorder = resolveFadedBorder({ themeTokens, semanticResolvers })
-  const hoverColor = resolveHoverColor({ themeTokens, semanticResolvers })
+  const hoverColor = resolveHoverColor({ themeTokens })
   const isPressed = !!state.isPressed && !state.isDisabled
   const hairline = borders.borderWidths.thin
 

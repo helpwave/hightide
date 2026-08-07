@@ -36,7 +36,6 @@ export const listActionTokenResolver: ListActionTokenResolver = ({
   const hasColor = overrides?.color !== undefined
   const coloring = resolveColorPairColoring({
     themeTokens,
-    semanticResolvers,
     colorPair: overrides?.color ?? {
       color: themeTokens.color.surface.onColor,
       onColor: themeTokens.color.surface.color,

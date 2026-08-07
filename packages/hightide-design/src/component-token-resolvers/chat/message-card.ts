@@ -79,7 +79,6 @@ export const chatMessageCardTokenResolver: ChatMessageCardTokenResolver = ({ the
   const fadedBorder = resolveFadedBorder({ themeTokens, semanticResolvers })
   const { accentTonal, accentText } = resolveAccentColoring({
     themeTokens,
-    semanticResolvers,
     color: overrides.color,
   })
   const alignment = resolveAlignment(config.direction)

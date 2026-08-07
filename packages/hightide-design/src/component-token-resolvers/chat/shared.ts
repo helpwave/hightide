@@ -36,7 +36,6 @@ export const resolveDescriptionColor = ({
 }: ThemeParams): HexColorToken => (
   semanticResolvers.asDescription({
     themeTokens,
-    semanticResolvers,
     color: themeTokens.color.surface.onColor,
   })
 )
@@ -47,18 +46,15 @@ export const resolveFadedBorder = ({
 }: ThemeParams): HexColorToken => (
   semanticResolvers.asFaded({
     themeTokens,
-    semanticResolvers,
     color: themeTokens.color.surface.onColor,
   })
 )
 
 export const resolveHoverColor = ({
   themeTokens,
-  semanticResolvers,
-}: ThemeParams): ColorToken => (
+}: Pick<ThemeParams, 'themeTokens'>): ColorToken => (
   resolveColorPairColoring({
     themeTokens,
-    semanticResolvers,
     colorPair: themeTokens.color.surface,
     style: 'filled',
     state: { isHovered: true },
@@ -67,9 +63,8 @@ export const resolveHoverColor = ({
 
 export const resolveAccentColoring = ({
   themeTokens,
-  semanticResolvers,
   color,
-}: ThemeParams & {
+}: Pick<ThemeParams, 'themeTokens'> & {
   color?: ColorPairToken,
 }) => {
   const accentPair = color ?? themeTokens.color.primary
@@ -77,13 +72,11 @@ export const resolveAccentColoring = ({
     accentPair,
     accentTonal: resolveColorPairColoring({
       themeTokens,
-      semanticResolvers,
       colorPair: accentPair,
       style: 'tonal',
     }),
     accentText: resolveColorPairColoring({
       themeTokens,
-      semanticResolvers,
       colorPair: accentPair,
       style: 'text',
     }),

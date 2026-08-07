@@ -27,11 +27,10 @@ export type ChipTokenResolver = ComponentTokenResolver<
   ChipTokens
 >
 
-export const chipTokenResolver: ChipTokenResolver = ({ themeTokens, semanticResolvers, overrides }) => {
+export const chipTokenResolver: ChipTokenResolver = ({ themeTokens, overrides }) => {
   const size = overrides.size ?? 'md'
   const coloring = resolveColorPairColoring({
     themeTokens,
-    semanticResolvers,
     colorPair: overrides.color ?? themeTokens.color.primary,
     style: overrides.coloringStyle ?? 'filled',
   })

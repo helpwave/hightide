@@ -40,18 +40,15 @@ export const switchTokenResolver: SwitchTokenResolver = ({
   const thumbSize = state.isActive ? THUMB_SIZE_ACTIVE : THUMB_SIZE_INACTIVE
   const fadedBorder = semanticResolvers.asFaded({
     themeTokens,
-    semanticResolvers,
     color: onColor,
   })
   const subtleThumb = semanticResolvers.withAppearance({
     themeTokens,
-    semanticResolvers,
     color: onColor,
     appearance: 'subtle',
   })
   const disabledTrack = semanticResolvers.tintedSurface({
     themeTokens,
-    semanticResolvers,
     tintColor: color.disabled.color,
     tintStrength: 'strong',
   })

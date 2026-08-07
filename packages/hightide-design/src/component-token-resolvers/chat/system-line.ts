@@ -29,11 +29,10 @@ export type ChatSystemLineTokenResolver = ComponentTokenResolver<
   ChatSystemLineTokens
 >
 
-export const chatSystemLineTokenResolver: ChatSystemLineTokenResolver = ({ themeTokens, semanticResolvers, overrides }) => {
+export const chatSystemLineTokenResolver: ChatSystemLineTokenResolver = ({ themeTokens, overrides }) => {
   const { shape, typography } = themeTokens
   const { accentText } = resolveAccentColoring({
     themeTokens,
-    semanticResolvers,
     color: overrides.color,
   })
 

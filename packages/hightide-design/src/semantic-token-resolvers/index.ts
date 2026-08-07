@@ -1,6 +1,6 @@
 export * from './color-scheme'
 export * from './coloring-style'
-export * from './hightide'
+export * from './semantic-token-resolvers'
 export * from './tinted-surface'
 export * from './types'
 export * from './with-appearance'

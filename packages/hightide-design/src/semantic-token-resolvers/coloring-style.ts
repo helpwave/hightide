@@ -2,11 +2,11 @@ import type { PressableState } from '../component-token-resolvers/pressable'
 import type { ThemeTokens } from '../theme-tokens/theme-tokens'
 import { HexColorUtils } from '../utils'
 import { OKLCHUtils } from '../utils/oklch'
+import { resolveColorScheme } from './color-scheme'
 import type {
   ColorSchemeToken,
   ColoringStyle,
-  ColoringTokens,
-  SemanticTokenResolvers
+  ColoringTokens
 } from './types'
 
 const applyFeedback = (
@@ -38,7 +38,6 @@ const applyFeedback = (
     return {
       color: color,
       onColor: onColor,
-      // TODO make this configurable
       borderColor: OKLCHUtils.changeLightness(scheme.base.color, 0.8),
     }
   case 'text':
@@ -51,23 +50,20 @@ const applyFeedback = (
 
 export const resolveColoringStyle = (params: {
   themeTokens: ThemeTokens,
-  semanticResolvers: SemanticTokenResolvers,
   colorScheme: ColorSchemeToken,
   style: ColoringStyle,
   state: ReadonlySet<PressableState>,
 }): ColoringTokens => {
   const {
     themeTokens,
-    semanticResolvers,
     colorScheme,
     style,
     state,
   } = params
 
   if (state.has('disabled')) {
-    const disabledScheme = semanticResolvers.colorScheme({
+    const disabledScheme = resolveColorScheme({
       themeTokens,
-      semanticResolvers,
       colorPair: themeTokens.color.disabled,
     })
     return applyFeedback(disabledScheme, style)
@@ -97,7 +93,6 @@ export const resolveColoringStyle = (params: {
   } else {
     tokens = applyFeedback(colorScheme, style)
   }
-  // TODO add dragged
 
   return tokens
 }

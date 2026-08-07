@@ -25,32 +25,26 @@ import type { HightideTheme } from '../types/theme'
 const bindSemantics = (themeTokens: ThemeTokens): HightideThemeSemantics => ({
   colorScheme: (parameter) => hightideSemanticTokenResolvers.colorScheme({
     themeTokens,
-    semanticResolvers: hightideSemanticTokenResolvers,
     ...parameter,
   }),
   coloringStyle: (parameter) => hightideSemanticTokenResolvers.coloringStyle({
     themeTokens,
-    semanticResolvers: hightideSemanticTokenResolvers,
     ...parameter,
   }),
   tintedSurface: (parameter) => hightideSemanticTokenResolvers.tintedSurface({
     themeTokens,
-    semanticResolvers: hightideSemanticTokenResolvers,
     ...parameter,
   }),
   withAppearance: (parameter) => hightideSemanticTokenResolvers.withAppearance({
     themeTokens,
-    semanticResolvers: hightideSemanticTokenResolvers,
     ...parameter,
   }),
   asFaded: (parameter) => hightideSemanticTokenResolvers.asFaded({
     themeTokens,
-    semanticResolvers: hightideSemanticTokenResolvers,
     ...parameter,
   }),
   asDescription: (parameter) => hightideSemanticTokenResolvers.asDescription({
     themeTokens,
-    semanticResolvers: hightideSemanticTokenResolvers,
     ...parameter,
   }),
 })
