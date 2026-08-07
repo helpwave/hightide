@@ -68,10 +68,36 @@ const CardDemo = () => {
             label="Notifications"
             leading={<Bell size={18} color={theme.colorSchemes.primary.text.base.foreground} />}
             trailing={(
-              <Switch
-                value={true}
-                onValueChange={action('notifications')}
-              />
+              <View
+                style={(() => {
+                  const switchTheme = theme.components.switch.track({})
+                  const switchThemeContainer = theme.components.switch.container({})
+                  return {
+                    'position': 'relative',
+                    'height': switchTheme.height,
+                    'width': switchTheme.width,
+                    'maxHeight': switchTheme.maxHeight,
+                    'maxWidth': switchTheme.maxWidth,
+                    'minHeight': switchTheme.minHeight,
+                    'minWidth': switchTheme.minWidth,
+                    'padding-right': switchThemeContainer.padding
+                  }
+                })()}
+              >
+                <Switch
+                  onValueChange={action('notifications')}
+                  style={{
+                    position: 'absolute',
+                    left: '50%',
+                    top: '50%',
+                    transform: [
+                      { translateX: '-50%' },
+                      { translateY: '-50%' },
+                    ],
+
+                  }}
+                />
+              </View>
             )}
             position="first"
           />

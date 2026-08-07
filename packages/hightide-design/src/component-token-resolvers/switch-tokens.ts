@@ -58,12 +58,18 @@ export const switchTokenResolver: SwitchTokenResolver = ({
     container: {
       opacity: state.isDisabled ? 0.6 : 1,
       size: {
-        width: mediumControl.size,
+        width: mediumControl.size + (mediumControl.size - TRACK_HEIGHT),
         height: mediumControl.size,
-        minWidth: mediumControl.size,
-        maxWidth: mediumControl.size,
+        minWidth: mediumControl.size + (mediumControl.size - TRACK_HEIGHT),
+        maxWidth: mediumControl.size + (mediumControl.size - TRACK_HEIGHT),
         minHeight: mediumControl.size,
         maxHeight: mediumControl.size,
+      },
+      shape: {
+        padding: {
+          horizontal: (mediumControl.size - TRACK_HEIGHT) / 2,
+          vertical: (mediumControl.size - TRACK_HEIGHT) / 2,
+        }
       },
       layout: {
         direction: 'horizontal',
