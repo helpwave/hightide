@@ -1,14 +1,17 @@
-import type { PressableColoringStyle } from '../semantic-token-resolvers/types'
+import {
+  resolveColoringStyle,
+  resolvePressableColoring,
+  type PressableColoringStyle
+} from '../semantic-token-resolvers'
 import type { ColorPairToken } from '../theme-tokens/theme-tokens-config'
 import {
   createElementLayoutTokens,
   type ComponentSize
 } from '../theme-tokens/element-layout'
-import { resolveColorPairColoring } from './coloring'
 import type { ComponentTokenResolver } from './component-token-resolver'
 import type { ContainerTokens } from './container-tokens'
 import type { TextStyleTokens } from './text-style-tokens'
-import type { PressableInteractionState } from './pressable'
+import { toActivePressableStates, type PressableInteractionState } from './pressable'
 
 export type ButtonState = PressableInteractionState
 
@@ -34,13 +37,19 @@ export type ButtonTokenResolver = ComponentTokenResolver<
 export const buttonTokenResolver: ButtonTokenResolver = ({ themeTokens, overrides, state }) => {
   const size = overrides.size ?? 'md'
   const coloringStyle = overrides.coloringStyle ?? 'filled'
-  const coloring = resolveColorPairColoring({
+  const coloring = resolveColoringStyle({
     themeTokens,
     colorPair: overrides.color ?? themeTokens.color.primary,
     style: coloringStyle,
-    state,
   })
-  const hasBorder = coloring.borderColor !== undefined
+  const resolved = resolvePressableColoring({
+    themeTokens,
+    coloring,
+    style: coloringStyle,
+    state: toActivePressableStates(state ?? {}),
+  })
+  const hasBorder = resolved.border !== 'transparent'
+  const hasOutline = resolved.outline !== 'transparent'
   const layout = createElementLayoutTokens(themeTokens).control[size]
   const insetForBordered = Math.max(layout.inset - layout.borderWidth, 0)
   const textStyle = themeTokens.typography.label[size]
@@ -48,7 +57,7 @@ export const buttonTokenResolver: ButtonTokenResolver = ({ themeTokens, override
 
   return {
     container: {
-      backgroundColor: coloring.color,
+      backgroundColor: resolved.background,
       border: hasBorder ? {
         width: {
           type: 'all',
@@ -56,14 +65,14 @@ export const buttonTokenResolver: ButtonTokenResolver = ({ themeTokens, override
         },
         color: {
           type: 'all',
-          value: coloring.borderColor,
+          value: resolved.border,
         },
       } : undefined,
-      outline: coloring.outlineColor !== undefined ? {
+      outline: hasOutline ? {
         width: themeTokens.focusOutline.width,
         offset: themeTokens.focusOutline.offset,
         style: themeTokens.focusOutline.style,
-        color: coloring.outlineColor,
+        color: resolved.outline,
       } : undefined,
       size: {
         minWidth: layout.minimumWidth,
@@ -86,7 +95,7 @@ export const buttonTokenResolver: ButtonTokenResolver = ({ themeTokens, override
       },
     },
     text: {
-      color: coloring.onColor,
+      color: resolved.text,
       fontSize: textStyle.fontSize,
       fontWeight: textStyle.fontWeight,
       fontFamily: textStyle.fontFamily,

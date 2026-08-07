@@ -1,7 +1,11 @@
 import type { ColorToken } from '../primitive-tokens/color'
+import {
+  resolveColoringStyle,
+  resolvePressableColoring
+} from '../semantic-token-resolvers'
 import { createElementLayoutTokens } from '../theme-tokens/element-layout'
-import { resolveColorPairColoring } from './coloring'
 import type { ComponentTokenResolver } from './component-token-resolver'
+import { toActivePressableStates } from './pressable'
 import type { TextStyleTokens } from './text-style-tokens'
 import type {
   SelectMenuTokens,
@@ -85,12 +89,16 @@ export const multiSelectTokenResolver: MultiSelectTokenResolver = ({ themeTokens
     themeTokens,
     color: onColor,
   })
-  const hoverColor = resolveColorPairColoring({
+  const hoverColor = resolvePressableColoring({
     themeTokens,
-    colorPair: themeTokens.color.surface,
+    coloring: resolveColoringStyle({
+      themeTokens,
+      colorPair: themeTokens.color.surface,
+      style: 'filled',
+    }),
     style: 'filled',
-    state: { isHovered: true },
-  }).color
+    state: toActivePressableStates({ isHovered: true }),
+  }).background
 
   return {
     trigger: {

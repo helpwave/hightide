@@ -1,7 +1,11 @@
 import {
   pressableColoringStyles,
-  resolveColorPairColoring
+  toActivePressableStates
 } from '@helpwave/hightide-design/component-token-resolvers'
+import {
+  resolveColoringStyle,
+  resolvePressableColoring
+} from '@helpwave/hightide-design/semantic-token-resolvers'
 import type {
   ColoringStyle,
   ColorPairToken,
@@ -60,17 +64,26 @@ export const resolveColoringStyles = (
   coloringStyle: ColoringStyle,
   state: InteractionState = {}
 ): ResolvedColoringStyles => {
-  const coloring = resolveColorPairColoring({
+  const coloring = resolveColoringStyle({
     themeTokens,
     colorPair,
     style: coloringStyle,
-    state,
+  })
+  const resolved = resolvePressableColoring({
+    themeTokens,
+    coloring,
+    style: coloringStyle,
+    state: toActivePressableStates(state),
   })
 
   return {
-    backgroundColor: coloring.color,
-    color: coloring.onColor,
-    borderColor: coloring.outlineColor ?? coloring.borderColor ?? coloring.color,
+    backgroundColor: resolved.background,
+    color: resolved.text,
+    borderColor: resolved.border !== 'transparent'
+      ? resolved.border
+      : resolved.outline !== 'transparent'
+        ? resolved.outline
+        : resolved.background,
   }
 }
 

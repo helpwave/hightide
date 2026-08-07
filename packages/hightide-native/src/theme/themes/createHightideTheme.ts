@@ -23,11 +23,11 @@ import type { HightideThemeSemantics } from '../types/semantics'
 import type { HightideTheme } from '../types/theme'
 
 const bindSemantics = (themeTokens: ThemeTokens): HightideThemeSemantics => ({
-  colorScheme: (parameter) => hightideSemanticTokenResolvers.colorScheme({
+  coloringStyle: (parameter) => hightideSemanticTokenResolvers.coloringStyle({
     themeTokens,
     ...parameter,
   }),
-  coloringStyle: (parameter) => hightideSemanticTokenResolvers.coloringStyle({
+  pressableColoring: (parameter) => hightideSemanticTokenResolvers.pressableColoring({
     themeTokens,
     ...parameter,
   }),

@@ -1,5 +1,5 @@
-import { resolveColorScheme } from './color-scheme'
 import { resolveColoringStyle } from './coloring-style'
+import { resolvePressableColoring } from './pressable-coloring'
 import { resolveTintedSurface } from './tinted-surface'
 import {
   resolveAsDescription,
@@ -9,8 +9,8 @@ import {
 import type { SemanticTokenResolvers } from './types'
 
 export const hightideSemanticTokenResolvers: SemanticTokenResolvers = {
-  colorScheme: resolveColorScheme,
   coloringStyle: resolveColoringStyle,
+  pressableColoring: resolvePressableColoring,
   tintedSurface: resolveTintedSurface,
   withAppearance: resolveWithAppearance,
   asFaded: resolveAsFaded,

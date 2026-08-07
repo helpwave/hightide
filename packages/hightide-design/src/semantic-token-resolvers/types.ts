@@ -8,18 +8,17 @@ export type SemanticTokenResolver<TProps, TResult> = (params: {
   themeTokens: ThemeTokens,
 } & TProps) => TResult
 
-export type ColorSchemeToken = {
-  base: ColorPairToken,
-  feedbackSubtle: ColorPairToken,
-  feedbackNormal: ColorPairToken,
-  feedbackStrong: ColorPairToken,
+export type ColoringTokens = {
+  background: ColorToken,
+  text: ColorToken,
+  accent: ColorToken,
 }
 
-export type ColoringTokens = {
-  color: ColorToken,
-  onColor: ColorToken,
-  borderColor?: ColorToken,
-  outlineColor?: ColorToken,
+export type PressableColoringTokens = {
+  background: ColorToken,
+  text: ColorToken,
+  border: ColorToken,
+  outline: ColorToken,
 }
 
 export type ColoringStyleBase = 'outline' | 'filled' | 'tonal' | 'tonal-outline'
@@ -31,12 +30,15 @@ export type ChipColoringStyle = ContainerColoringStyle
 export type { Appearance }
 
 export type SemanticTokenResolvers = {
-  colorScheme: SemanticTokenResolver<{ colorPair: ColorPairToken }, ColorSchemeToken>,
   coloringStyle: SemanticTokenResolver<{
-    colorScheme: ColorSchemeToken,
+    colorPair: ColorPairToken,
+    style: ColoringStyle,
+  }, ColoringTokens>,
+  pressableColoring: SemanticTokenResolver<{
+    coloring: ColoringTokens,
     style: ColoringStyle,
     state: ReadonlySet<PressableState>,
-  }, ColoringTokens>,
+  }, PressableColoringTokens>,
   tintedSurface: SemanticTokenResolver<{
     tintColor: HexColorToken,
     tintStrength?: TintStrength,

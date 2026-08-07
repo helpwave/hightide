@@ -1,12 +1,16 @@
 import {
+  resolveColoringStyle,
+  resolvePressableColoring
+} from '../semantic-token-resolvers'
+import {
   createElementLayoutTokens,
   type ComponentSize
 } from '../theme-tokens/element-layout'
-import { resolveColorPairColoring } from './coloring'
 import type { ComponentTokenResolver } from './component-token-resolver'
 import type { ContainerTokens } from './container-tokens'
 import type { IconTokens } from './icon-tokens'
 import type { InputState } from './input-tokens'
+import { toActivePressableStates } from './pressable'
 
 export type CheckboxState = InputState & {
   isChecked?: boolean,
@@ -52,16 +56,20 @@ export const checkboxTokenResolver: CheckboxTokenResolver = ({
     themeTokens,
     color: color.surface.onColor,
   })
-  const feedbackColoring = resolveColorPairColoring({
+  const feedbackColoring = resolvePressableColoring({
     themeTokens,
-    colorPair: themeTokens.color.primary,
+    coloring: resolveColoringStyle({
+      themeTokens,
+      colorPair: themeTokens.color.primary,
+      style: 'text',
+    }),
     style: 'text',
-    state: {
+    state: toActivePressableStates({
       isDisabled: state.isDisabled,
       isHovered: state.isHovered,
       isFocused: state.isFocused,
       isPressed: state.isPressed,
-    },
+    }),
   })
 
   const borderColor = state.isDisabled
@@ -76,7 +84,7 @@ export const checkboxTokenResolver: CheckboxTokenResolver = ({
 
   return {
     container: {
-      backgroundColor: feedbackColoring.color,
+      backgroundColor: feedbackColoring.background,
       size: {
         width: mediumControl.size,
         height: mediumControl.size,

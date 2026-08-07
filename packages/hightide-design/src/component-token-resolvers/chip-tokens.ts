@@ -1,10 +1,12 @@
-import type { ChipColoringStyle } from '../semantic-token-resolvers/types'
+import {
+  resolveColoringStyle,
+  type ChipColoringStyle
+} from '../semantic-token-resolvers'
 import type { ColorPairToken } from '../theme-tokens/theme-tokens-config'
 import {
   createElementLayoutTokens,
   type ComponentSize
 } from '../theme-tokens/element-layout'
-import { resolveColorPairColoring } from './coloring'
 import type { ComponentTokenResolver } from './component-token-resolver'
 import type { ContainerTokens } from './container-tokens'
 import type { TextStyleTokens } from './text-style-tokens'
@@ -29,28 +31,34 @@ export type ChipTokenResolver = ComponentTokenResolver<
 
 export const chipTokenResolver: ChipTokenResolver = ({ themeTokens, overrides }) => {
   const size = overrides.size ?? 'md'
-  const coloring = resolveColorPairColoring({
+  const coloringStyle = overrides.coloringStyle ?? 'filled'
+  const coloring = resolveColoringStyle({
     themeTokens,
     colorPair: overrides.color ?? themeTokens.color.primary,
-    style: overrides.coloringStyle ?? 'filled',
+    style: coloringStyle,
   })
+  const border = coloringStyle === 'outline' || coloringStyle === 'tonal-outline'
+    ? coloring.accent
+    : 'transparent'
+  const hasBorder = border !== 'transparent'
   const layout = createElementLayoutTokens(themeTokens).insideControl[size]
   const textStyle = themeTokens.typography.label[size]
   const gap = size === 'sm' ? themeTokens.spacing.xs : themeTokens.spacing.sm
+  const horizontalPadding = layout.inset + layout.paddingExtension
 
   return {
     container: {
-      backgroundColor: coloring.color,
-      border: {
+      backgroundColor: coloring.background,
+      border: hasBorder ? {
         width: {
           type: 'all',
           value: layout.borderWidth,
         },
         color: {
           type: 'all',
-          value: coloring.outlineColor ?? coloring.borderColor,
+          value: border,
         },
-      },
+      } : undefined,
       size: {
         minWidth: 0,
         minHeight: layout.size,
@@ -58,15 +66,19 @@ export const chipTokenResolver: ChipTokenResolver = ({ themeTokens, overrides })
       shape: {
         borderRadius: layout.borderRadius,
         padding: {
-          vertical: layout.inset,
-          horizontal: layout.inset + layout.paddingExtension,
+          vertical: hasBorder
+            ? Math.max(layout.inset - layout.borderWidth, 0)
+            : layout.inset,
+          horizontal: hasBorder
+            ? Math.max(horizontalPadding - layout.borderWidth, 0)
+            : horizontalPadding,
         },
       },
       layout: { gap },
     },
     text: {
       ...textStyle,
-      color: coloring.onColor,
+      color: coloring.text,
     },
   }
 }

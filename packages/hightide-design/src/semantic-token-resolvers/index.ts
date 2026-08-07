@@ -1,5 +1,5 @@
-export * from './color-scheme'
 export * from './coloring-style'
+export * from './pressable-coloring'
 export * from './semantic-token-resolvers'
 export * from './tinted-surface'
 export * from './types'

@@ -1,8 +1,12 @@
 import type { ColorToken, HexColorToken } from '../../primitive-tokens/color'
 import type { ColorPairToken } from '../../theme-tokens/theme-tokens-config'
 import type { ThemeTokens } from '../../theme-tokens/theme-tokens'
-import type { SemanticTokenResolvers } from '../../semantic-token-resolvers/types'
-import { resolveColorPairColoring } from '../coloring'
+import {
+  resolveColoringStyle,
+  resolvePressableColoring,
+  type SemanticTokenResolvers
+} from '../../semantic-token-resolvers'
+import { toActivePressableStates } from '../pressable'
 
 export type ChatMessageDirection = 'incoming' | 'outgoing'
 
@@ -53,12 +57,16 @@ export const resolveFadedBorder = ({
 export const resolveHoverColor = ({
   themeTokens,
 }: Pick<ThemeParams, 'themeTokens'>): ColorToken => (
-  resolveColorPairColoring({
+  resolvePressableColoring({
     themeTokens,
-    colorPair: themeTokens.color.surface,
+    coloring: resolveColoringStyle({
+      themeTokens,
+      colorPair: themeTokens.color.surface,
+      style: 'filled',
+    }),
     style: 'filled',
-    state: { isHovered: true },
-  }).color
+    state: toActivePressableStates({ isHovered: true }),
+  }).background
 )
 
 export const resolveAccentColoring = ({
@@ -70,12 +78,12 @@ export const resolveAccentColoring = ({
   const accentPair = color ?? themeTokens.color.primary
   return {
     accentPair,
-    accentTonal: resolveColorPairColoring({
+    accentTonal: resolveColoringStyle({
       themeTokens,
       colorPair: accentPair,
       style: 'tonal',
     }),
-    accentText: resolveColorPairColoring({
+    accentText: resolveColoringStyle({
       themeTokens,
       colorPair: accentPair,
       style: 'text',

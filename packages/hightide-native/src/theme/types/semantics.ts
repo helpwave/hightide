@@ -1,9 +1,9 @@
 import type { HexColorToken } from '@helpwave/hightide-design/primitive-tokens'
 import type {
   Appearance,
-  ColorSchemeToken,
   ColoringStyle,
-  ColoringTokens
+  ColoringTokens,
+  PressableColoringTokens
 } from '@helpwave/hightide-design/semantic-token-resolvers'
 import type { PressableState } from '@helpwave/hightide-design/component-token-resolvers'
 import type {
@@ -14,12 +14,15 @@ import type {
 export type BoundSemanticResolver<TParameter, TResult> = (parameter: TParameter) => TResult
 
 export type HightideThemeSemantics = {
-  colorScheme: BoundSemanticResolver<{ colorPair: ColorPairToken }, ColorSchemeToken>,
   coloringStyle: BoundSemanticResolver<{
-    colorScheme: ColorSchemeToken,
+    colorPair: ColorPairToken,
+    style: ColoringStyle,
+  }, ColoringTokens>,
+  pressableColoring: BoundSemanticResolver<{
+    coloring: ColoringTokens,
     style: ColoringStyle,
     state: ReadonlySet<PressableState>,
-  }, ColoringTokens>,
+  }, PressableColoringTokens>,
   tintedSurface: BoundSemanticResolver<{
     tintColor: HexColorToken,
     tintStrength?: TintStrength,
