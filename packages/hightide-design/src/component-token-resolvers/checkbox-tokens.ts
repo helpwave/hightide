@@ -39,12 +39,10 @@ export const checkboxTokenResolver: CheckboxTokenResolver = ({
   const size = overrides.size ?? 'md'
   const { color, borders } = themeTokens
   const accentPair = overrides.color ?? color.primary
-  const mediumControl = semanticResolvers.controlLayout({ themeTokens, size: 'md' })
   const element = semanticResolvers.controlLayout({ themeTokens, size })
-  const xsControl = semanticResolvers.controlLayout({ themeTokens, size: 'xs' })
   const borderWidth = borders.borderWidths.normal
-  const inset = xsControl.inset
-  const dimension = element.size - 2 * element.inset - 2 * element.borderWidth
+  const inset = Math.floor(element.inset * 0.5)
+  const dimension = Math.round(element.size * 0.5)
   const isActive = !!(state.isChecked || state.isIndeterminate)
   const coloring = resolveInputColoring({
     themeTokens,
@@ -56,19 +54,22 @@ export const checkboxTokenResolver: CheckboxTokenResolver = ({
     ? color.disabled.color
     : isActive ? accentPair.color : color.surface.color
 
+  // todo replace the md resolver with a touch target size
+  const containerSize = Math.max(element.size, semanticResolvers.controlLayout({ themeTokens , size: 'md' }).size)
+
   return {
     container: {
       backgroundColor: coloring.shadow,
       size: {
-        width: mediumControl.size,
-        height: mediumControl.size,
-        minWidth: mediumControl.size,
-        maxWidth: mediumControl.size,
-        minHeight: mediumControl.size,
-        maxHeight: mediumControl.size,
+        width: containerSize,
+        height: containerSize,
+        minWidth: containerSize,
+        maxWidth: containerSize,
+        minHeight: containerSize,
+        maxHeight: containerSize,
       },
       shape: {
-        borderRadius: mediumControl.size / 2,
+        borderRadius: containerSize / 2,
       },
       layout: {
         direction: 'horizontal',
