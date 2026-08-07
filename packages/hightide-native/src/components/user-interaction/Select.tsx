@@ -9,6 +9,7 @@ import {
   type ViewStyle
 } from 'react-native'
 
+import type { ColorPairToken } from '@helpwave/hightide-design/theme-tokens'
 import { useTheme } from '../../global-contexts/theme/ThemeContext'
 import { ThemedText } from '../visualization-and-display/ThemedText'
 import {
@@ -33,6 +34,7 @@ export type SelectProps = Partial<FormFieldDataHandling<string>>
     initialValue?: string | null,
     placeholder?: string,
     showSearch?: boolean,
+    color?: ColorPairToken,
     style?: StyleProp<ViewStyle>,
   }
 
@@ -42,6 +44,7 @@ export const Select = ({
   initialValue = null,
   placeholder = 'Select…',
   showSearch = true,
+  color,
   disabled = false,
   readOnly = false,
   invalid = false,
@@ -66,23 +69,16 @@ export const Select = ({
   }, [options, placeholder, select.value])
 
   const state = useMemo((): SelectState => ({
+    color,
     isDisabled: disabled,
     isReadonly: readOnly,
     isInvalid: invalid,
     isOpen: select.isOpen,
     hasValue: !!select.value,
-  }), [disabled, invalid, readOnly, select.isOpen, select.value])
+  }), [color, disabled, invalid, readOnly, select.isOpen, select.value])
 
   const selectTheme = theme.components.select
 
-  const resolvedTriggerStyle = useMemo(
-    () => selectTheme.trigger(state),
-    [selectTheme, state]
-  )
-  const resolvedTriggerTextStyle = useMemo(
-    () => selectTheme.triggerText(state),
-    [selectTheme, state]
-  )
   const resolvedOverlayStyle = useMemo(
     () => selectTheme.overlay({}),
     [selectTheme]
@@ -105,11 +101,38 @@ export const Select = ({
       <Pressable
         disabled={!interactive}
         onPress={() => select.toggleOpen()}
-        style={resolvedTriggerStyle}
+        style={(pressableState) => {
+          const interaction = pressableState as {
+            pressed: boolean,
+            hovered?: boolean,
+            focused?: boolean,
+          }
+          return selectTheme.trigger({
+            ...state,
+            isPressed: interaction.pressed,
+            isHovered: !!interaction.hovered,
+            isFocused: !!interaction.focused,
+          })
+        }}
       >
-        <ThemedText style={resolvedTriggerTextStyle}>
-          {selectedLabel}
-        </ThemedText>
+        {(pressableState) => {
+          const interaction = pressableState as {
+            pressed: boolean,
+            hovered?: boolean,
+            focused?: boolean,
+          }
+          return (
+            <ThemedText style={selectTheme.triggerText({
+              ...state,
+              isPressed: interaction.pressed,
+              isHovered: !!interaction.hovered,
+              isFocused: !!interaction.focused,
+            })}
+            >
+              {selectedLabel}
+            </ThemedText>
+          )
+        }}
       </Pressable>
 
       <Modal
@@ -142,6 +165,7 @@ export const Select = ({
                 const isSelected = select.value === item.id
                 const isHighlighted = select.highlightedValue === item.id
                 const optionState = {
+                  color,
                   isSelected,
                   isHighlighted,
                   isDisabled: item.disabled,

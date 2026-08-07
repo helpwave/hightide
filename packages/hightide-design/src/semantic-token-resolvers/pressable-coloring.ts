@@ -18,11 +18,12 @@ const blendBackground = (
   text: ColorToken,
   alpha: number
 ): ColorToken => {
+  const resolvedText: HexColorToken = text === 'transparent' ? '#FFFFFF00': text
   if (background === 'transparent') {
-    return HexColorUtils.hexWithAlpha(text as HexColorToken, alpha)
+    return HexColorUtils.hexWithAlpha(resolvedText, alpha)
   }
 
-  return HexColorUtils.blendOver(background, text as HexColorToken, alpha)
+  return HexColorUtils.blendOver(background, resolvedText, alpha)
 }
 
 const toPressableColoringTokens = (

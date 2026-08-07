@@ -1,15 +1,12 @@
 import type { ColorToken } from '../primitive-tokens/color'
 import type { ThemeTokens } from '../theme-tokens/theme-tokens'
 import type { ColorPairToken } from '../theme-tokens/theme-tokens-config'
-import {
-  createElementLayoutTokens,
-  type ComponentSize
-} from '../theme-tokens/element-layout'
+import { type ComponentSize } from '../semantic-token-resolvers'
 import type { ComponentTokenResolver } from './component-token-resolver'
 import type { ContainerTokens } from './container-tokens'
 import type { TextStyleTokens } from './text-style-tokens'
 import type { IconTokens } from './icon-tokens'
-import { createIconSizeTokens } from './icon-tokens'
+import { iconTokenResolver } from './icon-tokens'
 
 export const avatarStatuses = [
   'online',
@@ -80,13 +77,23 @@ export type AvatarTokenResolver = ComponentTokenResolver<
   AvatarTokens
 >
 
-export const avatarTokenResolver: AvatarTokenResolver = ({ themeTokens, config, overrides, state }) => {
+export const avatarTokenResolver: AvatarTokenResolver = ({
+  themeTokens,
+  semanticResolvers,
+  config,
+  overrides,
+  state,
+}) => {
   const size = overrides.size ?? 'md'
   const status = state.status ?? 'unknown'
   const { color, spacing, borders, typography, elevation } = themeTokens
   const colorPair = overrides.color ?? color.primary
-  const layout = createElementLayoutTokens(themeTokens).insideControl[size]
-  const iconTokens = createIconSizeTokens(themeTokens)[size]
+  const layout = semanticResolvers.insideControlLayout({ themeTokens, size })
+  const iconTokens = iconTokenResolver({
+    themeTokens,
+    semanticResolvers,
+    overrides: { size },
+  })
   const dimension = layout.size
   const borderRadius = dimension / 2
   const statusDotSize = Math.round(dimension / 10 * 4)

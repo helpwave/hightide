@@ -12,7 +12,7 @@ export const cardTokenResolver: CardTokenResolver = ({ themeTokens }) => {
   const { color, shape, elevation } = themeTokens
 
   return {
-    backgroundColor: color.surfaceVariant.color,
+    backgroundColor: color.surface.color,
     shape: {
       borderRadius: shape.borderRadius.lg,
     },
@@ -23,7 +23,7 @@ export const cardTokenResolver: CardTokenResolver = ({ themeTokens }) => {
       gap: 0,
     },
     decoration: {
-      shadow: elevation.level3
+      shadow: elevation.level2
     }
   }
 }

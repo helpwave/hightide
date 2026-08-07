@@ -1,4 +1,3 @@
-import { createElementLayoutTokens } from '../theme-tokens/element-layout'
 import type { ComponentTokenResolver } from './component-token-resolver'
 import type { ContainerTokens } from './container-tokens'
 import type { InputState } from './input-tokens'
@@ -33,7 +32,7 @@ export const switchTokenResolver: SwitchTokenResolver = ({
   state,
 }) => {
   const { color, borders } = themeTokens
-  const mediumControl = createElementLayoutTokens(themeTokens).control.md
+  const mediumControl = semanticResolvers.controlLayout({ themeTokens, size: 'md' })
   const onColor = color.surface.onColor
   const borderWidth = borders.borderWidths.normal
   const focusOutline = themeTokens.focusOutline

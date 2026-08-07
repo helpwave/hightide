@@ -5,9 +5,9 @@ import type {
 
 import type {
   ColorPairToken,
-  ComponentSize,
   PressableColoringStyle
 } from '@helpwave/hightide-design/theme-tokens'
+import type { ComponentSize } from '@helpwave/hightide-design/semantic-token-resolvers'
 
 import type { Color } from '../color'
 import type {

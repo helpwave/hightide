@@ -3,6 +3,8 @@ import type {
   ViewStyle
 } from 'react-native'
 
+import type { ColorPairToken } from '@helpwave/hightide-design/theme-tokens'
+
 import type { Color } from '../color'
 import type {
   InteractionState,
@@ -11,11 +13,13 @@ import type {
 } from '../resolver'
 
 export type SelectState = InteractionState & {
+  color?: ColorPairToken,
   isOpen?: boolean,
   hasValue?: boolean,
 }
 
 export type SelectOptionState = InteractionState & {
+  color?: ColorPairToken,
   isSelected?: boolean,
   isHighlighted?: boolean,
 }

@@ -1,18 +1,23 @@
-import { createElementLayoutTokens } from '../theme-tokens/element-layout'
+import { resolveInputColoring } from '../semantic-token-resolvers'
+import type { ColorPairToken } from '../theme-tokens/theme-tokens-config'
 import type { ComponentTokenResolver } from './component-token-resolver'
 import type { ContainerTokens } from './container-tokens'
-import { createIconSizeTokens, type IconTokens } from './icon-tokens'
+import { iconTokenResolver, type IconTokens } from './icon-tokens'
 import type { TextStyleTokens } from './text-style-tokens'
 
 export type InputState = {
   isHovered?: boolean,
   isFocused?: boolean,
+  isPressed?: boolean,
   isDisabled?: boolean,
   isReadonly?: boolean,
   isInvalid?: boolean,
 }
 
 export type InputComponentResolverProps = {
+  overrides?: {
+    color?: ColorPairToken,
+  },
   state: InputState,
 }
 
@@ -31,36 +36,46 @@ export type InputTokenResolver = ComponentTokenResolver<
 export const inputTokenResolver: InputTokenResolver = ({
   themeTokens,
   semanticResolvers,
+  overrides,
   state,
 }) => {
-  const { color, spacing, borders, typography } = themeTokens
-  const layout = createElementLayoutTokens(themeTokens).control.md
-  const textStyle = typography.label.md
-  const iconSizeTokens = createIconSizeTokens(themeTokens).md
-  const onColor = color.surface.onColor
-  const textColor = state.isDisabled ? color.disabled.onColor : onColor
-  const borderColor = semanticResolvers.asFaded({
+  const { spacing, typography } = themeTokens
+  const layout = semanticResolvers.controlLayout({ themeTokens, size: 'md' })
+  const textStyle = typography.body.md
+  const iconSizeTokens = iconTokenResolver({
     themeTokens,
-    color: onColor,
+    semanticResolvers,
+    overrides: { size: 'md' },
   })
-  const placeholderColor = semanticResolvers.asDescription({
+  const coloring = resolveInputColoring({
     themeTokens,
-    color: onColor,
+    state,
+    color: overrides?.color,
   })
+  const placeholderColor = state.isDisabled
+    ? themeTokens.color.disabled.onColor
+    : semanticResolvers.asDescription({
+      themeTokens,
+      color: themeTokens.color.surface.onColor,
+    })
 
   return {
     container: {
-      backgroundColor: state.isDisabled ? color.disabled.color : color.surfaceVariant.color,
+      backgroundColor: coloring.background,
       border: {
         width: {
           type: 'all',
-          value: borders.borderWidths.thin,
+          value: layout.borderWidth,
         },
         color: {
           type: 'all',
-          value: state.isInvalid ? color.negative.color : borderColor,
+          value: coloring.border,
         },
       },
+      outline: coloring.outline !== undefined ? {
+        ...themeTokens.focusOutline,
+        color: coloring.outline,
+      } : undefined,
       size: {
         minHeight: layout.size,
         width: '100%',
@@ -68,8 +83,8 @@ export const inputTokenResolver: InputTokenResolver = ({
       shape: {
         borderRadius: layout.borderRadius,
         padding: {
-          vertical: spacing.sm,
-          horizontal: spacing.md,
+          vertical: layout.inset,
+          horizontal: layout.horizontalContentPadding - layout.borderWidth,
         },
       },
       layout: {
@@ -81,7 +96,7 @@ export const inputTokenResolver: InputTokenResolver = ({
     },
     text: {
       ...textStyle,
-      color: textColor,
+      color: coloring.text,
     },
     placeholder: {
       ...textStyle,
@@ -90,7 +105,7 @@ export const inputTokenResolver: InputTokenResolver = ({
     icon: {
       size: iconSizeTokens.size,
       strokeWidth: iconSizeTokens.strokeWidth,
-      color: textColor,
+      color: coloring.text,
     },
   }
 }

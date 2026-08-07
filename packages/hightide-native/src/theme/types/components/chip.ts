@@ -5,9 +5,9 @@ import type {
 
 import type {
   ChipColoringStyle,
-  ColorPairToken,
-  ComponentSize
+  ColorPairToken
 } from '@helpwave/hightide-design/theme-tokens'
+import type { ComponentSize } from '@helpwave/hightide-design/semantic-token-resolvers'
 
 import type { StyleResolverFunction } from '../resolver'
 

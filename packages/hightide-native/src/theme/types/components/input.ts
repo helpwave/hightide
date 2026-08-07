@@ -1,12 +1,16 @@
 import type { TextStyle, ViewStyle } from 'react-native'
 
+import type { ColorPairToken } from '@helpwave/hightide-design/theme-tokens'
+
 import type { Color } from '../color'
 import type {
   InteractionState,
   StyleResolverFunction
 } from '../resolver'
 
-export type InputState = InteractionState
+export type InputState = InteractionState & {
+  color?: ColorPairToken,
+}
 
 export type InputContainerStyle = ViewStyle
 

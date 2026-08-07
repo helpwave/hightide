@@ -1,7 +1,18 @@
 import type { ColorToken, HexColorToken } from '../primitive-tokens/color'
-import type { ColorPairToken, TintStrength } from '../theme-tokens/theme-tokens-config'
+import type {
+  ColorPairToken,
+  ThemeLayoutSize,
+  ThemeTypographySize,
+  TintStrength
+} from '../theme-tokens/theme-tokens-config'
 import type { ThemeTokens } from '../theme-tokens/theme-tokens'
+import type { InputState } from '../component-token-resolvers/input-tokens'
 import type { PressableState } from '../component-token-resolvers/pressable'
+import type {
+  ContainerLayoutToken,
+  ControlElementLayoutToken,
+  InsideControlElementLayoutToken
+} from './element-layout'
 import type { Appearance } from './with-appearance'
 
 export type SemanticTokenResolver<TProps, TResult> = (params: {
@@ -19,6 +30,14 @@ export type PressableColoringTokens = {
   text: ColorToken,
   border: ColorToken,
   outline: ColorToken,
+}
+
+export type InputColoringTokens = {
+  background: ColorToken,
+  text: ColorToken,
+  border: ColorToken,
+  outline?: ColorToken,
+  shadow?: ColorToken,
 }
 
 export type ColoringStyleBase = 'outline' | 'filled' | 'tonal' | 'tonal-outline'
@@ -39,6 +58,19 @@ export type SemanticTokenResolvers = {
     style: ColoringStyle,
     state: ReadonlySet<PressableState>,
   }, PressableColoringTokens>,
+  inputColoring: SemanticTokenResolver<{
+    state: InputState,
+    color?: ColorPairToken,
+  }, InputColoringTokens>,
+  controlLayout: SemanticTokenResolver<{
+    size: ThemeLayoutSize,
+  }, ControlElementLayoutToken>,
+  containerLayout: SemanticTokenResolver<{
+    size: ThemeLayoutSize,
+  }, ContainerLayoutToken>,
+  insideControlLayout: SemanticTokenResolver<{
+    size: ThemeTypographySize,
+  }, InsideControlElementLayoutToken>,
   tintedSurface: SemanticTokenResolver<{
     tintColor: HexColorToken,
     tintStrength?: TintStrength,

@@ -1,5 +1,7 @@
 import type {
-  ElementLayoutTokens,
+  ElementLayoutTokens
+} from '@helpwave/hightide-design/semantic-token-resolvers'
+import type {
   ThemeBordersTokens,
   ThemeElevationTokens,
   ThemeShapeTokens,

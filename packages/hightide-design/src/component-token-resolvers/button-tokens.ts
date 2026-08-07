@@ -1,13 +1,10 @@
 import {
   resolveColoringStyle,
   resolvePressableColoring,
+  type ComponentSize,
   type PressableColoringStyle
 } from '../semantic-token-resolvers'
 import type { ColorPairToken } from '../theme-tokens/theme-tokens-config'
-import {
-  createElementLayoutTokens,
-  type ComponentSize
-} from '../theme-tokens/element-layout'
 import type { ComponentTokenResolver } from './component-token-resolver'
 import type { ContainerTokens } from './container-tokens'
 import type { TextStyleTokens } from './text-style-tokens'
@@ -34,7 +31,12 @@ export type ButtonTokenResolver = ComponentTokenResolver<
   ButtonTokens
 >
 
-export const buttonTokenResolver: ButtonTokenResolver = ({ themeTokens, overrides, state }) => {
+export const buttonTokenResolver: ButtonTokenResolver = ({
+  themeTokens,
+  semanticResolvers,
+  overrides,
+  state,
+}) => {
   const size = overrides.size ?? 'md'
   const coloringStyle = overrides.coloringStyle ?? 'filled'
   const coloring = resolveColoringStyle({
@@ -50,7 +52,7 @@ export const buttonTokenResolver: ButtonTokenResolver = ({ themeTokens, override
   })
   const hasBorder = resolved.border !== 'transparent'
   const hasOutline = resolved.outline !== 'transparent'
-  const layout = createElementLayoutTokens(themeTokens).control[size]
+  const layout = semanticResolvers.controlLayout({ themeTokens, size })
   const insetForBordered = Math.max(layout.inset - layout.borderWidth, 0)
   const textStyle = themeTokens.typography.label[size]
   const gap = themeTokens.spacing[size]

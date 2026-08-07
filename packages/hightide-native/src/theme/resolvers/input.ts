@@ -21,10 +21,14 @@ export const toInputThemeResolvers: ComponentThemeResolver<InputThemeResolvers> 
   const resolve = (state: InputState = {}) => componentTokens.input({
     themeTokens,
     semanticResolvers: semanticTokens,
+    overrides: {
+      color: state.color,
+    },
     state: {
       isDisabled: state.isDisabled,
       isHovered: state.isHovered,
       isFocused: state.isFocused,
+      isPressed: state.isPressed,
       isInvalid: state.isInvalid,
       isReadonly: state.isReadonly,
     },

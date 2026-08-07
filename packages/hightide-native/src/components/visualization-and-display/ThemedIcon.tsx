@@ -4,7 +4,7 @@ import {
 } from 'react-native'
 
 import type { HexColorToken } from '@helpwave/hightide-design/primitive-tokens'
-import type { ComponentSize } from '@helpwave/hightide-design/theme-tokens'
+import type { ComponentSize } from '@helpwave/hightide-design/semantic-token-resolvers'
 import type { Appearance } from '@helpwave/hightide-design/semantic-token-resolvers'
 
 import type { IconComponent } from '../../icons/types'

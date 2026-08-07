@@ -3,15 +3,18 @@ import {
   resolveColoringStyle,
   resolvePressableColoring
 } from '../semantic-token-resolvers'
-import { createElementLayoutTokens } from '../theme-tokens/element-layout'
+import type { ColorPairToken } from '../theme-tokens/theme-tokens-config'
 import { HexColorUtils } from '../utils/hex'
 import type { ComponentTokenResolver } from './component-token-resolver'
+import type { ContainerTokens } from './container-tokens'
+import {
+  inputTokenResolver,
+  type InputState
+} from './input-tokens'
 import { toActivePressableStates } from './pressable'
 import type { TextStyleTokens } from './text-style-tokens'
 
-export type SelectState = {
-  isDisabled?: boolean,
-  isInvalid?: boolean,
+export type SelectState = InputState & {
   isOpen?: boolean,
   hasValue?: boolean,
   isSelected?: boolean,
@@ -19,20 +22,13 @@ export type SelectState = {
 }
 
 export type SelectComponentResolverProps = {
+  overrides?: {
+    color?: ColorPairToken,
+  },
   state: SelectState,
 }
 
-export type SelectTriggerTokens = {
-  justifyContent: 'center',
-  minHeight: number,
-  paddingVertical: number,
-  paddingHorizontal: number,
-  borderRadius: number,
-  borderWidth: number,
-  borderColor: ColorToken,
-  backgroundColor: ColorToken,
-  opacity: number,
-}
+export type SelectTriggerTokens = ContainerTokens
 
 export type SelectOverlayTokens = {
   flex: number,
@@ -83,17 +79,26 @@ export type SelectTokenResolver = ComponentTokenResolver<
   SelectTokens
 >
 
-export const selectTokenResolver: SelectTokenResolver = ({ themeTokens, semanticResolvers, state }) => {
+export const selectTokenResolver: SelectTokenResolver = ({
+  themeTokens,
+  semanticResolvers,
+  overrides,
+  state,
+}) => {
   const { color, spacing, shape, borders, typography } = themeTokens
-  const layout = createElementLayoutTokens(themeTokens).control.md
   const onColor = color.surface.onColor
+  const accentPair = overrides?.color ?? color.primary
   const fadedBorder = semanticResolvers.asFaded({
     themeTokens,
     color: onColor,
   })
-  const placeholderColor = semanticResolvers.asDescription({
+  const input = inputTokenResolver({
     themeTokens,
-    color: onColor,
+    semanticResolvers,
+    overrides: {
+      color: overrides?.color,
+    },
+    state,
   })
   const hoverColor = resolvePressableColoring({
     themeTokens,
@@ -107,21 +112,8 @@ export const selectTokenResolver: SelectTokenResolver = ({ themeTokens, semantic
   }).background
 
   return {
-    trigger: {
-      justifyContent: 'center',
-      minHeight: layout.size,
-      paddingVertical: spacing.md,
-      paddingHorizontal: shape.padding.xxl,
-      borderRadius: shape.borderRadius.sm,
-      borderWidth: borders.borderWidths.thin,
-      borderColor: state.isInvalid ? color.negative.color : fadedBorder,
-      backgroundColor: state.isDisabled ? color.disabled.color : color.surfaceVariant.color,
-      opacity: state.isDisabled ? 0.6 : 1,
-    },
-    triggerText: {
-      ...typography.body.md,
-      color: state.hasValue ? onColor : placeholderColor,
-    },
+    trigger: input.container,
+    triggerText: state.hasValue ? input.text : input.placeholder,
     overlay: {
       flex: 1,
       justifyContent: 'center',
@@ -143,7 +135,7 @@ export const selectTokenResolver: SelectTokenResolver = ({ themeTokens, semantic
       borderBottomColor: fadedBorder,
       color: onColor,
     },
-    searchPlaceholderColor: placeholderColor,
+    searchPlaceholderColor: input.placeholder.color ?? onColor,
     option: {
       paddingVertical: shape.padding.xxl,
       paddingHorizontal: spacing.lg,
@@ -155,7 +147,7 @@ export const selectTokenResolver: SelectTokenResolver = ({ themeTokens, semantic
       fontWeight: state.isSelected
         ? typography.fontWeights.semibold
         : typography.fontWeights.base,
-      color: state.isSelected ? color.primary.color : color.surface.onColor,
+      color: state.isSelected ? accentPair.color : color.surface.onColor,
     },
   }
 }

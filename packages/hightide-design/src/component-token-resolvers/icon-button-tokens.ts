@@ -1,16 +1,13 @@
 import {
   resolveColoringStyle,
   resolvePressableColoring,
+  type ComponentSize,
   type PressableColoringStyle
 } from '../semantic-token-resolvers'
 import type { ColorPairToken } from '../theme-tokens/theme-tokens-config'
-import {
-  createElementLayoutTokens,
-  type ComponentSize
-} from '../theme-tokens/element-layout'
 import type { ComponentTokenResolver } from './component-token-resolver'
 import type { ContainerTokens } from './container-tokens'
-import { createIconSizeTokens, type IconTokens } from './icon-tokens'
+import { iconTokenResolver, type IconTokens } from './icon-tokens'
 import type { TextStyleTokens } from './text-style-tokens'
 import { toActivePressableStates, type PressableInteractionState } from './pressable'
 
@@ -38,6 +35,7 @@ export type IconButtonTokenResolver = ComponentTokenResolver<
 
 export const iconButtonTokenResolver: IconButtonTokenResolver = ({
   themeTokens,
+  semanticResolvers,
   overrides,
   state,
 }) => {
@@ -56,8 +54,12 @@ export const iconButtonTokenResolver: IconButtonTokenResolver = ({
   })
   const hasBorder = resolved.border !== 'transparent'
   const hasOutline = resolved.outline !== 'transparent'
-  const layout = createElementLayoutTokens(themeTokens).control[size]
-  const iconSizeTokens = createIconSizeTokens(themeTokens)[size]
+  const layout = semanticResolvers.controlLayout({ themeTokens, size })
+  const iconSizeTokens = iconTokenResolver({
+    themeTokens,
+    semanticResolvers,
+    overrides: { size },
+  })
   const textStyle = themeTokens.typography.label[size]
 
   return {

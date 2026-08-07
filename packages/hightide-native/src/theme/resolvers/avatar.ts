@@ -1,7 +1,5 @@
-import type {
-  ColorPairToken,
-  ComponentSize
-} from '@helpwave/hightide-design/theme-tokens'
+import type { ColorPairToken } from '@helpwave/hightide-design/theme-tokens'
+import type { ComponentSize } from '@helpwave/hightide-design/semantic-token-resolvers'
 
 import { toContainerStyle, toTextStyle } from '../adapters/style-adapters'
 import type {

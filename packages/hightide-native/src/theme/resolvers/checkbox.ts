@@ -23,6 +23,7 @@ export const toCheckboxThemeResolvers: ComponentThemeResolver<CheckboxThemeResol
     overrides: {
       size: state.size,
       isRounded: state.isRounded,
+      color: state.color,
     },
     state: {
       isDisabled: state.isDisabled,

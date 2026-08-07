@@ -1,6 +1,6 @@
 import type { ViewStyle, TextStyle } from 'react-native'
 
-import type { ComponentSize } from '@helpwave/hightide-design/theme-tokens'
+import type { ComponentSize } from '@helpwave/hightide-design/semantic-token-resolvers'
 import type {
   ColorPairToken,
   PressableColoringStyle

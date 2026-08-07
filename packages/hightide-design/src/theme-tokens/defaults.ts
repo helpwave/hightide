@@ -146,25 +146,25 @@ const withShadowColor = (
 
 export const defaultLightElevationTokens = (): ThemeElevationTokens => {
   const sizes = hightideShadow.layout.bottom
-  const color = hightideShadow.colors['3%']
+
   return {
-    level1: withShadowColor(sizes.xs, color),
-    level2: withShadowColor(sizes.sm, color),
-    level3: withShadowColor(sizes.md, color),
-    level4: withShadowColor(sizes.lg, color),
-    level5: withShadowColor(sizes.xl, color),
+    level1: withShadowColor(sizes.xs, '#0000000F'), // 6%
+    level2: withShadowColor(sizes.sm, '#0000001A'), // 10%
+    level3: withShadowColor(sizes.md, '#00000024'), // 14%
+    level4: withShadowColor(sizes.lg, '#0000002E'), // 18%
+    level5: withShadowColor(sizes.xl, '#00000038'), // 22%
   }
 }
 
 export const defaultDarkElevationTokens = (): ThemeElevationTokens => {
   const sizes = hightideShadow.layout.bottom
-  const color = hightideShadow.colors['8%']
+
   return {
-    level1: withShadowColor(sizes.xs, color),
-    level2: withShadowColor(sizes.sm, color),
-    level3: withShadowColor(sizes.md, color),
-    level4: withShadowColor(sizes.lg, color),
-    level5: withShadowColor(sizes.xl, color),
+    level1: withShadowColor(sizes.xs, '#FFFFFF0A'), // 4%
+    level2: withShadowColor(sizes.sm, '#FFFFFF0F'), // 6%
+    level3: withShadowColor(sizes.md, '#FFFFFF14'), // 8%
+    level4: withShadowColor(sizes.lg, '#FFFFFF1A'), // 10%
+    level5: withShadowColor(sizes.xl, '#FFFFFF24'), // 14%
   }
 }
 

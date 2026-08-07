@@ -1,6 +1,7 @@
 import type { ViewStyle } from 'react-native'
 
-import type { ComponentSize } from '@helpwave/hightide-design/theme-tokens'
+import type { ColorPairToken } from '@helpwave/hightide-design/theme-tokens'
+import type { ComponentSize } from '@helpwave/hightide-design/semantic-token-resolvers'
 
 import type { Color } from '../color'
 import type {
@@ -12,6 +13,7 @@ export type CheckboxSize = ComponentSize
 
 export type CheckboxState = InteractionState & {
   size?: CheckboxSize,
+  color?: ColorPairToken,
   isChecked?: boolean,
   isIndeterminate?: boolean,
   isRounded?: boolean,

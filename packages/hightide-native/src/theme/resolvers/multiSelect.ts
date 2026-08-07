@@ -1,4 +1,4 @@
-import { toTextStyle } from '../adapters/style-adapters'
+import { toContainerStyle, toTextStyle } from '../adapters/style-adapters'
 import type { Color } from '../types/color'
 import type {
   MultiSelectCheckboxIconStyle,
@@ -30,8 +30,13 @@ export const toMultiSelectThemeResolvers: ComponentThemeResolver<MultiSelectThem
   componentTokens,
 }) => {
   const resolve = (state: {
+    color?: MultiSelectState['color'],
     isDisabled?: boolean,
     isInvalid?: boolean,
+    isHovered?: boolean,
+    isFocused?: boolean,
+    isPressed?: boolean,
+    isReadonly?: boolean,
     isOpen?: boolean,
     hasSelections?: boolean,
     isSelected?: boolean,
@@ -39,20 +44,49 @@ export const toMultiSelectThemeResolvers: ComponentThemeResolver<MultiSelectThem
   } = {}) => componentTokens.multiSelect({
     themeTokens,
     semanticResolvers: semanticTokens,
-    state,
+    overrides: {
+      color: state.color,
+    },
+    state: {
+      isDisabled: state.isDisabled,
+      isInvalid: state.isInvalid,
+      isHovered: state.isHovered,
+      isFocused: state.isFocused,
+      isPressed: state.isPressed,
+      isReadonly: state.isReadonly,
+      isOpen: state.isOpen,
+      hasSelections: state.hasSelections,
+      isSelected: state.isSelected,
+      isHighlighted: state.isHighlighted,
+    },
   })
 
   return {
-    trigger: createStyleResolver((state: MultiSelectState): MultiSelectTriggerStyle => ({
-      ...resolve({
+    trigger: createStyleResolver((state: MultiSelectState): MultiSelectTriggerStyle => (
+      toContainerStyle(resolve({
+        color: state.color,
         isDisabled: state.isDisabled,
         isInvalid: state.isInvalid,
+        isHovered: state.isHovered,
+        isFocused: state.isFocused,
+        isPressed: state.isPressed,
+        isReadonly: state.isReadonly,
         isOpen: state.isOpen,
         hasSelections: state.hasSelections,
-      }).trigger,
-    })),
-    triggerText: createSimpleStyleResolver((): SelectTriggerTextStyle => (
-      toTextStyle(resolve().triggerText)
+      }).trigger)
+    )),
+    triggerText: createStyleResolver((state: MultiSelectState): SelectTriggerTextStyle => (
+      toTextStyle(resolve({
+        color: state.color,
+        isDisabled: state.isDisabled,
+        isInvalid: state.isInvalid,
+        isHovered: state.isHovered,
+        isFocused: state.isFocused,
+        isPressed: state.isPressed,
+        isReadonly: state.isReadonly,
+        isOpen: state.isOpen,
+        hasSelections: state.hasSelections,
+      }).triggerText)
     )),
     overlay: createSimpleStyleResolver((): SelectOverlayStyle => ({
       ...resolve().overlay,
@@ -68,6 +102,7 @@ export const toMultiSelectThemeResolvers: ComponentThemeResolver<MultiSelectThem
     )),
     option: createStyleResolver((state: MultiSelectOptionState): MultiSelectOptionStyle => ({
       ...resolve({
+        color: state.color,
         isDisabled: state.isDisabled,
         isSelected: state.isSelected,
         isHighlighted: state.isHighlighted,
@@ -75,6 +110,7 @@ export const toMultiSelectThemeResolvers: ComponentThemeResolver<MultiSelectThem
     })),
     optionText: createStyleResolver((state: MultiSelectOptionState): MultiSelectOptionTextStyle => (
       toTextStyle(resolve({
+        color: state.color,
         isDisabled: state.isDisabled,
         isSelected: state.isSelected,
         isHighlighted: state.isHighlighted,
@@ -82,6 +118,7 @@ export const toMultiSelectThemeResolvers: ComponentThemeResolver<MultiSelectThem
     )),
     checkbox: createStyleResolver((state: MultiSelectOptionState): MultiSelectCheckboxStyle => ({
       ...resolve({
+        color: state.color,
         isDisabled: state.isDisabled,
         isSelected: state.isSelected,
         isHighlighted: state.isHighlighted,
@@ -89,6 +126,7 @@ export const toMultiSelectThemeResolvers: ComponentThemeResolver<MultiSelectThem
     })),
     checkboxIcon: createValueResolver((state: MultiSelectOptionState): MultiSelectCheckboxIconStyle => {
       const { checkboxIcon } = resolve({
+        color: state.color,
         isDisabled: state.isDisabled,
         isSelected: state.isSelected,
         isHighlighted: state.isHighlighted,

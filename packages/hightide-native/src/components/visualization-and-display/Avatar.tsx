@@ -16,10 +16,8 @@ import {
 import { HightideIconRegistry } from '../../icons/HightideIconRegistry'
 import { ThemedIcon } from './ThemedIcon'
 import { ThemedText } from './ThemedText'
-import type {
-  ColorPairToken,
-  ComponentSize
-} from '@helpwave/hightide-design/theme-tokens'
+import type { ColorPairToken } from '@helpwave/hightide-design/theme-tokens'
+import type { ComponentSize } from '@helpwave/hightide-design/semantic-token-resolvers'
 
 import { useTheme } from '../../global-contexts/theme/ThemeContext'
 import type {

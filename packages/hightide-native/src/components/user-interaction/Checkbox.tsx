@@ -13,6 +13,7 @@ import {
   useEventCallbackStabilizer
 } from '@helpwave/hightide-utils/hooks'
 
+import type { ColorPairToken } from '@helpwave/hightide-design/theme-tokens'
 import { HightideIconRegistry } from '../../icons/HightideIconRegistry'
 import { ThemedIcon } from '../visualization-and-display/ThemedIcon'
 import { useTheme } from '../../global-contexts/theme/ThemeContext'
@@ -36,6 +37,7 @@ export type CheckboxProps = Omit<PressableProps, 'children' | 'style'>
     indeterminate?: boolean,
     size?: CheckboxSize,
     isRounded?: boolean,
+    color?: ColorPairToken,
     style?: StyleProp<ViewStyle>,
     containerStyle?: StyleOverwrite<CheckboxState, CheckboxStyle>,
     visualContainerStyle?: StyleOverwrite<CheckboxState, CheckboxVisualContainerStyle>,
@@ -58,6 +60,7 @@ export const Checkbox = ({
   onEditComplete,
   size = 'md',
   isRounded = false,
+  color,
   style,
   containerStyle,
   visualContainerStyle,
@@ -82,6 +85,7 @@ export const Checkbox = ({
 
   const resolveState = (interaction: PressableInteraction): CheckboxState => ({
     size,
+    color,
     isChecked: value,
     isIndeterminate: indeterminate,
     isInvalid: invalid,

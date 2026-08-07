@@ -3,8 +3,12 @@ import {
   resolveColoringStyle,
   resolvePressableColoring
 } from '../semantic-token-resolvers'
-import { createElementLayoutTokens } from '../theme-tokens/element-layout'
+import type { ColorPairToken } from '../theme-tokens/theme-tokens-config'
 import type { ComponentTokenResolver } from './component-token-resolver'
+import {
+  inputTokenResolver,
+  type InputState
+} from './input-tokens'
 import { toActivePressableStates } from './pressable'
 import type { TextStyleTokens } from './text-style-tokens'
 import type {
@@ -15,9 +19,7 @@ import type {
 } from './select-tokens'
 import { selectOverlayColor } from './select-tokens'
 
-export type MultiSelectState = {
-  isDisabled?: boolean,
-  isInvalid?: boolean,
+export type MultiSelectState = InputState & {
   isOpen?: boolean,
   hasSelections?: boolean,
   isSelected?: boolean,
@@ -25,12 +27,13 @@ export type MultiSelectState = {
 }
 
 export type MultiSelectComponentResolverProps = {
+  overrides?: {
+    color?: ColorPairToken,
+  },
   state: MultiSelectState,
 }
 
-export type MultiSelectTriggerTokens = SelectTriggerTokens & {
-  gap: number,
-}
+export type MultiSelectTriggerTokens = SelectTriggerTokens
 
 export type MultiSelectOptionTokens = {
   flexDirection: 'row',
@@ -76,18 +79,27 @@ export type MultiSelectTokenResolver = ComponentTokenResolver<
   MultiSelectTokens
 >
 
-export const multiSelectTokenResolver: MultiSelectTokenResolver = ({ themeTokens, semanticResolvers, state }) => {
+export const multiSelectTokenResolver: MultiSelectTokenResolver = ({
+  themeTokens,
+  semanticResolvers,
+  overrides,
+  state,
+}) => {
   const { color, spacing, shape, borders, typography } = themeTokens
-  const layout = createElementLayoutTokens(themeTokens).control.md
   const checkboxSize = spacing.lg + spacing.xs
   const onColor = color.surface.onColor
+  const accentPair = overrides?.color ?? color.primary
   const fadedBorder = semanticResolvers.asFaded({
     themeTokens,
     color: onColor,
   })
-  const placeholderColor = semanticResolvers.asDescription({
+  const input = inputTokenResolver({
     themeTokens,
-    color: onColor,
+    semanticResolvers,
+    overrides: {
+      color: overrides?.color,
+    },
+    state,
   })
   const hoverColor = resolvePressableColoring({
     themeTokens,
@@ -101,22 +113,8 @@ export const multiSelectTokenResolver: MultiSelectTokenResolver = ({ themeTokens
   }).background
 
   return {
-    trigger: {
-      justifyContent: 'center',
-      minHeight: layout.size,
-      paddingVertical: spacing.md,
-      paddingHorizontal: shape.padding.xxl,
-      borderRadius: shape.borderRadius.sm,
-      borderWidth: borders.borderWidths.thin,
-      borderColor: state.isInvalid ? color.negative.color : fadedBorder,
-      backgroundColor: state.isDisabled ? color.disabled.color : color.surfaceVariant.color,
-      gap: spacing.md,
-      opacity: state.isDisabled ? 0.6 : 1,
-    },
-    triggerText: {
-      ...typography.body.md,
-      color: placeholderColor,
-    },
+    trigger: input.container,
+    triggerText: state.hasSelections ? input.text : input.placeholder,
     overlay: {
       flex: 1,
       justifyContent: 'center',
@@ -138,7 +136,7 @@ export const multiSelectTokenResolver: MultiSelectTokenResolver = ({ themeTokens
       borderBottomColor: fadedBorder,
       color: onColor,
     },
-    searchPlaceholderColor: placeholderColor,
+    searchPlaceholderColor: input.placeholder.color ?? onColor,
     option: {
       flexDirection: 'row',
       alignItems: 'center',
@@ -153,7 +151,7 @@ export const multiSelectTokenResolver: MultiSelectTokenResolver = ({ themeTokens
       fontWeight: state.isSelected
         ? typography.fontWeights.semibold
         : typography.fontWeights.base,
-      color: state.isSelected ? color.primary.color : onColor,
+      color: state.isSelected ? accentPair.color : onColor,
     },
     checkbox: {
       alignItems: 'center',
@@ -162,11 +160,11 @@ export const multiSelectTokenResolver: MultiSelectTokenResolver = ({ themeTokens
       height: checkboxSize,
       borderRadius: shape.borderRadius.xs,
       borderWidth: borders.borderWidths.thin,
-      borderColor: state.isSelected ? color.primary.color : fadedBorder,
-      backgroundColor: state.isSelected ? color.primary.color : 'transparent',
+      borderColor: state.isSelected ? accentPair.color : fadedBorder,
+      backgroundColor: state.isSelected ? accentPair.color : 'transparent',
     },
     checkboxIcon: {
-      color: color.primary.onColor,
+      color: accentPair.onColor,
       isVisible: !!state.isSelected,
     },
   }

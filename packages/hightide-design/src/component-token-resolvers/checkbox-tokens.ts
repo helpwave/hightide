@@ -1,27 +1,20 @@
-import {
-  resolveColoringStyle,
-  resolvePressableColoring
-} from '../semantic-token-resolvers'
-import {
-  createElementLayoutTokens,
-  type ComponentSize
-} from '../theme-tokens/element-layout'
+import { resolveInputColoring, type ComponentSize } from '../semantic-token-resolvers'
+import type { ColorPairToken } from '../theme-tokens/theme-tokens-config'
 import type { ComponentTokenResolver } from './component-token-resolver'
 import type { ContainerTokens } from './container-tokens'
 import type { IconTokens } from './icon-tokens'
 import type { InputState } from './input-tokens'
-import { toActivePressableStates } from './pressable'
 
 export type CheckboxState = InputState & {
   isChecked?: boolean,
   isIndeterminate?: boolean,
-  isPressed?: boolean,
 }
 
 export type CheckboxComponentResolverProps = {
   overrides: {
     size?: ComponentSize,
     isRounded?: boolean,
+    color?: ColorPairToken,
   },
   state: CheckboxState,
 }
@@ -45,46 +38,27 @@ export const checkboxTokenResolver: CheckboxTokenResolver = ({
 }) => {
   const size = overrides.size ?? 'md'
   const { color, borders } = themeTokens
-  const control = createElementLayoutTokens(themeTokens).control
-  const mediumControl = control.md
-  const element = control[size]
+  const accentPair = overrides.color ?? color.primary
+  const mediumControl = semanticResolvers.controlLayout({ themeTokens, size: 'md' })
+  const element = semanticResolvers.controlLayout({ themeTokens, size })
+  const xsControl = semanticResolvers.controlLayout({ themeTokens, size: 'xs' })
   const borderWidth = borders.borderWidths.normal
-  const inset = control.xs.inset
+  const inset = xsControl.inset
   const dimension = element.size - 2 * element.inset - 2 * element.borderWidth
   const isActive = !!(state.isChecked || state.isIndeterminate)
-  const fadedBorder = semanticResolvers.asFaded({
+  const coloring = resolveInputColoring({
     themeTokens,
-    color: color.surface.onColor,
+    state,
+    color: overrides.color,
   })
-  const feedbackColoring = resolvePressableColoring({
-    themeTokens,
-    coloring: resolveColoringStyle({
-      themeTokens,
-      colorPair: themeTokens.color.primary,
-      style: 'text',
-    }),
-    style: 'text',
-    state: toActivePressableStates({
-      isDisabled: state.isDisabled,
-      isHovered: state.isHovered,
-      isFocused: state.isFocused,
-      isPressed: state.isPressed,
-    }),
-  })
-
-  const borderColor = state.isDisabled
-    ? color.disabled.color
-    : state.isInvalid
-      ? color.negative.color
-      : isActive ? color.primary.color : fadedBorder
 
   const backgroundColor = state.isDisabled
     ? color.disabled.color
-    : isActive ? color.primary.color : color.surface.color
+    : isActive ? accentPair.color : color.surface.color
 
   return {
     container: {
-      backgroundColor: feedbackColoring.background,
+      backgroundColor: coloring.shadow,
       size: {
         width: mediumControl.size,
         height: mediumControl.size,
@@ -108,14 +82,14 @@ export const checkboxTokenResolver: CheckboxTokenResolver = ({
     visualContainer: {
       backgroundColor,
       opacity: state.isDisabled ? 0.6 : 1,
-      border: {
+      border: isActive ? undefined : {
         width: {
           type: 'all',
           value: borderWidth,
         },
         color: {
           type: 'all',
-          value: borderColor,
+          value: coloring.border,
         },
       },
       size: {
@@ -134,13 +108,13 @@ export const checkboxTokenResolver: CheckboxTokenResolver = ({
         mainAxisAlignment: 'center',
         crossAxisAligment: 'center',
       },
-      outline: state.isFocused ? {
+      outline: coloring.outline !== undefined ? {
         ...themeTokens.focusOutline,
-        color: color.primary.color,
+        color: coloring.outline,
       } : undefined,
     },
     icon: {
-      color: isActive ? color.primary.onColor : color.primary.color,
+      color: isActive ? accentPair.onColor : accentPair.color,
       size: dimension - 2 * inset - 2 * borderWidth,
       strokeWidth: borders.borderWidths.normal,
     },

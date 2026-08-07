@@ -1,7 +1,12 @@
 import { componentTokenResolvers } from '@helpwave/hightide-design/component-token-resolvers'
-import { hightideSemanticTokenResolvers } from '@helpwave/hightide-design/semantic-token-resolvers'
-import { createElementLayoutTokens } from '@helpwave/hightide-design/theme-tokens'
-import type { ThemeTokens } from '@helpwave/hightide-design/theme-tokens'
+import {
+  hightideSemanticTokenResolvers,
+  resolveContainerLayout,
+  resolveControlLayout,
+  resolveInsideControlLayout,
+  type ElementLayoutTokens
+} from '@helpwave/hightide-design/semantic-token-resolvers'
+import type { ThemeLayoutSize, ThemeTokens, ThemeTypographySize } from '@helpwave/hightide-design/theme-tokens'
 
 import { toAvatarThemeResolvers } from '../resolvers/avatar'
 import { toButtonThemeResolvers } from '../resolvers/button'
@@ -22,12 +27,52 @@ import { toSwitchThemeResolvers } from '../resolvers/switch'
 import type { HightideThemeSemantics } from '../types/semantics'
 import type { HightideTheme } from '../types/theme'
 
+const layoutSizes = ['xs', 'sm', 'md', 'lg', 'xl'] as const satisfies readonly ThemeLayoutSize[]
+const typographySizes = ['sm', 'md', 'lg'] as const satisfies readonly ThemeTypographySize[]
+
+const resolveElementLayouts = (themeTokens: ThemeTokens): ElementLayoutTokens => ({
+  control: Object.fromEntries(
+    layoutSizes.map((size) => [
+      size,
+      resolveControlLayout({ themeTokens, size }),
+    ])
+  ) as ElementLayoutTokens['control'],
+  container: Object.fromEntries(
+    layoutSizes.map((size) => [
+      size,
+      resolveContainerLayout({ themeTokens, size }),
+    ])
+  ) as ElementLayoutTokens['container'],
+  insideControl: Object.fromEntries(
+    typographySizes.map((size) => [
+      size,
+      resolveInsideControlLayout({ themeTokens, size }),
+    ])
+  ) as ElementLayoutTokens['insideControl'],
+})
+
 const bindSemantics = (themeTokens: ThemeTokens): HightideThemeSemantics => ({
   coloringStyle: (parameter) => hightideSemanticTokenResolvers.coloringStyle({
     themeTokens,
     ...parameter,
   }),
   pressableColoring: (parameter) => hightideSemanticTokenResolvers.pressableColoring({
+    themeTokens,
+    ...parameter,
+  }),
+  inputColoring: (parameter) => hightideSemanticTokenResolvers.inputColoring({
+    themeTokens,
+    ...parameter,
+  }),
+  controlLayout: (parameter) => hightideSemanticTokenResolvers.controlLayout({
+    themeTokens,
+    ...parameter,
+  }),
+  containerLayout: (parameter) => hightideSemanticTokenResolvers.containerLayout({
+    themeTokens,
+    ...parameter,
+  }),
+  insideControlLayout: (parameter) => hightideSemanticTokenResolvers.insideControlLayout({
     themeTokens,
     ...parameter,
   }),
@@ -55,7 +100,7 @@ export const createHightideTheme = (themeTokens: ThemeTokens): HightideTheme => 
   semantics: bindSemantics(themeTokens),
   typography: themeTokens.typography,
   spacing: themeTokens.spacing,
-  elements: createElementLayoutTokens(themeTokens),
+  elements: resolveElementLayouts(themeTokens),
   borderRadius: themeTokens.shape.borderRadius,
   border: themeTokens.borders.borderWidths,
   shadow: {

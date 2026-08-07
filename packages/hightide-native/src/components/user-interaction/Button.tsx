@@ -11,9 +11,9 @@ import {
 
 import type {
   ColorPairToken,
-  ComponentSize,
   PressableColoringStyle
 } from '@helpwave/hightide-design/theme-tokens'
+import type { ComponentSize } from '@helpwave/hightide-design/semantic-token-resolvers'
 
 import { ContentThemeProvider } from '../../global-contexts/content-theme/ContentThemeProvider'
 import { useTheme } from '../../global-contexts/theme/ThemeContext'

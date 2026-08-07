@@ -1,9 +1,8 @@
-import { createElementLayoutTokens } from '../../theme-tokens'
 import type { ColorPairToken } from '../../theme-tokens/theme-tokens-config'
 import { resolveColoringStyle } from '../../semantic-token-resolvers'
 import type { ComponentTokenResolver } from '../component-token-resolver'
 import type { ContainerTokens } from '../container-tokens'
-import { createIconSizeTokens, type IconTokens } from '../icon-tokens'
+import { iconTokenResolver, type IconTokens } from '../icon-tokens'
 import type { TextStyleTokens } from '../text-style-tokens'
 
 export type ListPositionToken = 'first' | 'middle' | 'last'
@@ -47,12 +46,17 @@ export const listItemTokenResolver: ListItemTokenResolver = ({
   state,
 }) => {
   const { color, spacing, typography, borders } = themeTokens
-  const iconSizeTokens = createIconSizeTokens(themeTokens).md
+  const iconSizeTokens = iconTokenResolver({
+    themeTokens,
+    semanticResolvers,
+    overrides: { size: 'md' },
+  })
   const descriptionColor = semanticResolvers.asDescription({
     themeTokens,
     color: color.surface.onColor,
   })
-  const layout = createElementLayoutTokens(themeTokens).control.md
+  const layout = semanticResolvers.controlLayout({ themeTokens, size: 'md' })
+  const largeControl = semanticResolvers.controlLayout({ themeTokens, size: 'lg' })
   const appearance = config?.appearance ?? 'listItem'
   const position = state?.position ?? 'middle'
   const isIndependent = appearance === 'independent'
@@ -81,7 +85,7 @@ export const listItemTokenResolver: ListItemTokenResolver = ({
       shape: {
         borderRadius: isIndependent ? layout.borderRadius : undefined,
         padding: {
-          vertical: layout.inset,
+          vertical: largeControl.inset,
           horizontal: layout.horizontalContentPadding,
         },
       },

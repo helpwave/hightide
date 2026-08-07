@@ -8,6 +8,7 @@ import {
   type StyleProp,
   type ViewStyle
 } from 'react-native'
+import type { ColorPairToken } from '@helpwave/hightide-design/theme-tokens'
 import { Chip } from '../visualization-and-display/Chip'
 import { ThemedText } from '../visualization-and-display/ThemedText'
 import { ThemedIcon } from '../visualization-and-display/ThemedIcon'
@@ -33,6 +34,7 @@ export type MultiSelectProps = Partial<FormFieldDataHandling<string[]>>
     initialValue?: string[],
     placeholder?: string,
     showSearch?: boolean,
+    color?: ColorPairToken,
     style?: StyleProp<ViewStyle>,
   }
 
@@ -42,6 +44,7 @@ export const MultiSelect = ({
   initialValue = [],
   placeholder = 'Select…',
   showSearch = true,
+  color,
   disabled = false,
   readOnly = false,
   invalid = false,
@@ -67,24 +70,17 @@ export const MultiSelect = ({
   }, [multiSelect, options])
 
   const state = useMemo((): MultiSelectState => ({
+    color,
     isDisabled: disabled,
     isReadonly: readOnly,
     isInvalid: invalid,
     isOpen: multiSelect.isOpen,
     hasSelections: selectedLabels.length > 0,
     hasValue: selectedLabels.length > 0,
-  }), [disabled, invalid, multiSelect.isOpen, readOnly, selectedLabels.length])
+  }), [color, disabled, invalid, multiSelect.isOpen, readOnly, selectedLabels.length])
 
   const multiSelectTheme = theme.components.multiSelect
 
-  const resolvedTriggerStyle = useMemo(
-    () => multiSelectTheme.trigger(state),
-    [multiSelectTheme, state]
-  )
-  const resolvedTriggerTextStyle = useMemo(
-    () => multiSelectTheme.triggerText({}),
-    [multiSelectTheme]
-  )
   const resolvedOverlayStyle = useMemo(
     () => multiSelectTheme.overlay({}),
     [multiSelectTheme]
@@ -107,19 +103,31 @@ export const MultiSelect = ({
       <Pressable
         disabled={!interactive}
         onPress={() => multiSelect.toggleOpen()}
-        style={resolvedTriggerStyle}
+        style={(pressableState) => {
+          const interaction = pressableState as {
+            pressed: boolean,
+            hovered?: boolean,
+            focused?: boolean,
+          }
+          return multiSelectTheme.trigger({
+            ...state,
+            isPressed: interaction.pressed,
+            isHovered: !!interaction.hovered,
+            isFocused: !!interaction.focused,
+          })
+        }}
       >
         {selectedLabels.length > 0
           ? (
             <View style={{ flexDirection: 'row', flexWrap: 'wrap', gap: 6 }}>
               {selectedLabels.map((label) => (
-                <Chip key={label} size="sm" coloringStyle="tonal">
+                <Chip key={label} size="sm" color={color} coloringStyle="tonal">
                   {label}
                 </Chip>
               ))}
             </View>
           )
-          : <ThemedText style={resolvedTriggerTextStyle}>{placeholder}</ThemedText>}
+          : <ThemedText style={multiSelectTheme.triggerText(state)}>{placeholder}</ThemedText>}
       </Pressable>
 
       <Modal
@@ -152,6 +160,7 @@ export const MultiSelect = ({
                 const selected = multiSelect.isSelected(item.id)
                 const isHighlighted = multiSelect.highlightedId === item.id
                 const optionState = {
+                  color,
                   isSelected: selected,
                   isHighlighted,
                   isDisabled: item.disabled,

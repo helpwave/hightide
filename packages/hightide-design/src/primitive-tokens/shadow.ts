@@ -32,6 +32,13 @@ export type HightideShadowPrimitiveTokens = {
 
 export const hightideShadow = {
   layout: {
+    basic: {
+      xs: { x: 0, y: 0, blur: 2, spread: 0 },
+      sm: { x: 0, y: 0, blur: 3, spread: 0 },
+      md: { x: 0, y: 0, blur: 5, spread: 0 },
+      lg: { x: 0, y: 0, blur: 10, spread: 0 },
+      xl: { x: 0, y: 0, blur: 20, spread: 0 },
+    },
     around: {
       xs: { x: 2, y: 2, blur: 2, spread: 0 },
       sm: { x: 3, y: 3, blur: 3, spread: 0 },

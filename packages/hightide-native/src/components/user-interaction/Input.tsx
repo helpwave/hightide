@@ -15,6 +15,7 @@ import {
   type UseDelayOptionsResolved
 } from '@helpwave/hightide-utils/hooks'
 
+import type { ColorPairToken } from '@helpwave/hightide-design/theme-tokens'
 import { useTheme } from '../../global-contexts/theme/ThemeContext'
 import type {
   InputContainerStyle,
@@ -46,6 +47,7 @@ export type InputProps = Omit<TextInputProps, 'value' | 'style'>
   & Partial<FormFieldDataHandling<string>>
   & Partial<FormFieldInteractionStates>
   & {
+    color?: ColorPairToken,
     editCompleteOptions?: EditCompleteOptions,
     initialValue?: string,
     style?: StyleProp<TextStyle>,
@@ -56,6 +58,7 @@ export type InputProps = Omit<TextInputProps, 'value' | 'style'>
 export const Input = forwardRef<TextInput, InputProps>(function Input({
   value: controlledValue,
   initialValue,
+  color,
   invalid = false,
   disabled = false,
   readOnly = false,
@@ -89,10 +92,11 @@ export const Input = forwardRef<TextInput, InputProps>(function Input({
   })
 
   const state = useMemo((): InputState => ({
+    color,
     isDisabled: disabled,
     isInvalid: invalid,
     isReadonly: readOnly,
-  }), [disabled, invalid, readOnly])
+  }), [color, disabled, invalid, readOnly])
 
   const resolvedContainerStyle = useMemo(
     () => theme.components.input.container(state, containerStyle),

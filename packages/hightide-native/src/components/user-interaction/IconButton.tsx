@@ -10,9 +10,9 @@ import {
 } from 'react-native'
 import type {
   ColorPairToken,
-  ComponentSize,
   PressableColoringStyle
 } from '@helpwave/hightide-design/theme-tokens'
+import type { ComponentSize } from '@helpwave/hightide-design/semantic-token-resolvers'
 
 import { ContentThemeProvider } from '../../global-contexts/content-theme/ContentThemeProvider'
 import { useTheme } from '../../global-contexts/theme/ThemeContext'
@@ -84,7 +84,7 @@ export const IconButton = forwardRef<React.ComponentRef<typeof Pressable>, IconB
 
         return (
           <ContentThemeProvider
-            foregroundColor={resolvedIcon.color}
+            foregroundColor={resolvedIcon.color ?? theme.colors.primary.color}
             textStyle={resolvedText}
           >
             {children}

@@ -1,7 +1,7 @@
 import {
-  componentSizes
-} from '@helpwave/hightide-design/theme-tokens'
-import type { ComponentSize } from '@helpwave/hightide-design/theme-tokens'
+  componentSizes,
+  type ComponentSize
+} from '@helpwave/hightide-design/semantic-token-resolvers'
 
 import type { IconThemeResolvers } from '../types/components/hightide'
 import type { ComponentThemeResolver } from '../types/resolver'

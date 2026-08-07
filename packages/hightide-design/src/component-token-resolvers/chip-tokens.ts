@@ -1,12 +1,9 @@
 import {
   resolveColoringStyle,
-  type ChipColoringStyle
+  type ChipColoringStyle,
+  type ComponentSize
 } from '../semantic-token-resolvers'
 import type { ColorPairToken } from '../theme-tokens/theme-tokens-config'
-import {
-  createElementLayoutTokens,
-  type ComponentSize
-} from '../theme-tokens/element-layout'
 import type { ComponentTokenResolver } from './component-token-resolver'
 import type { ContainerTokens } from './container-tokens'
 import type { TextStyleTokens } from './text-style-tokens'
@@ -29,7 +26,11 @@ export type ChipTokenResolver = ComponentTokenResolver<
   ChipTokens
 >
 
-export const chipTokenResolver: ChipTokenResolver = ({ themeTokens, overrides }) => {
+export const chipTokenResolver: ChipTokenResolver = ({
+  themeTokens,
+  semanticResolvers,
+  overrides,
+}) => {
   const size = overrides.size ?? 'md'
   const coloringStyle = overrides.coloringStyle ?? 'filled'
   const coloring = resolveColoringStyle({
@@ -41,7 +42,7 @@ export const chipTokenResolver: ChipTokenResolver = ({ themeTokens, overrides })
     ? coloring.accent
     : 'transparent'
   const hasBorder = border !== 'transparent'
-  const layout = createElementLayoutTokens(themeTokens).insideControl[size]
+  const layout = semanticResolvers.insideControlLayout({ themeTokens, size })
   const textStyle = themeTokens.typography.label[size]
   const gap = size === 'sm' ? themeTokens.spacing.xs : themeTokens.spacing.sm
   const horizontalPadding = layout.inset + layout.paddingExtension

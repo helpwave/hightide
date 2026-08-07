@@ -38,7 +38,7 @@ export type MultiSelectCheckboxIconStyle = {
 
 export type MultiSelectThemeResolvers = {
   trigger: StyleResolverFunction<MultiSelectState, MultiSelectTriggerStyle>,
-  triggerText: SimpleStyleResolver<SelectTriggerTextStyle>,
+  triggerText: StyleResolverFunction<MultiSelectState, SelectTriggerTextStyle>,
   overlay: SimpleStyleResolver<SelectOverlayStyle>,
   menu: SimpleStyleResolver<SelectMenuStyle>,
   search: SimpleStyleResolver<SelectSearchStyle>,
