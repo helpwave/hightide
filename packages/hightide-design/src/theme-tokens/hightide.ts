@@ -2,13 +2,11 @@ import { hightidePrimitiveTokens } from '../primitive-tokens/hightide'
 import type { HightideColorPalettes } from '../primitive-tokens/color'
 import { createDarkThemeTokens } from './create-dark-theme-tokens'
 import { createLightThemeTokens } from './create-light-theme-tokens'
-import { tertiaryDarkColor, tertiaryLightColor } from './defaults'
 
 const palettes = hightidePrimitiveTokens.color.palettes as HightideColorPalettes
 
 const {
   purple,
-  blue,
   white,
 } = palettes
 
@@ -21,11 +19,11 @@ export const hightideLightThemeTokens = createLightThemeTokens({
       onColor: whiteColor,
     },
     secondary: {
-      color: blue.value[500],
+      color: '#00735e',
       onColor: whiteColor,
     },
     tertiary: {
-      color: tertiaryLightColor,
+      color: '#924800',
       onColor: whiteColor,
     },
   },
@@ -38,11 +36,11 @@ export const hightideDarkThemeTokens = createDarkThemeTokens({
       onColor: whiteColor,
     },
     secondary: {
-      color: blue.value[500],
+      color: '#009078',
       onColor: whiteColor,
     },
     tertiary: {
-      color: tertiaryDarkColor,
+      color: '#af6a36',
       onColor: whiteColor,
     },
   },

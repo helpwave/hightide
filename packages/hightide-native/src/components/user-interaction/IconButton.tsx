@@ -40,6 +40,7 @@ type PressableInteraction = {
   pressed: boolean,
   hovered?: boolean,
   focused?: boolean,
+  focusVisible?: boolean,
 }
 
 export const IconButton = forwardRef<React.ComponentRef<typeof Pressable>, IconButtonProps>(function IconButton({
@@ -63,6 +64,7 @@ export const IconButton = forwardRef<React.ComponentRef<typeof Pressable>, IconB
     isPressed: interaction.pressed,
     isHovered: !!interaction.hovered,
     isFocused: !!interaction.focused,
+    isFocusVisible: !!interaction.focusVisible,
   })
 
   return (

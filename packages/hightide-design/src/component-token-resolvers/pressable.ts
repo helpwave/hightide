@@ -1,12 +1,18 @@
 import type { PressableColoringStyle } from '../semantic-token-resolvers/types'
 import type { StateBasedProperty } from '../theme-tokens/stateBasedProperty'
 
-export type PressableState = 'disabled' | 'focused' | 'hovered' | 'pressed'
+export type PressableState =
+  | 'disabled'
+  | 'focused'
+  | 'focusVisible'
+  | 'hovered'
+  | 'pressed'
 
 export type PressableInteractionState = {
   isDisabled?: boolean,
   isHovered?: boolean,
   isFocused?: boolean,
+  isFocusVisible?: boolean,
   isPressed?: boolean,
 }
 
@@ -30,6 +36,9 @@ export const toActivePressableStates = (
   }
   if (state.isFocused) {
     active.add('focused')
+  }
+  if (state.isFocusVisible) {
+    active.add('focusVisible')
   }
   if (state.isHovered) {
     active.add('hovered')

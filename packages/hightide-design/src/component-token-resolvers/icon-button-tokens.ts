@@ -65,6 +65,7 @@ export const iconButtonTokenResolver: IconButtonTokenResolver = ({
   return {
     container: {
       backgroundColor: resolved.background,
+      opacity: state.isDisabled ? 0.6 : 1,
       border: hasBorder ? {
         width: {
           type: 'all',

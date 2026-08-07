@@ -108,12 +108,14 @@ export const MultiSelect = ({
             pressed: boolean,
             hovered?: boolean,
             focused?: boolean,
+            focusVisible?: boolean,
           }
           return multiSelectTheme.trigger({
             ...state,
             isPressed: interaction.pressed,
             isHovered: !!interaction.hovered,
             isFocused: !!interaction.focused,
+            isFocusVisible: !!interaction.focusVisible,
           })
         }}
       >

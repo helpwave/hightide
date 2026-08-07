@@ -75,7 +75,7 @@ export const checkboxTokenResolver: CheckboxTokenResolver = ({
         mainAxisAlignment: 'center',
         crossAxisAligment: 'center',
       },
-      outline: state.isFocused ? {
+      outline: state.isFocusVisible ? {
         color: 'transparent',
       } : undefined,
     },

@@ -28,6 +28,7 @@ export const toInputThemeResolvers: ComponentThemeResolver<InputThemeResolvers> 
       isDisabled: state.isDisabled,
       isHovered: state.isHovered,
       isFocused: state.isFocused,
+      isFocusVisible: state.isFocusVisible,
       isPressed: state.isPressed,
       isInvalid: state.isInvalid,
       isReadonly: state.isReadonly,

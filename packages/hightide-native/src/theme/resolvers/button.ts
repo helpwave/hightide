@@ -27,6 +27,7 @@ export const toButtonThemeResolvers: ComponentThemeResolver<ButtonThemeResolvers
       isDisabled: state.isDisabled,
       isHovered: state.isHovered,
       isFocused: state.isFocused,
+      isFocusVisible: state.isFocusVisible,
       isPressed: state.isPressed,
     },
   })

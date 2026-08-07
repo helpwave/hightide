@@ -8,6 +8,7 @@ import type { TextStyleTokens } from './text-style-tokens'
 export type InputState = {
   isHovered?: boolean,
   isFocused?: boolean,
+  isFocusVisible?: boolean,
   isPressed?: boolean,
   isDisabled?: boolean,
   isReadonly?: boolean,
@@ -62,6 +63,7 @@ export const inputTokenResolver: InputTokenResolver = ({
   return {
     container: {
       backgroundColor: coloring.background,
+      opacity: state.isDisabled ? 0.6 : 1,
       border: {
         width: {
           type: 'all',

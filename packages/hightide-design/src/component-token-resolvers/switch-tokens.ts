@@ -46,25 +46,17 @@ export const switchTokenResolver: SwitchTokenResolver = ({
     color: onColor,
     appearance: 'subtle',
   })
-  const disabledTrack = semanticResolvers.tintedSurface({
-    themeTokens,
-    tintColor: color.disabled.color,
-    tintStrength: 'strong',
-  })
-  const trackActive = state.isDisabled ? disabledTrack : color.primary.color
-  const trackInactive = state.isDisabled ? disabledTrack : color.surface.color
-  const trackBackground = state.isActive ? trackActive : trackInactive
-  const trackBorderColor = state.isDisabled
-    ? disabledTrack
-    : state.isInvalid
-      ? color.negative.color
-      : state.isActive ? trackActive : fadedBorder
-  const thumbColor = state.isDisabled
-    ? color.disabled.onColor
-    : state.isActive ? color.primary.onColor : subtleThumb
+  const trackActive = color.primary.color
+  const trackInactive = color.surface.color
+  const trackBackground = state.isDisabled ? themeTokens.color.disabled.color : state.isActive ? trackActive : trackInactive
+  const trackBorderColor =  state.isDisabled ? themeTokens.color.disabled.color : state.isInvalid
+    ? color.negative.color
+    : state.isActive ? trackActive : fadedBorder
+  const thumbColor = state.isActive ? color.primary.onColor : subtleThumb
 
   return {
     container: {
+      opacity: state.isDisabled ? 0.6 : 1,
       size: {
         width: mediumControl.size,
         height: mediumControl.size,
@@ -78,7 +70,7 @@ export const switchTokenResolver: SwitchTokenResolver = ({
         mainAxisAlignment: 'center',
         crossAxisAligment: 'center',
       },
-      outline: state.isFocused ? {
+      outline: state.isFocusVisible ? {
         color: 'transparent',
       } : undefined,
     },
@@ -106,7 +98,7 @@ export const switchTokenResolver: SwitchTokenResolver = ({
         mainAxisAlignment: 'start',
         crossAxisAligment: 'center',
       },
-      outline: state.isFocused ? {
+      outline: state.isFocusVisible ? {
         ...focusOutline,
         color: color.primary.color,
       } : undefined,

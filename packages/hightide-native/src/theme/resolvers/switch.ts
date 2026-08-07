@@ -24,6 +24,7 @@ export const toSwitchThemeResolvers: ComponentThemeResolver<SwitchThemeResolvers
       isDisabled: state.isDisabled,
       isHovered: state.isHovered,
       isFocused: state.isFocused,
+      isFocusVisible: state.isFocusVisible,
       isReadonly: state.isReadonly,
       isInvalid: state.isInvalid,
     },

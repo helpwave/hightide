@@ -27,6 +27,7 @@ type PressableInteraction = {
   pressed: boolean,
   hovered?: boolean,
   focused?: boolean,
+  focusVisible?: boolean,
 }
 
 export const ChatQuickReplyChip = ({
@@ -46,6 +47,7 @@ export const ChatQuickReplyChip = ({
     isPressed: interaction.pressed,
     isHovered: !!interaction.hovered,
     isFocused: !!interaction.focused,
+    isFocusVisible: !!interaction.focusVisible,
   })
 
   return (

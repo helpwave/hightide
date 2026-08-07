@@ -29,6 +29,7 @@ export const toCheckboxThemeResolvers: ComponentThemeResolver<CheckboxThemeResol
       isDisabled: state.isDisabled,
       isHovered: state.isHovered,
       isFocused: state.isFocused,
+      isFocusVisible: state.isFocusVisible,
       isPressed: state.isPressed,
       isReadonly: state.isReadonly,
       isInvalid: state.isInvalid,

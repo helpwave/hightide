@@ -106,12 +106,14 @@ export const Select = ({
             pressed: boolean,
             hovered?: boolean,
             focused?: boolean,
+            focusVisible?: boolean,
           }
           return selectTheme.trigger({
             ...state,
             isPressed: interaction.pressed,
             isHovered: !!interaction.hovered,
             isFocused: !!interaction.focused,
+            isFocusVisible: !!interaction.focusVisible,
           })
         }}
       >
@@ -120,6 +122,7 @@ export const Select = ({
             pressed: boolean,
             hovered?: boolean,
             focused?: boolean,
+            focusVisible?: boolean,
           }
           return (
             <ThemedText style={selectTheme.triggerText({
@@ -127,6 +130,7 @@ export const Select = ({
               isPressed: interaction.pressed,
               isHovered: !!interaction.hovered,
               isFocused: !!interaction.focused,
+              isFocusVisible: !!interaction.focusVisible,
             })}
             >
               {selectedLabel}

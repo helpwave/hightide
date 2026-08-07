@@ -29,12 +29,12 @@ const blendBackground = (
 const toPressableColoringTokens = (
   coloring: ColoringTokens,
   style: ColoringStyle,
-  isFocused: boolean
+  isFocusVisible: boolean
 ): PressableColoringTokens => ({
   background: coloring.background,
   text: coloring.text,
   border: isOutlinedStyle(style) ? coloring.accent : 'transparent',
-  outline: isFocused ? coloring.accent : 'transparent',
+  outline: isFocusVisible ? coloring.accent : 'transparent',
 })
 
 export const resolvePressableColoring = (params: {
@@ -68,7 +68,7 @@ export const resolvePressableColoring = (params: {
   let { background } = params.coloring
   const { text, accent } = params.coloring
 
-  if (state.has('pressed') || state.has('focused')) {
+  if (state.has('pressed') || state.has('focusVisible')) {
     background = blendBackground(background, text, tintConfig.normal)
   } else if (state.has('hovered')) {
     background = blendBackground(background, text, tintConfig.light)
@@ -77,6 +77,6 @@ export const resolvePressableColoring = (params: {
   return toPressableColoringTokens(
     { background, text, accent },
     style,
-    state.has('focused')
+    state.has('focusVisible')
   )
 }

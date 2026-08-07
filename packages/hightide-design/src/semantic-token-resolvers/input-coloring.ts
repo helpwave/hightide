@@ -44,13 +44,13 @@ export const resolveInputColoring = (params: {
       color: surface.onColor,
     })
 
-  const outline = state.isFocused
+  const outline = state.isFocusVisible
     ? (state.isInvalid ? negative.color : accentPair.color)
     : undefined
 
   let shadow: ColorToken | undefined
 
-  if (state.isPressed || state.isFocused) {
+  if (state.isPressed || state.isFocusVisible) {
     background = blendBackground(background, text, tintConfig.normal)
     shadow = HexColorUtils.hexWithAlpha(accentPair.color, tintConfig.normal)
   } else if (state.isHovered) {

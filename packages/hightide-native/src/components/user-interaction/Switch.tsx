@@ -47,6 +47,7 @@ type PressableInteraction = {
   pressed: boolean,
   hovered?: boolean,
   focused?: boolean,
+  focusVisible?: boolean,
 }
 
 const toNumber = (value: string | number | undefined, fallback: number): number => (
@@ -103,6 +104,7 @@ export const Switch = ({
     isPressed: interaction.pressed,
     isHovered: !!interaction.hovered,
     isFocused: !!interaction.focused,
+    isFocusVisible: !!interaction.focusVisible,
   })
 
   return (

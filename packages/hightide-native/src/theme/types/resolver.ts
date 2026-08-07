@@ -6,6 +6,7 @@ export type InteractionState = {
   isDisabled?: boolean,
   isHovered?: boolean,
   isFocused?: boolean,
+  isFocusVisible?: boolean,
   isPressed?: boolean,
   isReadonly?: boolean,
   isInvalid?: boolean,
