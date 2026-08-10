@@ -19,21 +19,36 @@ const hexWithAlpha = (hex: HexColorToken, alpha: number): HexColorToken => {
   return `#${rgb}${alphaHex}`
 }
 
-const parseRgb = (hex: HexColorToken): [number, number, number] => {
-  const expanded = expandHex(hex).slice(0, 6)
+const parseRgba = (hex: HexColorToken): [number, number, number, number] => {
+  const expanded = expandHex(hex)
+  const rgb = expanded.slice(0, 6)
+  const hasAlpha = expanded.length >= 8
+  const alphaHex = hasAlpha ? expanded.slice(6, 8) : 'ff'
+
   return [
-    Number.parseInt(expanded.slice(0, 2), 16),
-    Number.parseInt(expanded.slice(2, 4), 16),
-    Number.parseInt(expanded.slice(4, 6), 16),
+    Number.parseInt(rgb.slice(0, 2), 16),
+    Number.parseInt(rgb.slice(2, 4), 16),
+    Number.parseInt(rgb.slice(4, 6), 16),
+    Number.parseInt(alphaHex, 16) / 255,
   ]
 }
 
-const toHex = (r: number, g: number, b: number): HexColorToken => {
-  const channel = (value: number) => Math.round(Math.min(255, Math.max(0, value)))
-    .toString(16)
-    .padStart(2, '0')
+const parseRgb = (hex: HexColorToken): [number, number, number] => {
+  const [r, g, b] = parseRgba(hex)
+  return [r, g, b]
+}
 
-  return `#${channel(r)}${channel(g)}${channel(b)}`
+const channelHex = (value: number): string => Math.round(Math.min(255, Math.max(0, value)))
+  .toString(16)
+  .padStart(2, '0')
+
+const toHex = (r: number, g: number, b: number): HexColorToken => (
+  `#${channelHex(r)}${channelHex(g)}${channelHex(b)}`
+)
+
+const toHexWithAlpha = (r: number, g: number, b: number, alpha: number): HexColorToken => {
+  const alphaByte = Math.round(Math.min(1, Math.max(0, alpha)) * 255)
+  return `#${channelHex(r)}${channelHex(g)}${channelHex(b)}${alphaByte.toString(16).padStart(2, '0')}`
 }
 
 const mixWithBlack = (hex: HexColorToken, amount: number): HexColorToken => {
@@ -52,20 +67,29 @@ const mixWithWhite = (hex: HexColorToken, amount: number): HexColorToken => {
   )
 }
 
-const blendOver = (base: HexColorToken, overlay: HexColorToken, alpha: number): HexColorToken => {
-  const [br, bg, bb] = parseRgb(base)
-  const [or, og, ob] = parseRgb(overlay)
-  const t = Math.min(1, Math.max(0, alpha))
-  return toHex(
-    br * (1 - t) + or * t,
-    bg * (1 - t) + og * t,
-    bb * (1 - t) + ob * t
-  )
+const blend = (background: HexColorToken, tint: HexColorToken): HexColorToken => {
+  const [br, bg, bb, ba] = parseRgba(background)
+  const [tr, tg, tb, ta] = parseRgba(tint)
+  const outA = ta + ba * (1 - ta)
+
+  if (outA <= 0) {
+    return '#00000000'
+  }
+
+  const outR = (tr * ta + br * ba * (1 - ta)) / outA
+  const outG = (tg * ta + bg * ba * (1 - ta)) / outA
+  const outB = (tb * ta + bb * ba * (1 - ta)) / outA
+
+  if (outA >= 1) {
+    return toHex(outR, outG, outB)
+  }
+
+  return toHexWithAlpha(outR, outG, outB, outA)
 }
 
 export const HexColorUtils = {
   hexWithAlpha,
   mixWithBlack,
   mixWithWhite,
-  blendOver,
+  blend,
 }

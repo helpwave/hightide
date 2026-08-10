@@ -1,6 +1,7 @@
 import { toContainerStyle, toTextStyle } from '../adapters/style-adapters'
 import type { Color } from '../types/color'
 import type {
+  SelectIconStyle,
   SelectMenuStyle,
   SelectOptionState,
   SelectOptionStyle,
@@ -16,6 +17,7 @@ import {
   createSimpleStyleResolver,
   createSimpleValueResolver,
   createStyleResolver,
+  createValueResolver,
   type ComponentThemeResolver
 } from '../types/resolver'
 
@@ -58,35 +60,35 @@ export const toSelectThemeResolvers: ComponentThemeResolver<SelectThemeResolvers
     },
   })
 
+  const toTriggerState = (state: SelectState) => ({
+    color: state.color,
+    isDisabled: state.isDisabled,
+    isInvalid: state.isInvalid,
+    isHovered: state.isHovered,
+    isFocused: state.isFocused,
+    isFocusVisible: state.isFocusVisible,
+    isPressed: state.isPressed,
+    isReadonly: state.isReadonly,
+    isOpen: state.isOpen,
+    hasValue: state.hasValue,
+  })
+
   return {
     trigger: createStyleResolver((state: SelectState): SelectTriggerStyle => (
-      toContainerStyle(resolve({
-        color: state.color,
-        isDisabled: state.isDisabled,
-        isInvalid: state.isInvalid,
-        isHovered: state.isHovered,
-        isFocused: state.isFocused,
-        isFocusVisible: state.isFocusVisible,
-        isPressed: state.isPressed,
-        isReadonly: state.isReadonly,
-        isOpen: state.isOpen,
-        hasValue: state.hasValue,
-      }).trigger)
+      toContainerStyle(resolve(toTriggerState(state)).trigger)
     )),
     triggerText: createStyleResolver((state: SelectState): SelectTriggerTextStyle => (
-      toTextStyle(resolve({
-        color: state.color,
-        isDisabled: state.isDisabled,
-        isInvalid: state.isInvalid,
-        isHovered: state.isHovered,
-        isFocused: state.isFocused,
-        isFocusVisible: state.isFocusVisible,
-        isPressed: state.isPressed,
-        isReadonly: state.isReadonly,
-        isOpen: state.isOpen,
-        hasValue: state.hasValue,
-      }).triggerText)
+      toTextStyle(resolve(toTriggerState(state)).triggerText)
     )),
+    icon: createValueResolver((state: SelectState): SelectIconStyle => {
+      const { icon } = resolve(toTriggerState(state))
+
+      return {
+        size: icon.size,
+        strokeWidth: icon.strokeWidth,
+        color: icon.color,
+      }
+    }),
     overlay: createSimpleStyleResolver((): SelectOverlayStyle => ({
       ...resolve().overlay,
     })),

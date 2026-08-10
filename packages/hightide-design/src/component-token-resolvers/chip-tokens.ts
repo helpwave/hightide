@@ -62,7 +62,12 @@ export const chipTokenResolver: ChipTokenResolver = ({
           horizontal: horizontalPadding,
         },
       },
-      layout: { gap },
+      layout: {
+        gap,
+        direction: 'horizontal',
+        mainAxisAlignment: 'start',
+        crossAxisAligment: 'center',
+      },
     },
     text: {
       ...textStyle,

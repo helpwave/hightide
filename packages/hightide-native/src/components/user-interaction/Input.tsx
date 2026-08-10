@@ -1,6 +1,7 @@
 import {
   forwardRef,
-  useMemo
+  useMemo,
+  useState
 } from 'react'
 import {
   TextInput,
@@ -72,6 +73,9 @@ export const Input = forwardRef<TextInput, InputProps>(function Input({
   ...props
 }, ref) {
   const { theme } = useTheme()
+  const [isHovered, setIsHovered] = useState(false)
+  const [isPressed, setIsPressed] = useState(false)
+  const [isFocused, setIsFocused] = useState(false)
 
   const [value, setValue] = useControlledState({
     value: controlledValue,
@@ -91,12 +95,17 @@ export const Input = forwardRef<TextInput, InputProps>(function Input({
     disabled: !afterDelay || disabled || readOnly,
   })
 
+  const interactive = !disabled && !readOnly
+
   const state = useMemo((): InputState => ({
     color,
     isDisabled: disabled,
     isInvalid: invalid,
     isReadonly: readOnly,
-  }), [color, disabled, invalid, readOnly])
+    isHovered: interactive && isHovered,
+    isPressed: interactive && isPressed,
+    isFocused: interactive && isFocused,
+  }), [color, disabled, invalid, readOnly, interactive, isHovered, isPressed, isFocused])
 
   const resolvedContainerStyle = useMemo(
     () => theme.components.input.container(state, containerStyle),
@@ -116,7 +125,7 @@ export const Input = forwardRef<TextInput, InputProps>(function Input({
       {...props}
       ref={ref}
       value={value}
-      editable={!disabled && !readOnly}
+      editable={interactive}
       onChangeText={(nextValue) => {
         props.onChangeText?.(nextValue)
         restartTimer(() => {
@@ -124,12 +133,39 @@ export const Input = forwardRef<TextInput, InputProps>(function Input({
         })
         setValue(nextValue)
       }}
+      onFocus={(event) => {
+        if (interactive) {
+          setIsFocused(true)
+        }
+        props.onFocus?.(event)
+      }}
       onBlur={(event) => {
+        setIsFocused(false)
         props.onBlur?.(event)
         if (allowEditCompleteOnBlur) {
           onEditComplete?.(value ?? '')
           clearTimer()
         }
+      }}
+      onPressIn={(event) => {
+        if (interactive) {
+          setIsPressed(true)
+        }
+        props.onPressIn?.(event)
+      }}
+      onPressOut={(event) => {
+        setIsPressed(false)
+        props.onPressOut?.(event)
+      }}
+      onPointerEnter={(event) => {
+        if (interactive) {
+          setIsHovered(true)
+        }
+        props.onPointerEnter?.(event)
+      }}
+      onPointerLeave={(event) => {
+        setIsHovered(false)
+        props.onPointerLeave?.(event)
       }}
       onSubmitEditing={(event) => {
         props.onSubmitEditing?.(event)

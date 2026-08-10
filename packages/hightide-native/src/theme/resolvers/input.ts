@@ -1,3 +1,5 @@
+import type { ColorToken, HexColorToken } from '@helpwave/hightide-design/primitive-tokens'
+import { HexColorUtils } from '@helpwave/hightide-design/utils'
 import { toContainerStyle, toTextStyle } from '../adapters/style-adapters'
 import type {
   InputContainerStyle,
@@ -12,6 +14,17 @@ import {
   createValueResolver,
   type ComponentThemeResolver
 } from '../types/resolver'
+
+const blendWithStateLayer = (
+  base: ColorToken | undefined,
+  tint: ColorToken
+): ColorToken | undefined => {
+  if (base === undefined || tint === 'transparent' || base === 'transparent') {
+    return base
+  }
+
+  return HexColorUtils.blend(base as HexColorToken, tint as HexColorToken)
+}
 
 export const toInputThemeResolvers: ComponentThemeResolver<InputThemeResolvers> = ({
   themeTokens,
@@ -36,9 +49,25 @@ export const toInputThemeResolvers: ComponentThemeResolver<InputThemeResolvers> 
   })
 
   return {
-    container: createStyleResolver((state: InputState): InputContainerStyle => (
-      toContainerStyle(resolve(state).container)
-    )),
+    container: createStyleResolver((state: InputState): InputContainerStyle => {
+      const { container, stateLayer } = resolve(state)
+      const tint = stateLayer.backgroundColor ?? 'transparent'
+      const borderColor = container.border?.color
+
+      return toContainerStyle({
+        ...container,
+        backgroundColor: blendWithStateLayer(container.backgroundColor, tint),
+        border: container.border === undefined ? undefined : {
+          ...container.border,
+          color: borderColor?.type === 'all'
+            ? {
+              type: 'all',
+              value: blendWithStateLayer(borderColor.value, tint) ?? borderColor.value,
+            }
+            : borderColor,
+        },
+      })
+    }),
     text: createStyleResolver((state: InputState): InputTextStyle => (
       toTextStyle(resolve(state).text)
     )),

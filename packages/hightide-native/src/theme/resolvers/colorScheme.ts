@@ -26,7 +26,6 @@ const colorSchemeKeys = [
   'warning',
   'negative',
   'neutral',
-  'disabled',
 ] as const
 
 export type ResolvedColoringStyles = {

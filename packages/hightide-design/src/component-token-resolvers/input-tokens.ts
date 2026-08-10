@@ -1,8 +1,11 @@
-import { resolveInputColoring } from '../semantic-token-resolvers'
+import { resolveInputColoring, resolvePressableStateLayerTint } from '../semantic-token-resolvers'
+import { hightideShadow } from '../primitive-tokens/shadow'
 import type { ColorPairToken } from '../theme-tokens/theme-tokens-config'
+import { HexColorUtils } from '../utils/hex'
 import type { ComponentTokenResolver } from './component-token-resolver'
 import type { ContainerTokens } from './container-tokens'
 import { iconTokenResolver, type IconTokens } from './icon-tokens'
+import type { PressableState } from './pressable'
 import type { TextStyleTokens } from './text-style-tokens'
 
 export type InputState = {
@@ -24,6 +27,7 @@ export type InputComponentResolverProps = {
 
 export type InputTokens = {
   container: ContainerTokens,
+  stateLayer: ContainerTokens,
   text: TextStyleTokens,
   placeholder: TextStyleTokens,
   icon: IconTokens,
@@ -60,6 +64,27 @@ export const inputTokenResolver: InputTokenResolver = ({
       color: themeTokens.color.surface.onColor,
     })
 
+  const interactionStates = new Set<PressableState>()
+  if (state.isHovered === true) {
+    interactionStates.add('hovered')
+  }
+  if (state.isPressed === true) {
+    interactionStates.add('pressed')
+  }
+
+  const tint = resolvePressableStateLayerTint({
+    themeTokens,
+    states: interactionStates,
+    color: coloring.text,
+  })
+
+  const focusShadow = state.isFocused === true && coloring.border !== 'transparent'
+    ? {
+      ...hightideShadow.layout.basic.md,
+      color: HexColorUtils.hexWithAlpha(coloring.border, 0.7),
+    }
+    : undefined
+
   return {
     container: {
       backgroundColor: coloring.background,
@@ -74,9 +99,15 @@ export const inputTokenResolver: InputTokenResolver = ({
           value: coloring.border,
         },
       },
-      outline: coloring.outline !== undefined ? {
+      outline:  {
         ...themeTokens.focusOutline,
-        color: coloring.outline,
+        color: !state.isFocusVisible ? 'transparent' :
+          state.isInvalid === true
+            ? themeTokens.color.negative.color
+            : (overrides?.color ?? themeTokens.color.primary).color,
+      },
+      decoration: focusShadow !== undefined ? {
+        shadow: focusShadow,
       } : undefined,
       size: {
         minHeight: layout.size,
@@ -95,6 +126,9 @@ export const inputTokenResolver: InputTokenResolver = ({
         crossAxisAligment: 'center',
         gap: spacing.sm,
       },
+    },
+    stateLayer: {
+      backgroundColor: tint,
     },
     text: {
       ...textStyle,

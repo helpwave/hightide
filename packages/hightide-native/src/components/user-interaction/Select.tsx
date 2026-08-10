@@ -1,4 +1,4 @@
-import { useMemo } from 'react'
+import { Fragment, useMemo } from 'react'
 import {
   FlatList,
   Modal,
@@ -12,6 +12,8 @@ import {
 import type { ColorPairToken } from '@helpwave/hightide-design/theme-tokens'
 import { useTheme } from '../../global-contexts/theme/ThemeContext'
 import { ThemedText } from '../visualization-and-display/ThemedText'
+import { ThemedIcon } from '../visualization-and-display/ThemedIcon'
+import { HightideIconRegistry } from '../../icons/HightideIconRegistry'
 import {
   useSelect,
   type UseSelectOption
@@ -124,17 +126,27 @@ export const Select = ({
             focused?: boolean,
             focusVisible?: boolean,
           }
+          const triggerState = {
+            ...state,
+            isPressed: interaction.pressed,
+            isHovered: !!interaction.hovered,
+            isFocused: !!interaction.focused,
+            isFocusVisible: !!interaction.focusVisible,
+          }
+          const icon = selectTheme.icon(triggerState)
+
           return (
-            <ThemedText style={selectTheme.triggerText({
-              ...state,
-              isPressed: interaction.pressed,
-              isHovered: !!interaction.hovered,
-              isFocused: !!interaction.focused,
-              isFocusVisible: !!interaction.focusVisible,
-            })}
-            >
-              {selectedLabel}
-            </ThemedText>
+            <Fragment>
+              <ThemedText style={[selectTheme.triggerText(triggerState), { flex: 1 }]}>
+                {selectedLabel}
+              </ThemedText>
+              <ThemedIcon
+                icon={HightideIconRegistry.ChevronDown}
+                size={icon.size}
+                strokeWidth={icon.strokeWidth}
+                color={icon.color}
+              />
+            </Fragment>
           )
         }}
       </Pressable>

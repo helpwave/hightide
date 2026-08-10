@@ -13,20 +13,6 @@ import type {
   PressableVariant
 } from './types'
 
-const getTintAlpha = (tint: ColorToken): number => {
-  if (tint === 'transparent') {
-    return 0
-  }
-  const expanded = tint.startsWith('#') ? tint.slice(1) : tint
-  if (expanded.length === 8) {
-    return Number.parseInt(expanded.slice(6, 8), 16) / 255
-  }
-  if (expanded.length === 4) {
-    return Number.parseInt(expanded.slice(3, 4) + expanded.slice(3, 4), 16) / 255
-  }
-  return 1
-}
-
 const compositeTint = (
   background: ColorToken,
   tint: ColorToken
@@ -37,7 +23,7 @@ const compositeTint = (
   if (background === 'transparent') {
     return tint
   }
-  return HexColorUtils.blendOver(background, tint, getTintAlpha(tint))
+  return HexColorUtils.blend(background, tint)
 }
 
 const toPressableColoringTokens = (
@@ -63,7 +49,7 @@ export const resolvePressableStateLayerTint = (params: {
     return 'transparent'
   }
 
-  if (states.has('focused') || states.has('pressed')) {
+  if (states.has('focusVisible') || states.has('pressed')) {
     return HexColorUtils.hexWithAlpha(color, tintConfig.normal)
   }
   if (states.has('hovered')) {
@@ -86,9 +72,9 @@ export const resolvePressableColoring = (params: {
 
     if (colorVariant === 'tonal') {
       const coloring: ColoringToken = {
-        background: HexColorUtils.blendOver(surface.color, disabled.color, 0.8),
-        foreground: HexColorUtils.blendOver(surface.onColor, disabled.onColor, 0.8),
-        accent: HexColorUtils.blendOver(surface.color, disabled.color, 0.8),
+        background: HexColorUtils.blend(surface.color, HexColorUtils.hexWithAlpha(disabled.color, 0.8)),
+        foreground: HexColorUtils.blend(surface.onColor, HexColorUtils.hexWithAlpha(disabled.onColor, 0.8)),
+        accent: HexColorUtils.blend(surface.color, HexColorUtils.hexWithAlpha(disabled.color, 0.8)),
       }
       return toPressableColoringTokens(coloring, variant, false)
     }

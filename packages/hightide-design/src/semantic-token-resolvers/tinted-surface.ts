@@ -10,9 +10,8 @@ export const resolveTintedSurface = (params: {
 }): HexColorToken => {
   const strength = params.tintStrength ?? 'light'
   const alpha = params.themeTokens.color.tintConfig[strength]
-  return HexColorUtils.blendOver(
+  return HexColorUtils.blend(
     params.themeTokens.color.surface.color,
-    params.tintColor,
-    alpha
+    HexColorUtils.hexWithAlpha(params.tintColor, alpha)
   )
 }

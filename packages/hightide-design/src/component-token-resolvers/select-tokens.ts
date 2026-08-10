@@ -8,6 +8,7 @@ import type { ColorPairToken } from '../theme-tokens/theme-tokens-config'
 import { HexColorUtils } from '../utils/hex'
 import type { ComponentTokenResolver } from './component-token-resolver'
 import type { ContainerTokens } from './container-tokens'
+import type { IconTokens } from './icon-tokens'
 import {
   inputTokenResolver,
   type InputState
@@ -65,6 +66,7 @@ export type SelectOptionTokens = {
 export type SelectTokens = {
   trigger: SelectTriggerTokens,
   triggerText: TextStyleTokens,
+  icon: IconTokens,
   overlay: SelectOverlayTokens,
   menu: SelectMenuTokens,
   search: SelectSearchTokens,
@@ -115,8 +117,15 @@ export const selectTokenResolver: SelectTokenResolver = ({
   }).background
 
   return {
-    trigger: input.container,
+    trigger: {
+      ...input.container,
+      layout: {
+        ...input.container.layout,
+        gap: input.container.shape?.padding?.horizontal
+      }
+    },
     triggerText: state.hasValue ? input.text : input.placeholder,
+    icon: input.icon,
     overlay: {
       flex: 1,
       justifyContent: 'center',

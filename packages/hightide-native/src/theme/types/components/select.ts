@@ -28,6 +28,12 @@ export type SelectTriggerStyle = ViewStyle
 
 export type SelectTriggerTextStyle = TextStyle
 
+export type SelectIconStyle = {
+  size?: number,
+  strokeWidth?: number,
+  color?: Color,
+}
+
 export type SelectOverlayStyle = ViewStyle
 
 export type SelectMenuStyle = ViewStyle
@@ -41,6 +47,7 @@ export type SelectOptionTextStyle = TextStyle
 export type SelectThemeResolvers = {
   trigger: StyleResolverFunction<SelectState, SelectTriggerStyle>,
   triggerText: StyleResolverFunction<SelectState, SelectTriggerTextStyle>,
+  icon: StyleResolverFunction<SelectState, SelectIconStyle>,
   overlay: SimpleStyleResolver<SelectOverlayStyle>,
   menu: SimpleStyleResolver<SelectMenuStyle>,
   search: SimpleStyleResolver<SelectSearchStyle>,

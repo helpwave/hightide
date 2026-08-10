@@ -116,7 +116,13 @@ export const multiSelectTokenResolver: MultiSelectTokenResolver = ({
   }).background
 
   return {
-    trigger: input.container,
+    trigger: {
+      ...input.container,
+      size: {
+        ...input.container.size,
+        width: '100%',
+      },
+    },
     triggerText: state.hasSelections ? input.text : input.placeholder,
     overlay: {
       flex: 1,

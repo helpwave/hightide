@@ -12,6 +12,7 @@ import type { ColorPairToken } from '@helpwave/hightide-design/theme-tokens'
 import { Chip } from '../visualization-and-display/Chip'
 import { ThemedText } from '../visualization-and-display/ThemedText'
 import { ThemedIcon } from '../visualization-and-display/ThemedIcon'
+import { IconButton } from './IconButton'
 import { HightideIconRegistry } from '../../icons/HightideIconRegistry'
 import { useTheme } from '../../global-contexts/theme/ThemeContext'
 import {
@@ -23,6 +24,7 @@ import type {
   FormFieldDataHandling,
   FormFieldInteractionStates
 } from '../../types/formField'
+import { useTranslation } from '@helpwave/hightide-utils/context'
 
 export type MultiSelectOption = UseMultiSelectOption
 
@@ -53,6 +55,7 @@ export const MultiSelect = ({
   style,
 }: MultiSelectProps) => {
   const { theme } = useTheme()
+  const translation = useTranslation()
   const interactive = !disabled && !readOnly
 
   const multiSelect = useMultiSelect({
@@ -63,10 +66,8 @@ export const MultiSelect = ({
     onEditComplete,
   })
 
-  const selectedLabels = useMemo(() => {
-    return options
-      .filter((option) => multiSelect.isSelected(option.id))
-      .map((option) => option.label ?? option.id)
+  const selectedOptions = useMemo(() => {
+    return options.filter((option) => multiSelect.isSelected(option.id))
   }, [multiSelect, options])
 
   const state = useMemo((): MultiSelectState => ({
@@ -75,9 +76,9 @@ export const MultiSelect = ({
     isReadonly: readOnly,
     isInvalid: invalid,
     isOpen: multiSelect.isOpen,
-    hasSelections: selectedLabels.length > 0,
-    hasValue: selectedLabels.length > 0,
-  }), [color, disabled, invalid, multiSelect.isOpen, readOnly, selectedLabels.length])
+    hasSelections: selectedOptions.length > 0,
+    hasValue: selectedOptions.length > 0,
+  }), [color, disabled, invalid, multiSelect.isOpen, readOnly, selectedOptions.length])
 
   const multiSelectTheme = theme.components.multiSelect
 
@@ -99,7 +100,7 @@ export const MultiSelect = ({
   )
 
   return (
-    <View style={style}>
+    <View style={[{ width: '100%' }, style]}>
       <Pressable
         disabled={!interactive}
         onPress={() => multiSelect.toggleOpen()}
@@ -119,12 +120,40 @@ export const MultiSelect = ({
           })
         }}
       >
-        {selectedLabels.length > 0
+        {selectedOptions.length > 0
           ? (
-            <View style={{ flexDirection: 'row', flexWrap: 'wrap', gap: 6 }}>
-              {selectedLabels.map((label) => (
-                <Chip key={label} size="sm" color={color} variant="tonal">
-                  {label}
+            <View style={{ flexDirection: 'row', flexWrap: 'wrap', gap: 6, flex: 1 }}>
+              {selectedOptions.map((option) => (
+                <Chip key={option.id} size="sm" color={color} variant="tonal">
+                  <ThemedText>{option.label ?? option.id}</ThemedText>
+                  {!state.isReadonly && (
+                    <View
+                      style={{
+                        position: 'relative',
+                        width: theme.elements.container.xs.size,
+                      }}
+                    >
+                      <IconButton
+                        accessibilityLabel={translation('remove')}
+                        size="sm"
+                        color={theme.colors.negative}
+                        variant="foreground"
+                        disabled={!interactive}
+                        onPress={() => multiSelect.toggleSelection(option.id, false)}
+                        style={{
+                          position: 'absolute',
+                          left: '50%',
+                          top: '50%',
+                          transform: [
+                            { translateX: '-50%' },
+                            { translateY: '-50%' },
+                          ],
+                        }}
+                      >
+                        <ThemedIcon icon={HightideIconRegistry.X} />
+                      </IconButton>
+                    </View>
+                  )}
                 </Chip>
               ))}
             </View>

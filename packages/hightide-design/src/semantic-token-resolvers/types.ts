@@ -44,8 +44,6 @@ export type InputColoringTokens = {
   background: ColorToken,
   text: ColorToken,
   border: ColorToken,
-  outline?: ColorToken,
-  shadow?: ColorToken,
 }
 
 export type ColoringStyle = 'filled' | 'text'

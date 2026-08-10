@@ -58,10 +58,10 @@ export const switchTokenResolver: SwitchTokenResolver = ({
     container: {
       opacity: state.isDisabled ? 0.6 : 1,
       size: {
-        width: mediumControl.size + (mediumControl.size - TRACK_HEIGHT),
+        width: mediumControl.size,
         height: mediumControl.size,
-        minWidth: mediumControl.size + (mediumControl.size - TRACK_HEIGHT),
-        maxWidth: mediumControl.size + (mediumControl.size - TRACK_HEIGHT),
+        minWidth: mediumControl.size,
+        maxWidth: mediumControl.size,
         minHeight: mediumControl.size,
         maxHeight: mediumControl.size,
       },
