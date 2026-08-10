@@ -1,28 +1,17 @@
 import type { ColorPairToken } from '../../theme-tokens/theme-tokens-config'
-import { resolveColoringStyle } from '../../semantic-token-resolvers'
+import {
+  resolveColoringColorVariant,
+  resolveColoringStyle
+} from '../../semantic-token-resolvers'
 import type { ComponentTokenResolver } from '../component-token-resolver'
 import type { ContainerTokens } from '../container-tokens'
 import { iconTokenResolver, type IconTokens } from '../icon-tokens'
 import type { TextStyleTokens } from '../text-style-tokens'
 
-export type ListPositionToken = 'first' | 'middle' | 'last'
-
-export type ListItemAppearance = 'listItem' | 'independent'
-
-export type ListItemState = {
-  position?: ListPositionToken,
-}
-
-export type ListItemConfig = {
-  appearance?: ListItemAppearance,
-}
-
 export type ListItemComponentResolverProps = {
   overrides?: {
     color?: ColorPairToken,
   },
-  config?: ListItemConfig,
-  state?: ListItemState,
 }
 
 export type ListItemTokens = {
@@ -42,10 +31,8 @@ export const listItemTokenResolver: ListItemTokenResolver = ({
   themeTokens,
   semanticResolvers,
   overrides,
-  config,
-  state,
 }) => {
-  const { color, spacing, typography, borders } = themeTokens
+  const { color, spacing, typography } = themeTokens
   const iconSizeTokens = iconTokenResolver({
     themeTokens,
     semanticResolvers,
@@ -57,22 +44,20 @@ export const listItemTokenResolver: ListItemTokenResolver = ({
   })
   const layout = semanticResolvers.controlLayout({ themeTokens, size: 'md' })
   const largeControl = semanticResolvers.controlLayout({ themeTokens, size: 'lg' })
-  const appearance = config?.appearance ?? 'listItem'
-  const position = state?.position ?? 'middle'
-  const isIndependent = appearance === 'independent'
-  const showSeparator = appearance === 'listItem' && position !== 'last'
 
   const tonal = overrides?.color !== undefined
     ? resolveColoringStyle({
-      themeTokens,
-      colorPair: overrides.color,
-      style: 'tonal',
+      coloring: resolveColoringColorVariant({
+        colorPair: overrides.color,
+        variant: 'tonal',
+      }),
+      style: 'filled',
     })
     : undefined
 
-  const titleColor = tonal?.text ?? color.surface.onColor
-  const descriptionTextColor = tonal?.text ?? descriptionColor
-  const iconColor = tonal?.text ?? color.primary.color
+  const titleColor = tonal?.foreground ?? color.surface.onColor
+  const descriptionTextColor = tonal?.foreground ?? descriptionColor
+  const iconColor = tonal?.foreground ?? color.primary.color
 
   return {
     container: {
@@ -83,22 +68,11 @@ export const listItemTokenResolver: ListItemTokenResolver = ({
         minHeight: layout.size,
       },
       shape: {
-        borderRadius: isIndependent ? layout.borderRadius : undefined,
         padding: {
           vertical: largeControl.inset,
           horizontal: layout.horizontalContentPadding,
         },
       },
-      border: showSeparator ? {
-        width: {
-          type: 'physicalSide',
-          bottom: borders.borderWidths.thin,
-        },
-        color: {
-          type: 'physicalSide',
-          bottom: color.border,
-        },
-      } : undefined,
       layout: {
         gap: spacing.md,
         direction: 'horizontal',

@@ -1,4 +1,3 @@
-export * from './color-scheme'
 export * from './create-dark-theme-tokens'
 export * from './create-light-theme-tokens'
 export * from './create-theme-tokens'

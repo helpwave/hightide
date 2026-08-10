@@ -60,6 +60,10 @@ export type ContainerTokens = {
       horizontal?: number,
     },
   },
+  margin?: {
+    vertical?: number,
+    horizontal?: number,
+  },
   layout?: {
     gap?: number,
     direction?: LayoutDirectionToken,

@@ -13,6 +13,7 @@ import { action } from 'storybook/actions'
 
 import {
   Card,
+  Divider,
   ListActionItem,
   ListItem,
   ListNavigationItem,
@@ -38,9 +39,11 @@ const CardDemo = () => {
           Personal data
         </ThemedText>
         <Card>
-          <ListItem label="Name" value="Anna Müller" position="first"/>
-          <ListItem label="Date of birth" value="12.03.1988" position="middle" />
-          <ListItem label="Email" value="anna@example.com" position="last" />
+          <ListItem label="Name" value="Anna Müller" />
+          <Divider />
+          <ListItem label="Date of birth" value="12.03.1988" />
+          <Divider />
+          <ListItem label="Email" value="anna@example.com" />
         </Card>
       </View>
 
@@ -49,12 +52,12 @@ const CardDemo = () => {
           Practice
         </ThemedText>
         <Card>
-          <ListItem label="Practice" value="Praxis am Park" position="first"/>
+          <ListItem label="Practice" value="Praxis am Park" />
+          <Divider />
           <ListNavigationItem
             label="Practice details"
-            leading={<Building2 size={18} color={theme.colorSchemes.primary.text.base.foreground} />}
+            leading={<Building2 size={18} color={theme.colorSchemes.primary.foreground.base.foreground} />}
             onPress={action('practice-details')}
-            position="last"
           />
         </Card>
       </View>
@@ -66,7 +69,7 @@ const CardDemo = () => {
         <Card>
           <ListActionItem
             label="Notifications"
-            leading={<Bell size={18} color={theme.colorSchemes.primary.text.base.foreground} />}
+            leading={<Bell size={18} color={theme.colorSchemes.primary.foreground.base.foreground} />}
             trailing={(
               <View
                 style={(() => {
@@ -99,20 +102,19 @@ const CardDemo = () => {
                 />
               </View>
             )}
-            position="first"
           />
+          <Divider />
           <ListNavigationItem
             label="Account"
-            leading={<UserRound size={18} color={theme.colorSchemes.primary.text.base.foreground} />}
+            leading={<UserRound size={18} color={theme.colorSchemes.primary.foreground.base.foreground} />}
             onPress={action('account')}
-            position="middle"
           />
+          <Divider />
           <ListActionItem
             label="Log out"
             color={theme.colors.negative}
-            leading={<LogOut size={18} color={theme.colorSchemes.negative.text.base.foreground} />}
+            leading={<LogOut size={18} color={theme.colorSchemes.negative.foreground.base.foreground} />}
             onPress={action('logout')}
-            position="last"
           />
         </Card>
       </View>
@@ -125,7 +127,8 @@ export const card: Story = {
     children: (
       <>
         <ListItem label="Name" value="Anna Müller" />
-        <ListItem label="Email" value="anna@example.com" position="last" />
+        <Divider />
+        <ListItem label="Email" value="anna@example.com" />
       </>
     ),
   },

@@ -32,12 +32,6 @@ const toListItemDefaultThemeResolvers: ComponentThemeResolver<ListItemDefaultThe
     overrides: {
       color: state.color,
     },
-    config: {
-      appearance: state.appearance,
-    },
-    state: {
-      position: state.position,
-    },
   })
 
   return {
@@ -77,16 +71,12 @@ const toListActionItemThemeResolvers: ComponentThemeResolver<ListActionItemTheme
     overrides: {
       color: state.color,
     },
-    config: {
-      appearance: state.appearance,
-    },
     state: {
       isDisabled: state.isDisabled,
       isHovered: state.isHovered,
       isFocused: state.isFocused,
       isFocusVisible: state.isFocusVisible,
       isPressed: state.isPressed,
-      position: state.position,
     },
   })
 

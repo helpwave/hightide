@@ -27,14 +27,14 @@ type IconButtonArgs = {
   disabled: boolean,
   color: ColorPairKey,
   size: typeof ButtonUtil.sizes[number],
-  coloringStyle: typeof ButtonUtil.coloringStyles[number],
+  variant: typeof ButtonUtil.variants[number],
 }
 
 const IconButtonDemo = ({
   disabled,
   color,
   size,
-  coloringStyle,
+  variant,
 }: IconButtonArgs) => {
   const { theme } = useTheme()
 
@@ -43,7 +43,7 @@ const IconButtonDemo = ({
       disabled={disabled}
       color={theme.colors[color]}
       size={size}
-      coloringStyle={coloringStyle}
+      variant={variant}
       accessibilityLabel="Subtract"
       onPress={action('Pressed')}
     >
@@ -59,16 +59,16 @@ export const iconButton: StoryObj<IconButtonArgs> = {
       control: 'select',
       options: ButtonUtil.sizes,
     },
-    coloringStyle: {
+    variant: {
       control: 'select',
-      options: ButtonUtil.coloringStyles,
+      options: ButtonUtil.variants,
     },
   },
   args: {
     disabled: false,
     color: 'primary',
     size: 'md',
-    coloringStyle: 'filled',
+    variant: 'filled',
   },
   render: (args) => <IconButtonDemo {...args} />,
 }

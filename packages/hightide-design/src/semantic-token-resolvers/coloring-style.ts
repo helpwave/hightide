@@ -1,45 +1,130 @@
 import type { ColorPairToken } from '../theme-tokens/theme-tokens-config'
 import type { ThemeTokens } from '../theme-tokens/theme-tokens'
+import { HexColorUtils } from '../utils/hex'
 import { OKLCHUtils } from '../utils/oklch'
-import type { ColoringStyle, ColoringTokens } from './types'
+import type {
+  ChipVariant,
+  ColoringColorTokens,
+  ColoringColorVariant,
+  ColoringStyle,
+  ColoringToken,
+  PressableVariant
+} from './types'
 
-export const resolveColoringStyle = (params: {
-  themeTokens: ThemeTokens,
+export const resolveColoringColorVariant = (params: {
+  themeTokens?: ThemeTokens,
   colorPair: ColorPairToken,
-  style: ColoringStyle,
-}): ColoringTokens => {
+  variant: ColoringColorVariant,
+}): ColoringColorTokens => {
   const { color, onColor } = params.colorPair
 
-  switch (params.style) {
-  case 'filled':
+  switch (params.variant) {
+  case 'normal':
     return {
-      background: color,
-      text: onColor,
-      accent: color,
-    }
-  case 'outline':
-    return {
-      background: 'transparent',
-      text: color,
+      color,
+      onColor,
       accent: color,
     }
   case 'tonal':
     return {
-      background: OKLCHUtils.changeLightness(color, 0.95),
-      text: OKLCHUtils.changeLightness(color, 0.2),
+      color: OKLCHUtils.changeLightness(color, 0.95),
+      onColor: OKLCHUtils.changeLightness(color, 0.2),
       accent: color,
     }
-  case 'tonal-outline':
+  case 'transparent':
     return {
-      background: OKLCHUtils.changeLightness(color, 0.95),
-      text: OKLCHUtils.changeLightness(color, 0.2),
+      color: HexColorUtils.hexWithAlpha(color, 0.2),
+      onColor,
       accent: color,
+    }
+  }
+}
+
+export const resolveColoringStyle = (params: {
+  themeTokens?: ThemeTokens,
+  coloring: ColoringColorTokens,
+  style: ColoringStyle,
+}): ColoringToken => {
+  const { color, onColor, accent } = params.coloring
+
+  switch (params.style) {
+  case 'filled':
+    return {
+      foreground: onColor,
+      background: color,
+      accent,
     }
   case 'text':
     return {
+      foreground: color,
       background: 'transparent',
-      text: color,
-      accent: color,
+      accent,
+    }
+  }
+}
+
+export type PressableVariantMapping = {
+  colorVariant: ColoringColorVariant,
+  style: ColoringStyle,
+  bordered: boolean,
+  elevated: boolean,
+}
+
+export const mapPressableVariant = (
+  variant: PressableVariant
+): PressableVariantMapping => {
+  switch (variant) {
+  case 'elevated':
+    return {
+      colorVariant: 'normal',
+      style: 'filled',
+      bordered: false,
+      elevated: true,
+    }
+  case 'filled':
+    return {
+      colorVariant: 'normal',
+      style: 'filled',
+      bordered: false,
+      elevated: false,
+    }
+  case 'tonal':
+    return {
+      colorVariant: 'tonal',
+      style: 'filled',
+      bordered: false,
+      elevated: false,
+    }
+  case 'outlined':
+    return {
+      colorVariant: 'normal',
+      style: 'text',
+      bordered: true,
+      elevated: false,
+    }
+  case 'foreground':
+    return {
+      colorVariant: 'normal',
+      style: 'text',
+      bordered: false,
+      elevated: false,
+    }
+  }
+}
+
+export const mapChipVariant = (
+  variant: ChipVariant
+): { colorVariant: ColoringColorVariant, style: ColoringStyle } => {
+  switch (variant) {
+  case 'filled':
+    return {
+      colorVariant: 'normal',
+      style: 'filled',
+    }
+  case 'tonal':
+    return {
+      colorVariant: 'tonal',
+      style: 'filled',
     }
   }
 }

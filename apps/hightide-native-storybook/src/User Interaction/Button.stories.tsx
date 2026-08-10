@@ -23,7 +23,7 @@ type ButtonArgs = {
   disabled: boolean,
   color: ColorPairKey,
   size: typeof ButtonUtil.sizes[number],
-  coloringStyle: typeof ButtonUtil.coloringStyles[number],
+  variant: typeof ButtonUtil.variants[number],
 }
 
 const ButtonDemo = ({
@@ -31,7 +31,7 @@ const ButtonDemo = ({
   disabled,
   color,
   size,
-  coloringStyle,
+  variant,
 }: ButtonArgs) => {
   const { theme } = useTheme()
 
@@ -40,7 +40,7 @@ const ButtonDemo = ({
       disabled={disabled}
       color={theme.colors[color]}
       size={size}
-      coloringStyle={coloringStyle}
+      variant={variant}
       onPress={action('Pressed')}
     >
       {label}
@@ -58,9 +58,9 @@ export const button: StoryObj<ButtonArgs> = {
       control: 'select',
       options: ButtonUtil.sizes,
     },
-    coloringStyle: {
+    variant: {
       control: 'select',
-      options: ButtonUtil.coloringStyles,
+      options: ButtonUtil.variants,
     },
   },
   args: {
@@ -68,7 +68,7 @@ export const button: StoryObj<ButtonArgs> = {
     disabled: false,
     color: 'primary',
     size: 'md',
-    coloringStyle: 'filled',
+    variant: 'filled',
   },
   render: (args) => <ButtonDemo {...args} />,
 }

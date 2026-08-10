@@ -1,7 +1,3 @@
-import type {
-  ListItemAppearance,
-  ListPositionToken
-} from '@helpwave/hightide-design/component-token-resolvers'
 import type { ColorPairToken } from '@helpwave/hightide-design/theme-tokens'
 import type {
   TextStyle,
@@ -16,8 +12,6 @@ import type { IconStyle } from '../../../icons'
 
 export type ListItemState = {
   color?: ColorPairToken,
-  position?: ListPositionToken,
-  appearance?: ListItemAppearance,
 }
 
 export type ListItemStyle = ViewStyle
@@ -40,8 +34,6 @@ export type ListItemDefaultThemeResolvers = {
 
 export type ListActionItemState = InteractionState & {
   color?: ColorPairToken,
-  position?: ListPositionToken,
-  appearance?: ListItemAppearance,
 }
 
 export type ListActionItemStyle = ViewStyle

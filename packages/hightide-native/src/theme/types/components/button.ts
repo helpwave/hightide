@@ -1,10 +1,7 @@
 import type { ViewStyle, TextStyle } from 'react-native'
 
-import type { ComponentSize } from '@helpwave/hightide-design/semantic-token-resolvers'
-import type {
-  ColorPairToken,
-  PressableColoringStyle
-} from '@helpwave/hightide-design/theme-tokens'
+import type { ComponentSize, PressableVariant } from '@helpwave/hightide-design/semantic-token-resolvers'
+import type { ColorPairToken } from '@helpwave/hightide-design/theme-tokens'
 
 import type {
   InteractionState,
@@ -14,7 +11,7 @@ import type {
 export type ButtonState = InteractionState & {
   size?: ComponentSize,
   color?: ColorPairToken,
-  coloringStyle?: PressableColoringStyle,
+  variant?: PressableVariant,
 }
 
 export type ButtonStyle = ViewStyle
@@ -22,6 +19,8 @@ export type ButtonStyle = ViewStyle
 export type ButtonTextStyle = TextStyle
 
 export type ButtonThemeResolvers = {
-  container: StyleResolverFunction<ButtonState, ButtonStyle>,
+  touchTarget: StyleResolverFunction<ButtonState, ButtonStyle>,
+  visualContainer: StyleResolverFunction<ButtonState, ButtonStyle>,
+  stateLayer: StyleResolverFunction<ButtonState, ButtonStyle>,
   text: StyleResolverFunction<ButtonState, ButtonTextStyle>,
 }

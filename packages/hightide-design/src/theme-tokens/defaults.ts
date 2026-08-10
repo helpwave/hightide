@@ -25,9 +25,9 @@ import type {
 import type { TypographyStyleToken } from './typography-style-token'
 
 export const defaultTintConfig: TintConfig = {
-  light: 0.06,
-  normal: 0.12,
-  strong: 0.16,
+  light: 0.08,
+  normal: 0.16,
+  strong: 0.20,
 }
 
 export const tertiaryLightColor = '#057986' as const satisfies HexColorToken

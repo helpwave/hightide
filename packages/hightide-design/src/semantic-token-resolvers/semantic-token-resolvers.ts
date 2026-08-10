@@ -1,11 +1,17 @@
-import { resolveColoringStyle } from './coloring-style'
+import {
+  resolveColoringColorVariant,
+  resolveColoringStyle
+} from './coloring-style'
 import {
   resolveContainerLayout,
   resolveControlLayout,
   resolveInsideControlLayout
 } from './element-layout'
 import { resolveInputColoring } from './input-coloring'
-import { resolvePressableColoring } from './pressable-coloring'
+import {
+  resolvePressableColoring,
+  resolvePressableStateLayerTint
+} from './pressable-coloring'
 import { resolveTintedSurface } from './tinted-surface'
 import {
   resolveAsDescription,
@@ -15,8 +21,10 @@ import {
 import type { SemanticTokenResolvers } from './types'
 
 export const hightideSemanticTokenResolvers: SemanticTokenResolvers = {
+  coloringColorVariant: resolveColoringColorVariant,
   coloringStyle: resolveColoringStyle,
   pressableColoring: resolvePressableColoring,
+  pressableStateLayerTint: resolvePressableStateLayerTint,
   inputColoring: resolveInputColoring,
   controlLayout: resolveControlLayout,
   containerLayout: resolveContainerLayout,

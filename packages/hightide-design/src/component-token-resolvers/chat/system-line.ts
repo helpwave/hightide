@@ -47,10 +47,10 @@ export const chatSystemLineTokenResolver: ChatSystemLineTokenResolver = ({ theme
     text: {
       ...typography.body.sm,
       fontWeight: typography.fontWeights.medium,
-      color: accentText.text,
+      color: accentText.foreground,
     },
     icon: {
-      color: accentText.text,
+      color: accentText.foreground,
     },
   }
 }

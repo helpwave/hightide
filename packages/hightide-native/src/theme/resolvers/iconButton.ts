@@ -23,7 +23,7 @@ export const toIconButtonThemeResolvers: ComponentThemeResolver<IconButtonThemeR
     overrides: {
       size: state.size,
       color: state.color,
-      coloringStyle: state.coloringStyle,
+      variant: state.variant,
     },
     state: {
       isDisabled: state.isDisabled,
@@ -35,9 +35,26 @@ export const toIconButtonThemeResolvers: ComponentThemeResolver<IconButtonThemeR
   })
 
   return {
-    button: createStyleResolver((state: IconButtonState): IconButtonStyle => (
-      toContainerStyle(resolve(state).container)
-    )),
+    touchTarget: createStyleResolver((state: IconButtonState): IconButtonStyle => ({
+      ...toContainerStyle(resolve(state).touchTarget),
+      alignSelf: 'flex-start'
+    })),
+    visualContainer: createStyleResolver((state: IconButtonState): IconButtonStyle => ({
+      ...toContainerStyle(resolve(state).visualContainer),
+      overflow: 'hidden',
+    })),
+    stateLayer: createStyleResolver((state: IconButtonState): IconButtonStyle => {
+      const tokens = resolve(state)
+      return {
+        ...toContainerStyle(tokens.stateLayer),
+        position: 'absolute',
+        top: 0,
+        right: 0,
+        bottom: 0,
+        left: 0,
+        borderRadius: tokens.visualContainer.shape?.borderRadius,
+      }
+    }),
     icon: createValueResolver((state: IconButtonState): IconButtonIconStyle => {
       const { icon } = resolve(state)
 

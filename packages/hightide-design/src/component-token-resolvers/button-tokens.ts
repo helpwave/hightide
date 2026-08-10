@@ -1,8 +1,11 @@
 import {
+  mapPressableVariant,
+  resolveColoringColorVariant,
   resolveColoringStyle,
   resolvePressableColoring,
+  resolvePressableStateLayerTint,
   type ComponentSize,
-  type PressableColoringStyle
+  type PressableVariant
 } from '../semantic-token-resolvers'
 import type { ColorPairToken } from '../theme-tokens/theme-tokens-config'
 import type { ComponentTokenResolver } from './component-token-resolver'
@@ -16,13 +19,15 @@ export type ButtonComponentResolverProps = {
   overrides: {
     size?: ComponentSize,
     color?: ColorPairToken,
-    coloringStyle?: PressableColoringStyle,
+    variant?: PressableVariant,
   },
   state: ButtonState,
 }
 
 export type ButtonTokens = {
-  container: ContainerTokens,
+  touchTarget: ContainerTokens,
+  visualContainer: ContainerTokens,
+  stateLayer: ContainerTokens,
   text: TextStyleTokens,
 }
 
@@ -31,6 +36,8 @@ export type ButtonTokenResolver = ComponentTokenResolver<
   ButtonTokens
 >
 
+const touchTargetSize = 44
+
 export const buttonTokenResolver: ButtonTokenResolver = ({
   themeTokens,
   semanticResolvers,
@@ -38,17 +45,30 @@ export const buttonTokenResolver: ButtonTokenResolver = ({
   state,
 }) => {
   const size = overrides.size ?? 'md'
-  const coloringStyle = overrides.coloringStyle ?? 'filled'
+  const variant = overrides.variant ?? 'filled'
+  const { colorVariant, style, elevated } = mapPressableVariant(variant)
   const coloring = resolveColoringStyle({
-    themeTokens,
-    colorPair: overrides.color ?? themeTokens.color.primary,
-    style: coloringStyle,
+    coloring: resolveColoringColorVariant({
+      colorPair: overrides.color ?? themeTokens.color.primary,
+      variant: colorVariant,
+    }),
+    style,
+  })
+  const fullStates = toActivePressableStates(state ?? {})
+  const visualStates = toActivePressableStates({
+    isDisabled: state?.isDisabled,
+    isFocusVisible: state?.isFocusVisible,
   })
   const resolved = resolvePressableColoring({
     themeTokens,
     coloring,
-    style: coloringStyle,
-    state: toActivePressableStates(state ?? {}),
+    variant,
+    state: visualStates,
+  })
+  const tint = resolvePressableStateLayerTint({
+    themeTokens,
+    states: fullStates,
+    color: coloring.foreground,
   })
   const hasBorder = resolved.border !== 'transparent'
   const hasOutline = resolved.outline !== 'transparent'
@@ -56,9 +76,21 @@ export const buttonTokenResolver: ButtonTokenResolver = ({
   const insetForBordered = Math.max(layout.inset - layout.borderWidth, 0)
   const textStyle = themeTokens.typography.label[size]
   const gap = themeTokens.spacing[size]
+  const isHovered = state?.isHovered === true
 
   return {
-    container: {
+    touchTarget: {
+      size: {
+        minWidth: touchTargetSize,
+        minHeight: touchTargetSize,
+      },
+      layout: {
+        direction: 'horizontal',
+        mainAxisAlignment: 'center',
+        crossAxisAligment: 'center',
+      },
+    },
+    visualContainer: {
       backgroundColor: resolved.background,
       opacity: state.isDisabled ? 0.6 : 1,
       border: hasBorder ? {
@@ -77,8 +109,12 @@ export const buttonTokenResolver: ButtonTokenResolver = ({
         style: themeTokens.focusOutline.style,
         color: resolved.outline,
       } : undefined,
+      decoration: elevated ? {
+        shadow: isHovered
+          ? themeTokens.elevation.level2
+          : themeTokens.elevation.level1,
+      } : undefined,
       size: {
-        minWidth: layout.minimumWidth,
         minHeight: layout.size,
       },
       shape: {
@@ -97,8 +133,11 @@ export const buttonTokenResolver: ButtonTokenResolver = ({
         crossAxisAligment: 'center',
       },
     },
+    stateLayer: {
+      backgroundColor: tint,
+    },
     text: {
-      color: resolved.text,
+      color: resolved.foreground,
       fontSize: textStyle.fontSize,
       fontWeight: textStyle.fontWeight,
       fontFamily: textStyle.fontFamily,

@@ -9,11 +9,8 @@ import {
   type ViewStyle
 } from 'react-native'
 
-import type {
-  ChipColoringStyle,
-  ColorPairToken
-} from '@helpwave/hightide-design/theme-tokens'
-import type { ComponentSize } from '@helpwave/hightide-design/semantic-token-resolvers'
+import type { ColorPairToken } from '@helpwave/hightide-design/theme-tokens'
+import type { ChipVariant, ComponentSize } from '@helpwave/hightide-design/semantic-token-resolvers'
 
 import { ContentThemeProvider } from '../../global-contexts/content-theme/ContentThemeProvider'
 import { useTheme } from '../../global-contexts/theme/ThemeContext'
@@ -32,12 +29,12 @@ export type ChipColor = ColorPairToken
 
 export const ChipUtil = {
   sizes: ['sm', 'md', 'lg'] as const satisfies readonly ComponentSize[],
-  coloringStyles: ['filled', 'tonal', 'outline', 'tonal-outline'] as const satisfies readonly ChipColoringStyle[],
+  variants: ['filled', 'tonal'] as const satisfies readonly ChipVariant[],
 }
 
 export type ChipProps = Omit<ViewProps, 'children' | 'style'> & {
   color?: ChipColor,
-  coloringStyle?: ChipColoringStyle,
+  variant?: ChipVariant,
   size?: ChipSize,
   children?: ReactNode,
   style?: StyleProp<ViewStyle>,
@@ -48,7 +45,7 @@ export type ChipProps = Omit<ViewProps, 'children' | 'style'> & {
 export const Chip = ({
   children,
   color,
-  coloringStyle = 'filled',
+  variant = 'filled',
   size = 'md',
   style,
   chipStyle,
@@ -60,8 +57,8 @@ export const Chip = ({
   const state = useMemo((): ChipState => ({
     size,
     color,
-    coloringStyle,
-  }), [size, color, coloringStyle])
+    variant,
+  }), [size, color, variant])
 
   const resolvedChipStyle = useMemo(
     () => theme.components.chip.chip(state, chipStyle),

@@ -19,15 +19,23 @@ export type SemanticTokenResolver<TProps, TResult> = (params: {
   themeTokens: ThemeTokens,
 } & TProps) => TResult
 
-export type ColoringTokens = {
+export type ColoringColorVariant = 'normal' | 'tonal' | 'transparent'
+
+export type ColoringColorTokens = {
+  color: ColorToken,
+  onColor: ColorToken,
+  accent: ColorToken,
+}
+
+export type ColoringToken = {
+  foreground: ColorToken,
   background: ColorToken,
-  text: ColorToken,
   accent: ColorToken,
 }
 
 export type PressableColoringTokens = {
   background: ColorToken,
-  text: ColorToken,
+  foreground: ColorToken,
   border: ColorToken,
   outline: ColorToken,
 }
@@ -40,24 +48,30 @@ export type InputColoringTokens = {
   shadow?: ColorToken,
 }
 
-export type ColoringStyleBase = 'outline' | 'filled' | 'tonal' | 'tonal-outline'
-export type ColoringStyle = ColoringStyleBase | 'text'
-export type PressableColoringStyle = ColoringStyle
-export type ContainerColoringStyle = ColoringStyleBase
-export type ChipColoringStyle = ContainerColoringStyle
+export type ColoringStyle = 'filled' | 'text'
+export type PressableVariant = 'elevated' | 'filled' | 'tonal' | 'outlined' | 'foreground'
+export type ChipVariant = 'filled' | 'tonal'
 
 export type { Appearance }
 
 export type SemanticTokenResolvers = {
-  coloringStyle: SemanticTokenResolver<{
+  coloringColorVariant: SemanticTokenResolver<{
     colorPair: ColorPairToken,
+    variant: ColoringColorVariant,
+  }, ColoringColorTokens>,
+  coloringStyle: SemanticTokenResolver<{
+    coloring: ColoringColorTokens,
     style: ColoringStyle,
-  }, ColoringTokens>,
+  }, ColoringToken>,
   pressableColoring: SemanticTokenResolver<{
-    coloring: ColoringTokens,
-    style: ColoringStyle,
+    coloring: ColoringToken,
+    variant: PressableVariant,
     state: ReadonlySet<PressableState>,
   }, PressableColoringTokens>,
+  pressableStateLayerTint: SemanticTokenResolver<{
+    states: ReadonlySet<PressableState>,
+    color: ColorToken,
+  }, ColorToken>,
   inputColoring: SemanticTokenResolver<{
     state: InputState,
     color?: ColorPairToken,

@@ -102,7 +102,7 @@ export const ChatAttachmentCard = ({
         <IconButton
           accessibilityLabel={downloadLabel}
           size="sm"
-          coloringStyle="text"
+          variant="foreground"
           onPress={onDownload}
         >
           <ThemedIcon icon={HightideIconRegistry.Download} />

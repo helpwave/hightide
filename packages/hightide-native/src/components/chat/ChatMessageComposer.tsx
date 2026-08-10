@@ -103,11 +103,12 @@ export const ChatMessageComposer = ({
       {trailing}
       <IconButton
         accessibilityLabel={sendLabel}
-        coloringStyle="filled"
+        variant="filled"
         disabled={disabled || !(value ?? '').trim()}
         size="md"
         onPress={send}
-        buttonStyle={(prev) => ({ ...prev, borderRadius: 999 })}
+        visualContainerStyle={(prev) => ({ ...prev, borderRadius: 999 })}
+        stateLayerStyle={(prev) => ({ ...prev, borderRadius: 999 })}
       >
         <ThemedIcon icon={HightideIconRegistry.SendHorizontal} />
       </IconButton>

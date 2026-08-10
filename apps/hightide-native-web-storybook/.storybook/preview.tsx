@@ -64,6 +64,10 @@ const preview: Preview = {
               background-color: ${surfaceBackground} !important;
             }
 
+            main {
+              display: flex;
+            }
+
             .sb-show-main {
               color: ${surfaceColor} !important;
               background-color: ${surfaceBackground} !important;

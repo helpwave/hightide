@@ -20,6 +20,10 @@ import {
   type ChipTokenResolver
 } from './chip-tokens'
 import {
+  dividerTokenResolver,
+  type DividerTokenResolver
+} from './divider-tokens'
+import {
   iconButtonTokenResolver,
   type IconButtonTokenResolver
 } from './icon-button-tokens'
@@ -58,6 +62,7 @@ export type ComponentTokenResolvers = {
   select: SelectTokenResolver,
   multiSelect: MultiSelectTokenResolver,
   card: CardTokenResolver,
+  divider: DividerTokenResolver,
   listItem: ListItemTokenResolvers,
   avatar: AvatarTokenResolver,
   icon: IconTokenResolver,
@@ -74,6 +79,7 @@ export const componentTokenResolvers: ComponentTokenResolvers = {
   select: selectTokenResolver,
   multiSelect: multiSelectTokenResolver,
   card: cardTokenResolver,
+  divider: dividerTokenResolver,
   listItem: listItemTokenResolvers,
   avatar: avatarTokenResolver,
   icon: iconTokenResolver,

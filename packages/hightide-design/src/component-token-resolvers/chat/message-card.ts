@@ -114,12 +114,12 @@ export const chatMessageCardTokenResolver: ChatMessageCardTokenResolver = ({ the
       backgroundColor: accentTonal.background,
     },
     iconColor: {
-      color: accentTonal.text,
+      color: accentTonal.foreground,
     },
     title: {
       ...typography.body.sm,
       fontWeight: typography.fontWeights.bold,
-      color: accentText.text,
+      color: accentText.foreground,
     },
     subtitle: {
       ...typography.body.sm,

@@ -28,14 +28,14 @@ export default meta
 type ChipArgs = {
   label: string,
   color: ColorPairKey,
-  coloringStyle: typeof ChipUtil.coloringStyles[number],
+  variant: typeof ChipUtil.variants[number],
   size: typeof ChipUtil.sizes[number],
 }
 
 const ChipDemo = ({
   label,
   color,
-  coloringStyle,
+  variant,
   size,
 }: ChipArgs) => {
   const { theme } = useTheme()
@@ -43,7 +43,7 @@ const ChipDemo = ({
   return (
     <Chip
       color={theme.colors[color]}
-      coloringStyle={coloringStyle}
+      variant={variant}
       size={size}
     >
       {label}
@@ -57,9 +57,9 @@ export const chip: StoryObj<ChipArgs> = {
       control: 'text',
     },
     color: StorybookHelper.colorPairSelect,
-    coloringStyle: {
+    variant: {
       control: 'select',
-      options: ChipUtil.coloringStyles,
+      options: ChipUtil.variants,
     },
     size: {
       control: 'select',
@@ -69,7 +69,7 @@ export const chip: StoryObj<ChipArgs> = {
   args: {
     label: 'Label',
     color: 'primary',
-    coloringStyle: 'filled',
+    variant: 'filled',
     size: 'md',
   },
   render: (args) => <ChipDemo {...args} />,
@@ -78,9 +78,9 @@ export const chip: StoryObj<ChipArgs> = {
 type ChipInButtonArgs = {
   size: typeof ButtonUtil.sizes[number],
   color: ColorPairKey,
-  coloringStyle: typeof ButtonUtil.coloringStyles[number],
+  variant: typeof ButtonUtil.variants[number],
   chipColor: ColorPairKey,
-  chipColoringStyle: typeof ChipUtil.coloringStyles[number],
+  chipVariant: typeof ChipUtil.variants[number],
   chipSize: typeof ChipUtil.sizes[number],
   chipLabel: string,
   label: string,
@@ -89,9 +89,9 @@ type ChipInButtonArgs = {
 const ChipInButtonDemo = ({
   size,
   color,
-  coloringStyle,
+  variant,
   chipColor,
-  chipColoringStyle,
+  chipVariant,
   chipSize,
   chipLabel,
   label,
@@ -100,7 +100,7 @@ const ChipInButtonDemo = ({
   const state: ButtonState = {
     size,
     color: theme.colors[color],
-    coloringStyle,
+    variant,
   }
   const textStyle = theme.components.button.text(state)
 
@@ -108,13 +108,13 @@ const ChipInButtonDemo = ({
     <Button
       size={size}
       color={theme.colors[color]}
-      coloringStyle={coloringStyle}
+      variant={variant}
       onPress={action('Pressed')}
     >
       <>
         <Chip
           color={theme.colors[chipColor]}
-          coloringStyle={chipColoringStyle}
+          variant={chipVariant}
           size={chipSize}
         >
           {chipLabel}
@@ -132,14 +132,14 @@ export const chipInButton: StoryObj<ChipInButtonArgs> = {
       options: ButtonUtil.sizes,
     },
     color: StorybookHelper.colorPairSelect,
-    coloringStyle: {
+    variant: {
       control: 'select',
-      options: ButtonUtil.coloringStyles,
+      options: ButtonUtil.variants,
     },
     chipColor: StorybookHelper.colorPairSelect,
-    chipColoringStyle: {
+    chipVariant: {
       control: 'select',
-      options: ChipUtil.coloringStyles,
+      options: ChipUtil.variants,
     },
     chipSize: {
       control: 'select',
@@ -155,9 +155,9 @@ export const chipInButton: StoryObj<ChipInButtonArgs> = {
   args: {
     size: 'md',
     color: 'primary',
-    coloringStyle: 'filled',
+    variant: 'filled',
     chipColor: 'secondary',
-    chipColoringStyle: 'tonal',
+    chipVariant: 'tonal',
     chipSize: 'md',
     chipLabel: 'New',
     label: 'Filter',

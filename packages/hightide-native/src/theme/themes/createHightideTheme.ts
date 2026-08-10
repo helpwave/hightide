@@ -15,6 +15,7 @@ import { toChatThemeResolvers } from '../resolvers/chat/chat-theme'
 import { toCheckboxThemeResolvers } from '../resolvers/checkbox'
 import { toChipThemeResolvers } from '../resolvers/chip'
 import { createColorSchemes } from '../resolvers/colorScheme'
+import { toDividerThemeResolvers } from '../resolvers/divider'
 import { toIconThemeResolvers } from '../resolvers/icon'
 import { toIconButtonThemeResolvers } from '../resolvers/iconButton'
 import { toInputThemeResolvers } from '../resolvers/input'
@@ -52,11 +53,19 @@ const resolveElementLayouts = (themeTokens: ThemeTokens): ElementLayoutTokens =>
 })
 
 const bindSemantics = (themeTokens: ThemeTokens): HightideThemeSemantics => ({
+  coloringColorVariant: (parameter) => hightideSemanticTokenResolvers.coloringColorVariant({
+    themeTokens,
+    ...parameter,
+  }),
   coloringStyle: (parameter) => hightideSemanticTokenResolvers.coloringStyle({
     themeTokens,
     ...parameter,
   }),
   pressableColoring: (parameter) => hightideSemanticTokenResolvers.pressableColoring({
+    themeTokens,
+    ...parameter,
+  }),
+  pressableStateLayerTint: (parameter) => hightideSemanticTokenResolvers.pressableStateLayerTint({
     themeTokens,
     ...parameter,
   }),
@@ -156,6 +165,11 @@ export const createHightideTheme = (themeTokens: ThemeTokens): HightideTheme => 
       componentTokens: componentTokenResolvers,
     }),
     card: toCardThemeResolvers({
+      themeTokens,
+      semanticTokens: hightideSemanticTokenResolvers,
+      componentTokens: componentTokenResolvers,
+    }),
+    divider: toDividerThemeResolvers({
       themeTokens,
       semanticTokens: hightideSemanticTokenResolvers,
       componentTokens: componentTokenResolvers,

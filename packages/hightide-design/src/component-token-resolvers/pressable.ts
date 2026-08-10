@@ -1,4 +1,4 @@
-import type { PressableColoringStyle } from '../semantic-token-resolvers/types'
+import type { PressableVariant } from '../semantic-token-resolvers/types'
 import type { StateBasedProperty } from '../theme-tokens/stateBasedProperty'
 
 export type PressableState =
@@ -18,13 +18,13 @@ export type PressableInteractionState = {
 
 export type PressableStateBasedProperty<P> = StateBasedProperty<PressableState, P>
 
-export const pressableColoringStyles = [
+export const pressableVariants = [
+  'elevated',
   'filled',
-  'outline',
   'tonal',
-  'tonal-outline',
-  'text',
-] as const satisfies readonly PressableColoringStyle[]
+  'outlined',
+  'foreground',
+] as const satisfies readonly PressableVariant[]
 
 export const toActivePressableStates = (
   state: PressableInteractionState

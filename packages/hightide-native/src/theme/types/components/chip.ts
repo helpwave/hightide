@@ -3,18 +3,15 @@ import type {
   ViewStyle
 } from 'react-native'
 
-import type {
-  ChipColoringStyle,
-  ColorPairToken
-} from '@helpwave/hightide-design/theme-tokens'
-import type { ComponentSize } from '@helpwave/hightide-design/semantic-token-resolvers'
+import type { ColorPairToken } from '@helpwave/hightide-design/theme-tokens'
+import type { ChipVariant, ComponentSize } from '@helpwave/hightide-design/semantic-token-resolvers'
 
 import type { StyleResolverFunction } from '../resolver'
 
 export type ChipState = {
   size?: ComponentSize,
   color?: ColorPairToken,
-  coloringStyle?: ChipColoringStyle,
+  variant?: ChipVariant,
 }
 
 export type ChipStyle = ViewStyle

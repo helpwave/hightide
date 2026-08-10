@@ -1,6 +1,8 @@
 import {
+  mapChipVariant,
+  resolveColoringColorVariant,
   resolveColoringStyle,
-  type ChipColoringStyle,
+  type ChipVariant,
   type ComponentSize
 } from '../semantic-token-resolvers'
 import type { ColorPairToken } from '../theme-tokens/theme-tokens-config'
@@ -12,7 +14,7 @@ export type ChipComponentResolverProps = {
   overrides: {
     size?: ComponentSize,
     color?: ColorPairToken,
-    coloringStyle?: ChipColoringStyle,
+    variant?: ChipVariant,
   },
 }
 
@@ -32,16 +34,15 @@ export const chipTokenResolver: ChipTokenResolver = ({
   overrides,
 }) => {
   const size = overrides.size ?? 'md'
-  const coloringStyle = overrides.coloringStyle ?? 'filled'
+  const variant = overrides.variant ?? 'filled'
+  const { colorVariant, style } = mapChipVariant(variant)
   const coloring = resolveColoringStyle({
-    themeTokens,
-    colorPair: overrides.color ?? themeTokens.color.primary,
-    style: coloringStyle,
+    coloring: resolveColoringColorVariant({
+      colorPair: overrides.color ?? themeTokens.color.primary,
+      variant: colorVariant,
+    }),
+    style,
   })
-  const border = coloringStyle === 'outline' || coloringStyle === 'tonal-outline'
-    ? coloring.accent
-    : 'transparent'
-  const hasBorder = border !== 'transparent'
   const layout = semanticResolvers.insideControlLayout({ themeTokens, size })
   const textStyle = themeTokens.typography.label[size]
   const gap = size === 'sm' ? themeTokens.spacing.xs : themeTokens.spacing.sm
@@ -50,16 +51,6 @@ export const chipTokenResolver: ChipTokenResolver = ({
   return {
     container: {
       backgroundColor: coloring.background,
-      border: hasBorder ? {
-        width: {
-          type: 'all',
-          value: layout.borderWidth,
-        },
-        color: {
-          type: 'all',
-          value: border,
-        },
-      } : undefined,
       size: {
         minWidth: 0,
         minHeight: layout.size,
@@ -67,19 +58,15 @@ export const chipTokenResolver: ChipTokenResolver = ({
       shape: {
         borderRadius: layout.borderRadius,
         padding: {
-          vertical: hasBorder
-            ? Math.max(layout.inset - layout.borderWidth, 0)
-            : layout.inset,
-          horizontal: hasBorder
-            ? Math.max(horizontalPadding - layout.borderWidth, 0)
-            : horizontalPadding,
+          vertical: layout.inset,
+          horizontal: horizontalPadding,
         },
       },
       layout: { gap },
     },
     text: {
       ...textStyle,
-      color: coloring.text,
+      color: coloring.foreground,
     },
   }
 }

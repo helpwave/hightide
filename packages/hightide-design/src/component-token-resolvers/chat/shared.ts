@@ -2,6 +2,7 @@ import type { ColorToken, HexColorToken } from '../../primitive-tokens/color'
 import type { ColorPairToken } from '../../theme-tokens/theme-tokens-config'
 import type { ThemeTokens } from '../../theme-tokens/theme-tokens'
 import {
+  resolveColoringColorVariant,
   resolveColoringStyle,
   resolvePressableColoring,
   type SemanticTokenResolvers
@@ -60,11 +61,13 @@ export const resolveHoverColor = ({
   resolvePressableColoring({
     themeTokens,
     coloring: resolveColoringStyle({
-      themeTokens,
-      colorPair: themeTokens.color.surface,
+      coloring: resolveColoringColorVariant({
+        colorPair: themeTokens.color.surface,
+        variant: 'normal',
+      }),
       style: 'filled',
     }),
-    style: 'filled',
+    variant: 'filled',
     state: toActivePressableStates({ isHovered: true }),
   }).background
 )
@@ -79,13 +82,17 @@ export const resolveAccentColoring = ({
   return {
     accentPair,
     accentTonal: resolveColoringStyle({
-      themeTokens,
-      colorPair: accentPair,
-      style: 'tonal',
+      coloring: resolveColoringColorVariant({
+        colorPair: accentPair,
+        variant: 'tonal',
+      }),
+      style: 'filled',
     }),
     accentText: resolveColoringStyle({
-      themeTokens,
-      colorPair: accentPair,
+      coloring: resolveColoringColorVariant({
+        colorPair: accentPair,
+        variant: 'normal',
+      }),
       style: 'text',
     }),
   }

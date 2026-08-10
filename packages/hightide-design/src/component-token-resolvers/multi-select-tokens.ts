@@ -1,5 +1,6 @@
 import type { ColorToken } from '../primitive-tokens/color'
 import {
+  resolveColoringColorVariant,
   resolveColoringStyle,
   resolvePressableColoring
 } from '../semantic-token-resolvers'
@@ -104,11 +105,13 @@ export const multiSelectTokenResolver: MultiSelectTokenResolver = ({
   const hoverColor = resolvePressableColoring({
     themeTokens,
     coloring: resolveColoringStyle({
-      themeTokens,
-      colorPair: themeTokens.color.surface,
+      coloring: resolveColoringColorVariant({
+        colorPair: themeTokens.color.surface,
+        variant: 'normal',
+      }),
       style: 'filled',
     }),
-    style: 'filled',
+    variant: 'filled',
     state: toActivePressableStates({ isHovered: true }),
   }).background
 

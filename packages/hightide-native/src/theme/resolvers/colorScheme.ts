@@ -1,16 +1,17 @@
 import {
-  pressableColoringStyles,
+  pressableVariants,
   toActivePressableStates
 } from '@helpwave/hightide-design/component-token-resolvers'
+import type {
+  PressableVariant } from '@helpwave/hightide-design/semantic-token-resolvers'
 import {
+  mapPressableVariant,
+  resolveColoringColorVariant,
   resolveColoringStyle,
   resolvePressableColoring
 } from '@helpwave/hightide-design/semantic-token-resolvers'
 import type {
-  ColoringStyle,
   ColorPairToken,
-  ContainerColoringStyle,
-  PressableColoringStyle,
   ThemeTokens
 } from '@helpwave/hightide-design/theme-tokens'
 
@@ -45,7 +46,7 @@ export type ColoringStateProperty = {
   emphasisOverride: ColoringState,
 }
 
-export type HightideColorScheme = Record<PressableColoringStyle, ColoringStateProperty>
+export type HightideColorScheme = Record<PressableVariant, ColoringStateProperty>
 
 export type HightideColorSchemes = {
   primary: HightideColorScheme,
@@ -61,24 +62,27 @@ export type HightideColorSchemes = {
 export const resolveColoringStyles = (
   themeTokens: ThemeTokens,
   colorPair: ColorPairToken,
-  coloringStyle: ColoringStyle,
+  variant: PressableVariant,
   state: InteractionState = {}
 ): ResolvedColoringStyles => {
+  const { colorVariant, style } = mapPressableVariant(variant)
   const coloring = resolveColoringStyle({
-    themeTokens,
-    colorPair,
-    style: coloringStyle,
+    coloring: resolveColoringColorVariant({
+      colorPair,
+      variant: colorVariant,
+    }),
+    style,
   })
   const resolved = resolvePressableColoring({
     themeTokens,
     coloring,
-    style: coloringStyle,
+    variant,
     state: toActivePressableStates(state),
   })
 
   return {
     backgroundColor: resolved.background,
-    color: resolved.text,
+    color: resolved.foreground,
     borderColor: resolved.border !== 'transparent'
       ? resolved.border
       : resolved.outline !== 'transparent'
@@ -90,10 +94,10 @@ export const resolveColoringStyles = (
 const toColoringState = (
   themeTokens: ThemeTokens,
   colorPair: ColorPairToken,
-  coloringStyle: PressableColoringStyle,
+  variant: PressableVariant,
   state: InteractionState
 ): ColoringState => {
-  const resolved = resolveColoringStyles(themeTokens, colorPair, coloringStyle, state)
+  const resolved = resolveColoringStyles(themeTokens, colorPair, variant, state)
 
   return {
     color: resolved.backgroundColor,
@@ -107,14 +111,14 @@ export const createColorSchemes = (themeTokens: ThemeTokens): HightideColorSchem
     colorSchemeKeys.map((key) => [
       key,
       Object.fromEntries(
-        pressableColoringStyles.map((coloringStyle) => [
-          coloringStyle,
+        pressableVariants.map((variant) => [
+          variant,
           {
-            base: toColoringState(themeTokens, themeTokens.color[key], coloringStyle, {}),
+            base: toColoringState(themeTokens, themeTokens.color[key], variant, {}),
             emphasisOverride: toColoringState(
               themeTokens,
               themeTokens.color[key],
-              coloringStyle,
+              variant,
               { isHovered: true }
             ),
           } satisfies ColoringStateProperty,
@@ -124,8 +128,8 @@ export const createColorSchemes = (themeTokens: ThemeTokens): HightideColorSchem
   ) as HightideColorSchemes
 )
 
-export const isOutlineColoringStyle = (
-  coloringStyle: PressableColoringStyle | ContainerColoringStyle
+export const isOutlinedVariant = (
+  variant: PressableVariant
 ): boolean => {
-  return coloringStyle === 'outline' || coloringStyle === 'tonal-outline'
+  return variant === 'outlined'
 }

@@ -9,6 +9,7 @@ import type { ChipThemeResolvers } from './chip'
 import type { IconButtonThemeResolvers } from './iconButton'
 import type { InputThemeResolvers } from './input'
 import type { CardThemeResolvers } from './card'
+import type { DividerThemeResolvers } from './divider'
 import type { ListItemThemeResolvers } from './listItem'
 import type { MultiSelectThemeResolvers } from './multiSelect'
 import type { SelectThemeResolvers } from './select'
@@ -27,6 +28,7 @@ export type HightideComponentThemes = {
   multiSelect: MultiSelectThemeResolvers,
   chat: ChatThemeResolvers,
   card: CardThemeResolvers,
+  divider: DividerThemeResolvers,
   listItem: ListItemThemeResolvers,
   avatar: AvatarThemeResolvers,
   icon: IconThemeResolvers,

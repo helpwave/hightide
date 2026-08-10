@@ -1,4 +1,6 @@
 import {
+  mapPressableVariant,
+  resolveColoringColorVariant,
   resolveColoringStyle,
   resolvePressableColoring
 } from '../../semantic-token-resolvers'
@@ -8,20 +10,15 @@ import type { ButtonState } from '../button-tokens'
 import { toActivePressableStates } from '../pressable'
 import {
   listItemTokenResolver,
-  type ListItemConfig,
-  type ListItemTokens,
-  type ListPositionToken
+  type ListItemTokens
 } from './list-item-tokens'
 
-export type ListActionItemState = ButtonState & {
-  position?: ListPositionToken,
-}
+export type ListActionItemState = ButtonState
 
 export type ListActionComponentResolverProps = {
   overrides?: {
     color?: ColorPairToken,
   },
-  config?: ListItemConfig,
   state: ListActionItemState,
 }
 
@@ -34,33 +31,31 @@ export const listActionTokenResolver: ListActionTokenResolver = ({
   themeTokens,
   semanticResolvers,
   overrides,
-  config,
   state,
 }) => {
   const hasColor = overrides?.color !== undefined
-  const coloringStyle = hasColor ? 'tonal' : 'text'
+  const variant = hasColor ? 'tonal' : 'foreground'
+  const { colorVariant, style } = mapPressableVariant(variant)
   const coloring = resolveColoringStyle({
-    themeTokens,
-    colorPair: overrides?.color ?? {
-      color: themeTokens.color.surface.onColor,
-      onColor: themeTokens.color.surface.color,
-    },
-    style: coloringStyle,
+    coloring: resolveColoringColorVariant({
+      colorPair: overrides?.color ?? {
+        color: themeTokens.color.surface.onColor,
+        onColor: themeTokens.color.surface.color,
+      },
+      variant: colorVariant,
+    }),
+    style,
   })
   const resolved = resolvePressableColoring({
     themeTokens,
     coloring,
-    style: coloringStyle,
+    variant,
     state: toActivePressableStates(state),
   })
   const hasOutline = resolved.outline !== 'transparent'
   const base = listItemTokenResolver({
     themeTokens,
     semanticResolvers,
-    config,
-    state: {
-      position: state.position,
-    },
   })
 
   return {
@@ -68,7 +63,6 @@ export const listActionTokenResolver: ListActionTokenResolver = ({
     container: {
       ...base.container,
       backgroundColor: resolved.background,
-      border: base.container.border,
       outline: hasOutline ? {
         offset: -themeTokens.borders.borderWidths.normal,
         width: themeTokens.borders.borderWidths.normal,
@@ -78,15 +72,15 @@ export const listActionTokenResolver: ListActionTokenResolver = ({
     },
     titleText: {
       ...base.titleText,
-      color: resolved.text,
+      color: resolved.foreground,
     },
     descriptionText: {
       ...base.descriptionText,
-      color: hasColor ? resolved.text : base.descriptionText.color,
+      color: hasColor ? resolved.foreground : base.descriptionText.color,
     },
     icon: {
       ...base.icon,
-      color: resolved.text,
+      color: resolved.foreground,
     },
   }
 }

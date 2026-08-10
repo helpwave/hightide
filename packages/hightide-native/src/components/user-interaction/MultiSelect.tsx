@@ -123,7 +123,7 @@ export const MultiSelect = ({
           ? (
             <View style={{ flexDirection: 'row', flexWrap: 'wrap', gap: 6 }}>
               {selectedLabels.map((label) => (
-                <Chip key={label} size="sm" color={color} coloringStyle="tonal">
+                <Chip key={label} size="sm" color={color} variant="tonal">
                   {label}
                 </Chip>
               ))}

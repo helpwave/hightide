@@ -166,6 +166,8 @@ export const toContainerStyle = (tokens: ContainerTokens): ViewStyle => ({
   borderRadius: tokens.shape?.borderRadius,
   paddingVertical: tokens.shape?.padding?.vertical,
   paddingHorizontal: tokens.shape?.padding?.horizontal,
+  marginVertical: tokens.margin?.vertical,
+  marginHorizontal: tokens.margin?.horizontal,
   gap: tokens.layout?.gap,
   outlineColor: tokens.outline?.color,
   outlineOffset: tokens.outline?.offset,

@@ -4,15 +4,13 @@ import {
 } from 'react'
 import {
   Pressable,
+  View,
   type PressableProps,
   type StyleProp,
   type ViewStyle
 } from 'react-native'
-import type {
-  ColorPairToken,
-  PressableColoringStyle
-} from '@helpwave/hightide-design/theme-tokens'
-import type { ComponentSize } from '@helpwave/hightide-design/semantic-token-resolvers'
+import type { ColorPairToken } from '@helpwave/hightide-design/theme-tokens'
+import type { ComponentSize, PressableVariant } from '@helpwave/hightide-design/semantic-token-resolvers'
 
 import { ContentThemeProvider } from '../../global-contexts/content-theme/ContentThemeProvider'
 import { useTheme } from '../../global-contexts/theme/ThemeContext'
@@ -24,16 +22,18 @@ import type { StyleOverwrite } from '../../theme/types/resolver'
 
 export type IconButtonSize = ComponentSize
 
-export type IconButtonColoringStyle = PressableColoringStyle
+export type IconButtonVariant = PressableVariant
 
 export type IconButtonProps = Omit<PressableProps, 'children' | 'style'> & {
   size?: IconButtonSize,
   color?: ColorPairToken,
-  coloringStyle?: IconButtonColoringStyle,
+  variant?: IconButtonVariant,
   children?: ReactNode,
   accessibilityLabel: string,
   style?: StyleProp<ViewStyle>,
-  buttonStyle?: StyleOverwrite<IconButtonState, IconButtonStyle>,
+  touchTargetStyle?: StyleOverwrite<IconButtonState, IconButtonStyle>,
+  visualContainerStyle?: StyleOverwrite<IconButtonState, IconButtonStyle>,
+  stateLayerStyle?: StyleOverwrite<IconButtonState, IconButtonStyle>,
 }
 
 type PressableInteraction = {
@@ -47,11 +47,13 @@ export const IconButton = forwardRef<React.ComponentRef<typeof Pressable>, IconB
   children,
   size = 'md',
   color,
-  coloringStyle = 'filled',
+  variant = 'filled',
   disabled,
   accessibilityLabel,
   style,
-  buttonStyle,
+  touchTargetStyle,
+  visualContainerStyle,
+  stateLayerStyle,
   ...props
 }, ref) {
   const { theme } = useTheme()
@@ -59,7 +61,7 @@ export const IconButton = forwardRef<React.ComponentRef<typeof Pressable>, IconB
   const resolveState = (interaction: PressableInteraction): IconButtonState => ({
     size,
     color,
-    coloringStyle,
+    variant,
     isDisabled: !!disabled,
     isPressed: interaction.pressed,
     isHovered: !!interaction.hovered,
@@ -76,7 +78,7 @@ export const IconButton = forwardRef<React.ComponentRef<typeof Pressable>, IconB
       accessibilityLabel={accessibilityLabel}
       style={(pressableState) => {
         const state = resolveState(pressableState as PressableInteraction)
-        return [theme.components.iconButton.button(state, buttonStyle), style]
+        return [theme.components.iconButton.touchTarget(state, touchTargetStyle), style]
       }}
     >
       {(pressableState) => {
@@ -85,12 +87,18 @@ export const IconButton = forwardRef<React.ComponentRef<typeof Pressable>, IconB
         const resolvedText = theme.components.iconButton.text(state)
 
         return (
-          <ContentThemeProvider
-            foregroundColor={resolvedIcon.color ?? theme.colors.primary.color}
-            textStyle={resolvedText}
-          >
-            {children}
-          </ContentThemeProvider>
+          <View style={theme.components.iconButton.visualContainer(state, visualContainerStyle)}>
+            <View
+              pointerEvents="none"
+              style={theme.components.iconButton.stateLayer(state, stateLayerStyle)}
+            />
+            <ContentThemeProvider
+              foregroundColor={resolvedIcon.color ?? theme.colors.primary.color}
+              textStyle={resolvedText}
+            >
+              {children}
+            </ContentThemeProvider>
+          </View>
         )
       }}
     </Pressable>

@@ -21,7 +21,7 @@ export const toChipThemeResolvers: ComponentThemeResolver<ChipThemeResolvers> = 
     overrides: {
       size: state.size,
       color: state.color,
-      coloringStyle: state.coloringStyle,
+      variant: state.variant,
     },
   })
 

@@ -9,10 +9,6 @@ import {
   type ViewStyle
 } from 'react-native'
 
-import type {
-  ListItemAppearance,
-  ListPositionToken
-} from '@helpwave/hightide-design/component-token-resolvers'
 import type { ColorPairToken } from '@helpwave/hightide-design/theme-tokens'
 
 import { useTheme } from '../../global-contexts/theme/ThemeContext'
@@ -31,8 +27,6 @@ export type ListItemProps = Omit<ViewProps, 'style'> & {
   leading?: ReactNode,
   trailing?: ReactNode,
   color?: ColorPairToken,
-  position?: ListPositionToken,
-  appearance?: ListItemAppearance,
   style?: StyleProp<ViewStyle>,
   itemStyle?: StyleOverwrite<ListItemState, ListItemStyle>,
   labelStyle?: StyleOverwrite<ListItemState, ListItemDescriptionStyle>,
@@ -45,8 +39,6 @@ export const ListItem = ({
   leading,
   trailing,
   color,
-  position,
-  appearance,
   style,
   itemStyle,
   labelStyle,
@@ -56,9 +48,7 @@ export const ListItem = ({
   const { theme } = useTheme()
   const state = useMemo((): ListItemState => ({
     color,
-    position,
-    appearance,
-  }), [color, position, appearance])
+  }), [color])
 
   const resolvedItemStyle = useMemo(
     () => theme.components.listItem.default.container(state, itemStyle),

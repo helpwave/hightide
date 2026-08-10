@@ -4,16 +4,14 @@ import {
 } from 'react'
 import {
   Pressable,
+  View,
   type PressableProps,
   type StyleProp,
   type ViewStyle
 } from 'react-native'
 
-import type {
-  ColorPairToken,
-  PressableColoringStyle
-} from '@helpwave/hightide-design/theme-tokens'
-import type { ComponentSize } from '@helpwave/hightide-design/semantic-token-resolvers'
+import type { ColorPairToken } from '@helpwave/hightide-design/theme-tokens'
+import type { ComponentSize, PressableVariant } from '@helpwave/hightide-design/semantic-token-resolvers'
 
 import { ContentThemeProvider } from '../../global-contexts/content-theme/ContentThemeProvider'
 import { useTheme } from '../../global-contexts/theme/ThemeContext'
@@ -32,16 +30,18 @@ export type ButtonColor = ColorPairToken
 
 export const ButtonUtil = {
   sizes: ['sm', 'md', 'lg'] as const satisfies readonly ComponentSize[],
-  coloringStyles: ['outline', 'filled', 'text', 'tonal', 'tonal-outline'] as const satisfies readonly PressableColoringStyle[],
+  variants: ['elevated', 'filled', 'tonal', 'outlined', 'foreground'] as const satisfies readonly PressableVariant[],
 }
 
 export type ButtonProps = Omit<PressableProps, 'children' | 'style'> & {
   size?: ButtonSize,
   color?: ButtonColor,
-  coloringStyle?: PressableColoringStyle,
+  variant?: PressableVariant,
   children?: ReactNode,
   style?: StyleProp<ViewStyle>,
-  buttonStyle?: StyleOverwrite<ButtonState, ButtonStyle>,
+  touchTargetStyle?: StyleOverwrite<ButtonState, ButtonStyle>,
+  visualContainerStyle?: StyleOverwrite<ButtonState, ButtonStyle>,
+  stateLayerStyle?: StyleOverwrite<ButtonState, ButtonStyle>,
   textStyle?: StyleOverwrite<ButtonState, ButtonTextStyle>,
 }
 
@@ -56,10 +56,12 @@ export const Button = forwardRef<React.ComponentRef<typeof Pressable>, ButtonPro
   children,
   size = 'md',
   color,
-  coloringStyle = 'filled',
+  variant = 'filled',
   disabled,
   style,
-  buttonStyle,
+  touchTargetStyle,
+  visualContainerStyle,
+  stateLayerStyle,
   textStyle,
   ...props
 }, ref) {
@@ -68,7 +70,7 @@ export const Button = forwardRef<React.ComponentRef<typeof Pressable>, ButtonPro
   const resolveState = (interaction: PressableInteraction): ButtonState => ({
     size,
     color,
-    coloringStyle,
+    variant,
     isDisabled: !!disabled,
     isPressed: interaction.pressed,
     isHovered: !!interaction.hovered,
@@ -83,7 +85,7 @@ export const Button = forwardRef<React.ComponentRef<typeof Pressable>, ButtonPro
       disabled={disabled}
       style={(pressableState) => {
         const state = resolveState(pressableState as PressableInteraction)
-        return [theme.components.button.container(state, buttonStyle), style]
+        return [theme.components.button.touchTarget(state, touchTargetStyle), style]
       }}
     >
       {(pressableState) => {
@@ -91,14 +93,20 @@ export const Button = forwardRef<React.ComponentRef<typeof Pressable>, ButtonPro
         const resolvedText = theme.components.button.text(state, textStyle)
 
         return (
-          <ContentThemeProvider
-            foregroundColor={resolvedText.color as Color}
-            textStyle={resolvedText}
-          >
-            {typeof children === 'string' || typeof children === 'number'
-              ? <ThemedText>{children}</ThemedText>
-              : children}
-          </ContentThemeProvider>
+          <View style={theme.components.button.visualContainer(state, visualContainerStyle)}>
+            <View
+              pointerEvents="none"
+              style={theme.components.button.stateLayer(state, stateLayerStyle)}
+            />
+            <ContentThemeProvider
+              foregroundColor={resolvedText.color as Color}
+              textStyle={resolvedText}
+            >
+              {typeof children === 'string' || typeof children === 'number'
+                ? <ThemedText>{children}</ThemedText>
+                : children}
+            </ContentThemeProvider>
+          </View>
         )
       }}
     </Pressable>

@@ -12,7 +12,6 @@ export type ControlElementLayoutToken = {
   inset: number,
   borderWidth: number,
   borderRadius: number,
-  minimumWidth: number,
   horizontalContentPadding: number,
 }
 
@@ -37,14 +36,6 @@ export type ElementLayoutTokens = {
   control: Record<ThemeLayoutSize, ControlElementLayoutToken>,
   container: Record<ThemeLayoutSize, ContainerLayoutToken>,
   insideControl: Record<ThemeTypographySize, InsideControlElementLayoutToken>,
-}
-
-const controlMinimumWidths: Record<ThemeLayoutSize, number> = {
-  xs: 80,
-  sm: 112,
-  md: 144,
-  lg: 180,
-  xl: 200,
 }
 
 const paddingExtensionFor = (
@@ -76,7 +67,6 @@ export const resolveControlLayout = (params: {
     inset,
     borderWidth: borders.borderWidths.normal,
     borderRadius: shape.borderRadius[size],
-    minimumWidth: controlMinimumWidths[size],
     horizontalContentPadding: inset + paddingExtensionFor(themeTokens, size),
   }
 }
@@ -94,7 +84,7 @@ export const resolveContainerLayout = (params: {
     insetY: inset,
     insetX: inset + paddingExtensionFor(themeTokens, size),
     borderRadius: shape.borderRadius[size],
-    minimumWidth: controlMinimumWidths[size],
+    minimumWidth: sizes[size],
     minimumHeight: sizes[size],
   }
 }
