@@ -8,7 +8,9 @@ import type {
   LayoutDirectionToken,
   TextStyleTokens
 } from '@helpwave/hightide-design/component-token-resolvers'
+import type { ColorToken, HexColorToken } from '@helpwave/hightide-design/primitive-tokens'
 import type { ShadowToken } from '@helpwave/hightide-design/theme-tokens'
+import { HexColorUtils } from '@helpwave/hightide-design/utils'
 
 export const toShadowStyle = (shadow: ShadowToken): ViewStyle => ({
   shadowColor: shadow.color,
@@ -175,6 +177,39 @@ export const toContainerStyle = (tokens: ContainerTokens): ViewStyle => ({
   outlineStyle: tokens.outline?.style,
   ...(tokens.decoration?.shadow ? toShadowStyle(tokens.decoration.shadow) : {}),
 })
+
+const blendWithStateLayer = (
+  base: ColorToken | undefined,
+  tint: ColorToken
+): ColorToken | undefined => {
+  if (base === undefined || tint === 'transparent' || base === 'transparent') {
+    return base
+  }
+
+  return HexColorUtils.blend(base as HexColorToken, tint as HexColorToken)
+}
+
+export const toContainerStyleWithStateLayer = (
+  container: ContainerTokens,
+  stateLayer?: ContainerTokens
+): ViewStyle => {
+  const tint = stateLayer?.backgroundColor ?? 'transparent'
+  const borderColor = container.border?.color
+
+  return toContainerStyle({
+    ...container,
+    backgroundColor: blendWithStateLayer(container.backgroundColor, tint),
+    border: container.border === undefined ? undefined : {
+      ...container.border,
+      color: borderColor?.type === 'all'
+        ? {
+          type: 'all',
+          value: blendWithStateLayer(borderColor.value, tint) ?? borderColor.value,
+        }
+        : borderColor,
+    },
+  })
+}
 
 export const toTextStyle = (tokens: TextStyleTokens): TextStyle => ({
   color: tokens.color,

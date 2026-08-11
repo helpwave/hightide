@@ -2,10 +2,12 @@ import type { ColorToken } from '../primitive-tokens/color'
 import {
   resolveColoringColorVariant,
   resolveColoringStyle,
-  resolvePressableColoring
+  resolvePressableColoring,
+  resolvePressableStateLayerTint
 } from '../semantic-token-resolvers'
 import type { ColorPairToken } from '../theme-tokens/theme-tokens-config'
 import type { ComponentTokenResolver } from './component-token-resolver'
+import type { ContainerTokens } from './container-tokens'
 import {
   inputTokenResolver,
   type InputState
@@ -64,6 +66,7 @@ export type MultiSelectCheckboxIconTokens = {
 
 export type MultiSelectTokens = {
   trigger: MultiSelectTriggerTokens,
+  stateLayer: ContainerTokens,
   triggerText: TextStyleTokens,
   overlay: SelectOverlayTokens,
   menu: SelectMenuTokens,
@@ -102,6 +105,16 @@ export const multiSelectTokenResolver: MultiSelectTokenResolver = ({
     },
     state,
   })
+  const tint = resolvePressableStateLayerTint({
+    themeTokens,
+    states: toActivePressableStates({
+      isHovered: state.isHovered,
+      isPressed: state.isPressed,
+      isFocused: state.isFocused,
+      isFocusVisible: state.isFocusVisible,
+    }),
+    color: input.text.color ?? onColor,
+  })
   const hoverColor = resolvePressableColoring({
     themeTokens,
     coloring: resolveColoringStyle({
@@ -122,6 +135,9 @@ export const multiSelectTokenResolver: MultiSelectTokenResolver = ({
         ...input.container.size,
         width: '100%',
       },
+    },
+    stateLayer: {
+      backgroundColor: tint,
     },
     triggerText: state.hasSelections ? input.text : input.placeholder,
     overlay: {

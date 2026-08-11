@@ -1,4 +1,4 @@
-import { toContainerStyle, toTextStyle } from '../adapters/style-adapters'
+import { toContainerStyleWithStateLayer, toTextStyle } from '../adapters/style-adapters'
 import type { Color } from '../types/color'
 import type {
   SelectIconStyle,
@@ -74,9 +74,10 @@ export const toSelectThemeResolvers: ComponentThemeResolver<SelectThemeResolvers
   })
 
   return {
-    trigger: createStyleResolver((state: SelectState): SelectTriggerStyle => (
-      toContainerStyle(resolve(toTriggerState(state)).trigger)
-    )),
+    trigger: createStyleResolver((state: SelectState): SelectTriggerStyle => {
+      const { trigger, stateLayer } = resolve(toTriggerState(state))
+      return toContainerStyleWithStateLayer(trigger, stateLayer)
+    }),
     triggerText: createStyleResolver((state: SelectState): SelectTriggerTextStyle => (
       toTextStyle(resolve(toTriggerState(state)).triggerText)
     )),

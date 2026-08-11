@@ -1,4 +1,4 @@
-import { toContainerStyle, toTextStyle } from '../adapters/style-adapters'
+import { toContainerStyleWithStateLayer, toTextStyle } from '../adapters/style-adapters'
 import type { Color } from '../types/color'
 import type {
   MultiSelectCheckboxIconStyle,
@@ -63,34 +63,26 @@ export const toMultiSelectThemeResolvers: ComponentThemeResolver<MultiSelectThem
     },
   })
 
+  const toTriggerState = (state: MultiSelectState) => ({
+    color: state.color,
+    isDisabled: state.isDisabled,
+    isInvalid: state.isInvalid,
+    isHovered: state.isHovered,
+    isFocused: state.isFocused,
+    isFocusVisible: state.isFocusVisible,
+    isPressed: state.isPressed,
+    isReadonly: state.isReadonly,
+    isOpen: state.isOpen,
+    hasSelections: state.hasSelections,
+  })
+
   return {
-    trigger: createStyleResolver((state: MultiSelectState): MultiSelectTriggerStyle => (
-      toContainerStyle(resolve({
-        color: state.color,
-        isDisabled: state.isDisabled,
-        isInvalid: state.isInvalid,
-        isHovered: state.isHovered,
-        isFocused: state.isFocused,
-        isFocusVisible: state.isFocusVisible,
-        isPressed: state.isPressed,
-        isReadonly: state.isReadonly,
-        isOpen: state.isOpen,
-        hasSelections: state.hasSelections,
-      }).trigger)
-    )),
+    trigger: createStyleResolver((state: MultiSelectState): MultiSelectTriggerStyle => {
+      const { trigger, stateLayer } = resolve(toTriggerState(state))
+      return toContainerStyleWithStateLayer(trigger, stateLayer)
+    }),
     triggerText: createStyleResolver((state: MultiSelectState): SelectTriggerTextStyle => (
-      toTextStyle(resolve({
-        color: state.color,
-        isDisabled: state.isDisabled,
-        isInvalid: state.isInvalid,
-        isHovered: state.isHovered,
-        isFocused: state.isFocused,
-        isFocusVisible: state.isFocusVisible,
-        isPressed: state.isPressed,
-        isReadonly: state.isReadonly,
-        isOpen: state.isOpen,
-        hasSelections: state.hasSelections,
-      }).triggerText)
+      toTextStyle(resolve(toTriggerState(state)).triggerText)
     )),
     overlay: createSimpleStyleResolver((): SelectOverlayStyle => ({
       ...resolve().overlay,

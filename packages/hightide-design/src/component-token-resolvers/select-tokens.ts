@@ -2,7 +2,8 @@ import type { ColorToken } from '../primitive-tokens/color'
 import {
   resolveColoringColorVariant,
   resolveColoringStyle,
-  resolvePressableColoring
+  resolvePressableColoring,
+  resolvePressableStateLayerTint
 } from '../semantic-token-resolvers'
 import type { ColorPairToken } from '../theme-tokens/theme-tokens-config'
 import { HexColorUtils } from '../utils/hex'
@@ -65,6 +66,7 @@ export type SelectOptionTokens = {
 
 export type SelectTokens = {
   trigger: SelectTriggerTokens,
+  stateLayer: ContainerTokens,
   triggerText: TextStyleTokens,
   icon: IconTokens,
   overlay: SelectOverlayTokens,
@@ -103,6 +105,16 @@ export const selectTokenResolver: SelectTokenResolver = ({
     },
     state,
   })
+  const tint = resolvePressableStateLayerTint({
+    themeTokens,
+    states: toActivePressableStates({
+      isHovered: state.isHovered,
+      isPressed: state.isPressed,
+      isFocused: state.isFocused,
+      isFocusVisible: state.isFocusVisible,
+    }),
+    color: input.text.color ?? onColor,
+  })
   const hoverColor = resolvePressableColoring({
     themeTokens,
     coloring: resolveColoringStyle({
@@ -121,8 +133,11 @@ export const selectTokenResolver: SelectTokenResolver = ({
       ...input.container,
       layout: {
         ...input.container.layout,
-        gap: input.container.shape?.padding?.horizontal
-      }
+        gap: input.container.shape?.padding?.horizontal,
+      },
+    },
+    stateLayer: {
+      backgroundColor: tint,
     },
     triggerText: state.hasValue ? input.text : input.placeholder,
     icon: input.icon,

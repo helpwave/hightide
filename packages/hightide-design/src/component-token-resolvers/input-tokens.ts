@@ -65,7 +65,7 @@ export const inputTokenResolver: InputTokenResolver = ({
     })
 
   const interactionStates = new Set<PressableState>()
-  if (state.isHovered === true) {
+  if (state.isHovered === true && state.isFocused !== true) {
     interactionStates.add('hovered')
   }
   if (state.isPressed === true) {
