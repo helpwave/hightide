@@ -2,9 +2,11 @@ import {
   mapPressableVariant,
   resolveColoringColorVariant,
   resolveColoringStyle,
-  resolvePressableColoring
+  resolvePressableColoring,
+  resolvePressableStateLayerTint
 } from '../../semantic-token-resolvers'
 import type { ColorPairToken } from '../../theme-tokens/theme-tokens-config'
+import { HexColorUtils } from '../../utils/hex'
 import type { ComponentTokenResolver } from '../component-token-resolver'
 import type { ButtonState } from '../button-tokens'
 import { toActivePressableStates } from '../pressable'
@@ -46,13 +48,27 @@ export const listActionTokenResolver: ListActionTokenResolver = ({
     }),
     style,
   })
+  const fullStates = toActivePressableStates(state)
   const resolved = resolvePressableColoring({
     themeTokens,
     coloring,
     variant,
-    state: toActivePressableStates(state),
+    state: toActivePressableStates({
+      isDisabled: state.isDisabled,
+    }),
   })
-  const hasOutline = resolved.outline !== 'transparent'
+  const tint = resolvePressableStateLayerTint({
+    themeTokens,
+    states: fullStates,
+    color: coloring.foreground,
+  })
+
+  const background = HexColorUtils.blend(
+    resolved.background === 'transparent' ? '#FFFFFF00' : resolved.background,
+    tint === 'transparent' ? '#FFFFFF00' : tint
+  )
+  const isFocusVisible = fullStates.has('focusVisible')
+  const outlineColor = coloring.accent
   const base = listItemTokenResolver({
     themeTokens,
     semanticResolvers,
@@ -62,13 +78,12 @@ export const listActionTokenResolver: ListActionTokenResolver = ({
     ...base,
     container: {
       ...base.container,
-      backgroundColor: resolved.background,
-      outline: hasOutline ? {
-        offset: -themeTokens.borders.borderWidths.normal,
-        width: themeTokens.borders.borderWidths.normal,
-        color: resolved.outline,
-        style: 'solid'
-      } : undefined,
+      backgroundColor: background,
+      outline: {
+        ...themeTokens.focusOutline,
+        offset: themeTokens.focusOutline.width ? themeTokens.focusOutline.width * -1 : undefined,
+        color: isFocusVisible ? outlineColor : 'transparent',
+      },
     },
     titleText: {
       ...base.titleText,

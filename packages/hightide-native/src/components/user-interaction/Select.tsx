@@ -13,12 +13,14 @@ import type { ColorPairToken } from '@helpwave/hightide-design/theme-tokens'
 import { useTheme } from '../../global-contexts/theme/ThemeContext'
 import { ThemedText } from '../visualization-and-display/ThemedText'
 import { ThemedIcon } from '../visualization-and-display/ThemedIcon'
+import { ListActionItem } from '../list/ListActionItem'
 import { HightideIconRegistry } from '../../icons/HightideIconRegistry'
 import {
   useSelect,
   type UseSelectOption
 } from '../../hooks/useSelect'
 import type { SelectState } from '../../theme/types/components/select'
+import type { Color } from '../../theme/types/color'
 import type {
   FormFieldDataHandling,
   FormFieldInteractionStates
@@ -180,23 +182,29 @@ export const Select = ({
               renderItem={({ item }) => {
                 const isSelected = select.value === item.id
                 const isHighlighted = select.highlightedValue === item.id
-                const optionState = {
-                  color,
-                  isSelected,
-                  isHighlighted,
-                  isDisabled: item.disabled,
-                }
+                const optionColor = isSelected
+                  ? (color ?? theme.colors.primary)
+                  : undefined
+                const checkIcon = theme.components.listItem.action.icon({ color: optionColor })
 
                 return (
-                  <Pressable
+                  <ListActionItem
+                    label={item.label ?? item.id}
+                    color={optionColor}
                     disabled={item.disabled}
+                    isHighlighted={isHighlighted}
                     onPress={() => select.selectValue(item.id)}
-                    style={selectTheme.option(optionState)}
-                  >
-                    <ThemedText style={selectTheme.optionText(optionState)}>
-                      {item.label}
-                    </ThemedText>
-                  </Pressable>
+                    trailing={isSelected
+                      ? (
+                        <ThemedIcon
+                          icon={HightideIconRegistry.Check}
+                          size={checkIcon.size}
+                          strokeWidth={checkIcon.strokeWidth}
+                          color={checkIcon.color as Color | undefined}
+                        />
+                      )
+                      : undefined}
+                  />
                 )
               }}
             />

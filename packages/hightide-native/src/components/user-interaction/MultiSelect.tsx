@@ -12,6 +12,7 @@ import type { ColorPairToken } from '@helpwave/hightide-design/theme-tokens'
 import { Chip } from '../visualization-and-display/Chip'
 import { ThemedText } from '../visualization-and-display/ThemedText'
 import { ThemedIcon } from '../visualization-and-display/ThemedIcon'
+import { ListActionItem } from '../list/ListActionItem'
 import { IconButton } from './IconButton'
 import { HightideIconRegistry } from '../../icons/HightideIconRegistry'
 import { useTheme } from '../../global-contexts/theme/ThemeContext'
@@ -197,22 +198,29 @@ export const MultiSelect = ({
                   isDisabled: item.disabled,
                 }
                 const checkboxIcon = multiSelectTheme.checkboxIcon(optionState)
+                const optionColor = selected
+                  ? (color ?? theme.colors.primary)
+                  : undefined
 
                 return (
-                  <Pressable
+                  <ListActionItem
+                    label={item.label ?? item.id}
+                    color={optionColor}
                     disabled={item.disabled}
+                    isHighlighted={isHighlighted}
                     onPress={() => multiSelect.toggleSelection(item.id)}
-                    style={multiSelectTheme.option(optionState)}
-                  >
-                    <View style={multiSelectTheme.checkbox(optionState)}>
-                      {checkboxIcon.visible && (
-                        <ThemedIcon icon={HightideIconRegistry.Check} size="sm" color={checkboxIcon.color} />
-                      )}
-                    </View>
-                    <ThemedText style={multiSelectTheme.optionText(optionState)}>
-                      {item.label}
-                    </ThemedText>
-                  </Pressable>
+                    leading={(
+                      <View style={multiSelectTheme.checkbox(optionState)}>
+                        {checkboxIcon.visible && (
+                          <ThemedIcon
+                            icon={HightideIconRegistry.Check}
+                            size="sm"
+                            color={checkboxIcon.color}
+                          />
+                        )}
+                      </View>
+                    )}
+                  />
                 )
               }}
             />

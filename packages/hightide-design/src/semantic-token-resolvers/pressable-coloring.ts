@@ -49,7 +49,7 @@ export const resolvePressableStateLayerTint = (params: {
     return 'transparent'
   }
 
-  if (states.has('focusVisible') || states.has('focused') || states.has('pressed')) {
+  if (states.has('focusVisible') || states.has('pressed')) {
     return HexColorUtils.hexWithAlpha(color, tintConfig.normal)
   }
   if (states.has('hovered')) {
