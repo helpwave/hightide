@@ -18,7 +18,7 @@ import {
 import {
   toPressableState,
   type PressableStateValue
-} from './pressable'
+} from './pressable-tokens'
 import type { TextStyleTokens } from './text-style-tokens'
 
 export type SelectStateValue =

@@ -7,7 +7,7 @@ import {
   resolvePressableColoring,
   type SemanticTokenResolvers
 } from '../../semantic-token-resolvers'
-import type { PressableStateValue } from '../pressable'
+import type { PressableStateValue } from '../pressable-tokens'
 
 export type ChatMessageDirection = 'incoming' | 'outgoing'
 

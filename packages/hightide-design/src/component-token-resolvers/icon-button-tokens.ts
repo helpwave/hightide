@@ -14,9 +14,16 @@ import type { ContainerTokens } from './container-tokens'
 import { toButtonIconSize } from './icon-size'
 import { iconTokenResolver, type IconTokens } from './icon-tokens'
 import type { TextStyleTokens } from './text-style-tokens'
-import { type PressableState } from './pressable'
+import { type PressableState } from './pressable-tokens'
 
 export type IconButtonState = PressableState
+
+export const iconButtonVariants = [
+  'elevated',
+  'filled',
+  'tonal',
+  'foreground',
+] as const satisfies readonly IconButtonVariant[]
 
 export type IconButtonComponentResolverProps = {
   overrides: {

@@ -7,7 +7,7 @@ import type { ColorPairToken } from '../theme-tokens/theme-tokens-config'
 import type { ComponentTokenResolver } from './component-token-resolver'
 import type { ContainerTokens } from './container-tokens'
 import type { IconTokens } from './icon-tokens'
-import { toPressableState } from './pressable'
+import { toPressableState } from './pressable-tokens'
 import {
   inputStateValues,
   toInputState

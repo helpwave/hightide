@@ -5,7 +5,7 @@ import { HexColorUtils } from '../utils/hex'
 import type { ComponentTokenResolver } from './component-token-resolver'
 import type { ContainerTokens } from './container-tokens'
 import { inputStateValues } from './input-tokens'
-import { toPressableState } from './pressable'
+import { toPressableState } from './pressable-tokens'
 
 export const switchStateValues = [
   ...inputStateValues,

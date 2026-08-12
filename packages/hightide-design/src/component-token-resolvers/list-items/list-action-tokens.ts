@@ -12,7 +12,7 @@ import {
   listItemTokenResolver,
   type ListItemTokens
 } from './list-item-tokens'
-import type { PressableState } from '../pressable'
+import type { PressableState } from '../pressable-tokens'
 
 export type ListActionItemState = PressableState
 

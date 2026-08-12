@@ -2,7 +2,7 @@ import type { ColorToken } from '../primitive-tokens/color'
 import type {
   PressableState,
   PressableStateValue
-} from '../component-token-resolvers/pressable'
+} from '../component-token-resolvers/pressable-tokens'
 import type { ThemeTokens } from '../theme-tokens/theme-tokens'
 import type { StateBasedProperty } from '../theme-tokens/stateBasedProperty'
 import { resolveStateBasedProperty } from '../theme-tokens/stateBasedProperty'

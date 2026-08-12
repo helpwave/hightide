@@ -8,7 +8,7 @@ import { iconTokenResolver, type IconTokens } from './icon-tokens'
 import {
   pressableStateValues,
   type PressableStateValue
-} from './pressable'
+} from './pressable-tokens'
 import type { TextStyleTokens } from './text-style-tokens'
 
 export const inputStateValues = [

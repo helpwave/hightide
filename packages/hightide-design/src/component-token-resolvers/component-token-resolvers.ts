@@ -44,6 +44,10 @@ import {
   type MultiSelectTokenResolver
 } from './multi-select-tokens'
 import {
+  pressableTokenResolver,
+  type PressableTokenResolver
+} from './pressable-tokens'
+import {
   selectTokenResolver,
   type SelectTokenResolver
 } from './select-tokens'
@@ -55,6 +59,7 @@ import {
 export type ComponentTokenResolvers = {
   button: ButtonTokenResolver,
   iconButton: IconButtonTokenResolver,
+  pressable: PressableTokenResolver,
   chip: ChipTokenResolver,
   checkbox: CheckboxTokenResolver,
   switch: SwitchTokenResolver,
@@ -72,6 +77,7 @@ export type ComponentTokenResolvers = {
 export const componentTokenResolvers: ComponentTokenResolvers = {
   button: buttonTokenResolver,
   iconButton: iconButtonTokenResolver,
+  pressable: pressableTokenResolver,
   chip: chipTokenResolver,
   checkbox: checkboxTokenResolver,
   switch: switchTokenResolver,

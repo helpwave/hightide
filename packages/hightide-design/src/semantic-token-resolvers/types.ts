@@ -6,7 +6,7 @@ import type {
 } from '../theme-tokens/theme-tokens-config'
 import type { ThemeTokens } from '../theme-tokens/theme-tokens'
 import type { InputState } from '../component-token-resolvers/input-tokens'
-import type { PressableState } from '../component-token-resolvers/pressable'
+import type { PressableState } from '../component-token-resolvers/pressable-tokens'
 import type {
   ContainerLayoutToken,
   ControlElementLayoutToken,
