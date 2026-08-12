@@ -18,6 +18,7 @@ import { toDividerThemeResolvers } from '../resolvers/divider'
 import { toIconThemeResolvers } from '../resolvers/icon'
 import { toIconButtonThemeResolvers } from '../resolvers/iconButton'
 import { toInputThemeResolvers } from '../resolvers/input'
+import { toSearchBarThemeResolvers } from '../resolvers/searchBar'
 import {
   toListItemThemeResolvers
 } from '../resolvers/listItem'
@@ -154,6 +155,11 @@ export const createHightideTheme = (themeTokens: ThemeTokens): HightideTheme => 
       componentTokens: componentTokenResolvers,
     }),
     input: toInputThemeResolvers({
+      themeTokens,
+      semanticTokens: hightideSemanticTokenResolvers,
+      componentTokens: componentTokenResolvers,
+    }),
+    searchBar: toSearchBarThemeResolvers({
       themeTokens,
       semanticTokens: hightideSemanticTokenResolvers,
       componentTokens: componentTokenResolvers,

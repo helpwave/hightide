@@ -8,6 +8,7 @@ import type { CheckboxThemeResolvers } from './checkbox'
 import type { ChipThemeResolvers } from './chip'
 import type { IconButtonThemeResolvers } from './iconButton'
 import type { InputThemeResolvers } from './input'
+import type { SearchBarThemeResolvers } from './searchBar'
 import type { CardThemeResolvers } from './card'
 import type { DividerThemeResolvers } from './divider'
 import type { ListItemThemeResolvers } from './listItem'
@@ -26,6 +27,7 @@ export type HightideComponentThemes = {
   checkbox: CheckboxThemeResolvers,
   switch: SwitchThemeResolvers,
   input: InputThemeResolvers,
+  searchBar: SearchBarThemeResolvers,
   select: SelectThemeResolvers,
   multiSelect: MultiSelectThemeResolvers,
   chat: ChatThemeResolvers,

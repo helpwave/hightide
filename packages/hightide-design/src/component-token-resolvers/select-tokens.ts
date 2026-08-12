@@ -47,21 +47,16 @@ export type SelectOverlayTokens = {
 }
 
 export type SelectMenuTokens = {
-  maxHeight: number,
+  minHeight: number,
+  height: number,
   borderRadius: number,
   borderWidth: number,
   borderColor: ColorToken,
   backgroundColor: ColorToken,
-  overflow: 'hidden',
+  overflow: 'visible',
 }
 
-export type SelectSearchTokens = {
-  paddingVertical: number,
-  paddingHorizontal: number,
-  borderBottomWidth: number,
-  borderBottomColor: ColorToken,
-  color: ColorToken,
-}
+export type SelectHeaderTokens = ContainerTokens
 
 export type SelectOptionTokens = {
   paddingVertical: number,
@@ -77,10 +72,10 @@ export type SelectTokens = {
   icon: IconTokens,
   overlay: SelectOverlayTokens,
   menu: SelectMenuTokens,
-  search: SelectSearchTokens,
-  searchPlaceholderColor: ColorToken,
+  header: SelectHeaderTokens,
   option: SelectOptionTokens,
   optionText: TextStyleTokens,
+  emptyText: TextStyleTokens,
 }
 
 export const selectOverlayColor = HexColorUtils.hexWithAlpha('#000000', 0.35)
@@ -128,6 +123,8 @@ export const selectTokenResolver: SelectTokenResolver = ({
     variant: 'filled',
     state: new Set<PressableStateValue>(['hovered']),
   }).background
+  const touchTargetSize = semanticResolvers.touchTargetSize({ themeTokens })
+  const menuHeight = touchTargetSize * 6
 
   return {
     trigger: {
@@ -149,21 +146,22 @@ export const selectTokenResolver: SelectTokenResolver = ({
       backgroundColor: selectOverlayColor,
     },
     menu: {
-      maxHeight: 360,
+      minHeight: menuHeight,
+      height: menuHeight,
       borderRadius: shape.borderRadius.lg,
       borderWidth: borders.borderWidths.thin,
       borderColor: fadedBorder,
       backgroundColor: color.surfaceVariant.color,
-      overflow: 'hidden',
+      overflow: 'visible',
     },
-    search: {
-      paddingVertical: shape.padding.xxl,
-      paddingHorizontal: spacing.lg,
-      borderBottomWidth: borders.borderWidths.thin,
-      borderBottomColor: fadedBorder,
-      color: onColor,
+    header: {
+      shape: {
+        padding: {
+          vertical: shape.padding.sm,
+          horizontal: shape.padding.sm,
+        },
+      },
     },
-    searchPlaceholderColor: input.placeholder.color ?? onColor,
     option: {
       paddingVertical: shape.padding.xxl,
       paddingHorizontal: spacing.lg,
@@ -176,6 +174,13 @@ export const selectTokenResolver: SelectTokenResolver = ({
         ? typography.fontWeights.semibold
         : typography.fontWeights.base,
       color: state.has('selected') ? accentPair.color : color.surface.onColor,
+    },
+    emptyText: {
+      ...typography.body.md,
+      color: semanticResolvers.asDescription({
+        themeTokens,
+        color: onColor,
+      }),
     },
   }
 }

@@ -38,11 +38,13 @@ export type SelectOverlayStyle = ViewStyle
 
 export type SelectMenuStyle = ViewStyle
 
-export type SelectSearchStyle = TextStyle
+export type SelectHeaderStyle = ViewStyle
 
 export type SelectOptionStyle = ViewStyle
 
 export type SelectOptionTextStyle = TextStyle
+
+export type SelectEmptyTextStyle = TextStyle
 
 export type SelectThemeResolvers = {
   trigger: StyleResolverFunction<SelectState, SelectTriggerStyle>,
@@ -50,8 +52,8 @@ export type SelectThemeResolvers = {
   icon: StyleResolverFunction<SelectState, SelectIconStyle>,
   overlay: SimpleStyleResolver<SelectOverlayStyle>,
   menu: SimpleStyleResolver<SelectMenuStyle>,
-  search: SimpleStyleResolver<SelectSearchStyle>,
-  searchPlaceholderColor: SimpleStyleResolver<Color>,
+  header: SimpleStyleResolver<SelectHeaderStyle>,
   option: StyleResolverFunction<SelectOptionState, SelectOptionStyle>,
   optionText: StyleResolverFunction<SelectOptionState, SelectOptionTextStyle>,
+  emptyText: SimpleStyleResolver<SelectEmptyTextStyle>,
 }

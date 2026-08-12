@@ -48,6 +48,10 @@ import {
   type PressableTokenResolver
 } from './pressable-tokens'
 import {
+  searchBarTokenResolver,
+  type SearchBarTokenResolver
+} from './search-bar-tokens'
+import {
   selectTokenResolver,
   type SelectTokenResolver
 } from './select-tokens'
@@ -64,6 +68,7 @@ export type ComponentTokenResolvers = {
   checkbox: CheckboxTokenResolver,
   switch: SwitchTokenResolver,
   input: InputTokenResolver,
+  searchBar: SearchBarTokenResolver,
   select: SelectTokenResolver,
   multiSelect: MultiSelectTokenResolver,
   card: CardTokenResolver,
@@ -82,6 +87,7 @@ export const componentTokenResolvers: ComponentTokenResolvers = {
   checkbox: checkboxTokenResolver,
   switch: switchTokenResolver,
   input: inputTokenResolver,
+  searchBar: searchBarTokenResolver,
   select: selectTokenResolver,
   multiSelect: multiSelectTokenResolver,
   card: cardTokenResolver,

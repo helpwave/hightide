@@ -5,10 +5,11 @@ import type {
 
 import type { Color } from '../color'
 import type {
+  SelectEmptyTextStyle,
+  SelectHeaderStyle,
   SelectMenuStyle,
   SelectOptionState,
   SelectOverlayStyle,
-  SelectSearchStyle,
   SelectState,
   SelectTriggerTextStyle
 } from './select'
@@ -41,10 +42,10 @@ export type MultiSelectThemeResolvers = {
   triggerText: StyleResolverFunction<MultiSelectState, SelectTriggerTextStyle>,
   overlay: SimpleStyleResolver<SelectOverlayStyle>,
   menu: SimpleStyleResolver<SelectMenuStyle>,
-  search: SimpleStyleResolver<SelectSearchStyle>,
-  searchPlaceholderColor: SimpleStyleResolver<Color>,
+  header: SimpleStyleResolver<SelectHeaderStyle>,
   option: StyleResolverFunction<MultiSelectOptionState, MultiSelectOptionStyle>,
   optionText: StyleResolverFunction<MultiSelectOptionState, MultiSelectOptionTextStyle>,
+  emptyText: SimpleStyleResolver<SelectEmptyTextStyle>,
   checkbox: StyleResolverFunction<MultiSelectOptionState, MultiSelectCheckboxStyle>,
   checkboxIcon: StyleResolverFunction<MultiSelectOptionState, MultiSelectCheckboxIconStyle>,
 }

@@ -19,9 +19,9 @@ import {
 } from './pressable-tokens'
 import type { TextStyleTokens } from './text-style-tokens'
 import type {
+  SelectHeaderTokens,
   SelectMenuTokens,
   SelectOverlayTokens,
-  SelectSearchTokens,
   SelectTriggerTokens
 } from './select-tokens'
 import { selectOverlayColor } from './select-tokens'
@@ -81,10 +81,10 @@ export type MultiSelectTokens = {
   triggerText: TextStyleTokens,
   overlay: SelectOverlayTokens,
   menu: SelectMenuTokens,
-  search: SelectSearchTokens,
-  searchPlaceholderColor: ColorToken,
+  header: SelectHeaderTokens,
   option: MultiSelectOptionTokens,
   optionText: TextStyleTokens,
+  emptyText: TextStyleTokens,
   checkbox: MultiSelectCheckboxTokens,
   checkboxIcon: MultiSelectCheckboxIconTokens,
 }
@@ -133,6 +133,8 @@ export const multiSelectTokenResolver: MultiSelectTokenResolver = ({
     variant: 'filled',
     state: new Set<PressableStateValue>(['hovered']),
   }).background
+  const touchTargetSize = semanticResolvers.touchTargetSize({ themeTokens })
+  const menuHeight = touchTargetSize * 6
 
   return {
     trigger: {
@@ -153,21 +155,22 @@ export const multiSelectTokenResolver: MultiSelectTokenResolver = ({
       backgroundColor: selectOverlayColor,
     },
     menu: {
-      maxHeight: 360,
+      minHeight: menuHeight,
+      height: menuHeight,
       borderRadius: shape.borderRadius.lg,
       borderWidth: borders.borderWidths.thin,
       borderColor: fadedBorder,
       backgroundColor: color.surfaceVariant.color,
-      overflow: 'hidden',
+      overflow: 'visible',
     },
-    search: {
-      paddingVertical: shape.padding.xxl,
-      paddingHorizontal: spacing.lg,
-      borderBottomWidth: borders.borderWidths.thin,
-      borderBottomColor: fadedBorder,
-      color: onColor,
+    header: {
+      shape: {
+        padding: {
+          vertical: shape.padding.sm,
+          horizontal: shape.padding.sm,
+        },
+      },
     },
-    searchPlaceholderColor: input.placeholder.color ?? onColor,
     option: {
       flexDirection: 'row',
       alignItems: 'center',
@@ -183,6 +186,13 @@ export const multiSelectTokenResolver: MultiSelectTokenResolver = ({
         ? typography.fontWeights.semibold
         : typography.fontWeights.base,
       color: state.has('selected') ? accentPair.color : onColor,
+    },
+    emptyText: {
+      ...typography.body.md,
+      color: semanticResolvers.asDescription({
+        themeTokens,
+        color: onColor,
+      }),
     },
     checkbox: {
       alignItems: 'center',

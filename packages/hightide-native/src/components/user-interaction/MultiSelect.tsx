@@ -3,7 +3,6 @@ import {
   FlatList,
   Modal,
   Pressable,
-  TextInput,
   View,
   type StyleProp,
   type ViewStyle
@@ -14,6 +13,7 @@ import { ThemedText } from '../visualization-and-display/ThemedText'
 import { ThemedIcon } from '../visualization-and-display/ThemedIcon'
 import { ListActionItem } from '../list/ListActionItem'
 import { IconButton } from './IconButton'
+import { SearchBar } from './SearchBar'
 import { HightideIconRegistry } from '../../icons/HightideIconRegistry'
 import { useTheme } from '../../global-contexts/theme/ThemeContext'
 import {
@@ -91,14 +91,21 @@ export const MultiSelect = ({
     () => multiSelectTheme.menu({}),
     [multiSelectTheme]
   )
-  const resolvedSearchStyle = useMemo(
-    () => multiSelectTheme.search({}),
+  const resolvedHeaderStyle = useMemo(
+    () => multiSelectTheme.header({}),
     [multiSelectTheme]
   )
-  const searchPlaceholderColor = useMemo(
-    () => multiSelectTheme.searchPlaceholderColor({}),
+  const resolvedEmptyTextStyle = useMemo(
+    () => multiSelectTheme.emptyText({}),
     [multiSelectTheme]
   )
+  const visibleOptions = useMemo(
+    () => options.filter((option) => multiSelect.visibleOptionIds.includes(option.id)),
+    [options, multiSelect.visibleOptionIds]
+  )
+  const showEmptySearchResults = showSearch
+    && multiSelect.searchQuery.trim().length > 0
+    && visibleOptions.length === 0
 
   return (
     <View style={[{ width: '100%' }, style]}>
@@ -176,52 +183,67 @@ export const MultiSelect = ({
             onPress={(event) => event.stopPropagation()}
           >
             {showSearch && (
-              <TextInput
-                value={multiSelect.searchQuery}
-                onChangeText={multiSelect.setSearchQuery}
-                placeholder="Search…"
-                placeholderTextColor={searchPlaceholderColor}
-                style={resolvedSearchStyle}
+              <View style={resolvedHeaderStyle}>
+                <SearchBar
+                  value={multiSelect.searchQuery}
+                  onValueChange={multiSelect.setSearchQuery}
+                  onSearch={multiSelect.setSearchQuery}
+                />
+              </View>
+            )}
+            {showEmptySearchResults ? (
+              <View
+                style={{
+                  flex: 1,
+                  justifyContent: 'center',
+                  alignItems: 'center',
+                }}
+              >
+                <ThemedText style={resolvedEmptyTextStyle}>
+                  {translation('nothingFound')}
+                </ThemedText>
+              </View>
+            ) : (
+              <FlatList
+                data={visibleOptions}
+                keyExtractor={(option) => option.id}
+                style={{ flex: 1 }}
+                renderItem={({ item }) => {
+                  const selected = multiSelect.isSelected(item.id)
+                  const isHighlighted = multiSelect.highlightedId === item.id
+                  const optionState = {
+                    color,
+                    isSelected: selected,
+                    isHighlighted,
+                    isDisabled: item.disabled,
+                  }
+                  const checkboxIcon = multiSelectTheme.checkboxIcon(optionState)
+                  const optionColor = selected
+                    ? (color ?? theme.colors.primary)
+                    : undefined
+
+                  return (
+                    <ListActionItem
+                      label={item.label ?? item.id}
+                      color={optionColor}
+                      disabled={item.disabled}
+                      onPress={() => multiSelect.toggleSelection(item.id)}
+                      leading={(
+                        <View style={multiSelectTheme.checkbox(optionState)}>
+                          {checkboxIcon.visible && (
+                            <ThemedIcon
+                              icon={HightideIconRegistry.Check}
+                              size="sm"
+                              color={checkboxIcon.color}
+                            />
+                          )}
+                        </View>
+                      )}
+                    />
+                  )
+                }}
               />
             )}
-            <FlatList
-              data={options.filter((option) => multiSelect.visibleOptionIds.includes(option.id))}
-              keyExtractor={(option) => option.id}
-              renderItem={({ item }) => {
-                const selected = multiSelect.isSelected(item.id)
-                const isHighlighted = multiSelect.highlightedId === item.id
-                const optionState = {
-                  color,
-                  isSelected: selected,
-                  isHighlighted,
-                  isDisabled: item.disabled,
-                }
-                const checkboxIcon = multiSelectTheme.checkboxIcon(optionState)
-                const optionColor = selected
-                  ? (color ?? theme.colors.primary)
-                  : undefined
-
-                return (
-                  <ListActionItem
-                    label={item.label ?? item.id}
-                    color={optionColor}
-                    disabled={item.disabled}
-                    onPress={() => multiSelect.toggleSelection(item.id)}
-                    leading={(
-                      <View style={multiSelectTheme.checkbox(optionState)}>
-                        {checkboxIcon.visible && (
-                          <ThemedIcon
-                            icon={HightideIconRegistry.Check}
-                            size="sm"
-                            color={checkboxIcon.color}
-                          />
-                        )}
-                      </View>
-                    )}
-                  />
-                )
-              }}
-            />
           </Pressable>
         </Pressable>
       </Modal>

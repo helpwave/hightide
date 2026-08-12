@@ -2,8 +2,7 @@ import type {
   MultiSelectState as DesignMultiSelectState,
   MultiSelectStateValue
 } from '@helpwave/hightide-design/component-token-resolvers'
-import { toContainerStyleWithStateLayer, toTextStyle } from '../adapters/style-adapters'
-import type { Color } from '../types/color'
+import { toContainerStyle, toContainerStyleWithStateLayer, toTextStyle } from '../adapters/style-adapters'
 import type {
   MultiSelectCheckboxIconStyle,
   MultiSelectCheckboxStyle,
@@ -15,14 +14,14 @@ import type {
   MultiSelectTriggerStyle
 } from '../types/components/multiSelect'
 import type {
+  SelectEmptyTextStyle,
+  SelectHeaderStyle,
   SelectMenuStyle,
   SelectOverlayStyle,
-  SelectSearchStyle,
   SelectTriggerTextStyle
 } from '../types/components/select'
 import {
   createSimpleStyleResolver,
-  createSimpleValueResolver,
   createStyleResolver,
   createValueResolver,
   type ComponentThemeResolver
@@ -126,11 +125,8 @@ export const toMultiSelectThemeResolvers: ComponentThemeResolver<MultiSelectThem
     menu: createSimpleStyleResolver((): SelectMenuStyle => ({
       ...resolve().menu,
     })),
-    search: createSimpleStyleResolver((): SelectSearchStyle => ({
-      ...resolve().search,
-    })),
-    searchPlaceholderColor: createSimpleValueResolver((): Color => (
-      resolve().searchPlaceholderColor
+    header: createSimpleStyleResolver((): SelectHeaderStyle => (
+      toContainerStyle(resolve().header)
     )),
     option: createStyleResolver((state: MultiSelectOptionState): MultiSelectOptionStyle => ({
       ...resolve({
@@ -147,6 +143,9 @@ export const toMultiSelectThemeResolvers: ComponentThemeResolver<MultiSelectThem
         isSelected: state.isSelected,
         isHighlighted: state.isHighlighted,
       }).optionText)
+    )),
+    emptyText: createSimpleStyleResolver((): SelectEmptyTextStyle => (
+      toTextStyle(resolve().emptyText)
     )),
     checkbox: createStyleResolver((state: MultiSelectOptionState): MultiSelectCheckboxStyle => ({
       ...resolve({

@@ -7,6 +7,7 @@ import {
   FileText,
   Minus,
   Plus,
+  Search,
   SendHorizontal,
   User,
   X
@@ -23,6 +24,7 @@ export const HightideIconRegistry = {
   FileText: FileText,
   Minus: Minus,
   Plus: Plus,
+  Search: Search,
   SendHorizontal: SendHorizontal,
   User: User,
   X: X,

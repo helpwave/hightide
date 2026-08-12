@@ -2,16 +2,16 @@ import type {
   SelectState as DesignSelectState,
   SelectStateValue
 } from '@helpwave/hightide-design/component-token-resolvers'
-import { toContainerStyleWithStateLayer, toTextStyle } from '../adapters/style-adapters'
-import type { Color } from '../types/color'
+import { toContainerStyle, toContainerStyleWithStateLayer, toTextStyle } from '../adapters/style-adapters'
 import type {
   SelectIconStyle,
   SelectMenuStyle,
+  SelectHeaderStyle,
+  SelectEmptyTextStyle,
   SelectOptionState,
   SelectOptionStyle,
   SelectOptionTextStyle,
   SelectOverlayStyle,
-  SelectSearchStyle,
   SelectState,
   SelectThemeResolvers,
   SelectTriggerStyle,
@@ -19,7 +19,6 @@ import type {
 } from '../types/components/select'
 import {
   createSimpleStyleResolver,
-  createSimpleValueResolver,
   createStyleResolver,
   createValueResolver,
   type ComponentThemeResolver
@@ -130,11 +129,8 @@ export const toSelectThemeResolvers: ComponentThemeResolver<SelectThemeResolvers
     menu: createSimpleStyleResolver((): SelectMenuStyle => ({
       ...resolve().menu,
     })),
-    search: createSimpleStyleResolver((): SelectSearchStyle => ({
-      ...resolve().search,
-    })),
-    searchPlaceholderColor: createSimpleValueResolver((): Color => (
-      resolve().searchPlaceholderColor
+    header: createSimpleStyleResolver((): SelectHeaderStyle => (
+      toContainerStyle(resolve().header)
     )),
     option: createStyleResolver((state: SelectOptionState): SelectOptionStyle => ({
       ...resolve({
@@ -151,6 +147,9 @@ export const toSelectThemeResolvers: ComponentThemeResolver<SelectThemeResolvers
         isSelected: state.isSelected,
         isHighlighted: state.isHighlighted,
       }).optionText)
+    )),
+    emptyText: createSimpleStyleResolver((): SelectEmptyTextStyle => (
+      toTextStyle(resolve().emptyText)
     )),
   }
 }
