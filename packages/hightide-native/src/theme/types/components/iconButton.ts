@@ -6,7 +6,7 @@ import type {
 import type { ColorPairToken } from '@helpwave/hightide-design/theme-tokens'
 import type {
   ComponentSize,
-  PressableVariant
+  IconButtonVariant
 } from '@helpwave/hightide-design/semantic-token-resolvers'
 
 import type { Color } from '../color'
@@ -18,7 +18,7 @@ import type {
 export type IconButtonState = InteractionState & {
   size?: ComponentSize,
   color?: ColorPairToken,
-  variant?: PressableVariant,
+  variant?: IconButtonVariant,
 }
 
 export type IconButtonStyle = ViewStyle

@@ -1,5 +1,5 @@
 import {
-  mapPressableVariant,
+  mapButtonVariant,
   resolveColoringColorVariant,
   resolveColoringStyle,
   resolvePressableColoring,
@@ -36,7 +36,7 @@ export const listActionTokenResolver: ListActionTokenResolver = ({
 }) => {
   const hasColor = overrides?.color !== undefined
   const variant = hasColor ? 'tonal' : 'foreground'
-  const { colorVariant, style } = mapPressableVariant(variant)
+  const { colorVariant, style } = mapButtonVariant(variant)
   const coloring = resolveColoringStyle({
     coloring: resolveColoringColorVariant({
       colorPair: overrides?.color ?? {

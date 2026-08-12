@@ -1,4 +1,4 @@
-import type { PressableVariant } from '../semantic-token-resolvers/types'
+import type { ButtonVariant, IconButtonVariant } from '../semantic-token-resolvers/types'
 
 export const pressableStateValues = [
   'disabled',
@@ -28,10 +28,17 @@ export const toPressableState = (state: ReadonlySet<string>): PressableState => 
   return active
 }
 
-export const pressableVariants = [
+export const buttonVariants = [
   'elevated',
   'filled',
   'tonal',
   'outlined',
   'foreground',
-] as const satisfies readonly PressableVariant[]
+] as const satisfies readonly ButtonVariant[]
+
+export const iconButtonVariants = [
+  'elevated',
+  'filled',
+  'tonal',
+  'foreground',
+] as const satisfies readonly IconButtonVariant[]

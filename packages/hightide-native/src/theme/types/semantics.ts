@@ -10,7 +10,7 @@ import type {
   InputColoringTokens,
   InsideControlElementLayoutToken,
   PressableColoringTokens,
-  PressableVariant
+  ButtonVariant
 } from '@helpwave/hightide-design/semantic-token-resolvers'
 import type { InputState } from '@helpwave/hightide-design/component-token-resolvers'
 import type { PressableState } from '@helpwave/hightide-design/component-token-resolvers'
@@ -34,7 +34,7 @@ export type HightideThemeSemantics = {
   }, ColoringToken>,
   pressableColoring: BoundSemanticResolver<{
     coloring: ColoringToken,
-    variant: PressableVariant,
+    variant: ButtonVariant,
     state: PressableState,
   }, PressableColoringTokens>,
   pressableStateLayerTint: BoundSemanticResolver<{

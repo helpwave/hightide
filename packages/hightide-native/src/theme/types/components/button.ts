@@ -1,6 +1,6 @@
 import type { ViewStyle, TextStyle } from 'react-native'
 
-import type { ComponentSize, PressableVariant } from '@helpwave/hightide-design/semantic-token-resolvers'
+import type { ComponentSize, ButtonVariant } from '@helpwave/hightide-design/semantic-token-resolvers'
 import type { ColorPairToken } from '@helpwave/hightide-design/theme-tokens'
 
 import type {
@@ -12,7 +12,7 @@ import type { IconStyle } from '../../../icons'
 export type ButtonState = InteractionState & {
   size?: ComponentSize,
   color?: ColorPairToken,
-  variant?: PressableVariant,
+  variant?: ButtonVariant,
 }
 
 export type ButtonStyle = ViewStyle

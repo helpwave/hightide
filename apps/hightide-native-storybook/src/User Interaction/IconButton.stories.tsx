@@ -6,8 +6,8 @@ import { HightideIconRegistry } from '@helpwave/hightide-native/icons'
 import { action } from 'storybook/actions'
 
 import {
-  ButtonUtil,
-  IconButton
+  IconButton,
+  IconButtonUtil
 } from '@helpwave/hightide-native/components'
 import { useTheme } from '@helpwave/hightide-native/global-contexts'
 
@@ -25,8 +25,8 @@ export default meta
 type IconButtonArgs = {
   disabled: boolean,
   color: ColorPairKey,
-  size: typeof ButtonUtil.sizes[number],
-  variant: typeof ButtonUtil.variants[number],
+  size: typeof IconButtonUtil.sizes[number],
+  variant: typeof IconButtonUtil.variants[number],
 }
 
 const IconButtonDemo = ({
@@ -55,11 +55,11 @@ export const iconButton: StoryObj<IconButtonArgs> = {
     color: StorybookHelper.colorPairSelect,
     size: {
       control: 'select',
-      options: ButtonUtil.sizes,
+      options: IconButtonUtil.sizes,
     },
     variant: {
       control: 'select',
-      options: ButtonUtil.variants,
+      options: IconButtonUtil.variants,
     },
   },
   args: {

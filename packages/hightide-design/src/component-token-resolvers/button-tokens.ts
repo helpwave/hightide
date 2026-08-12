@@ -1,12 +1,12 @@
 import {
-  mapPressableVariant,
+  mapButtonVariant,
   resolveColoringColorVariant,
   resolveColoringStyle,
   resolvePressableColoring,
   resolvePressableStateLayerTint,
   toTypographySize,
-  type ComponentSize,
-  type PressableVariant
+  type ButtonVariant,
+  type ComponentSize
 } from '../semantic-token-resolvers'
 import type { ColorPairToken } from '../theme-tokens/theme-tokens-config'
 import type { ComponentTokenResolver } from './component-token-resolver'
@@ -22,7 +22,7 @@ export type ButtonComponentResolverProps = {
   overrides: {
     size?: ComponentSize,
     color?: ColorPairToken,
-    variant?: PressableVariant,
+    variant?: ButtonVariant,
   },
   state: ButtonState,
 }
@@ -48,7 +48,7 @@ export const buttonTokenResolver: ButtonTokenResolver = ({
 }) => {
   const size = overrides.size ?? 'md'
   const variant = overrides.variant ?? 'filled'
-  const { colorVariant, style, elevated } = mapPressableVariant(variant)
+  const { colorVariant, style, elevated } = mapButtonVariant(variant)
   const coloring = resolveColoringStyle({
     coloring: resolveColoringColorVariant({
       colorPair: overrides.color ?? themeTokens.color.primary,

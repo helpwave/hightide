@@ -24,6 +24,7 @@ import {
 import { toMultiSelectThemeResolvers } from '../resolvers/multiSelect'
 import { toSelectThemeResolvers } from '../resolvers/select'
 import { toSwitchThemeResolvers } from '../resolvers/switch'
+import { toThemedPressableThemeResolvers } from '../resolvers/themedPressable'
 import type { HightideThemeSemantics } from '../types/semantics'
 import type { HightideTheme } from '../types/theme'
 
@@ -128,6 +129,11 @@ export const createHightideTheme = (themeTokens: ThemeTokens): HightideTheme => 
       componentTokens: componentTokenResolvers,
     }),
     iconButton: toIconButtonThemeResolvers({
+      themeTokens,
+      semanticTokens: hightideSemanticTokenResolvers,
+      componentTokens: componentTokenResolvers,
+    }),
+    themedPressable: toThemedPressableThemeResolvers({
       themeTokens,
       semanticTokens: hightideSemanticTokenResolvers,
       componentTokens: componentTokenResolvers,

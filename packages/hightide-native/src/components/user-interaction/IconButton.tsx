@@ -7,7 +7,10 @@ import {
   type ViewStyle
 } from 'react-native'
 import type { ColorPairToken } from '@helpwave/hightide-design/theme-tokens'
-import type { ComponentSize, PressableVariant } from '@helpwave/hightide-design/semantic-token-resolvers'
+import type {
+  ComponentSize,
+  IconButtonVariant
+} from '@helpwave/hightide-design/semantic-token-resolvers'
 
 import { ContentThemeProvider } from '../../global-contexts/content-theme/ContentThemeProvider'
 import { useTheme } from '../../global-contexts/theme/ThemeContext'
@@ -21,7 +24,12 @@ import { ThemedIcon } from '../visualization-and-display'
 
 export type IconButtonSize = ComponentSize
 
-export type IconButtonVariant = PressableVariant
+export type { IconButtonVariant }
+
+export const IconButtonUtil = {
+  sizes: ['xs', 'sm', 'md', 'lg', 'xl'] as const satisfies readonly ComponentSize[],
+  variants: ['elevated', 'filled', 'tonal', 'foreground'] as const satisfies readonly IconButtonVariant[],
+}
 
 export type IconButtonProps = Omit<PressableProps, 'children' | 'style'> & {
   size?: IconButtonSize,

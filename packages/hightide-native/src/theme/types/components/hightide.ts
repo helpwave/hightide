@@ -14,12 +14,14 @@ import type { ListItemThemeResolvers } from './listItem'
 import type { MultiSelectThemeResolvers } from './multiSelect'
 import type { SelectThemeResolvers } from './select'
 import type { SwitchThemeResolvers } from './switch'
+import type { ThemedPressableThemeResolvers } from './themedPressable'
 
 export type IconThemeResolvers = Record<IconSize, IconTokens>
 
 export type HightideComponentThemes = {
   button: ButtonThemeResolvers,
   iconButton: IconButtonThemeResolvers,
+  themedPressable: ThemedPressableThemeResolvers,
   chip: ChipThemeResolvers,
   checkbox: CheckboxThemeResolvers,
   switch: SwitchThemeResolvers,

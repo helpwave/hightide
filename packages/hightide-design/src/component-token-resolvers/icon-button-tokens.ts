@@ -1,12 +1,12 @@
 import {
-  mapPressableVariant,
+  mapIconButtonVariant,
   resolveColoringColorVariant,
   resolveColoringStyle,
   resolvePressableColoring,
   resolvePressableStateLayerTint,
   toTypographySize,
   type ComponentSize,
-  type PressableVariant
+  type IconButtonVariant
 } from '../semantic-token-resolvers'
 import type { ColorPairToken } from '../theme-tokens/theme-tokens-config'
 import type { ComponentTokenResolver } from './component-token-resolver'
@@ -22,7 +22,7 @@ export type IconButtonComponentResolverProps = {
   overrides: {
     size?: ComponentSize,
     color?: ColorPairToken,
-    variant?: PressableVariant,
+    variant?: IconButtonVariant,
   },
   state: IconButtonState,
 }
@@ -48,7 +48,7 @@ export const iconButtonTokenResolver: IconButtonTokenResolver = ({
 }) => {
   const size = overrides.size ?? 'md'
   const variant = overrides.variant ?? 'filled'
-  const { colorVariant, style, elevated } = mapPressableVariant(variant)
+  const { colorVariant, style, elevated } = mapIconButtonVariant(variant)
   const coloring = resolveColoringStyle({
     coloring: resolveColoringColorVariant({
       colorPair: overrides.color ?? themeTokens.color.primary,

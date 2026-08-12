@@ -8,7 +8,7 @@ import type { StateBasedProperty } from '../theme-tokens/stateBasedProperty'
 import { resolveStateBasedProperty } from '../theme-tokens/stateBasedProperty'
 import { HexColorUtils } from '../utils/hex'
 import {
-  mapPressableVariant,
+  mapButtonVariant,
   resolveColoringColorVariant,
   resolveColoringStyle
 } from './coloring-style'
@@ -17,7 +17,7 @@ import type {
   ColoringStyle,
   ColoringToken,
   PressableColoringTokens,
-  PressableVariant
+  ButtonVariant
 } from './types'
 
 export const createColoringProperty = (
@@ -59,7 +59,7 @@ export const createColoringProperty = (
 
 export const createPressableColoringTokens = (
   coloring: ColoringToken
-) : StateBasedProperty<PressableVariant | PressableStateValue, PressableColoringTokens> => {
+) : StateBasedProperty<ButtonVariant | PressableStateValue, PressableColoringTokens> => {
   return {
     base: {
       background: coloring.background,
@@ -137,11 +137,11 @@ export const resolvePressableStateLayerTint = (params: {
 export const resolvePressableColoring = (params: {
   themeTokens: ThemeTokens,
   coloring: ColoringToken,
-  variant: PressableVariant,
+  variant: ButtonVariant,
   state: PressableState,
 }): PressableColoringTokens => {
   const { themeTokens, variant, state, coloring } = params
-  const { colorVariant, style } = mapPressableVariant(variant)
+  const { colorVariant, style } = mapButtonVariant(variant)
 
   const resolvedColoring = resolveStateBasedProperty(
     createColoringProperty(themeTokens, coloring, colorVariant, style),

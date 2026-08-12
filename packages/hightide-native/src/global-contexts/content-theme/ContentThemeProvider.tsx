@@ -2,16 +2,15 @@ import {
   useMemo,
   type PropsWithChildren
 } from 'react'
-import type { TextStyle } from 'react-native'
+import type { TextStyle, ColorValue } from 'react-native'
 
-import type { Color } from '../../theme/types/color'
 import {
   ContentThemeContext,
   type ContentThemeContextValue
 } from './ContentThemeContext'
 
 export type ContentThemeProviderProps = PropsWithChildren & {
-  foregroundColor: Color,
+  foregroundColor: ColorValue,
   textStyle: TextStyle,
 }
 

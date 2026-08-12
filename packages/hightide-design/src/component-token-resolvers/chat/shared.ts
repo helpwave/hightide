@@ -93,7 +93,7 @@ export const resolveAccentColoring = ({
         colorPair: accentPair,
         variant: 'normal',
       }),
-      style: 'text',
+      style: 'foreground',
     }),
   }
 }

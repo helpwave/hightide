@@ -2,12 +2,10 @@ import {
   createContext,
   useContext
 } from 'react'
-import type { TextStyle } from 'react-native'
-
-import type { Color } from '../../theme/types/color'
+import type { ColorValue, TextStyle } from 'react-native'
 
 export type ContentThemeContextValue = {
-  foregroundColor: Color,
+  foregroundColor: ColorValue,
   textStyle: TextStyle,
 }
 

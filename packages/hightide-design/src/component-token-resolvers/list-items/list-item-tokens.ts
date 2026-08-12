@@ -85,7 +85,7 @@ export const listItemTokenResolver: ListItemTokenResolver = ({
         width: '100%'
       },
       layout: {
-        gap: spacing.sm,
+        gap: spacing.xs,
         direction: 'vertical',
         mainAxisAlignment: 'center',
         crossAxisAligment: 'start',

@@ -45,8 +45,9 @@ export type InputColoringTokens = {
   border: ColorToken,
 }
 
-export type ColoringStyle = 'filled' | 'text'
-export type PressableVariant = 'elevated' | 'filled' | 'tonal' | 'outlined' | 'foreground'
+export type ColoringStyle = 'filled' | 'foreground'
+export type ButtonVariant = 'elevated' | 'filled' | 'tonal' | 'outlined' | 'foreground'
+export type IconButtonVariant = Exclude<ButtonVariant, 'outlined'>
 export type ChipVariant = 'filled' | 'tonal'
 
 export type { Appearance }
@@ -62,7 +63,7 @@ export type SemanticTokenResolvers = {
   }, ColoringToken>,
   pressableColoring: SemanticTokenResolver<{
     coloring: ColoringToken,
-    variant: PressableVariant,
+    variant: ButtonVariant,
     state: PressableState,
   }, PressableColoringTokens>,
   pressableStateLayerTint: SemanticTokenResolver<{

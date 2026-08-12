@@ -1,8 +1,8 @@
-import { pressableVariants } from '@helpwave/hightide-design/component-token-resolvers'
+import { buttonVariants } from '@helpwave/hightide-design/component-token-resolvers'
 import type {
-  PressableVariant } from '@helpwave/hightide-design/semantic-token-resolvers'
+  ButtonVariant } from '@helpwave/hightide-design/semantic-token-resolvers'
 import {
-  mapPressableVariant,
+  mapButtonVariant,
   resolveColoringColorVariant,
   resolveColoringStyle,
   resolvePressableColoring
@@ -45,7 +45,7 @@ export type ColoringStateProperty = {
   emphasisOverride: ColoringState,
 }
 
-export type HightideColorScheme = Record<PressableVariant, ColoringStateProperty>
+export type HightideColorScheme = Record<ButtonVariant, ColoringStateProperty>
 
 export type HightideColorSchemes = {
   primary: HightideColorScheme,
@@ -61,10 +61,10 @@ export type HightideColorSchemes = {
 export const resolveColoringStyles = (
   themeTokens: ThemeTokens,
   colorPair: ColorPairToken,
-  variant: PressableVariant,
+  variant: ButtonVariant,
   state: InteractionState = {}
 ): ResolvedColoringStyles => {
-  const { colorVariant, style } = mapPressableVariant(variant)
+  const { colorVariant, style } = mapButtonVariant(variant)
   const coloring = resolveColoringStyle({
     coloring: resolveColoringColorVariant({
       colorPair,
@@ -93,7 +93,7 @@ export const resolveColoringStyles = (
 const toColoringState = (
   themeTokens: ThemeTokens,
   colorPair: ColorPairToken,
-  variant: PressableVariant,
+  variant: ButtonVariant,
   state: InteractionState
 ): ColoringState => {
   const resolved = resolveColoringStyles(themeTokens, colorPair, variant, state)
@@ -110,7 +110,7 @@ export const createColorSchemes = (themeTokens: ThemeTokens): HightideColorSchem
     colorSchemeKeys.map((key) => [
       key,
       Object.fromEntries(
-        pressableVariants.map((variant) => [
+        buttonVariants.map((variant) => [
           variant,
           {
             base: toColoringState(themeTokens, themeTokens.color[key], variant, {}),
@@ -128,7 +128,7 @@ export const createColorSchemes = (themeTokens: ThemeTokens): HightideColorSchem
 )
 
 export const isOutlinedVariant = (
-  variant: PressableVariant
+  variant: ButtonVariant
 ): boolean => {
   return variant === 'outlined'
 }

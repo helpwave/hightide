@@ -8,7 +8,7 @@ import {
 } from 'react-native'
 
 import type { ColorPairToken } from '@helpwave/hightide-design/theme-tokens'
-import type { ComponentSize, PressableVariant } from '@helpwave/hightide-design/semantic-token-resolvers'
+import type { ComponentSize, ButtonVariant } from '@helpwave/hightide-design/semantic-token-resolvers'
 
 import { ContentThemeProvider } from '../../global-contexts/content-theme/ContentThemeProvider'
 import { useTheme } from '../../global-contexts/theme/ThemeContext'
@@ -29,13 +29,13 @@ export type ButtonColor = ColorPairToken
 
 export const ButtonUtil = {
   sizes: ['xs', 'sm', 'md', 'lg', 'xl'] as const satisfies readonly ComponentSize[],
-  variants: ['elevated', 'filled', 'tonal', 'outlined', 'foreground'] as const satisfies readonly PressableVariant[],
+  variants: ['elevated', 'filled', 'tonal', 'outlined', 'foreground'] as const satisfies readonly ButtonVariant[],
 }
 
 export type ButtonProps = Omit<PressableProps, 'children' | 'style'> & {
   size?: ButtonSize,
   color?: ButtonColor,
-  variant?: PressableVariant,
+  variant?: ButtonVariant,
   children: string,
   leadingIcon?: IconComponent,
   trailingIcon?: IconComponent,

@@ -3,12 +3,13 @@ import type { ThemeTokens } from '../theme-tokens/theme-tokens'
 import { HexColorUtils } from '../utils/hex'
 import { OKLCHUtils } from '../utils/oklch'
 import type {
+  ButtonVariant,
   ChipVariant,
   ColoringColorTokens,
   ColoringColorVariant,
   ColoringStyle,
   ColoringToken,
-  PressableVariant
+  IconButtonVariant
 } from './types'
 
 export const resolveColoringColorVariant = (params: {
@@ -54,7 +55,7 @@ export const resolveColoringStyle = (params: {
       background: color,
       accent,
     }
-  case 'text':
+  case 'foreground':
     return {
       foreground: color,
       background: 'transparent',
@@ -63,16 +64,16 @@ export const resolveColoringStyle = (params: {
   }
 }
 
-export type PressableVariantMapping = {
+export type ButtonVariantMapping = {
   colorVariant: ColoringColorVariant,
   style: ColoringStyle,
   bordered: boolean,
   elevated: boolean,
 }
 
-export const mapPressableVariant = (
-  variant: PressableVariant
-): PressableVariantMapping => {
+export const mapButtonVariant = (
+  variant: ButtonVariant
+): ButtonVariantMapping => {
   switch (variant) {
   case 'elevated':
     return {
@@ -98,19 +99,23 @@ export const mapPressableVariant = (
   case 'outlined':
     return {
       colorVariant: 'normal',
-      style: 'text',
+      style: 'foreground',
       bordered: true,
       elevated: false,
     }
   case 'foreground':
     return {
       colorVariant: 'normal',
-      style: 'text',
+      style: 'foreground',
       bordered: false,
       elevated: false,
     }
   }
 }
+
+export const mapIconButtonVariant = (
+  variant: IconButtonVariant
+): ButtonVariantMapping => mapButtonVariant(variant)
 
 export const mapChipVariant = (
   variant: ChipVariant
