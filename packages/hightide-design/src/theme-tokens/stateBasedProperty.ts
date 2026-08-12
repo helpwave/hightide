@@ -1,5 +1,6 @@
 export type StateBasedPropertyOverride<S extends string, P> = {
-  condition: ReadonlySet<S>,
+  condition?: ReadonlySet<S>,
+  negativeCondition?: ReadonlySet<S>,
   value: Partial<P>,
 }
 
@@ -10,14 +11,31 @@ export type StateBasedProperty<S extends string, P> = {
 
 export const matchesStateConditions = <S extends string>(
   active: ReadonlySet<S>,
-  condition: ReadonlySet<S>
+  condition?: ReadonlySet<S>
 ): boolean => {
-  if (condition.size === 0) {
+  if (condition === undefined || condition.size === 0) {
     return true
   }
 
   for (const state of condition) {
     if (!active.has(state)) {
+      return false
+    }
+  }
+
+  return true
+}
+
+export const matchesNegativeStateConditions = <S extends string>(
+  active: ReadonlySet<S>,
+  negativeCondition?: ReadonlySet<S>
+): boolean => {
+  if (negativeCondition === undefined || negativeCondition.size === 0) {
+    return true
+  }
+
+  for (const state of negativeCondition) {
+    if (active.has(state)) {
       return false
     }
   }
@@ -32,7 +50,10 @@ export const resolveStateBasedProperty = <S extends string, P extends object>(
   let result: P = { ...property.base }
 
   for (const override of property.overrides ?? []) {
-    if (matchesStateConditions(activeStates, override.condition)) {
+    if (
+      matchesStateConditions(activeStates, override.condition)
+      && matchesNegativeStateConditions(activeStates, override.negativeCondition)
+    ) {
       result = { ...result, ...override.value }
     }
   }

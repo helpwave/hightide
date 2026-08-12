@@ -104,16 +104,20 @@ export const createPressableStateLayerTintProperty = (
     base: { tint: 'transparent' },
     overrides: [
       {
-        condition: new Set<PressableStateValue>(['hovered']),
+        condition: new Set(['hovered']),
         value: { tint: HexColorUtils.hexWithAlpha(color, tintConfig.light) },
       },
       {
-        condition: new Set<PressableStateValue>(['focusVisible']),
+        condition: new Set(['focusVisible']),
         value: { tint: HexColorUtils.hexWithAlpha(color, tintConfig.normal) },
       },
       {
-        condition: new Set<PressableStateValue>(['pressed']),
+        condition: new Set(['pressed']),
         value: { tint: HexColorUtils.hexWithAlpha(color, tintConfig.normal) },
+      },
+      {
+        condition: new Set(['disabled']),
+        value: { tint: 'transparent' }
       },
     ],
   }

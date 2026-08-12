@@ -1,6 +1,11 @@
+import {
+  resolvePressableStateLayerTint
+} from '../semantic-token-resolvers'
+import { HexColorUtils } from '../utils/hex'
 import type { ComponentTokenResolver } from './component-token-resolver'
 import type { ContainerTokens } from './container-tokens'
 import { inputStateValues } from './input-tokens'
+import { toPressableState } from './pressable'
 
 export const switchStateValues = [
   ...inputStateValues,
@@ -64,6 +69,19 @@ export const switchTokenResolver: SwitchTokenResolver = ({
       ? color.negative.color
       : state.has('active') ? trackActive : fadedBorder
   const thumbColor = state.has('active') ? color.primary.onColor : subtleThumb
+  const tint = resolvePressableStateLayerTint({
+    themeTokens,
+    states: toPressableState(state),
+    color: thumbColor,
+  })
+  const tintedTrackBackground = HexColorUtils.blend(
+    trackBackground,
+    tint === 'transparent' ? trackBackground : tint
+  )
+  const tintedBorder = HexColorUtils.blend(
+    trackBorderColor,
+    tint === 'transparent' ? trackBorderColor : tint
+  )
 
   return {
     container: {
@@ -92,7 +110,7 @@ export const switchTokenResolver: SwitchTokenResolver = ({
       } : undefined,
     },
     track: {
-      backgroundColor: trackBackground,
+      backgroundColor: tintedTrackBackground,
       border: {
         width: {
           type: 'all',
@@ -100,7 +118,7 @@ export const switchTokenResolver: SwitchTokenResolver = ({
         },
         color: {
           type: 'all',
-          value: trackBorderColor,
+          value: tintedBorder,
         },
       },
       size: {
