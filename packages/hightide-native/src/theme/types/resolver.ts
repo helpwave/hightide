@@ -1,6 +1,10 @@
 import type { ThemeTokens } from '@helpwave/hightide-design/theme-tokens'
 import type { SemanticTokenResolvers } from '@helpwave/hightide-design/semantic-token-resolvers'
-import type { ComponentTokenResolvers } from '@helpwave/hightide-design/component-token-resolvers'
+import type {
+  ComponentTokenResolvers,
+  PressableState,
+  PressableStateValue
+} from '@helpwave/hightide-design/component-token-resolvers'
 
 export type InteractionState = {
   isDisabled?: boolean,
@@ -10,6 +14,30 @@ export type InteractionState = {
   isPressed?: boolean,
   isReadonly?: boolean,
   isInvalid?: boolean,
+}
+
+export const toPressableInteractionState = (
+  state: InteractionState = {}
+): PressableState => {
+  const active = new Set<PressableStateValue>()
+
+  if (state.isDisabled) {
+    active.add('disabled')
+  }
+  if (state.isFocused) {
+    active.add('focused')
+  }
+  if (state.isFocusVisible) {
+    active.add('focusVisible')
+  }
+  if (state.isHovered) {
+    active.add('hovered')
+  }
+  if (state.isPressed) {
+    active.add('pressed')
+  }
+
+  return active
 }
 
 export type StyleOverwrite<TState, TStyle> =

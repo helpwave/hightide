@@ -7,6 +7,7 @@ import type {
 } from '../types/components/button'
 import {
   createStyleResolver,
+  toPressableInteractionState,
   type ComponentThemeResolver
 } from '../types/resolver'
 
@@ -23,13 +24,7 @@ export const toButtonThemeResolvers: ComponentThemeResolver<ButtonThemeResolvers
       color: state.color,
       variant: state.variant,
     },
-    state: {
-      isDisabled: state.isDisabled,
-      isHovered: state.isHovered,
-      isFocused: state.isFocused,
-      isFocusVisible: state.isFocusVisible,
-      isPressed: state.isPressed,
-    },
+    state: toPressableInteractionState(state),
   })
 
   return {

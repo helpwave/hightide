@@ -1,3 +1,7 @@
+import type {
+  MultiSelectState as DesignMultiSelectState,
+  MultiSelectStateValue
+} from '@helpwave/hightide-design/component-token-resolvers'
 import { toContainerStyleWithStateLayer, toTextStyle } from '../adapters/style-adapters'
 import type { Color } from '../types/color'
 import type {
@@ -24,46 +28,78 @@ import {
   type ComponentThemeResolver
 } from '../types/resolver'
 
+type MultiSelectResolveState = {
+  color?: MultiSelectState['color'],
+  isDisabled?: boolean,
+  isInvalid?: boolean,
+  isHovered?: boolean,
+  isFocused?: boolean,
+  isFocusVisible?: boolean,
+  isPressed?: boolean,
+  isReadonly?: boolean,
+  isOpen?: boolean,
+  hasSelections?: boolean,
+  isSelected?: boolean,
+  isHighlighted?: boolean,
+}
+
+const toDesignMultiSelectState = (
+  state: MultiSelectResolveState = {}
+): DesignMultiSelectState => {
+  const active = new Set<MultiSelectStateValue>()
+
+  if (state.isDisabled) {
+    active.add('disabled')
+  }
+  if (state.isFocused) {
+    active.add('focused')
+  }
+  if (state.isFocusVisible) {
+    active.add('focusVisible')
+  }
+  if (state.isHovered) {
+    active.add('hovered')
+  }
+  if (state.isPressed) {
+    active.add('pressed')
+  }
+  if (state.isReadonly) {
+    active.add('readonly')
+  }
+  if (state.isInvalid) {
+    active.add('invalid')
+  }
+  if (state.isOpen) {
+    active.add('open')
+  }
+  if (state.hasSelections) {
+    active.add('hasSelections')
+  }
+  if (state.isSelected) {
+    active.add('selected')
+  }
+  if (state.isHighlighted) {
+    active.add('highlighted')
+  }
+
+  return active
+}
+
 export const toMultiSelectThemeResolvers: ComponentThemeResolver<MultiSelectThemeResolvers> = ({
   themeTokens,
   semanticTokens,
   componentTokens,
 }) => {
-  const resolve = (state: {
-    color?: MultiSelectState['color'],
-    isDisabled?: boolean,
-    isInvalid?: boolean,
-    isHovered?: boolean,
-    isFocused?: boolean,
-    isFocusVisible?: boolean,
-    isPressed?: boolean,
-    isReadonly?: boolean,
-    isOpen?: boolean,
-    hasSelections?: boolean,
-    isSelected?: boolean,
-    isHighlighted?: boolean,
-  } = {}) => componentTokens.multiSelect({
+  const resolve = (state: MultiSelectResolveState = {}) => componentTokens.multiSelect({
     themeTokens,
     semanticResolvers: semanticTokens,
     overrides: {
       color: state.color,
     },
-    state: {
-      isDisabled: state.isDisabled,
-      isInvalid: state.isInvalid,
-      isHovered: state.isHovered,
-      isFocused: state.isFocused,
-      isFocusVisible: state.isFocusVisible,
-      isPressed: state.isPressed,
-      isReadonly: state.isReadonly,
-      isOpen: state.isOpen,
-      hasSelections: state.hasSelections,
-      isSelected: state.isSelected,
-      isHighlighted: state.isHighlighted,
-    },
+    state: toDesignMultiSelectState(state),
   })
 
-  const toTriggerState = (state: MultiSelectState) => ({
+  const toTriggerState = (state: MultiSelectState): MultiSelectResolveState => ({
     color: state.color,
     isDisabled: state.isDisabled,
     isInvalid: state.isInvalid,

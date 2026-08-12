@@ -1,10 +1,17 @@
 import type { ComponentTokenResolver } from './component-token-resolver'
 import type { ContainerTokens } from './container-tokens'
-import type { InputState } from './input-tokens'
+import { inputStateValues } from './input-tokens'
 
-export type SwitchState = InputState & {
-  isActive?: boolean,
-}
+export const switchStateValues = [
+  ...inputStateValues,
+  'active',
+] as const
+
+export type SwitchStateValue = typeof switchStateValues[number]
+
+export type SwitchState = ReadonlySet<SwitchStateValue>
+
+export const switchStateValueSet: ReadonlySet<SwitchStateValue> = new Set(switchStateValues)
 
 export type SwitchComponentResolverProps = {
   state: SwitchState,
@@ -36,7 +43,7 @@ export const switchTokenResolver: SwitchTokenResolver = ({
   const onColor = color.surface.onColor
   const borderWidth = borders.borderWidths.normal
   const focusOutline = themeTokens.focusOutline
-  const thumbSize = state.isActive ? THUMB_SIZE_ACTIVE : THUMB_SIZE_INACTIVE
+  const thumbSize = state.has('active') ? THUMB_SIZE_ACTIVE : THUMB_SIZE_INACTIVE
   const fadedBorder = semanticResolvers.asFaded({
     themeTokens,
     color: onColor,
@@ -48,15 +55,19 @@ export const switchTokenResolver: SwitchTokenResolver = ({
   })
   const trackActive = color.primary.color
   const trackInactive = color.surface.color
-  const trackBackground = state.isDisabled ? themeTokens.color.disabled.color : state.isActive ? trackActive : trackInactive
-  const trackBorderColor =  state.isDisabled ? themeTokens.color.disabled.color : state.isInvalid
-    ? color.negative.color
-    : state.isActive ? trackActive : fadedBorder
-  const thumbColor = state.isActive ? color.primary.onColor : subtleThumb
+  const trackBackground = state.has('disabled')
+    ? themeTokens.color.disabled.color
+    : state.has('active') ? trackActive : trackInactive
+  const trackBorderColor = state.has('disabled')
+    ? themeTokens.color.disabled.color
+    : state.has('invalid')
+      ? color.negative.color
+      : state.has('active') ? trackActive : fadedBorder
+  const thumbColor = state.has('active') ? color.primary.onColor : subtleThumb
 
   return {
     container: {
-      opacity: state.isDisabled ? 0.6 : 1,
+      opacity: state.has('disabled') ? 0.6 : 1,
       size: {
         width: mediumControl.size,
         height: mediumControl.size,
@@ -76,7 +87,7 @@ export const switchTokenResolver: SwitchTokenResolver = ({
         mainAxisAlignment: 'center',
         crossAxisAligment: 'center',
       },
-      outline: state.isFocusVisible ? {
+      outline: state.has('focusVisible') ? {
         color: 'transparent',
       } : undefined,
     },
@@ -104,7 +115,7 @@ export const switchTokenResolver: SwitchTokenResolver = ({
         mainAxisAlignment: 'start',
         crossAxisAligment: 'center',
       },
-      outline: state.isFocusVisible ? {
+      outline: state.has('focusVisible') ? {
         ...focusOutline,
         color: color.primary.color,
       } : undefined,

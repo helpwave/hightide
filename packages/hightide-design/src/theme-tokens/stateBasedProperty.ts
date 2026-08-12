@@ -1,22 +1,28 @@
 export type StateBasedPropertyOverride<S extends string, P> = {
-  condition: S[],
+  condition: ReadonlySet<S>,
   value: Partial<P>,
 }
 
 export type StateBasedProperty<S extends string, P> = {
   base: P,
-  overrides?: StateBasedPropertyOverride<S, P>[],
+  overrides?: ReadonlyArray<StateBasedPropertyOverride<S, P>>,
 }
 
 export const matchesStateConditions = <S extends string>(
   active: ReadonlySet<S>,
-  condition: readonly S[]
+  condition: ReadonlySet<S>
 ): boolean => {
-  if (condition.length === 0) {
+  if (condition.size === 0) {
     return true
   }
 
-  return condition.every((state) => active.has(state))
+  for (const state of condition) {
+    if (!active.has(state)) {
+      return false
+    }
+  }
+
+  return true
 }
 
 export const resolveStateBasedProperty = <S extends string, P extends object>(

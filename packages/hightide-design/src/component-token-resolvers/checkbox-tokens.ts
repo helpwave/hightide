@@ -7,13 +7,23 @@ import type { ColorPairToken } from '../theme-tokens/theme-tokens-config'
 import type { ComponentTokenResolver } from './component-token-resolver'
 import type { ContainerTokens } from './container-tokens'
 import type { IconTokens } from './icon-tokens'
-import type { InputState } from './input-tokens'
-import { toActivePressableStates } from './pressable'
+import { toPressableState } from './pressable'
+import {
+  inputStateValues,
+  toInputState
+} from './input-tokens'
 
-export type CheckboxState = InputState & {
-  isChecked?: boolean,
-  isIndeterminate?: boolean,
-}
+export const checkboxStateValues = [
+  ...inputStateValues,
+  'checked',
+  'indeterminate',
+] as const
+
+export type CheckboxStateValue = typeof checkboxStateValues[number]
+
+export type CheckboxState = ReadonlySet<CheckboxStateValue>
+
+export const checkboxStateValueSet: ReadonlySet<CheckboxStateValue> = new Set(checkboxStateValues)
 
 export type CheckboxComponentResolverProps = {
   overrides: {
@@ -48,19 +58,19 @@ export const checkboxTokenResolver: CheckboxTokenResolver = ({
   const borderWidth = borders.borderWidths.normal
   const inset = Math.floor(element.inset * 0.5)
   const dimension = Math.round(element.size * 0.5)
-  const isActive = !!(state.isChecked || state.isIndeterminate)
+  const isActive = state.has('checked') || state.has('indeterminate')
   const coloring = resolveInputColoring({
     themeTokens,
-    state,
+    state: toInputState(state),
     color: overrides.color,
   })
   const tint = resolvePressableStateLayerTint({
     themeTokens,
-    states: toActivePressableStates(state),
+    states: toPressableState(state),
     color: accentPair.color,
   })
 
-  const backgroundColor = state.isDisabled
+  const backgroundColor = state.has('disabled')
     ? color.disabled.color
     : isActive ? accentPair.color : color.surface.color
 
@@ -86,13 +96,13 @@ export const checkboxTokenResolver: CheckboxTokenResolver = ({
         mainAxisAlignment: 'center',
         crossAxisAligment: 'center',
       },
-      outline: state.isFocusVisible ? {
+      outline: state.has('focusVisible') ? {
         color: 'transparent',
       } : undefined,
     },
     visualContainer: {
       backgroundColor,
-      opacity: state.isDisabled ? 0.6 : 1,
+      opacity: state.has('disabled') ? 0.6 : 1,
       border: isActive ? undefined : {
         width: {
           type: 'all',
@@ -119,9 +129,9 @@ export const checkboxTokenResolver: CheckboxTokenResolver = ({
         mainAxisAlignment: 'center',
         crossAxisAligment: 'center',
       },
-      outline: state.isFocusVisible === true ? {
+      outline: state.has('focusVisible') ? {
         ...themeTokens.focusOutline,
-        color: state.isInvalid === true
+        color: state.has('invalid')
           ? color.negative.color
           : accentPair.color,
       } : undefined,

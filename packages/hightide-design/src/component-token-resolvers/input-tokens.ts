@@ -5,17 +5,36 @@ import { HexColorUtils } from '../utils/hex'
 import type { ComponentTokenResolver } from './component-token-resolver'
 import type { ContainerTokens } from './container-tokens'
 import { iconTokenResolver, type IconTokens } from './icon-tokens'
-import type { PressableState } from './pressable'
+import {
+  pressableStateValues,
+  type PressableStateValue
+} from './pressable'
 import type { TextStyleTokens } from './text-style-tokens'
 
-export type InputState = {
-  isHovered?: boolean,
-  isFocused?: boolean,
-  isFocusVisible?: boolean,
-  isPressed?: boolean,
-  isDisabled?: boolean,
-  isReadonly?: boolean,
-  isInvalid?: boolean,
+export const inputStateValues = [
+  ...pressableStateValues,
+  'readonly',
+  'invalid',
+] as const
+
+export type InputStateValue = typeof inputStateValues[number]
+
+export type InputState = ReadonlySet<InputStateValue>
+
+export const inputStateValueSet: ReadonlySet<InputStateValue> = new Set(inputStateValues)
+
+export const isInputStateValue = (value: string): value is InputStateValue => (
+  inputStateValueSet.has(value as InputStateValue)
+)
+
+export const toInputState = (state: ReadonlySet<string>): InputState => {
+  const active = new Set<InputStateValue>()
+  for (const value of state) {
+    if (isInputStateValue(value)) {
+      active.add(value)
+    }
+  }
+  return active
 }
 
 export type InputComponentResolverProps = {
@@ -57,18 +76,18 @@ export const inputTokenResolver: InputTokenResolver = ({
     state,
     color: overrides?.color,
   })
-  const placeholderColor = state.isDisabled
+  const placeholderColor = state.has('disabled')
     ? themeTokens.color.disabled.onColor
     : semanticResolvers.asDescription({
       themeTokens,
       color: themeTokens.color.surface.onColor,
     })
 
-  const interactionStates = new Set<PressableState>()
-  if (state.isHovered === true && state.isFocused !== true) {
+  const interactionStates = new Set<PressableStateValue>()
+  if (state.has('hovered') && !state.has('focused')) {
     interactionStates.add('hovered')
   }
-  if (state.isPressed === true) {
+  if (state.has('pressed')) {
     interactionStates.add('pressed')
   }
 
@@ -78,7 +97,7 @@ export const inputTokenResolver: InputTokenResolver = ({
     color: coloring.text,
   })
 
-  const focusShadow = state.isFocused === true && coloring.border !== 'transparent'
+  const focusShadow = state.has('focused') && coloring.border !== 'transparent'
     ? {
       ...hightideShadow.layout.basic.md,
       color: HexColorUtils.hexWithAlpha(coloring.border, 0.7),
@@ -88,7 +107,7 @@ export const inputTokenResolver: InputTokenResolver = ({
   return {
     container: {
       backgroundColor: coloring.background,
-      opacity: state.isDisabled ? 0.6 : 1,
+      opacity: state.has('disabled') ? 0.6 : 1,
       border: {
         width: {
           type: 'all',
@@ -101,8 +120,8 @@ export const inputTokenResolver: InputTokenResolver = ({
       },
       outline:  {
         ...themeTokens.focusOutline,
-        color: !state.isFocusVisible ? 'transparent' :
-          state.isInvalid === true
+        color: !state.has('focusVisible') ? 'transparent' :
+          state.has('invalid')
             ? themeTokens.color.negative.color
             : (overrides?.color ?? themeTokens.color.primary).color,
       },

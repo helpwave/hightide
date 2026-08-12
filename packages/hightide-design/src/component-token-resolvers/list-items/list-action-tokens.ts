@@ -9,7 +9,6 @@ import type { ColorPairToken } from '../../theme-tokens/theme-tokens-config'
 import { HexColorUtils } from '../../utils/hex'
 import type { ComponentTokenResolver } from '../component-token-resolver'
 import type { ButtonState } from '../button-tokens'
-import { toActivePressableStates } from '../pressable'
 import {
   listItemTokenResolver,
   type ListItemTokens
@@ -48,18 +47,15 @@ export const listActionTokenResolver: ListActionTokenResolver = ({
     }),
     style,
   })
-  const fullStates = toActivePressableStates(state)
   const resolved = resolvePressableColoring({
     themeTokens,
     coloring,
     variant,
-    state: toActivePressableStates({
-      isDisabled: state.isDisabled,
-    }),
+    state,
   })
   const tint = resolvePressableStateLayerTint({
     themeTokens,
-    states: fullStates,
+    states: state,
     color: coloring.foreground,
   })
 
@@ -67,7 +63,7 @@ export const listActionTokenResolver: ListActionTokenResolver = ({
     resolved.background === 'transparent' ? '#FFFFFF00' : resolved.background,
     tint === 'transparent' ? '#FFFFFF00' : tint
   )
-  const isFocusVisible = fullStates.has('focusVisible')
+  const isFocusVisible = state.has('focusVisible')
   const outlineColor = coloring.accent
   const base = listItemTokenResolver({
     themeTokens,

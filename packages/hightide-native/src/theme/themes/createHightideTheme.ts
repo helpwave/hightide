@@ -14,7 +14,6 @@ import { toCardThemeResolvers } from '../resolvers/card'
 import { toChatThemeResolvers } from '../resolvers/chat/chat-theme'
 import { toCheckboxThemeResolvers } from '../resolvers/checkbox'
 import { toChipThemeResolvers } from '../resolvers/chip'
-import { createColorSchemes } from '../resolvers/colorScheme'
 import { toDividerThemeResolvers } from '../resolvers/divider'
 import { toIconThemeResolvers } from '../resolvers/icon'
 import { toIconButtonThemeResolvers } from '../resolvers/iconButton'
@@ -105,7 +104,6 @@ const bindSemantics = (themeTokens: ThemeTokens): HightideThemeSemantics => ({
 
 export const createHightideTheme = (themeTokens: ThemeTokens): HightideTheme => ({
   colors: themeTokens.color,
-  colorSchemes: createColorSchemes(themeTokens),
   semantics: bindSemantics(themeTokens),
   typography: themeTokens.typography,
   spacing: themeTokens.spacing,

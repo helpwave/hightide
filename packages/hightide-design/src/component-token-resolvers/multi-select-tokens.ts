@@ -9,10 +9,14 @@ import type { ColorPairToken } from '../theme-tokens/theme-tokens-config'
 import type { ComponentTokenResolver } from './component-token-resolver'
 import type { ContainerTokens } from './container-tokens'
 import {
+  inputStateValues,
   inputTokenResolver,
-  type InputState
+  toInputState
 } from './input-tokens'
-import { toActivePressableStates } from './pressable'
+import {
+  toPressableState,
+  type PressableStateValue
+} from './pressable'
 import type { TextStyleTokens } from './text-style-tokens'
 import type {
   SelectMenuTokens,
@@ -22,12 +26,19 @@ import type {
 } from './select-tokens'
 import { selectOverlayColor } from './select-tokens'
 
-export type MultiSelectState = InputState & {
-  isOpen?: boolean,
-  hasSelections?: boolean,
-  isSelected?: boolean,
-  isHighlighted?: boolean,
-}
+export const multiSelectStateValues = [
+  ...inputStateValues,
+  'open',
+  'hasSelections',
+  'selected',
+  'highlighted',
+] as const
+
+export type MultiSelectStateValue = typeof multiSelectStateValues[number]
+
+export type MultiSelectState = ReadonlySet<MultiSelectStateValue>
+
+export const multiSelectStateValueSet: ReadonlySet<MultiSelectStateValue> = new Set(multiSelectStateValues)
 
 export type MultiSelectComponentResolverProps = {
   overrides?: {
@@ -103,16 +114,11 @@ export const multiSelectTokenResolver: MultiSelectTokenResolver = ({
     overrides: {
       color: overrides?.color,
     },
-    state,
+    state: toInputState(state),
   })
   const tint = resolvePressableStateLayerTint({
     themeTokens,
-    states: toActivePressableStates({
-      isHovered: state.isHovered,
-      isPressed: state.isPressed,
-      isFocused: state.isFocused,
-      isFocusVisible: state.isFocusVisible,
-    }),
+    states: toPressableState(state),
     color: input.text.color ?? onColor,
   })
   const hoverColor = resolvePressableColoring({
@@ -125,7 +131,7 @@ export const multiSelectTokenResolver: MultiSelectTokenResolver = ({
       style: 'filled',
     }),
     variant: 'filled',
-    state: toActivePressableStates({ isHovered: true }),
+    state: new Set<PressableStateValue>(['hovered']),
   }).background
 
   return {
@@ -139,7 +145,7 @@ export const multiSelectTokenResolver: MultiSelectTokenResolver = ({
     stateLayer: {
       backgroundColor: tint,
     },
-    triggerText: state.hasSelections ? input.text : input.placeholder,
+    triggerText: state.has('hasSelections') ? input.text : input.placeholder,
     overlay: {
       flex: 1,
       justifyContent: 'center',
@@ -168,15 +174,15 @@ export const multiSelectTokenResolver: MultiSelectTokenResolver = ({
       gap: shape.padding.xl,
       paddingVertical: shape.padding.xxl,
       paddingHorizontal: spacing.lg,
-      backgroundColor: state.isHighlighted ? hoverColor : 'transparent',
-      opacity: state.isDisabled ? 0.5 : 1,
+      backgroundColor: state.has('highlighted') ? hoverColor : 'transparent',
+      opacity: state.has('disabled') ? 0.5 : 1,
     },
     optionText: {
       ...typography.body.md,
-      fontWeight: state.isSelected
+      fontWeight: state.has('selected')
         ? typography.fontWeights.semibold
         : typography.fontWeights.base,
-      color: state.isSelected ? accentPair.color : onColor,
+      color: state.has('selected') ? accentPair.color : onColor,
     },
     checkbox: {
       alignItems: 'center',
@@ -185,12 +191,12 @@ export const multiSelectTokenResolver: MultiSelectTokenResolver = ({
       height: checkboxSize,
       borderRadius: shape.borderRadius.xs,
       borderWidth: borders.borderWidths.thin,
-      borderColor: state.isSelected ? accentPair.color : fadedBorder,
-      backgroundColor: state.isSelected ? accentPair.color : 'transparent',
+      borderColor: state.has('selected') ? accentPair.color : fadedBorder,
+      backgroundColor: state.has('selected') ? accentPair.color : 'transparent',
     },
     checkboxIcon: {
       color: accentPair.onColor,
-      isVisible: !!state.isSelected,
+      isVisible: state.has('selected'),
     },
   }
 }

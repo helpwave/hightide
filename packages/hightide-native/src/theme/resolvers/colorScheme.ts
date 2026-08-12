@@ -1,7 +1,4 @@
-import {
-  pressableVariants,
-  toActivePressableStates
-} from '@helpwave/hightide-design/component-token-resolvers'
+import { pressableVariants } from '@helpwave/hightide-design/component-token-resolvers'
 import type {
   PressableVariant } from '@helpwave/hightide-design/semantic-token-resolvers'
 import {
@@ -16,7 +13,10 @@ import type {
 } from '@helpwave/hightide-design/theme-tokens'
 
 import type { Color } from '../types/color'
-import type { InteractionState } from '../types/resolver'
+import {
+  toPressableInteractionState,
+  type InteractionState
+} from '../types/resolver'
 
 const colorSchemeKeys = [
   'primary',
@@ -76,7 +76,7 @@ export const resolveColoringStyles = (
     themeTokens,
     coloring,
     variant,
-    state: toActivePressableStates(state),
+    state: toPressableInteractionState(state),
   })
 
   return {

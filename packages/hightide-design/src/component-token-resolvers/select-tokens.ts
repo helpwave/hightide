@@ -12,17 +12,23 @@ import type { ContainerTokens } from './container-tokens'
 import type { IconTokens } from './icon-tokens'
 import {
   inputTokenResolver,
-  type InputState
+  toInputState,
+  type InputStateValue
 } from './input-tokens'
-import { toActivePressableStates } from './pressable'
+import {
+  toPressableState,
+  type PressableStateValue
+} from './pressable'
 import type { TextStyleTokens } from './text-style-tokens'
 
-export type SelectState = InputState & {
-  isOpen?: boolean,
-  hasValue?: boolean,
-  isSelected?: boolean,
-  isHighlighted?: boolean,
-}
+export type SelectStateValue =
+  | InputStateValue
+  | 'open'
+  | 'hasValue'
+  | 'selected'
+  | 'highlighted'
+
+export type SelectState = ReadonlySet<SelectStateValue>
 
 export type SelectComponentResolverProps = {
   overrides?: {
@@ -103,16 +109,11 @@ export const selectTokenResolver: SelectTokenResolver = ({
     overrides: {
       color: overrides?.color,
     },
-    state,
+    state: toInputState(state),
   })
   const tint = resolvePressableStateLayerTint({
     themeTokens,
-    states: toActivePressableStates({
-      isHovered: state.isHovered,
-      isPressed: state.isPressed,
-      isFocused: state.isFocused,
-      isFocusVisible: state.isFocusVisible,
-    }),
+    states: toPressableState(state),
     color: input.text.color ?? onColor,
   })
   const hoverColor = resolvePressableColoring({
@@ -125,7 +126,7 @@ export const selectTokenResolver: SelectTokenResolver = ({
       style: 'filled',
     }),
     variant: 'filled',
-    state: toActivePressableStates({ isHovered: true }),
+    state: new Set<PressableStateValue>(['hovered']),
   }).background
 
   return {
@@ -139,7 +140,7 @@ export const selectTokenResolver: SelectTokenResolver = ({
     stateLayer: {
       backgroundColor: tint,
     },
-    triggerText: state.hasValue ? input.text : input.placeholder,
+    triggerText: state.has('hasValue') ? input.text : input.placeholder,
     icon: input.icon,
     overlay: {
       flex: 1,
@@ -166,15 +167,15 @@ export const selectTokenResolver: SelectTokenResolver = ({
     option: {
       paddingVertical: shape.padding.xxl,
       paddingHorizontal: spacing.lg,
-      backgroundColor: state.isHighlighted ? hoverColor : 'transparent',
-      opacity: state.isDisabled ? 0.5 : 1,
+      backgroundColor: state.has('highlighted') ? hoverColor : 'transparent',
+      opacity: state.has('disabled') ? 0.5 : 1,
     },
     optionText: {
       ...typography.body.md,
-      fontWeight: state.isSelected
+      fontWeight: state.has('selected')
         ? typography.fontWeights.semibold
         : typography.fontWeights.base,
-      color: state.isSelected ? accentPair.color : color.surface.onColor,
+      color: state.has('selected') ? accentPair.color : color.surface.onColor,
     },
   }
 }

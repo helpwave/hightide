@@ -1,3 +1,7 @@
+import type {
+  InputState as DesignInputState,
+  InputStateValue
+} from '@helpwave/hightide-design/component-token-resolvers'
 import { toContainerStyleWithStateLayer, toTextStyle } from '../adapters/style-adapters'
 import type {
   InputContainerStyle,
@@ -13,6 +17,34 @@ import {
   type ComponentThemeResolver
 } from '../types/resolver'
 
+const toDesignInputState = (state: InputState = {}): DesignInputState => {
+  const active = new Set<InputStateValue>()
+
+  if (state.isDisabled) {
+    active.add('disabled')
+  }
+  if (state.isFocused) {
+    active.add('focused')
+  }
+  if (state.isFocusVisible) {
+    active.add('focusVisible')
+  }
+  if (state.isHovered) {
+    active.add('hovered')
+  }
+  if (state.isPressed) {
+    active.add('pressed')
+  }
+  if (state.isReadonly) {
+    active.add('readonly')
+  }
+  if (state.isInvalid) {
+    active.add('invalid')
+  }
+
+  return active
+}
+
 export const toInputThemeResolvers: ComponentThemeResolver<InputThemeResolvers> = ({
   themeTokens,
   semanticTokens,
@@ -24,15 +56,7 @@ export const toInputThemeResolvers: ComponentThemeResolver<InputThemeResolvers> 
     overrides: {
       color: state.color,
     },
-    state: {
-      isDisabled: state.isDisabled,
-      isHovered: state.isHovered,
-      isFocused: state.isFocused,
-      isFocusVisible: state.isFocusVisible,
-      isPressed: state.isPressed,
-      isInvalid: state.isInvalid,
-      isReadonly: state.isReadonly,
-    },
+    state: toDesignInputState(state),
   })
 
   return {

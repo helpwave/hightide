@@ -11,9 +11,9 @@ import type { ColorPairToken } from '../theme-tokens/theme-tokens-config'
 import type { ComponentTokenResolver } from './component-token-resolver'
 import type { ContainerTokens } from './container-tokens'
 import type { TextStyleTokens } from './text-style-tokens'
-import { toActivePressableStates, type PressableInteractionState } from './pressable'
+import { type PressableState } from './pressable'
 
-export type ButtonState = PressableInteractionState
+export type ButtonState = PressableState
 
 export type ButtonComponentResolverProps = {
   overrides: {
@@ -54,20 +54,15 @@ export const buttonTokenResolver: ButtonTokenResolver = ({
     }),
     style,
   })
-  const fullStates = toActivePressableStates(state ?? {})
-  const visualStates = toActivePressableStates({
-    isDisabled: state?.isDisabled,
-    isFocusVisible: state?.isFocusVisible,
-  })
   const resolved = resolvePressableColoring({
     themeTokens,
     coloring,
     variant,
-    state: visualStates,
+    state: state,
   })
   const tint = resolvePressableStateLayerTint({
     themeTokens,
-    states: fullStates,
+    states: state,
     color: coloring.foreground,
   })
   const hasBorder = resolved.border !== 'transparent'
@@ -76,7 +71,7 @@ export const buttonTokenResolver: ButtonTokenResolver = ({
   const insetForBordered = Math.max(layout.inset - layout.borderWidth, 0)
   const textStyle = themeTokens.typography.label[size]
   const gap = themeTokens.spacing[size]
-  const isHovered = state?.isHovered === true
+  const isHovered = state.has('hovered')
 
   return {
     touchTarget: {
@@ -92,7 +87,7 @@ export const buttonTokenResolver: ButtonTokenResolver = ({
     },
     visualContainer: {
       backgroundColor: resolved.background,
-      opacity: state.isDisabled ? 0.6 : 1,
+      opacity: state.has('disabled') ? 0.6 : 1,
       border: hasBorder ? {
         width: {
           type: 'all',

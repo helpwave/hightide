@@ -14,7 +14,7 @@ export const resolveInputColoring = (params: {
   const { disabled, surface, surfaceVariant, negative, primary } = themeTokens.color
   const accentPair = params.color ?? primary
 
-  if (state.isDisabled) {
+  if (state.has('disabled')) {
     return {
       background: disabled.color,
       text: disabled.onColor,
@@ -24,9 +24,9 @@ export const resolveInputColoring = (params: {
 
   const background: ColorToken = surfaceVariant.color
   const text: ColorToken = surface.onColor
-  const border: ColorToken = state.isInvalid
+  const border: ColorToken = state.has('invalid')
     ? negative.color
-    : state.isFocused
+    : state.has('focused')
       ? accentPair.color
       : resolveAsFaded({
         themeTokens,

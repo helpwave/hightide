@@ -9,6 +9,7 @@ import type {
 import {
   createStyleResolver,
   createValueResolver,
+  toPressableInteractionState,
   type ComponentThemeResolver
 } from '../types/resolver'
 
@@ -25,13 +26,7 @@ export const toIconButtonThemeResolvers: ComponentThemeResolver<IconButtonThemeR
       color: state.color,
       variant: state.variant,
     },
-    state: {
-      isDisabled: state.isDisabled,
-      isHovered: state.isHovered,
-      isFocused: state.isFocused,
-      isFocusVisible: state.isFocusVisible,
-      isPressed: state.isPressed,
-    },
+    state: toPressableInteractionState(state),
   })
 
   return {
@@ -52,7 +47,6 @@ export const toIconButtonThemeResolvers: ComponentThemeResolver<IconButtonThemeR
         right: 0,
         bottom: 0,
         left: 0,
-        borderRadius: tokens.visualContainer.shape?.borderRadius,
       }
     }),
     icon: createValueResolver((state: IconButtonState): IconButtonIconStyle => {

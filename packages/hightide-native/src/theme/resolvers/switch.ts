@@ -1,3 +1,7 @@
+import type {
+  SwitchState as DesignSwitchState,
+  SwitchStateValue
+} from '@helpwave/hightide-design/component-token-resolvers'
 import { toContainerStyle } from '../adapters/style-adapters'
 import type {
   SwitchContainerStyle,
@@ -11,6 +15,37 @@ import {
   type ComponentThemeResolver
 } from '../types/resolver'
 
+const toDesignSwitchState = (state: SwitchState = {}): DesignSwitchState => {
+  const active = new Set<SwitchStateValue>()
+
+  if (state.isDisabled) {
+    active.add('disabled')
+  }
+  if (state.isFocused) {
+    active.add('focused')
+  }
+  if (state.isFocusVisible) {
+    active.add('focusVisible')
+  }
+  if (state.isHovered) {
+    active.add('hovered')
+  }
+  if (state.isPressed) {
+    active.add('pressed')
+  }
+  if (state.isReadonly) {
+    active.add('readonly')
+  }
+  if (state.isInvalid) {
+    active.add('invalid')
+  }
+  if (state.isActive) {
+    active.add('active')
+  }
+
+  return active
+}
+
 export const toSwitchThemeResolvers: ComponentThemeResolver<SwitchThemeResolvers> = ({
   themeTokens,
   semanticTokens,
@@ -19,15 +54,7 @@ export const toSwitchThemeResolvers: ComponentThemeResolver<SwitchThemeResolvers
   const resolve = (state: SwitchState = {}) => componentTokens.switch({
     themeTokens,
     semanticResolvers: semanticTokens,
-    state: {
-      isActive: state.isActive,
-      isDisabled: state.isDisabled,
-      isHovered: state.isHovered,
-      isFocused: state.isFocused,
-      isFocusVisible: state.isFocusVisible,
-      isReadonly: state.isReadonly,
-      isInvalid: state.isInvalid,
-    },
+    state: toDesignSwitchState(state),
   })
 
   return {

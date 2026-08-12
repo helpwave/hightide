@@ -35,10 +35,10 @@ export type HightideThemeSemantics = {
   pressableColoring: BoundSemanticResolver<{
     coloring: ColoringToken,
     variant: PressableVariant,
-    state: ReadonlySet<PressableState>,
+    state: PressableState,
   }, PressableColoringTokens>,
   pressableStateLayerTint: BoundSemanticResolver<{
-    states: ReadonlySet<PressableState>,
+    states: PressableState,
     color: ColorToken,
   }, ColorToken>,
   inputColoring: BoundSemanticResolver<{

@@ -56,7 +56,7 @@ const CardDemo = () => {
           <Divider />
           <ListNavigationItem
             label="Practice details"
-            leading={<Building2 size={18} color={theme.colorSchemes.primary.foreground.base.foreground} />}
+            leading={<Building2 size={18} color={theme.colors.primary.color} />}
             onPress={action('practice-details')}
           />
         </Card>
@@ -69,7 +69,7 @@ const CardDemo = () => {
         <Card>
           <ListActionItem
             label="Notifications"
-            leading={<Bell size={18} color={theme.colorSchemes.primary.foreground.base.foreground} />}
+            leading={<Bell size={18} color={theme.colors.primary.color} />}
             trailing={(
               <View
                 style={(() => {
@@ -106,14 +106,14 @@ const CardDemo = () => {
           <Divider />
           <ListNavigationItem
             label="Account"
-            leading={<UserRound size={18} color={theme.colorSchemes.primary.foreground.base.foreground} />}
+            leading={<UserRound size={18} color={theme.colors.primary.color} />}
             onPress={action('account')}
           />
           <Divider />
           <ListActionItem
             label="Log out"
             color={theme.colors.negative}
-            leading={<LogOut size={18} color={theme.colorSchemes.negative.foreground.base.foreground} />}
+            leading={<LogOut size={18} color={theme.colors.negative.color} />}
             onPress={action('logout')}
           />
         </Card>

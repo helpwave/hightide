@@ -7,7 +7,7 @@ import {
   resolvePressableColoring,
   type SemanticTokenResolvers
 } from '../../semantic-token-resolvers'
-import { toActivePressableStates } from '../pressable'
+import type { PressableStateValue } from '../pressable'
 
 export type ChatMessageDirection = 'incoming' | 'outgoing'
 
@@ -68,7 +68,7 @@ export const resolveHoverColor = ({
       style: 'filled',
     }),
     variant: 'filled',
-    state: toActivePressableStates({ isHovered: true }),
+    state: new Set<PressableStateValue>(['hovered']),
   }).background
 )
 

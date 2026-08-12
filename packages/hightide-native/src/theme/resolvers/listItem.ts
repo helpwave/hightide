@@ -18,6 +18,7 @@ import type {
 import {
   createStyleResolver,
   createValueResolver,
+  toPressableInteractionState,
   type ComponentThemeResolver
 } from '../types/resolver'
 
@@ -71,13 +72,7 @@ const toListActionItemThemeResolvers: ComponentThemeResolver<ListActionItemTheme
     overrides: {
       color: state.color,
     },
-    state: {
-      isDisabled: state.isDisabled,
-      isHovered: state.isHovered,
-      isFocused: state.isFocused,
-      isFocusVisible: state.isFocusVisible,
-      isPressed: state.isPressed,
-    },
+    state: toPressableInteractionState(state),
   })
 
   return {

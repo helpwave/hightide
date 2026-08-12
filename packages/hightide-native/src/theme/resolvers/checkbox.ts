@@ -1,3 +1,7 @@
+import type {
+  CheckboxState as DesignCheckboxState,
+  CheckboxStateValue
+} from '@helpwave/hightide-design/component-token-resolvers'
 import { toContainerStyle } from '../adapters/style-adapters'
 import type {
   CheckboxIconStyle,
@@ -12,6 +16,40 @@ import {
   type ComponentThemeResolver
 } from '../types/resolver'
 
+const toDesignCheckboxState = (state: CheckboxState): DesignCheckboxState => {
+  const active = new Set<CheckboxStateValue>()
+
+  if (state.isDisabled) {
+    active.add('disabled')
+  }
+  if (state.isFocused) {
+    active.add('focused')
+  }
+  if (state.isFocusVisible) {
+    active.add('focusVisible')
+  }
+  if (state.isHovered) {
+    active.add('hovered')
+  }
+  if (state.isPressed) {
+    active.add('pressed')
+  }
+  if (state.isReadonly) {
+    active.add('readonly')
+  }
+  if (state.isInvalid) {
+    active.add('invalid')
+  }
+  if (state.isChecked) {
+    active.add('checked')
+  }
+  if (state.isIndeterminate) {
+    active.add('indeterminate')
+  }
+
+  return active
+}
+
 export const toCheckboxThemeResolvers: ComponentThemeResolver<CheckboxThemeResolvers> = ({
   themeTokens,
   semanticTokens,
@@ -25,17 +63,7 @@ export const toCheckboxThemeResolvers: ComponentThemeResolver<CheckboxThemeResol
       isRounded: state.isRounded,
       color: state.color,
     },
-    state: {
-      isDisabled: state.isDisabled,
-      isHovered: state.isHovered,
-      isFocused: state.isFocused,
-      isFocusVisible: state.isFocusVisible,
-      isPressed: state.isPressed,
-      isReadonly: state.isReadonly,
-      isInvalid: state.isInvalid,
-      isChecked: state.isChecked,
-      isIndeterminate: state.isIndeterminate,
-    },
+    state: toDesignCheckboxState(state),
   })
 
   return {

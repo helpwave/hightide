@@ -1,6 +1,5 @@
 import type { ThemeColorTokens } from '@helpwave/hightide-design/theme-tokens'
 
-import type { HightideColorSchemes } from '../resolvers/colorScheme'
 import type { HightideComponentThemes } from './components/hightide'
 import type {
   HightideBorder,
@@ -14,7 +13,6 @@ import type { HightideTypography } from './typography'
 
 export type Theme = {
   colors: Record<string, unknown>,
-  colorSchemes: Record<string, unknown>,
   semantics: Record<string, unknown>,
   components: Record<string, unknown>,
   typography: Record<string, unknown>,
@@ -27,7 +25,6 @@ export type Theme = {
 
 export type HightideTheme = Theme & {
   colors: ThemeColorTokens & Theme['colors'],
-  colorSchemes: HightideColorSchemes & Theme['colorSchemes'],
   semantics: HightideThemeSemantics & Theme['semantics'],
   components: HightideComponentThemes & Theme['components'],
   typography: HightideTypography & Theme['typography'],

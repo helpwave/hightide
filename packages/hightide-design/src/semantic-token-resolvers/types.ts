@@ -64,10 +64,10 @@ export type SemanticTokenResolvers = {
   pressableColoring: SemanticTokenResolver<{
     coloring: ColoringToken,
     variant: PressableVariant,
-    state: ReadonlySet<PressableState>,
+    state: PressableState,
   }, PressableColoringTokens>,
   pressableStateLayerTint: SemanticTokenResolver<{
-    states: ReadonlySet<PressableState>,
+    states: PressableState,
     color: ColorToken,
   }, ColorToken>,
   inputColoring: SemanticTokenResolver<{

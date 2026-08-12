@@ -1,3 +1,7 @@
+import type {
+  SelectState as DesignSelectState,
+  SelectStateValue
+} from '@helpwave/hightide-design/component-token-resolvers'
 import { toContainerStyleWithStateLayer, toTextStyle } from '../adapters/style-adapters'
 import type { Color } from '../types/color'
 import type {
@@ -21,46 +25,76 @@ import {
   type ComponentThemeResolver
 } from '../types/resolver'
 
+type SelectResolveState = {
+  color?: SelectState['color'],
+  isDisabled?: boolean,
+  isInvalid?: boolean,
+  isHovered?: boolean,
+  isFocused?: boolean,
+  isFocusVisible?: boolean,
+  isPressed?: boolean,
+  isReadonly?: boolean,
+  isOpen?: boolean,
+  hasValue?: boolean,
+  isSelected?: boolean,
+  isHighlighted?: boolean,
+}
+
+const toDesignSelectState = (state: SelectResolveState = {}): DesignSelectState => {
+  const active = new Set<SelectStateValue>()
+
+  if (state.isDisabled) {
+    active.add('disabled')
+  }
+  if (state.isFocused) {
+    active.add('focused')
+  }
+  if (state.isFocusVisible) {
+    active.add('focusVisible')
+  }
+  if (state.isHovered) {
+    active.add('hovered')
+  }
+  if (state.isPressed) {
+    active.add('pressed')
+  }
+  if (state.isReadonly) {
+    active.add('readonly')
+  }
+  if (state.isInvalid) {
+    active.add('invalid')
+  }
+  if (state.isOpen) {
+    active.add('open')
+  }
+  if (state.hasValue) {
+    active.add('hasValue')
+  }
+  if (state.isSelected) {
+    active.add('selected')
+  }
+  if (state.isHighlighted) {
+    active.add('highlighted')
+  }
+
+  return active
+}
+
 export const toSelectThemeResolvers: ComponentThemeResolver<SelectThemeResolvers> = ({
   themeTokens,
   semanticTokens,
   componentTokens,
 }) => {
-  const resolve = (state: {
-    color?: SelectState['color'],
-    isDisabled?: boolean,
-    isInvalid?: boolean,
-    isHovered?: boolean,
-    isFocused?: boolean,
-    isFocusVisible?: boolean,
-    isPressed?: boolean,
-    isReadonly?: boolean,
-    isOpen?: boolean,
-    hasValue?: boolean,
-    isSelected?: boolean,
-    isHighlighted?: boolean,
-  } = {}) => componentTokens.select({
+  const resolve = (state: SelectResolveState = {}) => componentTokens.select({
     themeTokens,
     semanticResolvers: semanticTokens,
     overrides: {
       color: state.color,
     },
-    state: {
-      isDisabled: state.isDisabled,
-      isInvalid: state.isInvalid,
-      isHovered: state.isHovered,
-      isFocused: state.isFocused,
-      isFocusVisible: state.isFocusVisible,
-      isPressed: state.isPressed,
-      isReadonly: state.isReadonly,
-      isOpen: state.isOpen,
-      hasValue: state.hasValue,
-      isSelected: state.isSelected,
-      isHighlighted: state.isHighlighted,
-    },
+    state: toDesignSelectState(state),
   })
 
-  const toTriggerState = (state: SelectState) => ({
+  const toTriggerState = (state: SelectState): SelectResolveState => ({
     color: state.color,
     isDisabled: state.isDisabled,
     isInvalid: state.isInvalid,

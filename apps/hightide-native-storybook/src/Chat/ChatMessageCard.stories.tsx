@@ -27,10 +27,10 @@ const CardStory = () => {
       direction="incoming"
       title="Terminbestätigung"
       subtitle="Hausarztpraxis"
-      icon={<CalendarDays size={18} color={theme.colorSchemes.primary.foreground.base.foreground} />}
+      icon={<CalendarDays size={18} color={theme.colors.primary.color} />}
       actions={(
         <View style={{ flexDirection: 'row', gap: 10, flex: 1 }}>
-          <Button size="sm" coloringStyle="tonal" style={{ flex: 1 }}>Ablehnen</Button>
+          <Button size="sm" variant="tonal" style={{ flex: 1 }}>Ablehnen</Button>
           <Button size="sm" style={{ flex: 1 }}>Annehmen</Button>
         </View>
       )}
