@@ -1,5 +1,6 @@
 import type { ChatMessageDirection } from '@helpwave/hightide-design/component-token-resolvers'
 
+import { toContainerStyle, toTextStyle } from '../../adapters/style-adapters'
 import type {
   ChatAttachmentCardIconColor,
   ChatAttachmentCardIconStyle,
@@ -21,27 +22,27 @@ export const toChatAttachmentCardThemeResolvers: ComponentThemeResolver<ChatAtta
   semanticTokens,
   componentTokens,
 }) => {
-  const resolve = (direction?: ChatMessageDirection) => componentTokens({
+  const resolve = (direction?: ChatMessageDirection) => componentTokens.chat.attachmentCard({
     themeTokens,
     semanticResolvers: semanticTokens,
     config: { direction },
   })
 
   return {
-    container: createStyleResolver((state: ChatAttachmentCardState): ChatAttachmentCardStyle => ({
-      ...resolve(state.direction).container,
-    })),
-    icon: createSimpleStyleResolver((): ChatAttachmentCardIconStyle => ({
-      ...resolve().icon,
-    })),
+    container: createStyleResolver((state: ChatAttachmentCardState): ChatAttachmentCardStyle => (
+      toContainerStyle(resolve(state.direction).container)
+    )),
+    icon: createSimpleStyleResolver((): ChatAttachmentCardIconStyle => (
+      toContainerStyle(resolve().icon)
+    )),
     iconColor: createSimpleValueResolver((): ChatAttachmentCardIconColor => ({
       color: resolve().iconColor.color,
     })),
-    name: createSimpleStyleResolver((): ChatAttachmentCardNameStyle => ({
-      ...resolve().name,
-    })),
-    metadata: createSimpleStyleResolver((): ChatAttachmentCardMetadataStyle => ({
-      ...resolve().metadata,
-    })),
+    name: createSimpleStyleResolver((): ChatAttachmentCardNameStyle => (
+      toTextStyle(resolve().name)
+    )),
+    metadata: createSimpleStyleResolver((): ChatAttachmentCardMetadataStyle => (
+      toTextStyle(resolve().metadata)
+    )),
   }
 }

@@ -1,4 +1,3 @@
-import type { ColorToken } from '../primitive-tokens/color'
 import {
   resolveColoringColorVariant,
   resolveColoringStyle,
@@ -37,43 +36,15 @@ export type SelectComponentResolverProps = {
   state: SelectState,
 }
 
-export type SelectTriggerTokens = ContainerTokens
-
-export type SelectOverlayTokens = {
-  flex: number,
-  justifyContent: 'center',
-  padding: number,
-  backgroundColor: ColorToken,
-}
-
-export type SelectMenuTokens = {
-  minHeight: number,
-  height: number,
-  borderRadius: number,
-  borderWidth: number,
-  borderColor: ColorToken,
-  backgroundColor: ColorToken,
-  overflow: 'visible',
-}
-
-export type SelectHeaderTokens = ContainerTokens
-
-export type SelectOptionTokens = {
-  paddingVertical: number,
-  paddingHorizontal: number,
-  backgroundColor: ColorToken,
-  opacity: number,
-}
-
 export type SelectTokens = {
-  trigger: SelectTriggerTokens,
+  trigger: ContainerTokens,
   stateLayer: ContainerTokens,
   triggerText: TextStyleTokens,
   icon: IconTokens,
-  overlay: SelectOverlayTokens,
-  menu: SelectMenuTokens,
-  header: SelectHeaderTokens,
-  option: SelectOptionTokens,
+  overlay: ContainerTokens,
+  menu: ContainerTokens,
+  header: ContainerTokens,
+  option: ContainerTokens,
   optionText: TextStyleTokens,
   emptyText: TextStyleTokens,
 }
@@ -140,19 +111,38 @@ export const selectTokenResolver: SelectTokenResolver = ({
     triggerText: state.has('hasValue') ? input.text : input.placeholder,
     icon: input.icon,
     overlay: {
-      flex: 1,
-      justifyContent: 'center',
-      padding: spacing.xl,
       backgroundColor: selectOverlayColor,
+      shape: {
+        padding: {
+          vertical: spacing.xl,
+          horizontal: spacing.xl,
+        },
+      },
+      layout: {
+        direction: 'vertical',
+        mainAxisAlignment: 'center',
+      },
     },
     menu: {
-      minHeight: menuHeight,
-      height: menuHeight,
-      borderRadius: shape.borderRadius.lg,
-      borderWidth: borders.borderWidths.thin,
-      borderColor: fadedBorder,
       backgroundColor: color.surfaceVariant.color,
       overflow: 'visible',
+      size: {
+        minHeight: menuHeight,
+        height: menuHeight,
+      },
+      shape: {
+        borderRadius: { type: 'all', value: shape.borderRadius.lg },
+      },
+      border: {
+        width: {
+          type: 'all',
+          value: borders.borderWidths.thin,
+        },
+        color: {
+          type: 'all',
+          value: fadedBorder,
+        },
+      },
     },
     header: {
       shape: {
@@ -163,10 +153,14 @@ export const selectTokenResolver: SelectTokenResolver = ({
       },
     },
     option: {
-      paddingVertical: shape.padding.xxl,
-      paddingHorizontal: spacing.lg,
       backgroundColor: state.has('highlighted') ? hoverColor : 'transparent',
       opacity: state.has('disabled') ? 0.5 : 1,
+      shape: {
+        padding: {
+          vertical: shape.padding.xxl,
+          horizontal: spacing.lg,
+        },
+      },
     },
     optionText: {
       ...typography.body.md,

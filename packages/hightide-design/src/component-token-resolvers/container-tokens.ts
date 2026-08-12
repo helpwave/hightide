@@ -8,7 +8,19 @@ import type {
 export type LayoutDirectionToken = 'horizontal' | 'vertical'
 export type LayoutAlignmentToken = 'left-top' | 'left-center' | 'left-bottom' | 'center-top' | 'center-center' | 'center-bottom' | 'right-top' | 'right-center' | 'right-bottom'
 export type AxisAligmentToken = 'start' | 'center' | 'end'
+export type AlignSelfToken = AxisAligmentToken | 'stretch'
+export type OverflowToken = 'visible' | 'hidden' | 'scroll'
 export type SizeToken = number | `${number}%`
+export type BorderRadiusToken = {
+  type: 'all',
+  value?: number,
+} | {
+  type: 'physicalCorner',
+  topLeft?: number,
+  topRight?: number,
+  bottomLeft?: number,
+  bottomRight?: number,
+}
 export type DirectionalToken<T> = {
   type: 'physicalAxis',
   horizontal?: T,
@@ -44,6 +56,7 @@ export type BorderToken = {
 export type ContainerTokens = {
   backgroundColor?: ColorToken,
   opacity?: number,
+  overflow?: OverflowToken,
   border?: BorderToken,
   size?: {
     height?: SizeToken,
@@ -54,7 +67,7 @@ export type ContainerTokens = {
     maxWidth?: SizeToken,
   },
   shape?: {
-    borderRadius?: number,
+    borderRadius?: BorderRadiusToken,
     padding?: {
       vertical?: number,
       horizontal?: number,
@@ -69,6 +82,7 @@ export type ContainerTokens = {
     direction?: LayoutDirectionToken,
     mainAxisAlignment?: AxisAligmentToken,
     crossAxisAligment?: AxisAligmentToken,
+    alignSelf?: AlignSelfToken,
   },
   decoration?: {
     shadow?: ShadowToken,

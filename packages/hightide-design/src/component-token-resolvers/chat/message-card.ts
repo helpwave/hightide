@@ -1,6 +1,7 @@
-import type { ColorToken } from '../../primitive-tokens/color'
 import type { ColorPairToken } from '../../theme-tokens/theme-tokens-config'
 import type { ComponentTokenResolver } from '../component-token-resolver'
+import type { ContainerTokens } from '../container-tokens'
+import type { IconTokens } from '../icon-tokens'
 import type { TextStyleTokens } from '../text-style-tokens'
 import {
   messageCardMaxWidth,
@@ -10,10 +11,7 @@ import {
   resolveDescriptionColor,
   resolveFadedBorder,
   resolveMessageCorners,
-  type ChatCornerRadiusTokens,
-  type ChatIconTokens,
-  type ChatMessageDirection,
-  type ChatAlignment
+  type ChatMessageDirection
 } from './shared'
 
 export type ChatMessageCardComponentResolverProps = {
@@ -26,46 +24,14 @@ export type ChatMessageCardComponentResolverProps = {
 }
 
 export type ChatMessageCardTokens = {
-  container: ChatCornerRadiusTokens & {
-    width: number,
-    maxWidth: number,
-    backgroundColor: ColorToken,
-    borderWidth: number,
-    borderColor: ColorToken,
-    overflow: 'hidden',
-    alignSelf: ChatAlignment,
-  },
-  header: {
-    flexDirection: 'row',
-    alignItems: 'center',
-    gap: number,
-    paddingVertical: number,
-    paddingHorizontal: number,
-    borderBottomWidth: number,
-    borderBottomColor: ColorToken,
-  },
-  icon: {
-    alignItems: 'center',
-    justifyContent: 'center',
-    width: number,
-    height: number,
-    borderRadius: number,
-    backgroundColor: ColorToken,
-  },
-  iconColor: ChatIconTokens,
+  container: ContainerTokens,
+  header: ContainerTokens,
+  icon: ContainerTokens,
+  iconColor: IconTokens,
   title: TextStyleTokens,
   subtitle: TextStyleTokens,
-  body: {
-    paddingVertical: number,
-    paddingHorizontal: number,
-    gap: number,
-  },
-  actions: {
-    flexDirection: 'row',
-    gap: number,
-    paddingHorizontal: number,
-    paddingBottom: number,
-  },
+  body: ContainerTokens,
+  actions: ContainerTokens,
 }
 
 export type ChatMessageCardTokenResolver = ComponentTokenResolver<
@@ -87,31 +53,65 @@ export const chatMessageCardTokenResolver: ChatMessageCardTokenResolver = ({ the
 
   return {
     container: {
-      ...messageCorners,
-      width: messageCardWidth,
-      maxWidth: messageCardMaxWidth,
       backgroundColor: color.surface.color,
-      borderWidth: hairline,
-      borderColor: fadedBorder,
       overflow: 'hidden',
-      alignSelf: alignment,
+      size: {
+        width: messageCardWidth,
+        maxWidth: messageCardMaxWidth,
+      },
+      shape: {
+        borderRadius: messageCorners,
+      },
+      border: {
+        width: {
+          type: 'all',
+          value: hairline,
+        },
+        color: {
+          type: 'all',
+          value: fadedBorder,
+        },
+      },
+      layout: {
+        alignSelf: alignment,
+      },
     },
     header: {
-      flexDirection: 'row',
-      alignItems: 'center',
-      gap: shape.padding.xl,
-      paddingVertical: shape.padding.xxl,
-      paddingHorizontal: spacing.lg,
-      borderBottomWidth: hairline,
-      borderBottomColor: fadedBorder,
+      shape: {
+        padding: {
+          vertical: shape.padding.xxl,
+          horizontal: spacing.lg,
+        },
+      },
+      border: {
+        width: {
+          type: 'physicalSide',
+          bottom: hairline,
+        },
+        color: {
+          type: 'physicalSide',
+          bottom: fadedBorder,
+        },
+      },
+      layout: {
+        direction: 'horizontal',
+        crossAxisAligment: 'center',
+        gap: shape.padding.xl,
+      },
     },
     icon: {
-      alignItems: 'center',
-      justifyContent: 'center',
-      width: size.xs + spacing.md,
-      height: size.xs + spacing.md,
-      borderRadius: shape.borderRadius.sm,
       backgroundColor: accentTonal.background,
+      size: {
+        width: size.xs + spacing.md,
+        height: size.xs + spacing.md,
+      },
+      shape: {
+        borderRadius: { type: 'all', value: shape.borderRadius.sm },
+      },
+      layout: {
+        mainAxisAlignment: 'center',
+        crossAxisAligment: 'center',
+      },
     },
     iconColor: {
       color: accentTonal.foreground,
@@ -126,15 +126,27 @@ export const chatMessageCardTokenResolver: ChatMessageCardTokenResolver = ({ the
       color: descriptionColor,
     },
     body: {
-      paddingVertical: shape.padding.xxl,
-      paddingHorizontal: spacing.lg,
-      gap: spacing.sm,
+      shape: {
+        padding: {
+          vertical: shape.padding.xxl,
+          horizontal: spacing.lg,
+        },
+      },
+      layout: {
+        gap: spacing.sm,
+      },
     },
     actions: {
-      flexDirection: 'row',
-      gap: shape.padding.xl,
-      paddingHorizontal: spacing.lg,
-      paddingBottom: spacing.lg,
+      shape: {
+        padding: {
+          vertical: spacing.lg,
+          horizontal: spacing.lg,
+        },
+      },
+      layout: {
+        direction: 'horizontal',
+        gap: shape.padding.xl,
+      },
     },
   }
 }

@@ -3,7 +3,6 @@ import type {
   ViewStyle
 } from 'react-native'
 
-import type { Color } from '../color'
 import type {
   SelectEmptyTextStyle,
   SelectHeaderStyle,
@@ -17,6 +16,7 @@ import type {
   SimpleStyleResolver,
   StyleResolverFunction
 } from '../resolver'
+import type { IconStyle } from '../../../icons'
 
 export type MultiSelectState = SelectState & {
   hasSelections?: boolean,
@@ -32,10 +32,7 @@ export type MultiSelectOptionTextStyle = TextStyle
 
 export type MultiSelectCheckboxStyle = ViewStyle
 
-export type MultiSelectCheckboxIconStyle = {
-  color: Color,
-  visible: boolean,
-}
+export type MultiSelectCheckboxIconStyle = IconStyle
 
 export type MultiSelectThemeResolvers = {
   trigger: StyleResolverFunction<MultiSelectState, MultiSelectTriggerStyle>,

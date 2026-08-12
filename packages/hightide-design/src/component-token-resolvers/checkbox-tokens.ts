@@ -88,7 +88,10 @@ export const checkboxTokenResolver: CheckboxTokenResolver = ({
         maxHeight: containerSize,
       },
       shape: {
-        borderRadius: overrides.isRounded ? dimension / 2 : themeTokens.shape.borderRadius[size],
+        borderRadius: {
+          type: 'all',
+          value: overrides.isRounded ? dimension / 2 : themeTokens.shape.borderRadius[size],
+        },
       },
       layout: {
         direction: 'horizontal',
@@ -117,7 +120,10 @@ export const checkboxTokenResolver: CheckboxTokenResolver = ({
         height: dimension,
       },
       shape: {
-        borderRadius: overrides.isRounded ? dimension / 2 : themeTokens.shape.borderRadius.sm,
+        borderRadius: {
+          type: 'all',
+          value: overrides.isRounded ? dimension / 2 : themeTokens.shape.borderRadius.sm,
+        },
         padding: {
           vertical: inset,
           horizontal: inset,

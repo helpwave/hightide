@@ -14,7 +14,7 @@ export const cardTokenResolver: CardTokenResolver = ({ themeTokens }) => {
   return {
     backgroundColor: color.surface.color,
     shape: {
-      borderRadius: shape.borderRadius.lg,
+      borderRadius: { type: 'all', value: shape.borderRadius.lg },
     },
     layout: {
       direction: 'vertical',

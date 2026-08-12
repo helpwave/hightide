@@ -1,8 +1,9 @@
+import { toContainerStyle, toTextStyle } from '../../adapters/style-adapters'
 import type {
   ChatMessageCardActionsStyle,
   ChatMessageCardBodyStyle,
   ChatMessageCardHeaderStyle,
-  ChatMessageCardIconColor,
+  ChatMessageCardIcon,
   ChatMessageCardIconStyle,
   ChatMessageCardState,
   ChatMessageCardStyle,
@@ -22,7 +23,7 @@ export const toChatMessageCardThemeResolvers: ComponentThemeResolver<ChatMessage
   semanticTokens,
   componentTokens,
 }) => {
-  const resolve = (state?: Partial<ChatMessageCardState>) => componentTokens({
+  const resolve = (state?: Partial<ChatMessageCardState>) => componentTokens.chat.messageCard({
     themeTokens,
     semanticResolvers: semanticTokens,
     config: {
@@ -34,29 +35,29 @@ export const toChatMessageCardThemeResolvers: ComponentThemeResolver<ChatMessage
   })
 
   return {
-    container: createStyleResolver((state: ChatMessageCardState): ChatMessageCardStyle => ({
-      ...resolve(state).container,
-    })),
-    header: createSimpleStyleResolver((): ChatMessageCardHeaderStyle => ({
-      ...resolve().header,
-    })),
-    icon: createStyleResolver((state: ChatMessageCardState): ChatMessageCardIconStyle => ({
-      ...resolve(state).icon,
-    })),
-    iconColor: createValueResolver((state: ChatMessageCardState): ChatMessageCardIconColor => ({
+    container: createStyleResolver((state: ChatMessageCardState): ChatMessageCardStyle => (
+      toContainerStyle(resolve(state).container)
+    )),
+    header: createSimpleStyleResolver((): ChatMessageCardHeaderStyle => (
+      toContainerStyle(resolve().header)
+    )),
+    icon: createStyleResolver((state: ChatMessageCardState): ChatMessageCardIconStyle => (
+      toContainerStyle(resolve(state).icon)
+    )),
+    iconColor: createValueResolver((state: ChatMessageCardState): ChatMessageCardIcon => ({
       color: resolve(state).iconColor.color,
     })),
-    title: createStyleResolver((state: ChatMessageCardState): ChatMessageCardTitleStyle => ({
-      ...resolve(state).title,
-    })),
-    subtitle: createSimpleStyleResolver((): ChatMessageCardSubtitleStyle => ({
-      ...resolve().subtitle,
-    })),
-    body: createSimpleStyleResolver((): ChatMessageCardBodyStyle => ({
-      ...resolve().body,
-    })),
-    actions: createSimpleStyleResolver((): ChatMessageCardActionsStyle => ({
-      ...resolve().actions,
-    })),
+    title: createStyleResolver((state: ChatMessageCardState): ChatMessageCardTitleStyle => (
+      toTextStyle(resolve(state).title)
+    )),
+    subtitle: createSimpleStyleResolver((): ChatMessageCardSubtitleStyle => (
+      toTextStyle(resolve().subtitle)
+    )),
+    body: createSimpleStyleResolver((): ChatMessageCardBodyStyle => (
+      toContainerStyle(resolve().body)
+    )),
+    actions: createSimpleStyleResolver((): ChatMessageCardActionsStyle => (
+      toContainerStyle(resolve().actions)
+    )),
   }
 }

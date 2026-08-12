@@ -1,3 +1,4 @@
+import { toContainerStyle } from '../../adapters/style-adapters'
 import type {
   ChatMessageListStyle,
   ChatMessageListThemeResolvers
@@ -12,14 +13,15 @@ export const toChatMessageListThemeResolvers: ComponentThemeResolver<ChatMessage
   semanticTokens,
   componentTokens,
 }) => {
-  const resolve = () => componentTokens({
+  const resolve = () => componentTokens.chat.messageList({
     themeTokens,
     semanticResolvers: semanticTokens,
   })
 
   return {
     container: createSimpleStyleResolver((): ChatMessageListStyle => ({
-      ...resolve().container,
+      ...toContainerStyle(resolve().container),
+      flex: 1,
     })),
   }
 }

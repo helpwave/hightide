@@ -1,4 +1,3 @@
-import type { ColorToken } from '../primitive-tokens/color'
 import {
   resolveColoringColorVariant,
   resolveColoringStyle,
@@ -8,6 +7,7 @@ import {
 import type { ColorPairToken } from '../theme-tokens/theme-tokens-config'
 import type { ComponentTokenResolver } from './component-token-resolver'
 import type { ContainerTokens } from './container-tokens'
+import type { IconTokens } from './icon-tokens'
 import {
   inputStateValues,
   inputTokenResolver,
@@ -18,12 +18,6 @@ import {
   type PressableStateValue
 } from './pressable-tokens'
 import type { TextStyleTokens } from './text-style-tokens'
-import type {
-  SelectHeaderTokens,
-  SelectMenuTokens,
-  SelectOverlayTokens,
-  SelectTriggerTokens
-} from './select-tokens'
 import { selectOverlayColor } from './select-tokens'
 
 export const multiSelectStateValues = [
@@ -47,46 +41,18 @@ export type MultiSelectComponentResolverProps = {
   state: MultiSelectState,
 }
 
-export type MultiSelectTriggerTokens = SelectTriggerTokens
-
-export type MultiSelectOptionTokens = {
-  flexDirection: 'row',
-  alignItems: 'center',
-  gap: number,
-  paddingVertical: number,
-  paddingHorizontal: number,
-  backgroundColor: ColorToken,
-  opacity: number,
-}
-
-export type MultiSelectCheckboxTokens = {
-  alignItems: 'center',
-  justifyContent: 'center',
-  width: number,
-  height: number,
-  borderRadius: number,
-  borderWidth: number,
-  borderColor: ColorToken,
-  backgroundColor: ColorToken,
-}
-
-export type MultiSelectCheckboxIconTokens = {
-  color: ColorToken,
-  isVisible: boolean,
-}
-
 export type MultiSelectTokens = {
-  trigger: MultiSelectTriggerTokens,
+  trigger: ContainerTokens,
   stateLayer: ContainerTokens,
   triggerText: TextStyleTokens,
-  overlay: SelectOverlayTokens,
-  menu: SelectMenuTokens,
-  header: SelectHeaderTokens,
-  option: MultiSelectOptionTokens,
+  overlay: ContainerTokens,
+  menu: ContainerTokens,
+  header: ContainerTokens,
+  option: ContainerTokens,
   optionText: TextStyleTokens,
   emptyText: TextStyleTokens,
-  checkbox: MultiSelectCheckboxTokens,
-  checkboxIcon: MultiSelectCheckboxIconTokens,
+  checkbox: ContainerTokens,
+  checkboxIcon: IconTokens,
 }
 
 export type MultiSelectTokenResolver = ComponentTokenResolver<
@@ -149,19 +115,38 @@ export const multiSelectTokenResolver: MultiSelectTokenResolver = ({
     },
     triggerText: state.has('hasSelections') ? input.text : input.placeholder,
     overlay: {
-      flex: 1,
-      justifyContent: 'center',
-      padding: spacing.xl,
       backgroundColor: selectOverlayColor,
+      shape: {
+        padding: {
+          vertical: spacing.xl,
+          horizontal: spacing.xl,
+        },
+      },
+      layout: {
+        direction: 'vertical',
+        mainAxisAlignment: 'center',
+      },
     },
     menu: {
-      minHeight: menuHeight,
-      height: menuHeight,
-      borderRadius: shape.borderRadius.lg,
-      borderWidth: borders.borderWidths.thin,
-      borderColor: fadedBorder,
       backgroundColor: color.surfaceVariant.color,
       overflow: 'visible',
+      size: {
+        minHeight: menuHeight,
+        height: menuHeight,
+      },
+      shape: {
+        borderRadius: { type: 'all', value: shape.borderRadius.lg },
+      },
+      border: {
+        width: {
+          type: 'all',
+          value: borders.borderWidths.thin,
+        },
+        color: {
+          type: 'all',
+          value: fadedBorder,
+        },
+      },
     },
     header: {
       shape: {
@@ -172,13 +157,19 @@ export const multiSelectTokenResolver: MultiSelectTokenResolver = ({
       },
     },
     option: {
-      flexDirection: 'row',
-      alignItems: 'center',
-      gap: shape.padding.xl,
-      paddingVertical: shape.padding.xxl,
-      paddingHorizontal: spacing.lg,
       backgroundColor: state.has('highlighted') ? hoverColor : 'transparent',
       opacity: state.has('disabled') ? 0.5 : 1,
+      shape: {
+        padding: {
+          vertical: shape.padding.xxl,
+          horizontal: spacing.lg,
+        },
+      },
+      layout: {
+        direction: 'horizontal',
+        crossAxisAligment: 'center',
+        gap: shape.padding.xl,
+      },
     },
     optionText: {
       ...typography.body.md,
@@ -195,18 +186,31 @@ export const multiSelectTokenResolver: MultiSelectTokenResolver = ({
       }),
     },
     checkbox: {
-      alignItems: 'center',
-      justifyContent: 'center',
-      width: checkboxSize,
-      height: checkboxSize,
-      borderRadius: shape.borderRadius.xs,
-      borderWidth: borders.borderWidths.thin,
-      borderColor: state.has('selected') ? accentPair.color : fadedBorder,
       backgroundColor: state.has('selected') ? accentPair.color : 'transparent',
+      size: {
+        width: checkboxSize,
+        height: checkboxSize,
+      },
+      shape: {
+        borderRadius: { type: 'all', value: shape.borderRadius.xs },
+      },
+      border: {
+        width: {
+          type: 'all',
+          value: borders.borderWidths.thin,
+        },
+        color: {
+          type: 'all',
+          value: state.has('selected') ? accentPair.color : fadedBorder,
+        },
+      },
+      layout: {
+        mainAxisAlignment: 'center',
+        crossAxisAligment: 'center',
+      },
     },
     checkboxIcon: {
       color: accentPair.onColor,
-      isVisible: state.has('selected'),
     },
   }
 }

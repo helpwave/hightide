@@ -129,7 +129,7 @@ export const buttonTokenResolver: ButtonTokenResolver = ({
         minHeight: layout.size,
       },
       shape: {
-        borderRadius: layout.borderRadius,
+        borderRadius: { type: 'all', value: layout.borderRadius },
         padding: {
           vertical: hasBorder ? insetForBordered : layout.inset,
           horizontal: hasBorder

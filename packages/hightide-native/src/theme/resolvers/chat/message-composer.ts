@@ -1,4 +1,5 @@
-import type { Color } from '../../types/color'
+import type { IconStyle } from '../../../icons'
+import { toContainerStyle, toTextStyle } from '../../adapters/style-adapters'
 import type {
   ChatMessageComposerInputStyle,
   ChatMessageComposerStyle,
@@ -15,20 +16,22 @@ export const toChatMessageComposerThemeResolvers: ComponentThemeResolver<ChatMes
   semanticTokens,
   componentTokens,
 }) => {
-  const resolve = () => componentTokens({
+  const resolve = () => componentTokens.chat.messageComposer({
     themeTokens,
     semanticResolvers: semanticTokens,
   })
 
   return {
-    container: createSimpleStyleResolver((): ChatMessageComposerStyle => ({
-      ...resolve().container,
-    })),
-    input: createSimpleStyleResolver((): ChatMessageComposerInputStyle => ({
-      ...resolve().input,
-    })),
-    placeholderColor: createSimpleValueResolver((): Color => (
-      resolve().placeholderColor
+    container: createSimpleStyleResolver((): ChatMessageComposerStyle => (
+      toContainerStyle(resolve().container)
     )),
+    input: createSimpleStyleResolver((): ChatMessageComposerInputStyle => ({
+      ...toContainerStyle(resolve().input),
+      ...toTextStyle(resolve().text),
+      flex: 1,
+    })),
+    placeholderColor: createSimpleValueResolver((): IconStyle => ({
+      color: resolve().placeholder.color
+    })),
   }
 }

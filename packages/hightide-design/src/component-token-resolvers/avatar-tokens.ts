@@ -57,8 +57,6 @@ export type AvatarTokens = {
     container: ContainerTokens,
     stack: ContainerTokens,
     moreText: TextStyleTokens,
-    overlap: number,
-    maxShown: number,
   },
 }
 
@@ -115,7 +113,10 @@ export const avatarTokenResolver: AvatarTokenResolver = ({
         maxHeight: dimension,
       },
       shape: {
-        borderRadius,
+        borderRadius: {
+          type: 'all',
+          value: borderRadius,
+        },
       },
       layout: {
         direction: 'horizontal',
@@ -162,7 +163,7 @@ export const avatarTokenResolver: AvatarTokenResolver = ({
           height: statusDotSize,
         },
         shape: {
-          borderRadius: statusDotSize / 2,
+          borderRadius: { type: 'all', value: statusDotSize / 2 },
         },
       },
     },
@@ -192,8 +193,6 @@ export const avatarTokenResolver: AvatarTokenResolver = ({
         fontSize: dimension * 2 / 3,
         color: color.background.onColor,
       },
-      overlap: avatarGroupOverlap,
-      maxShown: avatarGroupMaxShown,
     },
   }
 }

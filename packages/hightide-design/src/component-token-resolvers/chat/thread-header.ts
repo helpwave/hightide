@@ -1,5 +1,5 @@
-import type { ColorToken } from '../../primitive-tokens/color'
 import type { ComponentTokenResolver } from '../component-token-resolver'
+import type { ContainerTokens } from '../container-tokens'
 import type { TextStyleTokens } from '../text-style-tokens'
 import {
   resolveDescriptionColor,
@@ -7,22 +7,13 @@ import {
 } from './shared'
 
 export type ChatThreadHeaderTokens = {
-  container: {
-    flexDirection: 'row',
-    alignItems: 'center',
-    gap: number,
-    paddingVertical: number,
-    paddingHorizontal: number,
-    borderBottomWidth: number,
-    borderBottomColor: ColorToken,
-    backgroundColor: ColorToken,
-  },
+  container: ContainerTokens,
   title: TextStyleTokens,
   subtitle: TextStyleTokens,
 }
 
 export type ChatThreadHeaderTokenResolver = ComponentTokenResolver<
-  Record<string, never>,
+  Record<string, unknown>,
   ChatThreadHeaderTokens
 >
 
@@ -33,14 +24,28 @@ export const chatThreadHeaderTokenResolver: ChatThreadHeaderTokenResolver = ({ t
 
   return {
     container: {
-      flexDirection: 'row',
-      alignItems: 'center',
-      gap: shape.padding.xxl,
-      paddingVertical: shape.padding.xxl,
-      paddingHorizontal: spacing.lg,
-      borderBottomWidth: borders.borderWidths.thin,
-      borderBottomColor: fadedBorder,
       backgroundColor: color.surface.color,
+      shape: {
+        padding: {
+          vertical: shape.padding.xxl,
+          horizontal: spacing.lg,
+        },
+      },
+      border: {
+        width: {
+          type: 'physicalSide',
+          bottom: borders.borderWidths.thin,
+        },
+        color: {
+          type: 'physicalSide',
+          bottom: fadedBorder,
+        },
+      },
+      layout: {
+        direction: 'horizontal',
+        crossAxisAligment: 'center',
+        gap: shape.padding.xxl,
+      },
     },
     title: {
       ...typography.body.md,

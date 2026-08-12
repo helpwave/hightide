@@ -58,7 +58,7 @@ export const chipTokenResolver: ChipTokenResolver = ({
         minHeight: layout.size,
       },
       shape: {
-        borderRadius: layout.borderRadius,
+        borderRadius: { type: 'all', value: layout.borderRadius },
         padding: {
           vertical: layout.inset,
           horizontal: horizontalPadding,

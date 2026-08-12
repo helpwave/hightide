@@ -2,7 +2,11 @@ import type {
   ColorPairToken,
   IconSize
 } from '@helpwave/hightide-design/theme-tokens'
-import type { AvatarTokens } from '@helpwave/hightide-design/component-token-resolvers'
+import {
+  avatarGroupMaxShown,
+  avatarGroupOverlap,
+  type AvatarTokens
+} from '@helpwave/hightide-design/component-token-resolvers'
 
 import { toContainerStyle, toTextStyle } from '../adapters/style-adapters'
 import type {
@@ -42,10 +46,10 @@ const withNumericAvatarSize = (
   const borderRadius = size / 2
   const statusDotSize = Math.round(size / 10 * 4)
   const visibleCount = Math.min(
-    tokens.group.maxShown,
-    groupCount ?? tokens.group.maxShown
+    avatarGroupMaxShown,
+    groupCount ?? avatarGroupMaxShown
   )
-  const stackWidth = size * (tokens.group.overlap * Math.max(visibleCount - 1, 0) + 1)
+  const stackWidth = size * (avatarGroupOverlap * Math.max(visibleCount - 1, 0) + 1)
 
   return {
     ...tokens,
@@ -61,7 +65,7 @@ const withNumericAvatarSize = (
       },
       shape: {
         ...tokens.container.shape,
-        borderRadius,
+        borderRadius: { type: 'all', value: borderRadius },
       },
     },
     icon: {
@@ -84,7 +88,7 @@ const withNumericAvatarSize = (
         },
         shape: {
           ...tokens.withStatus.statusDot.shape,
-          borderRadius: statusDotSize / 2,
+          borderRadius: { type: 'all', value: statusDotSize / 2 },
         },
       },
     },
@@ -161,8 +165,6 @@ export const toAvatarThemeResolvers: ComponentThemeResolver<AvatarThemeResolvers
       const width = typeof container.size?.width === 'number'
         ? container.size.width
         : 0
-      const overlap = tokens.group.overlap
-      const maxShown = tokens.group.maxShown
       const groupIndex = state.groupIndex ?? 0
 
       return {
@@ -170,8 +172,8 @@ export const toAvatarThemeResolvers: ComponentThemeResolver<AvatarThemeResolvers
         position: state.isGrouped ? 'absolute' : 'relative',
         overflow: 'hidden',
         ...(state.isGrouped ? {
-          left: groupIndex * width * overlap,
-          zIndex: maxShown - groupIndex,
+          left: groupIndex * width * avatarGroupOverlap,
+          zIndex: avatarGroupMaxShown - groupIndex,
         } : {}),
       }
     }),
@@ -179,6 +181,7 @@ export const toAvatarThemeResolvers: ComponentThemeResolver<AvatarThemeResolvers
       const { container } = resolve({ size: state.size, color: state.color })
       const width = container.size?.width
       const height = container.size?.height
+      const borderRadius = container.shape?.borderRadius
 
       return {
         position: 'absolute',
@@ -186,7 +189,9 @@ export const toAvatarThemeResolvers: ComponentThemeResolver<AvatarThemeResolvers
         top: 0,
         width,
         height,
-        borderRadius: container.shape?.borderRadius,
+        borderRadius: borderRadius?.type === 'all'
+          ? borderRadius.value
+          : undefined,
       }
     }),
     text: createStyleResolver((state: AvatarState): AvatarTextStyle => ({

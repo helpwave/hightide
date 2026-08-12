@@ -1,3 +1,4 @@
+import { toContainerStyle, toTextStyle } from '../../adapters/style-adapters'
 import type {
   ChatQuickReplyChipState,
   ChatQuickReplyChipStyle,
@@ -14,7 +15,7 @@ export const toChatQuickReplyChipThemeResolvers: ComponentThemeResolver<ChatQuic
   semanticTokens,
   componentTokens,
 }) => {
-  const resolve = (state: ChatQuickReplyChipState) => componentTokens({
+  const resolve = (state: ChatQuickReplyChipState) => componentTokens.chat.quickReplyChip({
     themeTokens,
     semanticResolvers: semanticTokens,
     state: {
@@ -25,11 +26,11 @@ export const toChatQuickReplyChipThemeResolvers: ComponentThemeResolver<ChatQuic
   })
 
   return {
-    container: createStyleResolver((state: ChatQuickReplyChipState): ChatQuickReplyChipStyle => ({
-      ...resolve(state).container,
-    })),
-    text: createStyleResolver((state: ChatQuickReplyChipState): ChatQuickReplyChipTextStyle => ({
-      ...resolve(state).text,
-    })),
+    container: createStyleResolver((state: ChatQuickReplyChipState): ChatQuickReplyChipStyle => (
+      toContainerStyle(resolve(state).container)
+    )),
+    text: createStyleResolver((state: ChatQuickReplyChipState): ChatQuickReplyChipTextStyle => (
+      toTextStyle(resolve(state).text)
+    )),
   }
 }

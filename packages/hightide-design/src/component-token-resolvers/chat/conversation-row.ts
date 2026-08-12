@@ -1,11 +1,11 @@
-import type { ColorToken } from '../../primitive-tokens/color'
 import type { ComponentTokenResolver } from '../component-token-resolver'
+import type { ContainerTokens } from '../container-tokens'
+import type { IconTokens } from '../icon-tokens'
 import type { TextStyleTokens } from '../text-style-tokens'
 import {
   pillBorderRadius,
   resolveDescriptionColor,
-  resolveHoverColor,
-  type ChatIconTokens
+  resolveHoverColor
 } from './shared'
 
 export type ChatConversationRowState = {
@@ -19,37 +19,14 @@ export type ChatConversationRowComponentResolverProps = {
   state: ChatConversationRowState,
 }
 
-export type ChatConversationRowContainerTokens = {
-  flexDirection: 'row',
-  alignItems: 'center',
-  gap: number,
-  width: '100%',
-  paddingVertical: number,
-  paddingHorizontal: number,
-  backgroundColor: ColorToken,
-  borderLeftWidth: number,
-  borderLeftColor: ColorToken,
-  borderRadius: number,
-}
-
-export type ChatUnreadBadgeTokens = {
-  alignItems: 'center',
-  justifyContent: 'center',
-  minWidth: number,
-  height: number,
-  paddingHorizontal: number,
-  borderRadius: number,
-  backgroundColor: ColorToken,
-}
-
 export type ChatConversationRowTokens = {
-  container: ChatConversationRowContainerTokens,
-  title: TextStyleTokens & { flex: number },
-  timestamp: TextStyleTokens & { flexShrink: number },
-  preview: TextStyleTokens & { flex: number },
-  unreadBadge: ChatUnreadBadgeTokens,
+  container: ContainerTokens,
+  title: TextStyleTokens,
+  timestamp: TextStyleTokens,
+  preview: TextStyleTokens,
+  unreadBadge: ContainerTokens,
   unreadBadgeText: TextStyleTokens,
-  sentIndicator: ChatIconTokens,
+  sentIndicator: IconTokens,
 }
 
 export type ChatConversationRowTokenResolver = ComponentTokenResolver<
@@ -65,18 +42,34 @@ export const chatConversationRowTokenResolver: ChatConversationRowTokenResolver 
 
   return {
     container: {
-      flexDirection: 'row',
-      alignItems: 'center',
-      gap: shape.padding.xxl,
-      width: '100%',
-      paddingVertical: shape.padding.xxl,
-      paddingHorizontal: spacing.lg,
       backgroundColor: state.isSelected
         ? color.background.color
         : isPressed ? hoverColor : 'transparent',
-      borderLeftWidth: state.isSelected ? borders.borderWidths.thick : 0,
-      borderLeftColor: state.isSelected ? color.primary.color : 'transparent',
-      borderRadius: shape.borderRadius.sm,
+      size: {
+        width: '100%',
+      },
+      shape: {
+        borderRadius: { type: 'all', value: shape.borderRadius.sm },
+        padding: {
+          vertical: shape.padding.xxl,
+          horizontal: spacing.lg,
+        },
+      },
+      border: {
+        width: {
+          type: 'physicalSide',
+          left: state.isSelected ? borders.borderWidths.thick : 0,
+        },
+        color: {
+          type: 'physicalSide',
+          left: state.isSelected ? color.primary.color : 'transparent',
+        },
+      },
+      layout: {
+        direction: 'horizontal',
+        crossAxisAligment: 'center',
+        gap: shape.padding.xxl,
+      },
     },
     title: {
       ...typography.body.md,
@@ -97,13 +90,21 @@ export const chatConversationRowTokenResolver: ChatConversationRowTokenResolver 
       flex: 1,
     },
     unreadBadge: {
-      alignItems: 'center',
-      justifyContent: 'center',
-      minWidth: spacing.lg + spacing.sm,
-      height: spacing.lg + spacing.sm,
-      paddingHorizontal: shape.padding.md,
-      borderRadius: pillBorderRadius,
       backgroundColor: color.primary.color,
+      size: {
+        minWidth: spacing.lg + spacing.sm,
+        height: spacing.lg + spacing.sm,
+      },
+      shape: {
+        borderRadius: { type: 'all', value: pillBorderRadius },
+        padding: {
+          horizontal: shape.padding.md,
+        },
+      },
+      layout: {
+        mainAxisAlignment: 'center',
+        crossAxisAligment: 'center',
+      },
     },
     unreadBadgeText: {
       ...typography.body.sm,

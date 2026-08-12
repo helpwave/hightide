@@ -1,24 +1,14 @@
-import type { ColorToken } from '../../primitive-tokens/color'
 import type { ComponentTokenResolver } from '../component-token-resolver'
+import type { ContainerTokens } from '../container-tokens'
 
 export type ChatConversationListTokens = {
-  container: {
-    flex: number,
-    backgroundColor: ColorToken,
-  },
-  header: {
-    paddingVertical: number,
-    paddingHorizontal: number,
-    gap: number,
-  },
-  footer: {
-    paddingVertical: number,
-    paddingHorizontal: number,
-  },
+  container: ContainerTokens,
+  header: ContainerTokens,
+  footer: ContainerTokens,
 }
 
 export type ChatConversationListTokenResolver = ComponentTokenResolver<
-  Record<string, never>,
+  Record<string, unknown>,
   ChatConversationListTokens
 >
 
@@ -27,17 +17,26 @@ export const chatConversationListTokenResolver: ChatConversationListTokenResolve
 
   return {
     container: {
-      flex: 1,
       backgroundColor: color.surface.color,
     },
     header: {
-      paddingVertical: spacing.lg,
-      paddingHorizontal: spacing.lg,
-      gap: shape.padding.xxl,
+      shape: {
+        padding: {
+          vertical: spacing.lg,
+          horizontal: spacing.lg,
+        },
+      },
+      layout: {
+        gap: shape.padding.xxl,
+      },
     },
     footer: {
-      paddingVertical: spacing.md,
-      paddingHorizontal: spacing.lg,
+      shape: {
+        padding: {
+          vertical: spacing.md,
+          horizontal: spacing.lg,
+        },
+      },
     },
   }
 }

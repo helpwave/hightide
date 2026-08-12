@@ -1,3 +1,4 @@
+import { toContainerStyle, toTextStyle } from '../../adapters/style-adapters'
 import type {
   ChatThreadHeaderStyle,
   ChatThreadHeaderSubtitleStyle,
@@ -14,20 +15,20 @@ export const toChatThreadHeaderThemeResolvers: ComponentThemeResolver<ChatThread
   semanticTokens,
   componentTokens,
 }) => {
-  const resolve = () => componentTokens({
+  const resolve = () => componentTokens.chat.threadHeader({
     themeTokens,
     semanticResolvers: semanticTokens,
   })
 
   return {
-    container: createSimpleStyleResolver((): ChatThreadHeaderStyle => ({
-      ...resolve().container,
-    })),
-    title: createSimpleStyleResolver((): ChatThreadHeaderTitleStyle => ({
-      ...resolve().title,
-    })),
-    subtitle: createSimpleStyleResolver((): ChatThreadHeaderSubtitleStyle => ({
-      ...resolve().subtitle,
-    })),
+    container: createSimpleStyleResolver((): ChatThreadHeaderStyle => (
+      toContainerStyle(resolve().container)
+    )),
+    title: createSimpleStyleResolver((): ChatThreadHeaderTitleStyle => (
+      toTextStyle(resolve().title)
+    )),
+    subtitle: createSimpleStyleResolver((): ChatThreadHeaderSubtitleStyle => (
+      toTextStyle(resolve().subtitle)
+    )),
   }
 }

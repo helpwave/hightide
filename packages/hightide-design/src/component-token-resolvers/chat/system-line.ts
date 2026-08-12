@@ -1,10 +1,9 @@
 import type { ColorPairToken } from '../../theme-tokens/theme-tokens-config'
 import type { ComponentTokenResolver } from '../component-token-resolver'
+import type { ContainerTokens } from '../container-tokens'
+import type { IconTokens } from '../icon-tokens'
 import type { TextStyleTokens } from '../text-style-tokens'
-import {
-  resolveAccentColoring,
-  type ChatIconTokens
-} from './shared'
+import { resolveAccentColoring } from './shared'
 
 export type ChatSystemLineComponentResolverProps = {
   overrides: {
@@ -13,15 +12,9 @@ export type ChatSystemLineComponentResolverProps = {
 }
 
 export type ChatSystemLineTokens = {
-  container: {
-    flexDirection: 'row',
-    alignItems: 'center',
-    justifyContent: 'center',
-    alignSelf: 'center',
-    gap: number,
-  },
+  container: ContainerTokens,
   text: TextStyleTokens,
-  icon: ChatIconTokens,
+  icon: IconTokens,
 }
 
 export type ChatSystemLineTokenResolver = ComponentTokenResolver<
@@ -38,11 +31,13 @@ export const chatSystemLineTokenResolver: ChatSystemLineTokenResolver = ({ theme
 
   return {
     container: {
-      flexDirection: 'row',
-      alignItems: 'center',
-      justifyContent: 'center',
-      alignSelf: 'center',
-      gap: shape.padding.md,
+      layout: {
+        direction: 'horizontal',
+        mainAxisAlignment: 'center',
+        crossAxisAligment: 'center',
+        alignSelf: 'center',
+        gap: shape.padding.md,
+      },
     },
     text: {
       ...typography.body.sm,

@@ -1,7 +1,9 @@
 import type { TextStyle, ViewStyle } from 'react-native'
 
 import type {
+  AlignSelfToken,
   AxisAligmentToken,
+  BorderRadiusToken,
   BorderToken,
   ContainerTokens,
   DirectionalToken,
@@ -52,6 +54,43 @@ const toAlignItems = (
   }
 
   return 'center'
+}
+
+const toAlignSelf = (
+  alignment?: AlignSelfToken
+): ViewStyle['alignSelf'] => {
+  if (alignment === undefined) {
+    return undefined
+  }
+
+  if (alignment === 'start') {
+    return 'flex-start'
+  }
+
+  if (alignment === 'end') {
+    return 'flex-end'
+  }
+
+  return alignment
+}
+
+const toBorderRadiusStyle = (
+  borderRadius?: BorderRadiusToken
+): ViewStyle => {
+  if (borderRadius === undefined) {
+    return {}
+  }
+
+  if (borderRadius.type === 'all') {
+    return { borderRadius: borderRadius.value }
+  }
+
+  return {
+    borderTopLeftRadius: borderRadius.topLeft,
+    borderTopRightRadius: borderRadius.topRight,
+    borderBottomLeftRadius: borderRadius.bottomLeft,
+    borderBottomRightRadius: borderRadius.bottomRight,
+  }
 }
 
 const toDirectionalBorderWidths = (
@@ -153,9 +192,11 @@ const toBorderStyle = (border?: BorderToken): ViewStyle => {
 }
 
 export const toContainerStyle = (tokens: ContainerTokens): ViewStyle => ({
+  overflow: tokens.overflow,
   flexDirection: toFlexDirection(tokens.layout?.direction),
   justifyContent: toJustifyContent(tokens.layout?.mainAxisAlignment),
   alignItems: toAlignItems(tokens.layout?.crossAxisAligment),
+  alignSelf: toAlignSelf(tokens.layout?.alignSelf),
   backgroundColor: tokens.backgroundColor,
   opacity: tokens.opacity,
   ...toBorderStyle(tokens.border),
@@ -165,7 +206,7 @@ export const toContainerStyle = (tokens: ContainerTokens): ViewStyle => ({
   minWidth: tokens.size?.minWidth,
   maxHeight: tokens.size?.maxHeight,
   maxWidth: tokens.size?.maxWidth,
-  borderRadius: tokens.shape?.borderRadius,
+  ...toBorderRadiusStyle(tokens.shape?.borderRadius),
   paddingVertical: tokens.shape?.padding?.vertical,
   paddingHorizontal: tokens.shape?.padding?.horizontal,
   marginVertical: tokens.margin?.vertical,
@@ -217,4 +258,7 @@ export const toTextStyle = (tokens: TextStyleTokens): TextStyle => ({
   fontWeight: tokens.fontWeight,
   fontFamily: tokens.fontFamily,
   lineHeight: tokens.lineHeight,
+  textAlign: tokens.textAlign,
+  flex: tokens.flex,
+  flexShrink: tokens.flexShrink,
 })

@@ -120,22 +120,23 @@ export const toMultiSelectThemeResolvers: ComponentThemeResolver<MultiSelectThem
       toTextStyle(resolve(toTriggerState(state)).triggerText)
     )),
     overlay: createSimpleStyleResolver((): SelectOverlayStyle => ({
-      ...resolve().overlay,
+      ...toContainerStyle(resolve().overlay),
+      flex: 1,
     })),
-    menu: createSimpleStyleResolver((): SelectMenuStyle => ({
-      ...resolve().menu,
-    })),
+    menu: createSimpleStyleResolver((): SelectMenuStyle => (
+      toContainerStyle(resolve().menu)
+    )),
     header: createSimpleStyleResolver((): SelectHeaderStyle => (
       toContainerStyle(resolve().header)
     )),
-    option: createStyleResolver((state: MultiSelectOptionState): MultiSelectOptionStyle => ({
-      ...resolve({
+    option: createStyleResolver((state: MultiSelectOptionState): MultiSelectOptionStyle => (
+      toContainerStyle(resolve({
         color: state.color,
         isDisabled: state.isDisabled,
         isSelected: state.isSelected,
         isHighlighted: state.isHighlighted,
-      }).option,
-    })),
+      }).option)
+    )),
     optionText: createStyleResolver((state: MultiSelectOptionState): MultiSelectOptionTextStyle => (
       toTextStyle(resolve({
         color: state.color,
@@ -147,14 +148,14 @@ export const toMultiSelectThemeResolvers: ComponentThemeResolver<MultiSelectThem
     emptyText: createSimpleStyleResolver((): SelectEmptyTextStyle => (
       toTextStyle(resolve().emptyText)
     )),
-    checkbox: createStyleResolver((state: MultiSelectOptionState): MultiSelectCheckboxStyle => ({
-      ...resolve({
+    checkbox: createStyleResolver((state: MultiSelectOptionState): MultiSelectCheckboxStyle => (
+      toContainerStyle(resolve({
         color: state.color,
         isDisabled: state.isDisabled,
         isSelected: state.isSelected,
         isHighlighted: state.isHighlighted,
-      }).checkbox,
-    })),
+      }).checkbox)
+    )),
     checkboxIcon: createValueResolver((state: MultiSelectOptionState): MultiSelectCheckboxIconStyle => {
       const { checkboxIcon } = resolve({
         color: state.color,
@@ -165,7 +166,6 @@ export const toMultiSelectThemeResolvers: ComponentThemeResolver<MultiSelectThem
 
       return {
         color: checkboxIcon.color,
-        visible: checkboxIcon.isVisible,
       }
     }),
   }

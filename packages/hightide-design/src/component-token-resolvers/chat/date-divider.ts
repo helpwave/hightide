@@ -1,5 +1,5 @@
-import type { ColorToken } from '../../primitive-tokens/color'
 import type { ComponentTokenResolver } from '../component-token-resolver'
+import type { ContainerTokens } from '../container-tokens'
 import type { TextStyleTokens } from '../text-style-tokens'
 import {
   pillBorderRadius,
@@ -7,18 +7,12 @@ import {
 } from './shared'
 
 export type ChatDateDividerTokens = {
-  container: {
-    alignSelf: 'center',
-    paddingVertical: number,
-    paddingHorizontal: number,
-    borderRadius: number,
-    backgroundColor: ColorToken,
-  },
+  container: ContainerTokens,
   text: TextStyleTokens,
 }
 
 export type ChatDateDividerTokenResolver = ComponentTokenResolver<
-  Record<string, never>,
+  Record<string, unknown>,
   ChatDateDividerTokens
 >
 
@@ -28,11 +22,17 @@ export const chatDateDividerTokenResolver: ChatDateDividerTokenResolver = ({ the
 
   return {
     container: {
-      alignSelf: 'center',
-      paddingVertical: spacing.sm,
-      paddingHorizontal: spacing.lg,
-      borderRadius: pillBorderRadius,
       backgroundColor: color.surface.color,
+      shape: {
+        borderRadius: { type: 'all', value: pillBorderRadius },
+        padding: {
+          vertical: spacing.sm,
+          horizontal: spacing.lg,
+        },
+      },
+      layout: {
+        alignSelf: 'center',
+      },
     },
     text: {
       ...typography.body.sm,

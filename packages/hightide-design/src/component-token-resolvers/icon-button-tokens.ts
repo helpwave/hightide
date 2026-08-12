@@ -128,7 +128,7 @@ export const iconButtonTokenResolver: IconButtonTokenResolver = ({
         height: layout.size,
       },
       shape: {
-        borderRadius: layout.borderRadius,
+        borderRadius: { type: 'all', value: layout.borderRadius },
       },
       layout: {
         direction: 'horizontal',

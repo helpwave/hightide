@@ -124,22 +124,23 @@ export const toSelectThemeResolvers: ComponentThemeResolver<SelectThemeResolvers
       }
     }),
     overlay: createSimpleStyleResolver((): SelectOverlayStyle => ({
-      ...resolve().overlay,
+      ...toContainerStyle(resolve().overlay),
+      flex: 1,
     })),
-    menu: createSimpleStyleResolver((): SelectMenuStyle => ({
-      ...resolve().menu,
-    })),
+    menu: createSimpleStyleResolver((): SelectMenuStyle => (
+      toContainerStyle(resolve().menu)
+    )),
     header: createSimpleStyleResolver((): SelectHeaderStyle => (
       toContainerStyle(resolve().header)
     )),
-    option: createStyleResolver((state: SelectOptionState): SelectOptionStyle => ({
-      ...resolve({
+    option: createStyleResolver((state: SelectOptionState): SelectOptionStyle => (
+      toContainerStyle(resolve({
         color: state.color,
         isDisabled: state.isDisabled,
         isSelected: state.isSelected,
         isHighlighted: state.isHighlighted,
-      }).option,
-    })),
+      }).option)
+    )),
     optionText: createStyleResolver((state: SelectOptionState): SelectOptionTextStyle => (
       toTextStyle(resolve({
         color: state.color,

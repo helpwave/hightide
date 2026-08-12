@@ -1,16 +1,14 @@
 import { HexColorUtils } from '../../utils/hex'
-import type { ColorToken } from '../../primitive-tokens/color'
 import type { ComponentTokenResolver } from '../component-token-resolver'
+import type { ContainerTokens } from '../container-tokens'
+import type { IconTokens } from '../icon-tokens'
 import type { TextStyleTokens } from '../text-style-tokens'
 import {
   bubbleMaxWidth,
   resolveAlignment,
   resolveDescriptionColor,
   resolveMessageCorners,
-  type ChatCornerRadiusTokens,
-  type ChatIconTokens,
-  type ChatMessageDirection,
-  type ChatAlignment
+  type ChatMessageDirection
 } from './shared'
 
 export type ChatMessageBubbleComponentResolverProps = {
@@ -20,29 +18,13 @@ export type ChatMessageBubbleComponentResolverProps = {
 }
 
 export type ChatMessageBubbleTokens = {
-  container: {
-    maxWidth: number,
-    gap: number,
-    alignSelf: ChatAlignment,
-    alignItems: ChatAlignment,
-  },
-  bubble: ChatCornerRadiusTokens & {
-    paddingVertical: number,
-    paddingHorizontal: number,
-    backgroundColor: ColorToken,
-  },
+  container: ContainerTokens,
+  bubble: ContainerTokens,
   content: TextStyleTokens,
-  timestamp: TextStyleTokens & {
-    marginTop: number,
-    textAlign: 'right',
-  },
-  receipt: {
-    flexDirection: 'row',
-    alignItems: 'center',
-    gap: number,
-  },
+  timestamp: TextStyleTokens,
+  receipt: ContainerTokens,
   receiptText: TextStyleTokens,
-  receiptIcon: ChatIconTokens,
+  receiptIcon: IconTokens,
 }
 
 export type ChatMessageBubbleTokenResolver = ComponentTokenResolver<
@@ -60,16 +42,27 @@ export const chatMessageBubbleTokenResolver: ChatMessageBubbleTokenResolver = ({
 
   return {
     container: {
-      maxWidth: bubbleMaxWidth,
-      gap: spacing.sm,
-      alignSelf: alignment,
-      alignItems: alignment,
+      size: {
+        maxWidth: bubbleMaxWidth,
+      },
+      layout: {
+        gap: spacing.sm,
+        alignSelf: alignment,
+        crossAxisAligment: alignment,
+      },
     },
     bubble: {
-      ...messageCorners,
-      paddingVertical: shape.padding.xxl,
-      paddingHorizontal: spacing.lg,
       backgroundColor: bubbleColors.color,
+      shape: {
+        borderRadius: messageCorners,
+        padding: {
+          vertical: shape.padding.xxl,
+          horizontal: spacing.lg,
+        },
+      },
+      layout: {
+        gap: spacing.sm,
+      },
     },
     content: {
       ...typography.body.md,
@@ -82,13 +75,14 @@ export const chatMessageBubbleTokenResolver: ChatMessageBubbleTokenResolver = ({
       color: isOutgoing
         ? HexColorUtils.hexWithAlpha(color.primary.onColor, 0.75)
         : descriptionColor,
-      marginTop: spacing.sm,
       textAlign: 'right',
     },
     receipt: {
-      flexDirection: 'row',
-      alignItems: 'center',
-      gap: spacing.sm,
+      layout: {
+        direction: 'horizontal',
+        crossAxisAligment: 'center',
+        gap: spacing.sm,
+      },
     },
     receiptText: {
       ...typography.body.sm,

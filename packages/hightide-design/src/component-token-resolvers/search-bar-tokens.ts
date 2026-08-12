@@ -1,6 +1,7 @@
 import type { ColorPairToken } from '../theme-tokens/theme-tokens-config'
 import type { ComponentTokenResolver } from './component-token-resolver'
 import type { ContainerTokens } from './container-tokens'
+import type { IconTokens } from './icon-tokens'
 import {
   inputTokenResolver,
   type InputState,
@@ -20,8 +21,7 @@ export type SearchBarTokens = {
   container: ContainerTokens,
   input: InputTokens,
   iconButton: ContainerTokens,
-  iconButtonColor: ColorPairToken,
-  trailingInset: number,
+  icon: IconTokens,
 }
 
 export type SearchBarTokenResolver = ComponentTokenResolver<
@@ -45,7 +45,6 @@ export const searchBarTokenResolver: SearchBarTokenResolver = ({
     themeTokens,
     size: 'sm',
   })
-  const trailingInset = iconButtonLayout.size + themeTokens.spacing.sm
   const horizontalPadding = input.container.shape?.padding?.horizontal ?? 0
 
   return {
@@ -78,10 +77,8 @@ export const searchBarTokenResolver: SearchBarTokenResolver = ({
         horizontal: themeTokens.spacing.sm,
       },
     },
-    iconButtonColor: {
+    icon: {
       color: themeTokens.color.surface.onColor,
-      onColor: themeTokens.color.surface.color,
     },
-    trailingInset,
   }
 }

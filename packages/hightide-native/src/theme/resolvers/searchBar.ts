@@ -73,13 +73,18 @@ export const toSearchBarThemeResolvers: ComponentThemeResolver<SearchBarThemeRes
       const horizontalPadding = typeof base.paddingHorizontal === 'number'
         ? base.paddingHorizontal
         : 0
+      const iconButtonWidth = typeof tokens.iconButton.size?.width === 'number'
+        ? tokens.iconButton.size.width
+        : 0
+      const iconButtonMargin = tokens.iconButton.margin?.horizontal ?? 0
+      const trailingInset = iconButtonWidth + iconButtonMargin
 
       return {
         ...base,
         ...toTextStyle(text),
         paddingHorizontal: undefined,
         paddingLeft: horizontalPadding,
-        paddingRight: horizontalPadding + tokens.trailingInset,
+        paddingRight: horizontalPadding + trailingInset,
       }
     }),
     placeholder: createStyleResolver((state: SearchBarState): SearchBarPlaceholderStyle => (
@@ -97,8 +102,15 @@ export const toSearchBarThemeResolvers: ComponentThemeResolver<SearchBarThemeRes
         transform: [{ translateY: '-50%' }],
       }
     }),
-    iconButtonColor: createValueResolver((state: SearchBarState): ColorPairToken => (
-      resolve(state).iconButtonColor
-    )),
+    iconButtonColor: createValueResolver((state: SearchBarState): ColorPairToken => {
+      const iconColor = resolve(state).icon.color
+
+      return {
+        color: (iconColor === undefined || iconColor === 'transparent'
+          ? themeTokens.color.surface.onColor
+          : iconColor),
+        onColor: themeTokens.color.surface.color,
+      }
+    }),
   }
 }

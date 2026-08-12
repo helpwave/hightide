@@ -7,22 +7,10 @@ import {
   resolvePressableColoring,
   type SemanticTokenResolvers
 } from '../../semantic-token-resolvers'
+import type { AxisAligmentToken, BorderRadiusToken } from '../container-tokens'
 import type { PressableStateValue } from '../pressable-tokens'
 
 export type ChatMessageDirection = 'incoming' | 'outgoing'
-
-export type ChatAlignment = 'flex-start' | 'flex-end'
-
-export type ChatIconTokens = {
-  color: ColorToken,
-}
-
-export type ChatCornerRadiusTokens = {
-  borderTopLeftRadius: number,
-  borderTopRightRadius: number,
-  borderBottomLeftRadius: number,
-  borderBottomRightRadius: number,
-}
 
 export const pillBorderRadius = 999
 export const bubbleMaxWidth = 280
@@ -101,19 +89,20 @@ export const resolveAccentColoring = ({
 export const resolveMessageCorners = (
   themeTokens: ThemeTokens,
   direction?: ChatMessageDirection
-): ChatCornerRadiusTokens => {
+): BorderRadiusToken => {
   const isOutgoing = direction === 'outgoing'
   const radius = themeTokens.shape.borderRadius.lg
   const corner = themeTokens.shape.borderRadius.xs
 
   return {
-    borderTopLeftRadius: radius,
-    borderTopRightRadius: radius,
-    borderBottomLeftRadius: isOutgoing ? radius : corner,
-    borderBottomRightRadius: isOutgoing ? corner : radius,
+    type: 'physicalCorner',
+    topLeft: radius,
+    topRight: radius,
+    bottomLeft: isOutgoing ? radius : corner,
+    bottomRight: isOutgoing ? corner : radius,
   }
 }
 
-export const resolveAlignment = (direction?: ChatMessageDirection): ChatAlignment => (
-  direction === 'outgoing' ? 'flex-end' : 'flex-start'
+export const resolveAlignment = (direction?: ChatMessageDirection): AxisAligmentToken => (
+  direction === 'outgoing' ? 'end' : 'start'
 )

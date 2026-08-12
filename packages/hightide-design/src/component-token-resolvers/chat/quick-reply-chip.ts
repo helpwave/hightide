@@ -1,5 +1,5 @@
-import type { ColorToken } from '../../primitive-tokens/color'
 import type { ComponentTokenResolver } from '../component-token-resolver'
+import type { ContainerTokens } from '../container-tokens'
 import type { TextStyleTokens } from '../text-style-tokens'
 import {
   pillBorderRadius,
@@ -19,18 +19,7 @@ export type ChatQuickReplyChipComponentResolverProps = {
 }
 
 export type ChatQuickReplyChipTokens = {
-  container: {
-    flexDirection: 'row',
-    alignItems: 'center',
-    alignSelf: 'flex-start',
-    gap: number,
-    paddingVertical: number,
-    paddingHorizontal: number,
-    borderRadius: number,
-    borderWidth: number,
-    borderColor: ColorToken,
-    backgroundColor: ColorToken,
-  },
+  container: ContainerTokens,
   text: TextStyleTokens,
 }
 
@@ -49,16 +38,30 @@ export const chatQuickReplyChipTokenResolver: ChatQuickReplyChipTokenResolver = 
 
   return {
     container: {
-      flexDirection: 'row',
-      alignItems: 'center',
-      alignSelf: 'flex-start',
-      gap: shape.padding.md,
-      paddingVertical: shape.padding.md,
-      paddingHorizontal: spacing.lg,
-      borderRadius: pillBorderRadius,
-      borderWidth: hairline,
-      borderColor: state.isActive ? color.primary.color : fadedBorder,
       backgroundColor: isPressed ? hoverColor : color.surface.color,
+      shape: {
+        borderRadius: { type: 'all', value: pillBorderRadius },
+        padding: {
+          vertical: shape.padding.md,
+          horizontal: spacing.lg,
+        },
+      },
+      border: {
+        width: {
+          type: 'all',
+          value: hairline,
+        },
+        color: {
+          type: 'all',
+          value: state.isActive ? color.primary.color : fadedBorder,
+        },
+      },
+      layout: {
+        direction: 'horizontal',
+        crossAxisAligment: 'center',
+        alignSelf: 'start',
+        gap: shape.padding.md,
+      },
     },
     text: {
       ...typography.body.sm,

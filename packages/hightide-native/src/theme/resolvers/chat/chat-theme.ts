@@ -20,56 +20,56 @@ export const toChatThemeResolvers: ComponentThemeResolver<ChatThemeResolvers> = 
   conversationRow: toChatConversationRowThemeResolvers({
     themeTokens,
     semanticTokens,
-    componentTokens: componentTokens.chat.conversationRow,
+    componentTokens,
   }),
   conversationList: toChatConversationListThemeResolvers({
     themeTokens,
     semanticTokens,
-    componentTokens: componentTokens.chat.conversationList,
+    componentTokens,
   }),
   threadHeader: toChatThreadHeaderThemeResolvers({
     themeTokens,
     semanticTokens,
-    componentTokens: componentTokens.chat.threadHeader,
+    componentTokens,
   }),
   messageList: toChatMessageListThemeResolvers({
     themeTokens,
     semanticTokens,
-    componentTokens: componentTokens.chat.messageList,
+    componentTokens,
   }),
   messageBubble: toChatMessageBubbleThemeResolvers({
     themeTokens,
     semanticTokens,
-    componentTokens: componentTokens.chat.messageBubble,
+    componentTokens,
   }),
   messageCard: toChatMessageCardThemeResolvers({
     themeTokens,
     semanticTokens,
-    componentTokens: componentTokens.chat.messageCard,
+    componentTokens,
   }),
   attachmentCard: toChatAttachmentCardThemeResolvers({
     themeTokens,
     semanticTokens,
-    componentTokens: componentTokens.chat.attachmentCard,
+    componentTokens,
   }),
   systemLine: toChatSystemLineThemeResolvers({
     themeTokens,
     semanticTokens,
-    componentTokens: componentTokens.chat.systemLine,
+    componentTokens,
   }),
   dateDivider: toChatDateDividerThemeResolvers({
     themeTokens,
     semanticTokens,
-    componentTokens: componentTokens.chat.dateDivider,
+    componentTokens,
   }),
   quickReplyChip: toChatQuickReplyChipThemeResolvers({
     themeTokens,
     semanticTokens,
-    componentTokens: componentTokens.chat.quickReplyChip,
+    componentTokens,
   }),
   messageComposer: toChatMessageComposerThemeResolvers({
     themeTokens,
     semanticTokens,
-    componentTokens: componentTokens.chat.messageComposer,
+    componentTokens,
   }),
 })

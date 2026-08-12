@@ -5,11 +5,11 @@ import type {
 
 import type { ColorPairToken } from '@helpwave/hightide-design/theme-tokens'
 
-import type { Color } from '../color'
 import type {
   InteractionState,
   StyleResolverFunction
 } from '../resolver'
+import type { IconStyle } from '../../../icons'
 
 export type ChatMessageDirection = 'incoming' | 'outgoing'
 
@@ -45,10 +45,7 @@ export type ChatMessageBubbleContentStyle = TextStyle
 export type ChatMessageBubbleTimestampStyle = TextStyle
 export type ChatMessageBubbleReceiptStyle = ViewStyle
 export type ChatMessageBubbleReceiptTextStyle = TextStyle
-
-export type ChatMessageBubbleReceiptIconStyle = {
-  color: Color,
-}
+export type ChatMessageBubbleReceiptIconStyle = IconStyle
 
 export type ChatMessageCardState = {
   direction: ChatMessageDirection,
@@ -59,9 +56,7 @@ export type ChatMessageCardStyle = ViewStyle
 export type ChatMessageCardHeaderStyle = ViewStyle
 export type ChatMessageCardIconStyle = ViewStyle
 
-export type ChatMessageCardIconColor = {
-  color: Color,
-}
+export type ChatMessageCardIcon = IconStyle
 
 export type ChatMessageCardTitleStyle = TextStyle
 export type ChatMessageCardSubtitleStyle = TextStyle
@@ -75,9 +70,7 @@ export type ChatAttachmentCardState = {
 export type ChatAttachmentCardStyle = ViewStyle
 export type ChatAttachmentCardIconStyle = ViewStyle
 
-export type ChatAttachmentCardIconColor = {
-  color: Color,
-}
+export type ChatAttachmentCardIconColor = IconStyle
 
 export type ChatAttachmentCardNameStyle = TextStyle
 export type ChatAttachmentCardMetadataStyle = TextStyle
@@ -89,9 +82,7 @@ export type ChatSystemLineState = {
 export type ChatSystemLineStyle = ViewStyle
 export type ChatSystemLineTextStyle = TextStyle
 
-export type ChatSystemLineIconStyle = {
-  color: Color,
-}
+export type ChatSystemLineIconStyle = IconStyle
 
 export type ChatDateDividerStyle = ViewStyle
 export type ChatDateDividerTextStyle = TextStyle
@@ -104,7 +95,7 @@ export type ChatQuickReplyChipStyle = ViewStyle
 export type ChatQuickReplyChipTextStyle = TextStyle
 
 export type ChatMessageComposerStyle = ViewStyle
-export type ChatMessageComposerInputStyle = TextStyle
+export type ChatMessageComposerInputStyle = ViewStyle & TextStyle
 
 export type ChatConversationRowThemeResolvers = {
   container: StyleResolverFunction<ChatConversationRowState, ChatConversationRowStyle>,
@@ -146,7 +137,7 @@ export type ChatMessageCardThemeResolvers = {
   container: StyleResolverFunction<ChatMessageCardState, ChatMessageCardStyle>,
   header: StyleResolverFunction<Record<string, never>, ChatMessageCardHeaderStyle>,
   icon: StyleResolverFunction<ChatMessageCardState, ChatMessageCardIconStyle>,
-  iconColor: StyleResolverFunction<ChatMessageCardState, ChatMessageCardIconColor>,
+  iconColor: StyleResolverFunction<ChatMessageCardState, ChatMessageCardIcon>,
   title: StyleResolverFunction<ChatMessageCardState, ChatMessageCardTitleStyle>,
   subtitle: StyleResolverFunction<Record<string, never>, ChatMessageCardSubtitleStyle>,
   body: StyleResolverFunction<Record<string, never>, ChatMessageCardBodyStyle>,
@@ -180,7 +171,7 @@ export type ChatQuickReplyChipThemeResolvers = {
 export type ChatMessageComposerThemeResolvers = {
   container: StyleResolverFunction<Record<string, never>, ChatMessageComposerStyle>,
   input: StyleResolverFunction<Record<string, never>, ChatMessageComposerInputStyle>,
-  placeholderColor: StyleResolverFunction<Record<string, never>, Color>,
+  placeholderColor: StyleResolverFunction<Record<string, never>, IconStyle>,
 }
 
 export type ChatThemeResolvers = {

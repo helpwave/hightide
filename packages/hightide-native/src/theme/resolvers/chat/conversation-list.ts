@@ -1,3 +1,4 @@
+import { toContainerStyle } from '../../adapters/style-adapters'
 import type {
   ChatConversationListFooterStyle,
   ChatConversationListHeaderStyle,
@@ -14,20 +15,21 @@ export const toChatConversationListThemeResolvers: ComponentThemeResolver<ChatCo
   semanticTokens,
   componentTokens,
 }) => {
-  const resolve = () => componentTokens({
+  const resolve = () => componentTokens.chat.conversationList({
     themeTokens,
-    semanticResolvers: semanticTokens,
+    semanticResolvers: semanticTokens
   })
 
   return {
     container: createSimpleStyleResolver((): ChatConversationListStyle => ({
-      ...resolve().container,
+      ...toContainerStyle(resolve().container),
+      flex: 1,
     })),
-    header: createSimpleStyleResolver((): ChatConversationListHeaderStyle => ({
-      ...resolve().header,
-    })),
-    footer: createSimpleStyleResolver((): ChatConversationListFooterStyle => ({
-      ...resolve().footer,
-    })),
+    header: createSimpleStyleResolver((): ChatConversationListHeaderStyle => (
+      toContainerStyle(resolve().header)
+    )),
+    footer: createSimpleStyleResolver((): ChatConversationListFooterStyle => (
+      toContainerStyle(resolve().footer)
+    )),
   }
 }

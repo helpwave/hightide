@@ -1,5 +1,5 @@
-import type { ColorToken } from '../../primitive-tokens/color'
 import type { ComponentTokenResolver } from '../component-token-resolver'
+import type { ContainerTokens } from '../container-tokens'
 import type { TextStyleTokens } from '../text-style-tokens'
 import {
   composerMaxLines,
@@ -8,31 +8,14 @@ import {
 } from './shared'
 
 export type ChatMessageComposerTokens = {
-  container: {
-    flexDirection: 'row',
-    alignItems: 'flex-end',
-    width: '100%',
-    gap: number,
-    paddingVertical: number,
-    paddingHorizontal: number,
-    backgroundColor: ColorToken,
-    borderTopWidth: number,
-    borderTopColor: ColorToken,
-  },
-  input: TextStyleTokens & {
-    flex: number,
-    minHeight: number,
-    maxHeight: number,
-    paddingVertical: number,
-    paddingHorizontal: number,
-    borderRadius: number,
-    backgroundColor: ColorToken,
-  },
-  placeholderColor: ColorToken,
+  container: ContainerTokens,
+  input: ContainerTokens,
+  text: TextStyleTokens,
+  placeholder: TextStyleTokens,
 }
 
 export type ChatMessageComposerTokenResolver = ComponentTokenResolver<
-  Record<string, never>,
+  Record<string, unknown>,
   ChatMessageComposerTokens
 >
 
@@ -43,27 +26,52 @@ export const chatMessageComposerTokenResolver: ChatMessageComposerTokenResolver 
 
   return {
     container: {
-      flexDirection: 'row',
-      alignItems: 'flex-end',
-      width: '100%',
-      gap: spacing.md,
-      paddingVertical: shape.padding.xxl,
-      paddingHorizontal: spacing.lg,
       backgroundColor: color.surface.color,
-      borderTopWidth: borders.borderWidths.thin,
-      borderTopColor: fadedBorder,
+      size: {
+        width: '100%',
+      },
+      shape: {
+        padding: {
+          vertical: shape.padding.xxl,
+          horizontal: spacing.lg,
+        },
+      },
+      border: {
+        width: {
+          type: 'physicalSide',
+          top: borders.borderWidths.thin,
+        },
+        color: {
+          type: 'physicalSide',
+          top: fadedBorder,
+        },
+      },
+      layout: {
+        direction: 'horizontal',
+        crossAxisAligment: 'end',
+        gap: spacing.md,
+      },
     },
     input: {
-      ...typography.body.md,
-      flex: 1,
-      minHeight: size.md,
-      maxHeight: size.md * composerMaxLines,
-      paddingVertical: shape.padding.xxl,
-      paddingHorizontal: shape.padding.xxl,
-      borderRadius: shape.borderRadius.sm,
       backgroundColor: color.surfaceVariant.color,
+      size: {
+        minHeight: size.md,
+        maxHeight: size.md * composerMaxLines,
+      },
+      shape: {
+        borderRadius: { type: 'all', value: shape.borderRadius.sm },
+        padding: {
+          vertical: shape.padding.xxl,
+          horizontal: shape.padding.xxl,
+        },
+      },
+    },
+    text: {
+      ...typography.body.md,
       color: color.surface.onColor,
     },
-    placeholderColor,
+    placeholder: {
+      color: placeholderColor,
+    },
   }
 }

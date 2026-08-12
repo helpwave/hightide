@@ -1,3 +1,4 @@
+import { toContainerStyle, toTextStyle } from '../../adapters/style-adapters'
 import type {
   ChatConversationRowPreviewStyle,
   ChatConversationRowState,
@@ -21,7 +22,7 @@ export const toChatConversationRowThemeResolvers: ComponentThemeResolver<ChatCon
   semanticTokens,
   componentTokens,
 }) => {
-  const resolve = (state: ChatConversationRowState = {}) => componentTokens({
+  const resolve = (state: ChatConversationRowState = {}) => componentTokens.chat.conversationRow({
     themeTokens,
     semanticResolvers: semanticTokens,
     state: {
@@ -33,24 +34,24 @@ export const toChatConversationRowThemeResolvers: ComponentThemeResolver<ChatCon
   })
 
   return {
-    container: createStyleResolver((state: ChatConversationRowState): ChatConversationRowStyle => ({
-      ...resolve(state).container,
-    })),
-    title: createStyleResolver((state: ChatConversationRowState): ChatConversationRowTitleStyle => ({
-      ...resolve(state).title,
-    })),
-    timestamp: createStyleResolver((state: ChatConversationRowState): ChatConversationRowTimestampStyle => ({
-      ...resolve(state).timestamp,
-    })),
-    preview: createStyleResolver((state: ChatConversationRowState): ChatConversationRowPreviewStyle => ({
-      ...resolve(state).preview,
-    })),
-    unreadBadge: createSimpleStyleResolver((): ChatConversationRowUnreadBadgeStyle => ({
-      ...resolve().unreadBadge,
-    })),
-    unreadBadgeText: createSimpleStyleResolver((): ChatConversationRowUnreadBadgeTextStyle => ({
-      ...resolve().unreadBadgeText,
-    })),
+    container: createStyleResolver((state: ChatConversationRowState): ChatConversationRowStyle => (
+      toContainerStyle(resolve(state).container)
+    )),
+    title: createStyleResolver((state: ChatConversationRowState): ChatConversationRowTitleStyle => (
+      toTextStyle(resolve(state).title)
+    )),
+    timestamp: createStyleResolver((state: ChatConversationRowState): ChatConversationRowTimestampStyle => (
+      toTextStyle(resolve(state).timestamp)
+    )),
+    preview: createStyleResolver((state: ChatConversationRowState): ChatConversationRowPreviewStyle => (
+      toTextStyle(resolve(state).preview)
+    )),
+    unreadBadge: createSimpleStyleResolver((): ChatConversationRowUnreadBadgeStyle => (
+      toContainerStyle(resolve().unreadBadge)
+    )),
+    unreadBadgeText: createSimpleStyleResolver((): ChatConversationRowUnreadBadgeTextStyle => (
+      toTextStyle(resolve().unreadBadgeText)
+    )),
     sentIndicator: createSimpleValueResolver((): ChatMessageBubbleReceiptIconStyle => ({
       color: resolve().sentIndicator.color,
     })),

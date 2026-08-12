@@ -1,6 +1,7 @@
 import { HexColorUtils } from '../../utils/hex'
-import type { ColorToken } from '../../primitive-tokens/color'
 import type { ComponentTokenResolver } from '../component-token-resolver'
+import type { ContainerTokens } from '../container-tokens'
+import type { IconTokens } from '../icon-tokens'
 import type { TextStyleTokens } from '../text-style-tokens'
 import {
   bubbleMaxWidth,
@@ -8,10 +9,7 @@ import {
   resolveDescriptionColor,
   resolveFadedBorder,
   resolveMessageCorners,
-  type ChatCornerRadiusTokens,
-  type ChatIconTokens,
-  type ChatMessageDirection,
-  type ChatAlignment
+  type ChatMessageDirection
 } from './shared'
 
 export type ChatAttachmentCardResolverProps = {
@@ -21,26 +19,9 @@ export type ChatAttachmentCardResolverProps = {
 }
 
 export type ChatAttachmentCardTokens = {
-  container: ChatCornerRadiusTokens & {
-    flexDirection: 'row',
-    alignItems: 'center',
-    gap: number,
-    maxWidth: number,
-    padding: number,
-    backgroundColor: ColorToken,
-    borderWidth: number,
-    borderColor: ColorToken,
-    alignSelf: ChatAlignment,
-  },
-  icon: {
-    alignItems: 'center',
-    justifyContent: 'center',
-    width: number,
-    height: number,
-    borderRadius: number,
-    backgroundColor: ColorToken,
-  },
-  iconColor: ChatIconTokens,
+  container: ContainerTokens,
+  icon: ContainerTokens,
+  iconColor: IconTokens,
   name: TextStyleTokens,
   metadata: TextStyleTokens,
 }
@@ -60,24 +41,47 @@ export const chatAttachmentCardTokenResolver: ChatAttachmentCardTokenResolver = 
 
   return {
     container: {
-      ...messageCorners,
-      flexDirection: 'row',
-      alignItems: 'center',
-      gap: shape.padding.xxl,
-      maxWidth: bubbleMaxWidth,
-      padding: shape.padding.xxl,
       backgroundColor: color.surface.color,
-      borderWidth: hairline,
-      borderColor: fadedBorder,
-      alignSelf: alignment,
+      size: {
+        maxWidth: bubbleMaxWidth,
+      },
+      shape: {
+        borderRadius: messageCorners,
+        padding: {
+          vertical: shape.padding.xxl,
+          horizontal: shape.padding.xxl,
+        },
+      },
+      border: {
+        width: {
+          type: 'all',
+          value: hairline,
+        },
+        color: {
+          type: 'all',
+          value: fadedBorder,
+        },
+      },
+      layout: {
+        direction: 'horizontal',
+        crossAxisAligment: 'center',
+        gap: shape.padding.xxl,
+        alignSelf: alignment,
+      },
     },
     icon: {
-      alignItems: 'center',
-      justifyContent: 'center',
-      width: size.md,
-      height: size.md,
-      borderRadius: shape.borderRadius.sm,
       backgroundColor: HexColorUtils.hexWithAlpha(color.negative.color, 0.2),
+      size: {
+        width: size.md,
+        height: size.md,
+      },
+      shape: {
+        borderRadius: { type: 'all', value: shape.borderRadius.sm },
+      },
+      layout: {
+        mainAxisAlignment: 'center',
+        crossAxisAligment: 'center',
+      },
     },
     iconColor: {
       color: color.negative.color,

@@ -126,7 +126,7 @@ export const switchTokenResolver: SwitchTokenResolver = ({
         height: TRACK_HEIGHT,
       },
       shape: {
-        borderRadius: TRACK_HEIGHT / 2,
+        borderRadius: { type: 'all', value: TRACK_HEIGHT / 2 },
       },
       layout: {
         direction: 'horizontal',
@@ -145,7 +145,7 @@ export const switchTokenResolver: SwitchTokenResolver = ({
         height: thumbSize,
       },
       shape: {
-        borderRadius: thumbSize / 2,
+        borderRadius: { type: 'all', value: thumbSize / 2 },
       },
     },
   }
