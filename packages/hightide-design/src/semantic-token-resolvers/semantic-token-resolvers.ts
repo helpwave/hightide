@@ -5,7 +5,8 @@ import {
 import {
   resolveContainerLayout,
   resolveControlLayout,
-  resolveInsideControlLayout
+  resolveInsideControlLayout,
+  resolveTouchTargetSize
 } from './element-layout'
 import { resolveInputColoring } from './input-coloring'
 import {
@@ -27,6 +28,7 @@ export const hightideSemanticTokenResolvers: SemanticTokenResolvers = {
   pressableStateLayerTint: resolvePressableStateLayerTint,
   inputColoring: resolveInputColoring,
   controlLayout: resolveControlLayout,
+  touchTargetSize: resolveTouchTargetSize,
   containerLayout: resolveContainerLayout,
   insideControlLayout: resolveInsideControlLayout,
   tintedSurface: resolveTintedSurface,

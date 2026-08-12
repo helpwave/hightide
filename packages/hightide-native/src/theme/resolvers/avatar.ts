@@ -1,5 +1,8 @@
-import type { ColorPairToken } from '@helpwave/hightide-design/theme-tokens'
-import type { ComponentSize } from '@helpwave/hightide-design/semantic-token-resolvers'
+import type {
+  ColorPairToken,
+  IconSize
+} from '@helpwave/hightide-design/theme-tokens'
+import type { AvatarTokens } from '@helpwave/hightide-design/component-token-resolvers'
 
 import { toContainerStyle, toTextStyle } from '../adapters/style-adapters'
 import type {
@@ -27,34 +30,124 @@ import {
   type ComponentThemeResolver
 } from '../types/resolver'
 
+const toDesignIconSize = (size?: IconSize | number): IconSize => (
+  typeof size === 'number' ? 'md' : (size ?? 'md')
+)
+
+const withNumericAvatarSize = (
+  tokens: AvatarTokens,
+  size: number,
+  groupCount?: number
+): AvatarTokens => {
+  const borderRadius = size / 2
+  const statusDotSize = Math.round(size / 10 * 4)
+  const visibleCount = Math.min(
+    tokens.group.maxShown,
+    groupCount ?? tokens.group.maxShown
+  )
+  const stackWidth = size * (tokens.group.overlap * Math.max(visibleCount - 1, 0) + 1)
+
+  return {
+    ...tokens,
+    container: {
+      ...tokens.container,
+      size: {
+        width: size,
+        height: size,
+        minWidth: size,
+        minHeight: size,
+        maxWidth: size,
+        maxHeight: size,
+      },
+      shape: {
+        ...tokens.container.shape,
+        borderRadius,
+      },
+    },
+    icon: {
+      ...tokens.icon,
+      size,
+    },
+    withStatus: {
+      container: {
+        ...tokens.withStatus.container,
+        size: {
+          width: size,
+          height: size,
+        },
+      },
+      statusDot: {
+        ...tokens.withStatus.statusDot,
+        size: {
+          width: statusDotSize,
+          height: statusDotSize,
+        },
+        shape: {
+          ...tokens.withStatus.statusDot.shape,
+          borderRadius: statusDotSize / 2,
+        },
+      },
+    },
+    group: {
+      ...tokens.group,
+      container: {
+        ...tokens.group.container,
+        size: {
+          ...tokens.group.container.size,
+          height: size,
+        },
+      },
+      stack: {
+        ...tokens.group.stack,
+        size: {
+          width: stackWidth,
+          height: size,
+        },
+      },
+      moreText: {
+        ...tokens.group.moreText,
+        fontSize: size * 2 / 3,
+      },
+    },
+  }
+}
+
 export const toAvatarThemeResolvers: ComponentThemeResolver<AvatarThemeResolvers> = ({
   themeTokens,
   semanticTokens,
   componentTokens,
 }) => {
   const resolve = (input: {
-    size?: ComponentSize,
+    size?: IconSize | number,
     color?: ColorPairToken,
     status?: AvatarStatus,
     isGrouped?: boolean,
     groupIndex?: number,
     groupCount?: number,
-  } = {}) => componentTokens.avatar({
-    themeTokens,
-    semanticResolvers: semanticTokens,
-    config: {
-      isGrouped: input.isGrouped,
-      groupIndex: input.groupIndex,
-      groupCount: input.groupCount,
-    },
-    overrides: {
-      color: input.color,
-      size: input.size,
-    },
-    state: {
-      status: input.status,
-    },
-  })
+  } = {}) => {
+    const tokens = componentTokens.avatar({
+      themeTokens,
+      semanticResolvers: semanticTokens,
+      config: {
+        isGrouped: input.isGrouped,
+        groupIndex: input.groupIndex,
+        groupCount: input.groupCount,
+      },
+      overrides: {
+        color: input.color,
+        size: toDesignIconSize(input.size),
+      },
+      state: {
+        status: input.status,
+      },
+    })
+
+    if (typeof input.size === 'number') {
+      return withNumericAvatarSize(tokens, input.size, input.groupCount)
+    }
+
+    return tokens
+  }
 
   return {
     container: createStyleResolver((state: AvatarState): AvatarStyle => {
@@ -65,7 +158,9 @@ export const toAvatarThemeResolvers: ComponentThemeResolver<AvatarThemeResolvers
         color: state.color,
       })
       const { container } = tokens
-      const width = container.size?.width
+      const width = typeof container.size?.width === 'number'
+        ? container.size.width
+        : 0
       const overlap = tokens.group.overlap
       const maxShown = tokens.group.maxShown
       const groupIndex = state.groupIndex ?? 0
@@ -74,7 +169,7 @@ export const toAvatarThemeResolvers: ComponentThemeResolver<AvatarThemeResolvers
         ...toContainerStyle(container),
         position: state.isGrouped ? 'absolute' : 'relative',
         overflow: 'hidden',
-        ...(state.isGrouped && width !== undefined ? {
+        ...(state.isGrouped ? {
           left: groupIndex * width * overlap,
           zIndex: maxShown - groupIndex,
         } : {}),
@@ -102,9 +197,9 @@ export const toAvatarThemeResolvers: ComponentThemeResolver<AvatarThemeResolvers
       const { icon } = resolve({ size: state.size, color: state.color })
 
       return {
-        size: icon.size,
-        strokeWidth: icon.strokeWidth,
-        color: icon.color,
+        size: icon.size ?? themeTokens.icongraphy.sizes.md,
+        strokeWidth: icon.strokeWidth ?? themeTokens.icongraphy.strokeWidth,
+        color: icon.color ?? themeTokens.color.primary.onColor,
       }
     }),
     withStatus: {

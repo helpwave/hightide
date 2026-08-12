@@ -1,7 +1,4 @@
-import {
-  forwardRef,
-  type ReactNode
-} from 'react'
+import { forwardRef } from 'react'
 import {
   Pressable,
   View,
@@ -15,21 +12,23 @@ import type { ComponentSize, PressableVariant } from '@helpwave/hightide-design/
 
 import { ContentThemeProvider } from '../../global-contexts/content-theme/ContentThemeProvider'
 import { useTheme } from '../../global-contexts/theme/ThemeContext'
+import type { IconComponent } from '../../icons/types'
 import type {
   ButtonState,
   ButtonStyle,
   ButtonTextStyle
 } from '../../theme/types/components/button'
 import type { StyleOverwrite } from '../../theme/types/resolver'
-import { ThemedText } from '../visualization-and-display/ThemedText'
 import type { Color } from '../../theme/types/color'
+import { ThemedIcon } from '../visualization-and-display/ThemedIcon'
+import { ThemedText } from '../visualization-and-display/ThemedText'
 
 export type ButtonSize = ComponentSize
 
 export type ButtonColor = ColorPairToken
 
 export const ButtonUtil = {
-  sizes: ['sm', 'md', 'lg'] as const satisfies readonly ComponentSize[],
+  sizes: ['xs', 'sm', 'md', 'lg', 'xl'] as const satisfies readonly ComponentSize[],
   variants: ['elevated', 'filled', 'tonal', 'outlined', 'foreground'] as const satisfies readonly PressableVariant[],
 }
 
@@ -37,7 +36,9 @@ export type ButtonProps = Omit<PressableProps, 'children' | 'style'> & {
   size?: ButtonSize,
   color?: ButtonColor,
   variant?: PressableVariant,
-  children?: ReactNode,
+  children: string,
+  leadingIcon?: IconComponent,
+  trailingIcon?: IconComponent,
   style?: StyleProp<ViewStyle>,
   touchTargetStyle?: StyleOverwrite<ButtonState, ButtonStyle>,
   visualContainerStyle?: StyleOverwrite<ButtonState, ButtonStyle>,
@@ -58,6 +59,8 @@ export const Button = forwardRef<React.ComponentRef<typeof Pressable>, ButtonPro
   color,
   variant = 'filled',
   disabled,
+  leadingIcon,
+  trailingIcon,
   style,
   touchTargetStyle,
   visualContainerStyle,
@@ -91,6 +94,7 @@ export const Button = forwardRef<React.ComponentRef<typeof Pressable>, ButtonPro
       {(pressableState) => {
         const state = resolveState(pressableState as PressableInteraction)
         const resolvedText = theme.components.button.text(state, textStyle)
+        const resolvedIcon = theme.components.button.icon(state)
 
         return (
           <View style={theme.components.button.visualContainer(state, visualContainerStyle)}>
@@ -102,9 +106,21 @@ export const Button = forwardRef<React.ComponentRef<typeof Pressable>, ButtonPro
               foregroundColor={resolvedText.color as Color}
               textStyle={resolvedText}
             >
-              {typeof children === 'string' || typeof children === 'number'
-                ? <ThemedText>{children}</ThemedText>
-                : children}
+              {leadingIcon !== undefined && (
+                <ThemedIcon
+                  icon={leadingIcon}
+                  size={resolvedIcon.size}
+                  strokeWidth={resolvedIcon.strokeWidth}
+                />
+              )}
+              <ThemedText>{children}</ThemedText>
+              {trailingIcon !== undefined && (
+                <ThemedIcon
+                  icon={trailingIcon}
+                  size={resolvedIcon.size}
+                  strokeWidth={resolvedIcon.strokeWidth}
+                />
+              )}
             </ContentThemeProvider>
           </View>
         )

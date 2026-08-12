@@ -16,8 +16,10 @@ import {
 import { HightideIconRegistry } from '../../icons/HightideIconRegistry'
 import { ThemedIcon } from './ThemedIcon'
 import { ThemedText } from './ThemedText'
-import type { ColorPairToken } from '@helpwave/hightide-design/theme-tokens'
-import type { ComponentSize } from '@helpwave/hightide-design/semantic-token-resolvers'
+import type {
+  ColorPairToken,
+  IconSize
+} from '@helpwave/hightide-design/theme-tokens'
 
 import { useTheme } from '../../global-contexts/theme/ThemeContext'
 import type {
@@ -36,7 +38,7 @@ import type {
 import { avatarStatuses } from '../../theme/types/components/avatar'
 import type { StyleOverwrite } from '../../theme/types/resolver'
 
-export type AvatarSize = ComponentSize
+export type AvatarSize = IconSize | number
 
 type ImageConfig = {
   avatarUrl: string,
@@ -56,7 +58,7 @@ const DefaultAvatarImage: ComponentType<AvatarImageProps> = ({ alt, ...props }) 
 )
 
 export const AvatarUtil = {
-  sizes: ['sm', 'md', 'lg'] as const satisfies readonly ComponentSize[],
+  sizes: ['sm', 'md', 'lg', 'xl'] as const satisfies readonly IconSize[],
   statuses: avatarStatuses,
 }
 
@@ -67,10 +69,10 @@ export type AvatarProps = Omit<ViewProps, 'children' | 'style'> & {
   color?: ColorPairToken,
   ImageComponent?: ComponentType<AvatarImageProps>,
   style?: StyleProp<ViewStyle>,
-  avatarStyle?: StyleOverwrite<{ size?: ComponentSize, isGrouped?: boolean, groupIndex?: number, color?: ColorPairToken }, AvatarStyle>,
-  imageStyle?: StyleOverwrite<{ size?: ComponentSize, isGrouped?: boolean, groupIndex?: number, color?: ColorPairToken }, AvatarImageStyle>,
-  textStyle?: StyleOverwrite<{ size?: ComponentSize, isGrouped?: boolean, groupIndex?: number, color?: ColorPairToken }, AvatarTextStyle>,
-  iconStyle?: StyleOverwrite<{ size?: ComponentSize, isGrouped?: boolean, groupIndex?: number, color?: ColorPairToken }, AvatarIconStyle>,
+  avatarStyle?: StyleOverwrite<{ size?: AvatarSize, isGrouped?: boolean, groupIndex?: number, color?: ColorPairToken }, AvatarStyle>,
+  imageStyle?: StyleOverwrite<{ size?: AvatarSize, isGrouped?: boolean, groupIndex?: number, color?: ColorPairToken }, AvatarImageStyle>,
+  textStyle?: StyleOverwrite<{ size?: AvatarSize, isGrouped?: boolean, groupIndex?: number, color?: ColorPairToken }, AvatarTextStyle>,
+  iconStyle?: StyleOverwrite<{ size?: AvatarSize, isGrouped?: boolean, groupIndex?: number, color?: ColorPairToken }, AvatarIconStyle>,
   isGrouped?: boolean,
   groupIndex?: number,
 }
@@ -165,8 +167,8 @@ export type AvatarGroupProps = Omit<ViewProps, 'children' | 'style'> & {
   size?: AvatarSize,
   ImageComponent?: ComponentType<AvatarImageProps>,
   style?: StyleProp<ViewStyle>,
-  stackStyle?: StyleOverwrite<{ size?: ComponentSize, count?: number }, AvatarGroupStackStyle>,
-  moreStyle?: StyleOverwrite<{ size?: ComponentSize, count?: number }, AvatarGroupMoreStyle>,
+  stackStyle?: StyleOverwrite<{ size?: AvatarSize, count?: number }, AvatarGroupStackStyle>,
+  moreStyle?: StyleOverwrite<{ size?: AvatarSize, count?: number }, AvatarGroupMoreStyle>,
 }
 
 export const AvatarGroup = ({
@@ -223,8 +225,8 @@ export type { AvatarStatus }
 
 export type AvatarWithStatusProps = AvatarProps & {
   status?: AvatarStatus,
-  containerStyle?: StyleOverwrite<{ size?: ComponentSize, status?: AvatarStatus }, AvatarWithStatusContainerStyle>,
-  statusDotStyle?: StyleOverwrite<{ size?: ComponentSize, status?: AvatarStatus }, AvatarStatusDotStyle>,
+  containerStyle?: StyleOverwrite<{ size?: AvatarSize, status?: AvatarStatus }, AvatarWithStatusContainerStyle>,
+  statusDotStyle?: StyleOverwrite<{ size?: AvatarSize, status?: AvatarStatus }, AvatarStatusDotStyle>,
 }
 
 export const AvatarWithStatus = ({
@@ -258,8 +260,8 @@ type AvatarWithLabelPosition = 'left' | 'right'
 export type AvatarWithLabelProps = AvatarProps & {
   label: ReactNode,
   labelPosition?: AvatarWithLabelPosition,
-  containerStyle?: StyleOverwrite<{ size?: ComponentSize }, AvatarWithLabelContainerStyle>,
-  labelStyle?: StyleOverwrite<{ size?: ComponentSize }, AvatarWithLabelTextStyle>,
+  containerStyle?: StyleOverwrite<{ size?: AvatarSize }, AvatarWithLabelContainerStyle>,
+  labelStyle?: StyleOverwrite<{ size?: AvatarSize }, AvatarWithLabelTextStyle>,
 }
 
 export const AvatarWithLabel = ({

@@ -74,8 +74,7 @@ export const checkboxTokenResolver: CheckboxTokenResolver = ({
     ? color.disabled.color
     : isActive ? accentPair.color : color.surface.color
 
-  // todo replace the md resolver with a touch target size
-  const containerSize = Math.max(element.size, semanticResolvers.controlLayout({ themeTokens , size: 'md' }).size)
+  const containerSize = Math.max(element.size, semanticResolvers.touchTargetSize({ themeTokens }))
 
   return {
     container: {
@@ -89,7 +88,7 @@ export const checkboxTokenResolver: CheckboxTokenResolver = ({
         maxHeight: containerSize,
       },
       shape: {
-        borderRadius: containerSize / 2,
+        borderRadius: overrides.isRounded ? dimension / 2 : themeTokens.shape.borderRadius[size],
       },
       layout: {
         direction: 'horizontal',

@@ -4,12 +4,15 @@ import {
   resolveColoringStyle,
   resolvePressableColoring,
   resolvePressableStateLayerTint,
+  toTypographySize,
   type ComponentSize,
   type PressableVariant
 } from '../semantic-token-resolvers'
 import type { ColorPairToken } from '../theme-tokens/theme-tokens-config'
 import type { ComponentTokenResolver } from './component-token-resolver'
 import type { ContainerTokens } from './container-tokens'
+import { toButtonIconSize } from './icon-size'
+import { iconTokenResolver, type IconTokens } from './icon-tokens'
 import type { TextStyleTokens } from './text-style-tokens'
 import { type PressableState } from './pressable'
 
@@ -28,6 +31,7 @@ export type ButtonTokens = {
   touchTarget: ContainerTokens,
   visualContainer: ContainerTokens,
   stateLayer: ContainerTokens,
+  icon: IconTokens,
   text: TextStyleTokens,
 }
 
@@ -35,8 +39,6 @@ export type ButtonTokenResolver = ComponentTokenResolver<
   ButtonComponentResolverProps,
   ButtonTokens
 >
-
-const touchTargetSize = 44
 
 export const buttonTokenResolver: ButtonTokenResolver = ({
   themeTokens,
@@ -68,10 +70,16 @@ export const buttonTokenResolver: ButtonTokenResolver = ({
   const hasBorder = resolved.border !== 'transparent'
   const hasOutline = resolved.outline !== 'transparent'
   const layout = semanticResolvers.controlLayout({ themeTokens, size })
+  const touchTargetSize = semanticResolvers.touchTargetSize({ themeTokens })
   const insetForBordered = Math.max(layout.inset - layout.borderWidth, 0)
-  const textStyle = themeTokens.typography.label[size]
+  const textStyle = themeTokens.typography.label[toTypographySize(size)]
   const gap = themeTokens.spacing[size]
   const isHovered = state.has('hovered')
+  const iconSizeTokens = iconTokenResolver({
+    themeTokens,
+    semanticResolvers,
+    overrides: { size: toButtonIconSize(size) },
+  })
 
   return {
     touchTarget: {
@@ -130,6 +138,11 @@ export const buttonTokenResolver: ButtonTokenResolver = ({
     },
     stateLayer: {
       backgroundColor: tint,
+    },
+    icon: {
+      size: iconSizeTokens.size,
+      strokeWidth: iconSizeTokens.strokeWidth,
+      color: resolved.foreground,
     },
     text: {
       color: resolved.foreground,

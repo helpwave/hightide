@@ -15,6 +15,7 @@ import type {
   ThemeBordersTokens,
   ThemeColorTokens,
   ThemeElevationTokens,
+  ThemeIcongraphyTokens,
   ThemeMotionTokens,
   ThemeShapeTokens,
   ThemeSizeTokens,
@@ -64,21 +65,21 @@ export const defaultTypographyTokens = (): ThemeTypographyTokens => {
       semibold: fontWeight.semibold,
       bold: fontWeight.bold,
     },
-    display: createTypographyStyle(fontSize['4xl'], Number(lineHeight['4xl']), fontWeight.bold, accentFamily),
+    display: createTypographyStyle(fontSize['4xl'], lineHeight['4xl'], fontWeight.bold, accentFamily),
     heading: {
-      lg: createTypographyStyle(fontSize['2xl'], Number(lineHeight['2xl']), fontWeight.semibold, accentFamily),
-      md: createTypographyStyle(fontSize.lg, Number(lineHeight.lg), fontWeight.semibold, accentFamily),
-      sm: createTypographyStyle(fontSize.base, Number(lineHeight.base), fontWeight.medium, accentFamily),
+      lg: createTypographyStyle(fontSize['2xl'], lineHeight['2xl'], fontWeight.semibold, accentFamily),
+      md: createTypographyStyle(fontSize.lg, lineHeight.lg, fontWeight.semibold, accentFamily),
+      sm: createTypographyStyle(fontSize.base, lineHeight.base, fontWeight.medium, accentFamily),
     },
     body: {
-      lg: createTypographyStyle(fontSize.lg, Number(lineHeight.lg), fontWeight.base, defaultFamily),
-      md: createTypographyStyle(fontSize.base, Number(lineHeight.base), fontWeight.base, defaultFamily),
-      sm: createTypographyStyle(fontSize.sm, Number(lineHeight.sm), fontWeight.base, defaultFamily),
+      lg: createTypographyStyle(fontSize.lg, lineHeight.lg, fontWeight.base, defaultFamily),
+      md: createTypographyStyle(fontSize.base, lineHeight.base, fontWeight.base, defaultFamily),
+      sm: createTypographyStyle(fontSize.sm, lineHeight.sm, fontWeight.base, defaultFamily),
     },
     label: {
-      lg: createTypographyStyle(fontSize.lg, Number(lineHeight.lg), fontWeight.semibold, defaultFamily),
-      md: createTypographyStyle(fontSize.base, Number(lineHeight.base), fontWeight.semibold, defaultFamily),
-      sm: createTypographyStyle(fontSize.sm, Number(lineHeight.sm), fontWeight.medium, defaultFamily),
+      lg: createTypographyStyle(fontSize.lg, lineHeight.lg, fontWeight.semibold, defaultFamily),
+      md: createTypographyStyle(fontSize.base, lineHeight.base, fontWeight.semibold, defaultFamily),
+      sm: createTypographyStyle(fontSize.sm, lineHeight.sm, fontWeight.medium, defaultFamily),
     },
   }
 }
@@ -86,9 +87,19 @@ export const defaultTypographyTokens = (): ThemeTypographyTokens => {
 export const defaultSizeTokens = (): ThemeSizeTokens => ({
   xs: 28,
   sm: 36,
-  md: 44,
-  lg: 52,
-  xl: 60,
+  md: 48,
+  lg: 60,
+  xl: 72,
+})
+
+export const defaultIcongraphyTokens = (): ThemeIcongraphyTokens => ({
+  sizes: {
+    sm: 20,
+    md: 24,
+    lg: 36,
+    xl: 48,
+  },
+  strokeWidth: 2,
 })
 
 export const defaultSpacingTokens = (): ThemeSpacingTokens => ({
@@ -245,9 +256,10 @@ export const buildColorTokens = (params: {
 export const resolveSharedGroups = (
   config: ThemeTokensModeConfig,
   elevationDefaults: ThemeElevationTokens
-): Pick<ThemeTokens, 'decoration' | 'typography' | 'size' | 'spacing' | 'shape' | 'borders' | 'elevation' | 'motion' | 'focusOutline'> => {
+): Pick<ThemeTokens, 'decoration' | 'typography' | 'icongraphy' | 'size' | 'spacing' | 'shape' | 'borders' | 'elevation' | 'motion' | 'focusOutline'> => {
   const appearanceDefaults = defaultAppearancePercentages()
   const focusOutlineDefaults = defaultFocusOutlineToken()
+  const icongraphyDefaults = defaultIcongraphyTokens()
 
   return {
     decoration: {
@@ -258,6 +270,13 @@ export const resolveSharedGroups = (
       },
     },
     typography: mergeTypography(defaultTypographyTokens(), config.typography),
+    icongraphy: {
+      sizes: {
+        ...icongraphyDefaults.sizes,
+        ...config.icongraphy?.sizes,
+      },
+      strokeWidth: config.icongraphy?.strokeWidth ?? icongraphyDefaults.strokeWidth,
+    },
     size: {
       ...defaultSizeTokens(),
       ...config.size,

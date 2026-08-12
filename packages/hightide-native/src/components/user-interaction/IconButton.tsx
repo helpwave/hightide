@@ -1,7 +1,4 @@
-import {
-  forwardRef,
-  type ReactNode
-} from 'react'
+import { forwardRef } from 'react'
 import {
   Pressable,
   View,
@@ -19,6 +16,8 @@ import type {
   IconButtonStyle
 } from '../../theme/types/components/iconButton'
 import type { StyleOverwrite } from '../../theme/types/resolver'
+import type { IconComponent } from '../../icons'
+import { ThemedIcon } from '../visualization-and-display'
 
 export type IconButtonSize = ComponentSize
 
@@ -28,7 +27,7 @@ export type IconButtonProps = Omit<PressableProps, 'children' | 'style'> & {
   size?: IconButtonSize,
   color?: ColorPairToken,
   variant?: IconButtonVariant,
-  children?: ReactNode,
+  icon: IconComponent,
   accessibilityLabel: string,
   style?: StyleProp<ViewStyle>,
   touchTargetStyle?: StyleOverwrite<IconButtonState, IconButtonStyle>,
@@ -44,7 +43,7 @@ type PressableInteraction = {
 }
 
 export const IconButton = forwardRef<React.ComponentRef<typeof Pressable>, IconButtonProps>(function IconButton({
-  children,
+  icon: IconComponent,
   size = 'md',
   color,
   variant = 'filled',
@@ -96,7 +95,7 @@ export const IconButton = forwardRef<React.ComponentRef<typeof Pressable>, IconB
               foregroundColor={resolvedIcon.color ?? theme.colors.primary.color}
               textStyle={resolvedText}
             >
-              {children}
+              <ThemedIcon icon={IconComponent} size={resolvedIcon.size} strokeWidth={resolvedIcon.strokeWidth}/>
             </ContentThemeProvider>
           </View>
         )

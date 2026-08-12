@@ -8,13 +8,13 @@ import {
 import type { ColorPairToken } from '../../theme-tokens/theme-tokens-config'
 import { HexColorUtils } from '../../utils/hex'
 import type { ComponentTokenResolver } from '../component-token-resolver'
-import type { ButtonState } from '../button-tokens'
 import {
   listItemTokenResolver,
   type ListItemTokens
 } from './list-item-tokens'
+import type { PressableState } from '../pressable'
 
-export type ListActionItemState = ButtonState
+export type ListActionItemState = PressableState
 
 export type ListActionComponentResolverProps = {
   overrides?: {

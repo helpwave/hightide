@@ -1,10 +1,10 @@
-import type { ComponentSize } from '../semantic-token-resolvers'
-import type { ComponentTokenResolver } from './component-token-resolver'
 import type { ColorToken } from '../primitive-tokens'
+import type { IconSize } from '../theme-tokens/theme-tokens-config'
+import type { ComponentTokenResolver } from './component-token-resolver'
 
 export type IconComponentResolverProps = {
   overrides: {
-    size?: ComponentSize,
+    size?: IconSize,
   },
 }
 
@@ -21,18 +21,13 @@ export type IconTokenResolver = ComponentTokenResolver<
 
 export const iconTokenResolver: IconTokenResolver = ({
   themeTokens,
-  semanticResolvers,
   overrides,
 }) => {
   const size = overrides.size ?? 'md'
-  const insideControl = semanticResolvers.insideControlLayout({
-    themeTokens,
-    size,
-  })
 
   return {
-    size: insideControl.size - 2 * themeTokens.spacing.xs,
-    strokeWidth: themeTokens.borders.borderWidths.normal,
+    size: themeTokens.icongraphy.sizes[size],
+    strokeWidth: themeTokens.icongraphy.strokeWidth,
     color: themeTokens.color.primary.color,
   }
 }

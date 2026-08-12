@@ -4,37 +4,39 @@ import type {
   ViewStyle
 } from 'react-native'
 
-import type { ColorPairToken } from '@helpwave/hightide-design/theme-tokens'
-import type { ComponentSize } from '@helpwave/hightide-design/semantic-token-resolvers'
+import type {
+  ColorPairToken,
+  IconSize
+} from '@helpwave/hightide-design/theme-tokens'
 import {
   avatarStatuses,
   type AvatarStatus
 } from '@helpwave/hightide-design/component-token-resolvers'
 
-import type { Color } from '../color'
 import type { StyleResolverFunction } from '../resolver'
+import type { IconStyle } from '../../../icons'
 
 export type { AvatarStatus }
 export { avatarStatuses }
 
 export type AvatarState = {
-  size?: ComponentSize,
+  size?: IconSize | number,
   isGrouped?: boolean,
   groupIndex?: number,
   color?: ColorPairToken,
 }
 
 export type AvatarWithStatusState = {
-  size?: ComponentSize,
+  size?: IconSize | number,
   status?: AvatarStatus,
 }
 
 export type AvatarWithLabelState = {
-  size?: ComponentSize,
+  size?: IconSize | number,
 }
 
 export type AvatarGroupState = {
-  size?: ComponentSize,
+  size?: IconSize | number,
   count?: number,
 }
 
@@ -44,11 +46,7 @@ export type AvatarImageStyle = ImageStyle
 
 export type AvatarTextStyle = TextStyle
 
-export type AvatarIconStyle = {
-  size: number,
-  strokeWidth: number,
-  color: Color,
-}
+export type AvatarIconStyle = IconStyle
 
 export type AvatarStatusDotStyle = ViewStyle
 

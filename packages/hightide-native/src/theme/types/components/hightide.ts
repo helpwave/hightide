@@ -1,4 +1,4 @@
-import type { ComponentSize } from '@helpwave/hightide-design/semantic-token-resolvers'
+import type { IconSize } from '@helpwave/hightide-design/theme-tokens'
 import type { IconTokens } from '@helpwave/hightide-design/component-token-resolvers'
 
 import type { AvatarThemeResolvers } from './avatar'
@@ -15,7 +15,7 @@ import type { MultiSelectThemeResolvers } from './multiSelect'
 import type { SelectThemeResolvers } from './select'
 import type { SwitchThemeResolvers } from './switch'
 
-export type IconThemeResolvers = Record<ComponentSize, IconTokens>
+export type IconThemeResolvers = Record<IconSize, IconTokens>
 
 export type HightideComponentThemes = {
   button: ButtonThemeResolvers,

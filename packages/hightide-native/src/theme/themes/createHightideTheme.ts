@@ -76,6 +76,10 @@ const bindSemantics = (themeTokens: ThemeTokens): HightideThemeSemantics => ({
     themeTokens,
     ...parameter,
   }),
+  touchTargetSize: (parameter) => hightideSemanticTokenResolvers.touchTargetSize({
+    themeTokens,
+    ...parameter,
+  }),
   containerLayout: (parameter) => hightideSemanticTokenResolvers.containerLayout({
     themeTokens,
     ...parameter,
@@ -106,6 +110,7 @@ export const createHightideTheme = (themeTokens: ThemeTokens): HightideTheme => 
   colors: themeTokens.color,
   semantics: bindSemantics(themeTokens),
   typography: themeTokens.typography,
+  icongraphy: themeTokens.icongraphy,
   spacing: themeTokens.spacing,
   elements: resolveElementLayouts(themeTokens),
   borderRadius: themeTokens.shape.borderRadius,

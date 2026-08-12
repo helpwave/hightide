@@ -2,7 +2,6 @@ import type { ColorToken, HexColorToken } from '../primitive-tokens/color'
 import type {
   ColorPairToken,
   ThemeLayoutSize,
-  ThemeTypographySize,
   TintStrength
 } from '../theme-tokens/theme-tokens-config'
 import type { ThemeTokens } from '../theme-tokens/theme-tokens'
@@ -77,11 +76,12 @@ export type SemanticTokenResolvers = {
   controlLayout: SemanticTokenResolver<{
     size: ThemeLayoutSize,
   }, ControlElementLayoutToken>,
+  touchTargetSize: SemanticTokenResolver<object, number>,
   containerLayout: SemanticTokenResolver<{
     size: ThemeLayoutSize,
   }, ContainerLayoutToken>,
   insideControlLayout: SemanticTokenResolver<{
-    size: ThemeTypographySize,
+    size: ThemeLayoutSize,
   }, InsideControlElementLayoutToken>,
   tintedSurface: SemanticTokenResolver<{
     tintColor: HexColorToken,

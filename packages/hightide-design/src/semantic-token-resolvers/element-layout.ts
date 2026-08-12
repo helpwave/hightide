@@ -4,8 +4,19 @@ import type {
   ThemeTypographySize
 } from '../theme-tokens/theme-tokens-config'
 
-export const componentSizes = ['sm', 'md', 'lg'] as const
+export const componentSizes = ['xs', 'sm', 'md', 'lg', 'xl'] as const
 export type ComponentSize = typeof componentSizes[number]
+
+export const toTypographySize = (size: ComponentSize): ThemeTypographySize => {
+  switch (size) {
+  case 'xs':
+    return 'sm'
+  case 'xl':
+    return 'lg'
+  default:
+    return size
+  }
+}
 
 export type ControlElementLayoutToken = {
   size: number,
@@ -71,6 +82,15 @@ export const resolveControlLayout = (params: {
   }
 }
 
+export const resolveTouchTargetSize = (params: {
+  themeTokens: ThemeTokens,
+}): number => (
+  resolveControlLayout({
+    themeTokens: params.themeTokens,
+    size: 'md',
+  }).size
+)
+
 export const resolveContainerLayout = (params: {
   themeTokens: ThemeTokens,
   size: ThemeLayoutSize,
@@ -91,10 +111,10 @@ export const resolveContainerLayout = (params: {
 
 export const resolveInsideControlLayout = (params: {
   themeTokens: ThemeTokens,
-  size: ThemeTypographySize,
+  size: ThemeLayoutSize,
 }): InsideControlElementLayoutToken => {
   const { themeTokens, size } = params
-  const smallerKeyMapping = { sm: 'xs', md: 'sm', lg: 'md' } as const
+  const smallerKeyMapping = { xs: 'xs', sm: 'xs', md: 'sm', lg: 'md', xl: 'lg' } as const
   const smallerKey = smallerKeyMapping[size]
   const token = resolveControlLayout({
     themeTokens,

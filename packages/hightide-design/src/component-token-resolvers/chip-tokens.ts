@@ -2,6 +2,7 @@ import {
   mapChipVariant,
   resolveColoringColorVariant,
   resolveColoringStyle,
+  toTypographySize,
   type ChipVariant,
   type ComponentSize
 } from '../semantic-token-resolvers'
@@ -43,9 +44,10 @@ export const chipTokenResolver: ChipTokenResolver = ({
     }),
     style,
   })
+  const typographySize = toTypographySize(size)
   const layout = semanticResolvers.insideControlLayout({ themeTokens, size })
-  const textStyle = themeTokens.typography.label[size]
-  const gap = size === 'sm' ? themeTokens.spacing.xs : themeTokens.spacing.sm
+  const textStyle = themeTokens.typography.label[typographySize]
+  const gap = size === 'sm' || size === 'xs' ? themeTokens.spacing.xs : themeTokens.spacing.sm
   const horizontalPadding = layout.inset + layout.paddingExtension
 
   return {

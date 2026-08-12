@@ -1,7 +1,9 @@
 import type { ColorToken } from '../primitive-tokens/color'
 import type { ThemeTokens } from '../theme-tokens/theme-tokens'
-import type { ColorPairToken } from '../theme-tokens/theme-tokens-config'
-import { type ComponentSize } from '../semantic-token-resolvers'
+import type {
+  ColorPairToken,
+  IconSize
+} from '../theme-tokens/theme-tokens-config'
 import type { ComponentTokenResolver } from './component-token-resolver'
 import type { ContainerTokens } from './container-tokens'
 import type { TextStyleTokens } from './text-style-tokens'
@@ -33,7 +35,7 @@ export type AvatarComponentResolverProps = {
   },
   overrides: {
     color?: ColorPairToken,
-    size?: ComponentSize,
+    size?: IconSize,
   },
   state: AvatarState,
 }
@@ -88,13 +90,12 @@ export const avatarTokenResolver: AvatarTokenResolver = ({
   const status = state.status ?? 'unknown'
   const { color, spacing, borders, typography, elevation } = themeTokens
   const colorPair = overrides.color ?? color.primary
-  const layout = semanticResolvers.insideControlLayout({ themeTokens, size })
   const iconTokens = iconTokenResolver({
     themeTokens,
     semanticResolvers,
     overrides: { size },
   })
-  const dimension = layout.size
+  const dimension = themeTokens.icongraphy.sizes[size]
   const borderRadius = dimension / 2
   const statusDotSize = Math.round(dimension / 10 * 4)
   const raised = elevation.level1
@@ -115,10 +116,11 @@ export const avatarTokenResolver: AvatarTokenResolver = ({
       },
       shape: {
         borderRadius,
-        padding: {
-          vertical: layout.inset,
-          horizontal: layout.inset,
-        },
+      },
+      layout: {
+        direction: 'horizontal',
+        mainAxisAlignment: 'center',
+        crossAxisAligment: 'center',
       },
       ...(config.isGrouped ? {
         decoration: {

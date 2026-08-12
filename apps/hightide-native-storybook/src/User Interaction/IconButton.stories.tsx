@@ -7,8 +7,7 @@ import { action } from 'storybook/actions'
 
 import {
   ButtonUtil,
-  IconButton,
-  ThemedIcon
+  IconButton
 } from '@helpwave/hightide-native/components'
 import { useTheme } from '@helpwave/hightide-native/global-contexts'
 
@@ -40,15 +39,14 @@ const IconButtonDemo = ({
 
   return (
     <IconButton
+      icon={HightideIconRegistry.Minus}
       disabled={disabled}
       color={theme.colors[color]}
       size={size}
       variant={variant}
       accessibilityLabel="Subtract"
       onPress={action('Pressed')}
-    >
-      <ThemedIcon icon={HightideIconRegistry.Minus} />
-    </IconButton>
+    />
   )
 }
 

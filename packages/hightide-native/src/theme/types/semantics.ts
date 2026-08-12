@@ -48,6 +48,7 @@ export type HightideThemeSemantics = {
   controlLayout: BoundSemanticResolver<{
     size: ThemeLayoutSize,
   }, ControlElementLayoutToken>,
+  touchTargetSize: BoundSemanticResolver<object, number>,
   containerLayout: BoundSemanticResolver<{
     size: ThemeLayoutSize,
   }, ContainerLayoutToken>,

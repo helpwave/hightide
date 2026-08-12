@@ -2,6 +2,7 @@ import type { ColorToken } from '../primitive-tokens/color'
 import type { ShadowLayoutToken } from '../primitive-tokens/shadow'
 import type {
   ColorPairToken,
+  IconSize,
   ThemeBorderWidthKey,
   ThemeElevationLevel,
   ThemeLayoutSize,
@@ -67,6 +68,11 @@ export type ThemeTypographyTokens = {
   label: Record<ThemeTypographySize, TypographyStyleToken>,
 }
 
+export type ThemeIcongraphyTokens = {
+  sizes: Record<IconSize, number>,
+  strokeWidth: number,
+}
+
 export type ThemeSizeTokens = Record<ThemeLayoutSize, number>
 
 export type ThemeSpacingTokens = Record<ThemeSpacingSize, number>
@@ -92,6 +98,7 @@ export type ThemeTokens = {
   color: ThemeColorTokens,
   decoration: ThemeDecorationTokens,
   typography: ThemeTypographyTokens,
+  icongraphy: ThemeIcongraphyTokens,
   size: ThemeSizeTokens,
   spacing: ThemeSpacingTokens,
   shape: ThemeShapeTokens,

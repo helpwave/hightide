@@ -4,20 +4,19 @@ import {
 } from 'react-native'
 
 import type { HexColorToken } from '@helpwave/hightide-design/primitive-tokens'
-import type { ComponentSize } from '@helpwave/hightide-design/semantic-token-resolvers'
 import type { Appearance } from '@helpwave/hightide-design/semantic-token-resolvers'
+import type { IconSize } from '@helpwave/hightide-design/theme-tokens'
 
 import type { IconComponent } from '../../icons/types'
 import { useContentTheme } from '../../global-contexts/content-theme/ContentThemeContext'
 import { useTheme } from '../../global-contexts/theme/ThemeContext'
-import type { Color } from '../../theme/types/color'
 
 export type ThemedIconAppearance = Appearance
 
 export type ThemedIconProps = Omit<ViewProps, 'children'> & {
   icon: IconComponent,
-  size?: ComponentSize | number,
-  color?: Color,
+  size?: IconSize | number,
+  color?: string,
   strokeWidth?: number,
   appearance?: ThemedIconAppearance,
 }
@@ -65,7 +64,7 @@ export const ThemedIcon = ({
     >
       <Glyph
         size={iconToken.size}
-        strokeWidth={iconToken.strokeWidth}
+        strokeWidth={strokeWidth ?? iconToken.strokeWidth}
         color={resolvedColor}
       />
     </View>

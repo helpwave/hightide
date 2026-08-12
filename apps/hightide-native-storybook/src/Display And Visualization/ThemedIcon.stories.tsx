@@ -2,25 +2,22 @@ import type {
   Meta,
   StoryObj
 } from '@storybook/react-native'
-import { View } from 'react-native'
 import { action } from 'storybook/actions'
 
 import { HightideIconRegistry } from '@helpwave/hightide-native/icons'
 import {
   ThemedIcon,
-  ThemedText,
   Button,
   ButtonUtil
 } from '@helpwave/hightide-native/components'
 import { useTheme } from '@helpwave/hightide-native/global-contexts'
-import type { ButtonState } from '@helpwave/hightide-native/theme'
 
 import {
   type ColorPairKey,
   StorybookHelper
 } from '../helper'
 
-const iconSizes = ['sm', 'md', 'lg'] as const
+const iconSizes = ['sm', 'md', 'lg', 'xl'] as const
 const iconAppearances = ['normal', 'subtle', 'faded'] as const
 
 const meta = {
@@ -76,40 +73,27 @@ export const themedIcon: Story = {
 type IconInButtonArgs = {
   size: typeof ButtonUtil.sizes[number],
   color: ColorPairKey,
-  coloringStyle: typeof ButtonUtil.coloringStyles[number],
+  variant: typeof ButtonUtil.variants[number],
   label: string,
 }
 
 const IconInButtonDemo = ({
   size,
   color,
-  coloringStyle,
+  variant,
   label,
 }: IconInButtonArgs) => {
   const { theme } = useTheme()
-  const state: ButtonState = {
-    size,
-    color: theme.colors[color],
-    coloringStyle,
-  }
-  const textStyle = theme.components.button.text(state)
-  const iconColor = typeof textStyle.color === 'string' ? textStyle.color : undefined
 
   return (
     <Button
       size={size}
       color={theme.colors[color]}
-      coloringStyle={coloringStyle}
+      variant={variant}
+      leadingIcon={HightideIconRegistry.Plus}
       onPress={action('Pressed')}
     >
-      <View style={{ flexDirection: 'row', alignItems: 'center', gap: 8 }}>
-        <ThemedIcon
-          icon={HightideIconRegistry.Plus}
-          size={size}
-          color={iconColor}
-        />
-        <ThemedText style={textStyle}>{label}</ThemedText>
-      </View>
+      {label}
     </Button>
   )
 }
@@ -121,9 +105,9 @@ export const iconInButton: StoryObj<IconInButtonArgs> = {
       options: ButtonUtil.sizes,
     },
     color: StorybookHelper.colorPairSelect,
-    coloringStyle: {
+    variant: {
       control: 'select',
-      options: ButtonUtil.coloringStyles,
+      options: ButtonUtil.variants,
     },
     label: {
       control: 'text',
@@ -132,7 +116,7 @@ export const iconInButton: StoryObj<IconInButtonArgs> = {
   args: {
     size: 'md',
     color: 'primary',
-    coloringStyle: 'filled',
+    variant: 'filled',
     label: 'Add',
   },
   render: (args) => <IconInButtonDemo {...args} />,

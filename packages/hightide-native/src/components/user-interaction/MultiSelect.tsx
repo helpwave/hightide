@@ -125,13 +125,13 @@ export const MultiSelect = ({
           ? (
             <View style={{ flexDirection: 'row', flexWrap: 'wrap', gap: 6, flex: 1 }}>
               {selectedOptions.map((option) => (
-                <Chip key={option.id} size="sm" color={color} variant="tonal">
+                <Chip key={option.id} size="md" color={color} variant="tonal">
                   <ThemedText>{option.label ?? option.id}</ThemedText>
                   {!state.isReadonly && (
                     <View
                       style={{
                         position: 'relative',
-                        width: theme.elements.container.xs.size,
+                        width: theme.icongraphy.sizes.sm,
                       }}
                     >
                       <IconButton
@@ -150,9 +150,8 @@ export const MultiSelect = ({
                             { translateY: '-50%' },
                           ],
                         }}
-                      >
-                        <ThemedIcon icon={HightideIconRegistry.X} />
-                      </IconButton>
+                        icon={HightideIconRegistry.X}
+                      />
                     </View>
                   )}
                 </Chip>
@@ -207,7 +206,6 @@ export const MultiSelect = ({
                     label={item.label ?? item.id}
                     color={optionColor}
                     disabled={item.disabled}
-                    isHighlighted={isHighlighted}
                     onPress={() => multiSelect.toggleSelection(item.id)}
                     leading={(
                       <View style={multiSelectTheme.checkbox(optionState)}>

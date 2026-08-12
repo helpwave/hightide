@@ -6,6 +6,7 @@ import { action } from 'storybook/actions'
 
 import { Button, ButtonUtil } from '@helpwave/hightide-native/components'
 import { useTheme } from '@helpwave/hightide-native/global-contexts'
+import { HightideIconRegistry } from '@helpwave/hightide-native/icons'
 
 import {
   type ColorPairKey,
@@ -24,6 +25,8 @@ type ButtonArgs = {
   color: ColorPairKey,
   size: typeof ButtonUtil.sizes[number],
   variant: typeof ButtonUtil.variants[number],
+  leadingIcon: boolean,
+  trailingIcon: boolean,
 }
 
 const ButtonDemo = ({
@@ -32,6 +35,8 @@ const ButtonDemo = ({
   color,
   size,
   variant,
+  leadingIcon,
+  trailingIcon,
 }: ButtonArgs) => {
   const { theme } = useTheme()
 
@@ -41,6 +46,8 @@ const ButtonDemo = ({
       color={theme.colors[color]}
       size={size}
       variant={variant}
+      leadingIcon={leadingIcon ? HightideIconRegistry.Plus : undefined}
+      trailingIcon={trailingIcon ? HightideIconRegistry.ChevronRight : undefined}
       onPress={action('Pressed')}
     >
       {label}
@@ -62,6 +69,12 @@ export const button: StoryObj<ButtonArgs> = {
       control: 'select',
       options: ButtonUtil.variants,
     },
+    leadingIcon: {
+      control: 'boolean',
+    },
+    trailingIcon: {
+      control: 'boolean',
+    },
   },
   args: {
     label: 'Test',
@@ -69,6 +82,8 @@ export const button: StoryObj<ButtonArgs> = {
     color: 'primary',
     size: 'md',
     variant: 'filled',
+    leadingIcon: false,
+    trailingIcon: false,
   },
   render: (args) => <ButtonDemo {...args} />,
 }

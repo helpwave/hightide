@@ -21,6 +21,7 @@ export type TintStrength = keyof TintConfig
 export type ThemeLayoutSize = 'xs' | 'sm' | 'md' | 'lg' | 'xl'
 export type ThemeSpacingSize = 'xxs' | 'xs' | 'sm' | 'md' | 'lg' | 'xl' | 'xxl'
 export type ThemeTypographySize = 'sm' | 'md' | 'lg'
+export type IconSize = 'sm' | 'md' | 'lg' | 'xl'
 export type ThemeBorderWidthKey = 'thin' | 'normal' | 'thick'
 export type ThemeElevationLevel = 'level1' | 'level2' | 'level3' | 'level4' | 'level5'
 export type ThemeMotionDurationKey = 'fast' | 'normal' | 'slow'
@@ -68,6 +69,10 @@ export type ThemeTokensConfig = {
     },
   },
   typography?: ThemeTokensTypographyConfig,
+  icongraphy?: {
+    sizes?: Partial<Record<IconSize, number>>,
+    strokeWidth?: number,
+  },
   size?: Partial<Record<ThemeLayoutSize, number>>,
   spacing?: Partial<Record<ThemeSpacingSize, number>>,
   shape?: {
