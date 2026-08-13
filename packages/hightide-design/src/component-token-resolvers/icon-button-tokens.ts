@@ -57,7 +57,9 @@ export const iconButtonTokenResolver: IconButtonTokenResolver = ({
   const variant = overrides.variant ?? 'filled'
   const { colorVariant, style, elevated } = mapIconButtonVariant(variant)
   const coloring = resolveColoringStyle({
+    themeTokens,
     coloring: resolveColoringColorVariant({
+      themeTokens,
       colorPair: overrides.color ?? themeTokens.color.primary,
       variant: colorVariant,
     }),

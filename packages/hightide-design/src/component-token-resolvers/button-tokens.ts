@@ -58,7 +58,9 @@ export const buttonTokenResolver: ButtonTokenResolver = ({
   const variant = overrides.variant ?? 'filled'
   const { colorVariant, style, elevated } = mapButtonVariant(variant)
   const coloring = resolveColoringStyle({
+    themeTokens,
     coloring: resolveColoringColorVariant({
+      themeTokens,
       colorPair: overrides.color ?? themeTokens.color.primary,
       variant: colorVariant,
     }),

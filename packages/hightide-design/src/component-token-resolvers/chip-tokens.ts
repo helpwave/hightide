@@ -38,7 +38,9 @@ export const chipTokenResolver: ChipTokenResolver = ({
   const variant = overrides.variant ?? 'filled'
   const { colorVariant, style } = mapChipVariant(variant)
   const coloring = resolveColoringStyle({
+    themeTokens,
     coloring: resolveColoringColorVariant({
+      themeTokens,
       colorPair: overrides.color ?? themeTokens.color.primary,
       variant: colorVariant,
     }),

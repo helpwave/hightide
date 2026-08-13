@@ -85,7 +85,9 @@ export const pressableTokenResolver: PressableTokenResolver = ({
       }
   )
   const coloring = resolveColoringStyle({
+    themeTokens,
     coloring: resolveColoringColorVariant({
+      themeTokens,
       colorPair,
       variant: coloringColorVariant,
     }),

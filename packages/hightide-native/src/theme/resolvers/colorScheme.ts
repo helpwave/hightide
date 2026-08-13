@@ -66,7 +66,9 @@ export const resolveColoringStyles = (
 ): ResolvedColoringStyles => {
   const { colorVariant, style } = mapButtonVariant(variant)
   const coloring = resolveColoringStyle({
+    themeTokens,
     coloring: resolveColoringColorVariant({
+      themeTokens,
       colorPair,
       variant: colorVariant,
     }),

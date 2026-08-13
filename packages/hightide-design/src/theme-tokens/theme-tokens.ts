@@ -44,6 +44,17 @@ export type ThemeAppearancePercentages = {
   faded: number,
 }
 
+export type ColoringConfigTokens = {
+  tonal: {
+    color: number,
+    onColor: number,
+  },
+  transparent: {
+    color: number,
+    onColor: number,
+  },
+}
+
 export type ThemeDecorationTokens = {
   appearancePercentages: ThemeAppearancePercentages,
 }
@@ -106,4 +117,5 @@ export type ThemeTokens = {
   elevation: ThemeElevationTokens,
   motion: ThemeMotionTokens,
   focusOutline: OutlineToken,
+  coloring: ColoringConfigTokens,
 }

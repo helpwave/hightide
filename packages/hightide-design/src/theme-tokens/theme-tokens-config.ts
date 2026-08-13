@@ -16,6 +16,17 @@ export type TintConfig = {
   strong: number,
 }
 
+export type ColoringConfig = {
+  tonal?: {
+    color: number,
+    onColor: number,
+  },
+  transparent?: {
+    color: number,
+    onColor: number,
+  },
+}
+
 export type TintStrength = keyof TintConfig
 
 export type ThemeLayoutSize = 'xs' | 'sm' | 'md' | 'lg' | 'xl'
@@ -87,6 +98,7 @@ export type ThemeTokensConfig = {
     durations?: Partial<Record<ThemeMotionDurationKey, number>>,
   },
   focusOutline?: OutlineToken,
+  coloring?: ColoringConfig,
 }
 
 export type ThemeTokensModeConfig = Omit<ThemeTokensConfig, 'themeMode'>

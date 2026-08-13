@@ -13,7 +13,6 @@ import {
 import { useControlledState } from '@helpwave/hightide-utils/hooks'
 
 import { HightideIconRegistry } from '../../icons/HightideIconRegistry'
-import { ThemedIcon } from '../visualization-and-display/ThemedIcon'
 import { IconButton } from '../user-interaction/IconButton'
 import { useTheme } from '../../global-contexts/theme/ThemeContext'
 import type {
@@ -93,7 +92,7 @@ export const ChatMessageComposer = ({
         value={value ?? ''}
         onChangeText={setValue}
         placeholder={placeholder}
-        placeholderTextColor={placeholderColor}
+        placeholderTextColor={placeholderColor.color}
         editable={!disabled}
         multiline
         style={resolvedInputStyle}
@@ -102,6 +101,7 @@ export const ChatMessageComposer = ({
       />
       {trailing}
       <IconButton
+        icon={HightideIconRegistry.SendHorizontal}
         accessibilityLabel={sendLabel}
         variant="filled"
         disabled={disabled || !(value ?? '').trim()}
@@ -109,9 +109,7 @@ export const ChatMessageComposer = ({
         onPress={send}
         visualContainerStyle={(prev) => ({ ...prev, borderRadius: 999 })}
         stateLayerStyle={(prev) => ({ ...prev, borderRadius: 999 })}
-      >
-        <ThemedIcon icon={HightideIconRegistry.SendHorizontal} />
-      </IconButton>
+      />
     </View>
   )
 }

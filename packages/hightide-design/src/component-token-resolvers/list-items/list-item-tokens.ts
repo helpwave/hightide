@@ -47,7 +47,9 @@ export const listItemTokenResolver: ListItemTokenResolver = ({
 
   const tonal = overrides?.color !== undefined
     ? resolveColoringStyle({
+      themeTokens,
       coloring: resolveColoringColorVariant({
+        themeTokens,
         colorPair: overrides.color,
         variant: 'tonal',
       }),

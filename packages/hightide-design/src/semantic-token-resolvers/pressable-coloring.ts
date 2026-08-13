@@ -38,7 +38,9 @@ export const createColoringProperty = (
       {
         condition: new Set(['disabled']),
         value: resolveColoringStyle({
+          themeTokens,
           coloring: resolveColoringColorVariant({
+            themeTokens,
             colorPair: disabled,
             variant,
           }),

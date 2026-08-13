@@ -49,7 +49,9 @@ export const resolveHoverColor = ({
   resolvePressableColoring({
     themeTokens,
     coloring: resolveColoringStyle({
+      themeTokens,
       coloring: resolveColoringColorVariant({
+        themeTokens,
         colorPair: themeTokens.color.surface,
         variant: 'normal',
       }),
@@ -70,14 +72,18 @@ export const resolveAccentColoring = ({
   return {
     accentPair,
     accentTonal: resolveColoringStyle({
+      themeTokens,
       coloring: resolveColoringColorVariant({
+        themeTokens,
         colorPair: accentPair,
         variant: 'tonal',
       }),
       style: 'filled',
     }),
     accentText: resolveColoringStyle({
+      themeTokens,
       coloring: resolveColoringColorVariant({
+        themeTokens,
         colorPair: accentPair,
         variant: 'normal',
       }),

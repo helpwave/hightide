@@ -90,7 +90,9 @@ export const multiSelectTokenResolver: MultiSelectTokenResolver = ({
   const hoverColor = resolvePressableColoring({
     themeTokens,
     coloring: resolveColoringStyle({
+      themeTokens,
       coloring: resolveColoringColorVariant({
+        themeTokens,
         colorPair: themeTokens.color.surface,
         variant: 'normal',
       }),

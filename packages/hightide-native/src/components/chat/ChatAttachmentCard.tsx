@@ -100,13 +100,12 @@ export const ChatAttachmentCard = ({
       </View>
       {onDownload && (
         <IconButton
+          icon={HightideIconRegistry.Download}
           accessibilityLabel={downloadLabel}
           size="sm"
           variant="foreground"
           onPress={onDownload}
-        >
-          <ThemedIcon icon={HightideIconRegistry.Download} />
-        </IconButton>
+        />
       )}
     </View>
   )

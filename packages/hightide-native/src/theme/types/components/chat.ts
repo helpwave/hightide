@@ -171,7 +171,7 @@ export type ChatQuickReplyChipThemeResolvers = {
 export type ChatMessageComposerThemeResolvers = {
   container: StyleResolverFunction<Record<string, never>, ChatMessageComposerStyle>,
   input: StyleResolverFunction<Record<string, never>, ChatMessageComposerInputStyle>,
-  placeholderColor: StyleResolverFunction<Record<string, never>, IconStyle>,
+  placeholderColor: StyleResolverFunction<Record<string, never>, TextStyle>,
 }
 
 export type ChatThemeResolvers = {

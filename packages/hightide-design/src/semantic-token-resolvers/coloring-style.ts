@@ -13,13 +13,14 @@ import type {
 } from './types'
 
 export const resolveColoringColorVariant = (params: {
-  themeTokens?: ThemeTokens,
+  themeTokens: ThemeTokens,
   colorPair: ColorPairToken,
   variant: ColoringColorVariant,
 }): ColoringColorTokens => {
-  const { color, onColor } = params.colorPair
+  const { themeTokens, variant, colorPair } = params
+  const { color, onColor } = colorPair
 
-  switch (params.variant) {
+  switch (variant) {
   case 'normal':
     return {
       color,
@@ -28,21 +29,21 @@ export const resolveColoringColorVariant = (params: {
     }
   case 'tonal':
     return {
-      color: OKLCHUtils.changeLightness(color, 0.95),
-      onColor: OKLCHUtils.changeLightness(color, 0.2),
+      color: OKLCHUtils.changeLightness(color, themeTokens.coloring.tonal.color),
+      onColor: OKLCHUtils.changeLightness(color, themeTokens.coloring.tonal.onColor),
       accent: color,
     }
   case 'transparent':
     return {
-      color: HexColorUtils.hexWithAlpha(color, 0.2),
-      onColor,
+      color: HexColorUtils.hexWithAlpha(color, themeTokens.coloring.transparent.color),
+      onColor: HexColorUtils.hexWithAlpha(color, themeTokens.coloring.transparent.onColor),
       accent: color,
     }
   }
 }
 
 export const resolveColoringStyle = (params: {
-  themeTokens?: ThemeTokens,
+  themeTokens: ThemeTokens,
   coloring: ColoringColorTokens,
   style: ColoringStyle,
 }): ColoringToken => {

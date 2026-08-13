@@ -38,7 +38,9 @@ export const listActionTokenResolver: ListActionTokenResolver = ({
   const variant = hasColor ? 'tonal' : 'foreground'
   const { colorVariant, style } = mapButtonVariant(variant)
   const coloring = resolveColoringStyle({
+    themeTokens,
     coloring: resolveColoringColorVariant({
+      themeTokens,
       colorPair: overrides?.color ?? {
         color: themeTokens.color.surface.onColor,
         onColor: themeTokens.color.surface.color,
