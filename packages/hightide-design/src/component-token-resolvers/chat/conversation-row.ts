@@ -1,15 +1,20 @@
+import { resolvePressableStateLayerTint } from '../../semantic-token-resolvers'
+import { HexColorUtils } from '../../utils/hex'
 import type { ComponentTokenResolver } from '../component-token-resolver'
 import type { ContainerTokens } from '../container-tokens'
 import type { IconTokens } from '../icon-tokens'
+import type { PressableStateValue } from '../pressable-tokens'
 import type { TextStyleTokens } from '../text-style-tokens'
 import {
   pillBorderRadius,
-  resolveDescriptionColor,
-  resolveHoverColor
+  resolveDescriptionColor
 } from './shared'
 
 export type ChatConversationRowState = {
   isPressed?: boolean,
+  isHovered?: boolean,
+  isFocused?: boolean,
+  isFocusVisible?: boolean,
   isDisabled?: boolean,
   isUnread?: boolean,
   isSelected?: boolean,
@@ -34,17 +39,45 @@ export type ChatConversationRowTokenResolver = ComponentTokenResolver<
   ChatConversationRowTokens
 >
 
+const toPressableStates = (state: ChatConversationRowState): ReadonlySet<PressableStateValue> => {
+  const active = new Set<PressableStateValue>()
+
+  if (state.isDisabled) {
+    active.add('disabled')
+  }
+  if (state.isFocused) {
+    active.add('focused')
+  }
+  if (state.isFocusVisible) {
+    active.add('focusVisible')
+  }
+  if (state.isHovered) {
+    active.add('hovered')
+  }
+  if (state.isPressed) {
+    active.add('pressed')
+  }
+
+  return active
+}
+
 export const chatConversationRowTokenResolver: ChatConversationRowTokenResolver = ({ themeTokens, semanticResolvers, state }) => {
   const { color, spacing, shape, borders, typography } = themeTokens
   const descriptionColor = resolveDescriptionColor({ themeTokens, semanticResolvers })
-  const hoverColor = resolveHoverColor({ themeTokens })
-  const isPressed = !!state.isPressed && !state.isDisabled
+  const baseBackground = state.isSelected ? color.background.color : 'transparent'
+  const tint = resolvePressableStateLayerTint({
+    themeTokens,
+    states: toPressableStates(state),
+    color: color.surface.onColor,
+  })
+  const backgroundColor = HexColorUtils.blend(
+    baseBackground === 'transparent' ? '#FFFFFF00' : baseBackground,
+    tint === 'transparent' ? '#FFFFFF00' : tint
+  )
 
   return {
     container: {
-      backgroundColor: state.isSelected
-        ? color.background.color
-        : isPressed ? hoverColor : 'transparent',
+      backgroundColor,
       size: {
         width: '100%',
       },

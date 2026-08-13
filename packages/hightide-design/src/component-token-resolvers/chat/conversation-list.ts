@@ -18,6 +18,9 @@ export const chatConversationListTokenResolver: ChatConversationListTokenResolve
   return {
     container: {
       backgroundColor: color.surface.color,
+      layout: {
+        direction: 'vertical'
+      }
     },
     header: {
       shape: {

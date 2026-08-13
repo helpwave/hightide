@@ -21,30 +21,36 @@ export type BorderRadiusToken = {
   bottomLeft?: number,
   bottomRight?: number,
 }
-export type DirectionalToken<T> = {
+
+export type PhysicalAxisToken<T> = {
   type: 'physicalAxis',
   horizontal?: T,
   vertical?: T,
-} | {
+}
+export type PhysicalSideToken<T> = {
   type: 'physicalSide',
   top?: T,
   right?: T,
   bottom?: T,
   left?: T,
-} | {
+}
+export type AllToken<T> = {
   type: 'all',
   value?: T,
-} | {
+}
+export type LogicalAxisToken<T> = {
   type: 'logicalAxis',
   inline?: T,
   block?: T,
-} | {
+}
+export type LogicalSideToken<T> ={
   type: 'logicalSide',
   inlineStart?: T,
   inlineEnd?: T,
   blockStart?: T,
   blockEnd?: T,
 }
+export type DirectionalToken<T> = PhysicalAxisToken<T> | PhysicalSideToken<T> | AllToken<T> | LogicalAxisToken<T>  | LogicalSideToken<T>
 export type { OutlineStyle, OutlineToken }
 export type BorderStyleToken = 'dotted' | 'dashed' | 'solid'
 export type BorderToken = {
@@ -52,6 +58,8 @@ export type BorderToken = {
   color?: DirectionalToken<ColorToken>,
   style?: BorderStyleToken,
 }
+export type PaddingToken = DirectionalToken<number>
+export type MarginToken = DirectionalToken<number>
 
 export type ContainerTokens = {
   backgroundColor?: ColorToken,

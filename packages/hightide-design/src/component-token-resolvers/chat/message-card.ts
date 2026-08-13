@@ -5,7 +5,6 @@ import type { IconTokens } from '../icon-tokens'
 import type { TextStyleTokens } from '../text-style-tokens'
 import {
   messageCardMaxWidth,
-  messageCardWidth,
   resolveAccentColoring,
   resolveAlignment,
   resolveDescriptionColor,
@@ -56,11 +55,14 @@ export const chatMessageCardTokenResolver: ChatMessageCardTokenResolver = ({ the
       backgroundColor: color.surface.color,
       overflow: 'hidden',
       size: {
-        width: messageCardWidth,
         maxWidth: messageCardMaxWidth,
       },
       shape: {
         borderRadius: messageCorners,
+        padding: {
+          horizontal: shape.padding.md,
+          vertical: shape.padding.md,
+        }
       },
       border: {
         width: {
@@ -73,16 +75,11 @@ export const chatMessageCardTokenResolver: ChatMessageCardTokenResolver = ({ the
         },
       },
       layout: {
+        direction: 'vertical',
         alignSelf: alignment,
       },
     },
     header: {
-      shape: {
-        padding: {
-          vertical: shape.padding.xxl,
-          horizontal: spacing.lg,
-        },
-      },
       border: {
         width: {
           type: 'physicalSide',
@@ -126,26 +123,16 @@ export const chatMessageCardTokenResolver: ChatMessageCardTokenResolver = ({ the
       color: descriptionColor,
     },
     body: {
-      shape: {
-        padding: {
-          vertical: shape.padding.xxl,
-          horizontal: spacing.lg,
-        },
-      },
       layout: {
         gap: spacing.sm,
+        direction: 'vertical',
+        crossAxisAligment: 'start',
       },
     },
     actions: {
-      shape: {
-        padding: {
-          vertical: spacing.lg,
-          horizontal: spacing.lg,
-        },
-      },
       layout: {
         direction: 'horizontal',
-        gap: shape.padding.xl,
+        gap: spacing.md,
       },
     },
   }

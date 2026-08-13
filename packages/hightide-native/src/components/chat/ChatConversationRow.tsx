@@ -112,7 +112,7 @@ export const ChatConversationRow = ({
           <Fragment>
             {avatar}
             <View style={{ flex: 1, minWidth: 0, gap: 5 }}>
-              <View style={{ flexDirection: 'row', alignItems: 'baseline', justifyContent: 'space-between', gap: 8 }}>
+              <View style={{ flexDirection: 'row', alignItems: 'center', justifyContent: 'space-between', gap: 8 }}>
                 {typeof title === 'string' || typeof title === 'number' ? (
                   <ThemedText style={resolvedTitle} numberOfLines={1}>{title}</ThemedText>
                 ) : (

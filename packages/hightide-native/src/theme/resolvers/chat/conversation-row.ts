@@ -27,6 +27,9 @@ export const toChatConversationRowThemeResolvers: ComponentThemeResolver<ChatCon
     semanticResolvers: semanticTokens,
     state: {
       isPressed: state.isPressed,
+      isHovered: state.isHovered,
+      isFocused: state.isFocused,
+      isFocusVisible: state.isFocusVisible,
       isDisabled: state.isDisabled,
       isUnread: state.isUnread,
       isSelected: state.isSelected,

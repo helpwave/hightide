@@ -50,8 +50,6 @@ export const chatMessageCard: Story = {
     title: 'Terminbestätigung',
   },
   render: () => (
-    <View style={{ padding: 16 }}>
-      <CardStory />
-    </View>
+    <CardStory />
   ),
 }

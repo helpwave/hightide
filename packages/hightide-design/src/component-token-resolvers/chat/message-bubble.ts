@@ -1,4 +1,3 @@
-import { HexColorUtils } from '../../utils/hex'
 import type { ComponentTokenResolver } from '../component-token-resolver'
 import type { ContainerTokens } from '../container-tokens'
 import type { IconTokens } from '../icon-tokens'
@@ -39,6 +38,7 @@ export const chatMessageBubbleTokenResolver: ChatMessageBubbleTokenResolver = ({
   const alignment = resolveAlignment(config.direction)
   const messageCorners = resolveMessageCorners(themeTokens, config.direction)
   const bubbleColors = isOutgoing ? color.primary : color.neutral
+  const messageDescriptionColor = semanticResolvers.asDescription({ themeTokens, color: bubbleColors.onColor })
 
   return {
     container: {
@@ -47,6 +47,7 @@ export const chatMessageBubbleTokenResolver: ChatMessageBubbleTokenResolver = ({
       },
       layout: {
         gap: spacing.sm,
+        direction: 'vertical',
         alignSelf: alignment,
         crossAxisAligment: alignment,
       },
@@ -62,6 +63,7 @@ export const chatMessageBubbleTokenResolver: ChatMessageBubbleTokenResolver = ({
       },
       layout: {
         gap: spacing.sm,
+        direction: 'vertical'
       },
     },
     content: {
@@ -72,9 +74,7 @@ export const chatMessageBubbleTokenResolver: ChatMessageBubbleTokenResolver = ({
     timestamp: {
       ...typography.body.sm,
       fontWeight: typography.fontWeights.medium,
-      color: isOutgoing
-        ? HexColorUtils.hexWithAlpha(color.primary.onColor, 0.75)
-        : descriptionColor,
+      color: messageDescriptionColor,
       textAlign: 'right',
     },
     receipt: {

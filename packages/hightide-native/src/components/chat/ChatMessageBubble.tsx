@@ -91,7 +91,7 @@ export const ChatMessageBubble = ({
         )}
         {timestamp != null && (
           typeof timestamp === 'string' || typeof timestamp === 'number' ? (
-            <ThemedText style={resolvedTimestampStyle}>{timestamp}</ThemedText>
+            <ThemedText style={[resolvedTimestampStyle, { width: '100%' }]}>{timestamp}</ThemedText>
           ) : (
             timestamp
           )
