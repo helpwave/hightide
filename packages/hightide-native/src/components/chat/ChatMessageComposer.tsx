@@ -1,6 +1,5 @@
 import {
   useMemo,
-  useState,
   type ReactNode
 } from 'react'
 import {
@@ -73,14 +72,6 @@ export const ChatMessageComposer = ({
     [theme, state]
   )
 
-  const controlSize = theme.semantics.controlLayout({ size: 'md' }).size
-  const [inputHeight, setInputHeight] = useState(controlSize)
-  const [inputWidth, setInputWidth] = useState<number | undefined>(undefined)
-  const lineHeight = resolvedInputStyle.lineHeight
-  // this assumes padding is less than one line height
-  const lines = Math.floor(inputHeight / (lineHeight ?? 16))
-  console.log(inputHeight, lines)
-
   const send = () => {
     const trimmed = (value ?? '').trim()
     if (!trimmed || disabled) {
@@ -99,36 +90,12 @@ export const ChatMessageComposer = ({
       )}
       <TextInput
         value={value ?? ''}
-        accessible={false}
-        accessibilityRole="none"
-        importantForAccessibility="no-hide-descendants"
-        pointerEvents="none"
-        onContentSizeChange={e => setInputHeight(e.nativeEvent.contentSize.height)}
-        style={{
-          ...resolvedInputStyle,
-          position: 'absolute',
-          pointerEvents: 'none',
-          opacity: 0,
-          minHeight: resolvedInputStyle.lineHeight,
-          height: resolvedInputStyle.lineHeight,
-          width: inputWidth,
-        }}
-        multiline
-      />
-      <TextInput
-        value={value ?? ''}
         onChangeText={setValue}
         placeholder={placeholder}
         placeholderTextColor={placeholderColor.color}
         editable={!disabled}
-        onLayout={e => setInputWidth(e.nativeEvent.layout.width)}
         multiline
-        style={{
-          ...resolvedInputStyle,
-          height: inputHeight,
-          paddingTop: lines < 2 ? (controlSize - (lineHeight ?? 16)) / 2 : resolvedInputStyle.paddingTop,
-          paddingBottom: lines < 2 ? (controlSize - (lineHeight ?? 16)) / 2 : resolvedInputStyle.paddingBottom
-        }}
+        style={resolvedInputStyle}
         onSubmitEditing={send}
         returnKeyType="send"
       />

@@ -60,9 +60,11 @@ export const chatMessageComposerTokenResolver: ChatMessageComposerTokenResolver 
         borderRadius: { type: 'all', value: shape.borderRadius.sm },
       },
       padding: {
-        type: 'physicalAxis',
-        vertical: shape.padding.md,
-        horizontal: shape.padding.md,
+        type: 'logicalSide',
+        blockStart:  shape.padding.md,
+        blockEnd:  shape.padding.md,
+        inlineStart: semanticResolvers.controlLayout({ themeTokens, size: 'md' }).horizontalContentPadding,
+        inlineEnd: shape.padding.md,
       },
     },
     text: {
