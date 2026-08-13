@@ -80,6 +80,24 @@ const toAlignSelf = (
   return alignment
 }
 
+const toAlignContent = (
+  alignment?: AlignSelfToken
+): ViewStyle['alignContent'] => {
+  if (alignment === undefined) {
+    return undefined
+  }
+
+  if (alignment === 'start') {
+    return 'flex-start'
+  }
+
+  if (alignment === 'end') {
+    return 'flex-end'
+  }
+
+  return alignment
+}
+
 const toBorderRadiusStyle = (
   borderRadius?: BorderRadiusToken
 ): ViewStyle => {
@@ -228,10 +246,13 @@ const toMarginStyle = (margin?: MarginToken): ViewStyle => {
 }
 
 export const toContainerStyle = (tokens: ContainerTokens): ViewStyle => ({
+  display: 'flex',
   overflow: tokens.overflow,
+  flexWrap: tokens.layout?.flexWrap,
   flexDirection: toFlexDirection(tokens.layout?.direction),
   justifyContent: toJustifyContent(tokens.layout?.mainAxisAlignment),
   alignItems: toAlignItems(tokens.layout?.crossAxisAligment),
+  alignContent: toAlignContent(tokens.layout?.alignContent),
   alignSelf: toAlignSelf(tokens.layout?.alignSelf),
   backgroundColor: tokens.backgroundColor,
   opacity: tokens.opacity,

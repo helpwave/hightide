@@ -16,7 +16,6 @@ export const pillBorderRadius = 999
 export const bubbleMaxWidth = 280
 export const messageCardWidth = 290
 export const messageCardMaxWidth = 300
-export const composerMaxLines = 7
 
 type ThemeParams = {
   themeTokens: ThemeTokens,

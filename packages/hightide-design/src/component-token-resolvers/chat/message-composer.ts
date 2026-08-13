@@ -2,7 +2,6 @@ import type { ComponentTokenResolver } from '../component-token-resolver'
 import type { ContainerTokens } from '../container-tokens'
 import type { TextStyleTokens } from '../text-style-tokens'
 import {
-  composerMaxLines,
   resolveDescriptionColor,
   resolveFadedBorder
 } from './shared'
@@ -32,8 +31,8 @@ export const chatMessageComposerTokenResolver: ChatMessageComposerTokenResolver 
       },
       padding: {
         type: 'physicalAxis',
-        vertical: shape.padding.xxl,
-        horizontal: spacing.lg,
+        vertical: shape.padding.xl,
+        horizontal: shape.padding.xl,
       },
       border: {
         width: {
@@ -48,22 +47,22 @@ export const chatMessageComposerTokenResolver: ChatMessageComposerTokenResolver 
       layout: {
         direction: 'horizontal',
         crossAxisAligment: 'end',
-        gap: spacing.md,
+        gap: spacing.xs,
       },
     },
     input: {
       backgroundColor: color.surfaceVariant.color,
       size: {
         minHeight: size.md,
-        maxHeight: size.md * composerMaxLines,
+        maxHeight: Math.max(size.md, typography.body.md.lineHeight * 8 + 2 * shape.padding.md),
       },
       shape: {
         borderRadius: { type: 'all', value: shape.borderRadius.sm },
       },
       padding: {
         type: 'physicalAxis',
-        vertical: shape.padding.xxl,
-        horizontal: shape.padding.xxl,
+        vertical: shape.padding.md,
+        horizontal: shape.padding.md,
       },
     },
     text: {

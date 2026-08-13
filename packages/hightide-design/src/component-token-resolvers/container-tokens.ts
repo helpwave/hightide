@@ -9,6 +9,7 @@ export type LayoutDirectionToken = 'horizontal' | 'vertical'
 export type LayoutAlignmentToken = 'left-top' | 'left-center' | 'left-bottom' | 'center-top' | 'center-center' | 'center-bottom' | 'right-top' | 'right-center' | 'right-bottom'
 export type AxisAligmentToken = 'start' | 'center' | 'end'
 export type AlignSelfToken = AxisAligmentToken | 'stretch'
+export type FlexWrapToken = 'nowrap' | 'wrap' | 'wrap-reverse'
 export type OverflowToken = 'visible' | 'hidden' | 'scroll'
 export type SizeToken = number | `${number}%`
 export type BorderRadiusToken = {
@@ -80,10 +81,12 @@ export type ContainerTokens = {
   padding?: PaddingToken,
   margin?: MarginToken,
   layout?: {
+    flexWrap?: FlexWrapToken,
     gap?: number,
     direction?: LayoutDirectionToken,
     mainAxisAlignment?: AxisAligmentToken,
     crossAxisAligment?: AxisAligmentToken,
+    alignContent?: AlignSelfToken,
     alignSelf?: AlignSelfToken,
   },
   decoration?: {
