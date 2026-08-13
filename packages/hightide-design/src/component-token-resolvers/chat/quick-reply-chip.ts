@@ -41,10 +41,11 @@ export const chatQuickReplyChipTokenResolver: ChatQuickReplyChipTokenResolver = 
       backgroundColor: isPressed ? hoverColor : color.surface.color,
       shape: {
         borderRadius: { type: 'all', value: pillBorderRadius },
-        padding: {
-          vertical: shape.padding.md,
-          horizontal: spacing.lg,
-        },
+      },
+      padding: {
+        type: 'physicalAxis',
+        vertical: shape.padding.md,
+        horizontal: spacing.lg,
       },
       border: {
         width: {

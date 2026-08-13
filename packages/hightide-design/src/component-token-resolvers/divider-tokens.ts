@@ -36,6 +36,7 @@ export const dividerTokenResolver: DividerTokenResolver = ({
   if (direction === 'vertical') {
     return {
       margin: {
+        type: 'physicalAxis',
         vertical: margin,
       },
       border: {
@@ -54,6 +55,7 @@ export const dividerTokenResolver: DividerTokenResolver = ({
 
   return {
     margin: {
+      type: 'physicalAxis',
       horizontal: margin,
     },
     border: {

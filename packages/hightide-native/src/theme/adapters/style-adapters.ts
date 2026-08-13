@@ -8,7 +8,13 @@ import type {
   ContainerTokens,
   DirectionalToken,
   LayoutDirectionToken,
+  MarginToken,
+  PaddingToken,
   TextStyleTokens
+} from '@helpwave/hightide-design/component-token-resolvers'
+import {
+  defaultWritingMode,
+  resolveDirectionalTokens
 } from '@helpwave/hightide-design/component-token-resolvers'
 import type { ColorToken, HexColorToken } from '@helpwave/hightide-design/primitive-tokens'
 import type { ShadowToken } from '@helpwave/hightide-design/theme-tokens'
@@ -25,7 +31,7 @@ export const toShadowStyle = (shadow: ShadowToken): ViewStyle => ({
 const toFlexDirection = (
   direction?: LayoutDirectionToken
 ): NonNullable<ViewStyle['flexDirection']> => (
-  direction === 'vertical' ? 'column' : 'row'
+  direction === 'horizontal' ? 'row' : 'column'
 )
 
 const toJustifyContent = (
@@ -191,6 +197,36 @@ const toBorderStyle = (border?: BorderToken): ViewStyle => {
   }
 }
 
+const toPaddingStyle = (padding?: PaddingToken): ViewStyle => {
+  if (padding === undefined) {
+    return {}
+  }
+
+  const sides = resolveDirectionalTokens([padding], defaultWritingMode)
+
+  return {
+    paddingTop: sides.top,
+    paddingRight: sides.right,
+    paddingBottom: sides.bottom,
+    paddingLeft: sides.left,
+  }
+}
+
+const toMarginStyle = (margin?: MarginToken): ViewStyle => {
+  if (margin === undefined) {
+    return {}
+  }
+
+  const sides = resolveDirectionalTokens([margin], defaultWritingMode)
+
+  return {
+    marginTop: sides.top,
+    marginRight: sides.right,
+    marginBottom: sides.bottom,
+    marginLeft: sides.left,
+  }
+}
+
 export const toContainerStyle = (tokens: ContainerTokens): ViewStyle => ({
   overflow: tokens.overflow,
   flexDirection: toFlexDirection(tokens.layout?.direction),
@@ -207,10 +243,8 @@ export const toContainerStyle = (tokens: ContainerTokens): ViewStyle => ({
   maxHeight: tokens.size?.maxHeight,
   maxWidth: tokens.size?.maxWidth,
   ...toBorderRadiusStyle(tokens.shape?.borderRadius),
-  paddingVertical: tokens.shape?.padding?.vertical,
-  paddingHorizontal: tokens.shape?.padding?.horizontal,
-  marginVertical: tokens.margin?.vertical,
-  marginHorizontal: tokens.margin?.horizontal,
+  ...toPaddingStyle(tokens.padding),
+  ...toMarginStyle(tokens.margin),
   gap: tokens.layout?.gap,
   outlineColor: tokens.outline?.color,
   outlineOffset: tokens.outline?.offset,

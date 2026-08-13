@@ -25,10 +25,11 @@ export const chatDateDividerTokenResolver: ChatDateDividerTokenResolver = ({ the
       backgroundColor: color.surface.color,
       shape: {
         borderRadius: { type: 'all', value: pillBorderRadius },
-        padding: {
-          vertical: spacing.sm,
-          horizontal: spacing.lg,
-        },
+      },
+      padding: {
+        type: 'physicalAxis',
+        vertical: spacing.sm,
+        horizontal: spacing.lg,
       },
       layout: {
         alignSelf: 'center',

@@ -47,10 +47,11 @@ export const chatAttachmentCardTokenResolver: ChatAttachmentCardTokenResolver = 
       },
       shape: {
         borderRadius: messageCorners,
-        padding: {
-          vertical: shape.padding.xxl,
-          horizontal: shape.padding.xxl,
-        },
+      },
+      padding: {
+        type: 'physicalAxis',
+        vertical: shape.padding.xxl,
+        horizontal: shape.padding.xxl,
       },
       border: {
         width: {

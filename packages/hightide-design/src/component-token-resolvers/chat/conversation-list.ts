@@ -23,22 +23,20 @@ export const chatConversationListTokenResolver: ChatConversationListTokenResolve
       }
     },
     header: {
-      shape: {
-        padding: {
-          vertical: spacing.lg,
-          horizontal: spacing.lg,
-        },
+      padding: {
+        type: 'physicalAxis',
+        vertical: spacing.lg,
+        horizontal: spacing.lg,
       },
       layout: {
         gap: shape.padding.xxl,
       },
     },
     footer: {
-      shape: {
-        padding: {
-          vertical: spacing.md,
-          horizontal: spacing.lg,
-        },
+      padding: {
+        type: 'physicalAxis',
+        vertical: spacing.md,
+        horizontal: spacing.lg,
       },
     },
   }

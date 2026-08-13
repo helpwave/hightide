@@ -132,12 +132,13 @@ export const buttonTokenResolver: ButtonTokenResolver = ({
       },
       shape: {
         borderRadius: { type: 'all', value: layout.borderRadius },
-        padding: {
-          vertical: hasBorder ? insetForBordered : layout.inset,
-          horizontal: hasBorder
-            ? Math.max(layout.horizontalContentPadding - layout.borderWidth, 0)
-            : layout.horizontalContentPadding,
-        },
+      },
+      padding: {
+        type: 'physicalAxis',
+        vertical: hasBorder ? insetForBordered : layout.inset,
+        horizontal: hasBorder
+          ? Math.max(layout.horizontalContentPadding - layout.borderWidth, 0)
+          : layout.horizontalContentPadding,
       },
       layout: {
         gap,

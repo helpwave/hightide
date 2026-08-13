@@ -98,13 +98,18 @@ export const selectTokenResolver: SelectTokenResolver = ({
   }).background
   const touchTargetSize = semanticResolvers.touchTargetSize({ themeTokens })
   const menuHeight = touchTargetSize * 6
+  // TODO remove this computation
+  const inputPadding = input.container.padding
+  const horizontalPadding = inputPadding?.type === 'physicalAxis'
+    ? inputPadding.horizontal
+    : undefined
 
   return {
     trigger: {
       ...input.container,
       layout: {
         ...input.container.layout,
-        gap: input.container.shape?.padding?.horizontal,
+        gap: horizontalPadding,
       },
     },
     stateLayer: {
@@ -114,11 +119,10 @@ export const selectTokenResolver: SelectTokenResolver = ({
     icon: input.icon,
     overlay: {
       backgroundColor: selectOverlayColor,
-      shape: {
-        padding: {
-          vertical: spacing.xl,
-          horizontal: spacing.xl,
-        },
+      padding: {
+        type: 'physicalAxis',
+        vertical: spacing.xl,
+        horizontal: spacing.xl,
       },
       layout: {
         direction: 'vertical',
@@ -147,21 +151,19 @@ export const selectTokenResolver: SelectTokenResolver = ({
       },
     },
     header: {
-      shape: {
-        padding: {
-          vertical: shape.padding.sm,
-          horizontal: shape.padding.sm,
-        },
+      padding: {
+        type: 'physicalAxis',
+        vertical: shape.padding.sm,
+        horizontal: shape.padding.sm,
       },
     },
     option: {
       backgroundColor: state.has('highlighted') ? hoverColor : 'transparent',
       opacity: state.has('disabled') ? 0.5 : 1,
-      shape: {
-        padding: {
-          vertical: shape.padding.xxl,
-          horizontal: spacing.lg,
-        },
+      padding: {
+        type: 'physicalAxis',
+        vertical: shape.padding.xxl,
+        horizontal: spacing.lg,
       },
     },
     optionText: {

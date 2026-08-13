@@ -94,11 +94,10 @@ export const switchTokenResolver: SwitchTokenResolver = ({
         minHeight: mediumControl.size,
         maxHeight: mediumControl.size,
       },
-      shape: {
-        padding: {
-          horizontal: (mediumControl.size - TRACK_HEIGHT) / 2,
-          vertical: (mediumControl.size - TRACK_HEIGHT) / 2,
-        }
+      padding: {
+        type: 'physicalAxis',
+        horizontal: (mediumControl.size - TRACK_HEIGHT) / 2,
+        vertical: (mediumControl.size - TRACK_HEIGHT) / 2,
       },
       layout: {
         direction: 'horizontal',

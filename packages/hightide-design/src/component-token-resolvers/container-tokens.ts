@@ -76,15 +76,9 @@ export type ContainerTokens = {
   },
   shape?: {
     borderRadius?: BorderRadiusToken,
-    padding?: {
-      vertical?: number,
-      horizontal?: number,
-    },
   },
-  margin?: {
-    vertical?: number,
-    horizontal?: number,
-  },
+  padding?: PaddingToken,
+  margin?: MarginToken,
   layout?: {
     gap?: number,
     direction?: LayoutDirectionToken,

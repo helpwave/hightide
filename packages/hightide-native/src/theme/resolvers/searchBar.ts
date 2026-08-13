@@ -69,20 +69,24 @@ export const toSearchBarThemeResolvers: ComponentThemeResolver<SearchBarThemeRes
     input: createStyleResolver((state: SearchBarState): SearchBarInputStyle => {
       const tokens = resolve(state)
       const { container, stateLayer, text } = tokens.input
+      // TODO remove this computation with a better solution
       const base = toContainerStyleWithStateLayer(container, stateLayer)
-      const horizontalPadding = typeof base.paddingHorizontal === 'number'
-        ? base.paddingHorizontal
-        : 0
+      const horizontalPadding = typeof base.paddingLeft === 'number'
+        ? base.paddingLeft
+        : typeof base.paddingRight === 'number'
+          ? base.paddingRight
+          : 0
       const iconButtonWidth = typeof tokens.iconButton.size?.width === 'number'
         ? tokens.iconButton.size.width
         : 0
-      const iconButtonMargin = tokens.iconButton.margin?.horizontal ?? 0
+      const iconButtonMargin = tokens.iconButton.margin?.type === 'physicalAxis'
+        ? tokens.iconButton.margin.horizontal ?? 0
+        : 0
       const trailingInset = iconButtonWidth + iconButtonMargin
 
       return {
         ...base,
         ...toTextStyle(text),
-        paddingHorizontal: undefined,
         paddingLeft: horizontalPadding,
         paddingRight: horizontalPadding + trailingInset,
       }

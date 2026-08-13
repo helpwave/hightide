@@ -45,7 +45,6 @@ export const searchBarTokenResolver: SearchBarTokenResolver = ({
     themeTokens,
     size: 'sm',
   })
-  const horizontalPadding = input.container.shape?.padding?.horizontal ?? 0
 
   return {
     container: {
@@ -59,13 +58,6 @@ export const searchBarTokenResolver: SearchBarTokenResolver = ({
         ...input.container,
         outline: undefined,
         decoration: undefined,
-        shape: {
-          ...input.container.shape,
-          padding: {
-            vertical: input.container.shape?.padding?.vertical,
-            horizontal: horizontalPadding,
-          },
-        },
       },
     },
     iconButton: {
@@ -74,6 +66,7 @@ export const searchBarTokenResolver: SearchBarTokenResolver = ({
         height: iconButtonLayout.size,
       },
       margin: {
+        type: 'physicalAxis',
         horizontal: themeTokens.spacing.sm,
       },
     },

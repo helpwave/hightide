@@ -25,11 +25,10 @@ export const chatThreadHeaderTokenResolver: ChatThreadHeaderTokenResolver = ({ t
   return {
     container: {
       backgroundColor: color.surface.color,
-      shape: {
-        padding: {
-          vertical: shape.padding.xxl,
-          horizontal: spacing.lg,
-        },
+      padding: {
+        type: 'physicalAxis',
+        vertical: shape.padding.xxl,
+        horizontal: spacing.lg,
       },
       border: {
         width: {

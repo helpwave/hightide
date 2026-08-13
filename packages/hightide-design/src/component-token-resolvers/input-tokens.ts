@@ -134,10 +134,11 @@ export const inputTokenResolver: InputTokenResolver = ({
       },
       shape: {
         borderRadius: { type: 'all', value: layout.borderRadius },
-        padding: {
-          vertical: layout.inset,
-          horizontal: layout.horizontalContentPadding - layout.borderWidth,
-        },
+      },
+      padding: {
+        type: 'physicalAxis',
+        vertical: layout.inset,
+        horizontal: layout.horizontalContentPadding - layout.borderWidth,
       },
       layout: {
         direction: 'horizontal',

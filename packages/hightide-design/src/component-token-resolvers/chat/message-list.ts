@@ -16,11 +16,10 @@ export const chatMessageListTokenResolver: ChatMessageListTokenResolver = ({ the
   return {
     container: {
       backgroundColor: color.background.color,
-      shape: {
-        padding: {
-          vertical: spacing.lg + spacing.xs,
-          horizontal: spacing.lg,
-        },
+      padding: {
+        type: 'physicalAxis',
+        vertical: spacing.lg + spacing.xs,
+        horizontal: spacing.lg,
       },
       layout: {
         gap: shape.padding.xxl,

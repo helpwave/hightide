@@ -59,10 +59,11 @@ export const chatMessageCardTokenResolver: ChatMessageCardTokenResolver = ({ the
       },
       shape: {
         borderRadius: messageCorners,
-        padding: {
-          horizontal: shape.padding.md,
-          vertical: shape.padding.md,
-        }
+      },
+      padding: {
+        type: 'physicalAxis',
+        horizontal: shape.padding.md,
+        vertical: shape.padding.md,
       },
       border: {
         width: {
@@ -89,6 +90,10 @@ export const chatMessageCardTokenResolver: ChatMessageCardTokenResolver = ({ the
           type: 'physicalSide',
           bottom: fadedBorder,
         },
+      },
+      padding: {
+        type: 'logicalSide',
+        blockEnd: themeTokens.shape.padding.md
       },
       layout: {
         direction: 'horizontal',
@@ -127,7 +132,12 @@ export const chatMessageCardTokenResolver: ChatMessageCardTokenResolver = ({ the
         gap: spacing.sm,
         direction: 'vertical',
         crossAxisAligment: 'start',
+        alignSelf: 'stretch',
       },
+      padding: {
+        type: 'logicalSide',
+        blockStart: themeTokens.spacing.md,
+      }
     },
     actions: {
       layout: {

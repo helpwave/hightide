@@ -56,10 +56,11 @@ export const chatMessageBubbleTokenResolver: ChatMessageBubbleTokenResolver = ({
       backgroundColor: bubbleColors.color,
       shape: {
         borderRadius: messageCorners,
-        padding: {
-          vertical: shape.padding.xxl,
-          horizontal: spacing.lg,
-        },
+      },
+      padding: {
+        type: 'physicalAxis',
+        vertical: shape.padding.xxl,
+        horizontal: spacing.lg,
       },
       layout: {
         gap: spacing.sm,

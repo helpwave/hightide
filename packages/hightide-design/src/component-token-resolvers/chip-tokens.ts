@@ -61,10 +61,11 @@ export const chipTokenResolver: ChipTokenResolver = ({
       },
       shape: {
         borderRadius: { type: 'all', value: layout.borderRadius },
-        padding: {
-          vertical: layout.inset,
-          horizontal: horizontalPadding,
-        },
+      },
+      padding: {
+        type: 'physicalAxis',
+        vertical: layout.inset,
+        horizontal: horizontalPadding,
       },
       layout: {
         gap,

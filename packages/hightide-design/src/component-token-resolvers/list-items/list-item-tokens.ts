@@ -69,11 +69,10 @@ export const listItemTokenResolver: ListItemTokenResolver = ({
         minWidth: layout.size,
         minHeight: layout.size,
       },
-      shape: {
-        padding: {
-          vertical: largeControl.inset,
-          horizontal: layout.horizontalContentPadding,
-        },
+      padding: {
+        type: 'physicalAxis',
+        vertical: largeControl.inset,
+        horizontal: layout.horizontalContentPadding,
       },
       layout: {
         gap: spacing.md,

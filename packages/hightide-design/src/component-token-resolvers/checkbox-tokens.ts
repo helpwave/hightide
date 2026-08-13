@@ -124,10 +124,11 @@ export const checkboxTokenResolver: CheckboxTokenResolver = ({
           type: 'all',
           value: overrides.isRounded ? dimension / 2 : themeTokens.shape.borderRadius.sm,
         },
-        padding: {
-          vertical: inset,
-          horizontal: inset,
-        },
+      },
+      padding: {
+        type: 'physicalAxis',
+        vertical: inset,
+        horizontal: inset,
       },
       layout: {
         direction: 'horizontal',

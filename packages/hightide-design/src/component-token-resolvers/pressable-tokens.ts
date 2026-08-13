@@ -138,12 +138,13 @@ export const pressableTokenResolver: PressableTokenResolver = ({
       },
       shape: {
         borderRadius: { type: 'all', value: layout.borderRadius },
-        padding: {
-          vertical: layout.inset,
-          horizontal: hasAdditionalHorizontalPadding
-            ? layout.horizontalContentPadding
-            : layout.inset,
-        },
+      },
+      padding: {
+        type: 'physicalAxis',
+        vertical: layout.inset,
+        horizontal: hasAdditionalHorizontalPadding
+          ? layout.horizontalContentPadding
+          : layout.inset,
       },
       layout: {
         gap,

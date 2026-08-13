@@ -83,10 +83,11 @@ export const chatConversationRowTokenResolver: ChatConversationRowTokenResolver 
       },
       shape: {
         borderRadius: { type: 'all', value: shape.borderRadius.sm },
-        padding: {
-          vertical: shape.padding.xxl,
-          horizontal: spacing.lg,
-        },
+      },
+      padding: {
+        type: 'physicalAxis',
+        vertical: shape.padding.xxl,
+        horizontal: spacing.lg,
       },
       border: {
         width: {
@@ -130,9 +131,10 @@ export const chatConversationRowTokenResolver: ChatConversationRowTokenResolver 
       },
       shape: {
         borderRadius: { type: 'all', value: pillBorderRadius },
-        padding: {
-          horizontal: shape.padding.md,
-        },
+      },
+      padding: {
+        type: 'physicalAxis',
+        horizontal: shape.padding.md,
       },
       layout: {
         mainAxisAlignment: 'center',

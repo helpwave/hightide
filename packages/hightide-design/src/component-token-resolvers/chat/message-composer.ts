@@ -30,11 +30,10 @@ export const chatMessageComposerTokenResolver: ChatMessageComposerTokenResolver 
       size: {
         width: '100%',
       },
-      shape: {
-        padding: {
-          vertical: shape.padding.xxl,
-          horizontal: spacing.lg,
-        },
+      padding: {
+        type: 'physicalAxis',
+        vertical: shape.padding.xxl,
+        horizontal: spacing.lg,
       },
       border: {
         width: {
@@ -60,10 +59,11 @@ export const chatMessageComposerTokenResolver: ChatMessageComposerTokenResolver 
       },
       shape: {
         borderRadius: { type: 'all', value: shape.borderRadius.sm },
-        padding: {
-          vertical: shape.padding.xxl,
-          horizontal: shape.padding.xxl,
-        },
+      },
+      padding: {
+        type: 'physicalAxis',
+        vertical: shape.padding.xxl,
+        horizontal: shape.padding.xxl,
       },
     },
     text: {
