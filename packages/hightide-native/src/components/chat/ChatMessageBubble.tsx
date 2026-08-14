@@ -27,8 +27,8 @@ import type { StyleOverwrite } from '../../theme/types/resolver'
 export type { ChatMessageDirection }
 
 export type ChatMessageBubbleProps = Omit<ViewProps, 'children' | 'style'> & {
-  direction?: ChatMessageDirection,
-  timestamp?: ReactNode,
+  direction: ChatMessageDirection,
+  timestamp: ReactNode,
   readReceipt?: ReactNode,
   children?: ReactNode,
   style?: StyleProp<ViewStyle>,
@@ -41,7 +41,7 @@ export type ChatMessageBubbleProps = Omit<ViewProps, 'children' | 'style'> & {
 }
 
 export const ChatMessageBubble = ({
-  direction = 'incoming',
+  direction,
   timestamp,
   readReceipt,
   children,
@@ -56,7 +56,6 @@ export const ChatMessageBubble = ({
 }: ChatMessageBubbleProps) => {
   const { theme } = useTheme()
   const state = useMemo(() => ({ direction }), [direction])
-  const hasMetaData = timestamp != null || readReceipt != null
 
   const resolvedContainerStyle = useMemo(
     () => theme.components.chat.messageBubble.container(state, containerStyle),
@@ -96,32 +95,28 @@ export const ChatMessageBubble = ({
           children
         )}
       </View>
-      {hasMetaData && (
-        <View style={resolvedMetaDataContainerStyle}>
-          {readReceipt != null && (
-            <View style={resolvedMetaDataStatusContainerStyle}>
-              <ThemedIcon
-                icon={HightideIconRegistry.CheckCheck}
-                size={resolvedMetaDataIcon.size}
-                strokeWidth={resolvedMetaDataIcon.strokeWidth}
-                color={resolvedMetaDataIcon.color}
-              />
-              {typeof readReceipt === 'string' || typeof readReceipt === 'number' ? (
-                <ThemedText style={resolvedMetaDataTextStyle}>{readReceipt}</ThemedText>
-              ) : (
-                readReceipt
-              )}
-            </View>
-          )}
-          {timestamp != null && (
-            typeof timestamp === 'string' || typeof timestamp === 'number' ? (
-              <ThemedText style={resolvedMetaDataTextStyle}>{timestamp}</ThemedText>
+      <View style={resolvedMetaDataContainerStyle}>
+        {readReceipt != null && (
+          <View style={resolvedMetaDataStatusContainerStyle}>
+            <ThemedIcon
+              icon={HightideIconRegistry.CheckCheck}
+              size={resolvedMetaDataIcon.size}
+              strokeWidth={resolvedMetaDataIcon.strokeWidth}
+              color={resolvedMetaDataIcon.color}
+            />
+            {typeof readReceipt === 'string' || typeof readReceipt === 'number' ? (
+              <ThemedText style={resolvedMetaDataTextStyle}>{readReceipt}</ThemedText>
             ) : (
-              timestamp
-            )
-          )}
-        </View>
-      )}
+              readReceipt
+            )}
+          </View>
+        )}
+        {typeof timestamp === 'string' || typeof timestamp === 'number' ? (
+          <ThemedText style={resolvedMetaDataTextStyle}>{timestamp}</ThemedText>
+        ) : (
+          timestamp
+        )}
+      </View>
     </View>
   )
 }

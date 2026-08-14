@@ -1,11 +1,10 @@
 import type { ChatThemeResolvers } from '../../types/components/chat'
 import type { ComponentThemeResolver } from '../../types/resolver'
-import { toChatAttachmentCardThemeResolvers } from './attachment-card'
+import { toChatAttachmentMessageBubbleThemeResolvers } from './attachment-message-bubble'
 import { toChatConversationListThemeResolvers } from './conversation-list'
 import { toChatConversationRowThemeResolvers } from './conversation-row'
 import { toChatDateDividerThemeResolvers } from './date-divider'
 import { toChatMessageBubbleThemeResolvers } from './message-bubble'
-import { toChatMessageCardThemeResolvers } from './message-card'
 import { toChatMessageComposerThemeResolvers } from './message-composer'
 import { toChatMessageListThemeResolvers } from './message-list'
 import { toChatQuickReplyChipThemeResolvers } from './quick-reply-chip'
@@ -42,12 +41,7 @@ export const toChatThemeResolvers: ComponentThemeResolver<ChatThemeResolvers> = 
     semanticTokens,
     componentTokens,
   }),
-  messageCard: toChatMessageCardThemeResolvers({
-    themeTokens,
-    semanticTokens,
-    componentTokens,
-  }),
-  attachmentCard: toChatAttachmentCardThemeResolvers({
+  attachmentMessageBubble: toChatAttachmentMessageBubbleThemeResolvers({
     themeTokens,
     semanticTokens,
     componentTokens,

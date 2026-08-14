@@ -1,9 +1,11 @@
-import { chatAttachmentCardTokenResolver, type ChatAttachmentCardTokenResolver } from './attachment-card'
+import {
+  chatAttachmentMessageBubbleTokenResolver,
+  type ChatAttachmentMessageBubbleTokenResolver
+} from './attachment-message-bubble'
 import { chatConversationListTokenResolver, type ChatConversationListTokenResolver } from './conversation-list'
 import { chatConversationRowTokenResolver, type ChatConversationRowTokenResolver } from './conversation-row'
 import { chatDateDividerTokenResolver, type ChatDateDividerTokenResolver } from './date-divider'
 import { chatMessageBubbleTokenResolver, type ChatMessageBubbleTokenResolver } from './message-bubble'
-import { chatMessageCardTokenResolver, type ChatMessageCardTokenResolver } from './message-card'
 import { chatMessageComposerTokenResolver, type ChatMessageComposerTokenResolver } from './message-composer'
 import { chatMessageListTokenResolver, type ChatMessageListTokenResolver } from './message-list'
 import { chatQuickReplyChipTokenResolver, type ChatQuickReplyChipTokenResolver } from './quick-reply-chip'
@@ -16,8 +18,7 @@ export type ChatTokenResolvers = {
   threadHeader: ChatThreadHeaderTokenResolver,
   messageList: ChatMessageListTokenResolver,
   messageBubble: ChatMessageBubbleTokenResolver,
-  messageCard: ChatMessageCardTokenResolver,
-  attachmentCard: ChatAttachmentCardTokenResolver,
+  attachmentMessageBubble: ChatAttachmentMessageBubbleTokenResolver,
   systemLine: ChatSystemLineTokenResolver,
   dateDivider: ChatDateDividerTokenResolver,
   quickReplyChip: ChatQuickReplyChipTokenResolver,
@@ -30,8 +31,7 @@ export const chatTokenResolvers: ChatTokenResolvers = {
   threadHeader: chatThreadHeaderTokenResolver,
   messageList: chatMessageListTokenResolver,
   messageBubble: chatMessageBubbleTokenResolver,
-  messageCard: chatMessageCardTokenResolver,
-  attachmentCard: chatAttachmentCardTokenResolver,
+  attachmentMessageBubble: chatAttachmentMessageBubbleTokenResolver,
   systemLine: chatSystemLineTokenResolver,
   dateDivider: chatDateDividerTokenResolver,
   quickReplyChip: chatQuickReplyChipTokenResolver,

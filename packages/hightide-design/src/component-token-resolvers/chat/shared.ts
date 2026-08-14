@@ -14,8 +14,6 @@ export type ChatMessageDirection = 'incoming' | 'outgoing'
 
 export const pillBorderRadius = 999
 export const bubbleMaxWidth = 280
-export const messageCardWidth = 290
-export const messageCardMaxWidth = 300
 
 type ThemeParams = {
   themeTokens: ThemeTokens,
