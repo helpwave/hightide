@@ -90,9 +90,7 @@ export type ThemeTokensConfig = {
     borderRadius?: Partial<Record<ThemeLayoutSize, number>>,
     padding?: Partial<Record<ThemeSpacingSize, number>>,
   },
-  borders?: {
-    borderWidths?: Partial<Record<ThemeBorderWidthKey, number>>,
-  },
+  borderWidth?: Partial<Record<ThemeBorderWidthKey, number>>,
   elevation?: Partial<Record<ThemeElevationLevel, ShadowLayoutToken>>,
   motion?: {
     durations?: Partial<Record<ThemeMotionDurationKey, number>>,

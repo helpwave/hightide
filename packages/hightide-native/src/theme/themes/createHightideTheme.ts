@@ -116,7 +116,7 @@ export const createHightideTheme = (themeTokens: ThemeTokens): HightideTheme => 
   spacing: themeTokens.spacing,
   elements: resolveElementLayouts(themeTokens),
   borderRadius: themeTokens.shape.borderRadius,
-  border: themeTokens.borders.borderWidths,
+  border: themeTokens.borderWidth,
   shadow: {
     raised: themeTokens.elevation.level1,
     container: themeTokens.elevation.level2,

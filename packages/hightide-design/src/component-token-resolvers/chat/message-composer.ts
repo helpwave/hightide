@@ -19,7 +19,7 @@ export type ChatMessageComposerTokenResolver = ComponentTokenResolver<
 >
 
 export const chatMessageComposerTokenResolver: ChatMessageComposerTokenResolver = ({ themeTokens, semanticResolvers }) => {
-  const { color, size, spacing, shape, borders, typography } = themeTokens
+  const { color, size, spacing, shape, borderWidth, typography } = themeTokens
   const placeholderColor = resolveDescriptionColor({ themeTokens, semanticResolvers })
   const fadedBorder = resolveFadedBorder({ themeTokens, semanticResolvers })
 
@@ -37,7 +37,7 @@ export const chatMessageComposerTokenResolver: ChatMessageComposerTokenResolver 
       border: {
         width: {
           type: 'physicalSide',
-          top: borders.borderWidths.thin,
+          top: borderWidth.thin,
         },
         color: {
           type: 'physicalSide',

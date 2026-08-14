@@ -86,7 +86,7 @@ export const avatarTokenResolver: AvatarTokenResolver = ({
 }) => {
   const size = overrides.size ?? 'md'
   const status = state.status ?? 'unknown'
-  const { color, spacing, borders, typography, elevation } = themeTokens
+  const { color, spacing, borderWidth, typography, elevation } = themeTokens
   const colorPair = overrides.color ?? color.primary
   const iconTokens = iconTokenResolver({
     themeTokens,
@@ -151,7 +151,7 @@ export const avatarTokenResolver: AvatarTokenResolver = ({
         border: {
           width: {
             type: 'all',
-            value: borders.borderWidths.thin,
+            value: borderWidth.thin,
           },
           color: {
             type: 'all',

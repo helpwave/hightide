@@ -2,7 +2,7 @@ import type {
   ElementLayoutTokens
 } from '@helpwave/hightide-design/semantic-token-resolvers'
 import type {
-  ThemeBordersTokens,
+  ThemeBorderWidthTokens,
   ThemeElevationTokens,
   ThemeShapeTokens,
   ThemeSpacingTokens
@@ -14,7 +14,7 @@ export type HightideElements = ElementLayoutTokens
 
 export type HightideBorderRadius = ThemeShapeTokens['borderRadius']
 
-export type HightideBorder = ThemeBordersTokens['borderWidths']
+export type HightideBorder = ThemeBorderWidthTokens
 
 export type HightideShadowToken = ThemeElevationTokens[keyof ThemeElevationTokens]
 

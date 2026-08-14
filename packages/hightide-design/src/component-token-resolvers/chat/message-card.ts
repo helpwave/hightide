@@ -39,7 +39,7 @@ export type ChatMessageCardTokenResolver = ComponentTokenResolver<
 >
 
 export const chatMessageCardTokenResolver: ChatMessageCardTokenResolver = ({ themeTokens, semanticResolvers, config, overrides }) => {
-  const { color, size, spacing, shape, borders, typography } = themeTokens
+  const { color, size, spacing, shape, borderWidth, typography } = themeTokens
   const descriptionColor = resolveDescriptionColor({ themeTokens, semanticResolvers })
   const fadedBorder = resolveFadedBorder({ themeTokens, semanticResolvers })
   const { accentTonal, accentText } = resolveAccentColoring({
@@ -48,7 +48,7 @@ export const chatMessageCardTokenResolver: ChatMessageCardTokenResolver = ({ the
   })
   const alignment = resolveAlignment(config.direction)
   const messageCorners = resolveMessageCorners(themeTokens, config.direction)
-  const hairline = borders.borderWidths.thin
+  const hairline = borderWidth.thin
 
   return {
     container: {

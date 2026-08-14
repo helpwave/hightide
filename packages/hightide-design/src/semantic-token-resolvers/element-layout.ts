@@ -70,13 +70,13 @@ export const resolveControlLayout = (params: {
   size: ThemeLayoutSize,
 }): ControlElementLayoutToken => {
   const { themeTokens, size } = params
-  const { size: sizes, shape, borders } = themeTokens
+  const { size: sizes, shape, borderWidth } = themeTokens
   const inset = shape.padding[size]
 
   return {
     size: sizes[size],
     inset,
-    borderWidth: borders.borderWidths.normal,
+    borderWidth: borderWidth.normal,
     borderRadius: shape.borderRadius[size],
     horizontalContentPadding: inset + paddingExtensionFor(themeTokens, size),
   }
@@ -124,7 +124,7 @@ export const resolveInsideControlLayout = (params: {
   return {
     size: token.size - 2 * token.inset - 2 * token.borderWidth,
     inset: themeTokens.shape.padding[smallerKey],
-    borderWidth: themeTokens.borders.borderWidths.thin,
+    borderWidth: themeTokens.borderWidth.thin,
     borderRadius: themeTokens.shape.borderRadius[smallerKey],
     paddingExtension: paddingExtensionFor(themeTokens, smallerKey),
   }

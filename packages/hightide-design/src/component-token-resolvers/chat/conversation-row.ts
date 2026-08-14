@@ -62,7 +62,7 @@ const toPressableStates = (state: ChatConversationRowState): ReadonlySet<Pressab
 }
 
 export const chatConversationRowTokenResolver: ChatConversationRowTokenResolver = ({ themeTokens, semanticResolvers, state }) => {
-  const { color, spacing, shape, borders, typography } = themeTokens
+  const { color, spacing, shape, borderWidth, typography } = themeTokens
   const descriptionColor = resolveDescriptionColor({ themeTokens, semanticResolvers })
   const baseBackground = state.isSelected ? color.background.color : 'transparent'
   const tint = resolvePressableStateLayerTint({
@@ -92,7 +92,7 @@ export const chatConversationRowTokenResolver: ChatConversationRowTokenResolver 
       border: {
         width: {
           type: 'physicalSide',
-          left: state.isSelected ? borders.borderWidths.thick : 0,
+          left: state.isSelected ? borderWidth.thick : 0,
         },
         color: {
           type: 'physicalSide',

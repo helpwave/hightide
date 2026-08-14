@@ -52,10 +52,10 @@ export const checkboxTokenResolver: CheckboxTokenResolver = ({
   state,
 }) => {
   const size = overrides.size ?? 'md'
-  const { color, borders } = themeTokens
+  const { color, borderWidth: borderWidthTokens } = themeTokens
   const accentPair = overrides.color ?? color.primary
   const element = semanticResolvers.controlLayout({ themeTokens, size })
-  const borderWidth = borders.borderWidths.normal
+  const borderWidth = borderWidthTokens.normal
   const inset = Math.floor(element.inset * 0.5)
   const dimension = Math.round(element.size * 0.5)
   const isActive = state.has('checked') || state.has('indeterminate')
@@ -145,7 +145,7 @@ export const checkboxTokenResolver: CheckboxTokenResolver = ({
     icon: {
       color: isActive ? accentPair.onColor : accentPair.color,
       size: dimension - 2 * inset - 2 * borderWidth,
-      strokeWidth: borders.borderWidths.normal,
+      strokeWidth: borderWidth,
     },
   }
 }

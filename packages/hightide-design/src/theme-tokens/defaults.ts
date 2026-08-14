@@ -12,7 +12,7 @@ import type {
 import type {
   OutlineToken,
   ThemeAppearancePercentages,
-  ThemeBordersTokens,
+  ThemeBorderWidthTokens,
   ThemeColorTokens,
   ThemeElevationTokens,
   ThemeIcongraphyTokens,
@@ -131,12 +131,10 @@ export const defaultShapeTokens = (): ThemeShapeTokens => ({
   },
 })
 
-export const defaultBordersTokens = (): ThemeBordersTokens => ({
-  borderWidths: {
-    thin: 1,
-    normal: 2,
-    thick: 4,
-  },
+export const defaultBorderWidthTokens = (): ThemeBorderWidthTokens => ({
+  thin: 1,
+  normal: 2,
+  thick: 4,
 })
 
 export const defaultMotionTokens = (): ThemeMotionTokens => ({
@@ -256,7 +254,7 @@ export const buildColorTokens = (params: {
 export const resolveSharedGroups = (
   config: ThemeTokensModeConfig,
   elevationDefaults: ThemeElevationTokens
-): Pick<ThemeTokens, 'decoration' | 'typography' | 'icongraphy' | 'size' | 'spacing' | 'shape' | 'borders' | 'elevation' | 'motion' | 'focusOutline'> => {
+): Pick<ThemeTokens, 'decoration' | 'typography' | 'icongraphy' | 'size' | 'spacing' | 'shape' | 'borderWidth' | 'elevation' | 'motion' | 'focusOutline'> => {
   const appearanceDefaults = defaultAppearancePercentages()
   const focusOutlineDefaults = defaultFocusOutlineToken()
   const icongraphyDefaults = defaultIcongraphyTokens()
@@ -295,11 +293,9 @@ export const resolveSharedGroups = (
         ...config.shape?.padding,
       },
     },
-    borders: {
-      borderWidths: {
-        ...defaultBordersTokens().borderWidths,
-        ...config.borders?.borderWidths,
-      },
+    borderWidth: {
+      ...defaultBorderWidthTokens(),
+      ...config.borderWidth,
     },
     elevation: {
       ...elevationDefaults,

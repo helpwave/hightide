@@ -66,7 +66,7 @@ export const multiSelectTokenResolver: MultiSelectTokenResolver = ({
   overrides,
   state,
 }) => {
-  const { color, spacing, shape, borders, typography } = themeTokens
+  const { color, spacing, shape, borderWidth, typography } = themeTokens
   const checkboxSize = spacing.lg + spacing.xs
   const onColor = color.surface.onColor
   const accentPair = overrides?.color ?? color.primary
@@ -141,7 +141,7 @@ export const multiSelectTokenResolver: MultiSelectTokenResolver = ({
       border: {
         width: {
           type: 'all',
-          value: borders.borderWidths.thin,
+          value: borderWidth.thin,
         },
         color: {
           type: 'all',
@@ -196,7 +196,7 @@ export const multiSelectTokenResolver: MultiSelectTokenResolver = ({
       border: {
         width: {
           type: 'all',
-          value: borders.borderWidths.thin,
+          value: borderWidth.thin,
         },
         color: {
           type: 'all',

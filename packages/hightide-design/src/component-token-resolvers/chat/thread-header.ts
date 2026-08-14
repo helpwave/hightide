@@ -18,7 +18,7 @@ export type ChatThreadHeaderTokenResolver = ComponentTokenResolver<
 >
 
 export const chatThreadHeaderTokenResolver: ChatThreadHeaderTokenResolver = ({ themeTokens, semanticResolvers }) => {
-  const { color, spacing, shape, borders, typography } = themeTokens
+  const { color, spacing, shape, borderWidth, typography } = themeTokens
   const descriptionColor = resolveDescriptionColor({ themeTokens, semanticResolvers })
   const fadedBorder = resolveFadedBorder({ themeTokens, semanticResolvers })
 
@@ -33,7 +33,7 @@ export const chatThreadHeaderTokenResolver: ChatThreadHeaderTokenResolver = ({ t
       border: {
         width: {
           type: 'physicalSide',
-          bottom: borders.borderWidths.thin,
+          bottom: borderWidth.thin,
         },
         color: {
           type: 'physicalSide',

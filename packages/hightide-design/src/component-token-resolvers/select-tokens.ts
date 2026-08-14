@@ -62,7 +62,7 @@ export const selectTokenResolver: SelectTokenResolver = ({
   overrides,
   state,
 }) => {
-  const { color, spacing, shape, borders, typography } = themeTokens
+  const { color, spacing, shape, borderWidth, typography } = themeTokens
   const onColor = color.surface.onColor
   const accentPair = overrides?.color ?? color.primary
   const fadedBorder = semanticResolvers.asFaded({
@@ -142,7 +142,7 @@ export const selectTokenResolver: SelectTokenResolver = ({
       border: {
         width: {
           type: 'all',
-          value: borders.borderWidths.thin,
+          value: borderWidth.thin,
         },
         color: {
           type: 'all',

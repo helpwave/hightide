@@ -43,10 +43,10 @@ export const switchTokenResolver: SwitchTokenResolver = ({
   semanticResolvers,
   state,
 }) => {
-  const { color, borders } = themeTokens
+  const { color, borderWidth: borderWidthTokens } = themeTokens
   const mediumControl = semanticResolvers.controlLayout({ themeTokens, size: 'md' })
   const onColor = color.surface.onColor
-  const borderWidth = borders.borderWidths.normal
+  const borderWidth = borderWidthTokens.normal
   const focusOutline = themeTokens.focusOutline
   const thumbSize = state.has('active') ? THUMB_SIZE_ACTIVE : THUMB_SIZE_INACTIVE
   const fadedBorder = semanticResolvers.asFaded({

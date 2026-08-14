@@ -93,9 +93,7 @@ export type ThemeShapeTokens = {
   padding: Record<ThemeSpacingSize, number>,
 }
 
-export type ThemeBordersTokens = {
-  borderWidths: Record<ThemeBorderWidthKey, number>,
-}
+export type ThemeBorderWidthTokens = Record<ThemeBorderWidthKey, number>
 
 export type ShadowToken = ShadowLayoutToken & { color: ColorToken }
 
@@ -113,7 +111,7 @@ export type ThemeTokens = {
   size: ThemeSizeTokens,
   spacing: ThemeSpacingTokens,
   shape: ThemeShapeTokens,
-  borders: ThemeBordersTokens,
+  borderWidth: ThemeBorderWidthTokens,
   elevation: ThemeElevationTokens,
   motion: ThemeMotionTokens,
   focusOutline: OutlineToken,

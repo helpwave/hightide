@@ -29,12 +29,12 @@ export type ChatQuickReplyChipTokenResolver = ComponentTokenResolver<
 >
 
 export const chatQuickReplyChipTokenResolver: ChatQuickReplyChipTokenResolver = ({ themeTokens, semanticResolvers, state }) => {
-  const { color, spacing, shape, borders, typography } = themeTokens
+  const { color, spacing, shape, borderWidth, typography } = themeTokens
   const descriptionColor = resolveDescriptionColor({ themeTokens, semanticResolvers })
   const fadedBorder = resolveFadedBorder({ themeTokens, semanticResolvers })
   const hoverColor = resolveHoverColor({ themeTokens })
   const isPressed = !!state.isPressed && !state.isDisabled
-  const hairline = borders.borderWidths.thin
+  const hairline = borderWidth.thin
 
   return {
     container: {
