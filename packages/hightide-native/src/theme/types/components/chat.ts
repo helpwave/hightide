@@ -60,6 +60,7 @@ export type PressableState = ThemedPressableState
 
 export type ChatAttachmentMessageBubbleFileIconContainerStyle = ViewStyle
 export type ChatAttachmentMessageBubbleFileIconStyle = IconStyle
+export type ChatAttachmentMessageBubbleDownloadIconContainerStyle = ViewStyle
 export type ChatAttachmentMessageBubbleDownloadIconStyle = IconStyle
 export type ChatAttachmentMessageBubbleFileNameTextStyle = TextStyle
 export type ChatAttachmentMessageBubbleFileMetadataTextStyle = TextStyle
@@ -153,6 +154,7 @@ export type ChatAttachmentMessageBubbleThemeResolvers = {
   >,
   fileIconContainer: StyleResolverFunction<ChatAttachmentMessageBubbleState, ChatAttachmentMessageBubbleFileIconContainerStyle>,
   fileIcon: StyleResolverFunction<ChatAttachmentMessageBubbleState, ChatAttachmentMessageBubbleFileIconStyle>,
+  downloadIconContainer: StyleResolverFunction<ChatAttachmentMessageBubbleState, ChatAttachmentMessageBubbleDownloadIconContainerStyle>,
   downloadIcon: StyleResolverFunction<ChatAttachmentMessageBubbleState, ChatAttachmentMessageBubbleDownloadIconStyle>,
   fileNameText: StyleResolverFunction<ChatAttachmentMessageBubbleState, ChatAttachmentMessageBubbleFileNameTextStyle>,
   fileMetadataText: StyleResolverFunction<ChatAttachmentMessageBubbleState, ChatAttachmentMessageBubbleFileMetadataTextStyle>,

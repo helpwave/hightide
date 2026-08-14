@@ -7,6 +7,7 @@ import type {
 
 import { toContainerStyle, toTextStyle } from '../../adapters/style-adapters'
 import type {
+  ChatAttachmentMessageBubbleDownloadIconContainerStyle,
   ChatAttachmentMessageBubbleDownloadIconStyle,
   ChatAttachmentMessageBubbleFileIconContainerStyle,
   ChatAttachmentMessageBubbleFileIconStyle,
@@ -148,6 +149,11 @@ export const toChatAttachmentMessageBubbleThemeResolvers: ComponentThemeResolver
         color: fileIcon.color,
       }
     }),
+    downloadIconContainer: createStyleResolver((
+      state: ChatAttachmentMessageBubbleState
+    ): ChatAttachmentMessageBubbleDownloadIconContainerStyle => (
+      toContainerStyle(resolve(state.direction).downloadIconContainer)
+    )),
     downloadIcon: createValueResolver((
       state: ChatAttachmentMessageBubbleState
     ): ChatAttachmentMessageBubbleDownloadIconStyle => {

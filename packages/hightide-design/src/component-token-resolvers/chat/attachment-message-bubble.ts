@@ -27,6 +27,7 @@ export type ChatAttachmentMessageBubbleTokens = {
   } & Partial<PressableTokens>,
   fileIconContainer: ContainerTokens,
   fileIcon: IconTokens,
+  downloadIconContainer: ContainerTokens,
   downloadIcon: IconTokens,
   fileNameText: TextStyleTokens,
   fileMetadataText: TextStyleTokens,
@@ -43,7 +44,6 @@ export const chatAttachmentMessageBubbleTokenResolver: ChatAttachmentMessageBubb
 }) => {
   const { color, size, spacing, shape, typography, icongraphy } = themeTokens
   const isOutgoing = config.direction === 'outgoing'
-
   return {
     chatMessageBubbleOverrides: {},
     contentContainer: {
@@ -80,8 +80,18 @@ export const chatAttachmentMessageBubbleTokenResolver: ChatAttachmentMessageBubb
       strokeWidth: icongraphy.strokeWidth,
       color: color.negative.color,
     },
+    downloadIconContainer: {
+      size: {
+        width: size.sm,
+        height: size.sm,
+      },
+      layout: {
+        mainAxisAlignment: 'center',
+        crossAxisAligment: 'center',
+      },
+    },
     downloadIcon: {
-      size: icongraphy.sizes.md,
+      size: icongraphy.sizes.sm,
       strokeWidth: icongraphy.strokeWidth,
     },
     fileNameText: {

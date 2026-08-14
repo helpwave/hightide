@@ -117,6 +117,10 @@ export const ChatAttachmentMessageBubble = ({
     () => attachment.fileIcon(state),
     [attachment, state]
   )
+  const resolvedDownloadIconContainerStyle = useMemo(
+    () => attachment.downloadIconContainer(state),
+    [attachment, state]
+  )
   const resolvedDownloadIcon = useMemo(
     () => attachment.downloadIcon(state),
     [attachment, state]
@@ -228,12 +232,14 @@ export const ChatAttachmentMessageBubble = ({
             )
           )}
         </View>
-        <ThemedIcon
-          icon={HightideIconRegistry.Download}
-          size={resolvedDownloadIcon.size}
-          strokeWidth={resolvedDownloadIcon.strokeWidth}
-          color={resolvedDownloadIcon.color}
-        />
+        <View style={resolvedDownloadIconContainerStyle}>
+          <ThemedIcon
+            icon={HightideIconRegistry.Download}
+            size={resolvedDownloadIcon.size}
+            strokeWidth={resolvedDownloadIcon.strokeWidth}
+            color={resolvedDownloadIcon.color}
+          />
+        </View>
       </ThemedPressable>
     </ChatMessageBubble>
   )
