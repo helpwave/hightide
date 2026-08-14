@@ -10,10 +10,9 @@ import {
 import { HightideIconRegistry } from '../../icons/HightideIconRegistry'
 import { ThemedIcon } from '../visualization-and-display/ThemedIcon'
 import { ThemedText } from '../visualization-and-display/ThemedText'
-import { IconButton } from '../user-interaction/IconButton'
+import { ThemedPressable } from '../user-interaction/ThemedPressable'
 import { useTheme } from '../../global-contexts/theme/ThemeContext'
 import type {
-  ChatAttachmentMessageBubbleContentContainerStyle,
   ChatAttachmentMessageBubbleFileMetadataTextStyle,
   ChatAttachmentMessageBubbleFileNameTextStyle,
   ChatAttachmentMessageBubbleState,
@@ -23,7 +22,9 @@ import type {
   ChatMessageBubbleMetaDataContainerStyle,
   ChatMessageBubbleMetaDataStatusContainerStyle,
   ChatMessageBubbleMetaDataTextStyle,
-  ChatMessageBubbleState
+  ChatMessageBubbleState,
+  PressableContainerStyle,
+  PressableState
 } from '../../theme/types/components/chat'
 import type { StyleOverwrite } from '../../theme/types/resolver'
 import {
@@ -32,14 +33,15 @@ import {
 } from './ChatMessageBubble'
 
 export type ChatAttachmentMessageBubbleProps = Omit<ChatMessageBubbleProps, 'children'> & {
+  children?: ReactNode,
   name: ReactNode,
   metadata?: ReactNode,
   icon?: ReactNode,
   downloadLabel?: string,
   onDownload?: () => void,
   contentContainerStyle?: StyleOverwrite<
-    ChatAttachmentMessageBubbleState,
-    ChatAttachmentMessageBubbleContentContainerStyle
+    PressableState,
+    PressableContainerStyle
   >,
   fileNameTextStyle?: StyleOverwrite<
     ChatAttachmentMessageBubbleState,
@@ -55,28 +57,29 @@ const mergeBubbleStyleOverwrite = <TStyle extends StyleProp<ViewStyle> | object>
   tokenOverride: TStyle,
   userOverwrite?: StyleOverwrite<ChatMessageBubbleState, TStyle>
 ): StyleOverwrite<ChatMessageBubbleState, TStyle> => (
-    (prev, state) => {
-      const withTokenOverride = {
-        ...(prev as object),
-        ...(tokenOverride as object),
-      } as TStyle
+  (prev, state) => {
+    const withTokenOverride = {
+      ...(prev as object),
+      ...(tokenOverride as object),
+    } as TStyle
 
-      if (userOverwrite === undefined) {
-        return withTokenOverride
-      }
-
-      if (typeof userOverwrite === 'function') {
-        return userOverwrite(withTokenOverride, state)
-      }
-
-      return {
-        ...(withTokenOverride as object),
-        ...(userOverwrite as object),
-      } as TStyle
+    if (userOverwrite === undefined) {
+      return withTokenOverride
     }
-  )
+
+    if (typeof userOverwrite === 'function') {
+      return userOverwrite(withTokenOverride, state)
+    }
+
+    return {
+      ...(withTokenOverride as object),
+      ...(userOverwrite as object),
+    } as TStyle
+  }
+)
 
 export const ChatAttachmentMessageBubble = ({
+  children,
   name,
   metadata,
   icon,
@@ -101,17 +104,21 @@ export const ChatAttachmentMessageBubble = ({
   const state = useMemo(() => ({ direction }), [direction])
   const attachment = theme.components.chat.attachmentMessageBubble
   const bubbleOverrides = attachment.chatMessageBubbleOverrides
-
-  const resolvedContentContainerStyle = useMemo(
-    () => attachment.contentContainer(state, contentContainerStyle),
-    [attachment, state, contentContainerStyle]
+  const contentResolvers = useMemo(
+    () => attachment.contentContainer(state),
+    [attachment, state]
   )
+
   const resolvedFileIconContainerStyle = useMemo(
     () => attachment.fileIconContainer(state),
     [attachment, state]
   )
   const resolvedFileIcon = useMemo(
     () => attachment.fileIcon(state),
+    [attachment, state]
+  )
+  const resolvedDownloadIcon = useMemo(
+    () => attachment.downloadIcon(state),
     [attachment, state]
   )
   const resolvedFileNameTextStyle = useMemo(
@@ -180,7 +187,21 @@ export const ChatAttachmentMessageBubble = ({
       metaDataStatusContainerStyle={resolvedMetaDataStatusContainerStyle}
       metaDataTextStyle={resolvedMetaDataTextStyle}
     >
-      <View style={resolvedContentContainerStyle}>
+      {children}
+      <ThemedPressable
+        accessibilityLabel={downloadLabel}
+        disabled={onDownload == null}
+        onPress={onDownload}
+        containerStyle={(_, pressableState) => (
+          contentResolvers.container(pressableState, contentContainerStyle)
+        )}
+        stateLayerStyle={(_, pressableState) => (
+          contentResolvers.stateLayer(pressableState)
+        )}
+        textStyle={(_, pressableState) => (
+          contentResolvers.text(pressableState)
+        )}
+      >
         <View style={resolvedFileIconContainerStyle}>
           {icon ?? (
             <ThemedIcon
@@ -199,21 +220,21 @@ export const ChatAttachmentMessageBubble = ({
           )}
           {metadata != null && (
             typeof metadata === 'string' || typeof metadata === 'number' ? (
-              <ThemedText style={resolvedFileMetadataTextStyle}>{metadata}</ThemedText>
+              <ThemedText appearance="description" style={resolvedFileMetadataTextStyle}>
+                {metadata}
+              </ThemedText>
             ) : (
               metadata
             )
           )}
         </View>
-        {onDownload && (
-          <IconButton
-            icon={HightideIconRegistry.Download}
-            accessibilityLabel={downloadLabel}
-            variant="foreground"
-            onPress={onDownload}
-          />
-        )}
-      </View>
+        <ThemedIcon
+          icon={HightideIconRegistry.Download}
+          size={resolvedDownloadIcon.size}
+          strokeWidth={resolvedDownloadIcon.strokeWidth}
+          color={resolvedDownloadIcon.color}
+        />
+      </ThemedPressable>
     </ChatMessageBubble>
   )
 }

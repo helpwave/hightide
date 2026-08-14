@@ -10,6 +10,7 @@ import type {
   StyleResolverFunction
 } from '../resolver'
 import type { IconStyle } from '../../../icons'
+import type { ThemedPressableState } from './themedPressable'
 
 export type ChatMessageDirection = 'incoming' | 'outgoing'
 
@@ -51,9 +52,15 @@ export type ChatAttachmentMessageBubbleState = {
   direction: ChatMessageDirection,
 }
 
-export type ChatAttachmentMessageBubbleContentContainerStyle = ViewStyle
+export type PressableContainerStyle = ViewStyle
+export type PressableStateLayerStyle = ViewStyle
+export type PressableTextStyle = TextStyle
+
+export type PressableState = ThemedPressableState
+
 export type ChatAttachmentMessageBubbleFileIconContainerStyle = ViewStyle
 export type ChatAttachmentMessageBubbleFileIconStyle = IconStyle
+export type ChatAttachmentMessageBubbleDownloadIconStyle = IconStyle
 export type ChatAttachmentMessageBubbleFileNameTextStyle = TextStyle
 export type ChatAttachmentMessageBubbleFileMetadataTextStyle = TextStyle
 
@@ -127,9 +134,26 @@ export type ChatAttachmentMessageBubbleOverridesThemeResolvers = {
 
 export type ChatAttachmentMessageBubbleThemeResolvers = {
   chatMessageBubbleOverrides: ChatAttachmentMessageBubbleOverridesThemeResolvers,
-  contentContainer: StyleResolverFunction<ChatAttachmentMessageBubbleState, ChatAttachmentMessageBubbleContentContainerStyle>,
+  contentContainer: StyleResolverFunction<
+    ChatAttachmentMessageBubbleState,
+    {
+      container: StyleResolverFunction<
+        PressableState,
+        PressableContainerStyle
+      >,
+      stateLayer: StyleResolverFunction<
+        PressableState,
+        PressableStateLayerStyle
+      >,
+      text: StyleResolverFunction<
+        PressableState,
+        PressableTextStyle
+      >,
+    }
+  >,
   fileIconContainer: StyleResolverFunction<ChatAttachmentMessageBubbleState, ChatAttachmentMessageBubbleFileIconContainerStyle>,
   fileIcon: StyleResolverFunction<ChatAttachmentMessageBubbleState, ChatAttachmentMessageBubbleFileIconStyle>,
+  downloadIcon: StyleResolverFunction<ChatAttachmentMessageBubbleState, ChatAttachmentMessageBubbleDownloadIconStyle>,
   fileNameText: StyleResolverFunction<ChatAttachmentMessageBubbleState, ChatAttachmentMessageBubbleFileNameTextStyle>,
   fileMetadataText: StyleResolverFunction<ChatAttachmentMessageBubbleState, ChatAttachmentMessageBubbleFileMetadataTextStyle>,
 }

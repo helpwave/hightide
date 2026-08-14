@@ -7,7 +7,7 @@ import type {
 
 import { toContainerStyle, toTextStyle } from '../../adapters/style-adapters'
 import type {
-  ChatAttachmentMessageBubbleContentContainerStyle,
+  ChatAttachmentMessageBubbleDownloadIconStyle,
   ChatAttachmentMessageBubbleFileIconContainerStyle,
   ChatAttachmentMessageBubbleFileIconStyle,
   ChatAttachmentMessageBubbleFileMetadataTextStyle,
@@ -20,11 +20,16 @@ import type {
   ChatMessageBubbleMetaDataContainerStyle,
   ChatMessageBubbleMetaDataIconStyle,
   ChatMessageBubbleMetaDataStatusContainerStyle,
-  ChatMessageBubbleMetaDataTextStyle
+  ChatMessageBubbleMetaDataTextStyle,
+  PressableContainerStyle,
+  PressableState,
+  PressableStateLayerStyle,
+  PressableTextStyle
 } from '../../types/components/chat'
 import {
   createStyleResolver,
   createValueResolver,
+  toPressableInteractionState,
   type ComponentThemeResolver
 } from '../../types/resolver'
 
@@ -91,11 +96,42 @@ export const toChatAttachmentMessageBubbleThemeResolvers: ComponentThemeResolver
         toOptionalIconStyle(resolve(state.direction).chatMessageBubbleOverrides.metaDataIcon)
       )),
     },
-    contentContainer: createStyleResolver((
-      state: ChatAttachmentMessageBubbleState
-    ): ChatAttachmentMessageBubbleContentContainerStyle => (
-      toContainerStyle(resolve(state.direction).contentContainer)
-    )),
+    contentContainer: createValueResolver((state: ChatAttachmentMessageBubbleState) => {
+      const contentContainer = resolve(state.direction).contentContainer
+
+      const resolvePressable = (pressableState: PressableState) => componentTokens.pressable({
+        themeTokens,
+        semanticResolvers: semanticTokens,
+        overrides: {
+          size: contentContainer.config.size,
+          color: contentContainer.config.color,
+          coloringStyle: contentContainer.config.coloringStyle,
+          coloringColorVariant: contentContainer.config.coloringColorVariant,
+          hasAdditionalHorizontalPadding: contentContainer.config.hasAdditionalHorizontalPadding,
+        },
+        state: toPressableInteractionState(pressableState),
+      })
+
+      return {
+        container: createStyleResolver((pressableState: PressableState): PressableContainerStyle => ({
+          ...toContainerStyle(resolvePressable(pressableState).container),
+          ...toOptionalContainerStyle(contentContainer.container),
+        })),
+        stateLayer: createStyleResolver((pressableState: PressableState): PressableStateLayerStyle => ({
+          ...toContainerStyle(resolvePressable(pressableState).stateLayer),
+          position: 'absolute',
+          top: 0,
+          right: 0,
+          bottom: 0,
+          left: 0,
+          ...toOptionalContainerStyle(contentContainer.stateLayer),
+        })),
+        text: createStyleResolver((pressableState: PressableState): PressableTextStyle => ({
+          ...toTextStyle(resolvePressable(pressableState).text),
+          ...toOptionalTextStyle(contentContainer.text),
+        })),
+      }
+    }),
     fileIconContainer: createStyleResolver((
       state: ChatAttachmentMessageBubbleState
     ): ChatAttachmentMessageBubbleFileIconContainerStyle => (
@@ -110,6 +146,17 @@ export const toChatAttachmentMessageBubbleThemeResolvers: ComponentThemeResolver
         size: fileIcon.size,
         strokeWidth: fileIcon.strokeWidth,
         color: fileIcon.color,
+      }
+    }),
+    downloadIcon: createValueResolver((
+      state: ChatAttachmentMessageBubbleState
+    ): ChatAttachmentMessageBubbleDownloadIconStyle => {
+      const { downloadIcon } = resolve(state.direction)
+
+      return {
+        size: downloadIcon.size,
+        strokeWidth: downloadIcon.strokeWidth,
+        color: downloadIcon.color,
       }
     }),
     fileNameText: createStyleResolver((
