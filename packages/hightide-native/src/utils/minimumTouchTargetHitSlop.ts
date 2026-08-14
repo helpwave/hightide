@@ -7,7 +7,7 @@ import type {
 
 export const computeMinimumTouchTargetHitSlop = (
   layout: { width: number, height: number },
-  touchTargetSize: number,
+  touchTargetSize: number
 ): Insets => {
   const horizontal = Math.max(0, touchTargetSize - layout.width) / 2
   const vertical = Math.max(0, touchTargetSize - layout.height) / 2

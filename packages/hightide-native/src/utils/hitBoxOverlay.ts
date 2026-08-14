@@ -29,7 +29,7 @@ export const resolveHitSlopInsets = (hitSlop: PressableProps['hitSlop']): Insets
 
 export const createHitBoxOverlayStyle = (
   hitSlop: PressableProps['hitSlop'],
-  color: string,
+  color: string
 ): ViewStyle => {
   const insets = resolveHitSlopInsets(hitSlop)
 
