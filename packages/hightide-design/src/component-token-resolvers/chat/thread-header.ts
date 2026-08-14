@@ -27,7 +27,7 @@ export const chatThreadHeaderTokenResolver: ChatThreadHeaderTokenResolver = ({ t
       backgroundColor: color.surface.color,
       padding: {
         type: 'physicalAxis',
-        vertical: shape.padding.xxl,
+        vertical: shape.padding.xl,
         horizontal: spacing.lg,
       },
       border: {
@@ -43,7 +43,7 @@ export const chatThreadHeaderTokenResolver: ChatThreadHeaderTokenResolver = ({ t
       layout: {
         direction: 'horizontal',
         crossAxisAligment: 'center',
-        gap: shape.padding.xxl,
+        gap: shape.padding.xl,
       },
     },
     title: {

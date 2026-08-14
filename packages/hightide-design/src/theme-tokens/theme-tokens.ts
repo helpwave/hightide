@@ -3,10 +3,12 @@ import type { ShadowLayoutToken } from '../primitive-tokens/shadow'
 import type {
   ColorPairToken,
   IconSize,
+  ThemeBorderRadiusSize,
   ThemeBorderWidthKey,
   ThemeElevationLevel,
   ThemeLayoutSize,
   ThemeMotionDurationKey,
+  ThemePaddingSize,
   ThemeSpacingSize,
   ThemeTypographySize,
   TintConfig
@@ -88,9 +90,13 @@ export type ThemeSizeTokens = Record<ThemeLayoutSize, number>
 
 export type ThemeSpacingTokens = Record<ThemeSpacingSize, number>
 
+export type ThemeBorderRadiusTokens = Record<ThemeBorderRadiusSize, number>
+
+export type ThemePaddingTokens = Record<ThemePaddingSize, number>
+
 export type ThemeShapeTokens = {
-  borderRadius: Record<ThemeLayoutSize, number>,
-  padding: Record<ThemeSpacingSize, number>,
+  borderRadius: ThemeBorderRadiusTokens,
+  padding: ThemePaddingTokens,
 }
 
 export type ThemeBorderWidthTokens = Record<ThemeBorderWidthKey, number>

@@ -29,7 +29,7 @@ export const chatConversationListTokenResolver: ChatConversationListTokenResolve
         horizontal: spacing.lg,
       },
       layout: {
-        gap: shape.padding.xxl,
+        gap: shape.padding.xl,
       },
     },
     footer: {

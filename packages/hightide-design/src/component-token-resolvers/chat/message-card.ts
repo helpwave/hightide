@@ -62,8 +62,8 @@ export const chatMessageCardTokenResolver: ChatMessageCardTokenResolver = ({ the
       },
       padding: {
         type: 'physicalAxis',
-        horizontal: themeTokens.shape.padding.xxl,
-        vertical: themeTokens.shape.padding.xxl,
+        horizontal: themeTokens.shape.padding.xl,
+        vertical: themeTokens.shape.padding.xl,
       },
       layout: {
         direction: 'vertical',

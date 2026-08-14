@@ -86,7 +86,7 @@ export const chatConversationRowTokenResolver: ChatConversationRowTokenResolver 
       },
       padding: {
         type: 'physicalAxis',
-        vertical: shape.padding.xxl,
+        vertical: shape.padding.xl,
         horizontal: spacing.lg,
       },
       border: {
@@ -102,7 +102,7 @@ export const chatConversationRowTokenResolver: ChatConversationRowTokenResolver 
       layout: {
         direction: 'horizontal',
         crossAxisAligment: 'center',
-        gap: shape.padding.xxl,
+        gap: shape.padding.xl,
       },
     },
     title: {

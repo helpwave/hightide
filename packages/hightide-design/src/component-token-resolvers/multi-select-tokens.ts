@@ -161,7 +161,7 @@ export const multiSelectTokenResolver: MultiSelectTokenResolver = ({
       opacity: state.has('disabled') ? 0.5 : 1,
       padding: {
         type: 'physicalAxis',
-        vertical: shape.padding.xxl,
+        vertical: shape.padding.xl,
         horizontal: spacing.lg,
       },
       layout: {

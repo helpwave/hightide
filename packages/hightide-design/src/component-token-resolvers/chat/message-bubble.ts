@@ -59,7 +59,7 @@ export const chatMessageBubbleTokenResolver: ChatMessageBubbleTokenResolver = ({
       },
       padding: {
         type: 'physicalAxis',
-        vertical: shape.padding.xxl,
+        vertical: shape.padding.xl,
         horizontal: spacing.lg,
       },
       layout: {

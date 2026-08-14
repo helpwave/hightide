@@ -22,7 +22,7 @@ export const chatMessageListTokenResolver: ChatMessageListTokenResolver = ({ the
         horizontal: spacing.lg,
       },
       layout: {
-        gap: shape.padding.xxl,
+        gap: shape.padding.xl,
       },
     },
   }

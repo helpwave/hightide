@@ -31,6 +31,8 @@ export type TintStrength = keyof TintConfig
 
 export type ThemeLayoutSize = 'xs' | 'sm' | 'md' | 'lg' | 'xl'
 export type ThemeSpacingSize = 'xxs' | 'xs' | 'sm' | 'md' | 'lg' | 'xl' | 'xxl'
+export type ThemeBorderRadiusSize = 'xxs' | 'xs' | 'sm' | 'md' | 'lg' | 'xl' | 'xxl'
+export type ThemePaddingSize = 'xs' | 'sm' | 'md' | 'lg' | 'xl'
 export type ThemeTypographySize = 'sm' | 'md' | 'lg'
 export type IconSize = 'sm' | 'md' | 'lg' | 'xl'
 export type ThemeBorderWidthKey = 'thin' | 'normal' | 'thick'
@@ -87,8 +89,8 @@ export type ThemeTokensConfig = {
   size?: Partial<Record<ThemeLayoutSize, number>>,
   spacing?: Partial<Record<ThemeSpacingSize, number>>,
   shape?: {
-    borderRadius?: Partial<Record<ThemeLayoutSize, number>>,
-    padding?: Partial<Record<ThemeSpacingSize, number>>,
+    borderRadius?: Partial<Record<ThemeBorderRadiusSize, number>>,
+    padding?: Partial<Record<ThemePaddingSize, number>>,
   },
   borderWidth?: Partial<Record<ThemeBorderWidthKey, number>>,
   elevation?: Partial<Record<ThemeElevationLevel, ShadowLayoutToken>>,

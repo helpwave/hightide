@@ -114,20 +114,20 @@ export const defaultSpacingTokens = (): ThemeSpacingTokens => ({
 
 export const defaultShapeTokens = (): ThemeShapeTokens => ({
   borderRadius: {
+    xxs: 2,
     xs: 4,
     sm: 6,
     md: 8,
     lg: 10,
     xl: 14,
+    xxl: 18,
   },
   padding: {
-    xxs: 1,
     xs: 2,
     sm: 4,
     md: 6,
-    lg: 8,
-    xl: 10,
-    xxl: 12,
+    lg: 10,
+    xl: 14,
   },
 })
 
