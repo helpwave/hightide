@@ -47,7 +47,7 @@ export const chatMessageComposerTokenResolver: ChatMessageComposerTokenResolver 
       layout: {
         direction: 'horizontal',
         crossAxisAligment: 'end',
-        gap: spacing.xs,
+        gap: spacing.md,
       },
     },
     input: {

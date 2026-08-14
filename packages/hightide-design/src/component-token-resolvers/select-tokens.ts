@@ -131,7 +131,7 @@ export const selectTokenResolver: SelectTokenResolver = ({
     },
     menu: {
       backgroundColor: color.surfaceVariant.color,
-      overflow: 'visible',
+      overflow: 'hidden',
       size: {
         minHeight: menuHeight,
         height: menuHeight,
