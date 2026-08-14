@@ -1,4 +1,4 @@
-import { forwardRef } from 'react'
+import { Fragment, forwardRef } from 'react'
 import {
   Pressable,
   View,
@@ -11,6 +11,7 @@ import type { ColorPairToken } from '@helpwave/hightide-design/theme-tokens'
 import type { ComponentSize, ButtonVariant } from '@helpwave/hightide-design/semantic-token-resolvers'
 
 import { ContentThemeProvider } from '../../global-contexts/content-theme/ContentThemeProvider'
+import { useDebugContext } from '../../global-contexts/debug'
 import { useTheme } from '../../global-contexts/theme/ThemeContext'
 import type { IconComponent } from '../../icons/types'
 import type {
@@ -20,6 +21,8 @@ import type {
 } from '../../theme/types/components/button'
 import type { StyleOverwrite } from '../../theme/types/resolver'
 import type { Color } from '../../theme/types/color'
+import { createHitBoxOverlayStyle } from '../../utils/hitBoxOverlay'
+import { useMinimumTouchTargetHitSlop } from '../../utils/minimumTouchTargetHitSlop'
 import { ThemedIcon } from '../visualization-and-display/ThemedIcon'
 import { ThemedText } from '../visualization-and-display/ThemedText'
 
@@ -40,8 +43,7 @@ export type ButtonProps = Omit<PressableProps, 'children' | 'style'> & {
   leadingIcon?: IconComponent,
   trailingIcon?: IconComponent,
   style?: StyleProp<ViewStyle>,
-  touchTargetStyle?: StyleOverwrite<ButtonState, ButtonStyle>,
-  visualContainerStyle?: StyleOverwrite<ButtonState, ButtonStyle>,
+  containerStyle?: StyleOverwrite<ButtonState, ButtonStyle>,
   stateLayerStyle?: StyleOverwrite<ButtonState, ButtonStyle>,
   textStyle?: StyleOverwrite<ButtonState, ButtonTextStyle>,
 }
@@ -62,13 +64,20 @@ export const Button = forwardRef<React.ComponentRef<typeof Pressable>, ButtonPro
   leadingIcon,
   trailingIcon,
   style,
-  touchTargetStyle,
-  visualContainerStyle,
+  containerStyle,
   stateLayerStyle,
   textStyle,
+  hitSlop: providedHitSlop,
+  onLayout: providedOnLayout,
   ...props
 }, ref) {
   const { theme } = useTheme()
+  const { hitBox } = useDebugContext()
+  const { hitSlop, onLayout } = useMinimumTouchTargetHitSlop({
+    touchTargetSize: theme.semantics.touchTargetSize({}),
+    hitSlop: providedHitSlop,
+    onLayout: providedOnLayout,
+  })
 
   const resolveState = (interaction: PressableInteraction): ButtonState => ({
     size,
@@ -86,9 +95,14 @@ export const Button = forwardRef<React.ComponentRef<typeof Pressable>, ButtonPro
       {...props}
       ref={ref}
       disabled={disabled}
+      hitSlop={hitSlop}
+      onLayout={onLayout}
       style={(pressableState) => {
         const state = resolveState(pressableState as PressableInteraction)
-        return [theme.components.button.touchTarget(state, touchTargetStyle), style]
+        return [
+          theme.components.button.container(state, containerStyle),
+          style,
+        ]
       }}
     >
       {(pressableState) => {
@@ -97,7 +111,13 @@ export const Button = forwardRef<React.ComponentRef<typeof Pressable>, ButtonPro
         const resolvedIcon = theme.components.button.icon(state)
 
         return (
-          <View style={theme.components.button.visualContainer(state, visualContainerStyle)}>
+          <Fragment>
+            {hitBox.isVisualizing && (
+              <View
+                pointerEvents="none"
+                style={createHitBoxOverlayStyle(hitSlop, hitBox.color)}
+              />
+            )}
             <View
               pointerEvents="none"
               style={theme.components.button.stateLayer(state, stateLayerStyle)}
@@ -122,7 +142,7 @@ export const Button = forwardRef<React.ComponentRef<typeof Pressable>, ButtonPro
                 />
               )}
             </ContentThemeProvider>
-          </View>
+          </Fragment>
         )
       }}
     </Pressable>

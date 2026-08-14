@@ -4,7 +4,6 @@ import {
   type ReactNode
 } from 'react'
 import {
-  Pressable,
   View,
   type PressableProps,
   type StyleProp,
@@ -22,6 +21,7 @@ import type {
   ChatConversationRowTitleStyle
 } from '../../theme/types/components/chat'
 import type { StyleOverwrite } from '../../theme/types/resolver'
+import { ThemedPressable } from '../user-interaction'
 
 export type ChatConversationSentIndicator = 'sent' | 'sentAndReceived'
 
@@ -94,7 +94,7 @@ export const ChatConversationRow = ({
   )
 
   return (
-    <Pressable
+    <ThemedPressable
       {...props}
       disabled={disabled}
       style={(pressableState) => {
@@ -131,7 +131,7 @@ export const ChatConversationRow = ({
                   {sentIndicator && (
                     <ThemedIcon
                       icon={sentIndicatorIcon}
-                      size={14}
+                      size={16}
                       color={sentIndicatorColor}
                     />
                   )}
@@ -153,6 +153,6 @@ export const ChatConversationRow = ({
           </Fragment>
         )
       }}
-    </Pressable>
+    </ThemedPressable>
   )
 }

@@ -1,4 +1,4 @@
-import { forwardRef } from 'react'
+import { Fragment, forwardRef } from 'react'
 import {
   Pressable,
   View,
@@ -13,6 +13,7 @@ import type {
 } from '@helpwave/hightide-design/semantic-token-resolvers'
 
 import { ContentThemeProvider } from '../../global-contexts/content-theme/ContentThemeProvider'
+import { useDebugContext } from '../../global-contexts/debug'
 import { useTheme } from '../../global-contexts/theme/ThemeContext'
 import type {
   IconButtonState,
@@ -20,6 +21,8 @@ import type {
 } from '../../theme/types/components/iconButton'
 import type { StyleOverwrite } from '../../theme/types/resolver'
 import type { IconComponent } from '../../icons'
+import { createHitBoxOverlayStyle } from '../../utils/hitBoxOverlay'
+import { useMinimumTouchTargetHitSlop } from '../../utils/minimumTouchTargetHitSlop'
 import { ThemedIcon } from '../visualization-and-display'
 
 export type IconButtonSize = ComponentSize
@@ -38,8 +41,7 @@ export type IconButtonProps = Omit<PressableProps, 'children' | 'style'> & {
   icon: IconComponent,
   accessibilityLabel: string,
   style?: StyleProp<ViewStyle>,
-  touchTargetStyle?: StyleOverwrite<IconButtonState, IconButtonStyle>,
-  visualContainerStyle?: StyleOverwrite<IconButtonState, IconButtonStyle>,
+  containerStyle?: StyleOverwrite<IconButtonState, IconButtonStyle>,
   stateLayerStyle?: StyleOverwrite<IconButtonState, IconButtonStyle>,
 }
 
@@ -58,12 +60,19 @@ export const IconButton = forwardRef<React.ComponentRef<typeof Pressable>, IconB
   disabled,
   accessibilityLabel,
   style,
-  touchTargetStyle,
-  visualContainerStyle,
+  containerStyle,
   stateLayerStyle,
+  hitSlop: providedHitSlop,
+  onLayout: providedOnLayout,
   ...props
 }, ref) {
   const { theme } = useTheme()
+  const { hitBox } = useDebugContext()
+  const { hitSlop, onLayout } = useMinimumTouchTargetHitSlop({
+    touchTargetSize: theme.semantics.touchTargetSize({}),
+    hitSlop: providedHitSlop,
+    onLayout: providedOnLayout,
+  })
 
   const resolveState = (interaction: PressableInteraction): IconButtonState => ({
     size,
@@ -83,9 +92,14 @@ export const IconButton = forwardRef<React.ComponentRef<typeof Pressable>, IconB
       disabled={disabled}
       accessibilityRole="button"
       accessibilityLabel={accessibilityLabel}
+      hitSlop={hitSlop}
+      onLayout={onLayout}
       style={(pressableState) => {
         const state = resolveState(pressableState as PressableInteraction)
-        return [theme.components.iconButton.touchTarget(state, touchTargetStyle), style]
+        return [
+          theme.components.iconButton.container(state, containerStyle),
+          style,
+        ]
       }}
     >
       {(pressableState) => {
@@ -94,7 +108,13 @@ export const IconButton = forwardRef<React.ComponentRef<typeof Pressable>, IconB
         const resolvedText = theme.components.iconButton.text(state)
 
         return (
-          <View style={theme.components.iconButton.visualContainer(state, visualContainerStyle)}>
+          <Fragment>
+            {hitBox.isVisualizing && (
+              <View
+                pointerEvents="none"
+                style={createHitBoxOverlayStyle(hitSlop, hitBox.color)}
+              />
+            )}
             <View
               pointerEvents="none"
               style={theme.components.iconButton.stateLayer(state, stateLayerStyle)}
@@ -105,7 +125,7 @@ export const IconButton = forwardRef<React.ComponentRef<typeof Pressable>, IconB
             >
               <ThemedIcon icon={IconComponent} size={resolvedIcon.size} strokeWidth={resolvedIcon.strokeWidth}/>
             </ContentThemeProvider>
-          </View>
+          </Fragment>
         )
       }}
     </Pressable>

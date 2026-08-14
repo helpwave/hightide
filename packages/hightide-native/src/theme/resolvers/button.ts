@@ -30,13 +30,9 @@ export const toButtonThemeResolvers: ComponentThemeResolver<ButtonThemeResolvers
   })
 
   return {
-    touchTarget: createStyleResolver((state: ButtonState): ButtonStyle => ({
-      ...toContainerStyle(resolve(state).touchTarget),
-      alignSelf: 'flex-start'
-    })),
-    visualContainer: createStyleResolver((state: ButtonState): ButtonStyle => ({
-      ...toContainerStyle(resolve(state).visualContainer),
-      overflow: 'hidden',
+    container: createStyleResolver((state: ButtonState): ButtonStyle => ({
+      ...toContainerStyle(resolve(state).container),
+      alignSelf: 'flex-start',
     })),
     stateLayer: createStyleResolver((state: ButtonState): ButtonStyle => {
       const tokens = resolve(state)

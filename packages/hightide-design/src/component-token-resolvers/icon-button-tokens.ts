@@ -35,8 +35,7 @@ export type IconButtonComponentResolverProps = {
 }
 
 export type IconButtonTokens = {
-  touchTarget: ContainerTokens,
-  visualContainer: ContainerTokens,
+  container: ContainerTokens,
   stateLayer: ContainerTokens,
   icon: IconTokens,
   text: TextStyleTokens,
@@ -82,7 +81,6 @@ export const iconButtonTokenResolver: IconButtonTokenResolver = ({
   const hasBorder = resolved.border !== 'transparent'
   const hasOutline = resolved.outline !== 'transparent'
   const layout = semanticResolvers.controlLayout({ themeTokens, size })
-  const touchTargetSize = semanticResolvers.touchTargetSize({ themeTokens })
   const iconSizeTokens = iconTokenResolver({
     themeTokens,
     semanticResolvers,
@@ -92,18 +90,7 @@ export const iconButtonTokenResolver: IconButtonTokenResolver = ({
   const isHovered = state.has('hovered')
 
   return {
-    touchTarget: {
-      size: {
-        minWidth: touchTargetSize,
-        minHeight: touchTargetSize,
-      },
-      layout: {
-        direction: 'horizontal',
-        mainAxisAlignment: 'center',
-        crossAxisAligment: 'center',
-      },
-    },
-    visualContainer: {
+    container: {
       backgroundColor: visualBackground,
       opacity: state.has('disabled') ? 0.6 : 1,
       border: hasBorder ? {
@@ -140,6 +127,9 @@ export const iconButtonTokenResolver: IconButtonTokenResolver = ({
     },
     stateLayer: {
       backgroundColor: tint,
+      shape: {
+        borderRadius: { type: 'all', value: layout.borderRadius },
+      },
     },
     icon: {
       size: iconSizeTokens.size,

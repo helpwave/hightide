@@ -33,6 +33,10 @@
       "types": "./src/context/theme/index.ts",
       "default": "./src/context/theme/index.ts"
     },
+    "./context/debug": {
+      "types": "./src/context/debug/index.ts",
+      "default": "./src/context/debug/index.ts"
+    },
     "./hooks": {
       "types": "./src/hooks/index.ts",
       "default": "./src/hooks/index.ts"

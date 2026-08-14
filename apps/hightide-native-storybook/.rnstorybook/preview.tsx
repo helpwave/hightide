@@ -30,6 +30,18 @@ const preview: Preview = {
         ],
       },
     },
+    hitBox: {
+      name: 'Hit Box',
+      description: 'Visualize pressable hit boxes including hitSlop',
+      defaultValue: 'hidden',
+      toolbar: {
+        icon: 'eye',
+        items: [
+          { value: 'hidden', title: 'Hit Box Hidden' },
+          { value: 'visible', title: 'Hit Box Visible' },
+        ],
+      },
+    },
   },
   decorators: [
     (Story, context) => {
@@ -38,11 +50,17 @@ const preview: Preview = {
       const theme = isDark ? 'dark' : 'light'
       const locale = context.globals.language
       const surfaceBackground = isDark ? darkBackground : lightBackground
+      const isVisualizingHitBox = context.globals.hitBox === 'visible'
 
       return (
         <HightideProvider
           theme={{ theme }}
           locale={{ locale }}
+          debug={{
+            hitBox: {
+              isVisualizing: isVisualizingHitBox,
+            },
+          }}
         >
           <View style={{ flex: 1, padding: 16, backgroundColor: surfaceBackground }}>
             <Story />

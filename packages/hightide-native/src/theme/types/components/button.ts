@@ -22,8 +22,7 @@ export type ButtonTextStyle = TextStyle
 export type ButtonIconStyle = IconStyle
 
 export type ButtonThemeResolvers = {
-  touchTarget: StyleResolverFunction<ButtonState, ButtonStyle>,
-  visualContainer: StyleResolverFunction<ButtonState, ButtonStyle>,
+  container: StyleResolverFunction<ButtonState, ButtonStyle>,
   stateLayer: StyleResolverFunction<ButtonState, ButtonStyle>,
   icon: StyleResolverFunction<ButtonState, ButtonIconStyle>,
   text: StyleResolverFunction<ButtonState, ButtonTextStyle>,

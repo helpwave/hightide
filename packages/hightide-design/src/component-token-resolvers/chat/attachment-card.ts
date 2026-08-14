@@ -7,7 +7,6 @@ import {
   bubbleMaxWidth,
   resolveAlignment,
   resolveDescriptionColor,
-  resolveFadedBorder,
   resolveMessageCorners,
   type ChatMessageDirection
 } from './shared'
@@ -32,12 +31,10 @@ export type ChatAttachmentCardTokenResolver = ComponentTokenResolver<
 >
 
 export const chatAttachmentCardTokenResolver: ChatAttachmentCardTokenResolver = ({ themeTokens, semanticResolvers, config }) => {
-  const { color, size, shape, borders, typography } = themeTokens
+  const { color, size, shape, typography } = themeTokens
   const descriptionColor = resolveDescriptionColor({ themeTokens, semanticResolvers })
-  const fadedBorder = resolveFadedBorder({ themeTokens, semanticResolvers })
   const alignment = resolveAlignment(config.direction)
   const messageCorners = resolveMessageCorners(themeTokens, config.direction)
-  const hairline = borders.borderWidths.thin
 
   return {
     container: {
@@ -53,22 +50,15 @@ export const chatAttachmentCardTokenResolver: ChatAttachmentCardTokenResolver = 
         vertical: shape.padding.xxl,
         horizontal: shape.padding.xxl,
       },
-      border: {
-        width: {
-          type: 'all',
-          value: hairline,
-        },
-        color: {
-          type: 'all',
-          value: fadedBorder,
-        },
-      },
       layout: {
         direction: 'horizontal',
         crossAxisAligment: 'center',
-        gap: shape.padding.xxl,
+        gap: themeTokens.spacing.md,
         alignSelf: alignment,
       },
+      decoration: {
+        shadow: themeTokens.elevation.level1,
+      }
     },
     icon: {
       backgroundColor: HexColorUtils.hexWithAlpha(color.negative.color, 0.2),

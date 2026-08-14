@@ -30,13 +30,9 @@ export const toThemedPressableThemeResolvers: ComponentThemeResolver<ThemedPress
   })
 
   return {
-    touchTarget: createStyleResolver((state: ThemedPressableState): ThemedPressableStyle => ({
-      ...toContainerStyle(resolve(state).touchTarget),
+    container: createStyleResolver((state: ThemedPressableState): ThemedPressableStyle => ({
+      ...toContainerStyle(resolve(state).container),
       alignSelf: 'flex-start',
-    })),
-    visualContainer: createStyleResolver((state: ThemedPressableState): ThemedPressableStyle => ({
-      ...toContainerStyle(resolve(state).visualContainer),
-      overflow: 'hidden',
     })),
     stateLayer: createStyleResolver((state: ThemedPressableState): ThemedPressableStyle => {
       const tokens = resolve(state)

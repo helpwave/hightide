@@ -30,13 +30,8 @@ export const toIconButtonThemeResolvers: ComponentThemeResolver<IconButtonThemeR
   })
 
   return {
-    touchTarget: createStyleResolver((state: IconButtonState): IconButtonStyle => ({
-      ...toContainerStyle(resolve(state).touchTarget),
-      alignSelf: 'flex-start'
-    })),
-    visualContainer: createStyleResolver((state: IconButtonState): IconButtonStyle => ({
-      ...toContainerStyle(resolve(state).visualContainer),
-      overflow: 'hidden',
+    container: createStyleResolver((state: IconButtonState): IconButtonStyle => ({
+      ...toContainerStyle(resolve(state).container),
     })),
     stateLayer: createStyleResolver((state: IconButtonState): IconButtonStyle => {
       const tokens = resolve(state)

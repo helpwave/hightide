@@ -108,7 +108,7 @@ export const ChatMessageComposer = ({
           disabled={disabled || !(value ?? '').trim()}
           size="sm"
           onPress={send}
-          visualContainerStyle={(prev) => ({ ...prev, borderRadius: 999 })}
+          containerStyle={(prev) => ({ ...prev, borderRadius: 999 })}
           stateLayerStyle={(prev) => ({ ...prev, borderRadius: 999 })}
         />
       </View>

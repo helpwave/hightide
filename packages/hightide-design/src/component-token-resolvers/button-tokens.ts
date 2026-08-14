@@ -36,8 +36,7 @@ export type ButtonComponentResolverProps = {
 }
 
 export type ButtonTokens = {
-  touchTarget: ContainerTokens,
-  visualContainer: ContainerTokens,
+  container: ContainerTokens,
   stateLayer: ContainerTokens,
   icon: IconTokens,
   text: TextStyleTokens,
@@ -80,7 +79,6 @@ export const buttonTokenResolver: ButtonTokenResolver = ({
   const hasBorder = resolved.border !== 'transparent'
   const hasOutline = resolved.outline !== 'transparent'
   const layout = semanticResolvers.controlLayout({ themeTokens, size })
-  const touchTargetSize = semanticResolvers.touchTargetSize({ themeTokens })
   const insetForBordered = Math.max(layout.inset - layout.borderWidth, 0)
   const textStyle = themeTokens.typography.label[toTypographySize(size)]
   const gap = themeTokens.spacing[size]
@@ -92,18 +90,7 @@ export const buttonTokenResolver: ButtonTokenResolver = ({
   })
 
   return {
-    touchTarget: {
-      size: {
-        minWidth: touchTargetSize,
-        minHeight: touchTargetSize,
-      },
-      layout: {
-        direction: 'horizontal',
-        mainAxisAlignment: 'center',
-        crossAxisAligment: 'center',
-      },
-    },
-    visualContainer: {
+    container: {
       backgroundColor: resolved.background,
       opacity: state.has('disabled') ? 0.6 : 1,
       border: hasBorder ? {
@@ -149,6 +136,9 @@ export const buttonTokenResolver: ButtonTokenResolver = ({
     },
     stateLayer: {
       backgroundColor: tint,
+      shape: {
+        borderRadius: { type: 'all', value: layout.borderRadius },
+      },
     },
     icon: {
       size: iconSizeTokens.size,

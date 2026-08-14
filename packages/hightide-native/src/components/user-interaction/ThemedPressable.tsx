@@ -1,10 +1,8 @@
-import { forwardRef, type ReactNode } from 'react'
+import { Fragment, forwardRef } from 'react'
 import {
   Pressable,
   View,
-  type PressableProps,
-  type StyleProp,
-  type ViewStyle
+  type PressableProps
 } from 'react-native'
 
 import type {
@@ -15,6 +13,7 @@ import type {
 import type { ColorPairToken } from '@helpwave/hightide-design/theme-tokens'
 
 import { ContentThemeProvider } from '../../global-contexts/content-theme/ContentThemeProvider'
+import { useDebugContext } from '../../global-contexts/debug'
 import { useTheme } from '../../global-contexts/theme/ThemeContext'
 import type {
   ThemedPressableState,
@@ -22,6 +21,8 @@ import type {
   ThemedPressableTextStyle
 } from '../../theme/types/components/themedPressable'
 import type { StyleOverwrite } from '../../theme/types/resolver'
+import { createHitBoxOverlayStyle } from '../../utils/hitBoxOverlay'
+import { useMinimumTouchTargetHitSlop } from '../../utils/minimumTouchTargetHitSlop'
 
 export type ThemedPressableSize = ComponentSize
 
@@ -31,16 +32,13 @@ export const ThemedPressableUtil = {
   coloringColorVariants: ['normal', 'tonal', 'transparent'] as const satisfies readonly ColoringColorVariant[],
 }
 
-export type ThemedPressableProps = Omit<PressableProps, 'children' | 'style'> & {
+export type ThemedPressableProps = PressableProps & {
   size?: ThemedPressableSize,
   color?: ColorPairToken,
   coloringStyle?: ColoringStyle,
   coloringColorVariant?: ColoringColorVariant,
   hasAdditionalHorizontalPadding?: boolean,
-  children?: ReactNode,
-  style?: StyleProp<ViewStyle>,
-  touchTargetStyle?: StyleOverwrite<ThemedPressableState, ThemedPressableStyle>,
-  visualContainerStyle?: StyleOverwrite<ThemedPressableState, ThemedPressableStyle>,
+  containerStyle?: StyleOverwrite<ThemedPressableState, ThemedPressableStyle>,
   stateLayerStyle?: StyleOverwrite<ThemedPressableState, ThemedPressableStyle>,
   textStyle?: StyleOverwrite<ThemedPressableState, ThemedPressableTextStyle>,
 }
@@ -61,13 +59,20 @@ export const ThemedPressable = forwardRef<React.ComponentRef<typeof Pressable>, 
   hasAdditionalHorizontalPadding = false,
   disabled,
   style,
-  touchTargetStyle,
-  visualContainerStyle,
+  containerStyle,
   stateLayerStyle,
   textStyle,
+  hitSlop: providedHitSlop,
+  onLayout: providedOnLayout,
   ...props
 }, ref) {
   const { theme } = useTheme()
+  const { hitBox } = useDebugContext()
+  const { hitSlop, onLayout } = useMinimumTouchTargetHitSlop({
+    touchTargetSize: theme.semantics.touchTargetSize({}),
+    hitSlop: providedHitSlop,
+    onLayout: providedOnLayout,
+  })
 
   const resolveState = (interaction: PressableInteraction): ThemedPressableState => ({
     size,
@@ -87,17 +92,32 @@ export const ThemedPressable = forwardRef<React.ComponentRef<typeof Pressable>, 
       {...props}
       ref={ref}
       disabled={disabled}
+      hitSlop={hitSlop}
+      onLayout={onLayout}
       style={(pressableState) => {
         const state = resolveState(pressableState as PressableInteraction)
-        return [theme.components.themedPressable.touchTarget(state, touchTargetStyle), style]
+        const resolvedStyle = typeof style === 'function' ? style(pressableState) : style
+        return [
+          theme.components.themedPressable.container(state, containerStyle),
+          resolvedStyle,
+        ]
       }}
     >
       {(pressableState) => {
         const state = resolveState(pressableState as PressableInteraction)
         const resolvedText = theme.components.themedPressable.text(state, textStyle)
+        const resolvedChildren = typeof children === 'function'
+          ? children(pressableState)
+          : children
 
         return (
-          <View style={theme.components.themedPressable.visualContainer(state, visualContainerStyle)}>
+          <Fragment>
+            {hitBox.isVisualizing && (
+              <View
+                pointerEvents="none"
+                style={createHitBoxOverlayStyle(hitSlop, hitBox.color)}
+              />
+            )}
             <View
               pointerEvents="none"
               style={theme.components.themedPressable.stateLayer(state, stateLayerStyle)}
@@ -106,9 +126,9 @@ export const ThemedPressable = forwardRef<React.ComponentRef<typeof Pressable>, 
               foregroundColor={resolvedText.color ?? theme.colors.surface.onColor}
               textStyle={resolvedText}
             >
-              {children}
+              {resolvedChildren}
             </ContentThemeProvider>
-          </View>
+          </Fragment>
         )
       }}
     </Pressable>

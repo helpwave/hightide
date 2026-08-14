@@ -9,6 +9,10 @@ import { ArrayUtil } from '@helpwave/hightide-utils/utils'
 
 import { HightideContext } from './HightideContext'
 import {
+  DebugProvider,
+  type DebugProviderProps
+} from './debug'
+import {
   LocalizationProvider,
   type LocalizationProviderProps
 } from './localization/LocalizationProvider'
@@ -27,6 +31,7 @@ export type HightideProviderProps = PropsWithChildren & {
   theme?: Omit<ThemeProviderProps<HightideTheme>, 'children'>,
   locale?: Omit<LocalizationProviderProps, 'children'>,
   translation?: Omit<TranslationProviderProps, 'children' | 'locale'>,
+  debug?: Omit<DebugProviderProps, 'children'>,
 }
 
 const HightideContextBridge = ({ children }: PropsWithChildren) => {
@@ -50,6 +55,7 @@ export const HightideProvider = ({
   theme,
   locale,
   translation,
+  debug,
 }: HightideProviderProps) => {
   const resolvedTranslations = useMemo(() => [
     ...ArrayUtil.resolveSingleOrArray(translation?.translation ?? []),
@@ -57,14 +63,16 @@ export const HightideProvider = ({
   ], [translation?.translation])
 
   return (
-    <LocalizationProvider {...locale}>
-      <TranslationProvider {...translation} translation={resolvedTranslations}>
-        <ThemeProvider {...theme}>
-          <HightideContextBridge>
-            {children}
-          </HightideContextBridge>
-        </ThemeProvider>
-      </TranslationProvider>
-    </LocalizationProvider>
+    <DebugProvider {...debug}>
+      <LocalizationProvider {...locale}>
+        <TranslationProvider {...translation} translation={resolvedTranslations}>
+          <ThemeProvider {...theme}>
+            <HightideContextBridge>
+              {children}
+            </HightideContextBridge>
+          </ThemeProvider>
+        </TranslationProvider>
+      </LocalizationProvider>
+    </DebugProvider>
   )
 }

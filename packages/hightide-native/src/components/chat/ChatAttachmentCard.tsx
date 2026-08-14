@@ -79,7 +79,6 @@ export const ChatAttachmentCard = ({
         {icon ?? (
           <ThemedIcon
             icon={HightideIconRegistry.FileText}
-            size={22}
             color={resolvedIconColor.color}
           />
         )}
@@ -102,7 +101,6 @@ export const ChatAttachmentCard = ({
         <IconButton
           icon={HightideIconRegistry.Download}
           accessibilityLabel={downloadLabel}
-          size="sm"
           variant="foreground"
           onPress={onDownload}
         />

@@ -37,7 +37,7 @@ export const chatMessageBubbleTokenResolver: ChatMessageBubbleTokenResolver = ({
   const isOutgoing = config.direction === 'outgoing'
   const alignment = resolveAlignment(config.direction)
   const messageCorners = resolveMessageCorners(themeTokens, config.direction)
-  const bubbleColors = isOutgoing ? color.primary : color.neutral
+  const bubbleColors = isOutgoing ? color.primary : color.surface
   const messageDescriptionColor = semanticResolvers.asDescription({ themeTokens, color: bubbleColors.onColor })
 
   return {
@@ -66,6 +66,9 @@ export const chatMessageBubbleTokenResolver: ChatMessageBubbleTokenResolver = ({
         gap: spacing.sm,
         direction: 'vertical'
       },
+      decoration: {
+        shadow: themeTokens.elevation.level1,
+      }
     },
     content: {
       ...typography.body.md,

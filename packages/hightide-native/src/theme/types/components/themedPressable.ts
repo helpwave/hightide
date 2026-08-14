@@ -25,8 +25,7 @@ export type ThemedPressableStyle = ViewStyle
 export type ThemedPressableTextStyle = TextStyle
 
 export type ThemedPressableThemeResolvers = {
-  touchTarget: StyleResolverFunction<ThemedPressableState, ThemedPressableStyle>,
-  visualContainer: StyleResolverFunction<ThemedPressableState, ThemedPressableStyle>,
+  container: StyleResolverFunction<ThemedPressableState, ThemedPressableStyle>,
   stateLayer: StyleResolverFunction<ThemedPressableState, ThemedPressableStyle>,
   text: StyleResolverFunction<ThemedPressableState, ThemedPressableTextStyle>,
 }

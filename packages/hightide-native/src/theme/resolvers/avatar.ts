@@ -216,7 +216,6 @@ export const toAvatarThemeResolvers: ComponentThemeResolver<AvatarThemeResolvers
         return {
           ...toContainerStyle(container),
           position: 'relative',
-          alignSelf: 'flex-start',
           minWidth: width,
           maxWidth: width,
           minHeight: height,

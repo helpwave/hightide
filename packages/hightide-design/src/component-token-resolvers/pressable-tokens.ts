@@ -55,8 +55,7 @@ export type PressableComponentResolverProps = {
 }
 
 export type PressableTokens = {
-  touchTarget: ContainerTokens,
-  visualContainer: ContainerTokens,
+  container: ContainerTokens,
   stateLayer: ContainerTokens,
   text: TextStyleTokens,
 }
@@ -108,23 +107,11 @@ export const pressableTokenResolver: PressableTokenResolver = ({
   })
   const hasOutline = resolved.outline !== 'transparent'
   const layout = semanticResolvers.controlLayout({ themeTokens, size })
-  const touchTargetSize = semanticResolvers.touchTargetSize({ themeTokens })
   const textStyle = themeTokens.typography.label[toTypographySize(size)]
   const gap = themeTokens.spacing[size]
 
   return {
-    touchTarget: {
-      size: {
-        minWidth: touchTargetSize,
-        minHeight: touchTargetSize,
-      },
-      layout: {
-        direction: 'horizontal',
-        mainAxisAlignment: 'center',
-        crossAxisAligment: 'center',
-      },
-    },
-    visualContainer: {
+    container: {
       backgroundColor: resolved.background,
       opacity: state.has('disabled') ? 0.6 : 1,
       outline: hasOutline ? {
@@ -155,6 +142,9 @@ export const pressableTokenResolver: PressableTokenResolver = ({
     },
     stateLayer: {
       backgroundColor: tint,
+      shape: {
+        borderRadius: { type: 'all', value: layout.borderRadius },
+      },
     },
     text: {
       color: resolved.foreground,

@@ -46,7 +46,6 @@ export const chatMessageCardTokenResolver: ChatMessageCardTokenResolver = ({ the
     themeTokens,
     color: overrides.color,
   })
-  const controlLayout = semanticResolvers.controlLayout({ themeTokens, size: 'md' })
   const alignment = resolveAlignment(config.direction)
   const messageCorners = resolveMessageCorners(themeTokens, config.direction)
   const hairline = borders.borderWidths.thin
@@ -63,23 +62,16 @@ export const chatMessageCardTokenResolver: ChatMessageCardTokenResolver = ({ the
       },
       padding: {
         type: 'physicalAxis',
-        horizontal: controlLayout.horizontalContentPadding,
-        vertical: controlLayout.inset,
-      },
-      border: {
-        width: {
-          type: 'all',
-          value: hairline,
-        },
-        color: {
-          type: 'all',
-          value: fadedBorder,
-        },
+        horizontal: themeTokens.shape.padding.xxl,
+        vertical: themeTokens.shape.padding.xxl,
       },
       layout: {
         direction: 'vertical',
         alignSelf: alignment,
       },
+      decoration: {
+        shadow: themeTokens.elevation.level1,
+      }
     },
     header: {
       border: {
@@ -131,14 +123,14 @@ export const chatMessageCardTokenResolver: ChatMessageCardTokenResolver = ({ the
     },
     body: {
       layout: {
-        gap: spacing.sm,
+        gap: spacing.xs,
         direction: 'vertical',
         crossAxisAligment: 'start',
         alignSelf: 'stretch',
       },
       padding: {
-        type: 'logicalSide',
-        blockStart: themeTokens.spacing.md,
+        type: 'logicalAxis',
+        block: themeTokens.spacing.md,
       }
     },
     actions: {

@@ -114,7 +114,7 @@ export const chatConversationRowTokenResolver: ChatConversationRowTokenResolver 
     timestamp: {
       ...typography.body.sm,
       fontWeight: state.isUnread ? typography.fontWeights.medium : typography.fontWeights.base,
-      color: state.isUnread ? color.primary.color : descriptionColor,
+      color: descriptionColor,
       flexShrink: 0,
     },
     preview: {
