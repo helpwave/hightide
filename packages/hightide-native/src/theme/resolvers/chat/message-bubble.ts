@@ -2,20 +2,19 @@ import type { ChatMessageDirection } from '@helpwave/hightide-design/component-t
 
 import { toContainerStyle, toTextStyle } from '../../adapters/style-adapters'
 import type {
+  ChatMessageBubbleBodyStyle,
+  ChatMessageBubbleBodyTextStyle,
   ChatMessageBubbleContainerStyle,
-  ChatMessageBubbleContentStyle,
-  ChatMessageBubbleReceiptIconStyle,
-  ChatMessageBubbleReceiptStyle,
-  ChatMessageBubbleReceiptTextStyle,
+  ChatMessageBubbleMetaDataContainerStyle,
+  ChatMessageBubbleMetaDataIconStyle,
+  ChatMessageBubbleMetaDataStatusContainerStyle,
+  ChatMessageBubbleMetaDataTextStyle,
   ChatMessageBubbleState,
-  ChatMessageBubbleStyle,
-  ChatMessageBubbleThemeResolvers,
-  ChatMessageBubbleTimestampStyle
+  ChatMessageBubbleThemeResolvers
 } from '../../types/components/chat'
 import {
-  createSimpleStyleResolver,
-  createSimpleValueResolver,
   createStyleResolver,
+  createValueResolver,
   type ComponentThemeResolver
 } from '../../types/resolver'
 
@@ -34,23 +33,29 @@ export const toChatMessageBubbleThemeResolvers: ComponentThemeResolver<ChatMessa
     container: createStyleResolver((state: ChatMessageBubbleState): ChatMessageBubbleContainerStyle => (
       toContainerStyle(resolve(state.direction).container)
     )),
-    bubble: createStyleResolver((state: ChatMessageBubbleState): ChatMessageBubbleStyle => (
-      toContainerStyle(resolve(state.direction).bubble)
+    body: createStyleResolver((state: ChatMessageBubbleState): ChatMessageBubbleBodyStyle => (
+      toContainerStyle(resolve(state.direction).body)
     )),
-    content: createStyleResolver((state: ChatMessageBubbleState): ChatMessageBubbleContentStyle => (
-      toTextStyle(resolve(state.direction).content)
+    bodyText: createStyleResolver((state: ChatMessageBubbleState): ChatMessageBubbleBodyTextStyle => (
+      toTextStyle(resolve(state.direction).bodyText)
     )),
-    timestamp: createStyleResolver((state: ChatMessageBubbleState): ChatMessageBubbleTimestampStyle => (
-      toTextStyle(resolve(state.direction).timestamp)
+    metaDataContainer: createStyleResolver((state: ChatMessageBubbleState): ChatMessageBubbleMetaDataContainerStyle => (
+      toContainerStyle(resolve(state.direction).metaDataContainer)
     )),
-    receipt: createSimpleStyleResolver((): ChatMessageBubbleReceiptStyle => (
-      toContainerStyle(resolve().receipt)
+    metaDataStatusContainer: createStyleResolver((state: ChatMessageBubbleState): ChatMessageBubbleMetaDataStatusContainerStyle => (
+      toContainerStyle(resolve(state.direction).metaDataStatusContainer)
     )),
-    receiptText: createSimpleStyleResolver((): ChatMessageBubbleReceiptTextStyle => (
-      toTextStyle(resolve().receiptText)
+    metaDataText: createStyleResolver((state: ChatMessageBubbleState): ChatMessageBubbleMetaDataTextStyle => (
+      toTextStyle(resolve(state.direction).metaDataText)
     )),
-    receiptIcon: createSimpleValueResolver((): ChatMessageBubbleReceiptIconStyle => ({
-      color: resolve().receiptIcon.color,
-    })),
+    metaDataIcon: createValueResolver((state: ChatMessageBubbleState): ChatMessageBubbleMetaDataIconStyle => {
+      const { metaDataIcon } = resolve(state.direction)
+
+      return {
+        size: metaDataIcon.size,
+        strokeWidth: metaDataIcon.strokeWidth,
+        color: metaDataIcon.color,
+      }
+    }),
   }
 }

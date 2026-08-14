@@ -5,7 +5,6 @@ import type { TextStyleTokens } from '../text-style-tokens'
 import {
   bubbleMaxWidth,
   resolveAlignment,
-  resolveDescriptionColor,
   resolveMessageCorners,
   type ChatMessageDirection
 } from './shared'
@@ -18,12 +17,12 @@ export type ChatMessageBubbleComponentResolverProps = {
 
 export type ChatMessageBubbleTokens = {
   container: ContainerTokens,
-  bubble: ContainerTokens,
-  content: TextStyleTokens,
-  timestamp: TextStyleTokens,
-  receipt: ContainerTokens,
-  receiptText: TextStyleTokens,
-  receiptIcon: IconTokens,
+  body: ContainerTokens,
+  bodyText: TextStyleTokens,
+  metaDataContainer: ContainerTokens,
+  metaDataStatusContainer: ContainerTokens,
+  metaDataText: TextStyleTokens,
+  metaDataIcon: IconTokens,
 }
 
 export type ChatMessageBubbleTokenResolver = ComponentTokenResolver<
@@ -32,8 +31,7 @@ export type ChatMessageBubbleTokenResolver = ComponentTokenResolver<
 >
 
 export const chatMessageBubbleTokenResolver: ChatMessageBubbleTokenResolver = ({ themeTokens, semanticResolvers, config }) => {
-  const { color, spacing, shape, typography } = themeTokens
-  const descriptionColor = resolveDescriptionColor({ themeTokens, semanticResolvers })
+  const { color, spacing, shape, typography, icongraphy } = themeTokens
   const isOutgoing = config.direction === 'outgoing'
   const alignment = resolveAlignment(config.direction)
   const messageCorners = resolveMessageCorners(themeTokens, config.direction)
@@ -42,59 +40,64 @@ export const chatMessageBubbleTokenResolver: ChatMessageBubbleTokenResolver = ({
 
   return {
     container: {
+      backgroundColor: bubbleColors.color,
       size: {
         maxWidth: bubbleMaxWidth,
+      },
+      shape: {
+        borderRadius: messageCorners,
+      },
+      padding: {
+        type: 'physicalSide',
+        left: shape.padding.xl,
+        right: shape.padding.xl,
+        top: shape.padding.lg,
+        bottom: shape.padding.md,
       },
       layout: {
         gap: spacing.sm,
         direction: 'vertical',
         alignSelf: alignment,
-        crossAxisAligment: alignment,
-      },
-    },
-    bubble: {
-      backgroundColor: bubbleColors.color,
-      shape: {
-        borderRadius: messageCorners,
-      },
-      padding: {
-        type: 'physicalAxis',
-        vertical: shape.padding.xl,
-        horizontal: spacing.lg,
-      },
-      layout: {
-        gap: spacing.sm,
-        direction: 'vertical'
       },
       decoration: {
         shadow: themeTokens.elevation.level1,
-      }
+      },
     },
-    content: {
+    body: {
+      layout: {
+        direction: 'vertical',
+      },
+    },
+    bodyText: {
       ...typography.body.md,
       fontWeight: typography.fontWeights.light,
       color: bubbleColors.onColor,
     },
-    timestamp: {
-      ...typography.body.sm,
-      fontWeight: typography.fontWeights.medium,
-      color: messageDescriptionColor,
-      textAlign: 'right',
+    metaDataContainer: {
+      layout: {
+        direction: 'horizontal',
+        mainAxisAlignment: 'end',
+        crossAxisAligment: 'center',
+        gap: spacing.md,
+        alignSelf: 'end',
+      },
     },
-    receipt: {
+    metaDataStatusContainer: {
       layout: {
         direction: 'horizontal',
         crossAxisAligment: 'center',
-        gap: spacing.sm,
+        gap: spacing.xs,
       },
     },
-    receiptText: {
+    metaDataText: {
       ...typography.body.sm,
       fontWeight: typography.fontWeights.medium,
-      color: descriptionColor,
+      color: messageDescriptionColor,
     },
-    receiptIcon: {
-      color: color.primary.color,
+    metaDataIcon: {
+      size: icongraphy.sizes.xs,
+      strokeWidth: icongraphy.strokeWidth,
+      color: messageDescriptionColor,
     },
   }
 }

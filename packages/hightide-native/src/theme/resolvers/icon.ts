@@ -3,7 +3,7 @@ import type { IconSize } from '@helpwave/hightide-design/theme-tokens'
 import type { IconThemeResolvers } from '../types/components/hightide'
 import type { ComponentThemeResolver } from '../types/resolver'
 
-const iconSizes = ['sm', 'md', 'lg', 'xl'] as const satisfies readonly IconSize[]
+const iconSizes = ['xs', 'sm', 'md', 'lg', 'xl'] as const satisfies readonly IconSize[]
 
 export const toIconThemeResolvers: ComponentThemeResolver<IconThemeResolvers> = ({
   themeTokens,

@@ -8,7 +8,7 @@ import type {
   ChatConversationRowTitleStyle,
   ChatConversationRowUnreadBadgeStyle,
   ChatConversationRowUnreadBadgeTextStyle,
-  ChatMessageBubbleReceiptIconStyle
+  ChatMessageBubbleMetaDataIconStyle
 } from '../../types/components/chat'
 import {
   createSimpleStyleResolver,
@@ -55,7 +55,7 @@ export const toChatConversationRowThemeResolvers: ComponentThemeResolver<ChatCon
     unreadBadgeText: createSimpleStyleResolver((): ChatConversationRowUnreadBadgeTextStyle => (
       toTextStyle(resolve().unreadBadgeText)
     )),
-    sentIndicator: createSimpleValueResolver((): ChatMessageBubbleReceiptIconStyle => ({
+    sentIndicator: createSimpleValueResolver((): ChatMessageBubbleMetaDataIconStyle => ({
       color: resolve().sentIndicator.color,
     })),
   }

@@ -40,12 +40,12 @@ export type ChatMessageBubbleState = {
 }
 
 export type ChatMessageBubbleContainerStyle = ViewStyle
-export type ChatMessageBubbleStyle = ViewStyle
-export type ChatMessageBubbleContentStyle = TextStyle
-export type ChatMessageBubbleTimestampStyle = TextStyle
-export type ChatMessageBubbleReceiptStyle = ViewStyle
-export type ChatMessageBubbleReceiptTextStyle = TextStyle
-export type ChatMessageBubbleReceiptIconStyle = IconStyle
+export type ChatMessageBubbleBodyStyle = ViewStyle
+export type ChatMessageBubbleBodyTextStyle = TextStyle
+export type ChatMessageBubbleMetaDataContainerStyle = ViewStyle
+export type ChatMessageBubbleMetaDataStatusContainerStyle = ViewStyle
+export type ChatMessageBubbleMetaDataTextStyle = TextStyle
+export type ChatMessageBubbleMetaDataIconStyle = IconStyle
 
 export type ChatMessageCardState = {
   direction: ChatMessageDirection,
@@ -104,7 +104,7 @@ export type ChatConversationRowThemeResolvers = {
   preview: StyleResolverFunction<ChatConversationRowState, ChatConversationRowPreviewStyle>,
   unreadBadge: StyleResolverFunction<Record<string, never>, ChatConversationRowUnreadBadgeStyle>,
   unreadBadgeText: StyleResolverFunction<Record<string, never>, ChatConversationRowUnreadBadgeTextStyle>,
-  sentIndicator: StyleResolverFunction<Record<string, never>, ChatMessageBubbleReceiptIconStyle>,
+  sentIndicator: StyleResolverFunction<Record<string, never>, ChatMessageBubbleMetaDataIconStyle>,
 }
 
 export type ChatConversationListThemeResolvers = {
@@ -125,12 +125,12 @@ export type ChatMessageListThemeResolvers = {
 
 export type ChatMessageBubbleThemeResolvers = {
   container: StyleResolverFunction<ChatMessageBubbleState, ChatMessageBubbleContainerStyle>,
-  bubble: StyleResolverFunction<ChatMessageBubbleState, ChatMessageBubbleStyle>,
-  content: StyleResolverFunction<ChatMessageBubbleState, ChatMessageBubbleContentStyle>,
-  timestamp: StyleResolverFunction<ChatMessageBubbleState, ChatMessageBubbleTimestampStyle>,
-  receipt: StyleResolverFunction<Record<string, never>, ChatMessageBubbleReceiptStyle>,
-  receiptText: StyleResolverFunction<Record<string, never>, ChatMessageBubbleReceiptTextStyle>,
-  receiptIcon: StyleResolverFunction<Record<string, never>, ChatMessageBubbleReceiptIconStyle>,
+  body: StyleResolverFunction<ChatMessageBubbleState, ChatMessageBubbleBodyStyle>,
+  bodyText: StyleResolverFunction<ChatMessageBubbleState, ChatMessageBubbleBodyTextStyle>,
+  metaDataContainer: StyleResolverFunction<ChatMessageBubbleState, ChatMessageBubbleMetaDataContainerStyle>,
+  metaDataStatusContainer: StyleResolverFunction<ChatMessageBubbleState, ChatMessageBubbleMetaDataStatusContainerStyle>,
+  metaDataText: StyleResolverFunction<ChatMessageBubbleState, ChatMessageBubbleMetaDataTextStyle>,
+  metaDataIcon: StyleResolverFunction<ChatMessageBubbleState, ChatMessageBubbleMetaDataIconStyle>,
 }
 
 export type ChatMessageCardThemeResolvers = {

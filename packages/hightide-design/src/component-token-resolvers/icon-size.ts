@@ -8,6 +8,7 @@ export const toButtonIconSize = (size: ComponentSize): Extract<IconSize, 'sm' | 
 export const toIconSize = (size: ComponentSize): IconSize => {
   switch (size) {
   case 'xs':
+    return 'xs'
   case 'sm':
     return 'sm'
   case 'md':

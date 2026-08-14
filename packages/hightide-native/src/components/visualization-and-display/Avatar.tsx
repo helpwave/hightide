@@ -58,7 +58,7 @@ const DefaultAvatarImage: ComponentType<AvatarImageProps> = ({ alt, ...props }) 
 )
 
 export const AvatarUtil = {
-  sizes: ['sm', 'md', 'lg', 'xl'] as const satisfies readonly IconSize[],
+  sizes: ['xs', 'sm', 'md', 'lg', 'xl'] as const satisfies readonly IconSize[],
   statuses: avatarStatuses,
 }
 
