@@ -1,4 +1,6 @@
-import { toContainerStyle, toTextStyle } from '../adapters/style-adapters'
+import { toContainerStyle } from '../adapters/container-adapter'
+import { toIconStyle } from '../adapters/icon-style-adapter'
+import { toTextStyle } from '../adapters/text-style-adapter'
 import type {
   ButtonIconStyle,
   ButtonState,
@@ -45,15 +47,9 @@ export const toButtonThemeResolvers: ComponentThemeResolver<ButtonThemeResolvers
         left: 0,
       }
     }),
-    icon: createValueResolver((state: ButtonState): ButtonIconStyle => {
-      const { icon } = resolve(state)
-
-      return {
-        color: icon.color,
-        size: icon.size,
-        strokeWidth: icon.strokeWidth,
-      }
-    }),
+    icon: createValueResolver((state: ButtonState): ButtonIconStyle => (
+      toIconStyle(resolve(state).icon)
+    )),
     text: createStyleResolver((state: ButtonState): ButtonTextStyle => (
       toTextStyle(resolve(state).text)
     )),

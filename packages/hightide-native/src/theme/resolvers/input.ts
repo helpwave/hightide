@@ -2,7 +2,9 @@ import type {
   InputState as DesignInputState,
   InputStateValue
 } from '@helpwave/hightide-design/component-token-resolvers'
-import { toContainerStyleWithStateLayer, toTextStyle } from '../adapters/style-adapters'
+import { toContainerStyleWithStateLayer } from '../adapters/container-adapter'
+import { toIconStyle } from '../adapters/icon-style-adapter'
+import { toTextStyle } from '../adapters/text-style-adapter'
 import type {
   InputContainerStyle,
   InputIconStyle,
@@ -70,14 +72,8 @@ export const toInputThemeResolvers: ComponentThemeResolver<InputThemeResolvers> 
     placeholder: createStyleResolver((state: InputState): InputPlaceholderStyle => (
       toTextStyle(resolve(state).placeholder)
     )),
-    icon: createValueResolver((state: InputState): InputIconStyle => {
-      const { icon } = resolve(state)
-
-      return {
-        size: icon.size,
-        strokeWidth: icon.strokeWidth,
-        color: icon.color,
-      }
-    }),
+    icon: createValueResolver((state: InputState): InputIconStyle => (
+      toIconStyle(resolve(state).icon)
+    )),
   }
 }

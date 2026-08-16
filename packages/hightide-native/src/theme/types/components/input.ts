@@ -2,11 +2,11 @@ import type { TextStyle, ViewStyle } from 'react-native'
 
 import type { ColorPairToken } from '@helpwave/hightide-design/theme-tokens'
 
-import type { Color } from '../color'
 import type {
   InteractionState,
   StyleResolverFunction
 } from '../resolver'
+import type { IconStyle } from '../../../icons'
 
 export type InputState = InteractionState & {
   color?: ColorPairToken,
@@ -18,11 +18,7 @@ export type InputTextStyle = TextStyle
 
 export type InputPlaceholderStyle = TextStyle
 
-export type InputIconStyle = {
-  size?: number,
-  strokeWidth?: number,
-  color?: Color,
-}
+export type InputIconStyle = IconStyle
 
 export type InputThemeResolvers = {
   container: StyleResolverFunction<InputState, InputContainerStyle>,

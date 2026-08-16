@@ -1,6 +1,8 @@
 import type { ChatMessageDirection } from '@helpwave/hightide-design/component-token-resolvers'
 
-import { toContainerStyle, toTextStyle } from '../../adapters/style-adapters'
+import { toContainerStyle } from '../../adapters/container-adapter'
+import { toIconStyle } from '../../adapters/icon-style-adapter'
+import { toTextStyle } from '../../adapters/text-style-adapter'
 import type {
   ChatMessageBubbleBodyStyle,
   ChatMessageBubbleBodyTextStyle,
@@ -48,14 +50,8 @@ export const toChatMessageBubbleThemeResolvers: ComponentThemeResolver<ChatMessa
     metaDataText: createStyleResolver((state: ChatMessageBubbleState): ChatMessageBubbleMetaDataTextStyle => (
       toTextStyle(resolve(state.direction).metaDataText)
     )),
-    metaDataIcon: createValueResolver((state: ChatMessageBubbleState): ChatMessageBubbleMetaDataIconStyle => {
-      const { metaDataIcon } = resolve(state.direction)
-
-      return {
-        size: metaDataIcon.size,
-        strokeWidth: metaDataIcon.strokeWidth,
-        color: metaDataIcon.color,
-      }
-    }),
+    metaDataIcon: createValueResolver((state: ChatMessageBubbleState): ChatMessageBubbleMetaDataIconStyle => (
+      toIconStyle(resolve(state.direction).metaDataIcon)
+    )),
   }
 }

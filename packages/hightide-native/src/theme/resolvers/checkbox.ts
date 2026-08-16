@@ -2,7 +2,8 @@ import type {
   CheckboxState as DesignCheckboxState,
   CheckboxStateValue
 } from '@helpwave/hightide-design/component-token-resolvers'
-import { toContainerStyle } from '../adapters/style-adapters'
+import { toContainerStyle } from '../adapters/container-adapter'
+import { toIconStyle } from '../adapters/icon-style-adapter'
 import type {
   CheckboxIconStyle,
   CheckboxState,
@@ -96,14 +97,8 @@ export const toCheckboxThemeResolvers: ComponentThemeResolver<CheckboxThemeResol
         marginLeft: -horizontal,
       }
     }),
-    icon: createValueResolver((state: CheckboxState): CheckboxIconStyle => {
-      const { icon } = resolve(state)
-
-      return {
-        color: icon.color,
-        size: icon.size,
-        strokeWidth: icon.strokeWidth,
-      }
-    }),
+    icon: createValueResolver((state: CheckboxState): CheckboxIconStyle => (
+      toIconStyle(resolve(state).icon)
+    )),
   }
 }

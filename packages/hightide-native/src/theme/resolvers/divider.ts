@@ -1,4 +1,4 @@
-import { toContainerStyle } from '../adapters/style-adapters'
+import { toContainerStyle } from '../adapters/container-adapter'
 import type {
   DividerState,
   DividerStyle,

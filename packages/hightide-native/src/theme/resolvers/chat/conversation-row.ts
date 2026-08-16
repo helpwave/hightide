@@ -1,4 +1,6 @@
-import { toContainerStyle, toTextStyle } from '../../adapters/style-adapters'
+import { toContainerStyle } from '../../adapters/container-adapter'
+import { toIconStyle } from '../../adapters/icon-style-adapter'
+import { toTextStyle } from '../../adapters/text-style-adapter'
 import type {
   ChatConversationRowPreviewStyle,
   ChatConversationRowState,
@@ -55,8 +57,8 @@ export const toChatConversationRowThemeResolvers: ComponentThemeResolver<ChatCon
     unreadBadgeText: createSimpleStyleResolver((): ChatConversationRowUnreadBadgeTextStyle => (
       toTextStyle(resolve().unreadBadgeText)
     )),
-    sentIndicator: createSimpleValueResolver((): ChatMessageBubbleMetaDataIconStyle => ({
-      color: resolve().sentIndicator.color,
-    })),
+    sentIndicator: createSimpleValueResolver((): ChatMessageBubbleMetaDataIconStyle => (
+      toIconStyle(resolve().sentIndicator)
+    )),
   }
 }

@@ -2,7 +2,9 @@ import type {
   SelectState as DesignSelectState,
   SelectStateValue
 } from '@helpwave/hightide-design/component-token-resolvers'
-import { toContainerStyle, toContainerStyleWithStateLayer, toTextStyle } from '../adapters/style-adapters'
+import { toContainerStyle, toContainerStyleWithStateLayer } from '../adapters/container-adapter'
+import { toIconStyle } from '../adapters/icon-style-adapter'
+import { toTextStyle } from '../adapters/text-style-adapter'
 import type {
   SelectIconStyle,
   SelectMenuStyle,
@@ -119,15 +121,9 @@ export const toSelectThemeResolvers: ComponentThemeResolver<SelectThemeResolvers
     triggerText: createStyleResolver((state: SelectState): SelectTriggerTextStyle => (
       toTextStyle(resolve(toTriggerState(state)).triggerText)
     )),
-    icon: createValueResolver((state: SelectState): SelectIconStyle => {
-      const { icon } = resolve(toTriggerState(state))
-
-      return {
-        size: icon.size,
-        strokeWidth: icon.strokeWidth,
-        color: icon.color,
-      }
-    }),
+    icon: createValueResolver((state: SelectState): SelectIconStyle => (
+      toIconStyle(resolve(toTriggerState(state)).icon)
+    )),
     overlay: createSimpleStyleResolver((): SelectOverlayStyle => ({
       ...toContainerStyle(resolve().overlay),
       flex: 1,

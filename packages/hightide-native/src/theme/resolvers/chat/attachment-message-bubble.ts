@@ -5,7 +5,9 @@ import type {
   TextStyleTokens
 } from '@helpwave/hightide-design/component-token-resolvers'
 
-import { toContainerStyle, toTextStyle } from '../../adapters/style-adapters'
+import { toContainerStyle } from '../../adapters/container-adapter'
+import { toIconStyle } from '../../adapters/icon-style-adapter'
+import { toTextStyle } from '../../adapters/text-style-adapter'
 import type {
   ChatAttachmentMessageBubbleDownloadIconContainerStyle,
   ChatAttachmentMessageBubbleDownloadIconStyle,
@@ -43,13 +45,7 @@ const toOptionalTextStyle = (tokens?: TextStyleTokens): ChatMessageBubbleBodyTex
 )
 
 const toOptionalIconStyle = (tokens?: IconTokens): ChatMessageBubbleMetaDataIconStyle => (
-  tokens === undefined
-    ? {}
-    : {
-      size: tokens.size,
-      strokeWidth: tokens.strokeWidth,
-      color: tokens.color,
-    }
+  tokens === undefined ? {} : toIconStyle(tokens)
 )
 
 export const toChatAttachmentMessageBubbleThemeResolvers: ComponentThemeResolver<
@@ -140,15 +136,9 @@ export const toChatAttachmentMessageBubbleThemeResolvers: ComponentThemeResolver
     )),
     fileIcon: createValueResolver((
       state: ChatAttachmentMessageBubbleState
-    ): ChatAttachmentMessageBubbleFileIconStyle => {
-      const { fileIcon } = resolve(state.direction)
-
-      return {
-        size: fileIcon.size,
-        strokeWidth: fileIcon.strokeWidth,
-        color: fileIcon.color,
-      }
-    }),
+    ): ChatAttachmentMessageBubbleFileIconStyle => (
+      toIconStyle(resolve(state.direction).fileIcon)
+    )),
     downloadIconContainer: createStyleResolver((
       state: ChatAttachmentMessageBubbleState
     ): ChatAttachmentMessageBubbleDownloadIconContainerStyle => (
@@ -156,15 +146,9 @@ export const toChatAttachmentMessageBubbleThemeResolvers: ComponentThemeResolver
     )),
     downloadIcon: createValueResolver((
       state: ChatAttachmentMessageBubbleState
-    ): ChatAttachmentMessageBubbleDownloadIconStyle => {
-      const { downloadIcon } = resolve(state.direction)
-
-      return {
-        size: downloadIcon.size,
-        strokeWidth: downloadIcon.strokeWidth,
-        color: downloadIcon.color,
-      }
-    }),
+    ): ChatAttachmentMessageBubbleDownloadIconStyle => (
+      toIconStyle(resolve(state.direction).downloadIcon)
+    )),
     fileNameText: createStyleResolver((
       state: ChatAttachmentMessageBubbleState
     ): ChatAttachmentMessageBubbleFileNameTextStyle => (

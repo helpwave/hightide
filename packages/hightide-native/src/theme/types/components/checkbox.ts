@@ -3,11 +3,11 @@ import type { ViewStyle } from 'react-native'
 import type { ColorPairToken } from '@helpwave/hightide-design/theme-tokens'
 import type { ComponentSize } from '@helpwave/hightide-design/semantic-token-resolvers'
 
-import type { Color } from '../color'
 import type {
   InteractionState,
   StyleResolverFunction
 } from '../resolver'
+import type { IconStyle } from '../../../icons'
 
 export type CheckboxSize = ComponentSize
 
@@ -23,11 +23,7 @@ export type CheckboxStyle = ViewStyle
 
 export type CheckboxStateLayerStyle = ViewStyle
 
-export type CheckboxIconStyle = {
-  color?: Color,
-  size?: number,
-  strokeWidth?: number,
-}
+export type CheckboxIconStyle = IconStyle
 
 export type CheckboxThemeResolvers = {
   container: StyleResolverFunction<CheckboxState, CheckboxStyle>,

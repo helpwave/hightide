@@ -2,7 +2,9 @@ import type {
   MultiSelectState as DesignMultiSelectState,
   MultiSelectStateValue
 } from '@helpwave/hightide-design/component-token-resolvers'
-import { toContainerStyle, toContainerStyleWithStateLayer, toTextStyle } from '../adapters/style-adapters'
+import { toContainerStyle, toContainerStyleWithStateLayer } from '../adapters/container-adapter'
+import { toIconStyle } from '../adapters/icon-style-adapter'
+import { toTextStyle } from '../adapters/text-style-adapter'
 import type {
   MultiSelectCheckboxIconStyle,
   MultiSelectCheckboxStyle,
@@ -161,17 +163,13 @@ export const toMultiSelectThemeResolvers: ComponentThemeResolver<MultiSelectThem
         isHighlighted: state.isHighlighted,
       }).checkbox)
     )),
-    checkboxIcon: createValueResolver((state: MultiSelectOptionState): MultiSelectCheckboxIconStyle => {
-      const { checkboxIcon } = resolve({
+    checkboxIcon: createValueResolver((state: MultiSelectOptionState): MultiSelectCheckboxIconStyle => (
+      toIconStyle(resolve({
         color: state.color,
         isDisabled: state.isDisabled,
         isSelected: state.isSelected,
         isHighlighted: state.isHighlighted,
-      })
-
-      return {
-        color: checkboxIcon.color,
-      }
-    }),
+      }).checkboxIcon)
+    )),
   }
 }

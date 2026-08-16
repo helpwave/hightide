@@ -6,7 +6,8 @@ import {
   toDesignAvatarSize,
   withNumericAvatarSize
 } from '../avatar'
-import { toContainerStyle, toTextStyle } from '../../adapters/style-adapters'
+import { toContainerStyle } from '../../adapters/container-adapter'
+import { toTextStyle } from '../../adapters/text-style-adapter'
 import type {
   ChatThreadHeaderContentRowStyle,
   ChatThreadHeaderStyle,

@@ -3,7 +3,8 @@ import type {
   TextStyleTokens
 } from '@helpwave/hightide-design/component-token-resolvers'
 
-import { toContainerStyle, toTextStyle } from '../../adapters/style-adapters'
+import { toContainerStyle } from '../../adapters/container-adapter'
+import { toTextStyle } from '../../adapters/text-style-adapter'
 import type {
   ChatQuickReplyChipState,
   ChatQuickReplyChipThemeResolvers,

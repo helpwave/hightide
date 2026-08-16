@@ -9,11 +9,11 @@ import type {
   IconButtonVariant
 } from '@helpwave/hightide-design/semantic-token-resolvers'
 
-import type { Color } from '../color'
 import type {
   InteractionState,
   StyleResolverFunction
 } from '../resolver'
+import type { IconStyle } from '../../../icons'
 
 export type IconButtonState = InteractionState & {
   size?: ComponentSize,
@@ -23,11 +23,7 @@ export type IconButtonState = InteractionState & {
 
 export type IconButtonStyle = ViewStyle
 
-export type IconButtonIconStyle = {
-  size?: number,
-  strokeWidth?: number,
-  color?: Color,
-}
+export type IconButtonIconStyle = IconStyle
 
 export type IconButtonTextStyle = TextStyle
 

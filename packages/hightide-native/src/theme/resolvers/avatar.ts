@@ -8,7 +8,9 @@ import {
   type AvatarWithStatusTokens
 } from '@helpwave/hightide-design/component-token-resolvers'
 
-import { toContainerStyle, toTextStyle } from '../adapters/style-adapters'
+import { toContainerStyle } from '../adapters/container-adapter'
+import { toIconStyle } from '../adapters/icon-style-adapter'
+import { toTextStyle } from '../adapters/text-style-adapter'
 import type {
   AvatarGroupContainerStyle,
   AvatarGroupStackStyle,
@@ -30,6 +32,7 @@ import {
   createValueResolver,
   type ComponentThemeResolver
 } from '../types/resolver'
+import type { ThemeTokens } from '@helpwave/hightide-design/theme-tokens'
 
 export const toDesignAvatarSize = (size?: AvatarSize | number): AvatarSize => (
   typeof size === 'number' ? 'md' : (size ?? 'md')
@@ -101,10 +104,7 @@ export const withNumericAvatarSize = (
 
 export const createAvatarStyleResolvers = (
   resolveTokens: (state: AvatarState) => AvatarTokens,
-  themeTokens: {
-    icongraphy: { sizes: Record<AvatarSize, number>, strokeWidth: number },
-    color: { primary: { onColor: string } },
-  }
+  themeTokens: ThemeTokens
 ): AvatarThemeResolvers => ({
   container: createStyleResolver((state: AvatarState): AvatarStyle => {
     const { container } = resolveTokens(state)
@@ -147,11 +147,11 @@ export const createAvatarStyleResolvers = (
   icon: createValueResolver((state: AvatarState): AvatarIconStyle => {
     const { icon } = resolveTokens(state)
 
-    return {
+    return toIconStyle({
       size: icon.size ?? themeTokens.icongraphy.sizes.md,
       strokeWidth: icon.strokeWidth ?? themeTokens.icongraphy.strokeWidth,
       color: icon.color ?? themeTokens.color.primary.onColor,
-    }
+    })
   }),
 })
 

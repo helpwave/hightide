@@ -1,5 +1,6 @@
-import type { IconStyle } from '../../../icons'
-import { toContainerStyle, toTextStyle } from '../../adapters/style-adapters'
+import { toContainerStyle } from '../../adapters/container-adapter'
+import { toTextStyle } from '../../adapters/text-style-adapter'
+import type { TextStyle } from 'react-native'
 import type {
   ChatMessageComposerInputStyle,
   ChatMessageComposerStyle,
@@ -30,7 +31,7 @@ export const toChatMessageComposerThemeResolvers: ComponentThemeResolver<ChatMes
       ...toTextStyle(resolve().text),
       flex: 1,
     })),
-    placeholderColor: createSimpleValueResolver((): IconStyle => ({
+    placeholderColor: createSimpleValueResolver((): TextStyle => ({
       color: resolve().placeholder.color
     })),
   }

@@ -1,4 +1,6 @@
-import { toContainerStyle, toTextStyle } from '../adapters/style-adapters'
+import { toContainerStyle } from '../adapters/container-adapter'
+import { toIconStyle } from '../adapters/icon-style-adapter'
+import { toTextStyle } from '../adapters/text-style-adapter'
 import type {
   ListActionItemContentStyle,
   ListActionItemIconStyle,
@@ -59,15 +61,9 @@ const toListItemDefaultThemeResolvers: ComponentThemeResolver<ListItemDefaultThe
     titleText: createStyleResolver((state: ListItemState): ListItemTitleStyle => (
       toTextStyle(resolve(state).titleText)
     )),
-    icon: createValueResolver((state: ListItemState): ListItemIconStyle => {
-      const { icon } = resolve(state)
-
-      return {
-        size: icon.size,
-        strokeWidth: icon.strokeWidth,
-        color: icon.color,
-      }
-    }),
+    icon: createValueResolver((state: ListItemState): ListItemIconStyle => (
+      toIconStyle(resolve(state).icon)
+    )),
   }
 }
 
@@ -102,15 +98,9 @@ const toListActionItemThemeResolvers: ComponentThemeResolver<ListActionItemTheme
     titleText: createStyleResolver((state: ListActionItemState): ListActionItemTitleStyle => (
       toTextStyle(resolve(state).titleText)
     )),
-    icon: createValueResolver((state: ListActionItemState): ListActionItemIconStyle => {
-      const { icon } = resolve(state)
-
-      return {
-        size: icon.size,
-        strokeWidth: icon.strokeWidth,
-        color: icon.color,
-      }
-    }),
+    icon: createValueResolver((state: ListActionItemState): ListActionItemIconStyle => (
+      toIconStyle(resolve(state).icon)
+    )),
   }
 }
 

@@ -4,7 +4,7 @@ import type { ContainerTokens } from './container-tokens'
 export type CardTokens = ContainerTokens
 
 export type CardTokenResolver = ComponentTokenResolver<
-  Record<string, never>,
+  object,
   CardTokens
 >
 

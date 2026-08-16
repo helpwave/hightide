@@ -1,6 +1,8 @@
 import type { ColorPairToken } from '@helpwave/hightide-design/theme-tokens'
 
-import { toContainerStyle, toTextStyle } from '../../adapters/style-adapters'
+import { toContainerStyle } from '../../adapters/container-adapter'
+import { toIconStyle } from '../../adapters/icon-style-adapter'
+import { toTextStyle } from '../../adapters/text-style-adapter'
 import type {
   ChatSystemLineIconStyle,
   ChatSystemLineState,
@@ -32,8 +34,8 @@ export const toChatSystemLineThemeResolvers: ComponentThemeResolver<ChatSystemLi
     text: createStyleResolver((state: ChatSystemLineState): ChatSystemLineTextStyle => (
       toTextStyle(resolve(state.color).text)
     )),
-    icon: createValueResolver((state: ChatSystemLineState): ChatSystemLineIconStyle => ({
-      color: resolve(state.color).icon.color,
-    })),
+    icon: createValueResolver((state: ChatSystemLineState): ChatSystemLineIconStyle => (
+      toIconStyle(resolve(state.color).icon)
+    )),
   }
 }

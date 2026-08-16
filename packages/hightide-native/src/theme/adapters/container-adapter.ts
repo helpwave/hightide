@@ -1,4 +1,4 @@
-import type { TextStyle, ViewStyle } from 'react-native'
+import type { ViewStyle } from 'react-native'
 
 import type {
   AlignSelfToken,
@@ -9,8 +9,7 @@ import type {
   DirectionalToken,
   LayoutDirectionToken,
   MarginToken,
-  PaddingToken,
-  TextStyleTokens
+  PaddingToken
 } from '@helpwave/hightide-design/component-token-resolvers'
 import {
   defaultWritingMode,
@@ -20,17 +19,7 @@ import type { ColorToken, HexColorToken } from '@helpwave/hightide-design/primit
 import type { ShadowToken } from '@helpwave/hightide-design/theme-tokens'
 import { HexColorUtils } from '@helpwave/hightide-design/utils'
 
-const defined = <T extends object>(style: T): T => {
-  const result = {} as T
-
-  for (const key of Object.keys(style) as (keyof T)[]) {
-    if (style[key] !== undefined) {
-      result[key] = style[key]
-    }
-  }
-
-  return result
-}
+import { defined } from './defined'
 
 export const toShadowStyle = (shadow: ShadowToken): ViewStyle => defined({
   boxShadow: [{
@@ -332,14 +321,3 @@ export const toContainerStyleWithStateLayer = (
     },
   })
 }
-
-export const toTextStyle = (tokens: TextStyleTokens): TextStyle => defined({
-  color: tokens.color,
-  fontSize: tokens.fontSize,
-  fontWeight: tokens.fontWeight,
-  fontFamily: tokens.fontFamily,
-  lineHeight: tokens.lineHeight,
-  textAlign: tokens.textAlign,
-  flex: tokens.flex,
-  flexShrink: tokens.flexShrink,
-})

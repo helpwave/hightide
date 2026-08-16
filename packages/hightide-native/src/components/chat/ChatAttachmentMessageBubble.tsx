@@ -57,26 +57,26 @@ const mergeBubbleStyleOverwrite = <TStyle extends StyleProp<ViewStyle> | object>
   tokenOverride: TStyle,
   userOverwrite?: StyleOverwrite<ChatMessageBubbleState, TStyle>
 ): StyleOverwrite<ChatMessageBubbleState, TStyle> => (
-  (prev, state) => {
-    const withTokenOverride = {
-      ...(prev as object),
-      ...(tokenOverride as object),
-    } as TStyle
+    (prev, state) => {
+      const withTokenOverride = {
+        ...(prev as object),
+        ...(tokenOverride as object),
+      } as TStyle
 
-    if (userOverwrite === undefined) {
-      return withTokenOverride
+      if (userOverwrite === undefined) {
+        return withTokenOverride
+      }
+
+      if (typeof userOverwrite === 'function') {
+        return userOverwrite(withTokenOverride, state)
+      }
+
+      return {
+        ...(withTokenOverride as object),
+        ...(userOverwrite as object),
+      } as TStyle
     }
-
-    if (typeof userOverwrite === 'function') {
-      return userOverwrite(withTokenOverride, state)
-    }
-
-    return {
-      ...(withTokenOverride as object),
-      ...(userOverwrite as object),
-    } as TStyle
-  }
-)
+  )
 
 export const ChatAttachmentMessageBubble = ({
   children,

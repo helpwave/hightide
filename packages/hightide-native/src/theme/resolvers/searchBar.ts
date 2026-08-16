@@ -3,7 +3,8 @@ import type {
   InputStateValue
 } from '@helpwave/hightide-design/component-token-resolvers'
 import type { ColorPairToken } from '@helpwave/hightide-design/theme-tokens'
-import { toContainerStyle, toContainerStyleWithStateLayer, toTextStyle } from '../adapters/style-adapters'
+import { toContainerStyle, toContainerStyleWithStateLayer } from '../adapters/container-adapter'
+import { toTextStyle } from '../adapters/text-style-adapter'
 import type {
   SearchBarContainerStyle,
   SearchBarIconButtonStyle,

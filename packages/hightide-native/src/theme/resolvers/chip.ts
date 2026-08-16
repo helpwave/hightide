@@ -1,4 +1,5 @@
-import { toContainerStyle, toTextStyle } from '../adapters/style-adapters'
+import { toContainerStyle } from '../adapters/container-adapter'
+import { toTextStyle } from '../adapters/text-style-adapter'
 import type {
   ChipState,
   ChipStyle,

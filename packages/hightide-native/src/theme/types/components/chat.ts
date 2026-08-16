@@ -7,6 +7,7 @@ import type { ColorPairToken } from '@helpwave/hightide-design/theme-tokens'
 
 import type {
   InteractionState,
+  SimpleStyleResolver,
   StyleResolverFunction
 } from '../resolver'
 import type { IconStyle } from '../../../icons'
@@ -201,7 +202,7 @@ export type ChatQuickReplyChipThemeResolvers = {
 export type ChatMessageComposerThemeResolvers = {
   container: StyleResolverFunction<Record<string, never>, ChatMessageComposerStyle>,
   input: StyleResolverFunction<Record<string, never>, ChatMessageComposerInputStyle>,
-  placeholderColor: StyleResolverFunction<Record<string, never>, TextStyle>,
+  placeholderColor: SimpleStyleResolver<TextStyle>,
 }
 
 export type ChatThemeResolvers = {

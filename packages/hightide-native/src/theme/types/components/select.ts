@@ -5,12 +5,12 @@ import type {
 
 import type { ColorPairToken } from '@helpwave/hightide-design/theme-tokens'
 
-import type { Color } from '../color'
 import type {
   InteractionState,
   SimpleStyleResolver,
   StyleResolverFunction
 } from '../resolver'
+import type { IconStyle } from '../../../icons'
 
 export type SelectState = InteractionState & {
   color?: ColorPairToken,
@@ -28,11 +28,7 @@ export type SelectTriggerStyle = ViewStyle
 
 export type SelectTriggerTextStyle = TextStyle
 
-export type SelectIconStyle = {
-  size?: number,
-  strokeWidth?: number,
-  color?: Color,
-}
+export type SelectIconStyle = IconStyle
 
 export type SelectMenuState = {
   hasSearch?: boolean,
