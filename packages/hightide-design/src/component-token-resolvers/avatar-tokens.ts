@@ -124,6 +124,10 @@ export type AvatarWithStatusTokens = {
   statusDot: ContainerTokens,
 }
 
+export type AvatarWithStatusOverrideTokens = Partial<AvatarWithStatusTokens> & {
+  overrides?: AvatarWithStatusComponentResolverProps['overrides'],
+}
+
 export type AvatarWithStatusTokenResolver = ComponentTokenResolver<
   AvatarWithStatusComponentResolverProps,
   AvatarWithStatusTokens
@@ -236,7 +240,6 @@ export const avatarGroupTokenResolver: AvatarGroupTokenResolver = ({
       layout: {
         direction: 'horizontal',
         crossAxisAligment: 'center',
-        alignSelf: 'start',
         gap,
       },
     },

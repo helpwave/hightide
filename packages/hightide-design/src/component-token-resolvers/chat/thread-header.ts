@@ -1,6 +1,7 @@
 import type { ComponentTokenResolver } from '../component-token-resolver'
 import type { ContainerTokens } from '../container-tokens'
 import type { TextStyleTokens } from '../text-style-tokens'
+import type { AvatarOverrideTokens } from '../avatar-tokens'
 import {
   resolveDescriptionColor,
   resolveFadedBorder
@@ -8,8 +9,10 @@ import {
 
 export type ChatThreadHeaderTokens = {
   container: ContainerTokens,
+  contentRow: ContainerTokens,
   title: TextStyleTokens,
   subtitle: TextStyleTokens,
+  avatarOverride: AvatarOverrideTokens,
 }
 
 export type ChatThreadHeaderTokenResolver = ComponentTokenResolver<
@@ -43,7 +46,13 @@ export const chatThreadHeaderTokenResolver: ChatThreadHeaderTokenResolver = ({ t
       layout: {
         direction: 'horizontal',
         crossAxisAligment: 'center',
-        gap: shape.padding.xl,
+        gap: spacing.md,
+      },
+    },
+    contentRow: {
+      layout: {
+        direction: 'vertical',
+        gap: spacing.xs,
       },
     },
     title: {
@@ -55,6 +64,11 @@ export const chatThreadHeaderTokenResolver: ChatThreadHeaderTokenResolver = ({ t
       ...typography.body.sm,
       fontWeight: typography.fontWeights.light,
       color: descriptionColor,
+    },
+    avatarOverride: {
+      overrides: {
+        size: 'lg',
+      },
     },
   }
 }

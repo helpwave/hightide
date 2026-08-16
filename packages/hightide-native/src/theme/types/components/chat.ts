@@ -11,6 +11,10 @@ import type {
 } from '../resolver'
 import type { IconStyle } from '../../../icons'
 import type { ThemedPressableState } from './themedPressable'
+import type {
+  AvatarState,
+  AvatarThemeResolvers
+} from './avatar'
 
 export type ChatMessageDirection = 'incoming' | 'outgoing'
 
@@ -31,6 +35,7 @@ export type ChatConversationListHeaderStyle = ViewStyle
 export type ChatConversationListFooterStyle = ViewStyle
 
 export type ChatThreadHeaderStyle = ViewStyle
+export type ChatThreadHeaderContentRowStyle = ViewStyle
 export type ChatThreadHeaderTitleStyle = TextStyle
 export type ChatThreadHeaderSubtitleStyle = TextStyle
 
@@ -102,8 +107,13 @@ export type ChatConversationListThemeResolvers = {
 
 export type ChatThreadHeaderThemeResolvers = {
   container: StyleResolverFunction<Record<string, never>, ChatThreadHeaderStyle>,
+  contentRow: StyleResolverFunction<Record<string, never>, ChatThreadHeaderContentRowStyle>,
   title: StyleResolverFunction<Record<string, never>, ChatThreadHeaderTitleStyle>,
   subtitle: StyleResolverFunction<Record<string, never>, ChatThreadHeaderSubtitleStyle>,
+  avatar: StyleResolverFunction<
+    AvatarState,
+    AvatarThemeResolvers
+  >,
 }
 
 export type ChatMessageListThemeResolvers = {

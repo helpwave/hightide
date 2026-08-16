@@ -1,10 +1,11 @@
-import type { ColorPairToken } from '@helpwave/hightide-design/theme-tokens'
 import {
   avatarGroupMaxShown,
   avatarGroupOverlap,
   type AvatarOverrideTokens,
   type AvatarSize,
-  type AvatarTokens
+  type AvatarTokens,
+  type AvatarWithStatusOverrideTokens,
+  type AvatarWithStatusTokens
 } from '@helpwave/hightide-design/component-token-resolvers'
 
 import { toContainerStyle, toTextStyle } from '../adapters/style-adapters'
@@ -30,11 +31,11 @@ import {
   type ComponentThemeResolver
 } from '../types/resolver'
 
-const toDesignAvatarSize = (size?: AvatarSize | number): AvatarSize => (
+export const toDesignAvatarSize = (size?: AvatarSize | number): AvatarSize => (
   typeof size === 'number' ? 'md' : (size ?? 'md')
 )
 
-const mergeAvatarTokens = (
+export const mergeAvatarTokens = (
   base: AvatarTokens,
   override?: AvatarOverrideTokens
 ): AvatarTokens => ({
@@ -68,7 +69,7 @@ const mergeAvatarTokens = (
   },
 })
 
-const withNumericAvatarSize = (
+export const withNumericAvatarSize = (
   tokens: AvatarTokens,
   size: number
 ): AvatarTokens => {
@@ -98,7 +99,7 @@ const withNumericAvatarSize = (
   }
 }
 
-const createAvatarStyleResolvers = (
+export const createAvatarStyleResolvers = (
   resolveTokens: (state: AvatarState) => AvatarTokens,
   themeTokens: {
     icongraphy: { sizes: Record<AvatarSize, number>, strokeWidth: number },
@@ -183,24 +184,15 @@ export const toAvatarThemeResolvers: ComponentThemeResolver<AvatarThemeResolvers
   return createAvatarStyleResolvers(resolveTokens, themeTokens)
 }
 
-export const toAvatarWithStatusThemeResolvers: ComponentThemeResolver<
-  AvatarWithStatusThemeResolvers
-> = ({
-  themeTokens,
-  semanticTokens,
-  componentTokens,
-}) => {
-  const resolve = (state: AvatarWithStatusState = {}) => componentTokens.avatarWithStatus({
-    themeTokens,
-    semanticResolvers: semanticTokens,
-    overrides: {
-      color: state.color,
-      size: toDesignAvatarSize(state.size),
-    },
-    state: {
-      status: state.status,
-    },
-  })
+export const createAvatarWithStatusThemeResolvers = (
+  resolve: (state: AvatarWithStatusState) => AvatarWithStatusTokens,
+  context: {
+    themeTokens: Parameters<ComponentThemeResolver<AvatarWithStatusThemeResolvers>>[0]['themeTokens'],
+    semanticTokens: Parameters<ComponentThemeResolver<AvatarWithStatusThemeResolvers>>[0]['semanticTokens'],
+    componentTokens: Parameters<ComponentThemeResolver<AvatarWithStatusThemeResolvers>>[0]['componentTokens'],
+  }
+): AvatarWithStatusThemeResolvers => {
+  const { themeTokens, semanticTokens, componentTokens } = context
 
   return {
     avatar: createValueResolver((state: AvatarWithStatusState) => {
@@ -263,6 +255,63 @@ export const toAvatarWithStatusThemeResolvers: ComponentThemeResolver<
       }
     }),
   }
+}
+
+export const mergeAvatarWithStatusTokens = (
+  base: AvatarWithStatusTokens,
+  override?: AvatarWithStatusOverrideTokens
+): AvatarWithStatusTokens => ({
+  avatarOverride: {
+    ...base.avatarOverride,
+    ...override?.avatarOverride,
+    overrides: {
+      ...base.avatarOverride.overrides,
+      ...override?.overrides,
+      ...override?.avatarOverride?.overrides,
+    },
+  },
+  statusDot: {
+    ...base.statusDot,
+    ...override?.statusDot,
+    size: {
+      ...base.statusDot.size,
+      ...override?.statusDot?.size,
+    },
+    shape: {
+      ...base.statusDot.shape,
+      ...override?.statusDot?.shape,
+    },
+    border: {
+      ...base.statusDot.border,
+      ...override?.statusDot?.border,
+    },
+  },
+})
+
+export const toAvatarWithStatusThemeResolvers: ComponentThemeResolver<
+  AvatarWithStatusThemeResolvers
+> = ({
+  themeTokens,
+  semanticTokens,
+  componentTokens,
+}) => {
+  const resolve = (state: AvatarWithStatusState = {}) => componentTokens.avatarWithStatus({
+    themeTokens,
+    semanticResolvers: semanticTokens,
+    overrides: {
+      color: state.color,
+      size: toDesignAvatarSize(state.size),
+    },
+    state: {
+      status: state.status,
+    },
+  })
+
+  return createAvatarWithStatusThemeResolvers(resolve, {
+    themeTokens,
+    semanticTokens,
+    componentTokens,
+  })
 }
 
 export const toAvatarGroupThemeResolvers: ComponentThemeResolver<

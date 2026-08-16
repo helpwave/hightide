@@ -289,7 +289,7 @@ export const AvatarWithStatus = ({
   const resolvedStatusDot = theme.components.avatarWithStatus.statusDot(state, statusDotStyle)
 
   return (
-    <View style={[{ position: 'relative', alignSelf: 'flex-start' }, style]}>
+    <View style={[{ position: 'relative' }, style]}>
       <Avatar
         {...avatarProps}
         size={size}

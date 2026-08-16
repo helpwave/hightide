@@ -4,7 +4,7 @@ import type {
   StoryObj
 } from '@storybook/react-native'
 
-import { ChatThreadHeader, AvatarWithStatus } from '@helpwave/hightide-native/components'
+import { ChatThreadHeader } from '@helpwave/hightide-native/components'
 
 const meta = {
   component: ChatThreadHeader,
@@ -15,13 +15,9 @@ type Story = StoryObj<typeof meta>
 
 export const chatThreadHeader: Story = {
   args: {
-    avatar: (
-      <AvatarWithStatus
-        name="Anna Wellermann"
-        status="online"
-        size="md"
-      />
-    ),
+    avatar: {
+      name: 'Anna Wellermann',
+    },
     title: 'Dr. Anna Wellermann',
     subtitle: 'Online',
   },
