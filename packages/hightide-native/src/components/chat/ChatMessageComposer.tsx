@@ -9,10 +9,10 @@ import {
   type ViewProps,
   type ViewStyle
 } from 'react-native'
-import { SendHorizontal } from 'lucide-react-native'
 
 import { useControlledState } from '@helpwave/hightide-utils/hooks'
 
+import { HightideIconRegistry } from '../../icons/HightideIconRegistry'
 import { IconButton } from '../user-interaction/IconButton'
 import { useTheme } from '../../global-contexts/theme/ThemeContext'
 import type {
@@ -84,7 +84,7 @@ export const ChatMessageComposer = ({
   return (
     <View {...props} style={[resolvedComposerStyle, style]}>
       {actions != null && (
-        <View style={{ flexDirection: 'row', alignItems: 'flex-start' }}>
+        <View style={{ flexDirection: 'row' }}>
           {actions}
         </View>
       )}
@@ -92,24 +92,26 @@ export const ChatMessageComposer = ({
         value={value ?? ''}
         onChangeText={setValue}
         placeholder={placeholder}
-        placeholderTextColor={placeholderColor}
+        placeholderTextColor={placeholderColor.color}
         editable={!disabled}
         multiline
         style={resolvedInputStyle}
         onSubmitEditing={send}
         returnKeyType="send"
       />
-      {trailing}
-      <IconButton
-        accessibilityLabel={sendLabel}
-        color="primary"
-        coloringStyle="solid"
-        disabled={disabled || !(value ?? '').trim()}
-        size="md"
-        onPress={send}
-        icon={SendHorizontal}
-        buttonStyle={(prev) => ({ ...prev, borderRadius: 999 })}
-      />
+      <View style={{ flexDirection: 'row', alignItems: 'flex-end' }}>
+        {trailing}
+        <IconButton
+          icon={HightideIconRegistry.SendHorizontal}
+          accessibilityLabel={sendLabel}
+          variant="filled"
+          disabled={disabled || !(value ?? '').trim()}
+          size="sm"
+          onPress={send}
+          containerStyle={(prev) => ({ ...prev, borderRadius: 999 })}
+          stateLayerStyle={(prev) => ({ ...prev, borderRadius: 999 })}
+        />
+      </View>
     </View>
   )
 }

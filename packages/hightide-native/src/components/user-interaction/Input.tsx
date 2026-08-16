@@ -1,6 +1,7 @@
 import {
   forwardRef,
-  useMemo
+  useMemo,
+  useState
 } from 'react'
 import {
   TextInput,
@@ -15,10 +16,12 @@ import {
   type UseDelayOptionsResolved
 } from '@helpwave/hightide-utils/hooks'
 
+import type { ColorPairToken } from '@helpwave/hightide-design/theme-tokens'
 import { useTheme } from '../../global-contexts/theme/ThemeContext'
 import type {
+  InputContainerStyle,
   InputState,
-  InputStyle
+  InputTextStyle
 } from '../../theme/types/components/input'
 import type { StyleOverwrite } from '../../theme/types/resolver'
 import type {
@@ -45,15 +48,18 @@ export type InputProps = Omit<TextInputProps, 'value' | 'style'>
   & Partial<FormFieldDataHandling<string>>
   & Partial<FormFieldInteractionStates>
   & {
+    color?: ColorPairToken,
     editCompleteOptions?: EditCompleteOptions,
     initialValue?: string,
     style?: StyleProp<TextStyle>,
-    inputStyle?: StyleOverwrite<InputState, InputStyle>,
+    containerStyle?: StyleOverwrite<InputState, InputContainerStyle>,
+    textStyle?: StyleOverwrite<InputState, InputTextStyle>,
   }
 
 export const Input = forwardRef<TextInput, InputProps>(function Input({
   value: controlledValue,
   initialValue,
+  color,
   invalid = false,
   disabled = false,
   readOnly = false,
@@ -62,10 +68,14 @@ export const Input = forwardRef<TextInput, InputProps>(function Input({
   onEditComplete,
   editCompleteOptions,
   style,
-  inputStyle,
+  containerStyle,
+  textStyle,
   ...props
 }, ref) {
   const { theme } = useTheme()
+  const [isHovered, setIsHovered] = useState(false)
+  const [isPressed, setIsPressed] = useState(false)
+  const [isFocused, setIsFocused] = useState(false)
 
   const [value, setValue] = useControlledState({
     value: controlledValue,
@@ -85,18 +95,28 @@ export const Input = forwardRef<TextInput, InputProps>(function Input({
     disabled: !afterDelay || disabled || readOnly,
   })
 
+  const interactive = !disabled && !readOnly
+
   const state = useMemo((): InputState => ({
+    color,
     isDisabled: disabled,
     isInvalid: invalid,
-    isReadOnly: readOnly,
-  }), [disabled, invalid, readOnly])
+    isReadonly: readOnly,
+    isHovered: interactive && isHovered,
+    isPressed: interactive && isPressed,
+    isFocused: interactive && isFocused,
+  }), [color, disabled, invalid, readOnly, interactive, isHovered, isPressed, isFocused])
 
-  const resolvedInputStyle = useMemo(
-    () => theme.components.input.input(state, inputStyle),
-    [theme, state, inputStyle]
+  const resolvedContainerStyle = useMemo(
+    () => theme.components.input.container(state, containerStyle),
+    [theme, state, containerStyle]
   )
-  const placeholderColor = useMemo(
-    () => theme.components.input.placeholderColor(state),
+  const resolvedTextStyle = useMemo(
+    () => theme.components.input.text(state, textStyle),
+    [theme, state, textStyle]
+  )
+  const resolvedPlaceholderStyle = useMemo(
+    () => theme.components.input.placeholder(state),
     [theme, state]
   )
 
@@ -105,7 +125,7 @@ export const Input = forwardRef<TextInput, InputProps>(function Input({
       {...props}
       ref={ref}
       value={value}
-      editable={!disabled && !readOnly}
+      editable={interactive}
       onChangeText={(nextValue) => {
         props.onChangeText?.(nextValue)
         restartTimer(() => {
@@ -113,12 +133,39 @@ export const Input = forwardRef<TextInput, InputProps>(function Input({
         })
         setValue(nextValue)
       }}
+      onFocus={(event) => {
+        if (interactive) {
+          setIsFocused(true)
+        }
+        props.onFocus?.(event)
+      }}
       onBlur={(event) => {
+        setIsFocused(false)
         props.onBlur?.(event)
         if (allowEditCompleteOnBlur) {
           onEditComplete?.(value ?? '')
           clearTimer()
         }
+      }}
+      onPressIn={(event) => {
+        if (interactive) {
+          setIsPressed(true)
+        }
+        props.onPressIn?.(event)
+      }}
+      onPressOut={(event) => {
+        setIsPressed(false)
+        props.onPressOut?.(event)
+      }}
+      onPointerEnter={(event) => {
+        if (interactive) {
+          setIsHovered(true)
+        }
+        props.onPointerEnter?.(event)
+      }}
+      onPointerLeave={(event) => {
+        setIsHovered(false)
+        props.onPointerLeave?.(event)
       }}
       onSubmitEditing={(event) => {
         props.onSubmitEditing?.(event)
@@ -127,8 +174,8 @@ export const Input = forwardRef<TextInput, InputProps>(function Input({
           clearTimer()
         }
       }}
-      placeholderTextColor={placeholderColor}
-      style={[resolvedInputStyle, style]}
+      placeholderTextColor={resolvedPlaceholderStyle.color}
+      style={[resolvedContainerStyle, resolvedTextStyle, style]}
       accessibilityState={{ disabled, selected: required }}
     />
   )

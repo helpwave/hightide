@@ -1,30 +1,35 @@
-import type { ViewStyle } from 'react-native'
-
-import type { ColoringType } from '@helpwave/hightide-design/utils'
 import type {
-  ButtonColoringStyle,
-  ElementSize
-} from '@helpwave/hightide-design/types'
+  TextStyle,
+  ViewStyle
+} from 'react-native'
 
-import type { Color } from '../color'
+import type { ColorPairToken } from '@helpwave/hightide-design/theme-tokens'
+import type {
+  ComponentSize,
+  IconButtonVariant
+} from '@helpwave/hightide-design/semantic-token-resolvers'
+
 import type {
   InteractionState,
   StyleResolverFunction
 } from '../resolver'
+import type { IconStyle } from '../../../icons'
 
 export type IconButtonState = InteractionState & {
-  size?: ElementSize,
-  color?: ColoringType,
-  coloringStyle?: ButtonColoringStyle,
+  size?: ComponentSize,
+  color?: ColorPairToken,
+  variant?: IconButtonVariant,
 }
 
 export type IconButtonStyle = ViewStyle
 
-export type IconButtonIconStyle = {
-  color: Color,
-}
+export type IconButtonIconStyle = IconStyle
 
-export type IconButtonTheme = {
-  button: StyleResolverFunction<IconButtonState, IconButtonStyle>,
+export type IconButtonTextStyle = TextStyle
+
+export type IconButtonThemeResolvers = {
+  container: StyleResolverFunction<IconButtonState, IconButtonStyle>,
+  stateLayer: StyleResolverFunction<IconButtonState, IconButtonStyle>,
   icon: StyleResolverFunction<IconButtonState, IconButtonIconStyle>,
+  text: StyleResolverFunction<IconButtonState, IconButtonTextStyle>,
 }

@@ -21,7 +21,7 @@ and adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 ### Changed
 
 - Renamed `HightideDesignTokens` to `HightideThemeTokens`
-- Renamed `Themes` to `ThemeTokens`
+- Renamed `Themes` to `HightideThemeTokens`
 - Renamed `constructTheme` to `constructThemeTokens` and `ThemeConstructorOptions` to `ThemeTokenConstructorOptions`
 - Moved `constructThemeTokens` from `hooks/` to `utils/`
 - Moved `hexWithAlpha` and coloring helpers (`coloringTypes`, `ColoringType`, `getColoringToken`) into `utils/`
@@ -60,7 +60,7 @@ and adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
 - `DesignTokens` aggregate type (colors, semantic colors, component colors, coloring, typography, layout, animation, decoration)
 - `HightideDesignTokens` with required shapes for every token attribute (`HightideColorPalleteTokens`, `HightideSemanticColorTokens`, `HightideColoringTokens`, `HightideDecorationTokens`, plus existing strict typography/layout/component/animation types)
-- Typography tokens (`TypographyTokens`, font sizes/weights/line heights, shared `typography` scale)
+- Typography tokens (`HightideTypographyTokens`, font sizes/weights/line heights, shared `typography` scale)
 - Animation and decoration token modules
 - Subpath package exports: `@helpwave/hightide-design/types`, `/tokens`, `/helpers`
 

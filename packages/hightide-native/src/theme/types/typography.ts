@@ -1,18 +1,17 @@
-export type TextStyle = {
-  fontSize: number,
-  lineHeight: number,
-  fontWeight: string,
-  fontFamily?: string,
-}
+import type {
+  ThemeTypographyTokens,
+  ThemeTypographySize,
+  TypographyStyleToken
+} from '@helpwave/hightide-design/theme-tokens'
 
-export type HightideTypography = {
-  fontWeights: Record<string, string>,
-  scales: {
-    headline: { large: TextStyle, medium: TextStyle, small: TextStyle },
-    title: { large: TextStyle, medium: TextStyle, small: TextStyle },
-    body: { large: TextStyle, medium: TextStyle },
-    label: { large: TextStyle, medium: TextStyle },
-    caption: { large: TextStyle, medium: TextStyle, small: TextStyle },
-    button: { large: TextStyle, medium: TextStyle, small: TextStyle },
-  },
-}
+export type TextStyle = TypographyStyleToken
+
+export type HightideTypography = ThemeTypographyTokens
+
+export type HightideFontFamilies = ThemeTypographyTokens['fontFamilies']
+
+export type HightideFontWeights = ThemeTypographyTokens['fontWeights']
+
+export type TypographySizes = ThemeTypographySize
+
+export type { TypographyStyleToken }

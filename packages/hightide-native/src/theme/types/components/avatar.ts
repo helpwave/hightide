@@ -4,29 +4,35 @@ import type {
   ViewStyle
 } from 'react-native'
 
-import type { ElementSize } from '@helpwave/hightide-design/types'
+import type { ColorPairToken } from '@helpwave/hightide-design/theme-tokens'
+import {
+  avatarStatuses,
+  type AvatarSize,
+  type AvatarStatus
+} from '@helpwave/hightide-design/component-token-resolvers'
 
 import type { StyleResolverFunction } from '../resolver'
+import type { IconStyle } from '../../../icons'
 
-export type AvatarStatus = 'online' | 'offline' | 'away' | 'busy' | 'unknown'
+export type { AvatarSize, AvatarStatus }
+export { avatarStatuses }
 
 export type AvatarState = {
-  size?: ElementSize,
+  size?: AvatarSize | number,
   isGrouped?: boolean,
   groupIndex?: number,
+  color?: ColorPairToken,
 }
 
 export type AvatarWithStatusState = {
-  size?: ElementSize,
+  size?: AvatarSize | number,
+  color?: ColorPairToken,
   status?: AvatarStatus,
 }
 
-export type AvatarWithLabelState = {
-  size?: ElementSize,
-}
-
 export type AvatarGroupState = {
-  size?: ElementSize,
+  size?: AvatarSize | number,
+  color?: ColorPairToken,
   count?: number,
 }
 
@@ -36,42 +42,37 @@ export type AvatarImageStyle = ImageStyle
 
 export type AvatarTextStyle = TextStyle
 
-export type AvatarIconStyle = {
-  size: number,
-  strokeWidth: number,
-  color: string,
-}
+export type AvatarIconStyle = IconStyle
 
 export type AvatarStatusDotStyle = ViewStyle
-
-export type AvatarWithStatusContainerStyle = ViewStyle
-
-export type AvatarWithLabelContainerStyle = ViewStyle
-
-export type AvatarWithLabelTextStyle = TextStyle
 
 export type AvatarGroupContainerStyle = ViewStyle
 
 export type AvatarGroupStackStyle = ViewStyle
 
-export type AvatarGroupMoreStyle = TextStyle
+export type AvatarGroupTextStyle = TextStyle
 
-export type AvatarTheme = {
-  avatar: StyleResolverFunction<AvatarState, AvatarStyle>,
+export type AvatarThemeResolvers = {
+  container: StyleResolverFunction<AvatarState, AvatarStyle>,
   image: StyleResolverFunction<AvatarState, AvatarImageStyle>,
   text: StyleResolverFunction<AvatarState, AvatarTextStyle>,
   icon: StyleResolverFunction<AvatarState, AvatarIconStyle>,
-  withStatus: {
-    container: StyleResolverFunction<AvatarWithStatusState, AvatarWithStatusContainerStyle>,
-    statusDot: StyleResolverFunction<AvatarWithStatusState, AvatarStatusDotStyle>,
-  },
-  withLabel: {
-    container: StyleResolverFunction<AvatarWithLabelState, AvatarWithLabelContainerStyle>,
-    text: StyleResolverFunction<AvatarWithLabelState, AvatarWithLabelTextStyle>,
-  },
-  group: {
-    container: StyleResolverFunction<AvatarGroupState, AvatarGroupContainerStyle>,
-    stack: StyleResolverFunction<AvatarGroupState, AvatarGroupStackStyle>,
-    more: StyleResolverFunction<AvatarGroupState, AvatarGroupMoreStyle>,
-  },
+}
+
+export type AvatarWithStatusThemeResolvers = {
+  avatar: StyleResolverFunction<
+    AvatarWithStatusState,
+    AvatarThemeResolvers
+  >,
+  statusDot: StyleResolverFunction<AvatarWithStatusState, AvatarStatusDotStyle>,
+}
+
+export type AvatarGroupThemeResolvers = {
+  avatar: StyleResolverFunction<
+    AvatarGroupState,
+    AvatarThemeResolvers
+  >,
+  container: StyleResolverFunction<AvatarGroupState, AvatarGroupContainerStyle>,
+  avatarStack: StyleResolverFunction<AvatarGroupState, AvatarGroupStackStyle>,
+  text: StyleResolverFunction<AvatarGroupState, AvatarGroupTextStyle>,
 }

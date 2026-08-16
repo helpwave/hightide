@@ -3,22 +3,16 @@ import {
   type ReactNode
 } from 'react'
 import {
-  Text,
   View,
   type StyleProp,
   type ViewProps,
   type ViewStyle
 } from 'react-native'
 
-import {
-  coloringTypes,
-  type ColoringType
-} from '@helpwave/hightide-design/utils'
-import type {
-  ChipColoringStyle,
-  ElementSize
-} from '@helpwave/hightide-design/types'
+import type { ColorPairToken } from '@helpwave/hightide-design/theme-tokens'
+import type { ChipVariant, ComponentSize } from '@helpwave/hightide-design/semantic-token-resolvers'
 
+import { ContentThemeProvider } from '../../global-contexts/content-theme/ContentThemeProvider'
 import { useTheme } from '../../global-contexts/theme/ThemeContext'
 import type {
   ChipState,
@@ -26,20 +20,21 @@ import type {
   ChipTextStyle
 } from '../../theme/types/components/chip'
 import type { StyleOverwrite } from '../../theme/types/resolver'
+import type { Color } from '../../theme/types/color'
+import { ThemedText } from './ThemedText'
 
-export type ChipSize = ElementSize
+export type ChipSize = ComponentSize
 
-export type ChipColor = ColoringType
+export type ChipColor = ColorPairToken
 
 export const ChipUtil = {
-  colors: coloringTypes,
-  sizes: ['xs', 'sm', 'md', 'lg'] as const satisfies readonly ElementSize[],
-  coloringStyles: ['solid', 'tonal', 'outline', 'tonal-outline'] as const satisfies readonly ChipColoringStyle[],
+  sizes: ['sm', 'md', 'lg'] as const satisfies readonly ComponentSize[],
+  variants: ['filled', 'tonal'] as const satisfies readonly ChipVariant[],
 }
 
 export type ChipProps = Omit<ViewProps, 'children' | 'style'> & {
   color?: ChipColor,
-  coloringStyle?: ChipColoringStyle,
+  variant?: ChipVariant,
   size?: ChipSize,
   children?: ReactNode,
   style?: StyleProp<ViewStyle>,
@@ -49,8 +44,8 @@ export type ChipProps = Omit<ViewProps, 'children' | 'style'> & {
 
 export const Chip = ({
   children,
-  color = 'neutral',
-  coloringStyle = 'solid',
+  color,
+  variant = 'filled',
   size = 'md',
   style,
   chipStyle,
@@ -62,8 +57,8 @@ export const Chip = ({
   const state = useMemo((): ChipState => ({
     size,
     color,
-    coloringStyle,
-  }), [size, color, coloringStyle])
+    variant,
+  }), [size, color, variant])
 
   const resolvedChipStyle = useMemo(
     () => theme.components.chip.chip(state, chipStyle),
@@ -79,9 +74,14 @@ export const Chip = ({
       {...props}
       style={[resolvedChipStyle, style]}
     >
-      {typeof children === 'string' || typeof children === 'number'
-        ? <Text style={resolvedTextStyle}>{children}</Text>
-        : children}
+      <ContentThemeProvider
+        foregroundColor={resolvedTextStyle.color as Color}
+        textStyle={resolvedTextStyle}
+      >
+        {typeof children === 'string' || typeof children === 'number'
+          ? <ThemedText>{children}</ThemedText>
+          : children}
+      </ContentThemeProvider>
     </View>
   )
 }

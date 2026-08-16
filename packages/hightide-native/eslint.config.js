@@ -1,4 +1,3 @@
-import storybook from 'eslint-plugin-storybook'
 import config from '@helpwave/eslint-config'
 import importPlugin from 'eslint-plugin-import'
 
@@ -28,16 +27,9 @@ export default [
     },
   },
   {
-    ignores: ['node_modules/**', 'storybook-static/**'],
+    ignores: ['node_modules/**'],
   },
   ...config.recommended,
-  ...storybook.configs['flat/recommended'],
-  {
-    files: ['**/*.stories.@(ts|tsx|js|jsx|mjs|cjs)'],
-    rules: {
-      'storybook/prefer-pascal-case': 'off',
-    },
-  },
   {
     rules: {
       indent: ['warn', 2]

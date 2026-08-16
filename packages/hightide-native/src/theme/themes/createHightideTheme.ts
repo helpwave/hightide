@@ -1,59 +1,222 @@
-import type {
-  ColorPaletteToken,
-  HightideThemeTokens
-} from '@helpwave/hightide-design/types'
+import { componentTokenResolvers } from '@helpwave/hightide-design/component-token-resolvers'
+import {
+  hightideSemanticTokenResolvers,
+  resolveContainerLayout,
+  resolveControlLayout,
+  resolveInsideControlLayout,
+  type ElementLayoutTokens
+} from '@helpwave/hightide-design/semantic-token-resolvers'
+import type { ThemeLayoutSize, ThemeTokens, ThemeTypographySize } from '@helpwave/hightide-design/theme-tokens'
 
-import { createAvatarThemeFromDesign } from '../resolvers/avatar'
-import { createButtonThemeFromDesign } from '../resolvers/button'
-import { createChatThemeFromDesign } from '../resolvers/chat'
-import { createCheckboxThemeFromDesign } from '../resolvers/checkbox'
-import { createChipThemeFromDesign } from '../resolvers/chip'
-import { createSwitchThemeFromDesign } from '../resolvers/switch'
-import { createIconButtonThemeFromDesign } from '../resolvers/iconButton'
-import { createInputThemeFromDesign } from '../resolvers/input'
-import { createMenuThemeFromDesign } from '../resolvers/menu'
-import { createMultiSelectThemeFromDesign } from '../resolvers/multiSelect'
-import { createSelectThemeFromDesign } from '../resolvers/select'
-import type {
-  Color,
-  ColorPalette,
-  HightideColors
-} from '../types/color'
+import {
+  toAvatarGroupThemeResolvers,
+  toAvatarThemeResolvers,
+  toAvatarWithStatusThemeResolvers
+} from '../resolvers/avatar'
+import { toButtonThemeResolvers } from '../resolvers/button'
+import { toCardThemeResolvers } from '../resolvers/card'
+import { toChatThemeResolvers } from '../resolvers/chat/chat-theme'
+import { toCheckboxThemeResolvers } from '../resolvers/checkbox'
+import { toChipThemeResolvers } from '../resolvers/chip'
+import { toDividerThemeResolvers } from '../resolvers/divider'
+import { toIconThemeResolvers } from '../resolvers/icon'
+import { toIconButtonThemeResolvers } from '../resolvers/iconButton'
+import { toInputThemeResolvers } from '../resolvers/input'
+import { toSearchBarThemeResolvers } from '../resolvers/searchBar'
+import {
+  toListItemThemeResolvers
+} from '../resolvers/listItem'
+import { toMultiSelectThemeResolvers } from '../resolvers/multiSelect'
+import { toSelectThemeResolvers } from '../resolvers/select'
+import { toSwitchThemeResolvers } from '../resolvers/switch'
+import { toThemedPressableThemeResolvers } from '../resolvers/themedPressable'
+import type { HightideThemeSemantics } from '../types/semantics'
 import type { HightideTheme } from '../types/theme'
 
-const unwrapColorPaletteToken = (token: ColorPaletteToken): Color | ColorPalette => {
-  if (token.type === 'singleValue') {
-    return token.value
-  }
-  return token.value
-}
+const layoutSizes = ['xs', 'sm', 'md', 'lg', 'xl'] as const satisfies readonly ThemeLayoutSize[]
+const typographySizes = ['sm', 'md', 'lg'] as const satisfies readonly ThemeTypographySize[]
 
-const unwrapColors = (colors: HightideThemeTokens['colors']): HightideColors & Record<string, Color | ColorPalette> => {
-  const result: Record<string, Color | ColorPalette> = {}
-  for (const [key, token] of Object.entries(colors)) {
-    result[key] = unwrapColorPaletteToken(token)
-  }
-  return result as HightideColors & Record<string, Color | ColorPalette>
-}
+const resolveElementLayouts = (themeTokens: ThemeTokens): ElementLayoutTokens => ({
+  control: Object.fromEntries(
+    layoutSizes.map((size) => [
+      size,
+      resolveControlLayout({ themeTokens, size }),
+    ])
+  ) as ElementLayoutTokens['control'],
+  container: Object.fromEntries(
+    layoutSizes.map((size) => [
+      size,
+      resolveContainerLayout({ themeTokens, size }),
+    ])
+  ) as ElementLayoutTokens['container'],
+  insideControl: Object.fromEntries(
+    typographySizes.map((size) => [
+      size,
+      resolveInsideControlLayout({ themeTokens, size }),
+    ])
+  ) as ElementLayoutTokens['insideControl'],
+})
 
-export const createHightideTheme = (tokens: HightideThemeTokens): HightideTheme => ({
-  colors: unwrapColors(tokens.colors),
-  semantic: tokens.semanticColors,
-  typography: tokens.typography,
-  layout: tokens.layout,
-  decoration: tokens.decorcation,
+const bindSemantics = (themeTokens: ThemeTokens): HightideThemeSemantics => ({
+  coloringColorVariant: (parameter) => hightideSemanticTokenResolvers.coloringColorVariant({
+    themeTokens,
+    ...parameter,
+  }),
+  coloringStyle: (parameter) => hightideSemanticTokenResolvers.coloringStyle({
+    themeTokens,
+    ...parameter,
+  }),
+  pressableColoring: (parameter) => hightideSemanticTokenResolvers.pressableColoring({
+    themeTokens,
+    ...parameter,
+  }),
+  pressableStateLayerTint: (parameter) => hightideSemanticTokenResolvers.pressableStateLayerTint({
+    themeTokens,
+    ...parameter,
+  }),
+  inputColoring: (parameter) => hightideSemanticTokenResolvers.inputColoring({
+    themeTokens,
+    ...parameter,
+  }),
+  controlLayout: (parameter) => hightideSemanticTokenResolvers.controlLayout({
+    themeTokens,
+    ...parameter,
+  }),
+  touchTargetSize: (parameter) => hightideSemanticTokenResolvers.touchTargetSize({
+    themeTokens,
+    ...parameter,
+  }),
+  containerLayout: (parameter) => hightideSemanticTokenResolvers.containerLayout({
+    themeTokens,
+    ...parameter,
+  }),
+  insideControlLayout: (parameter) => hightideSemanticTokenResolvers.insideControlLayout({
+    themeTokens,
+    ...parameter,
+  }),
+  tintedSurface: (parameter) => hightideSemanticTokenResolvers.tintedSurface({
+    themeTokens,
+    ...parameter,
+  }),
+  withAppearance: (parameter) => hightideSemanticTokenResolvers.withAppearance({
+    themeTokens,
+    ...parameter,
+  }),
+  asFaded: (parameter) => hightideSemanticTokenResolvers.asFaded({
+    themeTokens,
+    ...parameter,
+  }),
+  asDescription: (parameter) => hightideSemanticTokenResolvers.asDescription({
+    themeTokens,
+    ...parameter,
+  }),
+})
+
+export const createHightideTheme = (themeTokens: ThemeTokens): HightideTheme => ({
+  colors: themeTokens.color,
+  semantics: bindSemantics(themeTokens),
+  typography: themeTokens.typography,
+  icongraphy: themeTokens.icongraphy,
+  spacing: themeTokens.spacing,
+  elements: resolveElementLayouts(themeTokens),
+  borderRadius: themeTokens.shape.borderRadius,
+  border: themeTokens.borderWidth,
+  shadow: {
+    raised: themeTokens.elevation.level1,
+    container: themeTokens.elevation.level2,
+    popover: themeTokens.elevation.level3,
+    dialog: themeTokens.elevation.level4,
+  },
   components: {
-    coloring: tokens.coloring,
-    button: createButtonThemeFromDesign(tokens),
-    iconButton: createIconButtonThemeFromDesign(tokens),
-    chip: createChipThemeFromDesign(tokens),
-    checkbox: createCheckboxThemeFromDesign(tokens),
-    switch: createSwitchThemeFromDesign(tokens),
-    input: createInputThemeFromDesign(tokens),
-    select: createSelectThemeFromDesign(tokens),
-    multiSelect: createMultiSelectThemeFromDesign(tokens),
-    chat: createChatThemeFromDesign(tokens),
-    menu: createMenuThemeFromDesign(tokens),
-    avatar: createAvatarThemeFromDesign(tokens),
+    button: toButtonThemeResolvers({
+      themeTokens,
+      semanticTokens: hightideSemanticTokenResolvers,
+      componentTokens: componentTokenResolvers,
+    }),
+    iconButton: toIconButtonThemeResolvers({
+      themeTokens,
+      semanticTokens: hightideSemanticTokenResolvers,
+      componentTokens: componentTokenResolvers,
+    }),
+    themedPressable: toThemedPressableThemeResolvers({
+      themeTokens,
+      semanticTokens: hightideSemanticTokenResolvers,
+      componentTokens: componentTokenResolvers,
+    }),
+    chip: toChipThemeResolvers({
+      themeTokens,
+      semanticTokens: hightideSemanticTokenResolvers,
+      componentTokens: componentTokenResolvers,
+    }),
+    checkbox: toCheckboxThemeResolvers({
+      themeTokens,
+      semanticTokens: hightideSemanticTokenResolvers,
+      componentTokens: componentTokenResolvers,
+    }),
+    switch: toSwitchThemeResolvers({
+      themeTokens,
+      semanticTokens: hightideSemanticTokenResolvers,
+      componentTokens: componentTokenResolvers,
+    }),
+    input: toInputThemeResolvers({
+      themeTokens,
+      semanticTokens: hightideSemanticTokenResolvers,
+      componentTokens: componentTokenResolvers,
+    }),
+    searchBar: toSearchBarThemeResolvers({
+      themeTokens,
+      semanticTokens: hightideSemanticTokenResolvers,
+      componentTokens: componentTokenResolvers,
+    }),
+    select: toSelectThemeResolvers({
+      themeTokens,
+      semanticTokens: hightideSemanticTokenResolvers,
+      componentTokens: componentTokenResolvers,
+    }),
+    multiSelect: toMultiSelectThemeResolvers({
+      themeTokens,
+      semanticTokens: hightideSemanticTokenResolvers,
+      componentTokens: componentTokenResolvers,
+    }),
+    chat: toChatThemeResolvers({
+      themeTokens,
+      semanticTokens: hightideSemanticTokenResolvers,
+      componentTokens: componentTokenResolvers,
+    }),
+    card: toCardThemeResolvers({
+      themeTokens,
+      semanticTokens: hightideSemanticTokenResolvers,
+      componentTokens: componentTokenResolvers,
+    }),
+    divider: toDividerThemeResolvers({
+      themeTokens,
+      semanticTokens: hightideSemanticTokenResolvers,
+      componentTokens: componentTokenResolvers,
+    }),
+    listItem: toListItemThemeResolvers({
+      themeTokens,
+      semanticTokens: hightideSemanticTokenResolvers,
+      componentTokens: componentTokenResolvers,
+    }),
+    avatar: toAvatarThemeResolvers({
+      themeTokens,
+      semanticTokens: hightideSemanticTokenResolvers,
+      componentTokens: componentTokenResolvers,
+    }),
+    avatarWithStatus: toAvatarWithStatusThemeResolvers({
+      themeTokens,
+      semanticTokens: hightideSemanticTokenResolvers,
+      componentTokens: componentTokenResolvers,
+    }),
+    avatarGroup: toAvatarGroupThemeResolvers({
+      themeTokens,
+      semanticTokens: hightideSemanticTokenResolvers,
+      componentTokens: componentTokenResolvers,
+    }),
+    icon: toIconThemeResolvers({
+      themeTokens,
+      semanticTokens: hightideSemanticTokenResolvers,
+      componentTokens: componentTokenResolvers,
+    }),
   },
 })

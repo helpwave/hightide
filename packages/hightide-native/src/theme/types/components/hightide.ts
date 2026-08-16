@@ -1,46 +1,45 @@
-import type { Color } from '../color'
-import type { AvatarTheme } from './avatar'
-import type { ButtonTheme } from './button'
-import type { ChatTheme } from './chat'
-import type { CheckboxTheme } from './checkbox'
-import type { ChipTheme } from './chip'
-import type { IconButtonTheme } from './iconButton'
-import type { InputTheme } from './input'
-import type { MenuTheme } from './menu'
-import type { MultiSelectTheme } from './multiSelect'
-import type { SelectTheme } from './select'
-import type { SwitchTheme } from './switch'
+import type { IconSize } from '@helpwave/hightide-design/theme-tokens'
+import type { IconTokens } from '@helpwave/hightide-design/component-token-resolvers'
 
-export type ColoringDefinition = {
-  color: Color,
-  onColor: Color,
-  hover: Color,
-  text?: Color,
-  textHover?: Color,
-  outline?: Color,
-  outlineHover?: Color,
-  tonalText?: Color,
-  tonalBackground?: Color,
-}
+import type {
+  AvatarGroupThemeResolvers,
+  AvatarThemeResolvers,
+  AvatarWithStatusThemeResolvers
+} from './avatar'
+import type { ButtonThemeResolvers } from './button'
+import type { ChatThemeResolvers } from './chat'
+import type { CheckboxThemeResolvers } from './checkbox'
+import type { ChipThemeResolvers } from './chip'
+import type { IconButtonThemeResolvers } from './iconButton'
+import type { InputThemeResolvers } from './input'
+import type { SearchBarThemeResolvers } from './searchBar'
+import type { CardThemeResolvers } from './card'
+import type { DividerThemeResolvers } from './divider'
+import type { ListItemThemeResolvers } from './listItem'
+import type { MultiSelectThemeResolvers } from './multiSelect'
+import type { SelectThemeResolvers } from './select'
+import type { SwitchThemeResolvers } from './switch'
+import type { ThemedPressableThemeResolvers } from './themedPressable'
+
+export type IconThemeResolvers = Record<IconSize, IconTokens>
 
 export type HightideComponentThemes = {
-  coloring: {
-    primary: ColoringDefinition,
-    secondary: ColoringDefinition,
-    positive: ColoringDefinition,
-    warning: ColoringDefinition,
-    negative: ColoringDefinition,
-    neutral: ColoringDefinition,
-  } & Record<string, ColoringDefinition>,
-  button: ButtonTheme,
-  iconButton: IconButtonTheme,
-  chip: ChipTheme,
-  checkbox: CheckboxTheme,
-  switch: SwitchTheme,
-  input: InputTheme,
-  select: SelectTheme,
-  multiSelect: MultiSelectTheme,
-  chat: ChatTheme,
-  menu: MenuTheme,
-  avatar: AvatarTheme,
+  button: ButtonThemeResolvers,
+  iconButton: IconButtonThemeResolvers,
+  themedPressable: ThemedPressableThemeResolvers,
+  chip: ChipThemeResolvers,
+  checkbox: CheckboxThemeResolvers,
+  switch: SwitchThemeResolvers,
+  input: InputThemeResolvers,
+  searchBar: SearchBarThemeResolvers,
+  select: SelectThemeResolvers,
+  multiSelect: MultiSelectThemeResolvers,
+  chat: ChatThemeResolvers,
+  card: CardThemeResolvers,
+  divider: DividerThemeResolvers,
+  listItem: ListItemThemeResolvers,
+  avatar: AvatarThemeResolvers,
+  avatarWithStatus: AvatarWithStatusThemeResolvers,
+  avatarGroup: AvatarGroupThemeResolvers,
+  icon: IconThemeResolvers,
 }

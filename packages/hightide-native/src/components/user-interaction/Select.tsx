@@ -1,25 +1,31 @@
-import { useMemo } from 'react'
+import { Fragment, useMemo } from 'react'
 import {
   FlatList,
   Modal,
   Pressable,
-  Text,
-  TextInput,
   View,
   type StyleProp,
   type ViewStyle
 } from 'react-native'
 
+import type { ColorPairToken } from '@helpwave/hightide-design/theme-tokens'
+import { useTranslation } from '@helpwave/hightide-utils/context'
 import { useTheme } from '../../global-contexts/theme/ThemeContext'
+import { ThemedText } from '../visualization-and-display/ThemedText'
+import { ThemedIcon } from '../visualization-and-display/ThemedIcon'
+import { ListActionItem } from '../list/ListActionItem'
+import { HightideIconRegistry } from '../../icons/HightideIconRegistry'
 import {
   useSelect,
   type UseSelectOption
 } from '../../hooks/useSelect'
 import type { SelectState } from '../../theme/types/components/select'
+import type { Color } from '../../theme/types/color'
 import type {
   FormFieldDataHandling,
   FormFieldInteractionStates
 } from '../../types/formField'
+import { SearchBar } from './SearchBar'
 
 export type SelectOption<T extends string = string> = UseSelectOption & {
   value?: T,
@@ -33,6 +39,7 @@ export type SelectProps = Partial<FormFieldDataHandling<string>>
     initialValue?: string | null,
     placeholder?: string,
     showSearch?: boolean,
+    color?: ColorPairToken,
     style?: StyleProp<ViewStyle>,
   }
 
@@ -42,6 +49,7 @@ export const Select = ({
   initialValue = null,
   placeholder = 'Select…',
   showSearch = true,
+  color,
   disabled = false,
   readOnly = false,
   invalid = false,
@@ -50,6 +58,7 @@ export const Select = ({
   style,
 }: SelectProps) => {
   const { theme } = useTheme()
+  const translation = useTranslation()
   const interactive = !disabled && !readOnly
 
   const select = useSelect({
@@ -65,51 +74,93 @@ export const Select = ({
     return selected?.label ?? placeholder
   }, [options, placeholder, select.value])
 
+  const visibleOptions = useMemo(
+    () => options.filter((option) => select.visibleOptionIds.includes(option.id)),
+    [options, select.visibleOptionIds]
+  )
+
   const state = useMemo((): SelectState => ({
+    color,
     isDisabled: disabled,
-    isReadOnly: readOnly,
+    isReadonly: readOnly,
     isInvalid: invalid,
     isOpen: select.isOpen,
     hasValue: !!select.value,
-  }), [disabled, invalid, readOnly, select.isOpen, select.value])
+  }), [color, disabled, invalid, readOnly, select.isOpen, select.value])
 
   const selectTheme = theme.components.select
 
-  const resolvedTriggerStyle = useMemo(
-    () => selectTheme.trigger(state),
-    [selectTheme, state]
-  )
-  const resolvedTriggerTextStyle = useMemo(
-    () => selectTheme.triggerText(state),
-    [selectTheme, state]
-  )
   const resolvedOverlayStyle = useMemo(
-    () => selectTheme.overlay(state),
-    [selectTheme, state]
+    () => selectTheme.overlay({}),
+    [selectTheme]
   )
   const resolvedMenuStyle = useMemo(
-    () => selectTheme.menu(state),
-    [selectTheme, state]
+    () => selectTheme.menu({ hasSearch: showSearch }),
+    [selectTheme, showSearch]
   )
-  const resolvedSearchStyle = useMemo(
-    () => selectTheme.search(state),
-    [selectTheme, state]
+  const resolvedHeaderStyle = useMemo(
+    () => selectTheme.header({}),
+    [selectTheme]
   )
-  const searchPlaceholderColor = useMemo(
-    () => selectTheme.searchPlaceholderColor(state),
-    [selectTheme, state]
+  const resolvedEmptyTextStyle = useMemo(
+    () => selectTheme.emptyText({}),
+    [selectTheme]
   )
+  const showEmptySearchResults = showSearch
+    && select.searchQuery.trim().length > 0
+    && visibleOptions.length === 0
 
   return (
     <View style={style}>
       <Pressable
         disabled={!interactive}
         onPress={() => select.toggleOpen()}
-        style={resolvedTriggerStyle}
+        style={(pressableState) => {
+          const interaction = pressableState as {
+            pressed: boolean,
+            hovered?: boolean,
+            focused?: boolean,
+            focusVisible?: boolean,
+          }
+          return selectTheme.trigger({
+            ...state,
+            isPressed: interaction.pressed,
+            isHovered: !!interaction.hovered,
+            isFocused: !!interaction.focused,
+            isFocusVisible: !!interaction.focusVisible,
+          })
+        }}
       >
-        <Text style={resolvedTriggerTextStyle}>
-          {selectedLabel}
-        </Text>
+        {(pressableState) => {
+          const interaction = pressableState as {
+            pressed: boolean,
+            hovered?: boolean,
+            focused?: boolean,
+            focusVisible?: boolean,
+          }
+          const triggerState = {
+            ...state,
+            isPressed: interaction.pressed,
+            isHovered: !!interaction.hovered,
+            isFocused: !!interaction.focused,
+            isFocusVisible: !!interaction.focusVisible,
+          }
+          const icon = selectTheme.icon(triggerState)
+
+          return (
+            <Fragment>
+              <ThemedText style={[selectTheme.triggerText(triggerState), { flex: 1 }]}>
+                {selectedLabel}
+              </ThemedText>
+              <ThemedIcon
+                icon={HightideIconRegistry.ChevronDown}
+                size={icon.size}
+                strokeWidth={icon.strokeWidth}
+                color={icon.color}
+              />
+            </Fragment>
+          )
+        }}
       </Pressable>
 
       <Modal
@@ -127,39 +178,59 @@ export const Select = ({
             onPress={(event) => event.stopPropagation()}
           >
             {showSearch && (
-              <TextInput
-                value={select.searchQuery}
-                onChangeText={select.setSearchQuery}
-                placeholder="Search…"
-                placeholderTextColor={searchPlaceholderColor}
-                style={resolvedSearchStyle}
+              <View style={resolvedHeaderStyle}>
+                <SearchBar
+                  value={select.searchQuery}
+                  onValueChange={select.setSearchQuery}
+                  onSearch={select.setSearchQuery}
+                />
+              </View>
+            )}
+            {showEmptySearchResults ? (
+              <View
+                style={{
+                  flex: 1,
+                  justifyContent: 'center',
+                  alignItems: 'center',
+                }}
+              >
+                <ThemedText style={resolvedEmptyTextStyle}>
+                  {translation('nothingFound')}
+                </ThemedText>
+              </View>
+            ) : (
+              <FlatList
+                data={visibleOptions}
+                keyExtractor={(option) => option.id}
+                style={{ flex: 1 }}
+                renderItem={({ item }) => {
+                  const isSelected = select.value === item.id
+                  const optionColor = isSelected
+                    ? (color ?? theme.colors.primary)
+                    : undefined
+                  const checkIcon = theme.components.listItem.action.icon({ color: optionColor })
+
+                  return (
+                    <ListActionItem
+                      label={item.label ?? item.id}
+                      color={optionColor}
+                      disabled={item.disabled}
+                      onPress={() => select.selectValue(item.id)}
+                      trailing={isSelected
+                        ? (
+                          <ThemedIcon
+                            icon={HightideIconRegistry.Check}
+                            size={checkIcon.size}
+                            strokeWidth={checkIcon.strokeWidth}
+                            color={checkIcon.color as Color | undefined}
+                          />
+                        )
+                        : undefined}
+                    />
+                  )
+                }}
               />
             )}
-            <FlatList
-              data={options.filter((option) => select.visibleOptionIds.includes(option.id))}
-              keyExtractor={(option) => option.id}
-              renderItem={({ item }) => {
-                const isSelected = select.value === item.id
-                const isHighlighted = select.highlightedValue === item.id
-                const optionState = {
-                  isSelected,
-                  isHighlighted,
-                  isDisabled: item.disabled,
-                }
-
-                return (
-                  <Pressable
-                    disabled={item.disabled}
-                    onPress={() => select.selectValue(item.id)}
-                    style={selectTheme.option(optionState)}
-                  >
-                    <Text style={selectTheme.optionText(optionState)}>
-                      {item.label}
-                    </Text>
-                  </Pressable>
-                )
-              }}
-            />
           </Pressable>
         </Pressable>
       </Modal>

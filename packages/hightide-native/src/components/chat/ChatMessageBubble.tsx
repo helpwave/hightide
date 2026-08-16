@@ -3,21 +3,23 @@ import {
   type ReactNode
 } from 'react'
 import {
-  Text,
   View,
   type StyleProp,
   type ViewProps,
   type ViewStyle
 } from 'react-native'
-import { CheckCheck } from 'lucide-react-native'
-
+import { HightideIconRegistry } from '../../icons/HightideIconRegistry'
+import { ThemedIcon } from '../visualization-and-display/ThemedIcon'
+import { ThemedText } from '../visualization-and-display/ThemedText'
 import { useTheme } from '../../global-contexts/theme/ThemeContext'
 import type {
+  ChatMessageBubbleBodyStyle,
+  ChatMessageBubbleBodyTextStyle,
   ChatMessageBubbleContainerStyle,
-  ChatMessageBubbleContentStyle,
+  ChatMessageBubbleMetaDataContainerStyle,
+  ChatMessageBubbleMetaDataStatusContainerStyle,
+  ChatMessageBubbleMetaDataTextStyle,
   ChatMessageBubbleState,
-  ChatMessageBubbleStyle,
-  ChatMessageBubbleTimestampStyle,
   ChatMessageDirection
 } from '../../theme/types/components/chat'
 import type { StyleOverwrite } from '../../theme/types/resolver'
@@ -25,88 +27,96 @@ import type { StyleOverwrite } from '../../theme/types/resolver'
 export type { ChatMessageDirection }
 
 export type ChatMessageBubbleProps = Omit<ViewProps, 'children' | 'style'> & {
-  direction?: ChatMessageDirection,
-  timestamp?: ReactNode,
+  direction: ChatMessageDirection,
+  timestamp: ReactNode,
   readReceipt?: ReactNode,
   children?: ReactNode,
   style?: StyleProp<ViewStyle>,
   containerStyle?: StyleOverwrite<ChatMessageBubbleState, ChatMessageBubbleContainerStyle>,
-  bubbleStyle?: StyleOverwrite<ChatMessageBubbleState, ChatMessageBubbleStyle>,
-  contentStyle?: StyleOverwrite<ChatMessageBubbleState, ChatMessageBubbleContentStyle>,
-  timestampStyle?: StyleOverwrite<ChatMessageBubbleState, ChatMessageBubbleTimestampStyle>,
+  bodyStyle?: StyleOverwrite<ChatMessageBubbleState, ChatMessageBubbleBodyStyle>,
+  bodyTextStyle?: StyleOverwrite<ChatMessageBubbleState, ChatMessageBubbleBodyTextStyle>,
+  metaDataContainerStyle?: StyleOverwrite<ChatMessageBubbleState, ChatMessageBubbleMetaDataContainerStyle>,
+  metaDataStatusContainerStyle?: StyleOverwrite<ChatMessageBubbleState, ChatMessageBubbleMetaDataStatusContainerStyle>,
+  metaDataTextStyle?: StyleOverwrite<ChatMessageBubbleState, ChatMessageBubbleMetaDataTextStyle>,
 }
 
 export const ChatMessageBubble = ({
-  direction = 'incoming',
+  direction,
   timestamp,
   readReceipt,
   children,
   style,
   containerStyle,
-  bubbleStyle,
-  contentStyle,
-  timestampStyle,
+  bodyStyle,
+  bodyTextStyle,
+  metaDataContainerStyle,
+  metaDataStatusContainerStyle,
+  metaDataTextStyle,
   ...props
 }: ChatMessageBubbleProps) => {
   const { theme } = useTheme()
   const state = useMemo(() => ({ direction }), [direction])
-  const staticState = useMemo(() => ({}), [])
 
   const resolvedContainerStyle = useMemo(
     () => theme.components.chat.messageBubble.container(state, containerStyle),
     [theme, state, containerStyle]
   )
-  const resolvedBubbleStyle = useMemo(
-    () => theme.components.chat.messageBubble.bubble(state, bubbleStyle),
-    [theme, state, bubbleStyle]
+  const resolvedBodyStyle = useMemo(
+    () => theme.components.chat.messageBubble.body(state, bodyStyle),
+    [theme, state, bodyStyle]
   )
-  const resolvedContentStyle = useMemo(
-    () => theme.components.chat.messageBubble.content(state, contentStyle),
-    [theme, state, contentStyle]
+  const resolvedBodyTextStyle = useMemo(
+    () => theme.components.chat.messageBubble.bodyText(state, bodyTextStyle),
+    [theme, state, bodyTextStyle]
   )
-  const resolvedTimestampStyle = useMemo(
-    () => theme.components.chat.messageBubble.timestamp(state, timestampStyle),
-    [theme, state, timestampStyle]
+  const resolvedMetaDataContainerStyle = useMemo(
+    () => theme.components.chat.messageBubble.metaDataContainer(state, metaDataContainerStyle),
+    [theme, state, metaDataContainerStyle]
   )
-  const resolvedReceiptStyle = useMemo(
-    () => theme.components.chat.messageBubble.receipt(staticState),
-    [theme, staticState]
+  const resolvedMetaDataStatusContainerStyle = useMemo(
+    () => theme.components.chat.messageBubble.metaDataStatusContainer(state, metaDataStatusContainerStyle),
+    [theme, state, metaDataStatusContainerStyle]
   )
-  const resolvedReceiptTextStyle = useMemo(
-    () => theme.components.chat.messageBubble.receiptText(staticState),
-    [theme, staticState]
+  const resolvedMetaDataTextStyle = useMemo(
+    () => theme.components.chat.messageBubble.metaDataText(state, metaDataTextStyle),
+    [theme, state, metaDataTextStyle]
   )
-  const resolvedReceiptIcon = useMemo(
-    () => theme.components.chat.messageBubble.receiptIcon(staticState),
-    [theme, staticState]
+  const resolvedMetaDataIcon = useMemo(
+    () => theme.components.chat.messageBubble.metaDataIcon(state),
+    [theme, state]
   )
 
   return (
     <View {...props} style={[resolvedContainerStyle, style]}>
-      <View style={resolvedBubbleStyle}>
+      <View style={resolvedBodyStyle}>
         {typeof children === 'string' || typeof children === 'number' ? (
-          <Text style={resolvedContentStyle}>{children}</Text>
+          <ThemedText style={resolvedBodyTextStyle}>{children}</ThemedText>
         ) : (
           children
         )}
-        {timestamp != null && (
-          typeof timestamp === 'string' || typeof timestamp === 'number' ? (
-            <Text style={resolvedTimestampStyle}>{timestamp}</Text>
-          ) : (
-            timestamp
-          )
+      </View>
+      <View style={resolvedMetaDataContainerStyle}>
+        {readReceipt != null && (
+          <View style={resolvedMetaDataStatusContainerStyle}>
+            <ThemedIcon
+              icon={HightideIconRegistry.CheckCheck}
+              size={resolvedMetaDataIcon.size}
+              strokeWidth={resolvedMetaDataIcon.strokeWidth}
+              color={resolvedMetaDataIcon.color}
+            />
+            {typeof readReceipt === 'string' || typeof readReceipt === 'number' ? (
+              <ThemedText style={resolvedMetaDataTextStyle}>{readReceipt}</ThemedText>
+            ) : (
+              readReceipt
+            )}
+          </View>
+        )}
+        {typeof timestamp === 'string' || typeof timestamp === 'number' ? (
+          <ThemedText style={resolvedMetaDataTextStyle}>{timestamp}</ThemedText>
+        ) : (
+          timestamp
         )}
       </View>
-      {readReceipt != null && (
-        <View style={resolvedReceiptStyle}>
-          <CheckCheck size={14} color={resolvedReceiptIcon.color} />
-          {typeof readReceipt === 'string' || typeof readReceipt === 'number' ? (
-            <Text style={resolvedReceiptTextStyle}>{readReceipt}</Text>
-          ) : (
-            readReceipt
-          )}
-        </View>
-      )}
     </View>
   )
 }

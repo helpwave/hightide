@@ -1,91 +1,104 @@
-import type { ViewStyle } from 'react-native'
-
-import { componentLayouts } from '@helpwave/hightide-design/tokens'
 import type {
-  ComponentColorTokens,
-  HightideThemeTokens as DesignTokensTheme,
-  ElementSize
-} from '@helpwave/hightide-design/types'
-
-import type { HightideSemanticColors } from '../types/color'
+  CheckboxState as DesignCheckboxState,
+  CheckboxStateValue
+} from '@helpwave/hightide-design/component-token-resolvers'
+import { toContainerStyle } from '../adapters/container-adapter'
+import { toIconStyle } from '../adapters/icon-style-adapter'
 import type {
-  CheckboxSize,
+  CheckboxIconStyle,
   CheckboxState,
-  CheckboxTheme
+  CheckboxStateLayerStyle,
+  CheckboxStyle,
+  CheckboxThemeResolvers
 } from '../types/components/checkbox'
 import {
   createStyleResolver,
-  createValueResolver
+  createValueResolver,
+  type ComponentThemeResolver
 } from '../types/resolver'
 
-const checkboxSizes: Record<CheckboxSize, number> = {
-  sm: 20,
-  md: 24,
-  lg: 32,
-}
+const toDesignCheckboxState = (state: CheckboxState): DesignCheckboxState => {
+  const active = new Set<CheckboxStateValue>()
 
-const checkboxIconSizes: Record<CheckboxSize, Exclude<ElementSize, 'xs'>> = {
-  sm: 'sm',
-  md: 'md',
-  lg: 'lg',
-}
-
-export type CreateCheckboxThemeOptions = {
-  semantic: HightideSemanticColors,
-  component: ComponentColorTokens,
-}
-
-export const createCheckboxTheme = ({
-  semantic,
-  component,
-}: CreateCheckboxThemeOptions): CheckboxTheme => {
-  const resolveState = (state: CheckboxState) => {
-    const size = state.size ?? 'md'
-    const dimension = checkboxSizes[size]
-    const isActive = !!(state.isChecked || state.isIndeterminate)
-    const showIndicator = !!(state.isIndeterminate || state.alwaysShowCheckIcon || state.isChecked)
-
-    const borderColor = state.isDisabled
-      ? semantic.disabled
-      : state.isInvalid
-        ? semantic.negative
-        : (isActive ? semantic.primary : component.border)
-
-    const backgroundColor = state.isDisabled
-      ? semantic.disabled
-      : (isActive ? semantic.primary : component.input.background)
-
-    const checkbox: ViewStyle = {
-      width: dimension,
-      height: dimension,
-      alignItems: 'center',
-      justifyContent: 'center',
-      borderWidth: componentLayouts.shared.coloringOutlineWidth,
-      borderColor,
-      borderRadius: state.isRounded ? dimension / 2 : 6,
-      backgroundColor,
-      opacity: state.isDisabled ? 0.6 : 1,
-    }
-
-    return {
-      checkbox,
-      icon: {
-        color: isActive ? semantic.onPrimary : semantic.primary,
-        size: checkboxIconSizes[size],
-        visible: showIndicator,
-      },
-    }
+  if (state.isDisabled) {
+    active.add('disabled')
   }
+  if (state.isFocused) {
+    active.add('focused')
+  }
+  if (state.isFocusVisible) {
+    active.add('focusVisible')
+  }
+  if (state.isHovered) {
+    active.add('hovered')
+  }
+  if (state.isPressed) {
+    active.add('pressed')
+  }
+  if (state.isReadonly) {
+    active.add('readonly')
+  }
+  if (state.isInvalid) {
+    active.add('invalid')
+  }
+  if (state.isChecked) {
+    active.add('checked')
+  }
+  if (state.isIndeterminate) {
+    active.add('indeterminate')
+  }
+
+  return active
+}
+
+const toNumberSize = (value: string | number | undefined): number => (
+  typeof value === 'number' ? value : 0
+)
+
+export const toCheckboxThemeResolvers: ComponentThemeResolver<CheckboxThemeResolvers> = ({
+  themeTokens,
+  semanticTokens,
+  componentTokens,
+}) => {
+  const resolve = (state: CheckboxState) => componentTokens.checkbox({
+    themeTokens,
+    semanticResolvers: semanticTokens,
+    overrides: {
+      size: state.size,
+      isRounded: state.isRounded,
+      color: state.color,
+    },
+    state: toDesignCheckboxState(state),
+  })
 
   return {
-    checkbox: createStyleResolver((state) => resolveState(state).checkbox),
-    icon: createValueResolver((state) => resolveState(state).icon),
-  }
-}
+    container: createStyleResolver((state: CheckboxState): CheckboxStyle => (
+      toContainerStyle(resolve(state).container)
+    )),
+    stateLayer: createStyleResolver((state: CheckboxState): CheckboxStateLayerStyle => {
+      const tokens = resolve(state)
+      const containerStyle = toContainerStyle(tokens.container)
+      const touchTargetSize = semanticTokens.touchTargetSize({ themeTokens })
+      const width = toNumberSize(containerStyle.width as string | number | undefined)
+      const height = toNumberSize(containerStyle.height as string | number | undefined)
+      const horizontal = Math.max(0, touchTargetSize - width) / 2
+      const vertical = Math.max(0, touchTargetSize - height) / 2
 
-export const createCheckboxThemeFromDesign = (theme: DesignTokensTheme): CheckboxTheme => {
-  return createCheckboxTheme({
-    semantic: theme.semanticColors,
-    component: theme.componentColors,
-  })
+      return {
+        ...toContainerStyle(tokens.stateLayer),
+        position: 'absolute',
+        top: 0,
+        right: 0,
+        bottom: 0,
+        left: 0,
+        marginTop: -vertical,
+        marginRight: -horizontal,
+        marginBottom: -vertical,
+        marginLeft: -horizontal,
+      }
+    }),
+    icon: createValueResolver((state: CheckboxState): CheckboxIconStyle => (
+      toIconStyle(resolve(state).icon)
+    )),
+  }
 }

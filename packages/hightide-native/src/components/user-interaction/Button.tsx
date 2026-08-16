@@ -1,49 +1,50 @@
-import {
-  forwardRef,
-  type ReactNode
-} from 'react'
+import { Fragment, forwardRef } from 'react'
 import {
   Pressable,
-  Text,
+  View,
   type PressableProps,
   type StyleProp,
   type ViewStyle
 } from 'react-native'
 
-import {
-  coloringTypes,
-  type ColoringType
-} from '@helpwave/hightide-design/utils'
-import type {
-  ButtonColoringStyle,
-  ElementSize
-} from '@helpwave/hightide-design/types'
+import type { ColorPairToken } from '@helpwave/hightide-design/theme-tokens'
+import type { ComponentSize, ButtonVariant } from '@helpwave/hightide-design/semantic-token-resolvers'
 
+import { ContentThemeProvider } from '../../global-contexts/content-theme/ContentThemeProvider'
+import { useDebugContext } from '../../global-contexts/debug'
 import { useTheme } from '../../global-contexts/theme/ThemeContext'
+import type { IconComponent } from '../../icons/types'
 import type {
   ButtonState,
   ButtonStyle,
   ButtonTextStyle
 } from '../../theme/types/components/button'
 import type { StyleOverwrite } from '../../theme/types/resolver'
+import type { Color } from '../../theme/types/color'
+import { createHitBoxOverlayStyle } from '../../utils/hitBoxOverlay'
+import { useMinimumTouchTargetHitSlop } from '../../utils/minimumTouchTargetHitSlop'
+import { ThemedIcon } from '../visualization-and-display/ThemedIcon'
+import { ThemedText } from '../visualization-and-display/ThemedText'
 
-export type ButtonSize = ElementSize
+export type ButtonSize = ComponentSize
 
-export type ButtonColor = ColoringType
+export type ButtonColor = ColorPairToken
 
 export const ButtonUtil = {
-  colors: coloringTypes,
-  sizes: ['xs', 'sm', 'md', 'lg'] as const satisfies readonly ElementSize[],
-  coloringStyles: ['outline', 'solid', 'text', 'tonal', 'tonal-outline'] as const satisfies readonly ButtonColoringStyle[],
+  sizes: ['xs', 'sm', 'md', 'lg', 'xl'] as const satisfies readonly ComponentSize[],
+  variants: ['elevated', 'filled', 'tonal', 'outlined', 'foreground'] as const satisfies readonly ButtonVariant[],
 }
 
 export type ButtonProps = Omit<PressableProps, 'children' | 'style'> & {
   size?: ButtonSize,
   color?: ButtonColor,
-  coloringStyle?: ButtonColoringStyle,
-  children?: ReactNode,
+  variant?: ButtonVariant,
+  children: string,
+  leadingIcon?: IconComponent,
+  trailingIcon?: IconComponent,
   style?: StyleProp<ViewStyle>,
-  buttonStyle?: StyleOverwrite<ButtonState, ButtonStyle>,
+  containerStyle?: StyleOverwrite<ButtonState, ButtonStyle>,
+  stateLayerStyle?: StyleOverwrite<ButtonState, ButtonStyle>,
   textStyle?: StyleOverwrite<ButtonState, ButtonTextStyle>,
 }
 
@@ -51,29 +52,42 @@ type PressableInteraction = {
   pressed: boolean,
   hovered?: boolean,
   focused?: boolean,
+  focusVisible?: boolean,
 }
 
 export const Button = forwardRef<React.ComponentRef<typeof Pressable>, ButtonProps>(function Button({
   children,
   size = 'md',
-  color = 'primary',
-  coloringStyle = 'solid',
+  color,
+  variant = 'filled',
   disabled,
+  leadingIcon,
+  trailingIcon,
   style,
-  buttonStyle,
+  containerStyle,
+  stateLayerStyle,
   textStyle,
+  hitSlop: providedHitSlop,
+  onLayout: providedOnLayout,
   ...props
 }, ref) {
   const { theme } = useTheme()
+  const { hitBox } = useDebugContext()
+  const { hitSlop, onLayout } = useMinimumTouchTargetHitSlop({
+    touchTargetSize: theme.semantics.touchTargetSize({}),
+    hitSlop: providedHitSlop,
+    onLayout: providedOnLayout,
+  })
 
   const resolveState = (interaction: PressableInteraction): ButtonState => ({
     size,
     color,
-    coloringStyle,
+    variant,
     isDisabled: !!disabled,
     isPressed: interaction.pressed,
     isHovered: !!interaction.hovered,
     isFocused: !!interaction.focused,
+    isFocusVisible: !!interaction.focusVisible,
   })
 
   return (
@@ -81,20 +95,55 @@ export const Button = forwardRef<React.ComponentRef<typeof Pressable>, ButtonPro
       {...props}
       ref={ref}
       disabled={disabled}
+      hitSlop={hitSlop}
+      onLayout={onLayout}
       style={(pressableState) => {
         const state = resolveState(pressableState as PressableInteraction)
-        return [theme.components.button.button(state, buttonStyle), style]
+        return [
+          theme.components.button.container(state, containerStyle),
+          style,
+        ]
       }}
     >
       {(pressableState) => {
         const state = resolveState(pressableState as PressableInteraction)
         const resolvedText = theme.components.button.text(state, textStyle)
+        const resolvedIcon = theme.components.button.icon(state)
 
-        if (typeof children === 'string' || typeof children === 'number') {
-          return <Text style={resolvedText}>{children}</Text>
-        }
-
-        return children
+        return (
+          <Fragment>
+            {hitBox.isVisualizing && (
+              <View
+                pointerEvents="none"
+                style={createHitBoxOverlayStyle(hitSlop, hitBox.color)}
+              />
+            )}
+            <View
+              pointerEvents="none"
+              style={theme.components.button.stateLayer(state, stateLayerStyle)}
+            />
+            <ContentThemeProvider
+              foregroundColor={resolvedText.color as Color}
+              textStyle={resolvedText}
+            >
+              {leadingIcon !== undefined && (
+                <ThemedIcon
+                  icon={leadingIcon}
+                  size={resolvedIcon.size}
+                  strokeWidth={resolvedIcon.strokeWidth}
+                />
+              )}
+              <ThemedText>{children}</ThemedText>
+              {trailingIcon !== undefined && (
+                <ThemedIcon
+                  icon={trailingIcon}
+                  size={resolvedIcon.size}
+                  strokeWidth={resolvedIcon.strokeWidth}
+                />
+              )}
+            </ContentThemeProvider>
+          </Fragment>
+        )
       }}
     </Pressable>
   )

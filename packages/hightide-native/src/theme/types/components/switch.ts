@@ -1,4 +1,5 @@
-import type { Color } from '../color'
+import type { ViewStyle } from 'react-native'
+
 import type {
   InteractionState,
   StyleResolverFunction
@@ -8,8 +9,14 @@ export type SwitchState = InteractionState & {
   isActive?: boolean,
 }
 
-export type SwitchTheme = {
-  trackColor: StyleResolverFunction<SwitchState, Color>,
-  borderColor: StyleResolverFunction<SwitchState, Color>,
-  thumbColor: StyleResolverFunction<SwitchState, Color>,
+export type SwitchContainerStyle = ViewStyle
+
+export type SwitchTrackStyle = ViewStyle
+
+export type SwitchThumbStyle = ViewStyle
+
+export type SwitchThemeResolvers = {
+  container: StyleResolverFunction<SwitchState, SwitchContainerStyle>,
+  track: StyleResolverFunction<SwitchState, SwitchTrackStyle>,
+  thumb: StyleResolverFunction<SwitchState, SwitchThumbStyle>,
 }

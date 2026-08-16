@@ -1,41 +1,37 @@
 @layer components {
   .chat-message-bubble-container {
-    @apply flex-col-1 max-w-70;
+    @apply flex-col-1 max-w-70 px-3.75 py-2.75 rounded-xl gap-1;
 
     &[data-direction="incoming"] {
-      @apply self-start items-start;
+      @apply self-start rounded-bl-sm bg-neutral text-on-neutral;
     }
 
     &[data-direction="outgoing"] {
-      @apply self-end items-end;
+      @apply self-end rounded-br-sm bg-primary text-on-primary;
     }
   }
 
-  .chat-message-bubble {
-    @apply flex-col-1 px-3.75 py-2.75 rounded-xl;
-
-    &[data-direction="incoming"] {
-      @apply rounded-bl-sm bg-neutral text-on-neutral;
-    }
-
-    &[data-direction="outgoing"] {
-      @apply rounded-br-sm bg-primary text-on-primary;
-    }
+  .chat-message-bubble-body {
+    @apply flex-col-1;
   }
 
-  .chat-message-bubble-content {
+  .chat-message-bubble-body-text {
     @apply text-base/relaxed font-light;
   }
 
-  .chat-message-bubble-timestamp {
-    @apply self-end text-xs font-medium opacity-75;
+  .chat-message-bubble-metadata {
+    @apply flex-row-1 items-center self-end gap-1;
   }
 
-  .chat-message-bubble-receipt {
-    @apply flex-row-1 items-center text-xs font-medium text-description;
+  .chat-message-bubble-metadata-status {
+    @apply flex-row-1 items-center gap-0.5;
   }
 
-  .chat-message-bubble-receipt-icon {
-    @apply size-3.5 text-primary;
+  .chat-message-bubble-metadata-text {
+    @apply text-xs font-medium opacity-75;
+  }
+
+  .chat-message-bubble-metadata-icon {
+    @apply size-4 opacity-75;
   }
 }

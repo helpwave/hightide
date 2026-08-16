@@ -3,7 +3,6 @@ import {
   type ReactNode
 } from 'react'
 import {
-  Text,
   View,
   type StyleProp,
   type ViewProps,
@@ -11,6 +10,7 @@ import {
 } from 'react-native'
 
 import { useTheme } from '../../global-contexts/theme/ThemeContext'
+import { ThemedText } from '../visualization-and-display/ThemedText'
 import type {
   ChatDateDividerStyle,
   ChatDateDividerTextStyle
@@ -46,7 +46,7 @@ export const ChatDateDivider = ({
   return (
     <View {...props} style={[resolvedDividerStyle, style]}>
       {typeof children === 'string' || typeof children === 'number' ? (
-        <Text style={resolvedTextStyle}>{children}</Text>
+        <ThemedText style={resolvedTextStyle}>{children}</ThemedText>
       ) : (
         children
       )}

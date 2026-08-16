@@ -17,22 +17,28 @@ export const ChatMessageBubble = ({
   children,
   ...props
 }: ChatMessageBubbleProps) => {
+  const hasMetaData = timestamp != null || readReceipt != null
+
   return (
     <div
       {...props}
       className={clsx('chat-message-bubble-container', props.className)}
       data-direction={direction}
     >
-      <div className="chat-message-bubble" data-direction={direction}>
-        <span className="chat-message-bubble-content">{children}</span>
-        {timestamp && (
-          <span className="chat-message-bubble-timestamp">{timestamp}</span>
-        )}
+      <div className="chat-message-bubble-body">
+        <span className="chat-message-bubble-body-text">{children}</span>
       </div>
-      {readReceipt && (
-        <span className="chat-message-bubble-receipt">
-          <CheckCheck className="chat-message-bubble-receipt-icon"/>
-          {readReceipt}
+      {hasMetaData && (
+        <span className="chat-message-bubble-metadata">
+          {readReceipt != null && (
+            <span className="chat-message-bubble-metadata-status">
+              <CheckCheck className="chat-message-bubble-metadata-icon"/>
+              <span className="chat-message-bubble-metadata-text">{readReceipt}</span>
+            </span>
+          )}
+          {timestamp != null && (
+            <span className="chat-message-bubble-metadata-text">{timestamp}</span>
+          )}
         </span>
       )}
     </div>

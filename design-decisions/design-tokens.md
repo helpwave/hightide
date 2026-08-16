@@ -1,165 +1,113 @@
 # Design tokens
 
-This document describes how hightide structures design tokens, how they are assembled into `ThemeTokens`, and how platform packages map those tokens into a runtime `Theme` that apps consume through a `ThemeContext`.
+This document describes how hightide structures design tokens, how they are assembled into a `HightideDesignSystem`, and how platform packages map `HightideDesignSystemTokens` into a runtime `Theme` that apps consume through a `ThemeContext`.
 
 ## Goals
 
-- Keep raw palettes (primitives) separate from meaning (semantics) and component-specific color choices.
-- Build complete, platform-agnostic `ThemeTokens` once in `@helpwave/hightide-design`.
-- Let each UI package (`hightide-native` today, `hightide` later) translate `ThemeTokens` into a platform `Theme` with resolvers suited to React Native styles or web CSS/class patterns.
+- Keep raw palettes (primitives) separate from mode-resolved foundations (theme), meaning (semantics), and component-specific choices.
+- Build complete, platform-agnostic `HightideDesignSystemTokens` once in `@helpwave/hightide-design`.
+- Let each UI package (`hightide-native` today, `hightide` later) translate those tokens into a platform `Theme` with resolvers suited to React Native styles or web CSS/class patterns.
 - Deliver that `Theme` through a context so apps can switch modes and overwrite or extend themes without forking components.
 
 ## Token layers
 
-Token construction is a pipeline with four conceptual layers. Each layer only depends on the ones above it.
-
 ```text
-PrimitiveTokens
+HightidePrimitiveTokens   // sizes 0…160/4, border 0…10
       │
-      ▼  toSemantic(themeName, primitiveTokens)
-SemanticTokens
+      ▼  hightideSharedThemeTokens + light/dark color maps
+HightideThemeTokens   // hightideLightThemeTokens / hightideDarkThemeTokens
       │
-      ▼  toComponents(themeName, primitiveTokens, semanticTokens)
-ComponentTokens
+      ▼  toHightideSemanticTokens({ themeTokens })
+HightideSemanticTokens   // hightideLightSemanticTokens / hightideDarkSemanticTokens
       │
-      ▼  toTheme(themeName, primitiveTokens, semanticTokens, componentTokens)
-ThemeTokens
+      ▼  toHightideComponentTokens({ semanticTokens })
+HightideComponentTokens   // hightideLightComponentTokens / hightideDarkComponentTokens
+      │
+      ▼  HightideDesignSystemTokens { theme, semantic, components }
 ```
 
-In code this pipeline is `constructThemeTokens` in `@helpwave/hightide-design/utils`. Default hightide mappers live under `packages/hightide-design/src/tokens/mappings/`.
+Hightide ships precomputed constants per mode. Custom themes can still call `toHightideSemanticTokens` / `toHightideComponentTokens` after overriding a `HightideThemeTokens` object.
 
-### 1. PrimitiveTokens
+Public export:
 
-Raw, mode-agnostic building blocks. They have no product meaning by themselves.
-
-Examples:
-
-- Color palettes (`gray`, `purple`, `blue`, …) as typed `{ type, value }` wrappers
-- Shared layout numbers, typography scales, decoration, and animation tokens that are not theme-mode specific
-
-Hightide’s default primitives are `colorPalettes` plus the static layout/typography/decoration/animation modules in `@helpwave/hightide-design/tokens`.
-
-### 2. SemanticTokens
-
-Named roles derived from primitives for a given theme mode (`light`, `dark`, or a custom name).
-
-Examples:
-
-- `background` / `onBackground`
-- `primary` / `onPrimary` / `primaryHover`
-- `surface`, `disabled`, `warning`, …
-
-Mapper: `toHightideSemanticTokens` (`tokens/mappings/to-semantic.ts`).
-
-Semantics are the layer you usually override when branding (for example “use blue as primary”).
-
-### 3. ComponentTokens
-
-Colors (and related values) scoped to specific components, built from primitives and semantics for a theme mode.
-
-Examples:
-
-- `input.background`, `menu.background`
-- Chat / carousel / other component-specific slots
-
-Mapper: `toHightideComponentTokens` (`tokens/mappings/to-components.ts`).
-
-Prefer changing semantics first; use component tokens when a control needs a deliberate exception.
-
-### 4. ThemeTokens
-
-The assembled, platform-agnostic design package for one theme mode. Hightide’s shape is `HightideThemeTokens`:
-
-- `colors` — primitives
-- `semanticColors` — semantics
-- `componentColors` — component tokens
-- `coloring` — solid/outline/tonal style definitions derived from semantics
-- `typography`, `layout`, `animation`, `decorcation`
-
-Mapper: `toHightideTheme` (`tokens/mappings/to-theme.ts`), which also attaches shared layout/typography/animation/decoration and builds `coloring`.
-
-`ThemeTokens` are still data. They are not yet React Native `StyleSheet` values or web CSS variables applied to components.
-
-## From ThemeTokens to Theme
-
-Each UI package owns a second mapping step: **ThemeTokens → Theme**.
-
-```text
-ThemeTokens  ──createHightideTheme──►  Theme  ──ThemeProvider──►  components
+```ts
+hightideDesignSystem = {
+  primitives: HightidePrimitiveTokens,
+  themes: {
+    light: HightideDesignSystemTokens,
+    dark: HightideDesignSystemTokens,
+  },
+}
 ```
 
-### hightide-native (current)
+### 1. HightidePrimitiveTokens
 
-`createHightideTheme` in `@helpwave/hightide-native`:
+Raw, mode-agnostic building blocks under `@helpwave/hightide-design/primitive-tokens`.
 
-1. Unwraps palette tokens into flat `Color` / `ColorPalette` values.
-2. Exposes `semantic`, `typography`, `layout`, and `decoration` for direct use.
-3. Builds `components.*` style resolvers (button, chip, chat, avatar, …) from the design tokens.
+Includes `sizes` (`0…160`, step 4) and `border` (`0…10`). There is no primitive `elements` map.
 
-The result is a `HightideTheme` (a strict form of the loose `Theme` type) that native components read via `useTheme()`.
+### 2. HightideThemeTokens
 
-### hightide (planned)
+Precomputed as `hightideLightThemeTokens` / `hightideDarkThemeTokens` (`@helpwave/hightide-design/theme-tokens`):
 
-The web package should follow the same contract:
+- Shared non-color fields live in `hightideSharedThemeTokens` (`Omit<HightideThemeTokens, 'color'>`)
+- `color` — `HightideThemeColorTokens` (surface colors + inlined role colors for scheme build inputs); only layer that differs by light/dark
+- `size` / `padding` / `paddingExtension` / `borderRadius` — each `Record<ThemeLayoutSizes, number>` (`xs…xl`); theme `borderWidth` uses `thin|normal|thick`
+- `typography.fontFamily` — remapped roles `default` / `accent` / `mono` from primitive font registry
+- Other non-color scales passthrough from primitives
 
-1. Consume the same `ThemeTokens` from `@helpwave/hightide-design`.
-2. Map them into a web `Theme` (CSS variables, class recipes, or resolver functions—whichever matches the web stack).
-3. Provide that theme through the same context pattern so mode switching and overrides stay consistent across platforms.
+`ColorState` = `{ background, foreground, border }`. Resolve with `resolveStateBasedProperty` in order `base → focused → hover → pressed → disabled`.
 
-Design tokens stay shared; only the **ThemeTokens → Theme** adapter is platform-specific.
+### 3. HightideSemanticTokens
 
-## ThemeContext: switching and overwriting
+Precomputed as `hightideLightSemanticTokens` / `hightideDarkSemanticTokens` via `toHightideSemanticTokens`:
 
-Mapped themes are not global singletons. They are registered and selected through a `ThemeProvider` / `ThemeContext` setup.
+- pruned `colors` (`HightideSemanticColorTokens`) from theme (no role scheme inputs)
+- `colorSchemes` — built via `createHightideColorSchemes(themeTokens.color)` (`filled`, `outline`, `tonal`, `tonal-outline`, `text`)
+- `elementLayout: { control, container, insideControl }` from theme size/padding/paddingExtension/border
+- `border: HightideSemanticBorderTokens` (`thin ← xs`, `base ← md`, `thick ← xl`)
+- `typography` — `fontWeights`, `fontFamilies` (`default` / `accent` / `mono`), plus roles `display`, `heading` / `body` / `label` (`sm`–`lg`); see [typography.md](./typography.md)
+- passthrough spacing/radius/shadow
 
-### Why
+### 4. HightideComponentTokens
 
-- Switch between `light`, `dark`, system preference, or custom modes at runtime.
-- Register additional themes (branded or Storybook demos) without changing component code.
-- Overwrite or extend an existing theme (for example primary color) by supplying a new `Theme` instance in `supportedThemes`.
+Precomputed as `hightideLightComponentTokens` / `hightideDarkComponentTokens` via `toHightideComponentTokens` — colors + layouts from semantic only.
 
-### How (native today)
+- button / iconButton / chip: `ComponentSize` (`sm…lg`) from `elementLayout.control` (chip adjusted); layout includes `textStyle` from `typography.label[size]`
+- input: single layout from `control.md` with `textStyle` from `label.md`
+- checkbox: `ComponentSize` mapped via `insideControl` / one step denser nesting
+- icon: `insideControl` sizes + border stroke
+- avatar: per size `container` (`size`, `padding`, `color`), `text` (`textStyle` from `typography.label[size]` with `fontWeights.bold`, `color`), and `statusDot` (`size`, `borderWidth`, status colors: online→positive, busy→negative, away→warning, offline/unknown→disabled)
 
-1. Build one or more `Theme` objects with `createHightideTheme(themeTokens)` (optionally after customizing mappers / `constructThemeTokens`).
-2. Pass them into `ThemeProvider` as `supportedThemes` (defaults come from `HightideConfigUtils.defaultSupportedThemes`).
-3. Components call `useTheme()` to read the active `theme`, `themeMode`, and related config.
-4. Apps change mode through the context API; listeners such as `onChangedTheme` can persist the choice.
+### 5. HightideDesignSystemTokens
 
-Overwrite pattern:
+```ts
+{ theme: HightideThemeTokens, semantic: HightideSemanticTokens, components: HightideComponentTokens }
+```
 
-- Clone or rebuild `ThemeTokens` with alternate semantic/component mappers.
-- Run `createHightideTheme`.
-- Register the result under a mode key (or replace `light` / `dark`) in `supportedThemes`.
-
-Extension pattern:
-
-- Keep the base `HightideTheme`.
-- Add extra `components.*` resolvers on a widened theme type and register that object the same way.
-
-## Practical recipe
+## From HightideDesignSystemTokens to Theme
 
 ```text
-1. Start from PrimitiveTokens (colorPalettes, …)
-2. Optionally customize toSemantic / toComponents / toTheme
-3. constructThemeTokens(...) → ThemeTokens
-4. createHightideTheme(themeTokens) → Theme   // native; web equivalent later
-5. Provide Theme via ThemeProvider / ThemeContext
-6. Components consume useTheme()
+HightideDesignSystemTokens  ──createHightideTheme──►  Theme  ──ThemeProvider──►  components
 ```
+
+Native `createHightideTheme` maps `tokens.semantic.colors` → `theme.colors` and flattens semantic layout/schemes onto the runtime theme. `resolveColoringStyles` maps `InteractionState` → `Set<ElementState>` and calls `resolveStateBasedProperty` on `theme.colorSchemes[role][style]`.
 
 ## Package ownership
 
-| Concern | Package |
+| Concern | Package entry |
 | --- | --- |
-| Primitive / semantic / component / theme token types and default mappers | `@helpwave/hightide-design` |
-| `constructThemeTokens`, `hexWithAlpha`, coloring helpers | `@helpwave/hightide-design/utils` |
-| ThemeTokens → native Theme + style resolvers | `@helpwave/hightide-native` |
-| ThemeTokens → web Theme (future) | `@helpwave/hightide` |
-| Theme mode storage / shared theme context utilities | `@helpwave/hightide-utils` + platform ThemeProvider |
+| Primitives | `/primitive-tokens` |
+| HightideThemeTokens, shared/light/dark constants, StateBasedProperty | `/theme-tokens` |
+| Semantic mapper + precomputed semantic constants + `createHightideColorSchemes` | `/semantic-tokens` |
+| Component tokens + precomputed component constants | `/component-tokens` |
+| `hightideDesignSystem` assembly | `/design-system` |
+| `HexColorUtils` | `/utils` |
+| HightideDesignSystemTokens → native Theme | `@helpwave/hightide-native` |
 
 ## Design rules
 
-- Do not skip layers: components should not hard-code palette steps when a semantic or component token exists.
-- Keep `ThemeTokens` free of React / React Native types so design can stay dependency-light.
-- Put platform styling in the Theme adapter and component resolvers, not in the design package.
-- Prefer extending or replacing themes through context registration over branching inside components.
+- Do not skip layers: `toSemantic` / `toComponents` must never read color palettes.
+- All light/dark branching lives in the theme color maps behind `hightideLightThemeTokens` / `hightideDarkThemeTokens`.
+- Color schemes are declarative at theme build time (including baked tonal alphas).
+- Prefer extending themes through context registration over branching inside components.

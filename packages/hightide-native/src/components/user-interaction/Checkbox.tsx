@@ -1,28 +1,28 @@
 import {
-  useCallback,
-  useMemo
+  Fragment,
+  useCallback
 } from 'react'
 import {
   Pressable,
+  View,
   type PressableProps,
   type StyleProp,
   type ViewStyle
 } from 'react-native'
 import {
-  Check,
-  Minus
-} from 'lucide-react-native'
-
-import {
   useControlledState,
   useEventCallbackStabilizer
 } from '@helpwave/hightide-utils/hooks'
 
-import { Icon } from '../visualization-and-display/Icon'
+import type { ColorPairToken } from '@helpwave/hightide-design/theme-tokens'
+import { HightideIconRegistry } from '../../icons/HightideIconRegistry'
+import { ThemedIcon } from '../visualization-and-display/ThemedIcon'
+import { useDebugContext } from '../../global-contexts/debug'
 import { useTheme } from '../../global-contexts/theme/ThemeContext'
 import type {
   CheckboxSize,
   CheckboxState,
+  CheckboxStateLayerStyle,
   CheckboxStyle
 } from '../../theme/types/components/checkbox'
 import type { StyleOverwrite } from '../../theme/types/resolver'
@@ -30,8 +30,8 @@ import type {
   FormFieldDataHandling,
   FormFieldInteractionStates
 } from '../../types/formField'
-
-export type { CheckboxSize }
+import { createHitBoxOverlayStyle } from '../../utils/hitBoxOverlay'
+import { useMinimumTouchTargetHitSlop } from '../../utils/minimumTouchTargetHitSlop'
 
 export type CheckboxProps = Omit<PressableProps, 'children' | 'style'>
   & Partial<FormFieldInteractionStates>
@@ -40,11 +40,19 @@ export type CheckboxProps = Omit<PressableProps, 'children' | 'style'>
     initialValue?: boolean,
     indeterminate?: boolean,
     size?: CheckboxSize,
-    alwaysShowCheckIcon?: boolean,
     isRounded?: boolean,
+    color?: ColorPairToken,
     style?: StyleProp<ViewStyle>,
-    checkboxStyle?: StyleOverwrite<CheckboxState, CheckboxStyle>,
+    containerStyle?: StyleOverwrite<CheckboxState, CheckboxStyle>,
+    stateLayerStyle?: StyleOverwrite<CheckboxState, CheckboxStateLayerStyle>,
   }
+
+type PressableInteraction = {
+  pressed: boolean,
+  hovered?: boolean,
+  focused?: boolean,
+  focusVisible?: boolean,
+}
 
 export const Checkbox = ({
   value: controlledValue,
@@ -56,13 +64,22 @@ export const Checkbox = ({
   onValueChange,
   onEditComplete,
   size = 'md',
-  alwaysShowCheckIcon = false,
   isRounded = false,
+  color,
   style,
-  checkboxStyle,
+  containerStyle,
+  stateLayerStyle,
+  hitSlop: providedHitSlop,
+  onLayout: providedOnLayout,
   ...props
 }: CheckboxProps) => {
   const { theme } = useTheme()
+  const { hitBox } = useDebugContext()
+  const { hitSlop, onLayout } = useMinimumTouchTargetHitSlop({
+    touchTargetSize: theme.semantics.touchTargetSize({}),
+    hitSlop: providedHitSlop,
+    onLayout: providedOnLayout,
+  })
   const interactive = !disabled && !readOnly
 
   const onEditCompleteStable = useEventCallbackStabilizer(onEditComplete)
@@ -79,24 +96,20 @@ export const Checkbox = ({
     defaultValue: initialValue,
   })
 
-  const state = useMemo((): CheckboxState => ({
+  const resolveState = (interaction: PressableInteraction): CheckboxState => ({
     size,
+    color,
     isChecked: value,
     isIndeterminate: indeterminate,
     isInvalid: invalid,
     isDisabled: disabled,
+    isReadonly: readOnly,
     isRounded,
-    alwaysShowCheckIcon,
-  }), [alwaysShowCheckIcon, disabled, indeterminate, invalid, isRounded, size, value])
-
-  const resolvedCheckboxStyle = useMemo(
-    () => theme.components.checkbox.checkbox(state, checkboxStyle),
-    [theme, state, checkboxStyle]
-  )
-  const resolvedIcon = useMemo(
-    () => theme.components.checkbox.icon(state),
-    [theme, state]
-  )
+    isPressed: interaction.pressed,
+    isHovered: !!interaction.hovered,
+    isFocused: !!interaction.focused,
+    isFocusVisible: !!interaction.focusVisible,
+  })
 
   return (
     <Pressable
@@ -107,19 +120,46 @@ export const Checkbox = ({
         checked: indeterminate ? 'mixed' : value,
         disabled,
       }}
+      hitSlop={hitSlop}
+      onLayout={onLayout}
       onPress={(event) => {
         if (interactive) {
           setValue((previous) => !previous)
         }
         props.onPress?.(event)
       }}
-      style={[resolvedCheckboxStyle, style]}
+      style={(pressableState) => {
+        const state = resolveState(pressableState as PressableInteraction)
+        return [theme.components.checkbox.container(state, containerStyle), style]
+      }}
     >
-      {resolvedIcon.visible && (
-        indeterminate
-          ? <Icon icon={Minus} size={resolvedIcon.size} color={resolvedIcon.color} />
-          : <Icon icon={Check} size={resolvedIcon.size} color={resolvedIcon.color} />
-      )}
+      {(pressableState) => {
+        const state = resolveState(pressableState as PressableInteraction)
+        const resolvedIcon = theme.components.checkbox.icon(state)
+        const showIcon = !!(indeterminate || value)
+
+        return (
+          <Fragment>
+            {hitBox.isVisualizing && (
+              <View
+                pointerEvents="none"
+                style={createHitBoxOverlayStyle(hitSlop, hitBox.color)}
+              />
+            )}
+            <View
+              pointerEvents="none"
+              style={theme.components.checkbox.stateLayer(state, stateLayerStyle)}
+            />
+            {showIcon && (
+              <ThemedIcon
+                icon={indeterminate ? HightideIconRegistry.Minus : HightideIconRegistry.Check}
+                size={resolvedIcon.size}
+                color={resolvedIcon.color}
+              />
+            )}
+          </Fragment>
+        )
+      }}
     </Pressable>
   )
 }

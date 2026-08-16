@@ -23,6 +23,11 @@ export const ChatThreadHeader = ({
   trailingActionsClassName,
   ...props
 }: ChatThreadHeaderProps) => {
+  const resolvedAvatar = {
+    ...avatar,
+    status: avatar?.status ?? 'unknown',
+  }
+
   return (
     <div {...props} className={clsx('chat-thread-header', props.className)}>
       {leftActions && (
@@ -30,7 +35,7 @@ export const ChatThreadHeader = ({
           {leftActions}
         </div>
       )}
-      {avatar && (<AvatarWithStatus size="md" {...avatar}/>)}
+      <AvatarWithStatus size="lg" {...resolvedAvatar}/>
       <span className="chat-thread-header-info">
         <span className="chat-thread-header-title">{title}</span>
         {subtitle && (

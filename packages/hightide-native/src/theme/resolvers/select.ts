@@ -1,82 +1,157 @@
-import { fontWeights } from '@helpwave/hightide-design/tokens'
 import type {
-  ComponentColorTokens,
-  HightideThemeTokens as DesignTokensTheme
-} from '@helpwave/hightide-design/types'
-
-import type { HightideSemanticColors } from '../types/color'
+  SelectState as DesignSelectState,
+  SelectStateValue
+} from '@helpwave/hightide-design/component-token-resolvers'
+import { toContainerStyle, toContainerStyleWithStateLayer } from '../adapters/container-adapter'
+import { toIconStyle } from '../adapters/icon-style-adapter'
+import { toTextStyle } from '../adapters/text-style-adapter'
 import type {
+  SelectIconStyle,
+  SelectMenuStyle,
+  SelectMenuState,
+  SelectHeaderStyle,
+  SelectEmptyTextStyle,
   SelectOptionState,
+  SelectOptionStyle,
+  SelectOptionTextStyle,
+  SelectOverlayStyle,
   SelectState,
-  SelectTheme
+  SelectThemeResolvers,
+  SelectTriggerStyle,
+  SelectTriggerTextStyle
 } from '../types/components/select'
 import {
+  createSimpleStyleResolver,
   createStyleResolver,
-  createValueResolver
+  createValueResolver,
+  type ComponentThemeResolver
 } from '../types/resolver'
 
-export type CreateSelectThemeOptions = {
-  semantic: HightideSemanticColors,
-  component: ComponentColorTokens,
+type SelectResolveState = {
+  color?: SelectState['color'],
+  isDisabled?: boolean,
+  isInvalid?: boolean,
+  isHovered?: boolean,
+  isFocused?: boolean,
+  isFocusVisible?: boolean,
+  isPressed?: boolean,
+  isReadonly?: boolean,
+  isOpen?: boolean,
+  hasValue?: boolean,
+  isSelected?: boolean,
+  isHighlighted?: boolean,
+  hasSearch?: boolean,
 }
 
-export const createSelectTheme = ({
-  semantic,
-  component,
-}: CreateSelectThemeOptions): SelectTheme => {
-  return {
-    trigger: createStyleResolver((state: SelectState) => ({
-      minHeight: 44,
-      paddingHorizontal: 12,
-      paddingVertical: 8,
-      borderRadius: 6,
-      borderWidth: 1,
-      borderColor: state.isInvalid ? semantic.negative : component.border,
-      backgroundColor: state.isDisabled ? semantic.disabled : component.input.background,
-      justifyContent: 'center',
-      opacity: state.isDisabled ? 0.6 : 1,
-    })),
-    triggerText: createStyleResolver((state: SelectState) => ({
-      color: state.hasValue ? component.input.text : semantic.placeholder,
-    })),
-    overlay: createStyleResolver(() => ({
-      flex: 1,
-      backgroundColor: '#00000059',
-      justifyContent: 'center',
-      padding: 24,
-    })),
-    menu: createStyleResolver(() => ({
-      maxHeight: 360,
-      borderRadius: 12,
-      backgroundColor: component.menu.background,
-      borderWidth: 1,
-      borderColor: component.menu.border,
-      overflow: 'hidden',
-    })),
-    search: createStyleResolver(() => ({
-      paddingHorizontal: 16,
-      paddingVertical: 12,
-      borderBottomWidth: 1,
-      borderBottomColor: component.menu.border,
-      color: component.menu.text,
-    })),
-    searchPlaceholderColor: createValueResolver(() => semantic.placeholder),
-    option: createStyleResolver((state: SelectOptionState) => ({
-      paddingHorizontal: 16,
-      paddingVertical: 12,
-      backgroundColor: state.isHighlighted ? component.table.rowHoverBackground : 'transparent',
-      opacity: state.isDisabled ? 0.5 : 1,
-    })),
-    optionText: createStyleResolver((state: SelectOptionState) => ({
-      color: state.isSelected ? semantic.primary : component.menu.text,
-      fontWeight: state.isSelected ? fontWeights.semibold : fontWeights.base,
-    })),
+const toDesignSelectState = (state: SelectResolveState = {}): DesignSelectState => {
+  const active = new Set<SelectStateValue>()
+
+  if (state.isDisabled) {
+    active.add('disabled')
   }
+  if (state.isFocused) {
+    active.add('focused')
+  }
+  if (state.isFocusVisible) {
+    active.add('focusVisible')
+  }
+  if (state.isHovered) {
+    active.add('hovered')
+  }
+  if (state.isPressed) {
+    active.add('pressed')
+  }
+  if (state.isReadonly) {
+    active.add('readonly')
+  }
+  if (state.isInvalid) {
+    active.add('invalid')
+  }
+  if (state.isOpen) {
+    active.add('open')
+  }
+  if (state.hasValue) {
+    active.add('hasValue')
+  }
+  if (state.isSelected) {
+    active.add('selected')
+  }
+  if (state.isHighlighted) {
+    active.add('highlighted')
+  }
+
+  return active
 }
 
-export const createSelectThemeFromDesign = (theme: DesignTokensTheme): SelectTheme => {
-  return createSelectTheme({
-    semantic: theme.semanticColors,
-    component: theme.componentColors,
+export const toSelectThemeResolvers: ComponentThemeResolver<SelectThemeResolvers> = ({
+  themeTokens,
+  semanticTokens,
+  componentTokens,
+}) => {
+  const resolve = (state: SelectResolveState = {}) => componentTokens.select({
+    themeTokens,
+    semanticResolvers: semanticTokens,
+    config: {
+      hasSearch: state.hasSearch,
+    },
+    overrides: {
+      color: state.color,
+    },
+    state: toDesignSelectState(state),
   })
+
+  const toTriggerState = (state: SelectState): SelectResolveState => ({
+    color: state.color,
+    isDisabled: state.isDisabled,
+    isInvalid: state.isInvalid,
+    isHovered: state.isHovered,
+    isFocused: state.isFocused,
+    isFocusVisible: state.isFocusVisible,
+    isPressed: state.isPressed,
+    isReadonly: state.isReadonly,
+    isOpen: state.isOpen,
+    hasValue: state.hasValue,
+  })
+
+  return {
+    trigger: createStyleResolver((state: SelectState): SelectTriggerStyle => {
+      const { trigger, stateLayer } = resolve(toTriggerState(state))
+      return toContainerStyleWithStateLayer(trigger, stateLayer)
+    }),
+    triggerText: createStyleResolver((state: SelectState): SelectTriggerTextStyle => (
+      toTextStyle(resolve(toTriggerState(state)).triggerText)
+    )),
+    icon: createValueResolver((state: SelectState): SelectIconStyle => (
+      toIconStyle(resolve(toTriggerState(state)).icon)
+    )),
+    overlay: createSimpleStyleResolver((): SelectOverlayStyle => ({
+      ...toContainerStyle(resolve().overlay),
+      flex: 1,
+    })),
+    menu: createStyleResolver((state: SelectMenuState): SelectMenuStyle => (
+      toContainerStyle(resolve({ hasSearch: state.hasSearch }).menu)
+    )),
+    header: createSimpleStyleResolver((): SelectHeaderStyle => (
+      toContainerStyle(resolve().header)
+    )),
+    option: createStyleResolver((state: SelectOptionState): SelectOptionStyle => (
+      toContainerStyle(resolve({
+        color: state.color,
+        isDisabled: state.isDisabled,
+        isSelected: state.isSelected,
+        isHighlighted: state.isHighlighted,
+      }).option)
+    )),
+    optionText: createStyleResolver((state: SelectOptionState): SelectOptionTextStyle => (
+      toTextStyle(resolve({
+        color: state.color,
+        isDisabled: state.isDisabled,
+        isSelected: state.isSelected,
+        isHighlighted: state.isHighlighted,
+      }).optionText)
+    )),
+    emptyText: createSimpleStyleResolver((): SelectEmptyTextStyle => (
+      toTextStyle(resolve().emptyText)
+    )),
+  }
 }

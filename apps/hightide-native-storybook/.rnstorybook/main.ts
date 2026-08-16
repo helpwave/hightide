@@ -1,0 +1,17 @@
+import type { StorybookConfig } from '@storybook/react-native'
+
+const main: StorybookConfig = {
+  stories: [
+    {
+      directory: '../src',
+      files: '**/*.stories.?(ts|tsx|js|jsx)',
+    },
+  ],
+  deviceAddons: [
+    '@storybook/addon-ondevice-controls',
+    '@storybook/addon-ondevice-actions',
+  ],
+  framework: '@storybook/react-native',
+}
+
+export default main

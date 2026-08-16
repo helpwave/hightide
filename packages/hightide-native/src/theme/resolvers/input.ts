@@ -1,57 +1,79 @@
-import type { TextStyle } from 'react-native'
-
-import { componentLayouts } from '@helpwave/hightide-design/tokens'
 import type {
-  ComponentColorTokens,
-  HightideThemeTokens as DesignTokensTheme
-} from '@helpwave/hightide-design/types'
-
-import type { HightideSemanticColors } from '../types/color'
+  InputState as DesignInputState,
+  InputStateValue
+} from '@helpwave/hightide-design/component-token-resolvers'
+import { toContainerStyleWithStateLayer } from '../adapters/container-adapter'
+import { toIconStyle } from '../adapters/icon-style-adapter'
+import { toTextStyle } from '../adapters/text-style-adapter'
 import type {
+  InputContainerStyle,
+  InputIconStyle,
+  InputPlaceholderStyle,
   InputState,
-  InputTheme
+  InputTextStyle,
+  InputThemeResolvers
 } from '../types/components/input'
 import {
   createStyleResolver,
-  createValueResolver
+  createValueResolver,
+  type ComponentThemeResolver
 } from '../types/resolver'
 
-export type CreateInputThemeOptions = {
-  semantic: HightideSemanticColors,
-  component: ComponentColorTokens,
+const toDesignInputState = (state: InputState = {}): DesignInputState => {
+  const active = new Set<InputStateValue>()
+
+  if (state.isDisabled) {
+    active.add('disabled')
+  }
+  if (state.isFocused) {
+    active.add('focused')
+  }
+  if (state.isFocusVisible) {
+    active.add('focusVisible')
+  }
+  if (state.isHovered) {
+    active.add('hovered')
+  }
+  if (state.isPressed) {
+    active.add('pressed')
+  }
+  if (state.isReadonly) {
+    active.add('readonly')
+  }
+  if (state.isInvalid) {
+    active.add('invalid')
+  }
+
+  return active
 }
 
-export const createInputTheme = ({
-  semantic,
-  component,
-}: CreateInputThemeOptions): InputTheme => {
-  const resolveInput = (state: InputState): TextStyle => {
-    const sizing = componentLayouts.input.md
-    const borderColor = state.isInvalid ? semantic.negative : component.border
-
-    return {
-      minHeight: sizing.height,
-      paddingHorizontal: sizing.paddingX,
-      paddingVertical: sizing.paddingY,
-      borderRadius: sizing.borderRadius,
-      borderWidth: 1,
-      borderColor,
-      backgroundColor: state.isDisabled ? semantic.disabled : component.input.background,
-      color: state.isDisabled ? semantic.onDisabled : component.input.text,
-      fontSize: 14,
-      opacity: state.isDisabled ? 0.6 : 1,
-    }
-  }
+export const toInputThemeResolvers: ComponentThemeResolver<InputThemeResolvers> = ({
+  themeTokens,
+  semanticTokens,
+  componentTokens,
+}) => {
+  const resolve = (state: InputState = {}) => componentTokens.input({
+    themeTokens,
+    semanticResolvers: semanticTokens,
+    overrides: {
+      color: state.color,
+    },
+    state: toDesignInputState(state),
+  })
 
   return {
-    input: createStyleResolver(resolveInput),
-    placeholderColor: createValueResolver(() => semantic.placeholder),
+    container: createStyleResolver((state: InputState): InputContainerStyle => {
+      const { container, stateLayer } = resolve(state)
+      return toContainerStyleWithStateLayer(container, stateLayer)
+    }),
+    text: createStyleResolver((state: InputState): InputTextStyle => (
+      toTextStyle(resolve(state).text)
+    )),
+    placeholder: createStyleResolver((state: InputState): InputPlaceholderStyle => (
+      toTextStyle(resolve(state).placeholder)
+    )),
+    icon: createValueResolver((state: InputState): InputIconStyle => (
+      toIconStyle(resolve(state).icon)
+    )),
   }
-}
-
-export const createInputThemeFromDesign = (theme: DesignTokensTheme): InputTheme => {
-  return createInputTheme({
-    semantic: theme.semanticColors,
-    component: theme.componentColors,
-  })
 }

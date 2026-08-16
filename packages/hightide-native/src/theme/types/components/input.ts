@@ -1,19 +1,28 @@
-import type { TextStyle } from 'react-native'
+import type { TextStyle, ViewStyle } from 'react-native'
 
-import type { Color } from '../color'
+import type { ColorPairToken } from '@helpwave/hightide-design/theme-tokens'
+
 import type {
   InteractionState,
   StyleResolverFunction
 } from '../resolver'
+import type { IconStyle } from '../../../icons'
 
 export type InputState = InteractionState & {
-  isInvalid?: boolean,
-  isReadOnly?: boolean,
+  color?: ColorPairToken,
 }
 
-export type InputStyle = TextStyle
+export type InputContainerStyle = ViewStyle
 
-export type InputTheme = {
-  input: StyleResolverFunction<InputState, InputStyle>,
-  placeholderColor: StyleResolverFunction<InputState, Color>,
+export type InputTextStyle = TextStyle
+
+export type InputPlaceholderStyle = TextStyle
+
+export type InputIconStyle = IconStyle
+
+export type InputThemeResolvers = {
+  container: StyleResolverFunction<InputState, InputContainerStyle>,
+  text: StyleResolverFunction<InputState, InputTextStyle>,
+  placeholder: StyleResolverFunction<InputState, InputPlaceholderStyle>,
+  icon: StyleResolverFunction<InputState, InputIconStyle>,
 }

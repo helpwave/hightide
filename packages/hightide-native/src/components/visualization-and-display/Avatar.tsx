@@ -2,39 +2,43 @@ import {
   useEffect,
   useMemo,
   useState,
-  type ComponentType,
-  type ReactNode
+  type ComponentType
 } from 'react'
 import {
   Image,
-  Text,
   View,
   type ImageProps,
   type StyleProp,
   type ViewProps,
   type ViewStyle
 } from 'react-native'
-import { User } from 'lucide-react-native'
-
-import type { ElementSize } from '@helpwave/hightide-design/types'
+import { HightideIconRegistry } from '../../icons/HightideIconRegistry'
+import { ThemedIcon } from './ThemedIcon'
+import { ThemedText } from './ThemedText'
+import {
+  avatarSizes,
+  type AvatarSize as AvatarSizeToken
+} from '@helpwave/hightide-design/component-token-resolvers'
+import type { ColorPairToken } from '@helpwave/hightide-design/theme-tokens'
 
 import { useTheme } from '../../global-contexts/theme/ThemeContext'
 import type {
-  AvatarGroupMoreStyle,
+  AvatarGroupContainerStyle,
   AvatarGroupStackStyle,
+  AvatarGroupTextStyle,
   AvatarImageStyle,
   AvatarIconStyle,
+  AvatarState,
   AvatarStatus,
   AvatarStyle,
   AvatarTextStyle,
-  AvatarWithLabelContainerStyle,
-  AvatarWithLabelTextStyle,
-  AvatarWithStatusContainerStyle,
-  AvatarStatusDotStyle
+  AvatarStatusDotStyle,
+  AvatarWithStatusState
 } from '../../theme/types/components/avatar'
+import { avatarStatuses } from '../../theme/types/components/avatar'
 import type { StyleOverwrite } from '../../theme/types/resolver'
 
-export type AvatarSize = ElementSize
+export type AvatarSize = AvatarSizeToken | number
 
 type ImageConfig = {
   avatarUrl: string,
@@ -54,20 +58,21 @@ const DefaultAvatarImage: ComponentType<AvatarImageProps> = ({ alt, ...props }) 
 )
 
 export const AvatarUtil = {
-  sizes: ['xs', 'sm', 'md', 'lg'] as const satisfies readonly ElementSize[],
-  statuses: ['online', 'offline', 'away', 'busy', 'unknown'] as const satisfies readonly AvatarStatus[],
+  sizes: avatarSizes,
+  statuses: avatarStatuses,
 }
 
 export type AvatarProps = Omit<ViewProps, 'children' | 'style'> & {
   image?: ImageConfig,
   name?: string,
   size?: AvatarSize,
+  color?: ColorPairToken,
   ImageComponent?: ComponentType<AvatarImageProps>,
   style?: StyleProp<ViewStyle>,
-  avatarStyle?: StyleOverwrite<{ size?: ElementSize, isGrouped?: boolean, groupIndex?: number }, AvatarStyle>,
-  imageStyle?: StyleOverwrite<{ size?: ElementSize, isGrouped?: boolean, groupIndex?: number }, AvatarImageStyle>,
-  textStyle?: StyleOverwrite<{ size?: ElementSize, isGrouped?: boolean, groupIndex?: number }, AvatarTextStyle>,
-  iconStyle?: StyleOverwrite<{ size?: ElementSize, isGrouped?: boolean, groupIndex?: number }, AvatarIconStyle>,
+  avatarStyle?: StyleOverwrite<AvatarState, AvatarStyle>,
+  imageStyle?: StyleOverwrite<AvatarState, AvatarImageStyle>,
+  textStyle?: StyleOverwrite<AvatarState, AvatarTextStyle>,
+  iconStyle?: StyleOverwrite<AvatarState, AvatarIconStyle>,
   isGrouped?: boolean,
   groupIndex?: number,
 }
@@ -76,6 +81,7 @@ export const Avatar = ({
   image: initialImage,
   name,
   size = 'md',
+  color,
   ImageComponent = DefaultAvatarImage,
   style,
   avatarStyle,
@@ -92,11 +98,12 @@ export const Avatar = ({
   const [image, setImage] = useState(initialImage)
   const ImageElement = ImageComponent
 
-  const state = useMemo(() => ({
+  const state = useMemo((): AvatarState => ({
     size,
     isGrouped,
     groupIndex,
-  }), [size, isGrouped, groupIndex])
+    color,
+  }), [size, isGrouped, groupIndex, color])
 
   const displayName = useMemo(() => {
     const maxLetters = size === 'sm' ? 1 : 2
@@ -119,7 +126,7 @@ export const Avatar = ({
     setImage(initialImage)
   }, [image?.avatarUrl, initialImage])
 
-  const resolvedAvatar = theme.components.avatar.avatar(state, avatarStyle)
+  const resolvedAvatar = theme.components.avatar.container(state, avatarStyle)
   const resolvedImage = theme.components.avatar.image(state, imageStyle)
   const resolvedText = theme.components.avatar.text(state, textStyle)
   const resolvedIcon = theme.components.avatar.icon(state, iconStyle)
@@ -141,11 +148,11 @@ export const Avatar = ({
       )}
       {isShowingFallback && (
         name ? (
-          <Text style={resolvedText}>{displayName}</Text>
+          <ThemedText style={resolvedText}>{displayName}</ThemedText>
         ) : (
-          <User
+          <ThemedIcon
+            icon={HightideIconRegistry.User}
             size={resolvedIcon.size}
-            strokeWidth={resolvedIcon.strokeWidth}
             color={resolvedIcon.color}
           />
         )
@@ -158,57 +165,91 @@ export type AvatarGroupProps = Omit<ViewProps, 'children' | 'style'> & {
   avatars: Omit<AvatarProps, 'size' | 'isGrouped' | 'groupIndex'>[],
   showTotalNumber?: boolean,
   size?: AvatarSize,
+  color?: ColorPairToken,
   ImageComponent?: ComponentType<AvatarImageProps>,
   style?: StyleProp<ViewStyle>,
-  stackStyle?: StyleOverwrite<{ size?: ElementSize, count?: number }, AvatarGroupStackStyle>,
-  moreStyle?: StyleOverwrite<{ size?: ElementSize, count?: number }, AvatarGroupMoreStyle>,
+  containerStyle?: StyleOverwrite<{ size?: AvatarSize, count?: number }, AvatarGroupContainerStyle>,
+  avatarStackStyle?: StyleOverwrite<{ size?: AvatarSize, count?: number }, AvatarGroupStackStyle>,
+  textStyle?: StyleOverwrite<{ size?: AvatarSize, count?: number }, AvatarGroupTextStyle>,
 }
 
 export const AvatarGroup = ({
   avatars,
   showTotalNumber = true,
   size = 'md',
+  color,
   ImageComponent,
   style,
-  stackStyle,
-  moreStyle,
+  containerStyle,
+  avatarStackStyle,
+  textStyle,
   ...props
 }: AvatarGroupProps) => {
   const { theme } = useTheme()
-  const maxShownProfiles = theme.layout.avatarGroup.maxShown
+  const maxShownProfiles = 5
   const displayedProfiles = avatars.length < maxShownProfiles ? avatars : avatars.slice(0, maxShownProfiles)
   const notDisplayedProfiles = avatars.length - maxShownProfiles
 
   const state = useMemo(() => ({
     size,
+    color,
     count: displayedProfiles.length,
-  }), [size, displayedProfiles.length])
+  }), [size, color, displayedProfiles.length])
 
-  const resolvedContainer = theme.components.avatar.group.container(state)
-  const resolvedStack = theme.components.avatar.group.stack(state, stackStyle)
-  const resolvedMore = theme.components.avatar.group.more(state, moreStyle)
+  const avatarResolvers = useMemo(
+    () => theme.components.avatarGroup.avatar(state),
+    [theme, state]
+  )
+  const resolvedContainer = theme.components.avatarGroup.container(state, containerStyle)
+  const resolvedAvatarStack = theme.components.avatarGroup.avatarStack(state, avatarStackStyle)
+  const resolvedText = theme.components.avatarGroup.text(state, textStyle)
 
   return (
     <View
       {...props}
       style={[resolvedContainer, style]}
     >
-      <View style={resolvedStack}>
-        {displayedProfiles.map((avatar, index) => (
-          <Avatar
-            {...avatar}
-            key={index}
-            size={size}
-            isGrouped
-            groupIndex={index}
-            ImageComponent={avatar.ImageComponent ?? ImageComponent}
-          />
-        ))}
+      <View style={resolvedAvatarStack}>
+        {displayedProfiles.map((avatar, index) => {
+          const avatarState: AvatarState = {
+            size,
+            isGrouped: true,
+            groupIndex: index,
+            color: avatar.color ?? color,
+          }
+
+          return (
+            <Avatar
+              {...avatar}
+              key={index}
+              size={size}
+              isGrouped
+              groupIndex={index}
+              ImageComponent={avatar.ImageComponent ?? ImageComponent}
+              avatarStyle={(_, state) => avatarResolvers.container({
+                ...state,
+                ...avatarState,
+              })}
+              imageStyle={(_, state) => avatarResolvers.image({
+                ...state,
+                ...avatarState,
+              })}
+              textStyle={(_, state) => avatarResolvers.text({
+                ...state,
+                ...avatarState,
+              })}
+              iconStyle={(_, state) => avatarResolvers.icon({
+                ...state,
+                ...avatarState,
+              })}
+            />
+          )
+        })}
       </View>
       {showTotalNumber && notDisplayedProfiles > 0 && (
-        <Text style={resolvedMore}>
-          {`+ ${notDisplayedProfiles}`}
-        </Text>
+        <ThemedText style={resolvedText}>
+          {`+${notDisplayedProfiles}`}
+        </ThemedText>
       )}
     </View>
   )
@@ -218,69 +259,47 @@ export type { AvatarStatus }
 
 export type AvatarWithStatusProps = AvatarProps & {
   status?: AvatarStatus,
-  containerStyle?: StyleOverwrite<{ size?: ElementSize, status?: AvatarStatus }, AvatarWithStatusContainerStyle>,
-  statusDotStyle?: StyleOverwrite<{ size?: ElementSize, status?: AvatarStatus }, AvatarStatusDotStyle>,
+  statusDotStyle?: StyleOverwrite<AvatarWithStatusState, AvatarStatusDotStyle>,
 }
 
 export const AvatarWithStatus = ({
   status = 'unknown',
   size = 'md',
+  color,
   style,
-  containerStyle,
+  avatarStyle,
+  imageStyle,
+  textStyle,
+  iconStyle,
   statusDotStyle,
   ...avatarProps
 }: AvatarWithStatusProps) => {
   const { theme } = useTheme()
 
-  const state = useMemo(() => ({
+  const state = useMemo((): AvatarWithStatusState => ({
     size,
+    color,
     status,
-  }), [size, status])
+  }), [size, color, status])
 
-  const resolvedContainer = theme.components.avatar.withStatus.container(state, containerStyle)
-  const resolvedStatusDot = theme.components.avatar.withStatus.statusDot(state, statusDotStyle)
-
-  return (
-    <View style={[resolvedContainer, style]}>
-      <Avatar {...avatarProps} size={size} />
-      <View style={resolvedStatusDot} />
-    </View>
+  const avatarResolvers = useMemo(
+    () => theme.components.avatarWithStatus.avatar(state),
+    [theme, state]
   )
-}
-
-type AvatarWithLabelPosition = 'left' | 'right'
-
-export type AvatarWithLabelProps = AvatarProps & {
-  label: ReactNode,
-  labelPosition?: AvatarWithLabelPosition,
-  containerStyle?: StyleOverwrite<{ size?: ElementSize }, AvatarWithLabelContainerStyle>,
-  labelStyle?: StyleOverwrite<{ size?: ElementSize }, AvatarWithLabelTextStyle>,
-}
-
-export const AvatarWithLabel = ({
-  label,
-  labelPosition = 'left',
-  size = 'md',
-  style,
-  containerStyle,
-  labelStyle,
-  ...avatarProps
-}: AvatarWithLabelProps) => {
-  const { theme } = useTheme()
-
-  const state = useMemo(() => ({ size }), [size])
-  const resolvedContainer = theme.components.avatar.withLabel.container(state, containerStyle)
-  const resolvedLabel = theme.components.avatar.withLabel.text(state, labelStyle)
-
-  const avatar = <Avatar {...avatarProps} size={size} />
-  const labelElement = typeof label === 'string' || typeof label === 'number'
-    ? <Text style={resolvedLabel}>{label}</Text>
-    : label
+  const resolvedStatusDot = theme.components.avatarWithStatus.statusDot(state, statusDotStyle)
 
   return (
-    <View style={[resolvedContainer, style]}>
-      {labelPosition === 'left' ? labelElement : avatar}
-      {labelPosition === 'left' ? avatar : labelElement}
+    <View style={[{ position: 'relative' }, style]}>
+      <Avatar
+        {...avatarProps}
+        size={size}
+        color={color}
+        avatarStyle={(_, state) => avatarResolvers.container(state, avatarStyle)}
+        imageStyle={(_, state) => avatarResolvers.image(state, imageStyle)}
+        textStyle={(_, state) => avatarResolvers.text(state, textStyle)}
+        iconStyle={(_, state) => avatarResolvers.icon(state, iconStyle)}
+      />
+      <View style={resolvedStatusDot} />
     </View>
   )
 }

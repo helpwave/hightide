@@ -1,100 +1,175 @@
-import { fontWeights } from '@helpwave/hightide-design/tokens'
 import type {
-  ComponentColorTokens,
-  HightideThemeTokens as DesignTokensTheme
-} from '@helpwave/hightide-design/types'
-
-import type { HightideSemanticColors } from '../types/color'
+  MultiSelectState as DesignMultiSelectState,
+  MultiSelectStateValue
+} from '@helpwave/hightide-design/component-token-resolvers'
+import { toContainerStyle, toContainerStyleWithStateLayer } from '../adapters/container-adapter'
+import { toIconStyle } from '../adapters/icon-style-adapter'
+import { toTextStyle } from '../adapters/text-style-adapter'
 import type {
+  MultiSelectCheckboxIconStyle,
+  MultiSelectCheckboxStyle,
   MultiSelectOptionState,
+  MultiSelectOptionStyle,
+  MultiSelectOptionTextStyle,
   MultiSelectState,
-  MultiSelectTheme
+  MultiSelectThemeResolvers,
+  MultiSelectTriggerStyle
 } from '../types/components/multiSelect'
+import type {
+  SelectEmptyTextStyle,
+  SelectHeaderStyle,
+  SelectMenuState,
+  SelectMenuStyle,
+  SelectOverlayStyle,
+  SelectTriggerTextStyle
+} from '../types/components/select'
 import {
+  createSimpleStyleResolver,
   createStyleResolver,
-  createValueResolver
+  createValueResolver,
+  type ComponentThemeResolver
 } from '../types/resolver'
 
-export type CreateMultiSelectThemeOptions = {
-  semantic: HightideSemanticColors,
-  component: ComponentColorTokens,
+type MultiSelectResolveState = {
+  color?: MultiSelectState['color'],
+  isDisabled?: boolean,
+  isInvalid?: boolean,
+  isHovered?: boolean,
+  isFocused?: boolean,
+  isFocusVisible?: boolean,
+  isPressed?: boolean,
+  isReadonly?: boolean,
+  isOpen?: boolean,
+  hasSelections?: boolean,
+  isSelected?: boolean,
+  isHighlighted?: boolean,
+  hasSearch?: boolean,
 }
 
-export const createMultiSelectTheme = ({
-  semantic,
-  component,
-}: CreateMultiSelectThemeOptions): MultiSelectTheme => {
-  return {
-    trigger: createStyleResolver((state: MultiSelectState) => ({
-      minHeight: 44,
-      paddingHorizontal: 12,
-      paddingVertical: 8,
-      borderRadius: 6,
-      borderWidth: 1,
-      borderColor: state.isInvalid ? semantic.negative : component.border,
-      backgroundColor: state.isDisabled ? semantic.disabled : component.input.background,
-      justifyContent: 'center',
-      gap: 8,
-      opacity: state.isDisabled ? 0.6 : 1,
-    })),
-    triggerText: createStyleResolver(() => ({
-      color: semantic.placeholder,
-    })),
-    overlay: createStyleResolver(() => ({
-      flex: 1,
-      backgroundColor: '#00000059',
-      justifyContent: 'center',
-      padding: 24,
-    })),
-    menu: createStyleResolver(() => ({
-      maxHeight: 360,
-      borderRadius: 12,
-      backgroundColor: component.menu.background,
-      borderWidth: 1,
-      borderColor: component.menu.border,
-      overflow: 'hidden',
-    })),
-    search: createStyleResolver(() => ({
-      paddingHorizontal: 16,
-      paddingVertical: 12,
-      borderBottomWidth: 1,
-      borderBottomColor: component.menu.border,
-      color: component.menu.text,
-    })),
-    searchPlaceholderColor: createValueResolver(() => semantic.placeholder),
-    option: createStyleResolver((state: MultiSelectOptionState) => ({
-      paddingHorizontal: 16,
-      paddingVertical: 12,
-      backgroundColor: state.isHighlighted ? component.table.rowHoverBackground : 'transparent',
-      opacity: state.isDisabled ? 0.5 : 1,
-      flexDirection: 'row',
-      alignItems: 'center',
-      gap: 10,
-    })),
-    optionText: createStyleResolver((state: MultiSelectOptionState) => ({
-      color: state.isSelected ? semantic.primary : component.menu.text,
-      fontWeight: state.isSelected ? fontWeights.semibold : fontWeights.base,
-    })),
-    checkbox: createStyleResolver((state: MultiSelectOptionState) => ({
-      width: 18,
-      height: 18,
-      borderRadius: 4,
-      borderWidth: 1,
-      borderColor: state.isSelected ? semantic.primary : component.border,
-      backgroundColor: state.isSelected ? semantic.primary : 'transparent',
-      alignItems: 'center',
-      justifyContent: 'center',
-    })),
-    checkboxIcon: createValueResolver((state: MultiSelectOptionState) => ({
-      color: semantic.onPrimary,
-      visible: !!state.isSelected,
-    })),
+const toDesignMultiSelectState = (
+  state: MultiSelectResolveState = {}
+): DesignMultiSelectState => {
+  const active = new Set<MultiSelectStateValue>()
+
+  if (state.isDisabled) {
+    active.add('disabled')
   }
+  if (state.isFocused) {
+    active.add('focused')
+  }
+  if (state.isFocusVisible) {
+    active.add('focusVisible')
+  }
+  if (state.isHovered) {
+    active.add('hovered')
+  }
+  if (state.isPressed) {
+    active.add('pressed')
+  }
+  if (state.isReadonly) {
+    active.add('readonly')
+  }
+  if (state.isInvalid) {
+    active.add('invalid')
+  }
+  if (state.isOpen) {
+    active.add('open')
+  }
+  if (state.hasSelections) {
+    active.add('hasSelections')
+  }
+  if (state.isSelected) {
+    active.add('selected')
+  }
+  if (state.isHighlighted) {
+    active.add('highlighted')
+  }
+
+  return active
 }
 
-export const createMultiSelectThemeFromDesign = (theme: DesignTokensTheme): MultiSelectTheme => {
-  return createMultiSelectTheme({
-    semantic: theme.semanticColors,
-    component: theme.componentColors,
+export const toMultiSelectThemeResolvers: ComponentThemeResolver<MultiSelectThemeResolvers> = ({
+  themeTokens,
+  semanticTokens,
+  componentTokens,
+}) => {
+  const resolve = (state: MultiSelectResolveState = {}) => componentTokens.multiSelect({
+    themeTokens,
+    semanticResolvers: semanticTokens,
+    config: {
+      hasSearch: state.hasSearch,
+    },
+    overrides: {
+      color: state.color,
+    },
+    state: toDesignMultiSelectState(state),
   })
+
+  const toTriggerState = (state: MultiSelectState): MultiSelectResolveState => ({
+    color: state.color,
+    isDisabled: state.isDisabled,
+    isInvalid: state.isInvalid,
+    isHovered: state.isHovered,
+    isFocused: state.isFocused,
+    isFocusVisible: state.isFocusVisible,
+    isPressed: state.isPressed,
+    isReadonly: state.isReadonly,
+    isOpen: state.isOpen,
+    hasSelections: state.hasSelections,
+  })
+
+  return {
+    trigger: createStyleResolver((state: MultiSelectState): MultiSelectTriggerStyle => {
+      const { trigger, stateLayer } = resolve(toTriggerState(state))
+      return toContainerStyleWithStateLayer(trigger, stateLayer)
+    }),
+    triggerText: createStyleResolver((state: MultiSelectState): SelectTriggerTextStyle => (
+      toTextStyle(resolve(toTriggerState(state)).triggerText)
+    )),
+    overlay: createSimpleStyleResolver((): SelectOverlayStyle => ({
+      ...toContainerStyle(resolve().overlay),
+      flex: 1,
+    })),
+    menu: createStyleResolver((state: SelectMenuState): SelectMenuStyle => (
+      toContainerStyle(resolve({ hasSearch: state.hasSearch }).menu)
+    )),
+    header: createSimpleStyleResolver((): SelectHeaderStyle => (
+      toContainerStyle(resolve().header)
+    )),
+    option: createStyleResolver((state: MultiSelectOptionState): MultiSelectOptionStyle => (
+      toContainerStyle(resolve({
+        color: state.color,
+        isDisabled: state.isDisabled,
+        isSelected: state.isSelected,
+        isHighlighted: state.isHighlighted,
+      }).option)
+    )),
+    optionText: createStyleResolver((state: MultiSelectOptionState): MultiSelectOptionTextStyle => (
+      toTextStyle(resolve({
+        color: state.color,
+        isDisabled: state.isDisabled,
+        isSelected: state.isSelected,
+        isHighlighted: state.isHighlighted,
+      }).optionText)
+    )),
+    emptyText: createSimpleStyleResolver((): SelectEmptyTextStyle => (
+      toTextStyle(resolve().emptyText)
+    )),
+    checkbox: createStyleResolver((state: MultiSelectOptionState): MultiSelectCheckboxStyle => (
+      toContainerStyle(resolve({
+        color: state.color,
+        isDisabled: state.isDisabled,
+        isSelected: state.isSelected,
+        isHighlighted: state.isHighlighted,
+      }).checkbox)
+    )),
+    checkboxIcon: createValueResolver((state: MultiSelectOptionState): MultiSelectCheckboxIconStyle => (
+      toIconStyle(resolve({
+        color: state.color,
+        isDisabled: state.isDisabled,
+        isSelected: state.isSelected,
+        isHighlighted: state.isHighlighted,
+      }).checkboxIcon)
+    )),
+  }
 }
