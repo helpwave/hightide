@@ -44,7 +44,6 @@ export const switchTokenResolver: SwitchTokenResolver = ({
   state,
 }) => {
   const { color, borderWidth: borderWidthTokens } = themeTokens
-  const mediumControl = semanticResolvers.controlLayout({ themeTokens, size: 'md' })
   const onColor = color.surface.onColor
   const borderWidth = borderWidthTokens.normal
   const focusOutline = themeTokens.focusOutline
@@ -86,19 +85,6 @@ export const switchTokenResolver: SwitchTokenResolver = ({
   return {
     container: {
       opacity: state.has('disabled') ? 0.6 : 1,
-      size: {
-        width: mediumControl.size,
-        height: mediumControl.size,
-        minWidth: mediumControl.size,
-        maxWidth: mediumControl.size,
-        minHeight: mediumControl.size,
-        maxHeight: mediumControl.size,
-      },
-      padding: {
-        type: 'physicalAxis',
-        horizontal: (mediumControl.size - TRACK_HEIGHT) / 2,
-        vertical: (mediumControl.size - TRACK_HEIGHT) / 2,
-      },
       layout: {
         direction: 'horizontal',
         mainAxisAlignment: 'center',

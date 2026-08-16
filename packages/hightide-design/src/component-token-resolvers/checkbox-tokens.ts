@@ -36,7 +36,7 @@ export type CheckboxComponentResolverProps = {
 
 export type CheckboxTokens = {
   container: ContainerTokens,
-  visualContainer: ContainerTokens,
+  stateLayer: ContainerTokens,
   icon: IconTokens,
 }
 
@@ -74,35 +74,8 @@ export const checkboxTokenResolver: CheckboxTokenResolver = ({
     ? color.disabled.color
     : isActive ? accentPair.color : color.surface.color
 
-  const containerSize = Math.max(element.size, semanticResolvers.touchTargetSize({ themeTokens }))
-
   return {
     container: {
-      backgroundColor: tint,
-      size: {
-        width: containerSize,
-        height: containerSize,
-        minWidth: containerSize,
-        maxWidth: containerSize,
-        minHeight: containerSize,
-        maxHeight: containerSize,
-      },
-      shape: {
-        borderRadius: {
-          type: 'all',
-          value: overrides.isRounded ? dimension / 2 : themeTokens.shape.borderRadius[size],
-        },
-      },
-      layout: {
-        direction: 'horizontal',
-        mainAxisAlignment: 'center',
-        crossAxisAligment: 'center',
-      },
-      outline: state.has('focusVisible') ? {
-        color: 'transparent',
-      } : undefined,
-    },
-    visualContainer: {
       backgroundColor,
       opacity: state.has('disabled') ? 0.6 : 1,
       border: isActive ? undefined : {
@@ -141,6 +114,15 @@ export const checkboxTokenResolver: CheckboxTokenResolver = ({
           ? color.negative.color
           : accentPair.color,
       } : undefined,
+    },
+    stateLayer: {
+      backgroundColor: tint,
+      shape: {
+        borderRadius: {
+          type: 'all',
+          value: overrides.isRounded ? element.size / 2 : themeTokens.shape.borderRadius[size],
+        },
+      },
     },
     icon: {
       color: isActive ? accentPair.onColor : accentPair.color,

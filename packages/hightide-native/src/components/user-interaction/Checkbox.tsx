@@ -1,4 +1,5 @@
 import {
+  Fragment,
   useCallback
 } from 'react'
 import {
@@ -16,18 +17,21 @@ import {
 import type { ColorPairToken } from '@helpwave/hightide-design/theme-tokens'
 import { HightideIconRegistry } from '../../icons/HightideIconRegistry'
 import { ThemedIcon } from '../visualization-and-display/ThemedIcon'
+import { useDebugContext } from '../../global-contexts/debug'
 import { useTheme } from '../../global-contexts/theme/ThemeContext'
 import type {
   CheckboxSize,
   CheckboxState,
-  CheckboxStyle,
-  CheckboxVisualContainerStyle
+  CheckboxStateLayerStyle,
+  CheckboxStyle
 } from '../../theme/types/components/checkbox'
 import type { StyleOverwrite } from '../../theme/types/resolver'
 import type {
   FormFieldDataHandling,
   FormFieldInteractionStates
 } from '../../types/formField'
+import { createHitBoxOverlayStyle } from '../../utils/hitBoxOverlay'
+import { useMinimumTouchTargetHitSlop } from '../../utils/minimumTouchTargetHitSlop'
 
 export type CheckboxProps = Omit<PressableProps, 'children' | 'style'>
   & Partial<FormFieldInteractionStates>
@@ -40,7 +44,7 @@ export type CheckboxProps = Omit<PressableProps, 'children' | 'style'>
     color?: ColorPairToken,
     style?: StyleProp<ViewStyle>,
     containerStyle?: StyleOverwrite<CheckboxState, CheckboxStyle>,
-    visualContainerStyle?: StyleOverwrite<CheckboxState, CheckboxVisualContainerStyle>,
+    stateLayerStyle?: StyleOverwrite<CheckboxState, CheckboxStateLayerStyle>,
   }
 
 type PressableInteraction = {
@@ -64,10 +68,18 @@ export const Checkbox = ({
   color,
   style,
   containerStyle,
-  visualContainerStyle,
+  stateLayerStyle,
+  hitSlop: providedHitSlop,
+  onLayout: providedOnLayout,
   ...props
 }: CheckboxProps) => {
   const { theme } = useTheme()
+  const { hitBox } = useDebugContext()
+  const { hitSlop, onLayout } = useMinimumTouchTargetHitSlop({
+    touchTargetSize: theme.semantics.touchTargetSize({}),
+    hitSlop: providedHitSlop,
+    onLayout: providedOnLayout,
+  })
   const interactive = !disabled && !readOnly
 
   const onEditCompleteStable = useEventCallbackStabilizer(onEditComplete)
@@ -108,6 +120,8 @@ export const Checkbox = ({
         checked: indeterminate ? 'mixed' : value,
         disabled,
       }}
+      hitSlop={hitSlop}
+      onLayout={onLayout}
       onPress={(event) => {
         if (interactive) {
           setValue((previous) => !previous)
@@ -121,15 +135,21 @@ export const Checkbox = ({
     >
       {(pressableState) => {
         const state = resolveState(pressableState as PressableInteraction)
-        const resolvedVisualContainerStyle = theme.components.checkbox.visualContainer(
-          state,
-          visualContainerStyle
-        )
         const resolvedIcon = theme.components.checkbox.icon(state)
         const showIcon = !!(indeterminate || value)
 
         return (
-          <View style={resolvedVisualContainerStyle}>
+          <Fragment>
+            {hitBox.isVisualizing && (
+              <View
+                pointerEvents="none"
+                style={createHitBoxOverlayStyle(hitSlop, hitBox.color)}
+              />
+            )}
+            <View
+              pointerEvents="none"
+              style={theme.components.checkbox.stateLayer(state, stateLayerStyle)}
+            />
             {showIcon && (
               <ThemedIcon
                 icon={indeterminate ? HightideIconRegistry.Minus : HightideIconRegistry.Check}
@@ -137,7 +157,7 @@ export const Checkbox = ({
                 color={resolvedIcon.color}
               />
             )}
-          </View>
+          </Fragment>
         )
       }}
     </Pressable>

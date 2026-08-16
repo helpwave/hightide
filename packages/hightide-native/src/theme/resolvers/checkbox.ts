@@ -6,9 +6,9 @@ import { toContainerStyle } from '../adapters/style-adapters'
 import type {
   CheckboxIconStyle,
   CheckboxState,
+  CheckboxStateLayerStyle,
   CheckboxStyle,
-  CheckboxThemeResolvers,
-  CheckboxVisualContainerStyle
+  CheckboxThemeResolvers
 } from '../types/components/checkbox'
 import {
   createStyleResolver,
@@ -50,6 +50,10 @@ const toDesignCheckboxState = (state: CheckboxState): DesignCheckboxState => {
   return active
 }
 
+const toNumberSize = (value: string | number | undefined): number => (
+  typeof value === 'number' ? value : 0
+)
+
 export const toCheckboxThemeResolvers: ComponentThemeResolver<CheckboxThemeResolvers> = ({
   themeTokens,
   semanticTokens,
@@ -70,9 +74,28 @@ export const toCheckboxThemeResolvers: ComponentThemeResolver<CheckboxThemeResol
     container: createStyleResolver((state: CheckboxState): CheckboxStyle => (
       toContainerStyle(resolve(state).container)
     )),
-    visualContainer: createStyleResolver((state: CheckboxState): CheckboxVisualContainerStyle => (
-      toContainerStyle(resolve(state).visualContainer)
-    )),
+    stateLayer: createStyleResolver((state: CheckboxState): CheckboxStateLayerStyle => {
+      const tokens = resolve(state)
+      const containerStyle = toContainerStyle(tokens.container)
+      const touchTargetSize = semanticTokens.touchTargetSize({ themeTokens })
+      const width = toNumberSize(containerStyle.width as string | number | undefined)
+      const height = toNumberSize(containerStyle.height as string | number | undefined)
+      const horizontal = Math.max(0, touchTargetSize - width) / 2
+      const vertical = Math.max(0, touchTargetSize - height) / 2
+
+      return {
+        ...toContainerStyle(tokens.stateLayer),
+        position: 'absolute',
+        top: 0,
+        right: 0,
+        bottom: 0,
+        left: 0,
+        marginTop: -vertical,
+        marginRight: -horizontal,
+        marginBottom: -vertical,
+        marginLeft: -horizontal,
+      }
+    }),
     icon: createValueResolver((state: CheckboxState): CheckboxIconStyle => {
       const { icon } = resolve(state)
 

@@ -1,4 +1,5 @@
 import {
+  Fragment,
   useCallback,
   useEffect,
   useRef
@@ -17,6 +18,7 @@ import {
   useEventCallbackStabilizer
 } from '@helpwave/hightide-utils/hooks'
 
+import { useDebugContext } from '../../global-contexts/debug'
 import { useTheme } from '../../global-contexts/theme/ThemeContext'
 import type {
   SwitchContainerStyle,
@@ -29,6 +31,8 @@ import type {
   FormFieldDataHandling,
   FormFieldInteractionStates
 } from '../../types/formField'
+import { createHitBoxOverlayStyle } from '../../utils/hitBoxOverlay'
+import { useMinimumTouchTargetHitSlop } from '../../utils/minimumTouchTargetHitSlop'
 
 const ANIMATION_DURATION_MS = 250
 
@@ -67,9 +71,17 @@ export const Switch = ({
   trackStyle,
   thumbStyle,
   accessibilityLabel,
+  hitSlop: providedHitSlop,
+  onLayout: providedOnLayout,
   ...props
 }: SwitchProps) => {
   const { theme } = useTheme()
+  const { hitBox } = useDebugContext()
+  const { hitSlop, onLayout } = useMinimumTouchTargetHitSlop({
+    touchTargetSize: theme.semantics.touchTargetSize({}),
+    hitSlop: providedHitSlop,
+    onLayout: providedOnLayout,
+  })
   const interactive = !disabled && !readOnly
 
   const onEditCompleteStable = useEventCallbackStabilizer(onEditComplete)
@@ -117,6 +129,8 @@ export const Switch = ({
         checked: value,
         disabled,
       }}
+      hitSlop={hitSlop}
+      onLayout={onLayout}
       onPress={(event) => {
         if (interactive) {
           setValue((previous) => !previous)
@@ -165,19 +179,27 @@ export const Switch = ({
           : resolvedThumbInactive.backgroundColor
 
         return (
-          <View style={resolvedTrackStyle}>
-            <Animated.View
-              style={{
-                position: 'absolute',
-                top: thumbTop,
-                width: thumbSize,
-                height: thumbSize,
-                borderRadius: thumbActiveSize / 2,
-                backgroundColor: thumbColor,
-                transform: [{ translateX: thumbTranslateX }],
-              }}
-            />
-          </View>
+          <Fragment>
+            {hitBox.isVisualizing && (
+              <View
+                pointerEvents="none"
+                style={createHitBoxOverlayStyle(hitSlop, hitBox.color)}
+              />
+            )}
+            <View style={resolvedTrackStyle}>
+              <Animated.View
+                style={{
+                  position: 'absolute',
+                  top: thumbTop,
+                  width: thumbSize,
+                  height: thumbSize,
+                  borderRadius: thumbActiveSize / 2,
+                  backgroundColor: thumbColor,
+                  transform: [{ translateX: thumbTranslateX }],
+                }}
+              />
+            </View>
+          </Fragment>
         )
       }}
     </Pressable>

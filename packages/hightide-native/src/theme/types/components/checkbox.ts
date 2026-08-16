@@ -21,7 +21,7 @@ export type CheckboxState = InteractionState & {
 
 export type CheckboxStyle = ViewStyle
 
-export type CheckboxVisualContainerStyle = ViewStyle
+export type CheckboxStateLayerStyle = ViewStyle
 
 export type CheckboxIconStyle = {
   color?: Color,
@@ -31,6 +31,6 @@ export type CheckboxIconStyle = {
 
 export type CheckboxThemeResolvers = {
   container: StyleResolverFunction<CheckboxState, CheckboxStyle>,
-  visualContainer: StyleResolverFunction<CheckboxState, CheckboxVisualContainerStyle>,
+  stateLayer: StyleResolverFunction<CheckboxState, CheckboxStateLayerStyle>,
   icon: StyleResolverFunction<CheckboxState, CheckboxIconStyle>,
 }
