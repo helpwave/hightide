@@ -7,12 +7,11 @@ import { action } from 'storybook/actions'
 import {
   Chip,
   ChipUtil,
-  Button,
-  ButtonUtil,
+  ThemedPressable,
+  ThemedPressableUtil,
   ThemedText
 } from '@helpwave/hightide-native/components'
 import { useTheme } from '@helpwave/hightide-native/global-contexts'
-import type { ButtonState } from '@helpwave/hightide-native/theme'
 
 import {
   type ColorPairKey,
@@ -75,10 +74,12 @@ export const chip: StoryObj<ChipArgs> = {
   render: (args) => <ChipDemo {...args} />,
 }
 
-type ChipInButtonArgs = {
-  size: typeof ButtonUtil.sizes[number],
-  color: ColorPairKey,
-  variant: typeof ButtonUtil.variants[number],
+type ChipInPressableArgs = {
+  size: typeof ThemedPressableUtil.sizes[number],
+  color: ColorPairKey | 'default',
+  coloringStyle: typeof ThemedPressableUtil.coloringStyles[number],
+  coloringColorVariant: typeof ThemedPressableUtil.coloringColorVariants[number],
+  hasAdditionalHorizontalPadding: boolean,
   chipColor: ColorPairKey,
   chipVariant: typeof ChipUtil.variants[number],
   chipSize: typeof ChipUtil.sizes[number],
@@ -86,55 +87,61 @@ type ChipInButtonArgs = {
   label: string,
 }
 
-const ChipInButtonDemo = ({
+const ChipInPressableDemo = ({
   size,
   color,
-  variant,
+  coloringStyle,
+  coloringColorVariant,
+  hasAdditionalHorizontalPadding,
   chipColor,
   chipVariant,
   chipSize,
   chipLabel,
   label,
-}: ChipInButtonArgs) => {
+}: ChipInPressableArgs) => {
   const { theme } = useTheme()
-  const state: ButtonState = {
-    size,
-    color: theme.colors[color],
-    variant,
-  }
-  const textStyle = theme.components.button.text(state)
 
   return (
-    <Button
+    <ThemedPressable
       size={size}
-      color={theme.colors[color]}
-      variant={variant}
+      color={color === 'default' ? undefined : theme.colors[color]}
+      coloringStyle={coloringStyle}
+      coloringColorVariant={coloringColorVariant}
+      hasAdditionalHorizontalPadding={hasAdditionalHorizontalPadding}
       onPress={action('Pressed')}
     >
-      <>
-        <Chip
-          color={theme.colors[chipColor]}
-          variant={chipVariant}
-          size={chipSize}
-        >
-          {chipLabel}
-        </Chip>
-        <ThemedText style={textStyle}>{label}</ThemedText>
-      </>
-    </Button>
+      <Chip
+        color={theme.colors[chipColor]}
+        variant={chipVariant}
+        size={chipSize}
+      >
+        {chipLabel}
+      </Chip>
+      <ThemedText>{label}</ThemedText>
+    </ThemedPressable>
   )
 }
 
-export const chipInButton: StoryObj<ChipInButtonArgs> = {
+export const chipInPressable: StoryObj<ChipInPressableArgs> = {
   argTypes: {
     size: {
       control: 'select',
-      options: ButtonUtil.sizes,
+      options: ThemedPressableUtil.sizes,
     },
-    color: StorybookHelper.colorPairSelect,
-    variant: {
+    color: {
       control: 'select',
-      options: ButtonUtil.variants,
+      options: ['default', ...StorybookHelper.colorPairSelect.options],
+    },
+    coloringStyle: {
+      control: 'select',
+      options: ThemedPressableUtil.coloringStyles,
+    },
+    coloringColorVariant: {
+      control: 'select',
+      options: ThemedPressableUtil.coloringColorVariants,
+    },
+    hasAdditionalHorizontalPadding: {
+      control: 'boolean',
     },
     chipColor: StorybookHelper.colorPairSelect,
     chipVariant: {
@@ -154,13 +161,15 @@ export const chipInButton: StoryObj<ChipInButtonArgs> = {
   },
   args: {
     size: 'md',
-    color: 'primary',
-    variant: 'filled',
+    color: 'default',
+    coloringStyle: 'foreground',
+    coloringColorVariant: 'normal',
+    hasAdditionalHorizontalPadding: true,
     chipColor: 'secondary',
     chipVariant: 'tonal',
     chipSize: 'md',
     chipLabel: 'New',
     label: 'Filter',
   },
-  render: (args) => <ChipInButtonDemo {...args} />,
+  render: (args) => <ChipInPressableDemo {...args} />,
 }
