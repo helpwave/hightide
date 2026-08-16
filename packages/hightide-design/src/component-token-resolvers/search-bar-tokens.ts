@@ -67,7 +67,7 @@ export const searchBarTokenResolver: SearchBarTokenResolver = ({
       },
       margin: {
         type: 'physicalAxis',
-        horizontal: themeTokens.spacing.sm,
+        horizontal: (themeTokens.size.md - themeTokens.size.sm) / 2,
       },
     },
     icon: {

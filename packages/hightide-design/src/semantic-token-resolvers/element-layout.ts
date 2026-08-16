@@ -55,11 +55,11 @@ const paddingExtensionFor = (
 ): number => {
   const { spacing } = themeTokens
   const paddingExtension = {
-    xs: spacing.sm,
-    sm: spacing.md / 2 + spacing.xs,
-    md: spacing.md + spacing.xs,
-    lg: spacing.md + spacing.sm,
-    xl: spacing.lg,
+    xs: spacing.xs,
+    sm: spacing.sm,
+    md: spacing.md,
+    lg: spacing.lg,
+    xl: spacing.xl,
   } as const
 
   return paddingExtension[size]
