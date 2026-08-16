@@ -1,44 +1,48 @@
 import type { ComponentTokenResolver } from '../component-token-resolver'
-import type { ContainerTokens } from '../container-tokens'
-import type { TextStyleTokens } from '../text-style-tokens'
+import type {
+  PressableComponentResolverProps,
+  PressableTokens
+} from '../pressable-tokens'
 import {
   pillBorderRadius,
   resolveDescriptionColor,
-  resolveFadedBorder,
-  resolveHoverColor
+  resolveFadedBorder
 } from './shared'
 
-export type ChatQuickReplyChipState = {
-  isPressed?: boolean,
-  isDisabled?: boolean,
-  isActive?: boolean,
-}
-
 export type ChatQuickReplyChipComponentResolverProps = {
-  state: ChatQuickReplyChipState,
+  config: {
+    isActive?: boolean,
+  },
 }
 
 export type ChatQuickReplyChipTokens = {
-  container: ContainerTokens,
-  text: TextStyleTokens,
-}
+  config: Partial<PressableComponentResolverProps['overrides']>,
+} & Partial<PressableTokens>
 
 export type ChatQuickReplyChipTokenResolver = ComponentTokenResolver<
   ChatQuickReplyChipComponentResolverProps,
   ChatQuickReplyChipTokens
 >
 
-export const chatQuickReplyChipTokenResolver: ChatQuickReplyChipTokenResolver = ({ themeTokens, semanticResolvers, state }) => {
+export const chatQuickReplyChipTokenResolver: ChatQuickReplyChipTokenResolver = ({
+  themeTokens,
+  semanticResolvers,
+  config,
+}) => {
   const { color, spacing, shape, borderWidth, typography } = themeTokens
   const descriptionColor = resolveDescriptionColor({ themeTokens, semanticResolvers })
   const fadedBorder = resolveFadedBorder({ themeTokens, semanticResolvers })
-  const hoverColor = resolveHoverColor({ themeTokens })
-  const isPressed = !!state.isPressed && !state.isDisabled
+  const isActive = !!config.isActive
   const hairline = borderWidth.thin
 
   return {
+    config: {
+      coloringStyle: 'filled',
+      coloringColorVariant: 'normal',
+      color: color.surface,
+      size: 'sm',
+    },
     container: {
-      backgroundColor: isPressed ? hoverColor : color.surface.color,
       shape: {
         borderRadius: { type: 'all', value: pillBorderRadius },
       },
@@ -54,7 +58,7 @@ export const chatQuickReplyChipTokenResolver: ChatQuickReplyChipTokenResolver = 
         },
         color: {
           type: 'all',
-          value: state.isActive ? color.primary.color : fadedBorder,
+          value: isActive ? color.primary.color : fadedBorder,
         },
       },
       layout: {
@@ -64,10 +68,15 @@ export const chatQuickReplyChipTokenResolver: ChatQuickReplyChipTokenResolver = 
         gap: shape.padding.md,
       },
     },
+    stateLayer: {
+      shape: {
+        borderRadius: { type: 'all', value: pillBorderRadius },
+      },
+    },
     text: {
       ...typography.body.sm,
       fontWeight: typography.fontWeights.medium,
-      color: state.isActive ? color.primary.color : descriptionColor,
+      color: isActive ? color.primary.color : descriptionColor,
     },
   }
 }

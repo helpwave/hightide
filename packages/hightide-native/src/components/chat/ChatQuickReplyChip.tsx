@@ -1,33 +1,32 @@
-import type { ReactNode } from 'react'
 import {
-  Pressable,
-  type PressableProps,
-  type StyleProp,
-  type ViewStyle
-} from 'react-native'
+  useMemo,
+  type ReactNode
+} from 'react'
+import type { StyleProp, ViewStyle } from 'react-native'
 
 import { useTheme } from '../../global-contexts/theme/ThemeContext'
+import {
+  ThemedPressable,
+  type ThemedPressableProps
+} from '../user-interaction/ThemedPressable'
 import { ThemedText } from '../visualization-and-display/ThemedText'
 import type {
   ChatQuickReplyChipState,
-  ChatQuickReplyChipStyle,
-  ChatQuickReplyChipTextStyle
+  PressableContainerStyle,
+  PressableState,
+  PressableTextStyle
 } from '../../theme/types/components/chat'
 import type { StyleOverwrite } from '../../theme/types/resolver'
 
-export type ChatQuickReplyChipProps = Omit<PressableProps, 'children' | 'style'> & {
+export type ChatQuickReplyChipProps = Omit<
+  ThemedPressableProps,
+  'children' | 'containerStyle' | 'textStyle' | 'stateLayerStyle'
+> & {
   isActive?: boolean,
   children?: ReactNode,
   style?: StyleProp<ViewStyle>,
-  chipStyle?: StyleOverwrite<ChatQuickReplyChipState, ChatQuickReplyChipStyle>,
-  textStyle?: StyleOverwrite<ChatQuickReplyChipState, ChatQuickReplyChipTextStyle>,
-}
-
-type PressableInteraction = {
-  pressed: boolean,
-  hovered?: boolean,
-  focused?: boolean,
-  focusVisible?: boolean,
+  containerStyle?: StyleOverwrite<PressableState, PressableContainerStyle>,
+  textStyle?: StyleOverwrite<PressableState, PressableTextStyle>,
 }
 
 export const ChatQuickReplyChip = ({
@@ -35,40 +34,37 @@ export const ChatQuickReplyChip = ({
   children,
   disabled,
   style,
-  chipStyle,
+  containerStyle,
   textStyle,
   ...props
 }: ChatQuickReplyChipProps) => {
   const { theme } = useTheme()
-
-  const resolveState = (interaction: PressableInteraction): ChatQuickReplyChipState => ({
-    isActive,
-    isDisabled: !!disabled,
-    isPressed: interaction.pressed,
-    isHovered: !!interaction.hovered,
-    isFocused: !!interaction.focused,
-    isFocusVisible: !!interaction.focusVisible,
-  })
+  const state = useMemo((): ChatQuickReplyChipState => ({ isActive }), [isActive])
+  const pressableResolvers = useMemo(
+    () => theme.components.chat.quickReplyChip.pressable(state),
+    [theme, state]
+  )
 
   return (
-    <Pressable
+    <ThemedPressable
       {...props}
       disabled={disabled}
-      style={(pressableState) => {
-        const state = resolveState(pressableState as PressableInteraction)
-        return [theme.components.chat.quickReplyChip.container(state, chipStyle), style]
-      }}
+      style={style}
+      containerStyle={(_, pressableState) => (
+        pressableResolvers.container(pressableState, containerStyle)
+      )}
+      stateLayerStyle={(_, pressableState) => (
+        pressableResolvers.stateLayer(pressableState)
+      )}
+      textStyle={(_, pressableState) => (
+        pressableResolvers.text(pressableState, textStyle)
+      )}
     >
-      {(pressableState) => {
-        const state = resolveState(pressableState as PressableInteraction)
-        const resolvedText = theme.components.chat.quickReplyChip.text(state, textStyle)
-
-        if (typeof children === 'string' || typeof children === 'number') {
-          return <ThemedText style={resolvedText}>{children}</ThemedText>
-        }
-
-        return children
-      }}
-    </Pressable>
+      {typeof children === 'string' || typeof children === 'number' ? (
+        <ThemedText>{children}</ThemedText>
+      ) : (
+        children
+      )}
+    </ThemedPressable>
   )
 }

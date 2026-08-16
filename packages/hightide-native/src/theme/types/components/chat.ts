@@ -77,12 +77,9 @@ export type ChatSystemLineIconStyle = IconStyle
 export type ChatDateDividerStyle = ViewStyle
 export type ChatDateDividerTextStyle = TextStyle
 
-export type ChatQuickReplyChipState = InteractionState & {
+export type ChatQuickReplyChipState = {
   isActive?: boolean,
 }
-
-export type ChatQuickReplyChipStyle = ViewStyle
-export type ChatQuickReplyChipTextStyle = TextStyle
 
 export type ChatMessageComposerStyle = ViewStyle
 export type ChatMessageComposerInputStyle = ViewStyle & TextStyle
@@ -172,8 +169,23 @@ export type ChatDateDividerThemeResolvers = {
 }
 
 export type ChatQuickReplyChipThemeResolvers = {
-  container: StyleResolverFunction<ChatQuickReplyChipState, ChatQuickReplyChipStyle>,
-  text: StyleResolverFunction<ChatQuickReplyChipState, ChatQuickReplyChipTextStyle>,
+  pressable: StyleResolverFunction<
+    ChatQuickReplyChipState,
+    {
+      container: StyleResolverFunction<
+        PressableState,
+        PressableContainerStyle
+      >,
+      stateLayer: StyleResolverFunction<
+        PressableState,
+        PressableStateLayerStyle
+      >,
+      text: StyleResolverFunction<
+        PressableState,
+        PressableTextStyle
+      >,
+    }
+  >,
 }
 
 export type ChatMessageComposerThemeResolvers = {
