@@ -1,10 +1,8 @@
-import type {
-  ColorPairToken,
-  IconSize
-} from '@helpwave/hightide-design/theme-tokens'
+import type { ColorPairToken } from '@helpwave/hightide-design/theme-tokens'
 import {
   avatarGroupMaxShown,
   avatarGroupOverlap,
+  type AvatarSize,
   type AvatarTokens
 } from '@helpwave/hightide-design/component-token-resolvers'
 
@@ -34,7 +32,7 @@ import {
   type ComponentThemeResolver
 } from '../types/resolver'
 
-const toDesignIconSize = (size?: IconSize | number): IconSize => (
+const toDesignAvatarSize = (size?: AvatarSize | number): AvatarSize => (
   typeof size === 'number' ? 'md' : (size ?? 'md')
 )
 
@@ -122,7 +120,7 @@ export const toAvatarThemeResolvers: ComponentThemeResolver<AvatarThemeResolvers
   componentTokens,
 }) => {
   const resolve = (input: {
-    size?: IconSize | number,
+    size?: AvatarSize | number,
     color?: ColorPairToken,
     status?: AvatarStatus,
     isGrouped?: boolean,
@@ -139,7 +137,7 @@ export const toAvatarThemeResolvers: ComponentThemeResolver<AvatarThemeResolvers
       },
       overrides: {
         color: input.color,
-        size: toDesignIconSize(input.size),
+        size: toDesignAvatarSize(input.size),
       },
       state: {
         status: input.status,

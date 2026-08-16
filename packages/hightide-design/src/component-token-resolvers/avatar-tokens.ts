@@ -1,14 +1,10 @@
 import type { ColorToken } from '../primitive-tokens/color'
 import type { ThemeTokens } from '../theme-tokens/theme-tokens'
-import type {
-  ColorPairToken,
-  IconSize
-} from '../theme-tokens/theme-tokens-config'
+import type { ColorPairToken } from '../theme-tokens/theme-tokens-config'
 import type { ComponentTokenResolver } from './component-token-resolver'
 import type { ContainerTokens } from './container-tokens'
 import type { TextStyleTokens } from './text-style-tokens'
-import type { IconTokens } from './icon-tokens'
-import { iconTokenResolver } from './icon-tokens'
+import { iconTokenResolver, type IconTokens } from './icon-tokens'
 
 export const avatarStatuses = [
   'online',
@@ -19,6 +15,9 @@ export const avatarStatuses = [
 ] as const
 
 export type AvatarStatus = typeof avatarStatuses[number]
+
+export const avatarSizes = ['xs', 'sm', 'md', 'lg', 'xl'] as const
+export type AvatarSize = typeof avatarSizes[number]
 
 export const avatarGroupOverlap = 0.5
 export const avatarGroupMaxShown = 5
@@ -35,12 +34,11 @@ export type AvatarComponentResolverProps = {
   },
   overrides: {
     color?: ColorPairToken,
-    size?: IconSize,
+    size?: AvatarSize,
   },
   state: AvatarState,
 }
 
-// TODO create separate components for AvatarWithStatus, AvatarWithLabel and AvatarGroup
 export type AvatarTokens = {
   container: ContainerTokens,
   text: TextStyleTokens,

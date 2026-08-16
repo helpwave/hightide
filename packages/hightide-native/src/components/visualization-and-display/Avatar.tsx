@@ -16,10 +16,11 @@ import {
 import { HightideIconRegistry } from '../../icons/HightideIconRegistry'
 import { ThemedIcon } from './ThemedIcon'
 import { ThemedText } from './ThemedText'
-import type {
-  ColorPairToken,
-  IconSize
-} from '@helpwave/hightide-design/theme-tokens'
+import {
+  avatarSizes,
+  type AvatarSize as AvatarSizeToken
+} from '@helpwave/hightide-design/component-token-resolvers'
+import type { ColorPairToken } from '@helpwave/hightide-design/theme-tokens'
 
 import { useTheme } from '../../global-contexts/theme/ThemeContext'
 import type {
@@ -38,7 +39,7 @@ import type {
 import { avatarStatuses } from '../../theme/types/components/avatar'
 import type { StyleOverwrite } from '../../theme/types/resolver'
 
-export type AvatarSize = IconSize | number
+export type AvatarSize = AvatarSizeToken | number
 
 type ImageConfig = {
   avatarUrl: string,
@@ -58,7 +59,7 @@ const DefaultAvatarImage: ComponentType<AvatarImageProps> = ({ alt, ...props }) 
 )
 
 export const AvatarUtil = {
-  sizes: ['xs', 'sm', 'md', 'lg', 'xl'] as const satisfies readonly IconSize[],
+  sizes: avatarSizes,
   statuses: avatarStatuses,
 }
 
