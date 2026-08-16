@@ -71,16 +71,26 @@ export const ListActionItem = ({
     >
       {(pressableState) => {
         const state = resolveState(pressableState as PressableInteraction)
+        const resolvedLeadingItemContainerStyle = theme.components.listItem.action.leadingItemContainer(state)
         const resolvedContentStyle = theme.components.listItem.action.content(state)
+        const resolvedTrailingItemContainerStyle = theme.components.listItem.action.trailingItemContainer(state)
         const resolvedLabelStyle = theme.components.listItem.action.titleText(state, labelStyle)
 
         return (
           <Fragment>
-            {leading}
+            {leading != null && (
+              <View style={resolvedLeadingItemContainerStyle}>
+                {leading}
+              </View>
+            )}
             <View style={resolvedContentStyle}>
               <ThemedText style={resolvedLabelStyle}>{label}</ThemedText>
             </View>
-            {trailing}
+            {trailing != null && (
+              <View style={resolvedTrailingItemContainerStyle}>
+                {trailing}
+              </View>
+            )}
           </Fragment>
         )
       }}

@@ -54,8 +54,16 @@ export const ListItem = ({
     () => theme.components.listItem.default.container(state, itemStyle),
     [theme, state, itemStyle]
   )
+  const resolvedLeadingItemContainerStyle = useMemo(
+    () => theme.components.listItem.default.leadingItemContainer(state),
+    [theme, state]
+  )
   const resolvedContentStyle = useMemo(
     () => theme.components.listItem.default.content(state),
+    [theme, state]
+  )
+  const resolvedTrailingItemContainerStyle = useMemo(
+    () => theme.components.listItem.default.trailingItemContainer(state),
     [theme, state]
   )
   const resolvedLabelStyle = useMemo(
@@ -69,12 +77,20 @@ export const ListItem = ({
 
   return (
     <View {...props} style={[resolvedItemStyle, style]}>
-      {leading}
+      {leading != null && (
+        <View style={resolvedLeadingItemContainerStyle}>
+          {leading}
+        </View>
+      )}
       <View style={resolvedContentStyle}>
         <ThemedText style={resolvedLabelStyle}>{label}</ThemedText>
         <ThemedText style={resolvedValueStyle}>{value}</ThemedText>
       </View>
-      {trailing}
+      {trailing != null && (
+        <View style={resolvedTrailingItemContainerStyle}>
+          {trailing}
+        </View>
+      )}
     </View>
   )
 }

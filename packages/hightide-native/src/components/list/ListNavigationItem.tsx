@@ -71,21 +71,29 @@ export const ListNavigationItem = ({
     >
       {(pressableState) => {
         const state = resolveState(pressableState as PressableInteraction)
+        const resolvedLeadingItemContainerStyle = theme.components.listItem.navigation.leadingItemContainer(state)
         const resolvedContentStyle = theme.components.listItem.navigation.content(state)
+        const resolvedTrailingItemContainerStyle = theme.components.listItem.navigation.trailingItemContainer(state)
         const resolvedLabelStyle = theme.components.listItem.navigation.titleText(state, labelStyle)
         const resolvedIcon = theme.components.listItem.navigation.icon(state)
 
         return (
           <Fragment>
-            {leading}
+            {leading != null && (
+              <View style={resolvedLeadingItemContainerStyle}>
+                {leading}
+              </View>
+            )}
             <View style={resolvedContentStyle}>
               <ThemedText style={resolvedLabelStyle}>{label}</ThemedText>
             </View>
-            <ThemedIcon
-              icon={HightideIconRegistry.ChevronRight}
-              size={resolvedIcon.size}
-              color={resolvedIcon.color}
-            />
+            <View style={resolvedTrailingItemContainerStyle}>
+              <ThemedIcon
+                icon={HightideIconRegistry.ChevronRight}
+                size={resolvedIcon.size}
+                color={resolvedIcon.color}
+              />
+            </View>
           </Fragment>
         )
       }}

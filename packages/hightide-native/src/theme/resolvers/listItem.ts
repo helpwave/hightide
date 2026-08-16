@@ -2,18 +2,22 @@ import { toContainerStyle, toTextStyle } from '../adapters/style-adapters'
 import type {
   ListActionItemContentStyle,
   ListActionItemIconStyle,
+  ListActionItemLeadingItemContainerStyle,
   ListActionItemState,
   ListActionItemStyle,
   ListActionItemThemeResolvers,
   ListActionItemTitleStyle,
+  ListActionItemTrailingItemContainerStyle,
   ListItemContentStyle,
   ListItemDefaultThemeResolvers,
   ListItemDescriptionStyle,
   ListItemIconStyle,
+  ListItemLeadingItemContainerStyle,
   ListItemState,
   ListItemStyle,
   ListItemThemeResolvers,
-  ListItemTitleStyle
+  ListItemTitleStyle,
+  ListItemTrailingItemContainerStyle
 } from '../types/components/listItem'
 import {
   createStyleResolver,
@@ -39,10 +43,16 @@ const toListItemDefaultThemeResolvers: ComponentThemeResolver<ListItemDefaultThe
     container: createStyleResolver((state: ListItemState): ListItemStyle => (
       toContainerStyle(resolve(state).container)
     )),
+    leadingItemContainer: createStyleResolver((state: ListItemState): ListItemLeadingItemContainerStyle => (
+      toContainerStyle(resolve(state).leadingItemContainer)
+    )),
     content: createStyleResolver((state: ListItemState): ListItemContentStyle => ({
       ...toContainerStyle(resolve(state).content),
       flex: 1,
     })),
+    trailingItemContainer: createStyleResolver((state: ListItemState): ListItemTrailingItemContainerStyle => (
+      toContainerStyle(resolve(state).trailingItemContainer)
+    )),
     descriptionText: createStyleResolver((state: ListItemState): ListItemDescriptionStyle => (
       toTextStyle(resolve(state).descriptionText)
     )),
@@ -79,10 +89,16 @@ const toListActionItemThemeResolvers: ComponentThemeResolver<ListActionItemTheme
     container: createStyleResolver((state: ListActionItemState): ListActionItemStyle => (
       toContainerStyle(resolve(state).container)
     )),
+    leadingItemContainer: createStyleResolver((state: ListActionItemState): ListActionItemLeadingItemContainerStyle => (
+      toContainerStyle(resolve(state).leadingItemContainer)
+    )),
     content: createStyleResolver((state: ListActionItemState): ListActionItemContentStyle => ({
       ...toContainerStyle(resolve(state).content),
       flex: 1,
     })),
+    trailingItemContainer: createStyleResolver((state: ListActionItemState): ListActionItemTrailingItemContainerStyle => (
+      toContainerStyle(resolve(state).trailingItemContainer)
+    )),
     titleText: createStyleResolver((state: ListActionItemState): ListActionItemTitleStyle => (
       toTextStyle(resolve(state).titleText)
     )),

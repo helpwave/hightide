@@ -16,7 +16,9 @@ export type ListItemComponentResolverProps = {
 
 export type ListItemTokens = {
   container: ContainerTokens,
+  leadingItemContainer: ContainerTokens,
   content: ContainerTokens,
+  trailingItemContainer: ContainerTokens,
   icon: IconTokens,
   titleText: TextStyleTokens,
   descriptionText: TextStyleTokens,
@@ -75,9 +77,18 @@ export const listItemTokenResolver: ListItemTokenResolver = ({
         horizontal: layout.horizontalContentPadding,
       },
       layout: {
-        gap: spacing.md,
         direction: 'horizontal',
         mainAxisAlignment: 'start',
+        crossAxisAligment: 'center',
+      },
+    },
+    leadingItemContainer: {
+      margin: {
+        type: 'logicalSide',
+        inlineEnd: spacing.md,
+      },
+      layout: {
+        direction: 'horizontal',
         crossAxisAligment: 'center',
       },
     },
@@ -90,6 +101,16 @@ export const listItemTokenResolver: ListItemTokenResolver = ({
         direction: 'vertical',
         mainAxisAlignment: 'center',
         crossAxisAligment: 'start',
+      },
+    },
+    trailingItemContainer: {
+      margin: {
+        type: 'logicalSide',
+        inlineStart: spacing.xl,
+      },
+      layout: {
+        direction: 'horizontal',
+        crossAxisAligment: 'center',
       },
     },
     icon: {
