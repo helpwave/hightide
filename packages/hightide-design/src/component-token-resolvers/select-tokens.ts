@@ -30,6 +30,9 @@ export type SelectStateValue =
 export type SelectState = ReadonlySet<SelectStateValue>
 
 export type SelectComponentResolverProps = {
+  config?: {
+    hasSearch?: boolean,
+  },
   overrides?: {
     color?: ColorPairToken,
   },
@@ -59,12 +62,14 @@ export type SelectTokenResolver = ComponentTokenResolver<
 export const selectTokenResolver: SelectTokenResolver = ({
   themeTokens,
   semanticResolvers,
+  config,
   overrides,
   state,
 }) => {
   const { color, spacing, shape, borderWidth, typography } = themeTokens
   const onColor = color.surface.onColor
   const accentPair = overrides?.color ?? color.primary
+  const hasSearch = config?.hasSearch ?? true
   const fadedBorder = semanticResolvers.asFaded({
     themeTokens,
     color: onColor,
@@ -98,7 +103,6 @@ export const selectTokenResolver: SelectTokenResolver = ({
   }).background
   const touchTargetSize = semanticResolvers.touchTargetSize({ themeTokens })
   const menuHeight = touchTargetSize * 6
-  // TODO remove this computation
   const inputPadding = input.container.padding
   const horizontalPadding = inputPadding?.type === 'physicalAxis'
     ? inputPadding.horizontal
@@ -132,9 +136,11 @@ export const selectTokenResolver: SelectTokenResolver = ({
     menu: {
       backgroundColor: color.surfaceVariant.color,
       overflow: 'hidden',
-      size: {
+      size:  hasSearch ? {
         minHeight: menuHeight,
         height: menuHeight,
+      } : {
+        maxHeight: menuHeight,
       },
       shape: {
         borderRadius: { type: 'all', value: shape.borderRadius.lg },

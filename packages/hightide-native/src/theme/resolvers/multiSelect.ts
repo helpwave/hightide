@@ -16,6 +16,7 @@ import type {
 import type {
   SelectEmptyTextStyle,
   SelectHeaderStyle,
+  SelectMenuState,
   SelectMenuStyle,
   SelectOverlayStyle,
   SelectTriggerTextStyle
@@ -40,6 +41,7 @@ type MultiSelectResolveState = {
   hasSelections?: boolean,
   isSelected?: boolean,
   isHighlighted?: boolean,
+  hasSearch?: boolean,
 }
 
 const toDesignMultiSelectState = (
@@ -92,6 +94,9 @@ export const toMultiSelectThemeResolvers: ComponentThemeResolver<MultiSelectThem
   const resolve = (state: MultiSelectResolveState = {}) => componentTokens.multiSelect({
     themeTokens,
     semanticResolvers: semanticTokens,
+    config: {
+      hasSearch: state.hasSearch,
+    },
     overrides: {
       color: state.color,
     },
@@ -123,8 +128,8 @@ export const toMultiSelectThemeResolvers: ComponentThemeResolver<MultiSelectThem
       ...toContainerStyle(resolve().overlay),
       flex: 1,
     })),
-    menu: createSimpleStyleResolver((): SelectMenuStyle => (
-      toContainerStyle(resolve().menu)
+    menu: createStyleResolver((state: SelectMenuState): SelectMenuStyle => (
+      toContainerStyle(resolve({ hasSearch: state.hasSearch }).menu)
     )),
     header: createSimpleStyleResolver((): SelectHeaderStyle => (
       toContainerStyle(resolve().header)

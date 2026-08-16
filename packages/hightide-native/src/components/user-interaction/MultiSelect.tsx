@@ -88,8 +88,8 @@ export const MultiSelect = ({
     [multiSelectTheme]
   )
   const resolvedMenuStyle = useMemo(
-    () => multiSelectTheme.menu({}),
-    [multiSelectTheme]
+    () => multiSelectTheme.menu({ hasSearch: showSearch }),
+    [multiSelectTheme, showSearch]
   )
   const resolvedHeaderStyle = useMemo(
     () => multiSelectTheme.header({}),

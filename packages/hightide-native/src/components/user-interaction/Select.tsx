@@ -95,8 +95,8 @@ export const Select = ({
     [selectTheme]
   )
   const resolvedMenuStyle = useMemo(
-    () => selectTheme.menu({}),
-    [selectTheme]
+    () => selectTheme.menu({ hasSearch: showSearch }),
+    [selectTheme, showSearch]
   )
   const resolvedHeaderStyle = useMemo(
     () => selectTheme.header({}),

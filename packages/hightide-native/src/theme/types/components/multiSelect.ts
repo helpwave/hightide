@@ -6,6 +6,7 @@ import type {
 import type {
   SelectEmptyTextStyle,
   SelectHeaderStyle,
+  SelectMenuState,
   SelectMenuStyle,
   SelectOptionState,
   SelectOverlayStyle,
@@ -38,7 +39,7 @@ export type MultiSelectThemeResolvers = {
   trigger: StyleResolverFunction<MultiSelectState, MultiSelectTriggerStyle>,
   triggerText: StyleResolverFunction<MultiSelectState, SelectTriggerTextStyle>,
   overlay: SimpleStyleResolver<SelectOverlayStyle>,
-  menu: SimpleStyleResolver<SelectMenuStyle>,
+  menu: StyleResolverFunction<SelectMenuState, SelectMenuStyle>,
   header: SimpleStyleResolver<SelectHeaderStyle>,
   option: StyleResolverFunction<MultiSelectOptionState, MultiSelectOptionStyle>,
   optionText: StyleResolverFunction<MultiSelectOptionState, MultiSelectOptionTextStyle>,

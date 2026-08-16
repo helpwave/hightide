@@ -34,6 +34,10 @@ export type SelectIconStyle = {
   color?: Color,
 }
 
+export type SelectMenuState = {
+  hasSearch?: boolean,
+}
+
 export type SelectOverlayStyle = ViewStyle
 
 export type SelectMenuStyle = ViewStyle
@@ -51,7 +55,7 @@ export type SelectThemeResolvers = {
   triggerText: StyleResolverFunction<SelectState, SelectTriggerTextStyle>,
   icon: StyleResolverFunction<SelectState, SelectIconStyle>,
   overlay: SimpleStyleResolver<SelectOverlayStyle>,
-  menu: SimpleStyleResolver<SelectMenuStyle>,
+  menu: StyleResolverFunction<SelectMenuState, SelectMenuStyle>,
   header: SimpleStyleResolver<SelectHeaderStyle>,
   option: StyleResolverFunction<SelectOptionState, SelectOptionStyle>,
   optionText: StyleResolverFunction<SelectOptionState, SelectOptionTextStyle>,

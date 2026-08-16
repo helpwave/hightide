@@ -6,6 +6,7 @@ import { toContainerStyle, toContainerStyleWithStateLayer, toTextStyle } from '.
 import type {
   SelectIconStyle,
   SelectMenuStyle,
+  SelectMenuState,
   SelectHeaderStyle,
   SelectEmptyTextStyle,
   SelectOptionState,
@@ -37,6 +38,7 @@ type SelectResolveState = {
   hasValue?: boolean,
   isSelected?: boolean,
   isHighlighted?: boolean,
+  hasSearch?: boolean,
 }
 
 const toDesignSelectState = (state: SelectResolveState = {}): DesignSelectState => {
@@ -87,6 +89,9 @@ export const toSelectThemeResolvers: ComponentThemeResolver<SelectThemeResolvers
   const resolve = (state: SelectResolveState = {}) => componentTokens.select({
     themeTokens,
     semanticResolvers: semanticTokens,
+    config: {
+      hasSearch: state.hasSearch,
+    },
     overrides: {
       color: state.color,
     },
@@ -127,8 +132,8 @@ export const toSelectThemeResolvers: ComponentThemeResolver<SelectThemeResolvers
       ...toContainerStyle(resolve().overlay),
       flex: 1,
     })),
-    menu: createSimpleStyleResolver((): SelectMenuStyle => (
-      toContainerStyle(resolve().menu)
+    menu: createStyleResolver((state: SelectMenuState): SelectMenuStyle => (
+      toContainerStyle(resolve({ hasSearch: state.hasSearch }).menu)
     )),
     header: createSimpleStyleResolver((): SelectHeaderStyle => (
       toContainerStyle(resolve().header)

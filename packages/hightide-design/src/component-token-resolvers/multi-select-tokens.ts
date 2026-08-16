@@ -35,6 +35,9 @@ export type MultiSelectState = ReadonlySet<MultiSelectStateValue>
 export const multiSelectStateValueSet: ReadonlySet<MultiSelectStateValue> = new Set(multiSelectStateValues)
 
 export type MultiSelectComponentResolverProps = {
+  config?: {
+    hasSearch?: boolean,
+  },
   overrides?: {
     color?: ColorPairToken,
   },
@@ -63,6 +66,7 @@ export type MultiSelectTokenResolver = ComponentTokenResolver<
 export const multiSelectTokenResolver: MultiSelectTokenResolver = ({
   themeTokens,
   semanticResolvers,
+  config,
   overrides,
   state,
 }) => {
@@ -70,6 +74,7 @@ export const multiSelectTokenResolver: MultiSelectTokenResolver = ({
   const checkboxSize = spacing.lg + spacing.xs
   const onColor = color.surface.onColor
   const accentPair = overrides?.color ?? color.primary
+  const hasSearch = config?.hasSearch ?? true
   const fadedBorder = semanticResolvers.asFaded({
     themeTokens,
     color: onColor,
@@ -130,10 +135,12 @@ export const multiSelectTokenResolver: MultiSelectTokenResolver = ({
     },
     menu: {
       backgroundColor: color.surfaceVariant.color,
-      overflow: 'visible',
-      size: {
+      overflow: 'hidden',
+      size: hasSearch ? {
         minHeight: menuHeight,
         height: menuHeight,
+      } : {
+        maxHeight: menuHeight,
       },
       shape: {
         borderRadius: { type: 'all', value: shape.borderRadius.lg },
