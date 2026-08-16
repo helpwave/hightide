@@ -1,7 +1,11 @@
 import type { IconSize } from '@helpwave/hightide-design/theme-tokens'
 import type { IconTokens } from '@helpwave/hightide-design/component-token-resolvers'
 
-import type { AvatarThemeResolvers } from './avatar'
+import type {
+  AvatarGroupThemeResolvers,
+  AvatarThemeResolvers,
+  AvatarWithStatusThemeResolvers
+} from './avatar'
 import type { ButtonThemeResolvers } from './button'
 import type { ChatThemeResolvers } from './chat'
 import type { CheckboxThemeResolvers } from './checkbox'
@@ -35,5 +39,7 @@ export type HightideComponentThemes = {
   divider: DividerThemeResolvers,
   listItem: ListItemThemeResolvers,
   avatar: AvatarThemeResolvers,
+  avatarWithStatus: AvatarWithStatusThemeResolvers,
+  avatarGroup: AvatarGroupThemeResolvers,
   icon: IconThemeResolvers,
 }

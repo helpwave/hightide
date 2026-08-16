@@ -8,7 +8,11 @@ import {
 } from '@helpwave/hightide-design/semantic-token-resolvers'
 import type { ThemeLayoutSize, ThemeTokens, ThemeTypographySize } from '@helpwave/hightide-design/theme-tokens'
 
-import { toAvatarThemeResolvers } from '../resolvers/avatar'
+import {
+  toAvatarGroupThemeResolvers,
+  toAvatarThemeResolvers,
+  toAvatarWithStatusThemeResolvers
+} from '../resolvers/avatar'
 import { toButtonThemeResolvers } from '../resolvers/button'
 import { toCardThemeResolvers } from '../resolvers/card'
 import { toChatThemeResolvers } from '../resolvers/chat/chat-theme'
@@ -195,6 +199,16 @@ export const createHightideTheme = (themeTokens: ThemeTokens): HightideTheme => 
       componentTokens: componentTokenResolvers,
     }),
     avatar: toAvatarThemeResolvers({
+      themeTokens,
+      semanticTokens: hightideSemanticTokenResolvers,
+      componentTokens: componentTokenResolvers,
+    }),
+    avatarWithStatus: toAvatarWithStatusThemeResolvers({
+      themeTokens,
+      semanticTokens: hightideSemanticTokenResolvers,
+      componentTokens: componentTokenResolvers,
+    }),
+    avatarGroup: toAvatarGroupThemeResolvers({
       themeTokens,
       semanticTokens: hightideSemanticTokenResolvers,
       componentTokens: componentTokenResolvers,

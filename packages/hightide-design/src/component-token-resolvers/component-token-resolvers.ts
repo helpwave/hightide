@@ -1,6 +1,10 @@
 import {
+  avatarGroupTokenResolver,
   avatarTokenResolver,
-  type AvatarTokenResolver
+  avatarWithStatusTokenResolver,
+  type AvatarGroupTokenResolver,
+  type AvatarTokenResolver,
+  type AvatarWithStatusTokenResolver
 } from './avatar-tokens'
 import {
   buttonTokenResolver,
@@ -75,6 +79,8 @@ export type ComponentTokenResolvers = {
   divider: DividerTokenResolver,
   listItem: ListItemTokenResolvers,
   avatar: AvatarTokenResolver,
+  avatarWithStatus: AvatarWithStatusTokenResolver,
+  avatarGroup: AvatarGroupTokenResolver,
   icon: IconTokenResolver,
   chat: ChatTokenResolvers,
 }
@@ -94,6 +100,8 @@ export const componentTokenResolvers: ComponentTokenResolvers = {
   divider: dividerTokenResolver,
   listItem: listItemTokenResolvers,
   avatar: avatarTokenResolver,
+  avatarWithStatus: avatarWithStatusTokenResolver,
+  avatarGroup: avatarGroupTokenResolver,
   icon: iconTokenResolver,
   chat: chatTokenResolvers,
 }

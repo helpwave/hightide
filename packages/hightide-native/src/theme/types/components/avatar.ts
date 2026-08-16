@@ -26,15 +26,13 @@ export type AvatarState = {
 
 export type AvatarWithStatusState = {
   size?: AvatarSize | number,
+  color?: ColorPairToken,
   status?: AvatarStatus,
-}
-
-export type AvatarWithLabelState = {
-  size?: AvatarSize | number,
 }
 
 export type AvatarGroupState = {
   size?: AvatarSize | number,
+  color?: ColorPairToken,
   count?: number,
 }
 
@@ -48,34 +46,33 @@ export type AvatarIconStyle = IconStyle
 
 export type AvatarStatusDotStyle = ViewStyle
 
-export type AvatarWithStatusContainerStyle = ViewStyle
-
-export type AvatarWithLabelContainerStyle = ViewStyle
-
-export type AvatarWithLabelTextStyle = TextStyle
-
 export type AvatarGroupContainerStyle = ViewStyle
 
 export type AvatarGroupStackStyle = ViewStyle
 
-export type AvatarGroupMoreStyle = TextStyle
+export type AvatarGroupTextStyle = TextStyle
 
 export type AvatarThemeResolvers = {
   container: StyleResolverFunction<AvatarState, AvatarStyle>,
   image: StyleResolverFunction<AvatarState, AvatarImageStyle>,
   text: StyleResolverFunction<AvatarState, AvatarTextStyle>,
   icon: StyleResolverFunction<AvatarState, AvatarIconStyle>,
-  withStatus: {
-    container: StyleResolverFunction<AvatarWithStatusState, AvatarWithStatusContainerStyle>,
-    statusDot: StyleResolverFunction<AvatarWithStatusState, AvatarStatusDotStyle>,
-  },
-  withLabel: {
-    container: StyleResolverFunction<AvatarWithLabelState, AvatarWithLabelContainerStyle>,
-    text: StyleResolverFunction<AvatarWithLabelState, AvatarWithLabelTextStyle>,
-  },
-  group: {
-    container: StyleResolverFunction<AvatarGroupState, AvatarGroupContainerStyle>,
-    stack: StyleResolverFunction<AvatarGroupState, AvatarGroupStackStyle>,
-    more: StyleResolverFunction<AvatarGroupState, AvatarGroupMoreStyle>,
-  },
+}
+
+export type AvatarWithStatusThemeResolvers = {
+  avatar: StyleResolverFunction<
+    AvatarWithStatusState,
+    AvatarThemeResolvers
+  >,
+  statusDot: StyleResolverFunction<AvatarWithStatusState, AvatarStatusDotStyle>,
+}
+
+export type AvatarGroupThemeResolvers = {
+  avatar: StyleResolverFunction<
+    AvatarGroupState,
+    AvatarThemeResolvers
+  >,
+  container: StyleResolverFunction<AvatarGroupState, AvatarGroupContainerStyle>,
+  avatarStack: StyleResolverFunction<AvatarGroupState, AvatarGroupStackStyle>,
+  text: StyleResolverFunction<AvatarGroupState, AvatarGroupTextStyle>,
 }

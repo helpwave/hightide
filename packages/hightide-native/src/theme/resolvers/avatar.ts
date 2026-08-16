@@ -2,6 +2,7 @@ import type { ColorPairToken } from '@helpwave/hightide-design/theme-tokens'
 import {
   avatarGroupMaxShown,
   avatarGroupOverlap,
+  type AvatarOverrideTokens,
   type AvatarSize,
   type AvatarTokens
 } from '@helpwave/hightide-design/component-token-resolvers'
@@ -9,22 +10,19 @@ import {
 import { toContainerStyle, toTextStyle } from '../adapters/style-adapters'
 import type {
   AvatarGroupContainerStyle,
-  AvatarGroupMoreStyle,
   AvatarGroupStackStyle,
   AvatarGroupState,
+  AvatarGroupTextStyle,
+  AvatarGroupThemeResolvers,
   AvatarIconStyle,
   AvatarImageStyle,
   AvatarState,
-  AvatarStatus,
   AvatarStatusDotStyle,
   AvatarStyle,
   AvatarTextStyle,
   AvatarThemeResolvers,
-  AvatarWithLabelContainerStyle,
-  AvatarWithLabelState,
-  AvatarWithLabelTextStyle,
-  AvatarWithStatusContainerStyle,
-  AvatarWithStatusState
+  AvatarWithStatusState,
+  AvatarWithStatusThemeResolvers
 } from '../types/components/avatar'
 import {
   createStyleResolver,
@@ -36,18 +34,45 @@ const toDesignAvatarSize = (size?: AvatarSize | number): AvatarSize => (
   typeof size === 'number' ? 'md' : (size ?? 'md')
 )
 
+const mergeAvatarTokens = (
+  base: AvatarTokens,
+  override?: AvatarOverrideTokens
+): AvatarTokens => ({
+  container: {
+    ...base.container,
+    ...override?.container,
+    size: {
+      ...base.container.size,
+      ...override?.container?.size,
+    },
+    shape: {
+      ...base.container.shape,
+      ...override?.container?.shape,
+    },
+    layout: {
+      ...base.container.layout,
+      ...override?.container?.layout,
+    },
+    decoration: {
+      ...base.container.decoration,
+      ...override?.container?.decoration,
+    },
+  },
+  text: {
+    ...base.text,
+    ...override?.text,
+  },
+  icon: {
+    ...base.icon,
+    ...override?.icon,
+  },
+})
+
 const withNumericAvatarSize = (
   tokens: AvatarTokens,
-  size: number,
-  groupCount?: number
+  size: number
 ): AvatarTokens => {
   const borderRadius = size / 2
-  const statusDotSize = Math.round(size / 10 * 4)
-  const visibleCount = Math.min(
-    avatarGroupMaxShown,
-    groupCount ?? avatarGroupMaxShown
-  )
-  const stackWidth = size * (avatarGroupOverlap * Math.max(visibleCount - 1, 0) + 1)
 
   return {
     ...tokens,
@@ -70,204 +95,287 @@ const withNumericAvatarSize = (
       ...tokens.icon,
       size,
     },
-    withStatus: {
-      container: {
-        ...tokens.withStatus.container,
-        size: {
-          width: size,
-          height: size,
-        },
-      },
-      statusDot: {
-        ...tokens.withStatus.statusDot,
-        size: {
-          width: statusDotSize,
-          height: statusDotSize,
-        },
-        shape: {
-          ...tokens.withStatus.statusDot.shape,
-          borderRadius: { type: 'all', value: statusDotSize / 2 },
-        },
-      },
-    },
-    group: {
-      ...tokens.group,
-      container: {
-        ...tokens.group.container,
-        size: {
-          ...tokens.group.container.size,
-          height: size,
-        },
-      },
-      stack: {
-        ...tokens.group.stack,
-        size: {
-          width: stackWidth,
-          height: size,
-        },
-      },
-      moreText: {
-        ...tokens.group.moreText,
-        fontSize: size * 2 / 3,
-      },
-    },
   }
 }
+
+const createAvatarStyleResolvers = (
+  resolveTokens: (state: AvatarState) => AvatarTokens,
+  themeTokens: {
+    icongraphy: { sizes: Record<AvatarSize, number>, strokeWidth: number },
+    color: { primary: { onColor: string } },
+  }
+): AvatarThemeResolvers => ({
+  container: createStyleResolver((state: AvatarState): AvatarStyle => {
+    const { container } = resolveTokens(state)
+    const width = typeof container.size?.width === 'number'
+      ? container.size.width
+      : 0
+    const groupIndex = state.groupIndex ?? 0
+
+    return {
+      ...toContainerStyle(container),
+      position: state.isGrouped ? 'absolute' : 'relative',
+      overflow: 'hidden',
+      ...(state.isGrouped ? {
+        left: groupIndex * width * avatarGroupOverlap,
+        zIndex: avatarGroupMaxShown - groupIndex,
+      } : {}),
+    }
+  }),
+  image: createStyleResolver((state: AvatarState): AvatarImageStyle => {
+    const { container } = resolveTokens(state)
+    const width = container.size?.width
+    const height = container.size?.height
+    const borderRadius = container.shape?.borderRadius
+
+    return {
+      position: 'absolute',
+      left: 0,
+      top: 0,
+      width,
+      height,
+      borderRadius: borderRadius?.type === 'all'
+        ? borderRadius.value
+        : undefined,
+    }
+  }),
+  text: createStyleResolver((state: AvatarState): AvatarTextStyle => ({
+    ...toTextStyle(resolveTokens(state).text),
+    textAlign: 'center',
+  })),
+  icon: createValueResolver((state: AvatarState): AvatarIconStyle => {
+    const { icon } = resolveTokens(state)
+
+    return {
+      size: icon.size ?? themeTokens.icongraphy.sizes.md,
+      strokeWidth: icon.strokeWidth ?? themeTokens.icongraphy.strokeWidth,
+      color: icon.color ?? themeTokens.color.primary.onColor,
+    }
+  }),
+})
 
 export const toAvatarThemeResolvers: ComponentThemeResolver<AvatarThemeResolvers> = ({
   themeTokens,
   semanticTokens,
   componentTokens,
 }) => {
-  const resolve = (input: {
-    size?: AvatarSize | number,
-    color?: ColorPairToken,
-    status?: AvatarStatus,
-    isGrouped?: boolean,
-    groupIndex?: number,
-    groupCount?: number,
-  } = {}) => {
+  const resolveTokens = (state: AvatarState): AvatarTokens => {
     const tokens = componentTokens.avatar({
       themeTokens,
       semanticResolvers: semanticTokens,
       config: {
-        isGrouped: input.isGrouped,
-        groupIndex: input.groupIndex,
-        groupCount: input.groupCount,
+        isGrouped: state.isGrouped,
+        groupIndex: state.groupIndex,
       },
       overrides: {
-        color: input.color,
-        size: toDesignAvatarSize(input.size),
-      },
-      state: {
-        status: input.status,
+        color: state.color,
+        size: toDesignAvatarSize(state.size),
       },
     })
 
-    if (typeof input.size === 'number') {
-      return withNumericAvatarSize(tokens, input.size, input.groupCount)
+    if (typeof state.size === 'number') {
+      return withNumericAvatarSize(tokens, state.size)
     }
 
     return tokens
   }
 
+  return createAvatarStyleResolvers(resolveTokens, themeTokens)
+}
+
+export const toAvatarWithStatusThemeResolvers: ComponentThemeResolver<
+  AvatarWithStatusThemeResolvers
+> = ({
+  themeTokens,
+  semanticTokens,
+  componentTokens,
+}) => {
+  const resolve = (state: AvatarWithStatusState = {}) => componentTokens.avatarWithStatus({
+    themeTokens,
+    semanticResolvers: semanticTokens,
+    overrides: {
+      color: state.color,
+      size: toDesignAvatarSize(state.size),
+    },
+    state: {
+      status: state.status,
+    },
+  })
+
   return {
-    container: createStyleResolver((state: AvatarState): AvatarStyle => {
-      const tokens = resolve({
-        size: state.size,
-        isGrouped: state.isGrouped,
-        groupIndex: state.groupIndex,
-        color: state.color,
-      })
-      const { container } = tokens
-      const width = typeof container.size?.width === 'number'
-        ? container.size.width
-        : 0
-      const groupIndex = state.groupIndex ?? 0
+    avatar: createValueResolver((state: AvatarWithStatusState) => {
+      const { avatarOverride } = resolve(state)
 
-      return {
-        ...toContainerStyle(container),
-        position: state.isGrouped ? 'absolute' : 'relative',
-        overflow: 'hidden',
-        ...(state.isGrouped ? {
-          left: groupIndex * width * avatarGroupOverlap,
-          zIndex: avatarGroupMaxShown - groupIndex,
-        } : {}),
-      }
-    }),
-    image: createStyleResolver((state: AvatarState): AvatarImageStyle => {
-      const { container } = resolve({ size: state.size, color: state.color })
-      const width = container.size?.width
-      const height = container.size?.height
-      const borderRadius = container.shape?.borderRadius
+      const resolveTokens = (avatarState: AvatarState): AvatarTokens => {
+        const tokens = mergeAvatarTokens(
+          componentTokens.avatar({
+            themeTokens,
+            semanticResolvers: semanticTokens,
+            config: {
+              isGrouped: avatarState.isGrouped,
+              groupIndex: avatarState.groupIndex,
+            },
+            overrides: {
+              color: avatarState.color ?? avatarOverride.overrides?.color,
+              size: toDesignAvatarSize(avatarState.size ?? avatarOverride.overrides?.size),
+            },
+          }),
+          avatarOverride
+        )
 
-      return {
-        position: 'absolute',
-        left: 0,
-        top: 0,
-        width,
-        height,
-        borderRadius: borderRadius?.type === 'all'
-          ? borderRadius.value
-          : undefined,
-      }
-    }),
-    text: createStyleResolver((state: AvatarState): AvatarTextStyle => ({
-      ...toTextStyle(resolve({ size: state.size, color: state.color }).text),
-      textAlign: 'center',
-    })),
-    icon: createValueResolver((state: AvatarState): AvatarIconStyle => {
-      const { icon } = resolve({ size: state.size, color: state.color })
-
-      return {
-        size: icon.size ?? themeTokens.icongraphy.sizes.md,
-        strokeWidth: icon.strokeWidth ?? themeTokens.icongraphy.strokeWidth,
-        color: icon.color ?? themeTokens.color.primary.onColor,
-      }
-    }),
-    withStatus: {
-      container: createStyleResolver((state: AvatarWithStatusState): AvatarWithStatusContainerStyle => {
-        const { container } = resolve({ size: state.size }).withStatus
-        const width = container.size?.width
-        const height = container.size?.height
-
-        return {
-          ...toContainerStyle(container),
-          position: 'relative',
-          minWidth: width,
-          maxWidth: width,
-          minHeight: height,
-          maxHeight: height,
+        const size = avatarState.size ?? state.size
+        if (typeof size === 'number') {
+          return withNumericAvatarSize(tokens, size)
         }
-      }),
-      statusDot: createStyleResolver((state: AvatarWithStatusState): AvatarStatusDotStyle => ({
-        ...toContainerStyle(resolve({ size: state.size, status: state.status }).withStatus.statusDot),
+
+        return tokens
+      }
+
+      return createAvatarStyleResolvers(resolveTokens, themeTokens)
+    }),
+    statusDot: createStyleResolver((state: AvatarWithStatusState): AvatarStatusDotStyle => {
+      const tokens = resolve(state)
+      const statusDot = tokens.statusDot
+      const size = typeof state.size === 'number'
+        ? Math.round(state.size / 10 * 4)
+        : undefined
+
+      return {
+        ...toContainerStyle(
+          size === undefined
+            ? statusDot
+            : {
+              ...statusDot,
+              size: {
+                width: size,
+                height: size,
+              },
+              shape: {
+                ...statusDot.shape,
+                borderRadius: { type: 'all', value: size / 2 },
+              },
+            }
+        ),
         position: 'absolute',
         right: 0,
         bottom: 0,
         zIndex: 1,
-      })),
-    },
-    withLabel: {
-      container: createStyleResolver((state: AvatarWithLabelState): AvatarWithLabelContainerStyle => ({
-        ...toContainerStyle(resolve({ size: state.size }).withLabel.container),
-        flexDirection: 'row',
-        alignItems: 'center',
-      })),
-      text: createStyleResolver((state: AvatarWithLabelState): AvatarWithLabelTextStyle => {
-        const { text } = resolve({ size: state.size }).withLabel
+      }
+    }),
+  }
+}
 
-        return {
-          ...toTextStyle(text),
-          flexShrink: 1,
-        }
-      }),
+export const toAvatarGroupThemeResolvers: ComponentThemeResolver<
+  AvatarGroupThemeResolvers
+> = ({
+  themeTokens,
+  semanticTokens,
+  componentTokens,
+}) => {
+  const resolve = (state: AvatarGroupState = {}) => componentTokens.avatarGroup({
+    themeTokens,
+    semanticResolvers: semanticTokens,
+    config: {
+      groupCount: state.count,
     },
-    group: {
-      container: createStyleResolver((state: AvatarGroupState): AvatarGroupContainerStyle => ({
-        ...toContainerStyle(resolve({ size: state.size, groupCount: state.count }).group.container),
-        flexDirection: 'row',
-        alignItems: 'center',
-        alignSelf: 'flex-start',
-      })),
-      stack: createStyleResolver((state: AvatarGroupState): AvatarGroupStackStyle => {
-        const { stack } = resolve({ size: state.size, groupCount: state.count }).group
-        const width = stack.size?.width
-        const height = stack.size?.height
+    overrides: {
+      color: state.color,
+      size: toDesignAvatarSize(state.size),
+    },
+  })
 
-        return {
-          ...toContainerStyle(stack),
-          position: 'relative',
-          minWidth: width,
-          maxWidth: width,
-          minHeight: height,
-          maxHeight: height,
+  return {
+    avatar: createValueResolver((state: AvatarGroupState) => {
+      const { avatarOverride } = resolve(state)
+
+      const resolveTokens = (avatarState: AvatarState): AvatarTokens => {
+        const tokens = mergeAvatarTokens(
+          componentTokens.avatar({
+            themeTokens,
+            semanticResolvers: semanticTokens,
+            config: {
+              isGrouped: true,
+              groupIndex: avatarState.groupIndex,
+            },
+            overrides: {
+              color: avatarState.color ?? avatarOverride.overrides?.color,
+              size: toDesignAvatarSize(avatarState.size ?? avatarOverride.overrides?.size),
+            },
+          }),
+          avatarOverride
+        )
+
+        const size = avatarState.size ?? state.size
+        if (typeof size === 'number') {
+          return withNumericAvatarSize(tokens, size)
         }
-      }),
-      more: createStyleResolver((state: AvatarGroupState): AvatarGroupMoreStyle => ({
-        ...toTextStyle(resolve({ size: state.size, groupCount: state.count }).group.moreText),
+
+        return tokens
+      }
+
+      return createAvatarStyleResolvers(resolveTokens, themeTokens)
+    }),
+    container: createStyleResolver((state: AvatarGroupState): AvatarGroupContainerStyle => {
+      const tokens = resolve(state)
+      let container = tokens.container
+
+      if (typeof state.size === 'number') {
+        container = {
+          ...container,
+          size: {
+            ...container.size,
+            height: state.size,
+          },
+        }
+      }
+
+      return toContainerStyle(container)
+    }),
+    avatarStack: createStyleResolver((state: AvatarGroupState): AvatarGroupStackStyle => {
+      const tokens = resolve(state)
+      let avatarStack = tokens.avatarStack
+
+      if (typeof state.size === 'number') {
+        const visibleCount = Math.min(
+          avatarGroupMaxShown,
+          state.count ?? avatarGroupMaxShown
+        )
+        const stackWidth = state.size * (avatarGroupOverlap * Math.max(visibleCount - 1, 0) + 1)
+        avatarStack = {
+          ...avatarStack,
+          size: {
+            width: stackWidth,
+            height: state.size,
+          },
+        }
+      }
+
+      const width = avatarStack.size?.width
+      const height = avatarStack.size?.height
+
+      return {
+        ...toContainerStyle(avatarStack),
+        position: 'relative',
+        minWidth: width,
+        maxWidth: width,
+        minHeight: height,
+        maxHeight: height,
+      }
+    }),
+    text: createStyleResolver((state: AvatarGroupState): AvatarGroupTextStyle => {
+      const { text } = resolve(state)
+
+      return {
+        ...toTextStyle(
+          typeof state.size === 'number'
+            ? {
+              ...text,
+              fontSize: state.size * 2 / 3,
+            }
+            : text
+        ),
         flexShrink: 1,
-      })),
-    },
+      }
+    }),
   }
 }

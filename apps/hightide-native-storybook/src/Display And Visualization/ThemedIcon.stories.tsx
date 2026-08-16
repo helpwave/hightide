@@ -3,7 +3,9 @@ import type {
   StoryObj
 } from '@storybook/react-native'
 import { action } from 'storybook/actions'
+import { View } from 'react-native'
 
+import { iconSizes } from '@helpwave/hightide-design/theme-tokens'
 import { HightideIconRegistry } from '@helpwave/hightide-native/icons'
 import {
   ThemedIcon,
@@ -17,7 +19,6 @@ import {
   StorybookHelper
 } from '../helper'
 
-const iconSizes = ['sm', 'md', 'lg', 'xl'] as const
 const iconAppearances = ['normal', 'subtle', 'faded'] as const
 
 const meta = {
@@ -25,7 +26,7 @@ const meta = {
   argTypes: {
     size: {
       control: 'select',
-      options: iconSizes,
+      options: [...iconSizes],
     },
     appearance: {
       control: 'select',
@@ -38,21 +39,24 @@ export default meta
 type Story = StoryObj<typeof meta>
 
 const ThemedIconDemo = ({
-  size,
   appearance,
 }: {
-  size: typeof iconSizes[number],
   appearance: typeof iconAppearances[number],
 }) => {
   const { theme } = useTheme()
 
   return (
-    <ThemedIcon
-      icon={HightideIconRegistry.Plus}
-      size={size}
-      appearance={appearance}
-      color={theme.colors.background.onColor}
-    />
+    <View style={{ flexDirection: 'row', alignItems: 'center', gap: theme.spacing.lg }}>
+      {iconSizes.map((size) => (
+        <ThemedIcon
+          key={size}
+          icon={HightideIconRegistry.Plus}
+          size={size}
+          appearance={appearance}
+          color={theme.colors.background.onColor}
+        />
+      ))}
+    </View>
   )
 }
 
@@ -62,9 +66,8 @@ export const themedIcon: Story = {
     size: 'md',
     appearance: 'normal',
   },
-  render: ({ size, appearance }) => (
+  render: ({ appearance }) => (
     <ThemedIconDemo
-      size={(size ?? 'md') as typeof iconSizes[number]}
       appearance={(appearance ?? 'normal') as typeof iconAppearances[number]}
     />
   ),

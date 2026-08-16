@@ -22,52 +22,25 @@ export type AvatarSize = typeof avatarSizes[number]
 export const avatarGroupOverlap = 0.5
 export const avatarGroupMaxShown = 5
 
-export type AvatarState = {
-  status?: AvatarStatus,
-}
-
 export type AvatarComponentResolverProps = {
-  config: {
+  config?: {
     isGrouped?: boolean,
     groupIndex?: number,
-    groupCount?: number,
   },
-  overrides: {
+  overrides?: {
     color?: ColorPairToken,
     size?: AvatarSize,
   },
-  state: AvatarState,
 }
 
 export type AvatarTokens = {
   container: ContainerTokens,
   text: TextStyleTokens,
   icon: IconTokens,
-  withStatus: {
-    container: ContainerTokens,
-    statusDot: ContainerTokens,
-  },
-  withLabel: {
-    container: ContainerTokens,
-    text: TextStyleTokens,
-  },
-  group: {
-    container: ContainerTokens,
-    stack: ContainerTokens,
-    moreText: TextStyleTokens,
-  },
 }
 
-const statusColors = (themeTokens: ThemeTokens): Record<AvatarStatus, ColorToken> => {
-  const { color } = themeTokens
-
-  return {
-    online: color.positive.color,
-    busy: color.negative.color,
-    away: color.warning.color,
-    offline: color.disabled.color,
-    unknown: color.disabled.color,
-  }
+export type AvatarOverrideTokens = Partial<AvatarTokens> & {
+  overrides?: AvatarComponentResolverProps['overrides'],
 }
 
 export type AvatarTokenResolver = ComponentTokenResolver<
@@ -80,12 +53,10 @@ export const avatarTokenResolver: AvatarTokenResolver = ({
   semanticResolvers,
   config,
   overrides,
-  state,
 }) => {
-  const size = overrides.size ?? 'md'
-  const status = state.status ?? 'unknown'
-  const { color, spacing, borderWidth, typography, elevation } = themeTokens
-  const colorPair = overrides.color ?? color.primary
+  const size = overrides?.size ?? 'md'
+  const { color, typography, elevation } = themeTokens
+  const colorPair = overrides?.color ?? color.primary
   const iconTokens = iconTokenResolver({
     themeTokens,
     semanticResolvers,
@@ -93,11 +64,7 @@ export const avatarTokenResolver: AvatarTokenResolver = ({
   })
   const dimension = themeTokens.icongraphy.sizes[size]
   const borderRadius = dimension / 2
-  const statusDotSize = Math.round(dimension / 10 * 4)
   const raised = elevation.level1
-  const gap = spacing.sm
-  const visibleCount = Math.min(config.groupCount ?? avatarGroupMaxShown, avatarGroupMaxShown)
-  const stackWidth = dimension * (avatarGroupOverlap * Math.max(visibleCount - 1, 0) + 1)
 
   return {
     container: {
@@ -121,7 +88,7 @@ export const avatarTokenResolver: AvatarTokenResolver = ({
         mainAxisAlignment: 'center',
         crossAxisAligment: 'center',
       },
-      ...(config.isGrouped ? {
+      ...(config?.isGrouped ? {
         decoration: {
           shadow: raised,
         },
@@ -137,60 +104,151 @@ export const avatarTokenResolver: AvatarTokenResolver = ({
       strokeWidth: iconTokens.strokeWidth,
       color: colorPair.onColor,
     },
-    withStatus: {
-      container: {
-        size: {
-          width: dimension,
-          height: dimension,
+  }
+}
+
+export type AvatarWithStatusState = {
+  status?: AvatarStatus,
+}
+
+export type AvatarWithStatusComponentResolverProps = {
+  overrides?: {
+    color?: ColorPairToken,
+    size?: AvatarSize,
+  },
+  state: AvatarWithStatusState,
+}
+
+export type AvatarWithStatusTokens = {
+  avatarOverride: AvatarOverrideTokens,
+  statusDot: ContainerTokens,
+}
+
+export type AvatarWithStatusTokenResolver = ComponentTokenResolver<
+  AvatarWithStatusComponentResolverProps,
+  AvatarWithStatusTokens
+>
+
+const statusColors = (themeTokens: ThemeTokens): Record<AvatarStatus, ColorToken> => {
+  const { color } = themeTokens
+
+  return {
+    online: color.positive.color,
+    busy: color.negative.color,
+    away: color.warning.color,
+    offline: color.disabled.color,
+    unknown: color.disabled.color,
+  }
+}
+
+export const avatarWithStatusTokenResolver: AvatarWithStatusTokenResolver = ({
+  themeTokens,
+  overrides,
+  state,
+}) => {
+  const size = overrides?.size ?? 'md'
+  const status = state.status ?? 'unknown'
+  const { color, borderWidth } = themeTokens
+  const dimension = themeTokens.icongraphy.sizes[size]
+  const statusDotSize = Math.round(dimension / 10 * 4)
+
+  return {
+    avatarOverride: {
+      overrides: {
+        color: overrides?.color,
+        size,
+      },
+    },
+    statusDot: {
+      backgroundColor: statusColors(themeTokens)[status],
+      border: {
+        width: {
+          type: 'all',
+          value: borderWidth.thin,
+        },
+        color: {
+          type: 'all',
+          value: color.background.color,
         },
       },
-      statusDot: {
-        backgroundColor: statusColors(themeTokens)[status],
-        border: {
-          width: {
-            type: 'all',
-            value: borderWidth.thin,
-          },
-          color: {
-            type: 'all',
-            value: color.background.color,
-          },
-        },
-        size: {
-          width: statusDotSize,
-          height: statusDotSize,
-        },
-        shape: {
-          borderRadius: { type: 'all', value: statusDotSize / 2 },
+      size: {
+        width: statusDotSize,
+        height: statusDotSize,
+      },
+      shape: {
+        borderRadius: { type: 'all', value: statusDotSize / 2 },
+      },
+    },
+  }
+}
+
+export type AvatarGroupComponentResolverProps = {
+  config: {
+    groupCount?: number,
+  },
+  overrides?: {
+    color?: ColorPairToken,
+    size?: AvatarSize,
+  },
+}
+
+export type AvatarGroupTokens = {
+  avatarOverride: AvatarOverrideTokens,
+  container: ContainerTokens,
+  avatarStack: ContainerTokens,
+  text: TextStyleTokens,
+}
+
+export type AvatarGroupTokenResolver = ComponentTokenResolver<
+  AvatarGroupComponentResolverProps,
+  AvatarGroupTokens
+>
+
+export const avatarGroupTokenResolver: AvatarGroupTokenResolver = ({
+  themeTokens,
+  config,
+  overrides,
+}) => {
+  const size = overrides?.size ?? 'md'
+  const { color, spacing, elevation } = themeTokens
+  const dimension = themeTokens.icongraphy.sizes[size]
+  const visibleCount = Math.min(config.groupCount ?? avatarGroupMaxShown, avatarGroupMaxShown)
+  const stackWidth = dimension * (avatarGroupOverlap * Math.max(visibleCount - 1, 0) + 1)
+  const raised = elevation.level1
+  const gap = spacing.sm
+
+  return {
+    avatarOverride: {
+      overrides: {
+        color: overrides?.color,
+        size,
+      },
+      container: {
+        decoration: {
+          shadow: raised,
         },
       },
     },
-    withLabel: {
-      container: {
-        layout: { gap },
+    container: {
+      size: {
+        height: dimension,
       },
-      text: {
-        ...typography.body.md,
-        color: color.background.onColor,
+      layout: {
+        direction: 'horizontal',
+        crossAxisAligment: 'center',
+        alignSelf: 'start',
+        gap,
       },
     },
-    group: {
-      container: {
-        size: {
-          height: dimension,
-        },
-        layout: { gap },
+    avatarStack: {
+      size: {
+        width: stackWidth,
+        height: dimension,
       },
-      stack: {
-        size: {
-          width: stackWidth,
-          height: dimension,
-        },
-      },
-      moreText: {
-        fontSize: dimension * 2 / 3,
-        color: color.background.onColor,
-      },
+    },
+    text: {
+      fontSize: dimension * 2 / 3,
+      color: color.background.onColor,
     },
   }
 }
