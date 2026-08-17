@@ -5,6 +5,34 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/)
 and adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [0.1.1] - 2026-08-17
+
+### Changed
+
+- `FontWeightToken` is now a numeric union (`100 | 200 | … | 900`) instead of string literals (`'100' | …`); default typography weights use numbers
+
+## [0.1.0] - 2026-08-17
+
+### Added
+
+- Layered token pipeline with package exports for `primitive-tokens`, `theme-tokens`, `semantic-token-resolvers`, `component-token-resolvers`, `design-system`, and `utils`
+- Semantic token resolvers (coloring, pressable state layers, control / element layout, touch target size, and related helpers)
+- Component token resolvers for buttons, chips, inputs, selects, multi-select, checkbox, switch, search bar, avatars, list items, pressable, chat, and related surfaces
+- Shared container, text, and icon token shapes used across component resolvers
+
+### Changed
+
+- Restructured the package around primitive → theme → semantic → component token layers (replacing the previous `tokens` / `types` layout)
+- Separated theme colors from semantic color schemes; component tokens resolve through semantic resolvers
+- Unified component styling around container / text / icon tokens with clearer focus vs focus-visible and state-layer behavior
+- Split avatar tokens into `Avatar`, `AvatarWithStatus`, and `AvatarGroup`
+- Refined sizing, padding, border, shadow, typography, and chat / list / form control tokens
+
+### Removed
+
+- Breakpoints and motion tokens from the design system
+- Previous `@helpwave/hightide-design/types` and `@helpwave/hightide-design/tokens` export surfaces in favor of the new subpaths
+
 ## [0.0.6] - 2026-07-24
 
 ### Changed

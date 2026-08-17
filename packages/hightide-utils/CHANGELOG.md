@@ -5,6 +5,18 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/)
 and adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [0.1.0] - 2026-08-17
+
+### Added
+
+- Debug context (`DebugProvider`, `useDebugContext`) with hit-box visualization config under `@helpwave/hightide-utils/context/debug`
+
+### Changed
+
+- Missing `fallbackTheme` in `useCreateThemeConfig` now logs a warning instead of `console.log`
+- Store decode failures in `useSimpleStoreSyncedValue` now log a warning with context
+- Aligned React / `@types/react` (and added `react-dom` / `@types/react-dom`) with the monorepo React 19.0 line
+
 ## [0.0.5] - 2026-07-23
 
 ### Removed

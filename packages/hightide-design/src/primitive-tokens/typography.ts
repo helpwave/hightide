@@ -15,7 +15,7 @@ export type FontSizeKey =
 
 export type FontWeightKey = 'thin' | 'light' | 'base' | 'medium' | 'semibold' | 'bold'
 
-export type FontWeightToken = '100' | '200' | '300' | '400' | '500' | '600' | '700' | '800' | '900'
+export type FontWeightToken = 100 | 200 | 300 | 400 | 500 | 600 | 700 | 800 | 900
 
 export type HightideTypographyPrimitiveTokens = {
   fontFamily: Record<string, string>,
@@ -45,12 +45,12 @@ export const hightideTypography = {
     '9xl': 128,
   },
   fontWeight: {
-    thin: '100',
-    light: '300',
-    base: '400',
-    medium: '500',
-    semibold: '600',
-    bold: '700',
+    thin: 100,
+    light: 300,
+    base: 400,
+    medium: 500,
+    semibold: 600,
+    bold: 700,
   },
   lineHeight: {
     'xs': 16,
