@@ -10,7 +10,7 @@ import {
 import type { ColorPairToken } from '@helpwave/hightide-design/theme-tokens'
 import type { ComponentSize, ButtonVariant } from '@helpwave/hightide-design/semantic-token-resolvers'
 
-import { ContentThemeProvider } from '../../global-contexts/content-theme/ContentThemeProvider'
+import { ContentThemeOverrideProvider } from '../../global-contexts/content-theme/ContentThemeProvider'
 import { useDebugContext } from '../../global-contexts/debug'
 import { useTheme } from '../../global-contexts/theme/ThemeContext'
 import type { IconComponent } from '../../icons/types'
@@ -20,7 +20,6 @@ import type {
   ButtonTextStyle
 } from '../../theme/types/components/button'
 import type { StyleOverwrite } from '../../theme/types/resolver'
-import type { Color } from '../../theme/types/color'
 import { createHitBoxOverlayStyle } from '../../utils/hitBoxOverlay'
 import { useMinimumTouchTargetHitSlop } from '../../utils/minimumTouchTargetHitSlop'
 import { ThemedIcon } from '../visualization-and-display/ThemedIcon'
@@ -122,26 +121,18 @@ export const Button = forwardRef<React.ComponentRef<typeof Pressable>, ButtonPro
               pointerEvents="none"
               style={theme.components.button.stateLayer(state, stateLayerStyle)}
             />
-            <ContentThemeProvider
-              foregroundColor={resolvedText.color as Color}
+            <ContentThemeOverrideProvider
               textStyle={resolvedText}
+              iconStyle={resolvedIcon}
             >
               {leadingIcon !== undefined && (
-                <ThemedIcon
-                  icon={leadingIcon}
-                  size={resolvedIcon.size}
-                  strokeWidth={resolvedIcon.strokeWidth}
-                />
+                <ThemedIcon icon={leadingIcon} />
               )}
               <ThemedText>{children}</ThemedText>
               {trailingIcon !== undefined && (
-                <ThemedIcon
-                  icon={trailingIcon}
-                  size={resolvedIcon.size}
-                  strokeWidth={resolvedIcon.strokeWidth}
-                />
+                <ThemedIcon icon={trailingIcon} />
               )}
-            </ContentThemeProvider>
+            </ContentThemeOverrideProvider>
           </Fragment>
         )
       }}

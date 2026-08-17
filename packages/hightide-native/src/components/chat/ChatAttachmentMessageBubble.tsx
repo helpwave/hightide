@@ -205,6 +205,9 @@ export const ChatAttachmentMessageBubble = ({
         textStyle={(_, pressableState) => (
           contentResolvers.text(pressableState)
         )}
+        iconStyle={(_, pressableState) => (
+          contentResolvers.icon(pressableState)
+        )}
       >
         <View style={resolvedFileIconContainerStyle}>
           {icon ?? (

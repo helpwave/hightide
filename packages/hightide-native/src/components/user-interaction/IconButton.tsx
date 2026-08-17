@@ -12,7 +12,7 @@ import type {
   IconButtonVariant
 } from '@helpwave/hightide-design/semantic-token-resolvers'
 
-import { ContentThemeProvider } from '../../global-contexts/content-theme/ContentThemeProvider'
+import { ContentThemeOverrideProvider } from '../../global-contexts/content-theme/ContentThemeProvider'
 import { useDebugContext } from '../../global-contexts/debug'
 import { useTheme } from '../../global-contexts/theme/ThemeContext'
 import type {
@@ -105,7 +105,6 @@ export const IconButton = forwardRef<React.ComponentRef<typeof Pressable>, IconB
       {(pressableState) => {
         const state = resolveState(pressableState as PressableInteraction)
         const resolvedIcon = theme.components.iconButton.icon(state)
-        const resolvedText = theme.components.iconButton.text(state)
 
         return (
           <Fragment>
@@ -119,12 +118,11 @@ export const IconButton = forwardRef<React.ComponentRef<typeof Pressable>, IconB
               pointerEvents="none"
               style={theme.components.iconButton.stateLayer(state, stateLayerStyle)}
             />
-            <ContentThemeProvider
-              foregroundColor={resolvedIcon.color ?? theme.colors.primary.color}
-              textStyle={resolvedText}
+            <ContentThemeOverrideProvider
+              iconStyle={resolvedIcon}
             >
-              <ThemedIcon icon={IconComponent} size={resolvedIcon.size} strokeWidth={resolvedIcon.strokeWidth}/>
-            </ContentThemeProvider>
+              <ThemedIcon icon={IconComponent} />
+            </ContentThemeOverrideProvider>
           </Fragment>
         )
       }}

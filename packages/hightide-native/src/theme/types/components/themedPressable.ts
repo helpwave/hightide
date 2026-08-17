@@ -11,6 +11,7 @@ import type {
   InteractionState,
   StyleResolverFunction
 } from '../resolver'
+import type { IconStyle } from '../../../icons'
 
 export type ThemedPressableState = InteractionState & {
   size?: ComponentSize,
@@ -24,8 +25,11 @@ export type ThemedPressableStyle = ViewStyle
 
 export type ThemedPressableTextStyle = TextStyle
 
+export type ThemedPressableIconStyle = IconStyle
+
 export type ThemedPressableThemeResolvers = {
   container: StyleResolverFunction<ThemedPressableState, ThemedPressableStyle>,
   stateLayer: StyleResolverFunction<ThemedPressableState, ThemedPressableStyle>,
+  icon: StyleResolverFunction<ThemedPressableState, ThemedPressableIconStyle>,
   text: StyleResolverFunction<ThemedPressableState, ThemedPressableTextStyle>,
 }

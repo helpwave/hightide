@@ -12,10 +12,11 @@ import type {
 } from '@helpwave/hightide-design/semantic-token-resolvers'
 import type { ColorPairToken } from '@helpwave/hightide-design/theme-tokens'
 
-import { ContentThemeProvider } from '../../global-contexts/content-theme/ContentThemeProvider'
+import { ContentThemeOverrideProvider } from '../../global-contexts/content-theme/ContentThemeProvider'
 import { useDebugContext } from '../../global-contexts/debug'
 import { useTheme } from '../../global-contexts/theme/ThemeContext'
 import type {
+  ThemedPressableIconStyle,
   ThemedPressableState,
   ThemedPressableStyle,
   ThemedPressableTextStyle
@@ -40,6 +41,7 @@ export type ThemedPressableProps = PressableProps & {
   hasAdditionalHorizontalPadding?: boolean,
   containerStyle?: StyleOverwrite<ThemedPressableState, ThemedPressableStyle>,
   stateLayerStyle?: StyleOverwrite<ThemedPressableState, ThemedPressableStyle>,
+  iconStyle?: StyleOverwrite<ThemedPressableState, ThemedPressableIconStyle>,
   textStyle?: StyleOverwrite<ThemedPressableState, ThemedPressableTextStyle>,
 }
 
@@ -61,6 +63,7 @@ export const ThemedPressable = forwardRef<React.ComponentRef<typeof Pressable>, 
   style,
   containerStyle,
   stateLayerStyle,
+  iconStyle,
   textStyle,
   hitSlop: providedHitSlop,
   onLayout: providedOnLayout,
@@ -106,6 +109,7 @@ export const ThemedPressable = forwardRef<React.ComponentRef<typeof Pressable>, 
       {(pressableState) => {
         const state = resolveState(pressableState as PressableInteraction)
         const resolvedText = theme.components.themedPressable.text(state, textStyle)
+        const resolvedIcon = theme.components.themedPressable.icon(state, iconStyle)
         const resolvedChildren = typeof children === 'function'
           ? children(pressableState)
           : children
@@ -122,12 +126,13 @@ export const ThemedPressable = forwardRef<React.ComponentRef<typeof Pressable>, 
               pointerEvents="none"
               style={theme.components.themedPressable.stateLayer(state, stateLayerStyle)}
             />
-            <ContentThemeProvider
-              foregroundColor={resolvedText.color ?? theme.colors.surface.onColor}
+            <ContentThemeOverrideProvider
+              foreground={resolvedText.color}
               textStyle={resolvedText}
+              iconStyle={resolvedIcon}
             >
               {resolvedChildren}
-            </ContentThemeProvider>
+            </ContentThemeOverrideProvider>
           </Fragment>
         )
       }}

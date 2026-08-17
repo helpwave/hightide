@@ -18,6 +18,7 @@ import {
   ListItem,
   ListNavigationItem,
   Switch,
+  ThemedIcon,
   ThemedText
 } from '@helpwave/hightide-native/components'
 import { useTheme } from '@helpwave/hightide-native/global-contexts'
@@ -39,11 +40,11 @@ const CardDemo = () => {
           Personal data
         </ThemedText>
         <Card>
-          <ListItem label="Name" value="Anna Müller" />
+          <ListItem title="Anna Müller" subtitle="Name" contentOrder="subtitleFirst" />
           <Divider />
-          <ListItem label="Date of birth" value="12.03.1988" />
+          <ListItem title="12.03.1988" subtitle="Date of birth" contentOrder="subtitleFirst" />
           <Divider />
-          <ListItem label="Email" value="anna@example.com" />
+          <ListItem title="anna@example.com" subtitle="Email" contentOrder="subtitleFirst" />
         </Card>
       </View>
 
@@ -52,11 +53,11 @@ const CardDemo = () => {
           Practice
         </ThemedText>
         <Card>
-          <ListItem label="Practice" value="Praxis am Park" />
+          <ListItem title="Praxis am Park" subtitle="Practice" contentOrder="subtitleFirst" />
           <Divider />
           <ListNavigationItem
-            label="Practice details"
-            leading={<Building2 size={18} color={theme.colors.primary.color} />}
+            title="Practice details"
+            leading={<ThemedIcon icon={Building2} />}
             onPress={action('practice-details')}
           />
         </Card>
@@ -68,8 +69,8 @@ const CardDemo = () => {
         </ThemedText>
         <Card>
           <ListActionItem
-            label="Notifications"
-            leading={<Bell size={18} color={theme.colors.primary.color} />}
+            title="Notifications"
+            leading={<ThemedIcon icon={Bell} />}
             trailing={(
               <View
                 style={(() => {
@@ -105,15 +106,15 @@ const CardDemo = () => {
           />
           <Divider />
           <ListNavigationItem
-            label="Account"
-            leading={<UserRound size={18} color={theme.colors.primary.color} />}
+            title="Account"
+            leading={<ThemedIcon icon={UserRound} />}
             onPress={action('account')}
           />
           <Divider />
           <ListActionItem
-            label="Log out"
+            title="Log out"
             color={theme.colors.negative}
-            leading={<LogOut size={18} color={theme.colors.negative.color} />}
+            leading={<ThemedIcon icon={LogOut} />}
             onPress={action('logout')}
           />
         </Card>
@@ -126,9 +127,9 @@ export const card: Story = {
   args: {
     children: (
       <>
-        <ListItem label="Name" value="Anna Müller" />
+        <ListItem title="Anna Müller" subtitle="Name" contentOrder="subtitleFirst" />
         <Divider />
-        <ListItem label="Email" value="anna@example.com" />
+        <ListItem title="anna@example.com" subtitle="Email" contentOrder="subtitleFirst" />
       </>
     ),
   },

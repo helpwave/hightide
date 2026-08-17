@@ -1,14 +1,17 @@
 import type {
   ContainerTokens,
+  IconTokens,
   TextStyleTokens
 } from '@helpwave/hightide-design/component-token-resolvers'
 
 import { toContainerStyle } from '../../adapters/container-adapter'
+import { toIconStyle } from '../../adapters/icon-style-adapter'
 import { toTextStyle } from '../../adapters/text-style-adapter'
 import type {
   ChatQuickReplyChipState,
   ChatQuickReplyChipThemeResolvers,
   PressableContainerStyle,
+  PressableIconStyle,
   PressableState,
   PressableStateLayerStyle,
   PressableTextStyle
@@ -26,6 +29,10 @@ const toOptionalContainerStyle = (tokens?: ContainerTokens): PressableContainerS
 
 const toOptionalTextStyle = (tokens?: TextStyleTokens): PressableTextStyle => (
   tokens === undefined ? {} : toTextStyle(tokens)
+)
+
+const toOptionalIconStyle = (tokens?: IconTokens): PressableIconStyle => (
+  tokens === undefined ? {} : toIconStyle(tokens)
 )
 
 export const toChatQuickReplyChipThemeResolvers: ComponentThemeResolver<ChatQuickReplyChipThemeResolvers> = ({
@@ -73,6 +80,10 @@ export const toChatQuickReplyChipThemeResolvers: ComponentThemeResolver<ChatQuic
         text: createStyleResolver((pressableState: PressableState): PressableTextStyle => ({
           ...toTextStyle(resolvePressable(pressableState).text),
           ...toOptionalTextStyle(tokens.text),
+        })),
+        icon: createValueResolver((pressableState: PressableState): PressableIconStyle => ({
+          ...toIconStyle(resolvePressable(pressableState).icon),
+          ...toOptionalIconStyle(tokens.icon),
         })),
       }
     }),

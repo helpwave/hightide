@@ -5,6 +5,20 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/)
 and adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [0.2.0] - 2026-08-17
+
+### Added
+
+- Icon tokens on pressable and chip component resolvers (size via button icon sizing, color from resolved foreground)
+
+### Changed
+
+- List item icon size now resolves from `icongraphy.sizes.md`
+
+### Removed
+
+- Text tokens from the icon button component resolver
+
 ## [0.1.1] - 2026-08-17
 
 ### Changed

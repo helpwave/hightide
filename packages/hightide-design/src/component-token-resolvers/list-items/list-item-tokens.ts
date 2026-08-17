@@ -5,7 +5,7 @@ import {
 } from '../../semantic-token-resolvers'
 import type { ComponentTokenResolver } from '../component-token-resolver'
 import type { ContainerTokens } from '../container-tokens'
-import { iconTokenResolver, type IconTokens } from '../icon-tokens'
+import type { IconTokens } from '../icon-tokens'
 import type { TextStyleTokens } from '../text-style-tokens'
 
 export type ListItemComponentResolverProps = {
@@ -34,12 +34,7 @@ export const listItemTokenResolver: ListItemTokenResolver = ({
   semanticResolvers,
   overrides,
 }) => {
-  const { color, spacing, typography } = themeTokens
-  const iconSizeTokens = iconTokenResolver({
-    themeTokens,
-    semanticResolvers,
-    overrides: { size: 'md' },
-  })
+  const { color, spacing, typography, icongraphy } = themeTokens
   const descriptionColor = semanticResolvers.asDescription({
     themeTokens,
     color: color.surface.onColor,
@@ -114,8 +109,8 @@ export const listItemTokenResolver: ListItemTokenResolver = ({
       },
     },
     icon: {
-      size: iconSizeTokens.size,
-      strokeWidth: iconSizeTokens.strokeWidth,
+      size: icongraphy.sizes.md,
+      strokeWidth: icongraphy.strokeWidth,
       color: iconColor,
     },
     titleText: {

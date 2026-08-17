@@ -23,9 +23,13 @@ export const ThemedText = forwardRef<React.ComponentRef<typeof RNText>, ThemedTe
   ...props
 }, ref) {
   const { theme } = useTheme()
-  const { foregroundColor, textStyle } = useContentTheme()
+  const { foreground, textStyle } = useContentTheme()
+  // TODO use a hex color parser
+  const foregroundColor = (typeof textStyle.color === 'string'
+    ? textStyle.color
+    : foreground) as HexColorToken
   const color = appearance === 'description'
-    ? theme.semantics.asDescription({ color: foregroundColor as HexColorToken })
+    ? theme.semantics.asDescription({ color: foregroundColor })
     : foregroundColor
 
   return (

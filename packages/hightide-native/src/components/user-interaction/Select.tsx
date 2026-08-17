@@ -212,7 +212,7 @@ export const Select = ({
 
                   return (
                     <ListActionItem
-                      label={item.label ?? item.id}
+                      title={item.label ?? item.id}
                       color={optionColor}
                       disabled={item.disabled}
                       onPress={() => select.selectValue(item.id)}

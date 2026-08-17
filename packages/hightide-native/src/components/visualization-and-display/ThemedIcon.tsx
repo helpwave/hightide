@@ -23,7 +23,7 @@ export type ThemedIconProps = Omit<ViewProps, 'children'> & {
 
 export const ThemedIcon = ({
   icon: Glyph,
-  size = 'md',
+  size,
   color,
   strokeWidth,
   appearance = 'normal',
@@ -31,15 +31,19 @@ export const ThemedIcon = ({
   ...props
 }: ThemedIconProps) => {
   const { theme } = useTheme()
-  const { foregroundColor } = useContentTheme()
-  const iconToken = typeof size === 'number'
+  const { foreground, iconStyle } = useContentTheme()
+  const resolvedSize = size ?? iconStyle.size ?? 'md'
+  const iconToken = typeof resolvedSize === 'number'
     ? {
-      size,
-      strokeWidth: strokeWidth ?? theme.components.icon.md.strokeWidth,
+      size: resolvedSize,
+      strokeWidth: strokeWidth ?? iconStyle.strokeWidth ?? theme.components.icon.md.strokeWidth,
     }
-    : theme.components.icon[size]
+    : theme.components.icon[resolvedSize]
 
-  const baseColor = (color ?? foregroundColor) as HexColorToken
+  // TODO fix this by using a hex color parser
+  const baseColor = (color
+    ?? iconStyle.color
+    ?? foreground) as HexColorToken
   const resolvedColor = appearance === 'normal'
     ? baseColor
     : theme.semantics.withAppearance({ color: baseColor, appearance })
@@ -64,7 +68,7 @@ export const ThemedIcon = ({
     >
       <Glyph
         size={iconToken.size}
-        strokeWidth={strokeWidth ?? iconToken.strokeWidth}
+        strokeWidth={strokeWidth ?? iconStyle.strokeWidth ?? iconToken.strokeWidth}
         color={resolvedColor}
       />
     </View>

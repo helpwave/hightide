@@ -3,6 +3,7 @@ import { toIconStyle } from '../adapters/icon-style-adapter'
 import { toTextStyle } from '../adapters/text-style-adapter'
 import type {
   ListActionItemContentStyle,
+  ListActionItemDescriptionStyle,
   ListActionItemIconStyle,
   ListActionItemLeadingItemContainerStyle,
   ListActionItemState,
@@ -97,6 +98,9 @@ const toListActionItemThemeResolvers: ComponentThemeResolver<ListActionItemTheme
     )),
     titleText: createStyleResolver((state: ListActionItemState): ListActionItemTitleStyle => (
       toTextStyle(resolve(state).titleText)
+    )),
+    descriptionText: createStyleResolver((state: ListActionItemState): ListActionItemDescriptionStyle => (
+      toTextStyle(resolve(state).descriptionText)
     )),
     icon: createValueResolver((state: ListActionItemState): ListActionItemIconStyle => (
       toIconStyle(resolve(state).icon)

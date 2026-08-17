@@ -21,7 +21,7 @@ import {
 import { useNativeKeyValueStore } from '../../hooks/useNativeKeyValueStore'
 import type { ThemeMode } from '../../theme/themes/hightideThemes'
 import type { HightideTheme } from '../../theme/types/theme'
-import { ContentThemeProvider } from '../content-theme'
+import { ContentThemeRootProvider } from '../content-theme'
 
 export type ThemeProviderProps<T> = PropsWithChildren & {
   theme?: ThemeMode | null,
@@ -93,12 +93,17 @@ export const ThemeProvider = ({
 
   return (
     <ThemeContext.Provider value={contextValue}>
-      <ContentThemeProvider
-        foregroundColor={contextValue.theme.colors.surface.onColor}
+      <ContentThemeRootProvider
+        foreground={contextValue.theme.colors.surface.onColor}
         textStyle={contextValue.theme.typography.body.md}
+        iconStyle={{
+          size: contextValue.theme.icongraphy.sizes.md,
+          strokeWidth: contextValue.theme.icongraphy.strokeWidth,
+          color: contextValue.theme.colors.surface.onColor,
+        }}
       >
         {children}
-      </ContentThemeProvider>
+      </ContentThemeRootProvider>
     </ThemeContext.Provider>
   )
 }

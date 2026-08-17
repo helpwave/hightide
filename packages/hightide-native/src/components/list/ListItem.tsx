@@ -12,7 +12,6 @@ import {
 import type { ColorPairToken } from '@helpwave/hightide-design/theme-tokens'
 
 import { useTheme } from '../../global-contexts/theme/ThemeContext'
-import { ThemedText } from '../visualization-and-display/ThemedText'
 import type {
   ListItemDescriptionStyle,
   ListItemState,
@@ -20,29 +19,38 @@ import type {
   ListItemTitleStyle
 } from '../../theme/types/components/listItem'
 import type { StyleOverwrite } from '../../theme/types/resolver'
+import { ListItemAccessory } from './ListItemAccessory'
+import {
+  ListItemTextContent,
+  type ListItemContentOrder
+} from './ListItemTextContent'
 
 export type ListItemProps = Omit<ViewProps, 'style'> & {
-  label: string,
-  value: string,
+  title?: string,
+  subtitle?: string,
+  content?: ReactNode,
+  contentOrder?: ListItemContentOrder,
   leading?: ReactNode,
   trailing?: ReactNode,
   color?: ColorPairToken,
   style?: StyleProp<ViewStyle>,
   itemStyle?: StyleOverwrite<ListItemState, ListItemStyle>,
-  labelStyle?: StyleOverwrite<ListItemState, ListItemDescriptionStyle>,
-  valueStyle?: StyleOverwrite<ListItemState, ListItemTitleStyle>,
+  titleStyle?: StyleOverwrite<ListItemState, ListItemTitleStyle>,
+  subtitleStyle?: StyleOverwrite<ListItemState, ListItemDescriptionStyle>,
 }
 
 export const ListItem = ({
-  label,
-  value,
+  title,
+  subtitle,
+  content,
+  contentOrder = 'subtitleFirst',
   leading,
   trailing,
   color,
   style,
   itemStyle,
-  labelStyle,
-  valueStyle,
+  titleStyle,
+  subtitleStyle,
   ...props
 }: ListItemProps) => {
   const { theme } = useTheme()
@@ -66,30 +74,48 @@ export const ListItem = ({
     () => theme.components.listItem.default.trailingItemContainer(state),
     [theme, state]
   )
-  const resolvedLabelStyle = useMemo(
-    () => theme.components.listItem.default.descriptionText(state, labelStyle),
-    [theme, state, labelStyle]
+  const resolvedTitleStyle = useMemo(
+    () => theme.components.listItem.default.titleText(state, titleStyle),
+    [theme, state, titleStyle]
   )
-  const resolvedValueStyle = useMemo(
-    () => theme.components.listItem.default.titleText(state, valueStyle),
-    [theme, state, valueStyle]
+  const resolvedSubtitleStyle = useMemo(
+    () => theme.components.listItem.default.descriptionText(state, subtitleStyle),
+    [theme, state, subtitleStyle]
+  )
+  const resolvedIconStyle = useMemo(
+    () => theme.components.listItem.default.icon(state),
+    [theme, state]
   )
 
   return (
     <View {...props} style={[resolvedItemStyle, style]}>
       {leading != null && (
-        <View style={resolvedLeadingItemContainerStyle}>
+        <ListItemAccessory
+          style={resolvedLeadingItemContainerStyle}
+          foreground={color?.onColor}
+          iconStyle={resolvedIconStyle}
+        >
           {leading}
-        </View>
+        </ListItemAccessory>
       )}
       <View style={resolvedContentStyle}>
-        <ThemedText style={resolvedLabelStyle}>{label}</ThemedText>
-        <ThemedText style={resolvedValueStyle}>{value}</ThemedText>
+        <ListItemTextContent
+          title={title}
+          subtitle={subtitle}
+          content={content}
+          contentOrder={contentOrder}
+          titleStyle={resolvedTitleStyle}
+          subtitleStyle={resolvedSubtitleStyle}
+        />
       </View>
       {trailing != null && (
-        <View style={resolvedTrailingItemContainerStyle}>
+        <ListItemAccessory
+          style={resolvedTrailingItemContainerStyle}
+          foreground={color?.onColor}
+          iconStyle={resolvedIconStyle}
+        >
           {trailing}
-        </View>
+        </ListItemAccessory>
       )}
     </View>
   )
