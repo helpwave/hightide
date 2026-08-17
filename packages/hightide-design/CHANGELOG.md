@@ -14,6 +14,7 @@ and adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 ### Changed
 
 - List item icon size now resolves from `icongraphy.sizes.md`
+- List item icon color defaults to the content foreground (`surface.onColor`, or tonal foreground when a color override is set) instead of primary
 
 ### Removed
 

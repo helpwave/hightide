@@ -3,7 +3,10 @@ import type {
   Meta,
   StoryObj
 } from '@storybook/react-native'
-import { Bell } from 'lucide-react-native'
+import {
+  Bell,
+  ChevronRight
+} from 'lucide-react-native'
 import { action } from 'storybook/actions'
 
 import {
@@ -33,58 +36,130 @@ type ListActionItemArgs = {
   title: string,
   subtitle: string,
   contentOrder: ListItemContentOrder,
-  showSubtitle: boolean,
-  useCustomContent: boolean,
   color: ColorPairKey | 'default',
   disabled: boolean,
   withLeading: boolean,
+  withTrailing: boolean,
 }
 
 const ListActionItemDemo = ({
   title,
   subtitle,
   contentOrder,
-  showSubtitle,
-  useCustomContent,
   color,
   disabled,
   withLeading,
+  withTrailing,
 }: ListActionItemArgs) => {
   const { theme } = useTheme()
   const resolvedColor = color === 'default'
     ? undefined
     : theme.colors[color]
+  const leading = withLeading
+    ? <ThemedIcon icon={Bell} />
+    : undefined
+  const trailing = withTrailing
+    ? <ThemedIcon icon={ChevronRight} />
+    : undefined
 
   return (
-    <View style={{ padding: 16, maxWidth: 420 }}>
-      <Card>
-        <ListActionItem
-          title={useCustomContent ? undefined : title}
-          subtitle={useCustomContent || !showSubtitle ? undefined : subtitle}
-          content={useCustomContent
-            ? <ThemedText>{`${title} · custom content`}</ThemedText>
-            : undefined}
-          contentOrder={contentOrder}
-          color={resolvedColor}
-          disabled={disabled}
-          leading={withLeading
-            ? <ThemedIcon icon={Bell} />
-            : undefined}
-          onPress={action('Pressed')}
-        />
-        <Divider />
-        <ListActionItem
-          title="Title only"
-          onPress={action('Pressed title only')}
-        />
-        <Divider />
-        <ListActionItem
-          title="With subtitle"
-          subtitle="Optional subtitle"
-          contentOrder={contentOrder}
-          onPress={action('Pressed with subtitle')}
-        />
-      </Card>
+    <View style={{ padding: 16, flexDirection: 'row', gap: 16, alignItems: 'flex-start' }}>
+      <View style={{ flex: 1, minWidth: 0 }}>
+        <Card>
+          <ListActionItem
+            title={title}
+            subtitle={subtitle}
+            contentOrder={contentOrder}
+            color={resolvedColor}
+            disabled={disabled}
+            leading={leading}
+            trailing={trailing}
+            onPress={action('Pressed title + subtitle')}
+          />
+          <Divider />
+          <ListActionItem
+            title={title}
+            subtitle={subtitle}
+            contentOrder={contentOrder}
+            color={resolvedColor}
+            disabled={disabled}
+            leading={leading}
+            trailing={trailing}
+            onPress={action('Pressed title + subtitle')}
+          />
+          <Divider />
+          <ListActionItem
+            title={title}
+            subtitle={subtitle}
+            contentOrder={contentOrder}
+            color={resolvedColor}
+            disabled={disabled}
+            leading={leading}
+            trailing={trailing}
+            onPress={action('Pressed title + subtitle')}
+          />
+        </Card>
+      </View>
+      <View style={{ flex: 1, minWidth: 0 }}>
+        <Card>
+          <ListActionItem
+            title={title}
+            color={resolvedColor}
+            disabled={disabled}
+            leading={leading}
+            trailing={trailing}
+            onPress={action('Pressed title only')}
+          />
+          <Divider />
+          <ListActionItem
+            title={title}
+            color={resolvedColor}
+            disabled={disabled}
+            leading={leading}
+            trailing={trailing}
+            onPress={action('Pressed title only')}
+          />
+          <Divider />
+          <ListActionItem
+            title={title}
+            color={resolvedColor}
+            disabled={disabled}
+            leading={leading}
+            trailing={trailing}
+            onPress={action('Pressed title only')}
+          />
+        </Card>
+      </View>
+      <View style={{ flex: 1, minWidth: 0 }}>
+        <Card>
+          <ListActionItem
+            content={<ThemedText>{`${title} · custom content`}</ThemedText>}
+            color={resolvedColor}
+            disabled={disabled}
+            leading={leading}
+            trailing={trailing}
+            onPress={action('Pressed custom content')}
+          />
+          <Divider />
+          <ListActionItem
+            content={<ThemedText>{`${title} · custom content`}</ThemedText>}
+            color={resolvedColor}
+            disabled={disabled}
+            leading={leading}
+            trailing={trailing}
+            onPress={action('Pressed custom content')}
+          />
+          <Divider />
+          <ListActionItem
+            content={<ThemedText>{`${title} · custom content`}</ThemedText>}
+            color={resolvedColor}
+            disabled={disabled}
+            leading={leading}
+            trailing={trailing}
+            onPress={action('Pressed custom content')}
+          />
+        </Card>
+      </View>
     </View>
   )
 }
@@ -101,12 +176,6 @@ export const listActionItem: StoryObj<ListActionItemArgs> = {
       control: 'select',
       options: contentOrders,
     },
-    showSubtitle: {
-      control: 'boolean',
-    },
-    useCustomContent: {
-      control: 'boolean',
-    },
     color: {
       control: 'select',
       options: ['default', ...StorybookHelper.colorPairSelect.options],
@@ -117,16 +186,18 @@ export const listActionItem: StoryObj<ListActionItemArgs> = {
     withLeading: {
       control: 'boolean',
     },
+    withTrailing: {
+      control: 'boolean',
+    },
   },
   args: {
     title: 'Notifications',
     subtitle: 'Settings',
     contentOrder: 'titleFirst',
-    showSubtitle: true,
-    useCustomContent: false,
     color: 'default',
     disabled: false,
-    withLeading: true,
+    withLeading: false,
+    withTrailing: false,
   },
   render: (args) => <ListActionItemDemo {...args} />,
 }

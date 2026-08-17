@@ -33,8 +33,6 @@ type ListNavigationItemArgs = {
   title: string,
   subtitle: string,
   contentOrder: ListItemContentOrder,
-  showSubtitle: boolean,
-  useCustomContent: boolean,
   color: ColorPairKey | 'default',
   disabled: boolean,
   withLeading: boolean,
@@ -44,8 +42,6 @@ const ListNavigationItemDemo = ({
   title,
   subtitle,
   contentOrder,
-  showSubtitle,
-  useCustomContent,
   color,
   disabled,
   withLeading,
@@ -54,37 +50,99 @@ const ListNavigationItemDemo = ({
   const resolvedColor = color === 'default'
     ? undefined
     : theme.colors[color]
+  const leading = withLeading
+    ? <ThemedIcon icon={UserRound} />
+    : undefined
 
   return (
-    <View style={{ padding: 16, maxWidth: 420 }}>
-      <Card>
-        <ListNavigationItem
-          title={useCustomContent ? undefined : title}
-          subtitle={useCustomContent || !showSubtitle ? undefined : subtitle}
-          content={useCustomContent
-            ? <ThemedText>{`${title} · custom content`}</ThemedText>
-            : undefined}
-          contentOrder={contentOrder}
-          color={resolvedColor}
-          disabled={disabled}
-          leading={withLeading
-            ? <ThemedIcon icon={UserRound} />
-            : undefined}
-          onPress={action('Pressed')}
-        />
-        <Divider />
-        <ListNavigationItem
-          title="Title only"
-          onPress={action('Pressed title only')}
-        />
-        <Divider />
-        <ListNavigationItem
-          title="With subtitle"
-          subtitle="Optional subtitle"
-          contentOrder={contentOrder}
-          onPress={action('Pressed with subtitle')}
-        />
-      </Card>
+    <View style={{ padding: 16, flexDirection: 'row', gap: 16, alignItems: 'flex-start' }}>
+      <View style={{ flex: 1, minWidth: 0 }}>
+        <Card>
+          <ListNavigationItem
+            title={title}
+            subtitle={subtitle}
+            contentOrder={contentOrder}
+            color={resolvedColor}
+            disabled={disabled}
+            leading={leading}
+            onPress={action('Pressed title + subtitle')}
+          />
+          <Divider />
+          <ListNavigationItem
+            title={title}
+            subtitle={subtitle}
+            contentOrder={contentOrder}
+            color={resolvedColor}
+            disabled={disabled}
+            leading={leading}
+            onPress={action('Pressed title + subtitle')}
+          />
+          <Divider />
+          <ListNavigationItem
+            title={title}
+            subtitle={subtitle}
+            contentOrder={contentOrder}
+            color={resolvedColor}
+            disabled={disabled}
+            leading={leading}
+            onPress={action('Pressed title + subtitle')}
+          />
+        </Card>
+      </View>
+      <View style={{ flex: 1, minWidth: 0 }}>
+        <Card>
+          <ListNavigationItem
+            title={title}
+            color={resolvedColor}
+            disabled={disabled}
+            leading={leading}
+            onPress={action('Pressed title only')}
+          />
+          <Divider />
+          <ListNavigationItem
+            title={title}
+            color={resolvedColor}
+            disabled={disabled}
+            leading={leading}
+            onPress={action('Pressed title only')}
+          />
+          <Divider />
+          <ListNavigationItem
+            title={title}
+            color={resolvedColor}
+            disabled={disabled}
+            leading={leading}
+            onPress={action('Pressed title only')}
+          />
+        </Card>
+      </View>
+      <View style={{ flex: 1, minWidth: 0 }}>
+        <Card>
+          <ListNavigationItem
+            content={<ThemedText>{`${title} · custom content`}</ThemedText>}
+            color={resolvedColor}
+            disabled={disabled}
+            leading={leading}
+            onPress={action('Pressed custom content')}
+          />
+          <Divider />
+          <ListNavigationItem
+            content={<ThemedText>{`${title} · custom content`}</ThemedText>}
+            color={resolvedColor}
+            disabled={disabled}
+            leading={leading}
+            onPress={action('Pressed custom content')}
+          />
+          <Divider />
+          <ListNavigationItem
+            content={<ThemedText>{`${title} · custom content`}</ThemedText>}
+            color={resolvedColor}
+            disabled={disabled}
+            leading={leading}
+            onPress={action('Pressed custom content')}
+          />
+        </Card>
+      </View>
     </View>
   )
 }
@@ -101,12 +159,6 @@ export const listNavigationItem: StoryObj<ListNavigationItemArgs> = {
       control: 'select',
       options: contentOrders,
     },
-    showSubtitle: {
-      control: 'boolean',
-    },
-    useCustomContent: {
-      control: 'boolean',
-    },
     color: {
       control: 'select',
       options: ['default', ...StorybookHelper.colorPairSelect.options],
@@ -122,11 +174,9 @@ export const listNavigationItem: StoryObj<ListNavigationItemArgs> = {
     title: 'Account',
     subtitle: 'Profile',
     contentOrder: 'titleFirst',
-    showSubtitle: true,
-    useCustomContent: false,
     color: 'default',
     disabled: false,
-    withLeading: true,
+    withLeading: false,
   },
   render: (args) => <ListNavigationItemDemo {...args} />,
 }

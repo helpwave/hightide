@@ -3,11 +3,16 @@ import type {
   Meta,
   StoryObj
 } from '@storybook/react-native'
+import {
+  Bell,
+  ChevronRight
+} from 'lucide-react-native'
 
 import {
   Card,
   Divider,
   ListItem,
+  ThemedIcon,
   ThemedText,
   type ListItemContentOrder
 } from '@helpwave/hightide-native/components'
@@ -24,40 +29,98 @@ type ListItemArgs = {
   title: string,
   subtitle: string,
   contentOrder: ListItemContentOrder,
-  showSubtitle: boolean,
-  useCustomContent: boolean,
+  withLeading: boolean,
+  withTrailing: boolean,
 }
 
 const ListItemDemo = ({
   title,
   subtitle,
   contentOrder,
-  showSubtitle,
-  useCustomContent,
-}: ListItemArgs) => (
-  <View style={{ padding: 16, maxWidth: 420 }}>
-    <Card>
-      <ListItem
-        title={useCustomContent ? undefined : title}
-        subtitle={useCustomContent || !showSubtitle ? undefined : subtitle}
-        content={useCustomContent
-          ? <ThemedText>{`${title} · custom content`}</ThemedText>
-          : undefined}
-        contentOrder={contentOrder}
-      />
-      <Divider />
-      <ListItem
-        title="Title only"
-      />
-      <Divider />
-      <ListItem
-        title="With subtitle"
-        subtitle="Optional subtitle"
-        contentOrder={contentOrder}
-      />
-    </Card>
-  </View>
-)
+  withLeading,
+  withTrailing,
+}: ListItemArgs) => {
+  const leading = withLeading
+    ? <ThemedIcon icon={Bell} />
+    : undefined
+  const trailing = withTrailing
+    ? <ThemedIcon icon={ChevronRight} />
+    : undefined
+
+  return (
+    <View style={{ padding: 16, flexDirection: 'row', gap: 16, alignItems: 'flex-start' }}>
+      <View style={{ flex: 1, minWidth: 0 }}>
+        <Card>
+          <ListItem
+            title={title}
+            subtitle={subtitle}
+            contentOrder={contentOrder}
+            leading={leading}
+            trailing={trailing}
+          />
+          <Divider />
+          <ListItem
+            title={title}
+            subtitle={subtitle}
+            contentOrder={contentOrder}
+            leading={leading}
+            trailing={trailing}
+          />
+          <Divider />
+          <ListItem
+            title={title}
+            subtitle={subtitle}
+            contentOrder={contentOrder}
+            leading={leading}
+            trailing={trailing}
+          />
+        </Card>
+      </View>
+      <View style={{ flex: 1, minWidth: 0 }}>
+        <Card>
+          <ListItem
+            title={title}
+            leading={leading}
+            trailing={trailing}
+          />
+          <Divider />
+          <ListItem
+            title={title}
+            leading={leading}
+            trailing={trailing}
+          />
+          <Divider />
+          <ListItem
+            title={title}
+            leading={leading}
+            trailing={trailing}
+          />
+        </Card>
+      </View>
+      <View style={{ flex: 1, minWidth: 0 }}>
+        <Card>
+          <ListItem
+            content={<ThemedText>{`${title} · custom content`}</ThemedText>}
+            leading={leading}
+            trailing={trailing}
+          />
+          <Divider />
+          <ListItem
+            content={<ThemedText>{`${title} · custom content`}</ThemedText>}
+            leading={leading}
+            trailing={trailing}
+          />
+          <Divider />
+          <ListItem
+            content={<ThemedText>{`${title} · custom content`}</ThemedText>}
+            leading={leading}
+            trailing={trailing}
+          />
+        </Card>
+      </View>
+    </View>
+  )
+}
 
 export const listItem: StoryObj<ListItemArgs> = {
   argTypes: {
@@ -71,10 +134,10 @@ export const listItem: StoryObj<ListItemArgs> = {
       control: 'select',
       options: contentOrders,
     },
-    showSubtitle: {
+    withLeading: {
       control: 'boolean',
     },
-    useCustomContent: {
+    withTrailing: {
       control: 'boolean',
     },
   },
@@ -82,8 +145,8 @@ export const listItem: StoryObj<ListItemArgs> = {
     title: 'Anna Müller',
     subtitle: 'Name',
     contentOrder: 'titleFirst',
-    showSubtitle: true,
-    useCustomContent: false,
+    withLeading: false,
+    withTrailing: false,
   },
   render: (args) => <ListItemDemo {...args} />,
 }

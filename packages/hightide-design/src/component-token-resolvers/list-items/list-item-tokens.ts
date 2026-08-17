@@ -56,7 +56,7 @@ export const listItemTokenResolver: ListItemTokenResolver = ({
 
   const titleColor = tonal?.foreground ?? color.surface.onColor
   const descriptionTextColor = tonal?.foreground ?? descriptionColor
-  const iconColor = tonal?.foreground ?? color.primary.color
+  const iconColor = titleColor
 
   return {
     container: {

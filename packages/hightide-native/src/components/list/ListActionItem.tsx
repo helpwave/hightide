@@ -12,6 +12,7 @@ import {
 
 import type { ColorPairToken } from '@helpwave/hightide-design/theme-tokens'
 
+import { useDebugContext } from '../../global-contexts/debug'
 import { useTheme } from '../../global-contexts/theme/ThemeContext'
 import type {
   ListActionItemDescriptionStyle,
@@ -20,6 +21,8 @@ import type {
   ListActionItemTitleStyle
 } from '../../theme/types/components/listItem'
 import type { StyleOverwrite } from '../../theme/types/resolver'
+import { createHitBoxOverlayStyle } from '../../utils/hitBoxOverlay'
+import { useMinimumTouchTargetHitSlop } from '../../utils/minimumTouchTargetHitSlop'
 import { ListItemAccessory } from './ListItemAccessory'
 import {
   ListItemTextContent,
@@ -60,9 +63,17 @@ export const ListActionItem = ({
   itemStyle,
   titleStyle,
   subtitleStyle,
+  hitSlop: providedHitSlop,
+  onLayout: providedOnLayout,
   ...props
 }: ListActionItemProps) => {
   const { theme } = useTheme()
+  const { hitBox } = useDebugContext()
+  const { hitSlop, onLayout } = useMinimumTouchTargetHitSlop({
+    touchTargetSize: theme.semantics.touchTargetSize({}),
+    hitSlop: providedHitSlop,
+    onLayout: providedOnLayout,
+  })
 
   const resolveState = (interaction: PressableInteraction): ListActionItemState => ({
     color,
@@ -77,6 +88,8 @@ export const ListActionItem = ({
     <Pressable
       {...props}
       disabled={disabled}
+      hitSlop={hitSlop}
+      onLayout={onLayout}
       style={(pressableState) => {
         const state = resolveState(pressableState as PressableInteraction)
         return [theme.components.listItem.action.container(state, itemStyle), style]
@@ -93,6 +106,12 @@ export const ListActionItem = ({
 
         return (
           <Fragment>
+            {hitBox.isVisualizing && (
+              <View
+                pointerEvents="none"
+                style={createHitBoxOverlayStyle(hitSlop, hitBox.color)}
+              />
+            )}
             {leading != null && (
               <ListItemAccessory
                 style={resolvedLeadingItemContainerStyle}
