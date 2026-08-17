@@ -9,6 +9,8 @@ import {
 import type { ColorPairToken } from '../theme-tokens/theme-tokens-config'
 import type { ComponentTokenResolver } from './component-token-resolver'
 import type { ContainerTokens } from './container-tokens'
+import { toButtonIconSize } from './icon-size'
+import { iconTokenResolver, type IconTokens } from './icon-tokens'
 import type { TextStyleTokens } from './text-style-tokens'
 
 export type ChipComponentResolverProps = {
@@ -21,6 +23,7 @@ export type ChipComponentResolverProps = {
 
 export type ChipTokens = {
   container: ContainerTokens,
+  icon: IconTokens,
   text: TextStyleTokens,
 }
 
@@ -51,6 +54,11 @@ export const chipTokenResolver: ChipTokenResolver = ({
   const textStyle = themeTokens.typography.label[typographySize]
   const gap = size === 'sm' || size === 'xs' ? themeTokens.spacing.xs : themeTokens.spacing.sm
   const horizontalPadding = layout.inset + layout.paddingExtension
+  const iconSizeTokens = iconTokenResolver({
+    themeTokens,
+    semanticResolvers,
+    overrides: { size: toButtonIconSize(size) },
+  })
 
   return {
     container: {
@@ -73,6 +81,11 @@ export const chipTokenResolver: ChipTokenResolver = ({
         mainAxisAlignment: 'start',
         crossAxisAligment: 'center',
       },
+    },
+    icon: {
+      size: iconSizeTokens.size,
+      strokeWidth: iconSizeTokens.strokeWidth,
+      color: coloring.foreground,
     },
     text: {
       ...textStyle,

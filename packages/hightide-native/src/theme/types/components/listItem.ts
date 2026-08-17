@@ -52,6 +52,8 @@ export type ListActionItemTrailingItemContainerStyle = ViewStyle
 
 export type ListActionItemTitleStyle = TextStyle
 
+export type ListActionItemDescriptionStyle = TextStyle
+
 export type ListActionItemIconStyle = IconStyle
 
 export type ListActionItemThemeResolvers = {
@@ -60,6 +62,7 @@ export type ListActionItemThemeResolvers = {
   content: StyleResolverFunction<ListActionItemState, ListActionItemContentStyle>,
   trailingItemContainer: StyleResolverFunction<ListActionItemState, ListActionItemTrailingItemContainerStyle>,
   titleText: StyleResolverFunction<ListActionItemState, ListActionItemTitleStyle>,
+  descriptionText: StyleResolverFunction<ListActionItemState, ListActionItemDescriptionStyle>,
   icon: StyleResolverFunction<ListActionItemState, ListActionItemIconStyle>,
 }
 
@@ -74,6 +77,8 @@ export type ListNavigationItemContentStyle = ListActionItemContentStyle
 export type ListNavigationItemTrailingItemContainerStyle = ListActionItemTrailingItemContainerStyle
 
 export type ListNavigationItemTitleStyle = ListActionItemTitleStyle
+
+export type ListNavigationItemDescriptionStyle = ListActionItemDescriptionStyle
 
 export type ListNavigationItemIconStyle = ListActionItemIconStyle
 

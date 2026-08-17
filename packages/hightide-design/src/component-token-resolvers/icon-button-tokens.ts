@@ -4,7 +4,6 @@ import {
   resolveColoringStyle,
   resolvePressableColoring,
   resolvePressableStateLayerTint,
-  toTypographySize,
   type ComponentSize,
   type IconButtonVariant
 } from '../semantic-token-resolvers'
@@ -13,7 +12,6 @@ import type { ComponentTokenResolver } from './component-token-resolver'
 import type { ContainerTokens } from './container-tokens'
 import { toButtonIconSize } from './icon-size'
 import { iconTokenResolver, type IconTokens } from './icon-tokens'
-import type { TextStyleTokens } from './text-style-tokens'
 import { type PressableState } from './pressable-tokens'
 
 export type IconButtonState = PressableState
@@ -38,7 +36,6 @@ export type IconButtonTokens = {
   container: ContainerTokens,
   stateLayer: ContainerTokens,
   icon: IconTokens,
-  text: TextStyleTokens,
 }
 
 export type IconButtonTokenResolver = ComponentTokenResolver<
@@ -86,7 +83,6 @@ export const iconButtonTokenResolver: IconButtonTokenResolver = ({
     semanticResolvers,
     overrides: { size: toButtonIconSize(size) },
   })
-  const textStyle = themeTokens.typography.label[toTypographySize(size)]
   const isHovered = state.has('hovered')
 
   return {
@@ -134,10 +130,6 @@ export const iconButtonTokenResolver: IconButtonTokenResolver = ({
     icon: {
       size: iconSizeTokens.size,
       strokeWidth: iconSizeTokens.strokeWidth,
-      color: resolved.foreground,
-    },
-    text: {
-      ...textStyle,
       color: resolved.foreground,
     },
   }

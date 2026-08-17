@@ -1,6 +1,8 @@
 import { toContainerStyle } from '../adapters/container-adapter'
+import { toIconStyle } from '../adapters/icon-style-adapter'
 import { toTextStyle } from '../adapters/text-style-adapter'
 import type {
+  ThemedPressableIconStyle,
   ThemedPressableState,
   ThemedPressableStyle,
   ThemedPressableTextStyle,
@@ -8,6 +10,7 @@ import type {
 } from '../types/components/themedPressable'
 import {
   createStyleResolver,
+  createValueResolver,
   toPressableInteractionState,
   type ComponentThemeResolver
 } from '../types/resolver'
@@ -47,6 +50,9 @@ export const toThemedPressableThemeResolvers: ComponentThemeResolver<ThemedPress
         left: 0,
       }
     }),
+    icon: createValueResolver((state: ThemedPressableState): ThemedPressableIconStyle => (
+      toIconStyle(resolve(state).icon)
+    )),
     text: createStyleResolver((state: ThemedPressableState): ThemedPressableTextStyle => (
       toTextStyle(resolve(state).text)
     )),

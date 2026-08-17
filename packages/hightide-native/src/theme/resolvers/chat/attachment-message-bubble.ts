@@ -25,6 +25,7 @@ import type {
   ChatMessageBubbleMetaDataStatusContainerStyle,
   ChatMessageBubbleMetaDataTextStyle,
   PressableContainerStyle,
+  PressableIconStyle,
   PressableState,
   PressableStateLayerStyle,
   PressableTextStyle
@@ -127,6 +128,9 @@ export const toChatAttachmentMessageBubbleThemeResolvers: ComponentThemeResolver
           ...toTextStyle(resolvePressable(pressableState).text),
           ...toOptionalTextStyle(contentContainer.text),
         })),
+        icon: createValueResolver((pressableState: PressableState): PressableIconStyle => (
+          toIconStyle(resolvePressable(pressableState).icon)
+        )),
       }
     }),
     fileIconContainer: createStyleResolver((

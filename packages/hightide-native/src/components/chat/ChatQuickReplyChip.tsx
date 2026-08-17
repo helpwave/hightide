@@ -13,6 +13,7 @@ import { ThemedText } from '../visualization-and-display/ThemedText'
 import type {
   ChatQuickReplyChipState,
   PressableContainerStyle,
+  PressableIconStyle,
   PressableState,
   PressableTextStyle
 } from '../../theme/types/components/chat'
@@ -20,13 +21,14 @@ import type { StyleOverwrite } from '../../theme/types/resolver'
 
 export type ChatQuickReplyChipProps = Omit<
   ThemedPressableProps,
-  'children' | 'containerStyle' | 'textStyle' | 'stateLayerStyle'
+  'children' | 'containerStyle' | 'textStyle' | 'stateLayerStyle' | 'iconStyle'
 > & {
   isActive?: boolean,
   children?: ReactNode,
   style?: StyleProp<ViewStyle>,
   containerStyle?: StyleOverwrite<PressableState, PressableContainerStyle>,
   textStyle?: StyleOverwrite<PressableState, PressableTextStyle>,
+  iconStyle?: StyleOverwrite<PressableState, PressableIconStyle>,
 }
 
 export const ChatQuickReplyChip = ({
@@ -36,6 +38,7 @@ export const ChatQuickReplyChip = ({
   style,
   containerStyle,
   textStyle,
+  iconStyle,
   ...props
 }: ChatQuickReplyChipProps) => {
   const { theme } = useTheme()
@@ -58,6 +61,9 @@ export const ChatQuickReplyChip = ({
       )}
       textStyle={(_, pressableState) => (
         pressableResolvers.text(pressableState, textStyle)
+      )}
+      iconStyle={(_, pressableState) => (
+        pressableResolvers.icon(pressableState, iconStyle)
       )}
     >
       {typeof children === 'string' || typeof children === 'number' ? (

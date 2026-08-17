@@ -5,6 +5,26 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [0.2.0] - 2026-08-17
+
+### Added
+
+- `ContentThemeRootProvider` and `ContentThemeOverrideProvider` with `foreground`, `textStyle`, and `iconStyle` (override values support updaters)
+- `ListItemTextContent` and `ListItemAccessory` for shared list title/subtitle rendering and accessory content theming
+- Icon theme resolvers for `ThemedPressable` and `Chip` (including chat pressable wrappers that consume pressable tokens)
+- Minimum touch-target `hitSlop` and debug hit-box overlay for `ListActionItem` and `ListNavigationItem`
+
+### Changed
+
+- List item APIs use `title` / `subtitle` / `content` / `contentOrder` instead of `label` / `value`
+- Content theme context exposes a single `foreground` color instead of a color pair
+- `ThemedText`, `ThemedIcon`, buttons, chips, pressables, and list accessories consume the updated content theme
+- Consumes `@helpwave/hightide-design@0.2.0` pressable / chip icon tokens, list icon sizing, and foreground-default list icon color
+
+### Removed
+
+- Icon button text theme resolver (icons are themed via content theme `iconStyle` only)
+
 ## [0.1.1] - 2026-08-17
 
 ### Changed

@@ -13,6 +13,8 @@ import type { ColorPairToken } from '../theme-tokens/theme-tokens-config'
 import { resolveStateBasedProperty } from '../theme-tokens/stateBasedProperty'
 import type { ComponentTokenResolver } from './component-token-resolver'
 import type { ContainerTokens } from './container-tokens'
+import { toButtonIconSize } from './icon-size'
+import { iconTokenResolver, type IconTokens } from './icon-tokens'
 import type { TextStyleTokens } from './text-style-tokens'
 
 export const pressableStateValues = [
@@ -57,6 +59,7 @@ export type PressableComponentResolverProps = {
 export type PressableTokens = {
   container: ContainerTokens,
   stateLayer: ContainerTokens,
+  icon: IconTokens,
   text: TextStyleTokens,
 }
 
@@ -109,6 +112,11 @@ export const pressableTokenResolver: PressableTokenResolver = ({
   const layout = semanticResolvers.controlLayout({ themeTokens, size })
   const textStyle = themeTokens.typography.label[toTypographySize(size)]
   const gap = themeTokens.spacing[size]
+  const iconSizeTokens = iconTokenResolver({
+    themeTokens,
+    semanticResolvers,
+    overrides: { size: toButtonIconSize(size) },
+  })
 
   return {
     container: {
@@ -145,6 +153,11 @@ export const pressableTokenResolver: PressableTokenResolver = ({
       shape: {
         borderRadius: { type: 'all', value: layout.borderRadius },
       },
+    },
+    icon: {
+      size: iconSizeTokens.size,
+      strokeWidth: iconSizeTokens.strokeWidth,
+      color: resolved.foreground,
     },
     text: {
       color: resolved.foreground,

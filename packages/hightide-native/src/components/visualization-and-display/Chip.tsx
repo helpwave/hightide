@@ -12,15 +12,15 @@ import {
 import type { ColorPairToken } from '@helpwave/hightide-design/theme-tokens'
 import type { ChipVariant, ComponentSize } from '@helpwave/hightide-design/semantic-token-resolvers'
 
-import { ContentThemeProvider } from '../../global-contexts/content-theme/ContentThemeProvider'
+import { ContentThemeOverrideProvider } from '../../global-contexts/content-theme/ContentThemeProvider'
 import { useTheme } from '../../global-contexts/theme/ThemeContext'
 import type {
+  ChipIconStyle,
   ChipState,
   ChipStyle,
   ChipTextStyle
 } from '../../theme/types/components/chip'
 import type { StyleOverwrite } from '../../theme/types/resolver'
-import type { Color } from '../../theme/types/color'
 import { ThemedText } from './ThemedText'
 
 export type ChipSize = ComponentSize
@@ -39,6 +39,7 @@ export type ChipProps = Omit<ViewProps, 'children' | 'style'> & {
   children?: ReactNode,
   style?: StyleProp<ViewStyle>,
   chipStyle?: StyleOverwrite<ChipState, ChipStyle>,
+  iconStyle?: StyleOverwrite<ChipState, ChipIconStyle>,
   textStyle?: StyleOverwrite<ChipState, ChipTextStyle>,
 }
 
@@ -49,6 +50,7 @@ export const Chip = ({
   size = 'md',
   style,
   chipStyle,
+  iconStyle,
   textStyle,
   ...props
 }: ChipProps) => {
@@ -64,6 +66,10 @@ export const Chip = ({
     () => theme.components.chip.chip(state, chipStyle),
     [theme, state, chipStyle]
   )
+  const resolvedIconStyle = useMemo(
+    () => theme.components.chip.icon(state, iconStyle),
+    [theme, state, iconStyle]
+  )
   const resolvedTextStyle = useMemo(
     () => theme.components.chip.text(state, textStyle),
     [theme, state, textStyle]
@@ -74,14 +80,15 @@ export const Chip = ({
       {...props}
       style={[resolvedChipStyle, style]}
     >
-      <ContentThemeProvider
-        foregroundColor={resolvedTextStyle.color as Color}
+      <ContentThemeOverrideProvider
+        foreground={resolvedTextStyle.color}
         textStyle={resolvedTextStyle}
+        iconStyle={resolvedIconStyle}
       >
         {typeof children === 'string' || typeof children === 'number'
           ? <ThemedText>{children}</ThemedText>
           : children}
-      </ContentThemeProvider>
+      </ContentThemeOverrideProvider>
     </View>
   )
 }

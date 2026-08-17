@@ -61,6 +61,7 @@ export type ChatAttachmentMessageBubbleState = {
 export type PressableContainerStyle = ViewStyle
 export type PressableStateLayerStyle = ViewStyle
 export type PressableTextStyle = TextStyle
+export type PressableIconStyle = IconStyle
 
 export type PressableState = ThemedPressableState
 
@@ -158,6 +159,10 @@ export type ChatAttachmentMessageBubbleThemeResolvers = {
         PressableState,
         PressableTextStyle
       >,
+      icon: StyleResolverFunction<
+        PressableState,
+        PressableIconStyle
+      >,
     }
   >,
   fileIconContainer: StyleResolverFunction<ChatAttachmentMessageBubbleState, ChatAttachmentMessageBubbleFileIconContainerStyle>,
@@ -194,6 +199,10 @@ export type ChatQuickReplyChipThemeResolvers = {
       text: StyleResolverFunction<
         PressableState,
         PressableTextStyle
+      >,
+      icon: StyleResolverFunction<
+        PressableState,
+        PressableIconStyle
       >,
     }
   >,

@@ -224,19 +224,17 @@ export const MultiSelect = ({
 
                   return (
                     <ListActionItem
-                      label={item.label ?? item.id}
+                      title={item.label ?? item.id}
                       color={optionColor}
                       disabled={item.disabled}
                       onPress={() => multiSelect.toggleSelection(item.id)}
                       leading={(
                         <View style={multiSelectTheme.checkbox(optionState)}>
-                          {checkboxIcon.visible && (
-                            <ThemedIcon
-                              icon={HightideIconRegistry.Check}
-                              size="sm"
-                              color={checkboxIcon.color}
-                            />
-                          )}
+                          <ThemedIcon
+                            icon={HightideIconRegistry.Check}
+                            size="sm"
+                            color={checkboxIcon.color}
+                          />
                         </View>
                       )}
                     />
