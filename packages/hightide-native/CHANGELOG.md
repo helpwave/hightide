@@ -5,6 +5,37 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [0.1.1] - 2026-08-17
+
+### Changed
+
+- Consumes `@helpwave/hightide-design@0.1.1` numeric `FontWeightToken` values through the text style adapter
+
+## [0.1.0] - 2026-08-17
+
+### Added
+
+- `ThemedPressable`, `ThemedText`, `ThemedIcon`, `Card`, `Divider`, `SearchBar`, and list item components (`ListItem`, `ListActionItem`, `ListNavigationItem`)
+- Content theme and debug context wiring (hit-box visualization via `@helpwave/hightide-utils/context/debug`)
+- Minimum touch-target `hitSlop` helpers and debug hit-box overlay for pressable controls
+- Theme adapters split into container, text style, and icon style adapters
+- Semantic theme types and resolvers aligned with the new design-token pipeline (including chat, list, card, pressable, and search bar)
+
+### Changed
+
+- Theme creation and component resolvers now consume the layered `@helpwave/hightide-design` token / resolver APIs
+- Renamed menu surfaces to card / list item APIs (`Menu*` → `Card` / `List*`)
+- Chat attachment and message card surfaces reworked around `ChatAttachmentMessageBubble` and message bubble tokens
+- Avatar theming split across `Avatar`, `AvatarWithStatus`, and `AvatarGroup`; checkbox / switch / select / multi-select / chat controls updated for state layers and touch targets
+- Storybook moved out of the package into dedicated native / native-web apps
+
+### Removed
+
+- `Menu`, `MenuItem`, `MenuActionItem`, and `MenuNavigationItem`
+- `ChatAttachmentCard` and `ChatMessageCard` (replaced by bubble-based chat components)
+- Package-local Storybook config and stories (moved to apps)
+- `AvatarWithLabel` and the previous `Icon` display component (replaced by `ThemedIcon`)
+
 ## [0.0.8] - 2026-07-24
 
 ### Added
