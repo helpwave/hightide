@@ -24,7 +24,6 @@ export type ChatConversationRowState = InteractionState & {
   isSelected?: boolean,
 }
 
-export type ChatConversationRowStyle = ViewStyle
 export type ChatConversationRowContentContainerStyle = ViewStyle
 export type ChatConversationRowHeaderRowStyle = ViewStyle
 export type ChatConversationRowMessageRowStyle = ViewStyle
@@ -96,7 +95,27 @@ export type ChatMessageComposerStyle = ViewStyle
 export type ChatMessageComposerInputStyle = ViewStyle & TextStyle
 
 export type ChatConversationRowThemeResolvers = {
-  container: StyleResolverFunction<ChatConversationRowState, ChatConversationRowStyle>,
+  pressable: StyleResolverFunction<
+    ChatConversationRowState,
+    {
+      container: StyleResolverFunction<
+        PressableState,
+        PressableContainerStyle
+      >,
+      stateLayer: StyleResolverFunction<
+        PressableState,
+        PressableStateLayerStyle
+      >,
+      text: StyleResolverFunction<
+        PressableState,
+        PressableTextStyle
+      >,
+      icon: StyleResolverFunction<
+        PressableState,
+        PressableIconStyle
+      >,
+    }
+  >,
   contentContainer: StyleResolverFunction<ChatConversationRowState, ChatConversationRowContentContainerStyle>,
   headerRow: StyleResolverFunction<ChatConversationRowState, ChatConversationRowHeaderRowStyle>,
   messageRow: StyleResolverFunction<ChatConversationRowState, ChatConversationRowMessageRowStyle>,
@@ -126,6 +145,27 @@ export type ChatThreadHeaderThemeResolvers = {
   avatar: StyleResolverFunction<
     AvatarState,
     AvatarThemeResolvers
+  >,
+  pressable: StyleResolverFunction<
+    Record<string, never>,
+    {
+      container: StyleResolverFunction<
+        PressableState,
+        PressableContainerStyle
+      >,
+      stateLayer: StyleResolverFunction<
+        PressableState,
+        PressableStateLayerStyle
+      >,
+      text: StyleResolverFunction<
+        PressableState,
+        PressableTextStyle
+      >,
+      icon: StyleResolverFunction<
+        PressableState,
+        PressableIconStyle
+      >,
+    }
   >,
 }
 

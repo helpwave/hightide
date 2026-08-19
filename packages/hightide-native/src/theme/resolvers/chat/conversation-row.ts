@@ -1,4 +1,9 @@
-import type { AvatarTokens } from '@helpwave/hightide-design/component-token-resolvers'
+import type {
+  AvatarTokens,
+  ContainerTokens,
+  IconTokens,
+  TextStyleTokens
+} from '@helpwave/hightide-design/component-token-resolvers'
 
 import {
   createAvatarStyleResolvers,
@@ -16,12 +21,16 @@ import type {
   ChatConversationRowPreviewStyle,
   ChatConversationRowSentIndicatorStyle,
   ChatConversationRowState,
-  ChatConversationRowStyle,
   ChatConversationRowThemeResolvers,
   ChatConversationRowTimestampStyle,
   ChatConversationRowTitleStyle,
   ChatConversationRowUnreadBadgeStyle,
-  ChatConversationRowUnreadBadgeTextStyle
+  ChatConversationRowUnreadBadgeTextStyle,
+  PressableContainerStyle,
+  PressableIconStyle,
+  PressableState,
+  PressableStateLayerStyle,
+  PressableTextStyle
 } from '../../types/components/chat'
 import type {
   AvatarState,
@@ -32,8 +41,21 @@ import {
   createSimpleValueResolver,
   createStyleResolver,
   createValueResolver,
+  toPressableInteractionState,
   type ComponentThemeResolver
 } from '../../types/resolver'
+
+const toOptionalContainerStyle = (tokens?: ContainerTokens): PressableContainerStyle => (
+  tokens === undefined ? {} : toContainerStyle(tokens)
+)
+
+const toOptionalTextStyle = (tokens?: TextStyleTokens): PressableTextStyle => (
+  tokens === undefined ? {} : toTextStyle(tokens)
+)
+
+const toOptionalIconStyle = (tokens?: IconTokens): PressableIconStyle => (
+  tokens === undefined ? {} : toIconStyle(tokens)
+)
 
 export const toChatConversationRowThemeResolvers: ComponentThemeResolver<ChatConversationRowThemeResolvers> = ({
   themeTokens,
@@ -55,9 +77,46 @@ export const toChatConversationRowThemeResolvers: ComponentThemeResolver<ChatCon
   })
 
   return {
-    container: createStyleResolver((state: ChatConversationRowState): ChatConversationRowStyle => (
-      toContainerStyle(resolve(state).container)
-    )),
+    pressable: createValueResolver((state: ChatConversationRowState) => {
+      const { pressableOverrides } = resolve(state)
+
+      const resolvePressable = (pressableState: PressableState) => componentTokens.pressable({
+        themeTokens,
+        semanticResolvers: semanticTokens,
+        overrides: {
+          size: pressableOverrides.overrides?.size,
+          color: pressableOverrides.overrides?.color,
+          coloringStyle: pressableOverrides.overrides?.coloringStyle,
+          coloringColorVariant: pressableOverrides.overrides?.coloringColorVariant,
+          hasAdditionalHorizontalPadding: pressableOverrides.overrides?.hasAdditionalHorizontalPadding,
+        },
+        state: toPressableInteractionState(pressableState),
+      })
+
+      return {
+        container: createStyleResolver((pressableState: PressableState): PressableContainerStyle => ({
+          ...toContainerStyle(resolvePressable(pressableState).container),
+          ...toOptionalContainerStyle(pressableOverrides.container),
+        })),
+        stateLayer: createStyleResolver((pressableState: PressableState): PressableStateLayerStyle => ({
+          ...toContainerStyle(resolvePressable(pressableState).stateLayer),
+          position: 'absolute',
+          top: 0,
+          right: 0,
+          bottom: 0,
+          left: 0,
+          ...toOptionalContainerStyle(pressableOverrides.stateLayer),
+        })),
+        text: createStyleResolver((pressableState: PressableState): PressableTextStyle => ({
+          ...toTextStyle(resolvePressable(pressableState).text),
+          ...toOptionalTextStyle(pressableOverrides.text),
+        })),
+        icon: createValueResolver((pressableState: PressableState): PressableIconStyle => ({
+          ...toIconStyle(resolvePressable(pressableState).icon),
+          ...toOptionalIconStyle(pressableOverrides.icon),
+        })),
+      }
+    }),
     contentContainer: createStyleResolver((state: ChatConversationRowState): ChatConversationRowContentContainerStyle => (
       toContainerStyle(resolve(state).contentContainer)
     )),

@@ -15,11 +15,17 @@ import {
   Avatar,
   type AvatarProps
 } from '../visualization-and-display/Avatar'
+import {
+  ThemedPressable,
+  type ThemedPressableProps
+} from '../user-interaction/ThemedPressable'
 import type {
   ChatThreadHeaderContentRowStyle,
   ChatThreadHeaderStyle,
   ChatThreadHeaderSubtitleStyle,
-  ChatThreadHeaderTitleStyle
+  ChatThreadHeaderTitleStyle,
+  PressableContainerStyle,
+  PressableState
 } from '../../theme/types/components/chat'
 import type { StyleOverwrite } from '../../theme/types/resolver'
 
@@ -29,11 +35,14 @@ export type ChatThreadHeaderProps = Omit<ViewProps, 'style'> & {
   subtitle?: ReactNode,
   leftActions?: ReactNode,
   rightActions?: ReactNode,
+  onPress?: ThemedPressableProps['onPress'],
+  disabled?: boolean,
   style?: StyleProp<ViewStyle>,
   headerStyle?: StyleOverwrite<Record<string, never>, ChatThreadHeaderStyle>,
   contentRowStyle?: StyleOverwrite<Record<string, never>, ChatThreadHeaderContentRowStyle>,
   titleStyle?: StyleOverwrite<Record<string, never>, ChatThreadHeaderTitleStyle>,
   subtitleStyle?: StyleOverwrite<Record<string, never>, ChatThreadHeaderSubtitleStyle>,
+  pressableContainerStyle?: StyleOverwrite<PressableState, PressableContainerStyle>,
 }
 
 export const ChatThreadHeader = ({
@@ -42,11 +51,14 @@ export const ChatThreadHeader = ({
   subtitle,
   leftActions,
   rightActions,
+  onPress,
+  disabled,
   style,
   headerStyle,
   contentRowStyle,
   titleStyle,
   subtitleStyle,
+  pressableContainerStyle,
   ...props
 }: ChatThreadHeaderProps) => {
   const { theme } = useTheme()
@@ -71,16 +83,26 @@ export const ChatThreadHeader = ({
     () => theme.components.chat.threadHeader.subtitle(state, subtitleStyle),
     [theme, state, subtitleStyle]
   )
-
-  const avatarThemeState = useMemo(() => ({
-    size: resolvedAvatar.size,
-    color: resolvedAvatar.color,
-  }), [resolvedAvatar.size, resolvedAvatar.color])
+  const pressableResolvers = useMemo(
+    () => theme.components.chat.threadHeader.pressable(state),
+    [theme, state]
+  )
 
   const avatarTheme = useMemo(
-    () => theme.components.chat.threadHeader.avatar(avatarThemeState),
-    [theme, avatarThemeState]
+    () => theme.components.chat.threadHeader.avatar({
+      size: resolvedAvatar.size,
+      color: resolvedAvatar.color,
+    }),
+    [theme, resolvedAvatar.size, resolvedAvatar.color]
   )
+  const avatarSize = useMemo(() => {
+    if (typeof resolvedAvatar.size === 'number' || typeof resolvedAvatar.size === 'string') {
+      return resolvedAvatar.size
+    }
+
+    const width = avatarTheme.container({}).width
+    return typeof width === 'number' ? width : resolvedAvatar.size
+  }, [avatarTheme, resolvedAvatar.size])
 
   return (
     <View {...props} style={[resolvedHeaderStyle, style]}>
@@ -89,51 +111,69 @@ export const ChatThreadHeader = ({
           {leftActions}
         </View>
       )}
-      <Avatar
-        {...resolvedAvatar}
-        avatarStyle={(_, avatarState) => avatarTheme.container(
-          {
-            ...avatarState,
-            size: resolvedAvatar.size,
-          },
-          resolvedAvatar.avatarStyle
+      <ThemedPressable
+        onPress={onPress}
+        disabled={disabled}
+        containerStyle={(_, pressableState) => (
+          pressableResolvers.container(pressableState, pressableContainerStyle)
         )}
-        imageStyle={(_, avatarState) => avatarTheme.image(
-          {
-            ...avatarState,
-            size: resolvedAvatar.size,
-          },
-          resolvedAvatar.imageStyle
+        stateLayerStyle={(_, pressableState) => (
+          pressableResolvers.stateLayer(pressableState)
         )}
-        textStyle={(_, avatarState) => avatarTheme.text(
-          {
-            ...avatarState,
-            size: resolvedAvatar.size,
-          },
-          resolvedAvatar.textStyle
+        textStyle={(_, pressableState) => (
+          pressableResolvers.text(pressableState)
         )}
-        iconStyle={(_, avatarState) => avatarTheme.icon(
-          {
-            ...avatarState,
-            size: resolvedAvatar.size,
-          },
-          resolvedAvatar.iconStyle
+        iconStyle={(_, pressableState) => (
+          pressableResolvers.icon(pressableState)
         )}
-      />
-      <View style={resolvedContentRowStyle}>
-        {typeof title === 'string' || typeof title === 'number' ? (
-          <ThemedText style={resolvedTitleStyle} numberOfLines={1}>{title}</ThemedText>
-        ) : (
-          title
-        )}
-        {subtitle != null && (
-          typeof subtitle === 'string' || typeof subtitle === 'number' ? (
-            <ThemedText style={resolvedSubtitleStyle} numberOfLines={1}>{subtitle}</ThemedText>
+      >
+        <Avatar
+          {...resolvedAvatar}
+          size={avatarSize}
+          avatarStyle={(_, avatarState) => avatarTheme.container(
+            {
+              ...avatarState,
+              size: avatarSize,
+            },
+            resolvedAvatar.avatarStyle
+          )}
+          imageStyle={(_, avatarState) => avatarTheme.image(
+            {
+              ...avatarState,
+              size: avatarSize,
+            },
+            resolvedAvatar.imageStyle
+          )}
+          textStyle={(_, avatarState) => avatarTheme.text(
+            {
+              ...avatarState,
+              size: avatarSize,
+            },
+            resolvedAvatar.textStyle
+          )}
+          iconStyle={(_, avatarState) => avatarTheme.icon(
+            {
+              ...avatarState,
+              size: avatarSize,
+            },
+            resolvedAvatar.iconStyle
+          )}
+        />
+        <View style={resolvedContentRowStyle}>
+          {typeof title === 'string' || typeof title === 'number' ? (
+            <ThemedText style={resolvedTitleStyle} numberOfLines={1}>{title}</ThemedText>
           ) : (
-            subtitle
-          )
-        )}
-      </View>
+            title
+          )}
+          {subtitle != null && (
+            typeof subtitle === 'string' || typeof subtitle === 'number' ? (
+              <ThemedText style={resolvedSubtitleStyle} numberOfLines={1}>{subtitle}</ThemedText>
+            ) : (
+              subtitle
+            )
+          )}
+        </View>
+      </ThemedPressable>
       {rightActions != null && (
         <View style={{ flexDirection: 'row', alignItems: 'center', flexShrink: 0 }}>
           {rightActions}
