@@ -5,6 +5,34 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/)
 and adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [0.3.0] - 2026-08-19
+
+### Added
+
+- `FontSizingToken` (`fontSize` + `lineHeight`) on primitive typography and as `ThemeTokens.fontSizing`
+- Root theme scales `fontWeights` and `fontFamilies` (`default` | `accent` | `mono`)
+- Root `borderRadius` and `padding` token maps
+- `ThemeTokens.config` with `coloring` and `appearancePercentages`
+- Container layout tokens `flexGrow`, `flexShrink`, `flexBasis`, `mainAxisAlignment` (including spacing), `crossAxisAligment` (including stretch), `crossAxisLineAligment`, and `selfCrossAxisAlignment`
+- Chat conversation row `pressableOverrides` and thread header `pressableOverwrites`
+
+### Changed
+
+- Flattened `ThemeTokens`: `shape`, `decoration`, and top-level `coloring` moved to the fields above
+- `ThemeTypographyTokens` is only role styles (`display`, `heading`, `body`, `label`)
+- `ThemeTokensConfig` matches the flattened shape (`fontSizing`, `fontWeights`, `fontFamilies`, `borderRadius`, `padding`, nested `config`)
+- Primitive `hightideTypography` uses `fontSizing` instead of separate `fontSize` and `lineHeight` maps
+- Semantic and component resolvers read `borderRadius`, `padding`, `fontWeights`, `config.coloring`, and `config.appearancePercentages`
+- Input / select / multi-select tokens use theme `color.border`
+
+### Removed
+
+- `ThemeTokens.shape`, `ThemeTokens.decoration`, and top-level `ThemeTokens.coloring`
+- `ThemeShapeTokens` and `ThemeDecorationTokens`
+- `fontFamilies` / `fontWeights` nested under `typography`
+- Container `alignSelf` (replaced by `selfCrossAxisAlignment`)
+- Conversation row `container` tokens (replaced by `pressableOverrides`)
+
 ## [0.2.0] - 2026-08-17
 
 ### Added

@@ -5,6 +5,30 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [0.3.0] - 2026-08-19
+
+### Added
+
+- Runtime theme fields mirroring flattened design tokens: `size`, `padding`, `borderWidth`, `elevation`, `motion`, `focusOutline`, `fontSizing`, `fontWeights`, `fontFamilies`, and `config`
+- Overlay `stateLayer` resolvers on `Select` and `MultiSelect` (same pattern as `Button`)
+- `ChatThreadHeader` pressable wrapping avatar and title/subtitle (`onPress`, `disabled`, `pressableContainerStyle`)
+- `ChatConversationRow` pressable theming via `ThemedPressable`
+- Unified `StyleAdapterUtils` (`container`, `text`, `icon`, `containerWithStateLayer`, and granular layout/border helpers)
+
+### Changed
+
+- Consumes `@helpwave/hightide-design@0.3.0` flattened `ThemeTokens`
+- `theme.typography` is only role styles; use `theme.fontWeights` / `theme.fontFamilies` / `theme.fontSizing`
+- `theme.border` renamed to `theme.borderWidth`
+- Container / text / icon resolvers go through `StyleAdapterUtils`; borders resolve to physical `top` / `right` / `bottom` / `left`
+- List item minimum height uses `layout.size + spacing.md`
+
+### Removed
+
+- Separate `container-adapter`, `text-style-adapter`, `icon-style-adapter`, and `defined` adapter modules
+- `theme.border` (use `theme.borderWidth`)
+- `theme.typography.fontWeights` and `theme.typography.fontFamilies`
+
 ## [0.2.0] - 2026-08-17
 
 ### Added
