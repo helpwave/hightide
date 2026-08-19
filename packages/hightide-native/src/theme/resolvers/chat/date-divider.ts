@@ -1,5 +1,3 @@
-import { toContainerStyle } from '../../adapters/container-adapter'
-import { toTextStyle } from '../../adapters/text-style-adapter'
 import type {
   ChatDateDividerStyle,
   ChatDateDividerTextStyle,
@@ -9,6 +7,8 @@ import {
   createSimpleStyleResolver,
   type ComponentThemeResolver
 } from '../../types/resolver'
+
+import { StyleAdapterUtils } from '../../adapters'
 
 export const toChatDateDividerThemeResolvers: ComponentThemeResolver<ChatDateDividerThemeResolvers> = ({
   themeTokens,
@@ -22,10 +22,10 @@ export const toChatDateDividerThemeResolvers: ComponentThemeResolver<ChatDateDiv
 
   return {
     container: createSimpleStyleResolver((): ChatDateDividerStyle => (
-      toContainerStyle(resolve().container)
+      StyleAdapterUtils.container(resolve().container)
     )),
     text: createSimpleStyleResolver((): ChatDateDividerTextStyle => (
-      toTextStyle(resolve().text)
+      StyleAdapterUtils.text(resolve().text)
     )),
   }
 }

@@ -1,6 +1,3 @@
-import { toContainerStyle } from '../adapters/container-adapter'
-import { toIconStyle } from '../adapters/icon-style-adapter'
-import { toTextStyle } from '../adapters/text-style-adapter'
 import type {
   ChipIconStyle,
   ChipState,
@@ -13,6 +10,8 @@ import {
   createValueResolver,
   type ComponentThemeResolver
 } from '../types/resolver'
+
+import { StyleAdapterUtils } from '../adapters'
 
 export const toChipThemeResolvers: ComponentThemeResolver<ChipThemeResolvers> = ({
   themeTokens,
@@ -31,13 +30,13 @@ export const toChipThemeResolvers: ComponentThemeResolver<ChipThemeResolvers> = 
 
   return {
     chip: createStyleResolver((state: ChipState): ChipStyle => (
-      toContainerStyle(resolve(state).container)
+      StyleAdapterUtils.container(resolve(state).container)
     )),
     icon: createValueResolver((state: ChipState): ChipIconStyle => (
-      toIconStyle(resolve(state).icon)
+      StyleAdapterUtils.icon(resolve(state).icon)
     )),
     text: createStyleResolver((state: ChipState): ChipTextStyle => (
-      toTextStyle(resolve(state).text)
+      StyleAdapterUtils.text(resolve(state).text)
     )),
   }
 }

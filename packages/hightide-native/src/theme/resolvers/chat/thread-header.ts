@@ -1,8 +1,5 @@
 import type {
-  AvatarTokens,
-  ContainerTokens,
-  IconTokens,
-  TextStyleTokens
+  AvatarTokens
 } from '@helpwave/hightide-design/component-token-resolvers'
 
 import {
@@ -11,9 +8,6 @@ import {
   toDesignAvatarSize,
   withNumericAvatarSize
 } from '../avatar'
-import { toContainerStyle } from '../../adapters/container-adapter'
-import { toIconStyle } from '../../adapters/icon-style-adapter'
-import { toTextStyle } from '../../adapters/text-style-adapter'
 import type {
   ChatThreadHeaderContentRowStyle,
   ChatThreadHeaderStyle,
@@ -38,17 +32,7 @@ import {
   type ComponentThemeResolver
 } from '../../types/resolver'
 
-const toOptionalContainerStyle = (tokens?: ContainerTokens): PressableContainerStyle => (
-  tokens === undefined ? {} : toContainerStyle(tokens)
-)
-
-const toOptionalTextStyle = (tokens?: TextStyleTokens): PressableTextStyle => (
-  tokens === undefined ? {} : toTextStyle(tokens)
-)
-
-const toOptionalIconStyle = (tokens?: IconTokens): PressableIconStyle => (
-  tokens === undefined ? {} : toIconStyle(tokens)
-)
+import { StyleAdapterUtils } from '../../adapters'
 
 export const toChatThreadHeaderThemeResolvers: ComponentThemeResolver<ChatThreadHeaderThemeResolvers> = ({
   themeTokens,
@@ -62,16 +46,16 @@ export const toChatThreadHeaderThemeResolvers: ComponentThemeResolver<ChatThread
 
   return {
     container: createSimpleStyleResolver((): ChatThreadHeaderStyle => (
-      toContainerStyle(resolve().container)
+      StyleAdapterUtils.container(resolve().container)
     )),
     contentRow: createSimpleStyleResolver((): ChatThreadHeaderContentRowStyle => (
-      toContainerStyle(resolve().contentRow)
+      StyleAdapterUtils.container(resolve().contentRow)
     )),
     title: createSimpleStyleResolver((): ChatThreadHeaderTitleStyle => (
-      toTextStyle(resolve().title)
+      StyleAdapterUtils.text(resolve().title)
     )),
     subtitle: createSimpleStyleResolver((): ChatThreadHeaderSubtitleStyle => (
-      toTextStyle(resolve().subtitle)
+      StyleAdapterUtils.text(resolve().subtitle)
     )),
     avatar: createValueResolver((state: AvatarState): AvatarThemeResolvers => {
       const { avatarOverride } = resolve()
@@ -123,25 +107,25 @@ export const toChatThreadHeaderThemeResolvers: ComponentThemeResolver<ChatThread
 
       return {
         container: createStyleResolver((pressableState: PressableState): PressableContainerStyle => ({
-          ...toContainerStyle(resolvePressable(pressableState).container),
-          ...toOptionalContainerStyle(pressableOverwrites.container),
+          ...StyleAdapterUtils.container(resolvePressable(pressableState).container),
+          ...StyleAdapterUtils.container(pressableOverwrites.container = {}),
         })),
         stateLayer: createStyleResolver((pressableState: PressableState): PressableStateLayerStyle => ({
-          ...toContainerStyle(resolvePressable(pressableState).stateLayer),
+          ...StyleAdapterUtils.container(resolvePressable(pressableState).stateLayer),
           position: 'absolute',
           top: 0,
           right: 0,
           bottom: 0,
           left: 0,
-          ...toOptionalContainerStyle(pressableOverwrites.stateLayer),
+          ...StyleAdapterUtils.container(pressableOverwrites.stateLayer = {}),
         })),
         text: createStyleResolver((pressableState: PressableState): PressableTextStyle => ({
-          ...toTextStyle(resolvePressable(pressableState).text),
-          ...toOptionalTextStyle(pressableOverwrites.text),
+          ...StyleAdapterUtils.text(resolvePressable(pressableState).text),
+          ...StyleAdapterUtils.text(pressableOverwrites.text = {}),
         })),
         icon: createValueResolver((pressableState: PressableState): PressableIconStyle => ({
-          ...toIconStyle(resolvePressable(pressableState).icon),
-          ...toOptionalIconStyle(pressableOverwrites.icon),
+          ...StyleAdapterUtils.icon(resolvePressable(pressableState).icon),
+          ...StyleAdapterUtils.icon(pressableOverwrites.icon = {}),
         })),
       }
     }),

@@ -1,4 +1,3 @@
-import { toContainerStyle } from '../adapters/container-adapter'
 import type {
   CardStyle,
   CardThemeResolvers
@@ -7,6 +6,8 @@ import {
   createSimpleStyleResolver,
   type ComponentThemeResolver
 } from '../types/resolver'
+
+import { StyleAdapterUtils } from '../adapters'
 
 export const toCardThemeResolvers: ComponentThemeResolver<CardThemeResolvers> = ({
   themeTokens,
@@ -20,7 +21,7 @@ export const toCardThemeResolvers: ComponentThemeResolver<CardThemeResolvers> = 
 
   return {
     container: createSimpleStyleResolver((): CardStyle => ({
-      ...toContainerStyle(resolveCard()),
+      ...StyleAdapterUtils.container(resolveCard()),
       overflow: 'hidden',
     })),
   }

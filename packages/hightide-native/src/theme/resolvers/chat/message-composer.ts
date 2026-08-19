@@ -1,5 +1,3 @@
-import { toContainerStyle } from '../../adapters/container-adapter'
-import { toTextStyle } from '../../adapters/text-style-adapter'
 import type { TextStyle } from 'react-native'
 import type {
   ChatMessageComposerInputStyle,
@@ -11,6 +9,8 @@ import {
   createSimpleValueResolver,
   type ComponentThemeResolver
 } from '../../types/resolver'
+
+import { StyleAdapterUtils } from '../../adapters'
 
 export const toChatMessageComposerThemeResolvers: ComponentThemeResolver<ChatMessageComposerThemeResolvers> = ({
   themeTokens,
@@ -24,12 +24,11 @@ export const toChatMessageComposerThemeResolvers: ComponentThemeResolver<ChatMes
 
   return {
     container: createSimpleStyleResolver((): ChatMessageComposerStyle => (
-      toContainerStyle(resolve().container)
+      StyleAdapterUtils.container(resolve().container)
     )),
     input: createSimpleStyleResolver((): ChatMessageComposerInputStyle => ({
-      ...toContainerStyle(resolve().input),
-      ...toTextStyle(resolve().text),
-      flex: 1,
+      ...StyleAdapterUtils.container(resolve().input),
+      ...StyleAdapterUtils.text(resolve().text),
     })),
     placeholderColor: createSimpleValueResolver((): TextStyle => ({
       color: resolve().placeholder.color

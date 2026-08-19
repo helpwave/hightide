@@ -2,7 +2,6 @@ import type {
   SwitchState as DesignSwitchState,
   SwitchStateValue
 } from '@helpwave/hightide-design/component-token-resolvers'
-import { toContainerStyle } from '../adapters/container-adapter'
 import type {
   SwitchContainerStyle,
   SwitchState,
@@ -14,6 +13,8 @@ import {
   createStyleResolver,
   type ComponentThemeResolver
 } from '../types/resolver'
+
+import { StyleAdapterUtils } from '../adapters'
 
 const toDesignSwitchState = (state: SwitchState = {}): DesignSwitchState => {
   const active = new Set<SwitchStateValue>()
@@ -59,13 +60,13 @@ export const toSwitchThemeResolvers: ComponentThemeResolver<SwitchThemeResolvers
 
   return {
     container: createStyleResolver((state: SwitchState): SwitchContainerStyle => (
-      toContainerStyle(resolve(state).container)
+      StyleAdapterUtils.container(resolve(state).container)
     )),
     track: createStyleResolver((state: SwitchState): SwitchTrackStyle => (
-      toContainerStyle(resolve(state).track)
+      StyleAdapterUtils.container(resolve(state).track)
     )),
     thumb: createStyleResolver((state: SwitchState): SwitchThumbStyle => (
-      toContainerStyle(resolve(state).thumb)
+      StyleAdapterUtils.container(resolve(state).thumb)
     )),
   }
 }

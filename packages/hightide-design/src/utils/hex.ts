@@ -1,4 +1,4 @@
-import type { HexColorToken } from '../primitive-tokens/color'
+import type { ColorToken, HexColorToken } from '../primitive-tokens/color'
 
 const expandHex = (hex: string): string => {
   const normalized = hex.startsWith('#') ? hex.slice(1) : hex
@@ -87,9 +87,15 @@ const blend = (background: HexColorToken, tint: HexColorToken): HexColorToken =>
   return toHexWithAlpha(outR, outG, outB, outA)
 }
 
+function resolveColorToken(colorToken: ColorToken) : HexColorToken {
+  if(colorToken === 'transparent') return '#FFFFFF00'
+  return colorToken
+}
+
 export const HexColorUtils = {
   hexWithAlpha,
   mixWithBlack,
   mixWithWhite,
   blend,
+  resolveColorToken
 }

@@ -1,13 +1,4 @@
 import type {
-  ContainerTokens,
-  IconTokens,
-  TextStyleTokens
-} from '@helpwave/hightide-design/component-token-resolvers'
-
-import { toContainerStyle } from '../../adapters/container-adapter'
-import { toIconStyle } from '../../adapters/icon-style-adapter'
-import { toTextStyle } from '../../adapters/text-style-adapter'
-import type {
   ChatQuickReplyChipState,
   ChatQuickReplyChipThemeResolvers,
   PressableContainerStyle,
@@ -23,17 +14,7 @@ import {
   type ComponentThemeResolver
 } from '../../types/resolver'
 
-const toOptionalContainerStyle = (tokens?: ContainerTokens): PressableContainerStyle => (
-  tokens === undefined ? {} : toContainerStyle(tokens)
-)
-
-const toOptionalTextStyle = (tokens?: TextStyleTokens): PressableTextStyle => (
-  tokens === undefined ? {} : toTextStyle(tokens)
-)
-
-const toOptionalIconStyle = (tokens?: IconTokens): PressableIconStyle => (
-  tokens === undefined ? {} : toIconStyle(tokens)
-)
+import { StyleAdapterUtils } from '../../adapters'
 
 export const toChatQuickReplyChipThemeResolvers: ComponentThemeResolver<ChatQuickReplyChipThemeResolvers> = ({
   themeTokens,
@@ -65,25 +46,25 @@ export const toChatQuickReplyChipThemeResolvers: ComponentThemeResolver<ChatQuic
 
       return {
         container: createStyleResolver((pressableState: PressableState): PressableContainerStyle => ({
-          ...toContainerStyle(resolvePressable(pressableState).container),
-          ...toOptionalContainerStyle(tokens.container),
+          ...StyleAdapterUtils.container(resolvePressable(pressableState).container),
+          ...StyleAdapterUtils.container(tokens.container = {}),
         })),
         stateLayer: createStyleResolver((pressableState: PressableState): PressableStateLayerStyle => ({
-          ...toContainerStyle(resolvePressable(pressableState).stateLayer),
+          ...StyleAdapterUtils.container(resolvePressable(pressableState).stateLayer),
           position: 'absolute',
           top: 0,
           right: 0,
           bottom: 0,
           left: 0,
-          ...toOptionalContainerStyle(tokens.stateLayer),
+          ...StyleAdapterUtils.container(tokens.stateLayer = {}),
         })),
         text: createStyleResolver((pressableState: PressableState): PressableTextStyle => ({
-          ...toTextStyle(resolvePressable(pressableState).text),
-          ...toOptionalTextStyle(tokens.text),
+          ...StyleAdapterUtils.text(resolvePressable(pressableState).text),
+          ...StyleAdapterUtils.text(tokens.text = {}),
         })),
         icon: createValueResolver((pressableState: PressableState): PressableIconStyle => ({
-          ...toIconStyle(resolvePressable(pressableState).icon),
-          ...toOptionalIconStyle(tokens.icon),
+          ...StyleAdapterUtils.icon(resolvePressable(pressableState).icon),
+          ...StyleAdapterUtils.icon(tokens.icon = {}),
         })),
       }
     }),

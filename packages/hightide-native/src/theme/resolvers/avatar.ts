@@ -8,9 +8,6 @@ import {
   type AvatarWithStatusTokens
 } from '@helpwave/hightide-design/component-token-resolvers'
 
-import { toContainerStyle } from '../adapters/container-adapter'
-import { toIconStyle } from '../adapters/icon-style-adapter'
-import { toTextStyle } from '../adapters/text-style-adapter'
 import type {
   AvatarGroupContainerStyle,
   AvatarGroupStackStyle,
@@ -33,6 +30,8 @@ import {
   type ComponentThemeResolver
 } from '../types/resolver'
 import type { ThemeTokens } from '@helpwave/hightide-design/theme-tokens'
+
+import { StyleAdapterUtils } from '../adapters'
 
 export const toDesignAvatarSize = (size?: AvatarSize | number): AvatarSize => (
   typeof size === 'number' ? 'md' : (size ?? 'md')
@@ -114,7 +113,7 @@ export const createAvatarStyleResolvers = (
     const groupIndex = state.groupIndex ?? 0
 
     return {
-      ...toContainerStyle(container),
+      ...StyleAdapterUtils.container(container),
       position: state.isGrouped ? 'absolute' : 'relative',
       overflow: 'hidden',
       ...(state.isGrouped ? {
@@ -141,13 +140,13 @@ export const createAvatarStyleResolvers = (
     }
   }),
   text: createStyleResolver((state: AvatarState): AvatarTextStyle => ({
-    ...toTextStyle(resolveTokens(state).text),
+    ...StyleAdapterUtils.text(resolveTokens(state).text),
     textAlign: 'center',
   })),
   icon: createValueResolver((state: AvatarState): AvatarIconStyle => {
     const { icon } = resolveTokens(state)
 
-    return toIconStyle({
+    return StyleAdapterUtils.icon({
       size: icon.size ?? themeTokens.icongraphy.sizes.md,
       strokeWidth: icon.strokeWidth ?? themeTokens.icongraphy.strokeWidth,
       color: icon.color ?? themeTokens.color.primary.onColor,
@@ -233,7 +232,7 @@ export const createAvatarWithStatusThemeResolvers = (
         : undefined
 
       return {
-        ...toContainerStyle(
+        ...StyleAdapterUtils.container(
           size === undefined
             ? statusDot
             : {
@@ -378,7 +377,7 @@ export const toAvatarGroupThemeResolvers: ComponentThemeResolver<
         }
       }
 
-      return toContainerStyle(container)
+      return StyleAdapterUtils.container(container)
     }),
     avatarStack: createStyleResolver((state: AvatarGroupState): AvatarGroupStackStyle => {
       const tokens = resolve(state)
@@ -403,7 +402,7 @@ export const toAvatarGroupThemeResolvers: ComponentThemeResolver<
       const height = avatarStack.size?.height
 
       return {
-        ...toContainerStyle(avatarStack),
+        ...StyleAdapterUtils.container(avatarStack),
         position: 'relative',
         minWidth: width,
         maxWidth: width,
@@ -415,7 +414,7 @@ export const toAvatarGroupThemeResolvers: ComponentThemeResolver<
       const { text } = resolve(state)
 
       return {
-        ...toTextStyle(
+        ...StyleAdapterUtils.text(
           typeof state.size === 'number'
             ? {
               ...text,

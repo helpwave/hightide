@@ -1,8 +1,5 @@
 import type {
-  AvatarTokens,
-  ContainerTokens,
-  IconTokens,
-  TextStyleTokens
+  AvatarTokens
 } from '@helpwave/hightide-design/component-token-resolvers'
 
 import {
@@ -11,9 +8,6 @@ import {
   toDesignAvatarSize,
   withNumericAvatarSize
 } from '../avatar'
-import { toContainerStyle } from '../../adapters/container-adapter'
-import { toIconStyle } from '../../adapters/icon-style-adapter'
-import { toTextStyle } from '../../adapters/text-style-adapter'
 import type {
   ChatConversationRowContentContainerStyle,
   ChatConversationRowHeaderRowStyle,
@@ -45,17 +39,7 @@ import {
   type ComponentThemeResolver
 } from '../../types/resolver'
 
-const toOptionalContainerStyle = (tokens?: ContainerTokens): PressableContainerStyle => (
-  tokens === undefined ? {} : toContainerStyle(tokens)
-)
-
-const toOptionalTextStyle = (tokens?: TextStyleTokens): PressableTextStyle => (
-  tokens === undefined ? {} : toTextStyle(tokens)
-)
-
-const toOptionalIconStyle = (tokens?: IconTokens): PressableIconStyle => (
-  tokens === undefined ? {} : toIconStyle(tokens)
-)
+import { StyleAdapterUtils } from '../../adapters'
 
 export const toChatConversationRowThemeResolvers: ComponentThemeResolver<ChatConversationRowThemeResolvers> = ({
   themeTokens,
@@ -95,54 +79,54 @@ export const toChatConversationRowThemeResolvers: ComponentThemeResolver<ChatCon
 
       return {
         container: createStyleResolver((pressableState: PressableState): PressableContainerStyle => ({
-          ...toContainerStyle(resolvePressable(pressableState).container),
-          ...toOptionalContainerStyle(pressableOverrides.container),
+          ...StyleAdapterUtils.container(resolvePressable(pressableState).container),
+          ...StyleAdapterUtils.container(pressableOverrides.container  = {}),
         })),
         stateLayer: createStyleResolver((pressableState: PressableState): PressableStateLayerStyle => ({
-          ...toContainerStyle(resolvePressable(pressableState).stateLayer),
+          ...StyleAdapterUtils.container(resolvePressable(pressableState).stateLayer),
           position: 'absolute',
           top: 0,
           right: 0,
           bottom: 0,
           left: 0,
-          ...toOptionalContainerStyle(pressableOverrides.stateLayer),
+          ...StyleAdapterUtils.container(pressableOverrides.stateLayer  = {}),
         })),
         text: createStyleResolver((pressableState: PressableState): PressableTextStyle => ({
-          ...toTextStyle(resolvePressable(pressableState).text),
-          ...toOptionalTextStyle(pressableOverrides.text),
+          ...StyleAdapterUtils.text(resolvePressable(pressableState).text),
+          ...StyleAdapterUtils.text(pressableOverrides.text  = {}),
         })),
         icon: createValueResolver((pressableState: PressableState): PressableIconStyle => ({
-          ...toIconStyle(resolvePressable(pressableState).icon),
-          ...toOptionalIconStyle(pressableOverrides.icon),
+          ...StyleAdapterUtils.icon(resolvePressable(pressableState).icon),
+          ...StyleAdapterUtils.icon(pressableOverrides.icon  = {}),
         })),
       }
     }),
     contentContainer: createStyleResolver((state: ChatConversationRowState): ChatConversationRowContentContainerStyle => (
-      toContainerStyle(resolve(state).contentContainer)
+      StyleAdapterUtils.container(resolve(state).contentContainer)
     )),
     headerRow: createStyleResolver((state: ChatConversationRowState): ChatConversationRowHeaderRowStyle => (
-      toContainerStyle(resolve(state).headerRow)
+      StyleAdapterUtils.container(resolve(state).headerRow)
     )),
     messageRow: createStyleResolver((state: ChatConversationRowState): ChatConversationRowMessageRowStyle => (
-      toContainerStyle(resolve(state).messageRow)
+      StyleAdapterUtils.container(resolve(state).messageRow)
     )),
     title: createStyleResolver((state: ChatConversationRowState): ChatConversationRowTitleStyle => (
-      toTextStyle(resolve(state).title)
+      StyleAdapterUtils.text(resolve(state).title)
     )),
     timestamp: createStyleResolver((state: ChatConversationRowState): ChatConversationRowTimestampStyle => (
-      toTextStyle(resolve(state).timestamp)
+      StyleAdapterUtils.text(resolve(state).timestamp)
     )),
     preview: createStyleResolver((state: ChatConversationRowState): ChatConversationRowPreviewStyle => (
-      toTextStyle(resolve(state).preview)
+      StyleAdapterUtils.text(resolve(state).preview)
     )),
     unreadBadge: createSimpleStyleResolver((): ChatConversationRowUnreadBadgeStyle => (
-      toContainerStyle(resolve().unreadBadge)
+      StyleAdapterUtils.container(resolve().unreadBadge)
     )),
     unreadBadgeText: createSimpleStyleResolver((): ChatConversationRowUnreadBadgeTextStyle => (
-      toTextStyle(resolve().unreadBadgeText)
+      StyleAdapterUtils.text(resolve().unreadBadgeText)
     )),
     sentIndicator: createSimpleValueResolver((): ChatConversationRowSentIndicatorStyle => (
-      toIconStyle(resolve().sentIndicator)
+      StyleAdapterUtils.icon(resolve().sentIndicator)
     )),
     avatar: createValueResolver((state: AvatarState): AvatarThemeResolvers => {
       const { avatarOverride } = resolve()

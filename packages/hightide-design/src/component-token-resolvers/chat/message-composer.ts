@@ -66,6 +66,9 @@ export const chatMessageComposerTokenResolver: ChatMessageComposerTokenResolver 
         inlineStart: semanticResolvers.controlLayout({ themeTokens, size: 'md' }).horizontalContentPadding,
         inlineEnd: shape.padding.md,
       },
+      layout: {
+        flexGrow: 1,
+      }
     },
     text: {
       ...typography.body.md,

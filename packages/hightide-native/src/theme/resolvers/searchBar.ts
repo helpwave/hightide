@@ -3,8 +3,6 @@ import type {
   InputStateValue
 } from '@helpwave/hightide-design/component-token-resolvers'
 import type { ColorPairToken } from '@helpwave/hightide-design/theme-tokens'
-import { toContainerStyle, toContainerStyleWithStateLayer } from '../adapters/container-adapter'
-import { toTextStyle } from '../adapters/text-style-adapter'
 import type {
   SearchBarContainerStyle,
   SearchBarIconButtonStyle,
@@ -18,6 +16,9 @@ import {
   createValueResolver,
   type ComponentThemeResolver
 } from '../types/resolver'
+
+import { StyleAdapterUtils } from '../adapters'
+import { HexColorUtils } from '@helpwave/hightide-design/utils'
 
 const toDesignSearchBarState = (state: SearchBarState = {}): DesignInputState => {
   const active = new Set<InputStateValue>()
@@ -63,7 +64,7 @@ export const toSearchBarThemeResolvers: ComponentThemeResolver<SearchBarThemeRes
 
   return {
     container: createStyleResolver((state: SearchBarState): SearchBarContainerStyle => ({
-      ...toContainerStyle(resolve(state).container),
+      ...StyleAdapterUtils.container(resolve(state).container),
       position: 'relative',
       justifyContent: 'center',
     })),
@@ -71,7 +72,13 @@ export const toSearchBarThemeResolvers: ComponentThemeResolver<SearchBarThemeRes
       const tokens = resolve(state)
       const { container, stateLayer, text } = tokens.input
       // TODO remove this computation with a better solution
-      const base = toContainerStyleWithStateLayer(container, stateLayer)
+      if(container.backgroundColor && stateLayer.backgroundColor)
+        container.backgroundColor = HexColorUtils.blend(
+          HexColorUtils.resolveColorToken(container.backgroundColor),
+          HexColorUtils.resolveColorToken(stateLayer.backgroundColor)
+        )
+
+      const base = StyleAdapterUtils.container(container)
       const horizontalPadding = typeof base.paddingLeft === 'number'
         ? base.paddingLeft
         : typeof base.paddingRight === 'number'
@@ -87,17 +94,17 @@ export const toSearchBarThemeResolvers: ComponentThemeResolver<SearchBarThemeRes
 
       return {
         ...base,
-        ...toTextStyle(text),
+        ...StyleAdapterUtils.text(text),
         paddingLeft: horizontalPadding,
         paddingRight: horizontalPadding + trailingInset,
       }
     }),
     placeholder: createStyleResolver((state: SearchBarState): SearchBarPlaceholderStyle => (
-      toTextStyle(resolve(state).input.placeholder)
+      StyleAdapterUtils.text(resolve(state).input.placeholder)
     )),
     iconButton: createStyleResolver((state: SearchBarState): SearchBarIconButtonStyle => {
       const { iconButton } = resolve(state)
-      const style = toContainerStyle(iconButton)
+      const style = StyleAdapterUtils.container(iconButton)
 
       return {
         ...style,

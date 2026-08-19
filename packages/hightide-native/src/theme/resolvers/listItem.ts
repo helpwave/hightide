@@ -1,6 +1,3 @@
-import { toContainerStyle } from '../adapters/container-adapter'
-import { toIconStyle } from '../adapters/icon-style-adapter'
-import { toTextStyle } from '../adapters/text-style-adapter'
 import type {
   ListActionItemContentStyle,
   ListActionItemDescriptionStyle,
@@ -29,6 +26,8 @@ import {
   type ComponentThemeResolver
 } from '../types/resolver'
 
+import { StyleAdapterUtils } from '../adapters'
+
 const toListItemDefaultThemeResolvers: ComponentThemeResolver<ListItemDefaultThemeResolvers> = ({
   themeTokens,
   semanticTokens,
@@ -44,26 +43,26 @@ const toListItemDefaultThemeResolvers: ComponentThemeResolver<ListItemDefaultThe
 
   return {
     container: createStyleResolver((state: ListItemState): ListItemStyle => (
-      toContainerStyle(resolve(state).container)
+      StyleAdapterUtils.container(resolve(state).container)
     )),
     leadingItemContainer: createStyleResolver((state: ListItemState): ListItemLeadingItemContainerStyle => (
-      toContainerStyle(resolve(state).leadingItemContainer)
+      StyleAdapterUtils.container(resolve(state).leadingItemContainer)
     )),
     content: createStyleResolver((state: ListItemState): ListItemContentStyle => ({
-      ...toContainerStyle(resolve(state).content),
+      ...StyleAdapterUtils.container(resolve(state).content),
       flex: 1,
     })),
     trailingItemContainer: createStyleResolver((state: ListItemState): ListItemTrailingItemContainerStyle => (
-      toContainerStyle(resolve(state).trailingItemContainer)
+      StyleAdapterUtils.container(resolve(state).trailingItemContainer)
     )),
     descriptionText: createStyleResolver((state: ListItemState): ListItemDescriptionStyle => (
-      toTextStyle(resolve(state).descriptionText)
+      StyleAdapterUtils.text(resolve(state).descriptionText)
     )),
     titleText: createStyleResolver((state: ListItemState): ListItemTitleStyle => (
-      toTextStyle(resolve(state).titleText)
+      StyleAdapterUtils.text(resolve(state).titleText)
     )),
     icon: createValueResolver((state: ListItemState): ListItemIconStyle => (
-      toIconStyle(resolve(state).icon)
+      StyleAdapterUtils.icon(resolve(state).icon)
     )),
   }
 }
@@ -84,26 +83,26 @@ const toListActionItemThemeResolvers: ComponentThemeResolver<ListActionItemTheme
 
   return {
     container: createStyleResolver((state: ListActionItemState): ListActionItemStyle => (
-      toContainerStyle(resolve(state).container)
+      StyleAdapterUtils.container(resolve(state).container)
     )),
     leadingItemContainer: createStyleResolver((state: ListActionItemState): ListActionItemLeadingItemContainerStyle => (
-      toContainerStyle(resolve(state).leadingItemContainer)
+      StyleAdapterUtils.container(resolve(state).leadingItemContainer)
     )),
     content: createStyleResolver((state: ListActionItemState): ListActionItemContentStyle => ({
-      ...toContainerStyle(resolve(state).content),
+      ...StyleAdapterUtils.container(resolve(state).content),
       flex: 1,
     })),
     trailingItemContainer: createStyleResolver((state: ListActionItemState): ListActionItemTrailingItemContainerStyle => (
-      toContainerStyle(resolve(state).trailingItemContainer)
+      StyleAdapterUtils.container(resolve(state).trailingItemContainer)
     )),
     titleText: createStyleResolver((state: ListActionItemState): ListActionItemTitleStyle => (
-      toTextStyle(resolve(state).titleText)
+      StyleAdapterUtils.text(resolve(state).titleText)
     )),
     descriptionText: createStyleResolver((state: ListActionItemState): ListActionItemDescriptionStyle => (
-      toTextStyle(resolve(state).descriptionText)
+      StyleAdapterUtils.text(resolve(state).descriptionText)
     )),
     icon: createValueResolver((state: ListActionItemState): ListActionItemIconStyle => (
-      toIconStyle(resolve(state).icon)
+      StyleAdapterUtils.icon(resolve(state).icon)
     )),
   }
 }

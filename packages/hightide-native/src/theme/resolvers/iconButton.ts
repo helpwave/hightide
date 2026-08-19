@@ -1,5 +1,3 @@
-import { toContainerStyle } from '../adapters/container-adapter'
-import { toIconStyle } from '../adapters/icon-style-adapter'
 import type {
   IconButtonIconStyle,
   IconButtonState,
@@ -12,6 +10,8 @@ import {
   toPressableInteractionState,
   type ComponentThemeResolver
 } from '../types/resolver'
+
+import { StyleAdapterUtils } from '../adapters'
 
 export const toIconButtonThemeResolvers: ComponentThemeResolver<IconButtonThemeResolvers> = ({
   themeTokens,
@@ -31,12 +31,12 @@ export const toIconButtonThemeResolvers: ComponentThemeResolver<IconButtonThemeR
 
   return {
     container: createStyleResolver((state: IconButtonState): IconButtonStyle => ({
-      ...toContainerStyle(resolve(state).container),
+      ...StyleAdapterUtils.container(resolve(state).container),
     })),
     stateLayer: createStyleResolver((state: IconButtonState): IconButtonStyle => {
       const tokens = resolve(state)
       return {
-        ...toContainerStyle(tokens.stateLayer),
+        ...StyleAdapterUtils.container(tokens.stateLayer),
         position: 'absolute',
         top: 0,
         right: 0,
@@ -45,7 +45,7 @@ export const toIconButtonThemeResolvers: ComponentThemeResolver<IconButtonThemeR
       }
     }),
     icon: createValueResolver((state: IconButtonState): IconButtonIconStyle => (
-      toIconStyle(resolve(state).icon)
+      StyleAdapterUtils.icon(resolve(state).icon)
     )),
   }
 }

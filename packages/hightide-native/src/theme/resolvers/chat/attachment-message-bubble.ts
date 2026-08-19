@@ -1,13 +1,7 @@
 import type {
-  ChatMessageDirection,
-  ContainerTokens,
-  IconTokens,
-  TextStyleTokens
+  ChatMessageDirection
 } from '@helpwave/hightide-design/component-token-resolvers'
 
-import { toContainerStyle } from '../../adapters/container-adapter'
-import { toIconStyle } from '../../adapters/icon-style-adapter'
-import { toTextStyle } from '../../adapters/text-style-adapter'
 import type {
   ChatAttachmentMessageBubbleDownloadIconContainerStyle,
   ChatAttachmentMessageBubbleDownloadIconStyle,
@@ -37,17 +31,7 @@ import {
   type ComponentThemeResolver
 } from '../../types/resolver'
 
-const toOptionalContainerStyle = (tokens?: ContainerTokens): ChatMessageBubbleContainerStyle => (
-  tokens === undefined ? {} : toContainerStyle(tokens)
-)
-
-const toOptionalTextStyle = (tokens?: TextStyleTokens): ChatMessageBubbleBodyTextStyle => (
-  tokens === undefined ? {} : toTextStyle(tokens)
-)
-
-const toOptionalIconStyle = (tokens?: IconTokens): ChatMessageBubbleMetaDataIconStyle => (
-  tokens === undefined ? {} : toIconStyle(tokens)
-)
+import { StyleAdapterUtils } from '../../adapters'
 
 export const toChatAttachmentMessageBubbleThemeResolvers: ComponentThemeResolver<
   ChatAttachmentMessageBubbleThemeResolvers
@@ -65,33 +49,33 @@ export const toChatAttachmentMessageBubbleThemeResolvers: ComponentThemeResolver
   return {
     chatMessageBubbleOverrides: {
       container: createStyleResolver((state: ChatAttachmentMessageBubbleState): ChatMessageBubbleContainerStyle => (
-        toOptionalContainerStyle(resolve(state.direction).chatMessageBubbleOverrides.container)
+        StyleAdapterUtils.container(resolve(state.direction).chatMessageBubbleOverrides.container ?? {})
       )),
       body: createStyleResolver((state: ChatAttachmentMessageBubbleState): ChatMessageBubbleBodyStyle => (
-        toOptionalContainerStyle(resolve(state.direction).chatMessageBubbleOverrides.body)
+        StyleAdapterUtils.container(resolve(state.direction).chatMessageBubbleOverrides.body ?? {})
       )),
       bodyText: createStyleResolver((state: ChatAttachmentMessageBubbleState): ChatMessageBubbleBodyTextStyle => (
-        toOptionalTextStyle(resolve(state.direction).chatMessageBubbleOverrides.bodyText)
+        StyleAdapterUtils.text(resolve(state.direction).chatMessageBubbleOverrides.bodyText = {})
       )),
       metaDataContainer: createStyleResolver((
         state: ChatAttachmentMessageBubbleState
       ): ChatMessageBubbleMetaDataContainerStyle => (
-        toOptionalContainerStyle(resolve(state.direction).chatMessageBubbleOverrides.metaDataContainer)
+        StyleAdapterUtils.container(resolve(state.direction).chatMessageBubbleOverrides.metaDataContainer = {})
       )),
       metaDataStatusContainer: createStyleResolver((
         state: ChatAttachmentMessageBubbleState
       ): ChatMessageBubbleMetaDataStatusContainerStyle => (
-        toOptionalContainerStyle(resolve(state.direction).chatMessageBubbleOverrides.metaDataStatusContainer)
+        StyleAdapterUtils.container(resolve(state.direction).chatMessageBubbleOverrides.metaDataStatusContainer = {})
       )),
       metaDataText: createStyleResolver((
         state: ChatAttachmentMessageBubbleState
       ): ChatMessageBubbleMetaDataTextStyle => (
-        toOptionalTextStyle(resolve(state.direction).chatMessageBubbleOverrides.metaDataText)
+        StyleAdapterUtils.text(resolve(state.direction).chatMessageBubbleOverrides.metaDataText = {})
       )),
       metaDataIcon: createValueResolver((
         state: ChatAttachmentMessageBubbleState
       ): ChatMessageBubbleMetaDataIconStyle => (
-        toOptionalIconStyle(resolve(state.direction).chatMessageBubbleOverrides.metaDataIcon)
+        StyleAdapterUtils.icon(resolve(state.direction).chatMessageBubbleOverrides.metaDataIcon = {})
       )),
     },
     contentContainer: createValueResolver((state: ChatAttachmentMessageBubbleState) => {
@@ -112,56 +96,56 @@ export const toChatAttachmentMessageBubbleThemeResolvers: ComponentThemeResolver
 
       return {
         container: createStyleResolver((pressableState: PressableState): PressableContainerStyle => ({
-          ...toContainerStyle(resolvePressable(pressableState).container),
-          ...toOptionalContainerStyle(contentContainer.container),
+          ...StyleAdapterUtils.container(resolvePressable(pressableState).container),
+          ...StyleAdapterUtils.container(contentContainer.container = {}),
         })),
         stateLayer: createStyleResolver((pressableState: PressableState): PressableStateLayerStyle => ({
-          ...toContainerStyle(resolvePressable(pressableState).stateLayer),
+          ...StyleAdapterUtils.container(resolvePressable(pressableState).stateLayer),
           position: 'absolute',
           top: 0,
           right: 0,
           bottom: 0,
           left: 0,
-          ...toOptionalContainerStyle(contentContainer.stateLayer),
+          ...StyleAdapterUtils.container(contentContainer.stateLayer = {}),
         })),
         text: createStyleResolver((pressableState: PressableState): PressableTextStyle => ({
-          ...toTextStyle(resolvePressable(pressableState).text),
-          ...toOptionalTextStyle(contentContainer.text),
+          ...StyleAdapterUtils.text(resolvePressable(pressableState).text),
+          ...StyleAdapterUtils.text(contentContainer.text = {}),
         })),
         icon: createValueResolver((pressableState: PressableState): PressableIconStyle => (
-          toIconStyle(resolvePressable(pressableState).icon)
+          StyleAdapterUtils.icon(resolvePressable(pressableState).icon)
         )),
       }
     }),
     fileIconContainer: createStyleResolver((
       state: ChatAttachmentMessageBubbleState
     ): ChatAttachmentMessageBubbleFileIconContainerStyle => (
-      toContainerStyle(resolve(state.direction).fileIconContainer)
+      StyleAdapterUtils.container(resolve(state.direction).fileIconContainer)
     )),
     fileIcon: createValueResolver((
       state: ChatAttachmentMessageBubbleState
     ): ChatAttachmentMessageBubbleFileIconStyle => (
-      toIconStyle(resolve(state.direction).fileIcon)
+      StyleAdapterUtils.icon(resolve(state.direction).fileIcon)
     )),
     downloadIconContainer: createStyleResolver((
       state: ChatAttachmentMessageBubbleState
     ): ChatAttachmentMessageBubbleDownloadIconContainerStyle => (
-      toContainerStyle(resolve(state.direction).downloadIconContainer)
+      StyleAdapterUtils.container(resolve(state.direction).downloadIconContainer)
     )),
     downloadIcon: createValueResolver((
       state: ChatAttachmentMessageBubbleState
     ): ChatAttachmentMessageBubbleDownloadIconStyle => (
-      toIconStyle(resolve(state.direction).downloadIcon)
+      StyleAdapterUtils.icon(resolve(state.direction).downloadIcon)
     )),
     fileNameText: createStyleResolver((
       state: ChatAttachmentMessageBubbleState
     ): ChatAttachmentMessageBubbleFileNameTextStyle => (
-      toTextStyle(resolve(state.direction).fileNameText)
+      StyleAdapterUtils.text(resolve(state.direction).fileNameText)
     )),
     fileMetadataText: createStyleResolver((
       state: ChatAttachmentMessageBubbleState
     ): ChatAttachmentMessageBubbleFileMetadataTextStyle => (
-      toTextStyle(resolve(state.direction).fileMetadataText)
+      StyleAdapterUtils.text(resolve(state.direction).fileMetadataText)
     )),
   }
 }
