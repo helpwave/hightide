@@ -35,7 +35,7 @@ export const chatSystemLineTokenResolver: ChatSystemLineTokenResolver = ({ theme
         direction: 'horizontal',
         mainAxisAlignment: 'center',
         crossAxisAligment: 'center',
-        alignSelf: 'center',
+        selfCrossAxisAlignment: 'center',
         gap: shape.padding.md,
       },
     },

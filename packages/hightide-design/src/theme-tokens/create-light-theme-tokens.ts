@@ -25,28 +25,28 @@ const {
 export const createLightThemeTokens = (
   config: ThemeTokensModeConfig
 ): ThemeTokens => {
-  const tintConfig = config.colors.tintConfig ?? defaultTintConfig
+  const tintConfig = config.color.tintConfig ?? defaultTintConfig
   const whiteColor = white.value
   const blackColor = black.value
 
-  const primary = config.colors.primary
-  const secondary: ColorPairToken = config.colors.secondary ?? {
+  const primary = config.color.primary
+  const secondary: ColorPairToken = config.color.secondary ?? {
     color: blue.value[500],
     onColor: whiteColor,
   }
-  const tertiary: ColorPairToken = config.colors.tertiary ?? {
+  const tertiary: ColorPairToken = config.color.tertiary ?? {
     color: tertiaryLightColor,
     onColor: whiteColor,
   }
-  const positive: ColorPairToken = config.colors.positive ?? {
+  const positive: ColorPairToken = config.color.positive ?? {
     color: green.value[500],
     onColor: whiteColor,
   }
-  const warning: ColorPairToken = config.colors.warning ?? {
+  const warning: ColorPairToken = config.color.warning ?? {
     color: orange.value[500],
     onColor: whiteColor,
   }
-  const negative: ColorPairToken = config.colors.negative ?? {
+  const negative: ColorPairToken = config.color.negative ?? {
     color: red.value[600],
     onColor: whiteColor,
   }
@@ -54,19 +54,19 @@ export const createLightThemeTokens = (
     color: gray.value[150],
     onColor: blackColor,
   }
-  const background: ColorPairToken = config.colors.background ?? {
+  const background: ColorPairToken = config.color.background ?? {
     color: gray.value[75],
     onColor: gray.value[900],
   }
-  const surface: ColorPairToken = config.colors.surface ?? {
+  const surface: ColorPairToken = config.color.surface ?? {
     color: gray.value[25],
     onColor: gray.value[900],
   }
-  const surfaceVariant: ColorPairToken = config.colors.surfaceVariant ?? {
+  const surfaceVariant: ColorPairToken = config.color.surfaceVariant ?? {
     color: whiteColor,
     onColor: gray.value[900],
   }
-  const disabled: ColorPairToken = config.colors.disabled ?? {
+  const disabled: ColorPairToken = config.color.disabled ?? {
     color: gray.value[300],
     onColor: gray.value[500],
   }

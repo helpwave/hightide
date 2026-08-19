@@ -8,7 +8,11 @@ import type {
 export type LayoutDirectionToken = 'horizontal' | 'vertical'
 export type LayoutAlignmentToken = 'left-top' | 'left-center' | 'left-bottom' | 'center-top' | 'center-center' | 'center-bottom' | 'right-top' | 'right-center' | 'right-bottom'
 export type AxisAligmentToken = 'start' | 'center' | 'end'
-export type AlignSelfToken = AxisAligmentToken | 'stretch'
+export type StretchToken = 'stretch'
+export type SpacingToken = 'space-between' | 'space-evenly' | 'space-around'
+export type MainAxisAligmentToken = AxisAligmentToken | SpacingToken
+export type CrossAxisAligmentToken = AxisAligmentToken | StretchToken
+export type CrossAxisLineAligmentToken = AxisAligmentToken | SpacingToken | StretchToken
 export type FlexWrapToken = 'nowrap' | 'wrap' | 'wrap-reverse'
 export type OverflowToken = 'visible' | 'hidden' | 'scroll'
 export type SizeToken = number | `${number}%`
@@ -84,10 +88,13 @@ export type ContainerTokens = {
     flexWrap?: FlexWrapToken,
     gap?: number,
     direction?: LayoutDirectionToken,
-    mainAxisAlignment?: AxisAligmentToken,
-    crossAxisAligment?: AxisAligmentToken,
-    alignContent?: AlignSelfToken,
-    alignSelf?: AlignSelfToken,
+    mainAxisAlignment?: MainAxisAligmentToken,
+    crossAxisAligment?: CrossAxisAligmentToken,
+    crossAxisLineAligment?: CrossAxisLineAligmentToken,
+    selfCrossAxisAlignment?: CrossAxisAligmentToken,
+    flexGrow?: number,
+    flexShrink?: number,
+    flexBasis?: SizeToken | 'auto',
   },
   decoration?: {
     shadow?: ShadowToken,

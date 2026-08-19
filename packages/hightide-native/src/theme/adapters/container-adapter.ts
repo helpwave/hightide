@@ -1,13 +1,15 @@
 import type { ViewStyle } from 'react-native'
 
 import type {
-  AlignSelfToken,
   AxisAligmentToken,
   BorderRadiusToken,
   BorderToken,
   ContainerTokens,
+  CrossAxisAligmentToken,
+  CrossAxisLineAligmentToken,
   DirectionalToken,
   LayoutDirectionToken,
+  MainAxisAligmentToken,
   MarginToken,
   PaddingToken
 } from '@helpwave/hightide-design/component-token-resolvers'
@@ -41,76 +43,79 @@ const toFlexDirection = (
   return direction === 'horizontal' ? 'row' : 'column'
 }
 
+const toFlexStartEnd = (
+  alignment: AxisAligmentToken
+): 'flex-start' | 'flex-end' | 'center' => {
+  if (alignment === 'start') {
+    return 'flex-start'
+  }
+
+  if (alignment === 'end') {
+    return 'flex-end'
+  }
+
+  return 'center'
+}
+
 const toJustifyContent = (
-  alignment?: AxisAligmentToken
+  alignment?: MainAxisAligmentToken
 ): ViewStyle['justifyContent'] => {
   if (alignment === undefined) {
     return undefined
   }
 
-  if (alignment === 'start') {
-    return 'flex-start'
+  if (alignment === 'space-between' || alignment === 'space-evenly' || alignment === 'space-around') {
+    return alignment
   }
 
-  if (alignment === 'end') {
-    return 'flex-end'
-  }
-
-  return 'center'
+  return toFlexStartEnd(alignment)
 }
 
 const toAlignItems = (
-  alignment?: AxisAligmentToken
+  alignment?: CrossAxisAligmentToken
 ): ViewStyle['alignItems'] => {
   if (alignment === undefined) {
     return undefined
   }
 
-  if (alignment === 'start') {
-    return 'flex-start'
+  if (alignment === 'stretch') {
+    return alignment
   }
 
-  if (alignment === 'end') {
-    return 'flex-end'
-  }
-
-  return 'center'
+  return toFlexStartEnd(alignment)
 }
 
 const toAlignSelf = (
-  alignment?: AlignSelfToken
+  alignment?: CrossAxisAligmentToken
 ): ViewStyle['alignSelf'] => {
   if (alignment === undefined) {
     return undefined
   }
 
-  if (alignment === 'start') {
-    return 'flex-start'
+  if (alignment === 'stretch') {
+    return alignment
   }
 
-  if (alignment === 'end') {
-    return 'flex-end'
-  }
-
-  return alignment
+  return toFlexStartEnd(alignment)
 }
 
 const toAlignContent = (
-  alignment?: AlignSelfToken
+  alignment?: CrossAxisLineAligmentToken
 ): ViewStyle['alignContent'] => {
   if (alignment === undefined) {
     return undefined
   }
 
-  if (alignment === 'start') {
-    return 'flex-start'
+  if (
+    alignment === 'stretch'
+    || alignment === 'space-between'
+    || alignment === 'space-evenly'
+    || alignment === 'space-around'
+  ) {
+    return alignment
   }
 
-  if (alignment === 'end') {
-    return 'flex-end'
-  }
-
-  return alignment
+  return toFlexStartEnd(alignment)
 }
 
 const toBorderRadiusStyle = (
@@ -264,11 +269,14 @@ export const toContainerStyle = (tokens: ContainerTokens): ViewStyle => defined(
   display: 'flex',
   overflow: tokens.overflow,
   flexWrap: tokens.layout?.flexWrap,
+  flexGrow: tokens.layout?.flexGrow,
+  flexShrink: tokens.layout?.flexShrink,
+  flexBasis: tokens.layout?.flexBasis,
   flexDirection: toFlexDirection(tokens.layout?.direction),
   justifyContent: toJustifyContent(tokens.layout?.mainAxisAlignment),
   alignItems: toAlignItems(tokens.layout?.crossAxisAligment),
-  alignContent: toAlignContent(tokens.layout?.alignContent),
-  alignSelf: toAlignSelf(tokens.layout?.alignSelf),
+  alignContent: toAlignContent(tokens.layout?.crossAxisLineAligment),
+  alignSelf: toAlignSelf(tokens.layout?.selfCrossAxisAlignment),
   backgroundColor: tokens.backgroundColor,
   opacity: tokens.opacity,
   ...toBorderStyle(tokens.border),

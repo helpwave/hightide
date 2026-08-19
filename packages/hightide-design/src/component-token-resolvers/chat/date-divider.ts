@@ -32,7 +32,7 @@ export const chatDateDividerTokenResolver: ChatDateDividerTokenResolver = ({ the
         horizontal: spacing.lg,
       },
       layout: {
-        alignSelf: 'center',
+        selfCrossAxisAlignment: 'center',
       },
     },
     text: {

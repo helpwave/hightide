@@ -62,7 +62,7 @@ export type ThemeTokensTypographyConfig = {
 
 export type ThemeTokensConfig = {
   themeMode: ThemeMode,
-  colors: {
+  color: {
     primary: ColorPairToken,
     secondary?: ColorPairToken,
     tertiary?: ColorPairToken,

@@ -3,7 +3,6 @@ import { hightideTypography } from '../primitive-tokens/typography'
 import type { ShadowLayoutToken } from '../primitive-tokens/shadow'
 import { hightideShadow } from '../primitive-tokens/shadow'
 import { HexColorUtils } from '../utils/hex'
-import { OKLCHUtils } from '../utils/oklch'
 import type {
   ColorPairToken,
   ThemeTokensModeConfig,
@@ -249,7 +248,7 @@ export const buildColorTokens = (params: {
   warning: params.warning,
   negative: params.negative,
   neutral: params.neutral,
-  border: OKLCHUtils.changeLightness(params.surface.onColor, 0.8),
+  border: HexColorUtils.blend(params.surface.color, HexColorUtils.hexWithAlpha(params.surface.onColor, 0.3)),
 })
 
 export const resolveSharedGroups = (

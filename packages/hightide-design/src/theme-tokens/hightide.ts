@@ -13,7 +13,7 @@ const {
 const whiteColor = white.value
 
 export const hightideLightThemeTokens = createLightThemeTokens({
-  colors: {
+  color: {
     primary: {
       color: purple.value[500],
       onColor: whiteColor,
@@ -30,7 +30,7 @@ export const hightideLightThemeTokens = createLightThemeTokens({
 })
 
 export const hightideDarkThemeTokens = createDarkThemeTokens({
-  colors: {
+  color: {
     primary: {
       color: purple.value[400],
       onColor: whiteColor,

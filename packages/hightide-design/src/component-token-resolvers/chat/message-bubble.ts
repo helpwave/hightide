@@ -57,7 +57,7 @@ export const chatMessageBubbleTokenResolver: ChatMessageBubbleTokenResolver = ({
       layout: {
         gap: spacing.sm,
         direction: 'vertical',
-        alignSelf: alignment,
+        selfCrossAxisAlignment: alignment,
       },
       decoration: {
         shadow: themeTokens.elevation.level1,
@@ -79,7 +79,7 @@ export const chatMessageBubbleTokenResolver: ChatMessageBubbleTokenResolver = ({
         mainAxisAlignment: 'end',
         crossAxisAligment: 'center',
         gap: spacing.md,
-        alignSelf: 'end',
+        selfCrossAxisAlignment: 'end',
       },
     },
     metaDataStatusContainer: {

@@ -1,8 +1,9 @@
 import { resolvePressableStateLayerTint } from '../../semantic-token-resolvers'
 import { HexColorUtils } from '../../utils/hex'
+import type { AvatarOverrideTokens } from '../avatar-tokens'
 import type { ComponentTokenResolver } from '../component-token-resolver'
 import type { ContainerTokens } from '../container-tokens'
-import type { IconTokens } from '../icon-tokens'
+import { type IconTokens } from '../icon-tokens'
 import type { PressableStateValue } from '../pressable-tokens'
 import type { TextStyleTokens } from '../text-style-tokens'
 import {
@@ -26,12 +27,16 @@ export type ChatConversationRowComponentResolverProps = {
 
 export type ChatConversationRowTokens = {
   container: ContainerTokens,
+  contentContainer: ContainerTokens,
+  headerRow: ContainerTokens,
+  messageRow: ContainerTokens,
   title: TextStyleTokens,
   timestamp: TextStyleTokens,
   preview: TextStyleTokens,
   unreadBadge: ContainerTokens,
   unreadBadgeText: TextStyleTokens,
   sentIndicator: IconTokens,
+  avatarOverride: AvatarOverrideTokens,
 }
 
 export type ChatConversationRowTokenResolver = ComponentTokenResolver<
@@ -74,13 +79,30 @@ export const chatConversationRowTokenResolver: ChatConversationRowTokenResolver 
     baseBackground === 'transparent' ? '#FFFFFF00' : baseBackground,
     tint === 'transparent' ? '#FFFFFF00' : tint
   )
+  const title: TextStyleTokens = {
+    ...typography.body.md,
+    fontWeight: state.isUnread ? typography.fontWeights.bold : typography.fontWeights.medium,
+    color: color.surface.onColor,
+  }
+  const preview: TextStyleTokens = {
+    ...typography.body.sm,
+    fontWeight: typography.fontWeights.light,
+    color: state.isUnread ? color.surface.onColor : descriptionColor,
+  }
+  const contentContainer: ContainerTokens = {
+    layout: {
+      direction: 'vertical',
+      gap: spacing.xs,
+      flexGrow: 1,
+    },
+  }
+  const avatarSize = (title.lineHeight ?? 0)
+    + (preview.lineHeight ?? 0)
+    + (contentContainer.layout?.gap ?? 0)
 
   return {
     container: {
       backgroundColor,
-      size: {
-        width: '100%',
-      },
       shape: {
         borderRadius: { type: 'all', value: shape.borderRadius.sm },
       },
@@ -102,27 +124,36 @@ export const chatConversationRowTokenResolver: ChatConversationRowTokenResolver 
       layout: {
         direction: 'horizontal',
         crossAxisAligment: 'center',
+        selfCrossAxisAlignment: 'stretch',
         gap: shape.padding.xl,
       },
     },
-    title: {
-      ...typography.body.md,
-      fontWeight: state.isUnread ? typography.fontWeights.bold : typography.fontWeights.medium,
-      color: color.surface.onColor,
-      flex: 1,
+    contentContainer,
+    headerRow: {
+      layout: {
+        direction: 'horizontal',
+        crossAxisAligment: 'center',
+        mainAxisAlignment: 'space-between',
+        gap: spacing.md,
+      },
     },
+    messageRow: {
+      layout: {
+        direction: 'horizontal',
+        crossAxisAligment: 'center',
+        flexGrow: 1,
+        mainAxisAlignment: 'space-between',
+        gap: spacing.sm,
+      },
+    },
+    title,
     timestamp: {
       ...typography.body.sm,
       fontWeight: state.isUnread ? typography.fontWeights.medium : typography.fontWeights.base,
       color: descriptionColor,
       flexShrink: 0,
     },
-    preview: {
-      ...typography.body.sm,
-      fontWeight: typography.fontWeights.light,
-      color: state.isUnread ? color.surface.onColor : descriptionColor,
-      flex: 1,
-    },
+    preview,
     unreadBadge: {
       backgroundColor: color.primary.color,
       size: {
@@ -147,7 +178,27 @@ export const chatConversationRowTokenResolver: ChatConversationRowTokenResolver 
       color: color.primary.onColor,
     },
     sentIndicator: {
+      size: themeTokens.icongraphy.sizes.xs,
+      strokeWidth: themeTokens.icongraphy.strokeWidth,
       color: color.primary.color,
+    },
+    avatarOverride: {
+      container: {
+        size: {
+          width: avatarSize,
+          height: avatarSize,
+          minWidth: avatarSize,
+          minHeight: avatarSize,
+          maxWidth: avatarSize,
+          maxHeight: avatarSize,
+        },
+        shape: {
+          borderRadius: { type: 'all', value: avatarSize / 2 },
+        },
+      },
+      icon: {
+        size: avatarSize,
+      },
     },
   }
 }

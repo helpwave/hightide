@@ -10,6 +10,4 @@ export type TextStyleTokens = {
   fontWeight?: FontWeightToken,
   fontFamily?: string,
   textAlign?: TextAlignToken,
-  flex?: number,
-  flexShrink?: number,
 }
