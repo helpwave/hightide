@@ -248,7 +248,7 @@ export const buildColorTokens = (params: {
   warning: params.warning,
   negative: params.negative,
   neutral: params.neutral,
-  border: HexColorUtils.blend(params.surface.color, HexColorUtils.hexWithAlpha(params.surface.onColor, 0.3)),
+  border: HexColorUtils.blend(params.surface.color, HexColorUtils.hexWithAlpha(params.surface.onColor, 0.25)),
 })
 
 export const resolveSharedGroups = (

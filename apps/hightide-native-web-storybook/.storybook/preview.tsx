@@ -1,6 +1,6 @@
 import type { Preview } from '@storybook/react-native-web-vite'
 
-import { HightideProvider } from '@helpwave/hightide-native/global-contexts'
+import { DebugProvider, HightideProvider } from '@helpwave/hightide-native/global-contexts'
 import { themes } from '@helpwave/hightide-native/theme'
 
 const lightBackground = themes.light.colors.background.color
@@ -69,35 +69,32 @@ const preview: Preview = {
         <HightideProvider
           theme={{ theme }}
           locale={{ locale }}
-          debug={{
-            hitBox: {
-              isVisualizing: isVisualizingHitBox,
-            },
-          }}
         >
-          <style>{`
-            html, body, main {
-              transition: color 300ms, background-color 300ms;
-              color: ${surfaceColor} !important;
-              background-color: ${surfaceBackground} !important;
-            }
+          <DebugProvider hitBox={{ isVisualizing: isVisualizingHitBox }}>
+            <style>{`
+              html, body, main {
+                transition: color 300ms, background-color 300ms;
+                color: ${surfaceColor} !important;
+                background-color: ${surfaceBackground} !important;
+              }
 
-            main {
-              display: flex;
-            }
+              main {
+                display: flex;
+              }
 
-            .sb-show-main {
-              color: ${surfaceColor} !important;
-              background-color: ${surfaceBackground} !important;
-            }
+              .sb-show-main {
+                color: ${surfaceColor} !important;
+                background-color: ${surfaceBackground} !important;
+              }
 
-            .sb-show-main.sb-main-padded {
-              padding: 0;
-            }
-          `}</style>
-          <main style={{ padding: '1rem' }}>
-            <App />
-          </main>
+              .sb-show-main.sb-main-padded {
+                padding: 0;
+              }
+            `}</style>
+            <main style={{ padding: '1rem' }}>
+              <App />
+            </main>
+          </DebugProvider>
         </HightideProvider>
       )
     },

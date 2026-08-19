@@ -20,7 +20,7 @@ export const DebugProvider = ({
 }: DebugProviderProps) => {
   const value = useMemo((): DebugContextValue => ({
     hitBox: {
-      isVisualizing: hitBox?.isVisualizing ?? false,
+      isVisualizing: hitBox?.isVisualizing ?? true,
       color: hitBox?.color ?? DEFAULT_HIT_BOX_COLOR,
     },
   }), [hitBox?.isVisualizing, hitBox?.color])

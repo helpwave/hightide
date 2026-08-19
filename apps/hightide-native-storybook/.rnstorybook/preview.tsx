@@ -1,7 +1,7 @@
 import { View } from 'react-native'
 import type { Preview } from '@storybook/react-native'
 
-import { HightideProvider } from '@helpwave/hightide-native/global-contexts'
+import { DebugProvider, HightideProvider } from '@helpwave/hightide-native/global-contexts'
 import { themes } from '@helpwave/hightide-native/theme'
 
 const lightBackground = themes.light.colors.background.color
@@ -56,15 +56,12 @@ const preview: Preview = {
         <HightideProvider
           theme={{ theme }}
           locale={{ locale }}
-          debug={{
-            hitBox: {
-              isVisualizing: isVisualizingHitBox,
-            },
-          }}
         >
-          <View style={{ flex: 1, padding: 16, backgroundColor: surfaceBackground }}>
-            <Story />
-          </View>
+          <DebugProvider hitBox={{ isVisualizing: isVisualizingHitBox }}>
+            <View style={{ flex: 1, padding: 16, backgroundColor: surfaceBackground }}>
+              <Story />
+            </View>
+          </DebugProvider>
         </HightideProvider>
       )
     },
