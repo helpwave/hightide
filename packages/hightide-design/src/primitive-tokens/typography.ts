@@ -17,32 +17,36 @@ export type FontWeightKey = 'thin' | 'light' | 'base' | 'medium' | 'semibold' | 
 
 export type FontWeightToken = 100 | 200 | 300 | 400 | 500 | 600 | 700 | 800 | 900
 
+export type FontSizingToken = {
+  fontSize: number,
+  lineHeight: number,
+}
+
 export type HightideTypographyPrimitiveTokens = {
   fontFamily: Record<string, string>,
-  fontSize: Record<FontSizeKey, number> & Record<string, number>,
+  fontSizing: Record<FontSizeKey, FontSizingToken> & Record<string, FontSizingToken>,
   fontWeight: Record<FontWeightKey, FontWeightToken> & Record<string, FontWeightToken>,
-  lineHeight: Record<FontSizeKey, number | string> & Record<string, number | string>,
 }
 
 export const hightideTypography = {
   fontFamily: {
     inter: 'Inter',
-    spaceGrotesk: 'Space Grotesk',
+    spaceGrotesk: 'SpaceGrotesk',
   },
-  fontSize: {
-    'xs': 12,
-    'sm': 14,
-    'base': 16,
-    'lg': 18,
-    'xl': 20,
-    '2xl': 22,
-    '3xl': 24,
-    '4xl': 32,
-    '5xl': 48,
-    '6xl': 60,
-    '7xl': 72,
-    '8xl': 96,
-    '9xl': 128,
+  fontSizing: {
+    'xs': { fontSize: 12, lineHeight: 16 },
+    'sm': { fontSize: 14, lineHeight: 18 },
+    'base': { fontSize: 16, lineHeight: 20 },
+    'lg': { fontSize: 18, lineHeight: 24 },
+    'xl': { fontSize: 20, lineHeight: 28 },
+    '2xl': { fontSize: 22, lineHeight: 28 },
+    '3xl': { fontSize: 24, lineHeight: 32 },
+    '4xl': { fontSize: 32, lineHeight: 40 },
+    '5xl': { fontSize: 48, lineHeight: 48 },
+    '6xl': { fontSize: 60, lineHeight: 60 },
+    '7xl': { fontSize: 72, lineHeight: 72 },
+    '8xl': { fontSize: 96, lineHeight: 96 },
+    '9xl': { fontSize: 128, lineHeight: 128 },
   },
   fontWeight: {
     thin: 100,
@@ -51,20 +55,5 @@ export const hightideTypography = {
     medium: 500,
     semibold: 600,
     bold: 700,
-  },
-  lineHeight: {
-    'xs': 16,
-    'sm': 18,
-    'base': 20,
-    'lg': 24,
-    'xl': 28,
-    '2xl': 28,
-    '3xl': 32,
-    '4xl': 40,
-    '5xl': 48,
-    '6xl': 60,
-    '7xl': 72,
-    '8xl': 96,
-    '9xl': 128,
   },
 } as const satisfies HightideTypographyPrimitiveTokens

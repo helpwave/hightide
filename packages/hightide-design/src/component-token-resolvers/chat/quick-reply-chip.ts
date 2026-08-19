@@ -29,7 +29,7 @@ export const chatQuickReplyChipTokenResolver: ChatQuickReplyChipTokenResolver = 
   semanticResolvers,
   config,
 }) => {
-  const { color, spacing, shape, borderWidth, typography } = themeTokens
+  const { color, spacing, padding, borderWidth, typography, fontWeights } = themeTokens
   const descriptionColor = resolveDescriptionColor({ themeTokens, semanticResolvers })
   const fadedBorder = resolveFadedBorder({ themeTokens, semanticResolvers })
   const isActive = !!config.isActive
@@ -48,7 +48,7 @@ export const chatQuickReplyChipTokenResolver: ChatQuickReplyChipTokenResolver = 
       },
       padding: {
         type: 'physicalAxis',
-        vertical: shape.padding.md,
+        vertical: padding.md,
         horizontal: spacing.lg,
       },
       border: {
@@ -65,7 +65,7 @@ export const chatQuickReplyChipTokenResolver: ChatQuickReplyChipTokenResolver = 
         direction: 'horizontal',
         crossAxisAligment: 'center',
         selfCrossAxisAlignment: 'start',
-        gap: shape.padding.md,
+        gap: padding.md,
       },
     },
     stateLayer: {
@@ -75,7 +75,7 @@ export const chatQuickReplyChipTokenResolver: ChatQuickReplyChipTokenResolver = 
     },
     text: {
       ...typography.body.sm,
-      fontWeight: typography.fontWeights.medium,
+      fontWeight: fontWeights.medium,
       color: isActive ? color.primary.color : descriptionColor,
     },
   }

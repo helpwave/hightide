@@ -84,16 +84,15 @@ export const createDarkThemeTokens = (
       negative,
       neutral,
     }),
-    ...resolveSharedGroups(config, defaultDarkElevationTokens()),
-    coloring: {
+    ...resolveSharedGroups(config, defaultDarkElevationTokens(), {
       tonal: {
-        color: config.coloring?.tonal?.color ?? 0.3,
-        onColor: config.coloring?.tonal?.onColor ?? 0.95,
+        color: 0.3,
+        onColor: 0.95,
       },
       transparent: {
-        color: config.coloring?.tonal?.color ?? 0.4,
-        onColor: config.coloring?.tonal?.onColor ?? 1,
-      }
-    }
+        color: 0.4,
+        onColor: 1,
+      },
+    }),
   }
 }

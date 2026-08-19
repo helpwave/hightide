@@ -23,17 +23,17 @@ export type ChatThreadHeaderTokenResolver = ComponentTokenResolver<
 >
 
 export const chatThreadHeaderTokenResolver: ChatThreadHeaderTokenResolver = ({ themeTokens, semanticResolvers }) => {
-  const { color, spacing, shape, borderWidth, typography } = themeTokens
+  const { color, spacing, padding, borderWidth, typography, fontWeights } = themeTokens
   const descriptionColor = resolveDescriptionColor({ themeTokens, semanticResolvers })
   const fadedBorder = resolveFadedBorder({ themeTokens, semanticResolvers })
   const title: TextStyleTokens = {
     ...typography.body.md,
-    fontWeight: typography.fontWeights.bold,
+    fontWeight: fontWeights.bold,
     color: color.surface.onColor,
   }
   const subtitle: TextStyleTokens = {
     ...typography.body.sm,
-    fontWeight: typography.fontWeights.light,
+    fontWeight: fontWeights.light,
     color: descriptionColor,
   }
   const contentRow: ContainerTokens = {
@@ -52,8 +52,8 @@ export const chatThreadHeaderTokenResolver: ChatThreadHeaderTokenResolver = ({ t
       backgroundColor: color.surface.color,
       padding: {
         type: 'physicalAxis',
-        vertical: shape.padding.sm,
-        horizontal: shape.padding.md,
+        vertical: padding.sm,
+        horizontal: padding.md,
       },
       border: {
         width: {
@@ -104,7 +104,7 @@ export const chatThreadHeaderTokenResolver: ChatThreadHeaderTokenResolver = ({ t
         },
         padding: {
           type: 'all',
-          value: shape.padding.md,
+          value: padding.md,
         },
         layout: {
           direction: 'horizontal',

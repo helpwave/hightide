@@ -70,7 +70,7 @@ export const multiSelectTokenResolver: MultiSelectTokenResolver = ({
   overrides,
   state,
 }) => {
-  const { color, spacing, shape, borderWidth, typography } = themeTokens
+  const { color, spacing, padding, borderRadius, borderWidth, typography, fontWeights } = themeTokens
   const checkboxSize = spacing.lg + spacing.xs
   const onColor = color.surface.onColor
   const accentPair = overrides?.color ?? color.primary
@@ -143,7 +143,7 @@ export const multiSelectTokenResolver: MultiSelectTokenResolver = ({
         maxHeight: menuHeight,
       },
       shape: {
-        borderRadius: { type: 'all', value: shape.borderRadius.lg },
+        borderRadius: { type: 'all', value: borderRadius.lg },
       },
       border: {
         width: {
@@ -159,8 +159,8 @@ export const multiSelectTokenResolver: MultiSelectTokenResolver = ({
     header: {
       padding: {
         type: 'physicalAxis',
-        vertical: shape.padding.sm,
-        horizontal: shape.padding.sm,
+        vertical: padding.sm,
+        horizontal: padding.sm,
       },
     },
     option: {
@@ -168,20 +168,20 @@ export const multiSelectTokenResolver: MultiSelectTokenResolver = ({
       opacity: state.has('disabled') ? 0.5 : 1,
       padding: {
         type: 'physicalAxis',
-        vertical: shape.padding.xl,
+        vertical: padding.xl,
         horizontal: spacing.lg,
       },
       layout: {
         direction: 'horizontal',
         crossAxisAligment: 'center',
-        gap: shape.padding.xl,
+        gap: padding.xl,
       },
     },
     optionText: {
       ...typography.body.md,
       fontWeight: state.has('selected')
-        ? typography.fontWeights.semibold
-        : typography.fontWeights.base,
+        ? fontWeights.semibold
+        : fontWeights.base,
       color: state.has('selected') ? accentPair.color : onColor,
     },
     emptyText: {
@@ -198,7 +198,7 @@ export const multiSelectTokenResolver: MultiSelectTokenResolver = ({
         height: checkboxSize,
       },
       shape: {
-        borderRadius: { type: 'all', value: shape.borderRadius.xs },
+        borderRadius: { type: 'all', value: borderRadius.xs },
       },
       border: {
         width: {

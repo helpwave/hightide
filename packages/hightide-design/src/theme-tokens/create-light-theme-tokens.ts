@@ -86,16 +86,15 @@ export const createLightThemeTokens = (
       negative,
       neutral,
     }),
-    ...resolveSharedGroups(config, defaultLightElevationTokens()),
-    coloring: {
+    ...resolveSharedGroups(config, defaultLightElevationTokens(), {
       tonal: {
-        color: config.coloring?.tonal?.color ?? 0.95,
-        onColor: config.coloring?.tonal?.onColor ?? 0.2,
+        color: 0.95,
+        onColor: 0.2,
       },
       transparent: {
-        color: config.coloring?.tonal?.color ?? 0.3,
-        onColor: config.coloring?.tonal?.onColor ?? 1,
-      }
-    }
+        color: 0.3,
+        onColor: 1,
+      },
+    }),
   }
 }

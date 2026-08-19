@@ -1,6 +1,12 @@
 import type { ColorToken } from '../primitive-tokens/color'
 import type { ShadowLayoutToken } from '../primitive-tokens/shadow'
 import type {
+  FontSizeKey,
+  FontSizingToken,
+  FontWeightKey,
+  FontWeightToken
+} from '../primitive-tokens/typography'
+import type {
   ColorPairToken,
   IconSize,
   ThemeBorderRadiusSize,
@@ -57,24 +63,20 @@ export type ColoringConfigTokens = {
   },
 }
 
-export type ThemeDecorationTokens = {
+export type ThemeConfigTokens = {
+  coloring: ColoringConfigTokens,
   appearancePercentages: ThemeAppearancePercentages,
 }
 
+export type { FontSizingToken }
+
+export type ThemeFontSizingTokens = Record<FontSizeKey, FontSizingToken>
+
+export type ThemeFontWeightTokens = Record<FontWeightKey, FontWeightToken>
+
+export type ThemeFontFamilyTokens = Record<'default' | 'accent' | 'mono', string>
+
 export type ThemeTypographyTokens = {
-  fontFamilies: {
-    default: string,
-    accent: string,
-    mono: string,
-  },
-  fontWeights: {
-    thin: TypographyStyleToken['fontWeight'],
-    light: TypographyStyleToken['fontWeight'],
-    base: TypographyStyleToken['fontWeight'],
-    medium: TypographyStyleToken['fontWeight'],
-    semibold: TypographyStyleToken['fontWeight'],
-    bold: TypographyStyleToken['fontWeight'],
-  },
   display: TypographyStyleToken,
   heading: Record<ThemeTypographySize, TypographyStyleToken>,
   body: Record<ThemeTypographySize, TypographyStyleToken>,
@@ -94,11 +96,6 @@ export type ThemeBorderRadiusTokens = Record<ThemeBorderRadiusSize, number>
 
 export type ThemePaddingTokens = Record<ThemePaddingSize, number>
 
-export type ThemeShapeTokens = {
-  borderRadius: ThemeBorderRadiusTokens,
-  padding: ThemePaddingTokens,
-}
-
 export type ThemeBorderWidthTokens = Record<ThemeBorderWidthKey, number>
 
 export type ShadowToken = ShadowLayoutToken & { color: ColorToken }
@@ -111,15 +108,18 @@ export type ThemeMotionTokens = {
 
 export type ThemeTokens = {
   color: ThemeColorTokens,
-  decoration: ThemeDecorationTokens,
   typography: ThemeTypographyTokens,
   icongraphy: ThemeIcongraphyTokens,
   size: ThemeSizeTokens,
   spacing: ThemeSpacingTokens,
-  shape: ThemeShapeTokens,
+  borderRadius: ThemeBorderRadiusTokens,
+  padding: ThemePaddingTokens,
   borderWidth: ThemeBorderWidthTokens,
   elevation: ThemeElevationTokens,
   motion: ThemeMotionTokens,
   focusOutline: OutlineToken,
-  coloring: ColoringConfigTokens,
+  config: ThemeConfigTokens,
+  fontSizing: ThemeFontSizingTokens,
+  fontWeights: ThemeFontWeightTokens,
+  fontFamilies: ThemeFontFamilyTokens,
 }

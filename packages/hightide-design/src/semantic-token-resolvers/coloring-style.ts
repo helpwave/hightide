@@ -29,14 +29,14 @@ export const resolveColoringColorVariant = (params: {
     }
   case 'tonal':
     return {
-      color: OKLCHUtils.changeLightness(color, themeTokens.coloring.tonal.color),
-      onColor: OKLCHUtils.changeLightness(color, themeTokens.coloring.tonal.onColor),
+      color: OKLCHUtils.changeLightness(color, themeTokens.config.coloring.tonal.color),
+      onColor: OKLCHUtils.changeLightness(color, themeTokens.config.coloring.tonal.onColor),
       accent: color,
     }
   case 'transparent':
     return {
-      color: HexColorUtils.hexWithAlpha(color, themeTokens.coloring.transparent.color),
-      onColor: HexColorUtils.hexWithAlpha(color, themeTokens.coloring.transparent.onColor),
+      color: HexColorUtils.hexWithAlpha(color, themeTokens.config.coloring.transparent.color),
+      onColor: HexColorUtils.hexWithAlpha(color, themeTokens.config.coloring.transparent.onColor),
       accent: color,
     }
   }

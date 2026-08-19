@@ -66,7 +66,7 @@ export const selectTokenResolver: SelectTokenResolver = ({
   overrides,
   state,
 }) => {
-  const { color, spacing, shape, borderWidth, typography } = themeTokens
+  const { color, spacing, padding, borderRadius, borderWidth, typography, fontWeights } = themeTokens
   const onColor = color.surface.onColor
   const accentPair = overrides?.color ?? color.primary
   const hasSearch = config?.hasSearch ?? true
@@ -143,7 +143,7 @@ export const selectTokenResolver: SelectTokenResolver = ({
         maxHeight: menuHeight,
       },
       shape: {
-        borderRadius: { type: 'all', value: shape.borderRadius.lg },
+        borderRadius: { type: 'all', value: borderRadius.lg },
       },
       border: {
         width: {
@@ -159,8 +159,8 @@ export const selectTokenResolver: SelectTokenResolver = ({
     header: {
       padding: {
         type: 'physicalAxis',
-        vertical: shape.padding.sm,
-        horizontal: shape.padding.sm,
+        vertical: padding.sm,
+        horizontal: padding.sm,
       },
     },
     option: {
@@ -168,15 +168,15 @@ export const selectTokenResolver: SelectTokenResolver = ({
       opacity: state.has('disabled') ? 0.5 : 1,
       padding: {
         type: 'physicalAxis',
-        vertical: shape.padding.xl,
+        vertical: padding.xl,
         horizontal: spacing.lg,
       },
     },
     optionText: {
       ...typography.body.md,
       fontWeight: state.has('selected')
-        ? typography.fontWeights.semibold
-        : typography.fontWeights.base,
+        ? fontWeights.semibold
+        : fontWeights.base,
       color: state.has('selected') ? accentPair.color : color.surface.onColor,
     },
     emptyText: {

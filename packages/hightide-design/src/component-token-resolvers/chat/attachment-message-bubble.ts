@@ -42,7 +42,7 @@ export const chatAttachmentMessageBubbleTokenResolver: ChatAttachmentMessageBubb
   themeTokens,
   config,
 }) => {
-  const { color, size, spacing, shape, typography, icongraphy } = themeTokens
+  const { color, size, spacing, borderRadius, typography, fontWeights, icongraphy } = themeTokens
   const isOutgoing = config.direction === 'outgoing'
   return {
     chatMessageBubbleOverrides: {},
@@ -68,7 +68,7 @@ export const chatAttachmentMessageBubbleTokenResolver: ChatAttachmentMessageBubb
         height: size.md,
       },
       shape: {
-        borderRadius: { type: 'all', value: shape.borderRadius.sm },
+        borderRadius: { type: 'all', value: borderRadius.sm },
       },
       layout: {
         mainAxisAlignment: 'center',
@@ -96,7 +96,7 @@ export const chatAttachmentMessageBubbleTokenResolver: ChatAttachmentMessageBubb
     },
     fileNameText: {
       ...typography.body.sm,
-      fontWeight: typography.fontWeights.medium,
+      fontWeight: fontWeights.medium,
     },
     fileMetadataText: {
       ...typography.body.sm,

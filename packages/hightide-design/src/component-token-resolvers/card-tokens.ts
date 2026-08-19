@@ -9,12 +9,12 @@ export type CardTokenResolver = ComponentTokenResolver<
 >
 
 export const cardTokenResolver: CardTokenResolver = ({ themeTokens }) => {
-  const { color, shape, elevation } = themeTokens
+  const { color, borderRadius, elevation } = themeTokens
 
   return {
     backgroundColor: color.surface.color,
     shape: {
-      borderRadius: { type: 'all', value: shape.borderRadius.lg },
+      borderRadius: { type: 'all', value: borderRadius.lg },
     },
     layout: {
       direction: 'vertical',

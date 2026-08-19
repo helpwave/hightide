@@ -94,8 +94,8 @@ export const resolveMessageCorners = (
   direction?: ChatMessageDirection
 ): BorderRadiusToken => {
   const isOutgoing = direction === 'outgoing'
-  const radius = themeTokens.shape.borderRadius.lg
-  const corner = themeTokens.shape.borderRadius.xxs
+  const radius = themeTokens.borderRadius.lg
+  const corner = themeTokens.borderRadius.xxs
 
   return {
     type: 'physicalCorner',

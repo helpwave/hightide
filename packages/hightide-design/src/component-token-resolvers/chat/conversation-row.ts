@@ -43,16 +43,16 @@ export type ChatConversationRowTokenResolver = ComponentTokenResolver<
 >
 
 export const chatConversationRowTokenResolver: ChatConversationRowTokenResolver = ({ themeTokens, semanticResolvers, state }) => {
-  const { color, spacing, shape, borderWidth, typography } = themeTokens
+  const { color, spacing, padding, borderWidth, typography, fontWeights } = themeTokens
   const descriptionColor = resolveDescriptionColor({ themeTokens, semanticResolvers })
   const title: TextStyleTokens = {
     ...typography.body.md,
-    fontWeight: state.isUnread ? typography.fontWeights.bold : typography.fontWeights.medium,
+    fontWeight: state.isUnread ? fontWeights.bold : fontWeights.medium,
     color: color.surface.onColor,
   }
   const preview: TextStyleTokens = {
     ...typography.body.sm,
-    fontWeight: typography.fontWeights.light,
+    fontWeight: fontWeights.light,
     color: state.isUnread ? color.surface.onColor : descriptionColor,
   }
   const contentContainer: ContainerTokens = {
@@ -80,7 +80,7 @@ export const chatConversationRowTokenResolver: ChatConversationRowTokenResolver 
         },
         padding: {
           type: 'physicalAxis',
-          vertical: shape.padding.xl,
+          vertical: padding.xl,
           horizontal: spacing.lg,
         },
         border: {
@@ -97,7 +97,7 @@ export const chatConversationRowTokenResolver: ChatConversationRowTokenResolver 
           direction: 'horizontal',
           crossAxisAligment: 'center',
           selfCrossAxisAlignment: 'stretch',
-          gap: shape.padding.xl,
+          gap: padding.xl,
         },
       },
       stateLayer: {
@@ -127,7 +127,7 @@ export const chatConversationRowTokenResolver: ChatConversationRowTokenResolver 
     title,
     timestamp: {
       ...typography.body.sm,
-      fontWeight: state.isUnread ? typography.fontWeights.medium : typography.fontWeights.base,
+      fontWeight: state.isUnread ? fontWeights.medium : fontWeights.base,
       color: descriptionColor,
       flexShrink: 0,
     },
@@ -143,7 +143,7 @@ export const chatConversationRowTokenResolver: ChatConversationRowTokenResolver 
       },
       padding: {
         type: 'physicalAxis',
-        horizontal: shape.padding.md,
+        horizontal: padding.md,
       },
       layout: {
         mainAxisAlignment: 'center',
@@ -152,7 +152,7 @@ export const chatConversationRowTokenResolver: ChatConversationRowTokenResolver 
     },
     unreadBadgeText: {
       ...typography.body.sm,
-      fontWeight: typography.fontWeights.bold,
+      fontWeight: fontWeights.bold,
       color: color.primary.onColor,
     },
     sentIndicator: {

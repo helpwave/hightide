@@ -9,20 +9,24 @@ import type {
   TintConfig
 } from './theme-tokens-config'
 import type {
+  ColoringConfigTokens,
   OutlineToken,
   ThemeAppearancePercentages,
+  ThemeBorderRadiusTokens,
   ThemeBorderWidthTokens,
   ThemeColorTokens,
   ThemeElevationTokens,
+  ThemeFontFamilyTokens,
+  ThemeFontSizingTokens,
+  ThemeFontWeightTokens,
   ThemeIcongraphyTokens,
   ThemeMotionTokens,
-  ThemeShapeTokens,
+  ThemePaddingTokens,
   ThemeSizeTokens,
   ThemeSpacingTokens,
   ThemeTokens,
   ThemeTypographyTokens
 } from './theme-tokens'
-import type { TypographyStyleToken } from './typography-style-token'
 
 export const defaultTintConfig: TintConfig = {
   light: 0.08,
@@ -33,55 +37,87 @@ export const defaultTintConfig: TintConfig = {
 export const tertiaryLightColor = '#057986' as const satisfies HexColorToken
 export const tertiaryDarkColor = HexColorUtils.mixWithWhite(tertiaryLightColor, 0.35)
 
-const createTypographyStyle = (
-  fontSize: number,
-  lineHeight: number,
-  fontWeight: TypographyStyleToken['fontWeight'],
-  fontFamily: string
-): TypographyStyleToken => ({
-  fontSize,
-  lineHeight,
-  fontWeight,
-  fontFamily,
+export const defaultFontFamilyTokens = (): ThemeFontFamilyTokens => ({
+  default: hightideTypography.fontFamily.inter,
+  accent: hightideTypography.fontFamily.spaceGrotesk,
+  mono: hightideTypography.fontFamily.inter,
 })
 
-export const defaultTypographyTokens = (): ThemeTypographyTokens => {
-  const { fontFamily, fontSize, fontWeight, lineHeight } = hightideTypography
-  const defaultFamily = fontFamily.inter
-  const accentFamily = fontFamily.spaceGrotesk
+export const defaultFontWeightTokens = (): ThemeFontWeightTokens => ({
+  thin: hightideTypography.fontWeight.thin,
+  light: hightideTypography.fontWeight.light,
+  base: hightideTypography.fontWeight.base,
+  medium: hightideTypography.fontWeight.medium,
+  semibold: hightideTypography.fontWeight.semibold,
+  bold: hightideTypography.fontWeight.bold,
+})
 
-  return {
-    fontFamilies: {
-      default: defaultFamily,
-      accent: accentFamily,
-      mono: defaultFamily,
+export const defaultFontSizingTokens = (): ThemeFontSizingTokens => ({
+  ...hightideTypography.fontSizing,
+})
+
+export const defaultTypographyTokens = (
+  fontSizing: ThemeFontSizingTokens,
+  fontWeights: ThemeFontWeightTokens,
+  fontFamilies: ThemeFontFamilyTokens
+): ThemeTypographyTokens => ({
+  display: {
+    ...fontSizing['4xl'],
+    fontWeight: fontWeights.bold,
+    fontFamily: fontFamilies.accent,
+  },
+  heading: {
+    lg: {
+      ...fontSizing['2xl'],
+      fontWeight: fontWeights.semibold,
+      fontFamily: fontFamilies.accent,
     },
-    fontWeights: {
-      thin: fontWeight.thin,
-      light: fontWeight.light,
-      base: fontWeight.base,
-      medium: fontWeight.medium,
-      semibold: fontWeight.semibold,
-      bold: fontWeight.bold,
+    md: {
+      ...fontSizing.lg,
+      fontWeight: fontWeights.semibold,
+      fontFamily: fontFamilies.accent,
     },
-    display: createTypographyStyle(fontSize['4xl'], lineHeight['4xl'], fontWeight.bold, accentFamily),
-    heading: {
-      lg: createTypographyStyle(fontSize['2xl'], lineHeight['2xl'], fontWeight.semibold, accentFamily),
-      md: createTypographyStyle(fontSize.lg, lineHeight.lg, fontWeight.semibold, accentFamily),
-      sm: createTypographyStyle(fontSize.base, lineHeight.base, fontWeight.medium, accentFamily),
+    sm: {
+      ...fontSizing.base,
+      fontWeight: fontWeights.medium,
+      fontFamily: fontFamilies.accent,
     },
-    body: {
-      lg: createTypographyStyle(fontSize.lg, lineHeight.lg, fontWeight.base, defaultFamily),
-      md: createTypographyStyle(fontSize.base, lineHeight.base, fontWeight.base, defaultFamily),
-      sm: createTypographyStyle(fontSize.sm, lineHeight.sm, fontWeight.base, defaultFamily),
+  },
+  body: {
+    lg: {
+      ...fontSizing.lg,
+      fontWeight: fontWeights.base,
+      fontFamily: fontFamilies.default,
     },
-    label: {
-      lg: createTypographyStyle(fontSize.lg, lineHeight.lg, fontWeight.semibold, defaultFamily),
-      md: createTypographyStyle(fontSize.base, lineHeight.base, fontWeight.semibold, defaultFamily),
-      sm: createTypographyStyle(fontSize.sm, lineHeight.sm, fontWeight.medium, defaultFamily),
+    md: {
+      ...fontSizing.base,
+      fontWeight: fontWeights.base,
+      fontFamily: fontFamilies.default,
     },
-  }
-}
+    sm: {
+      ...fontSizing.sm,
+      fontWeight: fontWeights.base,
+      fontFamily: fontFamilies.default,
+    },
+  },
+  label: {
+    lg: {
+      ...fontSizing.lg,
+      fontWeight: fontWeights.semibold,
+      fontFamily: fontFamilies.default,
+    },
+    md: {
+      ...fontSizing.base,
+      fontWeight: fontWeights.semibold,
+      fontFamily: fontFamilies.default,
+    },
+    sm: {
+      ...fontSizing.sm,
+      fontWeight: fontWeights.medium,
+      fontFamily: fontFamilies.default,
+    },
+  },
+})
 
 export const defaultSizeTokens = (): ThemeSizeTokens => ({
   xs: 28,
@@ -112,23 +148,22 @@ export const defaultSpacingTokens = (): ThemeSpacingTokens => ({
   xxl: 32,
 })
 
-export const defaultShapeTokens = (): ThemeShapeTokens => ({
-  borderRadius: {
-    xxs: 2,
-    xs: 4,
-    sm: 6,
-    md: 8,
-    lg: 10,
-    xl: 14,
-    xxl: 18,
-  },
-  padding: {
-    xs: 2,
-    sm: 4,
-    md: 6,
-    lg: 10,
-    xl: 14,
-  },
+export const defaultBorderRadiusTokens = (): ThemeBorderRadiusTokens => ({
+  xxs: 2,
+  xs: 4,
+  sm: 6,
+  md: 8,
+  lg: 10,
+  xl: 14,
+  xxl: 18,
+})
+
+export const defaultPaddingTokens = (): ThemePaddingTokens => ({
+  xs: 2,
+  sm: 4,
+  md: 6,
+  lg: 10,
+  xl: 14,
 })
 
 export const defaultBorderWidthTokens = (): ThemeBorderWidthTokens => ({
@@ -157,11 +192,11 @@ export const defaultLightElevationTokens = (): ThemeElevationTokens => {
   const sizes = hightideShadow.layout.bottom
 
   return {
-    level1: withShadowColor(sizes.xs, '#0000000F'), // 6%
-    level2: withShadowColor(sizes.sm, '#0000001A'), // 10%
-    level3: withShadowColor(sizes.md, '#00000024'), // 14%
-    level4: withShadowColor(sizes.lg, '#0000002E'), // 18%
-    level5: withShadowColor(sizes.xl, '#00000038'), // 22%
+    level1: withShadowColor(sizes.xs, '#0000000F'),
+    level2: withShadowColor(sizes.sm, '#0000001A'),
+    level3: withShadowColor(sizes.md, '#00000024'),
+    level4: withShadowColor(sizes.lg, '#0000002E'),
+    level5: withShadowColor(sizes.xl, '#00000038'),
   }
 }
 
@@ -169,11 +204,11 @@ export const defaultDarkElevationTokens = (): ThemeElevationTokens => {
   const sizes = hightideShadow.layout.bottom
 
   return {
-    level1: withShadowColor(sizes.xs, '#FFFFFF0A'), // 4%
-    level2: withShadowColor(sizes.sm, '#FFFFFF0F'), // 6%
-    level3: withShadowColor(sizes.md, '#FFFFFF14'), // 8%
-    level4: withShadowColor(sizes.lg, '#FFFFFF1A'), // 10%
-    level5: withShadowColor(sizes.xl, '#FFFFFF24'), // 14%
+    level1: withShadowColor(sizes.xs, '#FFFFFF0A'),
+    level2: withShadowColor(sizes.sm, '#FFFFFF0F'),
+    level3: withShadowColor(sizes.md, '#FFFFFF14'),
+    level4: withShadowColor(sizes.lg, '#FFFFFF1A'),
+    level5: withShadowColor(sizes.xl, '#FFFFFF24'),
   }
 }
 
@@ -186,14 +221,6 @@ export const mergeTypography = (
   }
 
   return {
-    fontFamilies: {
-      ...defaults.fontFamilies,
-      ...override.fontFamilies,
-    },
-    fontWeights: {
-      ...defaults.fontWeights,
-      ...override.fontWeights,
-    },
     display: override.display ?? defaults.display,
     heading: {
       ...defaults.heading,
@@ -253,21 +280,30 @@ export const buildColorTokens = (params: {
 
 export const resolveSharedGroups = (
   config: ThemeTokensModeConfig,
-  elevationDefaults: ThemeElevationTokens
-): Pick<ThemeTokens, 'decoration' | 'typography' | 'icongraphy' | 'size' | 'spacing' | 'shape' | 'borderWidth' | 'elevation' | 'motion' | 'focusOutline'> => {
+  elevationDefaults: ThemeElevationTokens,
+  coloringDefaults: ColoringConfigTokens
+): Omit<ThemeTokens, 'color'> => {
   const appearanceDefaults = defaultAppearancePercentages()
   const focusOutlineDefaults = defaultFocusOutlineToken()
   const icongraphyDefaults = defaultIcongraphyTokens()
+  const fontSizing = {
+    ...defaultFontSizingTokens(),
+    ...config.fontSizing,
+  }
+  const fontWeights = {
+    ...defaultFontWeightTokens(),
+    ...config.fontWeights,
+  }
+  const fontFamilies = {
+    ...defaultFontFamilyTokens(),
+    ...config.fontFamilies,
+  }
 
   return {
-    decoration: {
-      appearancePercentages: {
-        normal: config.decoration?.appearancePercentages?.normal ?? appearanceDefaults.normal,
-        subtle: config.decoration?.appearancePercentages?.subtle ?? appearanceDefaults.subtle,
-        faded: config.decoration?.appearancePercentages?.faded ?? appearanceDefaults.faded,
-      },
-    },
-    typography: mergeTypography(defaultTypographyTokens(), config.typography),
+    typography: mergeTypography(
+      defaultTypographyTokens(fontSizing, fontWeights, fontFamilies),
+      config.typography
+    ),
     icongraphy: {
       sizes: {
         ...icongraphyDefaults.sizes,
@@ -283,15 +319,13 @@ export const resolveSharedGroups = (
       ...defaultSpacingTokens(),
       ...config.spacing,
     },
-    shape: {
-      borderRadius: {
-        ...defaultShapeTokens().borderRadius,
-        ...config.shape?.borderRadius,
-      },
-      padding: {
-        ...defaultShapeTokens().padding,
-        ...config.shape?.padding,
-      },
+    borderRadius: {
+      ...defaultBorderRadiusTokens(),
+      ...config.borderRadius,
+    },
+    padding: {
+      ...defaultPaddingTokens(),
+      ...config.padding,
     },
     borderWidth: {
       ...defaultBorderWidthTokens(),
@@ -319,6 +353,26 @@ export const resolveSharedGroups = (
       offset: config.focusOutline?.offset ?? focusOutlineDefaults.offset,
       style: config.focusOutline?.style ?? focusOutlineDefaults.style,
       color: config.focusOutline?.color ?? focusOutlineDefaults.color,
+    },
+    fontSizing,
+    fontWeights,
+    fontFamilies,
+    config: {
+      coloring: {
+        tonal: {
+          color: config.config?.coloring?.tonal?.color ?? coloringDefaults.tonal.color,
+          onColor: config.config?.coloring?.tonal?.onColor ?? coloringDefaults.tonal.onColor,
+        },
+        transparent: {
+          color: config.config?.coloring?.tonal?.color ?? coloringDefaults.transparent.color,
+          onColor: config.config?.coloring?.tonal?.onColor ?? coloringDefaults.transparent.onColor,
+        },
+      },
+      appearancePercentages: {
+        normal: config.config?.appearancePercentages?.normal ?? appearanceDefaults.normal,
+        subtle: config.config?.appearancePercentages?.subtle ?? appearanceDefaults.subtle,
+        faded: config.config?.appearancePercentages?.faded ?? appearanceDefaults.faded,
+      },
     },
   }
 }

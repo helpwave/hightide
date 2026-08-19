@@ -23,7 +23,7 @@ export type ChatSystemLineTokenResolver = ComponentTokenResolver<
 >
 
 export const chatSystemLineTokenResolver: ChatSystemLineTokenResolver = ({ themeTokens, overrides }) => {
-  const { shape, typography } = themeTokens
+  const { padding, typography, fontWeights } = themeTokens
   const { accentText } = resolveAccentColoring({
     themeTokens,
     color: overrides.color,
@@ -36,12 +36,12 @@ export const chatSystemLineTokenResolver: ChatSystemLineTokenResolver = ({ theme
         mainAxisAlignment: 'center',
         crossAxisAligment: 'center',
         selfCrossAxisAlignment: 'center',
-        gap: shape.padding.md,
+        gap: padding.md,
       },
     },
     text: {
       ...typography.body.sm,
-      fontWeight: typography.fontWeights.medium,
+      fontWeight: fontWeights.medium,
       color: accentText.foreground,
     },
     icon: {

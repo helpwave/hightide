@@ -13,7 +13,7 @@ export const resolveWithAppearance = (params: {
     params.themeTokens.color.surface.color,
     HexColorUtils.hexWithAlpha(
       params.color,
-      params.themeTokens.decoration.appearancePercentages[params.appearance]
+      params.themeTokens.config.appearancePercentages[params.appearance]
     )
   )
 )

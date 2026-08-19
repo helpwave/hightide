@@ -11,7 +11,7 @@ export type ChatMessageListTokenResolver = ComponentTokenResolver<
 >
 
 export const chatMessageListTokenResolver: ChatMessageListTokenResolver = ({ themeTokens }) => {
-  const { color, spacing, shape } = themeTokens
+  const { color, spacing, padding } = themeTokens
 
   return {
     container: {
@@ -22,7 +22,7 @@ export const chatMessageListTokenResolver: ChatMessageListTokenResolver = ({ the
         horizontal: spacing.lg,
       },
       layout: {
-        gap: shape.padding.xl,
+        gap: padding.xl,
       },
     },
   }
