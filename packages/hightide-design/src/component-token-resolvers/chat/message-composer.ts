@@ -19,7 +19,7 @@ export type ChatMessageComposerTokenResolver = ComponentTokenResolver<
 >
 
 export const chatMessageComposerTokenResolver: ChatMessageComposerTokenResolver = ({ themeTokens, semanticResolvers }) => {
-  const { color, size, spacing, shape, borderWidth, typography } = themeTokens
+  const { color, size, spacing, padding, borderRadius, borderWidth, typography } = themeTokens
   const placeholderColor = resolveDescriptionColor({ themeTokens, semanticResolvers })
   const fadedBorder = resolveFadedBorder({ themeTokens, semanticResolvers })
 
@@ -31,8 +31,8 @@ export const chatMessageComposerTokenResolver: ChatMessageComposerTokenResolver 
       },
       padding: {
         type: 'physicalAxis',
-        vertical: shape.padding.xl,
-        horizontal: shape.padding.xl,
+        vertical: padding.xl,
+        horizontal: padding.xl,
       },
       border: {
         width: {
@@ -54,18 +54,21 @@ export const chatMessageComposerTokenResolver: ChatMessageComposerTokenResolver 
       backgroundColor: color.surfaceVariant.color,
       size: {
         minHeight: size.md,
-        maxHeight: Math.max(size.md, typography.body.md.lineHeight * 8 + 2 * shape.padding.md),
+        maxHeight: Math.max(size.md, typography.body.md.lineHeight * 8 + 2 * padding.md),
       },
       shape: {
-        borderRadius: { type: 'all', value: shape.borderRadius.sm },
+        borderRadius: { type: 'all', value: borderRadius.sm },
       },
       padding: {
         type: 'logicalSide',
-        blockStart:  shape.padding.md,
-        blockEnd:  shape.padding.md,
+        blockStart:  padding.md,
+        blockEnd:  padding.md,
         inlineStart: semanticResolvers.controlLayout({ themeTokens, size: 'md' }).horizontalContentPadding,
-        inlineEnd: shape.padding.md,
+        inlineEnd: padding.md,
       },
+      layout: {
+        flexGrow: 1,
+      }
     },
     text: {
       ...typography.body.md,

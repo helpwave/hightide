@@ -24,12 +24,15 @@ export type ChatConversationRowState = InteractionState & {
   isSelected?: boolean,
 }
 
-export type ChatConversationRowStyle = ViewStyle
+export type ChatConversationRowContentContainerStyle = ViewStyle
+export type ChatConversationRowHeaderRowStyle = ViewStyle
+export type ChatConversationRowMessageRowStyle = ViewStyle
 export type ChatConversationRowTitleStyle = TextStyle
 export type ChatConversationRowTimestampStyle = TextStyle
 export type ChatConversationRowPreviewStyle = TextStyle
 export type ChatConversationRowUnreadBadgeStyle = ViewStyle
 export type ChatConversationRowUnreadBadgeTextStyle = TextStyle
+export type ChatConversationRowSentIndicatorStyle = IconStyle
 
 export type ChatConversationListStyle = ViewStyle
 export type ChatConversationListHeaderStyle = ViewStyle
@@ -92,13 +95,40 @@ export type ChatMessageComposerStyle = ViewStyle
 export type ChatMessageComposerInputStyle = ViewStyle & TextStyle
 
 export type ChatConversationRowThemeResolvers = {
-  container: StyleResolverFunction<ChatConversationRowState, ChatConversationRowStyle>,
+  pressable: StyleResolverFunction<
+    ChatConversationRowState,
+    {
+      container: StyleResolverFunction<
+        PressableState,
+        PressableContainerStyle
+      >,
+      stateLayer: StyleResolverFunction<
+        PressableState,
+        PressableStateLayerStyle
+      >,
+      text: StyleResolverFunction<
+        PressableState,
+        PressableTextStyle
+      >,
+      icon: StyleResolverFunction<
+        PressableState,
+        PressableIconStyle
+      >,
+    }
+  >,
+  contentContainer: StyleResolverFunction<ChatConversationRowState, ChatConversationRowContentContainerStyle>,
+  headerRow: StyleResolverFunction<ChatConversationRowState, ChatConversationRowHeaderRowStyle>,
+  messageRow: StyleResolverFunction<ChatConversationRowState, ChatConversationRowMessageRowStyle>,
   title: StyleResolverFunction<ChatConversationRowState, ChatConversationRowTitleStyle>,
   timestamp: StyleResolverFunction<ChatConversationRowState, ChatConversationRowTimestampStyle>,
   preview: StyleResolverFunction<ChatConversationRowState, ChatConversationRowPreviewStyle>,
   unreadBadge: StyleResolverFunction<Record<string, never>, ChatConversationRowUnreadBadgeStyle>,
   unreadBadgeText: StyleResolverFunction<Record<string, never>, ChatConversationRowUnreadBadgeTextStyle>,
-  sentIndicator: StyleResolverFunction<Record<string, never>, ChatMessageBubbleMetaDataIconStyle>,
+  sentIndicator: StyleResolverFunction<Record<string, never>, ChatConversationRowSentIndicatorStyle>,
+  avatar: StyleResolverFunction<
+    AvatarState,
+    AvatarThemeResolvers
+  >,
 }
 
 export type ChatConversationListThemeResolvers = {
@@ -115,6 +145,27 @@ export type ChatThreadHeaderThemeResolvers = {
   avatar: StyleResolverFunction<
     AvatarState,
     AvatarThemeResolvers
+  >,
+  pressable: StyleResolverFunction<
+    Record<string, never>,
+    {
+      container: StyleResolverFunction<
+        PressableState,
+        PressableContainerStyle
+      >,
+      stateLayer: StyleResolverFunction<
+        PressableState,
+        PressableStateLayerStyle
+      >,
+      text: StyleResolverFunction<
+        PressableState,
+        PressableTextStyle
+      >,
+      icon: StyleResolverFunction<
+        PressableState,
+        PressableIconStyle
+      >,
+    }
   >,
 }
 

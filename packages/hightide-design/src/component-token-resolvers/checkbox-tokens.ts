@@ -95,7 +95,7 @@ export const checkboxTokenResolver: CheckboxTokenResolver = ({
       shape: {
         borderRadius: {
           type: 'all',
-          value: overrides.isRounded ? dimension / 2 : themeTokens.shape.borderRadius.sm,
+          value: overrides.isRounded ? dimension / 2 : themeTokens.borderRadius.sm,
         },
       },
       padding: {
@@ -120,7 +120,7 @@ export const checkboxTokenResolver: CheckboxTokenResolver = ({
       shape: {
         borderRadius: {
           type: 'all',
-          value: overrides.isRounded ? element.size / 2 : themeTokens.shape.borderRadius[size],
+          value: overrides.isRounded ? element.size / 2 : themeTokens.borderRadius[size],
         },
       },
     },

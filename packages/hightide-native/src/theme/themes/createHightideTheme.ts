@@ -58,6 +58,7 @@ const resolveElementLayouts = (themeTokens: ThemeTokens): ElementLayoutTokens =>
 })
 
 const bindSemantics = (themeTokens: ThemeTokens): HightideThemeSemantics => ({
+  ...resolveElementLayouts(themeTokens),
   coloringColorVariant: (parameter) => hightideSemanticTokenResolvers.coloringColorVariant({
     themeTokens,
     ...parameter,
@@ -114,19 +115,27 @@ const bindSemantics = (themeTokens: ThemeTokens): HightideThemeSemantics => ({
 
 export const createHightideTheme = (themeTokens: ThemeTokens): HightideTheme => ({
   colors: themeTokens.color,
-  semantics: bindSemantics(themeTokens),
+  fontFamilies: themeTokens.fontFamilies,
+  fontWeights: themeTokens.fontWeights,
+  fontSizing: themeTokens.fontSizing,
   typography: themeTokens.typography,
   icongraphy: themeTokens.icongraphy,
+  size: themeTokens.size,
   spacing: themeTokens.spacing,
-  elements: resolveElementLayouts(themeTokens),
-  borderRadius: themeTokens.shape.borderRadius,
-  border: themeTokens.borderWidth,
+  padding: themeTokens.padding,
+  borderRadius: themeTokens.borderRadius,
+  borderWidth: themeTokens.borderWidth,
+  elevation: themeTokens.elevation,
   shadow: {
     raised: themeTokens.elevation.level1,
     container: themeTokens.elevation.level2,
     popover: themeTokens.elevation.level3,
     dialog: themeTokens.elevation.level4,
   },
+  motion: themeTokens.motion,
+  focusOutline: themeTokens.focusOutline,
+  config: themeTokens.config,
+  semantics: bindSemantics(themeTokens),
   components: {
     button: toButtonThemeResolvers({
       themeTokens,

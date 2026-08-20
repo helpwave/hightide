@@ -55,7 +55,7 @@ export const avatarTokenResolver: AvatarTokenResolver = ({
   overrides,
 }) => {
   const size = overrides?.size ?? 'md'
-  const { color, typography, elevation } = themeTokens
+  const { color, typography, fontWeights, elevation } = themeTokens
   const colorPair = overrides?.color ?? color.primary
   const iconTokens = iconTokenResolver({
     themeTokens,
@@ -96,7 +96,7 @@ export const avatarTokenResolver: AvatarTokenResolver = ({
     },
     text: {
       ...typography.label.sm,
-      fontWeight: typography.fontWeights.bold,
+      fontWeight: fontWeights.bold,
       color: colorPair.onColor,
     },
     icon: {

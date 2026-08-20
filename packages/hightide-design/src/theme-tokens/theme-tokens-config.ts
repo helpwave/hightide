@@ -1,6 +1,15 @@
 import type { HexColorToken } from '../primitive-tokens/color'
 import type { ShadowLayoutToken } from '../primitive-tokens/shadow'
-import type { OutlineToken } from './theme-tokens'
+import type {
+  FontSizeKey,
+  FontSizingToken,
+  FontWeightKey,
+  FontWeightToken
+} from '../primitive-tokens/typography'
+import type {
+  OutlineToken,
+  ThemeAppearancePercentages
+} from './theme-tokens'
 import type { TypographyStyleToken } from './typography-style-token'
 
 export type ThemeMode = 'light' | 'dark'
@@ -41,19 +50,6 @@ export type ThemeElevationLevel = 'level1' | 'level2' | 'level3' | 'level4' | 'l
 export type ThemeMotionDurationKey = 'fast' | 'normal' | 'slow'
 
 export type ThemeTokensTypographyConfig = {
-  fontFamilies?: {
-    default?: string,
-    accent?: string,
-    mono?: string,
-  },
-  fontWeights?: {
-    thin?: TypographyStyleToken['fontWeight'],
-    light?: TypographyStyleToken['fontWeight'],
-    base?: TypographyStyleToken['fontWeight'],
-    medium?: TypographyStyleToken['fontWeight'],
-    semibold?: TypographyStyleToken['fontWeight'],
-    bold?: TypographyStyleToken['fontWeight'],
-  },
   display?: TypographyStyleToken,
   heading?: Partial<Record<ThemeTypographySize, TypographyStyleToken>>,
   body?: Partial<Record<ThemeTypographySize, TypographyStyleToken>>,
@@ -62,7 +58,7 @@ export type ThemeTokensTypographyConfig = {
 
 export type ThemeTokensConfig = {
   themeMode: ThemeMode,
-  colors: {
+  color: {
     primary: ColorPairToken,
     secondary?: ColorPairToken,
     tertiary?: ColorPairToken,
@@ -75,13 +71,9 @@ export type ThemeTokensConfig = {
     disabled?: ColorPairToken,
     tintConfig?: TintConfig,
   },
-  decoration?: {
-    appearancePercentages?: {
-      normal?: number,
-      subtle?: number,
-      faded?: number,
-    },
-  },
+  fontFamilies?: Partial<Record<'default' | 'accent' | 'mono', string>>,
+  fontWeights?: Partial<Record<FontWeightKey, FontWeightToken>>,
+  fontSizing?: Partial<Record<FontSizeKey, FontSizingToken>>,
   typography?: ThemeTokensTypographyConfig,
   icongraphy?: {
     sizes?: Partial<Record<IconSize, number>>,
@@ -89,17 +81,18 @@ export type ThemeTokensConfig = {
   },
   size?: Partial<Record<ThemeLayoutSize, number>>,
   spacing?: Partial<Record<ThemeSpacingSize, number>>,
-  shape?: {
-    borderRadius?: Partial<Record<ThemeBorderRadiusSize, number>>,
-    padding?: Partial<Record<ThemePaddingSize, number>>,
-  },
+  padding?: Partial<Record<ThemePaddingSize, number>>,
+  borderRadius?: Partial<Record<ThemeBorderRadiusSize, number>>,
   borderWidth?: Partial<Record<ThemeBorderWidthKey, number>>,
   elevation?: Partial<Record<ThemeElevationLevel, ShadowLayoutToken>>,
   motion?: {
     durations?: Partial<Record<ThemeMotionDurationKey, number>>,
   },
   focusOutline?: OutlineToken,
-  coloring?: ColoringConfig,
+  config?: {
+    coloring?: ColoringConfig,
+    appearancePercentages?: Partial<ThemeAppearancePercentages>,
+  },
 }
 
 export type ThemeTokensModeConfig = Omit<ThemeTokensConfig, 'themeMode'>

@@ -7,6 +7,7 @@ import type {
   ColoringToken,
   ContainerLayoutToken,
   ControlElementLayoutToken,
+  ElementLayoutTokens,
   InputColoringTokens,
   InsideControlElementLayoutToken,
   PressableColoringTokens,
@@ -69,4 +70,4 @@ export type HightideThemeSemantics = {
   asDescription: BoundSemanticResolver<{
     color: HexColorToken,
   }, HexColorToken>,
-}
+} & ElementLayoutTokens

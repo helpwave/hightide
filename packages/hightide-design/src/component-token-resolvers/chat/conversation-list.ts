@@ -13,7 +13,7 @@ export type ChatConversationListTokenResolver = ComponentTokenResolver<
 >
 
 export const chatConversationListTokenResolver: ChatConversationListTokenResolver = ({ themeTokens }) => {
-  const { color, spacing, shape } = themeTokens
+  const { color, spacing, padding } = themeTokens
 
   return {
     container: {
@@ -29,7 +29,7 @@ export const chatConversationListTokenResolver: ChatConversationListTokenResolve
         horizontal: spacing.lg,
       },
       layout: {
-        gap: shape.padding.xl,
+        gap: padding.xl,
       },
     },
     footer: {

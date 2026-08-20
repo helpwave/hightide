@@ -149,6 +149,10 @@ export const Select = ({
 
           return (
             <Fragment>
+              <View
+                pointerEvents="none"
+                style={selectTheme.stateLayer(triggerState)}
+              />
               <ThemedText style={[selectTheme.triggerText(triggerState), { flex: 1 }]}>
                 {selectedLabel}
               </ThemedText>

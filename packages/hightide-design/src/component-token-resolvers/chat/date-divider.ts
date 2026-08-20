@@ -17,7 +17,7 @@ export type ChatDateDividerTokenResolver = ComponentTokenResolver<
 >
 
 export const chatDateDividerTokenResolver: ChatDateDividerTokenResolver = ({ themeTokens, semanticResolvers }) => {
-  const { color, spacing, typography } = themeTokens
+  const { color, spacing, typography, fontWeights } = themeTokens
   const descriptionColor = resolveDescriptionColor({ themeTokens, semanticResolvers })
 
   return {
@@ -32,12 +32,12 @@ export const chatDateDividerTokenResolver: ChatDateDividerTokenResolver = ({ the
         horizontal: spacing.lg,
       },
       layout: {
-        alignSelf: 'center',
+        selfCrossAxisAlignment: 'center',
       },
     },
     text: {
       ...typography.body.sm,
-      fontWeight: typography.fontWeights.medium,
+      fontWeight: fontWeights.medium,
       color: descriptionColor,
     },
   }

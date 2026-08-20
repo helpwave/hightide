@@ -9,9 +9,12 @@ export const resolveWithAppearance = (params: {
   color: HexColorToken,
   appearance: Appearance,
 }): HexColorToken => (
-  HexColorUtils.hexWithAlpha(
-    params.color,
-    params.themeTokens.decoration.appearancePercentages[params.appearance]
+  HexColorUtils.blend(
+    params.themeTokens.color.surface.color,
+    HexColorUtils.hexWithAlpha(
+      params.color,
+      params.themeTokens.config.appearancePercentages[params.appearance]
+    )
   )
 )
 

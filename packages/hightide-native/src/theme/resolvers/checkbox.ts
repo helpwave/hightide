@@ -2,8 +2,6 @@ import type {
   CheckboxState as DesignCheckboxState,
   CheckboxStateValue
 } from '@helpwave/hightide-design/component-token-resolvers'
-import { toContainerStyle } from '../adapters/container-adapter'
-import { toIconStyle } from '../adapters/icon-style-adapter'
 import type {
   CheckboxIconStyle,
   CheckboxState,
@@ -16,6 +14,8 @@ import {
   createValueResolver,
   type ComponentThemeResolver
 } from '../types/resolver'
+
+import { StyleAdapterUtils } from '../adapters'
 
 const toDesignCheckboxState = (state: CheckboxState): DesignCheckboxState => {
   const active = new Set<CheckboxStateValue>()
@@ -73,11 +73,11 @@ export const toCheckboxThemeResolvers: ComponentThemeResolver<CheckboxThemeResol
 
   return {
     container: createStyleResolver((state: CheckboxState): CheckboxStyle => (
-      toContainerStyle(resolve(state).container)
+      StyleAdapterUtils.container(resolve(state).container)
     )),
     stateLayer: createStyleResolver((state: CheckboxState): CheckboxStateLayerStyle => {
       const tokens = resolve(state)
-      const containerStyle = toContainerStyle(tokens.container)
+      const containerStyle = StyleAdapterUtils.container(tokens.container)
       const touchTargetSize = semanticTokens.touchTargetSize({ themeTokens })
       const width = toNumberSize(containerStyle.width as string | number | undefined)
       const height = toNumberSize(containerStyle.height as string | number | undefined)
@@ -85,7 +85,7 @@ export const toCheckboxThemeResolvers: ComponentThemeResolver<CheckboxThemeResol
       const vertical = Math.max(0, touchTargetSize - height) / 2
 
       return {
-        ...toContainerStyle(tokens.stateLayer),
+        ...StyleAdapterUtils.container(tokens.stateLayer),
         position: 'absolute',
         top: 0,
         right: 0,
@@ -98,7 +98,7 @@ export const toCheckboxThemeResolvers: ComponentThemeResolver<CheckboxThemeResol
       }
     }),
     icon: createValueResolver((state: CheckboxState): CheckboxIconStyle => (
-      toIconStyle(resolve(state).icon)
+      StyleAdapterUtils.icon(resolve(state).icon)
     )),
   }
 }

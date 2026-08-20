@@ -1,9 +1,8 @@
-import { resolvePressableStateLayerTint } from '../../semantic-token-resolvers'
-import { HexColorUtils } from '../../utils/hex'
+import type { AvatarOverrideTokens } from '../avatar-tokens'
 import type { ComponentTokenResolver } from '../component-token-resolver'
 import type { ContainerTokens } from '../container-tokens'
-import type { IconTokens } from '../icon-tokens'
-import type { PressableStateValue } from '../pressable-tokens'
+import { type IconTokens } from '../icon-tokens'
+import type { PressableOverrideTokens } from '../pressable-tokens'
 import type { TextStyleTokens } from '../text-style-tokens'
 import {
   pillBorderRadius,
@@ -25,13 +24,17 @@ export type ChatConversationRowComponentResolverProps = {
 }
 
 export type ChatConversationRowTokens = {
-  container: ContainerTokens,
+  pressableOverrides: PressableOverrideTokens,
+  contentContainer: ContainerTokens,
+  headerRow: ContainerTokens,
+  messageRow: ContainerTokens,
   title: TextStyleTokens,
   timestamp: TextStyleTokens,
   preview: TextStyleTokens,
   unreadBadge: ContainerTokens,
   unreadBadgeText: TextStyleTokens,
   sentIndicator: IconTokens,
+  avatarOverride: AvatarOverrideTokens,
 }
 
 export type ChatConversationRowTokenResolver = ComponentTokenResolver<
@@ -39,102 +42,108 @@ export type ChatConversationRowTokenResolver = ComponentTokenResolver<
   ChatConversationRowTokens
 >
 
-const toPressableStates = (state: ChatConversationRowState): ReadonlySet<PressableStateValue> => {
-  const active = new Set<PressableStateValue>()
-
-  if (state.isDisabled) {
-    active.add('disabled')
-  }
-  if (state.isFocused) {
-    active.add('focused')
-  }
-  if (state.isFocusVisible) {
-    active.add('focusVisible')
-  }
-  if (state.isHovered) {
-    active.add('hovered')
-  }
-  if (state.isPressed) {
-    active.add('pressed')
-  }
-
-  return active
-}
-
 export const chatConversationRowTokenResolver: ChatConversationRowTokenResolver = ({ themeTokens, semanticResolvers, state }) => {
-  const { color, spacing, shape, borderWidth, typography } = themeTokens
+  const { color, spacing, padding, borderWidth, typography, fontWeights } = themeTokens
   const descriptionColor = resolveDescriptionColor({ themeTokens, semanticResolvers })
-  const baseBackground = state.isSelected ? color.background.color : 'transparent'
-  const tint = resolvePressableStateLayerTint({
-    themeTokens,
-    states: toPressableStates(state),
+  const title: TextStyleTokens = {
+    ...typography.body.md,
+    fontWeight: state.isUnread ? fontWeights.bold : fontWeights.medium,
     color: color.surface.onColor,
-  })
-  const backgroundColor = HexColorUtils.blend(
-    baseBackground === 'transparent' ? '#FFFFFF00' : baseBackground,
-    tint === 'transparent' ? '#FFFFFF00' : tint
-  )
+  }
+  const preview: TextStyleTokens = {
+    ...typography.body.sm,
+    fontWeight: fontWeights.light,
+    color: state.isUnread ? color.surface.onColor : descriptionColor,
+  }
+  const contentContainer: ContainerTokens = {
+    layout: {
+      direction: 'vertical',
+      gap: spacing.xs,
+      flexGrow: 1,
+    },
+  }
+  const avatarSize = Math.max((title.lineHeight ?? 0)
+    + Math.max(preview.lineHeight ?? 0, themeTokens.icongraphy.sizes.sm)
+    + (contentContainer.layout?.gap ?? 0), themeTokens.icongraphy.sizes.lg)
 
   return {
-    container: {
-      backgroundColor,
-      size: {
-        width: '100%',
+    pressableOverrides: {
+      overrides: {
+        size: 'md',
+        coloringStyle: 'foreground',
+        coloringColorVariant: 'transparent',
       },
-      shape: {
-        borderRadius: { type: 'all', value: shape.borderRadius.sm },
-      },
-      padding: {
-        type: 'physicalAxis',
-        vertical: shape.padding.xl,
-        horizontal: spacing.lg,
-      },
-      border: {
-        width: {
-          type: 'physicalSide',
-          left: state.isSelected ? borderWidth.thick : 0,
+      container: {
+        backgroundColor: state.isSelected ? color.background.color : 'transparent',
+        shape: {
+          borderRadius: { type: 'all', value: 0 },
         },
-        color: {
-          type: 'physicalSide',
-          left: state.isSelected ? color.primary.color : 'transparent',
+        padding: {
+          type: 'physicalAxis',
+          vertical: padding.xl,
+          horizontal: spacing.lg,
+        },
+        border: {
+          width: {
+            type: 'physicalSide',
+            left: state.isSelected ? borderWidth.thick : 0,
+          },
+          color: {
+            type: 'physicalSide',
+            left: state.isSelected ? color.primary.color : 'transparent',
+          },
+        },
+        layout: {
+          direction: 'horizontal',
+          crossAxisAligment: 'center',
+          selfCrossAxisAlignment: 'stretch',
+          gap: padding.xl,
         },
       },
+      stateLayer: {
+        shape: {
+          borderRadius: { type: 'all', value: 0 },
+        },
+      },
+    },
+    contentContainer,
+    headerRow: {
       layout: {
         direction: 'horizontal',
         crossAxisAligment: 'center',
-        gap: shape.padding.xl,
+        mainAxisAlignment: 'space-between',
+        gap: spacing.md,
       },
     },
-    title: {
-      ...typography.body.md,
-      fontWeight: state.isUnread ? typography.fontWeights.bold : typography.fontWeights.medium,
-      color: color.surface.onColor,
-      flex: 1,
+    messageRow: {
+      layout: {
+        direction: 'horizontal',
+        crossAxisAligment: 'center',
+        flexGrow: 1,
+        mainAxisAlignment: 'space-between',
+        gap: spacing.sm,
+      },
     },
+    title,
     timestamp: {
       ...typography.body.sm,
-      fontWeight: state.isUnread ? typography.fontWeights.medium : typography.fontWeights.base,
+      fontWeight: state.isUnread ? fontWeights.medium : fontWeights.base,
       color: descriptionColor,
       flexShrink: 0,
     },
-    preview: {
-      ...typography.body.sm,
-      fontWeight: typography.fontWeights.light,
-      color: state.isUnread ? color.surface.onColor : descriptionColor,
-      flex: 1,
-    },
+    preview,
     unreadBadge: {
       backgroundColor: color.primary.color,
       size: {
-        minWidth: spacing.lg + spacing.sm,
-        height: spacing.lg + spacing.sm,
+        minWidth: themeTokens.icongraphy.sizes.sm,
+        height: themeTokens.icongraphy.sizes.sm,
       },
       shape: {
         borderRadius: { type: 'all', value: pillBorderRadius },
       },
       padding: {
         type: 'physicalAxis',
-        horizontal: shape.padding.md,
+        horizontal: padding.md,
       },
       layout: {
         mainAxisAlignment: 'center',
@@ -143,11 +152,31 @@ export const chatConversationRowTokenResolver: ChatConversationRowTokenResolver 
     },
     unreadBadgeText: {
       ...typography.body.sm,
-      fontWeight: typography.fontWeights.bold,
+      fontWeight: fontWeights.bold,
       color: color.primary.onColor,
     },
     sentIndicator: {
+      size: themeTokens.icongraphy.sizes.xs,
+      strokeWidth: themeTokens.icongraphy.strokeWidth,
       color: color.primary.color,
+    },
+    avatarOverride: {
+      container: {
+        size: {
+          width: avatarSize,
+          height: avatarSize,
+          minWidth: avatarSize,
+          minHeight: avatarSize,
+          maxWidth: avatarSize,
+          maxHeight: avatarSize,
+        },
+        shape: {
+          borderRadius: { type: 'all', value: avatarSize / 2 },
+        },
+      },
+      icon: {
+        size: avatarSize,
+      },
     },
   }
 }

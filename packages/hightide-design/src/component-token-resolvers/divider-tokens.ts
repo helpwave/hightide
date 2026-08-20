@@ -27,7 +27,7 @@ export const dividerTokenResolver: DividerTokenResolver = ({
 }) => {
   const direction = overrides?.direction ?? 'horizontal'
   const width = overrides?.width ?? 1
-  const margin = overrides?.margin ?? themeTokens.shape.padding.md
+  const margin = overrides?.margin ?? themeTokens.padding.md
   const color = overrides?.color ?? semanticResolvers.asFaded({
     themeTokens,
     color: themeTokens.color.surface.onColor,
@@ -38,6 +38,7 @@ export const dividerTokenResolver: DividerTokenResolver = ({
       margin: {
         type: 'physicalAxis',
         vertical: margin,
+        horizontal: width,
       },
       border: {
         width: {
@@ -57,6 +58,7 @@ export const dividerTokenResolver: DividerTokenResolver = ({
     margin: {
       type: 'physicalAxis',
       horizontal: margin,
+      vertical: width,
     },
     border: {
       width: {
@@ -69,5 +71,8 @@ export const dividerTokenResolver: DividerTokenResolver = ({
       },
       style: 'solid',
     },
+    layout: {
+      selfCrossAxisAlignment: 'stretch',
+    }
   }
 }

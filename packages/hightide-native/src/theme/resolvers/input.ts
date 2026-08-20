@@ -2,9 +2,6 @@ import type {
   InputState as DesignInputState,
   InputStateValue
 } from '@helpwave/hightide-design/component-token-resolvers'
-import { toContainerStyleWithStateLayer } from '../adapters/container-adapter'
-import { toIconStyle } from '../adapters/icon-style-adapter'
-import { toTextStyle } from '../adapters/text-style-adapter'
 import type {
   InputContainerStyle,
   InputIconStyle,
@@ -18,6 +15,9 @@ import {
   createValueResolver,
   type ComponentThemeResolver
 } from '../types/resolver'
+
+import { StyleAdapterUtils } from '../adapters'
+import { HexColorUtils } from '@helpwave/hightide-design/utils'
 
 const toDesignInputState = (state: InputState = {}): DesignInputState => {
   const active = new Set<InputStateValue>()
@@ -64,16 +64,21 @@ export const toInputThemeResolvers: ComponentThemeResolver<InputThemeResolvers> 
   return {
     container: createStyleResolver((state: InputState): InputContainerStyle => {
       const { container, stateLayer } = resolve(state)
-      return toContainerStyleWithStateLayer(container, stateLayer)
+      if(container.backgroundColor && stateLayer.backgroundColor)
+        container.backgroundColor = HexColorUtils.blend(
+          HexColorUtils.resolveColorToken(container.backgroundColor),
+          HexColorUtils.resolveColorToken(stateLayer.backgroundColor)
+        )
+      return StyleAdapterUtils.container(container)
     }),
     text: createStyleResolver((state: InputState): InputTextStyle => (
-      toTextStyle(resolve(state).text)
+      StyleAdapterUtils.text(resolve(state).text)
     )),
     placeholder: createStyleResolver((state: InputState): InputPlaceholderStyle => (
-      toTextStyle(resolve(state).placeholder)
+      StyleAdapterUtils.text(resolve(state).placeholder)
     )),
     icon: createValueResolver((state: InputState): InputIconStyle => (
-      toIconStyle(resolve(state).icon)
+      StyleAdapterUtils.icon(resolve(state).icon)
     )),
   }
 }

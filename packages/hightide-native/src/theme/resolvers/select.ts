@@ -2,9 +2,6 @@ import type {
   SelectState as DesignSelectState,
   SelectStateValue
 } from '@helpwave/hightide-design/component-token-resolvers'
-import { toContainerStyle, toContainerStyleWithStateLayer } from '../adapters/container-adapter'
-import { toIconStyle } from '../adapters/icon-style-adapter'
-import { toTextStyle } from '../adapters/text-style-adapter'
 import type {
   SelectIconStyle,
   SelectMenuStyle,
@@ -26,6 +23,8 @@ import {
   createValueResolver,
   type ComponentThemeResolver
 } from '../types/resolver'
+
+import { StyleAdapterUtils } from '../adapters'
 
 type SelectResolveState = {
   color?: SelectState['color'],
@@ -114,28 +113,36 @@ export const toSelectThemeResolvers: ComponentThemeResolver<SelectThemeResolvers
   })
 
   return {
-    trigger: createStyleResolver((state: SelectState): SelectTriggerStyle => {
-      const { trigger, stateLayer } = resolve(toTriggerState(state))
-      return toContainerStyleWithStateLayer(trigger, stateLayer)
-    }),
+    trigger: createStyleResolver((state: SelectState): SelectTriggerStyle => ({
+      ...StyleAdapterUtils.container(resolve(toTriggerState(state)).trigger),
+      overflow: 'hidden',
+    })),
+    stateLayer: createStyleResolver((state: SelectState): SelectTriggerStyle => ({
+      ...StyleAdapterUtils.container(resolve(toTriggerState(state)).stateLayer),
+      position: 'absolute',
+      top: 0,
+      right: 0,
+      bottom: 0,
+      left: 0,
+    })),
     triggerText: createStyleResolver((state: SelectState): SelectTriggerTextStyle => (
-      toTextStyle(resolve(toTriggerState(state)).triggerText)
+      StyleAdapterUtils.text(resolve(toTriggerState(state)).triggerText)
     )),
     icon: createValueResolver((state: SelectState): SelectIconStyle => (
-      toIconStyle(resolve(toTriggerState(state)).icon)
+      StyleAdapterUtils.icon(resolve(toTriggerState(state)).icon)
     )),
     overlay: createSimpleStyleResolver((): SelectOverlayStyle => ({
-      ...toContainerStyle(resolve().overlay),
+      ...StyleAdapterUtils.container(resolve().overlay),
       flex: 1,
     })),
     menu: createStyleResolver((state: SelectMenuState): SelectMenuStyle => (
-      toContainerStyle(resolve({ hasSearch: state.hasSearch }).menu)
+      StyleAdapterUtils.container(resolve({ hasSearch: state.hasSearch }).menu)
     )),
     header: createSimpleStyleResolver((): SelectHeaderStyle => (
-      toContainerStyle(resolve().header)
+      StyleAdapterUtils.container(resolve().header)
     )),
     option: createStyleResolver((state: SelectOptionState): SelectOptionStyle => (
-      toContainerStyle(resolve({
+      StyleAdapterUtils.container(resolve({
         color: state.color,
         isDisabled: state.isDisabled,
         isSelected: state.isSelected,
@@ -143,7 +150,7 @@ export const toSelectThemeResolvers: ComponentThemeResolver<SelectThemeResolvers
       }).option)
     )),
     optionText: createStyleResolver((state: SelectOptionState): SelectOptionTextStyle => (
-      toTextStyle(resolve({
+      StyleAdapterUtils.text(resolve({
         color: state.color,
         isDisabled: state.isDisabled,
         isSelected: state.isSelected,
@@ -151,7 +158,7 @@ export const toSelectThemeResolvers: ComponentThemeResolver<SelectThemeResolvers
       }).optionText)
     )),
     emptyText: createSimpleStyleResolver((): SelectEmptyTextStyle => (
-      toTextStyle(resolve().emptyText)
+      StyleAdapterUtils.text(resolve().emptyText)
     )),
   }
 }

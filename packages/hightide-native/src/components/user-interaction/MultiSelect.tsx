@@ -1,4 +1,4 @@
-import { useMemo } from 'react'
+import { Fragment, useMemo } from 'react'
 import {
   FlatList,
   Modal,
@@ -128,44 +128,72 @@ export const MultiSelect = ({
           })
         }}
       >
-        {selectedOptions.length > 0
-          ? (
-            <View style={{ flexDirection: 'row', flexWrap: 'wrap', gap: 6, flex: 1 }}>
-              {selectedOptions.map((option) => (
-                <Chip key={option.id} size="md" color={color} variant="tonal">
-                  <ThemedText>{option.label ?? option.id}</ThemedText>
-                  {!state.isReadonly && (
-                    <View
-                      style={{
-                        position: 'relative',
-                        width: theme.icongraphy.sizes.sm,
-                      }}
-                    >
-                      <IconButton
-                        accessibilityLabel={translation('remove')}
-                        size="sm"
-                        color={theme.colors.negative}
-                        variant="foreground"
-                        disabled={!interactive}
-                        onPress={() => multiSelect.toggleSelection(option.id, false)}
-                        style={{
-                          position: 'absolute',
-                          left: '50%',
-                          top: '50%',
-                          transform: [
-                            { translateX: '-50%' },
-                            { translateY: '-50%' },
-                          ],
-                        }}
-                        icon={HightideIconRegistry.X}
-                      />
-                    </View>
-                  )}
-                </Chip>
-              ))}
-            </View>
+        {(pressableState) => {
+          const interaction = pressableState as {
+            pressed: boolean,
+            hovered?: boolean,
+            focused?: boolean,
+            focusVisible?: boolean,
+          }
+          const triggerState = {
+            ...state,
+            isPressed: interaction.pressed,
+            isHovered: !!interaction.hovered,
+            isFocused: !!interaction.focused,
+            isFocusVisible: !!interaction.focusVisible,
+          }
+
+          return (
+            <Fragment>
+              <View
+                pointerEvents="none"
+                style={multiSelectTheme.stateLayer(triggerState)}
+              />
+              {selectedOptions.length > 0
+                ? (
+                  <View style={{ flexDirection: 'row', flexWrap: 'wrap', gap: 6, flex: 1 }}>
+                    {selectedOptions.map((option) => (
+                      <Chip key={option.id} size="md" color={color} variant="tonal">
+                        <ThemedText>{option.label ?? option.id}</ThemedText>
+                        {!state.isReadonly && (
+                          <View
+                            style={{
+                              position: 'relative',
+                              width: theme.icongraphy.sizes.sm,
+                            }}
+                          >
+                            <IconButton
+                              accessibilityLabel={translation('remove')}
+                              size="sm"
+                              color={theme.colors.negative}
+                              variant="foreground"
+                              disabled={!interactive}
+                              onPress={() => multiSelect.toggleSelection(option.id, false)}
+                              style={{
+                                position: 'absolute',
+                                left: '50%',
+                                top: '50%',
+                                transform: [
+                                  { translateX: '-50%' },
+                                  { translateY: '-50%' },
+                                ],
+                              }}
+                              icon={HightideIconRegistry.X}
+                            />
+                          </View>
+                        )}
+                      </Chip>
+                    ))}
+                  </View>
+                )
+                : (
+                  <ThemedText style={multiSelectTheme.triggerText(triggerState)}>
+                    {placeholder}
+                  </ThemedText>
+                )}
+            </Fragment>
           )
-          : <ThemedText style={multiSelectTheme.triggerText(state)}>{placeholder}</ThemedText>}
+        }}
       </Pressable>
 
       <Modal

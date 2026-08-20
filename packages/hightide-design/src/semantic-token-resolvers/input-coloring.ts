@@ -2,7 +2,6 @@ import type { ColorToken } from '../primitive-tokens/color'
 import type { InputState } from '../component-token-resolvers/input-tokens'
 import type { ColorPairToken } from '../theme-tokens/theme-tokens-config'
 import type { ThemeTokens } from '../theme-tokens/theme-tokens'
-import { resolveAsFaded } from './with-appearance'
 import type { InputColoringTokens } from './types'
 
 export const resolveInputColoring = (params: {
@@ -18,7 +17,7 @@ export const resolveInputColoring = (params: {
     return {
       background: disabled.color,
       text: disabled.onColor,
-      border: disabled.color,
+      border: 'transparent',
     }
   }
 
@@ -28,10 +27,7 @@ export const resolveInputColoring = (params: {
     ? negative.color
     : state.has('focused')
       ? accentPair.color
-      : resolveAsFaded({
-        themeTokens,
-        color: surface.onColor,
-      })
+      : themeTokens.color.border
 
   return {
     background,

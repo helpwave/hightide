@@ -63,6 +63,10 @@ export type PressableTokens = {
   text: TextStyleTokens,
 }
 
+export type PressableOverrideTokens = Partial<PressableTokens> & {
+  overrides?: PressableComponentResolverProps['overrides'],
+}
+
 export type PressableTokenResolver = ComponentTokenResolver<
   PressableComponentResolverProps,
   PressableTokens

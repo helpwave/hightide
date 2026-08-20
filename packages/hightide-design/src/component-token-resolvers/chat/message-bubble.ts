@@ -31,7 +31,7 @@ export type ChatMessageBubbleTokenResolver = ComponentTokenResolver<
 >
 
 export const chatMessageBubbleTokenResolver: ChatMessageBubbleTokenResolver = ({ themeTokens, semanticResolvers, config }) => {
-  const { color, spacing, shape, typography, icongraphy } = themeTokens
+  const { color, spacing, padding, typography, fontWeights, icongraphy } = themeTokens
   const isOutgoing = config.direction === 'outgoing'
   const alignment = resolveAlignment(config.direction)
   const messageCorners = resolveMessageCorners(themeTokens, config.direction)
@@ -49,15 +49,15 @@ export const chatMessageBubbleTokenResolver: ChatMessageBubbleTokenResolver = ({
       },
       padding: {
         type: 'physicalSide',
-        left: shape.padding.xl,
-        right: shape.padding.xl,
-        top: shape.padding.lg,
-        bottom: shape.padding.md,
+        left: padding.xl,
+        right: padding.xl,
+        top: padding.lg,
+        bottom: padding.md,
       },
       layout: {
         gap: spacing.sm,
         direction: 'vertical',
-        alignSelf: alignment,
+        selfCrossAxisAlignment: alignment,
       },
       decoration: {
         shadow: themeTokens.elevation.level1,
@@ -70,7 +70,7 @@ export const chatMessageBubbleTokenResolver: ChatMessageBubbleTokenResolver = ({
     },
     bodyText: {
       ...typography.body.md,
-      fontWeight: typography.fontWeights.light,
+      fontWeight: fontWeights.light,
       color: bubbleColors.onColor,
     },
     metaDataContainer: {
@@ -79,7 +79,7 @@ export const chatMessageBubbleTokenResolver: ChatMessageBubbleTokenResolver = ({
         mainAxisAlignment: 'end',
         crossAxisAligment: 'center',
         gap: spacing.md,
-        alignSelf: 'end',
+        selfCrossAxisAlignment: 'end',
       },
     },
     metaDataStatusContainer: {
@@ -91,7 +91,7 @@ export const chatMessageBubbleTokenResolver: ChatMessageBubbleTokenResolver = ({
     },
     metaDataText: {
       ...typography.body.sm,
-      fontWeight: typography.fontWeights.medium,
+      fontWeight: fontWeights.medium,
       color: messageDescriptionColor,
     },
     metaDataIcon: {

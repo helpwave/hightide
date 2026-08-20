@@ -24,27 +24,27 @@ const {
 export const createDarkThemeTokens = (
   config: ThemeTokensModeConfig
 ): ThemeTokens => {
-  const tintConfig = config.colors.tintConfig ?? defaultTintConfig
+  const tintConfig = config.color.tintConfig ?? defaultTintConfig
   const whiteColor = white.value
 
-  const primary = config.colors.primary
-  const secondary: ColorPairToken = config.colors.secondary ?? {
+  const primary = config.color.primary
+  const secondary: ColorPairToken = config.color.secondary ?? {
     color: blue.value[500],
     onColor: whiteColor,
   }
-  const tertiary: ColorPairToken = config.colors.tertiary ?? {
+  const tertiary: ColorPairToken = config.color.tertiary ?? {
     color: tertiaryDarkColor,
     onColor: whiteColor,
   }
-  const positive: ColorPairToken = config.colors.positive ?? {
+  const positive: ColorPairToken = config.color.positive ?? {
     color: green.value[700],
     onColor: whiteColor,
   }
-  const warning: ColorPairToken = config.colors.warning ?? {
+  const warning: ColorPairToken = config.color.warning ?? {
     color: orange.value[500],
     onColor: whiteColor,
   }
-  const negative: ColorPairToken = config.colors.negative ?? {
+  const negative: ColorPairToken = config.color.negative ?? {
     color: red.value[600],
     onColor: whiteColor,
   }
@@ -52,19 +52,19 @@ export const createDarkThemeTokens = (
     color: gray.value[750],
     onColor: whiteColor,
   }
-  const background: ColorPairToken = config.colors.background ?? {
+  const background: ColorPairToken = config.color.background ?? {
     color: gray.value[850],
     onColor: gray.value[100],
   }
-  const surface: ColorPairToken = config.colors.surface ?? {
+  const surface: ColorPairToken = config.color.surface ?? {
     color: gray.value[800],
     onColor: gray.value[100],
   }
-  const surfaceVariant: ColorPairToken = config.colors.surfaceVariant ?? {
+  const surfaceVariant: ColorPairToken = config.color.surfaceVariant ?? {
     color: gray.value[900],
     onColor: gray.value[100],
   }
-  const disabled: ColorPairToken = config.colors.disabled ?? {
+  const disabled: ColorPairToken = config.color.disabled ?? {
     color: gray.value[500],
     onColor: gray.value[300],
   }
@@ -84,16 +84,15 @@ export const createDarkThemeTokens = (
       negative,
       neutral,
     }),
-    ...resolveSharedGroups(config, defaultDarkElevationTokens()),
-    coloring: {
+    ...resolveSharedGroups(config, defaultDarkElevationTokens(), {
       tonal: {
-        color: config.coloring?.tonal?.color ?? 0.3,
-        onColor: config.coloring?.tonal?.onColor ?? 0.95,
+        color: 0.3,
+        onColor: 0.95,
       },
       transparent: {
-        color: config.coloring?.tonal?.color ?? 0.4,
-        onColor: config.coloring?.tonal?.onColor ?? 1,
-      }
-    }
+        color: 0.4,
+        onColor: 1,
+      },
+    }),
   }
 }

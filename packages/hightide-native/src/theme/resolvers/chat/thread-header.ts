@@ -1,4 +1,6 @@
-import type { AvatarTokens } from '@helpwave/hightide-design/component-token-resolvers'
+import type {
+  AvatarTokens
+} from '@helpwave/hightide-design/component-token-resolvers'
 
 import {
   createAvatarStyleResolvers,
@@ -6,14 +8,17 @@ import {
   toDesignAvatarSize,
   withNumericAvatarSize
 } from '../avatar'
-import { toContainerStyle } from '../../adapters/container-adapter'
-import { toTextStyle } from '../../adapters/text-style-adapter'
 import type {
   ChatThreadHeaderContentRowStyle,
   ChatThreadHeaderStyle,
   ChatThreadHeaderSubtitleStyle,
   ChatThreadHeaderThemeResolvers,
-  ChatThreadHeaderTitleStyle
+  ChatThreadHeaderTitleStyle,
+  PressableContainerStyle,
+  PressableIconStyle,
+  PressableState,
+  PressableStateLayerStyle,
+  PressableTextStyle
 } from '../../types/components/chat'
 import type {
   AvatarState,
@@ -21,9 +26,13 @@ import type {
 } from '../../types/components/avatar'
 import {
   createSimpleStyleResolver,
+  createStyleResolver,
   createValueResolver,
+  toPressableInteractionState,
   type ComponentThemeResolver
 } from '../../types/resolver'
+
+import { StyleAdapterUtils } from '../../adapters'
 
 export const toChatThreadHeaderThemeResolvers: ComponentThemeResolver<ChatThreadHeaderThemeResolvers> = ({
   themeTokens,
@@ -37,17 +46,16 @@ export const toChatThreadHeaderThemeResolvers: ComponentThemeResolver<ChatThread
 
   return {
     container: createSimpleStyleResolver((): ChatThreadHeaderStyle => (
-      toContainerStyle(resolve().container)
+      StyleAdapterUtils.container(resolve().container)
     )),
-    contentRow: createSimpleStyleResolver((): ChatThreadHeaderContentRowStyle => ({
-      ...toContainerStyle(resolve().contentRow),
-      flex: 1,
-    })),
+    contentRow: createSimpleStyleResolver((): ChatThreadHeaderContentRowStyle => (
+      StyleAdapterUtils.container(resolve().contentRow)
+    )),
     title: createSimpleStyleResolver((): ChatThreadHeaderTitleStyle => (
-      toTextStyle(resolve().title)
+      StyleAdapterUtils.text(resolve().title)
     )),
     subtitle: createSimpleStyleResolver((): ChatThreadHeaderSubtitleStyle => (
-      toTextStyle(resolve().subtitle)
+      StyleAdapterUtils.text(resolve().subtitle)
     )),
     avatar: createValueResolver((state: AvatarState): AvatarThemeResolvers => {
       const { avatarOverride } = resolve()
@@ -71,7 +79,7 @@ export const toChatThreadHeaderThemeResolvers: ComponentThemeResolver<ChatThread
           avatarOverride
         )
 
-        const size = avatarState.size ?? state.size
+        const size = avatarState.size ?? state.size ?? avatarOverride.container?.size?.width
         if (typeof size === 'number') {
           return withNumericAvatarSize(tokens, size)
         }
@@ -80,6 +88,46 @@ export const toChatThreadHeaderThemeResolvers: ComponentThemeResolver<ChatThread
       }
 
       return createAvatarStyleResolvers(resolveTokens, themeTokens)
+    }),
+    pressable: createValueResolver(() => {
+      const { pressableOverwrites } = resolve()
+
+      const resolvePressable = (pressableState: PressableState) => componentTokens.pressable({
+        themeTokens,
+        semanticResolvers: semanticTokens,
+        overrides: {
+          size: pressableOverwrites.overrides?.size,
+          color: pressableOverwrites.overrides?.color,
+          coloringStyle: pressableOverwrites.overrides?.coloringStyle,
+          coloringColorVariant: pressableOverwrites.overrides?.coloringColorVariant,
+          hasAdditionalHorizontalPadding: pressableOverwrites.overrides?.hasAdditionalHorizontalPadding,
+        },
+        state: toPressableInteractionState(pressableState),
+      })
+
+      return {
+        container: createStyleResolver((pressableState: PressableState): PressableContainerStyle => ({
+          ...StyleAdapterUtils.container(resolvePressable(pressableState).container),
+          ...StyleAdapterUtils.container(pressableOverwrites.container = {}),
+        })),
+        stateLayer: createStyleResolver((pressableState: PressableState): PressableStateLayerStyle => ({
+          ...StyleAdapterUtils.container(resolvePressable(pressableState).stateLayer),
+          position: 'absolute',
+          top: 0,
+          right: 0,
+          bottom: 0,
+          left: 0,
+          ...StyleAdapterUtils.container(pressableOverwrites.stateLayer = {}),
+        })),
+        text: createStyleResolver((pressableState: PressableState): PressableTextStyle => ({
+          ...StyleAdapterUtils.text(resolvePressable(pressableState).text),
+          ...StyleAdapterUtils.text(pressableOverwrites.text = {}),
+        })),
+        icon: createValueResolver((pressableState: PressableState): PressableIconStyle => ({
+          ...StyleAdapterUtils.icon(resolvePressable(pressableState).icon),
+          ...StyleAdapterUtils.icon(pressableOverwrites.icon = {}),
+        })),
+      }
     }),
   }
 }

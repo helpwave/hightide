@@ -1,20 +1,26 @@
 import type {
-  ElementLayoutTokens
-} from '@helpwave/hightide-design/semantic-token-resolvers'
-import type {
+  ThemeBorderRadiusTokens,
   ThemeBorderWidthTokens,
   ThemeElevationTokens,
-  ThemeShapeTokens,
+  ThemeMotionTokens,
+  ThemePaddingTokens,
+  ThemeSizeTokens,
   ThemeSpacingTokens
 } from '@helpwave/hightide-design/theme-tokens'
 
+export type HightideSize = ThemeSizeTokens
+
 export type HightideSpacing = ThemeSpacingTokens
 
-export type HightideElements = ElementLayoutTokens
+export type HightidePadding = ThemePaddingTokens
 
-export type HightideBorderRadius = ThemeShapeTokens['borderRadius']
+export type HightideBorderRadius = ThemeBorderRadiusTokens
 
-export type HightideBorder = ThemeBorderWidthTokens
+export type HightideBorderWidth = ThemeBorderWidthTokens
+
+export type HightideElevation = ThemeElevationTokens
+
+export type HightideMotion = ThemeMotionTokens
 
 export type HightideShadowToken = ThemeElevationTokens[keyof ThemeElevationTokens]
 

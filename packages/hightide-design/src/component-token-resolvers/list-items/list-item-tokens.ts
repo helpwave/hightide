@@ -62,9 +62,8 @@ export const listItemTokenResolver: ListItemTokenResolver = ({
     container: {
       backgroundColor: tonal?.background,
       size: {
-        width: '100%',
         minWidth: layout.size,
-        minHeight: layout.size,
+        minHeight: layout.size + themeTokens.spacing.md,
       },
       padding: {
         type: 'physicalAxis',
@@ -75,6 +74,8 @@ export const listItemTokenResolver: ListItemTokenResolver = ({
         direction: 'horizontal',
         mainAxisAlignment: 'start',
         crossAxisAligment: 'center',
+        flexGrow: 1,
+        selfCrossAxisAlignment: 'stretch',
       },
     },
     leadingItemContainer: {

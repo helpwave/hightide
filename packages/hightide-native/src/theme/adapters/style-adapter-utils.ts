@@ -1,0 +1,433 @@
+import type {
+  TextStyle,
+  ViewStyle
+} from 'react-native'
+
+import type {
+  AxisAligmentToken,
+  BorderRadiusToken,
+  BorderToken,
+  ContainerTokens,
+  CrossAxisAligmentToken,
+  CrossAxisLineAligmentToken,
+  IconTokens,
+  LayoutDirectionToken,
+  MainAxisAligmentToken,
+  MarginToken,
+  PaddingToken,
+  TextStyleTokens
+} from '@helpwave/hightide-design/component-token-resolvers'
+import {
+  defaultWritingMode,
+  resolveDirectionalTokens
+} from '@helpwave/hightide-design/component-token-resolvers'
+import type { ShadowToken } from '@helpwave/hightide-design/theme-tokens'
+import type { IconStyle } from '../../icons'
+
+type OptionalViewStyle<K extends keyof ViewStyle> = {
+  [P in K]?: ViewStyle[P]
+}
+
+const defined = <T extends object>(style: T): T => {
+  const result = {} as T
+
+  for (const key of Object.keys(style) as (keyof T)[]) {
+    if (style[key] !== undefined) {
+      result[key] = style[key]
+    }
+  }
+
+  return result
+}
+
+const toFlexStartEnd = (
+  alignment: AxisAligmentToken
+): 'flex-start' | 'flex-end' | 'center' => {
+  if (alignment === 'start') {
+    return 'flex-start'
+  }
+
+  if (alignment === 'end') {
+    return 'flex-end'
+  }
+
+  return 'center'
+}
+
+const shadowStyleAdapter = (
+  shadow?: ShadowToken
+): ViewStyle['boxShadow'] | undefined => {
+  if (shadow === undefined) {
+    return undefined
+  }
+
+  return [{
+    color: shadow.color,
+    offsetX: shadow.x,
+    offsetY: shadow.y,
+    blurRadius: shadow.blur,
+    spreadDistance: shadow.spread,
+  }]
+}
+
+const flexDirectionStyleAdapter = (
+  direction?: LayoutDirectionToken
+): ViewStyle['flexDirection'] | undefined => {
+  if (direction === undefined) {
+    return undefined
+  }
+
+  return direction === 'horizontal' ? 'row' : 'column'
+}
+
+const justifyContentStyleAdapter = (
+  alignment?: MainAxisAligmentToken
+): ViewStyle['justifyContent'] | undefined => {
+  if (alignment === undefined) {
+    return undefined
+  }
+
+  if (alignment === 'space-between' || alignment === 'space-evenly' || alignment === 'space-around') {
+    return alignment
+  }
+
+  return toFlexStartEnd(alignment)
+}
+
+const alignItemsStyleAdapter = (
+  alignment?: CrossAxisAligmentToken
+): ViewStyle['alignItems'] | undefined => {
+  if (alignment === undefined) {
+    return undefined
+  }
+
+  if (alignment === 'stretch') {
+    return alignment
+  }
+
+  return toFlexStartEnd(alignment)
+}
+
+const alignSelfStyleAdapter = (
+  alignment?: CrossAxisAligmentToken
+): ViewStyle['alignSelf'] | undefined => {
+  if (alignment === undefined) {
+    return undefined
+  }
+
+  if (alignment === 'stretch') {
+    return alignment
+  }
+
+  return toFlexStartEnd(alignment)
+}
+
+const alignContentStyleAdapter = (
+  alignment?: CrossAxisLineAligmentToken
+): ViewStyle['alignContent'] | undefined => {
+  if (alignment === undefined) {
+    return undefined
+  }
+
+  if (
+    alignment === 'stretch'
+    || alignment === 'space-between'
+    || alignment === 'space-evenly'
+    || alignment === 'space-around'
+  ) {
+    return alignment
+  }
+
+  return toFlexStartEnd(alignment)
+}
+
+const borderRadiusStyleAdapter = (
+  borderRadius?: BorderRadiusToken
+): OptionalViewStyle<
+  | 'borderRadius'
+  | 'borderTopLeftRadius'
+  | 'borderTopRightRadius'
+  | 'borderBottomLeftRadius'
+  | 'borderBottomRightRadius'
+> | undefined => {
+  if (borderRadius === undefined) {
+    return undefined
+  }
+
+  if (borderRadius.type === 'all') {
+    return {
+      borderRadius: borderRadius.value,
+      borderTopLeftRadius: undefined,
+      borderTopRightRadius: undefined,
+      borderBottomLeftRadius: undefined,
+      borderBottomRightRadius: undefined,
+    }
+  }
+
+  return {
+    borderRadius: undefined,
+    borderTopLeftRadius: borderRadius.topLeft,
+    borderTopRightRadius: borderRadius.topRight,
+    borderBottomLeftRadius: borderRadius.bottomLeft,
+    borderBottomRightRadius: borderRadius.bottomRight,
+  }
+}
+
+const borderWidthStyleAdapter = (
+  width?: BorderToken['width']
+): OptionalViewStyle<
+  | 'borderTopWidth'
+  | 'borderRightWidth'
+  | 'borderBottomWidth'
+  | 'borderLeftWidth'
+> | undefined => {
+  if (width === undefined) {
+    return undefined
+  }
+
+  const sides = resolveDirectionalTokens([width], defaultWritingMode)
+
+  return {
+    borderTopWidth: sides.top,
+    borderRightWidth: sides.right,
+    borderBottomWidth: sides.bottom,
+    borderLeftWidth: sides.left,
+  }
+}
+
+const borderColorStyleAdapter = (
+  color?: BorderToken['color']
+): OptionalViewStyle<
+  | 'borderTopColor'
+  | 'borderRightColor'
+  | 'borderBottomColor'
+  | 'borderLeftColor'
+> | undefined => {
+  if (color === undefined) {
+    return undefined
+  }
+
+  const sides = resolveDirectionalTokens([color], defaultWritingMode)
+
+  return {
+    borderTopColor: sides.top,
+    borderRightColor: sides.right,
+    borderBottomColor: sides.bottom,
+    borderLeftColor: sides.left,
+  }
+}
+
+const borderStyleAdapter = (
+  border?: BorderToken
+): OptionalViewStyle<
+  | 'borderStyle'
+  | 'borderTopWidth'
+  | 'borderRightWidth'
+  | 'borderBottomWidth'
+  | 'borderLeftWidth'
+  | 'borderTopColor'
+  | 'borderRightColor'
+  | 'borderBottomColor'
+  | 'borderLeftColor'
+> | undefined => {
+  if (border === undefined) {
+    return undefined
+  }
+
+  return {
+    borderStyle: border.style,
+    ...borderWidthStyleAdapter(border.width),
+    ...borderColorStyleAdapter(border.color),
+  }
+}
+
+const paddingStyleAdapter = (
+  padding?: PaddingToken
+): OptionalViewStyle<
+  | 'paddingTop'
+  | 'paddingRight'
+  | 'paddingBottom'
+  | 'paddingLeft'
+> | undefined => {
+  if (padding === undefined) {
+    return undefined
+  }
+
+  const sides = resolveDirectionalTokens([padding], defaultWritingMode)
+
+  return {
+    paddingTop: sides.top,
+    paddingRight: sides.right,
+    paddingBottom: sides.bottom,
+    paddingLeft: sides.left,
+  }
+}
+
+const marginStyleAdapter = (
+  margin?: MarginToken
+): OptionalViewStyle<
+  | 'marginTop'
+  | 'marginRight'
+  | 'marginBottom'
+  | 'marginLeft'
+> | undefined => {
+  if (margin === undefined) {
+    return undefined
+  }
+
+  const sides = resolveDirectionalTokens([margin], defaultWritingMode)
+
+  return {
+    marginTop: sides.top,
+    marginRight: sides.right,
+    marginBottom: sides.bottom,
+    marginLeft: sides.left,
+  }
+}
+
+const sizeStyleAdapter = (
+  size?: ContainerTokens['size']
+): OptionalViewStyle<
+  | 'width'
+  | 'height'
+  | 'minWidth'
+  | 'minHeight'
+  | 'maxWidth'
+  | 'maxHeight'
+> | undefined => {
+  if (size === undefined) {
+    return undefined
+  }
+
+  return {
+    width: size.width,
+    height: size.height,
+    minWidth: size.minWidth,
+    minHeight: size.minHeight,
+    maxWidth: size.maxWidth,
+    maxHeight: size.maxHeight,
+  }
+}
+
+const outlineStyleAdapter = (
+  outline?: ContainerTokens['outline']
+): OptionalViewStyle<
+  | 'outlineColor'
+  | 'outlineOffset'
+  | 'outlineWidth'
+  | 'outlineStyle'
+> | undefined => {
+  if (outline === undefined) {
+    return undefined
+  }
+
+  return {
+    outlineColor: outline.color,
+    outlineOffset: outline.offset,
+    outlineWidth: outline.width,
+    outlineStyle: outline.style,
+  }
+}
+
+const layoutStyleAdapter = (
+  layout?: ContainerTokens['layout']
+): OptionalViewStyle<
+  | 'flexWrap'
+  | 'flexGrow'
+  | 'flexShrink'
+  | 'flexBasis'
+  | 'flexDirection'
+  | 'justifyContent'
+  | 'alignItems'
+  | 'alignContent'
+  | 'alignSelf'
+  | 'gap'
+> | undefined => {
+  if (layout === undefined) {
+    return undefined
+  }
+
+  return {
+    flexWrap: layout.flexWrap,
+    flexGrow: layout.flexGrow,
+    flexShrink: layout.flexShrink,
+    flexBasis: layout.flexBasis,
+    flexDirection: flexDirectionStyleAdapter(layout.direction),
+    justifyContent: justifyContentStyleAdapter(layout.mainAxisAlignment),
+    alignItems: alignItemsStyleAdapter(layout.crossAxisAligment),
+    alignContent: alignContentStyleAdapter(layout.crossAxisLineAligment),
+    alignSelf: alignSelfStyleAdapter(layout.selfCrossAxisAlignment),
+    gap: layout.gap,
+  }
+}
+
+function containerStyleAdapter(tokens: ContainerTokens): ViewStyle {
+  if (tokens === undefined) {
+    return {}
+  }
+
+  return defined({
+    display: 'flex' as ViewStyle['display'],
+    overflow: tokens.overflow,
+    backgroundColor: tokens.backgroundColor,
+    opacity: tokens.opacity,
+    boxShadow: shadowStyleAdapter(tokens.decoration?.shadow),
+    ...layoutStyleAdapter(tokens.layout),
+    ...sizeStyleAdapter(tokens.size),
+    ...borderStyleAdapter(tokens.border),
+    ...borderRadiusStyleAdapter(tokens.shape?.borderRadius),
+    ...paddingStyleAdapter(tokens.padding),
+    ...marginStyleAdapter(tokens.margin),
+    ...outlineStyleAdapter(tokens.outline),
+  })
+}
+
+function textStyleAdapter(tokens: TextStyleTokens): TextStyle {
+  if (tokens === undefined) {
+    return {}
+  }
+
+  return defined({
+    color: tokens.color,
+    fontSize: tokens.fontSize,
+    fontWeight: tokens.fontWeight,
+    fontFamily: tokens.fontFamily,
+    lineHeight: tokens.lineHeight,
+    textAlign: tokens.textAlign,
+  })
+}
+
+function iconStyleAdapter(tokens: IconTokens): IconStyle {
+  if (tokens === undefined) {
+    return {}
+  }
+
+  return defined({
+    color: tokens.color,
+    size: tokens.size,
+    strokeWidth: tokens.strokeWidth,
+  })
+}
+
+export const StyleAdapterUtils = {
+  shadow: shadowStyleAdapter,
+  flexDirection: flexDirectionStyleAdapter,
+  justifyContent: justifyContentStyleAdapter,
+  alignItems: alignItemsStyleAdapter,
+  alignSelf: alignSelfStyleAdapter,
+  alignContent: alignContentStyleAdapter,
+  borderRadius: borderRadiusStyleAdapter,
+  borderWidth: borderWidthStyleAdapter,
+  borderColor: borderColorStyleAdapter,
+  border: borderStyleAdapter,
+  padding: paddingStyleAdapter,
+  margin: marginStyleAdapter,
+  size: sizeStyleAdapter,
+  outline: outlineStyleAdapter,
+  layout: layoutStyleAdapter,
+  container: containerStyleAdapter,
+  text: textStyleAdapter,
+  icon: iconStyleAdapter,
+}
+
+export type StyleAdapters = typeof StyleAdapterUtils

@@ -48,6 +48,7 @@ export type SelectEmptyTextStyle = TextStyle
 
 export type SelectThemeResolvers = {
   trigger: StyleResolverFunction<SelectState, SelectTriggerStyle>,
+  stateLayer: StyleResolverFunction<SelectState, SelectTriggerStyle>,
   triggerText: StyleResolverFunction<SelectState, SelectTriggerTextStyle>,
   icon: StyleResolverFunction<SelectState, SelectIconStyle>,
   overlay: SimpleStyleResolver<SelectOverlayStyle>,

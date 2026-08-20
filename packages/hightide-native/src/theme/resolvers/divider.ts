@@ -1,4 +1,3 @@
-import { toContainerStyle } from '../adapters/container-adapter'
 import type {
   DividerState,
   DividerStyle,
@@ -8,6 +7,8 @@ import {
   createStyleResolver,
   type ComponentThemeResolver
 } from '../types/resolver'
+
+import { StyleAdapterUtils } from '../adapters'
 
 export const toDividerThemeResolvers: ComponentThemeResolver<DividerThemeResolvers> = ({
   themeTokens,
@@ -27,8 +28,7 @@ export const toDividerThemeResolvers: ComponentThemeResolver<DividerThemeResolve
 
   return {
     container: createStyleResolver((state: DividerState): DividerStyle => ({
-      ...toContainerStyle(resolve(state)),
-      alignSelf: 'stretch',
+      ...StyleAdapterUtils.container(resolve(state)),
     })),
   }
 }

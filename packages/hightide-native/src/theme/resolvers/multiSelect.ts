@@ -2,9 +2,6 @@ import type {
   MultiSelectState as DesignMultiSelectState,
   MultiSelectStateValue
 } from '@helpwave/hightide-design/component-token-resolvers'
-import { toContainerStyle, toContainerStyleWithStateLayer } from '../adapters/container-adapter'
-import { toIconStyle } from '../adapters/icon-style-adapter'
-import { toTextStyle } from '../adapters/text-style-adapter'
 import type {
   MultiSelectCheckboxIconStyle,
   MultiSelectCheckboxStyle,
@@ -29,6 +26,8 @@ import {
   createValueResolver,
   type ComponentThemeResolver
 } from '../types/resolver'
+
+import { StyleAdapterUtils } from '../adapters'
 
 type MultiSelectResolveState = {
   color?: MultiSelectState['color'],
@@ -119,25 +118,33 @@ export const toMultiSelectThemeResolvers: ComponentThemeResolver<MultiSelectThem
   })
 
   return {
-    trigger: createStyleResolver((state: MultiSelectState): MultiSelectTriggerStyle => {
-      const { trigger, stateLayer } = resolve(toTriggerState(state))
-      return toContainerStyleWithStateLayer(trigger, stateLayer)
-    }),
+    trigger: createStyleResolver((state: MultiSelectState): MultiSelectTriggerStyle => ({
+      ...StyleAdapterUtils.container(resolve(toTriggerState(state)).trigger),
+      overflow: 'hidden',
+    })),
+    stateLayer: createStyleResolver((state: MultiSelectState): MultiSelectTriggerStyle => ({
+      ...StyleAdapterUtils.container(resolve(toTriggerState(state)).stateLayer),
+      position: 'absolute',
+      top: 0,
+      right: 0,
+      bottom: 0,
+      left: 0,
+    })),
     triggerText: createStyleResolver((state: MultiSelectState): SelectTriggerTextStyle => (
-      toTextStyle(resolve(toTriggerState(state)).triggerText)
+      StyleAdapterUtils.text(resolve(toTriggerState(state)).triggerText)
     )),
     overlay: createSimpleStyleResolver((): SelectOverlayStyle => ({
-      ...toContainerStyle(resolve().overlay),
+      ...StyleAdapterUtils.container(resolve().overlay),
       flex: 1,
     })),
     menu: createStyleResolver((state: SelectMenuState): SelectMenuStyle => (
-      toContainerStyle(resolve({ hasSearch: state.hasSearch }).menu)
+      StyleAdapterUtils.container(resolve({ hasSearch: state.hasSearch }).menu)
     )),
     header: createSimpleStyleResolver((): SelectHeaderStyle => (
-      toContainerStyle(resolve().header)
+      StyleAdapterUtils.container(resolve().header)
     )),
     option: createStyleResolver((state: MultiSelectOptionState): MultiSelectOptionStyle => (
-      toContainerStyle(resolve({
+      StyleAdapterUtils.container(resolve({
         color: state.color,
         isDisabled: state.isDisabled,
         isSelected: state.isSelected,
@@ -145,7 +152,7 @@ export const toMultiSelectThemeResolvers: ComponentThemeResolver<MultiSelectThem
       }).option)
     )),
     optionText: createStyleResolver((state: MultiSelectOptionState): MultiSelectOptionTextStyle => (
-      toTextStyle(resolve({
+      StyleAdapterUtils.text(resolve({
         color: state.color,
         isDisabled: state.isDisabled,
         isSelected: state.isSelected,
@@ -153,10 +160,10 @@ export const toMultiSelectThemeResolvers: ComponentThemeResolver<MultiSelectThem
       }).optionText)
     )),
     emptyText: createSimpleStyleResolver((): SelectEmptyTextStyle => (
-      toTextStyle(resolve().emptyText)
+      StyleAdapterUtils.text(resolve().emptyText)
     )),
     checkbox: createStyleResolver((state: MultiSelectOptionState): MultiSelectCheckboxStyle => (
-      toContainerStyle(resolve({
+      StyleAdapterUtils.container(resolve({
         color: state.color,
         isDisabled: state.isDisabled,
         isSelected: state.isSelected,
@@ -164,7 +171,7 @@ export const toMultiSelectThemeResolvers: ComponentThemeResolver<MultiSelectThem
       }).checkbox)
     )),
     checkboxIcon: createValueResolver((state: MultiSelectOptionState): MultiSelectCheckboxIconStyle => (
-      toIconStyle(resolve({
+      StyleAdapterUtils.icon(resolve({
         color: state.color,
         isDisabled: state.isDisabled,
         isSelected: state.isSelected,

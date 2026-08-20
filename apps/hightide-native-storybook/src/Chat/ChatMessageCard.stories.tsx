@@ -27,11 +27,11 @@ const CardStory = (args: ChatMessageBubbleProps) => {
   return (
     <ChatMessageBubble {...args}>
       <View style={{ flexDirection: 'column', gap: theme.spacing.md, width: '100%' }}>
-        <View style={{ flexDirection: 'row', alignItems: 'flex-start', justifyContent: 'center', gap: theme.spacing.md, paddingBottom: theme.spacing.md, borderBottomWidth: theme.border.thin, borderColor: theme.colors.border }}>
+        <View style={{ flexDirection: 'row', alignItems: 'flex-start', justifyContent: 'center', gap: theme.spacing.md, paddingBottom: theme.spacing.md, borderBottomWidth: theme.borderWidth.thin, borderColor: theme.colors.border }}>
           <View
             style={{
-              width: theme.elements.container.sm.size,
-              height: theme.elements.container.sm.size,
+              width: theme.semantics.container.sm.size,
+              height: theme.semantics.container.sm.size,
               borderRadius: theme.borderRadius.sm,
               alignItems: 'center',
               justifyContent: 'center',
@@ -41,7 +41,7 @@ const CardStory = (args: ChatMessageBubbleProps) => {
             <CalendarDays size={theme.icongraphy.sizes.sm} color={theme.colors.primary.color} />
           </View>
           <View style={{ flexDirection: 'column', justifyContent: 'center', gap: theme.spacing.xxs, alignSelf: 'stretch' }}>
-            <ThemedText style={{ ...theme.typography.body.md, fontWeight: theme.typography.fontWeights.semibold }} numberOfLines={1}>
+            <ThemedText style={{ ...theme.typography.body.md, fontWeight: theme.fontWeights.semibold }} numberOfLines={1}>
               Terminbestätigung
             </ThemedText>
             <ThemedText appearance="description" style={{ ...theme.typography.body.sm }}>
