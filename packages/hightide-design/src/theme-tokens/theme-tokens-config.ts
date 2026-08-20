@@ -71,6 +71,9 @@ export type ThemeTokensConfig = {
     disabled?: ColorPairToken,
     tintConfig?: TintConfig,
   },
+  fontFamilies?: Partial<Record<'default' | 'accent' | 'mono', string>>,
+  fontWeights?: Partial<Record<FontWeightKey, FontWeightToken>>,
+  fontSizing?: Partial<Record<FontSizeKey, FontSizingToken>>,
   typography?: ThemeTokensTypographyConfig,
   icongraphy?: {
     sizes?: Partial<Record<IconSize, number>>,
@@ -78,17 +81,14 @@ export type ThemeTokensConfig = {
   },
   size?: Partial<Record<ThemeLayoutSize, number>>,
   spacing?: Partial<Record<ThemeSpacingSize, number>>,
-  borderRadius?: Partial<Record<ThemeBorderRadiusSize, number>>,
   padding?: Partial<Record<ThemePaddingSize, number>>,
+  borderRadius?: Partial<Record<ThemeBorderRadiusSize, number>>,
   borderWidth?: Partial<Record<ThemeBorderWidthKey, number>>,
   elevation?: Partial<Record<ThemeElevationLevel, ShadowLayoutToken>>,
   motion?: {
     durations?: Partial<Record<ThemeMotionDurationKey, number>>,
   },
   focusOutline?: OutlineToken,
-  fontSizing?: Partial<Record<FontSizeKey, FontSizingToken>>,
-  fontWeights?: Partial<Record<FontWeightKey, FontWeightToken>>,
-  fontFamilies?: Partial<Record<'default' | 'accent' | 'mono', string>>,
   config?: {
     coloring?: ColoringConfig,
     appearancePercentages?: Partial<ThemeAppearancePercentages>,

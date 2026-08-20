@@ -70,11 +70,11 @@ export type ThemeConfigTokens = {
 
 export type { FontSizingToken }
 
-export type ThemeFontSizingTokens = Record<FontSizeKey, FontSizingToken>
+export type ThemeFontFamilyTokens = Record<'default' | 'accent' | 'mono', string>
 
 export type ThemeFontWeightTokens = Record<FontWeightKey, FontWeightToken>
 
-export type ThemeFontFamilyTokens = Record<'default' | 'accent' | 'mono', string>
+export type ThemeFontSizingTokens = Record<FontSizeKey, FontSizingToken>
 
 export type ThemeTypographyTokens = {
   display: TypographyStyleToken,
@@ -92,9 +92,9 @@ export type ThemeSizeTokens = Record<ThemeLayoutSize, number>
 
 export type ThemeSpacingTokens = Record<ThemeSpacingSize, number>
 
-export type ThemeBorderRadiusTokens = Record<ThemeBorderRadiusSize, number>
-
 export type ThemePaddingTokens = Record<ThemePaddingSize, number>
+
+export type ThemeBorderRadiusTokens = Record<ThemeBorderRadiusSize, number>
 
 export type ThemeBorderWidthTokens = Record<ThemeBorderWidthKey, number>
 
@@ -108,18 +108,18 @@ export type ThemeMotionTokens = {
 
 export type ThemeTokens = {
   color: ThemeColorTokens,
+  fontFamilies: ThemeFontFamilyTokens,
+  fontWeights: ThemeFontWeightTokens,
+  fontSizing: ThemeFontSizingTokens,
   typography: ThemeTypographyTokens,
   icongraphy: ThemeIcongraphyTokens,
   size: ThemeSizeTokens,
   spacing: ThemeSpacingTokens,
-  borderRadius: ThemeBorderRadiusTokens,
   padding: ThemePaddingTokens,
+  borderRadius: ThemeBorderRadiusTokens,
   borderWidth: ThemeBorderWidthTokens,
   elevation: ThemeElevationTokens,
   motion: ThemeMotionTokens,
   focusOutline: OutlineToken,
   config: ThemeConfigTokens,
-  fontSizing: ThemeFontSizingTokens,
-  fontWeights: ThemeFontWeightTokens,
-  fontFamilies: ThemeFontFamilyTokens,
 }

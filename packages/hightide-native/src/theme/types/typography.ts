@@ -9,13 +9,13 @@ import type {
 
 export type TextStyle = TypographyStyleToken
 
-export type HightideTypography = ThemeTypographyTokens
-
 export type HightideFontFamilies = ThemeFontFamilyTokens
 
 export type HightideFontWeights = ThemeFontWeightTokens
 
 export type HightideFontSizing = ThemeFontSizingTokens
+
+export type HightideTypography = ThemeTypographyTokens
 
 export type TypographySizes = ThemeTypographySize
 

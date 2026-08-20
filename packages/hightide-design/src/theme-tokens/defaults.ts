@@ -300,6 +300,9 @@ export const resolveSharedGroups = (
   }
 
   return {
+    fontFamilies,
+    fontWeights,
+    fontSizing,
     typography: mergeTypography(
       defaultTypographyTokens(fontSizing, fontWeights, fontFamilies),
       config.typography
@@ -319,13 +322,13 @@ export const resolveSharedGroups = (
       ...defaultSpacingTokens(),
       ...config.spacing,
     },
-    borderRadius: {
-      ...defaultBorderRadiusTokens(),
-      ...config.borderRadius,
-    },
     padding: {
       ...defaultPaddingTokens(),
       ...config.padding,
+    },
+    borderRadius: {
+      ...defaultBorderRadiusTokens(),
+      ...config.borderRadius,
     },
     borderWidth: {
       ...defaultBorderWidthTokens(),
@@ -354,9 +357,6 @@ export const resolveSharedGroups = (
       style: config.focusOutline?.style ?? focusOutlineDefaults.style,
       color: config.focusOutline?.color ?? focusOutlineDefaults.color,
     },
-    fontSizing,
-    fontWeights,
-    fontFamilies,
     config: {
       coloring: {
         tonal: {

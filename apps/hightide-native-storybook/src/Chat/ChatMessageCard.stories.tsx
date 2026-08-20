@@ -30,8 +30,8 @@ const CardStory = (args: ChatMessageBubbleProps) => {
         <View style={{ flexDirection: 'row', alignItems: 'flex-start', justifyContent: 'center', gap: theme.spacing.md, paddingBottom: theme.spacing.md, borderBottomWidth: theme.borderWidth.thin, borderColor: theme.colors.border }}>
           <View
             style={{
-              width: theme.elements.container.sm.size,
-              height: theme.elements.container.sm.size,
+              width: theme.semantics.container.sm.size,
+              height: theme.semantics.container.sm.size,
               borderRadius: theme.borderRadius.sm,
               alignItems: 'center',
               justifyContent: 'center',

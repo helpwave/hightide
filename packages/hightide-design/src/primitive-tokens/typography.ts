@@ -24,14 +24,22 @@ export type FontSizingToken = {
 
 export type HightideTypographyPrimitiveTokens = {
   fontFamily: Record<string, string>,
-  fontSizing: Record<FontSizeKey, FontSizingToken> & Record<string, FontSizingToken>,
   fontWeight: Record<FontWeightKey, FontWeightToken> & Record<string, FontWeightToken>,
+  fontSizing: Record<FontSizeKey, FontSizingToken> & Record<string, FontSizingToken>,
 }
 
 export const hightideTypography = {
   fontFamily: {
     inter: 'Inter',
     spaceGrotesk: 'SpaceGrotesk',
+  },
+  fontWeight: {
+    thin: 100,
+    light: 300,
+    base: 400,
+    medium: 500,
+    semibold: 600,
+    bold: 700,
   },
   fontSizing: {
     'xs': { fontSize: 12, lineHeight: 16 },
@@ -47,13 +55,5 @@ export const hightideTypography = {
     '7xl': { fontSize: 72, lineHeight: 72 },
     '8xl': { fontSize: 96, lineHeight: 96 },
     '9xl': { fontSize: 128, lineHeight: 128 },
-  },
-  fontWeight: {
-    thin: 100,
-    light: 300,
-    base: 400,
-    medium: 500,
-    semibold: 600,
-    bold: 700,
   },
 } as const satisfies HightideTypographyPrimitiveTokens
