@@ -70,10 +70,6 @@ export const selectTokenResolver: SelectTokenResolver = ({
   const onColor = color.surface.onColor
   const accentPair = overrides?.color ?? color.primary
   const hasSearch = config?.hasSearch ?? true
-  const fadedBorder = semanticResolvers.asFaded({
-    themeTokens,
-    color: onColor,
-  })
   const input = inputTokenResolver({
     themeTokens,
     semanticResolvers,
@@ -152,15 +148,17 @@ export const selectTokenResolver: SelectTokenResolver = ({
         },
         color: {
           type: 'all',
-          value: fadedBorder,
+          value: themeTokens.color.border,
         },
       },
     },
     header: {
       padding: {
-        type: 'physicalAxis',
-        vertical: padding.sm,
-        horizontal: padding.sm,
+        type: 'physicalSide',
+        top: padding.xl,
+        bottom: padding.md,
+        left: padding.xl,
+        right: padding.xl,
       },
     },
     option: {
@@ -183,7 +181,7 @@ export const selectTokenResolver: SelectTokenResolver = ({
       ...typography.body.md,
       color: semanticResolvers.asDescription({
         themeTokens,
-        color: onColor,
+        colorPair: color.surface,
       }),
     },
   }

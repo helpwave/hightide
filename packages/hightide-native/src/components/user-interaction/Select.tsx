@@ -20,7 +20,6 @@ import {
   type UseSelectOption
 } from '../../hooks/useSelect'
 import type { SelectState } from '../../theme/types/components/select'
-import type { Color } from '../../theme/types/color'
 import type {
   FormFieldDataHandling,
   FormFieldInteractionStates
@@ -69,6 +68,8 @@ export const Select = ({
     onEditComplete,
   })
 
+  const isSearchVisible = showSearch && options.length >= 6
+
   const selectedLabel = useMemo(() => {
     const selected = options.find((option) => option.id === select.value)
     return selected?.label ?? placeholder
@@ -95,8 +96,8 @@ export const Select = ({
     [selectTheme]
   )
   const resolvedMenuStyle = useMemo(
-    () => selectTheme.menu({ hasSearch: showSearch }),
-    [selectTheme, showSearch]
+    () => selectTheme.menu({ hasSearch: isSearchVisible }),
+    [selectTheme, isSearchVisible]
   )
   const resolvedHeaderStyle = useMemo(
     () => selectTheme.header({}),
@@ -106,7 +107,7 @@ export const Select = ({
     () => selectTheme.emptyText({}),
     [selectTheme]
   )
-  const showEmptySearchResults = showSearch
+  const showEmptySearchResults = isSearchVisible
     && select.searchQuery.trim().length > 0
     && visibleOptions.length === 0
 
@@ -181,7 +182,7 @@ export const Select = ({
             style={resolvedMenuStyle}
             onPress={(event) => event.stopPropagation()}
           >
-            {showSearch && (
+            {isSearchVisible && (
               <View style={resolvedHeaderStyle}>
                 <SearchBar
                   value={select.searchQuery}
@@ -220,16 +221,14 @@ export const Select = ({
                       color={optionColor}
                       disabled={item.disabled}
                       onPress={() => select.selectValue(item.id)}
-                      trailing={isSelected
-                        ? (
-                          <ThemedIcon
-                            icon={HightideIconRegistry.Check}
-                            size={checkIcon.size}
-                            strokeWidth={checkIcon.strokeWidth}
-                            color={checkIcon.color as Color | undefined}
-                          />
-                        )
-                        : undefined}
+                      leading={(
+                        <ThemedIcon
+                          icon={HightideIconRegistry.Check}
+                          size={checkIcon.size}
+                          strokeWidth={checkIcon.strokeWidth}
+                          color={isSelected ? theme.colors.primary.color : 'transparent'}
+                        />
+                      )}
                     />
                   )
                 }}

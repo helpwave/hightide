@@ -5,6 +5,14 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/)
 and adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [0.5.0] - 2026-08-21
+
+### Changed
+
+- `withAppearance`, `asFaded`, and `asDescription` take a `colorPair` (`color` + `onColor`) and blend `onColor` onto `color` at the appearance percentage, instead of blending a single color onto `surface`
+- Multi-select option checkmark uses a transparent icon color unless the option is selected
+- Multi-select option checkbox container and icon tokens are taken from `checkboxTokenResolver` (color override, mapped selected/highlighted state)
+
 ## [0.4.0] - 2026-08-21
 
 ### Changed

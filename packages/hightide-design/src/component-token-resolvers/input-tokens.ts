@@ -80,7 +80,7 @@ export const inputTokenResolver: InputTokenResolver = ({
     ? themeTokens.color.disabled.onColor
     : semanticResolvers.asDescription({
       themeTokens,
-      color: themeTokens.color.surface.onColor,
+      colorPair: themeTokens.color.surface,
     })
 
   const interactionStates = new Set<PressableStateValue>()

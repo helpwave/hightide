@@ -61,13 +61,13 @@ export type HightideThemeSemantics = {
     tintStrength?: TintStrength,
   }, HexColorToken>,
   withAppearance: BoundSemanticResolver<{
-    color: HexColorToken,
+    colorPair: ColorPairToken,
     appearance: Appearance,
   }, HexColorToken>,
   asFaded: BoundSemanticResolver<{
-    color: HexColorToken,
+    colorPair: ColorPairToken,
   }, HexColorToken>,
   asDescription: BoundSemanticResolver<{
-    color: HexColorToken,
+    colorPair: ColorPairToken,
   }, HexColorToken>,
 } & ElementLayoutTokens

@@ -67,6 +67,8 @@ export const MultiSelect = ({
     onEditComplete,
   })
 
+  const isSearchVisible = showSearch && options.length >= 6
+
   const selectedOptions = useMemo(() => {
     return options.filter((option) => multiSelect.isSelected(option.id))
   }, [multiSelect, options])
@@ -88,8 +90,8 @@ export const MultiSelect = ({
     [multiSelectTheme]
   )
   const resolvedMenuStyle = useMemo(
-    () => multiSelectTheme.menu({ hasSearch: showSearch }),
-    [multiSelectTheme, showSearch]
+    () => multiSelectTheme.menu({ hasSearch: isSearchVisible }),
+    [multiSelectTheme, isSearchVisible]
   )
   const resolvedHeaderStyle = useMemo(
     () => multiSelectTheme.header({}),
@@ -103,7 +105,7 @@ export const MultiSelect = ({
     () => options.filter((option) => multiSelect.visibleOptionIds.includes(option.id)),
     [options, multiSelect.visibleOptionIds]
   )
-  const showEmptySearchResults = showSearch
+  const showEmptySearchResults = isSearchVisible
     && multiSelect.searchQuery.trim().length > 0
     && visibleOptions.length === 0
 
@@ -210,7 +212,7 @@ export const MultiSelect = ({
             style={resolvedMenuStyle}
             onPress={(event) => event.stopPropagation()}
           >
-            {showSearch && (
+            {isSearchVisible && (
               <View style={resolvedHeaderStyle}>
                 <SearchBar
                   value={multiSelect.searchQuery}
@@ -260,7 +262,8 @@ export const MultiSelect = ({
                         <View style={multiSelectTheme.checkbox(optionState)}>
                           <ThemedIcon
                             icon={HightideIconRegistry.Check}
-                            size="sm"
+                            size={checkboxIcon.size}
+                            strokeWidth={checkboxIcon.strokeWidth}
                             color={checkboxIcon.color}
                           />
                         </View>

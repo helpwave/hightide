@@ -4,7 +4,10 @@ import {
 } from 'react'
 import type { ColorValue, TextStyle } from 'react-native'
 
+import type { HexColorToken } from '@helpwave/hightide-design/primitive-tokens'
+
 import type { IconStyle } from '../../icons'
+import { HexColorUtils } from '../../utils/hex'
 import {
   ContentThemeContext,
   useContentTheme,
@@ -36,15 +39,15 @@ export const ContentThemeRootProvider = ({
 
 type ColorOverride =
   | ColorValue
-  | ((prev: ColorValue) => ColorValue)
+  | ((prev: HexColorToken) => ColorValue)
 
 type TextStyleOverride =
   | TextStyle
-  | ((prev: TextStyle, foreground: ColorValue) => TextStyle)
+  | ((prev: TextStyle, foreground: HexColorToken) => TextStyle)
 
 type IconStyleOverride =
   | IconStyle
-  | ((prev: IconStyle, foreground: ColorValue) => IconStyle)
+  | ((prev: IconStyle, foreground: HexColorToken) => IconStyle)
 
 export type ContentThemeOverrideProviderProps = PropsWithChildren & {
   foreground?: ColorOverride,
@@ -55,10 +58,22 @@ export type ContentThemeOverrideProviderProps = PropsWithChildren & {
   isKeepingIconColor?: boolean,
 }
 
+const resolveColorOverride = (
+  override: ColorOverride | undefined,
+  previous: HexColorToken
+): HexColorToken | undefined => {
+  if (override === undefined) {
+    return undefined
+  }
+
+  const raw = typeof override === 'function' ? override(previous) : override
+  return HexColorUtils.tryParseColorValue(raw)
+}
+
 export const ContentThemeOverrideProvider = ({
   children,
   foreground: foregroundOverride,
-  background: backroundOverride,
+  background: backgroundOverride,
   textStyle: textStyleOverride,
   iconStyle: iconStyleOverride,
   isKeepingIconColor = false,
@@ -67,25 +82,24 @@ export const ContentThemeOverrideProvider = ({
   const parent = useContentTheme()
 
   const value = useMemo((): ContentThemeContextValue => {
-    const newForeground = typeof foregroundOverride === 'function'
-      ? foregroundOverride(parent.foreground)
-      : foregroundOverride
+    const newForeground = resolveColorOverride(foregroundOverride, parent.foreground)
+    const newBackground = resolveColorOverride(backgroundOverride, parent.background)
 
-    const newBackground = typeof backroundOverride === 'function'
-      ? backroundOverride(parent.background)
-      : backroundOverride
-
-    const textStyle = typeof textStyleOverride === 'function'
+    let textStyle = typeof textStyleOverride === 'function'
       ? textStyleOverride(parent.textStyle, parent.foreground)
       : textStyleOverride ?? parent.textStyle
 
-    if(!isKeepingTextColor && newForeground !== undefined) textStyle['color'] = newForeground
+    if (!isKeepingTextColor && newForeground !== undefined) {
+      textStyle = { ...textStyle, color: newForeground }
+    }
 
-    const iconStyle = typeof iconStyleOverride === 'function'
+    let iconStyle = typeof iconStyleOverride === 'function'
       ? iconStyleOverride(parent.iconStyle, parent.foreground)
       : iconStyleOverride ?? parent.iconStyle
 
-    if(!isKeepingIconColor && newForeground !== undefined) iconStyle['color'] = newForeground
+    if (!isKeepingIconColor && newForeground !== undefined) {
+      iconStyle = { ...iconStyle, color: newForeground }
+    }
 
     return {
       foreground: newForeground ?? parent.foreground,
@@ -93,7 +107,7 @@ export const ContentThemeOverrideProvider = ({
       textStyle,
       iconStyle,
     }
-  }, [parent, foregroundOverride, textStyleOverride, iconStyleOverride, backroundOverride, isKeepingTextColor, isKeepingIconColor])
+  }, [parent, foregroundOverride, textStyleOverride, iconStyleOverride, backgroundOverride, isKeepingTextColor, isKeepingIconColor])
 
   return (
     <ContentThemeContext.Provider value={value}>
