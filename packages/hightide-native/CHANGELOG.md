@@ -9,11 +9,13 @@ and adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
 ### Added
 
-- Add `backgroundColor` to ContentThemeContext
+- `backgroundColor` on content theme context
 
 ### Changed
 
-- `Button` and `ThemedPressable` now only has `style` and not both `containerStyle` and `style` for styling the container element  
+- `StyleOverwrite` callbacks are `(state, prev) => TStyle` instead of `(prev, state) => TStyle`
+- `Button`, `IconButton`, and `ThemedPressable` style the container with `style` only (`containerStyle` removed)
+- Consumes `@helpwave/hightide-design@0.4.0` conversation-row sent indicator color
 
 ## [0.3.2] - 2026-08-20
 

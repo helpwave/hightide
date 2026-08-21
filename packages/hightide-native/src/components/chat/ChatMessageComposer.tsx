@@ -20,6 +20,7 @@ import type {
   ChatMessageComposerStyle
 } from '../../theme/types/components/chat'
 import type { StyleOverwrite } from '../../theme/types/resolver'
+import { StyleAdapterUtils } from '../../theme'
 
 export type ChatMessageComposerProps = Omit<ViewProps, 'style'> & {
   value?: string,
@@ -108,8 +109,8 @@ export const ChatMessageComposer = ({
           disabled={disabled || !(value ?? '').trim()}
           size="sm"
           onPress={send}
-          containerStyle={(prev) => ({ ...prev, borderRadius: 999 })}
-          stateLayerStyle={(prev) => ({ ...prev, borderRadius: 999 })}
+          style={{ ...StyleAdapterUtils.borderRadius({ type: 'all', value: 999 }) }}
+          stateLayerStyle={{ ...StyleAdapterUtils.borderRadius({ type: 'all', value: 999 }) }}
         />
       </View>
     </View>

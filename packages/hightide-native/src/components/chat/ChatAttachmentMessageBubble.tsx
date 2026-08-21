@@ -57,7 +57,7 @@ const mergeBubbleStyleOverwrite = <TStyle extends StyleProp<ViewStyle> | object>
   tokenOverride: TStyle,
   userOverwrite?: StyleOverwrite<ChatMessageBubbleState, TStyle>
 ): StyleOverwrite<ChatMessageBubbleState, TStyle> => (
-    (prev, state) => {
+    (state, prev) => {
       const withTokenOverride = {
         ...(prev as object),
         ...(tokenOverride as object),
@@ -68,7 +68,7 @@ const mergeBubbleStyleOverwrite = <TStyle extends StyleProp<ViewStyle> | object>
       }
 
       if (typeof userOverwrite === 'function') {
-        return userOverwrite(withTokenOverride, state)
+        return userOverwrite(state, withTokenOverride)
       }
 
       return {
@@ -196,16 +196,16 @@ export const ChatAttachmentMessageBubble = ({
         accessibilityLabel={downloadLabel}
         disabled={onDownload == null}
         onPress={onDownload}
-        style={(_, pressableState) => (
+        style={(pressableState) => (
           contentResolvers.container(pressableState, contentContainerStyle)
         )}
-        stateLayerStyle={(_, pressableState) => (
+        stateLayerStyle={(pressableState) => (
           contentResolvers.stateLayer(pressableState)
         )}
-        textStyle={(_, pressableState) => (
+        textStyle={(pressableState) => (
           contentResolvers.text(pressableState)
         )}
-        iconStyle={(_, pressableState) => (
+        iconStyle={(pressableState) => (
           contentResolvers.icon(pressableState)
         )}
       >

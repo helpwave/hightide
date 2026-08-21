@@ -137,28 +137,28 @@ export const ChatConversationRow = ({
 
     return cloneElement(avatarElement, {
       size: avatarSize,
-      avatarStyle: (_, avatarState) => avatarTheme.container(
+      avatarStyle: (avatarState) => avatarTheme.container(
         {
           ...avatarState,
           size: avatarSize,
         },
         avatarStyle ?? avatarElement.props.avatarStyle
       ),
-      imageStyle: (_, avatarState) => avatarTheme.image(
+      imageStyle: (avatarState) => avatarTheme.image(
         {
           ...avatarState,
           size: avatarSize,
         },
         avatarElement.props.imageStyle
       ),
-      textStyle: (_, avatarState) => avatarTheme.text(
+      textStyle: (avatarState) => avatarTheme.text(
         {
           ...avatarState,
           size: avatarSize,
         },
         avatarElement.props.textStyle
       ),
-      iconStyle: (_, avatarState) => avatarTheme.icon(
+      iconStyle: (avatarState) => avatarTheme.icon(
         {
           ...avatarState,
           size: avatarSize,
@@ -172,22 +172,22 @@ export const ChatConversationRow = ({
     <ThemedPressable
       {...props}
       disabled={disabled}
-      style={(_, pressableState) => {
+      style={(pressableState) => {
         const state = resolveState(pressableState as PressableInteraction)
         return theme.components.chat.conversationRow.pressable(state).container(
           pressableState,
           style
         )
       }}
-      stateLayerStyle={(_, pressableState) => {
+      stateLayerStyle={(pressableState) => {
         const state = resolveState(pressableState as PressableInteraction)
         return theme.components.chat.conversationRow.pressable(state).stateLayer(pressableState)
       }}
-      textStyle={(_, pressableState) => {
+      textStyle={(pressableState) => {
         const state = resolveState(pressableState as PressableInteraction)
         return theme.components.chat.conversationRow.pressable(state).text(pressableState)
       }}
-      iconStyle={(_, pressableState) => {
+      iconStyle={(pressableState) => {
         const state = resolveState(pressableState as PressableInteraction)
         return theme.components.chat.conversationRow.pressable(state).icon(pressableState)
       }}
