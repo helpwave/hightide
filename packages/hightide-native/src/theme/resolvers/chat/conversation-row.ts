@@ -67,20 +67,14 @@ export const toChatConversationRowThemeResolvers: ComponentThemeResolver<ChatCon
       const resolvePressable = (pressableState: PressableState) => componentTokens.pressable({
         themeTokens,
         semanticResolvers: semanticTokens,
-        overrides: {
-          size: pressableOverrides.overrides?.size,
-          color: pressableOverrides.overrides?.color,
-          coloringStyle: pressableOverrides.overrides?.coloringStyle,
-          coloringColorVariant: pressableOverrides.overrides?.coloringColorVariant,
-          hasAdditionalHorizontalPadding: pressableOverrides.overrides?.hasAdditionalHorizontalPadding,
-        },
+        overrides: pressableOverrides.overrides ?? {},
         state: toPressableInteractionState(pressableState),
       })
 
       return {
         container: createStyleResolver((pressableState: PressableState): PressableContainerStyle => ({
           ...StyleAdapterUtils.container(resolvePressable(pressableState).container),
-          ...StyleAdapterUtils.container(pressableOverrides.container  = {}),
+          ...StyleAdapterUtils.container(pressableOverrides.container ?? {}),
         })),
         stateLayer: createStyleResolver((pressableState: PressableState): PressableStateLayerStyle => ({
           ...StyleAdapterUtils.container(resolvePressable(pressableState).stateLayer),
@@ -89,15 +83,15 @@ export const toChatConversationRowThemeResolvers: ComponentThemeResolver<ChatCon
           right: 0,
           bottom: 0,
           left: 0,
-          ...StyleAdapterUtils.container(pressableOverrides.stateLayer  = {}),
+          ...StyleAdapterUtils.container(pressableOverrides.stateLayer ?? {}),
         })),
         text: createStyleResolver((pressableState: PressableState): PressableTextStyle => ({
           ...StyleAdapterUtils.text(resolvePressable(pressableState).text),
-          ...StyleAdapterUtils.text(pressableOverrides.text  = {}),
+          ...StyleAdapterUtils.text(pressableOverrides.text ?? {}),
         })),
         icon: createValueResolver((pressableState: PressableState): PressableIconStyle => ({
           ...StyleAdapterUtils.icon(resolvePressable(pressableState).icon),
-          ...StyleAdapterUtils.icon(pressableOverrides.icon  = {}),
+          ...StyleAdapterUtils.icon(pressableOverrides.icon ?? {}),
         })),
       }
     }),

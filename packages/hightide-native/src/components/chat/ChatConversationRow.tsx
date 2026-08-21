@@ -8,9 +8,7 @@ import {
 } from 'react'
 import {
   View,
-  type PressableProps,
-  type StyleProp,
-  type ViewStyle
+  type PressableProps
 } from 'react-native'
 import { HightideIconRegistry } from '../../icons/HightideIconRegistry'
 import { ThemedIcon } from '../visualization-and-display/ThemedIcon'
@@ -46,8 +44,7 @@ export type ChatConversationRowProps = Omit<PressableProps, 'children' | 'style'
   unreadCount?: number,
   isSelected?: boolean,
   sentIndicator?: ChatConversationSentIndicator,
-  style?: StyleProp<ViewStyle>,
-  rowStyle?: StyleOverwrite<PressableState, PressableContainerStyle>,
+  style?: StyleOverwrite<PressableState, PressableContainerStyle>,
   contentContainerStyle?: StyleOverwrite<ChatConversationRowState, ChatConversationRowContentContainerStyle>,
   headerRowStyle?: StyleOverwrite<ChatConversationRowState, ChatConversationRowHeaderRowStyle>,
   messageRowStyle?: StyleOverwrite<ChatConversationRowState, ChatConversationRowMessageRowStyle>,
@@ -83,7 +80,6 @@ export const ChatConversationRow = ({
   sentIndicator,
   disabled,
   style,
-  rowStyle,
   contentContainerStyle,
   headerRowStyle,
   messageRowStyle,
@@ -176,12 +172,11 @@ export const ChatConversationRow = ({
     <ThemedPressable
       {...props}
       disabled={disabled}
-      style={style}
-      containerStyle={(_, pressableState) => {
+      style={(_, pressableState) => {
         const state = resolveState(pressableState as PressableInteraction)
         return theme.components.chat.conversationRow.pressable(state).container(
           pressableState,
-          rowStyle
+          style
         )
       }}
       stateLayerStyle={(_, pressableState) => {
@@ -228,21 +223,23 @@ export const ChatConversationRow = ({
                 )}
               </View>
               <View style={resolvedMessageRow}>
-                {sentIndicator && (
-                  <ThemedIcon
-                    icon={sentIndicatorIcon}
-                    size={resolvedSentIndicator.size}
-                    strokeWidth={resolvedSentIndicator.strokeWidth}
-                    color={resolvedSentIndicator.color}
-                  />
-                )}
-                {preview != null && (
-                  typeof preview === 'string' || typeof preview === 'number' ? (
-                    <ThemedText style={resolvedPreview} numberOfLines={1}>{preview}</ThemedText>
-                  ) : (
-                    preview
-                  )
-                )}
+                <View style={{ flexDirection: 'row', alignItems: 'center', flex: 1, gap: theme.spacing.xs  /* TODO replace this with a theme style */ }}>
+                  {sentIndicator && (
+                    <ThemedIcon
+                      icon={sentIndicatorIcon}
+                      size={resolvedSentIndicator.size}
+                      strokeWidth={resolvedSentIndicator.strokeWidth}
+                      color={resolvedSentIndicator.color}
+                    />
+                  )}
+                  {preview != null && (
+                    typeof preview === 'string' || typeof preview === 'number' ? (
+                      <ThemedText style={resolvedPreview} numberOfLines={1}>{preview}</ThemedText>
+                    ) : (
+                      preview
+                    )
+                  )}
+                </View>
                 {isUnread && (
                   <View style={unreadBadge}>
                     <ThemedText style={unreadBadgeText}>{unreadCount}</ThemedText>

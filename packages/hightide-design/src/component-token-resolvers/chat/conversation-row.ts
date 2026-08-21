@@ -158,7 +158,7 @@ export const chatConversationRowTokenResolver: ChatConversationRowTokenResolver 
     sentIndicator: {
       size: themeTokens.icongraphy.sizes.xs,
       strokeWidth: themeTokens.icongraphy.strokeWidth,
-      color: color.primary.color,
+      color: descriptionColor,
     },
     avatarOverride: {
       container: {
