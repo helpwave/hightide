@@ -36,7 +36,7 @@ export type MultiSelectProps = Partial<FormFieldDataHandling<string[]>>
     value?: string[],
     initialValue?: string[],
     placeholder?: string,
-    showSearch?: boolean,
+    searchableThreshold?: number,
     color?: ColorPairToken,
     style?: StyleProp<ViewStyle>,
   }
@@ -46,7 +46,7 @@ export const MultiSelect = ({
   value: controlledValue,
   initialValue = [],
   placeholder = 'Select…',
-  showSearch = true,
+  searchableThreshold = 6,
   color,
   disabled = false,
   readOnly = false,
@@ -67,7 +67,7 @@ export const MultiSelect = ({
     onEditComplete,
   })
 
-  const isSearchVisible = showSearch && options.length >= 6
+  const isSearchVisible = options.length >= searchableThreshold
 
   const selectedOptions = useMemo(() => {
     return options.filter((option) => multiSelect.isSelected(option.id))
@@ -162,6 +162,7 @@ export const MultiSelect = ({
                             style={{
                               position: 'relative',
                               width: theme.icongraphy.sizes.sm,
+                              height: theme.icongraphy.sizes.sm,
                             }}
                           >
                             <IconButton

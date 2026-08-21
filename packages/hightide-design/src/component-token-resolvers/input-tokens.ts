@@ -63,7 +63,7 @@ export const inputTokenResolver: InputTokenResolver = ({
   overrides,
   state,
 }) => {
-  const { spacing, typography } = themeTokens
+  const { typography } = themeTokens
   const layout = semanticResolvers.controlLayout({ themeTokens, size: 'md' })
   const textStyle = typography.body.md
   const iconSizeTokens = iconTokenResolver({
@@ -130,7 +130,6 @@ export const inputTokenResolver: InputTokenResolver = ({
       } : undefined,
       size: {
         minHeight: layout.size,
-        width: '100%',
       },
       shape: {
         borderRadius: { type: 'all', value: layout.borderRadius },
@@ -139,12 +138,6 @@ export const inputTokenResolver: InputTokenResolver = ({
         type: 'physicalAxis',
         vertical: layout.inset,
         horizontal: layout.horizontalContentPadding - layout.borderWidth,
-      },
-      layout: {
-        direction: 'horizontal',
-        mainAxisAlignment: 'start',
-        crossAxisAligment: 'center',
-        gap: spacing.sm,
       },
     },
     stateLayer: {

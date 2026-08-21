@@ -71,7 +71,7 @@ const LocaleSelect = () => {
       <Select
         options={options}
         value={locale}
-        showSearch={false}
+        searchableThreshold={Number.POSITIVE_INFINITY}
         onValueChange={(value) => setLocale(value)}
       />
     </View>

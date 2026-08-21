@@ -37,7 +37,7 @@ export type SelectProps = Partial<FormFieldDataHandling<string>>
     value?: string | null,
     initialValue?: string | null,
     placeholder?: string,
-    showSearch?: boolean,
+    searchableThreshold?: number,
     color?: ColorPairToken,
     style?: StyleProp<ViewStyle>,
   }
@@ -47,7 +47,7 @@ export const Select = ({
   value: controlledValue,
   initialValue = null,
   placeholder = 'Select…',
-  showSearch = true,
+  searchableThreshold = 6,
   color,
   disabled = false,
   readOnly = false,
@@ -68,7 +68,7 @@ export const Select = ({
     onEditComplete,
   })
 
-  const isSearchVisible = showSearch && options.length >= 6
+  const isSearchVisible = options.length >= searchableThreshold
 
   const selectedLabel = useMemo(() => {
     const selected = options.find((option) => option.id === select.value)

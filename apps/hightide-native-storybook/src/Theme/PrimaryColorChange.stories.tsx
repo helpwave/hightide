@@ -5,7 +5,6 @@ import type {
 } from '@storybook/react-native'
 import {
   hightidePrimitiveTokens,
-  type ColorToken,
   type HightideColorPalettes
 } from '@helpwave/hightide-design/primitive-tokens'
 import {
@@ -29,21 +28,21 @@ import {
 } from './themeStoryHelpers'
 
 const { blue, white } = hightidePrimitiveTokens.color.palettes as HightideColorPalettes
-const whiteColor = white.value as ColorToken
+const whiteColor = white.value
 
 const bluePrimaryTheme = createHightideTheme(createLightThemeTokens({
-  colors: {
+  color: {
     primary: {
-      color: blue.value[500] as ColorToken,
+      color: blue.value[500],
       onColor: whiteColor,
     },
   },
 }))
 
 const bluePrimaryDarkTheme = createHightideTheme(createDarkThemeTokens({
-  colors: {
+  color: {
     primary: {
-      color: blue.value[400] as ColorToken,
+      color: blue.value[400],
       onColor: whiteColor,
     },
   },

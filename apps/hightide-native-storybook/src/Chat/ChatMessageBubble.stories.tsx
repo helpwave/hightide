@@ -5,6 +5,7 @@ import type {
 } from '@storybook/react-native'
 
 import { ChatMessageBubble, type ChatMessageDirection } from '@helpwave/hightide-native/components'
+import { ThemeContext } from '@helpwave/hightide-native/global-contexts'
 
 const meta = {
   component: ChatMessageBubble,
@@ -27,11 +28,15 @@ export const chatMessageBubble: Story = {
     children: 'Perfekt, ich habe den Befund erhalten. Bis Mittwoch!',
   },
   render: (args) => (
-    <View style={{ gap: 12, maxWidth: 384, padding: 16 }}>
-      <ChatMessageBubble direction="incoming" timestamp="09:12">
-        Guten Tag Herr Wellermann, wir haben die Ergebnisse Ihrer Blutuntersuchung erhalten.
-      </ChatMessageBubble>
-      <ChatMessageBubble {...args} />
-    </View>
+    <ThemeContext.Consumer>
+      {(context) => (
+        <View style={{ gap: 12, maxWidth: 384, padding: 16, backgroundColor: context?.theme.colors.surface.color }}>
+          <ChatMessageBubble direction="incoming" timestamp="09:12">
+            Guten Tag Herr Wellermann, wir haben die Ergebnisse Ihrer Blutuntersuchung erhalten.
+          </ChatMessageBubble>
+          <ChatMessageBubble {...args} />
+        </View>
+      )}
+    </ThemeContext.Consumer>
   ),
 }
