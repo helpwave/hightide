@@ -267,6 +267,10 @@ export const buildColorTokens = (params: {
   background: params.background,
   surface: params.surface,
   surfaceVariant: params.surfaceVariant,
+  surfaceInverse: {
+    color: params.surface.onColor,
+    onColor: params.surface.color,
+  },
   disabled: params.disabled,
   primary: params.primary,
   secondary: params.secondary,
