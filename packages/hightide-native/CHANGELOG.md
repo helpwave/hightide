@@ -5,6 +5,20 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [0.5.0] - 2026-08-21
+
+### Added
+
+- Re-exports `HexColorUtils` from `@helpwave/hightide-design` via `@helpwave/hightide-native/utils`, with `parseColorValue` / `tryParseColorValue` to convert a React Native `ColorValue` to a hex color
+
+### Changed
+
+- `theme.semantics.withAppearance`, `asFaded`, and `asDescription` take a `colorPair` (`color` + `onColor`) and blend `onColor` onto `color` at the appearance percentage, instead of blending a single color onto `surface`
+- Consumes `@helpwave/hightide-design@0.5.0` appearance resolvers
+- `ContentThemeContextValue.foreground` and `background` are hex colors; `ContentThemeOverrideProvider` parses `ColorValue` overrides and keeps the parent color when parsing fails
+- `ThemedIcon` still parses an optional `color` prop with `tryParseColorValue`
+- `Select` and `MultiSelect` hide the dialog search bar when there are fewer than 6 options (even if `showSearch` is true)
+
 ## [0.4.0] - 2026-08-21
 
 ### Added

@@ -6,8 +6,6 @@ import {
   type TextProps
 } from 'react-native'
 
-import type { HexColorToken } from '@helpwave/hightide-design/primitive-tokens'
-
 import { useContentTheme } from '../../global-contexts/content-theme/ContentThemeContext'
 import { useTheme } from '../../global-contexts/theme/ThemeContext'
 
@@ -23,20 +21,21 @@ export const ThemedText = forwardRef<React.ComponentRef<typeof RNText>, ThemedTe
   ...props
 }, ref) {
   const { theme } = useTheme()
-  const { foreground, textStyle } = useContentTheme()
-  // TODO use a hex color parser
-  const foregroundColor = (typeof textStyle.color === 'string'
-    ? textStyle.color
-    : foreground) as HexColorToken
+  const { foreground, background, textStyle } = useContentTheme()
   const color = appearance === 'description'
-    ? theme.semantics.asDescription({ color: foregroundColor })
-    : foregroundColor
+    ? theme.semantics.asDescription({
+      colorPair: {
+        color: background,
+        onColor: foreground,
+      },
+    })
+    : undefined
 
   return (
     <RNText
       {...props}
       ref={ref}
-      style={[textStyle, { color }, style]}
+      style={[textStyle, color === undefined ? undefined : { color }, style]}
     />
   )
 })

@@ -44,17 +44,12 @@ export const switchTokenResolver: SwitchTokenResolver = ({
   state,
 }) => {
   const { color, borderWidth: borderWidthTokens } = themeTokens
-  const onColor = color.surface.onColor
   const borderWidth = borderWidthTokens.normal
   const focusOutline = themeTokens.focusOutline
   const thumbSize = state.has('active') ? THUMB_SIZE_ACTIVE : THUMB_SIZE_INACTIVE
-  const fadedBorder = semanticResolvers.asFaded({
-    themeTokens,
-    color: onColor,
-  })
   const subtleThumb = semanticResolvers.withAppearance({
     themeTokens,
-    color: onColor,
+    colorPair: color.surface,
     appearance: 'subtle',
   })
   const trackActive = color.primary.color
@@ -66,7 +61,7 @@ export const switchTokenResolver: SwitchTokenResolver = ({
     ? themeTokens.color.disabled.color
     : state.has('invalid')
       ? color.negative.color
-      : state.has('active') ? trackActive : fadedBorder
+      : state.has('active') ? trackActive : themeTokens.color.border
   const thumbColor = state.has('active') ? color.primary.onColor : subtleThumb
   const tint = resolvePressableStateLayerTint({
     themeTokens,
@@ -78,8 +73,8 @@ export const switchTokenResolver: SwitchTokenResolver = ({
     tint === 'transparent' ? trackBackground : tint
   )
   const tintedBorder = HexColorUtils.blend(
-    trackBorderColor,
-    tint === 'transparent' ? trackBorderColor : tint
+    HexColorUtils.resolveColorToken(trackBorderColor),
+    HexColorUtils.resolveColorToken(tint)
   )
 
   return {

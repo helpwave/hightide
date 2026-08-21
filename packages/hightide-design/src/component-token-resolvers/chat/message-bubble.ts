@@ -36,7 +36,10 @@ export const chatMessageBubbleTokenResolver: ChatMessageBubbleTokenResolver = ({
   const alignment = resolveAlignment(config.direction)
   const messageCorners = resolveMessageCorners(themeTokens, config.direction)
   const bubbleColors = isOutgoing ? color.primary : color.surface
-  const messageDescriptionColor = semanticResolvers.asDescription({ themeTokens, color: bubbleColors.onColor })
+  const messageDescriptionColor = semanticResolvers.asDescription({
+    themeTokens,
+    colorPair: bubbleColors,
+  })
 
   return {
     container: {

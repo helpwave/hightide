@@ -2,16 +2,18 @@ import {
   createContext,
   useContext
 } from 'react'
-import type { ColorValue, TextStyle } from 'react-native'
+import type { TextStyle } from 'react-native'
+
+import type { HexColorToken } from '@helpwave/hightide-design/primitive-tokens'
 
 import type { IconStyle } from '../../icons'
 
-export type ContentThemeContextValue = {
-  foreground: ColorValue,
-  background: ColorValue,
-  textStyle: TextStyle,
-  iconStyle: IconStyle,
-}
+export type ContentThemeContextValue = Readonly<{
+  foreground: HexColorToken,
+  background: HexColorToken,
+  textStyle: Readonly<TextStyle>,
+  iconStyle: Readonly<IconStyle>,
+}>
 
 export const ContentThemeContext = createContext<ContentThemeContextValue | null>(null)
 

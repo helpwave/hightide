@@ -17,7 +17,7 @@ import {
 } from '../types/resolver'
 
 import { StyleAdapterUtils } from '../adapters'
-import { HexColorUtils } from '@helpwave/hightide-design/utils'
+import { HexColorUtils } from '../../utils/hex'
 
 const toDesignInputState = (state: InputState = {}): DesignInputState => {
   const active = new Set<InputStateValue>()

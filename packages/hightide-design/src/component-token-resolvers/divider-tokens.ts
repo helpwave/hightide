@@ -30,7 +30,7 @@ export const dividerTokenResolver: DividerTokenResolver = ({
   const margin = overrides?.margin ?? themeTokens.padding.md
   const color = overrides?.color ?? semanticResolvers.asFaded({
     themeTokens,
-    color: themeTokens.color.surface.onColor,
+    colorPair: themeTokens.color.surface,
   })
 
   if (direction === 'vertical') {

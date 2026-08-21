@@ -89,13 +89,13 @@ export type SemanticTokenResolvers = {
     tintStrength?: TintStrength,
   }, HexColorToken>,
   withAppearance: SemanticTokenResolver<{
-    color: HexColorToken,
+    colorPair: ColorPairToken,
     appearance: Appearance,
   }, HexColorToken>,
   asFaded: SemanticTokenResolver<{
-    color: HexColorToken,
+    colorPair: ColorPairToken,
   }, HexColorToken>,
   asDescription: SemanticTokenResolver<{
-    color: HexColorToken,
+    colorPair: ColorPairToken,
   }, HexColorToken>,
 }

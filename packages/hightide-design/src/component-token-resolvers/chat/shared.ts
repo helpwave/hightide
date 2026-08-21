@@ -26,7 +26,7 @@ export const resolveDescriptionColor = ({
 }: ThemeParams): HexColorToken => (
   semanticResolvers.asDescription({
     themeTokens,
-    color: themeTokens.color.surface.onColor,
+    colorPair: themeTokens.color.surface,
   })
 )
 
@@ -36,7 +36,7 @@ export const resolveFadedBorder = ({
 }: ThemeParams): HexColorToken => (
   semanticResolvers.asFaded({
     themeTokens,
-    color: themeTokens.color.surface.onColor,
+    colorPair: themeTokens.color.surface,
   })
 )
 

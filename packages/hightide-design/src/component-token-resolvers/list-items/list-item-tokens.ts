@@ -37,7 +37,7 @@ export const listItemTokenResolver: ListItemTokenResolver = ({
   const { color, spacing, typography, icongraphy } = themeTokens
   const descriptionColor = semanticResolvers.asDescription({
     themeTokens,
-    color: color.surface.onColor,
+    colorPair: color.surface,
   })
   const layout = semanticResolvers.controlLayout({ themeTokens, size: 'md' })
   const largeControl = semanticResolvers.controlLayout({ themeTokens, size: 'lg' })

@@ -5,13 +5,13 @@ import {
   type ViewProps
 } from 'react-native'
 
-import type { HexColorToken } from '@helpwave/hightide-design/primitive-tokens'
 import type { Appearance } from '@helpwave/hightide-design/semantic-token-resolvers'
 import type { IconSize } from '@helpwave/hightide-design/theme-tokens'
 
 import type { IconComponent } from '../../icons/types'
 import { useContentTheme } from '../../global-contexts/content-theme/ContentThemeContext'
 import { useTheme } from '../../global-contexts/theme/ThemeContext'
+import { HexColorUtils } from '../../utils/hex'
 
 export type ThemedIconAppearance = Appearance
 
@@ -33,7 +33,7 @@ export const ThemedIcon = ({
   ...props
 }: ThemedIconProps) => {
   const { theme } = useTheme()
-  const { foreground, iconStyle } = useContentTheme()
+  const { foreground, background, iconStyle } = useContentTheme()
   const resolvedSize = size ?? iconStyle.size ?? 'md'
   const iconToken = typeof resolvedSize === 'number'
     ? {
@@ -42,13 +42,16 @@ export const ThemedIcon = ({
     }
     : theme.components.icon[resolvedSize]
 
-  // TODO fix this by using a hex color parser
-  const baseColor = (color
-    ?? iconStyle.color
-    ?? foreground) as HexColorToken
+  const baseColor = HexColorUtils.tryParseColorValue(color ?? iconStyle.color ?? foreground) ?? foreground
   const resolvedColor = appearance === 'normal'
     ? baseColor
-    : theme.semantics.withAppearance({ color: baseColor, appearance })
+    : theme.semantics.withAppearance({
+      colorPair: {
+        color: background,
+        onColor: baseColor,
+      },
+      appearance,
+    })
 
   return (
     <View
