@@ -3,9 +3,7 @@ import type {
   StoryObj
 } from '@storybook/react-native'
 import {
-  hightidePrimitiveTokens,
-  type ColorToken,
-  type HightideColorPalettes
+  hightidePrimitiveTokens
 } from '@helpwave/hightide-design/primitive-tokens'
 import { createLightThemeTokens } from '@helpwave/hightide-design/theme-tokens'
 
@@ -25,22 +23,22 @@ import {
   ThemeStoryFrame
 } from './themeStoryHelpers'
 
-const { blue, white } = hightidePrimitiveTokens.color.palettes as HightideColorPalettes
-const whiteColor = white.value as ColorToken
+const { blue, white } = hightidePrimitiveTokens.color.palettes
+const whiteColor = white.value
 
 const oceanTheme = createHightideTheme(createLightThemeTokens({
-  colors: {
+  color: {
     primary: {
-      color: blue.value[500] as ColorToken,
+      color: blue.value[500],
       onColor: whiteColor,
     },
     background: {
-      color: blue.value[100] as ColorToken,
-      onColor: blue.value[900] as ColorToken,
+      color: blue.value[100],
+      onColor: blue.value[900],
     },
     surface: {
-      color: blue.value[50] as ColorToken,
-      onColor: blue.value[900] as ColorToken,
+      color: blue.value[50],
+      onColor: blue.value[900],
     },
   },
 }))

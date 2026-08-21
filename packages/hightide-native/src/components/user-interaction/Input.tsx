@@ -3,11 +3,12 @@ import {
   useMemo,
   useState
 } from 'react'
+import type {
+  TextStyle } from 'react-native'
 import {
+  StyleSheet,
   TextInput,
-  type StyleProp,
-  type TextInputProps,
-  type TextStyle
+  type TextInputProps
 } from 'react-native'
 
 import {
@@ -51,8 +52,7 @@ export type InputProps = Omit<TextInputProps, 'value' | 'style'>
     color?: ColorPairToken,
     editCompleteOptions?: EditCompleteOptions,
     initialValue?: string,
-    style?: StyleProp<TextStyle>,
-    containerStyle?: StyleOverwrite<InputState, InputContainerStyle>,
+    style?:  StyleOverwrite<InputState, InputContainerStyle>,
     textStyle?: StyleOverwrite<InputState, InputTextStyle>,
   }
 
@@ -68,7 +68,6 @@ export const Input = forwardRef<TextInput, InputProps>(function Input({
   onEditComplete,
   editCompleteOptions,
   style,
-  containerStyle,
   textStyle,
   ...props
 }, ref) {
@@ -108,8 +107,8 @@ export const Input = forwardRef<TextInput, InputProps>(function Input({
   }), [color, disabled, invalid, readOnly, interactive, isHovered, isPressed, isFocused])
 
   const resolvedContainerStyle = useMemo(
-    () => theme.components.input.container(state, containerStyle),
-    [theme, state, containerStyle]
+    () => theme.components.input.container(state, style),
+    [theme, state, style]
   )
   const resolvedTextStyle = useMemo(
     () => theme.components.input.text(state, textStyle),
@@ -118,6 +117,21 @@ export const Input = forwardRef<TextInput, InputProps>(function Input({
   const resolvedPlaceholderStyle = useMemo(
     () => theme.components.input.placeholder(state),
     [theme, state]
+  )
+
+
+  const resolvedStyle = useMemo(
+    () => {
+      const resolvedSheet: TextStyle = StyleSheet.flatten<TextStyle>([
+        resolvedContainerStyle,
+        resolvedTextStyle,
+      ])
+      // this is required for android to work
+      // TODO find a better solution like separating container and text input
+      delete resolvedSheet['boxShadow']
+      return resolvedSheet
+    },
+    [resolvedContainerStyle, resolvedTextStyle]
   )
 
   return (
@@ -175,7 +189,7 @@ export const Input = forwardRef<TextInput, InputProps>(function Input({
         }
       }}
       placeholderTextColor={resolvedPlaceholderStyle.color}
-      style={[resolvedContainerStyle, resolvedTextStyle, style]}
+      style={resolvedStyle}
       accessibilityState={{ disabled, selected: required }}
     />
   )

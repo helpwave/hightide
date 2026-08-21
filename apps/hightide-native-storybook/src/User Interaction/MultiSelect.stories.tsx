@@ -28,7 +28,7 @@ export const multiSelect: Story = {
     initialValue: [],
     disabled: false,
     invalid: false,
-    showSearch: true,
+    searchableThreshold: 6,
     readOnly: false,
     placeholder: 'Select…',
     onValueChange: action('onValueChange'),

@@ -39,6 +39,7 @@ export type ChatAttachmentMessageBubbleProps = Omit<ChatMessageBubbleProps, 'chi
   icon?: ReactNode,
   downloadLabel?: string,
   onDownload?: () => void,
+  style: ChatMessageBubbleProps['style'],
   contentContainerStyle?: StyleOverwrite<
     PressableState,
     PressableContainerStyle
@@ -89,7 +90,6 @@ export const ChatAttachmentMessageBubble = ({
   timestamp,
   readReceipt,
   style,
-  containerStyle,
   bodyStyle,
   bodyTextStyle,
   metaDataContainerStyle,
@@ -137,9 +137,9 @@ export const ChatAttachmentMessageBubble = ({
   const resolvedContainerStyle = useMemo(
     () => mergeBubbleStyleOverwrite<ChatMessageBubbleContainerStyle>(
       bubbleOverrides.container(state),
-      containerStyle
+      style
     ),
-    [bubbleOverrides, state, containerStyle]
+    [bubbleOverrides, state, style]
   )
   const resolvedBodyStyle = useMemo(
     () => mergeBubbleStyleOverwrite<ChatMessageBubbleBodyStyle>(
@@ -183,8 +183,7 @@ export const ChatAttachmentMessageBubble = ({
       direction={direction}
       timestamp={timestamp}
       readReceipt={readReceipt}
-      style={style}
-      containerStyle={resolvedContainerStyle}
+      style={resolvedContainerStyle}
       bodyStyle={resolvedBodyStyle}
       bodyTextStyle={resolvedBodyTextStyle}
       metaDataContainerStyle={resolvedMetaDataContainerStyle}
@@ -219,7 +218,7 @@ export const ChatAttachmentMessageBubble = ({
             />
           )}
         </View>
-        <View style={{ flex: 1, minWidth: 0, gap: 2 }}>
+        <View style={{ gap: theme.spacing.xs }}>
           {typeof name === 'string' || typeof name === 'number' ? (
             <ThemedText style={resolvedFileNameTextStyle} numberOfLines={1}>{name}</ThemedText>
           ) : (

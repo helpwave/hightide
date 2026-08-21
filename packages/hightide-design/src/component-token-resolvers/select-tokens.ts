@@ -98,7 +98,7 @@ export const selectTokenResolver: SelectTokenResolver = ({
     state: new Set<PressableStateValue>(['hovered']),
   }).background
   const touchTargetSize = semanticResolvers.touchTargetSize({ themeTokens })
-  const menuHeight = touchTargetSize * 6
+  const menuHeight = touchTargetSize * 11.5
   const inputPadding = input.container.padding
   const horizontalPadding = inputPadding?.type === 'physicalAxis'
     ? inputPadding.horizontal

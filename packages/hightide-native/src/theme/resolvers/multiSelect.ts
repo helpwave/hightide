@@ -135,7 +135,6 @@ export const toMultiSelectThemeResolvers: ComponentThemeResolver<MultiSelectThem
     )),
     overlay: createSimpleStyleResolver((): SelectOverlayStyle => ({
       ...StyleAdapterUtils.container(resolve().overlay),
-      flex: 1,
     })),
     menu: createStyleResolver((state: SelectMenuState): SelectMenuStyle => (
       StyleAdapterUtils.container(resolve({ hasSearch: state.hasSearch }).menu)

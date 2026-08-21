@@ -140,7 +140,7 @@ export const multiSelectTokenResolver: MultiSelectTokenResolver = ({
     state: new Set<PressableStateValue>(['hovered']),
   }).background
   const touchTargetSize = semanticResolvers.touchTargetSize({ themeTokens })
-  const menuHeight = touchTargetSize * 6
+  const menuHeight = touchTargetSize * 11.5
 
   return {
     trigger: {
@@ -164,6 +164,7 @@ export const multiSelectTokenResolver: MultiSelectTokenResolver = ({
       layout: {
         direction: 'vertical',
         mainAxisAlignment: 'center',
+        flexGrow: 1,
       },
     },
     menu: {

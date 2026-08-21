@@ -3,7 +3,6 @@ import type { ContainerTokens } from '../container-tokens'
 import type { IconTokens } from '../icon-tokens'
 import type { TextStyleTokens } from '../text-style-tokens'
 import {
-  bubbleMaxWidth,
   resolveAlignment,
   resolveMessageCorners,
   type ChatMessageDirection
@@ -45,7 +44,7 @@ export const chatMessageBubbleTokenResolver: ChatMessageBubbleTokenResolver = ({
     container: {
       backgroundColor: bubbleColors.color,
       size: {
-        maxWidth: bubbleMaxWidth,
+        maxWidth: semanticResolvers.containerLayout({ themeTokens, size: 'md' }).size * 16
       },
       shape: {
         borderRadius: messageCorners,
@@ -57,6 +56,13 @@ export const chatMessageBubbleTokenResolver: ChatMessageBubbleTokenResolver = ({
         top: padding.lg,
         bottom: padding.md,
       },
+      margin: isOutgoing ? {
+        type: 'logicalSide',
+        inlineStart: themeTokens.spacing.xxl,
+      } : {
+        type: 'logicalSide',
+        inlineEnd: themeTokens.spacing.xxl,
+      } ,
       layout: {
         gap: spacing.sm,
         direction: 'vertical',

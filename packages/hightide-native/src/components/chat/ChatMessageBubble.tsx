@@ -4,9 +4,7 @@ import {
 } from 'react'
 import {
   View,
-  type StyleProp,
-  type ViewProps,
-  type ViewStyle
+  type ViewProps
 } from 'react-native'
 import { HightideIconRegistry } from '../../icons/HightideIconRegistry'
 import { ThemedIcon } from '../visualization-and-display/ThemedIcon'
@@ -31,8 +29,7 @@ export type ChatMessageBubbleProps = Omit<ViewProps, 'children' | 'style'> & {
   timestamp: ReactNode,
   readReceipt?: ReactNode,
   children?: ReactNode,
-  style?: StyleProp<ViewStyle>,
-  containerStyle?: StyleOverwrite<ChatMessageBubbleState, ChatMessageBubbleContainerStyle>,
+  style?: StyleOverwrite<ChatMessageBubbleState, ChatMessageBubbleContainerStyle>,
   bodyStyle?: StyleOverwrite<ChatMessageBubbleState, ChatMessageBubbleBodyStyle>,
   bodyTextStyle?: StyleOverwrite<ChatMessageBubbleState, ChatMessageBubbleBodyTextStyle>,
   metaDataContainerStyle?: StyleOverwrite<ChatMessageBubbleState, ChatMessageBubbleMetaDataContainerStyle>,
@@ -46,7 +43,6 @@ export const ChatMessageBubble = ({
   readReceipt,
   children,
   style,
-  containerStyle,
   bodyStyle,
   bodyTextStyle,
   metaDataContainerStyle,
@@ -58,8 +54,8 @@ export const ChatMessageBubble = ({
   const state = useMemo(() => ({ direction }), [direction])
 
   const resolvedContainerStyle = useMemo(
-    () => theme.components.chat.messageBubble.container(state, containerStyle),
-    [theme, state, containerStyle]
+    () => theme.components.chat.messageBubble.container(state, style),
+    [theme, state, style]
   )
   const resolvedBodyStyle = useMemo(
     () => theme.components.chat.messageBubble.body(state, bodyStyle),
@@ -87,7 +83,7 @@ export const ChatMessageBubble = ({
   )
 
   return (
-    <View {...props} style={[resolvedContainerStyle, style]}>
+    <View {...props} style={resolvedContainerStyle}>
       <View style={resolvedBodyStyle}>
         {typeof children === 'string' || typeof children === 'number' ? (
           <ThemedText style={resolvedBodyTextStyle}>{children}</ThemedText>
