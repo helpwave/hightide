@@ -82,6 +82,7 @@ export const Chip = ({
     >
       <ContentThemeOverrideProvider
         foreground={resolvedTextStyle.color}
+        background={resolvedChipStyle.backgroundColor}
         textStyle={resolvedTextStyle}
         iconStyle={resolvedIconStyle}
       >

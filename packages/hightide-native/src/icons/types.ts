@@ -1,8 +1,9 @@
 import type { ComponentType } from 'react'
+import type { ColorValue } from 'react-native'
 
 export type IconStyle = {
   size?: number,
-  color?: string,
+  color?: ColorValue,
   strokeWidth?: number,
 }
 

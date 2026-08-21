@@ -196,7 +196,7 @@ export const ChatAttachmentMessageBubble = ({
         accessibilityLabel={downloadLabel}
         disabled={onDownload == null}
         onPress={onDownload}
-        containerStyle={(_, pressableState) => (
+        style={(_, pressableState) => (
           contentResolvers.container(pressableState, contentContainerStyle)
         )}
         stateLayerStyle={(_, pressableState) => (
