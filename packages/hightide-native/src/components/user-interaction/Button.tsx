@@ -2,9 +2,7 @@ import { Fragment, forwardRef } from 'react'
 import {
   Pressable,
   View,
-  type PressableProps,
-  type StyleProp,
-  type ViewStyle
+  type PressableProps
 } from 'react-native'
 
 import type { ColorPairToken } from '@helpwave/hightide-design/theme-tokens'
@@ -13,7 +11,7 @@ import type { ComponentSize, ButtonVariant } from '@helpwave/hightide-design/sem
 import { ContentThemeOverrideProvider } from '../../global-contexts/content-theme/ContentThemeProvider'
 import { useDebugContext } from '../../global-contexts/debug'
 import { useTheme } from '../../global-contexts/theme/ThemeContext'
-import type { IconComponent } from '../../icons/types'
+import type { IconComponent, IconStyle } from '../../icons/types'
 import type {
   ButtonState,
   ButtonStyle,
@@ -41,10 +39,10 @@ export type ButtonProps = Omit<PressableProps, 'children' | 'style'> & {
   children: string,
   leadingIcon?: IconComponent,
   trailingIcon?: IconComponent,
-  style?: StyleProp<ViewStyle>,
-  containerStyle?: StyleOverwrite<ButtonState, ButtonStyle>,
+  style?: StyleOverwrite<ButtonState, ButtonStyle>,
   stateLayerStyle?: StyleOverwrite<ButtonState, ButtonStyle>,
   textStyle?: StyleOverwrite<ButtonState, ButtonTextStyle>,
+  iconStyle?: StyleOverwrite<ButtonState, IconStyle>,
 }
 
 type PressableInteraction = {
@@ -63,9 +61,9 @@ export const Button = forwardRef<React.ComponentRef<typeof Pressable>, ButtonPro
   leadingIcon,
   trailingIcon,
   style,
-  containerStyle,
   stateLayerStyle,
   textStyle,
+  iconStyle,
   hitSlop: providedHitSlop,
   onLayout: providedOnLayout,
   ...props
@@ -98,16 +96,13 @@ export const Button = forwardRef<React.ComponentRef<typeof Pressable>, ButtonPro
       onLayout={onLayout}
       style={(pressableState) => {
         const state = resolveState(pressableState as PressableInteraction)
-        return [
-          theme.components.button.container(state, containerStyle),
-          style,
-        ]
+        return theme.components.button.container(state, style)
       }}
     >
       {(pressableState) => {
         const state = resolveState(pressableState as PressableInteraction)
         const resolvedText = theme.components.button.text(state, textStyle)
-        const resolvedIcon = theme.components.button.icon(state)
+        const resolvedIcon = theme.components.button.icon(state, iconStyle)
 
         return (
           <Fragment>

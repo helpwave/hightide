@@ -226,19 +226,19 @@ export const AvatarGroup = ({
               isGrouped
               groupIndex={index}
               ImageComponent={avatar.ImageComponent ?? ImageComponent}
-              avatarStyle={(_, state) => avatarResolvers.container({
+              avatarStyle={(state) => avatarResolvers.container({
                 ...state,
                 ...avatarState,
               })}
-              imageStyle={(_, state) => avatarResolvers.image({
+              imageStyle={(state) => avatarResolvers.image({
                 ...state,
                 ...avatarState,
               })}
-              textStyle={(_, state) => avatarResolvers.text({
+              textStyle={(state) => avatarResolvers.text({
                 ...state,
                 ...avatarState,
               })}
-              iconStyle={(_, state) => avatarResolvers.icon({
+              iconStyle={(state) => avatarResolvers.icon({
                 ...state,
                 ...avatarState,
               })}
@@ -294,10 +294,10 @@ export const AvatarWithStatus = ({
         {...avatarProps}
         size={size}
         color={color}
-        avatarStyle={(_, state) => avatarResolvers.container(state, avatarStyle)}
-        imageStyle={(_, state) => avatarResolvers.image(state, imageStyle)}
-        textStyle={(_, state) => avatarResolvers.text(state, textStyle)}
-        iconStyle={(_, state) => avatarResolvers.icon(state, iconStyle)}
+        avatarStyle={(state) => avatarResolvers.container(state, avatarStyle)}
+        imageStyle={(state) => avatarResolvers.image(state, imageStyle)}
+        textStyle={(state) => avatarResolvers.text(state, textStyle)}
+        iconStyle={(state) => avatarResolvers.icon(state, iconStyle)}
       />
       <View style={resolvedStatusDot} />
     </View>

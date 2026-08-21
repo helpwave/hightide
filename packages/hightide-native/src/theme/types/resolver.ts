@@ -41,7 +41,7 @@ export const toPressableInteractionState = (
 }
 
 export type StyleOverwrite<TState, TStyle> =
-  TStyle | ((prev: TStyle, state: TState) => TStyle)
+  TStyle | ((state: TState, prev: TStyle) => TStyle)
 
 export type StyleResolverFunction<TState, TStyle> = (
   props: TState,
@@ -67,7 +67,7 @@ export const createStyleResolver = <TState, TStyle>(
     }
 
     if (typeof overwrite === 'function') {
-      return (overwrite as (prev: TStyle, state: TState) => TStyle)(base, props)
+      return (overwrite as (state: TState, prev: TStyle) => TStyle)(props, base)
     }
 
     return [base, overwrite] as TStyle
@@ -91,7 +91,7 @@ export const createValueResolver = <TState, TValue>(
     }
 
     if (typeof overwrite === 'function') {
-      return (overwrite as (prev: TValue, state: TState) => TValue)(base, props)
+      return (overwrite as (state: TState, prev: TValue) => TValue)(props, base)
     }
 
     return overwrite

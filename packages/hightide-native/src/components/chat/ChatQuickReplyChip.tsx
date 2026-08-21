@@ -2,7 +2,6 @@ import {
   useMemo,
   type ReactNode
 } from 'react'
-import type { StyleProp, ViewStyle } from 'react-native'
 
 import { useTheme } from '../../global-contexts/theme/ThemeContext'
 import {
@@ -25,8 +24,7 @@ export type ChatQuickReplyChipProps = Omit<
 > & {
   isActive?: boolean,
   children?: ReactNode,
-  style?: StyleProp<ViewStyle>,
-  containerStyle?: StyleOverwrite<PressableState, PressableContainerStyle>,
+  style?: StyleOverwrite<PressableState, PressableContainerStyle>,
   textStyle?: StyleOverwrite<PressableState, PressableTextStyle>,
   iconStyle?: StyleOverwrite<PressableState, PressableIconStyle>,
 }
@@ -36,7 +34,6 @@ export const ChatQuickReplyChip = ({
   children,
   disabled,
   style,
-  containerStyle,
   textStyle,
   iconStyle,
   ...props
@@ -52,17 +49,16 @@ export const ChatQuickReplyChip = ({
     <ThemedPressable
       {...props}
       disabled={disabled}
-      style={style}
-      containerStyle={(_, pressableState) => (
-        pressableResolvers.container(pressableState, containerStyle)
+      style={(pressableState) => (
+        pressableResolvers.container(pressableState, style)
       )}
-      stateLayerStyle={(_, pressableState) => (
+      stateLayerStyle={(pressableState) => (
         pressableResolvers.stateLayer(pressableState)
       )}
-      textStyle={(_, pressableState) => (
+      textStyle={(pressableState) => (
         pressableResolvers.text(pressableState, textStyle)
       )}
-      iconStyle={(_, pressableState) => (
+      iconStyle={(pressableState) => (
         pressableResolvers.icon(pressableState, iconStyle)
       )}
     >

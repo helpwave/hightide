@@ -1,6 +1,8 @@
-import type {
-  TextStyle,
-  ViewStyle
+import {
+  StyleSheet,
+  type StyleProp,
+  type TextStyle,
+  type ViewStyle
 } from 'react-native'
 
 import type {
@@ -23,6 +25,36 @@ import {
 } from '@helpwave/hightide-design/component-token-resolvers'
 import type { ShadowToken } from '@helpwave/hightide-design/theme-tokens'
 import type { IconStyle } from '../../icons'
+
+function getStyleProperty<
+  T extends ViewStyle,
+  K extends keyof T
+>(
+  style: StyleProp<T>,
+  property: K
+): T[K] {
+  if (style == null) {
+    return undefined as T[K]
+  }
+
+  if (Array.isArray(style)) {
+    for (let i = style.length - 1; i >= 0; i--) {
+      const value = getStyleProperty(
+        style[i] as StyleProp<T>,
+        property
+      )
+
+      if (value !== undefined) {
+        return value
+      }
+    }
+
+    return undefined as T[K]
+  }
+
+  const flattened = StyleSheet.flatten(style) as T
+  return flattened[property]
+}
 
 type OptionalViewStyle<K extends keyof ViewStyle> = {
   [P in K]?: ViewStyle[P]
@@ -144,7 +176,6 @@ const alignContentStyleAdapter = (
 const borderRadiusStyleAdapter = (
   borderRadius?: BorderRadiusToken
 ): OptionalViewStyle<
-  | 'borderRadius'
   | 'borderTopLeftRadius'
   | 'borderTopRightRadius'
   | 'borderBottomLeftRadius'
@@ -156,16 +187,14 @@ const borderRadiusStyleAdapter = (
 
   if (borderRadius.type === 'all') {
     return {
-      borderRadius: borderRadius.value,
-      borderTopLeftRadius: undefined,
-      borderTopRightRadius: undefined,
-      borderBottomLeftRadius: undefined,
-      borderBottomRightRadius: undefined,
+      borderTopLeftRadius:  borderRadius.value,
+      borderTopRightRadius:  borderRadius.value,
+      borderBottomLeftRadius:  borderRadius.value,
+      borderBottomRightRadius:  borderRadius.value,
     }
   }
 
   return {
-    borderRadius: undefined,
     borderTopLeftRadius: borderRadius.topLeft,
     borderTopRightRadius: borderRadius.topRight,
     borderBottomLeftRadius: borderRadius.bottomLeft,
@@ -428,6 +457,7 @@ export const StyleAdapterUtils = {
   container: containerStyleAdapter,
   text: textStyleAdapter,
   icon: iconStyleAdapter,
+  stylePropResolver: getStyleProperty
 }
 
 export type StyleAdapters = typeof StyleAdapterUtils

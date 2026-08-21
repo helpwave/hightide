@@ -5,6 +5,18 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [0.4.0] - 2026-08-21
+
+### Added
+
+- `backgroundColor` on content theme context
+
+### Changed
+
+- `StyleOverwrite` callbacks are `(state, prev) => TStyle` instead of `(prev, state) => TStyle`
+- `Button`, `IconButton`, and `ThemedPressable` style the container with `style` only (`containerStyle` removed)
+- Consumes `@helpwave/hightide-design@0.4.0` conversation-row sent indicator color
+
 ## [0.3.2] - 2026-08-20
 
 ### Added

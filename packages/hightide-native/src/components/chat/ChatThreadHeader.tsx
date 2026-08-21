@@ -114,44 +114,44 @@ export const ChatThreadHeader = ({
       <ThemedPressable
         onPress={onPress}
         disabled={disabled}
-        containerStyle={(_, pressableState) => (
+        style={(pressableState) => (
           pressableResolvers.container(pressableState, pressableContainerStyle)
         )}
-        stateLayerStyle={(_, pressableState) => (
+        stateLayerStyle={(pressableState) => (
           pressableResolvers.stateLayer(pressableState)
         )}
-        textStyle={(_, pressableState) => (
+        textStyle={(pressableState) => (
           pressableResolvers.text(pressableState)
         )}
-        iconStyle={(_, pressableState) => (
+        iconStyle={(pressableState) => (
           pressableResolvers.icon(pressableState)
         )}
       >
         <Avatar
           {...resolvedAvatar}
           size={avatarSize}
-          avatarStyle={(_, avatarState) => avatarTheme.container(
+          avatarStyle={(avatarState) => avatarTheme.container(
             {
               ...avatarState,
               size: avatarSize,
             },
             resolvedAvatar.avatarStyle
           )}
-          imageStyle={(_, avatarState) => avatarTheme.image(
+          imageStyle={(avatarState) => avatarTheme.image(
             {
               ...avatarState,
               size: avatarSize,
             },
             resolvedAvatar.imageStyle
           )}
-          textStyle={(_, avatarState) => avatarTheme.text(
+          textStyle={(avatarState) => avatarTheme.text(
             {
               ...avatarState,
               size: avatarSize,
             },
             resolvedAvatar.textStyle
           )}
-          iconStyle={(_, avatarState) => avatarTheme.icon(
+          iconStyle={(avatarState) => avatarTheme.icon(
             {
               ...avatarState,
               size: avatarSize,

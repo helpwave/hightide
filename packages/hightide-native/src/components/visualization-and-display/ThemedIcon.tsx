@@ -1,3 +1,5 @@
+import type {
+  ColorValue } from 'react-native'
 import {
   View,
   type ViewProps
@@ -16,7 +18,7 @@ export type ThemedIconAppearance = Appearance
 export type ThemedIconProps = Omit<ViewProps, 'children'> & {
   icon: IconComponent,
   size?: IconSize | number,
-  color?: string,
+  color?: ColorValue,
   strokeWidth?: number,
   appearance?: ThemedIconAppearance,
 }

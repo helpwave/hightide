@@ -44,7 +44,22 @@ export const chatConversationRow: Story = {
         title="Praxis am Park"
         timestamp="Gestern"
         preview="Ihr Termin wurde bestätigt."
+        sentIndicator="sent"
         onPress={action('press-read')}
+      />
+      <ChatConversationRow
+        avatar={(
+          <AvatarWithStatus
+            name="Jonas Parker"
+            status="offline"
+            size="lg"
+          />
+        )}
+        title="Praxis am Park"
+        timestamp="Gestern"
+        preview="Ihr Termin wurde bestätigt."
+        onPress={action('press-read')}
+        unreadCount={10}
       />
     </View>
   ),

@@ -33,13 +33,13 @@ export const ThemedPressableUtil = {
   coloringColorVariants: ['normal', 'tonal', 'transparent'] as const satisfies readonly ColoringColorVariant[],
 }
 
-export type ThemedPressableProps = PressableProps & {
+export type ThemedPressableProps = Omit<PressableProps, 'style'> & {
   size?: ThemedPressableSize,
   color?: ColorPairToken,
   coloringStyle?: ColoringStyle,
   coloringColorVariant?: ColoringColorVariant,
   hasAdditionalHorizontalPadding?: boolean,
-  containerStyle?: StyleOverwrite<ThemedPressableState, ThemedPressableStyle>,
+  style?: StyleOverwrite<ThemedPressableState, ThemedPressableStyle>,
   stateLayerStyle?: StyleOverwrite<ThemedPressableState, ThemedPressableStyle>,
   iconStyle?: StyleOverwrite<ThemedPressableState, ThemedPressableIconStyle>,
   textStyle?: StyleOverwrite<ThemedPressableState, ThemedPressableTextStyle>,
@@ -61,7 +61,6 @@ export const ThemedPressable = forwardRef<React.ComponentRef<typeof Pressable>, 
   hasAdditionalHorizontalPadding = false,
   disabled,
   style,
-  containerStyle,
   stateLayerStyle,
   iconStyle,
   textStyle,
@@ -98,21 +97,18 @@ export const ThemedPressable = forwardRef<React.ComponentRef<typeof Pressable>, 
       hitSlop={hitSlop}
       onLayout={onLayout}
       style={(pressableState) => {
-        const state = resolveState(pressableState as PressableInteraction)
-        const resolvedStyle = typeof style === 'function' ? style(pressableState) : style
-        return [
-          theme.components.themedPressable.container(state, containerStyle),
-          resolvedStyle,
-        ]
+        const state = resolveState(pressableState)
+        return theme.components.themedPressable.container(state, style)
       }}
     >
       {(pressableState) => {
-        const state = resolveState(pressableState as PressableInteraction)
+        const state = resolveState(pressableState)
         const resolvedText = theme.components.themedPressable.text(state, textStyle)
         const resolvedIcon = theme.components.themedPressable.icon(state, iconStyle)
         const resolvedChildren = typeof children === 'function'
           ? children(pressableState)
           : children
+        const backroundColor = theme.components.themedPressable.container(state, style).backgroundColor
 
         return (
           <Fragment>
@@ -128,6 +124,7 @@ export const ThemedPressable = forwardRef<React.ComponentRef<typeof Pressable>, 
             />
             <ContentThemeOverrideProvider
               foreground={resolvedText.color}
+              background={backroundColor}
               textStyle={resolvedText}
               iconStyle={resolvedIcon}
             >

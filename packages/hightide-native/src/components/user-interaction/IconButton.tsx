@@ -2,9 +2,7 @@ import { Fragment, forwardRef } from 'react'
 import {
   Pressable,
   View,
-  type PressableProps,
-  type StyleProp,
-  type ViewStyle
+  type PressableProps
 } from 'react-native'
 import type { ColorPairToken } from '@helpwave/hightide-design/theme-tokens'
 import type {
@@ -20,7 +18,7 @@ import type {
   IconButtonStyle
 } from '../../theme/types/components/iconButton'
 import type { StyleOverwrite } from '../../theme/types/resolver'
-import type { IconComponent } from '../../icons'
+import type { IconComponent, IconStyle } from '../../icons'
 import { createHitBoxOverlayStyle } from '../../utils/hitBoxOverlay'
 import { useMinimumTouchTargetHitSlop } from '../../utils/minimumTouchTargetHitSlop'
 import { ThemedIcon } from '../visualization-and-display'
@@ -40,9 +38,9 @@ export type IconButtonProps = Omit<PressableProps, 'children' | 'style'> & {
   variant?: IconButtonVariant,
   icon: IconComponent,
   accessibilityLabel: string,
-  style?: StyleProp<ViewStyle>,
-  containerStyle?: StyleOverwrite<IconButtonState, IconButtonStyle>,
+  style?: StyleOverwrite<IconButtonState, IconButtonStyle>,
   stateLayerStyle?: StyleOverwrite<IconButtonState, IconButtonStyle>,
+  iconStyle?:  StyleOverwrite<IconButtonState, IconStyle>,
 }
 
 type PressableInteraction = {
@@ -60,8 +58,8 @@ export const IconButton = forwardRef<React.ComponentRef<typeof Pressable>, IconB
   disabled,
   accessibilityLabel,
   style,
-  containerStyle,
   stateLayerStyle,
+  iconStyle,
   hitSlop: providedHitSlop,
   onLayout: providedOnLayout,
   ...props
@@ -96,15 +94,12 @@ export const IconButton = forwardRef<React.ComponentRef<typeof Pressable>, IconB
       onLayout={onLayout}
       style={(pressableState) => {
         const state = resolveState(pressableState as PressableInteraction)
-        return [
-          theme.components.iconButton.container(state, containerStyle),
-          style,
-        ]
+        return theme.components.iconButton.container(state, style)
       }}
     >
       {(pressableState) => {
         const state = resolveState(pressableState as PressableInteraction)
-        const resolvedIcon = theme.components.iconButton.icon(state)
+        const resolvedIcon = theme.components.iconButton.icon(state, iconStyle)
 
         return (
           <Fragment>

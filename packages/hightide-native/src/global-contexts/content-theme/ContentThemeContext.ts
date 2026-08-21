@@ -8,6 +8,7 @@ import type { IconStyle } from '../../icons'
 
 export type ContentThemeContextValue = {
   foreground: ColorValue,
+  background: ColorValue,
   textStyle: TextStyle,
   iconStyle: IconStyle,
 }
