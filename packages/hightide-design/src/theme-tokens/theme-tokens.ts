@@ -35,6 +35,7 @@ export type ThemeColorTokens = {
   background: ColorPairToken,
   surface: ColorPairToken,
   surfaceVariant: ColorPairToken,
+  surfaceInverse: ColorPairToken,
   disabled: ColorPairToken,
   primary: ColorPairToken,
   secondary: ColorPairToken,
