@@ -6,7 +6,6 @@ import type {
 } from '../types/components/iconButton'
 import {
   createStyleResolver,
-  createValueResolver,
   toPressableInteractionState,
   type ComponentThemeResolver
 } from '../types/resolver'
@@ -45,7 +44,7 @@ export const toIconButtonThemeResolvers: ComponentThemeResolver<IconButtonThemeR
         zIndex: 20,
       }
     }),
-    icon: createValueResolver((state: IconButtonState): IconButtonIconStyle => (
+    icon: createStyleResolver((state: IconButtonState): IconButtonIconStyle => (
       StyleAdapterUtils.icon(resolve(state).icon)
     )),
   }

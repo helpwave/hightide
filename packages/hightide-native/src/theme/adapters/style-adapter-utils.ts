@@ -1,4 +1,5 @@
 import {
+  PixelRatio,
   StyleSheet,
   type StyleProp,
   type TextStyle,
@@ -334,7 +335,9 @@ const sizeStyleAdapter = (
     width: size.width,
     height: size.height,
     minWidth: size.minWidth,
-    minHeight: size.minHeight,
+    // minHeight is rounded to the nearest pixel to avoid blurry edges and gaps multiselects on certain devices.
+    // See https://reactnative.dev/docs/pixelratio#pixelroundtonearestpixel for more information.
+    minHeight: typeof size.minHeight === 'number' ? PixelRatio.roundToNearestPixel(size.minHeight) : size.minHeight,
     maxWidth: size.maxWidth,
     maxHeight: size.maxHeight,
   })

@@ -85,20 +85,24 @@ export const ContentThemeOverrideProvider = ({
     const newForeground = resolveColorOverride(foregroundOverride, parent.foreground)
     const newBackground = resolveColorOverride(backgroundOverride, parent.background)
 
-    let textStyle = typeof textStyleOverride === 'function'
+    const resolvedTextStyleOverride = typeof textStyleOverride === 'function'
       ? textStyleOverride(parent.textStyle, parent.foreground)
-      : textStyleOverride ?? parent.textStyle
+      : textStyleOverride
+
+    let textStyle = resolvedTextStyleOverride ?? parent.textStyle
 
     if (!isKeepingTextColor && newForeground !== undefined) {
-      textStyle = { ...textStyle, color: newForeground }
+      textStyle = { ...textStyle, color: resolvedTextStyleOverride?.color ?? newForeground }
     }
 
-    let iconStyle = typeof iconStyleOverride === 'function'
+    const resolvedIconStyleOverride = typeof iconStyleOverride === 'function'
       ? iconStyleOverride(parent.iconStyle, parent.foreground)
       : iconStyleOverride ?? parent.iconStyle
 
+    let iconStyle = resolvedIconStyleOverride ?? parent.iconStyle
+
     if (!isKeepingIconColor && newForeground !== undefined) {
-      iconStyle = { ...iconStyle, color: newForeground }
+      iconStyle = { ...iconStyle, color: resolvedIconStyleOverride?.color ?? newForeground }
     }
 
     return {

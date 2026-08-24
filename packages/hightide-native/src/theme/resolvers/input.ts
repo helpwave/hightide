@@ -12,7 +12,6 @@ import type {
 } from '../types/components/input'
 import {
   createStyleResolver,
-  createValueResolver,
   type ComponentThemeResolver
 } from '../types/resolver'
 
@@ -77,7 +76,7 @@ export const toInputThemeResolvers: ComponentThemeResolver<InputThemeResolvers> 
     placeholder: createStyleResolver((state: InputState): InputPlaceholderStyle => (
       StyleAdapterUtils.text(resolve(state).placeholder)
     )),
-    icon: createValueResolver((state: InputState): InputIconStyle => (
+    icon: createStyleResolver((state: InputState): InputIconStyle => (
       StyleAdapterUtils.icon(resolve(state).icon)
     )),
   }

@@ -5,6 +5,7 @@ import type {
   PressableState,
   PressableStateValue
 } from '@helpwave/hightide-design/component-token-resolvers'
+import type { StyleProp } from 'react-native'
 
 export type InteractionState = {
   isDisabled?: boolean,
@@ -41,12 +42,12 @@ export const toPressableInteractionState = (
 }
 
 export type StyleOverwrite<TState, TStyle> =
-  TStyle | ((state: TState, prev: TStyle) => TStyle)
+  StyleProp<TStyle> | ((state: TState, prev: TStyle) => StyleProp<TStyle>)
 
 export type StyleResolverFunction<TState, TStyle> = (
   props: TState,
   overwrite?: StyleOverwrite<TState, TStyle>,
-) => TStyle
+) => StyleProp<TStyle>
 
 export type SimpleStyleResolver<TStyle> = StyleResolverFunction<Record<string, never>, TStyle>
 
@@ -70,7 +71,7 @@ export const createStyleResolver = <TState, TStyle>(
       return (overwrite as (state: TState, prev: TStyle) => TStyle)(props, base)
     }
 
-    return [base, overwrite] as TStyle
+    return [base, overwrite]
   }
 }
 
@@ -78,28 +79,4 @@ export const createSimpleStyleResolver = <TStyle>(
   resolve: () => TStyle
 ): SimpleStyleResolver<TStyle> => {
   return createStyleResolver<Record<string, never>, TStyle>(resolve)
-}
-
-export const createValueResolver = <TState, TValue>(
-  resolve: (props: TState) => TValue
-): StyleResolverFunction<TState, TValue> => {
-  return (props, overwrite) => {
-    const base = resolve(props)
-
-    if (overwrite === undefined) {
-      return base
-    }
-
-    if (typeof overwrite === 'function') {
-      return (overwrite as (state: TState, prev: TValue) => TValue)(props, base)
-    }
-
-    return overwrite
-  }
-}
-
-export const createSimpleValueResolver = <TValue>(
-  resolve: () => TValue
-): SimpleStyleResolver<TValue> => {
-  return createValueResolver<Record<string, never>, TValue>(resolve)
 }

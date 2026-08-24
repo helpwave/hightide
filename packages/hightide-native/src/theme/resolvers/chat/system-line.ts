@@ -9,7 +9,6 @@ import type {
 } from '../../types/components/chat'
 import {
   createStyleResolver,
-  createValueResolver,
   type ComponentThemeResolver
 } from '../../types/resolver'
 
@@ -33,7 +32,7 @@ export const toChatSystemLineThemeResolvers: ComponentThemeResolver<ChatSystemLi
     text: createStyleResolver((state: ChatSystemLineState): ChatSystemLineTextStyle => (
       StyleAdapterUtils.text(resolve(state.color).text)
     )),
-    icon: createValueResolver((state: ChatSystemLineState): ChatSystemLineIconStyle => (
+    icon: createStyleResolver((state: ChatSystemLineState): ChatSystemLineIconStyle => (
       StyleAdapterUtils.icon(resolve(state.color).icon)
     )),
   }

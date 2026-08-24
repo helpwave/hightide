@@ -26,7 +26,6 @@ import type {
 } from '../../types/components/chat'
 import {
   createStyleResolver,
-  createValueResolver,
   toPressableInteractionState,
   type ComponentThemeResolver
 } from '../../types/resolver'
@@ -72,13 +71,13 @@ export const toChatAttachmentMessageBubbleThemeResolvers: ComponentThemeResolver
       ): ChatMessageBubbleMetaDataTextStyle => (
         StyleAdapterUtils.text(resolve(state.direction).chatMessageBubbleOverrides.metaDataText = {})
       )),
-      metaDataIcon: createValueResolver((
+      metaDataIcon: createStyleResolver((
         state: ChatAttachmentMessageBubbleState
       ): ChatMessageBubbleMetaDataIconStyle => (
         StyleAdapterUtils.icon(resolve(state.direction).chatMessageBubbleOverrides.metaDataIcon = {})
       )),
     },
-    contentContainer: createValueResolver((state: ChatAttachmentMessageBubbleState) => {
+    contentContainer: createStyleResolver((state: ChatAttachmentMessageBubbleState) => {
       const contentContainer = resolve(state.direction).contentContainer
 
       const resolvePressable = (pressableState: PressableState) => componentTokens.pressable({
@@ -112,7 +111,7 @@ export const toChatAttachmentMessageBubbleThemeResolvers: ComponentThemeResolver
           ...StyleAdapterUtils.text(resolvePressable(pressableState).text),
           ...StyleAdapterUtils.text(contentContainer.text = {}),
         })),
-        icon: createValueResolver((pressableState: PressableState): PressableIconStyle => (
+        icon: createStyleResolver((pressableState: PressableState): PressableIconStyle => (
           StyleAdapterUtils.icon(resolvePressable(pressableState).icon)
         )),
       }
@@ -122,7 +121,7 @@ export const toChatAttachmentMessageBubbleThemeResolvers: ComponentThemeResolver
     ): ChatAttachmentMessageBubbleFileIconContainerStyle => (
       StyleAdapterUtils.container(resolve(state.direction).fileIconContainer)
     )),
-    fileIcon: createValueResolver((
+    fileIcon: createStyleResolver((
       state: ChatAttachmentMessageBubbleState
     ): ChatAttachmentMessageBubbleFileIconStyle => (
       StyleAdapterUtils.icon(resolve(state.direction).fileIcon)
@@ -132,7 +131,7 @@ export const toChatAttachmentMessageBubbleThemeResolvers: ComponentThemeResolver
     ): ChatAttachmentMessageBubbleDownloadIconContainerStyle => (
       StyleAdapterUtils.container(resolve(state.direction).downloadIconContainer)
     )),
-    downloadIcon: createValueResolver((
+    downloadIcon: createStyleResolver((
       state: ChatAttachmentMessageBubbleState
     ): ChatAttachmentMessageBubbleDownloadIconStyle => (
       StyleAdapterUtils.icon(resolve(state.direction).downloadIcon)

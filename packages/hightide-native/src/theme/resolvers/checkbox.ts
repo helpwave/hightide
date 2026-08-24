@@ -11,7 +11,6 @@ import type {
 } from '../types/components/checkbox'
 import {
   createStyleResolver,
-  createValueResolver,
   type ComponentThemeResolver
 } from '../types/resolver'
 
@@ -98,7 +97,7 @@ export const toCheckboxThemeResolvers: ComponentThemeResolver<CheckboxThemeResol
         marginLeft: -horizontal,
       }
     }),
-    icon: createValueResolver((state: CheckboxState): CheckboxIconStyle => (
+    icon: createStyleResolver((state: CheckboxState): CheckboxIconStyle => (
       StyleAdapterUtils.icon(resolve(state).icon)
     )),
   }

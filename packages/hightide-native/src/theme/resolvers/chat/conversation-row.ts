@@ -32,9 +32,7 @@ import type {
 } from '../../types/components/avatar'
 import {
   createSimpleStyleResolver,
-  createSimpleValueResolver,
   createStyleResolver,
-  createValueResolver,
   toPressableInteractionState,
   type ComponentThemeResolver
 } from '../../types/resolver'
@@ -61,7 +59,7 @@ export const toChatConversationRowThemeResolvers: ComponentThemeResolver<ChatCon
   })
 
   return {
-    pressable: createValueResolver((state: ChatConversationRowState) => {
+    pressable: createStyleResolver((state: ChatConversationRowState) => {
       const { pressableOverrides } = resolve(state)
 
       const resolvePressable = (pressableState: PressableState) => componentTokens.pressable({
@@ -89,7 +87,7 @@ export const toChatConversationRowThemeResolvers: ComponentThemeResolver<ChatCon
           ...StyleAdapterUtils.text(resolvePressable(pressableState).text),
           ...StyleAdapterUtils.text(pressableOverrides.text ?? {}),
         })),
-        icon: createValueResolver((pressableState: PressableState): PressableIconStyle => ({
+        icon: createStyleResolver((pressableState: PressableState): PressableIconStyle => ({
           ...StyleAdapterUtils.icon(resolvePressable(pressableState).icon),
           ...StyleAdapterUtils.icon(pressableOverrides.icon ?? {}),
         })),
@@ -119,10 +117,10 @@ export const toChatConversationRowThemeResolvers: ComponentThemeResolver<ChatCon
     unreadBadgeText: createSimpleStyleResolver((): ChatConversationRowUnreadBadgeTextStyle => (
       StyleAdapterUtils.text(resolve().unreadBadgeText)
     )),
-    sentIndicator: createSimpleValueResolver((): ChatConversationRowSentIndicatorStyle => (
+    sentIndicator: createSimpleStyleResolver((): ChatConversationRowSentIndicatorStyle => (
       StyleAdapterUtils.icon(resolve().sentIndicator)
     )),
-    avatar: createValueResolver((state: AvatarState): AvatarThemeResolvers => {
+    avatar: createStyleResolver((state: AvatarState): AvatarThemeResolvers => {
       const { avatarOverride } = resolve()
 
       const resolveTokens = (avatarState: AvatarState): AvatarTokens => {

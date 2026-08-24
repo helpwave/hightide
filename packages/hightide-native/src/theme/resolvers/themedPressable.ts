@@ -7,7 +7,6 @@ import type {
 } from '../types/components/themedPressable'
 import {
   createStyleResolver,
-  createValueResolver,
   toPressableInteractionState,
   type ComponentThemeResolver
 } from '../types/resolver'
@@ -50,7 +49,7 @@ export const toThemedPressableThemeResolvers: ComponentThemeResolver<ThemedPress
         zIndex: 20,
       }
     }),
-    icon: createValueResolver((state: ThemedPressableState): ThemedPressableIconStyle => (
+    icon: createStyleResolver((state: ThemedPressableState): ThemedPressableIconStyle => (
       StyleAdapterUtils.icon(resolve(state).icon)
     )),
     text: createStyleResolver((state: ThemedPressableState): ThemedPressableTextStyle => (

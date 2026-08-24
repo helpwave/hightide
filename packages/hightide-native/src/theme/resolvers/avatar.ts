@@ -26,7 +26,6 @@ import type {
 } from '../types/components/avatar'
 import {
   createStyleResolver,
-  createValueResolver,
   type ComponentThemeResolver
 } from '../types/resolver'
 import type { ThemeTokens } from '@helpwave/hightide-design/theme-tokens'
@@ -143,7 +142,7 @@ export const createAvatarStyleResolvers = (
     ...StyleAdapterUtils.text(resolveTokens(state).text),
     textAlign: 'center',
   })),
-  icon: createValueResolver((state: AvatarState): AvatarIconStyle => {
+  icon: createStyleResolver((state: AvatarState): AvatarIconStyle => {
     const { icon } = resolveTokens(state)
 
     return StyleAdapterUtils.icon({
@@ -194,7 +193,7 @@ export const createAvatarWithStatusThemeResolvers = (
   const { themeTokens, semanticTokens, componentTokens } = context
 
   return {
-    avatar: createValueResolver((state: AvatarWithStatusState) => {
+    avatar: createStyleResolver((state: AvatarWithStatusState) => {
       const { avatarOverride } = resolve(state)
 
       const resolveTokens = (avatarState: AvatarState): AvatarTokens => {
@@ -333,7 +332,7 @@ export const toAvatarGroupThemeResolvers: ComponentThemeResolver<
   })
 
   return {
-    avatar: createValueResolver((state: AvatarGroupState) => {
+    avatar: createStyleResolver((state: AvatarGroupState) => {
       const { avatarOverride } = resolve(state)
 
       const resolveTokens = (avatarState: AvatarState): AvatarTokens => {

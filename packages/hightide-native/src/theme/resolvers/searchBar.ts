@@ -13,7 +13,6 @@ import type {
 } from '../types/components/searchBar'
 import {
   createStyleResolver,
-  createValueResolver,
   type ComponentThemeResolver
 } from '../types/resolver'
 
@@ -114,7 +113,7 @@ export const toSearchBarThemeResolvers: ComponentThemeResolver<SearchBarThemeRes
         transform: [{ translateY: '-50%' }],
       }
     }),
-    iconButtonColor: createValueResolver((state: SearchBarState): ColorPairToken => {
+    iconButtonColor: createStyleResolver((state: SearchBarState): ColorPairToken => {
       const iconColor = resolve(state).icon.color
 
       return {
