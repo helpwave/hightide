@@ -47,6 +47,7 @@ export const toThemedPressableThemeResolvers: ComponentThemeResolver<ThemedPress
         right: 0,
         bottom: 0,
         left: 0,
+        zIndex: 20,
       }
     }),
     icon: createValueResolver((state: ThemedPressableState): ThemedPressableIconStyle => (

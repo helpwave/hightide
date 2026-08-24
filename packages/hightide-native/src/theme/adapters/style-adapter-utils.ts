@@ -25,6 +25,8 @@ import {
 } from '@helpwave/hightide-design/component-token-resolvers'
 import type { ShadowToken } from '@helpwave/hightide-design/theme-tokens'
 import type { IconStyle } from '../../icons'
+import type { SingleOrArray } from '@helpwave/hightide-utils/utils'
+import { ArrayUtil } from '@helpwave/hightide-utils/utils'
 
 function getStyleProperty<
   T extends ViewStyle,
@@ -87,19 +89,19 @@ const toFlexStartEnd = (
 }
 
 const shadowStyleAdapter = (
-  shadow?: ShadowToken
+  shadow?: SingleOrArray<ShadowToken>
 ): ViewStyle['boxShadow'] | undefined => {
   if (shadow === undefined) {
     return undefined
   }
 
-  return [{
+  return ArrayUtil.resolveSingleOrArray(shadow).map((shadow) => ({
     color: shadow.color,
     offsetX: shadow.x,
     offsetY: shadow.y,
     blurRadius: shadow.blur,
     spreadDistance: shadow.spread,
-  }]
+  }))
 }
 
 const flexDirectionStyleAdapter = (
@@ -194,12 +196,12 @@ const borderRadiusStyleAdapter = (
     }
   }
 
-  return {
+  return defined({
     borderTopLeftRadius: borderRadius.topLeft,
     borderTopRightRadius: borderRadius.topRight,
     borderBottomLeftRadius: borderRadius.bottomLeft,
     borderBottomRightRadius: borderRadius.bottomRight,
-  }
+  })
 }
 
 const borderWidthStyleAdapter = (
@@ -216,12 +218,12 @@ const borderWidthStyleAdapter = (
 
   const sides = resolveDirectionalTokens([width], defaultWritingMode)
 
-  return {
+  return defined({
     borderTopWidth: sides.top,
     borderRightWidth: sides.right,
     borderBottomWidth: sides.bottom,
     borderLeftWidth: sides.left,
-  }
+  })
 }
 
 const borderColorStyleAdapter = (
@@ -238,12 +240,12 @@ const borderColorStyleAdapter = (
 
   const sides = resolveDirectionalTokens([color], defaultWritingMode)
 
-  return {
+  return defined({
     borderTopColor: sides.top,
     borderRightColor: sides.right,
     borderBottomColor: sides.bottom,
     borderLeftColor: sides.left,
-  }
+  })
 }
 
 const borderStyleAdapter = (
@@ -263,11 +265,11 @@ const borderStyleAdapter = (
     return undefined
   }
 
-  return {
+  return defined({
     borderStyle: border.style,
     ...borderWidthStyleAdapter(border.width),
     ...borderColorStyleAdapter(border.color),
-  }
+  })
 }
 
 const paddingStyleAdapter = (
@@ -284,12 +286,12 @@ const paddingStyleAdapter = (
 
   const sides = resolveDirectionalTokens([padding], defaultWritingMode)
 
-  return {
+  return defined({
     paddingTop: sides.top,
     paddingRight: sides.right,
     paddingBottom: sides.bottom,
     paddingLeft: sides.left,
-  }
+  })
 }
 
 const marginStyleAdapter = (
@@ -306,12 +308,12 @@ const marginStyleAdapter = (
 
   const sides = resolveDirectionalTokens([margin], defaultWritingMode)
 
-  return {
+  return defined({
     marginTop: sides.top,
     marginRight: sides.right,
     marginBottom: sides.bottom,
     marginLeft: sides.left,
-  }
+  })
 }
 
 const sizeStyleAdapter = (
@@ -328,14 +330,14 @@ const sizeStyleAdapter = (
     return undefined
   }
 
-  return {
+  return defined({
     width: size.width,
     height: size.height,
     minWidth: size.minWidth,
     minHeight: size.minHeight,
     maxWidth: size.maxWidth,
     maxHeight: size.maxHeight,
-  }
+  })
 }
 
 const outlineStyleAdapter = (
@@ -350,12 +352,12 @@ const outlineStyleAdapter = (
     return undefined
   }
 
-  return {
+  return defined({
     outlineColor: outline.color,
     outlineOffset: outline.offset,
     outlineWidth: outline.width,
     outlineStyle: outline.style,
-  }
+  })
 }
 
 const layoutStyleAdapter = (
@@ -376,7 +378,7 @@ const layoutStyleAdapter = (
     return undefined
   }
 
-  return {
+  return defined({
     flexWrap: layout.flexWrap,
     flexGrow: layout.flexGrow,
     flexShrink: layout.flexShrink,
@@ -387,7 +389,7 @@ const layoutStyleAdapter = (
     alignContent: alignContentStyleAdapter(layout.crossAxisLineAligment),
     alignSelf: alignSelfStyleAdapter(layout.selfCrossAxisAlignment),
     gap: layout.gap,
-  }
+  })
 }
 
 function containerStyleAdapter(tokens: ContainerTokens): ViewStyle {

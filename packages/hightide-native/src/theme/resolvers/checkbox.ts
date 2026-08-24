@@ -91,6 +91,7 @@ export const toCheckboxThemeResolvers: ComponentThemeResolver<CheckboxThemeResol
         right: 0,
         bottom: 0,
         left: 0,
+        zIndex: 20,
         marginTop: -vertical,
         marginRight: -horizontal,
         marginBottom: -vertical,

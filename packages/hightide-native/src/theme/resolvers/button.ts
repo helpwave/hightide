@@ -44,6 +44,7 @@ export const toButtonThemeResolvers: ComponentThemeResolver<ButtonThemeResolvers
         right: 0,
         bottom: 0,
         left: 0,
+        zIndex: 20,
       }
     }),
     icon: createValueResolver((state: ButtonState): ButtonIconStyle => (
