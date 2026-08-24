@@ -86,7 +86,7 @@ export const avatarTokenResolver: AvatarTokenResolver = ({
       layout: {
         direction: 'horizontal',
         mainAxisAlignment: 'center',
-        crossAxisAligment: 'center',
+        crossAxisAlignment: 'center',
       },
       ...(config?.isGrouped ? {
         decoration: {
@@ -239,7 +239,7 @@ export const avatarGroupTokenResolver: AvatarGroupTokenResolver = ({
       },
       layout: {
         direction: 'horizontal',
-        crossAxisAligment: 'center',
+        crossAxisAlignment: 'center',
         gap,
       },
     },

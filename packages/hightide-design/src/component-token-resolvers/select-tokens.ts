@@ -109,6 +109,9 @@ export const selectTokenResolver: SelectTokenResolver = ({
       ...input.container,
       layout: {
         ...input.container.layout,
+        direction: 'horizontal',
+        crossAxisAlignment: 'center',
+        mainAxisAlignment: 'space-between',
         gap: horizontalPadding,
       },
     },

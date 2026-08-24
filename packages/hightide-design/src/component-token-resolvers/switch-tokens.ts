@@ -83,7 +83,7 @@ export const switchTokenResolver: SwitchTokenResolver = ({
       layout: {
         direction: 'horizontal',
         mainAxisAlignment: 'center',
-        crossAxisAligment: 'center',
+        crossAxisAlignment: 'center',
       },
       outline: state.has('focusVisible') ? {
         color: 'transparent',
@@ -111,7 +111,7 @@ export const switchTokenResolver: SwitchTokenResolver = ({
       layout: {
         direction: 'horizontal',
         mainAxisAlignment: 'start',
-        crossAxisAligment: 'center',
+        crossAxisAlignment: 'center',
       },
       outline: state.has('focusVisible') ? {
         ...focusOutline,

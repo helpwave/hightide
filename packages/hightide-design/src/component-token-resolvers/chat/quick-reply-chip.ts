@@ -63,7 +63,7 @@ export const chatQuickReplyChipTokenResolver: ChatQuickReplyChipTokenResolver = 
       },
       layout: {
         direction: 'horizontal',
-        crossAxisAligment: 'center',
+        crossAxisAlignment: 'center',
         selfCrossAxisAlignment: 'start',
         gap: padding.md,
       },

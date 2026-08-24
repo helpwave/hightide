@@ -34,7 +34,10 @@ import type { StyleOverwrite } from '../../theme/types/resolver'
 import { ThemedPressable } from '../user-interaction'
 import type { AvatarProps } from '../visualization-and-display/Avatar'
 
-export type ChatConversationSentIndicator = 'sent' | 'sentAndReceived'
+import type { ChatMessageStatus } from '../../enums/chatMessageStatus'
+import type { IconComponent } from '../../icons/types'
+
+export type { ChatMessageStatus }
 
 export type ChatConversationRowProps = Omit<PressableProps, 'children' | 'style'> & {
   avatar: ReactNode,
@@ -43,7 +46,7 @@ export type ChatConversationRowProps = Omit<PressableProps, 'children' | 'style'
   preview?: ReactNode,
   unreadCount?: number,
   isSelected?: boolean,
-  sentIndicator?: ChatConversationSentIndicator,
+  messageStatus?: ChatMessageStatus,
   style?: StyleOverwrite<PressableState, PressableContainerStyle>,
   contentContainerStyle?: StyleOverwrite<ChatConversationRowState, ChatConversationRowContentContainerStyle>,
   headerRowStyle?: StyleOverwrite<ChatConversationRowState, ChatConversationRowHeaderRowStyle>,
@@ -70,6 +73,12 @@ const toNumericSize = (value: unknown): number | undefined => (
   typeof value === 'number' ? value : undefined
 )
 
+const resolveMessageStatusIcon = (messageStatus: ChatMessageStatus): IconComponent => (
+  messageStatus === 'sent'
+    ? HightideIconRegistry.Clock
+    : HightideIconRegistry.CheckCheck
+)
+
 export const ChatConversationRow = ({
   avatar,
   title,
@@ -77,7 +86,7 @@ export const ChatConversationRow = ({
   preview,
   unreadCount,
   isSelected = false,
-  sentIndicator,
+  messageStatus,
   disabled,
   style,
   contentContainerStyle,
@@ -92,9 +101,9 @@ export const ChatConversationRow = ({
 }: ChatConversationRowProps) => {
   const { theme } = useTheme()
   const isUnread = (unreadCount ?? 0) > 0
-  const sentIndicatorIcon = sentIndicator === 'sentAndReceived'
-    ? HightideIconRegistry.CheckCheck
-    : HightideIconRegistry.Check
+  const messageStatusIcon = messageStatus === undefined
+    ? undefined
+    : resolveMessageStatusIcon(messageStatus)
 
   const resolveState = (interaction: PressableInteraction): ChatConversationRowState => ({
     isUnread,
@@ -119,6 +128,11 @@ export const ChatConversationRow = ({
     () => theme.components.chat.conversationRow.sentIndicator(staticState, sentIndicatorStyle),
     [theme, staticState, sentIndicatorStyle]
   )
+  const messageStatusIconColor = useMemo(() => (
+    messageStatus === 'read'
+      ? theme.colors.primary.color
+      : resolvedSentIndicator.color
+  ), [messageStatus, resolvedSentIndicator.color, theme.colors.primary.color])
   const avatarTheme = useMemo(
     () => theme.components.chat.conversationRow.avatar(staticState),
     [theme, staticState]
@@ -224,12 +238,12 @@ export const ChatConversationRow = ({
               </View>
               <View style={resolvedMessageRow}>
                 <View style={{ flexDirection: 'row', alignItems: 'center', flex: 1, gap: theme.spacing.xs  /* TODO replace this with a theme style */ }}>
-                  {sentIndicator && (
+                  {messageStatusIcon != null && (
                     <ThemedIcon
-                      icon={sentIndicatorIcon}
+                      icon={messageStatusIcon}
                       size={resolvedSentIndicator.size}
                       strokeWidth={resolvedSentIndicator.strokeWidth}
-                      color={resolvedSentIndicator.color}
+                      color={messageStatusIconColor}
                     />
                   )}
                   {preview != null && (

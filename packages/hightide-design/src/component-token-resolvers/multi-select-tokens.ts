@@ -145,6 +145,13 @@ export const multiSelectTokenResolver: MultiSelectTokenResolver = ({
   return {
     trigger: {
       ...input.container,
+      layout: {
+        ...input.container.layout,
+        direction: 'horizontal',
+        crossAxisAlignment: 'center',
+        mainAxisAlignment: 'space-between',
+        gap: themeTokens.spacing.md,
+      },
       size: {
         ...input.container.size,
         width: '100%',
@@ -209,7 +216,7 @@ export const multiSelectTokenResolver: MultiSelectTokenResolver = ({
       },
       layout: {
         direction: 'horizontal',
-        crossAxisAligment: 'center',
+        crossAxisAlignment: 'center',
         gap: padding.xl,
       },
     },

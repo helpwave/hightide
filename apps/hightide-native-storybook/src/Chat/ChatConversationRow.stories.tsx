@@ -27,7 +27,7 @@ export const chatConversationRow: Story = {
     timestamp: '09:24',
     preview: 'Perfekt, ich habe den Befund erhalten.',
     unreadCount: 2,
-    sentIndicator: 'sentAndReceived',
+    messageStatus: 'received',
     onPress: action('press'),
   },
   render: (args) => (
@@ -44,7 +44,7 @@ export const chatConversationRow: Story = {
         title="Praxis am Park"
         timestamp="Gestern"
         preview="Ihr Termin wurde bestätigt."
-        sentIndicator="sent"
+        messageStatus="sent"
         onPress={action('press-read')}
       />
       <ChatConversationRow

@@ -79,7 +79,7 @@ export const chipTokenResolver: ChipTokenResolver = ({
         gap,
         direction: 'horizontal',
         mainAxisAlignment: 'start',
-        crossAxisAligment: 'center',
+        crossAxisAlignment: 'center',
       },
     },
     icon: {

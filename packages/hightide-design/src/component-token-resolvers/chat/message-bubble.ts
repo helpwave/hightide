@@ -86,7 +86,7 @@ export const chatMessageBubbleTokenResolver: ChatMessageBubbleTokenResolver = ({
       layout: {
         direction: 'horizontal',
         mainAxisAlignment: 'end',
-        crossAxisAligment: 'center',
+        crossAxisAlignment: 'center',
         gap: spacing.md,
         selfCrossAxisAlignment: 'end',
       },
@@ -94,7 +94,7 @@ export const chatMessageBubbleTokenResolver: ChatMessageBubbleTokenResolver = ({
     metaDataStatusContainer: {
       layout: {
         direction: 'horizontal',
-        crossAxisAligment: 'center',
+        crossAxisAlignment: 'center',
         gap: spacing.xs,
       },
     },

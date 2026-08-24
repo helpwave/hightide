@@ -11,7 +11,7 @@ export type AxisAligmentToken = 'start' | 'center' | 'end'
 export type StretchToken = 'stretch'
 export type SpacingToken = 'space-between' | 'space-evenly' | 'space-around'
 export type MainAxisAligmentToken = AxisAligmentToken | SpacingToken
-export type CrossAxisAligmentToken = AxisAligmentToken | StretchToken
+export type CrossAxisAlignmentToken = AxisAligmentToken | StretchToken
 export type CrossAxisLineAligmentToken = AxisAligmentToken | SpacingToken | StretchToken
 export type FlexWrapToken = 'nowrap' | 'wrap' | 'wrap-reverse'
 export type OverflowToken = 'visible' | 'hidden' | 'scroll'
@@ -89,9 +89,9 @@ export type ContainerTokens = {
     gap?: number,
     direction?: LayoutDirectionToken,
     mainAxisAlignment?: MainAxisAligmentToken,
-    crossAxisAligment?: CrossAxisAligmentToken,
+    crossAxisAlignment?: CrossAxisAlignmentToken,
     crossAxisLineAligment?: CrossAxisLineAligmentToken,
-    selfCrossAxisAlignment?: CrossAxisAligmentToken,
+    selfCrossAxisAlignment?: CrossAxisAlignmentToken,
     flexGrow?: number,
     flexShrink?: number,
     flexBasis?: SizeToken | 'auto',

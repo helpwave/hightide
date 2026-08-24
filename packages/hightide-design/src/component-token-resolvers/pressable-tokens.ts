@@ -149,7 +149,7 @@ export const pressableTokenResolver: PressableTokenResolver = ({
         gap,
         direction: 'horizontal',
         mainAxisAlignment: 'center',
-        crossAxisAligment: 'center',
+        crossAxisAlignment: 'center',
       },
     },
     stateLayer: {

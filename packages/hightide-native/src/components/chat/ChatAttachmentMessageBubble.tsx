@@ -39,7 +39,7 @@ export type ChatAttachmentMessageBubbleProps = Omit<ChatMessageBubbleProps, 'chi
   icon?: ReactNode,
   downloadLabel?: string,
   onDownload?: () => void,
-  style: ChatMessageBubbleProps['style'],
+  style?: ChatMessageBubbleProps['style'],
   contentContainerStyle?: StyleOverwrite<
     PressableState,
     PressableContainerStyle
@@ -88,7 +88,7 @@ export const ChatAttachmentMessageBubble = ({
   downloadLabel = 'Download',
   onDownload,
   timestamp,
-  readReceipt,
+  messageStatus,
   style,
   bodyStyle,
   bodyTextStyle,
@@ -182,7 +182,7 @@ export const ChatAttachmentMessageBubble = ({
       {...props}
       direction={direction}
       timestamp={timestamp}
-      readReceipt={readReceipt}
+      messageStatus={messageStatus}
       style={resolvedContainerStyle}
       bodyStyle={resolvedBodyStyle}
       bodyTextStyle={resolvedBodyTextStyle}

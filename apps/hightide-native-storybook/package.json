@@ -12,13 +12,12 @@
   "main": "index.js",
   "scripts": {
     "clean": "rm -rf node_modules .expo dist",
-    "init": "node -e \"process.exit(0)\"",
+    "init": "sb-rn-get-stories",
     "build": "node -e \"process.exit(0)\"",
     "start": "expo start",
     "storybook": "EXPO_PUBLIC_STORYBOOK_ENABLED=true expo start",
     "storybook:ios": "EXPO_PUBLIC_STORYBOOK_ENABLED=true expo start --ios",
     "storybook:android": "EXPO_PUBLIC_STORYBOOK_ENABLED=true expo start --android",
-    "storybook-generate": "sb-rn-get-stories",
     "lint": "eslint .",
     "test": "node -e \"process.exit(0)\""
   },

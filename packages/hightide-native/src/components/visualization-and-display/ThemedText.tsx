@@ -9,7 +9,9 @@ import {
 import { useContentTheme } from '../../global-contexts/content-theme/ContentThemeContext'
 import { useTheme } from '../../global-contexts/theme/ThemeContext'
 
-export type ThemedTextAppearance = 'normal' | 'description'
+import type { ThemedTextAppearance } from '../../enums/themedTextAppearance'
+
+export type { ThemedTextAppearance }
 
 export type ThemedTextProps = TextProps & {
   appearance?: ThemedTextAppearance,

@@ -118,7 +118,7 @@ export const iconButtonTokenResolver: IconButtonTokenResolver = ({
       layout: {
         direction: 'horizontal',
         mainAxisAlignment: 'center',
-        crossAxisAligment: 'center',
+        crossAxisAlignment: 'center',
       },
     },
     stateLayer: {

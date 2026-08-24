@@ -95,7 +95,7 @@ export const chatConversationRowTokenResolver: ChatConversationRowTokenResolver 
         },
         layout: {
           direction: 'horizontal',
-          crossAxisAligment: 'center',
+          crossAxisAlignment: 'center',
           selfCrossAxisAlignment: 'stretch',
           gap: padding.xl,
         },
@@ -110,7 +110,7 @@ export const chatConversationRowTokenResolver: ChatConversationRowTokenResolver 
     headerRow: {
       layout: {
         direction: 'horizontal',
-        crossAxisAligment: 'center',
+        crossAxisAlignment: 'center',
         mainAxisAlignment: 'space-between',
         gap: spacing.md,
       },
@@ -118,7 +118,7 @@ export const chatConversationRowTokenResolver: ChatConversationRowTokenResolver 
     messageRow: {
       layout: {
         direction: 'horizontal',
-        crossAxisAligment: 'center',
+        crossAxisAlignment: 'center',
         flexGrow: 1,
         mainAxisAlignment: 'space-between',
         gap: spacing.sm,
@@ -147,7 +147,7 @@ export const chatConversationRowTokenResolver: ChatConversationRowTokenResolver 
       },
       layout: {
         mainAxisAlignment: 'center',
-        crossAxisAligment: 'center',
+        crossAxisAlignment: 'center',
       },
     },
     unreadBadgeText: {

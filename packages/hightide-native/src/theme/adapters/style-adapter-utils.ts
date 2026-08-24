@@ -10,7 +10,7 @@ import type {
   BorderRadiusToken,
   BorderToken,
   ContainerTokens,
-  CrossAxisAligmentToken,
+  CrossAxisAlignmentToken,
   CrossAxisLineAligmentToken,
   IconTokens,
   LayoutDirectionToken,
@@ -129,7 +129,7 @@ const justifyContentStyleAdapter = (
 }
 
 const alignItemsStyleAdapter = (
-  alignment?: CrossAxisAligmentToken
+  alignment?: CrossAxisAlignmentToken
 ): ViewStyle['alignItems'] | undefined => {
   if (alignment === undefined) {
     return undefined
@@ -143,7 +143,7 @@ const alignItemsStyleAdapter = (
 }
 
 const alignSelfStyleAdapter = (
-  alignment?: CrossAxisAligmentToken
+  alignment?: CrossAxisAlignmentToken
 ): ViewStyle['alignSelf'] | undefined => {
   if (alignment === undefined) {
     return undefined
@@ -385,7 +385,7 @@ const layoutStyleAdapter = (
     flexBasis: layout.flexBasis,
     flexDirection: flexDirectionStyleAdapter(layout.direction),
     justifyContent: justifyContentStyleAdapter(layout.mainAxisAlignment),
-    alignItems: alignItemsStyleAdapter(layout.crossAxisAligment),
+    alignItems: alignItemsStyleAdapter(layout.crossAxisAlignment),
     alignContent: alignContentStyleAdapter(layout.crossAxisLineAligment),
     alignSelf: alignSelfStyleAdapter(layout.selfCrossAxisAlignment),
     gap: layout.gap,

@@ -131,7 +131,7 @@ export const buttonTokenResolver: ButtonTokenResolver = ({
         gap,
         direction: 'horizontal',
         mainAxisAlignment: 'center',
-        crossAxisAligment: 'center',
+        crossAxisAlignment: 'center',
       },
     },
     stateLayer: {

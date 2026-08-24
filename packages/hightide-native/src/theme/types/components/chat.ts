@@ -17,7 +17,9 @@ import type {
   AvatarThemeResolvers
 } from './avatar'
 
-export type ChatMessageDirection = 'incoming' | 'outgoing'
+import type { ChatMessageDirection } from '../../../enums/chatMessageDirection'
+
+export type { ChatMessageDirection }
 
 export type ChatConversationRowState = InteractionState & {
   isUnread?: boolean,

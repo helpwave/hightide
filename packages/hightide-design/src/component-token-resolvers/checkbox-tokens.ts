@@ -106,7 +106,7 @@ export const checkboxTokenResolver: CheckboxTokenResolver = ({
       layout: {
         direction: 'horizontal',
         mainAxisAlignment: 'center',
-        crossAxisAligment: 'center',
+        crossAxisAlignment: 'center',
       },
       outline: state.has('focusVisible') ? {
         ...themeTokens.focusOutline,

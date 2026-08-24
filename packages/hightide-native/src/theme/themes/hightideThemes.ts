@@ -13,6 +13,8 @@ export const themes = {
   dark: hightideDarkTheme,
 } as const
 
-export type HightideThemeModes = 'dark' | 'light'
+import type { HightideThemeModes } from '../../enums/hightideThemeModes'
+
+export type { HightideThemeModes }
 
 export type ThemeMode = string | HightideThemeModes
