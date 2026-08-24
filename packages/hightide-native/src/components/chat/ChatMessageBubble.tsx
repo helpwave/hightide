@@ -15,6 +15,7 @@ import {
   useDateTimeFormat,
   useLocalization
 } from '../../global-contexts/localization/forward-exports'
+import { useMemoizedTheme } from '../../hooks/useMemoizedTheme'
 import type {
   ChatMessageStatus
 } from '../../enums/chatMessageStatus'
@@ -72,34 +73,13 @@ export const ChatMessageBubble = ({
   const { is24HourFormat, timeZone } = useDateTimeFormat()
   const state = useMemo(() => ({ direction }), [direction])
 
-  const resolvedContainerStyle = useMemo(
-    () => theme.components.chat.messageBubble.container(state, style),
-    [theme, state, style]
-  )
-  const resolvedBodyStyle = useMemo(
-    () => theme.components.chat.messageBubble.body(state, bodyStyle),
-    [theme, state, bodyStyle]
-  )
-  const resolvedBodyTextStyle = useMemo(
-    () => theme.components.chat.messageBubble.bodyText(state, bodyTextStyle),
-    [theme, state, bodyTextStyle]
-  )
-  const resolvedMetaDataContainerStyle = useMemo(
-    () => theme.components.chat.messageBubble.metaDataContainer(state, metaDataContainerStyle),
-    [theme, state, metaDataContainerStyle]
-  )
-  const resolvedMetaDataStatusContainerStyle = useMemo(
-    () => theme.components.chat.messageBubble.metaDataStatusContainer(state, metaDataStatusContainerStyle),
-    [theme, state, metaDataStatusContainerStyle]
-  )
-  const resolvedMetaDataTextStyle = useMemo(
-    () => theme.components.chat.messageBubble.metaDataText(state, metaDataTextStyle),
-    [theme, state, metaDataTextStyle]
-  )
-  const resolvedMetaDataIcon = useMemo(
-    () => theme.components.chat.messageBubble.metaDataIcon(state),
-    [theme, state]
-  )
+  const resolvedContainerStyle = useMemoizedTheme(theme.components.chat.messageBubble.container, state, style)
+  const resolvedBodyStyle = useMemoizedTheme(theme.components.chat.messageBubble.body, state, bodyStyle)
+  const resolvedBodyTextStyle = useMemoizedTheme(theme.components.chat.messageBubble.bodyText, state, bodyTextStyle)
+  const resolvedMetaDataContainerStyle = useMemoizedTheme(theme.components.chat.messageBubble.metaDataContainer, state, metaDataContainerStyle)
+  const resolvedMetaDataStatusContainerStyle = useMemoizedTheme(theme.components.chat.messageBubble.metaDataStatusContainer, state, metaDataStatusContainerStyle)
+  const resolvedMetaDataTextStyle = useMemoizedTheme(theme.components.chat.messageBubble.metaDataText, state, metaDataTextStyle)
+  const resolvedMetaDataIcon = useMemoizedTheme(theme.components.chat.messageBubble.metaDataIcon, state)
   const formattedTimestamp = useMemo(() => (
     timestamp === undefined
       ? undefined

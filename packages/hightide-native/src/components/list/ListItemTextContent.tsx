@@ -27,7 +27,7 @@ export const ListItemTextContent = ({
   subtitleStyle?: StyleProp<TextStyle>,
 }) => {
   if (content != null) {
-    return <>{content}</>
+    return <Fragment>{content}</Fragment>
   }
 
   const titleNode = title != null

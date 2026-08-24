@@ -15,6 +15,7 @@ import { useControlledState } from '@helpwave/hightide-utils/hooks'
 import { HightideIconRegistry } from '../../icons/HightideIconRegistry'
 import { IconButton } from '../user-interaction/IconButton'
 import { useTheme } from '../../global-contexts/theme/ThemeContext'
+import { useMemoizedTheme } from '../../hooks/useMemoizedTheme'
 import type {
   ChatMessageComposerInputStyle,
   ChatMessageComposerStyle
@@ -60,18 +61,9 @@ export const ChatMessageComposer = ({
   })
   const state = useMemo(() => ({}), [])
 
-  const resolvedComposerStyle = useMemo(
-    () => theme.components.chat.messageComposer.container(state, composerStyle),
-    [theme, state, composerStyle]
-  )
-  const resolvedInputStyle = useMemo(
-    () => theme.components.chat.messageComposer.input(state, inputStyle),
-    [theme, state, inputStyle]
-  )
-  const placeholderColor = useMemo(
-    () => theme.components.chat.messageComposer.placeholderColor(state),
-    [theme, state]
-  )
+  const resolvedComposerStyle = useMemoizedTheme(theme.components.chat.messageComposer.container, state, composerStyle)
+  const resolvedInputStyle = useMemoizedTheme(theme.components.chat.messageComposer.input, state, inputStyle)
+  const placeholderColor = useMemoizedTheme(theme.components.chat.messageComposer.placeholderColor, state)
 
   const send = () => {
     const trimmed = (value ?? '').trim()

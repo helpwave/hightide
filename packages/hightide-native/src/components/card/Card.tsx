@@ -10,6 +10,7 @@ import {
 } from 'react-native'
 
 import { useTheme } from '../../global-contexts/theme/ThemeContext'
+import { useMemoizedTheme } from '../../hooks/useMemoizedTheme'
 import type { CardStyle } from '../../theme/types/components/card'
 import type { StyleOverwrite } from '../../theme/types/resolver'
 
@@ -28,10 +29,7 @@ export const Card = ({
   const { theme } = useTheme()
   const state = useMemo(() => ({}), [])
 
-  const resolvedCardStyle = useMemo(
-    () => theme.components.card.container(state, cardStyle),
-    [theme, state, cardStyle]
-  )
+  const resolvedCardStyle = useMemoizedTheme(theme.components.card.container, state, cardStyle)
 
   return (
     <View {...props} style={[resolvedCardStyle, style]}>

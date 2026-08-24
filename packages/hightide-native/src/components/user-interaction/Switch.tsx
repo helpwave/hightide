@@ -1,7 +1,7 @@
 import {
-  Fragment,
   useCallback,
   useEffect,
+  useMemo,
   useRef
 } from 'react'
 import {
@@ -20,6 +20,7 @@ import {
 
 import { useDebugContext } from '../../global-contexts/debug'
 import { useTheme } from '../../global-contexts/theme/ThemeContext'
+import { useMemoizedTheme } from '../../hooks/useMemoizedTheme'
 import type {
   SwitchContainerStyle,
   SwitchState,
@@ -33,6 +34,7 @@ import type {
 } from '../../types/formField'
 import { createHitBoxOverlayStyle } from '../../utils/hitBoxOverlay'
 import { useMinimumTouchTargetHitSlop } from '../../utils/minimumTouchTargetHitSlop'
+import type { PressableInteractionState } from '../../utils/pressableInteraction'
 
 const ANIMATION_DURATION_MS = 250
 
@@ -47,16 +49,125 @@ export type SwitchProps = Omit<PressableProps, 'children' | 'style' | 'disabled'
     thumbStyle?: StyleOverwrite<SwitchState, SwitchThumbStyle>,
   }
 
-type PressableInteraction = {
-  pressed: boolean,
-  hovered?: boolean,
-  focused?: boolean,
-  focusVisible?: boolean,
+type SwitchContentProps = {
+  pressableState: PressableInteractionState,
+  value: boolean,
+  invalid: boolean,
+  disabled: boolean,
+  readOnly: boolean,
+  style?: StyleProp<ViewStyle>,
+  containerStyle?: StyleOverwrite<SwitchState, SwitchContainerStyle>,
+  trackStyle?: StyleOverwrite<SwitchState, SwitchTrackStyle>,
+  thumbStyle?: StyleOverwrite<SwitchState, SwitchThumbStyle>,
+  hitSlop: PressableProps['hitSlop'],
+  progress: Animated.Value,
 }
 
 const toNumber = (value: string | number | undefined, fallback: number): number => (
   typeof value === 'number' ? value : fallback
 )
+
+const SwitchContent = ({
+  pressableState,
+  value,
+  invalid,
+  disabled,
+  readOnly,
+  style,
+  containerStyle,
+  trackStyle,
+  thumbStyle,
+  hitSlop,
+  progress,
+}: SwitchContentProps) => {
+  const { theme } = useTheme()
+  const { hitBox } = useDebugContext()
+
+  const state = useMemo((): SwitchState => ({
+    isActive: value,
+    isInvalid: invalid,
+    isDisabled: disabled,
+    isReadonly: readOnly,
+    isPressed: pressableState.pressed,
+    isHovered: !!pressableState.hovered,
+    isFocused: !!pressableState.focused,
+    isFocusVisible: !!pressableState.focusVisible,
+  }), [
+    value,
+    invalid,
+    disabled,
+    readOnly,
+    pressableState.pressed,
+    pressableState.hovered,
+    pressableState.focused,
+    pressableState.focusVisible,
+  ])
+
+  const inactiveState = useMemo((): SwitchState => ({ ...state, isActive: false }), [state])
+  const activeState = useMemo((): SwitchState => ({ ...state, isActive: true }), [state])
+
+  const resolvedContainerStyle = useMemoizedTheme(theme.components.switch.container, state, containerStyle)
+  const resolvedTrackStyle = useMemoizedTheme(theme.components.switch.track, state, trackStyle)
+  const resolvedThumbInactive = useMemoizedTheme(theme.components.switch.thumb, inactiveState, thumbStyle)
+  const resolvedThumbActive = useMemoizedTheme(theme.components.switch.thumb, activeState, thumbStyle)
+
+  const trackWidth = toNumber(resolvedTrackStyle.width as string | number | undefined, 40)
+  const trackHeight = toNumber(resolvedTrackStyle.height as string | number | undefined, 28)
+  const fallbackBorderWidth = toNumber(resolvedTrackStyle.borderWidth, 0)
+  const trackBorderTop = toNumber(resolvedTrackStyle.borderTopWidth, fallbackBorderWidth)
+  const trackBorderRight = toNumber(resolvedTrackStyle.borderRightWidth, fallbackBorderWidth)
+  const trackBorderBottom = toNumber(resolvedTrackStyle.borderBottomWidth, fallbackBorderWidth)
+  const trackBorderLeft = toNumber(resolvedTrackStyle.borderLeftWidth, fallbackBorderWidth)
+  const thumbInactiveSize = toNumber(resolvedThumbInactive.width as string | number | undefined, 16)
+  const thumbActiveSize = toNumber(resolvedThumbActive.width as string | number | undefined, 20)
+  const trackInnerWidth = trackWidth - trackBorderLeft - trackBorderRight
+  const trackInnerHeight = trackHeight - trackBorderTop - trackBorderBottom
+  const thumbOffsetInactive = (trackInnerHeight - thumbInactiveSize) / 2
+  const thumbOffsetActive = trackInnerWidth - thumbActiveSize - (
+    (trackInnerHeight - thumbActiveSize) / 2
+  )
+  const thumbTopInactive = (trackInnerHeight - thumbInactiveSize) / 2
+  const thumbTopActive = (trackInnerHeight - thumbActiveSize) / 2
+  const thumbSize = progress.interpolate({
+    inputRange: [0, 1],
+    outputRange: [thumbInactiveSize, thumbActiveSize],
+  })
+  const thumbTranslateX = progress.interpolate({
+    inputRange: [0, 1],
+    outputRange: [thumbOffsetInactive, thumbOffsetActive],
+  })
+  const thumbTop = progress.interpolate({
+    inputRange: [0, 1],
+    outputRange: [thumbTopInactive, thumbTopActive],
+  })
+  const thumbColor = value
+    ? resolvedThumbActive.backgroundColor
+    : resolvedThumbInactive.backgroundColor
+
+  return (
+    <View style={[resolvedContainerStyle, style]}>
+      {hitBox.isVisualizing && (
+        <View
+          pointerEvents="none"
+          style={createHitBoxOverlayStyle(hitSlop, hitBox.color)}
+        />
+      )}
+      <View style={resolvedTrackStyle}>
+        <Animated.View
+          style={{
+            position: 'absolute',
+            top: thumbTop,
+            width: thumbSize,
+            height: thumbSize,
+            borderRadius: thumbActiveSize / 2,
+            backgroundColor: thumbColor,
+            transform: [{ translateX: thumbTranslateX }],
+          }}
+        />
+      </View>
+    </View>
+  )
+}
 
 export const Switch = ({
   value: controlledValue,
@@ -76,7 +187,6 @@ export const Switch = ({
   ...props
 }: SwitchProps) => {
   const { theme } = useTheme()
-  const { hitBox } = useDebugContext()
   const { hitSlop, onLayout } = useMinimumTouchTargetHitSlop({
     touchTargetSize: theme.semantics.touchTargetSize({}),
     hitSlop: providedHitSlop,
@@ -108,17 +218,6 @@ export const Switch = ({
     }).start()
   }, [progress, value])
 
-  const resolveState = (interaction: PressableInteraction): SwitchState => ({
-    isActive: value,
-    isInvalid: invalid,
-    isDisabled: disabled,
-    isReadonly: readOnly,
-    isPressed: interaction.pressed,
-    isHovered: !!interaction.hovered,
-    isFocused: !!interaction.focused,
-    isFocusVisible: !!interaction.focusVisible,
-  })
-
   return (
     <Pressable
       {...props}
@@ -137,75 +236,22 @@ export const Switch = ({
         }
         props.onPress?.(event)
       }}
-      style={(pressableState) => {
-        const state = resolveState(pressableState as PressableInteraction)
-        return [theme.components.switch.container(state, containerStyle), style]
-      }}
     >
-      {(pressableState) => {
-        const state = resolveState(pressableState as PressableInteraction)
-        const inactiveState: SwitchState = { ...state, isActive: false }
-        const activeState: SwitchState = { ...state, isActive: true }
-        const resolvedTrackStyle = theme.components.switch.track(state, trackStyle)
-        const resolvedThumbInactive = theme.components.switch.thumb(inactiveState, thumbStyle)
-        const resolvedThumbActive = theme.components.switch.thumb(activeState, thumbStyle)
-        const trackWidth = toNumber(resolvedTrackStyle.width as string | number | undefined, 40)
-        const trackHeight = toNumber(resolvedTrackStyle.height as string | number | undefined, 28)
-        const fallbackBorderWidth = toNumber(resolvedTrackStyle.borderWidth, 0)
-        const trackBorderTop = toNumber(resolvedTrackStyle.borderTopWidth, fallbackBorderWidth)
-        const trackBorderRight = toNumber(resolvedTrackStyle.borderRightWidth, fallbackBorderWidth)
-        const trackBorderBottom = toNumber(resolvedTrackStyle.borderBottomWidth, fallbackBorderWidth)
-        const trackBorderLeft = toNumber(resolvedTrackStyle.borderLeftWidth, fallbackBorderWidth)
-        const thumbInactiveSize = toNumber(resolvedThumbInactive.width as string | number | undefined, 16)
-        const thumbActiveSize = toNumber(resolvedThumbActive.width as string | number | undefined, 20)
-        const trackInnerWidth = trackWidth - trackBorderLeft - trackBorderRight
-        const trackInnerHeight = trackHeight - trackBorderTop - trackBorderBottom
-        const thumbOffsetInactive = (trackInnerHeight - thumbInactiveSize) / 2
-        const thumbOffsetActive = trackInnerWidth - thumbActiveSize - (
-          (trackInnerHeight - thumbActiveSize) / 2
-        )
-        const thumbTopInactive = (trackInnerHeight - thumbInactiveSize) / 2
-        const thumbTopActive = (trackInnerHeight - thumbActiveSize) / 2
-        const thumbSize = progress.interpolate({
-          inputRange: [0, 1],
-          outputRange: [thumbInactiveSize, thumbActiveSize],
-        })
-        const thumbTranslateX = progress.interpolate({
-          inputRange: [0, 1],
-          outputRange: [thumbOffsetInactive, thumbOffsetActive],
-        })
-        const thumbTop = progress.interpolate({
-          inputRange: [0, 1],
-          outputRange: [thumbTopInactive, thumbTopActive],
-        })
-        const thumbColor = value
-          ? resolvedThumbActive.backgroundColor
-          : resolvedThumbInactive.backgroundColor
-
-        return (
-          <Fragment>
-            {hitBox.isVisualizing && (
-              <View
-                pointerEvents="none"
-                style={createHitBoxOverlayStyle(hitSlop, hitBox.color)}
-              />
-            )}
-            <View style={resolvedTrackStyle}>
-              <Animated.View
-                style={{
-                  position: 'absolute',
-                  top: thumbTop,
-                  width: thumbSize,
-                  height: thumbSize,
-                  borderRadius: thumbActiveSize / 2,
-                  backgroundColor: thumbColor,
-                  transform: [{ translateX: thumbTranslateX }],
-                }}
-              />
-            </View>
-          </Fragment>
-        )
-      }}
+      {(pressableState) => (
+        <SwitchContent
+          pressableState={pressableState as PressableInteractionState}
+          value={value}
+          invalid={invalid}
+          disabled={disabled}
+          readOnly={readOnly}
+          style={style}
+          containerStyle={containerStyle}
+          trackStyle={trackStyle}
+          thumbStyle={thumbStyle}
+          hitSlop={hitSlop}
+          progress={progress}
+        />
+      )}
     </Pressable>
   )
 }

@@ -19,6 +19,7 @@ import {
 
 import type { ColorPairToken } from '@helpwave/hightide-design/theme-tokens'
 import { useTheme } from '../../global-contexts/theme/ThemeContext'
+import { useMemoizedTheme } from '../../hooks/useMemoizedTheme'
 import type {
   InputContainerStyle,
   InputState,
@@ -106,19 +107,9 @@ export const Input = forwardRef<TextInput, InputProps>(function Input({
     isFocused: interactive && isFocused,
   }), [color, disabled, invalid, readOnly, interactive, isHovered, isPressed, isFocused])
 
-  const resolvedContainerStyle = useMemo(
-    () => theme.components.input.container(state, style),
-    [theme, state, style]
-  )
-  const resolvedTextStyle = useMemo(
-    () => theme.components.input.text(state, textStyle),
-    [theme, state, textStyle]
-  )
-  const resolvedPlaceholderStyle = useMemo(
-    () => theme.components.input.placeholder(state),
-    [theme, state]
-  )
-
+  const resolvedContainerStyle = useMemoizedTheme(theme.components.input.container, state, style)
+  const resolvedTextStyle = useMemoizedTheme(theme.components.input.text, state, textStyle)
+  const resolvedPlaceholderStyle = useMemoizedTheme(theme.components.input.placeholder, state)
 
   const resolvedStyle = useMemo(
     () => {

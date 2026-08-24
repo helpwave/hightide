@@ -11,6 +11,7 @@ import {
 } from 'react-native'
 
 import { useTheme } from '../../global-contexts/theme/ThemeContext'
+import { useMemoizedTheme } from '../../hooks/useMemoizedTheme'
 import type {
   ChatConversationListFooterStyle,
   ChatConversationListHeaderStyle,
@@ -43,18 +44,9 @@ export const ChatConversationList = ({
   const { theme } = useTheme()
   const state = useMemo(() => ({}), [])
 
-  const resolvedListStyle = useMemo(
-    () => theme.components.chat.conversationList.container(state, listStyle),
-    [theme, state, listStyle]
-  )
-  const resolvedHeaderStyle = useMemo(
-    () => theme.components.chat.conversationList.header(state, headerStyle),
-    [theme, state, headerStyle]
-  )
-  const resolvedFooterStyle = useMemo(
-    () => theme.components.chat.conversationList.footer(state, footerStyle),
-    [theme, state, footerStyle]
-  )
+  const resolvedListStyle = useMemoizedTheme(theme.components.chat.conversationList.container, state, listStyle)
+  const resolvedHeaderStyle = useMemoizedTheme(theme.components.chat.conversationList.header, state, headerStyle)
+  const resolvedFooterStyle = useMemoizedTheme(theme.components.chat.conversationList.footer, state, footerStyle)
 
   return (
     <View {...props} style={[resolvedListStyle, style]}>

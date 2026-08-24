@@ -1,4 +1,4 @@
-import { Fragment, useMemo } from 'react'
+import { useMemo } from 'react'
 import {
   FlatList,
   Modal,
@@ -11,6 +11,7 @@ import {
 import type { ColorPairToken } from '@helpwave/hightide-design/theme-tokens'
 import { useTranslation } from '@helpwave/hightide-utils/context'
 import { useTheme } from '../../global-contexts/theme/ThemeContext'
+import { useMemoizedTheme } from '../../hooks/useMemoizedTheme'
 import { ThemedText } from '../visualization-and-display/ThemedText'
 import { ThemedIcon } from '../visualization-and-display/ThemedIcon'
 import { ListActionItem } from '../list/ListActionItem'
@@ -19,12 +20,106 @@ import {
   useSelect,
   type UseSelectOption
 } from '../../hooks/useSelect'
-import type { SelectState } from '../../theme/types/components/select'
+import type { SelectState, SelectThemeResolvers } from '../../theme/types/components/select'
+import type { MultiSelectOptionState } from '../../theme/types/components/multiSelect'
+import type { IconStyle } from '../../icons'
+import type { PressableInteractionState } from '../../utils/pressableInteraction'
 import type {
   FormFieldDataHandling,
   FormFieldInteractionStates
 } from '../../types/formField'
 import { SearchBar } from './SearchBar'
+
+type SelectTriggerContentProps = {
+  pressableState: PressableInteractionState,
+  state: SelectState,
+  selectedLabel: string,
+  selectTheme: SelectThemeResolvers,
+}
+
+const SelectTriggerContent = ({
+  pressableState,
+  state,
+  selectedLabel,
+  selectTheme,
+}: SelectTriggerContentProps) => {
+  const triggerState = useMemo((): SelectState => ({
+    ...state,
+    isPressed: pressableState.pressed,
+    isHovered: !!pressableState.hovered,
+    isFocused: !!pressableState.focused,
+    isFocusVisible: !!pressableState.focusVisible,
+  }), [
+    state,
+    pressableState.pressed,
+    pressableState.hovered,
+    pressableState.focused,
+    pressableState.focusVisible,
+  ])
+
+  const resolvedTriggerStyle = useMemoizedTheme(selectTheme.trigger, triggerState)
+  const resolvedStateLayerStyle = useMemoizedTheme(selectTheme.stateLayer, triggerState)
+  const resolvedTriggerTextStyle = useMemoizedTheme(selectTheme.triggerText, triggerState)
+  const resolvedIcon = useMemoizedTheme<SelectState, IconStyle>(selectTheme.icon, triggerState)
+
+  return (
+    <View style={resolvedTriggerStyle}>
+      <View pointerEvents="none" style={resolvedStateLayerStyle} />
+      <ThemedText style={[resolvedTriggerTextStyle, { flex: 1 }]}>
+        {selectedLabel}
+      </ThemedText>
+      <ThemedIcon
+        icon={HightideIconRegistry.ChevronDown}
+        size={resolvedIcon.size}
+        strokeWidth={resolvedIcon.strokeWidth}
+        color={resolvedIcon.color}
+      />
+    </View>
+  )
+}
+
+type SelectOptionRowProps = {
+  item: SelectOption,
+  isSelected: boolean,
+  optionColor?: ColorPairToken,
+  onSelect: () => void,
+}
+
+const SelectOptionRow = ({
+  item,
+  isSelected,
+  optionColor,
+  onSelect,
+}: SelectOptionRowProps) => {
+  const { theme } = useTheme()
+  const optionState = useMemo((): MultiSelectOptionState => ({
+    color: optionColor,
+    isSelected,
+    isHighlighted: false,
+    isDisabled: item.disabled,
+  }), [optionColor, isSelected, item.disabled])
+  const checkIcon = useMemoizedTheme<MultiSelectOptionState, IconStyle>(
+    theme.components.listItem.action.icon,
+    optionState
+  )
+
+  return (
+    <ListActionItem
+      title={item.label ?? item.id}
+      color={optionColor}
+      disabled={item.disabled}
+      onPress={onSelect}
+      leading={(
+        <ThemedIcon
+          icon={HightideIconRegistry.Check}
+          size={checkIcon.size}
+          strokeWidth={checkIcon.strokeWidth}
+          color={isSelected ? theme.colors.primary.color : 'transparent'}
+        />
+      )}
+    />
+  )
+}
 
 export type SelectOption<T extends string = string> = UseSelectOption & {
   value?: T,
@@ -91,22 +186,10 @@ export const Select = ({
 
   const selectTheme = theme.components.select
 
-  const resolvedOverlayStyle = useMemo(
-    () => selectTheme.overlay({}),
-    [selectTheme]
-  )
-  const resolvedMenuStyle = useMemo(
-    () => selectTheme.menu({ hasSearch: isSearchVisible }),
-    [selectTheme, isSearchVisible]
-  )
-  const resolvedHeaderStyle = useMemo(
-    () => selectTheme.header({}),
-    [selectTheme]
-  )
-  const resolvedEmptyTextStyle = useMemo(
-    () => selectTheme.emptyText({}),
-    [selectTheme]
-  )
+  const resolvedOverlayStyle = useMemoizedTheme(selectTheme.overlay, {})
+  const resolvedMenuStyle = useMemoizedTheme(selectTheme.menu, { hasSearch: isSearchVisible })
+  const resolvedHeaderStyle = useMemoizedTheme(selectTheme.header, {})
+  const resolvedEmptyTextStyle = useMemoizedTheme(selectTheme.emptyText, {})
   const showEmptySearchResults = isSearchVisible
     && select.searchQuery.trim().length > 0
     && visibleOptions.length === 0
@@ -116,56 +199,15 @@ export const Select = ({
       <Pressable
         disabled={!interactive}
         onPress={() => select.toggleOpen()}
-        style={(pressableState) => {
-          const interaction = pressableState as {
-            pressed: boolean,
-            hovered?: boolean,
-            focused?: boolean,
-            focusVisible?: boolean,
-          }
-          return selectTheme.trigger({
-            ...state,
-            isPressed: interaction.pressed,
-            isHovered: !!interaction.hovered,
-            isFocused: !!interaction.focused,
-            isFocusVisible: !!interaction.focusVisible,
-          })
-        }}
       >
-        {(pressableState) => {
-          const interaction = pressableState as {
-            pressed: boolean,
-            hovered?: boolean,
-            focused?: boolean,
-            focusVisible?: boolean,
-          }
-          const triggerState = {
-            ...state,
-            isPressed: interaction.pressed,
-            isHovered: !!interaction.hovered,
-            isFocused: !!interaction.focused,
-            isFocusVisible: !!interaction.focusVisible,
-          }
-          const icon = selectTheme.icon(triggerState)
-
-          return (
-            <Fragment>
-              <View
-                pointerEvents="none"
-                style={selectTheme.stateLayer(triggerState)}
-              />
-              <ThemedText style={[selectTheme.triggerText(triggerState), { flex: 1 }]}>
-                {selectedLabel}
-              </ThemedText>
-              <ThemedIcon
-                icon={HightideIconRegistry.ChevronDown}
-                size={icon.size}
-                strokeWidth={icon.strokeWidth}
-                color={icon.color}
-              />
-            </Fragment>
-          )
-        }}
+        {(pressableState) => (
+          <SelectTriggerContent
+            pressableState={pressableState as PressableInteractionState}
+            state={state}
+            selectedLabel={selectedLabel}
+            selectTheme={selectTheme}
+          />
+        )}
       </Pressable>
 
       <Modal
@@ -213,22 +255,13 @@ export const Select = ({
                   const optionColor = isSelected
                     ? (color ?? theme.colors.primary)
                     : undefined
-                  const checkIcon = theme.components.listItem.action.icon({ color: optionColor })
 
                   return (
-                    <ListActionItem
-                      title={item.label ?? item.id}
-                      color={optionColor}
-                      disabled={item.disabled}
-                      onPress={() => select.selectValue(item.id)}
-                      leading={(
-                        <ThemedIcon
-                          icon={HightideIconRegistry.Check}
-                          size={checkIcon.size}
-                          strokeWidth={checkIcon.strokeWidth}
-                          color={isSelected ? theme.colors.primary.color : 'transparent'}
-                        />
-                      )}
+                    <SelectOptionRow
+                      item={item}
+                      isSelected={isSelected}
+                      optionColor={optionColor}
+                      onSelect={() => select.selectValue(item.id)}
                     />
                   )
                 }}

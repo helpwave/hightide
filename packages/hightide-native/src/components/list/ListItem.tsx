@@ -12,6 +12,7 @@ import {
 import type { ColorPairToken } from '@helpwave/hightide-design/theme-tokens'
 
 import { useTheme } from '../../global-contexts/theme/ThemeContext'
+import { useMemoizedTheme } from '../../hooks/useMemoizedTheme'
 import type {
   ListItemDescriptionStyle,
   ListItemState,
@@ -58,34 +59,13 @@ export const ListItem = ({
     color,
   }), [color])
 
-  const resolvedItemStyle = useMemo(
-    () => theme.components.listItem.default.container(state, itemStyle),
-    [theme, state, itemStyle]
-  )
-  const resolvedLeadingItemContainerStyle = useMemo(
-    () => theme.components.listItem.default.leadingItemContainer(state),
-    [theme, state]
-  )
-  const resolvedContentStyle = useMemo(
-    () => theme.components.listItem.default.content(state),
-    [theme, state]
-  )
-  const resolvedTrailingItemContainerStyle = useMemo(
-    () => theme.components.listItem.default.trailingItemContainer(state),
-    [theme, state]
-  )
-  const resolvedTitleStyle = useMemo(
-    () => theme.components.listItem.default.titleText(state, titleStyle),
-    [theme, state, titleStyle]
-  )
-  const resolvedSubtitleStyle = useMemo(
-    () => theme.components.listItem.default.descriptionText(state, subtitleStyle),
-    [theme, state, subtitleStyle]
-  )
-  const resolvedIconStyle = useMemo(
-    () => theme.components.listItem.default.icon(state),
-    [theme, state]
-  )
+  const resolvedItemStyle = useMemoizedTheme(theme.components.listItem.default.container, state, itemStyle)
+  const resolvedLeadingItemContainerStyle = useMemoizedTheme(theme.components.listItem.default.leadingItemContainer, state)
+  const resolvedContentStyle = useMemoizedTheme(theme.components.listItem.default.content, state)
+  const resolvedTrailingItemContainerStyle = useMemoizedTheme(theme.components.listItem.default.trailingItemContainer, state)
+  const resolvedTitleStyle = useMemoizedTheme(theme.components.listItem.default.titleText, state, titleStyle)
+  const resolvedSubtitleStyle = useMemoizedTheme(theme.components.listItem.default.descriptionText, state, subtitleStyle)
+  const resolvedIconStyle = useMemoizedTheme(theme.components.listItem.default.icon, state)
 
   return (
     <View {...props} style={[resolvedItemStyle, style]}>

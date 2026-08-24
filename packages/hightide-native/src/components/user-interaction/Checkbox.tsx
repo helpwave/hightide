@@ -1,7 +1,4 @@
-import {
-  Fragment,
-  useCallback
-} from 'react'
+import { useCallback, useMemo } from 'react'
 import {
   Pressable,
   View,
@@ -19,6 +16,7 @@ import { HightideIconRegistry } from '../../icons/HightideIconRegistry'
 import { ThemedIcon } from '../visualization-and-display/ThemedIcon'
 import { useDebugContext } from '../../global-contexts/debug'
 import { useTheme } from '../../global-contexts/theme/ThemeContext'
+import { useMemoizedTheme } from '../../hooks/useMemoizedTheme'
 import type {
   CheckboxSize,
   CheckboxState,
@@ -32,6 +30,7 @@ import type {
 } from '../../types/formField'
 import { createHitBoxOverlayStyle } from '../../utils/hitBoxOverlay'
 import { useMinimumTouchTargetHitSlop } from '../../utils/minimumTouchTargetHitSlop'
+import type { PressableInteractionState } from '../../utils/pressableInteraction'
 
 export type CheckboxProps = Omit<PressableProps, 'children' | 'style'>
   & Partial<FormFieldInteractionStates>
@@ -47,11 +46,94 @@ export type CheckboxProps = Omit<PressableProps, 'children' | 'style'>
     stateLayerStyle?: StyleOverwrite<CheckboxState, CheckboxStateLayerStyle>,
   }
 
-type PressableInteraction = {
-  pressed: boolean,
-  hovered?: boolean,
-  focused?: boolean,
-  focusVisible?: boolean,
+type CheckboxContentProps = {
+  pressableState: PressableInteractionState,
+  value: boolean,
+  indeterminate?: boolean,
+  size: CheckboxSize,
+  isRounded: boolean,
+  color?: ColorPairToken,
+  invalid: boolean,
+  disabled: boolean,
+  readOnly: boolean,
+  style?: StyleProp<ViewStyle>,
+  containerStyle?: StyleOverwrite<CheckboxState, CheckboxStyle>,
+  stateLayerStyle?: StyleOverwrite<CheckboxState, CheckboxStateLayerStyle>,
+  hitSlop: PressableProps['hitSlop'],
+}
+
+const CheckboxContent = ({
+  pressableState,
+  value,
+  indeterminate,
+  size,
+  isRounded,
+  color,
+  invalid,
+  disabled,
+  readOnly,
+  style,
+  containerStyle,
+  stateLayerStyle,
+  hitSlop,
+}: CheckboxContentProps) => {
+  const { theme } = useTheme()
+  const { hitBox } = useDebugContext()
+
+  const state = useMemo((): CheckboxState => ({
+    size,
+    color,
+    isChecked: value,
+    isIndeterminate: indeterminate,
+    isInvalid: invalid,
+    isDisabled: disabled,
+    isReadonly: readOnly,
+    isRounded,
+    isPressed: pressableState.pressed,
+    isHovered: !!pressableState.hovered,
+    isFocused: !!pressableState.focused,
+    isFocusVisible: !!pressableState.focusVisible,
+  }), [
+    size,
+    color,
+    value,
+    indeterminate,
+    invalid,
+    disabled,
+    readOnly,
+    isRounded,
+    pressableState.pressed,
+    pressableState.hovered,
+    pressableState.focused,
+    pressableState.focusVisible,
+  ])
+
+  const resolvedContainerStyle = useMemoizedTheme(theme.components.checkbox.container, state, containerStyle)
+  const resolvedStateLayerStyle = useMemoizedTheme(theme.components.checkbox.stateLayer, state, stateLayerStyle)
+  const resolvedIcon = useMemoizedTheme(theme.components.checkbox.icon, state)
+  const showIcon = !!(indeterminate || value)
+
+  return (
+    <View style={[resolvedContainerStyle, style]}>
+      {hitBox.isVisualizing && (
+        <View
+          pointerEvents="none"
+          style={createHitBoxOverlayStyle(hitSlop, hitBox.color)}
+        />
+      )}
+      <View
+        pointerEvents="none"
+        style={resolvedStateLayerStyle}
+      />
+      {showIcon && (
+        <ThemedIcon
+          icon={indeterminate ? HightideIconRegistry.Minus : HightideIconRegistry.Check}
+          size={resolvedIcon.size}
+          color={resolvedIcon.color}
+        />
+      )}
+    </View>
+  )
 }
 
 export const Checkbox = ({
@@ -74,7 +156,6 @@ export const Checkbox = ({
   ...props
 }: CheckboxProps) => {
   const { theme } = useTheme()
-  const { hitBox } = useDebugContext()
   const { hitSlop, onLayout } = useMinimumTouchTargetHitSlop({
     touchTargetSize: theme.semantics.touchTargetSize({}),
     hitSlop: providedHitSlop,
@@ -96,21 +177,6 @@ export const Checkbox = ({
     defaultValue: initialValue,
   })
 
-  const resolveState = (interaction: PressableInteraction): CheckboxState => ({
-    size,
-    color,
-    isChecked: value,
-    isIndeterminate: indeterminate,
-    isInvalid: invalid,
-    isDisabled: disabled,
-    isReadonly: readOnly,
-    isRounded,
-    isPressed: interaction.pressed,
-    isHovered: !!interaction.hovered,
-    isFocused: !!interaction.focused,
-    isFocusVisible: !!interaction.focusVisible,
-  })
-
   return (
     <Pressable
       {...props}
@@ -128,38 +194,24 @@ export const Checkbox = ({
         }
         props.onPress?.(event)
       }}
-      style={(pressableState) => {
-        const state = resolveState(pressableState as PressableInteraction)
-        return [theme.components.checkbox.container(state, containerStyle), style]
-      }}
     >
-      {(pressableState) => {
-        const state = resolveState(pressableState as PressableInteraction)
-        const resolvedIcon = theme.components.checkbox.icon(state)
-        const showIcon = !!(indeterminate || value)
-
-        return (
-          <Fragment>
-            {hitBox.isVisualizing && (
-              <View
-                pointerEvents="none"
-                style={createHitBoxOverlayStyle(hitSlop, hitBox.color)}
-              />
-            )}
-            <View
-              pointerEvents="none"
-              style={theme.components.checkbox.stateLayer(state, stateLayerStyle)}
-            />
-            {showIcon && (
-              <ThemedIcon
-                icon={indeterminate ? HightideIconRegistry.Minus : HightideIconRegistry.Check}
-                size={resolvedIcon.size}
-                color={resolvedIcon.color}
-              />
-            )}
-          </Fragment>
-        )
-      }}
+      {(pressableState) => (
+        <CheckboxContent
+          pressableState={pressableState as PressableInteractionState}
+          value={value}
+          indeterminate={indeterminate}
+          size={size}
+          isRounded={isRounded}
+          color={color}
+          invalid={invalid}
+          disabled={disabled}
+          readOnly={readOnly}
+          style={style}
+          containerStyle={containerStyle}
+          stateLayerStyle={stateLayerStyle}
+          hitSlop={hitSlop}
+        />
+      )}
     </Pressable>
   )
 }

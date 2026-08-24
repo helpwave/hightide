@@ -1,4 +1,4 @@
-import { Fragment, useMemo } from 'react'
+import { useMemo } from 'react'
 import {
   FlatList,
   Modal,
@@ -16,18 +16,173 @@ import { IconButton } from './IconButton'
 import { SearchBar } from './SearchBar'
 import { HightideIconRegistry } from '../../icons/HightideIconRegistry'
 import { useTheme } from '../../global-contexts/theme/ThemeContext'
+import { useMemoizedTheme } from '../../hooks/useMemoizedTheme'
 import {
   useMultiSelect,
   type UseMultiSelectOption
 } from '../../hooks/useMultiSelect'
-import type { MultiSelectState } from '../../theme/types/components/multiSelect'
+import type {
+  MultiSelectOptionState,
+  MultiSelectState,
+  MultiSelectThemeResolvers
+} from '../../theme/types/components/multiSelect'
+import type { IconStyle } from '../../icons'
 import type {
   FormFieldDataHandling,
   FormFieldInteractionStates
 } from '../../types/formField'
 import { useTranslation } from '@helpwave/hightide-utils/context'
+import type { PressableInteractionState } from '../../utils/pressableInteraction'
 
 export type MultiSelectOption = UseMultiSelectOption
+
+type MultiSelectTriggerContentProps = {
+  pressableState: PressableInteractionState,
+  state: MultiSelectState,
+  placeholder: string,
+  selectedOptions: ReadonlyArray<MultiSelectOption>,
+  multiSelectTheme: MultiSelectThemeResolvers,
+  color?: ColorPairToken,
+  interactive: boolean,
+  onRemove: (optionId: string) => void,
+  removeLabel: string,
+  iconSizeSm: number,
+}
+
+const MultiSelectTriggerContent = ({
+  pressableState,
+  state,
+  placeholder,
+  selectedOptions,
+  multiSelectTheme,
+  color,
+  interactive,
+  onRemove,
+  removeLabel,
+  iconSizeSm,
+}: MultiSelectTriggerContentProps) => {
+  const { theme } = useTheme()
+
+  const triggerState = useMemo((): MultiSelectState => ({
+    ...state,
+    isPressed: pressableState.pressed,
+    isHovered: !!pressableState.hovered,
+    isFocused: !!pressableState.focused,
+    isFocusVisible: !!pressableState.focusVisible,
+  }), [
+    state,
+    pressableState.pressed,
+    pressableState.hovered,
+    pressableState.focused,
+    pressableState.focusVisible,
+  ])
+
+  const resolvedTriggerStyle = useMemoizedTheme(multiSelectTheme.trigger, triggerState)
+  const resolvedStateLayerStyle = useMemoizedTheme(multiSelectTheme.stateLayer, triggerState)
+  const resolvedTriggerTextStyle = useMemoizedTheme(multiSelectTheme.triggerText, triggerState)
+
+  return (
+    <View style={resolvedTriggerStyle}>
+      <View pointerEvents="none" style={resolvedStateLayerStyle} />
+      {selectedOptions.length > 0
+        ? (
+          <View style={{ flexDirection: 'row', flexWrap: 'wrap', gap: 6, flex: 1 }}>
+            {selectedOptions.map((option) => (
+              <Chip key={option.id} size="md" color={color} variant="tonal">
+                <ThemedText>{option.label ?? option.id}</ThemedText>
+                {!state.isReadonly && (
+                  <View
+                    style={{
+                      position: 'relative',
+                      width: iconSizeSm,
+                      height: iconSizeSm,
+                    }}
+                  >
+                    <IconButton
+                      accessibilityLabel={removeLabel}
+                      size="sm"
+                      color={theme.colors.negative}
+                      variant="foreground"
+                      disabled={!interactive}
+                      onPress={() => onRemove(option.id)}
+                      style={{
+                        position: 'absolute',
+                        left: '50%',
+                        top: '50%',
+                        transform: [
+                          { translateX: '-50%' },
+                          { translateY: '-50%' },
+                        ],
+                      }}
+                      icon={HightideIconRegistry.X}
+                    />
+                  </View>
+                )}
+              </Chip>
+            ))}
+          </View>
+        )
+        : (
+          <ThemedText style={resolvedTriggerTextStyle}>
+            {placeholder}
+          </ThemedText>
+        )}
+    </View>
+  )
+}
+
+type MultiSelectOptionRowProps = {
+  item: MultiSelectOption,
+  selected: boolean,
+  isHighlighted: boolean,
+  color?: ColorPairToken,
+  multiSelectTheme: MultiSelectThemeResolvers,
+  onToggle: () => void,
+}
+
+const MultiSelectOptionRow = ({
+  item,
+  selected,
+  isHighlighted,
+  color,
+  multiSelectTheme,
+  onToggle,
+}: MultiSelectOptionRowProps) => {
+  const { theme } = useTheme()
+  const optionState = useMemo((): MultiSelectOptionState => ({
+    color,
+    isSelected: selected,
+    isHighlighted,
+    isDisabled: item.disabled,
+  }), [color, selected, isHighlighted, item.disabled])
+  const resolvedCheckboxStyle = useMemoizedTheme(multiSelectTheme.checkbox, optionState)
+  const checkboxIcon = useMemoizedTheme<MultiSelectOptionState, IconStyle>(
+    multiSelectTheme.checkboxIcon,
+    optionState
+  )
+  const optionColor = selected
+    ? (color ?? theme.colors.primary)
+    : undefined
+
+  return (
+    <ListActionItem
+      title={item.label ?? item.id}
+      color={optionColor}
+      disabled={item.disabled}
+      onPress={onToggle}
+      leading={(
+        <View style={resolvedCheckboxStyle}>
+          <ThemedIcon
+            icon={HightideIconRegistry.Check}
+            size={checkboxIcon.size}
+            strokeWidth={checkboxIcon.strokeWidth}
+            color={checkboxIcon.color}
+          />
+        </View>
+      )}
+    />
+  )
+}
 
 export type MultiSelectProps = Partial<FormFieldDataHandling<string[]>>
   & Partial<FormFieldInteractionStates>
@@ -85,22 +240,10 @@ export const MultiSelect = ({
 
   const multiSelectTheme = theme.components.multiSelect
 
-  const resolvedOverlayStyle = useMemo(
-    () => multiSelectTheme.overlay({}),
-    [multiSelectTheme]
-  )
-  const resolvedMenuStyle = useMemo(
-    () => multiSelectTheme.menu({ hasSearch: isSearchVisible }),
-    [multiSelectTheme, isSearchVisible]
-  )
-  const resolvedHeaderStyle = useMemo(
-    () => multiSelectTheme.header({}),
-    [multiSelectTheme]
-  )
-  const resolvedEmptyTextStyle = useMemo(
-    () => multiSelectTheme.emptyText({}),
-    [multiSelectTheme]
-  )
+  const resolvedOverlayStyle = useMemoizedTheme(multiSelectTheme.overlay, {})
+  const resolvedMenuStyle = useMemoizedTheme(multiSelectTheme.menu, { hasSearch: isSearchVisible })
+  const resolvedHeaderStyle = useMemoizedTheme(multiSelectTheme.header, {})
+  const resolvedEmptyTextStyle = useMemoizedTheme(multiSelectTheme.emptyText, {})
   const visibleOptions = useMemo(
     () => options.filter((option) => multiSelect.visibleOptionIds.includes(option.id)),
     [options, multiSelect.visibleOptionIds]
@@ -114,89 +257,21 @@ export const MultiSelect = ({
       <Pressable
         disabled={!interactive}
         onPress={() => multiSelect.toggleOpen()}
-        style={(pressableState) => {
-          const interaction = pressableState as {
-            pressed: boolean,
-            hovered?: boolean,
-            focused?: boolean,
-            focusVisible?: boolean,
-          }
-          return multiSelectTheme.trigger({
-            ...state,
-            isPressed: interaction.pressed,
-            isHovered: !!interaction.hovered,
-            isFocused: !!interaction.focused,
-            isFocusVisible: !!interaction.focusVisible,
-          })
-        }}
       >
-        {(pressableState) => {
-          const interaction = pressableState as {
-            pressed: boolean,
-            hovered?: boolean,
-            focused?: boolean,
-            focusVisible?: boolean,
-          }
-          const triggerState = {
-            ...state,
-            isPressed: interaction.pressed,
-            isHovered: !!interaction.hovered,
-            isFocused: !!interaction.focused,
-            isFocusVisible: !!interaction.focusVisible,
-          }
-
-          return (
-            <Fragment>
-              <View
-                pointerEvents="none"
-                style={multiSelectTheme.stateLayer(triggerState)}
-              />
-              {selectedOptions.length > 0
-                ? (
-                  <View style={{ flexDirection: 'row', flexWrap: 'wrap', gap: 6, flex: 1 }}>
-                    {selectedOptions.map((option) => (
-                      <Chip key={option.id} size="md" color={color} variant="tonal">
-                        <ThemedText>{option.label ?? option.id}</ThemedText>
-                        {!state.isReadonly && (
-                          <View
-                            style={{
-                              position: 'relative',
-                              width: theme.icongraphy.sizes.sm,
-                              height: theme.icongraphy.sizes.sm,
-                            }}
-                          >
-                            <IconButton
-                              accessibilityLabel={translation('remove')}
-                              size="sm"
-                              color={theme.colors.negative}
-                              variant="foreground"
-                              disabled={!interactive}
-                              onPress={() => multiSelect.toggleSelection(option.id, false)}
-                              style={{
-                                position: 'absolute',
-                                left: '50%',
-                                top: '50%',
-                                transform: [
-                                  { translateX: '-50%' },
-                                  { translateY: '-50%' },
-                                ],
-                              }}
-                              icon={HightideIconRegistry.X}
-                            />
-                          </View>
-                        )}
-                      </Chip>
-                    ))}
-                  </View>
-                )
-                : (
-                  <ThemedText style={multiSelectTheme.triggerText(triggerState)}>
-                    {placeholder}
-                  </ThemedText>
-                )}
-            </Fragment>
-          )
-        }}
+        {(pressableState) => (
+          <MultiSelectTriggerContent
+            pressableState={pressableState as PressableInteractionState}
+            state={state}
+            placeholder={placeholder}
+            selectedOptions={selectedOptions}
+            multiSelectTheme={multiSelectTheme}
+            color={color}
+            interactive={interactive}
+            onRemove={(optionId) => multiSelect.toggleSelection(optionId, false)}
+            removeLabel={translation('remove')}
+            iconSizeSm={theme.icongraphy.sizes.sm}
+          />
+        )}
       </Pressable>
 
       <Modal
@@ -239,39 +314,16 @@ export const MultiSelect = ({
                 data={visibleOptions}
                 keyExtractor={(option) => option.id}
                 style={{ flex: 1 }}
-                renderItem={({ item }) => {
-                  const selected = multiSelect.isSelected(item.id)
-                  const isHighlighted = multiSelect.highlightedId === item.id
-                  const optionState = {
-                    color,
-                    isSelected: selected,
-                    isHighlighted,
-                    isDisabled: item.disabled,
-                  }
-                  const checkboxIcon = multiSelectTheme.checkboxIcon(optionState)
-                  const optionColor = selected
-                    ? (color ?? theme.colors.primary)
-                    : undefined
-
-                  return (
-                    <ListActionItem
-                      title={item.label ?? item.id}
-                      color={optionColor}
-                      disabled={item.disabled}
-                      onPress={() => multiSelect.toggleSelection(item.id)}
-                      leading={(
-                        <View style={multiSelectTheme.checkbox(optionState)}>
-                          <ThemedIcon
-                            icon={HightideIconRegistry.Check}
-                            size={checkboxIcon.size}
-                            strokeWidth={checkboxIcon.strokeWidth}
-                            color={checkboxIcon.color}
-                          />
-                        </View>
-                      )}
-                    />
-                  )
-                }}
+                renderItem={({ item }) => (
+                  <MultiSelectOptionRow
+                    item={item}
+                    selected={multiSelect.isSelected(item.id)}
+                    isHighlighted={multiSelect.highlightedId === item.id}
+                    color={color}
+                    multiSelectTheme={multiSelectTheme}
+                    onToggle={() => multiSelect.toggleSelection(item.id)}
+                  />
+                )}
               />
             )}
           </Pressable>

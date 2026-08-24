@@ -82,6 +82,7 @@ export const Button = forwardRef<React.ComponentRef<typeof Pressable>, ButtonPro
   const resolvedContainerStyle = useMemoizedTheme(theme.components.button.container, resolvedState, style)
   const resolvedTextStyle = useMemoizedTheme(theme.components.button.text, resolvedState, textStyle)
   const resolvedIcon = useMemoizedTheme(theme.components.button.icon, resolvedState, iconStyle)
+  const resolvedStateLayerStyle = useMemoizedTheme(theme.components.button.stateLayer, resolvedState, stateLayerStyle)
 
   return (
     <Pressable
@@ -108,7 +109,7 @@ export const Button = forwardRef<React.ComponentRef<typeof Pressable>, ButtonPro
       )}
       <View
         pointerEvents="none"
-        style={theme.components.button.stateLayer(resolvedState, stateLayerStyle)}
+        style={resolvedStateLayerStyle}
       />
       <ContentThemeOverrideProvider
         foreground={resolvedTextStyle?.color}

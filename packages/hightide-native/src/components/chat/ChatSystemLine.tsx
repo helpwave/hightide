@@ -15,6 +15,7 @@ import { HightideIconRegistry } from '../../icons/HightideIconRegistry'
 import { ThemedIcon } from '../visualization-and-display/ThemedIcon'
 import { ThemedText } from '../visualization-and-display/ThemedText'
 import { useTheme } from '../../global-contexts/theme/ThemeContext'
+import { useMemoizedTheme } from '../../hooks/useMemoizedTheme'
 import type {
   ChatSystemLineState,
   ChatSystemLineStyle,
@@ -43,18 +44,9 @@ export const ChatSystemLine = ({
   const { theme } = useTheme()
   const state = useMemo(() => ({ color }), [color])
 
-  const resolvedLineStyle = useMemo(
-    () => theme.components.chat.systemLine.container(state, lineStyle),
-    [theme, state, lineStyle]
-  )
-  const resolvedTextStyle = useMemo(
-    () => theme.components.chat.systemLine.text(state, textStyle),
-    [theme, state, textStyle]
-  )
-  const resolvedIcon = useMemo(
-    () => theme.components.chat.systemLine.icon(state),
-    [theme, state]
-  )
+  const resolvedLineStyle = useMemoizedTheme(theme.components.chat.systemLine.container, state, lineStyle)
+  const resolvedTextStyle = useMemoizedTheme(theme.components.chat.systemLine.text, state, textStyle)
+  const resolvedIcon = useMemoizedTheme(theme.components.chat.systemLine.icon, state)
 
   return (
     <View {...props} style={[resolvedLineStyle, style]}>
