@@ -28,7 +28,7 @@ export const ThemeSelect = () => {
       <Select
         options={options}
         value={themeMode}
-        showSearch={false}
+        searchableThreshold={Number.POSITIVE_INFINITY}
         onValueChange={(value) => setTheme(value)}
       />
     </View>

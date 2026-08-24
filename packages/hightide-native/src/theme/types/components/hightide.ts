@@ -19,6 +19,7 @@ import type { ListItemThemeResolvers } from './listItem'
 import type { MultiSelectThemeResolvers } from './multiSelect'
 import type { SelectThemeResolvers } from './select'
 import type { SwitchThemeResolvers } from './switch'
+import type { TextareaThemeResolvers } from './textarea'
 import type { ThemedPressableThemeResolvers } from './themedPressable'
 
 export type IconThemeResolvers = Record<IconSize, IconTokens>
@@ -31,6 +32,7 @@ export type HightideComponentThemes = {
   checkbox: CheckboxThemeResolvers,
   switch: SwitchThemeResolvers,
   input: InputThemeResolvers,
+  textarea: TextareaThemeResolvers,
   searchBar: SearchBarThemeResolvers,
   select: SelectThemeResolvers,
   multiSelect: MultiSelectThemeResolvers,

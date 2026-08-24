@@ -63,6 +63,10 @@ import {
   switchTokenResolver,
   type SwitchTokenResolver
 } from './switch-tokens'
+import {
+  textareaTokenResolver,
+  type TextareaTokenResolver
+} from './textarea-tokens'
 
 export type ComponentTokenResolvers = {
   button: ButtonTokenResolver,
@@ -72,6 +76,7 @@ export type ComponentTokenResolvers = {
   checkbox: CheckboxTokenResolver,
   switch: SwitchTokenResolver,
   input: InputTokenResolver,
+  textarea: TextareaTokenResolver,
   searchBar: SearchBarTokenResolver,
   select: SelectTokenResolver,
   multiSelect: MultiSelectTokenResolver,
@@ -93,6 +98,7 @@ export const componentTokenResolvers: ComponentTokenResolvers = {
   checkbox: checkboxTokenResolver,
   switch: switchTokenResolver,
   input: inputTokenResolver,
+  textarea: textareaTokenResolver,
   searchBar: searchBarTokenResolver,
   select: selectTokenResolver,
   multiSelect: multiSelectTokenResolver,
