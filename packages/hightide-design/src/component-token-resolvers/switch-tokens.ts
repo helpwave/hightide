@@ -47,6 +47,13 @@ export const switchTokenResolver: SwitchTokenResolver = ({
   const borderWidth = borderWidthTokens.normal
   const focusOutline = themeTokens.focusOutline
   const thumbSize = state.has('active') ? THUMB_SIZE_ACTIVE : THUMB_SIZE_INACTIVE
+  const trackInnerWidth = TRACK_WIDTH - 2 * borderWidth
+  const trackInnerHeight = TRACK_HEIGHT - 2 * borderWidth
+  const thumbInset = (trackInnerHeight - thumbSize) / 2
+  const thumbLeft = state.has('active')
+    ? trackInnerWidth - thumbSize - thumbInset
+    : thumbInset
+  const thumbTop = thumbInset
   const subtleThumb = semanticResolvers.withAppearance({
     themeTokens,
     colorPair: color.surface,
@@ -81,6 +88,7 @@ export const switchTokenResolver: SwitchTokenResolver = ({
     container: {
       opacity: state.has('disabled') ? 0.6 : 1,
       layout: {
+        selfCrossAxisAlignment: 'start',
         direction: 'horizontal',
         mainAxisAlignment: 'center',
         crossAxisAlignment: 'center',
@@ -108,6 +116,9 @@ export const switchTokenResolver: SwitchTokenResolver = ({
       shape: {
         borderRadius: { type: 'all', value: TRACK_HEIGHT / 2 },
       },
+      position: {
+        type: 'relative',
+      },
       layout: {
         direction: 'horizontal',
         mainAxisAlignment: 'start',
@@ -126,6 +137,15 @@ export const switchTokenResolver: SwitchTokenResolver = ({
       },
       shape: {
         borderRadius: { type: 'all', value: thumbSize / 2 },
+      },
+      position: {
+        type: 'absolute',
+        top: thumbTop,
+      },
+      transform: {
+        translate: {
+          x: thumbLeft,
+        },
       },
     },
   }

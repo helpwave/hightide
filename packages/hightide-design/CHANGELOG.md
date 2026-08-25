@@ -16,6 +16,7 @@ and adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 ### Changed
 
 - Renamed container layout token `crossAxisAligment` to `crossAxisAlignment` (`CrossAxisAlignmentToken`)
+- Switch thumb layout is resolved from state: track is `relative`, thumb is `absolute` with `top` and `transform.translate.x` (plus size) instead of native offset math
 
 ## [0.6.0] - 2026-08-21
 

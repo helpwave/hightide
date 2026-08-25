@@ -9,11 +9,13 @@ and adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
 ### Added
 
-- `StyleAdapterUtils.container` maps `ContainerTokens.position` and `ContainerTokens.transform` from `@helpwave/hightide-design@0.8.0` to React Native `position` / inset and `transform` styles
+- `StyleAdapterUtils.container` maps `ContainerTokens.position` and `ContainerTokens.transform` from `@helpwave/hightide-design@0.7.0` to React Native `position` / inset and `transform` styles
+- `useAnimatedStyleTransition` interpolates listed `ViewStyle` keys from the captured in-flight style to the next style (`animatedAttributes`; `position` includes `left` / `right` / `top` / `bottom`)
 
 ### Changed
 
 - `Checkbox`, `ThemedPressable`, `IconButton`, and `Switch` render their content in the component and track `isPressed` with `onPressIn` / `onPressOut` instead of Pressable children state
+- `Switch` thumbs use design position/transform tokens and animate `transform`, `position`, `width`, and `height` instead of interpolating local offset math
 
 ### Fixed
 
