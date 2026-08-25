@@ -2,11 +2,11 @@ import {
   cloneElement,
   isValidElement,
   useMemo,
+  useState,
   type ReactElement,
   type ReactNode
 } from 'react'
 import {
-  Pressable,
   StyleSheet,
   View,
   type PressableProps
@@ -37,11 +37,11 @@ import type {
   PressableTextStyle
 } from '../../theme/types/components/chat'
 import type { StyleOverwrite, StyleResolverFunction } from '../../theme/types/resolver'
-import type { PressableInteractionState } from '../../utils/pressableInteraction'
 import type { AvatarProps } from '../visualization-and-display/Avatar'
 
 import type { ChatMessageStatus } from '../../enums/chatMessageStatus'
 import type { IconComponent } from '../../icons/types'
+import { ThemedPressable } from '../user-interaction'
 
 export type { ChatMessageStatus }
 
@@ -71,15 +71,6 @@ type ConversationRowPressableResolvers = {
   icon: StyleResolverFunction<PressableState, PressableIconStyle>,
 }
 
-type PressableInteraction = PressableInteractionState
-
-const toPressableThemeState = (interaction: PressableInteraction): PressableState => ({
-  isPressed: interaction.pressed,
-  isHovered: !!interaction.hovered,
-  isFocused: !!interaction.focused,
-  isFocusVisible: !!interaction.focusVisible,
-})
-
 type AvatarElementProps = AvatarProps & {
   avatarStyle?: AvatarProps['avatarStyle'],
 }
@@ -94,39 +85,15 @@ const resolveMessageStatusIcon = (messageStatus: ChatMessageStatus): IconCompone
     : HightideIconRegistry.CheckCheck
 )
 
-type ChatConversationRowContentProps = {
-  pressableState: PressableInteraction,
-  avatar: ReactNode,
-  title: ReactNode,
-  timestamp?: ReactNode,
-  preview?: ReactNode,
-  unreadCount?: number,
-  isUnread: boolean,
-  isSelected: boolean,
-  disabled?: boolean,
-  messageStatus?: ChatMessageStatus,
-  style?: StyleOverwrite<PressableState, PressableContainerStyle>,
-  contentContainerStyle?: StyleOverwrite<ChatConversationRowState, ChatConversationRowContentContainerStyle>,
-  headerRowStyle?: StyleOverwrite<ChatConversationRowState, ChatConversationRowHeaderRowStyle>,
-  messageRowStyle?: StyleOverwrite<ChatConversationRowState, ChatConversationRowMessageRowStyle>,
-  titleStyle?: StyleOverwrite<ChatConversationRowState, ChatConversationRowTitleStyle>,
-  timestampStyle?: StyleOverwrite<ChatConversationRowState, ChatConversationRowTimestampStyle>,
-  previewStyle?: StyleOverwrite<ChatConversationRowState, ChatConversationRowPreviewStyle>,
-  sentIndicatorStyle?: StyleOverwrite<Record<string, never>, ChatConversationRowSentIndicatorStyle>,
-  avatarStyle?: StyleOverwrite<AvatarState, AvatarStyle>,
-}
-
-const ChatConversationRowContent = ({
-  pressableState,
+export const ChatConversationRow = ({
   avatar,
   title,
   timestamp,
   preview,
   unreadCount,
-  isUnread,
-  isSelected,
-  disabled,
+  isSelected = false,
   messageStatus,
+  disabled,
   style,
   contentContainerStyle,
   headerRowStyle,
@@ -136,32 +103,24 @@ const ChatConversationRowContent = ({
   previewStyle,
   sentIndicatorStyle,
   avatarStyle,
-}: ChatConversationRowContentProps) => {
+  ...props
+}: ChatConversationRowProps) => {
   const { theme } = useTheme()
+  const [isPressed, setIsPressed] = useState(false)
+  const isUnread = (unreadCount ?? 0) > 0
   const staticState = useMemo(() => ({}), [])
 
   const rowState = useMemo((): ChatConversationRowState => ({
     isUnread,
     isSelected,
     isDisabled: !!disabled,
-    isPressed: pressableState.pressed,
-    isHovered: !!pressableState.hovered,
-    isFocused: !!pressableState.focused,
-    isFocusVisible: !!pressableState.focusVisible,
-  }), [
-    isUnread,
-    isSelected,
-    disabled,
-    pressableState.pressed,
-    pressableState.hovered,
-    pressableState.focused,
-    pressableState.focusVisible,
-  ])
+    isPressed,
+  }), [disabled, isPressed, isSelected, isUnread])
 
-  const pressableThemeState = useMemo(
-    () => toPressableThemeState(pressableState),
-    [pressableState]
-  )
+  const pressableThemeState = useMemo((): PressableState => ({
+    isPressed,
+    isDisabled: !!disabled,
+  }), [disabled, isPressed])
 
   const pressableResolvers = useMemoizedThemeFactory<
     ChatConversationRowState,
@@ -170,7 +129,6 @@ const ChatConversationRowContent = ({
 
   const resolvedContainerStyle = useMemoizedTheme(pressableResolvers.container, pressableThemeState, style)
   const resolvedStateLayerStyle = useMemoizedTheme(pressableResolvers.stateLayer, pressableThemeState)
-  const resolvedTextStyle = useMemoizedTheme(pressableResolvers.text, pressableThemeState)
   const resolvedContentContainer = useMemoizedTheme(theme.components.chat.conversationRow.contentContainer, rowState, contentContainerStyle)
   const resolvedHeaderRow = useMemoizedTheme(theme.components.chat.conversationRow.headerRow, rowState, headerRowStyle)
   const resolvedMessageRow = useMemoizedTheme(theme.components.chat.conversationRow.messageRow, rowState, messageRowStyle)
@@ -236,102 +194,61 @@ const ChatConversationRowContent = ({
   }, [avatar, avatarSize, avatarStyle, avatarTheme])
 
   return (
-    <View style={resolvedContainerStyle}>
-      <View pointerEvents="none" style={resolvedStateLayerStyle} />
-      <View style={{ flexDirection: 'row', alignItems: 'center' }}>
-        {resolvedAvatar}
-        <View style={resolvedContentContainer}>
-          <View style={resolvedHeaderRow}>
-            {typeof title === 'string' || typeof title === 'number' ? (
-              <ThemedText style={[resolvedTitle, resolvedTextStyle]} numberOfLines={1}>{title}</ThemedText>
+    <ThemedPressable
+      {...props}
+      disabled={disabled}
+      style={resolvedContainerStyle}
+      stateLayerStyle={resolvedStateLayerStyle}
+      onPressIn={(event) => {
+        setIsPressed(true)
+        props.onPressIn?.(event)
+      }}
+      onPressOut={(event) => {
+        setIsPressed(false)
+        props.onPressOut?.(event)
+      }}
+    >
+      {resolvedAvatar}
+      <View style={resolvedContentContainer}>
+        <View style={resolvedHeaderRow}>
+          {typeof title === 'string' || typeof title === 'number' ? (
+            <ThemedText style={resolvedTitle} numberOfLines={1}>{title}</ThemedText>
+          ) : (
+            title
+          )}
+          {timestamp != null && (
+            typeof timestamp === 'string' || typeof timestamp === 'number' ? (
+              <ThemedText style={resolvedTimestamp}>{timestamp}</ThemedText>
             ) : (
-              title
+              timestamp
+            )
+          )}
+        </View>
+        <View style={resolvedMessageRow}>
+          <View style={{ flexDirection: 'row', alignItems: 'center', flex: 1, gap: theme.spacing.sm }}>
+            {messageStatusIcon != null && (
+              <ThemedIcon
+                icon={messageStatusIcon}
+                size={resolvedSentIndicator.size}
+                strokeWidth={resolvedSentIndicator.strokeWidth}
+                color={messageStatusIconColor}
+              />
             )}
-            {timestamp != null && (
-              typeof timestamp === 'string' || typeof timestamp === 'number' ? (
-                <ThemedText style={[resolvedTimestamp, resolvedTextStyle]}>{timestamp}</ThemedText>
+            {preview != null && (
+              typeof preview === 'string' || typeof preview === 'number' ? (
+                <ThemedText style={resolvedPreview} numberOfLines={1}>{preview}</ThemedText>
               ) : (
-                timestamp
+                preview
               )
             )}
           </View>
-          <View style={resolvedMessageRow}>
-            <View style={{ flexDirection: 'row', alignItems: 'center', flex: 1, gap: theme.spacing.xs }}>
-              {messageStatusIcon != null && (
-                <ThemedIcon
-                  icon={messageStatusIcon}
-                  size={resolvedSentIndicator.size}
-                  strokeWidth={resolvedSentIndicator.strokeWidth}
-                  color={messageStatusIconColor}
-                />
-              )}
-              {preview != null && (
-                typeof preview === 'string' || typeof preview === 'number' ? (
-                  <ThemedText style={[resolvedPreview, resolvedTextStyle]} numberOfLines={1}>{preview}</ThemedText>
-                ) : (
-                  preview
-                )
-              )}
+          {isUnread && (
+            <View style={unreadBadge}>
+              <ThemedText style={unreadBadgeText}>{unreadCount}</ThemedText>
             </View>
-            {isUnread && (
-              <View style={unreadBadge}>
-                <ThemedText style={unreadBadgeText}>{unreadCount}</ThemedText>
-              </View>
-            )}
-          </View>
+          )}
         </View>
       </View>
-    </View>
-  )
-}
-
-export const ChatConversationRow = ({
-  avatar,
-  title,
-  timestamp,
-  preview,
-  unreadCount,
-  isSelected = false,
-  messageStatus,
-  disabled,
-  style,
-  contentContainerStyle,
-  headerRowStyle,
-  messageRowStyle,
-  titleStyle,
-  timestampStyle,
-  previewStyle,
-  sentIndicatorStyle,
-  avatarStyle,
-  ...props
-}: ChatConversationRowProps) => {
-  const isUnread = (unreadCount ?? 0) > 0
-
-  return (
-    <Pressable {...props} disabled={disabled}>
-      {(pressableState) => (
-        <ChatConversationRowContent
-          pressableState={pressableState as PressableInteraction}
-          avatar={avatar}
-          title={title}
-          timestamp={timestamp}
-          preview={preview}
-          unreadCount={unreadCount}
-          isUnread={isUnread}
-          isSelected={isSelected}
-          disabled={disabled ?? false}
-          messageStatus={messageStatus}
-          style={style}
-          contentContainerStyle={contentContainerStyle}
-          headerRowStyle={headerRowStyle}
-          messageRowStyle={messageRowStyle}
-          titleStyle={titleStyle}
-          timestampStyle={timestampStyle}
-          previewStyle={previewStyle}
-          sentIndicatorStyle={sentIndicatorStyle}
-          avatarStyle={avatarStyle}
-        />
-      )}
-    </Pressable>
+    </ThemedPressable>
   )
 }

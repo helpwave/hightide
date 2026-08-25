@@ -97,7 +97,7 @@ export const chatConversationRowTokenResolver: ChatConversationRowTokenResolver 
           direction: 'horizontal',
           crossAxisAlignment: 'center',
           selfCrossAxisAlignment: 'stretch',
-          gap: padding.xl,
+          gap: spacing.md,
         },
       },
       stateLayer: {
@@ -121,7 +121,7 @@ export const chatConversationRowTokenResolver: ChatConversationRowTokenResolver 
         crossAxisAlignment: 'center',
         flexGrow: 1,
         mainAxisAlignment: 'space-between',
-        gap: spacing.sm,
+        gap: spacing.md,
       },
     },
     title,
@@ -154,6 +154,7 @@ export const chatConversationRowTokenResolver: ChatConversationRowTokenResolver 
       ...typography.body.sm,
       fontWeight: fontWeights.bold,
       color: color.primary.onColor,
+      textAlign: 'center',
     },
     sentIndicator: {
       size: themeTokens.icongraphy.sizes.xs,

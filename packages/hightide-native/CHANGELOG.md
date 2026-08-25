@@ -17,7 +17,7 @@ and adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
 - `Select` and `MultiSelect` take `SelectOption` / `MultiSelectOption` children instead of an `options` array
 - `Button`, `IconButton`, and `ThemedPressable` state-layer fill positioning comes from design tokens instead of native resolver overrides
-- `Checkbox`, `ThemedPressable`, `IconButton`, and `Switch` render their content in the component and track `isPressed` with `onPressIn` / `onPressOut` instead of Pressable children state
+- `Checkbox`, `ThemedPressable`, `IconButton`, `Switch`, and `ChatConversationRow` render their content in the component and track `isPressed` with `onPressIn` / `onPressOut` instead of Pressable children state
 - `Switch` thumbs use design position/transform tokens and animate `transform`, `position`, `width`, and `height` instead of interpolating local offset math
 
 ### Fixed
