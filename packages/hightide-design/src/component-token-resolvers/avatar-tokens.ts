@@ -35,6 +35,7 @@ export type AvatarComponentResolverProps = {
 
 export type AvatarTokens = {
   container: ContainerTokens,
+  image: ContainerTokens,
   text: TextStyleTokens,
   icon: IconTokens,
 }
@@ -93,6 +94,23 @@ export const avatarTokenResolver: AvatarTokenResolver = ({
           shadow: raised,
         },
       } : {}),
+    },
+    image: {
+      size: {
+        width: dimension,
+        height: dimension,
+      },
+      shape: {
+        borderRadius: {
+          type: 'all',
+          value: borderRadius,
+        },
+      },
+      position: {
+        type: 'absolute',
+        left: 0,
+        top: 0,
+      },
     },
     text: {
       ...typography.label.sm,

@@ -4,7 +4,11 @@ import {
 } from 'react'
 import { View } from 'react-native'
 
-import { Select, ThemedText } from '@helpwave/hightide-native/components'
+import {
+  Select,
+  SelectOption,
+  ThemedText
+} from '@helpwave/hightide-native/components'
 import { useTheme } from '@helpwave/hightide-native/global-contexts'
 
 export const ThemeSelect = () => {
@@ -26,11 +30,18 @@ export const ThemeSelect = () => {
     <View style={{ gap: 8, marginBottom: 16, maxWidth: 320 }}>
       <ThemedText>Theme</ThemedText>
       <Select
-        options={options}
         value={themeMode}
         searchableThreshold={Number.POSITIVE_INFINITY}
         onValueChange={(value) => setTheme(value)}
-      />
+      >
+        {options.map((option) => (
+          <SelectOption
+            key={option.id}
+            value={option.id}
+            label={option.label}
+          />
+        ))}
+      </Select>
     </View>
   )
 }
