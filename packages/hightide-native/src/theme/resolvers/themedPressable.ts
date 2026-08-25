@@ -36,19 +36,9 @@ export const toThemedPressableThemeResolvers: ComponentThemeResolver<ThemedPress
       ...StyleAdapterUtils.container(resolve(state).container),
       alignSelf: 'flex-start',
     })),
-    stateLayer: createStyleResolver((state: ThemedPressableState): ThemedPressableStyle => {
-      const tokens = resolve(state)
-
-      return {
-        ...StyleAdapterUtils.container(tokens.stateLayer),
-        position: 'absolute',
-        top: 0,
-        right: 0,
-        bottom: 0,
-        left: 0,
-        zIndex: 20,
-      }
-    }),
+    stateLayer: createStyleResolver((state: ThemedPressableState): ThemedPressableStyle => (
+      StyleAdapterUtils.container(resolve(state).stateLayer)
+    )),
     icon: createStyleResolver((state: ThemedPressableState): ThemedPressableIconStyle => (
       StyleAdapterUtils.icon(resolve(state).icon)
     )),

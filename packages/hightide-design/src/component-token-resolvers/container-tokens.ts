@@ -18,6 +18,7 @@ export type OverflowToken = 'visible' | 'hidden' | 'scroll'
 export type SizeToken = number | `${number}%`
 export type StaticPositionTokens = {
   type: 'static',
+  zIndex?: number,
 }
 export type RelativePositionTokens = {
   type: 'relative',
@@ -25,6 +26,7 @@ export type RelativePositionTokens = {
   right?: SizeToken,
   top?: SizeToken,
   bottom?: SizeToken,
+  zIndex?: number,
 }
 export type AbsolutePositionTokens = {
   type: 'absolute',
@@ -32,6 +34,7 @@ export type AbsolutePositionTokens = {
   right?: SizeToken,
   top?: SizeToken,
   bottom?: SizeToken,
+  zIndex?: number,
 }
 export type PositioningToken = StaticPositionTokens | RelativePositionTokens | AbsolutePositionTokens
 export type DegreeToken = `${string}deg`

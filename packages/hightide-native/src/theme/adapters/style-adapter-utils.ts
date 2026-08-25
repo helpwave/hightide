@@ -405,15 +405,17 @@ const positionStyleAdapter = (
   | 'right'
   | 'top'
   | 'bottom'
+  | 'zIndex'
 > | undefined => {
   if (position === undefined) {
     return undefined
   }
 
   if (position.type === 'static') {
-    return {
-      position: 'static',
-    }
+    return defined({
+      position: position.type,
+      zIndex: position.zIndex,
+    })
   }
 
   return defined({
@@ -422,6 +424,7 @@ const positionStyleAdapter = (
     right: position.right,
     top: position.top,
     bottom: position.bottom,
+    zIndex: position.zIndex,
   })
 }
 

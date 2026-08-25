@@ -14,6 +14,8 @@ export type InputState = InteractionState & {
 
 export type InputContainerStyle = ViewStyle
 
+export type InputStateLayerStyle = ViewStyle
+
 export type InputTextStyle = TextStyle
 
 export type InputPlaceholderStyle = TextStyle
@@ -22,6 +24,7 @@ export type InputIconStyle = IconStyle
 
 export type InputThemeResolvers = {
   container: StyleResolverFunction<InputState, InputContainerStyle>,
+  stateLayer: StyleResolverFunction<InputState, InputStateLayerStyle>,
   text: StyleResolverFunction<InputState, InputTextStyle>,
   placeholder: StyleResolverFunction<InputState, InputPlaceholderStyle>,
   icon: StyleResolverFunction<InputState, InputIconStyle>,

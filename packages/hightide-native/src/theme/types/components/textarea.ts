@@ -3,6 +3,7 @@ export type {
   InputIconStyle as TextareaIconStyle,
   InputPlaceholderStyle as TextareaPlaceholderStyle,
   InputState as TextareaState,
+  InputStateLayerStyle as TextareaStateLayerStyle,
   InputTextStyle as TextareaTextStyle,
   InputThemeResolvers as TextareaThemeResolvers
 } from './input'

@@ -33,18 +33,9 @@ export const toButtonThemeResolvers: ComponentThemeResolver<ButtonThemeResolvers
     container: createStyleResolver((state: ButtonState): ButtonStyle => (
       StyleAdapterUtils.container(resolve(state).container)
     )),
-    stateLayer: createStyleResolver((state: ButtonState): ButtonStyle => {
-      const tokens = resolve(state)
-      return {
-        ...StyleAdapterUtils.container(tokens.stateLayer),
-        position: 'absolute',
-        top: 0,
-        right: 0,
-        bottom: 0,
-        left: 0,
-        zIndex: 20,
-      }
-    }),
+    stateLayer: createStyleResolver((state: ButtonState): ButtonStyle => (
+      StyleAdapterUtils.container(resolve(state).stateLayer)
+    )),
     icon: createStyleResolver((state: ButtonState): ButtonIconStyle => (
       StyleAdapterUtils.icon(resolve(state).icon)
     )),

@@ -9,7 +9,8 @@ and adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
 ### Added
 
-- `position` on `ContainerTokens` (`PositioningToken`: `static` | `relative` | `absolute`, with optional `left` / `right` / `top` / `bottom` `SizeToken`s)
+- `position` on `ContainerTokens` (`PositioningToken`: `static` | `relative` | `absolute`, with optional `left` / `right` / `top` / `bottom` `SizeToken`s and `zIndex`)
+- Button, icon button, and pressable `stateLayer` tokens use absolute fill positioning (`top` / `right` / `bottom` / `left` 0, `zIndex` 20)
 - `transform` on `ContainerTokens` (`TransformTokens`: optional `translate`, `scale`, `rotation`, `skew`; `DegreeToken` for rotation)
 
 

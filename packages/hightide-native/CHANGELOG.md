@@ -10,12 +10,13 @@ and adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 ### Added
 
 - Compound `Select` / `MultiSelect` parts: Root (context), Trigger, Menu, Option, and a combined convenience component
-- `StyleAdapterUtils.container` maps `ContainerTokens.position` and `ContainerTokens.transform` from `@helpwave/hightide-design@0.7.0` to React Native `position` / inset and `transform` styles
+- `StyleAdapterUtils.container` maps `ContainerTokens.position` and `ContainerTokens.transform` from `@helpwave/hightide-design@0.7.0` to React Native `position` / inset / `zIndex` and `transform` styles
 - `useAnimatedStyleTransition` interpolates listed `ViewStyle` keys from the captured in-flight style to the next style (`animatedAttributes`; `position` includes `left` / `right` / `top` / `bottom`)
 
 ### Changed
 
 - `Select` and `MultiSelect` take `SelectOption` / `MultiSelectOption` children instead of an `options` array
+- `Button`, `IconButton`, and `ThemedPressable` state-layer fill positioning comes from design tokens instead of native resolver overrides
 - `Checkbox`, `ThemedPressable`, `IconButton`, and `Switch` render their content in the component and track `isPressed` with `onPressIn` / `onPressOut` instead of Pressable children state
 - `Switch` thumbs use design position/transform tokens and animate `transform`, `position`, `width`, and `height` instead of interpolating local offset math
 
