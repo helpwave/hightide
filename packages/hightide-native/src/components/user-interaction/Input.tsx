@@ -3,11 +3,9 @@ import {
   useMemo,
   useState
 } from 'react'
-import type {
-  TextStyle } from 'react-native'
 import {
-  StyleSheet,
   TextInput,
+  View,
   type TextInputProps
 } from 'react-native'
 
@@ -19,9 +17,11 @@ import {
 
 import type { ColorPairToken } from '@helpwave/hightide-design/theme-tokens'
 import { useTheme } from '../../global-contexts/theme/ThemeContext'
+import { useMemoizedTheme } from '../../hooks/useMemoizedTheme'
 import type {
   InputContainerStyle,
   InputState,
+  InputStateLayerStyle,
   InputTextStyle
 } from '../../theme/types/components/input'
 import type { StyleOverwrite } from '../../theme/types/resolver'
@@ -52,7 +52,8 @@ export type InputProps = Omit<TextInputProps, 'value' | 'style'>
     color?: ColorPairToken,
     editCompleteOptions?: EditCompleteOptions,
     initialValue?: string,
-    style?:  StyleOverwrite<InputState, InputContainerStyle>,
+    style?: StyleOverwrite<InputState, InputContainerStyle>,
+    stateLayerStyle?: StyleOverwrite<InputState, InputStateLayerStyle>,
     textStyle?: StyleOverwrite<InputState, InputTextStyle>,
   }
 
@@ -68,7 +69,10 @@ export const Input = forwardRef<TextInput, InputProps>(function Input({
   onEditComplete,
   editCompleteOptions,
   style,
+  stateLayerStyle,
   textStyle,
+  onPointerEnter,
+  onPointerLeave,
   ...props
 }, ref) {
   const { theme } = useTheme()
@@ -106,91 +110,76 @@ export const Input = forwardRef<TextInput, InputProps>(function Input({
     isFocused: interactive && isFocused,
   }), [color, disabled, invalid, readOnly, interactive, isHovered, isPressed, isFocused])
 
-  const resolvedContainerStyle = useMemo(
-    () => theme.components.input.container(state, style),
-    [theme, state, style]
-  )
-  const resolvedTextStyle = useMemo(
-    () => theme.components.input.text(state, textStyle),
-    [theme, state, textStyle]
-  )
-  const resolvedPlaceholderStyle = useMemo(
-    () => theme.components.input.placeholder(state),
-    [theme, state]
-  )
-
-
-  const resolvedStyle = useMemo(
-    () => {
-      const resolvedSheet: TextStyle = StyleSheet.flatten<TextStyle>([
-        resolvedContainerStyle,
-        resolvedTextStyle,
-      ])
-      // this is required for android to work
-      // TODO find a better solution like separating container and text input
-      delete resolvedSheet['boxShadow']
-      return resolvedSheet
-    },
-    [resolvedContainerStyle, resolvedTextStyle]
-  )
+  const resolvedContainerStyle = useMemoizedTheme(theme.components.input.container, state, style)
+  const resolvedStateLayerStyle = useMemoizedTheme(theme.components.input.stateLayer, state, stateLayerStyle)
+  const resolvedTextStyle = useMemoizedTheme(theme.components.input.text, state, textStyle)
+  const resolvedPlaceholderStyle = useMemoizedTheme(theme.components.input.placeholder, state)
 
   return (
-    <TextInput
-      {...props}
-      ref={ref}
-      value={value}
-      editable={interactive}
-      onChangeText={(nextValue) => {
-        props.onChangeText?.(nextValue)
-        restartTimer(() => {
-          onEditComplete?.(nextValue)
-        })
-        setValue(nextValue)
-      }}
-      onFocus={(event) => {
-        if (interactive) {
-          setIsFocused(true)
-        }
-        props.onFocus?.(event)
-      }}
-      onBlur={(event) => {
-        setIsFocused(false)
-        props.onBlur?.(event)
-        if (allowEditCompleteOnBlur) {
-          onEditComplete?.(value ?? '')
-          clearTimer()
-        }
-      }}
-      onPressIn={(event) => {
-        if (interactive) {
-          setIsPressed(true)
-        }
-        props.onPressIn?.(event)
-      }}
-      onPressOut={(event) => {
-        setIsPressed(false)
-        props.onPressOut?.(event)
-      }}
+    <View
+      style={resolvedContainerStyle}
       onPointerEnter={(event) => {
         if (interactive) {
           setIsHovered(true)
         }
-        props.onPointerEnter?.(event)
+        onPointerEnter?.(event)
       }}
       onPointerLeave={(event) => {
         setIsHovered(false)
-        props.onPointerLeave?.(event)
+        onPointerLeave?.(event)
       }}
-      onSubmitEditing={(event) => {
-        props.onSubmitEditing?.(event)
-        if (allowEnterComplete) {
-          onEditComplete?.(value ?? '')
-          clearTimer()
-        }
-      }}
-      placeholderTextColor={resolvedPlaceholderStyle.color}
-      style={resolvedStyle}
-      accessibilityState={{ disabled, selected: required }}
-    />
+    >
+      <View
+        pointerEvents="none"
+        style={resolvedStateLayerStyle}
+      />
+      <TextInput
+        {...props}
+        ref={ref}
+        value={value}
+        editable={interactive}
+        onChangeText={(nextValue) => {
+          props.onChangeText?.(nextValue)
+          restartTimer(() => {
+            onEditComplete?.(nextValue)
+          })
+          setValue(nextValue)
+        }}
+        onFocus={(event) => {
+          if (interactive) {
+            setIsFocused(true)
+          }
+          props.onFocus?.(event)
+        }}
+        onBlur={(event) => {
+          setIsFocused(false)
+          props.onBlur?.(event)
+          if (allowEditCompleteOnBlur) {
+            onEditComplete?.(value ?? '')
+            clearTimer()
+          }
+        }}
+        onPressIn={(event) => {
+          if (interactive) {
+            setIsPressed(true)
+          }
+          props.onPressIn?.(event)
+        }}
+        onPressOut={(event) => {
+          setIsPressed(false)
+          props.onPressOut?.(event)
+        }}
+        onSubmitEditing={(event) => {
+          props.onSubmitEditing?.(event)
+          if (allowEnterComplete) {
+            onEditComplete?.(value ?? '')
+            clearTimer()
+          }
+        }}
+        placeholderTextColor={resolvedPlaceholderStyle.color}
+        style={resolvedTextStyle}
+        accessibilityState={{ disabled, selected: required }}
+      />
+    </View>
   )
 })

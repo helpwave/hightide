@@ -27,7 +27,6 @@ import type {
 import {
   createSimpleStyleResolver,
   createStyleResolver,
-  createValueResolver,
   toPressableInteractionState,
   type ComponentThemeResolver
 } from '../../types/resolver'
@@ -57,7 +56,7 @@ export const toChatThreadHeaderThemeResolvers: ComponentThemeResolver<ChatThread
     subtitle: createSimpleStyleResolver((): ChatThreadHeaderSubtitleStyle => (
       StyleAdapterUtils.text(resolve().subtitle)
     )),
-    avatar: createValueResolver((state: AvatarState): AvatarThemeResolvers => {
+    avatar: createStyleResolver((state: AvatarState): AvatarThemeResolvers => {
       const { avatarOverride } = resolve()
 
       const resolveTokens = (avatarState: AvatarState): AvatarTokens => {
@@ -89,7 +88,7 @@ export const toChatThreadHeaderThemeResolvers: ComponentThemeResolver<ChatThread
 
       return createAvatarStyleResolvers(resolveTokens, themeTokens)
     }),
-    pressable: createValueResolver(() => {
+    pressable: createStyleResolver(() => {
       const { pressableOverwrites } = resolve()
 
       const resolvePressable = (pressableState: PressableState) => componentTokens.pressable({
@@ -123,7 +122,7 @@ export const toChatThreadHeaderThemeResolvers: ComponentThemeResolver<ChatThread
           ...StyleAdapterUtils.text(resolvePressable(pressableState).text),
           ...StyleAdapterUtils.text(pressableOverwrites.text = {}),
         })),
-        icon: createValueResolver((pressableState: PressableState): PressableIconStyle => ({
+        icon: createStyleResolver((pressableState: PressableState): PressableIconStyle => ({
           ...StyleAdapterUtils.icon(resolvePressable(pressableState).icon),
           ...StyleAdapterUtils.icon(pressableOverwrites.icon = {}),
         })),

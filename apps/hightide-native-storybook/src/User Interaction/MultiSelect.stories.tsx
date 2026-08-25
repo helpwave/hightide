@@ -4,7 +4,7 @@ import type {
 } from '@storybook/react-native'
 import { action } from 'storybook/actions'
 
-import { MultiSelect } from '@helpwave/hightide-native/components'
+import { MultiSelect, MultiSelectOption } from '@helpwave/hightide-native/components'
 import { StorybookHelper } from '../helper'
 
 const fruitOptions = StorybookHelper.selectValues
@@ -24,7 +24,6 @@ type Story = StoryObj<typeof meta>
 
 export const multiSelect: Story = {
   args: {
-    options: fruitOptions,
     initialValue: [],
     disabled: false,
     invalid: false,
@@ -34,4 +33,17 @@ export const multiSelect: Story = {
     onValueChange: action('onValueChange'),
     onEditComplete: action('onEditComplete'),
   },
+  render: (args) => (
+    <MultiSelect {...args}>
+      {fruitOptions.map((option) => (
+        <MultiSelectOption
+          key={option.id}
+          id={option.id}
+          value={option.id}
+          label={option.label}
+          disabled={option.disabled}
+        />
+      ))}
+    </MultiSelect>
+  ),
 }

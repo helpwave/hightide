@@ -11,11 +11,53 @@ export type AxisAligmentToken = 'start' | 'center' | 'end'
 export type StretchToken = 'stretch'
 export type SpacingToken = 'space-between' | 'space-evenly' | 'space-around'
 export type MainAxisAligmentToken = AxisAligmentToken | SpacingToken
-export type CrossAxisAligmentToken = AxisAligmentToken | StretchToken
+export type CrossAxisAlignmentToken = AxisAligmentToken | StretchToken
 export type CrossAxisLineAligmentToken = AxisAligmentToken | SpacingToken | StretchToken
 export type FlexWrapToken = 'nowrap' | 'wrap' | 'wrap-reverse'
 export type OverflowToken = 'visible' | 'hidden' | 'scroll'
 export type SizeToken = number | `${number}%`
+export type StaticPositionTokens = {
+  type: 'static',
+  zIndex?: number,
+}
+export type RelativePositionTokens = {
+  type: 'relative',
+  left?: SizeToken,
+  right?: SizeToken,
+  top?: SizeToken,
+  bottom?: SizeToken,
+  zIndex?: number,
+}
+export type AbsolutePositionTokens = {
+  type: 'absolute',
+  left?: SizeToken,
+  right?: SizeToken,
+  top?: SizeToken,
+  bottom?: SizeToken,
+  zIndex?: number,
+}
+export type PositioningToken = StaticPositionTokens | RelativePositionTokens | AbsolutePositionTokens
+export type DegreeToken = `${string}deg`
+// TODO: Add Matrix and perspective later
+export type TransformTokens = {
+  translate?: {
+    x?: number,
+    y?: number,
+  },
+  scale?: {
+    x?: number,
+    y?: number,
+  },
+  rotation?: {
+    x?: DegreeToken,
+    y?: DegreeToken,
+    z?: DegreeToken,
+  },
+  skew?: {
+    x?: number,
+    y?: number,
+  },
+}
 export type BorderRadiusToken = {
   type: 'all',
   value?: number,
@@ -70,6 +112,8 @@ export type ContainerTokens = {
   backgroundColor?: ColorToken,
   opacity?: number,
   overflow?: OverflowToken,
+  position?: PositioningToken,
+  transform?: TransformTokens,
   border?: BorderToken,
   size?: {
     height?: SizeToken,
@@ -89,9 +133,9 @@ export type ContainerTokens = {
     gap?: number,
     direction?: LayoutDirectionToken,
     mainAxisAlignment?: MainAxisAligmentToken,
-    crossAxisAligment?: CrossAxisAligmentToken,
-    crossAxisLineAligment?: CrossAxisLineAligmentToken,
-    selfCrossAxisAlignment?: CrossAxisAligmentToken,
+    crossAxisAlignment?: CrossAxisAlignmentToken,
+    crossAxisLineAlignment?: CrossAxisLineAligmentToken,
+    selfCrossAxisAlignment?: CrossAxisAlignmentToken,
     flexGrow?: number,
     flexShrink?: number,
     flexBasis?: SizeToken | 'auto',

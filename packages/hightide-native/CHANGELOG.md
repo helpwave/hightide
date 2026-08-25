@@ -5,6 +5,39 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [0.7.0] - 2026-08-25
+
+### Added
+
+- Compound `Select` / `MultiSelect` parts: Root (context), Trigger, Menu, Option, and a combined convenience component
+- Combined `Select` / `MultiSelect` `triggerProps` and `menuProps` (spread onto Trigger / Menu; option children still come from the combined component)
+- Required `id` on `SelectOption` / `MultiSelectOption` (used as the registration and selection id)
+- `StyleAdapterUtils.container` maps `ContainerTokens.position` and `ContainerTokens.transform` from `@helpwave/hightide-design@0.7.0` to React Native `position` / inset / `zIndex` and `transform` styles
+- `useAnimatedStyleTransition` interpolates listed `ViewStyle` keys from the captured in-flight style to the next style (`animatedAttributes`; `position` includes `left` / `right` / `top` / `bottom`)
+- `Input` / `Textarea` theme `stateLayer` resolver (fill inset by the container border width) instead of blending the tint into the container background
+
+### Changed
+
+- Consumes `@helpwave/hightide-design@0.7.0` position, transform, `zIndex`, layout rename, input/button/pressable state-layer, switch, card, list, and chat layout tokens
+- `Select` and `MultiSelect` take `SelectOption` / `MultiSelectOption` children instead of an `options` array
+- `SelectTrigger` / `MultiSelectTrigger` use `ThemedPressable` instead of a raw `Pressable`
+- `Button`, `IconButton`, `ThemedPressable`, and avatar resolvers map container/image/text/icon styles from design tokens without native fill or text-align overrides
+- `ThemedPressable` container no longer hardcodes `alignSelf: 'flex-start'`
+- `StyleAdapterUtils` maps `layout.crossAxisLineAlignment` (renamed from `crossAxisLineAligment`)
+- `Input` and `Textarea` render a dedicated state-layer view; text style uses `flex: 1` with zero padding/margin
+- `Checkbox`, `ThemedPressable`, `IconButton`, `Switch`, `ChatConversationRow`, `ChatThreadHeader`, `ChatQuickReplyChip`, `ListActionItem`, and `ListNavigationItem` render their content in the component and track `isPressed` with `onPressIn` / `onPressOut` instead of Pressable children state
+- `Switch` thumbs use design position/transform tokens and animate `transform`, `position`, `width`, and `height` instead of interpolating local offset math
+- `ThemedText` always applies a resolved `color` (`textStyle.color` or content-theme `foreground`); `appearance="description"` blends that color onto the content-theme background
+- Root `ThemeProvider` content-theme `textStyle` is body `md` without a baked-in `color`
+- `AvatarWithStatus` wrapper uses `alignSelf: 'flex-start'`
+- `ChatConversationRow` preview text uses `flex: 1` so it ellipsizes in the message row
+- `ChatConversationRow` renders `AvatarWithStatus` from optional `avatarProps` (conversation-row avatar size still applied); `avatar` / `avatarStyle` are replaced by `avatarOverride` for any custom avatar node
+
+### Fixed
+
+- `Select` and `MultiSelect` dialogs do not expand when search is disabled
+- `Select` / `MultiSelect` menu `ScrollView` no longer collapses to height 0 for empty search results
+
 ## [0.6.0] - 2026-08-21
 
 ### Added

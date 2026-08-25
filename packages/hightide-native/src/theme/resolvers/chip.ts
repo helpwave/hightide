@@ -7,7 +7,6 @@ import type {
 } from '../types/components/chip'
 import {
   createStyleResolver,
-  createValueResolver,
   type ComponentThemeResolver
 } from '../types/resolver'
 
@@ -32,7 +31,7 @@ export const toChipThemeResolvers: ComponentThemeResolver<ChipThemeResolvers> = 
     chip: createStyleResolver((state: ChipState): ChipStyle => (
       StyleAdapterUtils.container(resolve(state).container)
     )),
-    icon: createValueResolver((state: ChipState): ChipIconStyle => (
+    icon: createStyleResolver((state: ChipState): ChipIconStyle => (
       StyleAdapterUtils.icon(resolve(state).icon)
     )),
     text: createStyleResolver((state: ChipState): ChipTextStyle => (

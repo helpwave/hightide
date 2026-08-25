@@ -44,10 +44,12 @@ export type InputComponentResolverProps = {
   state: InputState,
 }
 
+export type InputTextTokens = TextStyleTokens
+
 export type InputTokens = {
   container: ContainerTokens,
   stateLayer: ContainerTokens,
-  text: TextStyleTokens,
+  text: InputTextTokens,
   placeholder: TextStyleTokens,
   icon: IconTokens,
 }
@@ -139,9 +141,25 @@ export const inputTokenResolver: InputTokenResolver = ({
         vertical: layout.inset,
         horizontal: layout.horizontalContentPadding - layout.borderWidth,
       },
+      layout: {
+        direction: 'horizontal',
+        mainAxisAlignment: 'start',
+        crossAxisAlignment: 'center',
+      }
     },
     stateLayer: {
       backgroundColor: tint,
+      position: {
+        type: 'absolute',
+        top: 0,
+        right: 0,
+        bottom: 0,
+        left: 0,
+        zIndex: 20,
+      },
+      shape: {
+        borderRadius: { type: 'all', value: layout.borderRadius },
+      },
     },
     text: {
       ...textStyle,

@@ -26,10 +26,8 @@ import type {
 } from '../types/components/avatar'
 import {
   createStyleResolver,
-  createValueResolver,
   type ComponentThemeResolver
 } from '../types/resolver'
-import type { ThemeTokens } from '@helpwave/hightide-design/theme-tokens'
 
 import { StyleAdapterUtils } from '../adapters'
 
@@ -60,6 +58,28 @@ export const mergeAvatarTokens = (
       ...base.container.decoration,
       ...override?.container?.decoration,
     },
+  },
+  image: {
+    ...base.image,
+    ...override?.image,
+    size: {
+      ...base.image.size,
+      ...override?.image?.size,
+    },
+    shape: {
+      ...base.image.shape,
+      ...override?.image?.shape,
+    },
+    layout: {
+      ...base.image.layout,
+      ...override?.image?.layout,
+    },
+    decoration: {
+      ...base.image.decoration,
+      ...override?.image?.decoration,
+    },
+    position: override?.image?.position ?? base.image.position,
+    transform: override?.image?.transform ?? base.image.transform,
   },
   text: {
     ...base.text,
@@ -94,6 +114,17 @@ export const withNumericAvatarSize = (
         borderRadius: { type: 'all', value: borderRadius },
       },
     },
+    image: {
+      ...tokens.image,
+      size: {
+        width: size,
+        height: size,
+      },
+      shape: {
+        ...tokens.image.shape,
+        borderRadius: { type: 'all', value: borderRadius },
+      },
+    },
     icon: {
       ...tokens.icon,
       size,
@@ -102,8 +133,7 @@ export const withNumericAvatarSize = (
 }
 
 export const createAvatarStyleResolvers = (
-  resolveTokens: (state: AvatarState) => AvatarTokens,
-  themeTokens: ThemeTokens
+  resolveTokens: (state: AvatarState) => AvatarTokens
 ): AvatarThemeResolvers => ({
   container: createStyleResolver((state: AvatarState): AvatarStyle => {
     const { container } = resolveTokens(state)
@@ -122,36 +152,15 @@ export const createAvatarStyleResolvers = (
       } : {}),
     }
   }),
-  image: createStyleResolver((state: AvatarState): AvatarImageStyle => {
-    const { container } = resolveTokens(state)
-    const width = container.size?.width
-    const height = container.size?.height
-    const borderRadius = container.shape?.borderRadius
-
-    return {
-      position: 'absolute',
-      left: 0,
-      top: 0,
-      width,
-      height,
-      borderRadius: borderRadius?.type === 'all'
-        ? borderRadius.value
-        : undefined,
-    }
-  }),
-  text: createStyleResolver((state: AvatarState): AvatarTextStyle => ({
-    ...StyleAdapterUtils.text(resolveTokens(state).text),
-    textAlign: 'center',
-  })),
-  icon: createValueResolver((state: AvatarState): AvatarIconStyle => {
-    const { icon } = resolveTokens(state)
-
-    return StyleAdapterUtils.icon({
-      size: icon.size ?? themeTokens.icongraphy.sizes.md,
-      strokeWidth: icon.strokeWidth ?? themeTokens.icongraphy.strokeWidth,
-      color: icon.color ?? themeTokens.color.primary.onColor,
-    })
-  }),
+  image: createStyleResolver((state: AvatarState): AvatarImageStyle => (
+    StyleAdapterUtils.container(resolveTokens(state).image) as AvatarImageStyle
+  )),
+  text: createStyleResolver((state: AvatarState): AvatarTextStyle => (
+    StyleAdapterUtils.text(resolveTokens(state).text)
+  )),
+  icon: createStyleResolver((state: AvatarState): AvatarIconStyle => (
+    StyleAdapterUtils.icon(resolveTokens(state).icon)
+  )),
 })
 
 export const toAvatarThemeResolvers: ComponentThemeResolver<AvatarThemeResolvers> = ({
@@ -180,7 +189,7 @@ export const toAvatarThemeResolvers: ComponentThemeResolver<AvatarThemeResolvers
     return tokens
   }
 
-  return createAvatarStyleResolvers(resolveTokens, themeTokens)
+  return createAvatarStyleResolvers(resolveTokens)
 }
 
 export const createAvatarWithStatusThemeResolvers = (
@@ -194,7 +203,7 @@ export const createAvatarWithStatusThemeResolvers = (
   const { themeTokens, semanticTokens, componentTokens } = context
 
   return {
-    avatar: createValueResolver((state: AvatarWithStatusState) => {
+    avatar: createStyleResolver((state: AvatarWithStatusState) => {
       const { avatarOverride } = resolve(state)
 
       const resolveTokens = (avatarState: AvatarState): AvatarTokens => {
@@ -222,7 +231,7 @@ export const createAvatarWithStatusThemeResolvers = (
         return tokens
       }
 
-      return createAvatarStyleResolvers(resolveTokens, themeTokens)
+      return createAvatarStyleResolvers(resolveTokens)
     }),
     statusDot: createStyleResolver((state: AvatarWithStatusState): AvatarStatusDotStyle => {
       const tokens = resolve(state)
@@ -333,7 +342,7 @@ export const toAvatarGroupThemeResolvers: ComponentThemeResolver<
   })
 
   return {
-    avatar: createValueResolver((state: AvatarGroupState) => {
+    avatar: createStyleResolver((state: AvatarGroupState) => {
       const { avatarOverride } = resolve(state)
 
       const resolveTokens = (avatarState: AvatarState): AvatarTokens => {
@@ -361,7 +370,7 @@ export const toAvatarGroupThemeResolvers: ComponentThemeResolver<
         return tokens
       }
 
-      return createAvatarStyleResolvers(resolveTokens, themeTokens)
+      return createAvatarStyleResolvers(resolveTokens)
     }),
     container: createStyleResolver((state: AvatarGroupState): AvatarGroupContainerStyle => {
       const tokens = resolve(state)

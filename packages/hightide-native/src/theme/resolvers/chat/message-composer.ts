@@ -6,7 +6,6 @@ import type {
 } from '../../types/components/chat'
 import {
   createSimpleStyleResolver,
-  createSimpleValueResolver,
   type ComponentThemeResolver
 } from '../../types/resolver'
 
@@ -30,7 +29,7 @@ export const toChatMessageComposerThemeResolvers: ComponentThemeResolver<ChatMes
       ...StyleAdapterUtils.container(resolve().input),
       ...StyleAdapterUtils.text(resolve().text),
     })),
-    placeholderColor: createSimpleValueResolver((): TextStyle => ({
+    placeholderColor: createSimpleStyleResolver((): TextStyle => ({
       color: resolve().placeholder.color
     })),
   }

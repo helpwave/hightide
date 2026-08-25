@@ -11,6 +11,7 @@ import { useLocalization } from '@helpwave/hightide-utils/context/localization'
 
 import {
   Select,
+  SelectOption,
   ThemedText
 } from '@helpwave/hightide-native/components'
 import {
@@ -69,11 +70,19 @@ const LocaleSelect = () => {
     <View style={{ gap: 8, maxWidth: 320 }}>
       <ThemedText>Locale</ThemedText>
       <Select
-        options={options}
         value={locale}
         searchableThreshold={Number.POSITIVE_INFINITY}
         onValueChange={(value) => setLocale(value)}
-      />
+      >
+        {options.map((option) => (
+          <SelectOption
+            key={option.id}
+            id={option.id}
+            value={option.id}
+            label={option.label}
+          />
+        ))}
+      </Select>
     </View>
   )
 }

@@ -67,7 +67,7 @@ export const chatThreadHeaderTokenResolver: ChatThreadHeaderTokenResolver = ({ t
       },
       layout: {
         direction: 'horizontal',
-        crossAxisAligment: 'center',
+        crossAxisAlignment: 'center',
         gap: spacing.xs,
       },
     },
@@ -108,10 +108,9 @@ export const chatThreadHeaderTokenResolver: ChatThreadHeaderTokenResolver = ({ t
         },
         layout: {
           direction: 'horizontal',
-          crossAxisAligment: 'center',
+          crossAxisAlignment: 'center',
           gap: spacing.md,
           flexGrow: 1,
-          selfCrossAxisAlignment: 'stretch',
         },
       },
     },

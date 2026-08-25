@@ -11,13 +11,15 @@ import type {
   StyleResolverFunction
 } from '../resolver'
 import type { IconStyle } from '../../../icons'
-import type { ThemedPressableState } from './themedPressable'
+import type { ThemedPressableState, ThemedPressableThemeResolvers } from './themedPressable'
 import type {
   AvatarState,
   AvatarThemeResolvers
 } from './avatar'
 
-export type ChatMessageDirection = 'incoming' | 'outgoing'
+import type { ChatMessageDirection } from '../../../enums/chatMessageDirection'
+
+export type { ChatMessageDirection }
 
 export type ChatConversationRowState = InteractionState & {
   isUnread?: boolean,
@@ -147,25 +149,8 @@ export type ChatThreadHeaderThemeResolvers = {
     AvatarThemeResolvers
   >,
   pressable: StyleResolverFunction<
-    Record<string, never>,
-    {
-      container: StyleResolverFunction<
-        PressableState,
-        PressableContainerStyle
-      >,
-      stateLayer: StyleResolverFunction<
-        PressableState,
-        PressableStateLayerStyle
-      >,
-      text: StyleResolverFunction<
-        PressableState,
-        PressableTextStyle
-      >,
-      icon: StyleResolverFunction<
-        PressableState,
-        PressableIconStyle
-      >,
-    }
+    ThemedPressableState,
+    ThemedPressableThemeResolvers
   >,
 }
 

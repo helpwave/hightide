@@ -55,9 +55,8 @@ export const chatAttachmentMessageBubbleTokenResolver: ChatAttachmentMessageBubb
       container: {
         layout: {
           direction: 'horizontal',
-          crossAxisAligment: 'center',
+          crossAxisAlignment: 'center',
           gap: spacing.md,
-          selfCrossAxisAlignment: 'stretch',
         },
       },
     },
@@ -72,7 +71,7 @@ export const chatAttachmentMessageBubbleTokenResolver: ChatAttachmentMessageBubb
       },
       layout: {
         mainAxisAlignment: 'center',
-        crossAxisAligment: 'center',
+        crossAxisAlignment: 'center',
       },
     },
     fileIcon: {
@@ -87,7 +86,7 @@ export const chatAttachmentMessageBubbleTokenResolver: ChatAttachmentMessageBubb
       },
       layout: {
         mainAxisAlignment: 'center',
-        crossAxisAligment: 'center',
+        crossAxisAlignment: 'center',
       },
     },
     downloadIcon: {

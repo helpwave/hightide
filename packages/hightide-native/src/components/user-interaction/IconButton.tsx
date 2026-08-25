@@ -1,4 +1,4 @@
-import { Fragment, forwardRef } from 'react'
+import { forwardRef, useMemo, useState } from 'react'
 import {
   Pressable,
   View,
@@ -13,6 +13,7 @@ import type {
 import { ContentThemeOverrideProvider } from '../../global-contexts/content-theme/ContentThemeProvider'
 import { useDebugContext } from '../../global-contexts/debug'
 import { useTheme } from '../../global-contexts/theme/ThemeContext'
+import { useMemoizedTheme } from '../../hooks/useMemoizedTheme'
 import type {
   IconButtonState,
   IconButtonStyle
@@ -43,15 +44,8 @@ export type IconButtonProps = Omit<PressableProps, 'children' | 'style'> & {
   iconStyle?:  StyleOverwrite<IconButtonState, IconStyle>,
 }
 
-type PressableInteraction = {
-  pressed: boolean,
-  hovered?: boolean,
-  focused?: boolean,
-  focusVisible?: boolean,
-}
-
 export const IconButton = forwardRef<React.ComponentRef<typeof Pressable>, IconButtonProps>(function IconButton({
-  icon: IconComponent,
+  icon,
   size = 'md',
   color,
   variant = 'filled',
@@ -71,17 +65,25 @@ export const IconButton = forwardRef<React.ComponentRef<typeof Pressable>, IconB
     hitSlop: providedHitSlop,
     onLayout: providedOnLayout,
   })
+  const [isPressed, setIsPressed] = useState(false)
 
-  const resolveState = (interaction: PressableInteraction): IconButtonState => ({
+  const resolvedState = useMemo((): IconButtonState => ({
     size,
     color,
     variant,
     isDisabled: !!disabled,
-    isPressed: interaction.pressed,
-    isHovered: !!interaction.hovered,
-    isFocused: !!interaction.focused,
-    isFocusVisible: !!interaction.focusVisible,
-  })
+    isPressed,
+  }), [
+    size,
+    color,
+    variant,
+    disabled,
+    isPressed,
+  ])
+
+  const resolvedContainerStyle = useMemoizedTheme(theme.components.iconButton.container, resolvedState, style)
+  const resolvedStateLayerStyle = useMemoizedTheme(theme.components.iconButton.stateLayer, resolvedState, stateLayerStyle)
+  const resolvedIconStyle = useMemoizedTheme(theme.components.iconButton.icon, resolvedState, iconStyle)
 
   return (
     <Pressable
@@ -92,35 +94,31 @@ export const IconButton = forwardRef<React.ComponentRef<typeof Pressable>, IconB
       accessibilityLabel={accessibilityLabel}
       hitSlop={hitSlop}
       onLayout={onLayout}
-      style={(pressableState) => {
-        const state = resolveState(pressableState as PressableInteraction)
-        return theme.components.iconButton.container(state, style)
+      style={resolvedContainerStyle}
+      onPressIn={(event) => {
+        setIsPressed(true)
+        props.onPressIn?.(event)
+      }}
+      onPressOut={(event) => {
+        setIsPressed(false)
+        props.onPressOut?.(event)
       }}
     >
-      {(pressableState) => {
-        const state = resolveState(pressableState as PressableInteraction)
-        const resolvedIcon = theme.components.iconButton.icon(state, iconStyle)
-
-        return (
-          <Fragment>
-            {hitBox.isVisualizing && (
-              <View
-                pointerEvents="none"
-                style={createHitBoxOverlayStyle(hitSlop, hitBox.color)}
-              />
-            )}
-            <View
-              pointerEvents="none"
-              style={theme.components.iconButton.stateLayer(state, stateLayerStyle)}
-            />
-            <ContentThemeOverrideProvider
-              iconStyle={resolvedIcon}
-            >
-              <ThemedIcon icon={IconComponent} />
-            </ContentThemeOverrideProvider>
-          </Fragment>
-        )
-      }}
+      {hitBox.isVisualizing && (
+        <View
+          pointerEvents="none"
+          style={createHitBoxOverlayStyle(hitSlop, hitBox.color)}
+        />
+      )}
+      <View
+        pointerEvents="none"
+        style={resolvedStateLayerStyle}
+      />
+      <ContentThemeOverrideProvider
+        iconStyle={resolvedIconStyle}
+      >
+        <ThemedIcon icon={icon} />
+      </ContentThemeOverrideProvider>
     </Pressable>
   )
 })

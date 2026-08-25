@@ -13,6 +13,7 @@ import {
 } from 'react-native'
 
 import { useTheme } from '../../global-contexts/theme/ThemeContext'
+import { useMemoizedTheme } from '../../hooks/useMemoizedTheme'
 import type { ChatMessageListStyle } from '../../theme/types/components/chat'
 import type { StyleOverwrite } from '../../theme/types/resolver'
 
@@ -37,14 +38,7 @@ export const ChatMessageList = ({
   const scrollRef = useRef<ScrollView>(null)
   const state = useMemo(() => ({}), [])
 
-  const resolvedListStyle = useMemo(
-    () => theme.components.chat.messageList.container(state, listStyle),
-    [theme, state, listStyle]
-  )
-  const listGap = useMemo(
-    () => (theme.components.chat.messageList.container(state) as ViewStyle).gap,
-    [theme, state]
-  )
+  const resolvedListStyle = useMemoizedTheme(theme.components.chat.messageList.container, state, listStyle)
 
   useEffect(() => {
     if (autoScroll) {
@@ -56,7 +50,7 @@ export const ChatMessageList = ({
     <ScrollView
       ref={scrollRef}
       style={[resolvedListStyle, style]}
-      contentContainerStyle={[{ gap: listGap }, contentContainerStyle]}
+      contentContainerStyle={[{ gap: resolvedListStyle.gap }, contentContainerStyle]}
       onScroll={onScroll}
       scrollEventThrottle={16}
     >

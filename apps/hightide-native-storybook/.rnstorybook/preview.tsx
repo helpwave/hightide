@@ -58,7 +58,7 @@ const preview: Preview = {
           locale={{ locale }}
         >
           <DebugProvider hitBox={{ isVisualizing: isVisualizingHitBox }}>
-            <View style={{ flex: 1, padding: 16, backgroundColor: surfaceBackground }}>
+            <View style={{ flex: 1, padding: 16, backgroundColor: surfaceBackground, flexDirection: 'column', alignItems: 'flex-start' }}>
               <Story />
             </View>
           </DebugProvider>

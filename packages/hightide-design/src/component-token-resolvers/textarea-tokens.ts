@@ -25,6 +25,10 @@ export const textareaTokenResolver: TextareaTokenResolver = (props) => {
         width: input.container.size?.width,
         height: textareaVisibleLineCount * lineHeight,
       },
+      layout: {
+        ...input.container.layout,
+        crossAxisAlignment: 'start'
+      },
     },
   }
 }

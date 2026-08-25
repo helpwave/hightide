@@ -13,6 +13,7 @@ import type { ColorToken } from '@helpwave/hightide-design/primitive-tokens'
 import type { DividerDirection } from '@helpwave/hightide-design/component-token-resolvers'
 
 import { useTheme } from '../../global-contexts/theme/ThemeContext'
+import { useMemoizedTheme } from '../../hooks/useMemoizedTheme'
 import type {
   DividerState,
   DividerStyle
@@ -45,10 +46,7 @@ export const Divider = forwardRef<View, DividerProps>(function Divider({
     margin,
   }), [direction, color, width, margin])
 
-  const resolvedDividerStyle = useMemo(
-    () => theme.components.divider.container(state, dividerStyle),
-    [theme, state, dividerStyle]
-  )
+  const resolvedDividerStyle = useMemoizedTheme(theme.components.divider.container, state, dividerStyle)
 
   return (
     <View

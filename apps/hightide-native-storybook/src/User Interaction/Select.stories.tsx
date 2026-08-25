@@ -4,7 +4,7 @@ import type {
 } from '@storybook/react-native'
 import { action } from 'storybook/actions'
 
-import { Select } from '@helpwave/hightide-native/components'
+import { Select, SelectOption } from '@helpwave/hightide-native/components'
 import { StorybookHelper } from '../helper'
 
 const fruitOptions = StorybookHelper.selectValues
@@ -24,7 +24,6 @@ type Story = StoryObj<typeof meta>
 
 export const select: Story = {
   args: {
-    options: fruitOptions,
     initialValue: null,
     disabled: false,
     invalid: false,
@@ -34,4 +33,17 @@ export const select: Story = {
     onValueChange: action('onValueChange'),
     onEditComplete: action('onEditComplete'),
   },
+  render: (args) => (
+    <Select {...args}>
+      {fruitOptions.map((option) => (
+        <SelectOption
+          key={option.id}
+          id={option.id}
+          value={option.id}
+          label={option.label}
+          disabled={option.disabled}
+        />
+      ))}
+    </Select>
+  ),
 }

@@ -9,7 +9,6 @@ import type {
 } from '../../types/components/chat'
 import {
   createStyleResolver,
-  createValueResolver,
   toPressableInteractionState,
   type ComponentThemeResolver
 } from '../../types/resolver'
@@ -28,7 +27,7 @@ export const toChatQuickReplyChipThemeResolvers: ComponentThemeResolver<ChatQuic
   })
 
   return {
-    pressable: createValueResolver((state: ChatQuickReplyChipState) => {
+    pressable: createStyleResolver((state: ChatQuickReplyChipState) => {
       const tokens = resolve(state.isActive)
 
       const resolvePressable = (pressableState: PressableState) => componentTokens.pressable({
@@ -62,7 +61,7 @@ export const toChatQuickReplyChipThemeResolvers: ComponentThemeResolver<ChatQuic
           ...StyleAdapterUtils.text(resolvePressable(pressableState).text),
           ...StyleAdapterUtils.text(tokens.text = {}),
         })),
-        icon: createValueResolver((pressableState: PressableState): PressableIconStyle => ({
+        icon: createStyleResolver((pressableState: PressableState): PressableIconStyle => ({
           ...StyleAdapterUtils.icon(resolvePressable(pressableState).icon),
           ...StyleAdapterUtils.icon(tokens.icon = {}),
         })),

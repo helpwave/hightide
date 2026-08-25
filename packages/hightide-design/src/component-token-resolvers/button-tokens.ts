@@ -131,11 +131,19 @@ export const buttonTokenResolver: ButtonTokenResolver = ({
         gap,
         direction: 'horizontal',
         mainAxisAlignment: 'center',
-        crossAxisAligment: 'center',
+        crossAxisAlignment: 'center',
       },
     },
     stateLayer: {
       backgroundColor: tint,
+      position: {
+        type: 'absolute',
+        top: 0,
+        right: 0,
+        bottom: 0,
+        left: 0,
+        zIndex: 20,
+      },
       shape: {
         borderRadius: { type: 'all', value: layout.borderRadius },
       },

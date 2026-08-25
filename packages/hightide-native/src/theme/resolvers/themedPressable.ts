@@ -7,7 +7,6 @@ import type {
 } from '../types/components/themedPressable'
 import {
   createStyleResolver,
-  createValueResolver,
   toPressableInteractionState,
   type ComponentThemeResolver
 } from '../types/resolver'
@@ -35,21 +34,11 @@ export const toThemedPressableThemeResolvers: ComponentThemeResolver<ThemedPress
   return {
     container: createStyleResolver((state: ThemedPressableState): ThemedPressableStyle => ({
       ...StyleAdapterUtils.container(resolve(state).container),
-      alignSelf: 'flex-start',
     })),
-    stateLayer: createStyleResolver((state: ThemedPressableState): ThemedPressableStyle => {
-      const tokens = resolve(state)
-
-      return {
-        ...StyleAdapterUtils.container(tokens.stateLayer),
-        position: 'absolute',
-        top: 0,
-        right: 0,
-        bottom: 0,
-        left: 0,
-      }
-    }),
-    icon: createValueResolver((state: ThemedPressableState): ThemedPressableIconStyle => (
+    stateLayer: createStyleResolver((state: ThemedPressableState): ThemedPressableStyle => (
+      StyleAdapterUtils.container(resolve(state).stateLayer)
+    )),
+    icon: createStyleResolver((state: ThemedPressableState): ThemedPressableIconStyle => (
       StyleAdapterUtils.icon(resolve(state).icon)
     )),
     text: createStyleResolver((state: ThemedPressableState): ThemedPressableTextStyle => (

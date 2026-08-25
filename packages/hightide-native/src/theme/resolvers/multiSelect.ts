@@ -23,7 +23,6 @@ import type {
 import {
   createSimpleStyleResolver,
   createStyleResolver,
-  createValueResolver,
   type ComponentThemeResolver
 } from '../types/resolver'
 
@@ -169,7 +168,7 @@ export const toMultiSelectThemeResolvers: ComponentThemeResolver<MultiSelectThem
         isHighlighted: state.isHighlighted,
       }).checkbox)
     )),
-    checkboxIcon: createValueResolver((state: MultiSelectOptionState): MultiSelectCheckboxIconStyle => (
+    checkboxIcon: createStyleResolver((state: MultiSelectOptionState): MultiSelectCheckboxIconStyle => (
       StyleAdapterUtils.icon(resolve({
         color: state.color,
         isDisabled: state.isDisabled,

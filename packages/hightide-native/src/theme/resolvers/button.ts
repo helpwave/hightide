@@ -7,7 +7,6 @@ import type {
 } from '../types/components/button'
 import {
   createStyleResolver,
-  createValueResolver,
   toPressableInteractionState,
   type ComponentThemeResolver
 } from '../types/resolver'
@@ -31,22 +30,13 @@ export const toButtonThemeResolvers: ComponentThemeResolver<ButtonThemeResolvers
   })
 
   return {
-    container: createStyleResolver((state: ButtonState): ButtonStyle => ({
-      ...StyleAdapterUtils.container(resolve(state).container),
-      alignSelf: 'flex-start',
-    })),
-    stateLayer: createStyleResolver((state: ButtonState): ButtonStyle => {
-      const tokens = resolve(state)
-      return {
-        ...StyleAdapterUtils.container(tokens.stateLayer),
-        position: 'absolute',
-        top: 0,
-        right: 0,
-        bottom: 0,
-        left: 0,
-      }
-    }),
-    icon: createValueResolver((state: ButtonState): ButtonIconStyle => (
+    container: createStyleResolver((state: ButtonState): ButtonStyle => (
+      StyleAdapterUtils.container(resolve(state).container)
+    )),
+    stateLayer: createStyleResolver((state: ButtonState): ButtonStyle => (
+      StyleAdapterUtils.container(resolve(state).stateLayer)
+    )),
+    icon: createStyleResolver((state: ButtonState): ButtonIconStyle => (
       StyleAdapterUtils.icon(resolve(state).icon)
     )),
     text: createStyleResolver((state: ButtonState): ButtonTextStyle => (

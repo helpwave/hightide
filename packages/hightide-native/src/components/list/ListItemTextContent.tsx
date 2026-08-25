@@ -4,7 +4,9 @@ import type { StyleProp, TextStyle } from 'react-native'
 
 import { ThemedText } from '../visualization-and-display/ThemedText'
 
-export type ListItemContentOrder = 'titleFirst' | 'subtitleFirst'
+import type { ListItemContentOrder } from '../../enums/listItemContentOrder'
+
+export type { ListItemContentOrder }
 
 export type ListItemTextContentProps = {
   title?: string,
@@ -25,7 +27,7 @@ export const ListItemTextContent = ({
   subtitleStyle?: StyleProp<TextStyle>,
 }) => {
   if (content != null) {
-    return <>{content}</>
+    return <Fragment>{content}</Fragment>
   }
 
   const titleNode = title != null

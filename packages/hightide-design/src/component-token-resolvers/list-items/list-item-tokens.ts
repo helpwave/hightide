@@ -73,9 +73,7 @@ export const listItemTokenResolver: ListItemTokenResolver = ({
       layout: {
         direction: 'horizontal',
         mainAxisAlignment: 'start',
-        crossAxisAligment: 'center',
-        flexGrow: 1,
-        selfCrossAxisAlignment: 'stretch',
+        crossAxisAlignment: 'center',
       },
     },
     leadingItemContainer: {
@@ -85,7 +83,7 @@ export const listItemTokenResolver: ListItemTokenResolver = ({
       },
       layout: {
         direction: 'horizontal',
-        crossAxisAligment: 'center',
+        crossAxisAlignment: 'center',
       },
     },
     content: {
@@ -96,7 +94,7 @@ export const listItemTokenResolver: ListItemTokenResolver = ({
         gap: spacing.xs,
         direction: 'vertical',
         mainAxisAlignment: 'center',
-        crossAxisAligment: 'start',
+        crossAxisAlignment: 'start',
       },
     },
     trailingItemContainer: {
@@ -106,7 +104,7 @@ export const listItemTokenResolver: ListItemTokenResolver = ({
       },
       layout: {
         direction: 'horizontal',
-        crossAxisAligment: 'center',
+        crossAxisAlignment: 'center',
       },
     },
     icon: {

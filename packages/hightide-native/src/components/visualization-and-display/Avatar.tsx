@@ -22,6 +22,7 @@ import {
 import type { ColorPairToken } from '@helpwave/hightide-design/theme-tokens'
 
 import { useTheme } from '../../global-contexts/theme/ThemeContext'
+import { useMemoizedTheme, useMemoizedThemeFactory } from '../../hooks/useMemoizedTheme'
 import type {
   AvatarGroupContainerStyle,
   AvatarGroupStackStyle,
@@ -32,6 +33,7 @@ import type {
   AvatarStatus,
   AvatarStyle,
   AvatarTextStyle,
+  AvatarThemeResolvers,
   AvatarStatusDotStyle,
   AvatarWithStatusState
 } from '../../theme/types/components/avatar'
@@ -126,10 +128,10 @@ export const Avatar = ({
     setImage(initialImage)
   }, [image?.avatarUrl, initialImage])
 
-  const resolvedAvatar = theme.components.avatar.container(state, avatarStyle)
-  const resolvedImage = theme.components.avatar.image(state, imageStyle)
-  const resolvedText = theme.components.avatar.text(state, textStyle)
-  const resolvedIcon = theme.components.avatar.icon(state, iconStyle)
+  const resolvedAvatar = useMemoizedTheme(theme.components.avatar.container, state, avatarStyle)
+  const resolvedImage = useMemoizedTheme(theme.components.avatar.image, state, imageStyle)
+  const resolvedText = useMemoizedTheme(theme.components.avatar.text, state, textStyle)
+  const resolvedIcon = useMemoizedTheme(theme.components.avatar.icon, state, iconStyle)
 
   return (
     <View
@@ -196,13 +198,13 @@ export const AvatarGroup = ({
     count: displayedProfiles.length,
   }), [size, color, displayedProfiles.length])
 
-  const avatarResolvers = useMemo(
-    () => theme.components.avatarGroup.avatar(state),
-    [theme, state]
-  )
-  const resolvedContainer = theme.components.avatarGroup.container(state, containerStyle)
-  const resolvedAvatarStack = theme.components.avatarGroup.avatarStack(state, avatarStackStyle)
-  const resolvedText = theme.components.avatarGroup.text(state, textStyle)
+  const avatarResolvers = useMemoizedThemeFactory<
+    AvatarState,
+    AvatarThemeResolvers
+  >(theme.components.avatarGroup.avatar, state)
+  const resolvedContainer = useMemoizedTheme(theme.components.avatarGroup.container, state, containerStyle)
+  const resolvedAvatarStack = useMemoizedTheme(theme.components.avatarGroup.avatarStack, state, avatarStackStyle)
+  const resolvedText = useMemoizedTheme(theme.components.avatarGroup.text, state, textStyle)
 
   return (
     <View
@@ -282,14 +284,14 @@ export const AvatarWithStatus = ({
     status,
   }), [size, color, status])
 
-  const avatarResolvers = useMemo(
-    () => theme.components.avatarWithStatus.avatar(state),
-    [theme, state]
-  )
-  const resolvedStatusDot = theme.components.avatarWithStatus.statusDot(state, statusDotStyle)
+  const avatarResolvers = useMemoizedThemeFactory<
+    AvatarWithStatusState,
+    AvatarThemeResolvers
+  >(theme.components.avatarWithStatus.avatar, state)
+  const resolvedStatusDot = useMemoizedTheme(theme.components.avatarWithStatus.statusDot, state, statusDotStyle)
 
   return (
-    <View style={[{ position: 'relative' }, style]}>
+    <View style={[{ position: 'relative', alignSelf: 'flex-start' }, style]}>
       <Avatar
         {...avatarProps}
         size={size}

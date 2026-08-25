@@ -1,4 +1,5 @@
 import {
+  PixelRatio,
   StyleSheet,
   type StyleProp,
   type TextStyle,
@@ -10,14 +11,16 @@ import type {
   BorderRadiusToken,
   BorderToken,
   ContainerTokens,
-  CrossAxisAligmentToken,
+  CrossAxisAlignmentToken,
   CrossAxisLineAligmentToken,
   IconTokens,
   LayoutDirectionToken,
   MainAxisAligmentToken,
   MarginToken,
   PaddingToken,
-  TextStyleTokens
+  PositioningToken,
+  TextStyleTokens,
+  TransformTokens
 } from '@helpwave/hightide-design/component-token-resolvers'
 import {
   defaultWritingMode,
@@ -25,6 +28,8 @@ import {
 } from '@helpwave/hightide-design/component-token-resolvers'
 import type { ShadowToken } from '@helpwave/hightide-design/theme-tokens'
 import type { IconStyle } from '../../icons'
+import type { SingleOrArray } from '@helpwave/hightide-utils/utils'
+import { ArrayUtil } from '@helpwave/hightide-utils/utils'
 
 function getStyleProperty<
   T extends ViewStyle,
@@ -87,19 +92,19 @@ const toFlexStartEnd = (
 }
 
 const shadowStyleAdapter = (
-  shadow?: ShadowToken
+  shadow?: SingleOrArray<ShadowToken>
 ): ViewStyle['boxShadow'] | undefined => {
   if (shadow === undefined) {
     return undefined
   }
 
-  return [{
+  return ArrayUtil.resolveSingleOrArray(shadow).map((shadow) => ({
     color: shadow.color,
     offsetX: shadow.x,
     offsetY: shadow.y,
     blurRadius: shadow.blur,
     spreadDistance: shadow.spread,
-  }]
+  }))
 }
 
 const flexDirectionStyleAdapter = (
@@ -127,7 +132,7 @@ const justifyContentStyleAdapter = (
 }
 
 const alignItemsStyleAdapter = (
-  alignment?: CrossAxisAligmentToken
+  alignment?: CrossAxisAlignmentToken
 ): ViewStyle['alignItems'] | undefined => {
   if (alignment === undefined) {
     return undefined
@@ -141,7 +146,7 @@ const alignItemsStyleAdapter = (
 }
 
 const alignSelfStyleAdapter = (
-  alignment?: CrossAxisAligmentToken
+  alignment?: CrossAxisAlignmentToken
 ): ViewStyle['alignSelf'] | undefined => {
   if (alignment === undefined) {
     return undefined
@@ -194,12 +199,12 @@ const borderRadiusStyleAdapter = (
     }
   }
 
-  return {
+  return defined({
     borderTopLeftRadius: borderRadius.topLeft,
     borderTopRightRadius: borderRadius.topRight,
     borderBottomLeftRadius: borderRadius.bottomLeft,
     borderBottomRightRadius: borderRadius.bottomRight,
-  }
+  })
 }
 
 const borderWidthStyleAdapter = (
@@ -216,12 +221,12 @@ const borderWidthStyleAdapter = (
 
   const sides = resolveDirectionalTokens([width], defaultWritingMode)
 
-  return {
+  return defined({
     borderTopWidth: sides.top,
     borderRightWidth: sides.right,
     borderBottomWidth: sides.bottom,
     borderLeftWidth: sides.left,
-  }
+  })
 }
 
 const borderColorStyleAdapter = (
@@ -238,12 +243,12 @@ const borderColorStyleAdapter = (
 
   const sides = resolveDirectionalTokens([color], defaultWritingMode)
 
-  return {
+  return defined({
     borderTopColor: sides.top,
     borderRightColor: sides.right,
     borderBottomColor: sides.bottom,
     borderLeftColor: sides.left,
-  }
+  })
 }
 
 const borderStyleAdapter = (
@@ -263,11 +268,11 @@ const borderStyleAdapter = (
     return undefined
   }
 
-  return {
+  return defined({
     borderStyle: border.style,
     ...borderWidthStyleAdapter(border.width),
     ...borderColorStyleAdapter(border.color),
-  }
+  })
 }
 
 const paddingStyleAdapter = (
@@ -284,12 +289,12 @@ const paddingStyleAdapter = (
 
   const sides = resolveDirectionalTokens([padding], defaultWritingMode)
 
-  return {
+  return defined({
     paddingTop: sides.top,
     paddingRight: sides.right,
     paddingBottom: sides.bottom,
     paddingLeft: sides.left,
-  }
+  })
 }
 
 const marginStyleAdapter = (
@@ -306,12 +311,12 @@ const marginStyleAdapter = (
 
   const sides = resolveDirectionalTokens([margin], defaultWritingMode)
 
-  return {
+  return defined({
     marginTop: sides.top,
     marginRight: sides.right,
     marginBottom: sides.bottom,
     marginLeft: sides.left,
-  }
+  })
 }
 
 const sizeStyleAdapter = (
@@ -328,14 +333,16 @@ const sizeStyleAdapter = (
     return undefined
   }
 
-  return {
+  return defined({
     width: size.width,
     height: size.height,
     minWidth: size.minWidth,
-    minHeight: size.minHeight,
+    // minHeight is rounded to the nearest pixel to avoid blurry edges and gaps multiselects on certain devices.
+    // See https://reactnative.dev/docs/pixelratio#pixelroundtonearestpixel for more information.
+    minHeight: typeof size.minHeight === 'number' ? PixelRatio.roundToNearestPixel(size.minHeight) : size.minHeight,
     maxWidth: size.maxWidth,
     maxHeight: size.maxHeight,
-  }
+  })
 }
 
 const outlineStyleAdapter = (
@@ -350,12 +357,12 @@ const outlineStyleAdapter = (
     return undefined
   }
 
-  return {
+  return defined({
     outlineColor: outline.color,
     outlineOffset: outline.offset,
     outlineWidth: outline.width,
     outlineStyle: outline.style,
-  }
+  })
 }
 
 const layoutStyleAdapter = (
@@ -376,18 +383,101 @@ const layoutStyleAdapter = (
     return undefined
   }
 
-  return {
+  return defined({
     flexWrap: layout.flexWrap,
     flexGrow: layout.flexGrow,
     flexShrink: layout.flexShrink,
     flexBasis: layout.flexBasis,
     flexDirection: flexDirectionStyleAdapter(layout.direction),
     justifyContent: justifyContentStyleAdapter(layout.mainAxisAlignment),
-    alignItems: alignItemsStyleAdapter(layout.crossAxisAligment),
-    alignContent: alignContentStyleAdapter(layout.crossAxisLineAligment),
+    alignItems: alignItemsStyleAdapter(layout.crossAxisAlignment),
+    alignContent: alignContentStyleAdapter(layout.crossAxisLineAlignment),
     alignSelf: alignSelfStyleAdapter(layout.selfCrossAxisAlignment),
     gap: layout.gap,
+  })
+}
+
+const positionStyleAdapter = (
+  position?: PositioningToken
+): OptionalViewStyle<
+  | 'position'
+  | 'left'
+  | 'right'
+  | 'top'
+  | 'bottom'
+  | 'zIndex'
+> | undefined => {
+  if (position === undefined) {
+    return undefined
   }
+
+  if (position.type === 'static') {
+    return defined({
+      position: position.type,
+      zIndex: position.zIndex,
+    })
+  }
+
+  return defined({
+    position: position.type,
+    left: position.left,
+    right: position.right,
+    top: position.top,
+    bottom: position.bottom,
+    zIndex: position.zIndex,
+  })
+}
+
+const transformStyleAdapter = (
+  transform?: TransformTokens
+): ViewStyle['transform'] | undefined => {
+  if (transform === undefined) {
+    return undefined
+  }
+
+  const transforms = []
+
+  if (transform.translate?.x !== undefined) {
+    transforms.push({ translateX: transform.translate.x })
+  }
+
+  if (transform.translate?.y !== undefined) {
+    transforms.push({ translateY: transform.translate.y })
+  }
+
+  if (transform.scale?.x !== undefined) {
+    transforms.push({ scaleX: transform.scale.x })
+  }
+
+  if (transform.scale?.y !== undefined) {
+    transforms.push({ scaleY: transform.scale.y })
+  }
+
+  if (transform.rotation?.x !== undefined) {
+    transforms.push({ rotateX: transform.rotation.x })
+  }
+
+  if (transform.rotation?.y !== undefined) {
+    transforms.push({ rotateY: transform.rotation.y })
+  }
+
+  if (transform.rotation?.z !== undefined) {
+    transforms.push({ rotateZ: transform.rotation.z })
+  }
+
+  if (transform.skew?.x !== undefined) {
+    transforms.push({ skewX: `${transform.skew.x}deg` })
+  }
+
+  if (transform.skew?.y !== undefined) {
+    transforms.push({ skewY: `${transform.skew.y}deg` })
+  }
+
+  if (transforms.length === 0) {
+    return undefined
+  }
+
+  return transforms
 }
 
 function containerStyleAdapter(tokens: ContainerTokens): ViewStyle {
@@ -401,6 +491,8 @@ function containerStyleAdapter(tokens: ContainerTokens): ViewStyle {
     backgroundColor: tokens.backgroundColor,
     opacity: tokens.opacity,
     boxShadow: shadowStyleAdapter(tokens.decoration?.shadow),
+    transform: transformStyleAdapter(tokens.transform),
+    ...positionStyleAdapter(tokens.position),
     ...layoutStyleAdapter(tokens.layout),
     ...sizeStyleAdapter(tokens.size),
     ...borderStyleAdapter(tokens.border),
@@ -454,6 +546,8 @@ export const StyleAdapterUtils = {
   size: sizeStyleAdapter,
   outline: outlineStyleAdapter,
   layout: layoutStyleAdapter,
+  position: positionStyleAdapter,
+  transform: transformStyleAdapter,
   container: containerStyleAdapter,
   text: textStyleAdapter,
   icon: iconStyleAdapter,

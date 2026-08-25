@@ -21,7 +21,6 @@ import type {
 } from '../types/components/listItem'
 import {
   createStyleResolver,
-  createValueResolver,
   toPressableInteractionState,
   type ComponentThemeResolver
 } from '../types/resolver'
@@ -61,7 +60,7 @@ const toListItemDefaultThemeResolvers: ComponentThemeResolver<ListItemDefaultThe
     titleText: createStyleResolver((state: ListItemState): ListItemTitleStyle => (
       StyleAdapterUtils.text(resolve(state).titleText)
     )),
-    icon: createValueResolver((state: ListItemState): ListItemIconStyle => (
+    icon: createStyleResolver((state: ListItemState): ListItemIconStyle => (
       StyleAdapterUtils.icon(resolve(state).icon)
     )),
   }
@@ -101,7 +100,7 @@ const toListActionItemThemeResolvers: ComponentThemeResolver<ListActionItemTheme
     descriptionText: createStyleResolver((state: ListActionItemState): ListActionItemDescriptionStyle => (
       StyleAdapterUtils.text(resolve(state).descriptionText)
     )),
-    icon: createValueResolver((state: ListActionItemState): ListActionItemIconStyle => (
+    icon: createStyleResolver((state: ListActionItemState): ListActionItemIconStyle => (
       StyleAdapterUtils.icon(resolve(state).icon)
     )),
   }

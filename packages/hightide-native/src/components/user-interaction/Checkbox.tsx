@@ -1,7 +1,4 @@
-import {
-  Fragment,
-  useCallback
-} from 'react'
+import { useCallback, useMemo, useState } from 'react'
 import {
   Pressable,
   View,
@@ -19,6 +16,7 @@ import { HightideIconRegistry } from '../../icons/HightideIconRegistry'
 import { ThemedIcon } from '../visualization-and-display/ThemedIcon'
 import { useDebugContext } from '../../global-contexts/debug'
 import { useTheme } from '../../global-contexts/theme/ThemeContext'
+import { useMemoizedTheme } from '../../hooks/useMemoizedTheme'
 import type {
   CheckboxSize,
   CheckboxState,
@@ -47,13 +45,6 @@ export type CheckboxProps = Omit<PressableProps, 'children' | 'style'>
     stateLayerStyle?: StyleOverwrite<CheckboxState, CheckboxStateLayerStyle>,
   }
 
-type PressableInteraction = {
-  pressed: boolean,
-  hovered?: boolean,
-  focused?: boolean,
-  focusVisible?: boolean,
-}
-
 export const Checkbox = ({
   value: controlledValue,
   initialValue = false,
@@ -81,6 +72,7 @@ export const Checkbox = ({
     onLayout: providedOnLayout,
   })
   const interactive = !disabled && !readOnly
+  const [isPressed, setIsPressed] = useState(false)
 
   const onEditCompleteStable = useEventCallbackStabilizer(onEditComplete)
   const onValueChangeStable = useEventCallbackStabilizer(onValueChange)
@@ -96,7 +88,7 @@ export const Checkbox = ({
     defaultValue: initialValue,
   })
 
-  const resolveState = (interaction: PressableInteraction): CheckboxState => ({
+  const resolvedState = useMemo((): CheckboxState => ({
     size,
     color,
     isChecked: value,
@@ -105,11 +97,23 @@ export const Checkbox = ({
     isDisabled: disabled,
     isReadonly: readOnly,
     isRounded,
-    isPressed: interaction.pressed,
-    isHovered: !!interaction.hovered,
-    isFocused: !!interaction.focused,
-    isFocusVisible: !!interaction.focusVisible,
-  })
+    isPressed,
+  }), [
+    size,
+    color,
+    value,
+    indeterminate,
+    invalid,
+    disabled,
+    readOnly,
+    isRounded,
+    isPressed,
+  ])
+
+  const resolvedContainerStyle = useMemoizedTheme(theme.components.checkbox.container, resolvedState, containerStyle)
+  const resolvedStateLayerStyle = useMemoizedTheme(theme.components.checkbox.stateLayer, resolvedState, stateLayerStyle)
+  const resolvedIcon = useMemoizedTheme(theme.components.checkbox.icon, resolvedState)
+  const showIcon = !!(indeterminate || value)
 
   return (
     <Pressable
@@ -122,44 +126,39 @@ export const Checkbox = ({
       }}
       hitSlop={hitSlop}
       onLayout={onLayout}
+      style={[resolvedContainerStyle, style]}
+      onPressIn={(event) => {
+        setIsPressed(true)
+        props.onPressIn?.(event)
+      }}
+      onPressOut={(event) => {
+        setIsPressed(false)
+        props.onPressOut?.(event)
+      }}
       onPress={(event) => {
         if (interactive) {
           setValue((previous) => !previous)
         }
         props.onPress?.(event)
       }}
-      style={(pressableState) => {
-        const state = resolveState(pressableState as PressableInteraction)
-        return [theme.components.checkbox.container(state, containerStyle), style]
-      }}
     >
-      {(pressableState) => {
-        const state = resolveState(pressableState as PressableInteraction)
-        const resolvedIcon = theme.components.checkbox.icon(state)
-        const showIcon = !!(indeterminate || value)
-
-        return (
-          <Fragment>
-            {hitBox.isVisualizing && (
-              <View
-                pointerEvents="none"
-                style={createHitBoxOverlayStyle(hitSlop, hitBox.color)}
-              />
-            )}
-            <View
-              pointerEvents="none"
-              style={theme.components.checkbox.stateLayer(state, stateLayerStyle)}
-            />
-            {showIcon && (
-              <ThemedIcon
-                icon={indeterminate ? HightideIconRegistry.Minus : HightideIconRegistry.Check}
-                size={resolvedIcon.size}
-                color={resolvedIcon.color}
-              />
-            )}
-          </Fragment>
-        )
-      }}
+      {hitBox.isVisualizing && (
+        <View
+          pointerEvents="none"
+          style={createHitBoxOverlayStyle(hitSlop, hitBox.color)}
+        />
+      )}
+      <View
+        pointerEvents="none"
+        style={resolvedStateLayerStyle}
+      />
+      {showIcon && (
+        <ThemedIcon
+          icon={indeterminate ? HightideIconRegistry.Minus : HightideIconRegistry.Check}
+          size={resolvedIcon.size}
+          color={resolvedIcon.color}
+        />
+      )}
     </Pressable>
   )
 }

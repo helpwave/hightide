@@ -35,6 +35,7 @@ export type AvatarComponentResolverProps = {
 
 export type AvatarTokens = {
   container: ContainerTokens,
+  image: ContainerTokens,
   text: TextStyleTokens,
   icon: IconTokens,
 }
@@ -86,13 +87,30 @@ export const avatarTokenResolver: AvatarTokenResolver = ({
       layout: {
         direction: 'horizontal',
         mainAxisAlignment: 'center',
-        crossAxisAligment: 'center',
+        crossAxisAlignment: 'center',
       },
       ...(config?.isGrouped ? {
         decoration: {
           shadow: raised,
         },
       } : {}),
+    },
+    image: {
+      size: {
+        width: dimension,
+        height: dimension,
+      },
+      shape: {
+        borderRadius: {
+          type: 'all',
+          value: borderRadius,
+        },
+      },
+      position: {
+        type: 'absolute',
+        left: 0,
+        top: 0,
+      },
     },
     text: {
       ...typography.label.sm,
@@ -239,7 +257,7 @@ export const avatarGroupTokenResolver: AvatarGroupTokenResolver = ({
       },
       layout: {
         direction: 'horizontal',
-        crossAxisAligment: 'center',
+        crossAxisAlignment: 'center',
         gap,
       },
     },

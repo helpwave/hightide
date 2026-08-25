@@ -30,7 +30,9 @@ export interface UseMultiSelectOptions {
   typeAheadResetMs?: number,
 }
 
-export type UseMultiSelectFirstHighlightBehavior = 'first' | 'last'
+import type { UseMultiSelectFirstHighlightBehavior } from '../enums/useMultiSelectFirstHighlightBehavior'
+
+export type { UseMultiSelectFirstHighlightBehavior }
 
 export interface UseMultiSelectState {
   value: string[],

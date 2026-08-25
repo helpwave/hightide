@@ -13,7 +13,6 @@ import type {
 } from '../../types/components/chat'
 import {
   createStyleResolver,
-  createValueResolver,
   type ComponentThemeResolver
 } from '../../types/resolver'
 
@@ -49,7 +48,7 @@ export const toChatMessageBubbleThemeResolvers: ComponentThemeResolver<ChatMessa
     metaDataText: createStyleResolver((state: ChatMessageBubbleState): ChatMessageBubbleMetaDataTextStyle => (
       StyleAdapterUtils.text(resolve(state.direction).metaDataText)
     )),
-    metaDataIcon: createValueResolver((state: ChatMessageBubbleState): ChatMessageBubbleMetaDataIconStyle => (
+    metaDataIcon: createStyleResolver((state: ChatMessageBubbleState): ChatMessageBubbleMetaDataIconStyle => (
       StyleAdapterUtils.icon(resolve(state.direction).metaDataIcon)
     )),
   }

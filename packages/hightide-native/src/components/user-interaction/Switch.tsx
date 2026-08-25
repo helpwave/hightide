@@ -1,8 +1,7 @@
 import {
-  Fragment,
   useCallback,
-  useEffect,
-  useRef
+  useMemo,
+  useState
 } from 'react'
 import {
   Animated,
@@ -20,6 +19,8 @@ import {
 
 import { useDebugContext } from '../../global-contexts/debug'
 import { useTheme } from '../../global-contexts/theme/ThemeContext'
+import { useAnimatedStyleTransition } from '../../hooks/useAnimatedStyleTransition'
+import { useMemoizedTheme } from '../../hooks/useMemoizedTheme'
 import type {
   SwitchContainerStyle,
   SwitchState,
@@ -34,7 +35,12 @@ import type {
 import { createHitBoxOverlayStyle } from '../../utils/hitBoxOverlay'
 import { useMinimumTouchTargetHitSlop } from '../../utils/minimumTouchTargetHitSlop'
 
-const ANIMATION_DURATION_MS = 250
+const thumbAnimatedAttributes: (keyof ViewStyle)[] = [
+  'transform',
+  'position',
+  'width',
+  'height',
+]
 
 export type SwitchProps = Omit<PressableProps, 'children' | 'style' | 'disabled'>
   & Partial<FormFieldInteractionStates>
@@ -46,17 +52,6 @@ export type SwitchProps = Omit<PressableProps, 'children' | 'style' | 'disabled'
     trackStyle?: StyleOverwrite<SwitchState, SwitchTrackStyle>,
     thumbStyle?: StyleOverwrite<SwitchState, SwitchThumbStyle>,
   }
-
-type PressableInteraction = {
-  pressed: boolean,
-  hovered?: boolean,
-  focused?: boolean,
-  focusVisible?: boolean,
-}
-
-const toNumber = (value: string | number | undefined, fallback: number): number => (
-  typeof value === 'number' ? value : fallback
-)
 
 export const Switch = ({
   value: controlledValue,
@@ -83,6 +78,7 @@ export const Switch = ({
     onLayout: providedOnLayout,
   })
   const interactive = !disabled && !readOnly
+  const [isPressed, setIsPressed] = useState(false)
 
   const onEditCompleteStable = useEventCallbackStabilizer(onEditComplete)
   const onValueChangeStable = useEventCallbackStabilizer(onValueChange)
@@ -98,25 +94,27 @@ export const Switch = ({
     defaultValue: initialValue,
   })
 
-  const progress = useRef(new Animated.Value(value ? 1 : 0)).current
-
-  useEffect(() => {
-    Animated.timing(progress, {
-      toValue: value ? 1 : 0,
-      duration: ANIMATION_DURATION_MS,
-      useNativeDriver: false,
-    }).start()
-  }, [progress, value])
-
-  const resolveState = (interaction: PressableInteraction): SwitchState => ({
+  const resolvedState = useMemo((): SwitchState => ({
     isActive: value,
     isInvalid: invalid,
     isDisabled: disabled,
     isReadonly: readOnly,
-    isPressed: interaction.pressed,
-    isHovered: !!interaction.hovered,
-    isFocused: !!interaction.focused,
-    isFocusVisible: !!interaction.focusVisible,
+    isPressed,
+  }), [
+    value,
+    invalid,
+    disabled,
+    readOnly,
+    isPressed,
+  ])
+
+  const resolvedContainerStyle = useMemoizedTheme(theme.components.switch.container, resolvedState, containerStyle)
+  const resolvedTrackStyle = useMemoizedTheme(theme.components.switch.track, resolvedState, trackStyle)
+  const resolvedThumbStyle = useMemoizedTheme(theme.components.switch.thumb, resolvedState, thumbStyle)
+  const animatedThumbStyle = useAnimatedStyleTransition({
+    style: resolvedThumbStyle,
+    duration: theme.motion.durations.normal,
+    animatedAttributes: thumbAnimatedAttributes,
   })
 
   return (
@@ -131,81 +129,31 @@ export const Switch = ({
       }}
       hitSlop={hitSlop}
       onLayout={onLayout}
+      style={[resolvedContainerStyle, style]}
+      onPressIn={(event) => {
+        setIsPressed(true)
+        props.onPressIn?.(event)
+      }}
+      onPressOut={(event) => {
+        setIsPressed(false)
+        props.onPressOut?.(event)
+      }}
       onPress={(event) => {
         if (interactive) {
           setValue((previous) => !previous)
         }
         props.onPress?.(event)
       }}
-      style={(pressableState) => {
-        const state = resolveState(pressableState as PressableInteraction)
-        return [theme.components.switch.container(state, containerStyle), style]
-      }}
     >
-      {(pressableState) => {
-        const state = resolveState(pressableState as PressableInteraction)
-        const inactiveState: SwitchState = { ...state, isActive: false }
-        const activeState: SwitchState = { ...state, isActive: true }
-        const resolvedTrackStyle = theme.components.switch.track(state, trackStyle)
-        const resolvedThumbInactive = theme.components.switch.thumb(inactiveState, thumbStyle)
-        const resolvedThumbActive = theme.components.switch.thumb(activeState, thumbStyle)
-        const trackWidth = toNumber(resolvedTrackStyle.width as string | number | undefined, 40)
-        const trackHeight = toNumber(resolvedTrackStyle.height as string | number | undefined, 28)
-        const fallbackBorderWidth = toNumber(resolvedTrackStyle.borderWidth, 0)
-        const trackBorderTop = toNumber(resolvedTrackStyle.borderTopWidth, fallbackBorderWidth)
-        const trackBorderRight = toNumber(resolvedTrackStyle.borderRightWidth, fallbackBorderWidth)
-        const trackBorderBottom = toNumber(resolvedTrackStyle.borderBottomWidth, fallbackBorderWidth)
-        const trackBorderLeft = toNumber(resolvedTrackStyle.borderLeftWidth, fallbackBorderWidth)
-        const thumbInactiveSize = toNumber(resolvedThumbInactive.width as string | number | undefined, 16)
-        const thumbActiveSize = toNumber(resolvedThumbActive.width as string | number | undefined, 20)
-        const trackInnerWidth = trackWidth - trackBorderLeft - trackBorderRight
-        const trackInnerHeight = trackHeight - trackBorderTop - trackBorderBottom
-        const thumbOffsetInactive = (trackInnerHeight - thumbInactiveSize) / 2
-        const thumbOffsetActive = trackInnerWidth - thumbActiveSize - (
-          (trackInnerHeight - thumbActiveSize) / 2
-        )
-        const thumbTopInactive = (trackInnerHeight - thumbInactiveSize) / 2
-        const thumbTopActive = (trackInnerHeight - thumbActiveSize) / 2
-        const thumbSize = progress.interpolate({
-          inputRange: [0, 1],
-          outputRange: [thumbInactiveSize, thumbActiveSize],
-        })
-        const thumbTranslateX = progress.interpolate({
-          inputRange: [0, 1],
-          outputRange: [thumbOffsetInactive, thumbOffsetActive],
-        })
-        const thumbTop = progress.interpolate({
-          inputRange: [0, 1],
-          outputRange: [thumbTopInactive, thumbTopActive],
-        })
-        const thumbColor = value
-          ? resolvedThumbActive.backgroundColor
-          : resolvedThumbInactive.backgroundColor
-
-        return (
-          <Fragment>
-            {hitBox.isVisualizing && (
-              <View
-                pointerEvents="none"
-                style={createHitBoxOverlayStyle(hitSlop, hitBox.color)}
-              />
-            )}
-            <View style={resolvedTrackStyle}>
-              <Animated.View
-                style={{
-                  position: 'absolute',
-                  top: thumbTop,
-                  width: thumbSize,
-                  height: thumbSize,
-                  borderRadius: thumbActiveSize / 2,
-                  backgroundColor: thumbColor,
-                  transform: [{ translateX: thumbTranslateX }],
-                }}
-              />
-            </View>
-          </Fragment>
-        )
-      }}
+      {hitBox.isVisualizing && (
+        <View
+          pointerEvents="none"
+          style={createHitBoxOverlayStyle(hitSlop, hitBox.color)}
+        />
+      )}
+      <View style={resolvedTrackStyle}>
+        <Animated.View style={animatedThumbStyle} />
+      </View>
     </Pressable>
   )
 }

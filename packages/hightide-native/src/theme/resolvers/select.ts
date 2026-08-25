@@ -20,7 +20,6 @@ import type {
 import {
   createSimpleStyleResolver,
   createStyleResolver,
-  createValueResolver,
   type ComponentThemeResolver
 } from '../types/resolver'
 
@@ -128,7 +127,7 @@ export const toSelectThemeResolvers: ComponentThemeResolver<SelectThemeResolvers
     triggerText: createStyleResolver((state: SelectState): SelectTriggerTextStyle => (
       StyleAdapterUtils.text(resolve(toTriggerState(state)).triggerText)
     )),
-    icon: createValueResolver((state: SelectState): SelectIconStyle => (
+    icon: createStyleResolver((state: SelectState): SelectIconStyle => (
       StyleAdapterUtils.icon(resolve(toTriggerState(state)).icon)
     )),
     overlay: createSimpleStyleResolver((): SelectOverlayStyle => ({

@@ -7,17 +7,16 @@ import type {
   InputIconStyle,
   InputPlaceholderStyle,
   InputState,
+  InputStateLayerStyle,
   InputTextStyle,
   InputThemeResolvers
 } from '../types/components/input'
 import {
   createStyleResolver,
-  createValueResolver,
   type ComponentThemeResolver
 } from '../types/resolver'
 
 import { StyleAdapterUtils } from '../adapters'
-import { HexColorUtils } from '../../utils/hex'
 
 const toDesignInputState = (state: InputState = {}): DesignInputState => {
   const active = new Set<InputStateValue>()
@@ -62,22 +61,39 @@ export const toInputThemeResolvers: ComponentThemeResolver<InputThemeResolvers> 
   })
 
   return {
-    container: createStyleResolver((state: InputState): InputContainerStyle => {
-      const { container, stateLayer } = resolve(state)
-      if(container.backgroundColor && stateLayer.backgroundColor)
-        container.backgroundColor = HexColorUtils.blend(
-          HexColorUtils.resolveColorToken(container.backgroundColor),
-          HexColorUtils.resolveColorToken(stateLayer.backgroundColor)
-        )
-      return StyleAdapterUtils.container(container)
-    }),
-    text: createStyleResolver((state: InputState): InputTextStyle => (
-      StyleAdapterUtils.text(resolve(state).text)
+    container: createStyleResolver((state: InputState): InputContainerStyle => (
+      StyleAdapterUtils.container(resolve(state).container)
     )),
+    stateLayer: createStyleResolver((state: InputState): InputStateLayerStyle => {
+      const style = resolve(state)
+      const stateLayer = style.stateLayer
+      const container = style.container
+      const resolvedContainerBorder = StyleAdapterUtils.borderWidth(container.border?.width)
+      return {
+        ...StyleAdapterUtils.container(stateLayer),
+        ...StyleAdapterUtils.position({
+          type: 'absolute',
+          zIndex: stateLayer.position?.zIndex ?? 20,
+          bottom: -(resolvedContainerBorder?.borderBottomWidth ?? 0),
+          top: -(resolvedContainerBorder?.borderTopWidth ?? 0),
+          left: -(resolvedContainerBorder?.borderLeftWidth ?? 0),
+          right: -(resolvedContainerBorder?.borderRightWidth ?? 0),
+        })
+      }
+    }),
+    text: createStyleResolver((state: InputState): InputTextStyle => {
+      const style = resolve(state).text
+      return {
+        ...StyleAdapterUtils.text(style),
+        flex: 1,
+        padding: 0,
+        margin: 0,
+      }
+    }),
     placeholder: createStyleResolver((state: InputState): InputPlaceholderStyle => (
       StyleAdapterUtils.text(resolve(state).placeholder)
     )),
-    icon: createValueResolver((state: InputState): InputIconStyle => (
+    icon: createStyleResolver((state: InputState): InputIconStyle => (
       StyleAdapterUtils.icon(resolve(state).icon)
     )),
   }

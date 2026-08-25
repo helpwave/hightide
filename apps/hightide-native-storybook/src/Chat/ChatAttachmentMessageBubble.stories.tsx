@@ -19,7 +19,7 @@ export const chatAttachmentMessageBubble: Story = {
     name: 'Blutbild_2026-03.pdf',
     metadata: 'PDF · 245 KB',
     direction: 'incoming',
-    timestamp: '09:21',
+    timestamp: new Date('2026-08-24T09:24:00'),
     onDownload: action('download'),
   },
   render: (args) => (
@@ -29,7 +29,7 @@ export const chatAttachmentMessageBubble: Story = {
         name="EKG_Bericht.pdf"
         metadata="PDF · 128 KB"
         direction="outgoing"
-        timestamp="09:24"
+        timestamp={new Date('2026-08-25T09:09:00')}
         onDownload={action('download')}
       />
     </View>

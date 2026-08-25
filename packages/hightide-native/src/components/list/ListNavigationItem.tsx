@@ -1,5 +1,6 @@
 import {
-  Fragment,
+  useMemo,
+  useState,
   type ReactNode
 } from 'react'
 import {
@@ -16,6 +17,7 @@ import { HightideIconRegistry } from '../../icons/HightideIconRegistry'
 import { ThemedIcon } from '../visualization-and-display/ThemedIcon'
 import { useDebugContext } from '../../global-contexts/debug'
 import { useTheme } from '../../global-contexts/theme/ThemeContext'
+import { useMemoizedTheme } from '../../hooks/useMemoizedTheme'
 import type {
   ListNavigationItemDescriptionStyle,
   ListNavigationItemState,
@@ -44,13 +46,6 @@ export type ListNavigationItemProps = Omit<PressableProps, 'children' | 'style'>
   subtitleStyle?: StyleOverwrite<ListNavigationItemState, ListNavigationItemDescriptionStyle>,
 }
 
-type PressableInteraction = {
-  pressed: boolean,
-  hovered?: boolean,
-  focused?: boolean,
-  focusVisible?: boolean,
-}
-
 export const ListNavigationItem = ({
   title,
   subtitle,
@@ -74,15 +69,21 @@ export const ListNavigationItem = ({
     hitSlop: providedHitSlop,
     onLayout: providedOnLayout,
   })
+  const [isPressed, setIsPressed] = useState(false)
 
-  const resolveState = (interaction: PressableInteraction): ListNavigationItemState => ({
+  const resolvedState = useMemo((): ListNavigationItemState => ({
     color,
     isDisabled: !!disabled,
-    isPressed: interaction.pressed,
-    isHovered: !!interaction.hovered,
-    isFocused: !!interaction.focused,
-    isFocusVisible: !!interaction.focusVisible,
-  })
+    isPressed,
+  }), [color, disabled, isPressed])
+
+  const resolvedItemStyle = useMemoizedTheme(theme.components.listItem.navigation.container, resolvedState, itemStyle)
+  const resolvedLeadingItemContainerStyle = useMemoizedTheme(theme.components.listItem.navigation.leadingItemContainer, resolvedState)
+  const resolvedContentStyle = useMemoizedTheme(theme.components.listItem.navigation.content, resolvedState)
+  const resolvedTrailingItemContainerStyle = useMemoizedTheme(theme.components.listItem.navigation.trailingItemContainer, resolvedState)
+  const resolvedTitleStyle = useMemoizedTheme(theme.components.listItem.navigation.titleText, resolvedState, titleStyle)
+  const resolvedSubtitleStyle = useMemoizedTheme(theme.components.listItem.navigation.descriptionText, resolvedState, subtitleStyle)
+  const resolvedIconStyle = useMemoizedTheme(theme.components.listItem.navigation.icon, resolvedState)
 
   return (
     <Pressable
@@ -90,57 +91,48 @@ export const ListNavigationItem = ({
       disabled={disabled}
       hitSlop={hitSlop}
       onLayout={onLayout}
-      style={(pressableState) => {
-        const state = resolveState(pressableState as PressableInteraction)
-        return [theme.components.listItem.navigation.container(state, itemStyle), style]
+      style={[resolvedItemStyle, style]}
+      onPressIn={(event) => {
+        setIsPressed(true)
+        props.onPressIn?.(event)
+      }}
+      onPressOut={(event) => {
+        setIsPressed(false)
+        props.onPressOut?.(event)
       }}
     >
-      {(pressableState) => {
-        const state = resolveState(pressableState as PressableInteraction)
-        const resolvedLeadingItemContainerStyle = theme.components.listItem.navigation.leadingItemContainer(state)
-        const resolvedContentStyle = theme.components.listItem.navigation.content(state)
-        const resolvedTrailingItemContainerStyle = theme.components.listItem.navigation.trailingItemContainer(state)
-        const resolvedTitleStyle = theme.components.listItem.navigation.titleText(state, titleStyle)
-        const resolvedSubtitleStyle = theme.components.listItem.navigation.descriptionText(state, subtitleStyle)
-        const resolvedIconStyle = theme.components.listItem.navigation.icon(state)
-
-        return (
-          <Fragment>
-            {hitBox.isVisualizing && (
-              <View
-                pointerEvents="none"
-                style={createHitBoxOverlayStyle(hitSlop, hitBox.color)}
-              />
-            )}
-            {leading != null && (
-              <ListItemAccessory
-                style={resolvedLeadingItemContainerStyle}
-                foreground={color?.onColor}
-                iconStyle={resolvedIconStyle}
-              >
-                {leading}
-              </ListItemAccessory>
-            )}
-            <View style={resolvedContentStyle}>
-              <ListItemTextContent
-                title={title}
-                subtitle={subtitle}
-                content={content}
-                contentOrder={contentOrder}
-                titleStyle={resolvedTitleStyle}
-                subtitleStyle={resolvedSubtitleStyle}
-              />
-            </View>
-            <ListItemAccessory
-              style={resolvedTrailingItemContainerStyle}
-              foreground={color?.onColor}
-              iconStyle={resolvedIconStyle}
-            >
-              <ThemedIcon icon={HightideIconRegistry.ChevronRight} />
-            </ListItemAccessory>
-          </Fragment>
-        )
-      }}
+      {hitBox.isVisualizing && (
+        <View
+          pointerEvents="none"
+          style={createHitBoxOverlayStyle(hitSlop, hitBox.color)}
+        />
+      )}
+      {leading != null && (
+        <ListItemAccessory
+          style={resolvedLeadingItemContainerStyle}
+          foreground={color?.onColor}
+          iconStyle={resolvedIconStyle}
+        >
+          {leading}
+        </ListItemAccessory>
+      )}
+      <View style={resolvedContentStyle}>
+        <ListItemTextContent
+          title={title}
+          subtitle={subtitle}
+          content={content}
+          contentOrder={contentOrder}
+          titleStyle={resolvedTitleStyle}
+          subtitleStyle={resolvedSubtitleStyle}
+        />
+      </View>
+      <ListItemAccessory
+        style={resolvedTrailingItemContainerStyle}
+        foreground={color?.onColor}
+        iconStyle={resolvedIconStyle}
+      >
+        <ThemedIcon icon={HightideIconRegistry.ChevronRight} />
+      </ListItemAccessory>
     </Pressable>
   )
 }

@@ -14,6 +14,7 @@ import type { ChipVariant, ComponentSize } from '@helpwave/hightide-design/seman
 
 import { ContentThemeOverrideProvider } from '../../global-contexts/content-theme/ContentThemeProvider'
 import { useTheme } from '../../global-contexts/theme/ThemeContext'
+import { useMemoizedTheme } from '../../hooks/useMemoizedTheme'
 import type {
   ChipIconStyle,
   ChipState,
@@ -62,18 +63,9 @@ export const Chip = ({
     variant,
   }), [size, color, variant])
 
-  const resolvedChipStyle = useMemo(
-    () => theme.components.chip.chip(state, chipStyle),
-    [theme, state, chipStyle]
-  )
-  const resolvedIconStyle = useMemo(
-    () => theme.components.chip.icon(state, iconStyle),
-    [theme, state, iconStyle]
-  )
-  const resolvedTextStyle = useMemo(
-    () => theme.components.chip.text(state, textStyle),
-    [theme, state, textStyle]
-  )
+  const resolvedChipStyle = useMemoizedTheme(theme.components.chip.chip, state, chipStyle)
+  const resolvedIconStyle = useMemoizedTheme(theme.components.chip.icon, state, iconStyle)
+  const resolvedTextStyle = useMemoizedTheme(theme.components.chip.text, state, textStyle)
 
   return (
     <View

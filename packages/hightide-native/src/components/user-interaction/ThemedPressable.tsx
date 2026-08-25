@@ -1,4 +1,4 @@
-import { Fragment, forwardRef } from 'react'
+import { forwardRef, useMemo, useState } from 'react'
 import {
   Pressable,
   View,
@@ -15,6 +15,7 @@ import type { ColorPairToken } from '@helpwave/hightide-design/theme-tokens'
 import { ContentThemeOverrideProvider } from '../../global-contexts/content-theme/ContentThemeProvider'
 import { useDebugContext } from '../../global-contexts/debug'
 import { useTheme } from '../../global-contexts/theme/ThemeContext'
+import { useMemoizedTheme } from '../../hooks/useMemoizedTheme'
 import type {
   ThemedPressableIconStyle,
   ThemedPressableState,
@@ -45,13 +46,6 @@ export type ThemedPressableProps = Omit<PressableProps, 'style'> & {
   textStyle?: StyleOverwrite<ThemedPressableState, ThemedPressableTextStyle>,
 }
 
-type PressableInteraction = {
-  pressed: boolean,
-  hovered?: boolean,
-  focused?: boolean,
-  focusVisible?: boolean,
-}
-
 export const ThemedPressable = forwardRef<React.ComponentRef<typeof Pressable>, ThemedPressableProps>(function ThemedPressable({
   children,
   size = 'md',
@@ -75,19 +69,33 @@ export const ThemedPressable = forwardRef<React.ComponentRef<typeof Pressable>, 
     hitSlop: providedHitSlop,
     onLayout: providedOnLayout,
   })
+  const [isPressed, setIsPressed] = useState(false)
 
-  const resolveState = (interaction: PressableInteraction): ThemedPressableState => ({
+  const resolvedState = useMemo((): ThemedPressableState => ({
     size,
     color,
     coloringStyle,
     coloringColorVariant,
     hasAdditionalHorizontalPadding,
     isDisabled: !!disabled,
-    isPressed: interaction.pressed,
-    isHovered: !!interaction.hovered,
-    isFocused: !!interaction.focused,
-    isFocusVisible: !!interaction.focusVisible,
-  })
+    isPressed,
+  }), [
+    size,
+    color,
+    coloringStyle,
+    coloringColorVariant,
+    hasAdditionalHorizontalPadding,
+    disabled,
+    isPressed,
+  ])
+
+  const resolvedContainerStyle = useMemoizedTheme(theme.components.themedPressable.container, resolvedState, style)
+  const resolvedStateLayerStyle = useMemoizedTheme(theme.components.themedPressable.stateLayer, resolvedState, stateLayerStyle)
+  const resolvedTextStyle = useMemoizedTheme(theme.components.themedPressable.text, resolvedState, textStyle)
+  const resolvedIconStyle = useMemoizedTheme(theme.components.themedPressable.icon, resolvedState, iconStyle)
+  const resolvedChildren = typeof children === 'function'
+    ? children({ pressed: isPressed })
+    : children
 
   return (
     <Pressable
@@ -96,43 +104,34 @@ export const ThemedPressable = forwardRef<React.ComponentRef<typeof Pressable>, 
       disabled={disabled}
       hitSlop={hitSlop}
       onLayout={onLayout}
-      style={(pressableState) => {
-        const state = resolveState(pressableState)
-        return theme.components.themedPressable.container(state, style)
+      style={resolvedContainerStyle}
+      onPressIn={(event) => {
+        setIsPressed(true)
+        props.onPressIn?.(event)
+      }}
+      onPressOut={(event) => {
+        setIsPressed(false)
+        props.onPressOut?.(event)
       }}
     >
-      {(pressableState) => {
-        const state = resolveState(pressableState)
-        const resolvedText = theme.components.themedPressable.text(state, textStyle)
-        const resolvedIcon = theme.components.themedPressable.icon(state, iconStyle)
-        const resolvedChildren = typeof children === 'function'
-          ? children(pressableState)
-          : children
-        const backroundColor = theme.components.themedPressable.container(state, style).backgroundColor
-
-        return (
-          <Fragment>
-            {hitBox.isVisualizing && (
-              <View
-                pointerEvents="none"
-                style={createHitBoxOverlayStyle(hitSlop, hitBox.color)}
-              />
-            )}
-            <View
-              pointerEvents="none"
-              style={theme.components.themedPressable.stateLayer(state, stateLayerStyle)}
-            />
-            <ContentThemeOverrideProvider
-              foreground={resolvedText.color}
-              background={backroundColor}
-              textStyle={resolvedText}
-              iconStyle={resolvedIcon}
-            >
-              {resolvedChildren}
-            </ContentThemeOverrideProvider>
-          </Fragment>
-        )
-      }}
+      {hitBox.isVisualizing && (
+        <View
+          pointerEvents="none"
+          style={createHitBoxOverlayStyle(hitSlop, hitBox.color)}
+        />
+      )}
+      <View
+        pointerEvents="none"
+        style={resolvedStateLayerStyle}
+      />
+      <ContentThemeOverrideProvider
+        foreground={resolvedTextStyle.color}
+        background={resolvedContainerStyle.backgroundColor}
+        textStyle={resolvedTextStyle}
+        iconStyle={resolvedIconStyle}
+      >
+        {resolvedChildren}
+      </ContentThemeOverrideProvider>
     </Pressable>
   )
 })

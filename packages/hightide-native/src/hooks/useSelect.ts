@@ -31,7 +31,9 @@ export interface UseSelectOptions {
   typeAheadResetMs?: number,
 }
 
-export type UseSelectFirstHighlightBehavior = 'first' | 'last'
+import type { UseSelectFirstHighlightBehavior } from '../enums/useSelectFirstHighlightBehavior'
+
+export type { UseSelectFirstHighlightBehavior }
 
 export interface UseSelectState {
   value: string | null,

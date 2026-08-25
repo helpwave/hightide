@@ -26,9 +26,6 @@ export const chatMessageComposerTokenResolver: ChatMessageComposerTokenResolver 
   return {
     container: {
       backgroundColor: color.surface.color,
-      size: {
-        width: '100%',
-      },
       padding: {
         type: 'physicalAxis',
         vertical: padding.xl,
@@ -46,7 +43,8 @@ export const chatMessageComposerTokenResolver: ChatMessageComposerTokenResolver 
       },
       layout: {
         direction: 'horizontal',
-        crossAxisAligment: 'end',
+        crossAxisAlignment: 'end',
+        selfCrossAxisAlignment: 'stretch',
         gap: spacing.md,
       },
     },
@@ -68,6 +66,7 @@ export const chatMessageComposerTokenResolver: ChatMessageComposerTokenResolver 
       },
       layout: {
         flexGrow: 1,
+        flexShrink: 1,
       }
     },
     text: {

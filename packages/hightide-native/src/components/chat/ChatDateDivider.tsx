@@ -10,6 +10,7 @@ import {
 } from 'react-native'
 
 import { useTheme } from '../../global-contexts/theme/ThemeContext'
+import { useMemoizedTheme } from '../../hooks/useMemoizedTheme'
 import { ThemedText } from '../visualization-and-display/ThemedText'
 import type {
   ChatDateDividerStyle,
@@ -34,14 +35,8 @@ export const ChatDateDivider = ({
   const { theme } = useTheme()
   const state = useMemo(() => ({}), [])
 
-  const resolvedDividerStyle = useMemo(
-    () => theme.components.chat.dateDivider.container(state, dividerStyle),
-    [theme, state, dividerStyle]
-  )
-  const resolvedTextStyle = useMemo(
-    () => theme.components.chat.dateDivider.text(state, textStyle),
-    [theme, state, textStyle]
-  )
+  const resolvedDividerStyle = useMemoizedTheme(theme.components.chat.dateDivider.container, state, dividerStyle)
+  const resolvedTextStyle = useMemoizedTheme(theme.components.chat.dateDivider.text, state, textStyle)
 
   return (
     <View {...props} style={[resolvedDividerStyle, style]}>
