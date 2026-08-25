@@ -5,6 +5,20 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [0.7.0] - 2026-08-25
+
+### Added
+
+- `StyleAdapterUtils.container` maps `ContainerTokens.position` and `ContainerTokens.transform` from `@helpwave/hightide-design@0.8.0` to React Native `position` / inset and `transform` styles
+
+### Changed
+
+- `Checkbox`, `ThemedPressable`, `IconButton`, and `Switch` render their content in the component and track `isPressed` with `onPressIn` / `onPressOut` instead of Pressable children state
+
+### Fixed
+
+- `Select` and `MulitSelect` dialogs to not expand if search was not enabled
+
 ## [0.6.0] - 2026-08-21
 
 ### Added

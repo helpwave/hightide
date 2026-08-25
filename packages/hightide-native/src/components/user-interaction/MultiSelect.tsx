@@ -313,7 +313,6 @@ export const MultiSelect = ({
               <FlatList
                 data={visibleOptions}
                 keyExtractor={(option) => option.id}
-                style={{ flex: 1 }}
                 renderItem={({ item }) => (
                   <MultiSelectOptionRow
                     item={item}

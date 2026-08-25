@@ -16,6 +16,45 @@ export type CrossAxisLineAligmentToken = AxisAligmentToken | SpacingToken | Stre
 export type FlexWrapToken = 'nowrap' | 'wrap' | 'wrap-reverse'
 export type OverflowToken = 'visible' | 'hidden' | 'scroll'
 export type SizeToken = number | `${number}%`
+export type StaticPositionTokens = {
+  type: 'static',
+}
+export type RelativePositionTokens = {
+  type: 'relative',
+  left?: SizeToken,
+  right?: SizeToken,
+  top?: SizeToken,
+  bottom?: SizeToken,
+}
+export type AbsolutePositionTokens = {
+  type: 'absolute',
+  left?: SizeToken,
+  right?: SizeToken,
+  top?: SizeToken,
+  bottom?: SizeToken,
+}
+export type PositioningToken = StaticPositionTokens | RelativePositionTokens | AbsolutePositionTokens
+export type DegreeToken = `${string}deg`
+// TODO: Add Matrix and perspective later
+export type TransformTokens = {
+  translate?: {
+    x?: number,
+    y?: number,
+  },
+  scale?: {
+    x?: number,
+    y?: number,
+  },
+  rotation?: {
+    x?: DegreeToken,
+    y?: DegreeToken,
+    z?: DegreeToken,
+  },
+  skew?: {
+    x?: number,
+    y?: number,
+  },
+}
 export type BorderRadiusToken = {
   type: 'all',
   value?: number,
@@ -70,6 +109,8 @@ export type ContainerTokens = {
   backgroundColor?: ColorToken,
   opacity?: number,
   overflow?: OverflowToken,
+  position?: PositioningToken,
+  transform?: TransformTokens,
   border?: BorderToken,
   size?: {
     height?: SizeToken,

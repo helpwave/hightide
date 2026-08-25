@@ -249,7 +249,6 @@ export const Select = ({
               <FlatList
                 data={visibleOptions}
                 keyExtractor={(option) => option.id}
-                style={{ flex: 1 }}
                 renderItem={({ item }) => {
                   const isSelected = select.value === item.id
                   const optionColor = isSelected

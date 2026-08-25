@@ -18,7 +18,9 @@ import type {
   MainAxisAligmentToken,
   MarginToken,
   PaddingToken,
-  TextStyleTokens
+  PositioningToken,
+  TextStyleTokens,
+  TransformTokens
 } from '@helpwave/hightide-design/component-token-resolvers'
 import {
   defaultWritingMode,
@@ -395,6 +397,86 @@ const layoutStyleAdapter = (
   })
 }
 
+const positionStyleAdapter = (
+  position?: PositioningToken
+): OptionalViewStyle<
+  | 'position'
+  | 'left'
+  | 'right'
+  | 'top'
+  | 'bottom'
+> | undefined => {
+  if (position === undefined) {
+    return undefined
+  }
+
+  if (position.type === 'static') {
+    return {
+      position: 'static',
+    }
+  }
+
+  return defined({
+    position: position.type,
+    left: position.left,
+    right: position.right,
+    top: position.top,
+    bottom: position.bottom,
+  })
+}
+
+const transformStyleAdapter = (
+  transform?: TransformTokens
+): ViewStyle['transform'] | undefined => {
+  if (transform === undefined) {
+    return undefined
+  }
+
+  const transforms = []
+
+  if (transform.translate?.x !== undefined) {
+    transforms.push({ translateX: transform.translate.x })
+  }
+
+  if (transform.translate?.y !== undefined) {
+    transforms.push({ translateY: transform.translate.y })
+  }
+
+  if (transform.scale?.x !== undefined) {
+    transforms.push({ scaleX: transform.scale.x })
+  }
+
+  if (transform.scale?.y !== undefined) {
+    transforms.push({ scaleY: transform.scale.y })
+  }
+
+  if (transform.rotation?.x !== undefined) {
+    transforms.push({ rotateX: transform.rotation.x })
+  }
+
+  if (transform.rotation?.y !== undefined) {
+    transforms.push({ rotateY: transform.rotation.y })
+  }
+
+  if (transform.rotation?.z !== undefined) {
+    transforms.push({ rotateZ: transform.rotation.z })
+  }
+
+  if (transform.skew?.x !== undefined) {
+    transforms.push({ skewX: `${transform.skew.x}deg` })
+  }
+
+  if (transform.skew?.y !== undefined) {
+    transforms.push({ skewY: `${transform.skew.y}deg` })
+  }
+
+  if (transforms.length === 0) {
+    return undefined
+  }
+
+  return transforms
+}
+
 function containerStyleAdapter(tokens: ContainerTokens): ViewStyle {
   if (tokens === undefined) {
     return {}
@@ -406,6 +488,8 @@ function containerStyleAdapter(tokens: ContainerTokens): ViewStyle {
     backgroundColor: tokens.backgroundColor,
     opacity: tokens.opacity,
     boxShadow: shadowStyleAdapter(tokens.decoration?.shadow),
+    transform: transformStyleAdapter(tokens.transform),
+    ...positionStyleAdapter(tokens.position),
     ...layoutStyleAdapter(tokens.layout),
     ...sizeStyleAdapter(tokens.size),
     ...borderStyleAdapter(tokens.border),
@@ -459,6 +543,8 @@ export const StyleAdapterUtils = {
   size: sizeStyleAdapter,
   outline: outlineStyleAdapter,
   layout: layoutStyleAdapter,
+  position: positionStyleAdapter,
+  transform: transformStyleAdapter,
   container: containerStyleAdapter,
   text: textStyleAdapter,
   icon: iconStyleAdapter,

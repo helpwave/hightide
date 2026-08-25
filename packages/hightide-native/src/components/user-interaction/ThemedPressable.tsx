@@ -1,4 +1,4 @@
-import { forwardRef, useMemo } from 'react'
+import { forwardRef, useMemo, useState } from 'react'
 import {
   Pressable,
   View,
@@ -25,7 +25,6 @@ import type {
 import type { StyleOverwrite } from '../../theme/types/resolver'
 import { createHitBoxOverlayStyle } from '../../utils/hitBoxOverlay'
 import { useMinimumTouchTargetHitSlop } from '../../utils/minimumTouchTargetHitSlop'
-import type { PressableInteractionState } from '../../utils/pressableInteraction'
 
 export type ThemedPressableSize = ComponentSize
 
@@ -47,53 +46,39 @@ export type ThemedPressableProps = Omit<PressableProps, 'style'> & {
   textStyle?: StyleOverwrite<ThemedPressableState, ThemedPressableTextStyle>,
 }
 
-type PressableInteraction = PressableInteractionState
-
-type ThemedPressableContentProps = {
-  pressableState: PressableInteraction,
-  children: ThemedPressableProps['children'],
-  size: ThemedPressableSize,
-  color?: ColorPairToken,
-  coloringStyle: ColoringStyle,
-  coloringColorVariant: ColoringColorVariant,
-  hasAdditionalHorizontalPadding: boolean,
-  disabled?: boolean,
-  style?: StyleOverwrite<ThemedPressableState, ThemedPressableStyle>,
-  stateLayerStyle?: StyleOverwrite<ThemedPressableState, ThemedPressableStyle>,
-  iconStyle?: StyleOverwrite<ThemedPressableState, ThemedPressableIconStyle>,
-  textStyle?: StyleOverwrite<ThemedPressableState, ThemedPressableTextStyle>,
-  hitSlop: PressableProps['hitSlop'],
-}
-
-const ThemedPressableContent = ({
-  pressableState,
+export const ThemedPressable = forwardRef<React.ComponentRef<typeof Pressable>, ThemedPressableProps>(function ThemedPressable({
   children,
-  size,
+  size = 'md',
   color,
-  coloringStyle,
-  coloringColorVariant,
-  hasAdditionalHorizontalPadding,
+  coloringStyle = 'foreground',
+  coloringColorVariant = 'normal',
+  hasAdditionalHorizontalPadding = false,
   disabled,
   style,
   stateLayerStyle,
   iconStyle,
   textStyle,
-  hitSlop,
-}: ThemedPressableContentProps) => {
+  hitSlop: providedHitSlop,
+  onLayout: providedOnLayout,
+  ...props
+}, ref) {
   const { theme } = useTheme()
   const { hitBox } = useDebugContext()
+  const { hitSlop, onLayout } = useMinimumTouchTargetHitSlop({
+    touchTargetSize: theme.semantics.touchTargetSize({}),
+    hitSlop: providedHitSlop,
+    onLayout: providedOnLayout,
+  })
+  const [isPressed, setIsPressed] = useState(false)
 
-  const state = useMemo((): ThemedPressableState => ({
+  const resolvedState = useMemo((): ThemedPressableState => ({
     size,
     color,
     coloringStyle,
     coloringColorVariant,
     hasAdditionalHorizontalPadding,
     isDisabled: !!disabled,
-    isPressed: pressableState.pressed,
-    isHovered: !!pressableState.hovered,
-    isFocused: !!pressableState.focused,
-    isFocusVisible: !!pressableState.focusVisible,
+    isPressed,
   }), [
     size,
     color,
@@ -101,22 +86,34 @@ const ThemedPressableContent = ({
     coloringColorVariant,
     hasAdditionalHorizontalPadding,
     disabled,
-    pressableState.pressed,
-    pressableState.hovered,
-    pressableState.focused,
-    pressableState.focusVisible,
+    isPressed,
   ])
 
-  const resolvedContainerStyle = useMemoizedTheme(theme.components.themedPressable.container, state, style)
-  const resolvedStateLayerStyle = useMemoizedTheme(theme.components.themedPressable.stateLayer, state, stateLayerStyle)
-  const resolvedTextStyle = useMemoizedTheme(theme.components.themedPressable.text, state, textStyle)
-  const resolvedIconStyle = useMemoizedTheme(theme.components.themedPressable.icon, state, iconStyle)
+  const resolvedContainerStyle = useMemoizedTheme(theme.components.themedPressable.container, resolvedState, style)
+  const resolvedStateLayerStyle = useMemoizedTheme(theme.components.themedPressable.stateLayer, resolvedState, stateLayerStyle)
+  const resolvedTextStyle = useMemoizedTheme(theme.components.themedPressable.text, resolvedState, textStyle)
+  const resolvedIconStyle = useMemoizedTheme(theme.components.themedPressable.icon, resolvedState, iconStyle)
   const resolvedChildren = typeof children === 'function'
-    ? children(pressableState)
+    ? children({ pressed: isPressed })
     : children
 
   return (
-    <View style={resolvedContainerStyle}>
+    <Pressable
+      {...props}
+      ref={ref}
+      disabled={disabled}
+      hitSlop={hitSlop}
+      onLayout={onLayout}
+      style={resolvedContainerStyle}
+      onPressIn={(event) => {
+        setIsPressed(true)
+        props.onPressIn?.(event)
+      }}
+      onPressOut={(event) => {
+        setIsPressed(false)
+        props.onPressOut?.(event)
+      }}
+    >
       {hitBox.isVisualizing && (
         <View
           pointerEvents="none"
@@ -135,59 +132,6 @@ const ThemedPressableContent = ({
       >
         {resolvedChildren}
       </ContentThemeOverrideProvider>
-    </View>
-  )
-}
-
-export const ThemedPressable = forwardRef<React.ComponentRef<typeof Pressable>, ThemedPressableProps>(function ThemedPressable({
-  children,
-  size = 'md',
-  color,
-  coloringStyle = 'foreground',
-  coloringColorVariant = 'normal',
-  hasAdditionalHorizontalPadding = false,
-  disabled,
-  style,
-  stateLayerStyle,
-  iconStyle,
-  textStyle,
-  hitSlop: providedHitSlop,
-  onLayout: providedOnLayout,
-  ...props
-}, ref) {
-  const { theme } = useTheme()
-  const { hitSlop, onLayout } = useMinimumTouchTargetHitSlop({
-    touchTargetSize: theme.semantics.touchTargetSize({}),
-    hitSlop: providedHitSlop,
-    onLayout: providedOnLayout,
-  })
-
-  return (
-    <Pressable
-      {...props}
-      ref={ref}
-      disabled={disabled}
-      hitSlop={hitSlop}
-      onLayout={onLayout}
-    >
-      {(pressableState) => (
-        <ThemedPressableContent
-          pressableState={pressableState as PressableInteractionState}
-          size={size}
-          color={color}
-          coloringStyle={coloringStyle}
-          coloringColorVariant={coloringColorVariant}
-          hasAdditionalHorizontalPadding={hasAdditionalHorizontalPadding}
-          disabled={disabled ?? false}
-          style={style}
-          stateLayerStyle={stateLayerStyle}
-          iconStyle={iconStyle}
-          textStyle={textStyle}
-          hitSlop={hitSlop}
-        >
-          {children}
-        </ThemedPressableContent>
-      )}
     </Pressable>
   )
 })
