@@ -74,8 +74,6 @@ export const listItemTokenResolver: ListItemTokenResolver = ({
         direction: 'horizontal',
         mainAxisAlignment: 'start',
         crossAxisAlignment: 'center',
-        flexGrow: 1,
-        selfCrossAxisAlignment: 'stretch',
       },
     },
     leadingItemContainer: {

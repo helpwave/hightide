@@ -134,7 +134,7 @@ export type ContainerTokens = {
     direction?: LayoutDirectionToken,
     mainAxisAlignment?: MainAxisAligmentToken,
     crossAxisAlignment?: CrossAxisAlignmentToken,
-    crossAxisLineAligment?: CrossAxisLineAligmentToken,
+    crossAxisLineAlignment?: CrossAxisLineAligmentToken,
     selfCrossAxisAlignment?: CrossAxisAlignmentToken,
     flexGrow?: number,
     flexShrink?: number,

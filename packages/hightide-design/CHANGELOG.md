@@ -10,14 +10,22 @@ and adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 ### Added
 
 - `position` on `ContainerTokens` (`PositioningToken`: `static` | `relative` | `absolute`, with optional `left` / `right` / `top` / `bottom` `SizeToken`s and `zIndex`)
-- Button, icon button, and pressable `stateLayer` tokens use absolute fill positioning (`top` / `right` / `bottom` / `left` 0, `zIndex` 20)
 - `transform` on `ContainerTokens` (`TransformTokens`: optional `translate`, `scale`, `rotation`, `skew`; `DegreeToken` for rotation)
-
+- Button, icon button, pressable, and input `stateLayer` tokens use absolute fill positioning (`top` / `right` / `bottom` / `left` 0, `zIndex` 20) and a matching `borderRadius`
+- Input container layout (`direction`, `mainAxisAlignment`, `crossAxisAlignment`); textarea keeps that layout with `crossAxisAlignment: 'start'`
+- Switch track container `size` (`width` / `height`) on the resolved tokens
+- Avatar overlay image uses absolute `position` (`left` / `top` 0)
 
 ### Changed
 
 - Renamed container layout token `crossAxisAligment` to `crossAxisAlignment` (`CrossAxisAlignmentToken`)
+- Renamed container layout token `crossAxisLineAligment` to `crossAxisLineAlignment`
 - Switch thumb layout is resolved from state: track is `relative`, thumb is `absolute` with `top` and `transform.translate.x` (plus size) instead of native offset math
+- Card layout `crossAxisAlignment` is `stretch`
+- Button, list item, chat attachment bubble, conversation row, thread header, and quick-reply chip drop extra `selfCrossAxisAlignment` / `flexGrow` defaults that fought parent stretch
+- Conversation row header uses `flexShrink: 1` and `gap: spacing.sm`; unread badge uses `flexShrink: 0`
+- Message composer container uses `selfCrossAxisAlignment: 'stretch'` instead of `flexGrow: 1` and no longer sets `width: '100%'`; input area uses `flexShrink: 1`
+- Quick-reply chip horizontal padding uses `padding.lg` instead of `spacing.lg`
 
 ## [0.6.0] - 2026-08-21
 

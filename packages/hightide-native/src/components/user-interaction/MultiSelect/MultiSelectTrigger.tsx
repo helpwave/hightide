@@ -1,7 +1,6 @@
 import type { ReactNode } from 'react'
 import { useMemo, useState } from 'react'
 import {
-  Pressable,
   View,
   type StyleProp,
   type ViewStyle
@@ -17,6 +16,7 @@ import { Chip } from '../../visualization-and-display/Chip'
 import { ThemedText } from '../../visualization-and-display/ThemedText'
 import { IconButton } from '../IconButton'
 import { useMultiSelectContext, type MultiSelectOptionType } from './MultiSelectContext'
+import { ThemedPressable } from '../ThemedPressable'
 
 export type MultiSelectTriggerProps<T = string> = {
   placeholder?: ReactNode,
@@ -65,7 +65,7 @@ export const MultiSelectTrigger = <T,>({
   const customDisplay = selectedDisplay?.(selectedOptions)
 
   return (
-    <Pressable
+    <ThemedPressable
       disabled={!interactive}
       style={[resolvedTriggerStyle, style]}
       onPressIn={() => setIsPressed(true)}
@@ -76,7 +76,7 @@ export const MultiSelectTrigger = <T,>({
       {selectedDisplay ? (
         customDisplay
       ) : selectedOptions.length > 0 ? (
-        <View style={{ flexDirection: 'row', flexWrap: 'wrap', gap: 6, flex: 1 }}>
+        <View style={{ flexDirection: 'row', flexWrap: 'wrap', gap: 6 }}>
           {selectedOptions.map((option) => (
             <Chip key={option.id} size="md" color={context.config.color} variant="tonal">
               <ThemedText>{option.label ?? String(option.value)}</ThemedText>
@@ -118,6 +118,6 @@ export const MultiSelectTrigger = <T,>({
       ) : (
         placeholder
       )}
-    </Pressable>
+    </ThemedPressable>
   )
 }

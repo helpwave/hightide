@@ -1,9 +1,6 @@
 import {
-  cloneElement,
-  isValidElement,
   useMemo,
   useState,
-  type ReactElement,
   type ReactNode
 } from 'react'
 import {
@@ -18,7 +15,6 @@ import { useTheme } from '../../global-contexts/theme/ThemeContext'
 import { useMemoizedTheme, useMemoizedThemeFactory } from '../../hooks/useMemoizedTheme'
 import type {
   AvatarState,
-  AvatarStyle,
   AvatarThemeResolvers
 } from '../../theme/types/components/avatar'
 import type {
@@ -37,7 +33,10 @@ import type {
   PressableTextStyle
 } from '../../theme/types/components/chat'
 import type { StyleOverwrite, StyleResolverFunction } from '../../theme/types/resolver'
-import type { AvatarProps } from '../visualization-and-display/Avatar'
+import {
+  AvatarWithStatus,
+  type AvatarWithStatusProps
+} from '../visualization-and-display/Avatar'
 
 import type { ChatMessageStatus } from '../../enums/chatMessageStatus'
 import type { IconComponent } from '../../icons/types'
@@ -46,7 +45,8 @@ import { ThemedPressable } from '../user-interaction'
 export type { ChatMessageStatus }
 
 export type ChatConversationRowProps = Omit<PressableProps, 'children' | 'style'> & {
-  avatar: ReactNode,
+  avatarProps?: AvatarWithStatusProps,
+  avatarOverride?: ReactNode,
   title: ReactNode,
   timestamp?: ReactNode,
   preview?: ReactNode,
@@ -61,7 +61,6 @@ export type ChatConversationRowProps = Omit<PressableProps, 'children' | 'style'
   timestampStyle?: StyleOverwrite<ChatConversationRowState, ChatConversationRowTimestampStyle>,
   previewStyle?: StyleOverwrite<ChatConversationRowState, ChatConversationRowPreviewStyle>,
   sentIndicatorStyle?: StyleOverwrite<Record<string, never>, ChatConversationRowSentIndicatorStyle>,
-  avatarStyle?: StyleOverwrite<AvatarState, AvatarStyle>,
 }
 
 type ConversationRowPressableResolvers = {
@@ -69,10 +68,6 @@ type ConversationRowPressableResolvers = {
   stateLayer: StyleResolverFunction<PressableState, PressableStateLayerStyle>,
   text: StyleResolverFunction<PressableState, PressableTextStyle>,
   icon: StyleResolverFunction<PressableState, PressableIconStyle>,
-}
-
-type AvatarElementProps = AvatarProps & {
-  avatarStyle?: AvatarProps['avatarStyle'],
 }
 
 const toNumericSize = (value: unknown): number | undefined => (
@@ -86,7 +81,8 @@ const resolveMessageStatusIcon = (messageStatus: ChatMessageStatus): IconCompone
 )
 
 export const ChatConversationRow = ({
-  avatar,
+  avatarProps,
+  avatarOverride,
   title,
   timestamp,
   preview,
@@ -102,7 +98,6 @@ export const ChatConversationRow = ({
   timestampStyle,
   previewStyle,
   sentIndicatorStyle,
-  avatarStyle,
   ...props
 }: ChatConversationRowProps) => {
   const { theme } = useTheme()
@@ -143,8 +138,8 @@ export const ChatConversationRow = ({
     staticState
   )
   const avatarSize = useMemo(
-    () => toNumericSize(StyleSheet.flatten(avatarTheme.container({})).width),
-    [avatarTheme]
+    () => toNumericSize(StyleSheet.flatten(avatarTheme.container({})).width) ?? avatarProps?.size,
+    [avatarProps?.size, avatarTheme]
   )
   const messageStatusIcon = messageStatus === undefined
     ? undefined
@@ -153,45 +148,13 @@ export const ChatConversationRow = ({
     ? theme.colors.primary.color
     : resolvedSentIndicator.color
 
-  const resolvedAvatar = useMemo(() => {
-    if (!isValidElement(avatar) || avatarSize === undefined) {
-      return avatar
-    }
-
-    const avatarElement = avatar as ReactElement<AvatarElementProps>
-
-    return cloneElement(avatarElement, {
-      size: avatarSize,
-      avatarStyle: (avatarState) => avatarTheme.container(
-        {
-          ...avatarState,
-          size: avatarSize,
-        },
-        avatarStyle ?? avatarElement.props.avatarStyle
-      ),
-      imageStyle: (avatarState) => avatarTheme.image(
-        {
-          ...avatarState,
-          size: avatarSize,
-        },
-        avatarElement.props.imageStyle
-      ),
-      textStyle: (avatarState) => avatarTheme.text(
-        {
-          ...avatarState,
-          size: avatarSize,
-        },
-        avatarElement.props.textStyle
-      ),
-      iconStyle: (avatarState) => avatarTheme.icon(
-        {
-          ...avatarState,
-          size: avatarSize,
-        },
-        avatarElement.props.iconStyle
-      ),
-    })
-  }, [avatar, avatarSize, avatarStyle, avatarTheme])
+  const {
+    avatarStyle,
+    imageStyle,
+    textStyle,
+    iconStyle,
+    ...restAvatarProps
+  } = avatarProps ?? {}
 
   return (
     <ThemedPressable
@@ -208,7 +171,40 @@ export const ChatConversationRow = ({
         props.onPressOut?.(event)
       }}
     >
-      {resolvedAvatar}
+      {avatarOverride ?? (
+        <AvatarWithStatus
+          {...restAvatarProps}
+          size={avatarSize}
+          avatarStyle={(avatarState) => avatarTheme.container(
+            {
+              ...avatarState,
+              size: avatarSize,
+            },
+            avatarStyle
+          )}
+          imageStyle={(avatarState) => avatarTheme.image(
+            {
+              ...avatarState,
+              size: avatarSize,
+            },
+            imageStyle
+          )}
+          textStyle={(avatarState) => avatarTheme.text(
+            {
+              ...avatarState,
+              size: avatarSize,
+            },
+            textStyle
+          )}
+          iconStyle={(avatarState) => avatarTheme.icon(
+            {
+              ...avatarState,
+              size: avatarSize,
+            },
+            iconStyle
+          )}
+        />
+      )}
       <View style={resolvedContentContainer}>
         <View style={resolvedHeaderRow}>
           {typeof title === 'string' || typeof title === 'number' ? (
@@ -225,7 +221,7 @@ export const ChatConversationRow = ({
           )}
         </View>
         <View style={resolvedMessageRow}>
-          <View style={{ flexDirection: 'row', alignItems: 'center', flex: 1, gap: theme.spacing.sm }}>
+          <View style={{ flexDirection: 'row', alignItems: 'center', flex: 1, gap: theme.spacing.xs }}>
             {messageStatusIcon != null && (
               <ThemedIcon
                 icon={messageStatusIcon}
@@ -236,7 +232,7 @@ export const ChatConversationRow = ({
             )}
             {preview != null && (
               typeof preview === 'string' || typeof preview === 'number' ? (
-                <ThemedText style={resolvedPreview} numberOfLines={1}>{preview}</ThemedText>
+                <ThemedText style={[resolvedPreview, { flex: 1 }]} numberOfLines={1}>{preview}</ThemedText>
               ) : (
                 preview
               )

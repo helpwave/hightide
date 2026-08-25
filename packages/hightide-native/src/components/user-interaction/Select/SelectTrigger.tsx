@@ -1,7 +1,6 @@
 import type { ReactNode } from 'react'
 import { useMemo, useState } from 'react'
 import {
-  Pressable,
   View,
   type StyleProp,
   type ViewStyle
@@ -15,6 +14,7 @@ import type { SelectState } from '../../../theme/types/components/select'
 import { ThemedIcon } from '../../visualization-and-display/ThemedIcon'
 import { ThemedText } from '../../visualization-and-display/ThemedText'
 import { useSelectContext, type SelectOptionType } from './SelectContext'
+import { ThemedPressable } from '../ThemedPressable'
 
 export type SelectTriggerProps<T = string> = {
   placeholder?: ReactNode,
@@ -66,7 +66,7 @@ export const SelectTrigger = <T,>({
   const resolvedDisplay = selectedDisplay ? customDisplay : fallbackDisplay
 
   return (
-    <Pressable
+    <ThemedPressable
       disabled={!interactive}
       style={[resolvedTriggerStyle, style]}
       onPressIn={() => setIsPressed(true)}
@@ -75,7 +75,7 @@ export const SelectTrigger = <T,>({
     >
       <View pointerEvents="none" style={resolvedStateLayerStyle} />
       {typeof resolvedDisplay === 'string' || typeof resolvedDisplay === 'number' ? (
-        <ThemedText style={[resolvedTriggerTextStyle, { flex: 1 }]}>
+        <ThemedText style={[resolvedTriggerTextStyle]}>
           {resolvedDisplay}
         </ThemedText>
       ) : (
@@ -87,6 +87,6 @@ export const SelectTrigger = <T,>({
         strokeWidth={resolvedIcon.strokeWidth}
         color={resolvedIcon.color}
       />
-    </Pressable>
+    </ThemedPressable>
   )
 }

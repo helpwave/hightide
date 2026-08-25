@@ -34,7 +34,7 @@ const CardDemo = () => {
   const { theme } = useTheme()
 
   return (
-    <View style={{ padding: 16, gap: 20, maxWidth: 420 }}>
+    <View style={{ padding: 16, gap: 20, flexDirection: 'column',  alignSelf: 'stretch' }}>
       <View style={{ gap: 8 }}>
         <ThemedText appearance="description" style={{ fontSize: 12, fontWeight: '700', letterSpacing: 0.4, textTransform: 'uppercase', paddingHorizontal: 4 }}>
           Personal data
@@ -72,36 +72,9 @@ const CardDemo = () => {
             title="Notifications"
             leading={<ThemedIcon icon={Bell} />}
             trailing={(
-              <View
-                style={(() => {
-                  const switchTheme = theme.components.switch.track({})
-                  const switchThemeContainer = theme.components.switch.container({})
-                  return {
-                    'position': 'relative',
-                    'height': switchTheme.height,
-                    'width': switchTheme.width,
-                    'maxHeight': switchTheme.maxHeight,
-                    'maxWidth': switchTheme.maxWidth,
-                    'minHeight': switchTheme.minHeight,
-                    'minWidth': switchTheme.minWidth,
-                    'padding-right': switchThemeContainer.padding
-                  }
-                })()}
-              >
-                <Switch
-                  onValueChange={action('notifications')}
-                  style={{
-                    position: 'absolute',
-                    left: '50%',
-                    top: '50%',
-                    transform: [
-                      { translateX: '-50%' },
-                      { translateY: '-50%' },
-                    ],
-
-                  }}
-                />
-              </View>
+              <Switch
+                onValueChange={action('notifications')}
+              />
             )}
           />
           <Divider />
@@ -124,6 +97,7 @@ const CardDemo = () => {
 }
 
 export const card: Story = {
+  decorators: (Story) => (<View style={{ alignSelf: 'stretch' }}><Story/></View>),
   args: {
     children: (
       <>

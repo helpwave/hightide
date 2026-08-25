@@ -391,7 +391,7 @@ const layoutStyleAdapter = (
     flexDirection: flexDirectionStyleAdapter(layout.direction),
     justifyContent: justifyContentStyleAdapter(layout.mainAxisAlignment),
     alignItems: alignItemsStyleAdapter(layout.crossAxisAlignment),
-    alignContent: alignContentStyleAdapter(layout.crossAxisLineAligment),
+    alignContent: alignContentStyleAdapter(layout.crossAxisLineAlignment),
     alignSelf: alignSelfStyleAdapter(layout.selfCrossAxisAlignment),
     gap: layout.gap,
   })

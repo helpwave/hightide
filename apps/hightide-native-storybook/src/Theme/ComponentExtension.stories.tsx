@@ -30,6 +30,7 @@ import {
   ThemeSelect,
   ThemeStoryFrame
 } from './themeStoryHelpers'
+import { useMemoizedTheme } from '../../../../packages/hightide-native/src/hooks/useMemoizedTheme'
 
 type CalloutState = InteractionState & {
   tone?: 'info' | 'warning',
@@ -141,12 +142,12 @@ const CalloutDemo = () => {
     tone: isWarning ? 'warning' : 'info',
     isDisabled,
   }
-  const containerStyle = theme.components.callout.container(state)
-  const textStyle = theme.components.callout.text(state)
+  const containerStyle = useMemoizedTheme(theme.components.callout.container,state)
+  const textStyle = useMemoizedTheme(theme.components.callout.text, state)
 
   return (
-    <View style={{ gap: 12 }}>
-      <View style={{ gap: 8 }}>
+    <View style={{ gap: theme.spacing.xxl }}>
+      <View style={{ gap: theme.spacing.xl }}>
         <CalloutStateCheckbox
           label="Warning tone"
           value={isWarning}
@@ -160,7 +161,7 @@ const CalloutDemo = () => {
       </View>
       <View style={containerStyle}>
         <ThemedText style={textStyle}>
-          Callout styles come from theme.components.callout
+            Callout styles come from theme.components.callout
         </ThemedText>
       </View>
     </View>

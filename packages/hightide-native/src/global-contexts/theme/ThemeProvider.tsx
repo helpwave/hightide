@@ -96,7 +96,10 @@ export const ThemeProvider = ({
       <ContentThemeRootProvider
         foreground={contextValue.theme.colors.surface.onColor}
         background={contextValue.theme.colors.surface.color}
-        textStyle={contextValue.theme.typography.body.md}
+        textStyle={{
+          ...contextValue.theme.typography.body.md,
+          //color: contextValue.theme.colors.surface.onColor,
+        }}
         iconStyle={{
           size: contextValue.theme.icongraphy.sizes.md,
           strokeWidth: contextValue.theme.icongraphy.strokeWidth,

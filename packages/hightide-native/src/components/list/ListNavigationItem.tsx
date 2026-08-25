@@ -1,5 +1,6 @@
 import {
   useMemo,
+  useState,
   type ReactNode
 } from 'react'
 import {
@@ -26,7 +27,6 @@ import type {
 import type { StyleOverwrite } from '../../theme/types/resolver'
 import { createHitBoxOverlayStyle } from '../../utils/hitBoxOverlay'
 import { useMinimumTouchTargetHitSlop } from '../../utils/minimumTouchTargetHitSlop'
-import type { PressableInteractionState } from '../../utils/pressableInteraction'
 import { ListItemAccessory } from './ListItemAccessory'
 import {
   ListItemTextContent,
@@ -46,28 +46,11 @@ export type ListNavigationItemProps = Omit<PressableProps, 'children' | 'style'>
   subtitleStyle?: StyleOverwrite<ListNavigationItemState, ListNavigationItemDescriptionStyle>,
 }
 
-type ListNavigationItemContentProps = {
-  pressableState: PressableInteractionState,
-  title?: string,
-  subtitle?: string,
-  content?: ReactNode,
-  contentOrder: ListItemContentOrder,
-  leading?: ReactNode,
-  color?: ColorPairToken,
-  disabled?: boolean,
-  style?: StyleProp<ViewStyle>,
-  itemStyle?: StyleOverwrite<ListNavigationItemState, ListNavigationItemStyle>,
-  titleStyle?: StyleOverwrite<ListNavigationItemState, ListNavigationItemTitleStyle>,
-  subtitleStyle?: StyleOverwrite<ListNavigationItemState, ListNavigationItemDescriptionStyle>,
-  hitSlop: PressableProps['hitSlop'],
-}
-
-const ListNavigationItemContent = ({
-  pressableState,
+export const ListNavigationItem = ({
   title,
   subtitle,
   content,
-  contentOrder,
+  contentOrder = 'titleFirst',
   leading,
   color,
   disabled,
@@ -75,37 +58,49 @@ const ListNavigationItemContent = ({
   itemStyle,
   titleStyle,
   subtitleStyle,
-  hitSlop,
-}: ListNavigationItemContentProps) => {
+  hitSlop: providedHitSlop,
+  onLayout: providedOnLayout,
+  ...props
+}: ListNavigationItemProps) => {
   const { theme } = useTheme()
   const { hitBox } = useDebugContext()
+  const { hitSlop, onLayout } = useMinimumTouchTargetHitSlop({
+    touchTargetSize: theme.semantics.touchTargetSize({}),
+    hitSlop: providedHitSlop,
+    onLayout: providedOnLayout,
+  })
+  const [isPressed, setIsPressed] = useState(false)
 
-  const state = useMemo((): ListNavigationItemState => ({
+  const resolvedState = useMemo((): ListNavigationItemState => ({
     color,
     isDisabled: !!disabled,
-    isPressed: pressableState.pressed,
-    isHovered: !!pressableState.hovered,
-    isFocused: !!pressableState.focused,
-    isFocusVisible: !!pressableState.focusVisible,
-  }), [
-    color,
-    disabled,
-    pressableState.pressed,
-    pressableState.hovered,
-    pressableState.focused,
-    pressableState.focusVisible,
-  ])
+    isPressed,
+  }), [color, disabled, isPressed])
 
-  const resolvedItemStyle = useMemoizedTheme(theme.components.listItem.navigation.container, state, itemStyle)
-  const resolvedLeadingItemContainerStyle = useMemoizedTheme(theme.components.listItem.navigation.leadingItemContainer, state)
-  const resolvedContentStyle = useMemoizedTheme(theme.components.listItem.navigation.content, state)
-  const resolvedTrailingItemContainerStyle = useMemoizedTheme(theme.components.listItem.navigation.trailingItemContainer, state)
-  const resolvedTitleStyle = useMemoizedTheme(theme.components.listItem.navigation.titleText, state, titleStyle)
-  const resolvedSubtitleStyle = useMemoizedTheme(theme.components.listItem.navigation.descriptionText, state, subtitleStyle)
-  const resolvedIconStyle = useMemoizedTheme(theme.components.listItem.navigation.icon, state)
+  const resolvedItemStyle = useMemoizedTheme(theme.components.listItem.navigation.container, resolvedState, itemStyle)
+  const resolvedLeadingItemContainerStyle = useMemoizedTheme(theme.components.listItem.navigation.leadingItemContainer, resolvedState)
+  const resolvedContentStyle = useMemoizedTheme(theme.components.listItem.navigation.content, resolvedState)
+  const resolvedTrailingItemContainerStyle = useMemoizedTheme(theme.components.listItem.navigation.trailingItemContainer, resolvedState)
+  const resolvedTitleStyle = useMemoizedTheme(theme.components.listItem.navigation.titleText, resolvedState, titleStyle)
+  const resolvedSubtitleStyle = useMemoizedTheme(theme.components.listItem.navigation.descriptionText, resolvedState, subtitleStyle)
+  const resolvedIconStyle = useMemoizedTheme(theme.components.listItem.navigation.icon, resolvedState)
 
   return (
-    <View style={[resolvedItemStyle, style]}>
+    <Pressable
+      {...props}
+      disabled={disabled}
+      hitSlop={hitSlop}
+      onLayout={onLayout}
+      style={[resolvedItemStyle, style]}
+      onPressIn={(event) => {
+        setIsPressed(true)
+        props.onPressIn?.(event)
+      }}
+      onPressOut={(event) => {
+        setIsPressed(false)
+        props.onPressOut?.(event)
+      }}
+    >
       {hitBox.isVisualizing && (
         <View
           pointerEvents="none"
@@ -138,57 +133,6 @@ const ListNavigationItemContent = ({
       >
         <ThemedIcon icon={HightideIconRegistry.ChevronRight} />
       </ListItemAccessory>
-    </View>
-  )
-}
-
-export const ListNavigationItem = ({
-  title,
-  subtitle,
-  content,
-  contentOrder = 'titleFirst',
-  leading,
-  color,
-  disabled,
-  style,
-  itemStyle,
-  titleStyle,
-  subtitleStyle,
-  hitSlop: providedHitSlop,
-  onLayout: providedOnLayout,
-  ...props
-}: ListNavigationItemProps) => {
-  const { theme } = useTheme()
-  const { hitSlop, onLayout } = useMinimumTouchTargetHitSlop({
-    touchTargetSize: theme.semantics.touchTargetSize({}),
-    hitSlop: providedHitSlop,
-    onLayout: providedOnLayout,
-  })
-
-  return (
-    <Pressable
-      {...props}
-      disabled={disabled}
-      hitSlop={hitSlop}
-      onLayout={onLayout}
-    >
-      {(pressableState) => (
-        <ListNavigationItemContent
-          pressableState={pressableState as PressableInteractionState}
-          title={title}
-          subtitle={subtitle}
-          content={content}
-          contentOrder={contentOrder}
-          leading={leading}
-          color={color}
-          disabled={disabled ?? false}
-          style={style}
-          itemStyle={itemStyle}
-          titleStyle={titleStyle}
-          subtitleStyle={subtitleStyle}
-          hitSlop={hitSlop}
-        />
-      )}
     </Pressable>
   )
 }

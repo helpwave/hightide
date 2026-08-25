@@ -132,7 +132,6 @@ export const buttonTokenResolver: ButtonTokenResolver = ({
         direction: 'horizontal',
         mainAxisAlignment: 'center',
         crossAxisAlignment: 'center',
-        selfCrossAxisAlignment: 'start',
       },
     },
     stateLayer: {

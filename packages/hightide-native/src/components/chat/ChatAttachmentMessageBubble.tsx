@@ -134,15 +134,8 @@ const AttachmentDownloadContent = ({
   resolvedFileMetadataTextStyle,
   spacingXs,
 }: AttachmentDownloadContentProps) => {
-  const pressableThemeState = useMemo(
-    () => toPressableThemeState(pressableState),
-    [
-      pressableState.pressed,
-      pressableState.hovered,
-      pressableState.focused,
-      pressableState.focusVisible,
-    ]
-  )
+  const pressableThemeState = useMemo(() => toPressableThemeState(pressableState),
+    [pressableState])
 
   const resolvedContainerStyle = useMemoizedTheme(contentResolvers.container, pressableThemeState, contentContainerStyle)
   const resolvedStateLayerStyle = useMemoizedTheme(contentResolvers.stateLayer, pressableThemeState)

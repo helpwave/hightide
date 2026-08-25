@@ -142,7 +142,6 @@ export const inputTokenResolver: InputTokenResolver = ({
         horizontal: layout.horizontalContentPadding - layout.borderWidth,
       },
       layout: {
-        flexGrow: 1,
         direction: 'horizontal',
         mainAxisAlignment: 'start',
         crossAxisAlignment: 'center',

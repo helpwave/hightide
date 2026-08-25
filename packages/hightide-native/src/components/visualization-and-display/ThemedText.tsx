@@ -1,6 +1,8 @@
 import {
   forwardRef
 } from 'react'
+import type {
+  ColorValue } from 'react-native'
 import {
   Text as RNText,
   type TextProps
@@ -10,6 +12,7 @@ import { useContentTheme } from '../../global-contexts/content-theme/ContentThem
 import { useTheme } from '../../global-contexts/theme/ThemeContext'
 
 import type { ThemedTextAppearance } from '../../enums/themedTextAppearance'
+import { HexColorUtils } from '../../utils'
 
 export type { ThemedTextAppearance }
 
@@ -24,20 +27,22 @@ export const ThemedText = forwardRef<React.ComponentRef<typeof RNText>, ThemedTe
 }, ref) {
   const { theme } = useTheme()
   const { foreground, background, textStyle } = useContentTheme()
-  const color = appearance === 'description'
+  let color: ColorValue | undefined = textStyle.color ?? foreground
+  color = appearance === 'description'
     ? theme.semantics.asDescription({
       colorPair: {
         color: background,
-        onColor: foreground,
+        onColor: HexColorUtils.parseColorValue(color),
       },
     })
-    : undefined
+    : color
+
 
   return (
     <RNText
       {...props}
       ref={ref}
-      style={[textStyle, color === undefined ? undefined : { color }, style]}
+      style={[textStyle, { color }, style]}
     />
   )
 })

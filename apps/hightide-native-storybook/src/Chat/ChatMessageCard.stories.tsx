@@ -69,7 +69,7 @@ const CardStory = (args: ChatMessageBubbleProps) => {
 export const chatMessageCard: Story = {
   args: {
     direction: 'incoming',
-    timestamp: '15:30',
+    timestamp: new Date(2004, 1, 24, 19, 8),
   },
   render: (args) => (
     <CardStory {...args} />

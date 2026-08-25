@@ -38,6 +38,7 @@ export const multiSelect: Story = {
       {fruitOptions.map((option) => (
         <MultiSelectOption
           key={option.id}
+          id={option.id}
           value={option.id}
           label={option.label}
           disabled={option.disabled}

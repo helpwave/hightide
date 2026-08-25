@@ -34,7 +34,6 @@ export const toThemedPressableThemeResolvers: ComponentThemeResolver<ThemedPress
   return {
     container: createStyleResolver((state: ThemedPressableState): ThemedPressableStyle => ({
       ...StyleAdapterUtils.container(resolve(state).container),
-      alignSelf: 'flex-start',
     })),
     stateLayer: createStyleResolver((state: ThemedPressableState): ThemedPressableStyle => (
       StyleAdapterUtils.container(resolve(state).stateLayer)

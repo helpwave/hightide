@@ -1,5 +1,5 @@
 import type { ReactNode } from 'react'
-import { useEffect, useId, useMemo } from 'react'
+import { useEffect, useMemo } from 'react'
 
 import { useTheme } from '../../../global-contexts/theme/ThemeContext'
 import { useMemoizedTheme } from '../../../hooks/useMemoizedTheme'
@@ -11,6 +11,7 @@ import { ThemedIcon } from '../../visualization-and-display/ThemedIcon'
 import { useSelectContext } from './SelectContext'
 
 export type SelectOptionProps<T = string> = {
+  id: string,
   value: T,
   label: string,
   disabled?: boolean,
@@ -18,6 +19,7 @@ export type SelectOptionProps<T = string> = {
 }
 
 export const SelectOption = <T,>({
+  id,
   value,
   label,
   disabled = false,
@@ -26,32 +28,26 @@ export const SelectOption = <T,>({
   const { theme } = useTheme()
   const context = useSelectContext<T>()
   const { registerOption } = context
-  const generatedId = useId()
-  const optionId = `select-option-${generatedId}`
   const display = children ?? label
 
   useEffect(() => {
     return registerOption({
-      id: optionId,
+      id,
       value,
       label,
       display,
       disabled,
     })
-  }, [disabled, display, label, optionId, registerOption, value])
+  }, [disabled, display, id, label, registerOption, value])
 
-  const isSelected = context.selectedId === optionId
-  const isVisible = context.visibleOptionIds.includes(optionId)
-  const optionColor = isSelected
-    ? (context.config.color ?? theme.colors.primary)
-    : undefined
+  const isSelected = context.selectedId === id
+  const isVisible = context.visibleOptionIds.includes(id)
 
   const optionState = useMemo((): MultiSelectOptionState => ({
-    color: optionColor,
     isSelected,
-    isHighlighted: context.highlightedId === optionId,
+    isHighlighted: context.highlightedId === id,
     isDisabled: disabled,
-  }), [context.highlightedId, disabled, isSelected, optionColor, optionId])
+  }), [context.highlightedId, disabled, id, isSelected])
 
   const checkIcon = useMemoizedTheme<MultiSelectOptionState, IconStyle>(
     theme.components.listItem.action.icon,
@@ -66,9 +62,8 @@ export const SelectOption = <T,>({
     <ListActionItem
       title={children ? undefined : label}
       content={children}
-      color={optionColor}
       disabled={disabled}
-      onPress={() => context.toggleSelection(optionId)}
+      onPress={() => context.toggleSelection(id)}
       leading={(
         <ThemedIcon
           icon={HightideIconRegistry.Check}

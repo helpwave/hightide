@@ -42,9 +42,9 @@ export const chatMessageComposerTokenResolver: ChatMessageComposerTokenResolver 
         },
       },
       layout: {
-        flexGrow: 1,
         direction: 'horizontal',
         crossAxisAlignment: 'end',
+        selfCrossAxisAlignment: 'stretch',
         gap: spacing.md,
       },
     },

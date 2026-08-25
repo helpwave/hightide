@@ -57,7 +57,6 @@ export const chatAttachmentMessageBubbleTokenResolver: ChatAttachmentMessageBubb
           direction: 'horizontal',
           crossAxisAlignment: 'center',
           gap: spacing.md,
-          selfCrossAxisAlignment: 'stretch',
         },
       },
     },

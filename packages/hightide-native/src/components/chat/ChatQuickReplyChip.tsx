@@ -1,9 +1,9 @@
 import {
   useMemo,
+  useState,
   type ReactNode
 } from 'react'
 import {
-  Pressable,
   View,
   type PressableProps
 } from 'react-native'
@@ -20,7 +20,7 @@ import type {
   PressableTextStyle
 } from '../../theme/types/components/chat'
 import type { StyleOverwrite, StyleResolverFunction } from '../../theme/types/resolver'
-import type { PressableInteractionState } from '../../utils/pressableInteraction'
+import { ThemedPressable } from '../user-interaction'
 
 export type ChatQuickReplyChipProps = Omit<PressableProps, 'children' | 'style'> & {
   isActive?: boolean,
@@ -37,37 +37,21 @@ type QuickReplyChipPressableResolvers = {
   icon: StyleResolverFunction<PressableState, PressableIconStyle>,
 }
 
-type PressableInteraction = PressableInteractionState
-
-const toPressableThemeState = (interaction: PressableInteraction): PressableState => ({
-  isPressed: interaction.pressed,
-  isHovered: !!interaction.hovered,
-  isFocused: !!interaction.focused,
-  isFocusVisible: !!interaction.focusVisible,
-})
-
-type ChatQuickReplyChipContentProps = {
-  pressableState: PressableInteraction,
-  isActive: boolean,
-  children?: ReactNode,
-  style?: StyleOverwrite<PressableState, PressableContainerStyle>,
-  textStyle?: StyleOverwrite<PressableState, PressableTextStyle>,
-  iconStyle?: StyleOverwrite<PressableState, PressableIconStyle>,
-}
-
-const ChatQuickReplyChipContent = ({
-  pressableState,
-  isActive,
+export const ChatQuickReplyChip = ({
+  isActive = false,
   children,
+  disabled,
   style,
   textStyle,
-}: ChatQuickReplyChipContentProps) => {
+  ...props
+}: ChatQuickReplyChipProps) => {
   const { theme } = useTheme()
+  const [isPressed, setIsPressed] = useState(false)
   const state = useMemo((): ChatQuickReplyChipState => ({ isActive }), [isActive])
-  const pressableThemeState = useMemo(
-    () => toPressableThemeState(pressableState),
-    [pressableState]
-  )
+  const pressableThemeState = useMemo((): PressableState => ({
+    isPressed,
+    isDisabled: !!disabled,
+  }), [disabled, isPressed])
   const pressableResolvers = useMemoizedThemeFactory<
     ChatQuickReplyChipState,
     QuickReplyChipPressableResolvers
@@ -78,39 +62,25 @@ const ChatQuickReplyChipContent = ({
   const resolvedTextStyle = useMemoizedTheme(pressableResolvers.text, pressableThemeState, textStyle)
 
   return (
-    <View style={resolvedContainerStyle}>
+    <ThemedPressable
+      {...props}
+      disabled={disabled}
+      style={resolvedContainerStyle}
+      onPressIn={(event) => {
+        setIsPressed(true)
+        props.onPressIn?.(event)
+      }}
+      onPressOut={(event) => {
+        setIsPressed(false)
+        props.onPressOut?.(event)
+      }}
+    >
       <View pointerEvents="none" style={resolvedStateLayerStyle} />
       {typeof children === 'string' || typeof children === 'number' ? (
         <ThemedText style={resolvedTextStyle}>{children}</ThemedText>
       ) : (
         children
       )}
-    </View>
-  )
-}
-
-export const ChatQuickReplyChip = ({
-  isActive = false,
-  children,
-  disabled,
-  style,
-  textStyle,
-  iconStyle,
-  ...props
-}: ChatQuickReplyChipProps) => {
-  return (
-    <Pressable {...props} disabled={disabled}>
-      {(pressableState) => (
-        <ChatQuickReplyChipContent
-          pressableState={pressableState as PressableInteraction}
-          isActive={isActive}
-          style={style}
-          textStyle={textStyle}
-          iconStyle={iconStyle}
-        >
-          {children}
-        </ChatQuickReplyChipContent>
-      )}
-    </Pressable>
+    </ThemedPressable>
   )
 }

@@ -8,7 +8,6 @@ import { action } from 'storybook/actions'
 import {
   ChatConversationList,
   ChatConversationRow,
-  AvatarWithStatus,
   ThemedText
 } from '@helpwave/hightide-native/components'
 
@@ -29,13 +28,10 @@ const ConversationListDemo = () => (
       )}
     >
       <ChatConversationRow
-        avatar={(
-          <AvatarWithStatus
-            name="Anna Wellermann"
-            status="online"
-            size="lg"
-          />
-        )}
+        avatarProps={{
+          name: 'Anna Wellermann',
+          status: 'online',
+        }}
         title="Dr. Anna Wellermann"
         timestamp="09:24"
         preview="Perfekt, ich habe den Befund erhalten."
@@ -43,13 +39,10 @@ const ConversationListDemo = () => (
         onPress={action('row-1')}
       />
       <ChatConversationRow
-        avatar={(
-          <AvatarWithStatus
-            name="Jonas Parker"
-            status="offline"
-            size="lg"
-          />
-        )}
+        avatarProps={{
+          name: 'Jonas Parker',
+          status: 'offline',
+        }}
         title="Praxis am Park"
         timestamp="Gestern"
         preview="Ihr Termin wurde bestätigt."

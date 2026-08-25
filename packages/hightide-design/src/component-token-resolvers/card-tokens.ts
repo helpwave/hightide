@@ -18,7 +18,7 @@ export const cardTokenResolver: CardTokenResolver = ({ themeTokens }) => {
     },
     layout: {
       direction: 'vertical',
-      crossAxisAlignment: 'center',
+      crossAxisAlignment: 'stretch',
       mainAxisAlignment: 'start',
       gap: 0,
     },

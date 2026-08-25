@@ -76,9 +76,7 @@ export const MultiSelectMenu = ({ children }: MultiSelectMenuProps) => {
                 </ThemedText>
               </View>
             )}
-            <ScrollView
-              style={showEmptySearchResults ? { height: 0, overflow: 'hidden' } : { flex: 1 }}
-            >
+            <ScrollView>
               {children}
             </ScrollView>
           </Pressable>

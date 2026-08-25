@@ -1,5 +1,5 @@
 import type { ReactNode } from 'react'
-import { useEffect, useId, useMemo } from 'react'
+import { useEffect, useMemo } from 'react'
 import { View } from 'react-native'
 
 import { useTheme } from '../../../global-contexts/theme/ThemeContext'
@@ -12,6 +12,7 @@ import { ThemedIcon } from '../../visualization-and-display/ThemedIcon'
 import { useMultiSelectContext } from './MultiSelectContext'
 
 export type MultiSelectOptionProps<T = string> = {
+  id: string,
   value: T,
   label: string,
   disabled?: boolean,
@@ -19,6 +20,7 @@ export type MultiSelectOptionProps<T = string> = {
 }
 
 export const MultiSelectOption = <T,>({
+  id,
   value,
   label,
   disabled = false,
@@ -27,22 +29,20 @@ export const MultiSelectOption = <T,>({
   const { theme } = useTheme()
   const context = useMultiSelectContext<T>()
   const { registerOption } = context
-  const generatedId = useId()
-  const optionId = `multi-select-option-${generatedId}`
   const display = children ?? label
 
   useEffect(() => {
     return registerOption({
-      id: optionId,
+      id,
       value,
       label,
       display,
       disabled,
     })
-  }, [disabled, display, label, optionId, registerOption, value])
+  }, [disabled, display, id, label, registerOption, value])
 
-  const isSelected = context.selectedIds.includes(optionId)
-  const isVisible = context.visibleOptionIds.includes(optionId)
+  const isSelected = context.selectedIds.includes(id)
+  const isVisible = context.visibleOptionIds.includes(id)
   const optionColor = isSelected
     ? (context.config.color ?? theme.colors.primary)
     : undefined
@@ -50,9 +50,9 @@ export const MultiSelectOption = <T,>({
   const optionState = useMemo((): MultiSelectOptionState => ({
     color: context.config.color,
     isSelected,
-    isHighlighted: context.highlightedId === optionId,
+    isHighlighted: context.highlightedId === id,
     isDisabled: disabled,
-  }), [context.config.color, context.highlightedId, disabled, isSelected, optionId])
+  }), [context.config.color, context.highlightedId, disabled, id, isSelected])
 
   const multiSelectTheme = theme.components.multiSelect
   const resolvedCheckboxStyle = useMemoizedTheme(multiSelectTheme.checkbox, optionState)
@@ -71,7 +71,7 @@ export const MultiSelectOption = <T,>({
       content={children}
       color={optionColor}
       disabled={disabled}
-      onPress={() => context.toggleSelection(optionId)}
+      onPress={() => context.toggleSelection(id)}
       leading={(
         <View style={resolvedCheckboxStyle}>
           <ThemedIcon

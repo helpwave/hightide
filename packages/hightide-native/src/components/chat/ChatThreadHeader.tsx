@@ -1,9 +1,9 @@
 import {
   useMemo,
+  useState,
   type ReactNode
 } from 'react'
 import {
-  Pressable,
   StyleSheet,
   View,
   type PressableProps,
@@ -29,11 +29,11 @@ import type {
   ChatThreadHeaderSubtitleStyle,
   ChatThreadHeaderTitleStyle,
   PressableContainerStyle,
-  PressableState,
-  PressableStateLayerStyle
+  PressableState
 } from '../../theme/types/components/chat'
-import type { StyleOverwrite, StyleResolverFunction } from '../../theme/types/resolver'
-import type { PressableInteractionState } from '../../utils/pressableInteraction'
+import type { StyleOverwrite } from '../../theme/types/resolver'
+import { ThemedPressable } from '../user-interaction'
+import type { ThemedPressableState, ThemedPressableThemeResolvers } from '../../theme'
 
 export type ChatThreadHeaderProps = Omit<ViewProps, 'style'> & {
   avatar?: AvatarProps,
@@ -51,26 +51,12 @@ export type ChatThreadHeaderProps = Omit<ViewProps, 'style'> & {
   pressableContainerStyle?: StyleOverwrite<PressableState, PressableContainerStyle>,
 }
 
-type ThreadHeaderPressableResolvers = {
-  container: StyleResolverFunction<PressableState, PressableContainerStyle>,
-  stateLayer: StyleResolverFunction<PressableState, PressableStateLayerStyle>,
-}
-
-type PressableInteraction = PressableInteractionState
-
-const toPressableThemeState = (interaction: PressableInteraction): PressableState => ({
-  isPressed: interaction.pressed,
-  isHovered: !!interaction.hovered,
-  isFocused: !!interaction.focused,
-  isFocusVisible: !!interaction.focusVisible,
-})
-
 type ChatThreadHeaderPressableContentProps = {
-  pressableState: PressableInteraction,
   avatar?: AvatarProps,
   title: ReactNode,
   subtitle?: ReactNode,
   disabled?: boolean,
+  onPress?: PressableProps['onPress'],
   contentRowStyle?: StyleOverwrite<Record<string, never>, ChatThreadHeaderContentRowStyle>,
   titleStyle?: StyleOverwrite<Record<string, never>, ChatThreadHeaderTitleStyle>,
   subtitleStyle?: StyleOverwrite<Record<string, never>, ChatThreadHeaderSubtitleStyle>,
@@ -78,28 +64,30 @@ type ChatThreadHeaderPressableContentProps = {
 }
 
 const ChatThreadHeaderPressableContent = ({
-  pressableState,
   avatar,
   title,
   subtitle,
+  disabled,
+  onPress,
   contentRowStyle,
   titleStyle,
   subtitleStyle,
   pressableContainerStyle,
 }: ChatThreadHeaderPressableContentProps) => {
   const { theme } = useTheme()
+  const [isPressed, setIsPressed] = useState(false)
   const staticState = useMemo(() => ({}), [])
   const resolvedAvatar = useMemo(() => ({
     ...avatar,
   }), [avatar])
 
-  const pressableThemeState = useMemo(
-    () => toPressableThemeState(pressableState),
-    [pressableState]
-  )
+  const pressableThemeState = useMemo((): PressableState => ({
+    isPressed,
+    isDisabled: !!disabled,
+  }), [disabled, isPressed])
   const pressableResolvers = useMemoizedThemeFactory<
-    Record<string, never>,
-    ThreadHeaderPressableResolvers
+    ThemedPressableState,
+    ThemedPressableThemeResolvers
   >(theme.components.chat.threadHeader.pressable, staticState)
   const resolvedContentRowStyle = useMemoizedTheme(theme.components.chat.threadHeader.contentRow, staticState, contentRowStyle)
   const resolvedTitleStyle = useMemoizedTheme(theme.components.chat.threadHeader.title, staticState, titleStyle)
@@ -124,8 +112,14 @@ const ChatThreadHeaderPressableContent = ({
   }, [avatarTheme, resolvedAvatar.size])
 
   return (
-    <View style={resolvedContainerStyle}>
-      <View pointerEvents="none" style={resolvedStateLayerStyle} />
+    <ThemedPressable
+      disabled={disabled}
+      onPress={onPress}
+      style={resolvedContainerStyle}
+      stateLayerStyle={resolvedStateLayerStyle}
+      onPressIn={() => setIsPressed(true)}
+      onPressOut={() => setIsPressed(false)}
+    >
       <Avatar
         {...resolvedAvatar}
         size={avatarSize}
@@ -172,7 +166,7 @@ const ChatThreadHeaderPressableContent = ({
           )
         )}
       </View>
-    </View>
+    </ThemedPressable>
   )
 }
 
@@ -204,21 +198,17 @@ export const ChatThreadHeader = ({
           {leftActions}
         </View>
       )}
-      <Pressable onPress={onPress} disabled={disabled}>
-        {(pressableState) => (
-          <ChatThreadHeaderPressableContent
-            pressableState={pressableState as PressableInteraction}
-            avatar={avatar}
-            title={title}
-            subtitle={subtitle}
-            disabled={disabled}
-            contentRowStyle={contentRowStyle}
-            titleStyle={titleStyle}
-            subtitleStyle={subtitleStyle}
-            pressableContainerStyle={pressableContainerStyle}
-          />
-        )}
-      </Pressable>
+      <ChatThreadHeaderPressableContent
+        avatar={avatar}
+        title={title}
+        subtitle={subtitle}
+        disabled={disabled}
+        onPress={onPress}
+        contentRowStyle={contentRowStyle}
+        titleStyle={titleStyle}
+        subtitleStyle={subtitleStyle}
+        pressableContainerStyle={pressableContainerStyle}
+      />
       {rightActions != null && (
         <View style={{ flexDirection: 'row', alignItems: 'center', flexShrink: 0 }}>
           {rightActions}

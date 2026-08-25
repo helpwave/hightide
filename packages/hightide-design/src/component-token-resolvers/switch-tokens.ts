@@ -86,9 +86,12 @@ export const switchTokenResolver: SwitchTokenResolver = ({
 
   return {
     container: {
+      size: {
+        width: TRACK_WIDTH,
+        height: TRACK_HEIGHT,
+      },
       opacity: state.has('disabled') ? 0.6 : 1,
       layout: {
-        selfCrossAxisAlignment: 'start',
         direction: 'horizontal',
         mainAxisAlignment: 'center',
         crossAxisAlignment: 'center',

@@ -1,4 +1,3 @@
-import { View } from 'react-native'
 import type {
   Meta,
   StoryObj
@@ -20,8 +19,6 @@ export const chatMessageComposer: Story = {
     onSend: action('send'),
   },
   render: (args) => (
-    <View style={{ maxWidth: 420 }}>
-      <ChatMessageComposer {...args} />
-    </View>
+    <ChatMessageComposer {...args} />
   ),
 }

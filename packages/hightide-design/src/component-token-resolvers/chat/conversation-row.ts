@@ -96,7 +96,6 @@ export const chatConversationRowTokenResolver: ChatConversationRowTokenResolver 
         layout: {
           direction: 'horizontal',
           crossAxisAlignment: 'center',
-          selfCrossAxisAlignment: 'stretch',
           gap: spacing.md,
         },
       },
@@ -120,8 +119,9 @@ export const chatConversationRowTokenResolver: ChatConversationRowTokenResolver 
         direction: 'horizontal',
         crossAxisAlignment: 'center',
         flexGrow: 1,
+        flexShrink: 1,
         mainAxisAlignment: 'space-between',
-        gap: spacing.md,
+        gap: spacing.sm,
       },
     },
     title,
@@ -146,6 +146,7 @@ export const chatConversationRowTokenResolver: ChatConversationRowTokenResolver 
         horizontal: padding.md,
       },
       layout: {
+        flexShrink: 0,
         mainAxisAlignment: 'center',
         crossAxisAlignment: 'center',
       },
