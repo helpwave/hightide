@@ -10,7 +10,7 @@
     "access": "public"
   },
   "license": "AGPL-3.0-only",
-  "version": "0.1.1",
+  "version": "0.1.2",
   "type": "module",
   "files": [
     "src",
@@ -54,11 +54,9 @@
     "barrel": "scripts/barrel.js"
   },
   "scripts": {
-    "clean": "pnpm run barrel && rm -rf node_modules",
-    "barrel": "node scripts/barrel.js",
-    "barrel:check": "node scripts/barrel.js --check",
+    "clean": "rm -rf node_modules",
     "build-intl": "build-intl --force -i ./locales -o ./src/i18n/translations.ts -n hightideTranslation",
-    "init": "pnpm run build-intl && pnpm run barrel",
+    "init": "pnpm run build-intl",
     "build": "node -e \"process.exit(0)\"",
     "lint": "eslint .",
     "test": "jest"

@@ -25,7 +25,7 @@ import { hightideTranslation } from "@helpwave/hightide-utils/i18n";
 | `@helpwave/hightide-utils/utils` | Utility modules (`ArrayUtil`, `DateUtils`, …) |
 | `@helpwave/hightide-utils/hooks` | Shared React hooks |
 | `@helpwave/hightide-utils/i18n` | Typed translations and i18n helpers |
-| `@helpwave/hightide-utils/context` | Shared context barrel |
+| `@helpwave/hightide-utils/context` | Shared context exports |
 | `@helpwave/hightide-utils/context/localization` | Localization context |
 | `@helpwave/hightide-utils/context/translation` | Translation context |
 | `@helpwave/hightide-utils/context/theme` | Theme context |
@@ -39,5 +39,4 @@ From the monorepo root:
 ```bash
 pnpm --filter @helpwave/hightide-utils run init
 pnpm --filter @helpwave/hightide-utils run build-intl
-pnpm --filter @helpwave/hightide-utils run barrel
 ```

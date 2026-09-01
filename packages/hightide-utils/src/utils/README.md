@@ -2,7 +2,7 @@
 
 Platform-agnostic utility modules for `@helpwave/hightide-utils`.
 
-See [conventions](../../conventions/README.md) for how Utils objects, deprecations, and barrels are structured.
+See [conventions](../../conventions/README.md) for how Utils objects, deprecations, and folder `index.ts` exports are structured.
 
 | Module | Utils object | Summary |
 | --- | --- | --- |
