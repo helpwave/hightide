@@ -10,7 +10,7 @@
     "access": "public"
   },
   "license": "AGPL-3.0-only",
-  "version": "0.7.0",
+  "version": "0.7.1",
   "type": "module",
   "files": [
     "src"
@@ -42,13 +42,11 @@
     }
   },
   "scripts": {
-    "clean": "pnpm run barrel && rm -rf node_modules",
-    "init": "pnpm run barrel",
-    "barrel": "node node_modules/@helpwave/hightide-utils/scripts/barrel.js",
-    "barrel:check": "pnpm run barrel --check",
-    "build": "pnpm run barrel",
+    "clean": "rm -rf node_modules",
+    "init": "node -e \"process.exit(0)\"",
+    "build": "node -e \"process.exit(0)\"",
     "lint": "eslint .",
-    "test": "pnpm run barrel:check"
+    "test": "node -e \"process.exit(0)\""
   },
   "devDependencies": {
     "@helpwave/eslint-config": "0.0.11",

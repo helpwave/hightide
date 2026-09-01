@@ -10,7 +10,7 @@
     "access": "public"
   },
   "license": "AGPL-3.0-only",
-  "version": "0.15.4",
+  "version": "0.15.5",
   "browserslist": [
     "> 0.2%",
     "last 3 versions",
@@ -35,10 +35,9 @@
     "./style/uncompiled/globals.css": "./dist/style/uncompiled/globals.css"
   },
   "scripts": {
-    "clean": "pnpm run barrel --clean && rm -rf dist node_modules .next storybook-static",
+    "clean": "rm -rf dist node_modules .next storybook-static",
     "build-css": "NODE_ENV=production node scripts/build-css.mjs",
-    "barrel": "node node_modules/@helpwave/hightide-utils/scripts/barrel.js --with-root",
-    "build": "pnpm run barrel && tsup && pnpm run build-css && cp -R src/style/ ./dist/style/uncompiled/",
+    "build": "tsup && pnpm run build-css && cp -R src/style/ ./dist/style/uncompiled/",
     "storybook": "storybook dev -p 6006",
     "storybook:devices": "storybook dev -p 6006 --host",
     "build-storybook": "storybook build",

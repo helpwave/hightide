@@ -3,7 +3,7 @@ const path = require('node:path')
 
 module.exports = () => {
   const utilsRoot = path.resolve(__dirname, '../../../hightide-utils')
-  execSync('npm run build-intl && npm run barrel', {
+  execSync('npm run build-intl', {
     cwd: utilsRoot,
     stdio: 'inherit',
   })

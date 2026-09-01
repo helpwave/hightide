@@ -1,0 +1,6 @@
+export * from './MultiSelect'
+export * from './MultiSelectContext'
+export * from './MultiSelectMenu'
+export * from './MultiSelectOption'
+export * from './MultiSelectRoot'
+export * from './MultiSelectTrigger'
