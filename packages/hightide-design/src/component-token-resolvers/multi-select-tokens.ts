@@ -23,7 +23,6 @@ import {
   type PressableStateValue
 } from './pressable-tokens'
 import type { TextStyleTokens } from './text-style-tokens'
-import { selectOverlayColor } from './select-tokens'
 
 export const multiSelectStateValues = [
   ...inputStateValues,
@@ -162,7 +161,7 @@ export const multiSelectTokenResolver: MultiSelectTokenResolver = ({
     },
     triggerText: state.has('hasSelections') ? input.text : input.placeholder,
     overlay: {
-      backgroundColor: selectOverlayColor,
+      backgroundColor: color.overlay,
       padding: {
         type: 'physicalAxis',
         vertical: spacing.xl,

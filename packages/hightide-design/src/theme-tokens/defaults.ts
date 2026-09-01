@@ -262,6 +262,7 @@ export const buildColorTokens = (params: {
   warning: ColorPairToken,
   negative: ColorPairToken,
   neutral: ColorPairToken,
+  overlay: ColorToken,
 }): ThemeColorTokens => ({
   tintConfig: params.tintConfig,
   background: params.background,
@@ -280,6 +281,7 @@ export const buildColorTokens = (params: {
   negative: params.negative,
   neutral: params.neutral,
   border: HexColorUtils.blend(params.surface.color, HexColorUtils.hexWithAlpha(params.surface.onColor, 0.25)),
+  overlay: params.overlay,
 })
 
 export const resolveSharedGroups = (

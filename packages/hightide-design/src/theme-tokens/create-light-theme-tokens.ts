@@ -70,6 +70,7 @@ export const createLightThemeTokens = (
     color: gray.value[300],
     onColor: gray.value[500],
   }
+  const overlay = config.color.overlay ?? '#00000039'
 
   return {
     color: buildColorTokens({
@@ -85,6 +86,7 @@ export const createLightThemeTokens = (
       warning,
       negative,
       neutral,
+      overlay,
     }),
     ...resolveSharedGroups(config, defaultLightElevationTokens(), {
       tonal: {

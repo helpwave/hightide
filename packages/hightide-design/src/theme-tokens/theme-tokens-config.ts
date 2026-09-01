@@ -1,4 +1,4 @@
-import type { HexColorToken } from '../primitive-tokens/color'
+import type { ColorToken, HexColorToken } from '../primitive-tokens/color'
 import type { ShadowLayoutToken } from '../primitive-tokens/shadow'
 import type {
   FontSizeKey,
@@ -69,6 +69,7 @@ export type ThemeTokensConfig = {
     surface?: ColorPairToken,
     surfaceVariant?: ColorPairToken,
     disabled?: ColorPairToken,
+    overlay?: ColorToken,
     tintConfig?: TintConfig,
   },
   fontFamilies?: Partial<Record<'default' | 'accent' | 'mono', string>>,

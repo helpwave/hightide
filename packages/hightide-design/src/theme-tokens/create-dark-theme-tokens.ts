@@ -68,6 +68,7 @@ export const createDarkThemeTokens = (
     color: gray.value[500],
     onColor: gray.value[300],
   }
+  const overlay = config.color.overlay ?? '#00000060'
 
   return {
     color: buildColorTokens({
@@ -83,6 +84,7 @@ export const createDarkThemeTokens = (
       warning,
       negative,
       neutral,
+      overlay,
     }),
     ...resolveSharedGroups(config, defaultDarkElevationTokens(), {
       tonal: {
