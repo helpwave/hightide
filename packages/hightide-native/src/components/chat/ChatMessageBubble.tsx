@@ -39,7 +39,7 @@ export type { ChatMessageDirection, ChatMessageStatus }
 export type ChatMessageBubbleProps = Omit<ViewProps, 'children' | 'style'> & {
   direction: ChatMessageDirection,
   timestamp?: Date,
-  messageStatus?: ChatMessageStatus,
+  status?: ChatMessageStatus,
   children?: ReactNode,
   style?: StyleOverwrite<ChatMessageBubbleState, ChatMessageBubbleContainerStyle>,
   bodyStyle?: StyleOverwrite<ChatMessageBubbleState, ChatMessageBubbleBodyStyle>,
@@ -49,16 +49,17 @@ export type ChatMessageBubbleProps = Omit<ViewProps, 'children' | 'style'> & {
   metaDataTextStyle?: StyleOverwrite<ChatMessageBubbleState, ChatMessageBubbleMetaDataTextStyle>,
 }
 
-const resolveMessageStatusIcon = (messageStatus: ChatMessageStatus): IconComponent => (
-  messageStatus === 'sent'
+const resolveMessageStatusIcon = (status: ChatMessageStatus): IconComponent => (
+  status === 'sending'
     ? HightideIconRegistry.Clock
-    : HightideIconRegistry.CheckCheck
+    : status === 'sent' ? HightideIconRegistry.Check
+      : HightideIconRegistry.CheckCheck
 )
 
 export const ChatMessageBubble = ({
   direction,
   timestamp,
-  messageStatus,
+  status,
   children,
   style,
   bodyStyle,
@@ -86,14 +87,14 @@ export const ChatMessageBubble = ({
       : DateUtils.formatAbsolute(timestamp, locale, 'time', { timeZone, is24HourFormat })
   ), [timestamp, locale, timeZone, is24HourFormat])
   const messageStatusIcon = useMemo(
-    () => (messageStatus === undefined ? undefined : resolveMessageStatusIcon(messageStatus)),
-    [messageStatus]
+    () => (status === undefined ? undefined : resolveMessageStatusIcon(status)),
+    [status]
   )
   const messageStatusIconColor = useMemo(() => (
-    messageStatus === 'read'
+    status === 'read'
       ? theme.colors.primary.color
       : resolvedMetaDataIcon.color
-  ), [messageStatus, resolvedMetaDataIcon.color, theme.colors.primary.color])
+  ), [status, resolvedMetaDataIcon.color, theme.colors.primary.color])
 
   return (
     <View {...props} style={resolvedContainerStyle}>

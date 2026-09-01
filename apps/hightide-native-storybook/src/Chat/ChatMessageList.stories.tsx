@@ -27,7 +27,7 @@ export const chatMessageList: Story = {
         <ChatMessageBubble direction="incoming" timestamp={new Date(2000, 1, 1, 9, 8)}>
           Guten Tag, wir haben Ihre Ergebnisse erhalten.
         </ChatMessageBubble>
-        <ChatMessageBubble direction="outgoing" timestamp={new Date(2000, 1, 1, 9, 24)} messageStatus="received">
+        <ChatMessageBubble direction="outgoing" timestamp={new Date(2000, 1, 1, 9, 24)} status="received">
           Vielen Dank, ich schaue sie mir an.
         </ChatMessageBubble>
         <ChatSystemLine>Nachricht zugestellt</ChatSystemLine>
