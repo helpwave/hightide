@@ -45,6 +45,7 @@ export type ThemeColorTokens = {
   negative: ColorPairToken,
   neutral: ColorPairToken,
   border: ColorToken,
+  overlay: ColorToken,
 }
 
 export type ThemeAppearancePercentages = {

@@ -5,6 +5,13 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/)
 and adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [0.7.2] - 2026-09-01
+
+### Added
+
+- `overlay` theme color for dialog, modal, and bottom-sheet scrims (`color.overlay` on config and resolved theme tokens; `#00000039` in light mode and `#00000060` in dark mode)
+- Select and multi-select overlay backgrounds use `themeTokens.color.overlay`
+
 ## [0.7.1] - 2026-09-01
 
 ### Changed

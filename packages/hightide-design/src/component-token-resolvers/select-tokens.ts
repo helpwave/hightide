@@ -5,7 +5,6 @@ import {
   resolvePressableStateLayerTint
 } from '../semantic-token-resolvers'
 import type { ColorPairToken } from '../theme-tokens/theme-tokens-config'
-import { HexColorUtils } from '../utils/hex'
 import type { ComponentTokenResolver } from './component-token-resolver'
 import type { ContainerTokens } from './container-tokens'
 import type { IconTokens } from './icon-tokens'
@@ -51,8 +50,6 @@ export type SelectTokens = {
   optionText: TextStyleTokens,
   emptyText: TextStyleTokens,
 }
-
-export const selectOverlayColor = HexColorUtils.hexWithAlpha('#000000', 0.35)
 
 export type SelectTokenResolver = ComponentTokenResolver<
   SelectComponentResolverProps,
@@ -121,7 +118,7 @@ export const selectTokenResolver: SelectTokenResolver = ({
     triggerText: state.has('hasValue') ? input.text : input.placeholder,
     icon: input.icon,
     overlay: {
-      backgroundColor: selectOverlayColor,
+      backgroundColor: color.overlay,
       padding: {
         type: 'physicalAxis',
         vertical: spacing.xl,
