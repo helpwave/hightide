@@ -1,40 +1,28 @@
-import type { ReactNode } from 'react'
-import { View, type StyleProp, type ViewStyle } from 'react-native'
-
-import type { SelectRootProps } from './SelectRoot'
+import { SelectComponent } from './SelectComponent'
+import { SelectContext } from './SelectContext'
+import { SelectMenu } from './SelectMenu'
+import { SelectOption } from './SelectOption'
 import { SelectRoot } from './SelectRoot'
-import type { SelectOptionType } from './SelectContext'
-import { SelectMenu, type SelectMenuProps } from './SelectMenu'
-import { SelectTrigger, type SelectTriggerProps } from './SelectTrigger'
+import { SelectTrigger } from './SelectTrigger'
 
-export type SelectProps<T = string> = Omit<SelectRootProps<T>, 'children'> & {
-  children?: ReactNode,
-  placeholder?: SelectTriggerProps<T>['placeholder'],
-  selectedDisplay?: (option: SelectOptionType<T> | null) => ReactNode,
-  triggerProps?: SelectTriggerProps<T>,
-  menuProps?: Omit<SelectMenuProps, 'children'>,
-  style?: StyleProp<ViewStyle>,
+export type { SelectProps } from './SelectComponent'
+
+export type Select = typeof SelectComponent & {
+  Root: typeof SelectRoot,
+  Trigger: typeof SelectTrigger,
+  Option: typeof SelectOption,
+  Menu: typeof SelectMenu,
+  Context: typeof SelectContext,
+  Provider: typeof SelectContext.Provider,
 }
 
-export const Select = <T,>({
-  children,
-  placeholder,
-  selectedDisplay,
-  triggerProps,
-  menuProps,
-  style,
-  ...props
-}: SelectProps<T>) => {
-  return (
-    <SelectRoot<T> {...props}>
-      <View style={style}>
-        <SelectTrigger<T>
-          placeholder={placeholder}
-          selectedDisplay={selectedDisplay}
-          {...triggerProps}
-        />
-        <SelectMenu {...menuProps}>{children}</SelectMenu>
-      </View>
-    </SelectRoot>
-  )
-}
+const Select = Object.assign(SelectComponent, {
+  Root: SelectRoot,
+  Trigger: SelectTrigger,
+  Option: SelectOption,
+  Menu: SelectMenu,
+  Context: SelectContext,
+  Provider: SelectContext.Provider,
+}) as Select
+
+export { Select }

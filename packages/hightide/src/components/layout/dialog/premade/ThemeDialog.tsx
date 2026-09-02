@@ -7,7 +7,6 @@ import { useTheme } from '../../../../global-contexts/theme/ThemeContext'
 import { Button } from '../../../user-interaction/Button'
 import type { SelectProps } from '../../../user-interaction/Select/Select'
 import { Select } from '../../../user-interaction/Select/Select'
-import { SelectOption } from '../../../user-interaction/Select/SelectOption'
 import { useHightideTranslation } from '@helpwave/hightide-utils/context/translation'
 
 export type ThemeSelectProps = Omit<SelectProps<string | null>, 'value' | 'children'>
@@ -27,13 +26,13 @@ export const ThemeSelect = ({ ...props }: ThemeSelectProps) => {
       }}
       iconAppearance="right"
       {...props}
-      buttonProps={{
-        ...props.buttonProps,
-        className: clsx('min-w-40 w-fit', props.buttonProps?.className),
+      triggerProps={{
+        ...props.triggerProps,
+        className: clsx('min-w-40 w-fit', props.triggerProps?.className),
       }}
       showSearch={false}
     >
-      <SelectOption
+      <Select.Option
         key="system"
         value={null}
         label={systemLabel}
@@ -42,11 +41,11 @@ export const ThemeSelect = ({ ...props }: ThemeSelectProps) => {
         <div className="flex-row-2 items-center">
           {systemLabel}
         </div>
-      </SelectOption>
+      </Select.Option>
       {Object.entries(supportedThemes).map(([themeMode, themeInformation]) => {
         const label = themeInformation.nameTranslations[locale] ?? `{{ThemeDialog.themeInformation.nameTranslations:${locale}}}`
         return (
-          <SelectOption
+          <Select.Option
             key={themeMode}
             value={themeMode}
             label={label}
@@ -55,7 +54,7 @@ export const ThemeSelect = ({ ...props }: ThemeSelectProps) => {
             <div className="flex-row-2 items-center">
               {label}
             </div>
-          </SelectOption>
+          </Select.Option>
         )
       })}
     </Select>

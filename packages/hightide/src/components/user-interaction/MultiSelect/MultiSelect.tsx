@@ -1,24 +1,31 @@
-import type { ForwardedRef } from 'react'
-import { forwardRef } from 'react'
-import type { MultiSelectRootProps } from './MultiSelectRoot'
-import { MultiSelectRoot } from './MultiSelectRoot'
-import type { MultiSelectButtonProps } from './MultiSelectButton'
-import { MultiSelectButton } from './MultiSelectButton'
-import type { MultiSelectContentProps } from './MultiSelectContent'
+import { MultiSelectChipDisplayTrigger } from './MultiSelectChipDisplayTrigger'
+import { MultiSelectComponent } from './MultiSelectComponent'
 import { MultiSelectContent } from './MultiSelectContent'
+import { MultiSelectContext } from './MultiSelectContext'
+import { MultiSelectOption } from './MultiSelectOption'
+import { MultiSelectRoot } from './MultiSelectRoot'
+import { MultiSelectTrigger } from './MultiSelectTrigger'
 
-export interface MultiSelectProps<T = string> extends MultiSelectRootProps<T> {
-  contentPanelProps?: MultiSelectContentProps,
-  buttonProps?: MultiSelectButtonProps<T>,
+export type { MultiSelectProps } from './MultiSelectComponent'
+
+export type MultiSelect = typeof MultiSelectComponent & {
+  Root: typeof MultiSelectRoot,
+  Trigger: typeof MultiSelectTrigger,
+  Option: typeof MultiSelectOption,
+  Content: typeof MultiSelectContent,
+  ChipDisplayTrigger: typeof MultiSelectChipDisplayTrigger,
+  Context: typeof MultiSelectContext,
+  Provider: typeof MultiSelectContext.Provider,
 }
 
-export const MultiSelect = forwardRef<HTMLDivElement, MultiSelectProps<unknown>>(
-  function MultiSelect<T = string>({ children, contentPanelProps, buttonProps, ...props }: MultiSelectProps<T>, ref: ForwardedRef<HTMLDivElement>) {
-    return (
-      <MultiSelectRoot<T> {...props}>
-        <MultiSelectButton ref={ref} {...buttonProps} />
-        <MultiSelectContent {...contentPanelProps}>{children}</MultiSelectContent>
-      </MultiSelectRoot>
-    )
-  }
-) as <T = string>(props: MultiSelectProps<T> & { ref?: React.Ref<HTMLDivElement> }) => React.ReactElement
+const MultiSelect = Object.assign(MultiSelectComponent, {
+  Root: MultiSelectRoot,
+  Trigger: MultiSelectTrigger,
+  Option: MultiSelectOption,
+  Content: MultiSelectContent,
+  ChipDisplayTrigger: MultiSelectChipDisplayTrigger,
+  Context: MultiSelectContext,
+  Provider: MultiSelectContext.Provider,
+}) as MultiSelect
+
+export { MultiSelect }

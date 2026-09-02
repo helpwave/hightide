@@ -1,6 +1,7 @@
 import clsx from 'clsx'
 import { CheckIcon } from 'lucide-react'
-import type { HTMLAttributes, ReactNode, RefObject } from 'react'
+import type React from 'react'
+import type { ForwardedRef, HTMLAttributes, ReactNode, RefObject } from 'react'
 import { createContext, forwardRef, useContext, useEffect, useId, useRef } from 'react'
 import type { SelectIconAppearance } from './SelectContext'
 import { useSelectContext } from './SelectContext'
@@ -24,14 +25,26 @@ export interface SelectOptionProps<T = string> extends HTMLAttributes<HTMLLIElem
   iconAppearance?: SelectIconAppearance,
 }
 
-export const SelectOption = forwardRef<HTMLLIElement, SelectOptionProps<unknown>>(function SelectOption<T = string>({
-  children,
-  label,
-  value,
-  disabled = false,
-  iconAppearance,
-  ...props
-}: SelectOptionProps<T>, ref) {
+type SelectOptionComponent = <T = string>(
+  props: SelectOptionProps<T> & {
+    ref?: React.ForwardedRef<HTMLLIElement>,
+  }
+) => React.ReactElement | null
+
+const SelectOptionImpl = forwardRef<
+  HTMLLIElement,
+  SelectOptionProps<unknown>
+>(function SelectOption<T>(
+  {
+    children,
+    label,
+    value,
+    disabled = false,
+    iconAppearance,
+    ...props
+  }: SelectOptionProps<T>,
+  ref: ForwardedRef<HTMLLIElement>
+) {
   const context= useSelectContext<T>()
   const { registerOption } = context
   const itemRef = useRef<HTMLLIElement>(null)
@@ -107,3 +120,5 @@ export const SelectOption = forwardRef<HTMLLIElement, SelectOptionProps<unknown>
     </li>
   )
 })
+
+export const SelectOption = SelectOptionImpl as SelectOptionComponent

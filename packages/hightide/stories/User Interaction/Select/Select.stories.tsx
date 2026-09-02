@@ -2,7 +2,6 @@ import type { Meta, StoryObj } from '@storybook/nextjs-vite'
 import { action } from 'storybook/actions'
 import { useEffect, useState } from 'react'
 import { Select } from '../../../src/components/user-interaction/Select/Select'
-import { SelectOption } from '../../../src/components/user-interaction/Select/SelectOption'
 
 const meta: Meta<typeof Select> = {
   component: Select,
@@ -38,7 +37,7 @@ export const select: Story = {
     onValueChange: action('onValueChange'),
     onEditComplete: action('onEditComplete'),
     children: fruitOptions.map((item, index) => (
-      <SelectOption key={index} {...item} />
+      <Select.Option key={index} {...item} />
     )),
   },
 }
@@ -74,21 +73,19 @@ export const selectWithUser: Story = {
     compareFunction: compareUser,
     onValueChange: action('onValueChange'),
     onEditComplete: action('onEditComplete'),
-    buttonProps: {
-      placeholder: 'Select a user',
-      selectedDisplay: (option) => {
-        if (!option) return null
-        const user = option.value as User
-        return (
-          <div className="flex flex-col">
-            <span>{user.name}</span>
-            <span className=" text-description">{user.email}</span>
-          </div>
-        )
-      },
+    placeholder: 'Select a user',
+    selectedDisplay: (option) => {
+      if (!option) return null
+      const user = option.value as User
+      return (
+        <div className="flex flex-col">
+          <span>{user.name}</span>
+          <span className=" text-description">{user.email}</span>
+        </div>
+      )
     },
     children: users.map((user) => (
-      <SelectOption
+      <Select.Option
         key={user.uuid}
         id={user.uuid}
         value={user}
@@ -98,7 +95,7 @@ export const selectWithUser: Story = {
           <span>{user.name}</span>
           <span className=" text-description">{user.email}</span>
         </div>
-      </SelectOption>
+      </Select.Option>
     )),
   },
   render: (args) => {
@@ -121,4 +118,36 @@ export const selectWithUser: Story = {
       />
     )
   },
+}
+
+export const selectComposed: Story = {
+  args: {
+    initialValue: undefined,
+    disabled: false,
+    invalid: false,
+    showSearch: false,
+    readOnly: false,
+    required: false,
+    onValueChange: action('onValueChange'),
+    onEditComplete: action('onEditComplete'),
+  },
+  render: (args) => (
+    <Select.Root
+      initialValue={args.initialValue}
+      disabled={args.disabled}
+      invalid={args.invalid}
+      showSearch={args.showSearch}
+      readOnly={args.readOnly}
+      required={args.required}
+      onValueChange={args.onValueChange}
+      onEditComplete={args.onEditComplete}
+    >
+      <Select.Trigger placeholder="Select…" />
+      <Select.Content>
+        {fruitOptions.map((item, index) => (
+          <Select.Option key={index} {...item} />
+        ))}
+      </Select.Content>
+    </Select.Root>
+  ),
 }

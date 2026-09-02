@@ -9,11 +9,9 @@ import { FilterOperatorUtils } from './FilterOperator'
 import type { ReactNode } from 'react'
 import { forwardRef, useEffect, useId, useMemo, useState } from 'react'
 import { Select } from '../Select/Select'
-import { SelectOption } from '../Select/SelectOption'
 import { Input } from '../input/Input'
 import { DateTimeInput } from '../input/DateTimeInput'
 import { MultiSelect } from '../MultiSelect/MultiSelect'
-import { MultiSelectOption } from '../MultiSelect/MultiSelectOption'
 import type { DataType } from './data-types'
 import clsx from 'clsx'
 import { FilterOperatorLabel } from './FilterOperatorLabel'
@@ -73,7 +71,7 @@ export const FilterBasePopUp = forwardRef<HTMLDivElement, FilterPopUpBaseProps>(
           <Select
             value={operator}
             onValueChange={(newOperator) => onOperatorChange(newOperator as FilterOperator)}
-            buttonProps={{
+            triggerProps={{
               'data-name': 'filter-operator-select',
               'className': 'w-fit coloring-text-hover neutral flex-row-1 items-center h-element-sm px-2 py-1 rounded-md hover:cursor-pointer font-bold',
               'selectedDisplay': (option) => option ? translation(FilterOperatorUtils.getInfo(option.value as FilterOperator).translationKey as Parameters<typeof translation>[0]) : ''
@@ -81,9 +79,9 @@ export const FilterBasePopUp = forwardRef<HTMLDivElement, FilterPopUpBaseProps>(
             iconAppearance="right"
           >
             {operators.map((op) => (
-              <SelectOption key={op} value={op} label={translation(FilterOperatorUtils.getInfo(op).translationKey as Parameters<typeof translation>[0])}>
+              <Select.Option key={op} value={op} label={translation(FilterOperatorUtils.getInfo(op).translationKey as Parameters<typeof translation>[0])}>
                 <FilterOperatorLabel operator={op} />
-              </SelectOption>
+              </Select.Option>
             ))}
           </Select>
         </div>
@@ -599,12 +597,12 @@ export const TagsFilterPopUp = forwardRef<HTMLDivElement, TagsFilterPopUpProps>(
               parameter: { ...parameter, uuidValues: selected.length > 0 ? selected : undefined },
             })
           }}
-          buttonProps={{ className: 'min-w-64' }}
+          triggerProps={{ className: 'min-w-64' }}
         >
           {availableTags.map(({ tag, label }) => (
-            <MultiSelectOption key={tag} value={tag} label={label}>
+            <MultiSelect.Option key={tag} value={tag} label={label}>
               {label}
-            </MultiSelectOption>
+            </MultiSelect.Option>
           ))}
         </MultiSelect>
       </Visibility>
@@ -663,10 +661,10 @@ export const TagsSingleFilterPopUp = forwardRef<HTMLDivElement, TagsSingleFilter
               parameter: { ...parameter, uuidValues: selected.length > 0 ? selected : undefined },
             })
           }}
-          buttonProps={{ className: 'min-w-64' }}
+          triggerProps={{ className: 'min-w-64' }}
         >
           {availableTags.map(({ tag, label }) => (
-            <MultiSelectOption key={tag} value={tag} label={label} />
+            <MultiSelect.Option key={tag} value={tag} label={label} />
           ))}
         </MultiSelect>
       </Visibility>
@@ -680,10 +678,10 @@ export const TagsSingleFilterPopUp = forwardRef<HTMLDivElement, TagsSingleFilter
               parameter: { ...parameter, uuidValue: selectedTag ?? undefined },
             })
           }}
-          buttonProps={{ className: 'min-w-64' }}
+          triggerProps={{ className: 'min-w-64' }}
         >
           {availableTags.map(({ tag, label }) => (
-            <SelectOption key={tag} value={tag} label={label} />
+            <Select.Option key={tag} value={tag} label={label} />
           ))}
         </Select>
       </Visibility>

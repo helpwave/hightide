@@ -1,8 +1,7 @@
 import { action } from 'storybook/actions'
 import type { Meta, StoryObj } from '@storybook/nextjs-vite'
 import { useEffect, useState } from 'react'
-import { MultiSelect } from '../../../src/components/user-interaction/MultiSelect/MultiSelect'
-import { MultiSelectOption } from '../../../src/components/user-interaction/MultiSelect/MultiSelectOption'
+import { MultiSelect, MultiSelect } from '../../../src/components/user-interaction/MultiSelect/MultiSelect'
 
 const meta: Meta<typeof MultiSelect> = {
   component: MultiSelect,
@@ -37,7 +36,7 @@ export const multiSelect: Story = {
     onValueChange: action('onValueChange'),
     onEditComplete: action('onEditComplete'),
     children: fruitOptions.map((item, index) => (
-      <MultiSelectOption key={index} {...item} />
+      <MultiSelect.Option key={index} {...item} />
     )),
   },
 }
@@ -72,21 +71,19 @@ export const multiSelectWithUser: Story = {
     compareFunction: compareUser,
     onValueChange: action('onValueChange'),
     onEditComplete: action('onEditComplete'),
-    buttonProps: {
-      placeholder: 'Select users',
-      selectedDisplay: (values: User[]) => (
-        <div className="flex flex-col gap-1">
-          {values.map((user) => (
-            <div key={user.uuid} className="flex flex-col">
-              <span>{user.name}</span>
-              <span className="text-description">{user.email}</span>
-            </div>
-          ))}
-        </div>
-      ),
-    },
+    placeholder: 'Select users',
+    selectedDisplay: (values: User[]) => (
+      <div className="flex flex-col gap-1">
+        {values.map((user) => (
+          <div key={user.uuid} className="flex flex-col">
+            <span>{user.name}</span>
+            <span className="text-description">{user.email}</span>
+          </div>
+        ))}
+      </div>
+    ),
     children: users.map((user) => (
-      <MultiSelectOption
+      <MultiSelect.Option
         key={user.uuid}
         id={user.uuid}
         value={user}
@@ -96,7 +93,7 @@ export const multiSelectWithUser: Story = {
           <span>{user.name}</span>
           <span className="text-description">{user.email}</span>
         </div>
-      </MultiSelectOption>
+      </MultiSelect.Option>
     )),
   },
   render: (args) => {
@@ -124,4 +121,36 @@ export const multiSelectWithUser: Story = {
       />
     )
   },
+}
+
+export const multiSelectComposed: Story = {
+  args: {
+    initialValue: ['Apple', 'Cherry'],
+    disabled: false,
+    invalid: false,
+    showSearch: true,
+    readOnly: false,
+    required: false,
+    onValueChange: action('onValueChange'),
+    onEditComplete: action('onEditComplete'),
+  },
+  render: (args) => (
+    <MultiSelect.Root
+      initialValue={args.initialValue}
+      disabled={args.disabled}
+      invalid={args.invalid}
+      showSearch={args.showSearch}
+      readOnly={args.readOnly}
+      required={args.required}
+      onValueChange={args.onValueChange}
+      onEditComplete={args.onEditComplete}
+    >
+      <MultiSelect.Trigger placeholder="Select…" />
+      <MultiSelect.Content>
+        {fruitOptions.map((item, index) => (
+          <MultiSelect.Option key={index} {...item} />
+        ))}
+      </MultiSelect.Content>
+    </MultiSelect.Root>
+  ),
 }

@@ -6,7 +6,6 @@ import { useTranslatedValidators } from '../../../src/hooks/useValidators'
 import { Input } from '../../../src/components/user-interaction/input/Input'
 import { MultiSelect } from '../../../src/components/user-interaction/MultiSelect/MultiSelect'
 import { Select } from '../../../src/components/user-interaction/Select/Select'
-import { SelectOption } from '../../../src/components/user-interaction/Select/SelectOption'
 import { Textarea } from '../../../src/components/user-interaction/Textarea'
 import { Button } from '../../../src/components/user-interaction/Button'
 import { useCreateForm } from '../../../src/components/form/useCreateForm'
@@ -18,7 +17,6 @@ import type { FormFieldDataHandling } from '../../../src/components/form/FormFie
 import { FormField } from '../../../src/components/form/FormField'
 import { FormProvider } from '../../../src/components/form/FormContext'
 import { DateTimeInput } from '../../../src/components/user-interaction/input/DateTimeInput'
-import { MultiSelectOption } from '../../../src/components/user-interaction/MultiSelect/MultiSelectOption'
 
 type FormState = 'editing' | 'sending' | 'submitted'
 
@@ -64,7 +62,7 @@ export const basic: Story = {
     onValueTouched,
     onUpdate,
     onValidUpdate,
-  }) => {
+  }: StoryArgs) => {
     const validators = useTranslatedValidators()
 
     const [state, setState] = useState<FormState>('editing')
@@ -151,7 +149,7 @@ export const basic: Story = {
               {({ dataProps, focusableElementProps, interactionStates }) => (
                 <Select {...dataProps as FormFieldDataHandling<string>} {...focusableElementProps} {...interactionStates}>
                   {StorybookHelper.selectValues.map(value => (
-                    <SelectOption key={value} value={value} label={value} />
+                    <Select.Option key={value} value={value} label={value} />
                   ))}
                 </Select>
               )}
@@ -167,7 +165,7 @@ export const basic: Story = {
               {({ dataProps, focusableElementProps, interactionStates }) => (
                 <MultiSelect {...dataProps} {...focusableElementProps} {...interactionStates}>
                   {StorybookHelper.selectValues.map(value => (
-                    <MultiSelectOption key={value} value={value} label={value} />
+                    <MultiSelect.Option key={value} value={value} label={value} />
                   ))}
                 </MultiSelect>
               )}
@@ -182,7 +180,7 @@ export const basic: Story = {
               {({ dataProps, focusableElementProps, interactionStates }) => (
                 <MultiSelect {...dataProps as FormFieldDataHandling<string[]>} {...focusableElementProps} {...interactionStates}>
                   {StorybookHelper.selectValues.map(value => (
-                    <MultiSelectOption key={value} value={value} label={value} />
+                    <MultiSelect.Option key={value} value={value} label={value} />
                   ))}
                 </MultiSelect>
               )}
@@ -342,7 +340,7 @@ return (
           {({ dataProps, focusableElementProps, interactionStates }) => (
             <Select {...dataProps as FormFieldDataHandling<string>} {...focusableElementProps} {...interactionStates}>
               {StorybookHelper.selectValues.map(value => (
-                <SelectOption key={value} value={value} />
+                <Select.Option key={value} value={value} />
               ))}
             </Select>
           )}
@@ -357,7 +355,7 @@ return (
           {({ dataProps, focusableElementProps, interactionStates }) => (
             <MultiSelect {...dataProps as FormFieldDataHandling<string[]>} {...focusableElementProps} {...interactionStates}>
               {StorybookHelper.selectValues.map(value => (
-                <SelectOption key={value} value={value} />
+                <MultiSelect.Option key={value} value={value} />
               ))}
             </MultiSelect>
           )}
@@ -371,7 +369,7 @@ return (
           {({ dataProps, focusableElementProps, interactionStates }) => (
             <MultiSelect {...dataProps as FormFieldDataHandling<string[]>} {...focusableElementProps} {...interactionStates}>
               {StorybookHelper.selectValues.map(value => (
-                <SelectOption key={value} value={value} />
+                <MultiSelect.Option key={value} value={value} />
               ))}
             </MultiSelect>
           )}

@@ -1,6 +1,7 @@
 import clsx from 'clsx'
 import { CheckIcon } from 'lucide-react'
-import type { HTMLAttributes, ReactNode, RefObject } from 'react'
+import type React from 'react'
+import type { ForwardedRef, HTMLAttributes, ReactNode, RefObject } from 'react'
 import { createContext, forwardRef, useContext, useEffect, useId, useRef } from 'react'
 import type { MultiSelectIconAppearance } from './MultiSelectContext'
 import { useMultiSelectContext } from './MultiSelectContext'
@@ -27,10 +28,16 @@ export interface MultiSelectOptionProps<T = string> extends HTMLAttributes<HTMLL
   iconAppearance?: MultiSelectIconAppearance,
 }
 
-export const MultiSelectOption = forwardRef<
+type MultiSelectOptionComponent = <T = string>(
+  props: MultiSelectOptionProps<T> & {
+    ref?: React.ForwardedRef<HTMLLIElement>,
+  }
+) => React.ReactElement | null
+
+const MultiSelectOptionImpl = forwardRef<
   HTMLLIElement,
   MultiSelectOptionProps<unknown>
->(function MultiSelectOption<T = string>(
+>(function MultiSelectOption<T>(
   {
     children,
     label,
@@ -39,7 +46,7 @@ export const MultiSelectOption = forwardRef<
     iconAppearance,
     ...props
   }: MultiSelectOptionProps<T>,
-  ref
+  ref: ForwardedRef<HTMLLIElement>
 ) {
   const context = useMultiSelectContext<T>()
   const { registerOption } = context
@@ -118,3 +125,5 @@ export const MultiSelectOption = forwardRef<
     </li>
   )
 })
+
+export const MultiSelectOption = MultiSelectOptionImpl as MultiSelectOptionComponent

@@ -2,12 +2,10 @@ import { List } from 'lucide-react'
 import { PropertyBase, type PropertyField } from './PropertyBase'
 import type { PropsWithChildren } from 'react'
 import { PropsUtil } from '../../../utils/propsUtil'
-import { MultiSelectChipDisplay } from '../MultiSelect/MultiSelectChipDisplay'
+import { MultiSelect } from '../MultiSelect/MultiSelect'
 
 export interface MultiSelectPropertyProps extends PropertyField<string[]>, PropsWithChildren {}
-/**
- * An Input for MultiSelect properties
- */
+
 export const MultiSelectProperty = ({
   children,
   value,
@@ -15,7 +13,7 @@ export const MultiSelectProperty = ({
   onEditComplete,
   ...props
 }: MultiSelectPropertyProps) => {
-  const hasValue = value.length > 0
+  const hasValue = value !== undefined && value.length > 0
 
   return (
     <PropertyBase
@@ -28,7 +26,7 @@ export const MultiSelectProperty = ({
           data-name="property-input-wrapper"
           data-invalid={PropsUtil.dataAttributes.bool(invalid)}
         >
-          <MultiSelectChipDisplay
+          <MultiSelect.Root
             value={value}
             onValueChange={(val) => {
               const arr = val as string[]
@@ -36,15 +34,14 @@ export const MultiSelectProperty = ({
               onEditComplete?.(arr)
             }}
             disabled={props.readOnly}
-            contentPanelProps={{
-              className: '!border-none !min-h-10'
-            }}
-            chipDisplayProps={{
-              className: 'flex flex-wrap gap-x-2 gap-y-2 p-0 items-center hover:cursor-pointer border-0',
-            }}
           >
-            {children}
-          </MultiSelectChipDisplay>
+            <MultiSelect.ChipDisplayTrigger
+              className="flex flex-wrap gap-x-2 gap-y-2 p-0 items-center hover:cursor-pointer border-0"
+            />
+            <MultiSelect.Content className="!border-none !min-h-10">
+              {children}
+            </MultiSelect.Content>
+          </MultiSelect.Root>
         </div>
       )}
     </PropertyBase>

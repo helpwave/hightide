@@ -4,7 +4,7 @@ import type {
 } from '@storybook/react-native'
 import { action } from 'storybook/actions'
 
-import { MultiSelect, MultiSelectOption } from '@helpwave/hightide-native/components'
+import { MultiSelect } from '@helpwave/hightide-native/components'
 import { StorybookHelper } from '../helper'
 
 const fruitOptions = StorybookHelper.selectValues
@@ -36,7 +36,7 @@ export const multiSelect: Story = {
   render: (args) => (
     <MultiSelect {...args}>
       {fruitOptions.map((option) => (
-        <MultiSelectOption
+        <MultiSelect.Option
           key={option.id}
           id={option.id}
           value={option.id}
@@ -45,5 +45,41 @@ export const multiSelect: Story = {
         />
       ))}
     </MultiSelect>
+  ),
+}
+
+export const multiSelectComposed: Story = {
+  args: {
+    initialValue: [],
+    disabled: false,
+    invalid: false,
+    searchableThreshold: 6,
+    readOnly: false,
+    onValueChange: action('onValueChange'),
+    onEditComplete: action('onEditComplete'),
+  },
+  render: (args) => (
+    <MultiSelect.Root
+      initialValue={args.initialValue}
+      disabled={args.disabled}
+      invalid={args.invalid}
+      searchableThreshold={args.searchableThreshold}
+      readOnly={args.readOnly}
+      onValueChange={args.onValueChange}
+      onEditComplete={args.onEditComplete}
+    >
+      <MultiSelect.Trigger placeholder="Select…" />
+      <MultiSelect.Menu>
+        {fruitOptions.map((option) => (
+          <MultiSelect.Option
+            key={option.id}
+            id={option.id}
+            value={option.id}
+            label={option.label}
+            disabled={option.disabled}
+          />
+        ))}
+      </MultiSelect.Menu>
+    </MultiSelect.Root>
   ),
 }

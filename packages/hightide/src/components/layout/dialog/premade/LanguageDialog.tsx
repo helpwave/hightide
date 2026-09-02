@@ -5,7 +5,6 @@ import { useLocalization } from '../../../../global-contexts/localization/forwar
 import { Button } from '../../../user-interaction/Button'
 import type { SelectProps } from '../../../user-interaction/Select/Select'
 import { Select } from '../../../user-interaction/Select/Select'
-import { SelectOption } from '../../../user-interaction/Select/SelectOption'
 import clsx from 'clsx'
 import { useHightideTranslation } from '@helpwave/hightide-utils/context/translation'
 
@@ -22,19 +21,19 @@ export const LanguageSelect = ({ ...props }: LanguageSelectProps) => {
         setLocale(language)
         props.onValueChange?.(language)
       }}
-      buttonProps={{
-        ...props.buttonProps,
-        className: clsx('min-w-40 w-fit', props.buttonProps?.className),
+      triggerProps={{
+        ...props.triggerProps,
+        className: clsx('min-w-40 w-fit', props.triggerProps?.className),
       }}
     >
       {Object.entries(supportedLocales).map(([supportedLocale, { localName }]) => (
-        <SelectOption
+        <Select.Option
           key={supportedLocale}
           value={supportedLocale}
           label={localName}
         >
           {localName}
-        </SelectOption>
+        </Select.Option>
       ))}
     </Select>
   )

@@ -4,7 +4,7 @@ import type {
 } from '@storybook/react-native'
 import { action } from 'storybook/actions'
 
-import { Select, SelectOption } from '@helpwave/hightide-native/components'
+import { Select } from '@helpwave/hightide-native/components'
 import { StorybookHelper } from '../helper'
 
 const fruitOptions = StorybookHelper.selectValues
@@ -36,7 +36,7 @@ export const select: Story = {
   render: (args) => (
     <Select {...args}>
       {fruitOptions.map((option) => (
-        <SelectOption
+        <Select.Option
           key={option.id}
           id={option.id}
           value={option.id}
@@ -45,5 +45,41 @@ export const select: Story = {
         />
       ))}
     </Select>
+  ),
+}
+
+export const selectComposed: Story = {
+  args: {
+    initialValue: null,
+    disabled: false,
+    invalid: false,
+    searchableThreshold: 6,
+    readOnly: false,
+    onValueChange: action('onValueChange'),
+    onEditComplete: action('onEditComplete'),
+  },
+  render: (args) => (
+    <Select.Root
+      initialValue={args.initialValue}
+      disabled={args.disabled}
+      invalid={args.invalid}
+      searchableThreshold={args.searchableThreshold}
+      readOnly={args.readOnly}
+      onValueChange={args.onValueChange}
+      onEditComplete={args.onEditComplete}
+    >
+      <Select.Trigger placeholder="Select…" />
+      <Select.Menu>
+        {fruitOptions.map((option) => (
+          <Select.Option
+            key={option.id}
+            id={option.id}
+            value={option.id}
+            label={option.label}
+            disabled={option.disabled}
+          />
+        ))}
+      </Select.Menu>
+    </Select.Root>
   ),
 }

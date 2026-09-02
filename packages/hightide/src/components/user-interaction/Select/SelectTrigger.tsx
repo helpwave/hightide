@@ -1,24 +1,31 @@
+import type React from 'react'
 import type { ComponentPropsWithoutRef, ForwardedRef, ReactNode } from 'react'
 import { forwardRef, useEffect, useRef } from 'react'
-import { useMultiSelectContext } from './MultiSelectContext'
+import type { SelectOptionType } from './SelectContext'
+import { useSelectContext } from './SelectContext'
 import { useHightideTranslation } from '@helpwave/hightide-utils/context/translation'
 import { ExpansionIcon } from '../../display-and-visualization/ExpansionIcon'
-import { MultiSelectOptionDisplayContext } from './MultiSelectOption'
+import { SelectOptionDisplayContext } from './SelectOption'
 import { ReactUtils } from '@helpwave/hightide-utils/utils'
 
-export interface MultiSelectButtonProps<T = string>
-  extends ComponentPropsWithoutRef<'div'> {
+export interface SelectTriggerProps<T = string> extends ComponentPropsWithoutRef<'div'> {
   'placeholder'?: ReactNode,
   'disabled'?: boolean,
-  'selectedDisplay'?: (values: T[]) => ReactNode,
+  'selectedDisplay'?: (value: SelectOptionType<T> | null) => ReactNode,
   'hideExpansionIcon'?: boolean,
   'data-name'?: string,
 }
 
-export const MultiSelectButton = forwardRef<
+type SelectTriggerComponent = <T = string>(
+  props: SelectTriggerProps<T> & {
+    ref?: React.ForwardedRef<HTMLDivElement>,
+  }
+) => React.ReactElement | null
+
+const SelectTriggerImpl = forwardRef<
   HTMLDivElement,
-  MultiSelectButtonProps<unknown>
->(function MultiSelectButton<T>(
+  SelectTriggerProps<unknown>
+>(function SelectTrigger<T>(
   {
     id,
     placeholder,
@@ -26,11 +33,11 @@ export const MultiSelectButton = forwardRef<
     selectedDisplay,
     hideExpansionIcon = false,
     ...props
-  }: MultiSelectButtonProps<T>,
+  }: SelectTriggerProps<T>,
   ref: ForwardedRef<HTMLDivElement>
 ) {
   const translation = useHightideTranslation()
-  const context = useMultiSelectContext<T>()
+  const context = useSelectContext<T>()
   const { config, layout } = context
   const { setIds } = config
   const { registerTrigger } = layout
@@ -49,11 +56,9 @@ export const MultiSelectButton = forwardRef<
   const disabled = !!disabledOverride || !!context.disabled
   const readOnly = !!context.readOnly
   const invalid = context.invalid
-  const hasValue = context.value.length > 0
+  const hasValue = context.selectedId !== null
   const hasInteractions = !readOnly && !disabled
-  const selectedOptions = context.selectedIds
-    .map((id) => context.idToOptionMap[id])
-    .filter(Boolean)
+  const selectedOption = context.selectedId ? (context.idToOptionMap[context.selectedId] ?? null) : null
 
   return (
     <div
@@ -87,7 +92,7 @@ export const MultiSelectButton = forwardRef<
           break
         }
       }}
-      data-name={props['data-name'] ?? 'multi-select-button'}
+      data-name={props['data-name'] ?? 'select-button'}
       data-value={hasValue ? '' : undefined}
       data-disabled={disabled ? '' : undefined}
       data-readonly={readOnly ? '' : undefined}
@@ -101,21 +106,14 @@ export const MultiSelectButton = forwardRef<
       aria-expanded={context.isOpen}
       aria-controls={context.isOpen ? context.config.ids.content : undefined}
     >
-      <MultiSelectOptionDisplayContext.Provider value="trigger">
+      <SelectOptionDisplayContext.Provider value="trigger">
         {hasValue
-          ? selectedDisplay?.(context.value) ?? (
-            <div className="flex flex-wrap gap-x-1 gap-y-2">
-              {selectedOptions.map((opt, index) => (
-                <span key={opt.id}>
-                  {opt.display}
-                  {index < selectedOptions.length - 1 && <span>,</span>}
-                </span>
-              ))}
-            </div>
-          )
+          ? selectedDisplay?.(selectedOption) ?? (selectedOption?.display)
           : placeholder ?? translation('clickToSelect')}
-      </MultiSelectOptionDisplayContext.Provider>
+      </SelectOptionDisplayContext.Provider>
       {!hideExpansionIcon && <ExpansionIcon isExpanded={context.isOpen} />}
     </div>
   )
 })
+
+export const SelectTrigger = SelectTriggerImpl as SelectTriggerComponent
