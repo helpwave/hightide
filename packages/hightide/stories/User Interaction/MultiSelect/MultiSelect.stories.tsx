@@ -1,10 +1,11 @@
 import { action } from 'storybook/actions'
 import type { Meta, StoryObj } from '@storybook/nextjs-vite'
 import { useEffect, useState } from 'react'
-import { MultiSelect, MultiSelect } from '../../../src/components/user-interaction/MultiSelect/MultiSelect'
+import { MultiSelect } from '../../../src/components/user-interaction/MultiSelect/MultiSelect'
+import type { MultiSelectProps } from '../../../src'
 
-const meta: Meta<typeof MultiSelect> = {
-  component: MultiSelect,
+const meta: Meta<typeof MultiSelect<User>> = {
+  component: MultiSelect<User>,
 }
 
 export default meta
@@ -96,7 +97,7 @@ export const multiSelectWithUser: Story = {
       </MultiSelect.Option>
     )),
   },
-  render: (args) => {
+  render: (args: MultiSelectProps<User>) => {
     const [value, setValue] = useState<User[]>(args.value as User[] | undefined ?? [])
 
     useEffect(() => {
@@ -134,7 +135,7 @@ export const multiSelectComposed: Story = {
     onValueChange: action('onValueChange'),
     onEditComplete: action('onEditComplete'),
   },
-  render: (args) => (
+  render: (args: MultiSelectProps<User>) => (
     <MultiSelect.Root
       initialValue={args.initialValue}
       disabled={args.disabled}

@@ -5,7 +5,7 @@ import clsx from 'clsx'
 import { useLocalization } from '../../../../global-contexts/localization/forward-exports'
 import { useTheme } from '../../../../global-contexts/theme/ThemeContext'
 import { Button } from '../../../user-interaction/Button'
-import type { SelectProps } from '../../../user-interaction/Select/Select'
+import type { SelectProps } from '../../../user-interaction/Select/SelectComponent'
 import { Select } from '../../../user-interaction/Select/Select'
 import { useHightideTranslation } from '@helpwave/hightide-utils/context/translation'
 

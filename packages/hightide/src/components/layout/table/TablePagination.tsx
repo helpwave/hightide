@@ -1,9 +1,10 @@
 import { Pagination, type PaginationProps } from '../navigation/Pagination'
 import type { HTMLAttributes } from 'react'
-import { Select, type SelectProps } from '../../user-interaction/Select/Select'
+import { Select } from '../../user-interaction/Select/Select'
 import { Visibility } from '../Visibility'
 import clsx from 'clsx'
 import { useTableStateWithoutSizingContext } from './TableContext'
+import type { SelectProps } from '../../user-interaction'
 
 export type TablePaginationMenuProps = Omit<PaginationProps, 'pageIndex' | 'pageCount'>
 
