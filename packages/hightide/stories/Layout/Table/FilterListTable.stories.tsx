@@ -84,7 +84,12 @@ const AgeFilterPopUp = ({ value, onValueChange, onRemove, name, onClose: close, 
             }}
           >
             {range(ageRange.length - 1).map(i => (
-              <Select.Option key={i} value={[ageRange[i], ageRange[i + 1]]} label={`${ageRange[i]} - ${ageRange[i + 1]}`}>
+              <Select.Option
+                key={i}
+                value={[ageRange[i], ageRange[i + 1]] as [number, number]}
+                valueId={`${ageRange[i]}-${ageRange[i + 1]}`}
+                label={`${ageRange[i]} - ${ageRange[i + 1]}`}
+              >
                 {ageRange[i]} - {ageRange[i + 1]}
               </Select.Option>
             ))}

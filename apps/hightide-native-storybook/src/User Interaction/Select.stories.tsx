@@ -38,7 +38,6 @@ export const select: Story = {
       {fruitOptions.map((option) => (
         <Select.Option
           key={option.id}
-          id={option.id}
           value={option.id}
           label={option.label}
           disabled={option.disabled}
@@ -73,7 +72,6 @@ export const selectComposed: Story = {
         {fruitOptions.map((option) => (
           <Select.Option
             key={option.id}
-            id={option.id}
             value={option.id}
             label={option.label}
             disabled={option.disabled}

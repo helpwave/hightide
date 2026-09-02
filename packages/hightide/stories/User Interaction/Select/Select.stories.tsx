@@ -2,8 +2,10 @@ import type { Meta, StoryObj } from '@storybook/nextjs-vite'
 import { action } from 'storybook/actions'
 import { useEffect, useState } from 'react'
 import { Select } from '../../../src/components/user-interaction/Select/Select'
+import type { SelectProps } from '../../../src'
+import type { SelectOptionType } from '../../../src/components/user-interaction/Select/SelectContext'
 
-const meta: Meta<typeof Select> = {
+const meta: Meta<typeof Select<User>> = {
   component: Select,
 }
 
@@ -74,9 +76,9 @@ export const selectWithUser: Story = {
     onValueChange: action('onValueChange'),
     onEditComplete: action('onEditComplete'),
     placeholder: 'Select a user',
-    selectedDisplay: (option) => {
+    selectedDisplay: (option:  SelectOptionType<User> | null) => {
       if (!option) return null
-      const user = option.value as User
+      const user = option.value.value
       return (
         <div className="flex flex-col">
           <span>{user.name}</span>
@@ -87,8 +89,8 @@ export const selectWithUser: Story = {
     children: users.map((user) => (
       <Select.Option
         key={user.uuid}
-        id={user.uuid}
         value={user}
+        valueId={user.uuid}
         label={user.name}
       >
         <div className="flex flex-col">
@@ -98,7 +100,7 @@ export const selectWithUser: Story = {
       </Select.Option>
     )),
   },
-  render: (args) => {
+  render: (args: SelectProps<User>) => {
     const [value, setValue] = useState<User | null>(args.value ?? null)
     useEffect(() => {
       setValue(args.value ?? null)
@@ -131,7 +133,7 @@ export const selectComposed: Story = {
     onValueChange: action('onValueChange'),
     onEditComplete: action('onEditComplete'),
   },
-  render: (args) => (
+  render: (args: SelectProps<User>) => (
     <Select.Root
       initialValue={args.initialValue}
       disabled={args.disabled}

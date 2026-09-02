@@ -6,10 +6,14 @@ import type { ColorPairToken } from '@helpwave/hightide-design/theme-tokens'
 import type { UseSelectFirstHighlightBehavior } from '../../../hooks/useSelect'
 import type { FormFieldInteractionStates } from '../../../types/formField'
 
-export type SelectOptionType<T = string> = {
-  id: string,
+export type SelectOptionIdentity<T> = {
   value: T,
-  label?: string,
+  id: string,
+}
+
+export type SelectOptionType<T = string> = {
+  value: SelectOptionIdentity<T>,
+  label: string,
   display?: ReactNode,
   disabled?: boolean,
 }

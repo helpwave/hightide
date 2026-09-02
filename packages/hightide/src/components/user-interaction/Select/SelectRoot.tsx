@@ -1,4 +1,4 @@
-import type { ReactNode, RefObject } from 'react'
+import type { ReactNode, RefObject, SetStateAction } from 'react'
 import { useCallback, useEffect, useId, useMemo, useState } from 'react'
 import { SelectContext } from './SelectContext'
 import type { SelectContextConfig, SelectContextLayout, SelectOptionType } from './SelectContext'
@@ -16,7 +16,7 @@ export interface SelectIds {
   searchInput: string,
 }
 
-export interface SelectRootProps<T> extends Partial<FormFieldDataHandling<T>>, Partial<FormFieldInteractionStates> {
+export interface SelectRootProps<T> extends Omit<Partial<FormFieldDataHandling<T>>, 'value'>, Partial<FormFieldInteractionStates> {
   value?: T | null,
   initialValue?: T | null,
   compareFunction?: (a: T | null, b: T | null) => boolean,
@@ -59,14 +59,14 @@ export function SelectRoot<T>({
   const registerOption = useCallback(
     (item: SelectOptionType<T>) => {
       setOptions((prev) => {
-        const next = prev.filter((o) => o.value !== item.value)
+        const next = prev.filter((o) => o.value.id !== item.value.id)
         next.push(item)
         next.sort((a, b) =>
           DOMUtils.compareDocumentPosition(a.ref.current, b.ref.current))
         return next
       })
       return () =>
-        setOptions((prev) => prev.filter((o) => o.value !== item.value))
+        setOptions((prev) => prev.filter((o) => o.value.id !== item.value.id))
     },
     []
   )
@@ -82,19 +82,19 @@ export function SelectRoot<T>({
 
   const idToOptionMap = useMemo(() => {
     return options.reduce((acc, o) => {
-      acc[o.id] = o
+      acc[o.value.id] = o
       return acc
     }, {} as Record<string, SelectOptionType<T>>)
   }, [options])
 
   const mappedValueId = useMemo(() => {
     if(value === undefined) return undefined
-    return options.find((o) => compare(o.value, value))?.id ?? null
+    return options.find((o) => compare(o.value.value, value))?.value.id ?? null
   }, [options, value, compare])
 
   const mappedInitialValueId = useMemo(() => {
     if(initialValue === undefined) return undefined
-    return options.find((o) => compare(o.value, initialValue))?.id ?? null
+    return options.find((o) => compare(o.value.value, initialValue))?.value.id ?? null
   }, [options, initialValue, compare])
 
   const onValueChangeStable = useEventCallbackStabilizer(onValueChange)
@@ -107,7 +107,7 @@ export function SelectRoot<T>({
       console.warn(`Attempted to select an option ${value} that is not valid`)
       return
     }
-    onValueChangeStable(option.value)
+    onValueChangeStable(option.value.value)
   }, [onValueChangeStable, idToOptionMap])
 
   const onEditCompleteWrapper = useCallback((value: string) => {
@@ -116,7 +116,7 @@ export function SelectRoot<T>({
       console.warn(`Attempted to edit complete an option ${value} that is not valid`)
       return
     }
-    onEditCompleteStable(option.value)
+    onEditCompleteStable(option.value.value)
   }, [onEditCompleteStable, idToOptionMap])
 
 
@@ -125,7 +125,11 @@ export function SelectRoot<T>({
     initialValue: mappedInitialValueId,
     onValueChange: onValueChangeWrapper,
     onEditComplete: onEditCompleteWrapper,
-    options,
+    options: options.map((o) => ({
+      id: o.value.id,
+      label: o.label,
+      disabled: o.disabled,
+    })),
     initialIsOpen,
     onClose,
     onIsOpenChange: onIsOpenChangeStable,
@@ -149,6 +153,14 @@ export function SelectRoot<T>({
     registerTrigger,
   }), [triggerRef, registerTrigger])
 
+  const setIsOpen = useCallback((updater: SetStateAction<boolean>) => {
+    if(typeof updater === 'function') {
+      state.setIsOpen(updater(state.isOpen))
+    } else {
+      state.setIsOpen(updater)
+    }
+  }, [state])
+
   return (
     <SelectContext.Provider
       value={{
@@ -157,7 +169,7 @@ export function SelectRoot<T>({
         readOnly,
         required,
         selectedId: state.value,
-        highlightedId: state.highlightedValue,
+        highlightedId: state.highlightedValue ?? null,
         isOpen: state.isOpen,
         options,
         visibleOptionIds: state.visibleOptionIds,
@@ -184,7 +196,7 @@ export function SelectRoot<T>({
       <PopUpContext.Provider
         value={{
           isOpen: state.isOpen,
-          setIsOpen: state.setIsOpen,
+          setIsOpen: setIsOpen,
           popUpId: ids.content,
           triggerId: ids.trigger,
           triggerRef,

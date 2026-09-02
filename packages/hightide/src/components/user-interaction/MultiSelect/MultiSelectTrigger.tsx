@@ -113,7 +113,7 @@ const MultiSelectTriggerImpl = forwardRef<
           ? selectedDisplay?.(context.value) ?? (
             <div className="flex flex-wrap gap-x-1 gap-y-2">
               {selectedOptions.map((opt, index) => (
-                <span key={opt.id}>
+                <span key={opt.value.id}>
                   {opt.display}
                   {index < selectedOptions.length - 1 && <span>,</span>}
                 </span>

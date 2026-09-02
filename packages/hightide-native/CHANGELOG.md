@@ -10,6 +10,9 @@ and adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 ### Changed
 
 - `Select` and `MultiSelect` are now the only public exports of their folders; parts are attached as `Select.Root`, `Select.Trigger`, `Select.Menu`, `Select.Option`, `Select.Context`, and `Select.Provider` (same shape on `MultiSelect`)
+- `Select.Option` / `MultiSelect.Option` no longer take a separate `id`: string options omit `valueId` and use `value` as the id (`label` optional, defaults to `value`); other `T` require `value`, `valueId`, and `label`
+- Registered options are `{ value: { value: T, id }, label, display?, disabled? }` instead of a flat `{ id, value, label }`; selection callbacks still emit `T`
+- `selectedDisplay` on `Select` receives the registered option, so the selected `T` is `option.value.value`
 
 ## [0.8.0] - 2026-09-01
 

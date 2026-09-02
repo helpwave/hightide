@@ -86,8 +86,8 @@ export const multiSelectWithUser: Story = {
     children: users.map((user) => (
       <MultiSelect.Option
         key={user.uuid}
-        id={user.uuid}
         value={user}
+        valueId={user.uuid}
         label={user.name}
       >
         <div className="flex flex-col">

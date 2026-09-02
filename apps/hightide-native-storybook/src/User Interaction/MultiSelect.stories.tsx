@@ -38,7 +38,6 @@ export const multiSelect: Story = {
       {fruitOptions.map((option) => (
         <MultiSelect.Option
           key={option.id}
-          id={option.id}
           value={option.id}
           label={option.label}
           disabled={option.disabled}
@@ -73,7 +72,6 @@ export const multiSelectComposed: Story = {
         {fruitOptions.map((option) => (
           <MultiSelect.Option
             key={option.id}
-            id={option.id}
             value={option.id}
             label={option.label}
             disabled={option.disabled}

@@ -6,10 +6,14 @@ import type { ColorPairToken } from '@helpwave/hightide-design/theme-tokens'
 import type { UseMultiSelectFirstHighlightBehavior } from '../../../hooks/useMultiSelect'
 import type { FormFieldInteractionStates } from '../../../types/formField'
 
-export type MultiSelectOptionType<T = string> = {
-  id: string,
+export type MultiSelectOptionIdentity<T> = {
   value: T,
-  label?: string,
+  id: string,
+}
+
+export type MultiSelectOptionType<T = string> = {
+  value: MultiSelectOptionIdentity<T>,
+  label: string,
   display?: ReactNode,
   disabled?: boolean,
 }

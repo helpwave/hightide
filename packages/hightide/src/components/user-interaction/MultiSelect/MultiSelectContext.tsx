@@ -3,10 +3,14 @@ import { createContext, useContext } from 'react'
 import type { FormFieldInteractionStates } from '../../form/FieldLayout'
 import type { UseMultiSelectFirstHighlightBehavior } from './useMultiSelect'
 
-export interface MultiSelectOptionType<T = string> {
-  id: string,
+export type MultiSelectOptionIdentity<T> = {
   value: T,
-  label?: string,
+  id: string,
+}
+
+export interface MultiSelectOptionType<T = string> {
+  value: MultiSelectOptionIdentity<T>,
+  label: string,
   display?: ReactNode,
   disabled?: boolean,
   ref: RefObject<HTMLElement | null>,

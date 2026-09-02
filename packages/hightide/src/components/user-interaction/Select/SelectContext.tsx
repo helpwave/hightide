@@ -3,10 +3,14 @@ import { createContext, useContext } from 'react'
 import type { UseSelectFirstHighlightBehavior } from './useSelect'
 import type { FormFieldInteractionStates } from '../../form/FieldLayout'
 
-export interface SelectOptionType<T = string> {
-  id: string,
+export type SelectOptionIdentity<T> = {
   value: T,
-  label?: string,
+  id: string,
+}
+
+export interface SelectOptionType<T = string> {
+  value: SelectOptionIdentity<T>,
+  label: string,
   display?: ReactNode,
   disabled?: boolean,
   ref: RefObject<HTMLElement | null>,

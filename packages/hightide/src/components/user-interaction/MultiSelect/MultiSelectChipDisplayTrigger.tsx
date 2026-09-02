@@ -61,13 +61,13 @@ export const MultiSelectChipDisplayTrigger = forwardRef<
       aria-readonly={readOnly}
     >
       {selectedOptions.map((opt) => (
-        <div key={opt.id} data-name="multi-select-chip-display-chip">
+        <div key={opt.value.id} data-name="multi-select-chip-display-chip">
           {opt.display}
           <IconButton
             tooltip={translation('remove')}
             disabled={!hasInteractions}
             onClick={(e) => {
-              context.toggleSelection(opt.id, false)
+              context.toggleSelection(opt.value.id, false)
               e.preventDefault()
             }}
             size="sm"

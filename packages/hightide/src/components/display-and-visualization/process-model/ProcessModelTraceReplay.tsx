@@ -291,7 +291,12 @@ export const ProcessModelTraceReplay = ({ graph, className }: ProcessModelTraceR
             showSearch={false}
           >
             {SPEED_OPTIONS.map((option) => (
-              <Select.Option key={option.value} value={option.value} label={option.label} />
+              <Select.Option<number>
+                key={option.value}
+                value={option.value}
+                valueId={String(option.value)}
+                label={option.label}
+              />
             ))}
           </Select>
         </div>

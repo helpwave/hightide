@@ -36,7 +36,6 @@ export const ThemeSelect = () => {
         {options.map((option) => (
           <Select.Option
             key={option.id}
-            id={option.id}
             value={option.id}
             label={option.label}
           />

@@ -1,5 +1,5 @@
 import type { ReactNode } from 'react'
-import { useEffect, useId, useMemo } from 'react'
+import { useEffect, useMemo } from 'react'
 
 import { useTheme } from '../../../global-contexts/theme/ThemeContext'
 import { useMemoizedTheme } from '../../../hooks/useMemoizedTheme'
@@ -8,17 +8,36 @@ import type { IconStyle } from '../../../icons'
 import type { MultiSelectOptionState } from '../../../theme/types/components/multiSelect'
 import { ListActionItem } from '../../list/ListActionItem'
 import { ThemedIcon } from '../../visualization-and-display/ThemedIcon'
+import type { SelectOptionIdentity } from './SelectContext'
 import { useSelectContext } from './SelectContext'
 
-export type SelectOptionProps<T = string> = {
-  value: T,
-  label: string,
+export type SelectOptionProps<T = string> = (
+  T extends string
+    ? {
+        valueId?: undefined,
+        value: T,
+        label?: string,
+      }
+    : {
+        valueId: string,
+        value: T,
+        label: string,
+      }
+) & {
   disabled?: boolean,
   children?: ReactNode,
 }
 
+const toIdentity = <T,>(value: T, valueId: string | undefined): SelectOptionIdentity<T> => {
+  if (valueId === undefined) {
+    return { value, id: value as string }
+  }
+  return { value, id: valueId }
+}
+
 export const SelectOption = <T,>({
   value,
+  valueId,
   label,
   disabled = false,
   children,
@@ -26,27 +45,28 @@ export const SelectOption = <T,>({
   const { theme } = useTheme()
   const context = useSelectContext<T>()
   const { registerOption } = context
-  const display = children ?? label
-  const id = useId()
+  const identity = useMemo(() => toIdentity<T>(value, valueId), [value, valueId])
+  const resolvedLabel: string = valueId === undefined ? (label ?? (value as string)) : label
+  const display = children ?? resolvedLabel
+  const optionId = identity.id
 
   useEffect(() => {
     return registerOption({
-      id,
-      value,
-      label,
+      value: identity,
+      label: resolvedLabel,
       display,
       disabled,
     })
-  }, [disabled, display, id, label, registerOption, value])
+  }, [disabled, display, identity, registerOption, resolvedLabel])
 
-  const isSelected = context.selectedId === id
-  const isVisible = context.visibleOptionIds.includes(id)
+  const isSelected = context.selectedId === optionId
+  const isVisible = context.visibleOptionIds.includes(optionId)
 
   const optionState = useMemo((): MultiSelectOptionState => ({
     isSelected,
-    isHighlighted: context.highlightedId === id,
+    isHighlighted: context.highlightedId === optionId,
     isDisabled: disabled,
-  }), [context.highlightedId, disabled, id, isSelected])
+  }), [context.highlightedId, disabled, optionId, isSelected])
 
   const checkIcon = useMemoizedTheme<MultiSelectOptionState, IconStyle>(
     theme.components.listItem.action.icon,
@@ -59,10 +79,10 @@ export const SelectOption = <T,>({
 
   return (
     <ListActionItem
-      title={children ? undefined : label}
+      title={children ? undefined : resolvedLabel}
       content={children}
       disabled={disabled}
-      onPress={() => context.toggleSelection(id)}
+      onPress={() => context.toggleSelection(optionId)}
       leading={(
         <ThemedIcon
           icon={HightideIconRegistry.Check}

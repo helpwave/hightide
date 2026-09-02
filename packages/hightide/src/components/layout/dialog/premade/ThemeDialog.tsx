@@ -35,6 +35,7 @@ export const ThemeSelect = ({ ...props }: ThemeSelectProps) => {
       <Select.Option
         key="system"
         value={null}
+        valueId="system"
         label={systemLabel}
         className="gap-x-6 justify-between"
       >
