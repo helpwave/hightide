@@ -191,7 +191,7 @@ export const ChatAttachmentMessageBubble = ({
   downloadLabel = 'Download',
   onDownload,
   timestamp,
-  messageStatus,
+  status,
   style,
   bodyStyle,
   bodyTextStyle,
@@ -273,7 +273,7 @@ export const ChatAttachmentMessageBubble = ({
       {...props}
       direction={direction}
       timestamp={timestamp}
-      messageStatus={messageStatus}
+      status={status}
       style={resolvedContainerStyle}
       bodyStyle={resolvedBodyStyle}
       bodyTextStyle={resolvedBodyTextStyle}

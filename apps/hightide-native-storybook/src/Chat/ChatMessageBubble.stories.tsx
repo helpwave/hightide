@@ -18,7 +18,7 @@ const meta = {
       control: 'select',
       options: ['incoming', 'outgoing'] satisfies ChatMessageDirection[],
     },
-    messageStatus: {
+    status: {
       control: 'select',
       options: ['sent', 'sending', 'received', 'read'] satisfies ChatMessageStatus[],
     },
@@ -32,7 +32,7 @@ export const chatMessageBubble: Story = {
   args: {
     direction: 'outgoing',
     timestamp: new Date('2026-08-24T09:24:00'),
-    messageStatus: 'read',
+    status: 'read',
     children: 'Perfekt, ich habe den Befund erhalten. Bis Mittwoch!',
   },
   render: (args) => (

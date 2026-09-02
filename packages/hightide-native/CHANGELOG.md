@@ -5,6 +5,13 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [0.8.0] - 2026-09-01
+
+### Changed
+
+- `ChatMessageBubble` (and `ChatAttachmentMessageBubble`) prop `messageStatus` is now `status`
+- Depending on the `MessageStatus` sent and sending icons are now differentiated 
+
 ## [0.7.1] - 2026-09-01
 
 ### Changed
