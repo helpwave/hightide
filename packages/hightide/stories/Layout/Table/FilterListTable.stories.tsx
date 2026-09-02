@@ -15,7 +15,6 @@ import { FilterOperatorUtils } from '../../../src/components/user-interaction/da
 import { FilterBasePopUp } from '../../../src/components/user-interaction/data/FilterPopUp'
 import { Input } from '../../../src/components/user-interaction/input/Input'
 import { Select } from '../../../src/components/user-interaction/Select/Select'
-import { SelectOption } from '../../../src/components/user-interaction/Select/SelectOption'
 import { Visibility } from '../../../src/components/layout/Visibility'
 import { SortingList } from '../../../src/components/user-interaction/data/SortingList'
 import type { SortingListItem } from '../../../src/components/user-interaction/data/SortingList'
@@ -74,7 +73,7 @@ const AgeFilterPopUp = ({ value, onValueChange, onRemove, name, onClose: close, 
         <div className="flex-col-1">
           <label htmlFor={ids.range} className="typography-label-md">{translation('min')}</label>
           <Select<[number, number]>
-            buttonProps={{ id: ids.range }}
+            triggerProps={{ id: ids.range }}
             value={parameter.numberMin !== undefined && parameter.numberMax !== undefined ? [parameter.numberMin, parameter.numberMax] : null}
             onValueChange={(newRange) => {
               onValueChange({ ...value, parameter: { ...parameter, numberMin: newRange[0], numberMax: newRange[1] } })
@@ -85,9 +84,14 @@ const AgeFilterPopUp = ({ value, onValueChange, onRemove, name, onClose: close, 
             }}
           >
             {range(ageRange.length - 1).map(i => (
-              <SelectOption key={i} value={[ageRange[i], ageRange[i + 1]]} label={`${ageRange[i]} - ${ageRange[i + 1]}`}>
+              <Select.Option
+                key={i}
+                value={[ageRange[i], ageRange[i + 1]] as [number, number]}
+                valueId={`${ageRange[i]}-${ageRange[i + 1]}`}
+                label={`${ageRange[i]} - ${ageRange[i + 1]}`}
+              >
                 {ageRange[i]} - {ageRange[i + 1]}
-              </SelectOption>
+              </Select.Option>
             ))}
           </Select>
         </div>

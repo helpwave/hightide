@@ -34,7 +34,7 @@ const mergeOptionMaps = <T,>(
 ): Record<string, MultiSelectOptionType<T>> => {
   const merged = { ...snapshots }
   for (const option of live) {
-    merged[option.id] = option
+    merged[option.value.id] = option
   }
   return merged
 }
@@ -59,14 +59,14 @@ export function MultiSelectRoot<T>({
   const [optionSnapshots, setOptionSnapshots] = useState<Record<string, MultiSelectOptionType<T>>>({})
 
   const registerOption = useCallback((item: MultiSelectOptionType<T>) => {
-    setOptionSnapshots((previous) => ({ ...previous, [item.id]: item }))
+    setOptionSnapshots((previous) => ({ ...previous, [item.value.id]: item }))
     setOptions((previous) => {
-      const next = previous.filter((option) => option.id !== item.id)
+      const next = previous.filter((option) => option.value.id !== item.value.id)
       next.push(item)
       return next
     })
     return () => {
-      setOptions((previous) => previous.filter((option) => option.id !== item.id))
+      setOptions((previous) => previous.filter((option) => option.value.id !== item.value.id))
     }
   }, [])
 
@@ -82,7 +82,7 @@ export function MultiSelectRoot<T>({
     }
     const known = Object.values(idToOptionMap)
     return value
-      .map((item) => known.find((option) => compare(option.value, item))?.id)
+      .map((item) => known.find((option) => compare(option.value.value, item))?.value.id)
       .filter((id): id is string => id !== undefined)
   }, [compare, idToOptionMap, value])
 
@@ -92,7 +92,7 @@ export function MultiSelectRoot<T>({
     }
     const known = Object.values(idToOptionMap)
     return initialValue
-      .map((item) => known.find((option) => compare(option.value, item))?.id)
+      .map((item) => known.find((option) => compare(option.value.value, item))?.value.id)
       .filter((id): id is string => id !== undefined)
   }, [compare, idToOptionMap, initialValue])
 
@@ -101,21 +101,21 @@ export function MultiSelectRoot<T>({
 
   const onValueChangeWrapper = useCallback((ids: string[]) => {
     const values = ids
-      .map((id) => idToOptionMap[id]?.value)
+      .map((id) => idToOptionMap[id]?.value.value)
       .filter((item): item is T => item != null)
     onValueChangeStable(values)
   }, [idToOptionMap, onValueChangeStable])
 
   const onEditCompleteWrapper = useCallback((ids: string[]) => {
     const values = ids
-      .map((id) => idToOptionMap[id]?.value)
+      .map((id) => idToOptionMap[id]?.value.value)
       .filter((item): item is T => item != null)
     onEditCompleteStable(values)
   }, [idToOptionMap, onEditCompleteStable])
 
   const hookOptions = useMemo(
     () => options.map((option) => ({
-      id: option.id,
+      id: option.value.id,
       label: option.label,
       disabled: option.disabled,
     })),
@@ -135,7 +135,7 @@ export function MultiSelectRoot<T>({
   const knownOptionCount = Math.max(options.length, Object.keys(optionSnapshots).length)
   const selectedValues = useMemo(
     () => state.value
-      .map((id) => idToOptionMap[id]?.value)
+      .map((id) => idToOptionMap[id]?.value.value)
       .filter((item): item is T => item != null),
     [idToOptionMap, state.value]
   )

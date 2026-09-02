@@ -1,8 +1,9 @@
 import clsx from 'clsx'
 import { CheckIcon } from 'lucide-react'
-import type { HTMLAttributes, ReactNode, RefObject } from 'react'
-import { createContext, forwardRef, useContext, useEffect, useId, useRef } from 'react'
-import type { SelectIconAppearance } from './SelectContext'
+import type React from 'react'
+import type { ForwardedRef, HTMLAttributes, RefObject } from 'react'
+import { createContext, forwardRef, useContext, useEffect, useMemo, useRef } from 'react'
+import type { SelectIconAppearance, SelectOptionIdentity } from './SelectContext'
 import { useSelectContext } from './SelectContext'
 
 export type SelectOptionDisplayLocation = 'trigger' | 'list';
@@ -17,41 +18,69 @@ export function useSelectOptionDisplayLocation(): SelectOptionDisplayLocation {
   return context
 }
 
-export interface SelectOptionProps<T = string> extends HTMLAttributes<HTMLLIElement> {
-  value: T,
-  label: string,
+export type SelectOptionProps<T = string> = (
+  T extends string
+    ? {
+        valueId?: undefined,
+        value: T,
+        label?: string,
+      }
+    : {
+        valueId: string,
+        value: T,
+        label: string,
+      }
+) & Omit<HTMLAttributes<HTMLLIElement>, 'value' | 'valueId'> & {
   disabled?: boolean,
   iconAppearance?: SelectIconAppearance,
 }
 
-export const SelectOption = forwardRef<HTMLLIElement, SelectOptionProps<unknown>>(function SelectOption<T = string>({
-  children,
-  label,
-  value,
-  disabled = false,
-  iconAppearance,
-  ...props
-}: SelectOptionProps<T>, ref) {
-  const context= useSelectContext<T>()
+type SelectOptionComponent = <T = string>(
+  props: SelectOptionProps<T> & {
+    ref?: React.ForwardedRef<HTMLLIElement>,
+  }
+) => React.ReactElement | null
+
+const toIdentity = <T,>(value: T, valueId: string | undefined): SelectOptionIdentity<T> => {
+  if (valueId === undefined) {
+    return { value, id: value as string }
+  }
+  return { value, id: valueId }
+}
+
+const SelectOptionImpl = forwardRef<
+  HTMLLIElement,
+  SelectOptionProps<unknown>
+>(function SelectOption<T>(
+  {
+    children,
+    label,
+    value,
+    valueId,
+    disabled = false,
+    iconAppearance,
+    ...props
+  }: SelectOptionProps<T>,
+  ref: ForwardedRef<HTMLLIElement>
+) {
+  const context = useSelectContext<T>()
   const { registerOption } = context
   const itemRef = useRef<HTMLLIElement>(null)
-
-  const display: ReactNode = children ?? label
+  const identity = useMemo(() => toIdentity<T>(value, valueId), [value, valueId])
+  const resolvedLabel: string = valueId === undefined ? (label ?? (value as string)) : label
+  const display = children ?? resolvedLabel
   const iconAppearanceResolved = iconAppearance ?? context.config.iconAppearance
-
-  const generatedId = useId()
-  const optionId = props?.id ?? 'select-option-' + generatedId
+  const optionId = identity.id
 
   useEffect(() => {
     return registerOption({
-      id: optionId,
-      value,
-      label,
+      value: identity,
+      label: resolvedLabel,
       display,
-      disabled: disabled,
+      disabled,
       ref: itemRef as React.RefObject<HTMLElement>,
     })
-  }, [value, label, disabled, registerOption, display, optionId])
+  }, [disabled, display, identity, registerOption, resolvedLabel])
 
   const isHighlighted = context.highlightedId === optionId
   const isSelected = context.selectedId === optionId
@@ -107,3 +136,5 @@ export const SelectOption = forwardRef<HTMLLIElement, SelectOptionProps<unknown>
     </li>
   )
 })
+
+export const SelectOption = SelectOptionImpl as SelectOptionComponent

@@ -1,3 +1,4 @@
+import type React from 'react'
 import type { ComponentPropsWithoutRef, ForwardedRef, ReactNode } from 'react'
 import { forwardRef, useEffect, useRef } from 'react'
 import { useMultiSelectContext } from './MultiSelectContext'
@@ -6,7 +7,7 @@ import { ExpansionIcon } from '../../display-and-visualization/ExpansionIcon'
 import { MultiSelectOptionDisplayContext } from './MultiSelectOption'
 import { ReactUtils } from '@helpwave/hightide-utils/utils'
 
-export interface MultiSelectButtonProps<T = string>
+export interface MultiSelectTriggerProps<T = string>
   extends ComponentPropsWithoutRef<'div'> {
   'placeholder'?: ReactNode,
   'disabled'?: boolean,
@@ -15,10 +16,16 @@ export interface MultiSelectButtonProps<T = string>
   'data-name'?: string,
 }
 
-export const MultiSelectButton = forwardRef<
+type MultiSelectTriggerComponent = <T = string>(
+  props: MultiSelectTriggerProps<T> & {
+    ref?: React.ForwardedRef<HTMLDivElement>,
+  }
+) => React.ReactElement | null
+
+const MultiSelectTriggerImpl = forwardRef<
   HTMLDivElement,
-  MultiSelectButtonProps<unknown>
->(function MultiSelectButton<T>(
+  MultiSelectTriggerProps<unknown>
+>(function MultiSelectTrigger<T>(
   {
     id,
     placeholder,
@@ -26,7 +33,7 @@ export const MultiSelectButton = forwardRef<
     selectedDisplay,
     hideExpansionIcon = false,
     ...props
-  }: MultiSelectButtonProps<T>,
+  }: MultiSelectTriggerProps<T>,
   ref: ForwardedRef<HTMLDivElement>
 ) {
   const translation = useHightideTranslation()
@@ -106,7 +113,7 @@ export const MultiSelectButton = forwardRef<
           ? selectedDisplay?.(context.value) ?? (
             <div className="flex flex-wrap gap-x-1 gap-y-2">
               {selectedOptions.map((opt, index) => (
-                <span key={opt.id}>
+                <span key={opt.value.id}>
                   {opt.display}
                   {index < selectedOptions.length - 1 && <span>,</span>}
                 </span>
@@ -119,3 +126,6 @@ export const MultiSelectButton = forwardRef<
     </div>
   )
 })
+
+export const MultiSelectTrigger =
+  MultiSelectTriggerImpl as MultiSelectTriggerComponent

@@ -1,4 +1,4 @@
-import type { ReactNode, RefObject } from 'react'
+import type { ReactNode, RefObject, SetStateAction } from 'react'
 import { useCallback, useEffect, useId, useMemo, useState } from 'react'
 import { MultiSelectContext } from './MultiSelectContext'
 import type { MultiSelectContextType, MultiSelectIconAppearance, MultiSelectOptionType } from './MultiSelectContext'
@@ -41,7 +41,7 @@ export function MultiSelectRoot<T>({
   readOnly = false,
   required = false,
 }: MultiSelectRootProps<T>) {
-  const [triggerRef, setTriggerRef] = useState<RefObject<HTMLElement> | null>(null)
+  const [triggerRef, setTriggerRef] = useState<RefObject<HTMLElement | null> | null>(null)
   const [options, setOptions] = useState<MultiSelectOptionType<T>[]>([])
   const generatedId = useId()
   const [ids, setIds] = useState<MultiSelectIds>({
@@ -53,13 +53,13 @@ export function MultiSelectRoot<T>({
 
   const registerOption = useCallback((item: MultiSelectOptionType<T>) => {
     setOptions((prev) => {
-      const next = prev.filter((o) => o.id !== item.id)
+      const next = prev.filter((o) => o.value.id !== item.value.id)
       next.push(item)
       next.sort((a, b) =>
         DOMUtils.compareDocumentPosition(a.ref.current, b.ref.current))
       return next
     })
-    return () => setOptions((prev) => prev.filter((o) => o.id !== item.id))
+    return () => setOptions((prev) => prev.filter((o) => o.value.id !== item.value.id))
   }, [])
 
   const registerTrigger = useCallback((ref: RefObject<HTMLElement>) => {
@@ -73,7 +73,7 @@ export function MultiSelectRoot<T>({
     () =>
       options.reduce(
         (acc, o) => {
-          acc[o.id] = o
+          acc[o.value.id] = o
           return acc
         },
         {} as Record<string, MultiSelectOptionType<T>>
@@ -84,21 +84,21 @@ export function MultiSelectRoot<T>({
   const mappedValueIds = useMemo(() => {
     if (value == null) return undefined
     return value
-      .map((v) => options.find((o) => compare(o.value, v))?.id)
+      .map((v) => options.find((o) => compare(o.value.value, v))?.value.id)
       .filter((id) => id !== undefined)
   }, [options, value, compare])
 
   const mappedInitialValueIds = useMemo(() => {
     if (initialValue == null) return []
     return initialValue
-      .map((v) => options.find((o) => compare(o.value, v))?.id)
+      .map((v) => options.find((o) => compare(o.value.value, v))?.value.id)
       .filter((id) => id !== undefined)
   }, [options, initialValue, compare])
 
   const onValueChangeStable = useCallback(
     (ids: string[]) => {
       const values = ids
-        .map((id) => idToOptionMap[id]?.value)
+        .map((id) => idToOptionMap[id]?.value.value)
         .filter((v): v is T => v != null)
       onValueChange?.(values)
     },
@@ -108,7 +108,7 @@ export function MultiSelectRoot<T>({
   const onEditCompleteStable = useCallback(
     (ids: string[]) => {
       const values = ids
-        .map((id) => idToOptionMap[id]?.value)
+        .map((id) => idToOptionMap[id]?.value.value)
         .filter((v): v is T => v != null)
       onEditComplete?.(values)
     },
@@ -116,7 +116,7 @@ export function MultiSelectRoot<T>({
   )
 
   const state = useMultiSelect({
-    options: options.map((o) => ({ id: o.id, label: o.label, disabled: o.disabled })),
+    options: options.map((o) => ({ id: o.value.id, label: o.label, disabled: o.disabled })),
     value: mappedValueIds,
     onValueChange: onValueChangeStable,
     onEditComplete: onEditCompleteStable,
@@ -134,7 +134,7 @@ export function MultiSelectRoot<T>({
 
   const contextValue = useMemo((): MultiSelectContextType<T> => {
     const valueT = state.value
-      .map((id) => idToOptionMap[id]?.value)
+      .map((id) => idToOptionMap[id]?.value.value)
       .filter((v): v is T => v != null)
     return {
       invalid,
@@ -189,12 +189,20 @@ export function MultiSelectRoot<T>({
     showSearch,
   ])
 
+  const setIsOpen = useCallback((updater: SetStateAction<boolean>) => {
+    if(typeof updater === 'function') {
+      state.setIsOpen(updater(state.isOpen))
+    } else {
+      state.setIsOpen(updater)
+    }
+  }, [state])
+
   return (
     <MultiSelectContext.Provider value={contextValue as MultiSelectContextType<unknown>}>
       <PopUpContext.Provider
         value={{
           isOpen: state.isOpen,
-          setIsOpen: state.setIsOpen,
+          setIsOpen,
           popUpId: ids.content,
           triggerId: ids.trigger,
           triggerRef,

@@ -6,7 +6,6 @@ import {
   processModelLibrary
 } from '../../../src/components/display-and-visualization/process-model/processModelLibrary'
 import { Select } from '../../../src/components/user-interaction/Select/Select'
-import { SelectOption } from '../../../src/components/user-interaction/Select/SelectOption'
 
 const meta: Meta<typeof ProcessModelCanvas> = {
   component: ProcessModelCanvas,
@@ -32,7 +31,7 @@ export const processModelCanvas: Story = {
             showSearch={false}
           >
             {processModelLibrary.map((entry) => (
-              <SelectOption key={entry.id} value={entry.id} label={entry.name} />
+              <Select.Option key={entry.id} value={entry.id} label={entry.name} />
             ))}
           </Select>
         </div>

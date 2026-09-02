@@ -78,8 +78,8 @@ export const MultiSelectTrigger = <T,>({
       ) : selectedOptions.length > 0 ? (
         <View style={{ flexDirection: 'row', flexWrap: 'wrap', gap: 6 }}>
           {selectedOptions.map((option) => (
-            <Chip key={option.id} size="md" color={context.config.color} variant="tonal">
-              <ThemedText>{option.label ?? String(option.value)}</ThemedText>
+            <Chip key={option.value.id} size="md" color={context.config.color} variant="tonal">
+              <ThemedText>{option.label ?? String(option.value.value)}</ThemedText>
               {!context.readOnly && (
                 <View
                   style={{
@@ -94,7 +94,7 @@ export const MultiSelectTrigger = <T,>({
                     color={theme.colors.negative}
                     variant="foreground"
                     disabled={!interactive}
-                    onPress={() => context.toggleSelection(option.id, false)}
+                    onPress={() => context.toggleSelection(option.value.id, false)}
                     style={{
                       position: 'absolute',
                       left: '50%',

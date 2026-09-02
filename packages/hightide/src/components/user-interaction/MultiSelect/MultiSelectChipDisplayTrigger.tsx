@@ -1,25 +1,21 @@
 import type { ForwardedRef, HTMLAttributes, ReactNode } from 'react'
 import { forwardRef, useEffect, useRef } from 'react'
 import { useMultiSelectContext } from './MultiSelectContext'
-import type { MultiSelectRootProps } from './MultiSelectRoot'
-import { MultiSelectRoot } from './MultiSelectRoot'
-import type { MultiSelectContentProps } from './MultiSelectContent'
-import { MultiSelectContent } from './MultiSelectContent'
 import { IconButton } from '../IconButton'
 import { useHightideTranslation } from '@helpwave/hightide-utils/context/translation'
 import { XIcon, Plus } from 'lucide-react'
 import { ReactUtils } from '@helpwave/hightide-utils/utils'
 
-export type MultiSelectChipDisplayButtonProps = HTMLAttributes<HTMLDivElement> & {
+export type MultiSelectChipDisplayTriggerProps = HTMLAttributes<HTMLDivElement> & {
   'disabled'?: boolean,
   'placeholder'?: ReactNode,
   'data-name'?: string,
 }
 
-export const MultiSelectChipDisplayButton = forwardRef<
+export const MultiSelectChipDisplayTrigger = forwardRef<
   HTMLDivElement,
-  MultiSelectChipDisplayButtonProps
->(function MultiSelectChipDisplayButton({ id, ...props }, ref: ForwardedRef<HTMLDivElement>) {
+  MultiSelectChipDisplayTriggerProps
+>(function MultiSelectChipDisplayTrigger({ id, ...props }, ref: ForwardedRef<HTMLDivElement>) {
   const translation = useHightideTranslation()
   const context = useMultiSelectContext<unknown>()
   const { config, layout } = context
@@ -65,13 +61,13 @@ export const MultiSelectChipDisplayButton = forwardRef<
       aria-readonly={readOnly}
     >
       {selectedOptions.map((opt) => (
-        <div key={opt.id} data-name="multi-select-chip-display-chip">
+        <div key={opt.value.id} data-name="multi-select-chip-display-chip">
           {opt.display}
           <IconButton
             tooltip={translation('remove')}
             disabled={!hasInteractions}
             onClick={(e) => {
-              context.toggleSelection(opt.id, false)
+              context.toggleSelection(opt.value.id, false)
               e.preventDefault()
             }}
             size="sm"
@@ -118,27 +114,3 @@ export const MultiSelectChipDisplayButton = forwardRef<
     </div>
   )
 })
-
-export type MultiSelectChipDisplayProps<T = string> = MultiSelectRootProps<T> & {
-  contentPanelProps?: MultiSelectContentProps,
-  chipDisplayProps?: MultiSelectChipDisplayButtonProps,
-};
-
-export const MultiSelectChipDisplay = forwardRef(
-  function MultiSelectChipDisplay<T = string>(
-    {
-      children,
-      contentPanelProps,
-      chipDisplayProps,
-      ...props
-    }: MultiSelectChipDisplayProps<T>,
-    ref: React.ForwardedRef<HTMLDivElement>
-  ) {
-    return (
-      <MultiSelectRoot<T> {...props}>
-        <MultiSelectChipDisplayButton ref={ref} {...chipDisplayProps} />
-        <MultiSelectContent {...contentPanelProps}>{children}</MultiSelectContent>
-      </MultiSelectRoot>
-    )
-  }
-)

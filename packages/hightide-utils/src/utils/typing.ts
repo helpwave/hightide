@@ -22,3 +22,5 @@ export type SuperSet<T, Base> = Base extends T ? T : never;
 export type SingleOrArray<T> = T | T[]
 
 export type Exact<T, U extends T> = U;
+
+export type NotUndefined<T> = Exclude<T, undefined>

@@ -6,7 +6,6 @@ import { ProcessModelActivityNode } from '../../../src/components/display-and-vi
 import { processModelLibrary } from '../../../src/components/display-and-visualization/process-model/processModelLibrary'
 import type { ProcessModelGraphActivityNode } from '../../../src/components/display-and-visualization/process-model/types'
 import { Select } from '../../../src/components/user-interaction/Select/Select'
-import { SelectOption } from '../../../src/components/user-interaction/Select/SelectOption'
 
 type ActivityNodeExample = {
   id: string,
@@ -49,7 +48,7 @@ export const processModelActivityNode: Story = {
     onPointerEnter: action('onPointerEnter'),
     onPointerLeave: action('onPointerLeave'),
   },
-  render: (args) => {
+  render: (args: typeof ProcessModelActivityNode) => {
     const [exampleId, setExampleId] = useState(activityNodeExamples[0].id)
     const example = useMemo(
       () => activityNodeExamples.find((item) => item.id === exampleId) ?? activityNodeExamples[0],
@@ -69,7 +68,7 @@ export const processModelActivityNode: Story = {
             showSearch={false}
           >
             {activityNodeExamples.map((item) => (
-              <SelectOption key={item.id} value={item.id} label={item.optionLabel} />
+              <Select.Option key={item.id} value={item.id} label={item.optionLabel} />
             ))}
           </Select>
         </div>

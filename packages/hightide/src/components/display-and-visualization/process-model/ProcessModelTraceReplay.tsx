@@ -8,7 +8,6 @@ import {
 import clsx from 'clsx'
 import { Button } from '../../user-interaction/Button'
 import { Select } from '../../user-interaction/Select/Select'
-import { SelectOption } from '../../user-interaction/Select/SelectOption'
 import { ProcessModelCanvas } from './ProcessModelCanvas'
 import { ProcessModelLayoutUtilities } from './layoutProcessModel'
 import type { ProcessModelGraphWithTraces, ProcessModelTrace } from './types'
@@ -292,7 +291,12 @@ export const ProcessModelTraceReplay = ({ graph, className }: ProcessModelTraceR
             showSearch={false}
           >
             {SPEED_OPTIONS.map((option) => (
-              <SelectOption key={option.value} value={option.value} label={option.label} />
+              <Select.Option<number>
+                key={option.value}
+                value={option.value}
+                valueId={String(option.value)}
+                label={option.label}
+              />
             ))}
           </Select>
         </div>

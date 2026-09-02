@@ -4,7 +4,7 @@ import { action } from 'storybook/actions'
 import clsx from 'clsx'
 import { MultiSelectProperty } from '../../../src/components/user-interaction/properties/MultiSelectProperty'
 import { StorybookHelper } from '../../../src/storybook/helper'
-import { MultiSelectOption } from '../../../src/components/user-interaction/MultiSelect/MultiSelectOption'
+import { MultiSelect } from '../../../src/components/user-interaction/MultiSelect/MultiSelect'
 
 const options = StorybookHelper.selectValues
 
@@ -22,7 +22,7 @@ export const multiSelectProperty: Story = {
     value: options.slice(3, 5),
     readOnly: false,
     children: options.map(option => (
-      <MultiSelectOption key={option} value={option} label={option}>
+      <MultiSelect.Option key={option} value={option} label={option}>
         <span className="flex-row-1 items-center">
           <span
             className={clsx(
@@ -35,7 +35,7 @@ export const multiSelectProperty: Story = {
           />
           {option}
         </span>
-      </MultiSelectOption>
+      </MultiSelect.Option>
     )),
     onValueChange: action('onValueChange'),
     onEditComplete: action('onEditComplete'),

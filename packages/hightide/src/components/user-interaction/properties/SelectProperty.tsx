@@ -3,15 +3,10 @@ import type { PropsWithChildren } from 'react'
 import type { PropertyField } from './PropertyBase'
 import { PropertyBase } from './PropertyBase'
 import { PropsUtil } from '../../../utils/propsUtil'
-import { SelectRoot } from '../Select/SelectRoot'
-import { SelectButton } from '../Select/SelectButton'
-import { SelectContent } from '../Select/SelectContent'
+import { Select } from '../Select/Select'
 
 export interface SingleSelectPropertyProps extends PropertyField<string>, PropsWithChildren {}
 
-/**
- * An Input for SingleSelect properties
- */
 export const SingleSelectProperty = ({
   children,
   value,
@@ -32,7 +27,7 @@ export const SingleSelectProperty = ({
           data-name="property-input-wrapper"
           data-invalid={PropsUtil.dataAttributes.bool(invalid)}
         >
-          <SelectRoot
+          <Select.Root
             value={value}
             onValueChange={(value) => {
               onValueChange?.(value)
@@ -40,12 +35,13 @@ export const SingleSelectProperty = ({
             }}
             disabled={props.readOnly}
           >
-            <SelectButton
+            <Select.Trigger
               className="flex-row-2 w-full items-center justify-between"
-              hideExpansionIcon={true} data-name="property-input"
+              hideExpansionIcon={true}
+              data-name="property-input"
             />
-            <SelectContent>{children}</SelectContent>
-          </SelectRoot>
+            <Select.Content>{children}</Select.Content>
+          </Select.Root>
         </div>
       )}
     </PropertyBase>

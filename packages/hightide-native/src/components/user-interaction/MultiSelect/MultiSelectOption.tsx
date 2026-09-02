@@ -9,19 +9,36 @@ import type { IconStyle } from '../../../icons'
 import type { MultiSelectOptionState } from '../../../theme/types/components/multiSelect'
 import { ListActionItem } from '../../list/ListActionItem'
 import { ThemedIcon } from '../../visualization-and-display/ThemedIcon'
+import type { MultiSelectOptionIdentity } from './MultiSelectContext'
 import { useMultiSelectContext } from './MultiSelectContext'
 
-export type MultiSelectOptionProps<T = string> = {
-  id: string,
-  value: T,
-  label: string,
+export type MultiSelectOptionProps<T = string> = (
+  T extends string
+    ? {
+        valueId?: undefined,
+        value: T,
+        label?: string,
+      }
+    : {
+        valueId: string,
+        value: T,
+        label: string,
+      }
+) & {
   disabled?: boolean,
   children?: ReactNode,
 }
 
+const toIdentity = <T,>(value: T, valueId: string | undefined): MultiSelectOptionIdentity<T> => {
+  if (valueId === undefined) {
+    return { value, id: value as string }
+  }
+  return { value, id: valueId }
+}
+
 export const MultiSelectOption = <T,>({
-  id,
   value,
+  valueId,
   label,
   disabled = false,
   children,
@@ -29,20 +46,22 @@ export const MultiSelectOption = <T,>({
   const { theme } = useTheme()
   const context = useMultiSelectContext<T>()
   const { registerOption } = context
-  const display = children ?? label
+  const identity = useMemo(() => toIdentity<T>(value, valueId), [value, valueId])
+  const resolvedLabel: string = valueId === undefined ? (label ?? (value as string)) : label
+  const display = children ?? resolvedLabel
+  const optionId = identity.id
 
   useEffect(() => {
     return registerOption({
-      id,
-      value,
-      label,
+      value: identity,
+      label: resolvedLabel,
       display,
       disabled,
     })
-  }, [disabled, display, id, label, registerOption, value])
+  }, [disabled, display, identity, registerOption, resolvedLabel])
 
-  const isSelected = context.selectedIds.includes(id)
-  const isVisible = context.visibleOptionIds.includes(id)
+  const isSelected = context.selectedIds.includes(optionId)
+  const isVisible = context.visibleOptionIds.includes(optionId)
   const optionColor = isSelected
     ? (context.config.color ?? theme.colors.primary)
     : undefined
@@ -50,9 +69,9 @@ export const MultiSelectOption = <T,>({
   const optionState = useMemo((): MultiSelectOptionState => ({
     color: context.config.color,
     isSelected,
-    isHighlighted: context.highlightedId === id,
+    isHighlighted: context.highlightedId === optionId,
     isDisabled: disabled,
-  }), [context.config.color, context.highlightedId, disabled, id, isSelected])
+  }), [context.config.color, context.highlightedId, disabled, optionId, isSelected])
 
   const multiSelectTheme = theme.components.multiSelect
   const resolvedCheckboxStyle = useMemoizedTheme(multiSelectTheme.checkbox, optionState)
@@ -67,11 +86,11 @@ export const MultiSelectOption = <T,>({
 
   return (
     <ListActionItem
-      title={children ? undefined : label}
+      title={children ? undefined : resolvedLabel}
       content={children}
       color={optionColor}
       disabled={disabled}
-      onPress={() => context.toggleSelection(id)}
+      onPress={() => context.toggleSelection(optionId)}
       leading={(
         <View style={resolvedCheckboxStyle}>
           <ThemedIcon

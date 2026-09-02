@@ -5,6 +5,17 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/)
 and adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [0.16.0] - 2026-09-02
+
+### Changed
+
+- `Select` and `MultiSelect` are now the only public exports of their folders; parts are attached as `Select.Root`, `Select.Trigger`, `Select.Content`, `Select.Option`, `Select.Context`, and `Select.Provider`
+- Combined `Select` / `MultiSelect` use `triggerProps` and `contentProps` instead of `buttonProps` and `contentPanelProps`
+- `MultiSelect.ChipDisplayTrigger` exposes the chip-display trigger; compose it with `MultiSelect.Root` and `MultiSelect.Content`
+- `Select.Option` / `MultiSelect.Option` no longer take a separate `id`: string options omit `valueId` and use `value` as the id (`label` optional, defaults to `value`); other `T` require `value`, `valueId`, and `label`
+- Registered options are `{ value: { value: T, id }, label, display?, disabled? }` instead of a flat `{ id, value, label }`; selection callbacks still emit `T`
+- `selectedDisplay` on `Select` receives the registered option, so the selected `T` is `option.value.value`
+
 ## [0.15.5] - 2026-09-01
 
 ### Changed

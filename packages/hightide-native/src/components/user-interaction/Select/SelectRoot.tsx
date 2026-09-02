@@ -35,7 +35,7 @@ const mergeOptionMaps = <T,>(
 ): Record<string, SelectOptionType<T>> => {
   const merged = { ...snapshots }
   for (const option of live) {
-    merged[option.id] = option
+    merged[option.value.id] = option
   }
   return merged
 }
@@ -61,14 +61,14 @@ export function SelectRoot<T>({
   const [optionSnapshots, setOptionSnapshots] = useState<Record<string, SelectOptionType<T>>>({})
 
   const registerOption = useCallback((item: SelectOptionType<T>) => {
-    setOptionSnapshots((previous) => ({ ...previous, [item.id]: item }))
+    setOptionSnapshots((previous) => ({ ...previous, [item.value.id]: item }))
     setOptions((previous) => {
-      const next = previous.filter((option) => option.value !== item.value)
+      const next = previous.filter((option) => option.value.id !== item.value.id)
       next.push(item)
       return next
     })
     return () => {
-      setOptions((previous) => previous.filter((option) => option.id !== item.id))
+      setOptions((previous) => previous.filter((option) => option.value.id !== item.value.id))
     }
   }, [])
 
@@ -82,14 +82,14 @@ export function SelectRoot<T>({
     if (value === undefined) {
       return undefined
     }
-    return Object.values(idToOptionMap).find((option) => compare(option.value, value))?.id ?? null
+    return Object.values(idToOptionMap).find((option) => compare(option.value.value, value))?.value.id ?? null
   }, [compare, idToOptionMap, value])
 
   const mappedInitialValueId = useMemo(() => {
     if (initialValue === undefined) {
       return undefined
     }
-    return Object.values(idToOptionMap).find((option) => compare(option.value, initialValue))?.id ?? null
+    return Object.values(idToOptionMap).find((option) => compare(option.value.value, initialValue))?.value.id ?? null
   }, [compare, idToOptionMap, initialValue])
 
   const onValueChangeStable = useEventCallbackStabilizer(onValueChange)
@@ -101,7 +101,7 @@ export function SelectRoot<T>({
     if (option === undefined) {
       return
     }
-    onValueChangeStable(option.value)
+    onValueChangeStable(option.value.value)
   }, [idToOptionMap, onValueChangeStable])
 
   const onEditCompleteWrapper = useCallback((id: string) => {
@@ -109,12 +109,12 @@ export function SelectRoot<T>({
     if (option === undefined) {
       return
     }
-    onEditCompleteStable(option.value)
+    onEditCompleteStable(option.value.value)
   }, [idToOptionMap, onEditCompleteStable])
 
   const hookOptions = useMemo(
     () => options.map((option) => ({
-      id: option.id,
+      id: option.value.id,
       label: option.label,
       disabled: option.disabled,
     })),

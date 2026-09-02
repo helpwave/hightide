@@ -1,10 +1,10 @@
 import { Pagination, type PaginationProps } from '../navigation/Pagination'
 import type { HTMLAttributes } from 'react'
-import { Select, type SelectProps } from '../../user-interaction/Select/Select'
-import { SelectOption } from '../../user-interaction/Select/SelectOption'
+import { Select } from '../../user-interaction/Select/Select'
 import { Visibility } from '../Visibility'
 import clsx from 'clsx'
 import { useTableStateWithoutSizingContext } from './TableContext'
+import type { SelectProps } from '../../user-interaction'
 
 export type TablePaginationMenuProps = Omit<PaginationProps, 'pageIndex' | 'pageCount'>
 
@@ -45,7 +45,7 @@ export const TablePageSizeSelect = ({
       onValueChange={(value) => table.setPageSize(Number(value))}
     >
       {pageSizeOptions.map(size => (
-        <SelectOption key={size} value={size.toString()} label={size.toString()}/>
+        <Select.Option key={size} value={size.toString()} label={size.toString()}/>
       ))}
     </Select>
   )
@@ -62,7 +62,7 @@ export const TablePagination = ({ allowChangingPageSize = true, pageSizeOptions,
     <div {...props} className={clsx('container flex-col-2 sm:flex-row-8 items-center justify-center', props.className)}>
       <TablePaginationMenu />
       <Visibility isVisible={allowChangingPageSize}>
-        <TablePageSizeSelect pageSizeOptions={pageSizeOptions} buttonProps={{ className: 'h-10 min-w-24 max-w-24' }} />
+        <TablePageSizeSelect pageSizeOptions={pageSizeOptions} triggerProps={{ className: 'h-10 min-w-24 max-w-24' }} />
       </Visibility>
     </div>
   )

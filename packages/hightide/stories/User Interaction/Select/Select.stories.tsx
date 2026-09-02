@@ -2,9 +2,10 @@ import type { Meta, StoryObj } from '@storybook/nextjs-vite'
 import { action } from 'storybook/actions'
 import { useEffect, useState } from 'react'
 import { Select } from '../../../src/components/user-interaction/Select/Select'
-import { SelectOption } from '../../../src/components/user-interaction/Select/SelectOption'
+import type { SelectProps } from '../../../src'
+import type { SelectOptionType } from '../../../src/components/user-interaction/Select/SelectContext'
 
-const meta: Meta<typeof Select> = {
+const meta: Meta<typeof Select<User>> = {
   component: Select,
 }
 
@@ -38,7 +39,7 @@ export const select: Story = {
     onValueChange: action('onValueChange'),
     onEditComplete: action('onEditComplete'),
     children: fruitOptions.map((item, index) => (
-      <SelectOption key={index} {...item} />
+      <Select.Option key={index} {...item} />
     )),
   },
 }
@@ -74,34 +75,32 @@ export const selectWithUser: Story = {
     compareFunction: compareUser,
     onValueChange: action('onValueChange'),
     onEditComplete: action('onEditComplete'),
-    buttonProps: {
-      placeholder: 'Select a user',
-      selectedDisplay: (option) => {
-        if (!option) return null
-        const user = option.value as User
-        return (
-          <div className="flex flex-col">
-            <span>{user.name}</span>
-            <span className=" text-description">{user.email}</span>
-          </div>
-        )
-      },
+    placeholder: 'Select a user',
+    selectedDisplay: (option:  SelectOptionType<User> | null) => {
+      if (!option) return null
+      const user = option.value.value
+      return (
+        <div className="flex flex-col">
+          <span>{user.name}</span>
+          <span className=" text-description">{user.email}</span>
+        </div>
+      )
     },
     children: users.map((user) => (
-      <SelectOption
+      <Select.Option
         key={user.uuid}
-        id={user.uuid}
         value={user}
+        valueId={user.uuid}
         label={user.name}
       >
         <div className="flex flex-col">
           <span>{user.name}</span>
           <span className=" text-description">{user.email}</span>
         </div>
-      </SelectOption>
+      </Select.Option>
     )),
   },
-  render: (args) => {
+  render: (args: SelectProps<User>) => {
     const [value, setValue] = useState<User | null>(args.value ?? null)
     useEffect(() => {
       setValue(args.value ?? null)
@@ -121,4 +120,36 @@ export const selectWithUser: Story = {
       />
     )
   },
+}
+
+export const selectComposed: Story = {
+  args: {
+    initialValue: undefined,
+    disabled: false,
+    invalid: false,
+    showSearch: false,
+    readOnly: false,
+    required: false,
+    onValueChange: action('onValueChange'),
+    onEditComplete: action('onEditComplete'),
+  },
+  render: (args: SelectProps<User>) => (
+    <Select.Root
+      initialValue={args.initialValue}
+      disabled={args.disabled}
+      invalid={args.invalid}
+      showSearch={args.showSearch}
+      readOnly={args.readOnly}
+      required={args.required}
+      onValueChange={args.onValueChange}
+      onEditComplete={args.onEditComplete}
+    >
+      <Select.Trigger placeholder="Select…" />
+      <Select.Content>
+        {fruitOptions.map((item, index) => (
+          <Select.Option key={index} {...item} />
+        ))}
+      </Select.Content>
+    </Select.Root>
+  ),
 }

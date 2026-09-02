@@ -1,8 +1,9 @@
 import clsx from 'clsx'
 import { CheckIcon } from 'lucide-react'
-import type { HTMLAttributes, ReactNode, RefObject } from 'react'
-import { createContext, forwardRef, useContext, useEffect, useId, useRef } from 'react'
-import type { MultiSelectIconAppearance } from './MultiSelectContext'
+import type React from 'react'
+import type { ForwardedRef, HTMLAttributes, RefObject } from 'react'
+import { createContext, forwardRef, useContext, useEffect, useMemo, useRef } from 'react'
+import type { MultiSelectIconAppearance, MultiSelectOptionIdentity } from './MultiSelectContext'
 import { useMultiSelectContext } from './MultiSelectContext'
 
 export type MultiSelectOptionDisplayLocation = 'trigger' | 'list';
@@ -20,47 +21,69 @@ export function useMultiSelectOptionDisplayLocation(): MultiSelectOptionDisplayL
   return context
 }
 
-export interface MultiSelectOptionProps<T = string> extends HTMLAttributes<HTMLLIElement> {
-  value: T,
-  label: string,
+export type MultiSelectOptionProps<T = string> = (
+  T extends string
+    ? {
+        valueId?: undefined,
+        value: T,
+        label?: string,
+      }
+    : {
+        valueId: string,
+        value: T,
+        label: string,
+      }
+) & Omit<HTMLAttributes<HTMLLIElement>, 'value' | 'valueId'> & {
   disabled?: boolean,
   iconAppearance?: MultiSelectIconAppearance,
 }
 
-export const MultiSelectOption = forwardRef<
+type MultiSelectOptionComponent = <T = string>(
+  props: MultiSelectOptionProps<T> & {
+    ref?: React.ForwardedRef<HTMLLIElement>,
+  }
+) => React.ReactElement | null
+
+const toIdentity = <T,>(value: T, valueId: string | undefined): MultiSelectOptionIdentity<T> => {
+  if (valueId === undefined) {
+    return { value, id: value as string }
+  }
+  return { value, id: valueId }
+}
+
+const MultiSelectOptionImpl = forwardRef<
   HTMLLIElement,
   MultiSelectOptionProps<unknown>
->(function MultiSelectOption<T = string>(
+>(function MultiSelectOption<T>(
   {
     children,
     label,
     value,
+    valueId,
     disabled = false,
     iconAppearance,
     ...props
   }: MultiSelectOptionProps<T>,
-  ref
+  ref: ForwardedRef<HTMLLIElement>
 ) {
   const context = useMultiSelectContext<T>()
   const { registerOption } = context
   const itemRef = useRef<HTMLLIElement>(null)
-
-  const display: ReactNode = children ?? label
+  const identity = useMemo(() => toIdentity<T>(value, valueId), [value, valueId])
+  const resolvedLabel = valueId === undefined ? (label ?? (value as string)) : label
+  const display = children ?? resolvedLabel
   const iconAppearanceResolved = iconAppearance ?? context.config.iconAppearance
-
-  const generatedId = useId()
-  const optionId = props?.id ?? 'multi-select-option-' + generatedId
+  const optionId = identity.id
 
   useEffect(() => {
     return registerOption({
-      id: optionId,
-      value,
-      label,
+      value: identity,
+      label: resolvedLabel,
       display,
       disabled: Boolean(disabled),
       ref: itemRef as React.RefObject<HTMLElement>,
     })
-  }, [optionId, value, label, disabled, registerOption, display])
+  }, [disabled, display, identity, registerOption, resolvedLabel])
 
   const isHighlighted = context.highlightedId === optionId
   const isSelected = context.selectedIds.includes(optionId)
@@ -118,3 +141,5 @@ export const MultiSelectOption = forwardRef<
     </li>
   )
 })
+
+export const MultiSelectOption = MultiSelectOptionImpl as MultiSelectOptionComponent

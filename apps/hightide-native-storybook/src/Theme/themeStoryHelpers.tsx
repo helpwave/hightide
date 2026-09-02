@@ -6,7 +6,6 @@ import { View } from 'react-native'
 
 import {
   Select,
-  SelectOption,
   ThemedText
 } from '@helpwave/hightide-native/components'
 import { useTheme } from '@helpwave/hightide-native/global-contexts'
@@ -35,9 +34,8 @@ export const ThemeSelect = () => {
         onValueChange={(value) => setTheme(value)}
       >
         {options.map((option) => (
-          <SelectOption
+          <Select.Option
             key={option.id}
-            id={option.id}
             value={option.id}
             label={option.label}
           />
