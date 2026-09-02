@@ -1,5 +1,5 @@
 import type { ReactNode } from 'react'
-import { useEffect, useMemo } from 'react'
+import { useEffect, useId, useMemo } from 'react'
 import { View } from 'react-native'
 
 import { useTheme } from '../../../global-contexts/theme/ThemeContext'
@@ -20,7 +20,6 @@ export type MultiSelectOptionProps<T = string> = {
 }
 
 export const MultiSelectOption = <T,>({
-  id,
   value,
   label,
   disabled = false,
@@ -30,6 +29,7 @@ export const MultiSelectOption = <T,>({
   const context = useMultiSelectContext<T>()
   const { registerOption } = context
   const display = children ?? label
+  const id = useId()
 
   useEffect(() => {
     return registerOption({

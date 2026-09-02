@@ -1,5 +1,5 @@
 import type { ReactNode } from 'react'
-import { useEffect, useMemo } from 'react'
+import { useEffect, useId, useMemo } from 'react'
 
 import { useTheme } from '../../../global-contexts/theme/ThemeContext'
 import { useMemoizedTheme } from '../../../hooks/useMemoizedTheme'
@@ -11,7 +11,6 @@ import { ThemedIcon } from '../../visualization-and-display/ThemedIcon'
 import { useSelectContext } from './SelectContext'
 
 export type SelectOptionProps<T = string> = {
-  id: string,
   value: T,
   label: string,
   disabled?: boolean,
@@ -19,7 +18,6 @@ export type SelectOptionProps<T = string> = {
 }
 
 export const SelectOption = <T,>({
-  id,
   value,
   label,
   disabled = false,
@@ -29,6 +27,7 @@ export const SelectOption = <T,>({
   const context = useSelectContext<T>()
   const { registerOption } = context
   const display = children ?? label
+  const id = useId()
 
   useEffect(() => {
     return registerOption({
