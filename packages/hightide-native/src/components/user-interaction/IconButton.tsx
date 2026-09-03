@@ -22,7 +22,7 @@ import type { StyleOverwrite } from '../../theme/types/resolver'
 import type { IconComponent, IconStyle } from '../../icons'
 import { createHitBoxOverlayStyle } from '../../utils/hitBoxOverlay'
 import { useMinimumTouchTargetHitSlop } from '../../utils/minimumTouchTargetHitSlop'
-import { ThemedIcon } from '../visualization-and-display'
+import { ThemedIcon, ThemedLoadingSpinner } from '../visualization-and-display'
 
 export type IconButtonSize = ComponentSize
 
@@ -42,6 +42,7 @@ export type IconButtonProps = Omit<PressableProps, 'children' | 'style'> & {
   style?: StyleOverwrite<IconButtonState, IconButtonStyle>,
   stateLayerStyle?: StyleOverwrite<IconButtonState, IconButtonStyle>,
   iconStyle?:  StyleOverwrite<IconButtonState, IconStyle>,
+  isProcessing?: boolean,
 }
 
 export const IconButton = forwardRef<React.ComponentRef<typeof Pressable>, IconButtonProps>(function IconButton({
@@ -54,6 +55,7 @@ export const IconButton = forwardRef<React.ComponentRef<typeof Pressable>, IconB
   style,
   stateLayerStyle,
   iconStyle,
+  isProcessing = false,
   hitSlop: providedHitSlop,
   onLayout: providedOnLayout,
   ...props
@@ -92,14 +94,30 @@ export const IconButton = forwardRef<React.ComponentRef<typeof Pressable>, IconB
       disabled={disabled}
       accessibilityRole="button"
       accessibilityLabel={accessibilityLabel}
+      accessibilityState={{
+        disabled: !!disabled,
+        busy: isProcessing,
+      }}
       hitSlop={hitSlop}
       onLayout={onLayout}
       style={resolvedContainerStyle}
+      onPress={(event) => {
+        if (isProcessing) {
+          return
+        }
+        props.onPress?.(event)
+      }}
       onPressIn={(event) => {
+        if (isProcessing) {
+          return
+        }
         setIsPressed(true)
         props.onPressIn?.(event)
       }}
       onPressOut={(event) => {
+        if (isProcessing) {
+          return
+        }
         setIsPressed(false)
         props.onPressOut?.(event)
       }}
@@ -117,7 +135,11 @@ export const IconButton = forwardRef<React.ComponentRef<typeof Pressable>, IconB
       <ContentThemeOverrideProvider
         iconStyle={resolvedIconStyle}
       >
-        <ThemedIcon icon={icon} />
+        {isProcessing ? (
+          <ThemedLoadingSpinner />
+        ) : (
+          <ThemedIcon icon={icon} />
+        )}
       </ContentThemeOverrideProvider>
     </Pressable>
   )

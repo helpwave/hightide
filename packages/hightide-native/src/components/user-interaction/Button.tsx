@@ -22,6 +22,7 @@ import type { StyleOverwrite } from '../../theme/types/resolver'
 import { createHitBoxOverlayStyle } from '../../utils/hitBoxOverlay'
 import { useMinimumTouchTargetHitSlop } from '../../utils/minimumTouchTargetHitSlop'
 import { ThemedIcon } from '../visualization-and-display/ThemedIcon'
+import { ThemedLoadingSpinner } from '../visualization-and-display/ThemedLoadingSpinner'
 import { ThemedText } from '../visualization-and-display/ThemedText'
 import { useMemoizedTheme } from '../../hooks/useMemoizedTheme'
 
@@ -46,6 +47,7 @@ export type ButtonProps = Omit<PressableProps, 'children' | 'style'> & {
   textStyle?: StyleOverwrite<ButtonState, ButtonTextStyle>,
   textProps?: Omit<TextProps, 'style'>,
   iconStyle?: StyleOverwrite<ButtonState, IconStyle>,
+  isProcessing?: boolean,
 }
 
 export const Button = forwardRef<React.ComponentRef<typeof Pressable>, ButtonProps>(function Button({
@@ -61,6 +63,7 @@ export const Button = forwardRef<React.ComponentRef<typeof Pressable>, ButtonPro
   textStyle,
   textProps,
   iconStyle,
+  isProcessing = false,
   hitSlop: providedHitSlop,
   onLayout: providedOnLayout,
   ...props
@@ -86,20 +89,38 @@ export const Button = forwardRef<React.ComponentRef<typeof Pressable>, ButtonPro
   const resolvedTextStyle = useMemoizedTheme(theme.components.button.text, resolvedState, textStyle)
   const resolvedIcon = useMemoizedTheme(theme.components.button.icon, resolvedState, iconStyle)
   const resolvedStateLayerStyle = useMemoizedTheme(theme.components.button.stateLayer, resolvedState, stateLayerStyle)
+  const showLeadingSpinner = isProcessing && (leadingIcon !== undefined || trailingIcon === undefined)
+  const showTrailingSpinner = isProcessing && leadingIcon === undefined && trailingIcon !== undefined
 
   return (
     <Pressable
       {...props}
       ref={ref}
       disabled={disabled}
+      accessibilityState={{
+        disabled: !!disabled,
+        busy: isProcessing,
+      }}
       hitSlop={hitSlop}
       onLayout={onLayout}
       style={resolvedContainerStyle}
+      onPress={(event) => {
+        if (isProcessing) {
+          return
+        }
+        props.onPress?.(event)
+      }}
       onPressIn={(event) => {
+        if (isProcessing) {
+          return
+        }
         setIsPressed(true)
         props.onPressIn?.(event)
       }}
       onPressOut={(event) => {
+        if (isProcessing) {
+          return
+        }
         setIsPressed(false)
         props.onPressOut?.(event)
       }}
@@ -120,11 +141,17 @@ export const Button = forwardRef<React.ComponentRef<typeof Pressable>, ButtonPro
         textStyle={resolvedTextStyle}
         iconStyle={resolvedIcon}
       >
-        {leadingIcon !== undefined && (
+        {showLeadingSpinner && (
+          <ThemedLoadingSpinner />
+        )}
+        {!isProcessing && leadingIcon !== undefined && (
           <ThemedIcon icon={leadingIcon} />
         )}
         <ThemedText numberOfLines={1} ellipsizeMode="tail" {...textProps}>{children}</ThemedText>
-        {trailingIcon !== undefined && (
+        {showTrailingSpinner && (
+          <ThemedLoadingSpinner />
+        )}
+        {!isProcessing && trailingIcon !== undefined && (
           <ThemedIcon icon={trailingIcon} />
         )}
       </ContentThemeOverrideProvider>

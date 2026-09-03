@@ -5,6 +5,13 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [0.9.2] - 2026-09-03
+
+### Added
+
+- `isProcessing` on `Button` and `IconButton`: presses are ignored while processing, and a loading spinner replaces the icon (or is shown on the left when the button has no icon)
+- `ThemedLoadingSpinner` for inline loading indication using the content-theme icon style
+
 ## [0.9.1] - 2026-09-03
 
 ### Added

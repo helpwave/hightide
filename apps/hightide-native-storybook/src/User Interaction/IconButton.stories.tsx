@@ -24,6 +24,7 @@ export default meta
 
 type IconButtonArgs = {
   disabled: boolean,
+  isProcessing: boolean,
   color: ColorPairKey,
   size: typeof IconButtonUtil.sizes[number],
   variant: typeof IconButtonUtil.variants[number],
@@ -31,6 +32,7 @@ type IconButtonArgs = {
 
 const IconButtonDemo = ({
   disabled,
+  isProcessing,
   color,
   size,
   variant,
@@ -41,6 +43,7 @@ const IconButtonDemo = ({
     <IconButton
       icon={HightideIconRegistry.Minus}
       disabled={disabled}
+      isProcessing={isProcessing}
       color={theme.colors[color]}
       size={size}
       variant={variant}
@@ -64,6 +67,7 @@ export const iconButton: StoryObj<IconButtonArgs> = {
   },
   args: {
     disabled: false,
+    isProcessing: false,
     color: 'primary',
     size: 'md',
     variant: 'filled',

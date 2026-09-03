@@ -22,6 +22,7 @@ export default meta
 type ButtonArgs = {
   label: string,
   disabled: boolean,
+  isProcessing: boolean,
   color: ColorPairKey,
   size: typeof ButtonUtil.sizes[number],
   variant: typeof ButtonUtil.variants[number],
@@ -32,6 +33,7 @@ type ButtonArgs = {
 const ButtonDemo = ({
   label,
   disabled,
+  isProcessing,
   color,
   size,
   variant,
@@ -43,6 +45,7 @@ const ButtonDemo = ({
   return (
     <Button
       disabled={disabled}
+      isProcessing={isProcessing}
       color={theme.colors[color]}
       size={size}
       variant={variant}
@@ -79,6 +82,7 @@ export const button: StoryObj<ButtonArgs> = {
   args: {
     label: 'Test',
     disabled: false,
+    isProcessing: false,
     color: 'primary',
     size: 'md',
     variant: 'filled',

@@ -1,5 +1,6 @@
 import type { ButtonHTMLAttributes } from 'react'
 import { forwardRef } from 'react'
+import { LoadingSpinner } from '../layout/loading/LoadingSpinner'
 
 /**
  * The different sizes for a button
@@ -33,6 +34,7 @@ export type ButtonProps = ButtonHTMLAttributes<HTMLButtonElement> & {
    */
   coloringStyle?: ButtonColoringStyle,
   allowClickEventPropagation?: boolean,
+  isProcessing?: boolean,
 }
 
 /**
@@ -45,6 +47,7 @@ export const Button = forwardRef<HTMLButtonElement, ButtonProps>(function SolidB
   coloringStyle = 'solid',
   disabled,
   allowClickEventPropagation = false,
+  isProcessing = false,
   ...props
 }, ref) {
   return (
@@ -52,9 +55,15 @@ export const Button = forwardRef<HTMLButtonElement, ButtonProps>(function SolidB
       {...props}
       ref={ref}
       disabled={disabled}
+      aria-busy={isProcessing || undefined}
       type={props['type'] ?? 'button'}
 
       onClick={event => {
+        if (isProcessing) {
+          event.preventDefault()
+          event.stopPropagation()
+          return
+        }
         if(!allowClickEventPropagation) {
           event.stopPropagation()
         }
@@ -63,11 +72,17 @@ export const Button = forwardRef<HTMLButtonElement, ButtonProps>(function SolidB
 
       data-name={props['data-name'] ?? 'button'}
       data-disabled={disabled ? '': undefined}
+      data-processing={isProcessing ? '': undefined}
       data-size={size ?? undefined}
       data-color={color ?? undefined}
       data-coloringstyle={coloringStyle ?? undefined}
     >
       {children}
+      {isProcessing && (
+        <span data-name="button-processing-overlay">
+          <LoadingSpinner />
+        </span>
+      )}
     </button>
   )
 })

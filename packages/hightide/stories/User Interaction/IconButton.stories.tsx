@@ -20,6 +20,7 @@ type Story = StoryObj<typeof meta>;
 export const iconButton: Story = {
   args: {
     disabled: false,
+    isProcessing: false,
     color: 'primary',
     size: 'md',
     coloringStyle: 'solid',

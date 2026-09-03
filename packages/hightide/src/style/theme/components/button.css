@@ -1,8 +1,12 @@
 @layer components {
   [data-name="button"] {
-    @apply flex flex-row items-center justify-center element;
+    @apply relative flex flex-row items-center justify-center element;
     @apply: font-semibold whitespace-nowrap w-fit;
     transition: var(--coloring-transitions), var(--focus-transitions);
+
+    [data-name="button-processing-overlay"] {
+      @apply absolute inset-0 flex items-center justify-center rounded-[inherit] bg-surface/40 pointer-events-none;
+    }
 
     &:not([data-disabled]) {
       @apply cursor-pointer coloring-color-detect coloring-style-hover-detect;

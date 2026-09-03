@@ -3,6 +3,7 @@ import { forwardRef,type ButtonHTMLAttributes } from 'react'
 import type { TooltipDisplayProps } from './Tooltip'
 import { TooltipContext, TooltipDisplay, TooltipRoot, useTooltip } from './Tooltip'
 import { Visibility } from '../layout/Visibility'
+import { LoadingSpinner } from '../layout/loading/LoadingSpinner'
 import { useLogOnce } from '@helpwave/hightide-utils/hooks'
 import { ReactUtils } from '@helpwave/hightide-utils/utils'
 import clsx from 'clsx'
@@ -25,6 +26,7 @@ export interface IconButtonBaseProps extends ButtonHTMLAttributes<HTMLButtonElem
      * @default 'solid'
      */
     coloringStyle?: IconButtonColoringStyle,
+    isProcessing?: boolean,
 }
 
 export const IconButtonBase = forwardRef<HTMLButtonElement, IconButtonBaseProps>(function IconButtonBase({
@@ -33,6 +35,7 @@ export const IconButtonBase = forwardRef<HTMLButtonElement, IconButtonBaseProps>
   color = 'primary',
   coloringStyle = 'solid',
   disabled,
+  isProcessing = false,
   ...props
 }, ref) {
   return (
@@ -40,10 +43,16 @@ export const IconButtonBase = forwardRef<HTMLButtonElement, IconButtonBaseProps>
       {...props}
       ref={ref}
       disabled={disabled}
+      aria-busy={isProcessing || undefined}
       type={props['type'] ?? 'button'}
 
 
       onClick={event => {
+        if (isProcessing) {
+          event.preventDefault()
+          event.stopPropagation()
+          return
+        }
         props.onClick?.(event)
       }}
 
@@ -53,7 +62,7 @@ export const IconButtonBase = forwardRef<HTMLButtonElement, IconButtonBaseProps>
       data-color={color ?? undefined}
       data-coloringstyle={coloringStyle ?? undefined}
     >
-      {children}
+      {isProcessing ? <LoadingSpinner /> : children}
     </button>
   )
 })
@@ -68,25 +77,33 @@ type IconButtonTooltipTriggerProps = IconButtonBaseProps
 
 const IconButtonTooltipTrigger = forwardRef<HTMLButtonElement, IconButtonTooltipTriggerProps>(function IconButtonTooltipTrigger({
   disabled,
+  isProcessing,
   ...props
 }, ref) {
   const { trigger: { ref: triggerRef, props: tooltipTriggerProps } } = useTooltip()
+  const isInteractionLocked = disabled || isProcessing
 
   return (
     <IconButtonBase
       {...props}
       ref={ReactUtils.assingRefsBuilder([ref, triggerRef as ForwardedRef<HTMLButtonElement>])}
       disabled={disabled}
+      isProcessing={isProcessing}
       type={props['type'] ?? 'button'}
 
       onClick={event => {
+        if (isProcessing) {
+          event.preventDefault()
+          event.stopPropagation()
+          return
+        }
         if(!disabled) {
           tooltipTriggerProps.onClick()
         }
         props.onClick?.(event)
       }}
       onKeyDown={(e) => {
-        if(!disabled) {
+        if(!isInteractionLocked) {
           if(e.key === 'Enter' || e.key === ' ') {
             tooltipTriggerProps.onClick()
           }
