@@ -2,7 +2,8 @@ import { forwardRef, useMemo, useState } from 'react'
 import {
   Pressable,
   View,
-  type PressableProps
+  type PressableProps,
+  type TextProps
 } from 'react-native'
 
 import type { ColorPairToken } from '@helpwave/hightide-design/theme-tokens'
@@ -43,6 +44,7 @@ export type ButtonProps = Omit<PressableProps, 'children' | 'style'> & {
   style?: StyleOverwrite<ButtonState, ButtonStyle>,
   stateLayerStyle?: StyleOverwrite<ButtonState, ButtonStyle>,
   textStyle?: StyleOverwrite<ButtonState, ButtonTextStyle>,
+  textProps?: Omit<TextProps, 'style'>,
   iconStyle?: StyleOverwrite<ButtonState, IconStyle>,
 }
 
@@ -57,6 +59,7 @@ export const Button = forwardRef<React.ComponentRef<typeof Pressable>, ButtonPro
   style,
   stateLayerStyle,
   textStyle,
+  textProps,
   iconStyle,
   hitSlop: providedHitSlop,
   onLayout: providedOnLayout,
@@ -120,7 +123,7 @@ export const Button = forwardRef<React.ComponentRef<typeof Pressable>, ButtonPro
         {leadingIcon !== undefined && (
           <ThemedIcon icon={leadingIcon} />
         )}
-        <ThemedText>{children}</ThemedText>
+        <ThemedText numberOfLines={1} ellipsizeMode="tail" {...textProps}>{children}</ThemedText>
         {trailingIcon !== undefined && (
           <ThemedIcon icon={trailingIcon} />
         )}
