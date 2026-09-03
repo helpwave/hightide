@@ -20,6 +20,7 @@ export const button: Story = {
   args: {
     children: 'Test',
     disabled: false,
+    isProcessing: false,
     color: 'primary',
     size: 'md',
     coloringStyle: 'solid',
