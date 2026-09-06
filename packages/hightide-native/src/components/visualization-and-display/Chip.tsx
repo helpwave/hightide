@@ -10,7 +10,7 @@ import {
 } from 'react-native'
 
 import type { ColorPairToken } from '@helpwave/hightide-design/theme-tokens'
-import type { ChipVariant, ComponentSize } from '@helpwave/hightide-design/semantic-token-resolvers'
+import type { ChipVariant, ComponentSize } from '@helpwave/hightide-design/semantic-tokens'
 
 import { ContentThemeOverrideProvider } from '../../global-contexts/content-theme/ContentThemeProvider'
 import { useTheme } from '../../global-contexts/theme/ThemeContext'

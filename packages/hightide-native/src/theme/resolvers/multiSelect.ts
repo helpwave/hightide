@@ -1,7 +1,7 @@
 import type {
   MultiSelectState as DesignMultiSelectState,
   MultiSelectStateValue
-} from '@helpwave/hightide-design/component-token-resolvers'
+} from '@helpwave/hightide-design/component-tokens'
 import type {
   MultiSelectCheckboxIconStyle,
   MultiSelectCheckboxStyle,

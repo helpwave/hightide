@@ -1,7 +1,7 @@
 import type {
   CheckboxState as DesignCheckboxState,
   CheckboxStateValue
-} from '@helpwave/hightide-design/component-token-resolvers'
+} from '@helpwave/hightide-design/component-tokens'
 import type {
   CheckboxIconStyle,
   CheckboxState,

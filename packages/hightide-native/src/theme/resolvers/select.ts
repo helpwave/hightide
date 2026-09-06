@@ -1,7 +1,7 @@
 import type {
   SelectState as DesignSelectState,
   SelectStateValue
-} from '@helpwave/hightide-design/component-token-resolvers'
+} from '@helpwave/hightide-design/component-tokens'
 import type {
   SelectIconStyle,
   SelectMenuStyle,

@@ -1,12 +1,12 @@
-import { componentTokenResolvers } from '@helpwave/hightide-design/component-token-resolvers'
+import type { ElementLayoutTokens } from '@helpwave/hightide-design/semantic-tokens'
+import type { ThemeLayoutSize, ThemeTokens, ThemeTypographySize } from '@helpwave/hightide-design/theme-tokens'
 import {
+  componentTokenResolvers,
   hightideSemanticTokenResolvers,
   resolveContainerLayout,
   resolveControlLayout,
-  resolveInsideControlLayout,
-  type ElementLayoutTokens
-} from '@helpwave/hightide-design/semantic-token-resolvers'
-import type { ThemeLayoutSize, ThemeTokens, ThemeTypographySize } from '@helpwave/hightide-design/theme-tokens'
+  resolveInsideControlLayout
+} from '../design-resolvers'
 
 import {
   toAvatarGroupThemeResolvers,

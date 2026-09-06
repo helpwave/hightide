@@ -21,15 +21,12 @@ import type {
   PositioningToken,
   TextStyleTokens,
   TransformTokens
-} from '@helpwave/hightide-design/component-token-resolvers'
-import {
-  defaultWritingMode,
-  resolveDirectionalTokens
-} from '@helpwave/hightide-design/component-token-resolvers'
+} from '@helpwave/hightide-design/component-tokens'
 import type { ShadowToken } from '@helpwave/hightide-design/theme-tokens'
 import type { IconStyle } from '../../icons'
 import type { SingleOrArray } from '@helpwave/hightide-utils/utils'
 import { ArrayUtil } from '@helpwave/hightide-utils/utils'
+import { defaultWritingMode, resolveDirectionalTokens } from './directional-tokens'
 
 function getStyleProperty<
   T extends ViewStyle,
@@ -490,13 +487,13 @@ function containerStyleAdapter(tokens: ContainerTokens): ViewStyle {
     overflow: tokens.overflow,
     backgroundColor: tokens.backgroundColor,
     opacity: tokens.opacity,
-    boxShadow: shadowStyleAdapter(tokens.decoration?.shadow),
+    boxShadow: shadowStyleAdapter(tokens.shadow),
     transform: transformStyleAdapter(tokens.transform),
     ...positionStyleAdapter(tokens.position),
     ...layoutStyleAdapter(tokens.layout),
     ...sizeStyleAdapter(tokens.size),
     ...borderStyleAdapter(tokens.border),
-    ...borderRadiusStyleAdapter(tokens.shape?.borderRadius),
+    ...borderRadiusStyleAdapter(tokens.borderRadius),
     ...paddingStyleAdapter(tokens.padding),
     ...marginStyleAdapter(tokens.margin),
     ...outlineStyleAdapter(tokens.outline),

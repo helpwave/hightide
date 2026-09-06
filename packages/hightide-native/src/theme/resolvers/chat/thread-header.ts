@@ -1,6 +1,6 @@
 import type {
   AvatarTokens
-} from '@helpwave/hightide-design/component-token-resolvers'
+} from '@helpwave/hightide-design/component-tokens'
 
 import {
   createAvatarStyleResolvers,
@@ -86,7 +86,7 @@ export const toChatThreadHeaderThemeResolvers: ComponentThemeResolver<ChatThread
         return tokens
       }
 
-      return createAvatarStyleResolvers(resolveTokens, themeTokens)
+      return createAvatarStyleResolvers(resolveTokens)
     }),
     pressable: createStyleResolver(() => {
       const { pressableOverwrites } = resolve()

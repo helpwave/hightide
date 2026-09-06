@@ -1,10 +1,10 @@
 import type { ThemeTokens } from '@helpwave/hightide-design/theme-tokens'
-import type { SemanticTokenResolvers } from '@helpwave/hightide-design/semantic-token-resolvers'
+import type { SemanticTokenResolvers } from '@helpwave/hightide-design/semantic-tokens'
 import type {
   ComponentTokenResolvers,
   PressableState,
   PressableStateValue
-} from '@helpwave/hightide-design/component-token-resolvers'
+} from '@helpwave/hightide-design/component-tokens'
 import type { StyleProp } from 'react-native'
 
 export type InteractionState = {

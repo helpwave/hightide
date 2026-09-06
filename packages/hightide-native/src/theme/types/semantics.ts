@@ -12,9 +12,9 @@ import type {
   InsideControlElementLayoutToken,
   PressableColoringTokens,
   ButtonVariant
-} from '@helpwave/hightide-design/semantic-token-resolvers'
-import type { InputState } from '@helpwave/hightide-design/component-token-resolvers'
-import type { PressableState } from '@helpwave/hightide-design/component-token-resolvers'
+} from '@helpwave/hightide-design/semantic-tokens'
+import type { InputState } from '@helpwave/hightide-design/component-tokens'
+import type { PressableState } from '@helpwave/hightide-design/component-tokens'
 import type {
   ColorPairToken,
   ThemeLayoutSize,
