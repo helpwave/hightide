@@ -26,6 +26,7 @@ import { toSearchBarThemeResolvers } from '../resolvers/searchBar'
 import {
   toListItemThemeResolvers
 } from '../resolvers/listItem'
+import { toModalThemeResolvers } from '../resolvers/modal'
 import { toMultiSelectThemeResolvers } from '../resolvers/multiSelect'
 import { toSelectThemeResolvers } from '../resolvers/select'
 import { toSwitchThemeResolvers } from '../resolvers/switch'
@@ -209,6 +210,11 @@ export const createHightideTheme = (themeTokens: ThemeTokens): HightideTheme => 
       componentTokens: componentTokenResolvers,
     }),
     listItem: toListItemThemeResolvers({
+      themeTokens,
+      semanticTokens: hightideSemanticTokenResolvers,
+      componentTokens: componentTokenResolvers,
+    }),
+    modal: toModalThemeResolvers({
       themeTokens,
       semanticTokens: hightideSemanticTokenResolvers,
       componentTokens: componentTokenResolvers,

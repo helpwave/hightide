@@ -15,6 +15,8 @@ const fruitOptions = StorybookHelper.selectValues
   }))
   .sort((a, b) => a.id.localeCompare(b.id))
 
+const fewFruitOptions = fruitOptions.slice(0, 5)
+
 const meta = {
   component: MultiSelect,
 } satisfies Meta<typeof MultiSelect>
@@ -36,6 +38,31 @@ export const multiSelect: Story = {
   render: (args) => (
     <MultiSelect {...args}>
       {fruitOptions.map((option) => (
+        <MultiSelect.Option
+          key={option.id}
+          value={option.id}
+          label={option.label}
+          disabled={option.disabled}
+        />
+      ))}
+    </MultiSelect>
+  ),
+}
+
+export const multiSelectFiveOptions: Story = {
+  args: {
+    initialValue: [],
+    disabled: false,
+    invalid: false,
+    searchableThreshold: 6,
+    readOnly: false,
+    placeholder: 'Select…',
+    onValueChange: action('onValueChange'),
+    onEditComplete: action('onEditComplete'),
+  },
+  render: (args) => (
+    <MultiSelect {...args}>
+      {fewFruitOptions.map((option) => (
         <MultiSelect.Option
           key={option.id}
           value={option.id}

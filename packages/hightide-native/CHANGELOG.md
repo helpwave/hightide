@@ -5,6 +5,13 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [0.9.3] - 2026-09-06
+
+### Added
+
+- Compound `Modal`: `Modal.Root`, `Modal.Background`, `Modal.Menu`, `Modal.CloseButton`, `Modal.Context`, `Modal.Provider`, and a combined `Modal` that assembles the last four
+- `Select` and `MultiSelect` menus render through `Modal`; the close button is omitted by default
+
 ## [0.9.2] - 2026-09-03
 
 ### Added

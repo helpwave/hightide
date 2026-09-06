@@ -5,6 +5,13 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/)
 and adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [0.7.3] - 2026-09-06
+
+### Added
+
+- `modalTokenResolver` with `background`, `menu`, and `closeButton` container tokens
+- Select and multi-select overlay and menu tokens reuse the modal tokens
+
 ## [0.7.2] - 2026-09-01
 
 ### Added

@@ -13,6 +13,7 @@ import {
   toInputState,
   type InputStateValue
 } from './input-tokens'
+import { modalTokenResolver } from './modal-tokens'
 import {
   toPressableState,
   type PressableStateValue
@@ -63,7 +64,7 @@ export const selectTokenResolver: SelectTokenResolver = ({
   overrides,
   state,
 }) => {
-  const { color, spacing, padding, borderRadius, borderWidth, typography, fontWeights } = themeTokens
+  const { color, spacing, padding, typography, fontWeights } = themeTokens
   const onColor = color.surface.onColor
   const accentPair = overrides?.color ?? color.primary
   const hasSearch = config?.hasSearch ?? true
@@ -96,6 +97,10 @@ export const selectTokenResolver: SelectTokenResolver = ({
   }).background
   const touchTargetSize = semanticResolvers.touchTargetSize({ themeTokens })
   const menuHeight = touchTargetSize * 11.5
+  const modal = modalTokenResolver({
+    themeTokens,
+    semanticResolvers,
+  })
   const inputPadding = input.container.padding
   const horizontalPadding = inputPadding?.type === 'physicalAxis'
     ? inputPadding.horizontal
@@ -117,39 +122,14 @@ export const selectTokenResolver: SelectTokenResolver = ({
     },
     triggerText: state.has('hasValue') ? input.text : input.placeholder,
     icon: input.icon,
-    overlay: {
-      backgroundColor: color.overlay,
-      padding: {
-        type: 'physicalAxis',
-        vertical: spacing.xl,
-        horizontal: spacing.xl,
-      },
-      layout: {
-        direction: 'vertical',
-        mainAxisAlignment: 'center',
-      },
-    },
+    overlay: modal.background,
     menu: {
-      backgroundColor: color.surfaceVariant.color,
-      overflow: 'hidden',
-      size:  hasSearch ? {
+      ...modal.menu,
+      size: hasSearch ? {
         minHeight: menuHeight,
         height: menuHeight,
       } : {
         maxHeight: menuHeight,
-      },
-      shape: {
-        borderRadius: { type: 'all', value: borderRadius.lg },
-      },
-      border: {
-        width: {
-          type: 'all',
-          value: borderWidth.thin,
-        },
-        color: {
-          type: 'all',
-          value: themeTokens.color.border,
-        },
       },
     },
     header: {

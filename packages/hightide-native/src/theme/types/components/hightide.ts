@@ -16,6 +16,7 @@ import type { SearchBarThemeResolvers } from './searchBar'
 import type { CardThemeResolvers } from './card'
 import type { DividerThemeResolvers } from './divider'
 import type { ListItemThemeResolvers } from './listItem'
+import type { ModalThemeResolvers } from './modal'
 import type { MultiSelectThemeResolvers } from './multiSelect'
 import type { SelectThemeResolvers } from './select'
 import type { SwitchThemeResolvers } from './switch'
@@ -40,6 +41,7 @@ export type HightideComponentThemes = {
   card: CardThemeResolvers,
   divider: DividerThemeResolvers,
   listItem: ListItemThemeResolvers,
+  modal: ModalThemeResolvers,
   avatar: AvatarThemeResolvers,
   avatarWithStatus: AvatarWithStatusThemeResolvers,
   avatarGroup: AvatarGroupThemeResolvers,

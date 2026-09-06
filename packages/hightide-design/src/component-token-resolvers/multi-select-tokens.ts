@@ -18,6 +18,7 @@ import {
   inputTokenResolver,
   toInputState
 } from './input-tokens'
+import { modalTokenResolver } from './modal-tokens'
 import {
   toPressableState,
   type PressableStateValue
@@ -85,7 +86,7 @@ export const multiSelectTokenResolver: MultiSelectTokenResolver = ({
   overrides,
   state,
 }) => {
-  const { color, spacing, padding, borderRadius, borderWidth, typography, fontWeights } = themeTokens
+  const { color, spacing, padding, typography, fontWeights } = themeTokens
   const onColor = color.surface.onColor
   const accentPair = overrides?.color ?? color.primary
   const hasSearch = config?.hasSearch ?? true
@@ -140,6 +141,10 @@ export const multiSelectTokenResolver: MultiSelectTokenResolver = ({
   }).background
   const touchTargetSize = semanticResolvers.touchTargetSize({ themeTokens })
   const menuHeight = touchTargetSize * 11.5
+  const modal = modalTokenResolver({
+    themeTokens,
+    semanticResolvers,
+  })
 
   return {
     trigger: {
@@ -160,40 +165,14 @@ export const multiSelectTokenResolver: MultiSelectTokenResolver = ({
       backgroundColor: tint,
     },
     triggerText: state.has('hasSelections') ? input.text : input.placeholder,
-    overlay: {
-      backgroundColor: color.overlay,
-      padding: {
-        type: 'physicalAxis',
-        vertical: spacing.xl,
-        horizontal: spacing.xl,
-      },
-      layout: {
-        direction: 'vertical',
-        mainAxisAlignment: 'center',
-        flexGrow: 1,
-      },
-    },
+    overlay: modal.background,
     menu: {
-      backgroundColor: color.surfaceVariant.color,
-      overflow: 'hidden',
+      ...modal.menu,
       size: hasSearch ? {
         minHeight: menuHeight,
         height: menuHeight,
       } : {
         maxHeight: menuHeight,
-      },
-      shape: {
-        borderRadius: { type: 'all', value: borderRadius.lg },
-      },
-      border: {
-        width: {
-          type: 'all',
-          value: borderWidth.thin,
-        },
-        color: {
-          type: 'all',
-          value: themeTokens.color.border,
-        },
       },
     },
     header: {
