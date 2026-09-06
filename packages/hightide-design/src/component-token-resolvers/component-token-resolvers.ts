@@ -44,6 +44,10 @@ import {
   type ListItemTokenResolvers
 } from './list-items'
 import {
+  modalTokenResolver,
+  type ModalTokenResolver
+} from './modal-tokens'
+import {
   multiSelectTokenResolver,
   type MultiSelectTokenResolver
 } from './multi-select-tokens'
@@ -83,6 +87,7 @@ export type ComponentTokenResolvers = {
   card: CardTokenResolver,
   divider: DividerTokenResolver,
   listItem: ListItemTokenResolvers,
+  modal: ModalTokenResolver,
   avatar: AvatarTokenResolver,
   avatarWithStatus: AvatarWithStatusTokenResolver,
   avatarGroup: AvatarGroupTokenResolver,
@@ -105,6 +110,7 @@ export const componentTokenResolvers: ComponentTokenResolvers = {
   card: cardTokenResolver,
   divider: dividerTokenResolver,
   listItem: listItemTokenResolvers,
+  modal: modalTokenResolver,
   avatar: avatarTokenResolver,
   avatarWithStatus: avatarWithStatusTokenResolver,
   avatarGroup: avatarGroupTokenResolver,

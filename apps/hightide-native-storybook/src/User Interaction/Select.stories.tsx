@@ -15,6 +15,8 @@ const fruitOptions = StorybookHelper.selectValues
   }))
   .sort((a, b) => a.id.localeCompare(b.id))
 
+const fewFruitOptions = fruitOptions.slice(0, 5)
+
 const meta = {
   component: Select,
 } satisfies Meta<typeof Select>
@@ -36,6 +38,31 @@ export const select: Story = {
   render: (args) => (
     <Select {...args}>
       {fruitOptions.map((option) => (
+        <Select.Option
+          key={option.id}
+          value={option.id}
+          label={option.label}
+          disabled={option.disabled}
+        />
+      ))}
+    </Select>
+  ),
+}
+
+export const selectFiveOptions: Story = {
+  args: {
+    initialValue: null,
+    disabled: false,
+    invalid: false,
+    searchableThreshold: 6,
+    readOnly: false,
+    placeholder: 'Select…',
+    onValueChange: action('onValueChange'),
+    onEditComplete: action('onEditComplete'),
+  },
+  render: (args) => (
+    <Select {...args}>
+      {fewFruitOptions.map((option) => (
         <Select.Option
           key={option.id}
           value={option.id}
