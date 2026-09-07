@@ -10,7 +10,10 @@ import {
   type ListItemTokens
 } from './list-item-tokens'
 import type { ColorPairToken } from '../../theme-tokens/theme-tokens-config'
+import { HexColorUtils } from '../../utils/hex'
 import type { PressableState } from '../pressable-tokens'
+import type { ContainerTokens } from '../container-tokens'
+import type { Resolvable } from '../resolvable'
 
 export type ListActionItemState = PressableState
 
@@ -29,7 +32,7 @@ export type ListActionTokenResolver = ComponentTokenResolver<
 export const listActionOverlayTokens = {
   container: {
     backgroundColor: stateful(tokenPath('params.background')),
-    outline: stateful({
+    outline: stateful<string, Resolvable<NonNullable<ContainerTokens['outline']>, string, string>>({
       width: tokenPath('theme.focusOutline.width'),
       offset: tokenCalc(
         'multiply',
@@ -38,7 +41,7 @@ export const listActionOverlayTokens = {
       ),
       style: tokenPath('theme.focusOutline.style'),
       color: {
-        value: 'transparent',
+        value: HexColorUtils.transparent,
       },
     }, [
       whenState(['focusVisible'], {

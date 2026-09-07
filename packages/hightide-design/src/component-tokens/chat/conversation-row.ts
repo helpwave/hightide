@@ -1,6 +1,8 @@
 import type { AvatarOverrideTokens } from '../avatar-tokens'
+import { HexColorUtils } from '../../utils/hex'
 import type { ComponentTokenResolver } from '../component-token-resolver'
 import type { ContainerTokens } from '../container-tokens'
+import type { Resolvable } from '../resolvable'
 import { type IconTokens } from '../icon-tokens'
 import type { PressableOverrideTokens } from '../pressable-tokens'
 import type { TextStyleTokens } from '../text-style-tokens'
@@ -75,9 +77,9 @@ export const chatConversationRowTokens = {
       coloringColorVariant: 'transparent',
     },
     container: {
-      backgroundColor: stateful(
+      backgroundColor: stateful<string, Resolvable<NonNullable<ContainerTokens['backgroundColor']>, string, string>>(
         {
-          value: 'transparent',
+          value: HexColorUtils.transparent,
         },
         [
           whenState(['selected'], tokenPath('theme.color.background.color')),
@@ -92,7 +94,7 @@ export const chatConversationRowTokens = {
         vertical: tokenPath('theme.padding.xl'),
         horizontal: tokenPath('theme.spacing.lg'),
       }),
-      border: stateful({
+      border: stateful<string, Resolvable<NonNullable<ContainerTokens['border']>, string, string>>({
         width: {
           type: 'physicalSide',
           left: tokenValue(0),
@@ -100,7 +102,7 @@ export const chatConversationRowTokens = {
         color: {
           type: 'physicalSide',
           left: {
-            value: 'transparent',
+            value: HexColorUtils.transparent,
           },
         },
       }, [

@@ -45,10 +45,6 @@ const asNumber = (value: unknown, label: string): number => {
 }
 
 const asHexColor = (value: unknown, label: string): HexColorToken => {
-  if (value === 'transparent') {
-    return HexColorUtils.resolveColorToken(value)
-  }
-
   if (typeof value !== 'string' || !value.startsWith('#')) {
     throw new Error(`Expected color for ${label}, received ${String(value)}`)
   }

@@ -1,4 +1,5 @@
 import type { ColorToken, HexColorToken } from '@helpwave/hightide-design/primitive-tokens'
+import { HexColorUtils } from '@helpwave/hightide-design/utils'
 import type { ColorPairToken, ThemeLayoutSize, TintStrength } from '@helpwave/hightide-design/theme-tokens'
 import type { ThemeTokens } from '@helpwave/hightide-design/theme-tokens'
 import type { InputState, PressableState, PressableStateValue } from '@helpwave/hightide-design/component-tokens'
@@ -146,8 +147,8 @@ export const resolvePressableStateLayerTint = (params: {
   states: PressableState,
   color: ColorToken,
 }): ColorToken => {
-  if (params.color === 'transparent') {
-    return 'transparent'
+  if (params.color === HexColorUtils.transparent) {
+    return HexColorUtils.transparent
   }
 
   return resolveTokenConfig<{ tint: ColorToken }>(

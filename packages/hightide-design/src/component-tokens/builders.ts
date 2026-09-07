@@ -1,4 +1,3 @@
-import type { ColorToken } from '../primitive-tokens/color'
 import type {
   NumberCalculationOperation,
   ResolvableColor,
@@ -56,10 +55,10 @@ export const tokenColorBlend = <ColorPath extends string, NumberPath extends str
     tint,
   })
 
-export const stateful = <S extends string>(
-  base: unknown,
-  overrides?: ReadonlyArray<StateBasedTokenPropertyOverride<S, unknown>>
-): StateBasedTokenProperty<S, unknown> => ({
+export const stateful = <S extends string, V>(
+  base: V,
+  overrides?: ReadonlyArray<StateBasedTokenPropertyOverride<S, V>>
+): StateBasedTokenProperty<S, V> => ({
     base,
     overrides,
   })
@@ -77,7 +76,3 @@ export const whenState = <S extends string, V>(
         : new Set(negativeCondition),
     value,
   })
-
-export const transparentColor = (): { value: ColorToken } => ({
-  value: 'transparent',
-})

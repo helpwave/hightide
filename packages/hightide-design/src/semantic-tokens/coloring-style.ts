@@ -1,3 +1,4 @@
+import { HexColorUtils } from '../utils/hex'
 import {
   tokenColorLightness,
   tokenColorOpacity,
@@ -50,7 +51,7 @@ export const coloringStyleTokens = {
   foreground: {
     foreground: tokenPath('params.coloring.color'),
     background: {
-      value: 'transparent',
+      value: HexColorUtils.transparent,
     },
     accent: tokenPath('params.coloring.accent'),
   },

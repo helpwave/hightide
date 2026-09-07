@@ -1,4 +1,5 @@
 import type { ColorToken } from '@helpwave/hightide-design/primitive-tokens'
+import { HexColorUtils } from '@helpwave/hightide-design/utils'
 import type { TypographyStyleToken } from '@helpwave/hightide-design/theme-tokens'
 import {
   pressableTokens,
@@ -80,7 +81,7 @@ export const pressableTokenResolver: PressableTokenResolver = ({
   })
   const states = new Set<PressableTokenState>(state)
 
-  if (resolved.outline !== 'transparent') {
+  if (resolved.outline !== HexColorUtils.transparent) {
     states.add('outlined')
   }
 

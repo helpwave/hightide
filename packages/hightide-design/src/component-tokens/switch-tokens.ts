@@ -1,3 +1,4 @@
+import { HexColorUtils } from '../utils/hex'
 import {
   stateful,
   tokenCalc,
@@ -10,6 +11,7 @@ import {
 import type { ComponentTokenResolver } from './component-token-resolver'
 import type { ContainerTokens } from './container-tokens'
 import { inputStateValues } from './input-tokens'
+import type { Resolvable } from './resolvable'
 
 export const switchStateValues = [
   ...inputStateValues,
@@ -105,7 +107,7 @@ export const switchTokens = {
       [
         whenState(['focusVisible'], {
           color: {
-            value: 'transparent',
+            value: HexColorUtils.transparent,
           },
         }),
       ]
@@ -188,13 +190,13 @@ export const switchTokens = {
       mainAxisAlignment: 'start',
       crossAxisAlignment: 'center',
     }),
-    outline: stateful(
+    outline: stateful<string, Resolvable<NonNullable<ContainerTokens['outline']>, string, string>>(
       {
         width: tokenValue(0),
         offset: tokenValue(0),
         style: 'solid',
         color: {
-          value: 'transparent',
+          value: HexColorUtils.transparent,
         },
       },
       [

@@ -59,12 +59,8 @@ export const listActionTokenResolver: ListActionTokenResolver = ({
     color: coloring.foreground,
   })
   const background = HexColorUtils.blend(
-    HexColorUtils.resolveColorToken(
-      resolved.background === 'transparent' ? '#FFFFFF00' : resolved.background
-    ),
-    HexColorUtils.resolveColorToken(
-      tint === 'transparent' ? '#FFFFFF00' : tint
-    )
+    resolved.background,
+    tint
   )
   const base = listItemTokenResolver({
     themeTokens,

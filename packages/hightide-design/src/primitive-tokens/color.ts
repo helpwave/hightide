@@ -1,5 +1,6 @@
 export type HexColorToken = `#${string}`
-export type ColorToken = HexColorToken | 'transparent'
+
+export type ColorToken = HexColorToken
 
 const colorPaletteBasicSteps = [50, 100, 200, 300, 400, 500, 600, 700, 800, 900, 950] as const
 export type ColorPaletteBasicStep = typeof colorPaletteBasicSteps[number]

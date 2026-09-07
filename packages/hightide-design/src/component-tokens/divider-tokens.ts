@@ -1,6 +1,7 @@
 import type { ColorToken } from '../primitive-tokens/color'
 import type { ComponentTokenResolver } from './component-token-resolver'
 import type { ContainerTokens } from './container-tokens'
+import type { Resolvable } from './resolvable'
 import {
   stateful,
   tokenPath,
@@ -40,7 +41,7 @@ export const dividerTokens = {
       }),
     ]
   ),
-  border: stateful(
+  border: stateful<string, Resolvable<NonNullable<ContainerTokens['border']>, string, string>>(
     {
       width: {
         type: 'physicalSide',

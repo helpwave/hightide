@@ -1,4 +1,5 @@
 import { type ComponentSize } from '../semantic-tokens'
+import { HexColorUtils } from '../utils/hex'
 import type { ColorPairToken } from '../theme-tokens/theme-tokens-config'
 import {
   stateful,
@@ -11,6 +12,7 @@ import type { ComponentTokenResolver } from './component-token-resolver'
 import type { ContainerTokens } from './container-tokens'
 import type { IconTokens } from './icon-tokens'
 import { inputStateValues } from './input-tokens'
+import type { Resolvable } from './resolvable'
 
 export const checkboxStateValues = [
   ...inputStateValues,
@@ -118,13 +120,13 @@ export const checkboxTokens = {
       mainAxisAlignment: 'center',
       crossAxisAlignment: 'center',
     }),
-    outline: stateful(
+    outline: stateful<string, Resolvable<NonNullable<ContainerTokens['outline']>, string, string>>(
       {
         width: tokenValue(0),
         offset: tokenValue(0),
         style: 'solid',
         color: {
-          value: 'transparent',
+          value: HexColorUtils.transparent,
         },
       },
       [

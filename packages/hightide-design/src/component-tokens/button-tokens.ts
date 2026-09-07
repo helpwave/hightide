@@ -3,6 +3,7 @@ import type {
   ComponentSize
 } from '../semantic-tokens'
 import type { ColorPairToken } from '../theme-tokens/theme-tokens-config'
+import { HexColorUtils } from '../utils/hex'
 import {
   stateful,
   tokenCalc,
@@ -12,6 +13,7 @@ import {
 } from './builders'
 import type { ComponentTokenResolver } from './component-token-resolver'
 import type { ContainerTokens } from './container-tokens'
+import type { Resolvable } from './resolvable'
 import type { IconTokens } from './icon-tokens'
 import type { TextStyleTokens } from './text-style-tokens'
 import { type PressableState } from './pressable-tokens'
@@ -56,7 +58,7 @@ export const buttonTokens = {
         whenState(['disabled'], tokenValue(0.6)),
       ]
     ),
-    border: stateful(
+    border: stateful<string, Resolvable<NonNullable<ContainerTokens['border']>, string, string>>(
       {
         width: {
           type: 'all',
@@ -65,7 +67,7 @@ export const buttonTokens = {
         color: {
           type: 'all',
           value: {
-            value: 'transparent',
+            value: HexColorUtils.transparent,
           },
         },
       },
@@ -82,13 +84,13 @@ export const buttonTokens = {
         }),
       ]
     ),
-    outline: stateful(
+    outline: stateful<string, Resolvable<NonNullable<ContainerTokens['outline']>, string, string>>(
       {
         width: tokenValue(0),
         offset: tokenValue(0),
         style: 'solid',
         color: {
-          value: 'transparent',
+          value: HexColorUtils.transparent,
         },
       },
       [

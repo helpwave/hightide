@@ -1,4 +1,5 @@
 import type { ColorToken } from '@helpwave/hightide-design/primitive-tokens'
+import { HexColorUtils } from '@helpwave/hightide-design/utils'
 import {
   multiSelectTokens,
   toInputState,
@@ -145,7 +146,7 @@ export const multiSelectTokenResolver: MultiSelectTokenResolver = ({
     checkbox: checkboxTokens.container,
     checkboxIcon: {
       ...checkboxTokens.icon,
-      color: state.has('selected') ? checkboxTokens.icon.color : 'transparent',
+      color: state.has('selected') ? checkboxTokens.icon.color : HexColorUtils.transparent,
     },
   }
 }

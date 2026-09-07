@@ -4,9 +4,10 @@ import {
   tokenColorOpacity,
   tokenPath,
   tokenValue,
-  transparentColor,
   whenState
 } from '../component-tokens/builders'
+import type { ResolvableColor } from '../component-tokens/resolvable'
+import { HexColorUtils } from '../utils/hex'
 
 export const pressableColoringTokens = {
   background: stateful(
@@ -41,25 +42,25 @@ export const pressableColoringTokens = {
       ),
     ]
   ),
-  border: stateful(
-    transparentColor(),
+  border: stateful<string, ResolvableColor<string, string>>(
+    { value: HexColorUtils.transparent },
     [
       whenState(['outlined'], tokenPath('params.coloring.accent')),
-      whenState(['disabled'], transparentColor()),
+      whenState(['disabled'], { value: HexColorUtils.transparent }),
     ]
   ),
-  outline: stateful(
-    transparentColor(),
+  outline: stateful<string, ResolvableColor<string, string>>(
+    { value: HexColorUtils.transparent },
     [
       whenState(['focusVisible'], tokenPath('params.coloring.accent')),
-      whenState(['disabled'], transparentColor()),
+      whenState(['disabled'], { value: HexColorUtils.transparent }),
     ]
   ),
 } as const
 
 export const pressableStateLayerTintTokens = {
-  tint: stateful(
-    transparentColor(),
+  tint: stateful<string, ResolvableColor<string, string>>(
+    { value: HexColorUtils.transparent },
     [
       whenState(
         ['hovered'],

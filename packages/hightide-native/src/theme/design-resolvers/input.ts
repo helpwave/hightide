@@ -1,4 +1,5 @@
 import type { ColorToken } from '@helpwave/hightide-design/primitive-tokens'
+import { HexColorUtils } from '@helpwave/hightide-design/utils'
 import type { TypographyStyleToken } from '@helpwave/hightide-design/theme-tokens'
 import {
   inputTokens,
@@ -77,12 +78,12 @@ export const inputTokenResolver: InputTokenResolver = ({
   })
   const states = new Set<InputTokenState>(state)
 
-  if (state.has('focused') && coloring.border !== 'transparent') {
+  if (state.has('focused') && coloring.border !== HexColorUtils.transparent) {
     states.add('hasFocusShadow')
   }
 
   const outlineColor = !state.has('focusVisible')
-    ? 'transparent'
+    ? HexColorUtils.transparent
     : state.has('invalid')
       ? themeTokens.color.negative.color
       : (overrides?.color ?? themeTokens.color.primary).color

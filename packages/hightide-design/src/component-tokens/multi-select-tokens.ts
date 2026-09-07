@@ -1,8 +1,10 @@
 import type { ColorPairToken } from '../theme-tokens/theme-tokens-config'
+import { HexColorUtils } from '../utils/hex'
 import type { ComponentTokenResolver } from './component-token-resolver'
 import type { ContainerTokens } from './container-tokens'
 import type { IconTokens } from './icon-tokens'
 import { inputStateValues } from './input-tokens'
+import type { Resolvable } from './resolvable'
 import type { TextStyleTokens } from './text-style-tokens'
 import {
   stateful,
@@ -76,7 +78,7 @@ export const multiSelectTokens = {
       right: tokenPath('theme.padding.xl'),
     }),
   },
-  menuSize: stateful(
+  menuSize: stateful<string, Resolvable<NonNullable<ContainerTokens['size']>, string, string>>(
     {
       maxHeight: menuHeight,
     },
@@ -88,9 +90,9 @@ export const multiSelectTokens = {
     ]
   ),
   option: {
-    backgroundColor: stateful(
+    backgroundColor: stateful<string, Resolvable<NonNullable<ContainerTokens['backgroundColor']>, string, string>>(
       {
-        value: 'transparent',
+        value: HexColorUtils.transparent,
       },
       [
         whenState(['highlighted'], tokenPath('params.hoverColor')),

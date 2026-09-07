@@ -117,7 +117,7 @@ export const toSearchBarThemeResolvers: ComponentThemeResolver<SearchBarThemeRes
       const iconColor = resolve(state).icon.color
 
       return {
-        color: (iconColor === undefined || iconColor === 'transparent'
+        color: (iconColor === undefined || iconColor === HexColorUtils.transparent
           ? themeTokens.color.surface.onColor
           : iconColor),
         onColor: themeTokens.color.surface.color,

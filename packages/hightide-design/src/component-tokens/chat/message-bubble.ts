@@ -1,5 +1,6 @@
 import type { ComponentTokenResolver } from '../component-token-resolver'
 import type { ContainerTokens } from '../container-tokens'
+import type { Resolvable } from '../resolvable'
 import type { IconTokens } from '../icon-tokens'
 import type { TextStyleTokens } from '../text-style-tokens'
 import {
@@ -78,7 +79,7 @@ export const chatMessageBubbleTokens = {
       top: tokenPath('theme.padding.lg'),
       bottom: tokenPath('theme.padding.md'),
     }),
-    margin: stateful({
+    margin: stateful<string, Resolvable<NonNullable<ContainerTokens['margin']>, string, string>>({
       type: 'logicalSide',
       inlineEnd: tokenPath('theme.spacing.xxl'),
     }, [
