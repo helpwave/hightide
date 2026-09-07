@@ -7,8 +7,9 @@ import type { ColorPairToken } from '../theme-tokens/theme-tokens-config'
 import { HexColorUtils } from '../utils/hex'
 import {
   stateful,
-  tokenPath,
+  tokenParameter,
   tokenValue,
+  tokenVariable,
   whenState
 } from './builders'
 import type { ComponentTokenResolver } from './component-token-resolver'
@@ -72,9 +73,43 @@ export type PressableTokenResolver = ComponentTokenResolver<
   PressableTokens
 >
 
+const layoutSize = tokenParameter('params.layout.size', tokenVariable('theme.size.md'))
+const layoutInset = tokenParameter('params.layout.inset', tokenVariable('theme.padding.md'))
+const layoutBorderRadius = tokenParameter(
+  'params.layout.borderRadius',
+  tokenVariable('theme.borderRadius.md')
+)
+const layoutHorizontalContentPadding = tokenParameter(
+  'params.layout.horizontalContentPadding',
+  tokenVariable('theme.padding.md')
+)
+const tint = tokenParameter('params.tint', { value: HexColorUtils.transparent })
+const textFontSize = tokenParameter(
+  'params.textStyle.fontSize',
+  tokenVariable('theme.typography.label.md.fontSize')
+)
+const textFontWeight = tokenParameter(
+  'params.textStyle.fontWeight',
+  tokenVariable('theme.typography.label.md.fontWeight')
+)
+const textFontFamily = tokenParameter(
+  'params.textStyle.fontFamily',
+  tokenVariable('theme.typography.label.md.fontFamily')
+)
+const textLineHeight = tokenParameter(
+  'params.textStyle.lineHeight',
+  tokenVariable('theme.typography.label.md.lineHeight')
+)
+const iconSize = tokenParameter('params.iconSize', tokenVariable('theme.icongraphy.sizes.md'))
+const iconStrokeWidth = tokenParameter(
+  'params.iconStrokeWidth',
+  tokenVariable('theme.icongraphy.strokeWidth')
+)
+const gap = tokenParameter('params.gap', tokenVariable('theme.spacing.md'))
+
 export const pressableTokens = {
   container: {
-    backgroundColor: stateful(tokenPath('params.coloring.background')),
+    backgroundColor: stateful(tokenVariable('semantics.pressableColoring.background')),
     opacity: stateful(
       tokenValue(1),
       [
@@ -92,43 +127,43 @@ export const pressableTokens = {
       },
       [
         whenState(['outlined', 'focusVisible'], {
-          width: tokenPath('theme.focusOutline.width'),
-          offset: tokenPath('theme.focusOutline.offset'),
-          style: tokenPath('theme.focusOutline.style'),
-          color: tokenPath('params.coloring.outline'),
+          width: tokenVariable('theme.focusOutline.width'),
+          offset: tokenVariable('theme.focusOutline.offset'),
+          style: tokenVariable('theme.focusOutline.style'),
+          color: tokenVariable('semantics.pressableColoring.outline'),
         }),
       ]
     ),
     size: stateful({
-      minHeight: tokenPath('params.layout.size'),
+      minHeight: layoutSize,
     }),
     borderRadius: stateful({
       type: 'all',
-      value: tokenPath('params.layout.borderRadius'),
+      value: layoutBorderRadius,
     }),
     padding: stateful(
       {
         type: 'physicalAxis',
-        vertical: tokenPath('params.layout.inset'),
-        horizontal: tokenPath('params.layout.inset'),
+        vertical: layoutInset,
+        horizontal: layoutInset,
       },
       [
         whenState(['additionalHorizontalPadding'], {
           type: 'physicalAxis',
-          vertical: tokenPath('params.layout.inset'),
-          horizontal: tokenPath('params.layout.horizontalContentPadding'),
+          vertical: layoutInset,
+          horizontal: layoutHorizontalContentPadding,
         }),
       ]
     ),
     layout: stateful({
-      gap: tokenPath('params.gap'),
+      gap,
       direction: 'horizontal',
       mainAxisAlignment: 'center',
       crossAxisAlignment: 'center',
     }),
   },
   stateLayer: {
-    backgroundColor: stateful(tokenPath('params.tint')),
+    backgroundColor: stateful(tint),
     position: stateful({
       type: 'absolute',
       top: tokenValue(0),
@@ -139,19 +174,19 @@ export const pressableTokens = {
     }),
     borderRadius: stateful({
       type: 'all',
-      value: tokenPath('params.layout.borderRadius'),
+      value: layoutBorderRadius,
     }),
   },
   icon: {
-    size: stateful(tokenPath('params.iconSize')),
-    strokeWidth: stateful(tokenPath('params.iconStrokeWidth')),
-    color: stateful(tokenPath('params.coloring.foreground')),
+    size: stateful(iconSize),
+    strokeWidth: stateful(iconStrokeWidth),
+    color: stateful(tokenVariable('semantics.pressableColoring.foreground')),
   },
   text: {
-    color: stateful(tokenPath('params.coloring.foreground')),
-    fontSize: stateful(tokenPath('params.textStyle.fontSize')),
-    fontWeight: stateful(tokenPath('params.textStyle.fontWeight')),
-    fontFamily: stateful(tokenPath('params.textStyle.fontFamily')),
-    lineHeight: stateful(tokenPath('params.textStyle.lineHeight')),
+    color: stateful(tokenVariable('semantics.pressableColoring.foreground')),
+    fontSize: stateful(textFontSize),
+    fontWeight: stateful(textFontWeight),
+    fontFamily: stateful(textFontFamily),
+    lineHeight: stateful(textLineHeight),
   },
 } as const

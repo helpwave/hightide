@@ -1,60 +1,97 @@
 import { HexColorUtils } from '../utils/hex'
 import {
+  stateful,
   tokenColorLightness,
   tokenColorOpacity,
-  tokenPath
+  tokenParameter,
+  tokenVariable,
+  whenConfig
 } from '../component-tokens/builders'
+import type { ResolvableColor } from '../component-tokens/resolvable'
 import type {
   ButtonVariant,
   ChipVariant,
   ColoringColorVariant,
   ColoringStyle,
-  IconButtonVariant
+  IconButtonVariant,
+  SemanticColoringConfig
 } from './types'
 
-export const coloringColorVariantTokens = {
-  normal: {
-    color: tokenPath('params.colorPair.color'),
-    onColor: tokenPath('params.colorPair.onColor'),
-    accent: tokenPath('params.colorPair.color'),
-  },
-  tonal: {
-    color: tokenColorLightness(
-      tokenPath('params.colorPair.color'),
-      tokenPath('theme.config.coloring.tonal.color')
-    ),
-    onColor: tokenColorLightness(
-      tokenPath('params.colorPair.color'),
-      tokenPath('theme.config.coloring.tonal.onColor')
-    ),
-    accent: tokenPath('params.colorPair.color'),
-  },
-  transparent: {
-    color: tokenColorOpacity(
-      tokenPath('params.colorPair.color'),
-      tokenPath('theme.config.coloring.transparent.color')
-    ),
-    onColor: tokenColorOpacity(
-      tokenPath('params.colorPair.color'),
-      tokenPath('theme.config.coloring.transparent.onColor')
-    ),
-    accent: tokenPath('params.colorPair.color'),
-  },
+const colorPairColor = tokenParameter(
+  'params.colorPair.color',
+  tokenVariable('theme.color.primary.color')
+)
+const colorPairOnColor = tokenParameter(
+  'params.colorPair.onColor',
+  tokenVariable('theme.color.primary.onColor')
+)
+
+export const coloringVariantTokens = {
+  color: stateful<string, ResolvableColor<string, string>, SemanticColoringConfig>(
+    colorPairColor,
+    [
+      whenConfig({ coloringColorVariant: 'tonal' }, tokenColorLightness(
+        colorPairColor,
+        tokenVariable('theme.config.coloring.tonal.color')
+      )),
+      whenConfig({ coloringColorVariant: 'transparent' }, tokenColorOpacity(
+        colorPairColor,
+        tokenVariable('theme.config.coloring.transparent.color')
+      )),
+    ]
+  ),
+  onColor: stateful<string, ResolvableColor<string, string>, SemanticColoringConfig>(
+    colorPairOnColor,
+    [
+      whenConfig({ coloringColorVariant: 'tonal' }, tokenColorLightness(
+        colorPairColor,
+        tokenVariable('theme.config.coloring.tonal.onColor')
+      )),
+      whenConfig({ coloringColorVariant: 'transparent' }, tokenColorOpacity(
+        colorPairColor,
+        tokenVariable('theme.config.coloring.transparent.onColor')
+      )),
+    ]
+  ),
+  accent: stateful<string, ResolvableColor<string, string>, SemanticColoringConfig>(
+    colorPairColor
+  ),
 } as const
 
 export const coloringStyleTokens = {
-  filled: {
-    foreground: tokenPath('params.coloring.onColor'),
-    background: tokenPath('params.coloring.color'),
-    accent: tokenPath('params.coloring.accent'),
-  },
-  foreground: {
-    foreground: tokenPath('params.coloring.color'),
-    background: {
-      value: HexColorUtils.transparent,
-    },
-    accent: tokenPath('params.coloring.accent'),
-  },
+  foreground: stateful<string, ResolvableColor<string, string>, SemanticColoringConfig>(
+    tokenParameter(
+      'params.coloring.onColor',
+      tokenVariable('semantics.coloringVariant.onColor')
+    ),
+    [
+      whenConfig(
+        { coloringStyle: 'foreground' },
+        tokenParameter(
+          'params.coloring.color',
+          tokenVariable('semantics.coloringVariant.color')
+        )
+      ),
+    ]
+  ),
+  background: stateful<string, ResolvableColor<string, string>, SemanticColoringConfig>(
+    tokenParameter(
+      'params.coloring.color',
+      tokenVariable('semantics.coloringVariant.color')
+    ),
+    [
+      whenConfig(
+        { coloringStyle: 'foreground' },
+        { value: HexColorUtils.transparent }
+      ),
+    ]
+  ),
+  accent: stateful<string, ResolvableColor<string, string>, SemanticColoringConfig>(
+    tokenParameter(
+      'params.coloring.accent',
+      tokenVariable('semantics.coloringVariant.accent')
+    )
+  ),
 } as const
 
 export type ButtonVariantMapping = {

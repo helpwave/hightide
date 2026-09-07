@@ -13,7 +13,8 @@ export type NumberCalculationOperation =
 
 export type ResolvableNumber<T extends number, P extends string = string> =
   | { type?: undefined, value: T }
-  | { type: 'variable', path: string }
+  | { type: 'variable', path: P }
+  | { type: 'parameter', path: P, fallback: ResolvableNumber<T, P> }
   | {
     type: 'calculation',
     operation: NumberCalculationOperation,
@@ -25,7 +26,8 @@ export type ColorOperation = 'opacity' | 'lightness' | 'blend'
 
 export type ResolvableColor<ColorPath extends string, NumberPath extends string> =
   | { type?: undefined, value: ColorToken }
-  | { type: 'variable', path: string }
+  | { type: 'variable', path: ColorPath }
+  | { type: 'parameter', path: ColorPath, fallback: ResolvableColor<ColorPath, NumberPath> }
   | {
     type: 'color',
     operation: 'opacity',
@@ -48,6 +50,7 @@ export type ResolvableColor<ColorPath extends string, NumberPath extends string>
 export type ResolvableString<P extends string = string> =
   | string
   | { type: 'variable', path: P }
+  | { type: 'parameter', path: P, fallback: ResolvableString<P> }
 
 export type Resolvable<T, NumberPath extends string, ColorPath extends string, StringPath extends string = string> =
   T extends number
@@ -61,6 +64,7 @@ export type Resolvable<T, NumberPath extends string, ColorPath extends string, S
           : T extends object
             ? (
               | { type: 'variable', path: string }
+              | { type: 'parameter', path: string, fallback: Resolvable<T, NumberPath, ColorPath, StringPath> }
               | { [K in keyof T]: Resolvable<T[K], NumberPath, ColorPath, StringPath> }
             )
             : T

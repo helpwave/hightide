@@ -46,6 +46,12 @@ export type InputColoringTokens = {
 }
 
 export type ColoringStyle = 'filled' | 'foreground'
+
+export type SemanticColoringConfig = {
+  coloringColorVariant: ColoringColorVariant,
+  coloringStyle: ColoringStyle,
+}
+
 export type ButtonVariant = 'elevated' | 'filled' | 'tonal' | 'outlined' | 'foreground'
 export type IconButtonVariant = Exclude<ButtonVariant, 'outlined'>
 export type ChipVariant = 'filled' | 'tonal'

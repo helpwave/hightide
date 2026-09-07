@@ -1,6 +1,9 @@
 import type { ColorToken, HexColorToken } from '@helpwave/hightide-design/primitive-tokens'
-import type { NumberCalculationOperation } from '@helpwave/hightide-design/component-tokens'
-import type { StateBasedTokenProperty } from '@helpwave/hightide-design/component-tokens'
+import type {
+  ContextBasedProperty,
+  NumberCalculationOperation
+} from '@helpwave/hightide-design/component-tokens'
+import { matchesConfigCondition } from '@helpwave/hightide-design/component-tokens'
 import { HexColorUtils, OKLCHUtils } from '@helpwave/hightide-design/utils'
 import {
   matchesNegativeStateConditions,
@@ -9,21 +12,37 @@ import {
 
 export type TokenResolveContext = {
   theme: object,
-  semantic?: object,
+  semantics?: object,
   params?: object,
+  config?: Record<string, string>,
+  state?: ReadonlySet<string>,
 }
 
-const getAtPath = (value: unknown, path: string): unknown => {
+const isRecord = (value: unknown): value is Record<string, unknown> => (
+  typeof value === 'object' && value !== null && !Array.isArray(value)
+)
+
+const tryGetAtPath = (value: unknown, path: string): unknown => {
+  if (path.length === 0) {
+    return value
+  }
+
   const keys = path.split('.')
   let current: unknown = value
 
   for (const key of keys) {
     if (current === null || current === undefined || typeof current !== 'object') {
-      throw new Error(`Token path not found: ${path}`)
+      return undefined
     }
 
     current = (current as Record<string, unknown>)[key]
   }
+
+  return current
+}
+
+const getAtPath = (value: unknown, path: string): unknown => {
+  const current = tryGetAtPath(value, path)
 
   if (current === undefined) {
     throw new Error(`Token path not found: ${path}`)
@@ -32,9 +51,33 @@ const getAtPath = (value: unknown, path: string): unknown => {
   return current
 }
 
-const isRecord = (value: unknown): value is Record<string, unknown> => (
-  typeof value === 'object' && value !== null && !Array.isArray(value)
-)
+const setAtPath = (target: Record<string, unknown>, path: string, value: unknown): void => {
+  const keys = path.split('.')
+  let current: Record<string, unknown> = target
+
+  for (let index = 0; index < keys.length - 1; index += 1) {
+    const key = keys[index]
+    if (key === undefined) {
+      return
+    }
+
+    const next = current[key]
+    if (!isRecord(next)) {
+      const created: Record<string, unknown> = {}
+      current[key] = created
+      current = created
+    } else {
+      current = next
+    }
+  }
+
+  const lastKey = keys[keys.length - 1]
+  if (lastKey === undefined) {
+    return
+  }
+
+  current[lastKey] = value
+}
 
 const asNumber = (value: unknown, label: string): number => {
   if (typeof value !== 'number' || Number.isNaN(value)) {
@@ -79,9 +122,20 @@ const resolveCalculation = (
   }
 }
 
-const resolveStateBasedTokenProperty = <S extends string, V>(
-  property: StateBasedTokenProperty<S, V>,
-  activeStates: ReadonlySet<S>
+const isContextBasedProperty = (
+  value: unknown
+): value is ContextBasedProperty<string, Record<string, string>, unknown> => (
+  isRecord(value)
+  && 'base' in value
+  && !('type' in value)
+  && !('path' in value)
+  && !('operation' in value)
+)
+
+const resolveContextBasedProperty = <S extends string, V>(
+  property: ContextBasedProperty<S, Record<string, string>, V>,
+  activeStates: ReadonlySet<S>,
+  config?: Record<string, string>
 ): V => {
   let result = property.base
 
@@ -89,6 +143,7 @@ const resolveStateBasedTokenProperty = <S extends string, V>(
     if (
       matchesStateConditions(activeStates, override.condition)
       && matchesNegativeStateConditions(activeStates, override.negativeCondition)
+      && matchesConfigCondition(config, override.configCondition)
     ) {
       result = override.value
     }
@@ -97,10 +152,51 @@ const resolveStateBasedTokenProperty = <S extends string, V>(
   return result
 }
 
-export const resolveResolvableValue = (
+const ensureParams = (context: TokenResolveContext): Record<string, unknown> => {
+  if (!isRecord(context.params)) {
+    context.params = {}
+  }
+
+  return context.params as Record<string, unknown>
+}
+
+export function resolveResolvableValue (
   value: unknown,
   context: TokenResolveContext
-): unknown => {
+): unknown {
+  const resolveSemanticVariable = (nestedPath: string): unknown => {
+    const cached = tryGetAtPath(context.params, nestedPath)
+    if (cached !== undefined) {
+      return cached
+    }
+
+    const node = tryGetAtPath(context.semantics, nestedPath)
+    if (node === undefined) {
+      throw new Error(`Token path not found: semantics.${nestedPath}`)
+    }
+
+    if (isContextBasedProperty(node)) {
+      const state = context.state ?? new Set<string>()
+      const resolved = resolveResolvableValue(
+        resolveContextBasedProperty(node, state, context.config),
+        context
+      )
+      setAtPath(ensureParams(context), nestedPath, resolved)
+      return resolved
+    }
+
+    return node
+  }
+
+  const resolveVariablePath = (path: string): unknown => {
+    const semanticsPrefix = 'semantics.'
+    if (path.startsWith(semanticsPrefix)) {
+      return resolveSemanticVariable(path.slice(semanticsPrefix.length))
+    }
+
+    return getAtPath(context, path)
+  }
+
   if (value === null || value === undefined || typeof value !== 'object') {
     return value
   }
@@ -120,7 +216,20 @@ export const resolveResolvableValue = (
       throw new Error('Variable resolvable is missing a string path')
     }
 
-    return getAtPath(context, value.path)
+    return resolveVariablePath(value.path)
+  }
+
+  if (type === 'parameter') {
+    if (typeof value.path !== 'string') {
+      throw new Error('Parameter resolvable is missing a string path')
+    }
+
+    const found = tryGetAtPath(context, value.path)
+    if (found !== undefined) {
+      return found
+    }
+
+    return resolveResolvableValue(value.fallback, context)
   }
 
   if (type === 'calculation') {
@@ -174,54 +283,52 @@ export const resolveResolvableValue = (
   return result
 }
 
-const isStateBasedTokenProperty = (value: unknown): value is StateBasedTokenProperty<string, unknown> => (
-  isRecord(value)
-  && 'base' in value
-  && !('type' in value)
-  && !('path' in value)
-  && !('operation' in value)
-)
-
 export const resolveConfigNode = (
   value: unknown,
   state: ReadonlySet<string>,
   context: TokenResolveContext
 ): unknown => {
-  if (isStateBasedTokenProperty(value)) {
+  const resolveContext: TokenResolveContext = {
+    ...context,
+    state: context.state ?? state,
+  }
+
+  if (isContextBasedProperty(value)) {
     return resolveResolvableValue(
-      resolveStateBasedTokenProperty(value, state),
-      context
+      resolveContextBasedProperty(value, state, resolveContext.config),
+      resolveContext
     )
   }
 
   if (Array.isArray(value)) {
-    return value.map((item) => resolveConfigNode(item, state, context))
+    return value.map((item) => resolveConfigNode(item, state, resolveContext))
   }
 
   if (!isRecord(value)) {
-    return resolveResolvableValue(value, context)
+    return resolveResolvableValue(value, resolveContext)
   }
 
   if (
     value.type === 'variable'
+    || value.type === 'parameter'
     || value.type === 'calculation'
     || value.type === 'color'
     || (value.type === undefined && 'value' in value)
   ) {
-    return resolveResolvableValue(value, context)
+    return resolveResolvableValue(value, resolveContext)
   }
 
   const result: Record<string, unknown> = {}
 
   for (const key of Object.keys(value)) {
-    result[key] = resolveConfigNode(value[key], state, context)
+    result[key] = resolveConfigNode(value[key], state, resolveContext)
   }
 
   return result
 }
 
 export const resolveTokenConfig = <T>(
-  config: unknown,
+  tokens: unknown,
   state: ReadonlySet<string>,
   context: TokenResolveContext
-): T => resolveConfigNode(config, state, context) as T
+): T => resolveConfigNode(tokens, state, { ...context, state }) as T

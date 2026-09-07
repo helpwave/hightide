@@ -5,14 +5,15 @@ import type { ThemeTokens } from '@helpwave/hightide-design/theme-tokens'
 import type { InputState, PressableState, PressableStateValue } from '@helpwave/hightide-design/component-tokens'
 import {
   buttonVariantMapping,
-  coloringColorVariantTokens,
   coloringStyleTokens,
+  coloringVariantTokens,
   containerLayoutTokens,
   controlLayoutTokens,
   inputColoringTokens,
   insideControlLayoutTokens,
   pressableColoringTokens,
   pressableStateLayerTintTokens,
+  semanticTokens,
   tintedSurfaceTokens,
   touchTargetSizeTokens,
   withAppearanceTokens,
@@ -40,15 +41,20 @@ export const resolveColoringColorVariant = (params: {
   colorPair: ColorPairToken,
   variant: ColoringColorVariant,
 }): ColoringColorTokens => (
-  resolveResolvableValue(
-    coloringColorVariantTokens[params.variant],
+  resolveTokenConfig<ColoringColorTokens>(
+    coloringVariantTokens,
+    new Set(),
     {
       theme: params.themeTokens,
+      semantics: semanticTokens,
       params: {
         colorPair: params.colorPair,
       },
+      config: {
+        coloringColorVariant: params.variant,
+      },
     }
-  ) as ColoringColorTokens
+  )
 )
 
 export const resolveColoringStyle = (params: {
@@ -56,15 +62,20 @@ export const resolveColoringStyle = (params: {
   coloring: ColoringColorTokens,
   style: ColoringStyle,
 }): ColoringToken => (
-  resolveResolvableValue(
-    coloringStyleTokens[params.style],
+  resolveTokenConfig<ColoringToken>(
+    coloringStyleTokens,
+    new Set(),
     {
       theme: params.themeTokens,
+      semantics: semanticTokens,
       params: {
         coloring: params.coloring,
       },
+      config: {
+        coloringStyle: params.style,
+      },
     }
-  ) as ColoringToken
+  )
 )
 
 export const mapButtonVariant = (
@@ -179,23 +190,24 @@ export const resolvePressableColoring = (params: {
     }),
     style,
   })
-  const states = new Set<ButtonVariant | PressableStateValue | 'tonal'>([
+  const states = new Set<ButtonVariant | PressableStateValue>([
     ...params.state,
     params.variant,
   ])
-
-  if (colorVariant === 'tonal') {
-    states.add('tonal')
-  }
 
   return resolveTokenConfig<PressableColoringTokens>(
     pressableColoringTokens,
     states,
     {
       theme: params.themeTokens,
+      semantics: semanticTokens,
       params: {
         coloring: params.coloring,
         disabledColoring,
+      },
+      config: {
+        coloringColorVariant: colorVariant,
+        coloringStyle: style,
       },
     }
   )

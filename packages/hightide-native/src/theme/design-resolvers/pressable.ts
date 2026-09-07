@@ -1,38 +1,28 @@
 import type { ColorToken } from '@helpwave/hightide-design/primitive-tokens'
 import { HexColorUtils } from '@helpwave/hightide-design/utils'
-import type { TypographyStyleToken } from '@helpwave/hightide-design/theme-tokens'
 import {
   pressableTokens,
   toButtonIconSize,
+  tokenVariable,
+  type PressableButtonTokenParams,
   type PressableStateValue,
   type PressableTokenResolver,
   type PressableTokens
 } from '@helpwave/hightide-design/component-tokens'
 import {
-  toTypographySize,
-  type ControlElementLayoutToken,
-  type PressableColoringTokens
+  semanticTokens,
+  toTypographySize
 } from '@helpwave/hightide-design/semantic-tokens'
-import { resolveTokenConfig } from '../static-resolve/resolve'
-import {
-  resolveColoringColorVariant,
-  resolveColoringStyle,
-  resolvePressableColoring,
-  resolvePressableStateLayerTint
-} from './semantic'
+import { resolveResolvableValue, resolveTokenConfig, type TokenResolveContext } from '../static-resolve/resolve'
+import { resolvePressableStateLayerTint } from './semantic'
 import { iconTokenResolver } from './icon'
 
 type PressableTokenState = PressableStateValue | 'outlined' | 'additionalHorizontalPadding'
 
-type PressableParams = {
-  layout: ControlElementLayoutToken,
-  coloring: PressableColoringTokens,
-  tint: ColorToken,
-  textStyle: TypographyStyleToken,
-  iconSize: number,
-  iconStrokeWidth: number,
-  gap: number,
-}
+type PressableParams = Pick<
+  PressableButtonTokenParams,
+  'layout' | 'tint' | 'textStyle' | 'iconSize' | 'iconStrokeWidth' | 'gap' | 'colorPair'
+>
 
 export const pressableTokenResolver: PressableTokenResolver = ({
   themeTokens,
@@ -52,26 +42,6 @@ export const pressableTokenResolver: PressableTokenResolver = ({
         onColor: themeTokens.color.surface.color,
       }
   )
-  const coloring = resolveColoringStyle({
-    themeTokens,
-    coloring: resolveColoringColorVariant({
-      themeTokens,
-      colorPair,
-      variant: coloringColorVariant,
-    }),
-    style: coloringStyle,
-  })
-  const resolved = resolvePressableColoring({
-    themeTokens,
-    coloring,
-    variant: coloringStyle === 'filled' ? 'filled' : 'foreground',
-    state,
-  })
-  const tint = resolvePressableStateLayerTint({
-    themeTokens,
-    states: state,
-    color: coloring.foreground,
-  })
   const layout = semanticResolvers.controlLayout({ themeTokens, size })
   const textStyle = themeTokens.typography.label[toTypographySize(size)]
   const iconSizeTokens = iconTokenResolver({
@@ -80,8 +50,32 @@ export const pressableTokenResolver: PressableTokenResolver = ({
     overrides: { size: toButtonIconSize(size) },
   })
   const states = new Set<PressableTokenState>(state)
+  const params: PressableParams = {
+    layout,
+    tint: HexColorUtils.transparent,
+    textStyle,
+    iconSize: iconSizeTokens.size ?? themeTokens.icongraphy.sizes.md,
+    iconStrokeWidth: iconSizeTokens.strokeWidth ?? themeTokens.icongraphy.strokeWidth,
+    gap: themeTokens.spacing[size],
+    colorPair,
+  }
+  const context: TokenResolveContext = {
+    theme: themeTokens,
+    semantics: semanticTokens,
+    params,
+    config: {
+      coloringColorVariant,
+      coloringStyle,
+    },
+    state: states,
+  }
 
-  if (resolved.outline !== HexColorUtils.transparent) {
+  const outline = resolveResolvableValue(
+    tokenVariable('semantics.pressableColoring.outline'),
+    context
+  ) as ColorToken
+
+  if (outline !== HexColorUtils.transparent) {
     states.add('outlined')
   }
 
@@ -89,20 +83,19 @@ export const pressableTokenResolver: PressableTokenResolver = ({
     states.add('additionalHorizontalPadding')
   }
 
+  const foreground = resolveResolvableValue(
+    tokenVariable('semantics.coloringStyle.foreground'),
+    context
+  ) as ColorToken
+  params.tint = resolvePressableStateLayerTint({
+    themeTokens,
+    states: state,
+    color: foreground,
+  })
+
   return resolveTokenConfig<PressableTokens>(
     pressableTokens,
     states,
-    {
-      theme: themeTokens,
-      params: {
-        layout,
-        coloring: resolved,
-        tint,
-        textStyle,
-        iconSize: iconSizeTokens.size ?? themeTokens.icongraphy.sizes.md,
-        iconStrokeWidth: iconSizeTokens.strokeWidth ?? themeTokens.icongraphy.strokeWidth,
-        gap: themeTokens.spacing[size],
-      } satisfies PressableParams,
-    }
+    context
   )
 }

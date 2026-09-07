@@ -1,39 +1,32 @@
 import type { ColorToken } from '@helpwave/hightide-design/primitive-tokens'
-import type { TypographyStyleToken } from '@helpwave/hightide-design/theme-tokens'
+import { HexColorUtils } from '@helpwave/hightide-design/utils'
 import {
   buttonTokens,
   toButtonIconSize,
+  tokenVariable,
   type ButtonTokenResolver,
   type ButtonTokens,
+  type PressableButtonTokenParams,
   type PressableStateValue
 } from '@helpwave/hightide-design/component-tokens'
 import {
+  semanticTokens,
   toTypographySize,
-  type ButtonVariant,
-  type ControlElementLayoutToken,
-  type PressableColoringTokens
+  type ButtonVariant
 } from '@helpwave/hightide-design/semantic-tokens'
-import { resolveTokenConfig } from '../static-resolve/resolve'
+import { resolveResolvableValue, resolveTokenConfig, type TokenResolveContext } from '../static-resolve/resolve'
 import {
   mapButtonVariant,
-  resolveColoringColorVariant,
-  resolveColoringStyle,
-  resolvePressableColoring,
   resolvePressableStateLayerTint
 } from './semantic'
 import { iconTokenResolver } from './icon'
 
 type ButtonTokenState = PressableStateValue | ButtonVariant
 
-type ButtonParams = {
-  layout: ControlElementLayoutToken,
-  coloring: PressableColoringTokens,
-  tint: ColorToken,
-  textStyle: TypographyStyleToken,
-  iconSize: number,
-  iconStrokeWidth: number,
-  gap: number,
-}
+type ButtonParams = Pick<
+  PressableButtonTokenParams,
+  'layout' | 'tint' | 'textStyle' | 'iconSize' | 'iconStrokeWidth' | 'gap' | 'colorPair'
+>
 
 export const buttonTokenResolver: ButtonTokenResolver = ({
   themeTokens,
@@ -44,26 +37,7 @@ export const buttonTokenResolver: ButtonTokenResolver = ({
   const size = overrides.size ?? 'md'
   const variant = overrides.variant ?? 'filled'
   const { colorVariant, style } = mapButtonVariant(variant)
-  const coloring = resolveColoringStyle({
-    themeTokens,
-    coloring: resolveColoringColorVariant({
-      themeTokens,
-      colorPair: overrides.color ?? themeTokens.color.primary,
-      variant: colorVariant,
-    }),
-    style,
-  })
-  const resolved = resolvePressableColoring({
-    themeTokens,
-    coloring,
-    variant,
-    state,
-  })
-  const tint = resolvePressableStateLayerTint({
-    themeTokens,
-    states: state,
-    color: coloring.foreground,
-  })
+  const colorPair = overrides.color ?? themeTokens.color.primary
   const layout = semanticResolvers.controlLayout({
     themeTokens,
     size,
@@ -77,21 +51,38 @@ export const buttonTokenResolver: ButtonTokenResolver = ({
     },
   })
   const states = new Set<ButtonTokenState>([...state, variant])
+  const params: ButtonParams = {
+    layout,
+    tint: HexColorUtils.transparent,
+    textStyle,
+    iconSize: iconSizeTokens.size ?? themeTokens.icongraphy.sizes.md,
+    iconStrokeWidth: iconSizeTokens.strokeWidth ?? themeTokens.icongraphy.strokeWidth,
+    gap: themeTokens.spacing[size],
+    colorPair,
+  }
+  const context: TokenResolveContext = {
+    theme: themeTokens,
+    semantics: semanticTokens,
+    params,
+    config: {
+      coloringColorVariant: colorVariant,
+      coloringStyle: style,
+    },
+    state: states,
+  }
+  const foreground = resolveResolvableValue(
+    tokenVariable('semantics.coloringStyle.foreground'),
+    context
+  ) as ColorToken
+  params.tint = resolvePressableStateLayerTint({
+    themeTokens,
+    states: state,
+    color: foreground,
+  })
 
   return resolveTokenConfig<ButtonTokens>(
     buttonTokens,
     states,
-    {
-      theme: themeTokens,
-      params: {
-        layout,
-        coloring: resolved,
-        tint,
-        textStyle,
-        iconSize: iconSizeTokens.size ?? themeTokens.icongraphy.sizes.md,
-        iconStrokeWidth: iconSizeTokens.strokeWidth ?? themeTokens.icongraphy.strokeWidth,
-        gap: themeTokens.spacing[size],
-      } satisfies ButtonParams,
-    }
+    context
   )
 }

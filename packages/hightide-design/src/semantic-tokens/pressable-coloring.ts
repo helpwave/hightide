@@ -2,57 +2,109 @@ import {
   stateful,
   tokenColorBlend,
   tokenColorOpacity,
+  tokenParameter,
   tokenPath,
   tokenValue,
+  tokenVariable,
   whenState
 } from '../component-tokens/builders'
 import type { ResolvableColor } from '../component-tokens/resolvable'
 import { HexColorUtils } from '../utils/hex'
+import type { SemanticColoringConfig } from './types'
+
+const coloringBackground = tokenParameter(
+  'params.coloring.background',
+  tokenVariable('semantics.coloringStyle.background')
+)
+const coloringForeground = tokenParameter(
+  'params.coloring.foreground',
+  tokenVariable('semantics.coloringStyle.foreground')
+)
+const coloringAccent = tokenParameter(
+  'params.coloring.accent',
+  tokenVariable('semantics.coloringStyle.accent')
+)
+
+const disabledFilledBackground = tokenParameter(
+  'params.disabledColoring.background',
+  tokenVariable('theme.color.disabled.color')
+)
+const disabledForegroundStyleBackground = tokenParameter(
+  'params.disabledColoring.background',
+  { value: HexColorUtils.transparent }
+)
+const disabledFilledForeground = tokenParameter(
+  'params.disabledColoring.foreground',
+  tokenVariable('theme.color.disabled.onColor')
+)
+const disabledForegroundStyleForeground = tokenParameter(
+  'params.disabledColoring.foreground',
+  tokenVariable('theme.color.disabled.color')
+)
+
+const disabledTonalBackground = tokenColorBlend(
+  tokenVariable('theme.color.surface.color'),
+  tokenColorOpacity(
+    tokenVariable('theme.color.disabled.color'),
+    tokenValue(0.8)
+  )
+)
+const disabledTonalForeground = tokenColorBlend(
+  tokenVariable('theme.color.surface.onColor'),
+  tokenColorOpacity(
+    tokenVariable('theme.color.disabled.onColor'),
+    tokenValue(0.8)
+  )
+)
 
 export const pressableColoringTokens = {
-  background: stateful(
-    tokenPath('params.coloring.background'),
+  background: stateful<string, ResolvableColor<string, string>, SemanticColoringConfig>(
+    coloringBackground,
     [
-      whenState(['disabled'], tokenPath('params.disabledColoring.background'), ['tonal']),
+      whenState(['disabled'], disabledFilledBackground, undefined, { coloringStyle: 'filled' }),
       whenState(
-        ['disabled', 'tonal'],
-        tokenColorBlend(
-          tokenPath('theme.color.surface.color'),
-          tokenColorOpacity(
-            tokenPath('theme.color.disabled.color'),
-            tokenValue(0.8)
-          )
-        )
+        ['disabled'],
+        disabledForegroundStyleBackground,
+        undefined,
+        { coloringStyle: 'foreground' }
+      ),
+      whenState(
+        ['disabled'],
+        disabledTonalBackground,
+        undefined,
+        { coloringColorVariant: 'tonal' }
       ),
     ]
   ),
-  foreground: stateful(
-    tokenPath('params.coloring.foreground'),
+  foreground: stateful<string, ResolvableColor<string, string>, SemanticColoringConfig>(
+    coloringForeground,
     [
-      whenState(['disabled'], tokenPath('params.disabledColoring.foreground'), ['tonal']),
+      whenState(['disabled'], disabledFilledForeground, undefined, { coloringStyle: 'filled' }),
       whenState(
-        ['disabled', 'tonal'],
-        tokenColorBlend(
-          tokenPath('theme.color.surface.onColor'),
-          tokenColorOpacity(
-            tokenPath('theme.color.disabled.onColor'),
-            tokenValue(0.8)
-          )
-        )
+        ['disabled'],
+        disabledForegroundStyleForeground,
+        undefined,
+        { coloringStyle: 'foreground' }
+      ),
+      whenState(
+        ['disabled'],
+        disabledTonalForeground,
+        undefined,
+        { coloringColorVariant: 'tonal' }
       ),
     ]
   ),
-  border: stateful<string, ResolvableColor<string, string>>(
+  border: stateful<string, ResolvableColor<string, string>, SemanticColoringConfig>(
     { value: HexColorUtils.transparent },
     [
-      whenState(['outlined'], tokenPath('params.coloring.accent')),
+      whenState(['outlined'], coloringAccent),
       whenState(['disabled'], { value: HexColorUtils.transparent }),
     ]
   ),
-  outline: stateful<string, ResolvableColor<string, string>>(
+  outline: stateful<string, ResolvableColor<string, string>, SemanticColoringConfig>(
     { value: HexColorUtils.transparent },
     [
-      whenState(['focusVisible'], tokenPath('params.coloring.accent')),
+      whenState(['focusVisible'], coloringAccent),
       whenState(['disabled'], { value: HexColorUtils.transparent }),
     ]
   ),
