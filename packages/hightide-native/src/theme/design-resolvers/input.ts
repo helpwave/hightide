@@ -12,7 +12,7 @@ import type {
   ControlElementLayoutToken,
   InputColoringTokens
 } from '@helpwave/hightide-design/semantic-tokens'
-import { resolveTokenConfig } from '../static-resolve/resolve'
+import { resolveConfigNode } from '../static-resolve/resolve'
 import {
   resolveInputColoring,
   resolvePressableStateLayerTint
@@ -88,9 +88,8 @@ export const inputTokenResolver: InputTokenResolver = ({
       ? themeTokens.color.negative.color
       : (overrides?.color ?? themeTokens.color.primary).color
 
-  return resolveTokenConfig<InputTokens>(
+  return resolveConfigNode<InputTokens>(
     inputTokens,
-    states,
     {
       theme: themeTokens,
       params: {
@@ -103,6 +102,7 @@ export const inputTokenResolver: InputTokenResolver = ({
         iconStrokeWidth: iconSizeTokens.strokeWidth ?? themeTokens.icongraphy.strokeWidth,
         outlineColor,
       } satisfies InputParams,
+      state: states,
     }
   )
 }

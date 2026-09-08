@@ -1,30 +1,40 @@
+import type { ColorPairToken } from '../theme-tokens/theme-tokens-config'
 import {
-  stateful,
-  tokenPath,
-  whenState
+  createTokenVariable,
+  whenState,
+  statefulField
 } from '../component-tokens/builders'
-import type { ResolvableColor } from '../component-tokens/resolvable'
+import type { ColorToken } from '../primitive-tokens/color'
+import type { ComponentTokenConfig } from '../component-tokens/token-config'
+import type { TokenContext } from '../component-tokens/token-context'
+import type { InputColoringTokens } from './types'
 import { HexColorUtils } from '../utils/hex'
 
+export type InputColoringParams = {
+  accentPair: ColorPairToken,
+}
+
+const tokenVariable = createTokenVariable<InputColoringParams>()
+
 export const inputColoringTokens = {
-  background: stateful(
-    tokenPath('theme.color.surfaceVariant.color'),
+  background: statefulField<ColorToken>(
+    tokenVariable('theme.color.surfaceVariant.color'),
     [
-      whenState(['disabled'], tokenPath('theme.color.disabled.color')),
+      whenState(['disabled'], tokenVariable('theme.color.disabled.color')),
     ]
   ),
-  text: stateful(
-    tokenPath('theme.color.surface.onColor'),
+  text: statefulField<ColorToken>(
+    tokenVariable('theme.color.surface.onColor'),
     [
-      whenState(['disabled'], tokenPath('theme.color.disabled.onColor')),
+      whenState(['disabled'], tokenVariable('theme.color.disabled.onColor')),
     ]
   ),
-  border: stateful<string, ResolvableColor<string, string>>(
-    tokenPath('theme.color.border'),
+  border: statefulField<ColorToken, TokenContext<InputColoringParams>>(
+    tokenVariable('theme.color.border'),
     [
       whenState(['disabled'], { value: HexColorUtils.transparent }),
-      whenState(['invalid'], tokenPath('theme.color.negative.color'), ['disabled']),
-      whenState(['focused'], tokenPath('params.accentPair.color'), ['disabled', 'invalid']),
+      whenState(['invalid'], tokenVariable('theme.color.negative.color'), ['disabled']),
+      whenState(['focused'], tokenVariable('params.accentPair.color'), ['disabled', 'invalid']),
     ]
   ),
-} as const
+} as const satisfies ComponentTokenConfig<InputColoringTokens, TokenContext<InputColoringParams>>

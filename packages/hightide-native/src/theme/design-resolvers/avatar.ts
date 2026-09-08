@@ -13,7 +13,7 @@ import {
   type ContainerTokens,
   type TextStyleTokens
 } from '@helpwave/hightide-design/component-tokens'
-import { resolveTokenConfig } from '../static-resolve/resolve'
+import { resolveConfigNode } from '../static-resolve/resolve'
 import { iconTokenResolver } from './icon'
 
 type AvatarTokenState = 'grouped'
@@ -45,9 +45,8 @@ export const avatarTokenResolver: AvatarTokenResolver = ({
     states.add('grouped')
   }
 
-  return resolveTokenConfig<AvatarTokens>(
+  return resolveConfigNode<AvatarTokens>(
     avatarTokens,
-    states,
     {
       theme: themeTokens,
       params: {
@@ -57,6 +56,7 @@ export const avatarTokenResolver: AvatarTokenResolver = ({
         iconSize: iconTokens.size ?? themeTokens.icongraphy.sizes[size],
         iconStrokeWidth: iconTokens.strokeWidth ?? themeTokens.icongraphy.strokeWidth,
       } satisfies AvatarParams,
+      state: states,
     }
   )
 }
@@ -70,14 +70,14 @@ export const avatarWithStatusTokenResolver: AvatarWithStatusTokenResolver = ({
 }) => {
   const size = overrides?.size ?? 'md'
   const status = state.status ?? 'unknown'
-  const resolved = resolveTokenConfig<Pick<AvatarWithStatusTokens, 'statusDot'>>(
+  const resolved = resolveConfigNode<Pick<AvatarWithStatusTokens, 'statusDot'>>(
     avatarWithStatusTokens,
-    new Set<AvatarWithStatusTokenState>([status]),
     {
       theme: themeTokens,
       params: {
         dimension: themeTokens.icongraphy.sizes[size],
       },
+      state: new Set<AvatarWithStatusTokenState>([status]),
     }
   )
 
@@ -105,20 +105,20 @@ export const avatarGroupTokenResolver: AvatarGroupTokenResolver = ({
   const size = overrides?.size ?? 'md'
   const dimension = themeTokens.icongraphy.sizes[size]
   const visibleCount = Math.min(config.groupCount ?? avatarGroupMaxShown, avatarGroupMaxShown)
-  const resolved = resolveTokenConfig<{
+  const resolved = resolveConfigNode<{
     container: ContainerTokens,
     avatarStack: ContainerTokens,
     text: TextStyleTokens,
     avatarOverrideContainer: ContainerTokens,
   }>(
     avatarGroupTokens,
-    new Set(),
     {
       theme: themeTokens,
       params: {
         dimension,
         visibleCount,
       } satisfies AvatarGroupParams,
+      state: new Set(),
     }
   )
 

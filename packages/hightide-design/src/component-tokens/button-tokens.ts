@@ -12,8 +12,9 @@ import {
 } from './builders'
 import type { ComponentTokenResolver } from './component-token-resolver'
 import type { ContainerTokens } from './container-tokens'
-import type { Resolvable } from './resolvable'
+import { elevationTokens } from './elevation-tokens'
 import type { IconTokens } from './icon-tokens'
+import type { PressableButtonTokenParams } from './pressable-button-params'
 import type { TextStyleTokens } from './text-style-tokens'
 import { type PressableState } from './pressable-tokens'
 import {
@@ -29,6 +30,11 @@ import {
   pressableButtonLineHeight,
   pressableButtonMinHeight
 } from './pressable-button-shared-tokens'
+import type { ComponentTokenConfig, ComponentTokenConfigValue } from './token-config'
+import type { TokenContext } from './token-context'
+
+export type ButtonParams = Pick<PressableButtonTokenParams, 'colorPair'>
+export type ButtonTokenContext = TokenContext<ButtonParams>
 
 export type ButtonState = PressableState
 
@@ -70,7 +76,7 @@ export const buttonTokens = {
         whenState(['disabled'], tokenValue(0.6)),
       ]
     ),
-    border: stateful<string, Resolvable<NonNullable<ContainerTokens['border']>, string, string>>(
+    border: stateful<string, ComponentTokenConfigValue<NonNullable<ContainerTokens['border']>>>(
       {
         width: {
           type: 'all',
@@ -96,7 +102,7 @@ export const buttonTokens = {
         }),
       ]
     ),
-    outline: stateful<string, Resolvable<NonNullable<ContainerTokens['outline']>, string, string>>(
+    outline: stateful<string, ComponentTokenConfigValue<NonNullable<ContainerTokens['outline']>>>(
       {
         width: tokenValue(0),
         offset: tokenValue(0),
@@ -114,10 +120,10 @@ export const buttonTokens = {
         }),
       ]
     ),
-    shadow: stateful(undefined,
+    shadow: stateful<string, ComponentTokenConfigValue<NonNullable<ContainerTokens['shadow']>> | undefined>(undefined,
       [
-        whenState(['elevated'], tokenVariable('theme.elevation.level1'), ['hovered']),
-        whenState(['elevated', 'hovered'], tokenVariable('theme.elevation.level2')),
+        whenState(['elevated'], elevationTokens('level1'), ['hovered']),
+        whenState(['elevated', 'hovered'], elevationTokens('level2')),
       ]),
     size: {
       minHeight: pressableButtonMinHeight,
@@ -155,4 +161,4 @@ export const buttonTokens = {
     fontFamily: pressableButtonFontFamily,
     lineHeight: pressableButtonLineHeight,
   },
-} as const
+} as const satisfies ComponentTokenConfig<ButtonTokens>

@@ -10,7 +10,7 @@ import {
   type ChatMessageDirection,
   type PressableStateValue
 } from '@helpwave/hightide-design/component-tokens'
-import { resolveTokenConfig } from '../../static-resolve/resolve'
+import { resolveConfigNode } from '../../static-resolve/resolve'
 import {
   resolveColoringColorVariant,
   resolveColoringStyle,
@@ -25,20 +25,24 @@ type ThemeParams = {
 export const resolveDescriptionColor = ({
   themeTokens,
 }: ThemeParams): HexColorToken => (
-  resolveTokenConfig<HexColorToken>(
+  resolveConfigNode<HexColorToken>(
     surfaceDescriptionColor,
-    new Set(),
-    { theme: themeTokens }
+    {
+      theme: themeTokens,
+      state: new Set(),
+    }
   )
 )
 
 export const resolveFadedBorder = ({
   themeTokens,
 }: ThemeParams): HexColorToken => (
-  resolveTokenConfig<HexColorToken>(
+  resolveConfigNode<HexColorToken>(
     surfaceFadedColor,
-    new Set(),
-    { theme: themeTokens }
+    {
+      theme: themeTokens,
+      state: new Set(),
+    }
   )
 )
 
@@ -95,10 +99,12 @@ export const resolveMessageCorners = (
   themeTokens: ThemeTokens,
   direction?: ChatMessageDirection
 ): BorderRadiusToken => (
-  resolveTokenConfig<BorderRadiusToken>(
+  resolveConfigNode<BorderRadiusToken>(
     messageCornersTokens,
-    new Set(direction === 'outgoing' ? ['outgoing'] : []),
-    { theme: themeTokens }
+    {
+      theme: themeTokens,
+      state: new Set(direction === 'outgoing' ? ['outgoing'] : []),
+    }
   )
 )
 

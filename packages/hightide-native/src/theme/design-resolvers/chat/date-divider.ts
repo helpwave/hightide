@@ -3,16 +3,16 @@ import {
   type ChatDateDividerTokenResolver,
   type ChatDateDividerTokens
 } from '@helpwave/hightide-design/component-tokens'
-import { resolveTokenConfig } from '../../static-resolve/resolve'
+import { resolveConfigNode } from '../../static-resolve/resolve'
 
 export const chatDateDividerTokenResolver: ChatDateDividerTokenResolver = ({
   themeTokens,
 }) => (
-  resolveTokenConfig<ChatDateDividerTokens>(
+  resolveConfigNode<ChatDateDividerTokens>(
     chatDateDividerTokens,
-    new Set(),
     {
       theme: themeTokens,
+      state: new Set(),
     }
   )
 )

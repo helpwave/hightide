@@ -3,14 +3,14 @@ import {
   type CardTokenResolver,
   type CardTokens
 } from '@helpwave/hightide-design/component-tokens'
-import { resolveTokenConfig } from '../static-resolve/resolve'
+import { resolveConfigNode } from '../static-resolve/resolve'
 
 export const cardTokenResolver: CardTokenResolver = ({ themeTokens }) => (
-  resolveTokenConfig<CardTokens>(
+  resolveConfigNode<CardTokens>(
     cardTokens,
-    new Set(),
     {
       theme: themeTokens,
+      state: new Set(),
     }
   )
 )

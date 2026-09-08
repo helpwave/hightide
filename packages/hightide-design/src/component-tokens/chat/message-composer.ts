@@ -1,11 +1,12 @@
 import type { ComponentTokenResolver } from '../component-token-resolver'
 import type { ContainerTokens } from '../container-tokens'
 import type { TextStyleTokens } from '../text-style-tokens'
+import type { ComponentTokenConfig } from '../token-config'
 import { surfaceDescriptionColor, surfaceFadedColor } from './shared'
 import {
   stateful,
   tokenCalc,
-  tokenPath,
+  tokenVariable,
   tokenValue
 } from '../builders'
 
@@ -23,17 +24,17 @@ export type ChatMessageComposerTokenResolver = ComponentTokenResolver<
 
 const composerInputMaxHeight = tokenCalc(
   'max',
-  tokenPath('theme.size.md'),
+  tokenVariable('theme.size.md'),
   tokenCalc(
     'add',
     tokenCalc(
       'multiply',
-      tokenPath('theme.typography.body.md.lineHeight'),
+      tokenVariable('theme.typography.body.md.lineHeight'),
       tokenValue(8)
     ),
     tokenCalc(
       'multiply',
-      tokenPath('theme.padding.md'),
+      tokenVariable('theme.padding.md'),
       tokenValue(2)
     )
   )
@@ -41,16 +42,16 @@ const composerInputMaxHeight = tokenCalc(
 
 export const chatMessageComposerTokens = {
   container: {
-    backgroundColor: stateful(tokenPath('theme.color.surface.color')),
+    backgroundColor: stateful(tokenVariable('theme.color.surface.color')),
     padding: stateful({
       type: 'physicalAxis',
-      vertical: tokenPath('theme.padding.xl'),
-      horizontal: tokenPath('theme.padding.xl'),
+      vertical: tokenVariable('theme.padding.xl'),
+      horizontal: tokenVariable('theme.padding.xl'),
     }),
     border: stateful({
       width: {
         type: 'physicalSide',
-        top: tokenPath('theme.borderWidth.thin'),
+        top: tokenVariable('theme.borderWidth.thin'),
       },
       color: {
         type: 'physicalSide',
@@ -61,29 +62,29 @@ export const chatMessageComposerTokens = {
       direction: 'horizontal',
       crossAxisAlignment: 'end',
       selfCrossAxisAlignment: 'stretch',
-      gap: tokenPath('theme.spacing.md'),
+      gap: tokenVariable('theme.spacing.md'),
     }),
   },
   input: {
-    backgroundColor: stateful(tokenPath('theme.color.surfaceVariant.color')),
+    backgroundColor: stateful(tokenVariable('theme.color.surfaceVariant.color')),
     size: stateful({
-      minHeight: tokenPath('theme.size.md'),
+      minHeight: tokenVariable('theme.size.md'),
       maxHeight: composerInputMaxHeight,
     }),
     borderRadius: stateful({
       type: 'all',
-      value: tokenPath('theme.borderRadius.sm'),
+      value: tokenVariable('theme.borderRadius.sm'),
     }),
     padding: stateful({
       type: 'logicalSide',
-      blockStart: tokenPath('theme.padding.md'),
-      blockEnd: tokenPath('theme.padding.md'),
+      blockStart: tokenVariable('theme.padding.md'),
+      blockEnd: tokenVariable('theme.padding.md'),
       inlineStart: tokenCalc(
         'add',
-        tokenPath('theme.padding.md'),
-        tokenPath('theme.spacing.md')
+        tokenVariable('theme.padding.md'),
+        tokenVariable('theme.spacing.md')
       ),
-      inlineEnd: tokenPath('theme.padding.md'),
+      inlineEnd: tokenVariable('theme.padding.md'),
     }),
     layout: stateful({
       flexGrow: tokenValue(1),
@@ -91,13 +92,13 @@ export const chatMessageComposerTokens = {
     }),
   },
   text: {
-    fontSize: stateful(tokenPath('theme.typography.body.md.fontSize')),
-    fontFamily: stateful(tokenPath('theme.typography.body.md.fontFamily')),
-    lineHeight: stateful(tokenPath('theme.typography.body.md.lineHeight')),
-    fontWeight: stateful(tokenPath('theme.typography.body.md.fontWeight')),
-    color: stateful(tokenPath('theme.color.surface.onColor')),
+    fontSize: stateful(tokenVariable('theme.typography.body.md.fontSize')),
+    fontFamily: stateful(tokenVariable('theme.typography.body.md.fontFamily')),
+    lineHeight: stateful(tokenVariable('theme.typography.body.md.lineHeight')),
+    fontWeight: stateful(tokenVariable('theme.typography.body.md.fontWeight')),
+    color: stateful(tokenVariable('theme.color.surface.onColor')),
   },
   placeholder: {
     color: stateful(surfaceDescriptionColor),
   },
-} as const
+} as const satisfies ComponentTokenConfig<ChatMessageComposerTokens>

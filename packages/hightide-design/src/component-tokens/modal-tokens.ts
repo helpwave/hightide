@@ -1,6 +1,8 @@
-import { stateful, tokenPath, tokenValue } from './builders'
+import { stateful, tokenVariable, tokenValue } from './builders'
 import type { ComponentTokenResolver } from './component-token-resolver'
 import type { ContainerTokens } from './container-tokens'
+import { elevationTokens } from './elevation-tokens'
+import type { ComponentTokenConfig } from './token-config'
 
 export type ModalTokens = {
   background: ContainerTokens,
@@ -15,11 +17,11 @@ export type ModalTokenResolver = ComponentTokenResolver<
 
 export const modalTokens = {
   background: {
-    backgroundColor: stateful(tokenPath('theme.color.overlay')),
+    backgroundColor: stateful(tokenVariable('theme.color.overlay')),
     padding: stateful({
       type: 'physicalAxis',
-      vertical: tokenPath('theme.spacing.xl'),
-      horizontal: tokenPath('theme.spacing.xl'),
+      vertical: tokenVariable('theme.spacing.xl'),
+      horizontal: tokenVariable('theme.spacing.xl'),
     }),
     layout: stateful({
       direction: 'vertical',
@@ -28,7 +30,7 @@ export const modalTokens = {
     }),
   },
   menu: {
-    backgroundColor: stateful(tokenPath('theme.color.surfaceVariant.color')),
+    backgroundColor: stateful(tokenVariable('theme.color.surfaceVariant.color')),
     overflow: stateful('hidden'),
     position: stateful({
       type: 'relative',
@@ -39,19 +41,19 @@ export const modalTokens = {
     }),
     borderRadius: stateful({
       type: 'all',
-      value: tokenPath('theme.borderRadius.lg'),
+      value: tokenVariable('theme.borderRadius.lg'),
     }),
     border: stateful({
       width: {
         type: 'all',
-        value: tokenPath('theme.borderWidth.thin'),
+        value: tokenVariable('theme.borderWidth.thin'),
       },
       color: {
         type: 'all',
-        value: tokenPath('theme.color.border'),
+        value: tokenVariable('theme.color.border'),
       },
     }),
-    shadow: stateful(tokenPath('theme.elevation.level4')),
+    shadow: stateful(elevationTokens('level4')),
   },
   closeButton: {
     position: stateful({
@@ -62,8 +64,8 @@ export const modalTokens = {
     }),
     padding: stateful({
       type: 'physicalSide',
-      top: tokenPath('theme.padding.md'),
-      right: tokenPath('theme.padding.md'),
+      top: tokenVariable('theme.padding.md'),
+      right: tokenVariable('theme.padding.md'),
     }),
   },
-} as const
+} as const satisfies ComponentTokenConfig<ModalTokens>

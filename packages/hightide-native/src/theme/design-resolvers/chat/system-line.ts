@@ -4,7 +4,7 @@ import {
   type ChatSystemLineTokenResolver,
   type ChatSystemLineTokens
 } from '@helpwave/hightide-design/component-tokens'
-import { resolveTokenConfig } from '../../static-resolve/resolve'
+import { resolveConfigNode } from '../../static-resolve/resolve'
 import { resolveAccentColoring } from './shared'
 
 type ChatSystemLineParams = {
@@ -20,14 +20,14 @@ export const chatSystemLineTokenResolver: ChatSystemLineTokenResolver = ({
     color: overrides.color,
   })
 
-  return resolveTokenConfig<ChatSystemLineTokens>(
+  return resolveConfigNode<ChatSystemLineTokens>(
     chatSystemLineTokens,
-    new Set(),
     {
       theme: themeTokens,
       params: {
         accentForeground: accentText.foreground,
       } satisfies ChatSystemLineParams,
+      state: new Set(),
     }
   )
 }

@@ -46,7 +46,8 @@
     "init": "node -e \"process.exit(0)\"",
     "build": "node -e \"process.exit(0)\"",
     "lint": "eslint .",
-    "test": "node -e \"process.exit(0)\""
+    "test": "node -e \"process.exit(0)\"",
+    "write-token-bundle": "node --experimental-strip-types --disable-warning=ExperimentalWarning --import ./scripts/register-ts-ext.mjs scripts/write-token-bundle.ts"
   },
   "devDependencies": {
     "@helpwave/eslint-config": "0.0.11",

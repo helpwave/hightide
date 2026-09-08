@@ -1,6 +1,7 @@
+import type { ColorToken } from '../../primitive-tokens/color'
 import type { ComponentTokenResolver } from '../component-token-resolver'
 import type { ContainerTokens } from '../container-tokens'
-import type { Resolvable } from '../resolvable'
+import { elevationTokens } from '../elevation-tokens'
 import type { IconTokens } from '../icon-tokens'
 import type { TextStyleTokens } from '../text-style-tokens'
 import {
@@ -12,10 +13,12 @@ import {
   tokenCalc,
   tokenColorBlend,
   tokenColorOpacity,
-  tokenPath,
+  tokenVariable,
   tokenValue,
-  whenState
+  whenState,
+  statefulField
 } from '../builders'
+import type { ComponentTokenConfigValue, ComponentTokenConfig } from '../token-config'
 
 export type ChatMessageBubbleComponentResolverProps = {
   config: {
@@ -40,32 +43,32 @@ export type ChatMessageBubbleTokenResolver = ComponentTokenResolver<
 
 const bubbleMaxWidth = tokenCalc(
   'multiply',
-  tokenPath('theme.size.md'),
+  tokenVariable('theme.size.md'),
   tokenValue(16)
 )
 
 const outgoingDescription = tokenColorBlend(
-  tokenPath('theme.color.primary.color'),
+  tokenVariable('theme.color.primary.color'),
   tokenColorOpacity(
-    tokenPath('theme.color.primary.onColor'),
-    tokenPath('theme.config.appearancePercentages.subtle')
+    tokenVariable('theme.color.primary.onColor'),
+    tokenVariable('theme.config.appearancePercentages.subtle')
   )
 )
 
 const incomingDescription = tokenColorBlend(
-  tokenPath('theme.color.surface.color'),
+  tokenVariable('theme.color.surface.color'),
   tokenColorOpacity(
-    tokenPath('theme.color.surface.onColor'),
-    tokenPath('theme.config.appearancePercentages.subtle')
+    tokenVariable('theme.color.surface.onColor'),
+    tokenVariable('theme.config.appearancePercentages.subtle')
   )
 )
 
 export const chatMessageBubbleTokens = {
   container: {
-    backgroundColor: stateful(
-      tokenPath('theme.color.surface.color'),
+    backgroundColor: statefulField<ColorToken>(
+      tokenVariable('theme.color.surface.color'),
       [
-        whenState(['outgoing'], tokenPath('theme.color.primary.color')),
+        whenState(['outgoing'], tokenVariable('theme.color.primary.color')),
       ]
     ),
     size: stateful({
@@ -74,32 +77,32 @@ export const chatMessageBubbleTokens = {
     borderRadius: messageCornersTokens,
     padding: stateful({
       type: 'physicalSide',
-      left: tokenPath('theme.padding.xl'),
-      right: tokenPath('theme.padding.xl'),
-      top: tokenPath('theme.padding.lg'),
-      bottom: tokenPath('theme.padding.md'),
+      left: tokenVariable('theme.padding.xl'),
+      right: tokenVariable('theme.padding.xl'),
+      top: tokenVariable('theme.padding.lg'),
+      bottom: tokenVariable('theme.padding.md'),
     }),
-    margin: stateful<string, Resolvable<NonNullable<ContainerTokens['margin']>, string, string>>({
+    margin: stateful<string, ComponentTokenConfigValue<NonNullable<ContainerTokens['margin']>>>({
       type: 'logicalSide',
-      inlineEnd: tokenPath('theme.spacing.xxl'),
+      inlineEnd: tokenVariable('theme.spacing.xxl'),
     }, [
       whenState(['outgoing'], {
         type: 'logicalSide',
-        inlineStart: tokenPath('theme.spacing.xxl'),
+        inlineStart: tokenVariable('theme.spacing.xxl'),
       }),
     ]),
     layout: stateful({
-      gap: tokenPath('theme.spacing.sm'),
+      gap: tokenVariable('theme.spacing.sm'),
       direction: 'vertical',
       selfCrossAxisAlignment: 'start',
     }, [
       whenState(['outgoing'], {
-        gap: tokenPath('theme.spacing.sm'),
+        gap: tokenVariable('theme.spacing.sm'),
         direction: 'vertical',
         selfCrossAxisAlignment: 'end',
       }),
     ]),
-    shadow: stateful(tokenPath('theme.elevation.level1')),
+    shadow: stateful(elevationTokens('level1')),
   },
   body: {
     layout: stateful({
@@ -107,14 +110,14 @@ export const chatMessageBubbleTokens = {
     }),
   },
   bodyText: {
-    fontSize: stateful(tokenPath('theme.typography.body.md.fontSize')),
-    fontFamily: stateful(tokenPath('theme.typography.body.md.fontFamily')),
-    lineHeight: stateful(tokenPath('theme.typography.body.md.lineHeight')),
-    fontWeight: stateful(tokenPath('theme.fontWeights.light')),
-    color: stateful(
-      tokenPath('theme.color.surface.onColor'),
+    fontSize: stateful(tokenVariable('theme.typography.body.md.fontSize')),
+    fontFamily: stateful(tokenVariable('theme.typography.body.md.fontFamily')),
+    lineHeight: stateful(tokenVariable('theme.typography.body.md.lineHeight')),
+    fontWeight: stateful(tokenVariable('theme.fontWeights.light')),
+    color: statefulField<ColorToken>(
+      tokenVariable('theme.color.surface.onColor'),
       [
-        whenState(['outgoing'], tokenPath('theme.color.primary.onColor')),
+        whenState(['outgoing'], tokenVariable('theme.color.primary.onColor')),
       ]
     ),
   },
@@ -123,7 +126,7 @@ export const chatMessageBubbleTokens = {
       direction: 'horizontal',
       mainAxisAlignment: 'end',
       crossAxisAlignment: 'center',
-      gap: tokenPath('theme.spacing.md'),
+      gap: tokenVariable('theme.spacing.md'),
       selfCrossAxisAlignment: 'end',
     }),
   },
@@ -131,23 +134,23 @@ export const chatMessageBubbleTokens = {
     layout: stateful({
       direction: 'horizontal',
       crossAxisAlignment: 'center',
-      gap: tokenPath('theme.spacing.xs'),
+      gap: tokenVariable('theme.spacing.xs'),
     }),
   },
   metaDataText: {
-    fontSize: stateful(tokenPath('theme.typography.body.sm.fontSize')),
-    fontFamily: stateful(tokenPath('theme.typography.body.sm.fontFamily')),
-    lineHeight: stateful(tokenPath('theme.typography.body.sm.lineHeight')),
-    fontWeight: stateful(tokenPath('theme.fontWeights.medium')),
-    color: stateful(incomingDescription, [
+    fontSize: stateful(tokenVariable('theme.typography.body.sm.fontSize')),
+    fontFamily: stateful(tokenVariable('theme.typography.body.sm.fontFamily')),
+    lineHeight: stateful(tokenVariable('theme.typography.body.sm.lineHeight')),
+    fontWeight: stateful(tokenVariable('theme.fontWeights.medium')),
+    color: statefulField<ColorToken>(incomingDescription, [
       whenState(['outgoing'], outgoingDescription),
     ]),
   },
   metaDataIcon: {
-    size: stateful(tokenPath('theme.icongraphy.sizes.xs')),
-    strokeWidth: stateful(tokenPath('theme.icongraphy.strokeWidth')),
-    color: stateful(incomingDescription, [
+    size: stateful(tokenVariable('theme.icongraphy.sizes.xs')),
+    strokeWidth: stateful(tokenVariable('theme.icongraphy.strokeWidth')),
+    color: statefulField<ColorToken>(incomingDescription, [
       whenState(['outgoing'], outgoingDescription),
     ]),
   },
-} as const
+} as const satisfies ComponentTokenConfig<ChatMessageBubbleTokens>

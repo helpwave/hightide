@@ -2,7 +2,7 @@ import type { AvatarOverrideTokens } from '../avatar-tokens'
 import { HexColorUtils } from '../../utils/hex'
 import type { ComponentTokenResolver } from '../component-token-resolver'
 import type { ContainerTokens } from '../container-tokens'
-import type { Resolvable } from '../resolvable'
+import type { ComponentTokenConfig, ComponentTokenConfigValue } from '../token-config'
 import { type IconTokens } from '../icon-tokens'
 import type { PressableOverrideTokens } from '../pressable-tokens'
 import type { TextStyleTokens } from '../text-style-tokens'
@@ -13,9 +13,10 @@ import {
 import {
   stateful,
   tokenCalc,
-  tokenPath,
+  tokenVariable,
   tokenValue,
-  whenState
+  whenState,
+  statefulField
 } from '../builders'
 
 export type ChatConversationRowState = {
@@ -55,18 +56,18 @@ const conversationAvatarSize = tokenCalc(
   'max',
   tokenCalc(
     'add',
-    tokenPath('theme.typography.body.md.lineHeight'),
+    tokenVariable('theme.typography.body.md.lineHeight'),
     tokenCalc(
       'add',
       tokenCalc(
         'max',
-        tokenPath('theme.typography.body.sm.lineHeight'),
-        tokenPath('theme.icongraphy.sizes.sm')
+        tokenVariable('theme.typography.body.sm.lineHeight'),
+        tokenVariable('theme.icongraphy.sizes.sm')
       ),
-      tokenPath('theme.spacing.xs')
+      tokenVariable('theme.spacing.xs')
     )
   ),
-  tokenPath('theme.icongraphy.sizes.lg')
+  tokenVariable('theme.icongraphy.sizes.lg')
 )
 
 export const chatConversationRowTokens = {
@@ -77,12 +78,12 @@ export const chatConversationRowTokens = {
       coloringColorVariant: 'transparent',
     },
     container: {
-      backgroundColor: stateful<string, Resolvable<NonNullable<ContainerTokens['backgroundColor']>, string, string>>(
+      backgroundColor: stateful<string, ComponentTokenConfigValue<NonNullable<ContainerTokens['backgroundColor']>>>(
         {
           value: HexColorUtils.transparent,
         },
         [
-          whenState(['selected'], tokenPath('theme.color.background.color')),
+          whenState(['selected'], tokenVariable('theme.color.background.color')),
         ]
       ),
       borderRadius: stateful({
@@ -91,10 +92,10 @@ export const chatConversationRowTokens = {
       }),
       padding: stateful({
         type: 'physicalAxis',
-        vertical: tokenPath('theme.padding.xl'),
-        horizontal: tokenPath('theme.spacing.lg'),
+        vertical: tokenVariable('theme.padding.xl'),
+        horizontal: tokenVariable('theme.spacing.lg'),
       }),
-      border: stateful<string, Resolvable<NonNullable<ContainerTokens['border']>, string, string>>({
+      border: stateful<string, ComponentTokenConfigValue<NonNullable<ContainerTokens['border']>>>({
         width: {
           type: 'physicalSide',
           left: tokenValue(0),
@@ -109,18 +110,18 @@ export const chatConversationRowTokens = {
         whenState(['selected'], {
           width: {
             type: 'physicalSide',
-            left: tokenPath('theme.borderWidth.thick'),
+            left: tokenVariable('theme.borderWidth.thick'),
           },
           color: {
             type: 'physicalSide',
-            left: tokenPath('theme.color.primary.color'),
+            left: tokenVariable('theme.color.primary.color'),
           },
         }),
       ]),
       layout: stateful({
         direction: 'horizontal',
         crossAxisAlignment: 'center',
-        gap: tokenPath('theme.spacing.md'),
+        gap: tokenVariable('theme.spacing.md'),
       }),
     },
     stateLayer: {
@@ -133,7 +134,7 @@ export const chatConversationRowTokens = {
   contentContainer: {
     layout: stateful({
       direction: 'vertical',
-      gap: tokenPath('theme.spacing.xs'),
+      gap: tokenVariable('theme.spacing.xs'),
       flexGrow: tokenValue(1),
     }),
   },
@@ -142,7 +143,7 @@ export const chatConversationRowTokens = {
       direction: 'horizontal',
       crossAxisAlignment: 'center',
       mainAxisAlignment: 'space-between',
-      gap: tokenPath('theme.spacing.md'),
+      gap: tokenVariable('theme.spacing.md'),
     }),
   },
   messageRow: {
@@ -152,51 +153,50 @@ export const chatConversationRowTokens = {
       flexGrow: tokenValue(1),
       flexShrink: tokenValue(1),
       mainAxisAlignment: 'space-between',
-      gap: tokenPath('theme.spacing.sm'),
+      gap: tokenVariable('theme.spacing.sm'),
     }),
   },
   title: {
-    fontSize: stateful(tokenPath('theme.typography.body.md.fontSize')),
-    fontFamily: stateful(tokenPath('theme.typography.body.md.fontFamily')),
-    lineHeight: stateful(tokenPath('theme.typography.body.md.lineHeight')),
-    fontWeight: stateful(
-      tokenPath('theme.fontWeights.medium'),
+    fontSize: stateful(tokenVariable('theme.typography.body.md.fontSize')),
+    fontFamily: stateful(tokenVariable('theme.typography.body.md.fontFamily')),
+    lineHeight: stateful(tokenVariable('theme.typography.body.md.lineHeight')),
+    fontWeight: statefulField<number>(
+      tokenVariable('theme.fontWeights.medium'),
       [
-        whenState(['unread'], tokenPath('theme.fontWeights.bold')),
+        whenState(['unread'], tokenVariable('theme.fontWeights.bold')),
       ]
     ),
-    color: stateful(tokenPath('theme.color.surface.onColor')),
+    color: stateful(tokenVariable('theme.color.surface.onColor')),
   },
   timestamp: {
-    fontSize: stateful(tokenPath('theme.typography.body.sm.fontSize')),
-    fontFamily: stateful(tokenPath('theme.typography.body.sm.fontFamily')),
-    lineHeight: stateful(tokenPath('theme.typography.body.sm.lineHeight')),
-    fontWeight: stateful(
-      tokenPath('theme.fontWeights.base'),
+    fontSize: stateful(tokenVariable('theme.typography.body.sm.fontSize')),
+    fontFamily: stateful(tokenVariable('theme.typography.body.sm.fontFamily')),
+    lineHeight: stateful(tokenVariable('theme.typography.body.sm.lineHeight')),
+    fontWeight: statefulField<number>(
+      tokenVariable('theme.fontWeights.base'),
       [
-        whenState(['unread'], tokenPath('theme.fontWeights.medium')),
+        whenState(['unread'], tokenVariable('theme.fontWeights.medium')),
       ]
     ),
     color: stateful(surfaceDescriptionColor),
-    flexShrink: stateful(tokenValue(0)),
   },
   preview: {
-    fontSize: stateful(tokenPath('theme.typography.body.sm.fontSize')),
-    fontFamily: stateful(tokenPath('theme.typography.body.sm.fontFamily')),
-    lineHeight: stateful(tokenPath('theme.typography.body.sm.lineHeight')),
-    fontWeight: stateful(tokenPath('theme.fontWeights.light')),
+    fontSize: stateful(tokenVariable('theme.typography.body.sm.fontSize')),
+    fontFamily: stateful(tokenVariable('theme.typography.body.sm.fontFamily')),
+    lineHeight: stateful(tokenVariable('theme.typography.body.sm.lineHeight')),
+    fontWeight: stateful(tokenVariable('theme.fontWeights.light')),
     color: stateful(
       surfaceDescriptionColor,
       [
-        whenState(['unread'], tokenPath('theme.color.surface.onColor')),
+        whenState(['unread'], tokenVariable('theme.color.surface.onColor')),
       ]
     ),
   },
   unreadBadge: {
-    backgroundColor: stateful(tokenPath('theme.color.primary.color')),
+    backgroundColor: stateful(tokenVariable('theme.color.primary.color')),
     size: stateful({
-      minWidth: tokenPath('theme.icongraphy.sizes.sm'),
-      height: tokenPath('theme.icongraphy.sizes.sm'),
+      minWidth: tokenVariable('theme.icongraphy.sizes.sm'),
+      height: tokenVariable('theme.icongraphy.sizes.sm'),
     }),
     borderRadius: stateful({
       type: 'all',
@@ -204,7 +204,7 @@ export const chatConversationRowTokens = {
     }),
     padding: stateful({
       type: 'physicalAxis',
-      horizontal: tokenPath('theme.padding.md'),
+      horizontal: tokenVariable('theme.padding.md'),
     }),
     layout: stateful({
       flexShrink: tokenValue(0),
@@ -213,16 +213,16 @@ export const chatConversationRowTokens = {
     }),
   },
   unreadBadgeText: {
-    fontSize: stateful(tokenPath('theme.typography.body.sm.fontSize')),
-    fontFamily: stateful(tokenPath('theme.typography.body.sm.fontFamily')),
-    lineHeight: stateful(tokenPath('theme.typography.body.sm.lineHeight')),
-    fontWeight: stateful(tokenPath('theme.fontWeights.bold')),
-    color: stateful(tokenPath('theme.color.primary.onColor')),
+    fontSize: stateful(tokenVariable('theme.typography.body.sm.fontSize')),
+    fontFamily: stateful(tokenVariable('theme.typography.body.sm.fontFamily')),
+    lineHeight: stateful(tokenVariable('theme.typography.body.sm.lineHeight')),
+    fontWeight: stateful(tokenVariable('theme.fontWeights.bold')),
+    color: stateful(tokenVariable('theme.color.primary.onColor')),
     textAlign: stateful('center'),
   },
   sentIndicator: {
-    size: stateful(tokenPath('theme.icongraphy.sizes.xs')),
-    strokeWidth: stateful(tokenPath('theme.icongraphy.strokeWidth')),
+    size: stateful(tokenVariable('theme.icongraphy.sizes.xs')),
+    strokeWidth: stateful(tokenVariable('theme.icongraphy.strokeWidth')),
     color: stateful(surfaceDescriptionColor),
   },
   avatarOverride: {
@@ -244,4 +244,4 @@ export const chatConversationRowTokens = {
       size: stateful(conversationAvatarSize),
     },
   },
-} as const
+} as const satisfies ComponentTokenConfig<ChatConversationRowTokens>

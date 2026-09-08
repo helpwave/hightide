@@ -5,14 +5,19 @@ import {
   tokenVariable,
   type PressableButtonTokenParams,
   type PressableStateValue,
-  type PressableTokenResolver,
-  type PressableTokens
+  type PressableTokenResolver
 } from '@helpwave/hightide-design/component-tokens'
 import {
   semanticTokens,
   type PressableTokenConfig
 } from '@helpwave/hightide-design/semantic-tokens'
-import { resolveResolvableValue, resolveTokenConfig, type TokenResolveContext } from '../static-resolve/resolve'
+import {
+  resolveContainerTokenConfig,
+  resolveIconTokenConfig,
+  resolveResolvableValue,
+  resolveTextStyleTokenConfig,
+  type TokenResolveContext
+} from '../static-resolve/resolve'
 
 type PressableTokenState = PressableStateValue | 'outlined' | 'additionalHorizontalPadding'
 
@@ -65,9 +70,10 @@ export const pressableTokenResolver: PressableTokenResolver = ({
     states.add('additionalHorizontalPadding')
   }
 
-  return resolveTokenConfig<PressableTokens>(
-    pressableTokens,
-    states,
-    context
-  )
+  return {
+    container: resolveContainerTokenConfig(pressableTokens.container, context),
+    stateLayer: resolveContainerTokenConfig(pressableTokens.stateLayer, context),
+    icon: resolveIconTokenConfig(pressableTokens.icon, context),
+    text: resolveTextStyleTokenConfig(pressableTokens.text, context),
+  }
 }

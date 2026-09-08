@@ -1,18 +1,35 @@
 import {
   type ChipVariant,
-  type ComponentSize
+  type ColoringToken,
+  type ComponentSize,
+  type InsideControlElementLayoutToken
 } from '../semantic-tokens'
 import type { ColorPairToken } from '../theme-tokens/theme-tokens-config'
+import type { TypographyStyleToken } from '../theme-tokens/typography-style-token'
 import {
   stateful,
   tokenCalc,
-  tokenPath,
+  createTokenVariable,
   tokenValue
 } from './builders'
 import type { ComponentTokenResolver } from './component-token-resolver'
 import type { ContainerTokens } from './container-tokens'
 import type { IconTokens } from './icon-tokens'
 import type { TextStyleTokens } from './text-style-tokens'
+import type { ComponentTokenConfig } from './token-config'
+import type { TokenContext } from './token-context'
+
+export type ChipParams = {
+  layout: InsideControlElementLayoutToken,
+  coloring: ColoringToken,
+  textStyle: TypographyStyleToken,
+  gap: number,
+  iconSize: number,
+  iconStrokeWidth: number,
+}
+export type ChipTokenContext = TokenContext<ChipParams>
+
+const tokenVariable = createTokenVariable<ChipParams>()
 
 export type ChipComponentResolverProps = {
   overrides: {
@@ -35,41 +52,41 @@ export type ChipTokenResolver = ComponentTokenResolver<
 
 export const chipTokens = {
   container: {
-    backgroundColor: stateful(tokenPath('params.coloring.background')),
+    backgroundColor: stateful(tokenVariable('params.coloring.background')),
     size: stateful({
       minWidth: tokenValue(0),
-      minHeight: tokenPath('params.layout.size'),
+      minHeight: tokenVariable('params.layout.size'),
     }),
     borderRadius: stateful({
       type: 'all',
-      value: tokenPath('params.layout.borderRadius'),
+      value: tokenVariable('params.layout.borderRadius'),
     }),
     padding: stateful({
       type: 'physicalAxis',
-      vertical: tokenPath('params.layout.inset'),
+      vertical: tokenVariable('params.layout.inset'),
       horizontal: tokenCalc(
         'add',
-        tokenPath('params.layout.inset'),
-        tokenPath('params.layout.paddingExtension')
+        tokenVariable('params.layout.inset'),
+        tokenVariable('params.layout.paddingExtension')
       ),
     }),
     layout: stateful({
-      gap: tokenPath('params.gap'),
+      gap: tokenVariable('params.gap'),
       direction: 'horizontal',
       mainAxisAlignment: 'start',
       crossAxisAlignment: 'center',
     }),
   },
   icon: {
-    size: stateful(tokenPath('params.iconSize')),
-    strokeWidth: stateful(tokenPath('params.iconStrokeWidth')),
-    color: stateful(tokenPath('params.coloring.foreground')),
+    size: stateful(tokenVariable('params.iconSize')),
+    strokeWidth: stateful(tokenVariable('params.iconStrokeWidth')),
+    color: stateful(tokenVariable('params.coloring.foreground')),
   },
   text: {
-    color: stateful(tokenPath('params.coloring.foreground')),
-    fontSize: stateful(tokenPath('params.textStyle.fontSize')),
-    fontWeight: stateful(tokenPath('params.textStyle.fontWeight')),
-    fontFamily: stateful(tokenPath('params.textStyle.fontFamily')),
-    lineHeight: stateful(tokenPath('params.textStyle.lineHeight')),
+    color: stateful(tokenVariable('params.coloring.foreground')),
+    fontSize: stateful(tokenVariable('params.textStyle.fontSize')),
+    fontWeight: stateful(tokenVariable('params.textStyle.fontWeight')),
+    fontFamily: stateful(tokenVariable('params.textStyle.fontFamily')),
+    lineHeight: stateful(tokenVariable('params.textStyle.lineHeight')),
   },
-} as const
+} as const satisfies ComponentTokenConfig<ChipTokens, ChipTokenContext>

@@ -1,10 +1,11 @@
 import {
-  stateful,
   tokenColorBlend,
   tokenColorOpacity,
-  tokenPath,
-  whenState
+  tokenVariable,
+  whenState,
+  statefulField
 } from '../builders'
+import type { ContainerTokens } from '../container-tokens'
 
 export type ChatMessageDirection = 'incoming' | 'outgoing'
 
@@ -12,33 +13,33 @@ export const pillBorderRadius = 999
 export const bubbleMaxWidth = 280
 
 export const surfaceDescriptionColor = tokenColorBlend(
-  tokenPath('theme.color.surface.color'),
+  tokenVariable('theme.color.surface.color'),
   tokenColorOpacity(
-    tokenPath('theme.color.surface.onColor'),
-    tokenPath('theme.config.appearancePercentages.subtle')
+    tokenVariable('theme.color.surface.onColor'),
+    tokenVariable('theme.config.appearancePercentages.subtle')
   )
 )
 
 export const surfaceFadedColor = tokenColorBlend(
-  tokenPath('theme.color.surface.color'),
+  tokenVariable('theme.color.surface.color'),
   tokenColorOpacity(
-    tokenPath('theme.color.surface.onColor'),
-    tokenPath('theme.config.appearancePercentages.faded')
+    tokenVariable('theme.color.surface.onColor'),
+    tokenVariable('theme.config.appearancePercentages.faded')
   )
 )
 
-export const messageCornersTokens = stateful({
+export const messageCornersTokens = statefulField<NonNullable<ContainerTokens['borderRadius']>>({
   type: 'physicalCorner',
-  topLeft: tokenPath('theme.borderRadius.lg'),
-  topRight: tokenPath('theme.borderRadius.lg'),
-  bottomLeft: tokenPath('theme.borderRadius.xxs'),
-  bottomRight: tokenPath('theme.borderRadius.lg'),
+  topLeft: tokenVariable('theme.borderRadius.lg'),
+  topRight: tokenVariable('theme.borderRadius.lg'),
+  bottomLeft: tokenVariable('theme.borderRadius.xxs'),
+  bottomRight: tokenVariable('theme.borderRadius.lg'),
 }, [
   whenState(['outgoing'], {
     type: 'physicalCorner',
-    topLeft: tokenPath('theme.borderRadius.lg'),
-    topRight: tokenPath('theme.borderRadius.lg'),
-    bottomLeft: tokenPath('theme.borderRadius.lg'),
-    bottomRight: tokenPath('theme.borderRadius.xxs'),
+    topLeft: tokenVariable('theme.borderRadius.lg'),
+    topRight: tokenVariable('theme.borderRadius.lg'),
+    bottomLeft: tokenVariable('theme.borderRadius.lg'),
+    bottomRight: tokenVariable('theme.borderRadius.xxs'),
   }),
 ])

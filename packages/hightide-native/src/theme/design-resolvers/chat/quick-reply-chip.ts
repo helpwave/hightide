@@ -3,7 +3,7 @@ import {
   type ChatQuickReplyChipTokenResolver,
   type ChatQuickReplyChipTokens
 } from '@helpwave/hightide-design/component-tokens'
-import { resolveTokenConfig } from '../../static-resolve/resolve'
+import { resolveConfigNode } from '../../static-resolve/resolve'
 
 type ChatQuickReplyChipTokenState = 'active'
 
@@ -17,13 +17,13 @@ export const chatQuickReplyChipTokenResolver: ChatQuickReplyChipTokenResolver = 
     states.add('active')
   }
 
-  const resolved = resolveTokenConfig<Omit<ChatQuickReplyChipTokens, 'config'> & {
+  const resolved = resolveConfigNode<Omit<ChatQuickReplyChipTokens, 'config'> & {
     config: Omit<ChatQuickReplyChipTokens['config'], 'color'>,
   }>(
     chatQuickReplyChipTokens,
-    states,
     {
       theme: themeTokens,
+      state: states,
     }
   )
 

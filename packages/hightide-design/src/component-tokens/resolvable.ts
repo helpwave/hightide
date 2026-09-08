@@ -1,4 +1,5 @@
 import type { ColorToken } from '../primitive-tokens/color'
+import type { DotPath } from '../utils/path'
 
 export type NumberCalculationOperation =
   | 'add'
@@ -11,15 +12,15 @@ export type NumberCalculationOperation =
   | 'round'
   | 'ceil'
 
-export type ResolvableNumber<T extends number, P extends string = string> =
+export type ResolvableNumber<P extends string = string, T extends number = number> =
   | { type?: undefined, value: T }
   | { type: 'variable', path: P }
-  | { type: 'parameter', path: P, fallback: ResolvableNumber<T, P> }
+  | { type: 'parameter', path: P, fallback: ResolvableNumber<P, T> }
   | {
     type: 'calculation',
     operation: NumberCalculationOperation,
-    value1: ResolvableNumber<T, P>,
-    value2: ResolvableNumber<T, P>,
+    value1: ResolvableNumber<P, T>,
+    value2: ResolvableNumber<P, T>,
   }
 
 export type ColorOperation = 'opacity' | 'lightness' | 'blend'
@@ -32,13 +33,13 @@ export type ResolvableColor<ColorPath extends string, NumberPath extends string>
     type: 'color',
     operation: 'opacity',
     color: ResolvableColor<ColorPath, NumberPath>,
-    amount: ResolvableNumber<number, NumberPath>,
+    amount: ResolvableNumber<NumberPath>,
   }
   | {
     type: 'color',
     operation: 'lightness',
     color: ResolvableColor<ColorPath, NumberPath>,
-    amount: ResolvableNumber<number, NumberPath>,
+    amount: ResolvableNumber<NumberPath>,
   }
   | {
     type: 'color',
@@ -52,19 +53,11 @@ export type ResolvableString<P extends string = string> =
   | { type: 'variable', path: P }
   | { type: 'parameter', path: P, fallback: ResolvableString<P> }
 
-export type Resolvable<T, NumberPath extends string, ColorPath extends string, StringPath extends string = string> =
+export type Resolvable<T, Context> =
   T extends number
-    ? ResolvableNumber<number, NumberPath>
+    ? ResolvableNumber<DotPath<Context, number>, number>
     : T extends ColorToken
-      ? ResolvableColor<ColorPath, NumberPath>
+      ? ResolvableColor<DotPath<Context, ColorToken>, DotPath<Context, number>>
       : T extends string
-        ? ResolvableString<StringPath>
-        : T extends ReadonlyArray<infer U>
-          ? ReadonlyArray<Resolvable<U, NumberPath, ColorPath, StringPath>>
-          : T extends object
-            ? (
-              | { type: 'variable', path: string }
-              | { type: 'parameter', path: string, fallback: Resolvable<T, NumberPath, ColorPath, StringPath> }
-              | { [K in keyof T]: Resolvable<T[K], NumberPath, ColorPath, StringPath> }
-            )
-            : T
+        ? ResolvableString<DotPath<Context, string>>
+        : never

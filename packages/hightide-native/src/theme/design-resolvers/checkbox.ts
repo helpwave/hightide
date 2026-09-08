@@ -11,7 +11,7 @@ import type {
   ControlElementLayoutToken,
   InputColoringTokens
 } from '@helpwave/hightide-design/semantic-tokens'
-import { resolveTokenConfig } from '../static-resolve/resolve'
+import { resolveConfigNode } from '../static-resolve/resolve'
 import {
   resolveInputColoring,
   resolvePressableStateLayerTint
@@ -56,9 +56,8 @@ export const checkboxTokenResolver: CheckboxTokenResolver = ({
     states.add('rounded')
   }
 
-  return resolveTokenConfig<CheckboxTokens>(
+  return resolveConfigNode<CheckboxTokens>(
     checkboxTokens,
-    states,
     {
       theme: themeTokens,
       params: {
@@ -68,6 +67,7 @@ export const checkboxTokenResolver: CheckboxTokenResolver = ({
         accentColor: accentPair.color,
         accentOnColor: accentPair.onColor,
       } satisfies CheckboxParams,
+      state: states,
     }
   )
 }

@@ -1,13 +1,14 @@
 import type { ComponentTokenResolver } from '../component-token-resolver'
 import type { ContainerTokens } from '../container-tokens'
 import type { TextStyleTokens } from '../text-style-tokens'
+import type { ComponentTokenConfig } from '../token-config'
 import {
   pillBorderRadius,
   surfaceDescriptionColor
 } from './shared'
 import {
   stateful,
-  tokenPath,
+  tokenVariable,
   tokenValue
 } from '../builders'
 
@@ -23,25 +24,25 @@ export type ChatDateDividerTokenResolver = ComponentTokenResolver<
 
 export const chatDateDividerTokens = {
   container: {
-    backgroundColor: stateful(tokenPath('theme.color.surface.color')),
+    backgroundColor: stateful(tokenVariable('theme.color.surface.color')),
     borderRadius: stateful({
       type: 'all',
       value: tokenValue(pillBorderRadius),
     }),
     padding: stateful({
       type: 'physicalAxis',
-      vertical: tokenPath('theme.spacing.sm'),
-      horizontal: tokenPath('theme.spacing.lg'),
+      vertical: tokenVariable('theme.spacing.sm'),
+      horizontal: tokenVariable('theme.spacing.lg'),
     }),
     layout: stateful({
       selfCrossAxisAlignment: 'center',
     }),
   },
   text: {
-    fontSize: stateful(tokenPath('theme.typography.body.sm.fontSize')),
-    fontFamily: stateful(tokenPath('theme.typography.body.sm.fontFamily')),
-    lineHeight: stateful(tokenPath('theme.typography.body.sm.lineHeight')),
-    fontWeight: stateful(tokenPath('theme.fontWeights.medium')),
+    fontSize: stateful(tokenVariable('theme.typography.body.sm.fontSize')),
+    fontFamily: stateful(tokenVariable('theme.typography.body.sm.fontFamily')),
+    lineHeight: stateful(tokenVariable('theme.typography.body.sm.lineHeight')),
+    fontWeight: stateful(tokenVariable('theme.fontWeights.medium')),
     color: stateful(surfaceDescriptionColor),
   },
-} as const
+} as const satisfies ComponentTokenConfig<ChatDateDividerTokens>

@@ -1,17 +1,20 @@
+import type { ColorToken } from '../primitive-tokens/color'
 import { HexColorUtils } from '../utils/hex'
 import {
   stateful,
   tokenCalc,
   tokenColorBlend,
   tokenColorOpacity,
-  tokenPath,
+  createTokenVariable,
   tokenValue,
-  whenState
+  whenState,
+  statefulField
 } from './builders'
 import type { ComponentTokenResolver } from './component-token-resolver'
 import type { ContainerTokens } from './container-tokens'
 import { inputStateValues } from './input-tokens'
-import type { Resolvable } from './resolvable'
+import type { ComponentTokenConfig, ComponentTokenConfigValue } from './token-config'
+import type { TokenContext } from './token-context'
 
 export const switchStateValues = [
   ...inputStateValues,
@@ -39,6 +42,13 @@ export type SwitchTokenResolver = ComponentTokenResolver<
   SwitchTokens
 >
 
+export type SwitchParams = {
+  tint: ColorToken,
+}
+export type SwitchTokenContext = TokenContext<SwitchParams>
+
+const tokenVariable = createTokenVariable<SwitchParams>()
+
 const TRACK_WIDTH = 44
 const TRACK_HEIGHT = 28
 const THUMB_SIZE_ACTIVE = 20
@@ -49,7 +59,7 @@ const trackHeight = tokenValue(TRACK_HEIGHT)
 const doubleBorder = tokenCalc(
   'multiply',
   tokenValue(2),
-  tokenPath('theme.borderWidth.normal')
+  tokenVariable('theme.borderWidth.normal')
 )
 const trackInnerWidth = tokenCalc('subtract', trackWidth, doubleBorder)
 const trackInnerHeight = tokenCalc('subtract', trackHeight, doubleBorder)
@@ -74,16 +84,16 @@ const thumbLeftActive = tokenCalc(
 )
 
 const inactiveThumbColor = tokenColorBlend(
-  tokenPath('theme.color.surface.color'),
+  tokenVariable('theme.color.surface.color'),
   tokenColorOpacity(
-    tokenPath('theme.color.surface.onColor'),
-    tokenPath('theme.config.appearancePercentages.subtle')
+    tokenVariable('theme.color.surface.onColor'),
+    tokenVariable('theme.config.appearancePercentages.subtle')
   )
 )
 
-const trackBackgroundInactive = tokenPath('theme.color.surface.color')
-const trackBackgroundActive = tokenPath('theme.color.primary.color')
-const trackBackgroundDisabled = tokenPath('theme.color.disabled.color')
+const trackBackgroundInactive = tokenVariable('theme.color.surface.color')
+const trackBackgroundActive = tokenVariable('theme.color.primary.color')
+const trackBackgroundDisabled = tokenVariable('theme.color.disabled.color')
 
 export const switchTokens = {
   container: {
@@ -102,7 +112,7 @@ export const switchTokens = {
       mainAxisAlignment: 'center',
       crossAxisAlignment: 'center',
     }),
-    outline: stateful(
+    outline: stateful<string, ComponentTokenConfigValue<NonNullable<ContainerTokens['outline']>, SwitchTokenContext> | undefined>(
       undefined,
       [
         whenState(['focusVisible'], {
@@ -114,62 +124,62 @@ export const switchTokens = {
     ),
   },
   track: {
-    backgroundColor: stateful(
-      tokenColorBlend(trackBackgroundInactive, tokenPath('params.tint')),
+    backgroundColor: statefulField<ColorToken, SwitchTokenContext>(
+      tokenColorBlend(trackBackgroundInactive, tokenVariable('params.tint')),
       [
-        whenState(['active'], tokenColorBlend(trackBackgroundActive, tokenPath('params.tint')), ['disabled']),
-        whenState(['disabled'], tokenColorBlend(trackBackgroundDisabled, tokenPath('params.tint'))),
+        whenState(['active'], tokenColorBlend(trackBackgroundActive, tokenVariable('params.tint')), ['disabled']),
+        whenState(['disabled'], tokenColorBlend(trackBackgroundDisabled, tokenVariable('params.tint'))),
       ]
     ),
-    border: stateful({
+    border: statefulField<NonNullable<ContainerTokens['border']>, SwitchTokenContext>({
       width: {
         type: 'all',
-        value: tokenPath('theme.borderWidth.normal'),
+        value: tokenVariable('theme.borderWidth.normal'),
       },
       color: {
         type: 'all',
         value: tokenColorBlend(
-          tokenPath('theme.color.border'),
-          tokenPath('params.tint')
+          tokenVariable('theme.color.border'),
+          tokenVariable('params.tint')
         ),
       },
     }, [
       whenState(['active'], {
         width: {
           type: 'all',
-          value: tokenPath('theme.borderWidth.normal'),
+          value: tokenVariable('theme.borderWidth.normal'),
         },
         color: {
           type: 'all',
           value: tokenColorBlend(
-            tokenPath('theme.color.primary.color'),
-            tokenPath('params.tint')
+            tokenVariable('theme.color.primary.color'),
+            tokenVariable('params.tint')
           ),
         },
       }, ['disabled', 'invalid']),
       whenState(['invalid'], {
         width: {
           type: 'all',
-          value: tokenPath('theme.borderWidth.normal'),
+          value: tokenVariable('theme.borderWidth.normal'),
         },
         color: {
           type: 'all',
           value: tokenColorBlend(
-            tokenPath('theme.color.negative.color'),
-            tokenPath('params.tint')
+            tokenVariable('theme.color.negative.color'),
+            tokenVariable('params.tint')
           ),
         },
       }, ['disabled']),
       whenState(['disabled'], {
         width: {
           type: 'all',
-          value: tokenPath('theme.borderWidth.normal'),
+          value: tokenVariable('theme.borderWidth.normal'),
         },
         color: {
           type: 'all',
           value: tokenColorBlend(
-            tokenPath('theme.color.disabled.color'),
-            tokenPath('params.tint')
+            tokenVariable('theme.color.disabled.color'),
+            tokenVariable('params.tint')
           ),
         },
       }),
@@ -190,7 +200,7 @@ export const switchTokens = {
       mainAxisAlignment: 'start',
       crossAxisAlignment: 'center',
     }),
-    outline: stateful<string, Resolvable<NonNullable<ContainerTokens['outline']>, string, string>>(
+    outline: stateful<string, ComponentTokenConfigValue<NonNullable<ContainerTokens['outline']>, SwitchTokenContext>>(
       {
         width: tokenValue(0),
         offset: tokenValue(0),
@@ -201,22 +211,22 @@ export const switchTokens = {
       },
       [
         whenState(['focusVisible'], {
-          width: tokenPath('theme.focusOutline.width'),
-          offset: tokenPath('theme.focusOutline.offset'),
-          style: tokenPath('theme.focusOutline.style'),
-          color: tokenPath('theme.color.primary.color'),
+          width: tokenVariable('theme.focusOutline.width'),
+          offset: tokenVariable('theme.focusOutline.offset'),
+          style: tokenVariable('theme.focusOutline.style'),
+          color: tokenVariable('theme.color.primary.color'),
         }),
       ]
     ),
   },
   thumb: {
-    backgroundColor: stateful(
+    backgroundColor: statefulField<ColorToken, SwitchTokenContext>(
       inactiveThumbColor,
       [
-        whenState(['active'], tokenPath('theme.color.primary.onColor')),
+        whenState(['active'], tokenVariable('theme.color.primary.onColor')),
       ]
     ),
-    size: stateful({
+    size: statefulField<NonNullable<ContainerTokens['size']>, SwitchTokenContext>({
       width: thumbSizeInactive,
       height: thumbSizeInactive,
     }, [
@@ -225,7 +235,7 @@ export const switchTokens = {
         height: thumbSizeActive,
       }),
     ]),
-    borderRadius: stateful({
+    borderRadius: statefulField<NonNullable<ContainerTokens['borderRadius']>, SwitchTokenContext>({
       type: 'all',
       value: tokenCalc('divide', thumbSizeInactive, tokenValue(2)),
     },
@@ -235,7 +245,7 @@ export const switchTokens = {
         value: tokenCalc('divide', thumbSizeActive, tokenValue(2)),
       }),
     ]),
-    position: stateful({
+    position: statefulField<NonNullable<ContainerTokens['position']>, SwitchTokenContext>({
       type: 'absolute',
       top: thumbInsetInactive,
     }, [
@@ -244,7 +254,7 @@ export const switchTokens = {
         top: thumbInsetActive,
       }),
     ]),
-    transform: stateful({
+    transform: statefulField<NonNullable<ContainerTokens['transform']>, SwitchTokenContext>({
       translate: {
         x: thumbLeftInactive,
       },
@@ -256,4 +266,4 @@ export const switchTokens = {
       }),
     ]),
   },
-} as const
+} as const satisfies ComponentTokenConfig<SwitchTokens, SwitchTokenContext>

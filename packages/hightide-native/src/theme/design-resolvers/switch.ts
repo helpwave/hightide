@@ -5,7 +5,7 @@ import {
   type SwitchTokenResolver,
   type SwitchTokens
 } from '@helpwave/hightide-design/component-tokens'
-import { resolveTokenConfig } from '../static-resolve/resolve'
+import { resolveConfigNode } from '../static-resolve/resolve'
 import {
   resolvePressableStateLayerTint,
   resolveWithAppearance
@@ -32,14 +32,14 @@ export const switchTokenResolver: SwitchTokenResolver = ({
     color: thumbColor,
   })
 
-  return resolveTokenConfig<SwitchTokens>(
+  return resolveConfigNode<SwitchTokens>(
     switchTokens,
-    state,
     {
       theme: themeTokens,
       params: {
         tint,
       } satisfies SwitchParams,
+      state: state,
     }
   )
 }

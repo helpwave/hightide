@@ -1,10 +1,16 @@
+import type { ColorToken } from '../primitive-tokens/color'
 import { hightideShadow } from '../primitive-tokens/shadow'
 import type { ColorPairToken } from '../theme-tokens/theme-tokens-config'
+import type { TypographyStyleToken } from '../theme-tokens/typography-style-token'
+import {
+  type ControlElementLayoutToken,
+  type InputColoringTokens
+} from '../semantic-tokens'
 import {
   stateful,
   tokenCalc,
   tokenColorOpacity,
-  tokenPath,
+  createTokenVariable,
   tokenValue,
   whenState
 } from './builders'
@@ -15,6 +21,8 @@ import {
   pressableStateValues
 } from './pressable-tokens'
 import type { TextStyleTokens } from './text-style-tokens'
+import type { ComponentTokenConfig, ComponentTokenConfigValue } from './token-config'
+import type { TokenContext } from './token-context'
 
 export const inputStateValues = [
   ...pressableStateValues,
@@ -64,9 +72,23 @@ export type InputTokenResolver = ComponentTokenResolver<
   InputTokens
 >
 
+export type InputParams = {
+  layout: ControlElementLayoutToken,
+  coloring: InputColoringTokens,
+  tint: ColorToken,
+  textStyle: TypographyStyleToken,
+  placeholderColor: ColorToken,
+  iconSize: number,
+  iconStrokeWidth: number,
+  outlineColor: ColorToken,
+}
+export type InputTokenContext = TokenContext<InputParams>
+
+const tokenVariable = createTokenVariable<InputParams>()
+
 export const inputTokens = {
   container: {
-    backgroundColor: stateful(tokenPath('params.coloring.background')),
+    backgroundColor: stateful(tokenVariable('params.coloring.background')),
     opacity: stateful(
       tokenValue(1),
       [
@@ -76,43 +98,48 @@ export const inputTokens = {
     border: stateful({
       width: {
         type: 'all',
-        value: tokenPath('params.layout.borderWidth'),
+        value: tokenVariable('params.layout.borderWidth'),
       },
       color: {
         type: 'all',
-        value: tokenPath('params.coloring.border'),
+        value: tokenVariable('params.coloring.border'),
       },
     }),
     outline: stateful({
-      width: tokenPath('theme.focusOutline.width'),
-      offset: tokenPath('theme.focusOutline.offset'),
-      style: tokenPath('theme.focusOutline.style'),
-      color: tokenPath('params.outlineColor'),
+      width: tokenVariable('theme.focusOutline.width'),
+      offset: tokenVariable('theme.focusOutline.offset'),
+      style: tokenVariable('theme.focusOutline.style'),
+      color: tokenVariable('params.outlineColor'),
     }),
-    shadow: stateful(undefined,
+    shadow: stateful<string, ComponentTokenConfigValue<NonNullable<ContainerTokens['shadow']>, InputTokenContext> | undefined>(
+      undefined,
       [
         whenState(['hasFocusShadow'], {
-          ...hightideShadow.layout.basic.md,
+          x: tokenValue(hightideShadow.layout.basic.md.x),
+          y: tokenValue(hightideShadow.layout.basic.md.y),
+          blur: tokenValue(hightideShadow.layout.basic.md.blur),
+          spread: tokenValue(hightideShadow.layout.basic.md.spread),
           color: tokenColorOpacity(
-            tokenPath('params.coloring.border'),
+            tokenVariable('params.coloring.border'),
             tokenValue(0.7)
           ),
         }),
-      ]),
+      ]
+    ),
     size: stateful({
-      minHeight: tokenPath('params.layout.size'),
+      minHeight: tokenVariable('params.layout.size'),
     }),
     borderRadius: stateful({
       type: 'all',
-      value: tokenPath('params.layout.borderRadius'),
+      value: tokenVariable('params.layout.borderRadius'),
     }),
     padding: stateful({
       type: 'physicalAxis',
-      vertical: tokenPath('params.layout.inset'),
+      vertical: tokenVariable('params.layout.inset'),
       horizontal: tokenCalc(
         'subtract',
-        tokenPath('params.layout.horizontalContentPadding'),
-        tokenPath('params.layout.borderWidth')
+        tokenVariable('params.layout.horizontalContentPadding'),
+        tokenVariable('params.layout.borderWidth')
       ),
     }),
     layout: stateful({
@@ -122,7 +149,7 @@ export const inputTokens = {
     }),
   },
   stateLayer: {
-    backgroundColor: stateful(tokenPath('params.tint')),
+    backgroundColor: stateful(tokenVariable('params.tint')),
     position: stateful({
       type: 'absolute',
       top: tokenValue(0),
@@ -133,26 +160,26 @@ export const inputTokens = {
     }),
     borderRadius: stateful({
       type: 'all',
-      value: tokenPath('params.layout.borderRadius'),
+      value: tokenVariable('params.layout.borderRadius'),
     }),
   },
   text: {
-    color: stateful(tokenPath('params.coloring.text')),
-    fontSize: stateful(tokenPath('params.textStyle.fontSize')),
-    fontWeight: stateful(tokenPath('params.textStyle.fontWeight')),
-    fontFamily: stateful(tokenPath('params.textStyle.fontFamily')),
-    lineHeight: stateful(tokenPath('params.textStyle.lineHeight')),
+    color: stateful(tokenVariable('params.coloring.text')),
+    fontSize: stateful(tokenVariable('params.textStyle.fontSize')),
+    fontWeight: stateful(tokenVariable('params.textStyle.fontWeight')),
+    fontFamily: stateful(tokenVariable('params.textStyle.fontFamily')),
+    lineHeight: stateful(tokenVariable('params.textStyle.lineHeight')),
   },
   placeholder: {
-    color: stateful(tokenPath('params.placeholderColor')),
-    fontSize: stateful(tokenPath('params.textStyle.fontSize')),
-    fontWeight: stateful(tokenPath('params.textStyle.fontWeight')),
-    fontFamily: stateful(tokenPath('params.textStyle.fontFamily')),
-    lineHeight: stateful(tokenPath('params.textStyle.lineHeight')),
+    color: stateful(tokenVariable('params.placeholderColor')),
+    fontSize: stateful(tokenVariable('params.textStyle.fontSize')),
+    fontWeight: stateful(tokenVariable('params.textStyle.fontWeight')),
+    fontFamily: stateful(tokenVariable('params.textStyle.fontFamily')),
+    lineHeight: stateful(tokenVariable('params.textStyle.lineHeight')),
   },
   icon: {
-    size: stateful(tokenPath('params.iconSize')),
-    strokeWidth: stateful(tokenPath('params.iconStrokeWidth')),
-    color: stateful(tokenPath('params.coloring.text')),
+    size: stateful(tokenVariable('params.iconSize')),
+    strokeWidth: stateful(tokenVariable('params.iconStrokeWidth')),
+    color: stateful(tokenVariable('params.coloring.text')),
   },
-} as const
+} as const satisfies ComponentTokenConfig<InputTokens, InputTokenContext>

@@ -1,19 +1,32 @@
 import {
   type ComponentSize,
+  type ControlElementLayoutToken,
   type IconButtonVariant
 } from '../semantic-tokens'
 import type { ColorPairToken } from '../theme-tokens/theme-tokens-config'
 import {
   stateful,
-  tokenPath,
+  createTokenVariable,
   tokenValue,
-  tokenVariable,
   whenState
 } from './builders'
 import type { ComponentTokenResolver } from './component-token-resolver'
 import type { ContainerTokens } from './container-tokens'
+import { elevationTokens } from './elevation-tokens'
 import type { IconTokens } from './icon-tokens'
+import type { PressableButtonTokenParams } from './pressable-button-params'
 import { type PressableState } from './pressable-tokens'
+import type { ComponentTokenConfig } from './token-config'
+import type { TokenContext } from './token-context'
+
+export type IconButtonParams = Pick<PressableButtonTokenParams, 'colorPair'> & {
+  layout: ControlElementLayoutToken,
+  iconSize: number,
+  iconStrokeWidth: number,
+}
+export type IconButtonTokenContext = TokenContext<IconButtonParams>
+
+const tokenVariable = createTokenVariable<IconButtonParams>()
 
 export type IconButtonState = PressableState
 
@@ -54,12 +67,12 @@ export const iconButtonTokens = {
       ]
     ),
     size: stateful({
-      width: tokenPath('params.layout.size'),
-      height: tokenPath('params.layout.size'),
+      width: tokenVariable('params.layout.size'),
+      height: tokenVariable('params.layout.size'),
     }),
     borderRadius: stateful({
       type: 'all',
-      value: tokenPath('params.layout.borderRadius'),
+      value: tokenVariable('params.layout.borderRadius'),
     }),
     layout: stateful({
       direction: 'horizontal',
@@ -68,8 +81,8 @@ export const iconButtonTokens = {
     }),
     shadow: stateful(undefined,
       [
-        whenState(['elevated'], tokenPath('theme.elevation.level1'), ['hovered']),
-        whenState(['elevated', 'hovered'], tokenPath('theme.elevation.level2')),
+        whenState(['elevated'], elevationTokens('level1'), ['hovered']),
+        whenState(['elevated', 'hovered'], elevationTokens('level2')),
       ]),
   },
   stateLayer: {
@@ -84,12 +97,12 @@ export const iconButtonTokens = {
     }),
     borderRadius: stateful({
       type: 'all',
-      value: tokenPath('params.layout.borderRadius'),
+      value: tokenVariable('params.layout.borderRadius'),
     }),
   },
   icon: {
-    size: stateful(tokenPath('params.iconSize')),
-    strokeWidth: stateful(tokenPath('params.iconStrokeWidth')),
+    size: stateful(tokenVariable('params.iconSize')),
+    strokeWidth: stateful(tokenVariable('params.iconStrokeWidth')),
     color: stateful(tokenVariable('semantics.coloring.foreground')),
   },
-} as const
+} as const satisfies ComponentTokenConfig<IconButtonTokens, IconButtonTokenContext>

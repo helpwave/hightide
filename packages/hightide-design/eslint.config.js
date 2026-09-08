@@ -27,7 +27,7 @@ export default [
     },
   },
   {
-    ignores: ['node_modules/**'],
+    ignores: ['node_modules/**', 'scripts/**', 'token-bundle.json'],
   },
   ...config.recommended,
   {

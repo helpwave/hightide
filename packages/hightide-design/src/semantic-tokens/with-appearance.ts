@@ -1,19 +1,26 @@
+import type { ColorPairToken } from '../theme-tokens/theme-tokens-config'
 import {
   tokenColorBlend,
   tokenColorOpacity,
-  tokenPath
+  createTokenVariable
 } from '../component-tokens/builders'
 
 export type Appearance = 'normal' | 'subtle' | 'faded'
+
+export type WithAppearanceParams = {
+  colorPair: ColorPairToken,
+}
+
+const tokenVariable = createTokenVariable<WithAppearanceParams>()
 
 const appearanceColor = (
   appearance: Appearance
 ) => (
   tokenColorBlend(
-    tokenPath('params.colorPair.color'),
+    tokenVariable('params.colorPair.color'),
     tokenColorOpacity(
-      tokenPath('params.colorPair.onColor'),
-      tokenPath(`theme.config.appearancePercentages.${appearance}`)
+      tokenVariable('params.colorPair.onColor'),
+      tokenVariable(`theme.config.appearancePercentages.${appearance}`)
     )
   )
 )

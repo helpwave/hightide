@@ -3,16 +3,16 @@ import {
   type ModalTokenResolver,
   type ModalTokens
 } from '@helpwave/hightide-design/component-tokens'
-import { resolveTokenConfig } from '../static-resolve/resolve'
+import { resolveConfigNode } from '../static-resolve/resolve'
 
 export const modalTokenResolver: ModalTokenResolver = ({
   themeTokens,
 }) => (
-  resolveTokenConfig<ModalTokens>(
+  resolveConfigNode<ModalTokens>(
     modalTokens,
-    new Set(),
     {
       theme: themeTokens,
+      state: new Set(),
     }
   )
 )

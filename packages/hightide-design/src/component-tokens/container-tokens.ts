@@ -4,8 +4,8 @@ import type {
   OutlineToken,
   ShadowToken
 } from '../theme-tokens/theme-tokens'
-import type { Resolvable } from './resolvable'
-import type { ContextBasedProperty } from './context-based'
+import type { ComponentTokenConfig } from './token-config'
+import type { TokenContext } from './token-context'
 
 export type LayoutDirectionToken = 'horizontal' | 'vertical'
 export type LayoutAlignmentToken = 'left-top' | 'left-center' | 'left-bottom' | 'center-top' | 'center-center' | 'center-bottom' | 'right-top' | 'right-center' | 'right-bottom'
@@ -145,15 +145,6 @@ export type ContainerTokens = {
 }
 
 export type ContainerTokenConfig<
-  S extends string,
-  NumberPath extends string,
-  ColorPath extends string,
-  StringPath extends string = string,
-  C extends Record<string, string> = Record<string, never>
-> = {
-  [K in keyof ContainerTokens]?: ContextBasedProperty<
-    S,
-    C,
-    Resolvable<NonNullable<ContainerTokens[K]>, NumberPath, ColorPath, StringPath>
-  >
-}
+  S extends string = string,
+  C extends Record<string, string> = Record<string, string>
+> = ComponentTokenConfig<ContainerTokens, TokenContext<unknown>, S, C>

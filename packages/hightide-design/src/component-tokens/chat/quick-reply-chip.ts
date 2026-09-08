@@ -1,8 +1,11 @@
+import type { ColorToken } from '../../primitive-tokens/color'
 import type { ComponentTokenResolver } from '../component-token-resolver'
+import type { ContainerTokens } from '../container-tokens'
 import type {
   PressableComponentResolverProps,
   PressableTokens
 } from '../pressable-tokens'
+import type { ComponentTokenConfig } from '../token-config'
 import {
   pillBorderRadius,
   surfaceDescriptionColor,
@@ -10,9 +13,10 @@ import {
 } from './shared'
 import {
   stateful,
-  tokenPath,
+  tokenVariable,
   tokenValue,
-  whenState
+  whenState,
+  statefulField
 } from '../builders'
 
 export type ChatQuickReplyChipComponentResolverProps = {
@@ -43,13 +47,13 @@ export const chatQuickReplyChipTokens = {
     }),
     padding: stateful({
       type: 'physicalAxis',
-      vertical: tokenPath('theme.padding.md'),
-      horizontal: tokenPath('theme.padding.lg'),
+      vertical: tokenVariable('theme.padding.md'),
+      horizontal: tokenVariable('theme.padding.lg'),
     }),
-    border: stateful({
+    border: statefulField<NonNullable<ContainerTokens['border']>>({
       width: {
         type: 'all',
-        value: tokenPath('theme.borderWidth.thin'),
+        value: tokenVariable('theme.borderWidth.thin'),
       },
       color: {
         type: 'all',
@@ -59,18 +63,18 @@ export const chatQuickReplyChipTokens = {
       whenState(['active'], {
         width: {
           type: 'all',
-          value: tokenPath('theme.borderWidth.thin'),
+          value: tokenVariable('theme.borderWidth.thin'),
         },
         color: {
           type: 'all',
-          value: tokenPath('theme.color.primary.color'),
+          value: tokenVariable('theme.color.primary.color'),
         },
       }),
     ]),
     layout: stateful({
       direction: 'horizontal',
       crossAxisAlignment: 'center',
-      gap: tokenPath('theme.padding.md'),
+      gap: tokenVariable('theme.padding.md'),
     }),
   },
   stateLayer: {
@@ -80,15 +84,15 @@ export const chatQuickReplyChipTokens = {
     }),
   },
   text: {
-    fontSize: stateful(tokenPath('theme.typography.body.sm.fontSize')),
-    fontFamily: stateful(tokenPath('theme.typography.body.sm.fontFamily')),
-    lineHeight: stateful(tokenPath('theme.typography.body.sm.lineHeight')),
-    fontWeight: stateful(tokenPath('theme.fontWeights.medium')),
-    color: stateful(
+    fontSize: stateful(tokenVariable('theme.typography.body.sm.fontSize')),
+    fontFamily: stateful(tokenVariable('theme.typography.body.sm.fontFamily')),
+    lineHeight: stateful(tokenVariable('theme.typography.body.sm.lineHeight')),
+    fontWeight: stateful(tokenVariable('theme.fontWeights.medium')),
+    color: statefulField<ColorToken>(
       surfaceDescriptionColor,
       [
-        whenState(['active'], tokenPath('theme.color.primary.color')),
+        whenState(['active'], tokenVariable('theme.color.primary.color')),
       ]
     ),
   },
-} as const
+} as const satisfies ComponentTokenConfig<ChatQuickReplyChipTokens>

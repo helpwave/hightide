@@ -2,7 +2,6 @@ import {
   iconButtonTokens,
   toButtonIconSize,
   type IconButtonTokenResolver,
-  type IconButtonTokens,
   type PressableButtonTokenParams,
   type PressableStateValue
 } from '@helpwave/hightide-design/component-tokens'
@@ -12,7 +11,11 @@ import {
   type ControlElementLayoutToken,
   type IconButtonVariant
 } from '@helpwave/hightide-design/semantic-tokens'
-import { resolveTokenConfig, type TokenResolveContext } from '../static-resolve/resolve'
+import {
+  resolveContainerTokenConfig,
+  resolveIconTokenConfig,
+  type TokenResolveContext
+} from '../static-resolve/resolve'
 import { iconTokenResolver } from './icon'
 
 type IconButtonTokenState = PressableStateValue | IconButtonVariant
@@ -62,9 +65,9 @@ export const iconButtonTokenResolver: IconButtonTokenResolver = ({
     state: states,
   }
 
-  return resolveTokenConfig<IconButtonTokens>(
-    iconButtonTokens,
-    states,
-    context
-  )
+  return {
+    container: resolveContainerTokenConfig(iconButtonTokens.container, context),
+    stateLayer: resolveContainerTokenConfig(iconButtonTokens.stateLayer, context),
+    icon: resolveIconTokenConfig(iconButtonTokens.icon, context),
+  }
 }

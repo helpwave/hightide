@@ -1,3 +1,4 @@
+import type { ColorToken } from '../primitive-tokens/color'
 import type { ColorPairToken } from '../theme-tokens/theme-tokens-config'
 import { HexColorUtils } from '../utils/hex'
 import {
@@ -5,16 +6,18 @@ import {
   tokenCalc,
   tokenColorBlend,
   tokenColorOpacity,
-  tokenPath,
+  createTokenVariable,
   tokenValue,
-  whenState
+  whenState,
+  statefulField
 } from './builders'
 import type { ComponentTokenResolver } from './component-token-resolver'
 import type { ContainerTokens } from './container-tokens'
 import type { IconTokens } from './icon-tokens'
 import { type InputStateValue } from './input-tokens'
-import type { Resolvable } from './resolvable'
 import type { TextStyleTokens } from './text-style-tokens'
+import type { ComponentTokenConfig, ComponentTokenConfigValue } from './token-config'
+import type { TokenContext } from './token-context'
 
 export type SelectStateValue =
   | InputStateValue
@@ -53,26 +56,35 @@ export type SelectTokenResolver = ComponentTokenResolver<
   SelectTokens
 >
 
+export type SelectParams = {
+  tint: ColorToken,
+  hoverColor: ColorToken,
+  accentColor: ColorToken,
+}
+export type SelectTokenContext = TokenContext<SelectParams>
+
+const tokenVariable = createTokenVariable<SelectParams>()
+
 const menuHeight = tokenCalc(
   'multiply',
-  tokenPath('theme.size.md'),
+  tokenVariable('theme.size.md'),
   tokenValue(11.5)
 )
 
 export const selectTokens = {
   stateLayer: {
-    backgroundColor: stateful(tokenPath('params.tint')),
+    backgroundColor: stateful(tokenVariable('params.tint')),
   },
   header: {
     padding: stateful({
       type: 'physicalSide',
-      top: tokenPath('theme.padding.xl'),
-      bottom: tokenPath('theme.padding.md'),
-      left: tokenPath('theme.padding.xl'),
-      right: tokenPath('theme.padding.xl'),
+      top: tokenVariable('theme.padding.xl'),
+      bottom: tokenVariable('theme.padding.md'),
+      left: tokenVariable('theme.padding.xl'),
+      right: tokenVariable('theme.padding.xl'),
     }),
   },
-  menuSize: stateful<string, Resolvable<NonNullable<ContainerTokens['size']>, string, string>>(
+  menuSize: stateful<string, ComponentTokenConfigValue<NonNullable<ContainerTokens['size']>, SelectTokenContext>>(
     {
       maxHeight: menuHeight,
     },
@@ -84,12 +96,12 @@ export const selectTokens = {
     ]
   ),
   option: {
-    backgroundColor: stateful<string, Resolvable<NonNullable<ContainerTokens['backgroundColor']>, string, string>>(
+    backgroundColor: stateful<string, ComponentTokenConfigValue<NonNullable<ContainerTokens['backgroundColor']>, SelectTokenContext>>(
       {
         value: HexColorUtils.transparent,
       },
       [
-        whenState(['highlighted'], tokenPath('params.hoverColor')),
+        whenState(['highlighted'], tokenVariable('params.hoverColor')),
       ]
     ),
     opacity: stateful(
@@ -100,40 +112,42 @@ export const selectTokens = {
     ),
     padding: stateful({
       type: 'physicalAxis',
-      vertical: tokenPath('theme.padding.xl'),
-      horizontal: tokenPath('theme.spacing.lg'),
+      vertical: tokenVariable('theme.padding.xl'),
+      horizontal: tokenVariable('theme.spacing.lg'),
     }),
   },
   optionText: {
-    fontSize: stateful(tokenPath('theme.typography.body.md.fontSize')),
-    fontFamily: stateful(tokenPath('theme.typography.body.md.fontFamily')),
-    lineHeight: stateful(tokenPath('theme.typography.body.md.lineHeight')),
-    fontWeight: stateful(
-      tokenPath('theme.fontWeights.base'),
+    fontSize: stateful(tokenVariable('theme.typography.body.md.fontSize')),
+    fontFamily: stateful(tokenVariable('theme.typography.body.md.fontFamily')),
+    lineHeight: stateful(tokenVariable('theme.typography.body.md.lineHeight')),
+    fontWeight: statefulField<number>(
+      tokenVariable('theme.fontWeights.base'),
       [
-        whenState(['selected'], tokenPath('theme.fontWeights.semibold')),
+        whenState(['selected'], tokenVariable('theme.fontWeights.semibold')),
       ]
     ),
-    color: stateful(
-      tokenPath('theme.color.surface.onColor'),
+    color: statefulField<ColorToken, SelectTokenContext>(
+      tokenVariable('theme.color.surface.onColor'),
       [
-        whenState(['selected'], tokenPath('params.accentColor')),
+        whenState(['selected'], tokenVariable('params.accentColor')),
       ]
     ),
   },
   emptyText: {
-    fontSize: stateful(tokenPath('theme.typography.body.md.fontSize')),
-    fontFamily: stateful(tokenPath('theme.typography.body.md.fontFamily')),
-    lineHeight: stateful(tokenPath('theme.typography.body.md.lineHeight')),
-    fontWeight: stateful(tokenPath('theme.typography.body.md.fontWeight')),
+    fontSize: stateful(tokenVariable('theme.typography.body.md.fontSize')),
+    fontFamily: stateful(tokenVariable('theme.typography.body.md.fontFamily')),
+    lineHeight: stateful(tokenVariable('theme.typography.body.md.lineHeight')),
+    fontWeight: stateful(tokenVariable('theme.typography.body.md.fontWeight')),
     color: stateful(
       tokenColorBlend(
-        tokenPath('theme.color.surface.color'),
+        tokenVariable('theme.color.surface.color'),
         tokenColorOpacity(
-          tokenPath('theme.color.surface.onColor'),
-          tokenPath('theme.config.appearancePercentages.subtle')
+          tokenVariable('theme.color.surface.onColor'),
+          tokenVariable('theme.config.appearancePercentages.subtle')
         )
       )
     ),
   },
-} as const
+} as const satisfies ComponentTokenConfig<SelectTokens & {
+  menuSize: ContainerTokens['size']
+}, SelectTokenContext>

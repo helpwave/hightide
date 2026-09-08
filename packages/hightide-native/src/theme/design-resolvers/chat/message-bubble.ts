@@ -3,7 +3,7 @@ import {
   type ChatMessageBubbleTokenResolver,
   type ChatMessageBubbleTokens
 } from '@helpwave/hightide-design/component-tokens'
-import { resolveTokenConfig } from '../../static-resolve/resolve'
+import { resolveConfigNode } from '../../static-resolve/resolve'
 
 type ChatMessageBubbleTokenState = 'outgoing'
 
@@ -17,11 +17,11 @@ export const chatMessageBubbleTokenResolver: ChatMessageBubbleTokenResolver = ({
     states.add('outgoing')
   }
 
-  return resolveTokenConfig<ChatMessageBubbleTokens>(
+  return resolveConfigNode<ChatMessageBubbleTokens>(
     chatMessageBubbleTokens,
-    states,
     {
       theme: themeTokens,
+      state: states,
     }
   )
 }

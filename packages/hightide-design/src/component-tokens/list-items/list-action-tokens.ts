@@ -1,19 +1,22 @@
 import {
   stateful,
   tokenCalc,
-  tokenPath,
+  createTokenVariable,
   tokenValue,
-  whenState
+  whenState,
+  statefulField
 } from '../builders'
 import type { ComponentTokenResolver } from '../component-token-resolver'
 import {
   type ListItemTokens
 } from './list-item-tokens'
+import type { ColorToken } from '../../primitive-tokens/color'
 import type { ColorPairToken } from '../../theme-tokens/theme-tokens-config'
 import { HexColorUtils } from '../../utils/hex'
 import type { PressableState } from '../pressable-tokens'
 import type { ContainerTokens } from '../container-tokens'
-import type { Resolvable } from '../resolvable'
+import type { ComponentTokenConfig, ComponentTokenConfigValue } from '../token-config'
+import type { TokenContext } from '../token-context'
 
 export type ListActionItemState = PressableState
 
@@ -29,45 +32,55 @@ export type ListActionTokenResolver = ComponentTokenResolver<
   ListItemTokens
 >
 
+export type ListActionParams = {
+  background: ColorToken,
+  foreground: ColorToken,
+  outlineColor: ColorToken,
+  descriptionColor: ColorToken,
+}
+export type ListActionTokenContext = TokenContext<ListActionParams>
+
+const tokenVariable = createTokenVariable<ListActionParams>()
+
 export const listActionOverlayTokens = {
   container: {
-    backgroundColor: stateful(tokenPath('params.background')),
-    outline: stateful<string, Resolvable<NonNullable<ContainerTokens['outline']>, string, string>>({
-      width: tokenPath('theme.focusOutline.width'),
+    backgroundColor: stateful(tokenVariable('params.background')),
+    outline: stateful<string, ComponentTokenConfigValue<NonNullable<ContainerTokens['outline']>, ListActionTokenContext>>({
+      width: tokenVariable('theme.focusOutline.width'),
       offset: tokenCalc(
         'multiply',
-        tokenPath('theme.focusOutline.width'),
+        tokenVariable('theme.focusOutline.width'),
         tokenValue(-1)
       ),
-      style: tokenPath('theme.focusOutline.style'),
+      style: tokenVariable('theme.focusOutline.style'),
       color: {
         value: HexColorUtils.transparent,
       },
     }, [
       whenState(['focusVisible'], {
-        width: tokenPath('theme.focusOutline.width'),
+        width: tokenVariable('theme.focusOutline.width'),
         offset: tokenCalc(
           'multiply',
-          tokenPath('theme.focusOutline.width'),
+          tokenVariable('theme.focusOutline.width'),
           tokenValue(-1)
         ),
-        style: tokenPath('theme.focusOutline.style'),
-        color: tokenPath('params.outlineColor'),
+        style: tokenVariable('theme.focusOutline.style'),
+        color: tokenVariable('params.outlineColor'),
       }),
     ]),
   },
   titleText: {
-    color: stateful(tokenPath('params.foreground')),
+    color: stateful(tokenVariable('params.foreground')),
   },
   descriptionText: {
-    color: stateful(
-      tokenPath('params.descriptionColor'),
+    color: statefulField<ColorToken, ListActionTokenContext>(
+      tokenVariable('params.descriptionColor'),
       [
-        whenState(['colored'], tokenPath('params.foreground')),
+        whenState(['colored'], tokenVariable('params.foreground')),
       ]
     ),
   },
   icon: {
-    color: stateful(tokenPath('params.foreground')),
+    color: stateful(tokenVariable('params.foreground')),
   },
-} as const
+} as const satisfies ComponentTokenConfig<ListItemTokens, ListActionTokenContext>

@@ -9,7 +9,7 @@ import {
   type SelectTokenResolver,
   type TextStyleTokens
 } from '@helpwave/hightide-design/component-tokens'
-import { resolveTokenConfig } from '../static-resolve/resolve'
+import { resolveConfigNode } from '../static-resolve/resolve'
 import {
   resolveColoringColorVariant,
   resolveColoringStyle,
@@ -77,7 +77,7 @@ export const selectTokenResolver: SelectTokenResolver = ({
     states.add('search')
   }
 
-  const resolved = resolveTokenConfig<{
+  const resolved = resolveConfigNode<{
     stateLayer: ContainerTokens,
     header: ContainerTokens,
     menuSize: ContainerTokens['size'],
@@ -86,7 +86,6 @@ export const selectTokenResolver: SelectTokenResolver = ({
     emptyText: TextStyleTokens,
   }>(
     selectTokens,
-    states,
     {
       theme: themeTokens,
       params: {
@@ -94,6 +93,7 @@ export const selectTokenResolver: SelectTokenResolver = ({
         hoverColor,
         accentColor: accentPair.color,
       } satisfies SelectParams,
+      state: states,
     }
   )
 

@@ -1,7 +1,6 @@
 import {
   buttonTokens,
   type ButtonTokenResolver,
-  type ButtonTokens,
   type PressableButtonTokenParams,
   type PressableStateValue
 } from '@helpwave/hightide-design/component-tokens'
@@ -10,7 +9,12 @@ import {
   type ButtonTokenConfig,
   type ButtonVariant
 } from '@helpwave/hightide-design/semantic-tokens'
-import { resolveTokenConfig, type TokenResolveContext } from '../static-resolve/resolve'
+import {
+  resolveContainerTokenConfig,
+  resolveIconTokenConfig,
+  resolveTextStyleTokenConfig,
+  type TokenResolveContext
+} from '../static-resolve/resolve'
 
 type ButtonTokenState = PressableStateValue | ButtonVariant
 
@@ -40,9 +44,10 @@ export const buttonTokenResolver: ButtonTokenResolver = ({
     state: states,
   }
 
-  return resolveTokenConfig<ButtonTokens>(
-    buttonTokens,
-    states,
-    context
-  )
+  return {
+    container: resolveContainerTokenConfig(buttonTokens.container, context),
+    stateLayer: resolveContainerTokenConfig(buttonTokens.stateLayer, context),
+    icon: resolveIconTokenConfig(buttonTokens.icon, context),
+    text: resolveTextStyleTokenConfig(buttonTokens.text, context),
+  }
 }

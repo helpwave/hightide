@@ -1,6 +1,7 @@
 import type { ComponentTokenResolver } from '../component-token-resolver'
 import type { ContainerTokens } from '../container-tokens'
-import { stateful, tokenPath } from '../builders'
+import type { ComponentTokenConfig } from '../token-config'
+import { stateful, tokenVariable } from '../builders'
 
 export type ChatConversationListTokens = {
   container: ContainerTokens,
@@ -15,7 +16,7 @@ export type ChatConversationListTokenResolver = ComponentTokenResolver<
 
 export const chatConversationListTokens = {
   container: {
-    backgroundColor: stateful(tokenPath('theme.color.surface.color')),
+    backgroundColor: stateful(tokenVariable('theme.color.surface.color')),
     layout: stateful({
       direction: 'vertical',
     }),
@@ -23,18 +24,18 @@ export const chatConversationListTokens = {
   header: {
     padding: stateful({
       type: 'physicalAxis',
-      vertical: tokenPath('theme.spacing.lg'),
-      horizontal: tokenPath('theme.spacing.lg'),
+      vertical: tokenVariable('theme.spacing.lg'),
+      horizontal: tokenVariable('theme.spacing.lg'),
     }),
     layout: stateful({
-      gap: tokenPath('theme.padding.xl'),
+      gap: tokenVariable('theme.padding.xl'),
     }),
   },
   footer: {
     padding: stateful({
       type: 'physicalAxis',
-      vertical: tokenPath('theme.spacing.md'),
-      horizontal: tokenPath('theme.spacing.lg'),
+      vertical: tokenVariable('theme.spacing.md'),
+      horizontal: tokenVariable('theme.spacing.lg'),
     }),
   },
-} as const
+} as const satisfies ComponentTokenConfig<ChatConversationListTokens>

@@ -5,7 +5,7 @@ import {
   type DividerTokens
 } from '@helpwave/hightide-design/component-tokens'
 import type { ColorToken } from '@helpwave/hightide-design/primitive-tokens'
-import { resolveTokenConfig } from '../static-resolve/resolve'
+import { resolveConfigNode } from '../static-resolve/resolve'
 
 type DividerParams = {
   color: ColorToken,
@@ -21,9 +21,8 @@ export const dividerTokenResolver: DividerTokenResolver = ({
   const direction = overrides?.direction ?? 'horizontal'
   const states = new Set<DividerDirection>([direction])
 
-  return resolveTokenConfig<DividerTokens>(
+  return resolveConfigNode<DividerTokens>(
     dividerTokens,
-    states,
     {
       theme: themeTokens,
       params: {
@@ -34,6 +33,7 @@ export const dividerTokenResolver: DividerTokenResolver = ({
         width: overrides?.width ?? 1,
         margin: overrides?.margin ?? themeTokens.padding.md,
       } satisfies DividerParams,
+      state: states,
     }
   )
 }

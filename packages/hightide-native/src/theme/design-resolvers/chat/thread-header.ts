@@ -3,16 +3,16 @@ import {
   type ChatThreadHeaderTokenResolver,
   type ChatThreadHeaderTokens
 } from '@helpwave/hightide-design/component-tokens'
-import { resolveTokenConfig } from '../../static-resolve/resolve'
+import { resolveConfigNode } from '../../static-resolve/resolve'
 
 export const chatThreadHeaderTokenResolver: ChatThreadHeaderTokenResolver = ({
   themeTokens,
 }) => (
-  resolveTokenConfig<ChatThreadHeaderTokens>(
+  resolveConfigNode<ChatThreadHeaderTokens>(
     chatThreadHeaderTokens,
-    new Set(),
     {
       theme: themeTokens,
+      state: new Set(),
     }
   )
 )

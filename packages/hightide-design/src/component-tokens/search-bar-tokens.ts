@@ -1,5 +1,10 @@
 import type { ColorPairToken } from '../theme-tokens/theme-tokens-config'
-import { stateful, tokenCalc, tokenPath, tokenValue } from './builders'
+import {
+  stateful,
+  tokenCalc,
+  createTokenVariable,
+  tokenValue
+} from './builders'
 import type { ComponentTokenResolver } from './component-token-resolver'
 import type { ContainerTokens } from './container-tokens'
 import type { IconTokens } from './icon-tokens'
@@ -7,6 +12,8 @@ import {
   type InputState,
   type InputTokens
 } from './input-tokens'
+import type { ComponentTokenConfig } from './token-config'
+import type { TokenContext } from './token-context'
 
 export type SearchBarState = InputState
 
@@ -29,6 +36,13 @@ export type SearchBarTokenResolver = ComponentTokenResolver<
   SearchBarTokens
 >
 
+export type SearchBarParams = {
+  iconButtonSize: number,
+}
+export type SearchBarTokenContext = TokenContext<SearchBarParams>
+
+const tokenVariable = createTokenVariable<SearchBarParams>()
+
 export const searchBarTokens = {
   container: {
     size: stateful({
@@ -37,8 +51,8 @@ export const searchBarTokens = {
   },
   iconButton: {
     size: stateful({
-      width: tokenPath('params.iconButtonSize'),
-      height: tokenPath('params.iconButtonSize'),
+      width: tokenVariable('params.iconButtonSize'),
+      height: tokenVariable('params.iconButtonSize'),
     }),
     margin: stateful({
       type: 'physicalAxis',
@@ -46,14 +60,14 @@ export const searchBarTokens = {
         'divide',
         tokenCalc(
           'subtract',
-          tokenPath('theme.size.md'),
-          tokenPath('theme.size.sm')
+          tokenVariable('theme.size.md'),
+          tokenVariable('theme.size.sm')
         ),
         tokenValue(2)
       ),
     }),
   },
   icon: {
-    color: stateful(tokenPath('theme.color.surface.onColor')),
+    color: stateful(tokenVariable('theme.color.surface.onColor')),
   },
-} as const
+} as const satisfies ComponentTokenConfig<SearchBarTokens, SearchBarTokenContext>

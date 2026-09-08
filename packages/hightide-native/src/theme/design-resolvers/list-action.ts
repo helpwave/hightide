@@ -7,7 +7,7 @@ import {
   type ListNavigationTokenResolver,
   type PressableStateValue
 } from '@helpwave/hightide-design/component-tokens'
-import { resolveTokenConfig } from '../static-resolve/resolve'
+import { resolveConfigNode } from '../static-resolve/resolve'
 import {
   mapButtonVariant,
   resolveColoringColorVariant,
@@ -72,9 +72,8 @@ export const listActionTokenResolver: ListActionTokenResolver = ({
     states.add('colored')
   }
 
-  const overlay = resolveTokenConfig<Pick<ListItemTokens, 'container' | 'titleText' | 'descriptionText' | 'icon'>>(
+  const overlay = resolveConfigNode<Pick<ListItemTokens, 'container' | 'titleText' | 'descriptionText' | 'icon'>>(
     listActionOverlayTokens,
-    states,
     {
       theme: themeTokens,
       params: {
@@ -83,6 +82,7 @@ export const listActionTokenResolver: ListActionTokenResolver = ({
         outlineColor: coloring.accent,
         descriptionColor: base.descriptionText.color ?? themeTokens.color.surface.onColor,
       } satisfies ListActionParams,
+      state: states,
     }
   )
 

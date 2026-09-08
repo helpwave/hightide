@@ -3,7 +3,7 @@ import {
   type SearchBarTokenResolver,
   type SearchBarTokens
 } from '@helpwave/hightide-design/component-tokens'
-import { resolveTokenConfig } from '../static-resolve/resolve'
+import { resolveConfigNode } from '../static-resolve/resolve'
 import { inputTokenResolver } from './input'
 
 type SearchBarParams = {
@@ -26,14 +26,14 @@ export const searchBarTokenResolver: SearchBarTokenResolver = ({
     themeTokens,
     size: 'sm',
   })
-  const resolved = resolveTokenConfig<Omit<SearchBarTokens, 'input'>>(
+  const resolved = resolveConfigNode<Omit<SearchBarTokens, 'input'>>(
     searchBarTokens,
-    new Set(),
     {
       theme: themeTokens,
       params: {
         iconButtonSize: iconButtonLayout.size,
       } satisfies SearchBarParams,
+      state: new Set(),
     }
   )
 

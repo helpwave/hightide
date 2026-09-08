@@ -1,18 +1,21 @@
-import { type ComponentSize } from '../semantic-tokens'
+import { type ComponentSize, type ControlElementLayoutToken, type InputColoringTokens } from '../semantic-tokens'
+import type { ColorToken } from '../primitive-tokens/color'
 import { HexColorUtils } from '../utils/hex'
 import type { ColorPairToken } from '../theme-tokens/theme-tokens-config'
 import {
   stateful,
   tokenCalc,
-  tokenPath,
+  createTokenVariable,
   tokenValue,
-  whenState
+  whenState,
+  statefulField
 } from './builders'
 import type { ComponentTokenResolver } from './component-token-resolver'
 import type { ContainerTokens } from './container-tokens'
 import type { IconTokens } from './icon-tokens'
 import { inputStateValues } from './input-tokens'
-import type { Resolvable } from './resolvable'
+import type { ComponentTokenConfig, ComponentTokenConfigValue } from './token-config'
+import type { TokenContext } from './token-context'
 
 export const checkboxStateValues = [
   ...inputStateValues,
@@ -46,14 +49,25 @@ export type CheckboxTokenResolver = ComponentTokenResolver<
   CheckboxTokens
 >
 
+export type CheckboxParams = {
+  layout: ControlElementLayoutToken,
+  coloring: InputColoringTokens,
+  tint: ColorToken,
+  accentColor: ColorToken,
+  accentOnColor: ColorToken,
+}
+export type CheckboxTokenContext = TokenContext<CheckboxParams>
+
+const tokenVariable = createTokenVariable<CheckboxParams>()
+
 const checkboxDimension = tokenCalc(
   'round',
-  tokenCalc('multiply', tokenPath('params.layout.size'), tokenValue(0.5))
+  tokenCalc('multiply', tokenVariable('params.layout.size'), tokenValue(0.5))
 )
 
 const checkboxInset = tokenCalc(
   'floor',
-  tokenCalc('multiply', tokenPath('params.layout.inset'), tokenValue(0.5))
+  tokenCalc('multiply', tokenVariable('params.layout.inset'), tokenValue(0.5))
 )
 
 const checkboxIconSize = tokenCalc(
@@ -62,17 +76,17 @@ const checkboxIconSize = tokenCalc(
   tokenCalc(
     'multiply',
     tokenValue(2),
-    tokenCalc('add', checkboxInset, tokenPath('theme.borderWidth.normal'))
+    tokenCalc('add', checkboxInset, tokenVariable('theme.borderWidth.normal'))
   )
 )
 
 export const checkboxTokens = {
   container: {
-    backgroundColor: stateful(
-      tokenPath('theme.color.surface.color'),
+    backgroundColor: statefulField<ColorToken, CheckboxTokenContext>(
+      tokenVariable('theme.color.surface.color'),
       [
-        whenState(['active'], tokenPath('params.accentColor'), ['disabled']),
-        whenState(['disabled'], tokenPath('theme.color.disabled.color')),
+        whenState(['active'], tokenVariable('params.accentColor'), ['disabled']),
+        whenState(['disabled'], tokenVariable('theme.color.disabled.color')),
       ]
     ),
     opacity: stateful(
@@ -85,11 +99,11 @@ export const checkboxTokens = {
       {
         width: {
           type: 'all',
-          value: tokenPath('theme.borderWidth.normal'),
+          value: tokenVariable('theme.borderWidth.normal'),
         },
         color: {
           type: 'all',
-          value: tokenPath('params.coloring.border'),
+          value: tokenVariable('params.coloring.border'),
         },
       },
       [
@@ -100,9 +114,9 @@ export const checkboxTokens = {
       width: checkboxDimension,
       height: checkboxDimension,
     }),
-    borderRadius: stateful({
+    borderRadius: statefulField<NonNullable<ContainerTokens['borderRadius']>, CheckboxTokenContext>({
       type: 'all',
-      value: tokenPath('theme.borderRadius.sm'),
+      value: tokenVariable('theme.borderRadius.sm'),
     },
     [
       whenState(['rounded'], {
@@ -120,7 +134,7 @@ export const checkboxTokens = {
       mainAxisAlignment: 'center',
       crossAxisAlignment: 'center',
     }),
-    outline: stateful<string, Resolvable<NonNullable<ContainerTokens['outline']>, string, string>>(
+    outline: stateful<string, ComponentTokenConfigValue<NonNullable<ContainerTokens['outline']>, CheckboxTokenContext>>(
       {
         width: tokenValue(0),
         offset: tokenValue(0),
@@ -131,41 +145,41 @@ export const checkboxTokens = {
       },
       [
         whenState(['focusVisible'], {
-          width: tokenPath('theme.focusOutline.width'),
-          offset: tokenPath('theme.focusOutline.offset'),
-          style: tokenPath('theme.focusOutline.style'),
-          color: tokenPath('params.accentColor'),
+          width: tokenVariable('theme.focusOutline.width'),
+          offset: tokenVariable('theme.focusOutline.offset'),
+          style: tokenVariable('theme.focusOutline.style'),
+          color: tokenVariable('params.accentColor'),
         }, ['invalid']),
         whenState(['focusVisible', 'invalid'], {
-          width: tokenPath('theme.focusOutline.width'),
-          offset: tokenPath('theme.focusOutline.offset'),
-          style: tokenPath('theme.focusOutline.style'),
-          color: tokenPath('theme.color.negative.color'),
+          width: tokenVariable('theme.focusOutline.width'),
+          offset: tokenVariable('theme.focusOutline.offset'),
+          style: tokenVariable('theme.focusOutline.style'),
+          color: tokenVariable('theme.color.negative.color'),
         }),
       ]
     ),
   },
   stateLayer: {
-    backgroundColor: stateful(tokenPath('params.tint')),
-    borderRadius: stateful({
+    backgroundColor: stateful(tokenVariable('params.tint')),
+    borderRadius: statefulField<NonNullable<ContainerTokens['borderRadius']>, CheckboxTokenContext>({
       type: 'all',
-      value: tokenPath('params.layout.borderRadius'),
+      value: tokenVariable('params.layout.borderRadius'),
     },
     [
       whenState(['rounded'], {
         type: 'all',
-        value: tokenCalc('divide', tokenPath('params.layout.size'), tokenValue(2)),
+        value: tokenCalc('divide', tokenVariable('params.layout.size'), tokenValue(2)),
       }),
     ]),
   },
   icon: {
-    color: stateful(
-      tokenPath('params.accentColor'),
+    color: statefulField<ColorToken, CheckboxTokenContext>(
+      tokenVariable('params.accentColor'),
       [
-        whenState(['active'], tokenPath('params.accentOnColor')),
+        whenState(['active'], tokenVariable('params.accentOnColor')),
       ]
     ),
     size: stateful(checkboxIconSize),
-    strokeWidth: stateful(tokenPath('theme.borderWidth.normal')),
+    strokeWidth: stateful(tokenVariable('theme.borderWidth.normal')),
   },
-} as const
+} as const satisfies ComponentTokenConfig<CheckboxTokens, CheckboxTokenContext>

@@ -1,15 +1,20 @@
+import type { ColorToken } from '../primitive-tokens/color'
 import type { ColorPairToken } from '../theme-tokens/theme-tokens-config'
 import {
   stateful,
   tokenCalc,
-  tokenPath,
+  createTokenVariable,
   tokenValue,
-  whenState
+  whenState,
+  statefulField
 } from './builders'
 import type { ComponentTokenResolver } from './component-token-resolver'
 import type { ContainerTokens } from './container-tokens'
+import { elevationTokens } from './elevation-tokens'
 import type { TextStyleTokens } from './text-style-tokens'
 import type { IconTokens } from './icon-tokens'
+import type { ComponentTokenConfig } from './token-config'
+import type { TokenContext } from './token-context'
 
 export const avatarStatuses = [
   'online',
@@ -54,20 +59,42 @@ export type AvatarTokenResolver = ComponentTokenResolver<
   AvatarTokens
 >
 
+export type AvatarParams = {
+  color: ColorToken,
+  onColor: ColorToken,
+  dimension: number,
+  iconSize: number,
+  iconStrokeWidth: number,
+}
+export type AvatarTokenContext = TokenContext<AvatarParams>
+
+export type AvatarWithStatusParams = {
+  dimension: number,
+}
+export type AvatarWithStatusTokenContext = TokenContext<AvatarWithStatusParams>
+
+export type AvatarGroupParams = {
+  dimension: number,
+  visibleCount: number,
+}
+export type AvatarGroupTokenContext = TokenContext<AvatarGroupParams>
+
+const tokenVariable = createTokenVariable<AvatarParams & AvatarGroupParams>()
+
 export const avatarTokens = {
   container: {
-    backgroundColor: stateful(tokenPath('params.color')),
+    backgroundColor: stateful(tokenVariable('params.color')),
     size: stateful({
-      width: tokenPath('params.dimension'),
-      height: tokenPath('params.dimension'),
-      minWidth: tokenPath('params.dimension'),
-      minHeight: tokenPath('params.dimension'),
-      maxWidth: tokenPath('params.dimension'),
-      maxHeight: tokenPath('params.dimension'),
+      width: tokenVariable('params.dimension'),
+      height: tokenVariable('params.dimension'),
+      minWidth: tokenVariable('params.dimension'),
+      minHeight: tokenVariable('params.dimension'),
+      maxWidth: tokenVariable('params.dimension'),
+      maxHeight: tokenVariable('params.dimension'),
     }),
     borderRadius: stateful({
       type: 'all',
-      value: tokenCalc('divide', tokenPath('params.dimension'), tokenValue(2)),
+      value: tokenCalc('divide', tokenVariable('params.dimension'), tokenValue(2)),
     }),
     layout: stateful({
       direction: 'horizontal',
@@ -76,17 +103,17 @@ export const avatarTokens = {
     }),
     shadow: stateful(undefined,
       [
-        whenState(['grouped'], tokenPath('theme.elevation.level1')),
+        whenState(['grouped'], elevationTokens('level1')),
       ]),
   },
   image: {
     size: stateful({
-      width: tokenPath('params.dimension'),
-      height: tokenPath('params.dimension'),
+      width: tokenVariable('params.dimension'),
+      height: tokenVariable('params.dimension'),
     }),
     borderRadius: stateful({
       type: 'all',
-      value: tokenCalc('divide', tokenPath('params.dimension'), tokenValue(2)),
+      value: tokenCalc('divide', tokenVariable('params.dimension'), tokenValue(2)),
     }),
     position: stateful({
       type: 'absolute',
@@ -95,18 +122,18 @@ export const avatarTokens = {
     }),
   },
   text: {
-    fontSize: stateful(tokenPath('theme.typography.label.sm.fontSize')),
-    fontWeight: stateful(tokenPath('theme.fontWeights.bold')),
-    fontFamily: stateful(tokenPath('theme.typography.label.sm.fontFamily')),
-    lineHeight: stateful(tokenPath('theme.typography.label.sm.lineHeight')),
-    color: stateful(tokenPath('params.onColor')),
+    fontSize: stateful(tokenVariable('theme.typography.label.sm.fontSize')),
+    fontWeight: stateful(tokenVariable('theme.fontWeights.bold')),
+    fontFamily: stateful(tokenVariable('theme.typography.label.sm.fontFamily')),
+    lineHeight: stateful(tokenVariable('theme.typography.label.sm.lineHeight')),
+    color: stateful(tokenVariable('params.onColor')),
   },
   icon: {
-    size: stateful(tokenPath('params.iconSize')),
-    strokeWidth: stateful(tokenPath('params.iconStrokeWidth')),
-    color: stateful(tokenPath('params.onColor')),
+    size: stateful(tokenVariable('params.iconSize')),
+    strokeWidth: stateful(tokenVariable('params.iconStrokeWidth')),
+    color: stateful(tokenVariable('params.onColor')),
   },
-} as const
+} as const satisfies ComponentTokenConfig<AvatarTokens, AvatarTokenContext>
 
 export type AvatarWithStatusState = {
   status?: AvatarStatus,
@@ -136,29 +163,29 @@ export type AvatarWithStatusTokenResolver = ComponentTokenResolver<
 
 const statusDotSize = tokenCalc(
   'round',
-  tokenCalc('multiply', tokenPath('params.dimension'), tokenValue(0.4))
+  tokenCalc('multiply', tokenVariable('params.dimension'), tokenValue(0.4))
 )
 
 export const avatarWithStatusTokens = {
   statusDot: {
-    backgroundColor: stateful(
-      tokenPath('theme.color.disabled.color'),
+    backgroundColor: statefulField<ColorToken, AvatarWithStatusTokenContext>(
+      tokenVariable('theme.color.disabled.color'),
       [
-        whenState(['online'], tokenPath('theme.color.positive.color')),
-        whenState(['busy'], tokenPath('theme.color.negative.color')),
-        whenState(['away'], tokenPath('theme.color.warning.color')),
-        whenState(['offline'], tokenPath('theme.color.disabled.color')),
-        whenState(['unknown'], tokenPath('theme.color.disabled.color')),
+        whenState(['online'], tokenVariable('theme.color.positive.color')),
+        whenState(['busy'], tokenVariable('theme.color.negative.color')),
+        whenState(['away'], tokenVariable('theme.color.warning.color')),
+        whenState(['offline'], tokenVariable('theme.color.disabled.color')),
+        whenState(['unknown'], tokenVariable('theme.color.disabled.color')),
       ]
     ),
     border: stateful({
       width: {
         type: 'all',
-        value: tokenPath('theme.borderWidth.thin'),
+        value: tokenVariable('theme.borderWidth.thin'),
       },
       color: {
         type: 'all',
-        value: tokenPath('theme.color.background.color'),
+        value: tokenVariable('theme.color.background.color'),
       },
     }),
     size: stateful({
@@ -170,7 +197,7 @@ export const avatarWithStatusTokens = {
       value: tokenCalc('divide', statusDotSize, tokenValue(2)),
     }),
   },
-} as const
+} as const satisfies ComponentTokenConfig<AvatarWithStatusTokens, AvatarWithStatusTokenContext>
 
 export type AvatarGroupComponentResolverProps = {
   config: {
@@ -196,7 +223,7 @@ export type AvatarGroupTokenResolver = ComponentTokenResolver<
 
 const avatarStackWidth = tokenCalc(
   'multiply',
-  tokenPath('params.dimension'),
+  tokenVariable('params.dimension'),
   tokenCalc(
     'add',
     tokenValue(1),
@@ -205,7 +232,7 @@ const avatarStackWidth = tokenCalc(
       tokenValue(avatarGroupOverlap),
       tokenCalc(
         'max',
-        tokenCalc('subtract', tokenPath('params.visibleCount'), tokenValue(1)),
+        tokenCalc('subtract', tokenVariable('params.visibleCount'), tokenValue(1)),
         tokenValue(0)
       )
     )
@@ -215,27 +242,29 @@ const avatarStackWidth = tokenCalc(
 export const avatarGroupTokens = {
   container: {
     size: stateful({
-      height: tokenPath('params.dimension'),
+      height: tokenVariable('params.dimension'),
     }),
     layout: stateful({
       direction: 'horizontal',
       crossAxisAlignment: 'center',
-      gap: tokenPath('theme.spacing.sm'),
+      gap: tokenVariable('theme.spacing.sm'),
     }),
   },
   avatarStack: {
     size: stateful({
       width: avatarStackWidth,
-      height: tokenPath('params.dimension'),
+      height: tokenVariable('params.dimension'),
     }),
   },
   text: {
     fontSize: stateful(
-      tokenCalc('multiply', tokenPath('params.dimension'), tokenValue(2 / 3))
+      tokenCalc('multiply', tokenVariable('params.dimension'), tokenValue(2 / 3))
     ),
-    color: stateful(tokenPath('theme.color.background.onColor')),
+    color: stateful(tokenVariable('theme.color.background.onColor')),
   },
   avatarOverrideContainer: {
-    shadow: stateful(tokenPath('theme.elevation.level1')),
+    shadow: stateful(elevationTokens('level1')),
   },
-} as const
+} as const satisfies ComponentTokenConfig<AvatarGroupTokens & {
+  avatarOverrideContainer: ContainerTokens
+}, AvatarGroupTokenContext>

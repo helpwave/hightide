@@ -3,11 +3,12 @@ import type { ContainerTokens } from '../container-tokens'
 import type { PressableOverrideTokens } from '../pressable-tokens'
 import type { TextStyleTokens } from '../text-style-tokens'
 import type { AvatarOverrideTokens } from '../avatar-tokens'
+import type { ComponentTokenConfig } from '../token-config'
 import { surfaceDescriptionColor, surfaceFadedColor } from './shared'
 import {
   stateful,
   tokenCalc,
-  tokenPath,
+  tokenVariable,
   tokenValue
 } from '../builders'
 
@@ -29,28 +30,28 @@ const threadAvatarSize = tokenCalc(
   'max',
   tokenCalc(
     'add',
-    tokenPath('theme.typography.body.md.lineHeight'),
+    tokenVariable('theme.typography.body.md.lineHeight'),
     tokenCalc(
       'add',
-      tokenPath('theme.typography.body.sm.lineHeight'),
-      tokenPath('theme.spacing.xs')
+      tokenVariable('theme.typography.body.sm.lineHeight'),
+      tokenVariable('theme.spacing.xs')
     )
   ),
-  tokenPath('theme.icongraphy.sizes.lg')
+  tokenVariable('theme.icongraphy.sizes.lg')
 )
 
 export const chatThreadHeaderTokens = {
   container: {
-    backgroundColor: stateful(tokenPath('theme.color.surface.color')),
+    backgroundColor: stateful(tokenVariable('theme.color.surface.color')),
     padding: stateful({
       type: 'physicalAxis',
-      vertical: tokenPath('theme.padding.sm'),
-      horizontal: tokenPath('theme.padding.md'),
+      vertical: tokenVariable('theme.padding.sm'),
+      horizontal: tokenVariable('theme.padding.md'),
     }),
     border: stateful({
       width: {
         type: 'physicalSide',
-        bottom: tokenPath('theme.borderWidth.thin'),
+        bottom: tokenVariable('theme.borderWidth.thin'),
       },
       color: {
         type: 'physicalSide',
@@ -60,28 +61,28 @@ export const chatThreadHeaderTokens = {
     layout: stateful({
       direction: 'horizontal',
       crossAxisAlignment: 'center',
-      gap: tokenPath('theme.spacing.xs'),
+      gap: tokenVariable('theme.spacing.xs'),
     }),
   },
   contentRow: {
     layout: stateful({
       direction: 'vertical',
-      gap: tokenPath('theme.spacing.xs'),
+      gap: tokenVariable('theme.spacing.xs'),
       flexGrow: tokenValue(1),
     }),
   },
   title: {
-    fontSize: stateful(tokenPath('theme.typography.body.md.fontSize')),
-    fontFamily: stateful(tokenPath('theme.typography.body.md.fontFamily')),
-    lineHeight: stateful(tokenPath('theme.typography.body.md.lineHeight')),
-    fontWeight: stateful(tokenPath('theme.fontWeights.bold')),
-    color: stateful(tokenPath('theme.color.surface.onColor')),
+    fontSize: stateful(tokenVariable('theme.typography.body.md.fontSize')),
+    fontFamily: stateful(tokenVariable('theme.typography.body.md.fontFamily')),
+    lineHeight: stateful(tokenVariable('theme.typography.body.md.lineHeight')),
+    fontWeight: stateful(tokenVariable('theme.fontWeights.bold')),
+    color: stateful(tokenVariable('theme.color.surface.onColor')),
   },
   subtitle: {
-    fontSize: stateful(tokenPath('theme.typography.body.sm.fontSize')),
-    fontFamily: stateful(tokenPath('theme.typography.body.sm.fontFamily')),
-    lineHeight: stateful(tokenPath('theme.typography.body.sm.lineHeight')),
-    fontWeight: stateful(tokenPath('theme.fontWeights.light')),
+    fontSize: stateful(tokenVariable('theme.typography.body.sm.fontSize')),
+    fontFamily: stateful(tokenVariable('theme.typography.body.sm.fontFamily')),
+    lineHeight: stateful(tokenVariable('theme.typography.body.sm.lineHeight')),
+    fontWeight: stateful(tokenVariable('theme.fontWeights.light')),
     color: stateful(surfaceDescriptionColor),
   },
   avatarOverride: {
@@ -115,14 +116,14 @@ export const chatThreadHeaderTokens = {
       }),
       padding: stateful({
         type: 'all',
-        value: tokenPath('theme.padding.md'),
+        value: tokenVariable('theme.padding.md'),
       }),
       layout: stateful({
         direction: 'horizontal',
         crossAxisAlignment: 'center',
-        gap: tokenPath('theme.spacing.md'),
+        gap: tokenVariable('theme.spacing.md'),
         flexGrow: tokenValue(1),
       }),
     },
   },
-} as const
+} as const satisfies ComponentTokenConfig<ChatThreadHeaderTokens>

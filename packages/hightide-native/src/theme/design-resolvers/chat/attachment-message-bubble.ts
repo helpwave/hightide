@@ -3,7 +3,7 @@ import {
   type ChatAttachmentMessageBubbleTokenResolver,
   type ChatAttachmentMessageBubbleTokens
 } from '@helpwave/hightide-design/component-tokens'
-import { resolveTokenConfig } from '../../static-resolve/resolve'
+import { resolveConfigNode } from '../../static-resolve/resolve'
 
 type ChatAttachmentTokenState = 'outgoing'
 
@@ -17,13 +17,13 @@ export const chatAttachmentMessageBubbleTokenResolver: ChatAttachmentMessageBubb
     states.add('outgoing')
   }
 
-  const resolved = resolveTokenConfig<Omit<ChatAttachmentMessageBubbleTokens, 'chatMessageBubbleOverrides' | 'contentContainer'> & {
+  const resolved = resolveConfigNode<Omit<ChatAttachmentMessageBubbleTokens, 'chatMessageBubbleOverrides' | 'contentContainer'> & {
     contentContainer: Pick<ChatAttachmentMessageBubbleTokens['contentContainer'], 'container'>,
   }>(
     chatAttachmentMessageBubbleTokens,
-    states,
     {
       theme: themeTokens,
+      state: states,
     }
   )
 

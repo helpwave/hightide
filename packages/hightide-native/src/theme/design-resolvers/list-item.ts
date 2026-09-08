@@ -5,7 +5,7 @@ import {
   type ListItemTokens
 } from '@helpwave/hightide-design/component-tokens'
 import type { ControlElementLayoutToken } from '@helpwave/hightide-design/semantic-tokens'
-import { resolveTokenConfig } from '../static-resolve/resolve'
+import { resolveConfigNode } from '../static-resolve/resolve'
 import {
   resolveColoringColorVariant,
   resolveColoringStyle
@@ -47,9 +47,8 @@ export const listItemTokenResolver: ListItemTokenResolver = ({
     states.add('tonal')
   }
 
-  return resolveTokenConfig<ListItemTokens>(
+  return resolveConfigNode<ListItemTokens>(
     listItemTokens,
-    states,
     {
       theme: themeTokens,
       params: {
@@ -59,6 +58,7 @@ export const listItemTokenResolver: ListItemTokenResolver = ({
         descriptionColor,
         backgroundColor: tonal?.background ?? themeTokens.color.surface.color,
       } satisfies ListItemParams,
+      state: states,
     }
   )
 }

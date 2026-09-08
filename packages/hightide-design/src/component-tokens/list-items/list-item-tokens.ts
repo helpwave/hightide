@@ -1,4 +1,6 @@
+import type { ColorToken } from '../../primitive-tokens/color'
 import type { ColorPairToken } from '../../theme-tokens/theme-tokens-config'
+import type { ControlElementLayoutToken } from '../../semantic-tokens'
 import type { ComponentTokenResolver } from '../component-token-resolver'
 import type { ContainerTokens } from '../container-tokens'
 import type { IconTokens } from '../icon-tokens'
@@ -6,9 +8,11 @@ import type { TextStyleTokens } from '../text-style-tokens'
 import {
   stateful,
   tokenCalc,
-  tokenPath,
+  createTokenVariable,
   whenState
 } from '../builders'
+import type { ComponentTokenConfig } from '../token-config'
+import type { TokenContext } from '../token-context'
 
 export type ListItemComponentResolverProps = {
   overrides?: {
@@ -31,26 +35,37 @@ export type ListItemTokenResolver = ComponentTokenResolver<
   ListItemTokens
 >
 
+export type ListItemParams = {
+  layout: ControlElementLayoutToken,
+  largeLayout: ControlElementLayoutToken,
+  titleColor: ColorToken,
+  descriptionColor: ColorToken,
+  backgroundColor?: ColorToken,
+}
+export type ListItemTokenContext = TokenContext<ListItemParams>
+
+const tokenVariable = createTokenVariable<ListItemParams>()
+
 export const listItemTokens = {
   container: {
     backgroundColor: stateful(
       undefined,
       [
-        whenState(['tonal'], tokenPath('params.backgroundColor')),
+        whenState(['tonal'], tokenVariable('params.backgroundColor')),
       ]
     ),
     size: stateful({
-      minWidth: tokenPath('params.layout.size'),
+      minWidth: tokenVariable('params.layout.size'),
       minHeight: tokenCalc(
         'add',
-        tokenPath('params.layout.size'),
-        tokenPath('theme.spacing.md')
+        tokenVariable('params.layout.size'),
+        tokenVariable('theme.spacing.md')
       ),
     }),
     padding: stateful({
       type: 'physicalAxis',
-      vertical: tokenPath('params.largeLayout.inset'),
-      horizontal: tokenPath('params.layout.horizontalContentPadding'),
+      vertical: tokenVariable('params.largeLayout.inset'),
+      horizontal: tokenVariable('params.layout.horizontalContentPadding'),
     }),
     layout: stateful({
       direction: 'horizontal',
@@ -61,7 +76,7 @@ export const listItemTokens = {
   leadingItemContainer: {
     margin: stateful({
       type: 'logicalSide',
-      inlineEnd: tokenPath('theme.spacing.md'),
+      inlineEnd: tokenVariable('theme.spacing.md'),
     }),
     layout: stateful({
       direction: 'horizontal',
@@ -73,7 +88,7 @@ export const listItemTokens = {
       width: '100%',
     }),
     layout: stateful({
-      gap: tokenPath('theme.spacing.xs'),
+      gap: tokenVariable('theme.spacing.xs'),
       direction: 'vertical',
       mainAxisAlignment: 'center',
       crossAxisAlignment: 'start',
@@ -82,7 +97,7 @@ export const listItemTokens = {
   trailingItemContainer: {
     margin: stateful({
       type: 'logicalSide',
-      inlineStart: tokenPath('theme.spacing.xl'),
+      inlineStart: tokenVariable('theme.spacing.xl'),
     }),
     layout: stateful({
       direction: 'horizontal',
@@ -90,22 +105,22 @@ export const listItemTokens = {
     }),
   },
   icon: {
-    size: stateful(tokenPath('theme.icongraphy.sizes.md')),
-    strokeWidth: stateful(tokenPath('theme.icongraphy.strokeWidth')),
-    color: stateful(tokenPath('params.titleColor')),
+    size: stateful(tokenVariable('theme.icongraphy.sizes.md')),
+    strokeWidth: stateful(tokenVariable('theme.icongraphy.strokeWidth')),
+    color: stateful(tokenVariable('params.titleColor')),
   },
   titleText: {
-    fontSize: stateful(tokenPath('theme.typography.body.md.fontSize')),
-    fontFamily: stateful(tokenPath('theme.typography.body.md.fontFamily')),
-    lineHeight: stateful(tokenPath('theme.typography.body.md.lineHeight')),
-    fontWeight: stateful(tokenPath('theme.typography.body.md.fontWeight')),
-    color: stateful(tokenPath('params.titleColor')),
+    fontSize: stateful(tokenVariable('theme.typography.body.md.fontSize')),
+    fontFamily: stateful(tokenVariable('theme.typography.body.md.fontFamily')),
+    lineHeight: stateful(tokenVariable('theme.typography.body.md.lineHeight')),
+    fontWeight: stateful(tokenVariable('theme.typography.body.md.fontWeight')),
+    color: stateful(tokenVariable('params.titleColor')),
   },
   descriptionText: {
-    fontSize: stateful(tokenPath('theme.typography.body.sm.fontSize')),
-    fontFamily: stateful(tokenPath('theme.typography.body.sm.fontFamily')),
-    lineHeight: stateful(tokenPath('theme.typography.body.sm.lineHeight')),
-    fontWeight: stateful(tokenPath('theme.typography.body.sm.fontWeight')),
-    color: stateful(tokenPath('params.descriptionColor')),
+    fontSize: stateful(tokenVariable('theme.typography.body.sm.fontSize')),
+    fontFamily: stateful(tokenVariable('theme.typography.body.sm.fontFamily')),
+    lineHeight: stateful(tokenVariable('theme.typography.body.sm.lineHeight')),
+    fontWeight: stateful(tokenVariable('theme.typography.body.sm.fontWeight')),
+    color: stateful(tokenVariable('params.descriptionColor')),
   },
-} as const
+} as const satisfies ComponentTokenConfig<ListItemTokens, ListItemTokenContext>

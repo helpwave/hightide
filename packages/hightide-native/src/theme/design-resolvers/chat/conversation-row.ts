@@ -3,7 +3,7 @@ import {
   type ChatConversationRowTokenResolver,
   type ChatConversationRowTokens
 } from '@helpwave/hightide-design/component-tokens'
-import { resolveTokenConfig } from '../../static-resolve/resolve'
+import { resolveConfigNode } from '../../static-resolve/resolve'
 
 type ChatConversationRowTokenState = 'unread' | 'selected'
 
@@ -21,11 +21,11 @@ export const chatConversationRowTokenResolver: ChatConversationRowTokenResolver 
     states.add('selected')
   }
 
-  return resolveTokenConfig<ChatConversationRowTokens>(
+  return resolveConfigNode<ChatConversationRowTokens>(
     chatConversationRowTokens,
-    states,
     {
       theme: themeTokens,
+      state: states,
     }
   )
 }

@@ -1,45 +1,65 @@
+import type { ColorToken } from '../primitive-tokens/color'
 import type { ThemeLayoutSize } from '../theme-tokens/theme-tokens-config'
+import type { DotPath } from '../utils/path'
 import type {
   ContextBasedProperty,
   ContextBasedPropertyOverride
 } from './context-based'
+import type { PressableButtonTokenParams } from './pressable-button-params'
 import type {
   NumberCalculationOperation,
   ResolvableColor,
   ResolvableNumber
 } from './resolvable'
-import type { PressableButtonParameterPath, TokenVariablePath } from './token-paths'
+import type { TokenContext, TokenPathOf } from './token-context'
+import type { ComponentTokenConfigValue } from './token-config'
 
 export const tokenValue = <T>(value: T): { value: T } => ({
   value,
 })
 
-export const tokenPath = (path: string): { type: 'variable', path: string } => ({
-  type: 'variable',
-  path,
-})
-
-export const tokenVariable = <P extends TokenVariablePath>(
-  path: P
-): { type: 'variable', path: TokenVariablePath } => ({
+export const tokenVariable = <
+  Params = unknown,
+  P extends TokenPathOf<Params> = TokenPathOf<Params>
+>(
+    path: P
+  ): { type: 'variable', path: P } => ({
     type: 'variable',
     path,
   })
 
-export const tokenParameter = <P extends PressableButtonParameterPath, F>(
-  path: P,
-  fallback: F
-): { type: 'parameter', path: PressableButtonParameterPath, fallback: F } => ({
+export const createTokenVariable = <Params>() => (
+  <P extends TokenPathOf<Params>>(
+    path: P
+  ): { type: 'variable', path: P } => tokenVariable<Params, P>(path)
+)
+
+export const tokenParameter = <
+  Params = PressableButtonTokenParams,
+  P extends (
+    | DotPath<TokenContext<Params>, ColorToken>
+    | DotPath<TokenContext<Params>, number>
+    | DotPath<TokenContext<Params>, string>
+  ) = (
+    | DotPath<TokenContext<Params>, ColorToken>
+    | DotPath<TokenContext<Params>, number>
+    | DotPath<TokenContext<Params>, string>
+  ),
+  F = unknown
+>(
+    path: P,
+    fallback: F
+  ): { type: 'parameter', path: P, fallback: F } => ({
     type: 'parameter',
     path,
     fallback,
   })
 
-export const tokenCalc = <T extends number, P extends string>(
+export const tokenCalc = <P extends string = string, T extends number = number>(
   operation: NumberCalculationOperation,
-  value1: ResolvableNumber<T, P>,
-  value2: ResolvableNumber<T, P> = { value: 0 as T }
-): ResolvableNumber<T, P> => ({
+  value1: ResolvableNumber<P, T>,
+  value2: ResolvableNumber<P, T> = { value: 0 as T }
+): ResolvableNumber<P, T> => ({
     type: 'calculation',
     operation,
     value1,
@@ -48,7 +68,7 @@ export const tokenCalc = <T extends number, P extends string>(
 
 export const tokenColorOpacity = <ColorPath extends string, NumberPath extends string>(
   color: ResolvableColor<ColorPath, NumberPath>,
-  amount: ResolvableNumber<number, NumberPath>
+  amount: ResolvableNumber<NumberPath>
 ): ResolvableColor<ColorPath, NumberPath> => ({
     type: 'color',
     operation: 'opacity',
@@ -58,7 +78,7 @@ export const tokenColorOpacity = <ColorPath extends string, NumberPath extends s
 
 export const tokenColorLightness = <ColorPath extends string, NumberPath extends string>(
   color: ResolvableColor<ColorPath, NumberPath>,
-  amount: ResolvableNumber<number, NumberPath>
+  amount: ResolvableNumber<NumberPath>
 ): ResolvableColor<ColorPath, NumberPath> => ({
     type: 'color',
     operation: 'lightness',
@@ -79,7 +99,7 @@ export const tokenColorBlend = <ColorPath extends string, NumberPath extends str
 export const stateful = <
   S extends string,
   V,
-  C extends Record<string, string> = Record<string, never>
+  C extends Record<string, string> = Record<string, string>
 >(
     base: V,
     overrides?: ReadonlyArray<ContextBasedPropertyOverride<S, C, V>>
@@ -88,6 +108,17 @@ export const stateful = <
     overrides,
   })
 
+export const statefulField = <
+  T,
+  Context = TokenContext<unknown>,
+  S extends string = string
+>(
+    base: ComponentTokenConfigValue<T, Context>,
+    overrides?: ReadonlyArray<ContextBasedPropertyOverride<S, Record<string, string>, ComponentTokenConfigValue<T, Context>>>
+  ): ContextBasedProperty<S, Record<string, string>, ComponentTokenConfigValue<T, Context>> => (
+    stateful(base, overrides)
+  )
+
 const toStateSet = <S extends string>(
   value: ReadonlyArray<S> | ReadonlySet<S>
 ): ReadonlySet<S> => (value instanceof Set ? value : new Set(value))
@@ -95,7 +126,7 @@ const toStateSet = <S extends string>(
 export const whenState = <
   S extends string,
   V,
-  C extends Record<string, string> = Record<string, never>
+  C extends Record<string, string> = Record<string, string>
 >(
     condition: ReadonlyArray<S> | ReadonlySet<S>,
     value: V,

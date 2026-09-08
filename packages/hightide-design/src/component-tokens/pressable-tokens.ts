@@ -14,7 +14,7 @@ import {
 import type { ComponentTokenResolver } from './component-token-resolver'
 import type { ContainerTokens } from './container-tokens'
 import type { IconTokens } from './icon-tokens'
-import type { Resolvable } from './resolvable'
+import type { PressableButtonTokenParams } from './pressable-button-params'
 import type { TextStyleTokens } from './text-style-tokens'
 import {
   pressableButtonBorderRadius,
@@ -28,6 +28,8 @@ import {
   pressableButtonMinHeight,
   pressablePadding
 } from './pressable-button-shared-tokens'
+import type { ComponentTokenConfig, ComponentTokenConfigValue } from './token-config'
+import type { TokenContext } from './token-context'
 
 export const pressableStateValues = [
   'disabled',
@@ -56,6 +58,9 @@ export const toPressableState = (state: ReadonlySet<string>): PressableState => 
   }
   return active
 }
+
+export type PressableParams = Pick<PressableButtonTokenParams, 'colorPair'>
+export type PressableTokenContext = TokenContext<PressableParams>
 
 export type PressableComponentResolverProps = {
   overrides: {
@@ -93,7 +98,7 @@ export const pressableTokens = {
         whenState(['disabled'], tokenValue(0.6)),
       ]
     ),
-    outline: stateful<string, Resolvable<NonNullable<ContainerTokens['outline']>, string, string>>(
+    outline: stateful<string, ComponentTokenConfigValue<NonNullable<ContainerTokens['outline']>>>(
       {
         width: tokenValue(0),
         offset: tokenValue(0),
@@ -147,4 +152,4 @@ export const pressableTokens = {
     fontFamily: pressableButtonFontFamily,
     lineHeight: pressableButtonLineHeight,
   },
-} as const
+} as const satisfies ComponentTokenConfig<PressableTokens, PressableTokenContext>

@@ -1,7 +1,12 @@
 import type { ColorToken, HexColorToken } from '@helpwave/hightide-design/primitive-tokens'
 import type {
+  ComponentTokenConfig,
+  ContainerTokens,
   ContextBasedProperty,
-  NumberCalculationOperation
+  IconTokens,
+  NumberCalculationOperation,
+  TextStyleTokens,
+  TokenContext
 } from '@helpwave/hightide-design/component-tokens'
 import { matchesConfigCondition } from '@helpwave/hightide-design/component-tokens'
 import { HexColorUtils, OKLCHUtils } from '@helpwave/hightide-design/utils'
@@ -283,29 +288,25 @@ export function resolveResolvableValue (
   return result
 }
 
-export const resolveConfigNode = (
+export const resolveConfigNode = <T = unknown>(
   value: unknown,
-  state: ReadonlySet<string>,
   context: TokenResolveContext
-): unknown => {
-  const resolveContext: TokenResolveContext = {
-    ...context,
-    state: context.state ?? state,
-  }
+): T => {
+  const state = context.state ?? new Set<string>()
 
   if (isContextBasedProperty(value)) {
     return resolveResolvableValue(
-      resolveContextBasedProperty(value, state, resolveContext.config),
-      resolveContext
-    )
+      resolveContextBasedProperty(value, state, context.config),
+      context
+    ) as T
   }
 
   if (Array.isArray(value)) {
-    return value.map((item) => resolveConfigNode(item, state, resolveContext))
+    return value.map((item) => resolveConfigNode(item, context)) as T
   }
 
   if (!isRecord(value)) {
-    return resolveResolvableValue(value, resolveContext)
+    return resolveResolvableValue(value, context) as T
   }
 
   if (
@@ -315,20 +316,29 @@ export const resolveConfigNode = (
     || value.type === 'color'
     || (value.type === undefined && 'value' in value)
   ) {
-    return resolveResolvableValue(value, resolveContext)
+    return resolveResolvableValue(value, context) as T
   }
 
   const result: Record<string, unknown> = {}
 
   for (const key of Object.keys(value)) {
-    result[key] = resolveConfigNode(value[key], state, resolveContext)
+    result[key] = resolveConfigNode(value[key], context)
   }
 
-  return result
+  return result as T
 }
 
-export const resolveTokenConfig = <T>(
-  tokens: unknown,
-  state: ReadonlySet<string>,
+export const resolveContainerTokenConfig = (
+  tokens: ComponentTokenConfig<ContainerTokens, TokenContext<any>>,
   context: TokenResolveContext
-): T => resolveConfigNode(tokens, state, { ...context, state }) as T
+): ContainerTokens => resolveConfigNode<ContainerTokens>(tokens, context)
+
+export const resolveIconTokenConfig = (
+  tokens: ComponentTokenConfig<IconTokens, TokenContext<any>>,
+  context: TokenResolveContext
+): IconTokens => resolveConfigNode<IconTokens>(tokens, context)
+
+export const resolveTextStyleTokenConfig = (
+  tokens: ComponentTokenConfig<TextStyleTokens, TokenContext<any>>,
+  context: TokenResolveContext
+): TextStyleTokens => resolveConfigNode<TextStyleTokens>(tokens, context)

@@ -3,16 +3,16 @@ import {
   type ChatMessageComposerTokenResolver,
   type ChatMessageComposerTokens
 } from '@helpwave/hightide-design/component-tokens'
-import { resolveTokenConfig } from '../../static-resolve/resolve'
+import { resolveConfigNode } from '../../static-resolve/resolve'
 
 export const chatMessageComposerTokenResolver: ChatMessageComposerTokenResolver = ({
   themeTokens,
 }) => (
-  resolveTokenConfig<ChatMessageComposerTokens>(
+  resolveConfigNode<ChatMessageComposerTokens>(
     chatMessageComposerTokens,
-    new Set(),
     {
       theme: themeTokens,
+      state: new Set(),
     }
   )
 )

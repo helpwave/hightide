@@ -4,7 +4,7 @@ import type {
 } from '../theme-tokens/theme-tokens-config'
 import {
   tokenCalc,
-  tokenPath,
+  tokenVariable,
   tokenValue
 } from '../component-tokens/builders'
 
@@ -65,30 +65,30 @@ const smallerKeyMapping = {
 const createControlLayoutTokens = (
   size: ThemeLayoutSize
 ) => ({
-  size: tokenPath(`theme.size.${size}`),
-  inset: tokenPath(`theme.padding.${size}`),
-  borderWidth: tokenPath('theme.borderWidth.normal'),
-  borderRadius: tokenPath(`theme.borderRadius.${size}`),
+  size: tokenVariable(`theme.size.${size}`),
+  inset: tokenVariable(`theme.padding.${size}`),
+  borderWidth: tokenVariable('theme.borderWidth.normal'),
+  borderRadius: tokenVariable(`theme.borderRadius.${size}`),
   horizontalContentPadding: tokenCalc(
     'add',
-    tokenPath(`theme.padding.${size}`),
-    tokenPath(`theme.spacing.${size}`)
+    tokenVariable(`theme.padding.${size}`),
+    tokenVariable(`theme.spacing.${size}`)
   ),
 })
 
 const createContainerLayoutTokens = (
   size: ThemeLayoutSize
 ) => ({
-  size: tokenPath(`theme.size.${size}`),
-  insetY: tokenPath(`theme.padding.${size}`),
+  size: tokenVariable(`theme.size.${size}`),
+  insetY: tokenVariable(`theme.padding.${size}`),
   insetX: tokenCalc(
     'add',
-    tokenPath(`theme.padding.${size}`),
-    tokenPath(`theme.spacing.${size}`)
+    tokenVariable(`theme.padding.${size}`),
+    tokenVariable(`theme.spacing.${size}`)
   ),
-  borderRadius: tokenPath(`theme.borderRadius.${size}`),
-  minimumWidth: tokenPath(`theme.size.${size}`),
-  minimumHeight: tokenPath(`theme.size.${size}`),
+  borderRadius: tokenVariable(`theme.borderRadius.${size}`),
+  minimumWidth: tokenVariable(`theme.size.${size}`),
+  minimumHeight: tokenVariable(`theme.size.${size}`),
 })
 
 const createInsideControlLayoutTokens = (
@@ -101,23 +101,23 @@ const createInsideControlLayoutTokens = (
       'subtract',
       tokenCalc(
         'subtract',
-        tokenPath(`theme.size.${size}`),
+        tokenVariable(`theme.size.${size}`),
         tokenCalc(
           'multiply',
-          tokenPath(`theme.padding.${size}`),
+          tokenVariable(`theme.padding.${size}`),
           tokenValue(2)
         )
       ),
       tokenCalc(
         'multiply',
-        tokenPath('theme.borderWidth.normal'),
+        tokenVariable('theme.borderWidth.normal'),
         tokenValue(2)
       )
     ),
-    inset: tokenPath(`theme.padding.${smallerKey}`),
-    borderWidth: tokenPath('theme.borderWidth.thin'),
-    borderRadius: tokenPath(`theme.borderRadius.${smallerKey}`),
-    paddingExtension: tokenPath(`theme.spacing.${smallerKey}`),
+    inset: tokenVariable(`theme.padding.${smallerKey}`),
+    borderWidth: tokenVariable('theme.borderWidth.thin'),
+    borderRadius: tokenVariable(`theme.borderRadius.${smallerKey}`),
+    paddingExtension: tokenVariable(`theme.spacing.${smallerKey}`),
   }
 }
 
@@ -145,4 +145,4 @@ export const insideControlLayoutTokens = {
   xl: createInsideControlLayoutTokens('xl'),
 } as const
 
-export const touchTargetSizeTokens = tokenPath('theme.size.md')
+export const touchTargetSizeTokens = tokenVariable('theme.size.md')

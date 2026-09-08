@@ -6,6 +6,7 @@ import type {
   PressableTokens
 } from '../pressable-tokens'
 import type { TextStyleTokens } from '../text-style-tokens'
+import type { ComponentTokenConfig } from '../token-config'
 import {
   type ChatMessageBubbleTokens
 } from './message-bubble'
@@ -15,7 +16,7 @@ import {
 import {
   stateful,
   tokenColorOpacity,
-  tokenPath,
+  tokenVariable,
   tokenValue
 } from '../builders'
 
@@ -49,24 +50,24 @@ export const chatAttachmentMessageBubbleTokens = {
       layout: stateful({
         direction: 'horizontal',
         crossAxisAlignment: 'center',
-        gap: tokenPath('theme.spacing.md'),
+        gap: tokenVariable('theme.spacing.md'),
       }),
     },
   },
   fileIconContainer: {
     backgroundColor: stateful(
       tokenColorOpacity(
-        tokenPath('theme.color.negative.color'),
+        tokenVariable('theme.color.negative.color'),
         tokenValue(0.2)
       )
     ),
     size: stateful({
-      width: tokenPath('theme.size.md'),
-      height: tokenPath('theme.size.md'),
+      width: tokenVariable('theme.size.md'),
+      height: tokenVariable('theme.size.md'),
     }),
     borderRadius: stateful({
       type: 'all',
-      value: tokenPath('theme.borderRadius.sm'),
+      value: tokenVariable('theme.borderRadius.sm'),
     }),
     layout: stateful({
       mainAxisAlignment: 'center',
@@ -74,14 +75,14 @@ export const chatAttachmentMessageBubbleTokens = {
     }),
   },
   fileIcon: {
-    size: stateful(tokenPath('theme.icongraphy.sizes.md')),
-    strokeWidth: stateful(tokenPath('theme.icongraphy.strokeWidth')),
-    color: stateful(tokenPath('theme.color.negative.color')),
+    size: stateful(tokenVariable('theme.icongraphy.sizes.md')),
+    strokeWidth: stateful(tokenVariable('theme.icongraphy.strokeWidth')),
+    color: stateful(tokenVariable('theme.color.negative.color')),
   },
   downloadIconContainer: {
     size: stateful({
-      width: tokenPath('theme.size.sm'),
-      height: tokenPath('theme.size.sm'),
+      width: tokenVariable('theme.size.sm'),
+      height: tokenVariable('theme.size.sm'),
     }),
     layout: stateful({
       mainAxisAlignment: 'center',
@@ -89,19 +90,19 @@ export const chatAttachmentMessageBubbleTokens = {
     }),
   },
   downloadIcon: {
-    size: stateful(tokenPath('theme.icongraphy.sizes.sm')),
-    strokeWidth: stateful(tokenPath('theme.icongraphy.strokeWidth')),
+    size: stateful(tokenVariable('theme.icongraphy.sizes.sm')),
+    strokeWidth: stateful(tokenVariable('theme.icongraphy.strokeWidth')),
   },
   fileNameText: {
-    fontSize: stateful(tokenPath('theme.typography.body.sm.fontSize')),
-    fontFamily: stateful(tokenPath('theme.typography.body.sm.fontFamily')),
-    lineHeight: stateful(tokenPath('theme.typography.body.sm.lineHeight')),
-    fontWeight: stateful(tokenPath('theme.fontWeights.medium')),
+    fontSize: stateful(tokenVariable('theme.typography.body.sm.fontSize')),
+    fontFamily: stateful(tokenVariable('theme.typography.body.sm.fontFamily')),
+    lineHeight: stateful(tokenVariable('theme.typography.body.sm.lineHeight')),
+    fontWeight: stateful(tokenVariable('theme.fontWeights.medium')),
   },
   fileMetadataText: {
-    fontSize: stateful(tokenPath('theme.typography.body.sm.fontSize')),
-    fontFamily: stateful(tokenPath('theme.typography.body.sm.fontFamily')),
-    lineHeight: stateful(tokenPath('theme.typography.body.sm.lineHeight')),
-    fontWeight: stateful(tokenPath('theme.typography.body.sm.fontWeight')),
+    fontSize: stateful(tokenVariable('theme.typography.body.sm.fontSize')),
+    fontFamily: stateful(tokenVariable('theme.typography.body.sm.fontFamily')),
+    lineHeight: stateful(tokenVariable('theme.typography.body.sm.lineHeight')),
+    fontWeight: stateful(tokenVariable('theme.typography.body.sm.fontWeight')),
   },
-} as const
+} as const satisfies ComponentTokenConfig<ChatAttachmentMessageBubbleTokens>

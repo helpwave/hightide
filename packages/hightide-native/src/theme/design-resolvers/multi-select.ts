@@ -13,7 +13,7 @@ import {
   type PressableStateValue,
   type TextStyleTokens
 } from '@helpwave/hightide-design/component-tokens'
-import { resolveTokenConfig } from '../static-resolve/resolve'
+import { resolveConfigNode } from '../static-resolve/resolve'
 import {
   resolveColoringColorVariant,
   resolveColoringStyle,
@@ -97,7 +97,7 @@ export const multiSelectTokenResolver: MultiSelectTokenResolver = ({
     states.add('search')
   }
 
-  const resolved = resolveTokenConfig<{
+  const resolved = resolveConfigNode<{
     stateLayer: ContainerTokens,
     header: ContainerTokens,
     menuSize: ContainerTokens['size'],
@@ -106,7 +106,6 @@ export const multiSelectTokenResolver: MultiSelectTokenResolver = ({
     emptyText: TextStyleTokens,
   }>(
     multiSelectTokens,
-    states,
     {
       theme: themeTokens,
       params: {
@@ -114,6 +113,7 @@ export const multiSelectTokenResolver: MultiSelectTokenResolver = ({
         hoverColor,
         accentColor: accentPair.color,
       } satisfies MultiSelectParams,
+      state: states,
     }
   )
 

@@ -1,11 +1,13 @@
 import type { ColorToken } from '../primitive-tokens/color'
 import type { ComponentTokenResolver } from './component-token-resolver'
 import type { ContainerTokens } from './container-tokens'
-import type { Resolvable } from './resolvable'
+import type { ComponentTokenConfig, ComponentTokenConfigValue } from './token-config'
+import type { TokenContext } from './token-context'
 import {
   stateful,
-  tokenPath,
-  whenState
+  createTokenVariable,
+  whenState,
+  statefulField
 } from './builders'
 
 export type DividerDirection = 'horizontal' | 'vertical'
@@ -21,35 +23,44 @@ export type DividerComponentResolverProps = {
 
 export type DividerTokens = ContainerTokens
 
+export type DividerParams = {
+  color: ColorToken,
+  width: number,
+  margin: number,
+}
+export type DividerTokenContext = TokenContext<DividerParams>
+
+const tokenVariable = createTokenVariable<DividerParams>()
+
 export type DividerTokenResolver = ComponentTokenResolver<
   DividerComponentResolverProps,
   DividerTokens
 >
 
 export const dividerTokens = {
-  margin: stateful(
+  margin: statefulField<NonNullable<ContainerTokens['margin']>, DividerTokenContext>(
     {
       type: 'physicalAxis',
-      horizontal: tokenPath('params.margin'),
-      vertical: tokenPath('params.width'),
+      horizontal: tokenVariable('params.margin'),
+      vertical: tokenVariable('params.width'),
     },
     [
       whenState(['vertical'], {
         type: 'physicalAxis',
-        vertical: tokenPath('params.margin'),
-        horizontal: tokenPath('params.width'),
+        vertical: tokenVariable('params.margin'),
+        horizontal: tokenVariable('params.width'),
       }),
     ]
   ),
-  border: stateful<string, Resolvable<NonNullable<ContainerTokens['border']>, string, string>>(
+  border: stateful<string, ComponentTokenConfigValue<NonNullable<ContainerTokens['border']>, DividerTokenContext>>(
     {
       width: {
         type: 'physicalSide',
-        bottom: tokenPath('params.width'),
+        bottom: tokenVariable('params.width'),
       },
       color: {
         type: 'physicalSide',
-        bottom: tokenPath('params.color'),
+        bottom: tokenVariable('params.color'),
       },
       style: 'solid',
     },
@@ -57,11 +68,11 @@ export const dividerTokens = {
       whenState(['vertical'], {
         width: {
           type: 'physicalSide',
-          right: tokenPath('params.width'),
+          right: tokenVariable('params.width'),
         },
         color: {
           type: 'physicalSide',
-          right: tokenPath('params.color'),
+          right: tokenVariable('params.color'),
         },
         style: 'solid',
       }),
@@ -75,4 +86,4 @@ export const dividerTokens = {
       whenState(['vertical'], {}),
     ]
   ),
-} as const
+} as const satisfies ComponentTokenConfig<DividerTokens, DividerTokenContext>

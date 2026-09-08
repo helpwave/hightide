@@ -30,7 +30,7 @@ import {
   type PressableColoringTokens,
   type SemanticTokenResolvers
 } from '@helpwave/hightide-design/semantic-tokens'
-import { resolveResolvableValue, resolveTokenConfig } from '../static-resolve/resolve'
+import { resolveResolvableValue, resolveConfigNode } from '../static-resolve/resolve'
 
 const layoutContext = (themeTokens: ThemeTokens) => ({
   theme: themeTokens,
@@ -41,9 +41,8 @@ export const resolveColoringColorVariant = (params: {
   colorPair: ColorPairToken,
   variant: ColoringColorVariant,
 }): ColoringColorTokens => (
-  resolveTokenConfig<ColoringColorTokens>(
+  resolveConfigNode<ColoringColorTokens>(
     coloringVariantTokens,
-    new Set(),
     {
       theme: params.themeTokens,
       semantics: semanticTokens,
@@ -53,6 +52,7 @@ export const resolveColoringColorVariant = (params: {
       config: {
         coloringColorVariant: params.variant,
       },
+      state: new Set(),
     }
   )
 )
@@ -62,9 +62,8 @@ export const resolveColoringStyle = (params: {
   coloring: ColoringColorTokens,
   style: ColoringStyle,
 }): ColoringToken => (
-  resolveTokenConfig<ColoringToken>(
+  resolveConfigNode<ColoringToken>(
     coloringStyleTokens,
-    new Set(),
     {
       theme: params.themeTokens,
       semantics: semanticTokens,
@@ -74,6 +73,7 @@ export const resolveColoringStyle = (params: {
       config: {
         coloringStyle: params.style,
       },
+      state: new Set(),
     }
   )
 )
@@ -141,14 +141,14 @@ export const resolveInputColoring = (params: {
     states.add('focused')
   }
 
-  return resolveTokenConfig<InputColoringTokens>(
+  return resolveConfigNode<InputColoringTokens>(
     inputColoringTokens,
-    states,
     {
       theme: params.themeTokens,
       params: {
         accentPair,
       },
+      state: states,
     }
   )
 }
@@ -162,15 +162,15 @@ export const resolvePressableStateLayerTint = (params: {
     return HexColorUtils.transparent
   }
 
-  return resolveTokenConfig<{ tint: ColorToken }>(
+  return resolveConfigNode<{ tint: ColorToken }>(
     pressableStateLayerTintTokens,
-    params.states,
     {
       theme: params.themeTokens,
       semantics: semanticTokens,
       params: {
         color: params.color,
       },
+      state: params.states,
     }
   ).tint
 }
@@ -196,9 +196,8 @@ export const resolvePressableColoring = (params: {
     params.variant,
   ])
 
-  return resolveTokenConfig<PressableColoringTokens>(
+  return resolveConfigNode<PressableColoringTokens>(
     pressableColoringTokens,
-    states,
     {
       theme: params.themeTokens,
       semantics: semanticTokens,
@@ -209,6 +208,7 @@ export const resolvePressableColoring = (params: {
       config: {
         variant: params.variant,
       },
+      state: states,
     }
   )
 }

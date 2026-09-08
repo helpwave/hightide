@@ -1,29 +1,36 @@
+import type { HexColorToken } from '../primitive-tokens/color'
 import {
   tokenColorBlend,
   tokenColorOpacity,
-  tokenPath
+  createTokenVariable
 } from '../component-tokens/builders'
+
+export type TintedSurfaceParams = {
+  tintColor: HexColorToken,
+}
+
+const tokenVariable = createTokenVariable<TintedSurfaceParams>()
 
 export const tintedSurfaceTokens = {
   light: tokenColorBlend(
-    tokenPath('theme.color.surface.color'),
+    tokenVariable('theme.color.surface.color'),
     tokenColorOpacity(
-      tokenPath('params.tintColor'),
-      tokenPath('theme.color.tintConfig.light')
+      tokenVariable('params.tintColor'),
+      tokenVariable('theme.color.tintConfig.light')
     )
   ),
   normal: tokenColorBlend(
-    tokenPath('theme.color.surface.color'),
+    tokenVariable('theme.color.surface.color'),
     tokenColorOpacity(
-      tokenPath('params.tintColor'),
-      tokenPath('theme.color.tintConfig.normal')
+      tokenVariable('params.tintColor'),
+      tokenVariable('theme.color.tintConfig.normal')
     )
   ),
   strong: tokenColorBlend(
-    tokenPath('theme.color.surface.color'),
+    tokenVariable('theme.color.surface.color'),
     tokenColorOpacity(
-      tokenPath('params.tintColor'),
-      tokenPath('theme.color.tintConfig.strong')
+      tokenVariable('params.tintColor'),
+      tokenVariable('theme.color.tintConfig.strong')
     )
   ),
 } as const

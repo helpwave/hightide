@@ -7,5 +7,3 @@ export const semanticTokens = {
   coloring: pressableColoringTokens,
   stateLayerTint: pressableStateLayerTintTokens.tint,
 } as const
-
-export type SemanticTokens = typeof semanticTokens
