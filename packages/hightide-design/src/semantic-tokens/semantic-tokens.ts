@@ -1,10 +1,11 @@
 import { coloringStyleTokens, coloringVariantTokens } from './coloring-style'
-import { pressableColoringTokens } from './pressable-coloring'
+import { pressableColoringTokens, pressableStateLayerTintTokens } from './pressable-coloring'
 
 export const semanticTokens = {
   coloringVariant: coloringVariantTokens,
   coloringStyle: coloringStyleTokens,
-  pressableColoring: pressableColoringTokens,
+  coloring: pressableColoringTokens,
+  stateLayerTint: pressableStateLayerTintTokens.tint,
 } as const
 
 export type SemanticTokens = typeof semanticTokens

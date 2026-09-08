@@ -167,6 +167,7 @@ export const resolvePressableStateLayerTint = (params: {
     params.states,
     {
       theme: params.themeTokens,
+      semantics: semanticTokens,
       params: {
         color: params.color,
       },
@@ -206,8 +207,7 @@ export const resolvePressableColoring = (params: {
         disabledColoring,
       },
       config: {
-        coloringColorVariant: colorVariant,
-        coloringStyle: style,
+        variant: params.variant,
       },
     }
   )

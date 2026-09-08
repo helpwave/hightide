@@ -1,3 +1,4 @@
+import type { ThemeLayoutSize } from '../theme-tokens/theme-tokens-config'
 import type {
   ContextBasedProperty,
   ContextBasedPropertyOverride
@@ -120,3 +121,26 @@ export const whenConfig = <
     configCondition,
     value,
   })
+
+const themeLayoutSizes = ['xs', 'sm', 'md', 'lg', 'xl'] as const satisfies readonly ThemeLayoutSize[]
+
+export const whenThemeSize = <V>(
+  valueForSize: (size: ThemeLayoutSize) => V
+): ReadonlyArray<ContextBasedPropertyOverride<string, { size: ThemeLayoutSize }, V>> => (
+    themeLayoutSizes
+      .filter((size) => size !== 'md')
+      .map((size) => whenConfig({ size }, valueForSize(size)))
+  )
+
+export const whenThemeSizeState = <S extends string, V>(
+  condition: ReadonlyArray<S> | ReadonlySet<S>,
+  valueForSize: (size: ThemeLayoutSize) => V,
+  negativeCondition?: ReadonlyArray<S> | ReadonlySet<S>
+): ReadonlyArray<ContextBasedPropertyOverride<S, { size: ThemeLayoutSize }, V>> => (
+    themeLayoutSizes.map((size) => whenState(
+      condition,
+      valueForSize(size),
+      negativeCondition,
+      { size }
+    ))
+  )

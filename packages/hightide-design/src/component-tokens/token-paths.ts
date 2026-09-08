@@ -14,12 +14,13 @@ export type SemanticTokenValues = {
     background: ColorToken,
     accent: ColorToken,
   },
-  pressableColoring: {
+  coloring: {
     background: ColorToken,
     foreground: ColorToken,
     border: ColorToken,
     outline: ColorToken,
   },
+  stateLayerTint: ColorToken,
 }
 
 export type ThemeVariablePath =

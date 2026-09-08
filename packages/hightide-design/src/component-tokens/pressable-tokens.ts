@@ -7,7 +7,6 @@ import type { ColorPairToken } from '../theme-tokens/theme-tokens-config'
 import { HexColorUtils } from '../utils/hex'
 import {
   stateful,
-  tokenParameter,
   tokenValue,
   tokenVariable,
   whenState
@@ -17,6 +16,18 @@ import type { ContainerTokens } from './container-tokens'
 import type { IconTokens } from './icon-tokens'
 import type { Resolvable } from './resolvable'
 import type { TextStyleTokens } from './text-style-tokens'
+import {
+  pressableButtonBorderRadius,
+  pressableButtonFontFamily,
+  pressableButtonFontSize,
+  pressableButtonFontWeight,
+  pressableButtonGap,
+  pressableButtonIconSize,
+  pressableButtonIconStrokeWidth,
+  pressableButtonLineHeight,
+  pressableButtonMinHeight,
+  pressablePadding
+} from './pressable-button-shared-tokens'
 
 export const pressableStateValues = [
   'disabled',
@@ -73,43 +84,9 @@ export type PressableTokenResolver = ComponentTokenResolver<
   PressableTokens
 >
 
-const layoutSize = tokenParameter('params.layout.size', tokenVariable('theme.size.md'))
-const layoutInset = tokenParameter('params.layout.inset', tokenVariable('theme.padding.md'))
-const layoutBorderRadius = tokenParameter(
-  'params.layout.borderRadius',
-  tokenVariable('theme.borderRadius.md')
-)
-const layoutHorizontalContentPadding = tokenParameter(
-  'params.layout.horizontalContentPadding',
-  tokenVariable('theme.padding.md')
-)
-const tint = tokenParameter('params.tint', { value: HexColorUtils.transparent })
-const textFontSize = tokenParameter(
-  'params.textStyle.fontSize',
-  tokenVariable('theme.typography.label.md.fontSize')
-)
-const textFontWeight = tokenParameter(
-  'params.textStyle.fontWeight',
-  tokenVariable('theme.typography.label.md.fontWeight')
-)
-const textFontFamily = tokenParameter(
-  'params.textStyle.fontFamily',
-  tokenVariable('theme.typography.label.md.fontFamily')
-)
-const textLineHeight = tokenParameter(
-  'params.textStyle.lineHeight',
-  tokenVariable('theme.typography.label.md.lineHeight')
-)
-const iconSize = tokenParameter('params.iconSize', tokenVariable('theme.icongraphy.sizes.md'))
-const iconStrokeWidth = tokenParameter(
-  'params.iconStrokeWidth',
-  tokenVariable('theme.icongraphy.strokeWidth')
-)
-const gap = tokenParameter('params.gap', tokenVariable('theme.spacing.md'))
-
 export const pressableTokens = {
   container: {
-    backgroundColor: stateful(tokenVariable('semantics.pressableColoring.background')),
+    backgroundColor: stateful(tokenVariable('semantics.coloring.background')),
     opacity: stateful(
       tokenValue(1),
       [
@@ -130,40 +107,24 @@ export const pressableTokens = {
           width: tokenVariable('theme.focusOutline.width'),
           offset: tokenVariable('theme.focusOutline.offset'),
           style: tokenVariable('theme.focusOutline.style'),
-          color: tokenVariable('semantics.pressableColoring.outline'),
+          color: tokenVariable('semantics.coloring.outline'),
         }),
       ]
     ),
-    size: stateful({
-      minHeight: layoutSize,
-    }),
-    borderRadius: stateful({
-      type: 'all',
-      value: layoutBorderRadius,
-    }),
-    padding: stateful(
-      {
-        type: 'physicalAxis',
-        vertical: layoutInset,
-        horizontal: layoutInset,
-      },
-      [
-        whenState(['additionalHorizontalPadding'], {
-          type: 'physicalAxis',
-          vertical: layoutInset,
-          horizontal: layoutHorizontalContentPadding,
-        }),
-      ]
-    ),
-    layout: stateful({
-      gap,
+    size: {
+      minHeight: pressableButtonMinHeight,
+    },
+    borderRadius: pressableButtonBorderRadius,
+    padding: pressablePadding,
+    layout: {
+      gap: pressableButtonGap,
       direction: 'horizontal',
       mainAxisAlignment: 'center',
       crossAxisAlignment: 'center',
-    }),
+    },
   },
   stateLayer: {
-    backgroundColor: stateful(tint),
+    backgroundColor: stateful(tokenVariable('semantics.stateLayerTint')),
     position: stateful({
       type: 'absolute',
       top: tokenValue(0),
@@ -172,21 +133,18 @@ export const pressableTokens = {
       left: tokenValue(0),
       zIndex: tokenValue(20),
     }),
-    borderRadius: stateful({
-      type: 'all',
-      value: layoutBorderRadius,
-    }),
+    borderRadius: pressableButtonBorderRadius,
   },
   icon: {
-    size: stateful(iconSize),
-    strokeWidth: stateful(iconStrokeWidth),
-    color: stateful(tokenVariable('semantics.pressableColoring.foreground')),
+    size: pressableButtonIconSize,
+    strokeWidth: pressableButtonIconStrokeWidth,
+    color: stateful(tokenVariable('semantics.coloring.foreground')),
   },
   text: {
-    color: stateful(tokenVariable('semantics.pressableColoring.foreground')),
-    fontSize: stateful(textFontSize),
-    fontWeight: stateful(textFontWeight),
-    fontFamily: stateful(textFontFamily),
-    lineHeight: stateful(textLineHeight),
+    color: stateful(tokenVariable('semantics.coloring.foreground')),
+    fontSize: pressableButtonFontSize,
+    fontWeight: pressableButtonFontWeight,
+    fontFamily: pressableButtonFontFamily,
+    lineHeight: pressableButtonLineHeight,
   },
 } as const

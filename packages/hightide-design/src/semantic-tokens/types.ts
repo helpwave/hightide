@@ -8,6 +8,7 @@ import type { ThemeTokens } from '../theme-tokens/theme-tokens'
 import type { InputState } from '../component-tokens/input-tokens'
 import type { PressableState } from '../component-tokens/pressable-tokens'
 import type {
+  ComponentSize,
   ContainerLayoutToken,
   ControlElementLayoutToken,
   InsideControlElementLayoutToken
@@ -47,14 +48,31 @@ export type InputColoringTokens = {
 
 export type ColoringStyle = 'filled' | 'foreground'
 
+export type ButtonVariant = 'elevated' | 'filled' | 'tonal' | 'outlined' | 'foreground'
+export type IconButtonVariant = Exclude<ButtonVariant, 'outlined'>
+export type ChipVariant = 'filled' | 'tonal'
+
 export type SemanticColoringConfig = {
   coloringColorVariant: ColoringColorVariant,
   coloringStyle: ColoringStyle,
 }
 
-export type ButtonVariant = 'elevated' | 'filled' | 'tonal' | 'outlined' | 'foreground'
-export type IconButtonVariant = Exclude<ButtonVariant, 'outlined'>
-export type ChipVariant = 'filled' | 'tonal'
+export type ButtonTokenConfig = {
+  size: ComponentSize,
+  variant: ButtonVariant,
+}
+
+export type PressableTokenConfig = {
+  size: ComponentSize,
+  coloringColorVariant: ColoringColorVariant,
+  coloringStyle: ColoringStyle,
+}
+
+export type PressableButtonColoringConfig = {
+  variant: ButtonVariant,
+  coloringColorVariant: ColoringColorVariant,
+  coloringStyle: ColoringStyle,
+}
 
 export type { Appearance }
 

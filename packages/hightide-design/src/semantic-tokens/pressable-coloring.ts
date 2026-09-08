@@ -3,14 +3,17 @@ import {
   tokenColorBlend,
   tokenColorOpacity,
   tokenParameter,
-  tokenPath,
   tokenValue,
   tokenVariable,
   whenState
 } from '../component-tokens/builders'
 import type { ResolvableColor } from '../component-tokens/resolvable'
 import { HexColorUtils } from '../utils/hex'
-import type { SemanticColoringConfig } from './types'
+import {
+  buttonVariantsWithColorVariant,
+  buttonVariantsWithStyle
+} from './coloring-style'
+import type { PressableButtonColoringConfig } from './types'
 
 const coloringBackground = tokenParameter(
   'params.coloring.background',
@@ -58,50 +61,68 @@ const disabledTonalForeground = tokenColorBlend(
 )
 
 export const pressableColoringTokens = {
-  background: stateful<string, ResolvableColor<string, string>, SemanticColoringConfig>(
+  background: stateful<string, ResolvableColor<string, string>, PressableButtonColoringConfig>(
     coloringBackground,
     [
       whenState(['disabled'], disabledFilledBackground, undefined, { coloringStyle: 'filled' }),
+      ...buttonVariantsWithStyle('filled').map((variant) => (
+        whenState(['disabled'], disabledFilledBackground, undefined, { variant })
+      )),
       whenState(
         ['disabled'],
         disabledForegroundStyleBackground,
         undefined,
         { coloringStyle: 'foreground' }
       ),
+      ...buttonVariantsWithStyle('foreground').map((variant) => (
+        whenState(['disabled'], disabledForegroundStyleBackground, undefined, { variant })
+      )),
       whenState(
         ['disabled'],
         disabledTonalBackground,
         undefined,
         { coloringColorVariant: 'tonal' }
       ),
+      ...buttonVariantsWithColorVariant('tonal').map((variant) => (
+        whenState(['disabled'], disabledTonalBackground, undefined, { variant })
+      )),
     ]
   ),
-  foreground: stateful<string, ResolvableColor<string, string>, SemanticColoringConfig>(
+  foreground: stateful<string, ResolvableColor<string, string>, PressableButtonColoringConfig>(
     coloringForeground,
     [
       whenState(['disabled'], disabledFilledForeground, undefined, { coloringStyle: 'filled' }),
+      ...buttonVariantsWithStyle('filled').map((variant) => (
+        whenState(['disabled'], disabledFilledForeground, undefined, { variant })
+      )),
       whenState(
         ['disabled'],
         disabledForegroundStyleForeground,
         undefined,
         { coloringStyle: 'foreground' }
       ),
+      ...buttonVariantsWithStyle('foreground').map((variant) => (
+        whenState(['disabled'], disabledForegroundStyleForeground, undefined, { variant })
+      )),
       whenState(
         ['disabled'],
         disabledTonalForeground,
         undefined,
         { coloringColorVariant: 'tonal' }
       ),
+      ...buttonVariantsWithColorVariant('tonal').map((variant) => (
+        whenState(['disabled'], disabledTonalForeground, undefined, { variant })
+      )),
     ]
   ),
-  border: stateful<string, ResolvableColor<string, string>, SemanticColoringConfig>(
+  border: stateful<string, ResolvableColor<string, string>, PressableButtonColoringConfig>(
     { value: HexColorUtils.transparent },
     [
       whenState(['outlined'], coloringAccent),
       whenState(['disabled'], { value: HexColorUtils.transparent }),
     ]
   ),
-  outline: stateful<string, ResolvableColor<string, string>, SemanticColoringConfig>(
+  outline: stateful<string, ResolvableColor<string, string>, PressableButtonColoringConfig>(
     { value: HexColorUtils.transparent },
     [
       whenState(['focusVisible'], coloringAccent),
@@ -110,6 +131,11 @@ export const pressableColoringTokens = {
   ),
 } as const
 
+const stateLayerTintColor = tokenParameter(
+  'params.color',
+  tokenVariable('semantics.coloringStyle.foreground')
+)
+
 export const pressableStateLayerTintTokens = {
   tint: stateful<string, ResolvableColor<string, string>>(
     { value: HexColorUtils.transparent },
@@ -117,24 +143,24 @@ export const pressableStateLayerTintTokens = {
       whenState(
         ['hovered'],
         tokenColorOpacity(
-          tokenPath('params.color'),
-          tokenPath('theme.color.tintConfig.light')
+          stateLayerTintColor,
+          tokenVariable('theme.color.tintConfig.light')
         ),
         ['disabled']
       ),
       whenState(
         ['focusVisible'],
         tokenColorOpacity(
-          tokenPath('params.color'),
-          tokenPath('theme.color.tintConfig.normal')
+          stateLayerTintColor,
+          tokenVariable('theme.color.tintConfig.normal')
         ),
         ['disabled']
       ),
       whenState(
         ['pressed'],
         tokenColorOpacity(
-          tokenPath('params.color'),
-          tokenPath('theme.color.tintConfig.normal')
+          stateLayerTintColor,
+          tokenVariable('theme.color.tintConfig.normal')
         ),
         ['disabled']
       ),

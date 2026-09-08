@@ -2,7 +2,6 @@ import type { ColorToken } from '@helpwave/hightide-design/primitive-tokens'
 import { HexColorUtils } from '@helpwave/hightide-design/utils'
 import {
   pressableTokens,
-  toButtonIconSize,
   tokenVariable,
   type PressableButtonTokenParams,
   type PressableStateValue,
@@ -11,22 +10,16 @@ import {
 } from '@helpwave/hightide-design/component-tokens'
 import {
   semanticTokens,
-  toTypographySize
+  type PressableTokenConfig
 } from '@helpwave/hightide-design/semantic-tokens'
 import { resolveResolvableValue, resolveTokenConfig, type TokenResolveContext } from '../static-resolve/resolve'
-import { resolvePressableStateLayerTint } from './semantic'
-import { iconTokenResolver } from './icon'
 
 type PressableTokenState = PressableStateValue | 'outlined' | 'additionalHorizontalPadding'
 
-type PressableParams = Pick<
-  PressableButtonTokenParams,
-  'layout' | 'tint' | 'textStyle' | 'iconSize' | 'iconStrokeWidth' | 'gap' | 'colorPair'
->
+type PressableParams = Pick<PressableButtonTokenParams, 'colorPair'>
 
 export const pressableTokenResolver: PressableTokenResolver = ({
   themeTokens,
-  semanticResolvers,
   overrides,
   state,
 }) => {
@@ -42,36 +35,25 @@ export const pressableTokenResolver: PressableTokenResolver = ({
         onColor: themeTokens.color.surface.color,
       }
   )
-  const layout = semanticResolvers.controlLayout({ themeTokens, size })
-  const textStyle = themeTokens.typography.label[toTypographySize(size)]
-  const iconSizeTokens = iconTokenResolver({
-    themeTokens,
-    semanticResolvers,
-    overrides: { size: toButtonIconSize(size) },
-  })
   const states = new Set<PressableTokenState>(state)
   const params: PressableParams = {
-    layout,
-    tint: HexColorUtils.transparent,
-    textStyle,
-    iconSize: iconSizeTokens.size ?? themeTokens.icongraphy.sizes.md,
-    iconStrokeWidth: iconSizeTokens.strokeWidth ?? themeTokens.icongraphy.strokeWidth,
-    gap: themeTokens.spacing[size],
     colorPair,
+  }
+  const config: PressableTokenConfig = {
+    coloringStyle,
+    coloringColorVariant,
+    size,
   }
   const context: TokenResolveContext = {
     theme: themeTokens,
     semantics: semanticTokens,
     params,
-    config: {
-      coloringColorVariant,
-      coloringStyle,
-    },
+    config,
     state: states,
   }
 
   const outline = resolveResolvableValue(
-    tokenVariable('semantics.pressableColoring.outline'),
+    tokenVariable('semantics.coloring.outline'),
     context
   ) as ColorToken
 
@@ -82,16 +64,6 @@ export const pressableTokenResolver: PressableTokenResolver = ({
   if (hasAdditionalHorizontalPadding) {
     states.add('additionalHorizontalPadding')
   }
-
-  const foreground = resolveResolvableValue(
-    tokenVariable('semantics.coloringStyle.foreground'),
-    context
-  ) as ColorToken
-  params.tint = resolvePressableStateLayerTint({
-    themeTokens,
-    states: state,
-    color: foreground,
-  })
 
   return resolveTokenConfig<PressableTokens>(
     pressableTokens,

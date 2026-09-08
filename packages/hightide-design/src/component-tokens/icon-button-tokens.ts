@@ -7,6 +7,7 @@ import {
   stateful,
   tokenPath,
   tokenValue,
+  tokenVariable,
   whenState
 } from './builders'
 import type { ComponentTokenResolver } from './component-token-resolver'
@@ -45,7 +46,7 @@ export type IconButtonTokenResolver = ComponentTokenResolver<
 
 export const iconButtonTokens = {
   container: {
-    backgroundColor: stateful(tokenPath('params.background')),
+    backgroundColor: stateful(tokenVariable('semantics.coloring.background')),
     opacity: stateful(
       tokenValue(1),
       [
@@ -72,7 +73,7 @@ export const iconButtonTokens = {
       ]),
   },
   stateLayer: {
-    backgroundColor: stateful(tokenPath('params.tint')),
+    backgroundColor: stateful(tokenVariable('semantics.stateLayerTint')),
     position: stateful({
       type: 'absolute',
       top: tokenValue(0),
@@ -89,6 +90,6 @@ export const iconButtonTokens = {
   icon: {
     size: stateful(tokenPath('params.iconSize')),
     strokeWidth: stateful(tokenPath('params.iconStrokeWidth')),
-    color: stateful(tokenPath('params.coloring.foreground')),
+    color: stateful(tokenVariable('semantics.coloring.foreground')),
   },
 } as const

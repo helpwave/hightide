@@ -14,85 +14,8 @@ import type {
   ColoringColorVariant,
   ColoringStyle,
   IconButtonVariant,
-  SemanticColoringConfig
+  PressableButtonColoringConfig
 } from './types'
-
-const colorPairColor = tokenParameter(
-  'params.colorPair.color',
-  tokenVariable('theme.color.primary.color')
-)
-const colorPairOnColor = tokenParameter(
-  'params.colorPair.onColor',
-  tokenVariable('theme.color.primary.onColor')
-)
-
-export const coloringVariantTokens = {
-  color: stateful<string, ResolvableColor<string, string>, SemanticColoringConfig>(
-    colorPairColor,
-    [
-      whenConfig({ coloringColorVariant: 'tonal' }, tokenColorLightness(
-        colorPairColor,
-        tokenVariable('theme.config.coloring.tonal.color')
-      )),
-      whenConfig({ coloringColorVariant: 'transparent' }, tokenColorOpacity(
-        colorPairColor,
-        tokenVariable('theme.config.coloring.transparent.color')
-      )),
-    ]
-  ),
-  onColor: stateful<string, ResolvableColor<string, string>, SemanticColoringConfig>(
-    colorPairOnColor,
-    [
-      whenConfig({ coloringColorVariant: 'tonal' }, tokenColorLightness(
-        colorPairColor,
-        tokenVariable('theme.config.coloring.tonal.onColor')
-      )),
-      whenConfig({ coloringColorVariant: 'transparent' }, tokenColorOpacity(
-        colorPairColor,
-        tokenVariable('theme.config.coloring.transparent.onColor')
-      )),
-    ]
-  ),
-  accent: stateful<string, ResolvableColor<string, string>, SemanticColoringConfig>(
-    colorPairColor
-  ),
-} as const
-
-export const coloringStyleTokens = {
-  foreground: stateful<string, ResolvableColor<string, string>, SemanticColoringConfig>(
-    tokenParameter(
-      'params.coloring.onColor',
-      tokenVariable('semantics.coloringVariant.onColor')
-    ),
-    [
-      whenConfig(
-        { coloringStyle: 'foreground' },
-        tokenParameter(
-          'params.coloring.color',
-          tokenVariable('semantics.coloringVariant.color')
-        )
-      ),
-    ]
-  ),
-  background: stateful<string, ResolvableColor<string, string>, SemanticColoringConfig>(
-    tokenParameter(
-      'params.coloring.color',
-      tokenVariable('semantics.coloringVariant.color')
-    ),
-    [
-      whenConfig(
-        { coloringStyle: 'foreground' },
-        { value: HexColorUtils.transparent }
-      ),
-    ]
-  ),
-  accent: stateful<string, ResolvableColor<string, string>, SemanticColoringConfig>(
-    tokenParameter(
-      'params.coloring.accent',
-      tokenVariable('semantics.coloringVariant.accent')
-    )
-  ),
-} as const
 
 export type ButtonVariantMapping = {
   colorVariant: ColoringColorVariant,
@@ -156,3 +79,121 @@ export const chipVariantMapping = {
 export const mapChipVariant = (
   variant: ChipVariant
 ): { colorVariant: ColoringColorVariant, style: ColoringStyle } => chipVariantMapping[variant]
+
+const buttonVariants = [
+  'elevated',
+  'filled',
+  'tonal',
+  'outlined',
+  'foreground',
+] as const satisfies readonly ButtonVariant[]
+
+const variantsMatching = (
+  match: (mapping: ButtonVariantMapping) => boolean
+): ReadonlyArray<ButtonVariant> => (
+  buttonVariants.filter((variant) => match(buttonVariantMapping[variant]))
+)
+
+export const buttonVariantsWithColorVariant = (
+  colorVariant: ColoringColorVariant
+): ReadonlyArray<ButtonVariant> => (
+  variantsMatching((mapping) => mapping.colorVariant === colorVariant)
+)
+
+export const buttonVariantsWithStyle = (
+  style: ColoringStyle
+): ReadonlyArray<ButtonVariant> => (
+  variantsMatching((mapping) => mapping.style === style)
+)
+
+const whenVariants = <V>(
+  variants: ReadonlyArray<ButtonVariant>,
+  value: V
+) => variants.map((variant) => whenConfig({ variant }, value))
+
+const colorPairColor = tokenParameter(
+  'params.colorPair.color',
+  tokenVariable('theme.color.primary.color')
+)
+const colorPairOnColor = tokenParameter(
+  'params.colorPair.onColor',
+  tokenVariable('theme.color.primary.onColor')
+)
+
+const tonalColor = tokenColorLightness(
+  colorPairColor,
+  tokenVariable('theme.config.coloring.tonal.color')
+)
+const tonalOnColor = tokenColorLightness(
+  colorPairColor,
+  tokenVariable('theme.config.coloring.tonal.onColor')
+)
+const transparentColor = tokenColorOpacity(
+  colorPairColor,
+  tokenVariable('theme.config.coloring.transparent.color')
+)
+const transparentOnColor = tokenColorOpacity(
+  colorPairColor,
+  tokenVariable('theme.config.coloring.transparent.onColor')
+)
+
+const tonalColorVariants = buttonVariantsWithColorVariant('tonal')
+const foregroundStyleVariants = buttonVariantsWithStyle('foreground')
+
+export const coloringVariantTokens = {
+  color: stateful<string, ResolvableColor<string, string>, PressableButtonColoringConfig>(
+    colorPairColor,
+    [
+      whenConfig({ coloringColorVariant: 'tonal' }, tonalColor),
+      ...whenVariants(tonalColorVariants, tonalColor),
+      whenConfig({ coloringColorVariant: 'transparent' }, transparentColor),
+    ]
+  ),
+  onColor: stateful<string, ResolvableColor<string, string>, PressableButtonColoringConfig>(
+    colorPairOnColor,
+    [
+      whenConfig({ coloringColorVariant: 'tonal' }, tonalOnColor),
+      ...whenVariants(tonalColorVariants, tonalOnColor),
+      whenConfig({ coloringColorVariant: 'transparent' }, transparentOnColor),
+    ]
+  ),
+  accent: stateful<string, ResolvableColor<string, string>, PressableButtonColoringConfig>(
+    colorPairColor
+  ),
+} as const
+
+const foregroundStyleColor = tokenParameter(
+  'params.coloring.color',
+  tokenVariable('semantics.coloringVariant.color')
+)
+const filledStyleForeground = tokenParameter(
+  'params.coloring.onColor',
+  tokenVariable('semantics.coloringVariant.onColor')
+)
+const foregroundStyleBackground = { value: HexColorUtils.transparent }
+
+export const coloringStyleTokens = {
+  foreground: stateful<string, ResolvableColor<string, string>, PressableButtonColoringConfig>(
+    filledStyleForeground,
+    [
+      whenConfig({ coloringStyle: 'foreground' }, foregroundStyleColor),
+      ...whenVariants(foregroundStyleVariants, foregroundStyleColor),
+    ]
+  ),
+  background: stateful<string, ResolvableColor<string, string>, PressableButtonColoringConfig>(
+    tokenParameter(
+      'params.coloring.color',
+      tokenVariable('semantics.coloringVariant.color')
+    ),
+    [
+      whenConfig({ coloringStyle: 'foreground' }, foregroundStyleBackground),
+      ...whenVariants(foregroundStyleVariants, foregroundStyleBackground),
+    ]
+  ),
+  accent: stateful<string, ResolvableColor<string, string>, PressableButtonColoringConfig>(
+    tokenParameter(
+      'params.coloring.accent',
+      tokenVariable('semantics.coloringVariant.accent')
+    )
+  ),
+} as const
