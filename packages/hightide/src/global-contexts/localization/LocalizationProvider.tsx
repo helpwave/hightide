@@ -8,33 +8,37 @@ import { useBrowserKeyValueStore } from '@helpwave/hightide-utils/hooks'
 import { LocalizationUtils } from '@helpwave/hightide-utils/utils'
 import { useEffect, useState } from 'react'
 import { useHightideConfig } from '../hightide-config/HightideConfigContext'
+import { SafeGlobals } from '../../utils/safeGlobals'
 
 export type LocalizationProviderProps = PropsWithChildren
   & Omit<LocalizationProviderPropsBase, 'store' | 'systemLocale' | 'fallbackLocale' | 'supportedLocales'>
   & Partial<Pick<LocalizationProviderPropsBase, 'fallbackLocale' | 'supportedLocales' | 'store'>>
 
 const detectWebSystemLocale = (supportedLocales: SupportedLocalesConfig): string | undefined => {
-  if (typeof window === 'undefined') return undefined
+  const win = SafeGlobals.window('useWebSystemLocale.detect')
+  if (!win) return undefined
   return LocalizationUtils.matchBrowserLocales(
-    window.navigator.languages,
+    win.navigator.languages,
     Object.keys(supportedLocales),
     LocalizationUtils.isoLocaleToLanguageShort
   )
 }
 
 const useWebSystemLocale = (supportedLocales: SupportedLocalesConfig) => {
-  const [systemLocale, setSystemLocale] = useState<string | undefined>(() =>
-    detectWebSystemLocale(supportedLocales))
+  const [systemLocale, setSystemLocale] = useState<string | undefined>(undefined)
 
   useEffect(() => {
-    if (typeof window === 'undefined') return
-
     const updateSystemLocale = () => {
       setSystemLocale(detectWebSystemLocale(supportedLocales))
     }
 
-    window.addEventListener('languagechange', updateSystemLocale)
-    return () => window.removeEventListener('languagechange', updateSystemLocale)
+    updateSystemLocale()
+
+    const win = SafeGlobals.window('useWebSystemLocale')
+    if (!win) return
+
+    win.addEventListener('languagechange', updateSystemLocale)
+    return () => win.removeEventListener('languagechange', updateSystemLocale)
   }, [supportedLocales])
 
   return systemLocale

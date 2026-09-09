@@ -5,6 +5,7 @@ import { useControlledState } from '@helpwave/hightide-utils/hooks'
 import { useLocalization } from '../../../global-contexts/localization/forward-exports'
 import { useHightideTranslation } from '@helpwave/hightide-utils/context/translation'
 import { PropsUtil } from '../../../utils/propsUtil'
+import { SafeGlobals } from '../../../utils/safeGlobals'
 import type { FormFieldInteractionStates } from '../../form/FieldLayout'
 import type { FormFieldDataHandling } from '../../form/FormField'
 import type { DateTimeFormat, DateTimePrecision } from '@helpwave/hightide-utils/utils'
@@ -134,7 +135,8 @@ export const DateTimeField = forwardRef<HTMLDivElement, DateTimeFieldProps>(func
       return
     }
     const element = segmentRefs.current.get(focusedType)
-    if (element && document?.activeElement !== element) {
+    const doc = SafeGlobals.document('DateTimeField.focusSegment')
+    if (element && doc?.activeElement !== element) {
       element.focus()
     }
   }, [focusedType])
@@ -224,8 +226,9 @@ export const DateTimeField = forwardRef<HTMLDivElement, DateTimeFieldProps>(func
     if (nextFocus instanceof Node && field.contains(nextFocus)) {
       return
     }
-    requestAnimationFrame(() => {
-      if (field.contains(document?.activeElement)) {
+    SafeGlobals.window('DateTimeField.onFieldBlur')?.requestAnimationFrame(() => {
+      const doc = SafeGlobals.document('DateTimeField.onFieldBlur')
+      if (field.contains(doc?.activeElement ?? null)) {
         return
       }
       setFocusedType(null)

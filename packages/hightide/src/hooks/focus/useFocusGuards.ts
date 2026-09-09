@@ -1,10 +1,12 @@
 import { useEffect } from 'react'
+import { SafeGlobals } from '../../utils/safeGlobals'
 
 const selectorName = 'data-hw-focus-guard'
 
 function FocusGuard() {
-  const element = document?.createElement('div')
-  if(!element) return
+  const doc = SafeGlobals.document('useFocusGuards.FocusGuard')
+  if (!doc) return
+  const element = doc.createElement('div')
   element.setAttribute(selectorName, '')
   element.tabIndex = 0
   element.style.border = 'none'
@@ -31,17 +33,21 @@ class FocusGuardsService {
   }
 
   add() {
-    const edgeGuards = document?.querySelectorAll(`[${selectorName}]`) ?? []
-    if(edgeGuards.length === 0) return
-    document?.body.insertAdjacentElement('afterbegin', edgeGuards[0] ?? FocusGuard())
-    document?.body.insertAdjacentElement('beforeend', edgeGuards[1] ?? FocusGuard())
+    const doc = SafeGlobals.document('useFocusGuards.add')
+    if (!doc?.body) return
+    const edgeGuards = doc.querySelectorAll(`[${selectorName}]`)
+    const start = edgeGuards[0] ?? FocusGuard()
+    const end = edgeGuards[1] ?? FocusGuard()
+    if (!start || !end) return
+    doc.body.insertAdjacentElement('afterbegin', start)
+    doc.body.insertAdjacentElement('beforeend', end)
     this.count++
   }
 
   remove() {
     if (this.count === 1) {
-      (document?.querySelectorAll(`[${selectorName}]`) ?? [])
-        .forEach((node) => node.remove())
+      const doc = SafeGlobals.document('useFocusGuards.remove')
+      doc?.querySelectorAll(`[${selectorName}]`).forEach((node) => node.remove())
     }
     this.count--
   }

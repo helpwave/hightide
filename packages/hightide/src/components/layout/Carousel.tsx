@@ -206,7 +206,7 @@ export const Carousel = ({
   const carouselContainerRef = useRef<HTMLDivElement>(null)
   const [disableClick, setDisableClick] = useState(false)
 
-  const timeOut = useRef<NodeJS.Timeout | undefined>(undefined)
+  const timeOut = useRef<ReturnType<typeof setTimeout> | undefined>(undefined)
 
   const length = useMemo(() => children.length, [children])
   const paddingItemCount = 3 // The number of items to append left and right of the list to allow for clean transition when looping

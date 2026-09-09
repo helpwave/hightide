@@ -1,6 +1,7 @@
 import { useEffect, useState } from 'react'
 import type { PropsWithBagFunctionOrChildren } from '@helpwave/hightide-utils/utils'
 import { BagFunctionUtil } from '@helpwave/hightide-utils/utils'
+import { SafeGlobals } from '../../utils/safeGlobals'
 
 type TransitionBag = {
   isOpen: boolean,
@@ -29,9 +30,13 @@ export function Transition({
 }: TransitionWrapperProps) {
   const [isOpen, setIsOpen] = useState<boolean>(show)
   const [isTransitioning, setIsTransitioning] = useState<boolean>(!isOpen)
+  const [isUsingReducedMotion, setIsUsingReducedMotion] = useState(true)
 
-  const isUsingReducedMotion = typeof window !== 'undefined' && typeof window.matchMedia === 'function' ?
-    window.matchMedia('(prefers-reduced-motion: reduce)').matches : true
+  useEffect(() => {
+    const win = SafeGlobals.window('Transition')
+    if (!win || typeof win.matchMedia !== 'function') return
+    setIsUsingReducedMotion(win.matchMedia('(prefers-reduced-motion: reduce)').matches)
+  }, [])
 
   useEffect(() => {
     setIsOpen(show)

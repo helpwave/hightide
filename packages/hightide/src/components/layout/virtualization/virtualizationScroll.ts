@@ -1,3 +1,5 @@
+import { SafeGlobals } from '../../../utils/safeGlobals'
+
 /**
  * Determines which element a virtualized list scrolls inside of.
  *
@@ -19,10 +21,11 @@ const SCROLLABLE_OVERFLOW = new Set(['auto', 'scroll', 'overlay'])
  * inside its own capped box.
  */
 export function findScrollableAncestor(element: HTMLElement | null): HTMLElement | null {
-  if (!element || typeof window === 'undefined') return null
+  const win = SafeGlobals.window('findScrollableAncestor')
+  if (!element || !win) return null
   let node: HTMLElement | null = element.parentElement
   while (node) {
-    const { overflowY } = window.getComputedStyle(node)
+    const { overflowY } = win.getComputedStyle(node)
     if (SCROLLABLE_OVERFLOW.has(overflowY) && node.scrollHeight > node.clientHeight) {
       return node
     }
@@ -43,7 +46,7 @@ export const APP_PAGE_CONTENT_SELECTOR = '[data-name="app-page-content"]'
  * the nearest scrollable ancestor for non-AppPage contexts.
  */
 export function findPageScrollContainer(element: HTMLElement | null): HTMLElement | null {
-  if (!element || typeof window === 'undefined') return null
+  if (!element || !SafeGlobals.window('findPageScrollContainer')) return null
   const appPageContent = element.closest(APP_PAGE_CONTENT_SELECTOR)
   if (appPageContent instanceof HTMLElement) return appPageContent
   return findScrollableAncestor(element)
@@ -57,12 +60,14 @@ export type ScrollMetrics = {
 
 /** Reads scroll metrics uniformly from either an element or the `window`. */
 export function getScrollMetrics(target: HTMLElement | Window | null): ScrollMetrics {
-  if (!target || typeof window === 'undefined') {
+  const win = SafeGlobals.window('getScrollMetrics')
+  if (!target || !win) {
     return { scrollTop: 0, scrollHeight: 0, clientHeight: 0 }
   }
-  if (target === window) {
-    const doc = document?.scrollingElement ?? document?.documentElement
-    return { scrollTop: window.scrollY, scrollHeight: doc.scrollHeight, clientHeight: window.innerHeight }
+  if (target === win) {
+    const doc = SafeGlobals.document('getScrollMetrics')
+    const scrolling = doc?.scrollingElement ?? doc?.documentElement
+    return { scrollTop: win.scrollY, scrollHeight: scrolling?.scrollHeight ?? 0, clientHeight: win.innerHeight }
   }
   const element = target as HTMLElement
   return { scrollTop: element.scrollTop, scrollHeight: element.scrollHeight, clientHeight: element.clientHeight }

@@ -3,6 +3,7 @@ import { useEffect, useState } from 'react'
 import type { Virtualizer } from '@tanstack/react-virtual'
 import { useVirtualizer, useWindowVirtualizer } from '@tanstack/react-virtual'
 import { findPageScrollContainer, type VirtualizationScroll } from './virtualizationScroll'
+import { SafeGlobals } from '../../../utils/safeGlobals'
 
 export type UseVirtualizedRowsOptions = {
   scroll: VirtualizationScroll,
@@ -65,7 +66,8 @@ export function useVirtualizedRows({
   useEffect(() => {
     if (!usesOuterScroll) return
     const content = contentRef.current
-    if (!content || typeof window === 'undefined') return
+    const win = SafeGlobals.window('useVirtualizedRows')
+    if (!content || !win) return
 
     const measure = () => {
       if (scroll === 'page') {
@@ -73,21 +75,21 @@ export function useVirtualizedRows({
         setPageScrollElement(prev => (prev === container ? prev : container))
         const top = container
           ? content.getBoundingClientRect().top - container.getBoundingClientRect().top + container.scrollTop
-          : content.getBoundingClientRect().top + window.scrollY
+          : content.getBoundingClientRect().top + win.scrollY
         setScrollMargin(prev => (Math.abs(prev - top) < 1 ? prev : top))
         return
       }
-      const top = content.getBoundingClientRect().top + window.scrollY
+      const top = content.getBoundingClientRect().top + win.scrollY
       setScrollMargin(prev => (Math.abs(prev - top) < 1 ? prev : top))
     }
 
     measure()
     const resizeObserver = new ResizeObserver(measure)
     resizeObserver.observe(content)
-    window.addEventListener('resize', measure)
+    win.addEventListener('resize', measure)
     return () => {
       resizeObserver.disconnect()
-      window.removeEventListener('resize', measure)
+      win.removeEventListener('resize', measure)
     }
     // `count` is included so the scroll container is re-resolved and the offset
     // re-measured once rows arrive (data often loads after the first mount).

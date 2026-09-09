@@ -2,10 +2,12 @@
 
 import type { RefObject } from 'react'
 import { useCallback, useEffect, useId, useRef, useState } from 'react'
+import { SafeGlobals } from '../../utils/safeGlobals'
 
 const createFocusGuard = () => {
-  const div = document?.createElement('div')
-  if(!div) return
+  const doc = SafeGlobals.document('useFocusTrap.createFocusGuard')
+  if (!doc?.body) return
+  const div = doc.createElement('div')
   Object.assign(div.style, {
     opacity: '0',
     outline: 'none',
@@ -16,7 +18,7 @@ const createFocusGuard = () => {
   })
   div.tabIndex = 0
   div.setAttribute('data-hw-focus-guard', '')
-  document?.body.appendChild(div)
+  doc.body.appendChild(div)
   return div
 }
 
@@ -76,24 +78,28 @@ class FocusTrapService {
   }
 
   private removeGuards() {
-    document?.querySelectorAll('[data-hw-focus-guard]').forEach((node) => node.remove())
+    SafeGlobals.document('useFocusTrap.removeGuards')
+      ?.querySelectorAll('[data-hw-focus-guard]')
+      .forEach((node) => node.remove())
   }
 
   private addGuards() {
     const guard1 = createFocusGuard()
     const guard2 = createFocusGuard()
     if(!guard1 || !guard2) return
-    document?.body.insertAdjacentElement('afterbegin', guard1)
-    document?.body.insertAdjacentElement('beforeend', guard2)
+    const doc = SafeGlobals.document('useFocusTrap.addGuards')
+    if (!doc?.body) return
+    doc.body.insertAdjacentElement('afterbegin', guard1)
+    doc.body.insertAdjacentElement('beforeend', guard2)
   }
 
   private activate() {
-    document?.addEventListener('focusin', this.onFocusIn)
+    SafeGlobals.document('useFocusTrap.activate')?.addEventListener('focusin', this.onFocusIn)
     this.addGuards()
   }
 
   private deactivate() {
-    document?.removeEventListener('focusin', this.onFocusIn)
+    SafeGlobals.document('useFocusTrap.deactivate')?.removeEventListener('focusin', this.onFocusIn)
     this.removeGuards()
   }
 
@@ -183,7 +189,7 @@ export const useFocusTrap = ({
   useEffect(() => {
     if (active) {
       if (!lastFocusRef.current) {
-        lastFocusRef.current = document?.activeElement as HTMLElement | null
+        lastFocusRef.current = SafeGlobals.document('useFocusTrap')?.activeElement as HTMLElement | null
       }
 
       function pause() {
@@ -193,7 +199,7 @@ export const useFocusTrap = ({
       function unpause() {
         setPaused(false)
 
-        if (container.current && !container.current.contains(document?.activeElement as HTMLElement | null)) {
+        if (container.current && !container.current.contains(SafeGlobals.document('useFocusTrap.unpause')?.activeElement as HTMLElement | null)) {
           focusElement()
         }
       }
@@ -221,7 +227,7 @@ export const useFocusTrap = ({
       function onKeyDown(event: KeyboardEvent) {
         const key = event.key
         const elements = getContainedFocusableElements(containerElement)
-        const active = document?.activeElement as HTMLElement | null
+        const active = SafeGlobals.document('useFocusTrap.onKeyDown')?.activeElement as HTMLElement | null
         const index = [...elements].findIndex(value => value === active)
         if (index === -1 || event.altKey || event.ctrlKey || event.metaKey) {
           return
