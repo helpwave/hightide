@@ -1,7 +1,7 @@
 import type {
   InputState as DesignInputState,
   InputStateValue
-} from '@helpwave/hightide-design/component-token-resolvers'
+} from '@helpwave/hightide-design/component-tokens'
 import type { ColorPairToken } from '@helpwave/hightide-design/theme-tokens'
 import type {
   SearchBarContainerStyle,
@@ -117,7 +117,7 @@ export const toSearchBarThemeResolvers: ComponentThemeResolver<SearchBarThemeRes
       const iconColor = resolve(state).icon.color
 
       return {
-        color: (iconColor === undefined || iconColor === 'transparent'
+        color: (iconColor === undefined || iconColor === HexColorUtils.transparent
           ? themeTokens.color.surface.onColor
           : iconColor),
         onColor: themeTokens.color.surface.color,

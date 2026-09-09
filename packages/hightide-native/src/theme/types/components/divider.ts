@@ -1,5 +1,5 @@
 import type { ColorToken } from '@helpwave/hightide-design/primitive-tokens'
-import type { DividerDirection } from '@helpwave/hightide-design/component-token-resolvers'
+import type { DividerDirection } from '@helpwave/hightide-design/component-tokens'
 import type { ViewStyle } from 'react-native'
 
 import type { StyleResolverFunction } from '../resolver'

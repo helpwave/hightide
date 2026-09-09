@@ -5,7 +5,7 @@ import {
   type ViewProps
 } from 'react-native'
 
-import type { Appearance } from '@helpwave/hightide-design/semantic-token-resolvers'
+import type { Appearance } from '@helpwave/hightide-design/semantic-tokens'
 import type { IconSize } from '@helpwave/hightide-design/theme-tokens'
 
 import type { IconComponent } from '../../icons/types'

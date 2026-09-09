@@ -151,7 +151,7 @@ const parseColorLiteral = (color: ColorValue | number): HexColorToken | undefine
   }
 
   if (trimmed.toLowerCase() === 'transparent') {
-    return DesignHexColorUtils.resolveColorToken('transparent')
+    return DesignHexColorUtils.transparent
   }
 
   return parseHexString(trimmed)

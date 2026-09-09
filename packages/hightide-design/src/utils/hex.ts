@@ -43,12 +43,12 @@ const channelHex = (value: number): string => Math.round(Math.min(255, Math.max(
   .padStart(2, '0')
 
 const toHex = (r: number, g: number, b: number): HexColorToken => (
-  `#${channelHex(r)}${channelHex(g)}${channelHex(b)}`
+  `#${channelHex(r)}${channelHex(g)}${channelHex(b)}` as HexColorToken
 )
 
 const toHexWithAlpha = (r: number, g: number, b: number, alpha: number): HexColorToken => {
   const alphaByte = Math.round(Math.min(1, Math.max(0, alpha)) * 255)
-  return `#${channelHex(r)}${channelHex(g)}${channelHex(b)}${alphaByte.toString(16).padStart(2, '0')}`
+  return `#${channelHex(r)}${channelHex(g)}${channelHex(b)}${alphaByte.toString(16).padStart(2, '0')}` as HexColorToken
 }
 
 const mixWithBlack = (hex: HexColorToken, amount: number): HexColorToken => {
@@ -73,7 +73,7 @@ const blend = (background: HexColorToken, tint: HexColorToken): HexColorToken =>
   const outA = ta + ba * (1 - ta)
 
   if (outA <= 0) {
-    return '#00000000'
+    return '#00000000' as HexColorToken
   }
 
   const outR = (tr * ta + br * ba * (1 - ta)) / outA
@@ -87,15 +87,13 @@ const blend = (background: HexColorToken, tint: HexColorToken): HexColorToken =>
   return toHexWithAlpha(outR, outG, outB, outA)
 }
 
-function resolveColorToken(colorToken: ColorToken) : HexColorToken {
-  if(colorToken === 'transparent') return '#FFFFFF00'
-  return colorToken
-}
+const resolveColorToken = (colorToken: ColorToken): HexColorToken => colorToken
 
 export const HexColorUtils = {
   hexWithAlpha,
   mixWithBlack,
   mixWithWhite,
   blend,
-  resolveColorToken
+  resolveColorToken,
+  transparent: '#FFFFFF00' as HexColorToken,
 }

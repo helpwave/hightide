@@ -18,7 +18,7 @@ import { ThemedText } from './ThemedText'
 import {
   avatarSizes,
   type AvatarSize as AvatarSizeToken
-} from '@helpwave/hightide-design/component-token-resolvers'
+} from '@helpwave/hightide-design/component-tokens'
 import type { ColorPairToken } from '@helpwave/hightide-design/theme-tokens'
 
 import { useTheme } from '../../global-contexts/theme/ThemeContext'

@@ -4,7 +4,7 @@ import type {
   StoryObj
 } from '@storybook/react-native'
 
-import type { DividerDirection } from '@helpwave/hightide-design/component-token-resolvers'
+import type { DividerDirection } from '@helpwave/hightide-design/component-tokens'
 import {
   Divider,
   ThemedText

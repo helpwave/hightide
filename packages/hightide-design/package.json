@@ -26,15 +26,15 @@
       "require": "./dist/theme-tokens/index.cjs",
       "import": "./dist/theme-tokens/index.js"
     },
-    "./semantic-token-resolvers": {
-      "types": "./dist/semantic-token-resolvers/index.d.ts",
-      "require": "./dist/semantic-token-resolvers/index.cjs",
-      "import": "./dist/semantic-token-resolvers/index.js"
+    "./semantic-tokens": {
+      "types": "./dist/semantic-tokens/index.ts",
+      "require": "./dist/semantic-tokens/index.cjs",
+      "import": "./dist/semantic-tokens/index.js"
     },
-    "./component-token-resolvers": {
-      "types": "./dist/component-token-resolvers/index.d.ts",
-      "require": "./dist/component-token-resolvers/index.cjs",
-      "import": "./dist/component-token-resolvers/index.js"
+    "./component-tokens": {
+      "types": "./dist/component-tokens/index.ts",
+      "require": "./dist/component-tokens/index.ts",
+      "import": "./dist/component-tokens/index.js"
     },
     "./design-system": {
       "types": "./dist/design-system/index.d.ts",
@@ -53,7 +53,8 @@
     "build": "tsup",
     "dev": "tsup --watch",
     "lint": "eslint .",
-    "test": "node -e \"process.exit(0)\""
+    "test": "node -e \"process.exit(0)\"",
+    "write-token-bundle": "node --experimental-strip-types --disable-warning=ExperimentalWarning --import ./scripts/register-ts-ext.mjs scripts/write-token-bundle.ts"
   },
   "devDependencies": {
     "@helpwave/eslint-config": "0.0.11",
