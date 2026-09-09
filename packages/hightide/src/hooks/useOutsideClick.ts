@@ -1,5 +1,6 @@
 import type { RefObject } from 'react'
 import { useEffect } from 'react'
+import { SafeGlobals } from '../utils/safeGlobals'
 
 export interface UseOutsideClickOptions {
   refs: RefObject<HTMLElement | null>[],
@@ -30,13 +31,15 @@ export const useOutsideClick = ({ refs, onOutsideClick, active = true }: UseOuts
 
       onOutsideClick(event)
     }
-    document?.addEventListener('mousedown', listener)
-    document?.addEventListener('touchstart', listener)
-    document?.addEventListener('pointerdown', listener)
+    const doc = SafeGlobals.document('useOutsideClick')
+    if (!doc) return
+    doc.addEventListener('mousedown', listener)
+    doc.addEventListener('touchstart', listener)
+    doc.addEventListener('pointerdown', listener)
     return () => {
-      document?.removeEventListener('mousedown', listener)
-      document?.removeEventListener('touchstart', listener)
-      document?.removeEventListener('pointerdown', listener)
+      doc.removeEventListener('mousedown', listener)
+      doc.removeEventListener('touchstart', listener)
+      doc.removeEventListener('pointerdown', listener)
     }
   }, [refs, onOutsideClick, active])
 }

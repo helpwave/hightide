@@ -6,6 +6,7 @@ import { MathUtil } from '@helpwave/hightide-utils/utils'
 import { useWindowResizeObserver } from './useWindowResizeObserver'
 import { useResizeObserver } from './useResizeObserver'
 import { useScrollObserver } from './useScrollObserver'
+import { SafeGlobals } from '../utils/safeGlobals'
 
 export type FloatingElementAlignment = 'beforeStart' | 'afterStart' | 'center' | 'beforeEnd' | 'afterEnd'
 
@@ -227,8 +228,14 @@ const measureSizes = ({
   containerRef?: RefObject<HTMLElement | null>,
   anchorRef?: RefObject<HTMLElement | null>,
   windowRef?: RefObject<HTMLElement | null>,
-}) => {
-  const visualViewport = window.visualViewport
+}): {
+  container: DOMRect | undefined,
+  anchor: DOMRect | undefined,
+  window: RectangleBounds,
+} | null => {
+  const win = SafeGlobals.window('useAnchoredPosition.measureSizes')
+  if (!win) return null
+  const visualViewport = win.visualViewport
   const fallback = visualViewport ? {
     top: 0,
     bottom: visualViewport.height - visualViewport.offsetTop,
@@ -238,11 +245,11 @@ const measureSizes = ({
     height: visualViewport.height - visualViewport.offsetTop,
   }: {
     top: 0,
-    bottom: window.innerHeight,
+    bottom: win.innerHeight,
     left: 0,
-    right: window.innerWidth,
-    width: window.innerWidth,
-    height: window.innerHeight,
+    right: win.innerWidth,
+    width: win.innerWidth,
+    height: win.innerHeight,
   }
 
   return {
@@ -252,7 +259,7 @@ const measureSizes = ({
   }
 }
 
-type MeasureSize = ReturnType<typeof measureSizes>
+type MeasureSize = NonNullable<ReturnType<typeof measureSizes>>
 
 // dont check position of container because we are changing it
 const isSameMeasurment = (a: MeasureSize | null, b: MeasureSize | null) =>
@@ -358,7 +365,7 @@ export function useAnchoredPosition({
     if (!containerRef.current || !active) {
       return
     }
-    let timeout: NodeJS.Timeout
+    let timeout: ReturnType<typeof setTimeout>
     if (isPolling) {
       timeout = setInterval(calculate, pollingInterval)
     }

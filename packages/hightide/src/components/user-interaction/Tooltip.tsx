@@ -13,6 +13,7 @@ import { AnchoredFloatingContainer } from '../layout/AnchoredFloatingContainer'
 import { createContext } from 'react'
 import { BagFunctionUtil } from '@helpwave/hightide-utils/utils'
 import { ReactUtils } from '@helpwave/hightide-utils/utils'
+import { SafeGlobals } from '../../utils/safeGlobals'
 
 export interface TooltipTriggerContextValue {
   ref: RefObject<HTMLElement | null>,
@@ -67,7 +68,7 @@ export const TooltipRoot = ({
   const [tooltipId, setTooltipId] = useState<string>(generatedId)
   const [isShown, setIsShown] = useState(isInitiallyShown)
 
-  const timeoutRef = useRef<NodeJS.Timeout>(undefined)
+  const timeoutRef = useRef<ReturnType<typeof setTimeout>>(undefined)
 
   const { config } = useHightideConfig()
 
@@ -110,12 +111,14 @@ export const TooltipRoot = ({
     const closeOnBlur = () => close()
     const closeOnScroll = () => close()
 
-    window.addEventListener('blur', closeOnBlur)
-    window.addEventListener('scroll', closeOnScroll, true)
+    const win = SafeGlobals.window('Tooltip')
+    if (!win) return
+    win.addEventListener('blur', closeOnBlur)
+    win.addEventListener('scroll', closeOnScroll, true)
 
     return () => {
-      window.removeEventListener('blur', closeOnBlur)
-      window.removeEventListener('scroll', closeOnScroll, true)
+      win.removeEventListener('blur', closeOnBlur)
+      win.removeEventListener('scroll', closeOnScroll, true)
     }
   }, [isShown, close])
 

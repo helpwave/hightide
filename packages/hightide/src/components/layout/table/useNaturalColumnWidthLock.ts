@@ -1,6 +1,7 @@
 import type { RefObject } from 'react'
 import { useLayoutEffect, useRef, useState } from 'react'
 import type { Table } from '@tanstack/react-table'
+import { SafeGlobals } from '../../../utils/safeGlobals'
 
 export type UseNaturalColumnWidthLockOptions<T> = {
   table: Table<T>,
@@ -51,11 +52,12 @@ export function useNaturalColumnWidthLock<T>({
   })
 
   useLayoutEffect(() => {
-    if (!enabled || typeof window === 'undefined') return
+    const win = SafeGlobals.window('useNaturalColumnWidthLock')
+    if (!enabled || !win) return
     let frame: number | null = null
     const handleResize = () => {
       if (frame !== null) return
-      frame = window.requestAnimationFrame(() => {
+      frame = win.requestAnimationFrame(() => {
         frame = null
         const autoLocked = autoLockedWidthsRef.current
         if (autoLocked.size === 0) return
@@ -70,10 +72,10 @@ export function useNaturalColumnWidthLock<T>({
         })
       })
     }
-    window.addEventListener('resize', handleResize)
+    win.addEventListener('resize', handleResize)
     return () => {
-      if (frame !== null) window.cancelAnimationFrame(frame)
-      window.removeEventListener('resize', handleResize)
+      if (frame !== null) win.cancelAnimationFrame(frame)
+      win.removeEventListener('resize', handleResize)
     }
   }, [enabled, table])
 

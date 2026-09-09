@@ -1,9 +1,11 @@
 import { useCallback } from 'react'
+import { SafeGlobals } from '../../utils/safeGlobals'
 
 export function useFocusManagement() {
   const getFocusableElements = useCallback((): HTMLElement[] => {
+    const doc = SafeGlobals.document('useFocusManagement.getFocusableElements')
     return Array.from(
-      document?.querySelectorAll(
+      doc?.querySelectorAll(
         'input, button, select, textarea, a[href], [tabindex]:not([tabindex="-1"])'
       ) ?? []
     ).filter(
@@ -21,8 +23,9 @@ export function useFocusManagement() {
       return undefined
     }
     let nextElement = elements[0]
-    if(document?.activeElement instanceof HTMLElement) {
-      const currentIndex = elements.indexOf(document?.activeElement)
+    const doc = SafeGlobals.document('useFocusManagement.getNextFocusElement')
+    if(doc?.activeElement instanceof HTMLElement) {
+      const currentIndex = elements.indexOf(doc.activeElement)
       nextElement = elements[(currentIndex + 1) % elements.length]
     }
     return nextElement
@@ -39,8 +42,9 @@ export function useFocusManagement() {
       return undefined
     }
     let previousElement = elements[0]
-    if(document?.activeElement instanceof HTMLElement) {
-      const currentIndex = elements.indexOf(document?.activeElement)
+    const doc = SafeGlobals.document('useFocusManagement.getPreviousFocusElement')
+    if(doc?.activeElement instanceof HTMLElement) {
+      const currentIndex = elements.indexOf(doc.activeElement)
       if(currentIndex === 0) {
         previousElement = elements[elements.length - 1]
       } else {

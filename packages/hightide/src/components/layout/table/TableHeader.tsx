@@ -7,6 +7,7 @@ import { TableFilterButton } from './TableFilterButton'
 import { useCallback, useEffect, useRef } from 'react'
 import { TableStateContext, useTableStateWithoutSizingContext } from './TableContext'
 import { DataTypeUtils, type DataType } from '../../user-interaction/data/data-types'
+import { SafeGlobals } from '../../../utils/safeGlobals'
 
 export type TableHeaderProps = {
   isSticky?: boolean,
@@ -37,10 +38,10 @@ export const TableHeader = ({ isSticky = false }: TableHeaderProps) => {
     if (!table.getState().columnSizingInfo.isResizingColumn) return
     resizePointerXRef.current = 'touches' in e ? e.touches[0].clientX : e.clientX
     if (resizeFrameRef.current !== null) return
-    resizeFrameRef.current = window.requestAnimationFrame(() => {
+    resizeFrameRef.current = SafeGlobals.window('TableHeader.handleResizeMove')?.requestAnimationFrame(() => {
       resizeFrameRef.current = null
       applyResize()
-    })
+    }) ?? null
   }, [table, applyResize])
 
   const handleResizeEnd = useCallback((e: PointerEvent) => {
@@ -49,7 +50,7 @@ export const TableHeader = ({ isSticky = false }: TableHeaderProps) => {
       resizePointerXRef.current = e.clientX
     }
     if (resizeFrameRef.current !== null) {
-      window.cancelAnimationFrame(resizeFrameRef.current)
+      SafeGlobals.window('TableHeader.handleResizeEnd')?.cancelAnimationFrame(resizeFrameRef.current)
       resizeFrameRef.current = null
     }
     applyResize()
@@ -64,13 +65,15 @@ export const TableHeader = ({ isSticky = false }: TableHeaderProps) => {
   }, [table, applyResize])
 
   useEffect(() => {
-    window.addEventListener('pointermove', handleResizeMove)
-    window.addEventListener('pointerup', handleResizeEnd)
+    const win = SafeGlobals.window('TableHeader')
+    if (!win) return
+    win.addEventListener('pointermove', handleResizeMove)
+    win.addEventListener('pointerup', handleResizeEnd)
     return () => {
-      window.removeEventListener('pointermove', handleResizeMove)
-      window.removeEventListener('pointerup', handleResizeEnd)
+      win.removeEventListener('pointermove', handleResizeMove)
+      win.removeEventListener('pointerup', handleResizeEnd)
       if (resizeFrameRef.current !== null) {
-        window.cancelAnimationFrame(resizeFrameRef.current)
+        win.cancelAnimationFrame(resizeFrameRef.current)
         resizeFrameRef.current = null
       }
     }
@@ -159,7 +162,7 @@ export const TableHeader = ({ isSticky = false }: TableHeaderProps) => {
                       onPointerDown={(e) => {
                         e.preventDefault()
                         e.currentTarget.setPointerCapture(e.pointerId)
-                        window.getSelection()?.removeAllRanges()
+                        SafeGlobals.window('TableHeader.onPointerDown')?.getSelection()?.removeAllRanges()
                         const startX = e.clientX
                         resizePointerXRef.current = startX
                         const renderedWidth = (e.currentTarget as HTMLElement).closest('th')?.getBoundingClientRect().width

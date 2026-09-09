@@ -12,6 +12,7 @@ import type {
 } from '@helpwave/hightide-utils/context/theme'
 import { useCreateThemeConfig } from '@helpwave/hightide-utils/context/theme'
 import { ThemeContext } from './ThemeContext'
+import { SafeGlobals } from '../../utils/safeGlobals'
 
 export type ThemeInformation = Omit<ThemeInformationBase<unknown>, 'theme'> & { theme?: unknown }
 export type SupportedThemesConfig = Record<SystemTheme, ThemeInformation> & Record<string, ThemeInformation>
@@ -64,7 +65,7 @@ export const ThemeProvider = ({
   })
 
   useEffect(() => {
-    document?.documentElement.setAttribute('data-theme', value.themeMode)
+    SafeGlobals.document('ThemeProvider')?.documentElement.setAttribute('data-theme', value.themeMode)
   }, [value.themeMode])
 
   return (

@@ -3,6 +3,7 @@
 import type { Dispatch, SetStateAction } from 'react'
 import { useCallback, useEffect, useMemo, useRef, useState } from 'react'
 import { StorageListener } from '../utils/StorageListener'
+import { SafeGlobals } from '../utils/safeGlobals'
 
 interface UseStorageProps<T> {
   key: string,
@@ -31,11 +32,12 @@ export const useStorage = <T>({
   const lastSerializedRef = useRef<string | null>(null)
 
   const storageService: Storage | undefined = useMemo(() => {
-    if(typeof window === 'undefined') return undefined
+    const win = SafeGlobals.window('useStorage')
+    if (!win) return undefined
     if (storageType === 'local') {
-      return window.localStorage
+      return win.localStorage
     }
-    return window.sessionStorage
+    return win.sessionStorage
   }, [storageType])
 
   const get = useCallback((): T => {
