@@ -1,6 +1,7 @@
 import { useCallback, useEffect, useState } from 'react'
 import clsx from 'clsx'
 import { getNeighbours, range, MathUtil, type DirectionNumber } from '@helpwave/hightide-utils/utils'
+import { SafeGlobals } from '../../utils/safeGlobals'
 
 export type ScrollPickerProps<T> = {
   options: T[],
@@ -159,7 +160,7 @@ export const ScrollPicker = <T, >({
 
   useEffect(() => {
     // constant update
-    requestAnimationFrame((timestamp) => animate(timestamp, lastTimeStamp))
+    SafeGlobals.window('ScrollPicker')?.requestAnimationFrame((timestamp) => animate(timestamp, lastTimeStamp))
   })
 
   const opacity = (transition: number, index: number, itemsCount: number) => {

@@ -7,6 +7,10 @@ import {
 import { Appearance } from 'react-native'
 
 import type { SupportedThemesConfig } from '@helpwave/hightide-utils/context'
+import {
+  useCreateThemeConfig,
+  type SystemTheme
+} from '@helpwave/hightide-utils/context/theme'
 
 import { HightideConfigUtils } from '../hightide-config/HightideConfigUtils'
 import {
@@ -14,10 +18,6 @@ import {
   useTheme,
   type ThemeContextValue
 } from './ThemeContext'
-import {
-  useCreateThemeConfig,
-  type SystemTheme
-} from './forward-exports'
 import { useNativeKeyValueStore } from '../../hooks/useNativeKeyValueStore'
 import type { ThemeMode } from '../../theme/themes/hightideThemes'
 import type { HightideTheme } from '../../theme/types/theme'

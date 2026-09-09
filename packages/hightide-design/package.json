@@ -10,41 +10,48 @@
     "access": "public"
   },
   "license": "AGPL-3.0-only",
-  "version": "0.7.3",
+  "version": "0.7.4",
   "type": "module",
   "files": [
-    "src"
+    "dist"
   ],
   "exports": {
     "./primitive-tokens": {
-      "types": "./src/primitive-tokens/index.ts",
-      "default": "./src/primitive-tokens/index.ts"
+      "types": "./dist/primitive-tokens/index.d.ts",
+      "require": "./dist/primitive-tokens/index.cjs",
+      "import": "./dist/primitive-tokens/index.js"
     },
     "./theme-tokens": {
-      "types": "./src/theme-tokens/index.ts",
-      "default": "./src/theme-tokens/index.ts"
+      "types": "./dist/theme-tokens/index.d.ts",
+      "require": "./dist/theme-tokens/index.cjs",
+      "import": "./dist/theme-tokens/index.js"
     },
     "./semantic-tokens": {
-      "types": "./src/semantic-tokens/index.ts",
-      "default": "./src/semantic-tokens/index.ts"
+      "types": "./dist/semantic-tokens/index.ts",
+      "require": "./dist/semantic-tokens/index.cjs",
+      "import": "./dist/semantic-tokens/index.js"
     },
     "./component-tokens": {
-      "types": "./src/component-tokens/index.ts",
-      "default": "./src/component-tokens/index.ts"
+      "types": "./dist/component-tokens/index.ts",
+      "require": "./dist/component-tokens/index.ts",
+      "import": "./dist/component-tokens/index.js"
     },
     "./design-system": {
-      "types": "./src/design-system/index.ts",
-      "default": "./src/design-system/index.ts"
+      "types": "./dist/design-system/index.d.ts",
+      "require": "./dist/design-system/index.cjs",
+      "import": "./dist/design-system/index.js"
     },
     "./utils": {
-      "types": "./src/utils/index.ts",
-      "default": "./src/utils/index.ts"
+      "types": "./dist/utils/index.d.ts",
+      "require": "./dist/utils/index.cjs",
+      "import": "./dist/utils/index.js"
     }
   },
   "scripts": {
-    "clean": "rm -rf node_modules",
+    "clean": "rm -rf dist node_modules",
     "init": "node -e \"process.exit(0)\"",
-    "build": "node -e \"process.exit(0)\"",
+    "build": "tsup",
+    "dev": "tsup --watch",
     "lint": "eslint .",
     "test": "node -e \"process.exit(0)\"",
     "write-token-bundle": "node --experimental-strip-types --disable-warning=ExperimentalWarning --import ./scripts/register-ts-ext.mjs scripts/write-token-bundle.ts"
@@ -55,6 +62,7 @@
     "@types/node": "20.19.43",
     "eslint": "9.31.0",
     "eslint-plugin-import": "2.32.0",
+    "tsup": "8.5.1",
     "typescript": "5.7.2"
   },
   "keywords": [

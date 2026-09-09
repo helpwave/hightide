@@ -1,6 +1,6 @@
 import type { SupportedThemesConfig } from '@helpwave/hightide-utils/context'
 
-import type { SupportedLocalesConfig } from '../localization/forward-exports'
+import type { SupportedLocalesConfig } from '../localization'
 import { themes } from '../../theme/themes/hightideThemes'
 import type { HightideTheme } from '../../theme/types/theme'
 

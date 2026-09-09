@@ -2,6 +2,7 @@
 
 import type { RefObject } from 'react'
 import { useEffect, useRef } from 'react'
+import { SafeGlobals } from '../utils/safeGlobals'
 
 export type SwipeInputMode = 'touch' | 'mouse' | 'both'
 
@@ -77,13 +78,14 @@ export const useSwipeGesture = ({
   }
 
   const findScrollableParent = (element: HTMLElement | null): HTMLElement | null => {
-    if (!element) return null
+    const win = SafeGlobals.window('useSwipeGesture.findScrollableParent')
+    if (!element || !win) return null
 
     const table = element.closest('table') || element.closest('[role="table"]')
     if (table) {
       let parent = table.parentElement
       while (parent) {
-        const style = window.getComputedStyle(parent)
+        const style = win.getComputedStyle(parent)
         if (style.overflow === 'auto' || style.overflow === 'scroll' ||
             style.overflowY === 'auto' || style.overflowY === 'scroll' ||
             style.overflowX === 'auto' || style.overflowX === 'scroll') {
@@ -96,7 +98,7 @@ export const useSwipeGesture = ({
 
     let current: HTMLElement | null = element
     while (current) {
-      const style = window.getComputedStyle(current)
+      const style = win.getComputedStyle(current)
       if (style.overflow === 'auto' || style.overflow === 'scroll' ||
           style.overflowY === 'auto' || style.overflowY === 'scroll' ||
           style.overflowX === 'auto' || style.overflowX === 'scroll') {
@@ -109,8 +111,10 @@ export const useSwipeGesture = ({
   }
 
   useEffect(() => {
+    const win = SafeGlobals.window('useSwipeGesture')
+    if (!win) return
     const element = elementRef?.current ?? null
-    const target: HTMLElement | Window = element ?? window
+    const target: HTMLElement | Window = element ?? win
     const listenTouch = inputMode === 'touch' || inputMode === 'both'
     const listenMouse = inputMode === 'mouse' || inputMode === 'both'
 
@@ -123,7 +127,7 @@ export const useSwipeGesture = ({
       gestureStartRef.current = {
         x,
         y,
-        scrollY: scrollableParent?.scrollTop ?? window.scrollY,
+        scrollY: scrollableParent?.scrollTop ?? win.scrollY,
         time: performance.now(),
       }
       isScrollingRef.current = !!scrollableParent
@@ -131,7 +135,7 @@ export const useSwipeGesture = ({
 
     const onGestureMove = (x: number, y: number, eventTarget: HTMLElement) => {
       const scrollableParent = findScrollableParent(eventTarget)
-      const currentScrollY = scrollableParent?.scrollTop ?? window.scrollY
+      const currentScrollY = scrollableParent?.scrollTop ?? win.scrollY
 
       gestureEndRef.current = {
         x,
@@ -227,8 +231,8 @@ export const useSwipeGesture = ({
     const onMouseUp = () => {
       if (!isMouseDownRef.current) return
       isMouseDownRef.current = false
-      window.removeEventListener('mousemove', onMouseMove)
-      window.removeEventListener('mouseup', onMouseUp)
+      win.removeEventListener('mousemove', onMouseMove)
+      win.removeEventListener('mouseup', onMouseUp)
       onGestureEnd()
     }
 
@@ -237,8 +241,8 @@ export const useSwipeGesture = ({
       if (!isWithinStartRegion(e.clientX, e.clientY)) return
       isMouseDownRef.current = true
       onGestureStart(e.clientX, e.clientY, e.target as HTMLElement)
-      window.addEventListener('mousemove', onMouseMove)
-      window.addEventListener('mouseup', onMouseUp)
+      win.addEventListener('mousemove', onMouseMove)
+      win.addEventListener('mouseup', onMouseUp)
     }
 
     const passiveOptions: AddEventListenerOptions = { passive: true }
@@ -262,8 +266,8 @@ export const useSwipeGesture = ({
 
       if (listenMouse) {
         target.removeEventListener('mousedown', onMouseDown)
-        window.removeEventListener('mousemove', onMouseMove)
-        window.removeEventListener('mouseup', onMouseUp)
+        win.removeEventListener('mousemove', onMouseMove)
+        win.removeEventListener('mouseup', onMouseUp)
       }
     }
   }, [elementRef, inputMode])

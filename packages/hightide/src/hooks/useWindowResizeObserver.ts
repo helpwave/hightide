@@ -1,4 +1,5 @@
 import { useEffect } from 'react'
+import { SafeGlobals } from '../utils/safeGlobals'
 
 /**
  * A hook that wraps the event listener attachment
@@ -10,10 +11,12 @@ import { useEffect } from 'react'
  */
 export const useWindowResizeObserver = (onResize: () => void) => {
   useEffect(() => {
-    window.addEventListener('resize', onResize)
+    const win = SafeGlobals.window('useWindowResizeObserver')
+    if (!win) return
+    win.addEventListener('resize', onResize)
 
     return () => {
-      window.removeEventListener('resize', onResize)
+      win.removeEventListener('resize', onResize)
     }
   }, [onResize])
 }

@@ -5,6 +5,27 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/)
 and adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [0.16.4] - 2026-09-09
+
+### Changed
+
+- Browser `window` and `document` are read through `SafeGlobals`, which logs and returns `null` when they are missing
+- Call sites that can wait until mount now access those globals inside `useEffect` or `useLayoutEffect`
+
+## [0.16.3] - 2026-09-09
+
+### Fixed
+
+- Dark `ThemeProvider` mapping used the light theme payload instead of dark
+- Dialog content `data-name` is always `dialog-content` and is no longer taken from props
+- Document access is optional-chained so focus, portal, click-outside, transition, date-time, virtualization, and theme `data-theme` code does not throw when `document` is missing
+
+## [0.16.2] - 2026-09-09
+
+### Added
+
+- `dev` script (`tsup --watch`) for continuous rebuilds of the compiled package
+
 ## [0.16.1] - 2026-09-03
 
 ### Added

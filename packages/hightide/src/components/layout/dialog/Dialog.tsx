@@ -135,7 +135,7 @@ export const Dialog = forwardRef<HTMLDivElement, DialogProps>(function Dialog({
               aria-labelledby={ids.title}
               aria-describedby={hasDescription ? ids.description : undefined}
 
-              data-name={props['data-name'] ?? 'dialog-content'}
+              data-name="dialog-content"
             >
               <div className="typography-title-lg mr-10">
                 {titleElement}

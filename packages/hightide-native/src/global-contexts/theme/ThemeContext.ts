@@ -6,7 +6,7 @@ import {
 import type {
   ThemeConfigValue,
   ThemeInformation
-} from './forward-exports'
+} from '@helpwave/hightide-utils/context/theme'
 import type { HightideTheme } from '../../theme/types/theme'
 
 export type { ThemeInformation }

@@ -2,6 +2,7 @@
 
 import type { RefObject } from 'react'
 import { useCallback, useEffect, useLayoutEffect, useReducer, useRef, useState } from 'react'
+import { SafeGlobals } from '../utils/safeGlobals'
 
 export type TransitionState = 'opened' | 'closed' | 'opening' | 'closing'
 
@@ -45,7 +46,7 @@ export const useTransitionState = ({
 }: UseTransitionStateProps): UseTransitionStateResult => {
   const [state, dispatch] = useReducer(reducer, initialState)
 
-  const timer = useRef<NodeJS.Timeout | undefined>(undefined)
+  const timer = useRef<ReturnType<typeof setTimeout> | undefined>(undefined)
   const hasAnimation = useRef<boolean>(false)
   const [timeout] = useState<number>(initialTimeout)
 
@@ -80,8 +81,9 @@ export const useTransitionState = ({
       let element = ref.current
       if(!element) {
         console.warn('useTransitionState: ref is not set to an element using window instead')
-        element = window.document.body
+        element = SafeGlobals.window('useTransitionState')?.document.body ?? null
       }
+      if (!element) return
       const animations = element.getAnimations({ subtree: true })
         .filter(animation => animation.effect?.getTiming().duration !== '0s')
       if (animations.length > 0) {

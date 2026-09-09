@@ -37,7 +37,7 @@ export const useUpdatingDateString = ({ absoluteFormat = 'dateTime', localeOverr
   }, [date, absoluteFormat, locale, is24HourFormat, timeZone])
 
   useEffect(() => {
-    let timeoutId: NodeJS.Timeout
+    let timeoutId: ReturnType<typeof setTimeout>
 
     const startTimer = () => {
       const now = new Date()

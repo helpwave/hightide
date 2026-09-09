@@ -18,6 +18,7 @@
     "build": "pnpm -r run build",
     "test": "pnpm -r run test",
     "lint": "pnpm -r run lint",
+    "dev": "pnpm -r run dev",
     "storybook-web": "pnpm --filter @helpwave/hightide-utils run build && pnpm --filter @helpwave/hightide run build && pnpm --filter @helpwave/hightide run storybook",
     "build-storybook-web": "pnpm --filter @helpwave/hightide-utils run build && pnpm --filter @helpwave/hightide run build && pnpm --filter @helpwave/hightide run build-storybook",
     "sync-native-stories": "pnpm --filter @helpwave/hightide-native-web-storybook run sync-stories",

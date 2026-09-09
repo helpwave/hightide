@@ -1,5 +1,7 @@
 'use client'
 
+import { SafeGlobals } from './safeGlobals'
+
 export type StorageSubscriber = (raw: string | null) => void
 
 export class StorageListener {
@@ -39,10 +41,11 @@ export class StorageListener {
   }
 
   private init() {
-    if (this.initialized || typeof window === 'undefined') return
+    const win = SafeGlobals.window('StorageListener.init')
+    if (this.initialized || !win) return
     this.initialized = true
 
-    window.addEventListener('storage', this.handleEvent)
+    win.addEventListener('storage', this.handleEvent)
   }
 
   private handleEvent = (event: StorageEvent) => {
@@ -58,7 +61,8 @@ export class StorageListener {
   }
 
   private getRegistry(storage: Storage) {
-    return storage === window.localStorage
+    const win = SafeGlobals.window('StorageListener.getRegistry')
+    return storage === win?.localStorage
       ? this.localSubscriptions
       : this.sessionSubscriptions
   }

@@ -4,6 +4,7 @@ import clsx from 'clsx'
 import { columnsForWidth, chunkIntoRows, overscanRowsForBuffer } from './gridLayout'
 import { useVirtualizedRows } from './useVirtualizedRows'
 import type { VirtualizationScroll } from './virtualizationScroll'
+import { SafeGlobals } from '../../../utils/safeGlobals'
 
 const DEFAULT_GAP_PX = 12
 const DEFAULT_ESTIMATE_ROW_HEIGHT_PX = 220
@@ -97,7 +98,8 @@ export function VirtualizedCardGrid<T>({
 
   useEffect(() => {
     const element = containerRef.current
-    if (!element || typeof window === 'undefined') return
+    const win = SafeGlobals.window('VirtualizedCardGrid')
+    if (!element || !win) return
 
     const measure = () => {
       const nextColumns = columnsForWidth(element.clientWidth, minCardWidthPx, gapPx)
@@ -107,10 +109,10 @@ export function VirtualizedCardGrid<T>({
     measure()
     const resizeObserver = new ResizeObserver(measure)
     resizeObserver.observe(element)
-    window.addEventListener('resize', measure)
+    win.addEventListener('resize', measure)
     return () => {
       resizeObserver.disconnect()
-      window.removeEventListener('resize', measure)
+      win.removeEventListener('resize', measure)
     }
   }, [minCardWidthPx, gapPx])
 

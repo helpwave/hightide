@@ -2,6 +2,7 @@
 
 import type { RefObject } from 'react'
 import { useLayoutEffect } from 'react'
+import { SafeGlobals } from '../utils/safeGlobals'
 
 function getScrollParents(el: HTMLElement): HTMLElement[] {
   const parents: HTMLElement[] = []
@@ -15,8 +16,10 @@ function getScrollParents(el: HTMLElement): HTMLElement[] {
     parent = parent.parentElement
   }
 
-  // only safe because window
-  parents.push(window as unknown as HTMLElement)
+  const win = SafeGlobals.window('useScrollObserver.getScrollParents')
+  if (win) {
+    parents.push(win as unknown as HTMLElement)
+  }
   return parents
 }
 

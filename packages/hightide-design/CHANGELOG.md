@@ -5,6 +5,17 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/)
 and adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [0.7.4] - 2026-09-09
+
+### Added
+
+- `dev` script (`tsup --watch`) for continuous rebuilds of the compiled package
+
+### Changed
+
+- The package is compiled to JavaScript with `tsup` and published from `dist` (ESM, CommonJS, and type declarations) instead of shipping TypeScript source
+- Subpath exports (`primitive-tokens`, `theme-tokens`, `semantic-token-resolvers`, `component-token-resolvers`, `design-system`, `utils`) resolve to `dist`
+
 ## [0.7.3] - 2026-09-06
 
 ### Added

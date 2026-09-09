@@ -13,6 +13,7 @@ import { ProcessModelLayoutUtilities } from './layoutProcessModel'
 import type { ProcessModelGraphWithTraces, ProcessModelTrace } from './types'
 import { Pause, Play, RotateCcw } from 'lucide-react'
 import { useHightideTranslation } from '@helpwave/hightide-utils/context/translation'
+import { SafeGlobals } from '../../../utils/safeGlobals'
 
 export type ProcessModelTraceReplayProps = {
   graph: ProcessModelGraphWithTraces,
@@ -65,6 +66,11 @@ function runParticleAlongPath(
       resolve()
       return
     }
+    const win = SafeGlobals.window('ProcessModelTraceReplay.runParticleAlongPath')
+    if (!win) {
+      resolve()
+      return
+    }
     const start = performance.now()
     const tick = (now: number) => {
       if (signal.aborted) {
@@ -77,13 +83,13 @@ function runParticleAlongPath(
       const opacity = u < 0.06 ? u / 0.06 : u > 0.88 ? (1 - u) / 0.12 : 1
       onFrame(pt.x, pt.y, opacity)
       if (u < 1) {
-        requestAnimationFrame(tick)
+        win.requestAnimationFrame(tick)
       } else {
         onFrame(0, 0, 0)
         resolve()
       }
     }
-    requestAnimationFrame(tick)
+    win.requestAnimationFrame(tick)
   })
 }
 
@@ -156,8 +162,13 @@ export const ProcessModelTraceReplay = ({ graph, className }: ProcessModelTraceR
 
   const awaitDoubleRaf = useCallback(() => {
     return new Promise<void>((resolve) => {
-      requestAnimationFrame(() => {
-        requestAnimationFrame(() => resolve())
+      const win = SafeGlobals.window('ProcessModelTraceReplay.awaitDoubleRaf')
+      if (!win) {
+        resolve()
+        return
+      }
+      win.requestAnimationFrame(() => {
+        win.requestAnimationFrame(() => resolve())
       })
     })
   }, [])
