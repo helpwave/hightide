@@ -6,5 +6,5 @@ export interface PortalProps extends PropsWithChildren {
 }
 
 export const Portal = ({ children, container }: PortalProps) : ReactPortal => {
-  return createPortal(children, container ?? document.body)
+  return createPortal(children, container ?? document?.body)
 }

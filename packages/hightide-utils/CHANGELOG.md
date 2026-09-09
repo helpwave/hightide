@@ -5,6 +5,13 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/)
 and adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [0.1.5] - 2026-09-09
+
+### Fixed
+
+- `useCreateThemeConfig` only warns when `fallbackTheme` is missing from `supportedThemes`, and the warning includes the theme name
+- `useDateTimeFormat` always returns `timeZone` as `string | undefined`
+
 ## [0.1.4] - 2026-09-09
 
 ### Added

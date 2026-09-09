@@ -134,7 +134,7 @@ export const DateTimeField = forwardRef<HTMLDivElement, DateTimeFieldProps>(func
       return
     }
     const element = segmentRefs.current.get(focusedType)
-    if (element && document.activeElement !== element) {
+    if (element && document?.activeElement !== element) {
       element.focus()
     }
   }, [focusedType])
@@ -225,7 +225,7 @@ export const DateTimeField = forwardRef<HTMLDivElement, DateTimeFieldProps>(func
       return
     }
     requestAnimationFrame(() => {
-      if (field.contains(document.activeElement)) {
+      if (field.contains(document?.activeElement)) {
         return
       }
       setFocusedType(null)

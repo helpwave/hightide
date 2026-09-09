@@ -5,6 +5,6 @@ export const useDateTimeFormat = () => {
   const context = useContext(LocalizationContext)
   return {
     is24HourFormat: context?.is24HourFormat ?? true,
-    timeZone: context?.timeZone,
+    timeZone: context?.timeZone ?? undefined,
   }
 }

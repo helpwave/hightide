@@ -63,10 +63,10 @@ describe('DateTimeField', () => {
 
     act(() => day.focus())
     fireEvent.keyDown(day, { key: 'ArrowRight' })
-    expect(document.activeElement).toBe(month)
+    expect(document?.activeElement).toBe(month)
 
     fireEvent.keyDown(month, { key: 'ArrowRight' })
-    expect(document.activeElement).toBe(year)
+    expect(document?.activeElement).toBe(year)
   })
 
   test('steps an empty segment to its lower bound on arrow up', () => {
@@ -92,7 +92,7 @@ describe('DateTimeField', () => {
       typeInto(day, '01')
       fireEvent.keyDown(month, { key: 'Tab' })
 
-      expect(document.activeElement).toBe(year)
+      expect(document?.activeElement).toBe(year)
       act(() => frames.forEach(frame => frame(0)))
 
       expect(day.textContent).toBe('01')
@@ -113,7 +113,7 @@ describe('DateTimeField', () => {
 
       act(() => day.focus())
       typeInto(day, '01')
-      act(() => (document.activeElement as HTMLElement | null)?.blur())
+      act(() => (document?.activeElement as HTMLElement | null)?.blur())
       act(() => frames.forEach(frame => frame(0)))
 
       expect(screen.getAllByRole('spinbutton')[0].textContent).toBe('01')
@@ -129,7 +129,7 @@ describe('DateTimeField', () => {
     act(() => day.focus())
     typeInto(day, '01')
 
-    expect(document.activeElement).toBe(month)
+    expect(document?.activeElement).toBe(month)
   })
 
   test('does not complete editing while focus moves to another segment', () => {
@@ -169,7 +169,7 @@ describe('DateTimeField', () => {
       typeInto(day, '15')
       typeInto(month, '06')
       typeInto(year, '03')
-      act(() => (document.activeElement as HTMLElement | null)?.blur())
+      act(() => (document?.activeElement as HTMLElement | null)?.blur())
       act(() => frames.forEach(frame => frame(0)))
 
       expect(screen.getAllByRole('spinbutton')[2].textContent).toBe('1903')
