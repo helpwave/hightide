@@ -80,7 +80,7 @@ export const useTransitionState = ({
       let element = ref.current
       if(!element) {
         console.warn('useTransitionState: ref is not set to an element using window instead')
-        element = window.document.body
+        element = window?.document?.body
       }
       const animations = element.getAnimations({ subtree: true })
         .filter(animation => animation.effect?.getTiming().duration !== '0s')

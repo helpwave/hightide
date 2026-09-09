@@ -30,13 +30,13 @@ export const useOutsideClick = ({ refs, onOutsideClick, active = true }: UseOuts
 
       onOutsideClick(event)
     }
-    document.addEventListener('mousedown', listener)
-    document.addEventListener('touchstart', listener)
-    document.addEventListener('pointerdown', listener)
+    document?.addEventListener('mousedown', listener)
+    document?.addEventListener('touchstart', listener)
+    document?.addEventListener('pointerdown', listener)
     return () => {
-      document.removeEventListener('mousedown', listener)
-      document.removeEventListener('touchstart', listener)
-      document.removeEventListener('pointerdown', listener)
+      document?.removeEventListener('mousedown', listener)
+      document?.removeEventListener('touchstart', listener)
+      document?.removeEventListener('pointerdown', listener)
     }
   }, [refs, onOutsideClick, active])
 }

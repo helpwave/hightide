@@ -3,9 +3,9 @@ import { useCallback } from 'react'
 export function useFocusManagement() {
   const getFocusableElements = useCallback((): HTMLElement[] => {
     return Array.from(
-      document.querySelectorAll(
+      document?.querySelectorAll(
         'input, button, select, textarea, a[href], [tabindex]:not([tabindex="-1"])'
-      )
+      ) ?? []
     ).filter(
       (el): el is HTMLElement =>
         el instanceof HTMLElement &&
@@ -21,8 +21,8 @@ export function useFocusManagement() {
       return undefined
     }
     let nextElement = elements[0]
-    if(document.activeElement instanceof HTMLElement) {
-      const currentIndex = elements.indexOf(document.activeElement)
+    if(document?.activeElement instanceof HTMLElement) {
+      const currentIndex = elements.indexOf(document?.activeElement)
       nextElement = elements[(currentIndex + 1) % elements.length]
     }
     return nextElement
@@ -39,8 +39,8 @@ export function useFocusManagement() {
       return undefined
     }
     let previousElement = elements[0]
-    if(document.activeElement instanceof HTMLElement) {
-      const currentIndex = elements.indexOf(document.activeElement)
+    if(document?.activeElement instanceof HTMLElement) {
+      const currentIndex = elements.indexOf(document?.activeElement)
       if(currentIndex === 0) {
         previousElement = elements[elements.length - 1]
       } else {

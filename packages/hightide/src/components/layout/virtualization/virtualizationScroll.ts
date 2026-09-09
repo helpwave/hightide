@@ -61,7 +61,7 @@ export function getScrollMetrics(target: HTMLElement | Window | null): ScrollMet
     return { scrollTop: 0, scrollHeight: 0, clientHeight: 0 }
   }
   if (target === window) {
-    const doc = document.scrollingElement ?? document.documentElement
+    const doc = document?.scrollingElement ?? document?.documentElement
     return { scrollTop: window.scrollY, scrollHeight: doc.scrollHeight, clientHeight: window.innerHeight }
   }
   const element = target as HTMLElement

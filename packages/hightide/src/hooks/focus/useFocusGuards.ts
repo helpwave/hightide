@@ -3,7 +3,8 @@ import { useEffect } from 'react'
 const selectorName = 'data-hw-focus-guard'
 
 function FocusGuard() {
-  const element = document.createElement('div')
+  const element = document?.createElement('div')
+  if(!element) return
   element.setAttribute(selectorName, '')
   element.tabIndex = 0
   element.style.border = 'none'
@@ -30,15 +31,16 @@ class FocusGuardsService {
   }
 
   add() {
-    const edgeGuards = document.querySelectorAll(`[${selectorName}]`)
-    document.body.insertAdjacentElement('afterbegin', edgeGuards[0] ?? FocusGuard())
-    document.body.insertAdjacentElement('beforeend', edgeGuards[1] ?? FocusGuard())
+    const edgeGuards = document?.querySelectorAll(`[${selectorName}]`) ?? []
+    if(edgeGuards.length === 0) return
+    document?.body.insertAdjacentElement('afterbegin', edgeGuards[0] ?? FocusGuard())
+    document?.body.insertAdjacentElement('beforeend', edgeGuards[1] ?? FocusGuard())
     this.count++
   }
 
   remove() {
     if (this.count === 1) {
-      document.querySelectorAll(`[${selectorName}]`)
+      (document?.querySelectorAll(`[${selectorName}]`) ?? [])
         .forEach((node) => node.remove())
     }
     this.count--

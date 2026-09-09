@@ -41,7 +41,7 @@ export const ThemeProvider = ({
       },
       dark: {
         ...resolvedSupportedThemes.dark,
-        theme: resolvedSupportedThemes.light.theme ?? undefined,
+        theme: resolvedSupportedThemes.dark.theme ?? undefined,
       }
     }
     for(const themeMode in resolvedSupportedThemes) {
@@ -64,7 +64,7 @@ export const ThemeProvider = ({
   })
 
   useEffect(() => {
-    document.documentElement.setAttribute('data-theme', value.themeMode)
+    document?.documentElement.setAttribute('data-theme', value.themeMode)
   }, [value.themeMode])
 
   return (

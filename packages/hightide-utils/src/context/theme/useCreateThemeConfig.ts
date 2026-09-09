@@ -73,8 +73,9 @@ export const useCreateThemeConfig = <T>({
       return systemTheme
     }
     if(supportedThemes[fallbackTheme]) {
-      console.warn('useCreateThemeConfig: fallbackTheme not found in the supported themes')
       return fallbackTheme
+    } else {
+      console.warn(`useCreateThemeConfig: fallbackTheme ${fallbackTheme} not found in the supported themes`)
     }
     return Object.keys(supportedThemes)[0]
   }, [fallbackTheme, preferredThemeMode, supportedThemes, systemTheme])
