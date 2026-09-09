@@ -10,45 +10,53 @@
     "access": "public"
   },
   "license": "AGPL-3.0-only",
-  "version": "0.9.3",
+  "version": "0.9.4",
   "type": "module",
   "files": [
-    "src"
+    "dist"
   ],
   "exports": {
     "./components": {
-      "types": "./src/components/index.ts",
-      "default": "./src/components/index.ts"
+      "types": "./dist/components/index.d.ts",
+      "require": "./dist/components/index.cjs",
+      "import": "./dist/components/index.js"
     },
     "./global-contexts": {
-      "types": "./src/global-contexts/index.ts",
-      "default": "./src/global-contexts/index.ts"
+      "types": "./dist/global-contexts/index.d.ts",
+      "require": "./dist/global-contexts/index.cjs",
+      "import": "./dist/global-contexts/index.js"
     },
     "./hooks": {
-      "types": "./src/hooks/index.ts",
-      "default": "./src/hooks/index.ts"
+      "types": "./dist/hooks/index.d.ts",
+      "require": "./dist/hooks/index.cjs",
+      "import": "./dist/hooks/index.js"
     },
     "./icons": {
-      "types": "./src/icons/index.ts",
-      "default": "./src/icons/index.ts"
+      "types": "./dist/icons/index.d.ts",
+      "require": "./dist/icons/index.cjs",
+      "import": "./dist/icons/index.js"
     },
     "./theme": {
-      "types": "./src/theme/index.ts",
-      "default": "./src/theme/index.ts"
+      "types": "./dist/theme/index.d.ts",
+      "require": "./dist/theme/index.cjs",
+      "import": "./dist/theme/index.js"
     },
     "./types": {
-      "types": "./src/types/index.ts",
-      "default": "./src/types/index.ts"
+      "types": "./dist/types/index.d.ts",
+      "require": "./dist/types/index.cjs",
+      "import": "./dist/types/index.js"
     },
     "./utils": {
-      "types": "./src/utils/index.ts",
-      "default": "./src/utils/index.ts"
+      "types": "./dist/utils/index.d.ts",
+      "require": "./dist/utils/index.cjs",
+      "import": "./dist/utils/index.js"
     }
   },
   "scripts": {
-    "clean": "rm -rf node_modules",
+    "clean": "rm -rf dist node_modules",
     "init": "node -e \"process.exit(0)\"",
-    "build": "node -e \"process.exit(0)\"",
+    "build": "tsup",
+    "dev": "tsup --watch",
     "lint": "eslint .",
     "test": "node -e \"process.exit(0)\""
   },
@@ -72,6 +80,7 @@
     "react": "19.0.0",
     "react-native": "0.79.6",
     "react-native-svg": "15.12.0",
+    "tsup": "8.5.1",
     "typescript": "5.7.2"
   },
   "keywords": [

@@ -86,7 +86,7 @@ export const toChatThreadHeaderThemeResolvers: ComponentThemeResolver<ChatThread
         return tokens
       }
 
-      return createAvatarStyleResolvers(resolveTokens, themeTokens)
+      return createAvatarStyleResolvers(resolveTokens)
     }),
     pressable: createStyleResolver(() => {
       const { pressableOverwrites } = resolve()

@@ -14,7 +14,7 @@ import { useTheme } from '../../global-contexts/theme/ThemeContext'
 import {
   useDateTimeFormat,
   useLocalization
-} from '../../global-contexts/localization/forward-exports'
+} from '../../global-contexts/localization'
 import { useMemoizedTheme } from '../../hooks/useMemoizedTheme'
 import type {
   ChatMessageStatus

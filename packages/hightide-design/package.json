@@ -10,41 +10,48 @@
     "access": "public"
   },
   "license": "AGPL-3.0-only",
-  "version": "0.7.3",
+  "version": "0.7.4",
   "type": "module",
   "files": [
-    "src"
+    "dist"
   ],
   "exports": {
     "./primitive-tokens": {
-      "types": "./src/primitive-tokens/index.ts",
-      "default": "./src/primitive-tokens/index.ts"
+      "types": "./dist/primitive-tokens/index.d.ts",
+      "require": "./dist/primitive-tokens/index.cjs",
+      "import": "./dist/primitive-tokens/index.js"
     },
     "./theme-tokens": {
-      "types": "./src/theme-tokens/index.ts",
-      "default": "./src/theme-tokens/index.ts"
+      "types": "./dist/theme-tokens/index.d.ts",
+      "require": "./dist/theme-tokens/index.cjs",
+      "import": "./dist/theme-tokens/index.js"
     },
     "./semantic-token-resolvers": {
-      "types": "./src/semantic-token-resolvers/index.ts",
-      "default": "./src/semantic-token-resolvers/index.ts"
+      "types": "./dist/semantic-token-resolvers/index.d.ts",
+      "require": "./dist/semantic-token-resolvers/index.cjs",
+      "import": "./dist/semantic-token-resolvers/index.js"
     },
     "./component-token-resolvers": {
-      "types": "./src/component-token-resolvers/index.ts",
-      "default": "./src/component-token-resolvers/index.ts"
+      "types": "./dist/component-token-resolvers/index.d.ts",
+      "require": "./dist/component-token-resolvers/index.cjs",
+      "import": "./dist/component-token-resolvers/index.js"
     },
     "./design-system": {
-      "types": "./src/design-system/index.ts",
-      "default": "./src/design-system/index.ts"
+      "types": "./dist/design-system/index.d.ts",
+      "require": "./dist/design-system/index.cjs",
+      "import": "./dist/design-system/index.js"
     },
     "./utils": {
-      "types": "./src/utils/index.ts",
-      "default": "./src/utils/index.ts"
+      "types": "./dist/utils/index.d.ts",
+      "require": "./dist/utils/index.cjs",
+      "import": "./dist/utils/index.js"
     }
   },
   "scripts": {
-    "clean": "rm -rf node_modules",
+    "clean": "rm -rf dist node_modules",
     "init": "node -e \"process.exit(0)\"",
-    "build": "node -e \"process.exit(0)\"",
+    "build": "tsup",
+    "dev": "tsup --watch",
     "lint": "eslint .",
     "test": "node -e \"process.exit(0)\""
   },
@@ -54,6 +61,7 @@
     "@types/node": "20.19.43",
     "eslint": "9.31.0",
     "eslint-plugin-import": "2.32.0",
+    "tsup": "8.5.1",
     "typescript": "5.7.2"
   },
   "keywords": [

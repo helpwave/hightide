@@ -5,6 +5,18 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [0.9.4] - 2026-09-09
+
+### Added
+
+- `dev` script (`tsup --watch`) for continuous rebuilds of the compiled package
+
+### Changed
+
+- The package is compiled to JavaScript with `tsup` and published from `dist` (ESM, CommonJS, and type declarations) instead of shipping TypeScript source
+- Subpath exports (`components`, `global-contexts`, `hooks`, `icons`, `theme`, `types`, `utils`) resolve to `dist`
+- Removed `forward-exports.ts`; utils re-exports live on the folder `index.ts` files
+
 ## [0.9.3] - 2026-09-06
 
 ### Added

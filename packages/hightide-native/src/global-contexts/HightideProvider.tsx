@@ -11,16 +11,16 @@ import { HightideContext } from './HightideContext'
 import {
   LocalizationProvider,
   type LocalizationProviderProps
-} from './localization/LocalizationProvider'
-import { useTheme } from './theme/ThemeContext'
+} from './localization'
 import {
   ThemeProvider,
+  useTheme,
   type ThemeProviderProps
-} from './theme/ThemeProvider'
+} from './theme'
 import {
   TranslationProvider,
   type TranslationProviderProps
-} from './translation/forward-exports'
+} from './translation'
 import type { HightideTheme } from '../theme'
 
 export type HightideProviderProps = PropsWithChildren & {

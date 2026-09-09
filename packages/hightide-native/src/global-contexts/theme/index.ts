@@ -1,3 +1,9 @@
 export * from './ThemeContext'
 export * from './ThemeProvider'
-export * from './forward-exports'
+export {
+  useCreateThemeConfig,
+  type ThemeInformation,
+  type ThemeConfigValue,
+  type SystemTheme,
+  type UseCreateThemeConfigProps,
+} from '@helpwave/hightide-utils/context/theme'

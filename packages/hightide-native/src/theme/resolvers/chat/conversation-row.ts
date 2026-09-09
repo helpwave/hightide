@@ -150,7 +150,7 @@ export const toChatConversationRowThemeResolvers: ComponentThemeResolver<ChatCon
         return tokens
       }
 
-      return createAvatarStyleResolvers(resolveTokens, themeTokens)
+      return createAvatarStyleResolvers(resolveTokens)
     }),
   }
 }
