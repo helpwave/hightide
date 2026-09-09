@@ -10,7 +10,7 @@
     "access": "public"
   },
   "license": "AGPL-3.0-only",
-  "version": "0.16.1",
+  "version": "0.16.2",
   "browserslist": [
     "> 0.2%",
     "last 3 versions",
@@ -38,6 +38,7 @@
     "clean": "rm -rf dist node_modules .next storybook-static",
     "build-css": "NODE_ENV=production node scripts/build-css.mjs",
     "build": "tsup && pnpm run build-css && cp -R src/style/ ./dist/style/uncompiled/",
+    "dev": "tsup --watch",
     "storybook": "storybook dev -p 6006",
     "storybook:devices": "storybook dev -p 6006 --host",
     "build-storybook": "storybook build",

@@ -5,6 +5,12 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/)
 and adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [0.16.2] - 2026-09-09
+
+### Added
+
+- `dev` script (`tsup --watch`) for continuous rebuilds of the compiled package
+
 ## [0.16.1] - 2026-09-03
 
 ### Added

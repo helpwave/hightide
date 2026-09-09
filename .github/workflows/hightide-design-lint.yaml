@@ -32,6 +32,5 @@ jobs:
           cache: pnpm
 
       - run: pnpm install --frozen-lockfile
-      - run: pnpm --filter @helpwave/hightide-utils run init
-      - run: pnpm --filter @helpwave/hightide-design run init
+      - run: pnpm --filter @helpwave/hightide-design... run init
       - run: pnpm --filter @helpwave/hightide-design lint
