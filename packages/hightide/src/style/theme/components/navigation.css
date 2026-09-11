@@ -1,7 +1,7 @@
 @layer components {
   .navigation-item-link,
   .navigation-item-link-in-box {
-    @apply decoration-3 p-2 hover:underline focus:underline font-bold text-lg rounded;
+    @apply decoration-3 p-2 hover:underline focus-visible:underline font-bold text-lg rounded;
   }
 
   .navigation-item-link-in-box {
@@ -9,6 +9,6 @@
   }
 
   .navigation-item-button {
-    @apply flex-row-1 p-2 hover:underline focus:underline font-bold text-lg rounded;
+    @apply flex-row-1 p-2 hover:underline focus-visible:underline font-bold text-lg rounded;
   }
 }
