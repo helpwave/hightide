@@ -1,3 +1,5 @@
+export { TokenBuilder } from './token'
+export type { Token, TokenRef, TokenRefPath } from './token-type'
 export * from './hex'
 export * from './oklch'
 export * from './path'

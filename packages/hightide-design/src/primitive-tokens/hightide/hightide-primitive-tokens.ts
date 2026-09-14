@@ -1,7 +1,7 @@
 import {
   hightideColor,
   type HightideColorPrimitiveTokens
-} from './color'
+} from './color-palettes'
 import {
   hightideShadow,
   type HightideShadowPrimitiveTokens
