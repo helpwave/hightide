@@ -4,7 +4,7 @@ import {
   type ChatSystemLineTokenResolver,
   type ChatSystemLineTokens
 } from '@helpwave/hightide-design/component-tokens'
-import { resolveConfigNode } from '../../static-resolve/resolve'
+import { resolveConfigNode } from '@helpwave/hightide-design/component-tokens'
 import { resolveAccentColoring } from './shared'
 
 type ChatSystemLineParams = {

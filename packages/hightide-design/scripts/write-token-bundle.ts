@@ -1,12 +1,12 @@
 import { mkdirSync, statSync, writeFileSync } from 'node:fs'
 import { dirname, resolve } from 'node:path'
 import { fileURLToPath } from 'node:url'
-import { componentTokens } from '../src/component-tokens/component-tokens.ts'
-import { semanticTokens } from '../src/semantic-tokens/semantic-tokens.ts'
+import { componentTokens } from '../src/component-tokens/hightide'
+import { semanticTokens } from '../src/semantic-tokens/hightide'
 import {
   hightideDarkThemeTokens,
   hightideLightThemeTokens
-} from '../src/theme-tokens/hightide.ts'
+} from '../src/theme-tokens/hightide'
 
 const toJsonValue = (_key: string, value: unknown): unknown => {
   if (value instanceof Set) {

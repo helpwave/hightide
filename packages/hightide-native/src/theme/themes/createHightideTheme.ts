@@ -1,5 +1,5 @@
 import type { ElementLayoutTokens } from '@helpwave/hightide-design/semantic-tokens'
-import type { ThemeLayoutSize, ThemeTokens, ThemeTypographySize } from '@helpwave/hightide-design/theme-tokens'
+import type { ThemeLayoutSize, ThemeTokens } from '@helpwave/hightide-design/theme-tokens'
 import {
   componentTokenResolvers,
   hightideSemanticTokenResolvers,
@@ -36,7 +36,6 @@ import type { HightideThemeSemantics } from '../types/semantics'
 import type { HightideTheme } from '../types/theme'
 
 const layoutSizes = ['xs', 'sm', 'md', 'lg', 'xl'] as const satisfies readonly ThemeLayoutSize[]
-const typographySizes = ['sm', 'md', 'lg'] as const satisfies readonly ThemeTypographySize[]
 
 const resolveElementLayouts = (themeTokens: ThemeTokens): ElementLayoutTokens => ({
   control: Object.fromEntries(
@@ -52,7 +51,7 @@ const resolveElementLayouts = (themeTokens: ThemeTokens): ElementLayoutTokens =>
     ])
   ) as ElementLayoutTokens['container'],
   insideControl: Object.fromEntries(
-    typographySizes.map((size) => [
+    layoutSizes.map((size) => [
       size,
       resolveInsideControlLayout({ themeTokens, size }),
     ])

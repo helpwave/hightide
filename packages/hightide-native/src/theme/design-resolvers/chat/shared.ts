@@ -1,4 +1,4 @@
-import type { ColorToken, HexColorToken } from '@helpwave/hightide-design/primitive-tokens'
+import type { ColorToken, ColorToken } from '@helpwave/hightide-design/primitive-tokens'
 import type { ColorPairToken, ThemeTokens } from '@helpwave/hightide-design/theme-tokens'
 import type { SemanticTokenResolvers } from '@helpwave/hightide-design/semantic-tokens'
 import {
@@ -10,7 +10,7 @@ import {
   type ChatMessageDirection,
   type PressableStateValue
 } from '@helpwave/hightide-design/component-tokens'
-import { resolveConfigNode } from '../../static-resolve/resolve'
+import { resolveConfigNode } from '@helpwave/hightide-design/component-tokens'
 import {
   resolveColoringColorVariant,
   resolveColoringStyle,
@@ -24,8 +24,8 @@ type ThemeParams = {
 
 export const resolveDescriptionColor = ({
   themeTokens,
-}: ThemeParams): HexColorToken => (
-  resolveConfigNode<HexColorToken>(
+}: ThemeParams): ColorToken => (
+  resolveConfigNode<ColorToken>(
     surfaceDescriptionColor,
     {
       theme: themeTokens,
@@ -36,8 +36,8 @@ export const resolveDescriptionColor = ({
 
 export const resolveFadedBorder = ({
   themeTokens,
-}: ThemeParams): HexColorToken => (
-  resolveConfigNode<HexColorToken>(
+}: ThemeParams): ColorToken => (
+  resolveConfigNode<ColorToken>(
     surfaceFadedColor,
     {
       theme: themeTokens,

@@ -26,7 +26,6 @@ import type { ShadowToken } from '@helpwave/hightide-design/theme-tokens'
 import type { IconStyle } from '../../icons'
 import type { SingleOrArray } from '@helpwave/hightide-utils/utils'
 import { ArrayUtil } from '@helpwave/hightide-utils/utils'
-import { defaultWritingMode, resolveDirectionalTokens } from './directional-tokens'
 
 function getStyleProperty<
   T extends ViewStyle,
@@ -187,15 +186,6 @@ const borderRadiusStyleAdapter = (
     return undefined
   }
 
-  if (borderRadius.type === 'all') {
-    return {
-      borderTopLeftRadius:  borderRadius.value,
-      borderTopRightRadius:  borderRadius.value,
-      borderBottomLeftRadius:  borderRadius.value,
-      borderBottomRightRadius:  borderRadius.value,
-    }
-  }
-
   return defined({
     borderTopLeftRadius: borderRadius.topLeft,
     borderTopRightRadius: borderRadius.topRight,
@@ -216,13 +206,11 @@ const borderWidthStyleAdapter = (
     return undefined
   }
 
-  const sides = resolveDirectionalTokens([width], defaultWritingMode)
-
   return defined({
-    borderTopWidth: sides.top,
-    borderRightWidth: sides.right,
-    borderBottomWidth: sides.bottom,
-    borderLeftWidth: sides.left,
+    borderTopWidth: width.top,
+    borderRightWidth: width.right,
+    borderBottomWidth: width.bottom,
+    borderLeftWidth: width.left,
   })
 }
 
@@ -238,13 +226,11 @@ const borderColorStyleAdapter = (
     return undefined
   }
 
-  const sides = resolveDirectionalTokens([color], defaultWritingMode)
-
   return defined({
-    borderTopColor: sides.top,
-    borderRightColor: sides.right,
-    borderBottomColor: sides.bottom,
-    borderLeftColor: sides.left,
+    borderTopColor: color.top,
+    borderRightColor: color.right,
+    borderBottomColor: color.bottom,
+    borderLeftColor: color.left,
   })
 }
 
@@ -284,13 +270,11 @@ const paddingStyleAdapter = (
     return undefined
   }
 
-  const sides = resolveDirectionalTokens([padding], defaultWritingMode)
-
   return defined({
-    paddingTop: sides.top,
-    paddingRight: sides.right,
-    paddingBottom: sides.bottom,
-    paddingLeft: sides.left,
+    paddingTop: padding.top,
+    paddingRight: padding.right,
+    paddingBottom: padding.bottom,
+    paddingLeft: padding.left,
   })
 }
 
@@ -306,13 +290,11 @@ const marginStyleAdapter = (
     return undefined
   }
 
-  const sides = resolveDirectionalTokens([margin], defaultWritingMode)
-
   return defined({
-    marginTop: sides.top,
-    marginRight: sides.right,
-    marginBottom: sides.bottom,
-    marginLeft: sides.left,
+    marginTop: margin.top,
+    marginRight: margin.right,
+    marginBottom: margin.bottom,
+    marginLeft: margin.left,
   })
 }
 

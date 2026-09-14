@@ -5,7 +5,7 @@ import {
   type DividerTokens
 } from '@helpwave/hightide-design/component-tokens'
 import type { ColorToken } from '@helpwave/hightide-design/primitive-tokens'
-import { resolveConfigNode } from '../static-resolve/resolve'
+import { resolveConfigNode } from '@helpwave/hightide-design/component-tokens'
 
 type DividerParams = {
   color: ColorToken,

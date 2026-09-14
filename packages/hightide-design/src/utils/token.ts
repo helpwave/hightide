@@ -1,5 +1,5 @@
 import type { ContextBasedProperty, ContextBasedPropertyOverride } from '../component-tokens/context-based'
-import type { HightideTokenPathProvider } from '../component-tokens/token-context'
+import type { HightideTokenPathProvider } from '../component-tokens/hightide/token-context'
 import type { AxisAlignmentToken, AxisAlignmentValue } from '../primitive-tokens/axis-alignment-token'
 import type { BorderStyleToken, BorderStyleValue } from '../primitive-tokens/border-style-token'
 import type { ColorOpToken } from '../primitive-tokens/color-op'
@@ -11,16 +11,34 @@ import type { FontFamilyToken } from '../primitive-tokens/font-family-token'
 import type { FontWeight, FontWeightToken } from '../primitive-tokens/font-weight-token'
 import type { LayoutDirectionToken, LayoutDirectionValue } from '../primitive-tokens/layout-direction-token'
 import type { MainAxisAlignmentToken, MainAxisAlignmentValue } from '../primitive-tokens/main-axis-alignment-token'
-import type { NumberCalcToken, NumberCalculationOperation } from '../primitive-tokens/number-calc'
+import type {
+  NumberBinaryCalculationOperation,
+  NumberCalcToken,
+  NumberUnaryCalculationOperation
+} from '../primitive-tokens/number-calc'
 import type { NumberToken } from '../primitive-tokens/number-token'
 import type { NumberValueToken } from '../primitive-tokens/number-value-token'
 import type { OutlineStyleToken, OutlineStyleValue } from '../primitive-tokens/outline-style-token'
 import type { OverflowToken, OverflowValue } from '../primitive-tokens/overflow-token'
 import type { PercentToken } from '../primitive-tokens/percent-token'
-import type { ResolverConfig, ResolverState } from '../primitive-tokens/resolver-types'
+import type { HightideResolverConfig, ResolverState } from '../primitive-tokens/resolver-types'
 import type { SpacingAlignmentToken, SpacingAlignmentValue } from '../primitive-tokens/spacing-alignment-token'
 import type { StretchToken, StretchValue } from '../primitive-tokens/stretch-token'
 import type { TextAlignToken, TextAlignValue } from '../primitive-tokens/text-align-token'
+import type {
+  AxisFlow,
+  WritingOrientation } from './box-sides'
+import {
+  type BoxCornersInput,
+  type BoxSidesInput,
+  type PhysicalBoxCorners,
+  type PhysicalBoxSides,
+  type WritingConfig,
+  isDefaultWritingConfig,
+  resolveBoxCorners,
+  resolveBoxSides,
+  writingConfigCombinations
+} from './box-sides'
 import type { HexColor } from './hex-color'
 import type { Token, TokenRef, TokenRefOrValue, TokenRefPath } from './token-type'
 import type { ColorToken } from '../primitive-tokens'
@@ -47,7 +65,7 @@ const numberValue = (
 })
 
 const numberRef = <Path = HightideTokenPathProvider>(
-  path: NoInfer<TokenRefPath<NumberValueToken, Path>>,
+  path: TokenRefPath<NumberValueToken, Path>,
   fallback?:  TokenRefOrValue<NumberValueToken>
 ): TokenRef<NumberValueToken> => ({
     type: 'ref.numberValue',
@@ -56,7 +74,7 @@ const numberRef = <Path = HightideTokenPathProvider>(
   })
 
 const calc = (
-  operation: NumberCalculationOperation,
+  operation: NumberBinaryCalculationOperation,
   value1: TokenRefOrValue<NumberValueToken>,
   value2: TokenRefOrValue<NumberValueToken>
 ): NumberValueToken => numberValue({
@@ -67,6 +85,23 @@ const calc = (
     value2,
   },
 })
+
+const unaryCalc = (
+  operation: NumberUnaryCalculationOperation,
+  value: TokenRefOrValue<NumberValueToken>
+): NumberValueToken => numberValue({
+  type: 'numberCalc',
+  value: {
+    operation,
+    value,
+  },
+})
+
+const floor = (value: TokenRefOrValue<NumberValueToken>): NumberValueToken => unaryCalc('floor', value)
+
+const round = (value: TokenRefOrValue<NumberValueToken>): NumberValueToken => unaryCalc('round', value)
+
+const ceil = (value: TokenRefOrValue<NumberValueToken>): NumberValueToken => unaryCalc('ceil', value)
 
 const color = (
   value: HexColor
@@ -242,17 +277,17 @@ const stateful = <
   V,
   S extends ResolverState = ResolverState
 >(
-    base: V,
-    overrides?: ReadonlyArray<ContextBasedPropertyOverride<V, S, ResolverConfig>>
-  ): ContextBasedProperty<V, S, ResolverConfig> => ({
-    base: base as V,
+    base?: V,
+    overrides?: ReadonlyArray<ContextBasedPropertyOverride<V, S, HightideResolverConfig>>
+  ): ContextBasedProperty<V, S, HightideResolverConfig> => ({
+    base: base,
     overrides,
   })
 
 const statefulField = <
   T extends Token,
   S extends ResolverState = ResolverState,
-  C extends ResolverConfig = ResolverConfig
+  C extends HightideResolverConfig = HightideResolverConfig
 >(
     base: TokenRefOrValue<T>,
     overrides?: ReadonlyArray<ContextBasedPropertyOverride<TokenRefOrValue<T>, S, C>>
@@ -266,14 +301,14 @@ const toStateSet = <S extends string>(
 ): ReadonlySet<S> => (value instanceof Set ? value : new Set(value))
 
 const whenState = <
-  S extends ResolverState,
-  V
+  V,
+  S extends ResolverState
 >(
     condition: ReadonlyArray<S> | ReadonlySet<S>,
     value: V,
     negativeCondition?: ReadonlyArray<S> | ReadonlySet<S>,
-    configCondition?: Partial<ResolverConfig>
-  ): ContextBasedPropertyOverride<V, S, ResolverConfig> => ({
+    configCondition?: Partial<HightideResolverConfig>
+  ): ContextBasedPropertyOverride<V, S, HightideResolverConfig> => ({
     condition: toStateSet(condition),
     negativeCondition: negativeCondition === undefined
       ? undefined
@@ -282,10 +317,14 @@ const whenState = <
     value,
   })
 
-const whenConfig = <V>(
-  configCondition: Partial<ResolverConfig>,
-  value: V
-): ContextBasedPropertyOverride<V, ResolverState, ResolverConfig> => ({
+const whenConfig = <
+  V,
+  Config extends HightideResolverConfig = HightideResolverConfig,
+  State extends ResolverState = ResolverState
+>(
+    configCondition: Partial<Config>,
+    value: V
+  ): ContextBasedPropertyOverride<V, State, Config> => ({
     configCondition,
     value,
   })
@@ -294,7 +333,7 @@ const themeLayoutSizes = ['xs', 'sm', 'md', 'lg', 'xl'] as const satisfies reado
 
 const whenThemeSize = <V>(
   valueForSize: (size: ThemeLayoutSize) => V
-): ReadonlyArray<ContextBasedPropertyOverride<V, ResolverState, ResolverConfig>> => (
+): ReadonlyArray<ContextBasedPropertyOverride<V, ResolverState, HightideResolverConfig>> => (
     themeLayoutSizes
       .filter((size) => size !== 'md')
       .map((size) => whenConfig({ size }, valueForSize(size)))
@@ -304,7 +343,7 @@ const whenThemeSizeState = <S extends ResolverState, V>(
   condition: ReadonlyArray<S> | ReadonlySet<S>,
   valueForSize: (size: ThemeLayoutSize) => V,
   negativeCondition?: ReadonlyArray<S> | ReadonlySet<S>
-): ReadonlyArray<ContextBasedPropertyOverride<V, S, ResolverConfig>> => (
+): ReadonlyArray<ContextBasedPropertyOverride<V, S, HightideResolverConfig>> => (
     themeLayoutSizes.map((size) => whenState(
       condition,
       valueForSize(size),
@@ -313,11 +352,95 @@ const whenThemeSizeState = <S extends ResolverState, V>(
     ))
   )
 
+const writingConfigCondition = (config: WritingConfig): Partial<HightideResolverConfig> => ({
+  'writing-orientation': config['writing-orientation'],
+  'writing-inline': config.inline,
+  'writing-block': config.block,
+})
+
+const writingModeOverrides = <
+  V,
+  S extends ResolverState = ResolverState
+>(
+    valueForConfig: (config: WritingConfig) => V
+  ): ReadonlyArray<ContextBasedPropertyOverride<V, S, HightideResolverConfig>> => {
+  return writingConfigCombinations
+    .filter((config) => !isDefaultWritingConfig(config))
+    .map((config) => whenConfig(writingConfigCondition(config), valueForConfig(config)))
+}
+
+const sides = <V>(
+  input: BoxSidesInput<V>,
+  orientation?: WritingOrientation,
+  inline?: AxisFlow,
+  block?: AxisFlow
+): PhysicalBoxSides<V> => resolveBoxSides(input, orientation, inline, block)
+
+const corners = <V>(
+  input: BoxCornersInput<V>,
+  orientation?: WritingOrientation,
+  inline?: AxisFlow,
+  block?: AxisFlow
+): PhysicalBoxCorners<V> => resolveBoxCorners(input, orientation, inline, block)
+
+const padding = <
+  V,
+  S extends ResolverState = ResolverState
+>(
+    input: BoxSidesInput<V>,
+    overrides?: ReadonlyArray<ContextBasedPropertyOverride<PhysicalBoxSides<V>, S, HightideResolverConfig>>
+  ): ContextBasedProperty<PhysicalBoxSides<V>, S, HightideResolverConfig> => stateful<PhysicalBoxSides<V>, S>(
+    resolveBoxSides(input),
+    [
+      ...writingModeOverrides<PhysicalBoxSides<V>, S>(
+        (config) => resolveBoxSides(
+          input,
+          config['writing-orientation'],
+          config.inline,
+          config.block
+        )
+      ),
+      ...(overrides ?? []),
+    ]
+  )
+
+const margin = <
+  V,
+  S extends ResolverState = ResolverState
+>(
+    input: BoxSidesInput<V>,
+    overrides?: ReadonlyArray<ContextBasedPropertyOverride<PhysicalBoxSides<V>, S, HightideResolverConfig>>
+  ): ContextBasedProperty<PhysicalBoxSides<V>, S, HightideResolverConfig> => padding(input, overrides)
+
+const borderRadius = <
+  V,
+  S extends ResolverState = ResolverState
+>(
+    input: BoxCornersInput<V>,
+    overrides?: ReadonlyArray<ContextBasedPropertyOverride<PhysicalBoxCorners<V>, S, HightideResolverConfig>>
+  ): ContextBasedProperty<PhysicalBoxCorners<V>, S, HightideResolverConfig> => stateful<PhysicalBoxCorners<V>, S>(
+    resolveBoxCorners(input),
+    [
+      ...writingModeOverrides<PhysicalBoxCorners<V>, S>(
+        (config) => resolveBoxCorners(
+          input,
+          config['writing-orientation'],
+          config.inline,
+          config.block
+        )
+      ),
+      ...(overrides ?? []),
+    ]
+  )
+
 export const TokenBuilder = {
   number,
   numberValue,
   numberRef,
   calc,
+  floor,
+  round,
+  ceil,
   color,
   colorRef,
   colorValue: colorValueToken,
@@ -348,4 +471,9 @@ export const TokenBuilder = {
   whenConfig,
   whenThemeSize,
   whenThemeSizeState,
+  sides,
+  corners,
+  padding,
+  margin,
+  borderRadius,
 }

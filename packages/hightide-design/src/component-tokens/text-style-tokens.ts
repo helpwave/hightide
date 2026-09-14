@@ -1,20 +1,14 @@
-import type { ColorToken } from '../primitive-tokens/color'
-import type { FontWeightToken } from '../primitive-tokens/typography'
-import type { ComponentTokenConfig } from './token-config'
-import type { TokenContext } from './token-context'
-
-export type TextAlignToken = 'left' | 'center' | 'right'
+import type { ColorValueToken } from '../primitive-tokens/color-value-token'
+import type { FontFamilyToken } from '../primitive-tokens/font-family-token'
+import type { NumberValueToken } from '../primitive-tokens/number-value-token'
+import type { TextAlignToken } from '../primitive-tokens/text-align-token'
 
 export type TextStyleTokens = {
-  color?: ColorToken,
-  fontSize?: number,
-  lineHeight?: number,
-  fontWeight?: FontWeightToken,
-  fontFamily?: string,
+  type: 'textStyle',
+  color?: ColorValueToken,
+  fontSize?: NumberValueToken,
+  lineHeight?: NumberValueToken,
+  fontWeight?: NumberValueToken,
+  fontFamily?: FontFamilyToken,
   textAlign?: TextAlignToken,
 }
-
-export type TextStyleTokenConfig<
-  S extends string = string,
-  C extends Record<string, string> = Record<string, string>
-> = ComponentTokenConfig<TextStyleTokens, TokenContext<unknown>, S, C>

@@ -15,7 +15,7 @@ import {
   resolveContainerTokenConfig,
   resolveIconTokenConfig,
   type TokenResolveContext
-} from '../static-resolve/resolve'
+} from '@helpwave/hightide-design/component-tokens'
 import { iconTokenResolver } from './icon'
 
 type IconButtonTokenState = PressableStateValue | IconButtonVariant

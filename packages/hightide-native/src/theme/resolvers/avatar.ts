@@ -93,7 +93,12 @@ export const withNumericAvatarSize = (
         maxWidth: size,
         maxHeight: size,
       },
-      borderRadius: { type: 'all', value: borderRadius },
+      borderRadius: {
+        topLeft: borderRadius,
+        topRight: borderRadius,
+        bottomLeft: borderRadius,
+        bottomRight: borderRadius,
+      },
     },
     image: {
       ...tokens.image,
@@ -101,7 +106,12 @@ export const withNumericAvatarSize = (
         width: size,
         height: size,
       },
-      borderRadius: { type: 'all', value: borderRadius },
+      borderRadius: {
+        topLeft: borderRadius,
+        topRight: borderRadius,
+        bottomLeft: borderRadius,
+        bottomRight: borderRadius,
+      },
     },
     icon: {
       ...tokens.icon,
@@ -228,7 +238,12 @@ export const createAvatarWithStatusThemeResolvers = (
                 width: size,
                 height: size,
               },
-              borderRadius: { type: 'all', value: size / 2 },
+              borderRadius: {
+                topLeft: size / 2,
+                topRight: size / 2,
+                bottomLeft: size / 2,
+                bottomRight: size / 2,
+              },
             }
         ),
         position: 'absolute',

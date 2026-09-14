@@ -3,7 +3,7 @@ import {
   type ChatQuickReplyChipTokenResolver,
   type ChatQuickReplyChipTokens
 } from '@helpwave/hightide-design/component-tokens'
-import { resolveConfigNode } from '../../static-resolve/resolve'
+import { resolveConfigNode } from '@helpwave/hightide-design/component-tokens'
 
 type ChatQuickReplyChipTokenState = 'active'
 

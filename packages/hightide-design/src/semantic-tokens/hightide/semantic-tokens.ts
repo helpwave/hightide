@@ -10,7 +10,7 @@ import {
 import { withAppearanceTokens } from './with-appearance'
 import { tintedSurfaceTokens } from './tinted-surface'
 import type { AssertAssignable } from '../../utils/assert'
-import type { ResolverConfig, HightideResolverParams, ResolverState } from '../../primitive-tokens/resolver-types'
+import type { HightideResolverConfig, HightideResolverParams, ResolverState } from '../../primitive-tokens/resolver-types'
 import type { ColorValueToken } from '../../primitive-tokens/color-value-token'
 import type { NumberValueToken } from '../../primitive-tokens/number-value-token'
 import type { TokenRefOrValue } from '../../utils/token-type'
@@ -27,13 +27,13 @@ export type HightideSemanticPathProvider = {
 type SemanticColorProperty = ContextBasedProperty<
   TokenRefOrValue<ColorValueToken>,
   ResolverState,
-  ResolverConfig
+  HightideResolverConfig
 >
 
 type SemanticNumberProperty = ContextBasedProperty<
   TokenRefOrValue<NumberValueToken>,
   ResolverState,
-  ResolverConfig
+  HightideResolverConfig
 >
 
 export type HightideSemanticTokens = AssertAssignable<{
@@ -96,7 +96,7 @@ export type HightideSemanticTokens = AssertAssignable<{
     },
     touchTargetSize: SemanticNumberProperty,
   },
-}, SemanticTokens<ResolverState, ResolverConfig>>
+}, SemanticTokens<ResolverState, HightideResolverConfig>>
 
 export const semanticTokens: HightideSemanticTokens = {
   color: {

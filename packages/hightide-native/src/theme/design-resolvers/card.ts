@@ -3,7 +3,7 @@ import {
   type CardTokenResolver,
   type CardTokens
 } from '@helpwave/hightide-design/component-tokens'
-import { resolveConfigNode } from '../static-resolve/resolve'
+import { resolveConfigNode } from '@helpwave/hightide-design/component-tokens'
 
 export const cardTokenResolver: CardTokenResolver = ({ themeTokens }) => (
   resolveConfigNode<CardTokens>(

@@ -1,150 +1,168 @@
-import type { ColorToken } from '../primitive-tokens/color'
-import type {
-  OutlineStyle,
-  OutlineToken,
-  ShadowToken
-} from '../theme-tokens/theme-tokens'
-import type { ComponentTokenConfig } from './token-config'
-import type { TokenContext } from './token-context'
+import type { AxisAlignmentToken } from '../primitive-tokens/axis-alignment-token'
+import type { BorderStyleToken } from '../primitive-tokens/border-style-token'
+import type { ColorValueToken } from '../primitive-tokens/color-value-token'
+import type { CrossAxisAlignmentToken } from '../primitive-tokens/cross-axis-alignment-token'
+import type { CrossAxisLineAlignmentToken } from '../primitive-tokens/cross-axis-line-alignment-token'
+import type { FlexWrapToken } from '../primitive-tokens/flex-wrap-token'
+import type { LayoutDirectionToken } from '../primitive-tokens/layout-direction-token'
+import type { MainAxisAlignmentToken } from '../primitive-tokens/main-axis-alignment-token'
+import type { NumberValueToken } from '../primitive-tokens/number-value-token'
+import type { OutlineStyleToken } from '../primitive-tokens/outline-style-token'
+import type { OverflowToken } from '../primitive-tokens/overflow-token'
+import type { PercentToken } from '../primitive-tokens/percent-token'
 
-export type LayoutDirectionToken = 'horizontal' | 'vertical'
-export type LayoutAlignmentToken = 'left-top' | 'left-center' | 'left-bottom' | 'center-top' | 'center-center' | 'center-bottom' | 'right-top' | 'right-center' | 'right-bottom'
-export type AxisAligmentToken = 'start' | 'center' | 'end'
-export type StretchToken = 'stretch'
-export type SpacingToken = 'space-between' | 'space-evenly' | 'space-around'
-export type MainAxisAligmentToken = AxisAligmentToken | SpacingToken
-export type CrossAxisAlignmentToken = AxisAligmentToken | StretchToken
-export type CrossAxisLineAligmentToken = AxisAligmentToken | SpacingToken | StretchToken
-export type FlexWrapToken = 'nowrap' | 'wrap' | 'wrap-reverse'
-export type OverflowToken = 'visible' | 'hidden' | 'scroll'
-export type SizeToken = number | `${number}%`
+export type { AxisAlignmentToken } from '../primitive-tokens/axis-alignment-token'
+export type { BorderStyleToken } from '../primitive-tokens/border-style-token'
+export type { CrossAxisAlignmentToken } from '../primitive-tokens/cross-axis-alignment-token'
+export type { CrossAxisLineAlignmentToken } from '../primitive-tokens/cross-axis-line-alignment-token'
+export type { FlexWrapToken } from '../primitive-tokens/flex-wrap-token'
+export type { LayoutDirectionToken } from '../primitive-tokens/layout-direction-token'
+export type { MainAxisAlignmentToken } from '../primitive-tokens/main-axis-alignment-token'
+export type { OverflowToken } from '../primitive-tokens/overflow-token'
+export type { StretchToken } from '../primitive-tokens/stretch-token'
+
+export type AxisAligmentToken = AxisAlignmentToken
+export type MainAxisAligmentToken = MainAxisAlignmentToken
+export type CrossAxisLineAligmentToken = CrossAxisLineAlignmentToken
+
+export type SizeToken = NumberValueToken | PercentToken
+
 export type StaticPositionTokens = {
   type: 'static',
-  zIndex?: number,
+  zIndex?: NumberValueToken,
 }
+
 export type RelativePositionTokens = {
   type: 'relative',
   left?: SizeToken,
   right?: SizeToken,
   top?: SizeToken,
   bottom?: SizeToken,
-  zIndex?: number,
+  zIndex?: NumberValueToken,
 }
+
 export type AbsolutePositionTokens = {
   type: 'absolute',
   left?: SizeToken,
   right?: SizeToken,
   top?: SizeToken,
   bottom?: SizeToken,
-  zIndex?: number,
+  zIndex?: NumberValueToken,
 }
+
 export type PositioningToken = StaticPositionTokens | RelativePositionTokens | AbsolutePositionTokens
-export type DegreeToken = `${string}deg`
-// TODO: Add Matrix and perspective later
+
 export type TransformTokens = {
   translate?: {
-    x?: number,
-    y?: number,
+    x?: NumberValueToken,
+    y?: NumberValueToken,
   },
   scale?: {
-    x?: number,
-    y?: number,
+    x?: NumberValueToken,
+    y?: NumberValueToken,
   },
   rotation?: {
-    x?: DegreeToken,
-    y?: DegreeToken,
-    z?: DegreeToken,
+    x?: NumberValueToken,
+    y?: NumberValueToken,
+    z?: NumberValueToken,
   },
   skew?: {
-    x?: number,
-    y?: number,
+    x?: NumberValueToken,
+    y?: NumberValueToken,
   },
 }
+
 export type BorderRadiusToken = {
-  type: 'all',
-  value?: number,
-} | {
-  type: 'physicalCorner',
-  topLeft?: number,
-  topRight?: number,
-  bottomLeft?: number,
-  bottomRight?: number,
+  topLeft?: NumberValueToken,
+  topRight?: NumberValueToken,
+  bottomRight?: NumberValueToken,
+  bottomLeft?: NumberValueToken,
 }
 
-export type PhysicalAxisToken<T> = {
-  type: 'physicalAxis',
-  horizontal?: T,
-  vertical?: T,
+export type OutlineToken = {
+  width?: NumberValueToken,
+  offset?: NumberValueToken,
+  color?: ColorValueToken,
+  style?: OutlineStyleToken,
 }
-export type PhysicalSideToken<T> = {
-  type: 'physicalSide',
-  top?: T,
-  right?: T,
-  bottom?: T,
-  left?: T,
+
+export type ShadowToken = {
+  x: NumberValueToken,
+  y: NumberValueToken,
+  blur: NumberValueToken,
+  spread: NumberValueToken,
+  color: ColorValueToken,
 }
-export type AllToken<T> = {
-  type: 'all',
-  value?: T,
+
+export type BorderWidthToken = {
+  left?: NumberValueToken,
+  right?: NumberValueToken,
+  top?: NumberValueToken,
+  bottom?: NumberValueToken,
 }
-export type LogicalAxisToken<T> = {
-  type: 'logicalAxis',
-  inline?: T,
-  block?: T,
+
+export type BorderColorToken = {
+  left?: ColorValueToken,
+  right?: ColorValueToken,
+  top?: ColorValueToken,
+  bottom?: ColorValueToken,
 }
-export type LogicalSideToken<T> ={
-  type: 'logicalSide',
-  inlineStart?: T,
-  inlineEnd?: T,
-  blockStart?: T,
-  blockEnd?: T,
-}
-export type DirectionalToken<T> = PhysicalAxisToken<T> | PhysicalSideToken<T> | AllToken<T> | LogicalAxisToken<T>  | LogicalSideToken<T>
-export type { OutlineStyle, OutlineToken }
-export type BorderStyleToken = 'dotted' | 'dashed' | 'solid'
+
 export type BorderToken = {
-  width?: DirectionalToken<number>,
-  color?: DirectionalToken<ColorToken>,
+  width?: BorderWidthToken,
+  color?: BorderColorToken,
   style?: BorderStyleToken,
 }
-export type PaddingToken = DirectionalToken<number>
-export type MarginToken = DirectionalToken<number>
+
+export type PaddingToken = {
+  left?: NumberValueToken,
+  right?: NumberValueToken,
+  top?: NumberValueToken,
+  bottom?: NumberValueToken,
+}
+
+export type MarginToken = {
+  left?: NumberValueToken,
+  right?: NumberValueToken,
+  top?: NumberValueToken,
+  bottom?: NumberValueToken,
+}
+
+export type ContainerSizeTokens = {
+  height?: SizeToken,
+  width?: SizeToken,
+  minHeight?: SizeToken,
+  minWidth?: SizeToken,
+  maxHeight?: SizeToken,
+  maxWidth?: SizeToken,
+}
+
+export type ContainerLayoutTokens = {
+  flexWrap?: FlexWrapToken,
+  gap?: NumberValueToken,
+  direction?: LayoutDirectionToken,
+  mainAxisAlignment?: MainAxisAlignmentToken,
+  crossAxisAlignment?: CrossAxisAlignmentToken,
+  crossAxisLineAlignment?: CrossAxisLineAlignmentToken,
+  selfCrossAxisAlignment?: CrossAxisAlignmentToken,
+  flexGrow?: NumberValueToken,
+  flexShrink?: NumberValueToken,
+  flexBasis?: SizeToken,
+}
 
 export type ContainerTokens = {
-  backgroundColor?: ColorToken,
-  opacity?: number,
+  type: 'container',
+  backgroundColor?: ColorValueToken,
+  opacity?: NumberValueToken,
   overflow?: OverflowToken,
   position?: PositioningToken,
   transform?: TransformTokens,
   border?: BorderToken,
-  size?: {
-    height?: SizeToken,
-    width?: SizeToken,
-    minHeight?: SizeToken,
-    minWidth?: SizeToken,
-    maxHeight?: SizeToken,
-    maxWidth?: SizeToken,
-  },
+  size?: ContainerSizeTokens,
   borderRadius?: BorderRadiusToken,
   padding?: PaddingToken,
   margin?: MarginToken,
-  layout?: {
-    flexWrap?: FlexWrapToken,
-    gap?: number,
-    direction?: LayoutDirectionToken,
-    mainAxisAlignment?: MainAxisAligmentToken,
-    crossAxisAlignment?: CrossAxisAlignmentToken,
-    crossAxisLineAlignment?: CrossAxisLineAligmentToken,
-    selfCrossAxisAlignment?: CrossAxisAlignmentToken,
-    flexGrow?: number,
-    flexShrink?: number,
-    flexBasis?: SizeToken | 'auto',
-  },
+  layout?: ContainerLayoutTokens,
   shadow?: ShadowToken,
   outline?: OutlineToken,
 }
-
-export type ContainerTokenConfig<
-  S extends string = string,
-  C extends Record<string, string> = Record<string, string>
-> = ComponentTokenConfig<ContainerTokens, TokenContext<unknown>, S, C>

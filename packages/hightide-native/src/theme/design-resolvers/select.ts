@@ -9,7 +9,7 @@ import {
   type SelectTokenResolver,
   type TextStyleTokens
 } from '@helpwave/hightide-design/component-tokens'
-import { resolveConfigNode } from '../static-resolve/resolve'
+import { resolveConfigNode } from '@helpwave/hightide-design/component-tokens'
 import {
   resolveColoringColorVariant,
   resolveColoringStyle,
@@ -68,9 +68,7 @@ export const selectTokenResolver: SelectTokenResolver = ({
     semanticResolvers,
   })
   const inputPadding = input.container.padding
-  const horizontalPadding = inputPadding?.type === 'physicalAxis'
-    ? inputPadding.horizontal
-    : undefined
+  const horizontalPadding = inputPadding?.left ?? inputPadding?.right
   const states = new Set<SelectTokenState>(state)
 
   if (hasSearch) {

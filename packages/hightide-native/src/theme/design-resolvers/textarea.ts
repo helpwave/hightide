@@ -3,7 +3,7 @@ import {
   type InputTokens,
   type TextareaTokenResolver
 } from '@helpwave/hightide-design/component-tokens'
-import { resolveConfigNode } from '../static-resolve/resolve'
+import { resolveConfigNode } from '@helpwave/hightide-design/component-tokens'
 import { inputTokenResolver } from './input'
 
 type TextareaOverlayParams = {

@@ -1,12 +1,17 @@
-import type { ColorToken, HexColorToken } from '@helpwave/hightide-design/primitive-tokens'
+import type { ColorToken, ColorToken } from '@helpwave/hightide-design/primitive-tokens'
 import type {
-  ComponentTokenConfig,
+  NumberBinaryCalculationOperation,
+  NumberCalculationOperation,
+  NumberUnaryCalculationOperation
+} from '@helpwave/hightide-design/primitive-tokens/number-calc'
+import type {
   ContainerTokens,
   ContextBasedProperty,
   IconTokens,
-  NumberCalculationOperation,
-  TextStyleTokens,
-  TokenContext
+  ResolvableContainerTokens,
+  ResolvableIconTokens,
+  ResolvableTextStyleTokens,
+  TextStyleTokens
 } from '@helpwave/hightide-design/component-tokens'
 import { matchesConfigCondition } from '@helpwave/hightide-design/component-tokens'
 import { HexColorUtils, OKLCHUtils } from '@helpwave/hightide-design/utils'
@@ -92,7 +97,7 @@ const asNumber = (value: unknown, label: string): number => {
   return value
 }
 
-const asHexColor = (value: unknown, label: string): HexColorToken => {
+const asHexColor = (value: unknown, label: string): ColorToken => {
   if (typeof value !== 'string' || !value.startsWith('#')) {
     throw new Error(`Expected color for ${label}, received ${String(value)}`)
   }
@@ -100,8 +105,8 @@ const asHexColor = (value: unknown, label: string): HexColorToken => {
   return HexColorUtils.resolveColorToken(value as ColorToken)
 }
 
-const resolveCalculation = (
-  operation: NumberCalculationOperation,
+const resolveBinaryCalculation = (
+  operation: NumberBinaryCalculationOperation,
   value1: number,
   value2: number
 ): number => {
@@ -118,14 +123,28 @@ const resolveCalculation = (
     return Math.min(value1, value2)
   case 'max':
     return Math.max(value1, value2)
-  case 'floor':
-    return Math.floor(value1)
-  case 'round':
-    return Math.round(value1)
-  case 'ceil':
-    return Math.ceil(value1)
   }
 }
+
+const resolveUnaryCalculation = (
+  operation: NumberUnaryCalculationOperation,
+  value: number
+): number => {
+  switch (operation) {
+  case 'floor':
+    return Math.floor(value)
+  case 'round':
+    return Math.round(value)
+  case 'ceil':
+    return Math.ceil(value)
+  }
+}
+
+const isUnaryCalculationOperation = (
+  operation: NumberCalculationOperation
+): operation is NumberUnaryCalculationOperation => (
+  operation === 'floor' || operation === 'round' || operation === 'ceil'
+)
 
 const isContextBasedProperty = (
   value: unknown
@@ -237,12 +256,21 @@ export function resolveResolvableValue (
     return resolveResolvableValue(value.fallback, context)
   }
 
-  if (type === 'calculation') {
-    const operation = value.operation as NumberCalculationOperation
-    const value1 = asNumber(resolveResolvableValue(value.value1, context), 'calculation.value1')
-    const value2 = asNumber(resolveResolvableValue(value.value2, context), 'calculation.value2')
+  if (type === 'numberCalc' || type === 'calculation') {
+    const payload = isRecord(value.value) ? value.value : value
+    const operation = payload.operation as NumberCalculationOperation
 
-    return resolveCalculation(operation, value1, value2)
+    if (isUnaryCalculationOperation(operation)) {
+      const operand = payload.value ?? payload.value1
+      return resolveUnaryCalculation(
+        operation,
+        asNumber(resolveResolvableValue(operand, context), 'calculation.value')
+      )
+    }
+
+    const value1 = asNumber(resolveResolvableValue(payload.value1, context), 'calculation.value1')
+    const value2 = asNumber(resolveResolvableValue(payload.value2, context), 'calculation.value2')
+    return resolveBinaryCalculation(operation, value1, value2)
   }
 
   if (type === 'color') {
@@ -329,16 +357,16 @@ export const resolveConfigNode = <T = unknown>(
 }
 
 export const resolveContainerTokenConfig = (
-  tokens: ComponentTokenConfig<ContainerTokens, TokenContext<any>>,
+  tokens: ResolvableContainerTokens,
   context: TokenResolveContext
 ): ContainerTokens => resolveConfigNode<ContainerTokens>(tokens, context)
 
 export const resolveIconTokenConfig = (
-  tokens: ComponentTokenConfig<IconTokens, TokenContext<any>>,
+  tokens: ResolvableIconTokens,
   context: TokenResolveContext
 ): IconTokens => resolveConfigNode<IconTokens>(tokens, context)
 
 export const resolveTextStyleTokenConfig = (
-  tokens: ComponentTokenConfig<TextStyleTokens, TokenContext<any>>,
+  tokens: ResolvableTextStyleTokens,
   context: TokenResolveContext
 ): TextStyleTokens => resolveConfigNode<TextStyleTokens>(tokens, context)

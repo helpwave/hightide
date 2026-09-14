@@ -1,30 +1,25 @@
-import type { ColorToken } from '@helpwave/hightide-design/primitive-tokens'
+import { TokenBuilder } from '@helpwave/hightide-design/utils'
 import {
   avatarGroupMaxShown,
   avatarGroupTokens,
   avatarTokens,
   avatarWithStatusTokens,
+  type AvatarGroupParams,
   type AvatarGroupTokenResolver,
+  type AvatarParams,
   type AvatarStatus,
   type AvatarTokenResolver,
   type AvatarTokens,
+  type AvatarWithStatusParams,
   type AvatarWithStatusTokenResolver,
   type AvatarWithStatusTokens,
   type ContainerTokens,
   type TextStyleTokens
 } from '@helpwave/hightide-design/component-tokens'
-import { resolveConfigNode } from '../static-resolve/resolve'
+import { resolveConfigNode } from '@helpwave/hightide-design/component-tokens'
 import { iconTokenResolver } from './icon'
 
 type AvatarTokenState = 'grouped'
-
-type AvatarParams = {
-  color: ColorToken,
-  onColor: ColorToken,
-  dimension: number,
-  iconSize: number,
-  iconStrokeWidth: number,
-}
 
 export const avatarTokenResolver: AvatarTokenResolver = ({
   themeTokens,
@@ -50,11 +45,15 @@ export const avatarTokenResolver: AvatarTokenResolver = ({
     {
       theme: themeTokens,
       params: {
-        color: colorPair.color,
-        onColor: colorPair.onColor,
-        dimension: themeTokens.icongraphy.sizes[size],
-        iconSize: iconTokens.size ?? themeTokens.icongraphy.sizes[size],
-        iconStrokeWidth: iconTokens.strokeWidth ?? themeTokens.icongraphy.strokeWidth,
+        colors: {
+          color: colorPair.color,
+          onColor: colorPair.onColor,
+        },
+        numbers: {
+          dimension: themeTokens.icongraphy.sizes[size],
+          iconSize: iconTokens.size ?? themeTokens.icongraphy.sizes[size],
+          iconStrokeWidth: iconTokens.strokeWidth ?? themeTokens.icongraphy.strokeWidth,
+        },
       } satisfies AvatarParams,
       state: states,
     }
@@ -75,8 +74,10 @@ export const avatarWithStatusTokenResolver: AvatarWithStatusTokenResolver = ({
     {
       theme: themeTokens,
       params: {
-        dimension: themeTokens.icongraphy.sizes[size],
-      },
+        numbers: {
+          dimension: themeTokens.icongraphy.sizes[size],
+        },
+      } satisfies AvatarWithStatusParams,
       state: new Set<AvatarWithStatusTokenState>([status]),
     }
   )
@@ -90,11 +91,6 @@ export const avatarWithStatusTokenResolver: AvatarWithStatusTokenResolver = ({
     },
     statusDot: resolved.statusDot,
   }
-}
-
-type AvatarGroupParams = {
-  dimension: number,
-  visibleCount: number,
 }
 
 export const avatarGroupTokenResolver: AvatarGroupTokenResolver = ({
@@ -115,8 +111,10 @@ export const avatarGroupTokenResolver: AvatarGroupTokenResolver = ({
     {
       theme: themeTokens,
       params: {
-        dimension,
-        visibleCount,
+        numbers: {
+          dimension,
+          visibleCount: TokenBuilder.number(visibleCount),
+        },
       } satisfies AvatarGroupParams,
       state: new Set(),
     }

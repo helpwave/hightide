@@ -11,7 +11,7 @@ import type {
   ControlElementLayoutToken,
   InputColoringTokens
 } from '@helpwave/hightide-design/semantic-tokens'
-import { resolveConfigNode } from '../static-resolve/resolve'
+import { resolveConfigNode } from '@helpwave/hightide-design/component-tokens'
 import {
   resolveInputColoring,
   resolvePressableStateLayerTint

@@ -1,7 +1,7 @@
 import {
   buttonTokens,
+  type ButtonParams,
   type ButtonTokenResolver,
-  type PressableButtonTokenParams,
   type PressableStateValue
 } from '@helpwave/hightide-design/component-tokens'
 import {
@@ -14,11 +14,9 @@ import {
   resolveIconTokenConfig,
   resolveTextStyleTokenConfig,
   type TokenResolveContext
-} from '../static-resolve/resolve'
+} from '@helpwave/hightide-design/component-tokens'
 
 type ButtonTokenState = PressableStateValue | ButtonVariant
-
-type ButtonParams = Pick<PressableButtonTokenParams, 'colorPair'>
 
 export const buttonTokenResolver: ButtonTokenResolver = ({
   themeTokens,
@@ -30,7 +28,10 @@ export const buttonTokenResolver: ButtonTokenResolver = ({
   const colorPair = overrides.color ?? themeTokens.color.primary
   const states = new Set<ButtonTokenState>([...state, variant])
   const params: ButtonParams = {
-    colorPair,
+    colors: {
+      color: colorPair.color,
+      onColor: colorPair.onColor,
+    },
   }
   const config: ButtonTokenConfig = {
     variant,

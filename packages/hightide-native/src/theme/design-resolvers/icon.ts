@@ -1,12 +1,9 @@
 import {
   iconTokens,
+  type IconParams,
   type IconTokenResolver
 } from '@helpwave/hightide-design/component-tokens'
-import { resolveIconTokenConfig } from '../static-resolve/resolve'
-
-type IconParams = {
-  size: number,
-}
+import { resolveIconTokenConfig } from '@helpwave/hightide-design/component-tokens'
 
 export const iconTokenResolver: IconTokenResolver = ({
   themeTokens,
@@ -19,7 +16,9 @@ export const iconTokenResolver: IconTokenResolver = ({
     {
       theme: themeTokens,
       params: {
-        size: themeTokens.icongraphy.sizes[size],
+        numbers: {
+          iconSize: themeTokens.icongraphy.sizes[size],
+        },
       } satisfies IconParams,
       state: new Set(),
     }

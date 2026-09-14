@@ -86,9 +86,9 @@ export const toSearchBarThemeResolvers: ComponentThemeResolver<SearchBarThemeRes
       const iconButtonWidth = typeof tokens.iconButton.size?.width === 'number'
         ? tokens.iconButton.size.width
         : 0
-      const iconButtonMargin = tokens.iconButton.margin?.type === 'physicalAxis'
-        ? tokens.iconButton.margin.horizontal ?? 0
-        : 0
+      const iconButtonMargin = tokens.iconButton.margin?.left
+        ?? tokens.iconButton.margin?.right
+        ?? 0
       const trailingInset = iconButtonWidth + iconButtonMargin
 
       return {

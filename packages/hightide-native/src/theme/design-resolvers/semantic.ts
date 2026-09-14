@@ -1,4 +1,4 @@
-import type { ColorToken, HexColorToken } from '@helpwave/hightide-design/primitive-tokens'
+import type { ColorToken, ColorToken } from '@helpwave/hightide-design/primitive-tokens'
 import { HexColorUtils } from '@helpwave/hightide-design/utils'
 import type { ColorPairToken, ThemeLayoutSize, TintStrength } from '@helpwave/hightide-design/theme-tokens'
 import type { ThemeTokens } from '@helpwave/hightide-design/theme-tokens'
@@ -30,7 +30,7 @@ import {
   type PressableColoringTokens,
   type SemanticTokenResolvers
 } from '@helpwave/hightide-design/semantic-tokens'
-import { resolveResolvableValue, resolveConfigNode } from '../static-resolve/resolve'
+import { resolveResolvableValue, resolveConfigNode } from '@helpwave/hightide-design/component-tokens'
 
 const layoutContext = (themeTokens: ThemeTokens) => ({
   theme: themeTokens,
@@ -47,7 +47,10 @@ export const resolveColoringColorVariant = (params: {
       theme: params.themeTokens,
       semantics: semanticTokens,
       params: {
-        colorPair: params.colorPair,
+        colors: {
+          color: params.colorPair.color,
+          onColor: params.colorPair.onColor,
+        },
       },
       config: {
         coloringColorVariant: params.variant,
@@ -68,7 +71,11 @@ export const resolveColoringStyle = (params: {
       theme: params.themeTokens,
       semantics: semanticTokens,
       params: {
-        coloring: params.coloring,
+        colors: {
+          color: params.coloring.color,
+          onColor: params.coloring.onColor,
+          accent: params.coloring.accent,
+        },
       },
       config: {
         coloringStyle: params.style,
@@ -86,10 +93,17 @@ export const resolveControlLayout = (params: {
   themeTokens: ThemeTokens,
   size: ThemeLayoutSize,
 }): ControlElementLayoutToken => (
-  resolveResolvableValue(
-    controlLayoutTokens[params.size],
-    layoutContext(params.themeTokens)
-  ) as ControlElementLayoutToken
+  resolveConfigNode<ControlElementLayoutToken>(
+    controlLayoutTokens,
+    {
+      theme: params.themeTokens,
+      semantics: semanticTokens,
+      config: {
+        size: params.size,
+      },
+      state: new Set(),
+    }
+  )
 )
 
 export const resolveTouchTargetSize = (params: {
@@ -105,20 +119,34 @@ export const resolveContainerLayout = (params: {
   themeTokens: ThemeTokens,
   size: ThemeLayoutSize,
 }): ContainerLayoutToken => (
-  resolveResolvableValue(
-    containerLayoutTokens[params.size],
-    layoutContext(params.themeTokens)
-  ) as ContainerLayoutToken
+  resolveConfigNode<ContainerLayoutToken>(
+    containerLayoutTokens,
+    {
+      theme: params.themeTokens,
+      semantics: semanticTokens,
+      config: {
+        size: params.size,
+      },
+      state: new Set(),
+    }
+  )
 )
 
 export const resolveInsideControlLayout = (params: {
   themeTokens: ThemeTokens,
   size: ThemeLayoutSize,
 }): InsideControlElementLayoutToken => (
-  resolveResolvableValue(
-    insideControlLayoutTokens[params.size],
-    layoutContext(params.themeTokens)
-  ) as InsideControlElementLayoutToken
+  resolveConfigNode<InsideControlElementLayoutToken>(
+    insideControlLayoutTokens,
+    {
+      theme: params.themeTokens,
+      semantics: semanticTokens,
+      config: {
+        size: params.size,
+      },
+      state: new Set(),
+    }
+  )
 )
 
 export const resolveInputColoring = (params: {
@@ -146,7 +174,9 @@ export const resolveInputColoring = (params: {
     {
       theme: params.themeTokens,
       params: {
-        accentPair,
+        colors: {
+          accent: accentPair.color,
+        },
       },
       state: states,
     }
@@ -168,7 +198,9 @@ export const resolvePressableStateLayerTint = (params: {
       theme: params.themeTokens,
       semantics: semanticTokens,
       params: {
-        color: params.color,
+        colors: {
+          tint: params.color,
+        },
       },
       state: params.states,
     }
@@ -202,8 +234,13 @@ export const resolvePressableColoring = (params: {
       theme: params.themeTokens,
       semantics: semanticTokens,
       params: {
-        coloring: params.coloring,
-        disabledColoring,
+        colors: {
+          background: params.coloring.background,
+          foreground: params.coloring.foreground,
+          accent: params.coloring.accent,
+          disabledBackground: disabledColoring.background,
+          disabledForeground: disabledColoring.foreground,
+        },
       },
       config: {
         variant: params.variant,
@@ -215,9 +252,9 @@ export const resolvePressableColoring = (params: {
 
 export const resolveTintedSurface = (params: {
   themeTokens: ThemeTokens,
-  tintColor: HexColorToken,
+  tintColor: ColorToken,
   tintStrength?: TintStrength,
-}): HexColorToken => {
+}): ColorToken => {
   const strength = params.tintStrength ?? 'light'
 
   return resolveResolvableValue(
@@ -225,32 +262,37 @@ export const resolveTintedSurface = (params: {
     {
       theme: params.themeTokens,
       params: {
-        tintColor: params.tintColor,
+        colors: {
+          tintColor: params.tintColor,
+        },
       },
     }
-  ) as HexColorToken
+  ) as ColorToken
 }
 
 export const resolveWithAppearance = (params: {
   themeTokens: ThemeTokens,
   colorPair: ColorPairToken,
   appearance: Appearance,
-}): HexColorToken => (
+}): ColorToken => (
   resolveResolvableValue(
     withAppearanceTokens[params.appearance],
     {
       theme: params.themeTokens,
       params: {
-        colorPair: params.colorPair,
+        colors: {
+          color: params.colorPair.color,
+          onColor: params.colorPair.onColor,
+        },
       },
     }
-  ) as HexColorToken
+  ) as ColorToken
 )
 
 export const resolveAsFaded = (params: {
   themeTokens: ThemeTokens,
   colorPair: ColorPairToken,
-}): HexColorToken => (
+}): ColorToken => (
   resolveWithAppearance({
     themeTokens: params.themeTokens,
     colorPair: params.colorPair,
@@ -261,7 +303,7 @@ export const resolveAsFaded = (params: {
 export const resolveAsDescription = (params: {
   themeTokens: ThemeTokens,
   colorPair: ColorPairToken,
-}): HexColorToken => (
+}): ColorToken => (
   resolveWithAppearance({
     themeTokens: params.themeTokens,
     colorPair: params.colorPair,

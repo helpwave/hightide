@@ -8,6 +8,7 @@ import {
   type HightideColorPalettes
 } from '@helpwave/hightide-design/primitive-tokens'
 import {
+  colorPair,
   createDarkThemeTokens,
   createLightThemeTokens
 } from '@helpwave/hightide-design/theme-tokens'
@@ -32,19 +33,13 @@ const whiteColor = white.value
 
 const bluePrimaryTheme = createHightideTheme(createLightThemeTokens({
   color: {
-    primary: {
-      color: blue.value[500],
-      onColor: whiteColor,
-    },
+    primary: colorPair(blue[500].value, whiteColor),
   },
 }))
 
 const bluePrimaryDarkTheme = createHightideTheme(createDarkThemeTokens({
   color: {
-    primary: {
-      color: blue.value[400],
-      onColor: whiteColor,
-    },
+    primary: colorPair(blue[400].value, whiteColor),
   },
 }))
 

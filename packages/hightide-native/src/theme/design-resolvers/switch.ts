@@ -5,7 +5,7 @@ import {
   type SwitchTokenResolver,
   type SwitchTokens
 } from '@helpwave/hightide-design/component-tokens'
-import { resolveConfigNode } from '../static-resolve/resolve'
+import { resolveConfigNode } from '@helpwave/hightide-design/component-tokens'
 import {
   resolvePressableStateLayerTint,
   resolveWithAppearance

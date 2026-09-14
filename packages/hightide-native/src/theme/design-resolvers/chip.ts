@@ -1,31 +1,20 @@
-import type { TypographyStyleToken } from '@helpwave/hightide-design/theme-tokens'
 import {
   chipTokens,
   toButtonIconSize,
+  type ChipParams,
   type ChipTokenResolver,
   type ChipTokens
 } from '@helpwave/hightide-design/component-tokens'
 import {
   mapChipVariant,
-  toTypographySize,
-  type ColoringToken,
-  type InsideControlElementLayoutToken
+  toTypographySize
 } from '@helpwave/hightide-design/semantic-tokens'
-import { resolveConfigNode } from '../static-resolve/resolve'
+import { resolveConfigNode } from '@helpwave/hightide-design/component-tokens'
 import {
   resolveColoringColorVariant,
   resolveColoringStyle
 } from './semantic'
 import { iconTokenResolver } from './icon'
-
-type ChipParams = {
-  layout: InsideControlElementLayoutToken,
-  coloring: ColoringToken,
-  textStyle: TypographyStyleToken,
-  gap: number,
-  iconSize: number,
-  iconStrokeWidth: number,
-}
 
 export const chipTokenResolver: ChipTokenResolver = ({
   themeTokens,
@@ -62,12 +51,22 @@ export const chipTokenResolver: ChipTokenResolver = ({
     {
       theme: themeTokens,
       params: {
-        layout,
-        coloring,
-        textStyle,
-        gap: size === 'sm' || size === 'xs' ? themeTokens.spacing.xs : themeTokens.spacing.sm,
-        iconSize: iconSizeTokens.size ?? themeTokens.icongraphy.sizes.md,
-        iconStrokeWidth: iconSizeTokens.strokeWidth ?? themeTokens.icongraphy.strokeWidth,
+        colors: {
+          background: coloring.background,
+          foreground: coloring.foreground,
+        },
+        numbers: {
+          size: layout.size,
+          borderRadius: layout.borderRadius,
+          inset: layout.inset,
+          paddingExtension: layout.paddingExtension,
+          gap: size === 'sm' || size === 'xs' ? themeTokens.spacing.xs : themeTokens.spacing.sm,
+          iconSize: iconSizeTokens.size ?? themeTokens.icongraphy.sizes.md,
+          iconStrokeWidth: iconSizeTokens.strokeWidth ?? themeTokens.icongraphy.strokeWidth,
+          fontSize: textStyle.fontSize,
+          fontWeight: textStyle.fontWeight,
+          lineHeight: textStyle.lineHeight,
+        },
       } satisfies ChipParams,
       state: new Set(),
     }

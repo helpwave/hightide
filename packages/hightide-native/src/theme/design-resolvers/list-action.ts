@@ -7,7 +7,7 @@ import {
   type ListNavigationTokenResolver,
   type PressableStateValue
 } from '@helpwave/hightide-design/component-tokens'
-import { resolveConfigNode } from '../static-resolve/resolve'
+import { resolveConfigNode } from '@helpwave/hightide-design/component-tokens'
 import {
   mapButtonVariant,
   resolveColoringColorVariant,

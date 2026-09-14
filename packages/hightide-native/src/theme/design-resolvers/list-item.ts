@@ -5,7 +5,7 @@ import {
   type ListItemTokens
 } from '@helpwave/hightide-design/component-tokens'
 import type { ControlElementLayoutToken } from '@helpwave/hightide-design/semantic-tokens'
-import { resolveConfigNode } from '../static-resolve/resolve'
+import { resolveConfigNode } from '@helpwave/hightide-design/component-tokens'
 import {
   resolveColoringColorVariant,
   resolveColoringStyle

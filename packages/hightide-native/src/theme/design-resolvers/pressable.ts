@@ -1,12 +1,5 @@
 import type { ColorToken } from '@helpwave/hightide-design/primitive-tokens'
-import { HexColorUtils } from '@helpwave/hightide-design/utils'
-import {
-  pressableTokens,
-  tokenVariable,
-  type PressableButtonTokenParams,
-  type PressableStateValue,
-  type PressableTokenResolver
-} from '@helpwave/hightide-design/component-tokens'
+import { HexColorUtils, TokenBuilder } from '@helpwave/hightide-design/utils'
 import {
   semanticTokens,
   type PressableTokenConfig
@@ -17,7 +10,7 @@ import {
   resolveResolvableValue,
   resolveTextStyleTokenConfig,
   type TokenResolveContext
-} from '../static-resolve/resolve'
+} from '@helpwave/hightide-design/component-tokens'
 
 type PressableTokenState = PressableStateValue | 'outlined' | 'additionalHorizontalPadding'
 
@@ -58,7 +51,7 @@ export const pressableTokenResolver: PressableTokenResolver = ({
   }
 
   const outline = resolveResolvableValue(
-    tokenVariable('semantics.coloring.outline'),
+    TokenBuilder.colorRef('semantics.color.coloring.outline'),
     context
   ) as ColorToken
 

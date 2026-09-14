@@ -101,8 +101,18 @@ export const ChatMessageComposer = ({
           disabled={disabled || !(value ?? '').trim()}
           size="sm"
           onPress={send}
-          style={{ ...StyleAdapterUtils.borderRadius({ type: 'all', value: 999 }) }}
-          stateLayerStyle={{ ...StyleAdapterUtils.borderRadius({ type: 'all', value: 999 }) }}
+          style={{ ...StyleAdapterUtils.borderRadius({
+            topLeft: 999,
+            topRight: 999,
+            bottomLeft: 999,
+            bottomRight: 999,
+          }) }}
+          stateLayerStyle={{ ...StyleAdapterUtils.borderRadius({
+            topLeft: 999,
+            topRight: 999,
+            bottomLeft: 999,
+            bottomRight: 999,
+          }) }}
         />
       </View>
     </View>

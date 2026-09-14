@@ -3,7 +3,7 @@ import {
   type ModalTokenResolver,
   type ModalTokens
 } from '@helpwave/hightide-design/component-tokens'
-import { resolveConfigNode } from '../static-resolve/resolve'
+import { resolveConfigNode } from '@helpwave/hightide-design/component-tokens'
 
 export const modalTokenResolver: ModalTokenResolver = ({
   themeTokens,

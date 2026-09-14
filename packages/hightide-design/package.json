@@ -27,13 +27,13 @@
       "import": "./dist/theme-tokens/index.js"
     },
     "./semantic-tokens": {
-      "types": "./dist/semantic-tokens/index.ts",
+      "types": "./dist/semantic-tokens/index.d.ts",
       "require": "./dist/semantic-tokens/index.cjs",
       "import": "./dist/semantic-tokens/index.js"
     },
     "./component-tokens": {
-      "types": "./dist/component-tokens/index.ts",
-      "require": "./dist/component-tokens/index.ts",
+      "types": "./dist/component-tokens/index.d.ts",
+      "require": "./dist/component-tokens/index.cjs",
       "import": "./dist/component-tokens/index.js"
     },
     "./design-system": {

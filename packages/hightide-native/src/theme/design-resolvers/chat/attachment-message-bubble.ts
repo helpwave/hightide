@@ -3,7 +3,7 @@ import {
   type ChatAttachmentMessageBubbleTokenResolver,
   type ChatAttachmentMessageBubbleTokens
 } from '@helpwave/hightide-design/component-tokens'
-import { resolveConfigNode } from '../../static-resolve/resolve'
+import { resolveConfigNode } from '@helpwave/hightide-design/component-tokens'
 
 type ChatAttachmentTokenState = 'outgoing'
 

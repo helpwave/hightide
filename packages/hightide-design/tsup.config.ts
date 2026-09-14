@@ -4,8 +4,8 @@ export default defineConfig({
   entry: {
     'primitive-tokens/index': 'src/primitive-tokens/index.ts',
     'theme-tokens/index': 'src/theme-tokens/index.ts',
-    'semantic-token-resolvers/index': 'src/semantic-token-resolvers/index.ts',
-    'component-token-resolvers/index': 'src/component-token-resolvers/index.ts',
+    'semantic-tokens/index': 'src/semantic-tokens/index.ts',
+    'component-tokens/index': 'src/component-tokens/index.ts',
     'design-system/index': 'src/design-system/index.ts',
     'utils/index': 'src/utils/index.ts',
   },
