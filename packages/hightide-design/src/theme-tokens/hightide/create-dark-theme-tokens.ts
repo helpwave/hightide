@@ -1,6 +1,5 @@
 import { hightidePrimitiveTokens } from '../../primitive-tokens/hightide'
 import type { HightideColorPalettes } from '../../primitive-tokens/hightide/color-palettes'
-import { TokenBuilder } from '../../utils'
 import type { ThemeTokensModeConfig } from '../create/theme-tokens-config'
 import type { HightideThemeTokens } from './theme-tokens'
 import {
@@ -10,7 +9,7 @@ import {
   resolveSharedGroups,
   tertiaryDarkColor
 } from './defaults'
-import { colorPair } from '../create/wrap'
+import { colorPair, wrapColor, wrapNumber } from '../create/wrap'
 
 const palettes = hightidePrimitiveTokens.color.palettes as HightideColorPalettes
 
@@ -40,7 +39,7 @@ export const createDarkThemeTokens = (
   const surface = config.color.surface ?? colorPair(gray[800].value, gray[100].value)
   const surfaceVariant = config.color.surfaceVariant ?? colorPair(gray[900].value, gray[100].value)
   const disabled = config.color.disabled ?? colorPair(gray[500].value, gray[300].value)
-  const overlay = config.color.overlay ?? TokenBuilder.color('#00000060')
+  const overlay = config.color.overlay ?? wrapColor('#00000060')
 
   return {
     color: buildColorTokens({
@@ -60,12 +59,12 @@ export const createDarkThemeTokens = (
     }),
     ...resolveSharedGroups(config, defaultDarkElevationTokens(), {
       tonal: {
-        color: TokenBuilder.number(0.3),
-        onColor: TokenBuilder.number(0.95),
+        color: wrapNumber(0.3),
+        onColor: wrapNumber(0.95),
       },
       transparent: {
-        color: TokenBuilder.number(0.4),
-        onColor: TokenBuilder.number(1),
+        color: wrapNumber(0.4),
+        onColor: wrapNumber(1),
       },
     }),
   }

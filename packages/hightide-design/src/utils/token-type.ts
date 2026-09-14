@@ -13,7 +13,7 @@ export type TokenRefPath<T extends Token, Path> =
 export type TokenRef<T extends Token> = {
   type: `ref.${T['type']}`,
   path: string,
-  fallback?: T['value'],
+  fallback?: TokenRef<T> | T,
 }
 
 export type TokenRefOrValue<T extends Token> = T | TokenRef<T>

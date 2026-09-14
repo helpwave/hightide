@@ -1,9 +1,9 @@
-import type { NumberToken } from '../../primitive-tokens/number-token'
+import type { NumberValueToken } from '../../primitive-tokens/number-value-token'
 import type { FontFamilyToken } from '../../primitive-tokens/font-family-token'
 
 export type TypographyStyleToken = {
-  fontSize: NumberToken,
-  lineHeight: NumberToken,
-  fontWeight: NumberToken,
+  fontSize: NumberValueToken,
+  lineHeight: NumberValueToken,
+  fontWeight: NumberValueToken,
   fontFamily: FontFamilyToken,
 }

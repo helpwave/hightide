@@ -1,6 +1,5 @@
 import type { ContextBasedProperty, ContextBasedPropertyOverride } from '../component-tokens/context-based'
 import type { HightideTokenPathProvider } from '../component-tokens/token-context'
-import type { ComponentTokenConfigValue } from '../component-tokens/token-config'
 import type { AxisAlignmentToken, AxisAlignmentValue } from '../primitive-tokens/axis-alignment-token'
 import type { BorderStyleToken, BorderStyleValue } from '../primitive-tokens/border-style-token'
 import type { ColorOpToken } from '../primitive-tokens/color-op'
@@ -23,7 +22,7 @@ import type { SpacingAlignmentToken, SpacingAlignmentValue } from '../primitive-
 import type { StretchToken, StretchValue } from '../primitive-tokens/stretch-token'
 import type { TextAlignToken, TextAlignValue } from '../primitive-tokens/text-align-token'
 import type { HexColor } from './hex-color'
-import type { TokenRef, TokenRefPath } from './token-type'
+import type { Token, TokenRef, TokenRefOrValue, TokenRefPath } from './token-type'
 import type { ColorToken } from '../primitive-tokens'
 import type { ThemeLayoutSize } from '../theme-tokens/create'
 
@@ -49,7 +48,7 @@ const numberValue = (
 
 const numberRef = <Path = HightideTokenPathProvider>(
   path: NoInfer<TokenRefPath<NumberValueToken, Path>>,
-  fallback?: NumberValueToken['value']
+  fallback?:  TokenRefOrValue<NumberValueToken>
 ): TokenRef<NumberValueToken> => ({
     type: 'ref.numberValue',
     path,
@@ -58,21 +57,32 @@ const numberRef = <Path = HightideTokenPathProvider>(
 
 const calc = (
   operation: NumberCalculationOperation,
-  value1: NumberValueToken | TokenRef<NumberValueToken>,
-  value2: NumberValueToken | TokenRef<NumberValueToken>
+  value1: TokenRefOrValue<NumberValueToken>,
+  value2: TokenRefOrValue<NumberValueToken>
 ): NumberValueToken => numberValue({
   type: 'numberCalc',
   value: {
     operation,
-    value1: toNumberValue(value1),
-    value2: toNumberValue(value2),
+    value1,
+    value2,
   },
 })
 
-const color = (value: HexColor): ColorToken => ({
+const color = (
+  value: HexColor
+): ColorToken => ({
   type: 'color',
   value,
 })
+
+const colorRef = <Path = HightideTokenPathProvider>(
+  path: NoInfer<TokenRefPath<ColorToken, Path>>,
+  fallback?: TokenRefOrValue<ColorToken>
+): TokenRef<ColorToken> => ({
+    type: 'ref.color',
+    path,
+    fallback,
+  })
 
 const toColorValue = (
   value: ColorValueToken | TokenRef<ColorValueToken>
@@ -83,15 +93,15 @@ const toColorValue = (
 )
 
 const colorValueToken = (
-  value: ColorToken | ColorOpToken
+  value: TokenRefOrValue<ColorToken | ColorOpToken>
 ): ColorValueToken => ({
   type: 'colorValue',
   value,
 })
 
-const colorRef = <Path = HightideTokenPathProvider>(
-  path: NoInfer<TokenRefPath<ColorValueToken, Path>>,
-  fallback?: ColorValueToken['value']
+const colorValueRef = <Path = HightideTokenPathProvider>(
+  path: TokenRefPath<ColorValueToken, Path>,
+  fallback?: TokenRefOrValue<ColorValueToken>
 ): TokenRef<ColorValueToken> => ({
     type: 'ref.colorValue',
     path,
@@ -146,7 +156,7 @@ const fontWeight = (value: FontWeight): FontWeightToken => ({
 
 const fontFamilyRef = <Path = HightideTokenPathProvider>(
   path: NoInfer<TokenRefPath<FontFamilyToken, Path>>,
-  fallback?: FontFamilyToken['value']
+  fallback?: TokenRefOrValue<FontFamilyToken>
 ): TokenRef<FontFamilyToken> => ({
     type: 'ref.fontFamily',
     path,
@@ -160,7 +170,7 @@ const outlineStyle = (value: OutlineStyleValue): OutlineStyleToken => ({
 
 const outlineStyleRef = <Path = HightideTokenPathProvider>(
   path: NoInfer<TokenRefPath<OutlineStyleToken, Path>>,
-  fallback?: OutlineStyleToken['value']
+  fallback?: TokenRefOrValue<OutlineStyleToken>
 ): TokenRef<OutlineStyleToken> => ({
     type: 'ref.outlineStyle',
     path,
@@ -240,13 +250,13 @@ const stateful = <
   })
 
 const statefulField = <
-  T,
-  Context = HightideTokenPathProvider,
-  S extends ResolverState = ResolverState
+  T extends Token,
+  S extends ResolverState = ResolverState,
+  C extends ResolverConfig = ResolverConfig
 >(
-    base: ComponentTokenConfigValue<T, Context>,
-    overrides?: ReadonlyArray<ContextBasedPropertyOverride<ComponentTokenConfigValue<T, Context>, S, ResolverConfig>>
-  ): ContextBasedProperty<ComponentTokenConfigValue<T, Context>, S, ResolverConfig> => ({
+    base: TokenRefOrValue<T>,
+    overrides?: ReadonlyArray<ContextBasedPropertyOverride<TokenRefOrValue<T>, S, C>>
+  ): ContextBasedProperty<TokenRefOrValue<T>, S, C> => ({
     base,
     overrides,
   })
@@ -309,9 +319,9 @@ export const TokenBuilder = {
   numberRef,
   calc,
   color,
-  colorToken: color,
-  colorValue: colorValueToken,
   colorRef,
+  colorValue: colorValueToken,
+  colorValueRef,
   colorOpacity,
   colorLightness,
   colorBlend,

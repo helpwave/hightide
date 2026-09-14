@@ -1,7 +1,7 @@
 import { TokenBuilder } from '../../utils'
-import type { ColorToken } from '../../primitive-tokens/color-token'
+import type { ColorValueToken } from '../../primitive-tokens/color-value-token'
 import type { HexColor } from '../../utils/hex-color'
-import type { NumberToken } from '../../primitive-tokens/number-token'
+import type { NumberValueToken } from '../../primitive-tokens/number-value-token'
 import { hightideTypography } from '../../primitive-tokens/hightide/typography'
 import type { ShadowLayoutToken } from '../../primitive-tokens/shadow-layout-token'
 import { hightideShadow } from '../../primitive-tokens/hightide/shadow'
@@ -29,12 +29,12 @@ import type {
   HightideThemeTokens,
   ThemeTypographyTokens
 } from './theme-tokens'
-import { wrapFontSizing } from '../create/wrap'
+import { wrapColor, wrapFontSizing, wrapNumber, hexFromColorValue } from '../create/wrap'
 
 export const defaultTintConfig: TintConfig = {
-  light: TokenBuilder.number(0.08),
-  normal: TokenBuilder.number(0.16),
-  strong: TokenBuilder.number(0.20),
+  light: wrapNumber(0.08),
+  normal: wrapNumber(0.16),
+  strong: wrapNumber(0.20),
 }
 
 export const tertiaryLightColor = '#057986' as const satisfies HexColor
@@ -47,12 +47,12 @@ export const defaultFontFamilyTokens = (): ThemeFontFamilyTokens => ({
 })
 
 export const defaultFontWeightTokens = (): ThemeFontWeightTokens => ({
-  thin: TokenBuilder.number(hightideTypography.fontWeight.thin.value),
-  light: TokenBuilder.number(hightideTypography.fontWeight.light.value),
-  base: TokenBuilder.number(hightideTypography.fontWeight.base.value),
-  medium: TokenBuilder.number(hightideTypography.fontWeight.medium.value),
-  semibold: TokenBuilder.number(hightideTypography.fontWeight.semibold.value),
-  bold: TokenBuilder.number(hightideTypography.fontWeight.bold.value),
+  thin: wrapNumber(hightideTypography.fontWeight.thin.value),
+  light: wrapNumber(hightideTypography.fontWeight.light.value),
+  base: wrapNumber(hightideTypography.fontWeight.base.value),
+  medium: wrapNumber(hightideTypography.fontWeight.medium.value),
+  semibold: wrapNumber(hightideTypography.fontWeight.semibold.value),
+  bold: wrapNumber(hightideTypography.fontWeight.bold.value),
 })
 
 export const defaultFontSizingTokens = (): ThemeFontSizingTokens => ({
@@ -135,63 +135,63 @@ export const defaultTypographyTokens = (
 })
 
 export const defaultSizeTokens = (): ThemeSizeTokens => ({
-  xs: TokenBuilder.number(28),
-  sm: TokenBuilder.number(36),
-  md: TokenBuilder.number(48),
-  lg: TokenBuilder.number(60),
-  xl: TokenBuilder.number(72),
+  xs: wrapNumber(28),
+  sm: wrapNumber(36),
+  md: wrapNumber(48),
+  lg: wrapNumber(60),
+  xl: wrapNumber(72),
 })
 
 export const defaultIcongraphyTokens = (): ThemeIcongraphyTokens => ({
   sizes: {
-    xs: TokenBuilder.number(16),
-    sm: TokenBuilder.number(20),
-    md: TokenBuilder.number(24),
-    lg: TokenBuilder.number(32),
-    xl: TokenBuilder.number(48),
+    xs: wrapNumber(16),
+    sm: wrapNumber(20),
+    md: wrapNumber(24),
+    lg: wrapNumber(32),
+    xl: wrapNumber(48),
   },
-  strokeWidth: TokenBuilder.number(2),
+  strokeWidth: wrapNumber(2),
 })
 
 export const defaultSpacingTokens = (): ThemeSpacingTokens => ({
-  xxs: TokenBuilder.number(1),
-  xs: TokenBuilder.number(2),
-  sm: TokenBuilder.number(4),
-  md: TokenBuilder.number(8),
-  lg: TokenBuilder.number(16),
-  xl: TokenBuilder.number(24),
-  xxl: TokenBuilder.number(32),
+  xxs: wrapNumber(1),
+  xs: wrapNumber(2),
+  sm: wrapNumber(4),
+  md: wrapNumber(8),
+  lg: wrapNumber(16),
+  xl: wrapNumber(24),
+  xxl: wrapNumber(32),
 })
 
 export const defaultBorderRadiusTokens = (): ThemeBorderRadiusTokens => ({
-  xxs: TokenBuilder.number(2),
-  xs: TokenBuilder.number(4),
-  sm: TokenBuilder.number(6),
-  md: TokenBuilder.number(8),
-  lg: TokenBuilder.number(10),
-  xl: TokenBuilder.number(14),
-  xxl: TokenBuilder.number(18),
+  xxs: wrapNumber(2),
+  xs: wrapNumber(4),
+  sm: wrapNumber(6),
+  md: wrapNumber(8),
+  lg: wrapNumber(10),
+  xl: wrapNumber(14),
+  xxl: wrapNumber(18),
 })
 
 export const defaultPaddingTokens = (): ThemePaddingTokens => ({
-  xs: TokenBuilder.number(2),
-  sm: TokenBuilder.number(4),
-  md: TokenBuilder.number(6),
-  lg: TokenBuilder.number(10),
-  xl: TokenBuilder.number(14),
+  xs: wrapNumber(2),
+  sm: wrapNumber(4),
+  md: wrapNumber(6),
+  lg: wrapNumber(10),
+  xl: wrapNumber(14),
 })
 
 export const defaultBorderWidthTokens = (): ThemeBorderWidthTokens => ({
-  thin: TokenBuilder.number(1),
-  normal: TokenBuilder.number(2),
-  thick: TokenBuilder.number(4),
+  thin: wrapNumber(1),
+  normal: wrapNumber(2),
+  thick: wrapNumber(4),
 })
 
 export const defaultMotionTokens = (): ThemeMotionTokens => ({
   durations: {
-    fast: TokenBuilder.number(100),
-    normal: TokenBuilder.number(200),
-    slow: TokenBuilder.number(300),
+    fast: wrapNumber(100),
+    normal: wrapNumber(200),
+    slow: wrapNumber(300),
   },
 })
 
@@ -199,11 +199,11 @@ const withShadowColor = (
   layout: ShadowLayoutToken,
   color: HexColor
 ) => ({
-  x: layout.x,
-  y: layout.y,
-  blur: layout.blur,
-  spread: layout.spread,
-  color: TokenBuilder.color(color),
+  x: wrapNumber(layout.x),
+  y: wrapNumber(layout.y),
+  blur: wrapNumber(layout.blur),
+  spread: wrapNumber(layout.spread),
+  color: wrapColor(color),
 })
 
 export const defaultLightElevationTokens = (): ThemeElevationTokens => {
@@ -256,14 +256,14 @@ export const mergeTypography = (
 }
 
 export const defaultAppearancePercentages = (): ThemeAppearancePercentages => ({
-  normal: TokenBuilder.number(1),
-  subtle: TokenBuilder.number(0.7),
-  faded: TokenBuilder.number(0.4),
+  normal: wrapNumber(1),
+  subtle: wrapNumber(0.7),
+  faded: wrapNumber(0.4),
 })
 
 export const defaultFocusOutlineToken = (): OutlineToken => ({
-  width: TokenBuilder.number(2),
-  offset: TokenBuilder.number(2),
+  width: wrapNumber(2),
+  offset: wrapNumber(2),
   style: TokenBuilder.outlineStyle('solid'),
 })
 
@@ -280,7 +280,7 @@ export const buildColorTokens = (params: {
   warning: ColorPairToken,
   negative: ColorPairToken,
   neutral: ColorPairToken,
-  overlay: ColorToken,
+  overlay: ColorValueToken,
 }): ThemeColorTokens => ({
   tintConfig: params.tintConfig,
   background: params.background,
@@ -298,9 +298,9 @@ export const buildColorTokens = (params: {
   warning: params.warning,
   negative: params.negative,
   neutral: params.neutral,
-  border: TokenBuilder.color(HexColorUtils.blend(
-    params.surface.color.value,
-    HexColorUtils.hexWithAlpha(params.surface.onColor.value, 0.25)
+  border: wrapColor(HexColorUtils.blend(
+    hexFromColorValue(params.surface.color),
+    HexColorUtils.hexWithAlpha(hexFromColorValue(params.surface.onColor), 0.25)
   )),
   overlay: params.overlay,
 })
@@ -309,8 +309,8 @@ export const resolveSharedGroups = (
   config: ThemeTokensModeConfig,
   elevationDefaults: ThemeElevationTokens,
   coloringDefaults: {
-    tonal: { color: NumberToken, onColor: NumberToken },
-    transparent: { color: NumberToken, onColor: NumberToken },
+    tonal: { color: NumberValueToken, onColor: NumberValueToken },
+    transparent: { color: NumberValueToken, onColor: NumberValueToken },
   }
 ): Omit<HightideThemeTokens, 'color'> => {
   const appearanceDefaults = defaultAppearancePercentages()
@@ -331,9 +331,9 @@ export const resolveSharedGroups = (
   }
 
   const mergeNumberPartial = <K extends string>(
-    defaults: Record<K, NumberToken>,
-    override?: Partial<Record<K, NumberToken>>
-  ): Record<K, NumberToken> => ({
+    defaults: Record<K, NumberValueToken>,
+    override?: Partial<Record<K, NumberValueToken>>
+  ): Record<K, NumberValueToken> => ({
       ...defaults,
       ...override,
     })

@@ -1,5 +1,5 @@
-import type { ColorToken } from '../../primitive-tokens/color-token'
-import type { NumberToken } from '../../primitive-tokens/number-token'
+import type { ColorValueToken } from '../../primitive-tokens/color-value-token'
+import type { NumberValueToken } from '../../primitive-tokens/number-value-token'
 import type { AssertAssignable } from '../../utils/assert'
 import type {
   FontSizeKey
@@ -41,24 +41,24 @@ export type ThemeColorTokens = {
   warning: ColorPairToken,
   negative: ColorPairToken,
   neutral: ColorPairToken,
-  border: ColorToken,
-  overlay: ColorToken,
+  border: ColorValueToken,
+  overlay: ColorValueToken,
 }
 
 export type ThemeAppearancePercentages = {
-  normal: NumberToken,
-  subtle: NumberToken,
-  faded: NumberToken,
+  normal: NumberValueToken,
+  subtle: NumberValueToken,
+  faded: NumberValueToken,
 }
 
 export type ColoringConfigTokens = {
   tonal: {
-    color: NumberToken,
-    onColor: NumberToken,
+    color: NumberValueToken,
+    onColor: NumberValueToken,
   },
   transparent: {
-    color: NumberToken,
-    onColor: NumberToken,
+    color: NumberValueToken,
+    onColor: NumberValueToken,
   },
 }
 
@@ -69,7 +69,7 @@ export type ThemeConfigTokens = {
 
 export type ThemeFontFamilyTokens = Record<'default' | 'accent' | 'mono', FontFamilyToken>
 
-export type ThemeFontWeightTokens = Record<FontWeightKey, NumberToken>
+export type ThemeFontWeightTokens = Record<FontWeightKey, NumberValueToken>
 
 export type ThemeFontSizingTokens = Record<FontSizeKey, FontSizingToken>
 
@@ -81,24 +81,24 @@ export type ThemeTypographyTokens = {
 }
 
 export type ThemeIcongraphyTokens = {
-  sizes: Record<IconSize, NumberToken>,
-  strokeWidth: NumberToken,
+  sizes: Record<IconSize, NumberValueToken>,
+  strokeWidth: NumberValueToken,
 }
 
-export type ThemeSizeTokens = Record<ThemeLayoutSize, NumberToken>
+export type ThemeSizeTokens = Record<ThemeLayoutSize, NumberValueToken>
 
-export type ThemeSpacingTokens = Record<ThemeSpacingSize, NumberToken>
+export type ThemeSpacingTokens = Record<ThemeSpacingSize, NumberValueToken>
 
-export type ThemePaddingTokens = Record<ThemePaddingSize, NumberToken>
+export type ThemePaddingTokens = Record<ThemePaddingSize, NumberValueToken>
 
-export type ThemeBorderRadiusTokens = Record<ThemeBorderRadiusSize, NumberToken>
+export type ThemeBorderRadiusTokens = Record<ThemeBorderRadiusSize, NumberValueToken>
 
-export type ThemeBorderWidthTokens = Record<ThemeBorderWidthKey, NumberToken>
+export type ThemeBorderWidthTokens = Record<ThemeBorderWidthKey, NumberValueToken>
 
 export type ThemeElevationTokens = Record<ThemeElevationLevel, ShadowToken>
 
 export type ThemeMotionTokens = {
-  durations: Record<ThemeMotionDurationKey, NumberToken>,
+  durations: Record<ThemeMotionDurationKey, NumberValueToken>,
 }
 
 export type HightideThemeTokens = AssertAssignable<{

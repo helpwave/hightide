@@ -1,7 +1,7 @@
-import type { ColorToken } from '../../primitive-tokens/color-token'
+import type { ColorValueToken } from '../../primitive-tokens/color-value-token'
 import type { OutlineStyleToken } from '../../primitive-tokens/outline-style-token'
 import type { FontFamilyToken } from '../../primitive-tokens/font-family-token'
-import type { NumberToken } from '../../primitive-tokens/number-token'
+import type { NumberValueToken } from '../../primitive-tokens/number-value-token'
 import type {
   FontSizeKey
 } from '../../primitive-tokens/font-sizing-token'
@@ -13,24 +13,24 @@ import type { TypographyStyleToken } from './typography-style-token'
 export type ThemeMode = 'light' | 'dark'
 
 export type ColorPairToken = {
-  color: ColorToken,
-  onColor: ColorToken,
+  color: ColorValueToken,
+  onColor: ColorValueToken,
 }
 
 export type TintConfig = {
-  light: NumberToken,
-  normal: NumberToken,
-  strong: NumberToken,
+  light: NumberValueToken,
+  normal: NumberValueToken,
+  strong: NumberValueToken,
 }
 
 export type ColoringConfig = {
   tonal?: {
-    color?: NumberToken,
-    onColor?: NumberToken,
+    color?: NumberValueToken,
+    onColor?: NumberValueToken,
   },
   transparent?: {
-    color?: NumberToken,
-    onColor?: NumberToken,
+    color?: NumberValueToken,
+    onColor?: NumberValueToken,
   },
 }
 
@@ -48,23 +48,23 @@ export type ThemeElevationLevel = 'level1' | 'level2' | 'level3' | 'level4' | 'l
 export type ThemeMotionDurationKey = 'fast' | 'normal' | 'slow'
 
 export type FontSizingToken = {
-  fontSize: NumberToken,
-  lineHeight: NumberToken,
+  fontSize: NumberValueToken,
+  lineHeight: NumberValueToken,
 }
 
 export type OutlineToken = {
-  width?: NumberToken,
-  offset?: NumberToken,
-  color?: ColorToken,
+  width?: NumberValueToken,
+  offset?: NumberValueToken,
+  color?: ColorValueToken,
   style?: OutlineStyleToken,
 }
 
 export type ShadowToken = {
-  x: NumberToken,
-  y: NumberToken,
-  blur: NumberToken,
-  spread: NumberToken,
-  color: ColorToken,
+  x: NumberValueToken,
+  y: NumberValueToken,
+  blur: NumberValueToken,
+  spread: NumberValueToken,
+  color: ColorValueToken,
 }
 
 export type ThemeTokensTypographyConfig = {
@@ -87,33 +87,33 @@ export type ThemeTokensConfig = {
     surface?: ColorPairToken,
     surfaceVariant?: ColorPairToken,
     disabled?: ColorPairToken,
-    overlay?: ColorToken,
+    overlay?: ColorValueToken,
     tintConfig?: TintConfig,
   },
   fontFamilies?: Partial<Record<'default' | 'accent' | 'mono', FontFamilyToken>>,
-  fontWeights?: Partial<Record<FontWeightKey, NumberToken>>,
+  fontWeights?: Partial<Record<FontWeightKey, NumberValueToken>>,
   fontSizing?: Partial<Record<FontSizeKey, FontSizingToken>>,
   typography?: ThemeTokensTypographyConfig,
   icongraphy?: {
-    sizes?: Partial<Record<IconSize, NumberToken>>,
-    strokeWidth?: NumberToken,
+    sizes?: Partial<Record<IconSize, NumberValueToken>>,
+    strokeWidth?: NumberValueToken,
   },
-  size?: Partial<Record<ThemeLayoutSize, NumberToken>>,
-  spacing?: Partial<Record<ThemeSpacingSize, NumberToken>>,
-  padding?: Partial<Record<ThemePaddingSize, NumberToken>>,
-  borderRadius?: Partial<Record<ThemeBorderRadiusSize, NumberToken>>,
-  borderWidth?: Partial<Record<ThemeBorderWidthKey, NumberToken>>,
+  size?: Partial<Record<ThemeLayoutSize, NumberValueToken>>,
+  spacing?: Partial<Record<ThemeSpacingSize, NumberValueToken>>,
+  padding?: Partial<Record<ThemePaddingSize, NumberValueToken>>,
+  borderRadius?: Partial<Record<ThemeBorderRadiusSize, NumberValueToken>>,
+  borderWidth?: Partial<Record<ThemeBorderWidthKey, NumberValueToken>>,
   elevation?: Partial<Record<ThemeElevationLevel, ShadowToken>>,
   motion?: {
-    durations?: Partial<Record<ThemeMotionDurationKey, NumberToken>>,
+    durations?: Partial<Record<ThemeMotionDurationKey, NumberValueToken>>,
   },
   focusOutline?: OutlineToken,
   config?: {
     coloring?: ColoringConfig,
     appearancePercentages?: Partial<{
-      normal: NumberToken,
-      subtle: NumberToken,
-      faded: NumberToken,
+      normal: NumberValueToken,
+      subtle: NumberValueToken,
+      faded: NumberValueToken,
     }>,
   },
 }
