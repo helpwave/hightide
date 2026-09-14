@@ -1,14 +1,18 @@
-import type { ColorToken } from '../primitive-tokens/color'
-import type { ShadowLayoutToken } from '../primitive-tokens/shadow'
+import type { ColorToken } from '../../primitive-tokens/color-token'
+import type { NumberToken } from '../../primitive-tokens/number-token'
+import type { AssertAssignable } from '../../utils/assert'
 import type {
-  FontSizeKey,
-  FontSizingToken,
-  FontWeightKey,
-  FontWeightToken
-} from '../primitive-tokens/typography'
+  FontSizeKey
+} from '../../primitive-tokens/font-sizing-token'
+import type {
+  FontWeightKey
+} from '../../primitive-tokens/font-weight-token'
 import type {
   ColorPairToken,
+  FontSizingToken,
   IconSize,
+  OutlineToken,
+  ShadowToken,
   ThemeBorderRadiusSize,
   ThemeBorderWidthKey,
   ThemeElevationLevel,
@@ -18,17 +22,10 @@ import type {
   ThemeSpacingSize,
   ThemeTypographySize,
   TintConfig
-} from './theme-tokens-config'
-import type { TypographyStyleToken } from './typography-style-token'
-
-export type OutlineStyle = 'dotted' | 'dashed' | 'solid'
-
-export type OutlineToken = {
-  width?: number,
-  offset?: number,
-  color?: ColorToken,
-  style?: OutlineStyle,
-}
+} from '../create/theme-tokens-config'
+import type { TypographyStyleToken } from '../create/typography-style-token'
+import type { ThemeTokens } from '../create/theme-tokens'
+import type { FontFamilyToken } from '../../primitive-tokens/font-family-token'
 
 export type ThemeColorTokens = {
   tintConfig: TintConfig,
@@ -49,19 +46,19 @@ export type ThemeColorTokens = {
 }
 
 export type ThemeAppearancePercentages = {
-  normal: number,
-  subtle: number,
-  faded: number,
+  normal: NumberToken,
+  subtle: NumberToken,
+  faded: NumberToken,
 }
 
 export type ColoringConfigTokens = {
   tonal: {
-    color: number,
-    onColor: number,
+    color: NumberToken,
+    onColor: NumberToken,
   },
   transparent: {
-    color: number,
-    onColor: number,
+    color: NumberToken,
+    onColor: NumberToken,
   },
 }
 
@@ -70,11 +67,9 @@ export type ThemeConfigTokens = {
   appearancePercentages: ThemeAppearancePercentages,
 }
 
-export type { FontSizingToken }
+export type ThemeFontFamilyTokens = Record<'default' | 'accent' | 'mono', FontFamilyToken>
 
-export type ThemeFontFamilyTokens = Record<'default' | 'accent' | 'mono', string>
-
-export type ThemeFontWeightTokens = Record<FontWeightKey, FontWeightToken>
+export type ThemeFontWeightTokens = Record<FontWeightKey, NumberToken>
 
 export type ThemeFontSizingTokens = Record<FontSizeKey, FontSizingToken>
 
@@ -86,29 +81,27 @@ export type ThemeTypographyTokens = {
 }
 
 export type ThemeIcongraphyTokens = {
-  sizes: Record<IconSize, number>,
-  strokeWidth: number,
+  sizes: Record<IconSize, NumberToken>,
+  strokeWidth: NumberToken,
 }
 
-export type ThemeSizeTokens = Record<ThemeLayoutSize, number>
+export type ThemeSizeTokens = Record<ThemeLayoutSize, NumberToken>
 
-export type ThemeSpacingTokens = Record<ThemeSpacingSize, number>
+export type ThemeSpacingTokens = Record<ThemeSpacingSize, NumberToken>
 
-export type ThemePaddingTokens = Record<ThemePaddingSize, number>
+export type ThemePaddingTokens = Record<ThemePaddingSize, NumberToken>
 
-export type ThemeBorderRadiusTokens = Record<ThemeBorderRadiusSize, number>
+export type ThemeBorderRadiusTokens = Record<ThemeBorderRadiusSize, NumberToken>
 
-export type ThemeBorderWidthTokens = Record<ThemeBorderWidthKey, number>
+export type ThemeBorderWidthTokens = Record<ThemeBorderWidthKey, NumberToken>
 
-export type ShadowToken = ShadowLayoutToken & { color: ColorToken }
-
-export type ThemeElevationTokens = Record<ThemeElevationLevel, ShadowLayoutToken & { color: ColorToken }>
+export type ThemeElevationTokens = Record<ThemeElevationLevel, ShadowToken>
 
 export type ThemeMotionTokens = {
-  durations: Record<ThemeMotionDurationKey, number>,
+  durations: Record<ThemeMotionDurationKey, NumberToken>,
 }
 
-export type ThemeTokens = {
+export type HightideThemeTokens = AssertAssignable<{
   color: ThemeColorTokens,
   fontFamilies: ThemeFontFamilyTokens,
   fontWeights: ThemeFontWeightTokens,
@@ -124,4 +117,4 @@ export type ThemeTokens = {
   motion: ThemeMotionTokens,
   focusOutline: OutlineToken,
   config: ThemeConfigTokens,
-}
+}, ThemeTokens>

@@ -1,38 +1,36 @@
-import type { ColorToken, HexColorToken } from '../primitive-tokens/color'
-import type { ShadowLayoutToken } from '../primitive-tokens/shadow'
+import type { ColorToken } from '../../primitive-tokens/color-token'
+import type { OutlineStyleToken } from '../../primitive-tokens/outline-style-token'
+import type { FontFamilyToken } from '../../primitive-tokens/font-family-token'
+import type { NumberToken } from '../../primitive-tokens/number-token'
 import type {
-  FontSizeKey,
-  FontSizingToken,
-  FontWeightKey,
-  FontWeightToken
-} from '../primitive-tokens/typography'
+  FontSizeKey
+} from '../../primitive-tokens/font-sizing-token'
 import type {
-  OutlineToken,
-  ThemeAppearancePercentages
-} from './theme-tokens'
+  FontWeightKey
+} from '../../primitive-tokens/font-weight-token'
 import type { TypographyStyleToken } from './typography-style-token'
 
 export type ThemeMode = 'light' | 'dark'
 
 export type ColorPairToken = {
-  color: HexColorToken,
-  onColor: HexColorToken,
+  color: ColorToken,
+  onColor: ColorToken,
 }
 
 export type TintConfig = {
-  light: number,
-  normal: number,
-  strong: number,
+  light: NumberToken,
+  normal: NumberToken,
+  strong: NumberToken,
 }
 
 export type ColoringConfig = {
   tonal?: {
-    color: number,
-    onColor: number,
+    color?: NumberToken,
+    onColor?: NumberToken,
   },
   transparent?: {
-    color: number,
-    onColor: number,
+    color?: NumberToken,
+    onColor?: NumberToken,
   },
 }
 
@@ -48,6 +46,26 @@ export type IconSize = typeof iconSizes[number]
 export type ThemeBorderWidthKey = 'thin' | 'normal' | 'thick'
 export type ThemeElevationLevel = 'level1' | 'level2' | 'level3' | 'level4' | 'level5'
 export type ThemeMotionDurationKey = 'fast' | 'normal' | 'slow'
+
+export type FontSizingToken = {
+  fontSize: NumberToken,
+  lineHeight: NumberToken,
+}
+
+export type OutlineToken = {
+  width?: NumberToken,
+  offset?: NumberToken,
+  color?: ColorToken,
+  style?: OutlineStyleToken,
+}
+
+export type ShadowToken = {
+  x: NumberToken,
+  y: NumberToken,
+  blur: NumberToken,
+  spread: NumberToken,
+  color: ColorToken,
+}
 
 export type ThemeTokensTypographyConfig = {
   display?: TypographyStyleToken,
@@ -72,27 +90,31 @@ export type ThemeTokensConfig = {
     overlay?: ColorToken,
     tintConfig?: TintConfig,
   },
-  fontFamilies?: Partial<Record<'default' | 'accent' | 'mono', string>>,
-  fontWeights?: Partial<Record<FontWeightKey, FontWeightToken>>,
+  fontFamilies?: Partial<Record<'default' | 'accent' | 'mono', FontFamilyToken>>,
+  fontWeights?: Partial<Record<FontWeightKey, NumberToken>>,
   fontSizing?: Partial<Record<FontSizeKey, FontSizingToken>>,
   typography?: ThemeTokensTypographyConfig,
   icongraphy?: {
-    sizes?: Partial<Record<IconSize, number>>,
-    strokeWidth?: number,
+    sizes?: Partial<Record<IconSize, NumberToken>>,
+    strokeWidth?: NumberToken,
   },
-  size?: Partial<Record<ThemeLayoutSize, number>>,
-  spacing?: Partial<Record<ThemeSpacingSize, number>>,
-  padding?: Partial<Record<ThemePaddingSize, number>>,
-  borderRadius?: Partial<Record<ThemeBorderRadiusSize, number>>,
-  borderWidth?: Partial<Record<ThemeBorderWidthKey, number>>,
-  elevation?: Partial<Record<ThemeElevationLevel, ShadowLayoutToken>>,
+  size?: Partial<Record<ThemeLayoutSize, NumberToken>>,
+  spacing?: Partial<Record<ThemeSpacingSize, NumberToken>>,
+  padding?: Partial<Record<ThemePaddingSize, NumberToken>>,
+  borderRadius?: Partial<Record<ThemeBorderRadiusSize, NumberToken>>,
+  borderWidth?: Partial<Record<ThemeBorderWidthKey, NumberToken>>,
+  elevation?: Partial<Record<ThemeElevationLevel, ShadowToken>>,
   motion?: {
-    durations?: Partial<Record<ThemeMotionDurationKey, number>>,
+    durations?: Partial<Record<ThemeMotionDurationKey, NumberToken>>,
   },
   focusOutline?: OutlineToken,
   config?: {
     coloring?: ColoringConfig,
-    appearancePercentages?: Partial<ThemeAppearancePercentages>,
+    appearancePercentages?: Partial<{
+      normal: NumberToken,
+      subtle: NumberToken,
+      faded: NumberToken,
+    }>,
   },
 }
 

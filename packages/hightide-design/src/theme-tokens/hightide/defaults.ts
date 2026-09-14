@@ -1,16 +1,18 @@
-import type { ColorToken, HexColorToken } from '../primitive-tokens/color'
-import { hightideTypography } from '../primitive-tokens/typography'
-import type { ShadowLayoutToken } from '../primitive-tokens/shadow'
-import { hightideShadow } from '../primitive-tokens/shadow'
-import { HexColorUtils } from '../utils/hex'
+import { TokenBuilder } from '../../utils'
+import type { ColorToken } from '../../primitive-tokens/color-token'
+import type { HexColor } from '../../utils/hex-color'
+import type { NumberToken } from '../../primitive-tokens/number-token'
+import { hightideTypography } from '../../primitive-tokens/hightide/typography'
+import type { ShadowLayoutToken } from '../../primitive-tokens/shadow-layout-token'
+import { hightideShadow } from '../../primitive-tokens/hightide/shadow'
+import { HexColorUtils } from '../../utils/hex'
 import type {
   ColorPairToken,
+  OutlineToken,
   ThemeTokensModeConfig,
   TintConfig
-} from './theme-tokens-config'
+} from '../create/theme-tokens-config'
 import type {
-  ColoringConfigTokens,
-  OutlineToken,
   ThemeAppearancePercentages,
   ThemeBorderRadiusTokens,
   ThemeBorderWidthTokens,
@@ -24,17 +26,18 @@ import type {
   ThemePaddingTokens,
   ThemeSizeTokens,
   ThemeSpacingTokens,
-  ThemeTokens,
+  HightideThemeTokens,
   ThemeTypographyTokens
 } from './theme-tokens'
+import { wrapFontSizing } from '../create/wrap'
 
 export const defaultTintConfig: TintConfig = {
-  light: 0.08,
-  normal: 0.16,
-  strong: 0.20,
+  light: TokenBuilder.number(0.08),
+  normal: TokenBuilder.number(0.16),
+  strong: TokenBuilder.number(0.20),
 }
 
-export const tertiaryLightColor = '#057986' as const satisfies HexColorToken
+export const tertiaryLightColor = '#057986' as const satisfies HexColor
 export const tertiaryDarkColor = HexColorUtils.mixWithWhite(tertiaryLightColor, 0.35)
 
 export const defaultFontFamilyTokens = (): ThemeFontFamilyTokens => ({
@@ -44,16 +47,28 @@ export const defaultFontFamilyTokens = (): ThemeFontFamilyTokens => ({
 })
 
 export const defaultFontWeightTokens = (): ThemeFontWeightTokens => ({
-  thin: hightideTypography.fontWeight.thin,
-  light: hightideTypography.fontWeight.light,
-  base: hightideTypography.fontWeight.base,
-  medium: hightideTypography.fontWeight.medium,
-  semibold: hightideTypography.fontWeight.semibold,
-  bold: hightideTypography.fontWeight.bold,
+  thin: TokenBuilder.number(hightideTypography.fontWeight.thin.value),
+  light: TokenBuilder.number(hightideTypography.fontWeight.light.value),
+  base: TokenBuilder.number(hightideTypography.fontWeight.base.value),
+  medium: TokenBuilder.number(hightideTypography.fontWeight.medium.value),
+  semibold: TokenBuilder.number(hightideTypography.fontWeight.semibold.value),
+  bold: TokenBuilder.number(hightideTypography.fontWeight.bold.value),
 })
 
 export const defaultFontSizingTokens = (): ThemeFontSizingTokens => ({
-  ...hightideTypography.fontSizing,
+  'xs': wrapFontSizing(hightideTypography.fontSizing.xs),
+  'sm': wrapFontSizing(hightideTypography.fontSizing.sm),
+  'base': wrapFontSizing(hightideTypography.fontSizing.base),
+  'lg': wrapFontSizing(hightideTypography.fontSizing.lg),
+  'xl': wrapFontSizing(hightideTypography.fontSizing.xl),
+  '2xl': wrapFontSizing(hightideTypography.fontSizing['2xl']),
+  '3xl': wrapFontSizing(hightideTypography.fontSizing['3xl']),
+  '4xl': wrapFontSizing(hightideTypography.fontSizing['4xl']),
+  '5xl': wrapFontSizing(hightideTypography.fontSizing['5xl']),
+  '6xl': wrapFontSizing(hightideTypography.fontSizing['6xl']),
+  '7xl': wrapFontSizing(hightideTypography.fontSizing['7xl']),
+  '8xl': wrapFontSizing(hightideTypography.fontSizing['8xl']),
+  '9xl': wrapFontSizing(hightideTypography.fontSizing['9xl']),
 })
 
 export const defaultTypographyTokens = (
@@ -120,72 +135,75 @@ export const defaultTypographyTokens = (
 })
 
 export const defaultSizeTokens = (): ThemeSizeTokens => ({
-  xs: 28,
-  sm: 36,
-  md: 48,
-  lg: 60,
-  xl: 72,
+  xs: TokenBuilder.number(28),
+  sm: TokenBuilder.number(36),
+  md: TokenBuilder.number(48),
+  lg: TokenBuilder.number(60),
+  xl: TokenBuilder.number(72),
 })
 
 export const defaultIcongraphyTokens = (): ThemeIcongraphyTokens => ({
   sizes: {
-    xs: 16,
-    sm: 20,
-    md: 24,
-    lg: 32,
-    xl: 48,
+    xs: TokenBuilder.number(16),
+    sm: TokenBuilder.number(20),
+    md: TokenBuilder.number(24),
+    lg: TokenBuilder.number(32),
+    xl: TokenBuilder.number(48),
   },
-  strokeWidth: 2,
+  strokeWidth: TokenBuilder.number(2),
 })
 
 export const defaultSpacingTokens = (): ThemeSpacingTokens => ({
-  xxs: 1,
-  xs: 2,
-  sm: 4,
-  md: 8,
-  lg: 16,
-  xl: 24,
-  xxl: 32,
+  xxs: TokenBuilder.number(1),
+  xs: TokenBuilder.number(2),
+  sm: TokenBuilder.number(4),
+  md: TokenBuilder.number(8),
+  lg: TokenBuilder.number(16),
+  xl: TokenBuilder.number(24),
+  xxl: TokenBuilder.number(32),
 })
 
 export const defaultBorderRadiusTokens = (): ThemeBorderRadiusTokens => ({
-  xxs: 2,
-  xs: 4,
-  sm: 6,
-  md: 8,
-  lg: 10,
-  xl: 14,
-  xxl: 18,
+  xxs: TokenBuilder.number(2),
+  xs: TokenBuilder.number(4),
+  sm: TokenBuilder.number(6),
+  md: TokenBuilder.number(8),
+  lg: TokenBuilder.number(10),
+  xl: TokenBuilder.number(14),
+  xxl: TokenBuilder.number(18),
 })
 
 export const defaultPaddingTokens = (): ThemePaddingTokens => ({
-  xs: 2,
-  sm: 4,
-  md: 6,
-  lg: 10,
-  xl: 14,
+  xs: TokenBuilder.number(2),
+  sm: TokenBuilder.number(4),
+  md: TokenBuilder.number(6),
+  lg: TokenBuilder.number(10),
+  xl: TokenBuilder.number(14),
 })
 
 export const defaultBorderWidthTokens = (): ThemeBorderWidthTokens => ({
-  thin: 1,
-  normal: 2,
-  thick: 4,
+  thin: TokenBuilder.number(1),
+  normal: TokenBuilder.number(2),
+  thick: TokenBuilder.number(4),
 })
 
 export const defaultMotionTokens = (): ThemeMotionTokens => ({
   durations: {
-    fast: 100,
-    normal: 200,
-    slow: 300,
+    fast: TokenBuilder.number(100),
+    normal: TokenBuilder.number(200),
+    slow: TokenBuilder.number(300),
   },
 })
 
 const withShadowColor = (
   layout: ShadowLayoutToken,
-  color: ColorToken
-): ShadowLayoutToken & { color: ColorToken } => ({
-  ...layout,
-  color,
+  color: HexColor
+) => ({
+  x: layout.x,
+  y: layout.y,
+  blur: layout.blur,
+  spread: layout.spread,
+  color: TokenBuilder.color(color),
 })
 
 export const defaultLightElevationTokens = (): ThemeElevationTokens => {
@@ -238,15 +256,15 @@ export const mergeTypography = (
 }
 
 export const defaultAppearancePercentages = (): ThemeAppearancePercentages => ({
-  normal: 1,
-  subtle: 0.7,
-  faded: 0.4,
+  normal: TokenBuilder.number(1),
+  subtle: TokenBuilder.number(0.7),
+  faded: TokenBuilder.number(0.4),
 })
 
 export const defaultFocusOutlineToken = (): OutlineToken => ({
-  width: 2,
-  offset: 2,
-  style: 'solid',
+  width: TokenBuilder.number(2),
+  offset: TokenBuilder.number(2),
+  style: TokenBuilder.outlineStyle('solid'),
 })
 
 export const buildColorTokens = (params: {
@@ -280,23 +298,30 @@ export const buildColorTokens = (params: {
   warning: params.warning,
   negative: params.negative,
   neutral: params.neutral,
-  border: HexColorUtils.blend(params.surface.color, HexColorUtils.hexWithAlpha(params.surface.onColor, 0.25)),
+  border: TokenBuilder.color(HexColorUtils.blend(
+    params.surface.color.value,
+    HexColorUtils.hexWithAlpha(params.surface.onColor.value, 0.25)
+  )),
   overlay: params.overlay,
 })
 
 export const resolveSharedGroups = (
   config: ThemeTokensModeConfig,
   elevationDefaults: ThemeElevationTokens,
-  coloringDefaults: ColoringConfigTokens
-): Omit<ThemeTokens, 'color'> => {
+  coloringDefaults: {
+    tonal: { color: NumberToken, onColor: NumberToken },
+    transparent: { color: NumberToken, onColor: NumberToken },
+  }
+): Omit<HightideThemeTokens, 'color'> => {
   const appearanceDefaults = defaultAppearancePercentages()
   const focusOutlineDefaults = defaultFocusOutlineToken()
   const icongraphyDefaults = defaultIcongraphyTokens()
-  const fontSizing = {
-    ...defaultFontSizingTokens(),
+  const fontSizingDefaults = defaultFontSizingTokens()
+  const fontSizing: ThemeFontSizingTokens = {
+    ...fontSizingDefaults,
     ...config.fontSizing,
   }
-  const fontWeights = {
+  const fontWeights: ThemeFontWeightTokens = {
     ...defaultFontWeightTokens(),
     ...config.fontWeights,
   }
@@ -304,6 +329,14 @@ export const resolveSharedGroups = (
     ...defaultFontFamilyTokens(),
     ...config.fontFamilies,
   }
+
+  const mergeNumberPartial = <K extends string>(
+    defaults: Record<K, NumberToken>,
+    override?: Partial<Record<K, NumberToken>>
+  ): Record<K, NumberToken> => ({
+      ...defaults,
+      ...override,
+    })
 
   return {
     fontFamilies,
@@ -314,54 +347,24 @@ export const resolveSharedGroups = (
       config.typography
     ),
     icongraphy: {
-      sizes: {
-        ...icongraphyDefaults.sizes,
-        ...config.icongraphy?.sizes,
-      },
+      sizes: mergeNumberPartial(icongraphyDefaults.sizes, config.icongraphy?.sizes),
       strokeWidth: config.icongraphy?.strokeWidth ?? icongraphyDefaults.strokeWidth,
     },
-    size: {
-      ...defaultSizeTokens(),
-      ...config.size,
-    },
-    spacing: {
-      ...defaultSpacingTokens(),
-      ...config.spacing,
-    },
-    padding: {
-      ...defaultPaddingTokens(),
-      ...config.padding,
-    },
-    borderRadius: {
-      ...defaultBorderRadiusTokens(),
-      ...config.borderRadius,
-    },
-    borderWidth: {
-      ...defaultBorderWidthTokens(),
-      ...config.borderWidth,
-    },
+    size: mergeNumberPartial(defaultSizeTokens(), config.size),
+    spacing: mergeNumberPartial(defaultSpacingTokens(), config.spacing),
+    padding: mergeNumberPartial(defaultPaddingTokens(), config.padding),
+    borderRadius: mergeNumberPartial(defaultBorderRadiusTokens(), config.borderRadius),
+    borderWidth: mergeNumberPartial(defaultBorderWidthTokens(), config.borderWidth),
     elevation: {
       ...elevationDefaults,
-      ...Object.fromEntries(
-        Object.entries(config.elevation ?? {}).map(([level, layout]) => [
-          level,
-          layout
-            ? withShadowColor(layout, elevationDefaults[level as keyof ThemeElevationTokens].color)
-            : elevationDefaults[level as keyof ThemeElevationTokens],
-        ])
-      ) as ThemeElevationTokens,
+      ...config.elevation,
     },
     motion: {
-      durations: {
-        ...defaultMotionTokens().durations,
-        ...config.motion?.durations,
-      },
+      durations: mergeNumberPartial(defaultMotionTokens().durations, config.motion?.durations),
     },
     focusOutline: {
-      width: config.focusOutline?.width ?? focusOutlineDefaults.width,
-      offset: config.focusOutline?.offset ?? focusOutlineDefaults.offset,
-      style: config.focusOutline?.style ?? focusOutlineDefaults.style,
-      color: config.focusOutline?.color ?? focusOutlineDefaults.color,
+      ...focusOutlineDefaults,
+      ...config.focusOutline,
     },
     config: {
       coloring: {
@@ -370,8 +373,8 @@ export const resolveSharedGroups = (
           onColor: config.config?.coloring?.tonal?.onColor ?? coloringDefaults.tonal.onColor,
         },
         transparent: {
-          color: config.config?.coloring?.tonal?.color ?? coloringDefaults.transparent.color,
-          onColor: config.config?.coloring?.tonal?.onColor ?? coloringDefaults.transparent.onColor,
+          color: config.config?.coloring?.transparent?.color ?? coloringDefaults.transparent.color,
+          onColor: config.config?.coloring?.transparent?.onColor ?? coloringDefaults.transparent.onColor,
         },
       },
       appearancePercentages: {

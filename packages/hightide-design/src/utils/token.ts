@@ -22,10 +22,10 @@ import type { ResolverConfig, ResolverState } from '../primitive-tokens/resolver
 import type { SpacingAlignmentToken, SpacingAlignmentValue } from '../primitive-tokens/spacing-alignment-token'
 import type { StretchToken, StretchValue } from '../primitive-tokens/stretch-token'
 import type { TextAlignToken, TextAlignValue } from '../primitive-tokens/text-align-token'
-import type { ThemeLayoutSize } from '../theme-tokens/theme-tokens-config'
 import type { HexColor } from './hex-color'
 import type { TokenRef, TokenRefPath } from './token-type'
 import type { ColorToken } from '../primitive-tokens'
+import type { ThemeLayoutSize } from '../theme-tokens/create'
 
 const number = (value: number): NumberToken => ({
   type: 'number',
