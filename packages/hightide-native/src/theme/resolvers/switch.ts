@@ -1,7 +1,7 @@
 import type {
   SwitchState as DesignSwitchState,
   SwitchStateValue
-} from '@helpwave/hightide-design/component-token-resolvers'
+} from '@helpwave/hightide-design/component-tokens'
 import type {
   SwitchContainerStyle,
   SwitchState,

@@ -1,4 +1,5 @@
-import type { ColorToken, HexColorToken } from '../primitive-tokens/color'
+import type { ColorToken } from '../primitive-tokens/color-token'
+import type { HexColor } from './hex-color'
 
 const expandHex = (hex: string): string => {
   const normalized = hex.startsWith('#') ? hex.slice(1) : hex
@@ -10,7 +11,7 @@ const expandHex = (hex: string): string => {
   return normalized
 }
 
-const hexWithAlpha = (hex: HexColorToken, alpha: number): HexColorToken => {
+const hexWithAlpha = (hex: HexColor, alpha: number): HexColor => {
   const expanded = expandHex(hex)
   const rgb = expanded.slice(0, 6)
   const alphaByte = Math.round(Math.min(1, Math.max(0, alpha)) * 255)
@@ -19,7 +20,7 @@ const hexWithAlpha = (hex: HexColorToken, alpha: number): HexColorToken => {
   return `#${rgb}${alphaHex}`
 }
 
-const parseRgba = (hex: HexColorToken): [number, number, number, number] => {
+const parseRgba = (hex: HexColor): [number, number, number, number] => {
   const expanded = expandHex(hex)
   const rgb = expanded.slice(0, 6)
   const hasAlpha = expanded.length >= 8
@@ -33,7 +34,7 @@ const parseRgba = (hex: HexColorToken): [number, number, number, number] => {
   ]
 }
 
-const parseRgb = (hex: HexColorToken): [number, number, number] => {
+const parseRgb = (hex: HexColor): [number, number, number] => {
   const [r, g, b] = parseRgba(hex)
   return [r, g, b]
 }
@@ -42,22 +43,22 @@ const channelHex = (value: number): string => Math.round(Math.min(255, Math.max(
   .toString(16)
   .padStart(2, '0')
 
-const toHex = (r: number, g: number, b: number): HexColorToken => (
-  `#${channelHex(r)}${channelHex(g)}${channelHex(b)}`
+const toHex = (r: number, g: number, b: number): HexColor => (
+  `#${channelHex(r)}${channelHex(g)}${channelHex(b)}` as HexColor
 )
 
-const toHexWithAlpha = (r: number, g: number, b: number, alpha: number): HexColorToken => {
+const toHexWithAlpha = (r: number, g: number, b: number, alpha: number): HexColor => {
   const alphaByte = Math.round(Math.min(1, Math.max(0, alpha)) * 255)
-  return `#${channelHex(r)}${channelHex(g)}${channelHex(b)}${alphaByte.toString(16).padStart(2, '0')}`
+  return `#${channelHex(r)}${channelHex(g)}${channelHex(b)}${alphaByte.toString(16).padStart(2, '0')}` as HexColor
 }
 
-const mixWithBlack = (hex: HexColorToken, amount: number): HexColorToken => {
+const mixWithBlack = (hex: HexColor, amount: number): HexColor => {
   const [r, g, b] = parseRgb(hex)
   const factor = 1 - Math.min(1, Math.max(0, amount))
   return toHex(r * factor, g * factor, b * factor)
 }
 
-const mixWithWhite = (hex: HexColorToken, amount: number): HexColorToken => {
+const mixWithWhite = (hex: HexColor, amount: number): HexColor => {
   const [r, g, b] = parseRgb(hex)
   const t = Math.min(1, Math.max(0, amount))
   return toHex(
@@ -67,13 +68,13 @@ const mixWithWhite = (hex: HexColorToken, amount: number): HexColorToken => {
   )
 }
 
-const blend = (background: HexColorToken, tint: HexColorToken): HexColorToken => {
+const blend = (background: HexColor, tint: HexColor): HexColor => {
   const [br, bg, bb, ba] = parseRgba(background)
   const [tr, tg, tb, ta] = parseRgba(tint)
   const outA = ta + ba * (1 - ta)
 
   if (outA <= 0) {
-    return '#00000000'
+    return '#00000000' as HexColor
   }
 
   const outR = (tr * ta + br * ba * (1 - ta)) / outA
@@ -87,9 +88,11 @@ const blend = (background: HexColorToken, tint: HexColorToken): HexColorToken =>
   return toHexWithAlpha(outR, outG, outB, outA)
 }
 
-function resolveColorToken(colorToken: ColorToken) : HexColorToken {
-  if(colorToken === 'transparent') return '#FFFFFF00'
-  return colorToken
+const resolveColorToken = (token: ColorToken | HexColor): HexColor => {
+  if (typeof token === 'string') {
+    return token
+  }
+  return token.value
 }
 
 export const HexColorUtils = {
@@ -97,5 +100,6 @@ export const HexColorUtils = {
   mixWithBlack,
   mixWithWhite,
   blend,
-  resolveColorToken
+  resolveColorToken,
+  transparent: '#FFFFFF00' as HexColor,
 }

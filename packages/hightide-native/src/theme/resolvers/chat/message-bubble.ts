@@ -1,4 +1,4 @@
-import type { ChatMessageDirection } from '@helpwave/hightide-design/component-token-resolvers'
+import type { ChatMessageDirection } from '@helpwave/hightide-design/component-tokens'
 
 import type {
   ChatMessageBubbleBodyStyle,

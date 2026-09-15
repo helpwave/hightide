@@ -1,7 +1,7 @@
 import type {
   InputState as DesignInputState,
   InputStateValue
-} from '@helpwave/hightide-design/component-token-resolvers'
+} from '@helpwave/hightide-design/component-tokens'
 import type { ColorPairToken } from '@helpwave/hightide-design/theme-tokens'
 import type {
   SearchBarContainerStyle,
@@ -86,9 +86,9 @@ export const toSearchBarThemeResolvers: ComponentThemeResolver<SearchBarThemeRes
       const iconButtonWidth = typeof tokens.iconButton.size?.width === 'number'
         ? tokens.iconButton.size.width
         : 0
-      const iconButtonMargin = tokens.iconButton.margin?.type === 'physicalAxis'
-        ? tokens.iconButton.margin.horizontal ?? 0
-        : 0
+      const iconButtonMargin = tokens.iconButton.margin?.left
+        ?? tokens.iconButton.margin?.right
+        ?? 0
       const trailingInset = iconButtonWidth + iconButtonMargin
 
       return {
@@ -117,7 +117,7 @@ export const toSearchBarThemeResolvers: ComponentThemeResolver<SearchBarThemeRes
       const iconColor = resolve(state).icon.color
 
       return {
-        color: (iconColor === undefined || iconColor === 'transparent'
+        color: (iconColor === undefined || iconColor === HexColorUtils.transparent
           ? themeTokens.color.surface.onColor
           : iconColor),
         onColor: themeTokens.color.surface.color,

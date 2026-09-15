@@ -1,4 +1,4 @@
-import type { ColorToken, HexColorToken } from '@helpwave/hightide-design/primitive-tokens'
+import type { ColorToken, ColorToken } from '@helpwave/hightide-design/primitive-tokens'
 import type {
   Appearance,
   ColoringColorTokens,
@@ -12,13 +12,12 @@ import type {
   InsideControlElementLayoutToken,
   PressableColoringTokens,
   ButtonVariant
-} from '@helpwave/hightide-design/semantic-token-resolvers'
-import type { InputState } from '@helpwave/hightide-design/component-token-resolvers'
-import type { PressableState } from '@helpwave/hightide-design/component-token-resolvers'
+} from '@helpwave/hightide-design/semantic-tokens'
+import type { InputState } from '@helpwave/hightide-design/component-tokens'
+import type { PressableState } from '@helpwave/hightide-design/component-tokens'
 import type {
   ColorPairToken,
   ThemeLayoutSize,
-  ThemeTypographySize,
   TintStrength
 } from '@helpwave/hightide-design/theme-tokens'
 
@@ -54,20 +53,20 @@ export type HightideThemeSemantics = {
     size: ThemeLayoutSize,
   }, ContainerLayoutToken>,
   insideControlLayout: BoundSemanticResolver<{
-    size: ThemeTypographySize,
+    size: ThemeLayoutSize,
   }, InsideControlElementLayoutToken>,
   tintedSurface: BoundSemanticResolver<{
-    tintColor: HexColorToken,
+    tintColor: ColorToken,
     tintStrength?: TintStrength,
-  }, HexColorToken>,
+  }, ColorToken>,
   withAppearance: BoundSemanticResolver<{
     colorPair: ColorPairToken,
     appearance: Appearance,
-  }, HexColorToken>,
+  }, ColorToken>,
   asFaded: BoundSemanticResolver<{
     colorPair: ColorPairToken,
-  }, HexColorToken>,
+  }, ColorToken>,
   asDescription: BoundSemanticResolver<{
     colorPair: ColorPairToken,
-  }, HexColorToken>,
+  }, ColorToken>,
 } & ElementLayoutTokens

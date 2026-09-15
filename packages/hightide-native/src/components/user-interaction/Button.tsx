@@ -7,7 +7,7 @@ import {
 } from 'react-native'
 
 import type { ColorPairToken } from '@helpwave/hightide-design/theme-tokens'
-import type { ComponentSize, ButtonVariant } from '@helpwave/hightide-design/semantic-token-resolvers'
+import type { ComponentSize, ButtonVariant } from '@helpwave/hightide-design/semantic-tokens'
 
 import { ContentThemeOverrideProvider } from '../../global-contexts/content-theme/ContentThemeProvider'
 import { useDebugContext } from '../../global-contexts/debug'

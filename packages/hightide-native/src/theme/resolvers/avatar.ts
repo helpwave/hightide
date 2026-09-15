@@ -6,7 +6,7 @@ import {
   type AvatarTokens,
   type AvatarWithStatusOverrideTokens,
   type AvatarWithStatusTokens
-} from '@helpwave/hightide-design/component-token-resolvers'
+} from '@helpwave/hightide-design/component-tokens'
 
 import type {
   AvatarGroupContainerStyle,
@@ -46,17 +46,9 @@ export const mergeAvatarTokens = (
       ...base.container.size,
       ...override?.container?.size,
     },
-    shape: {
-      ...base.container.shape,
-      ...override?.container?.shape,
-    },
     layout: {
       ...base.container.layout,
       ...override?.container?.layout,
-    },
-    decoration: {
-      ...base.container.decoration,
-      ...override?.container?.decoration,
     },
   },
   image: {
@@ -66,17 +58,9 @@ export const mergeAvatarTokens = (
       ...base.image.size,
       ...override?.image?.size,
     },
-    shape: {
-      ...base.image.shape,
-      ...override?.image?.shape,
-    },
     layout: {
       ...base.image.layout,
       ...override?.image?.layout,
-    },
-    decoration: {
-      ...base.image.decoration,
-      ...override?.image?.decoration,
     },
     position: override?.image?.position ?? base.image.position,
     transform: override?.image?.transform ?? base.image.transform,
@@ -109,9 +93,11 @@ export const withNumericAvatarSize = (
         maxWidth: size,
         maxHeight: size,
       },
-      shape: {
-        ...tokens.container.shape,
-        borderRadius: { type: 'all', value: borderRadius },
+      borderRadius: {
+        topLeft: borderRadius,
+        topRight: borderRadius,
+        bottomLeft: borderRadius,
+        bottomRight: borderRadius,
       },
     },
     image: {
@@ -120,9 +106,11 @@ export const withNumericAvatarSize = (
         width: size,
         height: size,
       },
-      shape: {
-        ...tokens.image.shape,
-        borderRadius: { type: 'all', value: borderRadius },
+      borderRadius: {
+        topLeft: borderRadius,
+        topRight: borderRadius,
+        bottomLeft: borderRadius,
+        bottomRight: borderRadius,
       },
     },
     icon: {
@@ -250,9 +238,11 @@ export const createAvatarWithStatusThemeResolvers = (
                 width: size,
                 height: size,
               },
-              shape: {
-                ...statusDot.shape,
-                borderRadius: { type: 'all', value: size / 2 },
+              borderRadius: {
+                topLeft: size / 2,
+                topRight: size / 2,
+                bottomLeft: size / 2,
+                bottomRight: size / 2,
               },
             }
         ),
@@ -284,10 +274,6 @@ export const mergeAvatarWithStatusTokens = (
     size: {
       ...base.statusDot.size,
       ...override?.statusDot?.size,
-    },
-    shape: {
-      ...base.statusDot.shape,
-      ...override?.statusDot?.shape,
     },
     border: {
       ...base.statusDot.border,

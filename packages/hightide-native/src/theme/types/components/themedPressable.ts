@@ -4,7 +4,7 @@ import type {
   ColoringColorVariant,
   ColoringStyle,
   ComponentSize
-} from '@helpwave/hightide-design/semantic-token-resolvers'
+} from '@helpwave/hightide-design/semantic-tokens'
 import type { ColorPairToken } from '@helpwave/hightide-design/theme-tokens'
 
 import type {

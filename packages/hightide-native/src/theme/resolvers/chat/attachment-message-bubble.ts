@@ -1,6 +1,6 @@
 import type {
   ChatMessageDirection
-} from '@helpwave/hightide-design/component-token-resolvers'
+} from '@helpwave/hightide-design/component-tokens'
 
 import type {
   ChatAttachmentMessageBubbleDownloadIconContainerStyle,

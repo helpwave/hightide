@@ -9,7 +9,7 @@ import {
   avatarStatuses,
   type AvatarSize,
   type AvatarStatus
-} from '@helpwave/hightide-design/component-token-resolvers'
+} from '@helpwave/hightide-design/component-tokens'
 
 import type { StyleResolverFunction } from '../resolver'
 import type { IconStyle } from '../../../icons'

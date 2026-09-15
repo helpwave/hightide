@@ -10,7 +10,7 @@ import {
 } from 'react-native'
 
 import type { ColorToken } from '@helpwave/hightide-design/primitive-tokens'
-import type { DividerDirection } from '@helpwave/hightide-design/component-token-resolvers'
+import type { DividerDirection } from '@helpwave/hightide-design/component-tokens'
 
 import { useTheme } from '../../global-contexts/theme/ThemeContext'
 import { useMemoizedTheme } from '../../hooks/useMemoizedTheme'

@@ -1,6 +1,6 @@
 import type {
   AvatarTokens
-} from '@helpwave/hightide-design/component-token-resolvers'
+} from '@helpwave/hightide-design/component-tokens'
 
 import {
   createAvatarStyleResolvers,

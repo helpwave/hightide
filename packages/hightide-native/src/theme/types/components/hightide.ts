@@ -1,5 +1,5 @@
 import type { IconSize } from '@helpwave/hightide-design/theme-tokens'
-import type { IconTokens } from '@helpwave/hightide-design/component-token-resolvers'
+import type { IconTokens } from '@helpwave/hightide-design/component-tokens'
 
 import type {
   AvatarGroupThemeResolvers,

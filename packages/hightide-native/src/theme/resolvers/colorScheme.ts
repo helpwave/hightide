@@ -1,12 +1,12 @@
-import { buttonVariants } from '@helpwave/hightide-design/component-token-resolvers'
-import type {
-  ButtonVariant } from '@helpwave/hightide-design/semantic-token-resolvers'
+import { HexColorUtils } from '@helpwave/hightide-design/utils'
+import { buttonVariants } from '@helpwave/hightide-design/component-tokens'
+import type { ButtonVariant } from '@helpwave/hightide-design/semantic-tokens'
 import {
   mapButtonVariant,
   resolveColoringColorVariant,
   resolveColoringStyle,
   resolvePressableColoring
-} from '@helpwave/hightide-design/semantic-token-resolvers'
+} from '../design-resolvers'
 import type {
   ColorPairToken,
   ThemeTokens
@@ -84,9 +84,9 @@ export const resolveColoringStyles = (
   return {
     backgroundColor: resolved.background,
     color: resolved.foreground,
-    borderColor: resolved.border !== 'transparent'
+    borderColor: resolved.border !== HexColorUtils.transparent
       ? resolved.border
-      : resolved.outline !== 'transparent'
+      : resolved.outline !== HexColorUtils.transparent
         ? resolved.outline
         : resolved.background,
   }

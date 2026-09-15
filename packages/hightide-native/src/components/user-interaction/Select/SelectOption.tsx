@@ -1,6 +1,7 @@
 import type { ReactNode } from 'react'
 import { useEffect, useMemo } from 'react'
 
+import { HexColorUtils } from '@helpwave/hightide-design/utils'
 import { useTheme } from '../../../global-contexts/theme/ThemeContext'
 import { useMemoizedTheme } from '../../../hooks/useMemoizedTheme'
 import { HightideIconRegistry } from '../../../icons/HightideIconRegistry'
@@ -88,7 +89,7 @@ export const SelectOption = <T,>({
           icon={HightideIconRegistry.Check}
           size={checkIcon.size}
           strokeWidth={checkIcon.strokeWidth}
-          color={isSelected ? theme.colors.primary.color : 'transparent'}
+          color={isSelected ? theme.colors.primary.color : HexColorUtils.transparent}
         />
       )}
     />

@@ -5,7 +5,7 @@ import type {
 import {
   hightidePrimitiveTokens
 } from '@helpwave/hightide-design/primitive-tokens'
-import { createLightThemeTokens } from '@helpwave/hightide-design/theme-tokens'
+import { colorPair, createLightThemeTokens } from '@helpwave/hightide-design/theme-tokens'
 
 import {
   Button,
@@ -28,18 +28,9 @@ const whiteColor = white.value
 
 const oceanTheme = createHightideTheme(createLightThemeTokens({
   color: {
-    primary: {
-      color: blue.value[500],
-      onColor: whiteColor,
-    },
-    background: {
-      color: blue.value[100],
-      onColor: blue.value[900],
-    },
-    surface: {
-      color: blue.value[50],
-      onColor: blue.value[900],
-    },
+    primary: colorPair(blue[500].value, whiteColor),
+    background: colorPair(blue[100].value, blue[900].value),
+    surface: colorPair(blue[50].value, blue[900].value),
   },
 }))
 

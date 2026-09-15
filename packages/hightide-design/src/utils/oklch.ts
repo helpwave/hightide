@@ -1,4 +1,4 @@
-import type { HexColorToken } from '../primitive-tokens'
+import type { HexColor } from './hex-color'
 
 export interface OKLab {
   l: number,
@@ -40,7 +40,7 @@ function linearToSrgb(value: number): number {
 /**
  * Hex -> OKLab
  */
-export function hexToOKLab(hex: HexColorToken): OKLab {
+export function hexToOKLab(hex: HexColor): OKLab {
   const clean = hex.replace(/^#/, '')
 
   if (!/^[0-9a-fA-F]{6}$/.test(clean)) {
@@ -127,7 +127,7 @@ function oklabToLinearRGB({ l, a, b }: OKLab) {
 /**
  * OKLab -> Hex
  */
-export function oklabToHex(lab: OKLab): HexColorToken {
+export function oklabToHex(lab: OKLab): HexColor {
   const rgb = oklabToLinearRGB(lab)
 
   const r = Math.round(linearToSrgb(rgb.r))
@@ -172,14 +172,14 @@ export function oklchToOKLab({ l, c, h }: OKLCH): OKLab {
 /**
  * Hex -> OKLCH
  */
-export function hexToOKLCH(hex: HexColorToken): OKLCH {
+export function hexToOKLCH(hex: HexColor): OKLCH {
   return oklabToOKLCH(hexToOKLab(hex))
 }
 
 /**
  * OKLCH -> Hex
  */
-export function oklchToHex(lch: OKLCH): HexColorToken {
+export function oklchToHex(lch: OKLCH): HexColor {
   return oklabToHex(oklchToOKLab(lch))
 }
 
@@ -192,9 +192,9 @@ export function oklchToHex(lch: OKLCH): HexColorToken {
  *   increaseLightness("#336699", 0.1)
  */
 function changeLightness(
-  hex: HexColorToken,
+  hex: HexColor,
   value: number
-): HexColorToken {
+): HexColor {
   const lch = hexToOKLCH(hex)
 
   return oklchToHex({

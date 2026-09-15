@@ -1,7 +1,7 @@
 import type {
   InputState as DesignInputState,
   InputStateValue
-} from '@helpwave/hightide-design/component-token-resolvers'
+} from '@helpwave/hightide-design/component-tokens'
 import type {
   InputContainerStyle,
   InputIconStyle,
