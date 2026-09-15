@@ -3,7 +3,6 @@ import type {
   ThemeLayoutSize,
   ThemeTypographySize
 } from '../../theme-tokens/create'
-import type { NumberToken } from '../../primitive-tokens/number-token'
 import type { NumberValueToken } from '../../primitive-tokens/number-value-token'
 import type { TokenRef } from '../../utils/token-type'
 
@@ -23,28 +22,28 @@ export const toTypographySize = (size: ComponentSize): ThemeTypographySize => (
 )
 
 export type ControlElementLayoutToken = {
-  size: NumberToken,
-  inset: NumberToken,
-  borderWidth: NumberToken,
-  borderRadius: NumberToken,
-  horizontalContentPadding: NumberToken,
+  size: NumberValueToken,
+  inset: NumberValueToken,
+  borderWidth: NumberValueToken,
+  borderRadius: NumberValueToken,
+  horizontalContentPadding: NumberValueToken,
 }
 
 export type ContainerLayoutToken = {
-  size: NumberToken,
-  insetY: NumberToken,
-  insetX: NumberToken,
-  borderRadius: NumberToken,
-  minimumWidth: NumberToken,
-  minimumHeight: NumberToken,
+  size: NumberValueToken,
+  insetY: NumberValueToken,
+  insetX: NumberValueToken,
+  borderRadius: NumberValueToken,
+  minimumWidth: NumberValueToken,
+  minimumHeight: NumberValueToken,
 }
 
 export type InsideControlElementLayoutToken = {
-  size: NumberToken,
-  inset: NumberToken,
-  borderWidth: NumberToken,
-  borderRadius: NumberToken,
-  paddingExtension: NumberToken,
+  size: NumberValueToken,
+  inset: NumberValueToken,
+  borderWidth: NumberValueToken,
+  borderRadius: NumberValueToken,
+  paddingExtension: NumberValueToken,
 }
 
 export type ElementLayoutTokens = {

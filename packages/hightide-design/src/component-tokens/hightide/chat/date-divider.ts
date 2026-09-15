@@ -24,16 +24,16 @@ export type ChatDateDividerTokenResolver = ComponentTokenResolver<
 
 export const chatDateDividerTokens = {
   container: {
-    kind: 'container' as const,
-    backgroundColor: TokenBuilder.stateful(TokenBuilder.colorRef('theme.color.surface.color')),
-    borderRadius: TokenBuilder.borderRadius({ value: TokenBuilder.number(pillBorderRadius) }),
+    type: 'container',
+    backgroundColor: TokenBuilder.stateful(TokenBuilder.colorValueRef('theme.color.surface.color')),
+    borderRadius: TokenBuilder.borderRadius({ value: TokenBuilder.numberValue(TokenBuilder.number(pillBorderRadius)) }),
     padding: TokenBuilder.padding({ vertical: TokenBuilder.numberRef('theme.spacing.sm'), horizontal: TokenBuilder.numberRef('theme.spacing.lg') }),
     layout: TokenBuilder.stateful({
       selfCrossAxisAlignment: 'center',
     }),
   },
   text: {
-    kind: 'textStyle' as const,
+    type: 'textStyle',
     fontSize: TokenBuilder.stateful(TokenBuilder.numberRef('theme.typography.body.sm.fontSize')),
     fontFamily: TokenBuilder.stateful(TokenBuilder.fontFamilyRef('theme.typography.body.sm.fontFamily')),
     lineHeight: TokenBuilder.stateful(TokenBuilder.numberRef('theme.typography.body.sm.lineHeight')),

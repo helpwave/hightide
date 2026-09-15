@@ -1,5 +1,6 @@
 import { TokenBuilder } from '../../../utils'
-import type { AssertAssignable, ColorToken, HightideResolverConfig, NumberToken, HightideResolverParams, ResolverState } from '../../../primitive-tokens'
+import type { TokenRefOrValue } from '../../../utils/token-type'
+import type { AssertAssignable, ColorValueToken, HightideResolverConfig, NumberValueToken, HightideResolverParams, ResolverState } from '../../../primitive-tokens'
 import type { ColorPairToken } from '../../../theme-tokens/create'
 import type { ComponentTokenResolver } from '../component-token-resolver'
 import type { ComponentTokens } from '../../component-tokens'
@@ -34,25 +35,25 @@ export type ListItemTokenResolver = ComponentTokenResolver<
 
 export type ListItemParams = AssertAssignable<{
   colors: {
-    foreground: ColorToken,
-    onColor: ColorToken,
-    background?: ColorToken,
+    foreground: ColorValueToken,
+    onColor: ColorValueToken,
+    background?: ColorValueToken,
   },
   numbers: {
-    size: NumberToken,
-    inset: NumberToken,
-    horizontalContentPadding: NumberToken,
+    size: NumberValueToken,
+    inset: NumberValueToken,
+    horizontalContentPadding: NumberValueToken,
   },
 }, HightideResolverParams>
 export type ListItemTokenContext = HightideTokenPathProvider<ListItemParams>
 
 export const listItemTokens = {
   container: {
-    kind: 'container' as const,
-    backgroundColor: TokenBuilder.stateful(
+    type: 'container',
+    backgroundColor: TokenBuilder.stateful<TokenRefOrValue<ColorValueToken>>(
       undefined,
       [
-        TokenBuilder.whenState(['tonal'], TokenBuilder.colorRef<ListItemTokenContext>('params.colors.background')),
+        TokenBuilder.whenState(['tonal'], TokenBuilder.colorValueRef<ListItemTokenContext>('params.colors.background')),
       ]
     ),
     size: TokenBuilder.stateful({
@@ -65,55 +66,59 @@ export const listItemTokens = {
     }),
     padding: TokenBuilder.padding({ vertical: TokenBuilder.numberRef<ListItemTokenContext>('params.numbers.inset'), horizontal: TokenBuilder.numberRef<ListItemTokenContext>('params.numbers.horizontalContentPadding') }),
     layout: TokenBuilder.stateful({
-      direction: 'horizontal',
-      mainAxisAlignment: 'start',
-      crossAxisAlignment: 'center',
+      direction: TokenBuilder.layoutDirection('horizontal'),
+      mainAxisAlignment: TokenBuilder.mainAxisAlignment('start'),
+      crossAxisAlignment: TokenBuilder.crossAxisAlignment('center'),
     }),
   },
   leadingItemContainer: {
+    type: 'container',
     margin: TokenBuilder.margin({ inlineEnd: TokenBuilder.numberRef<ListItemTokenContext>('theme.spacing.md') }),
     layout: TokenBuilder.stateful({
-      direction: 'horizontal',
-      crossAxisAlignment: 'center',
+      direction: TokenBuilder.layoutDirection('horizontal'),
+      crossAxisAlignment: TokenBuilder.crossAxisAlignment('center'),
     }),
   },
   content: {
-    kind: 'container' as const,
+    type: 'container',
     size: TokenBuilder.stateful({
       width: TokenBuilder.percent('100%'),
     }),
     layout: TokenBuilder.stateful({
       gap: TokenBuilder.numberRef<ListItemTokenContext>('theme.spacing.xs'),
-      direction: 'vertical',
-      mainAxisAlignment: 'center',
-      crossAxisAlignment: 'start',
+      direction: TokenBuilder.layoutDirection('vertical'),
+      mainAxisAlignment: TokenBuilder.mainAxisAlignment('center'),
+      crossAxisAlignment: TokenBuilder.crossAxisAlignment('start'),
     }),
   },
   trailingItemContainer: {
+    type: 'container',
     margin: TokenBuilder.margin({ inlineStart: TokenBuilder.numberRef<ListItemTokenContext>('theme.spacing.xl') }),
     layout: TokenBuilder.stateful({
-      direction: 'horizontal',
-      crossAxisAlignment: 'center',
+      direction: TokenBuilder.layoutDirection('horizontal'),
+      crossAxisAlignment: TokenBuilder.crossAxisAlignment('center'),
     }),
   },
   icon: {
-    kind: 'icon' as const,
+    type: 'icon',
     size: TokenBuilder.stateful(TokenBuilder.numberRef<ListItemTokenContext>('theme.icongraphy.sizes.md')),
     strokeWidth: TokenBuilder.stateful(TokenBuilder.numberRef<ListItemTokenContext>('theme.icongraphy.strokeWidth')),
-    color: TokenBuilder.stateful(TokenBuilder.colorRef<ListItemTokenContext>('params.colors.foreground')),
+    color: TokenBuilder.stateful(TokenBuilder.colorValueRef<ListItemTokenContext>('params.colors.foreground')),
   },
   titleText: {
+    type: 'textStyle',
     fontSize: TokenBuilder.stateful(TokenBuilder.numberRef<ListItemTokenContext>('theme.typography.body.md.fontSize')),
     fontFamily: TokenBuilder.stateful(TokenBuilder.fontFamilyRef<ListItemTokenContext>('theme.typography.body.md.fontFamily')),
     lineHeight: TokenBuilder.stateful(TokenBuilder.numberRef<ListItemTokenContext>('theme.typography.body.md.lineHeight')),
     fontWeight: TokenBuilder.stateful(TokenBuilder.numberRef<ListItemTokenContext>('theme.typography.body.md.fontWeight')),
-    color: TokenBuilder.stateful(TokenBuilder.colorRef<ListItemTokenContext>('params.colors.foreground')),
+    color: TokenBuilder.stateful(TokenBuilder.colorValueRef<ListItemTokenContext>('params.colors.foreground')),
   },
   descriptionText: {
+    type: 'textStyle',
     fontSize: TokenBuilder.stateful(TokenBuilder.numberRef<ListItemTokenContext>('theme.typography.body.sm.fontSize')),
     fontFamily: TokenBuilder.stateful(TokenBuilder.fontFamilyRef<ListItemTokenContext>('theme.typography.body.sm.fontFamily')),
     lineHeight: TokenBuilder.stateful(TokenBuilder.numberRef<ListItemTokenContext>('theme.typography.body.sm.lineHeight')),
     fontWeight: TokenBuilder.stateful(TokenBuilder.numberRef<ListItemTokenContext>('theme.typography.body.sm.fontWeight')),
-    color: TokenBuilder.stateful(TokenBuilder.colorRef<ListItemTokenContext>('params.colors.onColor')),
+    color: TokenBuilder.stateful(TokenBuilder.colorValueRef<ListItemTokenContext>('params.colors.onColor')),
   },
 } as const

@@ -183,7 +183,7 @@ const statusDotSize = TokenBuilder.round(
 
 export const avatarWithStatusTokens = {
   statusDot: {
-    kind: 'container' as const,
+    type: 'container',
     backgroundColor: TokenBuilder.statefulField<ColorValueToken, AvatarStatus>(
       TokenBuilder.colorValueRef('theme.color.disabled.color'),
       [
@@ -252,32 +252,32 @@ const avatarStackWidth = TokenBuilder.calc(
 
 export const avatarGroupTokens = {
   container: {
-    kind: 'container' as const,
+    type: 'container',
     size: TokenBuilder.stateful({
       height: TokenBuilder.numberRef<AvatarGroupTokenContext>('params.numbers.dimension'),
     }),
     layout: TokenBuilder.stateful({
-      direction: 'horizontal',
-      crossAxisAlignment: 'center',
+      direction: TokenBuilder.layoutDirection('horizontal'),
+      crossAxisAlignment: TokenBuilder.crossAxisAlignment('center'),
       gap: TokenBuilder.numberRef<AvatarGroupTokenContext>('theme.spacing.sm'),
     }),
   },
   avatarStack: {
-    kind: 'container' as const,
+    type: 'container',
     size: TokenBuilder.stateful({
       width: avatarStackWidth,
       height: TokenBuilder.numberRef<AvatarGroupTokenContext>('params.numbers.dimension'),
     }),
   },
   text: {
-    kind: 'textStyle' as const,
+    type: 'textStyle',
     fontSize: TokenBuilder.stateful(
       TokenBuilder.calc('multiply', TokenBuilder.numberRef<AvatarGroupTokenContext>('params.numbers.dimension'), TokenBuilder.numberValue(TokenBuilder.number(2 / 3)))
     ),
     color: TokenBuilder.stateful(TokenBuilder.colorValueRef<AvatarGroupTokenContext>('theme.color.background.onColor')),
   },
   avatarOverrideContainer: {
-    kind: 'container' as const,
+    type: 'container',
     shadow: TokenBuilder.stateful(elevationTokens('level1')),
   },
 } as const

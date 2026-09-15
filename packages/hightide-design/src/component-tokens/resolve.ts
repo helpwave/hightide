@@ -18,9 +18,9 @@ import type { ContainerTokens } from './container-tokens'
 import type { IconTokens } from './icon-tokens'
 import type { TextStyleTokens } from './text-style-tokens'
 
-const matchesStateConditions = <S extends string>(
-  active: ReadonlySet<S>,
-  condition?: ReadonlySet<S>
+const matchesStateConditions = (
+  active: ReadonlySet<string>,
+  condition?: ReadonlySet<string>
 ): boolean => {
   if (condition === undefined || condition.size === 0) {
     return true
@@ -35,9 +35,9 @@ const matchesStateConditions = <S extends string>(
   return true
 }
 
-const matchesNegativeStateConditions = <S extends string>(
-  active: ReadonlySet<S>,
-  negativeCondition?: ReadonlySet<S>
+const matchesNegativeStateConditions = (
+  active: ReadonlySet<string>,
+  negativeCondition?: ReadonlySet<string>
 ): boolean => {
   if (negativeCondition === undefined || negativeCondition.size === 0) {
     return true
@@ -211,7 +211,7 @@ const resolveContextBasedProperty = <S extends string, V>(
     }
   }
 
-  return result
+  return result as V
 }
 
 const ensureParams = (context: TokenResolveContext): Record<string, unknown> => {
@@ -222,7 +222,29 @@ const ensureParams = (context: TokenResolveContext): Record<string, unknown> => 
   return context.params as Record<string, unknown>
 }
 
-const primitiveLeafTypeSet = new Set<string>(primitiveLeafTypes)
+const primitiveLeafTypeSet = new Set<string>([
+  'axisAlignment',
+  'borderStyle',
+  'color',
+  'colorOp',
+  'colorValue',
+  'crossAxisAlignment',
+  'crossAxisLineAlignment',
+  'flexWrap',
+  'fontFamily',
+  'fontWeight',
+  'layoutDirection',
+  'mainAxisAlignment',
+  'number',
+  'numberCalc',
+  'numberValue',
+  'outlineStyle',
+  'overflow',
+  'percent',
+  'spacingAlignment',
+  'stretch',
+  'textAlign',
+])
 
 export function resolveResolvableValue (
   value: unknown,
@@ -242,7 +264,7 @@ export function resolveResolvableValue (
     if (isContextBasedProperty(node)) {
       const state = context.state ?? new Set<string>()
       const resolved = resolveResolvableValue(
-        resolveContextBasedProperty(node, state, context.config),
+        resolveContextBasedProperty(node, state, context.config as Record<string, string> | undefined),
         context
       )
       setAtPath(ensureParams(context), nestedPath, resolved)
@@ -380,7 +402,7 @@ export const resolveConfigNode = <T = unknown>(
 
   if (isContextBasedProperty(value)) {
     return resolveResolvableValue(
-      resolveContextBasedProperty(value, state, context.config),
+      resolveContextBasedProperty(value, state, context.config as Record<string, string> | undefined),
       context
     ) as T
   }
@@ -411,7 +433,7 @@ export const resolveConfigNode = <T = unknown>(
   const result: Record<string, unknown> = {}
 
   for (const key of Object.keys(value)) {
-    if (key === 'kind') {
+    if (key === 'kind' || key === 'type') {
       result[key] = value[key]
       continue
     }
@@ -423,7 +445,7 @@ export const resolveConfigNode = <T = unknown>(
 
 type ResolveComponentTokenArgs<Theme extends ThemeTokens, T> = {
   component: T,
-  semantics: SemanticTokens<{ theme: Theme }, string, ResolverConfig>,
+  semantics: SemanticTokens<string, ResolverConfig>,
   theme: Theme,
   state: ReadonlySet<string>,
   config: ResolverConfig,
@@ -432,11 +454,11 @@ type ResolveComponentTokenArgs<Theme extends ThemeTokens, T> = {
 
 export function resolveComponentToken<
   Theme extends ThemeTokens,
-  T extends { kind?: string }
+  T extends { type?: string, kind?: string }
 >(
   args: ResolveComponentTokenArgs<Theme, T>
-): T extends { kind: 'icon' } ? IconTokens
-  : T extends { kind: 'textStyle' } ? TextStyleTokens
+): T extends { type: 'icon' } | { kind: 'icon' } ? IconTokens
+  : T extends { type: 'textStyle' } | { kind: 'textStyle' } ? TextStyleTokens
   : ContainerTokens {
   const context: TokenResolveContext = {
     theme: args.theme,
@@ -446,8 +468,8 @@ export function resolveComponentToken<
     state: args.state,
   }
 
-  return resolveConfigNode(args.component, context) as T extends { kind: 'icon' } ? IconTokens
-    : T extends { kind: 'textStyle' } ? TextStyleTokens
+  return resolveConfigNode(args.component, context) as T extends { type: 'icon' } | { kind: 'icon' } ? IconTokens
+    : T extends { type: 'textStyle' } | { kind: 'textStyle' } ? TextStyleTokens
     : ContainerTokens
 }
 

@@ -20,14 +20,14 @@ export type ChatConversationListTokenResolver = ComponentTokenResolver<
 
 export const chatConversationListTokens = {
   container: {
-    kind: 'container' as const,
-    backgroundColor: TokenBuilder.stateful(TokenBuilder.colorRef('theme.color.surface.color')),
+    type: 'container',
+    backgroundColor: TokenBuilder.stateful(TokenBuilder.colorValueRef('theme.color.surface.color')),
     layout: TokenBuilder.stateful({
-      direction: 'vertical',
+      direction: TokenBuilder.layoutDirection('vertical'),
     }),
   },
   header: {
-    kind: 'container' as const,
+    type: 'container',
     padding: TokenBuilder.padding({ vertical: TokenBuilder.numberRef('theme.spacing.lg'), horizontal: TokenBuilder.numberRef('theme.spacing.lg') }),
     layout: TokenBuilder.stateful({
       gap: TokenBuilder.numberRef('theme.padding.xl'),

@@ -1,5 +1,5 @@
 import { TokenBuilder } from '../../utils'
-import type { AssertAssignable, HightideResolverConfig, NumberToken, HightideResolverParams, ResolverState } from '../../primitive-tokens'
+import type { AssertAssignable, NumberValueToken, HightideResolverParams } from '../../primitive-tokens'
 import {
   type InputComponentResolverProps,
   type InputConfig,
@@ -29,23 +29,23 @@ export type TextareaOverlayTokens = AssertAssignable<
 
 export type TextareaOverlayParams = AssertAssignable<{
   numbers: {
-    width: NumberToken,
-    lineHeight: NumberToken,
+    width: NumberValueToken,
+    lineHeight: NumberValueToken,
   },
 }, HightideResolverParams>
 export type TextareaTokenContext = HightideTokenPathProvider<TextareaOverlayParams>
 
 export const textareaContainerOverlayTokens = {
-  kind: 'container' as const,
+  type: 'container',
   size: TokenBuilder.stateful({
     width: TokenBuilder.numberRef<TextareaTokenContext>('params.numbers.width'),
     height: TokenBuilder.calc(
       'multiply',
-      TokenBuilder.number(textareaVisibleLineCount),
+      TokenBuilder.numberValue(TokenBuilder.number(textareaVisibleLineCount)),
       TokenBuilder.numberRef<TextareaTokenContext>('params.numbers.lineHeight')
     ),
   }),
   layout: TokenBuilder.stateful({
-    crossAxisAlignment: 'start',
+    crossAxisAlignment: TokenBuilder.crossAxisAlignment('start'),
   }),
 } as const

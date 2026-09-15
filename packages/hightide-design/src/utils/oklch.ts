@@ -1,4 +1,4 @@
-import type { HexColor } from '../primitive-tokens'
+import type { HexColor } from './hex-color'
 
 export interface OKLab {
   l: number,

@@ -11,24 +11,24 @@ import type { ResolvableContainerTokens } from '../resolvable-container-tokens'
 import type { ResolvableIconTokens } from '../resolvable-icon-tokens'
 import type { ResolvableTextStyleTokens } from '../resolvable-text-style-tokens'
 import type { HightideTokenPathProvider } from './token-context'
-import type { AssertAssignable, ColorToken, HightideResolverConfig, NumberToken, HightideResolverParams, ResolverState } from '../../primitive-tokens'
+import type { AssertAssignable, ColorValueToken, HightideResolverConfig, NumberValueToken, HightideResolverParams, ResolverState } from '../../primitive-tokens'
 
 export type ChipParams = AssertAssignable<{
   colors: {
-    background: ColorToken,
-    foreground: ColorToken,
+    background: ColorValueToken,
+    foreground: ColorValueToken,
   },
   numbers: {
-    size: NumberToken,
-    borderRadius: NumberToken,
-    inset: NumberToken,
-    paddingExtension: NumberToken,
-    gap: NumberToken,
-    iconSize: NumberToken,
-    iconStrokeWidth: NumberToken,
-    fontSize: NumberToken,
-    fontWeight: NumberToken,
-    lineHeight: NumberToken,
+    size: NumberValueToken,
+    borderRadius: NumberValueToken,
+    inset: NumberValueToken,
+    paddingExtension: NumberValueToken,
+    gap: NumberValueToken,
+    iconSize: NumberValueToken,
+    iconStrokeWidth: NumberValueToken,
+    fontSize: NumberValueToken,
+    fontWeight: NumberValueToken,
+    lineHeight: NumberValueToken,
   },
 }, HightideResolverParams>
 
@@ -58,10 +58,10 @@ export type ChipTokenResolver = ComponentTokenResolver<
 
 export const chipTokens = {
   container: {
-    kind: 'container',
-    backgroundColor: TokenBuilder.stateful(TokenBuilder.colorRef<ChipTokenContext>('params.colors.background')),
+    type: 'container',
+    backgroundColor: TokenBuilder.stateful(TokenBuilder.colorValueRef<ChipTokenContext>('params.colors.background')),
     size: TokenBuilder.stateful({
-      minWidth: TokenBuilder.number(0),
+      minWidth: TokenBuilder.numberValue(TokenBuilder.number(0)),
       minHeight: TokenBuilder.numberRef<ChipTokenContext>('params.numbers.size'),
     }),
     borderRadius: TokenBuilder.borderRadius({ value: TokenBuilder.numberRef<ChipTokenContext>('params.numbers.borderRadius') }),
@@ -72,20 +72,20 @@ export const chipTokens = {
       ) }),
     layout: TokenBuilder.stateful({
       gap: TokenBuilder.numberRef<ChipTokenContext>('params.numbers.gap'),
-      direction: 'horizontal',
-      mainAxisAlignment: 'start',
-      crossAxisAlignment: 'center',
+      direction: TokenBuilder.layoutDirection('horizontal'),
+      mainAxisAlignment: TokenBuilder.mainAxisAlignment('start'),
+      crossAxisAlignment: TokenBuilder.crossAxisAlignment('center'),
     }),
   },
   icon: {
-    kind: 'icon' as const,
+    type: 'icon',
     size: TokenBuilder.stateful(TokenBuilder.numberRef<ChipTokenContext>('params.numbers.iconSize')),
     strokeWidth: TokenBuilder.stateful(TokenBuilder.numberRef<ChipTokenContext>('params.numbers.iconStrokeWidth')),
-    color: TokenBuilder.stateful(TokenBuilder.colorRef<ChipTokenContext>('params.colors.foreground')),
+    color: TokenBuilder.stateful(TokenBuilder.colorValueRef<ChipTokenContext>('params.colors.foreground')),
   },
   text: {
-    kind: 'textStyle' as const,
-    color: TokenBuilder.stateful(TokenBuilder.colorRef<ChipTokenContext>('params.colors.foreground')),
+    type: 'textStyle',
+    color: TokenBuilder.stateful(TokenBuilder.colorValueRef<ChipTokenContext>('params.colors.foreground')),
     fontSize: TokenBuilder.stateful(TokenBuilder.numberRef<ChipTokenContext>('params.numbers.fontSize')),
     fontWeight: TokenBuilder.stateful(TokenBuilder.numberRef<ChipTokenContext>('params.numbers.fontWeight')),
     fontFamily: TokenBuilder.stateful(

@@ -1,8 +1,8 @@
 import type { AssertAssignable, HightideResolverConfig, ResolverState } from '../../../primitive-tokens'
 import { TokenBuilder } from '../../../utils'
-import type { NumberToken } from '../../../primitive-tokens/number-token'
+import type { NumberValueToken } from '../../../primitive-tokens/number-value-token'
 import type { ColorValueToken } from '../../../primitive-tokens/color-value-token'
-import type { TokenRef } from '../../../utils/token-type'
+import type { TokenRef, TokenRefOrValue } from '../../../utils/token-type'
 import type { AvatarOverrideTokens } from '../avatar-tokens'
 import { HexColorUtils } from '../../../utils/hex'
 import type { ComponentTokenResolver } from '../component-token-resolver'
@@ -79,79 +79,79 @@ export const chatConversationRowTokens = {
       coloringColorVariant: 'transparent',
     },
     container: {
-    kind: 'container' as const,
+    type: 'container',
       backgroundColor: TokenBuilder.stateful(
-        TokenBuilder.color(HexColorUtils.transparent),
+        TokenBuilder.colorValue(TokenBuilder.color(HexColorUtils.transparent)),
         [
-          TokenBuilder.whenState(['selected'], TokenBuilder.colorRef('theme.color.background.color')),
+          TokenBuilder.whenState(['selected'], TokenBuilder.colorValueRef('theme.color.background.color')),
         ]
       ),
-      borderRadius: TokenBuilder.borderRadius({ value: TokenBuilder.number(0) }),
+      borderRadius: TokenBuilder.borderRadius({ value: TokenBuilder.numberValue(TokenBuilder.number(0)) }),
       padding: TokenBuilder.padding({ vertical: TokenBuilder.numberRef('theme.padding.xl'), horizontal: TokenBuilder.numberRef('theme.spacing.lg') }),
       border: TokenBuilder.stateful({
-        width: TokenBuilder.sides({ left: TokenBuilder.number(0) }),
-        color: TokenBuilder.sides({ left: TokenBuilder.color(HexColorUtils.transparent) }),
+        width: TokenBuilder.sides<TokenRefOrValue<NumberValueToken>>({ left: TokenBuilder.numberValue(TokenBuilder.number(0)) }),
+        color: TokenBuilder.sides<TokenRefOrValue<ColorValueToken>>({ left: TokenBuilder.colorValue(TokenBuilder.color(HexColorUtils.transparent)) }),
       }, [
         TokenBuilder.whenState(['selected'], {
-          width: TokenBuilder.sides({ left: TokenBuilder.numberRef('theme.borderWidth.thick') }),
-          color: TokenBuilder.sides({ left: TokenBuilder.colorRef('theme.color.primary.color') }),
+          width: TokenBuilder.sides<TokenRefOrValue<NumberValueToken>>({ left: TokenBuilder.numberRef('theme.borderWidth.thick') }),
+          color: TokenBuilder.sides<TokenRefOrValue<ColorValueToken>>({ left: TokenBuilder.colorValueRef('theme.color.primary.color') }),
         }),
       ]),
       layout: TokenBuilder.stateful({
-        direction: 'horizontal',
-        crossAxisAlignment: 'center',
+        direction: TokenBuilder.layoutDirection('horizontal'),
+        crossAxisAlignment: TokenBuilder.crossAxisAlignment('center'),
         gap: TokenBuilder.numberRef('theme.spacing.md'),
       }),
     },
     stateLayer: {
-    kind: 'container' as const,
-      borderRadius: TokenBuilder.borderRadius({ value: TokenBuilder.number(0) }),
+    type: 'container',
+      borderRadius: TokenBuilder.borderRadius({ value: TokenBuilder.numberValue(TokenBuilder.number(0)) }),
     },
   },
   contentContainer: {
     layout: TokenBuilder.stateful({
-      direction: 'vertical',
+      direction: TokenBuilder.layoutDirection('vertical'),
       gap: TokenBuilder.numberRef('theme.spacing.xs'),
-      flexGrow: TokenBuilder.number(1),
+      flexGrow: TokenBuilder.numberValue(TokenBuilder.number(1)),
     }),
   },
   headerRow: {
     layout: TokenBuilder.stateful({
-      direction: 'horizontal',
-      crossAxisAlignment: 'center',
-      mainAxisAlignment: 'space-between',
+      direction: TokenBuilder.layoutDirection('horizontal'),
+      crossAxisAlignment: TokenBuilder.crossAxisAlignment('center'),
+      mainAxisAlignment: TokenBuilder.mainAxisAlignment('space-between'),
       gap: TokenBuilder.numberRef('theme.spacing.md'),
     }),
   },
   messageRow: {
     layout: TokenBuilder.stateful({
-      direction: 'horizontal',
-      crossAxisAlignment: 'center',
-      flexGrow: TokenBuilder.number(1),
-      flexShrink: TokenBuilder.number(1),
-      mainAxisAlignment: 'space-between',
+      direction: TokenBuilder.layoutDirection('horizontal'),
+      crossAxisAlignment: TokenBuilder.crossAxisAlignment('center'),
+      flexGrow: TokenBuilder.numberValue(TokenBuilder.number(1)),
+      flexShrink: TokenBuilder.numberValue(TokenBuilder.number(1)),
+      mainAxisAlignment: TokenBuilder.mainAxisAlignment('space-between'),
       gap: TokenBuilder.numberRef('theme.spacing.sm'),
     }),
   },
   title: {
-    kind: 'textStyle' as const,
+    type: 'textStyle',
     fontSize: TokenBuilder.stateful(TokenBuilder.numberRef('theme.typography.body.md.fontSize')),
     fontFamily: TokenBuilder.stateful(TokenBuilder.fontFamilyRef('theme.typography.body.md.fontFamily')),
     lineHeight: TokenBuilder.stateful(TokenBuilder.numberRef('theme.typography.body.md.lineHeight')),
-    fontWeight: TokenBuilder.statefulField<NumberToken>(
+    fontWeight: TokenBuilder.stateful(
       TokenBuilder.numberRef('theme.fontWeights.medium'),
       [
         TokenBuilder.whenState(['unread'], TokenBuilder.numberRef('theme.fontWeights.bold')),
       ]
     ),
-    color: TokenBuilder.stateful(TokenBuilder.colorRef('theme.color.surface.onColor')),
+    color: TokenBuilder.stateful(TokenBuilder.colorValueRef('theme.color.surface.onColor')),
   },
   timestamp: {
-    kind: 'textStyle' as const,
+    type: 'textStyle',
     fontSize: TokenBuilder.stateful(TokenBuilder.numberRef('theme.typography.body.sm.fontSize')),
     fontFamily: TokenBuilder.stateful(TokenBuilder.fontFamilyRef('theme.typography.body.sm.fontFamily')),
     lineHeight: TokenBuilder.stateful(TokenBuilder.numberRef('theme.typography.body.sm.lineHeight')),
-    fontWeight: TokenBuilder.statefulField<NumberToken>(
+    fontWeight: TokenBuilder.stateful(
       TokenBuilder.numberRef('theme.fontWeights.base'),
       [
         TokenBuilder.whenState(['unread'], TokenBuilder.numberRef('theme.fontWeights.medium')),
@@ -167,22 +167,22 @@ export const chatConversationRowTokens = {
     color: TokenBuilder.stateful<ColorValueToken | TokenRef<ColorValueToken>>(
       surfaceDescriptionColor,
       [
-        TokenBuilder.whenState(['unread'], TokenBuilder.colorRef('theme.color.surface.onColor')),
+        TokenBuilder.whenState(['unread'], TokenBuilder.colorValueRef('theme.color.surface.onColor')),
       ]
     ),
   },
   unreadBadge: {
-    backgroundColor: TokenBuilder.stateful(TokenBuilder.colorRef('theme.color.primary.color')),
+    backgroundColor: TokenBuilder.stateful(TokenBuilder.colorValueRef('theme.color.primary.color')),
     size: TokenBuilder.stateful({
       minWidth: TokenBuilder.numberRef('theme.icongraphy.sizes.sm'),
       height: TokenBuilder.numberRef('theme.icongraphy.sizes.sm'),
     }),
-    borderRadius: TokenBuilder.borderRadius({ value: TokenBuilder.number(pillBorderRadius) }),
+    borderRadius: TokenBuilder.borderRadius({ value: TokenBuilder.numberValue(TokenBuilder.number(pillBorderRadius)) }),
     padding: TokenBuilder.padding({ horizontal: TokenBuilder.numberRef('theme.padding.md') }),
     layout: TokenBuilder.stateful({
-      flexShrink: TokenBuilder.number(0),
-      mainAxisAlignment: 'center',
-      crossAxisAlignment: 'center',
+      flexShrink: TokenBuilder.numberValue(TokenBuilder.number(0)),
+      mainAxisAlignment: TokenBuilder.mainAxisAlignment('center'),
+      crossAxisAlignment: TokenBuilder.crossAxisAlignment('center'),
     }),
   },
   unreadBadgeText: {
@@ -190,7 +190,7 @@ export const chatConversationRowTokens = {
     fontFamily: TokenBuilder.stateful(TokenBuilder.fontFamilyRef('theme.typography.body.sm.fontFamily')),
     lineHeight: TokenBuilder.stateful(TokenBuilder.numberRef('theme.typography.body.sm.lineHeight')),
     fontWeight: TokenBuilder.stateful(TokenBuilder.numberRef('theme.fontWeights.bold')),
-    color: TokenBuilder.stateful(TokenBuilder.colorRef('theme.color.primary.onColor')),
+    color: TokenBuilder.stateful(TokenBuilder.colorValueRef('theme.color.primary.onColor')),
     textAlign: TokenBuilder.stateful('center'),
   },
   sentIndicator: {
@@ -200,7 +200,7 @@ export const chatConversationRowTokens = {
   },
   avatarOverride: {
     container: {
-    kind: 'container' as const,
+    type: 'container',
       size: TokenBuilder.stateful({
         width: conversationAvatarSize,
         height: conversationAvatarSize,
@@ -209,10 +209,10 @@ export const chatConversationRowTokens = {
         maxWidth: conversationAvatarSize,
         maxHeight: conversationAvatarSize,
       }),
-      borderRadius: TokenBuilder.borderRadius({ value: TokenBuilder.calc('divide', conversationAvatarSize, TokenBuilder.number(2)) }),
+      borderRadius: TokenBuilder.borderRadius({ value: TokenBuilder.calc('divide', conversationAvatarSize, TokenBuilder.numberValue(TokenBuilder.number(2))) }),
     },
     icon: {
-    kind: 'icon' as const,
+    type: 'icon',
       size: TokenBuilder.stateful(conversationAvatarSize),
     },
   },

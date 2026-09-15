@@ -78,7 +78,7 @@ export const selectTokenResolver: SelectTokenResolver = ({
   const resolved = resolveConfigNode<{
     stateLayer: ContainerTokens,
     header: ContainerTokens,
-    menuSize: ContainerTokens['size'],
+    menu: ContainerTokens,
     option: ContainerTokens,
     optionText: TextStyleTokens,
     emptyText: TextStyleTokens,
@@ -112,7 +112,7 @@ export const selectTokenResolver: SelectTokenResolver = ({
     overlay: modal.background,
     menu: {
       ...modal.menu,
-      size: resolved.menuSize,
+      size: resolved.menu.size,
     },
     header: resolved.header,
     option: resolved.option,

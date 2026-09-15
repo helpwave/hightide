@@ -18,13 +18,13 @@ export type ChatMessageListTokenResolver = ComponentTokenResolver<
 
 export const chatMessageListTokens = {
   container: {
-    kind: 'container' as const,
-    backgroundColor: TokenBuilder.stateful(TokenBuilder.colorRef('theme.color.background.color')),
+    type: 'container',
+    backgroundColor: TokenBuilder.stateful(TokenBuilder.colorValueRef('theme.color.background.color')),
     padding: TokenBuilder.padding({ vertical: TokenBuilder.calc(
-        'add',
-        TokenBuilder.numberRef('theme.spacing.lg'),
-        TokenBuilder.numberRef('theme.spacing.xs')
-      ), horizontal: TokenBuilder.numberRef('theme.spacing.lg') }),
+      'add',
+      TokenBuilder.numberRef('theme.spacing.lg'),
+      TokenBuilder.numberRef('theme.spacing.xs')
+    ), horizontal: TokenBuilder.numberRef('theme.spacing.lg') }),
     layout: TokenBuilder.stateful({
       gap: TokenBuilder.numberRef('theme.padding.xl'),
     }),

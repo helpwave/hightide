@@ -1,5 +1,5 @@
 import { TokenBuilder } from '../../../utils'
-import type { AssertAssignable, ColorToken, HightideResolverConfig, HightideResolverParams, ResolverState } from '../../../primitive-tokens'
+import type { AssertAssignable, ColorValueToken, HightideResolverConfig, HightideResolverParams, ResolverState } from '../../../primitive-tokens'
 import type { ColorPairToken } from '../../../theme-tokens/create'
 import type { ComponentTokenResolver } from '../component-token-resolver'
 import type { ComponentTokens } from '../../component-tokens'
@@ -30,32 +30,32 @@ export type ChatSystemLineTokenResolver = ComponentTokenResolver<
 
 export type ChatSystemLineParams = AssertAssignable<{
   colors: {
-    foreground: ColorToken,
+    foreground: ColorValueToken,
   },
 }, HightideResolverParams>
 export type ChatSystemLineTokenContext = HightideTokenPathProvider<ChatSystemLineParams>
 
 export const chatSystemLineTokens = {
   container: {
-    kind: 'container' as const,
+    type: 'container',
     layout: TokenBuilder.stateful({
-      direction: 'horizontal',
-      mainAxisAlignment: 'center',
-      crossAxisAlignment: 'center',
+      direction: TokenBuilder.layoutDirection('horizontal'),
+      mainAxisAlignment: TokenBuilder.mainAxisAlignment('center'),
+      crossAxisAlignment: TokenBuilder.crossAxisAlignment('center'),
       selfCrossAxisAlignment: 'center',
       gap: TokenBuilder.numberRef<ChatSystemLineTokenContext>('theme.padding.md'),
     }),
   },
   text: {
-    kind: 'textStyle' as const,
+    type: 'textStyle',
     fontSize: TokenBuilder.stateful(TokenBuilder.numberRef<ChatSystemLineTokenContext>('theme.typography.body.sm.fontSize')),
     fontFamily: TokenBuilder.stateful(TokenBuilder.fontFamilyRef<ChatSystemLineTokenContext>('theme.typography.body.sm.fontFamily')),
     lineHeight: TokenBuilder.stateful(TokenBuilder.numberRef<ChatSystemLineTokenContext>('theme.typography.body.sm.lineHeight')),
     fontWeight: TokenBuilder.stateful(TokenBuilder.numberRef<ChatSystemLineTokenContext>('theme.fontWeights.medium')),
-    color: TokenBuilder.stateful(TokenBuilder.colorRef<ChatSystemLineTokenContext>('params.colors.foreground')),
+    color: TokenBuilder.stateful(TokenBuilder.colorValueRef<ChatSystemLineTokenContext>('params.colors.foreground')),
   },
   icon: {
-    kind: 'icon' as const,
-    color: TokenBuilder.stateful(TokenBuilder.colorRef<ChatSystemLineTokenContext>('params.colors.foreground')),
+    type: 'icon',
+    color: TokenBuilder.stateful(TokenBuilder.colorValueRef<ChatSystemLineTokenContext>('params.colors.foreground')),
   },
 } as const

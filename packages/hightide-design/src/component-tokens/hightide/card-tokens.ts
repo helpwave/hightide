@@ -19,14 +19,14 @@ export type CardTokenResolver = ComponentTokenResolver<
 >
 
 export const cardTokens = {
-  kind: 'container' as const,
-  backgroundColor: TokenBuilder.stateful(TokenBuilder.colorRef('theme.color.surface.color')),
+  type: 'container',
+  backgroundColor: TokenBuilder.stateful(TokenBuilder.colorValueRef('theme.color.surface.color')),
   borderRadius: TokenBuilder.borderRadius({ value: TokenBuilder.numberRef('theme.borderRadius.lg') }),
   layout: TokenBuilder.stateful({
-    direction: 'vertical',
-    crossAxisAlignment: 'stretch',
-    mainAxisAlignment: 'start',
-    gap: TokenBuilder.number(0),
+    direction: TokenBuilder.layoutDirection('vertical'),
+    crossAxisAlignment: TokenBuilder.crossAxisAlignment('stretch'),
+    mainAxisAlignment: TokenBuilder.mainAxisAlignment('start'),
+    gap: TokenBuilder.numberValue(TokenBuilder.number(0)),
   }),
   shadow: TokenBuilder.stateful(elevationTokens('level2')),
 } as const

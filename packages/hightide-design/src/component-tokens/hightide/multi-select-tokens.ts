@@ -1,10 +1,12 @@
 import { TokenBuilder } from '../../utils'
-import type { AssertAssignable, ColorToken, HightideResolverConfig, HightideResolverParams, ResolverState } from '../../primitive-tokens'
+import type { AssertAssignable, ColorValueToken, HightideResolverConfig, HightideResolverParams, ResolverState } from '../../primitive-tokens'
 import type { ColorPairToken } from '../../theme-tokens/create'
 import { HexColorUtils } from '../../utils/hex'
 import type { ComponentTokenResolver } from './component-token-resolver'
 import type { ComponentTokens } from '../component-tokens'
 import type { ResolvableContainerTokens } from '../resolvable-container-tokens'
+import type { ResolvableLeaves } from '../resolvable-leaves'
+import type { ContainerSizeTokens } from '../container-tokens'
 import type { ResolvableIconTokens } from '../resolvable-icon-tokens'
 import type { ResolvableTextStyleTokens } from '../resolvable-text-style-tokens'
 import { inputStateValues } from './input-tokens'
@@ -57,9 +59,9 @@ export type MultiSelectTokenResolver = ComponentTokenResolver<
 
 export type MultiSelectParams = AssertAssignable<{
   colors: {
-    tint: ColorToken,
-    tintColor: ColorToken,
-    accent: ColorToken,
+    tint: ColorValueToken,
+    tintColor: ColorValueToken,
+    accent: ColorValueToken,
   },
 }, HightideResolverParams>
 export type MultiSelectTokenContext = HightideTokenPathProvider<MultiSelectParams>
@@ -67,77 +69,82 @@ export type MultiSelectTokenContext = HightideTokenPathProvider<MultiSelectParam
 const menuHeight = TokenBuilder.calc(
   'multiply',
   TokenBuilder.numberRef<MultiSelectTokenContext>('theme.size.md'),
-  TokenBuilder.number(11.5)
+  TokenBuilder.numberValue(TokenBuilder.number(11.5))
 )
 
 export const multiSelectTokens = {
   stateLayer: {
-    kind: 'container' as const,
-    backgroundColor: TokenBuilder.stateful(TokenBuilder.colorRef<MultiSelectTokenContext>('params.colors.tint')),
+    type: 'container',
+    backgroundColor: TokenBuilder.stateful(TokenBuilder.colorValueRef<MultiSelectTokenContext>('params.colors.tint')),
   },
   header: {
-    kind: 'container' as const,
+    type: 'container',
     padding: TokenBuilder.padding({ top: TokenBuilder.numberRef<MultiSelectTokenContext>('theme.padding.xl'), bottom: TokenBuilder.numberRef<MultiSelectTokenContext>('theme.padding.md'), left: TokenBuilder.numberRef<MultiSelectTokenContext>('theme.padding.xl'), right: TokenBuilder.numberRef<MultiSelectTokenContext>('theme.padding.xl') }),
   },
-  menuSize: TokenBuilder.stateful(
-    {
-      maxHeight: menuHeight,
-    },
-    [
-      TokenBuilder.whenState(['search'], {
-        minHeight: menuHeight,
-        height: menuHeight,
-      }),
-    ]
-  ),
-  option: {
-    kind: 'container' as const,
-    backgroundColor: TokenBuilder.stateful(
-      TokenBuilder.color(HexColorUtils.transparent),
+  menu: {
+    type: 'container',
+    size: TokenBuilder.stateful<ResolvableLeaves<ContainerSizeTokens>, MultiSelectState>(
+      {
+        maxHeight: menuHeight,
+      },
       [
-        TokenBuilder.whenState(['highlighted'], TokenBuilder.colorRef<MultiSelectTokenContext>('params.colors.tintColor')),
+        TokenBuilder.whenState(['search'], {
+          minHeight: menuHeight,
+          height: menuHeight,
+        }),
+      ]
+    ),
+  },
+  option: {
+    type: 'container',
+    backgroundColor: TokenBuilder.stateful(
+      TokenBuilder.colorValue(TokenBuilder.color(HexColorUtils.transparent)),
+      [
+        TokenBuilder.whenState(['highlighted'], TokenBuilder.colorValueRef<MultiSelectTokenContext>('params.colors.tintColor')),
       ]
     ),
     opacity: TokenBuilder.stateful(
-      TokenBuilder.number(1),
+      TokenBuilder.numberValue(TokenBuilder.number(1)),
       [
-        TokenBuilder.whenState(['disabled'], TokenBuilder.number(0.5)),
+        TokenBuilder.whenState(['disabled'], TokenBuilder.numberValue(TokenBuilder.number(0.5))),
       ]
     ),
     padding: TokenBuilder.padding({ vertical: TokenBuilder.numberRef<MultiSelectTokenContext>('theme.padding.xl'), horizontal: TokenBuilder.numberRef<MultiSelectTokenContext>('theme.spacing.lg') }),
     layout: TokenBuilder.stateful({
-      direction: 'horizontal',
-      crossAxisAlignment: 'center',
+      direction: TokenBuilder.layoutDirection('horizontal'),
+      crossAxisAlignment: TokenBuilder.crossAxisAlignment('center'),
       gap: TokenBuilder.numberRef<MultiSelectTokenContext>('theme.padding.xl'),
     }),
   },
   optionText: {
+    type: 'textStyle',
     fontSize: TokenBuilder.stateful(TokenBuilder.numberRef<MultiSelectTokenContext>('theme.typography.body.md.fontSize')),
     fontFamily: TokenBuilder.stateful(TokenBuilder.fontFamilyRef<MultiSelectTokenContext>('theme.typography.body.md.fontFamily')),
     lineHeight: TokenBuilder.stateful(TokenBuilder.numberRef<MultiSelectTokenContext>('theme.typography.body.md.lineHeight')),
-    fontWeight: TokenBuilder.statefulField<NumberToken>(
+    fontWeight: TokenBuilder.stateful(
       TokenBuilder.numberRef<MultiSelectTokenContext>('theme.fontWeights.base'),
       [
         TokenBuilder.whenState(['selected'], TokenBuilder.numberRef<MultiSelectTokenContext>('theme.fontWeights.semibold')),
       ]
     ),
-    color: TokenBuilder.statefulField<ColorToken, MultiSelectTokenContext>(
-      TokenBuilder.colorRef<MultiSelectTokenContext>('theme.color.surface.onColor'),
+    color: TokenBuilder.stateful(
+      TokenBuilder.colorValueRef<MultiSelectTokenContext>('theme.color.surface.onColor'),
       [
-        TokenBuilder.whenState(['selected'], TokenBuilder.colorRef<MultiSelectTokenContext>('params.colors.accent')),
+        TokenBuilder.whenState(['selected'], TokenBuilder.colorValueRef<MultiSelectTokenContext>('params.colors.accent')),
       ]
     ),
   },
   emptyText: {
+    type: 'textStyle',
     fontSize: TokenBuilder.stateful(TokenBuilder.numberRef<MultiSelectTokenContext>('theme.typography.body.md.fontSize')),
     fontFamily: TokenBuilder.stateful(TokenBuilder.fontFamilyRef<MultiSelectTokenContext>('theme.typography.body.md.fontFamily')),
     lineHeight: TokenBuilder.stateful(TokenBuilder.numberRef<MultiSelectTokenContext>('theme.typography.body.md.lineHeight')),
     fontWeight: TokenBuilder.stateful(TokenBuilder.numberRef<MultiSelectTokenContext>('theme.typography.body.md.fontWeight')),
     color: TokenBuilder.stateful(
       TokenBuilder.colorBlend(
-        TokenBuilder.colorRef<MultiSelectTokenContext>('theme.color.surface.color'),
+        TokenBuilder.colorValueRef<MultiSelectTokenContext>('theme.color.surface.color'),
         TokenBuilder.colorOpacity(
-          TokenBuilder.colorRef<MultiSelectTokenContext>('theme.color.surface.onColor'),
+          TokenBuilder.colorValueRef<MultiSelectTokenContext>('theme.color.surface.onColor'),
           TokenBuilder.numberRef<MultiSelectTokenContext>('theme.config.appearancePercentages.subtle')
         )
       )

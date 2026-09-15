@@ -1,5 +1,5 @@
 import { TokenBuilder } from '../../utils'
-import type { AssertAssignable, ColorToken, HightideResolverConfig, NumberToken, HightideResolverParams, ResolverState } from '../../primitive-tokens'
+import type { AssertAssignable, ColorValueToken, HightideResolverConfig, NumberValueToken, HightideResolverParams, ResolverState } from '../../primitive-tokens'
 import type { ComponentTokenResolver } from './component-token-resolver'
 import type { ComponentTokensNode } from '../component-tokens'
 import type { ResolvableContainerTokens } from '../resolvable-container-tokens'
@@ -10,7 +10,7 @@ export type DividerDirection = 'horizontal' | 'vertical'
 export type DividerComponentResolverProps = {
   overrides?: {
     direction?: DividerDirection,
-    color?: ColorToken,
+    color?: ColorValueToken,
     width?: number,
     margin?: number,
   },
@@ -26,11 +26,11 @@ export type DividerTokens = AssertAssignable<
 
 export type DividerParams = AssertAssignable<{
   colors: {
-    color: ColorToken,
+    color: ColorValueToken,
   },
   numbers: {
-    width: NumberToken,
-    margin: NumberToken,
+    width: NumberValueToken,
+    margin: NumberValueToken,
   },
 }, HightideResolverParams>
 export type DividerTokenContext = HightideTokenPathProvider<DividerParams>
@@ -41,7 +41,7 @@ export type DividerTokenResolver = ComponentTokenResolver<
 >
 
 export const dividerTokens = {
-  kind: 'container' as const,
+  type: 'container',
   margin: TokenBuilder.margin(
     {
       horizontal: TokenBuilder.numberRef<DividerTokenContext>('params.numbers.margin'),
@@ -57,23 +57,25 @@ export const dividerTokens = {
   border: TokenBuilder.stateful(
     {
       width: TokenBuilder.sides({ bottom: TokenBuilder.numberRef<DividerTokenContext>('params.numbers.width') }),
-      color: TokenBuilder.sides({ bottom: TokenBuilder.colorRef<DividerTokenContext>('params.colors.color') }),
-      style: 'solid',
+      color: TokenBuilder.sides({ bottom: TokenBuilder.colorValueRef<DividerTokenContext>('params.colors.color') }),
+      style: TokenBuilder.borderStyle('solid'),
     },
     [
       TokenBuilder.whenState(['vertical'], {
         width: TokenBuilder.sides({ right: TokenBuilder.numberRef<DividerTokenContext>('params.numbers.width') }),
-        color: TokenBuilder.sides({ right: TokenBuilder.colorRef<DividerTokenContext>('params.colors.color') }),
-        style: 'solid',
+        color: TokenBuilder.sides({ right: TokenBuilder.colorValueRef<DividerTokenContext>('params.colors.color') }),
+        style: TokenBuilder.borderStyle('solid'),
       }),
     ]
   ),
   layout: TokenBuilder.stateful(
     {
-      selfCrossAxisAlignment: 'stretch',
+      selfCrossAxisAlignment: TokenBuilder.crossAxisAlignment('stretch'),
     },
     [
-      TokenBuilder.whenState(['vertical'], {}),
+      TokenBuilder.whenState(['vertical'], {
+        selfCrossAxisAlignment: TokenBuilder.crossAxisAlignment('stretch'),
+      }),
     ]
   ),
 } as const

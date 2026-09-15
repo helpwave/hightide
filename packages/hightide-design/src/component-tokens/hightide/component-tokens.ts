@@ -1,14 +1,9 @@
-import type { AssertAssignable } from '../../utils/assert'
-import type { HightideResolverConfig, ResolverState } from '../../primitive-tokens/resolver-types'
 import {
   avatarGroupTokens,
   avatarTokens,
   avatarWithStatusTokens
 } from './avatar-tokens'
 import { buttonTokens } from './button-tokens'
-import type {
-  ComponentTokens as GenericComponentTokens
-} from '../component-tokens'
 import { cardTokens } from './card-tokens'
 import { chatAttachmentMessageBubbleTokens } from './chat/attachment-message-bubble'
 import { chatConversationListTokens } from './chat/conversation-list'
@@ -75,7 +70,3 @@ export const componentTokens = {
 
 export type HightideComponentTokens = typeof componentTokens
 
-type _assertHightideComponentTokens = AssertAssignable<
-  HightideComponentTokens,
-  GenericComponentTokens<ResolverState, HightideResolverConfig>
->

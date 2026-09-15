@@ -1,6 +1,6 @@
-import type { ColorToken } from '../../primitive-tokens/color-token'
+import type { ColorValueToken } from '../../primitive-tokens/color-value-token'
 import type { HexColor } from '../../utils/hex-color'
-import type { NumberToken } from '../../primitive-tokens/number-token'
+import type { NumberValueToken } from '../../primitive-tokens/number-value-token'
 import type {
   ColorPairToken,
   ThemeLayoutSize,
@@ -8,8 +8,8 @@ import type {
 } from '../../theme-tokens/create'
 import type { SemanticTokenResolver } from '../types'
 import type { HightideThemeTokens } from '../../theme-tokens/hightide'
-import type { InputState } from '../../component-tokens/input-tokens'
-import type { PressableState } from '../../component-tokens/pressable-tokens'
+import type { InputState } from '../../component-tokens/hightide/input-tokens'
+import type { PressableState } from '../../component-tokens/hightide/pressable-tokens'
 import type {
   ComponentSize,
   ContainerLayoutToken,
@@ -24,28 +24,28 @@ type HightideResolver<TProps, TResult> =
 export type ColoringColorVariant = 'normal' | 'tonal' | 'transparent'
 
 export type ColoringColorTokens = {
-  color: ColorToken,
-  onColor: ColorToken,
-  accent: ColorToken,
+  color: ColorValueToken,
+  onColor: ColorValueToken,
+  accent: ColorValueToken,
 }
 
 export type ColoringToken = {
-  foreground: ColorToken,
-  background: ColorToken,
-  accent: ColorToken,
+  foreground: ColorValueToken,
+  background: ColorValueToken,
+  accent: ColorValueToken,
 }
 
 export type PressableColoringTokens = {
-  background: ColorToken,
-  foreground: ColorToken,
-  border: ColorToken,
-  outline: ColorToken,
+  background: ColorValueToken,
+  foreground: ColorValueToken,
+  border: ColorValueToken,
+  outline: ColorValueToken,
 }
 
 export type InputColoringTokens = {
-  background: ColorToken,
-  text: ColorToken,
-  border: ColorToken,
+  background: ColorValueToken,
+  text: ColorValueToken,
+  border: ColorValueToken,
 }
 
 export type ColoringStyle = 'filled' | 'foreground'
@@ -94,8 +94,8 @@ export type SemanticTokenResolvers = {
   }, PressableColoringTokens>,
   pressableStateLayerTint: HightideResolver<{
     states: PressableState,
-    color: ColorToken,
-  }, ColorToken>,
+    color: ColorValueToken,
+  }, ColorValueToken>,
   inputColoring: HightideResolver<{
     state: InputState,
     color?: ColorPairToken,
@@ -103,7 +103,7 @@ export type SemanticTokenResolvers = {
   controlLayout: HightideResolver<{
     size: ThemeLayoutSize,
   }, ControlElementLayoutToken>,
-  touchTargetSize: HightideResolver<object, NumberToken>,
+  touchTargetSize: HightideResolver<object, NumberValueToken>,
   containerLayout: HightideResolver<{
     size: ThemeLayoutSize,
   }, ContainerLayoutToken>,
@@ -113,15 +113,15 @@ export type SemanticTokenResolvers = {
   tintedSurface: HightideResolver<{
     tintColor: HexColor,
     tintStrength?: TintStrength,
-  }, ColorToken>,
+  }, ColorValueToken>,
   withAppearance: HightideResolver<{
     colorPair: ColorPairToken,
     appearance: Appearance,
-  }, ColorToken>,
+  }, ColorValueToken>,
   asFaded: HightideResolver<{
     colorPair: ColorPairToken,
-  }, ColorToken>,
+  }, ColorValueToken>,
   asDescription: HightideResolver<{
     colorPair: ColorPairToken,
-  }, ColorToken>,
+  }, ColorValueToken>,
 }

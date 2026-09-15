@@ -34,6 +34,30 @@ export const pressableButtonGap = TokenBuilder.stateful(
   TokenBuilder.whenThemeSize((size) => TokenBuilder.numberRef(`theme.spacing.${size}`))
 )
 
+export const pressableButtonMinHeightSize = TokenBuilder.stateful(
+  {
+    minHeight: TokenBuilder.numberRef('theme.size.md'),
+  },
+  TokenBuilder.whenThemeSize((size) => ({
+    minHeight: TokenBuilder.numberRef(`theme.size.${size}`),
+  }))
+)
+
+export const pressableButtonCenteredLayout = TokenBuilder.stateful(
+  {
+    gap: TokenBuilder.numberRef('theme.spacing.md'),
+    direction: TokenBuilder.layoutDirection('horizontal'),
+    mainAxisAlignment: TokenBuilder.mainAxisAlignment('center'),
+    crossAxisAlignment: TokenBuilder.crossAxisAlignment('center'),
+  },
+  TokenBuilder.whenThemeSize((size) => ({
+    gap: TokenBuilder.numberRef(`theme.spacing.${size}`),
+    direction: TokenBuilder.layoutDirection('horizontal'),
+    mainAxisAlignment: TokenBuilder.mainAxisAlignment('center'),
+    crossAxisAlignment: TokenBuilder.crossAxisAlignment('center'),
+  }))
+)
+
 export const pressableButtonIconSize = TokenBuilder.stateful(
   TokenBuilder.numberRef('theme.icongraphy.sizes.md'),
   TokenBuilder.whenThemeSize((size) => TokenBuilder.numberRef(`theme.icongraphy.sizes.${toButtonIconSize(size)}`))
@@ -91,12 +115,12 @@ const outlinedPaddingFor = (size: ThemeLayoutSize): AxisPaddingInput => ({
   vertical: TokenBuilder.calc(
     'max',
     TokenBuilder.calc('subtract', insetFor(size), pressableButtonBorderWidth),
-    TokenBuilder.number(0)
+    TokenBuilder.numberValue(TokenBuilder.number(0))
   ),
   horizontal: TokenBuilder.calc(
     'max',
     TokenBuilder.calc('subtract', horizontalContentPaddingFor(size), pressableButtonBorderWidth),
-    TokenBuilder.number(0)
+    TokenBuilder.numberValue(TokenBuilder.number(0))
   ),
 })
 

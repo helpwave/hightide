@@ -1,18 +1,17 @@
 import { TokenBuilder } from '../../utils'
 import type { AssertAssignable, HightideResolverParams, HightideResolverConfig, ResolverState } from '../../primitive-tokens'
-import type { NumberToken } from '../../primitive-tokens/number-token'
+import type { NumberValueToken } from '../../primitive-tokens/number-value-token'
 import type { IconSize } from '../../theme-tokens/create'
 import type { ResolvableIconTokens } from '../resolvable-icon-tokens'
 import type { ComponentTokenResolver } from './component-token-resolver'
 import type { HightideTokenPathProvider } from './token-context'
-import type { IconTokens } from '../icon-tokens'
 
 export type { IconTokens } from '../icon-tokens'
 export type { ResolvableIconTokens } from '../resolvable-icon-tokens'
 
 export type IconParams = AssertAssignable<{
   numbers: {
-    iconSize: NumberToken,
+    iconSize: NumberValueToken,
   },
 }, HightideResolverParams>
 export type IconTokenContext = HightideTokenPathProvider<IconParams>
@@ -37,16 +36,16 @@ export type IconTokenResolver = ComponentTokenResolver<
 >
 
 export const iconTokens = {
-  kind: 'icon' as const,
+  type: 'icon',
   size: TokenBuilder.stateful(TokenBuilder.numberRef<IconTokenContext>(
     'params.numbers.iconSize',
     TokenBuilder.numberRef<IconTokenContext>('theme.icongraphy.sizes.md')
   )),
   strokeWidth: TokenBuilder.stateful(TokenBuilder.numberRef<IconTokenContext>('theme.icongraphy.strokeWidth')),
   color: TokenBuilder.stateful(
-    TokenBuilder.colorRef<IconTokenContext>(
+    TokenBuilder.colorValueRef<IconTokenContext>(
       'semantics.color.coloring.foreground',
-      TokenBuilder.colorRef<IconTokenContext>('theme.color.background.onColor')
+      TokenBuilder.colorValueRef<IconTokenContext>('theme.color.background.onColor')
     )
   ),
-}
+} as const

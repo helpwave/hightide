@@ -21,40 +21,40 @@ export type ModalTokenResolver = ComponentTokenResolver<
 
 export const modalTokens = {
   background: {
-    kind: 'container' as const,
-    backgroundColor: TokenBuilder.stateful(TokenBuilder.colorRef('theme.color.overlay')),
+    type: 'container',
+    backgroundColor: TokenBuilder.stateful(TokenBuilder.colorValueRef('theme.color.overlay')),
     padding: TokenBuilder.padding({ vertical: TokenBuilder.numberRef('theme.spacing.xl'), horizontal: TokenBuilder.numberRef('theme.spacing.xl') }),
     layout: TokenBuilder.stateful({
-      direction: 'vertical',
-      mainAxisAlignment: 'center',
-      flexGrow: TokenBuilder.number(1),
+      direction: TokenBuilder.layoutDirection('vertical'),
+      mainAxisAlignment: TokenBuilder.mainAxisAlignment('center'),
+      flexGrow: TokenBuilder.numberValue(TokenBuilder.number(1)),
     }),
   },
   menu: {
-    kind: 'container' as const,
-    backgroundColor: TokenBuilder.stateful(TokenBuilder.colorRef('theme.color.surfaceVariant.color')),
-    overflow: TokenBuilder.stateful('hidden'),
+    type: 'container',
+    backgroundColor: TokenBuilder.stateful(TokenBuilder.colorValueRef('theme.color.surfaceVariant.color')),
+    overflow: TokenBuilder.stateful(TokenBuilder.overflow('hidden')),
     position: TokenBuilder.stateful({
-      type: 'relative',
+      type: 'relative' as const,
     }),
     layout: TokenBuilder.stateful({
-      direction: 'vertical',
-      crossAxisAlignment: 'stretch',
+      direction: TokenBuilder.layoutDirection('vertical'),
+      crossAxisAlignment: TokenBuilder.crossAxisAlignment('stretch'),
     }),
     borderRadius: TokenBuilder.borderRadius({ value: TokenBuilder.numberRef('theme.borderRadius.lg') }),
     border: TokenBuilder.stateful({
       width: TokenBuilder.sides({ value: TokenBuilder.numberRef('theme.borderWidth.thin') }),
-      color: TokenBuilder.sides({ value: TokenBuilder.colorRef('theme.color.border') }),
+      color: TokenBuilder.sides({ value: TokenBuilder.colorValueRef('theme.color.border') }),
     }),
     shadow: TokenBuilder.stateful(elevationTokens('level4')),
   },
   closeButton: {
-    kind: 'container' as const,
+    type: 'container',
     position: TokenBuilder.stateful({
-      type: 'absolute',
-      top: TokenBuilder.number(0),
-      right: TokenBuilder.number(0),
-      zIndex: TokenBuilder.number(1),
+      type: 'absolute' as const,
+      top: TokenBuilder.numberValue(TokenBuilder.number(0)),
+      right: TokenBuilder.numberValue(TokenBuilder.number(0)),
+      zIndex: TokenBuilder.numberValue(TokenBuilder.number(1)),
     }),
     padding: TokenBuilder.padding({ top: TokenBuilder.numberRef('theme.padding.md'), right: TokenBuilder.numberRef('theme.padding.md') }),
   },

@@ -44,6 +44,12 @@ import type { Token, TokenRef, TokenRefOrValue, TokenRefPath } from './token-typ
 import type { ColorToken } from '../primitive-tokens'
 import type { ThemeLayoutSize } from '../theme-tokens/create'
 
+type WidenTokenLeaves<T> =
+  T extends TokenRef<infer U extends Token> ? TokenRefOrValue<U>
+    : T extends Token ? TokenRefOrValue<T>
+      : T extends object ? { [K in keyof T]: WidenTokenLeaves<T[K]> }
+        : T
+
 const number = (value: number): NumberToken => ({
   type: 'number',
   value,
@@ -278,10 +284,10 @@ const stateful = <
   S extends ResolverState = ResolverState
 >(
     base?: V,
-    overrides?: ReadonlyArray<ContextBasedPropertyOverride<V, S, HightideResolverConfig>>
-  ): ContextBasedProperty<V, S, HightideResolverConfig> => ({
-    base: base,
-    overrides,
+    overrides?: ReadonlyArray<ContextBasedPropertyOverride<WidenTokenLeaves<NoInfer<V>> | undefined, S, HightideResolverConfig>>
+  ): ContextBasedProperty<WidenTokenLeaves<V>, S, HightideResolverConfig> => ({
+    base: base as WidenTokenLeaves<V> | undefined,
+    overrides: overrides as ContextBasedProperty<WidenTokenLeaves<V>, S, HightideResolverConfig>['overrides'],
   })
 
 const statefulField = <
@@ -384,15 +390,14 @@ const corners = <V>(
 ): PhysicalBoxCorners<V> => resolveBoxCorners(input, orientation, inline, block)
 
 const padding = <
-  V,
   S extends ResolverState = ResolverState
 >(
-    input: BoxSidesInput<V>,
-    overrides?: ReadonlyArray<ContextBasedPropertyOverride<PhysicalBoxSides<V>, S, HightideResolverConfig>>
-  ): ContextBasedProperty<PhysicalBoxSides<V>, S, HightideResolverConfig> => stateful<PhysicalBoxSides<V>, S>(
+    input: BoxSidesInput<TokenRefOrValue<NumberValueToken>>,
+    overrides?: ReadonlyArray<ContextBasedPropertyOverride<PhysicalBoxSides<TokenRefOrValue<NumberValueToken>>, S, HightideResolverConfig>>
+  ): ContextBasedProperty<PhysicalBoxSides<TokenRefOrValue<NumberValueToken>>, S, HightideResolverConfig> => stateful<PhysicalBoxSides<TokenRefOrValue<NumberValueToken>>, S>(
     resolveBoxSides(input),
     [
-      ...writingModeOverrides<PhysicalBoxSides<V>, S>(
+      ...writingModeOverrides<PhysicalBoxSides<TokenRefOrValue<NumberValueToken>>, S>(
         (config) => resolveBoxSides(
           input,
           config['writing-orientation'],
@@ -405,23 +410,21 @@ const padding = <
   )
 
 const margin = <
-  V,
   S extends ResolverState = ResolverState
 >(
-    input: BoxSidesInput<V>,
-    overrides?: ReadonlyArray<ContextBasedPropertyOverride<PhysicalBoxSides<V>, S, HightideResolverConfig>>
-  ): ContextBasedProperty<PhysicalBoxSides<V>, S, HightideResolverConfig> => padding(input, overrides)
+    input: BoxSidesInput<TokenRefOrValue<NumberValueToken>>,
+    overrides?: ReadonlyArray<ContextBasedPropertyOverride<PhysicalBoxSides<TokenRefOrValue<NumberValueToken>>, S, HightideResolverConfig>>
+  ): ContextBasedProperty<PhysicalBoxSides<TokenRefOrValue<NumberValueToken>>, S, HightideResolverConfig> => padding(input, overrides)
 
 const borderRadius = <
-  V,
   S extends ResolverState = ResolverState
 >(
-    input: BoxCornersInput<V>,
-    overrides?: ReadonlyArray<ContextBasedPropertyOverride<PhysicalBoxCorners<V>, S, HightideResolverConfig>>
-  ): ContextBasedProperty<PhysicalBoxCorners<V>, S, HightideResolverConfig> => stateful<PhysicalBoxCorners<V>, S>(
+    input: BoxCornersInput<TokenRefOrValue<NumberValueToken>>,
+    overrides?: ReadonlyArray<ContextBasedPropertyOverride<PhysicalBoxCorners<TokenRefOrValue<NumberValueToken>>, S, HightideResolverConfig>>
+  ): ContextBasedProperty<PhysicalBoxCorners<TokenRefOrValue<NumberValueToken>>, S, HightideResolverConfig> => stateful<PhysicalBoxCorners<TokenRefOrValue<NumberValueToken>>, S>(
     resolveBoxCorners(input),
     [
-      ...writingModeOverrides<PhysicalBoxCorners<V>, S>(
+      ...writingModeOverrides<PhysicalBoxCorners<TokenRefOrValue<NumberValueToken>>, S>(
         (config) => resolveBoxCorners(
           input,
           config['writing-orientation'],

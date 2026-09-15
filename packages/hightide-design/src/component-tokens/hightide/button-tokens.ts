@@ -10,7 +10,7 @@ import { HexColorUtils } from '../../utils/hex'
 import type { ComponentTokenResolver } from './component-token-resolver'
 import type { ComponentTokens } from '../component-tokens'
 import { elevationTokens } from './elevation-tokens'
-import type { ResolvableContainerTokens } from '../resolvable-container-tokens'
+import type { ResolvableContainerTokens, ResolvableOutlineTokens, ResolvableShadowTokens } from '../resolvable-container-tokens'
 import type { ResolvableIconTokens } from '../resolvable-icon-tokens'
 import type { ResolvableTextStyleTokens } from '../resolvable-text-style-tokens'
 import type { PressableButtonTokenParams } from './pressable-button-params'
@@ -22,11 +22,11 @@ import {
   pressableButtonFontFamily,
   pressableButtonFontSize,
   pressableButtonFontWeight,
-  pressableButtonGap,
+  pressableButtonCenteredLayout,
   pressableButtonIconSize,
   pressableButtonIconStrokeWidth,
   pressableButtonLineHeight,
-  pressableButtonMinHeight
+  pressableButtonMinHeightSize
 } from './pressable-button-shared-tokens'
 import type { HightideTokenPathProvider } from './token-context'
 
@@ -67,12 +67,12 @@ export type ButtonTokenResolver = ComponentTokenResolver<
 
 export const buttonTokens = {
   container: {
-    kind: 'container' as const,
+    type: 'container',
     backgroundColor: TokenBuilder.stateful(TokenBuilder.colorValueRef<ButtonTokenContext>('semantics.color.coloring.background')),
     opacity: TokenBuilder.stateful(
-      TokenBuilder.number(1),
+      TokenBuilder.numberValue(TokenBuilder.number(1)),
       [
-        TokenBuilder.whenState(['disabled'], TokenBuilder.number(0.6)),
+        TokenBuilder.whenState(['disabled'], TokenBuilder.numberValue(TokenBuilder.number(0.6))),
       ]
     ),
     border: TokenBuilder.stateful(
@@ -103,33 +103,26 @@ export const buttonTokens = {
         }),
       ]
     ),
-    shadow: TokenBuilder.stateful(undefined,
+    shadow: TokenBuilder.stateful<ResolvableShadowTokens>(undefined,
       [
         TokenBuilder.whenState(['elevated'], elevationTokens('level1'), ['hovered']),
         TokenBuilder.whenState(['elevated', 'hovered'], elevationTokens('level2')),
       ]),
-    size: {
-      minHeight: pressableButtonMinHeight,
-    },
+    size: pressableButtonMinHeightSize,
     borderRadius: pressableButtonBorderRadius,
     padding: buttonPadding,
-    layout: {
-      gap: pressableButtonGap,
-      direction: 'horizontal',
-      mainAxisAlignment: 'center',
-      crossAxisAlignment: 'center',
-    },
+    layout: pressableButtonCenteredLayout,
   },
   stateLayer: {
-    kind: 'container' as const,
+    type: 'container',
     backgroundColor: TokenBuilder.stateful(TokenBuilder.colorValueRef('semantics.color.stateLayerTint')),
     position: TokenBuilder.stateful({
-      type: 'absolute',
-      top: TokenBuilder.number(0),
-      right: TokenBuilder.number(0),
-      bottom: TokenBuilder.number(0),
-      left: TokenBuilder.number(0),
-      zIndex: TokenBuilder.number(20),
+      type: 'absolute' as const,
+      top: TokenBuilder.numberValue(TokenBuilder.number(0)),
+      right: TokenBuilder.numberValue(TokenBuilder.number(0)),
+      bottom: TokenBuilder.numberValue(TokenBuilder.number(0)),
+      left: TokenBuilder.numberValue(TokenBuilder.number(0)),
+      zIndex: TokenBuilder.numberValue(TokenBuilder.number(20)),
     }),
     borderRadius: pressableButtonBorderRadius,
   },

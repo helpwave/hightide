@@ -1,10 +1,10 @@
 import { TokenBuilder } from '../../../utils'
-import type { AssertAssignable, ColorToken, HightideResolverConfig, HightideResolverParams, ResolverState } from '../../../primitive-tokens'
+import type { AssertAssignable, ColorValueToken, HightideResolverConfig, HightideResolverParams, ResolverState } from '../../../primitive-tokens'
 import type { ColorPairToken } from '../../../theme-tokens/create'
 import { HexColorUtils } from '../../../utils/hex'
 import type { ComponentTokenResolver } from '../component-token-resolver'
 import type { ComponentTokens } from '../../component-tokens'
-import type { ResolvableContainerTokens } from '../../resolvable-container-tokens'
+import type { ResolvableContainerTokens, ResolvableOutlineTokens } from '../../resolvable-container-tokens'
 import type { ResolvableIconTokens } from '../../resolvable-icon-tokens'
 import type { ResolvableTextStyleTokens } from '../../resolvable-text-style-tokens'
 import { type PressableStateValue } from '../pressable-tokens'
@@ -34,53 +34,55 @@ export type ListActionTokenResolver = ComponentTokenResolver<
 
 export type ListActionParams = AssertAssignable<{
   colors: {
-    background: ColorToken,
-    foreground: ColorToken,
-    accent: ColorToken,
-    onColor: ColorToken,
+    background: ColorValueToken,
+    foreground: ColorValueToken,
+    accent: ColorValueToken,
+    onColor: ColorValueToken,
   },
 }, HightideResolverParams>
 export type ListActionTokenContext = HightideTokenPathProvider<ListActionParams>
 
 export const listActionOverlayTokens = {
   container: {
-    kind: 'container' as const,
-    backgroundColor: TokenBuilder.stateful(TokenBuilder.colorRef<ListActionTokenContext>('params.colors.background')),
-    outline: TokenBuilder.stateful({
+    type: 'container',
+    backgroundColor: TokenBuilder.stateful(TokenBuilder.colorValueRef<ListActionTokenContext>('params.colors.background')),
+    outline: TokenBuilder.stateful<ResolvableOutlineTokens>({
       width: TokenBuilder.numberRef<ListActionTokenContext>('theme.focusOutline.width'),
       offset: TokenBuilder.calc(
         'multiply',
         TokenBuilder.numberRef<ListActionTokenContext>('theme.focusOutline.width'),
-        TokenBuilder.number(-1)
+        TokenBuilder.numberValue(TokenBuilder.number(-1))
       ),
       style: TokenBuilder.outlineStyleRef<ListActionTokenContext>('theme.focusOutline.style'),
-      color: TokenBuilder.color(HexColorUtils.transparent),
+      color: TokenBuilder.colorValue(TokenBuilder.color(HexColorUtils.transparent)),
     }, [
       TokenBuilder.whenState(['focusVisible'], {
         width: TokenBuilder.numberRef<ListActionTokenContext>('theme.focusOutline.width'),
         offset: TokenBuilder.calc(
           'multiply',
           TokenBuilder.numberRef<ListActionTokenContext>('theme.focusOutline.width'),
-          TokenBuilder.number(-1)
+          TokenBuilder.numberValue(TokenBuilder.number(-1))
         ),
         style: TokenBuilder.outlineStyleRef<ListActionTokenContext>('theme.focusOutline.style'),
-        color: TokenBuilder.colorRef<ListActionTokenContext>('params.colors.accent'),
+        color: TokenBuilder.colorValueRef<ListActionTokenContext>('params.colors.accent'),
       }),
     ]),
   },
   titleText: {
-    color: TokenBuilder.stateful(TokenBuilder.colorRef<ListActionTokenContext>('params.colors.foreground')),
+    type: 'textStyle',
+    color: TokenBuilder.stateful(TokenBuilder.colorValueRef<ListActionTokenContext>('params.colors.foreground')),
   },
   descriptionText: {
-    color: TokenBuilder.statefulField<ColorToken, ListActionTokenContext>(
-      TokenBuilder.colorRef<ListActionTokenContext>('params.colors.onColor'),
+    type: 'textStyle',
+    color: TokenBuilder.stateful(
+      TokenBuilder.colorValueRef<ListActionTokenContext>('params.colors.onColor'),
       [
-        TokenBuilder.whenState(['colored'], TokenBuilder.colorRef<ListActionTokenContext>('params.colors.foreground')),
+        TokenBuilder.whenState(['colored'], TokenBuilder.colorValueRef<ListActionTokenContext>('params.colors.foreground')),
       ]
     ),
   },
   icon: {
-    kind: 'icon' as const,
-    color: TokenBuilder.stateful(TokenBuilder.colorRef<ListActionTokenContext>('params.colors.foreground')),
+    type: 'icon',
+    color: TokenBuilder.stateful(TokenBuilder.colorValueRef<ListActionTokenContext>('params.colors.foreground')),
   },
 } as const

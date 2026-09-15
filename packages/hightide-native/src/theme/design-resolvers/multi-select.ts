@@ -100,7 +100,7 @@ export const multiSelectTokenResolver: MultiSelectTokenResolver = ({
   const resolved = resolveConfigNode<{
     stateLayer: ContainerTokens,
     header: ContainerTokens,
-    menuSize: ContainerTokens['size'],
+    menu: ContainerTokens,
     option: ContainerTokens,
     optionText: TextStyleTokens,
     emptyText: TextStyleTokens,
@@ -137,7 +137,7 @@ export const multiSelectTokenResolver: MultiSelectTokenResolver = ({
     overlay: modal.background,
     menu: {
       ...modal.menu,
-      size: resolved.menuSize,
+      size: resolved.menu.size,
     },
     header: resolved.header,
     option: resolved.option,

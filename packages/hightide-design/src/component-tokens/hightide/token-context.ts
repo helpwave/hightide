@@ -10,6 +10,6 @@ export type HightideTokenPathProvider<T extends HightideResolverParams = Hightid
 
 export type HightideComponentPathProvider = {
   theme: HightideThemeTokens,
-  semantics: SemanticTokens<{ theme: HightideThemeTokens }, ResolverState, HightideResolverConfig>,
+  semantics: SemanticTokens<ResolverState, HightideResolverConfig>,
   params: HightideResolverParams,
 }

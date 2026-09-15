@@ -1,5 +1,5 @@
 import { TokenBuilder } from '../../../utils'
-import type { AssertAssignable, HightideResolverConfig, ResolverState } from '../../../primitive-tokens'
+import type { AssertAssignable } from '../../../primitive-tokens'
 import type { ComponentTokenResolver } from '../component-token-resolver'
 import type { ComponentTokens } from '../../component-tokens'
 import type { ResolvableContainerTokens } from '../../resolvable-container-tokens'
@@ -49,10 +49,10 @@ export type ChatAttachmentMessageBubbleTokenResolver = ComponentTokenResolver<
 export const chatAttachmentMessageBubbleTokens = {
   contentContainer: {
     container: {
-    kind: 'container' as const,
+      type: 'container',
       layout: TokenBuilder.stateful({
-        direction: 'horizontal',
-        crossAxisAlignment: 'center',
+        direction: TokenBuilder.layoutDirection('horizontal'),
+        crossAxisAlignment: TokenBuilder.crossAxisAlignment('center'),
         gap: TokenBuilder.numberRef('theme.spacing.md'),
       }),
     },
@@ -60,8 +60,8 @@ export const chatAttachmentMessageBubbleTokens = {
   fileIconContainer: {
     backgroundColor: TokenBuilder.stateful(
       TokenBuilder.colorOpacity(
-        TokenBuilder.colorRef('theme.color.negative.color'),
-        TokenBuilder.number(0.2)
+        TokenBuilder.colorValueRef('theme.color.negative.color'),
+        TokenBuilder.numberValue(TokenBuilder.number(0.2))
       )
     ),
     size: TokenBuilder.stateful({
@@ -70,14 +70,14 @@ export const chatAttachmentMessageBubbleTokens = {
     }),
     borderRadius: TokenBuilder.borderRadius({ value: TokenBuilder.numberRef('theme.borderRadius.sm') }),
     layout: TokenBuilder.stateful({
-      mainAxisAlignment: 'center',
-      crossAxisAlignment: 'center',
+      mainAxisAlignment: TokenBuilder.mainAxisAlignment('center'),
+      crossAxisAlignment: TokenBuilder.crossAxisAlignment('center'),
     }),
   },
   fileIcon: {
     size: TokenBuilder.stateful(TokenBuilder.numberRef('theme.icongraphy.sizes.md')),
     strokeWidth: TokenBuilder.stateful(TokenBuilder.numberRef('theme.icongraphy.strokeWidth')),
-    color: TokenBuilder.stateful(TokenBuilder.colorRef('theme.color.negative.color')),
+    color: TokenBuilder.stateful(TokenBuilder.colorValueRef('theme.color.negative.color')),
   },
   downloadIconContainer: {
     size: TokenBuilder.stateful({
@@ -85,8 +85,8 @@ export const chatAttachmentMessageBubbleTokens = {
       height: TokenBuilder.numberRef('theme.size.sm'),
     }),
     layout: TokenBuilder.stateful({
-      mainAxisAlignment: 'center',
-      crossAxisAlignment: 'center',
+      mainAxisAlignment: TokenBuilder.mainAxisAlignment('center'),
+      crossAxisAlignment: TokenBuilder.crossAxisAlignment('center'),
     }),
   },
   downloadIcon: {

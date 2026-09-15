@@ -1,9 +1,8 @@
 import { TokenBuilder } from '../../../utils'
-import type { AssertAssignable, HightideResolverConfig, ResolverState } from '../../../primitive-tokens'
-import type { ColorToken } from '../../../primitive-tokens/color-token'
+import type { AssertAssignable, ColorValueToken, HightideResolverConfig, NumberValueToken, ResolverState } from '../../../primitive-tokens'
+import type { TokenRefOrValue } from '../../../utils/token-type'
 import type { ComponentTokenResolver } from '../component-token-resolver'
 import type { ResolvableContainerTokens } from '../../resolvable-container-tokens'
-import type { ContainerTokens } from '../../container-tokens'
 import type { ResolvableTextStyleTokens } from '../../resolvable-text-style-tokens'
 import type {
   PressableComponentResolverProps,
@@ -42,38 +41,38 @@ export const chatQuickReplyChipTokens = {
     size: 'sm',
   },
   container: {
-    kind: 'container' as const,
-    borderRadius: TokenBuilder.borderRadius({ value: TokenBuilder.number(pillBorderRadius) }),
+    type: 'container',
+    borderRadius: TokenBuilder.borderRadius({ value: TokenBuilder.numberValue(TokenBuilder.number(pillBorderRadius)) }),
     padding: TokenBuilder.padding({ vertical: TokenBuilder.numberRef('theme.padding.md'), horizontal: TokenBuilder.numberRef('theme.padding.lg') }),
-    border: TokenBuilder.statefulField<NonNullable<ContainerTokens['border']>>({
-      width: TokenBuilder.sides({ value: TokenBuilder.numberRef('theme.borderWidth.thin') }),
-      color: TokenBuilder.sides({ value: surfaceFadedColor }),
+    border: TokenBuilder.stateful({
+      width: TokenBuilder.sides<TokenRefOrValue<NumberValueToken>>({ value: TokenBuilder.numberRef('theme.borderWidth.thin') }),
+      color: TokenBuilder.sides<TokenRefOrValue<ColorValueToken>>({ value: surfaceFadedColor }),
     }, [
       TokenBuilder.whenState(['active'], {
-        width: TokenBuilder.sides({ value: TokenBuilder.numberRef('theme.borderWidth.thin') }),
-        color: TokenBuilder.sides({ value: TokenBuilder.colorRef('theme.color.primary.color') }),
+        width: TokenBuilder.sides<TokenRefOrValue<NumberValueToken>>({ value: TokenBuilder.numberRef('theme.borderWidth.thin') }),
+        color: TokenBuilder.sides<TokenRefOrValue<ColorValueToken>>({ value: TokenBuilder.colorValueRef('theme.color.primary.color') }),
       }),
     ]),
     layout: TokenBuilder.stateful({
-      direction: 'horizontal',
-      crossAxisAlignment: 'center',
+      direction: TokenBuilder.layoutDirection('horizontal'),
+      crossAxisAlignment: TokenBuilder.crossAxisAlignment('center'),
       gap: TokenBuilder.numberRef('theme.padding.md'),
     }),
   },
   stateLayer: {
-    kind: 'container' as const,
-    borderRadius: TokenBuilder.borderRadius({ value: TokenBuilder.number(pillBorderRadius) }),
+    type: 'container',
+    borderRadius: TokenBuilder.borderRadius({ value: TokenBuilder.numberValue(TokenBuilder.number(pillBorderRadius)) }),
   },
   text: {
-    kind: 'textStyle' as const,
+    type: 'textStyle',
     fontSize: TokenBuilder.stateful(TokenBuilder.numberRef('theme.typography.body.sm.fontSize')),
     fontFamily: TokenBuilder.stateful(TokenBuilder.fontFamilyRef('theme.typography.body.sm.fontFamily')),
     lineHeight: TokenBuilder.stateful(TokenBuilder.numberRef('theme.typography.body.sm.lineHeight')),
     fontWeight: TokenBuilder.stateful(TokenBuilder.numberRef('theme.fontWeights.medium')),
-    color: TokenBuilder.statefulField<ColorToken>(
+    color: TokenBuilder.stateful(
       surfaceDescriptionColor,
       [
-        TokenBuilder.whenState(['active'], TokenBuilder.colorRef('theme.color.primary.color')),
+        TokenBuilder.whenState(['active'], TokenBuilder.colorValueRef('theme.color.primary.color')),
       ]
     ),
   },

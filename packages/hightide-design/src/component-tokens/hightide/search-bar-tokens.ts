@@ -1,5 +1,5 @@
 import { TokenBuilder } from '../../utils'
-import type { AssertAssignable, HightideResolverConfig, NumberToken, HightideResolverParams, ResolverState } from '../../primitive-tokens'
+import type { AssertAssignable, HightideResolverConfig, NumberValueToken, HightideResolverParams, ResolverState } from '../../primitive-tokens'
 import type { ColorPairToken } from '../../theme-tokens/create'
 import type { ComponentTokenResolver } from './component-token-resolver'
 import type { ComponentTokens } from '../component-tokens'
@@ -37,19 +37,20 @@ export type SearchBarTokenResolver = ComponentTokenResolver<
 
 export type SearchBarParams = AssertAssignable<{
   numbers: {
-    iconButtonSize: NumberToken,
+    iconButtonSize: NumberValueToken,
   },
 }, HightideResolverParams>
 export type SearchBarTokenContext = HightideTokenPathProvider<SearchBarParams>
 
 export const searchBarTokens = {
   container: {
-    kind: 'container' as const,
+    type: 'container',
     size: TokenBuilder.stateful({
       width: TokenBuilder.percent('100%'),
     }),
   },
   iconButton: {
+    type: 'container',
     size: TokenBuilder.stateful({
       width: TokenBuilder.numberRef<SearchBarTokenContext>('params.numbers.iconButtonSize'),
       height: TokenBuilder.numberRef<SearchBarTokenContext>('params.numbers.iconButtonSize'),
@@ -61,11 +62,11 @@ export const searchBarTokens = {
           TokenBuilder.numberRef<SearchBarTokenContext>('theme.size.md'),
           TokenBuilder.numberRef<SearchBarTokenContext>('theme.size.sm')
         ),
-        TokenBuilder.number(2)
+        TokenBuilder.numberValue(TokenBuilder.number(2))
       ) }),
   },
   icon: {
-    kind: 'icon' as const,
-    color: TokenBuilder.stateful(TokenBuilder.colorRef<SearchBarTokenContext>('theme.color.surface.onColor')),
+    type: 'icon',
+    color: TokenBuilder.stateful(TokenBuilder.colorValueRef<SearchBarTokenContext>('theme.color.surface.onColor')),
   },
 } as const

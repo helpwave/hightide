@@ -42,36 +42,36 @@ const threadAvatarSize = TokenBuilder.calc(
 
 export const chatThreadHeaderTokens = {
   container: {
-    kind: 'container' as const,
-    backgroundColor: TokenBuilder.stateful(TokenBuilder.colorRef('theme.color.surface.color')),
+    type: 'container',
+    backgroundColor: TokenBuilder.stateful(TokenBuilder.colorValueRef('theme.color.surface.color')),
     padding: TokenBuilder.padding({ vertical: TokenBuilder.numberRef('theme.padding.sm'), horizontal: TokenBuilder.numberRef('theme.padding.md') }),
     border: TokenBuilder.stateful({
       width: TokenBuilder.sides({ bottom: TokenBuilder.numberRef('theme.borderWidth.thin') }),
       color: TokenBuilder.sides({ bottom: surfaceFadedColor }),
     }),
     layout: TokenBuilder.stateful({
-      direction: 'horizontal',
-      crossAxisAlignment: 'center',
+      direction: TokenBuilder.layoutDirection('horizontal'),
+      crossAxisAlignment: TokenBuilder.crossAxisAlignment('center'),
       gap: TokenBuilder.numberRef('theme.spacing.xs'),
     }),
   },
   contentRow: {
     layout: TokenBuilder.stateful({
-      direction: 'vertical',
+      direction: TokenBuilder.layoutDirection('vertical'),
       gap: TokenBuilder.numberRef('theme.spacing.xs'),
-      flexGrow: TokenBuilder.number(1),
+      flexGrow: TokenBuilder.numberValue(TokenBuilder.number(1)),
     }),
   },
   title: {
-    kind: 'textStyle' as const,
+    type: 'textStyle',
     fontSize: TokenBuilder.stateful(TokenBuilder.numberRef('theme.typography.body.md.fontSize')),
     fontFamily: TokenBuilder.stateful(TokenBuilder.fontFamilyRef('theme.typography.body.md.fontFamily')),
     lineHeight: TokenBuilder.stateful(TokenBuilder.numberRef('theme.typography.body.md.lineHeight')),
     fontWeight: TokenBuilder.stateful(TokenBuilder.numberRef('theme.fontWeights.bold')),
-    color: TokenBuilder.stateful(TokenBuilder.colorRef('theme.color.surface.onColor')),
+    color: TokenBuilder.stateful(TokenBuilder.colorValueRef('theme.color.surface.onColor')),
   },
   subtitle: {
-    kind: 'textStyle' as const,
+    type: 'textStyle',
     fontSize: TokenBuilder.stateful(TokenBuilder.numberRef('theme.typography.body.sm.fontSize')),
     fontFamily: TokenBuilder.stateful(TokenBuilder.fontFamilyRef('theme.typography.body.sm.fontFamily')),
     lineHeight: TokenBuilder.stateful(TokenBuilder.numberRef('theme.typography.body.sm.lineHeight')),
@@ -80,7 +80,7 @@ export const chatThreadHeaderTokens = {
   },
   avatarOverride: {
     container: {
-    kind: 'container' as const,
+      type: 'container',
       size: TokenBuilder.stateful({
         width: threadAvatarSize,
         height: threadAvatarSize,
@@ -89,10 +89,10 @@ export const chatThreadHeaderTokens = {
         maxWidth: threadAvatarSize,
         maxHeight: threadAvatarSize,
       }),
-      borderRadius: TokenBuilder.borderRadius({ value: TokenBuilder.calc('divide', threadAvatarSize, TokenBuilder.number(2)) }),
+      borderRadius: TokenBuilder.borderRadius({ value: TokenBuilder.calc('divide', threadAvatarSize, TokenBuilder.numberValue(TokenBuilder.number(2))) }),
     },
     icon: {
-    kind: 'icon' as const,
+      type: 'icon',
       size: TokenBuilder.stateful(threadAvatarSize),
     },
   },
@@ -103,16 +103,16 @@ export const chatThreadHeaderTokens = {
       coloringColorVariant: 'transparent',
     },
     container: {
-    kind: 'container' as const,
+      type: 'container',
       size: TokenBuilder.stateful({
-        minHeight: TokenBuilder.number(0),
+        minHeight: TokenBuilder.numberValue(TokenBuilder.number(0)),
       }),
       padding: TokenBuilder.padding({ value: TokenBuilder.numberRef('theme.padding.md') }),
       layout: TokenBuilder.stateful({
-        direction: 'horizontal',
-        crossAxisAlignment: 'center',
+        direction: TokenBuilder.layoutDirection('horizontal'),
+        crossAxisAlignment: TokenBuilder.crossAxisAlignment('center'),
         gap: TokenBuilder.numberRef('theme.spacing.md'),
-        flexGrow: TokenBuilder.number(1),
+        flexGrow: TokenBuilder.numberValue(TokenBuilder.number(1)),
       }),
     },
   },
