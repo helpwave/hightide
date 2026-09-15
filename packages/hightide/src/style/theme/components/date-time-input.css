@@ -19,7 +19,7 @@
   [data-name="date-time-segment"] {
     @apply rounded-sm px-0.5 text-center tabular-nums cursor-text focus-style-none;
 
-    &:focus {
+    &:focus-visible {
       @apply bg-primary/15;
     }
 

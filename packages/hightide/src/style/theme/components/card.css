@@ -92,7 +92,7 @@
   .navigation-card-action {
     @apply flex-col-0 items-center justify-center shrink-0 text-description transition-all rounded focus-visible:outline-none;
     @apply group-hover/card:translate-x-1;
-    @apply group-hover/card:text-on-surface focus:text-on-surface;
+    @apply group-hover/card:text-on-surface focus-visible:text-on-surface;
   }
 
   .navigation-card-action-icon {
