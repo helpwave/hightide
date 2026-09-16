@@ -14,7 +14,7 @@
       @apply hover:cursor-pointer;
 
       &:hover,
-      &:focus-within {
+      &:has(:focus-visible) {
         @apply bg-primary/15;
       }
     }
@@ -28,7 +28,7 @@
     @apply min-w-0 w-full min-h-11 min-w-0 min-h-11 rounded-md;
 
     transition: var(--focus-transitions);
-    &:focus-within {
+    &:has(focus-visible) {
       outline: var(--focus-outline);
       outline-offset: var(--focus-outline-offset);
       box-shadow: var(--focus-box-shadow);

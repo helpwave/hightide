@@ -57,7 +57,7 @@
 
     transition: var(--coloring-transitions), var(--focus-transitions);
 
-    &:focus-within {
+    &:has(:focus-visible) {
       @apply focus-style-apply;
     }
 

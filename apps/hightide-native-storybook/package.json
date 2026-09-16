@@ -11,15 +11,17 @@
   "version": "0.0.0",
   "main": "index.js",
   "scripts": {
-    "clean": "rm -rf node_modules .expo dist",
-    "init": "sb-rn-get-stories",
+    "clean": "rm -rf node_modules .expo dist android ios",
+    "init": "sb-rn-get-stories && npx expo prebuild",
     "build": "node -e \"process.exit(0)\"",
-    "start": "expo start",
-    "storybook": "EXPO_PUBLIC_STORYBOOK_ENABLED=true expo start",
-    "storybook:ios": "EXPO_PUBLIC_STORYBOOK_ENABLED=true expo start --ios",
-    "storybook:android": "EXPO_PUBLIC_STORYBOOK_ENABLED=true expo start --android",
+    "start": "EXPO_PUBLIC_STORYBOOK_ENABLED=true expo start --dev-client",
+    "storybook": "EXPO_PUBLIC_STORYBOOK_ENABLED=true expo start --dev-client",
+    "storybook:ios": "EXPO_PUBLIC_STORYBOOK_ENABLED=true expo start --ios --dev-client",
+    "storybook:android": "EXPO_PUBLIC_STORYBOOK_ENABLED=true expo start --android --dev-client",
     "lint": "eslint .",
-    "test": "node -e \"process.exit(0)\""
+    "test": "node -e \"process.exit(0)\"",
+    "android": "expo run:android",
+    "ios": "expo run:ios"
   },
   "dependencies": {
     "@babel/runtime": "8.0.0",
@@ -27,6 +29,8 @@
     "@helpwave/hightide-native": "workspace:*",
     "@helpwave/hightide-utils": "workspace:*",
     "@react-native-async-storage/async-storage": "2.1.2",
+    "@react-native-community/datetimepicker": "8.4.1",
+    "@react-native-documents/picker": "12.0.2",
     "@storybook/addon-ondevice-actions": "10.4.5",
     "@storybook/addon-ondevice-controls": "10.4.5",
     "@storybook/react": "10.4.5",

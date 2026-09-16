@@ -5,3 +5,5 @@ dist/
 .DS_Store
 .rnstorybook/storybook.requires.ts
 .rnstorybook/storybook.requires.js
+android/
+ios/

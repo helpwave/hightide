@@ -11,7 +11,6 @@
     outline-offset: 0;
 
     &:hover {
-
       [data-name="property-title"]:not([data-invalid]),
       [data-name="property-content"]:not([data-invalid]) {
         @apply border-primary;
@@ -23,7 +22,7 @@
       }
     }
 
-    &:focus-within {
+    &:has(:focus-visible) {
       @apply outline-solid outline-2;
       outline-offset: calc(var(--spacing) * 0.25);
 

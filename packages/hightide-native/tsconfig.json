@@ -4,6 +4,7 @@
     "lib": ["ES2019", "DOM", "ES2020.Intl", "ES2021.Intl"],
     "moduleResolution": "bundler",
     "module": "ESNext",
+    "moduleSuffixes": [".native", ".web", ".ios", ".android", ""],
     "jsx": "react-native",
     "esModuleInterop": true,
     "skipLibCheck": true
@@ -12,7 +13,6 @@
     "src"
   ],
   "exclude": [
-    "dist",
     "node_modules"
   ]
 }

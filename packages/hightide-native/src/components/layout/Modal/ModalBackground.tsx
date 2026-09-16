@@ -1,7 +1,8 @@
 import type { ReactNode } from 'react'
 import {
   Modal as ReactNativeModal,
-  Pressable
+  Pressable,
+  View
 } from 'react-native'
 
 import { useTheme } from '../../../global-contexts/theme/ThemeContext'
@@ -30,12 +31,13 @@ export const ModalBackground = ({
       animationType="fade"
       onRequestClose={() => context.setIsOpen(false)}
     >
-      <Pressable
-        style={resolvedStyle}
-        onPress={() => context.setIsOpen(false)}
-      >
+      <View style={resolvedStyle}>
+        <Pressable
+          style={{ position: 'absolute', top: 0, bottom: 0, left: 0, right: 0 }}
+          onPress={() => context.setIsOpen(false)}
+        />
         {children}
-      </Pressable>
+      </View>
     </ReactNativeModal>
   )
 }

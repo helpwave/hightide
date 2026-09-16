@@ -18,7 +18,7 @@ export default defineConfig({
   clean: true,
   splitting: true,
   minify: false,
-  target: 'es2022',
+  target: 'es2019',
   external: [
     'react',
     '@helpwave/internationalization',

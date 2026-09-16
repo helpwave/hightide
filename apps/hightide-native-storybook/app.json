@@ -5,7 +5,7 @@
     "version": "0.0.0",
     "orientation": "portrait",
     "userInterfaceStyle": "automatic",
-    "newArchEnabled": true,
+    "newArchEnabled": false,
     "ios": {
       "supportsTablet": true,
       "bundleIdentifier": "de.helpwave.hightide.native.storybook"
@@ -14,7 +14,7 @@
       "adaptiveIcon": {
         "backgroundColor": "#ffffff"
       },
-      "package": "de.helpwave.hightide.native.storybook"
+      "package": "de.helpwave.hightide_native.storybook"
     },
     "web": {
       "bundler": "metro"

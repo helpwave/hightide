@@ -10,53 +10,25 @@
     "access": "public"
   },
   "license": "AGPL-3.0-only",
-  "version": "0.9.4",
+  "version": "0.10.0",
   "type": "module",
   "files": [
-    "dist"
+    "src"
   ],
   "exports": {
-    "./components": {
-      "types": "./dist/components/index.d.ts",
-      "require": "./dist/components/index.cjs",
-      "import": "./dist/components/index.js"
-    },
-    "./global-contexts": {
-      "types": "./dist/global-contexts/index.d.ts",
-      "require": "./dist/global-contexts/index.cjs",
-      "import": "./dist/global-contexts/index.js"
-    },
-    "./hooks": {
-      "types": "./dist/hooks/index.d.ts",
-      "require": "./dist/hooks/index.cjs",
-      "import": "./dist/hooks/index.js"
-    },
-    "./icons": {
-      "types": "./dist/icons/index.d.ts",
-      "require": "./dist/icons/index.cjs",
-      "import": "./dist/icons/index.js"
-    },
-    "./theme": {
-      "types": "./dist/theme/index.d.ts",
-      "require": "./dist/theme/index.cjs",
-      "import": "./dist/theme/index.js"
-    },
-    "./types": {
-      "types": "./dist/types/index.d.ts",
-      "require": "./dist/types/index.cjs",
-      "import": "./dist/types/index.js"
-    },
-    "./utils": {
-      "types": "./dist/utils/index.d.ts",
-      "require": "./dist/utils/index.cjs",
-      "import": "./dist/utils/index.js"
-    }
+    "./components": "./src/components/index.ts",
+    "./global-contexts": "./src/global-contexts/index.ts",
+    "./hooks": "./src/hooks/index.ts",
+    "./icons": "./src/icons/index.ts",
+    "./theme": "./src/theme/index.ts",
+    "./types": "./src/types/index.ts",
+    "./utils": "./src/utils/index.ts"
   },
   "scripts": {
-    "clean": "rm -rf dist node_modules",
+    "clean": "rm -rf node_modules",
     "init": "node -e \"process.exit(0)\"",
-    "build": "tsup",
-    "dev": "tsup --watch",
+    "build": "tsc --noEmit",
+    "dev": "node -e \"process.exit(0)\"",
     "lint": "eslint .",
     "test": "node -e \"process.exit(0)\""
   },
@@ -67,6 +39,7 @@
   },
   "peerDependencies": {
     "@react-native-async-storage/async-storage": ">=2.0.0",
+    "@react-native-documents/picker": ">=12.0.0",
     "react": "^19.0.0",
     "react-native": ">=0.76.0",
     "react-native-svg": ">=15.0.0"
@@ -74,6 +47,7 @@
   "devDependencies": {
     "@helpwave/eslint-config": "0.0.11",
     "@react-native-async-storage/async-storage": "2.2.0",
+    "@react-native-documents/picker": "12.0.2",
     "@types/react": "19.0.10",
     "eslint": "9.31.0",
     "eslint-plugin-import": "2.32.0",

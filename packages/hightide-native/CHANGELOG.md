@@ -5,7 +5,23 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
-## [0.9.4] - 2026-09-09
+## [0.10.0] - 2026-09-16
+
+### Added
+
+- Compound `FileInput`: `FileInput.Root`, `FileInput.Trigger`, `FileInput.Menu`, `FileInput.Context`, `FileInput.Provider`, and a combined `FileInput` that assembles them
+- Selected files render as one-line rows in the trigger (file icon and name) with an add icon when empty and an edit icon when files are present
+- Opening the trigger shows a modal titled Select files with remove actions and an add button
+- On iOS and Android, Add file opens the system picker through `@react-native-documents/picker` (`pickFileInputItems.native.ts`); on web it uses a hidden file input (`pickFileInputItems.web.ts`). `pickFiles` remains an optional override
+- Duplicate files are kept only once when merging a new selection
+- `maxFiles` limits how many files can be selected; `maxVisualFiles` on `FileInput` and `FileInput.Trigger` caps trigger rows and shows `+ N more files` for the rest
+
+### Changed
+
+- The package is published from `src` instead of compiled `dist`; subpath exports point at TypeScript source
+- `build` type-checks with `tsc --noEmit` instead of bundling with `tsup`
+
+## [0.9.4] - 2026-09-08
 
 ### Added
 

@@ -28,6 +28,10 @@ import {
   type DividerTokenResolver
 } from './divider-tokens'
 import {
+  fileInputTokenResolver,
+  type FileInputTokenResolver
+} from './file-input-tokens'
+import {
   iconButtonTokenResolver,
   type IconButtonTokenResolver
 } from './icon-button-tokens'
@@ -86,6 +90,7 @@ export type ComponentTokenResolvers = {
   multiSelect: MultiSelectTokenResolver,
   card: CardTokenResolver,
   divider: DividerTokenResolver,
+  fileInput: FileInputTokenResolver,
   listItem: ListItemTokenResolvers,
   modal: ModalTokenResolver,
   avatar: AvatarTokenResolver,
@@ -109,6 +114,7 @@ export const componentTokenResolvers: ComponentTokenResolvers = {
   multiSelect: multiSelectTokenResolver,
   card: cardTokenResolver,
   divider: dividerTokenResolver,
+  fileInput: fileInputTokenResolver,
   listItem: listItemTokenResolvers,
   modal: modalTokenResolver,
   avatar: avatarTokenResolver,
