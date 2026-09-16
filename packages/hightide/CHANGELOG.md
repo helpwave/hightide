@@ -18,7 +18,7 @@ and adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
 ### Changed
 
-- Visual focus styles use `:focus-visible` instead of `:focus`; the default focus ring is still cleared with `:focus`
+- Visual focus styles use `:focus-visible` or `has(:focus-visible)` instead of `:focus`; the default focus ring is still cleared with `:focus`
 
 ## [0.16.4] - 2026-09-09
 
