@@ -19,6 +19,7 @@ import type { ListItemThemeResolvers } from './listItem'
 import type { ModalThemeResolvers } from './modal'
 import type { MultiSelectThemeResolvers } from './multiSelect'
 import type { SelectThemeResolvers } from './select'
+import type { FileInputThemeResolvers } from './fileInput'
 import type { SwitchThemeResolvers } from './switch'
 import type { TextareaThemeResolvers } from './textarea'
 import type { ThemedPressableThemeResolvers } from './themedPressable'
@@ -36,6 +37,7 @@ export type HightideComponentThemes = {
   textarea: TextareaThemeResolvers,
   searchBar: SearchBarThemeResolvers,
   select: SelectThemeResolvers,
+  fileInput: FileInputThemeResolvers,
   multiSelect: MultiSelectThemeResolvers,
   chat: ChatThemeResolvers,
   card: CardThemeResolvers,

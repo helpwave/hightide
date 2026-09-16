@@ -5,7 +5,16 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/)
 and adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
-## [0.16.5] - 2026-09-11
+## [0.16.5] - 2026-09-16
+
+### Added
+
+- Compound `FileInput`: `FileInput.Root`, `FileInput.Trigger`, `FileInput.Menu`, `FileInput.Context`, `FileInput.Provider`, and a combined `FileInput` that assembles them
+- Selected files render as one-line rows in the trigger (file icon and name) with an add icon when empty and an edit icon when files are present
+- Opening the trigger shows a modal titled Select files with remove actions, an add button, and drag-and-drop while the dialog is open
+- Duplicate files are kept only once when merging a new selection
+- While the picker is open, dragging a file shows a dashed primary border on the dialog that becomes solid when the file is over the dialog itself
+- `maxFiles` limits how many files can be selected; `maxVisualFiles` on `FileInput` and `FileInput.Trigger` caps trigger rows and shows `+ N more files` for the rest
 
 ### Changed
 

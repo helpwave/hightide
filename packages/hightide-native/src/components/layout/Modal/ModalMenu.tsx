@@ -1,5 +1,5 @@
 import type { ReactNode } from 'react'
-import { Pressable } from 'react-native'
+import { View } from 'react-native'
 
 import { useTheme } from '../../../global-contexts/theme/ThemeContext'
 import { useMemoizedTheme } from '../../../hooks/useMemoizedTheme'
@@ -19,12 +19,11 @@ export const ModalMenu = ({
   const resolvedStyle = useMemoizedTheme(theme.components.modal.menu, {}, style)
 
   return (
-    <Pressable
+    <View
       accessibilityRole="none"
       style={resolvedStyle}
-      onPress={(event) => event.stopPropagation()}
     >
       {children}
-    </Pressable>
+    </View>
   )
 }

@@ -3,6 +3,7 @@
   "addFilter": "Add filter",
   "addSorting": "Add sorting",
   "addTime": "Add Time",
+  "addFile": "Add file",
   "all": "All",
   "apply": "Apply",
   "back": "Back",
@@ -35,6 +36,7 @@
   "discard": "Discard",
   "discardChanges": "Discard Changes",
   "done": "Done",
+  "dropFilesHere": "Drop files here",
   "edit": "Edit",
   "editFilter": "Edit filter",
   "enterText": "Enter text here",
@@ -43,6 +45,8 @@
   "exit": "Exit",
   "filterOptions": "Filter options",
   "fieldRequiredError": "This field is required.",
+  "files": "Files",
+  "selectFiles": "Select files",
   "first": "First",
   "previous": "Previous",
   "next": "Next",
@@ -60,10 +64,17 @@
   "no": "No",
   "noColumn": "No column",
   "noData": "No data",
+  "noFilesSelected": "No files selected",
   "none": "None",
   "nothingFound": "Nothing found",
   "nResultsFound": "{count, plural, =1{# result found} other{# results found}}",
   "@nResultsFound": {
+    "placeholders": {
+      "count": { "type": "number" }
+    }
+  },
+  "nMoreFiles": "+ {count, plural, =1{# more file} other{# more files}}",
+  "@nMoreFiles": {
     "placeholders": {
       "count": { "type": "number" }
     }

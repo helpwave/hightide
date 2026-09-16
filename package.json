@@ -19,11 +19,15 @@
     "test": "pnpm -r run test",
     "lint": "pnpm -r run lint",
     "dev": "pnpm -r run dev",
-    "storybook-web": "pnpm --filter @helpwave/hightide-utils run build && pnpm --filter @helpwave/hightide run build && pnpm --filter @helpwave/hightide run storybook",
-    "build-storybook-web": "pnpm --filter @helpwave/hightide-utils run build && pnpm --filter @helpwave/hightide run build && pnpm --filter @helpwave/hightide run build-storybook",
+    "storybook-web-prepare": "pnpm --filter @helpwave/hightide... run build",
+    "storybook-web": "pnpm --filter @helpwave/hightide run storybook",
+    "build-storybook-web": "pnpm --filter @helpwave/hightide... run build && pnpm --filter @helpwave/hightide run build-storybook",
     "sync-native-stories": "pnpm --filter @helpwave/hightide-native-web-storybook run sync-stories",
-    "storybook-native": "pnpm --filter @helpwave/hightide-utils run build && pnpm --filter @helpwave/hightide-design run build && pnpm --filter @helpwave/hightide-native run build && pnpm --filter @helpwave/hightide-native-storybook run storybook",
-    "storybook-native-web": "pnpm --filter @helpwave/hightide-utils run build && pnpm --filter @helpwave/hightide-design run build && pnpm --filter @helpwave/hightide-native run build && pnpm --filter @helpwave/hightide-native-web-storybook run storybook",
-    "build-storybook-native-web": "pnpm --filter @helpwave/hightide-utils run build && pnpm --filter @helpwave/hightide-design run build && pnpm --filter @helpwave/hightide-native run build && pnpm --filter @helpwave/hightide-native-web-storybook run build-storybook"
+    "storybook-native-prepare:android": "pnpm --filter @helpwave/hightide-native... run build && pnpm --filter @helpwave/hightide-native-storybook run android",
+    "storybook-native-prepare:ios": "pnpm --filter @helpwave/hightide-native... run build && pnpm --filter @helpwave/hightide-native-storybook run ios",
+    "storybook-native": "pnpm --filter @helpwave/hightide-native-storybook run storybook",
+    "storybook-native-web-prepare": "pnpm --filter @helpwave/hightide-native... run build",
+    "storybook-native-web": "pnpm --filter @helpwave/hightide-native-web-storybook run storybook",
+    "build-storybook-native-web": "pnpm --filter @helpwave/hightide-native... run build && pnpm --filter @helpwave/hightide-native-web-storybook run build-storybook"
   }
 }

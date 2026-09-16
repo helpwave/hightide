@@ -29,6 +29,7 @@ import {
 import { toModalThemeResolvers } from '../resolvers/modal'
 import { toMultiSelectThemeResolvers } from '../resolvers/multiSelect'
 import { toSelectThemeResolvers } from '../resolvers/select'
+import { toFileInputThemeResolvers } from '../resolvers/fileInput'
 import { toSwitchThemeResolvers } from '../resolvers/switch'
 import { toTextareaThemeResolvers } from '../resolvers/textarea'
 import { toThemedPressableThemeResolvers } from '../resolvers/themedPressable'
@@ -185,6 +186,11 @@ export const createHightideTheme = (themeTokens: ThemeTokens): HightideTheme => 
       componentTokens: componentTokenResolvers,
     }),
     select: toSelectThemeResolvers({
+      themeTokens,
+      semanticTokens: hightideSemanticTokenResolvers,
+      componentTokens: componentTokenResolvers,
+    }),
+    fileInput: toFileInputThemeResolvers({
       themeTokens,
       semanticTokens: hightideSemanticTokenResolvers,
       componentTokens: componentTokenResolvers,

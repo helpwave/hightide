@@ -1,0 +1,61 @@
+@layer components {
+  [data-name="file-input-trigger"] {
+    @apply input-element flex-row-2 items-center justify-between rounded-md px-3 py-2;
+
+    &:not([data-disabled]):not([data-readonly]) {
+      @apply hover:cursor-pointer;
+    }
+
+    > svg {
+      @apply size-5 shrink-0;
+    }
+  }
+
+  [data-name="file-input-files"] {
+    @apply flex-col-1 grow min-w-0;
+  }
+
+  [data-name="file-input-file-row"] {
+    @apply flex-row-2 items-center min-w-0;
+
+    > svg {
+      @apply size-4 shrink-0;
+    }
+  }
+
+  [data-name="file-input-file-name"] {
+    @apply truncate;
+  }
+
+  [data-name="file-input-more-files"] {
+    @apply text-placeholder truncate;
+  }
+
+  .file-input-menu {
+    @apply min-w-80 border-2 border-solid border-transparent;
+  }
+
+  .file-input-menu[data-file-drag] {
+    @apply border-dashed border-primary;
+  }
+
+  .file-input-menu[data-drag-over] {
+    @apply border-solid border-primary;
+  }
+
+  [data-name="file-input-menu-list"] {
+    @apply flex-col-1 overflow-y-auto max-h-80;
+  }
+
+  [data-name="file-input-menu-row"] {
+    @apply flex-row-2 items-center min-w-0;
+
+    > svg {
+      @apply size-5 shrink-0;
+    }
+  }
+
+  [data-name="file-input-menu-title"] {
+    @apply grow truncate;
+  }
+}

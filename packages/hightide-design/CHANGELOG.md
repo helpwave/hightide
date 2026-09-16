@@ -5,7 +5,14 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/)
 and adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
-## [0.7.4] - 2026-09-09
+## [0.7.5] - 2026-09-16
+
+### Added
+
+- `fileInputTokenResolver` for FileInput trigger, file rows, modal menu, drop hint, menu title, and add-button layout
+- FileInput menu `dragging` and `dragOver` states use a primary dashed, then solid, drop border
+
+## [0.7.4] - 2026-09-08
 
 ### Added
 

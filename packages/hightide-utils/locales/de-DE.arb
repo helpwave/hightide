@@ -3,6 +3,7 @@
   "addFilter": "Filter hinzufügen",
   "addSorting": "Sortierung hinzufügen",
   "addTime": "Uhrzeit hinzufügen",
+  "addFile": "Datei hinzufügen",
   "all": "Alle",
   "apply": "Anwenden",
   "back": "Zurück",
@@ -34,6 +35,7 @@
   "discard": "Verwerfen",
   "discardChanges": "Änderungen Verwerfen",
   "done": "Fertig",
+  "dropFilesHere": "Dateien hier ablegen",
   "edit": "Bearbeiten",
   "editFilter": "Filter bearbeiten",
   "enterText": "Text hier eingeben",
@@ -41,6 +43,8 @@
   "errorOccurred": "Ein Fehler ist aufgetreten",
   "exit": "Beenden",
   "filterOptions": "Optionen filtern",
+  "files": "Dateien",
+  "selectFiles": "Dateien auswählen",
   "fieldRequiredError": "Dieses Feld ist erforderlich.",
   "first": "Erste",
   "previous": "Vorherige",
@@ -59,10 +63,17 @@
   "no": "Nein",
   "noColumn": "Keine Spalte",
   "noData": "Keine Daten",
+  "noFilesSelected": "Keine Dateien ausgewählt",
   "none": "Nichts",
   "nothingFound": "Nichts gefunden",
   "nResultsFound": "{count, plural, =1{# Ergebnis gefunden} other{# Ergebnisse gefunden}}",
   "@nResultsFound": {
+    "placeholders": {
+      "count": { "type": "number" }
+    }
+  },
+  "nMoreFiles": "+ {count, plural, =1{# weitere Datei} other{# weitere Dateien}}",
+  "@nMoreFiles": {
     "placeholders": {
       "count": { "type": "number" }
     }
