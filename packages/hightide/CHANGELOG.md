@@ -5,7 +5,7 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/)
 and adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
-## [0.16.5] - 2026-09-16
+## [0.17.0] - 2026-09-17
 
 ### Added
 
@@ -15,6 +15,8 @@ and adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 - Duplicate files are kept only once when merging a new selection
 - While the picker is open, dragging a file shows a dashed primary border on the dialog that becomes solid when the file is over the dialog itself
 - `maxFiles` limits how many files can be selected; `maxVisualFiles` on `FileInput` and `FileInput.Trigger` caps trigger rows and shows `+ N more files` for the rest
+
+## [0.16.5] - 2026-09-10
 
 ### Changed
 
