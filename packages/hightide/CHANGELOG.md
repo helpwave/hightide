@@ -5,6 +5,13 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/)
 and adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [0.17.1] - 2026-09-18
+
+### Changed
+
+- When only one file is allowed, the trigger opens the system picker directly instead of the multi-file dialog
+- Extra picks beyond `maxFiles` are dropped. The picker dialog shows the maximum file count and, when `accept` is set, the allowed file types. Add file is disabled when the limit is reached; the system picker is single-select when one slot remains
+
 ## [0.17.0] - 2026-09-17
 
 ### Added

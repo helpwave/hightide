@@ -64,8 +64,8 @@ const FileInputTriggerImpl = forwardRef<HTMLDivElement, FileInputTriggerProps>(f
       aria-invalid={invalid}
       aria-disabled={disabled}
       aria-readonly={readOnly}
-      aria-haspopup="dialog"
-      aria-expanded={context.isOpen}
+      aria-haspopup={(context.maxFiles ?? 1) > 1 ? 'dialog' : undefined}
+      aria-expanded={(context.maxFiles ?? 1) > 1 ? context.isOpen : undefined}
     >
       <div data-name="file-input-files">
         {hasFiles ? (

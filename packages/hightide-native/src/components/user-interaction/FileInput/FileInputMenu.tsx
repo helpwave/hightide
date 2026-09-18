@@ -1,5 +1,5 @@
 import { ScrollView, View } from 'react-native'
-import { useTranslation } from '@helpwave/hightide-utils/context'
+import { useHightideTranslation } from '@helpwave/hightide-utils/context/translation'
 import { useTheme } from '../../../global-contexts/theme/ThemeContext'
 import { useMemoizedTheme } from '../../../hooks/useMemoizedTheme'
 import { HightideIconRegistry } from '../../../icons/HightideIconRegistry'
@@ -10,13 +10,15 @@ import { ThemedText } from '../../visualization-and-display/ThemedText'
 import { Button } from '../Button'
 import { IconButton } from '../IconButton'
 import { useFileInputContext } from './FileInputContext'
+import { formatFileInputAccept } from './fileInputItem'
 
 export const FileInputMenu = () => {
   const { theme } = useTheme()
-  const translation = useTranslation()
+  const translation = useHightideTranslation()
   const context = useFileInputContext()
   const fileInputTheme = theme.components.fileInput
   const canEdit = !context.disabled && !context.readOnly
+  const allowedFileTypes = formatFileInputAccept(context.accept)
   const resolvedState = {
     color: context.config.color,
     isDisabled: !!context.disabled,
@@ -31,10 +33,11 @@ export const FileInputMenu = () => {
   const resolvedMenuBodyStyle = useMemoizedTheme(fileInputTheme.menuBody, resolvedState)
   const resolvedMenuHeaderStyle = useMemoizedTheme(fileInputTheme.menuHeader, resolvedState)
   const resolvedMenuTitleStyle = useMemoizedTheme(fileInputTheme.menuTitle, resolvedState)
+  const resolvedDropHintStyle = useMemoizedTheme(fileInputTheme.dropHint, resolvedState)
 
   return (
     <Modal
-      isOpen={context.isOpen}
+      isOpen={context.isOpen && (context.maxFiles ?? 1) > 1}
       onIsOpenChange={context.setIsOpen}
       backgroundProps={{ style: resolvedOverlayStyle }}
       menuProps={{ style: resolvedMenuStyle }}
@@ -48,8 +51,18 @@ export const FileInputMenu = () => {
             {translation('selectFiles')}
           </ThemedText>
         </View>
+        {context.maxFiles != null && (
+          <ThemedText style={[resolvedDropHintStyle]}>
+            {translation('maximumNumberOfFiles', { count: context.maxFiles })}
+          </ThemedText>
+        )}
+        {allowedFileTypes != null && (
+          <ThemedText style={resolvedDropHintStyle}>
+            {translation('allowedFileTypes', { types: allowedFileTypes })}
+          </ThemedText>
+        )}
         <ScrollView
-          style={{ flexGrow: 0, flexShrink: 0, maxHeight: theme.semantics.touchTargetSize({}) * 4.2 }}
+          style={{ flexGrow: 0, flexShrink: 1 }}
         >
           {context.files.map((file) => (
             <ListItem

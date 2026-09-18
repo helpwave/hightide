@@ -166,7 +166,7 @@ export const fileInputTokenResolver: FileInputTokenResolver = ({
     },
     dropHint: {
       ...typography.body.sm,
-      textAlign: 'center',
+      textAlign: 'left',
       color: semanticResolvers.asDescription({
         themeTokens,
         colorPair: color.surface,

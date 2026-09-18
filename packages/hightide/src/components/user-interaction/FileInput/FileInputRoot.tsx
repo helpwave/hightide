@@ -12,6 +12,7 @@ import {
   createFileInputItemsFromFileList,
   isFileDataTransfer,
   mergeFileInputItems,
+  normalizeFileInputAccept,
   resolveFileInputMaxFiles,
   type FileInputItem
 } from './fileInputItem'
@@ -22,8 +23,7 @@ export interface FileInputRootProps extends Omit<Partial<FormFieldDataHandling<r
   initialIsOpen?: boolean,
   onClose?: () => void,
   onIsOpenChange?: (isOpen: boolean) => void,
-  accept?: string,
-  multiple?: boolean,
+  accept?: string[],
   maxFiles?: number,
   pickFiles?: FileInputPickFiles,
   children: ReactNode,
@@ -39,7 +39,6 @@ export function FileInputRoot({
   onClose,
   onIsOpenChange,
   accept,
-  multiple = true,
   maxFiles,
   pickFiles,
   invalid = false,
@@ -54,7 +53,7 @@ export function FileInputRoot({
     defaultValue: initialValue ?? [],
   })
   const [isOpen, setIsOpenState] = useControlledState<boolean>({
-    defaultValue: initialIsOpen,
+    defaultValue: resolveFileInputMaxFiles(maxFiles) === 1 ? false : initialIsOpen,
   })
   const [isDragging, setIsDragging] = useState(false)
   const [isDragOver, setIsDragOver] = useState(false)
@@ -79,26 +78,21 @@ export function FileInputRoot({
     }
   }, [onCloseStable, onIsOpenChangeStable, setIsOpenState])
 
-  const toggleIsOpen = useCallback(() => {
-    setIsOpen(!isOpen)
-  }, [isOpen, setIsOpen])
-
   const addFiles = useCallback((incoming: readonly FileInputItem[]) => {
     if (incoming.length === 0) {
       return
     }
-    commitFiles(mergeFileInputItems(files ?? [], incoming, multiple, maxFiles))
-  }, [commitFiles, files, maxFiles, multiple])
+    commitFiles(mergeFileInputItems(files ?? [], incoming, maxFiles))
+  }, [commitFiles, files, maxFiles])
 
   const removeFile = useCallback((id: string) => {
     commitFiles((files ?? []).filter((file) => file.id !== id))
   }, [commitFiles, files])
 
-  const maxFileCount = resolveFileInputMaxFiles(multiple, maxFiles)
-  const canAddFiles = maxFileCount == null || (files ?? []).length < maxFileCount
-  const remainingFileSlots = maxFileCount == null
-    ? undefined
-    : Math.max(maxFileCount - (files ?? []).length, 0)
+  const maxFileCount = resolveFileInputMaxFiles(maxFiles)
+  const isSingleFile = maxFileCount === 1
+  const canAddFiles = (files ?? []).length < maxFileCount
+  const remainingFileSlots = Math.max(maxFileCount - (files ?? []).length, 0)
 
   useEffect(() => {
     if (!isOpen || disabled || readOnly || !canAddFiles) {
@@ -164,7 +158,10 @@ export function FileInputRoot({
   }, [])
 
   const requestAddFiles = useCallback(() => {
-    if (!canAddFiles) {
+    if (disabled || readOnly) {
+      return
+    }
+    if (!isSingleFile && !canAddFiles) {
       return
     }
     const customPicker = pickFilesStable()
@@ -178,7 +175,15 @@ export function FileInputRoot({
       return
     }
     openNativePicker()
-  }, [addFiles, canAddFiles, openNativePicker, pickFilesStable])
+  }, [addFiles, canAddFiles, disabled, isSingleFile, openNativePicker, pickFilesStable, readOnly])
+
+  const toggleIsOpen = useCallback(() => {
+    if (isSingleFile) {
+      requestAddFiles()
+      return
+    }
+    setIsOpen(!isOpen)
+  }, [isOpen, isSingleFile, requestAddFiles, setIsOpen])
 
   const contextValue = useMemo((): FileInputContextType => ({
     invalid,
@@ -186,11 +191,10 @@ export function FileInputRoot({
     readOnly,
     required,
     files: files ?? [],
-    isOpen,
+    isOpen: isSingleFile ? false : isOpen,
     isDragging,
     isDragOver,
     accept,
-    multiple,
     maxFiles,
     canAddFiles,
     fileInputRef,
@@ -211,8 +215,8 @@ export function FileInputRoot({
     isDragging,
     isDragOver,
     isOpen,
+    isSingleFile,
     maxFiles,
-    multiple,
     readOnly,
     removeFile,
     requestAddFiles,
@@ -226,11 +230,11 @@ export function FileInputRoot({
       <input
         ref={fileInputRef}
         type="file"
-        accept={accept}
-        multiple={remainingFileSlots == null ? multiple : remainingFileSlots > 1}
+        accept={normalizeFileInputAccept(accept).join(',') || undefined}
+        multiple={remainingFileSlots > 1}
         hidden={true}
         tabIndex={-1}
-        disabled={disabled || readOnly || !canAddFiles}
+        disabled={disabled || readOnly || (!isSingleFile && !canAddFiles)}
         onChange={(event) => {
           addFiles(createFileInputItemsFromFileList(event.target.files))
           event.target.value = ''

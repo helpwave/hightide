@@ -7,29 +7,20 @@ import {
 
 import {
   createFileInputItem,
+  normalizeFileInputAccept,
   type FileInputItem
 } from './fileInputItem'
 
 export type PickFileInputItemsOptions = {
-  accept?: string,
+  accept?: string[],
   multiple: boolean,
-}
-
-const acceptedTypes = (accept?: string): string[] => {
-  if (accept == null || accept === '') {
-    return []
-  }
-  return accept
-    .split(',')
-    .map((value) => value.trim())
-    .filter((value) => value.length > 0)
 }
 
 export const pickFileInputItems = async (
   options: PickFileInputItemsOptions
 ): Promise<readonly FileInputItem[] | null> => {
   try {
-    const type = acceptedTypes(options.accept)
+    const type = normalizeFileInputAccept(options.accept)
     const results = await pick({
       allowMultiSelection: options.multiple,
       type: type.length === 0 ? [types.allFiles] : type,

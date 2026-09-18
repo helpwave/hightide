@@ -1,10 +1,11 @@
 import {
   createFileInputItemsFromFileList,
+  normalizeFileInputAccept,
   type FileInputItem
 } from './fileInputItem'
 
 export type PickFileInputItemsOptions = {
-  accept?: string,
+  accept?: string[],
   multiple: boolean,
 }
 
@@ -20,8 +21,8 @@ export const pickFileInputItems = (
     const input = doc.createElement('input')
     input.type = 'file'
     input.multiple = options.multiple
-    const accept = options.accept
-    if (accept != null && accept !== '') {
+    const accept = normalizeFileInputAccept(options.accept).join(',')
+    if (accept !== '') {
       input.accept = accept
     }
     input.hidden = true

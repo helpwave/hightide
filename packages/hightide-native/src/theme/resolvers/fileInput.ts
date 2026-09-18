@@ -12,6 +12,7 @@ import type {
   FileInputMenuHeaderStyle,
   FileInputMenuStyle,
   FileInputMenuTitleStyle,
+  FileInputDropHintStyle,
   FileInputOverlayStyle,
   FileInputPlaceholderStyle,
   FileInputState,
@@ -148,6 +149,9 @@ export const toFileInputThemeResolvers: ComponentThemeResolver<FileInputThemeRes
     )),
     menuTitle: createStyleResolver((state: FileInputState): FileInputMenuTitleStyle => (
       StyleAdapterUtils.text(resolve(toState(state)).menuTitle)
+    )),
+    dropHint: createStyleResolver((state: FileInputState): FileInputDropHintStyle => (
+      StyleAdapterUtils.text(resolve(toState(state)).dropHint)
     )),
     addButtonContainer: createStyleResolver((state: FileInputState): FileInputAddButtonContainerStyle => (
       StyleAdapterUtils.container(resolve(toState(state)).addButtonContainer)
