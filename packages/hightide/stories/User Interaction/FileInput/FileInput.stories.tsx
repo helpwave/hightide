@@ -16,7 +16,6 @@ export const fileInput: Story = {
     disabled: false,
     invalid: false,
     readOnly: false,
-    multiple: true,
     maxFiles: undefined,
     maxVisualFiles: undefined,
     onValueChange: action('onValueChange'),
@@ -35,9 +34,37 @@ export const fileInputWithFiles: Story = {
     disabled: false,
     invalid: false,
     readOnly: false,
-    multiple: true,
     maxFiles: 6,
     maxVisualFiles: 2,
+    onValueChange: action('onValueChange'),
+    onEditComplete: action('onEditComplete'),
+  },
+}
+
+export const fileInputSingleFile: Story = {
+  args: {
+    initialValue: [],
+    disabled: false,
+    invalid: false,
+    readOnly: false,
+    maxFiles: 1,
+    accept: ['.pdf', 'image/png'],
+    onValueChange: action('onValueChange'),
+    onEditComplete: action('onEditComplete'),
+  },
+}
+
+export const fileInputLimited: Story = {
+  args: {
+    initialValue: [
+      createFileInputItem({ name: 'lab-results.pdf' }),
+      createFileInputItem({ name: 'referral.docx' }),
+    ],
+    disabled: false,
+    invalid: false,
+    readOnly: false,
+    maxFiles: 3,
+    accept: ['.pdf', '.docx', '.png'],
     onValueChange: action('onValueChange'),
     onEditComplete: action('onEditComplete'),
   },
@@ -53,7 +80,6 @@ export const fileInputComposed: Story = {
     disabled: false,
     invalid: false,
     readOnly: false,
-    multiple: true,
     maxFiles: 4,
     maxVisualFiles: 2,
     onValueChange: action('onValueChange'),
@@ -65,7 +91,6 @@ export const fileInputComposed: Story = {
       disabled={args.disabled}
       invalid={args.invalid}
       readOnly={args.readOnly}
-      multiple={args.multiple}
       maxFiles={args.maxFiles}
       onValueChange={args.onValueChange}
       onEditComplete={args.onEditComplete}

@@ -56,6 +56,18 @@
   "loading": "Lädt",
   "locale": "Locale",
   "maxLengthError": "Maximale Länge überschritten.",
+  "maximumNumberOfFiles": "Maximale Anzahl Dateien: {count}",
+  "@maximumNumberOfFiles": {
+    "placeholders": {
+      "count": { "type": "number" }
+    }
+  },
+  "allowedFileTypes": "Erlaubte Dateitypen: {types}",
+  "@allowedFileTypes": {
+    "placeholders": {
+      "types": { "type": "string" }
+    }
+  },
   "menu": "Menü",
   "minLengthError": "Mindestlänge nicht erreicht.",
   "more": "Mehr",

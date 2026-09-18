@@ -40,14 +40,28 @@ export const createFileInputItemsFromFileList = (
   }))
 }
 
-export const resolveFileInputMaxFiles = (
-  multiple: boolean,
-  maxFiles?: number
-): number | undefined => {
-  if (!multiple) {
+export const resolveFileInputMaxFiles = (maxFiles?: number): number => {
+  if (maxFiles == null || maxFiles <= 1) {
     return 1
   }
   return maxFiles
+}
+
+export const normalizeFileInputAccept = (accept?: readonly string[]): string[] => {
+  if (accept == null) {
+    return []
+  }
+  return accept
+    .map((value) => value.trim())
+    .filter((value) => value.length > 0)
+}
+
+export const formatFileInputAccept = (accept?: readonly string[]): string | undefined => {
+  const types = normalizeFileInputAccept(accept)
+  if (types.length === 0) {
+    return undefined
+  }
+  return types.join(', ')
 }
 
 type FileInputFileLike = {
@@ -106,10 +120,9 @@ export const fileInputItemsAreDuplicate = (
 export const mergeFileInputItems = (
   current: readonly FileInputItem[],
   incoming: readonly FileInputItem[],
-  multiple: boolean,
   maxFiles?: number
 ): FileInputItem[] => {
-  const limit = resolveFileInputMaxFiles(multiple, maxFiles)
+  const limit = resolveFileInputMaxFiles(maxFiles)
   if (limit === 1) {
     return incoming.slice(-1)
   }

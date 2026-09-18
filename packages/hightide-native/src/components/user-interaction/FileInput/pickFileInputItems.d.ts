@@ -1,7 +1,7 @@
 import type { FileInputItem } from './fileInputItem'
 
 export type PickFileInputItemsOptions = {
-  accept?: string,
+  accept?: string[],
   multiple: boolean,
 }
 

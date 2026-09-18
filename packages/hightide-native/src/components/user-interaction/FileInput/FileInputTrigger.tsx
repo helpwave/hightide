@@ -74,7 +74,7 @@ export const FileInputTrigger = ({
       accessibilityRole="button"
       accessibilityState={{
         disabled: !interactive,
-        expanded: context.isOpen,
+        expanded: (context.maxFiles ?? 1) > 1 ? context.isOpen : undefined,
       }}
       onPressIn={() => setIsPressed(true)}
       onPressOut={() => setIsPressed(false)}

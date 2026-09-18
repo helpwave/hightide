@@ -6,7 +6,11 @@ import { Dialog } from '../../layout/dialog/Dialog'
 import { Button } from '../Button'
 import { IconButton } from '../IconButton'
 import { useFileInputContext } from './FileInputContext'
-import { createFileInputItemsFromFileList, isFileDataTransfer } from './fileInputItem'
+import {
+  createFileInputItemsFromFileList,
+  formatFileInputAccept,
+  isFileDataTransfer
+} from './fileInputItem'
 
 export type FileInputMenuProps = Omit<ComponentPropsWithoutRef<'div'>, 'title'> & {
   children?: ReactNode,
@@ -20,11 +24,12 @@ export const FileInputMenu = ({
   const translation = useHightideTranslation()
   const context = useFileInputContext()
   const canEdit = !context.disabled && !context.readOnly
+  const allowedFileTypes = formatFileInputAccept(context.accept)
 
   return (
     <Dialog
       {...props}
-      isOpen={context.isOpen}
+      isOpen={context.isOpen && (context.maxFiles ?? 1) > 1}
       onClose={() => context.setIsOpen(false)}
       titleElement={translation('selectFiles')}
       description={translation('dropFilesHere')}
@@ -63,6 +68,20 @@ export const FileInputMenu = ({
         props.onDrop?.(event)
       }}
     >
+      {(context.maxFiles != null || allowedFileTypes != null) && (
+        <div data-name="file-input-menu-meta">
+          {context.maxFiles != null && (
+            <span data-name="file-input-menu-meta-text">
+              {translation('maximumNumberOfFiles', { count: context.maxFiles })}
+            </span>
+          )}
+          {allowedFileTypes != null && (
+            <span data-name="file-input-menu-meta-text">
+              {translation('allowedFileTypes', { types: allowedFileTypes })}
+            </span>
+          )}
+        </div>
+      )}
       <div data-name="file-input-menu-list">
         {context.files.map((file) => (
           <div key={file.id} data-name="file-input-menu-row">
@@ -82,10 +101,11 @@ export const FileInputMenu = ({
           </div>
         ))}
       </div>
-      {canEdit && context.canAddFiles && (
+      {canEdit && (
         <Button
           color="primary"
           coloringStyle="tonal"
+          disabled={!context.canAddFiles}
           onClick={() => context.requestAddFiles()}
         >
           <Plus />

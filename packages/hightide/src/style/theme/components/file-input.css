@@ -58,4 +58,12 @@
   [data-name="file-input-menu-title"] {
     @apply grow truncate;
   }
+
+  [data-name="file-input-menu-meta"] {
+    @apply flex-col-1;
+  }
+
+  [data-name="file-input-menu-meta-text"] {
+    @apply typography-body-md text-description;
+  }
 }

@@ -41,6 +41,8 @@ export type FileInputMenuHeaderStyle = ViewStyle
 
 export type FileInputMenuTitleStyle = TextStyle
 
+export type FileInputDropHintStyle = TextStyle
+
 export type FileInputAddButtonContainerStyle = ViewStyle
 
 export type FileInputThemeResolvers = {
@@ -57,5 +59,6 @@ export type FileInputThemeResolvers = {
   menuBody: StyleResolverFunction<FileInputState, FileInputMenuBodyStyle>,
   menuHeader: StyleResolverFunction<FileInputState, FileInputMenuHeaderStyle>,
   menuTitle: StyleResolverFunction<FileInputState, FileInputMenuTitleStyle>,
+  dropHint: StyleResolverFunction<FileInputState, FileInputDropHintStyle>,
   addButtonContainer: StyleResolverFunction<FileInputState, FileInputAddButtonContainerStyle>,
 }

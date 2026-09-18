@@ -10,8 +10,7 @@ export type FileInputPickFiles = () => Promise<readonly FileInputItem[] | null |
 export type FileInputContextType = Partial<FormFieldInteractionStates> & {
   files: readonly FileInputItem[],
   isOpen: boolean,
-  accept?: string,
-  multiple: boolean,
+  accept?: string[],
   maxFiles?: number,
   canAddFiles: boolean,
   config: {

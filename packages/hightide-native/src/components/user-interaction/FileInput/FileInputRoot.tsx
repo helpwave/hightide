@@ -31,8 +31,7 @@ export type FileInputRootProps = Partial<FormFieldDataHandling<readonly FileInpu
     initialIsOpen?: boolean,
     onClose?: () => void,
     onIsOpenChange?: (isOpen: boolean) => void,
-    accept?: string,
-    multiple?: boolean,
+    accept?: string[],
     maxFiles?: number,
     pickFiles?: FileInputPickFiles,
     color?: ColorPairToken,
@@ -49,7 +48,6 @@ export function FileInputRoot({
   onClose,
   onIsOpenChange,
   accept,
-  multiple = true,
   maxFiles,
   pickFiles,
   color,
@@ -64,7 +62,7 @@ export function FileInputRoot({
     defaultValue: initialValue ?? [],
   })
   const [isOpen, setIsOpenState] = useControlledState<boolean>({
-    defaultValue: initialIsOpen,
+    defaultValue: resolveFileInputMaxFiles(maxFiles) === 1 ? false : initialIsOpen,
   })
 
   const onEditCompleteStable = useEventCallbackStabilizer(onEditComplete)
@@ -85,33 +83,31 @@ export function FileInputRoot({
     }
   }, [onCloseStable, onIsOpenChangeStable, setIsOpenState])
 
-  const toggleIsOpen = useCallback(() => {
-    setIsOpen(!isOpen)
-  }, [isOpen, setIsOpen])
-
   const addFiles = useCallback((incoming: readonly FileInputItem[]) => {
     if (incoming.length === 0) {
       return
     }
-    commitFiles(mergeFileInputItems(files ?? [], incoming, multiple, maxFiles))
-  }, [commitFiles, files, maxFiles, multiple])
+    commitFiles(mergeFileInputItems(files ?? [], incoming, maxFiles))
+  }, [commitFiles, files, maxFiles])
 
   const removeFile = useCallback((id: string) => {
     commitFiles((files ?? []).filter((file) => file.id !== id))
   }, [commitFiles, files])
 
-  const maxFileCount = resolveFileInputMaxFiles(multiple, maxFiles)
-  const canAddFiles = maxFileCount == null || (files ?? []).length < maxFileCount
-  const remainingFileSlots = maxFileCount == null
-    ? undefined
-    : Math.max(maxFileCount - (files ?? []).length, 0)
+  const maxFileCount = resolveFileInputMaxFiles(maxFiles)
+  const isSingleFile = maxFileCount === 1
+  const canAddFiles = (files ?? []).length < maxFileCount
+  const remainingFileSlots = Math.max(maxFileCount - (files ?? []).length, 0)
 
   const requestAddFiles = useCallback(() => {
-    if (!canAddFiles) {
+    if (disabled || readOnly) {
+      return
+    }
+    if (!isSingleFile && !canAddFiles) {
       return
     }
 
-    const allowMultiple = remainingFileSlots == null ? multiple : remainingFileSlots > 1
+    const allowMultiple = remainingFileSlots > 1
 
     const applyPicked = (picked: readonly FileInputItem[] | null | undefined) => {
       if (picked == null) {
@@ -134,10 +130,20 @@ export function FileInputRoot({
     accept,
     addFiles,
     canAddFiles,
-    multiple,
+    disabled,
+    isSingleFile,
     pickFilesStable,
+    readOnly,
     remainingFileSlots,
   ])
+
+  const toggleIsOpen = useCallback(() => {
+    if (isSingleFile) {
+      requestAddFiles()
+      return
+    }
+    setIsOpen(!isOpen)
+  }, [isOpen, isSingleFile, requestAddFiles, setIsOpen])
 
   const contextValue = useMemo((): FileInputContextType => ({
     invalid,
@@ -145,9 +151,8 @@ export function FileInputRoot({
     readOnly,
     required,
     files: files ?? [],
-    isOpen: !!isOpen,
+    isOpen: isSingleFile ? false : !!isOpen,
     accept,
-    multiple,
     maxFiles,
     canAddFiles,
     config: {
@@ -167,8 +172,8 @@ export function FileInputRoot({
     files,
     invalid,
     isOpen,
+    isSingleFile,
     maxFiles,
-    multiple,
     readOnly,
     removeFile,
     requestAddFiles,
