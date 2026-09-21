@@ -5,6 +5,19 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/)
 and adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [0.1.8] - 2026-09-21
+
+### Added
+
+- `CalendarType` (`Gregorian`) in `date.ts` with `CalendarTypeUtils`
+- `startingWeekday` and `calendarType` on `LocalizationContextValue`; both are always resolved, and the setters accept `null` to clear the stored preference
+- Optional `LocaleInformation` fields `defaultTimeZone`, `defaultIs24HourFormat`, `defaultStartingWeekday`, and `defaultCalendarType`
+
+### Changed
+
+- Renamed `WeekDay` to `Weekday`
+- Time zone, hour format, starting weekday, and calendar type resolve as preference, then locale default, then hightide default
+
 ## [0.1.7] - 2026-09-18
 
 ### Added

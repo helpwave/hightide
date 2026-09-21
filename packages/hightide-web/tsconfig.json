@@ -14,11 +14,16 @@
     "declarationDir": "dist",
     "jsx": "react-jsx",
     "esModuleInterop": true,
-    "skipLibCheck": true
+    "skipLibCheck": true,
+    "types": [
+      "jest",
+      "node"
+    ]
   },
   "include": [
     "src",
-    "stories"
+    "stories",
+    "tests"
   ],
   "exclude": [
     "src/storybook",

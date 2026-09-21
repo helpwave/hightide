@@ -1,5 +1,5 @@
 import type { KeyboardEvent } from 'react'
-import type { WeekDay } from '@helpwave/hightide-utils/utils'
+import type { Weekday } from '@helpwave/hightide-utils/utils'
 import { DateUtils } from '@helpwave/hightide-utils/utils'
 import { useLocalization } from '../../../global-contexts/localization/forward-exports'
 import type { FormFieldDataHandling } from '../../form/FormField'
@@ -14,7 +14,7 @@ export type DayPickerProps = Partial<FormFieldDataHandling<Date>> & {
   initialDisplayedMonth?: Date,
   start?: Date,
   end?: Date,
-  weekStart?: WeekDay,
+  weekStart?: Weekday,
   markToday?: boolean,
   className?: string,
 }
@@ -32,11 +32,12 @@ export const DayPicker = ({
   end: providedEnd,
   onValueChange,
   onEditComplete,
-  weekStart = 'monday',
+  weekStart: weekStartOverride,
   markToday = true,
   className,
 }: DayPickerProps) => {
-  const { locale } = useLocalization()
+  const { locale, startingWeekday: contextStartingWeekday } = useLocalization()
+  const weekStart = weekStartOverride ?? contextStartingWeekday
 
   const [value, setValue] = useControlledState({
     value: controlledValue,

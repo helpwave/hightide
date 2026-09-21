@@ -3,8 +3,18 @@ import type { SupportedThemesConfig } from '../theme/ThemeProvider'
 
 export const HightideConfigUtils = {
   defaultSupportedLocales: {
-    'de-DE': { localName: 'Deutsch' },
-    'en-US': { localName: 'English (US)' },
+    'de-DE': {
+      localName: 'Deutsch',
+      defaultIs24HourFormat: true,
+      defaultStartingWeekday: 'monday',
+      defaultCalendarType: 'Gregorian',
+    },
+    'en-US': {
+      localName: 'English (US)',
+      defaultIs24HourFormat: false,
+      defaultStartingWeekday: 'sunday',
+      defaultCalendarType: 'Gregorian',
+    },
   } as const satisfies SupportedLocalesConfig,
   defaultSupportedThemes: {
     light: {

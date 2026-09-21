@@ -21,7 +21,21 @@ const monthsList = ['january', 'february', 'march', 'april', 'may', 'june', 'jul
 export type Month = typeof monthsList[number]
 
 const weekDayList = ['sunday', 'monday', 'tuesday', 'wednesday', 'thursday', 'friday', 'saturday'] as const
-export type WeekDay = typeof weekDayList[number]
+export type Weekday = typeof weekDayList[number]
+
+const calendarTypeValues = ['Gregorian'] as const
+export type CalendarType = (typeof calendarTypeValues)[number]
+const allowedCalendarTypeValues: ReadonlySet<string> = new Set(calendarTypeValues)
+function isCalendarTypeValue(value: unknown): value is CalendarType {
+  if (typeof value !== 'string') return false
+  return allowedCalendarTypeValues.has(value)
+}
+
+export const CalendarTypeUtils = {
+  array: calendarTypeValues,
+  set: allowedCalendarTypeValues,
+  typeCheck: isCalendarTypeValue,
+}
 
 const changeDuration = (date: Date, duration: Partial<DurationJSON>, isAdding?: boolean): Date => {
   const {
@@ -229,7 +243,7 @@ function fromZonedDate(date: Date | null, timeZone?: string): Date | null {
   return new Date(asUtc - offset)
 }
 
-const weeksForCalenderMonth = (date: Date, weekStart: WeekDay, weeks: number = 6) => {
+const weeksForCalenderMonth = (date: Date, weekStart: Weekday, weeks: number = 6) => {
   const month = date.getMonth()
   const year = date.getFullYear()
 

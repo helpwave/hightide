@@ -92,4 +92,93 @@ describe('useCreateLocalizationContext', () => {
 
     expect(result.current.supportedLocales).toEqual(supportedLocales)
   })
+
+  test('uses hightide defaults for starting weekday and calendar type', () => {
+    const store = useMemoryKeyValueStore()
+
+    const { result } = renderHook(() => useCreateLocalizationContext({
+      store,
+      fallbackLocale: 'en-US',
+      supportedLocales,
+    }))
+
+    expect(result.current.startingWeekday).toBe('monday')
+    expect(result.current.calendarType).toBe('Gregorian')
+  })
+
+  test('resolves locale defaults over hightide defaults', () => {
+    const store = useMemoryKeyValueStore()
+    const localesWithDefaults: SupportedLocalesConfig = {
+      'en-US': {
+        localName: 'English (US)',
+        defaultStartingWeekday: 'sunday',
+        defaultCalendarType: 'Gregorian',
+        defaultIs24HourFormat: false,
+      },
+      'de-DE': {
+        localName: 'Deutsch',
+        defaultStartingWeekday: 'monday',
+        defaultIs24HourFormat: true,
+      },
+    }
+
+    const { result } = renderHook(() => useCreateLocalizationContext({
+      store,
+      fallbackLocale: 'en-US',
+      supportedLocales: localesWithDefaults,
+    }))
+
+    expect(result.current.startingWeekday).toBe('sunday')
+    expect(result.current.is24HourFormat).toBe(false)
+  })
+
+  test('prefers stored starting weekday over locale default', () => {
+    const store = useMemoryKeyValueStore()
+    const localesWithDefaults: SupportedLocalesConfig = {
+      'en-US': {
+        localName: 'English (US)',
+        defaultStartingWeekday: 'sunday',
+      },
+    }
+
+    const { result } = renderHook(() => useCreateLocalizationContext({
+      store,
+      fallbackLocale: 'en-US',
+      supportedLocales: localesWithDefaults,
+    }))
+
+    act(() => {
+      result.current.setStartingWeekday('wednesday')
+    })
+
+    expect(result.current.startingWeekday).toBe('wednesday')
+
+    act(() => {
+      result.current.setStartingWeekday(null)
+    })
+
+    expect(result.current.startingWeekday).toBe('sunday')
+  })
+
+  test('setCalendarType null falls back to locale default then hightide default', () => {
+    const store = useMemoryKeyValueStore()
+
+    const { result } = renderHook(() => useCreateLocalizationContext({
+      store,
+      fallbackLocale: 'en-US',
+      supportedLocales,
+    }))
+
+    act(() => {
+      result.current.setCalendarType('Gregorian')
+    })
+
+    expect(result.current.calendarType).toBe('Gregorian')
+
+    act(() => {
+      result.current.setCalendarType(null)
+    })
+
+    expect(result.current.calendarType).toBe('Gregorian')
+  })
 })

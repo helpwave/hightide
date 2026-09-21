@@ -56,6 +56,10 @@ export const dateTimeInput: Story = {
         setIs24HourFormat: () => {},
         timeZone: timeZone || undefined,
         setTimeZone: () => {},
+        startingWeekday: 'monday',
+        setStartingWeekday: () => {},
+        calendarType: 'Gregorian',
+        setCalendarType: () => {},
         isInitialized: true,
       }}>
         <div className="flex-col-2 w-full max-w-md">
