@@ -1,27 +1,23 @@
 @layer components {
   .card {
-    @apply flex-col-0 w-full min-w-0 shadow-md surface coloring-solid;
+    @apply flex-col-0 w-full min-w-0 shadow-md surface coloring-solid justify-center;
+    @apply gap-y-2;
 
     &[data-size="sm"] {
-      @apply px-3 py-2 rounded-md;
+      @apply px-3 py-2 rounded-md min-h-16;
     }
 
     &[data-size="md"] {
-      @apply px-4 py-3 gap-y-3 rounded-md;
+      @apply px-4 py-3 gap-y-3 rounded-md min-h-20;
     }
 
     &[data-size="lg"] {
-      @apply px-8 py-6 gap-y-4 rounded-lg;
+      @apply px-8 py-6 gap-y-4 rounded-lg min-h-24;
     }
   }
 
   .card-header {
-    @apply flex flex-row items-center w-full min-w-0;
-
-    @apply gap-x-4;
-    @apply group-data-[size=sm]/card:min-h-16 group-data-[size=sm]/card:gap-x-3;
-    @apply group-data-[size=md]/card:min-h-20 group-data-[size=md]/card:gap-x-4;
-    @apply group-data-[size=lg]/card:min-h-24 group-data-[size=lg]/card:gap-x-6;
+    @apply flex flex-row items-center w-full min-w-0 gap-x-4;
   }
 
   .card-content {
@@ -35,20 +31,13 @@
 
   .card-title {
     @apply min-w-0;
-
     @apply typography-title-md;
-    @apply group-data-[size=sm]/card:typography-title-md;
-    @apply group-data-[size=md]/card:typography-title-md;
-    @apply group-data-[size=lg]/card:typography-title-lg;
   }
 
   .card-description {
     @apply text-description;
 
     @apply typography-body-md;
-    @apply group-data-[size=sm]/card:typography-body-md;
-    @apply group-data-[size=md]/card:typography-body-md;
-    @apply group-data-[size=lg]/card:typography-body-lg;
   }
 
   .action-card {
@@ -58,7 +47,7 @@
     transition: var(--coloring-transitions), var(--focus-transitions);
 
     &:has(:focus-visible) {
-      @apply focus-style-apply;
+      @apply focus-style-apply shadow-lg;
     }
 
     &:not([data-disabled]) {
@@ -85,7 +74,7 @@
     }
 
     &:focus-visible {
-      @apply focus-style-apply;
+      @apply focus-style-apply shadow-lg;
     }
   }
 
