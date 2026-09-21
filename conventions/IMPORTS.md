@@ -1,6 +1,6 @@
 # Import conventions
 
-Applies to all packages in this monorepo (`hightide`, `hightide-native`, `hightide-design`, `hightide-utils`).
+Applies to all packages in this monorepo (`hightide-web`, `hightide-native`, `hightide-design`, `hightide-utils`).
 
 ## Relative package imports
 

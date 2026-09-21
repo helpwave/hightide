@@ -383,7 +383,7 @@ importers:
         specifier: 7.3.5
         version: 7.3.5(@types/node@20.19.43)(jiti@2.7.0)(lightningcss@1.30.2)(terser@5.49.0)
 
-  packages/hightide:
+  packages/hightide-web:
     dependencies:
       '@helpwave/hightide-utils':
         specifier: workspace:*

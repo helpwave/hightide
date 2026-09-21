@@ -1,20 +1,20 @@
-name: hightide Lint
+name: hightide-web Lint
 
 on:
   push:
     branches:
       - main
     paths:
-      - "packages/hightide/**"
+      - "packages/hightide-web/**"
       - "packages/hightide-utils/**"
-      - ".github/workflows/hightide-lint.yaml"
+      - ".github/workflows/hightide-web-lint.yaml"
   pull_request:
     branches:
       - "**"
     paths:
-      - "packages/hightide/**"
+      - "packages/hightide-web/**"
       - "packages/hightide-utils/**"
-      - ".github/workflows/hightide-lint.yaml"
+      - ".github/workflows/hightide-web-lint.yaml"
 
 jobs:
   lint:

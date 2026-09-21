@@ -1,20 +1,20 @@
-name: hightide Test
+name: hightide-web Test
 
 on:
   push:
     branches:
       - main
     paths:
-      - "packages/hightide/**"
+      - "packages/hightide-web/**"
       - "packages/hightide-utils/**"
-      - ".github/workflows/hightide-test.yaml"
+      - ".github/workflows/hightide-web-test.yaml"
   pull_request:
     branches:
       - "**"
     paths:
-      - "packages/hightide/**"
+      - "packages/hightide-web/**"
       - "packages/hightide-utils/**"
-      - ".github/workflows/hightide-test.yaml"
+      - ".github/workflows/hightide-web-test.yaml"
 
 jobs:
   test:
