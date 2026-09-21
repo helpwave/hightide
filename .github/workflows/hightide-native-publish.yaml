@@ -2,17 +2,21 @@ name: hightide-native Publish
 
 on:
   push:
-    branches:
-      - main
-    paths:
-      - "packages/hightide-native/**"
-      - ".github/workflows/hightide-native-publish.yaml"
+    tags:
+      - "hightide-native@*"
 
 jobs:
   publish:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
+
+      - name: Publish precheck
+        run: node .github/scripts/publish-precheck.mjs
+        env:
+          TAG_PREFIX: hightide-native
+          PACKAGE_DIR: packages/hightide-native
+          TAG_NAME: ${{ github.ref_name }}
 
       - uses: pnpm/action-setup@v4
         with:
