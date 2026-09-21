@@ -6,5 +6,7 @@ export const useDateTimeFormat = () => {
   return {
     is24HourFormat: context?.is24HourFormat ?? true,
     timeZone: context?.timeZone ?? undefined,
+    startingWeekday: context?.startingWeekday ?? 'monday',
+    calendarType: context?.calendarType ?? 'Gregorian',
   }
 }

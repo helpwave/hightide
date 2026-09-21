@@ -8,7 +8,6 @@ import { DateTimeField, type DateTimeFieldProps } from '../../src/components/use
 import { DateTimeInput } from '../../src/components/user-interaction/input/DateTimeInput'
 
 
-
 const renderField = (props?: Partial<DateTimeFieldProps>) => {
   const onValueChange = jest.fn()
   const Wrapper = () => {
@@ -229,9 +228,19 @@ describe('DateTimeInput controlled value', () => {
 })
 
 describe('DateTimeInput hour format', () => {
-  test('defaults to a 24 hour clock regardless of locale', () => {
+  test('uses the 12 hour locale default for en-US', () => {
     render(
       <TestHightideProvider locale="en-US">
+        <DateTimeInput mode="time" initialValue={new Date(2024, 0, 1, 18, 30)} />
+      </TestHightideProvider>
+    )
+
+    expect(screen.getAllByRole('spinbutton').map(segment => segment.textContent)).toEqual(['06', '30', 'PM'])
+  })
+
+  test('uses the 24 hour locale default for de-DE', () => {
+    render(
+      <TestHightideProvider locale="de-DE">
         <DateTimeInput mode="time" initialValue={new Date(2024, 0, 1, 18, 30)} />
       </TestHightideProvider>
     )
@@ -241,7 +250,7 @@ describe('DateTimeInput hour format', () => {
 
   test('uses a 12 hour clock when the context opts out', () => {
     render(
-      <TestHightideProvider locale="en-US" is24HourFormat={false}>
+      <TestHightideProvider locale="de-DE" is24HourFormat={false}>
         <DateTimeInput mode="time" initialValue={new Date(2024, 0, 1, 18, 30)} />
       </TestHightideProvider>
     )
