@@ -5,14 +5,23 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/)
 and adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
-## [0.17.2] - 2026-09-21
+## [0.17.2] - 2026-09-23
 
 ### Added
 
+- `ExpandableHeader` `triggerProps` for the header toggle button
+- `ExpandableContent` `isClosingOnClick` to collapse when the content is clicked
+- `NavigationItemList` `onClose` so Escape on items can close the parent menu
 - Localization re-exports `Weekday` and `CalendarType`
 
 ### Changed
 
+- Click and keyboard handlers no longer call `event.stopPropagation` (`Button`, `IconButton`, `Select`, `MultiSelect`, `FileInput`, `Navigation`, `Expandable`, and `PropsUtil` helpers)
+- `Button` no longer stops click bubbling; `allowClickEventPropagation` has no effect
+- `Expandable` header is a `<button>`; `allowContainerToggle` is removed
+- `FAQSection` uses `isClosingOnClick` instead of container toggle
+- `Navigation` handles Escape on the focused control instead of a capturing menu handler
+- `MultiSelectChipDisplayTrigger` uses an overlay click target so chip remove buttons do not need to stop propagation
 - Default `de-DE` and `en-US` locale info includes `defaultIs24HourFormat`, `defaultStartingWeekday`, and `defaultCalendarType`
 - `DayPicker` uses localization `startingWeekday` when `weekStart` is omitted
 - Time inputs follow the locale hour-format default (`en-US` 12-hour, `de-DE` 24-hour) unless overridden
@@ -20,6 +29,10 @@ and adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 ### Fixed
 
 - `card` styling now applies the min-height correctly to the root element instead of the header
+
+### Removed
+
+- `ExpandableRoot` `allowContainerToggle`
 
 ## [0.17.1] - 2026-09-18
 
