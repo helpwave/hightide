@@ -4,9 +4,9 @@ import type { ColorPairToken } from '../../../theme-tokens/create'
 import { HexColorUtils } from '../../../utils/hex'
 import type { ComponentTokenResolver } from '../component-token-resolver'
 import type { ComponentTokens } from '../../component-tokens'
-import type { ResolvableContainerTokens, ResolvableOutlineTokens } from '../../resolvable-container-tokens'
-import type { ResolvableIconTokens } from '../../resolvable-icon-tokens'
-import type { ResolvableTextStyleTokens } from '../../resolvable-text-style-tokens'
+import type { ContainerTokens, OutlineTokens } from '../../container-tokens'
+import type { IconTokens } from '../../icon-tokens'
+import type { TextTokens } from '../../text-tokens'
 import { type PressableStateValue } from '../pressable-tokens'
 import type { HightideTokenPathProvider } from '../token-context'
 
@@ -21,10 +21,10 @@ export type ListActionComponentResolverProps = {
 }
 
 export type ListActionTokens = AssertAssignable<{
-  container: ResolvableContainerTokens<ListActionItemState, ListActionItemConfig>,
-  titleText: ResolvableTextStyleTokens<ListActionItemState, ListActionItemConfig>,
-  descriptionText: ResolvableTextStyleTokens<ListActionItemState, ListActionItemConfig>,
-  icon: ResolvableIconTokens<ListActionItemState, ListActionItemConfig>,
+  container: ContainerTokens,
+  titleText: TextTokens,
+  descriptionText: TextTokens,
+  icon: IconTokens,
 }, ComponentTokens<ListActionItemState, ListActionItemConfig>>
 
 export type ListActionTokenResolver = ComponentTokenResolver<
@@ -46,7 +46,7 @@ export const listActionOverlayTokens = {
   container: {
     type: 'container',
     backgroundColor: TokenBuilder.stateful(TokenBuilder.colorValueRef<ListActionTokenContext>('params.colors.background')),
-    outline: TokenBuilder.stateful<ResolvableOutlineTokens>({
+    outline: TokenBuilder.stateful<OutlineTokens>({
       width: TokenBuilder.numberRef<ListActionTokenContext>('theme.focusOutline.width'),
       offset: TokenBuilder.calc(
         'multiply',

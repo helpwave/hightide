@@ -1,8 +1,8 @@
 import { TokenBuilder } from '../../utils'
 import type { ThemeElevationLevel } from '../../theme-tokens/create'
-import type { ResolvableShadowTokens } from '../resolvable-container-tokens'
+import type { ShadowTokens } from '../container-tokens'
 
-export const elevationTokens = (level: ThemeElevationLevel) : ResolvableShadowTokens => ({
+export const elevationTokens = (level: ThemeElevationLevel) : ShadowTokens => ({
   color: TokenBuilder.colorValueRef(`theme.elevation.${level}.color`),
   spread: TokenBuilder.numberRef(`theme.elevation.${level}.spread`),
   blur: TokenBuilder.numberRef(`theme.elevation.${level}.blur`),

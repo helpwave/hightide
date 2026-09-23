@@ -5,8 +5,8 @@ import { HexColorUtils } from '../../utils/hex'
 import type { ColorPairToken } from '../../theme-tokens/create'
 import type { ComponentTokenResolver } from './component-token-resolver'
 import type { ComponentTokens } from '../component-tokens'
-import type { ResolvableContainerTokens, ResolvableOutlineTokens } from '../resolvable-container-tokens'
-import type { ResolvableIconTokens } from '../resolvable-icon-tokens'
+import type { ContainerTokens, OutlineTokens } from '../container-tokens'
+import type { IconTokens } from '../icon-tokens'
 import { inputStateValues } from './input-tokens'
 import type { HightideTokenPathProvider } from './token-context'
 
@@ -33,9 +33,9 @@ export type CheckboxComponentResolverProps = {
 }
 
 export type CheckboxTokens = AssertAssignable<{
-  container: ResolvableContainerTokens<CheckboxState, CheckboxConfig>,
-  stateLayer: ResolvableContainerTokens<CheckboxState, CheckboxConfig>,
-  icon: ResolvableIconTokens<CheckboxState, CheckboxConfig>,
+  container: ContainerTokens,
+  stateLayer: ContainerTokens,
+  icon: IconTokens,
 }, ComponentTokens<CheckboxState, CheckboxConfig>>
 
 export type CheckboxTokenResolver = ComponentTokenResolver<
@@ -115,7 +115,7 @@ export const checkboxTokens = {
       mainAxisAlignment: TokenBuilder.mainAxisAlignment('center'),
       crossAxisAlignment: TokenBuilder.crossAxisAlignment('center'),
     }),
-    outline: TokenBuilder.stateful<ResolvableOutlineTokens>(
+    outline: TokenBuilder.stateful<OutlineTokens>(
       {
         width: TokenBuilder.numberValue(TokenBuilder.number(0)),
         offset: TokenBuilder.numberValue(TokenBuilder.number(0)),

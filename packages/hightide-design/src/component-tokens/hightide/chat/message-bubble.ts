@@ -2,9 +2,9 @@ import { TokenBuilder } from '../../../utils'
 import type { AssertAssignable, HightideResolverConfig, ResolverState } from '../../../primitive-tokens'
 import type { ComponentTokenResolver } from '../component-token-resolver'
 import type { ComponentTokens } from '../../component-tokens'
-import type { ResolvableContainerTokens } from '../../resolvable-container-tokens'
-import type { ResolvableIconTokens } from '../../resolvable-icon-tokens'
-import type { ResolvableTextStyleTokens } from '../../resolvable-text-style-tokens'
+import type { ContainerTokens } from '../../container-tokens'
+import type { IconTokens } from '../../icon-tokens'
+import type { TextTokens } from '../../text-tokens'
 import { elevationTokens } from '../elevation-tokens'
 import {
   messageCornersTokens,
@@ -21,13 +21,13 @@ export type ChatMessageBubbleComponentResolverProps = {
 }
 
 export type ChatMessageBubbleTokens = AssertAssignable<{
-  container: ResolvableContainerTokens<ChatMessageBubbleState, ChatMessageBubbleConfig>,
-  body: ResolvableContainerTokens<ChatMessageBubbleState, ChatMessageBubbleConfig>,
-  bodyText: ResolvableTextStyleTokens<ChatMessageBubbleState, ChatMessageBubbleConfig>,
-  metaDataContainer: ResolvableContainerTokens<ChatMessageBubbleState, ChatMessageBubbleConfig>,
-  metaDataStatusContainer: ResolvableContainerTokens<ChatMessageBubbleState, ChatMessageBubbleConfig>,
-  metaDataText: ResolvableTextStyleTokens<ChatMessageBubbleState, ChatMessageBubbleConfig>,
-  metaDataIcon: ResolvableIconTokens<ChatMessageBubbleState, ChatMessageBubbleConfig>,
+  container: ContainerTokens,
+  body: ContainerTokens,
+  bodyText: TextTokens,
+  metaDataContainer: ContainerTokens,
+  metaDataStatusContainer: ContainerTokens,
+  metaDataText: TextTokens,
+  metaDataIcon: IconTokens,
 }, ComponentTokens<ChatMessageBubbleState, ChatMessageBubbleConfig>>
 
 export type ChatMessageBubbleTokenResolver = ComponentTokenResolver<

@@ -2,18 +2,18 @@ import { TokenBuilder } from '../../../utils'
 import type { AssertAssignable, HightideResolverConfig, ResolverState } from '../../../primitive-tokens'
 import type { ComponentTokenResolver } from '../component-token-resolver'
 import type { ComponentTokens } from '../../component-tokens'
-import type { ResolvableContainerTokens } from '../../resolvable-container-tokens'
-import type { ResolvableTextStyleTokens } from '../../resolvable-text-style-tokens'
+import type { ContainerTokens } from '../../container-tokens'
+import type { TextTokens } from '../../text-tokens'
 import { surfaceDescriptionColor, surfaceFadedColor } from './shared'
 
 export type ChatMessageComposerState = ResolverState
 export type ChatMessageComposerConfig = HightideResolverConfig
 
 export type ChatMessageComposerTokens = AssertAssignable<{
-  container: ResolvableContainerTokens<ChatMessageComposerState, ChatMessageComposerConfig>,
-  input: ResolvableContainerTokens<ChatMessageComposerState, ChatMessageComposerConfig>,
-  text: ResolvableTextStyleTokens<ChatMessageComposerState, ChatMessageComposerConfig>,
-  placeholder: ResolvableTextStyleTokens<ChatMessageComposerState, ChatMessageComposerConfig>,
+  container: ContainerTokens,
+  input: ContainerTokens,
+  text: TextTokens,
+  placeholder: TextTokens,
 }, ComponentTokens<ChatMessageComposerState, ChatMessageComposerConfig>>
 
 export type ChatMessageComposerTokenResolver = ComponentTokenResolver<

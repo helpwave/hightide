@@ -7,9 +7,9 @@ import type { AvatarOverrideTokens } from '../avatar-tokens'
 import { HexColorUtils } from '../../../utils/hex'
 import type { ComponentTokenResolver } from '../component-token-resolver'
 import type { ComponentTokens } from '../../component-tokens'
-import type { ResolvableContainerTokens } from '../../resolvable-container-tokens'
-import type { ResolvableIconTokens } from '../../resolvable-icon-tokens'
-import type { ResolvableTextStyleTokens } from '../../resolvable-text-style-tokens'
+import type { ContainerTokens } from '../../container-tokens'
+import type { IconTokens } from '../../icon-tokens'
+import type { TextTokens } from '../../text-tokens'
 import type { PressableOverrideTokens } from '../pressable-tokens'
 import {
   pillBorderRadius,
@@ -34,15 +34,15 @@ export type ChatConversationRowComponentResolverProps = {
 }
 
 export type ChatConversationRowTokens = AssertAssignable<{
-  contentContainer: ResolvableContainerTokens<ChatConversationRowState, ChatConversationRowConfig>,
-  headerRow: ResolvableContainerTokens<ChatConversationRowState, ChatConversationRowConfig>,
-  messageRow: ResolvableContainerTokens<ChatConversationRowState, ChatConversationRowConfig>,
-  title: ResolvableTextStyleTokens<ChatConversationRowState, ChatConversationRowConfig>,
-  timestamp: ResolvableTextStyleTokens<ChatConversationRowState, ChatConversationRowConfig>,
-  preview: ResolvableTextStyleTokens<ChatConversationRowState, ChatConversationRowConfig>,
-  unreadBadge: ResolvableContainerTokens<ChatConversationRowState, ChatConversationRowConfig>,
-  unreadBadgeText: ResolvableTextStyleTokens<ChatConversationRowState, ChatConversationRowConfig>,
-  sentIndicator: ResolvableIconTokens<ChatConversationRowState, ChatConversationRowConfig>,
+  contentContainer: ContainerTokens,
+  headerRow: ContainerTokens,
+  messageRow: ContainerTokens,
+  title: TextTokens,
+  timestamp: TextTokens,
+  preview: TextTokens,
+  unreadBadge: ContainerTokens,
+  unreadBadgeText: TextTokens,
+  sentIndicator: IconTokens,
 }, ComponentTokens<ChatConversationRowState, ChatConversationRowConfig>> & {
   pressableOverrides: PressableOverrideTokens,
   avatarOverride: AvatarOverrideTokens,

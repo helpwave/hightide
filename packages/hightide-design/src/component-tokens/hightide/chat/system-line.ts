@@ -3,9 +3,9 @@ import type { AssertAssignable, ColorValueToken, HightideResolverConfig, Hightid
 import type { ColorPairToken } from '../../../theme-tokens/create'
 import type { ComponentTokenResolver } from '../component-token-resolver'
 import type { ComponentTokens } from '../../component-tokens'
-import type { ResolvableContainerTokens } from '../../resolvable-container-tokens'
-import type { ResolvableIconTokens } from '../../resolvable-icon-tokens'
-import type { ResolvableTextStyleTokens } from '../../resolvable-text-style-tokens'
+import type { ContainerTokens } from '../../container-tokens'
+import type { IconTokens } from '../../icon-tokens'
+import type { TextTokens } from '../../text-tokens'
 import type { HightideTokenPathProvider } from '../token-context'
 
 export type ChatSystemLineState = ResolverState
@@ -18,9 +18,9 @@ export type ChatSystemLineComponentResolverProps = {
 }
 
 export type ChatSystemLineTokens = AssertAssignable<{
-  container: ResolvableContainerTokens<ChatSystemLineState, ChatSystemLineConfig>,
-  text: ResolvableTextStyleTokens<ChatSystemLineState, ChatSystemLineConfig>,
-  icon: ResolvableIconTokens<ChatSystemLineState, ChatSystemLineConfig>,
+  container: ContainerTokens,
+  text: TextTokens,
+  icon: IconTokens,
 }, ComponentTokens<ChatSystemLineState, ChatSystemLineConfig>>
 
 export type ChatSystemLineTokenResolver = ComponentTokenResolver<

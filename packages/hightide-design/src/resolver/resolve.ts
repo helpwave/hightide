@@ -6,17 +6,18 @@ import type {
   NumberCalculationOperation,
   NumberUnaryCalculationOperation
 } from '../primitive-tokens/number-calc'
-import type { ResolverConfig, HightideResolverParams } from '../primitive-tokens/resolver-types'
+import type { ResolverConfig, HightideResolverParams, ResolverParams, ResolverState } from '../primitive-tokens/resolver-types'
 import type { SemanticTokens } from '../semantic-tokens/semantic-tokens'
 import type { ThemeTokens } from '../theme-tokens/create'
 import { HexColorUtils } from '../utils/hex'
 import { OKLCHUtils } from '../utils/oklch'
 import { TokenBuilder } from '../utils'
-import type { ContextBasedProperty } from './context-based'
-import { matchesConfigCondition } from './context-based'
-import type { ContainerTokens } from './container-tokens'
-import type { IconTokens } from './icon-tokens'
-import type { TextStyleTokens } from './text-style-tokens'
+import type { ContextBasedProperty } from '../component-tokens/context-based'
+import { matchesConfigCondition } from '../component-tokens/context-based'
+import type { ContainerStyle } from './container-style'
+import type { IconStyle } from './icon-style'
+import type { Resolved } from './resolved'
+import type { TextStyle } from './text-style'
 
 const matchesStateConditions = (
   active: ReadonlySet<string>,
@@ -55,9 +56,9 @@ const matchesNegativeStateConditions = (
 export type TokenResolveContext = {
   theme: object,
   semantics?: object,
-  params?: HightideResolverParams | Record<string, unknown>,
+  params?: ResolverParams,
   config?: ResolverConfig,
-  state?: ReadonlySet<string>,
+  state?: ReadonlySet<ResolverState>,
 }
 
 const isRecord = (value: unknown): value is Record<string, unknown> => (
@@ -443,6 +444,33 @@ export const resolveConfigNode = <T = unknown>(
   return result as T
 }
 
+const unwrapPrimitiveLeaves = (value: unknown): unknown => {
+  if (value === null || value === undefined || typeof value !== 'object') {
+    return value
+  }
+
+  if (Array.isArray(value)) {
+    return value.map(unwrapPrimitiveLeaves)
+  }
+
+  if (!isRecord(value)) {
+    return value
+  }
+
+  const type = value.type
+  if (typeof type === 'string' && primitiveLeafTypeSet.has(type) && 'value' in value) {
+    return value.value
+  }
+
+  const result: Record<string, unknown> = {}
+
+  for (const key of Object.keys(value)) {
+    result[key] = unwrapPrimitiveLeaves(value[key])
+  }
+
+  return result
+}
+
 type ResolveComponentTokenArgs<Theme extends ThemeTokens, T> = {
   component: T,
   semantics: SemanticTokens<string, ResolverConfig>,
@@ -457,9 +485,9 @@ export function resolveComponentToken<
   T extends { type?: string, kind?: string }
 >(
   args: ResolveComponentTokenArgs<Theme, T>
-): T extends { type: 'icon' } | { kind: 'icon' } ? IconTokens
-  : T extends { type: 'textStyle' } | { kind: 'textStyle' } ? TextStyleTokens
-  : ContainerTokens {
+): T extends { type: 'icon' } | { kind: 'icon' } ? IconStyle
+  : T extends { type: 'textStyle' } | { kind: 'textStyle' } ? TextStyle
+  : ContainerStyle {
   const context: TokenResolveContext = {
     theme: args.theme,
     semantics: args.semantics,
@@ -468,22 +496,31 @@ export function resolveComponentToken<
     state: args.state,
   }
 
-  return resolveConfigNode(args.component, context) as T extends { type: 'icon' } | { kind: 'icon' } ? IconTokens
-    : T extends { type: 'textStyle' } | { kind: 'textStyle' } ? TextStyleTokens
-    : ContainerTokens
+  return unwrapPrimitiveLeaves(resolveConfigNode(args.component, context)) as T extends { type: 'icon' } | { kind: 'icon' } ? IconStyle
+    : T extends { type: 'textStyle' } | { kind: 'textStyle' } ? TextStyle
+    : ContainerStyle
 }
 
-export const resolveContainerTokenConfig = (
+export const resolveContainerTokens = (
   tokens: unknown,
   context: TokenResolveContext
-): ContainerTokens => resolveConfigNode<ContainerTokens>(tokens, context)
+): ContainerStyle => unwrapPrimitiveLeaves(resolveConfigNode(tokens, context)) as ContainerStyle
 
-export const resolveIconTokenConfig = (
+export const resolveIconTokens = (
   tokens: unknown,
   context: TokenResolveContext
-): IconTokens => resolveConfigNode<IconTokens>(tokens, context)
+): IconStyle => unwrapPrimitiveLeaves(resolveConfigNode(tokens, context)) as IconStyle
 
-export const resolveTextStyleTokenConfig = (
+export const resolveTextTokens = (
   tokens: unknown,
   context: TokenResolveContext
-): TextStyleTokens => resolveConfigNode<TextStyleTokens>(tokens, context)
+): TextStyle => unwrapPrimitiveLeaves(resolveConfigNode(tokens, context)) as TextStyle
+
+export const resolveTokens = <T>(
+  tokens: unknown,
+  context: TokenResolveContext
+): Resolved<T> => unwrapPrimitiveLeaves(resolveConfigNode(tokens, context)) as Resolved<T>
+
+export const resolveContainerTokenConfig = resolveContainerTokens
+export const resolveIconTokenConfig = resolveIconTokens
+export const resolveTextStyleTokenConfig = resolveTextTokens

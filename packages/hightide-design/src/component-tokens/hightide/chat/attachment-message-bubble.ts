@@ -2,9 +2,9 @@ import { TokenBuilder } from '../../../utils'
 import type { AssertAssignable } from '../../../primitive-tokens'
 import type { ComponentTokenResolver } from '../component-token-resolver'
 import type { ComponentTokens } from '../../component-tokens'
-import type { ResolvableContainerTokens } from '../../resolvable-container-tokens'
-import type { ResolvableIconTokens } from '../../resolvable-icon-tokens'
-import type { ResolvableTextStyleTokens } from '../../resolvable-text-style-tokens'
+import type { ContainerTokens } from '../../container-tokens'
+import type { IconTokens } from '../../icon-tokens'
+import type { TextTokens } from '../../text-tokens'
 import type {
   PressableComponentResolverProps,
   PressableTokens
@@ -28,12 +28,12 @@ export type ChatAttachmentMessageBubbleResolverProps = {
 }
 
 export type ChatAttachmentMessageBubbleTokens = AssertAssignable<{
-  fileIconContainer: ResolvableContainerTokens<ChatAttachmentMessageBubbleState, ChatAttachmentMessageBubbleConfig>,
-  fileIcon: ResolvableIconTokens<ChatAttachmentMessageBubbleState, ChatAttachmentMessageBubbleConfig>,
-  downloadIconContainer: ResolvableContainerTokens<ChatAttachmentMessageBubbleState, ChatAttachmentMessageBubbleConfig>,
-  downloadIcon: ResolvableIconTokens<ChatAttachmentMessageBubbleState, ChatAttachmentMessageBubbleConfig>,
-  fileNameText: ResolvableTextStyleTokens<ChatAttachmentMessageBubbleState, ChatAttachmentMessageBubbleConfig>,
-  fileMetadataText: ResolvableTextStyleTokens<ChatAttachmentMessageBubbleState, ChatAttachmentMessageBubbleConfig>,
+  fileIconContainer: ContainerTokens,
+  fileIcon: IconTokens,
+  downloadIconContainer: ContainerTokens,
+  downloadIcon: IconTokens,
+  fileNameText: TextTokens,
+  fileMetadataText: TextTokens,
 }, ComponentTokens<ChatAttachmentMessageBubbleState, ChatAttachmentMessageBubbleConfig>> & {
   chatMessageBubbleOverrides: Partial<ChatMessageBubbleTokens>,
   contentContainer: {

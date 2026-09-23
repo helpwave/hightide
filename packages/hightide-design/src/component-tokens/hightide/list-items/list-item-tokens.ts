@@ -4,9 +4,9 @@ import type { AssertAssignable, ColorValueToken, HightideResolverConfig, NumberV
 import type { ColorPairToken } from '../../../theme-tokens/create'
 import type { ComponentTokenResolver } from '../component-token-resolver'
 import type { ComponentTokens } from '../../component-tokens'
-import type { ResolvableContainerTokens } from '../../resolvable-container-tokens'
-import type { ResolvableIconTokens } from '../../resolvable-icon-tokens'
-import type { ResolvableTextStyleTokens } from '../../resolvable-text-style-tokens'
+import type { ContainerTokens } from '../../container-tokens'
+import type { IconTokens } from '../../icon-tokens'
+import type { TextTokens } from '../../text-tokens'
 import type { HightideTokenPathProvider } from '../token-context'
 
 export type ListItemState = AssertAssignable<'tonal', ResolverState>
@@ -19,13 +19,13 @@ export type ListItemComponentResolverProps = {
 }
 
 export type ListItemTokens = AssertAssignable<{
-  container: ResolvableContainerTokens<ListItemState, ListItemConfig>,
-  leadingItemContainer: ResolvableContainerTokens<ListItemState, ListItemConfig>,
-  content: ResolvableContainerTokens<ListItemState, ListItemConfig>,
-  trailingItemContainer: ResolvableContainerTokens<ListItemState, ListItemConfig>,
-  icon: ResolvableIconTokens<ListItemState, ListItemConfig>,
-  titleText: ResolvableTextStyleTokens<ListItemState, ListItemConfig>,
-  descriptionText: ResolvableTextStyleTokens<ListItemState, ListItemConfig>,
+  container: ContainerTokens,
+  leadingItemContainer: ContainerTokens,
+  content: ContainerTokens,
+  trailingItemContainer: ContainerTokens,
+  icon: IconTokens,
+  titleText: TextTokens,
+  descriptionText: TextTokens,
 }, ComponentTokens<ListItemState, ListItemConfig>>
 
 export type ListItemTokenResolver = ComponentTokenResolver<

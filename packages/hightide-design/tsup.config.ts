@@ -6,6 +6,7 @@ export default defineConfig({
     'theme-tokens/index': 'src/theme-tokens/index.ts',
     'semantic-tokens/index': 'src/semantic-tokens/index.ts',
     'component-tokens/index': 'src/component-tokens/index.ts',
+    'resolver/index': 'src/resolver/index.ts',
     'design-system/index': 'src/design-system/index.ts',
     'utils/index': 'src/utils/index.ts',
   },

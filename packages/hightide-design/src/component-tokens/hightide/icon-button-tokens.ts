@@ -7,8 +7,8 @@ import type { ColorPairToken } from '../../theme-tokens/create'
 import type { ComponentTokenResolver } from './component-token-resolver'
 import type { ComponentTokens } from '../component-tokens'
 import { elevationTokens } from './elevation-tokens'
-import type { ResolvableContainerTokens, ResolvableShadowTokens } from '../resolvable-container-tokens'
-import type { ResolvableIconTokens } from '../resolvable-icon-tokens'
+import type { ContainerTokens, ShadowTokens } from '../container-tokens'
+import type { IconTokens } from '../icon-tokens'
 import type { AssertAssignable, HightideResolverConfig, NumberValueToken, HightideResolverParams, ResolverState } from '../../primitive-tokens'
 import { type PressableStateValue } from './pressable-tokens'
 import type { HightideTokenPathProvider } from './token-context'
@@ -43,9 +43,9 @@ export type IconButtonComponentResolverProps = {
 }
 
 export type IconButtonTokens = AssertAssignable<{
-  container: ResolvableContainerTokens<IconButtonState, IconButtonConfig>,
-  stateLayer: ResolvableContainerTokens<IconButtonState, IconButtonConfig>,
-  icon: ResolvableIconTokens<IconButtonState, IconButtonConfig>,
+  container: ContainerTokens,
+  stateLayer: ContainerTokens,
+  icon: IconTokens,
 }, ComponentTokens<IconButtonState, IconButtonConfig>>
 
 export type IconButtonTokenResolver = ComponentTokenResolver<
@@ -73,7 +73,7 @@ export const iconButtonTokens = {
       mainAxisAlignment: TokenBuilder.mainAxisAlignment('center'),
       crossAxisAlignment: TokenBuilder.crossAxisAlignment('center'),
     }),
-    shadow: TokenBuilder.stateful<ResolvableShadowTokens>(undefined,
+    shadow: TokenBuilder.stateful<ShadowTokens>(undefined,
       [
         TokenBuilder.whenState(['elevated'], elevationTokens('level1'), ['hovered']),
         TokenBuilder.whenState(['elevated', 'hovered'], elevationTokens('level2')),

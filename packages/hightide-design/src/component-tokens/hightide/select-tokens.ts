@@ -4,11 +4,11 @@ import type { ColorPairToken } from '../../theme-tokens/create'
 import { HexColorUtils } from '../../utils/hex'
 import type { ComponentTokenResolver } from './component-token-resolver'
 import type { ComponentTokens } from '../component-tokens'
-import type { ResolvableContainerTokens } from '../resolvable-container-tokens'
+import type { ContainerTokens } from '../container-tokens'
 import type { ResolvableLeaves } from '../resolvable-leaves'
 import type { ContainerSizeTokens } from '../container-tokens'
-import type { ResolvableIconTokens } from '../resolvable-icon-tokens'
-import type { ResolvableTextStyleTokens } from '../resolvable-text-style-tokens'
+import type { IconTokens } from '../icon-tokens'
+import type { TextTokens } from '../text-tokens'
 import { type InputStateValue } from './input-tokens'
 import type { HightideTokenPathProvider } from './token-context'
 
@@ -34,16 +34,16 @@ export type SelectComponentResolverProps = {
 }
 
 export type SelectTokens = AssertAssignable<{
-  trigger: ResolvableContainerTokens<SelectState, SelectConfig>,
-  stateLayer: ResolvableContainerTokens<SelectState, SelectConfig>,
-  triggerText: ResolvableTextStyleTokens<SelectState, SelectConfig>,
-  icon: ResolvableIconTokens<SelectState, SelectConfig>,
-  overlay: ResolvableContainerTokens<SelectState, SelectConfig>,
-  menu: ResolvableContainerTokens<SelectState, SelectConfig>,
-  header: ResolvableContainerTokens<SelectState, SelectConfig>,
-  option: ResolvableContainerTokens<SelectState, SelectConfig>,
-  optionText: ResolvableTextStyleTokens<SelectState, SelectConfig>,
-  emptyText: ResolvableTextStyleTokens<SelectState, SelectConfig>,
+  trigger: ContainerTokens,
+  stateLayer: ContainerTokens,
+  triggerText: TextTokens,
+  icon: IconTokens,
+  overlay: ContainerTokens,
+  menu: ContainerTokens,
+  header: ContainerTokens,
+  option: ContainerTokens,
+  optionText: TextTokens,
+  emptyText: TextTokens,
 }, ComponentTokens<SelectState, SelectConfig>>
 
 export type SelectTokenResolver = ComponentTokenResolver<

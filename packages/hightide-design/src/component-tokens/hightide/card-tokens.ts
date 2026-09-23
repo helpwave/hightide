@@ -2,14 +2,14 @@ import { TokenBuilder } from '../../utils'
 import type { AssertAssignable, HightideResolverConfig, ResolverState } from '../../primitive-tokens'
 import type { ComponentTokenResolver } from './component-token-resolver'
 import type { ComponentTokensNode } from '../component-tokens'
-import type { ResolvableContainerTokens } from '../resolvable-container-tokens'
+import type { ContainerTokens } from '../container-tokens'
 import { elevationTokens } from './elevation-tokens'
 
 export type CardState = ResolverState
 export type CardConfig = HightideResolverConfig
 
 export type CardTokens = AssertAssignable<
-  ResolvableContainerTokens<CardState, CardConfig>,
+  ContainerTokens,
   ComponentTokensNode<CardState, CardConfig>
 >
 

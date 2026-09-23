@@ -36,6 +36,11 @@
       "require": "./dist/component-tokens/index.cjs",
       "import": "./dist/component-tokens/index.js"
     },
+    "./resolver": {
+      "types": "./dist/resolver/index.d.ts",
+      "require": "./dist/resolver/index.cjs",
+      "import": "./dist/resolver/index.js"
+    },
     "./design-system": {
       "types": "./dist/design-system/index.d.ts",
       "require": "./dist/design-system/index.cjs",

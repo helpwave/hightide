@@ -2,12 +2,11 @@ import { TokenBuilder } from '../../utils'
 import type { AssertAssignable, HightideResolverParams, HightideResolverConfig, ResolverState } from '../../primitive-tokens'
 import type { NumberValueToken } from '../../primitive-tokens/number-value-token'
 import type { IconSize } from '../../theme-tokens/create'
-import type { ResolvableIconTokens } from '../resolvable-icon-tokens'
+import type { IconTokens } from '../icon-tokens'
 import type { ComponentTokenResolver } from './component-token-resolver'
 import type { HightideTokenPathProvider } from './token-context'
 
 export type { IconTokens } from '../icon-tokens'
-export type { ResolvableIconTokens } from '../resolvable-icon-tokens'
 
 export type IconParams = AssertAssignable<{
   numbers: {
@@ -28,11 +27,11 @@ export type IconComponentResolverProps = {
 export type IconTokenConfig<
   S extends ResolverState = IconState,
   C extends HightideResolverConfig = IconConfig
-> = ResolvableIconTokens<S, C>
+> = IconTokens
 
 export type IconTokenResolver = ComponentTokenResolver<
   IconComponentResolverProps,
-  ResolvableIconTokens<IconState, IconConfig>
+  IconTokens
 >
 
 export const iconTokens = {

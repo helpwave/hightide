@@ -6,7 +6,7 @@ import type { TextAlignToken } from '../primitive-tokens/text-align-token'
 import type { TokenRefOrValue } from '../utils/token-type'
 import type { ContextBasedProperty } from './context-based'
 
-export type ResolvableTextStyleTokens<
+export type TextTokens<
   State extends ResolverState = ResolverState,
   Config extends ResolverConfig = ResolverConfig
 > = {

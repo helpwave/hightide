@@ -3,7 +3,7 @@ import type { AssertAssignable, ColorValueToken, HightideResolverConfig, Hightid
 import { HexColorUtils } from '../../utils/hex'
 import type { ComponentTokenResolver } from './component-token-resolver'
 import type { ComponentTokens } from '../component-tokens'
-import type { ResolvableContainerTokens, ResolvableOutlineTokens } from '../resolvable-container-tokens'
+import type { ContainerTokens, OutlineTokens } from '../container-tokens'
 import { inputStateValues } from './input-tokens'
 import type { HightideTokenPathProvider } from './token-context'
 
@@ -24,9 +24,9 @@ export type SwitchComponentResolverProps = {
 }
 
 export type SwitchTokens = AssertAssignable<{
-  container: ResolvableContainerTokens<SwitchState, SwitchConfig>,
-  track: ResolvableContainerTokens<SwitchState, SwitchConfig>,
-  thumb: ResolvableContainerTokens<SwitchState, SwitchConfig>,
+  container: ContainerTokens,
+  track: ContainerTokens,
+  thumb: ContainerTokens,
 }, ComponentTokens<SwitchState, SwitchConfig>>
 
 export type SwitchTokenResolver = ComponentTokenResolver<
@@ -105,7 +105,7 @@ export const switchTokens = {
       mainAxisAlignment: TokenBuilder.mainAxisAlignment('center'),
       crossAxisAlignment: TokenBuilder.crossAxisAlignment('center'),
     }),
-    outline: TokenBuilder.stateful<ResolvableOutlineTokens>(
+    outline: TokenBuilder.stateful<OutlineTokens>(
       undefined,
       [
         TokenBuilder.whenState(['focusVisible'], {
@@ -165,7 +165,7 @@ export const switchTokens = {
       mainAxisAlignment: TokenBuilder.mainAxisAlignment('start'),
       crossAxisAlignment: TokenBuilder.crossAxisAlignment('center'),
     }),
-    outline: TokenBuilder.stateful<ResolvableOutlineTokens>(
+    outline: TokenBuilder.stateful<OutlineTokens>(
       {
         width: TokenBuilder.numberValue(TokenBuilder.number(0)),
         offset: TokenBuilder.numberValue(TokenBuilder.number(0)),

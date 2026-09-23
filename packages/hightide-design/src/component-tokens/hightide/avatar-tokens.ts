@@ -5,9 +5,9 @@ import { elevationTokens } from './elevation-tokens'
 import type { HightideTokenPathProvider } from './token-context'
 import type { AssertAssignable, HightideResolverParams, ColorValueToken, NumberValueToken, ResolverState, HightideResolverConfig } from '../../primitive-tokens'
 import type { ComponentTokens } from '..'
-import type { ResolvableContainerTokens, ResolvableShadowTokens } from '../resolvable-container-tokens'
-import type { ResolvableIconTokens } from '../resolvable-icon-tokens'
-import type { ResolvableTextStyleTokens } from '../resolvable-text-style-tokens'
+import type { ContainerTokens, ShadowTokens } from '../container-tokens'
+import type { IconTokens } from '../icon-tokens'
+import type { TextTokens } from '../text-tokens'
 
 export const avatarStatuses = [
   'online',
@@ -44,10 +44,10 @@ export type AvatarConfig = AssertAssignable<HightideResolverConfig<{
 }>, HightideResolverConfig>
 
 export type AvatarTokens = AssertAssignable<{
-  container: ResolvableContainerTokens<AvatarState, AvatarConfig>,
-  image: ResolvableContainerTokens<AvatarState, AvatarConfig>,
-  text: ResolvableTextStyleTokens<AvatarState, AvatarConfig>,
-  icon: ResolvableIconTokens<AvatarState, AvatarConfig>,
+  container: ContainerTokens,
+  image: ContainerTokens,
+  text: TextTokens,
+  icon: IconTokens,
 }, ComponentTokens<AvatarState, AvatarConfig>>
 
 
@@ -111,7 +111,7 @@ export const avatarTokens = {
       mainAxisAlignment: TokenBuilder.mainAxisAlignment('center'),
       crossAxisAlignment: TokenBuilder.crossAxisAlignment('center'),
     }),
-    shadow: TokenBuilder.stateful<ResolvableShadowTokens, AvatarState>(undefined,
+    shadow: TokenBuilder.stateful<ShadowTokens, AvatarState>(undefined,
       [
         TokenBuilder.whenConfig({ 'avatar-group' : '' }, elevationTokens('level1')),
       ]),
@@ -163,7 +163,7 @@ export type AvatarWithStatusComponentResolverProps = {
 }
 
 export type AvatarWithStatusTokens = AssertAssignable<{
-  statusDot: ResolvableContainerTokens<AvatarWithStatusState, AvatarWithStatusConfig>,
+  statusDot: ContainerTokens,
 }, ComponentTokens<AvatarWithStatusState, AvatarWithStatusConfig>> & {
   avatarOverride: AvatarOverrideTokens,
 }
@@ -220,9 +220,9 @@ export type AvatarGroupState = ResolverState
 export type AvatarGroupConfig = HightideResolverConfig
 
 export type AvatarGroupTokens = AssertAssignable<{
-  container: ResolvableContainerTokens<AvatarGroupState, AvatarGroupConfig>,
-  avatarStack: ResolvableContainerTokens<AvatarGroupState, AvatarGroupConfig>,
-  text: ResolvableTextStyleTokens<AvatarGroupState, AvatarGroupConfig>,
+  container: ContainerTokens,
+  avatarStack: ContainerTokens,
+  text: TextTokens,
 }, ComponentTokens<AvatarGroupState, AvatarGroupConfig>> & {
   avatarOverride: AvatarOverrideTokens,
 }

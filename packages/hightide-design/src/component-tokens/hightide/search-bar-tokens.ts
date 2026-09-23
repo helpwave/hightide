@@ -3,8 +3,8 @@ import type { AssertAssignable, HightideResolverConfig, NumberValueToken, Highti
 import type { ColorPairToken } from '../../theme-tokens/create'
 import type { ComponentTokenResolver } from './component-token-resolver'
 import type { ComponentTokens } from '../component-tokens'
-import type { ResolvableContainerTokens } from '../resolvable-container-tokens'
-import type { ResolvableIconTokens } from '../resolvable-icon-tokens'
+import type { ContainerTokens } from '../container-tokens'
+import type { IconTokens } from '../icon-tokens'
 import {
   type InputState,
   type InputStateValue,
@@ -24,10 +24,10 @@ export type SearchBarComponentResolverProps = {
 }
 
 export type SearchBarTokens = AssertAssignable<{
-  container: ResolvableContainerTokens<SearchBarState, SearchBarConfig>,
+  container: ContainerTokens,
   input: InputTokens,
-  iconButton: ResolvableContainerTokens<SearchBarState, SearchBarConfig>,
-  icon: ResolvableIconTokens<SearchBarState, SearchBarConfig>,
+  iconButton: ContainerTokens,
+  icon: IconTokens,
 }, ComponentTokens<SearchBarState, SearchBarConfig>>
 
 export type SearchBarTokenResolver = ComponentTokenResolver<

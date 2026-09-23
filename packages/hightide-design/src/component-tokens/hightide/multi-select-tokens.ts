@@ -4,11 +4,11 @@ import type { ColorPairToken } from '../../theme-tokens/create'
 import { HexColorUtils } from '../../utils/hex'
 import type { ComponentTokenResolver } from './component-token-resolver'
 import type { ComponentTokens } from '../component-tokens'
-import type { ResolvableContainerTokens } from '../resolvable-container-tokens'
+import type { ContainerTokens } from '../container-tokens'
 import type { ResolvableLeaves } from '../resolvable-leaves'
 import type { ContainerSizeTokens } from '../container-tokens'
-import type { ResolvableIconTokens } from '../resolvable-icon-tokens'
-import type { ResolvableTextStyleTokens } from '../resolvable-text-style-tokens'
+import type { IconTokens } from '../icon-tokens'
+import type { TextTokens } from '../text-tokens'
 import { inputStateValues } from './input-tokens'
 import type { HightideTokenPathProvider } from './token-context'
 
@@ -39,17 +39,17 @@ export type MultiSelectComponentResolverProps = {
 }
 
 export type MultiSelectTokens = AssertAssignable<{
-  trigger: ResolvableContainerTokens<MultiSelectState, MultiSelectConfig>,
-  stateLayer: ResolvableContainerTokens<MultiSelectState, MultiSelectConfig>,
-  triggerText: ResolvableTextStyleTokens<MultiSelectState, MultiSelectConfig>,
-  overlay: ResolvableContainerTokens<MultiSelectState, MultiSelectConfig>,
-  menu: ResolvableContainerTokens<MultiSelectState, MultiSelectConfig>,
-  header: ResolvableContainerTokens<MultiSelectState, MultiSelectConfig>,
-  option: ResolvableContainerTokens<MultiSelectState, MultiSelectConfig>,
-  optionText: ResolvableTextStyleTokens<MultiSelectState, MultiSelectConfig>,
-  emptyText: ResolvableTextStyleTokens<MultiSelectState, MultiSelectConfig>,
-  checkbox: ResolvableContainerTokens<MultiSelectState, MultiSelectConfig>,
-  checkboxIcon: ResolvableIconTokens<MultiSelectState, MultiSelectConfig>,
+  trigger: ContainerTokens,
+  stateLayer: ContainerTokens,
+  triggerText: TextTokens,
+  overlay: ContainerTokens,
+  menu: ContainerTokens,
+  header: ContainerTokens,
+  option: ContainerTokens,
+  optionText: TextTokens,
+  emptyText: TextTokens,
+  checkbox: ContainerTokens,
+  checkboxIcon: IconTokens,
 }, ComponentTokens<MultiSelectState, MultiSelectConfig>>
 
 export type MultiSelectTokenResolver = ComponentTokenResolver<

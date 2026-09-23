@@ -2,7 +2,7 @@ import { TokenBuilder } from '../../utils'
 import type { AssertAssignable, ColorValueToken, HightideResolverConfig, NumberValueToken, HightideResolverParams, ResolverState } from '../../primitive-tokens'
 import type { ComponentTokenResolver } from './component-token-resolver'
 import type { ComponentTokensNode } from '../component-tokens'
-import type { ResolvableContainerTokens } from '../resolvable-container-tokens'
+import type { ContainerTokens } from '../container-tokens'
 import type { HightideTokenPathProvider } from './token-context'
 
 export type DividerDirection = 'horizontal' | 'vertical'
@@ -20,7 +20,7 @@ export type DividerState = AssertAssignable<'vertical', ResolverState>
 export type DividerConfig = HightideResolverConfig
 
 export type DividerTokens = AssertAssignable<
-  ResolvableContainerTokens<DividerState, DividerConfig>,
+  ContainerTokens,
   ComponentTokensNode<DividerState, DividerConfig>
 >
 

@@ -8,8 +8,8 @@ import type {
 } from '../../theme-tokens/create'
 import type { SemanticTokenResolver } from '../types'
 import type { HightideThemeTokens } from '../../theme-tokens/hightide'
-import type { InputState } from '../../component-tokens/hightide/input-tokens'
-import type { PressableState } from '../../component-tokens/hightide/pressable-tokens'
+import type { InputStateValue } from '../../component-tokens/hightide/input-tokens'
+import type { PressableStateValue } from '../../component-tokens/hightide/pressable-tokens'
 import type {
   ComponentSize,
   ContainerLayoutToken,
@@ -90,14 +90,14 @@ export type SemanticTokenResolvers = {
   pressableColoring: HightideResolver<{
     coloring: ColoringToken,
     variant: ButtonVariant,
-    state: PressableState,
+    state: ReadonlySet<PressableStateValue>,
   }, PressableColoringTokens>,
   pressableStateLayerTint: HightideResolver<{
-    states: PressableState,
+    states: ReadonlySet<PressableStateValue>,
     color: ColorValueToken,
   }, ColorValueToken>,
   inputColoring: HightideResolver<{
-    state: InputState,
+    state: ReadonlySet<InputStateValue>,
     color?: ColorPairToken,
   }, InputColoringTokens>,
   controlLayout: HightideResolver<{

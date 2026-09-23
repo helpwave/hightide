@@ -2,8 +2,8 @@ import { TokenBuilder } from '../../../utils'
 import type { AssertAssignable, HightideResolverConfig, ResolverState } from '../../../primitive-tokens'
 import type { ComponentTokenResolver } from '../component-token-resolver'
 import type { ComponentTokens } from '../../component-tokens'
-import type { ResolvableContainerTokens } from '../../resolvable-container-tokens'
-import type { ResolvableTextStyleTokens } from '../../resolvable-text-style-tokens'
+import type { ContainerTokens } from '../../container-tokens'
+import type { TextTokens } from '../../text-tokens'
 import {
   pillBorderRadius,
   surfaceDescriptionColor
@@ -13,8 +13,8 @@ export type ChatDateDividerState = ResolverState
 export type ChatDateDividerConfig = HightideResolverConfig
 
 export type ChatDateDividerTokens = AssertAssignable<{
-  container: ResolvableContainerTokens<ChatDateDividerState, ChatDateDividerConfig>,
-  text: ResolvableTextStyleTokens<ChatDateDividerState, ChatDateDividerConfig>,
+  container: ContainerTokens,
+  text: TextTokens,
 }, ComponentTokens<ChatDateDividerState, ChatDateDividerConfig>>
 
 export type ChatDateDividerTokenResolver = ComponentTokenResolver<

@@ -2,16 +2,16 @@ import { TokenBuilder } from '../../utils'
 import type { AssertAssignable, HightideResolverConfig, ResolverState } from '../../primitive-tokens'
 import type { ComponentTokenResolver } from './component-token-resolver'
 import type { ComponentTokens } from '../component-tokens'
-import type { ResolvableContainerTokens } from '../resolvable-container-tokens'
+import type { ContainerTokens } from '../container-tokens'
 import { elevationTokens } from './elevation-tokens'
 
 export type ModalState = ResolverState
 export type ModalConfig = HightideResolverConfig
 
 export type ModalTokens = AssertAssignable<{
-  background: ResolvableContainerTokens<ModalState, ModalConfig>,
-  menu: ResolvableContainerTokens<ModalState, ModalConfig>,
-  closeButton: ResolvableContainerTokens<ModalState, ModalConfig>,
+  background: ContainerTokens,
+  menu: ContainerTokens,
+  closeButton: ContainerTokens,
 }, ComponentTokens<ModalState, ModalConfig>>
 
 export type ModalTokenResolver = ComponentTokenResolver<

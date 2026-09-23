@@ -2,8 +2,8 @@ import { TokenBuilder } from '../../../utils'
 import type { AssertAssignable, HightideResolverConfig, ResolverState } from '../../../primitive-tokens'
 import type { ComponentTokenResolver } from '../component-token-resolver'
 import type { ComponentTokens } from '../../component-tokens'
-import type { ResolvableContainerTokens } from '../../resolvable-container-tokens'
-import type { ResolvableTextStyleTokens } from '../../resolvable-text-style-tokens'
+import type { ContainerTokens } from '../../container-tokens'
+import type { TextTokens } from '../../text-tokens'
 import type { PressableOverrideTokens } from '../pressable-tokens'
 import type { AvatarOverrideTokens } from '../avatar-tokens'
 import { surfaceDescriptionColor, surfaceFadedColor } from './shared'
@@ -12,10 +12,10 @@ export type ChatThreadHeaderState = ResolverState
 export type ChatThreadHeaderConfig = HightideResolverConfig
 
 export type ChatThreadHeaderTokens = AssertAssignable<{
-  container: ResolvableContainerTokens<ChatThreadHeaderState, ChatThreadHeaderConfig>,
-  contentRow: ResolvableContainerTokens<ChatThreadHeaderState, ChatThreadHeaderConfig>,
-  title: ResolvableTextStyleTokens<ChatThreadHeaderState, ChatThreadHeaderConfig>,
-  subtitle: ResolvableTextStyleTokens<ChatThreadHeaderState, ChatThreadHeaderConfig>,
+  container: ContainerTokens,
+  contentRow: ContainerTokens,
+  title: TextTokens,
+  subtitle: TextTokens,
 }, ComponentTokens<ChatThreadHeaderState, ChatThreadHeaderConfig>> & {
   avatarOverride: AvatarOverrideTokens,
   pressableOverwrites: PressableOverrideTokens,

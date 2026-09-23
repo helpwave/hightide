@@ -4,9 +4,9 @@ import { hightideShadow } from '../../primitive-tokens/hightide/shadow'
 import type { ColorPairToken } from '../../theme-tokens/create'
 import type { ComponentTokenResolver } from './component-token-resolver'
 import type { ComponentTokens } from '../component-tokens'
-import type { ResolvableContainerTokens, ResolvableShadowTokens } from '../resolvable-container-tokens'
-import type { ResolvableIconTokens } from '../resolvable-icon-tokens'
-import type { ResolvableTextStyleTokens } from '../resolvable-text-style-tokens'
+import type { ContainerTokens, ShadowTokens } from '../container-tokens'
+import type { IconTokens } from '../icon-tokens'
+import type { TextTokens } from '../text-tokens'
 import {
   pressableStateValues
 } from './pressable-tokens'
@@ -47,11 +47,11 @@ export type InputComponentResolverProps = {
 }
 
 export type InputTokens = AssertAssignable<{
-  container: ResolvableContainerTokens<InputState, InputConfig>,
-  stateLayer: ResolvableContainerTokens<InputState, InputConfig>,
-  text: ResolvableTextStyleTokens<InputState, InputConfig>,
-  placeholder: ResolvableTextStyleTokens<InputState, InputConfig>,
-  icon: ResolvableIconTokens<InputState, InputConfig>,
+  container: ContainerTokens,
+  stateLayer: ContainerTokens,
+  text: TextTokens,
+  placeholder: TextTokens,
+  icon: IconTokens,
 }, ComponentTokens<InputState, InputConfig>>
 
 export type InputTokenResolver = ComponentTokenResolver<
@@ -103,7 +103,7 @@ export const inputTokens = {
       style: TokenBuilder.outlineStyleRef<InputTokenContext>('theme.focusOutline.style'),
       color: TokenBuilder.colorValueRef<InputTokenContext>('params.colors.accent'),
     }),
-    shadow: TokenBuilder.stateful<ResolvableShadowTokens>(
+    shadow: TokenBuilder.stateful<ShadowTokens>(
       undefined,
       [
         TokenBuilder.whenState(['hasFocusShadow'], {

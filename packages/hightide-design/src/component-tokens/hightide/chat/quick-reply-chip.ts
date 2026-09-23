@@ -2,8 +2,8 @@ import { TokenBuilder } from '../../../utils'
 import type { AssertAssignable, ColorValueToken, HightideResolverConfig, NumberValueToken, ResolverState } from '../../../primitive-tokens'
 import type { TokenRefOrValue } from '../../../utils/token-type'
 import type { ComponentTokenResolver } from '../component-token-resolver'
-import type { ResolvableContainerTokens } from '../../resolvable-container-tokens'
-import type { ResolvableTextStyleTokens } from '../../resolvable-text-style-tokens'
+import type { ContainerTokens } from '../../container-tokens'
+import type { TextTokens } from '../../text-tokens'
 import type {
   PressableComponentResolverProps,
   PressableTokens
@@ -25,8 +25,8 @@ export type ChatQuickReplyChipComponentResolverProps = {
 
 export type ChatQuickReplyChipTokens = Partial<PressableTokens> & {
   config: Partial<PressableComponentResolverProps['overrides']>,
-  container?: ResolvableContainerTokens<ChatQuickReplyChipState, ChatQuickReplyChipConfig>,
-  text?: ResolvableTextStyleTokens<ChatQuickReplyChipState, ChatQuickReplyChipConfig>,
+  container?: ContainerTokens,
+  text?: TextTokens,
 }
 
 export type ChatQuickReplyChipTokenResolver = ComponentTokenResolver<

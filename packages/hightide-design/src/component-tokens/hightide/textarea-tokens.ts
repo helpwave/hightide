@@ -9,7 +9,7 @@ import {
 } from './input-tokens'
 import type { HightideTokenPathProvider } from './token-context'
 import type { ComponentTokensNode } from '../component-tokens'
-import type { ResolvableContainerTokens } from '../resolvable-container-tokens'
+import type { ContainerTokens } from '../container-tokens'
 
 export const textareaVisibleLineCount = 5
 
@@ -23,7 +23,7 @@ export type TextareaTokens = InputTokens
 export type TextareaTokenResolver = InputTokenResolver
 
 export type TextareaOverlayTokens = AssertAssignable<
-  ResolvableContainerTokens<TextareaState, TextareaConfig>,
+  ContainerTokens,
   ComponentTokensNode<TextareaState, TextareaConfig>
 >
 

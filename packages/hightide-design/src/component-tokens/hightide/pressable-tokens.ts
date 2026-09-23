@@ -9,9 +9,9 @@ import type { ColorPairToken } from '../../theme-tokens/create'
 import { HexColorUtils } from '../../utils/hex'
 import type { ComponentTokenResolver } from './component-token-resolver'
 import type { ComponentTokens } from '../component-tokens'
-import type { ResolvableContainerTokens, ResolvableOutlineTokens } from '../resolvable-container-tokens'
-import type { ResolvableIconTokens } from '../resolvable-icon-tokens'
-import type { ResolvableTextStyleTokens } from '../resolvable-text-style-tokens'
+import type { ContainerTokens, OutlineTokens } from '../container-tokens'
+import type { IconTokens } from '../icon-tokens'
+import type { TextTokens } from '../text-tokens'
 import type { PressableButtonTokenParams } from './pressable-button-params'
 import {
   pressableButtonBorderRadius,
@@ -74,10 +74,10 @@ export type PressableComponentResolverProps = {
 }
 
 export type PressableTokens = AssertAssignable<{
-  container: ResolvableContainerTokens<PressableState, PressableConfig>,
-  stateLayer: ResolvableContainerTokens<PressableState, PressableConfig>,
-  icon: ResolvableIconTokens<PressableState, PressableConfig>,
-  text: ResolvableTextStyleTokens<PressableState, PressableConfig>,
+  container: ContainerTokens,
+  stateLayer: ContainerTokens,
+  icon: IconTokens,
+  text: TextTokens,
 }, ComponentTokens<PressableState, PressableConfig>>
 
 export type PressableOverrideTokens = Partial<PressableTokens> & {
@@ -99,7 +99,7 @@ export const pressableTokens = {
         TokenBuilder.whenState(['disabled'], TokenBuilder.numberValue(TokenBuilder.number(0.6))),
       ]
     ),
-    outline: TokenBuilder.stateful<ResolvableOutlineTokens>(
+    outline: TokenBuilder.stateful<OutlineTokens>(
       {
         width: TokenBuilder.numberValue(TokenBuilder.number(0)),
         offset: TokenBuilder.numberValue(TokenBuilder.number(0)),
