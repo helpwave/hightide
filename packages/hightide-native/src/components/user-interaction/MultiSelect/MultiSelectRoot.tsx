@@ -1,7 +1,7 @@
 import type { ReactNode } from 'react'
 import { useCallback, useMemo, useState } from 'react'
 
-import type { ColorPairToken } from '@helpwave/hightide-design/theme-tokens'
+import type { ColorPair } from '../../../theme/types/color'
 import { useEventCallbackStabilizer } from '@helpwave/hightide-utils/hooks'
 
 import { useMultiSelect } from '../../../hooks/useMultiSelect'
@@ -24,7 +24,7 @@ export type MultiSelectRootProps<T> = Partial<FormFieldDataHandling<T[]>>
     initialIsOpen?: boolean,
     onClose?: () => void,
     searchableThreshold?: number,
-    color?: ColorPairToken,
+    color?: ColorPair,
     children: ReactNode,
   }
 

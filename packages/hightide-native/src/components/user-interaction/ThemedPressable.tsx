@@ -10,7 +10,8 @@ import type {
   ColoringStyle,
   ComponentSize
 } from '@helpwave/hightide-design/semantic-tokens'
-import type { ColorPairToken } from '@helpwave/hightide-design/theme-tokens'
+import type { ColorPair } from '../../theme/types/color'
+import { pressableTokenContext } from '../../theme/component-contexts'
 
 import { ContentThemeOverrideProvider } from '../../global-contexts/content-theme/ContentThemeProvider'
 import { useDebugContext } from '../../global-contexts/debug'
@@ -36,7 +37,7 @@ export const ThemedPressableUtil = {
 
 export type ThemedPressableProps = Omit<PressableProps, 'style'> & {
   size?: ThemedPressableSize,
-  color?: ColorPairToken,
+  color?: ColorPair,
   coloringStyle?: ColoringStyle,
   coloringColorVariant?: ColoringColorVariant,
   hasAdditionalHorizontalPadding?: boolean,
@@ -65,20 +66,22 @@ export const ThemedPressable = forwardRef<React.ComponentRef<typeof Pressable>, 
   const { theme } = useTheme()
   const { hitBox } = useDebugContext()
   const { hitSlop, onLayout } = useMinimumTouchTargetHitSlop({
-    touchTargetSize: theme.semantics.touchTargetSize({}),
+    touchTargetSize: theme.semantics.numbers.touchTargetSize({}),
     hitSlop: providedHitSlop,
     onLayout: providedOnLayout,
   })
   const [isPressed, setIsPressed] = useState(false)
 
-  const resolvedState = useMemo((): ThemedPressableState => ({
+  const resolvedState = useMemo((): ThemedPressableState => pressableTokenContext(theme, {
     size,
     color,
     coloringStyle,
     coloringColorVariant,
     hasAdditionalHorizontalPadding,
-    isDisabled: !!disabled,
-    isPressed,
+    interaction: {
+      isDisabled: !!disabled,
+      isPressed,
+    },
   }), [
     size,
     color,
@@ -87,6 +90,7 @@ export const ThemedPressable = forwardRef<React.ComponentRef<typeof Pressable>, 
     hasAdditionalHorizontalPadding,
     disabled,
     isPressed,
+    theme,
   ])
 
   const resolvedContainerStyle = useMemoizedTheme(theme.components.themedPressable.container, resolvedState, style)

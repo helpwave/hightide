@@ -1,242 +1,146 @@
-import type { ElementLayoutTokens } from '@helpwave/hightide-design/semantic-tokens'
-import type { ThemeLayoutSize, ThemeTokens } from '@helpwave/hightide-design/theme-tokens'
-import {
-  componentTokenResolvers,
-  hightideSemanticTokenResolvers,
-  resolveContainerLayout,
-  resolveControlLayout,
-  resolveInsideControlLayout
-} from '../design-resolvers'
-
-import {
-  toAvatarGroupThemeResolvers,
-  toAvatarThemeResolvers,
-  toAvatarWithStatusThemeResolvers
-} from '../resolvers/avatar'
-import { toButtonThemeResolvers } from '../resolvers/button'
-import { toCardThemeResolvers } from '../resolvers/card'
-import { toChatThemeResolvers } from '../resolvers/chat/chat-theme'
-import { toCheckboxThemeResolvers } from '../resolvers/checkbox'
-import { toChipThemeResolvers } from '../resolvers/chip'
-import { toDividerThemeResolvers } from '../resolvers/divider'
-import { toIconThemeResolvers } from '../resolvers/icon'
-import { toIconButtonThemeResolvers } from '../resolvers/iconButton'
-import { toInputThemeResolvers } from '../resolvers/input'
-import { toSearchBarThemeResolvers } from '../resolvers/searchBar'
-import {
-  toListItemThemeResolvers
-} from '../resolvers/listItem'
-import { toModalThemeResolvers } from '../resolvers/modal'
-import { toMultiSelectThemeResolvers } from '../resolvers/multiSelect'
-import { toSelectThemeResolvers } from '../resolvers/select'
-import { toSwitchThemeResolvers } from '../resolvers/switch'
-import { toTextareaThemeResolvers } from '../resolvers/textarea'
-import { toThemedPressableThemeResolvers } from '../resolvers/themedPressable'
-import type { HightideThemeSemantics } from '../types/semantics'
+import { componentTokens } from '@helpwave/hightide-design/component-tokens'
+import { resolveTokens } from '@helpwave/hightide-design/resolver'
+import { semanticTokens } from '@helpwave/hightide-design/semantic-tokens'
+import type { ThemeTokens } from '@helpwave/hightide-design/theme-tokens'
+import { createLeaves } from '../create-leaves'
+import { createSemantics } from '../create-semantics'
+import { flattenThemeTokens } from '../flatten-theme'
+import { bindTokenContext } from '../token-context'
+import type { HightideComponentThemes } from '../types/components/hightide'
 import type { HightideTheme } from '../types/theme'
+import { toFontWeight, type HightideFontWeights, type HightideTypography, type TypographyStyle } from '../types/typography'
 
-const layoutSizes = ['xs', 'sm', 'md', 'lg', 'xl'] as const satisfies readonly ThemeLayoutSize[]
+const themeCache = new WeakMap<ThemeTokens, HightideTheme>()
 
-const resolveElementLayouts = (themeTokens: ThemeTokens): ElementLayoutTokens => ({
-  control: Object.fromEntries(
-    layoutSizes.map((size) => [
-      size,
-      resolveControlLayout({ themeTokens, size }),
-    ])
-  ) as ElementLayoutTokens['control'],
-  container: Object.fromEntries(
-    layoutSizes.map((size) => [
-      size,
-      resolveContainerLayout({ themeTokens, size }),
-    ])
-  ) as ElementLayoutTokens['container'],
-  insideControl: Object.fromEntries(
-    layoutSizes.map((size) => [
-      size,
-      resolveInsideControlLayout({ themeTokens, size }),
-    ])
-  ) as ElementLayoutTokens['insideControl'],
-})
+export const createHightideTheme = (themeTokens: ThemeTokens): HightideTheme => {
+  const cached = themeCache.get(themeTokens)
+  if (cached !== undefined) {
+    return cached
+  }
 
-const bindSemantics = (themeTokens: ThemeTokens): HightideThemeSemantics => ({
-  ...resolveElementLayouts(themeTokens),
-  coloringColorVariant: (parameter) => hightideSemanticTokenResolvers.coloringColorVariant({
-    themeTokens,
-    ...parameter,
-  }),
-  coloringStyle: (parameter) => hightideSemanticTokenResolvers.coloringStyle({
-    themeTokens,
-    ...parameter,
-  }),
-  pressableColoring: (parameter) => hightideSemanticTokenResolvers.pressableColoring({
-    themeTokens,
-    ...parameter,
-  }),
-  pressableStateLayerTint: (parameter) => hightideSemanticTokenResolvers.pressableStateLayerTint({
-    themeTokens,
-    ...parameter,
-  }),
-  inputColoring: (parameter) => hightideSemanticTokenResolvers.inputColoring({
-    themeTokens,
-    ...parameter,
-  }),
-  controlLayout: (parameter) => hightideSemanticTokenResolvers.controlLayout({
-    themeTokens,
-    ...parameter,
-  }),
-  touchTargetSize: (parameter) => hightideSemanticTokenResolvers.touchTargetSize({
-    themeTokens,
-    ...parameter,
-  }),
-  containerLayout: (parameter) => hightideSemanticTokenResolvers.containerLayout({
-    themeTokens,
-    ...parameter,
-  }),
-  insideControlLayout: (parameter) => hightideSemanticTokenResolvers.insideControlLayout({
-    themeTokens,
-    ...parameter,
-  }),
-  tintedSurface: (parameter) => hightideSemanticTokenResolvers.tintedSurface({
-    themeTokens,
-    ...parameter,
-  }),
-  withAppearance: (parameter) => hightideSemanticTokenResolvers.withAppearance({
-    themeTokens,
-    ...parameter,
-  }),
-  asFaded: (parameter) => hightideSemanticTokenResolvers.asFaded({
-    themeTokens,
-    ...parameter,
-  }),
-  asDescription: (parameter) => hightideSemanticTokenResolvers.asDescription({
-    themeTokens,
-    ...parameter,
-  }),
-})
+  const flattened = flattenThemeTokens(
+    resolveTokens(themeTokens, { theme: themeTokens })
+  ) as Pick<
+    HightideTheme,
+    | 'fontFamilies'
+    | 'fontSizing'
+    | 'icongraphy'
+    | 'size'
+    | 'spacing'
+    | 'padding'
+    | 'borderRadius'
+    | 'borderWidth'
+    | 'elevation'
+    | 'motion'
+    | 'focusOutline'
+    | 'config'
+  > & {
+    color: HightideTheme['colors'],
+    fontWeights: Record<string, number>,
+    typography: {
+      display: Omit<TypographyStyle, 'fontWeight'> & { fontWeight: number },
+      heading: Record<'sm' | 'md' | 'lg', Omit<TypographyStyle, 'fontWeight'> & { fontWeight: number }>,
+      body: Record<'sm' | 'md' | 'lg', Omit<TypographyStyle, 'fontWeight'> & { fontWeight: number }>,
+      label: Record<'sm' | 'md' | 'lg', Omit<TypographyStyle, 'fontWeight'> & { fontWeight: number }>,
+    },
+  }
 
-export const createHightideTheme = (themeTokens: ThemeTokens): HightideTheme => ({
-  colors: themeTokens.color,
-  fontFamilies: themeTokens.fontFamilies,
-  fontWeights: themeTokens.fontWeights,
-  fontSizing: themeTokens.fontSizing,
-  typography: themeTokens.typography,
-  icongraphy: themeTokens.icongraphy,
-  size: themeTokens.size,
-  spacing: themeTokens.spacing,
-  padding: themeTokens.padding,
-  borderRadius: themeTokens.borderRadius,
-  borderWidth: themeTokens.borderWidth,
-  elevation: themeTokens.elevation,
-  shadow: {
-    raised: themeTokens.elevation.level1,
-    container: themeTokens.elevation.level2,
-    popover: themeTokens.elevation.level3,
-    dialog: themeTokens.elevation.level4,
-  },
-  motion: themeTokens.motion,
-  focusOutline: themeTokens.focusOutline,
-  config: themeTokens.config,
-  semantics: bindSemantics(themeTokens),
-  components: {
-    button: toButtonThemeResolvers({
-      themeTokens,
-      semanticTokens: hightideSemanticTokenResolvers,
-      componentTokens: componentTokenResolvers,
-    }),
-    iconButton: toIconButtonThemeResolvers({
-      themeTokens,
-      semanticTokens: hightideSemanticTokenResolvers,
-      componentTokens: componentTokenResolvers,
-    }),
-    themedPressable: toThemedPressableThemeResolvers({
-      themeTokens,
-      semanticTokens: hightideSemanticTokenResolvers,
-      componentTokens: componentTokenResolvers,
-    }),
-    chip: toChipThemeResolvers({
-      themeTokens,
-      semanticTokens: hightideSemanticTokenResolvers,
-      componentTokens: componentTokenResolvers,
-    }),
-    checkbox: toCheckboxThemeResolvers({
-      themeTokens,
-      semanticTokens: hightideSemanticTokenResolvers,
-      componentTokens: componentTokenResolvers,
-    }),
-    switch: toSwitchThemeResolvers({
-      themeTokens,
-      semanticTokens: hightideSemanticTokenResolvers,
-      componentTokens: componentTokenResolvers,
-    }),
-    input: toInputThemeResolvers({
-      themeTokens,
-      semanticTokens: hightideSemanticTokenResolvers,
-      componentTokens: componentTokenResolvers,
-    }),
-    textarea: toTextareaThemeResolvers({
-      themeTokens,
-      semanticTokens: hightideSemanticTokenResolvers,
-      componentTokens: componentTokenResolvers,
-    }),
-    searchBar: toSearchBarThemeResolvers({
-      themeTokens,
-      semanticTokens: hightideSemanticTokenResolvers,
-      componentTokens: componentTokenResolvers,
-    }),
-    select: toSelectThemeResolvers({
-      themeTokens,
-      semanticTokens: hightideSemanticTokenResolvers,
-      componentTokens: componentTokenResolvers,
-    }),
-    multiSelect: toMultiSelectThemeResolvers({
-      themeTokens,
-      semanticTokens: hightideSemanticTokenResolvers,
-      componentTokens: componentTokenResolvers,
-    }),
-    chat: toChatThemeResolvers({
-      themeTokens,
-      semanticTokens: hightideSemanticTokenResolvers,
-      componentTokens: componentTokenResolvers,
-    }),
-    card: toCardThemeResolvers({
-      themeTokens,
-      semanticTokens: hightideSemanticTokenResolvers,
-      componentTokens: componentTokenResolvers,
-    }),
-    divider: toDividerThemeResolvers({
-      themeTokens,
-      semanticTokens: hightideSemanticTokenResolvers,
-      componentTokens: componentTokenResolvers,
-    }),
-    listItem: toListItemThemeResolvers({
-      themeTokens,
-      semanticTokens: hightideSemanticTokenResolvers,
-      componentTokens: componentTokenResolvers,
-    }),
-    modal: toModalThemeResolvers({
-      themeTokens,
-      semanticTokens: hightideSemanticTokenResolvers,
-      componentTokens: componentTokenResolvers,
-    }),
-    avatar: toAvatarThemeResolvers({
-      themeTokens,
-      semanticTokens: hightideSemanticTokenResolvers,
-      componentTokens: componentTokenResolvers,
-    }),
-    avatarWithStatus: toAvatarWithStatusThemeResolvers({
-      themeTokens,
-      semanticTokens: hightideSemanticTokenResolvers,
-      componentTokens: componentTokenResolvers,
-    }),
-    avatarGroup: toAvatarGroupThemeResolvers({
-      themeTokens,
-      semanticTokens: hightideSemanticTokenResolvers,
-      componentTokens: componentTokenResolvers,
-    }),
-    icon: toIconThemeResolvers({
-      themeTokens,
-      semanticTokens: hightideSemanticTokenResolvers,
-      componentTokens: componentTokenResolvers,
-    }),
-  },
-})
+  const bind = bindTokenContext(themeTokens, semanticTokens)
+  const leaves = createLeaves(componentTokens, bind) as Record<string, never> & HightideComponentThemes & {
+    pressable: HightideComponentThemes['themedPressable'],
+    textarea: HightideComponentThemes['textarea']['overlay'],
+    icon: HightideComponentThemes['icon']['icon'],
+  }
+  const listItemAction = {
+    ...leaves.listItem.default,
+    ...leaves.listItem.action,
+  }
+  const asContainerGroup = (value: unknown) => (
+    typeof value === 'function' ? { container: value } : value
+  )
+  const mapTypographyStyle = (
+    style: Omit<TypographyStyle, 'fontWeight'> & { fontWeight: number }
+  ): TypographyStyle => ({
+    ...style,
+    fontWeight: toFontWeight(style.fontWeight),
+  })
+  const typographySizes = ['sm', 'md', 'lg'] as const
+  const mapTypographyScale = (
+    scale: Record<'sm' | 'md' | 'lg', Omit<TypographyStyle, 'fontWeight'> & { fontWeight: number }>
+  ) => (
+    Object.fromEntries(
+      typographySizes.map((size) => [size, mapTypographyStyle(scale[size])])
+    ) as Record<'sm' | 'md' | 'lg', TypographyStyle>
+  )
+  const typography: HightideTypography = {
+    display: mapTypographyStyle(flattened.typography.display),
+    heading: mapTypographyScale(flattened.typography.heading),
+    body: mapTypographyScale(flattened.typography.body),
+    label: mapTypographyScale(flattened.typography.label),
+  }
+  const fontWeights: HightideFontWeights = Object.fromEntries(
+    Object.entries(flattened.fontWeights).map(([key, value]) => [key, toFontWeight(value)])
+  )
+
+  const theme: HightideTheme = {
+    colors: flattened.color,
+    fontFamilies: flattened.fontFamilies,
+    fontWeights,
+    fontSizing: flattened.fontSizing,
+    typography,
+    icongraphy: flattened.icongraphy,
+    size: flattened.size,
+    spacing: flattened.spacing,
+    padding: flattened.padding,
+    borderRadius: flattened.borderRadius,
+    borderWidth: flattened.borderWidth,
+    elevation: flattened.elevation,
+    shadow: {
+      raised: flattened.elevation.level1,
+      container: flattened.elevation.level2,
+      popover: flattened.elevation.level3,
+      dialog: flattened.elevation.level4,
+    },
+    motion: flattened.motion,
+    focusOutline: flattened.focusOutline,
+    config: flattened.config,
+    semantics: createSemantics(themeTokens),
+    components: {
+      button: leaves.button,
+      iconButton: leaves.iconButton,
+      themedPressable: leaves.pressable,
+      chip: leaves.chip,
+      checkbox: leaves.checkbox,
+      switch: leaves.switch,
+      input: leaves.input,
+      textarea: {
+        ...leaves.input,
+        overlay: leaves.textarea,
+      },
+      searchBar: {
+        ...leaves.searchBar,
+        input: leaves.input,
+      },
+      select: leaves.select,
+      multiSelect: leaves.multiSelect,
+      chat: leaves.chat,
+      card: asContainerGroup(leaves.card) as HightideComponentThemes['card'],
+      divider: asContainerGroup(leaves.divider) as HightideComponentThemes['divider'],
+      listItem: {
+        default: leaves.listItem.default,
+        action: listItemAction,
+        navigation: listItemAction,
+      },
+      modal: leaves.modal,
+      avatar: leaves.avatar,
+      avatarWithStatus: leaves.avatarWithStatus,
+      avatarGroup: leaves.avatarGroup,
+      icon: {
+        icon: leaves.icon,
+      },
+    },
+  }
+
+  themeCache.set(themeTokens, theme)
+  return theme
+}

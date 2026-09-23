@@ -4,7 +4,7 @@ import {
 } from 'react'
 import type { ColorValue, TextStyle } from 'react-native'
 
-import type { ColorToken } from '@helpwave/hightide-design/primitive-tokens'
+import type { HexColor } from '../../theme/types/color'
 
 import type { IconStyle } from '../../icons'
 import { HexColorUtils } from '../../utils/hex'
@@ -39,15 +39,15 @@ export const ContentThemeRootProvider = ({
 
 type ColorOverride =
   | ColorValue
-  | ((prev: ColorToken) => ColorValue)
+  | ((prev: HexColor) => ColorValue)
 
 type TextStyleOverride =
   | TextStyle
-  | ((prev: TextStyle, foreground: ColorToken) => TextStyle)
+  | ((prev: TextStyle, foreground: HexColor) => TextStyle)
 
 type IconStyleOverride =
   | IconStyle
-  | ((prev: IconStyle, foreground: ColorToken) => IconStyle)
+  | ((prev: IconStyle, foreground: HexColor) => IconStyle)
 
 export type ContentThemeOverrideProviderProps = PropsWithChildren & {
   foreground?: ColorOverride,
@@ -60,8 +60,8 @@ export type ContentThemeOverrideProviderProps = PropsWithChildren & {
 
 const resolveColorOverride = (
   override: ColorOverride | undefined,
-  previous: ColorToken
-): ColorToken | undefined => {
+  previous: HexColor
+): HexColor | undefined => {
   if (override === undefined) {
     return undefined
   }

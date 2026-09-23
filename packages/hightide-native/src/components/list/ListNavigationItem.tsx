@@ -11,7 +11,9 @@ import {
   type ViewStyle
 } from 'react-native'
 
-import type { ColorPairToken } from '@helpwave/hightide-design/theme-tokens'
+import type { ColorPair } from '../../theme/types/color'
+import { listItemTokenContext } from '../../theme/component-contexts'
+import { interactionStateSet } from '../../theme/token-context'
 
 import { HightideIconRegistry } from '../../icons/HightideIconRegistry'
 import { ThemedIcon } from '../visualization-and-display/ThemedIcon'
@@ -39,7 +41,7 @@ export type ListNavigationItemProps = Omit<PressableProps, 'children' | 'style'>
   content?: ReactNode,
   contentOrder?: ListItemContentOrder,
   leading?: ReactNode,
-  color?: ColorPairToken,
+  color?: ColorPair,
   style?: StyleProp<ViewStyle>,
   itemStyle?: StyleOverwrite<ListNavigationItemState, ListNavigationItemStyle>,
   titleStyle?: StyleOverwrite<ListNavigationItemState, ListNavigationItemTitleStyle>,
@@ -65,17 +67,22 @@ export const ListNavigationItem = ({
   const { theme } = useTheme()
   const { hitBox } = useDebugContext()
   const { hitSlop, onLayout } = useMinimumTouchTargetHitSlop({
-    touchTargetSize: theme.semantics.touchTargetSize({}),
+    touchTargetSize: theme.semantics.numbers.touchTargetSize({}),
     hitSlop: providedHitSlop,
     onLayout: providedOnLayout,
   })
   const [isPressed, setIsPressed] = useState(false)
 
-  const resolvedState = useMemo((): ListNavigationItemState => ({
-    color,
-    isDisabled: !!disabled,
-    isPressed,
-  }), [color, disabled, isPressed])
+  const resolvedState = useMemo((): ListNavigationItemState => {
+    const base = listItemTokenContext(theme, { color })
+    return {
+      ...base,
+      state: interactionStateSet({
+        isDisabled: !!disabled,
+        isPressed,
+      }, color !== undefined ? ['colored', 'tonal'] : []),
+    }
+  }, [color, disabled, isPressed, theme])
 
   const resolvedItemStyle = useMemoizedTheme(theme.components.listItem.navigation.container, resolvedState, itemStyle)
   const resolvedLeadingItemContainerStyle = useMemoizedTheme(theme.components.listItem.navigation.leadingItemContainer, resolvedState)

@@ -520,7 +520,3 @@ export const resolveTokens = <T>(
   tokens: unknown,
   context: TokenResolveContext
 ): Resolved<T> => unwrapPrimitiveLeaves(resolveConfigNode(tokens, context)) as Resolved<T>
-
-export const resolveContainerTokenConfig = resolveContainerTokens
-export const resolveIconTokenConfig = resolveIconTokens
-export const resolveTextStyleTokenConfig = resolveTextTokens

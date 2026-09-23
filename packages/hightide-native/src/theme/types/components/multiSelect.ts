@@ -1,50 +1,34 @@
-import type {
-  TextStyle,
-  ViewStyle
-} from 'react-native'
-
+import type { TextStyle, ViewStyle } from 'react-native'
+import type { TokenContextInput } from '../../token-context'
+import type { StyleLeaf } from '../resolver'
+import type { IconStyle } from '../../../icons'
 import type {
   SelectEmptyTextStyle,
   SelectHeaderStyle,
-  SelectMenuState,
   SelectMenuStyle,
-  SelectOptionState,
   SelectOverlayStyle,
-  SelectState,
   SelectTriggerTextStyle
 } from './select'
-import type {
-  SimpleStyleResolver,
-  StyleResolverFunction
-} from '../resolver'
-import type { IconStyle } from '../../../icons'
 
-export type MultiSelectState = SelectState & {
-  hasSelections?: boolean,
-}
-
-export type MultiSelectOptionState = SelectOptionState
+export type MultiSelectState = TokenContextInput
+export type MultiSelectOptionState = TokenContextInput
 
 export type MultiSelectTriggerStyle = ViewStyle
-
 export type MultiSelectOptionStyle = ViewStyle
-
 export type MultiSelectOptionTextStyle = TextStyle
-
 export type MultiSelectCheckboxStyle = ViewStyle
-
 export type MultiSelectCheckboxIconStyle = IconStyle
 
 export type MultiSelectThemeResolvers = {
-  trigger: StyleResolverFunction<MultiSelectState, MultiSelectTriggerStyle>,
-  stateLayer: StyleResolverFunction<MultiSelectState, MultiSelectTriggerStyle>,
-  triggerText: StyleResolverFunction<MultiSelectState, SelectTriggerTextStyle>,
-  overlay: SimpleStyleResolver<SelectOverlayStyle>,
-  menu: StyleResolverFunction<SelectMenuState, SelectMenuStyle>,
-  header: SimpleStyleResolver<SelectHeaderStyle>,
-  option: StyleResolverFunction<MultiSelectOptionState, MultiSelectOptionStyle>,
-  optionText: StyleResolverFunction<MultiSelectOptionState, MultiSelectOptionTextStyle>,
-  emptyText: SimpleStyleResolver<SelectEmptyTextStyle>,
-  checkbox: StyleResolverFunction<MultiSelectOptionState, MultiSelectCheckboxStyle>,
-  checkboxIcon: StyleResolverFunction<MultiSelectOptionState, MultiSelectCheckboxIconStyle>,
+  trigger: StyleLeaf<MultiSelectTriggerStyle>,
+  stateLayer: StyleLeaf<MultiSelectTriggerStyle>,
+  triggerText: StyleLeaf<SelectTriggerTextStyle>,
+  overlay: StyleLeaf<SelectOverlayStyle>,
+  menu: StyleLeaf<SelectMenuStyle>,
+  header: StyleLeaf<SelectHeaderStyle>,
+  option: StyleLeaf<MultiSelectOptionStyle>,
+  optionText: StyleLeaf<MultiSelectOptionTextStyle>,
+  emptyText: StyleLeaf<SelectEmptyTextStyle>,
+  checkbox: StyleLeaf<MultiSelectCheckboxStyle>,
+  checkboxIcon: StyleLeaf<MultiSelectCheckboxIconStyle>,
 }

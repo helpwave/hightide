@@ -19,7 +19,9 @@ import {
 } from '@helpwave/hightide-utils/hooks'
 import { useTranslation } from '@helpwave/hightide-utils/context'
 
-import type { ColorPairToken } from '@helpwave/hightide-design/theme-tokens'
+import type { ColorPair } from '../../theme/types/color'
+import { HexColorUtils } from '../../utils/hex'
+import { inputTokenContext } from '../../theme/component-contexts'
 import { useTheme } from '../../global-contexts/theme/ThemeContext'
 import { HightideIconRegistry } from '../../icons/HightideIconRegistry'
 import { useMemoizedTheme } from '../../hooks/useMemoizedTheme'
@@ -55,7 +57,7 @@ export type SearchBarProps = Omit<TextInputProps, 'value' | 'style'>
   & Partial<FormFieldDataHandling<string>>
   & Partial<FormFieldInteractionStates>
   & {
-    color?: ColorPairToken,
+    color?: ColorPair,
     onSearch: (value: string) => void,
     searchButtonProps?: Omit<IconButtonProps, 'onPress' | 'icon' | 'accessibilityLabel'>,
     editCompleteOptions?: SearchBarEditCompleteOptions,
@@ -114,26 +116,51 @@ export const SearchBar = forwardRef<TextInput, SearchBarProps>(function SearchBa
 
   const interactive = !disabled && !readOnly
 
-  const state = useMemo((): SearchBarState => ({
-    color,
-    isDisabled: disabled,
-    isInvalid: invalid,
-    isReadonly: readOnly,
-    isHovered: interactive && isHovered,
-    isPressed: interactive && isPressed,
-    isFocused: interactive && isFocused,
-  }), [color, disabled, invalid, readOnly, interactive, isHovered, isPressed, isFocused])
+  const state = useMemo((): SearchBarState => {
+    const input = inputTokenContext(theme, {
+      color,
+      interaction: {
+        isDisabled: disabled,
+        isInvalid: invalid,
+        isReadonly: readOnly,
+        isHovered: interactive && isHovered,
+        isPressed: interactive && isPressed,
+        isFocused: interactive && isFocused,
+      },
+    })
+    const iconButtonLayout = theme.semantics.numbers.controlLayout({ config: { size: 'sm' } })
+    return {
+      ...input,
+      params: {
+        ...input.params,
+        numbers: {
+          ...input.params?.numbers,
+          iconButtonSize: iconButtonLayout.size,
+        },
+      },
+    }
+  }, [color, disabled, invalid, readOnly, interactive, isHovered, isPressed, isFocused, theme])
 
   const searchBarTheme = theme.components.searchBar
   const resolvedContainerStyle = useMemoizedTheme(searchBarTheme.container, state, containerStyle)
-  const resolvedInputStyle = useMemoizedTheme(searchBarTheme.input, state, inputStyle)
-  const resolvedPlaceholderStyle = useMemoizedTheme(searchBarTheme.placeholder, state)
+  const resolvedInputContainer = useMemoizedTheme(searchBarTheme.input.container, state)
+  const resolvedInputText = useMemoizedTheme(searchBarTheme.input.text, state, inputStyle)
+  const resolvedPlaceholderStyle = useMemoizedTheme(searchBarTheme.input.placeholder, state)
   const resolvedIconButtonStyle = useMemoizedTheme(
     searchBarTheme.iconButton,
     state,
     iconButtonStyle ?? searchButtonProps?.style
   )
-  const resolvedIconButtonColor = useMemoizedTheme(searchBarTheme.iconButtonColor, state)
+  const resolvedIcon = useMemoizedTheme(searchBarTheme.icon, state)
+  const resolvedInputStyle = {
+    ...resolvedInputContainer,
+    ...resolvedInputText,
+    position: 'relative' as const,
+  }
+  const resolvedIconButtonColor: ColorPair = {
+    color: HexColorUtils.tryParseColorValue(resolvedIcon.color ?? theme.colors.surface.onColor) ?? theme.colors.surface.onColor,
+    onColor: theme.colors.surface.color,
+  }
 
   const commitSearch = (nextValue: string) => {
     onSearch(nextValue)
@@ -141,7 +168,7 @@ export const SearchBar = forwardRef<TextInput, SearchBarProps>(function SearchBa
   }
 
   return (
-    <View style={[resolvedContainerStyle, style]}>
+    <View style={[resolvedContainerStyle, { position: 'relative', justifyContent: 'center' }, style]}>
       <TextInput
         {...props}
         ref={ref}
@@ -209,7 +236,15 @@ export const SearchBar = forwardRef<TextInput, SearchBarProps>(function SearchBa
         variant={searchButtonProps?.variant ?? 'foreground'}
         disabled={disabled || searchButtonProps?.disabled}
         onPress={() => commitSearch(value ?? '')}
-        style={resolvedIconButtonStyle}
+        style={[
+          resolvedIconButtonStyle,
+          {
+            position: 'absolute',
+            right: 0,
+            top: '50%',
+            transform: [{ translateY: '-50%' }],
+          },
+        ]}
       />
     </View>
   )

@@ -4,13 +4,13 @@ import {
 } from 'react'
 import type { TextStyle } from 'react-native'
 
-import type { ColorToken } from '@helpwave/hightide-design/primitive-tokens'
+import type { HexColor } from '../../theme/types/color'
 
 import type { IconStyle } from '../../icons'
 
 export type ContentThemeContextValue = Readonly<{
-  foreground: ColorToken,
-  background: ColorToken,
+  foreground: HexColor,
+  background: HexColor,
   textStyle: Readonly<TextStyle>,
   iconStyle: Readonly<IconStyle>,
 }>

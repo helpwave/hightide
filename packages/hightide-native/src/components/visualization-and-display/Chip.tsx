@@ -9,8 +9,9 @@ import {
   type ViewStyle
 } from 'react-native'
 
-import type { ColorPairToken } from '@helpwave/hightide-design/theme-tokens'
 import type { ChipVariant, ComponentSize } from '@helpwave/hightide-design/semantic-tokens'
+import type { ColorPair } from '../../theme/types/color'
+import { chipTokenContext } from '../../theme/component-contexts'
 
 import { ContentThemeOverrideProvider } from '../../global-contexts/content-theme/ContentThemeProvider'
 import { useTheme } from '../../global-contexts/theme/ThemeContext'
@@ -26,7 +27,7 @@ import { ThemedText } from './ThemedText'
 
 export type ChipSize = ComponentSize
 
-export type ChipColor = ColorPairToken
+export type ChipColor = ColorPair
 
 export const ChipUtil = {
   sizes: ['sm', 'md', 'lg'] as const satisfies readonly ComponentSize[],
@@ -57,13 +58,13 @@ export const Chip = ({
 }: ChipProps) => {
   const { theme } = useTheme()
 
-  const state = useMemo((): ChipState => ({
+  const state = useMemo((): ChipState => chipTokenContext(theme, {
     size,
     color,
     variant,
-  }), [size, color, variant])
+  }), [size, color, variant, theme])
 
-  const resolvedChipStyle = useMemoizedTheme(theme.components.chip.chip, state, chipStyle)
+  const resolvedChipStyle = useMemoizedTheme(theme.components.chip.container, state, chipStyle)
   const resolvedIconStyle = useMemoizedTheme(theme.components.chip.icon, state, iconStyle)
   const resolvedTextStyle = useMemoizedTheme(theme.components.chip.text, state, textStyle)
 

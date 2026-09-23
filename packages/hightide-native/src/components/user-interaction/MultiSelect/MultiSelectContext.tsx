@@ -1,7 +1,7 @@
 import type { ReactNode } from 'react'
 import { createContext, useContext } from 'react'
 
-import type { ColorPairToken } from '@helpwave/hightide-design/theme-tokens'
+import type { ColorPair } from '../../../theme/types/color'
 
 import type { UseMultiSelectFirstHighlightBehavior } from '../../../hooks/useMultiSelect'
 import type { FormFieldInteractionStates } from '../../../types/formField'
@@ -52,7 +52,7 @@ export type MultiSelectContextSearch = {
 
 export type MultiSelectContextConfig = {
   searchableThreshold: number,
-  color?: ColorPairToken,
+  color?: ColorPair,
 }
 
 export type MultiSelectContextType<T> = MultiSelectContextActions<T>

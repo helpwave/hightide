@@ -26,7 +26,9 @@ export const SelectMenu = ({ children }: SelectMenuProps) => {
     && visibleCount === 0
 
   const resolvedOverlayStyle = useMemoizedTheme(selectTheme.overlay, {})
-  const resolvedMenuStyle = useMemoizedTheme(selectTheme.menu, { hasSearch: isSearchVisible })
+  const resolvedMenuStyle = useMemoizedTheme(selectTheme.menu, {
+    config: { hasSearch: isSearchVisible ? 'true' : undefined },
+  })
   const resolvedHeaderStyle = useMemoizedTheme(selectTheme.header, {})
   const resolvedEmptyTextStyle = useMemoizedTheme(selectTheme.emptyText, {})
 

@@ -1,72 +1,77 @@
-import type { ColorToken, ColorToken } from '@helpwave/hightide-design/primitive-tokens'
-import type {
-  Appearance,
-  ColoringColorTokens,
-  ColoringColorVariant,
-  ColoringStyle,
-  ColoringToken,
-  ContainerLayoutToken,
-  ControlElementLayoutToken,
-  ElementLayoutTokens,
-  InputColoringTokens,
-  InsideControlElementLayoutToken,
-  PressableColoringTokens,
-  ButtonVariant
-} from '@helpwave/hightide-design/semantic-tokens'
-import type { InputState } from '@helpwave/hightide-design/component-tokens'
-import type { PressableState } from '@helpwave/hightide-design/component-tokens'
-import type {
-  ColorPairToken,
-  ThemeLayoutSize,
-  TintStrength
-} from '@helpwave/hightide-design/theme-tokens'
+import type { HexColor } from './color'
+import type { TokenContextInput } from '../token-context'
+import type { ColorPair } from './color'
 
-export type BoundSemanticResolver<TParameter, TResult> = (parameter: TParameter) => TResult
+export type ColoringColors = {
+  color: HexColor,
+  onColor: HexColor,
+  accent: HexColor,
+}
+
+export type Coloring = {
+  foreground: HexColor,
+  background: HexColor,
+  accent: HexColor,
+}
+
+export type PressableColoring = {
+  background: HexColor,
+  foreground: HexColor,
+  border: HexColor,
+  outline: HexColor,
+}
+
+export type InputColoring = {
+  background: HexColor,
+  text: HexColor,
+  border: HexColor,
+}
+
+export type ControlLayout = {
+  size: number,
+  inset: number,
+  borderWidth: number,
+  borderRadius: number,
+  horizontalContentPadding: number,
+}
+
+export type ContainerLayout = {
+  size: number,
+  insetY: number,
+  insetX: number,
+  borderRadius: number,
+  minimumWidth: number,
+  minimumHeight: number,
+}
+
+export type InsideControlLayout = {
+  size: number,
+  inset: number,
+  borderWidth: number,
+  borderRadius: number,
+  paddingExtension: number,
+}
+
+export type SemanticColorFn<T> = (context?: TokenContextInput) => T
 
 export type HightideThemeSemantics = {
-  coloringColorVariant: BoundSemanticResolver<{
-    colorPair: ColorPairToken,
-    variant: ColoringColorVariant,
-  }, ColoringColorTokens>,
-  coloringStyle: BoundSemanticResolver<{
-    coloring: ColoringColorTokens,
-    style: ColoringStyle,
-  }, ColoringToken>,
-  pressableColoring: BoundSemanticResolver<{
-    coloring: ColoringToken,
-    variant: ButtonVariant,
-    state: PressableState,
-  }, PressableColoringTokens>,
-  pressableStateLayerTint: BoundSemanticResolver<{
-    states: PressableState,
-    color: ColorToken,
-  }, ColorToken>,
-  inputColoring: BoundSemanticResolver<{
-    state: InputState,
-    color?: ColorPairToken,
-  }, InputColoringTokens>,
-  controlLayout: BoundSemanticResolver<{
-    size: ThemeLayoutSize,
-  }, ControlElementLayoutToken>,
-  touchTargetSize: BoundSemanticResolver<object, number>,
-  containerLayout: BoundSemanticResolver<{
-    size: ThemeLayoutSize,
-  }, ContainerLayoutToken>,
-  insideControlLayout: BoundSemanticResolver<{
-    size: ThemeLayoutSize,
-  }, InsideControlElementLayoutToken>,
-  tintedSurface: BoundSemanticResolver<{
-    tintColor: ColorToken,
-    tintStrength?: TintStrength,
-  }, ColorToken>,
-  withAppearance: BoundSemanticResolver<{
-    colorPair: ColorPairToken,
-    appearance: Appearance,
-  }, ColorToken>,
-  asFaded: BoundSemanticResolver<{
-    colorPair: ColorPairToken,
-  }, ColorToken>,
-  asDescription: BoundSemanticResolver<{
-    colorPair: ColorPairToken,
-  }, ColorToken>,
-} & ElementLayoutTokens
+  colors: {
+    coloringColorVariant: SemanticColorFn<ColoringColors>,
+    coloringStyle: SemanticColorFn<Coloring>,
+    pressableColoring: SemanticColorFn<PressableColoring>,
+    pressableStateLayerTint: SemanticColorFn<HexColor>,
+    inputColoring: SemanticColorFn<InputColoring>,
+    tintedSurface: SemanticColorFn<HexColor>,
+    withAppearance: SemanticColorFn<HexColor>,
+    asFaded: SemanticColorFn<HexColor>,
+    asDescription: SemanticColorFn<HexColor>,
+  },
+  numbers: {
+    touchTargetSize: SemanticColorFn<number>,
+    controlLayout: SemanticColorFn<ControlLayout>,
+    containerLayout: SemanticColorFn<ContainerLayout>,
+    insideControlLayout: SemanticColorFn<InsideControlLayout>,
+  },
+}
+
+export type { ColorPair }

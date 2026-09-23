@@ -11,7 +11,9 @@ import {
   type ViewStyle
 } from 'react-native'
 
-import type { ColorPairToken } from '@helpwave/hightide-design/theme-tokens'
+import type { ColorPair } from '../../theme/types/color'
+import { listItemTokenContext } from '../../theme/component-contexts'
+import { interactionStateSet } from '../../theme/token-context'
 
 import { useDebugContext } from '../../global-contexts/debug'
 import { useTheme } from '../../global-contexts/theme/ThemeContext'
@@ -38,7 +40,7 @@ export type ListActionItemProps = Omit<PressableProps, 'children' | 'style'> & {
   contentOrder?: ListItemContentOrder,
   leading?: ReactNode,
   trailing?: ReactNode,
-  color?: ColorPairToken,
+  color?: ColorPair,
   style?: StyleProp<ViewStyle>,
   itemStyle?: StyleOverwrite<ListActionItemState, ListActionItemStyle>,
   titleStyle?: StyleOverwrite<ListActionItemState, ListActionItemTitleStyle>,
@@ -65,17 +67,22 @@ export const ListActionItem = ({
   const { theme } = useTheme()
   const { hitBox } = useDebugContext()
   const { hitSlop, onLayout } = useMinimumTouchTargetHitSlop({
-    touchTargetSize: theme.semantics.touchTargetSize({}),
+    touchTargetSize: theme.semantics.numbers.touchTargetSize({}),
     hitSlop: providedHitSlop,
     onLayout: providedOnLayout,
   })
   const [isPressed, setIsPressed] = useState(false)
 
-  const resolvedState = useMemo((): ListActionItemState => ({
-    color,
-    isDisabled: !!disabled,
-    isPressed,
-  }), [color, disabled, isPressed])
+  const resolvedState = useMemo((): ListActionItemState => {
+    const base = listItemTokenContext(theme, { color })
+    return {
+      ...base,
+      state: interactionStateSet({
+        isDisabled: !!disabled,
+        isPressed,
+      }, color !== undefined ? ['colored', 'tonal'] : []),
+    }
+  }, [color, disabled, isPressed, theme])
 
   const resolvedItemStyle = useMemoizedTheme(theme.components.listItem.action.container, resolvedState, itemStyle)
   const resolvedLeadingItemContainerStyle = useMemoizedTheme(theme.components.listItem.action.leadingItemContainer, resolvedState)

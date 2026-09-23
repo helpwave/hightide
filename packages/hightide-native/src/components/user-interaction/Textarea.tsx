@@ -14,7 +14,8 @@ import {
   useDelay
 } from '@helpwave/hightide-utils/hooks'
 
-import type { ColorPairToken } from '@helpwave/hightide-design/theme-tokens'
+import type { ColorPair } from '../../theme/types/color'
+import { inputTokenContext } from '../../theme/component-contexts'
 import { useTheme } from '../../global-contexts/theme/ThemeContext'
 import { useMemoizedTheme } from '../../hooks/useMemoizedTheme'
 import type {
@@ -41,7 +42,7 @@ export type TextareaProps = Omit<TextInputProps, 'value' | 'style'>
   & Partial<FormFieldDataHandling<string>>
   & Partial<FormFieldInteractionStates>
   & {
-    color?: ColorPairToken,
+    color?: ColorPair,
     editCompleteOptions?: EditCompleteOptions,
     initialValue?: string,
     style?: StyleOverwrite<TextareaState, TextareaContainerStyle>,
@@ -92,15 +93,17 @@ export const Textarea = forwardRef<TextInput, TextareaProps>(function Textarea({
 
   const interactive = !disabled && !readOnly
 
-  const state = useMemo((): TextareaState => ({
+  const state = useMemo((): TextareaState => inputTokenContext(theme, {
     color,
-    isDisabled: disabled,
-    isInvalid: invalid,
-    isReadonly: readOnly,
-    isHovered: interactive && isHovered,
-    isPressed: interactive && isPressed,
-    isFocused: interactive && isFocused,
-  }), [color, disabled, invalid, readOnly, interactive, isHovered, isPressed, isFocused])
+    interaction: {
+      isDisabled: disabled,
+      isInvalid: invalid,
+      isReadonly: readOnly,
+      isHovered: interactive && isHovered,
+      isPressed: interactive && isPressed,
+      isFocused: interactive && isFocused,
+    },
+  }), [color, disabled, invalid, readOnly, interactive, isHovered, isPressed, isFocused, theme])
 
   const resolvedContainerStyle = useMemoizedTheme(theme.components.textarea.container, state, style)
   const resolvedStateLayerStyle = useMemoizedTheme(theme.components.textarea.stateLayer, state, stateLayerStyle)

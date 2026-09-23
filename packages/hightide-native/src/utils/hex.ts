@@ -1,21 +1,21 @@
 import { processColor, type ColorValue } from 'react-native'
 
-import type { ColorToken } from '@helpwave/hightide-design/primitive-tokens'
+import type { HexColor } from '../theme/types/color'
 import { HexColorUtils as DesignHexColorUtils } from '@helpwave/hightide-design/utils'
 
 const clampByte = (value: number): number => Math.round(Math.min(255, Math.max(0, value)))
 
 const channelHex = (value: number): string => clampByte(value).toString(16).padStart(2, '0')
 
-const toHex = (r: number, g: number, b: number, alpha: number = 1): ColorToken => {
+const toHex = (r: number, g: number, b: number, alpha: number = 1): HexColor => {
   if (alpha >= 1) {
-    return `#${channelHex(r)}${channelHex(g)}${channelHex(b)}`
+    return `#${channelHex(r)}${channelHex(g)}${channelHex(b)}` as HexColor
   }
 
-  return `#${channelHex(r)}${channelHex(g)}${channelHex(b)}${channelHex(alpha * 255)}`
+  return `#${channelHex(r)}${channelHex(g)}${channelHex(b)}${channelHex(alpha * 255)}` as HexColor
 }
 
-const argbNumberToHex = (argb: number): ColorToken => {
+const argbNumberToHex = (argb: number): HexColor => {
   const unsigned = argb >>> 0
   const alpha = ((unsigned >>> 24) & 0xff) / 255
   const r = (unsigned >>> 16) & 0xff
@@ -25,7 +25,7 @@ const argbNumberToHex = (argb: number): ColorToken => {
   return toHex(r, g, b, alpha)
 }
 
-const parseHexString = (value: string): ColorToken | undefined => {
+const parseHexString = (value: string): HexColor | undefined => {
   const normalized = value.startsWith('#') ? value.slice(1) : value
   if (!/^[0-9a-fA-F]+$/.test(normalized)) {
     return undefined
@@ -59,7 +59,7 @@ const parseNumericChannel = (raw: string, percentScale: number): number => {
   return Number.parseFloat(trimmed)
 }
 
-const parseRgbString = (value: string): ColorToken | undefined => {
+const parseRgbString = (value: string): HexColor | undefined => {
   const match = /^rgba?\(\s*([^\s,/]+)[\s,]+([^\s,/]+)[\s,]+([^\s,/]+)(?:\s*[,/]\s*([^\s,/]+))?\s*\)$/i.exec(value)
   if (!match) {
     return undefined
@@ -117,7 +117,7 @@ const hslToRgb = (hue: number, saturation: number, lightness: number): [number, 
   ]
 }
 
-const parseHslString = (value: string): ColorToken | undefined => {
+const parseHslString = (value: string): HexColor | undefined => {
   const match = /^hsla?\(\s*([^\s,/]+)(?:deg)?[\s,]+([^\s,/]+)[\s,]+([^\s,/]+)(?:\s*[,/]\s*([^\s,/]+))?\s*\)$/i.exec(value)
   if (!match) {
     return undefined
@@ -136,7 +136,7 @@ const parseHslString = (value: string): ColorToken | undefined => {
   return toHex(r, g, b, alpha)
 }
 
-const parseColorLiteral = (color: ColorValue | number): ColorToken | undefined => {
+const parseColorLiteral = (color: ColorValue | number): HexColor | undefined => {
   if (typeof color === 'number') {
     return argbNumberToHex(color)
   }
@@ -159,7 +159,7 @@ const parseColorLiteral = (color: ColorValue | number): ColorToken | undefined =
     ?? parseHslString(trimmed)
 }
 
-const tryParseColorValue = (color: ColorValue | number): ColorToken | undefined => {
+const tryParseColorValue = (color: ColorValue | number): HexColor | undefined => {
   const fromLiteral = parseColorLiteral(color)
   if (fromLiteral !== undefined) {
     return fromLiteral
@@ -177,7 +177,7 @@ const tryParseColorValue = (color: ColorValue | number): ColorToken | undefined 
   return undefined
 }
 
-const parseColorValue = (color: ColorValue | number): ColorToken => {
+const parseColorValue = (color: ColorValue | number): HexColor => {
   const parsed = tryParseColorValue(color)
   if (parsed === undefined) {
     throw new Error(`Unable to parse ColorValue to hex: ${String(color)}`)

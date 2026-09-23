@@ -7,22 +7,23 @@ import {
 } from 'react-native'
 
 import type {
-  AxisAligmentToken,
-  BorderRadiusToken,
-  BorderToken,
-  ContainerTokens,
-  CrossAxisAlignmentToken,
-  CrossAxisLineAligmentToken,
-  IconTokens,
-  LayoutDirectionToken,
-  MainAxisAligmentToken,
-  MarginToken,
-  PaddingToken,
-  PositioningToken,
-  TextStyleTokens,
-  TransformTokens
-} from '@helpwave/hightide-design/component-tokens'
-import type { ShadowToken } from '@helpwave/hightide-design/theme-tokens'
+  Border,
+  BorderRadius,
+  ContainerLayout,
+  ContainerStyle,
+  CrossAxisAlignment,
+  CrossAxisLineAlignment,
+  IconStyle as DesignIconStyle,
+  LayoutDirection,
+  MainAxisAlignment,
+  Margin,
+  Padding,
+  Positioning,
+  Shadow,
+  TextStyle as DesignTextStyle,
+  Transform
+} from '@helpwave/hightide-design/resolver'
+import type { AxisAlignment } from '@helpwave/hightide-design/resolver'
 import type { IconStyle } from '../../icons'
 import type { SingleOrArray } from '@helpwave/hightide-utils/utils'
 import { ArrayUtil } from '@helpwave/hightide-utils/utils'
@@ -74,7 +75,7 @@ const defined = <T extends object>(style: T): T => {
 }
 
 const toFlexStartEnd = (
-  alignment: AxisAligmentToken
+  alignment: AxisAlignment
 ): 'flex-start' | 'flex-end' | 'center' => {
   if (alignment === 'start') {
     return 'flex-start'
@@ -88,7 +89,7 @@ const toFlexStartEnd = (
 }
 
 const shadowStyleAdapter = (
-  shadow?: SingleOrArray<ShadowToken>
+  shadow?: SingleOrArray<Shadow>
 ): ViewStyle['boxShadow'] | undefined => {
   if (shadow === undefined) {
     return undefined
@@ -104,7 +105,7 @@ const shadowStyleAdapter = (
 }
 
 const flexDirectionStyleAdapter = (
-  direction?: LayoutDirectionToken
+  direction?: LayoutDirection
 ): ViewStyle['flexDirection'] | undefined => {
   if (direction === undefined) {
     return undefined
@@ -114,7 +115,7 @@ const flexDirectionStyleAdapter = (
 }
 
 const justifyContentStyleAdapter = (
-  alignment?: MainAxisAligmentToken
+  alignment?: MainAxisAlignment
 ): ViewStyle['justifyContent'] | undefined => {
   if (alignment === undefined) {
     return undefined
@@ -128,7 +129,7 @@ const justifyContentStyleAdapter = (
 }
 
 const alignItemsStyleAdapter = (
-  alignment?: CrossAxisAlignmentToken
+  alignment?: CrossAxisAlignment
 ): ViewStyle['alignItems'] | undefined => {
   if (alignment === undefined) {
     return undefined
@@ -142,7 +143,7 @@ const alignItemsStyleAdapter = (
 }
 
 const alignSelfStyleAdapter = (
-  alignment?: CrossAxisAlignmentToken
+  alignment?: CrossAxisAlignment
 ): ViewStyle['alignSelf'] | undefined => {
   if (alignment === undefined) {
     return undefined
@@ -156,7 +157,7 @@ const alignSelfStyleAdapter = (
 }
 
 const alignContentStyleAdapter = (
-  alignment?: CrossAxisLineAligmentToken
+  alignment?: CrossAxisLineAlignment
 ): ViewStyle['alignContent'] | undefined => {
   if (alignment === undefined) {
     return undefined
@@ -175,7 +176,7 @@ const alignContentStyleAdapter = (
 }
 
 const borderRadiusStyleAdapter = (
-  borderRadius?: BorderRadiusToken
+  borderRadius?: BorderRadius
 ): OptionalViewStyle<
   | 'borderTopLeftRadius'
   | 'borderTopRightRadius'
@@ -195,7 +196,7 @@ const borderRadiusStyleAdapter = (
 }
 
 const borderWidthStyleAdapter = (
-  width?: BorderToken['width']
+  width?: Border['width']
 ): OptionalViewStyle<
   | 'borderTopWidth'
   | 'borderRightWidth'
@@ -215,7 +216,7 @@ const borderWidthStyleAdapter = (
 }
 
 const borderColorStyleAdapter = (
-  color?: BorderToken['color']
+  color?: Border['color']
 ): OptionalViewStyle<
   | 'borderTopColor'
   | 'borderRightColor'
@@ -235,7 +236,7 @@ const borderColorStyleAdapter = (
 }
 
 const borderStyleAdapter = (
-  border?: BorderToken
+  border?: Border
 ): OptionalViewStyle<
   | 'borderStyle'
   | 'borderTopWidth'
@@ -259,7 +260,7 @@ const borderStyleAdapter = (
 }
 
 const paddingStyleAdapter = (
-  padding?: PaddingToken
+  padding?: Padding
 ): OptionalViewStyle<
   | 'paddingTop'
   | 'paddingRight'
@@ -279,7 +280,7 @@ const paddingStyleAdapter = (
 }
 
 const marginStyleAdapter = (
-  margin?: MarginToken
+  margin?: Margin
 ): OptionalViewStyle<
   | 'marginTop'
   | 'marginRight'
@@ -299,7 +300,7 @@ const marginStyleAdapter = (
 }
 
 const sizeStyleAdapter = (
-  size?: ContainerTokens['size']
+  size?: ContainerStyle['size']
 ): OptionalViewStyle<
   | 'width'
   | 'height'
@@ -325,7 +326,7 @@ const sizeStyleAdapter = (
 }
 
 const outlineStyleAdapter = (
-  outline?: ContainerTokens['outline']
+  outline?: ContainerStyle['outline']
 ): OptionalViewStyle<
   | 'outlineColor'
   | 'outlineOffset'
@@ -345,7 +346,7 @@ const outlineStyleAdapter = (
 }
 
 const layoutStyleAdapter = (
-  layout?: ContainerTokens['layout']
+  layout?: ContainerLayout
 ): OptionalViewStyle<
   | 'flexWrap'
   | 'flexGrow'
@@ -377,7 +378,7 @@ const layoutStyleAdapter = (
 }
 
 const positionStyleAdapter = (
-  position?: PositioningToken
+  position?: Positioning
 ): OptionalViewStyle<
   | 'position'
   | 'left'
@@ -408,7 +409,7 @@ const positionStyleAdapter = (
 }
 
 const transformStyleAdapter = (
-  transform?: TransformTokens
+  transform?: Transform
 ): ViewStyle['transform'] | undefined => {
   if (transform === undefined) {
     return undefined
@@ -459,7 +460,7 @@ const transformStyleAdapter = (
   return transforms
 }
 
-function containerStyleAdapter(tokens: ContainerTokens): ViewStyle {
+function containerStyleAdapter(tokens: ContainerStyle): ViewStyle {
   if (tokens === undefined) {
     return {}
   }
@@ -482,7 +483,7 @@ function containerStyleAdapter(tokens: ContainerTokens): ViewStyle {
   })
 }
 
-function textStyleAdapter(tokens: TextStyleTokens): TextStyle {
+function textStyleAdapter(tokens: DesignTextStyle): TextStyle {
   if (tokens === undefined) {
     return {}
   }
@@ -490,14 +491,14 @@ function textStyleAdapter(tokens: TextStyleTokens): TextStyle {
   return defined({
     color: tokens.color,
     fontSize: tokens.fontSize,
-    fontWeight: tokens.fontWeight,
+    fontWeight: tokens.fontWeight as TextStyle['fontWeight'],
     fontFamily: tokens.fontFamily,
     lineHeight: tokens.lineHeight,
     textAlign: tokens.textAlign,
   })
 }
 
-function iconStyleAdapter(tokens: IconTokens): IconStyle {
+function iconStyleAdapter(tokens: DesignIconStyle): IconStyle {
   if (tokens === undefined) {
     return {}
   }

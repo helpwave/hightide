@@ -1,82 +1,10 @@
-import type { ThemeTokens } from '@helpwave/hightide-design/theme-tokens'
-import type { SemanticTokenResolvers } from '@helpwave/hightide-design/semantic-tokens'
-import type {
-  ComponentTokenResolvers,
-  PressableState,
-  PressableStateValue
-} from '@helpwave/hightide-design/component-tokens'
 import type { StyleProp } from 'react-native'
+import type { TokenContextInput } from '../token-context'
 
-export type InteractionState = {
-  isDisabled?: boolean,
-  isHovered?: boolean,
-  isFocused?: boolean,
-  isFocusVisible?: boolean,
-  isPressed?: boolean,
-  isReadonly?: boolean,
-  isInvalid?: boolean,
-}
+export type { InteractionState } from '../token-context'
+export { interactionStateSet as toPressableInteractionState } from '../token-context'
 
-export const toPressableInteractionState = (
-  state: InteractionState = {}
-): PressableState => {
-  const active = new Set<PressableStateValue>()
+export type StyleOverwrite<TStateOrStyle, TStyle = TStateOrStyle> =
+  StyleProp<TStyle> | ((context: TokenContextInput, prev: TStyle) => StyleProp<TStyle>)
 
-  if (state.isDisabled) {
-    active.add('disabled')
-  }
-  if (state.isFocused) {
-    active.add('focused')
-  }
-  if (state.isFocusVisible) {
-    active.add('focusVisible')
-  }
-  if (state.isHovered) {
-    active.add('hovered')
-  }
-  if (state.isPressed) {
-    active.add('pressed')
-  }
-
-  return active
-}
-
-export type StyleOverwrite<TState, TStyle> =
-  StyleProp<TStyle> | ((state: TState, prev: TStyle) => StyleProp<TStyle>)
-
-export type StyleResolverFunction<TState, TStyle> = (
-  props: TState,
-  overwrite?: StyleOverwrite<TState, TStyle>,
-) => StyleProp<TStyle>
-
-export type SimpleStyleResolver<TStyle> = StyleResolverFunction<Record<string, never>, TStyle>
-
-export type ComponentThemeResolver<TTheme> = (params: {
-  themeTokens: ThemeTokens,
-  semanticTokens: SemanticTokenResolvers,
-  componentTokens: ComponentTokenResolvers,
-}) => TTheme
-
-export const createStyleResolver = <TState, TStyle>(
-  resolve: (props: TState) => TStyle
-): StyleResolverFunction<TState, TStyle> => {
-  return (props, overwrite) => {
-    const base = resolve(props)
-
-    if (overwrite === undefined) {
-      return base
-    }
-
-    if (typeof overwrite === 'function') {
-      return (overwrite as (state: TState, prev: TStyle) => TStyle)(props, base)
-    }
-
-    return [base, overwrite]
-  }
-}
-
-export const createSimpleStyleResolver = <TStyle>(
-  resolve: () => TStyle
-): SimpleStyleResolver<TStyle> => {
-  return createStyleResolver<Record<string, never>, TStyle>(resolve)
-}
+export type StyleLeaf<TStyle> = (context?: TokenContextInput) => TStyle

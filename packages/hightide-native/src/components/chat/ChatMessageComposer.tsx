@@ -63,7 +63,8 @@ export const ChatMessageComposer = ({
 
   const resolvedComposerStyle = useMemoizedTheme(theme.components.chat.messageComposer.container, state, composerStyle)
   const resolvedInputStyle = useMemoizedTheme(theme.components.chat.messageComposer.input, state, inputStyle)
-  const placeholderColor = useMemoizedTheme(theme.components.chat.messageComposer.placeholderColor, state)
+  const placeholderStyle = useMemoizedTheme(theme.components.chat.messageComposer.placeholder ?? theme.components.themedPressable.text, state)
+  const placeholderColor = placeholderStyle.color
 
   const send = () => {
     const trimmed = (value ?? '').trim()
@@ -85,7 +86,7 @@ export const ChatMessageComposer = ({
         value={value ?? ''}
         onChangeText={setValue}
         placeholder={placeholder}
-        placeholderTextColor={placeholderColor.color}
+        placeholderTextColor={placeholderColor}
         editable={!disabled}
         multiline
         style={resolvedInputStyle}

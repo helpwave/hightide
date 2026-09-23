@@ -1,7 +1,7 @@
 import type { ReactNode } from 'react'
 import { useCallback, useMemo, useState } from 'react'
 
-import type { ColorPairToken } from '@helpwave/hightide-design/theme-tokens'
+import type { ColorPair } from '../../../theme/types/color'
 import { useEventCallbackStabilizer } from '@helpwave/hightide-utils/hooks'
 
 import { useSelect } from '../../../hooks/useSelect'
@@ -25,7 +25,7 @@ export type SelectRootProps<T> = Partial<FormFieldDataHandling<T>>
     onClose?: () => void,
     onIsOpenChange?: (isOpen: boolean) => void,
     searchableThreshold?: number,
-    color?: ColorPairToken,
+    color?: ColorPair,
     children: ReactNode,
   }
 

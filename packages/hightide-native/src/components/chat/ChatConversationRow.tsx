@@ -4,7 +4,6 @@ import {
   type ReactNode
 } from 'react'
 import {
-  StyleSheet,
   View,
   type PressableProps
 } from 'react-native'
@@ -12,27 +11,19 @@ import { HightideIconRegistry } from '../../icons/HightideIconRegistry'
 import { ThemedIcon } from '../visualization-and-display/ThemedIcon'
 import { ThemedText } from '../visualization-and-display/ThemedText'
 import { useTheme } from '../../global-contexts/theme/ThemeContext'
-import { useMemoizedTheme, useMemoizedThemeFactory } from '../../hooks/useMemoizedTheme'
-import type {
-  AvatarState,
-  AvatarThemeResolvers
-} from '../../theme/types/components/avatar'
+import { useMemoizedTheme } from '../../hooks/useMemoizedTheme'
+import { interactionStateSet } from '../../theme/token-context'
 import type {
   ChatConversationRowContentContainerStyle,
   ChatConversationRowHeaderRowStyle,
   ChatConversationRowMessageRowStyle,
   ChatConversationRowPreviewStyle,
   ChatConversationRowSentIndicatorStyle,
-  ChatConversationRowState,
   ChatConversationRowTimestampStyle,
   ChatConversationRowTitleStyle,
-  PressableContainerStyle,
-  PressableIconStyle,
-  PressableState,
-  PressableStateLayerStyle,
-  PressableTextStyle
+  PressableContainerStyle
 } from '../../theme/types/components/chat'
-import type { StyleOverwrite, StyleResolverFunction } from '../../theme/types/resolver'
+import type { StyleOverwrite } from '../../theme/types/resolver'
 import {
   AvatarWithStatus,
   type AvatarWithStatusProps
@@ -53,26 +44,15 @@ export type ChatConversationRowProps = Omit<PressableProps, 'children' | 'style'
   unreadCount?: number,
   isSelected?: boolean,
   messageStatus?: ChatMessageStatus,
-  style?: StyleOverwrite<PressableState, PressableContainerStyle>,
-  contentContainerStyle?: StyleOverwrite<ChatConversationRowState, ChatConversationRowContentContainerStyle>,
-  headerRowStyle?: StyleOverwrite<ChatConversationRowState, ChatConversationRowHeaderRowStyle>,
-  messageRowStyle?: StyleOverwrite<ChatConversationRowState, ChatConversationRowMessageRowStyle>,
-  titleStyle?: StyleOverwrite<ChatConversationRowState, ChatConversationRowTitleStyle>,
-  timestampStyle?: StyleOverwrite<ChatConversationRowState, ChatConversationRowTimestampStyle>,
-  previewStyle?: StyleOverwrite<ChatConversationRowState, ChatConversationRowPreviewStyle>,
-  sentIndicatorStyle?: StyleOverwrite<Record<string, never>, ChatConversationRowSentIndicatorStyle>,
+  style?: StyleOverwrite<PressableContainerStyle>,
+  contentContainerStyle?: StyleOverwrite<ChatConversationRowContentContainerStyle>,
+  headerRowStyle?: StyleOverwrite<ChatConversationRowHeaderRowStyle>,
+  messageRowStyle?: StyleOverwrite<ChatConversationRowMessageRowStyle>,
+  titleStyle?: StyleOverwrite<ChatConversationRowTitleStyle>,
+  timestampStyle?: StyleOverwrite<ChatConversationRowTimestampStyle>,
+  previewStyle?: StyleOverwrite<ChatConversationRowPreviewStyle>,
+  sentIndicatorStyle?: StyleOverwrite<ChatConversationRowSentIndicatorStyle>,
 }
-
-type ConversationRowPressableResolvers = {
-  container: StyleResolverFunction<PressableState, PressableContainerStyle>,
-  stateLayer: StyleResolverFunction<PressableState, PressableStateLayerStyle>,
-  text: StyleResolverFunction<PressableState, PressableTextStyle>,
-  icon: StyleResolverFunction<PressableState, PressableIconStyle>,
-}
-
-const toNumericSize = (value: unknown): number | undefined => (
-  typeof value === 'number' ? value : undefined
-)
 
 const resolveMessageStatusIcon = (messageStatus: ChatMessageStatus): IconComponent => (
   messageStatus === 'sent'
@@ -103,44 +83,26 @@ export const ChatConversationRow = ({
   const { theme } = useTheme()
   const [isPressed, setIsPressed] = useState(false)
   const isUnread = (unreadCount ?? 0) > 0
-  const staticState = useMemo(() => ({}), [])
-
-  const rowState = useMemo((): ChatConversationRowState => ({
-    isUnread,
-    isSelected,
-    isDisabled: !!disabled,
-    isPressed,
+  const staticState = useMemo(() => ({
+    state: interactionStateSet({
+      isDisabled: !!disabled,
+      isPressed,
+    }, [
+      ...(isUnread ? ['unread'] : []),
+      ...(isSelected ? ['selected'] : []),
+    ]),
   }), [disabled, isPressed, isSelected, isUnread])
 
-  const pressableThemeState = useMemo((): PressableState => ({
-    isPressed,
-    isDisabled: !!disabled,
-  }), [disabled, isPressed])
-
-  const pressableResolvers = useMemoizedThemeFactory<
-    ChatConversationRowState,
-    ConversationRowPressableResolvers
-  >(theme.components.chat.conversationRow.pressable, rowState)
-
-  const resolvedContainerStyle = useMemoizedTheme(pressableResolvers.container, pressableThemeState, style)
-  const resolvedStateLayerStyle = useMemoizedTheme(pressableResolvers.stateLayer, pressableThemeState)
-  const resolvedContentContainer = useMemoizedTheme(theme.components.chat.conversationRow.contentContainer, rowState, contentContainerStyle)
-  const resolvedHeaderRow = useMemoizedTheme(theme.components.chat.conversationRow.headerRow, rowState, headerRowStyle)
-  const resolvedMessageRow = useMemoizedTheme(theme.components.chat.conversationRow.messageRow, rowState, messageRowStyle)
-  const resolvedTitle = useMemoizedTheme(theme.components.chat.conversationRow.title, rowState, titleStyle)
-  const resolvedTimestamp = useMemoizedTheme(theme.components.chat.conversationRow.timestamp, rowState, timestampStyle)
-  const resolvedPreview = useMemoizedTheme(theme.components.chat.conversationRow.preview, rowState, previewStyle)
+  const resolvedContentContainer = useMemoizedTheme(theme.components.chat.conversationRow.contentContainer, staticState, contentContainerStyle)
+  const resolvedHeaderRow = useMemoizedTheme(theme.components.chat.conversationRow.headerRow, staticState, headerRowStyle)
+  const resolvedMessageRow = useMemoizedTheme(theme.components.chat.conversationRow.messageRow, staticState, messageRowStyle)
+  const resolvedTitle = useMemoizedTheme(theme.components.chat.conversationRow.title, staticState, titleStyle)
+  const resolvedTimestamp = useMemoizedTheme(theme.components.chat.conversationRow.timestamp, staticState, timestampStyle)
+  const resolvedPreview = useMemoizedTheme(theme.components.chat.conversationRow.preview, staticState, previewStyle)
   const unreadBadge = useMemoizedTheme(theme.components.chat.conversationRow.unreadBadge, staticState)
   const unreadBadgeText = useMemoizedTheme(theme.components.chat.conversationRow.unreadBadgeText, staticState)
   const resolvedSentIndicator = useMemoizedTheme(theme.components.chat.conversationRow.sentIndicator, staticState, sentIndicatorStyle)
-  const avatarTheme = useMemoizedThemeFactory<AvatarState, AvatarThemeResolvers>(
-    theme.components.chat.conversationRow.avatar,
-    staticState
-  )
-  const avatarSize = useMemo(
-    () => toNumericSize(StyleSheet.flatten(avatarTheme.container({})).width) ?? avatarProps?.size,
-    [avatarProps?.size, avatarTheme]
-  )
+  const avatarSize = avatarProps?.size
   const messageStatusIcon = messageStatus === undefined
     ? undefined
     : resolveMessageStatusIcon(messageStatus)
@@ -149,10 +111,6 @@ export const ChatConversationRow = ({
     : resolvedSentIndicator.color
 
   const {
-    avatarStyle,
-    imageStyle,
-    textStyle,
-    iconStyle,
     ...restAvatarProps
   } = avatarProps ?? {}
 
@@ -160,8 +118,10 @@ export const ChatConversationRow = ({
     <ThemedPressable
       {...props}
       disabled={disabled}
-      style={resolvedContainerStyle}
-      stateLayerStyle={resolvedStateLayerStyle}
+      size="md"
+      coloringStyle="foreground"
+      coloringColorVariant="transparent"
+      style={style}
       onPressIn={(event) => {
         setIsPressed(true)
         props.onPressIn?.(event)
@@ -175,34 +135,6 @@ export const ChatConversationRow = ({
         <AvatarWithStatus
           {...restAvatarProps}
           size={avatarSize}
-          avatarStyle={(avatarState) => avatarTheme.container(
-            {
-              ...avatarState,
-              size: avatarSize,
-            },
-            avatarStyle
-          )}
-          imageStyle={(avatarState) => avatarTheme.image(
-            {
-              ...avatarState,
-              size: avatarSize,
-            },
-            imageStyle
-          )}
-          textStyle={(avatarState) => avatarTheme.text(
-            {
-              ...avatarState,
-              size: avatarSize,
-            },
-            textStyle
-          )}
-          iconStyle={(avatarState) => avatarTheme.icon(
-            {
-              ...avatarState,
-              size: avatarSize,
-            },
-            iconStyle
-          )}
         />
       )}
       <View style={resolvedContentContainer}>

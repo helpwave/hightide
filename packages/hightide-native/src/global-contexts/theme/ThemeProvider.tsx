@@ -89,7 +89,7 @@ export const ThemeProvider = ({
       theme: themeConfig.theme,
       isInitialized: store.isInitialized,
     }
-  }, [store.isInitialized, themeConfig.preferredThemeMode, themeConfig.setTheme, themeConfig.supportedThemes, themeConfig.theme, themeConfig.themeMode])
+  }, [store.isInitialized, themeConfig.preferredThemeMode, themeConfig.setTheme, themeConfig.supportedThemes, themeConfig.themeMode, themeConfig.theme])
 
   return (
     <ThemeContext.Provider value={contextValue}>
@@ -98,7 +98,6 @@ export const ThemeProvider = ({
         background={contextValue.theme.colors.surface.color}
         textStyle={{
           ...contextValue.theme.typography.body.md,
-          //color: contextValue.theme.colors.surface.onColor,
         }}
         iconStyle={{
           size: contextValue.theme.icongraphy.sizes.md,

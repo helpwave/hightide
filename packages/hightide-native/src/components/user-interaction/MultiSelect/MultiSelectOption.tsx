@@ -6,7 +6,7 @@ import { useTheme } from '../../../global-contexts/theme/ThemeContext'
 import { useMemoizedTheme } from '../../../hooks/useMemoizedTheme'
 import { HightideIconRegistry } from '../../../icons/HightideIconRegistry'
 import type { IconStyle } from '../../../icons'
-import type { MultiSelectOptionState } from '../../../theme/types/components/multiSelect'
+import { pressableTokenContext } from '../../../theme/component-contexts'
 import { ListActionItem } from '../../list/ListActionItem'
 import { ThemedIcon } from '../../visualization-and-display/ThemedIcon'
 import type { MultiSelectOptionIdentity } from './MultiSelectContext'
@@ -66,16 +66,20 @@ export const MultiSelectOption = <T,>({
     ? (context.config.color ?? theme.colors.primary)
     : undefined
 
-  const optionState = useMemo((): MultiSelectOptionState => ({
-    color: context.config.color,
-    isSelected,
-    isHighlighted: context.highlightedId === optionId,
-    isDisabled: disabled,
-  }), [context.config.color, context.highlightedId, disabled, optionId, isSelected])
+  const optionState = useMemo(() => ({
+    ...pressableTokenContext(theme, {
+      color: context.config.color,
+      interaction: { isDisabled: disabled },
+      extraState: [
+        ...(isSelected ? ['selected'] : []),
+        ...(context.highlightedId === optionId ? ['highlighted'] : []),
+      ],
+    }),
+  }), [context.config.color, context.highlightedId, disabled, optionId, isSelected, theme])
 
   const multiSelectTheme = theme.components.multiSelect
   const resolvedCheckboxStyle = useMemoizedTheme(multiSelectTheme.checkbox, optionState)
-  const checkboxIcon = useMemoizedTheme<MultiSelectOptionState, IconStyle>(
+  const checkboxIcon = useMemoizedTheme(
     multiSelectTheme.checkboxIcon,
     optionState
   )

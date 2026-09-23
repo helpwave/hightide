@@ -10,7 +10,7 @@ import { useTheme } from '../../../global-contexts/theme/ThemeContext'
 import { useMemoizedTheme } from '../../../hooks/useMemoizedTheme'
 import { HightideIconRegistry } from '../../../icons/HightideIconRegistry'
 import type { IconStyle } from '../../../icons'
-import type { SelectState } from '../../../theme/types/components/select'
+import { pressableTokenContext } from '../../../theme/component-contexts'
 import { ThemedIcon } from '../../visualization-and-display/ThemedIcon'
 import { ThemedText } from '../../visualization-and-display/ThemedText'
 import { useSelectContext, type SelectOptionType } from './SelectContext'
@@ -35,15 +35,20 @@ export const SelectTrigger = <T,>({
     ? (context.idToOptionMap[context.selectedId] ?? null)
     : null
 
-  const resolvedState = useMemo((): SelectState => ({
+  const resolvedState = useMemo(() => pressableTokenContext(theme, {
     color: context.config.color,
-    isDisabled: !!context.disabled,
-    isReadonly: !!context.readOnly,
-    isInvalid: !!context.invalid,
-    isOpen: context.isOpen,
-    hasValue: !!context.selectedId,
-    isPressed,
+    interaction: {
+      isDisabled: !!context.disabled,
+      isReadonly: !!context.readOnly,
+      isInvalid: !!context.invalid,
+      isPressed,
+    },
+    extraState: [
+      ...(context.isOpen ? ['open'] : []),
+      ...(context.selectedId ? ['hasValue'] : []),
+    ],
   }), [
+    theme,
     context.config.color,
     context.disabled,
     context.invalid,
@@ -57,7 +62,7 @@ export const SelectTrigger = <T,>({
   const resolvedTriggerStyle = useMemoizedTheme(selectTheme.trigger, resolvedState)
   const resolvedStateLayerStyle = useMemoizedTheme(selectTheme.stateLayer, resolvedState)
   const resolvedTriggerTextStyle = useMemoizedTheme(selectTheme.triggerText, resolvedState)
-  const resolvedIcon = useMemoizedTheme<SelectState, IconStyle>(selectTheme.icon, resolvedState)
+  const resolvedIcon = useMemoizedTheme(selectTheme.icon, resolvedState)
 
   const customDisplay = selectedDisplay?.(selectedOption)
   const fallbackDisplay = selectedOption?.display

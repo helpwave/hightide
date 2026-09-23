@@ -1,7 +1,7 @@
 import type { ReactNode } from 'react'
 import { createContext, useContext } from 'react'
 
-import type { ColorPairToken } from '@helpwave/hightide-design/theme-tokens'
+import type { ColorPair } from '../../../theme/types/color'
 
 import type { UseSelectFirstHighlightBehavior } from '../../../hooks/useSelect'
 import type { FormFieldInteractionStates } from '../../../types/formField'
@@ -51,7 +51,7 @@ export type SelectContextSearch = {
 
 export type SelectContextConfig = {
   searchableThreshold: number,
-  color?: ColorPairToken,
+  color?: ColorPair,
 }
 
 export type SelectContextType<T> = SelectContextActions<T>

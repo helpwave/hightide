@@ -27,6 +27,7 @@ import type {
   SwitchThumbStyle,
   SwitchTrackStyle
 } from '../../theme/types/components/switch'
+import { interactionStateSet } from '../../theme/token-context'
 import type { StyleOverwrite } from '../../theme/types/resolver'
 import type {
   FormFieldDataHandling,
@@ -73,7 +74,7 @@ export const Switch = ({
   const { theme } = useTheme()
   const { hitBox } = useDebugContext()
   const { hitSlop, onLayout } = useMinimumTouchTargetHitSlop({
-    touchTargetSize: theme.semantics.touchTargetSize({}),
+    touchTargetSize: theme.semantics.numbers.touchTargetSize({}),
     hitSlop: providedHitSlop,
     onLayout: providedOnLayout,
   })
@@ -95,11 +96,12 @@ export const Switch = ({
   })
 
   const resolvedState = useMemo((): SwitchState => ({
-    isActive: value,
-    isInvalid: invalid,
-    isDisabled: disabled,
-    isReadonly: readOnly,
-    isPressed,
+    state: interactionStateSet({
+      isDisabled: disabled,
+      isInvalid: invalid,
+      isReadonly: readOnly,
+      isPressed,
+    }, value ? ['active'] : []),
   }), [
     value,
     invalid,

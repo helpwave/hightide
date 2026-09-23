@@ -6,8 +6,9 @@ import {
   type TextProps
 } from 'react-native'
 
-import type { ColorPairToken } from '@helpwave/hightide-design/theme-tokens'
 import type { ComponentSize, ButtonVariant } from '@helpwave/hightide-design/semantic-tokens'
+import type { ColorPair } from '../../theme/types/color'
+import { pressableTokenContext } from '../../theme/component-contexts'
 
 import { ContentThemeOverrideProvider } from '../../global-contexts/content-theme/ContentThemeProvider'
 import { useDebugContext } from '../../global-contexts/debug'
@@ -28,7 +29,7 @@ import { useMemoizedTheme } from '../../hooks/useMemoizedTheme'
 
 export type ButtonSize = ComponentSize
 
-export type ButtonColor = ColorPairToken
+export type ButtonColor = ColorPair
 
 export const ButtonUtil = {
   sizes: ['xs', 'sm', 'md', 'lg', 'xl'] as const satisfies readonly ComponentSize[],
@@ -71,19 +72,21 @@ export const Button = forwardRef<React.ComponentRef<typeof Pressable>, ButtonPro
   const { theme } = useTheme()
   const { hitBox } = useDebugContext()
   const { hitSlop, onLayout } = useMinimumTouchTargetHitSlop({
-    touchTargetSize: theme.semantics.touchTargetSize({}),
+    touchTargetSize: theme.semantics.numbers.touchTargetSize({}),
     hitSlop: providedHitSlop,
     onLayout: providedOnLayout,
   })
 
   const [isPressed, setIsPressed] = useState(false)
-  const resolvedState = useMemo(() => ({
+  const resolvedState = useMemo(() => pressableTokenContext(theme, {
     size,
     color,
     variant,
-    isDisabled: !!disabled,
-    isPressed: isPressed,
-  }), [color, disabled, isPressed, size, variant])
+    interaction: {
+      isDisabled: !!disabled,
+      isPressed,
+    },
+  }), [color, disabled, isPressed, size, theme, variant])
 
   const resolvedContainerStyle = useMemoizedTheme(theme.components.button.container, resolvedState, style)
   const resolvedTextStyle = useMemoizedTheme(theme.components.button.text, resolvedState, textStyle)

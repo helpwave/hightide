@@ -19,10 +19,11 @@ import {
   avatarSizes,
   type AvatarSize as AvatarSizeToken
 } from '@helpwave/hightide-design/component-tokens'
-import type { ColorPairToken } from '@helpwave/hightide-design/theme-tokens'
+import type { ColorPair } from '../../theme/types/color'
+import { avatarTokenContext } from '../../theme/component-contexts'
 
 import { useTheme } from '../../global-contexts/theme/ThemeContext'
-import { useMemoizedTheme, useMemoizedThemeFactory } from '../../hooks/useMemoizedTheme'
+import { useMemoizedTheme } from '../../hooks/useMemoizedTheme'
 import type {
   AvatarGroupContainerStyle,
   AvatarGroupStackStyle,
@@ -33,7 +34,6 @@ import type {
   AvatarStatus,
   AvatarStyle,
   AvatarTextStyle,
-  AvatarThemeResolvers,
   AvatarStatusDotStyle,
   AvatarWithStatusState
 } from '../../theme/types/components/avatar'
@@ -68,7 +68,7 @@ export type AvatarProps = Omit<ViewProps, 'children' | 'style'> & {
   image?: ImageConfig,
   name?: string,
   size?: AvatarSize,
-  color?: ColorPairToken,
+  color?: ColorPair,
   ImageComponent?: ComponentType<AvatarImageProps>,
   style?: StyleProp<ViewStyle>,
   avatarStyle?: StyleOverwrite<AvatarState, AvatarStyle>,
@@ -100,12 +100,11 @@ export const Avatar = ({
   const [image, setImage] = useState(initialImage)
   const ImageElement = ImageComponent
 
-  const state = useMemo((): AvatarState => ({
-    size,
-    isGrouped,
-    groupIndex,
+  const state = useMemo((): AvatarState => avatarTokenContext(theme, {
+    size: typeof size === 'number' ? size : size,
     color,
-  }), [size, isGrouped, groupIndex, color])
+    isGrouped,
+  }), [size, isGrouped, color, theme])
 
   const displayName = useMemo(() => {
     const maxLetters = size === 'sm' ? 1 : 2
@@ -167,7 +166,7 @@ export type AvatarGroupProps = Omit<ViewProps, 'children' | 'style'> & {
   avatars: Omit<AvatarProps, 'size' | 'isGrouped' | 'groupIndex'>[],
   showTotalNumber?: boolean,
   size?: AvatarSize,
-  color?: ColorPairToken,
+  color?: ColorPair,
   ImageComponent?: ComponentType<AvatarImageProps>,
   style?: StyleProp<ViewStyle>,
   containerStyle?: StyleOverwrite<{ size?: AvatarSize, count?: number }, AvatarGroupContainerStyle>,
@@ -193,15 +192,14 @@ export const AvatarGroup = ({
   const notDisplayedProfiles = avatars.length - maxShownProfiles
 
   const state = useMemo(() => ({
-    size,
-    color,
-    count: displayedProfiles.length,
-  }), [size, color, displayedProfiles.length])
+    params: {
+      numbers: {
+        dimension: typeof size === 'number' ? size : theme.icongraphy.sizes[size],
+        visibleCount: displayedProfiles.length,
+      },
+    },
+  }), [size, displayedProfiles.length, theme])
 
-  const avatarResolvers = useMemoizedThemeFactory<
-    AvatarState,
-    AvatarThemeResolvers
-  >(theme.components.avatarGroup.avatar, state)
   const resolvedContainer = useMemoizedTheme(theme.components.avatarGroup.container, state, containerStyle)
   const resolvedAvatarStack = useMemoizedTheme(theme.components.avatarGroup.avatarStack, state, avatarStackStyle)
   const resolvedText = useMemoizedTheme(theme.components.avatarGroup.text, state, textStyle)
@@ -212,15 +210,7 @@ export const AvatarGroup = ({
       style={[resolvedContainer, style]}
     >
       <View style={resolvedAvatarStack}>
-        {displayedProfiles.map((avatar, index) => {
-          const avatarState: AvatarState = {
-            size,
-            isGrouped: true,
-            groupIndex: index,
-            color: avatar.color ?? color,
-          }
-
-          return (
+        {displayedProfiles.map((avatar, index) => (
             <Avatar
               {...avatar}
               key={index}
@@ -228,25 +218,8 @@ export const AvatarGroup = ({
               isGrouped
               groupIndex={index}
               ImageComponent={avatar.ImageComponent ?? ImageComponent}
-              avatarStyle={(state) => avatarResolvers.container({
-                ...state,
-                ...avatarState,
-              })}
-              imageStyle={(state) => avatarResolvers.image({
-                ...state,
-                ...avatarState,
-              })}
-              textStyle={(state) => avatarResolvers.text({
-                ...state,
-                ...avatarState,
-              })}
-              iconStyle={(state) => avatarResolvers.icon({
-                ...state,
-                ...avatarState,
-              })}
             />
-          )
-        })}
+          ))}
       </View>
       {showTotalNumber && notDisplayedProfiles > 0 && (
         <ThemedText style={resolvedText}>
@@ -279,15 +252,16 @@ export const AvatarWithStatus = ({
   const { theme } = useTheme()
 
   const state = useMemo((): AvatarWithStatusState => ({
-    size,
-    color,
-    status,
-  }), [size, color, status])
+    ...avatarTokenContext(theme, { size, color }),
+    state: new Set([status]),
+    params: {
+      ...avatarTokenContext(theme, { size, color }).params,
+      numbers: {
+        dimension: typeof size === 'number' ? size : theme.icongraphy.sizes[size],
+      },
+    },
+  }), [size, color, status, theme])
 
-  const avatarResolvers = useMemoizedThemeFactory<
-    AvatarWithStatusState,
-    AvatarThemeResolvers
-  >(theme.components.avatarWithStatus.avatar, state)
   const resolvedStatusDot = useMemoizedTheme(theme.components.avatarWithStatus.statusDot, state, statusDotStyle)
 
   return (
@@ -296,10 +270,10 @@ export const AvatarWithStatus = ({
         {...avatarProps}
         size={size}
         color={color}
-        avatarStyle={(state) => avatarResolvers.container(state, avatarStyle)}
-        imageStyle={(state) => avatarResolvers.image(state, imageStyle)}
-        textStyle={(state) => avatarResolvers.text(state, textStyle)}
-        iconStyle={(state) => avatarResolvers.icon(state, iconStyle)}
+        avatarStyle={avatarStyle}
+        imageStyle={imageStyle}
+        textStyle={textStyle}
+        iconStyle={iconStyle}
       />
       <View style={resolvedStatusDot} />
     </View>

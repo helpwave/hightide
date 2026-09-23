@@ -1,18 +1,11 @@
-import type { ColorToken } from '@helpwave/hightide-design/primitive-tokens'
-import type { DividerDirection } from '@helpwave/hightide-design/component-tokens'
 import type { ViewStyle } from 'react-native'
+import type { TokenContextInput } from '../../token-context'
+import type { StyleLeaf } from '../resolver'
 
-import type { StyleResolverFunction } from '../resolver'
-
-export type DividerState = {
-  direction?: DividerDirection,
-  color?: ColorToken,
-  width?: number,
-  margin?: number,
-}
+export type DividerState = TokenContextInput
 
 export type DividerStyle = ViewStyle
 
 export type DividerThemeResolvers = {
-  container: StyleResolverFunction<DividerState, DividerStyle>,
+  container: StyleLeaf<DividerStyle>,
 }

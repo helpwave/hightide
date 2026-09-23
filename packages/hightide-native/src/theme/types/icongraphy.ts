@@ -1,8 +1,8 @@
-import type {
-  IconSize,
-  ThemeIcongraphyTokens
-} from '@helpwave/hightide-design/theme-tokens'
+export type IconSize = 'xs' | 'sm' | 'md' | 'lg' | 'xl'
 
-export type HightideIcongraphy = ThemeIcongraphyTokens
+export type HightideIcongraphy = {
+  sizes: Record<IconSize, number>,
+  strokeWidth: number,
+}
 
 export type IconSizes = IconSize

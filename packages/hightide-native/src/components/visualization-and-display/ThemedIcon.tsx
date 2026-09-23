@@ -38,19 +38,27 @@ export const ThemedIcon = ({
   const iconToken = typeof resolvedSize === 'number'
     ? {
       size: resolvedSize,
-      strokeWidth: strokeWidth ?? iconStyle.strokeWidth ?? theme.components.icon.md.strokeWidth,
+      strokeWidth: strokeWidth ?? iconStyle.strokeWidth ?? theme.icongraphy.strokeWidth,
     }
-    : theme.components.icon[resolvedSize]
+    : theme.components.icon.icon({
+      params: {
+        numbers: {
+          iconSize: typeof resolvedSize === 'number' ? resolvedSize : theme.icongraphy.sizes[resolvedSize],
+        },
+      },
+    })
 
   const baseColor = HexColorUtils.tryParseColorValue(color ?? iconStyle.color ?? foreground) ?? foreground
   const resolvedColor = appearance === 'normal'
     ? baseColor
-    : theme.semantics.withAppearance({
-      colorPair: {
-        color: background,
-        onColor: baseColor,
+    : theme.semantics.colors.withAppearance({
+      params: {
+        colors: {
+          color: background,
+          onColor: baseColor,
+        },
       },
-      appearance,
+      config: { appearance },
     })
 
   return (

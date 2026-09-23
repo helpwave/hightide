@@ -9,7 +9,8 @@ import {
   type ViewStyle
 } from 'react-native'
 
-import type { ColorPairToken } from '@helpwave/hightide-design/theme-tokens'
+import type { ColorPair } from '../../theme/types/color'
+import { listItemTokenContext } from '../../theme/component-contexts'
 
 import { useTheme } from '../../global-contexts/theme/ThemeContext'
 import { useMemoizedTheme } from '../../hooks/useMemoizedTheme'
@@ -33,7 +34,7 @@ export type ListItemProps = Omit<ViewProps, 'style'> & {
   contentOrder?: ListItemContentOrder,
   leading?: ReactNode,
   trailing?: ReactNode,
-  color?: ColorPairToken,
+  color?: ColorPair,
   style?: StyleProp<ViewStyle>,
   itemStyle?: StyleOverwrite<ListItemState, ListItemStyle>,
   titleStyle?: StyleOverwrite<ListItemState, ListItemTitleStyle>,
@@ -55,9 +56,7 @@ export const ListItem = ({
   ...props
 }: ListItemProps) => {
   const { theme } = useTheme()
-  const state = useMemo((): ListItemState => ({
-    color,
-  }), [color])
+  const state = useMemo((): ListItemState => listItemTokenContext(theme, { color }), [color, theme])
 
   const resolvedItemStyle = useMemoizedTheme(theme.components.listItem.default.container, state, itemStyle)
   const resolvedLeadingItemContainerStyle = useMemoizedTheme(theme.components.listItem.default.leadingItemContainer, state)

@@ -1,9 +1,5 @@
-import type {
-  OutlineToken,
-  ThemeColorTokens,
-  ThemeConfigTokens
-} from '@helpwave/hightide-design/theme-tokens'
-
+import type { HexColor } from './color'
+import type { ColorPair } from './color'
 import type { HightideComponentThemes } from './components/hightide'
 import type { HightideIcongraphy } from './icongraphy'
 import type {
@@ -23,6 +19,53 @@ import type {
   HightideFontWeights,
   HightideTypography
 } from './typography'
+
+export type ThemeColors = {
+  tintConfig: {
+    light: number,
+    normal: number,
+    strong: number,
+  },
+  background: ColorPair,
+  surface: ColorPair,
+  surfaceVariant: ColorPair,
+  surfaceInverse: ColorPair,
+  disabled: ColorPair,
+  primary: ColorPair,
+  secondary: ColorPair,
+  tertiary: ColorPair,
+  positive: ColorPair,
+  warning: ColorPair,
+  negative: ColorPair,
+  neutral: ColorPair,
+  border: HexColor,
+  overlay: HexColor,
+}
+
+export type ThemeConfig = {
+  coloring: {
+    tonal: {
+      color: number,
+      onColor: number,
+    },
+    transparent: {
+      color: number,
+      onColor: number,
+    },
+  },
+  appearancePercentages: {
+    normal: number,
+    subtle: number,
+    faded: number,
+  },
+}
+
+export type FocusOutline = {
+  width?: number,
+  offset?: number,
+  color?: HexColor,
+  style?: string,
+}
 
 export type Theme = {
   colors: Record<string, unknown>,
@@ -46,22 +89,22 @@ export type Theme = {
 }
 
 export type HightideTheme = Theme & {
-  colors: ThemeColorTokens & Theme['colors'],
-  fontFamilies: HightideFontFamilies & Theme['fontFamilies'],
-  fontWeights: HightideFontWeights & Theme['fontWeights'],
-  fontSizing: HightideFontSizing & Theme['fontSizing'],
-  typography: HightideTypography & Theme['typography'],
-  icongraphy: HightideIcongraphy & Theme['icongraphy'],
-  size: HightideSize & Theme['size'],
-  spacing: HightideSpacing & Theme['spacing'],
-  padding: HightidePadding & Theme['padding'],
-  borderRadius: HightideBorderRadius & Theme['borderRadius'],
-  borderWidth: HightideBorderWidth & Theme['borderWidth'],
-  elevation: HightideElevation & Theme['elevation'],
-  shadow: HightideShadow & Theme['shadow'],
-  motion: HightideMotion & Theme['motion'],
-  focusOutline: OutlineToken & Theme['focusOutline'],
-  config: ThemeConfigTokens & Theme['config'],
-  semantics: HightideThemeSemantics & Theme['semantics'],
-  components: HightideComponentThemes & Theme['components'],
+  colors: ThemeColors,
+  fontFamilies: HightideFontFamilies,
+  fontWeights: HightideFontWeights,
+  fontSizing: HightideFontSizing,
+  typography: HightideTypography,
+  icongraphy: HightideIcongraphy,
+  size: HightideSize,
+  spacing: HightideSpacing,
+  padding: HightidePadding,
+  borderRadius: HightideBorderRadius,
+  borderWidth: HightideBorderWidth,
+  elevation: HightideElevation,
+  shadow: HightideShadow,
+  motion: HightideMotion,
+  focusOutline: FocusOutline,
+  config: ThemeConfig,
+  semantics: HightideThemeSemantics,
+  components: HightideComponentThemes,
 }

@@ -29,10 +29,12 @@ export const ThemedText = forwardRef<React.ComponentRef<typeof RNText>, ThemedTe
   const { foreground, background, textStyle } = useContentTheme()
   let color: ColorValue | undefined = textStyle.color ?? foreground
   color = appearance === 'description'
-    ? theme.semantics.asDescription({
-      colorPair: {
-        color: background,
-        onColor: HexColorUtils.parseColorValue(color),
+    ? theme.semantics.colors.asDescription({
+      params: {
+        colors: {
+          color: HexColorUtils.parseColorValue(background),
+          onColor: HexColorUtils.parseColorValue(color),
+        },
       },
     })
     : color

@@ -4,7 +4,6 @@ import {
 } from 'react'
 import {
   Pressable,
-  StyleSheet,
   View,
   type StyleProp,
   type ViewStyle
@@ -12,28 +11,18 @@ import {
 import { useTheme } from '../../global-contexts/theme/ThemeContext'
 import { HightideIconRegistry } from '../../icons/HightideIconRegistry'
 import {
-  useMemoizedTheme,
-  useMemoizedThemeFactory
+  useMemoizedTheme
 } from '../../hooks/useMemoizedTheme'
 import type {
   ChatAttachmentMessageBubbleFileIconStyle,
   ChatAttachmentMessageBubbleFileMetadataTextStyle,
   ChatAttachmentMessageBubbleFileNameTextStyle,
   ChatAttachmentMessageBubbleState,
-  ChatMessageBubbleBodyStyle,
-  ChatMessageBubbleBodyTextStyle,
-  ChatMessageBubbleContainerStyle,
-  ChatMessageBubbleMetaDataContainerStyle,
-  ChatMessageBubbleMetaDataStatusContainerStyle,
-  ChatMessageBubbleMetaDataTextStyle,
-  ChatMessageBubbleState,
   PressableContainerStyle,
-  PressableIconStyle,
-  PressableState,
-  PressableStateLayerStyle,
-  PressableTextStyle
+  PressableState
 } from '../../theme/types/components/chat'
-import type { StyleOverwrite, StyleResolverFunction } from '../../theme/types/resolver'
+import type { ThemedPressableThemeResolvers } from '../../theme/types/components/themedPressable'
+import type { StyleOverwrite } from '../../theme/types/resolver'
 import type { PressableInteractionState } from '../../utils/pressableInteraction'
 import { ThemedIcon } from '../visualization-and-display/ThemedIcon'
 import { ThemedText } from '../visualization-and-display/ThemedText'
@@ -64,44 +53,23 @@ export type ChatAttachmentMessageBubbleProps = Omit<ChatMessageBubbleProps, 'chi
   >,
 }
 
-type AttachmentContentPressableResolvers = {
-  container: StyleResolverFunction<PressableState, PressableContainerStyle>,
-  stateLayer: StyleResolverFunction<PressableState, PressableStateLayerStyle>,
-  text: StyleResolverFunction<PressableState, PressableTextStyle>,
-  icon: StyleResolverFunction<PressableState, PressableIconStyle>,
-}
+type AttachmentContentPressableResolvers = ThemedPressableThemeResolvers
 
-const toPressableThemeState = (interaction: PressableInteractionState): PressableState => ({
-  isPressed: interaction.pressed,
-  isHovered: !!interaction.hovered,
-  isFocused: !!interaction.focused,
-  isFocusVisible: !!interaction.focusVisible,
+import { pressableTokenContext } from '../../theme/component-contexts'
+
+const toPressableThemeState = (
+  theme: Parameters<typeof pressableTokenContext>[0],
+  interaction: PressableInteractionState
+) => pressableTokenContext(theme, {
+  coloringStyle: 'foreground',
+  coloringColorVariant: 'transparent',
+  interaction: {
+    isPressed: interaction.pressed,
+    isHovered: !!interaction.hovered,
+    isFocused: !!interaction.focused,
+    isFocusVisible: !!interaction.focusVisible,
+  },
 })
-
-const mergeBubbleStyleOverwrite = <TStyle extends StyleProp<ViewStyle> | object>(
-  tokenOverride: TStyle,
-  userOverwrite?: StyleOverwrite<ChatMessageBubbleState, TStyle>
-): StyleOverwrite<ChatMessageBubbleState, TStyle> => (
-    (state, prev) => {
-      const withTokenOverride = {
-        ...(prev as object),
-        ...(tokenOverride as object),
-      } as TStyle
-
-      if (userOverwrite === undefined) {
-        return withTokenOverride
-      }
-
-      if (typeof userOverwrite === 'function') {
-        return userOverwrite(state, withTokenOverride)
-      }
-
-      return {
-        ...(withTokenOverride as object),
-        ...(userOverwrite as object),
-      } as TStyle
-    }
-  )
 
 type AttachmentDownloadContentProps = {
   pressableState: PressableInteractionState,
@@ -134,8 +102,9 @@ const AttachmentDownloadContent = ({
   resolvedFileMetadataTextStyle,
   spacingXs,
 }: AttachmentDownloadContentProps) => {
-  const pressableThemeState = useMemo(() => toPressableThemeState(pressableState),
-    [pressableState])
+  const { theme } = useTheme()
+  const pressableThemeState = useMemo(() => toPressableThemeState(theme, pressableState),
+    [pressableState, theme])
 
   const resolvedContainerStyle = useMemoizedTheme(contentResolvers.container, pressableThemeState, contentContainerStyle)
   const resolvedStateLayerStyle = useMemoizedTheme(contentResolvers.stateLayer, pressableThemeState)
@@ -204,69 +173,18 @@ export const ChatAttachmentMessageBubble = ({
   ...props
 }: ChatAttachmentMessageBubbleProps) => {
   const { theme } = useTheme()
-  const state = useMemo(() => ({ direction }), [direction])
+  const state = useMemo(() => ({
+    config: { direction },
+    state: direction === 'outgoing' ? new Set(['outgoing']) : new Set<string>(),
+  }), [direction])
   const attachment = theme.components.chat.attachmentMessageBubble
-  const bubbleOverrides = attachment.chatMessageBubbleOverrides
-  const contentResolvers = useMemoizedThemeFactory<
-    ChatAttachmentMessageBubbleState,
-    AttachmentContentPressableResolvers
-  >(attachment.contentContainer, state)
 
   const resolvedFileIconContainerStyle = useMemoizedTheme(attachment.fileIconContainer, state)
-  const resolvedFileIcon = useMemoizedTheme<
-    ChatAttachmentMessageBubbleState,
-    ChatAttachmentMessageBubbleFileIconStyle
-  >(attachment.fileIcon, state)
+  const resolvedFileIcon = useMemoizedTheme(attachment.fileIcon, state)
   const resolvedDownloadIconContainerStyle = useMemoizedTheme(attachment.downloadIconContainer, state)
-  const resolvedDownloadIcon = useMemoizedTheme<
-    ChatAttachmentMessageBubbleState,
-    ChatAttachmentMessageBubbleFileIconStyle
-  >(attachment.downloadIcon, state)
+  const resolvedDownloadIcon = useMemoizedTheme(attachment.downloadIcon, state)
   const resolvedFileNameTextStyle = useMemoizedTheme(attachment.fileNameText, state, fileNameTextStyle)
   const resolvedFileMetadataTextStyle = useMemoizedTheme(attachment.fileMetadataText, state, fileMetadataTextStyle)
-
-  const resolvedContainerStyle = useMemo(
-    () => mergeBubbleStyleOverwrite<ChatMessageBubbleContainerStyle>(
-      StyleSheet.flatten(bubbleOverrides.container(state)) as ChatMessageBubbleContainerStyle,
-      style
-    ),
-    [bubbleOverrides, state, style]
-  )
-  const resolvedBodyStyle = useMemo(
-    () => mergeBubbleStyleOverwrite<ChatMessageBubbleBodyStyle>(
-      StyleSheet.flatten(bubbleOverrides.body(state)) as ChatMessageBubbleBodyStyle,
-      bodyStyle
-    ),
-    [bubbleOverrides, state, bodyStyle]
-  )
-  const resolvedBodyTextStyle = useMemo(
-    () => mergeBubbleStyleOverwrite<ChatMessageBubbleBodyTextStyle>(
-      StyleSheet.flatten(bubbleOverrides.bodyText(state)) as ChatMessageBubbleBodyTextStyle,
-      bodyTextStyle
-    ),
-    [bubbleOverrides, state, bodyTextStyle]
-  )
-  const resolvedMetaDataContainerStyle = useMemo(
-    () => mergeBubbleStyleOverwrite<ChatMessageBubbleMetaDataContainerStyle>(
-      StyleSheet.flatten(bubbleOverrides.metaDataContainer(state)) as ChatMessageBubbleMetaDataContainerStyle,
-      metaDataContainerStyle
-    ),
-    [bubbleOverrides, state, metaDataContainerStyle]
-  )
-  const resolvedMetaDataStatusContainerStyle = useMemo(
-    () => mergeBubbleStyleOverwrite<ChatMessageBubbleMetaDataStatusContainerStyle>(
-      StyleSheet.flatten(bubbleOverrides.metaDataStatusContainer(state)) as ChatMessageBubbleMetaDataStatusContainerStyle,
-      metaDataStatusContainerStyle
-    ),
-    [bubbleOverrides, state, metaDataStatusContainerStyle]
-  )
-  const resolvedMetaDataTextStyle = useMemo(
-    () => mergeBubbleStyleOverwrite<ChatMessageBubbleMetaDataTextStyle>(
-      StyleSheet.flatten(bubbleOverrides.metaDataText(state)) as ChatMessageBubbleMetaDataTextStyle,
-      metaDataTextStyle
-    ),
-    [bubbleOverrides, state, metaDataTextStyle]
-  )
 
   return (
     <ChatMessageBubble
@@ -274,12 +192,12 @@ export const ChatAttachmentMessageBubble = ({
       direction={direction}
       timestamp={timestamp}
       status={status}
-      style={resolvedContainerStyle}
-      bodyStyle={resolvedBodyStyle}
-      bodyTextStyle={resolvedBodyTextStyle}
-      metaDataContainerStyle={resolvedMetaDataContainerStyle}
-      metaDataStatusContainerStyle={resolvedMetaDataStatusContainerStyle}
-      metaDataTextStyle={resolvedMetaDataTextStyle}
+      style={style}
+      bodyStyle={bodyStyle}
+      bodyTextStyle={bodyTextStyle}
+      metaDataContainerStyle={metaDataContainerStyle}
+      metaDataStatusContainerStyle={metaDataStatusContainerStyle}
+      metaDataTextStyle={metaDataTextStyle}
     >
       {children}
       <Pressable
@@ -290,7 +208,7 @@ export const ChatAttachmentMessageBubble = ({
         {(pressableState) => (
           <AttachmentDownloadContent
             pressableState={pressableState as PressableInteractionState}
-            contentResolvers={contentResolvers}
+            contentResolvers={theme.components.themedPressable}
             contentContainerStyle={contentContainerStyle}
             name={name}
             metadata={metadata}

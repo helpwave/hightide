@@ -4,11 +4,12 @@ import {
   View,
   type PressableProps
 } from 'react-native'
-import type { ColorPairToken } from '@helpwave/hightide-design/theme-tokens'
 import type {
   ComponentSize,
   IconButtonVariant
 } from '@helpwave/hightide-design/semantic-tokens'
+import type { ColorPair } from '../../theme/types/color'
+import { pressableTokenContext } from '../../theme/component-contexts'
 
 import { ContentThemeOverrideProvider } from '../../global-contexts/content-theme/ContentThemeProvider'
 import { useDebugContext } from '../../global-contexts/debug'
@@ -35,7 +36,7 @@ export const IconButtonUtil = {
 
 export type IconButtonProps = Omit<PressableProps, 'children' | 'style'> & {
   size?: IconButtonSize,
-  color?: ColorPairToken,
+  color?: ColorPair,
   variant?: IconButtonVariant,
   icon: IconComponent,
   accessibilityLabel: string,
@@ -63,24 +64,27 @@ export const IconButton = forwardRef<React.ComponentRef<typeof Pressable>, IconB
   const { theme } = useTheme()
   const { hitBox } = useDebugContext()
   const { hitSlop, onLayout } = useMinimumTouchTargetHitSlop({
-    touchTargetSize: theme.semantics.touchTargetSize({}),
+    touchTargetSize: theme.semantics.numbers.touchTargetSize({}),
     hitSlop: providedHitSlop,
     onLayout: providedOnLayout,
   })
   const [isPressed, setIsPressed] = useState(false)
 
-  const resolvedState = useMemo((): IconButtonState => ({
+  const resolvedState = useMemo((): IconButtonState => pressableTokenContext(theme, {
     size,
     color,
     variant,
-    isDisabled: !!disabled,
-    isPressed,
+    interaction: {
+      isDisabled: !!disabled,
+      isPressed,
+    },
   }), [
     size,
     color,
     variant,
     disabled,
     isPressed,
+    theme,
   ])
 
   const resolvedContainerStyle = useMemoizedTheme(theme.components.iconButton.container, resolvedState, style)

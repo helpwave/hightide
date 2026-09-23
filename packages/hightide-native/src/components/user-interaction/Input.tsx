@@ -15,7 +15,8 @@ import {
   type UseDelayOptionsResolved
 } from '@helpwave/hightide-utils/hooks'
 
-import type { ColorPairToken } from '@helpwave/hightide-design/theme-tokens'
+import type { ColorPair } from '../../theme/types/color'
+import { inputTokenContext } from '../../theme/component-contexts'
 import { useTheme } from '../../global-contexts/theme/ThemeContext'
 import { useMemoizedTheme } from '../../hooks/useMemoizedTheme'
 import type {
@@ -49,7 +50,7 @@ export type InputProps = Omit<TextInputProps, 'value' | 'style'>
   & Partial<FormFieldDataHandling<string>>
   & Partial<FormFieldInteractionStates>
   & {
-    color?: ColorPairToken,
+    color?: ColorPair,
     editCompleteOptions?: EditCompleteOptions,
     initialValue?: string,
     style?: StyleOverwrite<InputState, InputContainerStyle>,
@@ -100,15 +101,17 @@ export const Input = forwardRef<TextInput, InputProps>(function Input({
 
   const interactive = !disabled && !readOnly
 
-  const state = useMemo((): InputState => ({
+  const state = useMemo((): InputState => inputTokenContext(theme, {
     color,
-    isDisabled: disabled,
-    isInvalid: invalid,
-    isReadonly: readOnly,
-    isHovered: interactive && isHovered,
-    isPressed: interactive && isPressed,
-    isFocused: interactive && isFocused,
-  }), [color, disabled, invalid, readOnly, interactive, isHovered, isPressed, isFocused])
+    interaction: {
+      isDisabled: disabled,
+      isInvalid: invalid,
+      isReadonly: readOnly,
+      isHovered: interactive && isHovered,
+      isPressed: interactive && isPressed,
+      isFocused: interactive && isFocused,
+    },
+  }), [color, disabled, invalid, readOnly, interactive, isHovered, isPressed, isFocused, theme])
 
   const resolvedContainerStyle = useMemoizedTheme(theme.components.input.container, state, style)
   const resolvedStateLayerStyle = useMemoizedTheme(theme.components.input.stateLayer, state, stateLayerStyle)

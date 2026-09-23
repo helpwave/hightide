@@ -9,7 +9,7 @@ import {
   type ViewStyle
 } from 'react-native'
 
-import type { ColorPairToken } from '@helpwave/hightide-design/theme-tokens'
+import type { ColorPair } from '../../theme/types/color'
 
 import { HightideIconRegistry } from '../../icons/HightideIconRegistry'
 import { ThemedIcon } from '../visualization-and-display/ThemedIcon'
@@ -25,7 +25,7 @@ import type { StyleOverwrite } from '../../theme/types/resolver'
 
 export type ChatSystemLineProps = Omit<ViewProps, 'children' | 'style'> & {
   icon?: ReactNode,
-  color?: ColorPairToken,
+  color?: ColorPair,
   children?: ReactNode,
   style?: StyleProp<ViewStyle>,
   lineStyle?: StyleOverwrite<ChatSystemLineState, ChatSystemLineStyle>,
@@ -42,7 +42,9 @@ export const ChatSystemLine = ({
   ...props
 }: ChatSystemLineProps) => {
   const { theme } = useTheme()
-  const state = useMemo(() => ({ color }), [color])
+  const state = useMemo(() => ({
+    params: color === undefined ? undefined : { colors: color },
+  }), [color])
 
   const resolvedLineStyle = useMemoizedTheme(theme.components.chat.systemLine.container, state, lineStyle)
   const resolvedTextStyle = useMemoizedTheme(theme.components.chat.systemLine.text, state, textStyle)

@@ -1,9 +1,8 @@
 import type { ViewStyle } from 'react-native'
-
-import type { SimpleStyleResolver } from '../resolver'
+import type { StyleLeaf } from '../resolver'
 
 export type CardStyle = ViewStyle
 
 export type CardThemeResolvers = {
-  container: SimpleStyleResolver<CardStyle>,
+  container: StyleLeaf<CardStyle>,
 }

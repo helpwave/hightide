@@ -26,7 +26,9 @@ export const MultiSelectMenu = ({ children }: MultiSelectMenuProps) => {
     && visibleCount === 0
 
   const resolvedOverlayStyle = useMemoizedTheme(multiSelectTheme.overlay, {})
-  const resolvedMenuStyle = useMemoizedTheme(multiSelectTheme.menu, { hasSearch: isSearchVisible })
+  const resolvedMenuStyle = useMemoizedTheme(multiSelectTheme.menu, {
+    config: { hasSearch: isSearchVisible ? 'true' : undefined },
+  })
   const resolvedHeaderStyle = useMemoizedTheme(multiSelectTheme.header, {})
   const resolvedEmptyTextStyle = useMemoizedTheme(multiSelectTheme.emptyText, {})
 

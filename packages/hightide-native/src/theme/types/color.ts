@@ -1,3 +1,8 @@
-import type { ColorToken } from '@helpwave/hightide-design/primitive-tokens'
+export type HexColor = `#${string}`
 
-export type Color = ColorToken
+export type ColorPair = {
+  color: HexColor,
+  onColor: HexColor,
+}
+
+export type Color = HexColor

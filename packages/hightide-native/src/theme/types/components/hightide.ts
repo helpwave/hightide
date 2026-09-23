@@ -1,6 +1,5 @@
-import type { IconSize } from '@helpwave/hightide-design/theme-tokens'
-import type { IconTokens } from '@helpwave/hightide-design/component-tokens'
-
+import type { StyleLeaf } from '../resolver'
+import type { IconStyle } from '../../../icons'
 import type {
   AvatarGroupThemeResolvers,
   AvatarThemeResolvers,
@@ -23,7 +22,9 @@ import type { SwitchThemeResolvers } from './switch'
 import type { TextareaThemeResolvers } from './textarea'
 import type { ThemedPressableThemeResolvers } from './themedPressable'
 
-export type IconThemeResolvers = Record<IconSize, IconTokens>
+export type IconThemeResolvers = {
+  icon: StyleLeaf<IconStyle>,
+}
 
 export type HightideComponentThemes = {
   button: ButtonThemeResolvers,
@@ -33,7 +34,9 @@ export type HightideComponentThemes = {
   checkbox: CheckboxThemeResolvers,
   switch: SwitchThemeResolvers,
   input: InputThemeResolvers,
-  textarea: TextareaThemeResolvers,
+  textarea: TextareaThemeResolvers & {
+    overlay: StyleLeaf<import('react-native').ViewStyle>,
+  },
   searchBar: SearchBarThemeResolvers,
   select: SelectThemeResolvers,
   multiSelect: MultiSelectThemeResolvers,

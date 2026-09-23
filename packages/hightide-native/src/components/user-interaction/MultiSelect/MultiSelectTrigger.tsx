@@ -11,7 +11,7 @@ import { useTranslation } from '@helpwave/hightide-utils/context'
 import { useTheme } from '../../../global-contexts/theme/ThemeContext'
 import { useMemoizedTheme } from '../../../hooks/useMemoizedTheme'
 import { HightideIconRegistry } from '../../../icons/HightideIconRegistry'
-import type { MultiSelectState } from '../../../theme/types/components/multiSelect'
+import { pressableTokenContext } from '../../../theme/component-contexts'
 import { Chip } from '../../visualization-and-display/Chip'
 import { ThemedText } from '../../visualization-and-display/ThemedText'
 import { IconButton } from '../IconButton'
@@ -38,16 +38,20 @@ export const MultiSelectTrigger = <T,>({
     .map((id) => context.idToOptionMap[id])
     .filter((option): option is MultiSelectOptionType<T> => option !== undefined)
 
-  const resolvedState = useMemo((): MultiSelectState => ({
+  const resolvedState = useMemo(() => pressableTokenContext(theme, {
     color: context.config.color,
-    isDisabled: !!context.disabled,
-    isReadonly: !!context.readOnly,
-    isInvalid: !!context.invalid,
-    isOpen: context.isOpen,
-    hasSelections: selectedOptions.length > 0,
-    hasValue: selectedOptions.length > 0,
-    isPressed,
+    interaction: {
+      isDisabled: !!context.disabled,
+      isReadonly: !!context.readOnly,
+      isInvalid: !!context.invalid,
+      isPressed,
+    },
+    extraState: [
+      ...(context.isOpen ? ['open'] : []),
+      ...(selectedOptions.length > 0 ? ['hasValue', 'hasSelections'] : []),
+    ],
   }), [
+    theme,
     context.config.color,
     context.disabled,
     context.invalid,

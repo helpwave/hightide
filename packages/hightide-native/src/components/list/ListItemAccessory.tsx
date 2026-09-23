@@ -5,7 +5,7 @@ import {
   type ViewStyle
 } from 'react-native'
 
-import type { ColorToken } from '@helpwave/hightide-design/primitive-tokens'
+import type { HexColor } from '../../theme/types/color'
 
 import { ContentThemeOverrideProvider } from '../../global-contexts/content-theme/ContentThemeProvider'
 import type { IconStyle } from '../../icons'
@@ -13,7 +13,7 @@ import type { IconStyle } from '../../icons'
 export type ListItemAccessoryProps = {
   children: ReactNode,
   style?: StyleProp<ViewStyle>,
-  foreground?: ColorToken,
+  foreground?: HexColor,
   iconStyle: IconStyle,
 }
 

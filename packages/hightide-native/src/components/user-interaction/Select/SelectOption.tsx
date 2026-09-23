@@ -6,7 +6,7 @@ import { useTheme } from '../../../global-contexts/theme/ThemeContext'
 import { useMemoizedTheme } from '../../../hooks/useMemoizedTheme'
 import { HightideIconRegistry } from '../../../icons/HightideIconRegistry'
 import type { IconStyle } from '../../../icons'
-import type { MultiSelectOptionState } from '../../../theme/types/components/multiSelect'
+import { interactionStateSet } from '../../../theme/token-context'
 import { ListActionItem } from '../../list/ListActionItem'
 import { ThemedIcon } from '../../visualization-and-display/ThemedIcon'
 import type { SelectOptionIdentity } from './SelectContext'
@@ -63,13 +63,16 @@ export const SelectOption = <T,>({
   const isSelected = context.selectedId === optionId
   const isVisible = context.visibleOptionIds.includes(optionId)
 
-  const optionState = useMemo((): MultiSelectOptionState => ({
-    isSelected,
-    isHighlighted: context.highlightedId === optionId,
-    isDisabled: disabled,
+  const optionState = useMemo(() => ({
+    state: interactionStateSet({
+      isDisabled: disabled,
+    }, [
+      ...(isSelected ? ['selected'] : []),
+      ...(context.highlightedId === optionId ? ['highlighted'] : []),
+    ]),
   }), [context.highlightedId, disabled, optionId, isSelected])
 
-  const checkIcon = useMemoizedTheme<MultiSelectOptionState, IconStyle>(
+  const checkIcon = useMemoizedTheme(
     theme.components.listItem.action.icon,
     optionState
   )

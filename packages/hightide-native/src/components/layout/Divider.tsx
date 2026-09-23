@@ -9,7 +9,7 @@ import {
   type ViewStyle
 } from 'react-native'
 
-import type { ColorToken } from '@helpwave/hightide-design/primitive-tokens'
+import type { HexColor } from '../../theme/types/color'
 import type { DividerDirection } from '@helpwave/hightide-design/component-tokens'
 
 import { useTheme } from '../../global-contexts/theme/ThemeContext'
@@ -22,7 +22,7 @@ import type { StyleOverwrite } from '../../theme/types/resolver'
 
 export type DividerProps = Omit<ViewProps, 'style'> & {
   direction?: DividerDirection,
-  color?: ColorToken,
+  color?: HexColor,
   width?: number,
   margin?: number,
   style?: StyleProp<ViewStyle>,
@@ -40,11 +40,17 @@ export const Divider = forwardRef<View, DividerProps>(function Divider({
 }, ref) {
   const { theme } = useTheme()
   const state = useMemo((): DividerState => ({
-    direction,
-    color,
-    width,
-    margin,
-  }), [direction, color, width, margin])
+    params: {
+      colors: {
+        color: color ?? theme.colors.border,
+      },
+      numbers: {
+        width: width ?? theme.borderWidth.thin,
+        margin: margin ?? 0,
+      },
+    },
+    state: direction === 'vertical' ? new Set(['vertical']) : new Set(),
+  }), [direction, color, width, margin, theme])
 
   const resolvedDividerStyle = useMemoizedTheme(theme.components.divider.container, state, dividerStyle)
 

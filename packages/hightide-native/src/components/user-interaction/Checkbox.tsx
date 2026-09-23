@@ -11,7 +11,8 @@ import {
   useEventCallbackStabilizer
 } from '@helpwave/hightide-utils/hooks'
 
-import type { ColorPairToken } from '@helpwave/hightide-design/theme-tokens'
+import type { ColorPair } from '../../theme/types/color'
+import { pressableTokenContext } from '../../theme/component-contexts'
 import { HightideIconRegistry } from '../../icons/HightideIconRegistry'
 import { ThemedIcon } from '../visualization-and-display/ThemedIcon'
 import { useDebugContext } from '../../global-contexts/debug'
@@ -39,7 +40,7 @@ export type CheckboxProps = Omit<PressableProps, 'children' | 'style'>
     indeterminate?: boolean,
     size?: CheckboxSize,
     isRounded?: boolean,
-    color?: ColorPairToken,
+    color?: ColorPair,
     style?: StyleProp<ViewStyle>,
     containerStyle?: StyleOverwrite<CheckboxState, CheckboxStyle>,
     stateLayerStyle?: StyleOverwrite<CheckboxState, CheckboxStateLayerStyle>,
@@ -67,7 +68,7 @@ export const Checkbox = ({
   const { theme } = useTheme()
   const { hitBox } = useDebugContext()
   const { hitSlop, onLayout } = useMinimumTouchTargetHitSlop({
-    touchTargetSize: theme.semantics.touchTargetSize({}),
+    touchTargetSize: theme.semantics.numbers.touchTargetSize({}),
     hitSlop: providedHitSlop,
     onLayout: providedOnLayout,
   })
@@ -88,16 +89,21 @@ export const Checkbox = ({
     defaultValue: initialValue,
   })
 
-  const resolvedState = useMemo((): CheckboxState => ({
+  const resolvedState = useMemo((): CheckboxState => pressableTokenContext(theme, {
     size,
     color,
-    isChecked: value,
-    isIndeterminate: indeterminate,
-    isInvalid: invalid,
-    isDisabled: disabled,
-    isReadonly: readOnly,
-    isRounded,
-    isPressed,
+    interaction: {
+      isDisabled: disabled,
+      isInvalid: invalid,
+      isReadonly: readOnly,
+      isPressed,
+    },
+    extraState: [
+      ...(value ? ['checked'] : []),
+      ...(indeterminate ? ['indeterminate'] : []),
+      ...(isRounded ? ['rounded'] : []),
+      ...((value || indeterminate) ? ['active'] : []),
+    ],
   }), [
     size,
     color,
@@ -108,6 +114,7 @@ export const Checkbox = ({
     readOnly,
     isRounded,
     isPressed,
+    theme,
   ])
 
   const resolvedContainerStyle = useMemoizedTheme(theme.components.checkbox.container, resolvedState, containerStyle)

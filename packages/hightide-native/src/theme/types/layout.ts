@@ -1,32 +1,34 @@
-import type {
-  ThemeBorderRadiusTokens,
-  ThemeBorderWidthTokens,
-  ThemeElevationTokens,
-  ThemeMotionTokens,
-  ThemePaddingTokens,
-  ThemeSizeTokens,
-  ThemeSpacingTokens
-} from '@helpwave/hightide-design/theme-tokens'
+import type { HexColor } from './color'
 
-export type HightideSize = ThemeSizeTokens
+export type HightideSize = Record<'xs' | 'sm' | 'md' | 'lg' | 'xl', number>
 
-export type HightideSpacing = ThemeSpacingTokens
+export type HightideSpacing = Record<'xxs' | 'xs' | 'sm' | 'md' | 'lg' | 'xl' | 'xxl', number>
 
-export type HightidePadding = ThemePaddingTokens
+export type HightidePadding = Record<'xs' | 'sm' | 'md' | 'lg' | 'xl', number>
 
-export type HightideBorderRadius = ThemeBorderRadiusTokens
+export type HightideBorderRadius = Record<'xxs' | 'xs' | 'sm' | 'md' | 'lg' | 'xl' | 'xxl', number>
 
-export type HightideBorderWidth = ThemeBorderWidthTokens
+export type HightideBorderWidth = Record<'thin' | 'normal' | 'thick', number>
 
-export type HightideElevation = ThemeElevationTokens
+export type Shadow = {
+  x: number,
+  y: number,
+  blur: number,
+  spread: number,
+  color: HexColor,
+}
 
-export type HightideMotion = ThemeMotionTokens
+export type HightideElevation = Record<'level1' | 'level2' | 'level3' | 'level4' | 'level5', Shadow>
 
-export type HightideShadowToken = ThemeElevationTokens[keyof ThemeElevationTokens]
+export type HightideMotion = {
+  durations: Record<'fast' | 'normal' | 'slow', number>,
+}
+
+export type HightideShadowToken = Shadow
 
 export type HightideShadow = {
-  raised: HightideShadowToken,
-  container: HightideShadowToken,
-  popover: HightideShadowToken,
-  dialog: HightideShadowToken,
+  raised: Shadow,
+  container: Shadow,
+  popover: Shadow,
+  dialog: Shadow,
 }
