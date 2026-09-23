@@ -8,16 +8,24 @@
     }
   }
 
-  [data-name="multi-select-chip-display-button"] {
-    @apply input-element flex flex-wrap gap-2 items-center rounded-md px-2.5 py-2.5;
+  .multi-select-chip-display-button {
+    @apply absolute inset-0 z-0;
+  }
+
+  .multi-select-chip-display-container {
+    @apply relative input-element flex flex-wrap gap-2 items-center rounded-md px-2.5 py-2.5;
 
     &:not([data-disabled]):not([data-readonly]) {
       @apply hover:cursor-pointer;
     }
   }
 
-  [data-name="multi-select-chip-display-chip"] {
-    @apply flex-row-1 items-center pl-2 pr-1 coloring-solid neutral rounded-md h-9;
+  .multi-select-chip-display-chip {
+    @apply flex-row-1 items-center pl-2 pr-1 coloring-solid neutral rounded-md h-9 z-1;
+  }
+
+  .multi-select-chip-display-add-button {
+    @apply size-9 z-1;
   }
 
   [data-name="select-list"],

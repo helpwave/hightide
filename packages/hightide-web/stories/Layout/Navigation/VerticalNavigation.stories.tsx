@@ -85,6 +85,7 @@ const navigationItems: NavigationItemData[] = [
   {
     id: 'company',
     label: navigationLabel(<Building className="size-5" />, 'Company'),
+    url: '#',
     items: [
       { id: 'about', label: navigationLabel(<Info className="size-5" />, 'About'), url: '#' },
       { id: 'careers', label: navigationLabel(<BriefcaseBusiness className="size-5" />, 'Careers'), url: '#' },

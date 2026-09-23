@@ -1,4 +1,7 @@
+@import "./general.css";
 @import "./button.css";
+@import "./tooltip.css";
+@import "./icon-button.css";
 @import "./card.css";
 @import "./chip.css";
 @import "./input-elements.css";
@@ -14,7 +17,6 @@
 @import "./expansion-icon.css";
 @import "./checkbox.css";
 @import "./switch.css";
-@import "./tooltip.css";
 @import "./drawer.css";
 @import "./dialog.css";
 @import "./textarea.css";
@@ -29,8 +31,6 @@
 @import "./select.css";
 @import "./file-input.css";
 @import "./combobox.css";
-@import "./general.css";
-@import "./icon-button.css";
 @import "./date-time-input.css";
 @import "./process-model.css";
 @import "./vertical-navigation.css";

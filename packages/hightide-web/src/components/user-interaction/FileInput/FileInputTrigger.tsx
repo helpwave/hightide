@@ -36,6 +36,8 @@ const FileInputTriggerImpl = forwardRef<HTMLDivElement, FileInputTriggerProps>(f
   const hasInteractions = !readOnly && !disabled
   const resolvedPlaceholder = placeholder ?? translation('noFilesSelected')
 
+  // todo consider converting to a button
+
   return (
     <div
       {...props}
@@ -51,7 +53,6 @@ const FileInputTriggerImpl = forwardRef<HTMLDivElement, FileInputTriggerProps>(f
         if (event.key === 'Enter' || event.key === ' ') {
           context.toggleIsOpen()
           event.preventDefault()
-          event.stopPropagation()
         }
       }}
       data-name="file-input-trigger"

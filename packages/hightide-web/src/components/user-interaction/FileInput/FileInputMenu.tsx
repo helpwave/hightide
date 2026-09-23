@@ -59,7 +59,6 @@ export const FileInputMenu = ({
       }}
       onDrop={(event) => {
         event.preventDefault()
-        event.stopPropagation()
         context.setIsDragOver(false)
         context.setIsDragging(false)
         if (canEdit && context.canAddFiles) {

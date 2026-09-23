@@ -79,17 +79,21 @@ export function VerticalNavigationMenuItem({
       data-expanded={expanded ? '' : undefined}
       className="vertical-navigation-item"
     >
-      <div
-        className="vertical-navigation-item-row"
-        data-interactable={interactable ? '' : undefined}
-        onClick={(event) => {
-          if(ref.current?.contains(event.target as Node)) return
-          if(hasChildren && !hasLink) {
-            toggleExpansion(id)
-          }
-        }}
-      >
-        {labelContent}
+      <div className="vertical-navigation-item-row-container">
+        <div
+          className="vertical-navigation-item-row"
+          data-interactable={interactable ? '' : undefined}
+          data-has-children={hasChildren ? '' : undefined}
+          data-has-link={hasLink ? '' : undefined}
+          onClick={(event) => {
+            if(ref.current?.contains(event.target as Node)) return
+            if(hasChildren && !hasLink) {
+              toggleExpansion(id)
+            }
+          }}
+        >
+          {labelContent}
+        </div>
 
         {hasChildren && (
           <IconButton

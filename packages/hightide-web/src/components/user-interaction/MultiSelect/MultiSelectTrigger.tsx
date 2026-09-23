@@ -80,17 +80,14 @@ const MultiSelectTriggerImpl = forwardRef<
         case ' ':
           context.toggleIsOpen()
           event.preventDefault()
-          event.stopPropagation()
           break
         case 'ArrowDown':
           context.setIsOpen(true, 'first')
           event.preventDefault()
-          event.stopPropagation()
           break
         case 'ArrowUp':
           context.setIsOpen(true, 'last')
           event.preventDefault()
-          event.stopPropagation()
           break
         }
       }}

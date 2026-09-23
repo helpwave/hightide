@@ -75,7 +75,7 @@ export const ConfirmDialog = ({
           </Button>
         )}
         <Button
-          color={buttonOverwrites?.[2].color ?? mapping[confirmType]}
+          color={buttonOverwrites?.[2].color ?? mapping[confirmType] ?? undefined}
           onClick={onConfirm}
           disabled={buttonOverwrites?.[2].disabled ?? false}
         >

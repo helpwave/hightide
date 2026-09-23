@@ -37,6 +37,7 @@ function isSubItem(item: NavigationItemType): item is SubItemNavigationItem {
 ///
 type NavigationItemWithSubItemProps = SubItemNavigationItem & UseAnchoredPositionOptions & {
   LinkComponent?: ElementType<NavigationLinkComponentProps>,
+  onClose?: () => void,
 }
 
 const NavigationItemWithSubItem = ({
@@ -44,6 +45,7 @@ const NavigationItemWithSubItem = ({
   label,
   horizontalAlignment = 'center',
   LinkComponent = DefaultLink,
+  onClose,
   ...options
 }: NavigationItemWithSubItemProps) => {
   const [isOpen, setOpen] = useState(false)
@@ -86,6 +88,11 @@ const NavigationItemWithSubItem = ({
         onBlur={onBlur}
 
         className="navigation-item-button"
+        onKeyDown={(event) => {
+          if (event.key === 'Escape') {
+            onClose?.()
+          }
+        }}
 
         aria-haspopup="true"
         aria-expanded={isOpen}
@@ -97,14 +104,6 @@ const NavigationItemWithSubItem = ({
       <ul
         id={'navigation-items-' + id}
         ref={containerRef}
-
-        onKeyDown={(event) => {
-          if (event.key === 'Escape') {
-            setOpen(false)
-            event.preventDefault()
-            event.stopPropagation()
-          }
-        }}
         onBlur={onBlur}
 
         hidden={!isOpen}
@@ -121,6 +120,11 @@ const NavigationItemWithSubItem = ({
               target={external ? '_blank' : undefined}
               rel={external ? 'noopener noreferrer' : undefined}
               className="navigation-item-link-in-box"
+              onKeyDown={(event) => {
+                if (event.key === 'Escape') {
+                  setOpen(false)
+                }
+              }}
             >
               {label}
             </LinkComponent>
@@ -136,22 +140,28 @@ const NavigationItemWithSubItem = ({
 ///
 export type NavigationItemListProps = Omit<HTMLAttributes<HTMLElement>, 'children'> & {
   items: NavigationItemType[],
+  onClose?: () => void,
   LinkComponent?: ElementType<NavigationLinkComponentProps>,
 }
 
-export const NavigationItemList = ({ items, LinkComponent = DefaultLink, ...restProps }: NavigationItemListProps) => {
+export const NavigationItemList = ({ items, LinkComponent = DefaultLink, onClose, ...restProps }: NavigationItemListProps) => {
   return (
     <ul {...restProps} className={clsx('flex-row-6 items-center', restProps.className)}>
       {items.map((item, index) => (
         <li key={index}>
           {isSubItem(item) ? (
-            <NavigationItemWithSubItem {...item} LinkComponent={LinkComponent} />
+            <NavigationItemWithSubItem {...item} onClose={onClose} LinkComponent={LinkComponent} />
           ) : (
             <LinkComponent
               href={item.link}
               target={item.external ? '_blank' : undefined}
               rel={item.external ? 'noopener noreferrer' : undefined}
               className="navigation-item-link"
+              onKeyDown={(event) => {
+                if (event.key === 'Escape') {
+                  onClose?.()
+                }
+              }}
             >
               {item.label}
             </LinkComponent>
@@ -171,10 +181,14 @@ export const Navigation = ({ ...props }: NavigationProps) => {
   const translation = useHightideTranslation()
   const [isMobileOpen, setIsMobileOpen] = useState(false)
   const id = useId()
-  const menuRef = useRef<HTMLDivElement>(null)
+  const closeRef = useRef<HTMLButtonElement>(null)
+  const menuButtonRef = useRef<HTMLButtonElement>(null)
 
   useEffect(() => {
-    menuRef.current?.focus()
+    if(isMobileOpen)
+      closeRef.current?.focus()
+    else
+      menuButtonRef.current?.focus()
   }, [isMobileOpen])
 
   const { zIndex } = useOverlayRegistry({ isActive: isMobileOpen })
@@ -186,6 +200,7 @@ export const Navigation = ({ ...props }: NavigationProps) => {
         className={clsx('hidden', { 'desktop:flex': !isMobileOpen }, props.className)}
       />
       <IconButton
+        ref={menuButtonRef}
         tooltip={translation('menu')}
         coloringStyle="text"
         color="neutral"
@@ -201,17 +216,7 @@ export const Navigation = ({ ...props }: NavigationProps) => {
       </IconButton>
       <div
         id={'navigation-menu-' + id}
-        ref={menuRef}
         hidden={!isMobileOpen}
-
-        onKeyDown={(event) => {
-          if (event.key === 'Escape') {
-            setIsMobileOpen(false)
-            event.preventDefault()
-            event.stopPropagation()
-          }
-        }}
-
         className={clsx(
           'flex-col-8 items-center justify-center fixed inset-0 p-8 w-screen h-screen bg-surface text-on-surface', {
             'desktop:hidden': isMobileOpen,
@@ -221,14 +226,27 @@ export const Navigation = ({ ...props }: NavigationProps) => {
         style={{ zIndex }}
       >
         <IconButton
+          ref={closeRef}
           tooltip={translation('close')}
           coloringStyle="text"
           color="neutral"
           onClick={() => setIsMobileOpen(false)}
+          onKeyDown={(event) => {
+            if(event.key === 'Escape') {
+              setIsMobileOpen(false)
+            }
+          }}
         >
           <XIcon/>
         </IconButton>
-        <NavigationItemList {...props} className={clsx('flex-col-8', props.className)}/>
+        <NavigationItemList
+          {...props}
+          onClose={() => {
+            props?.onClose?.()
+            setIsMobileOpen(false)
+          }}
+          className={clsx('flex-col-8', props.className)}
+        />
       </div>
     </nav>
   )

@@ -49,8 +49,6 @@ export const IconButtonBase = forwardRef<HTMLButtonElement, IconButtonBaseProps>
 
       onClick={event => {
         if (isProcessing) {
-          event.preventDefault()
-          event.stopPropagation()
           return
         }
         props.onClick?.(event)
@@ -93,8 +91,6 @@ const IconButtonTooltipTrigger = forwardRef<HTMLButtonElement, IconButtonTooltip
 
       onClick={event => {
         if (isProcessing) {
-          event.preventDefault()
-          event.stopPropagation()
           return
         }
         if(!disabled) {
