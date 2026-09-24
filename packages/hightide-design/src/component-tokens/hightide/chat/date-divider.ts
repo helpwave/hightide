@@ -15,7 +15,7 @@ export type ChatDateDividerConfig = HightideResolverConfig
 export type ChatDateDividerTokens = AssertAssignable<{
   container: ContainerTokens,
   text: TextTokens,
-}, ComponentTokens<ChatDateDividerState, ChatDateDividerConfig>>
+}, ComponentTokens<ChatDateDividerConfig>>
 
 export type ChatDateDividerTokenResolver = ComponentTokenResolver<
   Record<string, unknown>,

@@ -49,7 +49,10 @@ export const Divider = forwardRef<View, DividerProps>(function Divider({
         margin: margin ?? 0,
       },
     },
-    state: direction === 'vertical' ? new Set(['vertical']) : new Set(),
+    config: {
+      direction,
+      ...(direction === 'vertical' ? { vertical: 'true' } : {}),
+    },
   }), [direction, color, width, margin, theme])
 
   const resolvedDividerStyle = useMemoizedTheme(theme.components.divider.container, state, dividerStyle)

@@ -71,7 +71,7 @@ const ChatThreadHeaderPressableContent = ({
   const { theme } = useTheme()
   const [isPressed, setIsPressed] = useState(false)
   const staticState = useMemo(() => ({
-    state: new Set<string>(isPressed ? ['pressed'] : []),
+    config: isPressed ? { pressed: 'true' } : {},
   }), [isPressed])
   const resolvedAvatar = useMemo(() => ({
     ...avatar,

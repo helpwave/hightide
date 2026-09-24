@@ -16,6 +16,7 @@ import type {
   PressableTextStyle
 } from '../../theme/types/components/chat'
 import type { StyleOverwrite } from '../../theme/types/resolver'
+import { interactionConfig } from '../../theme/token-context'
 import { ThemedPressable } from '../user-interaction'
 
 export type ChatQuickReplyChipProps = Omit<PressableProps, 'children' | 'style'> & {
@@ -37,10 +38,9 @@ export const ChatQuickReplyChip = ({
   const { theme } = useTheme()
   const [isPressed, setIsPressed] = useState(false)
   const state = useMemo(() => ({
-    state: new Set([
-      ...(isActive ? ['active'] : []),
-      ...(isPressed ? ['isPressed'] : []),
-    ]),
+    config: interactionConfig({
+      isPressed,
+    }, isActive ? ['active'] : []),
   }), [isActive, isPressed])
   const resolvedTextStyle = useMemoizedTheme(
     theme.components.chat.quickReplyChip.text ?? theme.components.themedPressable.text,

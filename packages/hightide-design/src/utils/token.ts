@@ -21,7 +21,7 @@ import type { NumberValueToken } from '../primitive-tokens/number-value-token'
 import type { OutlineStyleToken, OutlineStyleValue } from '../primitive-tokens/outline-style-token'
 import type { OverflowToken, OverflowValue } from '../primitive-tokens/overflow-token'
 import type { PercentToken } from '../primitive-tokens/percent-token'
-import type { HightideResolverConfig, ResolverState } from '../primitive-tokens/resolver-types'
+import type { HightideResolverConfig } from '../primitive-tokens/resolver-types'
 import type { SpacingAlignmentToken, SpacingAlignmentValue } from '../primitive-tokens/spacing-alignment-token'
 import type { StretchToken, StretchValue } from '../primitive-tokens/stretch-token'
 import type { TextAlignToken, TextAlignValue } from '../primitive-tokens/text-align-token'
@@ -279,84 +279,88 @@ const percent = (value: `${number}%`): PercentToken => ({
   value,
 })
 
-const stateful = <
-  V,
-  S extends ResolverState = ResolverState
->(
-    base?: V,
-    overrides?: ReadonlyArray<ContextBasedPropertyOverride<WidenTokenLeaves<NoInfer<V>> | undefined, S, HightideResolverConfig>>
-  ): ContextBasedProperty<WidenTokenLeaves<V>, S, HightideResolverConfig> => ({
-    base: base as WidenTokenLeaves<V> | undefined,
-    overrides: overrides as ContextBasedProperty<WidenTokenLeaves<V>, S, HightideResolverConfig>['overrides'],
-  })
+const stateful = <V>(
+  base?: V,
+  overrides?: ReadonlyArray<ContextBasedPropertyOverride<WidenTokenLeaves<NoInfer<V>> | undefined, HightideResolverConfig>>
+): ContextBasedProperty<WidenTokenLeaves<V>, HightideResolverConfig> => ({
+  base: base as WidenTokenLeaves<V> | undefined,
+  overrides: overrides as ContextBasedProperty<WidenTokenLeaves<V>, HightideResolverConfig>['overrides'],
+})
 
 const statefulField = <
   T extends Token,
-  S extends ResolverState = ResolverState,
   C extends HightideResolverConfig = HightideResolverConfig
 >(
     base: TokenRefOrValue<T>,
-    overrides?: ReadonlyArray<ContextBasedPropertyOverride<TokenRefOrValue<T>, S, C>>
-  ): ContextBasedProperty<TokenRefOrValue<T>, S, C> => ({
+    overrides?: ReadonlyArray<ContextBasedPropertyOverride<TokenRefOrValue<T>, C>>
+  ): ContextBasedProperty<TokenRefOrValue<T>, C> => ({
     base,
     overrides,
   })
 
-const toStateSet = <S extends string>(
-  value: ReadonlyArray<S> | ReadonlySet<S>
-): ReadonlySet<S> => (value instanceof Set ? value : new Set(value))
+const toStringList = (value?: ReadonlyArray<string> | ReadonlySet<string>): readonly string[] => {
+  if (value === undefined) {
+    return []
+  }
 
-const whenState = <
-  V,
-  S extends ResolverState
->(
-    condition: ReadonlyArray<S> | ReadonlySet<S>,
-    value: V,
-    negativeCondition?: ReadonlyArray<S> | ReadonlySet<S>,
-    configCondition?: Partial<HightideResolverConfig>
-  ): ContextBasedPropertyOverride<V, S, HightideResolverConfig> => ({
-    condition: toStateSet(condition),
-    negativeCondition: negativeCondition === undefined
-      ? undefined
-      : toStateSet(negativeCondition),
-    configCondition,
-    value,
-  })
+  return [...value]
+}
 
 const whenConfig = <
   V,
-  Config extends HightideResolverConfig = HightideResolverConfig,
-  State extends ResolverState = ResolverState
+  Config extends HightideResolverConfig = HightideResolverConfig
 >(
     configCondition: Partial<Config>,
     value: V
-  ): ContextBasedPropertyOverride<V, State, Config> => ({
-    configCondition,
+  ): ContextBasedPropertyOverride<V, Config> => ({
+    condition: configCondition,
     value,
   })
+
+const whenState = <V>(
+  condition: ReadonlyArray<string> | ReadonlySet<string>,
+  value: V,
+  negativeCondition?: ReadonlyArray<string> | ReadonlySet<string>,
+  extraConfig?: Partial<HightideResolverConfig>
+): ContextBasedPropertyOverride<V, HightideResolverConfig> => {
+  const configCondition: Partial<HightideResolverConfig> = { ...extraConfig }
+
+  for (const key of toStringList(condition)) {
+    configCondition[key] = true
+  }
+
+  for (const key of toStringList(negativeCondition)) {
+    configCondition[key] = false
+  }
+
+  return {
+    condition: configCondition,
+    value,
+  }
+}
 
 const themeLayoutSizes = ['xs', 'sm', 'md', 'lg', 'xl'] as const satisfies readonly ThemeLayoutSize[]
 
 const whenThemeSize = <V>(
   valueForSize: (size: ThemeLayoutSize) => V
-): ReadonlyArray<ContextBasedPropertyOverride<V, ResolverState, HightideResolverConfig>> => (
-    themeLayoutSizes
-      .filter((size) => size !== 'md')
-      .map((size) => whenConfig({ size }, valueForSize(size)))
-  )
+): ReadonlyArray<ContextBasedPropertyOverride<V, HightideResolverConfig>> => (
+  themeLayoutSizes
+    .filter((size) => size !== 'md')
+    .map((size) => whenConfig({ size }, valueForSize(size)))
+)
 
-const whenThemeSizeState = <S extends ResolverState, V>(
-  condition: ReadonlyArray<S> | ReadonlySet<S>,
+const whenThemeSizeState = <V>(
+  condition: ReadonlyArray<string> | ReadonlySet<string>,
   valueForSize: (size: ThemeLayoutSize) => V,
-  negativeCondition?: ReadonlyArray<S> | ReadonlySet<S>
-): ReadonlyArray<ContextBasedPropertyOverride<V, S, HightideResolverConfig>> => (
-    themeLayoutSizes.map((size) => whenState(
-      condition,
-      valueForSize(size),
-      negativeCondition,
-      { size }
-    ))
-  )
+  negativeCondition?: ReadonlyArray<string> | ReadonlySet<string>
+): ReadonlyArray<ContextBasedPropertyOverride<V, HightideResolverConfig>> => (
+  themeLayoutSizes.map((size) => whenState(
+    condition,
+    valueForSize(size),
+    negativeCondition,
+    { size }
+  ))
+)
 
 const writingConfigCondition = (config: WritingConfig): Partial<HightideResolverConfig> => ({
   'writing-orientation': config['writing-orientation'],
@@ -364,16 +368,13 @@ const writingConfigCondition = (config: WritingConfig): Partial<HightideResolver
   'writing-block': config.block,
 })
 
-const writingModeOverrides = <
-  V,
-  S extends ResolverState = ResolverState
->(
-    valueForConfig: (config: WritingConfig) => V
-  ): ReadonlyArray<ContextBasedPropertyOverride<V, S, HightideResolverConfig>> => {
-  return writingConfigCombinations
+const writingModeOverrides = <V>(
+  valueForConfig: (config: WritingConfig) => V
+): ReadonlyArray<ContextBasedPropertyOverride<V, HightideResolverConfig>> => (
+  writingConfigCombinations
     .filter((config) => !isDefaultWritingConfig(config))
     .map((config) => whenConfig(writingConfigCondition(config), valueForConfig(config)))
-}
+)
 
 const sides = <V>(
   input: BoxSidesInput<V>,
@@ -389,52 +390,46 @@ const corners = <V>(
   block?: AxisFlow
 ): PhysicalBoxCorners<V> => resolveBoxCorners(input, orientation, inline, block)
 
-const padding = <
-  S extends ResolverState = ResolverState
->(
-    input: BoxSidesInput<TokenRefOrValue<NumberValueToken>>,
-    overrides?: ReadonlyArray<ContextBasedPropertyOverride<PhysicalBoxSides<TokenRefOrValue<NumberValueToken>>, S, HightideResolverConfig>>
-  ): ContextBasedProperty<PhysicalBoxSides<TokenRefOrValue<NumberValueToken>>, S, HightideResolverConfig> => stateful<PhysicalBoxSides<TokenRefOrValue<NumberValueToken>>, S>(
-    resolveBoxSides(input),
-    [
-      ...writingModeOverrides<PhysicalBoxSides<TokenRefOrValue<NumberValueToken>>, S>(
-        (config) => resolveBoxSides(
-          input,
-          config['writing-orientation'],
-          config.inline,
-          config.block
-        )
-      ),
-      ...(overrides ?? []),
-    ]
-  )
+const padding = (
+  input: BoxSidesInput<TokenRefOrValue<NumberValueToken>>,
+  overrides?: ReadonlyArray<ContextBasedPropertyOverride<PhysicalBoxSides<TokenRefOrValue<NumberValueToken>>, HightideResolverConfig>>
+): ContextBasedProperty<PhysicalBoxSides<TokenRefOrValue<NumberValueToken>>, HightideResolverConfig> => stateful<PhysicalBoxSides<TokenRefOrValue<NumberValueToken>>>(
+  resolveBoxSides(input),
+  [
+    ...writingModeOverrides<PhysicalBoxSides<TokenRefOrValue<NumberValueToken>>>(
+      (config) => resolveBoxSides(
+        input,
+        config['writing-orientation'],
+        config.inline,
+        config.block
+      )
+    ),
+    ...(overrides ?? []),
+  ]
+)
 
-const margin = <
-  S extends ResolverState = ResolverState
->(
-    input: BoxSidesInput<TokenRefOrValue<NumberValueToken>>,
-    overrides?: ReadonlyArray<ContextBasedPropertyOverride<PhysicalBoxSides<TokenRefOrValue<NumberValueToken>>, S, HightideResolverConfig>>
-  ): ContextBasedProperty<PhysicalBoxSides<TokenRefOrValue<NumberValueToken>>, S, HightideResolverConfig> => padding(input, overrides)
+const margin = (
+  input: BoxSidesInput<TokenRefOrValue<NumberValueToken>>,
+  overrides?: ReadonlyArray<ContextBasedPropertyOverride<PhysicalBoxSides<TokenRefOrValue<NumberValueToken>>, HightideResolverConfig>>
+): ContextBasedProperty<PhysicalBoxSides<TokenRefOrValue<NumberValueToken>>, HightideResolverConfig> => padding(input, overrides)
 
-const borderRadius = <
-  S extends ResolverState = ResolverState
->(
-    input: BoxCornersInput<TokenRefOrValue<NumberValueToken>>,
-    overrides?: ReadonlyArray<ContextBasedPropertyOverride<PhysicalBoxCorners<TokenRefOrValue<NumberValueToken>>, S, HightideResolverConfig>>
-  ): ContextBasedProperty<PhysicalBoxCorners<TokenRefOrValue<NumberValueToken>>, S, HightideResolverConfig> => stateful<PhysicalBoxCorners<TokenRefOrValue<NumberValueToken>>, S>(
-    resolveBoxCorners(input),
-    [
-      ...writingModeOverrides<PhysicalBoxCorners<TokenRefOrValue<NumberValueToken>>, S>(
-        (config) => resolveBoxCorners(
-          input,
-          config['writing-orientation'],
-          config.inline,
-          config.block
-        )
-      ),
-      ...(overrides ?? []),
-    ]
-  )
+const borderRadius = (
+  input: BoxCornersInput<TokenRefOrValue<NumberValueToken>>,
+  overrides?: ReadonlyArray<ContextBasedPropertyOverride<PhysicalBoxCorners<TokenRefOrValue<NumberValueToken>>, HightideResolverConfig>>
+): ContextBasedProperty<PhysicalBoxCorners<TokenRefOrValue<NumberValueToken>>, HightideResolverConfig> => stateful<PhysicalBoxCorners<TokenRefOrValue<NumberValueToken>>>(
+  resolveBoxCorners(input),
+  [
+    ...writingModeOverrides<PhysicalBoxCorners<TokenRefOrValue<NumberValueToken>>>(
+      (config) => resolveBoxCorners(
+        input,
+        config['writing-orientation'],
+        config.inline,
+        config.block
+      )
+    ),
+    ...(overrides ?? []),
+  ]
+)
 
 export const TokenBuilder = {
   number,

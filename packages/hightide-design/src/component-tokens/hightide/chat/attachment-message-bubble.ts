@@ -34,7 +34,7 @@ export type ChatAttachmentMessageBubbleTokens = AssertAssignable<{
   downloadIcon: IconTokens,
   fileNameText: TextTokens,
   fileMetadataText: TextTokens,
-}, ComponentTokens<ChatAttachmentMessageBubbleState, ChatAttachmentMessageBubbleConfig>> & {
+}, ComponentTokens<ChatAttachmentMessageBubbleConfig>> & {
   chatMessageBubbleOverrides: Partial<ChatMessageBubbleTokens>,
   contentContainer: {
     config: Partial<PressableComponentResolverProps['overrides']>,

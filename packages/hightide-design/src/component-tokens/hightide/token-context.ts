@@ -1,5 +1,5 @@
 import type { HightideThemeTokens } from '../../theme-tokens/hightide'
-import type { HightideResolverParams, HightideResolverConfig, ResolverState } from '../../primitive-tokens/resolver-types'
+import type { HightideResolverParams, HightideResolverConfig } from '../../primitive-tokens/resolver-types'
 import type { HightideSemanticTokens, SemanticTokens } from '../../semantic-tokens'
 
 export type HightideTokenPathProvider<T extends HightideResolverParams = HightideResolverParams> = {
@@ -10,6 +10,6 @@ export type HightideTokenPathProvider<T extends HightideResolverParams = Hightid
 
 export type HightideComponentPathProvider = {
   theme: HightideThemeTokens,
-  semantics: SemanticTokens<ResolverState, HightideResolverConfig>,
+  semantics: SemanticTokens<HightideResolverConfig>,
   params: HightideResolverParams,
 }

@@ -27,7 +27,7 @@ import type {
   SwitchThumbStyle,
   SwitchTrackStyle
 } from '../../theme/types/components/switch'
-import { interactionStateSet } from '../../theme/token-context'
+import { interactionConfig } from '../../theme/token-context'
 import type { StyleOverwrite } from '../../theme/types/resolver'
 import type {
   FormFieldDataHandling,
@@ -96,7 +96,7 @@ export const Switch = ({
   })
 
   const resolvedState = useMemo((): SwitchState => ({
-    state: interactionStateSet({
+    config: interactionConfig({
       isDisabled: disabled,
       isInvalid: invalid,
       isReadonly: readOnly,

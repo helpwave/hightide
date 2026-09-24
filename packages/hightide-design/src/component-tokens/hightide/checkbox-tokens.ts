@@ -36,7 +36,7 @@ export type CheckboxTokens = AssertAssignable<{
   container: ContainerTokens,
   stateLayer: ContainerTokens,
   icon: IconTokens,
-}, ComponentTokens<CheckboxState, CheckboxConfig>>
+}, ComponentTokens<CheckboxConfig>>
 
 export type CheckboxTokenResolver = ComponentTokenResolver<
   CheckboxComponentResolverProps,

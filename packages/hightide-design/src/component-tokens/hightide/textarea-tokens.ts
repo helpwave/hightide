@@ -24,7 +24,7 @@ export type TextareaTokenResolver = InputTokenResolver
 
 export type TextareaOverlayTokens = AssertAssignable<
   ContainerTokens,
-  ComponentTokensNode<TextareaState, TextareaConfig>
+  ComponentTokensNode<TextareaConfig>
 >
 
 export type TextareaOverlayParams = AssertAssignable<{

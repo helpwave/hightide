@@ -50,7 +50,7 @@ export type MultiSelectTokens = AssertAssignable<{
   emptyText: TextTokens,
   checkbox: ContainerTokens,
   checkboxIcon: IconTokens,
-}, ComponentTokens<MultiSelectState, MultiSelectConfig>>
+}, ComponentTokens<MultiSelectConfig>>
 
 export type MultiSelectTokenResolver = ComponentTokenResolver<
   MultiSelectComponentResolverProps,
@@ -83,7 +83,7 @@ export const multiSelectTokens = {
   },
   menu: {
     type: 'container',
-    size: TokenBuilder.stateful<ResolvableLeaves<ContainerSizeTokens>, MultiSelectState>(
+    size: TokenBuilder.stateful<ResolvableLeaves<ContainerSizeTokens>>(
       {
         maxHeight: menuHeight,
       },

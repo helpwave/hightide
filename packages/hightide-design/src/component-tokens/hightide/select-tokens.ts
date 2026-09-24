@@ -44,7 +44,7 @@ export type SelectTokens = AssertAssignable<{
   option: ContainerTokens,
   optionText: TextTokens,
   emptyText: TextTokens,
-}, ComponentTokens<SelectState, SelectConfig>>
+}, ComponentTokens<SelectConfig>>
 
 export type SelectTokenResolver = ComponentTokenResolver<
   SelectComponentResolverProps,
@@ -77,7 +77,7 @@ export const selectTokens = {
   },
   menu: {
     type: 'container',
-    size: TokenBuilder.stateful<ResolvableLeaves<ContainerSizeTokens>, SelectState>(
+    size: TokenBuilder.stateful<ResolvableLeaves<ContainerSizeTokens>>(
       {
         maxHeight: menuHeight,
       },

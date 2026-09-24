@@ -14,7 +14,7 @@ export type ChatMessageComposerTokens = AssertAssignable<{
   input: ContainerTokens,
   text: TextTokens,
   placeholder: TextTokens,
-}, ComponentTokens<ChatMessageComposerState, ChatMessageComposerConfig>>
+}, ComponentTokens<ChatMessageComposerConfig>>
 
 export type ChatMessageComposerTokenResolver = ComponentTokenResolver<
   Record<string, unknown>,

@@ -73,8 +73,10 @@ export const ChatMessageBubble = ({
   const { locale } = useLocalization()
   const { is24HourFormat, timeZone } = useDateTimeFormat()
   const state = useMemo(() => ({
-    config: { direction },
-    state: direction === 'outgoing' ? new Set(['outgoing']) : new Set<string>(),
+    config: {
+      direction,
+      ...(direction === 'outgoing' ? { outgoing: 'true' } : {}),
+    },
   }), [direction])
 
   const resolvedContainerStyle = useMemoizedTheme(theme.components.chat.messageBubble.container, state, style)

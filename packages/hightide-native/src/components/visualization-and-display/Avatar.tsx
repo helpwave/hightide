@@ -251,16 +251,23 @@ export const AvatarWithStatus = ({
 }: AvatarWithStatusProps) => {
   const { theme } = useTheme()
 
-  const state = useMemo((): AvatarWithStatusState => ({
-    ...avatarTokenContext(theme, { size, color }),
-    state: new Set([status]),
-    params: {
-      ...avatarTokenContext(theme, { size, color }).params,
-      numbers: {
-        dimension: typeof size === 'number' ? size : theme.icongraphy.sizes[size],
+  const state = useMemo((): AvatarWithStatusState => {
+    const base = avatarTokenContext(theme, { size, color })
+    return {
+      ...base,
+      config: {
+        ...base.config,
+        [status]: 'true',
       },
-    },
-  }), [size, color, status, theme])
+      params: {
+        ...base.params,
+        numbers: {
+          ...base.params?.numbers,
+          dimension: typeof size === 'number' ? size : theme.icongraphy.sizes[size],
+        },
+      },
+    }
+  }, [size, color, status, theme])
 
   const resolvedStatusDot = useMemoizedTheme(theme.components.avatarWithStatus.statusDot, state, statusDotStyle)
 

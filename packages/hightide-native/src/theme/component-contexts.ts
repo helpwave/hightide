@@ -5,7 +5,7 @@ import type { ColorPair } from './types/color'
 import type { HightideTheme } from './types/theme'
 import type { IconSize } from './types/icongraphy'
 import type { InteractionState, TokenContextInput } from './token-context'
-import { interactionStateSet } from './token-context'
+import { interactionConfig, mergeConfig } from './token-context'
 
 export const toHexColor = (value: unknown): ColorPair['color'] => {
   if (typeof value === 'string' && value.startsWith('#')) {
@@ -48,13 +48,15 @@ export const pressableTokenContext = (
     params: {
       colors: pair,
     },
-    config: {
-      size: options.size,
-      variant: options.variant,
-      coloringStyle: options.coloringStyle,
-      coloringColorVariant: options.coloringColorVariant,
-    },
-    state: interactionStateSet(options.interaction, extra),
+    config: mergeConfig(
+      {
+        size: options.size,
+        variant: options.variant,
+        coloringStyle: options.coloringStyle,
+        coloringColorVariant: options.coloringColorVariant,
+      },
+      interactionConfig(options.interaction, extra)
+    ),
   }
 }
 
@@ -66,15 +68,17 @@ export const inputTokenContext = (
   }
 ): TokenContextInput => {
   const pair = toColorPair(options.color ?? theme.colors.primary)
-  const state = interactionStateSet(options.interaction)
+  const flags = interactionConfig(options.interaction)
   const coloring = theme.semantics.colors.inputColoring({
     params: { colors: { accent: pair.color } },
-    state,
+    config: flags,
   })
-  const extra = new Set(state)
-  if (options.interaction.isFocused && coloring.border !== HexColorUtils.transparent) {
-    extra.add('hasFocusShadow')
-  }
+  const config = mergeConfig(
+    flags,
+    options.interaction.isFocused && coloring.border !== HexColorUtils.transparent
+      ? { hasFocusShadow: 'true' }
+      : undefined
+  )
   const layout = theme.semantics.numbers.controlLayout({ config: { size: 'md' } })
   const textStyle = theme.typography.body.md
   const placeholderColor = options.interaction.isDisabled
@@ -89,7 +93,7 @@ export const inputTokenContext = (
     })
   const tint = theme.semantics.colors.pressableStateLayerTint({
     params: { colors: { tint: coloring.text } },
-    state: interactionStateSet({
+    config: interactionConfig({
       isHovered: !!options.interaction.isHovered && !options.interaction.isFocused,
       isPressed: options.interaction.isPressed,
     }),
@@ -123,7 +127,7 @@ export const inputTokenContext = (
         lineHeight: textStyle.lineHeight,
       },
     },
-    state: extra,
+    config,
   }
 }
 
@@ -202,7 +206,7 @@ export const avatarTokenContext = (
         iconStrokeWidth: theme.icongraphy.strokeWidth,
       },
     },
-    config: options.isGrouped ? { 'avatar-group': '' } : {},
+    config: options.isGrouped ? { 'avatar-group': 'true' } : {},
   }
 }
 
@@ -255,6 +259,6 @@ export const listItemTokenContext = (
         horizontalContentPadding: layout.horizontalContentPadding,
       },
     },
-    state: hasColor ? new Set(['tonal']) : new Set(),
+    config: hasColor ? { tonal: 'true' } : {},
   }
 }

@@ -21,7 +21,7 @@ export type DividerConfig = HightideResolverConfig
 
 export type DividerTokens = AssertAssignable<
   ContainerTokens,
-  ComponentTokensNode<DividerState, DividerConfig>
+  ComponentTokensNode<DividerConfig>
 >
 
 export type DividerParams = AssertAssignable<{

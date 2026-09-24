@@ -16,7 +16,7 @@ export type ChatThreadHeaderTokens = AssertAssignable<{
   contentRow: ContainerTokens,
   title: TextTokens,
   subtitle: TextTokens,
-}, ComponentTokens<ChatThreadHeaderState, ChatThreadHeaderConfig>> & {
+}, ComponentTokens<ChatThreadHeaderConfig>> & {
   avatarOverride: AvatarOverrideTokens,
   pressableOverwrites: PressableOverrideTokens,
 }

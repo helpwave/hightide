@@ -52,7 +52,7 @@ export type InputTokens = AssertAssignable<{
   text: TextTokens,
   placeholder: TextTokens,
   icon: IconTokens,
-}, ComponentTokens<InputState, InputConfig>>
+}, ComponentTokens<InputConfig>>
 
 export type InputTokenResolver = ComponentTokenResolver<
   InputComponentResolverProps,

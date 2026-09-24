@@ -1,18 +1,16 @@
-import type { ResolverConfig, ResolverState } from '../primitive-tokens'
+import type { ResolverConfig } from '../primitive-tokens'
 import type { ContainerTokens } from './container-tokens'
 import type { IconTokens } from './icon-tokens'
 import type { TextTokens } from './text-tokens'
 
 export type ComponentTokensNode<
-  State extends ResolverState = ResolverState,
   Config extends ResolverConfig = ResolverConfig
 > =
-  | { readonly [key: string]: ComponentTokensNode<State, Config> }
+  | { readonly [key: string]: ComponentTokensNode<Config> }
   | IconTokens
   | ContainerTokens
   | TextTokens
 
 export type ComponentTokens<
-  State extends ResolverState = ResolverState,
   Config extends ResolverConfig = ResolverConfig
-> = Record<string, ComponentTokensNode<State, Config>>
+> = Record<string, ComponentTokensNode<Config>>

@@ -6,7 +6,7 @@ import { useTheme } from '../../../global-contexts/theme/ThemeContext'
 import { useMemoizedTheme } from '../../../hooks/useMemoizedTheme'
 import { HightideIconRegistry } from '../../../icons/HightideIconRegistry'
 import type { IconStyle } from '../../../icons'
-import { interactionStateSet } from '../../../theme/token-context'
+import { interactionConfig } from '../../../theme/token-context'
 import { ListActionItem } from '../../list/ListActionItem'
 import { ThemedIcon } from '../../visualization-and-display/ThemedIcon'
 import type { SelectOptionIdentity } from './SelectContext'
@@ -64,7 +64,7 @@ export const SelectOption = <T,>({
   const isVisible = context.visibleOptionIds.includes(optionId)
 
   const optionState = useMemo(() => ({
-    state: interactionStateSet({
+    config: interactionConfig({
       isDisabled: disabled,
     }, [
       ...(isSelected ? ['selected'] : []),

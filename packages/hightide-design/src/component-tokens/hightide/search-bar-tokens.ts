@@ -1,5 +1,5 @@
 import { TokenBuilder } from '../../utils'
-import type { AssertAssignable, HightideResolverConfig, NumberValueToken, HightideResolverParams, ResolverState } from '../../primitive-tokens'
+import type { AssertAssignable, HightideResolverConfig, NumberValueToken, HightideResolverParams } from '../../primitive-tokens'
 import type { ColorPairToken } from '../../theme-tokens/create'
 import type { ComponentTokenResolver } from './component-token-resolver'
 import type { ComponentTokens } from '../component-tokens'
@@ -28,7 +28,7 @@ export type SearchBarTokens = AssertAssignable<{
   input: InputTokens,
   iconButton: ContainerTokens,
   icon: IconTokens,
-}, ComponentTokens<SearchBarState, SearchBarConfig>>
+}, ComponentTokens<SearchBarConfig>>
 
 export type SearchBarTokenResolver = ComponentTokenResolver<
   SearchBarComponentResolverProps,

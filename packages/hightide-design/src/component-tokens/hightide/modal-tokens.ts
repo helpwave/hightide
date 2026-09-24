@@ -12,7 +12,7 @@ export type ModalTokens = AssertAssignable<{
   background: ContainerTokens,
   menu: ContainerTokens,
   closeButton: ContainerTokens,
-}, ComponentTokens<ModalState, ModalConfig>>
+}, ComponentTokens<ModalConfig>>
 
 export type ModalTokenResolver = ComponentTokenResolver<
   object,

@@ -28,13 +28,13 @@ import {
 import { useMemoizedTheme } from '@helpwave/hightide-native/hooks'
 import {
   bindTokenContext,
-  interactionStateSet,
   StyleAdapterUtils,
   themes,
   type StyleLeaf,
   type TokenContextInput
 } from '@helpwave/hightide-native/theme'
 import type { HightideTheme } from '@helpwave/hightide-native/theme'
+import { interactionConfig } from '../../../../packages/hightide-native/src/theme/token-context'
 import {
   ThemeSelect,
   ThemeStoryFrame
@@ -157,8 +157,8 @@ const CalloutDemo = () => {
       variant: 'tonal',
       coloringStyle: 'filled',
       coloringColorVariant: 'tonal',
+      ...interactionConfig({ isDisabled }),
     },
-    state: interactionStateSet({ isDisabled }),
   }), [color.color, color.onColor, isDisabled])
   const containerStyle = useMemoizedTheme(theme.components.callout.container, context)
   const textStyle = useMemoizedTheme(theme.components.callout.text, context)

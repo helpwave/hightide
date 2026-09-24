@@ -28,7 +28,7 @@ export type ChatMessageBubbleTokens = AssertAssignable<{
   metaDataStatusContainer: ContainerTokens,
   metaDataText: TextTokens,
   metaDataIcon: IconTokens,
-}, ComponentTokens<ChatMessageBubbleState, ChatMessageBubbleConfig>>
+}, ComponentTokens<ChatMessageBubbleConfig>>
 
 export type ChatMessageBubbleTokenResolver = ComponentTokenResolver<
   ChatMessageBubbleComponentResolverProps,

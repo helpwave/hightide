@@ -40,7 +40,7 @@ export type AvatarComponentResolverProps = {
 export type AvatarState = AssertAssignable<'isLoading' | 'hasLoaded', ResolverState>
 export type AvatarConfig = AssertAssignable<HightideResolverConfig<{
   'avatar-status'?: AvatarStatus,
-  'avatar-group'?: '',
+  'avatar-group'?: true,
 }>, HightideResolverConfig>
 
 export type AvatarTokens = AssertAssignable<{
@@ -48,7 +48,7 @@ export type AvatarTokens = AssertAssignable<{
   image: ContainerTokens,
   text: TextTokens,
   icon: IconTokens,
-}, ComponentTokens<AvatarState, AvatarConfig>>
+}, ComponentTokens<AvatarConfig>>
 
 
 export type AvatarOverrideTokens = Partial<AvatarTokens> & {
@@ -111,9 +111,9 @@ export const avatarTokens = {
       mainAxisAlignment: TokenBuilder.mainAxisAlignment('center'),
       crossAxisAlignment: TokenBuilder.crossAxisAlignment('center'),
     }),
-    shadow: TokenBuilder.stateful<ShadowTokens, AvatarState>(undefined,
+    shadow: TokenBuilder.stateful<ShadowTokens>(undefined,
       [
-        TokenBuilder.whenConfig({ 'avatar-group' : '' }, elevationTokens('level1')),
+        TokenBuilder.whenConfig({ 'avatar-group': true }, elevationTokens('level1')),
       ]),
   },
   image: {
@@ -164,7 +164,7 @@ export type AvatarWithStatusComponentResolverProps = {
 
 export type AvatarWithStatusTokens = AssertAssignable<{
   statusDot: ContainerTokens,
-}, ComponentTokens<AvatarWithStatusState, AvatarWithStatusConfig>> & {
+}, ComponentTokens<AvatarWithStatusConfig>> & {
   avatarOverride: AvatarOverrideTokens,
 }
 
@@ -184,7 +184,7 @@ const statusDotSize = TokenBuilder.round(
 export const avatarWithStatusTokens = {
   statusDot: {
     type: 'container',
-    backgroundColor: TokenBuilder.statefulField<ColorValueToken, AvatarStatus>(
+    backgroundColor: TokenBuilder.statefulField<ColorValueToken>(
       TokenBuilder.colorValueRef('theme.color.disabled.color'),
       [
         TokenBuilder.whenState(['online'], TokenBuilder.colorValueRef<AvatarWithStatusTokenContext>('theme.color.positive.color')),
@@ -223,7 +223,7 @@ export type AvatarGroupTokens = AssertAssignable<{
   container: ContainerTokens,
   avatarStack: ContainerTokens,
   text: TextTokens,
-}, ComponentTokens<AvatarGroupState, AvatarGroupConfig>> & {
+}, ComponentTokens<AvatarGroupConfig>> & {
   avatarOverride: AvatarOverrideTokens,
 }
 

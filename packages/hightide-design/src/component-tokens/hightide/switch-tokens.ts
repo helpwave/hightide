@@ -27,7 +27,7 @@ export type SwitchTokens = AssertAssignable<{
   container: ContainerTokens,
   track: ContainerTokens,
   thumb: ContainerTokens,
-}, ComponentTokens<SwitchState, SwitchConfig>>
+}, ComponentTokens<SwitchConfig>>
 
 export type SwitchTokenResolver = ComponentTokenResolver<
   SwitchComponentResolverProps,

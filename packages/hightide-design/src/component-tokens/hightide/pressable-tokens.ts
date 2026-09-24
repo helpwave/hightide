@@ -78,7 +78,7 @@ export type PressableTokens = AssertAssignable<{
   stateLayer: ContainerTokens,
   icon: IconTokens,
   text: TextTokens,
-}, ComponentTokens<PressableState, PressableConfig>>
+}, ComponentTokens<PressableConfig>>
 
 export type PressableOverrideTokens = Partial<PressableTokens> & {
   overrides?: PressableComponentResolverProps['overrides'],

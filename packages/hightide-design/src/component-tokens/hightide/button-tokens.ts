@@ -58,7 +58,7 @@ export type ButtonTokens = AssertAssignable<{
   stateLayer: ContainerTokens,
   icon: IconTokens,
   text: TextTokens,
-}, ComponentTokens<ButtonState, ButtonConfig>>
+}, ComponentTokens<ButtonConfig>>
 
 export type ButtonTokenResolver = ComponentTokenResolver<
   ButtonComponentResolverProps,

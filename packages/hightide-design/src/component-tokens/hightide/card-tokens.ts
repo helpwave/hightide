@@ -10,7 +10,7 @@ export type CardConfig = HightideResolverConfig
 
 export type CardTokens = AssertAssignable<
   ContainerTokens,
-  ComponentTokensNode<CardState, CardConfig>
+  ComponentTokensNode<CardConfig>
 >
 
 export type CardTokenResolver = ComponentTokenResolver<

@@ -1,5 +1,5 @@
 import { TokenBuilder } from '../../utils'
-import type { AssertAssignable, HightideResolverParams, HightideResolverConfig, ResolverState } from '../../primitive-tokens'
+import type { AssertAssignable, HightideResolverParams, HightideResolverConfig } from '../../primitive-tokens'
 import type { NumberValueToken } from '../../primitive-tokens/number-value-token'
 import type { IconSize } from '../../theme-tokens/create'
 import type { IconTokens } from '../icon-tokens'
@@ -15,7 +15,6 @@ export type IconParams = AssertAssignable<{
 }, HightideResolverParams>
 export type IconTokenContext = HightideTokenPathProvider<IconParams>
 
-export type IconState = ResolverState
 export type IconConfig = HightideResolverConfig
 
 export type IconComponentResolverProps = {
@@ -25,7 +24,6 @@ export type IconComponentResolverProps = {
 }
 
 export type IconTokenConfig<
-  S extends ResolverState = IconState,
   C extends HightideResolverConfig = IconConfig
 > = IconTokens
 

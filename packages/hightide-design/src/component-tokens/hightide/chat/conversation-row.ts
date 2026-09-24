@@ -43,7 +43,7 @@ export type ChatConversationRowTokens = AssertAssignable<{
   unreadBadge: ContainerTokens,
   unreadBadgeText: TextTokens,
   sentIndicator: IconTokens,
-}, ComponentTokens<ChatConversationRowState, ChatConversationRowConfig>> & {
+}, ComponentTokens<ChatConversationRowConfig>> & {
   pressableOverrides: PressableOverrideTokens,
   avatarOverride: AvatarOverrideTokens,
 }

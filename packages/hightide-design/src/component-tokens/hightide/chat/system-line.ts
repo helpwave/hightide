@@ -21,7 +21,7 @@ export type ChatSystemLineTokens = AssertAssignable<{
   container: ContainerTokens,
   text: TextTokens,
   icon: IconTokens,
-}, ComponentTokens<ChatSystemLineState, ChatSystemLineConfig>>
+}, ComponentTokens<ChatSystemLineConfig>>
 
 export type ChatSystemLineTokenResolver = ComponentTokenResolver<
   ChatSystemLineComponentResolverProps,

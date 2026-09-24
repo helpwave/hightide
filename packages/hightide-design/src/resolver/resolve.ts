@@ -6,59 +6,24 @@ import type {
   NumberCalculationOperation,
   NumberUnaryCalculationOperation
 } from '../primitive-tokens/number-calc'
-import type { ResolverConfig, HightideResolverParams, ResolverParams, ResolverState } from '../primitive-tokens/resolver-types'
+import type { ResolverConfig, HightideResolverParams, ResolverParams, ResolverRuntimeConfig } from '../primitive-tokens/resolver-types'
 import type { SemanticTokens } from '../semantic-tokens/semantic-tokens'
 import type { ThemeTokens } from '../theme-tokens/create'
 import { HexColorUtils } from '../utils/hex'
 import { OKLCHUtils } from '../utils/oklch'
 import { TokenBuilder } from '../utils'
 import type { ContextBasedProperty } from '../component-tokens/context-based'
-import { matchesConfigCondition } from '../component-tokens/context-based'
+import { matchesCondition } from '../component-tokens/context-based'
 import type { ContainerStyle } from './container-style'
 import type { IconStyle } from './icon-style'
 import type { Resolved } from './resolved'
 import type { TextStyle } from './text-style'
 
-const matchesStateConditions = (
-  active: ReadonlySet<string>,
-  condition?: ReadonlySet<string>
-): boolean => {
-  if (condition === undefined || condition.size === 0) {
-    return true
-  }
-
-  for (const state of condition) {
-    if (!active.has(state)) {
-      return false
-    }
-  }
-
-  return true
-}
-
-const matchesNegativeStateConditions = (
-  active: ReadonlySet<string>,
-  negativeCondition?: ReadonlySet<string>
-): boolean => {
-  if (negativeCondition === undefined || negativeCondition.size === 0) {
-    return true
-  }
-
-  for (const state of negativeCondition) {
-    if (active.has(state)) {
-      return false
-    }
-  }
-
-  return true
-}
-
 export type TokenResolveContext = {
   theme: object,
   semantics?: object,
   params?: ResolverParams,
-  config?: ResolverConfig,
-  state?: ReadonlySet<ResolverState>,
+  config?: ResolverRuntimeConfig,
 }
 
 const isRecord = (value: unknown): value is Record<string, unknown> => (
@@ -185,7 +150,7 @@ const isUnaryCalculationOperation = (
 
 const isContextBasedProperty = (
   value: unknown
-): value is ContextBasedProperty<unknown, string, Record<string, string>> => (
+): value is ContextBasedProperty<unknown, ResolverConfig> => (
   isRecord(value)
   && 'base' in value
   && !('type' in value)
@@ -195,19 +160,14 @@ const isContextBasedProperty = (
   && !('operation' in value)
 )
 
-const resolveContextBasedProperty = <S extends string, V>(
-  property: ContextBasedProperty<V, S, Record<string, string>>,
-  activeStates: ReadonlySet<S>,
-  config?: Record<string, string>
+const resolveContextBasedProperty = <V>(
+  property: ContextBasedProperty<V, ResolverConfig>,
+  config?: ResolverRuntimeConfig
 ): V => {
   let result = property.base
 
   for (const override of property.overrides ?? []) {
-    if (
-      matchesStateConditions(activeStates, override.condition)
-      && matchesNegativeStateConditions(activeStates, override.negativeCondition)
-      && matchesConfigCondition(config, override.configCondition)
-    ) {
+    if (matchesCondition(config, override.condition)) {
       result = override.value
     }
   }
@@ -263,9 +223,8 @@ export function resolveResolvableValue (
     }
 
     if (isContextBasedProperty(node)) {
-      const state = context.state ?? new Set<string>()
       const resolved = resolveResolvableValue(
-        resolveContextBasedProperty(node, state, context.config as Record<string, string> | undefined),
+        resolveContextBasedProperty(node, context.config),
         context
       )
       setAtPath(ensureParams(context), nestedPath, resolved)
@@ -399,11 +358,9 @@ export const resolveConfigNode = <T = unknown>(
   value: unknown,
   context: TokenResolveContext
 ): T => {
-  const state = context.state ?? new Set<string>()
-
   if (isContextBasedProperty(value)) {
     return resolveResolvableValue(
-      resolveContextBasedProperty(value, state, context.config as Record<string, string> | undefined),
+      resolveContextBasedProperty(value, context.config),
       context
     ) as T
   }
@@ -473,10 +430,9 @@ const unwrapPrimitiveLeaves = (value: unknown): unknown => {
 
 type ResolveComponentTokenArgs<Theme extends ThemeTokens, T> = {
   component: T,
-  semantics: SemanticTokens<string, ResolverConfig>,
+  semantics: SemanticTokens<ResolverConfig>,
   theme: Theme,
-  state: ReadonlySet<string>,
-  config: ResolverConfig,
+  config: ResolverRuntimeConfig,
   params: HightideResolverParams & Record<string, unknown>,
 }
 
@@ -493,7 +449,6 @@ export function resolveComponentToken<
     semantics: args.semantics,
     params: args.params,
     config: args.config,
-    state: args.state,
   }
 
   return unwrapPrimitiveLeaves(resolveConfigNode(args.component, context)) as T extends { type: 'icon' } | { kind: 'icon' } ? IconStyle

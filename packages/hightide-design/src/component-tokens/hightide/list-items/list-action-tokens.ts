@@ -25,7 +25,7 @@ export type ListActionTokens = AssertAssignable<{
   titleText: TextTokens,
   descriptionText: TextTokens,
   icon: IconTokens,
-}, ComponentTokens<ListActionItemState, ListActionItemConfig>>
+}, ComponentTokens<ListActionItemConfig>>
 
 export type ListActionTokenResolver = ComponentTokenResolver<
   ListActionComponentResolverProps,

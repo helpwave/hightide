@@ -12,7 +12,7 @@ import { ThemedIcon } from '../visualization-and-display/ThemedIcon'
 import { ThemedText } from '../visualization-and-display/ThemedText'
 import { useTheme } from '../../global-contexts/theme/ThemeContext'
 import { useMemoizedTheme } from '../../hooks/useMemoizedTheme'
-import { interactionStateSet } from '../../theme/token-context'
+import { interactionConfig } from '../../theme/token-context'
 import type {
   ChatConversationRowContentContainerStyle,
   ChatConversationRowHeaderRowStyle,
@@ -84,7 +84,7 @@ export const ChatConversationRow = ({
   const [isPressed, setIsPressed] = useState(false)
   const isUnread = (unreadCount ?? 0) > 0
   const staticState = useMemo(() => ({
-    state: interactionStateSet({
+    config: interactionConfig({
       isDisabled: !!disabled,
       isPressed,
     }, [

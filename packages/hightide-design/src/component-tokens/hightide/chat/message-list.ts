@@ -9,7 +9,7 @@ export type ChatMessageListConfig = HightideResolverConfig
 
 export type ChatMessageListTokens = AssertAssignable<{
   container: ContainerTokens,
-}, ComponentTokens<ChatMessageListState, ChatMessageListConfig>>
+}, ComponentTokens<ChatMessageListConfig>>
 
 export type ChatMessageListTokenResolver = ComponentTokenResolver<
   Record<string, unknown>,

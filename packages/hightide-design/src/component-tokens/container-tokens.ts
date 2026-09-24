@@ -10,7 +10,7 @@ import type { NumberValueToken } from '../primitive-tokens/number-value-token'
 import type { OutlineStyleToken } from '../primitive-tokens/outline-style-token'
 import type { OverflowToken } from '../primitive-tokens/overflow-token'
 import type { PercentToken } from '../primitive-tokens/percent-token'
-import type { ResolverConfig, ResolverState } from '../primitive-tokens'
+import type { ResolverConfig } from '../primitive-tokens'
 import type { TokenRefOrValue } from '../utils/token-type'
 import type { ContextBasedProperty } from './context-based'
 import type { ResolvableLeaves } from './resolvable-leaves'
@@ -158,23 +158,22 @@ export type ShadowTokens = ResolvableLeaves<ShadowToken>
 export type OutlineTokens = ResolvableLeaves<OutlineToken>
 
 export type ContainerTokens<
-  State extends ResolverState = ResolverState,
   Config extends ResolverConfig = ResolverConfig
 > = {
   type: 'container',
-  backgroundColor?: ContextBasedProperty<TokenRefOrValue<ColorValueToken>, State, Config>,
-  opacity?: ContextBasedProperty<TokenRefOrValue<NumberValueToken>, State, Config>,
-  overflow?: ContextBasedProperty<TokenRefOrValue<OverflowToken>, State, Config>,
-  position?: ContextBasedProperty<ResolvableLeaves<PositioningToken>, State, Config>,
-  transform?: ContextBasedProperty<ResolvableLeaves<TransformTokens>, State, Config>,
-  border?: ContextBasedProperty<ResolvableLeaves<BorderToken>, State, Config>,
-  size?: ContextBasedProperty<ResolvableLeaves<ContainerSizeTokens>, State, Config>,
-  borderRadius?: ContextBasedProperty<ResolvableLeaves<BorderRadiusToken>, State, Config>,
-  padding?: ContextBasedProperty<ResolvableLeaves<PaddingToken>, State, Config>,
-  margin?: ContextBasedProperty<ResolvableLeaves<MarginToken>, State, Config>,
-  layout?: ContextBasedProperty<ResolvableLeaves<ContainerLayoutTokens>, State, Config>,
-  shadow?: ContextBasedProperty<ShadowTokens, State, Config>,
-  outline?: ContextBasedProperty<OutlineTokens, State, Config>,
+  backgroundColor?: ContextBasedProperty<TokenRefOrValue<ColorValueToken>, Config>,
+  opacity?: ContextBasedProperty<TokenRefOrValue<NumberValueToken>, Config>,
+  overflow?: ContextBasedProperty<TokenRefOrValue<OverflowToken>, Config>,
+  position?: ContextBasedProperty<ResolvableLeaves<PositioningToken>, Config>,
+  transform?: ContextBasedProperty<ResolvableLeaves<TransformTokens>, Config>,
+  border?: ContextBasedProperty<ResolvableLeaves<BorderToken>, Config>,
+  size?: ContextBasedProperty<ResolvableLeaves<ContainerSizeTokens>, Config>,
+  borderRadius?: ContextBasedProperty<ResolvableLeaves<BorderRadiusToken>, Config>,
+  padding?: ContextBasedProperty<ResolvableLeaves<PaddingToken>, Config>,
+  margin?: ContextBasedProperty<ResolvableLeaves<MarginToken>, Config>,
+  layout?: ContextBasedProperty<ResolvableLeaves<ContainerLayoutTokens>, Config>,
+  shadow?: ContextBasedProperty<ShadowTokens, Config>,
+  outline?: ContextBasedProperty<OutlineTokens, Config>,
 }
 
 

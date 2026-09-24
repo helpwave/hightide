@@ -13,7 +13,7 @@ import {
 
 import type { ColorPair } from '../../theme/types/color'
 import { listItemTokenContext } from '../../theme/component-contexts'
-import { interactionStateSet } from '../../theme/token-context'
+import { interactionConfig, mergeConfig } from '../../theme/token-context'
 
 import { HightideIconRegistry } from '../../icons/HightideIconRegistry'
 import { ThemedIcon } from '../visualization-and-display/ThemedIcon'
@@ -77,10 +77,13 @@ export const ListNavigationItem = ({
     const base = listItemTokenContext(theme, { color })
     return {
       ...base,
-      state: interactionStateSet({
-        isDisabled: !!disabled,
-        isPressed,
-      }, color !== undefined ? ['colored', 'tonal'] : []),
+      config: mergeConfig(
+        base.config,
+        interactionConfig({
+          isDisabled: !!disabled,
+          isPressed,
+        }, color !== undefined ? ['colored', 'tonal'] : [])
+      ),
     }
   }, [color, disabled, isPressed, theme])
 

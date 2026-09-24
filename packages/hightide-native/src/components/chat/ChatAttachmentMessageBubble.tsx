@@ -174,8 +174,10 @@ export const ChatAttachmentMessageBubble = ({
 }: ChatAttachmentMessageBubbleProps) => {
   const { theme } = useTheme()
   const state = useMemo(() => ({
-    config: { direction },
-    state: direction === 'outgoing' ? new Set(['outgoing']) : new Set<string>(),
+    config: {
+      direction,
+      ...(direction === 'outgoing' ? { outgoing: 'true' } : {}),
+    },
   }), [direction])
   const attachment = theme.components.chat.attachmentMessageBubble
 

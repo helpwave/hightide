@@ -49,7 +49,7 @@ export type ChipTokens = AssertAssignable<{
   container: ContainerTokens,
   icon: IconTokens,
   text: TextTokens,
-}, ComponentTokens<ChipState, ChipConfig>>
+}, ComponentTokens<ChipConfig>>
 
 export type ChipTokenResolver = ComponentTokenResolver<
   ChipComponentResolverProps,

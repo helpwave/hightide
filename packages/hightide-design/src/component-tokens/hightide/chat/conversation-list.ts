@@ -11,7 +11,7 @@ export type ChatConversationListTokens = AssertAssignable<{
   container: ContainerTokens,
   header: ContainerTokens,
   footer: ContainerTokens,
-}, ComponentTokens<ChatConversationListState, ChatConversationListConfig>>
+}, ComponentTokens<ChatConversationListConfig>>
 
 export type ChatConversationListTokenResolver = ComponentTokenResolver<
   Record<string, unknown>,

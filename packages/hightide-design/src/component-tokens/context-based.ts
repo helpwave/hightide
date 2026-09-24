@@ -1,43 +1,53 @@
-import type { ResolverConfig, ResolverState } from '../primitive-tokens/resolver-types'
+import type { ResolverConfig, ResolverRuntimeConfig } from '../primitive-tokens/resolver-types'
 import { writingConfigDefaults } from '../utils/box-sides'
 
 export type ContextBasedPropertyOverride<
   V,
-  S extends ResolverState,
-  C extends ResolverConfig
+  C extends ResolverConfig = ResolverConfig
 > = {
-  condition?: ReadonlySet<S>,
-  negativeCondition?: ReadonlySet<S>,
-  configCondition?: Partial<C>,
+  condition?: Partial<C>,
   value: V,
 }
 
 export type ContextBasedProperty<
   V,
-  S extends ResolverState = ResolverState,
   C extends ResolverConfig = ResolverConfig
 > = {
   base?: V,
-  overrides?: ReadonlyArray<ContextBasedPropertyOverride<V, S, C>>,
+  overrides?: ReadonlyArray<ContextBasedPropertyOverride<V, C>>,
 }
 
-export const matchesConfigCondition = (
-  config: Record<string, string> | undefined,
-  condition?: Partial<Record<string, string>>
+export const matchesCondition = (
+  config: ResolverRuntimeConfig | undefined,
+  condition?: Partial<Record<string, string | true | false | undefined>>
 ): boolean => {
   if (condition === undefined) {
     return true
   }
 
-  for (const [key, value] of Object.entries(condition)) {
-    if (value === undefined) {
+  for (const [key, expected] of Object.entries(condition)) {
+    if (expected === undefined) {
       continue
     }
 
-    // TODO conider a better solution here
-    const actual = config?.[key] ?? writingConfigDefaults[key]
+    const actual = config?.[key]
 
-    if (actual !== value) {
+    if (expected === true) {
+      if (typeof actual !== 'string') {
+        return false
+      }
+      continue
+    }
+
+    if (expected === false) {
+      if (actual !== undefined) {
+        return false
+      }
+      continue
+    }
+
+    const resolved = actual ?? writingConfigDefaults[key]
+    if (resolved !== expected) {
       return false
     }
   }
