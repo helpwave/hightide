@@ -13,12 +13,6 @@ export const defaultWritingConfig = {
   'block': 'forward',
 } as const satisfies WritingConfig
 
-export const writingConfigDefaults: Record<string, string> = {
-  'writing-orientation': defaultWritingConfig['writing-orientation'],
-  'inline': defaultWritingConfig.inline,
-  'block': defaultWritingConfig.block,
-}
-
 export type PhysicalSide = 'left' | 'right' | 'top' | 'bottom'
 export type PhysicalCorner = 'topLeft' | 'topRight' | 'bottomRight' | 'bottomLeft'
 

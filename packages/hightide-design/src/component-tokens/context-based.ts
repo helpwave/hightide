@@ -1,5 +1,4 @@
 import type { ResolverConfig, ResolverRuntimeConfig } from '../primitive-tokens/resolver-types'
-import { writingConfigDefaults } from '../utils/box-sides'
 
 export type ContextBasedPropertyOverride<
   V,
@@ -46,8 +45,7 @@ export const matchesCondition = (
       continue
     }
 
-    const resolved = actual ?? writingConfigDefaults[key]
-    if (resolved !== expected) {
+    if (actual !== expected) {
       return false
     }
   }

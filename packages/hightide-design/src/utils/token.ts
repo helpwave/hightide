@@ -34,6 +34,7 @@ import {
   type PhysicalBoxCorners,
   type PhysicalBoxSides,
   type WritingConfig,
+  defaultWritingConfig,
   isDefaultWritingConfig,
   resolveBoxCorners,
   resolveBoxSides,
@@ -283,9 +284,9 @@ const stateful = <V>(
   base?: V,
   overrides?: ReadonlyArray<ContextBasedPropertyOverride<WidenTokenLeaves<NoInfer<V>> | undefined, HightideResolverConfig>>
 ): ContextBasedProperty<WidenTokenLeaves<V>, HightideResolverConfig> => ({
-  base: base as WidenTokenLeaves<V> | undefined,
-  overrides: overrides as ContextBasedProperty<WidenTokenLeaves<V>, HightideResolverConfig>['overrides'],
-})
+    base: base as WidenTokenLeaves<V> | undefined,
+    overrides: overrides as ContextBasedProperty<WidenTokenLeaves<V>, HightideResolverConfig>['overrides'],
+  })
 
 const statefulField = <
   T extends Token,
@@ -344,36 +345,70 @@ const themeLayoutSizes = ['xs', 'sm', 'md', 'lg', 'xl'] as const satisfies reado
 const whenThemeSize = <V>(
   valueForSize: (size: ThemeLayoutSize) => V
 ): ReadonlyArray<ContextBasedPropertyOverride<V, HightideResolverConfig>> => (
-  themeLayoutSizes
-    .filter((size) => size !== 'md')
-    .map((size) => whenConfig({ size }, valueForSize(size)))
-)
+    themeLayoutSizes
+      .filter((size) => size !== 'md')
+      .map((size) => whenConfig({ size }, valueForSize(size)))
+  )
 
 const whenThemeSizeState = <V>(
   condition: ReadonlyArray<string> | ReadonlySet<string>,
   valueForSize: (size: ThemeLayoutSize) => V,
   negativeCondition?: ReadonlyArray<string> | ReadonlySet<string>
 ): ReadonlyArray<ContextBasedPropertyOverride<V, HightideResolverConfig>> => (
-  themeLayoutSizes.map((size) => whenState(
-    condition,
-    valueForSize(size),
-    negativeCondition,
-    { size }
-  ))
-)
+    themeLayoutSizes.map((size) => whenState(
+      condition,
+      valueForSize(size),
+      negativeCondition,
+      { size }
+    ))
+  )
 
-const writingConfigCondition = (config: WritingConfig): Partial<HightideResolverConfig> => ({
-  'writing-orientation': config['writing-orientation'],
-  'writing-inline': config.inline,
-  'writing-block': config.block,
-})
+const writingModeConditions = (config: WritingConfig): Partial<HightideResolverConfig>[] => {
+  const slots = [
+    {
+      key: 'writing-orientation',
+      value: config['writing-orientation'],
+      isDefault: config['writing-orientation'] === defaultWritingConfig['writing-orientation'],
+    },
+    {
+      key: 'writing-inline',
+      value: config.inline,
+      isDefault: config.inline === defaultWritingConfig.inline,
+    },
+    {
+      key: 'writing-block',
+      value: config.block,
+      isDefault: config.block === defaultWritingConfig.block,
+    },
+  ] as const
+
+  let variants: Partial<HightideResolverConfig>[] = [{}]
+
+  for (const slot of slots) {
+    const next: Partial<HightideResolverConfig>[] = []
+
+    for (const variant of variants) {
+      next.push({ ...variant, [slot.key]: slot.value })
+      if (slot.isDefault) {
+        next.push({ ...variant, [slot.key]: false })
+      }
+    }
+
+    variants = next
+  }
+
+  return variants
+}
 
 const writingModeOverrides = <V>(
   valueForConfig: (config: WritingConfig) => V
 ): ReadonlyArray<ContextBasedPropertyOverride<V, HightideResolverConfig>> => (
   writingConfigCombinations
     .filter((config) => !isDefaultWritingConfig(config))
-    .map((config) => whenConfig(writingConfigCondition(config), valueForConfig(config)))
+    .flatMap((config) => {
+      const value = valueForConfig(config)
+      return writingModeConditions(config).map((condition) => whenConfig(condition, value))
+    })
 )
 
 const sides = <V>(
