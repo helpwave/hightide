@@ -1,4 +1,5 @@
 export * from './Avatar'
+export * from './AvatarGroup'
 export * from './Card'
 export * from './ChangingNumber'
 export * from './Chip'

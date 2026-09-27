@@ -1,6 +1,6 @@
 import type { Meta, StoryObj } from '@storybook/nextjs-vite'
-import type { AvatarProps } from '../../../src/components/display-and-visualization/Avatar'
-import  { AvatarGroup } from '../../../src/components/display-and-visualization/Avatar'
+import type { AvatarProps } from '../../../src/components/display-and-visualization/Avatar/AvatarComponent'
+import { AvatarGroup } from '../../../src/components/display-and-visualization/AvatarGroup/AvatarGroup'
 import { range } from '@helpwave/hightide-utils/utils'
 import { faker } from '@faker-js/faker'
 
@@ -31,7 +31,7 @@ export const avatarGroup: Story = {
     useName: false,
     useErrorImage: false,
     size: 'md',
-    showTotalNumber: false,
+    hasAdditionalText: false,
     avatars
   },
   render: ({ avatars, useErrorImage, useImage, useName, ...props }) => {

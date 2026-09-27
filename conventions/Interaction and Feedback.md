@@ -4,7 +4,7 @@ Minimum states an element must differentiate. These apply to mobile and web unle
 
 There are three component types: Presentation, Interactive, and DataInput. Each type lists its own states. States are not inherited from another type.
 
-LifeCycle is separate from these types. It describes whether the element is available, waiting on data, blocked by an external operation or dependency, or performing an operation.
+LoadingState is separate from these types. It describes whether the element is available, waiting on data, blocked by an external operation or dependency, or performing an operation.
 
 ## Presentation
 
@@ -38,12 +38,12 @@ Data input elements accept or display an editable value.
 | `focus-visible` | web only, often replacing `focus` |
 | `disabled` | mobile and web |
 
-## LifeCycle
+## LoadingState
 
-Every element can be in one lifecycle state:
+Every element can be in one loading state:
 
 ```ts
-type LifeCycle = 'idle' | 'loading' | 'blocked' | 'processing'
+type LoadingState = 'idle' | 'loading' | 'blocked' | 'processing'
 ```
 
 ### idle

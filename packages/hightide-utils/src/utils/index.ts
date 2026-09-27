@@ -1,6 +1,7 @@
 export * from './array'
 export * from './bagFunctions'
 export * from './builder'
+export * from './componentState'
 export * from './curve'
 export * from './date'
 export * from './duration'

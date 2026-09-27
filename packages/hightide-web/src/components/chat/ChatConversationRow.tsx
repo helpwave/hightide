@@ -1,14 +1,15 @@
 import type { ButtonHTMLAttributes, ReactNode } from 'react'
 import clsx from 'clsx'
 import { Check, CheckCheck } from 'lucide-react'
-import type { AvatarWithStatusProps } from '../display-and-visualization/Avatar'
-import { AvatarWithStatus } from '../display-and-visualization/Avatar'
+
+import { Avatar } from '../display-and-visualization/Avatar/Avatar'
+import type { AvatarProps } from '../display-and-visualization/Avatar/AvatarComponent'
 import { PropsUtil } from '../../utils/propsUtil'
 
 export type ChatConversationSentIndicator = 'sent' | 'sentAndReceived'
 
 export type ChatConversationRowProps = ButtonHTMLAttributes<HTMLButtonElement> & {
-  avatar: AvatarWithStatusProps,
+  avatar: AvatarProps,
   title: ReactNode,
   timestamp?: ReactNode,
   preview?: ReactNode,
@@ -38,7 +39,11 @@ export const ChatConversationRow = ({
       data-selected={PropsUtil.dataAttributes.bool(isSelected)}
       data-unread={PropsUtil.dataAttributes.bool(isUnread)}
     >
-      <AvatarWithStatus size="md" {...avatar}/>
+      <Avatar
+        size="md"
+        {...avatar}
+        hasStatusIndicator={avatar.hasStatusIndicator ?? true}
+      />
       <span className="chat-conversation-row-content">
         <span className="chat-conversation-row-top">
           <span className="chat-conversation-row-title">{title}</span>

@@ -1,7 +1,7 @@
 @layer components {
   .avatar {
     @apply relative flex-row-0 items-center justify-center primary coloring-solid rounded-full;
-    &[data-group] {
+    &.avatar-group-avatar {
       @apply absolute shadow-side shadow-r-4 shadow-hard;
     }
     &[data-size="xs"] {
@@ -17,23 +17,27 @@
       @apply size-12 p-2 text-2xl font-bold;
     }
 
-    &[data-group]:nth-child(1) {
+    &[data-loading-state="loading"] {
+      @apply animate-pulse;
+    }
+
+    &.avatar-group-avatar:nth-child(1) {
       left: calc(0 * var(--size) * var(--overlap));
       z-index: 5;
     }
-    &[data-group]:nth-child(2) {
+    &.avatar-group-avatar:nth-child(2) {
       left: calc(1 * var(--size) * var(--overlap));
       z-index: 4;
     }
-    &[data-group]:nth-child(3) {
+    &.avatar-group-avatar:nth-child(3) {
       left: calc(2 * var(--size) * var(--overlap));
       z-index: 3;
     }
-    &[data-group]:nth-child(4) {
+    &.avatar-group-avatar:nth-child(4) {
       left: calc(3 * var(--size) * var(--overlap));
       z-index: 2;
     }
-    &[data-group]:nth-child(5) {
+    &.avatar-group-avatar:nth-child(5) {
       left: calc(4 * var(--size) * var(--overlap));
       z-index: 1;
     }
@@ -64,20 +68,16 @@
     }
   }
 
-  .avatar-group-container {
+  .avatar-group-overlap {
     @apply relative w-[calc(var(--size)*(0.5*4+1))] h-[var(--size)];
   }
 
-  .avatar-group-more {
+  .avatar-group-additional-text {
     @apply flex-row-2 truncate items-center text-[calc(var(--size)*2/3)];
   }
 
-  .avatar-with-status {
-    @apply relative inline-flex;
-  }
-
-  .avatar-with-status-dot {
-    @apply absolute right-0 bottom-0 z-1 rounded-full border-solid transition-colors;
+  .avatar-status-indicator {
+    @apply absolute right-0 bottom-0 z-2 rounded-full border-solid transition-colors;
     border-color: var(--color-background);
 
     &[data-size="xs"] {

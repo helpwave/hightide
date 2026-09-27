@@ -1,6 +1,7 @@
 export * from './StorageListener'
 export * from './dom'
 export * from './forward-exports'
+export * from './image'
 export * from './propsUtil'
 export * from './safeGlobals'
 export * from './writeToClipboard'

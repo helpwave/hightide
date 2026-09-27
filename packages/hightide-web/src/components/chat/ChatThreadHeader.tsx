@@ -1,10 +1,11 @@
 import type { HTMLAttributes, ReactNode } from 'react'
 import clsx from 'clsx'
-import type { AvatarWithStatusProps } from '../display-and-visualization/Avatar'
-import { AvatarWithStatus } from '../display-and-visualization/Avatar'
+
+import { Avatar } from '../display-and-visualization/Avatar/Avatar'
+import type { AvatarProps } from '../display-and-visualization/Avatar/AvatarComponent'
 
 export type ChatThreadHeaderProps = HTMLAttributes<HTMLDivElement> & {
-  avatar?: AvatarWithStatusProps,
+  avatar?: AvatarProps,
   title: ReactNode,
   subtitle?: ReactNode,
   leftActions?: ReactNode,
@@ -23,11 +24,6 @@ export const ChatThreadHeader = ({
   trailingActionsClassName,
   ...props
 }: ChatThreadHeaderProps) => {
-  const resolvedAvatar = {
-    ...avatar,
-    status: avatar?.status ?? 'unknown',
-  }
-
   return (
     <div {...props} className={clsx('chat-thread-header', props.className)}>
       {leftActions && (
@@ -35,7 +31,10 @@ export const ChatThreadHeader = ({
           {leftActions}
         </div>
       )}
-      <AvatarWithStatus size="lg" {...resolvedAvatar}/>
+      <Avatar
+        size="lg"
+        {...avatar}
+      />
       <span className="chat-thread-header-info">
         <span className="chat-thread-header-title">{title}</span>
         {subtitle && (
