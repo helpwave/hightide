@@ -17,9 +17,10 @@ export const ExpansionIcon = ({
   return (
     <div
       {...props}
-      className={clsx('expansion-icon', props.className)}
       data-expanded={isExpanded ? '' : undefined}
-      data-disabled={disabled ? '' : undefined}>
+      data-disabled={disabled ? '' : undefined}
+      className={clsx('expansion-icon', props.className)}
+    >
       {children ? (
         children
       ) : (

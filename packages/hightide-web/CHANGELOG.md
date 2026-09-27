@@ -5,7 +5,28 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/)
 and adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
-## [0.17.2] - 2026-09-21
+## [0.18.0] - unpublished
+
+### Added
+
+- `ExpandableHeader` `triggerProps` for the header toggle button
+- `ExpandableContent` `isClosingOnClick` to collapse when the content is clicked
+- `NavigationItemList` `onClose` so Escape on items can close the parent menu
+
+### Changed
+
+- Click and keyboard handlers no longer call `event.stopPropagation` (`Button`, `IconButton`, `Select`, `MultiSelect`, `FileInput`, `Navigation`, `Expandable`, and `PropsUtil` helpers)
+- `Button` no longer stops click bubbling; `allowClickEventPropagation` has no effect
+- `Expandable` header is a `<button>`; `allowContainerToggle` is removed
+- `FAQSection` uses `isClosingOnClick` instead of container toggle
+- `Navigation` handles Escape on the focused control instead of a capturing menu handler
+- `MultiSelectChipDisplayTrigger` uses an overlay click target so chip remove buttons do not need to stop propagation
+
+### Removed
+
+- `ExpandableRoot`'s `allowContainerToggle`
+
+## [0.17.2] - 2026-09-23
 
 ### Added
 

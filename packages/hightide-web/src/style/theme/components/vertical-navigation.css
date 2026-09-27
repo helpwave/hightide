@@ -7,8 +7,16 @@
     @apply list-none m-0 p-0 outline-none;
   }
 
+  .vertical-navigation-item-row-container {
+    @apply relative flex-row-0 min-h-11 min-w-0;
+  }
+
   .vertical-navigation-item-row {
-    @apply relative flex-row-1 items-center min-h-11 min-w-0 h-full w-full rounded-md;
+    @apply flex-row-1 items-center min-h-11 min-w-0 h-full w-full rounded-md;
+
+    &[data-has-children][data-has-link] {
+      @apply mr-11;
+    }
 
     &[data-interactable] {
       @apply hover:cursor-pointer;

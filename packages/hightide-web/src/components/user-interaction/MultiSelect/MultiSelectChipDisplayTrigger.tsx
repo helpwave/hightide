@@ -1,4 +1,3 @@
-import clsx from 'clsx'
 import type { ForwardedRef, HTMLAttributes, ReactNode } from 'react'
 import { forwardRef, useEffect, useRef } from 'react'
 import { useMultiSelectContext } from './MultiSelectContext'
@@ -6,6 +5,7 @@ import { IconButton } from '../IconButton'
 import { useHightideTranslation } from '@helpwave/hightide-utils/context/translation'
 import { XIcon, Plus } from 'lucide-react'
 import { ReactUtils } from '@helpwave/hightide-utils/utils'
+import clsx from 'clsx'
 
 export type MultiSelectChipDisplayTriggerProps = HTMLAttributes<HTMLDivElement> & {
   disabled?: boolean,
@@ -45,29 +45,31 @@ export const MultiSelectChipDisplayTrigger = forwardRef<
     <div
       {...props}
       ref={ReactUtils.assingRefsBuilder([innerRef, ref])}
-      onClick={(event) => {
-        props.onClick?.(event)
-        if (event.defaultPrevented) return
-        if (!hasInteractions) return
-        context.toggleIsOpen()
-      }}
-      className={clsx('multi-select-chip-display-button', props.className)}
+      className={clsx('multi-select-chip-display-container', props.className)}
       data-value={context.value.length > 0 ? '' : undefined}
       data-disabled={disabled ? '' : undefined}
       data-readonly={readOnly ? '' : undefined}
       data-invalid={invalid ? '' : undefined}
       aria-invalid={invalid}
       aria-disabled={disabled}
-      aria-readonly={readOnly}>
+      aria-readonly={readOnly}
+    >
+      <div
+        onClick={() => {
+          console.log('clicked')
+          if (!hasInteractions) return
+          context.toggleIsOpen()
+        }}
+        className="multi-select-chip-display-button"
+      />
       {selectedOptions.map((opt) => (
         <div key={opt.value.id} className="multi-select-chip-display-chip">
           {opt.display}
           <IconButton
             tooltip={translation('remove')}
             disabled={!hasInteractions}
-            onClick={(e) => {
+            onClick={() => {
               context.toggleSelection(opt.value.id, false)
-              e.preventDefault()
             }}
             size="sm"
             color="negative"
@@ -81,8 +83,7 @@ export const MultiSelectChipDisplayTrigger = forwardRef<
       <IconButton
         id={context.config.ids.trigger}
         disabled={!hasInteractions}
-        onClick={(event) => {
-          event.stopPropagation()
+        onClick={() => {
           if (!hasInteractions) return
           context.toggleIsOpen()
         }}
@@ -106,7 +107,7 @@ export const MultiSelectChipDisplayTrigger = forwardRef<
         aria-controls={
           context.isOpen ? context.config.ids.content : undefined
         }
-        className="size-9"
+        className="multi-select-chip-display-add-button"
       >
         <Plus />
       </IconButton>

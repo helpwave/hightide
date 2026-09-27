@@ -46,7 +46,6 @@ export type ExpandableRootProps = HTMLAttributes<HTMLDivElement> & {
   onExpandedChange?: (isExpanded: boolean) => void,
   isInitialExpanded?: boolean,
   disabled?: boolean,
-  allowContainerToggle?: boolean,
 }
 
 export const ExpandableRoot = forwardRef<HTMLDivElement, ExpandableRootProps>(function ExpandableRoot({
@@ -56,7 +55,6 @@ export const ExpandableRoot = forwardRef<HTMLDivElement, ExpandableRootProps>(fu
   onExpandedChange,
   isInitialExpanded = false,
   disabled = false,
-  allowContainerToggle = false,
   ...props
 }, ref) {
   const generatedId = useId()
@@ -92,16 +90,10 @@ export const ExpandableRoot = forwardRef<HTMLDivElement, ExpandableRootProps>(fu
         {...props}
         ref={ref}
         id={ids.root}
-        className={clsx('expandable-root', props.className)}
-        onClick={(event) => {
-          props.onClick?.(event)
-          if (allowContainerToggle) {
-            toggle()
-          }
-        }}
         data-expanded={isExpanded ? '' : undefined}
         data-disabled={disabled ? '' : undefined}
-        data-containertoggleable={allowContainerToggle ? '' : undefined}>
+        className={clsx('expandable-root', props.className)}
+      >
         {children}
       </div>
     </ExpandableContext.Provider>
@@ -114,11 +106,13 @@ export const ExpandableRoot = forwardRef<HTMLDivElement, ExpandableRootProps>(fu
 
 export type ExpandableHeaderProps = HTMLAttributes<HTMLDivElement> & {
   isUsingDefaultIcon?: boolean,
+  triggerProps?: HTMLAttributes<HTMLButtonElement>,
 }
 
 export const ExpandableHeader = forwardRef<HTMLDivElement, ExpandableHeaderProps>(function ExpandableHeader({
   children,
   isUsingDefaultIcon = true,
+  triggerProps,
   ...props
 }, ref) {
   const { isExpanded, toggle, ids, setIds, disabled } = useExpandableContext()
@@ -131,23 +125,28 @@ export const ExpandableHeader = forwardRef<HTMLDivElement, ExpandableHeaderProps
 
   return (
     <div
-      {...props}
       ref={ref}
+      {...props}
       id={ids.header}
-      className={clsx('expandable-header', props.className)}
-      onClick={event => {
-        event.stopPropagation()
-        props.onClick?.(event)
-        toggle()
-      }}
-      data-expanded={isExpanded ? '' : undefined}
-      data-disabled={disabled ? '' : undefined}
-      aria-expanded={isExpanded}
-      aria-controls={ids.content}
-      aria-disabled={disabled || undefined}>
-      {children}
+      className={clsx('expandable-header-container', props.className)}
+    >
+      <button
+        {...triggerProps}
+        onClick={event => {
+          triggerProps?.onClick?.(event)
+          toggle()
+        }}
+        data-expanded={isExpanded ? '' : undefined}
+        data-disabled={disabled ? '' : undefined}
+        aria-expanded={isExpanded}
+        aria-controls={ids.content}
+        aria-disabled={disabled || undefined}
+        className={clsx('expandable-header', triggerProps?.className)}
+      >
+        {children}
+      </button>
       <Visibility isVisible={isUsingDefaultIcon}>
-        <ExpansionIcon isExpanded={isExpanded} disabled={disabled} />
+        <ExpansionIcon isExpanded={isExpanded} disabled={disabled} className="expandable-header-icon" />
       </Visibility>
     </div>
   )
@@ -159,14 +158,16 @@ export const ExpandableHeader = forwardRef<HTMLDivElement, ExpandableHeaderProps
 
 export type ExpandableContentProps = HTMLAttributes<HTMLDivElement> & {
   forceMount?: boolean,
+  isClosingOnClick?: boolean,
 }
 
 export const ExpandableContent = forwardRef<HTMLDivElement, ExpandableContentProps>(function ExpandableContent({
   children,
   forceMount = false,
+  isClosingOnClick = false,
   ...props
 }, forwardedRef) {
-  const { isExpanded, ids, setIds } = useExpandableContext()
+  const { isExpanded, ids, setIds, setIsExpanded } = useExpandableContext()
 
   const ref = useRef<HTMLDivElement | null>(null)
 
@@ -184,9 +185,16 @@ export const ExpandableContent = forwardRef<HTMLDivElement, ExpandableContentPro
       {...props}
       ref={ReactUtils.assingRefsBuilder([ref, forwardedRef])}
       id={ids.content}
-      className={clsx('expandable-content', props.className)}
       data-expanded={isExpanded ? '' : undefined}
-      data-state={transitionState}>
+      data-state={transitionState}
+      className={clsx('expandable-content', props.className)}
+      onClick={event => {
+        props.onClick?.(event)
+        if (isClosingOnClick) {
+          setIsExpanded(false)
+        }
+      }}
+    >
       <Visibility isVisible={forceMount || isExpanded}>
         {children}
       </Visibility>

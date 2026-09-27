@@ -21,12 +21,11 @@ export const FAQSection = ({
         <li key={index}>
           <ExpandableRoot
             {...restProps}
-            allowContainerToggle={true}
           >
             <ExpandableHeader>
               {title}
             </ExpandableHeader>
-            <ExpandableContent>
+            <ExpandableContent isClosingOnClick>
               {content}
             </ExpandableContent>
           </ExpandableRoot>

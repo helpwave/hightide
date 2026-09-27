@@ -7,8 +7,12 @@
     }
   }
 
+  .expandable-header-container {
+    @apply relative flex-row-0;
+  }
+
   .expandable-header {
-    @apply flex-row-2 justify-between items-center py-2 px-4 rounded-lg select-none;
+    @apply flex-row-2 flex-1 justify-between items-center py-2 px-4 rounded-lg select-none;
 
     &:not([data-disabled]) {
       @apply cursor-pointer surface coloring-solid-hover;
@@ -38,6 +42,10 @@
     &[data-expanded] {
       @apply max-h-24 opacity-100 py-2 duration-(--animation-duration-in);
     }
+  }
+
+  .expandable-header-icon {
+    @apply absolute right-2 top-1/2 -translate-y-1/2;
   }
 }
 

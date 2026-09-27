@@ -12,9 +12,7 @@ type Story = StoryObj<typeof meta>;
 
 export const expandable: Story = {
   args: {
-    isExpanded: false,
     disabled: false,
-    allowContainerToggle: true,
     onChange: action('onChange'),
   },
   render: (args) => (
