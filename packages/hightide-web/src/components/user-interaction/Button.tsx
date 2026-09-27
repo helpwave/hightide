@@ -46,7 +46,6 @@ export const Button = forwardRef<HTMLButtonElement, ButtonProps>(function SolidB
   color = 'primary',
   coloringStyle = 'solid',
   disabled,
-  allowClickEventPropagation = false,
   isProcessing = false,
   ...props
 }, ref) {
@@ -60,17 +59,12 @@ export const Button = forwardRef<HTMLButtonElement, ButtonProps>(function SolidB
 
       onClick={event => {
         if (isProcessing) {
-          event.preventDefault()
-          event.stopPropagation()
           return
-        }
-        if(!allowClickEventPropagation) {
-          event.stopPropagation()
         }
         props.onClick?.(event)
       }}
 
-      data-name={props['data-name'] ?? 'button'}
+      data-name="button"
       data-disabled={disabled ? '': undefined}
       data-processing={isProcessing ? '': undefined}
       data-size={size ?? undefined}
