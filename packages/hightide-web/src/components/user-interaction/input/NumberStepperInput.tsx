@@ -6,12 +6,13 @@ import { IconButton } from '../IconButton'
 import { useHightideTranslation } from '@helpwave/hightide-utils/context/translation'
 import type { FormFieldInteractionStates } from '../../form/FieldLayout'
 import type { FormFieldDataHandling } from '../../form/FormField'
-import { PropsUtil } from '../../../utils/propsUtil'
 import { useControlledState } from '@helpwave/hightide-utils/hooks'
 import type { ChangeRateCurveProps, StepperLoopEvent } from '@helpwave/hightide-utils/hooks'
 import { useStepperHold } from '@helpwave/hightide-utils/hooks'
 import { NumberInput } from './NumberInput'
 import type { DirectionNumber } from '@helpwave/hightide-utils/utils'
+
+import { PropsUtil } from '../../../utils/propsUtil'
 
 export type NumberStepperInputLayout = 'row' | 'col'
 
@@ -174,7 +175,7 @@ export const NumberStepperInput = forwardRef<HTMLInputElement, NumberStepperInpu
         disabled={disabled}
         readOnly={readOnly}
         required={required}
-        data-name="number-stepper-input-field"
+        className="number-stepper-input-field"
         onKeyDown={(event) => {
           props.onKeyDown?.(event)
           if (event.key === 'ArrowUp') {
@@ -196,8 +197,7 @@ export const NumberStepperInput = forwardRef<HTMLInputElement, NumberStepperInpu
             event.preventDefault()
             stop('keyboard', -1)
           }
-        }}
-      />
+        }}/>
       {layout === 'col' ? minusButton : plusButton}
     </div>
   )

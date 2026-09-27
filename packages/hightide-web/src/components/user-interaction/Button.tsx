@@ -1,3 +1,4 @@
+import clsx from 'clsx'
 import type { ButtonHTMLAttributes } from 'react'
 import { forwardRef } from 'react'
 import { LoadingSpinner } from '../layout/loading/LoadingSpinner'
@@ -70,16 +71,15 @@ export const Button = forwardRef<HTMLButtonElement, ButtonProps>(function SolidB
         props.onClick?.(event)
       }}
 
-      data-name={props['data-name'] ?? 'button'}
+      className={clsx('button', props.className)}
       data-disabled={disabled ? '': undefined}
       data-processing={isProcessing ? '': undefined}
       data-size={size ?? undefined}
       data-color={color ?? undefined}
-      data-coloringstyle={coloringStyle ?? undefined}
-    >
+      data-coloringstyle={coloringStyle ?? undefined}>
       {children}
       {isProcessing && (
-        <span data-name="button-processing-overlay">
+        <span className="button-processing-overlay">
           <LoadingSpinner />
         </span>
       )}

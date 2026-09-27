@@ -1,3 +1,4 @@
+import clsx from 'clsx'
 import type React from 'react'
 import type { ComponentPropsWithoutRef, ForwardedRef, ReactNode } from 'react'
 import { forwardRef, useEffect, useRef } from 'react'
@@ -9,11 +10,10 @@ import { ReactUtils } from '@helpwave/hightide-utils/utils'
 
 export interface MultiSelectTriggerProps<T = string>
   extends ComponentPropsWithoutRef<'div'> {
-  'placeholder'?: ReactNode,
-  'disabled'?: boolean,
-  'selectedDisplay'?: (values: T[]) => ReactNode,
-  'hideExpansionIcon'?: boolean,
-  'data-name'?: string,
+  placeholder?: ReactNode,
+  disabled?: boolean,
+  selectedDisplay?: (values: T[]) => ReactNode,
+  hideExpansionIcon?: boolean,
 }
 
 type MultiSelectTriggerComponent = <T = string>(
@@ -94,7 +94,7 @@ const MultiSelectTriggerImpl = forwardRef<
           break
         }
       }}
-      data-name={props['data-name'] ?? 'multi-select-button'}
+      className={clsx('multi-select-button', props.className)}
       data-value={hasValue ? '' : undefined}
       data-disabled={disabled ? '' : undefined}
       data-readonly={readOnly ? '' : undefined}
@@ -106,8 +106,7 @@ const MultiSelectTriggerImpl = forwardRef<
       aria-readonly={readOnly}
       aria-haspopup="dialog"
       aria-expanded={context.isOpen}
-      aria-controls={context.isOpen ? context.config.ids.content : undefined}
-    >
+      aria-controls={context.isOpen ? context.config.ids.content : undefined}>
       <MultiSelectOptionDisplayContext.Provider value="trigger">
         {hasValue
           ? selectedDisplay?.(context.value) ?? (

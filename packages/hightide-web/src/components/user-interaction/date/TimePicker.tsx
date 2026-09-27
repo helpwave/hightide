@@ -1,3 +1,4 @@
+import clsx from 'clsx'
 import { useEffect, useMemo, useRef } from 'react'
 import { closestMatch, range } from '@helpwave/hightide-utils/utils'
 import { Button } from '../Button'
@@ -50,6 +51,8 @@ export const TimePicker = ({
   const minutes = useMemo(() => {
     const full = range(60)
     switch (minuteIncrement) {
+    case '1min':
+      return full
     case '5min':
       return full.filter(value => value % 5 === 0)
     case '10min':
@@ -126,8 +129,8 @@ export const TimePicker = ({
   }
 
   return (
-    <div data-name="time-picker-container" className={className}>
-      <div data-name="time-picker-value-column">
+    <div className={clsx('time-picker-container', className)}>
+      <div className="time-picker-value-column">
         {hours.map(hour => {
           const isSelected = hour === value.getHours() - (!is24HourFormat && isPM ? 12 : 0)
           return (
@@ -144,7 +147,7 @@ export const TimePicker = ({
           )
         })}
       </div>
-      <div data-name="time-picker-value-column">
+      <div className="time-picker-value-column">
         {minutes.map(minute => {
           const isSelected = minute === closestMinute
           return (
@@ -162,7 +165,7 @@ export const TimePicker = ({
         })}
       </div>
       <Visibility isVisible={precision === 'second' || precision === 'millisecond'}>
-        <div data-name="time-picker-value-column">
+        <div className="time-picker-value-column">
           {seconds.map(second => {
             const isSelected = second === closestSecond
             return (
@@ -181,7 +184,7 @@ export const TimePicker = ({
         </div>
       </Visibility>
       <Visibility isVisible={precision === 'millisecond'}>
-        <div data-name="time-picker-value-column">
+        <div className="time-picker-value-column">
           {milliseconds.map(millisecond => {
             const isSelected = millisecond === closestMillisecond
             return (
@@ -200,7 +203,7 @@ export const TimePicker = ({
         </div>
       </Visibility>
       {!is24HourFormat && (
-        <div data-name="time-picker-value-column">
+        <div className="time-picker-value-column">
           <Button
             size="sm"
             color={!isPM ? 'primary' : 'neutral'}

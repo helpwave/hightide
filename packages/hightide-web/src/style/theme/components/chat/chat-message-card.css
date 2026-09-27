@@ -50,7 +50,7 @@
       @apply flex-1;
     }
 
-    > [data-name="button"] {
+    > .button {
       @apply min-w-0;
     }
   }

@@ -9,13 +9,13 @@ import { Visibility } from '../../layout/Visibility'
 import type { FormFieldDataHandling } from '../../form/FormField'
 import { DateTimePickerDialog } from '../date/DateTimePickerDialog'
 import { useControlledState } from '@helpwave/hightide-utils/hooks'
-import { PropsUtil } from '../../../utils/propsUtil'
 import type { FormFieldInteractionStates } from '../../form/FieldLayout'
 import { PopUp } from '../../layout/popup/PopUp'
 import { IconButton } from '../IconButton'
 import { DateUtils, type DateTimeFormat } from '@helpwave/hightide-utils/utils'
 import { DateTimeField } from './DateTimeField'
 import { ReactUtils } from '@helpwave/hightide-utils/utils'
+import { PropsUtil } from '../../../utils/propsUtil'
 
 export interface DateTimeInputProps extends
   Partial<FormFieldInteractionStates>,
@@ -107,7 +107,7 @@ export const DateTimeInput = forwardRef<HTMLDivElement, DateTimeInputProps>(func
   }, [isOpen, state])
 
   const focusField = () => {
-    fieldRef.current?.querySelector<HTMLElement>('[data-name="date-time-segment"]')?.focus()
+    fieldRef.current?.querySelector<HTMLElement>('.date-time-segment')?.focus()
   }
 
   const hasClear = !required && allowClear && !readOnly && !disabled && state !== null
@@ -131,12 +131,10 @@ export const DateTimeInput = forwardRef<HTMLDivElement, DateTimeInputProps>(func
         }}
 
         className={clsx('date-time-input', props.className)}
-        data-name="date-time-input"
         data-value={PropsUtil.dataAttributes.bool(!!state)}
         data-has-actions={PropsUtil.dataAttributes.bool(hasActions)}
         {...PropsUtil.dataAttributes.interactionStates({ disabled, readOnly, invalid, required })}
-        {...PropsUtil.aria.interactionStates({ disabled, readOnly, invalid, required }, props)}
-      >
+        {...PropsUtil.aria.interactionStates({ disabled, readOnly, invalid, required }, props)}>
         <DateTimeField
           ref={fieldRef}
           value={toZoned(state)}

@@ -1,3 +1,4 @@
+import clsx from 'clsx'
 import type { RefObject } from 'react'
 import { forwardRef, useCallback, useContext, useMemo, useRef } from 'react'
 import { useEventCallbackStabilizer } from '@helpwave/hightide-utils/hooks'
@@ -9,23 +10,22 @@ import type { UseFocusTrapProps } from '../../../hooks/focus/useFocusTrap'
 import { FocusTrap } from '../../utils/FocusTrap'
 import type { UseOutsideClickHandlers, UseOutsideClickOptions } from '../../../hooks/useOutsideClick'
 import { useOutsideClick } from '../../../hooks/useOutsideClick'
-import { PropsUtil } from '../../../utils/propsUtil'
 import { usePresenceRef } from '../../../hooks/usePresenceRef'
 import { useLogOnce } from '@helpwave/hightide-utils/hooks'
 import { PopUpContext } from './PopUpContext'
 import { useOverlayRegistry } from '@helpwave/hightide-utils/hooks'
 import { useScrollObserver } from '../../../hooks/useScrollObserver'
 import { ReactUtils } from '@helpwave/hightide-utils/utils'
+import { PropsUtil } from '../../../utils/propsUtil'
 
 export interface PopUpProps extends Omit<AnchoredFloatingContainerProps, 'anchor'>, Partial<UseOutsideClickHandlers> {
-  'isOpen'?: boolean,
-  'focusTrapOptions'?: Omit<UseFocusTrapProps, 'container'>,
-  'outsideClickOptions'?: Partial<UseOutsideClickOptions>,
-  'onClose'?: () => void,
-  'forceMount'?: boolean,
-  'anchorExcludedFromOutsideClick'?: boolean,
-  'anchor'?: RefObject<HTMLElement |null>,
-  'data-name'?: string,
+  isOpen?: boolean,
+  focusTrapOptions?: Omit<UseFocusTrapProps, 'container'>,
+  outsideClickOptions?: Partial<UseOutsideClickOptions>,
+  onClose?: () => void,
+  forceMount?: boolean,
+  anchorExcludedFromOutsideClick?: boolean,
+  anchor?: RefObject<HTMLElement |null>,
 }
 
 export const PopUp = forwardRef<HTMLDivElement, PopUpProps>(function PopUp({
@@ -99,8 +99,7 @@ export const PopUp = forwardRef<HTMLDivElement, PopUpProps>(function PopUp({
               overflow: 'hidden',
               ...props.style
             }}
-            data-name={props['data-name'] ?? 'pop-up'}
-          >
+            className={clsx('pop-up', props.className)}>
             {children}
           </AnchoredFloatingContainer>
         </FocusTrap>

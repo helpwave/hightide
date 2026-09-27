@@ -1,10 +1,10 @@
 @layer components {
-  [data-name="button"] {
+  .button {
     @apply relative flex flex-row items-center justify-center element;
     @apply: font-semibold whitespace-nowrap w-fit;
     transition: var(--coloring-transitions), var(--focus-transitions);
 
-    [data-name="button-processing-overlay"] {
+    .button-processing-overlay {
       @apply absolute inset-0 flex items-center justify-center rounded-[inherit] bg-surface/40 pointer-events-none;
     }
 

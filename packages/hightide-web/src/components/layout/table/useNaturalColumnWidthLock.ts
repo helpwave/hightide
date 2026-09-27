@@ -37,7 +37,7 @@ export function useNaturalColumnWidthLock<T>({
     if (element.getBoundingClientRect().width === 0) return
     if (getComputedStyle(element).tableLayout !== 'auto') return
 
-    const headerCells = element.querySelectorAll<HTMLTableCellElement>('th[data-name="table-header-cell"]')
+    const headerCells = element.querySelectorAll<HTMLTableCellElement>('th.table-header-cell')
     if (headerCells.length !== columns.length) return
     const measured: Record<string, number> = {}
     columns.forEach((column, index) => {

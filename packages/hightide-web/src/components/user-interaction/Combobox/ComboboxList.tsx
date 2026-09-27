@@ -34,8 +34,7 @@ export const ComboboxList = forwardRef<HTMLUListElement, ComboboxListProps>(
         role="listbox"
         aria-label={translation('filterOptions')}
         tabIndex={-1}
-        data-name="combobox-list"
-      >
+        className={clsx('combobox-list', props.className)}>
         {children}
         <li
           role="option"
@@ -43,8 +42,7 @@ export const ComboboxList = forwardRef<HTMLUListElement, ComboboxListProps>(
           aria-disabled={true}
           aria-live="polite"
           aria-atomic={true}
-          data-name="combobox-list-status"
-          className={clsx({ 'sr-only': count > 0 })}
+          className={clsx('combobox-list-status', { 'sr-only': count > 0 })}
         >
           {translation('nResultsFound', { count })}
         </li>

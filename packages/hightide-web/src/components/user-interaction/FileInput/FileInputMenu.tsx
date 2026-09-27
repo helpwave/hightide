@@ -7,6 +7,7 @@ import { Button } from '../Button'
 import { IconButton } from '../IconButton'
 import { useFileInputContext } from './FileInputContext'
 import {
+
   createFileInputItemsFromFileList,
   formatFileInputAccept,
   isFileDataTransfer
@@ -69,24 +70,24 @@ export const FileInputMenu = ({
       }}
     >
       {(context.maxFiles != null || allowedFileTypes != null) && (
-        <div data-name="file-input-menu-meta">
+        <div className="file-input-menu-meta">
           {context.maxFiles != null && (
-            <span data-name="file-input-menu-meta-text">
+            <span className="file-input-menu-meta-text">
               {translation('maximumNumberOfFiles', { count: context.maxFiles })}
             </span>
           )}
           {allowedFileTypes != null && (
-            <span data-name="file-input-menu-meta-text">
+            <span className="file-input-menu-meta-text">
               {translation('allowedFileTypes', { types: allowedFileTypes })}
             </span>
           )}
         </div>
       )}
-      <div data-name="file-input-menu-list">
+      <div className="file-input-menu-list">
         {context.files.map((file) => (
-          <div key={file.id} data-name="file-input-menu-row">
+          <div key={file.id} className="file-input-menu-row">
             <FileText aria-hidden={true} />
-            <span data-name="file-input-menu-title">{file.name}</span>
+            <span className="file-input-menu-title">{file.name}</span>
             {canEdit && (
               <IconButton
                 tooltip={translation('remove')}

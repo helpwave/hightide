@@ -1,3 +1,4 @@
+import clsx from 'clsx'
 import { type HTMLAttributes, useCallback } from 'react'
 import type { FormFieldInteractionStates } from '../form/FieldLayout'
 import type { FormFieldDataHandling } from '../form/FormField'
@@ -45,7 +46,6 @@ export const Switch = ({
   return (
     <div
       {...props}
-
       onClick={(event) => {
         if (!disabled && !readOnly) {
           setValue(prev => !prev)
@@ -66,12 +66,11 @@ export const Switch = ({
       aria-checked={value}
       {...PropsUtil.aria.interactionStates({ disabled, invalid, readOnly, required }, props)}
 
-      data-name={props['data-name'] ?? 'switch'}
+      className={clsx('switch', props.className)}
       data-active={PropsUtil.dataAttributes.bool(value)}
-      {...PropsUtil.dataAttributes.interactionStates({ disabled, invalid, readOnly, required })}
-    >
-      <div data-name="switch-track" className="switch-track">
-        <div data-name="switch-thumb" data-active={PropsUtil.dataAttributes.bool(value)} className="switch-thumb" />
+      {...PropsUtil.dataAttributes.interactionStates({ disabled, invalid, readOnly, required })}>
+      <div className="switch-track">
+        <div data-active={PropsUtil.dataAttributes.bool(value)} className="switch-thumb" />
       </div>
     </div>
   )

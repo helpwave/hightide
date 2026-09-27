@@ -1,3 +1,4 @@
+import clsx from 'clsx'
 import type { ForwardedRef, HTMLAttributes, ReactNode } from 'react'
 import { forwardRef, useEffect, useRef } from 'react'
 import { useMultiSelectContext } from './MultiSelectContext'
@@ -7,9 +8,8 @@ import { XIcon, Plus } from 'lucide-react'
 import { ReactUtils } from '@helpwave/hightide-utils/utils'
 
 export type MultiSelectChipDisplayTriggerProps = HTMLAttributes<HTMLDivElement> & {
-  'disabled'?: boolean,
-  'placeholder'?: ReactNode,
-  'data-name'?: string,
+  disabled?: boolean,
+  placeholder?: ReactNode,
 }
 
 export const MultiSelectChipDisplayTrigger = forwardRef<
@@ -51,17 +51,16 @@ export const MultiSelectChipDisplayTrigger = forwardRef<
         if (!hasInteractions) return
         context.toggleIsOpen()
       }}
-      data-name={props['data-name'] ?? 'multi-select-chip-display-button'}
+      className={clsx('multi-select-chip-display-button', props.className)}
       data-value={context.value.length > 0 ? '' : undefined}
       data-disabled={disabled ? '' : undefined}
       data-readonly={readOnly ? '' : undefined}
       data-invalid={invalid ? '' : undefined}
       aria-invalid={invalid}
       aria-disabled={disabled}
-      aria-readonly={readOnly}
-    >
+      aria-readonly={readOnly}>
       {selectedOptions.map((opt) => (
-        <div key={opt.value.id} data-name="multi-select-chip-display-chip">
+        <div key={opt.value.id} className="multi-select-chip-display-chip">
           {opt.display}
           <IconButton
             tooltip={translation('remove')}

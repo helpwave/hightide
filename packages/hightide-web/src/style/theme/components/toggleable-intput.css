@@ -1,5 +1,5 @@
 @layer components {
-    [data-name="togglable-input"] {
+    .togglable-input {
         all: unset;
         @apply w-full rounded-md focus-style-none focus-style-outline focusable;
 

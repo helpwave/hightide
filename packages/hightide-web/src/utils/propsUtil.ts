@@ -123,22 +123,22 @@ function navigate<T>({
   return (event) => {
     switch (event.key) {
     case 'ArrowLeft':
-      left(event)
+      left?.(event)
       event.preventDefault()
       event.stopPropagation()
       break
     case 'ArrowRight':
-      right(event)
+      right?.(event)
       event.preventDefault()
       event.stopPropagation()
       break
     case 'ArrowUp':
-      up(event)
+      up?.(event)
       event.preventDefault()
       event.stopPropagation()
       break
     case 'ArrowDown':
-      down(event)
+      down?.(event)
       event.preventDefault()
       event.stopPropagation()
       break

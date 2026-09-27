@@ -8,6 +8,7 @@ import { Visibility } from '../../layout/Visibility'
 import { Button } from '../Button'
 import { NumberStepperInput } from '../input/NumberStepperInput'
 import type {
+
   TimePickerMillisecondIncrement,
   TimePickerMinuteIncrement,
   TimePickerSecondIncrement
@@ -160,7 +161,7 @@ export const TimeInput = ({
   }, [updateValue])
 
   return (
-    <div data-name="time-input" className={clsx('time-input', className)}>
+    <div className={clsx('time-input', className)}>
       <NumberStepperInput
         layout="col"
         looping={allowLooping}
@@ -174,8 +175,7 @@ export const TimeInput = ({
         onEditComplete={setHourValue}
         formatDisplayedValue={padTwoDigits}
         onLooped={onHourLooped}
-        data-name="time-input-hour"
-        className="time-input-segment"
+        className="time-input-hour time-input-segment"
       />
       <span className="time-input-separator">:</span>
       <NumberStepperInput
@@ -190,8 +190,7 @@ export const TimeInput = ({
         onEditComplete={setMinuteValue}
         formatDisplayedValue={padTwoDigits}
         onLooped={onMinuteLooped}
-        data-name="time-input-minute"
-        className="time-input-segment"
+        className="time-input-minute time-input-segment"
       />
       <Visibility isVisible={precision === 'second' || precision === 'millisecond'}>
         <span className="time-input-separator">:</span>
@@ -206,8 +205,7 @@ export const TimeInput = ({
           onValueChange={setSecondValue}
           onEditComplete={setSecondValue}
           onLooped={onSecondLooped}
-          data-name="time-input-second"
-          className="time-input-segment"
+          className="time-input-second time-input-segment"
         />
       </Visibility>
       <Visibility isVisible={precision === 'millisecond'}>
@@ -223,12 +221,11 @@ export const TimeInput = ({
           onValueChange={setMillisecondValue}
           onEditComplete={setMillisecondValue}
           onLooped={onMillisecondLooped}
-          data-name="time-input-millisecond"
-          className="time-input-segment"
+          className="time-input-millisecond time-input-segment"
         />
       </Visibility>
       <Visibility isVisible={!is24HourFormat}>
-        <div data-name="time-input-period" className="time-input-period">
+        <div className="time-input-period">
           <Button
             size="sm"
             color={!isPM ? 'primary' : 'neutral'}

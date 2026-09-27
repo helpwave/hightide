@@ -1,3 +1,4 @@
+import clsx from 'clsx'
 import type { HTMLAttributes, ReactNode } from 'react'
 import { useId, useMemo, forwardRef } from 'react'
 import type { FormFieldInteractionStates } from '../../utils/propsUtil'
@@ -87,16 +88,13 @@ export const FormFieldLayout = forwardRef<HTMLDivElement, FormFieldLayoutProps>(
     <div
       {...props}
       ref={ref}
-
-      data-name="form-field-container"
-    >
+      className={clsx('form-field-container', props.className)}>
       {label && (
         <label
           {...labelProps}
           id={ids.label}
           htmlFor={ids.input}
-          data-name="form-field-label"
-        >
+          className={clsx('form-field-label', labelProps?.className)}>
           {label}
           {showRequiredIndicator && required && <div role="none" className="bg-primary w-2 h-2 rounded-full" />}
         </label>
@@ -105,9 +103,7 @@ export const FormFieldLayout = forwardRef<HTMLDivElement, FormFieldLayoutProps>(
         <p
           {...descriptionProps}
           id={ids.description}
-
-          data-name="form-field-description"
-        >
+          className={clsx('form-field-description', descriptionProps?.className)}>
           {description}
         </p>
       )}
@@ -116,13 +112,10 @@ export const FormFieldLayout = forwardRef<HTMLDivElement, FormFieldLayoutProps>(
         <div
           {...invalidDescriptionProps}
           id={ids.description}
-
           role="alert"
           aria-hidden={!invalid}
           aria-live="polite"
-
-          data-name="form-field-error"
-        >
+          className={clsx('form-field-error', invalidDescriptionProps?.className)}>
           {invalidDescription}
         </div>
       )}

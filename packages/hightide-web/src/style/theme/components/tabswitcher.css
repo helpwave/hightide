@@ -1,10 +1,10 @@
 @layer components {
-  [data-name="tab-list"] {
+  .tab-list {
     display: grid;
     grid-template-columns: repeat(var(--tab-count), 1fr);
   }
 
-  [data-name="tab-list-item"] {
+  .tab-list-item {
     @apply flex-row-0 grow justify-center px-3 py-2 typography-label-md border-b-4 transition-colors neutral coloring-text-hover;
     
     &[data-disabled] {
@@ -21,11 +21,11 @@
     }
   }
 
-  [data-name="tab-view"] {
+  .tab-view {
     @apply flex-col;
   }
 
-  [data-name="tab-panel"] {
+  .tab-panel {
     @apply flex-col-0 overflow-y-auto;
   }
 }

@@ -1,3 +1,4 @@
+import clsx from 'clsx'
 import type { InputHTMLAttributes } from 'react'
 import React, { forwardRef, useRef } from 'react'
 import type { UseDelayOptionsResolved } from '@helpwave/hightide-utils/hooks'
@@ -5,9 +6,10 @@ import { useDelay } from '@helpwave/hightide-utils/hooks'
 import { useFocusManagement } from '../../../hooks/focus/useFocusManagement'
 import type { FormFieldInteractionStates } from '../../form/FieldLayout'
 import type { FormFieldDataHandling } from '../../form/FormField'
-import { PropsUtil } from '../../../utils/propsUtil'
 import { useControlledState } from '@helpwave/hightide-utils/hooks'
 import { ReactUtils } from '@helpwave/hightide-utils/utils'
+
+import { PropsUtil } from '../../../utils/propsUtil'
 
 export type EditCompleteOptionsResolved = {
   onBlur: boolean,
@@ -28,9 +30,8 @@ export type InputProps = Omit<InputHTMLAttributes<HTMLInputElement>, 'value'>
   & Partial<FormFieldDataHandling<string>>
   & Partial<FormFieldInteractionStates>
   & {
-    'editCompleteOptions'?: EditCompleteOptions,
-    'initialValue'?: string,
-    'data-name'?: string,
+    editCompleteOptions?: EditCompleteOptions,
+    initialValue?: string,
   }
 
 /**
@@ -103,11 +104,10 @@ export const Input = forwardRef<HTMLInputElement, InputProps>(function Input({
         setValue(value)
       }}
 
-      data-name={props['data-name'] ?? 'input'}
+      className={clsx('input', props.className)}
       data-value={PropsUtil.dataAttributes.bool(!!value)}
       {...PropsUtil.dataAttributes.interactionStates({ ...props, invalid })}
 
-      {...PropsUtil.aria.interactionStates({ ...props, invalid }, props)}
-    />
+      {...PropsUtil.aria.interactionStates({ ...props, invalid }, props)}/>
   )
 })

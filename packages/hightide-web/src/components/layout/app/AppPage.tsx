@@ -24,13 +24,13 @@ export const AppSidebar = ({ isOpen = false, onClose, children, ...props }: AppS
     <>
       {isOpen && (
         <div
-          data-name="app-sidebar-backdrop"
+          className="app-sidebar-backdrop"
           onClick={onClose}
           role="presentation"
         />
       )}
       <div
-        data-name="app-sidebar-container"
+        className="app-sidebar-container"
         data-open={PropsUtil.dataAttributes.bool(isOpen)}
         style={{ zIndex }}
       >
@@ -39,12 +39,10 @@ export const AppSidebar = ({ isOpen = false, onClose, children, ...props }: AppS
           container={ref}
         >
           <aside
-            ref={ref}
             {...props}
-            data-name="app-sidebar-content"
+            ref={ref}
             data-open={PropsUtil.dataAttributes.bool(isOpen)}
-            className={clsx(props.className)}
-          >
+            className={clsx('app-sidebar-content', props.className)}>
             <IconButton
               className="app-sidebar-close-button"
               tooltip={translation('close')}
@@ -197,9 +195,7 @@ export const AppPage = ({
   return (
     <div
       {...props}
-      data-name="app-page"
-      className={clsx(props.className)}
-    >
+      className={clsx('app-page', props.className)}>
       <AppPageSidebarWithNavigation
         isOpen={isSidebarOpen}
         onClose={() => setIsSidebarOpen(false)}
@@ -210,8 +206,8 @@ export const AppPage = ({
         activeId={resolvedActiveId}
         LinkComponent={sidebarProps.LinkComponent}
       />
-      <div data-name="app-page-body">
-        <header data-name="app-page-header">
+      <div className="app-page-body">
+        <header className="app-page-header">
           <IconButton
             className="app-page-menu-button"
             tooltip={translation('menu')}
@@ -222,8 +218,8 @@ export const AppPage = ({
           </IconButton>
           {headerActions}
         </header>
-        <div data-name="app-page-content" data-no-scrolling={noScrolling ? '' : undefined}>
-          <main data-name="app-page-main-content" data-outer-no-scrolling={noScrolling ? '' : undefined}>
+        <div className="app-page-content" data-no-scrolling={noScrolling ? '' : undefined}>
+          <main className="app-page-main-content" data-outer-no-scrolling={noScrolling ? '' : undefined}>
             {children}
             {hasSpacer && (<div className="app-page-main-spacer" />)}
           </main>

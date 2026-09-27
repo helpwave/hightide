@@ -1,5 +1,5 @@
 @layer components {
-  [data-name="table-container"] {
+  .table-container {
     @apply flex-col-0 w-full overflow-auto border-2 rounded-lg bg-background;
 
     --table-rounding-bottom: var(--radius-lg);
@@ -20,7 +20,7 @@
     }
   }
 
-  [data-name="table"] {
+  .table {
     @apply table-fixed border-separate border-spacing-0;
     @apply bg-table-background text-table-text;
 
@@ -33,15 +33,15 @@
     }
   }
 
-  [data-name="table-filler-cell"] {
+  .table-filler-cell {
     @apply flex flex-row items-center w-1/2 h-6 text-disabled font-bold;
   }
 
-  [data-name="table-default-cell"] {
+  .table-default-cell {
     @apply block max-w-full overflow-ellipsis truncate;
   }
 
-  [data-name="table-header-cell"] {
+  .table-header-cell {
     @apply relative;
     @apply first:pl-3 last:pr-3;
     @apply border-b-2;
@@ -57,27 +57,27 @@
     @apply px-3 py-2.5 flex-row-1 items-center truncate;
   }
 
-  [data-name="table-body-row"] {
+  .table-body-row {
     @apply hover:bg-table-row-hover-background;
     &[data-clickable] {
       @apply hover:cursor-pointer;
     }
   }
 
-  [data-name="table-body-filler-row"] {
+  .table-body-filler-row {
     @apply hover:cursor-not-allowed;
     &[data-clickable] {
       @apply hover:cursor-pointer hover:bg-table-row-hover-background;
     }
   }
 
-  [data-name="table-body-cell"],
-  [data-name="table-body-filler-cell"] {
+  .table-body-cell,
+  .table-body-filler-cell {
     @apply px-3 first:pl-6 last:pr-6 py-2.5;
     @apply border-b-1;
   }
 
-  [data-name="table-resize-indicator"] {
+  .table-resize-indicator {
     @apply absolute right-1 top-1/2 -translate-y-1/2;
     @apply h-6 w-2 rounded bg-primary;
     @apply cursor-col-resize;
@@ -97,9 +97,9 @@
     }
   }
 
-  [data-name="table-body-row"]:last-child > [data-name="table-body-cell"],
-  [data-name="table-body-filler-row"]:last-child
-    > [data-name="table-body-filler-cell"] {
+  .table-body-row:last-child > .table-body-cell,
+  .table-body-filler-row:last-child
+    > .table-body-filler-cell {
     @apply first:rounded-bl-[var(--table-rounding-bottom)];
     @apply last:rounded-br-[calc(min(var(--table-rounding-right),var(--table-rounding-bottom)))];
     @apply border-b-0;

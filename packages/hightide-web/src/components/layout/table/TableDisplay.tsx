@@ -1,3 +1,4 @@
+import clsx from 'clsx'
 import type { TableHTMLAttributes } from 'react'
 import { useRef } from 'react'
 import './types'
@@ -11,10 +12,9 @@ import { useScrollbarState } from '../../../hooks/useScrollbarState'
 import { useNaturalColumnWidthLock } from './useNaturalColumnWidthLock'
 
 export interface TableDisplayProps extends TableHTMLAttributes<HTMLTableElement> {
-  'containerProps'?: Omit<React.HTMLAttributes<HTMLDivElement>, 'children'> & { 'data-name'?: string },
-  'tableHeaderProps'?: Omit<TableHeaderProps, 'children' | 'table'>,
-  'virtualized'?: boolean | TableVirtualizationOptions,
-  'data-name'?: string,
+  containerProps?: Omit<React.HTMLAttributes<HTMLDivElement>, 'children'>,
+  tableHeaderProps?: Omit<TableHeaderProps, 'children' | 'table'>,
+  virtualized?: boolean | TableVirtualizationOptions,
 }
 
 
@@ -48,14 +48,13 @@ export const TableDisplay = <T,>({
     <div
       {...containerProps}
       ref={containerRef}
-      data-name={containerProps?.['data-name'] ?? 'table-container'}
+      className={clsx('table-container', containerProps?.className)}
       data-scrollbar={scrollbarState}
-      data-page-scroll={usesPageScroll ? '' : undefined}
-    >
+      data-page-scroll={usesPageScroll ? '' : undefined}>
       <table
         {...props}
         ref={tableRef}
-        data-name={props['data-name'] ?? 'table'}
+        className={clsx('table', props.className)}
         data-column-sizing={columnSizingMode}
         data-natural-locked={isNaturalWidthLocked ? '' : undefined}
 
@@ -64,8 +63,7 @@ export const TableDisplay = <T,>({
             ? { width: Math.floor(Math.max(table.getTotalSize(), targetWidth ?? table.getTotalSize())) }
             : {}),
           ...props.style,
-        }}
-      >
+        }}>
         {children}
         <TableHeader {...tableHeaderProps} />
         {virtualized

@@ -24,7 +24,7 @@ export const SingleSelectProperty = ({
     >
       {({ invalid }) => (
         <div
-          data-name="property-input-wrapper"
+          className="property-input-wrapper"
           data-invalid={PropsUtil.dataAttributes.bool(invalid)}
         >
           <Select.Root
@@ -36,9 +36,8 @@ export const SingleSelectProperty = ({
             disabled={props.readOnly}
           >
             <Select.Trigger
-              className="flex-row-2 w-full items-center justify-between"
+              className="property-input flex-row-2 w-full items-center justify-between"
               hideExpansionIcon={true}
-              data-name="property-input"
             />
             <Select.Content>{children}</Select.Content>
           </Select.Root>

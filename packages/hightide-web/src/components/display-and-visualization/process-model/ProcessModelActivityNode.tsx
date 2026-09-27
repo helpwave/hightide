@@ -37,9 +37,8 @@ export const ProcessModelActivityNode = ({
   const rootName = kind === 'terminal' ? 'process-model-terminal-node' : 'process-model-activity-node'
   return (
     <div
-      data-name={rootName}
       id={`nd-${nodeId}`}
-      className={clsx('process-model-activity-node', className)}
+      className={clsx('process-model-activity-node', rootName, className)}
       data-kind={kind}
       data-bordered={PropsUtil.dataAttributes.bool(bordered)}
       data-active={PropsUtil.dataAttributes.bool(active)}

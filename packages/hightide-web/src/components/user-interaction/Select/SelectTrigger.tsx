@@ -1,3 +1,4 @@
+import clsx from 'clsx'
 import type React from 'react'
 import type { ComponentPropsWithoutRef, ForwardedRef, ReactNode } from 'react'
 import { forwardRef, useEffect, useRef } from 'react'
@@ -9,11 +10,10 @@ import { SelectOptionDisplayContext } from './SelectOption'
 import { ReactUtils } from '@helpwave/hightide-utils/utils'
 
 export interface SelectTriggerProps<T = string> extends ComponentPropsWithoutRef<'div'> {
-  'placeholder'?: ReactNode,
-  'disabled'?: boolean,
-  'selectedDisplay'?: (value: SelectOptionType<T> | null) => ReactNode,
-  'hideExpansionIcon'?: boolean,
-  'data-name'?: string,
+  placeholder?: ReactNode,
+  disabled?: boolean,
+  selectedDisplay?: (value: SelectOptionType<T> | null) => ReactNode,
+  hideExpansionIcon?: boolean,
 }
 
 type SelectTriggerComponent = <T = string>(
@@ -92,7 +92,7 @@ const SelectTriggerImpl = forwardRef<
           break
         }
       }}
-      data-name={props['data-name'] ?? 'select-button'}
+      className={clsx('select-button', props.className)}
       data-value={hasValue ? '' : undefined}
       data-disabled={disabled ? '' : undefined}
       data-readonly={readOnly ? '' : undefined}
@@ -104,8 +104,7 @@ const SelectTriggerImpl = forwardRef<
       aria-readonly={readOnly}
       aria-haspopup="dialog"
       aria-expanded={context.isOpen}
-      aria-controls={context.isOpen ? context.config.ids.content : undefined}
-    >
+      aria-controls={context.isOpen ? context.config.ids.content : undefined}>
       <SelectOptionDisplayContext.Provider value="trigger">
         {hasValue
           ? selectedDisplay?.(selectedOption) ?? (selectedOption?.display)

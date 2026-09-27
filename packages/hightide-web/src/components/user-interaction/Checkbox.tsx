@@ -1,11 +1,13 @@
+import clsx from 'clsx'
 import { Check, Minus } from 'lucide-react'
 import { useCallback, type HTMLAttributes } from 'react'
 import { Visibility } from '../layout/Visibility'
-import { PropsUtil } from '../../utils/propsUtil'
 import type { FormFieldInteractionStates } from '../form/FieldLayout'
 import type { FormFieldDataHandling } from '../form/FormField'
 import { useControlledState } from '@helpwave/hightide-utils/hooks'
 import { useEventCallbackStabilizer } from '@helpwave/hightide-utils/hooks'
+
+import { PropsUtil } from '../../utils/propsUtil'
 
 type CheckBoxSize = 'sm' | 'md' | 'lg' | null
 
@@ -59,7 +61,6 @@ export const Checkbox = ({
   return (
     <div
       {...props}
-
       onClick={(event) => {
         if (interactive) {
           setValue(prev => !prev)
@@ -87,13 +88,12 @@ export const Checkbox = ({
       aria-checked={interactive ? (indeterminate ? 'mixed' : value) : undefined}
       {...PropsUtil.aria.interactionStates({ disabled, invalid, readOnly, required }, props)}
 
-      data-name="checkbox"
-    >
+      className={clsx('checkbox', props.className)}>
       <Visibility isVisible={indeterminate}>
-        <Minus data-name="checkbox-indicator" className="checkbox-indicator" aria-hidden={true} />
+        <Minus className="checkbox-indicator" aria-hidden={true} />
       </Visibility>
       <Visibility isVisible={!indeterminate && (alwaysShowCheckIcon || value)}>
-        <Check data-name="checkbox-indicator" className="checkbox-indicator" aria-hidden={true} />
+        <Check className="checkbox-indicator" aria-hidden={true} />
       </Visibility>
     </div>
   )

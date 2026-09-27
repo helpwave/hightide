@@ -42,12 +42,11 @@ function useExpandableContext() {
 //
 
 export type ExpandableRootProps = HTMLAttributes<HTMLDivElement> & {
-  'isExpanded'?: boolean,
-  'onExpandedChange'?: (isExpanded: boolean) => void,
-  'isInitialExpanded'?: boolean,
-  'disabled'?: boolean,
-  'allowContainerToggle'?: boolean,
-  'data-name'?: string,
+  isExpanded?: boolean,
+  onExpandedChange?: (isExpanded: boolean) => void,
+  isInitialExpanded?: boolean,
+  disabled?: boolean,
+  allowContainerToggle?: boolean,
 }
 
 export const ExpandableRoot = forwardRef<HTMLDivElement, ExpandableRootProps>(function ExpandableRoot({
@@ -93,7 +92,7 @@ export const ExpandableRoot = forwardRef<HTMLDivElement, ExpandableRootProps>(fu
         {...props}
         ref={ref}
         id={ids.root}
-        data-name={props['data-name'] ?? 'expandable-root'}
+        className={clsx('expandable-root', props.className)}
         onClick={(event) => {
           props.onClick?.(event)
           if (allowContainerToggle) {
@@ -102,8 +101,7 @@ export const ExpandableRoot = forwardRef<HTMLDivElement, ExpandableRootProps>(fu
         }}
         data-expanded={isExpanded ? '' : undefined}
         data-disabled={disabled ? '' : undefined}
-        data-containertoggleable={allowContainerToggle ? '' : undefined}
-      >
+        data-containertoggleable={allowContainerToggle ? '' : undefined}>
         {children}
       </div>
     </ExpandableContext.Provider>
@@ -115,8 +113,7 @@ export const ExpandableRoot = forwardRef<HTMLDivElement, ExpandableRootProps>(fu
 //
 
 export type ExpandableHeaderProps = HTMLAttributes<HTMLDivElement> & {
-  'isUsingDefaultIcon'?: boolean,
-  'data-name'?: string,
+  isUsingDefaultIcon?: boolean,
 }
 
 export const ExpandableHeader = forwardRef<HTMLDivElement, ExpandableHeaderProps>(function ExpandableHeader({
@@ -137,7 +134,7 @@ export const ExpandableHeader = forwardRef<HTMLDivElement, ExpandableHeaderProps
       {...props}
       ref={ref}
       id={ids.header}
-      data-name={props['data-name'] ?? 'expandable-header'}
+      className={clsx('expandable-header', props.className)}
       onClick={event => {
         event.stopPropagation()
         props.onClick?.(event)
@@ -147,8 +144,7 @@ export const ExpandableHeader = forwardRef<HTMLDivElement, ExpandableHeaderProps
       data-disabled={disabled ? '' : undefined}
       aria-expanded={isExpanded}
       aria-controls={ids.content}
-      aria-disabled={disabled || undefined}
-    >
+      aria-disabled={disabled || undefined}>
       {children}
       <Visibility isVisible={isUsingDefaultIcon}>
         <ExpansionIcon isExpanded={isExpanded} disabled={disabled} />
@@ -162,8 +158,7 @@ export const ExpandableHeader = forwardRef<HTMLDivElement, ExpandableHeaderProps
 //
 
 export type ExpandableContentProps = HTMLAttributes<HTMLDivElement> & {
-  'forceMount'?: boolean,
-  'data-name'?: string,
+  forceMount?: boolean,
 }
 
 export const ExpandableContent = forwardRef<HTMLDivElement, ExpandableContentProps>(function ExpandableContent({
@@ -189,17 +184,15 @@ export const ExpandableContent = forwardRef<HTMLDivElement, ExpandableContentPro
       {...props}
       ref={ReactUtils.assingRefsBuilder([ref, forwardedRef])}
       id={ids.content}
-      data-name={props['data-name'] ?? 'expandable-content'}
+      className={clsx('expandable-content', props.className)}
       data-expanded={isExpanded ? '' : undefined}
-      data-state={transitionState}
-    >
+      data-state={transitionState}>
       <Visibility isVisible={forceMount || isExpanded}>
         {children}
       </Visibility>
     </div>
   )
 })
-
 
 //
 // Composite

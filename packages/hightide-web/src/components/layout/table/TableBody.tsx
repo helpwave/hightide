@@ -33,12 +33,11 @@ export const TableBody = React.memo(function TableBodyVisual() {
             key={row.id}
             onClick={() => onRowClick?.(row, table)}
             data-clickable={PropsUtil.dataAttributes.bool(!!onRowClick)}
-            data-name="table-body-row"
-            className={clsx(BagFunctionUtil.resolve(table.options.meta?.bodyRowClassName, row.original))}
+            className={clsx('table-body-row', BagFunctionUtil.resolve(table.options.meta?.bodyRowClassName, row.original))}
           >
             {row.getVisibleCells().map(cell => {
               return (
-                <td key={cell.id} data-name="table-body-cell" className={clsx(cell.column.columnDef.meta?.className)}>
+                <td key={cell.id} className={clsx('table-body-cell', cell.column.columnDef.meta?.className)}>
                   {flexRender(
                     cell.column.columnDef.cell,
                     cell.getContext()
@@ -61,7 +60,7 @@ export const TableBody = React.memo(function TableBodyVisual() {
               {columns.map((column) => {
                 if(!column) return
                 return (
-                  <td key={column.id} data-name="table-body-filler-cell" className={clsx(column.columnDef.meta?.className)}>
+                  <td key={column.id} className={clsx('table-body-filler-cell', column.columnDef.meta?.className)}>
                     {fillerRowCell ? fillerRowCell(column.id, table) : (<FillerCell />)}
                   </td>
                 )

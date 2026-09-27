@@ -1,5 +1,7 @@
 'use client'
 
+import clsx from 'clsx'
+
 import type { HTMLAttributes, ReactNode } from 'react'
 import { forwardRef, useCallback, useContext, useId, useMemo, useRef } from 'react'
 import { useEventCallbackStabilizer } from '@helpwave/hightide-utils/hooks'
@@ -10,13 +12,14 @@ import { useLogOnce } from '@helpwave/hightide-utils/hooks'
 import { useOverlayRegistry } from '@helpwave/hightide-utils/hooks'
 import { Visibility } from '../Visibility'
 import { useTransitionState } from '../../../hooks/useTransitionState'
-import { PropsUtil } from '../../../utils/propsUtil'
 import { Portal } from '../../utils/Portal'
 import { FocusTrap } from '../../utils/FocusTrap'
 import { usePresenceRef } from '../../../hooks/usePresenceRef'
 import { DialogContext } from './DialogContext'
 import { IconButton } from '../../user-interaction/IconButton'
 import { ReactUtils } from '@helpwave/hightide-utils/utils'
+
+import { PropsUtil } from '../../../utils/propsUtil'
 
 export type DialogPosition = 'top' | 'center' | 'none'
 
@@ -103,8 +106,7 @@ export const Dialog = forwardRef<HTMLDivElement, DialogProps>(function Dialog({
 
           data-open={PropsUtil.dataAttributes.bool(isOpen)}
 
-          data-name="dialog-container"
-          className={containerClassName}
+          className={clsx('dialog-container', containerClassName)}
           style={{ zIndex }}
         >
           <div
@@ -112,12 +114,11 @@ export const Dialog = forwardRef<HTMLDivElement, DialogProps>(function Dialog({
 
             onClick={onCloseWrapper}
 
-            data-name="dialog-background"
             data-state={transitionState}
 
             aria-hidden={true}
 
-            className={backgroundClassName}
+            className={clsx('dialog-background', backgroundClassName)}
           />
           <FocusTrap active={isPresent && isOpen} container={ref}>
             <div
@@ -135,8 +136,7 @@ export const Dialog = forwardRef<HTMLDivElement, DialogProps>(function Dialog({
               aria-labelledby={ids.title}
               aria-describedby={hasDescription ? ids.description : undefined}
 
-              data-name="dialog-content"
-            >
+              className={clsx('dialog-content', props.className)}>
               <div className="typography-title-lg mr-10">
                 {titleElement}
               </div>

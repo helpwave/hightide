@@ -1,5 +1,5 @@
 @layer components {
-  [data-name="file-input-trigger"] {
+  .file-input-trigger {
     @apply input-element flex-row-2 items-center justify-between rounded-md px-3 py-2;
 
     &:not([data-disabled]):not([data-readonly]) {
@@ -11,11 +11,11 @@
     }
   }
 
-  [data-name="file-input-files"] {
+  .file-input-files {
     @apply flex-col-1 grow min-w-0;
   }
 
-  [data-name="file-input-file-row"] {
+  .file-input-file-row {
     @apply flex-row-2 items-center min-w-0;
 
     > svg {
@@ -23,11 +23,11 @@
     }
   }
 
-  [data-name="file-input-file-name"] {
+  .file-input-file-name {
     @apply truncate;
   }
 
-  [data-name="file-input-more-files"] {
+  .file-input-more-files {
     @apply text-placeholder truncate;
   }
 
@@ -43,11 +43,11 @@
     @apply border-solid border-primary;
   }
 
-  [data-name="file-input-menu-list"] {
+  .file-input-menu-list {
     @apply flex-col-1 overflow-y-auto max-h-80;
   }
 
-  [data-name="file-input-menu-row"] {
+  .file-input-menu-row {
     @apply flex-row-2 items-center min-w-0;
 
     > svg {
@@ -55,15 +55,15 @@
     }
   }
 
-  [data-name="file-input-menu-title"] {
+  .file-input-menu-title {
     @apply grow truncate;
   }
 
-  [data-name="file-input-menu-meta"] {
+  .file-input-menu-meta {
     @apply flex-col-1;
   }
 
-  [data-name="file-input-menu-meta-text"] {
+  .file-input-menu-meta-text {
     @apply typography-body-md text-description;
   }
 }

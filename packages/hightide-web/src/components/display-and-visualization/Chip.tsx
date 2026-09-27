@@ -1,3 +1,4 @@
+import clsx from 'clsx'
 import type { HTMLAttributes } from 'react'
 import { ButtonUtil } from '../user-interaction/Button'
 
@@ -31,11 +32,10 @@ export const Chip = ({
   return (
     <div
       {...props}
-      data-name={props['data-name'] ?? 'chip'}
+      className={clsx('chip', props.className)}
       data-color={color ?? undefined}
       data-coloringstyle={coloringStyle ?? undefined}
-      data-size={size ?? undefined}
-    >
+      data-size={size ?? undefined}>
       {children}
     </div>
   )
@@ -53,7 +53,10 @@ export const ChipList = ({
   ...props
 }: ChipListProps) => {
   return (
-    <ul {...props} data-name={props['data-name'] ?? 'chip-list'}>
+    <ul
+      {...props}
+      className={clsx('chip-list', props.className)}
+    >
       {list.map((value, index) => (
         <li key={index}>
           <Chip

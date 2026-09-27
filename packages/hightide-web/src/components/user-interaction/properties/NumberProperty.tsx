@@ -32,12 +32,11 @@ export const NumberProperty = ({
     >
       {({ invalid }) => (
         <div
-          data-name="property-input-wrapper"
+          className="property-input-wrapper"
           data-invalid={PropsUtil.dataAttributes.bool(invalid)}
         >
           <Input
-            data-name="property-input"
-            className="w-full pr-8"
+            className="property-input w-full pr-8"
             data-invalid={PropsUtil.dataAttributes.bool(invalid)}
             value={value?.toString() ?? ''}
             type="number"
@@ -46,7 +45,7 @@ export const NumberProperty = ({
             onValueChange={(value) => {
               const numberValue = parseFloat(value)
               if (isNaN(numberValue)) {
-                onValueClear()
+                onValueClear?.()
               } else {
                 onValueChange?.(numberValue)
               }
@@ -54,7 +53,7 @@ export const NumberProperty = ({
             onEditComplete={(value) => {
               const numberValue = parseFloat(value)
               if (isNaN(numberValue)) {
-                onValueClear()
+                onValueClear?.()
               } else {
                 onEditComplete?.(numberValue)
               }
@@ -62,7 +61,7 @@ export const NumberProperty = ({
           />
           {suffix && (
             <span
-              data-name="property-suffix"
+              className="property-suffix"
               data-invalid={PropsUtil.dataAttributes.bool(invalid)}
             >
               {suffix}

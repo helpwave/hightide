@@ -1,3 +1,4 @@
+import clsx from 'clsx'
 import type { PropsWithChildren, ReactNode, RefObject } from 'react'
 import { forwardRef, useContext, useEffect } from 'react'
 import { useId } from 'react'
@@ -163,20 +164,14 @@ export const TooltipRoot = ({
 }
 
 
-
-
-
-
-
 type TooltipAligment = 'top' | 'bottom' | 'left' | 'right'
 
 export interface TooltipDisplayProps extends Omit<AnchoredFloatingContainerProps, 'options' | 'anchor'>, Partial<TooltipConfig> {
-  'alignment'?: TooltipAligment,
-  'disabled'?: boolean,
-  'anchor'?: RefObject<HTMLElement | null>,
-  'isShown'?: boolean,
-  'options'?: Omit<UseAnchoredPositionOptions, 'verticalAlignment' | 'horizontalAlignment'>,
-  'data-name'?: string,
+  alignment?: TooltipAligment,
+  disabled?: boolean,
+  anchor?: RefObject<HTMLElement | null>,
+  isShown?: boolean,
+  options?: Omit<UseAnchoredPositionOptions, 'verticalAlignment' | 'horizontalAlignment'>,
 }
 
 export const TooltipDisplay = forwardRef<HTMLDivElement, TooltipDisplayProps>(function TooltipAnchoredFloatingContainer({
@@ -242,7 +237,7 @@ export const TooltipDisplay = forwardRef<HTMLDivElement, TooltipDisplayProps>(fu
           ...props.options,
         }}
 
-        data-name={props['data-name'] ?? 'tooltip'}
+        className={clsx('tooltip', props.className)}
         data-state={transitionState}
         data-animated={isAnimated ? '': undefined}
 
@@ -253,8 +248,7 @@ export const TooltipDisplay = forwardRef<HTMLDivElement, TooltipDisplayProps>(fu
           position: 'fixed',
           opacity: isVisible ? undefined : 0,
           ...props.style
-        }}
-      >
+        }}>
         {children}
       </AnchoredFloatingContainer>
     </Portal>

@@ -1,4 +1,4 @@
-import type { HTMLAttributes, ReactNode, RefObject } from 'react'
+import type { ForwardedRef, HTMLAttributes, ReactNode, RefObject } from 'react'
 import { forwardRef, useEffect, useId, useRef } from 'react'
 import clsx from 'clsx'
 import { useComboboxContext } from './ComboboxContext'
@@ -17,7 +17,7 @@ export const ComboboxOption = forwardRef<HTMLLIElement, ComboboxOptionProps<unkn
   id: idProp,
   className,
   ...restProps
-}, ref) {
+} : ComboboxOptionProps<T>, ref: ForwardedRef<HTMLLIElement>) {
   const context = useComboboxContext<T>()
   const { registerOption } = context
   const itemRef = useRef<HTMLLIElement>(null)
@@ -62,11 +62,10 @@ export const ComboboxOption = forwardRef<HTMLLIElement, ComboboxOptionProps<unkn
       aria-disabled={disabled}
       aria-hidden={!isVisible}
 
-      data-name="combobox-option"
       data-highlighted={isHighlighted ? '' : undefined}
       data-visible={isVisible ? '' : undefined}
       data-disabled={disabled ? '' : undefined}
-      className={clsx(!isVisible && 'hidden', className)}
+      className={clsx('combobox-option', !isVisible && 'hidden', className)}
       onClick={(event) => {
         if (!disabled) {
           context.selectOption(optionId)
@@ -78,8 +77,7 @@ export const ComboboxOption = forwardRef<HTMLLIElement, ComboboxOptionProps<unkn
           context.highlightItem(optionId)
           restProps.onMouseEnter?.(event)
         }
-      }}
-    >
+      }}>
       {resolvedDisplay}
     </li>
   )

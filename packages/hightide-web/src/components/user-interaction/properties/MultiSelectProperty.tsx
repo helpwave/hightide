@@ -23,7 +23,7 @@ export const MultiSelectProperty = ({
     >
       {({ invalid }) => (
         <div
-          data-name="property-input-wrapper"
+          className="property-input-wrapper"
           data-invalid={PropsUtil.dataAttributes.bool(invalid)}
         >
           <MultiSelect.Root

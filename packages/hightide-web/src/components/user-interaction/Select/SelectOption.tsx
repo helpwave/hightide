@@ -101,7 +101,7 @@ const SelectOptionImpl = forwardRef<
       aria-selected={isSelected}
       aria-hidden={!isVisible}
 
-      data-name="select-list-option"
+      className={clsx('select-list-option', props.className)}
       data-highlighted={isHighlighted ? '' : undefined}
       data-selected={isSelected ? '' : undefined}
       data-disabled={disabled ? '' : undefined}
@@ -118,8 +118,7 @@ const SelectOptionImpl = forwardRef<
           context.highlightItem(optionId)
           props.onMouseEnter?.(event)
         }
-      }}
-    >
+      }}>
       {iconAppearanceResolved === 'left' && context.selectedId !== null && (
         <CheckIcon
           className={clsx('w-4 h-4', { 'opacity-0': !isSelected || disabled })}

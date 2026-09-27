@@ -1,5 +1,5 @@
 @layer components {
-  [data-name="vertical-navigation-menu"] {
+  .vertical-navigation-menu {
     @apply flex-col-0 list-none m-0 p-0;
   }
 

@@ -1,11 +1,13 @@
+import clsx from 'clsx'
 import type { KeyboardEvent } from 'react'
 import type { Weekday } from '@helpwave/hightide-utils/utils'
 import { DateUtils } from '@helpwave/hightide-utils/utils'
 import { useLocalization } from '../../../global-contexts/localization/forward-exports'
 import type { FormFieldDataHandling } from '../../form/FormField'
-import { PropsUtil } from '../../../utils/propsUtil'
 import { useCallback, useEffect, useMemo, useRef } from 'react'
 import { useControlledState } from '@helpwave/hightide-utils/hooks'
+
+import { PropsUtil } from '../../../utils/propsUtil'
 
 export type DayPickerProps = Partial<FormFieldDataHandling<Date>> & {
   initialValue?: Date,
@@ -85,8 +87,6 @@ export const DayPicker = ({
     return date
   }, [start, end])
 
-
-
   const navigateTo = useCallback((candidate: Date) => {
     const clamped = clampToRange(candidate)
     if (!DateUtils.between(clamped, start, end)) return
@@ -109,18 +109,17 @@ export const DayPicker = ({
     [focusTargetDate, navigateTo]
   )
 
-
   return (
-    <div data-name="day-picker-container" className={className}>
-      <div data-name="day-picker-header-row">
+    <div className={clsx('day-picker-container', className)}>
+      <div className="day-picker-header-row">
         {weeks[0]!.map((weekDay, index) => (
-          <div key={index} data-name="day-picker-header-item">
+          <div key={index} className="day-picker-header-item">
             {new Intl.DateTimeFormat(locale, { weekday: 'long' }).format(weekDay).substring(0, 2)}
           </div>
         ))}
       </div>
       {weeks.map((week, index) => (
-        <div key={index} data-name="day-picker-body-row">
+        <div key={index} className="day-picker-body-row">
           {week.map((date) => {
             const isSelected = !!value && DateUtils.equalDate(value, date)
             const isFocused = !!focusTargetDate && DateUtils.equalDate(focusTargetDate, date)
@@ -131,7 +130,7 @@ export const DayPicker = ({
               <div
                 key={date.getDate()}
                 ref={isFocused ? selectedButtonRef : undefined}
-                data-name="day-picker-body-item"
+                className="day-picker-body-item"
                 onClick={() => {
                   if (!isDayValid) return
                   const newDate = new Date(
@@ -168,4 +167,3 @@ export const DayPicker = ({
     </div>
   )
 }
-

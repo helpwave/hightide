@@ -123,8 +123,7 @@ export const SelectContent = forwardRef<HTMLUListElement, SelectContentProps>(fu
             aria-disabled={true}
             aria-live="polite"
             aria-atomic={true}
-            data-name="select-list-status"
-            className={clsx({ 'sr-only': context.visibleOptionIds.length > 0 })}
+            className={clsx('select-list-status', { 'sr-only': context.visibleOptionIds.length > 0 })}
           >
             {translation('nResultsFound', { count: context.visibleOptionIds.length })}
           </li>

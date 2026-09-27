@@ -59,16 +59,14 @@ export const Avatar = ({
 
   return (
     <div
-      {...props}
-      data-name="avatar"
-      data-size={size ?? undefined}
-    >
+      className={clsx('avatar', props.className)}
+      data-size={size ?? undefined}>
       <Visibility isVisible={isShowingImage}>
         <Image
           key={image?.avatarUrl}
           src={image?.avatarUrl}
           alt={image?.alt}
-          data-name="avatar-image"
+          className="avatar-image"
           onLoad={() => setHasLoaded(true)}
           onError={() => setHasError(true)}
           data-error={hasError ? '' : undefined}
@@ -81,11 +79,10 @@ export const Avatar = ({
 }
 
 export type AvatarGroupProps = HTMLAttributes<HTMLDivElement> & {
-  'avatars': Omit<AvatarProps, 'size'>[],
-  'showTotalNumber'?: boolean,
-  'size'?: AvatarSize,
-  'data-name'?: string,
-  'ImageComponent'?: ElementType<AvatarImageProps>,
+  avatars: Omit<AvatarProps, 'size'>[],
+  showTotalNumber?: boolean,
+  size?: AvatarSize,
+  ImageComponent?: ElementType<AvatarImageProps>,
 }
 
 /**
@@ -118,14 +115,12 @@ export const AvatarGroup = ({
 
   return (
     <div
-      {...props}
-      data-name={props['data-name'] ?? 'avatar-group'}
-      data-size={size ?? undefined}
-    >
+      className={clsx('avatar-group', props.className)}
+      data-size={size ?? undefined}>
       {group}
       {showTotalNumber && notDisplayedProfiles > 0 && (
         <span
-          data-name="avatar-group-more"
+          className="avatar-group-more"
           data-size={size}
         >
           {`+ ${notDisplayedProfiles}`}
@@ -149,13 +144,12 @@ export const AvatarWithStatus = ({
 }: AvatarWithStatusProps) => {
   return (
     <div
-      className={clsx(className)}
-      data-name="avatar-with-status"
+      className={clsx('avatar-with-status', className)}
       data-size={size ?? undefined}
     >
       <Avatar {...avatarProps} size={size} />
       <div
-        data-name="avatar-with-status-dot"
+        className="avatar-with-status-dot"
         data-size={size ?? undefined}
         data-status={status}
       />

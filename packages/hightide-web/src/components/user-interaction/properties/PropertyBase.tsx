@@ -86,20 +86,19 @@ export const PropertyBase = ({
 
   return (
     <div
-      className={clsx('group/property min-w-0 w-full', className)}
-      data-name="property-root"
+      className={clsx('property-root group/property min-w-0 w-full', className)}
       data-invalid={PropsUtil.dataAttributes.bool(invalid)}
     >
-      <div data-name="property-inner">
+      <div className="property-inner">
         <div
-          data-name="property-title"
+          className="property-title"
           data-invalid={PropsUtil.dataAttributes.bool(invalid)}
         >
           <div className="flex min-w-0 flex-1 flex-row items-center justify-between gap-2">
             <Tooltip tooltip={name} containerClassName="min-w-0">
               <div className="flex-row-1 items-center">
-                <div data-name="property-title-icon">{icon}</div>
-                <span data-name="property-title-text">{name}</span>
+                <div className="property-title-icon">{icon}</div>
+                <span className="property-title-text">{name}</span>
               </div>
             </Tooltip>
             {invalid && (
@@ -107,18 +106,18 @@ export const PropertyBase = ({
             )}
           </div>
           {showActionsContainer && (
-            <div data-name="property-title-actions">
+            <div className="property-title-actions">
               {renderActionButtons()}
             </div>
           )}
         </div>
         <div
-          data-name="property-content"
+          className="property-content"
           data-invalid={PropsUtil.dataAttributes.bool(invalid)}
         >
           {children({ required, hasValue, invalid })}
           {showActionsContainer && (
-            <div data-name="property-actions">
+            <div className="property-actions">
               {renderActionButtons()}
             </div>
           )}

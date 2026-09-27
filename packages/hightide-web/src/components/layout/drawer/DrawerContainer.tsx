@@ -2,12 +2,13 @@ import { forwardRef, useId, useMemo, useRef, type HTMLAttributes } from 'react'
 import { useFocusTrap } from '../../../hooks/focus/useFocusTrap'
 import { useOverlayRegistry } from '@helpwave/hightide-utils/hooks'
 import { useTransitionState } from '../../../hooks/useTransitionState'
-import { PropsUtil } from '../../../utils/propsUtil'
 import { Portal } from '../../utils/Portal'
 import { useDrawerContext } from './DrawerContext'
 import type { DrawerAligment } from './Drawer'
 import { ReactUtils } from '@helpwave/hightide-utils/utils'
 import clsx from 'clsx'
+
+import { PropsUtil } from '../../../utils/propsUtil'
 
 export type DrawerContainerProps = HTMLAttributes<HTMLDivElement> & {
   alignment: DrawerAligment,
@@ -62,8 +63,7 @@ export const DrawerContainer = forwardRef<HTMLDivElement, DrawerContainerProps>(
         <div
           id={ids.background}
           onClick={() => setOpen(false)}
-          className={backgroundClassName}
-          data-name="drawer-background"
+          className={clsx('drawer-background', backgroundClassName)}
           data-state={transitionState}
           data-depth={depth}
           data-alignment={alignment}
@@ -85,5 +85,3 @@ export const DrawerContainer = forwardRef<HTMLDivElement, DrawerContainerProps>(
     </Portal>
   )
 })
-
-

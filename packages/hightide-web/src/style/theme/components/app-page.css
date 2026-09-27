@@ -1,9 +1,9 @@
 @layer components {
-  [data-name="app-page"] {
+  .app-page {
     @apply flex-row-0 h-dvh min-h-dvh max-h-dvh w-screen overflow-hidden overflow-x-hidden;
   }
 
-  [data-name="app-sidebar-backdrop"] {
+  .app-sidebar-backdrop {
     @apply fixed inset-0 z-40 touch-manipulation bg-overlay-shadow;
 
     @variant desktop {
@@ -11,7 +11,7 @@
     }
   }
 
-  [data-name="app-sidebar-container"] {
+  .app-sidebar-container {
     @apply fixed inset-y-0 min-w-full h-screen p-4;
     padding-top: calc(max(env(safe-area-inset-top), var(--spacing) * 4));
     padding-bottom: calc(max(env(safe-area-inset-bottom), var(--spacing) * 4));
@@ -33,7 +33,7 @@
     }
   }
 
-  [data-name="app-sidebar-content"] {
+  .app-sidebar-content {
     @apply relative flex-col-4 rounded-lg bg-surface text-on-surface w-full h-full min-h-0 overflow-hidden shadow-around-md;
     @apply transform transition-transform duration-300 ease-out;
 
@@ -78,11 +78,11 @@
     @apply flex-col-0 px-3 pt-2;
   }
 
-  [data-name="app-page-body"] {
+  .app-page-body {
     @apply flex-col-0 grow min-w-0 h-full overflow-hidden;
   }
 
-  [data-name="app-page-content"] {
+  .app-page-content {
     @apply flex-col-0 grow min-h-0 overflow-y-auto overscroll-y-contain;
     scrollbar-gutter: stable;
 
@@ -91,7 +91,7 @@
     }
   }
 
-  [data-name="app-page-header"] {
+  .app-page-header {
     @apply flex-row-2 items-center p-4 bg-background text-on-background;
 
     @variant desktop {
@@ -105,7 +105,7 @@
     }
   }
 
-  [data-name="app-page-main-content"] {
+  .app-page-main-content {
     @apply flex-col-0 px-4;
 
     @variant desktop {

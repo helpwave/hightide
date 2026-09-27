@@ -2,11 +2,11 @@ import type { CSSProperties, Dispatch, HTMLAttributes, KeyboardEvent, PropsWithC
 import { useCallback, useId, useState } from 'react'
 import { createContext, useContext, useEffect, useRef } from 'react'
 import clsx from 'clsx'
-import { PropsUtil } from '../../utils/propsUtil'
 import { resolveSetState } from '@helpwave/hightide-utils/utils'
 import { createPortal } from 'react-dom'
 import { Visibility } from './Visibility'
 import { useControlledState } from '@helpwave/hightide-utils/hooks'
+import { PropsUtil } from '../../utils'
 
 export interface TabInfo {
   id: string,
@@ -93,7 +93,6 @@ export function TabSwitcher({ children, activeId: controlledActiveId, onActiveId
       })
     }
   }, [])
-
 
   useEffect(() => {
     const active = tabInfos.find(value => value.id === activeId)
@@ -182,12 +181,11 @@ export function TabList({ ...props }: TabListProps) {
   return (
     <ul
       {...props}
-      data-name="tab-list"
+      className={clsx('tab-list', props.className)}
       onKeyDown={onKeyDown}
       role="tablist"
       aria-orientation="horizontal"
-      style={{ '--tab-count': infos?.length ?? 0, ...props.style } as CSSProperties}
-    >
+      style={{ '--tab-count': infos?.length ?? 0, ...props.style } as CSSProperties}>
       {infos?.map((tabInfo) => {
         const isDisabled = !!tabInfo.disabled
         const isActive = activeId === tabInfo.id
@@ -199,10 +197,9 @@ export function TabList({ ...props }: TabListProps) {
             }}
             id={tabInfo.labelId}
 
-
             {...(isDisabled ? {} : PropsUtil.aria.click(() => setActive(tabInfo.id)))}
 
-            data-name="tab-list-item"
+            className="tab-list-item"
             data-active={PropsUtil.dataAttributes.bool(isActive)}
             data-disabled={PropsUtil.dataAttributes.bool(isDisabled)}
 
@@ -219,7 +216,6 @@ export function TabList({ ...props }: TabListProps) {
     </ul>
   )
 }
-
 
 //
 // TabView
@@ -288,13 +284,10 @@ export function TabPanel({ label, forceMount = false, disabled = false, initiall
       ref={ref}
       id={id}
       hidden={!isActive}
-
-      data-name="tab-panel"
+      className={clsx('tab-panel', props.className)}
       data-disabled={PropsUtil.dataAttributes.bool(disabled)}
-
       role="tabpanel"
-      aria-labelledby={labelId}
-    >
+      aria-labelledby={labelId}>
       <Visibility isVisible={isActive || forceMount}>
         {props.children}
       </Visibility>

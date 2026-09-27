@@ -1,5 +1,6 @@
 import type { ElementType } from 'react'
 import {
+
   NavigationProvider,
   type NavigationProviderProps
 } from './NavigationContext'
@@ -29,7 +30,7 @@ export function VerticalNavigationMenu({
 
   return (
     <NavigationProvider nodes={nodes} {...navigationOptions}>
-      <ul data-name="vertical-navigation-menu">
+      <ul className="vertical-navigation-menu">
         {items.map((item) => (
           <VerticalNavigationMenuItem key={item.id} {...item} LinkComponent={LinkComponent} />
         ))}

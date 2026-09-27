@@ -62,8 +62,7 @@ export const ToggleableInput = forwardRef<HTMLInputElement, ToggleableInputProps
         }}
 
         data-isediting={isEditing ? '' : undefined}
-        data-name={props['data-name'] ?? 'togglable-input'}
-      />
+        className={clsx('togglable-input', props.className)}/>
       {!isEditing && (
         <div className="absolute left-0 flex-row-2 items-center pointer-events-none touch-none w-full overflow-hidden">
           <span className={clsx(' truncate')}>

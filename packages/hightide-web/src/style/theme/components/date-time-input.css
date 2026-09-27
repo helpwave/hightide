@@ -1,5 +1,5 @@
 @layer components {
-  [data-name="date-time-input"] {
+  .date-time-input {
     @apply input-element flex-row-2 items-center justify-between w-full px-3 h-element-md rounded-md;
 
     &:focus-within {
@@ -12,11 +12,11 @@
     }
   }
 
-  [data-name="date-time-field"] {
+  .date-time-field {
     @apply flex-row-0 items-center min-w-0 grow overflow-hidden;
   }
 
-  [data-name="date-time-segment"] {
+  .date-time-segment {
     @apply rounded-sm px-0.5 text-center tabular-nums cursor-text focus-style-none;
 
     &:focus-visible {
@@ -28,7 +28,7 @@
     }
   }
 
-  [data-name="date-time-separator"] {
+  .date-time-separator {
     @apply px-px;
   }
 

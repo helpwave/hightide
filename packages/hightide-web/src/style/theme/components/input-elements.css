@@ -49,7 +49,7 @@
 
 /* input-elements */
 @layer components {
-  [data-name="input"] {
+  .input {
     @apply input-element px-3 py-2 rounded-md h-element-md;
   }
 }

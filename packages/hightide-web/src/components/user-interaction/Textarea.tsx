@@ -4,9 +4,10 @@ import clsx from 'clsx'
 import { useDelay, type UseDelayOptions } from '@helpwave/hightide-utils/hooks'
 import type { FormFieldInteractionStates } from '../form/FieldLayout'
 import type { FormFieldDataHandling } from '../form/FormField'
-import { PropsUtil } from '../../utils/propsUtil'
 import { useControlledState } from '@helpwave/hightide-utils/hooks'
 import { useEventCallbackStabilizer } from '@helpwave/hightide-utils/hooks'
+
+import { PropsUtil } from '../../utils/propsUtil'
 
 export type TextareaProps = Omit<TextareaHTMLAttributes<HTMLTextAreaElement>, 'value'>
   & Partial<FormFieldDataHandling<string>>
@@ -62,15 +63,13 @@ export const Textarea = forwardRef<HTMLTextAreaElement, TextareaProps>(function 
         onEditCompleteWrapper(event.target.value)
       }}
 
-      data-name={props['data-name'] ?? 'textarea'}
+      className={clsx('textarea', props.className)}
       data-value={PropsUtil.dataAttributes.bool(!!value)}
       {...PropsUtil.dataAttributes.interactionStates({ ...props, invalid })}
 
-      {...PropsUtil.aria.interactionStates({ ...props, invalid }, props)}
-    />
+      {...PropsUtil.aria.interactionStates({ ...props, invalid }, props)}/>
   )
 })
-
 
 export type TextareaWithHeadlineProps = Omit<TextareaProps, 'defaultStyle'> & {
   headline: ReactNode,

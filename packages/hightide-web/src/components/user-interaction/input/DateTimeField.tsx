@@ -4,13 +4,13 @@ import clsx from 'clsx'
 import { useControlledState } from '@helpwave/hightide-utils/hooks'
 import { useLocalization } from '../../../global-contexts/localization/forward-exports'
 import { useHightideTranslation } from '@helpwave/hightide-utils/context/translation'
-import { PropsUtil } from '../../../utils/propsUtil'
 import { SafeGlobals } from '../../../utils/safeGlobals'
 import type { FormFieldInteractionStates } from '../../form/FieldLayout'
 import type { FormFieldDataHandling } from '../../form/FormField'
 import type { DateTimeFormat, DateTimePrecision } from '@helpwave/hightide-utils/utils'
 import type { EditableSegmentType, SegmentEditState } from './dateTimeSegments'
 import {
+
   buildSegmentLayout,
   clearSegment,
   composeDate,
@@ -24,6 +24,7 @@ import {
   timeUnitTranslationKey,
   typeDigit
 } from './dateTimeSegments'
+import { PropsUtil } from '../../../utils/propsUtil'
 
 const advanceKeys = ['.', ':', '/', ',', '-', ' ']
 
@@ -251,9 +252,7 @@ export const DateTimeField = forwardRef<HTMLDivElement, DateTimeFieldProps>(func
     <div
       {...props}
       ref={forwardedRef}
-
       role="group"
-
       onBlur={onFieldBlur}
       onMouseDown={(event) => {
         props.onMouseDown?.(event)
@@ -263,15 +262,13 @@ export const DateTimeField = forwardRef<HTMLDivElement, DateTimeFieldProps>(func
         }
       }}
 
-      className={clsx(className)}
-      data-name="date-time-field"
+      className={clsx('date-time-field', className)}
       {...PropsUtil.dataAttributes.interactionStates({ disabled, readOnly, invalid, required })}
-      {...PropsUtil.aria.interactionStates({ disabled, readOnly, invalid, required })}
-    >
+      {...PropsUtil.aria.interactionStates({ disabled, readOnly, invalid, required })}>
       {layout.map((segment, index) => {
         if (segment.kind === 'literal') {
           return (
-            <span key={`literal-${index}`} aria-hidden={true} data-name="date-time-separator">
+            <span key={`literal-${index}`} aria-hidden={true} className="date-time-separator">
               {segment.text}
             </span>
           )
@@ -298,7 +295,7 @@ export const DateTimeField = forwardRef<HTMLDivElement, DateTimeFieldProps>(func
               }
             }}
 
-            data-name="date-time-segment"
+            className="date-time-segment"
             data-placeholder={PropsUtil.dataAttributes.bool(numericValue === undefined && editState.buffer?.type !== type)}
             aria-label={type === 'dayPeriod' ? translation('dayPeriod') : translation(timeUnitTranslationKey[type], { count: 1 })}
             aria-valuemin={type === 'dayPeriod' ? undefined : bounds.min}

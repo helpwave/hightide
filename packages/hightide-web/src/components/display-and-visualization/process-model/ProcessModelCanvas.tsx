@@ -5,6 +5,7 @@ import { ProcessModelActivityNode } from './ProcessModelActivityNode'
 import { ProcessModelTerminalNode } from './ProcessModelTerminalNode'
 import { ProcessModelLayoutUtilities } from './layoutProcessModel'
 import type {
+
   ProcessModelGraph,
   ProcessModelGraphActivityNode,
   ProcessModelGraphNode
@@ -173,8 +174,7 @@ export const ProcessModelCanvas = ({
 
   return (
     <div
-      data-name="process-model-canvas"
-      className={clsx('process-model-canvas-wrap', className)}
+      className={clsx('process-model-canvas process-model-canvas-wrap', className)}
       style={{ width: canvasW + 64, minHeight: canvasH + 64 }}
     >
       <svg

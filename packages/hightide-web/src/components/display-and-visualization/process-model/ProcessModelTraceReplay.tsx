@@ -1,4 +1,5 @@
 import {
+
   useCallback,
   useEffect,
   useId,
@@ -269,7 +270,7 @@ export const ProcessModelTraceReplay = ({ graph, className }: ProcessModelTraceR
   }, [])
 
   return (
-    <div data-name="process-model-trace-replay" className={clsx('process-model-trace-replay', className)}>
+    <div className={clsx('process-model-trace-replay', className)}>
       <div className="process-model-trace-replay-toolbar">
         <Button
           color="primary"

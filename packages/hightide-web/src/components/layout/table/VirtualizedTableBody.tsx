@@ -3,9 +3,9 @@ import type { Cell, Row, Table } from '@tanstack/react-table'
 import { flexRender } from '@tanstack/react-table'
 import clsx from 'clsx'
 import { useTableContainerContext, useTableStateWithoutSizingContext } from './TableContext'
-import { PropsUtil } from '../../../utils/propsUtil'
 import { BagFunctionUtil } from '@helpwave/hightide-utils/utils'
 import { range } from '@helpwave/hightide-utils/utils'
+import { PropsUtil } from '../../../utils/propsUtil'
 import { FillerCell } from './FillerCell'
 import { useVirtualizedRows } from '../virtualization/useVirtualizedRows'
 import type { VirtualizationScroll } from '../virtualization/virtualizationScroll'
@@ -45,11 +45,10 @@ const VirtualizedTableRow = memo(({
     ref={measureRef}
     onClick={onRowClick ? () => onRowClick(row, table) : undefined}
     data-clickable={PropsUtil.dataAttributes.bool(!!onRowClick)}
-    data-name="table-body-row"
-    className={className}
+    className={clsx('table-body-row', className)}
   >
     {cells.map(cell => (
-      <td key={cell.id} data-name="table-body-cell" className={clsx(cell.column.columnDef.meta?.className)}>
+      <td key={cell.id} className={clsx('table-body-cell', cell.column.columnDef.meta?.className)}>
         {flexRender(cell.column.columnDef.cell, cell.getContext())}
       </td>
     ))}
@@ -105,9 +104,9 @@ export const VirtualizedTableBody = ({
     return (
       <tbody ref={bodyRef}>
         {range(rowCount).map((_, index) => (
-          <tr key={index} data-name="table-body-filler-row">
+          <tr key={index} className="table-body-filler-row">
             {table.getVisibleLeafColumns().map((col, colIndex) => (
-              <td key={colIndex} data-name="table-body-filler-cell">
+              <td key={colIndex} className="table-body-filler-cell">
                 {fillerRowCell(col.id, table) ?? <FillerCell/>}
               </td>
             ))}

@@ -1,3 +1,4 @@
+import clsx from 'clsx'
 import type React from 'react'
 import type { ComponentPropsWithoutRef, ForwardedRef, ReactNode } from 'react'
 import { forwardRef } from 'react'
@@ -54,7 +55,7 @@ const FileInputTriggerImpl = forwardRef<HTMLDivElement, FileInputTriggerProps>(f
           event.stopPropagation()
         }
       }}
-      data-name="file-input-trigger"
+      className={clsx('file-input-trigger', props.className)}
       data-value={hasFiles ? '' : undefined}
       data-disabled={disabled ? '' : undefined}
       data-readonly={readOnly ? '' : undefined}
@@ -65,19 +66,18 @@ const FileInputTriggerImpl = forwardRef<HTMLDivElement, FileInputTriggerProps>(f
       aria-disabled={disabled}
       aria-readonly={readOnly}
       aria-haspopup={(context.maxFiles ?? 1) > 1 ? 'dialog' : undefined}
-      aria-expanded={(context.maxFiles ?? 1) > 1 ? context.isOpen : undefined}
-    >
-      <div data-name="file-input-files">
+      aria-expanded={(context.maxFiles ?? 1) > 1 ? context.isOpen : undefined}>
+      <div className="file-input-files">
         {hasFiles ? (
           <>
             {visible.map((file) => (
-              <div key={file.id} data-name="file-input-file-row">
+              <div key={file.id} className="file-input-file-row">
                 <FileText aria-hidden={true} />
-                <span data-name="file-input-file-name">{file.name}</span>
+                <span className="file-input-file-name">{file.name}</span>
               </div>
             ))}
             {hiddenCount > 0 && (
-              <span data-name="file-input-more-files">
+              <span className="file-input-more-files">
                 {translation('nMoreFiles', { count: hiddenCount })}
               </span>
             )}

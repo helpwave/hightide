@@ -1,10 +1,10 @@
-import { PropsUtil } from '../../../utils/propsUtil'
 import { flexRender } from '@tanstack/react-table'
 import clsx from 'clsx'
 import { Visibility } from '../Visibility'
 import { TableSortButton } from './TableSortButton'
 import { TableFilterButton } from './TableFilterButton'
 import { useCallback, useEffect, useRef } from 'react'
+import { PropsUtil } from '../../../utils/propsUtil'
 import { TableStateContext, useTableStateWithoutSizingContext } from './TableContext'
 import { DataTypeUtils, type DataType } from '../../user-interaction/data/data-types'
 import { SafeGlobals } from '../../../utils/safeGlobals'
@@ -103,9 +103,9 @@ export const TableHeader = ({ isSticky = false }: TableHeaderProps) => {
           )}
         </TableStateContext.Consumer>
       ))}
-      <thead data-name="table-header">
+      <thead className="table-header">
         {table.getHeaderGroups().map(headerGroup => (
-          <tr key={headerGroup.id} data-name="table-header-row" className={clsx(table.options.meta?.headerRowClassName)}>
+          <tr key={headerGroup.id} className={clsx('table-header-row', table.options.meta?.headerRowClassName)}>
             {headerGroup.headers.map(header => {
               return (
                 <th
@@ -114,8 +114,7 @@ export const TableHeader = ({ isSticky = false }: TableHeaderProps) => {
 
 
                   data-sticky={isSticky ? '' : undefined}
-                  data-name="table-header-cell"
-                  className={clsx('group/table-header-cell', header.column.columnDef.meta?.className)}
+                  className={clsx('table-header-cell group/table-header-cell', header.column.columnDef.meta?.className)}
                   style={isNaturalSizing ? { minWidth: header.column.columnDef.minSize } : undefined}
                 >
                   <Visibility isVisible={!header.isPlaceholder}>
@@ -181,7 +180,7 @@ export const TableHeader = ({ isSticky = false }: TableHeaderProps) => {
                         header.column.resetSize()
                       }}
 
-                      data-name="table-resize-indicator"
+                      className="table-resize-indicator"
                       data-active={PropsUtil.dataAttributes.bool(header.column.getCanResize() && header.column?.getIsResizing())}
                       data-disabled={PropsUtil.dataAttributes.bool(!header.column.getCanResize())}
                     />

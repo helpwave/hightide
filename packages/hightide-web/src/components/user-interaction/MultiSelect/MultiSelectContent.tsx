@@ -119,12 +119,11 @@ export const MultiSelectContent = forwardRef<
         id={context.config.ids.listbox}
         onKeyDown={showSearch ? undefined : keyHandler}
         role="listbox"
-        data-name="multi-select-list"
         aria-multiselectable={true}
         aria-orientation="vertical"
         aria-label={listboxAriaLabel}
         tabIndex={showSearch ? undefined : 0}
-        className={clsx('flex-col-1 p-2 overflow-auto')}
+        className="multi-select-list flex-col-1 p-2 overflow-auto"
       >
         {props.children}
         <Visibility isVisible={showSearch}>
@@ -134,8 +133,7 @@ export const MultiSelectContent = forwardRef<
             aria-disabled={true}
             aria-live="polite"
             aria-atomic={true}
-            data-name="multi-select-list-status"
-            className={clsx({
+            className={clsx('multi-select-list-status', {
               'sr-only': context.visibleOptionIds.length > 0,
             })}
           >
