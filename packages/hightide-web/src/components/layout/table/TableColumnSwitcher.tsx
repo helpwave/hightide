@@ -1,12 +1,12 @@
 import { useMemo, useRef, useId } from 'react'
 import { ChevronUp, ChevronDown, ChevronLeft, ChevronRight, Eye, EyeOff, Pin, PinOff, Columns3Cog } from 'lucide-react'
-import type { ButtonProps } from '../../user-interaction/Button'
 import { useHightideTranslation } from '@helpwave/hightide-utils/context/translation'
 import type { PopUpProps } from '../popup/PopUp'
 import { PopUp } from '../popup/PopUp'
 import { PopUpRoot } from '../popup/PopUpRoot'
 import { PopUpOpener } from '../popup/PopUpOpener'
 import { useTableStateWithoutSizingContext } from './TableContext'
+import type { IconButtonProps } from '../../user-interaction/IconButton'
 import { IconButton } from '../../user-interaction/IconButton'
 import { Visibility } from '../Visibility'
 
@@ -335,7 +335,7 @@ export const TableColumnSwitcherPopUp = ({ ...props }: TableColumnSwitcherPopUpP
 }
 
 export interface TableColumnSwitcherProps extends TableColumnSwitcherPopUpProps {
-  buttonProps?: ButtonProps,
+  buttonProps?: Partial<Omit<IconButtonProps, 'children'>>,
 }
 
 export const TableColumnSwitcher = ({ buttonProps, ...props }: TableColumnSwitcherProps) => {

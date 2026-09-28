@@ -107,8 +107,8 @@ export const FileInputMenu = ({
           coloringStyle="tonal"
           disabled={!context.canAddFiles}
           onClick={() => context.requestAddFiles()}
+          leading={<Plus />}
         >
-          <Plus />
           {translation('addFile')}
         </Button>
       )}

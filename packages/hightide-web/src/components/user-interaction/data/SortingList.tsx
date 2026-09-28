@@ -7,6 +7,7 @@ import { PopUpRoot } from '../../layout/popup/PopUpRoot'
 import { PopUp } from '../../layout/popup/PopUp'
 import { PopUpOpener } from '../../layout/popup/PopUpOpener'
 import { Button } from '../Button'
+import { Pressable } from '../Pressable'
 import { Combobox } from '../Combobox/Combobox'
 import { ComboboxOption } from '../Combobox/ComboboxOption'
 import { PopUpContext } from '../../layout/popup/PopUpContext'
@@ -58,31 +59,40 @@ export const SortingList = ({ sorting, onSortingChange, availableItems }: Sortin
       <PopUpRoot>
         <PopUpOpener>
           {({ toggleOpen, props }) => (
-            <Button {...props} onClick={toggleOpen} color="neutral" size="sm" className="min-w-36">
+            <Button
+              {...props}
+              onClick={toggleOpen}
+              color="neutral"
+              size="sm"
+              className="min-w-36"
+              trailing={<PlusIcon className="size-4" />}
+            >
               {translation('addSorting')}
-              <PlusIcon className="size-4" />
             </Button>
           )}
         </PopUpOpener>
         <PopUp className="flex-col-2 p-2">
           <PopUpContext.Consumer>
-            {({ setIsOpen }) => (
-              <Combobox
-                onItemClick={(id) => {
-                  const item = itemRecord[id]
-                  if (!item) return
-                  onSortingChange([...sorting, { id: item.id, desc: false }])
-                  setIsOpen(false)
-                }}
-              >
-                {inactiveItems.map((item) => (
-                  <ComboboxOption key={item.id} value={item.id} label={item.label}>
-                    {DataTypeUtils.toIcon(item.dataType)}
-                    {item.label}
-                  </ComboboxOption>
-                ))}
-              </Combobox>
-            )}
+            {(context) => {
+              if(!context) return
+              const { setIsOpen } = context
+              return (
+                <Combobox
+                  onItemClick={(id) => {
+                    const item = itemRecord[id]
+                    if (!item) return
+                    onSortingChange([...sorting, { id: item.id, desc: false }])
+                    setIsOpen(false)
+                  }}
+                >
+                  {inactiveItems.map((item) => (
+                    <ComboboxOption key={item.id} value={item.id} label={item.label}>
+                      {DataTypeUtils.toIcon(item.dataType)}
+                      {item.label}
+                    </ComboboxOption>
+                  ))}
+                </Combobox>
+              )}}
           </PopUpContext.Consumer>
         </PopUp>
       </PopUpRoot>
@@ -93,70 +103,73 @@ export const SortingList = ({ sorting, onSortingChange, availableItems }: Sortin
           <PopUpRoot key={columnSort.id}>
             <PopUpOpener>
               {({ toggleOpen, props }) => (
-                <Button {...props} onClick={toggleOpen} color="secondary" coloringStyle="tonal-outline" size="sm">
+                <Pressable {...props} onClick={toggleOpen} color="secondary" coloringStyle="tonal-outline" size="sm">
                   <span className="font-bold">{item.label}</span>
                   {columnSort.desc ? <ArrowDownWideNarrow className="size-5"/> : <ArrowUpNarrowWide className="size-5"/>}
-                </Button>
+                </Pressable>
               )}
             </PopUpOpener>
             <PopUpContext.Consumer>
-              {({ setIsOpen }) => (
-                <PopUp
-                  className={clsx('flex-col-3 p-3 min-w-64')}
-                  onClose={() => setIsOpen(false)}
-                >
-                  <div className="flex-row-4 justify-between w-full items-center gap-2">
-                    <span className="typography-title-sm font-semibold">{item.label}</span>
-                    <div className="flex-row-0 shrink-0 items-center">
-                      <IconButton
-                        tooltip={translation('removeFilter')}
-                        onClick={() => {
-                          removeSort(columnSort.id)
-                          setIsOpen(false)
-                        }}
-                        color="negative"
-                        coloringStyle="text"
-                        size="sm"
-                      >
-                        <TrashIcon className="size-4" />
-                      </IconButton>
-                      <IconButton
-                        tooltip={translation('close')}
-                        onClick={() => setIsOpen(false)}
-                        color="neutral"
-                        coloringStyle="text"
-                        size="sm"
-                      >
-                        <XIcon className="size-4" />
-                      </IconButton>
+              {(context) => {
+                if(!context) return
+                const { setIsOpen } = context
+                return (
+                  <PopUp
+                    className={clsx('flex-col-3 p-3 min-w-64')}
+                    onClose={() => setIsOpen(false)}
+                  >
+                    <div className="flex-row-4 justify-between w-full items-center gap-2">
+                      <span className="typography-title-sm font-semibold">{item.label}</span>
+                      <div className="flex-row-0 shrink-0 items-center">
+                        <IconButton
+                          tooltip={translation('removeFilter')}
+                          onClick={() => {
+                            removeSort(columnSort.id)
+                            setIsOpen(false)
+                          }}
+                          color="negative"
+                          coloringStyle="text"
+                          size="sm"
+                        >
+                          <TrashIcon className="size-4" />
+                        </IconButton>
+                        <IconButton
+                          tooltip={translation('close')}
+                          onClick={() => setIsOpen(false)}
+                          color="neutral"
+                          coloringStyle="text"
+                          size="sm"
+                        >
+                          <XIcon className="size-4" />
+                        </IconButton>
+                      </div>
                     </div>
-                  </div>
-                  <div className="flex-row-1 w-full gap-2">
-                    <Button
-                      type="button"
-                      className="flex-1 flex-row-1 items-center justify-center gap-2"
-                      color={columnSort.desc ? 'neutral' : 'primary'}
-                      coloringStyle="solid"
-                      size="md"
-                      onClick={() => setSortDirection(columnSort.id, false)}
-                    >
-                      <ArrowUpNarrowWide className="size-4" />
-                      {translation('sortAsc')}
-                    </Button>
-                    <Button
-                      type="button"
-                      className="flex-1 flex-row-1 items-center justify-center gap-2"
-                      color={columnSort.desc ? 'primary' : 'neutral'}
-                      coloringStyle="solid"
-                      size="md"
-                      onClick={() => setSortDirection(columnSort.id, true)}
-                    >
-                      <ArrowDownWideNarrow className="size-4" />
-                      {translation('sortDesc')}
-                    </Button>
-                  </div>
-                </PopUp>
-              )}
+                    <div className="flex-row-1 w-full gap-2">
+                      <Button
+                        type="button"
+                        className="flex-1"
+                        color={columnSort.desc ? 'neutral' : 'primary'}
+                        coloringStyle="solid"
+                        size="md"
+                        onClick={() => setSortDirection(columnSort.id, false)}
+                        leading={<ArrowUpNarrowWide className="size-4" />}
+                      >
+                        {translation('sortAsc')}
+                      </Button>
+                      <Button
+                        type="button"
+                        className="flex-1"
+                        color={columnSort.desc ? 'primary' : 'neutral'}
+                        coloringStyle="solid"
+                        size="md"
+                        onClick={() => setSortDirection(columnSort.id, true)}
+                        leading={<ArrowDownWideNarrow className="size-4" />}
+                      >
+                        {translation('sortDesc')}
+                      </Button>
+                    </div>
+                  </PopUp>
+                )}}
             </PopUpContext.Consumer>
           </PopUpRoot>
         )

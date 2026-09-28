@@ -62,9 +62,9 @@ export const DatePicker = ({
           size="sm"
           color="neutral"
           onClick={() => setDisplayMode(displayMode === 'day' ? 'yearMonth' : 'day')}
+          trailing={<ChevronDown size={16}/>}
         >
           {`${new Intl.DateTimeFormat(LocalizationUtil.isoLocaleToLanguage(locale), { month: 'short' }).format(displayedMonth)} ${displayedMonth.getFullYear()}`}
-          <ChevronDown size={16}/>
         </Button>
         <div className="flex-row-2 justify-end">
           <IconButton

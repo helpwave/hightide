@@ -1,58 +1,49 @@
 @layer components {
   .button {
-    @apply relative flex flex-row items-center justify-center element;
-    @apply: font-semibold whitespace-nowrap w-fit;
-    transition: var(--coloring-transitions), var(--focus-transitions);
-
-    .button-processing-overlay {
-      @apply absolute inset-0 flex items-center justify-center rounded-[inherit] bg-surface/40 pointer-events-none;
-    }
-
-    &:not([data-disabled]) {
-      @apply cursor-pointer coloring-color-detect coloring-style-hover-detect;
-    }
-    
-    &[data-disabled] {
-      @apply disabled coloring-style-detect cursor-not-allowed;
-    }
-
     &[data-size="xs"] {
-      @apply gap-x-1 sizing-xs;
-      @apply text-xs min-w-20;
+      @apply min-w-20;
+      padding: var(--element-padding) var(--element-padding-direction);
+
       &[data-coloringstyle="outline"],
       &[data-coloringstyle="tonal-outline"] {
-        padding: 
-          calc(var(--spacing-element-padding-xs) - var(--coloring-outline-width)) 
+        padding:
+          calc(var(--spacing-element-padding-xs) - var(--coloring-outline-width))
           calc(var(--spacing-element-padding-direction-xs) - var(--coloring-outline-width));
       }
     }
+
     &[data-size="sm"] {
-      @apply gap-x-1 sizing-sm;
       @apply min-w-28;
+      padding: var(--element-padding) var(--element-padding-direction);
+
       &[data-coloringstyle="outline"],
       &[data-coloringstyle="tonal-outline"] {
-        padding: 
-          calc(var(--spacing-element-padding-sm) - var(--coloring-outline-width)) 
+        padding:
+          calc(var(--spacing-element-padding-sm) - var(--coloring-outline-width))
           calc(var(--spacing-element-padding-direction-sm) - var(--coloring-outline-width));
       }
     }
+
     &[data-size="md"] {
-      @apply gap-x-2 sizing-md;
       @apply min-w-36;
+      padding: var(--element-padding) var(--element-padding-direction);
+
       &[data-coloringstyle="outline"],
       &[data-coloringstyle="tonal-outline"] {
-        padding: 
-          calc(var(--spacing-element-padding-md) - var(--coloring-outline-width)) 
+        padding:
+          calc(var(--spacing-element-padding-md) - var(--coloring-outline-width))
           calc(var(--spacing-element-padding-direction-md) - var(--coloring-outline-width));
       }
     }
+
     &[data-size="lg"] {
-      @apply gap-x-2 sizing-lg;
-      @apply text-lg min-w-45;
+      @apply min-w-45;
+      padding: var(--element-padding) var(--element-padding-direction);
+
       &[data-coloringstyle="outline"],
       &[data-coloringstyle="tonal-outline"] {
-        padding: 
-          calc(var(--spacing-element-padding-lg) - var(--coloring-outline-width)) 
+        padding:
+          calc(var(--spacing-element-padding-lg) - var(--coloring-outline-width))
           calc(var(--spacing-element-padding-direction-lg) - var(--coloring-outline-width));
       }
     }

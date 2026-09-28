@@ -65,9 +65,8 @@ export const StepperBar = ({
           onClick={() => {
             update(currentStep - 1)
           }}
-          className="flex-row-1 items-center justify-center"
+          leading={<ChevronLeft size={14}/>}
         >
-          <ChevronLeft size={14}/>
           {translation('back')}
         </Button>
       </div>
@@ -95,11 +94,10 @@ export const StepperBar = ({
         <div className="flex-row-2 flex-[2] justify-end">
           <Button
             onClick={() => update(currentStep + 1)}
-            className="flex-row-1 items-center justify-center"
             disabled={disabledSteps.has(currentStep)}
+            trailing={<ChevronRight size={14}/>}
           >
             {translation('next')}
-            <ChevronRight size={14}/>
           </Button>
         </div>
       )}
@@ -108,9 +106,8 @@ export const StepperBar = ({
           <Button
             disabled={disabledSteps.has(currentStep)}
             onClick={onFinish}
-            className="flex-row-1 items-center justify-center"
+            leading={<Check size={14}/>}
           >
-            <Check size={14}/>
             {finishText ?? translation('confirm')}
           </Button>
         </div>

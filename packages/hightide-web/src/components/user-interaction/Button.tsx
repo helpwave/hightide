@@ -1,82 +1,40 @@
 import clsx from 'clsx'
-import type { ButtonHTMLAttributes } from 'react'
+import type { ReactNode } from 'react'
 import { forwardRef } from 'react'
-import { LoadingSpinner } from '../layout/loading/LoadingSpinner'
+import type { PressableProps } from './Pressable'
+import { Pressable } from './Pressable'
 
-/**
- * The different sizes for a button
- */
-type ButtonSize = 'xs' | 'sm' | 'md' | 'lg' | null
+export {
+  ButtonUtil,
+  Pressable,
+  type ButtonColor,
+  type ButtonColoringStyle,
+  type ButtonSize,
+  type PressableProps,
+} from './Pressable'
 
-type ButtonColoringStyle = 'outline' | 'solid' | 'text' | 'tonal' | 'tonal-outline' | null
-
-const buttonColorsList = ['primary', 'secondary', 'positive', 'warning', 'negative', 'neutral'] as const
-
-/**
- * The allowed colors for the Button
- */
-export type ButtonColor = typeof buttonColorsList[number] | null
-
-export const ButtonUtil = {
-  colors: buttonColorsList,
+export type ButtonProps = Omit<PressableProps, 'children'> & {
+  children: string,
+  leading?: ReactNode,
+  trailing?: ReactNode,
 }
 
-/**
- * The shard properties between all button types
- */
-export type ButtonProps = ButtonHTMLAttributes<HTMLButtonElement> & {
-  /**
-   * @default 'medium'
-   */
-  size?: ButtonSize,
-  color?: ButtonColor,
-  /**
-   * @default 'solid'
-   */
-  coloringStyle?: ButtonColoringStyle,
-  allowClickEventPropagation?: boolean,
-  isProcessing?: boolean,
-}
-
-/**
- * A button with a solid background and different sizes
- */
-export const Button = forwardRef<HTMLButtonElement, ButtonProps>(function SolidButton({
+export const Button = forwardRef<HTMLButtonElement, ButtonProps>(function Button({
   children,
-  size = 'md',
-  color = 'primary',
-  coloringStyle = 'solid',
-  disabled,
-  isProcessing = false,
+  leading,
+  trailing,
+  className,
   ...props
 }, ref) {
   return (
-    <button
+    <Pressable
       {...props}
       ref={ref}
-      disabled={disabled}
-      aria-busy={isProcessing || undefined}
-      type={props['type'] ?? 'button'}
-
-      onClick={event => {
-        if (isProcessing) {
-          return
-        }
-        props.onClick?.(event)
-      }}
-
-      className={clsx('button', props.className)}
-      data-disabled={disabled ? '': undefined}
-      data-processing={isProcessing ? '': undefined}
-      data-size={size ?? undefined}
-      data-color={color ?? undefined}
-      data-coloringstyle={coloringStyle ?? undefined}>
+      className={clsx('button', className)}
+    >
+      {leading}
       {children}
-      {isProcessing && (
-        <span className="button-processing-overlay">
-          <LoadingSpinner />
-        </span>
-      )}
-    </button>
+      {trailing}
+    </Pressable>
   )
 })

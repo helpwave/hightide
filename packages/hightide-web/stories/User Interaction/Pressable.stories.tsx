@@ -1,25 +1,25 @@
 import type { Meta, StoryObj } from '@storybook/nextjs-vite'
-import { Check, ChevronRight } from 'lucide-react'
-import { ButtonUtil } from '../../src/components/user-interaction/Button'
-import { Button } from '../../src/components/user-interaction/Button'
+import { Plus } from 'lucide-react'
+import { ButtonUtil } from '../../src/components/user-interaction/Pressable'
+import { Pressable } from '../../src/components/user-interaction/Pressable'
 import { action } from 'storybook/actions'
 
 const meta = {
-  component: Button,
+  component: Pressable,
   argTypes: {
     color: {
       control: 'select',
       options: ButtonUtil.colors,
     },
   },
-} satisfies Meta<typeof Button>
+} satisfies Meta<typeof Pressable>
 
 export default meta
 type Story = StoryObj<typeof meta>;
 
-export const button: Story = {
+export const pressable: Story = {
   args: {
-    children: 'Test',
+    children: 'Label',
     disabled: false,
     isProcessing: false,
     color: 'primary',
@@ -30,15 +30,12 @@ export const button: Story = {
   render: ({ children, ...props }) => {
     return (
       <div className="flex-row-2 items-center">
-        <Button {...props}>
+        <Pressable {...props}>
           {children}
-        </Button>
-        <Button {...props} leading={<Check size={16} />}>
-          {children}
-        </Button>
-        <Button {...props} trailing={<ChevronRight size={16} />}>
-          {children}
-        </Button>
+        </Pressable>
+        <Pressable {...props} aria-label="Add">
+          <Plus />
+        </Pressable>
       </div>
     )
   }

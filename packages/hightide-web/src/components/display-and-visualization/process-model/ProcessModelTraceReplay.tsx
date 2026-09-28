@@ -283,16 +283,16 @@ export const ProcessModelTraceReplay = ({ graph, className }: ProcessModelTraceR
               void startPlayback()
             }
           }}
+          leading={isPlaying ? <Pause /> : <Play />}
         >
-          {isPlaying ? <Pause /> : <Play />}
           {isPlaying ? translation('pauseTrace') : translation('playTrace')}
         </Button>
         <Button
           color="primary"
           coloringStyle="outline"
           onClick={resetReplay}
+          leading={<RotateCcw />}
         >
-          <RotateCcw />
           {translation('reset')}
         </Button>
         <div className="process-model-trace-replay-speed">

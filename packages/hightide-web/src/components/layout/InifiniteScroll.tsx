@@ -11,7 +11,7 @@ import {
 } from 'react'
 import clsx from 'clsx'
 import { range } from '@helpwave/hightide-utils/utils'
-import { Button } from '../user-interaction/Button'
+import { Pressable } from '../user-interaction/Pressable'
 import { ChevronDown, ChevronUp } from 'lucide-react'
 import { Visibility } from './Visibility'
 
@@ -123,15 +123,15 @@ export function InfiniteScroll({
       style={style}
     >
       <Visibility isVisible={windowState.start > 0}>
-        <Button color="neutral" onClick={() => addToStart()}>
+        <Pressable color="neutral" onClick={() => addToStart()}>
           <ChevronUp/>
-        </Button>
+        </Pressable>
       </Visibility>
       {visibleItems.map((index) => children(index))}
       <Visibility isVisible={windowState.end < itemCount - 1}>
-        <Button color="neutral" onClick={() => addToEnd()}>
+        <Pressable color="neutral" onClick={() => addToEnd()}>
           <ChevronDown/>
-        </Button>
+        </Pressable>
       </Visibility>
     </div>
   )
