@@ -1,4 +1,5 @@
 import { AlertOctagon } from 'lucide-react'
+import { Icon } from '../../display-and-visualization/Icon'
 import clsx from 'clsx'
 import { useHightideTranslation } from '@helpwave/hightide-utils/context/translation'
 
@@ -17,7 +18,7 @@ export const ErrorComponent = ({
   const translation = useHightideTranslation()
   return (
     <div className={clsx('flex-col-4 items-center justify-center w-full h-24', classname)}>
-      <AlertOctagon size={64} className="text-warning"/>
+      <Icon icon={AlertOctagon} size="xl" className="text-warning" />
       {errorText ?? `${translation('errorOccurred')} :(`}
     </div>
   )

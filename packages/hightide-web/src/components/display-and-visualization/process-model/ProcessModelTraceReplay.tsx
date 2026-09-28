@@ -283,7 +283,7 @@ export const ProcessModelTraceReplay = ({ graph, className }: ProcessModelTraceR
               void startPlayback()
             }
           }}
-          leading={isPlaying ? <Pause /> : <Play />}
+          leading={isPlaying ? Pause : Play}
         >
           {isPlaying ? translation('pauseTrace') : translation('playTrace')}
         </Button>
@@ -291,7 +291,7 @@ export const ProcessModelTraceReplay = ({ graph, className }: ProcessModelTraceR
           color="primary"
           coloringStyle="outline"
           onClick={resetReplay}
-          leading={<RotateCcw />}
+          leading={RotateCcw}
         >
           {translation('reset')}
         </Button>

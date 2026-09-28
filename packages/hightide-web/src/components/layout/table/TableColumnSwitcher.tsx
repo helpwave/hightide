@@ -208,13 +208,8 @@ export const TableColumnSwitcherPopUp = ({ ...props }: TableColumnSwitcherPopUpP
               disabled={!hasHideableColumns}
               onClick={toggleAllColumnsVisibility}
               aria-label={allColumnsVisible ? translation('hideAllColumns') : translation('showAllColumns')}
-            >
-              {allColumnsVisible ? (
-                <Eye className="size-4" />
-              ) : (
-                <EyeOff className="size-4" />
-              )}
-            </IconButton>
+              icon={allColumnsVisible ? Eye : EyeOff}
+            />
           </Visibility>
         </div>
         <span className="text-description typography-label-sm">
@@ -246,9 +241,8 @@ export const TableColumnSwitcherPopUp = ({ ...props }: TableColumnSwitcherPopUpP
                       coloringStyle="text"
                       disabled={pinState === 'left'}
                       onClick={() => pinColumn(columnId, 'left')}
-                    >
-                      <ChevronLeft className="size-4" />
-                    </IconButton>
+                      icon={ChevronLeft}
+                    />
                     <IconButton
                       tooltip={translation('pinToRight')}
                       size="sm"
@@ -256,9 +250,8 @@ export const TableColumnSwitcherPopUp = ({ ...props }: TableColumnSwitcherPopUpP
                       coloringStyle="text"
                       disabled={pinState === 'right'}
                       onClick={() => pinColumn(columnId, 'right')}
-                    >
-                      <ChevronRight className="size-4" />
-                    </IconButton>
+                      icon={ChevronRight}
+                    />
                   </>
                 ) : (
                   <>
@@ -269,9 +262,8 @@ export const TableColumnSwitcherPopUp = ({ ...props }: TableColumnSwitcherPopUpP
                       coloringStyle="text"
                       disabled={!canMoveUp}
                       onClick={() => moveColumn(columnId, 'up')}
-                    >
-                      <ChevronUp className="size-4" />
-                    </IconButton>
+                      icon={ChevronUp}
+                    />
                     <IconButton
                       tooltip={translation('decreaseSortingPriority')}
                       size="sm"
@@ -279,9 +271,8 @@ export const TableColumnSwitcherPopUp = ({ ...props }: TableColumnSwitcherPopUpP
                       coloringStyle="text"
                       disabled={!canMoveDown}
                       onClick={() => moveColumn(columnId, 'down')}
-                    >
-                      <ChevronDown className="size-4" />
-                    </IconButton>
+                      icon={ChevronDown}
+                    />
                   </>
                 )}
               </div>
@@ -298,13 +289,8 @@ export const TableColumnSwitcherPopUp = ({ ...props }: TableColumnSwitcherPopUpP
                     disabled={!column.getCanHide()}
                     onClick={() => toggleColumnVisibility(columnId)}
                     aria-label={isVisible ? translation('hideColumn') : translation('showColumn')}
-                  >
-                    {isVisible ? (
-                      <Eye className="size-4" />
-                    ) : (
-                      <EyeOff className="size-4" />
-                    )}
-                  </IconButton>
+                    icon={isVisible ? Eye : EyeOff}
+                  />
                 </Visibility>
                 <Visibility isVisible={enableColumnPinning}>
                   <IconButton
@@ -321,9 +307,8 @@ export const TableColumnSwitcherPopUp = ({ ...props }: TableColumnSwitcherPopUpP
                       }
                     }}
                     aria-label={isPinned ? translation('unpin') : translation('pinLeft')}
-                  >
-                    {!isPinned ? ( <PinOff className="size-4" />) : ( <Pin className="size-4" />)}
-                  </IconButton>
+                    icon={!isPinned ? PinOff : Pin}
+                  />
                 </Visibility>
               </>
             </div>
@@ -349,10 +334,9 @@ export const TableColumnSwitcher = ({ buttonProps, ...props }: TableColumnSwitch
             {...props}
             color="neutral"
             tooltip={translation('changeColumnDisplay')}
+            icon={Columns3Cog}
             {...buttonProps}
-          >
-            <Columns3Cog className="size-5" />
-          </IconButton>
+          />
         )}
       </PopUpOpener>
       <TableColumnSwitcherPopUp {...props} />

@@ -10,6 +10,7 @@ import {
   CircleDashed,
   CircleDot
 } from 'lucide-react'
+import { Icon } from '../../display-and-visualization/Icon'
 import type { DataType } from './data-types'
 import type { ReactNode } from 'react'
 
@@ -85,16 +86,16 @@ type OperatorInfoResult = {
 }
 const getOperatorInfo = (operator: FilterOperator) : OperatorInfoResult  => {
   switch (operator) {
-  case 'equals': return { icon: <Equal className="w-4 h-4" />, translationKey: 'equals', replacementTranslationKey: 'rEquals' }
-  case 'notEquals': return { icon: <EqualNot className="w-4 h-4" />, translationKey: 'notEquals', replacementTranslationKey: 'rNotEquals' }
-  case 'contains': return { icon: <SearchCheck className="w-4 h-4" />, translationKey: 'contains', replacementTranslationKey: 'rContains' }
-  case 'notContains': return { icon: <SearchX className="w-4 h-4" />, translationKey: 'notContains', replacementTranslationKey: 'rNotContains' }
-  case 'startsWith': return { icon: <SearchCheck className="w-4 h-4" />, translationKey: 'startsWith', replacementTranslationKey: 'rStartsWith' }
-  case 'endsWith': return { icon: <SearchX className="w-4 h-4" />, translationKey: 'endsWith', replacementTranslationKey: 'rEndsWith' }
+  case 'equals': return { icon: <Icon icon={Equal} size="xs" />, translationKey: 'equals', replacementTranslationKey: 'rEquals' }
+  case 'notEquals': return { icon: <Icon icon={EqualNot} size="xs" />, translationKey: 'notEquals', replacementTranslationKey: 'rNotEquals' }
+  case 'contains': return { icon: <Icon icon={SearchCheck} size="xs" />, translationKey: 'contains', replacementTranslationKey: 'rContains' }
+  case 'notContains': return { icon: <Icon icon={SearchX} size="xs" />, translationKey: 'notContains', replacementTranslationKey: 'rNotContains' }
+  case 'startsWith': return { icon: <Icon icon={SearchCheck} size="xs" />, translationKey: 'startsWith', replacementTranslationKey: 'rStartsWith' }
+  case 'endsWith': return { icon: <Icon icon={SearchX} size="xs" />, translationKey: 'endsWith', replacementTranslationKey: 'rEndsWith' }
   case 'greaterThan': return {
     icon: (<div className="flex-row-0 items-center">
-      <ChevronRight className="w-4 h-4" />
-      <Equal className="-ml-1 w-4 h-4" />
+      <Icon icon={ChevronRight} size="xs" />
+      <Icon icon={Equal} size="xs" className="-ml-1" />
     </div>
     ),
     translationKey: 'greaterThanOrEqual',
@@ -102,22 +103,22 @@ const getOperatorInfo = (operator: FilterOperator) : OperatorInfoResult  => {
   }
   case 'greaterThanOrEqual': return {
     icon: (<div className="flex-row-0 items-center">
-      <ChevronRight className="w-4 h-4" />
-      <Equal className="-ml-1 w-4 h-4" />
+      <Icon icon={ChevronRight} size="xs" />
+      <Icon icon={Equal} size="xs" className="-ml-1" />
     </div>
     ),
     translationKey: 'greaterThanOrEqual',
     replacementTranslationKey: 'rGreaterThanOrEqual'
   }
   case 'lessThan': return {
-    icon: <ChevronLeft className="w-4 h-4" />,
+    icon: <Icon icon={ChevronLeft} size="xs" />,
     translationKey: 'lessThan',
     replacementTranslationKey: 'rLessThan'
   }
   case 'lessThanOrEqual': return {
     icon: (<div className="flex-row-0 items-center">
-      <ChevronLeft className="w-4 h-4" />
-      <Equal className="-ml-1 w-4 h-4" />
+      <Icon icon={ChevronLeft} size="xs" />
+      <Icon icon={Equal} size="xs" className="-ml-1" />
     </div>
     ),
     translationKey: 'lessThanOrEqual',
@@ -125,8 +126,8 @@ const getOperatorInfo = (operator: FilterOperator) : OperatorInfoResult  => {
   }
   case 'between': return {
     icon: (<div className="flex-row-0 items-center">
-      <ChevronRight className="w-4 h-4" />
-      <ChevronLeft className="-ml-1 w-4 h-4" />
+      <Icon icon={ChevronRight} size="xs" />
+      <Icon icon={ChevronLeft} size="xs" className="-ml-1" />
     </div>
     ),
     translationKey: 'between',
@@ -134,17 +135,17 @@ const getOperatorInfo = (operator: FilterOperator) : OperatorInfoResult  => {
   }
   case 'notBetween': return {
     icon: (<div className="flex-row-0 items-center">
-      <ChevronLeft className="w-4 h-4" />
-      <ChevronRight className="-ml-1 w-4 h-4" />
+      <Icon icon={ChevronLeft} size="xs" />
+      <Icon icon={ChevronRight} size="xs" className="-ml-1" />
     </div>
     ),
     translationKey: 'notBetween',
     replacementTranslationKey: 'rNotBetween'
   }
-  case 'isTrue': return { icon: <CheckCircle2 className="w-4 h-4" />, translationKey: 'isTrue', replacementTranslationKey: 'isTrue' }
-  case 'isFalse': return { icon: <XCircle className="w-4 h-4" />, translationKey: 'isFalse', replacementTranslationKey: 'isFalse' }
-  case 'isUndefined': return { icon: <CircleDashed className="w-4 h-4" />, translationKey: 'isUndefined', replacementTranslationKey: 'isUndefined' }
-  case 'isNotUndefined': return { icon: <CircleDot className="w-4 h-4" />, translationKey: 'isNotUndefined', replacementTranslationKey: 'isNotUndefined' }
+  case 'isTrue': return { icon: <Icon icon={CheckCircle2} size="xs" />, translationKey: 'isTrue', replacementTranslationKey: 'isTrue' }
+  case 'isFalse': return { icon: <Icon icon={XCircle} size="xs" />, translationKey: 'isFalse', replacementTranslationKey: 'isFalse' }
+  case 'isUndefined': return { icon: <Icon icon={CircleDashed} size="xs" />, translationKey: 'isUndefined', replacementTranslationKey: 'isUndefined' }
+  case 'isNotUndefined': return { icon: <Icon icon={CircleDot} size="xs" />, translationKey: 'isNotUndefined', replacementTranslationKey: 'isNotUndefined' }
   default: return { icon: null, translationKey: 'unknown translation key', replacementTranslationKey: 'unknown' }
   }
 }

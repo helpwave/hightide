@@ -1,4 +1,5 @@
 import { Check } from 'lucide-react'
+import { Icon } from '../../display-and-visualization/Icon'
 import { PropertyBase, type PropertyField } from './PropertyBase'
 import { useHightideTranslation } from '@helpwave/hightide-utils/context/translation'
 import { Button } from '../Button'
@@ -23,15 +24,15 @@ export const CheckboxProperty = ({
       {...baseProps}
       hasValue={value !== undefined}
       readOnly={readOnly}
-      icon={<Check size={24}/>}
+      icon={<Icon icon={Check} />}
     >
       {() => (
         <div className="flex-row-2 items-center">
           <Button
             color={value ? 'positive' : 'neutral'} size="sm"
             onClick={() => {
-              onValueChange(true)
-              onEditComplete(true)
+              onValueChange?.(true)
+              onEditComplete?.(true)
             }}
             className="min-w-20"
           >
@@ -40,8 +41,8 @@ export const CheckboxProperty = ({
           <Button
             color={!value && value !== undefined ? 'negative' : 'neutral'} size="sm"
             onClick={() => {
-              onValueChange(false)
-              onEditComplete(false)
+              onValueChange?.(false)
+              onEditComplete?.(false)
             }}
             className="min-w-20"
           >

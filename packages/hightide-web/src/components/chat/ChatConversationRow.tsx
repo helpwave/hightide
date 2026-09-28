@@ -1,7 +1,7 @@
 import type { ButtonHTMLAttributes, ReactNode } from 'react'
 import clsx from 'clsx'
 import { Check, CheckCheck } from 'lucide-react'
-
+import { Icon } from '../display-and-visualization/Icon'
 import { Avatar } from '../display-and-visualization/Avatar/Avatar'
 import type { AvatarProps } from '../display-and-visualization/Avatar/AvatarComponent'
 import { PropsUtil } from '../../utils/propsUtil'
@@ -54,7 +54,9 @@ export const ChatConversationRow = ({
         <span className="chat-conversation-row-bottom">
           <span className="chat-conversation-row-preview">
             {sentIndicator && (
-              <SentIndicatorIcon
+              <Icon
+                icon={SentIndicatorIcon}
+                size="xs"
                 className="chat-conversation-row-sent-indicator"
                 data-sent-indicator={sentIndicator}
               />

@@ -1,6 +1,7 @@
 import type { HTMLAttributes, ReactNode } from 'react'
 import clsx from 'clsx'
 import { CheckCheck } from 'lucide-react'
+import { Icon } from '../display-and-visualization/Icon'
 
 export type ChatMessageDirection = 'incoming' | 'outgoing'
 
@@ -32,7 +33,7 @@ export const ChatMessageBubble = ({
         <span className="chat-message-bubble-metadata">
           {readReceipt != null && (
             <span className="chat-message-bubble-metadata-status">
-              <CheckCheck className="chat-message-bubble-metadata-icon"/>
+              <Icon icon={CheckCheck} size="xs" className="chat-message-bubble-metadata-icon" />
               <span className="chat-message-bubble-metadata-text">{readReceipt}</span>
             </span>
           )}

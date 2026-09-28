@@ -6,6 +6,7 @@ import { ArrowDownWideNarrow, ArrowUpNarrowWide, PlusIcon, TrashIcon, XIcon } fr
 import { PopUpRoot } from '../../layout/popup/PopUpRoot'
 import { PopUp } from '../../layout/popup/PopUp'
 import { PopUpOpener } from '../../layout/popup/PopUpOpener'
+import { Icon } from '../../display-and-visualization/Icon'
 import { Button } from '../Button'
 import { Pressable } from '../Pressable'
 import { Combobox } from '../Combobox/Combobox'
@@ -65,7 +66,7 @@ export const SortingList = ({ sorting, onSortingChange, availableItems }: Sortin
               color="neutral"
               size="sm"
               className="min-w-36"
-              trailing={<PlusIcon className="size-4" />}
+              trailing={PlusIcon}
             >
               {translation('addSorting')}
             </Button>
@@ -105,7 +106,7 @@ export const SortingList = ({ sorting, onSortingChange, availableItems }: Sortin
               {({ toggleOpen, props }) => (
                 <Pressable {...props} onClick={toggleOpen} color="secondary" coloringStyle="tonal-outline" size="sm">
                   <span className="font-bold">{item.label}</span>
-                  {columnSort.desc ? <ArrowDownWideNarrow className="size-5"/> : <ArrowUpNarrowWide className="size-5"/>}
+                  <Icon icon={columnSort.desc ? ArrowDownWideNarrow : ArrowUpNarrowWide} size="sm" />
                 </Pressable>
               )}
             </PopUpOpener>
@@ -130,18 +131,16 @@ export const SortingList = ({ sorting, onSortingChange, availableItems }: Sortin
                           color="negative"
                           coloringStyle="text"
                           size="sm"
-                        >
-                          <TrashIcon className="size-4" />
-                        </IconButton>
+                          icon={TrashIcon}
+                        />
                         <IconButton
                           tooltip={translation('close')}
                           onClick={() => setIsOpen(false)}
                           color="neutral"
                           coloringStyle="text"
                           size="sm"
-                        >
-                          <XIcon className="size-4" />
-                        </IconButton>
+                          icon={XIcon}
+                        />
                       </div>
                     </div>
                     <div className="flex-row-1 w-full gap-2">
@@ -152,7 +151,7 @@ export const SortingList = ({ sorting, onSortingChange, availableItems }: Sortin
                         coloringStyle="solid"
                         size="md"
                         onClick={() => setSortDirection(columnSort.id, false)}
-                        leading={<ArrowUpNarrowWide className="size-4" />}
+                        leading={ArrowUpNarrowWide}
                       >
                         {translation('sortAsc')}
                       </Button>
@@ -163,7 +162,7 @@ export const SortingList = ({ sorting, onSortingChange, availableItems }: Sortin
                         coloringStyle="solid"
                         size="md"
                         onClick={() => setSortDirection(columnSort.id, true)}
-                        leading={<ArrowDownWideNarrow className="size-4" />}
+                        leading={ArrowDownWideNarrow}
                       >
                         {translation('sortDesc')}
                       </Button>

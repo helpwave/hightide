@@ -8,6 +8,7 @@ import { useAnchoredPosition } from '../../../hooks/useAnchoredPosition'
 import { ExpansionIcon } from '../../display-and-visualization/ExpansionIcon'
 import { useOverlayRegistry } from '@helpwave/hightide-utils/hooks'
 import { useHightideTranslation } from '@helpwave/hightide-utils/context/translation'
+import { Icon } from '../../display-and-visualization/Icon'
 import { IconButton } from '../../user-interaction/IconButton'
 
 type SimpleNavigationItem = {
@@ -212,7 +213,7 @@ export const Navigation = ({ ...props }: NavigationProps) => {
         aria-expanded={isMobileOpen}
         aria-controls={'navigation-menu-' + id}
       >
-        <MenuIcon className="w-6 h-6"/>
+        <Icon icon={MenuIcon} />
       </IconButton>
       <div
         id={'navigation-menu-' + id}
@@ -237,7 +238,7 @@ export const Navigation = ({ ...props }: NavigationProps) => {
             }
           }}
         >
-          <XIcon/>
+          <Icon icon={XIcon} />
         </IconButton>
         <NavigationItemList
           {...props}

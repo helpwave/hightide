@@ -1,4 +1,5 @@
 import { FilterIcon } from 'lucide-react'
+import { Icon } from '../../display-and-visualization/Icon'
 import { useEffect, useId, useMemo, useRef, useState } from 'react'
 import type { Header } from '@tanstack/react-table'
 import { flexRender } from '@tanstack/react-table'
@@ -62,7 +63,7 @@ export const TableFilterButton = ({
 
         className="relative"
       >
-        <FilterIcon className="size-4"/>
+        <Icon icon={FilterIcon} size="xs" />
         <Visibility isVisible={hasFilter}>
           <div className="absolute -top-1 -right-1 w-2 h-2 rounded-full bg-primary" />
         </Visibility>

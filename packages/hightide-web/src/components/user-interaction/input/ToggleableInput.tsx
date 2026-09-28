@@ -1,5 +1,6 @@
 import { forwardRef, useEffect, useRef, useState } from 'react'
 import { Pencil } from 'lucide-react'
+import { Icon } from '../../display-and-visualization/Icon'
 import clsx from 'clsx'
 import type { EditCompleteOptions, InputProps } from './Input'
 import { Input } from './Input'
@@ -68,7 +69,7 @@ export const ToggleableInput = forwardRef<HTMLInputElement, ToggleableInputProps
           <span className={clsx(' truncate')}>
             {value}
           </span>
-          <Pencil className={clsx(`size-force-4`, { 'text-transparent': isEditing })} />
+          <Icon icon={Pencil} size="xs" className={clsx({ 'text-transparent': isEditing })} />
         </div>
       )}
     </div>

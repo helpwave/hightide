@@ -1,6 +1,7 @@
 import type { ReactNode } from 'react'
 import clsx from 'clsx'
 import { AlertTriangle, Trash, X } from 'lucide-react'
+import { Icon } from '../../display-and-visualization/Icon'
 import { useHightideTranslation } from '@helpwave/hightide-utils/context/translation'
 import { Tooltip } from '../Tooltip'
 import { PropsUtil } from '../../../utils/propsUtil'
@@ -66,9 +67,8 @@ export const PropertyBase = ({
           color="negative"
           coloringStyle="text"
           size="sm"
-        >
-          <X className="size-force-5" />
-        </IconButton>
+          icon={X}
+        />
       )}
       {isRemoveEnabled && (
         <IconButton
@@ -77,9 +77,8 @@ export const PropertyBase = ({
           color="negative"
           coloringStyle="text"
           size="sm"
-        >
-          <Trash className="size-force-5" />
-        </IconButton>
+          icon={Trash}
+        />
       )}
     </>
   )
@@ -102,7 +101,7 @@ export const PropertyBase = ({
               </div>
             </Tooltip>
             {invalid && (
-              <AlertTriangle className="size-force-6 shrink-0"/>
+              <Icon icon={AlertTriangle} />
             )}
           </div>
           {showActionsContainer && (

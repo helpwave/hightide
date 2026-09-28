@@ -1,7 +1,7 @@
 import type { AnchorHTMLAttributes, ButtonHTMLAttributes, ElementType, MouseEvent, ReactNode } from 'react'
 import clsx from 'clsx'
 import { ChevronRight, ExternalLink } from 'lucide-react'
-
+import { Icon } from '../display-and-visualization/Icon'
 import { PropsUtil } from '../../utils/propsUtil'
 import { ListItemContent } from './ListItemContent'
 import type { ListItemColor, ListItemContentOrder } from './ListItemTypes'
@@ -29,8 +29,6 @@ function ListNavigationContent({
   leading,
   isExternal = false,
 }: ListNavigationContentProps) {
-  const Icon = isExternal ? ExternalLink : ChevronRight
-
   return (
     <ListItemContent
       title={title}
@@ -38,7 +36,14 @@ function ListNavigationContent({
       content={content}
       contentOrder={contentOrder}
       leading={leading}
-      trailing={<Icon className="list-navigation-item-icon" aria-hidden="true" />}
+      trailing={(
+        <Icon
+          icon={isExternal ? ExternalLink : ChevronRight}
+          size="sm"
+          className="list-navigation-item-icon"
+          aria-hidden={true}
+        />
+      )}
     />
   )
 }

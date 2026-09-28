@@ -1,4 +1,5 @@
 import { ChevronDown, ChevronsUpDown, ChevronUp } from 'lucide-react'
+import { Icon } from '../../display-and-visualization/Icon'
 import clsx from 'clsx'
 import type { SortDirection } from '@tanstack/react-table'
 import { Visibility } from '../Visibility'
@@ -31,14 +32,14 @@ export const TableSortButton = ({
 }: TableSortButtonProps) => {
   const translation = useHightideTranslation()
 
-  let icon = <ChevronsUpDown className="size-4"/>
+  let icon = <Icon icon={ChevronsUpDown} size="xs" />
   if (sortDirection) {
     let usedSortDirection = sortDirection
     if (invert) {
       usedSortDirection = usedSortDirection === 'desc' ? 'asc' : 'desc'
     }
     icon = usedSortDirection === 'asc' ?
-      (<ChevronUp className="size-4"/>) : (<ChevronDown className="size-4"/>)
+      (<Icon icon={ChevronUp} size="xs" />) : (<Icon icon={ChevronDown} size="xs" />)
   }
 
   const parsedIndex = sortingIndexDisplay?.index ?? -1

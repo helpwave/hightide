@@ -1,5 +1,6 @@
-import type { ForwardedRef, ReactNode } from 'react'
+import type { ElementType, ForwardedRef, ReactNode } from 'react'
 import { forwardRef,type ButtonHTMLAttributes } from 'react'
+import { Icon } from '../display-and-visualization/Icon'
 import type { TooltipDisplayProps } from './Tooltip'
 import { TooltipContext, TooltipDisplay, TooltipRoot, useTooltip } from './Tooltip'
 import { Visibility } from '../layout/Visibility'
@@ -27,10 +28,12 @@ export interface IconButtonBaseProps extends ButtonHTMLAttributes<HTMLButtonElem
      */
     coloringStyle?: IconButtonColoringStyle,
     isProcessing?: boolean,
+    icon?: ElementType,
 }
 
 export const IconButtonBase = forwardRef<HTMLButtonElement, IconButtonBaseProps>(function IconButtonBase({
   children,
+  icon,
   size = 'md',
   color = 'primary',
   coloringStyle = 'solid',
@@ -60,7 +63,7 @@ export const IconButtonBase = forwardRef<HTMLButtonElement, IconButtonBaseProps>
       data-color={color ?? undefined}
       data-coloringstyle={coloringStyle ?? undefined}
     >
-      {isProcessing ? <LoadingSpinner /> : children}
+      {isProcessing ? <LoadingSpinner /> : (children ?? <Icon icon={icon} />)}
     </button>
   )
 })

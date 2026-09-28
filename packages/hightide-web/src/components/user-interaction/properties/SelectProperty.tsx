@@ -1,4 +1,5 @@
 import { List } from 'lucide-react'
+import { Icon } from '../../display-and-visualization/Icon'
 import type { PropsWithChildren } from 'react'
 import type { PropertyField } from './PropertyBase'
 import { PropertyBase } from './PropertyBase'
@@ -20,7 +21,7 @@ export const SingleSelectProperty = ({
     <PropertyBase
       {...props}
       hasValue={hasValue}
-      icon={<List size={24}/>}
+      icon={<Icon icon={List} />}
     >
       {({ invalid }) => (
         <div

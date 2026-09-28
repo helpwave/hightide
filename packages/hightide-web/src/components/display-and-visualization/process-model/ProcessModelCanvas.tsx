@@ -1,6 +1,7 @@
 import { useId, useMemo, type ReactNode } from 'react'
 import clsx from 'clsx'
 import { Check, Plus } from 'lucide-react'
+import { Icon } from '../Icon'
 import { ProcessModelActivityNode } from './ProcessModelActivityNode'
 import { ProcessModelTerminalNode } from './ProcessModelTerminalNode'
 import { ProcessModelLayoutUtilities } from './layoutProcessModel'
@@ -25,9 +26,9 @@ export type ProcessModelCanvasProps = {
 
 function defaultRenderActivityIcon(node: ProcessModelGraphActivityNode): ReactNode {
   if (node.activityIcon === 'check') {
-    return <Check size={15} strokeWidth={2} className="process-model-activity-node-icon-svg" />
+    return <Icon icon={Check} size="xs" className="process-model-activity-node-icon-svg" />
   }
-  return <Plus size={15} strokeWidth={2} className="process-model-activity-node-icon-svg" />
+  return <Icon icon={Plus} size="xs" className="process-model-activity-node-icon-svg" />
 }
 
 function isVisited(

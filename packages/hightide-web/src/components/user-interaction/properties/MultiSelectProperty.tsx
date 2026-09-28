@@ -1,4 +1,5 @@
 import { List } from 'lucide-react'
+import { Icon } from '../../display-and-visualization/Icon'
 import { PropertyBase, type PropertyField } from './PropertyBase'
 import type { PropsWithChildren } from 'react'
 import { PropsUtil } from '../../../utils/propsUtil'
@@ -19,7 +20,7 @@ export const MultiSelectProperty = ({
     <PropertyBase
       {...props}
       hasValue={hasValue}
-      icon={<List size={24}/>}
+      icon={<Icon icon={List} />}
     >
       {({ invalid }) => (
         <div

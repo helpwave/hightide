@@ -75,9 +75,8 @@ export const MultiSelectChipDisplayTrigger = forwardRef<
             color="negative"
             coloringStyle="text"
             className="flex-row-0 items-center size-7 p-1"
-          >
-            <XIcon className="size-5" />
-          </IconButton>
+            icon={XIcon}
+          />
         </div>
       ))}
       <IconButton
@@ -108,9 +107,8 @@ export const MultiSelectChipDisplayTrigger = forwardRef<
           context.isOpen ? context.config.ids.content : undefined
         }
         className="multi-select-chip-display-add-button"
-      >
-        <Plus />
-      </IconButton>
+        icon={Plus}
+      />
     </div>
   )
 })

@@ -1,4 +1,5 @@
 import { Binary, Calendar, CalendarClock, Check, Database, Tag, Tags, TextIcon } from 'lucide-react'
+import { Icon } from '../../display-and-visualization/Icon'
 import type { ReactNode } from 'react'
 
 const dataTypes = [
@@ -45,21 +46,21 @@ const getDefaultValue = (type: DataType, selectOptions?: string[]): DataValue =>
 function toIcon(type: DataType): ReactNode {
   switch (type) {
   case 'text':
-    return <TextIcon className="size-4" />
+    return <Icon icon={TextIcon} size="xs" />
   case 'number':
-    return <Binary className="size-4" />
+    return <Icon icon={Binary} size="xs" />
   case 'boolean':
-    return <Check className="size-4" />
+    return <Icon icon={Check} size="xs" />
   case 'date':
-    return <Calendar className="size-4" />
+    return <Icon icon={Calendar} size="xs" />
   case 'dateTime':
-    return <CalendarClock className="size-4" />
+    return <Icon icon={CalendarClock} size="xs" />
   case 'singleTag':
-    return <Tag className="size-4" />
+    return <Icon icon={Tag} size="xs" />
   case 'multiTags':
-    return <Tags className="size-4" />
+    return <Icon icon={Tags} size="xs" />
   case 'unknownType':
-    return <Database className="size-4" />
+    return <Icon icon={Database} size="xs" />
   }
 }
 

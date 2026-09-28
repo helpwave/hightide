@@ -71,9 +71,8 @@ export const FlexibleDateTimeInput = forwardRef<HTMLDivElement, FlexibleDateTime
             }
             setMode(nextMode)
           }}
-        >
-          {mode === 'date' ? <ClockPlus className="size-5"/> : <ClockFading className="size-5"/>}
-        </IconButton>,
+          icon={mode === 'date' ? ClockPlus : ClockFading}
+        />
       ]}
     />
   )

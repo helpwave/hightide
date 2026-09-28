@@ -62,7 +62,7 @@ export const DatePicker = ({
           size="sm"
           color="neutral"
           onClick={() => setDisplayMode(displayMode === 'day' ? 'yearMonth' : 'day')}
-          trailing={<ChevronDown size={16}/>}
+          trailing={ChevronDown}
         >
           {`${new Intl.DateTimeFormat(LocalizationUtil.isoLocaleToLanguage(locale), { month: 'short' }).format(displayedMonth)} ${displayedMonth.getFullYear()}`}
         </Button>
@@ -78,9 +78,8 @@ export const DatePicker = ({
               setValue(newDate)
               setDisplayedMonth(newDate)
             }}
-          >
-            <Calendar className="size-5"/>
-          </IconButton>
+            icon={Calendar}
+          />
           <IconButton
             tooltip={translation('time.previousMonth')}
             size="sm"
@@ -88,9 +87,8 @@ export const DatePicker = ({
             onClick={() => {
               setDisplayedMonth(DateUtils.subtractDuration(displayedMonth, { months: 1 }))
             }}
-          >
-            <ArrowUp size={20}/>
-          </IconButton>
+            icon={ArrowUp}
+          />
           <IconButton
             tooltip={translation('time.nextMonth')}
             size="sm"
@@ -98,9 +96,8 @@ export const DatePicker = ({
             onClick={() => {
               setDisplayedMonth(DateUtils.addDuration(displayedMonth, { months: 1 }))
             }}
-          >
-            <ArrowDown size={20}/>
-          </IconButton>
+            icon={ArrowDown}
+          />
         </div>
       </div>
       {displayMode === 'yearMonth' ? (

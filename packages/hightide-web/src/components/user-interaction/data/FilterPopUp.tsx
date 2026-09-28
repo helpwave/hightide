@@ -91,18 +91,16 @@ export const FilterBasePopUp = forwardRef<HTMLDivElement, FilterPopUpBaseProps>(
             color="negative"
             coloringStyle="text"
             size="sm"
-          >
-            <TrashIcon className="size-4" />
-          </IconButton>
+            icon={TrashIcon}
+          />
           <IconButton
             tooltip={translation('done')}
             onClick={props.onClose}
             color="neutral"
             coloringStyle="text"
             size="sm"
-          >
-            <Check className="size-4" />
-          </IconButton>
+            icon={Check}
+          />
         </div>
       </div>
       {children}

@@ -33,10 +33,10 @@ export const button: Story = {
         <Button {...props}>
           {children}
         </Button>
-        <Button {...props} leading={<Check size={16} />}>
+        <Button {...props} leading={Check}>
           {children}
         </Button>
-        <Button {...props} trailing={<ChevronRight size={16} />}>
+        <Button {...props} trailing={ChevronRight}>
           {children}
         </Button>
       </div>

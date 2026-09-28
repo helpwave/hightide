@@ -160,9 +160,8 @@ export const DateTimeInput = forwardRef<HTMLDivElement, DateTimeInputProps>(func
                 setState(null)
                 onEditComplete?.(null)
               }}
-            >
-              <X className="size-5"/>
-            </IconButton>
+              icon={X}
+            />
           </Visibility>
           <Visibility isVisible={hasTimePicker}>
             <IconButton
@@ -175,9 +174,8 @@ export const DateTimeInput = forwardRef<HTMLDivElement, DateTimeInputProps>(func
               aria-haspopup="dialog"
               aria-expanded={isOpen}
               aria-controls={isOpen ? ids.popup : undefined}
-            >
-              <CalendarIcon className="size-5"/>
-            </IconButton>
+              icon={CalendarIcon}
+            />
           </Visibility>
         </div>
       </div>

@@ -128,9 +128,8 @@ export const NumberStepperInput = forwardRef<HTMLInputElement, NumberStepperInpu
       onPointerUp={() => stop('button', 1)}
       onPointerLeave={() => stop('button', 1)}
       onPointerCancel={() => stop('button', 1)}
-    >
-      <Plus aria-hidden={true} />
-    </IconButton>
+      icon={Plus}
+    />
   )
 
   const minusButton = (
@@ -147,9 +146,8 @@ export const NumberStepperInput = forwardRef<HTMLInputElement, NumberStepperInpu
       onPointerUp={() => stop('button', -1)}
       onPointerLeave={() => stop('button', -1)}
       onPointerCancel={() => stop('button', -1)}
-    >
-      <Minus aria-hidden={true} />
-    </IconButton>
+      icon={Minus}
+    />
   )
 
   return (

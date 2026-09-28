@@ -4,6 +4,7 @@ import { useCallback, useMemo, useRef, useState, type HTMLAttributes, type React
 import { IconButton } from '../../user-interaction/IconButton'
 import { useHightideTranslation } from '@helpwave/hightide-utils/context/translation'
 import { MenuIcon, X } from 'lucide-react'
+import { Icon } from '../../display-and-visualization/Icon'
 import { useOverlayRegistry } from '@helpwave/hightide-utils/hooks'
 import { PropsUtil } from '../../../utils/propsUtil'
 import type { LinkComponentProps } from '../navigation/navigation-menus/VerticalNavigationMenu'
@@ -50,7 +51,7 @@ export const AppSidebar = ({ isOpen = false, onClose, children, ...props }: AppS
               coloringStyle="text"
               color="neutral"
             >
-              <X className="size-6" />
+              <Icon icon={X} />
             </IconButton>
             {children}
           </aside>
@@ -214,7 +215,7 @@ export const AppPage = ({
             onClick={() => setIsSidebarOpen(prev => !prev)}
             coloringStyle="text"
           >
-            <MenuIcon />
+            <Icon icon={MenuIcon} />
           </IconButton>
           {headerActions}
         </header>

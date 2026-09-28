@@ -32,9 +32,8 @@ export function DrawerCloseButton({
         handleClose()
         onClick?.(event)
       }}
-    >
-      <X />
-    </IconButton>
+      icon={X}
+    />
   )
 }
 

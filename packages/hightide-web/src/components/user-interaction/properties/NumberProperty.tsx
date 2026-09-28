@@ -1,4 +1,5 @@
 import { Binary } from 'lucide-react'
+import { Icon } from '../../display-and-visualization/Icon'
 import { Input } from '../input/Input'
 import { useHightideTranslation } from '@helpwave/hightide-utils/context/translation'
 import type { PropertyField } from './PropertyBase'
@@ -28,7 +29,7 @@ export const NumberProperty = ({
       {...baseProps}
       onValueClear={onValueClear}
       hasValue={hasValue}
-      icon={<Binary size={24}/>}
+      icon={<Icon icon={Binary} />}
     >
       {({ invalid }) => (
         <div

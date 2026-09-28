@@ -1,5 +1,6 @@
 import { LoaderCircle } from 'lucide-react'
 import clsx from 'clsx'
+import { Icon } from '../../display-and-visualization/Icon'
 
 export type LoadingSpinnerProps = {
   className?: string,
@@ -7,6 +8,11 @@ export type LoadingSpinnerProps = {
 
 export const LoadingSpinner = ({ className }: LoadingSpinnerProps) => {
   return (
-    <LoaderCircle className={clsx('size-4 animate-spin', className)} aria-hidden />
+    <Icon
+      icon={LoaderCircle}
+      size="xs"
+      className={clsx('animate-spin', className)}
+      aria-hidden
+    />
   )
 }

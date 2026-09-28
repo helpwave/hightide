@@ -1,4 +1,5 @@
 import { Text } from 'lucide-react'
+import { Icon } from '../../display-and-visualization/Icon'
 import { useHightideTranslation } from '@helpwave/hightide-utils/context/translation'
 import { Textarea } from '../Textarea'
 import type { PropertyField } from './PropertyBase'
@@ -24,7 +25,7 @@ export const TextProperty = ({
     <PropertyBase
       {...baseProps}
       hasValue={hasValue}
-      icon={<Text size={24}/>}
+      icon={<Icon icon={Text} />}
     >
       {({ invalid }) => (
         <Textarea

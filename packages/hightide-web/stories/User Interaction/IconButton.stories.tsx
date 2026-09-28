@@ -26,13 +26,6 @@ export const iconButton: Story = {
     coloringStyle: 'solid',
     tooltip: 'Subtract',
     onClick: action('Clicked'),
-    children: <MinusIcon className="size-4"/>,
+    icon: MinusIcon,
   },
-  render: ({ children, ...props }) => {
-    return (
-      <IconButton {...props}>
-        {children}
-      </IconButton>
-    )
-  }
 }

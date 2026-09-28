@@ -1,7 +1,7 @@
 import type { HTMLAttributes } from 'react'
 import clsx from 'clsx'
 import { UserIcon } from 'lucide-react'
-
+import { Icon } from '../Icon'
 import { isImageShown, useAvatarContext } from './AvatarContext'
 
 export function AvatarFallback({
@@ -16,7 +16,7 @@ export function AvatarFallback({
       {...props}
       className={clsx('avatar-fallback', className)}
     >
-      <UserIcon />
+      <Icon icon={UserIcon} />
     </div>
   )
 }

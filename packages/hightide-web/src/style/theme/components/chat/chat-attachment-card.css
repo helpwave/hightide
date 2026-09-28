@@ -11,14 +11,6 @@
     }
   }
 
-  .chat-attachment-card-icon {
-    @apply flex-row-0 shrink-0 items-center justify-center size-11 rounded-md negative coloring-tonal;
-
-    > svg {
-      @apply size-5.5;
-    }
-  }
-
   .chat-attachment-card-info {
     @apply flex-col-0 gap-y-0.5 grow min-w-0;
   }

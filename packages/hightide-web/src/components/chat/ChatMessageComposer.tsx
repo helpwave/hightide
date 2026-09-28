@@ -2,6 +2,7 @@ import type { HTMLAttributes, ReactNode } from 'react'
 import { useCallback, useLayoutEffect, useRef } from 'react'
 import clsx from 'clsx'
 import { SendHorizontal } from 'lucide-react'
+import { Icon } from '../display-and-visualization/Icon'
 import { IconButton } from '../user-interaction/IconButton'
 import { useControlledState } from '@helpwave/hightide-utils/hooks'
 import { useWindowResizeObserver } from '../../hooks/useWindowResizeObserver'
@@ -95,7 +96,7 @@ export const ChatMessageComposer = ({
         onClick={send}
         className="chat-message-composer-send-button"
       >
-        <SendHorizontal/>
+        <Icon icon={SendHorizontal} />
       </IconButton>
     </div>
   )

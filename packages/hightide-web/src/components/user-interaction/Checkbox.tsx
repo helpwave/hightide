@@ -1,5 +1,7 @@
 import clsx from 'clsx'
 import { Check, Minus } from 'lucide-react'
+import type { IconSize } from '../display-and-visualization/Icon'
+import { Icon } from '../display-and-visualization/Icon'
 import { useCallback, type HTMLAttributes } from 'react'
 import { Visibility } from '../layout/Visibility'
 import type { FormFieldInteractionStates } from '../form/FieldLayout'
@@ -57,6 +59,7 @@ export const Checkbox = ({
   })
 
   const interactive = !disabled && !readOnly
+  const indicatorSize: IconSize = size === 'sm' ? 'sm' : size === 'lg' ? 'lg' : 'md'
 
   return (
     <div
@@ -90,10 +93,10 @@ export const Checkbox = ({
 
       className={clsx('checkbox', props.className)}>
       <Visibility isVisible={indeterminate}>
-        <Minus className="checkbox-indicator" aria-hidden={true} />
+        <Icon icon={Minus} size={indicatorSize} className="checkbox-indicator" aria-hidden={true} />
       </Visibility>
       <Visibility isVisible={!indeterminate && (alwaysShowCheckIcon || value)}>
-        <Check className="checkbox-indicator" aria-hidden={true} />
+        <Icon icon={Check} size={indicatorSize} className="checkbox-indicator" aria-hidden={true} />
       </Visibility>
     </div>
   )

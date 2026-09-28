@@ -65,7 +65,7 @@ export const StepperBar = ({
           onClick={() => {
             update(currentStep - 1)
           }}
-          leading={<ChevronLeft size={14}/>}
+          leading={ChevronLeft}
         >
           {translation('back')}
         </Button>
@@ -95,7 +95,7 @@ export const StepperBar = ({
           <Button
             onClick={() => update(currentStep + 1)}
             disabled={disabledSteps.has(currentStep)}
-            trailing={<ChevronRight size={14}/>}
+            trailing={ChevronRight}
           >
             {translation('next')}
           </Button>
@@ -106,7 +106,7 @@ export const StepperBar = ({
           <Button
             disabled={disabledSteps.has(currentStep)}
             onClick={onFinish}
-            leading={<Check size={14}/>}
+            leading={Check}
           >
             {finishText ?? translation('confirm')}
           </Button>

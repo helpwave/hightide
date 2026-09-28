@@ -48,17 +48,15 @@ export const Pagination = ({
         coloringStyle="text"
         color="neutral"
         onClick={() => changePage(0)} disabled={onFirstPage || noPages}
-      >
-        <ChevronFirst/>
-      </IconButton>
+        icon={ChevronFirst}
+      />
       <IconButton
         tooltip={translation('previous')}
         coloringStyle="text"
         color="neutral"
         onClick={() => changePage(pageIndex - 1)} disabled={onFirstPage || noPages}
-      >
-        <ChevronLeft/>
-      </IconButton>
+        icon={ChevronLeft}
+      />
       <div className="flex-row-2 min-w-56 items-center justify-center mx-2 text-center">
         <Input
           value={value}
@@ -93,17 +91,15 @@ export const Pagination = ({
         coloringStyle="text"
         color="neutral"
         onClick={() => changePage(pageIndex + 1)} disabled={onLastPage || noPages}
-      >
-        <ChevronRight/>
-      </IconButton>
+        icon={ChevronRight}
+      />
       <IconButton
         tooltip={translation('last')}
         coloringStyle="text"
         color="neutral"
         onClick={() => changePage(pageCount - 1)} disabled={onLastPage || noPages}
-      >
-        <ChevronLast/>
-      </IconButton>
+        icon={ChevronLast}
+      />
     </div>
   )
 }

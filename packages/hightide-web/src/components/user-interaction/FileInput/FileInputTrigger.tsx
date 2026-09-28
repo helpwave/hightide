@@ -3,6 +3,7 @@ import type React from 'react'
 import type { ComponentPropsWithoutRef, ForwardedRef, ReactNode } from 'react'
 import { forwardRef } from 'react'
 import { FileText, Pencil, Plus } from 'lucide-react'
+import { Icon } from '../../display-and-visualization/Icon'
 import { useHightideTranslation } from '@helpwave/hightide-utils/context/translation'
 import { ReactUtils } from '@helpwave/hightide-utils/utils'
 import { useFileInputContext } from './FileInputContext'
@@ -73,7 +74,7 @@ const FileInputTriggerImpl = forwardRef<HTMLDivElement, FileInputTriggerProps>(f
           <>
             {visible.map((file) => (
               <div key={file.id} className="file-input-file-row">
-                <FileText aria-hidden={true} />
+                <Icon icon={FileText} aria-hidden={true} />
                 <span className="file-input-file-name">{file.name}</span>
               </div>
             ))}
@@ -85,11 +86,7 @@ const FileInputTriggerImpl = forwardRef<HTMLDivElement, FileInputTriggerProps>(f
           </>
         ) : resolvedPlaceholder}
       </div>
-      {hasFiles ? (
-        <Pencil aria-hidden={true} />
-      ) : (
-        <Plus aria-hidden={true} />
-      )}
+      <Icon icon={hasFiles ? Pencil : Plus} aria-hidden={true} />
     </div>
   )
 })

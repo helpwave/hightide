@@ -430,18 +430,16 @@ export const Carousel = ({
                 className={clsx('absolute z-10 left-2 top-1/2 -translate-y-1/2 shadow-md', { hidden: !canGoLeft() })}
                 disabled={!canGoLeft()}
                 onClick={() => left()}
-              >
-                <ChevronLeft size={24}/>
-              </IconButton>
+                icon={ChevronLeft}
+              />
               <IconButton
                 tooltip={translation('next')}
                 color="neutral"
                 className={clsx('absolute z-10 right-2 top-1/2 -translate-y-1/2 shadow-md', { hidden: !canGoRight() })}
                 disabled={!canGoRight()}
                 onClick={() => right()}
-              >
-                <ChevronRight size={24}/>
-              </IconButton>
+                icon={ChevronRight}
+              />
             </>
           )}
         </div>

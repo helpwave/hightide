@@ -1,6 +1,7 @@
 import type { InputProps } from './Input'
 import { Input } from './Input'
 import { Search } from 'lucide-react'
+import { Icon } from '../../display-and-visualization/Icon'
 import { clsx } from 'clsx'
 import { useHightideTranslation } from '@helpwave/hightide-utils/context/translation'
 import type { HTMLAttributes } from 'react'
@@ -49,7 +50,7 @@ export const SearchBar = ({
         onClick={() => onSearch(value)}
         className={clsx('search-bar-icon-button', searchButtonProps?.className)}
       >
-        <Search className="search-bar-icon"/>
+        <Icon icon={Search} size="sm" className="search-bar-icon" />
       </IconButton>
     </div>
   )

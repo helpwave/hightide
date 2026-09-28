@@ -1,6 +1,7 @@
 import type { ElementType, HTMLAttributeAnchorTarget, ReactNode } from 'react'
 import { useId, useRef } from 'react'
 import { ExternalLink } from 'lucide-react'
+import { Icon } from '../../../display-and-visualization/Icon'
 import { ExpansionIcon } from '../../../display-and-visualization/ExpansionIcon'
 import { IconButton } from '../../../user-interaction/IconButton'
 import { useNavigationItem } from './NavigationContext'
@@ -60,7 +61,7 @@ export function VerticalNavigationMenuItem({
       <div className="vertical-navigation-item-label" data-action-padding={hasChildren ? '' : undefined}>
         {label}
         {external && (
-          <ExternalLink className="vertical-navigation-item-link-external-icon" />
+          <Icon icon={ExternalLink} size="sm" className="vertical-navigation-item-link-external-icon" />
         )}
       </div>
     </LinkComponent>

@@ -1,5 +1,6 @@
 import clsx from 'clsx'
 import { CheckIcon } from 'lucide-react'
+import { Icon } from '../../display-and-visualization/Icon'
 import type React from 'react'
 import type { ForwardedRef, HTMLAttributes, RefObject } from 'react'
 import { createContext, forwardRef, useContext, useEffect, useMemo, useRef } from 'react'
@@ -123,8 +124,10 @@ const MultiSelectOptionImpl = forwardRef<
         }
       }}>
       {iconAppearanceResolved === 'left' && (
-        <CheckIcon
-          className={clsx('w-4 h-4', { 'opacity-0': !isSelected || disabled })}
+        <Icon
+          icon={CheckIcon}
+          size="xs"
+          className={clsx({ 'opacity-0': !isSelected || disabled })}
           aria-hidden={true}
         />
       )}
@@ -132,8 +135,10 @@ const MultiSelectOptionImpl = forwardRef<
         {display}
       </MultiSelectOptionDisplayContext.Provider>
       {iconAppearanceResolved === 'right' && (
-        <CheckIcon
-          className={clsx('w-4 h-4', { 'opacity-0': !isSelected || disabled })}
+        <Icon
+          icon={CheckIcon}
+          size="xs"
+          className={clsx({ 'opacity-0': !isSelected || disabled })}
           aria-hidden={true}
         />
       )}

@@ -2,6 +2,7 @@ import { useState } from 'react'
 import { clsx } from 'clsx'
 import { writeToClipboard } from '../../utils/writeToClipboard'
 import { CheckIcon, Copy } from 'lucide-react'
+import { Icon } from '../display-and-visualization/Icon'
 import { useHightideTranslation } from '@helpwave/hightide-utils/context/translation'
 import { TooltipDisplay, TooltipRoot, TooltipTrigger, type TooltipProps } from './Tooltip'
 
@@ -61,12 +62,12 @@ export const CopyToClipboardWrapper = ({
       >
         {isShowingConfirmation ? (
           <div className="flex-row-1">
-            <CheckIcon size={16} className="text-positive"/>
+            <Icon icon={CheckIcon} size="xs" className="text-positive" />
             {translation('copied')}
           </div>
         ) : (
           <div className="flex-row-1 text-description">
-            <Copy size={16}/>
+            <Icon icon={Copy} size="xs" />
             {translation('clickToCopy')}
           </div>
         )}

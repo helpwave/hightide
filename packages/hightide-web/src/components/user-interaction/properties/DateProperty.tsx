@@ -1,4 +1,5 @@
 import { CalendarDays } from 'lucide-react'
+import { Icon } from '../../display-and-visualization/Icon'
 import { PropertyBase, type PropertyField } from './PropertyBase'
 import { DateTimeInput, type DateTimeInputProps } from '../input/DateTimeInput'
 import { PropsUtil } from '../../../utils/propsUtil'
@@ -41,7 +42,7 @@ export const DateProperty = ({
         onEditComplete?.(null)
       })}
       hasValue={hasValue}
-      icon={<CalendarDays size={24}/>}
+      icon={<Icon icon={CalendarDays} />}
       className={className}
     >
       {({ invalid }) => (

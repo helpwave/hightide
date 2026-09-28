@@ -4,6 +4,7 @@ import clsx from 'clsx'
 import { useHightideTranslation } from '@helpwave/hightide-utils/context/translation'
 import { Dialog } from '../../layout/dialog/Dialog'
 import { Button } from '../Button'
+import { Icon } from '../../display-and-visualization/Icon'
 import { IconButton } from '../IconButton'
 import { useFileInputContext } from './FileInputContext'
 import {
@@ -85,7 +86,7 @@ export const FileInputMenu = ({
       <div className="file-input-menu-list">
         {context.files.map((file) => (
           <div key={file.id} className="file-input-menu-row">
-            <FileText aria-hidden={true} />
+            <Icon icon={FileText} aria-hidden={true} />
             <span className="file-input-menu-title">{file.name}</span>
             {canEdit && (
               <IconButton
@@ -94,9 +95,8 @@ export const FileInputMenu = ({
                 color="negative"
                 coloringStyle="text"
                 onClick={() => context.removeFile(file.id)}
-              >
-                <X />
-              </IconButton>
+                icon={X}
+              />
             )}
           </div>
         ))}
@@ -107,7 +107,7 @@ export const FileInputMenu = ({
           coloringStyle="tonal"
           disabled={!context.canAddFiles}
           onClick={() => context.requestAddFiles()}
-          leading={<Plus />}
+          leading={Plus}
         >
           {translation('addFile')}
         </Button>

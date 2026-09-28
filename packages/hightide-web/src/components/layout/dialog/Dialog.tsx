@@ -159,9 +159,8 @@ export const Dialog = forwardRef<HTMLDivElement, DialogProps>(function Dialog({
                     color="neutral"
                     coloringStyle="text"
                     onClick={onCloseWrapper}
-                  >
-                    <X size={24}/>
-                  </IconButton>
+                    icon={X}
+                  />
                 </div>
               </Visibility>
               {children}

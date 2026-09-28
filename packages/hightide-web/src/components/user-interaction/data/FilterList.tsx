@@ -86,7 +86,7 @@ export const FilterList = ({ value, onValueChange, availableItems }: FilterListP
               color="neutral"
               size="sm"
               className="min-w-36"
-              trailing={<PlusIcon className="size-4" />}
+              trailing={PlusIcon}
             >
               {translation('addFilter')}
             </Button>
