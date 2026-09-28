@@ -2,7 +2,7 @@ import { action } from 'storybook/actions'
 import type { Meta, StoryObj } from '@storybook/nextjs-vite'
 import { useEffect, useState } from 'react'
 import { MultiSelect } from '../../../src/components/user-interaction/MultiSelect/MultiSelect'
-import type { MultiSelectProps } from '../../../src'
+import type { MultiSelectProps } from '../../../src/components/user-interaction/MultiSelect/MultiSelectComponent'
 
 const meta: Meta<typeof MultiSelect<User>> = {
   component: MultiSelect<User>,

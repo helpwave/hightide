@@ -11,6 +11,7 @@
   },
   "license": "AGPL-3.0-only",
   "version": "0.17.2",
+  "type": "module",
   "browserslist": [
     "> 0.2%",
     "last 3 versions",
@@ -23,13 +24,26 @@
   "files": [
     "dist"
   ],
-  "main": "dist/index.cjs",
-  "module": "dist/index.js",
-  "types": "dist/index.d.ts",
   "exports": {
-    ".": {
-      "require": "./dist/index.cjs",
-      "import": "./dist/index.js"
+    "./components": {
+      "types": "./dist/components/index.d.ts",
+      "require": "./dist/components/index.cjs",
+      "import": "./dist/components/index.js"
+    },
+    "./global-contexts": {
+      "types": "./dist/global-contexts/index.d.ts",
+      "require": "./dist/global-contexts/index.cjs",
+      "import": "./dist/global-contexts/index.js"
+    },
+    "./hooks": {
+      "types": "./dist/hooks/index.d.ts",
+      "require": "./dist/hooks/index.cjs",
+      "import": "./dist/hooks/index.js"
+    },
+    "./utils": {
+      "types": "./dist/utils/index.d.ts",
+      "require": "./dist/utils/index.cjs",
+      "import": "./dist/utils/index.js"
     },
     "./style/globals.css": "./dist/style/globals.css",
     "./style/uncompiled/globals.css": "./dist/style/uncompiled/globals.css"
