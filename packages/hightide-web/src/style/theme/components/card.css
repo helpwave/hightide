@@ -1,90 +1,17 @@
 @layer components {
   .card {
-    @apply flex-col-0 w-full min-w-0 shadow-md surface coloring-solid justify-center;
-    @apply gap-y-2;
+    @apply flex-col-0 w-full min-w-0 overflow-hidden surface coloring-solid shadow-md;
 
     &[data-size="sm"] {
-      @apply px-3 py-2 rounded-md min-h-16;
+      @apply px-3 py-2 rounded-lg min-h-16;
     }
 
     &[data-size="md"] {
-      @apply px-4 py-3 gap-y-3 rounded-md min-h-20;
+      @apply px-4 py-3 rounded-lg min-h-20;
     }
 
     &[data-size="lg"] {
-      @apply px-8 py-6 gap-y-4 rounded-lg min-h-24;
+      @apply px-8 py-6 rounded-xl min-h-24;
     }
-  }
-
-  .card-header {
-    @apply flex flex-row items-center w-full min-w-0 gap-x-4;
-  }
-
-  .card-content {
-    @apply flex-col-1.5 min-w-0 flex-1;
-  }
-
-  .card-leading,
-  .card-trailing {
-    @apply flex-col-0 items-center justify-center shrink-0 self-center text-description;
-  }
-
-  .card-title {
-    @apply min-w-0;
-    @apply typography-title-md;
-  }
-
-  .card-description {
-    @apply text-description;
-
-    @apply typography-body-md;
-  }
-
-  .action-card {
-    @apply surface coloring-solid-hover;
-    @apply focus-style-outline;
-
-    transition: var(--coloring-transitions), var(--focus-transitions);
-
-    &:has(:focus-visible) {
-      @apply focus-style-apply shadow-lg;
-    }
-
-    &:not([data-disabled]) {
-      @apply cursor-pointer;
-
-      &:hover {
-        @apply shadow-lg;
-      }
-    }
-
-    &[data-disabled] {
-      @apply cursor-not-allowed;
-    }
-  }
-
-  .navigation-card {
-    @apply surface coloring-solid-hover;
-    @apply focus-style-outline;
-    @apply hover:cursor-pointer outline-none;
-    transition: var(--coloring-transitions), var(--focus-transitions);
-
-    &:hover {
-      @apply shadow-lg;
-    }
-
-    &:focus-visible {
-      @apply focus-style-apply shadow-lg;
-    }
-  }
-
-  .navigation-card-action {
-    @apply flex-col-0 items-center justify-center shrink-0 text-description transition-all rounded focus-visible:outline-none;
-    @apply group-hover/card:translate-x-1;
-    @apply group-hover/card:text-on-surface focus-visible:text-on-surface;
-  }
-
-  .navigation-card-action-icon {
-    @apply size-force-5;
   }
 }

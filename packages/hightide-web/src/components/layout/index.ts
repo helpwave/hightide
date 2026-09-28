@@ -1,5 +1,6 @@
 export * from './AnchoredFloatingContainer'
 export * from './Carousel'
+export * from './Divider'
 export * from './DividerInserter'
 export * from './Expandable'
 export * from './FAQSection'
