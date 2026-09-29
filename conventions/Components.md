@@ -59,6 +59,23 @@ When primitives share state, the component provides a `Component.Root` primitive
 
 A component whose primitives do not share state does not have a Root.
 
+### Context
+
+When a component has a context, the object that collects its primitives exposes that context and its consumer.
+
+- `Component.Context` is the React context.
+- `Component.Consumer` is `Component.Context.Consumer`.
+
+```tsx
+<Expandable.Root>
+  <Expandable.Consumer>
+    {(state) => (state?.isExpanded ? 'Open' : 'Closed')}
+  </Expandable.Consumer>
+</Expandable.Root>
+```
+
+Callers read shared state through `Component.Consumer` or the component hook. They do not reach the consumer by importing the context module.
+
 ## Styling identification
 
 Components identify themselves for styling with class names. Do not use `data-name`, or any other data attribute, as the styling hook.

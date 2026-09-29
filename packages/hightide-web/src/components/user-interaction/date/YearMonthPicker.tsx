@@ -1,7 +1,7 @@
 import { memo, useCallback, useEffect, useMemo, useRef, useState } from 'react'
 import { equalSizeGroups, range } from '@helpwave/hightide-utils/utils'
 import clsx from 'clsx'
-import { ExpandableContent, ExpandableHeader, ExpandableRoot } from '../../layout/Expandable'
+import { ExpandableSection } from '../../layout/ExpandableSection'
 import { DateUtils } from '@helpwave/hightide-utils/utils'
 import { useLocalization } from '../../../global-contexts/localization/forward-exports'
 import { Button } from '../Button'
@@ -39,47 +39,45 @@ const YearRow = memo(function YearRow({
   const monthGrid = useMemo(() => equalSizeGroups([...DateUtils.monthsList], 3), [])
 
   return (
-    <ExpandableRoot
+    <ExpandableSection
       ref={isSelectedYear ? ref : undefined}
       isExpanded={isExpanded}
       onExpandedChange={setIsExpanded}
+      trigger={year}
+      triggerProps={{ className: clsx('px-2', { 'text-primary font-bold': isSelectedYear }) }}
+      contentProps={{ className: 'gap-y-1 px-2 expandable-content-h-43' }}
     >
-      <ExpandableHeader className={clsx('px-2', { 'text-primary font-bold': isSelectedYear })}>
-        {year}
-      </ExpandableHeader>
-      <ExpandableContent className="gap-y-1 px-2 expandable-content-h-43">
-        {isExpanded && monthGrid.map((group, groupIdx) => (
-          <div key={groupIdx} className="flex-row-1">
-            {group.map(month => {
-              const monthIndex = DateUtils.monthsList.indexOf(month)
+      {isExpanded && monthGrid.map((group, groupIdx) => (
+        <div key={groupIdx} className="flex-row-1">
+          {group.map(month => {
+            const monthIndex = DateUtils.monthsList.indexOf(month)
 
-              const currentTimestamp = new Date(year, monthIndex).getTime()
-              const isAfterStart = minTimestamp === undefined || currentTimestamp >= minTimestamp
-              const isBeforeEnd = maxTimestamp === undefined || currentTimestamp <= maxTimestamp
-              const isValid = isAfterStart && isBeforeEnd
-              const isSelectedMonth = monthIndex === selectedMonthIndex
+            const currentTimestamp = new Date(year, monthIndex).getTime()
+            const isAfterStart = minTimestamp === undefined || currentTimestamp >= minTimestamp
+            const isBeforeEnd = maxTimestamp === undefined || currentTimestamp <= maxTimestamp
+            const isValid = isAfterStart && isBeforeEnd
+            const isSelectedMonth = monthIndex === selectedMonthIndex
 
-              return (
-                <Button
-                  key={month}
-                  disabled={!isValid}
-                  color={isSelectedMonth && isValid ? 'primary' : 'neutral'}
-                  className="flex-1 min-w-auto"
-                  size="sm"
-                  onClick={() => {
-                    if (isValid) {
-                      onSelect(new Date(year, monthIndex))
-                    }
-                  }}
-                >
-                  {monthNames[monthIndex]}
-                </Button>
-              )
-            })}
-          </div>
-        ))}
-      </ExpandableContent>
-    </ExpandableRoot>
+            return (
+              <Button
+                key={month}
+                disabled={!isValid}
+                color={isSelectedMonth && isValid ? 'primary' : 'neutral'}
+                className="flex-1 min-w-auto"
+                size="sm"
+                onClick={() => {
+                  if (isValid) {
+                    onSelect(new Date(year, monthIndex))
+                  }
+                }}
+              >
+                {monthNames[monthIndex]}
+              </Button>
+            )
+          })}
+        </div>
+      ))}
+    </ExpandableSection>
   )
 })
 
