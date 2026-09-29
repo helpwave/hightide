@@ -1,9 +1,8 @@
 import type { ElementType, HTMLAttributeAnchorTarget, ReactNode } from 'react'
-import { useId, useRef } from 'react'
+import { useId } from 'react'
 import { ExternalLink } from 'lucide-react'
 import { Icon } from '../../../display-and-visualization/Icon'
 import { ExpansionIcon } from '../../../display-and-visualization/ExpansionIcon'
-import { IconButton } from '../../../user-interaction/IconButton'
 import { useNavigationItem } from './NavigationContext'
 import type { NavigationItemData } from './types'
 
@@ -16,12 +15,7 @@ export interface LinkComponentProps {
   'children'?: ReactNode,
 }
 
-export interface VerticalNavigationMenuItemProps {
-  id: string,
-  label: NavigationItemData['label'],
-  url?: string,
-  external?: boolean,
-  items?: NavigationItemData[],
+export type VerticalNavigationMenuItemProps = NavigationItemData & {
   depth?: number,
   forceMountDepth?: number,
   LinkComponent?: ElementType<LinkComponentProps>,
@@ -32,14 +26,11 @@ const DefaultLink: ElementType<LinkComponentProps> = 'a'
 export function VerticalNavigationMenuItem({
   id,
   label,
-  url,
-  external = false,
-  items,
   depth = 0,
   forceMountDepth = 2,
   LinkComponent = DefaultLink,
+  ...item
 }: VerticalNavigationMenuItemProps) {
-  const ref = useRef<HTMLButtonElement | null>(null)
   const groupId = useId()
   const {
     expanded,
@@ -47,10 +38,12 @@ export function VerticalNavigationMenuItem({
     toggleExpansion,
   } = useNavigationItem(id)
 
-  const hasChildren = items != null && items.length > 0
-  const hasLink = url != null
+  const childItems = 'items' in item && item.items != null ? item.items : undefined
+  const url = 'url' in item ? item.url : undefined
+  const external = 'external' in item ? item.external ?? false : false
+  const hasChildren = childItems != null && childItems.length > 0
 
-  const labelContent = hasLink ? (
+  const labelContent = url != null ? (
     <LinkComponent
       href={url}
       className="vertical-navigation-item-link"
@@ -58,7 +51,7 @@ export function VerticalNavigationMenuItem({
       target={external ? '_blank' : undefined}
       rel={external ? 'noopener noreferrer' : undefined}
     >
-      <div className="vertical-navigation-item-label" data-action-padding={hasChildren ? '' : undefined}>
+      <div className="vertical-navigation-item-label">
         {label}
         {external && (
           <Icon icon={ExternalLink} size="sm" className="vertical-navigation-item-link-external-icon" />
@@ -71,7 +64,7 @@ export function VerticalNavigationMenuItem({
     </div>
   )
 
-  const interactable = hasLink || hasChildren
+  const interactable = url != null || hasChildren
   const forceMountChildren = depth < forceMountDepth
 
   return (
@@ -80,51 +73,43 @@ export function VerticalNavigationMenuItem({
       data-expanded={expanded ? '' : undefined}
       className="vertical-navigation-item"
     >
-      <div className="vertical-navigation-item-row-container">
-        <div
-          className="vertical-navigation-item-row"
-          data-interactable={interactable ? '' : undefined}
-          data-has-children={hasChildren ? '' : undefined}
-          data-has-link={hasLink ? '' : undefined}
-          onClick={(event) => {
-            if(ref.current?.contains(event.target as Node)) return
-            if(hasChildren && !hasLink) {
-              toggleExpansion(id)
-            }
+      {hasChildren ? (
+        <button
+          type="button"
+          className="vertical-navigation-item-row-container"
+          data-has-children=""
+          aria-expanded={expanded}
+          aria-controls={groupId}
+          onClick={() => {
+            toggleExpansion(id)
           }}
         >
-          {labelContent}
-        </div>
-
-        {hasChildren && (
-          <IconButton
-            ref={ref}
-            type="button"
-            variant="foreground"
-            color="neutral"
-            aria-label={`${expanded ? 'Collapse' : 'Expand'} ${typeof label === 'string' ? label : id}`}
-            aria-expanded={expanded}
-            aria-controls={groupId}
-            onClick={() => {
-              toggleExpansion(id)
-            }}
-            className="vertical-navigation-toggle"
+          <div className="vertical-navigation-item-row">
+            {labelContent}
+          </div>
+          <ExpansionIcon isExpanded={expanded} aria-hidden className="vertical-navigation-toggle" />
+        </button>
+      ) : (
+        <div className="vertical-navigation-item-row-container">
+          <div
+            className="vertical-navigation-item-row"
+            data-interactable={interactable ? '' : undefined}
           >
-            <ExpansionIcon isExpanded={expanded} aria-hidden />
-          </IconButton>
-        )}
-      </div>
+            {labelContent}
+          </div>
+        </div>
+      )}
 
-      {hasChildren && (expanded || forceMountChildren) && (
+      {childItems != null && childItems.length > 0 && (expanded || forceMountChildren) && (
         <ul
           id={groupId}
           className="vertical-navigation-group"
           hidden={!expanded}
         >
-          {items.map((item) => (
+          {childItems.map((child) => (
             <VerticalNavigationMenuItem
-              key={item.id}
-              {...item}
+              key={child.id}
+              {...child}
               depth={depth + 1}
               LinkComponent={LinkComponent}
             />

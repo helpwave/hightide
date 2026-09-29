@@ -9,6 +9,7 @@ import { useOverlayRegistry } from '@helpwave/hightide-utils/hooks'
 import { PropsUtil } from '../../../utils/propsUtil'
 import type { LinkComponentProps } from '../navigation/navigation-menus/VerticalNavigationMenu'
 import { VerticalNavigationMenu, type NavigationItemData } from '../navigation/navigation-menus/VerticalNavigationMenu'
+import type { NavigationGroupItem, NavigationLinkItem, NavigationLabelItem } from '../navigation/navigation-menus/types'
 import { FocusTrap } from '../../utils/FocusTrap'
 
 export interface AppSidebarProps extends HTMLAttributes<HTMLDivElement> {
@@ -111,22 +112,36 @@ export const AppPageSidebarWithNavigation = ({
   )
 }
 
-export interface AppPageNavigationItem {
+type AppPageNavigationItemBase = {
   id: string,
   label: ReactNode,
   icon?: ReactNode,
-  url?: string,
-  external?: boolean,
-  items?: AppPageNavigationItem[],
 }
+
+export type AppPageNavigationItem =
+  | (AppPageNavigationItemBase & {
+    url: string,
+    external?: boolean,
+    items?: never,
+  })
+  | (AppPageNavigationItemBase & {
+    items: AppPageNavigationItem[],
+    url?: never,
+    external?: never,
+  })
+  | (AppPageNavigationItemBase & {
+    url?: never,
+    external?: never,
+    items?: never,
+  })
 
 function findActiveIdByUrl(
   items: ReadonlyArray<AppPageNavigationItem>,
   activeUrl: string
 ): string | null {
   for (const item of items) {
-    if (item.url === activeUrl) return item.id
-    if (item.items != null) {
+    if ('url' in item && item.url === activeUrl) return item.id
+    if ('items' in item && item.items != null) {
       const found = findActiveIdByUrl(item.items, activeUrl)
       if (found != null) return found
     }
@@ -170,22 +185,38 @@ export const AppPage = ({
   const toNavigationItems = useCallback((items?: AppPageNavigationItem[]): NavigationItemData[] | undefined => {
     return items?.map((item) => {
       const isActive = item.id === resolvedActiveId
-      return ({
+      const label = (
+        <span className="app-page-navigation-item-label" data-active-page={isActive ? '' : undefined}>
+          {item.icon && (
+            <span className="size-5">
+              {item.icon}
+            </span>
+          )}
+          {item.label}
+        </span>
+      )
+      if ('items' in item && item.items != null) {
+        const group: NavigationGroupItem = {
+          id: item.id,
+          label,
+          items: toNavigationItems(item.items) ?? [],
+        }
+        return group
+      }
+      if ('url' in item && item.url != null) {
+        const link: NavigationLinkItem = {
+          id: item.id,
+          label,
+          url: item.url,
+          external: item.external,
+        }
+        return link
+      }
+      const labelItem: NavigationLabelItem = {
         id: item.id,
-        label: (
-          <span className="app-page-navigation-item-label" data-active-page={isActive ? '' : undefined}>
-            {item.icon && (
-              <span className="size-5">
-                {item.icon}
-              </span>
-            )}
-            {item.label}
-          </span>
-        ),
-        url: item.url,
-        external: item.external,
-        items: toNavigationItems(item.items),
-      })
+        label,
+      }
+      return labelItem
     }) ?? undefined
   }, [resolvedActiveId])
 

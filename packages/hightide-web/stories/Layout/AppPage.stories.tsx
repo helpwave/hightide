@@ -40,9 +40,8 @@ const initialNavigationItems: AppPageNavigationItem[] = [
     label: (<div className="flex-row-2 justify-between w-full">{'With Label'}<span className="text-description">8</span></div>),
   },
   {
-    id: 'linkAndChildren',
-    label: 'Link and Children',
-    url: '#',
+    id: 'children',
+    label: 'Children',
     items: [
       {
         id: 'linkAndChildren-1',
