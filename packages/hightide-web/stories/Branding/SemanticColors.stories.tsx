@@ -61,7 +61,6 @@ const ColoringStyleElement = ({
         'coloring-style-detect': !isHover,
       }
     )}
-    style={{ transition: 'var(--coloring-transitions)' }}
   >
     {label}
   </div>

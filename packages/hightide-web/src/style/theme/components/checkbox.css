@@ -2,7 +2,7 @@
   .checkbox {
     @apply flex-col-0 items-center justify-center border-2;
     @apply rounded data-[rounded]:rounded-full;
-    transition: var(--coloring-transitions), var(--focus-transitions);
+    transition: var(--focus-transitions);
 
     &:not([data-disabled]) {
       @apply hover:cursor-pointer;

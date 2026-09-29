@@ -1,7 +1,7 @@
 @layer components {
   .icon-button {
     @apply coloring relative flex-col-0 items-center justify-center element-square;
-    transition: var(--coloring-transitions), var(--focus-transitions);
+    transition: var(--focus-transitions);
 
     &:not([data-disabled]) {
       @apply cursor-pointer;

@@ -2,7 +2,7 @@
   .switch {
     @apply flex-col-0 items-center justify-center;
     @apply h-7 w-12 rounded-full border-2 p-1;
-    transition: var(--coloring-transitions), var(--focus-transitions);
+    transition: var(--focus-transitions);
 
     &:not([data-disabled]) {
       @apply hover:cursor-pointer;

@@ -2,7 +2,7 @@
   .chat-conversation-row {
     @apply flex-row-3 shrink-0 items-center w-full px-3.5 py-3 text-left bg-transparent cursor-pointer rounded-md;
     @apply border-2 border-transparent focus-style-none focus-style-border outline-none;
-    transition: var(--coloring-transitions), var(--focus-transitions);
+    transition: var(--focus-transitions);
 
     &:focus-visible {
       @apply focus-style-apply;

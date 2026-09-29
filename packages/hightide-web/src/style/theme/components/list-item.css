@@ -28,7 +28,7 @@
   .list-action-item,
   .list-navigation-item {
     @apply cursor-pointer bg-transparent outline-none focus-style-outline;
-    transition: var(--coloring-transitions), var(--focus-transitions);
+    transition: var(--focus-transitions);
 
     &:hover:not(:disabled):not([data-disabled]) {
       @apply bg-surface-hover;
