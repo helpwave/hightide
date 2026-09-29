@@ -1,6 +1,6 @@
 @layer components {
   .pressable {
-    @apply relative flex flex-row items-center justify-center font-semibold whitespace-nowrap w-fit;
+    @apply coloring relative flex flex-row items-center justify-center font-semibold whitespace-nowrap w-fit;
     height: var(--element-height, var(--spacing-element-md));
     padding: var(--element-padding, var(--spacing-element-padding-md));
     border-radius: var(--element-border-radius, 0.375rem);
@@ -11,18 +11,17 @@
     }
 
     &:not([data-disabled]) {
-      @apply cursor-pointer coloring-color-detect coloring-style-hover-detect;
+      @apply cursor-pointer;
     }
 
     &[data-disabled] {
-      @apply disabled coloring-style-detect cursor-not-allowed;
+      @apply cursor-not-allowed;
     }
 
     &[data-size="xs"] {
       @apply gap-x-1 sizing-xs text-xs;
 
-      &[data-coloringstyle="outline"],
-      &[data-coloringstyle="tonal-outline"] {
+      &[data-bordered] {
         padding: calc(var(--spacing-element-padding-xs) - var(--coloring-outline-width));
       }
     }
@@ -30,8 +29,7 @@
     &[data-size="sm"] {
       @apply gap-x-1 sizing-sm;
 
-      &[data-coloringstyle="outline"],
-      &[data-coloringstyle="tonal-outline"] {
+      &[data-bordered] {
         padding: calc(var(--spacing-element-padding-sm) - var(--coloring-outline-width));
       }
     }
@@ -39,8 +37,7 @@
     &[data-size="md"] {
       @apply gap-x-2 sizing-md;
 
-      &[data-coloringstyle="outline"],
-      &[data-coloringstyle="tonal-outline"] {
+      &[data-bordered] {
         padding: calc(var(--spacing-element-padding-md) - var(--coloring-outline-width));
       }
     }
@@ -48,8 +45,7 @@
     &[data-size="lg"] {
       @apply gap-x-2 sizing-lg text-lg;
 
-      &[data-coloringstyle="outline"],
-      &[data-coloringstyle="tonal-outline"] {
+      &[data-bordered] {
         padding: calc(var(--spacing-element-padding-lg) - var(--coloring-outline-width));
       }
     }

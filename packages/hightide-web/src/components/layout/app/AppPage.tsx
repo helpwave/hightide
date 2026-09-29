@@ -48,7 +48,7 @@ export const AppSidebar = ({ isOpen = false, onClose, children, ...props }: AppS
               className="app-sidebar-close-button"
               tooltip={translation('close')}
               onClick={onClose}
-              coloringStyle="text"
+              variant="foreground"
               color="neutral"
             >
               <Icon icon={X} />
@@ -213,7 +213,7 @@ export const AppPage = ({
             className="app-page-menu-button"
             tooltip={translation('menu')}
             onClick={() => setIsSidebarOpen(prev => !prev)}
-            coloringStyle="text"
+            variant="foreground"
           >
             <Icon icon={MenuIcon} />
           </IconButton>

@@ -89,7 +89,7 @@ export const FilterBasePopUp = forwardRef<HTMLDivElement, FilterPopUpBaseProps>(
             tooltip={translation('removeFilter')}
             onClick={onRemove}
             color="negative"
-            coloringStyle="text"
+            variant="foreground"
             size="sm"
             icon={TrashIcon}
           />
@@ -97,7 +97,7 @@ export const FilterBasePopUp = forwardRef<HTMLDivElement, FilterPopUpBaseProps>(
             tooltip={translation('done')}
             onClick={props.onClose}
             color="neutral"
-            coloringStyle="text"
+            variant="foreground"
             size="sm"
             icon={Check}
           />

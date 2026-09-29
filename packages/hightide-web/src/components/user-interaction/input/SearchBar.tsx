@@ -46,7 +46,7 @@ export const SearchBar = ({
         tooltip={translation('search')}
         size="sm"
         color="neutral"
-        coloringStyle="text"
+        variant="foreground"
         onClick={() => onSearch(value)}
         className={clsx('search-bar-icon-button', searchButtonProps?.className)}
       >

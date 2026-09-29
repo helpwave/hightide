@@ -21,7 +21,7 @@ export const chatConversationListWithHeader: Story = {
         <IconButton
           tooltip="New Chat"
           size="sm"
-          coloringStyle="text"
+          variant="foreground"
         >
           <Plus className="size-5"/>
         </IconButton>

@@ -41,7 +41,7 @@ export const ChatAttachmentCard = ({
           tooltip={downloadLabel}
           size="sm"
           color="primary"
-          coloringStyle="text"
+          variant="foreground"
           onClick={onDownload}
         >
           <Icon icon={Download} />

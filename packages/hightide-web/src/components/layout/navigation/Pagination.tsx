@@ -45,14 +45,14 @@ export const Pagination = ({
     <div {...props} className={clsx('flex-row-1', props.className)} >
       <IconButton
         tooltip={translation('first')}
-        coloringStyle="text"
+        variant="foreground"
         color="neutral"
         onClick={() => changePage(0)} disabled={onFirstPage || noPages}
         icon={ChevronFirst}
       />
       <IconButton
         tooltip={translation('previous')}
-        coloringStyle="text"
+        variant="foreground"
         color="neutral"
         onClick={() => changePage(pageIndex - 1)} disabled={onFirstPage || noPages}
         icon={ChevronLeft}
@@ -88,14 +88,14 @@ export const Pagination = ({
       </div>
       <IconButton
         tooltip={translation('next')}
-        coloringStyle="text"
+        variant="foreground"
         color="neutral"
         onClick={() => changePage(pageIndex + 1)} disabled={onLastPage || noPages}
         icon={ChevronRight}
       />
       <IconButton
         tooltip={translation('last')}
-        coloringStyle="text"
+        variant="foreground"
         color="neutral"
         onClick={() => changePage(pageCount - 1)} disabled={onLastPage || noPages}
         icon={ChevronLast}

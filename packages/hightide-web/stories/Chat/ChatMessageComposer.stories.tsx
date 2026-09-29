@@ -22,7 +22,7 @@ export const chatMessageComposer: Story = {
         <IconButton
           tooltip="Kamera"
           color="neutral"
-          coloringStyle="text"
+          variant="foreground"
           onClick={action('onCamera')}
         >
           <Camera/>
@@ -30,7 +30,7 @@ export const chatMessageComposer: Story = {
         <IconButton
           tooltip="Anhang"
           color="neutral"
-          coloringStyle="text"
+          variant="foreground"
           onClick={action('onAttachment')}
         >
           <Paperclip/>

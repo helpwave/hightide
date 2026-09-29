@@ -93,7 +93,7 @@ export const FileInputMenu = ({
                 tooltip={translation('remove')}
                 size="sm"
                 color="negative"
-                coloringStyle="text"
+                variant="foreground"
                 onClick={() => context.removeFile(file.id)}
                 icon={X}
               />
@@ -104,7 +104,7 @@ export const FileInputMenu = ({
       {canEdit && (
         <Button
           color="primary"
-          coloringStyle="tonal"
+          variant="tonal"
           disabled={!context.canAddFiles}
           onClick={() => context.requestAddFiles()}
           leading={Plus}

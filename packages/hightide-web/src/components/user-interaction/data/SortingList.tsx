@@ -104,7 +104,7 @@ export const SortingList = ({ sorting, onSortingChange, availableItems }: Sortin
           <PopUpRoot key={columnSort.id}>
             <PopUpOpener>
               {({ toggleOpen, props }) => (
-                <Pressable {...props} onClick={toggleOpen} color="secondary" coloringStyle="tonal-outline" size="sm">
+                <Pressable {...props} onClick={toggleOpen} color="secondary" coloringStyle="filled" colorVariant="tonal" bordered size="sm">
                   <span className="font-bold">{item.label}</span>
                   <Icon icon={columnSort.desc ? ArrowDownWideNarrow : ArrowUpNarrowWide} size="sm" />
                 </Pressable>
@@ -129,7 +129,7 @@ export const SortingList = ({ sorting, onSortingChange, availableItems }: Sortin
                             setIsOpen(false)
                           }}
                           color="negative"
-                          coloringStyle="text"
+                          variant="foreground"
                           size="sm"
                           icon={TrashIcon}
                         />
@@ -137,7 +137,7 @@ export const SortingList = ({ sorting, onSortingChange, availableItems }: Sortin
                           tooltip={translation('close')}
                           onClick={() => setIsOpen(false)}
                           color="neutral"
-                          coloringStyle="text"
+                          variant="foreground"
                           size="sm"
                           icon={XIcon}
                         />
@@ -148,7 +148,7 @@ export const SortingList = ({ sorting, onSortingChange, availableItems }: Sortin
                         type="button"
                         className="flex-1"
                         color={columnSort.desc ? 'neutral' : 'primary'}
-                        coloringStyle="solid"
+                        variant="filled"
                         size="md"
                         onClick={() => setSortDirection(columnSort.id, false)}
                         leading={ArrowUpNarrowWide}
@@ -159,7 +159,7 @@ export const SortingList = ({ sorting, onSortingChange, availableItems }: Sortin
                         type="button"
                         className="flex-1"
                         color={columnSort.desc ? 'primary' : 'neutral'}
-                        coloringStyle="solid"
+                        variant="filled"
                         size="md"
                         onClick={() => setSortDirection(columnSort.id, true)}
                         leading={ArrowDownWideNarrow}

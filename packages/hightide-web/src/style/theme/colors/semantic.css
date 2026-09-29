@@ -108,5 +108,9 @@
     --color-neutral-tonal-background: var(--color-gray-400);
 
     --color-faded: var(--color-gray-650);
+
+    --coloring-tonal-lightness: 0.3;
+    --coloring-tonal-on-lightness: 0.95;
+    --coloring-transparent-alpha: 40%;
   }
 }

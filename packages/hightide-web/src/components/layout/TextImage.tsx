@@ -65,7 +65,7 @@ export const TextImage = ({
           <div className="flex-row-2 mt-2 underline">
             <Button
               color="neutral"
-              coloringStyle="text"
+              variant="foreground"
               onClick={onShowMoreClicked}
             >
               {translation('showMore')}

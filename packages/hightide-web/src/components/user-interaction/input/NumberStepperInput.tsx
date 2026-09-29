@@ -119,7 +119,7 @@ export const NumberStepperInput = forwardRef<HTMLInputElement, NumberStepperInpu
       type="button"
       size="sm"
       color="neutral"
-      coloringStyle="tonal"
+      variant="tonal"
       disabled={disabled || readOnly}
       tooltip={translation('increaseValue')}
       tooltipProps={{ alignment: layout === 'row' ? 'bottom' : 'top', options: { avoidOverlap: false } }}
@@ -137,7 +137,7 @@ export const NumberStepperInput = forwardRef<HTMLInputElement, NumberStepperInpu
       type="button"
       size="sm"
       color="neutral"
-      coloringStyle="tonal"
+      variant="tonal"
       disabled={disabled || readOnly}
       tooltip={translation('decreaseValue')}
       tooltipProps={{ alignment: 'bottom', options: { avoidOverlap: false } }}

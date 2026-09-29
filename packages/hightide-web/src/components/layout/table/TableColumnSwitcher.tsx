@@ -204,7 +204,7 @@ export const TableColumnSwitcherPopUp = ({ ...props }: TableColumnSwitcherPopUpP
               tooltip={allColumnsVisible ? translation('hideAllColumns') : translation('showAllColumns')}
               size="sm"
               color="neutral"
-              coloringStyle="text"
+              variant="foreground"
               disabled={!hasHideableColumns}
               onClick={toggleAllColumnsVisibility}
               aria-label={allColumnsVisible ? translation('hideAllColumns') : translation('showAllColumns')}
@@ -238,7 +238,7 @@ export const TableColumnSwitcherPopUp = ({ ...props }: TableColumnSwitcherPopUpP
                       tooltip={translation('pinToLeft')}
                       size="sm"
                       color="neutral"
-                      coloringStyle="text"
+                      variant="foreground"
                       disabled={pinState === 'left'}
                       onClick={() => pinColumn(columnId, 'left')}
                       icon={ChevronLeft}
@@ -247,7 +247,7 @@ export const TableColumnSwitcherPopUp = ({ ...props }: TableColumnSwitcherPopUpP
                       tooltip={translation('pinToRight')}
                       size="sm"
                       color="neutral"
-                      coloringStyle="text"
+                      variant="foreground"
                       disabled={pinState === 'right'}
                       onClick={() => pinColumn(columnId, 'right')}
                       icon={ChevronRight}
@@ -259,7 +259,7 @@ export const TableColumnSwitcherPopUp = ({ ...props }: TableColumnSwitcherPopUpP
                       tooltip={translation('increaseSortingPriority')}
                       size="sm"
                       color="neutral"
-                      coloringStyle="text"
+                      variant="foreground"
                       disabled={!canMoveUp}
                       onClick={() => moveColumn(columnId, 'up')}
                       icon={ChevronUp}
@@ -268,7 +268,7 @@ export const TableColumnSwitcherPopUp = ({ ...props }: TableColumnSwitcherPopUpP
                       tooltip={translation('decreaseSortingPriority')}
                       size="sm"
                       color="neutral"
-                      coloringStyle="text"
+                      variant="foreground"
                       disabled={!canMoveDown}
                       onClick={() => moveColumn(columnId, 'down')}
                       icon={ChevronDown}
@@ -285,7 +285,7 @@ export const TableColumnSwitcherPopUp = ({ ...props }: TableColumnSwitcherPopUpP
                     tooltip={translation('changeVisibility')}
                     size="sm"
                     color="neutral"
-                    coloringStyle="text"
+                    variant="foreground"
                     disabled={!column.getCanHide()}
                     onClick={() => toggleColumnVisibility(columnId)}
                     aria-label={isVisible ? translation('hideColumn') : translation('showColumn')}
@@ -297,7 +297,7 @@ export const TableColumnSwitcherPopUp = ({ ...props }: TableColumnSwitcherPopUpP
                     tooltip={translation('changePinning')}
                     size="sm"
                     color="neutral"
-                    coloringStyle="text"
+                    variant="foreground"
                     disabled={!column.getCanPin()}
                     onClick={() => {
                       if(isPinned) {

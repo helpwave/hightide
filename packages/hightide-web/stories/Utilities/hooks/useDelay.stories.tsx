@@ -28,7 +28,7 @@ export const story: Story = {
           {'Press me'}
         </Button>
         <span className="mt-12">{`Has an active timer: ${hasActiveTimer}`}</span>
-        <Button coloringStyle="text" onClick={ clearTimer} color="negative" disabled={!hasActiveTimer}>
+        <Button variant="foreground" onClick={ clearTimer} color="negative" disabled={!hasActiveTimer}>
           {'Clear'}
         </Button>
       </div>

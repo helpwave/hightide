@@ -70,7 +70,7 @@ export const DatePicker = ({
           <IconButton
             tooltip={translation('time.today')}
             size="sm"
-            coloringStyle="tonal"
+            variant="tonal"
             disabled={!isDayMode}
             onClick={() => {
               const newDate = new Date()

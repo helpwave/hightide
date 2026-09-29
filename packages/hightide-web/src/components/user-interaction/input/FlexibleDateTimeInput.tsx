@@ -61,7 +61,7 @@ export const FlexibleDateTimeInput = forwardRef<HTMLDivElement, FlexibleDateTime
         <IconButton
           key="flexible-date-time-mode"
           size="sm"
-          coloringStyle="text"
+          variant="foreground"
           color="neutral"
           tooltip={mode === 'date' ? translation('addTime') : translation('withoutTime')}
           onClick={() => {

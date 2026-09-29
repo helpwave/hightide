@@ -173,7 +173,7 @@ export const chatDemo: Story = {
                 <IconButton
                   tooltip="Neuer Chat"
                   size="sm"
-                  coloringStyle="text"
+                  variant="foreground"
                   onClick={action('onCreate')}
                 >
                   <Plus className="size-5"/>
@@ -214,7 +214,7 @@ export const chatDemo: Story = {
                   tooltip="Zurück"
                   size="sm"
                   color="neutral"
-                  coloringStyle="text"
+                  variant="foreground"
                   className="chat-thread-header-back desktop:hidden"
                   onClick={() => setSelectedId(null)}
                 >
@@ -227,7 +227,7 @@ export const chatDemo: Story = {
                     tooltip="Anrufen"
                     size="sm"
                     color="neutral"
-                    coloringStyle="text"
+                    variant="foreground"
                     onClick={action('onCall')}
                   >
                     <Phone/>
@@ -236,7 +236,7 @@ export const chatDemo: Story = {
                     tooltip="Zu Kontakten hinzufügen"
                     size="sm"
                     color="neutral"
-                    coloringStyle="text"
+                    variant="foreground"
                     onClick={action('onAddContact')}
                   >
                     <UserRoundPlus/>
@@ -314,7 +314,7 @@ export const chatDemo: Story = {
                       tooltip="Kamera"
                       size="sm"
                       color="neutral"
-                      coloringStyle="text"
+                      variant="foreground"
                       onClick={action('onCamera')}
                     >
                       <Camera/>
@@ -323,7 +323,7 @@ export const chatDemo: Story = {
                       tooltip="Anhang"
                       size="sm"
                       color="neutral"
-                      coloringStyle="text"
+                      variant="foreground"
                       onClick={action('onAttachment')}
                     >
                       <Paperclip/>

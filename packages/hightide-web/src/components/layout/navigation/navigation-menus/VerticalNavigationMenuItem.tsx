@@ -100,7 +100,7 @@ export function VerticalNavigationMenuItem({
           <IconButton
             ref={ref}
             type="button"
-            coloringStyle="text"
+            variant="foreground"
             color="neutral"
             aria-label={`${expanded ? 'Collapse' : 'Expand'} ${typeof label === 'string' ? label : id}`}
             aria-expanded={expanded}

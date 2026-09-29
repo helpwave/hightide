@@ -24,7 +24,7 @@ export const pressable: Story = {
     isProcessing: false,
     color: 'primary',
     size: 'md',
-    coloringStyle: 'solid',
+    coloringStyle: 'filled',
     onClick: action('Clicked'),
   },
   render: ({ children, ...props }) => {

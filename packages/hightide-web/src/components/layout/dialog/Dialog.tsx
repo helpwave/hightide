@@ -157,7 +157,7 @@ export const Dialog = forwardRef<HTMLDivElement, DialogProps>(function Dialog({
                     tooltip={translation('closeDialog')}
                     size="xs"
                     color="neutral"
-                    coloringStyle="text"
+                    variant="foreground"
                     onClick={onCloseWrapper}
                     icon={X}
                   />

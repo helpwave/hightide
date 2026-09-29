@@ -203,7 +203,7 @@ export const Navigation = ({ ...props }: NavigationProps) => {
       <IconButton
         ref={menuButtonRef}
         tooltip={translation('menu')}
-        coloringStyle="text"
+        variant="foreground"
         color="neutral"
         onClick={() => setIsMobileOpen(true)}
 
@@ -229,7 +229,7 @@ export const Navigation = ({ ...props }: NavigationProps) => {
         <IconButton
           ref={closeRef}
           tooltip={translation('close')}
-          coloringStyle="text"
+          variant="foreground"
           color="neutral"
           onClick={() => setIsMobileOpen(false)}
           onKeyDown={(event) => {

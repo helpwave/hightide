@@ -73,7 +73,7 @@ export const MultiSelectChipDisplayTrigger = forwardRef<
             }}
             size="sm"
             color="negative"
-            coloringStyle="text"
+            variant="foreground"
             className="flex-row-0 items-center size-7 p-1"
             icon={XIcon}
           />

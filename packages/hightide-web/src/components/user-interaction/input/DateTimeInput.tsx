@@ -155,7 +155,7 @@ export const DateTimeInput = forwardRef<HTMLDivElement, DateTimeInputProps>(func
           <Visibility isVisible={hasClear}>
             <IconButton
               tooltip={translation('clearValue')}
-              coloringStyle="text" color="neutral" size="sm"
+              variant="foreground" color="neutral" size="sm"
               onClick={() => {
                 setState(null)
                 onEditComplete?.(null)
@@ -166,7 +166,7 @@ export const DateTimeInput = forwardRef<HTMLDivElement, DateTimeInputProps>(func
           <Visibility isVisible={hasTimePicker}>
             <IconButton
               tooltip={translation('sDateTimeSelect', { datetimeMode: mode })}
-              coloringStyle="text" color="neutral" size="sm"
+              variant="foreground" color="neutral" size="sm"
               disabled={disabled}
               onClick={() => {
                 changeOpenWrapper(true)

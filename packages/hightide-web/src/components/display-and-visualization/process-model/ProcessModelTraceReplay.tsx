@@ -274,7 +274,7 @@ export const ProcessModelTraceReplay = ({ graph, className }: ProcessModelTraceR
       <div className="process-model-trace-replay-toolbar">
         <Button
           color="primary"
-          coloringStyle={isPlaying ? 'outline' : 'solid'}
+          variant={isPlaying ? 'outlined' : 'filled'}
           className="min-w-48"
           onClick={() => {
             if (isPlaying) {
@@ -289,7 +289,7 @@ export const ProcessModelTraceReplay = ({ graph, className }: ProcessModelTraceR
         </Button>
         <Button
           color="primary"
-          coloringStyle="outline"
+          variant="outlined"
           onClick={resetReplay}
           leading={RotateCcw}
         >

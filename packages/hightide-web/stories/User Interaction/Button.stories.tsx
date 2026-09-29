@@ -11,6 +11,10 @@ const meta = {
       control: 'select',
       options: ButtonUtil.colors,
     },
+    variant: {
+      control: 'select',
+      options: ButtonUtil.variants,
+    },
   },
 } satisfies Meta<typeof Button>
 
@@ -24,7 +28,7 @@ export const button: Story = {
     isProcessing: false,
     color: 'primary',
     size: 'md',
-    coloringStyle: 'solid',
+    variant: 'filled',
     onClick: action('Clicked'),
   },
   render: ({ children, ...props }) => {
@@ -37,6 +41,9 @@ export const button: Story = {
           {children}
         </Button>
         <Button {...props} trailing={ChevronRight}>
+          {children}
+        </Button>
+        <Button {...props} leading={Check} trailing={ChevronRight}>
           {children}
         </Button>
       </div>

@@ -90,7 +90,7 @@ export const ChatMessageComposer = ({
       <IconButton
         tooltip={sendLabel}
         color="primary"
-        coloringStyle="solid"
+        variant="filled"
         disabled={disabled || !(value ?? '').trim()}
         size="md"
         onClick={send}

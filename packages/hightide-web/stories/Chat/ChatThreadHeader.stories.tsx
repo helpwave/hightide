@@ -14,7 +14,7 @@ type Story = StoryObj<typeof meta>
 export const chatThreadHeader: Story = {
   args: {
     leftActions: (
-      <IconButton tooltip="Zurück" size="sm" color="neutral" coloringStyle="text" onClick={action('onBack')}>
+      <IconButton tooltip="Zurück" size="sm" color="neutral" variant="foreground" onClick={action('onBack')}>
         <ChevronLeft/>
       </IconButton>
     ),
@@ -26,13 +26,13 @@ export const chatThreadHeader: Story = {
     subtitle: 'geb. 14.03.1982 · Vers.-Nr. K220541880 · GKV',
     rightActions: (
       <>
-        <IconButton tooltip="Anrufen" size="sm" color="neutral" coloringStyle="text" onClick={action('onCall')}>
+        <IconButton tooltip="Anrufen" size="sm" color="neutral" variant="foreground" onClick={action('onCall')}>
           <Phone/>
         </IconButton>
-        <IconButton tooltip="Zu Kontakten hinzufügen" size="sm" color="neutral" coloringStyle="text" onClick={action('onAddContact')}>
+        <IconButton tooltip="Zu Kontakten hinzufügen" size="sm" color="neutral" variant="foreground" onClick={action('onAddContact')}>
           <UserRoundPlus/>
         </IconButton>
-        <IconButton tooltip="Mehr" size="sm" color="neutral" coloringStyle="text">
+        <IconButton tooltip="Mehr" size="sm" color="neutral" variant="foreground">
           <EllipsisVertical/>
         </IconButton>
       </>

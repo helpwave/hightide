@@ -83,10 +83,10 @@ export const appPage: Story = {
   args: {
     headerActions: [(
       <div className="w-full flex-row-0 justify-end" key="header-actions">
-        <IconButton tooltip="Notifications" coloringStyle="text">
+        <IconButton tooltip="Notifications" variant="foreground">
           <Bell className="size-6" />
         </IconButton>
-        <IconButton tooltip="Settings" coloringStyle="text">
+        <IconButton tooltip="Settings" variant="foreground">
           <Settings className="size-6" />
         </IconButton>
       </div>

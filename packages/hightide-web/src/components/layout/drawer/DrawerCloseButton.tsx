@@ -20,7 +20,7 @@ export function DrawerCloseButton({
 
   return (
     <IconButton
-      coloringStyle="text"
+      variant="foreground"
       color="neutral"
       size="sm"
 

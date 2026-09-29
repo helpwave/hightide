@@ -65,7 +65,7 @@ export const PropertyBase = ({
           onClick={onValueClear}
           disabled={!hasValue}
           color="negative"
-          coloringStyle="text"
+          variant="foreground"
           size="sm"
           icon={X}
         />
@@ -75,7 +75,7 @@ export const PropertyBase = ({
           tooltip={translation('removeProperty')}
           onClick={onRemove}
           color="negative"
-          coloringStyle="text"
+          variant="foreground"
           size="sm"
           icon={Trash}
         />

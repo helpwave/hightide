@@ -148,7 +148,7 @@ export const FilterList = ({ value, onValueChange, availableItems }: FilterListP
           >
             <PopUpOpener>
               {({ toggleOpen, props }) => (
-                <Pressable {...props} onClick={toggleOpen} color="primary" coloringStyle="tonal-outline" size="sm">
+                <Pressable {...props} onClick={toggleOpen} color="primary" coloringStyle="filled" colorVariant="tonal" bordered size="sm">
                   {item.activeLabelBuilder ?
                     item.activeLabelBuilder(columnFilter.value) : (
                       <>

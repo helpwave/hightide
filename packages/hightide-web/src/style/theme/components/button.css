@@ -1,11 +1,11 @@
 @layer components {
   .button {
+    @apply coloring;
     &[data-size="xs"] {
       @apply min-w-20;
       padding: var(--element-padding) var(--element-padding-direction);
 
-      &[data-coloringstyle="outline"],
-      &[data-coloringstyle="tonal-outline"] {
+      &[data-bordered] {
         padding:
           calc(var(--spacing-element-padding-xs) - var(--coloring-outline-width))
           calc(var(--spacing-element-padding-direction-xs) - var(--coloring-outline-width));
@@ -16,8 +16,7 @@
       @apply min-w-28;
       padding: var(--element-padding) var(--element-padding-direction);
 
-      &[data-coloringstyle="outline"],
-      &[data-coloringstyle="tonal-outline"] {
+      &[data-bordered] {
         padding:
           calc(var(--spacing-element-padding-sm) - var(--coloring-outline-width))
           calc(var(--spacing-element-padding-direction-sm) - var(--coloring-outline-width));
@@ -28,8 +27,7 @@
       @apply min-w-36;
       padding: var(--element-padding) var(--element-padding-direction);
 
-      &[data-coloringstyle="outline"],
-      &[data-coloringstyle="tonal-outline"] {
+      &[data-bordered] {
         padding:
           calc(var(--spacing-element-padding-md) - var(--coloring-outline-width))
           calc(var(--spacing-element-padding-direction-md) - var(--coloring-outline-width));
@@ -40,8 +38,7 @@
       @apply min-w-45;
       padding: var(--element-padding) var(--element-padding-direction);
 
-      &[data-coloringstyle="outline"],
-      &[data-coloringstyle="tonal-outline"] {
+      &[data-bordered] {
         padding:
           calc(var(--spacing-element-padding-lg) - var(--coloring-outline-width))
           calc(var(--spacing-element-padding-direction-lg) - var(--coloring-outline-width));

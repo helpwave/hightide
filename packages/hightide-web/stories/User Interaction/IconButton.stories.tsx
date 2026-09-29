@@ -23,7 +23,7 @@ export const iconButton: Story = {
     isProcessing: false,
     color: 'primary',
     size: 'md',
-    coloringStyle: 'solid',
+    variant: 'filled',
     tooltip: 'Subtract',
     onClick: action('Clicked'),
     icon: MinusIcon,

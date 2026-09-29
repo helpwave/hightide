@@ -1,3 +1,39 @@
+@property --coloring-base {
+  syntax: "<color>";
+  inherits: true;
+  initial-value: transparent;
+}
+
+@property --coloring-on-base {
+  syntax: "<color>";
+  inherits: true;
+  initial-value: transparent;
+}
+
+@property --coloring-color {
+  syntax: "<color>";
+  inherits: true;
+  initial-value: transparent;
+}
+
+@property --coloring-on-color {
+  syntax: "<color>";
+  inherits: true;
+  initial-value: transparent;
+}
+
+@property --coloring-accent {
+  syntax: "<color>";
+  inherits: true;
+  initial-value: transparent;
+}
+
+@property --coloring-foreground {
+  syntax: "<color>";
+  inherits: true;
+  initial-value: transparent;
+}
+
 :root {
   --coloring-transitions:
     border-color var(--animation-duration-in, 250ms) ease-in-out, 
@@ -60,6 +96,133 @@
   hover:border-[var(--coloring-border-hover,--coloring-hover)]
   hover:text-[var(--coloring-outline-hover,var(--coloring-hover))]
   hover:bg-[var(--coloring-tonal-hover,var(--coloring-tonal-background,var(--coloring-tonal,var(--coloring-color))))]/30;
+}
+
+@utility coloring {
+  position: relative;
+  --coloring-color: var(--coloring-base);
+  --coloring-on-color: var(--coloring-on-base);
+  --coloring-accent: var(--coloring-base);
+  --coloring-foreground: var(--coloring-on-color);
+
+  &[data-color="primary"] {
+    --coloring-base: var(--color-primary);
+    --coloring-on-base: var(--color-on-primary);
+  }
+
+  &[data-color="secondary"] {
+    --coloring-base: var(--color-secondary);
+    --coloring-on-base: var(--color-on-secondary);
+  }
+
+  &[data-color="positive"] {
+    --coloring-base: var(--color-positive);
+    --coloring-on-base: var(--color-on-positive);
+  }
+
+  &[data-color="warning"] {
+    --coloring-base: var(--color-warning);
+    --coloring-on-base: var(--color-on-warning);
+  }
+
+  &[data-color="negative"] {
+    --coloring-base: var(--color-negative);
+    --coloring-on-base: var(--color-on-negative);
+  }
+
+  &[data-color="neutral"] {
+    --coloring-base: var(--color-neutral);
+    --coloring-on-base: var(--color-on-neutral);
+  }
+
+  &[data-color="description"] {
+    --coloring-base: var(--color-description);
+    --coloring-on-base: var(--color-on-surface);
+  }
+
+  &[data-color="surface"] {
+    --coloring-base: var(--color-surface);
+    --coloring-on-base: var(--color-on-surface);
+  }
+
+  &[data-color="surface-variant"] {
+    --coloring-base: var(--color-surface-variant);
+    --coloring-on-base: var(--color-on-surface-variant);
+  }
+
+  &[data-color="surface-warning"] {
+    --coloring-base: var(--color-surface-warning);
+    --coloring-on-base: var(--color-on-surface-warning);
+  }
+
+  &[data-color="disabled"],
+  &[data-disabled] {
+    --coloring-base: var(--color-disabled);
+    --coloring-on-base: var(--color-on-disabled);
+  }
+
+  &[data-disabled] {
+    opacity: 0.6;
+  }
+
+  &[data-color-variant="tonal"] {
+    --coloring-color: color-mix(in srgb, var(--coloring-base) 20%, transparent);
+    --coloring-on-color: var(--coloring-base);
+
+    @supports (color: oklch(from red 0.5 c h)) {
+      --coloring-color: oklch(from var(--coloring-base) var(--coloring-tonal-lightness) c h);
+      --coloring-on-color: oklch(from var(--coloring-base) var(--coloring-tonal-on-lightness) c h);
+    }
+  }
+
+  &[data-color-variant="transparent"] {
+    --coloring-color: color-mix(in srgb, var(--coloring-base) var(--coloring-transparent-alpha), transparent);
+    --coloring-on-color: var(--coloring-base);
+  }
+
+  &[data-coloring-style="filled"] {
+    background-color: var(--coloring-color);
+    color: var(--coloring-foreground, var(--coloring-on-color));
+  }
+
+  &[data-coloring-style="foreground"] {
+    --coloring-foreground: var(--coloring-color);
+    background-color: transparent;
+    color: var(--coloring-foreground);
+  }
+
+  &[data-bordered] {
+    border-style: solid;
+    border-width: var(--coloring-outline-width);
+    border-color: var(--coloring-accent);
+  }
+
+  &[data-elevated] {
+    @apply shadow-around;
+  }
+
+  &[data-elevated]:not([data-disabled]):hover {
+    @apply shadow-around-md;
+  }
+
+  &:not([data-disabled])::before {
+    content: "";
+    position: absolute;
+    inset: 0;
+    border-radius: inherit;
+    pointer-events: none;
+    background: var(--coloring-foreground, var(--coloring-on-color));
+    opacity: 0;
+  }
+
+  &:not([data-disabled]):hover::before {
+    opacity: 0.08;
+  }
+
+  &:not([data-disabled]):focus-visible::before,
+  &:not([data-disabled]):active::before {
+    opacity: 0.16;
+  }
 }
 
 @utility coloring-reset-variables {
