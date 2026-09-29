@@ -1,18 +1,46 @@
 import type { CSSProperties, HTMLAttributes, ReactElement, ReactNode } from 'react'
-import { Children, isValidElement, useCallback, useId, useLayoutEffect, useMemo, useRef, useState } from 'react'
+import { Children, cloneElement, isValidElement, useCallback, useId, useLayoutEffect, useMemo, useRef, useState } from 'react'
 import clsx from 'clsx'
 
 import type { WheelPickerRegisteredOption } from './WheelPickerContext'
 import { WheelPickerContextProvider } from './WheelPickerContext'
 import { WheelPickerBar } from './WheelPickerBar'
+import { WheelPickerPreviewScope } from './WheelPickerOption'
+
+export type WheelPickerLoopEvent<T> = {
+  value: T,
+  direction: 1 | -1,
+  loopedAround: 'start' | 'end',
+}
 
 export type WheelPickerRootProps<T> = Omit<HTMLAttributes<HTMLDivElement>, 'defaultValue' | 'children' | 'onChange'> & {
   value?: T,
   defaultValue?: T,
   onValueChange?: (value: T) => void,
+  onLoop?: (event: WheelPickerLoopEvent<T>) => void,
   disabled?: boolean,
+  isLooping?: boolean,
   visibleRows?: number,
   children?: ReactNode,
+}
+
+function wrappedNodes(nodes: ReactNode[], start: number, count: number) {
+  if (nodes.length === 0 || count <= 0) {
+    return []
+  }
+  return Array.from({ length: count }, (_, offset) => {
+    const index = ((start + offset) % nodes.length + nodes.length) % nodes.length
+    return nodes[index]
+  })
+}
+
+function previewCopies(nodes: ReactNode[], prefix: string) {
+  return nodes.map((node, index) => {
+    if (!isValidElement(node)) {
+      return node
+    }
+    return cloneElement(node, { key: `${prefix}-${index}` })
+  })
 }
 
 function isWheelPickerBar(node: ReactNode): node is ReactElement {
@@ -33,19 +61,27 @@ function itemHeightOf<T>(options: WheelPickerRegisteredOption<T>[]) {
   return options[0]?.element.offsetHeight ?? 0
 }
 
+function resolveStep(currentIndex: number, steps: number, length: number, isLooping: boolean) {
+  const raw = currentIndex + steps
+  if (!isLooping || length <= 0) {
+    return {
+      index: Math.max(0, Math.min(length - 1, raw)),
+      loops: 0,
+    }
+  }
+  return {
+    index: ((raw % length) + length) % length,
+    loops: Math.floor(raw / length),
+  }
+}
+
 function paintOptions<T>(options: WheelPickerRegisteredOption<T>[], scrollTop: number) {
   const itemHeight = itemHeightOf(options)
   if (itemHeight <= 0) {
     return
   }
-  const indexFloat = scrollTop / itemHeight
-  const centeredIndex = Math.round(indexFloat)
+  const centeredIndex = Math.round(scrollTop / itemHeight)
   options.forEach((option, index) => {
-    const distance = Math.abs(index - indexFloat)
-    const blur = Math.min(distance * distance * 0.9, 6)
-    const opacity = Math.max(0.4, 1 - distance * 0.22)
-    option.element.style.setProperty('--wheel-picker-distance-blur', `${blur}px`)
-    option.element.style.setProperty('--wheel-picker-distance-opacity', `${opacity}`)
     option.element.toggleAttribute('data-centered', index === centeredIndex)
   })
 }
@@ -54,7 +90,9 @@ export function WheelPickerRoot<T>({
   value,
   defaultValue,
   onValueChange,
+  onLoop,
   disabled = false,
+  isLooping = false,
   visibleRows = 1,
   className,
   children,
@@ -67,6 +105,8 @@ export function WheelPickerRoot<T>({
   const optionsRef = useRef<WheelPickerRegisteredOption<T>[]>([])
   const userScrollingRef = useRef(false)
   const onValueChangeRef = useRef(onValueChange)
+  const onLoopRef = useRef(onLoop)
+  const isLoopingRef = useRef(isLooping)
   const [uncontrolled, setUncontrolled] = useState(defaultValue)
   const [options, setOptions] = useState<WheelPickerRegisteredOption<T>[]>([])
   const optionsPublishScheduled = useRef(false)
@@ -74,6 +114,8 @@ export function WheelPickerRoot<T>({
   const selectedRef = useRef(selected)
   selectedRef.current = selected
   onValueChangeRef.current = onValueChange
+  onLoopRef.current = onLoop
+  isLoopingRef.current = isLooping
 
   const childList = Children.toArray(children)
   const bars = childList.filter(isWheelPickerBar)
@@ -140,6 +182,35 @@ export function WheelPickerRoot<T>({
     paintOptions(options, scroller.scrollTop)
     applyValue(option.value)
   }, [applyValue, disabled])
+
+  const stepBy = useCallback((steps: number) => {
+    const scroller = scrollerRef.current
+    const options = orderedOptions(optionsRef.current)
+    const itemHeight = itemHeightOf(options)
+    if (!scroller || itemHeight <= 0 || options.length === 0 || steps === 0) {
+      return
+    }
+    const currentIndex = Math.round(scroller.scrollTop / itemHeight)
+    const { index, loops } = resolveStep(currentIndex, steps, options.length, isLoopingRef.current)
+    const option = options[index]
+    if (!option) {
+      return
+    }
+    scrollToIndex(index, 'auto')
+    applyValue(option.value)
+    if (loops === 0) {
+      return
+    }
+    const direction = loops > 0 ? 1 : -1
+    const loopedAround = direction === 1 ? 'end' : 'start'
+    for (let count = 0; count < Math.abs(loops); count += 1) {
+      onLoopRef.current?.({
+        value: option.value,
+        direction,
+        loopedAround,
+      })
+    }
+  }, [applyValue, scrollToIndex])
 
   const selectValue = useCallback((next: T) => {
     if (disabled) {
@@ -208,9 +279,7 @@ export function WheelPickerRoot<T>({
         return
       }
       wheelRemainder -= steps * itemHeight
-      const currentIndex = Math.round(scroller.scrollTop / itemHeight)
-      const nextIndex = Math.max(0, Math.min(options.length - 1, currentIndex + steps))
-      scrollToIndex(nextIndex, 'auto')
+      stepBy(steps)
     }
     const onScroll = () => {
       if (disabled) {
@@ -229,17 +298,47 @@ export function WheelPickerRoot<T>({
       userScrollingRef.current = false
       commitFromScroll()
     }
+    let touchStartY = 0
+    let touchStartScroll = 0
+    const onTouchStart = (event: TouchEvent) => {
+      touchStartY = event.touches[0]?.clientY ?? 0
+      touchStartScroll = scroller.scrollTop
+    }
+    const onTouchEnd = (event: TouchEvent) => {
+      if (!isLoopingRef.current) {
+        return
+      }
+      const options = orderedOptions(optionsRef.current)
+      const itemHeight = itemHeightOf(options)
+      if (itemHeight <= 0 || options.length === 0) {
+        return
+      }
+      const endY = event.changedTouches[0]?.clientY ?? touchStartY
+      const dragged = touchStartY - endY
+      const maxScroll = (options.length - 1) * itemHeight
+      const startedAtEnd = touchStartScroll >= maxScroll - 1
+      const startedAtStart = touchStartScroll <= 1
+      if (startedAtEnd && dragged > itemHeight / 2) {
+        stepBy(1)
+      } else if (startedAtStart && dragged < -itemHeight / 2) {
+        stepBy(-1)
+      }
+    }
     const root = scroller.parentElement ?? scroller
     root.addEventListener('wheel', onWheel, { passive: false })
+    root.addEventListener('touchstart', onTouchStart, { passive: true })
+    root.addEventListener('touchend', onTouchEnd)
     scroller.addEventListener('scroll', onScroll, { passive: true })
     scroller.addEventListener('scrollend', onScrollEnd)
     return () => {
       window.clearTimeout(timer)
       root.removeEventListener('wheel', onWheel)
+      root.removeEventListener('touchstart', onTouchStart)
+      root.removeEventListener('touchend', onTouchEnd)
       scroller.removeEventListener('scroll', onScroll)
       scroller.removeEventListener('scrollend', onScrollEnd)
     }
-  }, [commitFromScroll, disabled, scrollToIndex])
+  }, [commitFromScroll, disabled, scrollToIndex, stepBy])
 
   const moveSelection = useCallback((direction: 1 | -1 | 'start' | 'end') => {
     const options = orderedOptions(optionsRef.current)
@@ -253,7 +352,22 @@ export function WheelPickerRoot<T>({
     } else if (direction === 'end') {
       nextIndex = options.length - 1
     } else {
-      nextIndex += direction
+      const { index, loops } = resolveStep(currentIndex < 0 ? 0 : currentIndex, direction, options.length, isLooping)
+      nextIndex = index
+      const option = options[nextIndex]
+      if (!option) {
+        return
+      }
+      scrollToIndex(nextIndex, 'smooth')
+      applyValue(option.value)
+      if (loops !== 0) {
+        onLoop?.({
+          value: option.value,
+          direction,
+          loopedAround: direction === 1 ? 'end' : 'start',
+        })
+      }
+      return
     }
     const option = options[nextIndex]
     if (!option) {
@@ -261,7 +375,7 @@ export function WheelPickerRoot<T>({
     }
     scrollToIndex(nextIndex, 'smooth')
     applyValue(option.value)
-  }, [applyValue, scrollToIndex])
+  }, [applyValue, isLooping, onLoop, scrollToIndex])
 
   const contextValue = useMemo(() => ({
     value: selected,
@@ -273,12 +387,12 @@ export function WheelPickerRoot<T>({
 
   const activeId = options.find((option) => Object.is(option.value, selected))?.id
   const rowSpan = Number.isFinite(visibleRows) ? Math.max(0, visibleRows) : 1
-  const rowCount = 1 + rowSpan * 2
+  const previewCount = isLooping ? Math.ceil(rowSpan) : 0
+  const leadingPreview = previewCopies(wrappedNodes(items, items.length - previewCount, previewCount), 'leading')
+  const trailingPreview = previewCopies(wrappedNodes(items, 0, previewCount), 'trailing')
   const pickerStyle = {
     ...style,
     '--wheel-picker-visible-span': rowSpan,
-    '--wheel-picker-fade-start': `${(rowSpan / rowCount) * 100}%`,
-    '--wheel-picker-fade-end': `${((rowSpan + 1) / rowCount) * 100}%`,
   } as CSSProperties
 
   return (
@@ -292,6 +406,7 @@ export function WheelPickerRoot<T>({
         aria-orientation="vertical"
         aria-activedescendant={activeId}
         data-disabled={disabled ? '' : undefined}
+        data-looping={isLooping ? '' : undefined}
         className={clsx('wheel-picker-root', className)}
         style={pickerStyle}
         onKeyDown={(event) => {
@@ -318,7 +433,21 @@ export function WheelPickerRoot<T>({
           ref={scrollerRef}
           className="wheel-picker-items"
         >
+          {isLooping && (
+            <div className="wheel-picker-loop-preview" aria-hidden>
+              <WheelPickerPreviewScope>
+                {leadingPreview}
+              </WheelPickerPreviewScope>
+            </div>
+          )}
           {items}
+          {isLooping && (
+            <div className="wheel-picker-loop-preview wheel-picker-loop-preview-end" aria-hidden>
+              <WheelPickerPreviewScope>
+                {trailingPreview}
+              </WheelPickerPreviewScope>
+            </div>
+          )}
         </div>
         {bars}
       </div>

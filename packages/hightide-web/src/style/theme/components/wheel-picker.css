@@ -2,10 +2,8 @@
   .wheel-picker-root {
     --wheel-picker-item-height: 2.5rem;
     --wheel-picker-visible-span: 1;
-    --wheel-picker-fade-start: 33.333%;
-    --wheel-picker-fade-end: 66.667%;
 
-    @apply relative w-fit min-w-24 select-none rounded-md focus-style-outline outline-none;
+    @apply relative w-fit min-w-16 select-none rounded-md focus-style-outline outline-none;
 
     height: calc(var(--wheel-picker-item-height) * (1 + var(--wheel-picker-visible-span) * 2));
 
@@ -26,13 +24,6 @@
     overscroll-behavior: contain;
     scrollbar-width: none;
     touch-action: pan-y;
-    mask-image: linear-gradient(
-      to bottom,
-      rgb(0 0 0 / 0.55) 0%,
-      black var(--wheel-picker-fade-start),
-      black var(--wheel-picker-fade-end),
-      rgb(0 0 0 / 0.55) 100%
-    );
 
     &::-webkit-scrollbar {
       display: none;
@@ -44,14 +35,30 @@
     pointer-events: none;
   }
 
+  .wheel-picker-root[data-looping] .wheel-picker-items {
+    padding-block: 0;
+  }
+
+  .wheel-picker-loop-preview {
+    @apply flex flex-col justify-end overflow-hidden pointer-events-none;
+
+    height: calc(var(--wheel-picker-item-height) * var(--wheel-picker-visible-span));
+  }
+
+  .wheel-picker-loop-preview-end {
+    @apply justify-start;
+  }
+
+  .wheel-picker-loop-preview .wheel-picker-option {
+    scroll-snap-align: none;
+  }
+
   .wheel-picker-option {
-    @apply flex shrink-0 items-center justify-center px-4 text-base text-description;
+    @apply flex shrink-0 items-center justify-center px-2 text-base text-description;
 
     height: var(--wheel-picker-item-height);
-    min-width: calc(var(--spacing) * 24);
+    width: 100%;
     scroll-snap-align: center;
-    filter: blur(var(--wheel-picker-distance-blur, 0px));
-    opacity: var(--wheel-picker-distance-opacity, 1);
 
     &[data-centered] {
       @apply font-semibold text-on-background;

@@ -9,7 +9,7 @@ import { useControlledState } from '@helpwave/hightide-utils/hooks'
 
 import { PropsUtil } from '../../../utils/propsUtil'
 
-export type DayPickerProps = Partial<FormFieldDataHandling<Date>> & {
+export type CalendarDayPickerProps = Partial<FormFieldDataHandling<Date>> & {
   initialValue?: Date,
   displayedMonth?: Date,
   changeDisplayedMonth?: (date: Date) => void,
@@ -24,7 +24,7 @@ export type DayPickerProps = Partial<FormFieldDataHandling<Date>> & {
 /**
  * A component for selecting a day of a month
  */
-export const DayPicker = ({
+export const CalendarDayPicker = ({
   displayedMonth: controlledDisplayedMonth,
   initialDisplayedMonth,
   changeDisplayedMonth,
@@ -37,7 +37,7 @@ export const DayPicker = ({
   weekStart: weekStartOverride,
   markToday = true,
   className,
-}: DayPickerProps) => {
+}: CalendarDayPickerProps) => {
   const { locale, startingWeekday: contextStartingWeekday } = useLocalization()
   const weekStart = weekStartOverride ?? contextStartingWeekday
 
@@ -110,16 +110,16 @@ export const DayPicker = ({
   )
 
   return (
-    <div className={clsx('day-picker-container', className)}>
-      <div className="day-picker-header-row">
+    <div className={clsx('calendar-day-picker-container', className)}>
+      <div className="calendar-day-picker-header-row">
         {weeks[0]!.map((weekDay, index) => (
-          <div key={index} className="day-picker-header-item">
+          <div key={index} className="calendar-day-picker-header-item">
             {new Intl.DateTimeFormat(locale, { weekday: 'long' }).format(weekDay).substring(0, 2)}
           </div>
         ))}
       </div>
       {weeks.map((week, index) => (
-        <div key={index} className="day-picker-body-row">
+        <div key={index} className="calendar-day-picker-body-row">
           {week.map((date) => {
             const isSelected = !!value && DateUtils.equalDate(value, date)
             const isFocused = !!focusTargetDate && DateUtils.equalDate(focusTargetDate, date)
@@ -130,7 +130,7 @@ export const DayPicker = ({
               <div
                 key={date.getDate()}
                 ref={isFocused ? selectedButtonRef : undefined}
-                className="day-picker-body-item"
+                className="calendar-day-picker-body-item coloring"
                 onClick={() => {
                   if (!isDayValid) return
                   const newDate = new Date(
@@ -153,8 +153,11 @@ export const DayPicker = ({
                 role="button"
                 tabIndex={isFocused ? 0 : -1}
 
+                data-color={isSelected ? 'primary' : isSameMonth ? 'surface-inverse' : 'description'}
+                data-coloring-style={isSelected ? 'filled' : 'foreground'}
+                data-color-variant="normal"
+                data-disabled={PropsUtil.dataAttributes.bool(!isDayValid)}
                 data-selected={PropsUtil.dataAttributes.bool(isSelected)}
-                data-invalid={PropsUtil.dataAttributes.bool(!isDayValid)}
                 data-today={PropsUtil.dataAttributes.bool(isToday && markToday)}
                 data-samemonth={PropsUtil.dataAttributes.bool(isSameMonth)}
               >

@@ -145,6 +145,11 @@
     --coloring-on-base: var(--color-on-surface);
   }
 
+  &[data-color="surface-inverse"] {
+    --coloring-base: var(--color-on-surface);
+    --coloring-on-base: var(--color-surface);
+  }
+
   &[data-color="surface-variant"] {
     --coloring-base: var(--color-surface-variant);
     --coloring-on-base: var(--color-on-surface-variant);

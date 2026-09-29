@@ -6,7 +6,7 @@ import type { IconSize } from '../display-and-visualization/Icon'
 import { Icon } from '../display-and-visualization/Icon'
 import { LoadingSpinner } from '../layout/loading/LoadingSpinner'
 import type { ButtonVariant, PressableProps } from './Pressable'
-import { mapButtonVariant, Pressable } from './Pressable'
+import { buttonColorForVariant, mapButtonVariant, Pressable } from './Pressable'
 
 export {
   ButtonUtil,
@@ -39,6 +39,7 @@ export const Button = forwardRef<HTMLButtonElement, ButtonProps>(function Button
   className,
   size = 'md',
   variant = 'filled',
+  color,
   isProcessing = false,
   ...props
 }, ref) {
@@ -53,6 +54,7 @@ export const Button = forwardRef<HTMLButtonElement, ButtonProps>(function Button
       {...coloring}
       ref={ref}
       size={size}
+      color={buttonColorForVariant(variant, color === undefined ? 'primary' : color) ?? undefined}
       isProcessing={isProcessing}
       processingIndicator={false}
       className={clsx('button coloring', className)}

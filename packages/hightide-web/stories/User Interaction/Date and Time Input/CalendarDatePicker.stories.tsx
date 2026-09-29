@@ -1,23 +1,24 @@
 import type { Meta, StoryObj } from '@storybook/nextjs-vite'
-import {  DatePicker } from '../../../src/components/user-interaction/date/DatePicker'
-import { DateUtils } from '@helpwave/hightide-utils/utils'
 import { action } from 'storybook/actions'
+import { DateUtils } from '@helpwave/hightide-utils/utils'
+
+import { CalendarDatePicker } from '../../../src/components/user-interaction/date/CalendarDatePicker'
 
 const meta = {
-  component: DatePicker,
-} satisfies Meta<typeof DatePicker>
+  component: CalendarDatePicker,
+} satisfies Meta<typeof CalendarDatePicker>
 
 export default meta
-type Story = StoryObj<typeof meta>;
+type Story = StoryObj<typeof meta>
 
-export const datePicker: Story = {
+export const calendarDatePicker: Story = {
   args: {
     initialValue: new Date(),
     start: DateUtils.subtractDuration(new Date(), { years: 50 }),
     end: DateUtils.addDuration(new Date(), { years: 50 }),
     initialDisplay: 'day',
     yearMonthPickerProps: {},
-    dayPickerProps: {},
+    calendarDayPickerProps: {},
     onValueChange: action('onValueChange'),
     onEditComplete: action('onEditComplete')
   },

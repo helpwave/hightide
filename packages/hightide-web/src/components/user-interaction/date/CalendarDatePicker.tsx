@@ -1,10 +1,10 @@
-import { useState } from 'react'
+import { useState, type ReactNode } from 'react'
 import { ArrowDown, ArrowUp, Calendar, ChevronDown } from 'lucide-react'
 import { DateUtils } from '@helpwave/hightide-utils/utils'
 import { LocalizationUtil } from '@helpwave/hightide-utils/i18n'
 import clsx from 'clsx'
-import type { DayPickerProps } from './DayPicker'
-import { DayPicker } from './DayPicker'
+import type { CalendarDayPickerProps } from './CalendarDayPicker'
+import { CalendarDayPicker } from './CalendarDayPicker'
 import type { YearMonthPickerProps } from './YearMonthPicker'
 import { YearMonthPicker } from './YearMonthPicker'
 import { useLocalization } from '../../../global-contexts/localization/forward-exports'
@@ -14,23 +14,25 @@ import { useControlledState } from '@helpwave/hightide-utils/hooks'
 import { IconButton } from '../IconButton'
 import { useHightideTranslation } from '@helpwave/hightide-utils/context/translation'
 
-type DisplayMode = 'yearMonth' | 'day'
+type DisplayMode = 'yearMonth' | 'day' | 'time'
 
-export interface DatePickerProps extends
+export interface CalendarDatePickerProps extends
  Partial<FormFieldDataHandling<Date>>,
- Pick<DayPickerProps, 'markToday' | 'start' | 'end' | 'weekStart'>
+ Pick<CalendarDayPickerProps, 'markToday' | 'start' | 'end' | 'weekStart'>
  {
   initialValue?: Date,
   initialDisplay?: DisplayMode,
-  dayPickerProps?: Omit<DayPickerProps, 'displayedMonth' | 'onChange' | 'selected' | 'weekStart' | 'markToday' | 'start' | 'end'>,
+  calendarDayPickerProps?: Omit<CalendarDayPickerProps, 'displayedMonth' | 'onChange' | 'selected' | 'weekStart' | 'markToday' | 'start' | 'end'>,
   yearMonthPickerProps?: Omit<YearMonthPickerProps, 'displayedYearMonth' | 'onChange' | 'start' | 'end'>,
+  timeLabel?: ReactNode,
+  timePicker?: ReactNode,
   className?: string,
 }
 
 /**
  * A Component for picking a date
  */
-export const DatePicker = ({
+export const CalendarDatePicker = ({
   value: controlledValue,
   initialValue = new Date(),
   start,
@@ -40,9 +42,11 @@ export const DatePicker = ({
   onValueChange,
   onEditComplete,
   yearMonthPickerProps,
-  dayPickerProps,
+  calendarDayPickerProps,
+  timeLabel,
+  timePicker,
   className
-}: DatePickerProps) => {
+}: CalendarDatePickerProps) => {
   const translation = useHightideTranslation()
   const { locale } = useLocalization()
   const [value, setValue] = useControlledState({
@@ -56,16 +60,28 @@ export const DatePicker = ({
   const isDayMode = displayMode === 'day'
 
   return (
-    <div className={clsx('date-picker', className)}>
-      <div className="date-picker-header">
-        <Button
-          size="sm"
-          color="neutral"
-          onClick={() => setDisplayMode(displayMode === 'day' ? 'yearMonth' : 'day')}
-          trailing={ChevronDown}
-        >
-          {`${new Intl.DateTimeFormat(LocalizationUtil.isoLocaleToLanguage(locale), { month: 'short' }).format(displayedMonth)} ${displayedMonth.getFullYear()}`}
-        </Button>
+    <div className={clsx('calendar-date-picker', className)}>
+      <div className="calendar-date-picker-header">
+        <div className="calendar-date-picker-selectors">
+          <Button
+            size="sm"
+            color="neutral"
+            onClick={() => setDisplayMode(displayMode === 'day' ? 'yearMonth' : 'day')}
+            trailing={ChevronDown}
+          >
+            {`${new Intl.DateTimeFormat(LocalizationUtil.isoLocaleToLanguage(locale), { month: 'short' }).format(displayedMonth)} ${displayedMonth.getFullYear()}`}
+          </Button>
+          {timePicker !== undefined && (
+            <Button
+              size="sm"
+              color="neutral"
+              onClick={() => setDisplayMode(displayMode === 'time' ? 'day' : 'time')}
+              trailing={ChevronDown}
+            >
+              {timeLabel}
+            </Button>
+          )}
+        </div>
         <div className="flex-row-2 justify-end">
           <IconButton
             tooltip={translation('time.today')}
@@ -107,18 +123,22 @@ export const DatePicker = ({
           start={start}
           end={end}
           onValueChange={newDate => {
-            setDisplayedMonth(newDate)
-            setDisplayMode('day')
+            setValue(newDate)
+            setDisplayedMonth(new Date(newDate.getFullYear(), newDate.getMonth(), 1))
           }}
           onEditComplete={newDate => {
-            setDisplayedMonth(newDate)
-            setDisplayMode('day')
+            setDisplayedMonth(new Date(newDate.getFullYear(), newDate.getMonth(), 1))
+            onEditComplete?.(newDate)
           }}
-          className="date-picker-content"
+          className="calendar-date-picker-content"
         />
+      ) : displayMode === 'time' ? (
+        <div className="calendar-date-picker-content calendar-date-picker-time">
+          {timePicker}
+        </div>
       ) : (
-        <DayPicker
-          {...dayPickerProps}
+        <CalendarDayPicker
+          {...calendarDayPickerProps}
           value={value}
           displayedMonth={displayedMonth}
           changeDisplayedMonth={setDisplayedMonth}
@@ -127,7 +147,7 @@ export const DatePicker = ({
           weekStart={weekStart}
           onValueChange={setValue}
           onEditComplete={onEditComplete}
-          className="date-picker-content"
+          className="calendar-date-picker-content"
         />
       )}
     </div>

@@ -18,9 +18,23 @@ export const iconButtonVariants = ['elevated', 'filled', 'tonal', 'foreground'] 
 
 export type IconButtonVariant = typeof iconButtonVariants[number]
 
-const buttonColorsList = ['primary', 'secondary', 'positive', 'warning', 'negative', 'neutral'] as const
+const buttonColorsList = ['primary', 'secondary', 'positive', 'warning', 'negative', 'neutral', 'surfaceInverse'] as const
 
 export type ButtonColor = typeof buttonColorsList[number] | null
+
+export function coloringColorName(color: ButtonColor) {
+  if (color === 'surfaceInverse') {
+    return 'surface-inverse'
+  }
+  return color ?? undefined
+}
+
+export function buttonColorForVariant(variant: ButtonVariant | IconButtonVariant, color: ButtonColor) {
+  if (variant === 'foreground' && color === 'neutral') {
+    return 'surfaceInverse' as const
+  }
+  return color
+}
 
 export const ButtonUtil = {
   colors: buttonColorsList,
@@ -86,7 +100,7 @@ export const Pressable = forwardRef<HTMLButtonElement, PressableProps>(function 
       data-disabled={disabled ? '' : undefined}
       data-processing={isProcessing ? '' : undefined}
       data-size={size ?? undefined}
-      data-color={color ?? undefined}
+      data-color={coloringColorName(color)}
       data-coloring-style={coloringStyle}
       data-color-variant={colorVariant}
       data-bordered={bordered ? '' : undefined}

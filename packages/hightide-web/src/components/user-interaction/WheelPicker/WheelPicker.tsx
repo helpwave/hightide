@@ -6,7 +6,7 @@ import { WheelPickerBar } from './WheelPickerBar'
 import { WheelPickerContext } from './WheelPickerContext'
 import type { WheelPickerOptionProps } from './WheelPickerOption'
 import { WheelPickerOption } from './WheelPickerOption'
-import type { WheelPickerRootProps } from './WheelPickerRoot'
+import type { WheelPickerLoopEvent, WheelPickerRootProps } from './WheelPickerRoot'
 import { WheelPickerRoot } from './WheelPickerRoot'
 
 export type WheelPickerProps<T> = Omit<WheelPickerRootProps<T>, 'children'> & {
@@ -45,4 +45,4 @@ const WheelPicker = Object.assign(WheelPickerComponentImpl as WheelPickerCompone
 })
 
 export { WheelPicker }
-export type { WheelPickerOptionProps, WheelPickerRootProps, WheelPickerBarProps }
+export type { WheelPickerLoopEvent, WheelPickerOptionProps, WheelPickerRootProps, WheelPickerBarProps }

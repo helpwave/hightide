@@ -25,9 +25,9 @@
 @import "./dialog.css";
 @import "./textarea.css";
 @import "./form-field.css";
-@import "./day-picker.css";
+@import "./calendar-day-picker.css";
 @import "./time-picker.css";
-@import "./time-input.css";
+@import "./time-wheel-picker.css";
 @import "./number-stepper-input.css";
 @import "./number-input.css";
 @import "./property.css";

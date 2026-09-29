@@ -1,15 +1,16 @@
 import type { Meta, StoryObj } from '@storybook/nextjs-vite'
 import { action } from 'storybook/actions'
-import { DayPicker } from '../../../src/components/user-interaction/date/DayPicker'
+
+import { CalendarDayPicker } from '../../../src/components/user-interaction/date/CalendarDayPicker'
 
 const meta = {
-  component: DayPicker,
-} satisfies Meta<typeof DayPicker>
+  component: CalendarDayPicker,
+} satisfies Meta<typeof CalendarDayPicker>
 
 export default meta
-type Story = StoryObj<typeof meta>;
+type Story = StoryObj<typeof meta>
 
-export const dayPicker: Story = {
+export const calendarDayPicker: Story = {
   args: {
     displayedMonth: new Date(),
     initialValue: new Date(),

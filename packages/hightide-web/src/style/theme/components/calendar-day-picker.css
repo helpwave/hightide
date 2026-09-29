@@ -1,0 +1,33 @@
+@layer components {
+  .calendar-day-picker-container {
+    @apply flex-col-1 min-w-64 select-none;
+  }
+
+  .calendar-day-picker-header-row {
+    @apply grid grid-cols-7 gap-2;
+  }
+
+  .calendar-day-picker-header-item {
+    @apply flex items-center justify-center grow font-semibold;
+  }
+
+  .calendar-day-picker-body-row {
+    @apply grid grid-cols-7 gap-2;
+  }
+
+  .calendar-day-picker-body-item {
+    @apply flex-row-0 items-center justify-center rounded-full h-8;
+
+    &:not([data-disabled]) {
+      @apply hover:cursor-pointer;
+    }
+
+    &[data-disabled] {
+      @apply hover:cursor-not-allowed;
+    }
+
+    &[data-today] {
+      @apply border-2 border-on-background;
+    }
+  }
+}

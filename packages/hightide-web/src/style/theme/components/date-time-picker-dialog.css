@@ -1,24 +1,43 @@
 @layer components {
   .date-time-picker-dialog {
-    @apply flex-col-2 w-full overflow-y-auto p-2;
+    @apply flex-col-2 w-full overflow-x-hidden overflow-y-auto p-2;
     container-type: inline-size;
     container-name: date-time-picker-dialog;
   }
 
   .date-time-picker-dialog-header {
-    @apply flex-row-2 justify-center w-full py-1;
+    @apply grid w-full items-center py-1;
+    grid-template-columns: 2.5rem 1fr 2.5rem;
   }
 
   .date-time-picker-dialog-label {
-    @apply typography-title-md font-semibold;
+    @apply typography-title-md font-semibold text-center;
+    grid-column: 2;
+  }
+
+  .date-time-picker-dialog-clear {
+    grid-column: 3;
+    justify-self: end;
+  }
+
+  .date-time-picker-dialog-pair {
+    @apply flex-row-4 items-center justify-center;
+    flex-wrap: nowrap;
+    width: max-content;
+    max-width: none;
+  }
+
+  .date-time-picker-dialog[data-compact] .date-time-picker-dialog-pair {
+    @apply w-full;
+    min-width: 0;
   }
 
   .date-time-picker-dialog-actions {
-    @apply mt-2 flex-col-2 w-full;
+    @apply mt-2 flex-row-2 w-full items-center justify-end;
+  }
 
-    @container date-time-picker-dialog (min-width: 20rem) {
-      @apply flex-row-2 justify-end;
-    }
+  .date-time-picker-dialog[data-step] .date-time-picker-dialog-actions {
+    @apply justify-between;
   }
 
   .date-time-picker-dialog-action {
