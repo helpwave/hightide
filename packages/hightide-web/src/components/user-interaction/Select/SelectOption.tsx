@@ -41,7 +41,7 @@ type SelectOptionComponent = <T = string>(
   props: SelectOptionProps<T> & {
     ref?: React.ForwardedRef<HTMLLIElement>,
   }
-) => React.ReactElement | null
+) => React.ReactElement
 
 const toIdentity = <T,>(value: T, valueId: string | undefined): SelectOptionIdentity<T> => {
   if (valueId === undefined) {

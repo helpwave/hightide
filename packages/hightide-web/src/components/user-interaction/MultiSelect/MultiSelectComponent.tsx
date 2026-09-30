@@ -20,7 +20,7 @@ type MultiSelectComponentType = <T = string>(
   props: MultiSelectProps<T> & {
     ref?: React.ForwardedRef<HTMLDivElement>,
   }
-) => React.ReactElement | null
+) => React.ReactElement
 
 const MultiSelectComponentImpl = forwardRef<
   HTMLDivElement,

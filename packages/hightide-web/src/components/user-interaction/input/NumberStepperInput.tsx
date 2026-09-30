@@ -4,8 +4,7 @@ import clsx from 'clsx'
 import { Minus, Plus } from 'lucide-react'
 import { IconButton } from '../IconButton'
 import { useHightideTranslation } from '@helpwave/hightide-utils/context/translation'
-import type { FormFieldInteractionStates } from '../../form/FieldLayout'
-import type { FormFieldDataHandling } from '../../form/FormField'
+import type { InputInterface } from './Input'
 import { useControlledState } from '@helpwave/hightide-utils/hooks'
 import type { ChangeRateCurveProps, StepperLoopEvent } from '@helpwave/hightide-utils/hooks'
 import { useStepperHold } from '@helpwave/hightide-utils/hooks'
@@ -24,10 +23,8 @@ type ActiveInputState = {
 }
 
 export type NumberStepperInputProps = Omit<InputHTMLAttributes<HTMLInputElement>, 'value' | 'type' | 'min' | 'max' | 'step'>
-  & Partial<FormFieldInteractionStates>
-  & Partial<FormFieldDataHandling<number>>
+  & InputInterface<number>
   & {
-    initialValue?: number,
     minimum?: number,
     maximum?: number,
     stepSize?: number,

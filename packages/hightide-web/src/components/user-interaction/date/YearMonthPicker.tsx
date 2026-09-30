@@ -4,7 +4,7 @@ import { DateUtils, range } from '@helpwave/hightide-utils/utils'
 import { useControlledState, useEventCallbackStabilizer } from '@helpwave/hightide-utils/hooks'
 
 import { useLocalization } from '../../../global-contexts/localization/forward-exports'
-import type { FormFieldDataHandling } from '../../form/FormField'
+import type { InputInterface } from '../input/Input'
 import { WheelPicker } from '../WheelPicker'
 
 const defaultStart = DateUtils.subtractDuration(new Date(), { years: 100 })
@@ -27,8 +27,7 @@ function withYearMonth(date: Date, year: number, month: number) {
   return next
 }
 
-export type YearMonthPickerProps = Partial<FormFieldDataHandling<Date>> & {
-  initialValue?: Date,
+export type YearMonthPickerProps = InputInterface<Date> & {
   start?: Date,
   end?: Date,
   className?: string,

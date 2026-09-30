@@ -20,7 +20,7 @@ type MultiSelectTriggerComponent = <T = string>(
   props: MultiSelectTriggerProps<T> & {
     ref?: React.ForwardedRef<HTMLDivElement>,
   }
-) => React.ReactElement | null
+) => React.ReactElement
 
 const MultiSelectTriggerImpl = forwardRef<
   HTMLDivElement,

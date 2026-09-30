@@ -1,18 +1,15 @@
 import type { CSSProperties, InputHTMLAttributes } from 'react'
 import { forwardRef, useRef } from 'react'
 import clsx from 'clsx'
-import type { FormFieldInteractionStates } from '../../form/FieldLayout'
-import type { FormFieldDataHandling } from '../../form/FormField'
+import type { InputInterface } from './Input'
 import { useControlledState } from '@helpwave/hightide-utils/hooks'
 import { ReactUtils } from '@helpwave/hightide-utils/utils'
 import { MathUtil } from '@helpwave/hightide-utils/utils'
 import { PropsUtil } from '../../../utils/propsUtil'
 
 export type NumberInputProps = Omit<InputHTMLAttributes<HTMLInputElement>, 'value' | 'type' | 'min' | 'max' | 'step'>
-  & Partial<FormFieldInteractionStates>
-  & Partial<FormFieldDataHandling<number>>
+  & InputInterface<number>
   & {
-    initialValue?: number,
     minimum?: number,
     maximum?: number,
     approximateMaxCharacters?: number,

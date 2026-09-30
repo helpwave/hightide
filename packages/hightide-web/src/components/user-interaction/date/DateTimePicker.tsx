@@ -5,7 +5,7 @@ import { useControlledState } from '@helpwave/hightide-utils/hooks'
 import clsx from 'clsx'
 
 import { useDateTimeFormat, useLocalization } from '../../../global-contexts/localization/forward-exports'
-import type { FormFieldDataHandling } from '../../form/FormField'
+import type { InputInterface } from '../input/Input'
 import type { CalendarDatePickerProps } from './CalendarDatePicker'
 import { CalendarDatePicker } from './CalendarDatePicker'
 import type { TimeWheelPickerProps } from './TimeWheelPicker'
@@ -13,11 +13,10 @@ import { TimeWheelPicker } from './TimeWheelPicker'
 
 export interface DateTimePickerProps extends
 HTMLAttributes<HTMLDivElement>,
-Partial<FormFieldDataHandling<Date>>,
+InputInterface<Date>,
 Pick<CalendarDatePickerProps, 'start' | 'end' | 'weekStart' | 'markToday'>,
 Pick<TimeWheelPickerProps, 'is24HourFormat' | 'minuteIncrement' | 'secondIncrement' | 'millisecondIncrement' | 'precision'>
 {
-  initialValue?: Date,
   mode?: DateTimeFormat,
   calendarDatePickerProps?: Omit<CalendarDatePickerProps, 'onChange' | 'value' | 'start' | 'end' | 'markToday'>,
   timeInputProps?: Omit<TimeWheelPickerProps, 'value' | 'onValueChange' | 'onEditComplete' | 'is24HourFormat' | 'minuteIncrement' | 'secondIncrement' | 'millisecondIncrement' | 'precision'>,

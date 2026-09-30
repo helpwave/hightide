@@ -4,9 +4,9 @@ How components are structured.
 
 ## Anatomy
 
-Every component is split into primitives, and every component has an aggregate.
+Every component is split into parts, and every component has an aggregate.
 
-The aggregate is the component used in the common case. Primitives are the individual elements of that component, attached as static members of the aggregate.
+The aggregate is the component used in the common case. Parts are the individual elements of that component, attached as static members of the aggregate.
 
 ```tsx
 <Select value={value} onValueChange={setValue}>
@@ -14,13 +14,13 @@ The aggregate is the component used in the common case. Primitives are the indiv
 </Select>
 ```
 
-`<Select />` is the aggregate. `Select.Root`, `Select.Trigger`, `Select.Content`, and `Select.Option` are the primitives. Each element of the component has its own primitive.
+`<Select />` is the aggregate. `Select.Root`, `Select.Trigger`, `Select.Content`, and `Select.Option` are its parts.
 
-The aggregate composes those primitives into the default arrangement. Callers who need a different arrangement use the primitives directly. Both forms are part of the public API.
+The aggregate composes those parts into the default arrangement. Callers who need a different arrangement use the parts directly. Both forms are part of the public API.
 
 ### Aggregate
 
-Props that belong to an individual primitive can be set on the aggregate. A dedicated props object for that primitive overwrites the values the aggregate already applied.
+Props that belong to an individual part can be set on the aggregate. A dedicated props object for that part overwrites the values the aggregate already applied.
 
 ```tsx
 <Select
@@ -47,23 +47,16 @@ That aggregate is the same composition as:
 </Select.Root>
 ```
 
-### Primitives
+### Parts
 
-A primitive owns one element: the root, the trigger, the content panel, an option, and so on. Name them `Component.Element`, and export them on the aggregate.
+Every part of the aggregate is one of these.
 
-### Root
+#### Context, Provider, and Consumer
 
-When primitives share state, the component provides a `Component.Root` primitive. Root parameterizes that state and provides it through context. The other primitives read the context. They do not own the shared state themselves.
-
-`Select.Root` holds the open state, the current value, interaction flags such as disabled, invalid, and read-only, and option registration, and passes them through `Select.Context`.
-
-A component whose primitives do not share state does not have a Root.
-
-### Context
-
-When a component has a context, the object that collects its primitives exposes that context and its consumer.
+When a component has a context, the aggregate always exposes all three.
 
 - `Component.Context` is the React context.
+- `Component.Provider` is `Component.Context.Provider`.
 - `Component.Consumer` is `Component.Context.Consumer`.
 
 ```tsx
@@ -75,6 +68,24 @@ When a component has a context, the object that collects its primitives exposes 
 ```
 
 Callers read shared state through `Component.Consumer` or the component hook. They do not reach the consumer by importing the context module.
+
+#### Root
+
+`Component.Root` is the logic of the component. It parameterizes shared state and provides it through context. It renders no HTML element.
+
+The other parts read that context. They do not own the shared state themselves.
+
+`Select.Root` holds the open state, the current value, interaction flags such as disabled, invalid, and read-only, and option registration, and passes them through `Select.Context`.
+
+A component whose parts do not share state does not have a Root.
+
+#### Subcomponent
+
+A subcomponent wraps HTML for one purpose: the trigger, the content panel, an option, and so on. Name it `Component.Element`, and export it on the aggregate.
+
+It contains one HTML element. It is a `forwardRef` to that element, and its props extend `HTMLAttributes` for that element.
+
+When a subcomponent contains more than one HTML element, it still forwards a ref, and every HTML element inside has its own `HTMLAttributes` props.
 
 ## Styling identification
 

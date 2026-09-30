@@ -10,16 +10,15 @@ import { IconButton } from '../IconButton'
 import { DateWheelPicker } from './DateWheelPicker'
 import { type DateTimeWheelPickerProps } from './DateTimeWheelPicker'
 import { TimeWheelPicker } from './TimeWheelPicker'
-import type { FormFieldDataHandling } from '../../form/FormField'
+import type { InputInterface } from '../input/Input'
 import type { DateTimeFormat, Weekday } from '@helpwave/hightide-utils/utils'
 import clsx from 'clsx'
 
 export interface DateTimePickerDialogProps extends
 HTMLAttributes<HTMLDivElement>,
-Partial<FormFieldDataHandling<Date | null>>,
+InputInterface<Date | null>,
 Pick<DateTimeWheelPickerProps, 'start' | 'end' | 'isLooping' | 'loopingBehaviour' | 'is24HourFormat' | 'minuteIncrement' | 'secondIncrement' | 'millisecondIncrement' | 'precision'>
 {
-  initialValue?: Date | null,
   allowRemove?: boolean,
   weekStart?: Weekday,
   markToday?: boolean,

@@ -59,5 +59,45 @@
 @layer components {
   .input {
     @apply input-element px-3 py-2 rounded-md h-element-md;
+
+    &[data-readonly]:not([data-disabled]):not([data-invalid]) {
+      border-color: color-mix(in oklch, var(--color-border) 80%, transparent);
+      --focus-border-color: color-mix(in oklch, var(--color-focus) 80%, transparent);
+      --focus-box-shadow: 0 0 calc(var(--spacing) * 1) calc(var(--spacing) * 0.8)
+        color-mix(in oklch, var(--color-focus) 28%, transparent);
+
+      @variant dark {
+        --focus-box-shadow: 0 0 calc(var(--spacing) * 1.5) calc(var(--spacing) * 0.8)
+          color-mix(in oklch, var(--color-focus) 48%, transparent);
+      }
+
+      &[data-value] {
+        color: color-mix(in oklch, var(--color-input-text) 80%, transparent);
+      }
+
+      &:not([data-value]) {
+        color: color-mix(in oklch, var(--color-placeholder) 80%, transparent);
+      }
+    }
+
+    &[data-readonly]:not([data-disabled])[data-invalid] {
+      border-color: color-mix(in oklch, var(--color-negative) 80%, transparent);
+      --focus-border-color: color-mix(in oklch, var(--color-negative) 80%, transparent);
+      --focus-box-shadow: 0 0 calc(var(--spacing) * 1) calc(var(--spacing) * 0.8)
+        color-mix(in oklch, var(--color-negative) 28%, transparent);
+
+      @variant dark {
+        --focus-box-shadow: 0 0 calc(var(--spacing) * 1.5) calc(var(--spacing) * 0.8)
+          color-mix(in oklch, var(--color-negative) 48%, transparent);
+      }
+
+      &[data-value] {
+        color: color-mix(in oklch, var(--color-negative) 80%, transparent);
+      }
+
+      &:not([data-value]) {
+        color: color-mix(in oklch, var(--color-placeholder) 80%, transparent);
+      }
+    }
   }
 }

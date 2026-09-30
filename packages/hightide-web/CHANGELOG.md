@@ -62,6 +62,9 @@ and adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 - Clicking a looped `WheelPicker` value selects it, including the repeated value past the end of the list
 - `DateTimePickerDialog` centers its wheels horizontally
 - `date-time-input-dialog-popup` sets `data-time-format` (`12h` or `24h`). A 12-hour `dateTime` popup uses a larger tablet minimum width
+- Value callbacks use `InputInterface` on `Input`, including optional `initialValue`, `invalid`, `disabled`, `readOnly`, and `required`. Form fields keep `FormFieldDataHandling` for their own required value props
+- `Select` and `MultiSelect` values are no longer `T | null`. An empty selection is omitted
+- Readonly `.input` text, border, and focus use 80% opacity
 - `Carousel` is a compound component: `Carousel.Root`, `Carousel.Container`, `Carousel.Slide`, `Carousel.Arrows`, `Carousel.FadeLayover`, `Carousel.Stepper`, `Carousel.Context`, and `Carousel.Consumer`. The combined `Carousel` still composes them from `children`, `hintNext`, `arrows`, `dots`, and `blurColor`
 - `Modal` is a compound component: `Modal.Root`, `Modal.Container`, `Modal.Background`, `Modal.Content`, `Modal.Title`, `Modal.Description`, `Modal.CloseButton`, `Modal.Opener`, `Modal.Context`, and `Modal.Consumer`. The combined `Modal` takes `titleElement`, `description`, `position`, `isClosable`, and slot props `containerProps`, `backgroundProps`, `contentProps`, `titleProps`, `descriptionProps`, and `closeButtonProps`
 - `isClosable` (default `true`) hides the close button and ignores close requests when `false`

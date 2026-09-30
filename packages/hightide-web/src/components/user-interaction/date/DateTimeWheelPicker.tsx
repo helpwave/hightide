@@ -1,17 +1,16 @@
 import clsx from 'clsx'
 import { useControlledState } from '@helpwave/hightide-utils/hooks'
 
-import type { FormFieldDataHandling } from '../../form/FormField'
+import type { InputInterface } from '../input/Input'
 import type { DateWheelPickerProps } from './DateWheelPicker'
 import { DateWheelPicker } from './DateWheelPicker'
 import type { TimeWheelPickerProps } from './TimeWheelPicker'
 import { TimeWheelPicker } from './TimeWheelPicker'
 
 export type DateTimeWheelPickerProps =
-  Partial<FormFieldDataHandling<Date>> &
+  InputInterface<Date> &
   Pick<DateWheelPickerProps, 'start' | 'end' | 'isLooping' | 'loopingBehaviour'> &
   Pick<TimeWheelPickerProps, 'is24HourFormat' | 'minuteIncrement' | 'secondIncrement' | 'millisecondIncrement' | 'precision'> & {
-    initialValue?: Date,
     className?: string,
     dateWheelPickerProps?: Omit<DateWheelPickerProps, 'value' | 'onValueChange' | 'onEditComplete' | 'start' | 'end' | 'isLooping' | 'loopingBehaviour'>,
     timeWheelPickerProps?: Omit<TimeWheelPickerProps, 'value' | 'onValueChange' | 'onEditComplete' | 'is24HourFormat' | 'minuteIncrement' | 'secondIncrement' | 'millisecondIncrement' | 'precision' | 'isLooping' | 'loopingBehaviour'>,

@@ -1,3 +1,4 @@
+import type { InputInterface } from '../user-interaction/input/Input'
 import type { FormFieldAriaAttributes, FormFieldInteractionStates } from './FieldLayout'
 import { FormFieldLayout, type FormFieldLayoutProps } from './FieldLayout'
 import { useFormField } from './FormContext'
@@ -26,11 +27,7 @@ export interface FormFieldProps<T extends FormValue, K extends keyof T> extends 
   validationBehaviour?: FormValidationBehaviour,
 }
 
-export type FormFieldDataHandling<T> = {
-  value: T,
-  onValueChange: (value: T) => void,
-  onEditComplete: (value: T) => void,
-}
+export type FormFieldDataHandling<T> = Required<Pick<InputInterface<T>, 'value' | 'onValueChange' | 'onEditComplete'>>
 
 export const FormField = <T extends FormValue, K extends keyof T>({ children, name, triggerUpdateOnEditComplete, validationBehaviour, ...props }: FormFieldProps<T, K>) => {
   const formField = useFormField<T, K>(name, { triggerUpdate: triggerUpdateOnEditComplete, validationBehaviour })

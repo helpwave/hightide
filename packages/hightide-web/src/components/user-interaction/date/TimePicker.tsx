@@ -2,7 +2,7 @@ import clsx from 'clsx'
 import { useEffect, useMemo, useRef } from 'react'
 import { closestMatch, range } from '@helpwave/hightide-utils/utils'
 import { Button } from '../Button'
-import type { FormFieldDataHandling } from '../../form/FormField'
+import type { InputInterface } from '../input/Input'
 import { useControlledState } from '@helpwave/hightide-utils/hooks'
 import type { DateTimePrecision } from '@helpwave/hightide-utils/utils'
 import { Visibility } from '../../layout/Visibility'
@@ -14,8 +14,7 @@ export type TimePickerSecondIncrement = '1s' | '5s' | '10s' | '15s' | '30s'
 
 export type TimePickerMillisecondIncrement = '1ms' | '5ms' | '10ms' | '25ms' | '50ms' | '100ms' | '250ms' | '500ms'
 
-export interface TimePickerProps extends Partial<FormFieldDataHandling<Date>> {
-  initialValue?: Date,
+export interface TimePickerProps extends InputInterface<Date> {
   is24HourFormat?: boolean,
   precision?: DateTimePrecision,
   minuteIncrement?: TimePickerMinuteIncrement,

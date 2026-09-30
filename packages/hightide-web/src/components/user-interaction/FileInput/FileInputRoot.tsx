@@ -4,8 +4,7 @@ import {
   useControlledState,
   useEventCallbackStabilizer
 } from '@helpwave/hightide-utils/hooks'
-import type { FormFieldDataHandling } from '../../form/FormField'
-import type { FormFieldInteractionStates } from '../../form/FieldLayout'
+import type { InputInterface } from '../input/Input'
 import { SafeGlobals } from '../../../utils/safeGlobals'
 import { FileInputContext, type FileInputContextType, type FileInputPickFiles } from './FileInputContext'
 import {
@@ -17,9 +16,8 @@ import {
   type FileInputItem
 } from './fileInputItem'
 
-export interface FileInputRootProps extends Omit<Partial<FormFieldDataHandling<readonly FileInputItem[]>>, 'value'>, Partial<FormFieldInteractionStates> {
+export interface FileInputRootProps extends Omit<InputInterface<readonly FileInputItem[]>, 'value'> {
   value?: readonly FileInputItem[],
-  initialValue?: readonly FileInputItem[],
   initialIsOpen?: boolean,
   onClose?: () => void,
   onIsOpenChange?: (isOpen: boolean) => void,

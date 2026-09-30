@@ -4,7 +4,7 @@ import { DateUtils, range } from '@helpwave/hightide-utils/utils'
 import { useControlledState, useEventCallbackStabilizer } from '@helpwave/hightide-utils/hooks'
 
 import { useLocalization } from '../../../global-contexts/localization/forward-exports'
-import type { FormFieldDataHandling } from '../../form/FormField'
+import type { InputInterface } from '../input/Input'
 import { WheelPicker } from '../WheelPicker'
 import type { WheelLoopingBehaviour } from './TimeWheelPicker'
 
@@ -32,8 +32,7 @@ function withDateParts(date: Date, year: number, month: number, day: number) {
   return next
 }
 
-export type DateWheelPickerProps = Partial<FormFieldDataHandling<Date>> & {
-  initialValue?: Date,
+export type DateWheelPickerProps = InputInterface<Date> & {
   start?: Date,
   end?: Date,
   isLooping?: boolean,

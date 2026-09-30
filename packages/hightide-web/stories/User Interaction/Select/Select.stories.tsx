@@ -57,8 +57,7 @@ const users: User[] = [
   { uuid: '5', name: 'Eve Wilson', email: 'eve@example.com' },
 ]
 
-function compareUser(a: User | null, b: User | null): boolean {
-  if (a === null || b === null) return a === b
+function compareUser(a: User, b: User): boolean {
   return a.uuid === b.uuid
 }
 
@@ -100,9 +99,9 @@ export const selectWithUser: Story = {
     )),
   },
   render: (args: SelectProps<User>) => {
-    const [value, setValue] = useState<User | null>(args.value ?? null)
+    const [value, setValue] = useState<User | undefined>(args.value)
     useEffect(() => {
-      setValue(args.value ?? null)
+      setValue(args.value)
     }, [args.value])
     return (
       <Select<User>

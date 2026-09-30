@@ -3,19 +3,16 @@ import type { HTMLAttributes, ReactNode } from 'react'
 import { forwardRef, useCallback, useId } from 'react'
 import { Checkbox, type CheckboxProps } from './Checkbox'
 import { PropsUtil } from '../../utils/propsUtil'
-import type { FormFieldDataHandling } from '../form/FormField'
-import type { FormFieldInteractionStates } from '../form/FieldLayout'
+import type { InputInterface } from './input/Input'
 import { useControlledState } from '@helpwave/hightide-utils/hooks'
 import { useEventCallbackStabilizer } from '@helpwave/hightide-utils/hooks'
 
 type LabelledCheckboxCheckPosition = 'left' | 'right'
 
 export type LabelledCheckboxProps = Omit<HTMLAttributes<HTMLDivElement>, 'children'>
-  & Partial<FormFieldInteractionStates>
-  & Partial<FormFieldDataHandling<boolean>>
+  & InputInterface<boolean>
   & Pick<CheckboxProps, 'indeterminate' | 'size' | 'alwaysShowCheckIcon' | 'isRounded'>
   & {
-    initialValue?: boolean,
     label: ReactNode,
     checkPosition?: LabelledCheckboxCheckPosition,
     checkboxClassName?: string,

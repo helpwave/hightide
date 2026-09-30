@@ -13,7 +13,6 @@ import { Visibility } from '../../../src/components/layout/Visibility'
 import { HelpwaveLogo } from '../../../src/components/branding/HelpwaveLogo'
 import { useEffect, useMemo, useState } from 'react'
 import type { FormValidationBehaviour } from '../../../src/components/form/FormStore'
-import type { FormFieldDataHandling } from '../../../src/components/form/FormField'
 import { FormField } from '../../../src/components/form/FormField'
 import { FormProvider } from '../../../src/components/form/FormContext'
 import { DateTimeInput } from '../../../src/components/user-interaction/input/DateTimeInput'
@@ -147,7 +146,7 @@ export const basic: Story = {
               validationBehaviour={validationBehaviour}
             >
               {({ dataProps, focusableElementProps, interactionStates }) => (
-                <Select {...dataProps as FormFieldDataHandling<string>} {...focusableElementProps} {...interactionStates}>
+                <Select {...dataProps} {...focusableElementProps} {...interactionStates}>
                   {StorybookHelper.selectValues.map(value => (
                     <Select.Option key={value} value={value} label={value} />
                   ))}
@@ -178,7 +177,7 @@ export const basic: Story = {
               validationBehaviour={validationBehaviour}
             >
               {({ dataProps, focusableElementProps, interactionStates }) => (
-                <MultiSelect {...dataProps as FormFieldDataHandling<string[]>} {...focusableElementProps} {...interactionStates}>
+                <MultiSelect {...dataProps} {...focusableElementProps} {...interactionStates}>
                   {StorybookHelper.selectValues.map(value => (
                     <MultiSelect.Option key={value} value={value} label={value} />
                   ))}
@@ -338,7 +337,7 @@ return (
           label="Your favourite Fruit"
         >
           {({ dataProps, focusableElementProps, interactionStates }) => (
-            <Select {...dataProps as FormFieldDataHandling<string>} {...focusableElementProps} {...interactionStates}>
+            <Select {...dataProps} {...focusableElementProps} {...interactionStates}>
               {StorybookHelper.selectValues.map(value => (
                 <Select.Option key={value} value={value} />
               ))}
@@ -353,7 +352,7 @@ return (
           label="Your contribution"
         >
           {({ dataProps, focusableElementProps, interactionStates }) => (
-            <MultiSelect {...dataProps as FormFieldDataHandling<string[]>} {...focusableElementProps} {...interactionStates}>
+            <MultiSelect {...dataProps} {...focusableElementProps} {...interactionStates}>
               {StorybookHelper.selectValues.map(value => (
                 <MultiSelect.Option key={value} value={value} />
               ))}
@@ -367,7 +366,7 @@ return (
           label="Allergies"
         >
           {({ dataProps, focusableElementProps, interactionStates }) => (
-            <MultiSelect {...dataProps as FormFieldDataHandling<string[]>} {...focusableElementProps} {...interactionStates}>
+            <MultiSelect {...dataProps} {...focusableElementProps} {...interactionStates}>
               {StorybookHelper.selectValues.map(value => (
                 <MultiSelect.Option key={value} value={value} />
               ))}

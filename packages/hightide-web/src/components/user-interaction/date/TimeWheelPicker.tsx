@@ -4,7 +4,7 @@ import { closestMatch, range, type DateTimePrecision } from '@helpwave/hightide-
 import { useControlledState } from '@helpwave/hightide-utils/hooks'
 
 import { useDateTimeFormat } from '../../../global-contexts/localization/forward-exports'
-import type { FormFieldDataHandling } from '../../form/FormField'
+import type { InputInterface } from '../input/Input'
 import { Visibility } from '../../layout/Visibility'
 import { WheelPicker, type WheelPickerLoopEvent } from '../WheelPicker'
 import type {
@@ -94,8 +94,7 @@ function set12HourDisplay(date: Date, displayHour: number, loopingBehaviour: Whe
   date.setHours(normalizedHour + (nextIsPM ? 12 : 0))
 }
 
-export interface TimeWheelPickerProps extends Partial<FormFieldDataHandling<Date>> {
-  initialValue?: Date,
+export interface TimeWheelPickerProps extends InputInterface<Date> {
   is24HourFormat?: boolean,
   isLooping?: boolean,
   loopingBehaviour?: WheelLoopingBehaviour,

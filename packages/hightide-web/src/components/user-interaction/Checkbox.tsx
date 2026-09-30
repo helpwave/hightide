@@ -4,8 +4,7 @@ import type { IconSize } from '../display-and-visualization/Icon'
 import { Icon } from '../display-and-visualization/Icon'
 import { useCallback, type HTMLAttributes } from 'react'
 import { Visibility } from '../layout/Visibility'
-import type { FormFieldInteractionStates } from '../form/FieldLayout'
-import type { FormFieldDataHandling } from '../form/FormField'
+import type { InputInterface } from './input/Input'
 import { useControlledState } from '@helpwave/hightide-utils/hooks'
 import { useEventCallbackStabilizer } from '@helpwave/hightide-utils/hooks'
 
@@ -15,15 +14,12 @@ import { PropsUtil } from '../../utils/propsUtil'
 type CheckBoxSize = 'sm' | 'md' | 'lg' | null
 
 export type CheckboxProps = HTMLAttributes<HTMLDivElement>
-  & Partial<FormFieldInteractionStates>
-  & Partial<FormFieldDataHandling<boolean>>
+  & InputInterface<boolean>
   & {
-    initialValue?: boolean,
     indeterminate?: boolean,
     size?: CheckBoxSize,
     alwaysShowCheckIcon?: boolean,
     isRounded?: boolean,
-    interactive?: boolean,
   }
 
 /**

@@ -4,8 +4,7 @@ import { MultiSelectContext } from './MultiSelectContext'
 import type { MultiSelectContextType, MultiSelectIconAppearance, MultiSelectOptionType } from './MultiSelectContext'
 import { useMultiSelect } from './useMultiSelect'
 import { DOMUtils } from '../../../utils/dom'
-import type { FormFieldDataHandling } from '../../form/FormField'
-import type { FormFieldInteractionStates } from '../../form/FieldLayout'
+import type { InputInterface } from '../input/Input'
 import { PopUpContext } from '../../layout/popup/PopUpContext'
 
 export interface MultiSelectIds {
@@ -15,8 +14,7 @@ export interface MultiSelectIds {
   searchInput: string,
 }
 
-export interface MultiSelectRootProps<T> extends Partial<FormFieldDataHandling<T[]>>, Partial<FormFieldInteractionStates> {
-  initialValue?: T[],
+export interface MultiSelectRootProps<T> extends InputInterface<T[]> {
   compareFunction?: (a: T, b: T) => boolean,
   initialIsOpen?: boolean,
   onClose?: () => void,
@@ -85,14 +83,14 @@ export function MultiSelectRoot<T>({
   )
 
   const mappedValueIds = useMemo(() => {
-    if (value == null) return undefined
+    if (value === undefined) return undefined
     return value
       .map((v) => options.find((o) => compare(o.value.value, v))?.value.id)
       .filter((id) => id !== undefined)
   }, [options, value, compare])
 
   const mappedInitialValueIds = useMemo(() => {
-    if (initialValue == null) return []
+    if (initialValue === undefined) return []
     return initialValue
       .map((v) => options.find((o) => compare(o.value.value, v))?.value.id)
       .filter((id) => id !== undefined)
@@ -102,7 +100,7 @@ export function MultiSelectRoot<T>({
     (ids: string[]) => {
       const values = ids
         .map((id) => idToOptionMap[id]?.value.value)
-        .filter((v): v is T => v != null)
+        .filter((value): value is T => value !== undefined)
       onValueChange?.(values)
     },
     [idToOptionMap, onValueChange]
@@ -112,7 +110,7 @@ export function MultiSelectRoot<T>({
     (ids: string[]) => {
       const values = ids
         .map((id) => idToOptionMap[id]?.value.value)
-        .filter((v): v is T => v != null)
+        .filter((value): value is T => value !== undefined)
       onEditComplete?.(values)
     },
     [idToOptionMap, onEditComplete]
@@ -140,7 +138,7 @@ export function MultiSelectRoot<T>({
   const contextValue = useMemo((): MultiSelectContextType<T> => {
     const valueT = state.value
       .map((id) => idToOptionMap[id]?.value.value)
-      .filter((v): v is T => v != null)
+      .filter((value): value is T => value !== undefined)
     return {
       invalid,
       disabled,

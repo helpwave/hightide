@@ -20,7 +20,7 @@ type SelectComponentType = <T = string>(
   props: SelectProps<T> & {
     ref?: React.ForwardedRef<HTMLDivElement>,
   }
-) => React.ReactElement | null
+) => React.ReactElement
 
 const SelectComponentImpl = forwardRef<
   HTMLDivElement,

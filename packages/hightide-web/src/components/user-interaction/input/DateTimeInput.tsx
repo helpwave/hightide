@@ -6,10 +6,9 @@ import type { DateTimePickerProps } from '../date/DateTimePicker'
 import { useHightideTranslation } from '@helpwave/hightide-utils/context/translation'
 import { useDateTimeFormat, useLocalization } from '../../../global-contexts/localization/forward-exports'
 import { Visibility } from '../../layout/Visibility'
-import type { FormFieldDataHandling } from '../../form/FormField'
+import type { InputInterface } from './Input'
 import { DateTimePickerDialog } from '../date/DateTimePickerDialog'
 import { useControlledState } from '@helpwave/hightide-utils/hooks'
-import type { FormFieldInteractionStates } from '../../form/FieldLayout'
 import { PopUp } from '../../layout/popup/PopUp'
 import { IconButton } from '../IconButton'
 import { DateUtils, type DateTimeFormat } from '@helpwave/hightide-utils/utils'
@@ -18,18 +17,16 @@ import { ReactUtils } from '@helpwave/hightide-utils/utils'
 import { PropsUtil } from '../../../utils/propsUtil'
 
 export interface DateTimeInputProps extends
-  Partial<FormFieldInteractionStates>,
   Omit<HTMLAttributes<HTMLDivElement>, 'defaultValue' | 'onChange'>,
-  Partial<FormFieldDataHandling<Date | null>>,
+  InputInterface<Date | null>,
   Pick<DateTimePickerProps, 'start' | 'end' | 'weekStart' | 'markToday' | 'is24HourFormat' | 'minuteIncrement' | 'secondIncrement' | 'millisecondIncrement' | 'precision'>
 {
-  initialValue?: Date | null,
   allowRemove?: boolean,
   allowClear?: boolean,
   mode?: DateTimeFormat,
   timeZone?: string,
   containerProps?: HTMLAttributes<HTMLDivElement>,
-  pickerProps?: Omit<DateTimePickerProps, keyof FormFieldDataHandling<Date> | 'mode' | 'initialValue' | 'start' | 'end' | 'weekStart' | 'markToday' | 'is24HourFormat' | 'minuteIncrement' | 'secondIncrement' | 'millisecondIncrement' | 'precision'>,
+  pickerProps?: Omit<DateTimePickerProps, keyof InputInterface<Date> | 'mode' | 'start' | 'end' | 'weekStart' | 'markToday' | 'is24HourFormat' | 'minuteIncrement' | 'secondIncrement' | 'millisecondIncrement' | 'precision'>,
   outsideClickCloses?: boolean,
   onDialogOpeningChange?: (isOpen: boolean) => void,
   actions?: ReactNode[],

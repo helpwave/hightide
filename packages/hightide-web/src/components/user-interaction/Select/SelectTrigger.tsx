@@ -20,7 +20,7 @@ type SelectTriggerComponent = <T = string>(
   props: SelectTriggerProps<T> & {
     ref?: React.ForwardedRef<HTMLDivElement>,
   }
-) => React.ReactElement | null
+) => React.ReactElement
 
 const SelectTriggerImpl = forwardRef<
   HTMLDivElement,

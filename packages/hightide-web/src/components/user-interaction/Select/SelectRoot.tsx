@@ -4,9 +4,8 @@ import { SelectContext } from './SelectContext'
 import type { SelectContextConfig, SelectContextLayout, SelectOptionType } from './SelectContext'
 import { useSelect } from './useSelect'
 import { DOMUtils } from '../../../utils/dom'
-import type { FormFieldDataHandling } from '../../form/FormField'
+import type { InputInterface } from '../input/Input'
 import { useEventCallbackStabilizer } from '@helpwave/hightide-utils/hooks'
-import type { FormFieldInteractionStates } from '../../form/FieldLayout'
 import { PopUpContext } from '../../layout/popup/PopUpContext'
 
 export interface SelectIds {
@@ -16,10 +15,8 @@ export interface SelectIds {
   searchInput: string,
 }
 
-export interface SelectRootProps<T> extends Omit<Partial<FormFieldDataHandling<T>>, 'value'>, Partial<FormFieldInteractionStates> {
-  value?: T | null,
-  initialValue?: T | null,
-  compareFunction?: (a: T | null, b: T | null) => boolean,
+export interface SelectRootProps<T> extends InputInterface<T> {
+  compareFunction?: (a: T, b: T) => boolean,
   initialIsOpen?: boolean,
   onClose?: () => void,
   onIsOpenChange?: (isOpen: boolean) => void,
@@ -92,12 +89,12 @@ export function SelectRoot<T>({
 
   const mappedValueId = useMemo(() => {
     if(value === undefined) return undefined
-    return options.find((o) => compare(o.value.value, value))?.value.id ?? null
+    return options.find((o) => compare(o.value.value, value))?.value.id
   }, [options, value, compare])
 
   const mappedInitialValueId = useMemo(() => {
     if(initialValue === undefined) return undefined
-    return options.find((o) => compare(o.value.value, initialValue))?.value.id ?? null
+    return options.find((o) => compare(o.value.value, initialValue))?.value.id
   }, [options, initialValue, compare])
 
   const onValueChangeStable = useEventCallbackStabilizer(onValueChange)
@@ -124,8 +121,8 @@ export function SelectRoot<T>({
 
 
   const state = useSelect({
-    value: mappedValueId,
-    initialValue: mappedInitialValueId,
+    value: value !== undefined && mappedValueId === undefined ? null : mappedValueId,
+    initialValue: initialValue !== undefined && mappedInitialValueId === undefined ? null : mappedInitialValueId,
     onValueChange: onValueChangeWrapper,
     onEditComplete: onEditCompleteWrapper,
     options: options.map((o) => ({

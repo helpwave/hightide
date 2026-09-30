@@ -4,8 +4,6 @@ import React, { forwardRef, useRef } from 'react'
 import type { UseDelayOptionsResolved } from '@helpwave/hightide-utils/hooks'
 import { useDelay } from '@helpwave/hightide-utils/hooks'
 import { useFocusManagement } from '../../../hooks/focus/useFocusManagement'
-import type { FormFieldInteractionStates } from '../../form/FieldLayout'
-import type { FormFieldDataHandling } from '../../form/FormField'
 import { useControlledState } from '@helpwave/hightide-utils/hooks'
 import { ReactUtils } from '@helpwave/hightide-utils/utils'
 
@@ -26,12 +24,21 @@ const defaultEditCompleteOptions: EditCompleteOptionsResolved = {
   delay: 2500
 }
 
+export type InputInterface<In, Out extends In = In> = {
+  value?: In,
+  initialValue?: In,
+  onValueChange?: (value: Out) => void,
+  onEditComplete?: (value: Out) => void,
+  invalid?: boolean,
+  disabled?: boolean,
+  readOnly?: boolean,
+  required?: boolean,
+}
+
 export type InputProps = Omit<InputHTMLAttributes<HTMLInputElement>, 'value'>
-  & Partial<FormFieldDataHandling<string>>
-  & Partial<FormFieldInteractionStates>
+  & InputInterface<string>
   & {
     editCompleteOptions?: EditCompleteOptions,
-    initialValue?: string,
   }
 
 /**

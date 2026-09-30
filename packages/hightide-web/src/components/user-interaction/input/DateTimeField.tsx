@@ -5,8 +5,7 @@ import { useControlledState } from '@helpwave/hightide-utils/hooks'
 import { useLocalization } from '../../../global-contexts/localization/forward-exports'
 import { useHightideTranslation } from '@helpwave/hightide-utils/context/translation'
 import { SafeGlobals } from '../../../utils/safeGlobals'
-import type { FormFieldInteractionStates } from '../../form/FieldLayout'
-import type { FormFieldDataHandling } from '../../form/FormField'
+import type { InputInterface } from './Input'
 import type { DateTimeFormat, DateTimePrecision } from '@helpwave/hightide-utils/utils'
 import type { EditableSegmentType, SegmentEditState } from './dateTimeSegments'
 import {
@@ -29,10 +28,8 @@ import { PropsUtil } from '../../../utils/propsUtil'
 const advanceKeys = ['.', ':', '/', ',', '-', ' ']
 
 export interface DateTimeFieldProps extends
-  Partial<FormFieldInteractionStates>,
-  Partial<FormFieldDataHandling<Date | null>>,
+  InputInterface<Date | null>,
   Omit<HTMLAttributes<HTMLDivElement>, 'defaultValue' | 'onChange'> {
-  initialValue?: Date | null,
   mode?: DateTimeFormat,
   precision?: DateTimePrecision,
   is24HourFormat?: boolean,

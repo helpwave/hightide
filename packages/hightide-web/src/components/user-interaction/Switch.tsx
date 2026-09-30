@@ -1,18 +1,13 @@
 import clsx from 'clsx'
 import { type HTMLAttributes, useCallback } from 'react'
-import type { FormFieldInteractionStates } from '../form/FieldLayout'
-import type { FormFieldDataHandling } from '../form/FormField'
+import type { InputInterface } from './input/Input'
 import { useControlledState } from '@helpwave/hightide-utils/hooks'
 import { useEventCallbackStabilizer } from '@helpwave/hightide-utils/hooks'
 import { ColoringUtils } from '../../utils/coloring'
 import { PropsUtil } from '../../utils/propsUtil'
 
 export type SwitchProps = HTMLAttributes<HTMLDivElement>
-  & Partial<FormFieldInteractionStates>
-  & Partial<FormFieldDataHandling<boolean>>
-  & {
-    initialValue?: boolean,
-  }
+  & InputInterface<boolean>
 
 /**
  * A binary on/off switch

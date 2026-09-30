@@ -9,7 +9,7 @@ import type { YearMonthPickerProps } from './YearMonthPicker'
 import { YearMonthPicker } from './YearMonthPicker'
 import { useLocalization } from '../../../global-contexts/localization/forward-exports'
 import { Button } from '../Button'
-import type { FormFieldDataHandling } from '../../form/FormField'
+import type { InputInterface } from '../input/Input'
 import { useControlledState } from '@helpwave/hightide-utils/hooks'
 import { IconButton } from '../IconButton'
 import { useHightideTranslation } from '@helpwave/hightide-utils/context/translation'
@@ -17,10 +17,9 @@ import { useHightideTranslation } from '@helpwave/hightide-utils/context/transla
 type DisplayMode = 'yearMonth' | 'day' | 'time'
 
 export interface CalendarDatePickerProps extends
- Partial<FormFieldDataHandling<Date>>,
+ InputInterface<Date>,
  Pick<CalendarDayPickerProps, 'markToday' | 'start' | 'end' | 'weekStart'>
  {
-  initialValue?: Date,
   initialDisplay?: DisplayMode,
   calendarDayPickerProps?: Omit<CalendarDayPickerProps, 'displayedMonth' | 'onChange' | 'selected' | 'weekStart' | 'markToday' | 'start' | 'end'>,
   yearMonthPickerProps?: Omit<YearMonthPickerProps, 'displayedYearMonth' | 'onChange' | 'start' | 'end'>,

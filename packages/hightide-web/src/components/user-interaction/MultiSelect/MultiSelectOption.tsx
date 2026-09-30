@@ -44,7 +44,7 @@ type MultiSelectOptionComponent = <T = string>(
   props: MultiSelectOptionProps<T> & {
     ref?: React.ForwardedRef<HTMLLIElement>,
   }
-) => React.ReactElement | null
+) => React.ReactElement
 
 const toIdentity = <T,>(value: T, valueId: string | undefined): MultiSelectOptionIdentity<T> => {
   if (valueId === undefined) {

@@ -14,6 +14,7 @@ export const input: Story = {
     initialValue: '',
     disabled: false,
     invalid: false,
+    readOnly: false,
     placeholder: 'Placeholder',
     editCompleteOptions: {
       allowEnterComplete: true,
