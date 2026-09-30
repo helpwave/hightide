@@ -57,6 +57,7 @@ and adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 - Dark theme background is `gray-800`, surface is `gray-700`, surface variant is `gray-750`, and primary stays `purple-500`
 - Coloring custom properties start as `initial` instead of `transparent`
 - `Select` and `MultiSelect` show the search field when the option count is at least `searchableThreshold` (default `6`)
+- `Carousel` is a compound component: `Carousel.Root`, `Carousel.Container`, `Carousel.Slide`, `Carousel.Arrows`, `Carousel.FadeLayover`, `Carousel.Stepper`, `Carousel.Context`, and `Carousel.Consumer`. The combined `Carousel` still composes them from `children`, `hintNext`, `arrows`, `dots`, and `blurColor`
 
 ### Removed
 
@@ -71,6 +72,8 @@ and adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 - `ChatMessageCard` and `ChatAttachmentCard`. Structured messages are composed with `ChatMessageBubble`; file messages use `ChatAttachmentMessageBubble`. `ChatMessageBubble` `readReceipt` is replaced by `status`
 - Fixed `--color-description` tokens (`gray-600` in light, `gray-400` in dark)
 - `showSearch` on `Select` and `MultiSelect`
+- Standalone `CarouselTabs` and `CarouselSlide`. Use `Carousel.Stepper` and `Carousel.Slide`
+- Unused `Carousel` prop `overScrollThreshold`
 
 
 ## [0.17.2] - 2026-09-23
