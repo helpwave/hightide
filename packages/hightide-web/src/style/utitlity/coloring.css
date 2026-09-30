@@ -1,37 +1,37 @@
 @property --coloring-base {
   syntax: "<color>";
   inherits: true;
-  initial-value: transparent;
+  initial-value: initial;
 }
 
 @property --coloring-on-base {
   syntax: "<color>";
   inherits: true;
-  initial-value: transparent;
+  initial-value: initial;
 }
 
 @property --coloring-color {
   syntax: "<color>";
   inherits: true;
-  initial-value: transparent;
+  initial-value: initial;
 }
 
 @property --coloring-on-color {
   syntax: "<color>";
   inherits: true;
-  initial-value: transparent;
+  initial-value: initial;
 }
 
 @property --coloring-accent {
   syntax: "<color>";
   inherits: true;
-  initial-value: transparent;
+  initial-value: initial;
 }
 
 @property --coloring-foreground {
   syntax: "<color>";
   inherits: true;
-  initial-value: transparent;
+  initial-value: initial;
 }
 
 :root {
@@ -146,7 +146,7 @@
   }
 
   &[data-color-variant="tonal"] {
-    --coloring-color: color-mix(in srgb, var(--coloring-base) 20%, transparent);
+    --coloring-color: color-mix(in oklch, var(--coloring-base) 20%, transparent);
     --coloring-on-color: var(--coloring-base);
 
     @supports (color: oklch(from red 0.5 c h)) {
@@ -156,7 +156,7 @@
   }
 
   &[data-color-variant="transparent"] {
-    --coloring-color: color-mix(in srgb, var(--coloring-base) var(--coloring-transparent-alpha), transparent);
+    --coloring-color: color-mix(in oklch, var(--coloring-base) var(--coloring-transparent-alpha), transparent);
     --coloring-on-color: var(--coloring-base);
   }
 

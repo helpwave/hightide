@@ -50,6 +50,11 @@
   --coloring-on-color: var(--color-on-disabled);
 }
 
+@utility text-description {
+  --color-description: color-mix(in oklch, var(--coloring-foreground, var(--color-on-surface)) var(--appearance-subtle), var(--coloring-color, var(--color-surface)));
+  color: var(--color-description);
+}
+
 @utility description {
   @apply coloring-reset-variables;
   --coloring-color: var(--color-description);

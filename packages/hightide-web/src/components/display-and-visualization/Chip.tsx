@@ -1,21 +1,24 @@
 import clsx from 'clsx'
 import type { HTMLAttributes } from 'react'
-import { ButtonUtil } from '../user-interaction/Button'
+import type { ColoringColor, ColoringColorVariant, ColoringStyle } from '../../utils/coloring'
+import { ColoringUtils } from '../../utils/coloring'
 
 type ChipSize = 'xs' | 'sm' | 'md' | 'lg' | null
 
-type ChipColoringStyle = 'solid' | 'tonal' | 'outline' | 'tonal-outline' | null
-
-const chipColors = ButtonUtil.colors
-export type ChipColor = typeof chipColors[number]
+export type ChipColor = ColoringColor
 
 export const ChipUtil = {
-  colors: chipColors,
+  colors: ColoringUtils.colors,
+  colorVariants: ColoringUtils.colorVariants,
+  styles: ColoringUtils.styles,
 }
 
 export type ChipProps = HTMLAttributes<HTMLDivElement> & {
   color?: ChipColor,
-  coloringStyle?: ChipColoringStyle,
+  colorVariant?: ColoringColorVariant,
+  coloringStyle?: ColoringStyle,
+  bordered?: boolean,
+  elevated?: boolean,
   size?: ChipSize,
 }
 
@@ -25,7 +28,10 @@ export type ChipProps = HTMLAttributes<HTMLDivElement> & {
 export const Chip = ({
   children,
   color = 'neutral',
-  coloringStyle = 'solid',
+  colorVariant = 'tonal',
+  coloringStyle = 'filled',
+  bordered = false,
+  elevated = false,
   size = 'md',
   ...props
 }: ChipProps) => {
@@ -33,9 +39,16 @@ export const Chip = ({
     <div
       {...props}
       className={clsx('chip', props.className)}
-      data-color={color ?? undefined}
-      data-coloringstyle={coloringStyle ?? undefined}
-      data-size={size ?? undefined}>
+      data-size={size ?? undefined}
+      {...ColoringUtils.build({
+        color,
+        mode: 'static',
+        colorVariant,
+        coloringStyle,
+        bordered,
+        elevated,
+      })}
+    >
       {children}
     </div>
   )

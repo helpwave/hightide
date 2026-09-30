@@ -268,7 +268,7 @@ export const chatDemo: Story = {
                       <span className="text-sm font-space font-bold">Rezept-Anfrage</span>
                       <span className="text-xs text-description">Folgeverordnung</span>
                     </span>
-                    <Chip size="xs" color="primary" coloringStyle="tonal">NEU</Chip>
+                    <Chip size="xs" color="primary" colorVariant="tonal">NEU</Chip>
                   </div>
                   <div className="flex-col-1 py-3">
                     <span className="typography-title-md">Ramipril 5mg</span>
@@ -293,7 +293,7 @@ export const chatDemo: Story = {
                       <span className="text-sm font-space font-bold">Terminvorschlag</span>
                       <span className="text-xs text-description">Besprechung Blutwerte · 30 Min</span>
                     </span>
-                    <Chip size="xs" color="warning" coloringStyle="tonal">AUSSTEHEND</Chip>
+                    <Chip size="xs" color="warning" colorVariant="tonal">AUSSTEHEND</Chip>
                   </div>
                   <div className="flex-col-1 pt-3">
                     <span className="typography-title-md">Mi. 8. Juli 2026</span>

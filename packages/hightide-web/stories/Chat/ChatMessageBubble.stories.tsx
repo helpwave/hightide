@@ -30,7 +30,7 @@ export const chatMessageBubble: Story = {
     children: 'Perfekt, ich habe den Befund erhalten. Bis Mittwoch!',
   },
   render: (args) => (
-    <div className="flex-col-3 w-96 p-4 rounded-lg bg-background">
+    <div className="flex-col-4">
       <ChatMessageBubble direction="incoming" timestamp={new Date(2026, 7, 24, 9, 12)}>
         Guten Tag Herr Wellermann, wir haben die Ergebnisse Ihrer Blutuntersuchung erhalten.
       </ChatMessageBubble>

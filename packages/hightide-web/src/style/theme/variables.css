@@ -14,12 +14,18 @@
   --coloring-transparent-alpha: 30%;
   --coloring-state-hover: 8%;
   --coloring-state-press: 16%;
+  --appearance-subtle: 70%;
 
   --icon-size-xs: 16px;
   --icon-size-sm: 20px;
   --icon-size-md: 24px;
   --icon-size-lg: 32px;
   --icon-size-xl: 48px;
+
+  @variant dark {
+    --coloring-tonal-lightness: 0.3;
+    --coloring-tonal-on-lightness: 0.95;
+  }
 }
 
 @theme {

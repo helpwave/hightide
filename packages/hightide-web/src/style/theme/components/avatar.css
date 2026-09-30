@@ -5,16 +5,16 @@
       @apply absolute shadow-side shadow-r-4 shadow-hard;
     }
     &[data-size="xs"] {
-      @apply size-6 p-0.5 text-xs font-semibold;
+      @apply size-6 min-w-6 max-w-6 p-0.5 text-xs font-semibold;
     }
     &[data-size="sm"] {
-      @apply size-8 p-1 text-xs font-semibold;
+      @apply size-8 min-w-8 max-w-8 p-1 text-xs font-semibold;
     }
     &[data-size="md"] {
-      @apply size-10 p-1.5 text-lg font-semibold;
+      @apply size-10 min-w-10 max-w-10 p-1.5 text-lg font-semibold;
     }
     &[data-size="lg"] {
-      @apply size-12 p-2 text-2xl font-bold;
+      @apply size-12 min-w-12 max-w-12 p-2 text-2xl font-bold;
     }
 
     &[data-loading-state="loading"] {

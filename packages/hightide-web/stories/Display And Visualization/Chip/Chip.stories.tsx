@@ -7,7 +7,15 @@ const meta = {
     color: {
       control: 'select',
       options: ChipUtil.colors,
-    }
+    },
+    colorVariant: {
+      control: 'select',
+      options: ChipUtil.colorVariants,
+    },
+    coloringStyle: {
+      control: 'select',
+      options: ChipUtil.styles,
+    },
   },
 } satisfies Meta<typeof Chip>
 
@@ -17,7 +25,8 @@ type Story = StoryObj<typeof meta>;
 export const chip: Story = {
   args: {
     color: 'primary',
-    coloringStyle: 'solid',
+    colorVariant: 'tonal',
+    coloringStyle: 'filled',
     size: 'md',
     children: 'Label',
   },

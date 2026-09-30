@@ -19,7 +19,7 @@ export const chatAttachmentMessageBubble: Story = {
     onDownload: action('download'),
   },
   render: (args) => (
-    <div className="flex-col-3 w-96 p-4">
+    <div className="flex-col-4">
       <ChatAttachmentMessageBubble {...args} />
       <ChatAttachmentMessageBubble
         name="EKG_Bericht.pdf"

@@ -21,6 +21,7 @@
   --color-overlay-background: var(--color-surface);
   --color-overlay-text: var(--color-on-surface);
   --color-overlay-shadow: #00000039;
+  --color-overlay-shadow: oklch(0.000 0 0 / 0.25);
 
   /* ProgressIndicator */
   --color-progress-indicator-fill: var(--color-primary);
@@ -32,13 +33,14 @@
   --color-process-model-edge-label-text-strong: var(--color-primary);
   --color-process-model-edge-label-text-muted: var(--color-purple-300);
   --color-process-model-terminal-fill: var(--color-primary);
-  --color-process-model-terminal-fill-active: color-mix(in srgb, var(--color-on-primary) var(--coloring-state-press), var(--color-primary));
+  --color-process-model-terminal-fill-active: color-mix(in oklch, var(--color-on-primary) var(--coloring-state-press), var(--color-primary));
   --color-process-model-terminal-fill-visited: var(--color-purple-400);
   --color-process-model-activity-icon-bg: var(--color-purple-100);
   --color-process-model-node-active-ring: var(--color-purple-100);
   --color-process-model-node-active-bg: var(--color-purple-50);
   --color-process-model-node-visited-border: var(--color-purple-200);
   --color-process-model-node-visited-bg: #fdf9ff;
+  --color-process-model-node-visited-bg: oklch(0.987 0.009 314.8);
 
   /* Property */
   --color-property-title-background: var(--color-gray-100);
@@ -46,6 +48,7 @@
 
   /* Scrollbar */
   --color-scrollbar-track: #00000033;
+  --color-scrollbar-track: oklch(0.000 0 0 / 0.2);
   --color-scrollbar-thumb: var(--color-gray-600);
 
   /* Stepper Bar */
@@ -100,9 +103,11 @@
 
     /* Overlay, Dialog, Modal */
     --color-overlay-shadow: #00000060;
+    --color-overlay-shadow: oklch(0.000 0 0 / 0.4);
 
     /* Scrollbar */
     --color-scrollbar-track: #ffffff33;
+    --color-scrollbar-track: oklch(1.000 0 0 / 0.2);
     --color-scrollbar-thumb: var(--color-gray-300);
 
     /* Switch */

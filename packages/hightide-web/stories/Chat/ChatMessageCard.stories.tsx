@@ -6,6 +6,7 @@ import { Chip } from '../../src/components/display-and-visualization/Chip'
 import { Icon } from '../../src/components/display-and-visualization/Icon'
 import { Button } from '../../src/components/user-interaction/Button'
 import { ColoringUtils, type ColoringColor } from '../../src/utils/coloring'
+import clsx from 'clsx'
 
 const meta = {
   component: ChatMessageBubble,
@@ -34,7 +35,7 @@ const MessageCardStory = ({
   color = 'primary',
   ...bubbleProps
 }: MessageCardStoryProps) => (
-  <ChatMessageBubble {...bubbleProps}>
+  <ChatMessageBubble {...bubbleProps} className={clsx(bubbleProps?.className, 'max-w-96')}>
     <div className="flex-col-0 w-full min-w-64">
       <div className="flex-row-0 gap-x-2.5 items-center pb-3 border-b border-divider">
         <span
@@ -71,27 +72,25 @@ export const appointmentProposal: Story = {
     timestamp: new Date(2026, 6, 8, 15, 0),
   },
   render: (args) => (
-    <div className="w-96 p-4">
-      <MessageCardStory
-        {...args}
-        icon={CalendarDays}
-        title="Terminvorschlag"
-        subtitle="Besprechung Blutwerte · 30 Min"
-        badge={<Chip size="xs" color="warning" coloringStyle="tonal">AUSSTEHEND</Chip>}
-        body={(
-          <>
-            <span className="typography-title-md">Mi. 8. Juli 2026</span>
-            <span className="text-sm text-description">15:00 – 15:30 Uhr · Sprechzimmer 2</span>
-          </>
-        )}
-        actions={(
-          <>
-            <Button size="sm" color="primary" className="rounded-full">Zusagen</Button>
-            <Button size="sm" color="neutral" className="rounded-full">Ablehnen</Button>
-          </>
-        )}
-      />
-    </div>
+    <MessageCardStory
+      {...args}
+      icon={CalendarDays}
+      title="Terminvorschlag"
+      subtitle="Besprechung Blutwerte · 30 Min"
+      badge={<Chip size="xs" color="warning" colorVariant="tonal">AUSSTEHEND</Chip>}
+      body={(
+        <>
+          <span className="typography-title-md">Mi. 8. Juli 2026</span>
+          <span className="text-sm text-description">15:00 – 15:30 Uhr · Sprechzimmer 2</span>
+        </>
+      )}
+      actions={(
+        <>
+          <Button size="sm" color="primary" className="rounded-full">Zusagen</Button>
+          <Button size="sm" color="neutral" className="rounded-full">Ablehnen</Button>
+        </>
+      )}
+    />
   ),
 }
 
@@ -101,27 +100,25 @@ export const prescriptionRequest: Story = {
     timestamp: new Date(2026, 6, 8, 14, 12),
   },
   render: (args) => (
-    <div className="w-96 p-4">
-      <MessageCardStory
-        {...args}
-        icon={Pill}
-        title="Rezept-Anfrage"
-        subtitle="Folgeverordnung"
-        badge={<Chip size="xs" color="primary" coloringStyle="tonal">NEU</Chip>}
-        body={(
-          <>
-            <span className="typography-title-md">Ramipril 5mg</span>
-            <span className="text-sm text-description">N2 · 50 Stück · zuletzt 12.05.2026</span>
-          </>
-        )}
-        actions={(
-          <>
-            <Button size="sm" color="primary" className="rounded-full">Ausstellen</Button>
-            <Button size="sm" color="neutral" className="rounded-full">Ablehnen</Button>
-          </>
-        )}
-      />
-    </div>
+    <MessageCardStory
+      {...args}
+      icon={Pill}
+      title="Rezept-Anfrage"
+      subtitle="Folgeverordnung"
+      badge={<Chip size="xs" color="primary" colorVariant="tonal">NEU</Chip>}
+      body={(
+        <>
+          <span className="typography-title-md">Ramipril 5mg</span>
+          <span className="text-sm text-description">N2 · 50 Stück · zuletzt 12.05.2026</span>
+        </>
+      )}
+      actions={(
+        <>
+          <Button size="sm" color="primary" className="rounded-full">Ausstellen</Button>
+          <Button size="sm" color="neutral" className="rounded-full">Ablehnen</Button>
+        </>
+      )}
+    />
   ),
 }
 
@@ -132,21 +129,19 @@ export const referral: Story = {
     status: 'sent',
   },
   render: (args) => (
-    <div className="w-96 p-4">
-      <MessageCardStory
-        {...args}
-        icon={Send}
-        title="Überweisung"
-        subtitle="Kardiologie"
-        color="secondary"
-        badge={<Chip size="xs" color="secondary" coloringStyle="tonal">GESENDET</Chip>}
-        body={(
-          <>
-            <span className="typography-title-md">Dr. med. K. Brandt</span>
-            <span className="text-sm text-description">Kardiologische Praxis am Markt</span>
-          </>
-        )}
-      />
-    </div>
+    <MessageCardStory
+      {...args}
+      icon={Send}
+      title="Überweisung"
+      subtitle="Kardiologie"
+      color="secondary"
+      badge={<Chip size="xs" color="secondary" colorVariant="tonal">GESENDET</Chip>}
+      body={(
+        <>
+          <span className="typography-title-md">Dr. med. K. Brandt</span>
+          <span className="text-sm text-description">Kardiologische Praxis am Markt</span>
+        </>
+      )}
+    />
   ),
 }

@@ -4,6 +4,7 @@ import { Check, CheckCheck, Clock } from 'lucide-react'
 import { DateUtils } from '@helpwave/hightide-utils/utils'
 import { useDateTimeFormat, useLocalization } from '../../global-contexts/localization/forward-exports'
 import { Icon } from '../display-and-visualization/Icon'
+import { ColoringUtils } from '../user-interaction'
 
 export const chatMessageDirections = ['incoming', 'outgoing'] as const
 
@@ -47,6 +48,9 @@ export const ChatMessageBubble = ({
 
   return (
     <div
+      {...ColoringUtils.build({
+        color: direction === 'outgoing' ? 'primary' : 'surface',
+      })}
       {...props}
       className={clsx('chat-message-bubble-container', className)}
       data-direction={direction}

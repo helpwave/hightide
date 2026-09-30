@@ -1,6 +1,6 @@
 @layer components {
   .chip {
-    @apply flex flex-row items-center justify-center w-fit font-semibold coloring-color-detect coloring-style-detect;
+    @apply flex flex-row items-center justify-center w-fit font-semibold;
 
     &[data-size="xs"] {
       @apply gap-x-1 px-1 py-0.75 rounded-1 h-6 text-sm;

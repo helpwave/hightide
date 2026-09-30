@@ -1,6 +1,6 @@
 @layer components {
   .chat-system-line {
-    @apply flex-row-0 gap-x-1.5 self-center items-center justify-center text-xs font-medium coloring-color-detect coloring-text;
+    @apply flex-row-0 gap-x-1.5 self-center items-center justify-center text-xs font-medium rounded-full px-3 py-1;
   }
 
   .chat-system-line-icon {

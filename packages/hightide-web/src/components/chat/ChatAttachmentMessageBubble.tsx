@@ -27,7 +27,7 @@ export const ChatAttachmentMessageBubble = ({
 }: ChatAttachmentMessageBubbleProps) => {
   const content = (
     <>
-      <span className="chat-attachment-message-file-icon">
+      <span className="chat-attachment-message-file-icon" {...ColoringUtils.build({ color: 'secondary', colorVariant: 'tonal' })}>
         {icon ?? <Icon icon={FileText} size="md" />}
       </span>
       <span className="chat-attachment-message-info">
@@ -62,9 +62,9 @@ export const ChatAttachmentMessageBubble = ({
           aria-label={downloadLabel}
           onClick={onDownload}
           {...ColoringUtils.build({
-            color: direction === 'outgoing' ? 'primary' : 'neutral',
+            color: 'surface-inverse',
             mode: 'interactive',
-            colorVariant: 'tonal',
+            coloringStyle: 'foreground'
           })}
         >
           {content}

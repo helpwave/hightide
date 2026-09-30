@@ -1,13 +1,13 @@
 @layer components {
   .chat-message-bubble-container {
-    @apply flex-col-1 max-w-70 px-3.75 pt-2.75 pb-2 rounded-xl gap-2;
+    @apply flex-col-1 max-w-128 px-3.75 pt-2.75 pb-2 rounded-xl gap-2;
 
     &[data-direction="incoming"] {
-      @apply self-start rounded-bl-sm bg-neutral text-on-neutral;
+      @apply self-start rounded-bl-sm mr-12;
     }
 
     &[data-direction="outgoing"] {
-      @apply self-end rounded-br-sm bg-primary text-on-primary;
+      @apply self-end rounded-br-sm ml-12;
     }
   }
 
@@ -28,15 +28,11 @@
   }
 
   .chat-message-bubble-metadata-text {
-    @apply text-xs font-medium opacity-75;
+    @apply text-xs text-description;
   }
 
   .chat-message-bubble-metadata-icon {
-    @apply size-4 opacity-75;
-
-    &[data-status="read"] {
-      @apply opacity-100;
-    }
+    @apply size-4 text-description;
   }
 
   .chat-message-bubble-container[data-direction="incoming"] .chat-message-bubble-metadata-icon[data-status="read"] {

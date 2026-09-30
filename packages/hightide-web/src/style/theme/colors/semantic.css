@@ -34,7 +34,6 @@
   --color-text-secondary: var(--color-gray-600);
   --color-text-tertiary: var(--color-gray-300);
   --color-placeholder: var(--color-gray-500);
-  --color-description: var(--color-gray-600);
   --color-label: var(--color-gray-700);
 
   /* Other */
@@ -60,7 +59,7 @@
   /* dark theme */
   @variant dark {
     /* Background */
-    --color-background: var(--color-gray-850);
+    --color-background: var(--color-gray-800);
     --color-on-background: var(--color-text-primary);
 
     /* States */
@@ -72,8 +71,8 @@
     --color-on-disabled: var(--color-gray-300);
 
     /* Surface */
-    --color-surface: var(--color-gray-800);
-    --color-surface-variant: var(--color-gray-900);
+    --color-surface: var(--color-gray-700);
+    --color-surface-variant: var(--color-gray-750);
     --color-surface-warning: var(--color-orange-900);
 
     /* Text */
@@ -81,11 +80,10 @@
     --color-text-secondary: var(--color-gray-400);
     --color-text-tertiary: var(--color-gray-600);
     --color-placeholder: var(--color-gray-500);
-    --color-description: var(--color-gray-400);
     --color-label: var(--color-gray-300);
 
     /* Other */
-    --color-primary: var(--color-purple-400);
+    --color-primary: var(--color-purple-500);
 
     --color-neutral: var(--color-gray-750);
     --color-on-neutral: var(--color-white);

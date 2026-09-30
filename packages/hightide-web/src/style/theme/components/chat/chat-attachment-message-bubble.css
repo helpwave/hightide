@@ -12,7 +12,7 @@
   }
 
   .chat-attachment-message-file-icon {
-    @apply flex-row-0 items-center justify-center size-9 shrink-0 rounded-md bg-negative/20 text-negative;
+    @apply flex-row-0 items-center justify-center size-9 shrink-0 rounded-md;
   }
 
   .chat-attachment-message-info {

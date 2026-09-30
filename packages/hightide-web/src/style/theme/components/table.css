@@ -59,7 +59,7 @@
 
   .table-body-row {
     &[data-coloring-mode="interactive"]:hover {
-      background-color: color-mix(in srgb, var(--color-on-surface) var(--coloring-state-hover), transparent);
+      background-color: color-mix(in oklch, var(--color-on-surface) var(--coloring-state-hover), transparent);
     }
     &[data-clickable] {
       @apply hover:cursor-pointer;
@@ -72,7 +72,7 @@
       @apply hover:cursor-pointer;
 
       &[data-coloring-mode="interactive"]:hover {
-        background-color: color-mix(in srgb, var(--color-on-surface) var(--coloring-state-hover), transparent);
+        background-color: color-mix(in oklch, var(--color-on-surface) var(--coloring-state-hover), transparent);
       }
     }
   }

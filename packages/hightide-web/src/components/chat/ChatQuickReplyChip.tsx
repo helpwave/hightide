@@ -16,7 +16,11 @@ export const ChatQuickReplyChip = ({
     <button
       {...props}
       type={props.type ?? 'button'}
-      {...ColoringUtils.dataColoringMode('interactive')}
+      {...ColoringUtils.build({
+        color: isActive ? 'primary' : 'neutral',
+        mode: 'interactive',
+        bordered: true,
+      })}
       className={clsx('chat-quick-reply-chip', props.className)}
       data-active={PropsUtil.dataAttributes.bool(isActive)}
     >

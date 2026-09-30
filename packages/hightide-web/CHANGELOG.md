@@ -29,6 +29,8 @@ and adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 - `ColoringUtils` with `build` (defaults: mode `static`, color variant `normal`, coloring style `filled`) and setters `dataColor`, `dataColoringMode`, `dataColorVariant`, `dataColoringStyle`, `dataBordered`, and `dataElevated`
 - Coloring attributes `data-coloring-mode` (`static` | `interactive`), `data-color`, `data-color-variant`, `data-coloring-style`, `data-bordered`, and `data-elevated`. Hover (8%) and press (16%) state layers apply only when mode is `interactive`
 - `--coloring-state-hover` and `--coloring-state-press`
+- `--appearance-subtle` (`70%`)
+- `text-description`, which sets the text color from the active foreground and background
 
 ### Changed
 
@@ -48,6 +50,12 @@ and adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 - Interactive color no longer uses dedicated hover tokens. Hover and press are a foreground state layer, or the same mix on elements that cannot paint a pseudo-element (native inputs and table rows)
 - Interactive controls no longer animate color transitions
 - `ChatMessageBubble` requires `direction` and takes `timestamp` as a `Date` and `status` (`sending` | `sent` | `received` | `read`), matching native. String children render as message text; other children render inside the bubble
+- `ChatMessageBubble` uses static coloring (`primary` outgoing, `neutral` incoming). Its timestamp and status icon use `text-description`
+- Palette colors are `oklch`, with the hex value declared first so older browsers keep a color. The gray scale uses even lightness steps
+- `color-mix` interpolates in `oklch` (coloring, focus, inputs, tables, properties, and the process-model active fill)
+- Description text is no longer a fixed gray. `text-description` mixes `--coloring-foreground` (otherwise `--color-on-surface`) into `--coloring-color` (otherwise `--color-surface`) at `--appearance-subtle`
+- Dark theme background is `gray-800`, surface is `gray-700`, surface variant is `gray-750`, and primary stays `purple-500`
+- Coloring custom properties start as `initial` instead of `transparent`
 
 ### Removed
 
@@ -60,6 +68,7 @@ and adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 - `coloringStyle` values `solid`, `outline`, `text`, and `tonal-outline` on `Button` and `IconButton`
 - CSS class `coloring` and the hover color tokens `--color-primary-hover`, `--color-secondary-hover`, `--color-positive-hover`, `--color-warning-hover`, `--color-negative-hover`, `--color-surface-hover`, `--color-neutral-hover`, `--color-neutral-text-hover`, and `--color-neutral-outline-hover` (light and dark)
 - `ChatMessageCard` and `ChatAttachmentCard`. Structured messages are composed with `ChatMessageBubble`; file messages use `ChatAttachmentMessageBubble`. `ChatMessageBubble` `readReceipt` is replaced by `status`
+- Fixed `--color-description` tokens (`gray-600` in light, `gray-400` in dark)
 
 
 ## [0.17.2] - 2026-09-23
