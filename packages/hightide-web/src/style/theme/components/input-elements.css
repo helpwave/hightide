@@ -11,10 +11,6 @@
   &:not([data-disabled]):not([data-invalid]) {
     @apply bg-input-background;
 
-    &:not([data-readonly]) {
-      --coloring-foreground: var(--color-on-surface);
-    }
-
     &:not([data-value]) {
       @apply text-placeholder;
     }
@@ -26,10 +22,6 @@
 
   &:not([data-disabled])[data-invalid] {
     @apply bg-negative/20 border-negative;
-
-    &:not([data-readonly]) {
-      --coloring-foreground: var(--color-negative);
-    }
 
     --color-focus: var(--color-negative);
 
@@ -46,19 +38,19 @@
     @apply border-disabled bg-disabled text-on-disabled placeholder:text-transparent cursor-not-allowed;
   }
 
-  &[data-coloring-mode="interactive"]:is(input, textarea):not([data-disabled]):not([data-readonly]):not([data-invalid]):hover {
+  &:not([data-disabled]):not([data-readonly]):not([data-invalid]):hover {
     background-color: color-mix(in oklch, var(--color-on-surface) var(--coloring-state-hover), var(--color-input-background));
   }
 
-  &[data-coloring-mode="interactive"]:is(input, textarea):not([data-disabled]):not([data-readonly]):not([data-invalid]):active {
+  &:not([data-disabled]):not([data-readonly]):not([data-invalid]):active {
     background-color: color-mix(in oklch, var(--color-on-surface) var(--coloring-state-press), var(--color-input-background));
   }
 
-  &[data-coloring-mode="interactive"]:is(input, textarea):not([data-disabled]):not([data-readonly])[data-invalid]:hover {
+  &:not([data-disabled]):not([data-readonly])[data-invalid]:hover {
     background-color: color-mix(in oklch, var(--color-negative) var(--coloring-state-hover), color-mix(in oklch, var(--color-negative) 20%, transparent));
   }
 
-  &[data-coloring-mode="interactive"]:is(input, textarea):not([data-disabled]):not([data-readonly])[data-invalid]:active {
+  &:not([data-disabled]):not([data-readonly])[data-invalid]:active {
     background-color: color-mix(in oklch, var(--color-negative) var(--coloring-state-press), color-mix(in oklch, var(--color-negative) 20%, transparent));
   }
 }

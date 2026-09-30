@@ -1,6 +1,7 @@
 import clsx from 'clsx'
 import { CheckIcon } from 'lucide-react'
 import { Icon } from '../../display-and-visualization/Icon'
+import { ColoringUtils } from '../../../utils/coloring'
 import type React from 'react'
 import type { ForwardedRef, HTMLAttributes, RefObject } from 'react'
 import { createContext, forwardRef, useContext, useEffect, useMemo, useRef } from 'react'
@@ -106,6 +107,11 @@ const MultiSelectOptionImpl = forwardRef<
       aria-hidden={!isVisible}
 
       className={clsx('multi-select-list-option', props.className)}
+      {...ColoringUtils.build({
+        color: 'surface-inverse',
+        mode: 'interactive',
+        coloringStyle: 'foreground',
+      })}
       data-highlighted={isHighlighted ? '' : undefined}
       data-selected={isSelected ? '' : undefined}
       data-disabled={disabled ? '' : undefined}

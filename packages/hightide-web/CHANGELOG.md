@@ -57,6 +57,8 @@ and adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 - Dark theme background is `gray-800`, surface is `gray-700`, surface variant is `gray-750`, and primary stays `purple-500`
 - Coloring custom properties start as `initial` instead of `transparent`
 - `Select` and `MultiSelect` show the search field when the option count is at least `searchableThreshold` (default `6`)
+- `Select` and `MultiSelect` menu options use interactive foreground coloring with `surface-inverse` instead of a primary highlight
+- Input elements no longer set coloring data attributes. `Select` and `MultiSelect` triggers use the input hover and press background
 - `Carousel` is a compound component: `Carousel.Root`, `Carousel.Container`, `Carousel.Slide`, `Carousel.Arrows`, `Carousel.FadeLayover`, `Carousel.Stepper`, `Carousel.Context`, and `Carousel.Consumer`. The combined `Carousel` still composes them from `children`, `hintNext`, `arrows`, `dots`, and `blurColor`
 - `Modal` is a compound component: `Modal.Root`, `Modal.Container`, `Modal.Background`, `Modal.Content`, `Modal.Title`, `Modal.Description`, `Modal.CloseButton`, `Modal.Opener`, `Modal.Context`, and `Modal.Consumer`. The combined `Modal` takes `titleElement`, `description`, `position`, `isClosable`, and slot props `containerProps`, `backgroundProps`, `contentProps`, `titleProps`, `descriptionProps`, and `closeButtonProps`
 - `isClosable` (default `true`) hides the close button and ignores close requests when `false`

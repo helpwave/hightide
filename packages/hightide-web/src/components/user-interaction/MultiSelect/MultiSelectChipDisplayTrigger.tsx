@@ -5,7 +5,6 @@ import { IconButton } from '../IconButton'
 import { useHightideTranslation } from '@helpwave/hightide-utils/context/translation'
 import { XIcon, Plus } from 'lucide-react'
 import { ReactUtils } from '@helpwave/hightide-utils/utils'
-import { ColoringUtils } from '../../../utils/coloring'
 import clsx from 'clsx'
 
 export type MultiSelectChipDisplayTriggerProps = HTMLAttributes<HTMLDivElement> & {
@@ -46,7 +45,6 @@ export const MultiSelectChipDisplayTrigger = forwardRef<
     <div
       {...props}
       ref={ReactUtils.assingRefsBuilder([innerRef, ref])}
-      {...ColoringUtils.dataColoringMode('interactive')}
       className={clsx('multi-select-chip-display-container', props.className)}
       data-value={context.value.length > 0 ? '' : undefined}
       data-disabled={disabled ? '' : undefined}

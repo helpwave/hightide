@@ -8,7 +8,6 @@ import { useHightideTranslation } from '@helpwave/hightide-utils/context/transla
 import { ExpansionIcon } from '../../display-and-visualization/ExpansionIcon'
 import { SelectOptionDisplayContext } from './SelectOption'
 import { ReactUtils } from '@helpwave/hightide-utils/utils'
-import { ColoringUtils } from '../../../utils/coloring'
 
 export interface SelectTriggerProps<T = string> extends ComponentPropsWithoutRef<'div'> {
   placeholder?: ReactNode,
@@ -90,7 +89,6 @@ const SelectTriggerImpl = forwardRef<
           break
         }
       }}
-      {...ColoringUtils.dataColoringMode('interactive')}
       className={clsx('select-button', props.className)}
       data-value={hasValue ? '' : undefined}
       data-disabled={disabled ? '' : undefined}

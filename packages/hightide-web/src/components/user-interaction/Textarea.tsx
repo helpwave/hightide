@@ -7,7 +7,6 @@ import type { FormFieldDataHandling } from '../form/FormField'
 import { useControlledState } from '@helpwave/hightide-utils/hooks'
 import { useEventCallbackStabilizer } from '@helpwave/hightide-utils/hooks'
 
-import { ColoringUtils } from '../../utils/coloring'
 import { PropsUtil } from '../../utils/propsUtil'
 
 export type TextareaProps = Omit<TextareaHTMLAttributes<HTMLTextAreaElement>, 'value'>
@@ -64,7 +63,6 @@ export const Textarea = forwardRef<HTMLTextAreaElement, TextareaProps>(function 
         onEditCompleteWrapper(event.target.value)
       }}
 
-      {...ColoringUtils.dataColoringMode('interactive')}
       className={clsx('textarea', props.className)}
       data-value={PropsUtil.dataAttributes.bool(!!value)}
       {...PropsUtil.dataAttributes.interactionStates({ ...props, invalid })}

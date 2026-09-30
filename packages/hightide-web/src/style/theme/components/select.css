@@ -48,15 +48,18 @@
 
     &:not([data-disabled]) {
       @apply cursor-pointer;
-
-      &[data-highlighted] {
-        @apply bg-primary/20;
-      }
     }
   }
 
   .select-list-status,
   .multi-select-list-status {
     @apply text-description px-2 py-1 rounded-md;
+  }
+}
+
+@layer utilities {
+  .select-list-option:not([data-disabled])[data-highlighted]::before,
+  .multi-select-list-option:not([data-disabled])[data-highlighted]::before {
+    opacity: var(--coloring-state-hover);
   }
 }

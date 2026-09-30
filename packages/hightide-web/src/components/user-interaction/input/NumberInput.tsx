@@ -6,7 +6,6 @@ import type { FormFieldDataHandling } from '../../form/FormField'
 import { useControlledState } from '@helpwave/hightide-utils/hooks'
 import { ReactUtils } from '@helpwave/hightide-utils/utils'
 import { MathUtil } from '@helpwave/hightide-utils/utils'
-import { ColoringUtils } from '../../../utils/coloring'
 import { PropsUtil } from '../../../utils/propsUtil'
 
 export type NumberInputProps = Omit<InputHTMLAttributes<HTMLInputElement>, 'value' | 'type' | 'min' | 'max' | 'step'>
@@ -76,7 +75,6 @@ export const NumberInput = forwardRef<HTMLInputElement, NumberInputProps>(functi
       data-value={PropsUtil.dataAttributes.bool(Number.isFinite(value))}
       {...PropsUtil.dataAttributes.interactionStates({ disabled, invalid, readOnly, required })}
       {...PropsUtil.aria.interactionStates({ disabled, invalid, readOnly, required }, props)}
-      {...ColoringUtils.dataColoringMode('interactive')}
       className={clsx('number-input number-input-field', className)}
       style={{
         ...style,

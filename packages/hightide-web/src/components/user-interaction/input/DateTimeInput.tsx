@@ -13,7 +13,6 @@ import type { FormFieldInteractionStates } from '../../form/FieldLayout'
 import { PopUp } from '../../layout/popup/PopUp'
 import { IconButton } from '../IconButton'
 import { DateUtils, type DateTimeFormat } from '@helpwave/hightide-utils/utils'
-import { ColoringUtils } from '../../../utils/coloring'
 import { DateTimeField } from './DateTimeField'
 import { ReactUtils } from '@helpwave/hightide-utils/utils'
 import { PropsUtil } from '../../../utils/propsUtil'
@@ -131,7 +130,6 @@ export const DateTimeInput = forwardRef<HTMLDivElement, DateTimeInputProps>(func
           }
         }}
 
-        {...ColoringUtils.dataColoringMode('interactive')}
         className={clsx('date-time-input', props.className)}
         data-value={PropsUtil.dataAttributes.bool(!!state)}
         data-has-actions={PropsUtil.dataAttributes.bool(hasActions)}
