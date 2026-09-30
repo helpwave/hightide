@@ -9,7 +9,6 @@ import { Visibility } from '../../layout/Visibility'
 import { ReactUtils } from '@helpwave/hightide-utils/utils'
 
 export interface MultiSelectContentProps extends PopUpProps {
-  showSearch?: boolean,
   searchInputProps?: Omit<ComponentProps<typeof Input>, 'value' | 'onValueChange'>,
 }
 
@@ -17,7 +16,7 @@ export const MultiSelectContent = forwardRef<
   HTMLUListElement,
   MultiSelectContentProps
 >(function MultiSelectContent<T>(
-  { id, options, showSearch: showSearchOverride, searchInputProps, ...props } : MultiSelectContentProps,
+  { id, options, searchInputProps, ...props }: MultiSelectContentProps,
   ref: ForwardedRef<HTMLUListElement>
 ) {
   const translation = useHightideTranslation()
@@ -32,7 +31,7 @@ export const MultiSelectContent = forwardRef<
     if (id) setIds((prev) => ({ ...prev, content: id }))
   }, [id, setIds])
 
-  const showSearch = showSearchOverride ?? context.search.hasSearch
+  const showSearch = context.search.hasSearch
   const listboxAriaLabel = showSearch ? translation('searchResults') : undefined
 
   const keyHandler = useCallback(

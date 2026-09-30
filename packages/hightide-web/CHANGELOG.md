@@ -56,6 +56,7 @@ and adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 - Description text is no longer a fixed gray. `text-description` mixes `--coloring-foreground` (otherwise `--color-on-surface`) into `--coloring-color` (otherwise `--color-surface`) at `--appearance-subtle`
 - Dark theme background is `gray-800`, surface is `gray-700`, surface variant is `gray-750`, and primary stays `purple-500`
 - Coloring custom properties start as `initial` instead of `transparent`
+- `Select` and `MultiSelect` show the search field when the option count is at least `searchableThreshold` (default `6`)
 
 ### Removed
 
@@ -69,6 +70,7 @@ and adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 - CSS class `coloring` and the hover color tokens `--color-primary-hover`, `--color-secondary-hover`, `--color-positive-hover`, `--color-warning-hover`, `--color-negative-hover`, `--color-surface-hover`, `--color-neutral-hover`, `--color-neutral-text-hover`, and `--color-neutral-outline-hover` (light and dark)
 - `ChatMessageCard` and `ChatAttachmentCard`. Structured messages are composed with `ChatMessageBubble`; file messages use `ChatAttachmentMessageBubble`. `ChatMessageBubble` `readReceipt` is replaced by `status`
 - Fixed `--color-description` tokens (`gray-600` in light, `gray-400` in dark)
+- `showSearch` on `Select` and `MultiSelect`
 
 
 ## [0.17.2] - 2026-09-23

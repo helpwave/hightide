@@ -1,5 +1,5 @@
 import type { ReactNode, RefObject, SetStateAction } from 'react'
-import { useCallback, useEffect, useId, useMemo, useState } from 'react'
+import { useCallback, useEffect, useId, useMemo, useRef, useState } from 'react'
 import { MultiSelectContext } from './MultiSelectContext'
 import type { MultiSelectContextType, MultiSelectIconAppearance, MultiSelectOptionType } from './MultiSelectContext'
 import { useMultiSelect } from './useMultiSelect'
@@ -20,7 +20,7 @@ export interface MultiSelectRootProps<T> extends Partial<FormFieldDataHandling<T
   compareFunction?: (a: T, b: T) => boolean,
   initialIsOpen?: boolean,
   onClose?: () => void,
-  showSearch?: boolean,
+  searchableThreshold?: number,
   iconAppearance?: MultiSelectIconAppearance,
   children: ReactNode,
 }
@@ -34,15 +34,17 @@ export function MultiSelectRoot<T>({
   compareFunction,
   initialIsOpen = false,
   onClose,
-  showSearch = true,
+  searchableThreshold = 6,
   iconAppearance = 'right',
   invalid = false,
   disabled = false,
   readOnly = false,
   required = false,
 }: MultiSelectRootProps<T>) {
-  const [triggerRef, setTriggerRef] = useState<RefObject<HTMLElement | null> | null>(null)
+  const nullTrigger = useRef<HTMLElement | null>(null)
+  const [triggerRef, setTriggerRef] = useState<RefObject<HTMLElement | null>>(nullTrigger)
   const [options, setOptions] = useState<MultiSelectOptionType<T>[]>([])
+  const [optionSnapshots, setOptionSnapshots] = useState<Record<string, MultiSelectOptionType<T>>>({})
   const generatedId = useId()
   const [ids, setIds] = useState<MultiSelectIds>({
     trigger: 'multi-select-' + generatedId,
@@ -52,6 +54,7 @@ export function MultiSelectRoot<T>({
   })
 
   const registerOption = useCallback((item: MultiSelectOptionType<T>) => {
+    setOptionSnapshots((previous) => ({ ...previous, [item.value.id]: item }))
     setOptions((prev) => {
       const next = prev.filter((o) => o.value.id !== item.value.id)
       next.push(item)
@@ -62,9 +65,9 @@ export function MultiSelectRoot<T>({
     return () => setOptions((prev) => prev.filter((o) => o.value.id !== item.value.id))
   }, [])
 
-  const registerTrigger = useCallback((ref: RefObject<HTMLElement>) => {
+  const registerTrigger = useCallback((ref: RefObject<HTMLElement | null>) => {
     setTriggerRef(ref)
-    return () => setTriggerRef(null)
+    return () => setTriggerRef(nullTrigger)
   }, [])
 
   const compare = useMemo(() => compareFunction ?? Object.is, [compareFunction])
@@ -125,12 +128,14 @@ export function MultiSelectRoot<T>({
     onClose,
   })
   const { setSearchQuery } = state
+  const knownOptionCount = Math.max(options.length, Object.keys(optionSnapshots).length)
+  const hasSearch = knownOptionCount >= searchableThreshold
 
   useEffect(() => {
-    if (showSearch === false) {
+    if (!hasSearch) {
       setSearchQuery('')
     }
-  }, [showSearch, setSearchQuery])
+  }, [hasSearch, setSearchQuery])
 
   const contextValue = useMemo((): MultiSelectContextType<T> => {
     const valueT = state.value
@@ -168,7 +173,7 @@ export function MultiSelectRoot<T>({
         registerTrigger,
       },
       search: {
-        hasSearch: showSearch,
+        hasSearch,
         searchQuery: state.searchQuery,
         setSearchQuery: state.setSearchQuery,
       },
@@ -186,7 +191,7 @@ export function MultiSelectRoot<T>({
     ids,
     triggerRef,
     registerTrigger,
-    showSearch,
+    hasSearch,
   ])
 
   const setIsOpen = useCallback((updater: SetStateAction<boolean>) => {

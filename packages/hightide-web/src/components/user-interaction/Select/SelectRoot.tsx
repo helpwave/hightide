@@ -1,5 +1,5 @@
 import type { ReactNode, RefObject, SetStateAction } from 'react'
-import { useCallback, useEffect, useId, useMemo, useState } from 'react'
+import { useCallback, useEffect, useId, useMemo, useRef, useState } from 'react'
 import { SelectContext } from './SelectContext'
 import type { SelectContextConfig, SelectContextLayout, SelectOptionType } from './SelectContext'
 import { useSelect } from './useSelect'
@@ -23,7 +23,7 @@ export interface SelectRootProps<T> extends Omit<Partial<FormFieldDataHandling<T
   initialIsOpen?: boolean,
   onClose?: () => void,
   onIsOpenChange?: (isOpen: boolean) => void,
-  showSearch?: boolean,
+  searchableThreshold?: number,
   iconAppearance?: 'left' | 'right' | 'none',
   children: ReactNode,
 }
@@ -38,15 +38,17 @@ export function SelectRoot<T>({
   initialIsOpen = false,
   onClose,
   onIsOpenChange,
-  showSearch = true,
+  searchableThreshold = 6,
   iconAppearance = 'right',
   invalid = false,
   disabled = false,
   readOnly = false,
   required = false,
 }: SelectRootProps<T>) {
-  const [triggerRef, setTriggerRef] = useState<RefObject<HTMLElement> | null>(null)
+  const nullTrigger = useRef<HTMLElement | null>(null)
+  const [triggerRef, setTriggerRef] = useState<RefObject<HTMLElement | null>>(nullTrigger)
   const [options, setOptions] = useState<SelectOptionType<T>[]>([])
+  const [optionSnapshots, setOptionSnapshots] = useState<Record<string, SelectOptionType<T>>>({})
   const generatedId = useId()
   const [ids, setIds] = useState<SelectIds>({
     trigger: 'select-' + generatedId,
@@ -58,6 +60,7 @@ export function SelectRoot<T>({
 
   const registerOption = useCallback(
     (item: SelectOptionType<T>) => {
+      setOptionSnapshots((previous) => ({ ...previous, [item.value.id]: item }))
       setOptions((prev) => {
         const next = prev.filter((o) => o.value.id !== item.value.id)
         next.push(item)
@@ -71,10 +74,10 @@ export function SelectRoot<T>({
     []
   )
 
-  const registerTrigger = useCallback((ref: RefObject<HTMLElement>) => {
+  const registerTrigger = useCallback((ref: RefObject<HTMLElement | null>) => {
     setTriggerRef(ref)
     return () => {
-      setTriggerRef(null)
+      setTriggerRef(nullTrigger)
     }
   }, [])
 
@@ -135,12 +138,14 @@ export function SelectRoot<T>({
     onIsOpenChange: onIsOpenChangeStable,
   })
   const { setSearchQuery } = state
+  const knownOptionCount = Math.max(options.length, Object.keys(optionSnapshots).length)
+  const hasSearch = knownOptionCount >= searchableThreshold
 
   useEffect(() => {
-    if(showSearch === false) {
+    if (!hasSearch) {
       setSearchQuery('')
     }
-  }, [showSearch, setSearchQuery])
+  }, [hasSearch, setSearchQuery])
 
   const config: SelectContextConfig = useMemo(() => ({
     iconAppearance,
@@ -187,7 +192,7 @@ export function SelectRoot<T>({
         config,
         layout,
         search: {
-          hasSearch: showSearch,
+          hasSearch,
           searchQuery: state.searchQuery,
           setSearchQuery: state.setSearchQuery,
         },

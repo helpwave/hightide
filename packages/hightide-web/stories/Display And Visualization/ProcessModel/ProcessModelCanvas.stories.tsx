@@ -28,7 +28,6 @@ export const processModelCanvas: Story = {
           <Select
             value={modelId}
             onValueChange={setModelId}
-            showSearch={false}
           >
             {processModelLibrary.map((entry) => (
               <Select.Option key={entry.id} value={entry.id} label={entry.name} />

@@ -300,7 +300,6 @@ export const ProcessModelTraceReplay = ({ graph, className }: ProcessModelTraceR
           <Select
             value={speedMult}
             onValueChange={setSpeedMult}
-            showSearch={false}
           >
             {SPEED_OPTIONS.map((option) => (
               <Select.Option<number>

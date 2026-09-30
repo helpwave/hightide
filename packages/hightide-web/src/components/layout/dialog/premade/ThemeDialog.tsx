@@ -30,7 +30,6 @@ export const ThemeSelect = ({ ...props }: ThemeSelectProps) => {
         ...props.triggerProps,
         className: clsx('min-w-40 w-fit', props.triggerProps?.className),
       }}
-      showSearch={false}
     >
       <Select.Option
         key="system"

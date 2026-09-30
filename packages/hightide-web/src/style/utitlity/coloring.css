@@ -73,7 +73,7 @@
 @layer utilities {
   [data-coloring-mode="static"],
   [data-coloring-mode="interactive"] {
-  position: relative;
+  position: var(--coloring-position-override, relative);
 
   --coloring-color: var(--coloring-base);
   --coloring-on-color: var(--coloring-on-base);

@@ -6,8 +6,8 @@ export type PopUpContextType = {
   setIsOpen: Dispatch<SetStateAction<boolean>>,
   popUpId: string,
   triggerId: string,
-  triggerRef: RefObject<HTMLElement> | null,
-  setTriggerRef: (ref: RefObject<HTMLElement> | null) => void,
+  triggerRef: RefObject<HTMLElement | null>,
+  setTriggerRef: (ref: RefObject<HTMLElement | null>) => void,
 }
 
 export const PopUpContext = createContext<PopUpContextType | null>(null)

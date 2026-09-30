@@ -9,12 +9,11 @@ import { Visibility } from '../../layout/Visibility'
 import { ReactUtils } from '@helpwave/hightide-utils/utils'
 
 export interface SelectContentProps extends PopUpProps {
-  showSearch?: boolean,
   searchInputProps?: Omit<ComponentProps<typeof Input>, 'value' | 'onValueChange'>,
 }
 
 export const SelectContent = forwardRef<HTMLUListElement, SelectContentProps>(function SelectContent<T>({
-  id, options, showSearch: showSearchOverride, searchInputProps, ...props
+  id, options, searchInputProps, ...props
 }: SelectContentProps, ref: ForwardedRef<HTMLUListElement>) {
   const translation = useHightideTranslation()
   const innerRef = useRef<HTMLUListElement>(null)
@@ -28,7 +27,7 @@ export const SelectContent = forwardRef<HTMLUListElement, SelectContentProps>(fu
     if (id) setIds((prev) => ({ ...prev, content: id }))
   }, [id, setIds])
 
-  const showSearch = showSearchOverride ?? context.search.hasSearch
+  const showSearch = context.search.hasSearch
   const listboxAriaLabel = showSearch ? translation('searchResults') : undefined
 
   const keyHandler = useCallback(

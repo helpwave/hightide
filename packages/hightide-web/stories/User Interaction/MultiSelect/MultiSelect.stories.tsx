@@ -31,7 +31,6 @@ export const multiSelect: Story = {
     initialValue: ['Apple', 'Cherry'],
     disabled: false,
     invalid: false,
-    showSearch: true,
     readOnly: false,
     required: false,
     onValueChange: action('onValueChange'),
@@ -66,7 +65,7 @@ export const multiSelectWithUser: Story = {
     initialValue: undefined,
     disabled: false,
     invalid: false,
-    showSearch: true,
+    searchableThreshold: 5,
     readOnly: false,
     required: false,
     compareFunction: compareUser,
@@ -129,7 +128,6 @@ export const multiSelectComposed: Story = {
     initialValue: ['Apple', 'Cherry'],
     disabled: false,
     invalid: false,
-    showSearch: true,
     readOnly: false,
     required: false,
     onValueChange: action('onValueChange'),
@@ -140,7 +138,7 @@ export const multiSelectComposed: Story = {
       initialValue={args.initialValue}
       disabled={args.disabled}
       invalid={args.invalid}
-      showSearch={args.showSearch}
+      searchableThreshold={args.searchableThreshold}
       readOnly={args.readOnly}
       required={args.required}
       onValueChange={args.onValueChange}

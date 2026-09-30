@@ -1,6 +1,6 @@
 import { useControlledState } from '@helpwave/hightide-utils/hooks'
 import type { PropsWithChildren, RefObject } from 'react'
-import { useId, useMemo, useState } from 'react'
+import { useId, useMemo, useRef, useState } from 'react'
 import { PopUpContext } from './PopUpContext'
 
 export interface PopUpRootProps extends PropsWithChildren {
@@ -28,7 +28,8 @@ export function PopUpRoot({
     defaultValue: initialIsOpen,
   })
 
-  const [triggerRef, setTriggerRef] = useState<RefObject<HTMLElement> | null>(null)
+  const nullTrigger = useRef<HTMLElement | null>(null)
+  const [triggerRef, setTriggerRef] = useState<RefObject<HTMLElement | null>>(nullTrigger)
 
   const popUpId = useMemo(() => popUpIdOverwrite ?? `pop-up-${generatedPopUpId}`, [popUpIdOverwrite, generatedPopUpId])
   const triggerId = useMemo(() => triggerIdOverwrite ?? `pop-up-trigger-${generatedTriggerId}`, [triggerIdOverwrite, generatedTriggerId])

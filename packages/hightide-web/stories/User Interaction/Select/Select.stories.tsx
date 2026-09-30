@@ -33,7 +33,6 @@ export const select: Story = {
     initialValue: undefined,
     disabled: false,
     invalid: false,
-    showSearch: false,
     readOnly: false,
     required: false,
     onValueChange: action('onValueChange'),
@@ -69,7 +68,7 @@ export const selectWithUser: Story = {
     initialValue: undefined,
     disabled: false,
     invalid: false,
-    showSearch: true,
+    searchableThreshold: 5,
     readOnly: false,
     required: false,
     compareFunction: compareUser,
@@ -127,7 +126,6 @@ export const selectComposed: Story = {
     initialValue: undefined,
     disabled: false,
     invalid: false,
-    showSearch: false,
     readOnly: false,
     required: false,
     onValueChange: action('onValueChange'),
@@ -138,7 +136,7 @@ export const selectComposed: Story = {
       initialValue={args.initialValue}
       disabled={args.disabled}
       invalid={args.invalid}
-      showSearch={args.showSearch}
+      searchableThreshold={args.searchableThreshold}
       readOnly={args.readOnly}
       required={args.required}
       onValueChange={args.onValueChange}

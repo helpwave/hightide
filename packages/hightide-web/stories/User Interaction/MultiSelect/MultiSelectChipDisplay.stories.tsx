@@ -29,7 +29,6 @@ export const multiSelectChipDisplay: Story = {
     initialValue: ['Apple', 'Cherry'],
     disabled: false,
     invalid: false,
-    showSearch: false,
     readOnly: false,
     required: false,
     onValueChange: action('onValueChange'),
@@ -40,7 +39,7 @@ export const multiSelectChipDisplay: Story = {
       initialValue={args.initialValue}
       disabled={args.disabled}
       invalid={args.invalid}
-      showSearch={args.showSearch}
+      searchableThreshold={args.searchableThreshold}
       readOnly={args.readOnly}
       required={args.required}
       onValueChange={args.onValueChange}
