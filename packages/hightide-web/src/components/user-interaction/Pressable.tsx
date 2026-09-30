@@ -3,12 +3,13 @@ import type { ButtonHTMLAttributes } from 'react'
 import { forwardRef } from 'react'
 
 import { LoadingSpinner } from '../layout/loading/LoadingSpinner'
+import type { ColoringColor, ColoringColorVariant, ColoringStyle } from '../../utils/coloring'
+import { ColoringUtils } from '../../utils/coloring'
+
+export type { ColoringColor, ColoringColorVariant, ColoringMode, ColoringStyle } from '../../utils/coloring'
+export { ColoringUtils } from '../../utils/coloring'
 
 export type ButtonSize = 'xs' | 'sm' | 'md' | 'lg' | null
-
-export type ColoringStyle = 'filled' | 'foreground'
-
-export type ColoringColorVariant = 'normal' | 'tonal' | 'transparent'
 
 export const buttonVariants = ['elevated', 'filled', 'tonal', 'outlined', 'foreground'] as const
 
@@ -22,7 +23,7 @@ const buttonColorsList = ['primary', 'secondary', 'positive', 'warning', 'negati
 
 export type ButtonColor = typeof buttonColorsList[number] | null
 
-export function coloringColorName(color: ButtonColor) {
+export function coloringColorName(color: ButtonColor): ColoringColor | undefined {
   if (color === 'surfaceInverse') {
     return 'surface-inverse'
   }
@@ -96,15 +97,18 @@ export const Pressable = forwardRef<HTMLButtonElement, PressableProps>(function 
         }
         onClick?.(event)
       }}
-      className={clsx('pressable coloring', className)}
+      className={clsx('pressable', className)}
       data-disabled={disabled ? '' : undefined}
       data-processing={isProcessing ? '' : undefined}
       data-size={size ?? undefined}
-      data-color={coloringColorName(color)}
-      data-coloring-style={coloringStyle}
-      data-color-variant={colorVariant}
-      data-bordered={bordered ? '' : undefined}
-      data-elevated={elevated ? '' : undefined}
+      {...ColoringUtils.build({
+        color: coloringColorName(color) ?? 'primary',
+        mode: 'interactive',
+        coloringStyle,
+        colorVariant,
+        bordered,
+        elevated,
+      })}
     >
       {children}
       {isProcessing && processingIndicator && (

@@ -1,7 +1,8 @@
 @layer components {
   .chat-quick-reply-chip {
     @apply flex-row-0 gap-x-1.5 items-center w-fit px-3.5 py-1.5 rounded-full border text-sm font-medium cursor-pointer;
-    @apply border-divider text-description bg-surface hover:bg-surface-hover;
+    @apply border-divider text-description bg-surface;
+    --coloring-on-base: var(--color-on-surface);
 
     &[data-active] {
       @apply border-primary text-primary;

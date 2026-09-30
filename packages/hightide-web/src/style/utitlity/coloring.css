@@ -49,28 +49,13 @@
   text-[var(--coloring-solid-text,var(--coloring-on-color))];
 }
 
-@utility coloring-solid-hover {
-  @apply coloring-solid
-  hover:bg-[var(--coloring-solid-hover,var(--coloring-hover))];
-}
-
 @utility coloring-tonal {
   @apply bg-[var(--coloring-tonal-background,var(--coloring-tonal,var(--coloring-color)))]/20
   text-[var(--coloring-tonal-text,var(--coloring-tonal,var(--coloring-color)))];
 }
 
-@utility coloring-tonal-hover {
-  @apply coloring-tonal
-  hover:bg-[var(--coloring-tonal-hover,var(--coloring-tonal-background,var(--coloring-tonal,var(--coloring-color))))]/30;
-}
-
 @utility coloring-text {
   @apply text-[var(--coloring-text,var(--coloring-color))];
-}
-
-@utility coloring-text-hover {
-  @apply coloring-text
-  hover:bg-[var(--coloring-text-hover,var(--coloring-text,var(--coloring-color)))]/20;
 }
 
 @utility coloring-outline {
@@ -79,27 +64,17 @@
   @apply text-[var(--coloring-outline,var(--coloring-color))];
 }
 
-@utility coloring-outline-hover {
-  @apply coloring-outline
-  hover:border-[var(--coloring-border-hover,--coloring-hover)]
-  hover:text-[var(--coloring-outline-hover,var(--coloring-hover))];
-}
-
 @utility coloring-tonal-outline {
   @apply coloring-tonal;
   border-width: var(--coloring-outline-width, 0.125rem);
   @apply border-[var(--coloring-border,var(--coloring-outline,var(--coloring-color)))];
 }
 
-@utility coloring-tonal-outline-hover {
-  @apply coloring-tonal-outline
-  hover:border-[var(--coloring-border-hover,--coloring-hover)]
-  hover:text-[var(--coloring-outline-hover,var(--coloring-hover))]
-  hover:bg-[var(--coloring-tonal-hover,var(--coloring-tonal-background,var(--coloring-tonal,var(--coloring-color))))]/30;
-}
-
-@utility coloring {
+@layer utilities {
+  [data-coloring-mode="static"],
+  [data-coloring-mode="interactive"] {
   position: relative;
+
   --coloring-color: var(--coloring-base);
   --coloring-on-color: var(--coloring-on-base);
   --coloring-accent: var(--coloring-base);
@@ -206,40 +181,37 @@
     @apply shadow-around;
   }
 
-  &[data-elevated]:not([data-disabled]):hover {
+  &[data-coloring-mode="interactive"][data-elevated]:not([data-disabled]):hover {
     @apply shadow-around-md;
   }
+  }
 
-  &:not([data-disabled])::before {
+  [data-coloring-mode="interactive"]:not([data-disabled]):not([data-readonly])::before {
     content: "";
     position: absolute;
     inset: 0;
     border-radius: inherit;
     pointer-events: none;
-    background: var(--coloring-foreground, var(--coloring-on-color));
+    background: var(--coloring-foreground);
     opacity: 0;
   }
 
-  &:not([data-disabled]):hover::before {
-    opacity: 0.08;
+  [data-coloring-mode="interactive"]:not([data-disabled]):not([data-readonly]):hover::before {
+    opacity: var(--coloring-state-hover);
   }
 
-  &:not([data-disabled]):focus-visible::before,
-  &:not([data-disabled]):active::before {
-    opacity: 0.16;
+  [data-coloring-mode="interactive"]:not([data-disabled]):not([data-readonly]):focus-visible::before,
+  [data-coloring-mode="interactive"]:not([data-disabled]):not([data-readonly]):active::before {
+    opacity: var(--coloring-state-press);
   }
 }
 
 @utility coloring-reset-variables {
   --coloring-color: initial;
   --coloring-on-color: initial;
-  --coloring-hover: initial;
   --coloring-text: initial;
-  --coloring-text-hover: initial;
   --coloring-outline: initial;
-  --coloring-outline-hover: initial;
   --coloring-tonal: initial;
   --coloring-tonal-background: initial;
   --coloring-tonal-text: initial;
-  --coloring-tonal-hover: initial;
 }

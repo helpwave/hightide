@@ -1,6 +1,7 @@
 import type { HTMLAttributes } from 'react'
 import clsx from 'clsx'
 
+import { ColoringUtils } from '../../utils/coloring'
 import { ListItemContent } from './ListItemContent'
 import type { ListItemColor, ListItemContentOrder, ListItemContentProps } from './ListItemTypes'
 
@@ -24,7 +25,7 @@ export function ListItem({
     <div
       {...props}
       className={clsx('list-item', color, color && 'coloring-tonal', className)}
-      data-color={color}
+      {...ColoringUtils.dataColor(color)}
     >
       <ListItemContent
         title={title}

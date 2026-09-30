@@ -1,6 +1,6 @@
 @layer components {
   .button {
-    @apply coloring;
+    @apply relative;
     &[data-size="xs"] {
       @apply min-w-20;
       padding: var(--element-padding) var(--element-padding-direction);
@@ -44,5 +44,11 @@
           calc(var(--spacing-element-padding-direction-lg) - var(--coloring-outline-width));
       }
     }
+  }
+}
+
+@layer utilities {
+  .button[data-bordered][data-coloring-mode="interactive"]:not([data-disabled]):not([data-readonly])::before {
+    inset: -2px;
   }
 }

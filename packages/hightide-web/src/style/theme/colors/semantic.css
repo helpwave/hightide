@@ -11,15 +11,12 @@
   /* States */
   --color-warning: var(--color-orange-500);
   --color-on-warning: var(--color-white);
-  --color-warning-hover: var(--color-orange-600);
 
   --color-positive: var(--color-green-500);
   --color-on-positive: var(--color-white);
-  --color-positive-hover: var(--color-green-600);
 
   --color-negative: var(--color-red-500);
   --color-on-negative: var(--color-white);
-  --color-negative-hover: var(--color-red-600);
 
   --color-disabled: var(--color-gray-300);
   --color-on-disabled: var(--color-gray-500);
@@ -27,7 +24,6 @@
   /* Surface */
   --color-surface: var(--color-gray-25);
   --color-on-surface: var(--color-text-primary);
-  --color-surface-hover: var(--color-white);
   --color-surface-variant: var(--color-white);
   --color-on-surface-variant: var(--color-on-surface);
   --color-surface-warning: var(--color-orange-100);
@@ -44,19 +40,14 @@
   /* Other */
   --color-primary: var(--color-purple-500);
   --color-on-primary: var(--color-white);
-  --color-primary-hover: var(--color-purple-600);
 
   --color-secondary: var(--color-blue-500);
   --color-on-secondary: var(--color-white);
-  --color-secondary-hover: var(--color-blue-600);
 
   --color-neutral: var(--color-gray-150);
   --color-on-neutral: var(--color-black);
-  --color-neutral-hover: var(--color-gray-200);
   --color-neutral-text: var(--color-black);
-  --color-neutral-text-hover: var(--color-gray-500);
   --color-neutral-outline: var(--color-black);
-  --color-neutral-outline-hover: var(--color-gray-600);
   --color-neutral-tonal-text: var(--color-black);
   --color-neutral-tonal-background: var(--color-gray-300);
 
@@ -82,7 +73,6 @@
 
     /* Surface */
     --color-surface: var(--color-gray-800);
-    --color-surface-hover: var(--color-gray-700);
     --color-surface-variant: var(--color-gray-900);
     --color-surface-warning: var(--color-orange-900);
 
@@ -96,14 +86,11 @@
 
     /* Other */
     --color-primary: var(--color-purple-400);
-    --color-primary-hover: var(--color-purple-500);
 
     --color-neutral: var(--color-gray-750);
-    --color-neutral-hover: var(--color-gray-600);
     --color-on-neutral: var(--color-white);
     --color-neutral-text: var(--color-white);
     --color-neutral-outline: var(--color-gray-200);
-    --color-neutral-outline-hover: var(--color-gray-400);
     --color-neutral-tonal-text: var(--color-white);
     --color-neutral-tonal-background: var(--color-gray-400);
 

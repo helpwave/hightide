@@ -1,6 +1,7 @@
 import type { ButtonHTMLAttributes } from 'react'
 import clsx from 'clsx'
 
+import { ColoringUtils } from '../../utils/coloring'
 import { PropsUtil } from '../../utils/propsUtil'
 import { ListItemContent } from './ListItemContent'
 import type { ListItemColor, ListItemContentOrder, ListItemContentProps } from './ListItemTypes'
@@ -28,8 +29,10 @@ export function ListActionItem({
       {...props}
       type={type ?? 'button'}
       disabled={disabled}
-      className={clsx('list-action-item', color, color && 'coloring-tonal-hover', className)}
-      data-color={color}
+      className={clsx('list-action-item', className)}
+      {...(color
+        ? ColoringUtils.build({ color, mode: 'interactive', colorVariant: 'tonal' })
+        : ColoringUtils.dataColoringMode('interactive'))}
       data-disabled={PropsUtil.dataAttributes.bool(disabled)}
     >
       <ListItemContent

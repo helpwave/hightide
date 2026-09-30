@@ -2,7 +2,7 @@ import type { ElementType, ForwardedRef, ReactNode } from 'react'
 import { forwardRef,type ButtonHTMLAttributes } from 'react'
 import { Icon } from '../display-and-visualization/Icon'
 import type { ButtonColor, IconButtonVariant } from './Pressable'
-import { buttonColorForVariant, coloringColorName, mapButtonVariant } from './Pressable'
+import { buttonColorForVariant, coloringColorName, ColoringUtils, mapButtonVariant } from './Pressable'
 import type { TooltipDisplayProps } from './Tooltip'
 import { TooltipContext, TooltipDisplay, TooltipRoot, useTooltip } from './Tooltip'
 import { Visibility } from '../layout/Visibility'
@@ -55,14 +55,17 @@ export const IconButtonBase = forwardRef<HTMLButtonElement, IconButtonBaseProps>
         props.onClick?.(event)
       }}
 
-      className={clsx('icon-button coloring', props.className)}
+      className={clsx('icon-button', props.className)}
       data-disabled={disabled ? '': undefined}
       data-size={size ?? undefined}
-      data-color={coloringColorName(resolvedColor)}
-      data-coloring-style={coloring.coloringStyle}
-      data-color-variant={coloring.colorVariant}
-      data-bordered={coloring.bordered ? '' : undefined}
-      data-elevated={coloring.elevated ? '' : undefined}
+      {...ColoringUtils.build({
+        color: coloringColorName(resolvedColor) ?? 'primary',
+        mode: 'interactive',
+        coloringStyle: coloring.coloringStyle,
+        colorVariant: coloring.colorVariant,
+        bordered: coloring.bordered,
+        elevated: coloring.elevated,
+      })}
     >
       {isProcessing ? <LoadingSpinner /> : (children ?? <Icon icon={icon} />)}
     </button>

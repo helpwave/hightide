@@ -4,6 +4,7 @@ import { Check, CheckCheck } from 'lucide-react'
 import { Icon } from '../display-and-visualization/Icon'
 import { Avatar } from '../display-and-visualization/Avatar/Avatar'
 import type { AvatarProps } from '../display-and-visualization/Avatar/AvatarComponent'
+import { ColoringUtils } from '../../utils/coloring'
 import { PropsUtil } from '../../utils/propsUtil'
 
 export type ChatConversationSentIndicator = 'sent' | 'sentAndReceived'
@@ -35,6 +36,7 @@ export const ChatConversationRow = ({
     <button
       {...props}
       type={props.type ?? 'button'}
+      {...ColoringUtils.dataColoringMode('interactive')}
       className={clsx('chat-conversation-row', props.className)}
       data-selected={PropsUtil.dataAttributes.bool(isSelected)}
       data-unread={PropsUtil.dataAttributes.bool(isUnread)}

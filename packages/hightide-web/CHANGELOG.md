@@ -12,6 +12,23 @@ and adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 - `ExpandableHeader` `triggerProps` for the header toggle button
 - `ExpandableContent` `isClosingOnClick` to collapse when the content is clicked
 - `NavigationItemList` `onClose` so Escape on items can close the parent menu
+- Subpath package exports: `@helpwave/hightide/components`, `@helpwave/hightide/global-contexts`, `@helpwave/hightide/hooks`, and `@helpwave/hightide/utils`, each with types
+- `Pressable` for colored buttons, with `coloringStyle` (`filled` | `foreground`), `colorVariant` (`normal` | `tonal` | `transparent`), `bordered`, `elevated`, and `processingIndicator`
+- `Button` and `IconButton` `variant`: `elevated`, `filled`, `tonal`, `outlined` (`Button` only), and `foreground`
+- `surfaceInverse` button color
+- `Icon` for a sized icon element (`xs` through `xl`)
+- `Divider` with `direction` `horizontal` or `vertical`
+- `ListItem`, `ListActionItem`, and `ListNavigationItem` (`href`, `onClick`, or `LinkComponent`; external links show an external icon)
+- Compound `Expandable`: `Expandable.Root`, `Expandable.Trigger` (render prop with toggle props), `Expandable.Content`, `Expandable.Context`, and `Expandable.Consumer`
+- `ExpandableSection`, `ExpandableSectionHeader`, and `ExpandableSectionContent` for the previous combined expandable layout
+- Compound `Avatar`: `Avatar.Root`, `Avatar.Image`, `Avatar.Fallback`, `Avatar.Name`, `Avatar.StatusIndicator`, and `Avatar.Context`. The combined `Avatar` accepts `status`, `hasStatusIndicator`, and slot props
+- Compound `AvatarGroup`: `AvatarGroup.Container`, `AvatarGroup.Overlap`, and `AvatarGroup.AdditionalText`
+- Compound `WheelPicker`: `WheelPicker.Root`, `WheelPicker.Option`, `WheelPicker.Bar`, and `WheelPicker.Context`, with `value` / `defaultValue`, `onValueChange`, `onLoop`, `isLooping`, and `visibleRows`
+- `DateWheelPicker`, `TimeWheelPicker`, and `DateTimeWheelPicker`
+- `ChatAttachmentMessageBubble`, a `ChatMessageBubble` specialization for a file name, metadata, and optional download action
+- `ColoringUtils` with `build` (defaults: mode `static`, color variant `normal`, coloring style `filled`) and setters `dataColor`, `dataColoringMode`, `dataColorVariant`, `dataColoringStyle`, `dataBordered`, and `dataElevated`
+- Coloring attributes `data-coloring-mode` (`static` | `interactive`), `data-color`, `data-color-variant`, `data-coloring-style`, `data-bordered`, and `data-elevated`. Hover (8%) and press (16%) state layers apply only when mode is `interactive`
+- `--coloring-state-hover` and `--coloring-state-press`
 
 ### Changed
 
@@ -21,10 +38,29 @@ and adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 - `FAQSection` uses `isClosingOnClick` instead of container toggle
 - `Navigation` handles Escape on the focused control instead of a capturing menu handler
 - `MultiSelectChipDisplayTrigger` uses an overlay click target so chip remove buttons do not need to stop propagation
+- The package is `"type": "module"` and no longer publishes a root `.` export. Import from the subpath exports above
+- Component styling uses class names instead of `data-name`
+- `Button` and `IconButton` take `variant` instead of `coloringStyle` (`solid`, `outline`, `text`, `tonal`, `tonal-outline`). `Button` children are a string, with `leading` and `trailing` icon components. Processing shows a spinner in place of an icon
+- `Card` is a sized container. Title, description, leading, and trailing content are composed by the caller
+- `NavigationItemData` is a link, a group, or a label. A link cannot also have child items. External links render an external icon, and nested groups can force-mount up to a depth
+- `Expandable` is the compound primitive. The previous combined component is `ExpandableSection`
+- `DatePicker` is `CalendarDatePicker` and `DayPicker` is `CalendarDayPicker`. Date, year-month, and time selection use wheel pickers. `DateTimePicker` `timeInputProps` configures `TimeWheelPicker`
+- Interactive color no longer uses dedicated hover tokens. Hover and press are a foreground state layer, or the same mix on elements that cannot paint a pseudo-element (native inputs and table rows)
+- Interactive controls no longer animate color transitions
+- `ChatMessageBubble` requires `direction` and takes `timestamp` as a `Date` and `status` (`sending` | `sent` | `received` | `read`), matching native. String children render as message text; other children render inside the bubble
 
 ### Removed
 
 - `ExpandableRoot`'s `allowContainerToggle`
+- Root import `@helpwave/hightide` (`src/index.ts`)
+- `ActionCard`, `NavigationCard`, `AvatarWithStatus`, and `AvatarWithLabel`
+- `ScrollPicker`
+- `TimeInput`
+- `ExpandableHeader`
+- `coloringStyle` values `solid`, `outline`, `text`, and `tonal-outline` on `Button` and `IconButton`
+- CSS class `coloring` and the hover color tokens `--color-primary-hover`, `--color-secondary-hover`, `--color-positive-hover`, `--color-warning-hover`, `--color-negative-hover`, `--color-surface-hover`, `--color-neutral-hover`, `--color-neutral-text-hover`, and `--color-neutral-outline-hover` (light and dark)
+- `ChatMessageCard` and `ChatAttachmentCard`. Structured messages are composed with `ChatMessageBubble`; file messages use `ChatAttachmentMessageBubble`. `ChatMessageBubble` `readReceipt` is replaced by `status`
+
 
 ## [0.17.2] - 2026-09-23
 

@@ -12,6 +12,8 @@
   --coloring-tonal-lightness: 0.95;
   --coloring-tonal-on-lightness: 0.2;
   --coloring-transparent-alpha: 30%;
+  --coloring-state-hover: 8%;
+  --coloring-state-press: 16%;
 
   --icon-size-xs: 16px;
   --icon-size-sm: 20px;

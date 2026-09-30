@@ -9,6 +9,7 @@ import type { FormFieldDataHandling } from '../../form/FormField'
 import { useControlledState } from '@helpwave/hightide-utils/hooks'
 import { ReactUtils } from '@helpwave/hightide-utils/utils'
 
+import { ColoringUtils } from '../../../utils/coloring'
 import { PropsUtil } from '../../../utils/propsUtil'
 
 export type EditCompleteOptionsResolved = {
@@ -104,6 +105,7 @@ export const Input = forwardRef<HTMLInputElement, InputProps>(function Input({
         setValue(value)
       }}
 
+      {...ColoringUtils.dataColoringMode('interactive')}
       className={clsx('input', props.className)}
       data-value={PropsUtil.dataAttributes.bool(!!value)}
       {...PropsUtil.dataAttributes.interactionStates({ ...props, invalid })}

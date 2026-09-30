@@ -72,7 +72,7 @@ export const FilterBasePopUp = forwardRef<HTMLDivElement, FilterPopUpBaseProps>(
             value={operator}
             onValueChange={(newOperator) => onOperatorChange(newOperator as FilterOperator)}
             triggerProps={{
-              className: 'filter-operator-select w-fit coloring-text-hover neutral flex-row-1 items-center h-element-sm px-2 py-1 rounded-md hover:cursor-pointer font-bold',
+              className: 'filter-operator-select w-fit flex-row-1 items-center h-element-sm px-2 py-1 rounded-md hover:cursor-pointer font-bold',
               selectedDisplay: (option) => option ? translation(FilterOperatorUtils.getInfo(option.value.value).translationKey as Parameters<typeof translation>[0]) : ''
             }}
             iconAppearance="right"

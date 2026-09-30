@@ -28,15 +28,8 @@
   .list-action-item,
   .list-navigation-item {
     @apply cursor-pointer bg-transparent outline-none focus-style-outline;
+    --coloring-on-base: var(--color-on-surface);
     transition: var(--focus-transitions);
-
-    &:hover:not(:disabled):not([data-disabled]) {
-      @apply bg-surface-hover;
-    }
-
-    &:active:not(:disabled):not([data-disabled]) {
-      @apply bg-surface-hover;
-    }
 
     &:focus-visible {
       @apply focus-style-apply;
@@ -45,10 +38,6 @@
     &:disabled,
     &[data-disabled] {
       @apply cursor-not-allowed opacity-50;
-    }
-
-    &[data-color] {
-      @apply coloring-tonal-hover;
     }
   }
 

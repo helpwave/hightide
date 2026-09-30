@@ -4,15 +4,17 @@
     @apply rounded data-[rounded]:rounded-full;
     transition: var(--focus-transitions);
 
-    &:not([data-disabled]) {
+    &:not([data-disabled]):not([data-readonly]) {
       @apply hover:cursor-pointer;
+      --coloring-foreground: var(--color-primary);
     }
     &[data-disabled] {
       @apply border-on-disabled bg-disabled cursor-not-allowed;
       @apply data-[checked=false]:text-transparent text-on-disabled;
     }
     &:not([data-disabled])[data-invalid] {
-      @apply border-negative hover:border-negative-hover;
+      @apply border-negative;
+      --coloring-foreground: var(--color-negative);
     }
     &:not([data-disabled])[data-invalid]:not([data-checked="false"]) {
       @apply text-negative bg-negative/20;
@@ -21,10 +23,10 @@
       @apply text-border bg-transparent;
     }
     &:not([data-disabled]):not([data-invalid]):not([data-checked="false"]) {
-      @apply bg-primary/40 border-primary text-primary hover:border-primary-hover hover:bg-primary/20;
+      @apply bg-primary/40 border-primary text-primary;
     }
     &:not([data-disabled]):not([data-invalid])[data-checked="false"] {
-      @apply border-border text-border bg-transparent hover:border-primary-hover;
+      @apply border-border text-border bg-transparent;
     }
 
     &[data-size="sm"] {

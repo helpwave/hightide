@@ -1,6 +1,7 @@
 import type { ButtonHTMLAttributes } from 'react'
 import clsx from 'clsx'
 
+import { ColoringUtils } from '../../../utils/coloring'
 import { ExpansionIcon } from '../../display-and-visualization/ExpansionIcon'
 import { useExpandableContext } from '../Expandable/ExpandableContext'
 
@@ -22,6 +23,7 @@ export function ExpandableSectionHeader({
       {...props}
       data-expanded={isExpanded ? '' : undefined}
       data-disabled={disabled ? '' : undefined}
+      {...ColoringUtils.dataColoringMode('interactive')}
       className={clsx('expandable-section-header', className)}
     >
       {children}

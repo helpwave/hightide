@@ -58,7 +58,9 @@
   }
 
   .table-body-row {
-    @apply hover:bg-table-row-hover-background;
+    &[data-coloring-mode="interactive"]:hover {
+      background-color: color-mix(in srgb, var(--color-on-surface) var(--coloring-state-hover), transparent);
+    }
     &[data-clickable] {
       @apply hover:cursor-pointer;
     }
@@ -67,7 +69,11 @@
   .table-body-filler-row {
     @apply hover:cursor-not-allowed;
     &[data-clickable] {
-      @apply hover:cursor-pointer hover:bg-table-row-hover-background;
+      @apply hover:cursor-pointer;
+
+      &[data-coloring-mode="interactive"]:hover {
+        background-color: color-mix(in srgb, var(--color-on-surface) var(--coloring-state-hover), transparent);
+      }
     }
   }
 

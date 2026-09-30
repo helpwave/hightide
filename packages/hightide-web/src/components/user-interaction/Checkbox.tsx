@@ -9,6 +9,7 @@ import type { FormFieldDataHandling } from '../form/FormField'
 import { useControlledState } from '@helpwave/hightide-utils/hooks'
 import { useEventCallbackStabilizer } from '@helpwave/hightide-utils/hooks'
 
+import { ColoringUtils } from '../../utils/coloring'
 import { PropsUtil } from '../../utils/propsUtil'
 
 type CheckBoxSize = 'sm' | 'md' | 'lg' | null
@@ -91,6 +92,7 @@ export const Checkbox = ({
       aria-checked={interactive ? (indeterminate ? 'mixed' : value) : undefined}
       {...PropsUtil.aria.interactionStates({ disabled, invalid, readOnly, required }, props)}
 
+      {...ColoringUtils.dataColoringMode('interactive')}
       className={clsx('checkbox', props.className)}>
       <Visibility isVisible={indeterminate}>
         <Icon icon={Minus} size={indicatorSize} className="checkbox-indicator" aria-hidden={true} />

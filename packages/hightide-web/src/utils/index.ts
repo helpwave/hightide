@@ -1,3 +1,4 @@
+export * from './coloring'
 export * from './StorageListener'
 export * from './dom'
 export * from './forward-exports'

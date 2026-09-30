@@ -1,5 +1,6 @@
 import type { ButtonHTMLAttributes } from 'react'
 import clsx from 'clsx'
+import { ColoringUtils } from '../../utils/coloring'
 import { PropsUtil } from '../../utils/propsUtil'
 
 export type ChatQuickReplyChipProps = ButtonHTMLAttributes<HTMLButtonElement> & {
@@ -15,6 +16,7 @@ export const ChatQuickReplyChip = ({
     <button
       {...props}
       type={props.type ?? 'button'}
+      {...ColoringUtils.dataColoringMode('interactive')}
       className={clsx('chat-quick-reply-chip', props.className)}
       data-active={PropsUtil.dataAttributes.bool(isActive)}
     >

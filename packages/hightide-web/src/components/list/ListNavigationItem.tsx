@@ -2,6 +2,7 @@ import type { AnchorHTMLAttributes, ButtonHTMLAttributes, ElementType, MouseEven
 import clsx from 'clsx'
 import { ChevronRight, ExternalLink } from 'lucide-react'
 import { Icon } from '../display-and-visualization/Icon'
+import { ColoringUtils } from '../../utils/coloring'
 import { PropsUtil } from '../../utils/propsUtil'
 import { ListItemContent } from './ListItemContent'
 import type { ListItemColor, ListItemContentOrder } from './ListItemTypes'
@@ -75,7 +76,7 @@ export function ListNavigationItem({
   onClick,
   ...props
 }: ListNavigationItemProps) {
-  const itemClassName = clsx('list-navigation-item', color, color && 'coloring-tonal-hover', className)
+  const itemClassName = clsx('list-navigation-item', className)
   const body = (
     <ListNavigationContent
       title={title}
@@ -96,7 +97,9 @@ export function ListNavigationItem({
         rel={isExternal ? 'noopener noreferrer' : undefined}
         aria-disabled={disabled || undefined}
         className={itemClassName}
-        data-color={color}
+        {...(color
+          ? ColoringUtils.build({ color, mode: 'interactive', colorVariant: 'tonal' })
+          : ColoringUtils.dataColoringMode('interactive'))}
         data-disabled={PropsUtil.dataAttributes.bool(disabled)}
         data-external={PropsUtil.dataAttributes.bool(isExternal)}
         onClick={(event) => {
@@ -118,7 +121,9 @@ export function ListNavigationItem({
       type="button"
       disabled={disabled}
       className={itemClassName}
-      data-color={color}
+      {...(color
+        ? ColoringUtils.build({ color, mode: 'interactive', colorVariant: 'tonal' })
+        : ColoringUtils.dataColoringMode('interactive'))}
       data-disabled={PropsUtil.dataAttributes.bool(disabled)}
       onClick={(event) => onClick?.(event)}
     >

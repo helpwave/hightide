@@ -32,7 +32,7 @@
   --color-process-model-edge-label-text-strong: var(--color-primary);
   --color-process-model-edge-label-text-muted: var(--color-purple-300);
   --color-process-model-terminal-fill: var(--color-primary);
-  --color-process-model-terminal-fill-active: var(--color-primary-hover);
+  --color-process-model-terminal-fill-active: color-mix(in srgb, var(--color-on-primary) var(--coloring-state-press), var(--color-primary));
   --color-process-model-terminal-fill-visited: var(--color-purple-400);
   --color-process-model-activity-icon-bg: var(--color-purple-100);
   --color-process-model-node-active-ring: var(--color-purple-100);
@@ -61,7 +61,6 @@
   --color-table-background: var(--color-surface);
   --color-table-text: var(--color-on-surface);
   --color-table-header-background: var(--color-surface-variant);
-  --color-table-row-hover-background: var(--color-surface-hover);
 
   /* TextImage */
   --color-text-image-primary-background: var(--color-primary);

@@ -5,6 +5,7 @@ import clsx from 'clsx'
 import { useTableContainerContext, useTableStateWithoutSizingContext } from './TableContext'
 import { BagFunctionUtil } from '@helpwave/hightide-utils/utils'
 import { range } from '@helpwave/hightide-utils/utils'
+import { ColoringUtils } from '../../../utils/coloring'
 import { PropsUtil } from '../../../utils/propsUtil'
 import { FillerCell } from './FillerCell'
 import { useVirtualizedRows } from '../virtualization/useVirtualizedRows'
@@ -45,6 +46,7 @@ const VirtualizedTableRow = memo(({
     ref={measureRef}
     onClick={onRowClick ? () => onRowClick(row, table) : undefined}
     data-clickable={PropsUtil.dataAttributes.bool(!!onRowClick)}
+    {...ColoringUtils.dataColoringMode('interactive')}
     className={clsx('table-body-row', className)}
   >
     {cells.map(cell => (

@@ -1,6 +1,6 @@
 @layer components {
   .icon-button {
-    @apply coloring relative flex-col-0 items-center justify-center element-square;
+    @apply relative flex-col-0 items-center justify-center element-square;
     transition: var(--focus-transitions);
 
     &:not([data-disabled]) {

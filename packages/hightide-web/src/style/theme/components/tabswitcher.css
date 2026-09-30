@@ -5,7 +5,9 @@
   }
 
   .tab-list-item {
-    @apply flex-row-0 grow justify-center px-3 py-2 typography-label-md border-b-4 transition-colors neutral coloring-text-hover;
+    @apply flex-row-0 grow justify-center px-3 py-2 typography-label-md border-b-4 transition-colors;
+    --coloring-on-base: var(--color-on-surface);
+    color: var(--color-on-surface);
     
     &[data-disabled] {
       @apply cursor-not-allowed disabled coloring-text;

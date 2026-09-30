@@ -4,6 +4,7 @@ import type { FormFieldInteractionStates } from '../form/FieldLayout'
 import type { FormFieldDataHandling } from '../form/FormField'
 import { useControlledState } from '@helpwave/hightide-utils/hooks'
 import { useEventCallbackStabilizer } from '@helpwave/hightide-utils/hooks'
+import { ColoringUtils } from '../../utils/coloring'
 import { PropsUtil } from '../../utils/propsUtil'
 
 export type SwitchProps = HTMLAttributes<HTMLDivElement>
@@ -66,6 +67,7 @@ export const Switch = ({
       aria-checked={value}
       {...PropsUtil.aria.interactionStates({ disabled, invalid, readOnly, required }, props)}
 
+      {...ColoringUtils.dataColoringMode('interactive')}
       className={clsx('switch', props.className)}
       data-active={PropsUtil.dataAttributes.bool(value)}
       {...PropsUtil.dataAttributes.interactionStates({ disabled, invalid, readOnly, required })}>

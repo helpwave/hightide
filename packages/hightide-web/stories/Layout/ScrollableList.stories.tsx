@@ -1,6 +1,7 @@
 import type { Meta, StoryObj } from '@storybook/nextjs-vite'
 import { ScrollableList } from '../../src/components/layout/ScrollableList'
 import { Button } from '../../src/components/user-interaction/Button'
+import { ColoringUtils } from '../../src/utils/coloring'
 
 const listItems = [
   'Alpha',
@@ -41,7 +42,8 @@ export const scrollableList: Story = {
         {listItems.map((item) => (
           <div
             key={item}
-            className="px-2 py-2.5 rounded-md surface coloring-solid-hover"
+            className="px-2 py-2.5 rounded-md"
+            {...ColoringUtils.build({ color: 'surface', mode: 'interactive' })}
           >
             {item}
           </div>
@@ -69,7 +71,8 @@ export const asNav: Story = {
           <a
             key={item}
             href="#"
-            className="block px-2 py-2.5 rounded-md surface coloring-solid-hover"
+            className="block px-2 py-2.5 rounded-md"
+            {...ColoringUtils.build({ color: 'surface', mode: 'interactive' })}
             onClick={(event) => event.preventDefault()}
           >
             {item}

@@ -6,6 +6,7 @@ import { FileText, Pencil, Plus } from 'lucide-react'
 import { Icon } from '../../display-and-visualization/Icon'
 import { useHightideTranslation } from '@helpwave/hightide-utils/context/translation'
 import { ReactUtils } from '@helpwave/hightide-utils/utils'
+import { ColoringUtils } from '../../../utils/coloring'
 import { useFileInputContext } from './FileInputContext'
 import { splitVisibleFileInputItems } from './fileInputItem'
 
@@ -57,6 +58,7 @@ const FileInputTriggerImpl = forwardRef<HTMLDivElement, FileInputTriggerProps>(f
           event.preventDefault()
         }
       }}
+      {...ColoringUtils.dataColoringMode('interactive')}
       className={clsx('file-input-trigger', props.className)}
       data-value={hasFiles ? '' : undefined}
       data-disabled={disabled ? '' : undefined}

@@ -9,24 +9,25 @@ import { ChatConversationList } from '../../src/components/chat/ChatConversation
 import { ChatConversationRow, type ChatConversationSentIndicator } from '../../src/components/chat/ChatConversationRow'
 import { ChatThreadHeader } from '../../src/components/chat/ChatThreadHeader'
 import { ChatMessageList } from '../../src/components/chat/ChatMessageList'
-import { ChatMessageBubble } from '../../src/components/chat/ChatMessageBubble'
-import { ChatMessageCard } from '../../src/components/chat/ChatMessageCard'
-import { ChatAttachmentCard } from '../../src/components/chat/ChatAttachmentCard'
+import { ChatMessageBubble, type ChatMessageDirection, type ChatMessageStatus } from '../../src/components/chat/ChatMessageBubble'
+import { ChatAttachmentMessageBubble } from '../../src/components/chat/ChatAttachmentMessageBubble'
 import { ChatDateDivider } from '../../src/components/chat/ChatDateDivider'
 import { ChatSystemLine } from '../../src/components/chat/ChatSystemLine'
 import { ChatQuickReplyChip } from '../../src/components/chat/ChatQuickReplyChip'
 import { ChatMessageComposer } from '../../src/components/chat/ChatMessageComposer'
 import { Chip } from '../../src/components/display-and-visualization/Chip'
+import { Icon } from '../../src/components/display-and-visualization/Icon'
 import { Button } from '../../src/components/user-interaction/Button'
+import { ColoringUtils } from '../../src/utils/coloring'
 import { IconButton } from '../../src/components/user-interaction/IconButton'
 import { TimeDisplay } from '../../src/components/user-interaction/date/TimeDisplay'
 
 type DemoMessage = {
   id: string,
-  direction: 'incoming' | 'outgoing',
+  direction: ChatMessageDirection,
   content: string,
-  timestamp: ReactNode,
-  readReceipt?: string,
+  timestamp: Date,
+  status?: ChatMessageStatus,
 }
 
 type DemoConversation = {
@@ -119,20 +120,21 @@ const initialMessages: DemoMessage[] = [
     id: 'm1',
     direction: 'incoming',
     content: 'Guten Tag, ich bräuchte ein Folgerezept für Ramipril 5mg. Die Packung reicht noch bis Ende der Woche.',
-    timestamp: '13:58',
+    timestamp: new Date(2026, 6, 8, 13, 58),
   },
   {
     id: 'm2',
     direction: 'outgoing',
     content: 'Guten Tag Herr Wellermann, danke für Ihre Nachricht. Wir schauen uns das direkt an.',
-    timestamp: '14:05',
+    timestamp: new Date(2026, 6, 8, 14, 5),
+    status: 'read',
   },
   {
     id: 'm3',
     direction: 'outgoing',
     content: 'Passt Ihnen zusätzlich ein kurzer Termin zur Besprechung Ihrer Blutwerte?',
-    timestamp: '14:10',
-    readReceipt: 'Gelesen',
+    timestamp: new Date(2026, 6, 8, 14, 10),
+    status: 'read',
   },
 ]
 
@@ -154,7 +156,7 @@ export const chatDemo: Story = {
           id: `m${previous.length + 1}`,
           direction: 'outgoing',
           content,
-          timestamp: <TimeDisplay date={new Date()} mode="time"/>,
+          timestamp: new Date(),
         },
       ])
     }
@@ -253,37 +255,58 @@ export const chatDemo: Story = {
                   {message.content}
                 </ChatMessageBubble>
               ))}
-              <ChatMessageCard
-                icon={<Pill/>}
-                title="Rezept-Anfrage"
-                subtitle="Folgeverordnung"
-                direction="incoming"
-                badge={<Chip size="xs" color="primary" coloringStyle="tonal">NEU</Chip>}
-                actions={(
-                  <>
+              <ChatMessageBubble direction="incoming" timestamp={new Date(2026, 6, 8, 14, 12)}>
+                <div className="flex-col-0 w-full min-w-56">
+                  <div className="flex-row-0 gap-x-2.5 items-center pb-3 border-b border-divider">
+                    <span
+                      className="flex-row-0 items-center justify-center size-9 shrink-0 rounded-md"
+                      {...ColoringUtils.build({ color: 'primary', colorVariant: 'tonal' })}
+                    >
+                      <Icon icon={Pill} size="sm" />
+                    </span>
+                    <span className="flex-col-0 gap-y-0.5 grow min-w-0">
+                      <span className="text-sm font-space font-bold">Rezept-Anfrage</span>
+                      <span className="text-xs text-description">Folgeverordnung</span>
+                    </span>
+                    <Chip size="xs" color="primary" coloringStyle="tonal">NEU</Chip>
+                  </div>
+                  <div className="flex-col-1 py-3">
+                    <span className="typography-title-md">Ramipril 5mg</span>
+                    <span className="text-sm text-description">N2 · 50 Stück · zuletzt 12.05.2026</span>
+                  </div>
+                  <div className="flex-row-0 gap-x-2.5 [&>*]:flex-1 [&>.button]:min-w-0">
                     <Button size="sm" color="primary" className="rounded-full" onClick={action('onIssue')}>Ausstellen</Button>
                     <Button size="sm" color="neutral" className="rounded-full" onClick={action('onDecline')}>Ablehnen</Button>
-                  </>
-                )}
-              >
-                <span className="typography-title-md">Ramipril 5mg</span>
-                <span className="text-sm text-description">N2 · 50 Stück · zuletzt 12.05.2026</span>
-              </ChatMessageCard>
-              <ChatMessageCard
-                icon={<CalendarDays/>}
-                title="Terminvorschlag"
-                subtitle="Besprechung Blutwerte · 30 Min"
-                direction="outgoing"
-                badge={<Chip size="xs" color="warning" coloringStyle="tonal">AUSSTEHEND</Chip>}
-              >
-                <span className="typography-title-md">Mi. 8. Juli 2026</span>
-                <span className="text-sm text-description">15:00 – 15:30 Uhr · Sprechzimmer 2</span>
-              </ChatMessageCard>
+                  </div>
+                </div>
+              </ChatMessageBubble>
+              <ChatMessageBubble direction="outgoing" timestamp={new Date(2026, 6, 8, 14, 16)} status="sent">
+                <div className="flex-col-0 w-full min-w-56">
+                  <div className="flex-row-0 gap-x-2.5 items-center pb-3 border-b border-divider">
+                    <span
+                      className="flex-row-0 items-center justify-center size-9 shrink-0 rounded-md"
+                      {...ColoringUtils.build({ color: 'primary', colorVariant: 'tonal' })}
+                    >
+                      <Icon icon={CalendarDays} size="sm" />
+                    </span>
+                    <span className="flex-col-0 gap-y-0.5 grow min-w-0">
+                      <span className="text-sm font-space font-bold">Terminvorschlag</span>
+                      <span className="text-xs text-description">Besprechung Blutwerte · 30 Min</span>
+                    </span>
+                    <Chip size="xs" color="warning" coloringStyle="tonal">AUSSTEHEND</Chip>
+                  </div>
+                  <div className="flex-col-1 pt-3">
+                    <span className="typography-title-md">Mi. 8. Juli 2026</span>
+                    <span className="text-sm text-description">15:00 – 15:30 Uhr · Sprechzimmer 2</span>
+                  </div>
+                </div>
+              </ChatMessageBubble>
               <ChatSystemLine>Termin bestätigt · Mi. 8. Juli, 15:00 Uhr</ChatSystemLine>
-              <ChatAttachmentCard
+              <ChatAttachmentMessageBubble
                 name="Befund_Blutbild.pdf"
-                metadata="PDF · 196 KB · 14:18"
+                metadata="PDF · 196 KB"
                 direction="incoming"
+                timestamp={new Date(2026, 6, 8, 14, 18)}
                 downloadLabel="Herunterladen"
                 onDownload={action('onDownload')}
               />
@@ -292,7 +315,7 @@ export const chatDemo: Story = {
                   key={message.id}
                   direction={message.direction}
                   timestamp={message.timestamp}
-                  readReceipt={message.readReceipt}
+                  status={message.status}
                 >
                   {message.content}
                 </ChatMessageBubble>

@@ -6,7 +6,7 @@ import { resolveSetState } from '@helpwave/hightide-utils/utils'
 import { createPortal } from 'react-dom'
 import { Visibility } from './Visibility'
 import { useControlledState } from '@helpwave/hightide-utils/hooks'
-import { PropsUtil } from '../../utils'
+import { ColoringUtils, PropsUtil } from '../../utils'
 
 export interface TabInfo {
   id: string,
@@ -201,6 +201,7 @@ export function TabList({ ...props }: TabListProps) {
 
             className="tab-list-item"
             data-active={PropsUtil.dataAttributes.bool(isActive)}
+            {...ColoringUtils.dataColoringMode('interactive')}
             data-disabled={PropsUtil.dataAttributes.bool(isDisabled)}
 
             role="tab"

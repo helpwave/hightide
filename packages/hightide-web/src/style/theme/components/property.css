@@ -44,7 +44,8 @@
     }
 
     &[data-invalid] {
-      @apply bg-warning text-on-warning border-warning-hover;
+      @apply bg-warning text-on-warning;
+      border-color: color-mix(in srgb, var(--color-on-warning) var(--coloring-state-press), var(--color-warning));
     }
   }
 

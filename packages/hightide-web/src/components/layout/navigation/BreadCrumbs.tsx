@@ -1,4 +1,5 @@
 import { ArrayUtil } from '@helpwave/hightide-utils/utils'
+import { ColoringUtils } from '../../../utils/coloring'
 import clsx from 'clsx'
 import type { AnchorHTMLAttributes, ElementType, HTMLAttributes, ReactNode } from 'react'
 
@@ -12,6 +13,7 @@ export const BreadCrumbLink = ({ LinkElement = DefaultBreadCrumbLinkElement, cla
   return (
     <LinkElement
       {...props}
+      {...ColoringUtils.dataColoringMode('interactive')}
       className={clsx('breadcrumb-link', className)}
     />
   )

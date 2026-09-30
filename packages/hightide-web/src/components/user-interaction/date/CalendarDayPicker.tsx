@@ -7,6 +7,7 @@ import type { FormFieldDataHandling } from '../../form/FormField'
 import { useCallback, useEffect, useMemo, useRef } from 'react'
 import { useControlledState } from '@helpwave/hightide-utils/hooks'
 
+import { ColoringUtils } from '../../../utils/coloring'
 import { PropsUtil } from '../../../utils/propsUtil'
 
 export type CalendarDayPickerProps = Partial<FormFieldDataHandling<Date>> & {
@@ -130,7 +131,7 @@ export const CalendarDayPicker = ({
               <div
                 key={date.getDate()}
                 ref={isFocused ? selectedButtonRef : undefined}
-                className="calendar-day-picker-body-item coloring"
+                className="calendar-day-picker-body-item"
                 onClick={() => {
                   if (!isDayValid) return
                   const newDate = new Date(
@@ -153,9 +154,11 @@ export const CalendarDayPicker = ({
                 role="button"
                 tabIndex={isFocused ? 0 : -1}
 
-                data-color={isSelected ? 'primary' : isSameMonth ? 'surface-inverse' : 'description'}
-                data-coloring-style={isSelected ? 'filled' : 'foreground'}
-                data-color-variant="normal"
+                {...ColoringUtils.build({
+                  color: isSelected ? 'primary' : isSameMonth ? 'surface-inverse' : 'description',
+                  mode: isDayValid ? 'interactive' : 'static',
+                  coloringStyle: isSelected ? 'filled' : 'foreground',
+                })}
                 data-disabled={PropsUtil.dataAttributes.bool(!isDayValid)}
                 data-selected={PropsUtil.dataAttributes.bool(isSelected)}
                 data-today={PropsUtil.dataAttributes.bool(isToday && markToday)}

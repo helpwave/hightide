@@ -1,9 +1,9 @@
 import type { CSSProperties } from 'react'
 import type { Meta, StoryObj } from '@storybook/nextjs-vite'
 import { Circle } from 'lucide-react'
-import clsx from 'clsx'
+import { ColoringUtils, type ColoringMode } from '../../src/utils/coloring'
 
-const coloringStyles = ['solid', 'text', 'outline', 'tonal', 'tonal-outline'] as const
+const coloringStyles = ['filled', 'foreground', 'outlined', 'tonal', 'tonal-outlined'] as const
 
 type ColoringStyle = typeof coloringStyles[number]
 
@@ -40,31 +40,41 @@ const colorStyle = (name: string): CSSProperties => ({
   color: `var(--color-${name})`,
 })
 
+const coloringAttributes = (color: ColorKey, coloringStyle: ColoringStyle, mode: ColoringMode) => {
+  switch (coloringStyle) {
+  case 'filled':
+    return ColoringUtils.build({ color, mode })
+  case 'foreground':
+    return ColoringUtils.build({ color, mode, coloringStyle: 'foreground' })
+  case 'outlined':
+    return ColoringUtils.build({ color, mode, coloringStyle: 'foreground', bordered: true })
+  case 'tonal':
+    return ColoringUtils.build({ color, mode, colorVariant: 'tonal' })
+  case 'tonal-outlined':
+    return ColoringUtils.build({ color, mode, colorVariant: 'tonal', bordered: true })
+  }
+}
+
 const ColoringStyleElement = ({
   colorKey,
   coloringStyle,
   label,
-  isHover,
+  mode,
 }: {
   colorKey: ColorKey,
   coloringStyle: ColoringStyle,
   label: string,
-  isHover: boolean,
-}) => (
-  <div
-    data-color={colorKey}
-    data-coloringstyle={coloringStyle}
-    className={clsx(
-      'rounded-lg px-3 py-1.5 typography-label-md w-full text-center coloring-color-detect',
-      {
-        'coloring-style-hover-detect': isHover,
-        'coloring-style-detect': !isHover,
-      }
-    )}
-  >
-    {label}
-  </div>
-)
+  mode: ColoringMode,
+}) => {
+  return (
+    <div
+      {...coloringAttributes(colorKey, coloringStyle, mode)}
+      className="rounded-lg px-3 py-1.5 typography-label-md w-full text-center"
+    >
+      {label}
+    </div>
+  )
+}
 
 const SemanticColorsTable = () => {
   return (
@@ -97,13 +107,13 @@ const SemanticColorsTable = () => {
                       colorKey={colorKey}
                       coloringStyle={style}
                       label={name}
-                      isHover={false}
+                      mode="static"
                     />
                     <ColoringStyleElement
                       colorKey={colorKey}
                       coloringStyle={style}
-                      label={name + '-hover'}
-                      isHover={true}
+                      label={name}
+                      mode="interactive"
                     />
                   </div>
                 </td>

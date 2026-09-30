@@ -1,44 +1,77 @@
-import type { HTMLAttributes, ReactNode } from 'react'
+import { useMemo, type HTMLAttributes, type ReactNode } from 'react'
 import clsx from 'clsx'
-import { CheckCheck } from 'lucide-react'
+import { Check, CheckCheck, Clock } from 'lucide-react'
+import { DateUtils } from '@helpwave/hightide-utils/utils'
+import { useDateTimeFormat, useLocalization } from '../../global-contexts/localization/forward-exports'
 import { Icon } from '../display-and-visualization/Icon'
 
-export type ChatMessageDirection = 'incoming' | 'outgoing'
+export const chatMessageDirections = ['incoming', 'outgoing'] as const
 
-export type ChatMessageBubbleProps = HTMLAttributes<HTMLDivElement> & {
-  direction?: ChatMessageDirection,
-  timestamp?: ReactNode,
-  readReceipt?: ReactNode,
+export type ChatMessageDirection = typeof chatMessageDirections[number]
+
+export const chatMessageStatuses = ['sent', 'sending', 'received', 'read'] as const
+
+export type ChatMessageStatus = typeof chatMessageStatuses[number]
+
+export type ChatMessageBubbleProps = Omit<HTMLAttributes<HTMLDivElement>, 'children'> & {
+  direction: ChatMessageDirection,
+  timestamp?: Date,
+  status?: ChatMessageStatus,
+  children?: ReactNode,
 }
 
+const statusIcon = (status: ChatMessageStatus) => (
+  status === 'sending'
+    ? Clock
+    : status === 'sent'
+      ? Check
+      : CheckCheck
+)
+
 export const ChatMessageBubble = ({
-  direction = 'incoming',
+  direction,
   timestamp,
-  readReceipt,
+  status,
   children,
+  className,
   ...props
 }: ChatMessageBubbleProps) => {
-  const hasMetaData = timestamp != null || readReceipt != null
+  const { locale } = useLocalization()
+  const { is24HourFormat, timeZone } = useDateTimeFormat()
+  const formattedTimestamp = useMemo(() => (
+    timestamp === undefined
+      ? undefined
+      : DateUtils.formatAbsolute(timestamp, locale, 'time', { timeZone, is24HourFormat })
+  ), [timestamp, locale, timeZone, is24HourFormat])
+  const hasMetaData = formattedTimestamp != null || status != null
 
   return (
     <div
       {...props}
-      className={clsx('chat-message-bubble-container', props.className)}
+      className={clsx('chat-message-bubble-container', className)}
       data-direction={direction}
     >
       <div className="chat-message-bubble-body">
-        <span className="chat-message-bubble-body-text">{children}</span>
+        {typeof children === 'string' || typeof children === 'number' ? (
+          <span className="chat-message-bubble-body-text">{children}</span>
+        ) : (
+          children
+        )}
       </div>
       {hasMetaData && (
         <span className="chat-message-bubble-metadata">
-          {readReceipt != null && (
+          {status != null && (
             <span className="chat-message-bubble-metadata-status">
-              <Icon icon={CheckCheck} size="xs" className="chat-message-bubble-metadata-icon" />
-              <span className="chat-message-bubble-metadata-text">{readReceipt}</span>
+              <Icon
+                icon={statusIcon(status)}
+                size="xs"
+                className="chat-message-bubble-metadata-icon"
+                data-status={status}
+              />
             </span>
           )}
-          {timestamp != null && (
-            <span className="chat-message-bubble-metadata-text">{timestamp}</span>
+          {formattedTimestamp != null && (
+            <span className="chat-message-bubble-metadata-text">{formattedTimestamp}</span>
           )}
         </span>
       )}

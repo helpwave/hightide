@@ -16,7 +16,9 @@ export {
   type ButtonColor,
   type ButtonSize,
   type ButtonVariant,
+  ColoringUtils,
   type ColoringColorVariant,
+  type ColoringMode,
   type ColoringStyle,
   type PressableProps,
 } from './Pressable'
@@ -57,7 +59,7 @@ export const Button = forwardRef<HTMLButtonElement, ButtonProps>(function Button
       color={buttonColorForVariant(variant, color === undefined ? 'primary' : color) ?? undefined}
       isProcessing={isProcessing}
       processingIndicator={false}
-      className={clsx('button coloring', className)}
+      className={clsx('button', className)}
     >
       {showLeadingSpinner ? (
         <LoadingSpinner size={iconSize} />

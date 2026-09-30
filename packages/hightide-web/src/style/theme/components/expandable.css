@@ -11,7 +11,8 @@
     @apply flex-row-2 flex-1 justify-between items-center min-h-12 px-4 rounded-lg select-none;
 
     &:not([data-disabled]) {
-      @apply cursor-pointer surface coloring-solid-hover;
+      @apply cursor-pointer;
+      --coloring-on-base: var(--color-on-surface);
     }
 
     &[data-disabled] {
