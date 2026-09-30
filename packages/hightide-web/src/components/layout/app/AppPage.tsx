@@ -1,16 +1,16 @@
 import clsx from 'clsx'
 import type { ElementType } from 'react'
 import { useCallback, useMemo, useRef, useState, type HTMLAttributes, type ReactNode } from 'react'
-import { IconButton } from '../../user-interaction/IconButton'
+import { IconButton } from '../../interaction/IconButton'
 import { useHightideTranslation } from '@helpwave/hightide-utils/context/translation'
 import { MenuIcon, X } from 'lucide-react'
-import { Icon } from '../../display-and-visualization/Icon'
+import { Icon } from '../../visualization/Icon'
 import { useOverlayRegistry } from '@helpwave/hightide-utils/hooks'
 import { PropsUtil } from '../../../utils/propsUtil'
-import type { LinkComponentProps } from '../navigation/navigation-menus/VerticalNavigationMenu'
-import { VerticalNavigationMenu, type NavigationItemData } from '../navigation/navigation-menus/VerticalNavigationMenu'
-import type { NavigationGroupItem, NavigationLinkItem, NavigationLabelItem } from '../navigation/navigation-menus/types'
-import { FocusTrap } from '../../utils/FocusTrap'
+import type { LinkComponentProps } from '../../interaction/navigation/navigation-menus/VerticalNavigationMenu'
+import { VerticalNavigationMenu, type NavigationItemData } from '../../interaction/navigation/navigation-menus/VerticalNavigationMenu'
+import type { NavigationGroupItem, NavigationLinkItem, NavigationLabelItem } from '../../interaction/navigation/navigation-menus/types'
+import { FocusTrap } from '../../interaction/FocusTrap'
 
 export interface AppSidebarProps extends HTMLAttributes<HTMLDivElement> {
   isOpen?: boolean,

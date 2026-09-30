@@ -2,7 +2,7 @@ import type { ButtonHTMLAttributes } from 'react'
 import clsx from 'clsx'
 
 import { ColoringUtils } from '../../../utils/coloring'
-import { ExpansionIcon } from '../../display-and-visualization/ExpansionIcon'
+import { ExpansionIcon } from '../../visualization/ExpansionIcon'
 import { useExpandableContext } from '../Expandable/ExpandableContext'
 
 export type ExpandableSectionHeaderProps = ButtonHTMLAttributes<HTMLButtonElement> & {

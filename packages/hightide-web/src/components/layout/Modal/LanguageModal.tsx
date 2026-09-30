@@ -3,9 +3,9 @@ import clsx from 'clsx'
 import { useHightideTranslation } from '@helpwave/hightide-utils/context/translation'
 
 import { useLocalization } from '../../../global-contexts/localization/forward-exports'
-import { Button } from '../../user-interaction/Button'
-import type { SelectProps } from '../../user-interaction/Select/SelectComponent'
-import { Select } from '../../user-interaction/Select/Select'
+import { Button } from '../../interaction/Button'
+import type { SelectProps } from '../../data-input/Select/SelectComponent'
+import { Select } from '../../data-input/Select/Select'
 import type { ModalProps } from './Modal'
 import { Modal } from './Modal'
 

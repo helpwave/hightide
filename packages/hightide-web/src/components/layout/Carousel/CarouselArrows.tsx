@@ -2,7 +2,7 @@ import type { HTMLAttributes } from 'react'
 import { ChevronLeft, ChevronRight } from 'lucide-react'
 import { useHightideTranslation } from '@helpwave/hightide-utils/context/translation'
 
-import { IconButton } from '../../user-interaction/IconButton'
+import { IconButton } from '../../interaction/IconButton'
 import { useCarouselContext } from './CarouselContext'
 
 export type CarouselArrowsProps = HTMLAttributes<HTMLDivElement>

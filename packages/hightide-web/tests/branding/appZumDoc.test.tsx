@@ -2,8 +2,8 @@
  * @jest-environment jsdom
  */
 import { render, screen } from '@testing-library/react'
-import { AppZumDocBadge } from '../../src/components/branding/AppZumDocBadge'
-import { AppZumDocLogo } from '../../src/components/branding/AppZumDocLogo'
+import { AppZumDocBadge } from '../../src/components/branding/visualization/AppZumDocBadge'
+import { AppZumDocLogo } from '../../src/components/branding/visualization/AppZumDocLogo'
 
 describe('AppZumDocBadge', () => {
   test('renders the wordmark with the logo', () => {

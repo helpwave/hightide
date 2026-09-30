@@ -11,9 +11,9 @@ import {
 } from 'react'
 import clsx from 'clsx'
 import { range } from '@helpwave/hightide-utils/utils'
-import { Pressable } from '../user-interaction/Pressable'
+import { Pressable } from '../interaction/Pressable'
 import { ChevronDown, ChevronUp } from 'lucide-react'
-import { Icon } from '../display-and-visualization/Icon'
+import { Icon } from '../visualization/Icon'
 import { Visibility } from './Visibility'
 
 export interface InfiniteScrollProps {

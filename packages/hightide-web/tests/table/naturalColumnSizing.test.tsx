@@ -3,8 +3,8 @@
  */
 import { render } from '@testing-library/react'
 import { TestHightideProvider } from '../setup/TestHightideProvider'
-import { Table } from '../../src/components/layout/table/Table'
-import { TableColumn } from '../../src/components/layout/table/TableColumn'
+import { Table } from '../../src/components/layout/Table/Table'
+import { TableColumn } from '../../src/components/layout/Table/TableColumn'
 
 type Row = { id: string, name: string, grade: string }
 

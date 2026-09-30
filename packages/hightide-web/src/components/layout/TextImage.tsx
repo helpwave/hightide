@@ -1,6 +1,6 @@
 import clsx from 'clsx'
 import { useHightideTranslation } from '@helpwave/hightide-utils/context/translation'
-import { Button } from '../user-interaction/Button'
+import { Button } from '../interaction/Button'
 
 type TextImageColor = 'primary' | 'secondary' | 'dark'
 

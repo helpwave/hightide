@@ -5,8 +5,8 @@ import { X } from 'lucide-react'
 import { useHightideTranslation } from '@helpwave/hightide-utils/context/translation'
 
 import { Visibility } from '../Visibility'
-import type { IconButtonProps } from '../../user-interaction/IconButton'
-import { IconButton } from '../../user-interaction/IconButton'
+import type { IconButtonProps } from '../../interaction/IconButton'
+import { IconButton } from '../../interaction/IconButton'
 import { useModalContext } from './ModalContext'
 
 export type ModalCloseButtonProps = IconButtonProps

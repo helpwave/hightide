@@ -87,6 +87,44 @@ It contains one HTML element. It is a `forwardRef` to that element, and its prop
 
 When a subcomponent contains more than one HTML element, it still forwards a ref, and every HTML element inside has its own `HTMLAttributes` props.
 
+## Distinction
+
+A component folder matches what the component does.
+
+Grouping folders stay lowercase: `layout`, `interaction`, `data-input`, `visualization`, `properties`, `chat`, and `branding`.
+
+A folder that holds one aggregate uses that aggregate's name, capitalized the same way: `Select`, `Modal`, `Drawer`, `PopUp`, `Table`, `Carousel`, `WheelPicker`, `Avatar`.
+
+### layout
+
+A layout component takes configuration and elements, and arranges those elements. It does not read or write a value through `InputInterface`.
+
+`Modal`, `Carousel`, `Card`, and `Form` are layout components.
+
+### interaction
+
+An interaction component reacts to the user. It does not implement `InputInterface`.
+
+`Button`, `Menu`, `Tooltip`, and `WheelPicker` are interaction components.
+
+### data-input
+
+A data-input component reads and writes a value through `InputInterface`. Every component in `data-input` implements that interface.
+
+`Input`, `Select`, `Checkbox`, and `DateTimeInput` are data-input components.
+
+### visualization
+
+A visualization component takes required data and displays it. Icons are visualization components.
+
+`Icon`, `Avatar`, `Chip`, and `ProgressIndicator` are visualization components.
+
+### Feature folders
+
+A feature that extends the core components has its own folder. `chat` holds chat features. `branding` holds icons and marks for a specific product.
+
+Inside a feature folder, components use the same folders: `layout`, `interaction`, `data-input`, and `visualization`.
+
 ## Styling identification
 
 Components identify themselves for styling with class names. Do not use `data-name`, or any other data attribute, as the styling hook.

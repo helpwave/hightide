@@ -5,7 +5,7 @@ import { forwardRef } from 'react'
 import clsx from 'clsx'
 import { ReactUtils } from '@helpwave/hightide-utils/utils'
 
-import { FocusTrap } from '../../utils/FocusTrap'
+import { FocusTrap } from '../../interaction/FocusTrap'
 import { useModalContext } from './ModalContext'
 
 export type ModalPosition = 'top' | 'center' | 'none'

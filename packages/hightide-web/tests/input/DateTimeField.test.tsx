@@ -4,8 +4,8 @@
 import { useEffect, useState } from 'react'
 import { act, fireEvent, render, screen } from '@testing-library/react'
 import { TestHightideProvider } from '../setup/TestHightideProvider'
-import { DateTimeField, type DateTimeFieldProps } from '../../src/components/user-interaction/input/DateTimeField'
-import { DateTimeInput } from '../../src/components/user-interaction/input/DateTimeInput'
+import { DateTimeField, type DateTimeFieldProps } from '../../src/components/data-input/input/DateTimeField'
+import { DateTimeInput } from '../../src/components/data-input/input/DateTimeInput'
 
 
 const renderField = (props?: Partial<DateTimeFieldProps>) => {

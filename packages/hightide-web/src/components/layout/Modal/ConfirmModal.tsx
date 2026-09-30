@@ -2,8 +2,8 @@ import type { PropsWithChildren } from 'react'
 import clsx from 'clsx'
 import { useHightideTranslation } from '@helpwave/hightide-utils/context/translation'
 
-import type { ButtonColor } from '../../user-interaction/Button'
-import { Button } from '../../user-interaction/Button'
+import type { ButtonColor } from '../../interaction/Button'
+import { Button } from '../../interaction/Button'
 import type { ModalProps } from './Modal'
 import { Modal } from './Modal'
 

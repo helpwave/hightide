@@ -8,7 +8,7 @@ import { useEventCallbackStabilizer, useLogOnce, useOverlayRegistry } from '@hel
 import { useFocusTrap } from '../../../hooks/focus/useFocusTrap'
 import { usePresenceRef } from '../../../hooks/usePresenceRef'
 import { useTransitionState } from '../../../hooks/useTransitionState'
-import { Portal } from '../../utils/Portal'
+import { Portal } from '../Portal'
 import { Visibility } from '../Visibility'
 import { PropsUtil } from '../../../utils/propsUtil'
 import { ModalContext } from './ModalContext'
