@@ -4,7 +4,7 @@ import { CalendarIcon, X } from 'lucide-react'
 import clsx from 'clsx'
 import type { DateTimePickerProps } from '../date/DateTimePicker'
 import { useHightideTranslation } from '@helpwave/hightide-utils/context/translation'
-import { useLocalization } from '../../../global-contexts/localization/forward-exports'
+import { useDateTimeFormat, useLocalization } from '../../../global-contexts/localization/forward-exports'
 import { Visibility } from '../../layout/Visibility'
 import type { FormFieldDataHandling } from '../../form/FormField'
 import { DateTimePickerDialog } from '../date/DateTimePickerDialog'
@@ -67,7 +67,9 @@ export const DateTimeInput = forwardRef<HTMLDivElement, DateTimeInputProps>(func
 }, forwardedRef) {
   const translation = useHightideTranslation()
   const { timeZone: contextTimeZone } = useLocalization()
+  const { is24HourFormat: contextIs24HourFormat } = useDateTimeFormat()
   const timeZone = timeZoneOverride ?? contextTimeZone
+  const resolvedIs24HourFormat = is24HourFormat ?? contextIs24HourFormat
   const [isOpen, setIsOpen] = useState(false)
   const [state, setState] = useControlledState<Date | null>({
     value,
@@ -140,7 +142,7 @@ export const DateTimeInput = forwardRef<HTMLDivElement, DateTimeInputProps>(func
           value={toZoned(state)}
           mode={mode}
           precision={precision}
-          is24HourFormat={is24HourFormat}
+          is24HourFormat={resolvedIs24HourFormat}
           disabled={disabled}
           readOnly={readOnly}
           invalid={invalid}
@@ -199,6 +201,7 @@ export const DateTimeInput = forwardRef<HTMLDivElement, DateTimeInputProps>(func
         aria-labelledby={ids.label}
 
         data-mode={mode}
+        data-time-format={resolvedIs24HourFormat ? '24h' : '12h'}
 
         className="date-time-input-dialog-popup"
       >
@@ -218,7 +221,7 @@ export const DateTimeInput = forwardRef<HTMLDivElement, DateTimeInputProps>(func
           end={toZoned(end ?? null) ?? undefined}
           weekStart={weekStart}
           markToday={markToday}
-          is24HourFormat={is24HourFormat}
+          is24HourFormat={resolvedIs24HourFormat}
           minuteIncrement={minuteIncrement}
           secondIncrement={secondIncrement}
           millisecondIncrement={millisecondIncrement}

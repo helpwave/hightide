@@ -36,7 +36,11 @@ export const dateTimePickerDialog: Story = {
     }, [initialValue])
 
     return (
-      <div className="date-time-input-dialog-popup" data-mode={args.mode}>
+      <div
+        className="date-time-input-dialog-popup"
+        data-mode={args.mode}
+        data-time-format={args.is24HourFormat ? '24h' : '12h'}
+      >
         <DateTimePickerDialog
           {...args}
           value={value}

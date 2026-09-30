@@ -221,9 +221,18 @@ export function WheelPickerRoot<T>({
     if (index < 0) {
       return
     }
+    const currentIndex = options.findIndex((option) => Object.is(option.value, selectedRef.current))
+    if (isLooping && currentIndex >= 0 && options.length > 1) {
+      const forward = (index - currentIndex + options.length) % options.length
+      const steps = forward <= options.length / 2 ? forward : forward - options.length
+      if (steps !== 0 && (currentIndex + steps < 0 || currentIndex + steps >= options.length)) {
+        stepBy(steps)
+        return
+      }
+    }
     scrollToIndex(index, 'smooth')
     applyValue(next)
-  }, [applyValue, disabled, scrollToIndex])
+  }, [applyValue, disabled, isLooping, scrollToIndex, stepBy])
 
   const publishOptions = useCallback(() => {
     if (optionsPublishScheduled.current) {

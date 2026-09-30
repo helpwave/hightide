@@ -50,6 +50,7 @@
   }
 
   .wheel-picker-loop-preview .wheel-picker-option {
+    pointer-events: auto;
     scroll-snap-align: none;
   }
 
