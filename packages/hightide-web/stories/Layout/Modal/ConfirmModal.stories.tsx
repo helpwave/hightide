@@ -1,21 +1,20 @@
 import type { Meta, StoryObj } from '@storybook/nextjs-vite'
 import { action } from 'storybook/actions'
-import { ConfirmDialog } from '../../../src/components/layout/dialog/premade/ConfirmDialog'
+import { ConfirmModal } from '../../../src/components/layout/Modal/ConfirmModal'
 
 
 const meta: Meta = {
-  component: ConfirmDialog,
-} satisfies Meta<typeof ConfirmDialog>
+  component: ConfirmModal,
+} satisfies Meta<typeof ConfirmModal>
 
 export default meta
 type Story = StoryObj<typeof meta>;
 
-export const confirmDialog: Story = {
+export const confirmModal: Story = {
   args: {
     isOpen: true,
-    isModal: true,
     titleElement: 'Do you want to confirm this?',
-    description: 'Whatever you click only closes the Dialog',
+    description: 'Whatever you click only closes the modal',
     onDecline: action('onDecline'),
     onConfirm: action('onConfirm'),
     onCancel: action('onCancel'),

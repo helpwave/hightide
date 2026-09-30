@@ -1,21 +1,22 @@
 import type { PropsWithChildren, ReactNode } from 'react'
 import { useHightideTranslation } from '@helpwave/hightide-utils/context/translation'
-import type { ConfirmDialogProps } from './ConfirmDialog'
-import { ConfirmDialog } from './ConfirmDialog'
 
-type DiscardChangesDialogProps =
-  Omit<ConfirmDialogProps, 'onDecline' | 'onConfirm' | 'buttonOverwrites' | 'titleElement' | 'description'>
+import type { ConfirmModalProps } from './ConfirmModal'
+import { ConfirmModal } from './ConfirmModal'
+
+type DiscardChangesModalProps =
+  Omit<ConfirmModalProps, 'onDecline' | 'onConfirm' | 'buttonOverwrites' | 'titleElement' | 'description'>
   & {
-  isShowingDecline?: boolean,
-  requireAnswer?: boolean,
-  onCancel: () => void,
-  onSave: () => void,
-  onDontSave: () => void,
-  titleOverwrite?: ReactNode,
-  descriptionOverwrite?: ReactNode,
-}
+    isShowingDecline?: boolean,
+    requireAnswer?: boolean,
+    onCancel: () => void,
+    onSave: () => void,
+    onDontSave: () => void,
+    titleOverwrite?: ReactNode,
+    descriptionOverwrite?: ReactNode,
+  }
 
-export const DiscardChangesDialog = ({
+export const DiscardChangesModal = ({
   children,
   onCancel,
   onSave,
@@ -23,10 +24,10 @@ export const DiscardChangesDialog = ({
   titleOverwrite,
   descriptionOverwrite,
   ...props
-}: PropsWithChildren<DiscardChangesDialogProps>) => {
+}: PropsWithChildren<DiscardChangesModalProps>) => {
   const translation = useHightideTranslation()
   return (
-    <ConfirmDialog
+    <ConfirmModal
       {...props}
       titleElement={titleOverwrite ?? translation('unsavedChanges')}
       description={descriptionOverwrite ?? translation('unsavedChangesSaveQuestion')}
@@ -36,6 +37,8 @@ export const DiscardChangesDialog = ({
       buttonOverwrites={[{ text: translation('cancel') }, { text: translation('discardChanges') }, { text: translation('save') }]}
     >
       {children}
-    </ConfirmDialog>
+    </ConfirmModal>
   )
 }
+
+export type { DiscardChangesModalProps }

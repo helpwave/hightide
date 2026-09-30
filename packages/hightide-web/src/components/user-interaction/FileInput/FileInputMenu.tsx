@@ -2,7 +2,7 @@ import type { ComponentPropsWithoutRef, ReactNode } from 'react'
 import { FileText, Plus, X } from 'lucide-react'
 import clsx from 'clsx'
 import { useHightideTranslation } from '@helpwave/hightide-utils/context/translation'
-import { Dialog } from '../../layout/dialog/Dialog'
+import { Modal } from '../../layout/Modal/Modal'
 import { Button } from '../Button'
 import { Icon } from '../../display-and-visualization/Icon'
 import { IconButton } from '../IconButton'
@@ -29,44 +29,46 @@ export const FileInputMenu = ({
   const allowedFileTypes = formatFileInputAccept(context.accept)
 
   return (
-    <Dialog
-      {...props}
+    <Modal
       isOpen={context.isOpen && (context.maxFiles ?? 1) > 1}
       onClose={() => context.setIsOpen(false)}
       titleElement={translation('selectFiles')}
       description={translation('dropFilesHere')}
-      className={clsx('file-input-menu', className)}
-      data-file-drag={context.isDragging ? '' : undefined}
-      data-drag-over={context.isDragOver ? '' : undefined}
-      onDragEnter={(event) => {
-        event.preventDefault()
-        if (canEdit && context.canAddFiles && isFileDataTransfer(event.dataTransfer)) {
-          context.setIsDragOver(true)
-        }
-        props.onDragEnter?.(event)
-      }}
-      onDragOver={(event) => {
-        event.preventDefault()
-        props.onDragOver?.(event)
-      }}
-      onDragLeave={(event) => {
-        event.preventDefault()
-        const nextTarget = event.relatedTarget
-        if (nextTarget instanceof Node && event.currentTarget.contains(nextTarget)) {
+      contentProps={{
+        ...props,
+        'className': clsx('file-input-menu', className),
+        'data-file-drag': context.isDragging ? '' : undefined,
+        'data-drag-over': context.isDragOver ? '' : undefined,
+        'onDragEnter': (event) => {
+          event.preventDefault()
+          if (canEdit && context.canAddFiles && isFileDataTransfer(event.dataTransfer)) {
+            context.setIsDragOver(true)
+          }
+          props.onDragEnter?.(event)
+        },
+        'onDragOver': (event) => {
+          event.preventDefault()
+          props.onDragOver?.(event)
+        },
+        'onDragLeave': (event) => {
+          event.preventDefault()
+          const nextTarget = event.relatedTarget
+          if (nextTarget instanceof Node && event.currentTarget.contains(nextTarget)) {
+            props.onDragLeave?.(event)
+            return
+          }
+          context.setIsDragOver(false)
           props.onDragLeave?.(event)
-          return
-        }
-        context.setIsDragOver(false)
-        props.onDragLeave?.(event)
-      }}
-      onDrop={(event) => {
-        event.preventDefault()
-        context.setIsDragOver(false)
-        context.setIsDragging(false)
-        if (canEdit && context.canAddFiles) {
-          context.addFiles(createFileInputItemsFromFileList(event.dataTransfer.files))
-        }
-        props.onDrop?.(event)
+        },
+        'onDrop': (event) => {
+          event.preventDefault()
+          context.setIsDragOver(false)
+          context.setIsDragging(false)
+          if (canEdit && context.canAddFiles) {
+            context.addFiles(createFileInputItemsFromFileList(event.dataTransfer.files))
+          }
+          props.onDrop?.(event)
+        },
       }}
     >
       {(context.maxFiles != null || allowedFileTypes != null) && (
@@ -113,6 +115,6 @@ export const FileInputMenu = ({
         </Button>
       )}
       {children}
-    </Dialog>
+    </Modal>
   )
 }

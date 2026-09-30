@@ -1,12 +1,13 @@
 import type { PropsWithChildren, ReactNode } from 'react'
-import type { DialogProps } from '../Dialog'
-import { Dialog } from '../Dialog'
-import { useLocalization } from '../../../../global-contexts/localization/forward-exports'
-import { Button } from '../../../user-interaction/Button'
-import type { SelectProps } from '../../../user-interaction/Select/SelectComponent'
-import { Select } from '../../../user-interaction/Select/Select'
 import clsx from 'clsx'
 import { useHightideTranslation } from '@helpwave/hightide-utils/context/translation'
+
+import { useLocalization } from '../../../global-contexts/localization/forward-exports'
+import { Button } from '../../user-interaction/Button'
+import type { SelectProps } from '../../user-interaction/Select/SelectComponent'
+import { Select } from '../../user-interaction/Select/Select'
+import type { ModalProps } from './Modal'
+import { Modal } from './Modal'
 
 type LanguageSelectProps = Omit<SelectProps, 'value' | 'children'>
 
@@ -39,26 +40,30 @@ export const LanguageSelect = ({ ...props }: LanguageSelectProps) => {
   )
 }
 
-type LanguageDialogProps = Omit<DialogProps, 'titleElement' | 'description'> & PropsWithChildren<{
+type LanguageModalProps = Omit<ModalProps, 'titleElement' | 'description'> & PropsWithChildren<{
   titleOverwrite?: ReactNode,
   descriptionOverwrite?: ReactNode,
 }>
 
-export const LanguageDialog = ({
+export const LanguageModal = ({
   onClose,
   titleOverwrite,
   descriptionOverwrite,
+  contentProps,
   ...props
-}: LanguageDialogProps) => {
+}: LanguageModalProps) => {
   const translation = useHightideTranslation()
 
   return (
-    <Dialog
+    <Modal
+      {...props}
       titleElement={titleOverwrite ?? translation('language')}
       description={descriptionOverwrite ?? translation('chooseLanguage')}
       onClose={onClose}
-      className={clsx('w-80', props.className)}
-      {...props}
+      contentProps={{
+        ...contentProps,
+        className: clsx('w-80', contentProps?.className),
+      }}
     >
       <LanguageSelect />
       <div className="flex-row-4 mt-3 justify-end">
@@ -66,6 +71,6 @@ export const LanguageDialog = ({
           {translation('done')}
         </Button>
       </div>
-    </Dialog>
+    </Modal>
   )
 }

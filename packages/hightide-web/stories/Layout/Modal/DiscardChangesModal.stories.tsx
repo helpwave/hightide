@@ -1,15 +1,15 @@
 import type { Meta, StoryObj } from '@storybook/nextjs-vite'
 import { action } from 'storybook/actions'
-import { DiscardChangesDialog } from '../../../src/components/layout/dialog/premade/DiscardChangesDialog'
+import { DiscardChangesModal } from '../../../src/components/layout/Modal/DiscardChangesModal'
 
 const meta: Meta = {
-  component: DiscardChangesDialog,
-} satisfies Meta<typeof DiscardChangesDialog>
+  component: DiscardChangesModal,
+} satisfies Meta<typeof DiscardChangesModal>
 
 export default meta
 type Story = StoryObj<typeof meta>;
 
-export const discardChangesDialog: Story = {
+export const discardChangesModal: Story = {
   args: {
     isOpen: true,
     onDontSave: action('onDontSave'),

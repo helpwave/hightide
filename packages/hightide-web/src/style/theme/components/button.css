@@ -2,7 +2,7 @@
   .button {
     @apply relative;
     &[data-size="xs"] {
-      @apply min-w-20;
+      @apply min-w-16;
       padding: var(--element-padding) var(--element-padding-direction);
 
       &[data-bordered] {
@@ -13,7 +13,7 @@
     }
 
     &[data-size="sm"] {
-      @apply min-w-28;
+      @apply min-w-20;
       padding: var(--element-padding) var(--element-padding-direction);
 
       &[data-bordered] {
@@ -24,7 +24,7 @@
     }
 
     &[data-size="md"] {
-      @apply min-w-36;
+      @apply min-w-24;
       padding: var(--element-padding) var(--element-padding-direction);
 
       &[data-bordered] {
@@ -35,7 +35,7 @@
     }
 
     &[data-size="lg"] {
-      @apply min-w-45;
+      @apply min-w-36;
       padding: var(--element-padding) var(--element-padding-direction);
 
       &[data-bordered] {

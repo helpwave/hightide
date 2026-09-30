@@ -1,13 +1,14 @@
 import { type PropsWithChildren, type ReactNode } from 'react'
-import type { DialogProps } from '../Dialog'
-import { Dialog } from '../Dialog'
 import clsx from 'clsx'
-import { useLocalization } from '../../../../global-contexts/localization/forward-exports'
-import { useTheme } from '../../../../global-contexts/theme/ThemeContext'
-import { Button } from '../../../user-interaction/Button'
-import type { SelectProps } from '../../../user-interaction/Select/SelectComponent'
-import { Select } from '../../../user-interaction/Select/Select'
 import { useHightideTranslation } from '@helpwave/hightide-utils/context/translation'
+
+import { useLocalization } from '../../../global-contexts/localization/forward-exports'
+import { useTheme } from '../../../global-contexts/theme/ThemeContext'
+import { Button } from '../../user-interaction/Button'
+import type { SelectProps } from '../../user-interaction/Select/SelectComponent'
+import { Select } from '../../user-interaction/Select/Select'
+import type { ModalProps } from './Modal'
+import { Modal } from './Modal'
 
 export type ThemeSelectProps = Omit<SelectProps<string | null>, 'value' | 'children'>
 
@@ -43,7 +44,7 @@ export const ThemeSelect = ({ ...props }: ThemeSelectProps) => {
         </div>
       </Select.Option>
       {Object.entries(supportedThemes).map(([themeMode, themeInformation]) => {
-        const label = themeInformation.nameTranslations[locale] ?? `{{ThemeDialog.themeInformation.nameTranslations:${locale}}}`
+        const label = themeInformation.nameTranslations[locale] ?? `{{ThemeModal.themeInformation.nameTranslations:${locale}}}`
         return (
           <Select.Option
             key={themeMode}
@@ -61,26 +62,30 @@ export const ThemeSelect = ({ ...props }: ThemeSelectProps) => {
   )
 }
 
-export interface ThemeDialogProps extends Omit<DialogProps, 'titleElement' | 'description'> {
+export interface ThemeModalProps extends Omit<ModalProps, 'titleElement' | 'description'> {
   titleOverwrite?: ReactNode,
   descriptionOverwrite?: ReactNode,
 }
 
-export const ThemeDialog = ({
+export const ThemeModal = ({
   onClose,
   titleOverwrite,
   descriptionOverwrite,
+  contentProps,
   ...props
-}: PropsWithChildren<ThemeDialogProps>) => {
+}: PropsWithChildren<ThemeModalProps>) => {
   const translation = useHightideTranslation()
 
   return (
-    <Dialog
+    <Modal
+      {...props}
       titleElement={titleOverwrite ?? translation('pThemes', { count: 1 })}
       description={descriptionOverwrite ?? translation('chooseTheme')}
       onClose={onClose}
-      className="w-80"
-      {...props}
+      contentProps={{
+        ...contentProps,
+        className: clsx('w-80', contentProps?.className),
+      }}
     >
       <ThemeSelect />
       <div className="flex-row-4 w-full mt-3 justify-end">
@@ -88,6 +93,6 @@ export const ThemeDialog = ({
           {translation('done')}
         </Button>
       </div>
-    </Dialog>
+    </Modal>
   )
 }

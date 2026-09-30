@@ -58,6 +58,13 @@ and adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 - Coloring custom properties start as `initial` instead of `transparent`
 - `Select` and `MultiSelect` show the search field when the option count is at least `searchableThreshold` (default `6`)
 - `Carousel` is a compound component: `Carousel.Root`, `Carousel.Container`, `Carousel.Slide`, `Carousel.Arrows`, `Carousel.FadeLayover`, `Carousel.Stepper`, `Carousel.Context`, and `Carousel.Consumer`. The combined `Carousel` still composes them from `children`, `hintNext`, `arrows`, `dots`, and `blurColor`
+- `Modal` is a compound component: `Modal.Root`, `Modal.Container`, `Modal.Background`, `Modal.Content`, `Modal.Title`, `Modal.Description`, `Modal.CloseButton`, `Modal.Opener`, `Modal.Context`, and `Modal.Consumer`. The combined `Modal` takes `titleElement`, `description`, `position`, `isClosable`, and slot props `containerProps`, `backgroundProps`, `contentProps`, `titleProps`, `descriptionProps`, and `closeButtonProps`
+- `isClosable` (default `true`) hides the close button and ignores close requests when `false`
+- `Modal.Container` closes on Escape when the event default has not been prevented
+- `ConfirmDialog` is `ConfirmModal`, `DiscardChangesDialog` is `DiscardChangesModal`, `InputDialog` is `InputModal`, `LanguageDialog` is `LanguageModal`, and `ThemeDialog` is `ThemeModal`
+- `Modal` content max width is `calc(min(100vw - 1rem, 60rem))` by default, `calc(min(100vw - 2rem, 80rem))` from the tablet breakpoint, and `calc(min(100vw - 4rem, 120rem))` from the desktop breakpoint
+- `Modal` content min height is `calc(min(64rem, 100vh - 1rem))` by default, `calc(min(64rem, 100vh - 2rem))` from the tablet breakpoint, and `calc(min(64rem, 100vh - 4rem))` from the desktop breakpoint
+- `ConfirmModal` and `DiscardChangesModal` action buttons stack in a column below the tablet breakpoint
 
 ### Removed
 
@@ -74,6 +81,11 @@ and adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 - `showSearch` on `Select` and `MultiSelect`
 - Standalone `CarouselTabs` and `CarouselSlide`. Use `Carousel.Stepper` and `Carousel.Slide`
 - Unused `Carousel` prop `overScrollThreshold`
+- `Dialog`, `DialogRoot`, and `DialogOpenerWrapper`. Use `Modal`
+- CSS classes `dialog-container`, `dialog-background`, and `dialog-content`. Use `modal-container`, `modal-background`, and `modal-content`
+- `isModal` on `Modal`. A modal is always a modal
+- `backgroundClassName` and `containerClassName` on `Modal`. Use `backgroundProps` and `containerProps`
+- `ConfirmDialog`, `DiscardChangesDialog`, `InputDialog`, `LanguageDialog`, and `ThemeDialog`
 
 
 ## [0.17.2] - 2026-09-23

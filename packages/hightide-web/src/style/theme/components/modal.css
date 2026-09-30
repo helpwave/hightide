@@ -1,12 +1,12 @@
 @layer components {
-  .dialog-container {
+  .modal-container {
     @apply fixed inset-0 h-screen w-screen;
     &:not([data-open]) {
       @apply touch-none pointer-events-none;
     }
   }
 
-  .dialog-background {
+  .modal-background {
     @apply fixed inset-0 h-screen w-screen bg-overlay-shadow;
     animation-fill-mode: forwards;
 
@@ -25,8 +25,22 @@
     }
   }
 
-  .dialog-content {
-    @apply flex-col-2 p-4 bg-overlay-background text-overlay-text rounded-xl shadow-hw-bottom max-w-[calc(100vw_-_2rem)] max-h-[calc(100vh_-_2rem)];
+  .modal-content {
+    @apply flex-col-2 p-4 bg-overlay-background text-overlay-text rounded-xl shadow-hw-bottom max-h-[calc(100vh_-_2rem)];
+    max-width: calc(min(100vw - 1rem, 60rem));
+    max-height: calc(min(100vh - 1rem, 60rem));
+    min-width: 20rem;
+    min-height: 10rem;
+
+    @variant tablet {
+      max-width: calc(min(100vw - 2rem, 80rem));
+      max-height: calc(min(100vh - 2rem, 80rem));
+    }
+
+    @variant desktop {
+      max-width: calc(min(100vw - 4rem, 120rem));
+      max-height: calc(min(100vh - 4rem, 120rem));
+    }
     animation-timing-function: ease-out;
     animation-fill-mode: forwards;
 
@@ -48,5 +62,27 @@
     &[data-position="center"] {
       @apply fixed inset-0 m-auto w-fit h-fit;
     }
+  }
+
+  .modal-actions {
+    @apply flex-col-4 mt-3;
+
+    @variant tablet {
+      @apply flex-row-4 justify-end;
+    }
+  }
+
+  .modal-actions-button {
+    @apply w-full;
+
+    @variant tablet {
+      @apply w-auto;
+    }
+  }
+
+  .modal-close-button {
+    @apply top-1 right-1;
+    --coloring-position-override: absolute;
+
   }
 }

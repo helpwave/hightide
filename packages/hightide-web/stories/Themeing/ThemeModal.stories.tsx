@@ -1,14 +1,14 @@
 import type { Meta, StoryObj  } from '@storybook/nextjs-vite'
-import { ThemeDialog } from '../../src/components/layout/dialog/premade/ThemeDialog'
+import { ThemeModal } from '../../src/components/layout/Modal/ThemeModal'
 
 const meta: Meta = {
-  component: ThemeDialog,
+  component: ThemeModal,
 }
 
 export default meta
 type Story = StoryObj<typeof meta>;
 
-export const themeDialog: Story = {
+export const themeModal: Story = {
   args: {
     isOpen: true,
   }

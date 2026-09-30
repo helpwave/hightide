@@ -1,12 +1,13 @@
 import type { PropsWithChildren } from 'react'
-import type { ButtonColor } from '../../../user-interaction/Button'
-import { Button } from '../../../user-interaction/Button'
-import { useHightideTranslation } from '@helpwave/hightide-utils/context/translation'
 import clsx from 'clsx'
-import type { DialogProps } from '../Dialog'
-import { Dialog } from '../Dialog'
+import { useHightideTranslation } from '@helpwave/hightide-utils/context/translation'
 
-export type ConfirmDialogType = 'positive' | 'negative' | 'neutral' | 'primary'
+import type { ButtonColor } from '../../user-interaction/Button'
+import { Button } from '../../user-interaction/Button'
+import type { ModalProps } from './Modal'
+import { Modal } from './Modal'
+
+export type ConfirmModalType = 'positive' | 'negative' | 'neutral' | 'primary'
 
 type ButtonOverwriteType = {
   text?: string,
@@ -14,35 +15,31 @@ type ButtonOverwriteType = {
   disabled?: boolean,
 }
 
-export type ConfirmDialogProps = Omit<DialogProps, 'onClose'> & {
+export type ConfirmModalProps = Omit<ModalProps, 'onClose'> & {
   isShowingDecline?: boolean,
   requireAnswer?: boolean,
   onCancel: () => void,
   onConfirm: () => void,
   onDecline?: () => void,
-  confirmType?: ConfirmDialogType,
-  /**
-   * Order: Cancel, Decline, Confirm
-   */
+  confirmType?: ConfirmModalType,
   buttonOverwrites?: [ButtonOverwriteType, ButtonOverwriteType, ButtonOverwriteType],
 }
 
-/**
- * A Dialog for asking the user for confirmation
- */
-export const ConfirmDialog = ({
+export const ConfirmModal = ({
   children,
   onCancel,
   onConfirm,
   onDecline,
   confirmType = 'positive',
   buttonOverwrites,
-  className,
+  contentProps,
+  isShowingDecline: _isShowingDecline,
+  requireAnswer: _requireAnswer,
   ...restProps
-}: PropsWithChildren<ConfirmDialogProps>) => {
+}: PropsWithChildren<ConfirmModalProps>) => {
   const translation = useHightideTranslation()
 
-  const mapping: Record<ConfirmDialogType, ButtonColor> = {
+  const mapping: Record<ConfirmModalType, ButtonColor> = {
     neutral: 'neutral',
     negative: 'negative',
     positive: 'positive',
@@ -50,13 +47,21 @@ export const ConfirmDialog = ({
   }
 
   return (
-    <Dialog {...restProps} onClose={onCancel} className={clsx('justify-between', className)}>
+    <Modal
+      {...restProps}
+      onClose={onCancel}
+      contentProps={{
+        ...contentProps,
+        className: clsx('justify-between', contentProps?.className),
+      }}
+    >
       <div className="flex-col-2 grow">
         {children}
       </div>
-      <div className="flex-row-4 mt-3 justify-end">
+      <div className="modal-actions">
         {onCancel && (
           <Button
+            className="modal-actions-button"
             color={buttonOverwrites?.[0].color ?? 'neutral'}
             onClick={onCancel}
             disabled={buttonOverwrites?.[0].disabled ?? false}
@@ -66,15 +71,16 @@ export const ConfirmDialog = ({
         )}
         {onDecline && (
           <Button
+            className="modal-actions-button"
             color={buttonOverwrites?.[1].color ?? 'negative'}
             onClick={onDecline}
-
             disabled={buttonOverwrites?.[1].disabled ?? false}
           >
             {buttonOverwrites?.[1].text ?? translation('decline')}
           </Button>
         )}
         <Button
+          className="modal-actions-button"
           color={buttonOverwrites?.[2].color ?? mapping[confirmType] ?? undefined}
           onClick={onConfirm}
           disabled={buttonOverwrites?.[2].disabled ?? false}
@@ -82,6 +88,6 @@ export const ConfirmDialog = ({
           {buttonOverwrites?.[2].text ?? translation('confirm')}
         </Button>
       </div>
-    </Dialog>
+    </Modal>
   )
 }
