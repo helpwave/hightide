@@ -6,6 +6,7 @@ import { useHightideTranslation } from '@helpwave/hightide-utils/context/transla
 import { XIcon, Plus } from 'lucide-react'
 import { ReactUtils } from '@helpwave/hightide-utils/utils'
 import clsx from 'clsx'
+import { ColoringUtils } from '../../interaction'
 
 export type MultiSelectChipDisplayTriggerProps = HTMLAttributes<HTMLDivElement> & {
   disabled?: boolean,
@@ -63,7 +64,7 @@ export const MultiSelectChipDisplayTrigger = forwardRef<
         className="multi-select-chip-display-button"
       />
       {selectedOptions.map((opt) => (
-        <div key={opt.value.id} className="multi-select-chip-display-chip">
+        <div key={opt.value.id} {...ColoringUtils.build({ color: 'surface-variant' })} className="multi-select-chip-display-chip">
           {opt.display}
           <IconButton
             tooltip={translation('remove')}

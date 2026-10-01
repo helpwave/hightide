@@ -1,18 +1,29 @@
 import type { ReactNode, RefObject } from 'react'
 import { useCallback, useId, useMemo, useState } from 'react'
+import { useControlledState, useEventCallbackStabilizer } from '@helpwave/hightide-utils/hooks'
+
+import type { InputInterface } from '../input/Input'
+import { DOMUtils } from '../../../utils/dom'
 import { ComboboxContext } from './ComboboxContext'
 import type { ComboboxContextConfig, ComboboxContextIds, ComboboxContextLayout, ComboboxContextType, ComboboxOptionType } from './ComboboxContext'
 import type { UseComboboxOptions } from './useCombobox'
 import { useCombobox } from './useCombobox'
-import { DOMUtils } from '../../../utils/dom'
 
-export interface ComboboxRootProps<T = string> extends Omit<UseComboboxOptions, 'options'> {
+export interface ComboboxRootProps<T = string> extends InputInterface<T>, Omit<UseComboboxOptions, 'options'> {
   children: ReactNode,
   onItemClick?: (value: T) => void,
 }
 
 export function ComboboxRoot<T = string>({
   children,
+  value,
+  initialValue,
+  onValueChange,
+  onEditComplete,
+  invalid = false,
+  disabled = false,
+  readOnly = false,
+  required = false,
   onItemClick,
   ...hookProps
 }: ComboboxRootProps<T>) {
@@ -22,6 +33,18 @@ export function ComboboxRoot<T = string>({
   const [ids, setIds] = useState<ComboboxContextIds>({
     trigger: `combobox-${generatedId}`,
     listbox: `combobox-${generatedId}-listbox`,
+  })
+  const onValueChangeStable = useEventCallbackStabilizer(onValueChange)
+  const onEditCompleteStable = useEventCallbackStabilizer(onEditComplete)
+  const onItemClickStable = useEventCallbackStabilizer(onItemClick)
+  const [selectedValue, setSelectedValue] = useControlledState<T | undefined>({
+    value,
+    onValueChange: (next) => {
+      if (next !== undefined) {
+        onValueChangeStable(next)
+      }
+    },
+    defaultValue: initialValue,
   })
 
   const registerOption = useCallback(
@@ -65,10 +88,19 @@ export function ComboboxRoot<T = string>({
 
   const selectOption = useCallback(
     (id: string) => {
+      if (disabled || readOnly) {
+        return
+      }
       const option = idToOptionMap[id]
-      if (option) onItemClick?.(option.value as T)
+      if (!option || option.disabled) {
+        return
+      }
+      setSelectedValue(option.value)
+      onEditCompleteStable(option.value)
+      onItemClickStable(option.value)
+      state.setSearchQuery(option.label ?? '')
     },
-    [idToOptionMap, onItemClick]
+    [disabled, readOnly, idToOptionMap, setSelectedValue, onEditCompleteStable, onItemClickStable, state]
   )
 
   const config: ComboboxContextConfig = useMemo(
@@ -94,6 +126,11 @@ export function ComboboxRoot<T = string>({
 
   const contextValue = useMemo(
     () => ({
+      value: selectedValue,
+      invalid,
+      disabled,
+      readOnly,
+      required,
       highlightedId: state.highlightedId,
       options,
       visibleOptionIds: state.visibleOptionIds,
@@ -110,6 +147,11 @@ export function ComboboxRoot<T = string>({
       search,
     }),
     [
+      selectedValue,
+      invalid,
+      disabled,
+      readOnly,
+      required,
       state.highlightedId,
       state.visibleOptionIds,
       state.highlightFirst,

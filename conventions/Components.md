@@ -111,7 +111,7 @@ An interaction component reacts to the user. It does not implement `InputInterfa
 
 A data-input component reads and writes a value through `InputInterface`. Every component in `data-input` implements that interface.
 
-`Input`, `Select`, `Checkbox`, and `DateTimeInput` are data-input components.
+`Input`, `Select`, `Combobox`, `Checkbox`, and `DateTimeInput` are data-input components.
 
 ### visualization
 

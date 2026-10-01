@@ -23,9 +23,9 @@ export function ListItem({
 }: ListItemProps) {
   return (
     <div
+      {...(color ? ColoringUtils.build({ color, colorVariant: 'tonal' }) : {})}
       {...props}
-      className={clsx('list-item', color, color && 'coloring-tonal', className)}
-      {...ColoringUtils.dataColor(color)}
+      className={clsx('list-item', className)}
     >
       <ListItemContent
         title={title}

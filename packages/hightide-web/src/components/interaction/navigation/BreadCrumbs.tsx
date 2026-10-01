@@ -13,7 +13,7 @@ export const BreadCrumbLink = ({ LinkElement = DefaultBreadCrumbLinkElement, cla
   return (
     <LinkElement
       {...props}
-      {...ColoringUtils.dataColoringMode('interactive')}
+      {...ColoringUtils.build({ color: 'surface-inverse', mode: 'interactive', coloringStyle: 'foreground' })}
       className={clsx('breadcrumb-link', className)}
     />
   )

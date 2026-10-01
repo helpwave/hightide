@@ -46,7 +46,6 @@ const VirtualizedTableRow = memo(({
     ref={measureRef}
     onClick={onRowClick ? () => onRowClick(row, table) : undefined}
     data-clickable={PropsUtil.dataAttributes.bool(!!onRowClick)}
-    {...ColoringUtils.dataColoringMode('interactive')}
     className={clsx('table-body-row', className)}
   >
     {cells.map(cell => (

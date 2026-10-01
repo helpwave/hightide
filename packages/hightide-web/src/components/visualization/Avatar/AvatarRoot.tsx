@@ -6,6 +6,7 @@ import type { LoadingState } from '@helpwave/hightide-utils/utils'
 import type { ImageComponent } from '../../../utils/image'
 import { AvatarContext } from './AvatarContext'
 import type { AvatarImageConfig, AvatarSize, AvatarStatus } from './AvatarTypes'
+import { ColoringUtils } from '../../interaction'
 
 const DefaultAvatarImage: ImageComponent = 'img'
 
@@ -70,10 +71,11 @@ export function AvatarRoot({
   return (
     <AvatarContext.Provider value={contextValue}>
       <div
-        {...props}
-        className={clsx('avatar', className)}
         data-size={size ?? undefined}
         data-loading-state={imageLoadingState}
+        {...ColoringUtils.build({ color: 'primary' })}
+        {...props}
+        className={clsx('avatar', className)}
       >
         {children}
       </div>

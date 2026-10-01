@@ -1,7 +1,8 @@
 import type { ForwardedRef, HTMLAttributes, ReactNode, RefObject } from 'react'
-import { forwardRef, useEffect, useId, useRef } from 'react'
+import { forwardRef, useEffect, useId, useMemo, useRef } from 'react'
 import clsx from 'clsx'
 import { useComboboxContext } from './ComboboxContext'
+import { ColoringUtils } from '../../interaction'
 
 export interface ComboboxOptionProps<T = string> extends HTMLAttributes<HTMLLIElement> {
   value: T,
@@ -13,7 +14,7 @@ export const ComboboxOption = forwardRef<HTMLLIElement, ComboboxOptionProps<unkn
   children,
   value,
   label,
-  disabled = false,
+  disabled: disabledOverwrite = false,
   id: idProp,
   className,
   ...restProps
@@ -25,6 +26,14 @@ export const ComboboxOption = forwardRef<HTMLLIElement, ComboboxOptionProps<unkn
   const optionId = idProp ?? `combobox-option-${generatedId}`
 
   const resolvedDisplay: ReactNode = children ?? label
+
+  const disabled = useMemo(() =>
+    disabledOverwrite ?? context.disabled,
+  [context.disabled, disabledOverwrite])
+
+  const interactable = useMemo(() =>
+    !disabled && !context.readOnly,
+  [context.readOnly, disabled])
 
   useEffect(() => {
     return registerOption({
@@ -65,15 +74,16 @@ export const ComboboxOption = forwardRef<HTMLLIElement, ComboboxOptionProps<unkn
       data-highlighted={isHighlighted ? '' : undefined}
       data-visible={isVisible ? '' : undefined}
       data-disabled={disabled ? '' : undefined}
+      {...ColoringUtils.build({ color: 'surface-inverse', coloringStyle: 'foreground', mode: 'interactive' })}
       className={clsx('combobox-option', !isVisible && 'hidden', className)}
       onClick={(event) => {
-        if (!disabled) {
+        if (!interactable) {
           context.selectOption(optionId)
           restProps.onClick?.(event)
         }
       }}
       onMouseEnter={(event) => {
-        if (!disabled) {
+        if (!interactable) {
           context.highlightItem(optionId)
           restProps.onMouseEnter?.(event)
         }

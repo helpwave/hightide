@@ -34,7 +34,6 @@ export const TableBody = React.memo(function TableBodyVisual() {
             key={row.id}
             onClick={() => onRowClick?.(row, table)}
             data-clickable={PropsUtil.dataAttributes.bool(!!onRowClick)}
-            {...ColoringUtils.dataColoringMode('interactive')}
             className={clsx('table-body-row', BagFunctionUtil.resolve(table.options.meta?.bodyRowClassName, row.original))}
           >
             {row.getVisibleCells().map(cell => {

@@ -1,5 +1,6 @@
 import type { Dispatch, ReactNode, RefObject, SetStateAction } from 'react'
 import { createContext, useContext } from 'react'
+import type { InputInterface } from '../input/Input'
 
 export interface ComboboxOptionType<T = string> {
   id: string,
@@ -50,7 +51,8 @@ export interface ComboboxContextConfig {
   setIds: Dispatch<SetStateAction<ComboboxContextIds>>,
 }
 
-export interface ComboboxContextType<T> extends ComboboxContextInternalState, ComboboxContextComputedState<T>, ComboboxContextActions<T> {
+export interface ComboboxContextType<T> extends ComboboxContextInternalState, ComboboxContextComputedState<T>, ComboboxContextActions<T>, Required<Pick<InputInterface<T>, 'invalid' | 'disabled' | 'readOnly' | 'required'>> {
+  value?: T,
   config: ComboboxContextConfig,
   layout: ComboboxContextLayout,
   search: ComboboxContextSearch,
@@ -61,7 +63,7 @@ export const ComboboxContext = createContext<ComboboxContextType<unknown> | null
 export function useComboboxContext<T = string>(): ComboboxContextType<T> {
   const ctx = useContext(ComboboxContext)
   if (ctx == null) {
-    throw new Error('useComboboxContext must be used within ComboboxRoot')
+    throw new Error('Combobox components must be used within a Combobox.Root')
   }
   return ctx as ComboboxContextType<T>
 }

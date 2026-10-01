@@ -21,7 +21,7 @@
   }
 
   .multi-select-chip-display-chip {
-    @apply flex-row-1 items-center pl-2 pr-1 coloring-solid neutral rounded-md h-9 z-1;
+    @apply flex-row-1 items-center pl-2 pr-1 rounded-md h-9 z-1;
   }
 
   .multi-select-chip-display-add-button {

@@ -4,10 +4,12 @@ import clsx from 'clsx'
 import { useComboboxContext } from './ComboboxContext'
 import { useHightideTranslation } from '@helpwave/hightide-utils/context/translation'
 
-export type ComboboxListProps = HTMLAttributes<HTMLUListElement>
+export type ComboboxListProps = HTMLAttributes<HTMLUListElement> & {
+  statusProps?: HTMLAttributes<HTMLLIElement>,
+}
 
 export const ComboboxList = forwardRef<HTMLUListElement, ComboboxListProps>(
-  function ComboboxList({ children, ...props }, ref) {
+  function ComboboxList({ children, statusProps, ...props }, ref) {
     const translation = useHightideTranslation()
     const context = useComboboxContext()
     const { layout } = context
@@ -37,12 +39,13 @@ export const ComboboxList = forwardRef<HTMLUListElement, ComboboxListProps>(
         className={clsx('combobox-list', props.className)}>
         {children}
         <li
+          {...statusProps}
           role="option"
           aria-selected={false}
           aria-disabled={true}
           aria-live="polite"
           aria-atomic={true}
-          className={clsx('combobox-list-status', { 'sr-only': count > 0 })}
+          className={clsx('combobox-list-status', { 'sr-only': count > 0 }, statusProps?.className)}
         >
           {translation('nResultsFound', { count })}
         </li>

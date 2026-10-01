@@ -1,4 +1,5 @@
 export * from './Checkbox'
+export * from './Combobox'
 export * from './FileInput'
 export * from './LabelledCheckbox'
 export * from './MultiSelect'

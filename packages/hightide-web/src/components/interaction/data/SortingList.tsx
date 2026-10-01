@@ -9,8 +9,7 @@ import { PopUpOpener } from '../../layout/PopUp/PopUpOpener'
 import { Icon } from '../../visualization/Icon'
 import { Button } from '../Button'
 import { Pressable } from '../Pressable'
-import { Combobox } from '../Combobox/Combobox'
-import { ComboboxOption } from '../Combobox/ComboboxOption'
+import { Combobox } from '../../data-input/Combobox/Combobox'
 import { PopUpContext } from '../../layout/PopUp/PopUpContext'
 import { IconButton } from '../IconButton'
 import clsx from 'clsx'
@@ -87,10 +86,10 @@ export const SortingList = ({ sorting, onSortingChange, availableItems }: Sortin
                   }}
                 >
                   {inactiveItems.map((item) => (
-                    <ComboboxOption key={item.id} value={item.id} label={item.label}>
+                    <Combobox.Option key={item.id} value={item.id} label={item.label}>
                       {DataTypeUtils.toIcon(item.dataType)}
                       {item.label}
-                    </ComboboxOption>
+                    </Combobox.Option>
                   ))}
                 </Combobox>
               )}}

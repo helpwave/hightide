@@ -201,7 +201,7 @@ export function TabList({ ...props }: TabListProps) {
 
             className="tab-list-item"
             data-active={PropsUtil.dataAttributes.bool(isActive)}
-            {...ColoringUtils.dataColoringMode('interactive')}
+            {...ColoringUtils.build({ color: 'surface-inverse', mode: 'interactive', coloringStyle: 'foreground' })}
             data-disabled={PropsUtil.dataAttributes.bool(isDisabled)}
 
             role="tab"

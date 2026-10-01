@@ -15,7 +15,7 @@
     @apply flex-row-1 items-center px-2 py-1 rounded-md cursor-pointer;
 
     &[data-highlighted] {
-      @apply bg-primary/20;
+      background-color: color-mix(in oklch, var(--color-on-surface) var(--coloring-state-hover), transparent);
     }
   }
 

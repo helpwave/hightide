@@ -6,6 +6,7 @@ import { Visibility } from '../Visibility'
 import { useHightideTranslation } from '@helpwave/hightide-utils/context/translation'
 import type { IconButtonProps } from '../../interaction/IconButton'
 import { IconButton } from '../../interaction/IconButton'
+import { ColoringUtils } from '../../interaction'
 
 type SortingIndexDisplay = {
   index: number,
@@ -62,7 +63,8 @@ export const TableSortButton = ({
     >
       <Visibility isVisible={hasSortingIndex}>
         <div
-          className={clsx('absolute bottom-0 right-1/2 translate-x-1/2 translate-y-2/3 z-1 primary coloring-solid rounded-full h-4 w-5 text-sm')}
+          {...ColoringUtils.build({ color: 'primary' })}
+          className={clsx('absolute bottom-0 right-1/2 translate-x-1/2 translate-y-2/3 z-1 rounded-full h-4 w-5 text-sm')}
         >
           {`${parsedIndex}.`}
         </div>

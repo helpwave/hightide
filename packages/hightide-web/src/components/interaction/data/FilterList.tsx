@@ -11,8 +11,7 @@ import { PopUpOpener } from '../../layout/PopUp/PopUpOpener'
 import { Button } from '../Button'
 import { Pressable } from '../Pressable'
 import { FilterPopUp } from './FilterPopUp'
-import { Combobox } from '../Combobox/Combobox'
-import { ComboboxOption } from '../Combobox/ComboboxOption'
+import { Combobox } from '../../data-input/Combobox/Combobox'
 import { PopUpContext } from '../../layout/PopUp/PopUpContext'
 import type { FilterOperator } from './FilterOperator'
 import { FilterOperatorUtils } from './FilterOperator'
@@ -115,10 +114,10 @@ export const FilterList = ({ value, onValueChange, availableItems }: FilterListP
                   }}
                 >
                   {inactiveItems.map(item => (
-                    <ComboboxOption key={item.id} value={item.id} label={item.label}>
+                    <Combobox.Option key={item.id} value={item.id} label={item.label}>
                       {DataTypeUtils.toIcon(item.dataType)}
                       {item.label}
-                    </ComboboxOption>
+                    </Combobox.Option>
                   ))}
                 </Combobox>
               )}}

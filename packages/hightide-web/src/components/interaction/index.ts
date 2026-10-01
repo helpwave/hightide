@@ -1,5 +1,4 @@
 export * from './Button'
-export * from './Combobox'
 export * from './CopyToClipboardWrapper'
 export * from './FocusTrap'
 export * from './IconButton'

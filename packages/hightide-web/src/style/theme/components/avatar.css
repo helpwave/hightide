@@ -1,6 +1,6 @@
 @layer components {
   .avatar {
-    @apply relative flex-row-0 items-center justify-center primary coloring-solid rounded-full;
+    @apply relative flex-row-0 items-center justify-center rounded-full;
     &.avatar-group-avatar {
       @apply absolute shadow-side shadow-r-4 shadow-hard;
     }

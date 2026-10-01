@@ -1,6 +1,6 @@
 @layer components {
   .card {
-    @apply flex-col-0 w-full min-w-0 overflow-hidden surface coloring-solid shadow-md;
+    @apply flex-col-0 w-full min-w-0 overflow-hidden shadow-md;
 
     &[data-size="sm"] {
       @apply px-3 py-2 rounded-lg min-h-16;

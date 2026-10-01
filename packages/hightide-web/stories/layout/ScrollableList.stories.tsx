@@ -25,7 +25,7 @@ type Story = StoryObj<typeof meta>
 
 export const scrollableList: Story = {
   args: {
-    className: 'surface coloring-solid rounded-lg border border-divider',
+    className: 'rounded-lg border border-divider',
     headerClassName: 'px-4 py-3 border-b border-divider',
     contentClassName: 'px-2 py-1',
     footerClassName: 'px-4 py-2 border-t border-divider',
@@ -57,7 +57,7 @@ export const asNav: Story = {
   args: {
     'as': 'nav',
     'aria-label': 'Sections',
-    'className': 'surface coloring-solid rounded-lg border border-divider',
+    'className': 'rounded-lg border border-divider',
     'headerClassName': 'px-4 py-3 border-b border-divider',
     'contentClassName': 'px-2 py-1',
     'header': (

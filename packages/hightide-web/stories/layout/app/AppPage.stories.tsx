@@ -99,7 +99,7 @@ export const appPage: Story = {
         {Array.from({ length: 12 }, (_, index) => (
           <div
             key={index}
-            className="surface coloring-solid rounded-lg p-4 typography-label-md"
+            className="rounded-lg p-4 typography-label-md"
           >
             {`Section ${index + 1}`}
           </div>

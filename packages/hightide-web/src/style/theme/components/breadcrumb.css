@@ -7,13 +7,10 @@
   }
   .breadcrumb-link {
     @apply flex-row-1 px-1.5 py-1 rounded-1.5 h-8;
-    @apply relative;
-    --coloring-on-base: var(--color-description);
-    color: var(--color-description);
+    opacity: 80%;
   }
   .breadcrumb-item:last-child .breadcrumb-link {
-    --coloring-on-base: var(--color-on-surface);
-    color: var(--color-on-surface);
+    opacity: 100%;
   }
 
   .breadcrumb-divider {

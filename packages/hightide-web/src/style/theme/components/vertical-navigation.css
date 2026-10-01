@@ -14,12 +14,16 @@
       @apply hover:cursor-pointer;
       transition: var(--focus-transitions);
 
-      &:hover,
-      &:focus-visible {
-        @apply bg-primary/15;
+      &:hover {
+        background-color: color-mix(in oklch, var(--color-on-surface) var(--coloring-state-hover), transparent);
+      }
+
+      &:active {
+        background-color: color-mix(in oklch, var(--color-on-surface) var(--coloring-state-press), transparent);
       }
 
       &:focus-visible {
+        background-color: color-mix(in oklch, var(--color-on-surface) var(--coloring-state-press), transparent);
         outline: var(--focus-outline);
         outline-offset: var(--focus-outline-offset);
         box-shadow: var(--focus-box-shadow);
@@ -34,9 +38,12 @@
     &[data-interactable] {
       @apply hover:cursor-pointer;
 
-      &:hover,
-      &:has(:focus-visible) {
-        @apply bg-primary/15;
+      &:hover {
+        background-color: color-mix(in oklch, var(--color-on-surface) var(--coloring-state-hover), transparent);
+      }
+
+      &:active, &:has(:focus-visible) {
+        background-color: color-mix(in oklch, var(--color-on-surface) var(--coloring-state-press), transparent);
       }
     }
   }

@@ -1,6 +1,6 @@
 @layer components {
   .expandable-section-root {
-    @apply flex-col-0 surface coloring-solid rounded-lg shadow-sm;
+    @apply flex-col-0 rounded-lg shadow-sm;
 
     &:not([data-disabled])[data-containertoggleable] {
       @apply cursor-pointer;
@@ -16,7 +16,7 @@
     }
 
     &[data-disabled] {
-      @apply cursor-not-allowed disabled coloring-solid;
+      @apply cursor-not-allowed;
     }
   }
 

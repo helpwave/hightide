@@ -49,12 +49,12 @@
   /* Scrollbar */
   --color-scrollbar-track: #00000033;
   --color-scrollbar-track: oklch(0.000 0 0 / 0.2);
-  --color-scrollbar-thumb: var(--color-gray-600);
+  --color-scrollbar-thumb: var(--color-gray-400);
 
   /* Stepper Bar */
   --color-stepperbar-dot-active: var(--color-primary);
   --color-stepperbar-dot-normal: var(--color-purple-100);
-  --color-stepperbar-dot-disabled: var(--color-description);
+  --color-stepperbar-dot-disabled: var(--color-surface-variant);
 
   /* Switch */
   --color-switch-thumb-inactive: var(--color-on-surface);
@@ -75,7 +75,7 @@
 
   /* Tooltip */
   --color-tooltip-background: var(--color-menu-background);
-  --color-tooltip-text: var(--color-description);
+  --color-tooltip-text: var(--color-menu-text);
 
   /* Other */
   --color-border: var(--color-gray-200);

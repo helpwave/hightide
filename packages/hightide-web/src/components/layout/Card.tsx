@@ -1,5 +1,6 @@
 import type { HTMLAttributes } from 'react'
 import clsx from 'clsx'
+import { ColoringUtils } from '../interaction'
 
 export type CardSize = 'sm' | 'md' | 'lg'
 
@@ -14,9 +15,10 @@ export function Card({
 }: CardProps) {
   return (
     <div
+      {...ColoringUtils.build({ color: 'surface' })}
+      data-size={size}
       {...props}
       className={clsx('card', className)}
-      data-size={size}
     />
   )
 }

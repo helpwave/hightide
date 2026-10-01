@@ -8,6 +8,7 @@ import type { ExpandableRootProps } from '../Expandable/ExpandableRoot'
 import { ExpandableSectionContent } from './ExpandableSectionContent'
 import { ExpandableSectionHeader } from './ExpandableSectionHeader'
 import type { ExpandableSectionHeaderProps } from './ExpandableSectionHeader'
+import { ColoringUtils } from '../../interaction'
 
 export type ExpandableSectionProps = Omit<ExpandableRootProps, 'children'> & Omit<HTMLAttributes<HTMLDivElement>, 'children' | 'id'> & {
   trigger: ReactNode,
@@ -27,10 +28,11 @@ const ExpandableSectionFrame = forwardRef<HTMLDivElement, HTMLAttributes<HTMLDiv
 
   return (
     <div
-      {...props}
-      ref={ref}
       data-expanded={isExpanded ? '' : undefined}
       data-disabled={disabled ? '' : undefined}
+      {...ColoringUtils.build({ color: 'surface' })}
+      {...props}
+      ref={ref}
       className={clsx('expandable-section-root', className)}
     >
       {children}

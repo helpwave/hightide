@@ -17,6 +17,7 @@ import { useOverlayRegistry } from '@helpwave/hightide-utils/hooks'
 import { useScrollObserver } from '../../../hooks/useScrollObserver'
 import { ReactUtils } from '@helpwave/hightide-utils/utils'
 import { PropsUtil } from '../../../utils/propsUtil'
+import { ColoringUtils } from '../../interaction'
 
 export interface PopUpProps extends Omit<AnchoredFloatingContainerProps, 'anchor'>, Partial<UseOutsideClickHandlers> {
   isOpen?: boolean,
@@ -80,6 +81,7 @@ export const PopUp = forwardRef<HTMLDivElement, PopUpProps>(function PopUp({
       <Portal>
         <FocusTrap {...focusTrapOptions} active={isPresent && isOpen && (focusTrapOptions?.active ?? true)} container={ref}>
           <AnchoredFloatingContainer
+            {...ColoringUtils.build({ color: 'surface' })}
             {...props}
             id={id}
             anchor={anchor}
@@ -99,7 +101,8 @@ export const PopUp = forwardRef<HTMLDivElement, PopUpProps>(function PopUp({
               overflow: 'hidden',
               ...props.style
             }}
-            className={clsx('pop-up', props.className)}>
+            className={clsx('pop-up', props.className)}
+          >
             {children}
           </AnchoredFloatingContainer>
         </FocusTrap>

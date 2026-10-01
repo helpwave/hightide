@@ -44,37 +44,13 @@
     background-color var(--animation-duration-in, 250ms) ease-in-out;
 }
 
-@utility coloring-solid {
-  @apply bg-[var(--coloring-solid-color,var(--coloring-color))]
-  text-[var(--coloring-solid-text,var(--coloring-on-color))];
-}
-
-@utility coloring-tonal {
-  @apply bg-[var(--coloring-tonal-background,var(--coloring-tonal,var(--coloring-color)))]/20
-  text-[var(--coloring-tonal-text,var(--coloring-tonal,var(--coloring-color)))];
-}
-
-@utility coloring-text {
-  @apply text-[var(--coloring-text,var(--coloring-color))];
-}
-
-@utility coloring-outline {
-  border-width: var(--coloring-outline-width, 0.125rem);
-  @apply border-[var(--coloring-border,var(--coloring-outline,var(--coloring-color)))];
-  @apply text-[var(--coloring-outline,var(--coloring-color))];
-}
-
-@utility coloring-tonal-outline {
-  @apply coloring-tonal;
-  border-width: var(--coloring-outline-width, 0.125rem);
-  @apply border-[var(--coloring-border,var(--coloring-outline,var(--coloring-color)))];
-}
-
 @layer utilities {
+  [data-coloring-mode="interactive"] {
+    position: var(--coloring-position-override, relative);
+  }
+
   [data-coloring-mode="static"],
   [data-coloring-mode="interactive"] {
-  position: var(--coloring-position-override, relative);
-
   --coloring-color: var(--coloring-base);
   --coloring-on-color: var(--coloring-on-base);
   --coloring-accent: var(--coloring-base);
@@ -108,11 +84,6 @@
   &[data-color="neutral"] {
     --coloring-base: var(--color-neutral);
     --coloring-on-base: var(--color-on-neutral);
-  }
-
-  &[data-color="description"] {
-    --coloring-base: var(--color-description);
-    --coloring-on-base: var(--color-on-surface);
   }
 
   &[data-color="surface"] {
@@ -167,7 +138,6 @@
 
   &[data-coloring-style="foreground"] {
     --coloring-foreground: var(--coloring-color);
-    background-color: transparent;
     color: var(--coloring-foreground);
   }
 

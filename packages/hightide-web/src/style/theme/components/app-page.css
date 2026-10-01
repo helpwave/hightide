@@ -119,7 +119,7 @@
   }
 
   .app-page-main-spacer {
-    @apply min-h-16;
+    @apply min-h-4;
   }
 
   .app-page-navigation-item-label {

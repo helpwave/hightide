@@ -66,6 +66,7 @@ and adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 - Components are grouped into `layout`, `interaction`, `data-input`, and `visualization`. Feature folders such as `chat` and `branding` use the same grouping
 - `ChatMessageComposer` implements `InputInterface` and lives in `chat/data-input`
 - `properties` is its own component folder. A folder that holds one aggregate uses that aggregate's name, including `Drawer`, `PopUp`, and `Table`. Stories follow the same folders
+- `Combobox` implements `InputInterface` and lives in `data-input`. Its parts are `Combobox.Root`, `Combobox.Input`, `Combobox.List`, `Combobox.Option`, `Combobox.Context`, `Combobox.Provider`, and `Combobox.Consumer`
 - `Select` and `MultiSelect` values are no longer `T | null`. An empty selection is omitted
 - Readonly `.input` text, border, and focus use 80% opacity
 - `Carousel` is a compound component: `Carousel.Root`, `Carousel.Container`, `Carousel.Slide`, `Carousel.Arrows`, `Carousel.FadeLayover`, `Carousel.Stepper`, `Carousel.Context`, and `Carousel.Consumer`. The combined `Carousel` still composes them from `children`, `hintNext`, `arrows`, `dots`, and `blurColor`
@@ -97,7 +98,7 @@ and adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 - `isModal` on `Modal`. A modal is always a modal
 - `backgroundClassName` and `containerClassName` on `Modal`. Use `backgroundProps` and `containerProps`
 - `ConfirmDialog`, `DiscardChangesDialog`, `InputDialog`, `LanguageDialog`, and `ThemeDialog`
-
+- `coloring-*` classNames in favor of the new coloring data attributes
 
 ## [0.17.2] - 2026-09-23
 

@@ -1,7 +1,6 @@
 import type { Meta, StoryObj } from '@storybook/nextjs-vite'
 import { action } from 'storybook/actions'
-import { Combobox } from '../../../src/components/interaction/Combobox/Combobox'
-import { ComboboxOption } from '../../../src/components/interaction/Combobox/ComboboxOption'
+import { Combobox } from '../../../src/components/data-input/Combobox/Combobox'
 
 const options = [
   { value: 'apple', label: 'Apple' },
@@ -29,11 +28,13 @@ export const combobox: Story = {
   args: {
     id: undefined,
     children: options.map(({ value, label }) => (
-      <ComboboxOption key={value} value={value} label={label}>
+      <Combobox.Option key={value} value={value} label={label}>
         {label}
-      </ComboboxOption>
+      </Combobox.Option>
     )),
     onItemClick: action('onItemClick'),
+    onValueChange: action('onValueChange'),
+    onEditComplete: action('onEditComplete'),
   },
   render: (args) => (
     <div className="w-80 flex flex-col gap-2">

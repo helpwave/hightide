@@ -1,9 +1,11 @@
-import { type ComponentProps, forwardRef, useCallback } from 'react'
-import { Input } from '../../data-input/input/Input'
+import type { InputHTMLAttributes, KeyboardEvent } from 'react'
+import { forwardRef, useCallback } from 'react'
 import { useHightideTranslation } from '@helpwave/hightide-utils/context/translation'
+
+import { Input } from '../input/Input'
 import { useComboboxContext } from './ComboboxContext'
 
-export type ComboboxInputProps = Omit<ComponentProps<typeof Input>, 'value'>
+export type ComboboxInputProps = Omit<InputHTMLAttributes<HTMLInputElement>, 'value'>
 
 export const ComboboxInput = forwardRef<HTMLInputElement, ComboboxInputProps>(
   function ComboboxInput(props, ref) {
@@ -12,7 +14,7 @@ export const ComboboxInput = forwardRef<HTMLInputElement, ComboboxInputProps>(
     const { highlightNext, highlightPrevious, highlightFirst, highlightLast, highlightedId, selectOption } = context
 
     const handleKeyDown = useCallback(
-      (event: React.KeyboardEvent<HTMLInputElement>) => {
+      (event: KeyboardEvent<HTMLInputElement>) => {
         props.onKeyDown?.(event)
         switch (event.key) {
         case 'ArrowDown':
@@ -50,6 +52,10 @@ export const ComboboxInput = forwardRef<HTMLInputElement, ComboboxInputProps>(
         ref={ref}
         value={context.search.searchQuery}
         onValueChange={context.search.setSearchQuery}
+        invalid={context.invalid}
+        disabled={props.disabled ?? context.disabled}
+        readOnly={props.readOnly ?? context.readOnly}
+        required={props.required ?? context.required}
         onKeyDown={handleKeyDown}
         placeholder={props.placeholder ?? translation('search')}
         role="combobox"

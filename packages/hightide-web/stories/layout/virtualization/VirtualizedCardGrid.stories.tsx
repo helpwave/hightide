@@ -35,7 +35,7 @@ const fetchPage = async (pageIndex: number): Promise<Item[]> => {
 }
 
 const ItemCard = ({ item }: { item: Item }) => (
-  <div className="surface coloring-solid rounded-lg p-4 flex-col-2 h-full">
+  <div className="rounded-lg p-4 flex-col-2 h-full">
     <div className="flex-row-2 items-center justify-between">
       <span className="typography-title-sm truncate">{item.name}</span>
       <Chip>{item.status}</Chip>
