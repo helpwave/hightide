@@ -5,7 +5,6 @@ import { FillerCell } from './FillerCell'
 import React from 'react'
 import { useTableStateWithoutSizingContext } from './TableContext'
 import clsx from 'clsx'
-import { ColoringUtils } from '../../../utils/coloring'
 import { PropsUtil } from '../../../utils/propsUtil'
 import { Visibility } from '../Visibility'
 
@@ -57,7 +56,6 @@ export const TableBody = React.memo(function TableBodyVisual() {
               className={clsx('table-body-filler-row')}
               onClick={() => onFillerRowClick?.(index, table)}
               data-clickable={PropsUtil.dataAttributes.bool(!!onFillerRowClick)}
-              {...ColoringUtils.dataColoringMode(onFillerRowClick ? 'interactive' : undefined)}
             >
               {columns.map((column) => {
                 if(!column) return

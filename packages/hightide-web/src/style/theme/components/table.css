@@ -57,22 +57,12 @@
     @apply px-3 py-2.5 flex-row-1 items-center truncate;
   }
 
-  .table-body-row {
+  .table-body-row,
+  .table-body-filler-row {
     &[data-clickable] {
       @apply hover:cursor-pointer;
       &:hover {
          background-color: color-mix(in oklch, var(--color-on-surface) var(--coloring-state-hover), transparent);
-      }
-    }
-  }
-
-  .table-body-filler-row {
-    @apply hover:cursor-not-allowed;
-    &[data-clickable] {
-      @apply hover:cursor-pointer;
-
-      &[data-coloring-mode="interactive"]:hover {
-        background-color: color-mix(in oklch, var(--color-on-surface) var(--coloring-state-hover), transparent);
       }
     }
   }

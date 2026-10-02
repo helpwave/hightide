@@ -56,7 +56,7 @@ export const Checkbox = ({
   })
 
   const interactive = !disabled && !readOnly
-  const indicatorSize: IconSize = size === 'sm' ? 'sm' : size === 'lg' ? 'lg' : 'md'
+  const indicatorSize: IconSize = size === 'sm' ? 'sm' : size === 'lg' ? 'md' : 'sm'
 
   return (
     <div

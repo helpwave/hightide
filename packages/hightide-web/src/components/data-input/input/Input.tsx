@@ -24,7 +24,7 @@ const defaultEditCompleteOptions: EditCompleteOptionsResolved = {
   delay: 2500
 }
 
-export type InputInterface<In, Out extends In = In> = {
+export type InputInterface<In, Out = In> = {
   value?: In,
   initialValue?: In,
   onValueChange?: (value: Out) => void,
