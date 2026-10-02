@@ -62,7 +62,7 @@ export const ChatAttachmentMessageBubble = ({
           aria-label={downloadLabel}
           onClick={onDownload}
           {...ColoringUtils.build({
-            color: 'surface-inverse',
+            color: direction === 'outgoing' ? 'primary-inverse' : 'surface-inverse',
             mode: 'interactive',
             coloringStyle: 'foreground'
           })}

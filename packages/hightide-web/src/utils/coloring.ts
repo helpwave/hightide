@@ -14,6 +14,7 @@ export type ColoringColorVariant = typeof coloringColorVariants[number]
 
 export const coloringColors = [
   'primary',
+  'primary-inverse',
   'secondary',
   'positive',
   'warning',

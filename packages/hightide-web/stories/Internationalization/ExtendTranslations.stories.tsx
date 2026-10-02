@@ -3,7 +3,7 @@ import type {
   StoryObj
 } from '@storybook/nextjs-vite'
 
-import { LanguageSelect } from '../../src/components/layout/Modal/LanguageModal'
+import { LanguageSelect } from '../../src/components/layout/Modal/premade/LanguageModal'
 import { HightideProvider } from '../../src/global-contexts/HightideProvider'
 import { HightideConfigUtils } from '../../src/global-contexts/hightide-config/HightideConfigUtils'
 import {

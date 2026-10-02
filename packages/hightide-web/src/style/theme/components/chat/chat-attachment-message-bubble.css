@@ -4,7 +4,7 @@
   }
 
   .chat-attachment-message-content {
-    @apply flex-row-3 items-center w-full rounded-md px-2 py-2 text-left;
+    @apply flex-row-3 items-center w-full rounded-md px-2 pr-4 py-2 text-left;
   }
 
   button.chat-attachment-message-content {

@@ -1,4 +1,4 @@
-import type { HTMLAttributes, ReactNode } from 'react'
+import type { CSSProperties, HTMLAttributes, ReactNode } from 'react'
 import { forwardRef, useCallback, useEffect, useId, useMemo, useRef, useState } from 'react'
 import { CalendarIcon, X } from 'lucide-react'
 import clsx from 'clsx'
@@ -111,10 +111,18 @@ export const DateTimeInput = forwardRef<HTMLDivElement, DateTimeInputProps>(func
 
   const hasClear = !required && allowClear && !readOnly && !disabled && state !== null
   const hasTimePicker = !readOnly
-  const hasActions = hasClear || hasTimePicker || actions.length > 0
+  const actionCount = useMemo(() => {
+    let count = 0
+    if(hasClear) count++
+    if(hasTimePicker) count++
+    count += actions.length
+    return count
+  }, [actions.length, hasClear, hasTimePicker])
+  const hasActions = actionCount > 0
+
 
   return (
-    <div {...containerProps} className={clsx('relative w-full', containerProps?.className)}>
+    <div {...containerProps} className={clsx('date-time-input-container', containerProps?.className)}>
       <div
         {...props}
         ref={ReactUtils.assingRefsBuilder([controlRef, forwardedRef])}
@@ -129,11 +137,16 @@ export const DateTimeInput = forwardRef<HTMLDivElement, DateTimeInputProps>(func
           }
         }}
 
-        className={clsx('date-time-input', props.className)}
+        className={clsx('date-time-input input-element', props.className)}
         data-value={PropsUtil.dataAttributes.bool(!!state)}
         data-has-actions={PropsUtil.dataAttributes.bool(hasActions)}
         {...PropsUtil.dataAttributes.interactionStates({ disabled, readOnly, invalid, required })}
-        {...PropsUtil.aria.interactionStates({ disabled, readOnly, invalid, required }, props)}>
+        {...PropsUtil.aria.interactionStates({ disabled, readOnly, invalid, required }, props)}
+        style={{
+          '--action-count': actionCount,
+          ...props?.style
+        } as CSSProperties}
+      >
         <DateTimeField
           ref={fieldRef}
           value={toZoned(state)}
@@ -149,7 +162,7 @@ export const DateTimeInput = forwardRef<HTMLDivElement, DateTimeInputProps>(func
           aria-labelledby={props['aria-labelledby']}
           aria-describedby={props['aria-describedby']}
         />
-        <div className="flex-row-1 items-center">
+        <div className="data-time-actions-container">
           {actions}
           <Visibility isVisible={hasClear}>
             <IconButton

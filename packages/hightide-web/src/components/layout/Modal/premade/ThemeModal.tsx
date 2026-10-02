@@ -2,13 +2,13 @@ import { type PropsWithChildren, type ReactNode } from 'react'
 import clsx from 'clsx'
 import { useHightideTranslation } from '@helpwave/hightide-utils/context/translation'
 
-import { useLocalization } from '../../../global-contexts/localization/forward-exports'
-import { useTheme } from '../../../global-contexts/theme/ThemeContext'
-import { Button } from '../../interaction/Button'
-import type { SelectProps } from '../../data-input/Select/SelectComponent'
-import { Select } from '../../data-input/Select/Select'
-import type { ModalProps } from './Modal'
-import { Modal } from './Modal'
+import { useLocalization } from '../../../../global-contexts/localization/forward-exports'
+import { useTheme } from '../../../../global-contexts/theme/ThemeContext'
+import { Button } from '../../../interaction/Button'
+import type { SelectProps } from '../../../data-input/Select/SelectComponent'
+import { Select } from '../../../data-input/Select/Select'
+import type { ModalProps } from '../Modal'
+import { Modal } from '../Modal'
 
 export type ThemeSelectProps = Omit<SelectProps<string | null>, 'value' | 'children'>
 
@@ -71,7 +71,7 @@ export const ThemeModal = ({
   onClose,
   titleOverwrite,
   descriptionOverwrite,
-  contentProps,
+  panelProps: contentProps,
   ...props
 }: PropsWithChildren<ThemeModalProps>) => {
   const translation = useHightideTranslation()
@@ -82,7 +82,7 @@ export const ThemeModal = ({
       titleElement={titleOverwrite ?? translation('pThemes', { count: 1 })}
       description={descriptionOverwrite ?? translation('chooseTheme')}
       onClose={onClose}
-      contentProps={{
+      panelProps={{
         ...contentProps,
         className: clsx('w-80', contentProps?.className),
       }}

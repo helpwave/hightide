@@ -46,7 +46,7 @@ export const MultiSelectChipDisplayTrigger = forwardRef<
     <div
       {...props}
       ref={ReactUtils.assingRefsBuilder([innerRef, ref])}
-      className={clsx('multi-select-chip-display-container', props.className)}
+      className={clsx('multi-select-chip-display-container input-element', props.className)}
       data-value={context.value.length > 0 ? '' : undefined}
       data-disabled={disabled ? '' : undefined}
       data-readonly={readOnly ? '' : undefined}
@@ -57,14 +57,13 @@ export const MultiSelectChipDisplayTrigger = forwardRef<
     >
       <div
         onClick={() => {
-          console.log('clicked')
           if (!hasInteractions) return
           context.toggleIsOpen()
         }}
         className="multi-select-chip-display-button"
       />
       {selectedOptions.map((opt) => (
-        <div key={opt.value.id} {...ColoringUtils.build({ color: 'surface-variant' })} className="multi-select-chip-display-chip">
+        <div key={opt.value.id} {...ColoringUtils.build({ color: 'neutral' })} className="multi-select-chip-display-chip">
           {opt.display}
           <IconButton
             tooltip={translation('remove')}
@@ -75,7 +74,7 @@ export const MultiSelectChipDisplayTrigger = forwardRef<
             size="sm"
             color="negative"
             variant="foreground"
-            className="flex-row-0 items-center size-7 p-1"
+            className="multi-select-chip-display-chip-icon-button"
             icon={XIcon}
           />
         </div>
@@ -98,7 +97,7 @@ export const MultiSelectChipDisplayTrigger = forwardRef<
           }
         }}
         tooltip={translation('changeSelection')}
-        size="md"
+        size="sm"
         color="neutral"
         aria-invalid={invalid}
         aria-disabled={disabled}

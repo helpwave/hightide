@@ -1,4 +1,5 @@
 @import "./general.css";
+@import "./input-element.css";
 @import "./pressable.css";
 @import "./button.css";
 @import "./tooltip.css";
@@ -9,7 +10,7 @@
 @import "./list-item.css";
 @import "./divider.css";
 @import "./chip.css";
-@import "./input-elements.css";
+@import "./input.css";
 @import "./toggleable-intput.css";
 @import "./table.css";
 @import "./scrollbar.css";

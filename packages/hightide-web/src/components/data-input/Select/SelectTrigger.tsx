@@ -89,7 +89,7 @@ const SelectTriggerImpl = forwardRef<
           break
         }
       }}
-      className={clsx('select-button', props.className)}
+      className={clsx('select-button input-element', props.className)}
       data-value={hasValue ? '' : undefined}
       data-disabled={disabled ? '' : undefined}
       data-readonly={readOnly ? '' : undefined}

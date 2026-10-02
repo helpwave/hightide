@@ -1,6 +1,6 @@
 import { action } from 'storybook/actions'
 import type { Meta, StoryObj } from '@storybook/nextjs-vite'
-import { InsideLabelInput } from '../../../src/components/data-input/input/InsideLabelInput'
+import { InsideLabelInput } from '../../src/components/data-input/input/InsideLabelInput'
 import { clsx } from 'clsx'
 
 const meta = {

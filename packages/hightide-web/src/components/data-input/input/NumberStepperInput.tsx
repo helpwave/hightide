@@ -120,6 +120,7 @@ export const NumberStepperInput = forwardRef<HTMLInputElement, NumberStepperInpu
       disabled={disabled || readOnly}
       tooltip={translation('increaseValue')}
       tooltipProps={{ alignment: layout === 'row' ? 'bottom' : 'top', options: { avoidOverlap: false } }}
+      data-layout={layout === 'col' ? 'col' : 'row'}
       className={clsx('number-stepper-input-button', plusButtonClassName)}
       onPointerDown={() => start('button', 1)}
       onPointerUp={() => stop('button', 1)}
@@ -138,6 +139,7 @@ export const NumberStepperInput = forwardRef<HTMLInputElement, NumberStepperInpu
       disabled={disabled || readOnly}
       tooltip={translation('decreaseValue')}
       tooltipProps={{ alignment: 'bottom', options: { avoidOverlap: false } }}
+      data-layout={layout === 'col' ? 'col' : 'row'}
       className={clsx('number-stepper-input-button', minusButtonClassName)}
       onPointerDown={() => start('button', -1)}
       onPointerUp={() => stop('button', -1)}

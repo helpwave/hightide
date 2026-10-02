@@ -3,10 +3,6 @@
     @apply flex-col-2;
   }
 
-  .combobox-input {
-    @apply input-element rounded-md;
-  }
-
   .combobox-list {
     @apply flex-col-1 overflow-y-auto;
   }

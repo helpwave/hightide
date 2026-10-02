@@ -25,12 +25,14 @@
     }
   }
 
-  .modal-content {
-    @apply flex-col-2 p-4 bg-overlay-background text-overlay-text rounded-xl shadow-hw-bottom max-h-[calc(100vh_-_2rem)];
-    max-width: calc(min(100vw - 1rem, 60rem));
-    max-height: calc(min(100vh - 1rem, 60rem));
+  .modal-panel {
+    @apply flex-col-0 bg-overlay-background text-overlay-text rounded-xl max-h-[calc(100vh_-_2rem)] overflow-hidden;
     min-width: 20rem;
     min-height: 10rem;
+    
+    /* mobile */
+    max-width: calc(min(100vw - 1rem, 60rem));
+    max-height: calc(min(100vh - 1rem, 60rem));
 
     @variant tablet {
       max-width: calc(min(100vw - 2rem, 80rem));
@@ -64,8 +66,18 @@
     }
   }
 
+  .modal-title {
+    @apply typography-title-lg mr-11;
+    @apply p-2 tablet:p-3 desktop:p-4 pb-0 tablet:pb-0 desktop:pb-0;
+  }
+
+  .modal-content {
+    @apply flex flex-col-0 grow overflow-auto;
+    @apply p-2 tablet:p-3 desktop:p-4 pt-0 tablet:pt-0 desktop:pt-0;
+  }
+
   .modal-actions {
-    @apply flex-col-4 mt-3;
+    @apply flex-col-2 mt-2;
 
     @variant tablet {
       @apply flex-row-4 justify-end;

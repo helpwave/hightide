@@ -37,23 +37,18 @@
 
   --spacing-element-xs: calc(7 * var(--spacing));
   --spacing-element-sm: calc(9 * var(--spacing));
+  /* This should always be at least 44px on standard settings */
   --spacing-element-md: calc(
-    11 * var(--spacing)
-  ); /* This should always be at least 44px on standard settings */
-  --spacing-element-lg: calc(13 * var(--spacing));
+    12 * var(--spacing)
+  ); 
+  --spacing-element-lg: calc(15 * var(--spacing));
+  --spacing-element-xl: calc(18 * var(--spacing));
 
-  --spacing-element-padding-xs: calc(
-    (var(--spacing-element-xs) - 4 * var(--spacing)) / 2
-  );
-  --spacing-element-padding-sm: calc(
-    (var(--spacing-element-sm) - 6 * var(--spacing)) / 2
-  );
-  --spacing-element-padding-md: calc(
-    (var(--spacing-element-md) - 6 * var(--spacing)) / 2
-  );
-  --spacing-element-padding-lg: calc(
-    (var(--spacing-element-lg) - 8 * var(--spacing)) / 2
-  );
+  --spacing-element-padding-xs: calc(2 / 4 * var(--spacing));
+  --spacing-element-padding-sm: calc(4 / 4 * var(--spacing));
+  --spacing-element-padding-md: calc(6 / 4 * var(--spacing));
+  --spacing-element-padding-lg: calc(10 / 4 * var(--spacing));
+  --spacing-element-padding-xl: calc(14 / 4 * var(--spacing));
 
   --spacing-element-padding-direction-xs: calc(
     var(--spacing-element-padding-xs) * 1.5
@@ -66,5 +61,8 @@
   );
   --spacing-element-padding-direction-lg: calc(
     var(--spacing-element-padding-lg) * 3
+  );
+  --spacing-element-padding-direction-xl: calc(
+    var(--spacing-element-padding-xl) * 3
   );
 }

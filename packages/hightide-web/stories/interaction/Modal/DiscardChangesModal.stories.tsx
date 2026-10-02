@@ -1,6 +1,6 @@
 import type { Meta, StoryObj } from '@storybook/nextjs-vite'
 import { action } from 'storybook/actions'
-import { DiscardChangesModal } from '../../../src/components/layout/Modal/DiscardChangesModal'
+import { DiscardChangesModal } from '../../../src/components/layout/Modal/premade/DiscardChangesModal'
 
 const meta: Meta = {
   component: DiscardChangesModal,

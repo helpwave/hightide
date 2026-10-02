@@ -9,8 +9,8 @@
 
   .chat-message-composer-input {
     @apply leading-[var(--text-base--line-height)] resize-none overflow-y-auto;
-    @apply bg-surface-variant text-on-surface p-3 rounded-md;
-    @apply min-w-0  min-h-11 grow;
+    @apply bg-surface-variant text-on-surface p-3.5 rounded-md;
+    @apply min-w-0  min-h-element-md grow;
   }
 
   .chat-message-composer-send-button {

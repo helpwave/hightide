@@ -34,7 +34,7 @@ export const FileInputMenu = ({
       onClose={() => context.setIsOpen(false)}
       titleElement={translation('selectFiles')}
       description={translation('dropFilesHere')}
-      contentProps={{
+      panelProps={{
         ...props,
         'className': clsx('file-input-menu', className),
         'data-file-drag': context.isDragging ? '' : undefined,

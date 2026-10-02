@@ -61,6 +61,11 @@
     --coloring-on-base: var(--color-on-primary);
   }
 
+   &[data-color="primary-inverse"] {
+    --coloring-base: var(--color-on-primary);
+    --coloring-on-base: var(--color-primary);
+  }
+
   &[data-color="secondary"] {
     --coloring-base: var(--color-secondary);
     --coloring-on-base: var(--color-on-secondary);

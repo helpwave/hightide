@@ -1,6 +1,6 @@
 import type { Meta, StoryObj } from '@storybook/nextjs-vite'
 import { action } from 'storybook/actions'
-import { ConfirmModal } from '../../../src/components/layout/Modal/ConfirmModal'
+import { ConfirmModal } from '../../../src/components/layout/Modal/premade/ConfirmModal'
 
 
 const meta: Meta = {

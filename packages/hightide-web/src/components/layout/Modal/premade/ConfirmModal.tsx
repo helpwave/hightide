@@ -1,11 +1,10 @@
 import type { PropsWithChildren } from 'react'
-import clsx from 'clsx'
 import { useHightideTranslation } from '@helpwave/hightide-utils/context/translation'
 
-import type { ButtonColor } from '../../interaction/Button'
-import { Button } from '../../interaction/Button'
-import type { ModalProps } from './Modal'
-import { Modal } from './Modal'
+import type { ButtonColor } from '../../../interaction/Button'
+import { Button } from '../../../interaction/Button'
+import type { ModalProps } from '../Modal'
+import { Modal } from '../Modal'
 
 export type ConfirmModalType = 'positive' | 'negative' | 'neutral' | 'primary'
 
@@ -32,7 +31,6 @@ export const ConfirmModal = ({
   onDecline,
   confirmType = 'positive',
   buttonOverwrites,
-  contentProps,
   isShowingDecline: _isShowingDecline,
   requireAnswer: _requireAnswer,
   ...restProps
@@ -50,10 +48,6 @@ export const ConfirmModal = ({
     <Modal
       {...restProps}
       onClose={onCancel}
-      contentProps={{
-        ...contentProps,
-        className: clsx('justify-between', contentProps?.className),
-      }}
     >
       <div className="flex-col-2 grow">
         {children}

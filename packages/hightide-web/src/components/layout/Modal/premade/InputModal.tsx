@@ -1,5 +1,5 @@
-import type { InputProps } from '../../data-input/input/Input'
-import { Input } from '../../data-input/input/Input'
+import type { InputProps } from '../../../data-input/input/Input'
+import { Input } from '../../../data-input/input/Input'
 import type { ConfirmModalProps } from './ConfirmModal'
 import { ConfirmModal } from './ConfirmModal'
 

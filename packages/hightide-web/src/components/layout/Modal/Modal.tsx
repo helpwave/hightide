@@ -10,8 +10,7 @@ import { ModalCloseButton } from './ModalCloseButton'
 import type { ModalCloseButtonProps } from './ModalCloseButton'
 import { ModalContainer } from './ModalContainer'
 import type { ModalContainerProps } from './ModalContainer'
-import { ModalContent } from './ModalContent'
-import type { ModalContentProps, ModalPosition } from './ModalContent'
+import { ModalPanel, type ModalPanelProps, type ModalPosition } from './ModalPanel'
 import { ModalContext } from './ModalContext'
 import { ModalDescription } from './ModalDescription'
 import type { ModalDescriptionProps } from './ModalDescription'
@@ -19,6 +18,7 @@ import { ModalOpener } from './ModalOpener'
 import { ModalRoot } from './ModalRoot'
 import { ModalTitle } from './ModalTitle'
 import type { ModalTitleProps } from './ModalTitle'
+import { ModalContent, type ModalContentProps } from './ModalContent'
 
 export type { ModalPosition }
 
@@ -32,6 +32,7 @@ export type ModalProps = {
   children?: ReactNode,
   containerProps?: Omit<ModalContainerProps, 'children' | 'isOpen' | 'onClose' | 'isClosable' | 'hasDescription' | 'contentId'>,
   backgroundProps?: ModalBackgroundProps,
+  panelProps?: Omit<ModalPanelProps, 'children'>,
   contentProps?: Omit<ModalContentProps, 'children'>,
   titleProps?: Omit<ModalTitleProps, 'children'>,
   descriptionProps?: Omit<ModalDescriptionProps, 'children'>,
@@ -48,6 +49,7 @@ const ModalComponent = forwardRef<HTMLDivElement, ModalProps>(function Modal({
   isClosable = true,
   containerProps,
   backgroundProps,
+  panelProps,
   contentProps,
   titleProps,
   descriptionProps,
@@ -60,25 +62,27 @@ const ModalComponent = forwardRef<HTMLDivElement, ModalProps>(function Modal({
       onClose={onClose}
       isClosable={isClosable}
       hasDescription={!!description}
-      contentId={contentProps?.id}
+      contentId={panelProps?.id}
       className={clsx(containerProps?.className)}
     >
       <ModalBackground {...backgroundProps} />
-      <ModalContent
-        {...contentProps}
+      <ModalPanel
+        {...panelProps}
         ref={forwardedRef}
         position={position}
-        className={clsx(contentProps?.className)}
+        className={clsx(panelProps?.className)}
       >
         <ModalTitle {...titleProps}>
           {titleElement}
         </ModalTitle>
-        <ModalDescription {...descriptionProps}>
-          {description}
-        </ModalDescription>
-        <ModalCloseButton {...closeButtonProps} />
-        {children}
-      </ModalContent>
+        <ModalContent {...contentProps}>
+          <ModalDescription {...descriptionProps}>
+            {description}
+          </ModalDescription>
+          <ModalCloseButton {...closeButtonProps} />
+          {children}
+        </ModalContent>
+      </ModalPanel>
     </ModalContainer>
   )
 })
@@ -87,7 +91,7 @@ const Modal = Object.assign(ModalComponent, {
   Root: ModalRoot,
   Container: ModalContainer,
   Background: ModalBackground,
-  Content: ModalContent,
+  Content: ModalPanel,
   Title: ModalTitle,
   Description: ModalDescription,
   CloseButton: ModalCloseButton,

@@ -91,7 +91,7 @@ const MultiSelectTriggerImpl = forwardRef<
           break
         }
       }}
-      className={clsx('multi-select-button', props.className)}
+      className={clsx('multi-select-button input-element', props.className)}
       data-value={hasValue ? '' : undefined}
       data-disabled={disabled ? '' : undefined}
       data-readonly={readOnly ? '' : undefined}

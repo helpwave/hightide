@@ -17,6 +17,10 @@
   }
 
   .number-stepper-input-button {
-    @apply shrink-0 w-full;
+    @apply shrink-0;
+
+    &[data-layout="col"] {
+      @apply min-w-15;
+    }
   }
 }

@@ -4,6 +4,7 @@ import { useHightideTranslation } from '@helpwave/hightide-utils/context/transla
 
 import { Input } from '../input/Input'
 import { useComboboxContext } from './ComboboxContext'
+import clsx from 'clsx'
 
 export type ComboboxInputProps = Omit<InputHTMLAttributes<HTMLInputElement>, 'value'>
 
@@ -63,6 +64,7 @@ export const ComboboxInput = forwardRef<HTMLInputElement, ComboboxInputProps>(
         aria-controls={context.config.ids.listbox}
         aria-activedescendant={context.highlightedId ?? undefined}
         aria-autocomplete="list"
+        className={clsx('combobox-input', props.className)}
       />
     )
   }

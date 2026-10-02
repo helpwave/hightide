@@ -31,6 +31,7 @@ and adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 - `--coloring-state-hover` and `--coloring-state-press`
 - `--appearance-subtle` (`70%`)
 - `text-description`, which sets the text color from the active foreground and background
+- Added a `ModalPanel` component for the modal panel
 
 ### Changed
 
@@ -77,6 +78,9 @@ and adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 - `Modal` content max width is `calc(min(100vw - 1rem, 60rem))` by default, `calc(min(100vw - 2rem, 80rem))` from the tablet breakpoint, and `calc(min(100vw - 4rem, 120rem))` from the desktop breakpoint
 - `Modal` content min height is `calc(min(64rem, 100vh - 1rem))` by default, `calc(min(64rem, 100vh - 2rem))` from the tablet breakpoint, and `calc(min(64rem, 100vh - 4rem))` from the desktop breakpoint
 - `ConfirmModal` and `DiscardChangesModal` action buttons stack in a column below the tablet breakpoint
+- `input-element` to a component className instead of a tailwind utility
+- default element sizes to match hightide-design
+- updated `Modal` parts stylings
 
 ### Removed
 

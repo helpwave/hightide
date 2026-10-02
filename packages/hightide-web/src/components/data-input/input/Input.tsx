@@ -111,7 +111,7 @@ export const Input = forwardRef<HTMLInputElement, InputProps>(function Input({
         setValue(value)
       }}
 
-      className={clsx('input', props.className)}
+      className={clsx('input input-element', props.className)}
       data-value={PropsUtil.dataAttributes.bool(!!value)}
       {...PropsUtil.dataAttributes.interactionStates({ ...props, invalid })}
 

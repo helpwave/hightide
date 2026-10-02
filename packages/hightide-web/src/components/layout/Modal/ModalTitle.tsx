@@ -20,7 +20,7 @@ export function ModalTitle({
     <div
       {...props}
       id={context.ids.title}
-      className={clsx('typography-title-lg mr-10', props.className)}
+      className={clsx('modal-title', props.className)}
     >
       {children}
     </div>

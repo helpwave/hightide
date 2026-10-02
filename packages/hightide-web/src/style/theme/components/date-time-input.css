@@ -1,6 +1,11 @@
 @layer components {
+  .date-time-input-container {
+    @apply relative w-full;
+  }
+
+
   .date-time-input {
-    @apply input-element flex-row-2 items-center justify-between w-full px-3 h-element-md rounded-md;
+    @apply flex-row-2 items-center justify-between w-full px-3 h-element-md rounded-md;
 
     &:focus-within {
       box-shadow: var(--focus-box-shadow);
@@ -8,7 +13,7 @@
     }
 
     &[data-has-actions] {
-      @apply pr-0.5;
+      padding-inline-end: calc(var(--spacing) * (3 + var(--action-count, 0) * 9))
     }
   }
 
@@ -29,7 +34,10 @@
   }
 
   .date-time-separator {
-    @apply px-px;
+  }
+
+  .data-time-actions-container {
+    @apply absolute right-1 flex-row-1 items-center;
   }
 
   .date-time-input-dialog-popup {

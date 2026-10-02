@@ -1,5 +1,5 @@
 import type { Meta, StoryObj  } from '@storybook/nextjs-vite'
-import { ThemeModal } from '../../../src/components/layout/Modal/ThemeModal'
+import { ThemeModal } from '../../../src/components/layout/Modal/premade/ThemeModal'
 
 const meta: Meta = {
   component: ThemeModal,

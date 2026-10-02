@@ -72,7 +72,7 @@ export const NumberInput = forwardRef<HTMLInputElement, NumberInputProps>(functi
       data-value={PropsUtil.dataAttributes.bool(Number.isFinite(value))}
       {...PropsUtil.dataAttributes.interactionStates({ disabled, invalid, readOnly, required })}
       {...PropsUtil.aria.interactionStates({ disabled, invalid, readOnly, required }, props)}
-      className={clsx('number-input number-input-field', className)}
+      className={clsx('input-element number-input', className)}
       style={{
         ...style,
         '--number-input-approximate-max-characters': approximateMaxCharacters,

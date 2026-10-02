@@ -1,5 +1,5 @@
 import type { Meta, StoryObj } from '@storybook/nextjs-vite'
-import { LanguageModal } from '../../../src/components/layout/Modal/LanguageModal'
+import { LanguageModal } from '../../../src/components/layout/Modal/premade/LanguageModal'
 
 const meta: Meta = {
   component: LanguageModal,

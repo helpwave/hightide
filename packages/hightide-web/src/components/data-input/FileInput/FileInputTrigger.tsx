@@ -57,7 +57,7 @@ const FileInputTriggerImpl = forwardRef<HTMLDivElement, FileInputTriggerProps>(f
           event.preventDefault()
         }
       }}
-      className={clsx('file-input-trigger', props.className)}
+      className={clsx('file-input-trigger input-element', props.className)}
       data-value={hasFiles ? '' : undefined}
       data-disabled={disabled ? '' : undefined}
       data-readonly={readOnly ? '' : undefined}

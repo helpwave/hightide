@@ -24,7 +24,7 @@ export function ModalCloseButton({
     <Visibility isVisible={context.isClosable}>
       <IconButton
         tooltip={translation('closeDialog')}
-        size="md"
+        size="sm"
         color="neutral"
         variant="foreground"
         onClick={context.onClose}
