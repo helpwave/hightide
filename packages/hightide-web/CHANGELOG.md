@@ -12,6 +12,26 @@ and adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 - `ExpandableHeader` `triggerProps` for the header toggle button
 - `ExpandableContent` `isClosingOnClick` to collapse when the content is clicked
 - `NavigationItemList` `onClose` so Escape on items can close the parent menu
+- Subpath package exports: `@helpwave/hightide/components`, `@helpwave/hightide/global-contexts`, `@helpwave/hightide/hooks`, and `@helpwave/hightide/utils`, each with types
+- `Pressable` for colored buttons, with `coloringStyle` (`filled` | `foreground`), `colorVariant` (`normal` | `tonal` | `transparent`), `bordered`, `elevated`, and `processingIndicator`
+- `Button` and `IconButton` `variant`: `elevated`, `filled`, `tonal`, `outlined` (`Button` only), and `foreground`
+- `surfaceInverse` button color
+- `Icon` for a sized icon element (`xs` through `xl`)
+- `Divider` with `direction` `horizontal` or `vertical`
+- `ListItem`, `ListActionItem`, and `ListNavigationItem` (`href`, `onClick`, or `LinkComponent`; external links show an external icon)
+- Compound `Expandable`: `Expandable.Root`, `Expandable.Trigger` (render prop with toggle props), `Expandable.Content`, `Expandable.Context`, and `Expandable.Consumer`
+- `ExpandableSection`, `ExpandableSectionHeader`, and `ExpandableSectionContent` for the previous combined expandable layout
+- Compound `Avatar`: `Avatar.Root`, `Avatar.Image`, `Avatar.Fallback`, `Avatar.Name`, `Avatar.StatusIndicator`, and `Avatar.Context`. The combined `Avatar` accepts `status`, `hasStatusIndicator`, and slot props
+- Compound `AvatarGroup`: `AvatarGroup.Container`, `AvatarGroup.Overlap`, and `AvatarGroup.AdditionalText`
+- Compound `WheelPicker`: `WheelPicker.Root`, `WheelPicker.Option`, `WheelPicker.Bar`, and `WheelPicker.Context`, with `value` / `defaultValue`, `onValueChange`, `onLoop`, `isLooping`, and `visibleRows`
+- `DateWheelPicker`, `TimeWheelPicker`, and `DateTimeWheelPicker`
+- `ChatAttachmentMessageBubble`, a `ChatMessageBubble` specialization for a file name, metadata, and optional download action
+- `ColoringUtils` with `build` (defaults: mode `static`, color variant `normal`, coloring style `filled`) and setters `dataColor`, `dataColoringMode`, `dataColorVariant`, `dataColoringStyle`, `dataBordered`, and `dataElevated`
+- Coloring attributes `data-coloring-mode` (`static` | `interactive`), `data-color`, `data-color-variant`, `data-coloring-style`, `data-bordered`, and `data-elevated`. Hover (8%) and press (16%) state layers apply only when mode is `interactive`
+- `--coloring-state-hover` and `--coloring-state-press`
+- `--appearance-subtle` (`70%`)
+- `text-description`, which sets the text color from the active foreground and background
+- Added a `ModalPanel` component for the modal panel
 
 ### Changed
 
@@ -21,10 +41,68 @@ and adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 - `FAQSection` uses `isClosingOnClick` instead of container toggle
 - `Navigation` handles Escape on the focused control instead of a capturing menu handler
 - `MultiSelectChipDisplayTrigger` uses an overlay click target so chip remove buttons do not need to stop propagation
+- The package is `"type": "module"` and no longer publishes a root `.` export. Import from the subpath exports above
+- Component styling uses class names instead of `data-name`
+- `Button` and `IconButton` take `variant` instead of `coloringStyle` (`solid`, `outline`, `text`, `tonal`, `tonal-outline`). `Button` children are a string, with `leading` and `trailing` icon components. Processing shows a spinner in place of an icon
+- `Card` is a sized container. Title, description, leading, and trailing content are composed by the caller
+- `NavigationItemData` is a link, a group, or a label. A link cannot also have child items. External links render an external icon, and nested groups can force-mount up to a depth
+- `Expandable` is the compound primitive. The previous combined component is `ExpandableSection`
+- `DatePicker` is `CalendarDatePicker` and `DayPicker` is `CalendarDayPicker`. Date, year-month, and time selection use wheel pickers. `DateTimePicker` `timeInputProps` configures `TimeWheelPicker`
+- Interactive color no longer uses dedicated hover tokens. Hover and press are a foreground state layer, or the same mix on elements that cannot paint a pseudo-element (native inputs and table rows)
+- Interactive controls no longer animate color transitions
+- `ChatMessageBubble` requires `direction` and takes `timestamp` as a `Date` and `status` (`sending` | `sent` | `received` | `read`), matching native. String children render as message text; other children render inside the bubble
+- `ChatMessageBubble` uses static coloring (`primary` outgoing, `neutral` incoming). Its timestamp and status icon use `text-description`
+- Palette colors are `oklch`, with the hex value declared first so older browsers keep a color. The gray scale uses even lightness steps
+- `color-mix` interpolates in `oklch` (coloring, focus, inputs, tables, properties, and the process-model active fill)
+- Description text is no longer a fixed gray. `text-description` mixes `--coloring-foreground` (otherwise `--color-on-surface`) into `--coloring-color` (otherwise `--color-surface`) at `--appearance-subtle`
+- Dark theme background is `gray-800`, surface is `gray-700`, surface variant is `gray-750`, and primary stays `purple-500`
+- Coloring custom properties start as `initial` instead of `transparent`
+- `Select` and `MultiSelect` show the search field when the option count is at least `searchableThreshold` (default `6`)
+- `Select` and `MultiSelect` menu options use interactive foreground coloring with `surface-inverse` instead of a primary highlight
+- Input elements no longer set coloring data attributes. `Select` and `MultiSelect` triggers use the input hover and press background
+- Clicking a looped `WheelPicker` value selects it, including the repeated value past the end of the list
+- `DateTimePickerDialog` centers its wheels horizontally
+- `date-time-input-dialog-popup` sets `data-time-format` (`12h` or `24h`). A 12-hour `dateTime` popup uses a larger tablet minimum width
+- Value callbacks use `InputInterface` on `Input`, including optional `initialValue`, `invalid`, `disabled`, `readOnly`, and `required`. Form fields keep `FormFieldDataHandling` for their own required value props
+- Components are grouped into `layout`, `interaction`, `data-input`, and `visualization`. Feature folders such as `chat` and `branding` use the same grouping
+- `ChatMessageComposer` implements `InputInterface` and lives in `chat/data-input`
+- `properties` is its own component folder. A folder that holds one aggregate uses that aggregate's name, including `Drawer`, `PopUp`, and `Table`. Stories follow the same folders
+- `Combobox` implements `InputInterface` and lives in `data-input`. Its parts are `Combobox.Root`, `Combobox.Input`, `Combobox.List`, `Combobox.Option`, `Combobox.Context`, `Combobox.Provider`, and `Combobox.Consumer`
+- `Select` and `MultiSelect` values are no longer `T | null`. An empty selection is omitted
+- Readonly `.input` text, border, and focus use 80% opacity
+- `Carousel` is a compound component: `Carousel.Root`, `Carousel.Container`, `Carousel.Slide`, `Carousel.Arrows`, `Carousel.FadeLayover`, `Carousel.Stepper`, `Carousel.Context`, and `Carousel.Consumer`. The combined `Carousel` still composes them from `children`, `hintNext`, `arrows`, `dots`, and `blurColor`
+- `Modal` is a compound component: `Modal.Root`, `Modal.Container`, `Modal.Background`, `Modal.Content`, `Modal.Title`, `Modal.Description`, `Modal.CloseButton`, `Modal.Opener`, `Modal.Context`, and `Modal.Consumer`. The combined `Modal` takes `titleElement`, `description`, `position`, `isClosable`, and slot props `containerProps`, `backgroundProps`, `contentProps`, `titleProps`, `descriptionProps`, and `closeButtonProps`
+- `isClosable` (default `true`) hides the close button and ignores close requests when `false`
+- `Modal.Container` closes on Escape when the event default has not been prevented
+- `ConfirmDialog` is `ConfirmModal`, `DiscardChangesDialog` is `DiscardChangesModal`, `InputDialog` is `InputModal`, `LanguageDialog` is `LanguageModal`, and `ThemeDialog` is `ThemeModal`
+- `Modal` content max width is `calc(min(100vw - 1rem, 60rem))` by default, `calc(min(100vw - 2rem, 80rem))` from the tablet breakpoint, and `calc(min(100vw - 4rem, 120rem))` from the desktop breakpoint
+- `Modal` content min height is `calc(min(64rem, 100vh - 1rem))` by default, `calc(min(64rem, 100vh - 2rem))` from the tablet breakpoint, and `calc(min(64rem, 100vh - 4rem))` from the desktop breakpoint
+- `ConfirmModal` and `DiscardChangesModal` action buttons stack in a column below the tablet breakpoint
+- `input-element` to a component className instead of a tailwind utility
+- default element sizes to match hightide-design
+- updated `Modal` parts stylings
 
 ### Removed
 
 - `ExpandableRoot`'s `allowContainerToggle`
+- Root import `@helpwave/hightide` (`src/index.ts`)
+- `ActionCard`, `NavigationCard`, `AvatarWithStatus`, and `AvatarWithLabel`
+- `ScrollPicker`
+- `TimeInput`
+- `ExpandableHeader`
+- `coloringStyle` values `solid`, `outline`, `text`, and `tonal-outline` on `Button` and `IconButton`
+- CSS class `coloring` and the hover color tokens `--color-primary-hover`, `--color-secondary-hover`, `--color-positive-hover`, `--color-warning-hover`, `--color-negative-hover`, `--color-surface-hover`, `--color-neutral-hover`, `--color-neutral-text-hover`, and `--color-neutral-outline-hover` (light and dark)
+- `ChatMessageCard` and `ChatAttachmentCard`. Structured messages are composed with `ChatMessageBubble`; file messages use `ChatAttachmentMessageBubble`. `ChatMessageBubble` `readReceipt` is replaced by `status`
+- Fixed `--color-description` tokens (`gray-600` in light, `gray-400` in dark)
+- `showSearch` on `Select` and `MultiSelect`
+- Standalone `CarouselTabs` and `CarouselSlide`. Use `Carousel.Stepper` and `Carousel.Slide`
+- Unused `Carousel` prop `overScrollThreshold`
+- `Dialog`, `DialogRoot`, and `DialogOpenerWrapper`. Use `Modal`
+- CSS classes `dialog-container`, `dialog-background`, and `dialog-content`. Use `modal-container`, `modal-background`, and `modal-content`
+- `isModal` on `Modal`. A modal is always a modal
+- `backgroundClassName` and `containerClassName` on `Modal`. Use `backgroundProps` and `containerProps`
+- `ConfirmDialog`, `DiscardChangesDialog`, `InputDialog`, `LanguageDialog`, and `ThemeDialog`
+- `coloring-*` classNames in favor of the new coloring data attributes
 
 ## [0.17.2] - 2026-09-23
 

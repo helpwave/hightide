@@ -2,8 +2,8 @@ import type { Meta, StoryObj } from '@storybook/nextjs-vite'
 import { action } from 'storybook/actions'
 import { useState } from 'react'
 
-import { Button } from '../../../src/components/user-interaction/Button'
-import { Input } from '../../../src/components/user-interaction/input/Input'
+import { Button } from '../../../src/components/interaction/Button'
+import { Input } from '../../../src/components/data-input/input/Input'
 import { useThrottle } from '@helpwave/hightide-utils/hooks'
 
 type StoryArgs = {
@@ -52,7 +52,7 @@ function ThrottleDemo({ throttleMs }: StoryArgs) {
     <div className="flex w-full max-w-md flex-col gap-8">
       <Input
         value={inputValue}
-        onValueChange={handleInputChange}
+        onValueUpdate={handleInputChange}
         placeholder="Type to trigger throttled updates"
       />
       <Button onClick={handleClick}>

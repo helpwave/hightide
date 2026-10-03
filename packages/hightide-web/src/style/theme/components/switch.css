@@ -1,11 +1,12 @@
 @layer components {
-  [data-name="switch"] {
+  .switch {
     @apply flex-col-0 items-center justify-center;
     @apply h-7 w-12 rounded-full border-2 p-1;
-    transition: var(--coloring-transitions), var(--focus-transitions);
+    transition: var(--focus-transitions);
 
-    &:not([data-disabled]) {
+    &:not([data-disabled]):not([data-readonly]) {
       @apply hover:cursor-pointer;
+      --coloring-foreground: var(--color-primary);
     }
 
     &[data-disabled] {
@@ -13,37 +14,27 @@
     }
 
     &:not([data-disabled]) {
-      [data-invalid] {
+      &[data-invalid] {
         @apply border-negative;
-
-        &:hover {
-          @apply border-negative-hover bg-negative/10;
-        }
+        --coloring-foreground: var(--color-negative);
       }
 
       &:not([data-invalid]) {
         @apply bg-input-background border-border;
 
-        &:hover {
-          @apply border-primary-hover bg-primary/10;
-        }
-
         &[data-active] {
           @apply bg-primary border-primary;
-
-          &:hover {
-            @apply bg-primary-hover border-primary-hover;
-          }
+          --coloring-foreground: var(--color-on-primary);
         }
       }
     }
   }
 
-  [data-name="switch-track"] {
+  .switch-track {
     @apply w-full h-full rounded-full flex items-center relative;
   }
 
-  [data-name="switch-thumb"] {
+  .switch-thumb {
     @apply rounded-full transition-all duration-[var(--animation-duration-in,250ms)] h-3 w-3;
     @apply absolute top-1/2 -translate-y-1/2 left-0.5;
 

@@ -1,8 +1,8 @@
 import type { ReactNode } from 'react'
-import type { ExpandableProps } from './Expandable'
-import { ExpandableContent, ExpandableHeader, ExpandableRoot } from './Expandable'
+import type { ExpandableSectionProps } from './ExpandableSection'
+import { ExpandableSection } from './ExpandableSection'
 
-export type FAQItem = Pick<ExpandableProps, 'isExpanded' | 'className'> & {
+export type FAQItem = Pick<ExpandableSectionProps, 'isExpanded' | 'className'> & {
   title: string,
   content: ReactNode,
 }
@@ -19,16 +19,13 @@ export const FAQSection = ({
     <ul className="flex-col-4">
       {entries.map(({ title, content, ...restProps }, index) => (
         <li key={index}>
-          <ExpandableRoot
+          <ExpandableSection
             {...restProps}
+            trigger={title}
+            contentProps={{ isClosingOnClick: true }}
           >
-            <ExpandableHeader>
-              {title}
-            </ExpandableHeader>
-            <ExpandableContent isClosingOnClick>
-              {content}
-            </ExpandableContent>
-          </ExpandableRoot>
+            {content}
+          </ExpandableSection>
         </li>
       ))}
     </ul>

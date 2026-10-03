@@ -1,0 +1,71 @@
+import type { InputHTMLAttributes, KeyboardEvent } from 'react'
+import { forwardRef, useCallback } from 'react'
+import { useHightideTranslation } from '@helpwave/hightide-utils/context/translation'
+
+import { Input } from '../input/Input'
+import { useComboboxContext } from './ComboboxContext'
+import clsx from 'clsx'
+
+export type ComboboxInputProps = Omit<InputHTMLAttributes<HTMLInputElement>, 'value'>
+
+export const ComboboxInput = forwardRef<HTMLInputElement, ComboboxInputProps>(
+  function ComboboxInput(props, ref) {
+    const translation = useHightideTranslation()
+    const context = useComboboxContext()
+    const { highlightNext, highlightPrevious, highlightFirst, highlightLast, highlightedId, selectOption } = context
+
+    const handleKeyDown = useCallback(
+      (event: KeyboardEvent<HTMLInputElement>) => {
+        props.onKeyDown?.(event)
+        switch (event.key) {
+        case 'ArrowDown':
+          highlightNext()
+          event.preventDefault()
+          break
+        case 'ArrowUp':
+          highlightPrevious()
+          event.preventDefault()
+          break
+        case 'Home':
+          highlightFirst()
+          event.preventDefault()
+          break
+        case 'End':
+          highlightLast()
+          event.preventDefault()
+          break
+        case 'Enter':
+          if (highlightedId) {
+            selectOption(highlightedId)
+            event.preventDefault()
+          }
+          break
+        default:
+          break
+        }
+      },
+      [props, highlightedId, selectOption, highlightNext, highlightPrevious, highlightFirst, highlightLast]
+    )
+
+    return (
+      <Input
+        {...props}
+        ref={ref}
+        value={context.search.searchQuery}
+        onValueUpdate={context.search.setSearchQuery}
+        invalid={context.invalid}
+        disabled={props.disabled ?? context.disabled}
+        readOnly={props.readOnly ?? context.readOnly}
+        required={props.required ?? context.required}
+        onKeyDown={handleKeyDown}
+        placeholder={props.placeholder ?? translation('search')}
+        role="combobox"
+        aria-expanded={context.visibleOptionIds.length > 0}
+        aria-controls={context.config.ids.listbox}
+        aria-activedescendant={context.highlightedId ?? undefined}
+        aria-autocomplete="list"
+        className={clsx('combobox-input', props.className)}
+      />
+    )
+  }
+)

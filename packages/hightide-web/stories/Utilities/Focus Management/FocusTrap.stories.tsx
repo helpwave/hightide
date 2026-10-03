@@ -1,10 +1,10 @@
 import type { Meta, StoryObj } from '@storybook/nextjs-vite'
 import { useRef, useState } from 'react'
-import { Input } from '../../../src/components/user-interaction/input/Input'
-import { FocusTrapWrapper } from '../../../src/components/utils/FocusTrap'
+import { Input } from '../../../src/components/data-input/input/Input'
+import { FocusTrapWrapper } from '../../../src/components/interaction/FocusTrap'
 import { clsx } from 'clsx'
-import { Dialog } from '../../../src/components/layout/dialog/Dialog'
-import { Button } from '../../../src/components/user-interaction/Button'
+import { Modal } from '../../../src/components/layout/Modal/Modal'
+import { Button } from '../../../src/components/interaction/Button'
 
 type StoryArgs = unknown
 
@@ -24,7 +24,7 @@ export const focusTrap: Story = {
 
     return (
       <>
-        <Dialog
+        <Modal
           isOpen={showDialog}
           titleElement="Dialog 1"
           description="This is the second dialog trap"
@@ -36,8 +36,8 @@ export const focusTrap: Story = {
           <Button onClick={() => setShowDialog(false)} color="negative">
           Close
           </Button>
-        </Dialog>
-        <Dialog
+        </Modal>
+        <Modal
           isOpen={showDialog2}
           titleElement="Dialog 2"
           description="This is the second dialog trap"

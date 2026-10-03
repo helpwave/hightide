@@ -1,0 +1,13 @@
+@layer components {
+  .divider {
+    @apply shrink-0 bg-divider;
+
+    &[data-direction="horizontal"] {
+      @apply h-px w-full;
+    }
+
+    &[data-direction="vertical"] {
+      @apply w-px self-stretch;
+    }
+  }
+}

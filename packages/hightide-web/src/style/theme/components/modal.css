@@ -1,0 +1,100 @@
+@layer components {
+  .modal-container {
+    @apply fixed inset-0 h-screen w-screen;
+    &:not([data-open]) {
+      @apply touch-none pointer-events-none;
+    }
+  }
+
+  .modal-background {
+    @apply fixed inset-0 h-screen w-screen bg-overlay-shadow;
+    animation-fill-mode: forwards;
+
+    &[data-state="opening"] {
+      animation-duration: var(--animation-duration-in);
+    }
+
+    &[data-state="closing"] {
+      animation-duration: var(--animation-duration-out);
+      animation-direction: reverse;
+    }
+
+    &[data-state="opening"],
+    &[data-state="closing"] {
+      animation-name: fade-in;
+    }
+  }
+
+  .modal-panel {
+    @apply flex-col-0 bg-overlay-background text-overlay-text rounded-xl max-h-[calc(100vh_-_2rem)] overflow-hidden;
+    min-width: 20rem;
+    min-height: 10rem;
+    
+    /* mobile */
+    max-width: calc(min(100vw - 1rem, 60rem));
+    max-height: calc(min(100vh - 1rem, 60rem));
+
+    @variant tablet {
+      max-width: calc(min(100vw - 2rem, 80rem));
+      max-height: calc(min(100vh - 2rem, 80rem));
+    }
+
+    @variant desktop {
+      max-width: calc(min(100vw - 4rem, 120rem));
+      max-height: calc(min(100vh - 4rem, 120rem));
+    }
+    animation-timing-function: ease-out;
+    animation-fill-mode: forwards;
+
+    &[data-state="opening"],
+    &[data-state="opened"] {
+      animation-duration: var(--animation-duration-in);
+    }
+    &[data-state="closing"] {
+      animation-duration: var(--animation-duration-out);
+      animation-direction: reverse;
+    }
+    &[data-state="opening"],
+    &[data-state="closing"] {
+      animation-name: pop-in;
+    }
+    &[data-position="top"] {
+      @apply fixed inset-x-0 top-8 mx-auto w-fit;
+    }
+    &[data-position="center"] {
+      @apply fixed inset-0 m-auto w-fit h-fit;
+    }
+  }
+
+  .modal-title {
+    @apply typography-title-lg mr-11;
+    @apply p-2 tablet:p-3 desktop:p-4 pb-0 tablet:pb-0 desktop:pb-0;
+  }
+
+  .modal-content {
+    @apply flex flex-col-0 grow overflow-auto;
+    @apply p-2 tablet:p-3 desktop:p-4 pt-0 tablet:pt-0 desktop:pt-0;
+  }
+
+  .modal-actions {
+    @apply flex-col-2 mt-2;
+
+    @variant tablet {
+      @apply flex-row-4 justify-end;
+    }
+  }
+
+  .modal-actions-button {
+    @apply w-full;
+
+    @variant tablet {
+      @apply w-auto;
+    }
+  }
+
+  .modal-close-button {
+    @apply top-1 right-1;
+    --coloring-position-override: absolute;
+
+  }
+}

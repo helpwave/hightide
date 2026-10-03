@@ -1,0 +1,18 @@
+import type { Meta, StoryObj } from '@storybook/nextjs-vite'
+import { Textarea } from '../../src/components/data-input/Textarea'
+
+const meta = {
+  component: Textarea,
+} satisfies Meta<typeof Textarea>
+
+export default meta
+type Story = StoryObj<typeof meta>;
+
+export const textarea: Story = {
+  args: {
+    initialValue: 'Text',
+    disabled: false,
+    invalid: false,
+    className: 'w-full',
+  },
+}

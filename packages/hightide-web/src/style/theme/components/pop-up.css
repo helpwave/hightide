@@ -1,5 +1,5 @@
-[data-name="pop-up"] {
-    @apply surface coloring-solid rounded-md border-2 border-outline-variant shadow-lg shadow-black/15;
+.pop-up {
+    @apply rounded-md border-2 border-outline-variant shadow-lg shadow-black/15;
     @apply focus-within:border-primary;
 
     transition: 

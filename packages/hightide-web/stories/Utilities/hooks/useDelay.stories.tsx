@@ -1,7 +1,7 @@
 import type { Meta, StoryObj } from '@storybook/nextjs-vite'
 import { action } from 'storybook/actions'
 import { useDelay } from '@helpwave/hightide-utils/hooks'
-import { Button } from '../../../src/components/user-interaction/Button'
+import { Button } from '../../../src/components/interaction/Button'
 
 type StoryArgs = {
   delay: number,
@@ -28,7 +28,7 @@ export const story: Story = {
           {'Press me'}
         </Button>
         <span className="mt-12">{`Has an active timer: ${hasActiveTimer}`}</span>
-        <Button coloringStyle="text" onClick={ clearTimer} color="negative" disabled={!hasActiveTimer}>
+        <Button variant="foreground" onClick={ clearTimer} color="negative" disabled={!hasActiveTimer}>
           {'Clear'}
         </Button>
       </div>
