@@ -4,7 +4,7 @@ import type { IconSize } from '../visualization/Icon'
 import { Icon } from '../visualization/Icon'
 import { useCallback, type HTMLAttributes } from 'react'
 import { Visibility } from '../layout/Visibility'
-import type { InputInterface } from './input/Input'
+import type { InputComponentInterface } from './input/Input'
 import { useControlledState } from '@helpwave/hightide-utils/hooks'
 import { useEventCallbackStabilizer } from '@helpwave/hightide-utils/hooks'
 
@@ -14,7 +14,7 @@ import { PropsUtil } from '../../utils/propsUtil'
 type CheckBoxSize = 'sm' | 'md' | 'lg' | null
 
 export type CheckboxProps = HTMLAttributes<HTMLDivElement>
-  & InputInterface<boolean>
+  & InputComponentInterface<boolean>
   & {
     indeterminate?: boolean,
     size?: CheckBoxSize,
@@ -35,8 +35,8 @@ export const Checkbox = ({
   invalid = false,
   disabled = false,
   readOnly = false,
-  onValueChange,
-  onEditComplete,
+  onValueUpdate: onValueChange,
+  onValueCommit: onEditComplete,
   size = 'md',
   alwaysShowCheckIcon = false,
   isRounded = false,

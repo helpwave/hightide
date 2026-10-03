@@ -75,7 +75,7 @@ const AgeFilterPopUp = ({ value, onValueChange, onRemove, name, onClose: close, 
           <Select<[number, number]>
             triggerProps={{ id: ids.range }}
             value={parameter.numberMin !== undefined && parameter.numberMax !== undefined ? [parameter.numberMin, parameter.numberMax] : null}
-            onValueChange={(newRange) => {
+            onValueUpdate={(newRange) => {
               onValueChange({ ...value, parameter: { ...parameter, numberMin: newRange[0], numberMax: newRange[1] } })
             }}
             compareFunction={(a, b) => {
@@ -101,7 +101,7 @@ const AgeFilterPopUp = ({ value, onValueChange, onRemove, name, onClose: close, 
           value={parameter.numberValue?.toString() ?? ''}
           type="number"
           placeholder="0"
-          onValueChange={text => {
+          onValueUpdate={text => {
             const num = Number(text)
             onValueChange({
               dataType: 'number',

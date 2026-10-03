@@ -19,7 +19,7 @@ const renderField = (props?: Partial<DateTimeFieldProps>) => {
           locale="de-DE"
           {...props}
           value={value}
-          onValueChange={(next) => {
+          onValueUpdate={(next) => {
             onValueChange(next)
             setValue(next)
           }}
@@ -139,7 +139,7 @@ describe('DateTimeField', () => {
     })
     try {
       const onEditComplete = jest.fn()
-      renderField({ onEditComplete })
+      renderField({ onValueCommit: onEditComplete })
       const [day, month] = screen.getAllByRole('spinbutton')
 
       act(() => day.focus())
@@ -201,7 +201,7 @@ describe('DateTimeInput controlled value', () => {
         <DateTimeInput
           mode="date"
           value={value}
-          onValueChange={(next) => {
+          onValueUpdate={(next) => {
             onValueChange(next)
             setValue(next)
           }}
@@ -314,7 +314,7 @@ describe('DateTimeInput clear button', () => {
             required={props.required}
             allowClear={props.allowClear}
             value={value}
-            onValueChange={(next) => {
+            onValueUpdate={(next) => {
               onValueChange(next)
               setValue(next)
             }}

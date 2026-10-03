@@ -4,7 +4,7 @@ import { closestMatch, range, type DateTimePrecision } from '@helpwave/hightide-
 import { useControlledState } from '@helpwave/hightide-utils/hooks'
 
 import { useDateTimeFormat } from '../../../global-contexts/localization/forward-exports'
-import type { InputInterface } from '../input/Input'
+import type { InputComponentInterface } from '../input/Input'
 import { Visibility } from '../../layout/Visibility'
 import { WheelPicker, type WheelPickerLoopEvent } from '../../interaction/WheelPicker'
 import type {
@@ -94,7 +94,7 @@ function set12HourDisplay(date: Date, displayHour: number, loopingBehaviour: Whe
   date.setHours(normalizedHour + (nextIsPM ? 12 : 0))
 }
 
-export interface TimeWheelPickerProps extends InputInterface<Date> {
+export interface TimeWheelPickerProps extends InputComponentInterface<Date> {
   is24HourFormat?: boolean,
   isLooping?: boolean,
   loopingBehaviour?: WheelLoopingBehaviour,
@@ -136,8 +136,8 @@ function NumericWheel({
 export const TimeWheelPicker = ({
   value: controlledValue,
   initialValue = new Date(),
-  onValueChange,
-  onEditComplete,
+  onValueUpdate: onValueChange,
+  onValueCommit: onEditComplete,
   is24HourFormat: is24HourFormatOverride,
   minuteIncrement = '1min',
   secondIncrement = '1s',

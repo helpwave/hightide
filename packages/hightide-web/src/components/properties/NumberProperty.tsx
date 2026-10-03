@@ -43,7 +43,7 @@ export const NumberProperty = ({
             type="number"
             readOnly={readOnly}
             placeholder={translation('value')}
-            onValueChange={(value) => {
+            onValueUpdate={(value) => {
               const numberValue = parseFloat(value)
               if (isNaN(numberValue)) {
                 onValueClear?.()
@@ -51,7 +51,7 @@ export const NumberProperty = ({
                 onValueChange?.(numberValue)
               }
             }}
-            onEditComplete={(value) => {
+            onValueCommit={(value) => {
               const numberValue = parseFloat(value)
               if (isNaN(numberValue)) {
                 onValueClear?.()

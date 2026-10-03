@@ -107,12 +107,12 @@ export const selectWithUser: Story = {
       <Select<User>
         {...args}
         value={value}
-        onValueChange={(v) => {
-          args.onValueChange?.(v)
+        onValueUpdate={(v) => {
+          args.onValueUpdate?.(v)
           setValue(v)
         }}
-        onEditComplete={(v) => {
-          args.onEditComplete?.(v)
+        onValueCommit={(v) => {
+          args.onValueCommit?.(v)
           setValue(v)
         }}
       />
@@ -138,8 +138,8 @@ export const selectComposed: Story = {
       searchableThreshold={args.searchableThreshold}
       readOnly={args.readOnly}
       required={args.required}
-      onValueChange={args.onValueChange}
-      onEditComplete={args.onEditComplete}
+      onValueUpdate={args.onValueUpdate}
+      onValueCommit={args.onValueCommit}
     >
       <Select.Trigger placeholder="Select…" />
       <Select.Content>

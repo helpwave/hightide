@@ -66,11 +66,11 @@ export const dateTimeInput: Story = {
           <DateTimeInput
             {...args}
             value={value}
-            onValueChange={(next) => {
+            onValueUpdate={(next) => {
               args.onValueChange?.(next)
               setValue(next)
             }}
-            onEditComplete={(next) => {
+            onValueCommit={(next) => {
               args.onEditComplete?.(next)
               setValue(next)
             }}

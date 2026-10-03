@@ -3,14 +3,14 @@ import type { HTMLAttributes, ReactNode } from 'react'
 import { forwardRef, useCallback, useId } from 'react'
 import { Checkbox, type CheckboxProps } from './Checkbox'
 import { PropsUtil } from '../../utils/propsUtil'
-import type { InputInterface } from './input/Input'
+import type { InputComponentInterface } from './input/Input'
 import { useControlledState } from '@helpwave/hightide-utils/hooks'
 import { useEventCallbackStabilizer } from '@helpwave/hightide-utils/hooks'
 
 type LabelledCheckboxCheckPosition = 'left' | 'right'
 
 export type LabelledCheckboxProps = Omit<HTMLAttributes<HTMLDivElement>, 'children'>
-  & InputInterface<boolean>
+  & InputComponentInterface<boolean>
   & Pick<CheckboxProps, 'indeterminate' | 'size' | 'alwaysShowCheckIcon' | 'isRounded'>
   & {
     label: ReactNode,
@@ -25,8 +25,8 @@ export type LabelledCheckboxProps = Omit<HTMLAttributes<HTMLDivElement>, 'childr
 export const LabelledCheckbox = forwardRef<HTMLDivElement, LabelledCheckboxProps>(function LabelledCheckbox({
   value: controlledValue,
   initialValue = false,
-  onValueChange,
-  onEditComplete,
+  onValueUpdate: onValueChange,
+  onValueCommit: onEditComplete,
   indeterminate,
   required = false,
   invalid = false,

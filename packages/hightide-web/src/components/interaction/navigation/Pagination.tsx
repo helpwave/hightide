@@ -67,14 +67,14 @@ export const Pagination = ({
           min={1}
           max={pageCount}
           disabled={noPages}
-          onValueChange={value => {
+          onValueUpdate={value => {
             if (value) {
               setValue(MathUtil.clamp(Number(value), 1, pageCount).toString())
             } else {
               setValue(value)
             }
           }}
-          onEditComplete={value => {
+          onValueCommit={value => {
             changePage(MathUtil.clamp(Number(value) - 1, 0, pageCount - 1))
           }}
           editCompleteOptions={{ delay: 800 }}

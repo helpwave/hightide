@@ -6,7 +6,7 @@ import type { DateTimePickerProps } from '../date/DateTimePicker'
 import { useHightideTranslation } from '@helpwave/hightide-utils/context/translation'
 import { useDateTimeFormat, useLocalization } from '../../../global-contexts/localization/forward-exports'
 import { Visibility } from '../../layout/Visibility'
-import type { InputInterface } from './Input'
+import type { InputComponentInterface } from './Input'
 import { DateTimePickerDialog } from '../date/DateTimePickerDialog'
 import { useControlledState } from '@helpwave/hightide-utils/hooks'
 import { PopUp } from '../../layout/PopUp/PopUp'
@@ -18,7 +18,7 @@ import { PropsUtil } from '../../../utils/propsUtil'
 
 export interface DateTimeInputProps extends
   Omit<HTMLAttributes<HTMLDivElement>, 'defaultValue' | 'onChange'>,
-  InputInterface<Date | null>,
+  InputComponentInterface<Date | null>,
   Pick<DateTimePickerProps, 'start' | 'end' | 'weekStart' | 'markToday' | 'is24HourFormat' | 'minuteIncrement' | 'secondIncrement' | 'millisecondIncrement' | 'precision'>
 {
   allowRemove?: boolean,
@@ -26,7 +26,7 @@ export interface DateTimeInputProps extends
   mode?: DateTimeFormat,
   timeZone?: string,
   containerProps?: HTMLAttributes<HTMLDivElement>,
-  pickerProps?: Omit<DateTimePickerProps, keyof InputInterface<Date> | 'mode' | 'start' | 'end' | 'weekStart' | 'markToday' | 'is24HourFormat' | 'minuteIncrement' | 'secondIncrement' | 'millisecondIncrement' | 'precision'>,
+  pickerProps?: Omit<DateTimePickerProps, keyof InputComponentInterface<Date> | 'mode' | 'start' | 'end' | 'weekStart' | 'markToday' | 'is24HourFormat' | 'minuteIncrement' | 'secondIncrement' | 'millisecondIncrement' | 'precision'>,
   outsideClickCloses?: boolean,
   onDialogOpeningChange?: (isOpen: boolean) => void,
   actions?: ReactNode[],
@@ -36,8 +36,8 @@ export const DateTimeInput = forwardRef<HTMLDivElement, DateTimeInputProps>(func
   id: inputId,
   value,
   initialValue = null,
-  onValueChange,
-  onEditComplete,
+  onValueUpdate: onValueChange,
+  onValueCommit: onEditComplete,
   allowRemove = false,
   allowClear = true,
   containerProps,
@@ -157,8 +157,8 @@ export const DateTimeInput = forwardRef<HTMLDivElement, DateTimeInputProps>(func
           readOnly={readOnly}
           invalid={invalid}
           required={required}
-          onValueChange={(next) => setState(fromZoned(next))}
-          onEditComplete={(next) => onEditComplete?.(fromZoned(next))}
+          onValueUpdate={(next) => setState(fromZoned(next))}
+          onValueCommit={(next) => onEditComplete?.(fromZoned(next))}
           aria-labelledby={props['aria-labelledby']}
           aria-describedby={props['aria-describedby']}
         />
@@ -218,8 +218,8 @@ export const DateTimeInput = forwardRef<HTMLDivElement, DateTimeInputProps>(func
         <DateTimePickerDialog
           value={toZoned(dialogValue)}
           allowRemove={allowRemove}
-          onValueChange={(value) => setDialogValue(fromZoned(value))}
-          onEditComplete={(value) => {
+          onValueUpdate={(value) => setDialogValue(fromZoned(value))}
+          onValueCommit={(value) => {
             const absolute = fromZoned(value)
             setState(absolute)
             onEditComplete?.(absolute)

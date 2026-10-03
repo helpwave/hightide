@@ -42,8 +42,8 @@ export const multiSelectChipDisplay: Story = {
       searchableThreshold={args.searchableThreshold}
       readOnly={args.readOnly}
       required={args.required}
-      onValueChange={args.onValueChange}
-      onEditComplete={args.onEditComplete}
+      onValueUpdate={args.onValueChange}
+      onValueCommit={args.onEditComplete}
     >
       <MultiSelect.ChipDisplayTrigger />
       <MultiSelect.Content>

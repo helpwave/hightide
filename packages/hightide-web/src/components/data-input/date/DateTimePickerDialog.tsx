@@ -10,13 +10,13 @@ import { IconButton } from '../../interaction/IconButton'
 import { DateWheelPicker } from './DateWheelPicker'
 import { type DateTimeWheelPickerProps } from './DateTimeWheelPicker'
 import { TimeWheelPicker } from './TimeWheelPicker'
-import type { InputInterface } from '../input/Input'
+import type { InputComponentInterface } from '../input/Input'
 import type { DateTimeFormat, Weekday } from '@helpwave/hightide-utils/utils'
 import clsx from 'clsx'
 
 export interface DateTimePickerDialogProps extends
 HTMLAttributes<HTMLDivElement>,
-InputInterface<Date | null>,
+InputComponentInterface<Date | null>,
 Pick<DateTimeWheelPickerProps, 'start' | 'end' | 'isLooping' | 'loopingBehaviour' | 'is24HourFormat' | 'minuteIncrement' | 'secondIncrement' | 'millisecondIncrement' | 'precision'>
 {
   allowRemove?: boolean,
@@ -34,8 +34,8 @@ export const DateTimePickerDialog = ({
   initialValue = null,
   value,
   allowRemove = true,
-  onValueChange,
-  onEditComplete,
+  onValueUpdate: onValueChange,
+  onValueCommit: onEditComplete,
   mode = 'date',
   pickerProps = {},
   start,
@@ -159,8 +159,8 @@ export const DateTimePickerDialog = ({
         {showDate && (
           <DateWheelPicker
             value={pickerState}
-            onValueChange={setPickerState}
-            onEditComplete={setPickerState}
+            onValueUpdate={setPickerState}
+            onValueCommit={setPickerState}
             start={start}
             end={end}
             isLooping={isLooping}
@@ -170,8 +170,8 @@ export const DateTimePickerDialog = ({
         {showTime && (
           <TimeWheelPicker
             value={pickerState}
-            onValueChange={setPickerState}
-            onEditComplete={setPickerState}
+            onValueUpdate={setPickerState}
+            onValueCommit={setPickerState}
             isLooping={isLooping}
             loopingBehaviour={loopingBehaviour}
             is24HourFormat={is24HourFormat}

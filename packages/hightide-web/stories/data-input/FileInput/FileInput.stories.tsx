@@ -92,8 +92,8 @@ export const fileInputComposed: Story = {
       invalid={args.invalid}
       readOnly={args.readOnly}
       maxFiles={args.maxFiles}
-      onValueChange={args.onValueChange}
-      onEditComplete={args.onEditComplete}
+      onValueUpdate={args.onValueChange}
+      onValueCommit={args.onEditComplete}
     >
       <FileInput.Trigger placeholder="Add files…" maxVisualFiles={args.maxVisualFiles} />
       <FileInput.Menu />

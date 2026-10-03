@@ -70,7 +70,7 @@ export const FilterBasePopUp = forwardRef<HTMLDivElement, FilterPopUpBaseProps>(
           <span className="typography-label-sm text-description">{name ?? translation('filter')}</span>
           <Select
             value={operator}
-            onValueChange={(newOperator) => onOperatorChange(newOperator as FilterOperator)}
+            onValueUpdate={(newOperator) => onOperatorChange(newOperator as FilterOperator)}
             triggerProps={{
               className: 'filter-operator-select w-fit flex-row-1 items-center h-element-sm px-2 py-1 rounded-md hover:cursor-pointer font-bold',
               selectedDisplay: (option) => option ? translation(FilterOperatorUtils.getInfo(option.value.value).translationKey as Parameters<typeof translation>[0]) : ''
@@ -150,7 +150,7 @@ export const TextFilterPopUp = forwardRef<HTMLDivElement, FilterPopUpProps>(func
             id={ids.search}
             value={parameter.stringValue ?? ''}
             placeholder={translation('value')}
-            onValueChange={searchText => {
+            onValueUpdate={searchText => {
               onValueChange({
                 dataType: 'text',
                 operator,
@@ -207,7 +207,7 @@ export const NumberFilterPopUp = forwardRef<HTMLDivElement, FilterPopUpProps>(fu
             value={parameter.numberMin?.toString() ?? ''}
             type="number"
             placeholder="0"
-            onValueChange={text => {
+            onValueUpdate={text => {
               const num = Number(text)
               onValueChange({
                 dataType: 'number',
@@ -225,7 +225,7 @@ export const NumberFilterPopUp = forwardRef<HTMLDivElement, FilterPopUpProps>(fu
             value={parameter.numberMax?.toString() ?? ''}
             type="number"
             placeholder="1"
-            onValueChange={text => {
+            onValueUpdate={text => {
               const num = Number(text)
               onValueChange({
                 dataType: 'number',
@@ -242,7 +242,7 @@ export const NumberFilterPopUp = forwardRef<HTMLDivElement, FilterPopUpProps>(fu
           value={parameter.numberValue?.toString() ?? ''}
           type="number"
           placeholder="0"
-          onValueChange={text => {
+          onValueUpdate={text => {
             const num = Number(text)
             onValueChange({
               dataType: 'number',
@@ -297,8 +297,8 @@ export const DateFilterPopUp = forwardRef<HTMLDivElement, FilterPopUpProps>(func
           <DateTimeInput
             id={ids.startDate}
             value={temporaryMinDateValue ?? parameter.dateMin ?? null}
-            onValueChange={setTemporaryMinDateValue}
-            onEditComplete={dateValue => {
+            onValueUpdate={setTemporaryMinDateValue}
+            onValueCommit={dateValue => {
               if (dateValue && parameter.dateMax && dateValue > parameter.dateMax) {
                 if (!parameter.dateMin) {
                   onValueChange({
@@ -333,8 +333,8 @@ export const DateFilterPopUp = forwardRef<HTMLDivElement, FilterPopUpProps>(func
           <DateTimeInput
             id={ids.endDate}
             value={temporaryMaxDateValue ?? parameter.dateMax ?? null}
-            onValueChange={setTemporaryMaxDateValue}
-            onEditComplete={dateValue => {
+            onValueUpdate={setTemporaryMaxDateValue}
+            onValueCommit={dateValue => {
               if (dateValue && parameter.dateMin && dateValue < parameter.dateMin) {
                 if (!parameter.dateMax) {
                   onValueChange({
@@ -370,7 +370,7 @@ export const DateFilterPopUp = forwardRef<HTMLDivElement, FilterPopUpProps>(func
         <DateTimeInput
           id={ids.compareDate}
           value={parameter.dateValue ?? null}
-          onValueChange={compareDate => {
+          onValueUpdate={compareDate => {
             onValueChange({
               dataType: 'date',
               operator,
@@ -432,8 +432,8 @@ export const DatetimeFilterPopUp = forwardRef<HTMLDivElement, FilterPopUpProps>(
             id={ids.startDate}
             mode="dateTime"
             value={temporaryMinDateValue ?? parameter.dateMin ?? null}
-            onValueChange={setTemporaryMinDateValue}
-            onEditComplete={dateValue => {
+            onValueUpdate={setTemporaryMinDateValue}
+            onValueCommit={dateValue => {
               if (dateValue && parameter.dateMax && dateValue > parameter.dateMax) {
                 if (!parameter.dateMin) {
                   onValueChange({
@@ -467,8 +467,8 @@ export const DatetimeFilterPopUp = forwardRef<HTMLDivElement, FilterPopUpProps>(
             id={ids.endDate}
             mode="dateTime"
             value={temporaryMaxDateValue ?? parameter.dateMax ?? null}
-            onValueChange={setTemporaryMaxDateValue}
-            onEditComplete={dateValue => {
+            onValueUpdate={setTemporaryMaxDateValue}
+            onValueCommit={dateValue => {
               if (dateValue && parameter.dateMin && dateValue < parameter.dateMin) {
                 if (!parameter.dateMax) {
                   onValueChange({
@@ -505,7 +505,7 @@ export const DatetimeFilterPopUp = forwardRef<HTMLDivElement, FilterPopUpProps>(
           id={ids.compareDate}
           mode="dateTime"
           value={parameter.dateValue ?? null}
-          onValueChange={compareDate => {
+          onValueUpdate={compareDate => {
             onValueChange({
               dataType: 'dateTime',
               operator,
@@ -587,7 +587,7 @@ export const TagsFilterPopUp = forwardRef<HTMLDivElement, TagsFilterPopUpProps>(
       <Visibility isVisible={needsParameterInput}>
         <MultiSelect
           value={selectedTags}
-          onValueChange={(selected) => {
+          onValueUpdate={(selected) => {
             onValueChange({
               dataType: 'multiTags',
               operator,
@@ -651,7 +651,7 @@ export const TagsSingleFilterPopUp = forwardRef<HTMLDivElement, TagsSingleFilter
       <Visibility isVisible={needsParameterInput && needsMultiSelect}>
         <MultiSelect
           value={selectedTagsMulti}
-          onValueChange={(selected) => {
+          onValueUpdate={(selected) => {
             onValueChange({
               dataType: 'singleTag',
               operator,
@@ -668,7 +668,7 @@ export const TagsSingleFilterPopUp = forwardRef<HTMLDivElement, TagsSingleFilter
       <Visibility isVisible={needsParameterInput && !needsMultiSelect}>
         <Select
           value={selectedTagSingle}
-          onValueChange={(selectedTag) => {
+          onValueUpdate={(selectedTag) => {
             onValueChange({
               dataType: 'singleTag',
               operator,

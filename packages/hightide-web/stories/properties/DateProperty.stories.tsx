@@ -33,11 +33,11 @@ export const dateProperty: Story = {
       <DateProperty
         {...props}
         value={usedDate}
-        onValueChange={(date) => {
+        onValueUpdate={(date) => {
           props.onValueChange?.(date)
           setUsedDate(date)
         }}
-        onEditComplete={(date) => {
+        onValueCommit={(date) => {
           props.onEditComplete?.(date)
           setUsedDate(date)
         }}

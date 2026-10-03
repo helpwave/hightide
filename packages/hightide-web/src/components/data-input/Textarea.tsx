@@ -2,14 +2,14 @@ import type { LabelHTMLAttributes, ReactNode, TextareaHTMLAttributes } from 'rea
 import { forwardRef, useCallback, useId } from 'react'
 import clsx from 'clsx'
 import { useDelay, type UseDelayOptions } from '@helpwave/hightide-utils/hooks'
-import type { InputInterface } from './input/Input'
+import type { InputComponentInterface } from './input/Input'
 import { useControlledState } from '@helpwave/hightide-utils/hooks'
 import { useEventCallbackStabilizer } from '@helpwave/hightide-utils/hooks'
 
 import { PropsUtil } from '../../utils/propsUtil'
 
 export type TextareaProps = Omit<TextareaHTMLAttributes<HTMLTextAreaElement>, 'value'>
-  & InputInterface<string>
+  & InputComponentInterface<string>
   & {
     saveDelayOptions?: UseDelayOptions,
 }
@@ -23,8 +23,8 @@ export const Textarea = forwardRef<HTMLTextAreaElement, TextareaProps>(function 
   value: controlledValue,
   initialValue,
   invalid = false,
-  onValueChange,
-  onEditComplete,
+  onValueUpdate: onValueChange,
+  onValueCommit: onEditComplete,
   saveDelayOptions,
   ...props
 }, ref) {

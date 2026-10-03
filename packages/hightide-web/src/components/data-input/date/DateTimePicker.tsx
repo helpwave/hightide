@@ -5,7 +5,7 @@ import { useControlledState } from '@helpwave/hightide-utils/hooks'
 import clsx from 'clsx'
 
 import { useDateTimeFormat, useLocalization } from '../../../global-contexts/localization/forward-exports'
-import type { InputInterface } from '../input/Input'
+import type { InputComponentInterface } from '../input/Input'
 import type { CalendarDatePickerProps } from './CalendarDatePicker'
 import { CalendarDatePicker } from './CalendarDatePicker'
 import type { TimeWheelPickerProps } from './TimeWheelPicker'
@@ -13,7 +13,7 @@ import { TimeWheelPicker } from './TimeWheelPicker'
 
 export interface DateTimePickerProps extends
 HTMLAttributes<HTMLDivElement>,
-InputInterface<Date>,
+InputComponentInterface<Date>,
 Pick<CalendarDatePickerProps, 'start' | 'end' | 'weekStart' | 'markToday'>,
 Pick<TimeWheelPickerProps, 'is24HourFormat' | 'minuteIncrement' | 'secondIncrement' | 'millisecondIncrement' | 'precision'>
 {
@@ -37,8 +37,8 @@ export const DateTimePicker = ({
   secondIncrement,
   millisecondIncrement,
   precision,
-  onValueChange,
-  onEditComplete,
+  onValueUpdate: onValueChange,
+  onValueCommit: onEditComplete,
   timeInputProps,
   calendarDatePickerProps,
   ...props
@@ -69,8 +69,8 @@ export const DateTimePicker = ({
       millisecondIncrement={millisecondIncrement}
       precision={precision}
       value={value}
-      onValueChange={setValue}
-      onEditComplete={onEditComplete}
+      onValueUpdate={setValue}
+      onValueCommit={onEditComplete}
     />
   )
 
@@ -83,8 +83,8 @@ export const DateTimePicker = ({
         end={end}
         weekStart={weekStart}
         value={value}
-        onValueChange={setValue}
-        onEditComplete={onEditComplete}
+        onValueUpdate={setValue}
+        onValueCommit={onEditComplete}
         timeLabel={timeLabel}
         timePicker={timePicker}
       />
@@ -97,8 +97,8 @@ export const DateTimePicker = ({
         end={end}
         weekStart={weekStart}
         value={value}
-        onValueChange={setValue}
-        onEditComplete={onEditComplete}
+        onValueUpdate={setValue}
+        onValueCommit={onEditComplete}
       />
     )
   } else {

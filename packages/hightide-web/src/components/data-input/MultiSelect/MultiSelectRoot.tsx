@@ -4,7 +4,7 @@ import { MultiSelectContext } from './MultiSelectContext'
 import type { MultiSelectContextType, MultiSelectIconAppearance, MultiSelectOptionType } from './MultiSelectContext'
 import { useMultiSelect } from './useMultiSelect'
 import { DOMUtils } from '../../../utils/dom'
-import type { InputInterface } from '../input/Input'
+import type { InputComponentInterface } from '../input/Input'
 import { PopUpContext } from '../../layout/PopUp/PopUpContext'
 
 export interface MultiSelectIds {
@@ -14,7 +14,7 @@ export interface MultiSelectIds {
   searchInput: string,
 }
 
-export interface MultiSelectRootProps<T> extends InputInterface<T[]> {
+export interface MultiSelectRootProps<T> extends InputComponentInterface<T[]> {
   compareFunction?: (a: T, b: T) => boolean,
   initialIsOpen?: boolean,
   onClose?: () => void,
@@ -26,8 +26,8 @@ export interface MultiSelectRootProps<T> extends InputInterface<T[]> {
 export function MultiSelectRoot<T>({
   children,
   value,
-  onValueChange,
-  onEditComplete,
+  onValueUpdate: onValueChange,
+  onValueCommit: onEditComplete,
   initialValue,
   compareFunction,
   initialIsOpen = false,

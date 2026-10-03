@@ -21,7 +21,7 @@ type ToggleableInputProps = InputProps & {
 export const ToggleableInput = forwardRef<HTMLInputElement, ToggleableInputProps>(function ToggleableInput({
   value: controlledValue,
   initialValue,
-  onValueChange,
+  onValueUpdate: onValueChange,
   initialState = 'display',
   editCompleteOptions,
   ...props
@@ -47,9 +47,9 @@ export const ToggleableInput = forwardRef<HTMLInputElement, ToggleableInputProps
         {...props}
         ref={ReactUtils.assingRefsBuilder([innerRef, forwardedRef])}
         value={value}
-        onValueChange={setValue}
-        onEditComplete={(text) => {
-          props.onEditComplete?.(text)
+        onValueUpdate={setValue}
+        onValueCommit={(text) => {
+          props.onValueCommit?.(text)
           setIsEditing(false)
         }}
         onFocus={event => {

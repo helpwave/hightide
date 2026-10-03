@@ -18,9 +18,9 @@ export const LanguageSelect = ({ ...props }: LanguageSelectProps) => {
     <Select
       {...props}
       value={locale}
-      onValueChange={(language: string) => {
+      onValueUpdate={(language: string) => {
         setLocale(language)
-        props.onValueChange?.(language)
+        props.onValueUpdate?.(language)
       }}
       triggerProps={{
         ...props.triggerProps,

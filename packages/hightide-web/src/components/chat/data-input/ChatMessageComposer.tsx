@@ -5,7 +5,7 @@ import { SendHorizontal } from 'lucide-react'
 import { useControlledState, useEventCallbackStabilizer } from '@helpwave/hightide-utils/hooks'
 
 import { useWindowResizeObserver } from '../../../hooks/useWindowResizeObserver'
-import type { InputInterface } from '../../data-input/input/Input'
+import type { InputComponentInterface } from '../../data-input/input/Input'
 import { IconButton } from '../../interaction/IconButton'
 import { Icon } from '../../visualization/Icon'
 import { PropsUtil } from '../../../utils/propsUtil'
@@ -13,7 +13,7 @@ import { PropsUtil } from '../../../utils/propsUtil'
 const MAX_INPUT_LINES = 7
 
 export type ChatMessageComposerProps = Omit<HTMLAttributes<HTMLDivElement>, 'onChange'>
-  & InputInterface<string>
+  & InputComponentInterface<string>
   & {
     onSend: (value: string) => void,
     placeholder?: string,
@@ -25,8 +25,8 @@ export type ChatMessageComposerProps = Omit<HTMLAttributes<HTMLDivElement>, 'onC
 export const ChatMessageComposer = forwardRef<HTMLDivElement, ChatMessageComposerProps>(function ChatMessageComposer({
   value: controlledValue,
   initialValue,
-  onValueChange,
-  onEditComplete,
+  onValueUpdate: onValueChange,
+  onValueCommit: onEditComplete,
   invalid = false,
   disabled = false,
   readOnly = false,

@@ -1,14 +1,14 @@
 import clsx from 'clsx'
 import { useControlledState } from '@helpwave/hightide-utils/hooks'
 
-import type { InputInterface } from '../input/Input'
+import type { InputComponentInterface } from '../input/Input'
 import type { DateWheelPickerProps } from './DateWheelPicker'
 import { DateWheelPicker } from './DateWheelPicker'
 import type { TimeWheelPickerProps } from './TimeWheelPicker'
 import { TimeWheelPicker } from './TimeWheelPicker'
 
 export type DateTimeWheelPickerProps =
-  InputInterface<Date> &
+  InputComponentInterface<Date> &
   Pick<DateWheelPickerProps, 'start' | 'end' | 'isLooping' | 'loopingBehaviour'> &
   Pick<TimeWheelPickerProps, 'is24HourFormat' | 'minuteIncrement' | 'secondIncrement' | 'millisecondIncrement' | 'precision'> & {
     className?: string,
@@ -19,8 +19,8 @@ export type DateTimeWheelPickerProps =
 export const DateTimeWheelPicker = ({
   value: controlledValue,
   initialValue = new Date(),
-  onValueChange,
-  onEditComplete,
+  onValueUpdate: onValueChange,
+  onValueCommit: onEditComplete,
   start,
   end,
   isLooping,
@@ -49,8 +49,8 @@ export const DateTimeWheelPicker = ({
         end={end}
         isLooping={isLooping}
         loopingBehaviour={loopingBehaviour}
-        onValueChange={setValue}
-        onEditComplete={onEditComplete}
+        onValueUpdate={setValue}
+        onValueCommit={onEditComplete}
       />
       <TimeWheelPicker
         {...timeWheelPickerProps}
@@ -62,8 +62,8 @@ export const DateTimeWheelPicker = ({
         precision={precision}
         isLooping={isLooping}
         loopingBehaviour={loopingBehaviour}
-        onValueChange={setValue}
-        onEditComplete={onEditComplete}
+        onValueUpdate={setValue}
+        onValueCommit={onEditComplete}
       />
     </div>
   )

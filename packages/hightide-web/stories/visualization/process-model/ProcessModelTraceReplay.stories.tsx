@@ -28,7 +28,7 @@ export const processModelTraceReplay: Story = {
           <span>Example model</span>
           <Select
             value={modelId}
-            onValueChange={setModelId}
+            onValueUpdate={setModelId}
           >
             {processModelLibrary.map((entry) => (
               <Select.Option key={entry.id} value={entry.id} label={entry.name} />

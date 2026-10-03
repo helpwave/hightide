@@ -15,8 +15,8 @@ export type DatePropertyProps =
 export const DateProperty = ({
   name,
   value,
-  onValueChange,
-  onEditComplete,
+  onValueUpdate: onValueChange,
+  onValueCommit: onEditComplete,
   onRemove,
   onValueClear,
   required,
@@ -53,8 +53,8 @@ export const DateProperty = ({
           required={required}
           readOnly={readOnly}
           allowClear={false}
-          onValueChange={onValueChange}
-          onEditComplete={onEditComplete}
+          onValueUpdate={onValueChange}
+          onValueCommit={onEditComplete}
           className="property-input flex-row-4 pr-0"
           data-invalid={PropsUtil.dataAttributes.bool(invalid)}
         />

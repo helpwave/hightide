@@ -5,7 +5,7 @@ import { useControlledState } from '@helpwave/hightide-utils/hooks'
 import { useLocalization } from '../../../global-contexts/localization/forward-exports'
 import { useHightideTranslation } from '@helpwave/hightide-utils/context/translation'
 import { SafeGlobals } from '../../../utils/safeGlobals'
-import type { InputInterface } from './Input'
+import type { InputComponentInterface } from './Input'
 import type { DateTimeFormat, DateTimePrecision } from '@helpwave/hightide-utils/utils'
 import type { EditableSegmentType, SegmentEditState } from './dateTimeSegments'
 import {
@@ -28,7 +28,7 @@ import { PropsUtil } from '../../../utils/propsUtil'
 const advanceKeys = ['.', ':', '/', ',', '-', ' ']
 
 export interface DateTimeFieldProps extends
-  InputInterface<Date | null>,
+  InputComponentInterface<Date | null>,
   Omit<HTMLAttributes<HTMLDivElement>, 'defaultValue' | 'onChange'> {
   mode?: DateTimeFormat,
   precision?: DateTimePrecision,
@@ -39,8 +39,8 @@ export interface DateTimeFieldProps extends
 export const DateTimeField = forwardRef<HTMLDivElement, DateTimeFieldProps>(function DateTimeField({
   value: controlledValue,
   initialValue = null,
-  onValueChange,
-  onEditComplete,
+  onValueUpdate: onValueChange,
+  onValueCommit: onEditComplete,
   mode = 'date',
   precision = 'minute',
   is24HourFormat,

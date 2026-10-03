@@ -1,6 +1,6 @@
 import type { Dispatch, ReactNode, RefObject, SetStateAction } from 'react'
 import { createContext, useContext } from 'react'
-import type { InputInterface } from '../input/Input'
+import type { InputComponentInterface } from '../input/Input'
 
 export interface ComboboxOptionType<T = string> {
   id: string,
@@ -51,7 +51,7 @@ export interface ComboboxContextConfig {
   setIds: Dispatch<SetStateAction<ComboboxContextIds>>,
 }
 
-export interface ComboboxContextType<T> extends ComboboxContextInternalState, ComboboxContextComputedState<T>, ComboboxContextActions<T>, Required<Pick<InputInterface<T>, 'invalid' | 'disabled' | 'readOnly' | 'required'>> {
+export interface ComboboxContextType<T> extends ComboboxContextInternalState, ComboboxContextComputedState<T>, ComboboxContextActions<T>, Required<Pick<InputComponentInterface<T>, 'invalid' | 'disabled' | 'readOnly' | 'required'>> {
   value?: T,
   config: ComboboxContextConfig,
   layout: ComboboxContextLayout,

@@ -36,7 +36,7 @@ export const TableWithSelectionProvider = <T,>({
                 <Checkbox
                   value={table?.getIsAllRowsSelected()}
                   indeterminate={table?.getIsSomeRowsSelected()}
-                  onValueChange={value => {
+                  onValueUpdate={value => {
                     const newValue = !!value
                     table?.toggleAllRowsSelected(newValue)
                   }}
@@ -52,7 +52,7 @@ export const TableWithSelectionProvider = <T,>({
           <Checkbox
             disabled={!row.getCanSelect()}
             value={row.getIsSelected()}
-            onValueChange={row.getToggleSelectedHandler()}
+            onValueUpdate={row.getToggleSelectedHandler()}
           />
         )
       },

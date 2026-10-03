@@ -9,7 +9,7 @@ import type { YearMonthPickerProps } from './YearMonthPicker'
 import { YearMonthPicker } from './YearMonthPicker'
 import { useLocalization } from '../../../global-contexts/localization/forward-exports'
 import { Button } from '../../interaction/Button'
-import type { InputInterface } from '../input/Input'
+import type { InputComponentInterface } from '../input/Input'
 import { useControlledState } from '@helpwave/hightide-utils/hooks'
 import { IconButton } from '../../interaction/IconButton'
 import { useHightideTranslation } from '@helpwave/hightide-utils/context/translation'
@@ -17,7 +17,7 @@ import { useHightideTranslation } from '@helpwave/hightide-utils/context/transla
 type DisplayMode = 'yearMonth' | 'day' | 'time'
 
 export interface CalendarDatePickerProps extends
- InputInterface<Date>,
+ InputComponentInterface<Date>,
  Pick<CalendarDayPickerProps, 'markToday' | 'start' | 'end' | 'weekStart'>
  {
   initialDisplay?: DisplayMode,
@@ -38,8 +38,8 @@ export const CalendarDatePicker = ({
   end,
   initialDisplay = 'day',
   weekStart,
-  onValueChange,
-  onEditComplete,
+  onValueUpdate: onValueChange,
+  onValueCommit: onEditComplete,
   yearMonthPickerProps,
   calendarDayPickerProps,
   timeLabel,
@@ -121,11 +121,11 @@ export const CalendarDatePicker = ({
           value={value}
           start={start}
           end={end}
-          onValueChange={newDate => {
+          onValueUpdate={newDate => {
             setValue(newDate)
             setDisplayedMonth(new Date(newDate.getFullYear(), newDate.getMonth(), 1))
           }}
-          onEditComplete={newDate => {
+          onValueCommit={newDate => {
             setDisplayedMonth(new Date(newDate.getFullYear(), newDate.getMonth(), 1))
             onEditComplete?.(newDate)
           }}
@@ -144,8 +144,8 @@ export const CalendarDatePicker = ({
           start={start}
           end={end}
           weekStart={weekStart}
-          onValueChange={setValue}
-          onEditComplete={onEditComplete}
+          onValueUpdate={setValue}
+          onValueCommit={onEditComplete}
           className="calendar-date-picker-content"
         />
       )}

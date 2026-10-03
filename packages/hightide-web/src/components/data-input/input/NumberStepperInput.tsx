@@ -4,7 +4,7 @@ import clsx from 'clsx'
 import { Minus, Plus } from 'lucide-react'
 import { IconButton } from '../../interaction/IconButton'
 import { useHightideTranslation } from '@helpwave/hightide-utils/context/translation'
-import type { InputInterface } from './Input'
+import type { InputComponentInterface } from './Input'
 import { useControlledState } from '@helpwave/hightide-utils/hooks'
 import type { ChangeRateCurveProps, StepperLoopEvent } from '@helpwave/hightide-utils/hooks'
 import { useStepperHold } from '@helpwave/hightide-utils/hooks'
@@ -23,7 +23,7 @@ type ActiveInputState = {
 }
 
 export type NumberStepperInputProps = Omit<InputHTMLAttributes<HTMLInputElement>, 'value' | 'type' | 'min' | 'max' | 'step'>
-  & InputInterface<number>
+  & InputComponentInterface<number>
   & {
     minimum?: number,
     maximum?: number,
@@ -47,8 +47,8 @@ export type NumberStepperInputProps = Omit<InputHTMLAttributes<HTMLInputElement>
 export const NumberStepperInput = forwardRef<HTMLInputElement, NumberStepperInputProps>(function NumberStepperInput({
   value: controlledValue,
   initialValue = 0,
-  onValueChange,
-  onEditComplete,
+  onValueUpdate: onValueChange,
+  onValueCommit: onEditComplete,
   minimum,
   maximum,
   stepSize: step = 1,
@@ -161,8 +161,8 @@ export const NumberStepperInput = forwardRef<HTMLInputElement, NumberStepperInpu
         {...props}
         ref={forwardedRef}
         value={value}
-        onValueChange={setValue}
-        onEditComplete={onEditComplete}
+        onValueUpdate={setValue}
+        onValueCommit={onEditComplete}
         minimum={minimum}
         maximum={maximum}
         approximateMaxCharacters={approximateMaxCharacters}

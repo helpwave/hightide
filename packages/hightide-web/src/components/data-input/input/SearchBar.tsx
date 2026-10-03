@@ -36,8 +36,8 @@ export const SearchBar = ({
       <Input
         {...inputProps}
         value={value}
-        onValueChange={setValue}
-        onEditComplete={onSearch}
+        onValueUpdate={setValue}
+        onValueCommit={onSearch}
         placeholder={inputProps.placeholder ?? translation('search')}
         className={clsx('search-bar-input', inputProps.className)}
       />

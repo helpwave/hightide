@@ -21,8 +21,8 @@ export const ThemeSelect = ({ ...props }: ThemeSelectProps) => {
   return (
     <Select<string | null>
       value={preferredThemeMode}
-      onEditComplete={(value) => {
-        props.onEditComplete?.(value)
+      onValueCommit={(value) => {
+        props.onValueCommit?.(value)
         setTheme(value)
       }}
       iconAppearance="right"

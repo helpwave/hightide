@@ -42,7 +42,7 @@ export const TablePageSizeSelect = ({
     <Select
       {...props}
       value={currentPageSize.toString()}
-      onValueChange={(value) => table.setPageSize(Number(value))}
+      onValueUpdate={(value) => table.setPageSize(Number(value))}
     >
       {pageSizeOptions.map(size => (
         <Select.Option key={size} value={size.toString()} label={size.toString()}/>

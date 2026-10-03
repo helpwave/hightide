@@ -2,14 +2,14 @@ import type { ReactNode, RefObject } from 'react'
 import { useCallback, useId, useMemo, useState } from 'react'
 import { useControlledState, useEventCallbackStabilizer } from '@helpwave/hightide-utils/hooks'
 
-import type { InputInterface } from '../input/Input'
+import type { InputComponentInterface } from '../input/Input'
 import { DOMUtils } from '../../../utils/dom'
 import { ComboboxContext } from './ComboboxContext'
 import type { ComboboxContextConfig, ComboboxContextIds, ComboboxContextLayout, ComboboxContextType, ComboboxOptionType } from './ComboboxContext'
 import type { UseComboboxOptions } from './useCombobox'
 import { useCombobox } from './useCombobox'
 
-export interface ComboboxRootProps<T = string> extends InputInterface<T>, Omit<UseComboboxOptions, 'options'> {
+export interface ComboboxRootProps<T = string> extends InputComponentInterface<T>, Omit<UseComboboxOptions, 'options'> {
   children: ReactNode,
   onItemClick?: (value: T) => void,
 }
@@ -18,8 +18,8 @@ export function ComboboxRoot<T = string>({
   children,
   value,
   initialValue,
-  onValueChange,
-  onEditComplete,
+  onValueUpdate: onValueChange,
+  onValueCommit: onEditComplete,
   invalid = false,
   disabled = false,
   readOnly = false,

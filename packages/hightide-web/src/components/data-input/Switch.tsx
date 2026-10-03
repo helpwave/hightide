@@ -1,13 +1,13 @@
 import clsx from 'clsx'
 import { type HTMLAttributes, useCallback } from 'react'
-import type { InputInterface } from './input/Input'
+import type { InputComponentInterface } from './input/Input'
 import { useControlledState } from '@helpwave/hightide-utils/hooks'
 import { useEventCallbackStabilizer } from '@helpwave/hightide-utils/hooks'
 import { ColoringUtils } from '../../utils/coloring'
 import { PropsUtil } from '../../utils/propsUtil'
 
 export type SwitchProps = HTMLAttributes<HTMLDivElement>
-  & InputInterface<boolean>
+  & InputComponentInterface<boolean>
 
 /**
  * A binary on/off switch
@@ -21,8 +21,8 @@ export const Switch = ({
   invalid = false,
   disabled = false,
   readOnly = false,
-  onValueChange,
-  onEditComplete,
+  onValueUpdate: onValueChange,
+  onValueCommit: onEditComplete,
   ...props
 }: SwitchProps) => {
   const onEditCompleteStable = useEventCallbackStabilizer(onEditComplete)

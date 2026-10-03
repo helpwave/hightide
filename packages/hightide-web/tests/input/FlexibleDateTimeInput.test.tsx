@@ -17,7 +17,7 @@ const renderFlexible = (props: Partial<FlexibleDateTimeInputProps> & { defaultMo
         <FlexibleDateTimeInput
           {...props}
           value={value}
-          onValueChange={(next) => {
+          onValueUpdate={(next) => {
             onValueChange(next)
             setValue(next)
           }}

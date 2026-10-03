@@ -64,7 +64,7 @@ export const processModelActivityNode: Story = {
           <span>Example node</span>
           <Select
             value={exampleId}
-            onValueChange={setExampleId}
+            onValueUpdate={setExampleId}
           >
             {activityNodeExamples.map((item) => (
               <Select.Option key={item.id} value={item.id} label={item.optionLabel} />

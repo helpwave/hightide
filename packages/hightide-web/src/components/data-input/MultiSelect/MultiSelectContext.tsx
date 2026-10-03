@@ -1,6 +1,6 @@
 import type { Dispatch, ReactNode, RefObject, SetStateAction } from 'react'
 import { createContext, useContext } from 'react'
-import type { InputInterface } from '../input/Input'
+import type { InputComponentInterface } from '../input/Input'
 import type { UseMultiSelectFirstHighlightBehavior } from './useMultiSelect'
 
 export type MultiSelectOptionIdentity<T> = {
@@ -23,7 +23,7 @@ export interface MultiSelectContextIds {
   searchInput: string,
 }
 
-export interface MultiSelectContextState<T> extends Required<Pick<InputInterface<T>, 'invalid' | 'disabled' | 'readOnly' | 'required'>> {
+export interface MultiSelectContextState<T> extends Required<Pick<InputComponentInterface<T>, 'invalid' | 'disabled' | 'readOnly' | 'required'>> {
   value: T[],
   options: ReadonlyArray<MultiSelectOptionType<T>>,
   selectedIds: string[],

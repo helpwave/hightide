@@ -16,7 +16,7 @@ export const FlexibleDateTimeInput = forwardRef<HTMLDivElement, FlexibleDateTime
   defaultMode = 'date',
   value: controlledValue,
   initialValue,
-  onValueChange,
+  onValueUpdate: onValueChange,
   fixedTime: fixedTimeOverride,
   timeZone: timeZoneOverride,
   actions = [],
@@ -53,7 +53,7 @@ export const FlexibleDateTimeInput = forwardRef<HTMLDivElement, FlexibleDateTime
       timeZone={timeZone}
       mode={mode}
       value={value}
-      onValueChange={(next) => {
+      onValueUpdate={(next) => {
         setValue(next === null ? null : (mode === 'date' ? toDate(next) : next))
       }}
       actions={[

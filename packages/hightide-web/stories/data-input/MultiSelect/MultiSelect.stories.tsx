@@ -110,12 +110,12 @@ export const multiSelectWithUser: Story = {
         {...args}
         initialValue={initialValue}
         value={value}
-        onValueChange={(v) => {
-          args.onValueChange?.(v)
+        onValueUpdate={(v) => {
+          args.onValueUpdate?.(v)
           setValue(v)
         }}
-        onEditComplete={(v) => {
-          args.onEditComplete?.(v)
+        onValueCommit={(v) => {
+          args.onValueCommit?.(v)
           setValue(v)
         }}
       />
@@ -141,8 +141,8 @@ export const multiSelectComposed: Story = {
       searchableThreshold={args.searchableThreshold}
       readOnly={args.readOnly}
       required={args.required}
-      onValueChange={args.onValueChange}
-      onEditComplete={args.onEditComplete}
+      onValueUpdate={args.onValueUpdate}
+      onValueCommit={args.onValueCommit}
     >
       <MultiSelect.Trigger placeholder="Select…" />
       <MultiSelect.Content>

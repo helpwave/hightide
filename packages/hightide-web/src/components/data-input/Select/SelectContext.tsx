@@ -1,7 +1,7 @@
 import type { Dispatch, ReactNode, RefObject, SetStateAction } from 'react'
 import { createContext, useContext } from 'react'
 import type { UseSelectFirstHighlightBehavior } from './useSelect'
-import type { InputInterface } from '../input/Input'
+import type { InputComponentInterface } from '../input/Input'
 
 export type SelectOptionIdentity<T> = {
   value: T,
@@ -23,7 +23,7 @@ export interface SelectContextIds {
   searchInput: string,
 }
 
-export interface SelectContextState<T> extends Required<Pick<InputInterface<T>, 'invalid' | 'disabled' | 'readOnly' | 'required'>> {
+export interface SelectContextState<T> extends Required<Pick<InputComponentInterface<T>, 'invalid' | 'disabled' | 'readOnly' | 'required'>> {
   selectedId: string | null,
   options: ReadonlyArray<SelectOptionType<T>>,
   highlightedId: string | null,

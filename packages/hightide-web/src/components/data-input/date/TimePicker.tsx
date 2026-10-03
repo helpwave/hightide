@@ -2,7 +2,7 @@ import clsx from 'clsx'
 import { useEffect, useMemo, useRef } from 'react'
 import { closestMatch, range } from '@helpwave/hightide-utils/utils'
 import { Button } from '../../interaction/Button'
-import type { InputInterface } from '../input/Input'
+import type { InputComponentInterface } from '../input/Input'
 import { useControlledState } from '@helpwave/hightide-utils/hooks'
 import type { DateTimePrecision } from '@helpwave/hightide-utils/utils'
 import { Visibility } from '../../layout/Visibility'
@@ -14,7 +14,7 @@ export type TimePickerSecondIncrement = '1s' | '5s' | '10s' | '15s' | '30s'
 
 export type TimePickerMillisecondIncrement = '1ms' | '5ms' | '10ms' | '25ms' | '50ms' | '100ms' | '250ms' | '500ms'
 
-export interface TimePickerProps extends InputInterface<Date> {
+export interface TimePickerProps extends InputComponentInterface<Date> {
   is24HourFormat?: boolean,
   precision?: DateTimePrecision,
   minuteIncrement?: TimePickerMinuteIncrement,
@@ -26,8 +26,8 @@ export interface TimePickerProps extends InputInterface<Date> {
 export const TimePicker = ({
   value: controlledValue,
   initialValue = new Date(),
-  onValueChange,
-  onEditComplete,
+  onValueUpdate: onValueChange,
+  onValueCommit: onEditComplete,
   is24HourFormat: is24HourFormatOverride,
   minuteIncrement = '5min',
   secondIncrement = '5s',

@@ -29,7 +29,7 @@ export const MultiSelectProperty = ({
         >
           <MultiSelect.Root
             value={value}
-            onValueChange={(val) => {
+            onValueUpdate={(val) => {
               const arr = val as string[]
               onValueChange?.(arr)
               onEditComplete?.(arr)

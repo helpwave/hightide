@@ -36,11 +36,11 @@ export const numberStepperInput: Story = {
       <NumberStepperInput
         {...props}
         value={value}
-        onValueChange={(nextValue) => {
+        onValueUpdate={(nextValue) => {
           props.onValueChange?.(nextValue)
           setValue(nextValue)
         }}
-        onEditComplete={(nextValue) => {
+        onValueCommit={(nextValue) => {
           props.onEditComplete?.(nextValue)
           setValue(nextValue)
         }}

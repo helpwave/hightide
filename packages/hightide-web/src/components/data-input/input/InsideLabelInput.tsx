@@ -19,7 +19,7 @@ export const InsideLabelInput = forwardRef<HTMLInputElement, InsideLabelInputPro
   id: customId,
   value: controlledValue,
   initialValue,
-  onValueChange,
+  onValueUpdate: onValueChange,
   label,
   ...props
 }, forwardedRef) {
@@ -40,7 +40,7 @@ export const InsideLabelInput = forwardRef<HTMLInputElement, InsideLabelInputPro
         ref={forwardedRef}
 
         value={value}
-        onValueChange={setValue}
+        onValueUpdate={setValue}
 
         onFocus={event => {
           props.onFocus?.(event)

@@ -35,8 +35,8 @@ export const TextProperty = ({
           value={value ?? ''}
           readOnly={readOnly}
           placeholder={translation('text')}
-          onValueChange={(value) => onValueChange?.(value)}
-          onEditComplete={(value) => onEditComplete?.(value)}
+          onValueUpdate={(value) => onValueChange?.(value)}
+          onValueCommit={(value) => onEditComplete?.(value)}
         />
       )}
     </PropertyBase>

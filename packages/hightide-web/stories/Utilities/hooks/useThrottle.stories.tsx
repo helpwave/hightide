@@ -52,7 +52,7 @@ function ThrottleDemo({ throttleMs }: StoryArgs) {
     <div className="flex w-full max-w-md flex-col gap-8">
       <Input
         value={inputValue}
-        onValueChange={handleInputChange}
+        onValueUpdate={handleInputChange}
         placeholder="Type to trigger throttled updates"
       />
       <Button onClick={handleClick}>

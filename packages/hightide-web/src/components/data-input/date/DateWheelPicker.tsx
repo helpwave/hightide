@@ -4,7 +4,7 @@ import { DateUtils, range } from '@helpwave/hightide-utils/utils'
 import { useControlledState, useEventCallbackStabilizer } from '@helpwave/hightide-utils/hooks'
 
 import { useLocalization } from '../../../global-contexts/localization/forward-exports'
-import type { InputInterface } from '../input/Input'
+import type { InputComponentInterface } from '../input/Input'
 import { WheelPicker } from '../../interaction/WheelPicker'
 import type { WheelLoopingBehaviour } from './TimeWheelPicker'
 
@@ -32,7 +32,7 @@ function withDateParts(date: Date, year: number, month: number, day: number) {
   return next
 }
 
-export type DateWheelPickerProps = InputInterface<Date> & {
+export type DateWheelPickerProps = InputComponentInterface<Date> & {
   start?: Date,
   end?: Date,
   isLooping?: boolean,
@@ -45,8 +45,8 @@ export const DateWheelPicker = ({
   initialValue = new Date(),
   start = defaultStart,
   end = defaultEnd,
-  onValueChange,
-  onEditComplete,
+  onValueUpdate: onValueChange,
+  onValueCommit: onEditComplete,
   isLooping = true,
   loopingBehaviour = 'update',
   className,

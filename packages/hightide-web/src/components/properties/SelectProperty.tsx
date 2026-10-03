@@ -30,7 +30,7 @@ export const SingleSelectProperty = ({
         >
           <Select.Root
             value={value}
-            onValueChange={(value) => {
+            onValueUpdate={(value) => {
               onValueChange?.(value)
               onEditComplete?.(value)
             }}

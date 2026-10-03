@@ -52,7 +52,7 @@ export const ComboboxInput = forwardRef<HTMLInputElement, ComboboxInputProps>(
         {...props}
         ref={ref}
         value={context.search.searchQuery}
-        onValueChange={context.search.setSearchQuery}
+        onValueUpdate={context.search.setSearchQuery}
         invalid={context.invalid}
         disabled={props.disabled ?? context.disabled}
         readOnly={props.readOnly ?? context.readOnly}

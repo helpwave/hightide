@@ -1,11 +1,11 @@
 import type { RefObject } from 'react'
 import { createContext, useContext } from 'react'
-import type { InputInterface } from '../input/Input'
+import type { InputComponentInterface } from '../input/Input'
 import type { FileInputItem } from './fileInputItem'
 
 export type FileInputPickFiles = () => Promise<readonly FileInputItem[] | null | undefined>
 
-export type FileInputContextType = Pick<InputInterface<unknown>, 'invalid' | 'disabled' | 'readOnly' | 'required'> & {
+export type FileInputContextType = Pick<InputComponentInterface<unknown>, 'invalid' | 'disabled' | 'readOnly' | 'required'> & {
   files: readonly FileInputItem[],
   isOpen: boolean,
   isDragging: boolean,

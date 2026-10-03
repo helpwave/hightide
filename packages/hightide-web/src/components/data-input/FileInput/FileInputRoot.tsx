@@ -4,7 +4,7 @@ import {
   useControlledState,
   useEventCallbackStabilizer
 } from '@helpwave/hightide-utils/hooks'
-import type { InputInterface } from '../input/Input'
+import type { InputComponentInterface } from '../input/Input'
 import { SafeGlobals } from '../../../utils/safeGlobals'
 import { FileInputContext, type FileInputContextType, type FileInputPickFiles } from './FileInputContext'
 import {
@@ -16,7 +16,7 @@ import {
   type FileInputItem
 } from './fileInputItem'
 
-export interface FileInputRootProps extends Omit<InputInterface<readonly FileInputItem[]>, 'value'> {
+export interface FileInputRootProps extends Omit<InputComponentInterface<readonly FileInputItem[]>, 'value'> {
   value?: readonly FileInputItem[],
   initialIsOpen?: boolean,
   onClose?: () => void,
@@ -30,8 +30,8 @@ export interface FileInputRootProps extends Omit<InputInterface<readonly FileInp
 export function FileInputRoot({
   children,
   value,
-  onValueChange,
-  onEditComplete,
+  onValueUpdate: onValueChange,
+  onValueCommit: onEditComplete,
   initialValue,
   initialIsOpen = false,
   onClose,

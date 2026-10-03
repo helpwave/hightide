@@ -4,7 +4,7 @@ import { SelectContext } from './SelectContext'
 import type { SelectContextConfig, SelectContextLayout, SelectOptionType } from './SelectContext'
 import { useSelect } from './useSelect'
 import { DOMUtils } from '../../../utils/dom'
-import type { InputInterface } from '../input/Input'
+import type { InputComponentInterface } from '../input/Input'
 import { useEventCallbackStabilizer } from '@helpwave/hightide-utils/hooks'
 import { PopUpContext } from '../../layout/PopUp/PopUpContext'
 
@@ -15,7 +15,7 @@ export interface SelectIds {
   searchInput: string,
 }
 
-export interface SelectRootProps<T> extends InputInterface<T> {
+export interface SelectRootProps<T> extends InputComponentInterface<T> {
   compareFunction?: (a: T, b: T) => boolean,
   initialIsOpen?: boolean,
   onClose?: () => void,
@@ -28,8 +28,8 @@ export interface SelectRootProps<T> extends InputInterface<T> {
 export function SelectRoot<T>({
   children,
   value,
-  onValueChange,
-  onEditComplete,
+  onValueUpdate: onValueChange,
+  onValueCommit: onEditComplete,
   initialValue,
   compareFunction,
   initialIsOpen = false,
