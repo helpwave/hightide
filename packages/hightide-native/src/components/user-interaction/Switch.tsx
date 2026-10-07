@@ -14,7 +14,7 @@ import {
 
 import {
   useControlledState,
-  useEventCallbackStabilizer
+  useStableEvent
 } from '@helpwave/hightide-utils/hooks'
 
 import { useDebugContext } from '../../global-contexts/debug'
@@ -80,8 +80,8 @@ export const Switch = ({
   const interactive = !disabled && !readOnly
   const [isPressed, setIsPressed] = useState(false)
 
-  const onEditCompleteStable = useEventCallbackStabilizer(onEditComplete)
-  const onValueChangeStable = useEventCallbackStabilizer(onValueChange)
+  const onEditCompleteStable = useStableEvent(onEditComplete)
+  const onValueChangeStable = useStableEvent(onValueChange)
 
   const onChangeWrapper = useCallback((nextValue: boolean) => {
     onValueChangeStable(nextValue)

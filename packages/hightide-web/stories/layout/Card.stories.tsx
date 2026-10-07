@@ -3,9 +3,9 @@ import { action } from 'storybook/actions'
 import { Bell, Building2, LogOut, UserRound } from 'lucide-react'
 import { Card } from '../../src/components/layout/Card'
 import { Divider } from '../../src/components/layout/Divider'
-import { ListActionItem } from '../../src/components/interaction/list/ListActionItem'
+import { ListActionItem } from '../../src/components/layout/list/ListActionItem'
 import { ListItem } from '../../src/components/layout/list/ListItem'
-import { ListNavigationItem } from '../../src/components/interaction/list/ListNavigationItem'
+import { ListNavigationItem } from '../../src/components/layout/list/ListNavigationItem'
 import { Switch } from '../../src/components/data-input/Switch'
 
 const meta: Meta<typeof Card> = {

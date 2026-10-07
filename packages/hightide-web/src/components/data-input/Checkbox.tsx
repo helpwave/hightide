@@ -6,7 +6,7 @@ import { useCallback, type HTMLAttributes } from 'react'
 import { Visibility } from '../layout/Visibility'
 import type { InputComponentInterface } from './input/Input'
 import { useControlledState } from '@helpwave/hightide-utils/hooks'
-import { useEventCallbackStabilizer } from '@helpwave/hightide-utils/hooks'
+import { useStableEvent } from '@helpwave/hightide-utils/hooks'
 
 import { ColoringUtils } from '../../utils/coloring'
 import { PropsUtil } from '../../utils/propsUtil'
@@ -42,8 +42,8 @@ export const Checkbox = ({
   isRounded = false,
   ...props
 }: CheckboxProps) => {
-  const onEditCompleteStable = useEventCallbackStabilizer(onEditComplete)
-  const onValueChangeStable = useEventCallbackStabilizer(onValueChange)
+  const onEditCompleteStable = useStableEvent(onEditComplete)
+  const onValueChangeStable = useStableEvent(onValueChange)
   const onChangeWrapper = useCallback((value: boolean) => {
     onValueChangeStable(value)
     onEditCompleteStable(value)

@@ -3,7 +3,7 @@ import { action } from 'storybook/actions'
 import { UserRound } from 'lucide-react'
 import { Card } from '../../../src/components/layout/Card'
 import { Divider } from '../../../src/components/layout/Divider'
-import { ListNavigationItem } from '../../../src/components/interaction/list/ListNavigationItem'
+import { ListNavigationItem } from '../../../src/components/layout/list/ListNavigationItem'
 import type { ListItemColor, ListItemContentOrder } from '../../../src/components/layout/list/ListItemTypes'
 
 const contentOrders = ['titleFirst', 'subtitleFirst'] as const satisfies readonly ListItemContentOrder[]

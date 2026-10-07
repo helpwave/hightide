@@ -2,8 +2,7 @@ import type { HTMLAttributes } from 'react'
 import { useCallback, useEffect, useId, useMemo, useState } from 'react'
 import clsx from 'clsx'
 import { useHightideTranslation } from '@helpwave/hightide-utils/context/translation'
-import { useEventCallbackStabilizer, useLogOnce } from '@helpwave/hightide-utils/hooks'
-
+import { useStableEvent, useLogOnce } from '@helpwave/hightide-utils/hooks'
 import { CarouselContextProvider } from './CarouselContext'
 
 export type CarouselRootProps = HTMLAttributes<HTMLDivElement> & {
@@ -28,7 +27,7 @@ export function CarouselRoot({
   ...props
 }: CarouselRootProps) {
   const translation = useHightideTranslation()
-  const onSlideChangedStable = useEventCallbackStabilizer(onSlideChanged)
+  const onSlideChangedStable = useStableEvent(onSlideChanged)
   const generatedId = useId()
   const id = props.id ?? `carousel-${generatedId}`
   const loops = isAutoPlaying || isLooping

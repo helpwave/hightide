@@ -3,8 +3,8 @@ import clsx from 'clsx'
 
 import { ColoringUtils } from '../../../utils/coloring'
 import { PropsUtil } from '../../../utils/propsUtil'
-import { ListItemContent } from '../../layout/list/ListItemContent'
-import type { ListItemColor, ListItemContentOrder, ListItemContentProps } from '../../layout/list/ListItemTypes'
+import { ListItemContent } from './ListItemContent'
+import type { ListItemColor, ListItemContentOrder, ListItemContentProps } from './ListItemTypes'
 
 export type ListActionItemProps = Omit<ButtonHTMLAttributes<HTMLButtonElement>, 'title' | 'content' | 'color'> & Omit<ListItemContentProps, 'contentOrder'> & {
   contentOrder?: ListItemContentOrder,

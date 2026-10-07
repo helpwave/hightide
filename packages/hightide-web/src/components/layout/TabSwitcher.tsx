@@ -4,7 +4,7 @@ import { createContext, useContext, useEffect, useRef } from 'react'
 import clsx from 'clsx'
 import { resolveSetState } from '@helpwave/hightide-utils/utils'
 import { createPortal } from 'react-dom'
-import { Visibility } from '../layout/Visibility'
+import { Visibility } from './Visibility'
 import { useControlledState } from '@helpwave/hightide-utils/hooks'
 import { ColoringUtils, PropsUtil } from '../../utils'
 

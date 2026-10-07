@@ -2,7 +2,7 @@ import type { HTMLAttributes, ReactNode } from 'react'
 import { forwardRef, useCallback, useLayoutEffect, useRef } from 'react'
 import clsx from 'clsx'
 import { SendHorizontal } from 'lucide-react'
-import { useControlledState, useEventCallbackStabilizer } from '@helpwave/hightide-utils/hooks'
+import { useControlledState, useStableEvent } from '@helpwave/hightide-utils/hooks'
 
 import { useWindowResizeObserver } from '../../../hooks/useWindowResizeObserver'
 import type { InputComponentInterface } from '../../data-input/input/Input'
@@ -44,7 +44,7 @@ export const ChatMessageComposer = forwardRef<HTMLDivElement, ChatMessageCompose
     onValueChange,
     defaultValue: initialValue ?? '',
   })
-  const onEditCompleteStable = useEventCallbackStabilizer(onEditComplete)
+  const onEditCompleteStable = useStableEvent(onEditComplete)
   const canEdit = !disabled && !readOnly
 
   const syncTextareaHeight = useCallback(() => {

@@ -1,6 +1,6 @@
 import type { ReactNode } from 'react'
 import { useCallback, useEffect, useLayoutEffect, useMemo, useRef, useState } from 'react'
-import { useEventCallbackStabilizer } from '@helpwave/hightide-utils/hooks'
+import { useStableEvent } from '@helpwave/hightide-utils/hooks'
 import { ColumnSizeUtil } from './columnSizeUtil'
 import type { ColumnSizingMode, TableColumnDefinitionContextType, TableContainerContextType, TableStateWithoutSizingContextType } from './TableContext'
 import { TableColumnDefinitionContext, TableContainerContext, TableStateContext, TableStateWithoutSizingContext } from './TableContext'
@@ -45,8 +45,8 @@ export const TableProvider = <T,>({
   ...tableOptions
 }: TableProviderProps<T>) => {
   const translation = useHightideTranslation()
-  const onRowClickStable = useEventCallbackStabilizer(onRowClick)
-  const onFillerRowClickStable = useEventCallbackStabilizer(onFillerRowClick)
+  const onRowClickStable = useStableEvent(onRowClick)
+  const onFillerRowClickStable = useStableEvent(onFillerRowClick)
 
   const [registeredColumns, setRegisteredColumns] = useState<ColumnDef<T>[]>([])
   const containerRef = useRef<HTMLDivElement | null>(null)

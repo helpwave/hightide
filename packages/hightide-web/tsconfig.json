@@ -23,7 +23,7 @@
   "include": [
     "src",
     "stories",
-    "tests"
+    "tests",
   ],
   "exclude": [
     "src/storybook",

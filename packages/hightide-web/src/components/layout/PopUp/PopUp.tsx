@@ -1,7 +1,7 @@
 import clsx from 'clsx'
 import type { RefObject } from 'react'
 import { forwardRef, useCallback, useContext, useMemo, useRef } from 'react'
-import { useEventCallbackStabilizer } from '@helpwave/hightide-utils/hooks'
+import { useStableEvent } from '@helpwave/hightide-utils/hooks'
 import { Portal } from '../Portal'
 import type { AnchoredFloatingContainerProps } from '../AnchoredFloatingContainer'
 import { AnchoredFloatingContainer } from '../AnchoredFloatingContainer'
@@ -48,8 +48,8 @@ export const PopUp = forwardRef<HTMLDivElement, PopUpProps>(function PopUp({
   const id = props.id ?? context?.popUpId
   const { refAssignment, isPresent, ref } = usePresenceRef<HTMLDivElement>({ isOpen })
 
-  const onCloseStable = useEventCallbackStabilizer(onClose)
-  const onOutsideClickStable = useEventCallbackStabilizer(onOutsideClick)
+  const onCloseStable = useStableEvent(onClose)
+  const onOutsideClickStable = useStableEvent(onOutsideClick)
 
   const onCloseWrapper = useCallback(() => {
     onCloseStable()

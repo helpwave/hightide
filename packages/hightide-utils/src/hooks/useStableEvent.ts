@@ -1,6 +1,6 @@
 import { useCallback, useEffect, useRef } from 'react'
 
-export function useEventCallbackStabilizer<
+export function useStableEvent<
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
   T extends (...args: any[]) => any
 >(

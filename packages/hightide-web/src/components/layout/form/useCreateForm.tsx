@@ -1,7 +1,7 @@
 import { useCallback, useEffect, useMemo, useRef, type ReactNode } from 'react'
 import type { FormEvent, FormStoreProps, FormValue } from './FormStore'
 import { FormStore } from './FormStore'
-import { useEventCallbackStabilizer } from '@helpwave/hightide-utils/hooks'
+import { useStableEvent } from '@helpwave/hightide-utils/hooks'
 
 export type UseCreateFormProps<T extends FormValue> = Omit<FormStoreProps<T>, 'validationBehaviour'> & {
   onFormSubmit: (values: T) => void,
@@ -66,11 +66,11 @@ export function useCreateForm<T extends FormValue>({
   scrollToElements = true,
   scrollOptions = { behavior: 'smooth', block: 'center' },
 }: UseCreateFormProps<T>) : UseCreateFormResult<T> {
-  const onFormSubmitStable = useEventCallbackStabilizer(onFormSubmit)
-  const onFormErrorStable = useEventCallbackStabilizer(onFormError)
-  const onValueChangeStable = useEventCallbackStabilizer(onValueChange)
-  const onUpdateStable = useEventCallbackStabilizer(onUpdate)
-  const onValidUpdateStable = useEventCallbackStabilizer(onValidUpdate)
+  const onFormSubmitStable = useStableEvent(onFormSubmit)
+  const onFormErrorStable = useStableEvent(onFormError)
+  const onValueChangeStable = useStableEvent(onValueChange)
+  const onUpdateStable = useStableEvent(onUpdate)
+  const onValidUpdateStable = useStableEvent(onValidUpdate)
 
   const storeRef = useRef<FormStore<T>>(
     new FormStore<T>({

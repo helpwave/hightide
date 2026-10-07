@@ -23,7 +23,7 @@ export interface CalendarDatePickerProps extends
   initialDisplay?: DisplayMode,
   calendarDayPickerProps?: Omit<CalendarDayPickerProps, 'displayedMonth' | 'onChange' | 'selected' | 'weekStart' | 'markToday' | 'start' | 'end'>,
   yearMonthPickerProps?: Omit<YearMonthPickerProps, 'displayedYearMonth' | 'onChange' | 'start' | 'end'>,
-  timeLabel?: ReactNode,
+  timeLabel: string,
   timePicker?: ReactNode,
   className?: string,
 }

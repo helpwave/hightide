@@ -27,7 +27,7 @@ export interface FormFieldProps<T extends FormValue, K extends keyof T> extends 
   validationBehaviour?: FormValidationBehaviour,
 }
 
-export type FormFieldDataHandling<T> = Required<Pick<InputComponentInterface<T>, 'value' | 'onValueChange' | 'onEditComplete'>>
+export type FormFieldDataHandling<T> = Required<Pick<InputComponentInterface<T>, 'value' | 'onValueUpdate' | 'onValueCommit'>>
 
 export const FormField = <T extends FormValue, K extends keyof T>({ children, name, triggerUpdateOnEditComplete, validationBehaviour, ...props }: FormFieldProps<T, K>) => {
   const formField = useFormField<T, K>(name, { triggerUpdate: triggerUpdateOnEditComplete, validationBehaviour })

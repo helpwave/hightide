@@ -1,6 +1,6 @@
 import type { Meta, StoryObj } from '@storybook/nextjs-vite'
-import type { TabSwitcherProps } from '../../src/components/interaction/TabSwitcher'
-import { TabList, TabPanel, TabSwitcher } from '../../src/components/interaction/TabSwitcher'
+import type { TabSwitcherProps } from '../../src/components/layout/TabSwitcher'
+import { TabList, TabPanel, TabSwitcher } from '../../src/components/layout/TabSwitcher'
 import { useState } from 'react'
 import { Button } from '../../src/components/interaction/Button'
 import { action } from 'storybook/actions'

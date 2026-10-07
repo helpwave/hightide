@@ -3,7 +3,7 @@
 import type { HTMLAttributes, SetStateAction } from 'react'
 import { useCallback, useContext, useId, useMemo, useRef } from 'react'
 import clsx from 'clsx'
-import { useEventCallbackStabilizer, useLogOnce, useOverlayRegistry } from '@helpwave/hightide-utils/hooks'
+import { useStableEvent, useLogOnce, useOverlayRegistry } from '@helpwave/hightide-utils/hooks'
 
 import { useFocusTrap } from '../../../hooks/focus/useFocusTrap'
 import { usePresenceRef } from '../../../hooks/usePresenceRef'
@@ -44,7 +44,7 @@ export function ModalContainer({
     parentSetIsOpen?.(next)
   }, [isClosable, isOpen, parentSetIsOpen])
   const containerRef = useRef<HTMLDivElement>(null)
-  const onCloseStable = useEventCallbackStabilizer(onClose)
+  const onCloseStable = useStableEvent(onClose)
 
   const ids = useMemo<ModalIds>(() => ({
     container: `modal-container-${generatedId}`,

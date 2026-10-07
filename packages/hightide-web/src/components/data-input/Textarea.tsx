@@ -4,7 +4,7 @@ import clsx from 'clsx'
 import { useDelay, type UseDelayOptions } from '@helpwave/hightide-utils/hooks'
 import type { InputComponentInterface } from './input/Input'
 import { useControlledState } from '@helpwave/hightide-utils/hooks'
-import { useEventCallbackStabilizer } from '@helpwave/hightide-utils/hooks'
+import { useStableEvent } from '@helpwave/hightide-utils/hooks'
 
 import { PropsUtil } from '../../utils/propsUtil'
 
@@ -35,7 +35,7 @@ export const Textarea = forwardRef<HTMLTextAreaElement, TextareaProps>(function 
   })
   const { restartTimer, clearTimer } = useDelay(saveDelayOptions)
 
-  const onEditCompleteStable = useEventCallbackStabilizer(onEditComplete)
+  const onEditCompleteStable = useStableEvent(onEditComplete)
   const onEditCompleteWrapper = useCallback((text: string) => {
     onEditCompleteStable(text)
     clearTimer()

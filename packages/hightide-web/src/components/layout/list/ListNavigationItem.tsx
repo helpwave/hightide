@@ -4,8 +4,8 @@ import { ChevronRight, ExternalLink } from 'lucide-react'
 import { Icon } from '../../visualization/Icon'
 import { ColoringUtils } from '../../../utils/coloring'
 import { PropsUtil } from '../../../utils/propsUtil'
-import { ListItemContent } from '../../layout/list/ListItemContent'
-import type { ListItemColor, ListItemContentOrder } from '../../layout/list/ListItemTypes'
+import { ListItemContent } from './ListItemContent'
+import type { ListItemColor, ListItemContentOrder } from './ListItemTypes'
 
 export type ListNavigationLinkProps = AnchorHTMLAttributes<HTMLAnchorElement> & {
   href: string,

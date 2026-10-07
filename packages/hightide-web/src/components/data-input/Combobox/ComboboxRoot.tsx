@@ -1,6 +1,6 @@
 import type { ReactNode, RefObject } from 'react'
 import { useCallback, useId, useMemo, useState } from 'react'
-import { useControlledState, useEventCallbackStabilizer } from '@helpwave/hightide-utils/hooks'
+import { useControlledState, useStableEvent } from '@helpwave/hightide-utils/hooks'
 
 import type { InputComponentInterface } from '../input/Input'
 import { DOMUtils } from '../../../utils/dom'
@@ -34,9 +34,9 @@ export function ComboboxRoot<T = string>({
     trigger: `combobox-${generatedId}`,
     listbox: `combobox-${generatedId}-listbox`,
   })
-  const onValueChangeStable = useEventCallbackStabilizer(onValueChange)
-  const onEditCompleteStable = useEventCallbackStabilizer(onEditComplete)
-  const onItemClickStable = useEventCallbackStabilizer(onItemClick)
+  const onValueChangeStable = useStableEvent(onValueChange)
+  const onEditCompleteStable = useStableEvent(onEditComplete)
+  const onItemClickStable = useStableEvent(onItemClick)
   const [selectedValue, setSelectedValue] = useControlledState<T | undefined>({
     value,
     onValueChange: (next) => {

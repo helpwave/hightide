@@ -5,7 +5,7 @@ import { Checkbox, type CheckboxProps } from './Checkbox'
 import { PropsUtil } from '../../utils/propsUtil'
 import type { InputComponentInterface } from './input/Input'
 import { useControlledState } from '@helpwave/hightide-utils/hooks'
-import { useEventCallbackStabilizer } from '@helpwave/hightide-utils/hooks'
+import { useStableEvent } from '@helpwave/hightide-utils/hooks'
 
 type LabelledCheckboxCheckPosition = 'left' | 'right'
 
@@ -47,8 +47,8 @@ export const LabelledCheckbox = forwardRef<HTMLDivElement, LabelledCheckboxProps
   const id = customId ?? generatedId
   const labelId = `${id}-label`
 
-  const onEditCompleteStable = useEventCallbackStabilizer(onEditComplete)
-  const onValueChangeStable = useEventCallbackStabilizer(onValueChange)
+  const onEditCompleteStable = useStableEvent(onEditComplete)
+  const onValueChangeStable = useStableEvent(onValueChange)
   const onChangeWrapper = useCallback((value: boolean) => {
     onValueChangeStable(value)
     onEditCompleteStable(value)

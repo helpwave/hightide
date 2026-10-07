@@ -1,7 +1,7 @@
 import { useCallback, useMemo, useRef } from 'react'
 import clsx from 'clsx'
 import { DateUtils, range } from '@helpwave/hightide-utils/utils'
-import { useControlledState, useEventCallbackStabilizer } from '@helpwave/hightide-utils/hooks'
+import { useControlledState, useStableEvent } from '@helpwave/hightide-utils/hooks'
 
 import { useLocalization } from '../../../global-contexts/localization/forward-exports'
 import type { InputComponentInterface } from '../input/Input'
@@ -59,7 +59,7 @@ export const DateWheelPicker = ({
   })
   const valueRef = useRef(value)
   valueRef.current = value
-  const onEditCompleteStable = useEventCallbackStabilizer(onEditComplete)
+  const onEditCompleteStable = useStableEvent(onEditComplete)
 
   const monthNames = useMemo(() => {
     const formatter = new Intl.DateTimeFormat(locale, { month: 'short' })

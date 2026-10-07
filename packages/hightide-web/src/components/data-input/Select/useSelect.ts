@@ -6,7 +6,7 @@ import {
 } from 'react'
 import { useSingleSelection } from '@helpwave/hightide-utils/hooks'
 import { useListNavigation } from '@helpwave/hightide-utils/hooks'
-import { useEventCallbackStabilizer } from '@helpwave/hightide-utils/hooks'
+import { useStableEvent } from '@helpwave/hightide-utils/hooks'
 import { useSearch } from '@helpwave/hightide-utils/hooks'
 import { useTypeAheadSearch } from '@helpwave/hightide-utils/hooks'
 
@@ -71,10 +71,10 @@ export function useSelect({
   const [isOpen, setIsOpen] = useState(initialIsOpen)
   const [searchQuery, setSearchQuery] = useState('')
 
-  const onValueChangeStable = useEventCallbackStabilizer(onValueChange)
-  const onEditCompleteStable = useEventCallbackStabilizer(onEditComplete)
-  const onCloseStable = useEventCallbackStabilizer(onClose)
-  const onIsOpenChangeStable = useEventCallbackStabilizer(onIsOpenChange)
+  const onValueChangeStable = useStableEvent(onValueChange)
+  const onEditCompleteStable = useStableEvent(onEditComplete)
+  const onCloseStable = useStableEvent(onClose)
+  const onIsOpenChangeStable = useStableEvent(onIsOpenChange)
 
   const onSelectionChangeWrapper = useCallback((id: string | null) => {
     if(id === null) return

@@ -3,7 +3,7 @@ import { action } from 'storybook/actions'
 import { Bell, ChevronRight } from 'lucide-react'
 import { Card } from '../../../src/components/layout/Card'
 import { Divider } from '../../../src/components/layout/Divider'
-import { ListActionItem } from '../../../src/components/interaction/list/ListActionItem'
+import { ListActionItem } from '../../../src/components/layout/list/ListActionItem'
 import type { ListItemColor, ListItemContentOrder } from '../../../src/components/layout/list/ListItemTypes'
 
 const contentOrders = ['titleFirst', 'subtitleFirst'] as const satisfies readonly ListItemContentOrder[]

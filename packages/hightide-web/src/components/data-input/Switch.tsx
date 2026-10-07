@@ -2,7 +2,7 @@ import clsx from 'clsx'
 import { type HTMLAttributes, useCallback } from 'react'
 import type { InputComponentInterface } from './input/Input'
 import { useControlledState } from '@helpwave/hightide-utils/hooks'
-import { useEventCallbackStabilizer } from '@helpwave/hightide-utils/hooks'
+import { useStableEvent } from '@helpwave/hightide-utils/hooks'
 import { ColoringUtils } from '../../utils/coloring'
 import { PropsUtil } from '../../utils/propsUtil'
 
@@ -25,8 +25,8 @@ export const Switch = ({
   onValueCommit: onEditComplete,
   ...props
 }: SwitchProps) => {
-  const onEditCompleteStable = useEventCallbackStabilizer(onEditComplete)
-  const onValueChangeStable = useEventCallbackStabilizer(onValueChange)
+  const onEditCompleteStable = useStableEvent(onEditComplete)
+  const onValueChangeStable = useStableEvent(onValueChange)
 
   const onChangeWrapper = useCallback((value: boolean) => {
     onValueChangeStable(!value)

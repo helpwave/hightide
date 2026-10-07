@@ -6,7 +6,7 @@ import {
 } from 'react'
 import { useMultiSelection } from '@helpwave/hightide-utils/hooks'
 import { useListNavigation } from '@helpwave/hightide-utils/hooks'
-import { useEventCallbackStabilizer } from '@helpwave/hightide-utils/hooks'
+import { useStableEvent } from '@helpwave/hightide-utils/hooks'
 import { useSearch } from '@helpwave/hightide-utils/hooks'
 import { useTypeAheadSearch } from '@helpwave/hightide-utils/hooks'
 
@@ -84,8 +84,8 @@ export function useMultiSelect({
     isControlled: controlledValue !== undefined,
   })
 
-  const editCompleteStable = useEventCallbackStabilizer(onEditComplete)
-  const onCloseStable = useEventCallbackStabilizer(onClose)
+  const editCompleteStable = useStableEvent(onEditComplete)
+  const onCloseStable = useStableEvent(onClose)
 
   const { searchResult: visibleOptions } = useSearch({
     items: options,

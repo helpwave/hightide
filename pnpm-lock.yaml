@@ -383,130 +383,6 @@ importers:
         specifier: 7.3.5
         version: 7.3.5(@types/node@20.19.43)(jiti@2.7.0)(lightningcss@1.30.2)(terser@5.49.0)
 
-  packages/hightide-web:
-    dependencies:
-      '@helpwave/hightide-utils':
-        specifier: workspace:*
-        version: link:../hightide-utils
-      '@helpwave/internationalization':
-        specifier: 0.4.0
-        version: 0.4.0
-      '@tailwindcss/cli':
-        specifier: 4.1.18
-        version: 4.1.18
-      '@tanstack/react-table':
-        specifier: 8.21.3
-        version: 8.21.3(react-dom@19.0.0(react@19.0.0))(react@19.0.0)
-      '@tanstack/react-virtual':
-        specifier: 3.14.3
-        version: 3.14.3(react-dom@19.0.0(react@19.0.0))(react@19.0.0)
-      clsx:
-        specifier: 2.1.1
-        version: 2.1.1
-      lucide-react:
-        specifier: 0.561.0
-        version: 0.561.0(react@19.0.0)
-      tailwindcss:
-        specifier: 4.1.18
-        version: 4.1.18
-    devDependencies:
-      '@babel/core':
-        specifier: 7.29.7
-        version: 7.29.7(supports-color@8.1.1)
-      '@babel/preset-env':
-        specifier: 7.29.7
-        version: 7.29.7(@babel/core@7.29.7(supports-color@8.1.1))(supports-color@8.1.1)
-      '@babel/preset-react':
-        specifier: 7.29.7
-        version: 7.29.7(@babel/core@7.29.7(supports-color@8.1.1))(supports-color@8.1.1)
-      '@babel/preset-typescript':
-        specifier: 7.29.7
-        version: 7.29.7(@babel/core@7.29.7(supports-color@8.1.1))(supports-color@8.1.1)
-      '@faker-js/faker':
-        specifier: 10.1.0
-        version: 10.1.0
-      '@helpwave/eslint-config':
-        specifier: 0.0.11
-        version: 0.0.11(jiti@2.7.0)(supports-color@8.1.1)
-      '@storybook/addon-docs':
-        specifier: 10.4.5
-        version: 10.4.5(@types/react-dom@19.2.3(@types/react@19.0.10))(@types/react@19.0.10)(esbuild@0.27.7)(rollup@4.62.2)(storybook@10.4.5(@testing-library/dom@10.4.1)(@types/react@19.0.10)(react@19.0.0))(vite@7.3.5(@types/node@20.19.43)(jiti@2.7.0)(lightningcss@1.30.2)(terser@5.49.0))
-      '@storybook/addon-links':
-        specifier: 10.4.5
-        version: 10.4.5(@types/react@19.0.10)(react@19.0.0)(storybook@10.4.5(@testing-library/dom@10.4.1)(@types/react@19.0.10)(react@19.0.0))
-      '@storybook/react-vite':
-        specifier: 10.4.5
-        version: 10.4.5(@types/react-dom@19.2.3(@types/react@19.0.10))(@types/react@19.0.10)(esbuild@0.27.7)(react-dom@19.0.0(react@19.0.0))(react@19.0.0)(rollup@4.62.2)(storybook@10.4.5(@testing-library/dom@10.4.1)(@types/react@19.0.10)(react@19.0.0))(supports-color@8.1.1)(typescript@5.7.2)(vite@7.3.5(@types/node@20.19.43)(jiti@2.7.0)(lightningcss@1.30.2)(terser@5.49.0))
-      '@tailwindcss/postcss':
-        specifier: 4.1.18
-        version: 4.1.18
-      '@testing-library/react':
-        specifier: 16.3.0
-        version: 16.3.0(@testing-library/dom@10.4.1)(@types/react-dom@19.2.3(@types/react@19.0.10))(@types/react@19.0.10)(react-dom@19.0.0(react@19.0.0))(react@19.0.0)
-      '@types/jest':
-        specifier: 30.0.0
-        version: 30.0.0
-      '@types/node':
-        specifier: 20.19.43
-        version: 20.19.43
-      '@types/react':
-        specifier: 19.0.10
-        version: 19.0.10
-      '@types/react-dom':
-        specifier: 19.2.3
-        version: 19.2.3(@types/react@19.0.10)
-      '@types/tinycolor2':
-        specifier: 1.4.6
-        version: 1.4.6
-      '@vitest/mocker':
-        specifier: 4.0.16
-        version: 4.0.16(vite@7.3.5(@types/node@20.19.43)(jiti@2.7.0)(lightningcss@1.30.2)(terser@5.49.0))
-      autoprefixer:
-        specifier: 10.4.23
-        version: 10.4.23(postcss@8.5.15)
-      eslint:
-        specifier: 9.31.0
-        version: 9.31.0(jiti@2.7.0)(supports-color@8.1.1)
-      eslint-plugin-import:
-        specifier: 2.32.0
-        version: 2.32.0(@typescript-eslint/parser@8.64.0(eslint@9.31.0(jiti@2.7.0)(supports-color@8.1.1))(supports-color@8.1.1)(typescript@5.7.2))(eslint@9.31.0(jiti@2.7.0)(supports-color@8.1.1))(supports-color@8.1.1)
-      eslint-plugin-storybook:
-        specifier: 10.4.5
-        version: 10.4.5(eslint@9.31.0(jiti@2.7.0)(supports-color@8.1.1))(storybook@10.4.5(@testing-library/dom@10.4.1)(@types/react@19.0.10)(react@19.0.0))(supports-color@8.1.1)(typescript@5.7.2)
-      jest:
-        specifier: 30.2.0
-        version: 30.2.0(@types/node@20.19.43)(esbuild-register@3.6.0(esbuild@0.27.7)(supports-color@8.1.1))(supports-color@8.1.1)
-      jest-environment-jsdom:
-        specifier: 30.2.0
-        version: 30.2.0(supports-color@8.1.1)
-      postcss:
-        specifier: 8.5.15
-        version: 8.5.15
-      postcss-load-config:
-        specifier: 6.0.1
-        version: 6.0.1(jiti@2.7.0)(postcss@8.5.15)
-      react:
-        specifier: 19.0.0
-        version: 19.0.0
-      react-dom:
-        specifier: 19.0.0
-        version: 19.0.0(react@19.0.0)
-      storybook:
-        specifier: 10.4.5
-        version: 10.4.5(@testing-library/dom@10.4.1)(@types/react@19.0.10)(react@19.0.0)
-      ts-jest:
-        specifier: 29.4.6
-        version: 29.4.6(@babel/core@7.29.7(supports-color@8.1.1))(@jest/transform@30.2.0(supports-color@8.1.1))(@jest/types@30.4.1)(babel-jest@30.2.0(@babel/core@7.29.7(supports-color@8.1.1))(supports-color@8.1.1))(esbuild@0.27.7)(jest-util@30.4.1)(jest@30.2.0(@types/node@20.19.43)(esbuild-register@3.6.0(esbuild@0.27.7)(supports-color@8.1.1))(supports-color@8.1.1))(typescript@5.7.2)
-      tsup:
-        specifier: 8.5.1
-        version: 8.5.1(jiti@2.7.0)(postcss@8.5.15)(supports-color@8.1.1)(typescript@5.7.2)
-      typescript:
-        specifier: 5.7.2
-        version: 5.7.2
-      vite:
-        specifier: 7.3.5
-        version: 7.3.5(@types/node@20.19.43)(jiti@2.7.0)(lightningcss@1.30.2)(terser@5.49.0)
-
   packages/hightide-design:
     devDependencies:
       '@helpwave/eslint-config':
@@ -628,6 +504,133 @@ importers:
       typescript:
         specifier: 5.7.2
         version: 5.7.2
+      zustand:
+        specifier: 5.0.15
+        version: 5.0.15(@types/react@19.0.10)(react@19.0.0)(use-sync-external-store@1.6.0(react@19.0.0))
+
+  packages/hightide-web:
+    dependencies:
+      '@helpwave/hightide-utils':
+        specifier: workspace:*
+        version: link:../hightide-utils
+      '@helpwave/internationalization':
+        specifier: 0.4.0
+        version: 0.4.0
+      '@tailwindcss/cli':
+        specifier: 4.1.18
+        version: 4.1.18
+      '@tanstack/react-table':
+        specifier: 8.21.3
+        version: 8.21.3(react-dom@19.0.0(react@19.0.0))(react@19.0.0)
+      '@tanstack/react-virtual':
+        specifier: 3.14.3
+        version: 3.14.3(react-dom@19.0.0(react@19.0.0))(react@19.0.0)
+      clsx:
+        specifier: 2.1.1
+        version: 2.1.1
+      lucide-react:
+        specifier: 0.561.0
+        version: 0.561.0(react@19.0.0)
+      tailwindcss:
+        specifier: 4.1.18
+        version: 4.1.18
+    devDependencies:
+      '@babel/core':
+        specifier: 7.29.7
+        version: 7.29.7(supports-color@8.1.1)
+      '@babel/preset-env':
+        specifier: 7.29.7
+        version: 7.29.7(@babel/core@7.29.7(supports-color@8.1.1))(supports-color@8.1.1)
+      '@babel/preset-react':
+        specifier: 7.29.7
+        version: 7.29.7(@babel/core@7.29.7(supports-color@8.1.1))(supports-color@8.1.1)
+      '@babel/preset-typescript':
+        specifier: 7.29.7
+        version: 7.29.7(@babel/core@7.29.7(supports-color@8.1.1))(supports-color@8.1.1)
+      '@faker-js/faker':
+        specifier: 10.1.0
+        version: 10.1.0
+      '@helpwave/eslint-config':
+        specifier: 0.0.11
+        version: 0.0.11(jiti@2.7.0)(supports-color@8.1.1)
+      '@storybook/addon-docs':
+        specifier: 10.4.5
+        version: 10.4.5(@types/react-dom@19.2.3(@types/react@19.0.10))(@types/react@19.0.10)(esbuild@0.28.1)(rollup@4.62.2)(storybook@10.4.5(@testing-library/dom@10.4.1)(@types/react@19.0.10)(react@19.0.0))(vite@7.3.5(@types/node@20.19.43)(jiti@2.7.0)(lightningcss@1.30.2)(terser@5.49.0))
+      '@storybook/addon-links':
+        specifier: 10.4.5
+        version: 10.4.5(@types/react@19.0.10)(react@19.0.0)(storybook@10.4.5(@testing-library/dom@10.4.1)(@types/react@19.0.10)(react@19.0.0))
+      '@storybook/react-vite':
+        specifier: 10.4.5
+        version: 10.4.5(@types/react-dom@19.2.3(@types/react@19.0.10))(@types/react@19.0.10)(esbuild@0.28.1)(react-dom@19.0.0(react@19.0.0))(react@19.0.0)(rollup@4.62.2)(storybook@10.4.5(@testing-library/dom@10.4.1)(@types/react@19.0.10)(react@19.0.0))(supports-color@8.1.1)(typescript@5.7.2)(vite@7.3.5(@types/node@20.19.43)(jiti@2.7.0)(lightningcss@1.30.2)(terser@5.49.0))
+      '@tailwindcss/postcss':
+        specifier: 4.1.18
+        version: 4.1.18
+      '@testing-library/react':
+        specifier: 16.3.0
+        version: 16.3.0(@testing-library/dom@10.4.1)(@types/react-dom@19.2.3(@types/react@19.0.10))(@types/react@19.0.10)(react-dom@19.0.0(react@19.0.0))(react@19.0.0)
+      '@types/jest':
+        specifier: 30.0.0
+        version: 30.0.0
+      '@types/node':
+        specifier: 20.19.43
+        version: 20.19.43
+      '@types/react':
+        specifier: 19.0.10
+        version: 19.0.10
+      '@types/react-dom':
+        specifier: 19.2.3
+        version: 19.2.3(@types/react@19.0.10)
+      '@types/tinycolor2':
+        specifier: 1.4.6
+        version: 1.4.6
+      '@vitest/mocker':
+        specifier: 4.0.16
+        version: 4.0.16(vite@7.3.5(@types/node@20.19.43)(jiti@2.7.0)(lightningcss@1.30.2)(terser@5.49.0))
+      autoprefixer:
+        specifier: 10.4.23
+        version: 10.4.23(postcss@8.5.15)
+      eslint:
+        specifier: 9.31.0
+        version: 9.31.0(jiti@2.7.0)(supports-color@8.1.1)
+      eslint-plugin-import:
+        specifier: 2.32.0
+        version: 2.32.0(@typescript-eslint/parser@8.64.0(eslint@9.31.0(jiti@2.7.0)(supports-color@8.1.1))(supports-color@8.1.1)(typescript@5.7.2))(eslint@9.31.0(jiti@2.7.0)(supports-color@8.1.1))(supports-color@8.1.1)
+      eslint-plugin-storybook:
+        specifier: 10.4.5
+        version: 10.4.5(eslint@9.31.0(jiti@2.7.0)(supports-color@8.1.1))(storybook@10.4.5(@testing-library/dom@10.4.1)(@types/react@19.0.10)(react@19.0.0))(supports-color@8.1.1)(typescript@5.7.2)
+      jest:
+        specifier: 30.2.0
+        version: 30.2.0(@types/node@20.19.43)(esbuild-register@3.6.0(esbuild@0.28.1)(supports-color@8.1.1))(supports-color@8.1.1)
+      jest-environment-jsdom:
+        specifier: 30.2.0
+        version: 30.2.0(supports-color@8.1.1)
+      postcss:
+        specifier: 8.5.15
+        version: 8.5.15
+      postcss-load-config:
+        specifier: 6.0.1
+        version: 6.0.1(jiti@2.7.0)(postcss@8.5.15)
+      react:
+        specifier: 19.0.0
+        version: 19.0.0
+      react-dom:
+        specifier: 19.0.0
+        version: 19.0.0(react@19.0.0)
+      storybook:
+        specifier: 10.4.5
+        version: 10.4.5(@testing-library/dom@10.4.1)(@types/react@19.0.10)(react@19.0.0)
+      ts-jest:
+        specifier: 29.4.6
+        version: 29.4.6(@babel/core@7.29.7(supports-color@8.1.1))(@jest/transform@30.2.0(supports-color@8.1.1))(@jest/types@30.4.1)(babel-jest@30.2.0(@babel/core@7.29.7(supports-color@8.1.1))(supports-color@8.1.1))(esbuild@0.27.7)(jest-util@30.4.1)(jest@30.2.0(@types/node@20.19.43)(esbuild-register@3.6.0(esbuild@0.28.1)(supports-color@8.1.1))(supports-color@8.1.1))(typescript@5.7.2)
+      tsup:
+        specifier: 8.5.1
+        version: 8.5.1(jiti@2.7.0)(postcss@8.5.15)(supports-color@8.1.1)(typescript@5.7.2)
+      typescript:
+        specifier: 5.7.2
+        version: 5.7.2
+      vite:
+        specifier: 7.3.5
+        version: 7.3.5(@types/node@20.19.43)(jiti@2.7.0)(lightningcss@1.30.2)(terser@5.49.0)
 
 packages:
 
@@ -7108,6 +7111,24 @@ packages:
     resolution: {integrity: sha512-rVksvsnNCdJ/ohGc6xgPwyN8eheCxsiLM8mxuE/t/mOVqJewPuO1miLpTHQiRgTKCLexL4MeAFVagts7HmNZ2Q==}
     engines: {node: '>=10'}
 
+  zustand@5.0.15:
+    resolution: {integrity: sha512-MpSEjRiBkA9crSYeOUH32rJC7SVqAbm0Fqcqge/bUi2PPoLcBWKOsG+C8mevmpr8TwXHBVkChbbJiyvkE+i/3A==}
+    engines: {node: '>=12.20.0'}
+    peerDependencies:
+      '@types/react': '>=18.0.0'
+      immer: '>=9.0.6'
+      react: '>=18.0.0'
+      use-sync-external-store: '>=1.2.0'
+    peerDependenciesMeta:
+      '@types/react':
+        optional: true
+      immer:
+        optional: true
+      react:
+        optional: true
+      use-sync-external-store:
+        optional: true
+
 snapshots:
 
   '@0no-co/graphql.web@1.3.3': {}
@@ -8612,42 +8633,6 @@ snapshots:
       jest-util: 30.2.0
       slash: 3.0.0
 
-  '@jest/core@30.2.0(esbuild-register@3.6.0(esbuild@0.27.7)(supports-color@8.1.1))(supports-color@8.1.1)':
-    dependencies:
-      '@jest/console': 30.2.0
-      '@jest/pattern': 30.0.1
-      '@jest/reporters': 30.2.0(supports-color@8.1.1)
-      '@jest/test-result': 30.2.0
-      '@jest/transform': 30.2.0(supports-color@8.1.1)
-      '@jest/types': 30.2.0
-      '@types/node': 20.19.43
-      ansi-escapes: 4.3.2
-      chalk: 4.1.2
-      ci-info: 4.4.0
-      exit-x: 0.2.2
-      graceful-fs: 4.2.11
-      jest-changed-files: 30.2.0
-      jest-config: 30.2.0(@types/node@20.19.43)(esbuild-register@3.6.0(esbuild@0.27.7)(supports-color@8.1.1))(supports-color@8.1.1)
-      jest-haste-map: 30.2.0
-      jest-message-util: 30.2.0
-      jest-regex-util: 30.0.1
-      jest-resolve: 30.2.0
-      jest-resolve-dependencies: 30.2.0(supports-color@8.1.1)
-      jest-runner: 30.2.0(supports-color@8.1.1)
-      jest-runtime: 30.2.0(supports-color@8.1.1)
-      jest-snapshot: 30.2.0(supports-color@8.1.1)
-      jest-util: 30.2.0
-      jest-validate: 30.2.0
-      jest-watcher: 30.2.0
-      micromatch: 4.0.8
-      pretty-format: 30.2.0
-      slash: 3.0.0
-    transitivePeerDependencies:
-      - babel-plugin-macros
-      - esbuild-register
-      - supports-color
-      - ts-node
-
   '@jest/core@30.2.0(esbuild-register@3.6.0(esbuild@0.28.1)(supports-color@8.1.1))(supports-color@8.1.1)':
     dependencies:
       '@jest/console': 30.2.0
@@ -9430,25 +9415,6 @@ snapshots:
 
   '@standard-schema/spec@1.1.0': {}
 
-  '@storybook/addon-docs@10.4.5(@types/react-dom@19.2.3(@types/react@19.0.10))(@types/react@19.0.10)(esbuild@0.27.7)(rollup@4.62.2)(storybook@10.4.5(@testing-library/dom@10.4.1)(@types/react@19.0.10)(react@19.0.0))(vite@7.3.5(@types/node@20.19.43)(jiti@2.7.0)(lightningcss@1.30.2)(terser@5.49.0))':
-    dependencies:
-      '@mdx-js/react': 3.1.1(@types/react@19.0.10)(react@19.0.0)
-      '@storybook/csf-plugin': 10.4.5(esbuild@0.27.7)(rollup@4.62.2)(storybook@10.4.5(@testing-library/dom@10.4.1)(@types/react@19.0.10)(react@19.0.0))(vite@7.3.5(@types/node@20.19.43)(jiti@2.7.0)(lightningcss@1.30.2)(terser@5.49.0))
-      '@storybook/icons': 2.1.0(react@19.0.0)
-      '@storybook/react-dom-shim': 10.4.5(@types/react-dom@19.2.3(@types/react@19.0.10))(@types/react@19.0.10)(react-dom@19.0.0(react@19.0.0))(react@19.0.0)(storybook@10.4.5(@testing-library/dom@10.4.1)(@types/react@19.0.10)(react@19.0.0))
-      react: 19.0.0
-      react-dom: 19.0.0(react@19.0.0)
-      storybook: 10.4.5(@testing-library/dom@10.4.1)(@types/react@19.0.10)(react@19.0.0)
-      ts-dedent: 2.3.0
-    optionalDependencies:
-      '@types/react': 19.0.10
-    transitivePeerDependencies:
-      - '@types/react-dom'
-      - esbuild
-      - rollup
-      - vite
-      - webpack
-
   '@storybook/addon-docs@10.4.5(@types/react-dom@19.2.3(@types/react@19.0.10))(@types/react@19.0.10)(esbuild@0.28.1)(rollup@4.62.2)(storybook@10.4.5(@testing-library/dom@10.4.1)(@types/react@19.0.10)(react@19.0.0))(vite@7.3.5(@types/node@20.19.43)(jiti@2.7.0)(lightningcss@1.30.2)(terser@5.49.0))':
     dependencies:
       '@mdx-js/react': 3.1.1(@types/react@19.0.10)(react@19.0.0)
@@ -9506,17 +9472,6 @@ snapshots:
       - supports-color
       - typescript
 
-  '@storybook/builder-vite@10.4.5(esbuild@0.27.7)(rollup@4.62.2)(storybook@10.4.5(@testing-library/dom@10.4.1)(@types/react@19.0.10)(react@19.0.0))(vite@7.3.5(@types/node@20.19.43)(jiti@2.7.0)(lightningcss@1.30.2)(terser@5.49.0))':
-    dependencies:
-      '@storybook/csf-plugin': 10.4.5(esbuild@0.27.7)(rollup@4.62.2)(storybook@10.4.5(@testing-library/dom@10.4.1)(@types/react@19.0.10)(react@19.0.0))(vite@7.3.5(@types/node@20.19.43)(jiti@2.7.0)(lightningcss@1.30.2)(terser@5.49.0))
-      storybook: 10.4.5(@testing-library/dom@10.4.1)(@types/react@19.0.10)(react@19.0.0)
-      ts-dedent: 2.3.0
-      vite: 7.3.5(@types/node@20.19.43)(jiti@2.7.0)(lightningcss@1.30.2)(terser@5.49.0)
-    transitivePeerDependencies:
-      - esbuild
-      - rollup
-      - webpack
-
   '@storybook/builder-vite@10.4.5(esbuild@0.28.1)(rollup@4.62.2)(storybook@10.4.5(@testing-library/dom@10.4.1)(@types/react@19.0.10)(react@19.0.0))(vite@7.3.5(@types/node@20.19.43)(jiti@2.7.0)(lightningcss@1.30.2)(terser@5.49.0))':
     dependencies:
       '@storybook/csf-plugin': 10.4.5(esbuild@0.28.1)(rollup@4.62.2)(storybook@10.4.5(@testing-library/dom@10.4.1)(@types/react@19.0.10)(react@19.0.0))(vite@7.3.5(@types/node@20.19.43)(jiti@2.7.0)(lightningcss@1.30.2)(terser@5.49.0))
@@ -9527,15 +9482,6 @@ snapshots:
       - esbuild
       - rollup
       - webpack
-
-  '@storybook/csf-plugin@10.4.5(esbuild@0.27.7)(rollup@4.62.2)(storybook@10.4.5(@testing-library/dom@10.4.1)(@types/react@19.0.10)(react@19.0.0))(vite@7.3.5(@types/node@20.19.43)(jiti@2.7.0)(lightningcss@1.30.2)(terser@5.49.0))':
-    dependencies:
-      storybook: 10.4.5(@testing-library/dom@10.4.1)(@types/react@19.0.10)(react@19.0.0)
-      unplugin: 2.3.11
-    optionalDependencies:
-      esbuild: 0.27.7
-      rollup: 4.62.2
-      vite: 7.3.5(@types/node@20.19.43)(jiti@2.7.0)(lightningcss@1.30.2)(terser@5.49.0)
 
   '@storybook/csf-plugin@10.4.5(esbuild@0.28.1)(rollup@4.62.2)(storybook@10.4.5(@testing-library/dom@10.4.1)(@types/react@19.0.10)(react@19.0.0))(vite@7.3.5(@types/node@20.19.43)(jiti@2.7.0)(lightningcss@1.30.2)(terser@5.49.0))':
     dependencies:
@@ -9679,30 +9625,6 @@ snapshots:
       - supports-color
       - typescript
       - utf-8-validate
-
-  '@storybook/react-vite@10.4.5(@types/react-dom@19.2.3(@types/react@19.0.10))(@types/react@19.0.10)(esbuild@0.27.7)(react-dom@19.0.0(react@19.0.0))(react@19.0.0)(rollup@4.62.2)(storybook@10.4.5(@testing-library/dom@10.4.1)(@types/react@19.0.10)(react@19.0.0))(supports-color@8.1.1)(typescript@5.7.2)(vite@7.3.5(@types/node@20.19.43)(jiti@2.7.0)(lightningcss@1.30.2)(terser@5.49.0))':
-    dependencies:
-      '@joshwooding/vite-plugin-react-docgen-typescript': 0.7.0(typescript@5.7.2)(vite@7.3.5(@types/node@20.19.43)(jiti@2.7.0)(lightningcss@1.30.2)(terser@5.49.0))
-      '@rollup/pluginutils': 5.4.0(rollup@4.62.2)
-      '@storybook/builder-vite': 10.4.5(esbuild@0.27.7)(rollup@4.62.2)(storybook@10.4.5(@testing-library/dom@10.4.1)(@types/react@19.0.10)(react@19.0.0))(vite@7.3.5(@types/node@20.19.43)(jiti@2.7.0)(lightningcss@1.30.2)(terser@5.49.0))
-      '@storybook/react': 10.4.5(@types/react-dom@19.2.3(@types/react@19.0.10))(@types/react@19.0.10)(react-dom@19.0.0(react@19.0.0))(react@19.0.0)(storybook@10.4.5(@testing-library/dom@10.4.1)(@types/react@19.0.10)(react@19.0.0))(supports-color@8.1.1)(typescript@5.7.2)
-      empathic: 2.0.1
-      magic-string: 0.30.21
-      react: 19.0.0
-      react-docgen: 8.0.3(supports-color@8.1.1)
-      react-dom: 19.0.0(react@19.0.0)
-      resolve: 1.22.12
-      storybook: 10.4.5(@testing-library/dom@10.4.1)(@types/react@19.0.10)(react@19.0.0)
-      tsconfig-paths: 4.2.0
-      vite: 7.3.5(@types/node@20.19.43)(jiti@2.7.0)(lightningcss@1.30.2)(terser@5.49.0)
-    transitivePeerDependencies:
-      - '@types/react'
-      - '@types/react-dom'
-      - esbuild
-      - rollup
-      - supports-color
-      - typescript
-      - webpack
 
   '@storybook/react-vite@10.4.5(@types/react-dom@19.2.3(@types/react@19.0.10))(@types/react@19.0.10)(esbuild@0.28.1)(react-dom@19.0.0(react@19.0.0))(react@19.0.0)(rollup@4.62.2)(storybook@10.4.5(@testing-library/dom@10.4.1)(@types/react@19.0.10)(react@19.0.0))(supports-color@8.1.1)(typescript@5.7.2)(vite@7.3.5(@types/node@20.19.43)(jiti@2.7.0)(lightningcss@1.30.2)(terser@5.49.0))':
     dependencies:
@@ -11215,14 +11137,6 @@ snapshots:
 
   es-toolkit@1.50.0: {}
 
-  esbuild-register@3.6.0(esbuild@0.27.7)(supports-color@8.1.1):
-    dependencies:
-      debug: 4.4.3(supports-color@8.1.1)
-      esbuild: 0.27.7
-    transitivePeerDependencies:
-      - supports-color
-    optional: true
-
   esbuild-register@3.6.0(esbuild@0.28.1)(supports-color@8.1.1):
     dependencies:
       debug: 4.4.3(supports-color@8.1.1)
@@ -12231,25 +12145,6 @@ snapshots:
       - babel-plugin-macros
       - supports-color
 
-  jest-cli@30.2.0(@types/node@20.19.43)(esbuild-register@3.6.0(esbuild@0.27.7)(supports-color@8.1.1))(supports-color@8.1.1):
-    dependencies:
-      '@jest/core': 30.2.0(esbuild-register@3.6.0(esbuild@0.27.7)(supports-color@8.1.1))(supports-color@8.1.1)
-      '@jest/test-result': 30.2.0
-      '@jest/types': 30.2.0
-      chalk: 4.1.2
-      exit-x: 0.2.2
-      import-local: 3.2.0
-      jest-config: 30.2.0(@types/node@20.19.43)(esbuild-register@3.6.0(esbuild@0.27.7)(supports-color@8.1.1))(supports-color@8.1.1)
-      jest-util: 30.2.0
-      jest-validate: 30.2.0
-      yargs: 17.7.3
-    transitivePeerDependencies:
-      - '@types/node'
-      - babel-plugin-macros
-      - esbuild-register
-      - supports-color
-      - ts-node
-
   jest-cli@30.2.0(@types/node@20.19.43)(esbuild-register@3.6.0(esbuild@0.28.1)(supports-color@8.1.1))(supports-color@8.1.1):
     dependencies:
       '@jest/core': 30.2.0(esbuild-register@3.6.0(esbuild@0.28.1)(supports-color@8.1.1))(supports-color@8.1.1)
@@ -12268,39 +12163,6 @@ snapshots:
       - esbuild-register
       - supports-color
       - ts-node
-
-  jest-config@30.2.0(@types/node@20.19.43)(esbuild-register@3.6.0(esbuild@0.27.7)(supports-color@8.1.1))(supports-color@8.1.1):
-    dependencies:
-      '@babel/core': 7.29.7(supports-color@8.1.1)
-      '@jest/get-type': 30.1.0
-      '@jest/pattern': 30.0.1
-      '@jest/test-sequencer': 30.2.0
-      '@jest/types': 30.2.0
-      babel-jest: 30.2.0(@babel/core@7.29.7(supports-color@8.1.1))(supports-color@8.1.1)
-      chalk: 4.1.2
-      ci-info: 4.4.0
-      deepmerge: 4.3.1
-      glob: 10.5.0
-      graceful-fs: 4.2.11
-      jest-circus: 30.2.0(supports-color@8.1.1)
-      jest-docblock: 30.2.0
-      jest-environment-node: 30.2.0
-      jest-regex-util: 30.0.1
-      jest-resolve: 30.2.0
-      jest-runner: 30.2.0(supports-color@8.1.1)
-      jest-util: 30.2.0
-      jest-validate: 30.2.0
-      micromatch: 4.0.8
-      parse-json: 5.2.0
-      pretty-format: 30.2.0
-      slash: 3.0.0
-      strip-json-comments: 3.1.1
-    optionalDependencies:
-      '@types/node': 20.19.43
-      esbuild-register: 3.6.0(esbuild@0.27.7)(supports-color@8.1.1)
-    transitivePeerDependencies:
-      - babel-plugin-macros
-      - supports-color
 
   jest-config@30.2.0(@types/node@20.19.43)(esbuild-register@3.6.0(esbuild@0.28.1)(supports-color@8.1.1))(supports-color@8.1.1):
     dependencies:
@@ -12677,19 +12539,6 @@ snapshots:
       jest-util: 30.2.0
       merge-stream: 2.0.0
       supports-color: 8.1.1
-
-  jest@30.2.0(@types/node@20.19.43)(esbuild-register@3.6.0(esbuild@0.27.7)(supports-color@8.1.1))(supports-color@8.1.1):
-    dependencies:
-      '@jest/core': 30.2.0(esbuild-register@3.6.0(esbuild@0.27.7)(supports-color@8.1.1))(supports-color@8.1.1)
-      '@jest/types': 30.2.0
-      import-local: 3.2.0
-      jest-cli: 30.2.0(@types/node@20.19.43)(esbuild-register@3.6.0(esbuild@0.27.7)(supports-color@8.1.1))(supports-color@8.1.1)
-    transitivePeerDependencies:
-      - '@types/node'
-      - babel-plugin-macros
-      - esbuild-register
-      - supports-color
-      - ts-node
 
   jest@30.2.0(@types/node@20.19.43)(esbuild-register@3.6.0(esbuild@0.28.1)(supports-color@8.1.1))(supports-color@8.1.1):
     dependencies:
@@ -14435,27 +14284,6 @@ snapshots:
 
   ts-interface-checker@0.1.13: {}
 
-  ts-jest@29.4.6(@babel/core@7.29.7(supports-color@8.1.1))(@jest/transform@30.2.0(supports-color@8.1.1))(@jest/types@30.4.1)(babel-jest@30.2.0(@babel/core@7.29.7(supports-color@8.1.1))(supports-color@8.1.1))(esbuild@0.27.7)(jest-util@30.4.1)(jest@30.2.0(@types/node@20.19.43)(esbuild-register@3.6.0(esbuild@0.27.7)(supports-color@8.1.1))(supports-color@8.1.1))(typescript@5.7.2):
-    dependencies:
-      bs-logger: 0.2.6
-      fast-json-stable-stringify: 2.1.0
-      handlebars: 4.7.9
-      jest: 30.2.0(@types/node@20.19.43)(esbuild-register@3.6.0(esbuild@0.27.7)(supports-color@8.1.1))(supports-color@8.1.1)
-      json5: 2.2.3
-      lodash.memoize: 4.1.2
-      make-error: 1.3.6
-      semver: 7.8.5
-      type-fest: 4.41.0
-      typescript: 5.7.2
-      yargs-parser: 21.1.1
-    optionalDependencies:
-      '@babel/core': 7.29.7(supports-color@8.1.1)
-      '@jest/transform': 30.2.0(supports-color@8.1.1)
-      '@jest/types': 30.4.1
-      babel-jest: 30.2.0(@babel/core@7.29.7(supports-color@8.1.1))(supports-color@8.1.1)
-      esbuild: 0.27.7
-      jest-util: 30.4.1
-
   ts-jest@29.4.6(@babel/core@7.29.7(supports-color@8.1.1))(@jest/transform@30.2.0(supports-color@8.1.1))(@jest/types@30.4.1)(babel-jest@30.2.0(@babel/core@7.29.7(supports-color@8.1.1))(supports-color@8.1.1))(esbuild@0.27.7)(jest-util@30.4.1)(jest@30.2.0(@types/node@20.19.43)(esbuild-register@3.6.0(esbuild@0.28.1)(supports-color@8.1.1))(supports-color@8.1.1))(typescript@5.7.2):
     dependencies:
       bs-logger: 0.2.6
@@ -14916,3 +14744,9 @@ snapshots:
       yargs-parser: 21.1.1
 
   yocto-queue@0.1.0: {}
+
+  zustand@5.0.15(@types/react@19.0.10)(react@19.0.0)(use-sync-external-store@1.6.0(react@19.0.0)):
+    optionalDependencies:
+      '@types/react': 19.0.10
+      react: 19.0.0
+      use-sync-external-store: 1.6.0(react@19.0.0)

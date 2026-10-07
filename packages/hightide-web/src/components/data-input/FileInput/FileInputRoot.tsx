@@ -2,7 +2,7 @@ import type { ReactNode } from 'react'
 import { useCallback, useEffect, useMemo, useRef, useState } from 'react'
 import {
   useControlledState,
-  useEventCallbackStabilizer
+  useStableEvent
 } from '@helpwave/hightide-utils/hooks'
 import type { InputComponentInterface } from '../input/Input'
 import { SafeGlobals } from '../../../utils/safeGlobals'
@@ -56,10 +56,10 @@ export function FileInputRoot({
   const [isDragging, setIsDragging] = useState(false)
   const [isDragOver, setIsDragOver] = useState(false)
 
-  const onEditCompleteStable = useEventCallbackStabilizer(onEditComplete)
-  const onCloseStable = useEventCallbackStabilizer(onClose)
-  const onIsOpenChangeStable = useEventCallbackStabilizer(onIsOpenChange)
-  const pickFilesStable = useEventCallbackStabilizer(pickFiles)
+  const onEditCompleteStable = useStableEvent(onEditComplete)
+  const onCloseStable = useStableEvent(onClose)
+  const onIsOpenChangeStable = useStableEvent(onIsOpenChange)
+  const pickFilesStable = useStableEvent(pickFiles)
 
   const commitFiles = useCallback((next: readonly FileInputItem[]) => {
     setFiles(next)

@@ -5,7 +5,7 @@ import type { SelectContextConfig, SelectContextLayout, SelectOptionType } from 
 import { useSelect } from './useSelect'
 import { DOMUtils } from '../../../utils/dom'
 import type { InputComponentInterface } from '../input/Input'
-import { useEventCallbackStabilizer } from '@helpwave/hightide-utils/hooks'
+import { useStableEvent } from '@helpwave/hightide-utils/hooks'
 import { PopUpContext } from '../../layout/PopUp/PopUpContext'
 
 export interface SelectIds {
@@ -97,9 +97,9 @@ export function SelectRoot<T>({
     return options.find((o) => compare(o.value.value, initialValue))?.value.id
   }, [options, initialValue, compare])
 
-  const onValueChangeStable = useEventCallbackStabilizer(onValueChange)
-  const onEditCompleteStable = useEventCallbackStabilizer(onEditComplete)
-  const onIsOpenChangeStable = useEventCallbackStabilizer(onIsOpenChange)
+  const onValueChangeStable = useStableEvent(onValueChange)
+  const onEditCompleteStable = useStableEvent(onEditComplete)
+  const onIsOpenChangeStable = useStableEvent(onIsOpenChange)
 
   const onValueChangeWrapper = useCallback((value: string) => {
     const option = idToOptionMap[value]
