@@ -1,58 +1,46 @@
-import { useCallback, useEffect, useMemo, useRef, type ReactNode } from 'react'
-import type { FormEvent, FormStoreProps, FormValue } from './FormStore'
-import { FormStore } from './FormStore'
+import { useCallback, useEffect, useMemo, useRef } from 'react'
+import { countFormErrors, createFormStore, isValidationRunnerInvalid, type CreateFormStoreOptions, type FormFieldErrors, type FormStore, type FormValues } from '@helpwave/hightide-utils/form'
 import { useStableEvent } from '@helpwave/hightide-utils/hooks'
 
-export type UseCreateFormProps<T extends FormValue> = Omit<FormStoreProps<T>, 'validationBehaviour'> & {
+export type FormValue = FormValues
+
+export type UseCreateFormProps<T extends FormValue> = Pick<CreateFormStoreOptions<T>, 'initialValues' | 'initialTouchedValues' | 'validation'> & {
   onFormSubmit: (values: T) => void,
-  onFormError?: (values: T, errors: Partial<Record<keyof T, ReactNode>>) => void,
-  /**
-   * Called when the form values change.
-   *
-   * E.g. a key press for an input field.
-   *
-   * For most purposes use {@link onUpdate} instead.
-   * @param values The new values of the form.
-   */
+  onFormError?: (values: T, errors: FormFieldErrors<T>) => void,
   onValueChange?: (values: T) => void,
-  /**
-   * Called when the form values change and the corresponding inputs determined that the user
-   * finished editing these fields and the client should make an update against the server.
-   *
-   * E.g. a user finished editing an input field by pressing enter or blurring the field.
-   *
-   * @param updatedKeys The keys that were updated.
-   * @param update The update that was made.
-   */
   onValidUpdate?: (updatedKeys: (keyof T)[], update: Partial<T>) => void,
-  /**
-   * Called when the form values change and the corresponding inputs determined that the user
-   * finished editing these fields and the client should make an update against the server.
-   *
-   * E.g. a user finished editing an input field by pressing enter or blurring the field.
-   *
-   * @param updatedKeys The keys that were updated.
-   * @param update The update that was made.
-   */
   onUpdate?: (updatedKeys: (keyof T)[], update: Partial<T>) => void,
-  /* Whether to scroll and focus the first element when submitting with an error or resetting */
   scrollToElements?: boolean,
   scrollOptions?: ScrollIntoViewOptions,
 }
 
 export type UseCreateFormResult<T extends FormValue> = {
-  /**
-   * The form store.
-   * Do not attempt to read the store directly, use useFormObserver or useFormField instead.
-   * Otherwise you will not get the latest values and errors.
-   */
   store: FormStore<T>,
   reset: () => void,
   submit: () => void,
   update: (updater: Partial<T> | ((current: T) => Partial<T>), triggerUpdate?: boolean) => void,
-  validateAll: () => void,
+  validateAll: () => number,
   registerRef: (key: keyof T) => (el: HTMLElement | null) => void,
+  notifyUpdate: (updatedKeys: (keyof T)[], update: Partial<T>) => void,
 }
+
+const sortByDocumentOrder = (elements: HTMLElement[]) => {
+  return elements.sort((left, right) => {
+    const position = left.compareDocumentPosition(right)
+    if (position & Node.DOCUMENT_POSITION_FOLLOWING) return -1
+    if (position & Node.DOCUMENT_POSITION_PRECEDING) return 1
+    return 0
+  })
+}
+
+const focusFirst = (elements: HTMLElement[], scrollOptions: ScrollIntoViewOptions) => {
+  const [first] = sortByDocumentOrder(elements)
+  if (!first) return
+  first.scrollIntoView(scrollOptions)
+  first.focus()
+}
+
+const defaultScrolloptions: ScrollIntoViewOptions = { behavior: 'smooth', block: 'center' }
 
 export function useCreateForm<T extends FormValue>({
   onFormSubmit,
@@ -61,11 +49,11 @@ export function useCreateForm<T extends FormValue>({
   onUpdate,
   onValidUpdate,
   initialValues,
-  hasTriedSubmitting,
-  validators,
+  initialTouchedValues,
+  validation,
   scrollToElements = true,
-  scrollOptions = { behavior: 'smooth', block: 'center' },
-}: UseCreateFormProps<T>) : UseCreateFormResult<T> {
+  scrollOptions = defaultScrolloptions,
+}: UseCreateFormProps<T>): UseCreateFormResult<T> {
   const onFormSubmitStable = useStableEvent(onFormSubmit)
   const onFormErrorStable = useStableEvent(onFormError)
   const onValueChangeStable = useStableEvent(onValueChange)
@@ -73,101 +61,85 @@ export function useCreateForm<T extends FormValue>({
   const onValidUpdateStable = useStableEvent(onValidUpdate)
 
   const storeRef = useRef<FormStore<T>>(
-    new FormStore<T>({
+    createFormStore({
       initialValues,
-      hasTriedSubmitting,
-      validators,
+      initialTouchedValues,
+      validation,
     })
   )
-
-  useEffect(() => {
-    storeRef.current.changeValidators(validators)
-  }, [validators])
-
   const fieldRefs = useRef<Partial<Record<keyof T, HTMLElement | null>>>({})
   const registerRef = useCallback((key: keyof T) => {
-    return (el: HTMLElement | null) => {
-      fieldRefs.current[key] = el
+    return (element: HTMLElement | null) => {
+      fieldRefs.current[key] = element
     }
   }, [])
 
+  const notifyUpdate = useCallback((updatedKeys: (keyof T)[], update: Partial<T>) => {
+    const state = storeRef.current.getState()
+    onUpdateStable(updatedKeys, update)
+    if (countFormErrors(state.errors, state.validationRunnerError) === 0) {
+      onValidUpdateStable(updatedKeys, update)
+    }
+  }, [onUpdateStable, onValidUpdateStable])
+
   useEffect(() => {
-    const handleUpdate = (event: FormEvent<T>) => {
-      if (event.type === 'onSubmit') {
-        if(event.hasErrors) {
-          onFormErrorStable(event.values, event.errors)
-
-          if (scrollToElements) {
-            const errorInputs = (Object.keys(event.errors) as (keyof T)[])
-              .filter((key) => event.errors[key])
-              .map((key) => fieldRefs.current[key])
-              .filter((el): el is HTMLElement => el !== null && el !== undefined)
-
-            if (errorInputs.length > 0) {
-              errorInputs.sort((a, b) => {
-                const position = a.compareDocumentPosition(b)
-                if (position & Node.DOCUMENT_POSITION_FOLLOWING) return -1
-                if (position & Node.DOCUMENT_POSITION_PRECEDING) return 1
-                return 0
-              })
-
-              errorInputs[0].scrollIntoView(scrollOptions)
-              errorInputs[0].focus()
-            }
-          }
-        } else {
-          onFormSubmitStable(event.values)
-        }
-      } else if (event.type === 'reset') {
-        if (scrollToElements) {
-          const inputs = Object.values(fieldRefs.current).filter(
-            (el): el is HTMLElement => el !== null && el !== undefined
-          )
-          if (inputs.length > 0) {
-            inputs.sort((a, b) => {
-              const position = a.compareDocumentPosition(b)
-              if (position & Node.DOCUMENT_POSITION_FOLLOWING) return -1
-              if (position & Node.DOCUMENT_POSITION_PRECEDING) return 1
-              return 0
-            })
-
-            inputs[0].scrollIntoView(scrollOptions)
-            inputs[0].focus()
-          }
-        }
-      } else if (event.type === 'onChange') {
-        onValueChangeStable(storeRef.current.getAllValues())
-      } else if (event.type === 'onUpdate') {
-        onUpdateStable(event.updatedKeys, event.update)
-        if(!event.hasErrors) {
-          onValidUpdateStable(event.updatedKeys, event.update)
-        }
+    return storeRef.current.subscribe((state, previous) => {
+      if (state.values !== previous.values) {
+        onValueChangeStable(state.values)
       }
+    })
+  }, [onValueChangeStable, storeRef])
+
+  const reset = useCallback(() => {
+    storeRef.current.getState().reset()
+    if (!scrollToElements) return
+
+    const inputs = Object.values(fieldRefs.current).filter(
+      (element): element is HTMLElement => element !== null && element !== undefined
+    )
+    focusFirst(inputs, scrollOptions)
+  }, [scrollOptions, scrollToElements])
+
+  const submit = useCallback(() => {
+    const errorCount = storeRef.current.getState().validate()
+    const { values, errors, validationRunnerError } = storeRef.current.getState()
+
+    if (errorCount > 0) {
+      onFormErrorStable(values, errors)
+
+      if (scrollToElements) {
+        const errorInputs = (Object.keys(values) as (keyof T)[])
+          .filter((key) => (errors[key]?.length ?? 0) > 0 || isValidationRunnerInvalid(validationRunnerError[key]))
+          .map((key) => fieldRefs.current[key])
+          .filter((element): element is HTMLElement => element !== null && element !== undefined)
+        focusFirst(errorInputs, scrollOptions)
+      }
+      return
     }
 
-    const unsubscribe = storeRef.current.subscribe('ALL', handleUpdate)
-    return () => {
-      unsubscribe()
+    onFormSubmitStable(values)
+  }, [onFormErrorStable, onFormSubmitStable, scrollOptions, scrollToElements])
+
+  const update = useCallback((updater: Partial<T> | ((current: T) => Partial<T>), triggerUpdate: boolean = false) => {
+    const current = storeRef.current.getState().values
+    const nextUpdate = typeof updater === 'function' ? updater(current) : updater
+    storeRef.current.getState().setValues(nextUpdate)
+    if (triggerUpdate) {
+      notifyUpdate(Object.keys(nextUpdate) as (keyof T)[], nextUpdate)
     }
-  }, [onFormErrorStable, onFormSubmitStable, onUpdateStable, onValidUpdateStable, onValueChangeStable, scrollOptions, scrollToElements])
+  }, [notifyUpdate])
 
+  const validateAll = useCallback(() => {
+    return storeRef.current.getState().validate()
+  }, [])
 
-  const callbacks = useMemo(() => ({
-    reset: () => storeRef.current.reset(),
-    submit: () => storeRef.current.submit(),
-    update: (updater: Partial<T> | ((current: T) => Partial<T>), triggerUpdate: boolean = false) => {
-      if (typeof updater === 'function') {
-        storeRef.current.setValues(updater(storeRef.current.getAllValues()), triggerUpdate)
-      } else {
-        storeRef.current.setValues(updater, triggerUpdate)
-      }
-    },
-    validateAll: () => storeRef.current.validateAll(),
-  }), [])
-
-  return {
+  return useMemo(() => ({
     store: storeRef.current,
-    ...callbacks,
-    registerRef
-  }
+    reset,
+    submit,
+    update,
+    validateAll,
+    registerRef,
+    notifyUpdate,
+  }), [notifyUpdate, registerRef, reset, submit, update, validateAll])
 }

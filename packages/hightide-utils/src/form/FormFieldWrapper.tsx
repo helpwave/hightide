@@ -1,5 +1,7 @@
-import type { FormValues } from './FormStore'
+import type { FormValues, ValidationRunnerState } from './FormStore'
 import { useFormStore } from './FormStoreContext'
+
+const emptyFieldErrors: string[] = []
 
 export type FormFieldWrapperConfig<
   T extends FormValues,
@@ -12,7 +14,8 @@ export type FormFieldWrapperBag<T extends FormValues, K extends keyof T> = {
   name: K,
 
   value: T[K],
-  error: string | undefined,
+  errors: string[],
+  validationRunnerError: ValidationRunnerState | undefined,
 
   isTouched: boolean,
   isRequired: boolean,
@@ -37,11 +40,12 @@ export function FormFieldWrapper<
   children,
 }: FormFieldWrapperProps<T, K>) {
   const value = useFormStore<T>()(state => state.values[name])
-  const error = useFormStore<T>()(state => state.errors[name])
-  const isTouched = useFormStore<T>()(state => state.touched[name] ?? false)
+  const errors = useFormStore<T>()(state => state.errors[name]) ?? emptyFieldErrors
+  const validationRunnerError = useFormStore<T>()(state => state.validationRunnerError[name])
+  const isTouched = useFormStore<T>()(state => state.touchedValues[name] ?? false)
 
   const setValue = useFormStore<T>()(state => state.setValue)
-  const setTouched = useFormStore<T>()(state => state.setTouched)
+  const setTouchedValue = useFormStore<T>()(state => state.setTouchedValue)
 
   const isRequired = useFormStore<T>()(state =>
     typeof config?.isRequired === 'function'
@@ -56,11 +60,12 @@ export function FormFieldWrapper<
   return children({
     name,
     value,
-    error,
+    errors,
+    validationRunnerError,
     isTouched,
     isRequired,
     isDisabled,
     setValue: value => setValue(name, value),
-    setTouched: touched => setTouched(name, touched),
+    setTouched: touched => setTouchedValue(name, touched ?? true),
   })
 }

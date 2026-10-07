@@ -1,17 +1,11 @@
 import type { Meta, StoryObj } from '@storybook/nextjs-vite'
 import { action } from 'storybook/actions'
-import { Input } from '../../src/components/data-input/input/Input'
+import { useState } from 'react'
+import { Input, type InputState } from '../../src/components/data-input/input/Input'
 
 const meta = {
   component: Input,
-} satisfies Meta<typeof Input>
-
-export default meta
-type Story = StoryObj<typeof meta>;
-
-export const input: Story = {
   args: {
-    initialValue: '',
     disabled: false,
     invalid: false,
     readOnly: false,
@@ -23,7 +17,53 @@ export const input: Story = {
       delay: 2500
     },
     onChange: action('onChange'),
-    onValueChange: action('onValueChange'),
-    onEditComplete: action('onEditComplete'),
+    onValueUpdate: action('onValueUpdate'),
+    onValueCommit: action('onValueCommit'),
+    onStateChange: action('onStateChange'),
+    onStateEvent: action('onStateEvent'),
+  },
+} satisfies Meta<typeof Input>
+
+export default meta
+type Story = StoryObj<typeof meta>;
+
+export const input: Story = {
+  args: {
+    initialValue: '',
+  },
+}
+
+export const controlledValue: Story = {
+  render: function ControlledValue(args) {
+    const [value, setValue] = useState('Controlled value')
+
+    return (
+      <Input
+        {...args}
+        value={value}
+        onValueUpdate={(next) => {
+          args.onValueUpdate?.(next)
+          setValue(next)
+        }}
+      />
+    )
+  },
+}
+
+export const controlledState: Story = {
+  render: function ControlledState(args) {
+    const [state, setState] = useState<InputState>({ value: 'State value' })
+
+    return (
+      <Input
+        {...args}
+        value={undefined}
+        state={state}
+        onStateChange={(next) => {
+          args.onStateChange?.(next)
+          setState(next)
+        }}
+      />
+    )
   },
 }

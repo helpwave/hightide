@@ -1,12 +1,11 @@
-import type { PropsWithChildren, ReactNode } from 'react'
-import { createContext, useCallback, useContext, useSyncExternalStore } from 'react'
-import type { FormStore, FormValue, FormValidationBehaviour } from './FormStore'
-import type { UseCreateFormResult } from './useCreateForm'
+import type { PropsWithChildren } from 'react'
+import { createContext, useCallback, useContext } from 'react'
+import { countFormErrors, createFormStore, FormStoreProvider, isValidationRunnerInvalid, type FormStore, type FormValidationRunnerError, type FormValues, type ValidationRunnerState } from '@helpwave/hightide-utils/form'
 import type { FormFieldDataHandling } from './FormField'
+import type { FormValue, UseCreateFormResult } from './useCreateForm'
 
 export type FormContextType<T extends FormValue> = UseCreateFormResult<T>
-// eslint-disable-next-line @typescript-eslint/no-explicit-any
-export const FormContext = createContext<FormContextType<any> | null>(null)
+export const FormContext = createContext<FormContextType<FormValues> | null>(null)
 
 export type FormProviderProps<T extends FormValue> = PropsWithChildren & {
   state: FormContextType<T>,
@@ -14,101 +13,82 @@ export type FormProviderProps<T extends FormValue> = PropsWithChildren & {
 
 export const FormProvider = <T extends FormValue>({ children, state }: FormProviderProps<T>) => {
   return (
-    <FormContext.Provider value={state}>
-      {children}
+    <FormContext.Provider value={state as FormContextType<FormValues>}>
+      <FormStoreProvider store={state.store}>
+        {children}
+      </FormStoreProvider>
     </FormContext.Provider>
   )
 }
 
-export function useForm<T extends FormValue>() {
-  const ctx = useContext(FormContext)
-  if (!ctx) throw new Error('FormContext is only available inside a <Form>')
-  return ctx as FormContextType<T>
+export function useForm<T extends FormValue>(): FormContextType<T> {
+  const context = useContext(FormContext)
+  if (!context) throw new Error('useForm must be used inside a FormProvider')
+  return context as FormContextType<T>
 }
 
 export interface UseFormFieldParameter<T extends FormValue> {
   key: keyof T,
 }
 
-export interface UseFormFieldOptions {
-  triggerUpdate?: boolean,
-  validationBehaviour?: FormValidationBehaviour,
-}
-
-export interface UserFormFieldProps<T extends FormValue> extends UseFormFieldParameter<T>, UseFormFieldOptions {}
-
 export type FormFieldResult<T> = {
-  store: FormStore<T>,
+  store: FormStore<FormValue>,
   value: T,
-  error: ReactNode,
+  errors: string[],
+  validationRunnerError: ValidationRunnerState | undefined,
   touched: boolean,
-  hasTriedSubmitting: boolean,
   dataProps: FormFieldDataHandling<T>,
   registerRef: (el: HTMLElement | null) => void,
+  updateValue: (value: T) => void,
 }
 
-export function useFormField<T extends FormValue, K extends keyof T>(key: K, { triggerUpdate = true, validationBehaviour = 'touched' }: UseFormFieldOptions): FormFieldResult<T[K]> | null {
-  const context = useContext(FormContext)
+const fallbackStore = createFormStore<FormValues>({ initialValues: {} })
 
-  const subscribe = useCallback((cb: () => void) => {
-    if (!context) return () => { }
-    return context.store.subscribe(key, cb)
-  }, [context, key])
+const emptyFieldErrors: string[] = []
 
-  const subscribeAll = useCallback((cb: () => void) => {
-    if (!context) return () => { }
-    return context.store.subscribe('ALL', cb)
-  }, [context])
+export function useFormField<T extends FormValue, K extends keyof T>(key: K): FormFieldResult<T[K]> | null {
+  const context = useContext(FormContext) as FormContextType<T> | null
+  const store = (context?.store ?? fallbackStore) as FormStore<T>
 
-  const value = useSyncExternalStore(
-    subscribe,
-    () => context ? context.store.getValue(key) : undefined
-  )
+  const value = store(state => state.values[key])
+  const errors = store(state => state.errors[key]) ?? emptyFieldErrors
+  const validationRunnerError = store(state => state.validationRunnerError[key])
+  const touched = store(state => state.touchedValues[key] ?? false)
 
-  const error = useSyncExternalStore(
-    subscribe,
-    () => context ? context.store.getError(key) : undefined
-  )
+  const visibleErrors = touched
+    ? [...errors, ...(validationRunnerError?.errors ?? [])]
+    : []
 
-  const touched = useSyncExternalStore(
-    subscribe,
-    () => context ? context.store.getTouched(key) : undefined
-  )
+  const onValueUpdate = useCallback((next: T[K]) => {
+    store.getState().setValue(key, next)
+  }, [key, store])
 
-  const hasTriedSubmitting = useSyncExternalStore(
-    subscribeAll,
-    () => context ? context.store.getHasTriedSubmitting() : undefined
-  )
-  const isShowingErrors =
-    validationBehaviour === 'always' ||
-    (validationBehaviour === 'touched' && (touched ?? false)) ||
-    (validationBehaviour === 'submit' && (hasTriedSubmitting ?? false))
+  const onValueCommit = useCallback((next: T[K]) => {
+    store.getState().setTouchedValue(key, true)
+    store.getState().setValue(key, next)
+    context?.notifyUpdate([key], { [key]: next } as unknown as Partial<T>)
+  }, [context, key, store])
 
-
-  const getDataProps = useCallback(() => {
-    return {
-      value,
-      onValueChange: (val: T[K]) => context?.store.setValue(key, val),
-      onEditComplete: (val: T[K]) => {
-        context?.store.setTouched(key)
-        context?.store.setValue(key, val, triggerUpdate)
-      }
-    }
-  }, [context?.store, key, triggerUpdate, value])
-
+  const updateValue = useCallback((next: T[K]) => {
+    store.getState().setValue(key, next)
+    context?.notifyUpdate([key], { [key]: next } as unknown as Partial<T>)
+  }, [context, key, store])
 
   if (!context) return null
 
-  const { registerRef } = context
-
   return {
-    store: context.store,
+    store: store as FormStore<FormValue>,
     value,
-    error: isShowingErrors ? error : undefined,
-    touched: touched ?? false,
-    hasTriedSubmitting: hasTriedSubmitting ?? false,
-    dataProps: getDataProps(),
-    registerRef: registerRef(key),
+    errors: visibleErrors,
+    validationRunnerError,
+    touched,
+    dataProps: {
+      value,
+      onValueUpdate,
+      onValueCommit,
+    },
+    registerRef: context.registerRef(key),
+    updateValue,
   }
 }
 
@@ -119,37 +99,30 @@ export type UseFormObserverProps<T extends FormValue> = {
 export interface FormObserverResult<T extends FormValue> {
   store: FormStore<T>,
   values: T,
-  touched: Partial<Record<keyof T, boolean>>,
-  errors: Partial<Record<keyof T, ReactNode>>,
+  touchedValues: Partial<Record<keyof T, boolean>>,
+  errors: Partial<Record<keyof T, string[]>>,
+  validationRunnerError: FormValidationRunnerError<T>,
   hasErrors: boolean,
-  hasTriedSubmitting: boolean,
 }
 
-export function useFormObserver<T extends FormValue>({ formStore }: UseFormObserverProps<T> = {}) : FormObserverResult<T> | null {
+export function useFormObserver<T extends FormValue>({ formStore }: UseFormObserverProps<T> = {}): FormObserverResult<T> | null {
   const context = useContext(FormContext)
-  const store = formStore ?? context?.store as FormStore<T>
+  const store = (formStore ?? context?.store ?? fallbackStore) as FormStore<T>
 
-  const subscribe = useCallback((cb: () => void) => {
-    if (!store) return () => { }
-    return store.subscribe('ALL', cb)
-  }, [store])
+  const values = store(state => state.values)
+  const errors = store(state => state.errors)
+  const validationRunnerError = store(state => state.validationRunnerError)
+  const touchedValues = store(state => state.touchedValues)
 
-
-  const values = useSyncExternalStore(subscribe, () => store ? store.getAllValues() : undefined)
-  const errors = useSyncExternalStore(subscribe, () => store ? store.getErrors() : undefined)
-  const touched = useSyncExternalStore(subscribe, () => store ? store.getAllTouched() : undefined)
-  const hasErrors = useSyncExternalStore(subscribe, () => store ? store.getHasError() : undefined)
-  const hasTriedSubmitting = useSyncExternalStore(subscribe, () => store ? store.getHasTriedSubmitting() : undefined)
-
-  if (!store) return null
+  if (!formStore && !context) return null
 
   return {
     store,
     values,
     errors,
-    touched,
-    hasErrors,
-    hasTriedSubmitting,
+    validationRunnerError,
+    touchedValues,
+    hasErrors: countFormErrors(errors, validationRunnerError) > 0,
   }
 }
 
@@ -161,31 +134,29 @@ export interface UseFormObserverKeyProps<T extends FormValue, K extends keyof T>
 export interface FormObserverKeyResult<T extends FormValue, K extends keyof T> {
   store: FormStore<T>,
   value: T[K],
-  error: ReactNode,
+  errors: string[],
+  validationRunnerError: ValidationRunnerState | undefined,
   hasError: boolean,
   touched: boolean,
 }
 
 export function useFormObserverKey<T extends FormValue, K extends keyof T>({ formStore, formKey }: UseFormObserverKeyProps<T, K>): FormObserverKeyResult<T, K> | null {
   const context = useContext(FormContext)
-  const store = formStore ?? context?.store as FormStore<T>
+  const store = (formStore ?? context?.store ?? fallbackStore) as FormStore<T>
 
-  const subscribe = useCallback((cb: () => void) => {
-    if (!store) return () => { }
-    return store.subscribe(formKey, cb)
-  }, [store, formKey])
+  const value = store(state => state.values[formKey])
+  const errors = store(state => state.errors[formKey]) ?? emptyFieldErrors
+  const validationRunnerError = store(state => state.validationRunnerError[formKey])
+  const touched = store(state => state.touchedValues[formKey] ?? false)
 
-  const value = useSyncExternalStore(subscribe, () => store ? store.getValue(formKey) : undefined)
-  const error = useSyncExternalStore(subscribe, () => store ? store.getError(formKey) : undefined)
-  const touched = useSyncExternalStore(subscribe, () => store ? store.getTouched(formKey) : undefined)
-
-  if (!store) return null
+  if (!formStore && !context) return null
 
   return {
     store,
     value,
-    error,
+    errors,
+    validationRunnerError,
     touched,
-    hasError: !!error,
+    hasError: errors.length > 0 || isValidationRunnerInvalid(validationRunnerError),
   }
 }

@@ -33,8 +33,13 @@ and adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 - `text-description`, which sets the text color from the active foreground and background
 - Added a `ModalPanel` component for the modal panel
 
+### Removed
+
+- `useTranslatedValidators`. Form validation returns error codes from `FormValidationUtils` without translating them
+
 ### Changed
 
+- Form creation and validation use `@helpwave/hightide-utils/form`. `FormField` keeps its current props and bag
 - Click and keyboard handlers no longer call `event.stopPropagation` (`Button`, `IconButton`, `Select`, `MultiSelect`, `FileInput`, `Navigation`, `Expandable`, and `PropsUtil` helpers)
 - `Button` no longer stops click bubbling; `allowClickEventPropagation` has no effect
 - `Expandable` header is a `<button>`; `allowContainerToggle` is removed

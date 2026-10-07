@@ -1,10 +1,9 @@
 import clsx from 'clsx'
 import type { InputHTMLAttributes } from 'react'
-import React, { forwardRef, useRef } from 'react'
-import type { UseDelayOptionsResolved } from '@helpwave/hightide-utils/hooks'
-import { useDelay } from '@helpwave/hightide-utils/hooks'
+import { forwardRef, useRef } from 'react'
+import type { StateMachineBinding, StateMachineDefinition, UseDelayOptionsResolved } from '@helpwave/hightide-utils/hooks'
+import { useDelay, useStateMachine, useStateMachineBinding } from '@helpwave/hightide-utils/hooks'
 import { useFocusManagement } from '../../../hooks/focus/useFocusManagement'
-import { useControlledState } from '@helpwave/hightide-utils/hooks'
 import { ReactUtils } from '@helpwave/hightide-utils/utils'
 
 import { PropsUtil } from '../../../utils/propsUtil'
@@ -64,10 +63,46 @@ export type InputComponentInterface<In, Out = In> = InputInterface<In, Out> & {
   required?: boolean,
 }
 
+export type InputState = {
+  value: string,
+}
+
+export type InputEvent =
+  | { type: 'change', value: string }
+  | { type: 'focus' }
+  | { type: 'blur' }
+  | { type: 'compositionStart' }
+  | { type: 'compositionEnd' }
+
+const inputStateTransition = (state: InputState, event: InputEvent): InputState => {
+  switch (event.type) {
+  case 'change':
+    return { value: event.value }
+  case 'focus':
+  case 'blur':
+  case 'compositionStart':
+  case 'compositionEnd':
+    return state
+  }
+}
+
+const definition: StateMachineDefinition<InputState, InputEvent> = ({
+  initialState: () => ({ value: '' }),
+  transition: inputStateTransition,
+})
+
+const valueBinding: StateMachineBinding<InputState, string, InputEvent> = {
+  get: state => state.value,
+  set: value => ({ type: 'change', value }),
+}
+
 export type InputProps = Omit<InputHTMLAttributes<HTMLInputElement>, 'value'>
   & InputComponentInterface<string>
   & {
     editCompleteOptions?: EditCompleteOptions,
+    state?: InputState,
+    onStateChange?: (state: InputState) => void,
+    onStateEvent?: (event: InputEvent) => void,
   }
 
 /**
@@ -77,17 +112,29 @@ export type InputProps = Omit<InputHTMLAttributes<HTMLInputElement>, 'value'>
  */
 export const Input = forwardRef<HTMLInputElement, InputProps>(function Input({
   value: controlledValue,
-  initialValue,
+  initialValue = '',
   invalid = false,
-  onValueUpdate: onValueChange,
+  onValueUpdate,
   onValueCommit: onEditComplete,
   editCompleteOptions,
+  state,
+  onStateChange,
+  onStateEvent,
   ...props
 }, forwardedRef) {
-  const [value, setValue] = useControlledState({
+  const machine = useStateMachine(definition, {
+    state,
+    onStateEvent,
+    onStateChange,
+  })
+
+  const boundValue = useStateMachineBinding({
+    state: machine.state,
+    dispatch: machine.dispatch,
+    binding: valueBinding,
     value: controlledValue,
-    onValueChange: onValueChange,
     defaultValue: initialValue,
+    onChange: onValueUpdate,
   })
   const {
     onBlur: allowEditCompleteOnBlur,
@@ -108,7 +155,7 @@ export const Input = forwardRef<HTMLInputElement, InputProps>(function Input({
   return (
     <input
       {...props}
-      value={value}
+      value={boundValue.value}
       ref={ReactUtils.assingRefsBuilder([innerRef, forwardedRef])}
 
       onKeyDown={event => {
@@ -123,12 +170,25 @@ export const Input = forwardRef<HTMLInputElement, InputProps>(function Input({
           focusNext()
         }
       }}
+      onFocus={event => {
+        props.onFocus?.(event)
+        machine.dispatch({ type: 'focus' })
+      }}
       onBlur={event => {
         props.onBlur?.(event)
+        machine.dispatch({ type: 'blur' })
         if (allowEditCompleteOnBlur) {
           onEditComplete?.(event.target.value)
           clearTimer()
         }
+      }}
+      onCompositionStart={event => {
+        props.onCompositionStart?.(event)
+        machine.dispatch({ type: 'compositionStart' })
+      }}
+      onCompositionEnd={event => {
+        props.onCompositionEnd?.(event)
+        machine.dispatch({ type: 'compositionEnd' })
       }}
       onChange={event => {
         props.onChange?.(event)
@@ -137,11 +197,11 @@ export const Input = forwardRef<HTMLInputElement, InputProps>(function Input({
           innerRef.current?.blur()
           onEditComplete?.(value)
         })
-        setValue(value)
+        boundValue.setValue(value)
       }}
 
       className={clsx('input input-element', props.className)}
-      data-value={PropsUtil.dataAttributes.bool(!!value)}
+      data-value={PropsUtil.dataAttributes.bool(!!boundValue.value)}
       {...PropsUtil.dataAttributes.interactionStates({ ...props, invalid })}
 
       {...PropsUtil.aria.interactionStates({ ...props, invalid }, props)}/>

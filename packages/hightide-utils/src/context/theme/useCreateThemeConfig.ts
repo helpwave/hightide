@@ -1,5 +1,5 @@
 import { useCallback, useEffect, useMemo } from 'react'
-import { useEventCallbackStabilizer } from '../../hooks/useEventCallbackStabelizer'
+import { useStableEvent } from '../../hooks/useStableEvent'
 import type { SimpleValueStore } from '../../hooks/useSimpleStoreSyncedValue'
 import { useSimpleStoreSyncedValue } from '../../hooks/useSimpleStoreSyncedValue'
 import type { Locale } from '../localization/LocalizationContext'
@@ -91,7 +91,7 @@ export const useCreateThemeConfig = <T>({
     }
   }, [deleteStoredTheme, setStoredTheme, supportedThemes, theme])
 
-  const onChangeRef = useEventCallbackStabilizer(onChangedTheme)
+  const onChangeRef = useStableEvent(onChangedTheme)
 
   useEffect(() => {
     onChangeRef?.(resolvedThemeMode)

@@ -7,5 +7,5 @@ export {
   type FormFieldProps,
 } from './FormField'
 export * from './FormObserver'
-export * from './FormStore'
+export type { FormStore, FormValidator } from '@helpwave/hightide-utils/form'
 export * from './useCreateForm'
