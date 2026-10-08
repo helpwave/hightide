@@ -1,53 +1,56 @@
-import { useCallback, useMemo } from 'react'
+import { useCallback, useEffect, useMemo, useRef } from 'react'
 import { useStableEvent } from './useStableEvent'
 
-export type StateMachineBinding<S, V, E> = {
-  get: (state: S) => V,
-  set: (value: V) => E,
-}
-
-export type StateMachineBindingOptions<S, V, E> = {
-  state: S,
-  dispatch: (event: E) => void,
-  binding: StateMachineBinding<S, V, E>,
+export type StateMachineBindingProps<T, V> = {
+  state: T,
+  onStateChange?: (state: T) => void,
+  onValueChange?: (value: V) => void,
+  inject: (value: V) => Partial<T>,
   value?: V,
-  defaultValue: V,
-  onChange?: (value: V) => void,
+  get: (state: T) => V,
 }
 
-export type StateMachineBoundState<V> = {
-  value: V,
-  setValue: (value: V) => void,
-  controlled: boolean,
+export type StateMachineBindingResult<T> = {
+  state: T,
+  onStateChange: (state: T) => void,
 }
 
-export function useStateMachineBinding<S, V, E>({
+export function useStateMachineBinding<T, V>({
   state,
-  dispatch,
-  binding,
-  value: controlledValue,
-  onChange,
-}: StateMachineBindingOptions<S, V, E>): StateMachineBoundState<V> {
-  const value = controlledValue !== undefined
-    ? controlledValue
-    : binding.get(state)
-  const isControlled = controlledValue !== undefined
+  onStateChange,
+  onValueChange,
+  inject,
+  value,
+  get,
+}: StateMachineBindingProps<T, V>): StateMachineBindingResult<T> {
+  const isActive = value !== undefined
+  const onStateChangeStable = useStableEvent(onStateChange)
+  const onValueChangeStable = useStableEvent(onValueChange)
+  const previousValueRef = useRef(value)
 
-  const onChangeStable = useStableEvent(onChange)
-  const dispatchStable = useStableEvent(dispatch)
-  const setEventStable = useStableEvent(binding.set)
+  useEffect(() => {
+    if(value != undefined)
+      previousValueRef.current = value
+  }, [value])
 
-  const setValue = useCallback((nextValue: V) => {
-    onChangeStable(nextValue)
-
-    if (!isControlled) {
-      dispatchStable(setEventStable(nextValue))
+  const nextState = useMemo(() => {
+    if(isActive) {
+      return{ ...state, ...inject(value) }
     }
-  }, [isControlled, dispatchStable, onChangeStable, setEventStable])
+    return state
+  }, [inject, isActive, state, value])
+
+  const handleStateChange = useCallback((newState: T) => {
+    const nextValue = get(newState)
+    if (nextValue !== previousValueRef.current) {
+      onValueChangeStable(nextValue)
+    }
+    previousValueRef.current = nextValue
+    onStateChangeStable(newState)
+  }, [get, onStateChangeStable, onValueChangeStable])
 
   return useMemo(() => ({
-    value,
-    setValue,
-    controlled: isControlled,
-  }), [isControlled, setValue, value])
+    state: nextState,
+    onStateChange: handleStateChange,
+  }), [handleStateChange, nextState])
 }
