@@ -15,7 +15,6 @@ export function TextInputStateManager({
   onStateChange,
   onStateEvent,
   value: controlledValue,
-  initialValue,
   initialState,
   onValueChange,
   isInvalid = false,
@@ -25,7 +24,7 @@ export function TextInputStateManager({
   children,
 }: TextInputStateManagerProps) {
   const [state, setState] = useControlledState({
-    defaultValue: { ...initialState, value: initialValue ?? initialState?.value ?? '' },
+    defaultValue: { ...initialState, value: controlledValue ?? initialState?.value ?? '' },
     value: controlledState,
     onValueChange: onStateChange
   })

@@ -21,5 +21,8 @@ export interface ControllableInputProps<T> extends Partial<InputConfig> {
 }
 
 export interface ControllableStateInputProps<T extends InputState, E extends InputStateEvent> extends
-  ControllableInputProps<T['value']>,
-  ControllableStateProps<T, E> {}
+  Partial<InputConfig>,
+  ControllableStateProps<T, E> {
+  value?: T['value'],
+  onValueChange?: (value: T['value']) => void,
+}

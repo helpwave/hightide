@@ -2,7 +2,7 @@ import { forwardRef, useEffect, useRef, useState } from 'react'
 import { Pencil } from 'lucide-react'
 import { Icon } from '../../visualization/Icon'
 import clsx from 'clsx'
-import type { TextInputElementProps, TextInputProps } from './TextInput'
+import type { TextInputProps } from './TextInput'
 import { TextInput } from './TextInput'
 import { useEditCompletable, useControlledState } from '@helpwave/hightide-utils/hooks'
 import { ReactUtils } from '@helpwave/hightide-utils/utils'
@@ -13,10 +13,10 @@ type ToggleableInputEditOptions = {
   delay?: number,
 }
 
-type ToggleableInputProps = Omit<TextInputProps, 'initialState' | 'inputProps'>
-  & TextInputElementProps
+type ToggleableInputProps = Omit<TextInputProps, 'initialState' | 'state'>
   & {
-    initialState?: 'editing' | 'display',
+    initialValue?: string,
+    initialEditingState?: 'editing' | 'display',
     onValueCommit?: (value: string) => void,
     editCompleteOptions?: ToggleableInputEditOptions,
   }
@@ -28,27 +28,26 @@ type ToggleableInputProps = Omit<TextInputProps, 'initialState' | 'inputProps'>
  * The State is managed by the parent
  */
 export const ToggleableInput = forwardRef<HTMLInputElement, ToggleableInputProps>(function ToggleableInput({
+  initialValue,
   value: controlledValue,
-  initialValue = '',
   onValueChange,
   onValueCommit,
-  initialState = 'display',
+  initialEditingState: initialState = 'display',
   editCompleteOptions,
   isInvalid,
   isDisabled,
   isReadOnly,
   isRequired,
-  state,
   onStateChange,
   onStateEvent,
   inputRef,
-  ...elementProps
-}, forwardedRef) {
+  inputProps
+}) {
   const [isEditing, setIsEditing] = useState(initialState !== 'display')
   const [value, setValue] = useControlledState({
     value: controlledValue,
     onValueChange,
-    defaultValue: initialValue,
+    defaultValue: initialValue ?? '',
   })
   const edit = useEditCompletable({
     value,
@@ -72,16 +71,14 @@ export const ToggleableInput = forwardRef<HTMLInputElement, ToggleableInputProps
   return (
     <div className={clsx('relative flex-row-2', { 'flex-1': isEditing })}>
       <TextInput
-        ref={ReactUtils.assingRefsBuilder([innerRef, forwardedRef])}
         value={value}
         isInvalid={isInvalid}
         isDisabled={isDisabled}
         isReadOnly={isReadOnly}
         isRequired={isRequired}
-        state={state}
         onStateChange={onStateChange}
         onStateEvent={onStateEvent}
-        inputRef={inputRef}
+        inputRef={ReactUtils.assingRefsBuilder([innerRef, inputRef])}
         onValueChange={(text) => {
           setValue(text)
           if (editCompleteOptions?.afterDelay) {
@@ -89,26 +86,26 @@ export const ToggleableInput = forwardRef<HTMLInputElement, ToggleableInputProps
           }
         }}
         inputProps={{
-          ...elementProps,
+          ...inputProps ?? {},
           'onKeyDown': event => {
-            elementProps.onKeyDown?.(event)
+            inputProps?.onKeyDown?.(event)
             if (edit.completeOnKey(event)) {
               innerRef.current?.blur()
             }
           },
           'onFocus': event => {
-            elementProps.onFocus?.(event)
+            inputProps?.onFocus?.(event)
             setIsEditing(true)
             event.target.select()
           },
           'onBlur': event => {
-            elementProps.onBlur?.(event)
+            inputProps?.onBlur?.(event)
             if (isBlurCompleteEnabled) {
               edit.completeNow()
             }
           },
           'data-isediting': isEditing ? '' : undefined,
-          'className': clsx('togglable-input', elementProps.className),
+          'className': clsx('togglable-input', inputProps?.className),
         }}
       />
       {!isEditing && (

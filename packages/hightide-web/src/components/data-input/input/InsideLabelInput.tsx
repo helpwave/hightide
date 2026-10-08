@@ -1,15 +1,16 @@
-import type { ReactNode } from 'react'
+import type { LabelHTMLAttributes, ReactNode, RefObject } from 'react'
 import { useId } from 'react'
-import { forwardRef, useState } from 'react'
+import { useState } from 'react'
 import clsx from 'clsx'
-import type { TextInputElementProps, TextInputProps } from './TextInput'
+import type { TextInputProps } from './TextInput'
 import { TextInput } from './TextInput'
-import { useControlledState } from '@helpwave/hightide-utils/hooks'
 
-type InsideLabelInputProps = Omit<TextInputProps, 'inputProps'>
-  & Omit<TextInputElementProps, 'aria-label' | 'aria-labelledby' | 'placeholder'>
+type InsideLabelInputProps = TextInputProps
   & {
+    id: string,
     label: ReactNode,
+    lablerRef?: RefObject<HTMLLabelElement>,
+    labelProps?: LabelHTMLAttributes<HTMLLabelElement>,
   }
 
 /**
@@ -17,74 +18,61 @@ type InsideLabelInputProps = Omit<TextInputProps, 'inputProps'>
  *
  * The State is managed by the parent
  */
-export const InsideLabelInput = forwardRef<HTMLInputElement, InsideLabelInputProps>(function InsideLabelInput({
+export const InsideLabelInput = ({
   id: customId,
-  value: controlledValue,
-  initialValue,
-  initialState,
-  onValueChange,
-  isInvalid,
-  isDisabled,
-  isReadOnly,
-  isRequired,
-  state,
-  onStateChange,
-  onStateEvent,
   inputRef,
+  inputProps,
   label,
-  ...elementProps
-}, forwardedRef) {
-  const [value, setValue] = useControlledState<string>({
-    value: controlledValue,
-    onValueChange,
-    defaultValue: initialValue,
-  })
+  lablerRef,
+  labelProps,
+  ...props
+}: InsideLabelInputProps) => {
   const [isFocused, setIsFocused] = useState(false)
   const generatedId = useId()
   const id = customId ?? generatedId
+  const labelId = id + '-label'
 
   return (
     <div className={clsx('relative')}>
-      <TextInput
-        ref={forwardedRef}
-        value={value}
-        initialState={initialState}
-        isInvalid={isInvalid}
-        isDisabled={isDisabled}
-        isReadOnly={isReadOnly}
-        isRequired={isRequired}
-        state={state}
-        onStateChange={onStateChange}
-        onStateEvent={onStateEvent}
-        inputRef={inputRef}
-        onValueChange={setValue}
-        inputProps={{
-          ...elementProps,
-          id,
-          'onFocus': event => {
-            elementProps.onFocus?.(event)
+      <TextInput.StateManager {...props}>
+        <TextInput.Input
+          {...inputProps ?? {}}
+          ref={inputRef}
+          id={id}
+          onFocus={event => {
+            inputProps?.onFocus?.(event)
             setIsFocused(true)
-          },
-          'onBlur': event => {
-            elementProps.onBlur?.(event)
+          }}
+          onBlur={event => {
+            inputProps?.onBlur?.(event)
             setIsFocused(false)
-          },
-          'aria-labelledby': id + '-label',
-          'className': clsx('h-14 px-4 pb-2 py-6.5', elementProps.className),
-        }}
-      />
-      <label
-        id={id + '-label'}
-        aria-hidden={true}
-        data-display={isFocused || !!value ? 'small' : 'full'}
-        className={clsx(
-          'absolute left-4 ml-0.5 top-2 transition-all delay-25 pointer-events-none touch-none',
-          'data-[display=small]:top-2 data-[display=small]:h-force-4.5 data-[display=small]:typography-caption-sm data-[display=small]:overflow-y-hidden',
-          'data-[display=full]:top-1/2 data-[display=full]:-translate-y-1/2 data-[display=full]:typography-body-md'
-        )}
-      >
-        {label}
-      </label>
+          }}
+          aria-labelledby={labelId}
+          className={clsx('h-14 px-4 pb-2 py-6.5', inputProps?.className)}
+        />
+        <TextInput.Consumer>
+          {(context) => {
+            if(!context) return
+            return (
+              <label
+                ref={lablerRef}
+                {...labelProps ?? {}}
+                id={labelId}
+                aria-hidden={true}
+                data-display={isFocused || !!context.state.value ? 'small' : 'full'}
+                className={clsx(
+                  'absolute left-4 ml-0.5 top-2 transition-all delay-25 pointer-events-none touch-none',
+                  'data-[display=small]:top-2 data-[display=small]:h-force-4.5 data-[display=small]:typography-caption-sm data-[display=small]:overflow-y-hidden',
+                  'data-[display=full]:top-1/2 data-[display=full]:-translate-y-1/2 data-[display=full]:typography-body-md',
+                  labelProps?.className
+                )}
+              >
+                {label}
+              </label>
+            )
+          }}
+        </TextInput.Consumer>
+      </TextInput.StateManager>
     </div>
   )
-})
+}
