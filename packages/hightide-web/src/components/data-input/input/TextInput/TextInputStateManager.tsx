@@ -1,18 +1,14 @@
 import type { ReactNode } from 'react'
-import { useMemo } from 'react'
+import { useCallback, useMemo } from 'react'
+import type { ControllableStateInputProps } from '@helpwave/hightide-utils/interfaces'
 import { useStateMachine, useStateMachineBinding } from '@helpwave/hightide-utils/hooks'
 import { TextInputContext, type TextInputContextValue } from './TextInputContext'
-import { textInputStateDefinition, textInputValueBinding, type TextInputEvent, type TextInputState } from './TextInputState'
+import { textInputStateTransition, textInputValueBinding, type TextInputEvent, type TextInputState } from './TextInputState'
 
-export type TextInputStateManagerProps = {
-  state?: TextInputState,
-  onStateChange?: (state: TextInputState) => void,
-  onStateEvent?: (event: TextInputEvent) => void,
-  value?: string,
-  initialValue?: string,
-  onValueUpdate?: (value: string) => void,
-  children?: ReactNode,
-}
+export type TextInputStateManagerProps = ControllableStateInputProps<TextInputState, TextInputEvent>
+  & {
+    children?: ReactNode,
+  }
 
 export function TextInputStateManager({
   state,
@@ -20,10 +16,17 @@ export function TextInputStateManager({
   onStateEvent,
   value: controlledValue,
   initialValue = '',
-  onValueUpdate,
+  initialState,
+  onValueChange,
+  isInvalid = false,
+  isDisabled = false,
+  isReadOnly = false,
+  isRequired = false,
   children,
 }: TextInputStateManagerProps) {
-  const machine = useStateMachine(textInputStateDefinition, {
+  const machine = useStateMachine({
+    initialState: () => initialState ?? { value: initialValue },
+    transition: textInputStateTransition,
     state,
     onStateEvent,
     onStateChange,
@@ -35,15 +38,33 @@ export function TextInputStateManager({
     binding: textInputValueBinding,
     value: controlledValue,
     defaultValue: initialValue,
-    onChange: onValueUpdate,
+    onChange: onValueChange,
   })
 
+  const config = useMemo(() => ({
+    isInvalid,
+    isDisabled,
+    isReadOnly,
+    isRequired,
+  }), [isDisabled, isInvalid, isReadOnly, isRequired])
+
+  const dispatch = useCallback((event: TextInputEvent) => {
+    if (event.type === 'change') {
+      boundValue.setValue(event.value)
+      return
+    }
+    machine.dispatch(event)
+  }, [boundValue.setValue, machine.dispatch])
+
+  const contextState = boundValue.value === machine.state.value
+    ? machine.state
+    : { value: boundValue.value }
+
   const contextValue = useMemo<TextInputContextValue>(() => ({
-    state: machine.state,
-    value: boundValue.value,
-    setValue: boundValue.setValue,
-    dispatch: machine.dispatch,
-  }), [boundValue.setValue, boundValue.value, machine.dispatch, machine.state])
+    state: contextState,
+    dispatch,
+    config,
+  }), [config, contextState, dispatch])
 
   return (
     <TextInputContext.Provider value={contextValue}>

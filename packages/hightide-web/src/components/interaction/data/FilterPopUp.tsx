@@ -147,17 +147,19 @@ export const TextFilterPopUp = forwardRef<HTMLDivElement, FilterPopUpProps>(func
         <div className="flex-col-1">
           <label htmlFor={ids.search} className="typography-label-md">{translation('search')}</label>
           <TextInput
-            id={ids.search}
             value={parameter.stringValue ?? ''}
-            placeholder={translation('value')}
-            onValueUpdate={searchText => {
+            onValueChange={searchText => {
               onValueChange({
                 dataType: 'text',
                 operator,
                 parameter: { ...parameter, stringValue: searchText },
               })
             }}
-            className="min-w-64"
+            inputProps={{
+              id: ids.search,
+              placeholder: translation('value'),
+              className: 'min-w-64',
+            }}
           />
         </div>
       </Visibility>
@@ -203,11 +205,8 @@ export const NumberFilterPopUp = forwardRef<HTMLDivElement, FilterPopUpProps>(fu
         <div className="flex-col-1">
           <label htmlFor={ids.min} className="typography-label-md">{translation('min')}</label>
           <TextInput
-            id={ids.min}
             value={parameter.numberMin?.toString() ?? ''}
-            type="number"
-            placeholder="0"
-            onValueUpdate={text => {
+            onValueChange={text => {
               const num = Number(text)
               onValueChange({
                 dataType: 'number',
@@ -215,17 +214,19 @@ export const NumberFilterPopUp = forwardRef<HTMLDivElement, FilterPopUpProps>(fu
                 parameter: { ...parameter, numberMin: isNaN(num) ? undefined : num },
               })
             }}
-            className="min-w-64"
+            inputProps={{
+              id: ids.min,
+              type: 'number',
+              placeholder: '0',
+              className: 'min-w-64',
+            }}
           />
         </div>
         <div className="flex-col-1">
           <label htmlFor={ids.max} className="typography-label-md">{translation('max')}</label>
           <TextInput
-            id={ids.max}
             value={parameter.numberMax?.toString() ?? ''}
-            type="number"
-            placeholder="1"
-            onValueUpdate={text => {
+            onValueChange={text => {
               const num = Number(text)
               onValueChange({
                 dataType: 'number',
@@ -233,16 +234,19 @@ export const NumberFilterPopUp = forwardRef<HTMLDivElement, FilterPopUpProps>(fu
                 parameter: { ...parameter, numberMax: isNaN(num) ? undefined : num },
               })
             }}
-            className="min-w-64"
+            inputProps={{
+              id: ids.max,
+              type: 'number',
+              placeholder: '1',
+              className: 'min-w-64',
+            }}
           />
         </div>
       </Visibility>
       <Visibility isVisible={!needsRangeInput && needsParameterInput}>
         <TextInput
           value={parameter.numberValue?.toString() ?? ''}
-          type="number"
-          placeholder="0"
-          onValueUpdate={text => {
+          onValueChange={text => {
             const num = Number(text)
             onValueChange({
               dataType: 'number',
@@ -250,7 +254,11 @@ export const NumberFilterPopUp = forwardRef<HTMLDivElement, FilterPopUpProps>(fu
               parameter: { ...parameter, numberValue: isNaN(num) ? undefined : num },
             })
           }}
-          className="min-w-64"
+          inputProps={{
+            type: 'number',
+            placeholder: '0',
+            className: 'min-w-64',
+          }}
         />
       </Visibility>
     </FilterBasePopUp>

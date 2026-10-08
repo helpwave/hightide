@@ -6,21 +6,16 @@ import { TextInput, type TextInputState } from '../../src/components/data-input/
 const meta = {
   component: TextInput,
   args: {
-    disabled: false,
-    invalid: false,
-    readOnly: false,
-    placeholder: 'Placeholder',
-    editCompleteOptions: {
-      allowEnterComplete: true,
-      onBlur: true,
-      afterDelay: true,
-      delay: 2500
-    },
-    onChange: action('onChange'),
-    onValueUpdate: action('onValueUpdate'),
-    onValueCommit: action('onValueCommit'),
+    isDisabled: false,
+    isInvalid: false,
+    isReadOnly: false,
+    onValueChange: action('onValueChange'),
     onStateChange: action('onStateChange'),
     onStateEvent: action('onStateEvent'),
+    inputProps: {
+      placeholder: 'Placeholder',
+      onChange: action('onChange'),
+    },
   },
 } satisfies Meta<typeof TextInput>
 
@@ -41,8 +36,8 @@ export const controlledValue: Story = {
       <TextInput
         {...args}
         value={value}
-        onValueUpdate={(next) => {
-          args.onValueUpdate?.(next)
+        onValueChange={(next) => {
+          args.onValueChange?.(next)
           setValue(next)
         }}
       />

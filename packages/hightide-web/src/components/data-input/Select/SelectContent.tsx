@@ -1,15 +1,15 @@
-import type { ComponentProps, ForwardedRef } from 'react'
+import type { ForwardedRef } from 'react'
 import { forwardRef, useCallback, useEffect, useRef } from 'react'
 import { useSelectContext } from './SelectContext'
 import clsx from 'clsx'
 import { useHightideTranslation } from '@helpwave/hightide-utils/context/translation'
 import { PopUp, type PopUpProps } from '../../layout/PopUp/PopUp'
-import { TextInput } from '../input/TextInput'
+import { TextInput, type TextInputProps } from '../input/TextInput'
 import { Visibility } from '../../layout/Visibility'
 import { ReactUtils } from '@helpwave/hightide-utils/utils'
 
 export interface SelectContentProps extends PopUpProps {
-  searchInputProps?: Omit<ComponentProps<typeof TextInput>, 'value' | 'onValueChange'>,
+  searchInputProps?: Omit<TextInputProps, 'value' | 'onValueChange'>,
 }
 
 export const SelectContent = forwardRef<HTMLUListElement, SelectContentProps>(function SelectContent<T>({
@@ -85,22 +85,37 @@ export const SelectContent = forwardRef<HTMLUListElement, SelectContentProps>(fu
     >
       {showSearch && (
         <TextInput
-          {...searchInputProps}
           ref={searchInputRef}
-          id={context.config.ids.searchInput}
           value={context.search.searchQuery}
-          onValueUpdate={context.search.setSearchQuery}
-          onKeyDown={keyHandler}
-          placeholder={searchInputProps?.placeholder ?? translation('filterOptions')}
-          role="combobox"
-          aria-autocomplete="list"
-          aria-expanded={context.isOpen}
-          aria-controls={context.config.ids.listbox}
-          aria-activedescendant={
-            context.highlightedId ? context.config.ids.listbox + '-' + context.highlightedId : undefined
-          }
-          aria-label={searchInputProps?.['aria-label'] ?? translation('filterOptions')}
-          className={clsx('mx-2 mt-2 shrink-0', searchInputProps?.className)}
+          onValueChange={context.search.setSearchQuery}
+          isInvalid={searchInputProps?.isInvalid}
+          isDisabled={searchInputProps?.isDisabled}
+          isReadOnly={searchInputProps?.isReadOnly}
+          isRequired={searchInputProps?.isRequired}
+          state={searchInputProps?.state}
+          initialState={searchInputProps?.initialState}
+          initialValue={searchInputProps?.initialValue}
+          onStateChange={searchInputProps?.onStateChange}
+          onStateEvent={searchInputProps?.onStateEvent}
+          inputRef={searchInputProps?.inputRef}
+          inputProps={{
+            ...searchInputProps?.inputProps,
+            'id': context.config.ids.searchInput,
+            'onKeyDown': (event) => {
+              searchInputProps?.inputProps?.onKeyDown?.(event)
+              keyHandler(event)
+            },
+            'placeholder': searchInputProps?.inputProps?.placeholder ?? translation('filterOptions'),
+            'role': 'combobox',
+            'aria-autocomplete': 'list',
+            'aria-expanded': context.isOpen,
+            'aria-controls': context.config.ids.listbox,
+            'aria-activedescendant': context.highlightedId
+              ? context.config.ids.listbox + '-' + context.highlightedId
+              : undefined,
+            'aria-label': searchInputProps?.inputProps?.['aria-label'] ?? translation('filterOptions'),
+            'className': clsx('mx-2 mt-2 shrink-0', searchInputProps?.inputProps?.className),
+          }}
         />
       )}
       <ul

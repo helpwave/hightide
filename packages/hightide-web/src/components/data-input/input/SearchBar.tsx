@@ -1,4 +1,4 @@
-import type { TextInputProps } from './TextInput'
+import type { TextInputProps, TextInputElementProps } from './TextInput'
 import { TextInput } from './TextInput'
 import { Search } from 'lucide-react'
 import { Icon } from '../../visualization/Icon'
@@ -7,23 +7,34 @@ import { useHightideTranslation } from '@helpwave/hightide-utils/context/transla
 import type { HTMLAttributes } from 'react'
 import type { IconButtonProps } from '../../interaction/IconButton'
 import { IconButton } from '../../interaction/IconButton'
-import { useControlledState } from '@helpwave/hightide-utils/hooks'
+import { useControlledState, useEditCompletable } from '@helpwave/hightide-utils/hooks'
 
-export type SearchBarProps = Omit<TextInputProps, 'onValueChange' | 'onEditComplete'> & {
-  onValueChange?: (value: string) => void,
-  onSearch: (value: string) => void,
-  searchButtonProps?: Omit<IconButtonProps, 'onClick'>,
-  containerProps?: HTMLAttributes<HTMLDivElement>,
-}
+export type SearchBarProps = Omit<TextInputProps, 'onValueChange' | 'inputProps'>
+  & TextInputElementProps
+  & {
+    onValueChange?: (value: string) => void,
+    onSearch: (value: string) => void,
+    searchButtonProps?: Omit<IconButtonProps, 'onClick'>,
+    containerProps?: HTMLAttributes<HTMLDivElement>,
+  }
 
 export const SearchBar = ({
   value: controlledValue,
-  initialValue,
+  initialValue = '',
+  initialState,
   onValueChange,
   onSearch,
+  isInvalid,
+  isDisabled,
+  isReadOnly,
+  isRequired,
+  state,
+  onStateChange,
+  onStateEvent,
+  inputRef,
   searchButtonProps,
   containerProps,
-  ...inputProps
+  ...elementProps
 }: SearchBarProps) => {
   const translation = useHightideTranslation()
   const [value, setValue] = useControlledState({
@@ -31,15 +42,34 @@ export const SearchBar = ({
     onValueChange,
     defaultValue: initialValue,
   })
+  const edit = useEditCompletable({
+    value,
+    onEditComplete: onSearch,
+    isTimerEnabled: false,
+  })
   return (
     <div {...containerProps} className={clsx('search-bar-container group/search-bar', containerProps?.className)}>
       <TextInput
-        {...inputProps}
         value={value}
-        onValueUpdate={setValue}
-        onValueCommit={onSearch}
-        placeholder={inputProps.placeholder ?? translation('search')}
-        className={clsx('search-bar-input', inputProps.className)}
+        initialState={initialState}
+        isInvalid={isInvalid}
+        isDisabled={isDisabled}
+        isReadOnly={isReadOnly}
+        isRequired={isRequired}
+        state={state}
+        onStateChange={onStateChange}
+        onStateEvent={onStateEvent}
+        inputRef={inputRef}
+        onValueChange={setValue}
+        inputProps={{
+          ...elementProps,
+          onBlur: event => {
+            elementProps.onBlur?.(event)
+            edit.completeNow()
+          },
+          placeholder: elementProps.placeholder ?? translation('search'),
+          className: clsx('search-bar-input', elementProps.className),
+        }}
       />
       <IconButton
         {...searchButtonProps}

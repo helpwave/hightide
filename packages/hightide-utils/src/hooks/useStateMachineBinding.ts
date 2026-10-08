@@ -1,4 +1,5 @@
-import { useCallback } from 'react'
+import { useCallback, useMemo } from 'react'
+import { useStableEvent } from './useStableEvent'
 
 export type StateMachineBinding<S, V, E> = {
   get: (state: S) => V,
@@ -30,23 +31,23 @@ export function useStateMachineBinding<S, V, E>({
   const value = controlledValue !== undefined
     ? controlledValue
     : binding.get(state)
+  const isControlled = controlledValue !== undefined
+
+  const onChangeStable = useStableEvent(onChange)
+  const dispatchStable = useStableEvent(dispatch)
+  const setEventStable = useStableEvent(binding.set)
 
   const setValue = useCallback((nextValue: V) => {
-    onChange?.(nextValue)
+    onChangeStable(nextValue)
 
-    if (controlledValue === undefined) {
-      dispatch(binding.set(nextValue))
+    if (!isControlled) {
+      dispatchStable(setEventStable(nextValue))
     }
-  }, [
-    controlledValue,
-    dispatch,
-    binding,
-    onChange,
-  ])
+  }, [isControlled, dispatchStable, onChangeStable, setEventStable])
 
-  return {
+  return useMemo(() => ({
     value,
     setValue,
-    controlled: controlledValue !== undefined,
-  }
+    controlled: isControlled,
+  }), [isControlled, setValue, value])
 }

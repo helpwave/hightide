@@ -52,8 +52,8 @@ function ThrottleDemo({ throttleMs }: StoryArgs) {
     <div className="flex w-full max-w-md flex-col gap-8">
       <TextInput
         value={inputValue}
-        onValueUpdate={handleInputChange}
-        placeholder="Type to trigger throttled updates"
+        onValueChange={handleInputChange}
+        inputProps={{ placeholder: 'Type to trigger throttled updates' }}
       />
       <Button onClick={handleClick}>
         {'Click to Increase Trigger Count'}

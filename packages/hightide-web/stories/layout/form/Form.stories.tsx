@@ -3,7 +3,8 @@ import { action } from 'storybook/actions'
 import type { StorybookHelperSelectType } from '../../../src/storybook/helper'
 import { StorybookHelper } from '../../../src/storybook/helper'
 import { FormValidationUtils } from '@helpwave/hightide-utils/utils'
-import { TextInput } from '../../../src/components/data-input/input/TextInput'
+import { useEditCompletable } from '@helpwave/hightide-utils/hooks'
+import { TextInput, type TextInputElementProps } from '../../../src/components/data-input/input/TextInput'
 import { MultiSelect } from '../../../src/components/data-input/MultiSelect/MultiSelect'
 import { Select } from '../../../src/components/data-input/Select/Select'
 import { Textarea } from '../../../src/components/data-input/Textarea'
@@ -11,7 +12,7 @@ import { Button } from '../../../src/components/interaction/Button'
 import { useCreateForm } from '../../../src/components/layout/form/useCreateForm'
 import { Visibility } from '../../../src/components/layout/Visibility'
 import { HelpwaveLogo } from '../../../src/components/branding/visualization/HelpwaveLogo'
-import { useEffect, useMemo, useState } from 'react'
+import { useEffect, useMemo, useState, type FocusEvent, type Ref } from 'react'
 import { FormField } from '../../../src/components/layout/form/FormField'
 import { FormProvider } from '../../../src/components/layout/form/FormContext'
 import { DateTimeInput } from '../../../src/components/data-input/input/DateTimeInput'
@@ -38,6 +39,53 @@ type StoryArgs = {
 }
 
 const meta: Meta<StoryArgs> = {}
+
+function FormTextInput({
+  value,
+  onValueUpdate,
+  onValueCommit,
+  invalid,
+  disabled,
+  readOnly,
+  required,
+  onBlur,
+  ref,
+  ...inputProps
+}: {
+  value?: string,
+  onValueUpdate: (value: string) => void,
+  onValueCommit: (value: string) => void,
+  invalid?: boolean,
+  disabled?: boolean,
+  readOnly?: boolean,
+  required?: boolean,
+  ref?: Ref<HTMLInputElement>,
+} & TextInputElementProps) {
+  const edit = useEditCompletable({
+    value: value ?? '',
+    onEditComplete: onValueCommit,
+    isTimerEnabled: false,
+  })
+
+  return (
+    <TextInput
+      ref={ref}
+      value={value ?? ''}
+      isInvalid={invalid}
+      isDisabled={disabled}
+      isReadOnly={readOnly}
+      isRequired={required}
+      onValueChange={onValueUpdate}
+      inputProps={{
+        ...inputProps,
+        onBlur: (event: FocusEvent<HTMLInputElement>) => {
+          onBlur?.(event)
+          edit.completeNow()
+        },
+      }}
+    />
+  )
+}
 
 export default meta
 type Story = StoryObj<typeof meta>;
@@ -136,7 +184,7 @@ export const basic: Story = {
               label="Your name"
             >
               {({ dataProps, focusableElementProps, interactionStates }) => (
-                <TextInput {...dataProps} {...focusableElementProps} {...interactionStates} placeholder="e.g. John Doe" />
+                <FormTextInput {...dataProps} {...focusableElementProps} {...interactionStates} placeholder="e.g. John Doe" />
               )}
             </FormField>
 
@@ -147,7 +195,7 @@ export const basic: Story = {
               label="Email"
             >
               {({ dataProps, focusableElementProps, interactionStates }) => (
-                <TextInput {...dataProps} {...focusableElementProps} {...interactionStates} placeholder="e.g. test@helpwave.de" />
+                <FormTextInput {...dataProps} {...focusableElementProps} {...interactionStates} placeholder="e.g. test@helpwave.de" />
               )}
             </FormField>
 
@@ -342,7 +390,7 @@ return (
           label="Your name"
         >
           {({ dataProps, focusableElementProps, interactionStates }) => (
-            <TextInput {...dataProps} {...focusableElementProps} {...interactionStates} placeholder="e.g. John Doe" />
+            <FormTextInput {...dataProps} {...focusableElementProps} {...interactionStates} placeholder="e.g. John Doe" />
           )}
         </FormField>
 
@@ -353,7 +401,7 @@ return (
           label="Email"
         >
           {({ dataProps, focusableElementProps, interactionStates }) => (
-            <TextInput {...dataProps} {...focusableElementProps} {...interactionStates} placeholder="e.g. test@helpwave.de" />
+            <FormTextInput {...dataProps} {...focusableElementProps} {...interactionStates} placeholder="e.g. test@helpwave.de" />
           )}
         </FormField>
 

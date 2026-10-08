@@ -1,6 +1,7 @@
 import { ChevronFirst, ChevronLast, ChevronLeft, ChevronRight } from 'lucide-react'
 import clsx from 'clsx'
 import { TextInput } from '../../data-input/input/TextInput'
+import { useEditCompletable } from '@helpwave/hightide-utils/hooks'
 import { MathUtil } from '@helpwave/hightide-utils/utils'
 import type { HTMLAttributes } from 'react'
 import { useEffect, useState } from 'react'
@@ -24,6 +25,13 @@ export const Pagination = ({
 }: PaginationProps) => {
   const translation = useHightideTranslation()
   const [value, setValue] = useState<string>((pageIndex + 1).toString())
+  const edit = useEditCompletable({
+    value,
+    delay: 800,
+    onEditComplete: (next) => {
+      onPageIndexChanged?.(MathUtil.clamp(Number(next) - 1, 0, pageCount - 1))
+    },
+  })
 
   const noPages = pageCount === 0
   const onFirstPage = pageIndex === 0 && !noPages
@@ -60,24 +68,23 @@ export const Pagination = ({
       <div className="flex-row-2 min-w-56 items-center justify-center mx-2 text-center">
         <TextInput
           value={value}
-          className={clsx(
-            'w-24 text-center font-bold input-indicator-hidden h-10'
-          )}
-          type="number"
-          min={1}
-          max={pageCount}
-          disabled={noPages}
-          onValueUpdate={value => {
-            if (value) {
-              setValue(MathUtil.clamp(Number(value), 1, pageCount).toString())
-            } else {
-              setValue(value)
-            }
+          isDisabled={noPages}
+          onValueChange={next => {
+            const nextValue = next
+              ? MathUtil.clamp(Number(next), 1, pageCount).toString()
+              : next
+            setValue(nextValue)
+            edit.setTimer()
           }}
-          onValueCommit={value => {
-            changePage(MathUtil.clamp(Number(value) - 1, 0, pageCount - 1))
+          inputProps={{
+            className: clsx('w-24 text-center font-bold input-indicator-hidden h-10'),
+            type: 'number',
+            min: 1,
+            max: pageCount,
+            onBlur: () => {
+              edit.completeNow()
+            },
           }}
-          editCompleteOptions={{ delay: 800 }}
         />
         <span className="select-none w-10">{translation('of')}</span>
         <span

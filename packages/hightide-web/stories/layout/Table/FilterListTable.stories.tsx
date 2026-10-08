@@ -99,9 +99,7 @@ const AgeFilterPopUp = ({ value, onValueChange, onRemove, name, onClose: close, 
       <Visibility isVisible={!needsRangeInput && needsParameterInput}>
         <TextInput
           value={parameter.numberValue?.toString() ?? ''}
-          type="number"
-          placeholder="0"
-          onValueUpdate={text => {
+          onValueChange={text => {
             const num = Number(text)
             onValueChange({
               dataType: 'number',
@@ -109,7 +107,11 @@ const AgeFilterPopUp = ({ value, onValueChange, onRemove, name, onClose: close, 
               parameter: { ...parameter, numberValue: isNaN(num) ? undefined : num },
             })
           }}
-          className="min-w-64"
+          inputProps={{
+            type: 'number',
+            placeholder: '0',
+            className: 'min-w-64',
+          }}
         />
       </Visibility>
     </FilterBasePopUp>

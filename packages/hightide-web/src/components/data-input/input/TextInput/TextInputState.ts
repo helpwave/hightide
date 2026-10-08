@@ -1,4 +1,4 @@
-import type { StateMachineBinding, StateMachineDefinition } from '@helpwave/hightide-utils/hooks'
+import type { StateMachineBinding } from '@helpwave/hightide-utils/hooks'
 
 export type TextInputState = {
   value: string,
@@ -21,11 +21,6 @@ export const textInputStateTransition = (state: TextInputState, event: TextInput
   case 'compositionEnd':
     return state
   }
-}
-
-export const textInputStateDefinition: StateMachineDefinition<TextInputState, TextInputEvent> = {
-  initialState: () => ({ value: '' }),
-  transition: textInputStateTransition,
 }
 
 export const textInputValueBinding: StateMachineBinding<TextInputState, string, TextInputEvent> = {

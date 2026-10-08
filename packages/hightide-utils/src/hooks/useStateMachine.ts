@@ -1,11 +1,9 @@
-import { useCallback, useState } from 'react'
+import { useCallback, useMemo, useState } from 'react'
+import { useStableEvent } from './useStableEvent'
 
-export type StateMachineDefinition<S, E> = {
+export type StateMachineProps<S, E> = {
   initialState: () => S,
   transition: (state: S, event: E) => S,
-}
-
-export type StateMachineOptions<S, E> = {
   state?: S,
   onStateEvent?: (event: E) => void,
   onStateChange?: (state: S) => void,
@@ -17,42 +15,37 @@ export type StateMachine<S, E> = {
   controlled: boolean,
 }
 
-export function useStateMachine<S, E>(
-  definition: StateMachineDefinition<S, E>,
-  options: StateMachineOptions<S, E> = {}
-): StateMachine<S, E> {
-  const {
-    state: controlledState,
-    onStateEvent,
-    onStateChange,
-  } = options
+export function useStateMachine<S, E>({
+  initialState,
+  transition,
+  state: controlledState,
+  onStateEvent,
+  onStateChange,
+}: StateMachineProps<S, E>): StateMachine<S, E> {
+  const [internalState, setInternalState] = useState(initialState)
 
-  const [internalState, setInternalState] = useState(definition.initialState)
+  const isControlled = controlledState !== undefined
+  const state = isControlled ? controlledState : internalState
 
-  const controlled = controlledState !== undefined
-  const state = controlled ? controlledState : internalState
+  const transitionStable = useStableEvent(transition)
+  const onStateEventStable = useStableEvent(onStateEvent)
+  const onStateChangeStable = useStableEvent(onStateChange)
 
   const dispatch = useCallback((event: E) => {
-    onStateEvent?.(event)
+    onStateEventStable(event)
 
-    const nextState = definition.transition(state, event)
+    const nextState = transitionStable(state, event)
 
-    if (!controlled) {
+    if (!isControlled) {
       setInternalState(nextState)
     }
 
-    onStateChange?.(nextState)
-  }, [
-    state,
-    controlled,
-    definition,
-    onStateEvent,
-    onStateChange,
-  ])
+    onStateChangeStable(nextState)
+  }, [isControlled, onStateChangeStable, onStateEventStable, state, transitionStable])
 
-  return {
+  return useMemo(() => ({
     state,
     dispatch,
-    controlled,
-  }
+    controlled: isControlled,
+  }), [isControlled, dispatch, state])
 }
