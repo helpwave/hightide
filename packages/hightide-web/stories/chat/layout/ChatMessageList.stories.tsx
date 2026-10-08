@@ -1,4 +1,4 @@
-import type { Meta, StoryObj } from '@storybook/nextjs-vite'
+import type { Meta, StoryObj } from '@storybook/react-vite'
 import { CalendarDays } from 'lucide-react'
 import { ChatMessageList } from '../../../src/components/chat/layout/ChatMessageList'
 import { ChatMessageBubble } from '../../../src/components/chat/visualization/ChatMessageBubble'

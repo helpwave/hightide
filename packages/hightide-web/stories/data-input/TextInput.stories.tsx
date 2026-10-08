@@ -1,4 +1,4 @@
-import type { Meta, StoryObj } from '@storybook/nextjs-vite'
+import type { Meta, StoryObj } from '@storybook/react-vite'
 import { action } from 'storybook/actions'
 import { useState } from 'react'
 import { TextInput, type TextInputState } from '../../src/components/data-input/input/TextInput'

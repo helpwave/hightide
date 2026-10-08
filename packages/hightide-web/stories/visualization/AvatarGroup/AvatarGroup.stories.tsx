@@ -1,4 +1,4 @@
-import type { Meta, StoryObj } from '@storybook/nextjs-vite'
+import type { Meta, StoryObj } from '@storybook/react-vite'
 import type { AvatarProps } from '../../../src/components/visualization/Avatar/AvatarComponent'
 import { AvatarGroup } from '../../../src/components/visualization/AvatarGroup/AvatarGroup'
 import { range } from '@helpwave/hightide-utils/utils'

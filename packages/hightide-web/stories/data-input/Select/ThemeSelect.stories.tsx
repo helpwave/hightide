@@ -1,4 +1,4 @@
-import type { Meta, StoryObj  } from '@storybook/nextjs-vite'
+import type { Meta, StoryObj  } from '@storybook/react-vite'
 import { ThemeSelect } from '../../../src/components/layout/Modal/ThemeModal'
 
 const meta: Meta = {

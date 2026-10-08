@@ -1,5 +1,5 @@
 import { action } from 'storybook/actions'
-import type { Meta, StoryObj } from '@storybook/nextjs-vite'
+import type { Meta, StoryObj } from '@storybook/react-vite'
 import { ToggleableInput } from '../../src/components/data-input/input/ToggleableInput'
 
 const meta = {

@@ -1,4 +1,4 @@
-import type { Meta, StoryObj } from '@storybook/nextjs-vite'
+import type { Meta, StoryObj } from '@storybook/react-vite'
 import { Chip, ChipUtil } from '../../src/components/visualization/Chip'
 
 const meta = {

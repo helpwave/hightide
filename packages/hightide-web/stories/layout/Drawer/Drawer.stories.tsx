@@ -1,4 +1,4 @@
-import type { Meta, StoryObj } from '@storybook/nextjs-vite'
+import type { Meta, StoryObj } from '@storybook/react-vite'
 import { action } from 'storybook/actions'
 import { Drawer } from '../../../src/components/layout/Drawer/Drawer'
 import { Button } from '../../../src/components/interaction/Button'

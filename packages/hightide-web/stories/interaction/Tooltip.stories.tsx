@@ -1,4 +1,4 @@
-import type { Meta, StoryObj } from '@storybook/nextjs-vite'
+import type { Meta, StoryObj } from '@storybook/react-vite'
 import { Tooltip } from '../../src/components/interaction/Tooltip'
 
 const meta: Meta<typeof Tooltip> = {

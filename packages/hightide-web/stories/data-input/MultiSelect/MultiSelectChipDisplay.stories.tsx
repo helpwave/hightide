@@ -1,6 +1,6 @@
 import { action } from 'storybook/actions'
 import { MultiSelect } from '../../../src/components/data-input/MultiSelect/MultiSelect'
-import type { Meta, StoryObj } from '@storybook/nextjs-vite'
+import type { Meta, StoryObj } from '@storybook/react-vite'
 
 const meta = {
   component: MultiSelect,

@@ -1,4 +1,4 @@
-import type { Meta, StoryObj } from '@storybook/nextjs-vite'
+import type { Meta, StoryObj } from '@storybook/react-vite'
 import { HelpwaveBadge } from '../../../src/components/branding/visualization/HelpwaveBadge'
 
 const meta = {

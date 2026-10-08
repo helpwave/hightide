@@ -1,5 +1,5 @@
 import { action } from 'storybook/actions'
-import type { Meta, StoryObj } from '@storybook/nextjs-vite'
+import type { Meta, StoryObj } from '@storybook/react-vite'
 import { useEffect, useState } from 'react'
 import { MultiSelect } from '../../../src/components/data-input/MultiSelect/MultiSelect'
 import type { MultiSelectProps } from '../../../src/components/data-input/MultiSelect/MultiSelectComponent'

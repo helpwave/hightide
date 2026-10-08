@@ -1,4 +1,4 @@
-import type { Meta, StoryObj } from '@storybook/nextjs-vite'
+import type { Meta, StoryObj } from '@storybook/react-vite'
 import { useEffect, useState } from 'react'
 import { NumberStepperInput } from '../../src/components/data-input/input/NumberStepperInput'
 import { action } from 'storybook/actions'

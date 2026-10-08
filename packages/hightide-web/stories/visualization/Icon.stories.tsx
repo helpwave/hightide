@@ -1,4 +1,4 @@
-import type { Meta, StoryObj } from '@storybook/nextjs-vite'
+import type { Meta, StoryObj } from '@storybook/react-vite'
 import { Plus } from 'lucide-react'
 import { iconSizes } from '../../src/components/visualization/Icon'
 import { Icon } from '../../src/components/visualization/Icon'

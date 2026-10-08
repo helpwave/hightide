@@ -1,4 +1,4 @@
-import type { Meta, StoryObj } from '@storybook/nextjs-vite'
+import type { Meta, StoryObj } from '@storybook/react-vite'
 import { AppZumDocLogo } from '../../../src/components/branding/visualization/AppZumDocLogo'
 
 const meta = {

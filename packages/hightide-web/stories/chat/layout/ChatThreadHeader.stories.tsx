@@ -1,4 +1,4 @@
-import type { Meta, StoryObj } from '@storybook/nextjs-vite'
+import type { Meta, StoryObj } from '@storybook/react-vite'
 import { action } from 'storybook/actions'
 import { ChevronLeft, EllipsisVertical, Phone, UserRoundPlus } from 'lucide-react'
 import { ChatThreadHeader } from '../../../src/components/chat/layout/ChatThreadHeader'

@@ -1,4 +1,4 @@
-import type { Meta, StoryObj } from '@storybook/nextjs-vite'
+import type { Meta, StoryObj } from '@storybook/react-vite'
 import { Check, ChevronRight } from 'lucide-react'
 import { ButtonUtil } from '../../src/components/interaction/Button'
 import { Button } from '../../src/components/interaction/Button'

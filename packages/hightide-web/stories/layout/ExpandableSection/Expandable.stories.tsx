@@ -1,4 +1,4 @@
-import type { Meta, StoryObj } from '@storybook/nextjs-vite'
+import type { Meta, StoryObj } from '@storybook/react-vite'
 import { action } from 'storybook/actions'
 import { ExpandableSection } from '../../../src/components/layout/ExpandableSection'
 import { range } from '@helpwave/hightide-utils/utils'

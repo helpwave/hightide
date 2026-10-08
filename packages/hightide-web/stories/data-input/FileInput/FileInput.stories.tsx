@@ -1,4 +1,4 @@
-import type { Meta, StoryObj } from '@storybook/nextjs-vite'
+import type { Meta, StoryObj } from '@storybook/react-vite'
 import { action } from 'storybook/actions'
 import { FileInput } from '../../../src/components/data-input/FileInput/FileInput'
 import { createFileInputItem } from '../../../src/components/data-input/FileInput/fileInputItem'

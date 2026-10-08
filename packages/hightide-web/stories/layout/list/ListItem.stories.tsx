@@ -1,4 +1,4 @@
-import type { Meta, StoryObj } from '@storybook/nextjs-vite'
+import type { Meta, StoryObj } from '@storybook/react-vite'
 import { Bell, ChevronRight } from 'lucide-react'
 import { Card } from '../../../src/components/layout/Card'
 import { Divider } from '../../../src/components/layout/Divider'

@@ -1,4 +1,4 @@
-import type { Meta, StoryObj } from '@storybook/nextjs-vite'
+import type { Meta, StoryObj } from '@storybook/react-vite'
 import { Modal } from '../../../src/components/layout/Modal/Modal'
 import type { ModalPosition } from '../../../src/components/layout/Modal/Modal'
 import { Button } from '../../../src/components/interaction/Button'

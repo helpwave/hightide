@@ -1,4 +1,4 @@
-import type { Meta, StoryObj } from '@storybook/nextjs-vite'
+import type { Meta, StoryObj } from '@storybook/react-vite'
 import { Checkbox } from '../../src/components/data-input/Checkbox'
 import { action } from 'storybook/actions'
 

@@ -1,5 +1,5 @@
 import type { ElementType, ReactNode } from 'react'
-import type { Meta, StoryObj } from '@storybook/nextjs-vite'
+import type { Meta, StoryObj } from '@storybook/react-vite'
 import { CalendarDays, Pill, Send } from 'lucide-react'
 import { ChatMessageBubble, type ChatMessageBubbleProps } from '../../../src/components/chat/visualization/ChatMessageBubble'
 import { Chip } from '../../../src/components/visualization/Chip'

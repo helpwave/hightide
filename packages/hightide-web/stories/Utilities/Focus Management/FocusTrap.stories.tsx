@@ -1,4 +1,4 @@
-import type { Meta, StoryObj } from '@storybook/nextjs-vite'
+import type { Meta, StoryObj } from '@storybook/react-vite'
 import { useRef, useState } from 'react'
 import { TextInput } from '../../../src/components/data-input/input/TextInput'
 import { FocusTrapWrapper } from '../../../src/components/interaction/FocusTrap'

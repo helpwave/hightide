@@ -1,4 +1,4 @@
-import type { Meta, StoryObj } from '@storybook/nextjs-vite'
+import type { Meta, StoryObj } from '@storybook/react-vite'
 import { action } from 'storybook/actions'
 import { Camera, Paperclip } from 'lucide-react'
 import { ChatMessageComposer } from '../../../src/components/chat/data-input/ChatMessageComposer'

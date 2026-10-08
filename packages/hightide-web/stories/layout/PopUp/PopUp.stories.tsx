@@ -1,4 +1,4 @@
-import type { Meta, StoryObj } from '@storybook/nextjs-vite'
+import type { Meta, StoryObj } from '@storybook/react-vite'
 import { useRef } from 'react'
 import type { UseAnchoredPositionOptions } from '../../../src/hooks/useAnchoredPosition'
 import type { PopUpProps } from '../../../src/components/layout/PopUp/PopUp'

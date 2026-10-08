@@ -1,4 +1,4 @@
-import type { Meta, StoryObj } from '@storybook/nextjs-vite'
+import type { Meta, StoryObj } from '@storybook/react-vite'
 import { TimePicker } from '../../../src/components/data-input/date/TimePicker'
 import { action } from 'storybook/actions'
 

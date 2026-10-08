@@ -1,4 +1,4 @@
-import type { Meta, StoryObj } from '@storybook/nextjs-vite'
+import type { Meta, StoryObj } from '@storybook/react-vite'
 import { useCallback, useState } from 'react'
 import { faker } from '@faker-js/faker'
 import { range } from '@helpwave/hightide-utils/utils'

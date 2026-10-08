@@ -1,4 +1,4 @@
-import type { Meta, StoryObj } from '@storybook/nextjs-vite'
+import type { Meta, StoryObj } from '@storybook/react-vite'
 import { Menu, MenuItem } from '../../src/components/interaction/Menu'
 import { action } from 'storybook/actions'
 import { Button } from '../../src/components/interaction/Button'

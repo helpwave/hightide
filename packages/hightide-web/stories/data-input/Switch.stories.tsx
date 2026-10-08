@@ -1,4 +1,4 @@
-import type { Meta, StoryObj } from '@storybook/nextjs-vite'
+import type { Meta, StoryObj } from '@storybook/react-vite'
 import { Switch as SwitchComponent } from '../../src/components/data-input/Switch'
 import { action } from 'storybook/actions'
 

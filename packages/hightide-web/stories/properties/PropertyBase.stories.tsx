@@ -1,4 +1,4 @@
-import type { Meta, StoryObj } from '@storybook/nextjs-vite'
+import type { Meta, StoryObj } from '@storybook/react-vite'
 import clsx from 'clsx'
 import { PropertyBase } from '../../src/components/properties/PropertyBase'
 import { Text } from 'lucide-react'

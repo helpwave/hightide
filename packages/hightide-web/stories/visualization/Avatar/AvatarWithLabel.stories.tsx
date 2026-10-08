@@ -1,5 +1,5 @@
 import type { ReactNode } from 'react'
-import type { Meta, StoryObj } from '@storybook/nextjs-vite'
+import type { Meta, StoryObj } from '@storybook/react-vite'
 import clsx from 'clsx'
 import { Avatar } from '../../../src/components/visualization/Avatar/Avatar'
 

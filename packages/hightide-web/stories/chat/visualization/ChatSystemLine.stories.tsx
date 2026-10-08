@@ -1,4 +1,4 @@
-import type { Meta, StoryObj } from '@storybook/nextjs-vite'
+import type { Meta, StoryObj } from '@storybook/react-vite'
 import { ChatSystemLine } from '../../../src/components/chat/visualization/ChatSystemLine'
 
 const meta: Meta<typeof ChatSystemLine> = {

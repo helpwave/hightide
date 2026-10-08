@@ -1,4 +1,4 @@
-import type { Meta, StoryObj } from '@storybook/nextjs-vite'
+import type { Meta, StoryObj } from '@storybook/react-vite'
 import { useMemo, useState } from 'react'
 import { ProcessModelCanvas } from '../../../src/components/visualization/process-model/ProcessModelCanvas'
 import {

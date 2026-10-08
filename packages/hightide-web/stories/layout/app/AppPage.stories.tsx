@@ -1,4 +1,4 @@
-import type { Meta, StoryObj } from '@storybook/nextjs-vite'
+import type { Meta, StoryObj } from '@storybook/react-vite'
 import { Bell, File, Folder, Package, Settings } from 'lucide-react'
 import type { AppPageNavigationItem } from '../../../src/components/layout/app/AppPage'
 import { AppPage } from '../../../src/components/layout/app/AppPage'

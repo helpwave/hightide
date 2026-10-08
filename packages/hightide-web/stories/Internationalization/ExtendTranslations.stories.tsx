@@ -1,7 +1,7 @@
 import type {
   Meta,
   StoryObj
-} from '@storybook/nextjs-vite'
+} from '@storybook/react-vite'
 
 import { LanguageSelect } from '../../src/components/layout/Modal/premade/LanguageModal'
 import { HightideProvider } from '../../src/global-contexts/HightideProvider'

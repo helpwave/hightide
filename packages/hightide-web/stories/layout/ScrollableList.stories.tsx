@@ -1,4 +1,4 @@
-import type { Meta, StoryObj } from '@storybook/nextjs-vite'
+import type { Meta, StoryObj } from '@storybook/react-vite'
 import { ScrollableList } from '../../src/components/layout/ScrollableList'
 import { Button } from '../../src/components/interaction/Button'
 import { ColoringUtils } from '../../src/utils/coloring'

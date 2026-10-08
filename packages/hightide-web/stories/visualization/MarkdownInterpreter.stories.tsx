@@ -1,4 +1,4 @@
-import type { Meta, StoryObj } from '@storybook/nextjs-vite'
+import type { Meta, StoryObj } from '@storybook/react-vite'
 import { MarkdownInterpreter } from '../../src/components/visualization/MarkdownInterpreter'
 
 const meta = {
