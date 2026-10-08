@@ -4,7 +4,7 @@ import {
   useControlledState,
   useStableEvent
 } from '@helpwave/hightide-utils/hooks'
-import type { InputComponentInterface } from '../input/Input'
+import type { InputComponentInterface } from '../input/TextInput'
 import { SafeGlobals } from '../../../utils/safeGlobals'
 import { FileInputContext, type FileInputContextType, type FileInputPickFiles } from './FileInputContext'
 import {

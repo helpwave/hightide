@@ -1,6 +1,6 @@
 import { ChevronFirst, ChevronLast, ChevronLeft, ChevronRight } from 'lucide-react'
 import clsx from 'clsx'
-import { Input } from '../../data-input/input/Input'
+import { TextInput } from '../../data-input/input/TextInput'
 import { MathUtil } from '@helpwave/hightide-utils/utils'
 import type { HTMLAttributes } from 'react'
 import { useEffect, useState } from 'react'
@@ -58,7 +58,7 @@ export const Pagination = ({
         icon={ChevronLeft}
       />
       <div className="flex-row-2 min-w-56 items-center justify-center mx-2 text-center">
-        <Input
+        <TextInput
           value={value}
           className={clsx(
             'w-24 text-center font-bold input-indicator-hidden h-10'

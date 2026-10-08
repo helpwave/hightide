@@ -5,7 +5,7 @@ import { SendHorizontal } from 'lucide-react'
 import { useControlledState, useStableEvent } from '@helpwave/hightide-utils/hooks'
 
 import { useWindowResizeObserver } from '../../../hooks/useWindowResizeObserver'
-import type { InputComponentInterface } from '../../data-input/input/Input'
+import type { InputComponentInterface } from '../../data-input/input/TextInput'
 import { IconButton } from '../../interaction/IconButton'
 import { Icon } from '../../visualization/Icon'
 import { PropsUtil } from '../../../utils/propsUtil'

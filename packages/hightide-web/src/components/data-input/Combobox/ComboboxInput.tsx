@@ -2,7 +2,7 @@ import type { InputHTMLAttributes, KeyboardEvent } from 'react'
 import { forwardRef, useCallback } from 'react'
 import { useHightideTranslation } from '@helpwave/hightide-utils/context/translation'
 
-import { Input } from '../input/Input'
+import { TextInput } from '../input/TextInput'
 import { useComboboxContext } from './ComboboxContext'
 import clsx from 'clsx'
 
@@ -48,7 +48,7 @@ export const ComboboxInput = forwardRef<HTMLInputElement, ComboboxInputProps>(
     )
 
     return (
-      <Input
+      <TextInput
         {...props}
         ref={ref}
         value={context.search.searchQuery}

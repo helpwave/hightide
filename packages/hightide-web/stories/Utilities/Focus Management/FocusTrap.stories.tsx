@@ -1,6 +1,6 @@
 import type { Meta, StoryObj } from '@storybook/nextjs-vite'
 import { useRef, useState } from 'react'
-import { Input } from '../../../src/components/data-input/input/Input'
+import { TextInput } from '../../../src/components/data-input/input/TextInput'
 import { FocusTrapWrapper } from '../../../src/components/interaction/FocusTrap'
 import { clsx } from 'clsx'
 import { Modal } from '../../../src/components/layout/Modal/Modal'
@@ -74,7 +74,7 @@ export const focusTrap: Story = {
               <Button onClick={() => setInnerActive(prevState => !prevState)}>
                 {'Toggle Inner Focus Trap'}
               </Button>
-              <Input ref={ref2} />
+              <TextInput ref={ref2} />
             </FocusTrapWrapper>
           </FocusTrapWrapper>
           <span>This part is not reachable with keyboard navigation when the traps are active</span>

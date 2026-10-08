@@ -1,10 +1,10 @@
 import type { Meta, StoryObj } from '@storybook/nextjs-vite'
 import { action } from 'storybook/actions'
 import { useState } from 'react'
-import { Input, type InputState } from '../../src/components/data-input/input/Input'
+import { TextInput, type TextInputState } from '../../src/components/data-input/input/TextInput'
 
 const meta = {
-  component: Input,
+  component: TextInput,
   args: {
     disabled: false,
     invalid: false,
@@ -22,7 +22,7 @@ const meta = {
     onStateChange: action('onStateChange'),
     onStateEvent: action('onStateEvent'),
   },
-} satisfies Meta<typeof Input>
+} satisfies Meta<typeof TextInput>
 
 export default meta
 type Story = StoryObj<typeof meta>;
@@ -38,7 +38,7 @@ export const controlledValue: Story = {
     const [value, setValue] = useState('Controlled value')
 
     return (
-      <Input
+      <TextInput
         {...args}
         value={value}
         onValueUpdate={(next) => {
@@ -52,10 +52,10 @@ export const controlledValue: Story = {
 
 export const controlledState: Story = {
   render: function ControlledState(args) {
-    const [state, setState] = useState<InputState>({ value: 'State value' })
+    const [state, setState] = useState<TextInputState>({ value: 'State value' })
 
     return (
-      <Input
+      <TextInput
         {...args}
         value={undefined}
         state={state}

@@ -1,6 +1,6 @@
 import { Binary } from 'lucide-react'
 import { Icon } from '../visualization/Icon'
-import { Input } from '../data-input/input/Input'
+import { TextInput } from '../data-input/input/TextInput'
 import { useHightideTranslation } from '@helpwave/hightide-utils/context/translation'
 import type { PropertyField } from './PropertyBase'
 import { PropertyBase } from './PropertyBase'
@@ -36,7 +36,7 @@ export const NumberProperty = ({
           className="property-input-wrapper"
           data-invalid={PropsUtil.dataAttributes.bool(invalid)}
         >
-          <Input
+          <TextInput
             className="property-input w-full pr-8"
             data-invalid={PropsUtil.dataAttributes.bool(invalid)}
             value={value?.toString() ?? ''}

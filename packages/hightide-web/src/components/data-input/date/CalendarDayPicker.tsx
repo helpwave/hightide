@@ -3,7 +3,7 @@ import type { KeyboardEvent } from 'react'
 import type { Weekday } from '@helpwave/hightide-utils/utils'
 import { DateUtils } from '@helpwave/hightide-utils/utils'
 import { useLocalization } from '../../../global-contexts/localization/forward-exports'
-import type { InputComponentInterface } from '../input/Input'
+import type { InputComponentInterface } from '../input/TextInput'
 import { useCallback, useEffect, useMemo, useRef } from 'react'
 import { useControlledState } from '@helpwave/hightide-utils/hooks'
 

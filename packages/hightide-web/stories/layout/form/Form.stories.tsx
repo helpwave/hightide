@@ -2,8 +2,8 @@ import type { Meta, StoryObj } from '@storybook/nextjs-vite'
 import { action } from 'storybook/actions'
 import type { StorybookHelperSelectType } from '../../../src/storybook/helper'
 import { StorybookHelper } from '../../../src/storybook/helper'
-import { useTranslatedValidators } from '../../../src/hooks/useValidators'
-import { Input } from '../../../src/components/data-input/input/Input'
+import { FormValidationUtils } from '@helpwave/hightide-utils/utils'
+import { TextInput } from '../../../src/components/data-input/input/TextInput'
 import { MultiSelect } from '../../../src/components/data-input/MultiSelect/MultiSelect'
 import { Select } from '../../../src/components/data-input/Select/Select'
 import { Textarea } from '../../../src/components/data-input/Textarea'
@@ -12,7 +12,6 @@ import { useCreateForm } from '../../../src/components/layout/form/useCreateForm
 import { Visibility } from '../../../src/components/layout/Visibility'
 import { HelpwaveLogo } from '../../../src/components/branding/visualization/HelpwaveLogo'
 import { useEffect, useMemo, useState } from 'react'
-import type { FormValidationBehaviour } from '../../../src/components/layout/form/FormStore'
 import { FormField } from '../../../src/components/layout/form/FormField'
 import { FormProvider } from '../../../src/components/layout/form/FormContext'
 import { DateTimeInput } from '../../../src/components/data-input/input/DateTimeInput'
@@ -36,7 +35,6 @@ type StoryArgs = {
   onValueTouched?: (value: { key: keyof FormValue, value: FormValue[keyof FormValue] }) => void,
   onUpdate?: (value: { updatedKeys: (keyof FormValue)[], update: Partial<FormValue> }) => void,
   disabled?: boolean,
-  validationBehaviour?: FormValidationBehaviour,
 }
 
 const meta: Meta<StoryArgs> = {}
@@ -47,7 +45,6 @@ type Story = StoryObj<typeof meta>;
 export const basic: Story = {
   args: {
     disabled: false,
-    validationBehaviour: 'touched',
     onValueChange: action('onValueChange'),
     onValueTouched: action('onValueTouched'),
     onUpdate: action('onValueUpdate'),
@@ -55,15 +52,12 @@ export const basic: Story = {
     onSubmit: action('onSubmit'),
   },
   render: ({
-    validationBehaviour,
     onSubmit,
     onValueChange,
     onValueTouched,
     onUpdate,
     onValidUpdate,
   }: StoryArgs) => {
-    const validators = useTranslatedValidators()
-
     const [state, setState] = useState<FormState>('editing')
     useEffect(() => {
       if (state === 'sending') {
@@ -81,12 +75,32 @@ export const basic: Story = {
         notes: '',
         preferredDate: null,
       },
-      validators: useMemo(() => ({
-        name: (val) => validators.notEmpty(val) ?? validators.length(val, [4, 32]),
-        email: (val) => validators.notEmpty(val) ?? validators.email(val),
-        favouriteFruit: (val) => validators.notEmpty(val),
-        contributions: (val) => validators.notEmpty(val?.length) ?? validators.selection(val, [2, 4]),
-      }), [validators]),
+      validation: useMemo(() => ([
+        {
+          dependsOn: ['name'],
+          validatorFn: (values) => ({
+            name: FormValidationUtils.string.notEmpty(values.name) ?? FormValidationUtils.string.length(values.name, [4, 32]),
+          }),
+        },
+        {
+          dependsOn: ['email'],
+          validatorFn: (values) => ({
+            email: FormValidationUtils.string.notEmpty(values.email) ?? FormValidationUtils.string.email(values.email),
+          }),
+        },
+        {
+          dependsOn: ['favouriteFruit'],
+          validatorFn: (values) => ({
+            favouriteFruit: FormValidationUtils.string.notEmpty(values.favouriteFruit),
+          }),
+        },
+        {
+          dependsOn: ['contributions'],
+          validatorFn: (values) => ({
+            contributions: FormValidationUtils.selection.notEmpty(values.contributions) ?? FormValidationUtils.selection.bounds(values.contributions, [2, 4]),
+          }),
+        },
+      ]), []),
       onFormSubmit: (finalValues) => {
         setState('sending')
         onSubmit?.(finalValues)
@@ -97,17 +111,18 @@ export const basic: Story = {
     })
 
     useEffect(() => {
-      const unsubscribe = form.store.subscribe('ALL', (event) => {
-        if (event.type === 'onTouched') {
-          onValueTouched?.({ key: event.key, value: event.value })
-        }
+      return form.store.subscribe((state, previous) => {
+        (Object.keys(state.touchedValues) as (keyof FormValue)[]).forEach((key) => {
+          if (state.touchedValues[key] && !previous.touchedValues[key]) {
+            onValueTouched?.({ key, value: state.values[key] })
+          }
+        })
       })
-      return () => unsubscribe()
     }, [form.store, onValueTouched])
 
     return (
       <FormProvider state={form}>
-        <form className="flex-col-8 w-full max-w-128" onSubmit={event => {
+        <form className="flex-col-4 w-full max-w-128" onSubmit={event => {
           event.preventDefault()
           form.submit()
         }}>
@@ -119,10 +134,9 @@ export const basic: Story = {
               required={true}
               description="Your name will not be visible to others."
               label="Your name"
-              validationBehaviour={validationBehaviour}
             >
               {({ dataProps, focusableElementProps, interactionStates }) => (
-                <Input {...dataProps} {...focusableElementProps} {...interactionStates} placeholder="e.g. John Doe" />
+                <TextInput {...dataProps} {...focusableElementProps} {...interactionStates} placeholder="e.g. John Doe" />
               )}
             </FormField>
 
@@ -131,10 +145,9 @@ export const basic: Story = {
               required={true}
               description="A email to contact you."
               label="Email"
-              validationBehaviour={validationBehaviour}
             >
               {({ dataProps, focusableElementProps, interactionStates }) => (
-                <Input {...dataProps} {...focusableElementProps} {...interactionStates} placeholder="e.g. test@helpwave.de" />
+                <TextInput {...dataProps} {...focusableElementProps} {...interactionStates} placeholder="e.g. test@helpwave.de" />
               )}
             </FormField>
 
@@ -143,7 +156,6 @@ export const basic: Story = {
               required={true}
               description="We will use this to include as many likes as possible."
               label="Your favourite Fruit"
-              validationBehaviour={validationBehaviour}
             >
               {({ dataProps, focusableElementProps, interactionStates }) => (
                 <Select {...dataProps} {...focusableElementProps} {...interactionStates}>
@@ -159,7 +171,6 @@ export const basic: Story = {
               required={true}
               description="Please specify which ingredients you are bringing."
               label="Your contribution"
-              validationBehaviour={validationBehaviour}
             >
               {({ dataProps, focusableElementProps, interactionStates }) => (
                 <MultiSelect {...dataProps} {...focusableElementProps} {...interactionStates}>
@@ -174,7 +185,6 @@ export const basic: Story = {
               name="allergies"
               description="The ingredients you are allergic to."
               label="Allergies"
-              validationBehaviour={validationBehaviour}
             >
               {({ dataProps, focusableElementProps, interactionStates }) => (
                 <MultiSelect {...dataProps} {...focusableElementProps} {...interactionStates}>
@@ -189,7 +199,6 @@ export const basic: Story = {
               name="preferredDate"
               description="The date you would like to attend the event."
               label="Preferred Date"
-              validationBehaviour={validationBehaviour}
             >
               {({ dataProps, focusableElementProps, interactionStates }) => (
                 <DateTimeInput
@@ -204,7 +213,6 @@ export const basic: Story = {
               name="notes"
               description="Anything else we should be aware of or you'd like us to know."
               label="Notes"
-              validationBehaviour={validationBehaviour}
             >
               {({ dataProps, focusableElementProps, interactionStates }) => (
                 <Textarea
@@ -258,8 +266,6 @@ export const basic: Story = {
     docs: {
       source: {
         code: `
-const validators = useTranslatedValidators()
-
 const [state, setState] = useState<FormState>('editing')
 useEffect(() => {
   if (state === 'sending') {
@@ -276,12 +282,32 @@ const form = useCreateForm<FormValue>({
     contributions: [],
     notes: '',
   },
-  validators: useMemo(() => ({
-    name: (val) => validators.notEmpty(val) ?? validators.length(val, [4, 32]),
-    email: (val) => validators.notEmpty(val) ?? validators.email(val),
-    favouriteFruit: (val) => validators.notEmpty(val),
-    contributions: (val) => validators.notEmpty(val?.length) ?? validators.selection(val, [2, 4]),
-  }), [validators]),
+  validation: [
+    {
+      dependsOn: ['name'],
+      validatorFn: (values) => ({
+        name: FormValidationUtils.string.notEmpty(values.name) ?? FormValidationUtils.string.length(values.name, [4, 32]),
+      }),
+    },
+    {
+      dependsOn: ['email'],
+      validatorFn: (values) => ({
+        email: FormValidationUtils.string.notEmpty(values.email) ?? FormValidationUtils.string.email(values.email),
+      }),
+    },
+    {
+      dependsOn: ['favouriteFruit'],
+      validatorFn: (values) => ({
+        favouriteFruit: FormValidationUtils.string.notEmpty(values.favouriteFruit),
+      }),
+    },
+    {
+      dependsOn: ['contributions'],
+      validatorFn: (values) => ({
+        contributions: FormValidationUtils.selection.notEmpty(values.contributions) ?? FormValidationUtils.selection.bounds(values.contributions, [2, 4]),
+      }),
+    },
+  ],
   onFormSubmit: (finalValues) => {
     setState('sending')
     onSubmit?.(finalValues)
@@ -291,12 +317,13 @@ const form = useCreateForm<FormValue>({
 })
 
 useEffect(() => {
-  const unsubscribe = form.store.subscribe('ALL', (event) => {
-    if (event.type === 'onTouched') {
-      onValueTouched?.({ key: event.key, value: event.value })
-    }
+  return form.store.subscribe((state, previous) => {
+    (Object.keys(state.touchedValues) as (keyof FormValue)[]).forEach((key) => {
+      if (state.touchedValues[key] && !previous.touchedValues[key]) {
+        onValueTouched?.({ key, value: state.values[key] })
+      }
+    })
   })
-  return () => unsubscribe()
 }, [form.store, onValueTouched])
 
 return (
@@ -315,7 +342,7 @@ return (
           label="Your name"
         >
           {({ dataProps, focusableElementProps, interactionStates }) => (
-            <Input {...dataProps} {...focusableElementProps} {...interactionStates} placeholder="e.g. John Doe" />
+            <TextInput {...dataProps} {...focusableElementProps} {...interactionStates} placeholder="e.g. John Doe" />
           )}
         </FormField>
 
@@ -326,7 +353,7 @@ return (
           label="Email"
         >
           {({ dataProps, focusableElementProps, interactionStates }) => (
-            <Input {...dataProps} {...focusableElementProps} {...interactionStates} placeholder="e.g. test@helpwave.de" />
+            <TextInput {...dataProps} {...focusableElementProps} {...interactionStates} placeholder="e.g. test@helpwave.de" />
           )}
         </FormField>
 

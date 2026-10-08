@@ -1,7 +1,7 @@
 import clsx from 'clsx'
 import { useControlledState } from '@helpwave/hightide-utils/hooks'
 
-import type { InputComponentInterface } from '../input/Input'
+import type { InputComponentInterface } from '../input/TextInput'
 import type { DateWheelPickerProps } from './DateWheelPicker'
 import { DateWheelPicker } from './DateWheelPicker'
 import type { TimeWheelPickerProps } from './TimeWheelPicker'

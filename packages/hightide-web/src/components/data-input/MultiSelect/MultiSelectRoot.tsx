@@ -4,7 +4,7 @@ import { MultiSelectContext } from './MultiSelectContext'
 import type { MultiSelectContextType, MultiSelectIconAppearance, MultiSelectOptionType } from './MultiSelectContext'
 import { useMultiSelect } from './useMultiSelect'
 import { DOMUtils } from '../../../utils/dom'
-import type { InputComponentInterface } from '../input/Input'
+import type { InputComponentInterface } from '../input/TextInput'
 import { PopUpContext } from '../../layout/PopUp/PopUpContext'
 
 export interface MultiSelectIds {

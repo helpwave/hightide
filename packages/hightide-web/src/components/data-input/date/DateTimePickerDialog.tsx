@@ -10,7 +10,7 @@ import { IconButton } from '../../interaction/IconButton'
 import { DateWheelPicker } from './DateWheelPicker'
 import { type DateTimeWheelPickerProps } from './DateTimeWheelPicker'
 import { TimeWheelPicker } from './TimeWheelPicker'
-import type { InputComponentInterface } from '../input/Input'
+import type { InputComponentInterface } from '../input/TextInput'
 import type { DateTimeFormat, Weekday } from '@helpwave/hightide-utils/utils'
 import clsx from 'clsx'
 

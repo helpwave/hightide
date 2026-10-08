@@ -4,7 +4,7 @@ import { closestMatch, range, type DateTimePrecision } from '@helpwave/hightide-
 import { useControlledState } from '@helpwave/hightide-utils/hooks'
 
 import { useDateTimeFormat } from '../../../global-contexts/localization/forward-exports'
-import type { InputComponentInterface } from '../input/Input'
+import type { InputComponentInterface } from '../input/TextInput'
 import { Visibility } from '../../layout/Visibility'
 import { WheelPicker, type WheelPickerLoopEvent } from '../../interaction/WheelPicker'
 import type {

@@ -13,7 +13,7 @@ import { FilterFunctions } from '../../../src/components/interaction/data/filter
 import type { DataType } from '../../../src/components/interaction/data/data-types'
 import { FilterOperatorUtils } from '../../../src/components/interaction/data/FilterOperator'
 import { FilterBasePopUp } from '../../../src/components/interaction/data/FilterPopUp'
-import { Input } from '../../../src/components/data-input/input/Input'
+import { TextInput } from '../../../src/components/data-input/input/TextInput'
 import { Select } from '../../../src/components/data-input/Select/Select'
 import { Visibility } from '../../../src/components/layout/Visibility'
 import { SortingList } from '../../../src/components/interaction/data/SortingList'
@@ -97,7 +97,7 @@ const AgeFilterPopUp = ({ value, onValueChange, onRemove, name, onClose: close, 
         </div>
       </Visibility>
       <Visibility isVisible={!needsRangeInput && needsParameterInput}>
-        <Input
+        <TextInput
           value={parameter.numberValue?.toString() ?? ''}
           type="number"
           placeholder="0"

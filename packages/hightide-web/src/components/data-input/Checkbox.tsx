@@ -4,7 +4,7 @@ import type { IconSize } from '../visualization/Icon'
 import { Icon } from '../visualization/Icon'
 import { useCallback, type HTMLAttributes } from 'react'
 import { Visibility } from '../layout/Visibility'
-import type { InputComponentInterface } from './input/Input'
+import type { InputComponentInterface } from './input/TextInput'
 import { useControlledState } from '@helpwave/hightide-utils/hooks'
 import { useStableEvent } from '@helpwave/hightide-utils/hooks'
 

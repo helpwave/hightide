@@ -2,11 +2,11 @@ import type { ReactNode } from 'react'
 import { useId } from 'react'
 import { forwardRef, useState } from 'react'
 import clsx from 'clsx'
-import type { InputProps } from './Input'
-import { Input } from './Input'
+import type { TextInputProps } from './TextInput'
+import { TextInput } from './TextInput'
 import { useControlledState } from '@helpwave/hightide-utils/hooks'
 
-type InsideLabelInputProps = Omit<InputProps, 'aria-label' | 'aria-labelledby' | 'placeholder'> & {
+type InsideLabelInputProps = Omit<TextInputProps, 'aria-label' | 'aria-labelledby' | 'placeholder'> & {
   label: ReactNode,
 }
 
@@ -34,7 +34,7 @@ export const InsideLabelInput = forwardRef<HTMLInputElement, InsideLabelInputPro
 
   return (
     <div className={clsx('relative')}>
-      <Input
+      <TextInput
         {...props}
         id={id}
         ref={forwardedRef}

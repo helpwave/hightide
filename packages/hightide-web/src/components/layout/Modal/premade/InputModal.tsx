@@ -1,10 +1,10 @@
-import type { InputProps } from '../../../data-input/input/Input'
-import { Input } from '../../../data-input/input/Input'
+import type { TextInputProps } from '../../../data-input/input/TextInput'
+import { TextInput } from '../../../data-input/input/TextInput'
 import type { ConfirmModalProps } from './ConfirmModal'
 import { ConfirmModal } from './ConfirmModal'
 
 export type InputModalProps = ConfirmModalProps & {
-  inputs: InputProps[],
+  inputs: TextInputProps[],
 }
 
 export const InputModal = ({
@@ -17,7 +17,7 @@ export const InputModal = ({
       buttonOverwrites={buttonOverwrites}
       {...props}
     >
-      {inputs.map((inputProps, index) => <Input key={`input ${index}`} {...inputProps}/>)}
+      {inputs.map((inputProps, index) => <TextInput key={`input ${index}`} {...inputProps}/>)}
     </ConfirmModal>
   )
 }

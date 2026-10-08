@@ -1,7 +1,7 @@
 import type { Dispatch, ReactNode, RefObject, SetStateAction } from 'react'
 import { createContext, useContext } from 'react'
 import type { UseSelectFirstHighlightBehavior } from './useSelect'
-import type { InputComponentInterface } from '../input/Input'
+import type { InputComponentInterface } from '../input/TextInput'
 
 export type SelectOptionIdentity<T> = {
   value: T,

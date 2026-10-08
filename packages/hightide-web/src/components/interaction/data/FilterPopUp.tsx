@@ -9,7 +9,7 @@ import { FilterOperatorUtils } from './FilterOperator'
 import type { ReactNode } from 'react'
 import { forwardRef, useEffect, useId, useMemo, useState } from 'react'
 import { Select } from '../../data-input/Select/Select'
-import { Input } from '../../data-input/input/Input'
+import { TextInput } from '../../data-input/input/TextInput'
 import { DateTimeInput } from '../../data-input/input/DateTimeInput'
 import { MultiSelect } from '../../data-input/MultiSelect/MultiSelect'
 import type { DataType } from './data-types'
@@ -146,7 +146,7 @@ export const TextFilterPopUp = forwardRef<HTMLDivElement, FilterPopUpProps>(func
       <Visibility isVisible={needsParameterInput}>
         <div className="flex-col-1">
           <label htmlFor={ids.search} className="typography-label-md">{translation('search')}</label>
-          <Input
+          <TextInput
             id={ids.search}
             value={parameter.stringValue ?? ''}
             placeholder={translation('value')}
@@ -202,7 +202,7 @@ export const NumberFilterPopUp = forwardRef<HTMLDivElement, FilterPopUpProps>(fu
       <Visibility isVisible={needsRangeInput}>
         <div className="flex-col-1">
           <label htmlFor={ids.min} className="typography-label-md">{translation('min')}</label>
-          <Input
+          <TextInput
             id={ids.min}
             value={parameter.numberMin?.toString() ?? ''}
             type="number"
@@ -220,7 +220,7 @@ export const NumberFilterPopUp = forwardRef<HTMLDivElement, FilterPopUpProps>(fu
         </div>
         <div className="flex-col-1">
           <label htmlFor={ids.max} className="typography-label-md">{translation('max')}</label>
-          <Input
+          <TextInput
             id={ids.max}
             value={parameter.numberMax?.toString() ?? ''}
             type="number"
@@ -238,7 +238,7 @@ export const NumberFilterPopUp = forwardRef<HTMLDivElement, FilterPopUpProps>(fu
         </div>
       </Visibility>
       <Visibility isVisible={!needsRangeInput && needsParameterInput}>
-        <Input
+        <TextInput
           value={parameter.numberValue?.toString() ?? ''}
           type="number"
           placeholder="0"

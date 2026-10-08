@@ -1,7 +1,7 @@
 import type { CSSProperties, InputHTMLAttributes } from 'react'
 import { forwardRef, useRef } from 'react'
 import clsx from 'clsx'
-import type { InputComponentInterface } from './Input'
+import type { InputComponentInterface } from './TextInput'
 import { useControlledState } from '@helpwave/hightide-utils/hooks'
 import { ReactUtils } from '@helpwave/hightide-utils/utils'
 import { MathUtil } from '@helpwave/hightide-utils/utils'

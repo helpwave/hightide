@@ -3,7 +3,7 @@ import type { HTMLAttributes, ReactNode } from 'react'
 import { forwardRef, useCallback, useId } from 'react'
 import { Checkbox, type CheckboxProps } from './Checkbox'
 import { PropsUtil } from '../../utils/propsUtil'
-import type { InputComponentInterface } from './input/Input'
+import type { InputComponentInterface } from './input/TextInput'
 import { useControlledState } from '@helpwave/hightide-utils/hooks'
 import { useStableEvent } from '@helpwave/hightide-utils/hooks'
 

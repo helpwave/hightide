@@ -1,6 +1,6 @@
 import type { Dispatch, ReactNode, RefObject, SetStateAction } from 'react'
 import { createContext, useContext } from 'react'
-import type { InputComponentInterface } from '../input/Input'
+import type { InputComponentInterface } from '../input/TextInput'
 
 export interface ComboboxOptionType<T = string> {
   id: string,

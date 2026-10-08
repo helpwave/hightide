@@ -4,7 +4,7 @@ import { SelectContext } from './SelectContext'
 import type { SelectContextConfig, SelectContextLayout, SelectOptionType } from './SelectContext'
 import { useSelect } from './useSelect'
 import { DOMUtils } from '../../../utils/dom'
-import type { InputComponentInterface } from '../input/Input'
+import type { InputComponentInterface } from '../input/TextInput'
 import { useStableEvent } from '@helpwave/hightide-utils/hooks'
 import { PopUpContext } from '../../layout/PopUp/PopUpContext'
 

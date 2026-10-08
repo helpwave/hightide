@@ -1,6 +1,6 @@
 import clsx from 'clsx'
 import { type HTMLAttributes, useCallback } from 'react'
-import type { InputComponentInterface } from './input/Input'
+import type { InputComponentInterface } from './input/TextInput'
 import { useControlledState } from '@helpwave/hightide-utils/hooks'
 import { useStableEvent } from '@helpwave/hightide-utils/hooks'
 import { ColoringUtils } from '../../utils/coloring'

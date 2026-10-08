@@ -5,7 +5,7 @@ import { useControlledState } from '@helpwave/hightide-utils/hooks'
 import { useLocalization } from '../../../global-contexts/localization/forward-exports'
 import { useHightideTranslation } from '@helpwave/hightide-utils/context/translation'
 import { SafeGlobals } from '../../../utils/safeGlobals'
-import type { InputComponentInterface } from './Input'
+import type { InputComponentInterface } from './TextInput'
 import type { DateTimeFormat, DateTimePrecision } from '@helpwave/hightide-utils/utils'
 import type { EditableSegmentType, SegmentEditState } from './dateTimeSegments'
 import {

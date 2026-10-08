@@ -3,7 +3,7 @@ import { action } from 'storybook/actions'
 import { useState } from 'react'
 
 import { Button } from '../../../src/components/interaction/Button'
-import { Input } from '../../../src/components/data-input/input/Input'
+import { TextInput } from '../../../src/components/data-input/input/TextInput'
 import { useDebouncer } from '@helpwave/hightide-utils/hooks'
 
 type StoryArgs = {
@@ -46,7 +46,7 @@ function DebouncerDemo({ debounceMs }: StoryArgs) {
 
   return (
     <div className="flex w-full max-w-md flex-col gap-8">
-      <Input
+      <TextInput
         value={inputValue}
         onValueUpdate={handleInputChange}
         placeholder="Type to trigger debounced updates"

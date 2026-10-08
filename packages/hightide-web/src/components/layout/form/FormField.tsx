@@ -1,4 +1,4 @@
-import type { InputComponentInterface } from '../../data-input/input/Input'
+import type { InputComponentInterface } from '../../data-input/input/TextInput'
 import type { FormFieldAriaAttributes, FormFieldInteractionStates } from './FieldLayout'
 import { FormFieldLayout, type FormFieldLayoutProps } from './FieldLayout'
 import { useFormField } from './FormContext'

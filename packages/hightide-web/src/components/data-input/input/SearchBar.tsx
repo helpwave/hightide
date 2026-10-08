@@ -1,5 +1,5 @@
-import type { InputProps } from './Input'
-import { Input } from './Input'
+import type { TextInputProps } from './TextInput'
+import { TextInput } from './TextInput'
 import { Search } from 'lucide-react'
 import { Icon } from '../../visualization/Icon'
 import { clsx } from 'clsx'
@@ -9,7 +9,7 @@ import type { IconButtonProps } from '../../interaction/IconButton'
 import { IconButton } from '../../interaction/IconButton'
 import { useControlledState } from '@helpwave/hightide-utils/hooks'
 
-export type SearchBarProps = Omit<InputProps, 'onValueChange' | 'onEditComplete'> & {
+export type SearchBarProps = Omit<TextInputProps, 'onValueChange' | 'onEditComplete'> & {
   onValueChange?: (value: string) => void,
   onSearch: (value: string) => void,
   searchButtonProps?: Omit<IconButtonProps, 'onClick'>,
@@ -33,7 +33,7 @@ export const SearchBar = ({
   })
   return (
     <div {...containerProps} className={clsx('search-bar-container group/search-bar', containerProps?.className)}>
-      <Input
+      <TextInput
         {...inputProps}
         value={value}
         onValueUpdate={setValue}

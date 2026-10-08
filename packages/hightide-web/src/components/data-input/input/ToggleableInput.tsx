@@ -2,14 +2,14 @@ import { forwardRef, useEffect, useRef, useState } from 'react'
 import { Pencil } from 'lucide-react'
 import { Icon } from '../../visualization/Icon'
 import clsx from 'clsx'
-import type { EditCompleteOptions, InputProps } from './Input'
-import { Input } from './Input'
+import type { TextInputEditCompleteOptions, TextInputProps } from './TextInput'
+import { TextInput } from './TextInput'
 import { useControlledState } from '@helpwave/hightide-utils/hooks'
 import { ReactUtils } from '@helpwave/hightide-utils/utils'
 
-type ToggleableInputProps = InputProps & {
+type ToggleableInputProps = TextInputProps & {
   initialState?: 'editing' | 'display',
-  editCompleteOptions?: Omit<EditCompleteOptions, 'allowEnterComplete'>,
+  editCompleteOptions?: Omit<TextInputEditCompleteOptions, 'allowEnterComplete'>,
 }
 
 /**
@@ -43,7 +43,7 @@ export const ToggleableInput = forwardRef<HTMLInputElement, ToggleableInputProps
 
   return (
     <div className={clsx('relative flex-row-2', { 'flex-1': isEditing })}>
-      <Input
+      <TextInput
         {...props}
         ref={ReactUtils.assingRefsBuilder([innerRef, forwardedRef])}
         value={value}

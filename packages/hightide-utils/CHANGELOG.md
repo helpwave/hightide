@@ -10,6 +10,7 @@ and adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 ### Added
 
 - `createFormStore` takes `initialValues`, `initialTouchedValues`, and a fixed `validation` list of `FormValidator` objects. Field errors are `string[]`. Async checks use `validationRunnerError` (`ValidationRunnerState`). `FormValidationUtils` groups checks by `string`, `number`, and `selection`, each with `mapTranslation`. `FormValidationErrorTypeUtils` lives in `utils/form-validation`. Validation messages use `validationError*` translation keys
+- `useStateMachine` and `useStateMachineBinding` hooks
 
 ### Changed
 

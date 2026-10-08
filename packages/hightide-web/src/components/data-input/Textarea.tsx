@@ -2,7 +2,7 @@ import type { LabelHTMLAttributes, ReactNode, TextareaHTMLAttributes } from 'rea
 import { forwardRef, useCallback, useId } from 'react'
 import clsx from 'clsx'
 import { useDelay, type UseDelayOptions } from '@helpwave/hightide-utils/hooks'
-import type { InputComponentInterface } from './input/Input'
+import type { InputComponentInterface } from './input/TextInput'
 import { useControlledState } from '@helpwave/hightide-utils/hooks'
 import { useStableEvent } from '@helpwave/hightide-utils/hooks'
 

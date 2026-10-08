@@ -2,7 +2,7 @@ import type { ReactNode, RefObject } from 'react'
 import { useCallback, useId, useMemo, useState } from 'react'
 import { useControlledState, useStableEvent } from '@helpwave/hightide-utils/hooks'
 
-import type { InputComponentInterface } from '../input/Input'
+import type { InputComponentInterface } from '../input/TextInput'
 import { DOMUtils } from '../../../utils/dom'
 import { ComboboxContext } from './ComboboxContext'
 import type { ComboboxContextConfig, ComboboxContextIds, ComboboxContextLayout, ComboboxContextType, ComboboxOptionType } from './ComboboxContext'

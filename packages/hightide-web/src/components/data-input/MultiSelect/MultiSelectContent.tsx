@@ -4,12 +4,12 @@ import { useMultiSelectContext } from './MultiSelectContext'
 import clsx from 'clsx'
 import { useHightideTranslation } from '@helpwave/hightide-utils/context/translation'
 import { PopUp, type PopUpProps } from '../../layout/PopUp/PopUp'
-import { Input } from '../input/Input'
+import { TextInput } from '../input/TextInput'
 import { Visibility } from '../../layout/Visibility'
 import { ReactUtils } from '@helpwave/hightide-utils/utils'
 
 export interface MultiSelectContentProps extends PopUpProps {
-  searchInputProps?: Omit<ComponentProps<typeof Input>, 'value' | 'onValueChange'>,
+  searchInputProps?: Omit<ComponentProps<typeof TextInput>, 'value' | 'onValueChange'>,
 }
 
 export const MultiSelectContent = forwardRef<
@@ -94,7 +94,7 @@ export const MultiSelectContent = forwardRef<
       className={clsx('multi-select-content', props.className)}
     >
       {showSearch && (
-        <Input
+        <TextInput
           {...searchInputProps}
           ref={searchInputRef}
           id={context.config.ids.searchInput}
