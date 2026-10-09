@@ -70,15 +70,20 @@ export const LabelledCheckbox = forwardRef<HTMLDivElement, LabelledCheckboxProps
   const checkbox = (
     <Checkbox
       value={value}
+      onValueChange={setValue}
       indeterminate={indeterminate}
-      required={required}
-      invalid={invalid}
-      disabled={disabled}
-      readOnly={readOnly}
+      isRequired={required}
+      isInvalid={invalid}
+      isDisabled={disabled}
+      isReadOnly={readOnly}
       size={size}
       alwaysShowCheckIcon={alwaysShowCheckIcon}
       isRounded={isRounded}
-      className={checkboxClassName}
+      triggerProps={{
+        className: checkboxClassName,
+        onClick: (event) => event.stopPropagation(),
+        onKeyDown: (event) => event.stopPropagation(),
+      }}
     />
   )
 

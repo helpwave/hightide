@@ -36,11 +36,10 @@ export const TableWithSelectionProvider = <T,>({
                 <Checkbox
                   value={table?.getIsAllRowsSelected()}
                   indeterminate={table?.getIsSomeRowsSelected()}
-                  onValueUpdate={value => {
-                    const newValue = !!value
-                    table?.toggleAllRowsSelected(newValue)
+                  onValueChange={value => {
+                    table?.toggleAllRowsSelected(!!value)
                   }}
-                  disabled={(table?.getRowCount() ?? 0) < 1}
+                  isDisabled={(table?.getRowCount() ?? 0) < 1}
                 />
               )
             }}
@@ -50,9 +49,9 @@ export const TableWithSelectionProvider = <T,>({
       cell: ({ row }) => {
         return (
           <Checkbox
-            disabled={!row.getCanSelect()}
+            isDisabled={!row.getCanSelect()}
             value={row.getIsSelected()}
-            onValueUpdate={row.getToggleSelectedHandler()}
+            onValueChange={row.getToggleSelectedHandler()}
           />
         )
       },
@@ -78,7 +77,7 @@ export const TableWithSelectionProvider = <T,>({
       placeholderColumnExcludeIds={placeholderColumnExcludeIds}
       fillerRowCell={useCallback((columnId: string, table: Table<T>) => {
         if (columnId === selectionRowId) {
-          return (<Checkbox value={false} disabled={true} />)
+          return (<Checkbox value={false} isDisabled={true} />)
         }
         return fillerRowCell?.(columnId, table) ?? (<FillerCell />)
       }, [fillerRowCell, selectionRowId])}
