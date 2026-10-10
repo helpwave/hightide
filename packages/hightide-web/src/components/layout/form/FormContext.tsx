@@ -37,6 +37,7 @@ export type FormFieldResult<T> = {
   errors: string[],
   validationRunnerError: ValidationRunnerState | undefined,
   touched: boolean,
+  setTouched: (touched?: boolean) => void,
   dataProps: FormFieldDataHandling<T>,
   registerRef: (el: HTMLElement | null) => void,
   updateValue: (value: T) => void,
@@ -69,6 +70,10 @@ export function useFormField<T extends FormValue, K extends keyof T>(key: K): Fo
     context?.notifyUpdate([key], { [key]: next } as unknown as Partial<T>)
   }, [context, key, store])
 
+  const setTouched = useCallback((touched = true) => {
+    store.getState().setTouchedValue(key, touched)
+  }, [key, store])
+
   const updateValue = useCallback((next: T[K]) => {
     store.getState().setValue(key, next)
     context?.notifyUpdate([key], { [key]: next } as unknown as Partial<T>)
@@ -82,6 +87,7 @@ export function useFormField<T extends FormValue, K extends keyof T>(key: K): Fo
     errors: visibleErrors,
     validationRunnerError,
     touched,
+    setTouched,
     dataProps: {
       value,
       onValueUpdate,

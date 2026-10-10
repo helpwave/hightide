@@ -6,6 +6,7 @@ export {
   type FormFieldFocusableElementProps,
   type FormFieldProps,
 } from './FormField'
+export type { TouchedTrigger } from '@helpwave/hightide-utils/form'
 export * from './FormObserver'
 export type { FormStore, FormValidator } from '@helpwave/hightide-utils/form'
 export * from './useCreateForm'

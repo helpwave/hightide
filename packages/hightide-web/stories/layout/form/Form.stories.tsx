@@ -4,10 +4,10 @@ import type { StorybookHelperSelectType } from '../../../src/storybook/helper'
 import { StorybookHelper } from '../../../src/storybook/helper'
 import { FormValidationUtils } from '@helpwave/hightide-utils/utils'
 import { useEditCompletable } from '@helpwave/hightide-utils/hooks'
-import { TextInput, type TextInputElementProps } from '../../../src/components/data-input/input/TextInput'
+import { TextInput, type TextInputElementProps, type TextInputEvent } from '../../../src/components/data-input/input/TextInput'
 import { MultiSelect } from '../../../src/components/data-input/MultiSelect/MultiSelect'
 import { Select } from '../../../src/components/data-input/Select/Select'
-import { Textarea, type TextareaElementProps } from '../../../src/components/data-input/Textarea'
+import { Textarea, type TextareaElementProps, type TextareaEvent } from '../../../src/components/data-input/Textarea'
 import { Button } from '../../../src/components/interaction/Button'
 import { useCreateForm } from '../../../src/components/layout/form/useCreateForm'
 import { Visibility } from '../../../src/components/layout/Visibility'
@@ -44,6 +44,7 @@ function FormTextInput({
   value,
   onValueUpdate,
   onValueCommit,
+  onStateEvent,
   invalid,
   disabled,
   readOnly,
@@ -55,6 +56,7 @@ function FormTextInput({
   value?: string,
   onValueUpdate: (value: string) => void,
   onValueCommit: (value: string) => void,
+  onStateEvent?: (event: TextInputEvent) => void,
   invalid?: boolean,
   disabled?: boolean,
   readOnly?: boolean,
@@ -69,13 +71,14 @@ function FormTextInput({
 
   return (
     <TextInput
-      ref={ref}
+      inputRef={ref}
       value={value ?? ''}
       isInvalid={invalid}
       isDisabled={disabled}
       isReadOnly={readOnly}
       isRequired={required}
       onValueChange={onValueUpdate}
+      onStateEvent={onStateEvent}
       inputProps={{
         ...inputProps,
         onBlur: (event: FocusEvent<HTMLInputElement>) => {
@@ -91,6 +94,7 @@ function FormTextarea({
   value,
   onValueUpdate,
   onValueCommit,
+  onStateEvent,
   invalid,
   disabled,
   readOnly,
@@ -102,6 +106,7 @@ function FormTextarea({
   value?: string,
   onValueUpdate: (value: string) => void,
   onValueCommit: (value: string) => void,
+  onStateEvent?: (event: TextareaEvent) => void,
   invalid?: boolean,
   disabled?: boolean,
   readOnly?: boolean,
@@ -123,6 +128,7 @@ function FormTextarea({
       isReadOnly={readOnly}
       isRequired={required}
       onValueChange={onValueUpdate}
+      onStateEvent={onStateEvent}
       inputProps={{
         ...inputProps,
         onChange: (event) => {
@@ -234,8 +240,8 @@ export const basic: Story = {
               description="Your name will not be visible to others."
               label="Your name"
             >
-              {({ dataProps, focusableElementProps, interactionStates }) => (
-                <FormTextInput {...dataProps} {...focusableElementProps} {...interactionStates} placeholder="e.g. John Doe" />
+              {({ dataProps, focusableElementProps, interactionStates, onStateEvent }) => (
+                <FormTextInput {...dataProps} {...focusableElementProps} {...interactionStates} onStateEvent={onStateEvent} placeholder="e.g. John Doe" />
               )}
             </FormField>
 
@@ -245,8 +251,8 @@ export const basic: Story = {
               description="A email to contact you."
               label="Email"
             >
-              {({ dataProps, focusableElementProps, interactionStates }) => (
-                <FormTextInput {...dataProps} {...focusableElementProps} {...interactionStates} placeholder="e.g. test@helpwave.de" />
+              {({ dataProps, focusableElementProps, interactionStates, onStateEvent }) => (
+                <FormTextInput {...dataProps} {...focusableElementProps} {...interactionStates} onStateEvent={onStateEvent} placeholder="e.g. test@helpwave.de" />
               )}
             </FormField>
 
@@ -313,9 +319,10 @@ export const basic: Story = {
               description="Anything else we should be aware of or you'd like us to know."
               label="Notes"
             >
-              {({ dataProps, focusableElementProps, interactionStates }) => (
+              {({ dataProps, focusableElementProps, interactionStates, onStateEvent }) => (
                 <FormTextarea
                   {...dataProps} {...focusableElementProps} {...interactionStates}
+                  onStateEvent={onStateEvent}
                   placeholder="e.g. Please buy the delicious cranberry juice"
                 />
               )}
@@ -440,8 +447,8 @@ return (
           description="Your name will not be visible to others."
           label="Your name"
         >
-          {({ dataProps, focusableElementProps, interactionStates }) => (
-            <FormTextInput {...dataProps} {...focusableElementProps} {...interactionStates} placeholder="e.g. John Doe" />
+          {({ dataProps, focusableElementProps, interactionStates, onStateEvent }) => (
+            <FormTextInput {...dataProps} {...focusableElementProps} {...interactionStates} onStateEvent={onStateEvent} placeholder="e.g. John Doe" />
           )}
         </FormField>
 
@@ -451,8 +458,8 @@ return (
           description="A email to contact you."
           label="Email"
         >
-          {({ dataProps, focusableElementProps, interactionStates }) => (
-            <FormTextInput {...dataProps} {...focusableElementProps} {...interactionStates} placeholder="e.g. test@helpwave.de" />
+          {({ dataProps, focusableElementProps, interactionStates, onStateEvent }) => (
+            <FormTextInput {...dataProps} {...focusableElementProps} {...interactionStates} onStateEvent={onStateEvent} placeholder="e.g. test@helpwave.de" />
           )}
         </FormField>
 
@@ -505,9 +512,10 @@ return (
           description="Anything else we should be aware of or you'd like us to know."
           label="Notes"
         >
-          {({ dataProps, focusableElementProps, interactionStates }) => (
+          {({ dataProps, focusableElementProps, interactionStates, onStateEvent }) => (
             <FormTextarea
               {...dataProps} {...focusableElementProps} {...interactionStates}
+              onStateEvent={onStateEvent}
               placeholder="e.g. Please buy the delicious cranberry juice"
             />
           )}
