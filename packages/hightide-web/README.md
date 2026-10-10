@@ -27,7 +27,7 @@ Two stylesheet exports are available:
 ### Step 3 — Wrap your app with `HightideProvider`
 
 ```tsx
-import { HightideProvider } from "@helpwave/hightide";
+import { HightideProvider } from "@helpwave/hightide/global-contexts";
 
 <HightideProvider theme={{ theme: "system" }} locale={{ locale: "system" }}>
   {children}
@@ -37,7 +37,7 @@ import { HightideProvider } from "@helpwave/hightide";
 ### Step 4 — Use components
 
 ```tsx
-import { LoadingAnimation } from "@helpwave/hightide";
+import { LoadingAnimation } from "@helpwave/hightide/components";
 ```
 
 ### Uncompiled CSS path (advanced)

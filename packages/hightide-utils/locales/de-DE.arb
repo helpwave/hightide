@@ -70,6 +70,53 @@
   },
   "menu": "Menü",
   "minLengthError": "Mindestlänge nicht erreicht.",
+  "validationErrorNotEmpty": "Das Feld darf nicht leer sein.",
+  "validationErrorInvalidEmail": "Die E-Mail ist ungültig.",
+  "validationErrorTooShort": "Der Wert muss mindestens {min} Zeichen enthalten.",
+  "@validationErrorTooShort": {
+    "placeholders": {
+      "min": { "type": "number" }
+    }
+  },
+  "validationErrorTooLong": "Der Wert darf höchstens {max} Zeichen enthalten.",
+  "@validationErrorTooLong": {
+    "placeholders": {
+      "max": { "type": "number" }
+    }
+  },
+  "validationErrorOutOfRangeString": "Der Wert muss zwischen {min} und {max} Zeichen lang sein.",
+  "@validationErrorOutOfRangeString": {
+    "placeholders": {
+      "min": { "type": "number" },
+      "max": { "type": "number" }
+    }
+  },
+  "validationErrorOutOfRangeNumber": "Der Wert muss zwischen {min} und {max} liegen.",
+  "@validationErrorOutOfRangeNumber": {
+    "placeholders": {
+      "min": { "type": "number" },
+      "max": { "type": "number" }
+    }
+  },
+  "validationErrorOutOfRangeSelectionItems": "Es müssen zwischen {min} und {max} Elemente ausgewählt werden.",
+  "@validationErrorOutOfRangeSelectionItems": {
+    "placeholders": {
+      "min": { "type": "number" },
+      "max": { "type": "number" }
+    }
+  },
+  "validationErrorTooFewSelectionItems": "Es müssen mindestens {min} Elemente ausgewählt werden.",
+  "@validationErrorTooFewSelectionItems": {
+    "placeholders": {
+      "min": { "type": "number" }
+    }
+  },
+  "validationErrorTooManySelectionItems": "Es müssen maximal {max} Elemente ausgewählt werden.",
+  "@validationErrorTooManySelectionItems": {
+    "placeholders": {
+      "max": { "type": "number" }
+    }
+  },
   "more": "Mehr",
   "next": "Weiter",
   "no": "Nein",
@@ -245,8 +292,6 @@
   "playTrace": "Trace abspielen",
   "startDate": "Start",
   "startsWith": "Beginnt mit",
-  "notEmpty": "Das Feld darf nicht leer sein.",
-  "invalidEmail": "Die E-Mail ist ungültig.",
   "isFalse": "Ist falsch",
   "isTrue": "Ist wahr",
   "isUndefined": "Ist undefiniert",
@@ -257,51 +302,6 @@
   "before": "Vor",
   "onOrAfter": "Nach oder Gleich",
   "onOrBefore": "Vor oder Gleich",
-  "tooShort": "Der Wert muss mindestens {min} Zeichen enthalten.",
-  "@tooShort": {
-    "placeholders": {
-      "min": { "type": "number" }
-    }
-  },
-  "tooLong": "Der Wert darf höchstens {max} Zeichen enthalten.",
-  "@tooLong": {
-    "placeholders": {
-      "max": { "type": "number" }
-    }
-  },
-  "outOfRangeString": "Der Wert muss zwischen {min} und {max} Zeichen lang sein.",
-  "@outOfRangeString": {
-    "placeholders": {
-      "min": { "type": "number" },
-      "max": { "type": "number" }
-    }
-  },
-  "outOfRangeNumber": "Der Wert muss zwischen {min} und {max} liegen.",
-  "@outOfRangeNumber": {
-    "placeholders": {
-      "min": { "type": "number" },
-      "max": { "type": "number" }
-    }
-  },
-  "outOfRangeSelectionItems": "Es müssen zwischen {min} und {max} Elemente ausgewählt werden.",
-  "@outOfRangeSelectionItems": {
-    "placeholders": {
-      "min": { "type": "number" },
-      "max": { "type": "number" }
-    }
-  },
-  "tooFewSelectionItems": "Es müssen mindestens {min} Elemente ausgewählt werden.",
-  "@tooFewSelectionItems": {
-    "placeholders": {
-      "min": { "type": "number" }
-    }
-  },
-  "tooManySelectionItems": "Es müssen maximal {max} Elemente ausgewählt werden.",
-  "@tooManySelectionItems": {
-    "placeholders": {
-      "max": { "type": "number" }
-    }
-  },
   "age": "Alter",
   "entryDate": "Eintragsdatum",
   "identifier": "Identifikator",

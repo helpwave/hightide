@@ -1,5 +1,5 @@
 import { useCallback, useEffect, useMemo } from 'react'
-import { useEventCallbackStabilizer } from '../../hooks/useEventCallbackStabelizer'
+import { useStableEvent } from '../../hooks/useStableEvent'
 import { useSimpleStoreSyncedValue, type SimpleValueStore } from '../../hooks/useSimpleStoreSyncedValue'
 import type { LocalizationContextValue, SupportedLocalesConfig } from './LocalizationContext'
 import { StringUnionUtils } from '../../utils/stringUnion'
@@ -194,31 +194,31 @@ export const useCreateLocalizationContext = ({
     setStoredCalendarType(calendarType)
   }, [calendarType, setStoredCalendarType])
 
-  const onChangeRef = useEventCallbackStabilizer(onChangedLocale)
+  const onChangeRef = useStableEvent(onChangedLocale)
 
   useEffect(() => {
     onChangeRef?.(resolvedLocale)
   }, [resolvedLocale, onChangeRef])
 
-  const onChangeTimeZoneRef = useEventCallbackStabilizer(onChangedTimeZone)
+  const onChangeTimeZoneRef = useStableEvent(onChangedTimeZone)
 
   useEffect(() => {
     onChangeTimeZoneRef?.(resolvedTimeZone)
   }, [resolvedTimeZone, onChangeTimeZoneRef])
 
-  const onChangeIs24HourFormatRef = useEventCallbackStabilizer(onChangedIs24HourFormat)
+  const onChangeIs24HourFormatRef = useStableEvent(onChangedIs24HourFormat)
 
   useEffect(() => {
     onChangeIs24HourFormatRef?.(resolvedIs24HourFormat)
   }, [resolvedIs24HourFormat, onChangeIs24HourFormatRef])
 
-  const onChangeStartingWeekdayRef = useEventCallbackStabilizer(onChangedStartingWeekday)
+  const onChangeStartingWeekdayRef = useStableEvent(onChangedStartingWeekday)
 
   useEffect(() => {
     onChangeStartingWeekdayRef?.(resolvedStartingWeekday)
   }, [resolvedStartingWeekday, onChangeStartingWeekdayRef])
 
-  const onChangeCalendarTypeRef = useEventCallbackStabilizer(onChangedCalendarType)
+  const onChangeCalendarTypeRef = useStableEvent(onChangedCalendarType)
 
   useEffect(() => {
     onChangeCalendarTypeRef?.(resolvedCalendarType)

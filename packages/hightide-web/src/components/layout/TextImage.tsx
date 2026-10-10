@@ -1,6 +1,6 @@
 import clsx from 'clsx'
 import { useHightideTranslation } from '@helpwave/hightide-utils/context/translation'
-import { Button } from '../user-interaction/Button'
+import { Button } from '../interaction/Button'
 
 type TextImageColor = 'primary' | 'secondary' | 'dark'
 
@@ -65,7 +65,7 @@ export const TextImage = ({
           <div className="flex-row-2 mt-2 underline">
             <Button
               color="neutral"
-              coloringStyle="text"
+              variant="foreground"
               onClick={onShowMoreClicked}
             >
               {translation('showMore')}

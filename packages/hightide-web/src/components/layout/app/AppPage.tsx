@@ -1,14 +1,16 @@
 import clsx from 'clsx'
 import type { ElementType } from 'react'
 import { useCallback, useMemo, useRef, useState, type HTMLAttributes, type ReactNode } from 'react'
-import { IconButton } from '../../user-interaction/IconButton'
+import { IconButton } from '../../interaction/IconButton'
 import { useHightideTranslation } from '@helpwave/hightide-utils/context/translation'
 import { MenuIcon, X } from 'lucide-react'
+import { Icon } from '../../visualization/Icon'
 import { useOverlayRegistry } from '@helpwave/hightide-utils/hooks'
 import { PropsUtil } from '../../../utils/propsUtil'
-import type { LinkComponentProps } from '../navigation/navigation-menus/VerticalNavigationMenu'
-import { VerticalNavigationMenu, type NavigationItemData } from '../navigation/navigation-menus/VerticalNavigationMenu'
-import { FocusTrap } from '../../utils/FocusTrap'
+import type { LinkComponentProps } from '../../interaction/navigation/navigation-menus/VerticalNavigationMenu'
+import { VerticalNavigationMenu, type NavigationItemData } from '../../interaction/navigation/navigation-menus/VerticalNavigationMenu'
+import type { NavigationGroupItem, NavigationLinkItem, NavigationLabelItem } from '../../interaction/navigation/navigation-menus/types'
+import { FocusTrap } from '../../interaction/FocusTrap'
 
 export interface AppSidebarProps extends HTMLAttributes<HTMLDivElement> {
   isOpen?: boolean,
@@ -24,13 +26,13 @@ export const AppSidebar = ({ isOpen = false, onClose, children, ...props }: AppS
     <>
       {isOpen && (
         <div
-          data-name="app-sidebar-backdrop"
+          className="app-sidebar-backdrop"
           onClick={onClose}
           role="presentation"
         />
       )}
       <div
-        data-name="app-sidebar-container"
+        className="app-sidebar-container"
         data-open={PropsUtil.dataAttributes.bool(isOpen)}
         style={{ zIndex }}
       >
@@ -39,20 +41,18 @@ export const AppSidebar = ({ isOpen = false, onClose, children, ...props }: AppS
           container={ref}
         >
           <aside
-            ref={ref}
             {...props}
-            data-name="app-sidebar-content"
+            ref={ref}
             data-open={PropsUtil.dataAttributes.bool(isOpen)}
-            className={clsx(props.className)}
-          >
+            className={clsx('app-sidebar-content', props.className)}>
             <IconButton
               className="app-sidebar-close-button"
               tooltip={translation('close')}
               onClick={onClose}
-              coloringStyle="text"
+              variant="foreground"
               color="neutral"
             >
-              <X className="size-6" />
+              <Icon icon={X} />
             </IconButton>
             {children}
           </aside>
@@ -112,22 +112,36 @@ export const AppPageSidebarWithNavigation = ({
   )
 }
 
-export interface AppPageNavigationItem {
+type AppPageNavigationItemBase = {
   id: string,
   label: ReactNode,
   icon?: ReactNode,
-  url?: string,
-  external?: boolean,
-  items?: AppPageNavigationItem[],
 }
+
+export type AppPageNavigationItem =
+  | (AppPageNavigationItemBase & {
+    url: string,
+    external?: boolean,
+    items?: never,
+  })
+  | (AppPageNavigationItemBase & {
+    items: AppPageNavigationItem[],
+    url?: never,
+    external?: never,
+  })
+  | (AppPageNavigationItemBase & {
+    url?: never,
+    external?: never,
+    items?: never,
+  })
 
 function findActiveIdByUrl(
   items: ReadonlyArray<AppPageNavigationItem>,
   activeUrl: string
 ): string | null {
   for (const item of items) {
-    if (item.url === activeUrl) return item.id
-    if (item.items != null) {
+    if ('url' in item && item.url === activeUrl) return item.id
+    if ('items' in item && item.items != null) {
       const found = findActiveIdByUrl(item.items, activeUrl)
       if (found != null) return found
     }
@@ -171,22 +185,38 @@ export const AppPage = ({
   const toNavigationItems = useCallback((items?: AppPageNavigationItem[]): NavigationItemData[] | undefined => {
     return items?.map((item) => {
       const isActive = item.id === resolvedActiveId
-      return ({
+      const label = (
+        <span className="app-page-navigation-item-label" data-active-page={isActive ? '' : undefined}>
+          {item.icon && (
+            <span className="size-5">
+              {item.icon}
+            </span>
+          )}
+          {item.label}
+        </span>
+      )
+      if ('items' in item && item.items != null) {
+        const group: NavigationGroupItem = {
+          id: item.id,
+          label,
+          items: toNavigationItems(item.items) ?? [],
+        }
+        return group
+      }
+      if ('url' in item && item.url != null) {
+        const link: NavigationLinkItem = {
+          id: item.id,
+          label,
+          url: item.url,
+          external: item.external,
+        }
+        return link
+      }
+      const labelItem: NavigationLabelItem = {
         id: item.id,
-        label: (
-          <span className="app-page-navigation-item-label" data-active-page={isActive ? '' : undefined}>
-            {item.icon && (
-              <span className="size-5">
-                {item.icon}
-              </span>
-            )}
-            {item.label}
-          </span>
-        ),
-        url: item.url,
-        external: item.external,
-        items: toNavigationItems(item.items),
-      })
+        label,
+      }
+      return labelItem
     }) ?? undefined
   }, [resolvedActiveId])
 
@@ -197,9 +227,7 @@ export const AppPage = ({
   return (
     <div
       {...props}
-      data-name="app-page"
-      className={clsx(props.className)}
-    >
+      className={clsx('app-page', props.className)}>
       <AppPageSidebarWithNavigation
         isOpen={isSidebarOpen}
         onClose={() => setIsSidebarOpen(false)}
@@ -210,20 +238,20 @@ export const AppPage = ({
         activeId={resolvedActiveId}
         LinkComponent={sidebarProps.LinkComponent}
       />
-      <div data-name="app-page-body">
-        <header data-name="app-page-header">
+      <div className="app-page-body">
+        <header className="app-page-header">
           <IconButton
             className="app-page-menu-button"
             tooltip={translation('menu')}
             onClick={() => setIsSidebarOpen(prev => !prev)}
-            coloringStyle="text"
+            variant="foreground"
           >
-            <MenuIcon />
+            <Icon icon={MenuIcon} />
           </IconButton>
           {headerActions}
         </header>
-        <div data-name="app-page-content" data-no-scrolling={noScrolling ? '' : undefined}>
-          <main data-name="app-page-main-content" data-outer-no-scrolling={noScrolling ? '' : undefined}>
+        <div className="app-page-content" data-no-scrolling={noScrolling ? '' : undefined}>
+          <main className="app-page-main-content" data-outer-no-scrolling={noScrolling ? '' : undefined}>
             {children}
             {hasSpacer && (<div className="app-page-main-spacer" />)}
           </main>

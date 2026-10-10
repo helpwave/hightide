@@ -1,0 +1,33 @@
+import type { Meta, StoryObj } from '@storybook/react-vite'
+import { Tooltip } from '../../src/components/interaction/Tooltip'
+
+const meta: Meta<typeof Tooltip> = {
+  component: Tooltip,
+}
+
+export default meta
+type Story = StoryObj<typeof meta>;
+
+export const tooltip: Story = {
+  args: {
+    tooltip: 'Tooltip',
+    position: 'bottom',
+    appearDelay: undefined,
+    containerClassName: undefined,
+    tooltipClassName: undefined,
+  },
+  decorators: (Story) => {
+    return (
+      <div className="flex-col-2 items-center justify-center min-h-64">
+        <Story />
+      </div>
+    )
+  },
+  render: ({ ...props }) => {
+    return (
+      <Tooltip {...props}>
+        <span className="bg-primary text-white px-2 py-1 rounded-lg">Hover over me</span>
+      </Tooltip>
+    )
+  }
+}

@@ -17,12 +17,12 @@
 
 @utility focus-style-shadow {
   --focus-box-shadow: 0 0 calc(var(--spacing) * 1) calc(var(--spacing) * 0.8)
-    color-mix(in srgb, var(--color-focus) 35%, transparent);
+    color-mix(in oklch, var(--color-focus) 35%, transparent);
 
   @variant dark {
     --focus-box-shadow: 0 0 calc(var(--spacing) * 1.5)
       calc(var(--spacing) * 0.8)
-      color-mix(in srgb, var(--color-focus) 60%, transparent);
+      color-mix(in oklch, var(--color-focus) 60%, transparent);
   }
 }
 

@@ -1,0 +1,8 @@
+export { Textarea, type TextareaProps } from './Textarea'
+export { TextareaContext, useTextareaContext } from './TextareaContext'
+export { TextareaElement } from './TextareaElement'
+export { TextareaStateManager, type TextareaStateManagerProps } from './TextareaStateManager'
+export { TextareaWithHeadline, type TextareaWithHeadlineProps } from './TextareaWithHeadline'
+export type { TextareaElementProps } from './TextareaElement'
+export type { TextareaState, TextareaEvent } from './TextareaState'
+export type { TextareaContextValue } from './TextareaContext'

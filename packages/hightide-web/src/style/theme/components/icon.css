@@ -1,0 +1,50 @@
+@layer components {
+  .icon {
+    @apply block shrink-0 overflow-hidden;
+
+    &[data-size="xs"] {
+      width: var(--icon-size-xs);
+      height: var(--icon-size-xs);
+      min-width: var(--icon-size-xs);
+      max-width: var(--icon-size-xs);
+      min-height: var(--icon-size-xs);
+      max-height: var(--icon-size-xs);
+    }
+
+    &[data-size="sm"] {
+      width: var(--icon-size-sm);
+      height: var(--icon-size-sm);
+      min-width: var(--icon-size-sm);
+      max-width: var(--icon-size-sm);
+      min-height: var(--icon-size-sm);
+      max-height: var(--icon-size-sm);
+    }
+
+    &[data-size="md"] {
+      width: var(--icon-size-md);
+      height: var(--icon-size-md);
+      min-width: var(--icon-size-md);
+      max-width: var(--icon-size-md);
+      min-height: var(--icon-size-md);
+      max-height: var(--icon-size-md);
+    }
+
+    &[data-size="lg"] {
+      width: var(--icon-size-lg);
+      height: var(--icon-size-lg);
+      min-width: var(--icon-size-lg);
+      max-width: var(--icon-size-lg);
+      min-height: var(--icon-size-lg);
+      max-height: var(--icon-size-lg);
+    }
+
+    &[data-size="xl"] {
+      width: var(--icon-size-xl);
+      height: var(--icon-size-xl);
+      min-width: var(--icon-size-xl);
+      max-width: var(--icon-size-xl);
+      min-height: var(--icon-size-xl);
+      max-height: var(--icon-size-xl);
+    }
+  }
+}

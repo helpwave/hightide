@@ -2,7 +2,7 @@ import type { ReactNode } from 'react'
 import { useCallback, useMemo, useState } from 'react'
 
 import type { ColorPairToken } from '@helpwave/hightide-design/theme-tokens'
-import { useEventCallbackStabilizer } from '@helpwave/hightide-utils/hooks'
+import { useStableEvent } from '@helpwave/hightide-utils/hooks'
 
 import { useMultiSelect } from '../../../hooks/useMultiSelect'
 import type {
@@ -96,8 +96,8 @@ export function MultiSelectRoot<T>({
       .filter((id): id is string => id !== undefined)
   }, [compare, idToOptionMap, initialValue])
 
-  const onValueChangeStable = useEventCallbackStabilizer(onValueChange)
-  const onEditCompleteStable = useEventCallbackStabilizer(onEditComplete)
+  const onValueChangeStable = useStableEvent(onValueChange)
+  const onEditCompleteStable = useStableEvent(onEditComplete)
 
   const onValueChangeWrapper = useCallback((ids: string[]) => {
     const values = ids

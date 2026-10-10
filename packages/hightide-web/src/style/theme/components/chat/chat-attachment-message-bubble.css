@@ -1,0 +1,33 @@
+@layer components {
+  .chat-attachment-message-bubble .chat-message-bubble-body {
+    @apply gap-2;
+  }
+
+  .chat-attachment-message-content {
+    @apply flex-row-3 items-center w-full rounded-md px-2 pr-4 py-2 text-left;
+  }
+
+  button.chat-attachment-message-content {
+    @apply cursor-pointer;
+  }
+
+  .chat-attachment-message-file-icon {
+    @apply flex-row-0 items-center justify-center size-9 shrink-0 rounded-md;
+  }
+
+  .chat-attachment-message-info {
+    @apply flex-col-0 gap-y-0.5 grow min-w-0;
+  }
+
+  .chat-attachment-message-name {
+    @apply text-sm font-medium truncate;
+  }
+
+  .chat-attachment-message-metadata {
+    @apply text-xs text-description;
+  }
+
+  .chat-attachment-message-download-icon {
+    @apply shrink-0;
+  }
+}

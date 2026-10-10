@@ -1,5 +1,5 @@
 @layer components {
-  [data-name="vertical-navigation-menu"] {
+  .vertical-navigation-menu {
     @apply flex-col-0 list-none m-0 p-0;
   }
 
@@ -8,22 +8,42 @@
   }
 
   .vertical-navigation-item-row-container {
-    @apply relative flex-row-0 min-h-11 min-w-0;
+    @apply flex-row-0 items-center min-h-element-md min-w-0 w-full rounded-md border-0 bg-transparent p-0 text-inherit text-left font-[inherit];
+
+    &[data-has-children] {
+      @apply hover:cursor-pointer;
+      transition: var(--focus-transitions);
+
+      &:hover {
+        background-color: color-mix(in oklch, var(--color-on-surface) var(--coloring-state-hover), transparent);
+      }
+
+      &:active {
+        background-color: color-mix(in oklch, var(--color-on-surface) var(--coloring-state-press), transparent);
+      }
+
+      &:focus-visible {
+        background-color: color-mix(in oklch, var(--color-on-surface) var(--coloring-state-press), transparent);
+        outline: var(--focus-outline);
+        outline-offset: var(--focus-outline-offset);
+        box-shadow: var(--focus-box-shadow);
+        border-color: var(--focus-border-color);
+      }
+    }
   }
 
   .vertical-navigation-item-row {
-    @apply flex-row-1 items-center min-h-11 min-w-0 h-full w-full rounded-md;
-
-    &[data-has-children][data-has-link] {
-      @apply mr-11;
-    }
+    @apply flex-row-1 items-center min-h-element-md min-w-0 h-full flex-1 rounded-md;
 
     &[data-interactable] {
       @apply hover:cursor-pointer;
 
-      &:hover,
-      &:has(:focus-visible) {
-        @apply bg-primary/15;
+      &:hover {
+        background-color: color-mix(in oklch, var(--color-on-surface) var(--coloring-state-hover), transparent);
+      }
+
+      &:active, &:has(:focus-visible) {
+        background-color: color-mix(in oklch, var(--color-on-surface) var(--coloring-state-press), transparent);
       }
     }
   }
@@ -33,7 +53,7 @@
   }
 
   .vertical-navigation-item-link {
-    @apply min-w-0 w-full min-h-11 min-w-0 min-h-11 rounded-md;
+    @apply min-w-0 w-full min-h-element-md min-w-0 h-element-md rounded-md;
 
     transition: var(--focus-transitions);
     &:has(focus-visible) {
@@ -45,15 +65,11 @@
   }
 
   .vertical-navigation-item-label {
-    @apply flex-row-2 flex-1 items-center min-w-0 w-full min-h-11 px-2.5 py-1.5;
-
-    &[data-action-padding] {
-      @apply pr-11;
-    }
+    @apply flex-row-2 flex-1 items-center min-w-0 w-full min-h-element-md px-2.5 py-1.5;
   }
 
   .vertical-navigation-toggle {
-    @apply absolute right-0 top-1/2 -translate-y-1/2;
+    @apply shrink-0 mr-2.5 pointer-events-none text-description;
   }
 
   .vertical-navigation-item-link-external-icon {

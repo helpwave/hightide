@@ -21,6 +21,7 @@
   --color-overlay-background: var(--color-surface);
   --color-overlay-text: var(--color-on-surface);
   --color-overlay-shadow: #00000039;
+  --color-overlay-shadow: oklch(0.000 0 0 / 0.25);
 
   /* ProgressIndicator */
   --color-progress-indicator-fill: var(--color-primary);
@@ -32,13 +33,14 @@
   --color-process-model-edge-label-text-strong: var(--color-primary);
   --color-process-model-edge-label-text-muted: var(--color-purple-300);
   --color-process-model-terminal-fill: var(--color-primary);
-  --color-process-model-terminal-fill-active: var(--color-primary-hover);
+  --color-process-model-terminal-fill-active: color-mix(in oklch, var(--color-on-primary) var(--coloring-state-press), var(--color-primary));
   --color-process-model-terminal-fill-visited: var(--color-purple-400);
   --color-process-model-activity-icon-bg: var(--color-purple-100);
   --color-process-model-node-active-ring: var(--color-purple-100);
   --color-process-model-node-active-bg: var(--color-purple-50);
   --color-process-model-node-visited-border: var(--color-purple-200);
   --color-process-model-node-visited-bg: #fdf9ff;
+  --color-process-model-node-visited-bg: oklch(0.987 0.009 314.8);
 
   /* Property */
   --color-property-title-background: var(--color-gray-100);
@@ -46,12 +48,13 @@
 
   /* Scrollbar */
   --color-scrollbar-track: #00000033;
-  --color-scrollbar-thumb: var(--color-gray-600);
+  --color-scrollbar-track: oklch(0.000 0 0 / 0.2);
+  --color-scrollbar-thumb: var(--color-gray-400);
 
   /* Stepper Bar */
   --color-stepperbar-dot-active: var(--color-primary);
   --color-stepperbar-dot-normal: var(--color-purple-100);
-  --color-stepperbar-dot-disabled: var(--color-description);
+  --color-stepperbar-dot-disabled: var(--color-surface-variant);
 
   /* Switch */
   --color-switch-thumb-inactive: var(--color-on-surface);
@@ -61,7 +64,6 @@
   --color-table-background: var(--color-surface);
   --color-table-text: var(--color-on-surface);
   --color-table-header-background: var(--color-surface-variant);
-  --color-table-row-hover-background: var(--color-surface-hover);
 
   /* TextImage */
   --color-text-image-primary-background: var(--color-primary);
@@ -73,7 +75,7 @@
 
   /* Tooltip */
   --color-tooltip-background: var(--color-menu-background);
-  --color-tooltip-text: var(--color-description);
+  --color-tooltip-text: var(--color-menu-text);
 
   /* Other */
   --color-border: var(--color-gray-200);
@@ -101,9 +103,11 @@
 
     /* Overlay, Dialog, Modal */
     --color-overlay-shadow: #00000060;
+    --color-overlay-shadow: oklch(0.000 0 0 / 0.4);
 
     /* Scrollbar */
     --color-scrollbar-track: #ffffff33;
+    --color-scrollbar-track: oklch(1.000 0 0 / 0.2);
     --color-scrollbar-thumb: var(--color-gray-300);
 
     /* Switch */

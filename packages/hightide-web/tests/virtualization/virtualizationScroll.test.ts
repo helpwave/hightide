@@ -21,7 +21,7 @@ describe('findPageScrollContainer', () => {
     // virtualization must still bind to it (otherwise an empty list never
     // resolves a scroll element and renders zero rows).
     documentBody.innerHTML = `
-      <div data-name="app-page-content">
+      <div class="app-page-content">
         <main>
           <div id="list">
             <table><tbody id="body"></tbody></table>
@@ -30,7 +30,7 @@ describe('findPageScrollContainer', () => {
       </div>
     `
     const body = document?.getElementById('body')
-    const appPageContent = document?.querySelector('[data-name="app-page-content"]')
+    const appPageContent = document?.querySelector('.app-page-content')
 
     expect(findScrollableAncestor(body)).toBeNull()
     expect(findPageScrollContainer(body)).toBe(appPageContent)

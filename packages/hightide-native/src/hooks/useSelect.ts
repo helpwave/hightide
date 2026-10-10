@@ -6,7 +6,7 @@ import {
 } from 'react'
 
 import {
-  useEventCallbackStabilizer,
+  useStableEvent,
   useListNavigation,
   useSearch,
   useSingleSelection,
@@ -76,10 +76,10 @@ export function useSelect({
   const [isOpen, setIsOpen] = useState(initialIsOpen)
   const [searchQuery, setSearchQuery] = useState('')
 
-  const onValueChangeStable = useEventCallbackStabilizer(onValueChange)
-  const onEditCompleteStable = useEventCallbackStabilizer(onEditComplete)
-  const onCloseStable = useEventCallbackStabilizer(onClose)
-  const onIsOpenChangeStable = useEventCallbackStabilizer(onIsOpenChange)
+  const onValueChangeStable = useStableEvent(onValueChange)
+  const onEditCompleteStable = useStableEvent(onEditComplete)
+  const onCloseStable = useStableEvent(onClose)
+  const onIsOpenChangeStable = useStableEvent(onIsOpenChange)
 
   const onSelectionChangeWrapper = useCallback((id: string | null) => {
     if (id === null) return

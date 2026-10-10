@@ -1,3 +1,39 @@
+@property --coloring-base {
+  syntax: "<color>";
+  inherits: true;
+  initial-value: initial;
+}
+
+@property --coloring-on-base {
+  syntax: "<color>";
+  inherits: true;
+  initial-value: initial;
+}
+
+@property --coloring-color {
+  syntax: "<color>";
+  inherits: true;
+  initial-value: initial;
+}
+
+@property --coloring-on-color {
+  syntax: "<color>";
+  inherits: true;
+  initial-value: initial;
+}
+
+@property --coloring-accent {
+  syntax: "<color>";
+  inherits: true;
+  initial-value: initial;
+}
+
+@property --coloring-foreground {
+  syntax: "<color>";
+  inherits: true;
+  initial-value: initial;
+}
+
 :root {
   --coloring-transitions:
     border-color var(--animation-duration-in, 250ms) ease-in-out, 
@@ -8,70 +44,149 @@
     background-color var(--animation-duration-in, 250ms) ease-in-out;
 }
 
-@utility coloring-solid {
-  @apply bg-[var(--coloring-solid-color,var(--coloring-color))]
-  text-[var(--coloring-solid-text,var(--coloring-on-color))];
-}
+@layer utilities {
+  [data-coloring-mode="interactive"] {
+    position: var(--coloring-position-override, relative);
+  }
 
-@utility coloring-solid-hover {
-  @apply coloring-solid
-  hover:bg-[var(--coloring-solid-hover,var(--coloring-hover))];
-}
+  [data-coloring-mode="static"],
+  [data-coloring-mode="interactive"] {
+  --coloring-color: var(--coloring-base);
+  --coloring-on-color: var(--coloring-on-base);
+  --coloring-accent: var(--coloring-base);
+  --coloring-foreground: var(--coloring-on-color);
 
-@utility coloring-tonal {
-  @apply bg-[var(--coloring-tonal-background,var(--coloring-tonal,var(--coloring-color)))]/20
-  text-[var(--coloring-tonal-text,var(--coloring-tonal,var(--coloring-color)))];
-}
+  &[data-color="primary"] {
+    --coloring-base: var(--color-primary);
+    --coloring-on-base: var(--color-on-primary);
+  }
 
-@utility coloring-tonal-hover {
-  @apply coloring-tonal
-  hover:bg-[var(--coloring-tonal-hover,var(--coloring-tonal-background,var(--coloring-tonal,var(--coloring-color))))]/30;
-}
+   &[data-color="primary-inverse"] {
+    --coloring-base: var(--color-on-primary);
+    --coloring-on-base: var(--color-primary);
+  }
 
-@utility coloring-text {
-  @apply text-[var(--coloring-text,var(--coloring-color))];
-}
+  &[data-color="secondary"] {
+    --coloring-base: var(--color-secondary);
+    --coloring-on-base: var(--color-on-secondary);
+  }
 
-@utility coloring-text-hover {
-  @apply coloring-text
-  hover:bg-[var(--coloring-text-hover,var(--coloring-text,var(--coloring-color)))]/20;
-}
+  &[data-color="positive"] {
+    --coloring-base: var(--color-positive);
+    --coloring-on-base: var(--color-on-positive);
+  }
 
-@utility coloring-outline {
-  border-width: var(--coloring-outline-width, 0.125rem);
-  @apply border-[var(--coloring-border,var(--coloring-outline,var(--coloring-color)))];
-  @apply text-[var(--coloring-outline,var(--coloring-color))];
-}
+  &[data-color="warning"] {
+    --coloring-base: var(--color-warning);
+    --coloring-on-base: var(--color-on-warning);
+  }
 
-@utility coloring-outline-hover {
-  @apply coloring-outline
-  hover:border-[var(--coloring-border-hover,--coloring-hover)]
-  hover:text-[var(--coloring-outline-hover,var(--coloring-hover))];
-}
+  &[data-color="negative"] {
+    --coloring-base: var(--color-negative);
+    --coloring-on-base: var(--color-on-negative);
+  }
 
-@utility coloring-tonal-outline {
-  @apply coloring-tonal;
-  border-width: var(--coloring-outline-width, 0.125rem);
-  @apply border-[var(--coloring-border,var(--coloring-outline,var(--coloring-color)))];
-}
+  &[data-color="neutral"] {
+    --coloring-base: var(--color-neutral);
+    --coloring-on-base: var(--color-on-neutral);
+  }
 
-@utility coloring-tonal-outline-hover {
-  @apply coloring-tonal-outline
-  hover:border-[var(--coloring-border-hover,--coloring-hover)]
-  hover:text-[var(--coloring-outline-hover,var(--coloring-hover))]
-  hover:bg-[var(--coloring-tonal-hover,var(--coloring-tonal-background,var(--coloring-tonal,var(--coloring-color))))]/30;
+  &[data-color="surface"] {
+    --coloring-base: var(--color-surface);
+    --coloring-on-base: var(--color-on-surface);
+  }
+
+  &[data-color="surface-inverse"] {
+    --coloring-base: var(--color-on-surface);
+    --coloring-on-base: var(--color-surface);
+  }
+
+  &[data-color="surface-variant"] {
+    --coloring-base: var(--color-surface-variant);
+    --coloring-on-base: var(--color-on-surface-variant);
+  }
+
+  &[data-color="surface-warning"] {
+    --coloring-base: var(--color-surface-warning);
+    --coloring-on-base: var(--color-on-surface-warning);
+  }
+
+  &[data-color="disabled"],
+  &[data-disabled] {
+    --coloring-base: var(--color-disabled);
+    --coloring-on-base: var(--color-on-disabled);
+  }
+
+  &[data-disabled] {
+    opacity: 0.6;
+  }
+
+  &[data-color-variant="tonal"] {
+    --coloring-color: color-mix(in oklch, var(--coloring-base) 20%, transparent);
+    --coloring-on-color: var(--coloring-base);
+
+    @supports (color: oklch(from red 0.5 c h)) {
+      --coloring-color: oklch(from var(--coloring-base) var(--coloring-tonal-lightness) c h);
+      --coloring-on-color: oklch(from var(--coloring-base) var(--coloring-tonal-on-lightness) c h);
+    }
+  }
+
+  &[data-color-variant="transparent"] {
+    --coloring-color: color-mix(in oklch, var(--coloring-base) var(--coloring-transparent-alpha), transparent);
+    --coloring-on-color: var(--coloring-base);
+  }
+
+  &[data-coloring-style="filled"] {
+    background-color: var(--coloring-color);
+    color: var(--coloring-foreground, var(--coloring-on-color));
+  }
+
+  &[data-coloring-style="foreground"] {
+    --coloring-foreground: var(--coloring-color);
+    color: var(--coloring-foreground);
+  }
+
+  &[data-bordered] {
+    border-style: solid;
+    border-width: var(--coloring-outline-width);
+    border-color: var(--coloring-accent);
+  }
+
+  &[data-elevated] {
+    @apply shadow-around;
+  }
+
+  &[data-coloring-mode="interactive"][data-elevated]:not([data-disabled]):hover {
+    @apply shadow-around-md;
+  }
+  }
+
+  [data-coloring-mode="interactive"]:not([data-disabled]):not([data-readonly])::before {
+    content: "";
+    position: absolute;
+    inset: 0;
+    border-radius: inherit;
+    pointer-events: none;
+    background: var(--coloring-foreground);
+    opacity: 0;
+  }
+
+  [data-coloring-mode="interactive"]:not([data-disabled]):not([data-readonly]):hover::before {
+    opacity: var(--coloring-state-hover);
+  }
+
+  [data-coloring-mode="interactive"]:not([data-disabled]):not([data-readonly]):focus-visible::before,
+  [data-coloring-mode="interactive"]:not([data-disabled]):not([data-readonly]):active::before {
+    opacity: var(--coloring-state-press);
+  }
 }
 
 @utility coloring-reset-variables {
   --coloring-color: initial;
   --coloring-on-color: initial;
-  --coloring-hover: initial;
   --coloring-text: initial;
-  --coloring-text-hover: initial;
   --coloring-outline: initial;
-  --coloring-outline-hover: initial;
   --coloring-tonal: initial;
   --coloring-tonal-background: initial;
   --coloring-tonal-text: initial;
-  --coloring-tonal-hover: initial;
 }

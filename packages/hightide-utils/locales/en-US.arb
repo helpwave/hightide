@@ -71,6 +71,53 @@
   },
   "menu": "Menu",
   "minLengthError": "Minimum length not met.",
+  "validationErrorNotEmpty": "The field cannot be empty.",
+  "validationErrorInvalidEmail": "The email is not valid.",
+  "validationErrorTooShort": "The value requires at least {min} characters.",
+  "@validationErrorTooShort": {
+    "placeholders": {
+      "min": { "type": "number" }
+    }
+  },
+  "validationErrorTooLong": "The value requires less than {max} characters.",
+  "@validationErrorTooLong": {
+    "placeholders": {
+      "max": { "type": "number" }
+    }
+  },
+  "validationErrorOutOfRangeString": "The value needs to have between {min} and {max} characters.",
+  "@validationErrorOutOfRangeString": {
+    "placeholders": {
+      "min": { "type": "number" },
+      "max": { "type": "number" }
+    }
+  },
+  "validationErrorOutOfRangeNumber": "The value must be between {min} and {max}.",
+  "@validationErrorOutOfRangeNumber": {
+    "placeholders": {
+      "min": { "type": "number" },
+      "max": { "type": "number" }
+    }
+  },
+  "validationErrorOutOfRangeSelectionItems": "Between {min} and {max} items must be selected.",
+  "@validationErrorOutOfRangeSelectionItems": {
+    "placeholders": {
+      "min": { "type": "number" },
+      "max": { "type": "number" }
+    }
+  },
+  "validationErrorTooFewSelectionItems": "Select at least {min} items.",
+  "@validationErrorTooFewSelectionItems": {
+    "placeholders": {
+      "min": { "type": "number" }
+    }
+  },
+  "validationErrorTooManySelectionItems": "Select at most {max} items.",
+  "@validationErrorTooManySelectionItems": {
+    "placeholders": {
+      "max": { "type": "number" }
+    }
+  },
   "more": "More",
   "next": "Next",
   "no": "No",
@@ -246,8 +293,6 @@
   "playTrace": "Play trace",
   "startDate": "Start",
   "startsWith": "Starts with",
-  "notEmpty": "The field cannot be empty.",
-  "invalidEmail": "The email is not valid.",
   "isFalse": "Is false",
   "isTrue": "Is true",
   "isUndefined": "Is undefined",
@@ -258,51 +303,6 @@
   "before": "Before",
   "onOrAfter": "After or Equal",
   "onOrBefore": "Before or Equal",
-  "tooShort": "The value requires at least {min} characters.",
-  "@tooShort": {
-    "placeholders": {
-      "min": { "type": "number" }
-    }
-  },
-  "tooLong": "The value requires less than {max} characters.",
-  "@tooLong": {
-    "placeholders": {
-      "max": { "type": "number" }
-    }
-  },
-  "outOfRangeString": "The value needs to have between {min} and {max} characters.",
-  "@outOfRangeString": {
-    "placeholders": {
-      "min": { "type": "number" },
-      "max": { "type": "number" }
-    }
-  },
-  "outOfRangeNumber": "The value must be between {min} and {max}.",
-  "@outOfRangeNumber": {
-    "placeholders": {
-      "min": { "type": "number" },
-      "max": { "type": "number" }
-    }
-  },
-  "outOfRangeSelectionItems": "Between {min} and {max} items must be selected.",
-  "@outOfRangeSelectionItems": {
-    "placeholders": {
-      "min": { "type": "number" },
-      "max": { "type": "number" }
-    }
-  },
-  "tooFewSelectionItems": "Select at least {min} items.",
-  "@tooFewSelectionItems": {
-    "placeholders": {
-      "min": { "type": "number" }
-    }
-  },
-  "tooManySelectionItems": "Select at most {max} items.",
-  "@tooManySelectionItems": {
-    "placeholders": {
-      "max": { "type": "number" }
-    }
-  },
   "age": "Age",
   "entryDate": "Entry Date",
   "identifier": "Identifier",

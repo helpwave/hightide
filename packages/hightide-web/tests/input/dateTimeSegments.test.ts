@@ -9,7 +9,7 @@ import {
   stepSegment,
   typeDigit,
   type SegmentEditState
-} from '../../src/components/user-interaction/input/dateTimeSegments'
+} from '../../src/components/data-input/input/dateTimeSegments'
 
 const dateLayout = buildSegmentLayout({ locale: 'de-DE', mode: 'date', precision: 'minute', is24HourFormat: true })
 const dateTimeLayout = buildSegmentLayout({ locale: 'de-DE', mode: 'dateTime', precision: 'minute', is24HourFormat: true })

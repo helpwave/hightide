@@ -1,23 +1,16 @@
 @layer components {
   .chat-conversation-row {
-    @apply flex-row-3 shrink-0 items-center w-full px-3.5 py-3 text-left bg-transparent cursor-pointer rounded-md;
+    @apply flex-row-3 shrink-0 items-center w-full px-3.5 py-3 text-left bg-transparent cursor-pointer;
+    --coloring-on-base: var(--color-on-surface);
     @apply border-2 border-transparent focus-style-none focus-style-border outline-none;
-    transition: var(--coloring-transitions), var(--focus-transitions);
+    transition: var(--focus-transitions);
 
     &:focus-visible {
       @apply focus-style-apply;
     }
 
-    &:hover {
-      @apply bg-surface-hover;
-    }
-
     &[data-selected] {
-      @apply bg-background border-l-primary border-l-4 pl-3.25  ;
-
-      &:hover {
-        @apply bg-surface-hover;
-      }
+      @apply bg-background border-l-primary border-l-4 pl-3.25;
     }
   }
 
@@ -67,5 +60,17 @@
 
   .chat-conversation-row-unread-count {
     @apply flex-row-0 shrink-0 items-center justify-center min-w-5 h-5 px-1.5 rounded-full bg-primary text-on-primary text-xs font-bold;
+  }
+}
+
+@layer utilities {
+  .chat-conversation-row[data-coloring-mode="interactive"]:not([data-disabled]):not([data-readonly]) {
+    &::before {
+      inset: -2px;
+    }
+    
+    &[data-selected]::before {
+      left: -4px;
+    }
   }
 }

@@ -7,8 +7,10 @@ export default defineConfig({
     'context/translation/index': 'src/context/translation/index.ts',
     'context/theme/index': 'src/context/theme/index.ts',
     'context/debug/index': 'src/context/debug/index.ts',
+    'form/index': 'src/form/index.ts',
     'hooks/index': 'src/hooks/index.ts',
     'i18n/index': 'src/i18n/index.ts',
+    'interfaces/index': 'src/interfaces/index.ts',
     'utils/index': 'src/utils/index.ts',
   },
   format: ['cjs', 'esm'],
@@ -22,6 +24,7 @@ export default defineConfig({
   external: [
     'react',
     '@helpwave/internationalization',
+    'zustand',
   ],
   cjsInterop: true,
 })

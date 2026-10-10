@@ -4,7 +4,7 @@
 import { useState } from 'react'
 import { act, fireEvent, render, screen } from '@testing-library/react'
 import { TestHightideProvider } from '../setup/TestHightideProvider'
-import { FlexibleDateTimeInput, type FlexibleDateTimeInputProps } from '../../src/components/user-interaction/input/FlexibleDateTimeInput'
+import { FlexibleDateTimeInput, type FlexibleDateTimeInputProps } from '../../src/components/data-input/input/FlexibleDateTimeInput'
 
 
 
@@ -17,7 +17,7 @@ const renderFlexible = (props: Partial<FlexibleDateTimeInputProps> & { defaultMo
         <FlexibleDateTimeInput
           {...props}
           value={value}
-          onValueChange={(next) => {
+          onValueUpdate={(next) => {
             onValueChange(next)
             setValue(next)
           }}

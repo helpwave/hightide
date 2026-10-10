@@ -1,0 +1,8 @@
+export { TextInput, type TextInputProps } from './TextInput'
+export { TextInputContext, useTextInputContext } from './TextInputContext'
+export { TextInputElement } from './TextInputElement'
+export { TextInputStateManager, type TextInputStateManagerProps } from './TextInputStateManager'
+export type { TextInputElementProps } from './TextInputElement'
+export type { InputInterface, InputComponentInterface } from './InputTypes'
+export type { TextInputState, TextInputEvent } from './TextInputState'
+export type { TextInputContextValue } from './TextInputContext'

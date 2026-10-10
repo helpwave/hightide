@@ -1,7 +1,0 @@
-export * from './Avatar'
-export * from './Card'
-export * from './ChangingNumber'
-export * from './Chip'
-export * from './ExpansionIcon'
-export * from './ProgressIndicator'
-export * from './process-model'

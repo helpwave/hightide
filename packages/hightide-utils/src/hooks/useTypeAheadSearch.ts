@@ -1,5 +1,5 @@
 import { useCallback, useEffect, useRef } from 'react'
-import { useEventCallbackStabilizer } from './useEventCallbackStabelizer'
+import { useStableEvent } from './useStableEvent'
 
 export interface UseTypeAheadSearchOptions<T> {
   options: ReadonlyArray<T>,
@@ -27,8 +27,8 @@ export function useTypeAheadSearch<T>({
   const timeoutRef = useRef<ReturnType<typeof setTimeout> | null>(null)
 
   const toString = toStringProp ?? defaultToString
-  const toStringStable = useEventCallbackStabilizer(toString)
-  const onResultChangeStable = useEventCallbackStabilizer(onResultChange)
+  const toStringStable = useStableEvent(toString)
+  const onResultChangeStable = useStableEvent(onResultChange)
 
   const reset = useCallback(() => {
     if (timeoutRef.current) {

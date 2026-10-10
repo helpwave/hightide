@@ -1,0 +1,70 @@
+@layer components {
+  .carousel {
+    @apply flex-col-2 items-center w-full;
+  }
+
+  .carousel-container {
+    @apply relative w-full overflow-hidden;
+  }
+
+  .carousel-track {
+    @apply flex-row-2 relative h-full;
+  }
+
+  .carousel-track-inner {
+    @apply flex-row-2 relative h-full w-full px-2 overflow-hidden;
+  }
+
+  .carousel-slide-frame {
+    @apply px-16 h-full;
+  }
+
+  .carousel-slide {
+    @apply focus-style-none;
+  }
+
+  .carousel-container[data-hint-next] .carousel-slide {
+    @apply absolute left-[50%] h-full overflow-hidden transition-transform ease-in-out;
+  }
+
+  .carousel-fade-layover {
+    @apply hidden desktop:block pointer-events-none absolute h-full w-[20%] to-transparent;
+  }
+
+  .carousel-fade-layover[data-side="start"] {
+    @apply left-0 bg-gradient-to-r;
+  }
+
+  .carousel-fade-layover[data-side="end"] {
+    @apply right-0 bg-gradient-to-l;
+  }
+
+  .carousel-arrow {
+    @apply absolute z-10 top-1/2 -translate-y-1/2 shadow-md;
+    --coloring-position-override: absolute;
+  }
+
+  .carousel-arrow[data-direction="previous"] {
+    @apply left-2;
+  }
+
+  .carousel-arrow[data-direction="next"] {
+    @apply right-2;
+  }
+
+  .carousel-arrow[data-hidden] {
+    @apply hidden;
+  }
+
+  .carousel-stepper {
+    @apply flex-row-1 items-center justify-center w-full my-2;
+  }
+
+  .carousel-stepper-tab {
+    @apply w-8 min-w-8 h-3 min-h-3 first:rounded-l-md last:rounded-r-md bg-carousel-dot-disabled hover:bg-carousel-dot-active;
+  }
+
+  .carousel-stepper-tab[data-selected] {
+    @apply bg-carousel-dot-active hover:brightness-90;
+  }
+}

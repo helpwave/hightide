@@ -1,0 +1,47 @@
+@layer components {
+  .list-item,
+  .list-action-item,
+  .list-navigation-item {
+    @apply flex-row-0 items-center w-full min-w-0 min-h-12 px-4 py-3 text-left text-on-surface;
+  }
+
+  .list-item-leading {
+    @apply flex-row-0 items-center justify-center shrink-0 me-4 text-description;
+  }
+
+  .list-item-content {
+    @apply flex-col-1 min-w-0 flex-1;
+  }
+
+  .list-item-trailing {
+    @apply flex-row-0 items-center justify-center shrink-0 ms-6 text-description;
+  }
+
+  .list-item-title {
+    @apply typography-body-md min-w-0;
+  }
+
+  .list-item-subtitle {
+    @apply typography-caption-sm min-w-0 text-description;
+  }
+
+  .list-action-item,
+  .list-navigation-item {
+    @apply cursor-pointer bg-transparent outline-none focus-style-outline;
+    --coloring-on-base: var(--color-on-surface);
+    transition: var(--focus-transitions);
+
+    &:focus-visible {
+      @apply focus-style-apply;
+    }
+
+    &:disabled,
+    &[data-disabled] {
+      @apply cursor-not-allowed opacity-50;
+    }
+  }
+
+  .list-navigation-item-icon {
+    @apply size-force-5;
+  }
+}

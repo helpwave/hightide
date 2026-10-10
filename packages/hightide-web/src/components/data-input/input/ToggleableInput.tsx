@@ -1,0 +1,118 @@
+import { forwardRef, useEffect, useRef, useState } from 'react'
+import { Pencil } from 'lucide-react'
+import { Icon } from '../../visualization/Icon'
+import clsx from 'clsx'
+import type { TextInputProps } from './TextInput'
+import { TextInput } from './TextInput'
+import { useEditCompletable, useControlledState } from '@helpwave/hightide-utils/hooks'
+import { ReactUtils } from '@helpwave/hightide-utils/utils'
+
+type ToggleableInputEditOptions = {
+  onBlur?: boolean,
+  afterDelay?: boolean,
+  delay?: number,
+}
+
+type ToggleableInputProps = TextInputProps
+  & {
+    initialEditingState?: 'editing' | 'display',
+    onValueCommit?: (value: string) => void,
+    editCompleteOptions?: ToggleableInputEditOptions,
+  }
+
+/**
+ * A Text input component for inputting text. It changes appearance upon entering the edit mode and switches
+ * back to display mode on loss of focus or on enter
+ *
+ * The State is managed by the parent
+ */
+export const ToggleableInput = forwardRef<HTMLInputElement, ToggleableInputProps>(function ToggleableInput({
+  initialValue,
+  value: controlledValue,
+  onValueChange,
+  onValueCommit,
+  initialEditingState: initialState = 'display',
+  editCompleteOptions,
+  isInvalid,
+  isDisabled,
+  isReadOnly,
+  isRequired,
+  onStateEvent,
+  inputRef,
+  inputProps
+}) {
+  const [isEditing, setIsEditing] = useState(initialState !== 'display')
+  const [value, setValue] = useControlledState({
+    value: controlledValue,
+    onValueChange,
+    defaultValue: initialValue ?? '',
+  })
+  const edit = useEditCompletable({
+    value,
+    onEditComplete: (text) => {
+      onValueCommit?.(text)
+      setIsEditing(false)
+    },
+    delay: editCompleteOptions?.delay,
+    isTimerEnabled: editCompleteOptions?.afterDelay ?? false,
+  })
+  const isBlurCompleteEnabled = editCompleteOptions?.onBlur ?? true
+
+  const innerRef = useRef<HTMLInputElement>(null)
+
+  useEffect(() => {
+    if (isEditing) {
+      innerRef.current?.focus()
+    }
+  }, [isEditing])
+
+  return (
+    <div className={clsx('relative flex-row-2', { 'flex-1': isEditing })}>
+      <TextInput
+        value={value}
+        isInvalid={isInvalid}
+        isDisabled={isDisabled}
+        isReadOnly={isReadOnly}
+        isRequired={isRequired}
+        onStateEvent={onStateEvent}
+        inputRef={ReactUtils.assingRefsBuilder([innerRef, inputRef])}
+        onValueChange={(text) => {
+          setValue(text)
+          if (editCompleteOptions?.afterDelay) {
+            edit.setTimer()
+          }
+        }}
+        inputProps={{
+          ...inputProps ?? {},
+          'onKeyDown': event => {
+            inputProps?.onKeyDown?.(event)
+            if (edit.completeOnKey(event)) {
+              innerRef.current?.blur()
+            }
+          },
+          'onFocus': event => {
+            inputProps?.onFocus?.(event)
+            setIsEditing(true)
+            event.target.select()
+          },
+          'onBlur': event => {
+            inputProps?.onBlur?.(event)
+            if (isBlurCompleteEnabled) {
+              edit.completeNow()
+            }
+          },
+          'data-isediting': isEditing ? '' : undefined,
+          'className': clsx('togglable-input', inputProps?.className),
+        }}
+      />
+      {!isEditing && (
+        <div className="absolute left-0 flex-row-2 items-center pointer-events-none touch-none w-full overflow-hidden">
+          <span className={clsx(' truncate')}>
+            {value}
+          </span>
+          <Icon icon={Pencil} size="xs" className={clsx({ 'text-transparent': isEditing })} />
+        </div>
+      )}
+    </div>
+  )
+})
