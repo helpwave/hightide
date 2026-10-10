@@ -9,9 +9,8 @@ import type { IconButtonProps } from '../../interaction/IconButton'
 import { IconButton } from '../../interaction/IconButton'
 import { useControlledState, useEditCompletable } from '@helpwave/hightide-utils/hooks'
 
-export type SearchBarProps = Omit<TextInputProps, 'state' | 'initialState'>
+export type SearchBarProps = TextInputProps
   & {
-    initialValue?: string,
     onSearch: (value: string) => void,
     searchButtonProps?: IconButtonProps,
     containerProps?: HTMLAttributes<HTMLDivElement>,
@@ -26,7 +25,6 @@ export const SearchBar = ({
   isDisabled,
   isReadOnly,
   isRequired,
-  onStateChange,
   onStateEvent,
   inputRef,
   inputProps,
@@ -52,7 +50,6 @@ export const SearchBar = ({
         isDisabled={isDisabled}
         isReadOnly={isReadOnly}
         isRequired={isRequired}
-        onStateChange={onStateChange}
         onStateEvent={onStateEvent}
         inputRef={inputRef}
         onValueChange={setValue}

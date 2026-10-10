@@ -1,12 +1,14 @@
 import type { ComponentRef, Ref } from 'react'
-import type { ControllableStateInputProps } from '@helpwave/hightide-utils/interfaces'
+import { useCallback } from 'react'
+import type { ControllableInputProps } from '@helpwave/hightide-utils/interfaces'
+import { useControlledState, useStateMachineBinding } from '@helpwave/hightide-utils/hooks'
 import { ReactUtils } from '@helpwave/hightide-utils/utils'
 import { CheckboxIcon, type CheckboxIconProps } from './CheckboxIcon'
 import { CheckboxStateManager } from './CheckboxStateManager'
 import { CheckboxTrigger, type CheckboxSize, type CheckboxTriggerProps } from './CheckboxTrigger'
 import type { CheckboxEvent, CheckboxState } from './CheckboxState'
 
-export type CheckboxProps = ControllableStateInputProps<CheckboxState, CheckboxEvent>
+export type CheckboxProps = ControllableInputProps<boolean, CheckboxEvent>
   & {
     indeterminate?: boolean,
     size?: CheckboxSize,
@@ -19,6 +21,14 @@ export type CheckboxProps = ControllableStateInputProps<CheckboxState, CheckboxE
   }
 
 const CheckboxComponent = ({
+  value,
+  initialValue,
+  onValueChange,
+  onStateEvent,
+  isInvalid,
+  isDisabled,
+  isReadOnly,
+  isRequired,
   indeterminate = false,
   size = 'md',
   alwaysShowCheckIcon = false,
@@ -27,10 +37,29 @@ const CheckboxComponent = ({
   triggerProps,
   iconRef,
   iconProps,
-  ...stateManagerProps
 }: CheckboxProps) => {
+  const [state, setState] = useControlledState<CheckboxState>({
+    defaultValue: { value: initialValue ?? false },
+  })
+  const valueBinding = useStateMachineBinding<CheckboxState, boolean>({
+    state,
+    onStateChange: setState,
+    onValueChange,
+    value,
+    inject: useCallback((next: boolean) => ({ value: next }), []),
+    get: useCallback((current: CheckboxState) => current.value, []),
+  })
+
   return (
-    <CheckboxStateManager {...stateManagerProps}>
+    <CheckboxStateManager
+      state={valueBinding.state}
+      onStateChange={valueBinding.onStateChange}
+      onStateEvent={onStateEvent}
+      isInvalid={isInvalid}
+      isDisabled={isDisabled}
+      isReadOnly={isReadOnly}
+      isRequired={isRequired}
+    >
       <CheckboxTrigger
         ref={ReactUtils.assingRefsBuilder([triggerRef])}
         indeterminate={indeterminate}

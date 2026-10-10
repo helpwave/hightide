@@ -13,7 +13,6 @@ const meta = {
     size: 'md',
     alwaysShowCheckIcon: false,
     onValueChange: action('onValueChange'),
-    onStateChange: action('onStateChange'),
     onStateEvent: action('onStateEvent'),
   },
 } satisfies Meta<typeof Checkbox>
@@ -23,7 +22,7 @@ type Story = StoryObj<typeof meta>;
 
 export const uncontrolled: Story = {
   args: {
-    initialState: { value: false },
+    initialValue: false,
   },
 }
 
@@ -49,15 +48,30 @@ export const controlledState: Story = {
     const [state, setState] = useState<CheckboxState>({ value: false })
 
     return (
-      <Checkbox
-        {...args}
-        value={undefined}
+      <Checkbox.StateManager
         state={state}
         onStateChange={(next) => {
-          args.onStateChange?.(next)
+          action('onStateChange')(next)
           setState(next)
         }}
-      />
+        onStateEvent={args.onStateEvent}
+        isInvalid={args.isInvalid}
+        isDisabled={args.isDisabled}
+        isReadOnly={args.isReadOnly}
+        isRequired={args.isRequired}
+      >
+        <Checkbox.Trigger
+          indeterminate={args.indeterminate}
+          size={args.size}
+          isRounded={args.isRounded}
+        >
+          <Checkbox.Icon
+            indeterminate={args.indeterminate}
+            size={args.size}
+            alwaysShowCheckIcon={args.alwaysShowCheckIcon}
+          />
+        </Checkbox.Trigger>
+      </Checkbox.StateManager>
     )
   },
 }

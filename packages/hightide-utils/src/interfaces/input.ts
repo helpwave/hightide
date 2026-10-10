@@ -1,4 +1,4 @@
-import type { ControllableStateProps } from './controllable-state'
+import type { StateManagerProps } from './state-manager'
 
 export interface InputState { value: unknown }
 export interface InputStateEvent { type: string }
@@ -14,15 +14,13 @@ export interface InputContextValue<T extends InputState, E extends InputStateEve
   config: C,
 }
 
-export interface ControllableInputProps<T> extends Partial<InputConfig> {
+export interface ControllableInputProps<T, E extends InputStateEvent> extends Partial<InputConfig> {
   value?: T,
   initialValue?: T,
   onValueChange?: (value: T) => void,
+  onStateEvent?: (event: E) => void,
 }
 
-export interface ControllableStateInputProps<T extends InputState, E extends InputStateEvent> extends
+export interface InputStateMangerProps<T extends InputState, E extends InputStateEvent> extends
   Partial<InputConfig>,
-  ControllableStateProps<T, E> {
-  value?: T['value'],
-  onValueChange?: (value: T['value']) => void,
-}
+  StateManagerProps<T, E> {}

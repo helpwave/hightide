@@ -1,10 +1,10 @@
 import { Text } from 'lucide-react'
 import { Icon } from '../visualization/Icon'
 import { useHightideTranslation } from '@helpwave/hightide-utils/context/translation'
+import { useEditCompletable } from '@helpwave/hightide-utils/hooks'
 import { Textarea } from '../data-input/Textarea'
 import type { PropertyField } from './PropertyBase'
 import { PropertyBase } from './PropertyBase'
-import { PropsUtil } from '../../utils/propsUtil'
 
 export type TextPropertyProps = PropertyField<string>
 
@@ -20,6 +20,11 @@ export const TextProperty = ({
 }: TextPropertyProps) => {
   const translation = useHightideTranslation()
   const hasValue = value !== undefined
+  const edit = useEditCompletable({
+    value: value ?? '',
+    onEditComplete,
+    delay: 3000,
+  })
 
   return (
     <PropertyBase
@@ -29,14 +34,17 @@ export const TextProperty = ({
     >
       {({ invalid }) => (
         <Textarea
-          className="property-input w-full"
-          data-invalid={PropsUtil.dataAttributes.bool(invalid)}
-          rows={5}
           value={value ?? ''}
-          readOnly={readOnly}
-          placeholder={translation('text')}
-          onValueUpdate={(value) => onValueChange?.(value)}
-          onValueCommit={(value) => onEditComplete?.(value)}
+          isReadOnly={readOnly}
+          isInvalid={invalid}
+          onValueChange={(next) => onValueChange?.(next)}
+          inputProps={{
+            className: 'property-input w-full',
+            rows: 5,
+            placeholder: translation('text'),
+            onChange: () => edit.setTimer(),
+            onBlur: () => edit.completeNow(),
+          }}
         />
       )}
     </PropertyBase>

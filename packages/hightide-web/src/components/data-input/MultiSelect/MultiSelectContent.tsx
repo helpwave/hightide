@@ -21,7 +21,6 @@ export const MultiSelectContent = forwardRef<
 ) {
   const translation = useHightideTranslation()
   const innerRef = useRef<HTMLUListElement>(null)
-  const searchInputRef = useRef<HTMLInputElement>(null)
 
   const context = useMultiSelectContext<T>()
   const { config, highlightNext, highlightPrevious, highlightFirst, highlightLast, highlightedId, handleTypeaheadKey, toggleSelection } = context
@@ -95,17 +94,13 @@ export const MultiSelectContent = forwardRef<
     >
       {showSearch && (
         <TextInput
-          ref={searchInputRef}
           value={context.search.searchQuery ?? ''}
           onValueChange={context.search.setSearchQuery}
           isInvalid={searchInputProps?.isInvalid}
           isDisabled={searchInputProps?.isDisabled}
           isReadOnly={searchInputProps?.isReadOnly}
           isRequired={searchInputProps?.isRequired}
-          state={searchInputProps?.state}
-          initialState={searchInputProps?.initialState}
           initialValue={searchInputProps?.initialValue}
-          onStateChange={searchInputProps?.onStateChange}
           onStateEvent={searchInputProps?.onStateEvent}
           inputRef={searchInputProps?.inputRef}
           inputProps={{

@@ -10,7 +10,6 @@ const meta = {
     isInvalid: false,
     isReadOnly: false,
     onValueChange: action('onValueChange'),
-    onStateChange: action('onStateChange'),
     onStateEvent: action('onStateEvent'),
     inputProps: {
       placeholder: 'Placeholder',
@@ -50,15 +49,20 @@ export const controlledState: Story = {
     const [state, setState] = useState<TextInputState>({ value: 'State value' })
 
     return (
-      <TextInput
-        {...args}
-        value={undefined}
+      <TextInput.StateManager
         state={state}
         onStateChange={(next) => {
-          args.onStateChange?.(next)
+          action('onStateChange')(next)
           setState(next)
         }}
-      />
+        onStateEvent={args.onStateEvent}
+        isInvalid={args.isInvalid}
+        isDisabled={args.isDisabled}
+        isReadOnly={args.isReadOnly}
+        isRequired={args.isRequired}
+      >
+        <TextInput.Input {...args.inputProps} />
+      </TextInput.StateManager>
     )
   },
 }

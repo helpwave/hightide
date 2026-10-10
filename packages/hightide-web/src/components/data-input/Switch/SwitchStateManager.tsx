@@ -2,15 +2,15 @@ import type { ReactNode } from 'react'
 import { useCallback, useMemo } from 'react'
 import type { InputStateMangerProps } from '@helpwave/hightide-utils/interfaces'
 import { useStableEvent, useStateMachine } from '@helpwave/hightide-utils/hooks'
-import { TextInputContext, type TextInputContextValue } from './TextInputContext'
-import { textInputStateTransition, type TextInputEvent, type TextInputState } from './TextInputState'
+import { SwitchContext, type SwitchContextValue } from './SwitchContext'
+import { switchStateTransition, type SwitchEvent, type SwitchState } from './SwitchState'
 
-export type TextInputStateManagerProps = InputStateMangerProps<TextInputState, TextInputEvent>
+export type SwitchStateManagerProps = InputStateMangerProps<SwitchState, SwitchEvent>
   & {
     children?: ReactNode,
   }
 
-export function TextInputStateManager({
+export function SwitchStateManager({
   state,
   onStateChange,
   onStateEvent,
@@ -19,15 +19,15 @@ export function TextInputStateManager({
   isReadOnly = false,
   isRequired = false,
   children,
-}: TextInputStateManagerProps) {
-  const machine = useStateMachine<TextInputState, TextInputEvent>({
+}: SwitchStateManagerProps) {
+  const machine = useStateMachine<SwitchState, SwitchEvent>({
     state,
-    transition: textInputStateTransition,
+    transition: switchStateTransition,
     onStateChange,
   })
 
   const onStateEventStable = useStableEvent(onStateEvent)
-  const dispatch = useCallback((event: TextInputEvent) => {
+  const dispatch = useCallback((event: SwitchEvent) => {
     machine.dispatch(event)
     onStateEventStable(event)
   }, [machine, onStateEventStable])
@@ -39,15 +39,15 @@ export function TextInputStateManager({
     isRequired,
   }), [isDisabled, isInvalid, isReadOnly, isRequired])
 
-  const contextValue = useMemo<TextInputContextValue>(() => ({
+  const contextValue = useMemo<SwitchContextValue>(() => ({
     state: machine.state,
     dispatch,
     config,
   }), [config, dispatch, machine.state])
 
   return (
-    <TextInputContext.Provider value={contextValue}>
+    <SwitchContext.Provider value={contextValue}>
       {children}
-    </TextInputContext.Provider>
+    </SwitchContext.Provider>
   )
 }

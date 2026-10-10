@@ -2,15 +2,15 @@ import type { ReactNode } from 'react'
 import { useCallback, useMemo } from 'react'
 import type { InputStateMangerProps } from '@helpwave/hightide-utils/interfaces'
 import { useStableEvent, useStateMachine } from '@helpwave/hightide-utils/hooks'
-import { TextInputContext, type TextInputContextValue } from './TextInputContext'
-import { textInputStateTransition, type TextInputEvent, type TextInputState } from './TextInputState'
+import { TextareaContext, type TextareaContextValue } from './TextareaContext'
+import { textareaStateTransition, type TextareaEvent, type TextareaState } from './TextareaState'
 
-export type TextInputStateManagerProps = InputStateMangerProps<TextInputState, TextInputEvent>
+export type TextareaStateManagerProps = InputStateMangerProps<TextareaState, TextareaEvent>
   & {
     children?: ReactNode,
   }
 
-export function TextInputStateManager({
+export function TextareaStateManager({
   state,
   onStateChange,
   onStateEvent,
@@ -19,15 +19,15 @@ export function TextInputStateManager({
   isReadOnly = false,
   isRequired = false,
   children,
-}: TextInputStateManagerProps) {
-  const machine = useStateMachine<TextInputState, TextInputEvent>({
+}: TextareaStateManagerProps) {
+  const machine = useStateMachine<TextareaState, TextareaEvent>({
     state,
-    transition: textInputStateTransition,
+    transition: textareaStateTransition,
     onStateChange,
   })
 
   const onStateEventStable = useStableEvent(onStateEvent)
-  const dispatch = useCallback((event: TextInputEvent) => {
+  const dispatch = useCallback((event: TextareaEvent) => {
     machine.dispatch(event)
     onStateEventStable(event)
   }, [machine, onStateEventStable])
@@ -39,15 +39,15 @@ export function TextInputStateManager({
     isRequired,
   }), [isDisabled, isInvalid, isReadOnly, isRequired])
 
-  const contextValue = useMemo<TextInputContextValue>(() => ({
+  const contextValue = useMemo<TextareaContextValue>(() => ({
     state: machine.state,
     dispatch,
     config,
   }), [config, dispatch, machine.state])
 
   return (
-    <TextInputContext.Provider value={contextValue}>
+    <TextareaContext.Provider value={contextValue}>
       {children}
-    </TextInputContext.Provider>
+    </TextareaContext.Provider>
   )
 }

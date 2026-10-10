@@ -7,7 +7,7 @@ import { useEditCompletable } from '@helpwave/hightide-utils/hooks'
 import { TextInput, type TextInputElementProps } from '../../../src/components/data-input/input/TextInput'
 import { MultiSelect } from '../../../src/components/data-input/MultiSelect/MultiSelect'
 import { Select } from '../../../src/components/data-input/Select/Select'
-import { Textarea } from '../../../src/components/data-input/Textarea'
+import { Textarea, type TextareaElementProps } from '../../../src/components/data-input/Textarea'
 import { Button } from '../../../src/components/interaction/Button'
 import { useCreateForm } from '../../../src/components/layout/form/useCreateForm'
 import { Visibility } from '../../../src/components/layout/Visibility'
@@ -79,6 +79,57 @@ function FormTextInput({
       inputProps={{
         ...inputProps,
         onBlur: (event: FocusEvent<HTMLInputElement>) => {
+          onBlur?.(event)
+          edit.completeNow()
+        },
+      }}
+    />
+  )
+}
+
+function FormTextarea({
+  value,
+  onValueUpdate,
+  onValueCommit,
+  invalid,
+  disabled,
+  readOnly,
+  required,
+  onBlur,
+  ref,
+  ...inputProps
+}: {
+  value?: string,
+  onValueUpdate: (value: string) => void,
+  onValueCommit: (value: string) => void,
+  invalid?: boolean,
+  disabled?: boolean,
+  readOnly?: boolean,
+  required?: boolean,
+  ref?: Ref<HTMLTextAreaElement>,
+} & TextareaElementProps) {
+  const edit = useEditCompletable({
+    value: value ?? '',
+    onEditComplete: onValueCommit,
+    delay: 3000,
+  })
+
+  return (
+    <Textarea
+      inputRef={ref}
+      value={value ?? ''}
+      isInvalid={invalid}
+      isDisabled={disabled}
+      isReadOnly={readOnly}
+      isRequired={required}
+      onValueChange={onValueUpdate}
+      inputProps={{
+        ...inputProps,
+        onChange: (event) => {
+          inputProps.onChange?.(event)
+          edit.setTimer()
+        },
+        onBlur: (event) => {
           onBlur?.(event)
           edit.completeNow()
         },
@@ -263,7 +314,7 @@ export const basic: Story = {
               label="Notes"
             >
               {({ dataProps, focusableElementProps, interactionStates }) => (
-                <Textarea
+                <FormTextarea
                   {...dataProps} {...focusableElementProps} {...interactionStates}
                   placeholder="e.g. Please buy the delicious cranberry juice"
                 />
@@ -455,7 +506,7 @@ return (
           label="Notes"
         >
           {({ dataProps, focusableElementProps, interactionStates }) => (
-            <Textarea
+            <FormTextarea
               {...dataProps} {...focusableElementProps} {...interactionStates}
               placeholder="e.g. Please buy the delicious cranberry juice"
             />

@@ -17,7 +17,6 @@ export const SelectContent = forwardRef<HTMLUListElement, SelectContentProps>(fu
 }: SelectContentProps, ref: ForwardedRef<HTMLUListElement>) {
   const translation = useHightideTranslation()
   const innerRef = useRef<HTMLUListElement>(null)
-  const searchInputRef = useRef<HTMLInputElement>(null)
 
   const context = useSelectContext<T>()
   const { config, handleTypeaheadKey, toggleSelection, highlightNext, highlightPrevious, highlightFirst, highlightLast, highlightedId } = context
@@ -85,17 +84,13 @@ export const SelectContent = forwardRef<HTMLUListElement, SelectContentProps>(fu
     >
       {showSearch && (
         <TextInput
-          ref={searchInputRef}
           value={context.search.searchQuery}
           onValueChange={context.search.setSearchQuery}
           isInvalid={searchInputProps?.isInvalid}
           isDisabled={searchInputProps?.isDisabled}
           isReadOnly={searchInputProps?.isReadOnly}
           isRequired={searchInputProps?.isRequired}
-          state={searchInputProps?.state}
-          initialState={searchInputProps?.initialState}
           initialValue={searchInputProps?.initialValue}
-          onStateChange={searchInputProps?.onStateChange}
           onStateEvent={searchInputProps?.onStateEvent}
           inputRef={searchInputProps?.inputRef}
           inputProps={{

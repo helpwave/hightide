@@ -1,9 +1,10 @@
 import type { LabelHTMLAttributes, ReactNode, RefObject } from 'react'
-import { useId } from 'react'
-import { useState } from 'react'
+import { useCallback, useId, useState } from 'react'
 import clsx from 'clsx'
+import { useControlledState, useStateMachineBinding } from '@helpwave/hightide-utils/hooks'
 import type { TextInputProps } from './TextInput'
 import { TextInput } from './TextInput'
+import type { TextInputState } from './TextInput/TextInputState'
 
 type InsideLabelInputProps = TextInputProps
   & {
@@ -25,16 +26,42 @@ export const InsideLabelInput = ({
   label,
   lablerRef,
   labelProps,
-  ...props
+  value,
+  initialValue,
+  onValueChange,
+  onStateEvent,
+  isInvalid,
+  isDisabled,
+  isReadOnly,
+  isRequired,
 }: InsideLabelInputProps) => {
   const [isFocused, setIsFocused] = useState(false)
   const generatedId = useId()
   const id = customId ?? generatedId
   const labelId = id + '-label'
+  const [state, setState] = useControlledState<TextInputState>({
+    defaultValue: { value: initialValue ?? '' },
+  })
+  const valueBinding = useStateMachineBinding<TextInputState, string>({
+    state,
+    onStateChange: setState,
+    onValueChange,
+    value,
+    inject: useCallback((next: string) => ({ value: next }), []),
+    get: useCallback((current: TextInputState) => current.value, []),
+  })
 
   return (
     <div className={clsx('relative')}>
-      <TextInput.StateManager {...props}>
+      <TextInput.StateManager
+        state={valueBinding.state}
+        onStateChange={valueBinding.onStateChange}
+        onStateEvent={onStateEvent}
+        isInvalid={isInvalid}
+        isDisabled={isDisabled}
+        isReadOnly={isReadOnly}
+        isRequired={isRequired}
+      >
         <TextInput.Input
           {...inputProps ?? {}}
           ref={inputRef}

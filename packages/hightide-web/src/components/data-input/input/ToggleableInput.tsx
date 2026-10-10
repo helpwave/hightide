@@ -13,9 +13,8 @@ type ToggleableInputEditOptions = {
   delay?: number,
 }
 
-type ToggleableInputProps = Omit<TextInputProps, 'initialState' | 'state'>
+type ToggleableInputProps = TextInputProps
   & {
-    initialValue?: string,
     initialEditingState?: 'editing' | 'display',
     onValueCommit?: (value: string) => void,
     editCompleteOptions?: ToggleableInputEditOptions,
@@ -38,7 +37,6 @@ export const ToggleableInput = forwardRef<HTMLInputElement, ToggleableInputProps
   isDisabled,
   isReadOnly,
   isRequired,
-  onStateChange,
   onStateEvent,
   inputRef,
   inputProps
@@ -76,7 +74,6 @@ export const ToggleableInput = forwardRef<HTMLInputElement, ToggleableInputProps
         isDisabled={isDisabled}
         isReadOnly={isReadOnly}
         isRequired={isRequired}
-        onStateChange={onStateChange}
         onStateEvent={onStateEvent}
         inputRef={ReactUtils.assingRefsBuilder([innerRef, inputRef])}
         onValueChange={(text) => {
