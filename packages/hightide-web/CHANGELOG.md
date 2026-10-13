@@ -12,6 +12,8 @@ and adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 - `ExpandableHeader` `triggerProps` for the header toggle button
 - `ExpandableContent` `isClosingOnClick` to collapse when the content is clicked
 - `NavigationItemList` `onClose` so Escape on items can close the parent menu
+- Default supported locales and theme name translations for Portuguese (Brazil) (`pt-BR`), Spanish (`es-ES`), French (`fr-FR`), Dutch (`nl-NL`), Italian (`it-IT`), Polish (`pl-PL`), Turkish (`tr-TR`), Romanian (`ro-RO`), Greek (`el-GR`), and Russian (`ru-RU`)
+- Localized date segment placeholders for the new locales
 
 ### Changed
 

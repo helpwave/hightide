@@ -1,0 +1,361 @@
+{
+  "add": "Προσθήκη",
+  "addFilter": "Προσθήκη φίλτρου",
+  "addSorting": "Προσθήκη ταξινόμησης",
+  "addTime": "Προσθήκη ώρας",
+  "addFile": "Προσθήκη αρχείου",
+  "all": "Όλα",
+  "apply": "Εφαρμογή",
+  "back": "Πίσω",
+  "between": "Μεταξύ",
+  "cancel": "Ακύρωση",
+  "carousel": "Καρουζέλ",
+  "contains": "Περιέχει",
+  "change": "Αλλαγή",
+  "changeColumnDisplay": "Αλλαγή εμφάνισης στηλών",
+  "chooseLanguage": "Επιλέξτε τη γλώσσα σας",
+  "chooseTheme": "Επιλέξτε το θέμα χρωμάτων που προτιμάτε.",
+  "system": "Σύστημα",
+  "chooseSlide": "Επιλέξτε διαφάνεια για εμφάνιση",
+  "clear": "Εκκαθάριση",
+  "removeProperty": "Αφαίρεση ιδιότητας",
+  "clearValue": "Εκκαθάριση τιμής",
+  "click": "Κλικ",
+  "clickToCopy": "Κάντε κλικ για αντιγραφή",
+  "clickToSelect": "Κάντε κλικ για επιλογή",
+  "close": "Κλείσιμο",
+  "closeDialog": "Κλείσιμο διαλόγου",
+  "confirm": "Επιβεβαίωση",
+  "copy": "Αντιγραφή",
+  "copied": "Αντιγράφηκε",
+  "create": "Δημιουργία",
+  "date": "Ημερομηνία",
+  "dayPeriod": "π.μ./μ.μ.",
+  "decline": "Άρνηση",
+  "delete": "Διαγραφή",
+  "discard": "Απόρριψη",
+  "discardChanges": "Απόρριψη αλλαγών",
+  "done": "Τέλος",
+  "dropFilesHere": "Αποθέστε αρχεία εδώ",
+  "edit": "Επεξεργασία",
+  "editFilter": "Επεξεργασία φίλτρου",
+  "enterText": "Εισαγάγετε κείμενο εδώ",
+  "error": "Σφάλμα",
+  "errorOccurred": "Παρουσιάστηκε σφάλμα",
+  "exit": "Έξοδος",
+  "filterOptions": "Επιλογές φίλτρου",
+  "fieldRequiredError": "Αυτό το πεδίο είναι υποχρεωτικό.",
+  "files": "Αρχεία",
+  "selectFiles": "Επιλογή αρχείων",
+  "first": "Πρώτο",
+  "previous": "Προηγούμενο",
+  "next": "Επόμενο",
+  "last": "Τελευταίο",
+  "invalidEmailError": "Εισαγάγετε μια έγκυρη διεύθυνση email.",
+  "language": "Γλώσσα",
+  "less": "Λιγότερα",
+  "loading": "Φόρτωση",
+  "locale": "Τοπικές ρυθμίσεις",
+  "maxLengthError": "Υπέρβαση μέγιστου μήκους.",
+  "maximumNumberOfFiles": "Μέγιστος αριθμός αρχείων: {count}",
+  "@maximumNumberOfFiles": {
+    "placeholders": {
+      "count": { "type": "number" }
+    }
+  },
+  "allowedFileTypes": "Επιτρεπόμενοι τύποι αρχείων: {types}",
+  "@allowedFileTypes": {
+    "placeholders": {
+      "types": { "type": "string" }
+    }
+  },
+  "menu": "Μενού",
+  "minLengthError": "Δεν επιτεύχθηκε το ελάχιστο μήκος.",
+  "more": "Περισσότερα",
+  "next": "Επόμενο",
+  "no": "Όχι",
+  "noColumn": "Καμία στήλη",
+  "noData": "Δεν υπάρχουν δεδομένα",
+  "noFilesSelected": "Δεν επιλέχθηκαν αρχεία",
+  "none": "Κανένα",
+  "nothingFound": "Δεν βρέθηκε τίποτα",
+  "nResultsFound": "{count, plural, =1{Βρέθηκε # αποτέλεσμα} other{Βρέθηκαν # αποτελέσματα}}",
+  "@nResultsFound": {
+    "placeholders": {
+      "count": { "type": "number" }
+    }
+  },
+  "nMoreFiles": "+ {count, plural, =1{# ακόμη αρχείο} other{# ακόμη αρχεία}}",
+  "@nMoreFiles": {
+    "placeholders": {
+      "count": { "type": "number" }
+    }
+  },
+  "of": "από",
+  "optional": "Προαιρετικό",
+  "pleaseWait": "Περιμένετε...",
+  "previous": "Προηγούμενο",
+  "remove": "Αφαίρεση",
+  "removeFilter": "Αφαίρεση φίλτρου",
+  "required": "Υποχρεωτικό",
+  "reset": "Επαναφορά",
+  "rBetween": "Μεταξύ {value1} και {value2}",
+  "@rBetween": {
+    "placeholders": {
+      "value1": {},
+      "value2": {}
+    }
+  },
+  "rContains": "Περιέχει {value}",
+  "@rContains": {
+    "placeholders": {
+      "value": {}
+    }
+  },
+  "rEndsWith": "Τελειώνει σε {value}",
+  "@rEndsWith": {
+    "placeholders": {
+      "value": {}
+    }
+  },
+  "rEquals": "Ίσο με {value}",
+  "@rEquals": {
+    "placeholders": {
+      "value": {}
+    }
+  },
+  "rGreaterThan": "Μεγαλύτερο από {value}",
+  "@rGreaterThan": {
+    "placeholders": {
+      "value": {}
+    }
+  },
+  "rGreaterThanOrEqual": "Μεγαλύτερο ή ίσο με {value}",
+  "@rGreaterThanOrEqual": {
+    "placeholders": {
+      "value": {}
+    }
+  },
+  "rLessThan": "Μικρότερο από {value}",
+  "@rLessThan": {
+    "placeholders": {
+      "value": {}
+    }
+  },
+  "rLessThanOrEqual": "Μικρότερο ή ίσο με {value}",
+  "@rLessThanOrEqual": {
+    "placeholders": {
+      "value": {}
+    }
+  },
+  "rNotBetween": "Όχι μεταξύ {value1} και {value2}",
+  "@rNotBetween": {
+    "placeholders": {
+      "value1": {},
+      "value2": {}
+    }
+  },
+  "rNotContains": "Δεν περιέχει {value}",
+  "@rNotContains": {
+    "placeholders": {
+      "value": {}
+    }
+  },
+  "rNotEquals": "Διάφορο από {value}",
+  "@rNotEquals": {
+    "placeholders": {
+      "value": {}
+    }
+  },
+  "rStartsWith": "Ξεκινά με {value}",
+  "@rStartsWith": {
+    "placeholders": {
+      "value": {}
+    }
+  },
+  "save": "Αποθήκευση",
+  "saved": "Αποθηκεύτηκε",
+  "search": "Αναζήτηση",
+  "searchResults": "Αποτελέσματα αναζήτησης",
+  "select": "Επιλογή",
+  "selection": "Επιλογή",
+  "selectOption": "Επιλέξτε μια επιλογή",
+  "show": "Εμφάνιση",
+  "showMore": "Εμφάνιση περισσότερων",
+  "showLess": "Εμφάνιση λιγότερων",
+  "showSlide": "Εμφάνιση διαφάνειας {index}",
+  "@showSlide": {
+    "placeholders": {
+      "index": {
+        "type": "number"
+      }
+    }
+  },
+  "slide": "Διαφάνεια",
+  "slideOf": "Διαφάνεια {index} από {length}",
+  "@slideOf": {
+    "placeholders": {
+      "index": {
+        "type": "number"
+      },
+      "length": {
+        "type": "number"
+      }
+    }
+  },
+  "slideNavigation": "Πλοήγηση διαφανειών",
+  "speed": "Ταχύτητα",
+  "submit": "Υποβολή",
+  "success": "Επιτυχία",
+  "text": "Κείμενο",
+  "pThemes": "{count, plural, =1{Θέμα} other{Θέματα}}",
+  "@pThemes": {
+    "placeholders": {
+      "count": { "type":  "number" }
+    }
+  },
+  "sDateTimeSelect": "{datetimeMode, select, time{Επιλογή ώρας} date{Επιλογή ημερομηνίας} dateTime{Επιλογή ημερομηνίας και ώρας}}",
+  "@sDateTimeSelect": {
+    "placeholders": {
+      "datetimeMode": {}
+    }
+  },
+  "update": "Ενημέρωση",
+  "unsavedChanges": "Μη αποθηκευμένες αλλαγές",
+  "unsavedChangesSaveQuestion": "Θέλετε να αποθηκεύσετε τις αλλαγές σας;",
+  "value": "Τιμή",
+  "yes": "Ναι",
+  "endDate": "Λήξη",
+  "endsWith": "Τελειώνει σε",
+  "entriesPerPage": "Εγγραφές ανά σελίδα",
+  "equals": "Ίσο με",
+  "filter": "Φίλτρο",
+  "filterNonWhitespace": "Μη κενό",
+  "greaterThan": "Μεγαλύτερο από",
+  "greaterThanOrEqual": "Μεγαλύτερο ή ίσο",
+  "filterNotUndefined": "Ορισμένο",
+  "filterUndefined": "Μη ορισμένο",
+  "max": "Μέγ.",
+  "min": "Ελάχ.",
+  "notBetween": "Όχι μεταξύ",
+  "notContains": "Δεν περιέχει",
+  "notEquals": "Διάφορο από",
+  "noParameterRequired": "Δεν απαιτείται παράμετρος",
+  "parameter": "Παράμετρος",
+  "pauseTrace": "Παύση ίχνους",
+  "playTrace": "Αναπαραγωγή ίχνους",
+  "startDate": "Έναρξη",
+  "startsWith": "Ξεκινά με",
+  "notEmpty": "Το πεδίο δεν μπορεί να είναι κενό.",
+  "invalidEmail": "Το email δεν είναι έγκυρο.",
+  "isFalse": "Είναι ψευδές",
+  "isTrue": "Είναι αληθές",
+  "isUndefined": "Δεν έχει οριστεί",
+  "isNotUndefined": "Έχει οριστεί",
+  "lessThan": "Μικρότερο από",
+  "lessThanOrEqual": "Μικρότερο ή ίσο",
+  "after": "Μετά",
+  "before": "Πριν",
+  "onOrAfter": "Μετά ή ίσο",
+  "onOrBefore": "Πριν ή ίσο",
+  "tooShort": "Η τιμή απαιτεί τουλάχιστον {min} χαρακτήρες.",
+  "@tooShort": {
+    "placeholders": {
+      "min": { "type": "number" }
+    }
+  },
+  "tooLong": "Η τιμή πρέπει να έχει λιγότερους από {max} χαρακτήρες.",
+  "@tooLong": {
+    "placeholders": {
+      "max": { "type": "number" }
+    }
+  },
+  "outOfRangeString": "Η τιμή πρέπει να έχει από {min} έως {max} χαρακτήρες.",
+  "@outOfRangeString": {
+    "placeholders": {
+      "min": { "type": "number" },
+      "max": { "type": "number" }
+    }
+  },
+  "outOfRangeNumber": "Η τιμή πρέπει να είναι μεταξύ {min} και {max}.",
+  "@outOfRangeNumber": {
+    "placeholders": {
+      "min": { "type": "number" },
+      "max": { "type": "number" }
+    }
+  },
+  "outOfRangeSelectionItems": "Πρέπει να επιλεγούν από {min} έως {max} στοιχεία.",
+  "@outOfRangeSelectionItems": {
+    "placeholders": {
+      "min": { "type": "number" },
+      "max": { "type": "number" }
+    }
+  },
+  "tooFewSelectionItems": "Επιλέξτε τουλάχιστον {min} στοιχεία.",
+  "@tooFewSelectionItems": {
+    "placeholders": {
+      "min": { "type": "number" }
+    }
+  },
+  "tooManySelectionItems": "Επιλέξτε το πολύ {max} στοιχεία.",
+  "@tooManySelectionItems": {
+    "placeholders": {
+      "max": { "type": "number" }
+    }
+  },
+  "age": "Ηλικία",
+  "entryDate": "Ημερομηνία εισαγωγής",
+  "identifier": "Αναγνωριστικό",
+  "name": "Όνομα",
+  "street": "Οδός",
+  "tag": "Ετικέτα",
+  "tags": "Ετικέτες",
+  "sGender": "{gender, select, male{Άνδρας} female{Γυναίκα} other{Άλλο}}",
+  "@sGender": {
+    "placeholders": {
+      "gender": {}
+    }
+  },
+  "goodToSeeYou": "Χαιρόμαστε που σας βλέπουμε",
+  "welcome": "Καλώς ήρθατε",
+  "withoutTime": "Χωρίς ώρα",
+  "rSortingOrderAfter": "Εφαρμόζεται {otherSortings, plural, =0{ως η πρώτη ταξινόμηση} =1{μετά από # άλλη ταξινόμηση} other{μετά από # άλλες ταξινομήσεις}}",
+  "@rSortingOrderAfter": {
+    "placeholders": {
+      "otherSortings": { "type": "number" }
+    }
+  },
+  "columnPicker": "Επιλογέας στηλών",
+  "columnPickerDescription": "Αναδιάταξη και εμφάνιση ή απόκρυψη στηλών",
+  "columns": "Στήλες",
+  "moveUp": "Μετακίνηση πάνω",
+  "moveDown": "Μετακίνηση κάτω",
+  "hideAllColumns": "Απόκρυψη όλων των στηλών",
+  "hideColumn": "Απόκρυψη στήλης",
+  "showAllColumns": "Εμφάνιση όλων των στηλών",
+  "showColumn": "Εμφάνιση στήλης",
+  "pinned": "Καρφιτσωμένο",
+  "unpin": "Ξεκαρφίτσωμα",
+  "unknown": "Άγνωστο",
+  "pinLeft": "Καρφίτσωμα αριστερά",
+  "pinRight": "Καρφίτσωμα δεξιά",
+  "changeVisibility": "Αλλαγή ορατότητας",
+  "changePinning": "Αλλαγή καρφιτσώματος",
+  "changeSelection": "Αλλαγή επιλογής",
+  "pinToRight": "Καρφίτσωμα δεξιά",
+  "pinToLeft": "Καρφίτσωμα αριστερά",
+  "increaseSortingPriority": "Αύξηση προτεραιότητας ταξινόμησης",
+  "increaseValue": "Αύξηση τιμής",
+  "decreaseSortingPriority": "Μείωση προτεραιότητας ταξινόμησης",
+  "decreaseValue": "Μείωση τιμής",
+  "caseSensitive": "Διάκριση πεζών-κεφαλαίων",
+  "sortAsc": "ΑΥΞ",
+  "sortDesc": "ΦΘΙΝ",
+  "sorting": "Ταξινόμηση",
+  "sSortingState": "{sortDirection, select, asc{Ταξινόμηση (τρέχουσα: αύξουσα)} desc{Ταξινόμηση (τρέχουσα: φθίνουσα)} other{Ταξινόμηση (τρέχουσα: καμία)}}",
+  "@sSortingState": {
+    "placeholders": {
+      "sortDirection": {}
+    }
+  }
+}

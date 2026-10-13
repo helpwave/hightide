@@ -1,0 +1,137 @@
+{
+  "january": "Ianuarie",
+  "february": "Februarie",
+  "march": "Martie",
+  "april": "Aprilie",
+  "may": "Mai",
+  "june": "Iunie",
+  "july": "Iulie",
+  "august": "August",
+  "september": "Septembrie",
+  "october": "Octombrie",
+  "november": "Noiembrie",
+  "december": "Decembrie",
+  "century": "{count, plural, =1{Secol} other{Secole}}",
+  "@century": {
+    "placeholders": {
+      "count": {
+        "type": "number"
+      }
+    }
+  },
+  "decade": "{count, plural, =1{Deceniu} other{Decenii}}",
+  "@decade": {
+    "placeholders": {
+      "count": {
+        "type": "number"
+      }
+    }
+  },
+  "year": "{count, plural, =1{An} other{Ani}}",
+  "@year": {
+    "placeholders": {
+      "count": {
+        "type": "number"
+      }
+    }
+  },
+  "month": "{count, plural, =1{Lună} other{Luni}}",
+  "@month": {
+    "placeholders": {
+      "count": {
+        "type": "number"
+      }
+    }
+  },
+  "nextMonth": "Luna următoare",
+  "previousMonth": "Luna anterioară",
+  "day": "{count, plural, =1{Zi} other{Zile}}",
+  "@day": {
+    "placeholders": {
+      "count": {
+        "type": "number"
+      }
+    }
+  },
+  "hour": "{count, plural, =1{Oră} other{Ore}}",
+  "@hour": {
+    "placeholders": {
+      "count": {
+        "type": "number"
+      }
+    }
+  },
+  "minute": "{count, plural, =1{Minut} other{Minute}}",
+  "@minute": {
+    "placeholders": {
+      "count": {
+        "type": "number"
+      }
+    }
+  },
+  "second": "{count, plural, =1{Secundă} other{Secunde}}",
+  "@second": {
+    "placeholders": {
+      "count": {
+        "type": "number"
+      }
+    }
+  },
+  "millisecond": "{count, plural, =1{Milisecundă} other{Milisecunde}}",
+  "@millisecond": {
+    "placeholders": {
+      "count": {
+        "type": "number"
+      }
+    }
+  },
+  "microsecond": "{count, plural, =1{Microsecundă} other{Microsecunde}}",
+  "@microsecond": {
+    "placeholders": {
+      "count": {
+        "type": "number"
+      }
+    }
+  },
+  "nanosecond": "{count, plural, =1{Nanosecundă} other{Nanosecunde}}",
+  "@nanosecond": {
+    "placeholders": {
+      "count": {
+        "type": "number"
+      }
+    }
+  },
+  "yesterday": "Ieri",
+  "today": "Astăzi",
+  "tomorrow": "Mâine",
+  "in": "peste",
+  "ago": "acum",
+  "inDays": "peste {days} zile",
+  "@inDays": {
+    "placeholders": {
+      "days": {
+        "type": "number"
+      }
+    }
+  },
+  "agoDays": "acum {days} zile",
+  "@agoDays": {
+    "placeholders": {
+      "days": {
+        "type": "number"
+      }
+    }
+  },
+  "sMonthLong": "{month, select, january{Ianuarie} february{Februarie} march{Martie} april{Aprilie} may{Mai} june{Iunie} july{Iulie} august{August} september{Septembrie} october{Octombrie} november{Noiembrie} december{Decembrie} other{Lună necunoscută}}",
+  "@sMonthLong": {
+    "placeholders": {
+      "month": {}
+    }
+  },
+  "sMonthShort": "{month, select, january{Ian.} february{Feb.} march{Mar.} april{Apr.} may{Mai} june{Iun.} july{Iul.} august{Aug.} september{Sept.} october{Oct.} november{Nov.} december{Dec.} other{???}}",
+  "@sMonthShort": {
+    "placeholders": {
+      "month": {}
+    }
+  }
+}
