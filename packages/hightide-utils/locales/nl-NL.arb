@@ -1,0 +1,361 @@
+{
+  "add": "Toevoegen",
+  "addFilter": "Filter toevoegen",
+  "addSorting": "Sortering toevoegen",
+  "addTime": "Tijd toevoegen",
+  "addFile": "Bestand toevoegen",
+  "all": "Alle",
+  "apply": "Toepassen",
+  "back": "Terug",
+  "between": "Tussen",
+  "cancel": "Annuleren",
+  "carousel": "Carrousel",
+  "contains": "Bevat",
+  "change": "Wijzigen",
+  "changeColumnDisplay": "Kolomweergave wijzigen",
+  "chooseLanguage": "Kies je taal",
+  "chooseTheme": "Kies je voorkeurskleurenthema.",
+  "system": "Systeem",
+  "chooseSlide": "Kies de dia die je wilt weergeven",
+  "clear": "Wissen",
+  "removeProperty": "Eigenschap verwijderen",
+  "clearValue": "Waarde wissen",
+  "click": "Klikken",
+  "clickToCopy": "Klik om te kopiëren",
+  "clickToSelect": "Klik om te selecteren",
+  "close": "Sluiten",
+  "closeDialog": "Dialoogvenster sluiten",
+  "confirm": "Bevestigen",
+  "copy": "Kopiëren",
+  "copied": "Gekopieerd",
+  "create": "Aanmaken",
+  "date": "Datum",
+  "dayPeriod": "AM/PM",
+  "decline": "Weigeren",
+  "delete": "Verwijderen",
+  "discard": "Negeren",
+  "discardChanges": "Wijzigingen negeren",
+  "done": "Gereed",
+  "dropFilesHere": "Zet bestanden hier neer",
+  "edit": "Bewerken",
+  "editFilter": "Filter bewerken",
+  "enterText": "Voer hier tekst in",
+  "error": "Fout",
+  "errorOccurred": "Er is een fout opgetreden",
+  "exit": "Afsluiten",
+  "filterOptions": "Filteropties",
+  "fieldRequiredError": "Dit veld is verplicht.",
+  "files": "Bestanden",
+  "selectFiles": "Bestanden selecteren",
+  "first": "Eerste",
+  "previous": "Vorige",
+  "next": "Volgende",
+  "last": "Laatste",
+  "invalidEmailError": "Voer een geldig e-mailadres in.",
+  "language": "Taal",
+  "less": "Minder",
+  "loading": "Laden",
+  "locale": "Landinstelling",
+  "maxLengthError": "Maximale lengte overschreden.",
+  "maximumNumberOfFiles": "Maximaal aantal bestanden: {count}",
+  "@maximumNumberOfFiles": {
+    "placeholders": {
+      "count": { "type": "number" }
+    }
+  },
+  "allowedFileTypes": "Toegestane bestandstypen: {types}",
+  "@allowedFileTypes": {
+    "placeholders": {
+      "types": { "type": "string" }
+    }
+  },
+  "menu": "Menu",
+  "minLengthError": "Minimale lengte niet bereikt.",
+  "more": "Meer",
+  "next": "Volgende",
+  "no": "Nee",
+  "noColumn": "Geen kolom",
+  "noData": "Geen gegevens",
+  "noFilesSelected": "Geen bestanden geselecteerd",
+  "none": "Geen",
+  "nothingFound": "Niets gevonden",
+  "nResultsFound": "{count, plural, =1{# resultaat gevonden} other{# resultaten gevonden}}",
+  "@nResultsFound": {
+    "placeholders": {
+      "count": { "type": "number" }
+    }
+  },
+  "nMoreFiles": "+ {count, plural, =1{# ander bestand} other{# andere bestanden}}",
+  "@nMoreFiles": {
+    "placeholders": {
+      "count": { "type": "number" }
+    }
+  },
+  "of": "van",
+  "optional": "Optioneel",
+  "pleaseWait": "Even geduld...",
+  "previous": "Vorige",
+  "remove": "Verwijderen",
+  "removeFilter": "Filter verwijderen",
+  "required": "Verplicht",
+  "reset": "Opnieuw instellen",
+  "rBetween": "Tussen {value1} en {value2}",
+  "@rBetween": {
+    "placeholders": {
+      "value1": {},
+      "value2": {}
+    }
+  },
+  "rContains": "Bevat {value}",
+  "@rContains": {
+    "placeholders": {
+      "value": {}
+    }
+  },
+  "rEndsWith": "Eindigt op {value}",
+  "@rEndsWith": {
+    "placeholders": {
+      "value": {}
+    }
+  },
+  "rEquals": "Gelijk aan {value}",
+  "@rEquals": {
+    "placeholders": {
+      "value": {}
+    }
+  },
+  "rGreaterThan": "Groter dan {value}",
+  "@rGreaterThan": {
+    "placeholders": {
+      "value": {}
+    }
+  },
+  "rGreaterThanOrEqual": "Groter dan of gelijk aan {value}",
+  "@rGreaterThanOrEqual": {
+    "placeholders": {
+      "value": {}
+    }
+  },
+  "rLessThan": "Kleiner dan {value}",
+  "@rLessThan": {
+    "placeholders": {
+      "value": {}
+    }
+  },
+  "rLessThanOrEqual": "Kleiner dan of gelijk aan {value}",
+  "@rLessThanOrEqual": {
+    "placeholders": {
+      "value": {}
+    }
+  },
+  "rNotBetween": "Niet tussen {value1} en {value2}",
+  "@rNotBetween": {
+    "placeholders": {
+      "value1": {},
+      "value2": {}
+    }
+  },
+  "rNotContains": "Bevat geen {value}",
+  "@rNotContains": {
+    "placeholders": {
+      "value": {}
+    }
+  },
+  "rNotEquals": "Niet gelijk aan {value}",
+  "@rNotEquals": {
+    "placeholders": {
+      "value": {}
+    }
+  },
+  "rStartsWith": "Begint met {value}",
+  "@rStartsWith": {
+    "placeholders": {
+      "value": {}
+    }
+  },
+  "save": "Opslaan",
+  "saved": "Opgeslagen",
+  "search": "Zoeken",
+  "searchResults": "Zoekresultaten",
+  "select": "Selecteren",
+  "selection": "Selectie",
+  "selectOption": "Selecteer een optie",
+  "show": "Weergeven",
+  "showMore": "Meer weergeven",
+  "showLess": "Minder weergeven",
+  "showSlide": "Dia {index} weergeven",
+  "@showSlide": {
+    "placeholders": {
+      "index": {
+        "type": "number"
+      }
+    }
+  },
+  "slide": "Dia",
+  "slideOf": "Dia {index} van {length}",
+  "@slideOf": {
+    "placeholders": {
+      "index": {
+        "type": "number"
+      },
+      "length": {
+        "type": "number"
+      }
+    }
+  },
+  "slideNavigation": "Dianavigatie",
+  "speed": "Snelheid",
+  "submit": "Verzenden",
+  "success": "Gelukt",
+  "text": "Tekst",
+  "pThemes": "{count, plural, =1{Thema} other{Thema's}}",
+  "@pThemes": {
+    "placeholders": {
+      "count": { "type":  "number" }
+    }
+  },
+  "sDateTimeSelect": "{datetimeMode, select, time{Tijd selecteren} date{Datum selecteren} dateTime{Datum en tijd selecteren}}",
+  "@sDateTimeSelect": {
+    "placeholders": {
+      "datetimeMode": {}
+    }
+  },
+  "update": "Bijwerken",
+  "unsavedChanges": "Niet-opgeslagen wijzigingen",
+  "unsavedChangesSaveQuestion": "Wil je je wijzigingen opslaan?",
+  "value": "Waarde",
+  "yes": "Ja",
+  "endDate": "Einde",
+  "endsWith": "Eindigt op",
+  "entriesPerPage": "Items per pagina",
+  "equals": "Gelijk aan",
+  "filter": "Filter",
+  "filterNonWhitespace": "Niet leeg",
+  "greaterThan": "Groter dan",
+  "greaterThanOrEqual": "Groter dan of gelijk aan",
+  "filterNotUndefined": "Gedefinieerd",
+  "filterUndefined": "Niet gedefinieerd",
+  "max": "Max",
+  "min": "Min",
+  "notBetween": "Niet tussen",
+  "notContains": "Bevat niet",
+  "notEquals": "Niet gelijk aan",
+  "noParameterRequired": "Geen parameter vereist",
+  "parameter": "Parameter",
+  "pauseTrace": "Trace pauzeren",
+  "playTrace": "Trace afspelen",
+  "startDate": "Begin",
+  "startsWith": "Begint met",
+  "notEmpty": "Het veld mag niet leeg zijn.",
+  "invalidEmail": "Het e-mailadres is ongeldig.",
+  "isFalse": "Is onwaar",
+  "isTrue": "Is waar",
+  "isUndefined": "Is niet gedefinieerd",
+  "isNotUndefined": "Is gedefinieerd",
+  "lessThan": "Kleiner dan",
+  "lessThanOrEqual": "Kleiner dan of gelijk aan",
+  "after": "Na",
+  "before": "Voor",
+  "onOrAfter": "Op of na",
+  "onOrBefore": "Op of voor",
+  "tooShort": "De waarde moet minimaal {min} tekens bevatten.",
+  "@tooShort": {
+    "placeholders": {
+      "min": { "type": "number" }
+    }
+  },
+  "tooLong": "De waarde moet minder dan {max} tekens bevatten.",
+  "@tooLong": {
+    "placeholders": {
+      "max": { "type": "number" }
+    }
+  },
+  "outOfRangeString": "De waarde moet tussen {min} en {max} tekens bevatten.",
+  "@outOfRangeString": {
+    "placeholders": {
+      "min": { "type": "number" },
+      "max": { "type": "number" }
+    }
+  },
+  "outOfRangeNumber": "De waarde moet tussen {min} en {max} liggen.",
+  "@outOfRangeNumber": {
+    "placeholders": {
+      "min": { "type": "number" },
+      "max": { "type": "number" }
+    }
+  },
+  "outOfRangeSelectionItems": "Er moeten tussen {min} en {max} items worden geselecteerd.",
+  "@outOfRangeSelectionItems": {
+    "placeholders": {
+      "min": { "type": "number" },
+      "max": { "type": "number" }
+    }
+  },
+  "tooFewSelectionItems": "Selecteer minimaal {min} items.",
+  "@tooFewSelectionItems": {
+    "placeholders": {
+      "min": { "type": "number" }
+    }
+  },
+  "tooManySelectionItems": "Selecteer maximaal {max} items.",
+  "@tooManySelectionItems": {
+    "placeholders": {
+      "max": { "type": "number" }
+    }
+  },
+  "age": "Leeftijd",
+  "entryDate": "Invoerdatum",
+  "identifier": "ID",
+  "name": "Naam",
+  "street": "Straat",
+  "tag": "Tag",
+  "tags": "Tags",
+  "sGender": "{gender, select, male{Man} female{Vrouw} other{Anders}}",
+  "@sGender": {
+    "placeholders": {
+      "gender": {}
+    }
+  },
+  "goodToSeeYou": "Fijn je te zien",
+  "welcome": "Welkom",
+  "withoutTime": "Zonder tijd",
+  "rSortingOrderAfter": "Toegepast {otherSortings, plural, =0{als eerste sortering} =1{na # andere sortering} other{na # andere sorteringen}}",
+  "@rSortingOrderAfter": {
+    "placeholders": {
+      "otherSortings": { "type": "number" }
+    }
+  },
+  "columnPicker": "Kolomkiezer",
+  "columnPickerDescription": "Kolommen herschikken en weergeven of verbergen",
+  "columns": "Kolommen",
+  "moveUp": "Omhoog",
+  "moveDown": "Omlaag",
+  "hideAllColumns": "Alle kolommen verbergen",
+  "hideColumn": "Kolom verbergen",
+  "showAllColumns": "Alle kolommen weergeven",
+  "showColumn": "Kolom weergeven",
+  "pinned": "Vastgezet",
+  "unpin": "Losmaken",
+  "unknown": "Onbekend",
+  "pinLeft": "Links vastzetten",
+  "pinRight": "Rechts vastzetten",
+  "changeVisibility": "Zichtbaarheid wijzigen",
+  "changePinning": "Vastzetten wijzigen",
+  "changeSelection": "Selectie wijzigen",
+  "pinToRight": "Rechts vastzetten",
+  "pinToLeft": "Links vastzetten",
+  "increaseSortingPriority": "Sorteerprioriteit verhogen",
+  "increaseValue": "Waarde verhogen",
+  "decreaseSortingPriority": "Sorteerprioriteit verlagen",
+  "decreaseValue": "Waarde verlagen",
+  "caseSensitive": "Hoofdlettergevoelig",
+  "sortAsc": "OPL.",
+  "sortDesc": "AFL.",
+  "sorting": "Sortering",
+  "sSortingState": "{sortDirection, select, asc{Sortering (momenteel oplopend)} desc{Sortering (momenteel aflopend)} other{Sortering (momenteel geen)}}",
+  "@sSortingState": {
+    "placeholders": {
+      "sortDirection": {}
+    }
+  }
+}

@@ -1,0 +1,361 @@
+{
+  "add": "Ekle",
+  "addFilter": "Filtre ekle",
+  "addSorting": "Sıralama ekle",
+  "addTime": "Saat ekle",
+  "addFile": "Dosya ekle",
+  "all": "Tümü",
+  "apply": "Uygula",
+  "back": "Geri",
+  "between": "Arasında",
+  "cancel": "İptal",
+  "carousel": "Döngü",
+  "contains": "İçerir",
+  "change": "Değiştir",
+  "changeColumnDisplay": "Sütun görünümünü değiştir",
+  "chooseLanguage": "Dilinizi seçin",
+  "chooseTheme": "Tercih ettiğiniz renk temasını seçin.",
+  "system": "Sistem",
+  "chooseSlide": "Gösterilecek slaytı seçin",
+  "clear": "Temizle",
+  "removeProperty": "Özelliği kaldır",
+  "clearValue": "Değeri temizle",
+  "click": "Tıkla",
+  "clickToCopy": "Kopyalamak için tıklayın",
+  "clickToSelect": "Seçmek için tıklayın",
+  "close": "Kapat",
+  "closeDialog": "İletişim kutusunu kapat",
+  "confirm": "Onayla",
+  "copy": "Kopyala",
+  "copied": "Kopyalandı",
+  "create": "Oluştur",
+  "date": "Tarih",
+  "dayPeriod": "ÖÖ/ÖS",
+  "decline": "Reddet",
+  "delete": "Sil",
+  "discard": "Vazgeç",
+  "discardChanges": "Değişiklikleri at",
+  "done": "Bitti",
+  "dropFilesHere": "Dosyaları buraya bırakın",
+  "edit": "Düzenle",
+  "editFilter": "Filtreyi düzenle",
+  "enterText": "Buraya metin girin",
+  "error": "Hata",
+  "errorOccurred": "Bir hata oluştu",
+  "exit": "Çıkış",
+  "filterOptions": "Filtre seçenekleri",
+  "fieldRequiredError": "Bu alan zorunludur.",
+  "files": "Dosyalar",
+  "selectFiles": "Dosya seçin",
+  "first": "İlk",
+  "previous": "Önceki",
+  "next": "Sonraki",
+  "last": "Son",
+  "invalidEmailError": "Lütfen geçerli bir e-posta adresi girin.",
+  "language": "Dil",
+  "less": "Daha az",
+  "loading": "Yükleniyor",
+  "locale": "Bölge ayarı",
+  "maxLengthError": "Maksimum uzunluk aşıldı.",
+  "maximumNumberOfFiles": "Maksimum dosya sayısı: {count}",
+  "@maximumNumberOfFiles": {
+    "placeholders": {
+      "count": { "type": "number" }
+    }
+  },
+  "allowedFileTypes": "İzin verilen dosya türleri: {types}",
+  "@allowedFileTypes": {
+    "placeholders": {
+      "types": { "type": "string" }
+    }
+  },
+  "menu": "Menü",
+  "minLengthError": "Minimum uzunluğa ulaşılmadı.",
+  "more": "Daha fazla",
+  "next": "Sonraki",
+  "no": "Hayır",
+  "noColumn": "Sütun yok",
+  "noData": "Veri yok",
+  "noFilesSelected": "Dosya seçilmedi",
+  "none": "Hiçbiri",
+  "nothingFound": "Hiçbir şey bulunamadı",
+  "nResultsFound": "{count, plural, =1{# sonuç bulundu} other{# sonuç bulundu}}",
+  "@nResultsFound": {
+    "placeholders": {
+      "count": { "type": "number" }
+    }
+  },
+  "nMoreFiles": "+ {count, plural, =1{# dosya daha} other{# dosya daha}}",
+  "@nMoreFiles": {
+    "placeholders": {
+      "count": { "type": "number" }
+    }
+  },
+  "of": "/",
+  "optional": "İsteğe bağlı",
+  "pleaseWait": "Lütfen bekleyin...",
+  "previous": "Önceki",
+  "remove": "Kaldır",
+  "removeFilter": "Filtreyi kaldır",
+  "required": "Zorunlu",
+  "reset": "Sıfırla",
+  "rBetween": "{value1} ile {value2} arasında",
+  "@rBetween": {
+    "placeholders": {
+      "value1": {},
+      "value2": {}
+    }
+  },
+  "rContains": "{value} içerir",
+  "@rContains": {
+    "placeholders": {
+      "value": {}
+    }
+  },
+  "rEndsWith": "{value} ile biter",
+  "@rEndsWith": {
+    "placeholders": {
+      "value": {}
+    }
+  },
+  "rEquals": "{value} değerine eşit",
+  "@rEquals": {
+    "placeholders": {
+      "value": {}
+    }
+  },
+  "rGreaterThan": "{value} değerinden büyük",
+  "@rGreaterThan": {
+    "placeholders": {
+      "value": {}
+    }
+  },
+  "rGreaterThanOrEqual": "{value} değerinden büyük veya eşit",
+  "@rGreaterThanOrEqual": {
+    "placeholders": {
+      "value": {}
+    }
+  },
+  "rLessThan": "{value} değerinden küçük",
+  "@rLessThan": {
+    "placeholders": {
+      "value": {}
+    }
+  },
+  "rLessThanOrEqual": "{value} değerinden küçük veya eşit",
+  "@rLessThanOrEqual": {
+    "placeholders": {
+      "value": {}
+    }
+  },
+  "rNotBetween": "{value1} ile {value2} arasında değil",
+  "@rNotBetween": {
+    "placeholders": {
+      "value1": {},
+      "value2": {}
+    }
+  },
+  "rNotContains": "{value} içermez",
+  "@rNotContains": {
+    "placeholders": {
+      "value": {}
+    }
+  },
+  "rNotEquals": "{value} değerine eşit değil",
+  "@rNotEquals": {
+    "placeholders": {
+      "value": {}
+    }
+  },
+  "rStartsWith": "{value} ile başlar",
+  "@rStartsWith": {
+    "placeholders": {
+      "value": {}
+    }
+  },
+  "save": "Kaydet",
+  "saved": "Kaydedildi",
+  "search": "Ara",
+  "searchResults": "Arama sonuçları",
+  "select": "Seç",
+  "selection": "Seçim",
+  "selectOption": "Bir seçenek belirleyin",
+  "show": "Göster",
+  "showMore": "Daha fazla göster",
+  "showLess": "Daha az göster",
+  "showSlide": "{index}. slaytı göster",
+  "@showSlide": {
+    "placeholders": {
+      "index": {
+        "type": "number"
+      }
+    }
+  },
+  "slide": "Slayt",
+  "slideOf": "Slayt {index} / {length}",
+  "@slideOf": {
+    "placeholders": {
+      "index": {
+        "type": "number"
+      },
+      "length": {
+        "type": "number"
+      }
+    }
+  },
+  "slideNavigation": "Slayt gezintisi",
+  "speed": "Hız",
+  "submit": "Gönder",
+  "success": "Başarılı",
+  "text": "Metin",
+  "pThemes": "{count, plural, =1{Tema} other{Temalar}}",
+  "@pThemes": {
+    "placeholders": {
+      "count": { "type":  "number" }
+    }
+  },
+  "sDateTimeSelect": "{datetimeMode, select, time{Saat seçin} date{Tarih seçin} dateTime{Tarih ve saat seçin}}",
+  "@sDateTimeSelect": {
+    "placeholders": {
+      "datetimeMode": {}
+    }
+  },
+  "update": "Güncelle",
+  "unsavedChanges": "Kaydedilmemiş değişiklikler",
+  "unsavedChangesSaveQuestion": "Değişikliklerinizi kaydetmek istiyor musunuz?",
+  "value": "Değer",
+  "yes": "Evet",
+  "endDate": "Bitiş",
+  "endsWith": "İle biter",
+  "entriesPerPage": "Sayfa başına kayıt",
+  "equals": "Eşittir",
+  "filter": "Filtre",
+  "filterNonWhitespace": "Boşluk olmayan",
+  "greaterThan": "Büyüktür",
+  "greaterThanOrEqual": "Büyük veya eşit",
+  "filterNotUndefined": "Tanımlı",
+  "filterUndefined": "Tanımsız",
+  "max": "Maks.",
+  "min": "Min.",
+  "notBetween": "Arasında değil",
+  "notContains": "İçermez",
+  "notEquals": "Eşit değil",
+  "noParameterRequired": "Parametre gerekmez",
+  "parameter": "Parametre",
+  "pauseTrace": "İzlemeyi duraklat",
+  "playTrace": "İzlemeyi oynat",
+  "startDate": "Başlangıç",
+  "startsWith": "İle başlar",
+  "notEmpty": "Bu alan boş bırakılamaz.",
+  "invalidEmail": "E-posta adresi geçerli değil.",
+  "isFalse": "Yanlış",
+  "isTrue": "Doğru",
+  "isUndefined": "Tanımsız",
+  "isNotUndefined": "Tanımlı",
+  "lessThan": "Küçüktür",
+  "lessThanOrEqual": "Küçük veya eşit",
+  "after": "Sonra",
+  "before": "Önce",
+  "onOrAfter": "Sonra veya eşit",
+  "onOrBefore": "Önce veya eşit",
+  "tooShort": "Değer en az {min} karakter içermelidir.",
+  "@tooShort": {
+    "placeholders": {
+      "min": { "type": "number" }
+    }
+  },
+  "tooLong": "Değer {max} karakterden az olmalıdır.",
+  "@tooLong": {
+    "placeholders": {
+      "max": { "type": "number" }
+    }
+  },
+  "outOfRangeString": "Değer {min} ile {max} karakter arasında olmalıdır.",
+  "@outOfRangeString": {
+    "placeholders": {
+      "min": { "type": "number" },
+      "max": { "type": "number" }
+    }
+  },
+  "outOfRangeNumber": "Değer {min} ile {max} arasında olmalıdır.",
+  "@outOfRangeNumber": {
+    "placeholders": {
+      "min": { "type": "number" },
+      "max": { "type": "number" }
+    }
+  },
+  "outOfRangeSelectionItems": "{min} ile {max} arasında öğe seçilmelidir.",
+  "@outOfRangeSelectionItems": {
+    "placeholders": {
+      "min": { "type": "number" },
+      "max": { "type": "number" }
+    }
+  },
+  "tooFewSelectionItems": "En az {min} öğe seçin.",
+  "@tooFewSelectionItems": {
+    "placeholders": {
+      "min": { "type": "number" }
+    }
+  },
+  "tooManySelectionItems": "En fazla {max} öğe seçin.",
+  "@tooManySelectionItems": {
+    "placeholders": {
+      "max": { "type": "number" }
+    }
+  },
+  "age": "Yaş",
+  "entryDate": "Giriş tarihi",
+  "identifier": "Tanımlayıcı",
+  "name": "Ad",
+  "street": "Sokak",
+  "tag": "Etiket",
+  "tags": "Etiketler",
+  "sGender": "{gender, select, male{Erkek} female{Kadın} other{Diğer}}",
+  "@sGender": {
+    "placeholders": {
+      "gender": {}
+    }
+  },
+  "goodToSeeYou": "Sizi görmek güzel",
+  "welcome": "Hoş geldiniz",
+  "withoutTime": "Saat olmadan",
+  "rSortingOrderAfter": "{otherSortings, plural, =0{İlk sıralama olarak} =1{# diğer sıralamadan sonra} other{# diğer sıralamadan sonra}} uygulandı",
+  "@rSortingOrderAfter": {
+    "placeholders": {
+      "otherSortings": { "type": "number" }
+    }
+  },
+  "columnPicker": "Sütun seçici",
+  "columnPickerDescription": "Sütunları yeniden sıralayın, gösterin veya gizleyin",
+  "columns": "Sütunlar",
+  "moveUp": "Yukarı taşı",
+  "moveDown": "Aşağı taşı",
+  "hideAllColumns": "Tüm sütunları gizle",
+  "hideColumn": "Sütunu gizle",
+  "showAllColumns": "Tüm sütunları göster",
+  "showColumn": "Sütunu göster",
+  "pinned": "Sabitlenmiş",
+  "unpin": "Sabitlemeyi kaldır",
+  "unknown": "Bilinmiyor",
+  "pinLeft": "Sola sabitle",
+  "pinRight": "Sağa sabitle",
+  "changeVisibility": "Görünürlüğü değiştir",
+  "changePinning": "Sabitlemeyi değiştir",
+  "changeSelection": "Seçimi değiştir",
+  "pinToRight": "Sağa sabitle",
+  "pinToLeft": "Sola sabitle",
+  "increaseSortingPriority": "Sıralama önceliğini artır",
+  "increaseValue": "Değeri artır",
+  "decreaseSortingPriority": "Sıralama önceliğini azalt",
+  "decreaseValue": "Değeri azalt",
+  "caseSensitive": "Büyük/küçük harf duyarlı",
+  "sortAsc": "ART",
+  "sortDesc": "AZL",
+  "sorting": "Sıralama",
+  "sSortingState": "{sortDirection, select, asc{Sıralama (Şu an artan)} desc{Sıralama (Şu an azalan)} other{Sıralama (Şu an yok)}}",
+  "@sSortingState": {
+    "placeholders": {
+      "sortDirection": {}
+    }
+  }
+}

@@ -1,0 +1,137 @@
+{
+  "january": "Ocak",
+  "february": "Şubat",
+  "march": "Mart",
+  "april": "Nisan",
+  "may": "Mayıs",
+  "june": "Haziran",
+  "july": "Temmuz",
+  "august": "Ağustos",
+  "september": "Eylül",
+  "october": "Ekim",
+  "november": "Kasım",
+  "december": "Aralık",
+  "century": "{count, plural, =1{Yüzyıl} other{Yüzyıl}}",
+  "@century": {
+    "placeholders": {
+      "count": {
+        "type": "number"
+      }
+    }
+  },
+  "decade": "{count, plural, =1{On yıl} other{On yıl}}",
+  "@decade": {
+    "placeholders": {
+      "count": {
+        "type": "number"
+      }
+    }
+  },
+  "year": "{count, plural, =1{Yıl} other{Yıl}}",
+  "@year": {
+    "placeholders": {
+      "count": {
+        "type": "number"
+      }
+    }
+  },
+  "month": "{count, plural, =1{Ay} other{Ay}}",
+  "@month": {
+    "placeholders": {
+      "count": {
+        "type": "number"
+      }
+    }
+  },
+  "nextMonth": "Sonraki ay",
+  "previousMonth": "Önceki ay",
+  "day": "{count, plural, =1{Gün} other{Gün}}",
+  "@day": {
+    "placeholders": {
+      "count": {
+        "type": "number"
+      }
+    }
+  },
+  "hour": "{count, plural, =1{Saat} other{Saat}}",
+  "@hour": {
+    "placeholders": {
+      "count": {
+        "type": "number"
+      }
+    }
+  },
+  "minute": "{count, plural, =1{Dakika} other{Dakika}}",
+  "@minute": {
+    "placeholders": {
+      "count": {
+        "type": "number"
+      }
+    }
+  },
+  "second": "{count, plural, =1{Saniye} other{Saniye}}",
+  "@second": {
+    "placeholders": {
+      "count": {
+        "type": "number"
+      }
+    }
+  },
+  "millisecond": "{count, plural, =1{Milisaniye} other{Milisaniye}}",
+  "@millisecond": {
+    "placeholders": {
+      "count": {
+        "type": "number"
+      }
+    }
+  },
+  "microsecond": "{count, plural, =1{Mikrosaniye} other{Mikrosaniye}}",
+  "@microsecond": {
+    "placeholders": {
+      "count": {
+        "type": "number"
+      }
+    }
+  },
+  "nanosecond": "{count, plural, =1{Nanosaniye} other{Nanosaniye}}",
+  "@nanosecond": {
+    "placeholders": {
+      "count": {
+        "type": "number"
+      }
+    }
+  },
+  "yesterday": "Dün",
+  "today": "Bugün",
+  "tomorrow": "Yarın",
+  "in": "içinde",
+  "ago": "önce",
+  "inDays": "{days} gün içinde",
+  "@inDays": {
+    "placeholders": {
+      "days": {
+        "type": "number"
+      }
+    }
+  },
+  "agoDays": "{days} gün önce",
+  "@agoDays": {
+    "placeholders": {
+      "days": {
+        "type": "number"
+      }
+    }
+  },
+  "sMonthLong": "{month, select, january{Ocak} february{Şubat} march{Mart} april{Nisan} may{Mayıs} june{Haziran} july{Temmuz} august{Ağustos} september{Eylül} october{Ekim} november{Kasım} december{Aralık} other{Bilinmeyen ay}}",
+  "@sMonthLong": {
+    "placeholders": {
+      "month": {}
+    }
+  },
+  "sMonthShort": "{month, select, january{Oca} february{Şub} march{Mar} april{Nis} may{May} june{Haz} july{Tem} august{Ağu} september{Eyl} october{Eki} november{Kas} december{Ara} other{???}}",
+  "@sMonthShort": {
+    "placeholders": {
+      "month": {}
+    }
+  }
+}

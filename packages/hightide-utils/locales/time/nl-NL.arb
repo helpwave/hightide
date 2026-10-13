@@ -1,0 +1,137 @@
+{
+  "january": "Januari",
+  "february": "Februari",
+  "march": "Maart",
+  "april": "April",
+  "may": "Mei",
+  "june": "Juni",
+  "july": "Juli",
+  "august": "Augustus",
+  "september": "September",
+  "october": "Oktober",
+  "november": "November",
+  "december": "December",
+  "century": "{count, plural, =1{Eeuw} other{Eeuwen}}",
+  "@century": {
+    "placeholders": {
+      "count": {
+        "type": "number"
+      }
+    }
+  },
+  "decade": "{count, plural, =1{Decennium} other{Decennia}}",
+  "@decade": {
+    "placeholders": {
+      "count": {
+        "type": "number"
+      }
+    }
+  },
+  "year": "{count, plural, =1{Jaar} other{Jaren}}",
+  "@year": {
+    "placeholders": {
+      "count": {
+        "type": "number"
+      }
+    }
+  },
+  "month": "{count, plural, =1{Maand} other{Maanden}}",
+  "@month": {
+    "placeholders": {
+      "count": {
+        "type": "number"
+      }
+    }
+  },
+  "nextMonth": "Volgende maand",
+  "previousMonth": "Vorige maand",
+  "day": "{count, plural, =1{Dag} other{Dagen}}",
+  "@day": {
+    "placeholders": {
+      "count": {
+        "type": "number"
+      }
+    }
+  },
+  "hour": "{count, plural, =1{Uur} other{Uren}}",
+  "@hour": {
+    "placeholders": {
+      "count": {
+        "type": "number"
+      }
+    }
+  },
+  "minute": "{count, plural, =1{Minuut} other{Minuten}}",
+  "@minute": {
+    "placeholders": {
+      "count": {
+        "type": "number"
+      }
+    }
+  },
+  "second": "{count, plural, =1{Seconde} other{Seconden}}",
+  "@second": {
+    "placeholders": {
+      "count": {
+        "type": "number"
+      }
+    }
+  },
+  "millisecond": "{count, plural, =1{Milliseconde} other{Milliseconden}}",
+  "@millisecond": {
+    "placeholders": {
+      "count": {
+        "type": "number"
+      }
+    }
+  },
+  "microsecond": "{count, plural, =1{Microseconde} other{Microseconden}}",
+  "@microsecond": {
+    "placeholders": {
+      "count": {
+        "type": "number"
+      }
+    }
+  },
+  "nanosecond": "{count, plural, =1{Nanoseconde} other{Nanoseconden}}",
+  "@nanosecond": {
+    "placeholders": {
+      "count": {
+        "type": "number"
+      }
+    }
+  },
+  "yesterday": "Gisteren",
+  "today": "Vandaag",
+  "tomorrow": "Morgen",
+  "in": "over",
+  "ago": "geleden",
+  "inDays": "over {days} dagen",
+  "@inDays": {
+    "placeholders": {
+      "days": {
+        "type": "number"
+      }
+    }
+  },
+  "agoDays": "{days} dagen geleden",
+  "@agoDays": {
+    "placeholders": {
+      "days": {
+        "type": "number"
+      }
+    }
+  },
+  "sMonthLong": "{month, select, january{Januari} february{Februari} march{Maart} april{April} may{Mei} june{Juni} july{Juli} august{Augustus} september{September} october{Oktober} november{November} december{December} other{Onbekende maand}}",
+  "@sMonthLong": {
+    "placeholders": {
+      "month": {}
+    }
+  },
+  "sMonthShort": "{month, select, january{jan} february{feb} march{mrt} april{apr} may{mei} june{jun} july{jul} august{aug} september{sep} october{okt} november{nov} december{dec} other{???}}",
+  "@sMonthShort": {
+    "placeholders": {
+      "month": {}
+    }
+  }
+}

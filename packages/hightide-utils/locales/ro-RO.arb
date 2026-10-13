@@ -1,0 +1,361 @@
+{
+  "add": "Adăugați",
+  "addFilter": "Adăugați un filtru",
+  "addSorting": "Adăugați o sortare",
+  "addTime": "Adăugați ora",
+  "addFile": "Adăugați un fișier",
+  "all": "Toate",
+  "apply": "Aplicați",
+  "back": "Înapoi",
+  "between": "Între",
+  "cancel": "Anulați",
+  "carousel": "Carusel",
+  "contains": "Conține",
+  "change": "Modificați",
+  "changeColumnDisplay": "Modificați afișarea coloanelor",
+  "chooseLanguage": "Alegeți limba",
+  "chooseTheme": "Alegeți tema de culori preferată.",
+  "system": "Sistem",
+  "chooseSlide": "Alegeți diapozitivul de afișat",
+  "clear": "Ștergeți",
+  "removeProperty": "Eliminați proprietatea",
+  "clearValue": "Ștergeți valoarea",
+  "click": "Faceți clic",
+  "clickToCopy": "Faceți clic pentru a copia",
+  "clickToSelect": "Faceți clic pentru a selecta",
+  "close": "Închideți",
+  "closeDialog": "Închideți dialogul",
+  "confirm": "Confirmați",
+  "copy": "Copiați",
+  "copied": "Copiat",
+  "create": "Creați",
+  "date": "Data",
+  "dayPeriod": "a.m./p.m.",
+  "decline": "Refuzați",
+  "delete": "Ștergeți",
+  "discard": "Renunțați",
+  "discardChanges": "Renunțați la modificări",
+  "done": "Gata",
+  "dropFilesHere": "Plasați fișierele aici",
+  "edit": "Editați",
+  "editFilter": "Editați filtrul",
+  "enterText": "Introduceți textul aici",
+  "error": "Eroare",
+  "errorOccurred": "A apărut o eroare",
+  "exit": "Ieșiți",
+  "filterOptions": "Opțiuni de filtrare",
+  "fieldRequiredError": "Acest câmp este obligatoriu.",
+  "files": "Fișiere",
+  "selectFiles": "Selectați fișiere",
+  "first": "Primul",
+  "previous": "Anterior",
+  "next": "Următor",
+  "last": "Ultimul",
+  "invalidEmailError": "Introduceți o adresă de e-mail validă.",
+  "language": "Limbă",
+  "less": "Mai puțin",
+  "loading": "Se încarcă",
+  "locale": "Setări regionale",
+  "maxLengthError": "Lungimea maximă a fost depășită.",
+  "maximumNumberOfFiles": "Număr maxim de fișiere: {count}",
+  "@maximumNumberOfFiles": {
+    "placeholders": {
+      "count": { "type": "number" }
+    }
+  },
+  "allowedFileTypes": "Tipuri de fișiere permise: {types}",
+  "@allowedFileTypes": {
+    "placeholders": {
+      "types": { "type": "string" }
+    }
+  },
+  "menu": "Meniu",
+  "minLengthError": "Lungimea minimă nu a fost atinsă.",
+  "more": "Mai mult",
+  "next": "Următor",
+  "no": "Nu",
+  "noColumn": "Nicio coloană",
+  "noData": "Nu există date",
+  "noFilesSelected": "Niciun fișier selectat",
+  "none": "Niciunul",
+  "nothingFound": "Nu s-a găsit nimic",
+  "nResultsFound": "{count, plural, =1{# rezultat găsit} other{Rezultate găsite: #}}",
+  "@nResultsFound": {
+    "placeholders": {
+      "count": { "type": "number" }
+    }
+  },
+  "nMoreFiles": "+ {count, plural, =1{încă # fișier} other{încă # fișiere}}",
+  "@nMoreFiles": {
+    "placeholders": {
+      "count": { "type": "number" }
+    }
+  },
+  "of": "din",
+  "optional": "Opțional",
+  "pleaseWait": "Vă rugăm să așteptați...",
+  "previous": "Anterior",
+  "remove": "Eliminați",
+  "removeFilter": "Eliminați filtrul",
+  "required": "Obligatoriu",
+  "reset": "Resetați",
+  "rBetween": "Între {value1} și {value2}",
+  "@rBetween": {
+    "placeholders": {
+      "value1": {},
+      "value2": {}
+    }
+  },
+  "rContains": "Conține {value}",
+  "@rContains": {
+    "placeholders": {
+      "value": {}
+    }
+  },
+  "rEndsWith": "Se termină cu {value}",
+  "@rEndsWith": {
+    "placeholders": {
+      "value": {}
+    }
+  },
+  "rEquals": "Egal cu {value}",
+  "@rEquals": {
+    "placeholders": {
+      "value": {}
+    }
+  },
+  "rGreaterThan": "Mai mare decât {value}",
+  "@rGreaterThan": {
+    "placeholders": {
+      "value": {}
+    }
+  },
+  "rGreaterThanOrEqual": "Mai mare sau egal cu {value}",
+  "@rGreaterThanOrEqual": {
+    "placeholders": {
+      "value": {}
+    }
+  },
+  "rLessThan": "Mai mic decât {value}",
+  "@rLessThan": {
+    "placeholders": {
+      "value": {}
+    }
+  },
+  "rLessThanOrEqual": "Mai mic sau egal cu {value}",
+  "@rLessThanOrEqual": {
+    "placeholders": {
+      "value": {}
+    }
+  },
+  "rNotBetween": "Nu este între {value1} și {value2}",
+  "@rNotBetween": {
+    "placeholders": {
+      "value1": {},
+      "value2": {}
+    }
+  },
+  "rNotContains": "Nu conține {value}",
+  "@rNotContains": {
+    "placeholders": {
+      "value": {}
+    }
+  },
+  "rNotEquals": "Diferit de {value}",
+  "@rNotEquals": {
+    "placeholders": {
+      "value": {}
+    }
+  },
+  "rStartsWith": "Începe cu {value}",
+  "@rStartsWith": {
+    "placeholders": {
+      "value": {}
+    }
+  },
+  "save": "Salvați",
+  "saved": "Salvat",
+  "search": "Căutați",
+  "searchResults": "Rezultatele căutării",
+  "select": "Selectați",
+  "selection": "Selecție",
+  "selectOption": "Selectați o opțiune",
+  "show": "Afișați",
+  "showMore": "Afișați mai mult",
+  "showLess": "Afișați mai puțin",
+  "showSlide": "Afișați diapozitivul {index}",
+  "@showSlide": {
+    "placeholders": {
+      "index": {
+        "type": "number"
+      }
+    }
+  },
+  "slide": "Diapozitiv",
+  "slideOf": "Diapozitivul {index} din {length}",
+  "@slideOf": {
+    "placeholders": {
+      "index": {
+        "type": "number"
+      },
+      "length": {
+        "type": "number"
+      }
+    }
+  },
+  "slideNavigation": "Navigare între diapozitive",
+  "speed": "Viteză",
+  "submit": "Trimiteți",
+  "success": "Succes",
+  "text": "Text",
+  "pThemes": "{count, plural, =1{Temă} other{Teme}}",
+  "@pThemes": {
+    "placeholders": {
+      "count": { "type":  "number" }
+    }
+  },
+  "sDateTimeSelect": "{datetimeMode, select, time{Selectați ora} date{Selectați data} dateTime{Selectați data și ora}}",
+  "@sDateTimeSelect": {
+    "placeholders": {
+      "datetimeMode": {}
+    }
+  },
+  "update": "Actualizați",
+  "unsavedChanges": "Modificări nesalvate",
+  "unsavedChangesSaveQuestion": "Doriți să salvați modificările?",
+  "value": "Valoare",
+  "yes": "Da",
+  "endDate": "Sfârșit",
+  "endsWith": "Se termină cu",
+  "entriesPerPage": "Intrări pe pagină",
+  "equals": "Egal cu",
+  "filter": "Filtru",
+  "filterNonWhitespace": "Fără spații goale",
+  "greaterThan": "Mai mare decât",
+  "greaterThanOrEqual": "Mai mare sau egal cu",
+  "filterNotUndefined": "Definit",
+  "filterUndefined": "Nedefinit",
+  "max": "Max.",
+  "min": "Min.",
+  "notBetween": "Nu este între",
+  "notContains": "Nu conține",
+  "notEquals": "Diferit de",
+  "noParameterRequired": "Nu este necesar niciun parametru",
+  "parameter": "Parametru",
+  "pauseTrace": "Întrerupeți urmărirea",
+  "playTrace": "Redați urmărirea",
+  "startDate": "Început",
+  "startsWith": "Începe cu",
+  "notEmpty": "Câmpul nu poate fi gol.",
+  "invalidEmail": "Adresa de e-mail nu este validă.",
+  "isFalse": "Este fals",
+  "isTrue": "Este adevărat",
+  "isUndefined": "Este nedefinit",
+  "isNotUndefined": "Este definit",
+  "lessThan": "Mai mic decât",
+  "lessThanOrEqual": "Mai mic sau egal cu",
+  "after": "După",
+  "before": "Înainte",
+  "onOrAfter": "După sau egal",
+  "onOrBefore": "Înainte sau egal",
+  "tooShort": "Valoarea trebuie să aibă cel puțin {min} caractere.",
+  "@tooShort": {
+    "placeholders": {
+      "min": { "type": "number" }
+    }
+  },
+  "tooLong": "Valoarea trebuie să aibă mai puțin de {max} caractere.",
+  "@tooLong": {
+    "placeholders": {
+      "max": { "type": "number" }
+    }
+  },
+  "outOfRangeString": "Valoarea trebuie să aibă între {min} și {max} caractere.",
+  "@outOfRangeString": {
+    "placeholders": {
+      "min": { "type": "number" },
+      "max": { "type": "number" }
+    }
+  },
+  "outOfRangeNumber": "Valoarea trebuie să fie între {min} și {max}.",
+  "@outOfRangeNumber": {
+    "placeholders": {
+      "min": { "type": "number" },
+      "max": { "type": "number" }
+    }
+  },
+  "outOfRangeSelectionItems": "Trebuie selectate între {min} și {max} elemente.",
+  "@outOfRangeSelectionItems": {
+    "placeholders": {
+      "min": { "type": "number" },
+      "max": { "type": "number" }
+    }
+  },
+  "tooFewSelectionItems": "Selectați cel puțin {min} elemente.",
+  "@tooFewSelectionItems": {
+    "placeholders": {
+      "min": { "type": "number" }
+    }
+  },
+  "tooManySelectionItems": "Selectați cel mult {max} elemente.",
+  "@tooManySelectionItems": {
+    "placeholders": {
+      "max": { "type": "number" }
+    }
+  },
+  "age": "Vârstă",
+  "entryDate": "Data intrării",
+  "identifier": "Identificator",
+  "name": "Nume",
+  "street": "Stradă",
+  "tag": "Etichetă",
+  "tags": "Etichete",
+  "sGender": "{gender, select, male{Masculin} female{Feminin} other{Altul}}",
+  "@sGender": {
+    "placeholders": {
+      "gender": {}
+    }
+  },
+  "goodToSeeYou": "Ne bucurăm să vă revedem",
+  "welcome": "Bun venit",
+  "withoutTime": "Fără oră",
+  "rSortingOrderAfter": "Aplicată {otherSortings, plural, =0{ca primă sortare} =1{după o altă sortare} other{după alte sortări (#)}}",
+  "@rSortingOrderAfter": {
+    "placeholders": {
+      "otherSortings": { "type": "number" }
+    }
+  },
+  "columnPicker": "Selector de coloane",
+  "columnPickerDescription": "Reordonați, afișați sau ascundeți coloanele",
+  "columns": "Coloane",
+  "moveUp": "Mutați în sus",
+  "moveDown": "Mutați în jos",
+  "hideAllColumns": "Ascundeți toate coloanele",
+  "hideColumn": "Ascundeți coloana",
+  "showAllColumns": "Afișați toate coloanele",
+  "showColumn": "Afișați coloana",
+  "pinned": "Fixate",
+  "unpin": "Anulați fixarea",
+  "unknown": "Necunoscut",
+  "pinLeft": "Fixați la stânga",
+  "pinRight": "Fixați la dreapta",
+  "changeVisibility": "Modificați vizibilitatea",
+  "changePinning": "Modificați fixarea",
+  "changeSelection": "Modificați selecția",
+  "pinToRight": "Fixați la dreapta",
+  "pinToLeft": "Fixați la stânga",
+  "increaseSortingPriority": "Creșteți prioritatea sortării",
+  "increaseValue": "Creșteți valoarea",
+  "decreaseSortingPriority": "Reduceți prioritatea sortării",
+  "decreaseValue": "Reduceți valoarea",
+  "caseSensitive": "Sensibil la majuscule",
+  "sortAsc": "CRESC.",
+  "sortDesc": "DESC.",
+  "sorting": "Sortare",
+  "sSortingState": "{sortDirection, select, asc{Sortare (în prezent crescătoare)} desc{Sortare (în prezent descrescătoare)} other{Sortare (în prezent niciuna)}}",
+  "@sSortingState": {
+    "placeholders": {
+      "sortDirection": {}
+    }
+  }
+}
