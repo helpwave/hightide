@@ -1,0 +1,137 @@
+{
+  "january": "Styczeń",
+  "february": "Luty",
+  "march": "Marzec",
+  "april": "Kwiecień",
+  "may": "Maj",
+  "june": "Czerwiec",
+  "july": "Lipiec",
+  "august": "Sierpień",
+  "september": "Wrzesień",
+  "october": "Październik",
+  "november": "Listopad",
+  "december": "Grudzień",
+  "century": "{count, plural, =1{Wiek} =2{Wieki} few{Wieki} many{Wieków} other{Wieki}}",
+  "@century": {
+    "placeholders": {
+      "count": {
+        "type": "number"
+      }
+    }
+  },
+  "decade": "{count, plural, =1{Dekada} =2{Dekady} few{Dekady} many{Dekad} other{Dekady}}",
+  "@decade": {
+    "placeholders": {
+      "count": {
+        "type": "number"
+      }
+    }
+  },
+  "year": "{count, plural, =1{Rok} =2{Lata} few{Lata} many{Lat} other{Lata}}",
+  "@year": {
+    "placeholders": {
+      "count": {
+        "type": "number"
+      }
+    }
+  },
+  "month": "{count, plural, =1{Miesiąc} =2{Miesiące} few{Miesiące} many{Miesięcy} other{Miesiące}}",
+  "@month": {
+    "placeholders": {
+      "count": {
+        "type": "number"
+      }
+    }
+  },
+  "nextMonth": "Następny miesiąc",
+  "previousMonth": "Poprzedni miesiąc",
+  "day": "{count, plural, =1{Dzień} =2{Dni} few{Dni} many{Dni} other{Dni}}",
+  "@day": {
+    "placeholders": {
+      "count": {
+        "type": "number"
+      }
+    }
+  },
+  "hour": "{count, plural, =1{Godzina} =2{Godziny} few{Godziny} many{Godzin} other{Godziny}}",
+  "@hour": {
+    "placeholders": {
+      "count": {
+        "type": "number"
+      }
+    }
+  },
+  "minute": "{count, plural, =1{Minuta} =2{Minuty} few{Minuty} many{Minut} other{Minuty}}",
+  "@minute": {
+    "placeholders": {
+      "count": {
+        "type": "number"
+      }
+    }
+  },
+  "second": "{count, plural, =1{Sekunda} =2{Sekundy} few{Sekundy} many{Sekund} other{Sekundy}}",
+  "@second": {
+    "placeholders": {
+      "count": {
+        "type": "number"
+      }
+    }
+  },
+  "millisecond": "{count, plural, =1{Milisekunda} =2{Milisekundy} few{Milisekundy} many{Milisekund} other{Milisekundy}}",
+  "@millisecond": {
+    "placeholders": {
+      "count": {
+        "type": "number"
+      }
+    }
+  },
+  "microsecond": "{count, plural, =1{Mikrosekunda} =2{Mikrosekundy} few{Mikrosekundy} many{Mikrosekund} other{Mikrosekundy}}",
+  "@microsecond": {
+    "placeholders": {
+      "count": {
+        "type": "number"
+      }
+    }
+  },
+  "nanosecond": "{count, plural, =1{Nanosekunda} =2{Nanosekundy} few{Nanosekundy} many{Nanosekund} other{Nanosekundy}}",
+  "@nanosecond": {
+    "placeholders": {
+      "count": {
+        "type": "number"
+      }
+    }
+  },
+  "yesterday": "Wczoraj",
+  "today": "Dzisiaj",
+  "tomorrow": "Jutro",
+  "in": "za",
+  "ago": "temu",
+  "inDays": "za {days} dni",
+  "@inDays": {
+    "placeholders": {
+      "days": {
+        "type": "number"
+      }
+    }
+  },
+  "agoDays": "{days} dni temu",
+  "@agoDays": {
+    "placeholders": {
+      "days": {
+        "type": "number"
+      }
+    }
+  },
+  "sMonthLong": "{month, select, january{Styczeń} february{Luty} march{Marzec} april{Kwiecień} may{Maj} june{Czerwiec} july{Lipiec} august{Sierpień} september{Wrzesień} october{Październik} november{Listopad} december{Grudzień} other{Nieznany miesiąc}}",
+  "@sMonthLong": {
+    "placeholders": {
+      "month": {}
+    }
+  },
+  "sMonthShort": "{month, select, january{Sty} february{Lut} march{Mar} april{Kwi} may{Maj} june{Cze} july{Lip} august{Sie} september{Wrz} october{Paź} november{Lis} december{Gru} other{???}}",
+  "@sMonthShort": {
+    "placeholders": {
+      "month": {}
+    }
+  }
+}

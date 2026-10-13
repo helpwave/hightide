@@ -1,0 +1,361 @@
+{
+  "add": "Añadir",
+  "addFilter": "Añadir filtro",
+  "addSorting": "Añadir ordenación",
+  "addTime": "Añadir hora",
+  "addFile": "Añadir archivo",
+  "all": "Todos",
+  "apply": "Aplicar",
+  "back": "Atrás",
+  "between": "Entre",
+  "cancel": "Cancelar",
+  "carousel": "Carrusel",
+  "contains": "Contiene",
+  "change": "Cambiar",
+  "changeColumnDisplay": "Cambiar visualización de columnas",
+  "chooseLanguage": "Elige tu idioma",
+  "chooseTheme": "Elige tu tema de color preferido.",
+  "system": "Sistema",
+  "chooseSlide": "Elige la diapositiva que quieres mostrar",
+  "clear": "Borrar",
+  "removeProperty": "Quitar propiedad",
+  "clearValue": "Borrar valor",
+  "click": "Hacer clic",
+  "clickToCopy": "Haz clic para copiar",
+  "clickToSelect": "Haz clic para seleccionar",
+  "close": "Cerrar",
+  "closeDialog": "Cerrar diálogo",
+  "confirm": "Confirmar",
+  "copy": "Copiar",
+  "copied": "Copiado",
+  "create": "Crear",
+  "date": "Fecha",
+  "dayPeriod": "a. m./p. m.",
+  "decline": "Rechazar",
+  "delete": "Eliminar",
+  "discard": "Descartar",
+  "discardChanges": "Descartar cambios",
+  "done": "Hecho",
+  "dropFilesHere": "Suelta los archivos aquí",
+  "edit": "Editar",
+  "editFilter": "Editar filtro",
+  "enterText": "Introduce el texto aquí",
+  "error": "Error",
+  "errorOccurred": "Se ha producido un error",
+  "exit": "Salir",
+  "filterOptions": "Opciones de filtro",
+  "fieldRequiredError": "Este campo es obligatorio.",
+  "files": "Archivos",
+  "selectFiles": "Seleccionar archivos",
+  "first": "Primero",
+  "previous": "Anterior",
+  "next": "Siguiente",
+  "last": "Último",
+  "invalidEmailError": "Introduce una dirección de correo electrónico válida.",
+  "language": "Idioma",
+  "less": "Menos",
+  "loading": "Cargando",
+  "locale": "Configuración regional",
+  "maxLengthError": "Se ha superado la longitud máxima.",
+  "maximumNumberOfFiles": "Número máximo de archivos: {count}",
+  "@maximumNumberOfFiles": {
+    "placeholders": {
+      "count": { "type": "number" }
+    }
+  },
+  "allowedFileTypes": "Tipos de archivo permitidos: {types}",
+  "@allowedFileTypes": {
+    "placeholders": {
+      "types": { "type": "string" }
+    }
+  },
+  "menu": "Menú",
+  "minLengthError": "No se alcanza la longitud mínima.",
+  "more": "Más",
+  "next": "Siguiente",
+  "no": "No",
+  "noColumn": "Ninguna columna",
+  "noData": "Sin datos",
+  "noFilesSelected": "No se han seleccionado archivos",
+  "none": "Ninguno",
+  "nothingFound": "No se ha encontrado nada",
+  "nResultsFound": "{count, plural, =1{# resultado encontrado} other{# resultados encontrados}}",
+  "@nResultsFound": {
+    "placeholders": {
+      "count": { "type": "number" }
+    }
+  },
+  "nMoreFiles": "+ {count, plural, =1{# archivo más} other{# archivos más}}",
+  "@nMoreFiles": {
+    "placeholders": {
+      "count": { "type": "number" }
+    }
+  },
+  "of": "de",
+  "optional": "Opcional",
+  "pleaseWait": "Espera un momento...",
+  "previous": "Anterior",
+  "remove": "Quitar",
+  "removeFilter": "Quitar filtro",
+  "required": "Obligatorio",
+  "reset": "Restablecer",
+  "rBetween": "Entre {value1} y {value2}",
+  "@rBetween": {
+    "placeholders": {
+      "value1": {},
+      "value2": {}
+    }
+  },
+  "rContains": "Contiene {value}",
+  "@rContains": {
+    "placeholders": {
+      "value": {}
+    }
+  },
+  "rEndsWith": "Termina en {value}",
+  "@rEndsWith": {
+    "placeholders": {
+      "value": {}
+    }
+  },
+  "rEquals": "Igual a {value}",
+  "@rEquals": {
+    "placeholders": {
+      "value": {}
+    }
+  },
+  "rGreaterThan": "Mayor que {value}",
+  "@rGreaterThan": {
+    "placeholders": {
+      "value": {}
+    }
+  },
+  "rGreaterThanOrEqual": "Mayor o igual que {value}",
+  "@rGreaterThanOrEqual": {
+    "placeholders": {
+      "value": {}
+    }
+  },
+  "rLessThan": "Menor que {value}",
+  "@rLessThan": {
+    "placeholders": {
+      "value": {}
+    }
+  },
+  "rLessThanOrEqual": "Menor o igual que {value}",
+  "@rLessThanOrEqual": {
+    "placeholders": {
+      "value": {}
+    }
+  },
+  "rNotBetween": "No está entre {value1} y {value2}",
+  "@rNotBetween": {
+    "placeholders": {
+      "value1": {},
+      "value2": {}
+    }
+  },
+  "rNotContains": "No contiene {value}",
+  "@rNotContains": {
+    "placeholders": {
+      "value": {}
+    }
+  },
+  "rNotEquals": "Distinto de {value}",
+  "@rNotEquals": {
+    "placeholders": {
+      "value": {}
+    }
+  },
+  "rStartsWith": "Empieza por {value}",
+  "@rStartsWith": {
+    "placeholders": {
+      "value": {}
+    }
+  },
+  "save": "Guardar",
+  "saved": "Guardado",
+  "search": "Buscar",
+  "searchResults": "Resultados de la búsqueda",
+  "select": "Seleccionar",
+  "selection": "Selección",
+  "selectOption": "Selecciona una opción",
+  "show": "Mostrar",
+  "showMore": "Mostrar más",
+  "showLess": "Mostrar menos",
+  "showSlide": "Mostrar diapositiva {index}",
+  "@showSlide": {
+    "placeholders": {
+      "index": {
+        "type": "number"
+      }
+    }
+  },
+  "slide": "Diapositiva",
+  "slideOf": "Diapositiva {index} de {length}",
+  "@slideOf": {
+    "placeholders": {
+      "index": {
+        "type": "number"
+      },
+      "length": {
+        "type": "number"
+      }
+    }
+  },
+  "slideNavigation": "Navegación de diapositivas",
+  "speed": "Velocidad",
+  "submit": "Enviar",
+  "success": "Éxito",
+  "text": "Texto",
+  "pThemes": "{count, plural, =1{Tema} other{Temas}}",
+  "@pThemes": {
+    "placeholders": {
+      "count": { "type":  "number" }
+    }
+  },
+  "sDateTimeSelect": "{datetimeMode, select, time{Seleccionar hora} date{Seleccionar fecha} dateTime{Seleccionar fecha y hora}}",
+  "@sDateTimeSelect": {
+    "placeholders": {
+      "datetimeMode": {}
+    }
+  },
+  "update": "Actualizar",
+  "unsavedChanges": "Cambios sin guardar",
+  "unsavedChangesSaveQuestion": "¿Quieres guardar los cambios?",
+  "value": "Valor",
+  "yes": "Sí",
+  "endDate": "Fin",
+  "endsWith": "Termina en",
+  "entriesPerPage": "Entradas por página",
+  "equals": "Igual a",
+  "filter": "Filtro",
+  "filterNonWhitespace": "No vacío",
+  "greaterThan": "Mayor que",
+  "greaterThanOrEqual": "Mayor o igual que",
+  "filterNotUndefined": "Definido",
+  "filterUndefined": "No definido",
+  "max": "Máx.",
+  "min": "Mín.",
+  "notBetween": "No está entre",
+  "notContains": "No contiene",
+  "notEquals": "Distinto de",
+  "noParameterRequired": "No se requiere ningún parámetro",
+  "parameter": "Parámetro",
+  "pauseTrace": "Pausar traza",
+  "playTrace": "Reproducir traza",
+  "startDate": "Inicio",
+  "startsWith": "Empieza por",
+  "notEmpty": "El campo no puede estar vacío.",
+  "invalidEmail": "El correo electrónico no es válido.",
+  "isFalse": "Es falso",
+  "isTrue": "Es verdadero",
+  "isUndefined": "No está definido",
+  "isNotUndefined": "Está definido",
+  "lessThan": "Menor que",
+  "lessThanOrEqual": "Menor o igual que",
+  "after": "Después de",
+  "before": "Antes de",
+  "onOrAfter": "En o después de",
+  "onOrBefore": "En o antes de",
+  "tooShort": "El valor debe tener al menos {min} caracteres.",
+  "@tooShort": {
+    "placeholders": {
+      "min": { "type": "number" }
+    }
+  },
+  "tooLong": "El valor debe tener menos de {max} caracteres.",
+  "@tooLong": {
+    "placeholders": {
+      "max": { "type": "number" }
+    }
+  },
+  "outOfRangeString": "El valor debe tener entre {min} y {max} caracteres.",
+  "@outOfRangeString": {
+    "placeholders": {
+      "min": { "type": "number" },
+      "max": { "type": "number" }
+    }
+  },
+  "outOfRangeNumber": "El valor debe estar entre {min} y {max}.",
+  "@outOfRangeNumber": {
+    "placeholders": {
+      "min": { "type": "number" },
+      "max": { "type": "number" }
+    }
+  },
+  "outOfRangeSelectionItems": "Debes seleccionar entre {min} y {max} elementos.",
+  "@outOfRangeSelectionItems": {
+    "placeholders": {
+      "min": { "type": "number" },
+      "max": { "type": "number" }
+    }
+  },
+  "tooFewSelectionItems": "Selecciona al menos {min} elementos.",
+  "@tooFewSelectionItems": {
+    "placeholders": {
+      "min": { "type": "number" }
+    }
+  },
+  "tooManySelectionItems": "Selecciona como máximo {max} elementos.",
+  "@tooManySelectionItems": {
+    "placeholders": {
+      "max": { "type": "number" }
+    }
+  },
+  "age": "Edad",
+  "entryDate": "Fecha de registro",
+  "identifier": "Identificador",
+  "name": "Nombre",
+  "street": "Calle",
+  "tag": "Etiqueta",
+  "tags": "Etiquetas",
+  "sGender": "{gender, select, male{Masculino} female{Femenino} other{Otro}}",
+  "@sGender": {
+    "placeholders": {
+      "gender": {}
+    }
+  },
+  "goodToSeeYou": "Nos alegra verte",
+  "welcome": "Te damos la bienvenida",
+  "withoutTime": "Sin hora",
+  "rSortingOrderAfter": "Aplicada {otherSortings, plural, =0{como primera ordenación} =1{después de # ordenación previa} other{después de # ordenaciones previas}}",
+  "@rSortingOrderAfter": {
+    "placeholders": {
+      "otherSortings": { "type": "number" }
+    }
+  },
+  "columnPicker": "Selector de columnas",
+  "columnPickerDescription": "Reordena las columnas y muéstralas u ocúltalas",
+  "columns": "Columnas",
+  "moveUp": "Subir",
+  "moveDown": "Bajar",
+  "hideAllColumns": "Ocultar todas las columnas",
+  "hideColumn": "Ocultar columna",
+  "showAllColumns": "Mostrar todas las columnas",
+  "showColumn": "Mostrar columna",
+  "pinned": "Fijado",
+  "unpin": "Desfijar",
+  "unknown": "Desconocido",
+  "pinLeft": "Fijar a la izquierda",
+  "pinRight": "Fijar a la derecha",
+  "changeVisibility": "Cambiar visibilidad",
+  "changePinning": "Cambiar fijación",
+  "changeSelection": "Cambiar selección",
+  "pinToRight": "Fijar a la derecha",
+  "pinToLeft": "Fijar a la izquierda",
+  "increaseSortingPriority": "Aumentar prioridad de ordenación",
+  "increaseValue": "Aumentar valor",
+  "decreaseSortingPriority": "Reducir prioridad de ordenación",
+  "decreaseValue": "Reducir valor",
+  "caseSensitive": "Distinguir mayúsculas y minúsculas",
+  "sortAsc": "ASC",
+  "sortDesc": "DESC",
+  "sorting": "Ordenación",
+  "sSortingState": "{sortDirection, select, asc{Ordenación (actualmente ascendente)} desc{Ordenación (actualmente descendente)} other{Ordenación (actualmente ninguna)}}",
+  "@sSortingState": {
+    "placeholders": {
+      "sortDirection": {}
+    }
+  }
+}

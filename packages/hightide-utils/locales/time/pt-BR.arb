@@ -1,0 +1,137 @@
+{
+  "january": "Janeiro",
+  "february": "Fevereiro",
+  "march": "Março",
+  "april": "Abril",
+  "may": "Maio",
+  "june": "Junho",
+  "july": "Julho",
+  "august": "Agosto",
+  "september": "Setembro",
+  "october": "Outubro",
+  "november": "Novembro",
+  "december": "Dezembro",
+  "century": "{count, plural, =1{Século} other{Séculos}}",
+  "@century": {
+    "placeholders": {
+      "count": {
+        "type": "number"
+      }
+    }
+  },
+  "decade": "{count, plural, =1{Década} other{Décadas}}",
+  "@decade": {
+    "placeholders": {
+      "count": {
+        "type": "number"
+      }
+    }
+  },
+  "year": "{count, plural, =1{Ano} other{Anos}}",
+  "@year": {
+    "placeholders": {
+      "count": {
+        "type": "number"
+      }
+    }
+  },
+  "month": "{count, plural, =1{Mês} other{Meses}}",
+  "@month": {
+    "placeholders": {
+      "count": {
+        "type": "number"
+      }
+    }
+  },
+  "nextMonth": "Próximo mês",
+  "previousMonth": "Mês anterior",
+  "day": "{count, plural, =1{Dia} other{Dias}}",
+  "@day": {
+    "placeholders": {
+      "count": {
+        "type": "number"
+      }
+    }
+  },
+  "hour": "{count, plural, =1{Hora} other{Horas}}",
+  "@hour": {
+    "placeholders": {
+      "count": {
+        "type": "number"
+      }
+    }
+  },
+  "minute": "{count, plural, =1{Minuto} other{Minutos}}",
+  "@minute": {
+    "placeholders": {
+      "count": {
+        "type": "number"
+      }
+    }
+  },
+  "second": "{count, plural, =1{Segundo} other{Segundos}}",
+  "@second": {
+    "placeholders": {
+      "count": {
+        "type": "number"
+      }
+    }
+  },
+  "millisecond": "{count, plural, =1{Milissegundo} other{Milissegundos}}",
+  "@millisecond": {
+    "placeholders": {
+      "count": {
+        "type": "number"
+      }
+    }
+  },
+  "microsecond": "{count, plural, =1{Microssegundo} other{Microssegundos}}",
+  "@microsecond": {
+    "placeholders": {
+      "count": {
+        "type": "number"
+      }
+    }
+  },
+  "nanosecond": "{count, plural, =1{Nanossegundo} other{Nanossegundos}}",
+  "@nanosecond": {
+    "placeholders": {
+      "count": {
+        "type": "number"
+      }
+    }
+  },
+  "yesterday": "Ontem",
+  "today": "Hoje",
+  "tomorrow": "Amanhã",
+  "in": "em",
+  "ago": "atrás",
+  "inDays": "em {days} dias",
+  "@inDays": {
+    "placeholders": {
+      "days": {
+        "type": "number"
+      }
+    }
+  },
+  "agoDays": "há {days} dias",
+  "@agoDays": {
+    "placeholders": {
+      "days": {
+        "type": "number"
+      }
+    }
+  },
+  "sMonthLong": "{month, select, january{Janeiro} february{Fevereiro} march{Março} april{Abril} may{Maio} june{Junho} july{Julho} august{Agosto} september{Setembro} october{Outubro} november{Novembro} december{Dezembro} other{Mês desconhecido}}",
+  "@sMonthLong": {
+    "placeholders": {
+      "month": {}
+    }
+  },
+  "sMonthShort": "{month, select, january{Jan} february{Fev} march{Mar} april{Abr} may{Mai} june{Jun} july{Jul} august{Ago} september{Set} october{Out} november{Nov} december{Dez} other{???}}",
+  "@sMonthShort": {
+    "placeholders": {
+      "month": {}
+    }
+  }
+}
