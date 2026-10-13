@@ -1,0 +1,361 @@
+{
+  "add": "Добавить",
+  "addFilter": "Добавить фильтр",
+  "addSorting": "Добавить сортировку",
+  "addTime": "Добавить время",
+  "addFile": "Добавить файл",
+  "all": "Все",
+  "apply": "Применить",
+  "back": "Назад",
+  "between": "Между",
+  "cancel": "Отмена",
+  "carousel": "Карусель",
+  "contains": "Содержит",
+  "change": "Изменить",
+  "changeColumnDisplay": "Изменить отображение столбцов",
+  "chooseLanguage": "Выберите язык",
+  "chooseTheme": "Выберите предпочитаемую цветовую тему.",
+  "system": "Системная",
+  "chooseSlide": "Выберите слайд для отображения",
+  "clear": "Очистить",
+  "removeProperty": "Удалить свойство",
+  "clearValue": "Очистить значение",
+  "click": "Нажмите",
+  "clickToCopy": "Нажмите, чтобы скопировать",
+  "clickToSelect": "Нажмите, чтобы выбрать",
+  "close": "Закрыть",
+  "closeDialog": "Закрыть диалог",
+  "confirm": "Подтвердить",
+  "copy": "Копировать",
+  "copied": "Скопировано",
+  "create": "Создать",
+  "date": "Дата",
+  "dayPeriod": "ДП/ПП",
+  "decline": "Отклонить",
+  "delete": "Удалить",
+  "discard": "Отбросить",
+  "discardChanges": "Отменить изменения",
+  "done": "Готово",
+  "dropFilesHere": "Перетащите файлы сюда",
+  "edit": "Редактировать",
+  "editFilter": "Изменить фильтр",
+  "enterText": "Введите текст",
+  "error": "Ошибка",
+  "errorOccurred": "Произошла ошибка",
+  "exit": "Выход",
+  "filterOptions": "Параметры фильтра",
+  "fieldRequiredError": "Это поле обязательно для заполнения.",
+  "files": "Файлы",
+  "selectFiles": "Выбрать файлы",
+  "first": "Первая",
+  "previous": "Предыдущая",
+  "next": "Следующая",
+  "last": "Последняя",
+  "invalidEmailError": "Введите корректный адрес электронной почты.",
+  "language": "Язык",
+  "less": "Меньше",
+  "loading": "Загрузка",
+  "locale": "Локаль",
+  "maxLengthError": "Превышена максимальная длина.",
+  "maximumNumberOfFiles": "Максимальное количество файлов: {count}",
+  "@maximumNumberOfFiles": {
+    "placeholders": {
+      "count": { "type": "number" }
+    }
+  },
+  "allowedFileTypes": "Допустимые типы файлов: {types}",
+  "@allowedFileTypes": {
+    "placeholders": {
+      "types": { "type": "string" }
+    }
+  },
+  "menu": "Меню",
+  "minLengthError": "Не достигнута минимальная длина.",
+  "more": "Ещё",
+  "next": "Следующая",
+  "no": "Нет",
+  "noColumn": "Нет столбца",
+  "noData": "Нет данных",
+  "noFilesSelected": "Файлы не выбраны",
+  "none": "Нет",
+  "nothingFound": "Ничего не найдено",
+  "nResultsFound": "{count, plural, =0{Найдено # результатов} =1{Найден # результат} =2{Найдено # результата} few{Найдено # результата} many{Найдено # результатов} other{Найдено # результата}}",
+  "@nResultsFound": {
+    "placeholders": {
+      "count": { "type": "number" }
+    }
+  },
+  "nMoreFiles": "+ {count, plural, =0{ещё # файлов} =1{ещё # файл} =2{ещё # файла} few{ещё # файла} many{ещё # файлов} other{ещё # файла}}",
+  "@nMoreFiles": {
+    "placeholders": {
+      "count": { "type": "number" }
+    }
+  },
+  "of": "из",
+  "optional": "Необязательно",
+  "pleaseWait": "Пожалуйста, подождите...",
+  "previous": "Предыдущая",
+  "remove": "Удалить",
+  "removeFilter": "Удалить фильтр",
+  "required": "Обязательно",
+  "reset": "Сбросить",
+  "rBetween": "Между {value1} и {value2}",
+  "@rBetween": {
+    "placeholders": {
+      "value1": {},
+      "value2": {}
+    }
+  },
+  "rContains": "Содержит {value}",
+  "@rContains": {
+    "placeholders": {
+      "value": {}
+    }
+  },
+  "rEndsWith": "Заканчивается на {value}",
+  "@rEndsWith": {
+    "placeholders": {
+      "value": {}
+    }
+  },
+  "rEquals": "Равно {value}",
+  "@rEquals": {
+    "placeholders": {
+      "value": {}
+    }
+  },
+  "rGreaterThan": "Больше {value}",
+  "@rGreaterThan": {
+    "placeholders": {
+      "value": {}
+    }
+  },
+  "rGreaterThanOrEqual": "Больше или равно {value}",
+  "@rGreaterThanOrEqual": {
+    "placeholders": {
+      "value": {}
+    }
+  },
+  "rLessThan": "Меньше {value}",
+  "@rLessThan": {
+    "placeholders": {
+      "value": {}
+    }
+  },
+  "rLessThanOrEqual": "Меньше или равно {value}",
+  "@rLessThanOrEqual": {
+    "placeholders": {
+      "value": {}
+    }
+  },
+  "rNotBetween": "Не между {value1} и {value2}",
+  "@rNotBetween": {
+    "placeholders": {
+      "value1": {},
+      "value2": {}
+    }
+  },
+  "rNotContains": "Не содержит {value}",
+  "@rNotContains": {
+    "placeholders": {
+      "value": {}
+    }
+  },
+  "rNotEquals": "Не равно {value}",
+  "@rNotEquals": {
+    "placeholders": {
+      "value": {}
+    }
+  },
+  "rStartsWith": "Начинается с {value}",
+  "@rStartsWith": {
+    "placeholders": {
+      "value": {}
+    }
+  },
+  "save": "Сохранить",
+  "saved": "Сохранено",
+  "search": "Поиск",
+  "searchResults": "Результаты поиска",
+  "select": "Выбрать",
+  "selection": "Выбор",
+  "selectOption": "Выберите вариант",
+  "show": "Показать",
+  "showMore": "Показать больше",
+  "showLess": "Показать меньше",
+  "showSlide": "Показать слайд {index}",
+  "@showSlide": {
+    "placeholders": {
+      "index": {
+        "type": "number"
+      }
+    }
+  },
+  "slide": "Слайд",
+  "slideOf": "Слайд {index} из {length}",
+  "@slideOf": {
+    "placeholders": {
+      "index": {
+        "type": "number"
+      },
+      "length": {
+        "type": "number"
+      }
+    }
+  },
+  "slideNavigation": "Навигация по слайдам",
+  "speed": "Скорость",
+  "submit": "Отправить",
+  "success": "Успешно",
+  "text": "Текст",
+  "pThemes": "{count, plural, =1{Тема} =2{Темы} few{Темы} many{Тем} other{Темы}}",
+  "@pThemes": {
+    "placeholders": {
+      "count": { "type":  "number" }
+    }
+  },
+  "sDateTimeSelect": "{datetimeMode, select, time{Выберите время} date{Выберите дату} dateTime{Выберите дату и время}}",
+  "@sDateTimeSelect": {
+    "placeholders": {
+      "datetimeMode": {}
+    }
+  },
+  "update": "Обновить",
+  "unsavedChanges": "Несохранённые изменения",
+  "unsavedChangesSaveQuestion": "Сохранить изменения?",
+  "value": "Значение",
+  "yes": "Да",
+  "endDate": "Окончание",
+  "endsWith": "Заканчивается на",
+  "entriesPerPage": "Записей на странице",
+  "equals": "Равно",
+  "filter": "Фильтр",
+  "filterNonWhitespace": "Непустое",
+  "greaterThan": "Больше",
+  "greaterThanOrEqual": "Больше или равно",
+  "filterNotUndefined": "Определено",
+  "filterUndefined": "Не определено",
+  "max": "Макс.",
+  "min": "Мин.",
+  "notBetween": "Не между",
+  "notContains": "Не содержит",
+  "notEquals": "Не равно",
+  "noParameterRequired": "Параметр не требуется",
+  "parameter": "Параметр",
+  "pauseTrace": "Приостановить трассировку",
+  "playTrace": "Воспроизвести трассировку",
+  "startDate": "Начало",
+  "startsWith": "Начинается с",
+  "notEmpty": "Поле не может быть пустым.",
+  "invalidEmail": "Некорректный адрес электронной почты.",
+  "isFalse": "Ложно",
+  "isTrue": "Истинно",
+  "isUndefined": "Не определено",
+  "isNotUndefined": "Определено",
+  "lessThan": "Меньше",
+  "lessThanOrEqual": "Меньше или равно",
+  "after": "После",
+  "before": "До",
+  "onOrAfter": "Не ранее",
+  "onOrBefore": "Не позднее",
+  "tooShort": "Значение должно содержать не менее {min} символов.",
+  "@tooShort": {
+    "placeholders": {
+      "min": { "type": "number" }
+    }
+  },
+  "tooLong": "Значение должно содержать менее {max} символов.",
+  "@tooLong": {
+    "placeholders": {
+      "max": { "type": "number" }
+    }
+  },
+  "outOfRangeString": "Значение должно содержать от {min} до {max} символов.",
+  "@outOfRangeString": {
+    "placeholders": {
+      "min": { "type": "number" },
+      "max": { "type": "number" }
+    }
+  },
+  "outOfRangeNumber": "Значение должно быть в диапазоне от {min} до {max}.",
+  "@outOfRangeNumber": {
+    "placeholders": {
+      "min": { "type": "number" },
+      "max": { "type": "number" }
+    }
+  },
+  "outOfRangeSelectionItems": "Необходимо выбрать от {min} до {max} элементов.",
+  "@outOfRangeSelectionItems": {
+    "placeholders": {
+      "min": { "type": "number" },
+      "max": { "type": "number" }
+    }
+  },
+  "tooFewSelectionItems": "Выберите не менее {min} элементов.",
+  "@tooFewSelectionItems": {
+    "placeholders": {
+      "min": { "type": "number" }
+    }
+  },
+  "tooManySelectionItems": "Выберите не более {max} элементов.",
+  "@tooManySelectionItems": {
+    "placeholders": {
+      "max": { "type": "number" }
+    }
+  },
+  "age": "Возраст",
+  "entryDate": "Дата поступления",
+  "identifier": "Идентификатор",
+  "name": "Имя",
+  "street": "Улица",
+  "tag": "Тег",
+  "tags": "Теги",
+  "sGender": "{gender, select, male{Мужской} female{Женский} other{Другой}}",
+  "@sGender": {
+    "placeholders": {
+      "gender": {}
+    }
+  },
+  "goodToSeeYou": "Рады вас видеть",
+  "welcome": "Добро пожаловать",
+  "withoutTime": "Без времени",
+  "rSortingOrderAfter": "Применяется {otherSortings, plural, =0{как первая сортировка} =1{после # другой сортировки} =2{после # других сортировок} few{после # других сортировок} many{после # других сортировок} other{после # других сортировок}}",
+  "@rSortingOrderAfter": {
+    "placeholders": {
+      "otherSortings": { "type": "number" }
+    }
+  },
+  "columnPicker": "Выбор столбцов",
+  "columnPickerDescription": "Изменение порядка, отображение и скрытие столбцов",
+  "columns": "Столбцы",
+  "moveUp": "Переместить вверх",
+  "moveDown": "Переместить вниз",
+  "hideAllColumns": "Скрыть все столбцы",
+  "hideColumn": "Скрыть столбец",
+  "showAllColumns": "Показать все столбцы",
+  "showColumn": "Показать столбец",
+  "pinned": "Закреплено",
+  "unpin": "Открепить",
+  "unknown": "Неизвестно",
+  "pinLeft": "Закрепить слева",
+  "pinRight": "Закрепить справа",
+  "changeVisibility": "Изменить видимость",
+  "changePinning": "Изменить закрепление",
+  "changeSelection": "Изменить выбор",
+  "pinToRight": "Закрепить справа",
+  "pinToLeft": "Закрепить слева",
+  "increaseSortingPriority": "Повысить приоритет сортировки",
+  "increaseValue": "Увеличить значение",
+  "decreaseSortingPriority": "Понизить приоритет сортировки",
+  "decreaseValue": "Уменьшить значение",
+  "caseSensitive": "С учётом регистра",
+  "sortAsc": "ВОЗР",
+  "sortDesc": "УБЫВ",
+  "sorting": "Сортировка",
+  "sSortingState": "{sortDirection, select, asc{Сортировка (сейчас по возрастанию)} desc{Сортировка (сейчас по убыванию)} other{Сортировка (сейчас отключена)}}",
+  "@sSortingState": {
+    "placeholders": {
+      "sortDirection": {}
+    }
+  }
+}

@@ -1,0 +1,137 @@
+{
+  "january": "Январь",
+  "february": "Февраль",
+  "march": "Март",
+  "april": "Апрель",
+  "may": "Май",
+  "june": "Июнь",
+  "july": "Июль",
+  "august": "Август",
+  "september": "Сентябрь",
+  "october": "Октябрь",
+  "november": "Ноябрь",
+  "december": "Декабрь",
+  "century": "{count, plural, =1{Век} =2{Века} few{Века} many{Веков} other{Века}}",
+  "@century": {
+    "placeholders": {
+      "count": {
+        "type": "number"
+      }
+    }
+  },
+  "decade": "{count, plural, =1{Десятилетие} =2{Десятилетия} few{Десятилетия} many{Десятилетий} other{Десятилетия}}",
+  "@decade": {
+    "placeholders": {
+      "count": {
+        "type": "number"
+      }
+    }
+  },
+  "year": "{count, plural, =1{Год} =2{Года} few{Года} many{Лет} other{Года}}",
+  "@year": {
+    "placeholders": {
+      "count": {
+        "type": "number"
+      }
+    }
+  },
+  "month": "{count, plural, =1{Месяц} =2{Месяца} few{Месяца} many{Месяцев} other{Месяца}}",
+  "@month": {
+    "placeholders": {
+      "count": {
+        "type": "number"
+      }
+    }
+  },
+  "nextMonth": "Следующий месяц",
+  "previousMonth": "Предыдущий месяц",
+  "day": "{count, plural, =1{День} =2{Дня} few{Дня} many{Дней} other{Дня}}",
+  "@day": {
+    "placeholders": {
+      "count": {
+        "type": "number"
+      }
+    }
+  },
+  "hour": "{count, plural, =1{Час} =2{Часа} few{Часа} many{Часов} other{Часа}}",
+  "@hour": {
+    "placeholders": {
+      "count": {
+        "type": "number"
+      }
+    }
+  },
+  "minute": "{count, plural, =1{Минута} =2{Минуты} few{Минуты} many{Минут} other{Минуты}}",
+  "@minute": {
+    "placeholders": {
+      "count": {
+        "type": "number"
+      }
+    }
+  },
+  "second": "{count, plural, =1{Секунда} =2{Секунды} few{Секунды} many{Секунд} other{Секунды}}",
+  "@second": {
+    "placeholders": {
+      "count": {
+        "type": "number"
+      }
+    }
+  },
+  "millisecond": "{count, plural, =1{Миллисекунда} =2{Миллисекунды} few{Миллисекунды} many{Миллисекунд} other{Миллисекунды}}",
+  "@millisecond": {
+    "placeholders": {
+      "count": {
+        "type": "number"
+      }
+    }
+  },
+  "microsecond": "{count, plural, =1{Микросекунда} =2{Микросекунды} few{Микросекунды} many{Микросекунд} other{Микросекунды}}",
+  "@microsecond": {
+    "placeholders": {
+      "count": {
+        "type": "number"
+      }
+    }
+  },
+  "nanosecond": "{count, plural, =1{Наносекунда} =2{Наносекунды} few{Наносекунды} many{Наносекунд} other{Наносекунды}}",
+  "@nanosecond": {
+    "placeholders": {
+      "count": {
+        "type": "number"
+      }
+    }
+  },
+  "yesterday": "Вчера",
+  "today": "Сегодня",
+  "tomorrow": "Завтра",
+  "in": "через",
+  "ago": "назад",
+  "inDays": "через {days} дн.",
+  "@inDays": {
+    "placeholders": {
+      "days": {
+        "type": "number"
+      }
+    }
+  },
+  "agoDays": "{days} дн. назад",
+  "@agoDays": {
+    "placeholders": {
+      "days": {
+        "type": "number"
+      }
+    }
+  },
+  "sMonthLong": "{month, select, january{Январь} february{Февраль} march{Март} april{Апрель} may{Май} june{Июнь} july{Июль} august{Август} september{Сентябрь} october{Октябрь} november{Ноябрь} december{Декабрь} other{Неизвестный месяц}}",
+  "@sMonthLong": {
+    "placeholders": {
+      "month": {}
+    }
+  },
+  "sMonthShort": "{month, select, january{Янв} february{Фев} march{Мар} april{Апр} may{Май} june{Июн} july{Июл} august{Авг} september{Сен} october{Окт} november{Ноя} december{Дек} other{???}}",
+  "@sMonthShort": {
+    "placeholders": {
+      "month": {}
+    }
+  }
+}
