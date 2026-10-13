@@ -5,6 +5,12 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/)
 and adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [0.1.9] - unpublished
+
+### Added
+
+- Translations for Portuguese (Brazil) (`pt-BR`), Spanish (`es-ES`), French (`fr-FR`), Dutch (`nl-NL`), Italian (`it-IT`), Polish (`pl-PL`), Turkish (`tr-TR`), Romanian (`ro-RO`), Greek (`el-GR`), and Russian (`ru-RU`)
+
 ## [0.1.8] - 2026-09-21
 
 ### Added

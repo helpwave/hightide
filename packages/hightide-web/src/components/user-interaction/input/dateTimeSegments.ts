@@ -319,15 +319,35 @@ const formatDayPeriod = (value: number, locale: string): string => {
   return part?.value ?? (value === dayPeriodPm ? 'PM' : 'AM')
 }
 
+type DatePlaceholders = { day: string, month: string, year: string }
+
+const defaultDatePlaceholders: DatePlaceholders = { day: 'DD', month: 'MM', year: 'YYYY' }
+
+const datePlaceholdersByLanguage: Record<string, DatePlaceholders> = {
+  de: { day: 'TT', month: 'MM', year: 'JJJJ' },
+  el: { day: 'ΗΗ', month: 'ΜΜ', year: 'ΕΕΕΕ' },
+  es: { day: 'DD', month: 'MM', year: 'AAAA' },
+  fr: { day: 'JJ', month: 'MM', year: 'AAAA' },
+  it: { day: 'GG', month: 'MM', year: 'AAAA' },
+  nl: { day: 'DD', month: 'MM', year: 'JJJJ' },
+  pl: { day: 'DD', month: 'MM', year: 'RRRR' },
+  pt: { day: 'DD', month: 'MM', year: 'AAAA' },
+  ro: { day: 'ZZ', month: 'LL', year: 'AAAA' },
+  ru: { day: 'ДД', month: 'ММ', year: 'ГГГГ' },
+  tr: { day: 'GG', month: 'AA', year: 'YYYY' },
+}
+
+const datePlaceholders = (locale: string): DatePlaceholders => {
+  const language = locale.toLowerCase().split('-')[0]
+  return datePlaceholdersByLanguage[language] ?? defaultDatePlaceholders
+}
+
 export const segmentPlaceholder = (type: EditableSegmentType, locale: string): string => {
-  const german = locale.toLowerCase().startsWith('de')
   switch (type) {
   case 'day':
-    return german ? 'TT' : 'DD'
   case 'month':
-    return 'MM'
   case 'year':
-    return german ? 'JJJJ' : 'YYYY'
+    return datePlaceholders(locale)[type]
   case 'hour':
     return 'hh'
   case 'minute':
