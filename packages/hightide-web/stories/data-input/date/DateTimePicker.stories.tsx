@@ -22,6 +22,5 @@ export const dateTimePicker: Story = {
     weekStart: 'monday',
     markToday: true,
     onValueChange: action('onValueChange'),
-    onEditComplete: action('onEditComplete')
   },
 }

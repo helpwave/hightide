@@ -21,6 +21,5 @@ export const timeWheelPicker: Story = {
     secondIncrement: '1s',
     millisecondIncrement: '100ms',
     onValueChange: action('onValueChange'),
-    onEditComplete: action('onEditComplete'),
   },
 }

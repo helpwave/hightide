@@ -15,6 +15,7 @@ and adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 ### Changed
 
 - Renamed `useEventCallbackStabilizer` to `useStableEvent`
+- updated to `@helpwave/internationalization` to `0.5.0`
 
 ### Removed
 

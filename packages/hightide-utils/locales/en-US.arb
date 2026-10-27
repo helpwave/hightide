@@ -1,4 +1,5 @@
 {
+  "@@locale": "en-US",
   "add": "Add",
   "addFilter": "Add filter",
   "addSorting": "Add sorting",
@@ -60,7 +61,7 @@
   "maximumNumberOfFiles": "Maximum number of files: {count}",
   "@maximumNumberOfFiles": {
     "placeholders": {
-      "count": { "type": "number" }
+      "count": { "type": "int" }
     }
   },
   "allowedFileTypes": "Allowed file types: {types}",
@@ -76,46 +77,46 @@
   "validationErrorTooShort": "The value requires at least {min} characters.",
   "@validationErrorTooShort": {
     "placeholders": {
-      "min": { "type": "number" }
+      "min": { "type": "float" }
     }
   },
   "validationErrorTooLong": "The value requires less than {max} characters.",
   "@validationErrorTooLong": {
     "placeholders": {
-      "max": { "type": "number" }
+      "max": { "type": "float" }
     }
   },
   "validationErrorOutOfRangeString": "The value needs to have between {min} and {max} characters.",
   "@validationErrorOutOfRangeString": {
     "placeholders": {
-      "min": { "type": "number" },
-      "max": { "type": "number" }
+      "min": { "type": "float" },
+      "max": { "type": "float" }
     }
   },
   "validationErrorOutOfRangeNumber": "The value must be between {min} and {max}.",
   "@validationErrorOutOfRangeNumber": {
     "placeholders": {
-      "min": { "type": "number" },
-      "max": { "type": "number" }
+      "min": { "type": "float" },
+      "max": { "type": "float" }
     }
   },
   "validationErrorOutOfRangeSelectionItems": "Between {min} and {max} items must be selected.",
   "@validationErrorOutOfRangeSelectionItems": {
     "placeholders": {
-      "min": { "type": "number" },
-      "max": { "type": "number" }
+      "min": { "type": "float" },
+      "max": { "type": "float" }
     }
   },
   "validationErrorTooFewSelectionItems": "Select at least {min} items.",
   "@validationErrorTooFewSelectionItems": {
     "placeholders": {
-      "min": { "type": "number" }
+      "min": { "type": "float" }
     }
   },
   "validationErrorTooManySelectionItems": "Select at most {max} items.",
   "@validationErrorTooManySelectionItems": {
     "placeholders": {
-      "max": { "type": "number" }
+      "max": { "type": "float" }
     }
   },
   "more": "More",
@@ -129,13 +130,13 @@
   "nResultsFound": "{count, plural, =1{# result found} other{# results found}}",
   "@nResultsFound": {
     "placeholders": {
-      "count": { "type": "number" }
+      "count": { "type": "int" }
     }
   },
   "nMoreFiles": "+ {count, plural, =1{# more file} other{# more files}}",
   "@nMoreFiles": {
     "placeholders": {
-      "count": { "type": "number" }
+      "count": { "type": "int" }
     }
   },
   "of": "of",
@@ -149,75 +150,75 @@
   "rBetween": "Between {value1} and {value2}",
   "@rBetween": {
     "placeholders": {
-      "value1": {},
-      "value2": {}
+      "value1": { "type": "string" },
+      "value2": { "type": "string" }
     }
   },
   "rContains": "Contains {value}",
   "@rContains": {
     "placeholders": {
-      "value": {}
+      "value": { "type": "string" }
     }
   },
   "rEndsWith": "Ends with {value}",
   "@rEndsWith": {
     "placeholders": {
-      "value": {}
+      "value": { "type": "string" }
     }
   },
   "rEquals": "Equals {value}",
   "@rEquals": {
     "placeholders": {
-      "value": {}
+      "value": { "type": "string" }
     }
   },
   "rGreaterThan": "Greater than {value}",
   "@rGreaterThan": {
     "placeholders": {
-      "value": {}
+      "value": { "type": "string" }
     }
   },
   "rGreaterThanOrEqual": "Greater than or equal {value}",
   "@rGreaterThanOrEqual": {
     "placeholders": {
-      "value": {}
+      "value": { "type": "string" }
     }
   },
   "rLessThan": "Less than {value}",
   "@rLessThan": {
     "placeholders": {
-      "value": {}
+      "value": { "type": "string" }
     }
   },
   "rLessThanOrEqual": "Less than or equal {value}",
   "@rLessThanOrEqual": {
     "placeholders": {
-      "value": {}
+      "value": { "type": "string" }
     }
   },
   "rNotBetween": "Not between {value1} and {value2}",
   "@rNotBetween": {
     "placeholders": {
-      "value1": {},
-      "value2": {}
+      "value1": { "type": "string" },
+      "value2": { "type": "string" }
     }
   },
   "rNotContains": "Not contains {value}",
   "@rNotContains": {
     "placeholders": {
-      "value": {}
+      "value": { "type": "string" }
     }
   },
   "rNotEquals": "Not equals {value}",
   "@rNotEquals": {
     "placeholders": {
-      "value": {}
+      "value": { "type": "string" }
     }
   },
   "rStartsWith": "Starts with {value}",
   "@rStartsWith": {
     "placeholders": {
-      "value": {}
+      "value": { "type": "string" }
     }
   },
   "save": "Save",
@@ -234,7 +235,7 @@
   "@showSlide": {
     "placeholders": {
       "index": {
-        "type": "number"
+        "type": "int"
       }
     }
   },
@@ -243,10 +244,10 @@
   "@slideOf": {
     "placeholders": {
       "index": {
-        "type": "number"
+        "type": "int"
       },
       "length": {
-        "type": "number"
+        "type": "int"
       }
     }
   },
@@ -258,13 +259,13 @@
   "pThemes": "{count, plural, =1{Theme} other{Themes}}",
   "@pThemes": {
     "placeholders": {
-      "count": { "type":  "number" }
+      "count": { "type": "int" }
     }
   },
   "sDateTimeSelect": "{datetimeMode, select, time{Select Time} date{Select Date} dateTime{Select Date and Time}}",
   "@sDateTimeSelect": {
     "placeholders": {
-      "datetimeMode": {}
+      "datetimeMode": { "type": "string" }
     }
   },
   "update": "Update",
@@ -313,7 +314,7 @@
   "sGender": "{gender, select, male{Male} female{Female} other{Other}}",
   "@sGender": {
     "placeholders": {
-      "gender": {}
+      "gender": { "type": "string" }
     }
   },
   "goodToSeeYou": "Good to see you",
@@ -322,7 +323,7 @@
   "rSortingOrderAfter": "Applied {otherSortings, plural, =0{as the first sorting} =1{after # other sorting} other{after # other sortings}}",
   "@rSortingOrderAfter": {
     "placeholders": {
-      "otherSortings": { "type": "number" }
+      "otherSortings": { "type": "int" }
     }
   },
   "columnPicker": "Column Picker",
@@ -355,7 +356,7 @@
   "sSortingState": "{sortDirection, select, asc{Sorting (Currently Ascending)} desc{Sorting (Currently Descending)} other{Sorting (Currently None)}}",
   "@sSortingState": {
     "placeholders": {
-      "sortDirection": {}
+      "sortDirection": { "type": "string" }
     }
   }
 }

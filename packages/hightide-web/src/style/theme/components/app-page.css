@@ -51,8 +51,7 @@
   }
 
   .app-sidebar-close-button {
-    @apply top-1 right-1 z-10;
-    --coloring-position-override: absolute;
+    @apply top-1 right-1 z-10 absolute;
 
     @variant desktop {
       @apply hidden;

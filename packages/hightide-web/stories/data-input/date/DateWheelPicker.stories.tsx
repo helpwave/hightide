@@ -19,6 +19,5 @@ export const dateWheelPicker: Story = {
     isLooping: true,
     loopingBehaviour: 'update',
     onValueChange: action('onValueChange'),
-    onEditComplete: action('onEditComplete'),
   },
 }

@@ -16,7 +16,6 @@ export const yearMonthPicker: Story = {
     start: DateUtils.subtractDuration(new Date(), { years: 50 }),
     end: DateUtils.addDuration(new Date(), { years: 50 }),
     onValueChange: action('onValueChange'),
-    onEditComplete: action('onEditComplete'),
   },
   decorators: (Story) => {
     return (

@@ -16,8 +16,7 @@ export const calendarDayPicker: Story = {
     initialValue: new Date(),
     markToday: true,
     weekStart: 'monday',
-    className: 'h-max-71',
+    layoutProps: { className: 'h-max-71' },
     onValueChange: action('onValueChange'),
-    onEditComplete: action('onEditComplete'),
   },
 }

@@ -15,7 +15,6 @@ export const timePicker: Story = {
     is24HourFormat: true,
     minuteIncrement: '5min',
     onValueChange: action('onValueChange'),
-    onEditComplete: action('onEditComplete')
   },
   decorators: (Story) => {
     return (

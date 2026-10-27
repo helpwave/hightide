@@ -5,10 +5,11 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/)
 and adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
-## [0.18.0] - unpublished
+## [0.19.0] - unpublished
 
 ### Added
 
+- `TabSwitcher` `variant` `'underline' | 'segmented-chips'`, default `'underline'`. The list and each item set `data-style-variant` to that value
 - `ExpandableHeader` `triggerProps` for the header toggle button
 - `ExpandableContent` `isClosingOnClick` to collapse when the content is clicked
 - `NavigationItemList` `onClose` so Escape on items can close the parent menu
@@ -39,6 +40,8 @@ and adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
 ### Changed
 
+- `TabSwitcher` is an aggregate with `TabSwitcher.StateManager`, `TabSwitcher.Layout`, `TabSwitcher.TabList`, `TabSwitcher.TabPanel`, `TabSwitcher.Context`, `TabSwitcher.Provider`, and `TabSwitcher.Consumer`. `TabView` and the panel portal are removed. `activeId`, `onActiveIdChange`, and `initialActiveId` stay the same
+- `segmented-chips` uses fully rounded outer corners, slightly rounded inner corners, a primary active item, and neutral inactive items. `underline` keeps the current bottom border
 - Form creation and validation use `@helpwave/hightide-utils/form`. `FormField` keeps its current props and bag
 - Click and keyboard handlers no longer call `event.stopPropagation` (`Button`, `IconButton`, `Select`, `MultiSelect`, `FileInput`, `Navigation`, `Expandable`, and `PropsUtil` helpers)
 - `Button` no longer stops click bubbling; `allowClickEventPropagation` has no effect

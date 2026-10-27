@@ -26,9 +26,8 @@ export const dateTimePickerDialog: Story = {
     secondIncrement: '1s',
     millisecondIncrement: '100ms',
     onValueChange: action('onValueChange'),
-    onEditComplete: action('onEditComplete'),
   },
-  render: ({ initialValue, ...args }) => {
+  render: ({ initialValue, onValueChange, onStateEvent, ...args }) => {
     const [value, setValue] = useState<Date | null>(initialValue ?? null)
 
     useEffect(() => {
@@ -44,13 +43,15 @@ export const dateTimePickerDialog: Story = {
         <DateTimePickerDialog
           {...args}
           value={value}
-          onValueUpdate={(next) => {
-            args.onValueChange?.(next)
+          onValueChange={(next) => {
+            onValueChange?.(next)
             setValue(next)
           }}
-          onValueCommit={(next) => {
-            args.onEditComplete?.(next)
-            setValue(next)
+          onStateEvent={(event) => {
+            onStateEvent?.(event)
+            if (event.type === 'commit') {
+              setValue(event.value)
+            }
           }}
         />
       </div>

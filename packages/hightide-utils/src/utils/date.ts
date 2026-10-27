@@ -1,4 +1,4 @@
-import { equalSizeGroups } from './array'
+import { equalSizeGroups, range } from './array'
 import type { DurationJSON } from './duration'
 
 const DateTimeFormat = ['date', 'time', 'dateTime'] as const
@@ -132,6 +132,41 @@ const isLastMillisecondOfDay = (date: Date): boolean => {
 
 const daysInMonth = (year: number, monthIndex: number): number => {
   return new Date(year, monthIndex + 1, 0).getDate()
+}
+
+const monthsForYear = (year: number, minTimestamp?: number, maxTimestamp?: number): number[] => {
+  return range(12).filter((month) => {
+    const monthStart = new Date(year, month, 1).getTime()
+    const monthEnd = new Date(year, month + 1, 0).getTime()
+    const isAfterStart = minTimestamp === undefined || monthEnd >= minTimestamp
+    const isBeforeEnd = maxTimestamp === undefined || monthStart <= maxTimestamp
+    return isAfterStart && isBeforeEnd
+  })
+}
+
+const withYearMonth = (date: Date, year: number, month: number): Date => {
+  const next = new Date(date)
+  const lastDay = daysInMonth(year, month)
+  next.setFullYear(year, month, Math.min(date.getDate(), lastDay))
+  return next
+}
+
+const withDateParts = (date: Date, year: number, month: number, day: number): Date => {
+  const next = new Date(date)
+  const lastDay = daysInMonth(year, month)
+  next.setFullYear(year, month, Math.min(day, lastDay))
+  return next
+}
+
+const monthBounds = (start: Date, end: Date): { minTimestamp: number, maxTimestamp: number } => {
+  return {
+    minTimestamp: new Date(start.getFullYear(), start.getMonth(), 1).getTime(),
+    maxTimestamp: new Date(end.getFullYear(), end.getMonth() + 1, 0).getTime(),
+  }
+}
+
+const yearsBetween = (start: Date, end: Date): number[] => {
+  return range([start.getFullYear(), end.getFullYear()], { exclusiveEnd: false })
 }
 
 
@@ -393,6 +428,11 @@ export const DateUtils = {
   equalDate,
   isLastMillisecondOfDay,
   daysInMonth,
+  monthsForYear,
+  withYearMonth,
+  withDateParts,
+  monthBounds,
+  yearsBetween,
   sameTime,
   withTime,
   zonedParts,

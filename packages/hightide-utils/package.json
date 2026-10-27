@@ -10,7 +10,7 @@
     "access": "public"
   },
   "license": "AGPL-3.0-only",
-  "version": "0.1.8",
+  "version": "0.2.0",
   "type": "module",
   "files": [
     "dist",
@@ -73,7 +73,7 @@
   },
   "scripts": {
     "clean": "rm -rf dist node_modules",
-    "build-intl": "build-intl --force -i ./locales -o ./src/i18n/translations.ts -n hightideTranslation",
+    "build-intl": "build-intl -c intl.config.json",
     "init": "pnpm run build-intl",
     "build": "tsup",
     "dev": "tsup --watch",
@@ -81,7 +81,7 @@
     "test": "jest"
   },
   "dependencies": {
-    "@helpwave/internationalization": "0.4.0",
+    "@helpwave/internationalization": "0.5.0",
     "zustand": "5.0.15"
   },
   "peerDependencies": {

@@ -18,6 +18,5 @@ export const dateTimeWheelPicker: Story = {
     loopingBehaviour: 'update',
     precision: 'minute',
     onValueChange: action('onValueChange'),
-    onEditComplete: action('onEditComplete'),
   },
 }

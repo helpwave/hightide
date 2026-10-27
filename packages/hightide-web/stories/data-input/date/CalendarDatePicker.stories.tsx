@@ -20,6 +20,5 @@ export const calendarDatePicker: Story = {
     yearMonthPickerProps: {},
     calendarDayPickerProps: {},
     onValueChange: action('onValueChange'),
-    onEditComplete: action('onEditComplete')
   },
 }

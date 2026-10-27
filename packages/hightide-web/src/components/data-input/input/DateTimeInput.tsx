@@ -218,14 +218,18 @@ export const DateTimeInput = forwardRef<HTMLDivElement, DateTimeInputProps>(func
         <DateTimePickerDialog
           value={toZoned(dialogValue)}
           allowRemove={allowRemove}
-          onValueUpdate={(value) => setDialogValue(fromZoned(value))}
-          onValueCommit={(value) => {
-            const absolute = fromZoned(value)
+          onStateEvent={(event) => {
+            if (event.type !== 'commit') {
+              return
+            }
+            const absolute = fromZoned(event.value)
+            setDialogValue(absolute)
             setState(absolute)
             onEditComplete?.(absolute)
             changeOpenWrapper(false)
           }}
-          pickerProps={{ ...(pickerProps ?? {}), className: 'date-time-input-date-time-picker' }}
+          layoutProps={{ className: 'date-time-input-dialog' }}
+          bodyProps={{ className: clsx('date-time-input-date-time-picker', pickerProps?.layoutProps?.className) }}
           mode={mode}
           start={toZoned(start ?? null) ?? undefined}
           end={toZoned(end ?? null) ?? undefined}
@@ -236,7 +240,6 @@ export const DateTimeInput = forwardRef<HTMLDivElement, DateTimeInputProps>(func
           secondIncrement={secondIncrement}
           millisecondIncrement={millisecondIncrement}
           precision={precision}
-          className="date-time-input-dialog"
         />
       </PopUp>
     </div>

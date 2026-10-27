@@ -22,7 +22,6 @@ export default defineConfig({
     '@tanstack/react-table',
     '@tanstack/react-virtual',
     'lucide-react',
-    '@helpwave/internationalization',
     '@helpwave/hightide-utils',
   ],
   cjsInterop: true,

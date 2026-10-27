@@ -190,3 +190,11 @@
   --coloring-tonal-background: initial;
   --coloring-tonal-text: initial;
 }
+
+@utility absolute {
+  --coloring-position-override: absolute;
+}
+
+@utility relative {
+  --coloring-position-override: relative;
+}

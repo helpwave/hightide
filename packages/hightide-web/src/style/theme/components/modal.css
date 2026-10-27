@@ -93,8 +93,6 @@
   }
 
   .modal-close-button {
-    @apply top-1 right-1;
-    --coloring-position-override: absolute;
-
+    @apply top-1 right-1 absolute;
   }
 }

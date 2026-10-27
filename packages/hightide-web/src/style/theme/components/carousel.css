@@ -41,7 +41,6 @@
 
   .carousel-arrow {
     @apply absolute z-10 top-1/2 -translate-y-1/2 shadow-md;
-    --coloring-position-override: absolute;
   }
 
   .carousel-arrow[data-direction="previous"] {

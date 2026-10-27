@@ -456,8 +456,8 @@ importers:
   packages/hightide-utils:
     dependencies:
       '@helpwave/internationalization':
-        specifier: 0.4.0
-        version: 0.4.0
+        specifier: 0.5.0
+        version: 0.5.0
       zustand:
         specifier: 5.0.15
         version: 5.0.15(@types/react@19.0.10)(react@19.0.0)(use-sync-external-store@1.6.0(react@19.0.0))
@@ -513,9 +513,6 @@ importers:
       '@helpwave/hightide-utils':
         specifier: workspace:*
         version: link:../hightide-utils
-      '@helpwave/internationalization':
-        specifier: 0.4.0
-        version: 0.4.0
       '@tailwindcss/cli':
         specifier: 4.1.18
         version: 4.1.18
@@ -1868,8 +1865,8 @@ packages:
   '@helpwave/eslint-config@0.0.11':
     resolution: {integrity: sha512-IZXYfUWpm4I8xd+TucpvjkMSmAw5zikPMzxutspxXz38sqjDrldtSgO9KVRrNjJhIoafY5Usric3mTuJIOoBQQ==}
 
-  '@helpwave/internationalization@0.4.0':
-    resolution: {integrity: sha512-mvlg9wPojQq7JcLPPIGXGbUbWfuUvGgegJwh/WBHY2SOkj2VRbQ5PjGhc7h7gWwY8/cqDUAeewIo0worqyFjfw==}
+  '@helpwave/internationalization@0.5.0':
+    resolution: {integrity: sha512-0xsuaLO1Mp2JBVc5vV+s38OtAn2E3dplsNAZVL6pCpxnK8ofdj8+Q4EN4GLiNA2D68Ba7MNDGAZ3W08UGo5hSQ==}
     hasBin: true
 
   '@humanfs/core@0.19.2':
@@ -8581,7 +8578,7 @@ snapshots:
       - jiti
       - supports-color
 
-  '@helpwave/internationalization@0.4.0': {}
+  '@helpwave/internationalization@0.5.0': {}
 
   '@humanfs/core@0.19.2':
     dependencies:
