@@ -40,6 +40,7 @@ and adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
 ### Changed
 
+- `Menu` is a compound component: `Menu.StateManager`, `Menu.Trigger`, `Menu.Content`, `Menu.Item`, `Menu.NavigationItem`, `Menu.Context`, `Menu.Provider`, and `Menu.Consumer`. `Menu.Item` is the action tile and closes the menu when `isClosingOnClick` is set. Open, close, and toggle go through the state manager
 - `TabSwitcher` is an aggregate with `TabSwitcher.StateManager`, `TabSwitcher.Layout`, `TabSwitcher.TabList`, `TabSwitcher.TabPanel`, `TabSwitcher.Context`, `TabSwitcher.Provider`, and `TabSwitcher.Consumer`. `TabView` and the panel portal are removed. `activeId`, `onActiveIdChange`, and `initialActiveId` stay the same
 - `segmented-chips` uses fully rounded outer corners, slightly rounded inner corners, a primary active item, and neutral inactive items. `underline` keeps the current bottom border
 - Form creation and validation use `@helpwave/hightide-utils/form`. `FormField` keeps its current props and bag
