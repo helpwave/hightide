@@ -8,7 +8,7 @@ import {
 } from 'react'
 import clsx from 'clsx'
 import { Button } from '../../interaction/Button'
-import { Select } from '../../data-input/Select/Select'
+import { Select } from '../../data-input/selection/Select/Select'
 import { ProcessModelCanvas } from './ProcessModelCanvas'
 import { ProcessModelLayoutUtilities } from './layoutProcessModel'
 import type { ProcessModelGraphWithTraces, ProcessModelTrace } from './types'
@@ -299,7 +299,7 @@ export const ProcessModelTraceReplay = ({ graph, className }: ProcessModelTraceR
           <span className="process-model-trace-replay-speed-label">{translation('speed')}</span>
           <Select
             value={speedMult}
-            onValueUpdate={setSpeedMult}
+            onValueChange={setSpeedMult}
           >
             {SPEED_OPTIONS.map((option) => (
               <Select.Option<number>

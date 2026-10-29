@@ -26,6 +26,10 @@
       @apply hover:cursor-not-allowed;
     }
 
+    &:not([data-samemonth]):not([data-disabled]) {
+      opacity: 0.7;
+    }
+
     &[data-today] {
       @apply border-2 border-on-background;
     }

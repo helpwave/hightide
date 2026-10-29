@@ -6,7 +6,7 @@ import {
   processModelLibrary
 } from '../../../src/components/visualization/process-model/processModelLibrary'
 import type { ProcessModelGraphWithTraces } from '../../../src/components/visualization/process-model/types'
-import { Select } from '../../../src/components/data-input/Select/Select'
+import { Select } from '../../../src/components/data-input/selection/Select/Select'
 
 const meta: Meta<typeof ProcessModelTraceReplay> = {
   component: ProcessModelTraceReplay,
@@ -28,7 +28,7 @@ export const processModelTraceReplay: Story = {
           <span>Example model</span>
           <Select
             value={modelId}
-            onValueUpdate={setModelId}
+            onValueChange={setModelId}
           >
             {processModelLibrary.map((entry) => (
               <Select.Option key={entry.id} value={entry.id} label={entry.name} />

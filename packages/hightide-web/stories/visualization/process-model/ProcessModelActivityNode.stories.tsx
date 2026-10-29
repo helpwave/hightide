@@ -5,7 +5,7 @@ import { action } from 'storybook/actions'
 import { ProcessModelActivityNode } from '../../../src/components/visualization/process-model/ProcessModelActivityNode'
 import { processModelLibrary } from '../../../src/components/visualization/process-model/processModelLibrary'
 import type { ProcessModelGraphActivityNode } from '../../../src/components/visualization/process-model/types'
-import { Select } from '../../../src/components/data-input/Select/Select'
+import { Select } from '../../../src/components/data-input/selection/Select/Select'
 
 type ActivityNodeExample = {
   id: string,
@@ -64,7 +64,7 @@ export const processModelActivityNode: Story = {
           <span>Example node</span>
           <Select
             value={exampleId}
-            onValueUpdate={setExampleId}
+            onValueChange={setExampleId}
           >
             {activityNodeExamples.map((item) => (
               <Select.Option key={item.id} value={item.id} label={item.optionLabel} />

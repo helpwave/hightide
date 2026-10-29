@@ -1,5 +1,5 @@
-import type { TextInputProps } from '../../../data-input/input/TextInput'
-import { TextInput } from '../../../data-input/input/TextInput'
+import type { TextInputProps } from '../../../data-input/text/TextInput'
+import { TextInput } from '../../../data-input/text/TextInput'
 import type { ConfirmModalProps } from './ConfirmModal'
 import { ConfirmModal } from './ConfirmModal'
 

@@ -1,7 +1,6 @@
 import type { ReactNode } from 'react'
-import type { InputStateEvent } from '@helpwave/hightide-utils/interfaces'
+import type { ControllableInputProps, InputStateEvent } from '@helpwave/hightide-utils/interfaces'
 import { useFieldTouchedTrigger, type TouchedTrigger } from '@helpwave/hightide-utils/form'
-import type { InputComponentInterface } from '../../data-input/input/TextInput'
 import type { FormFieldAriaAttributes, FormFieldInteractionStates } from './FieldLayout'
 import { FormFieldLayout, type FormFieldLayoutProps } from './FieldLayout'
 import { useFormField } from './FormContext'
@@ -29,7 +28,9 @@ export interface FormFieldProps<T extends FormValue, K extends keyof T, E extend
   touchedTrigger?: TouchedTrigger<E>,
 }
 
-export type FormFieldDataHandling<T> = Required<Pick<InputComponentInterface<T>, 'value' | 'onValueUpdate' | 'onValueCommit'>>
+export type FormFieldCommitEvent<T> = { type: 'commit', value: T }
+
+export type FormFieldDataHandling<T> = Required<Pick<ControllableInputProps<T, FormFieldCommitEvent<T>>, 'value' | 'onValueChange' | 'onStateEvent'>>
 
 export const FormField = <T extends FormValue, K extends keyof T, E extends InputStateEvent = InputStateEvent>({
   children,

@@ -1,6 +1,7 @@
 import type { ReactNode } from 'react'
 import { useCallback, useEffect, useMemo, useState } from 'react'
-import { useStateMachine } from '@helpwave/hightide-utils/hooks'
+import { useStableEvent, useStateMachine } from '@helpwave/hightide-utils/hooks'
+import type { StateManagerProps } from '@helpwave/hightide-utils/interfaces'
 import { TabSwitcherContext, type TabInfo } from './TabSwitcherContext'
 import {
   tabSwitcherStateTransition,
@@ -20,9 +21,7 @@ function sortByDomOrder(infos: TabInfo[]): TabInfo[] {
   })
 }
 
-export type TabSwitcherStateManagerProps = {
-  state: TabSwitcherState,
-  onStateChange?: (state: TabSwitcherState) => void,
+export type TabSwitcherStateManagerProps = StateManagerProps<TabSwitcherState, TabSwitcherEvent> & {
   variant?: TabSwitcherVariant,
   children?: ReactNode,
 }
@@ -30,6 +29,7 @@ export type TabSwitcherStateManagerProps = {
 export function TabSwitcherStateManager({
   state,
   onStateChange,
+  onStateEvent,
   variant = 'underline',
   children,
 }: TabSwitcherStateManagerProps) {
@@ -56,12 +56,15 @@ export function TabSwitcherStateManager({
     return () => unsubscribe(id)
   }, [unsubscribe])
 
+  const onStateEventStable = useStableEvent(onStateEvent)
+
   const dispatch = useCallback((event: TabSwitcherEvent) => {
     if (event.type === 'select' && event.id !== null && tabInfos.find((tab) => tab.id === event.id)?.disabled) {
       return
     }
     machine.dispatch(event)
-  }, [machine, tabInfos])
+    onStateEventStable?.(event)
+  }, [machine, onStateEventStable, tabInfos])
 
   const activeId = useMemo(() => {
     const active = tabInfos.find((tab) => tab.id === state.activeId)

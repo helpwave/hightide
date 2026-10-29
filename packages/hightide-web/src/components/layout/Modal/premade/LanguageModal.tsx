@@ -4,8 +4,8 @@ import { useHightideTranslation } from '@helpwave/hightide-utils/context/transla
 
 import { useLocalization } from '../../../../global-contexts/localization/forward-exports'
 import { Button } from '../../../interaction/Button'
-import type { SelectProps } from '../../../data-input/Select/SelectComponent'
-import { Select } from '../../../data-input/Select/Select'
+import type { SelectProps } from '../../../data-input/selection/Select/SelectComponent'
+import { Select } from '../../../data-input/selection/Select/Select'
 import type { ModalProps } from '../Modal'
 import { Modal } from '../Modal'
 
@@ -18,9 +18,9 @@ export const LanguageSelect = ({ ...props }: LanguageSelectProps) => {
     <Select
       {...props}
       value={locale}
-      onValueUpdate={(language: string) => {
+      onValueChange={(language: string) => {
         setLocale(language)
-        props.onValueUpdate?.(language)
+        props.onValueChange?.(language)
       }}
       triggerProps={{
         ...props.triggerProps,

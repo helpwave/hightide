@@ -5,8 +5,8 @@ import { useHightideTranslation } from '@helpwave/hightide-utils/context/transla
 import { useLocalization } from '../../../../global-contexts/localization/forward-exports'
 import { useTheme } from '../../../../global-contexts/theme/ThemeContext'
 import { Button } from '../../../interaction/Button'
-import type { SelectProps } from '../../../data-input/Select/SelectComponent'
-import { Select } from '../../../data-input/Select/Select'
+import type { SelectProps } from '../../../data-input/selection/Select/SelectComponent'
+import { Select } from '../../../data-input/selection/Select/Select'
 import type { ModalProps } from '../Modal'
 import { Modal } from '../Modal'
 
@@ -20,13 +20,13 @@ export const ThemeSelect = ({ ...props }: ThemeSelectProps) => {
 
   return (
     <Select<string | null>
-      value={preferredThemeMode}
-      onValueCommit={(value) => {
-        props.onValueCommit?.(value)
-        setTheme(value)
-      }}
-      iconAppearance="right"
       {...props}
+      value={preferredThemeMode}
+      iconAppearance="right"
+      onStateEvent={(event) => {
+        props.onStateEvent?.(event)
+        if (event.type === 'commit') setTheme(event.value)
+      }}
       triggerProps={{
         ...props.triggerProps,
         className: clsx('min-w-40 w-fit', props.triggerProps?.className),

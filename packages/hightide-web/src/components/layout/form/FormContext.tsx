@@ -90,8 +90,10 @@ export function useFormField<T extends FormValue, K extends keyof T>(key: K): Fo
     setTouched,
     dataProps: {
       value,
-      onValueUpdate,
-      onValueCommit,
+      onValueChange: onValueUpdate,
+      onStateEvent: (event) => {
+        if (event.type === 'commit') onValueCommit(event.value)
+      },
     },
     registerRef: context.registerRef(key),
     updateValue,

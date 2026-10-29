@@ -4,10 +4,10 @@ import type { StorybookHelperSelectType } from '../../../src/storybook/helper'
 import { StorybookHelper } from '../../../src/storybook/helper'
 import { FormValidationUtils } from '@helpwave/hightide-utils/utils'
 import { useEditCompletable } from '@helpwave/hightide-utils/hooks'
-import { TextInput, type TextInputElementProps, type TextInputEvent } from '../../../src/components/data-input/input/TextInput'
-import { MultiSelect } from '../../../src/components/data-input/MultiSelect/MultiSelect'
-import { Select } from '../../../src/components/data-input/Select/Select'
-import { Textarea, type TextareaElementProps, type TextareaEvent } from '../../../src/components/data-input/Textarea'
+import { TextInput, type TextInputElementProps, type TextInputEvent } from '../../../src/components/data-input/text/TextInput'
+import { MultiSelect } from '../../../src/components/data-input/selection/MultiSelect/MultiSelect'
+import { Select } from '../../../src/components/data-input/selection/Select/Select'
+import { Textarea, type TextareaElementProps, type TextareaEvent } from '../../../src/components/data-input/text/Textarea'
 import { Button } from '../../../src/components/interaction/Button'
 import { useCreateForm } from '../../../src/components/layout/form/useCreateForm'
 import { Visibility } from '../../../src/components/layout/Visibility'
@@ -15,7 +15,7 @@ import { HelpwaveLogo } from '../../../src/components/branding/visualization/Hel
 import { useEffect, useMemo, useState, type FocusEvent, type Ref } from 'react'
 import { FormField } from '../../../src/components/layout/form/FormField'
 import { FormProvider } from '../../../src/components/layout/form/FormContext'
-import { DateTimeInput } from '../../../src/components/data-input/input/DateTimeInput'
+import { DateTimeInput } from '../../../src/components/data-input/dateTime/DateTimeInput'
 
 type FormState = 'editing' | 'sending' | 'submitted'
 
@@ -42,8 +42,7 @@ const meta: Meta<StoryArgs> = {}
 
 function FormTextInput({
   value,
-  onValueUpdate,
-  onValueCommit,
+  onValueChange,
   onStateEvent,
   invalid,
   disabled,
@@ -54,9 +53,8 @@ function FormTextInput({
   ...inputProps
 }: {
   value?: string,
-  onValueUpdate: (value: string) => void,
-  onValueCommit: (value: string) => void,
-  onStateEvent?: (event: TextInputEvent) => void,
+  onValueChange: (value: string) => void,
+  onStateEvent?: (event: TextInputEvent | { type: 'commit', value: string }) => void,
   invalid?: boolean,
   disabled?: boolean,
   readOnly?: boolean,
@@ -65,7 +63,7 @@ function FormTextInput({
 } & TextInputElementProps) {
   const edit = useEditCompletable({
     value: value ?? '',
-    onEditComplete: onValueCommit,
+    onEditComplete: (next) => onStateEvent?.({ type: 'commit', value: next }),
     isTimerEnabled: false,
   })
 
@@ -77,7 +75,7 @@ function FormTextInput({
       isDisabled={disabled}
       isReadOnly={readOnly}
       isRequired={required}
-      onValueChange={onValueUpdate}
+      onValueChange={onValueChange}
       onStateEvent={onStateEvent}
       inputProps={{
         ...inputProps,
@@ -92,8 +90,7 @@ function FormTextInput({
 
 function FormTextarea({
   value,
-  onValueUpdate,
-  onValueCommit,
+  onValueChange,
   onStateEvent,
   invalid,
   disabled,
@@ -104,9 +101,8 @@ function FormTextarea({
   ...inputProps
 }: {
   value?: string,
-  onValueUpdate: (value: string) => void,
-  onValueCommit: (value: string) => void,
-  onStateEvent?: (event: TextareaEvent) => void,
+  onValueChange: (value: string) => void,
+  onStateEvent?: (event: TextareaEvent | { type: 'commit', value: string }) => void,
   invalid?: boolean,
   disabled?: boolean,
   readOnly?: boolean,
@@ -115,7 +111,7 @@ function FormTextarea({
 } & TextareaElementProps) {
   const edit = useEditCompletable({
     value: value ?? '',
-    onEditComplete: onValueCommit,
+    onEditComplete: (next) => onStateEvent?.({ type: 'commit', value: next }),
     delay: 3000,
   })
 
@@ -127,7 +123,7 @@ function FormTextarea({
       isDisabled={disabled}
       isReadOnly={readOnly}
       isRequired={required}
-      onValueChange={onValueUpdate}
+      onValueChange={onValueChange}
       onStateEvent={onStateEvent}
       inputProps={{
         ...inputProps,
@@ -241,7 +237,17 @@ export const basic: Story = {
               label="Your name"
             >
               {({ dataProps, focusableElementProps, interactionStates, onStateEvent }) => (
-                <FormTextInput {...dataProps} {...focusableElementProps} {...interactionStates} onStateEvent={onStateEvent} placeholder="e.g. John Doe" />
+                <FormTextInput
+                  {...focusableElementProps}
+                  {...interactionStates}
+                  value={dataProps.value}
+                  onValueChange={dataProps.onValueChange}
+                  onStateEvent={(event) => {
+                    onStateEvent(event)
+                    if (event.type === 'commit') dataProps.onStateEvent(event)
+                  }}
+                  placeholder="e.g. John Doe"
+                />
               )}
             </FormField>
 
@@ -252,7 +258,17 @@ export const basic: Story = {
               label="Email"
             >
               {({ dataProps, focusableElementProps, interactionStates, onStateEvent }) => (
-                <FormTextInput {...dataProps} {...focusableElementProps} {...interactionStates} onStateEvent={onStateEvent} placeholder="e.g. test@helpwave.de" />
+                <FormTextInput
+                  {...focusableElementProps}
+                  {...interactionStates}
+                  value={dataProps.value}
+                  onValueChange={dataProps.onValueChange}
+                  onStateEvent={(event) => {
+                    onStateEvent(event)
+                    if (event.type === 'commit') dataProps.onStateEvent(event)
+                  }}
+                  placeholder="e.g. test@helpwave.de"
+                />
               )}
             </FormField>
 
@@ -262,8 +278,16 @@ export const basic: Story = {
               description="We will use this to include as many likes as possible."
               label="Your favourite Fruit"
             >
-              {({ dataProps, focusableElementProps, interactionStates }) => (
-                <Select {...dataProps} {...focusableElementProps} {...interactionStates}>
+              {({ dataProps, interactionStates }) => (
+                <Select
+                  value={dataProps.value}
+                  onValueChange={dataProps.onValueChange}
+                  onStateEvent={dataProps.onStateEvent}
+                  isInvalid={interactionStates.invalid}
+                  isDisabled={interactionStates.disabled}
+                  isReadOnly={interactionStates.readOnly}
+                  isRequired={interactionStates.required}
+                >
                   {StorybookHelper.selectValues.map(value => (
                     <Select.Option key={value} value={value} label={value} />
                   ))}
@@ -277,8 +301,16 @@ export const basic: Story = {
               description="Please specify which ingredients you are bringing."
               label="Your contribution"
             >
-              {({ dataProps, focusableElementProps, interactionStates }) => (
-                <MultiSelect {...dataProps} {...focusableElementProps} {...interactionStates}>
+              {({ dataProps, interactionStates }) => (
+                <MultiSelect
+                  value={dataProps.value}
+                  onValueChange={dataProps.onValueChange}
+                  onStateEvent={dataProps.onStateEvent}
+                  isInvalid={interactionStates.invalid}
+                  isDisabled={interactionStates.disabled}
+                  isReadOnly={interactionStates.readOnly}
+                  isRequired={interactionStates.required}
+                >
                   {StorybookHelper.selectValues.map(value => (
                     <MultiSelect.Option key={value} value={value} label={value} />
                   ))}
@@ -291,8 +323,16 @@ export const basic: Story = {
               description="The ingredients you are allergic to."
               label="Allergies"
             >
-              {({ dataProps, focusableElementProps, interactionStates }) => (
-                <MultiSelect {...dataProps} {...focusableElementProps} {...interactionStates}>
+              {({ dataProps, interactionStates }) => (
+                <MultiSelect
+                  value={dataProps.value}
+                  onValueChange={dataProps.onValueChange}
+                  onStateEvent={dataProps.onStateEvent}
+                  isInvalid={interactionStates.invalid}
+                  isDisabled={interactionStates.disabled}
+                  isReadOnly={interactionStates.readOnly}
+                  isRequired={interactionStates.required}
+                >
                   {StorybookHelper.selectValues.map(value => (
                     <MultiSelect.Option key={value} value={value} label={value} />
                   ))}
@@ -305,11 +345,26 @@ export const basic: Story = {
               description="The date you would like to attend the event."
               label="Preferred Date"
             >
-              {({ dataProps, focusableElementProps, interactionStates }) => (
+              {({ dataProps, focusableElementProps, interactionStates, onStateEvent }) => (
                 <DateTimeInput
-                  {...dataProps}
-                  {...focusableElementProps}
-                  {...interactionStates}
+                  value={dataProps.value}
+                  onValueChange={dataProps.onValueChange}
+                  onStateEvent={(event) => {
+                    onStateEvent(event)
+                    if (event.type === 'commit') dataProps.onStateEvent(event)
+                  }}
+                  isInvalid={interactionStates.invalid}
+                  isDisabled={interactionStates.disabled}
+                  isReadOnly={interactionStates.readOnly}
+                  isRequired={interactionStates.required}
+                  controlProps={{
+                    id: focusableElementProps.id,
+                    ...{
+                      'aria-labelledby': focusableElementProps['aria-labelledby'],
+                      'aria-describedby': focusableElementProps['aria-describedby'],
+                      'aria-errormessage': focusableElementProps['aria-errormessage'],
+                    },
+                  }}
                 />
               )}
             </FormField>
@@ -321,8 +376,14 @@ export const basic: Story = {
             >
               {({ dataProps, focusableElementProps, interactionStates, onStateEvent }) => (
                 <FormTextarea
-                  {...dataProps} {...focusableElementProps} {...interactionStates}
-                  onStateEvent={onStateEvent}
+                  {...focusableElementProps}
+                  {...interactionStates}
+                  value={dataProps.value}
+                  onValueChange={dataProps.onValueChange}
+                  onStateEvent={(event) => {
+                    onStateEvent(event)
+                    if (event.type === 'commit') dataProps.onStateEvent(event)
+                  }}
                   placeholder="e.g. Please buy the delicious cranberry juice"
                 />
               )}
@@ -448,7 +509,17 @@ return (
           label="Your name"
         >
           {({ dataProps, focusableElementProps, interactionStates, onStateEvent }) => (
-            <FormTextInput {...dataProps} {...focusableElementProps} {...interactionStates} onStateEvent={onStateEvent} placeholder="e.g. John Doe" />
+            <FormTextInput
+              {...focusableElementProps}
+              {...interactionStates}
+              value={dataProps.value}
+              onValueChange={dataProps.onValueChange}
+              onStateEvent={(event) => {
+                onStateEvent(event)
+                if (event.type === 'commit') dataProps.onStateEvent(event)
+              }}
+              placeholder="e.g. John Doe"
+            />
           )}
         </FormField>
 
@@ -459,7 +530,17 @@ return (
           label="Email"
         >
           {({ dataProps, focusableElementProps, interactionStates, onStateEvent }) => (
-            <FormTextInput {...dataProps} {...focusableElementProps} {...interactionStates} onStateEvent={onStateEvent} placeholder="e.g. test@helpwave.de" />
+            <FormTextInput
+              {...focusableElementProps}
+              {...interactionStates}
+              value={dataProps.value}
+              onValueChange={dataProps.onValueChange}
+              onStateEvent={(event) => {
+                onStateEvent(event)
+                if (event.type === 'commit') dataProps.onStateEvent(event)
+              }}
+              placeholder="e.g. test@helpwave.de"
+            />
           )}
         </FormField>
 
@@ -469,8 +550,16 @@ return (
           description="We will use this to include as many likes as possible."
           label="Your favourite Fruit"
         >
-          {({ dataProps, focusableElementProps, interactionStates }) => (
-            <Select {...dataProps} {...focusableElementProps} {...interactionStates}>
+          {({ dataProps, interactionStates }) => (
+            <Select
+              value={dataProps.value}
+              onValueChange={dataProps.onValueChange}
+              onStateEvent={dataProps.onStateEvent}
+              isInvalid={interactionStates.invalid}
+              isDisabled={interactionStates.disabled}
+              isReadOnly={interactionStates.readOnly}
+              isRequired={interactionStates.required}
+            >
               {StorybookHelper.selectValues.map(value => (
                 <Select.Option key={value} value={value} />
               ))}
@@ -484,8 +573,16 @@ return (
           description="Please specify which ingredients you are bringing."
           label="Your contribution"
         >
-          {({ dataProps, focusableElementProps, interactionStates }) => (
-            <MultiSelect {...dataProps} {...focusableElementProps} {...interactionStates}>
+          {({ dataProps, interactionStates }) => (
+            <MultiSelect
+              value={dataProps.value}
+              onValueChange={dataProps.onValueChange}
+              onStateEvent={dataProps.onStateEvent}
+              isInvalid={interactionStates.invalid}
+              isDisabled={interactionStates.disabled}
+              isReadOnly={interactionStates.readOnly}
+              isRequired={interactionStates.required}
+            >
               {StorybookHelper.selectValues.map(value => (
                 <MultiSelect.Option key={value} value={value} />
               ))}
@@ -498,8 +595,16 @@ return (
           description="The ingredients you are allergic to."
           label="Allergies"
         >
-          {({ dataProps, focusableElementProps, interactionStates }) => (
-            <MultiSelect {...dataProps} {...focusableElementProps} {...interactionStates}>
+          {({ dataProps, interactionStates }) => (
+            <MultiSelect
+              value={dataProps.value}
+              onValueChange={dataProps.onValueChange}
+              onStateEvent={dataProps.onStateEvent}
+              isInvalid={interactionStates.invalid}
+              isDisabled={interactionStates.disabled}
+              isReadOnly={interactionStates.readOnly}
+              isRequired={interactionStates.required}
+            >
               {StorybookHelper.selectValues.map(value => (
                 <MultiSelect.Option key={value} value={value} />
               ))}
@@ -514,8 +619,14 @@ return (
         >
           {({ dataProps, focusableElementProps, interactionStates, onStateEvent }) => (
             <FormTextarea
-              {...dataProps} {...focusableElementProps} {...interactionStates}
-              onStateEvent={onStateEvent}
+              {...focusableElementProps}
+              {...interactionStates}
+              value={dataProps.value}
+              onValueChange={dataProps.onValueChange}
+              onStateEvent={(event) => {
+                onStateEvent(event)
+                if (event.type === 'commit') dataProps.onStateEvent(event)
+              }}
               placeholder="e.g. Please buy the delicious cranberry juice"
             />
           )}

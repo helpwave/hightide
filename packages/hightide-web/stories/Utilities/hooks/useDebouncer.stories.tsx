@@ -3,7 +3,7 @@ import { action } from 'storybook/actions'
 import { useState } from 'react'
 
 import { Button } from '../../../src/components/interaction/Button'
-import { TextInput } from '../../../src/components/data-input/input/TextInput'
+import { TextInput } from '../../../src/components/data-input/text/TextInput'
 import { useDebouncer } from '@helpwave/hightide-utils/hooks'
 
 type StoryArgs = {

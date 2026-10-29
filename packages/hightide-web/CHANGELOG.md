@@ -9,6 +9,8 @@ and adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
 ### Added
 
+- Data-input components are grouped by the value they capture: `boolean`, `text`, `number`, `file`, `selection`, and `dateTime`. Stories use the same folders. `InputComponentInterface` is removed. Every data-input aggregate uses `ControllableInputProps`, every data-input state manager uses `InputStateMangerProps`, and other state managers use `StateManagerProps`
+- Each of those inputs is an aggregate with `StateManager`, parts, `Context`, `Provider`, and `Consumer`. Folder indexes export the aggregate and types only
 - `TabSwitcher` `variant` `'underline' | 'segmented-chips'`, default `'underline'`. The list and each item set `data-style-variant` to that value
 - `ExpandableHeader` `triggerProps` for the header toggle button
 - `ExpandableContent` `isClosingOnClick` to collapse when the content is clicked
@@ -40,6 +42,8 @@ and adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
 ### Changed
 
+- `FileInput` is an aggregate with `FileInput.StateManager`, `FileInput.Layout`, `FileInput.Input`, `FileInput.Trigger`, and `FileInput.Menu`. `FileInput.Layout` places the file input and the trigger together
+- Data-input aggregates, including `Select`, `MultiSelect`, `Combobox`, `FileInput`, and `LabelledCheckbox`, use `value`, `initialValue`, `onValueChange`, and `onStateEvent`. Completion dispatches `{ type: 'commit', value }`. `isInvalid`, `isDisabled`, `isReadOnly`, and `isRequired` replace `invalid`, `disabled`, `readOnly`, and `required`. `NumberStepperInput` uses `isLooping`, `incrementProps.className`, and `decrementProps.className`
 - `Menu` is a compound component: `Menu.StateManager`, `Menu.Trigger`, `Menu.Content`, `Menu.Item`, `Menu.NavigationItem`, `Menu.Context`, `Menu.Provider`, and `Menu.Consumer`. `Menu.Item` is the action tile and closes the menu when `isClosingOnClick` is set. Open, close, and toggle go through the state manager
 - `TabSwitcher` is an aggregate with `TabSwitcher.StateManager`, `TabSwitcher.Layout`, `TabSwitcher.TabList`, `TabSwitcher.TabPanel`, `TabSwitcher.Context`, `TabSwitcher.Provider`, and `TabSwitcher.Consumer`. `TabView` and the panel portal are removed. `activeId`, `onActiveIdChange`, and `initialActiveId` stay the same
 - `segmented-chips` uses fully rounded outer corners, slightly rounded inner corners, a primary active item, and neutral inactive items. `underline` keeps the current bottom border
@@ -72,12 +76,12 @@ and adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 - Clicking a looped `WheelPicker` value selects it, including the repeated value past the end of the list
 - `DateTimePickerDialog` centers its wheels horizontally
 - `date-time-input-dialog-popup` sets `data-time-format` (`12h` or `24h`). A 12-hour `dateTime` popup uses a larger tablet minimum width
-- Value callbacks use `InputInterface` on `Input`, including optional `initialValue`, `invalid`, `disabled`, `readOnly`, and `required`. Form fields keep `FormFieldDataHandling` for their own required value props
+- Value callbacks use `ControllableInputProps`, including optional `initialValue`, `isInvalid`, `isDisabled`, `isReadOnly`, and `isRequired`. Form fields keep `FormFieldDataHandling` for their required `value`, `onValueChange`, and `onStateEvent` props
 - Components are grouped into `layout`, `interaction`, `data-input`, and `visualization`. Feature folders such as `chat` and `branding` use the same grouping
 - `TabSwitcher`, `ListActionItem`, and `ListNavigationItem` live in `layout`
-- `ChatMessageComposer` implements `InputInterface` and lives in `chat/data-input`
+- `ChatMessageComposer` uses `ControllableInputProps` and lives in `chat/data-input`
 - `properties` is its own component folder. A folder that holds one aggregate uses that aggregate's name, including `Drawer`, `PopUp`, and `Table`. Stories follow the same folders
-- `Combobox` implements `InputInterface` and lives in `data-input`. Its parts are `Combobox.Root`, `Combobox.Input`, `Combobox.List`, `Combobox.Option`, `Combobox.Context`, `Combobox.Provider`, and `Combobox.Consumer`
+- `Combobox` uses `ControllableInputProps` and lives in `data-input/selection`. Its parts are `Combobox.Root`, `Combobox.Input`, `Combobox.List`, `Combobox.Option`, `Combobox.Context`, `Combobox.Provider`, and `Combobox.Consumer`
 - `Select` and `MultiSelect` values are no longer `T | null`. An empty selection is omitted
 - Readonly `.input` text, border, and focus use 80% opacity
 - `Carousel` is a compound component: `Carousel.Root`, `Carousel.Container`, `Carousel.Slide`, `Carousel.Arrows`, `Carousel.FadeLayover`, `Carousel.Stepper`, `Carousel.Context`, and `Carousel.Consumer`. The combined `Carousel` still composes them from `children`, `hintNext`, `arrows`, `dots`, and `blurColor`

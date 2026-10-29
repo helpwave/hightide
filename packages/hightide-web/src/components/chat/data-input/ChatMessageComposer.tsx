@@ -5,15 +5,17 @@ import { SendHorizontal } from 'lucide-react'
 import { useControlledState, useStableEvent } from '@helpwave/hightide-utils/hooks'
 
 import { useWindowResizeObserver } from '../../../hooks/useWindowResizeObserver'
-import type { InputComponentInterface } from '../../data-input/input/TextInput'
+import type { ControllableInputProps } from '@helpwave/hightide-utils/interfaces'
 import { IconButton } from '../../interaction/IconButton'
 import { Icon } from '../../visualization/Icon'
 import { PropsUtil } from '../../../utils/propsUtil'
 
 const MAX_INPUT_LINES = 7
 
+export type ChatMessageComposerEvent = { type: 'commit', value: string }
+
 export type ChatMessageComposerProps = Omit<HTMLAttributes<HTMLDivElement>, 'onChange'>
-  & InputComponentInterface<string>
+  & ControllableInputProps<string, ChatMessageComposerEvent>
   & {
     onSend: (value: string) => void,
     placeholder?: string,
@@ -25,12 +27,12 @@ export type ChatMessageComposerProps = Omit<HTMLAttributes<HTMLDivElement>, 'onC
 export const ChatMessageComposer = forwardRef<HTMLDivElement, ChatMessageComposerProps>(function ChatMessageComposer({
   value: controlledValue,
   initialValue,
-  onValueUpdate: onValueChange,
-  onValueCommit: onEditComplete,
-  invalid = false,
-  disabled = false,
-  readOnly = false,
-  required = false,
+  onValueChange,
+  onStateEvent,
+  isInvalid = false,
+  isDisabled = false,
+  isReadOnly = false,
+  isRequired = false,
   onSend,
   placeholder,
   sendLabel = 'Send',
@@ -44,8 +46,8 @@ export const ChatMessageComposer = forwardRef<HTMLDivElement, ChatMessageCompose
     onValueChange,
     defaultValue: initialValue ?? '',
   })
-  const onEditCompleteStable = useStableEvent(onEditComplete)
-  const canEdit = !disabled && !readOnly
+  const onStateEventStable = useStableEvent(onStateEvent)
+  const canEdit = !isDisabled && !isReadOnly
 
   const syncTextareaHeight = useCallback(() => {
     const textarea = textareaRef.current
@@ -72,7 +74,7 @@ export const ChatMessageComposer = forwardRef<HTMLDivElement, ChatMessageCompose
     if (!trimmed) {
       return
     }
-    onEditCompleteStable(trimmed)
+    onStateEventStable?.({ type: 'commit', value: trimmed })
     onSend(trimmed)
     setValue('')
   }
@@ -82,7 +84,7 @@ export const ChatMessageComposer = forwardRef<HTMLDivElement, ChatMessageCompose
       {...props}
       ref={ref}
       className={clsx('chat-message-composer', props.className)}
-      {...PropsUtil.dataAttributes.interactionStates({ invalid, disabled, readOnly, required })}
+      {...PropsUtil.dataAttributes.interactionStates({ invalid: isInvalid, disabled: isDisabled, readOnly: isReadOnly, required: isRequired })}
     >
       {actions && (
         <div className="chat-message-composer-actions">
@@ -95,9 +97,9 @@ export const ChatMessageComposer = forwardRef<HTMLDivElement, ChatMessageCompose
         rows={1}
         value={value ?? ''}
         placeholder={placeholder}
-        disabled={disabled}
-        readOnly={readOnly}
-        required={required}
+        disabled={isDisabled}
+        readOnly={isReadOnly}
+        required={isRequired}
         onChange={event => {
           if (!canEdit) {
             return
@@ -105,7 +107,7 @@ export const ChatMessageComposer = forwardRef<HTMLDivElement, ChatMessageCompose
           setValue(event.target.value)
         }}
         onBlur={event => {
-          onEditCompleteStable(event.target.value)
+          onStateEventStable?.({ type: 'commit', value: event.target.value })
         }}
         onKeyDown={event => {
           if (event.key === 'Enter' && !event.shiftKey) {
@@ -113,14 +115,14 @@ export const ChatMessageComposer = forwardRef<HTMLDivElement, ChatMessageCompose
             send()
           }
         }}
-        {...PropsUtil.aria.interactionStates({ invalid, disabled, readOnly, required })}
+        {...PropsUtil.aria.interactionStates({ invalid: isInvalid, disabled: isDisabled, readOnly: isReadOnly, required: isRequired })}
       />
       {trailing}
       <IconButton
         tooltip={sendLabel}
         color="primary"
         variant="filled"
-        disabled={disabled || readOnly || !(value ?? '').trim()}
+        disabled={isDisabled || isReadOnly || !(value ?? '').trim()}
         size="md"
         onClick={send}
         className="chat-message-composer-send-button"

@@ -1,6 +1,6 @@
 import type { Meta, StoryObj } from '@storybook/react-vite'
 import { useRef, useState } from 'react'
-import { TextInput } from '../../../src/components/data-input/input/TextInput'
+import { TextInput } from '../../../src/components/data-input/text/TextInput'
 import { FocusTrapWrapper } from '../../../src/components/interaction/FocusTrap'
 import { clsx } from 'clsx'
 import { Modal } from '../../../src/components/layout/Modal/Modal'
@@ -74,7 +74,7 @@ export const focusTrap: Story = {
               <Button onClick={() => setInnerActive(prevState => !prevState)}>
                 {'Toggle Inner Focus Trap'}
               </Button>
-              <TextInput ref={ref2} />
+              <TextInput inputRef={ref2} />
             </FocusTrapWrapper>
           </FocusTrapWrapper>
           <span>This part is not reachable with keyboard navigation when the traps are active</span>

@@ -4,7 +4,7 @@ import type { PropsWithChildren } from 'react'
 import type { PropertyField } from './PropertyBase'
 import { PropertyBase } from './PropertyBase'
 import { PropsUtil } from '../../utils/propsUtil'
-import { Select } from '../data-input/Select/Select'
+import { Select } from '../data-input/selection/Select/Select'
 
 export interface SingleSelectPropertyProps extends PropertyField<string>, PropsWithChildren {}
 
@@ -30,11 +30,11 @@ export const SingleSelectProperty = ({
         >
           <Select.Root
             value={value}
-            onValueUpdate={(value) => {
-              onValueChange?.(value)
-              onEditComplete?.(value)
+            onValueChange={(next) => {
+              onValueChange?.(next)
+              onEditComplete?.(next)
             }}
-            disabled={props.readOnly}
+            isDisabled={props.readOnly}
           >
             <Select.Trigger
               className="property-input flex-row-2 w-full items-center justify-between"

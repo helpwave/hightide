@@ -3,7 +3,7 @@ import { Icon } from '../visualization/Icon'
 import { PropertyBase, type PropertyField } from './PropertyBase'
 import type { PropsWithChildren } from 'react'
 import { PropsUtil } from '../../utils/propsUtil'
-import { MultiSelect } from '../data-input/MultiSelect/MultiSelect'
+import { MultiSelect } from '../data-input/selection/MultiSelect/MultiSelect'
 
 export interface MultiSelectPropertyProps extends PropertyField<string[]>, PropsWithChildren {}
 
@@ -29,12 +29,12 @@ export const MultiSelectProperty = ({
         >
           <MultiSelect.Root
             value={value}
-            onValueUpdate={(val) => {
+            onValueChange={(val) => {
               const arr = val as string[]
               onValueChange?.(arr)
               onEditComplete?.(arr)
             }}
-            disabled={props.readOnly}
+            isDisabled={props.readOnly}
           >
             <MultiSelect.ChipDisplayTrigger
               className="flex flex-wrap gap-x-2 gap-y-2 p-0 items-center hover:cursor-pointer border-0"

@@ -1,6 +1,6 @@
 import { ChevronFirst, ChevronLast, ChevronLeft, ChevronRight } from 'lucide-react'
 import clsx from 'clsx'
-import { TextInput } from '../../data-input/input/TextInput'
+import { TextInput } from '../../data-input/text/TextInput'
 import { useEditCompletable } from '@helpwave/hightide-utils/hooks'
 import { MathUtil } from '@helpwave/hightide-utils/utils'
 import type { HTMLAttributes } from 'react'

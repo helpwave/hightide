@@ -2,7 +2,7 @@ import { Text } from 'lucide-react'
 import { Icon } from '../visualization/Icon'
 import { useHightideTranslation } from '@helpwave/hightide-utils/context/translation'
 import { useEditCompletable } from '@helpwave/hightide-utils/hooks'
-import { Textarea } from '../data-input/Textarea'
+import { Textarea } from '../data-input/text/Textarea'
 import type { PropertyField } from './PropertyBase'
 import { PropertyBase } from './PropertyBase'
 

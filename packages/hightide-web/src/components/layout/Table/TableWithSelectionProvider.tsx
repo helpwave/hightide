@@ -1,4 +1,4 @@
-import { Checkbox } from '../../data-input/Checkbox'
+import { Checkbox } from '../../data-input/boolean/Checkbox'
 import { FillerCell } from './FillerCell'
 import type { TableProviderProps } from './TableProvider'
 import { TableProvider } from './TableProvider'

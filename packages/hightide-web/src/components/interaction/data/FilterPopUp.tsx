@@ -8,10 +8,10 @@ import type { FilterOperator } from './FilterOperator'
 import { FilterOperatorUtils } from './FilterOperator'
 import type { ReactNode } from 'react'
 import { forwardRef, useEffect, useId, useMemo, useState } from 'react'
-import { Select } from '../../data-input/Select/Select'
-import { TextInput } from '../../data-input/input/TextInput'
-import { DateTimeInput } from '../../data-input/input/DateTimeInput'
-import { MultiSelect } from '../../data-input/MultiSelect/MultiSelect'
+import { Select } from '../../data-input/selection/Select/Select'
+import { TextInput } from '../../data-input/text/TextInput'
+import { DateTimeInput } from '../../data-input/dateTime/DateTimeInput'
+import { MultiSelect } from '../../data-input/selection/MultiSelect/MultiSelect'
 import type { DataType } from './data-types'
 import clsx from 'clsx'
 import { FilterOperatorLabel } from './FilterOperatorLabel'
@@ -70,7 +70,7 @@ export const FilterBasePopUp = forwardRef<HTMLDivElement, FilterPopUpBaseProps>(
           <span className="typography-label-sm text-description">{name ?? translation('filter')}</span>
           <Select
             value={operator}
-            onValueUpdate={(newOperator) => onOperatorChange(newOperator as FilterOperator)}
+            onValueChange={(newOperator) => onOperatorChange(newOperator as FilterOperator)}
             triggerProps={{
               className: 'filter-operator-select w-fit flex-row-1 items-center h-element-sm px-2 py-1 rounded-md hover:cursor-pointer font-bold',
               selectedDisplay: (option) => option ? translation(FilterOperatorUtils.getInfo(option.value.value).translationKey as Parameters<typeof translation>[0]) : ''
@@ -303,10 +303,12 @@ export const DateFilterPopUp = forwardRef<HTMLDivElement, FilterPopUpProps>(func
         <div className="flex-col-1">
           <label htmlFor={ids.startDate} className="typography-label-md">{translation('startDate')}</label>
           <DateTimeInput
-            id={ids.startDate}
+            controlProps={{ id: ids.startDate, className: 'min-w-64' }}
             value={temporaryMinDateValue ?? parameter.dateMin ?? null}
-            onValueUpdate={setTemporaryMinDateValue}
-            onValueCommit={dateValue => {
+            onValueChange={setTemporaryMinDateValue}
+            onStateEvent={(event) => {
+              if (event.type !== 'commit') return
+              const dateValue = event.value
               if (dateValue && parameter.dateMax && dateValue > parameter.dateMax) {
                 if (!parameter.dateMin) {
                   onValueChange({
@@ -333,16 +335,17 @@ export const DateFilterPopUp = forwardRef<HTMLDivElement, FilterPopUpProps>(func
             }}
             allowRemove={true}
             outsideClickCloses={false}
-            className="min-w-64"
           />
         </div>
         <div className="flex-col-1">
           <label htmlFor={ids.endDate} className="typography-label-md">{translation('endDate')}</label>
           <DateTimeInput
-            id={ids.endDate}
+            controlProps={{ id: ids.endDate, className: 'min-w-64' }}
             value={temporaryMaxDateValue ?? parameter.dateMax ?? null}
-            onValueUpdate={setTemporaryMaxDateValue}
-            onValueCommit={dateValue => {
+            onValueChange={setTemporaryMaxDateValue}
+            onStateEvent={(event) => {
+              if (event.type !== 'commit') return
+              const dateValue = event.value
               if (dateValue && parameter.dateMin && dateValue < parameter.dateMin) {
                 if (!parameter.dateMax) {
                   onValueChange({
@@ -369,16 +372,15 @@ export const DateFilterPopUp = forwardRef<HTMLDivElement, FilterPopUpProps>(func
             }}
             allowRemove={true}
             outsideClickCloses={false}
-            className="min-w-64"
           />
         </div>
       </Visibility>
       <Visibility isVisible={!needsRangeInput && needsParameterInput}>
         <label htmlFor={ids.compareDate} className="typography-label-md">{translation('date')}</label>
         <DateTimeInput
-          id={ids.compareDate}
+          controlProps={{ id: ids.compareDate, className: 'min-w-64' }}
           value={parameter.dateValue ?? null}
-          onValueUpdate={compareDate => {
+          onValueChange={compareDate => {
             onValueChange({
               dataType: 'date',
               operator,
@@ -387,7 +389,6 @@ export const DateFilterPopUp = forwardRef<HTMLDivElement, FilterPopUpProps>(func
           }}
           allowRemove={true}
           outsideClickCloses={false}
-          className="min-w-64"
         />
       </Visibility>
       <Visibility isVisible={!needsParameterInput}>
@@ -437,11 +438,13 @@ export const DatetimeFilterPopUp = forwardRef<HTMLDivElement, FilterPopUpProps>(
         <div className="flex-col-2 gap-2">
           <label htmlFor={ids.startDate} className="typography-label-md">{translation('startDate')}</label>
           <DateTimeInput
-            id={ids.startDate}
+            controlProps={{ id: ids.startDate, className: 'min-w-64' }}
             mode="dateTime"
             value={temporaryMinDateValue ?? parameter.dateMin ?? null}
-            onValueUpdate={setTemporaryMinDateValue}
-            onValueCommit={dateValue => {
+            onValueChange={setTemporaryMinDateValue}
+            onStateEvent={(event) => {
+              if (event.type !== 'commit') return
+              const dateValue = event.value
               if (dateValue && parameter.dateMax && dateValue > parameter.dateMax) {
                 if (!parameter.dateMin) {
                   onValueChange({
@@ -468,15 +471,16 @@ export const DatetimeFilterPopUp = forwardRef<HTMLDivElement, FilterPopUpProps>(
             }}
             allowRemove={true}
             outsideClickCloses={false}
-            className="min-w-64"
           />
           <label htmlFor={ids.endDate} className="typography-label-md">{translation('endDate')}</label>
           <DateTimeInput
-            id={ids.endDate}
+            controlProps={{ id: ids.endDate, className: 'min-w-64' }}
             mode="dateTime"
             value={temporaryMaxDateValue ?? parameter.dateMax ?? null}
-            onValueUpdate={setTemporaryMaxDateValue}
-            onValueCommit={dateValue => {
+            onValueChange={setTemporaryMaxDateValue}
+            onStateEvent={(event) => {
+              if (event.type !== 'commit') return
+              const dateValue = event.value
               if (dateValue && parameter.dateMin && dateValue < parameter.dateMin) {
                 if (!parameter.dateMax) {
                   onValueChange({
@@ -503,17 +507,16 @@ export const DatetimeFilterPopUp = forwardRef<HTMLDivElement, FilterPopUpProps>(
             }}
             allowRemove={true}
             outsideClickCloses={false}
-            className="min-w-64"
           />
         </div>
       </Visibility>
       <Visibility isVisible={!needsRangeInput && needsParameterInput}>
         <label htmlFor={ids.compareDate} className="typography-label-md">{translation('date')}</label>
         <DateTimeInput
-          id={ids.compareDate}
+          controlProps={{ id: ids.compareDate, className: 'min-w-64' }}
           mode="dateTime"
           value={parameter.dateValue ?? null}
-          onValueUpdate={compareDate => {
+          onValueChange={compareDate => {
             onValueChange({
               dataType: 'dateTime',
               operator,
@@ -522,7 +525,6 @@ export const DatetimeFilterPopUp = forwardRef<HTMLDivElement, FilterPopUpProps>(
           }}
           allowRemove={true}
           outsideClickCloses={false}
-          className="min-w-64"
         />
       </Visibility>
       <Visibility isVisible={!needsParameterInput}>
@@ -595,7 +597,7 @@ export const TagsFilterPopUp = forwardRef<HTMLDivElement, TagsFilterPopUpProps>(
       <Visibility isVisible={needsParameterInput}>
         <MultiSelect
           value={selectedTags}
-          onValueUpdate={(selected) => {
+          onValueChange={(selected) => {
             onValueChange({
               dataType: 'multiTags',
               operator,
@@ -659,7 +661,7 @@ export const TagsSingleFilterPopUp = forwardRef<HTMLDivElement, TagsSingleFilter
       <Visibility isVisible={needsParameterInput && needsMultiSelect}>
         <MultiSelect
           value={selectedTagsMulti}
-          onValueUpdate={(selected) => {
+          onValueChange={(selected) => {
             onValueChange({
               dataType: 'singleTag',
               operator,
@@ -676,7 +678,7 @@ export const TagsSingleFilterPopUp = forwardRef<HTMLDivElement, TagsSingleFilter
       <Visibility isVisible={needsParameterInput && !needsMultiSelect}>
         <Select
           value={selectedTagSingle}
-          onValueUpdate={(selectedTag) => {
+          onValueChange={(selectedTag) => {
             onValueChange({
               dataType: 'singleTag',
               operator,

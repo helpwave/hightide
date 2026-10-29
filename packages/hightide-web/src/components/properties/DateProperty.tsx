@@ -1,7 +1,8 @@
+import clsx from 'clsx'
 import { CalendarDays } from 'lucide-react'
 import { Icon } from '../visualization/Icon'
 import { PropertyBase, type PropertyField } from './PropertyBase'
-import { DateTimeInput, type DateTimeInputProps } from '../data-input/input/DateTimeInput'
+import { DateTimeInput, type DateTimeInputProps } from '../data-input/dateTime/DateTimeInput'
 import { PropsUtil } from '../../utils/propsUtil'
 
 export type DatePropertyProps =
@@ -10,13 +11,16 @@ export type DatePropertyProps =
   & {
     type?: 'dateTime' | 'date',
     allowRemove?: boolean,
+    required?: boolean,
+    readOnly?: boolean,
+    className?: string,
   }
 
 export const DateProperty = ({
   name,
   value,
-  onValueUpdate: onValueChange,
-  onValueCommit: onEditComplete,
+  onValueChange,
+  onStateEvent,
   onRemove,
   onValueClear,
   required,
@@ -25,6 +29,11 @@ export const DateProperty = ({
   allowRemove = true,
   type = 'dateTime',
   className,
+  isInvalid,
+  isDisabled,
+  isReadOnly,
+  isRequired,
+  controlProps,
   ...inputProps
 }: DatePropertyProps) => {
   const hasValue = !!value
@@ -39,7 +48,7 @@ export const DateProperty = ({
       onRemove={onRemove}
       onValueClear={onValueClear ?? (() => {
         onValueChange?.(null)
-        onEditComplete?.(null)
+        onStateEvent?.({ type: 'commit', value: null })
       })}
       hasValue={hasValue}
       icon={<Icon icon={CalendarDays} />}
@@ -50,13 +59,18 @@ export const DateProperty = ({
           {...inputProps}
           value={value}
           mode={type}
-          required={required}
-          readOnly={readOnly}
+          isInvalid={isInvalid ?? invalid}
+          isDisabled={isDisabled}
+          isReadOnly={isReadOnly ?? readOnly}
+          isRequired={isRequired ?? required}
           allowClear={false}
-          onValueUpdate={onValueChange}
-          onValueCommit={onEditComplete}
-          className="property-input flex-row-4 pr-0"
-          data-invalid={PropsUtil.dataAttributes.bool(invalid)}
+          onValueChange={onValueChange}
+          onStateEvent={onStateEvent}
+          controlProps={{
+            ...controlProps,
+            className: clsx('property-input flex-row-4 pr-0', controlProps?.className),
+            ...{ 'data-invalid': PropsUtil.dataAttributes.bool(invalid) },
+          }}
         />
       )}
     </PropertyBase>

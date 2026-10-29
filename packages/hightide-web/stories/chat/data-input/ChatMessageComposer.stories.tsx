@@ -15,7 +15,7 @@ export const chatMessageComposer: Story = {
   args: {
     placeholder: 'Nachricht an Dr. med. Sophie Vogt schreiben',
     sendLabel: 'Senden',
-    disabled: false,
+    isDisabled: false,
     onSend: action('onSend'),
     actions: (
       <>

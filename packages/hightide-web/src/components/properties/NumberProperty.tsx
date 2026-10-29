@@ -1,6 +1,6 @@
 import { Binary } from 'lucide-react'
 import { Icon } from '../visualization/Icon'
-import { TextInput } from '../data-input/input/TextInput'
+import { TextInput } from '../data-input/text/TextInput'
 import { useHightideTranslation } from '@helpwave/hightide-utils/context/translation'
 import { useEditCompletable } from '@helpwave/hightide-utils/hooks'
 import type { PropertyField } from './PropertyBase'

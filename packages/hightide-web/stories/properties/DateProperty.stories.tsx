@@ -18,7 +18,7 @@ export const dateProperty: Story = {
     readOnly: false,
     type: 'dateTime',
     onValueChange: action('onValueChange'),
-    onEditComplete: action('onEditComplete'),
+    onStateEvent: action('onStateEvent'),
     onRemove: action('onRemove'),
     onValueClear: action('onValueClear'),
   },
@@ -33,13 +33,13 @@ export const dateProperty: Story = {
       <DateProperty
         {...props}
         value={usedDate}
-        onValueUpdate={(date) => {
+        onValueChange={(date) => {
           props.onValueChange?.(date)
           setUsedDate(date)
         }}
-        onValueCommit={(date) => {
-          props.onEditComplete?.(date)
-          setUsedDate(date)
+        onStateEvent={(event) => {
+          props.onStateEvent?.(event)
+          if (event.type === 'commit') setUsedDate(event.value)
         }}
         onValueClear={() => {
           props.onValueClear?.()

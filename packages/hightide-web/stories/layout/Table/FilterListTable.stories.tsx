@@ -13,8 +13,8 @@ import { FilterFunctions } from '../../../src/components/interaction/data/filter
 import type { DataType } from '../../../src/components/interaction/data/data-types'
 import { FilterOperatorUtils } from '../../../src/components/interaction/data/FilterOperator'
 import { FilterBasePopUp } from '../../../src/components/interaction/data/FilterPopUp'
-import { TextInput } from '../../../src/components/data-input/input/TextInput'
-import { Select } from '../../../src/components/data-input/Select/Select'
+import { TextInput } from '../../../src/components/data-input/text/TextInput'
+import { Select } from '../../../src/components/data-input/selection/Select/Select'
 import { Visibility } from '../../../src/components/layout/Visibility'
 import { SortingList } from '../../../src/components/interaction/data/SortingList'
 import type { SortingListItem } from '../../../src/components/interaction/data/SortingList'
@@ -75,7 +75,7 @@ const AgeFilterPopUp = ({ value, onValueChange, onRemove, name, onClose: close, 
           <Select<[number, number]>
             triggerProps={{ id: ids.range }}
             value={parameter.numberMin !== undefined && parameter.numberMax !== undefined ? [parameter.numberMin, parameter.numberMax] : null}
-            onValueUpdate={(newRange) => {
+            onValueChange={(newRange) => {
               onValueChange({ ...value, parameter: { ...parameter, numberMin: newRange[0], numberMax: newRange[1] } })
             }}
             compareFunction={(a, b) => {

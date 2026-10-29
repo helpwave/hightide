@@ -1,6 +1,6 @@
 import { Pagination, type PaginationProps } from '../../interaction/navigation/Pagination'
 import type { HTMLAttributes } from 'react'
-import { Select } from '../../data-input/Select/Select'
+import { Select } from '../../data-input/selection/Select/Select'
 import { Visibility } from '../Visibility'
 import clsx from 'clsx'
 import { useTableStateWithoutSizingContext } from './TableContext'
@@ -42,7 +42,7 @@ export const TablePageSizeSelect = ({
     <Select
       {...props}
       value={currentPageSize.toString()}
-      onValueUpdate={(value) => table.setPageSize(Number(value))}
+      onValueChange={(value) => table.setPageSize(Number(value))}
     >
       {pageSizeOptions.map(size => (
         <Select.Option key={size} value={size.toString()} label={size.toString()}/>
