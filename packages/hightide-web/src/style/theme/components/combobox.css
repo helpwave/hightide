@@ -15,6 +15,10 @@
     }
   }
 
+  .combobox-new-value {
+    @apply flex-row-2 items-center;
+  }
+
   .combobox-list-status {
     @apply text-description text-sm px-2 py-1 rounded-md;
   }

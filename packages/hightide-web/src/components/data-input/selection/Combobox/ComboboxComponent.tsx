@@ -5,10 +5,10 @@ import type { ComboboxInputProps } from './ComboboxInput'
 import { ComboboxInput } from './ComboboxInput'
 import type { ComboboxListProps } from './ComboboxList'
 import { ComboboxList } from './ComboboxList'
-import type { ComboboxRootProps } from './ComboboxRoot'
-import { ComboboxRoot } from './ComboboxRoot'
+import type { ComboboxStateManagerProps } from './ComboboxStateManager'
+import { ComboboxStateManager } from './ComboboxStateManager'
 
-export type ComboboxProps<T = string> = Omit<ComboboxRootProps<T>, 'children'> & {
+export type ComboboxProps<T = string> = Omit<ComboboxStateManagerProps<T>, 'children'> & {
   children?: ReactNode,
   placeholder?: ComboboxInputProps['placeholder'],
   id?: string,
@@ -34,7 +34,7 @@ const ComboboxComponentImpl = forwardRef<HTMLInputElement, ComboboxProps<unknown
   ref: ForwardedRef<HTMLInputElement>
 ) {
   return (
-    <ComboboxRoot<T> {...props}>
+    <ComboboxStateManager<T> {...props}>
       <ComboboxInput
         ref={ref}
         id={id}
@@ -42,7 +42,7 @@ const ComboboxComponentImpl = forwardRef<HTMLInputElement, ComboboxProps<unknown
         {...inputProps}
       />
       <ComboboxList {...listProps}>{children}</ComboboxList>
-    </ComboboxRoot>
+    </ComboboxStateManager>
   )
 })
 

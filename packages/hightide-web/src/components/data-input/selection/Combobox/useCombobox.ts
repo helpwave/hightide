@@ -14,6 +14,8 @@ export interface UseComboboxOptions {
   searchQuery?: string,
   onSearchQueryChange?: (query: string) => void,
   initialSearchQuery?: string,
+  allowNewValue?: boolean,
+  newValueOptionId?: string,
 }
 
 export interface UseComboboxState {
@@ -34,13 +36,15 @@ export interface UseComboboxActions {
   highlightItem: (id: string) => void,
 }
 
-export interface UseComboboxReturn extends UseComboboxState, UseComboboxComputedState, UseComboboxActions {}
+export interface UseComboboxReturn extends UseComboboxState, UseComboboxComputedState, UseComboboxActions { }
 
 export function useCombobox({
   options,
   searchQuery: controlledSearchQuery,
   onSearchQueryChange,
   initialSearchQuery = '',
+  allowNewValue = false,
+  newValueOptionId,
 }: UseComboboxOptions): UseComboboxReturn {
   const [searchQuery, setSearchQuery] = useControlledState({
     value: controlledSearchQuery,
@@ -51,18 +55,26 @@ export function useCombobox({
   const { searchResult: visibleOptions } = useSearch({
     items: options,
     searchQuery: searchQuery ?? '',
-    toTags: useCallback((o: UseComboboxOption) => [o.label], []),
+    toTags: useCallback((o: UseComboboxOption) => o.label ? [o.label] : [], []),
   })
 
-  const visibleOptionIds = useMemo(
-    () => visibleOptions.map((o) => o.id),
-    [visibleOptions]
-  )
+  const includeNewValue = allowNewValue && !!newValueOptionId && (searchQuery ?? '').trim().length > 0
 
-  const enabledOptionIds = useMemo(
-    () => visibleOptions.filter((o) => !o.disabled).map((o) => o.id),
-    [visibleOptions]
-  )
+  const visibleOptionIds = useMemo(() => {
+    const ids = visibleOptions.map((option) => option.id)
+    if (includeNewValue && newValueOptionId && !ids.includes(newValueOptionId)) {
+      ids.push(newValueOptionId)
+    }
+    return ids
+  }, [includeNewValue, newValueOptionId, visibleOptions])
+
+  const enabledOptionIds = useMemo(() => {
+    const ids = visibleOptions.filter((option) => !option.disabled).map((option) => option.id)
+    if (includeNewValue && newValueOptionId && !ids.includes(newValueOptionId)) {
+      ids.push(newValueOptionId)
+    }
+    return ids
+  }, [includeNewValue, newValueOptionId, visibleOptions])
 
   const listNav = useListNavigation({ options: enabledOptionIds })
 

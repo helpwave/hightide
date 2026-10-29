@@ -1,5 +1,6 @@
 import type { Meta, StoryObj } from '@storybook/react-vite'
 import { action } from 'storybook/actions'
+import { useState } from 'react'
 import { Combobox } from '../../../../src/components/data-input/selection/Combobox/Combobox'
 
 const options = [
@@ -41,4 +42,39 @@ export const combobox: Story = {
       <Combobox {...args} />
     </div>
   ),
+}
+
+export const allowNewValue: Story = {
+  args: {
+    isAllowingNewValue: true,
+    onNewValueAdded: action('onNewValueAdded'),
+    onItemClick: action('onItemClick'),
+    onValueChange: action('onValueChange'),
+    onStateEvent: action('onStateEvent'),
+  },
+  render: function AllowNewValue(args) {
+    const [added, setAdded] = useState<string[]>([])
+    const values = [
+      ...options,
+      ...added.map((value) => ({ value, label: value })),
+    ]
+
+    return (
+      <div className="w-80 flex flex-col gap-2">
+        <Combobox
+          {...args}
+          onNewValueAdded={(value) => {
+            args.onNewValueAdded?.(value)
+            setAdded((current) => current.includes(value) ? current : [...current, value])
+          }}
+        >
+          {values.map(({ value, label }) => (
+            <Combobox.Option key={value} value={value} label={label}>
+              {label}
+            </Combobox.Option>
+          ))}
+        </Combobox>
+      </div>
+    )
+  },
 }

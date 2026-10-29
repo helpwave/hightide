@@ -1,8 +1,10 @@
 import type { HTMLAttributes, RefObject } from 'react'
 import { forwardRef, useEffect, useRef } from 'react'
 import clsx from 'clsx'
-import { useComboboxContext } from './ComboboxContext'
+import { Plus } from 'lucide-react'
 import { useHightideTranslation } from '@helpwave/hightide-utils/context/translation'
+import { Icon } from '../../../visualization/Icon'
+import { useComboboxContext } from './ComboboxContext'
 
 export type ComboboxListProps = HTMLAttributes<HTMLUListElement> & {
   statusProps?: HTMLAttributes<HTMLLIElement>,
@@ -26,7 +28,11 @@ export const ComboboxList = forwardRef<HTMLUListElement, ComboboxListProps>(
       else if (ref) (ref as RefObject<HTMLUListElement | null>).current = node
     }
 
-    const count = context.visibleOptionIds.length
+    const { newValueId, isAllowingNewValue } = context.config
+    const newValue = context.search.searchQuery.trim()
+    const showNewValue = isAllowingNewValue && context.visibleOptionIds.includes(newValueId) && newValue.length > 0
+    const isNewValueHighlighted = context.highlightedId === newValueId
+    const count = context.visibleOptionIds.filter((id) => id !== newValueId).length
 
     return (
       <ul
@@ -38,6 +44,20 @@ export const ComboboxList = forwardRef<HTMLUListElement, ComboboxListProps>(
         tabIndex={-1}
         className={clsx('combobox-list', props.className)}>
         {children}
+        {showNewValue && (
+          <li
+            id={newValueId}
+            role="option"
+            aria-selected={isNewValueHighlighted}
+            data-highlighted={isNewValueHighlighted ? '' : undefined}
+            className="combobox-option combobox-new-value"
+            onMouseEnter={() => context.highlightItem(newValueId)}
+            onClick={() => context.addNewValue()}
+          >
+            <Icon icon={Plus} size="sm" aria-hidden={true} />
+            <span>{`Add "${newValue}"`}</span>
+          </li>
+        )}
         <li
           {...statusProps}
           role="option"

@@ -27,6 +27,7 @@ export interface ComboboxContextComputedState<T> {
 export interface ComboboxContextActions<T> {
   registerOption(option: ComboboxOptionType<T>): () => void,
   selectOption(id: string): void,
+  addNewValue(): void,
   highlightFirst(): void,
   highlightLast(): void,
   highlightNext(): void,
@@ -47,6 +48,8 @@ export interface ComboboxContextSearch {
 export interface ComboboxContextConfig {
   ids: ComboboxContextIds,
   setIds: Dispatch<SetStateAction<ComboboxContextIds>>,
+  newValueId: string,
+  isAllowingNewValue: boolean,
 }
 
 export interface ComboboxContextType<T> extends ComboboxContextInternalState, ComboboxContextComputedState<T>, ComboboxContextActions<T> {
@@ -65,7 +68,7 @@ export const ComboboxContext = createContext<ComboboxContextType<unknown> | null
 export function useComboboxContext<T = string>(): ComboboxContextType<T> {
   const ctx = useContext(ComboboxContext)
   if (ctx == null) {
-    throw new Error('Combobox components must be used within a Combobox.Root')
+    throw new Error('useComboboxContext must be used inside a Combobox.StateManager')
   }
   return ctx as ComboboxContextType<T>
 }

@@ -3,10 +3,10 @@ import { ComboboxContext } from './ComboboxContext'
 import { ComboboxInput } from './ComboboxInput'
 import { ComboboxList } from './ComboboxList'
 import { ComboboxOption } from './ComboboxOption'
-import { ComboboxRoot } from './ComboboxRoot'
+import { ComboboxStateManager } from './ComboboxStateManager'
 
 const Combobox = Object.assign(ComboboxComponent, {
-  Root: ComboboxRoot,
+  StateManager: ComboboxStateManager,
   Input: ComboboxInput,
   List: ComboboxList,
   Option: ComboboxOption,

@@ -11,12 +11,14 @@ import { useCombobox } from './useCombobox'
 
 export type ComboboxEvent<T> = { type: 'commit', value: T }
 
-export interface ComboboxRootProps<T = string> extends ControllableInputProps<T, ComboboxEvent<T>>, Omit<UseComboboxOptions, 'options'> {
+export interface ComboboxStateManagerProps<T = string> extends ControllableInputProps<T, ComboboxEvent<T>>, Omit<UseComboboxOptions, 'options' | 'allowNewValue' | 'newValueOptionId'> {
   children: ReactNode,
   onItemClick?: (value: T) => void,
+  isAllowingNewValue?: boolean,
+  onNewValueAdded?: (value: string) => void,
 }
 
-export function ComboboxRoot<T = string>({
+export function ComboboxStateManager<T = string>({
   children,
   value,
   initialValue,
@@ -27,11 +29,14 @@ export function ComboboxRoot<T = string>({
   isReadOnly = false,
   isRequired = false,
   onItemClick,
+  isAllowingNewValue = false,
+  onNewValueAdded,
   ...hookProps
-}: ComboboxRootProps<T>) {
+}: ComboboxStateManagerProps<T>) {
   const [options, setOptions] = useState<ComboboxOptionType<T>[]>([])
   const [listRef, setListRef] = useState<RefObject<HTMLUListElement | null> | null>(null)
   const generatedId = useId()
+  const newValueId = `combobox-new-value-${generatedId}`
   const [ids, setIds] = useState<ComboboxContextIds>({
     trigger: `combobox-${generatedId}`,
     listbox: `combobox-${generatedId}-listbox`,
@@ -39,6 +44,7 @@ export function ComboboxRoot<T = string>({
   const onValueChangeStable = useStableEvent(onValueChange)
   const onStateEventStable = useStableEvent(onStateEvent)
   const onItemClickStable = useStableEvent(onItemClick)
+  const onNewValueAddedStable = useStableEvent(onNewValueAdded)
   const [selectedValue, setSelectedValue] = useControlledState<T | undefined>({
     value,
     onValueChange: (next) => {
@@ -79,7 +85,12 @@ export function ComboboxRoot<T = string>({
     [options]
   )
 
-  const state = useCombobox({ ...hookProps, options: hookOptions })
+  const state = useCombobox({
+    ...hookProps,
+    options: hookOptions,
+    allowNewValue: isAllowingNewValue && !isDisabled && !isReadOnly,
+    newValueOptionId: newValueId,
+  })
 
   const idToOptionMap = useMemo(() => {
     return options.reduce((acc, o) => {
@@ -88,9 +99,20 @@ export function ComboboxRoot<T = string>({
     }, {} as Record<string, ComboboxOptionType<T>>)
   }, [options])
 
+  const addNewValue = useCallback(() => {
+    if (!isAllowingNewValue || isDisabled || isReadOnly) return
+    const next = state.searchQuery.trim()
+    if (!next) return
+    onNewValueAddedStable(next)
+  }, [isAllowingNewValue, isDisabled, isReadOnly, onNewValueAddedStable, state.searchQuery])
+
   const selectOption = useCallback(
     (id: string) => {
       if (isDisabled || isReadOnly) {
+        return
+      }
+      if (id === newValueId) {
+        addNewValue()
         return
       }
       const option = idToOptionMap[id]
@@ -102,12 +124,17 @@ export function ComboboxRoot<T = string>({
       onItemClickStable(option.value)
       state.setSearchQuery(option.label ?? '')
     },
-    [isDisabled, isReadOnly, idToOptionMap, setSelectedValue, onStateEventStable, onItemClickStable, state]
+    [isDisabled, isReadOnly, newValueId, addNewValue, idToOptionMap, setSelectedValue, onStateEventStable, onItemClickStable, state]
   )
 
   const config: ComboboxContextConfig = useMemo(
-    () => ({ ids, setIds }),
-    [ids, setIds]
+    () => ({
+      ids,
+      setIds,
+      newValueId,
+      isAllowingNewValue,
+    }),
+    [ids, setIds, newValueId, isAllowingNewValue]
   )
 
   const layout: ComboboxContextLayout = useMemo(
@@ -139,6 +166,7 @@ export function ComboboxRoot<T = string>({
       idToOptionMap,
       registerOption,
       selectOption,
+      addNewValue,
       highlightFirst: state.highlightFirst,
       highlightLast: state.highlightLast,
       highlightNext: state.highlightNext,
@@ -165,6 +193,7 @@ export function ComboboxRoot<T = string>({
       idToOptionMap,
       registerOption,
       selectOption,
+      addNewValue,
       config,
       layout,
       search,
