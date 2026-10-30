@@ -18,9 +18,9 @@ type Story = StoryObj<typeof meta>;
 export const multiSelectProperty: Story = {
   args: {
     name: 'Fruits',
-    required: false,
+    isRequired: false,
     value: options.slice(3, 5),
-    readOnly: false,
+    isReadOnly: false,
     children: options.map(option => (
       <MultiSelect.Option key={option} value={option} label={option}>
         <span className="flex-row-1 items-center">

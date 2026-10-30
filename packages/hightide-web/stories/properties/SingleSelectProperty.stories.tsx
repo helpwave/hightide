@@ -18,9 +18,9 @@ type Story = StoryObj<typeof meta>;
 export const singleSelectProperty: Story = {
   args: {
     name: 'Fruits',
-    required: false,
-    value: undefined,
-    readOnly: false,
+    isRequired: false,
+    value: '',
+    isReadOnly: false,
     children: options.map(option => (
       <Select.Option key={option} value={option} label={option}>
         <span className="flex-row-1 items-center">
@@ -43,7 +43,7 @@ export const singleSelectProperty: Story = {
     onValueClear: action('onValueClear'),
   },
   render: ({ value, ...props }) => {
-    const [usedValue, setUsedValue] = useState<string | undefined>(value)
+    const [usedValue, setUsedValue] = useState(value ?? '')
 
     return (
       <SingleSelectProperty
@@ -59,7 +59,7 @@ export const singleSelectProperty: Story = {
         }}
         onValueClear={() => {
           props.onValueClear?.()
-          setUsedValue(undefined)
+          setUsedValue('')
         }}
       />
     )

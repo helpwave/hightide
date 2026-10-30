@@ -4,14 +4,21 @@ import { PropertyBase, type PropertyField } from './PropertyBase'
 import type { PropsWithChildren } from 'react'
 import { PropsUtil } from '../../utils/propsUtil'
 import { MultiSelect } from '../data-input/selection/MultiSelect/MultiSelect'
+import type { MultiSelectEvent } from '../data-input/selection/MultiSelect/MultiSelectStateManager'
 
-export interface MultiSelectPropertyProps extends PropertyField<string[]>, PropsWithChildren {}
+export interface MultiSelectPropertyProps extends PropertyField<string[], MultiSelectEvent<string>>, PropsWithChildren {}
 
 export const MultiSelectProperty = ({
   children,
   value,
+  initialValue,
   onValueChange,
+  onStateEvent,
   onEditComplete,
+  isReadOnly,
+  isDisabled,
+  isInvalid,
+  isRequired,
   ...props
 }: MultiSelectPropertyProps) => {
   const hasValue = value !== undefined && value.length > 0
@@ -20,6 +27,10 @@ export const MultiSelectProperty = ({
     <PropertyBase
       {...props}
       hasValue={hasValue}
+      isReadOnly={isReadOnly}
+      isDisabled={isDisabled}
+      isInvalid={isInvalid}
+      isRequired={isRequired}
       icon={<Icon icon={List} />}
     >
       {({ invalid }) => (
@@ -27,14 +38,19 @@ export const MultiSelectProperty = ({
           className="property-input-wrapper"
           data-invalid={PropsUtil.dataAttributes.bool(invalid)}
         >
-          <MultiSelect.Root
+          <MultiSelect.StateManager
             value={value}
+            initialValue={initialValue}
             onValueChange={(val) => {
               const arr = val as string[]
               onValueChange?.(arr)
               onEditComplete?.(arr)
             }}
-            isDisabled={props.readOnly}
+            onStateEvent={onStateEvent}
+            isInvalid={invalid}
+            isDisabled={isDisabled}
+            isReadOnly={isReadOnly}
+            isRequired={isRequired}
           >
             <MultiSelect.ChipDisplayTrigger
               className="flex flex-wrap gap-x-2 gap-y-2 p-0 items-center hover:cursor-pointer border-0"
@@ -42,7 +58,7 @@ export const MultiSelectProperty = ({
             <MultiSelect.Content className="!border-none !min-h-10">
               {children}
             </MultiSelect.Content>
-          </MultiSelect.Root>
+          </MultiSelect.StateManager>
         </div>
       )}
     </PropertyBase>

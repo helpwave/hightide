@@ -131,7 +131,7 @@ export const selectComposed: Story = {
     onStateEvent: action('onStateEvent'),
   },
   render: (args: SelectProps<User>) => (
-    <Select.Root
+    <Select.StateManager
       initialValue={args.initialValue}
       isDisabled={args.isDisabled}
       isInvalid={args.isInvalid}
@@ -147,6 +147,6 @@ export const selectComposed: Story = {
           <Select.Option key={index} {...item} />
         ))}
       </Select.Content>
-    </Select.Root>
+    </Select.StateManager>
   ),
 }

@@ -13,9 +13,9 @@ type Story = StoryObj<typeof meta>;
 export const checkboxProperty: Story = {
   args: {
     name: 'Property',
-    required: false,
+    isRequired: false,
     value: undefined,
-    readOnly: false,
+    isReadOnly: false,
     onValueChange: action('onValueChange'),
     onEditComplete: action('onEditComplete'),
     onRemove: action('onRemove'),

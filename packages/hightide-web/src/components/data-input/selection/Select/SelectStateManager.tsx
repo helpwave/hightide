@@ -17,7 +17,7 @@ export interface SelectIds {
 
 export type SelectEvent<T> = { type: 'commit', value: T }
 
-export interface SelectRootProps<T> extends ControllableInputProps<T, SelectEvent<T>> {
+export interface SelectStateManagerProps<T> extends ControllableInputProps<T, SelectEvent<T>> {
   compareFunction?: (a: T, b: T) => boolean,
   initialIsOpen?: boolean,
   onClose?: () => void,
@@ -27,7 +27,7 @@ export interface SelectRootProps<T> extends ControllableInputProps<T, SelectEven
   children: ReactNode,
 }
 
-export function SelectRoot<T>({
+export function SelectStateManager<T>({
   children,
   value,
   onValueChange,
@@ -43,7 +43,7 @@ export function SelectRoot<T>({
   isDisabled = false,
   isReadOnly = false,
   isRequired = false,
-}: SelectRootProps<T>) {
+}: SelectStateManagerProps<T>) {
   const nullTrigger = useRef<HTMLElement | null>(null)
   const [triggerRef, setTriggerRef] = useState<RefObject<HTMLElement | null>>(nullTrigger)
   const [options, setOptions] = useState<SelectOptionType<T>[]>([])

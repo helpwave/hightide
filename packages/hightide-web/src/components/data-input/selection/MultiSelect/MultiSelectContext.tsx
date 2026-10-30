@@ -81,7 +81,7 @@ const MultiSelectContext = createContext<MultiSelectContextType<unknown> | null>
 
 export function useMultiSelectContext<T>(): MultiSelectContextType<T> {
   const ctx = useContext(MultiSelectContext)
-  if (!ctx) throw new Error('useMultiSelectContext must be used within MultiSelectRoot')
+  if (!ctx) throw new Error('useMultiSelectContext must be used inside a MultiSelect.Provider')
   return ctx as MultiSelectContextType<T>
 }
 

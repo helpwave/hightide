@@ -13,9 +13,9 @@ type Story = StoryObj<typeof meta>;
 export const textProperty: Story = {
   args: {
     name: 'Property',
-    required: false,
-    value: undefined,
-    readOnly: false,
+    isRequired: false,
+    value: '',
+    isReadOnly: false,
     className: '',
     onValueChange: action('onValueChange'),
     onEditComplete: action('onEditComplete'),
@@ -23,10 +23,10 @@ export const textProperty: Story = {
     onValueClear: action('onValueClear'),
   },
   render: ({ value, ...props }) => {
-    const [usedValue, setUsedValue] = useState<string | undefined>(value)
+    const [usedValue, setUsedValue] = useState(value ?? '')
 
     useEffect(() => {
-      setUsedValue(value)
+      setUsedValue(value ?? '')
     }, [value])
 
     return (
@@ -43,7 +43,7 @@ export const textProperty: Story = {
         }}
         onValueClear={() => {
           props.onValueClear?.()
-          setUsedValue(undefined)
+          setUsedValue('')
         }}
       />
     )

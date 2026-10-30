@@ -35,7 +35,7 @@ export const multiSelectChipDisplay: Story = {
     onStateEvent: action('onStateEvent'),
   },
   render: (args: typeof MultiSelect.arguments) => (
-    <MultiSelect.Root
+    <MultiSelect.StateManager
       initialValue={args.initialValue}
       isDisabled={args.isDisabled}
       isInvalid={args.isInvalid}
@@ -51,6 +51,6 @@ export const multiSelectChipDisplay: Story = {
           <MultiSelect.Option key={index} {...item} />
         ))}
       </MultiSelect.Content>
-    </MultiSelect.Root>
+    </MultiSelect.StateManager>
   ),
 }

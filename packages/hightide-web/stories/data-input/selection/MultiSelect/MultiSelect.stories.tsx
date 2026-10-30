@@ -134,7 +134,7 @@ export const multiSelectComposed: Story = {
     onStateEvent: action('onStateEvent'),
   },
   render: (args: MultiSelectProps<User>) => (
-    <MultiSelect.Root
+    <MultiSelect.StateManager
       initialValue={args.initialValue}
       isDisabled={args.isDisabled}
       isInvalid={args.isInvalid}
@@ -150,6 +150,6 @@ export const multiSelectComposed: Story = {
           <MultiSelect.Option key={index} {...item} />
         ))}
       </MultiSelect.Content>
-    </MultiSelect.Root>
+    </MultiSelect.StateManager>
   ),
 }

@@ -1,52 +1,38 @@
-import type React from 'react'
-import type { ForwardedRef, ReactNode } from 'react'
-import { forwardRef } from 'react'
-import type { MultiSelectRootProps } from './MultiSelectRoot'
-import { MultiSelectRoot } from './MultiSelectRoot'
+import type { ReactNode, Ref } from 'react'
+import type { MultiSelectStateManagerProps } from './MultiSelectStateManager'
+import { MultiSelectStateManager } from './MultiSelectStateManager'
 import type { MultiSelectTriggerProps } from './MultiSelectTrigger'
 import { MultiSelectTrigger } from './MultiSelectTrigger'
 import type { MultiSelectContentProps } from './MultiSelectContent'
 import { MultiSelectContent } from './MultiSelectContent'
 
-export type MultiSelectProps<T = string> = Omit<MultiSelectRootProps<T>, 'children'> & {
+export type MultiSelectProps<T = string> = Omit<MultiSelectStateManagerProps<T>, 'children'> & {
   children?: ReactNode,
   placeholder?: MultiSelectTriggerProps<T>['placeholder'],
   selectedDisplay?: MultiSelectTriggerProps<T>['selectedDisplay'],
+  triggerRef?: Ref<HTMLDivElement>,
   triggerProps?: MultiSelectTriggerProps<T>,
   contentProps?: Omit<MultiSelectContentProps, 'children'>,
 }
 
-type MultiSelectComponentType = <T = string>(
-  props: MultiSelectProps<T> & {
-    ref?: React.ForwardedRef<HTMLDivElement>,
-  }
-) => React.ReactElement
-
-const MultiSelectComponentImpl = forwardRef<
-  HTMLDivElement,
-  MultiSelectProps<unknown>
->(function MultiSelectComponent<T>(
-  {
-    children,
-    placeholder,
-    selectedDisplay,
-    triggerProps,
-    contentProps,
-    ...props
-  }: MultiSelectProps<T>,
-  ref: ForwardedRef<HTMLDivElement>
-) {
+export function MultiSelectComponent<T = string>({
+  children,
+  placeholder,
+  selectedDisplay,
+  triggerRef,
+  triggerProps,
+  contentProps,
+  ...props
+}: MultiSelectProps<T>) {
   return (
-    <MultiSelectRoot<T> {...props}>
+    <MultiSelectStateManager<T> {...props}>
       <MultiSelectTrigger
-        ref={ref}
         placeholder={placeholder}
         selectedDisplay={selectedDisplay}
         {...triggerProps}
+        ref={triggerRef}
       />
       <MultiSelectContent {...contentProps}>{children}</MultiSelectContent>
-    </MultiSelectRoot>
+    </MultiSelectStateManager>
   )
-})
-
-export const MultiSelectComponent = MultiSelectComponentImpl as MultiSelectComponentType
+}

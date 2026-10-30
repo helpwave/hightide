@@ -13,9 +13,9 @@ type Story = StoryObj<typeof meta>;
 export const dateProperty: Story = {
   args: {
     name: 'Property',
-    required: false,
-    value: undefined,
-    readOnly: false,
+    isRequired: false,
+    value: null,
+    isReadOnly: false,
     type: 'dateTime',
     onValueChange: action('onValueChange'),
     onStateEvent: action('onStateEvent'),

@@ -16,7 +16,7 @@ export interface MultiSelectIds {
 
 export type MultiSelectEvent<T> = { type: 'commit', value: T[] }
 
-export interface MultiSelectRootProps<T> extends ControllableInputProps<T[], MultiSelectEvent<T>> {
+export interface MultiSelectStateManagerProps<T> extends ControllableInputProps<T[], MultiSelectEvent<T>> {
   compareFunction?: (a: T, b: T) => boolean,
   initialIsOpen?: boolean,
   onClose?: () => void,
@@ -25,7 +25,7 @@ export interface MultiSelectRootProps<T> extends ControllableInputProps<T[], Mul
   children: ReactNode,
 }
 
-export function MultiSelectRoot<T>({
+export function MultiSelectStateManager<T>({
   children,
   value,
   onValueChange,
@@ -40,7 +40,7 @@ export function MultiSelectRoot<T>({
   isDisabled = false,
   isReadOnly = false,
   isRequired = false,
-}: MultiSelectRootProps<T>) {
+}: MultiSelectStateManagerProps<T>) {
   const nullTrigger = useRef<HTMLElement | null>(null)
   const [triggerRef, setTriggerRef] = useState<RefObject<HTMLElement | null>>(nullTrigger)
   const [options, setOptions] = useState<MultiSelectOptionType<T>[]>([])

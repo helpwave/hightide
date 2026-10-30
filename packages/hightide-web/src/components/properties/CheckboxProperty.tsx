@@ -1,49 +1,70 @@
 import { Check } from 'lucide-react'
+import { useControlledState } from '@helpwave/hightide-utils/hooks'
 import { Icon } from '../visualization/Icon'
 import { PropertyBase, type PropertyField } from './PropertyBase'
 import { useHightideTranslation } from '@helpwave/hightide-utils/context/translation'
 import { Button } from '../interaction/Button'
+import type { CheckboxEvent } from '../data-input/boolean/Checkbox'
 
-
-export type CheckboxPropertyProps = PropertyField<boolean>
+export type CheckboxPropertyProps = PropertyField<boolean, CheckboxEvent>
 
 /**
  * An Input component for a boolean values
  */
 export const CheckboxProperty = ({
   value,
+  initialValue,
   onValueChange,
+  onStateEvent,
   onEditComplete,
-  readOnly,
+  isReadOnly,
+  isDisabled,
+  isInvalid,
+  isRequired,
   ...baseProps
 }: CheckboxPropertyProps) => {
   const translation = useHightideTranslation()
+  const [checked, setChecked] = useControlledState<boolean | undefined>({
+    value,
+    onValueChange: (next) => {
+      if (next !== undefined) onValueChange?.(next)
+    },
+    defaultValue: initialValue,
+    isControlled: value !== undefined || initialValue === undefined,
+  })
+  const locked = !!isReadOnly || !!isDisabled
+
+  const choose = (next: boolean) => {
+    if (locked) return
+    setChecked(next)
+    onStateEvent?.({ type: 'toggle' })
+    onEditComplete?.(next)
+  }
 
   return (
     <PropertyBase
       {...baseProps}
-      hasValue={value !== undefined}
-      readOnly={readOnly}
+      hasValue={checked !== undefined}
+      isReadOnly={isReadOnly}
+      isDisabled={isDisabled}
+      isInvalid={isInvalid}
+      isRequired={isRequired}
       icon={<Icon icon={Check} />}
     >
       {() => (
         <div className="flex-row-2 items-center">
           <Button
-            color={value ? 'positive' : 'neutral'} size="sm"
-            onClick={() => {
-              onValueChange?.(true)
-              onEditComplete?.(true)
-            }}
+            color={checked ? 'positive' : 'neutral'} size="sm"
+            disabled={locked}
+            onClick={() => choose(true)}
             className="min-w-20"
           >
             {translation('yes')}
           </Button>
           <Button
-            color={!value && value !== undefined ? 'negative' : 'neutral'} size="sm"
-            onClick={() => {
-              onValueChange?.(false)
-              onEditComplete?.(false)
-            }}
+            color={!checked && checked !== undefined ? 'negative' : 'neutral'} size="sm"
+            disabled={locked}
+            onClick={() => choose(false)}
             className="min-w-20"
           >
             {translation('no')}

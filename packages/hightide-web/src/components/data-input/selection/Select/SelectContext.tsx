@@ -80,6 +80,6 @@ export const SelectContext = createContext<SelectContextType<unknown> | null>(nu
 
 export function useSelectContext<T>(): SelectContextType<T> {
   const ctx = useContext(SelectContext)
-  if (!ctx) throw new Error('useSelectContext must be used within SelectRoot')
+  if (!ctx) throw new Error('useSelectContext must be used inside a Select.Provider')
   return ctx as SelectContextType<T>
 }

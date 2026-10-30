@@ -1,30 +1,29 @@
 import type { ReactNode } from 'react'
 import clsx from 'clsx'
 import { AlertTriangle, Trash, X } from 'lucide-react'
-import { Icon } from '../visualization/Icon'
+import type { ControllableInputProps, InputStateEvent } from '@helpwave/hightide-utils/interfaces'
 import { useHightideTranslation } from '@helpwave/hightide-utils/context/translation'
+import { Icon } from '../visualization/Icon'
 import { Tooltip } from '../interaction/Tooltip'
 import { PropsUtil } from '../../utils/propsUtil'
 import { IconButton } from '../interaction/IconButton'
 
-export type PropertyField<T> = {
+export type PropertyField<T, E extends InputStateEvent> = {
   name: string,
-  required?: boolean,
-  readOnly?: boolean,
   allowClear?: boolean,
-  value?: T,
+  className?: string,
   onRemove?: () => void,
   onValueClear?: () => void,
-  onValueChange?: (value: T) => void,
   onEditComplete?: (value: T) => void,
-}
-
+} & ControllableInputProps<T, E>
 
 export type PropertyBaseProps = {
-  children: (props: { required: boolean, hasValue: boolean, invalid: boolean }) => ReactNode,
+  children: (props: { isRequired: boolean, hasValue: boolean, invalid: boolean }) => ReactNode,
   name: string,
-  required?: boolean,
-  readOnly?: boolean,
+  isRequired?: boolean,
+  isReadOnly?: boolean,
+  isDisabled?: boolean,
+  isInvalid?: boolean,
   allowClear?: boolean,
   allowRemove?: boolean,
   hasValue: boolean,
@@ -40,10 +39,12 @@ export type PropertyBaseProps = {
 export const PropertyBase = ({
   name,
   children,
-  required = false,
+  isRequired = false,
   hasValue,
   icon,
-  readOnly,
+  isReadOnly = false,
+  isDisabled = false,
+  isInvalid = false,
   allowClear = true,
   allowRemove = true,
   onRemove,
@@ -51,10 +52,11 @@ export const PropertyBase = ({
   className,
 }: PropertyBaseProps) => {
   const translation = useHightideTranslation()
-  const invalid = required && !hasValue
+  const invalid = isInvalid || (isRequired && !hasValue)
+  const isLocked = isReadOnly || isDisabled
 
-  const isClearEnabled = allowClear && !readOnly
-  const isRemoveEnabled = allowRemove && !readOnly
+  const isClearEnabled = allowClear && !isLocked
+  const isRemoveEnabled = allowRemove && !isLocked
   const showActionsContainer = isClearEnabled || isRemoveEnabled
 
   const renderActionButtons = () => (
@@ -114,7 +116,7 @@ export const PropertyBase = ({
           className="property-content"
           data-invalid={PropsUtil.dataAttributes.bool(invalid)}
         >
-          {children({ required, hasValue, invalid })}
+          {children({ isRequired, hasValue, invalid })}
           {showActionsContainer && (
             <div className="property-actions">
               {renderActionButtons()}

@@ -5,14 +5,21 @@ import type { PropertyField } from './PropertyBase'
 import { PropertyBase } from './PropertyBase'
 import { PropsUtil } from '../../utils/propsUtil'
 import { Select } from '../data-input/selection/Select/Select'
+import type { SelectEvent } from '../data-input/selection/Select/SelectStateManager'
 
-export interface SingleSelectPropertyProps extends PropertyField<string>, PropsWithChildren {}
+export interface SingleSelectPropertyProps extends PropertyField<string, SelectEvent<string>>, PropsWithChildren {}
 
 export const SingleSelectProperty = ({
   children,
   value,
+  initialValue,
   onValueChange,
+  onStateEvent,
   onEditComplete,
+  isReadOnly,
+  isDisabled,
+  isInvalid,
+  isRequired,
   ...props
 }: SingleSelectPropertyProps) => {
   const hasValue = value !== undefined
@@ -21,6 +28,10 @@ export const SingleSelectProperty = ({
     <PropertyBase
       {...props}
       hasValue={hasValue}
+      isReadOnly={isReadOnly}
+      isDisabled={isDisabled}
+      isInvalid={isInvalid}
+      isRequired={isRequired}
       icon={<Icon icon={List} />}
     >
       {({ invalid }) => (
@@ -28,20 +39,25 @@ export const SingleSelectProperty = ({
           className="property-input-wrapper"
           data-invalid={PropsUtil.dataAttributes.bool(invalid)}
         >
-          <Select.Root
+          <Select.StateManager
             value={value}
+            initialValue={initialValue}
             onValueChange={(next) => {
               onValueChange?.(next)
               onEditComplete?.(next)
             }}
-            isDisabled={props.readOnly}
+            onStateEvent={onStateEvent}
+            isInvalid={invalid}
+            isDisabled={isDisabled}
+            isReadOnly={isReadOnly}
+            isRequired={isRequired}
           >
             <Select.Trigger
               className="property-input flex-row-2 w-full items-center justify-between"
               hideExpansionIcon={true}
             />
             <Select.Content>{children}</Select.Content>
-          </Select.Root>
+          </Select.StateManager>
         </div>
       )}
     </PropertyBase>

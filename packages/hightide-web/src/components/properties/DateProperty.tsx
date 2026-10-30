@@ -3,36 +3,35 @@ import { CalendarDays } from 'lucide-react'
 import { Icon } from '../visualization/Icon'
 import { PropertyBase, type PropertyField } from './PropertyBase'
 import { DateTimeInput, type DateTimeInputProps } from '../data-input/dateTime/DateTimeInput'
+import type { DateTimeInputEvent } from '../data-input/dateTime/DateTimeInput'
 import { PropsUtil } from '../../utils/propsUtil'
 
 export type DatePropertyProps =
-  Pick<PropertyField<Date | null>, 'name' | 'onRemove' | 'onValueClear'>
-  & Omit<DateTimeInputProps, 'mode' | 'allowRemove'>
+  PropertyField<Date | null, DateTimeInputEvent>
+  & Omit<DateTimeInputProps, 'mode' | 'allowRemove' | keyof PropertyField<Date | null, DateTimeInputEvent>>
   & {
     type?: 'dateTime' | 'date',
     allowRemove?: boolean,
-    required?: boolean,
-    readOnly?: boolean,
     className?: string,
   }
 
 export const DateProperty = ({
   name,
   value,
+  initialValue,
   onValueChange,
   onStateEvent,
   onRemove,
   onValueClear,
-  required,
-  readOnly,
+  onEditComplete: _onEditComplete,
+  isRequired,
+  isReadOnly,
+  isInvalid,
+  isDisabled,
   allowClear = true,
   allowRemove = true,
   type = 'dateTime',
   className,
-  isInvalid,
-  isDisabled,
-  isReadOnly,
-  isRequired,
   controlProps,
   ...inputProps
 }: DatePropertyProps) => {
@@ -41,8 +40,10 @@ export const DateProperty = ({
   return (
     <PropertyBase
       name={name}
-      required={required}
-      readOnly={readOnly}
+      isRequired={isRequired}
+      isReadOnly={isReadOnly}
+      isDisabled={isDisabled}
+      isInvalid={isInvalid}
       allowClear={allowClear}
       allowRemove={allowRemove}
       onRemove={onRemove}
@@ -58,11 +59,12 @@ export const DateProperty = ({
         <DateTimeInput
           {...inputProps}
           value={value}
+          initialValue={initialValue}
           mode={type}
-          isInvalid={isInvalid ?? invalid}
+          isInvalid={invalid}
           isDisabled={isDisabled}
-          isReadOnly={isReadOnly ?? readOnly}
-          isRequired={isRequired ?? required}
+          isReadOnly={isReadOnly}
+          isRequired={isRequired}
           allowClear={false}
           onValueChange={onValueChange}
           onStateEvent={onStateEvent}

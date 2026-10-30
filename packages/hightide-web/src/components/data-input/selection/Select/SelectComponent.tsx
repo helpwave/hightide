@@ -1,52 +1,38 @@
-import type React from 'react'
-import type { ForwardedRef, ReactNode } from 'react'
-import { forwardRef } from 'react'
-import type { SelectRootProps } from './SelectRoot'
-import { SelectRoot } from './SelectRoot'
+import type { ReactNode, Ref } from 'react'
+import type { SelectStateManagerProps } from './SelectStateManager'
+import { SelectStateManager } from './SelectStateManager'
 import type { SelectTriggerProps } from './SelectTrigger'
 import { SelectTrigger } from './SelectTrigger'
 import type { SelectContentProps } from './SelectContent'
 import { SelectContent } from './SelectContent'
 
-export type SelectProps<T = string> = Omit<SelectRootProps<T>, 'children'> & {
+export type SelectProps<T = string> = Omit<SelectStateManagerProps<T>, 'children'> & {
   children?: ReactNode,
   placeholder?: SelectTriggerProps<T>['placeholder'],
   selectedDisplay?: SelectTriggerProps<T>['selectedDisplay'],
+  triggerRef?: Ref<HTMLDivElement>,
   triggerProps?: SelectTriggerProps<T>,
   contentProps?: Omit<SelectContentProps, 'children'>,
 }
 
-type SelectComponentType = <T = string>(
-  props: SelectProps<T> & {
-    ref?: React.ForwardedRef<HTMLDivElement>,
-  }
-) => React.ReactElement
-
-const SelectComponentImpl = forwardRef<
-  HTMLDivElement,
-  SelectProps<unknown>
->(function SelectComponent<T>(
-  {
-    children,
-    placeholder,
-    selectedDisplay,
-    triggerProps,
-    contentProps,
-    ...props
-  }: SelectProps<T>,
-  ref: ForwardedRef<HTMLDivElement>
-) {
+export function SelectComponent<T = string>({
+  children,
+  placeholder,
+  selectedDisplay,
+  triggerRef,
+  triggerProps,
+  contentProps,
+  ...props
+}: SelectProps<T>) {
   return (
-    <SelectRoot<T> {...props}>
+    <SelectStateManager<T> {...props}>
       <SelectTrigger
-        ref={ref}
         placeholder={placeholder}
         selectedDisplay={selectedDisplay}
         {...triggerProps}
+        ref={triggerRef}
       />
       <SelectContent {...contentProps}>{children}</SelectContent>
-    </SelectRoot>
+    </SelectStateManager>
   )
-})
-
-export const SelectComponent = SelectComponentImpl as SelectComponentType
+}

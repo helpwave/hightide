@@ -13,10 +13,10 @@ type Story = StoryObj<typeof meta>;
 export const numberProperty: Story = {
   args: {
     name: 'Property',
-    required: false,
+    isRequired: false,
     value: undefined,
     suffix: 'kg',
-    readOnly: false,
+    isReadOnly: false,
     className: '',
     onValueChange: action('onValueChange'),
     onEditComplete: action('onEditComplete'),

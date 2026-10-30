@@ -14,9 +14,9 @@ type Story = StoryObj<typeof meta>;
 export const propertyBase: Story = {
   args: {
     name: 'Property',
-    required: false,
+    isRequired: false,
     hasValue: true,
-    readOnly: false,
+    isReadOnly: false,
     allowClear: false,
     icon: <Text size={24}/>,
     children: ({ invalid }) => (
