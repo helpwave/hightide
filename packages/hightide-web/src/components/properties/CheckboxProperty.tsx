@@ -21,6 +21,7 @@ export const CheckboxProperty = ({
   isDisabled,
   isInvalid,
   isRequired,
+  id,
   ...baseProps
 }: CheckboxPropertyProps) => {
   const translation = useHightideTranslation()
@@ -52,7 +53,7 @@ export const CheckboxProperty = ({
       icon={<Icon icon={Check} />}
     >
       {() => (
-        <div className="flex-row-2 items-center">
+        <div id={id} className="flex-row-2 items-center">
           <Button
             color={checked ? 'positive' : 'neutral'} size="sm"
             disabled={locked}

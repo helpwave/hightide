@@ -1,11 +1,11 @@
 import type { ReactNode } from 'react'
 import { useCallback, useMemo } from 'react'
-import type { InputStateMangerProps } from '@helpwave/hightide-utils/interfaces'
+import type { DOMInputStateMangerProps } from '../../domInput'
 import { useStableEvent, useStateMachine } from '@helpwave/hightide-utils/hooks'
 import { TextareaContext, type TextareaContextValue } from './TextareaContext'
 import { textareaStateTransition, type TextareaEvent, type TextareaState } from './TextareaState'
 
-export type TextareaStateManagerProps = InputStateMangerProps<TextareaState, TextareaEvent>
+export type TextareaStateManagerProps = DOMInputStateMangerProps<TextareaState, TextareaEvent>
   & {
     children?: ReactNode,
   }
@@ -18,6 +18,7 @@ export function TextareaStateManager({
   isDisabled = false,
   isReadOnly = false,
   isRequired = false,
+  id,
   children,
 }: TextareaStateManagerProps) {
   const machine = useStateMachine<TextareaState, TextareaEvent>({
@@ -37,7 +38,8 @@ export function TextareaStateManager({
     isDisabled,
     isReadOnly,
     isRequired,
-  }), [isDisabled, isInvalid, isReadOnly, isRequired])
+    id,
+  }), [isDisabled, isInvalid, isReadOnly, isRequired, id])
 
   const contextValue = useMemo<TextareaContextValue>(() => ({
     state: machine.state,

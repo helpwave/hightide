@@ -10,7 +10,7 @@ import { Select } from '../../../data-input/selection/Select/Select'
 import type { ModalProps } from '../Modal'
 import { Modal } from '../Modal'
 
-export type ThemeSelectProps = Omit<SelectProps<string | null>, 'value' | 'children'>
+export type ThemeSelectProps = Omit<SelectProps<string | null>, 'value' | 'options'>
 
 export const ThemeSelect = ({ ...props }: ThemeSelectProps) => {
   const { locale } = useLocalization()
@@ -31,34 +31,38 @@ export const ThemeSelect = ({ ...props }: ThemeSelectProps) => {
         ...props.triggerProps,
         className: clsx('min-w-40 w-fit', props.triggerProps?.className),
       }}
-    >
-      <Select.Option
-        key="system"
-        value={null}
-        valueId="system"
-        label={systemLabel}
-        className="gap-x-6 justify-between"
-      >
-        <div className="flex-row-2 items-center">
-          {systemLabel}
-        </div>
-      </Select.Option>
-      {Object.entries(supportedThemes).map(([themeMode, themeInformation]) => {
-        const label = themeInformation.nameTranslations[locale] ?? `{{ThemeModal.themeInformation.nameTranslations:${locale}}}`
-        return (
-          <Select.Option
-            key={themeMode}
-            value={themeMode}
-            label={label}
-            className="gap-x-6 justify-between"
-          >
-            <div className="flex-row-2 items-center">
-              {label}
-            </div>
-          </Select.Option>
-        )
-      })}
-    </Select>
+      options={[
+        {
+          id: 'system',
+          value: null,
+          label: systemLabel,
+          visual: {
+            className: 'gap-x-6 justify-between',
+            content: (
+              <div className="flex-row-2 items-center">
+                {systemLabel}
+              </div>
+            ),
+          },
+        },
+        ...Object.entries(supportedThemes).map(([themeMode, themeInformation]) => {
+          const label = themeInformation.nameTranslations[locale] ?? `{{ThemeModal.themeInformation.nameTranslations:${locale}}}`
+          return {
+            id: themeMode,
+            value: themeMode,
+            label,
+            visual: {
+              className: 'gap-x-6 justify-between',
+              content: (
+                <div className="flex-row-2 items-center">
+                  {label}
+                </div>
+              ),
+            },
+          }
+        }),
+      ]}
+    />
   )
 }
 

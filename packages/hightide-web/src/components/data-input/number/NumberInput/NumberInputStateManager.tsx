@@ -1,11 +1,11 @@
 import type { ReactNode } from 'react'
 import { useCallback, useMemo } from 'react'
-import type { InputStateMangerProps } from '@helpwave/hightide-utils/interfaces'
+import type { DOMInputStateMangerProps } from '../../domInput'
 import { useStableEvent, useStateMachine } from '@helpwave/hightide-utils/hooks'
 import { NumberInputContext, type NumberInputContextValue } from './NumberInputContext'
 import { numberInputStateTransition, type NumberInputEvent, type NumberInputState } from './NumberInputState'
 
-export type NumberInputStateManagerProps = InputStateMangerProps<NumberInputState, NumberInputEvent> & {
+export type NumberInputStateManagerProps = DOMInputStateMangerProps<NumberInputState, NumberInputEvent> & {
   children?: ReactNode,
 }
 
@@ -17,6 +17,7 @@ export function NumberInputStateManager({
   isDisabled = false,
   isReadOnly = false,
   isRequired = false,
+  id,
   children,
 }: NumberInputStateManagerProps) {
   const machine = useStateMachine<NumberInputState, NumberInputEvent>({
@@ -34,7 +35,8 @@ export function NumberInputStateManager({
     isDisabled,
     isReadOnly,
     isRequired,
-  }), [isDisabled, isInvalid, isReadOnly, isRequired])
+    id,
+  }), [isDisabled, isInvalid, isReadOnly, isRequired, id])
   const contextValue = useMemo<NumberInputContextValue>(() => ({
     state: machine.state,
     dispatch,

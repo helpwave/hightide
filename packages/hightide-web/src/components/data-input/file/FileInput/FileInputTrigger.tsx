@@ -44,6 +44,7 @@ const FileInputTriggerImpl = forwardRef<HTMLDivElement, FileInputTriggerProps>(f
     <div
       {...props}
       ref={ReactUtils.assingRefsBuilder([ref])}
+      id={context.id ?? props.id}
       onClick={(event) => {
         if (!hasInteractions) return
         props.onClick?.(event)

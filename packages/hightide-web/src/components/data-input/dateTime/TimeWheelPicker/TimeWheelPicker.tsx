@@ -1,5 +1,5 @@
 import type { ComponentRef, Ref } from 'react'
-import type { ControllableInputProps } from '@helpwave/hightide-utils/interfaces'
+import type { ControllableDOMInputProps } from '../../domInput'
 import type { DateTimePrecision } from '@helpwave/hightide-utils/utils'
 import { ReactUtils } from '@helpwave/hightide-utils/utils'
 import { useBoundDateState } from '../useDateStateMachine'
@@ -25,7 +25,7 @@ import {
   type WheelLoopingBehaviour
 } from './TimeWheelPickerState'
 
-export type TimeWheelPickerProps = ControllableInputProps<Date, TimeWheelPickerEvent> & {
+export type TimeWheelPickerProps = ControllableDOMInputProps<Date, TimeWheelPickerEvent> & {
   is24HourFormat?: boolean,
   isLooping?: boolean,
   loopingBehaviour?: WheelLoopingBehaviour,
@@ -46,6 +46,7 @@ const TimeWheelPickerComponent = ({
   isDisabled,
   isReadOnly,
   isRequired,
+  id,
   is24HourFormat,
   isLooping = true,
   loopingBehaviour = defaultWheelLoopingBehaviour,
@@ -69,6 +70,7 @@ const TimeWheelPickerComponent = ({
       isDisabled={isDisabled}
       isReadOnly={isReadOnly}
       isRequired={isRequired}
+      id={id}
       is24HourFormat={is24HourFormat}
       isLooping={isLooping}
       loopingBehaviour={loopingBehaviour}

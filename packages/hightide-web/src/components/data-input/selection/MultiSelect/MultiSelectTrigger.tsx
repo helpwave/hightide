@@ -5,7 +5,6 @@ import { forwardRef, useEffect, useRef } from 'react'
 import { useMultiSelectContext } from './MultiSelectContext'
 import { useHightideTranslation } from '@helpwave/hightide-utils/context/translation'
 import { ExpansionIcon } from '../../../visualization/ExpansionIcon'
-import { MultiSelectOptionDisplayContext } from './MultiSelectOption'
 import { ReactUtils } from '@helpwave/hightide-utils/utils'
 
 export interface MultiSelectTriggerProps<T = string>
@@ -104,20 +103,18 @@ const MultiSelectTriggerImpl = forwardRef<
       aria-haspopup="dialog"
       aria-expanded={context.isOpen}
       aria-controls={context.isOpen ? context.config.ids.content : undefined}>
-      <MultiSelectOptionDisplayContext.Provider value="trigger">
-        {hasValue
-          ? selectedDisplay?.(context.value) ?? (
-            <div className="flex flex-wrap gap-x-1 gap-y-2">
-              {selectedOptions.map((opt, index) => (
-                <span key={opt.value.id}>
-                  {opt.display}
-                  {index < selectedOptions.length - 1 && <span>,</span>}
-                </span>
-              ))}
-            </div>
-          )
-          : placeholder ?? translation('clickToSelect')}
-      </MultiSelectOptionDisplayContext.Provider>
+      {hasValue
+        ? selectedDisplay?.(context.value) ?? (
+          <div className="flex flex-wrap gap-x-1 gap-y-2">
+            {selectedOptions.map((opt, index) => (
+              <span key={opt.id}>
+                {opt.visual?.content ?? opt.label}
+                {index < selectedOptions.length - 1 && <span>,</span>}
+              </span>
+            ))}
+          </div>
+        )
+        : placeholder ?? translation('clickToSelect')}
       {!hideExpansionIcon && <ExpansionIcon isExpanded={context.isOpen} />}
     </div>
   )

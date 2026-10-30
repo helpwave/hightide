@@ -73,16 +73,17 @@ export const FilterBasePopUp = forwardRef<HTMLDivElement, FilterPopUpBaseProps>(
             onValueChange={(newOperator) => onOperatorChange(newOperator as FilterOperator)}
             triggerProps={{
               className: 'filter-operator-select w-fit flex-row-1 items-center h-element-sm px-2 py-1 rounded-md hover:cursor-pointer font-bold',
-              selectedDisplay: (option) => option ? translation(FilterOperatorUtils.getInfo(option.value.value).translationKey as Parameters<typeof translation>[0]) : ''
+              selectedDisplay: (option) => option ? translation(FilterOperatorUtils.getInfo(option.value).translationKey as Parameters<typeof translation>[0]) : ''
             }}
             iconAppearance="right"
-          >
-            {operators.map((op) => (
-              <Select.Option key={op} value={op} label={translation(FilterOperatorUtils.getInfo(op).translationKey as Parameters<typeof translation>[0])}>
-                <FilterOperatorLabel operator={op} />
-              </Select.Option>
-            ))}
-          </Select>
+            options={operators.map((op) => ({
+              value: op,
+              label: translation(FilterOperatorUtils.getInfo(op).translationKey as Parameters<typeof translation>[0]),
+              visual: {
+                content: <FilterOperatorLabel operator={op} />,
+              },
+            }))}
+          />
         </div>
         <div className="flex-row-0 items-center">
           <IconButton
@@ -605,13 +606,12 @@ export const TagsFilterPopUp = forwardRef<HTMLDivElement, TagsFilterPopUpProps>(
             })
           }}
           triggerProps={{ className: 'min-w-64' }}
-        >
-          {availableTags.map(({ tag, label }) => (
-            <MultiSelect.Option key={tag} value={tag} label={label}>
-              {label}
-            </MultiSelect.Option>
-          ))}
-        </MultiSelect>
+          options={availableTags.map(({ tag, label }) => ({
+            value: tag,
+            label,
+            visual: { content: label },
+          }))}
+        />
       </Visibility>
       <Visibility isVisible={!needsParameterInput}>
         <span className="text-sm text-description h-10">
@@ -669,11 +669,11 @@ export const TagsSingleFilterPopUp = forwardRef<HTMLDivElement, TagsSingleFilter
             })
           }}
           triggerProps={{ className: 'min-w-64' }}
-        >
-          {availableTags.map(({ tag, label }) => (
-            <MultiSelect.Option key={tag} value={tag} label={label} />
-          ))}
-        </MultiSelect>
+          options={availableTags.map(({ tag, label }) => ({
+            value: tag,
+            label,
+          }))}
+        />
       </Visibility>
       <Visibility isVisible={needsParameterInput && !needsMultiSelect}>
         <Select
@@ -686,11 +686,11 @@ export const TagsSingleFilterPopUp = forwardRef<HTMLDivElement, TagsSingleFilter
             })
           }}
           triggerProps={{ className: 'min-w-64' }}
-        >
-          {availableTags.map(({ tag, label }) => (
-            <Select.Option key={tag} value={tag} label={label} />
-          ))}
-        </Select>
+          options={availableTags.map(({ tag, label }) => ({
+            value: tag,
+            label,
+          }))}
+        />
       </Visibility>
       <Visibility isVisible={!needsParameterInput}>
         <span className="text-sm text-description h-10">

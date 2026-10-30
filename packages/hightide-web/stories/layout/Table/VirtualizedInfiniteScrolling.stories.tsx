@@ -3,7 +3,6 @@ import { useCallback, useEffect, useMemo, useRef, useState } from 'react'
 import { faker } from '@faker-js/faker'
 import { range } from '@helpwave/hightide-utils/utils'
 import { Table } from '../../../src/components/layout/Table/Table'
-import { TableColumn } from '../../../src/components/layout/Table/TableColumn'
 import { TableCell } from '../../../src/components/layout/Table/TableCell'
 import { TableColumnSwitcher } from '../../../src/components/layout/Table/TableColumnSwitcher'
 import { Chip } from '../../../src/components/visualization/Chip'
@@ -93,6 +92,37 @@ export const virtualizedInfiniteScrolling: Story = {
           data: flatData,
           isUsingFillerRows: true,
           initialState: { pagination: { pageIndex: 0, pageSize: TOTAL_ROWS } },
+          columns: [
+            { id: 'id', header: 'ID', accessorKey: 'id', sortingFn: 'alphanumeric', size: 80, minSize: 70, maxSize: 120 },
+            { id: 'name', header: translation('name'), accessorKey: 'name', sortingFn: 'text', size: 200, minSize: 160, maxSize: 320, filterFn: 'text' },
+            { id: 'age', header: translation('age'), accessorKey: 'age', sortingFn: 'alphanumeric', size: 110, minSize: 90, maxSize: 160, filterFn: 'number' },
+            { id: 'email', header: 'Email', accessorKey: 'email', sortingFn: 'text', size: 280, minSize: 200, maxSize: 400, filterFn: 'text' },
+            { id: 'city', header: 'City', accessorKey: 'city', sortingFn: 'text', size: 180, minSize: 140, maxSize: 300, filterFn: 'text' },
+            {
+              id: 'status',
+              header: 'Status',
+              accessorKey: 'status',
+              sortingFn: 'text',
+              size: 150,
+              minSize: 120,
+              maxSize: 220,
+              filterFn: 'singleTag',
+              cell: ({ cell }) => (<Chip>{cell.getValue() as string}</Chip>),
+              meta: { filterData: { tags: statuses.map((status) => ({ tag: status, label: status })) } },
+            },
+            { id: 'visits', header: 'Visits', accessorKey: 'visits', sortingFn: 'alphanumeric', size: 120, minSize: 100, maxSize: 180, filterFn: 'number' },
+            {
+              id: 'joined',
+              header: 'Joined',
+              accessorKey: 'joined',
+              sortingFn: 'datetime',
+              size: 200,
+              minSize: 160,
+              maxSize: 300,
+              filterFn: 'date',
+              cell: ({ cell }) => (<TableCell>{(cell.getValue() as Date).toLocaleDateString()}</TableCell>),
+            },
+          ],
         }}
         paginationOptions={{ showPagination: false }}
         displayProps={{
@@ -115,37 +145,7 @@ export const virtualizedInfiniteScrolling: Story = {
         footer={isFetching ? (
           <span className="text-description typography-label-md">Fetching more…</span>
         ) : null}
-      >
-        <TableColumn id="id" header="ID" accessorKey="id" sortingFn="alphanumeric" size={80} minSize={70} maxSize={120}/>
-        <TableColumn id="name" header={translation('name')} accessorKey="name" sortingFn="text" size={200} minSize={160} maxSize={320} filterType="text"/>
-        <TableColumn id="age" header={translation('age')} accessorKey="age" sortingFn="alphanumeric" size={110} minSize={90} maxSize={160} filterType="number"/>
-        <TableColumn id="email" header="Email" accessorKey="email" sortingFn="text" size={280} minSize={200} maxSize={400} filterType="text"/>
-        <TableColumn id="city" header="City" accessorKey="city" sortingFn="text" size={180} minSize={140} maxSize={300} filterType="text"/>
-        <TableColumn
-          id="status"
-          header="Status"
-          accessorKey="status"
-          sortingFn="text"
-          size={150}
-          minSize={120}
-          maxSize={220}
-          filterType="singleTag"
-          cell={({ cell }) => (<Chip>{cell.getValue() as string}</Chip>)}
-          meta={{ filterData: { tags: statuses.map((status) => ({ tag: status, label: status })) } }}
-        />
-        <TableColumn id="visits" header="Visits" accessorKey="visits" sortingFn="alphanumeric" size={120} minSize={100} maxSize={180} filterType="number"/>
-        <TableColumn
-          id="joined"
-          header="Joined"
-          accessorKey="joined"
-          sortingFn="datetime"
-          size={200}
-          minSize={160}
-          maxSize={300}
-          filterType="date"
-          cell={({ cell }) => (<TableCell>{(cell.getValue() as Date).toLocaleDateString()}</TableCell>)}
-        />
-      </Table>
+      />
     )
   },
 }

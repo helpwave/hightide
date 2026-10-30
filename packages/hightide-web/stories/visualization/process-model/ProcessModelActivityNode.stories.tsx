@@ -62,14 +62,14 @@ export const processModelActivityNode: Story = {
       <div className="flex flex-col gap-4">
         <div className="flex flex-row items-center gap-2 text-sm font-medium text-on-surface">
           <span>Example node</span>
-          <Select
+          <Select<string>
             value={exampleId}
             onValueChange={setExampleId}
-          >
-            {activityNodeExamples.map((item) => (
-              <Select.Option key={item.id} value={item.id} label={item.optionLabel} />
-            ))}
-          </Select>
+            options={activityNodeExamples.map((item) => ({
+              value: item.id,
+              label: item.optionLabel,
+            }))}
+          />
         </div>
         <div className="inline-block rounded-2xl bg-surface p-6">
           <div className="min-h-[52px]">

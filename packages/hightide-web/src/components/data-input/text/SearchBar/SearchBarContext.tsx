@@ -1,8 +1,8 @@
 import { createContext, useContext } from 'react'
-import type { InputConfig, InputContextValue } from '@helpwave/hightide-utils/interfaces'
+import type { DOMInputConfig, DOMInputContextValue } from '../../domInput'
 import type { SearchBarEvent, SearchBarState } from './SearchBarState'
 
-export type SearchBarContextValue = InputContextValue<SearchBarState, SearchBarEvent, InputConfig> & {
+export type SearchBarContextValue = DOMInputContextValue<SearchBarState, SearchBarEvent, DOMInputConfig> & {
   onSearch: (value: string) => void,
 }
 

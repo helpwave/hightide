@@ -1,15 +1,17 @@
 import { ComboboxComponent } from './ComboboxComponent'
 import { ComboboxContext } from './ComboboxContext'
-import { ComboboxInput } from './ComboboxInput'
 import { ComboboxList } from './ComboboxList'
-import { ComboboxOption } from './ComboboxOption'
+import { ComboboxListItemElement } from './ComboboxListItemElement'
+import { ComboboxPopUp } from './ComboboxPopUp'
+import { ComboboxSearchbar } from './ComboboxSearchbar'
 import { ComboboxStateManager } from './ComboboxStateManager'
 
 const Combobox = Object.assign(ComboboxComponent, {
   StateManager: ComboboxStateManager,
-  Input: ComboboxInput,
+  Searchbar: ComboboxSearchbar,
+  PopUp: ComboboxPopUp,
   List: ComboboxList,
-  Option: ComboboxOption,
+  ListItemElement: ComboboxListItemElement,
   Context: ComboboxContext,
   Provider: ComboboxContext.Provider,
   Consumer: ComboboxContext.Consumer,

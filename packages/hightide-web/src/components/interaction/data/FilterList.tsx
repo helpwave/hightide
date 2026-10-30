@@ -112,14 +112,19 @@ export const FilterList = ({ value, onValueChange, availableItems }: FilterListP
                     setEditState(newValue)
                     setIsOpen(false)
                   }}
-                >
-                  {inactiveItems.map(item => (
-                    <Combobox.Option key={item.id} value={item.id} label={item.label}>
-                      {DataTypeUtils.toIcon(item.dataType)}
-                      {item.label}
-                    </Combobox.Option>
-                  ))}
-                </Combobox>
+                  options={inactiveItems.map(item => ({
+                    value: item.id,
+                    label: item.label,
+                    visual: {
+                      content: (
+                        <>
+                          {DataTypeUtils.toIcon(item.dataType)}
+                          {item.label}
+                        </>
+                      ),
+                    },
+                  }))}
+                />
               )}}
           </PopUpContext.Consumer>
         </PopUp>

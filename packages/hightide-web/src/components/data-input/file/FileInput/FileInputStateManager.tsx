@@ -4,7 +4,7 @@ import {
   useControlledState,
   useStableEvent
 } from '@helpwave/hightide-utils/hooks'
-import type { ControllableInputProps } from '@helpwave/hightide-utils/interfaces'
+import type { ControllableDOMInputProps } from '../../domInput'
 import { SafeGlobals } from '../../../../utils/safeGlobals'
 import { FileInputContext, type FileInputContextType, type FileInputPickFiles } from './FileInputContext'
 import {
@@ -16,7 +16,7 @@ import {
 
 export type FileInputEvent = { type: 'commit', value: readonly FileInputItem[] }
 
-export interface FileInputStateManagerProps extends Omit<ControllableInputProps<readonly FileInputItem[], FileInputEvent>, 'value'> {
+export interface FileInputStateManagerProps extends Omit<ControllableDOMInputProps<readonly FileInputItem[], FileInputEvent>, 'value'> {
   value?: readonly FileInputItem[],
   initialIsOpen?: boolean,
   onClose?: () => void,
@@ -43,6 +43,7 @@ export function FileInputStateManager({
   isDisabled = false,
   isReadOnly = false,
   isRequired = false,
+  id,
 }: FileInputStateManagerProps) {
   const [files, setFiles] = useControlledState<readonly FileInputItem[]>({
     value,
@@ -187,6 +188,7 @@ export function FileInputStateManager({
     isDisabled,
     isReadOnly,
     isRequired,
+    id,
     files: files ?? [],
     isOpen: isSingleFile ? false : isOpen,
     isDragging,
@@ -221,6 +223,7 @@ export function FileInputStateManager({
     isRequired,
     setIsOpen,
     toggleIsOpen,
+    id,
   ])
 
   return (

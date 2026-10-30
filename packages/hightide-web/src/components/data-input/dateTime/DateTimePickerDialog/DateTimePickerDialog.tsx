@@ -1,6 +1,6 @@
 import type { ComponentRef, ReactNode, Ref } from 'react'
 import { useCallback, useEffect, useRef } from 'react'
-import type { ControllableInputProps } from '@helpwave/hightide-utils/interfaces'
+import type { ControllableDOMInputProps } from '../../domInput'
 import { useControlledState, useStateMachineBinding } from '@helpwave/hightide-utils/hooks'
 import type { DateTimeFormat, DateTimePrecision, Weekday } from '@helpwave/hightide-utils/utils'
 import { ReactUtils } from '@helpwave/hightide-utils/utils'
@@ -22,7 +22,7 @@ import type {
   DateTimePickerDialogState
 } from './DateTimePickerDialogState'
 
-export type DateTimePickerDialogProps = ControllableInputProps<Date | null, DateTimePickerDialogEvent> & {
+export type DateTimePickerDialogProps = ControllableDOMInputProps<Date | null, DateTimePickerDialogEvent> & {
   allowRemove?: boolean,
   mode?: DateTimeFormat,
   start?: Date,
@@ -61,6 +61,7 @@ const DateTimePickerDialogComponent = ({
   isDisabled,
   isReadOnly,
   isRequired,
+  id,
   allowRemove,
   mode,
   start,
@@ -129,6 +130,7 @@ const DateTimePickerDialogComponent = ({
       isDisabled={isDisabled}
       isReadOnly={isReadOnly}
       isRequired={isRequired}
+      id={id}
       mode={mode}
       allowRemove={allowRemove}
       label={label}

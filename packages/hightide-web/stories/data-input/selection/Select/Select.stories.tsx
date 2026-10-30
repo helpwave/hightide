@@ -3,9 +3,9 @@ import { action } from 'storybook/actions'
 import { useEffect, useState } from 'react'
 import { Select } from '../../../../src/components/data-input/selection/Select/Select'
 import type { SelectProps } from '../../../../src/components/data-input/selection/Select/SelectComponent'
-import type { SelectOptionType } from '../../../../src/components/data-input/selection/Select/SelectContext'
+import type { SelectOptionData } from '../../../../src/components/data-input/selection/Select/SelectContext'
 
-const meta: Meta<typeof Select<User>> = {
+const meta: Meta<typeof Select<string>> = {
   component: Select,
 }
 
@@ -37,9 +37,34 @@ export const select: Story = {
     isRequired: false,
     onValueChange: action('onValueChange'),
     onStateEvent: action('onStateEvent'),
-    children: fruitOptions.map((item, index) => (
-      <Select.Option key={index} {...item} />
-    )),
+    options: fruitOptions,
+  },
+}
+
+export const controlledValue: Story = {
+  args: {
+    options: fruitOptions,
+    isDisabled: false,
+    isInvalid: false,
+    isReadOnly: false,
+    isRequired: false,
+    onValueChange: action('onValueChange'),
+    onStateEvent: action('onStateEvent'),
+  },
+  render: function ControlledValue(args) {
+    const [value, setValue] = useState('none')
+
+    return (
+      <Select
+        {...args}
+        value={value}
+        onValueChange={(next) => {
+          if(next === 'none') return
+          args.onValueChange?.(next)
+          setValue(next)
+        }}
+      />
+    )
   },
 }
 
@@ -61,7 +86,7 @@ function compareUser(a: User, b: User): boolean {
   return a.uuid === b.uuid
 }
 
-export const selectWithUser: Story = {
+export const selectWithUser: StoryObj<typeof Select<User>> = {
   args: {
     value: undefined,
     initialValue: undefined,
@@ -74,9 +99,9 @@ export const selectWithUser: Story = {
     onValueChange: action('onValueChange'),
     onStateEvent: action('onStateEvent'),
     placeholder: 'Select a user',
-    selectedDisplay: (option:  SelectOptionType<User> | null) => {
+    selectedDisplay: (option: SelectOptionData<User> | null) => {
       if (!option) return null
-      const user = option.value.value
+      const user = option.value
       return (
         <div className="flex flex-col">
           <span>{user.name}</span>
@@ -84,19 +109,19 @@ export const selectWithUser: Story = {
         </div>
       )
     },
-    children: users.map((user) => (
-      <Select.Option
-        key={user.uuid}
-        value={user}
-        valueId={user.uuid}
-        label={user.name}
-      >
-        <div className="flex flex-col">
-          <span>{user.name}</span>
-          <span className=" text-description">{user.email}</span>
-        </div>
-      </Select.Option>
-    )),
+    options: users.map((user) => ({
+      id: user.uuid,
+      value: user,
+      label: user.name,
+      visual: {
+        content: (
+          <div className="flex flex-col">
+            <span>{user.name}</span>
+            <span className=" text-description">{user.email}</span>
+          </div>
+        ),
+      },
+    })),
   },
   render: (args: SelectProps<User>) => {
     const [value, setValue] = useState<User | undefined>(args.value)
@@ -130,8 +155,9 @@ export const selectComposed: Story = {
     onValueChange: action('onValueChange'),
     onStateEvent: action('onStateEvent'),
   },
-  render: (args: SelectProps<User>) => (
+  render: (args: SelectProps<string>) => (
     <Select.StateManager
+      options={fruitOptions}
       initialValue={args.initialValue}
       isDisabled={args.isDisabled}
       isInvalid={args.isInvalid}
@@ -142,11 +168,10 @@ export const selectComposed: Story = {
       onStateEvent={args.onStateEvent}
     >
       <Select.Trigger placeholder="Select…" />
-      <Select.Content>
-        {fruitOptions.map((item, index) => (
-          <Select.Option key={index} {...item} />
-        ))}
-      </Select.Content>
+      <Select.PopUp>
+        <Select.Searchbar />
+        <Select.List />
+      </Select.PopUp>
     </Select.StateManager>
   ),
 }

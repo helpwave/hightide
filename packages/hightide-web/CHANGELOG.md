@@ -42,6 +42,7 @@ and adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
 ### Changed
 
+- `Table` and `TableWithSelection` take columns only through `columns`. `TableColumn` and column registration are removed
 - `FileInput` is an aggregate with `FileInput.StateManager`, `FileInput.Layout`, `FileInput.Input`, `FileInput.Trigger`, and `FileInput.Menu`. `FileInput.Layout` places the file input and the trigger together
 - Data-input aggregates, including `Select`, `MultiSelect`, `Combobox`, `FileInput`, and `LabelledCheckbox`, use `value`, `initialValue`, `onValueChange`, and `onStateEvent`. Completion dispatches `{ type: 'commit', value }`. `isInvalid`, `isDisabled`, `isReadOnly`, and `isRequired` replace `invalid`, `disabled`, `readOnly`, and `required`. `NumberStepperInput` uses `isLooping`, `incrementProps.className`, and `decrementProps.className`
 - Property fields (`PropertyBase`, `TextProperty`, `NumberProperty`, `DateProperty`, `CheckboxProperty`, `SingleSelectProperty`, and `MultiSelectProperty`) use `ControllableInputProps`. `required` and `readOnly` are removed. `isRequired` and `isReadOnly` apply to the shell and the input. `isDisabled` or `isReadOnly` locks clear and remove. A field is invalid when `isInvalid` is set, or when it is required and empty. `TextProperty`, `DateProperty`, `SingleSelectProperty`, and `MultiSelectProperty` forward `value`, `initialValue`, `onValueChange`, and `onStateEvent`. `NumberProperty` emits `change` and `commit`. `CheckboxProperty` emits `toggle` and can start from `initialValue`. `PropertyBase` children receive `isRequired` instead of `required`
@@ -82,7 +83,11 @@ and adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 - `TabSwitcher`, `ListActionItem`, and `ListNavigationItem` live in `layout`
 - `ChatMessageComposer` uses `ControllableInputProps` and lives in `chat/data-input`
 - `properties` is its own component folder. A folder that holds one aggregate uses that aggregate's name, including `Drawer`, `PopUp`, and `Table`. Stories follow the same folders
-- `Combobox` uses `ControllableInputProps` and lives in `data-input/selection`. Its parts are `Combobox.Root`, `Combobox.Input`, `Combobox.List`, `Combobox.Option`, `Combobox.Context`, `Combobox.Provider`, and `Combobox.Consumer`
+- `Select`, `MultiSelect`, and `Combobox` take an `options` array on the state manager. A string value can omit `id` and `label`; both default to that string. Any other value requires `id` and `label`. An option can set `disabled` and `visual` (`className`, `style`, `content`)
+- `Select` and `MultiSelect` parts are `StateManager`, `Trigger`, `PopUp`, `Searchbar`, `List`, `Context`, `Provider`, and `Consumer`. `MultiSelect.ChipDisplayTrigger` remains. The combined components take `triggerRef`, `popupRef`, `searchbarRef`, and `listRef`, with `triggerProps`, `popupProps`, `searchbarProps`, and `listProps`
+- `Combobox` parts are `StateManager`, `Searchbar`, `PopUp`, `List`, `ListItemElement`, `Context`, `Provider`, and `Consumer`. The search field stays outside the popup. The combined component takes `searchbarRef`, `popupRef`, and `listRef`. Placeholder is set through `searchbarProps`. `isAllowingNewValue` and `onNewValueAdded` offer a value that is not already in `options`
+- `Select.List`, `MultiSelect.List`, and `Combobox.List` render `options` and take `listElement` for a custom row. The state manager owns the list ref and option refs, and scrolls the highlighted row into view
+- Selection state managers use `ControllableDOMInputProps`. Optional `id` is set on the `Select` and `MultiSelect` trigger, and on the `Combobox` search input
 - `Select` and `MultiSelect` values are no longer `T | null`. An empty selection is omitted
 - Readonly `.input` text, border, and focus use 80% opacity
 - `Carousel` is a compound component: `Carousel.Root`, `Carousel.Container`, `Carousel.Slide`, `Carousel.Arrows`, `Carousel.FadeLayover`, `Carousel.Stepper`, `Carousel.Context`, and `Carousel.Consumer`. The combined `Carousel` still composes them from `children`, `hintNext`, `arrows`, `dots`, and `blurColor`
@@ -110,6 +115,8 @@ and adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 - `ChatMessageCard` and `ChatAttachmentCard`. Structured messages are composed with `ChatMessageBubble`; file messages use `ChatAttachmentMessageBubble`. `ChatMessageBubble` `readReceipt` is replaced by `status`
 - Fixed `--color-description` tokens (`gray-600` in light, `gray-400` in dark)
 - `showSearch` on `Select` and `MultiSelect`
+- `Select.Root`, `Select.Content`, `Select.Option`, `MultiSelect.Root`, `MultiSelect.Content`, `MultiSelect.Option`, `Combobox.Root`, `Combobox.Input`, and `Combobox.Option`. Options are data on the state manager. The menu is `PopUp`, `Searchbar`, and `List`
+- `contentProps` on combined `Select` and `MultiSelect`. Use `popupProps`
 - Standalone `CarouselTabs` and `CarouselSlide`. Use `Carousel.Stepper` and `Carousel.Slide`
 - Unused `Carousel` prop `overScrollThreshold`
 - `Dialog`, `DialogRoot`, and `DialogOpenerWrapper`. Use `Modal`

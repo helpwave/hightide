@@ -23,6 +23,7 @@ export const ColorInputField = forwardRef<HTMLInputElement, ColorInputFieldProps
       spellCheck={false}
       maxLength={config.hasAlpha ? 9 : 7}
       value={shown}
+      id={config.id ?? props.id}
       disabled={config.isDisabled}
       readOnly={config.isReadOnly}
       required={config.isRequired}

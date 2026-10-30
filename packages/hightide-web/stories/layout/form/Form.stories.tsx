@@ -287,11 +287,8 @@ export const basic: Story = {
                   isDisabled={interactionStates.disabled}
                   isReadOnly={interactionStates.readOnly}
                   isRequired={interactionStates.required}
-                >
-                  {StorybookHelper.selectValues.map(value => (
-                    <Select.Option key={value} value={value} label={value} />
-                  ))}
-                </Select>
+                  options={StorybookHelper.selectValues.map(value => ({ value, label: value }))}
+                />
               )}
             </FormField>
 
@@ -310,11 +307,8 @@ export const basic: Story = {
                   isDisabled={interactionStates.disabled}
                   isReadOnly={interactionStates.readOnly}
                   isRequired={interactionStates.required}
-                >
-                  {StorybookHelper.selectValues.map(value => (
-                    <MultiSelect.Option key={value} value={value} label={value} />
-                  ))}
-                </MultiSelect>
+                  options={StorybookHelper.selectValues.map(value => ({ value, label: value }))}
+                />
               )}
             </FormField>
 
@@ -332,11 +326,8 @@ export const basic: Story = {
                   isDisabled={interactionStates.disabled}
                   isReadOnly={interactionStates.readOnly}
                   isRequired={interactionStates.required}
-                >
-                  {StorybookHelper.selectValues.map(value => (
-                    <MultiSelect.Option key={value} value={value} label={value} />
-                  ))}
-                </MultiSelect>
+                  options={StorybookHelper.selectValues.map(value => ({ value, label: value }))}
+                />
               )}
             </FormField>
 
@@ -559,11 +550,8 @@ return (
               isDisabled={interactionStates.disabled}
               isReadOnly={interactionStates.readOnly}
               isRequired={interactionStates.required}
-            >
-              {StorybookHelper.selectValues.map(value => (
-                <Select.Option key={value} value={value} />
-              ))}
-            </Select>
+              options={StorybookHelper.selectValues.map(value => ({ value }))}
+            />
           )}
         </FormField>
 
@@ -582,11 +570,8 @@ return (
               isDisabled={interactionStates.disabled}
               isReadOnly={interactionStates.readOnly}
               isRequired={interactionStates.required}
-            >
-              {StorybookHelper.selectValues.map(value => (
-                <MultiSelect.Option key={value} value={value} />
-              ))}
-            </MultiSelect>
+              options={StorybookHelper.selectValues.map(value => ({ value }))}
+            />
           )}
         </FormField>
 
@@ -604,11 +589,8 @@ return (
               isDisabled={interactionStates.disabled}
               isReadOnly={interactionStates.readOnly}
               isRequired={interactionStates.required}
-            >
-              {StorybookHelper.selectValues.map(value => (
-                <MultiSelect.Option key={value} value={value} />
-              ))}
-            </MultiSelect>
+              options={StorybookHelper.selectValues.map(value => ({ value }))}
+            />
           )}
         </FormField>
 

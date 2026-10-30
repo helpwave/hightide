@@ -1,5 +1,5 @@
 import type { ComponentRef, Ref } from 'react'
-import type { ControllableInputProps } from '@helpwave/hightide-utils/interfaces'
+import type { ControllableDOMInputProps } from '../../domInput'
 import { ReactUtils } from '@helpwave/hightide-utils/utils'
 import { useBoundDateState } from '../useDateStateMachine'
 import type { WheelLoopingBehaviour } from '../TimeWheelPicker'
@@ -12,7 +12,7 @@ import { DateWheelPickerYearWheel } from './DateWheelPickerYearWheel'
 import { DateWheelPickerStateManager } from './DateWheelPickerStateManager'
 import type { DateWheelPickerEvent, DateWheelPickerState } from './DateWheelPickerState'
 
-export type DateWheelPickerProps = ControllableInputProps<Date, DateWheelPickerEvent> & {
+export type DateWheelPickerProps = ControllableDOMInputProps<Date, DateWheelPickerEvent> & {
   start?: Date,
   end?: Date,
   isLooping?: boolean,
@@ -30,6 +30,7 @@ const DateWheelPickerComponent = ({
   isDisabled,
   isReadOnly,
   isRequired,
+  id,
   start,
   end,
   isLooping = true,
@@ -50,6 +51,7 @@ const DateWheelPickerComponent = ({
       isDisabled={isDisabled}
       isReadOnly={isReadOnly}
       isRequired={isRequired}
+      id={id}
       start={start}
       end={end}
       isLooping={isLooping}

@@ -13,7 +13,7 @@ const fruitOptions = [
   { value: 'Apple', label: 'Apple' },
   { value: 'Banana', label: 'Banana', disabled: true },
   { value: 'Cherry', label: 'Cherry' },
-  { value: 'Dragonfruit', label: 'Dragonfruit', className: '!text-red-400' },
+  { value: 'Dragonfruit', label: 'Dragonfruit', visual: { className: '!text-red-400' } },
   { value: 'Elderberry', label: 'Elderberry' },
   { value: 'Fig', label: 'Fig' },
   { value: 'Grapefruit', label: 'Grapefruit' },
@@ -27,6 +27,7 @@ const fruitOptions = [
 export const multiSelectChipDisplay: Story = {
   args: {
     initialValue: ['Apple', 'Cherry'],
+    options: fruitOptions,
     isDisabled: false,
     isInvalid: false,
     isReadOnly: false,
@@ -36,6 +37,7 @@ export const multiSelectChipDisplay: Story = {
   },
   render: (args: typeof MultiSelect.arguments) => (
     <MultiSelect.StateManager
+      options={fruitOptions}
       initialValue={args.initialValue}
       isDisabled={args.isDisabled}
       isInvalid={args.isInvalid}
@@ -46,11 +48,10 @@ export const multiSelectChipDisplay: Story = {
       onStateEvent={args.onStateEvent}
     >
       <MultiSelect.ChipDisplayTrigger />
-      <MultiSelect.Content>
-        {fruitOptions.map((item, index) => (
-          <MultiSelect.Option key={index} {...item} />
-        ))}
-      </MultiSelect.Content>
+      <MultiSelect.PopUp>
+        <MultiSelect.Searchbar />
+        <MultiSelect.List />
+      </MultiSelect.PopUp>
     </MultiSelect.StateManager>
   ),
 }

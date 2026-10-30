@@ -1,5 +1,5 @@
 import type { ComponentRef, Ref } from 'react'
-import type { ControllableInputProps } from '@helpwave/hightide-utils/interfaces'
+import type { ControllableDOMInputProps } from '../../domInput'
 import type { DateTimePrecision } from '@helpwave/hightide-utils/utils'
 import { ReactUtils } from '@helpwave/hightide-utils/utils'
 import { useBoundDateState } from '../useDateStateMachine'
@@ -23,7 +23,7 @@ import {
   type TimePickerState
 } from './TimePickerState'
 
-export type TimePickerProps = ControllableInputProps<Date, TimePickerEvent> & {
+export type TimePickerProps = ControllableDOMInputProps<Date, TimePickerEvent> & {
   is24HourFormat?: boolean,
   precision?: DateTimePrecision,
   minuteIncrement?: TimePickerMinuteIncrement,
@@ -52,6 +52,7 @@ const TimePickerComponent = ({
   isDisabled,
   isReadOnly,
   isRequired,
+  id,
   is24HourFormat,
   precision = defaultTimePickerPrecision,
   minuteIncrement = defaultTimePickerMinuteIncrement,
@@ -83,6 +84,7 @@ const TimePickerComponent = ({
       isDisabled={isDisabled}
       isReadOnly={isReadOnly}
       isRequired={isRequired}
+      id={id}
       is24HourFormat={is24HourFormat}
       precision={precision}
       minuteIncrement={minuteIncrement}

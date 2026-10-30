@@ -1,6 +1,6 @@
 import type { ComponentRef, ReactNode, Ref } from 'react'
 import { useCallback, useId } from 'react'
-import type { ControllableInputProps } from '@helpwave/hightide-utils/interfaces'
+import type { ControllableDOMInputProps } from '../../domInput'
 import { useControlledState, useStateMachineBinding } from '@helpwave/hightide-utils/hooks'
 import { ReactUtils } from '@helpwave/hightide-utils/utils'
 import type { TextInput, TextInputElementProps } from '../TextInput'
@@ -11,7 +11,7 @@ import { InsideLabelInputLayout, type InsideLabelInputLayoutProps } from './Insi
 import { InsideLabelInputStateManager } from './InsideLabelInputStateManager'
 import type { InsideLabelInputEvent, InsideLabelInputState } from './InsideLabelInputState'
 
-export type InsideLabelInputProps = ControllableInputProps<string, InsideLabelInputEvent> & {
+export type InsideLabelInputProps = ControllableDOMInputProps<string, InsideLabelInputEvent> & {
   id?: string,
   label: ReactNode,
   layoutRef?: Ref<ComponentRef<typeof InsideLabelInputLayout>>,
@@ -64,6 +64,7 @@ const InsideLabelInputComponent = ({
       isDisabled={isDisabled}
       isReadOnly={isReadOnly}
       isRequired={isRequired}
+      id={id}
     >
       <InsideLabelInputLayout
         {...layoutProps}

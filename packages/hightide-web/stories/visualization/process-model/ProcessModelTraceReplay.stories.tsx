@@ -26,14 +26,14 @@ export const processModelTraceReplay: Story = {
       <div className="flex flex-col items-center gap-4">
         <div className="flex w-full max-w-[900px] flex-row items-center gap-2 text-sm font-medium text-on-surface">
           <span>Example model</span>
-          <Select
+          <Select<string>
             value={modelId}
             onValueChange={setModelId}
-          >
-            {processModelLibrary.map((entry) => (
-              <Select.Option key={entry.id} value={entry.id} label={entry.name} />
-            ))}
-          </Select>
+            options={processModelLibrary.map((entry) => ({
+              value: entry.id,
+              label: entry.name,
+            }))}
+          />
         </div>
         <ProcessModelTraceReplay key={modelId} graph={graph} />
       </div>

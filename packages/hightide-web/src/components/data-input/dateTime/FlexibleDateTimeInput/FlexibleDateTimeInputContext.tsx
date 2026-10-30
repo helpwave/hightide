@@ -1,11 +1,11 @@
 import { createContext, useContext } from 'react'
-import type { InputConfig, InputContextValue } from '@helpwave/hightide-utils/interfaces'
+import type { DOMInputConfig, DOMInputContextValue } from '../../domInput'
 import type { FlexibleDateTimeInputEvent, FlexibleDateTimeInputState } from './FlexibleDateTimeInputState'
 
-export type FlexibleDateTimeInputContextValue = InputContextValue<
+export type FlexibleDateTimeInputContextValue = DOMInputContextValue<
   FlexibleDateTimeInputState,
   FlexibleDateTimeInputEvent,
-  InputConfig
+  DOMInputConfig
 >
 
 export const FlexibleDateTimeInputContext = createContext<FlexibleDateTimeInputContextValue | null>(null)

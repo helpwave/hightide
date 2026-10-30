@@ -1,8 +1,8 @@
 import { createContext, useContext } from 'react'
-import type { InputContextValue } from '@helpwave/hightide-utils/interfaces'
+import type { DOMInputContextValue } from '../../domInput'
 import type { TextInputEvent, TextInputState } from './TextInputState'
 
-export type TextInputContextValue = InputContextValue<TextInputState, TextInputEvent>
+export type TextInputContextValue = DOMInputContextValue<TextInputState, TextInputEvent>
 
 export const TextInputContext = createContext<TextInputContextValue | null>(null)
 

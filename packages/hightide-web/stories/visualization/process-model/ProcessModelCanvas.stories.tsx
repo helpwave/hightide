@@ -25,14 +25,14 @@ export const processModelCanvas: Story = {
       <div className="flex flex-col gap-4">
         <div className="flex flex-row items-center gap-2 text-sm font-medium text-on-surface">
           <span>Example model</span>
-          <Select
+          <Select<string>
             value={modelId}
             onValueChange={setModelId}
-          >
-            {processModelLibrary.map((entry) => (
-              <Select.Option key={entry.id} value={entry.id} label={entry.name} />
-            ))}
-          </Select>
+            options={processModelLibrary.map((entry) => ({
+              value: entry.id,
+              label: entry.name,
+            }))}
+          />
         </div>
         <ProcessModelCanvas graph={graph} />
       </div>

@@ -87,17 +87,3 @@ export const useTableContainerContext = <T,>(): TableContainerContextType<T> => 
   if (!context) throw new Error('useTableContainerContext must be used within a <TableContainerContext.Provider> like <TableContainer>')
   return context as TableContainerContextType<T>
 }
-
-export type TableColumnDefinitionContextType<T> = {
-  table: Table<T>,
-  registerColumn: (column: ColumnDef<T>) => () => void,
-}
-
-// eslint-disable-next-line @typescript-eslint/no-explicit-any
-export const TableColumnDefinitionContext = createContext<TableColumnDefinitionContextType<any> | null>(null)
-
-export const useTableColumnDefinitionContext = <T,>(): TableColumnDefinitionContextType<T> => {
-  const context = useContext(TableColumnDefinitionContext)
-  if (!context) throw new Error('useTableColumnDefinitionContext must be used within a <TableColumnDefinitionContext.Provider> like <TableColumnDefinition>')
-  return context as TableColumnDefinitionContextType<T>
-}

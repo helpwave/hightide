@@ -28,11 +28,7 @@ type Story = StoryObj<typeof meta>;
 export const combobox: Story = {
   args: {
     id: undefined,
-    children: options.map(({ value, label }) => (
-      <Combobox.Option key={value} value={value} label={label}>
-        {label}
-      </Combobox.Option>
-    )),
+    options,
     onItemClick: action('onItemClick'),
     onValueChange: action('onValueChange'),
     onStateEvent: action('onStateEvent'),
@@ -63,17 +59,12 @@ export const allowNewValue: Story = {
       <div className="w-80 flex flex-col gap-2">
         <Combobox
           {...args}
+          options={values}
           onNewValueAdded={(value) => {
             args.onNewValueAdded?.(value)
             setAdded((current) => current.includes(value) ? current : [...current, value])
           }}
-        >
-          {values.map(({ value, label }) => (
-            <Combobox.Option key={value} value={value} label={label}>
-              {label}
-            </Combobox.Option>
-          ))}
-        </Combobox>
+        />
       </div>
     )
   },

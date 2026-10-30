@@ -1,6 +1,6 @@
 import type { ReactNode } from 'react'
 import { useMemo } from 'react'
-import type { InputStateMangerProps } from '@helpwave/hightide-utils/interfaces'
+import type { DOMInputStateMangerProps } from '../../domInput'
 import { DateUtils } from '@helpwave/hightide-utils/utils'
 import { useLocalization } from '../../../../global-contexts/localization/forward-exports'
 import { dateInputConfig, useDateStateMachine } from '../useDateStateMachine'
@@ -14,7 +14,7 @@ import {
 const defaultPickerStart = DateUtils.subtractDuration(new Date(), { years: 100 })
 const defaultPickerEnd = DateUtils.addDuration(new Date(), { years: 100 })
 
-export type YearMonthPickerStateManagerProps = InputStateMangerProps<YearMonthPickerState, YearMonthPickerEvent> & {
+export type YearMonthPickerStateManagerProps = DOMInputStateMangerProps<YearMonthPickerState, YearMonthPickerEvent> & {
   children?: ReactNode,
   start?: Date,
   end?: Date,
@@ -28,6 +28,7 @@ export function YearMonthPickerStateManager({
   isDisabled,
   isReadOnly,
   isRequired,
+  id,
   start = defaultPickerStart,
   end = defaultPickerEnd,
   children,
@@ -47,11 +48,11 @@ export function YearMonthPickerStateManager({
     return (current: YearMonthPickerState, event: YearMonthPickerEvent) => yearMonthPickerStateTransition(current, event, bounds)
   }, [bounds])
   const config = useMemo<YearMonthPickerContextConfig>(() => ({
-    ...dateInputConfig({ isInvalid, isDisabled, isReadOnly, isRequired }),
+    ...dateInputConfig({ isInvalid, isDisabled, isReadOnly, isRequired, id }),
     monthNames,
     months,
     years,
-  }), [isDisabled, isInvalid, isReadOnly, isRequired, monthNames, months, years])
+  }), [isDisabled, isInvalid, isReadOnly, isRequired, monthNames, months, years, id])
   const contextValue = useDateStateMachine({
     state,
     transition,

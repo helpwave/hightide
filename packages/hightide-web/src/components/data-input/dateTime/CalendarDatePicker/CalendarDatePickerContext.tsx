@@ -1,9 +1,9 @@
 import { createContext, useContext } from 'react'
-import type { InputConfig, InputContextValue } from '@helpwave/hightide-utils/interfaces'
+import type { DOMInputConfig, DOMInputContextValue } from '../../domInput'
 import type { Weekday } from '@helpwave/hightide-utils/utils'
 import type { CalendarDatePickerEvent, CalendarDatePickerState } from './CalendarDatePickerState'
 
-export interface CalendarDatePickerContextConfig extends InputConfig {
+export interface CalendarDatePickerContextConfig extends DOMInputConfig {
   start?: Date,
   end?: Date,
   weekStart?: Weekday,
@@ -11,7 +11,7 @@ export interface CalendarDatePickerContextConfig extends InputConfig {
   locale: string,
 }
 
-export type CalendarDatePickerContextValue = InputContextValue<CalendarDatePickerState, CalendarDatePickerEvent, CalendarDatePickerContextConfig>
+export type CalendarDatePickerContextValue = DOMInputContextValue<CalendarDatePickerState, CalendarDatePickerEvent, CalendarDatePickerContextConfig>
 
 export const CalendarDatePickerContext = createContext<CalendarDatePickerContextValue | null>(null)
 

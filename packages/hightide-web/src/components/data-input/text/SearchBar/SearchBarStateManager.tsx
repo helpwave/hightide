@@ -1,11 +1,11 @@
 import type { ReactNode } from 'react'
 import { useCallback, useMemo } from 'react'
-import type { InputStateMangerProps } from '@helpwave/hightide-utils/interfaces'
+import type { DOMInputStateMangerProps } from '../../domInput'
 import { useStableEvent, useStateMachine } from '@helpwave/hightide-utils/hooks'
 import { SearchBarContext, type SearchBarContextValue } from './SearchBarContext'
 import { searchBarStateTransition, type SearchBarEvent, type SearchBarState } from './SearchBarState'
 
-export type SearchBarStateManagerProps = InputStateMangerProps<SearchBarState, SearchBarEvent> & {
+export type SearchBarStateManagerProps = DOMInputStateMangerProps<SearchBarState, SearchBarEvent> & {
   onSearch: (value: string) => void,
   children?: ReactNode,
 }
@@ -19,6 +19,7 @@ export function SearchBarStateManager({
   isDisabled = false,
   isReadOnly = false,
   isRequired = false,
+  id,
   children,
 }: SearchBarStateManagerProps) {
   const machine = useStateMachine<SearchBarState, SearchBarEvent>({
@@ -40,7 +41,8 @@ export function SearchBarStateManager({
     isDisabled,
     isReadOnly,
     isRequired,
-  }), [isDisabled, isInvalid, isReadOnly, isRequired])
+    id,
+  }), [isDisabled, isInvalid, isReadOnly, isRequired, id])
   const contextValue = useMemo<SearchBarContextValue>(() => ({
     state: machine.state,
     dispatch,

@@ -1,8 +1,8 @@
 import { createContext, useContext } from 'react'
-import type { InputContextValue } from '@helpwave/hightide-utils/interfaces'
+import type { DOMInputContextValue } from '../../domInput'
 import type { SwitchEvent, SwitchState } from './SwitchState'
 
-export type SwitchContextValue = InputContextValue<SwitchState, SwitchEvent>
+export type SwitchContextValue = DOMInputContextValue<SwitchState, SwitchEvent>
 
 export const SwitchContext = createContext<SwitchContextValue | null>(null)
 

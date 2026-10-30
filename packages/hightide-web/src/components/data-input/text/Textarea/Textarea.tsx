@@ -1,6 +1,6 @@
 import type { ComponentRef, Ref } from 'react'
 import { useCallback } from 'react'
-import type { ControllableInputProps } from '@helpwave/hightide-utils/interfaces'
+import type { ControllableDOMInputProps } from '../../domInput'
 import { useControlledState, useStateMachineBinding } from '@helpwave/hightide-utils/hooks'
 import { ReactUtils } from '@helpwave/hightide-utils/utils'
 import { TextareaContext } from './TextareaContext'
@@ -8,7 +8,7 @@ import { TextareaElement, type TextareaElementProps } from './TextareaElement'
 import { TextareaStateManager } from './TextareaStateManager'
 import type { TextareaEvent, TextareaState } from './TextareaState'
 
-export type TextareaProps = ControllableInputProps<string, TextareaEvent>
+export type TextareaProps = ControllableDOMInputProps<string, TextareaEvent>
   & {
     inputRef?: Ref<ComponentRef<typeof TextareaElement>>,
     inputProps?: TextareaElementProps,
@@ -23,6 +23,7 @@ const TextareaComponent = ({
   isDisabled,
   isReadOnly,
   isRequired,
+  id,
   inputRef,
   inputProps,
 }: TextareaProps) => {
@@ -47,6 +48,7 @@ const TextareaComponent = ({
       isDisabled={isDisabled}
       isReadOnly={isReadOnly}
       isRequired={isRequired}
+      id={id}
     >
       <TextareaElement
         ref={ReactUtils.assingRefsBuilder([inputRef])}

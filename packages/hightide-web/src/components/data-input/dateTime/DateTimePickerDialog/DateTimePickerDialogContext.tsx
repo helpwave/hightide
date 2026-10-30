@@ -1,11 +1,11 @@
 import { createContext, useContext } from 'react'
 import type { RefObject } from 'react'
-import type { InputConfig, InputContextValue } from '@helpwave/hightide-utils/interfaces'
+import type { DOMInputConfig, DOMInputContextValue } from '../../domInput'
 import type { DateTimePickerDialogEvent, DateTimePickerDialogOptions, DateTimePickerDialogState } from './DateTimePickerDialogState'
 
-export interface DateTimePickerDialogContextConfig extends DateTimePickerDialogOptions, InputConfig {}
+export interface DateTimePickerDialogContextConfig extends DateTimePickerDialogOptions, DOMInputConfig {}
 
-export type DateTimePickerDialogContextValue = InputContextValue<DateTimePickerDialogState, DateTimePickerDialogEvent, DateTimePickerDialogContextConfig>
+export type DateTimePickerDialogContextValue = DOMInputContextValue<DateTimePickerDialogState, DateTimePickerDialogEvent, DateTimePickerDialogContextConfig>
 
 export const DateTimePickerDialogContext = createContext<DateTimePickerDialogContextValue | null>(null)
 

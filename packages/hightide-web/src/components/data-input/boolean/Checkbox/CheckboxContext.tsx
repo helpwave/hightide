@@ -1,8 +1,8 @@
 import { createContext, useContext } from 'react'
-import type { InputContextValue } from '@helpwave/hightide-utils/interfaces'
+import type { DOMInputContextValue } from '../../domInput'
 import type { CheckboxEvent, CheckboxState } from './CheckboxState'
 
-export type CheckboxContextValue = InputContextValue<CheckboxState, CheckboxEvent>
+export type CheckboxContextValue = DOMInputContextValue<CheckboxState, CheckboxEvent>
 
 export const CheckboxContext = createContext<CheckboxContextValue | null>(null)
 

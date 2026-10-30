@@ -1,9 +1,9 @@
 import { createContext, useContext } from 'react'
-import type { InputConfig, InputContextValue } from '@helpwave/hightide-utils/interfaces'
+import type { DOMInputConfig, DOMInputContextValue } from '../../domInput'
 import type { DateTimeFormat, DateTimePrecision } from '@helpwave/hightide-utils/utils'
 import type { DateTimeInputEvent, DateTimeInputState } from './DateTimeInputState'
 
-export type DateTimeInputContextValue = InputContextValue<DateTimeInputState, DateTimeInputEvent, InputConfig> & {
+export type DateTimeInputContextValue = DOMInputContextValue<DateTimeInputState, DateTimeInputEvent, DOMInputConfig> & {
   mode: DateTimeFormat,
   precision: DateTimePrecision,
   timeZone: string,

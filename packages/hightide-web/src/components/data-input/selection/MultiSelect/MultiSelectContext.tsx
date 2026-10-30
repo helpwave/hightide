@@ -1,19 +1,9 @@
-import type { Dispatch, ReactNode, RefObject, SetStateAction } from 'react'
+import type { Dispatch, RefObject, SetStateAction } from 'react'
 import { createContext, useContext } from 'react'
+import type { SelectionOptionData } from '../option'
 import type { UseMultiSelectFirstHighlightBehavior } from './useMultiSelect'
 
-export type MultiSelectOptionIdentity<T> = {
-  value: T,
-  id: string,
-}
-
-export interface MultiSelectOptionType<T = string> {
-  value: MultiSelectOptionIdentity<T>,
-  label: string,
-  display?: ReactNode,
-  disabled?: boolean,
-  ref: RefObject<HTMLElement | null>,
-}
+export type MultiSelectOptionData<T> = SelectionOptionData<T>
 
 export interface MultiSelectContextIds {
   trigger: string,
@@ -28,7 +18,7 @@ export interface MultiSelectContextState<T> {
   isReadOnly: boolean,
   isRequired: boolean,
   value: T[],
-  options: ReadonlyArray<MultiSelectOptionType<T>>,
+  options: ReadonlyArray<MultiSelectOptionData<T>>,
   selectedIds: string[],
   highlightedId: string | null,
   isOpen: boolean,
@@ -36,11 +26,10 @@ export interface MultiSelectContextState<T> {
 
 export interface MultiSelectContextComputedState<T> {
   visibleOptionIds: ReadonlyArray<string>,
-  idToOptionMap: Record<string, MultiSelectOptionType<T>>,
+  idToOptionMap: Record<string, MultiSelectOptionData<T>>,
 }
 
-export interface MultiSelectContextActions<T> {
-  registerOption(option: MultiSelectOptionType<T>): () => void,
+export interface MultiSelectContextActions {
   toggleSelection(id: string, isSelected?: boolean): void,
   highlightFirst(): void,
   highlightLast(): void,
@@ -71,7 +60,8 @@ export interface MultiSelectContextConfig {
   setIds: Dispatch<SetStateAction<MultiSelectContextIds>>,
 }
 
-export interface MultiSelectContextType<T> extends MultiSelectContextActions<T>, MultiSelectContextState<T>, MultiSelectContextComputedState<T> {
+export interface MultiSelectContextType<T> extends MultiSelectContextActions, MultiSelectContextState<T>, MultiSelectContextComputedState<T> {
+  optionRefs: Record<string, RefObject<HTMLLIElement | null>>,
   config: MultiSelectContextConfig,
   layout: MultiSelectContextLayout,
   search: MultiSelectContextSearch,

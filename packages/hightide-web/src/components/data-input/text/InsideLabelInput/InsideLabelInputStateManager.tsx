@@ -1,6 +1,6 @@
 import type { ReactNode } from 'react'
 import { useCallback, useMemo } from 'react'
-import type { InputStateMangerProps } from '@helpwave/hightide-utils/interfaces'
+import type { DOMInputStateMangerProps } from '../../domInput'
 import { useStableEvent, useStateMachine } from '@helpwave/hightide-utils/hooks'
 import { InsideLabelInputContext, type InsideLabelInputContextValue } from './InsideLabelInputContext'
 import {
@@ -9,7 +9,7 @@ import {
   type InsideLabelInputState
 } from './InsideLabelInputState'
 
-export type InsideLabelInputStateManagerProps = InputStateMangerProps<InsideLabelInputState, InsideLabelInputEvent> & {
+export type InsideLabelInputStateManagerProps = DOMInputStateMangerProps<InsideLabelInputState, InsideLabelInputEvent> & {
   children?: ReactNode,
 }
 
@@ -21,6 +21,7 @@ export function InsideLabelInputStateManager({
   isDisabled = false,
   isReadOnly = false,
   isRequired = false,
+  id,
   children,
 }: InsideLabelInputStateManagerProps) {
   const machine = useStateMachine<InsideLabelInputState, InsideLabelInputEvent>({
@@ -38,7 +39,8 @@ export function InsideLabelInputStateManager({
     isDisabled,
     isReadOnly,
     isRequired,
-  }), [isDisabled, isInvalid, isReadOnly, isRequired])
+    id,
+  }), [isDisabled, isInvalid, isReadOnly, isRequired, id])
   const contextValue = useMemo<InsideLabelInputContextValue>(() => ({
     state: machine.state,
     dispatch,

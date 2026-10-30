@@ -1,6 +1,6 @@
 import type { ComponentRef, Ref } from 'react'
 import { useCallback } from 'react'
-import type { ControllableInputProps } from '@helpwave/hightide-utils/interfaces'
+import type { ControllableDOMInputProps } from '../../domInput'
 import { useControlledState, useStateMachineBinding } from '@helpwave/hightide-utils/hooks'
 import { ReactUtils } from '@helpwave/hightide-utils/utils'
 import type { TextInputElementProps } from '../TextInput'
@@ -11,7 +11,7 @@ import { ToggleableInputLayout, type ToggleableInputLayoutProps } from './Toggle
 import { ToggleableInputStateManager } from './ToggleableInputStateManager'
 import type { ToggleableInputEvent, ToggleableInputState } from './ToggleableInputState'
 
-export type ToggleableInputProps = ControllableInputProps<string, ToggleableInputEvent> & {
+export type ToggleableInputProps = ControllableDOMInputProps<string, ToggleableInputEvent> & {
   initialEditingState?: 'editing' | 'display',
   editCompleteOptions?: ToggleableInputEditOptions,
   layoutRef?: Ref<ComponentRef<typeof ToggleableInputLayout>>,
@@ -29,6 +29,7 @@ const ToggleableInputComponent = ({
   isDisabled,
   isReadOnly,
   isRequired,
+  id,
   initialEditingState = 'display',
   editCompleteOptions,
   layoutRef,
@@ -60,6 +61,7 @@ const ToggleableInputComponent = ({
       isDisabled={isDisabled}
       isReadOnly={isReadOnly}
       isRequired={isRequired}
+      id={id}
     >
       <ToggleableInputLayout
         {...layoutProps}

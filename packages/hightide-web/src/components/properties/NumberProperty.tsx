@@ -30,6 +30,7 @@ export const NumberProperty = ({
   isInvalid,
   isDisabled,
   isRequired,
+  id,
   suffix,
   ...baseProps
 }: NumberPropertyProps) => {
@@ -79,6 +80,7 @@ export const NumberProperty = ({
             isInvalid={invalid}
             isDisabled={isDisabled}
             isRequired={isRequired}
+            id={id}
             onValueChange={(next) => {
               setText(next)
               const numberValue = parseFloat(next)

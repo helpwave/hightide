@@ -1,6 +1,6 @@
 import type { ReactNode } from 'react'
 import { useMemo } from 'react'
-import type { InputStateMangerProps } from '@helpwave/hightide-utils/interfaces'
+import type { DOMInputStateMangerProps } from '../../domInput'
 import type { Weekday } from '@helpwave/hightide-utils/utils'
 import { useLocalization } from '../../../../global-contexts/localization/forward-exports'
 import { dateInputConfig, useDateStateMachine } from '../useDateStateMachine'
@@ -11,7 +11,7 @@ import {
   type CalendarDayPickerState
 } from './CalendarDayPickerState'
 
-export type CalendarDayPickerStateManagerProps = InputStateMangerProps<CalendarDayPickerState, CalendarDayPickerEvent> & {
+export type CalendarDayPickerStateManagerProps = DOMInputStateMangerProps<CalendarDayPickerState, CalendarDayPickerEvent> & {
   children?: ReactNode,
   start?: Date,
   end?: Date,
@@ -31,6 +31,7 @@ export function CalendarDayPickerStateManager({
   isDisabled,
   isReadOnly,
   isRequired,
+  id,
   start: providedStart,
   end: providedEnd,
   weekStart: weekStartOverride,
@@ -45,13 +46,13 @@ export function CalendarDayPickerStateManager({
     return (current: CalendarDayPickerState, event: CalendarDayPickerEvent) => calendarDayPickerStateTransition(current, event, { start, end })
   }, [end, start])
   const config = useMemo<CalendarDayPickerContextConfig>(() => ({
-    ...dateInputConfig({ isInvalid, isDisabled, isReadOnly, isRequired }),
+    ...dateInputConfig({ isInvalid, isDisabled, isReadOnly, isRequired, id }),
     start,
     end,
     weekStart,
     markToday,
     locale,
-  }), [end, isDisabled, isInvalid, isReadOnly, isRequired, locale, markToday, start, weekStart])
+  }), [end, isDisabled, isInvalid, isReadOnly, isRequired, locale, markToday, start, weekStart, id])
   const contextValue = useDateStateMachine({
     state,
     transition,

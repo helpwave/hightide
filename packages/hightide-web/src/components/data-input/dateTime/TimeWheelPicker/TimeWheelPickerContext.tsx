@@ -1,9 +1,9 @@
 import { createContext, useContext } from 'react'
-import type { InputConfig, InputContextValue } from '@helpwave/hightide-utils/interfaces'
+import type { DOMInputConfig, DOMInputContextValue } from '../../domInput'
 import type { DateTimePrecision } from '@helpwave/hightide-utils/utils'
 import type { TimeWheelPickerEvent, TimeWheelPickerState, WheelLoopingBehaviour } from './TimeWheelPickerState'
 
-export interface TimeWheelPickerContextConfig extends InputConfig {
+export interface TimeWheelPickerContextConfig extends DOMInputConfig {
   is24HourFormat: boolean,
   isLooping: boolean,
   loopingBehaviour: WheelLoopingBehaviour,
@@ -14,7 +14,7 @@ export interface TimeWheelPickerContextConfig extends InputConfig {
   milliseconds: number[],
 }
 
-export type TimeWheelPickerContextValue = InputContextValue<TimeWheelPickerState, TimeWheelPickerEvent, TimeWheelPickerContextConfig>
+export type TimeWheelPickerContextValue = DOMInputContextValue<TimeWheelPickerState, TimeWheelPickerEvent, TimeWheelPickerContextConfig>
 
 export const TimeWheelPickerContext = createContext<TimeWheelPickerContextValue | null>(null)
 

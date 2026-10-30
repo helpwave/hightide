@@ -1,9 +1,9 @@
 import { createContext, useContext } from 'react'
-import type { InputConfig, InputContextValue } from '@helpwave/hightide-utils/interfaces'
+import type { DOMInputConfig, DOMInputContextValue } from '../../domInput'
 import type { WheelLoopingBehaviour } from '../TimeWheelPicker'
 import type { DateWheelPickerEvent, DateWheelPickerState } from './DateWheelPickerState'
 
-export interface DateWheelPickerContextConfig extends InputConfig {
+export interface DateWheelPickerContextConfig extends DOMInputConfig {
   isLooping: boolean,
   loopingBehaviour: WheelLoopingBehaviour,
   monthNames: string[],
@@ -12,7 +12,7 @@ export interface DateWheelPickerContextConfig extends InputConfig {
   days: number[],
 }
 
-export type DateWheelPickerContextValue = InputContextValue<DateWheelPickerState, DateWheelPickerEvent, DateWheelPickerContextConfig>
+export type DateWheelPickerContextValue = DOMInputContextValue<DateWheelPickerState, DateWheelPickerEvent, DateWheelPickerContextConfig>
 
 export const DateWheelPickerContext = createContext<DateWheelPickerContextValue | null>(null)
 

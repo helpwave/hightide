@@ -27,7 +27,7 @@ export const TablePaginationMenu = ({ ...props }: TablePaginationMenuProps) => {
 
 const defaultPageSizeOptions: number[] = [10, 25, 50, 100, 500, 1000] as const
 
-export interface TablePageSizeSelectProps extends Omit<SelectProps, 'children'> {
+export interface TablePageSizeSelectProps extends Omit<SelectProps, 'options' | 'value' | 'onValueChange'> {
   pageSizeOptions?: number[],
 }
 
@@ -43,11 +43,11 @@ export const TablePageSizeSelect = ({
       {...props}
       value={currentPageSize.toString()}
       onValueChange={(value) => table.setPageSize(Number(value))}
-    >
-      {pageSizeOptions.map(size => (
-        <Select.Option key={size} value={size.toString()} label={size.toString()}/>
-      ))}
-    </Select>
+      options={pageSizeOptions.map(size => ({
+        value: size.toString(),
+        label: size.toString(),
+      }))}
+    />
   )
 }
 

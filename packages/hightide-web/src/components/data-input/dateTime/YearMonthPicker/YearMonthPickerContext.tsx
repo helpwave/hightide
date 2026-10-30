@@ -1,14 +1,14 @@
 import { createContext, useContext } from 'react'
-import type { InputConfig, InputContextValue } from '@helpwave/hightide-utils/interfaces'
+import type { DOMInputConfig, DOMInputContextValue } from '../../domInput'
 import type { YearMonthPickerEvent, YearMonthPickerState } from './YearMonthPickerState'
 
-export interface YearMonthPickerContextConfig extends InputConfig {
+export interface YearMonthPickerContextConfig extends DOMInputConfig {
   monthNames: string[],
   months: number[],
   years: number[],
 }
 
-export type YearMonthPickerContextValue = InputContextValue<YearMonthPickerState, YearMonthPickerEvent, YearMonthPickerContextConfig>
+export type YearMonthPickerContextValue = DOMInputContextValue<YearMonthPickerState, YearMonthPickerEvent, YearMonthPickerContextConfig>
 
 export const YearMonthPickerContext = createContext<YearMonthPickerContextValue | null>(null)
 

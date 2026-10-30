@@ -1,8 +1,8 @@
 import { createContext, useContext } from 'react'
-import type { InputConfig, InputContextValue } from '@helpwave/hightide-utils/interfaces'
+import type { DOMInputConfig, DOMInputContextValue } from '../../domInput'
 import type { DateTimeFieldEvent, DateTimeFieldState } from './DateTimeFieldState'
 
-export type DateTimeFieldContextValue = InputContextValue<DateTimeFieldState, DateTimeFieldEvent, InputConfig> & {
+export type DateTimeFieldContextValue = DOMInputContextValue<DateTimeFieldState, DateTimeFieldEvent, DOMInputConfig> & {
   locale: string,
   is24HourFormat: boolean,
 }

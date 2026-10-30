@@ -1,13 +1,13 @@
 import { createContext, useContext } from 'react'
-import type { InputConfig, InputContextValue } from '@helpwave/hightide-utils/interfaces'
+import type { DOMInputConfig, DOMInputContextValue } from '../../domInput'
 import type { ColorInputEvent, ColorInputState } from './ColorInputState'
 
-export type ColorInputConfig = InputConfig & {
+export type ColorInputConfig = DOMInputConfig & {
   hasAlpha: boolean,
   isCapitalized: boolean,
 }
 
-export type ColorInputContextValue = InputContextValue<ColorInputState, ColorInputEvent, ColorInputConfig>
+export type ColorInputContextValue = DOMInputContextValue<ColorInputState, ColorInputEvent, ColorInputConfig>
 
 export const ColorInputContext = createContext<ColorInputContextValue | null>(null)
 

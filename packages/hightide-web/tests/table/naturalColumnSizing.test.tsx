@@ -4,7 +4,6 @@
 import { render } from '@testing-library/react'
 import { TestHightideProvider } from '../setup/TestHightideProvider'
 import { Table } from '../../src/components/layout/Table/Table'
-import { TableColumn } from '../../src/components/layout/Table/TableColumn'
 
 type Row = { id: string, name: string, grade: string }
 
@@ -18,12 +17,17 @@ const DATA: Row[] = [
 const renderTable = (columnSizingMode?: 'fill' | 'natural') => render(
   <TestHightideProvider locale="en-US">
     <Table
-      table={{ data: DATA, columnSizingMode, isUsingFillerRows: false }}
+      table={{
+        data: DATA,
+        columnSizingMode,
+        isUsingFillerRows: false,
+        columns: [
+          { id: 'name', header: 'Name', accessorKey: 'name', minSize: 120 },
+          { id: 'grade', header: 'Grade', accessorKey: 'grade', minSize: 48 },
+        ],
+      }}
       paginationOptions={{ showPagination: false }}
-    >
-      <TableColumn<Row> id="name" header="Name" accessorKey="name" minSize={120}/>
-      <TableColumn<Row> id="grade" header="Grade" accessorKey="grade" minSize={48}/>
-    </Table>
+    />
   </TestHightideProvider>
 )
 

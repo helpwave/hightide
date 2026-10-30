@@ -29,6 +29,7 @@ export const CheckboxTrigger = forwardRef<HTMLDivElement, CheckboxTriggerProps>(
     <div
       {...props}
       ref={forwardedRef}
+      id={config.id ?? props.id}
       onClick={(event) => {
         props.onClick?.(event)
         if (isInteractive) {

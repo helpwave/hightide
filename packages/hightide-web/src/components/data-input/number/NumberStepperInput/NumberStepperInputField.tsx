@@ -25,6 +25,7 @@ export function NumberStepperInputField({
       isDisabled={config.isDisabled}
       isReadOnly={config.isReadOnly}
       isRequired={config.isRequired}
+      id={config.id}
       onValueChange={(next) => dispatch({ type: 'change', value: next })}
       onStateEvent={(event) => {
         if (event.type === 'commit') {

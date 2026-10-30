@@ -25,6 +25,7 @@ export const DateProperty = ({
   onValueClear,
   onEditComplete: _onEditComplete,
   isRequired,
+  id,
   isReadOnly,
   isInvalid,
   isDisabled,
@@ -65,6 +66,7 @@ export const DateProperty = ({
           isDisabled={isDisabled}
           isReadOnly={isReadOnly}
           isRequired={isRequired}
+          id={id}
           allowClear={false}
           onValueChange={onValueChange}
           onStateEvent={onStateEvent}

@@ -5,7 +5,7 @@ import { SendHorizontal } from 'lucide-react'
 import { useControlledState, useStableEvent } from '@helpwave/hightide-utils/hooks'
 
 import { useWindowResizeObserver } from '../../../hooks/useWindowResizeObserver'
-import type { ControllableInputProps } from '@helpwave/hightide-utils/interfaces'
+import type { ControllableDOMInputProps } from '../../data-input/domInput'
 import { IconButton } from '../../interaction/IconButton'
 import { Icon } from '../../visualization/Icon'
 import { PropsUtil } from '../../../utils/propsUtil'
@@ -15,7 +15,7 @@ const MAX_INPUT_LINES = 7
 export type ChatMessageComposerEvent = { type: 'commit', value: string }
 
 export type ChatMessageComposerProps = Omit<HTMLAttributes<HTMLDivElement>, 'onChange'>
-  & ControllableInputProps<string, ChatMessageComposerEvent>
+  & ControllableDOMInputProps<string, ChatMessageComposerEvent>
   & {
     onSend: (value: string) => void,
     placeholder?: string,
@@ -33,6 +33,7 @@ export const ChatMessageComposer = forwardRef<HTMLDivElement, ChatMessageCompose
   isDisabled = false,
   isReadOnly = false,
   isRequired = false,
+  id,
   onSend,
   placeholder,
   sendLabel = 'Send',
@@ -94,6 +95,7 @@ export const ChatMessageComposer = forwardRef<HTMLDivElement, ChatMessageCompose
       <textarea
         ref={textareaRef}
         className="chat-message-composer-input"
+        id={id}
         rows={1}
         value={value ?? ''}
         placeholder={placeholder}

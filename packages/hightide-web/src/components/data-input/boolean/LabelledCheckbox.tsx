@@ -1,7 +1,7 @@
 import clsx from 'clsx'
 import type { HTMLAttributes, ReactNode } from 'react'
 import { forwardRef, useCallback, useId } from 'react'
-import type { ControllableInputProps } from '@helpwave/hightide-utils/interfaces'
+import type { ControllableDOMInputProps } from '../domInput'
 import { Checkbox, type CheckboxProps } from './Checkbox'
 import { PropsUtil } from '../../../utils/propsUtil'
 import { useControlledState, useStableEvent } from '@helpwave/hightide-utils/hooks'
@@ -11,7 +11,7 @@ type LabelledCheckboxCheckPosition = 'left' | 'right'
 export type LabelledCheckboxEvent = { type: 'commit', value: boolean }
 
 export type LabelledCheckboxProps = Omit<HTMLAttributes<HTMLDivElement>, 'children'>
-  & ControllableInputProps<boolean, LabelledCheckboxEvent>
+  & ControllableDOMInputProps<boolean, LabelledCheckboxEvent>
   & Pick<CheckboxProps, 'indeterminate' | 'size' | 'alwaysShowCheckIcon' | 'isRounded'>
   & {
     label: ReactNode,

@@ -4,7 +4,6 @@ import { action } from 'storybook/actions'
 import clsx from 'clsx'
 import { MultiSelectProperty } from '../../src/components/properties/MultiSelectProperty'
 import { StorybookHelper } from '../../src/storybook/helper'
-import { MultiSelect } from '../../src/components/data-input/selection/MultiSelect/MultiSelect'
 
 const options = StorybookHelper.selectValues
 
@@ -21,29 +20,33 @@ export const multiSelectProperty: Story = {
     isRequired: false,
     value: options.slice(3, 5),
     isReadOnly: false,
-    children: options.map(option => (
-      <MultiSelect.Option key={option} value={option} label={option}>
-        <span className="flex-row-1 items-center">
-          <span
-            className={clsx(
-              'w-4 h-4 rounded-full',
-              {
-                'bg-primary': option.length % 3 === 0,
-                'bg-secondary': option.length % 3 !== 0,
-              }
-            )}
-          />
-          {option}
-        </span>
-      </MultiSelect.Option>
-    )),
+    options: options.map(option => ({
+      value: option,
+      label: option,
+      visual: {
+        content: (
+          <span className="flex-row-1 items-center">
+            <span
+              className={clsx(
+                'w-4 h-4 rounded-full',
+                {
+                  'bg-primary': option.length % 3 === 0,
+                  'bg-secondary': option.length % 3 !== 0,
+                }
+              )}
+            />
+            {option}
+          </span>
+        ),
+      },
+    })),
     onValueChange: action('onValueChange'),
     onEditComplete: action('onEditComplete'),
     onRemove: action('onRemove'),
     onValueClear: action('onValueClear'),
   },
   render: ({ value: initialValue, ...props }) => {
-    const [values, setValues] = useState<string[]>(initialValue)
+    const [values, setValues] = useState<string[]>(initialValue ?? [])
 
     return (
       <MultiSelectProperty

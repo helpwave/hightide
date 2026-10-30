@@ -1,27 +1,39 @@
-import type { ReactNode, Ref } from 'react'
+import type { Ref } from 'react'
 import type { MultiSelectStateManagerProps } from './MultiSelectStateManager'
 import { MultiSelectStateManager } from './MultiSelectStateManager'
 import type { MultiSelectTriggerProps } from './MultiSelectTrigger'
 import { MultiSelectTrigger } from './MultiSelectTrigger'
-import type { MultiSelectContentProps } from './MultiSelectContent'
-import { MultiSelectContent } from './MultiSelectContent'
+import type { MultiSelectPopUpProps } from './MultiSelectPopUp'
+import { MultiSelectPopUp } from './MultiSelectPopUp'
+import type { MultiSelectSearchbarProps } from './MultiSelectSearchbar'
+import { MultiSelectSearchbar } from './MultiSelectSearchbar'
+import type { MultiSelectListProps } from './MultiSelectList'
+import { MultiSelectList } from './MultiSelectList'
 
 export type MultiSelectProps<T = string> = Omit<MultiSelectStateManagerProps<T>, 'children'> & {
-  children?: ReactNode,
   placeholder?: MultiSelectTriggerProps<T>['placeholder'],
   selectedDisplay?: MultiSelectTriggerProps<T>['selectedDisplay'],
   triggerRef?: Ref<HTMLDivElement>,
   triggerProps?: MultiSelectTriggerProps<T>,
-  contentProps?: Omit<MultiSelectContentProps, 'children'>,
+  popupRef?: Ref<HTMLDivElement>,
+  popupProps?: MultiSelectPopUpProps,
+  searchbarRef?: Ref<HTMLInputElement>,
+  searchbarProps?: MultiSelectSearchbarProps,
+  listRef?: Ref<HTMLUListElement>,
+  listProps?: MultiSelectListProps<T>,
 }
 
 export function MultiSelectComponent<T = string>({
-  children,
   placeholder,
   selectedDisplay,
   triggerRef,
   triggerProps,
-  contentProps,
+  popupRef,
+  popupProps,
+  searchbarRef,
+  searchbarProps,
+  listRef,
+  listProps,
   ...props
 }: MultiSelectProps<T>) {
   return (
@@ -32,7 +44,19 @@ export function MultiSelectComponent<T = string>({
         {...triggerProps}
         ref={triggerRef}
       />
-      <MultiSelectContent {...contentProps}>{children}</MultiSelectContent>
+      <MultiSelectPopUp
+        {...popupProps}
+        ref={popupRef}
+      >
+        <MultiSelectSearchbar
+          {...searchbarProps}
+          ref={searchbarRef}
+        />
+        <MultiSelectList
+          {...listProps}
+          ref={listRef}
+        />
+      </MultiSelectPopUp>
     </MultiSelectStateManager>
   )
 }

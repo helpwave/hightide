@@ -1,3 +1,4 @@
+export * from './domInput'
 export * from './text/TextInput'
 export * from './number/NumberInput'
 export * from './number/NumberStepperInput'

@@ -9,7 +9,7 @@ import { Select } from '../../../data-input/selection/Select/Select'
 import type { ModalProps } from '../Modal'
 import { Modal } from '../Modal'
 
-type LanguageSelectProps = Omit<SelectProps, 'value' | 'children'>
+type LanguageSelectProps = Omit<SelectProps, 'value' | 'options'>
 
 export const LanguageSelect = ({ ...props }: LanguageSelectProps) => {
   const { locale, setLocale, supportedLocales } = useLocalization()
@@ -26,17 +26,12 @@ export const LanguageSelect = ({ ...props }: LanguageSelectProps) => {
         ...props.triggerProps,
         className: clsx('min-w-40 w-fit', props.triggerProps?.className),
       }}
-    >
-      {Object.entries(supportedLocales).map(([supportedLocale, { localName }]) => (
-        <Select.Option
-          key={supportedLocale}
-          value={supportedLocale}
-          label={localName}
-        >
-          {localName}
-        </Select.Option>
-      ))}
-    </Select>
+      options={Object.entries(supportedLocales).map(([supportedLocale, { localName }]) => ({
+        value: supportedLocale,
+        label: localName,
+        visual: { content: localName },
+      }))}
+    />
   )
 }
 

@@ -3,7 +3,6 @@ import { useCallback, useState } from 'react'
 import { faker } from '@faker-js/faker'
 import { range } from '@helpwave/hightide-utils/utils'
 import { Table } from '../../../src/components/layout/Table/Table'
-import { TableColumn } from '../../../src/components/layout/Table/TableColumn'
 import { Button } from '../../../src/components/interaction/Button'
 import { Chip } from '../../../src/components/visualization/Chip'
 
@@ -45,6 +44,19 @@ export const naturalColumnSizing: Story = {
           columnSizingMode: 'natural',
           isUsingFillerRows: false,
           initialState: { pagination: { pageIndex: 0, pageSize: 1000 } },
+          columns: [
+            { id: 'id', header: 'ID', accessorKey: 'id', minSize: 48 },
+            {
+              id: 'grade',
+              header: 'Grade',
+              accessorKey: 'grade',
+              minSize: 48,
+              cell: ({ cell }) => (<Chip size="sm">{cell.getValue() as string}</Chip>),
+            },
+            { id: 'name', header: 'Name', accessorKey: 'name', minSize: 120 },
+            { id: 'city', header: 'City', accessorKey: 'city', minSize: 96 },
+            { id: 'note', header: 'Note', accessorKey: 'note', minSize: 120 },
+          ],
         }}
         paginationOptions={{ showPagination: false }}
         header={(
@@ -53,19 +65,7 @@ export const naturalColumnSizing: Story = {
             <Button onClick={addWideRows}>Load wider content</Button>
           </div>
         )}
-      >
-        <TableColumn id="id" header="ID" accessorKey="id" minSize={48}/>
-        <TableColumn
-          id="grade"
-          header="Grade"
-          accessorKey="grade"
-          minSize={48}
-          cell={({ cell }) => (<Chip size="sm">{cell.getValue() as string}</Chip>)}
-        />
-        <TableColumn id="name" header="Name" accessorKey="name" minSize={120}/>
-        <TableColumn id="city" header="City" accessorKey="city" minSize={96}/>
-        <TableColumn id="note" header="Note" accessorKey="note" minSize={120}/>
-      </Table>
+      />
     )
   },
 }

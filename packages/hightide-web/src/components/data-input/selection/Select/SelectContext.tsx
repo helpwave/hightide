@@ -1,19 +1,9 @@
-import type { Dispatch, ReactNode, RefObject, SetStateAction } from 'react'
+import type { Dispatch, RefObject, SetStateAction } from 'react'
 import { createContext, useContext } from 'react'
+import type { SelectionOptionData } from '../option'
 import type { UseSelectFirstHighlightBehavior } from './useSelect'
 
-export type SelectOptionIdentity<T> = {
-  value: T,
-  id: string,
-}
-
-export interface SelectOptionType<T = string> {
-  value: SelectOptionIdentity<T>,
-  label: string,
-  display?: ReactNode,
-  disabled?: boolean,
-  ref: RefObject<HTMLElement | null>,
-}
+export type SelectOptionData<T> = SelectionOptionData<T>
 
 export interface SelectContextIds {
   trigger: string,
@@ -28,18 +18,17 @@ export interface SelectContextState<T> {
   isReadOnly: boolean,
   isRequired: boolean,
   selectedId: string | null,
-  options: ReadonlyArray<SelectOptionType<T>>,
+  options: ReadonlyArray<SelectOptionData<T>>,
   highlightedId: string | null,
   isOpen: boolean,
 }
 
 export interface SelectContextComputedState<T> {
   visibleOptionIds: ReadonlyArray<string>,
-  idToOptionMap: Record<string, SelectOptionType<T>>,
+  idToOptionMap: Record<string, SelectOptionData<T>>,
 }
 
-export interface SelectContextActions<T> {
-  registerOption(option: SelectOptionType<T>): () => void,
+export interface SelectContextActions {
   toggleSelection(id: string): void,
   highlightFirst(): void,
   highlightLast(): void,
@@ -70,7 +59,8 @@ export interface SelectContextConfig {
   setIds: Dispatch<SetStateAction<SelectContextIds>>,
 }
 
-export interface SelectContextType<T> extends SelectContextActions<T>, SelectContextState<T>, SelectContextComputedState<T> {
+export interface SelectContextType<T> extends SelectContextActions, SelectContextState<T>, SelectContextComputedState<T> {
+  optionRefs: Record<string, RefObject<HTMLLIElement | null>>,
   config: SelectContextConfig,
   layout: SelectContextLayout,
   search: SelectContextSearch,

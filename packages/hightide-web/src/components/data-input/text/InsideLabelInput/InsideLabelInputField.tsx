@@ -35,6 +35,7 @@ export function InsideLabelInputField({
       isDisabled={config.isDisabled}
       isReadOnly={config.isReadOnly}
       isRequired={config.isRequired}
+      id={config.id}
     >
       <TextInput.Input
         {...inputProps}

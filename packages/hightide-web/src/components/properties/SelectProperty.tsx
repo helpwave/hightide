@@ -1,16 +1,18 @@
 import { List } from 'lucide-react'
 import { Icon } from '../visualization/Icon'
-import type { PropsWithChildren } from 'react'
 import type { PropertyField } from './PropertyBase'
 import { PropertyBase } from './PropertyBase'
 import { PropsUtil } from '../../utils/propsUtil'
 import { Select } from '../data-input/selection/Select/Select'
 import type { SelectEvent } from '../data-input/selection/Select/SelectStateManager'
+import type { SelectionOptionInput } from '../data-input/selection/option'
 
-export interface SingleSelectPropertyProps extends PropertyField<string, SelectEvent<string>>, PropsWithChildren {}
+export interface SingleSelectPropertyProps extends PropertyField<string, SelectEvent<string>> {
+  options: ReadonlyArray<SelectionOptionInput<string>>,
+}
 
 export const SingleSelectProperty = ({
-  children,
+  options,
   value,
   initialValue,
   onValueChange,
@@ -20,6 +22,7 @@ export const SingleSelectProperty = ({
   isDisabled,
   isInvalid,
   isRequired,
+  id,
   ...props
 }: SingleSelectPropertyProps) => {
   const hasValue = value !== undefined
@@ -40,6 +43,7 @@ export const SingleSelectProperty = ({
           data-invalid={PropsUtil.dataAttributes.bool(invalid)}
         >
           <Select.StateManager
+            options={options}
             value={value}
             initialValue={initialValue}
             onValueChange={(next) => {
@@ -51,12 +55,16 @@ export const SingleSelectProperty = ({
             isDisabled={isDisabled}
             isReadOnly={isReadOnly}
             isRequired={isRequired}
+            id={id}
           >
             <Select.Trigger
               className="property-input flex-row-2 w-full items-center justify-between"
               hideExpansionIcon={true}
             />
-            <Select.Content>{children}</Select.Content>
+            <Select.PopUp>
+              <Select.Searchbar />
+              <Select.List />
+            </Select.PopUp>
           </Select.StateManager>
         </div>
       )}

@@ -1,6 +1,6 @@
 import type { ComponentRef, Ref, RefObject } from 'react'
 import { useCallback, useId, useMemo, useRef } from 'react'
-import type { ControllableInputProps } from '@helpwave/hightide-utils/interfaces'
+import type { ControllableDOMInputProps } from '../../domInput'
 import { useControlledState, useStateMachineBinding } from '@helpwave/hightide-utils/hooks'
 import { ReactUtils } from '@helpwave/hightide-utils/utils'
 import type { HexColor } from './hexColor'
@@ -14,7 +14,7 @@ import { ColorInputStateManager } from './ColorInputStateManager'
 import { colorInputStateFromHex, type ColorInputEvent, type ColorInputState } from './ColorInputState'
 import { ColorInputSwatch } from './ColorInputSwatch'
 
-export type ColorInputProps = ControllableInputProps<HexColor, ColorInputEvent> & {
+export type ColorInputProps = ControllableDOMInputProps<HexColor, ColorInputEvent> & {
   hasAlpha?: boolean,
   isCapitalized?: boolean,
   layoutRef?: Ref<ComponentRef<typeof ColorInputLayout>>,
@@ -34,6 +34,7 @@ const ColorInputComponent = ({
   isDisabled,
   isReadOnly,
   isRequired,
+  id,
   hasAlpha = false,
   isCapitalized = false,
   layoutRef,
@@ -69,6 +70,7 @@ const ColorInputComponent = ({
       isDisabled={isDisabled}
       isReadOnly={isReadOnly}
       isRequired={isRequired}
+      id={id}
     >
       <ColorInputLayout
         {...layoutProps}

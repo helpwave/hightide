@@ -1,7 +1,7 @@
 import type { ReactNode } from 'react'
 import { useCallback, useEffect, useRef } from 'react'
 import { DateUtils } from '@helpwave/hightide-utils/utils'
-import type { ControllableInputProps } from '@helpwave/hightide-utils/interfaces'
+import type { ControllableDOMInputProps } from '../../domInput'
 import { useControlledState, useStableEvent, useStateMachineBinding } from '@helpwave/hightide-utils/hooks'
 import { useLocalization } from '../../../../global-contexts/localization/forward-exports'
 import type { DateTimeInputProps } from '../DateTimeInput'
@@ -13,7 +13,7 @@ import { FlexibleDateTimeInputStateManager } from './FlexibleDateTimeInputStateM
 import type { FlexibleDateTimeInputEvent, FlexibleDateTimeInputState, FlexibleDateTimeMode } from './FlexibleDateTimeInputState'
 
 export type FlexibleDateTimeInputProps = Omit<DateTimeInputProps, 'mode' | 'actions' | 'onStateEvent' | 'onValueChange'>
-  & ControllableInputProps<Date | null, FlexibleDateTimeInputEvent>
+  & ControllableDOMInputProps<Date | null, FlexibleDateTimeInputEvent>
   & {
     defaultMode?: FlexibleDateTimeMode,
     fixedTime?: Date | null,
@@ -29,6 +29,7 @@ const FlexibleDateTimeInputComponent = ({
   isDisabled,
   isReadOnly,
   isRequired,
+  id,
   defaultMode = 'date',
   fixedTime: fixedTimeOverride,
   timeZone: timeZoneOverride,
@@ -76,6 +77,7 @@ const FlexibleDateTimeInputComponent = ({
       isDisabled={isDisabled}
       isReadOnly={isReadOnly}
       isRequired={isRequired}
+      id={id}
     >
       <FlexibleDateTimeInputInput
         {...props}

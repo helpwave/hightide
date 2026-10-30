@@ -1,5 +1,5 @@
 import type { ComponentRef, Ref } from 'react'
-import type { ControllableInputProps } from '@helpwave/hightide-utils/interfaces'
+import type { ControllableDOMInputProps } from '../../domInput'
 import { useControlledState, useStateMachineBinding } from '@helpwave/hightide-utils/hooks'
 import type { Weekday } from '@helpwave/hightide-utils/utils'
 import { ReactUtils } from '@helpwave/hightide-utils/utils'
@@ -17,7 +17,7 @@ import type {
   CalendarDisplayMode
 } from './CalendarDatePickerState'
 
-export type CalendarDatePickerProps = ControllableInputProps<Date, CalendarDatePickerEvent> & {
+export type CalendarDatePickerProps = ControllableDOMInputProps<Date, CalendarDatePickerEvent> & {
   initialDisplay?: CalendarDisplayMode,
   start?: Date,
   end?: Date,
@@ -43,6 +43,7 @@ const CalendarDatePickerComponent = ({
   isDisabled,
   isReadOnly,
   isRequired,
+  id,
   initialDisplay = 'day',
   start,
   end,
@@ -83,6 +84,7 @@ const CalendarDatePickerComponent = ({
       isDisabled={isDisabled}
       isReadOnly={isReadOnly}
       isRequired={isRequired}
+      id={id}
       start={start}
       end={end}
       weekStart={weekStart}

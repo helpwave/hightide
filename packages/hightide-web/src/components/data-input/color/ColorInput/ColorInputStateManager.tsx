@@ -1,11 +1,11 @@
 import type { ReactNode } from 'react'
 import { useCallback, useEffect, useMemo, useRef } from 'react'
-import type { InputStateMangerProps } from '@helpwave/hightide-utils/interfaces'
+import type { DOMInputStateMangerProps } from '../../domInput'
 import { useStableEvent, useStateMachine } from '@helpwave/hightide-utils/hooks'
 import { ColorInputContext, type ColorInputContextValue } from './ColorInputContext'
 import { colorInputStateTransition, type ColorInputEvent, type ColorInputState } from './ColorInputState'
 
-export type ColorInputStateManagerProps = InputStateMangerProps<ColorInputState, ColorInputEvent> & {
+export type ColorInputStateManagerProps = DOMInputStateMangerProps<ColorInputState, ColorInputEvent> & {
   hasAlpha?: boolean,
   isCapitalized?: boolean,
   children?: ReactNode,
@@ -19,6 +19,7 @@ export function ColorInputStateManager({
   isDisabled = false,
   isReadOnly = false,
   isRequired = false,
+  id,
   hasAlpha = false,
   isCapitalized = false,
   children,
@@ -48,9 +49,10 @@ export function ColorInputStateManager({
     isDisabled,
     isReadOnly,
     isRequired,
+    id,
     hasAlpha,
     isCapitalized,
-  }), [isCapitalized, hasAlpha, isDisabled, isInvalid, isReadOnly, isRequired])
+  }), [isCapitalized, hasAlpha, isDisabled, isInvalid, isReadOnly, isRequired, id])
 
   const contextValue = useMemo<ColorInputContextValue>(() => ({
     state: machine.state,

@@ -1,5 +1,5 @@
 import type { ComponentRef, Ref } from 'react'
-import type { ControllableInputProps } from '@helpwave/hightide-utils/interfaces'
+import type { ControllableDOMInputProps } from '../../domInput'
 import type { DateTimeFormat, DateTimePrecision, Weekday } from '@helpwave/hightide-utils/utils'
 import { ReactUtils } from '@helpwave/hightide-utils/utils'
 import { useBoundDateState } from '../useDateStateMachine'
@@ -18,7 +18,7 @@ import { DateTimePickerTime } from './DateTimePickerTime'
 import { DateTimePickerStateManager } from './DateTimePickerStateManager'
 import type { DateTimePickerEvent, DateTimePickerState } from './DateTimePickerState'
 
-export type DateTimePickerProps = ControllableInputProps<Date, DateTimePickerEvent> & {
+export type DateTimePickerProps = ControllableDOMInputProps<Date, DateTimePickerEvent> & {
   mode?: DateTimeFormat,
   start?: Date,
   end?: Date,
@@ -47,6 +47,7 @@ const DateTimePickerComponent = ({
   isDisabled,
   isReadOnly,
   isRequired,
+  id,
   mode,
   start,
   end,
@@ -78,6 +79,7 @@ const DateTimePickerComponent = ({
       isDisabled={isDisabled}
       isReadOnly={isReadOnly}
       isRequired={isRequired}
+      id={id}
       mode={mode}
       start={start}
       end={end}

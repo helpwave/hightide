@@ -1,6 +1,6 @@
 import type { ComponentRef, Ref } from 'react'
 import { useCallback } from 'react'
-import type { ControllableInputProps } from '@helpwave/hightide-utils/interfaces'
+import type { ControllableDOMInputProps } from '../../domInput'
 import { useControlledState, useStateMachineBinding } from '@helpwave/hightide-utils/hooks'
 import { ReactUtils } from '@helpwave/hightide-utils/utils'
 import { TextInputElement, type TextInputElementProps } from './TextInputElement'
@@ -8,7 +8,7 @@ import { TextInputStateManager } from './TextInputStateManager'
 import type { TextInputEvent, TextInputState } from './TextInputState'
 import { TextInputContext } from './TextInputContext'
 
-export type TextInputProps = ControllableInputProps<string, TextInputEvent>
+export type TextInputProps = ControllableDOMInputProps<string, TextInputEvent>
   & {
     inputRef?: Ref<ComponentRef<typeof TextInputElement>>,
     inputProps?: TextInputElementProps,
@@ -23,6 +23,7 @@ const TextInputComponent = ({
   isDisabled,
   isReadOnly,
   isRequired,
+  id,
   inputRef,
   inputProps,
 }: TextInputProps) => {
@@ -47,6 +48,7 @@ const TextInputComponent = ({
       isDisabled={isDisabled}
       isReadOnly={isReadOnly}
       isRequired={isRequired}
+      id={id}
     >
       <TextInputElement
         ref={ReactUtils.assingRefsBuilder([inputRef])}

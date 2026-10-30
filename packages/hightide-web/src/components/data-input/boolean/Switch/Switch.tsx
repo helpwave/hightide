@@ -1,6 +1,6 @@
 import type { ComponentRef, Ref } from 'react'
 import { useCallback } from 'react'
-import type { ControllableInputProps } from '@helpwave/hightide-utils/interfaces'
+import type { ControllableDOMInputProps } from '../../domInput'
 import { useControlledState, useStateMachineBinding } from '@helpwave/hightide-utils/hooks'
 import { ReactUtils } from '@helpwave/hightide-utils/utils'
 import { SwitchStateManager } from './SwitchStateManager'
@@ -9,7 +9,7 @@ import { SwitchTrack, type SwitchTrackProps } from './SwitchTrack'
 import { SwitchTrigger, type SwitchTriggerProps } from './SwitchTrigger'
 import type { SwitchEvent, SwitchState } from './SwitchState'
 
-export type SwitchProps = ControllableInputProps<boolean, SwitchEvent>
+export type SwitchProps = ControllableDOMInputProps<boolean, SwitchEvent>
   & {
     triggerRef?: Ref<ComponentRef<typeof SwitchTrigger>>,
     triggerProps?: SwitchTriggerProps,
@@ -28,6 +28,7 @@ const SwitchComponent = ({
   isDisabled,
   isReadOnly,
   isRequired,
+  id,
   triggerRef,
   triggerProps,
   trackRef,
@@ -56,6 +57,7 @@ const SwitchComponent = ({
       isDisabled={isDisabled}
       isReadOnly={isReadOnly}
       isRequired={isRequired}
+      id={id}
     >
       <SwitchTrigger
         ref={ReactUtils.assingRefsBuilder([triggerRef])}

@@ -20,6 +20,7 @@ export function SearchBarField({ inputRef, inputProps }: SearchBarFieldProps) {
       isDisabled={config.isDisabled}
       isReadOnly={config.isReadOnly}
       isRequired={config.isRequired}
+      id={config.id}
       onValueChange={(next) => dispatch({ type: 'change', value: next })}
       inputRef={inputRef}
       inputProps={{

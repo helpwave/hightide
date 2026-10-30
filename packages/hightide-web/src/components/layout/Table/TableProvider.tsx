@@ -2,8 +2,8 @@ import type { ReactNode } from 'react'
 import { useCallback, useEffect, useLayoutEffect, useMemo, useRef, useState } from 'react'
 import { useStableEvent } from '@helpwave/hightide-utils/hooks'
 import { ColumnSizeUtil } from './columnSizeUtil'
-import type { ColumnSizingMode, TableColumnDefinitionContextType, TableContainerContextType, TableStateWithoutSizingContextType } from './TableContext'
-import { TableColumnDefinitionContext, TableContainerContext, TableStateContext, TableStateWithoutSizingContext } from './TableContext'
+import type { ColumnSizingMode, TableContainerContextType, TableStateWithoutSizingContextType } from './TableContext'
+import { TableContainerContext, TableStateContext, TableStateWithoutSizingContext } from './TableContext'
 import { TableFilter } from './TableFilter'
 import type { ColumnDef, InitialTableState, Row, TableOptions, TableState , Table as ReactTable, CellContext, Table } from '@tanstack/react-table'
 import { getCoreRowModel, getFilteredRowModel, getPaginationRowModel, getSortedRowModel, useReactTable } from '@tanstack/react-table'
@@ -48,7 +48,6 @@ export const TableProvider = <T,>({
   const onRowClickStable = useStableEvent(onRowClick)
   const onFillerRowClickStable = useStableEvent(onFillerRowClick)
 
-  const [registeredColumns, setRegisteredColumns] = useState<ColumnDef<T>[]>([])
   const containerRef = useRef<HTMLDivElement | null>(null)
   const [tableState, setTableState] = useState<TableState>({
     columnSizing: {},
@@ -102,20 +101,8 @@ export const TableProvider = <T,>({
     setTargetWidth(computeWidth())
   }, [computeWidth, negotiatesWidths]))
 
-  const registerColumn = useCallback((column: ColumnDef<T>) => {
-    setRegisteredColumns(prev => {
-      return [...prev, column]
-    })
-    return () => {
-      setRegisteredColumns(prev => {
-        return prev.filter(value => value.id !== column.id)
-      })
-    }
-  }, [])
-
   const columns = useMemo(() => {
-    const contextColumns = Array.from(registeredColumns.values())
-    const merged = columnsProp ? [...contextColumns, ...columnsProp] : contextColumns
+    const merged = columnsProp ?? []
 
     const nonVisibleColumnIds: string[] = merged
       .reduce((prev, next) => {
@@ -134,7 +121,7 @@ export const TableProvider = <T,>({
     }
 
     return merged
-  }, [columnsProp, registeredColumns, placeholderColumnExcludeIds, translation, tableState.columnVisibility])
+  }, [columnsProp, placeholderColumnExcludeIds, translation, tableState.columnVisibility])
 
   const defaultCell = useCallback((value : CellContext<T, unknown>) => {
     let parsedValue: string = ''
@@ -218,12 +205,6 @@ export const TableProvider = <T,>({
   }, [table, targetWidth, columnVisibility, columnOrder, columnPinning])
 
 
-  const tableColumnDefinitionContextValue: TableColumnDefinitionContextType<T> = useMemo(() => ({
-    table,
-    registerColumn,
-  }), [table, registerColumn])
-
-
   const tableContainerContextValue: TableContainerContextType<T> = useMemo(() => ({
     table,
     containerRef,
@@ -297,11 +278,9 @@ export const TableProvider = <T,>({
   return (
     <TableStateWithoutSizingContext.Provider value={tableStateWithoutSizingContextValue}>
       <TableStateContext.Provider value={tableStateContextValue}>
-        <TableColumnDefinitionContext.Provider value={tableColumnDefinitionContextValue}>
-          <TableContainerContext.Provider value={tableContainerContextValue}>
-            {children}
-          </TableContainerContext.Provider>
-        </TableColumnDefinitionContext.Provider>
+        <TableContainerContext.Provider value={tableContainerContextValue}>
+          {children}
+        </TableContainerContext.Provider>
       </TableStateContext.Provider>
     </TableStateWithoutSizingContext.Provider>
   )

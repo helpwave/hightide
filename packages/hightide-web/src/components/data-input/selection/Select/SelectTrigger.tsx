@@ -2,17 +2,16 @@ import clsx from 'clsx'
 import type React from 'react'
 import type { ComponentPropsWithoutRef, ForwardedRef, ReactNode } from 'react'
 import { forwardRef, useEffect, useRef } from 'react'
-import type { SelectOptionType } from './SelectContext'
+import type { SelectOptionData } from './SelectContext'
 import { useSelectContext } from './SelectContext'
 import { useHightideTranslation } from '@helpwave/hightide-utils/context/translation'
 import { ExpansionIcon } from '../../../visualization/ExpansionIcon'
-import { SelectOptionDisplayContext } from './SelectOption'
 import { ReactUtils } from '@helpwave/hightide-utils/utils'
 
 export interface SelectTriggerProps<T = string> extends ComponentPropsWithoutRef<'div'> {
   placeholder?: ReactNode,
   disabled?: boolean,
-  selectedDisplay?: (value: SelectOptionType<T> | null) => ReactNode,
+  selectedDisplay?: (value: SelectOptionData<T> | null) => ReactNode,
   hideExpansionIcon?: boolean,
 }
 
@@ -102,11 +101,9 @@ const SelectTriggerImpl = forwardRef<
       aria-haspopup="dialog"
       aria-expanded={context.isOpen}
       aria-controls={context.isOpen ? context.config.ids.content : undefined}>
-      <SelectOptionDisplayContext.Provider value="trigger">
-        {hasValue
-          ? selectedDisplay?.(selectedOption) ?? (selectedOption?.display)
-          : placeholder ?? translation('clickToSelect')}
-      </SelectOptionDisplayContext.Provider>
+      {hasValue
+        ? selectedDisplay?.(selectedOption) ?? selectedOption?.visual?.content ?? selectedOption?.label
+        : placeholder ?? translation('clickToSelect')}
       {!hideExpansionIcon && <ExpansionIcon isExpanded={context.isOpen} />}
     </div>
   )

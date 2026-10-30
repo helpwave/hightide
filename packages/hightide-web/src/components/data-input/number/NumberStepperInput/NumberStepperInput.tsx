@@ -1,7 +1,7 @@
 import type { ComponentRef, Ref } from 'react'
 import { useCallback } from 'react'
 import type { ChangeRateCurveProps, StepperLoopEvent } from '@helpwave/hightide-utils/hooks'
-import type { ControllableInputProps } from '@helpwave/hightide-utils/interfaces'
+import type { ControllableDOMInputProps } from '../../domInput'
 import { useControlledState, useStateMachineBinding } from '@helpwave/hightide-utils/hooks'
 import { ReactUtils } from '@helpwave/hightide-utils/utils'
 import { NumberStepperInputContext } from './NumberStepperInputContext'
@@ -18,7 +18,7 @@ import type { NumberStepperInputEvent, NumberStepperInputState } from './NumberS
 
 export type NumberStepperInputLayout = NumberStepperInputLayoutMode
 
-export type NumberStepperInputProps = ControllableInputProps<number, NumberStepperInputEvent> & {
+export type NumberStepperInputProps = ControllableDOMInputProps<number, NumberStepperInputEvent> & {
   minimum?: number,
   maximum?: number,
   stepSize?: number,
@@ -48,6 +48,7 @@ const NumberStepperInputComponent = ({
   isDisabled,
   isReadOnly,
   isRequired,
+  id,
   minimum,
   maximum,
   stepSize,
@@ -88,6 +89,7 @@ const NumberStepperInputComponent = ({
       isDisabled={isDisabled}
       isReadOnly={isReadOnly}
       isRequired={isRequired}
+      id={id}
     >
       <NumberStepperHold
         minimum={minimum}

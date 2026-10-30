@@ -1,6 +1,6 @@
 import type { ReactNode } from 'react'
 import { useMemo } from 'react'
-import type { InputStateMangerProps } from '@helpwave/hightide-utils/interfaces'
+import type { DOMInputStateMangerProps } from '../../domInput'
 import { range, type DateTimePrecision } from '@helpwave/hightide-utils/utils'
 import { useDateTimeFormat } from '../../../../global-contexts/localization/forward-exports'
 import { dateInputConfig, useDateStateMachine } from '../useDateStateMachine'
@@ -27,7 +27,7 @@ import {
 
 const stepped = (length: number, step: number) => range(length).filter((value) => value % step === 0)
 
-export type TimeWheelPickerStateManagerProps = InputStateMangerProps<TimeWheelPickerState, TimeWheelPickerEvent> & {
+export type TimeWheelPickerStateManagerProps = DOMInputStateMangerProps<TimeWheelPickerState, TimeWheelPickerEvent> & {
   children?: ReactNode,
   is24HourFormat?: boolean,
   isLooping?: boolean,
@@ -46,6 +46,7 @@ export function TimeWheelPickerStateManager({
   isDisabled,
   isReadOnly,
   isRequired,
+  id,
   is24HourFormat: is24HourFormatOverride,
   isLooping = true,
   loopingBehaviour = defaultWheelLoopingBehaviour,
@@ -64,7 +65,7 @@ export function TimeWheelPickerStateManager({
     })
   }, [is24HourFormat, loopingBehaviour])
   const config = useMemo<TimeWheelPickerContextConfig>(() => ({
-    ...dateInputConfig({ isInvalid, isDisabled, isReadOnly, isRequired }),
+    ...dateInputConfig({ isInvalid, isDisabled, isReadOnly, isRequired, id }),
     is24HourFormat,
     isLooping,
     loopingBehaviour,
@@ -73,7 +74,7 @@ export function TimeWheelPickerStateManager({
     minutes: stepped(60, timeWheelMinuteStep[minuteIncrement]),
     seconds: stepped(60, timeWheelSecondStep[secondIncrement]),
     milliseconds: stepped(1000, timeWheelMillisecondStep[millisecondIncrement]),
-  }), [is24HourFormat, isDisabled, isInvalid, isLooping, isReadOnly, isRequired, loopingBehaviour, millisecondIncrement, minuteIncrement, precision, secondIncrement])
+  }), [is24HourFormat, isDisabled, isInvalid, isLooping, isReadOnly, isRequired, loopingBehaviour, millisecondIncrement, minuteIncrement, precision, secondIncrement, id])
   const contextValue = useDateStateMachine({
     state,
     transition,

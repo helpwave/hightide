@@ -1,12 +1,12 @@
 import type { ReactNode } from 'react'
 import { useCallback, useMemo } from 'react'
-import type { InputStateMangerProps } from '@helpwave/hightide-utils/interfaces'
+import type { DOMInputStateMangerProps } from '../../domInput'
 import { useStableEvent, useStateMachine } from '@helpwave/hightide-utils/hooks'
 import type { DateTimeFormat, DateTimePrecision } from '@helpwave/hightide-utils/utils'
 import { DateTimeInputContext, type DateTimeInputContextValue } from './DateTimeInputContext'
 import { dateTimeInputStateTransition, type DateTimeInputEvent, type DateTimeInputState } from './DateTimeInputState'
 
-export type DateTimeInputStateManagerProps = InputStateMangerProps<DateTimeInputState, DateTimeInputEvent> & {
+export type DateTimeInputStateManagerProps = DOMInputStateMangerProps<DateTimeInputState, DateTimeInputEvent> & {
   mode: DateTimeFormat,
   precision: DateTimePrecision,
   timeZone: string,
@@ -30,6 +30,7 @@ export function DateTimeInputStateManager({
   isDisabled = false,
   isReadOnly = false,
   isRequired = false,
+  id,
   children,
 }: DateTimeInputStateManagerProps) {
   const machine = useStateMachine<DateTimeInputState, DateTimeInputEvent>({
@@ -47,7 +48,8 @@ export function DateTimeInputStateManager({
     isDisabled,
     isReadOnly,
     isRequired,
-  }), [isDisabled, isInvalid, isReadOnly, isRequired])
+    id,
+  }), [isDisabled, isInvalid, isReadOnly, isRequired, id])
   const contextValue = useMemo<DateTimeInputContextValue>(() => ({
     state: machine.state,
     dispatch,

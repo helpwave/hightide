@@ -1,6 +1,6 @@
 import type { ReactNode } from 'react'
 import { useCallback, useMemo, useRef } from 'react'
-import type { InputStateMangerProps } from '@helpwave/hightide-utils/interfaces'
+import type { DOMInputStateMangerProps } from '../../domInput'
 import { useStableEvent } from '@helpwave/hightide-utils/hooks'
 import { FlexibleDateTimeInputContext, type FlexibleDateTimeInputContextValue } from './FlexibleDateTimeInputContext'
 import {
@@ -9,7 +9,7 @@ import {
   type FlexibleDateTimeInputState
 } from './FlexibleDateTimeInputState'
 
-export type FlexibleDateTimeInputStateManagerProps = InputStateMangerProps<FlexibleDateTimeInputState, FlexibleDateTimeInputEvent> & {
+export type FlexibleDateTimeInputStateManagerProps = DOMInputStateMangerProps<FlexibleDateTimeInputState, FlexibleDateTimeInputEvent> & {
   children?: ReactNode,
 }
 
@@ -21,6 +21,7 @@ export function FlexibleDateTimeInputStateManager({
   isDisabled = false,
   isReadOnly = false,
   isRequired = false,
+  id,
   children,
 }: FlexibleDateTimeInputStateManagerProps) {
   const onStateChangeStable = useStableEvent(onStateChange)
@@ -42,7 +43,8 @@ export function FlexibleDateTimeInputStateManager({
     isDisabled,
     isReadOnly,
     isRequired,
-  }), [isDisabled, isInvalid, isReadOnly, isRequired])
+    id,
+  }), [isDisabled, isInvalid, isReadOnly, isRequired, id])
   const contextValue = useMemo<FlexibleDateTimeInputContextValue>(() => ({
     state,
     dispatch,

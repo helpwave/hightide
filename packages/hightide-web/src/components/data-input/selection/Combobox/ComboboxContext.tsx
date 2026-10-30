@@ -1,31 +1,22 @@
-import type { Dispatch, ReactNode, RefObject, SetStateAction } from 'react'
+import type { Dispatch, RefObject, SetStateAction } from 'react'
 import { createContext, useContext } from 'react'
-export interface ComboboxOptionType<T = string> {
-  id: string,
-  value: T,
-  label?: string,
-  display?: ReactNode,
-  disabled?: boolean,
-  ref: RefObject<HTMLElement>,
-}
+import type { SelectionOptionData } from '../option'
+
+export type ComboboxOptionData<T = string> = SelectionOptionData<T>
 
 export interface ComboboxContextIds {
   trigger: string,
   listbox: string,
-}
-
-export interface ComboboxContextInternalState {
-  highlightedId: string | null,
+  popup: string,
 }
 
 export interface ComboboxContextComputedState<T> {
-  options: ReadonlyArray<ComboboxOptionType<T>>,
+  options: ReadonlyArray<ComboboxOptionData<T>>,
   visibleOptionIds: ReadonlyArray<string>,
-  idToOptionMap: Record<string, ComboboxOptionType<T>>,
+  idToOptionMap: Record<string, ComboboxOptionData<T>>,
 }
 
-export interface ComboboxContextActions<T> {
-  registerOption(option: ComboboxOptionType<T>): () => void,
+export interface ComboboxContextActions {
   selectOption(id: string): void,
   addNewValue(): void,
   highlightFirst(): void,
@@ -33,11 +24,12 @@ export interface ComboboxContextActions<T> {
   highlightNext(): void,
   highlightPrevious(): void,
   highlightItem(id: string): void,
+  setIsOpen(open: boolean): void,
 }
 
 export interface ComboboxContextLayout {
   listRef: RefObject<HTMLUListElement | null>,
-  registerList(ref: RefObject<HTMLUListElement | null>): () => void,
+  searchbarRef: RefObject<HTMLInputElement | null>,
 }
 
 export interface ComboboxContextSearch {
@@ -52,12 +44,15 @@ export interface ComboboxContextConfig {
   isAllowingNewValue: boolean,
 }
 
-export interface ComboboxContextType<T> extends ComboboxContextInternalState, ComboboxContextComputedState<T>, ComboboxContextActions<T> {
+export interface ComboboxContextType<T> extends ComboboxContextComputedState<T>, ComboboxContextActions {
   isInvalid: boolean,
   isDisabled: boolean,
   isReadOnly: boolean,
   isRequired: boolean,
+  isOpen: boolean,
   value?: T,
+  highlightedId: string | null,
+  optionRefs: Record<string, RefObject<HTMLLIElement | null>>,
   config: ComboboxContextConfig,
   layout: ComboboxContextLayout,
   search: ComboboxContextSearch,

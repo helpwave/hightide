@@ -3,7 +3,6 @@ import { useCallback, useEffect, useMemo, useRef, useState } from 'react'
 import { faker } from '@faker-js/faker'
 import { range } from '@helpwave/hightide-utils/utils'
 import { Table } from '../../../src/components/layout/Table/Table'
-import { TableColumn } from '../../../src/components/layout/Table/TableColumn'
 import { Chip } from '../../../src/components/visualization/Chip'
 
 type Person = {
@@ -83,6 +82,22 @@ export const pageScrollTable: Story = {
             data: flatData,
             isUsingFillerRows: true,
             initialState: { pagination: { pageIndex: 0, pageSize: TOTAL_ROWS } },
+            columns: [
+              { id: 'id', header: 'ID', accessorKey: 'id', sortingFn: 'alphanumeric', size: 80, minSize: 70, maxSize: 120 },
+              { id: 'name', header: 'Name', accessorKey: 'name', sortingFn: 'text', size: 220, minSize: 160, maxSize: 320, filterFn: 'text' },
+              { id: 'city', header: 'City', accessorKey: 'city', sortingFn: 'text', size: 200, minSize: 140, maxSize: 300, filterFn: 'text' },
+              {
+                id: 'status',
+                header: 'Status',
+                accessorKey: 'status',
+                sortingFn: 'text',
+                size: 150,
+                minSize: 120,
+                maxSize: 220,
+                cell: ({ cell }) => (<Chip>{cell.getValue() as string}</Chip>),
+              },
+              { id: 'visits', header: 'Visits', accessorKey: 'visits', sortingFn: 'alphanumeric', size: 120, minSize: 100, maxSize: 180, filterFn: 'number' },
+            ],
           }}
           paginationOptions={{ showPagination: false }}
           displayProps={{
@@ -92,22 +107,7 @@ export const pageScrollTable: Story = {
           footer={isFetching ? (
             <span className="text-description typography-label-md">Fetching more…</span>
           ) : null}
-        >
-          <TableColumn id="id" header="ID" accessorKey="id" sortingFn="alphanumeric" size={80} minSize={70} maxSize={120}/>
-          <TableColumn id="name" header="Name" accessorKey="name" sortingFn="text" size={220} minSize={160} maxSize={320} filterType="text"/>
-          <TableColumn id="city" header="City" accessorKey="city" sortingFn="text" size={200} minSize={140} maxSize={300} filterType="text"/>
-          <TableColumn
-            id="status"
-            header="Status"
-            accessorKey="status"
-            sortingFn="text"
-            size={150}
-            minSize={120}
-            maxSize={220}
-            cell={({ cell }) => (<Chip>{cell.getValue() as string}</Chip>)}
-          />
-          <TableColumn id="visits" header="Visits" accessorKey="visits" sortingFn="alphanumeric" size={120} minSize={100} maxSize={180} filterType="number"/>
-        </Table>
+        />
       </div>
     )
   },

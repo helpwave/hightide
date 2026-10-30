@@ -46,6 +46,7 @@ export function ToggleableInputField({
       isDisabled={config.isDisabled}
       isReadOnly={config.isReadOnly}
       isRequired={config.isRequired}
+      id={config.id}
       onValueChange={(text) => {
         dispatch({ type: 'change', value: text })
         if (editOptions?.isCompletingAfterDelay) {

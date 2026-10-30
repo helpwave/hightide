@@ -33,6 +33,7 @@ export const NumberInputInput = forwardRef<HTMLInputElement, NumberInputInputPro
       type="text"
       inputMode="numeric"
       value={displayed}
+      id={config.id ?? props.id}
       disabled={config.isDisabled}
       readOnly={config.isReadOnly}
       required={config.isRequired}

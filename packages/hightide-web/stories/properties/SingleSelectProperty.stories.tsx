@@ -4,7 +4,6 @@ import { action } from 'storybook/actions'
 import { StorybookHelper } from '../../src/storybook/helper'
 import clsx from 'clsx'
 import { SingleSelectProperty } from '../../src/components/properties/SelectProperty'
-import { Select } from '../../src/components/data-input/selection/Select/Select'
 const options = [...StorybookHelper.selectValues]
 
 
@@ -21,22 +20,26 @@ export const singleSelectProperty: Story = {
     isRequired: false,
     value: '',
     isReadOnly: false,
-    children: options.map(option => (
-      <Select.Option key={option} value={option} label={option}>
-        <span className="flex-row-1 items-center">
-          <span
-            className={clsx(
-              'w-4 h-4 rounded-full',
-              {
-                'bg-primary': option.length % 3 === 0,
-                'bg-secondary': option.length % 3 !== 0,
-              }
-            )}
-          />
-          {option}
-        </span>
-      </Select.Option>
-    )),
+    options: options.map(option => ({
+      value: option,
+      label: option,
+      visual: {
+        content: (
+          <span className="flex-row-1 items-center">
+            <span
+              className={clsx(
+                'w-4 h-4 rounded-full',
+                {
+                  'bg-primary': option.length % 3 === 0,
+                  'bg-secondary': option.length % 3 !== 0,
+                }
+              )}
+            />
+            {option}
+          </span>
+        ),
+      },
+    })),
     onValueChange: action('onValueChange'),
     onEditComplete: action('onEditComplete'),
     onRemove: action('onRemove'),

@@ -22,6 +22,7 @@ export const TextProperty = ({
   isInvalid,
   isDisabled,
   isRequired,
+  id,
   ...baseProps
 }: TextPropertyProps) => {
   const translation = useHightideTranslation()
@@ -50,6 +51,7 @@ export const TextProperty = ({
           isInvalid={invalid}
           isDisabled={isDisabled}
           isRequired={isRequired}
+          id={id}
           onValueChange={onValueChange}
           onStateEvent={onStateEvent}
           inputProps={{

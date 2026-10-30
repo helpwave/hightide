@@ -1,6 +1,6 @@
 import type { ComponentRef, Ref } from 'react'
 import { useCallback } from 'react'
-import type { ControllableInputProps } from '@helpwave/hightide-utils/interfaces'
+import type { ControllableDOMInputProps } from '../../domInput'
 import { useControlledState, useStateMachineBinding } from '@helpwave/hightide-utils/hooks'
 import { ReactUtils } from '@helpwave/hightide-utils/utils'
 import { CheckboxIcon, type CheckboxIconProps } from './CheckboxIcon'
@@ -8,7 +8,7 @@ import { CheckboxStateManager } from './CheckboxStateManager'
 import { CheckboxTrigger, type CheckboxSize, type CheckboxTriggerProps } from './CheckboxTrigger'
 import type { CheckboxEvent, CheckboxState } from './CheckboxState'
 
-export type CheckboxProps = ControllableInputProps<boolean, CheckboxEvent>
+export type CheckboxProps = ControllableDOMInputProps<boolean, CheckboxEvent>
   & {
     indeterminate?: boolean,
     size?: CheckboxSize,
@@ -29,6 +29,7 @@ const CheckboxComponent = ({
   isDisabled,
   isReadOnly,
   isRequired,
+  id,
   indeterminate = false,
   size = 'md',
   alwaysShowCheckIcon = false,
@@ -59,6 +60,7 @@ const CheckboxComponent = ({
       isDisabled={isDisabled}
       isReadOnly={isReadOnly}
       isRequired={isRequired}
+      id={id}
     >
       <CheckboxTrigger
         ref={ReactUtils.assingRefsBuilder([triggerRef])}

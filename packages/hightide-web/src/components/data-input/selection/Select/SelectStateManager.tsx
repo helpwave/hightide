@@ -1,12 +1,13 @@
 import type { ReactNode, RefObject, SetStateAction } from 'react'
 import { useCallback, useEffect, useId, useMemo, useRef, useState } from 'react'
 import { SelectContext } from './SelectContext'
-import type { SelectContextConfig, SelectContextLayout, SelectOptionType } from './SelectContext'
+import type { SelectContextConfig, SelectContextLayout } from './SelectContext'
 import { useSelect } from './useSelect'
-import { DOMUtils } from '../../../../utils/dom'
-import type { ControllableInputProps } from '@helpwave/hightide-utils/interfaces'
+import type { ControllableDOMInputProps } from '../../domInput'
 import { useStableEvent } from '@helpwave/hightide-utils/hooks'
 import { PopUpContext } from '../../../layout/PopUp/PopUpContext'
+import type { SelectionOptionInput } from '../option'
+import { normalizeSelectionOptions, scrollHighlightedOption, useOptionRefs } from '../option'
 
 export interface SelectIds {
   trigger: string,
@@ -17,7 +18,8 @@ export interface SelectIds {
 
 export type SelectEvent<T> = { type: 'commit', value: T }
 
-export interface SelectStateManagerProps<T> extends ControllableInputProps<T, SelectEvent<T>> {
+export interface SelectStateManagerProps<T> extends ControllableDOMInputProps<T, SelectEvent<T>> {
+  options: ReadonlyArray<SelectionOptionInput<T>>,
   compareFunction?: (a: T, b: T) => boolean,
   initialIsOpen?: boolean,
   onClose?: () => void,
@@ -29,6 +31,7 @@ export interface SelectStateManagerProps<T> extends ControllableInputProps<T, Se
 
 export function SelectStateManager<T>({
   children,
+  options,
   value,
   onValueChange,
   onStateEvent,
@@ -43,35 +46,27 @@ export function SelectStateManager<T>({
   isDisabled = false,
   isReadOnly = false,
   isRequired = false,
+  id,
 }: SelectStateManagerProps<T>) {
   const nullTrigger = useRef<HTMLElement | null>(null)
   const [triggerRef, setTriggerRef] = useState<RefObject<HTMLElement | null>>(nullTrigger)
-  const [options, setOptions] = useState<SelectOptionType<T>[]>([])
-  const [optionSnapshots, setOptionSnapshots] = useState<Record<string, SelectOptionType<T>>>({})
+  const normalizedOptions = useMemo(() => normalizeSelectionOptions(options), [options])
+  const optionIds = useMemo(() => normalizedOptions.map((option) => option.id), [normalizedOptions])
+  const optionRefs = useOptionRefs(optionIds)
+  const optionRefsRef = useRef(optionRefs)
+  optionRefsRef.current = optionRefs
   const generatedId = useId()
   const [ids, setIds] = useState<SelectIds>({
-    trigger: 'select-' + generatedId,
+    trigger: id ?? 'select-' + generatedId,
     content: 'select-content-' + generatedId,
     listbox: 'select-listbox-' + generatedId,
     searchInput: 'select-search-' + generatedId,
   })
 
-
-  const registerOption = useCallback(
-    (item: SelectOptionType<T>) => {
-      setOptionSnapshots((previous) => ({ ...previous, [item.value.id]: item }))
-      setOptions((prev) => {
-        const next = prev.filter((o) => o.value.id !== item.value.id)
-        next.push(item)
-        next.sort((a, b) =>
-          DOMUtils.compareDocumentPosition(a.ref.current, b.ref.current))
-        return next
-      })
-      return () =>
-        setOptions((prev) => prev.filter((o) => o.value.id !== item.value.id))
-    },
-    []
-  )
+  useEffect(() => {
+    if (!id) return
+    setIds((prev) => (prev.trigger === id ? prev : { ...prev, trigger: id }))
+  }, [id])
 
   const registerTrigger = useCallback((ref: RefObject<HTMLElement | null>) => {
     setTriggerRef(ref)
@@ -83,68 +78,75 @@ export function SelectStateManager<T>({
   const compare = useMemo(() => compareFunction ?? Object.is, [compareFunction])
 
   const idToOptionMap = useMemo(() => {
-    return options.reduce((acc, o) => {
-      acc[o.value.id] = o
+    return normalizedOptions.reduce((acc, option) => {
+      acc[option.id] = option
       return acc
-    }, {} as Record<string, SelectOptionType<T>>)
-  }, [options])
+    }, {} as Record<string, typeof normalizedOptions[number]>)
+  }, [normalizedOptions])
 
   const mappedValueId = useMemo(() => {
-    if(value === undefined) return undefined
-    return options.find((o) => compare(o.value.value, value))?.value.id
-  }, [options, value, compare])
+    if (value === undefined) return undefined
+    return normalizedOptions.find((option) => compare(option.value, value))?.id
+  }, [normalizedOptions, value, compare])
 
   const mappedInitialValueId = useMemo(() => {
-    if(initialValue === undefined) return undefined
-    return options.find((o) => compare(o.value.value, initialValue))?.value.id
-  }, [options, initialValue, compare])
+    if (initialValue === undefined) return undefined
+    return normalizedOptions.find((option) => compare(option.value, initialValue))?.id
+  }, [normalizedOptions, initialValue, compare])
 
   const onValueChangeStable = useStableEvent(onValueChange)
   const onStateEventStable = useStableEvent(onStateEvent)
   const onIsOpenChangeStable = useStableEvent(onIsOpenChange)
 
-  const onValueChangeWrapper = useCallback((value: string) => {
-    const option = idToOptionMap[value]
-    if(option === undefined) {
-      console.warn(`Attempted to select an option ${value} that is not valid`)
+  const onValueChangeWrapper = useCallback((nextId: string) => {
+    const option = idToOptionMap[nextId]
+    if (option === undefined) {
+      console.warn(`Attempted to select an option ${nextId} that is not valid`)
       return
     }
-    onValueChangeStable(option.value.value)
+    onValueChangeStable(option.value)
   }, [onValueChangeStable, idToOptionMap])
 
-  const onEditCompleteWrapper = useCallback((value: string) => {
-    const option = idToOptionMap[value]
-    if(option === undefined) {
-      console.warn(`Attempted to edit complete an option ${value} that is not valid`)
+  const onEditCompleteWrapper = useCallback((nextId: string) => {
+    const option = idToOptionMap[nextId]
+    if (option === undefined) {
+      console.warn(`Attempted to edit complete an option ${nextId} that is not valid`)
       return
     }
-    onStateEventStable?.({ type: 'commit', value: option.value.value })
+    onStateEventStable?.({ type: 'commit', value: option.value })
   }, [onStateEventStable, idToOptionMap])
-
 
   const state = useSelect({
     value: value !== undefined && mappedValueId === undefined ? null : mappedValueId,
     initialValue: initialValue !== undefined && mappedInitialValueId === undefined ? null : mappedInitialValueId,
     onValueChange: onValueChangeWrapper,
     onEditComplete: onEditCompleteWrapper,
-    options: options.map((o) => ({
-      id: o.value.id,
-      label: o.label,
-      disabled: o.disabled,
+    options: normalizedOptions.map((option) => ({
+      id: option.id,
+      label: option.label,
+      disabled: option.disabled,
     })),
     initialIsOpen,
     onClose,
     onIsOpenChange: onIsOpenChangeStable,
   })
   const { setSearchQuery } = state
-  const knownOptionCount = Math.max(options.length, Object.keys(optionSnapshots).length)
-  const hasSearch = knownOptionCount >= searchableThreshold
+  const hasSearch = normalizedOptions.length >= searchableThreshold
 
   useEffect(() => {
     if (!hasSearch) {
       setSearchQuery('')
     }
   }, [hasSearch, setSearchQuery])
+
+  useEffect(() => {
+    scrollHighlightedOption(
+      state.highlightedValue ?? null,
+      optionRefsRef.current,
+      ids.listbox,
+      hasSearch ? ids.searchInput : undefined
+    )
+  }, [hasSearch, ids.listbox, ids.searchInput, state.highlightedValue, state.isOpen])
 
   const config: SelectContextConfig = useMemo(() => ({
     iconAppearance,
@@ -158,7 +160,7 @@ export function SelectStateManager<T>({
   }), [triggerRef, registerTrigger])
 
   const setIsOpen = useCallback((updater: SetStateAction<boolean>) => {
-    if(typeof updater === 'function') {
+    if (typeof updater === 'function') {
       state.setIsOpen(updater(state.isOpen))
     } else {
       state.setIsOpen(updater)
@@ -175,10 +177,10 @@ export function SelectStateManager<T>({
         selectedId: state.value,
         highlightedId: state.highlightedValue ?? null,
         isOpen: state.isOpen,
-        options,
+        options: normalizedOptions,
+        optionRefs,
         visibleOptionIds: state.visibleOptionIds,
         idToOptionMap,
-        registerOption,
         toggleSelection: state.selectValue,
         highlightFirst: state.highlightFirst,
         highlightLast: state.highlightLast,

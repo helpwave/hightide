@@ -1,6 +1,6 @@
 import type { ReactNode } from 'react'
 import { useMemo } from 'react'
-import type { InputStateMangerProps } from '@helpwave/hightide-utils/interfaces'
+import type { DOMInputStateMangerProps } from '../../domInput'
 import { dateInputConfig, useDateStateMachine } from '../useDateStateMachine'
 import { DateTimeWheelPickerContext, type DateTimeWheelPickerContextConfig } from './DateTimeWheelPickerContext'
 import {
@@ -11,7 +11,7 @@ import {
 } from './DateTimeWheelPickerState'
 
 export type DateTimeWheelPickerStateManagerProps =
-  InputStateMangerProps<DateTimeWheelPickerState, DateTimeWheelPickerEvent> &
+  DOMInputStateMangerProps<DateTimeWheelPickerState, DateTimeWheelPickerEvent> &
   DateTimeWheelPickerOptions & {
     children?: ReactNode,
   }
@@ -24,6 +24,7 @@ export function DateTimeWheelPickerStateManager({
   isDisabled,
   isReadOnly,
   isRequired,
+  id,
   start,
   end,
   isLooping,
@@ -36,7 +37,7 @@ export function DateTimeWheelPickerStateManager({
   children,
 }: DateTimeWheelPickerStateManagerProps) {
   const config = useMemo<DateTimeWheelPickerContextConfig>(() => ({
-    ...dateInputConfig({ isInvalid, isDisabled, isReadOnly, isRequired }),
+    ...dateInputConfig({ isInvalid, isDisabled, isReadOnly, isRequired, id }),
     start,
     end,
     isLooping,
@@ -46,7 +47,7 @@ export function DateTimeWheelPickerStateManager({
     secondIncrement,
     millisecondIncrement,
     precision,
-  }), [end, is24HourFormat, isDisabled, isInvalid, isLooping, isReadOnly, isRequired, loopingBehaviour, millisecondIncrement, minuteIncrement, precision, secondIncrement, start])
+  }), [end, is24HourFormat, isDisabled, isInvalid, isLooping, isReadOnly, isRequired, loopingBehaviour, millisecondIncrement, minuteIncrement, precision, secondIncrement, start, id])
   const contextValue = useDateStateMachine({
     state,
     transition: dateTimeWheelPickerStateTransition,

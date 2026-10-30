@@ -297,19 +297,15 @@ export const ProcessModelTraceReplay = ({ graph, className }: ProcessModelTraceR
         </Button>
         <div className="process-model-trace-replay-speed">
           <span className="process-model-trace-replay-speed-label">{translation('speed')}</span>
-          <Select
+          <Select<number>
             value={speedMult}
             onValueChange={setSpeedMult}
-          >
-            {SPEED_OPTIONS.map((option) => (
-              <Select.Option<number>
-                key={option.value}
-                value={option.value}
-                valueId={String(option.value)}
-                label={option.label}
-              />
-            ))}
-          </Select>
+            options={SPEED_OPTIONS.map((option) => ({
+              id: String(option.value),
+              value: option.value,
+              label: option.label,
+            }))}
+          />
         </div>
       </div>
       <div ref={hostRef}>

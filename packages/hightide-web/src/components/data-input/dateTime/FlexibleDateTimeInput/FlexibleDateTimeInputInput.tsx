@@ -31,6 +31,7 @@ export function FlexibleDateTimeInputInput({
       isDisabled={config.isDisabled}
       isReadOnly={config.isReadOnly}
       isRequired={config.isRequired}
+      id={config.id}
       onValueChange={(next) => {
         const adjusted = next === null ? null : (state.mode === 'date' ? toDate(next) : next)
         dispatch({ type: 'setValue', value: adjusted, mode: state.mode })

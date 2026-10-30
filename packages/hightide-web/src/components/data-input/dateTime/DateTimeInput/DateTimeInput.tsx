@@ -1,6 +1,6 @@
 import type { ComponentRef, ReactNode, Ref, RefObject } from 'react'
 import { useCallback, useId, useMemo, useRef } from 'react'
-import type { ControllableInputProps } from '@helpwave/hightide-utils/interfaces'
+import type { ControllableDOMInputProps } from '../../domInput'
 import { useControlledState, useStateMachineBinding } from '@helpwave/hightide-utils/hooks'
 import type { DateTimeFormat, DateTimePrecision, Weekday } from '@helpwave/hightide-utils/utils'
 import { ReactUtils } from '@helpwave/hightide-utils/utils'
@@ -19,7 +19,7 @@ import { DateTimeInputPopup, type DateTimeInputPopupProps } from './DateTimeInpu
 import { DateTimeInputStateManager } from './DateTimeInputStateManager'
 import type { DateTimeInputEvent, DateTimeInputState } from './DateTimeInputState'
 
-export type DateTimeInputProps = ControllableInputProps<Date | null, DateTimeInputEvent> & {
+export type DateTimeInputProps = ControllableDOMInputProps<Date | null, DateTimeInputEvent> & {
   allowRemove?: boolean,
   allowClear?: boolean,
   mode?: DateTimeFormat,
@@ -53,6 +53,7 @@ const DateTimeInputComponent = ({
   isDisabled,
   isReadOnly,
   isRequired,
+  id,
   allowRemove = false,
   allowClear = true,
   mode = 'date',
@@ -114,6 +115,7 @@ const DateTimeInputComponent = ({
       isDisabled={isDisabled}
       isReadOnly={isReadOnly}
       isRequired={isRequired}
+      id={id}
       mode={mode}
       precision={precision}
       timeZone={timeZone}

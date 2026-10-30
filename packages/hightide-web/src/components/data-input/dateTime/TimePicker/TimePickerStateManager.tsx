@@ -1,6 +1,6 @@
 import type { ReactNode } from 'react'
 import { useMemo } from 'react'
-import type { InputStateMangerProps } from '@helpwave/hightide-utils/interfaces'
+import type { DOMInputStateMangerProps } from '../../domInput'
 import type { DateTimePrecision } from '@helpwave/hightide-utils/utils'
 import { range } from '@helpwave/hightide-utils/utils'
 import { useDateTimeFormat } from '../../../../global-contexts/localization/forward-exports'
@@ -50,7 +50,7 @@ const millisecondStep: Record<TimePickerMillisecondIncrement, number> = {
   '500ms': 500,
 }
 
-export type TimePickerStateManagerProps = InputStateMangerProps<TimePickerState, TimePickerEvent> & {
+export type TimePickerStateManagerProps = DOMInputStateMangerProps<TimePickerState, TimePickerEvent> & {
   children?: ReactNode,
   is24HourFormat?: boolean,
   precision?: DateTimePrecision,
@@ -67,6 +67,7 @@ export function TimePickerStateManager({
   isDisabled,
   isReadOnly,
   isRequired,
+  id,
   is24HourFormat: is24HourFormatOverride,
   precision = defaultTimePickerPrecision,
   minuteIncrement = defaultTimePickerMinuteIncrement,
@@ -80,14 +81,14 @@ export function TimePickerStateManager({
     return (current: TimePickerState, event: TimePickerEvent) => timePickerStateTransition(current, event, { is24HourFormat })
   }, [is24HourFormat])
   const config = useMemo<TimePickerContextConfig>(() => ({
-    ...dateInputConfig({ isInvalid, isDisabled, isReadOnly, isRequired }),
+    ...dateInputConfig({ isInvalid, isDisabled, isReadOnly, isRequired, id }),
     is24HourFormat,
     precision,
     hours: is24HourFormat ? range(24) : range(12),
     minutes: stepped(60, minuteStep[minuteIncrement]),
     seconds: stepped(60, secondStep[secondIncrement]),
     milliseconds: stepped(1000, millisecondStep[millisecondIncrement]),
-  }), [is24HourFormat, isDisabled, isInvalid, isReadOnly, isRequired, millisecondIncrement, minuteIncrement, precision, secondIncrement])
+  }), [is24HourFormat, isDisabled, isInvalid, isReadOnly, isRequired, millisecondIncrement, minuteIncrement, precision, secondIncrement, id])
   const contextValue = useDateStateMachine({
     state,
     transition,

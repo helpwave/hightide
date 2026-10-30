@@ -19,6 +19,7 @@ export const SwitchTrigger = forwardRef<HTMLDivElement, SwitchTriggerProps>(func
     <div
       {...props}
       ref={forwardedRef}
+      id={config.id ?? props.id}
       onClick={(event) => {
         props.onClick?.(event)
         if (isInteractive) {

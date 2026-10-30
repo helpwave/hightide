@@ -1,49 +1,46 @@
-import type React from 'react'
-import type { ForwardedRef, ReactNode } from 'react'
-import { forwardRef } from 'react'
-import type { ComboboxInputProps } from './ComboboxInput'
-import { ComboboxInput } from './ComboboxInput'
+import type { Ref } from 'react'
+import type { ComboboxSearchbarProps } from './ComboboxSearchbar'
+import { ComboboxSearchbar } from './ComboboxSearchbar'
 import type { ComboboxListProps } from './ComboboxList'
 import { ComboboxList } from './ComboboxList'
+import type { ComboboxPopUpProps } from './ComboboxPopUp'
+import { ComboboxPopUp } from './ComboboxPopUp'
 import type { ComboboxStateManagerProps } from './ComboboxStateManager'
 import { ComboboxStateManager } from './ComboboxStateManager'
 
 export type ComboboxProps<T = string> = Omit<ComboboxStateManagerProps<T>, 'children'> & {
-  children?: ReactNode,
-  placeholder?: ComboboxInputProps['placeholder'],
-  id?: string,
-  inputProps?: ComboboxInputProps,
-  listProps?: Omit<ComboboxListProps, 'children'>,
+  searchbarRef?: Ref<HTMLInputElement>,
+  popupRef?: Ref<HTMLDivElement>,
+  listRef?: Ref<HTMLUListElement>,
+  searchbarProps?: ComboboxSearchbarProps,
+  popupProps?: ComboboxPopUpProps,
+  listProps?: Omit<ComboboxListProps<T>, 'children'>,
 }
 
-type ComboboxComponentType = <T = string>(
-  props: ComboboxProps<T> & {
-    ref?: React.ForwardedRef<HTMLInputElement>,
-  }
-) => React.ReactElement
-
-const ComboboxComponentImpl = forwardRef<HTMLInputElement, ComboboxProps<unknown>>(function ComboboxComponent<T>(
-  {
-    children,
-    placeholder,
-    id,
-    inputProps,
-    listProps,
-    ...props
-  }: ComboboxProps<T>,
-  ref: ForwardedRef<HTMLInputElement>
-) {
+export function ComboboxComponent<T = string>({
+  searchbarRef,
+  popupRef,
+  listRef,
+  searchbarProps,
+  popupProps,
+  listProps,
+  ...props
+}: ComboboxProps<T>) {
   return (
     <ComboboxStateManager<T> {...props}>
-      <ComboboxInput
-        ref={ref}
-        id={id}
-        placeholder={placeholder}
-        {...inputProps}
+      <ComboboxSearchbar
+        {...searchbarProps}
+        ref={searchbarRef}
       />
-      <ComboboxList {...listProps}>{children}</ComboboxList>
+      <ComboboxPopUp
+        {...popupProps}
+        ref={popupRef}
+      >
+        <ComboboxList
+          {...listProps}
+          ref={listRef}
+        />
+      </ComboboxPopUp>
     </ComboboxStateManager>
   )
-})
-
-export const ComboboxComponent = ComboboxComponentImpl as ComboboxComponentType
+}

@@ -22,6 +22,7 @@ export function DateTimeInputField({ fieldRef, ...props }: DateTimeInputFieldPro
       isReadOnly={config.isReadOnly}
       isInvalid={config.isInvalid}
       isRequired={config.isRequired}
+      id={config.id}
       onValueChange={(next) => dispatch({ type: 'setValue', value: DateUtils.fromZonedDate(next, timeZone) })}
       onStateEvent={(event) => {
         if (event.type === 'commit') {

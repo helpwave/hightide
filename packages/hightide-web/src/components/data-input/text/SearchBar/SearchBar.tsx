@@ -1,6 +1,6 @@
 import type { ComponentRef, Ref } from 'react'
 import { useCallback } from 'react'
-import type { ControllableInputProps } from '@helpwave/hightide-utils/interfaces'
+import type { ControllableDOMInputProps } from '../../domInput'
 import { useControlledState, useStateMachineBinding } from '@helpwave/hightide-utils/hooks'
 import { ReactUtils } from '@helpwave/hightide-utils/utils'
 import { SearchBarContext } from './SearchBarContext'
@@ -10,7 +10,7 @@ import { SearchBarSearchButton, type SearchBarSearchButtonProps } from './Search
 import { SearchBarStateManager } from './SearchBarStateManager'
 import type { SearchBarEvent, SearchBarState } from './SearchBarState'
 
-export type SearchBarProps = ControllableInputProps<string, SearchBarEvent> & {
+export type SearchBarProps = ControllableDOMInputProps<string, SearchBarEvent> & {
   onSearch: (value: string) => void,
   layoutRef?: Ref<ComponentRef<typeof SearchBarLayout>>,
   layoutProps?: SearchBarLayoutProps,
@@ -29,6 +29,7 @@ const SearchBarComponent = ({
   isDisabled,
   isReadOnly,
   isRequired,
+  id,
   onSearch,
   layoutRef,
   layoutProps,
@@ -59,6 +60,7 @@ const SearchBarComponent = ({
       isDisabled={isDisabled}
       isReadOnly={isReadOnly}
       isRequired={isRequired}
+      id={id}
     >
       <SearchBarLayout
         {...layoutProps}

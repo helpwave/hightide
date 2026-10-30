@@ -1,8 +1,8 @@
 import { createContext, useContext } from 'react'
-import type { InputConfig, InputContextValue } from '@helpwave/hightide-utils/interfaces'
+import type { DOMInputConfig, DOMInputContextValue } from '../../domInput'
 import type { InsideLabelInputEvent, InsideLabelInputState } from './InsideLabelInputState'
 
-export type InsideLabelInputContextValue = InputContextValue<InsideLabelInputState, InsideLabelInputEvent, InputConfig>
+export type InsideLabelInputContextValue = DOMInputContextValue<InsideLabelInputState, InsideLabelInputEvent, DOMInputConfig>
 
 export const InsideLabelInputContext = createContext<InsideLabelInputContextValue | null>(null)
 

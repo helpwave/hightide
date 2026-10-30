@@ -1,11 +1,11 @@
 import type { ReactNode } from 'react'
 import { useCallback, useMemo } from 'react'
-import type { InputStateMangerProps } from '@helpwave/hightide-utils/interfaces'
+import type { DOMInputStateMangerProps } from '../../domInput'
 import { useStableEvent, useStateMachine } from '@helpwave/hightide-utils/hooks'
 import { TextInputContext, type TextInputContextValue } from './TextInputContext'
 import { textInputStateTransition, type TextInputEvent, type TextInputState } from './TextInputState'
 
-export type TextInputStateManagerProps = InputStateMangerProps<TextInputState, TextInputEvent>
+export type TextInputStateManagerProps = DOMInputStateMangerProps<TextInputState, TextInputEvent>
   & {
     children?: ReactNode,
   }
@@ -18,6 +18,7 @@ export function TextInputStateManager({
   isDisabled = false,
   isReadOnly = false,
   isRequired = false,
+  id,
   children,
 }: TextInputStateManagerProps) {
   const machine = useStateMachine<TextInputState, TextInputEvent>({
@@ -37,7 +38,8 @@ export function TextInputStateManager({
     isDisabled,
     isReadOnly,
     isRequired,
-  }), [isDisabled, isInvalid, isReadOnly, isRequired])
+    id,
+  }), [isDisabled, isInvalid, isReadOnly, isRequired, id])
 
   const contextValue = useMemo<TextInputContextValue>(() => ({
     state: machine.state,

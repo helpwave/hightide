@@ -1,5 +1,5 @@
 import type { ComponentRef, Ref } from 'react'
-import type { ControllableInputProps } from '@helpwave/hightide-utils/interfaces'
+import type { ControllableDOMInputProps } from '../../domInput'
 import { ReactUtils } from '@helpwave/hightide-utils/utils'
 import { useBoundDateState } from '../useDateStateMachine'
 import { YearMonthPickerContext } from './YearMonthPickerContext'
@@ -9,7 +9,7 @@ import { YearMonthPickerYearWheel } from './YearMonthPickerYearWheel'
 import { YearMonthPickerStateManager } from './YearMonthPickerStateManager'
 import type { YearMonthPickerEvent, YearMonthPickerState } from './YearMonthPickerState'
 
-export type YearMonthPickerProps = ControllableInputProps<Date, YearMonthPickerEvent> & {
+export type YearMonthPickerProps = ControllableDOMInputProps<Date, YearMonthPickerEvent> & {
   start?: Date,
   end?: Date,
   layoutRef?: Ref<ComponentRef<typeof YearMonthPickerLayout>>,
@@ -25,6 +25,7 @@ const YearMonthPickerComponent = ({
   isDisabled,
   isReadOnly,
   isRequired,
+  id,
   start,
   end,
   layoutRef,
@@ -43,6 +44,7 @@ const YearMonthPickerComponent = ({
       isDisabled={isDisabled}
       isReadOnly={isReadOnly}
       isRequired={isRequired}
+      id={id}
       start={start}
       end={end}
     >

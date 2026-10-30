@@ -1,6 +1,6 @@
 import type { ReactNode } from 'react'
 import { useMemo } from 'react'
-import type { InputStateMangerProps } from '@helpwave/hightide-utils/interfaces'
+import type { DOMInputStateMangerProps } from '../../domInput'
 import { DateUtils } from '@helpwave/hightide-utils/utils'
 import { useLocalization } from '../../../../global-contexts/localization/forward-exports'
 import { dateInputConfig, useDateStateMachine } from '../useDateStateMachine'
@@ -17,7 +17,7 @@ import {
 const defaultPickerStart = DateUtils.subtractDuration(new Date(), { years: 100 })
 const defaultPickerEnd = DateUtils.addDuration(new Date(), { years: 100 })
 
-export type DateWheelPickerStateManagerProps = InputStateMangerProps<DateWheelPickerState, DateWheelPickerEvent> & {
+export type DateWheelPickerStateManagerProps = DOMInputStateMangerProps<DateWheelPickerState, DateWheelPickerEvent> & {
   children?: ReactNode,
   start?: Date,
   end?: Date,
@@ -33,6 +33,7 @@ export function DateWheelPickerStateManager({
   isDisabled,
   isReadOnly,
   isRequired,
+  id,
   start = defaultPickerStart,
   end = defaultPickerEnd,
   isLooping = true,
@@ -61,14 +62,14 @@ export function DateWheelPickerStateManager({
     })
   }, [bounds, loopingBehaviour])
   const config = useMemo<DateWheelPickerContextConfig>(() => ({
-    ...dateInputConfig({ isInvalid, isDisabled, isReadOnly, isRequired }),
+    ...dateInputConfig({ isInvalid, isDisabled, isReadOnly, isRequired, id }),
     isLooping,
     loopingBehaviour,
     monthNames,
     months,
     years,
     days,
-  }), [days, isDisabled, isInvalid, isLooping, isReadOnly, isRequired, loopingBehaviour, monthNames, months, years])
+  }), [days, isDisabled, isInvalid, isLooping, isReadOnly, isRequired, loopingBehaviour, monthNames, months, years, id])
   const contextValue = useDateStateMachine({
     state,
     transition,

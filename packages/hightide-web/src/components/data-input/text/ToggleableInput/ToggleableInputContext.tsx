@@ -1,8 +1,8 @@
 import { createContext, useContext } from 'react'
-import type { InputConfig, InputContextValue } from '@helpwave/hightide-utils/interfaces'
+import type { DOMInputConfig, DOMInputContextValue } from '../../domInput'
 import type { ToggleableInputEvent, ToggleableInputState } from './ToggleableInputState'
 
-export type ToggleableInputContextValue = InputContextValue<ToggleableInputState, ToggleableInputEvent, InputConfig>
+export type ToggleableInputContextValue = DOMInputContextValue<ToggleableInputState, ToggleableInputEvent, DOMInputConfig>
 
 export const ToggleableInputContext = createContext<ToggleableInputContextValue | null>(null)
 

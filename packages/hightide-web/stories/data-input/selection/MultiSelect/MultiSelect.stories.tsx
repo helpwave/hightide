@@ -4,8 +4,8 @@ import { useEffect, useState } from 'react'
 import { MultiSelect } from '../../../../src/components/data-input/selection/MultiSelect/MultiSelect'
 import type { MultiSelectProps } from '../../../../src/components/data-input/selection/MultiSelect/MultiSelectComponent'
 
-const meta: Meta<typeof MultiSelect<User>> = {
-  component: MultiSelect<User>,
+const meta: Meta<typeof MultiSelect<string>> = {
+  component: MultiSelect<string>,
 }
 
 export default meta
@@ -15,7 +15,7 @@ const fruitOptions = [
   { value: 'Apple', label: 'Apple' },
   { value: 'Banana', label: 'Banana', disabled: true },
   { value: 'Cherry', label: 'Cherry' },
-  { value: 'Dragonfruit', label: 'Dragonfruit', className: '!text-red-400' },
+  { value: 'Dragonfruit', label: 'Dragonfruit', visual: { className: '!text-red-400' } },
   { value: 'Elderberry', label: 'Elderberry' },
   { value: 'Fig', label: 'Fig' },
   { value: 'Grapefruit', label: 'Grapefruit' },
@@ -35,9 +35,7 @@ export const multiSelect: Story = {
     isRequired: false,
     onValueChange: action('onValueChange'),
     onStateEvent: action('onStateEvent'),
-    children: fruitOptions.map((item, index) => (
-      <MultiSelect.Option key={index} {...item} />
-    )),
+    options: fruitOptions,
   },
 }
 
@@ -59,7 +57,7 @@ function compareUser(a: User, b: User): boolean {
   return a.uuid === b.uuid
 }
 
-export const multiSelectWithUser: Story = {
+export const multiSelectWithUser: StoryObj<typeof MultiSelect<User>> = {
   args: {
     value: undefined,
     initialValue: undefined,
@@ -82,19 +80,19 @@ export const multiSelectWithUser: Story = {
         ))}
       </div>
     ),
-    children: users.map((user) => (
-      <MultiSelect.Option
-        key={user.uuid}
-        value={user}
-        valueId={user.uuid}
-        label={user.name}
-      >
-        <div className="flex flex-col">
-          <span>{user.name}</span>
-          <span className="text-description">{user.email}</span>
-        </div>
-      </MultiSelect.Option>
-    )),
+    options: users.map((user) => ({
+      id: user.uuid,
+      value: user,
+      label: user.name,
+      visual: {
+        content: (
+          <div className="flex flex-col">
+            <span>{user.name}</span>
+            <span className="text-description">{user.email}</span>
+          </div>
+        ),
+      },
+    })),
   },
   render: (args: MultiSelectProps<User>) => {
     const [value, setValue] = useState<User[]>(args.value as User[] | undefined ?? [])
@@ -133,8 +131,9 @@ export const multiSelectComposed: Story = {
     onValueChange: action('onValueChange'),
     onStateEvent: action('onStateEvent'),
   },
-  render: (args: MultiSelectProps<User>) => (
+  render: (args: MultiSelectProps<string>) => (
     <MultiSelect.StateManager
+      options={fruitOptions}
       initialValue={args.initialValue}
       isDisabled={args.isDisabled}
       isInvalid={args.isInvalid}
@@ -145,11 +144,10 @@ export const multiSelectComposed: Story = {
       onStateEvent={args.onStateEvent}
     >
       <MultiSelect.Trigger placeholder="Select…" />
-      <MultiSelect.Content>
-        {fruitOptions.map((item, index) => (
-          <MultiSelect.Option key={index} {...item} />
-        ))}
-      </MultiSelect.Content>
+      <MultiSelect.PopUp>
+        <MultiSelect.Searchbar />
+        <MultiSelect.List />
+      </MultiSelect.PopUp>
     </MultiSelect.StateManager>
   ),
 }

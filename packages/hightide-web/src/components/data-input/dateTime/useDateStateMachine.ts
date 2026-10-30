@@ -1,5 +1,6 @@
 import { useCallback, useMemo, useRef } from 'react'
-import type { InputConfig, InputContextValue, InputState, InputStateEvent } from '@helpwave/hightide-utils/interfaces'
+import type { DOMInputConfig, DOMInputContextValue } from '../domInput'
+import type { InputState, InputStateEvent } from '@helpwave/hightide-utils/interfaces'
 import { useControlledState, useStableEvent, useStateMachineBinding } from '@helpwave/hightide-utils/hooks'
 
 export function dateInputConfig({
@@ -7,16 +8,18 @@ export function dateInputConfig({
   isDisabled = false,
   isReadOnly = false,
   isRequired = false,
-}: Partial<InputConfig> = {}): InputConfig {
+  id,
+}: Partial<DOMInputConfig> = {}): DOMInputConfig {
   return {
     isInvalid,
     isDisabled,
     isReadOnly,
     isRequired,
+    id,
   }
 }
 
-export function useDateStateMachine<S extends InputState, E extends InputStateEvent, C extends InputConfig>({
+export function useDateStateMachine<S extends InputState, E extends InputStateEvent, C extends DOMInputConfig>({
   state,
   transition,
   onStateChange,
@@ -28,7 +31,7 @@ export function useDateStateMachine<S extends InputState, E extends InputStateEv
   onStateChange?: (state: S) => void,
   onStateEvent?: (event: E) => void,
   config: C,
-}): InputContextValue<S, E, C> {
+}): DOMInputContextValue<S, E, C> {
   const stateRef = useRef(state)
   stateRef.current = state
   const transitionStable = useStableEvent(transition)

@@ -1,11 +1,11 @@
 import type { ReactNode } from 'react'
 import { useCallback, useMemo } from 'react'
-import type { InputStateMangerProps } from '@helpwave/hightide-utils/interfaces'
+import type { DOMInputStateMangerProps } from '../../domInput'
 import { useStableEvent, useStateMachine } from '@helpwave/hightide-utils/hooks'
 import { DateTimeFieldContext, type DateTimeFieldContextValue } from './DateTimeFieldContext'
 import { dateTimeFieldStateTransition, type DateTimeFieldEvent, type DateTimeFieldState } from './DateTimeFieldState'
 
-export type DateTimeFieldStateManagerProps = InputStateMangerProps<DateTimeFieldState, DateTimeFieldEvent> & {
+export type DateTimeFieldStateManagerProps = DOMInputStateMangerProps<DateTimeFieldState, DateTimeFieldEvent> & {
   locale: string,
   is24HourFormat: boolean,
   children?: ReactNode,
@@ -21,6 +21,7 @@ export function DateTimeFieldStateManager({
   isDisabled = false,
   isReadOnly = false,
   isRequired = false,
+  id,
   children,
 }: DateTimeFieldStateManagerProps) {
   const machine = useStateMachine<DateTimeFieldState, DateTimeFieldEvent>({
@@ -38,7 +39,8 @@ export function DateTimeFieldStateManager({
     isDisabled,
     isReadOnly,
     isRequired,
-  }), [isDisabled, isInvalid, isReadOnly, isRequired])
+    id,
+  }), [isDisabled, isInvalid, isReadOnly, isRequired, id])
   const contextValue = useMemo<DateTimeFieldContextValue>(() => ({
     state: machine.state,
     dispatch,

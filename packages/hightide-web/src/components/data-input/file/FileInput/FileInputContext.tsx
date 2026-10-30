@@ -8,6 +8,7 @@ export type FileInputContextType = {
   isDisabled: boolean,
   isReadOnly: boolean,
   isRequired: boolean,
+  id?: string,
   files: readonly FileInputItem[],
   isOpen: boolean,
   isDragging: boolean,

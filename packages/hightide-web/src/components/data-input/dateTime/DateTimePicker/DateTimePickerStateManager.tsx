@@ -1,6 +1,6 @@
 import type { ReactNode } from 'react'
 import { useMemo } from 'react'
-import type { InputStateMangerProps } from '@helpwave/hightide-utils/interfaces'
+import type { DOMInputStateMangerProps } from '../../domInput'
 import type { DateTimeFormat, DateTimePrecision, Weekday } from '@helpwave/hightide-utils/utils'
 import { useDateTimeFormat, useLocalization } from '../../../../global-contexts/localization/forward-exports'
 import { dateInputConfig, useDateStateMachine } from '../useDateStateMachine'
@@ -17,7 +17,7 @@ import {
   type DateTimePickerState
 } from './DateTimePickerState'
 
-export type DateTimePickerStateManagerProps = InputStateMangerProps<DateTimePickerState, DateTimePickerEvent> & {
+export type DateTimePickerStateManagerProps = DOMInputStateMangerProps<DateTimePickerState, DateTimePickerEvent> & {
   children?: ReactNode,
   mode?: DateTimeFormat,
   start?: Date,
@@ -40,6 +40,7 @@ export function DateTimePickerStateManager({
   isDisabled,
   isReadOnly,
   isRequired,
+  id,
   mode = 'dateTime',
   start,
   end,
@@ -57,7 +58,7 @@ export function DateTimePickerStateManager({
   const { is24HourFormat: contextIs24HourFormat } = useDateTimeFormat()
   const is24HourFormat = is24HourFormatOverride ?? contextIs24HourFormat
   const config = useMemo<DateTimePickerContextConfig>(() => ({
-    ...dateInputConfig({ isInvalid, isDisabled, isReadOnly, isRequired }),
+    ...dateInputConfig({ isInvalid, isDisabled, isReadOnly, isRequired, id }),
     mode,
     start,
     end,
@@ -70,7 +71,7 @@ export function DateTimePickerStateManager({
     precision,
     initialDisplay,
     locale,
-  }), [end, initialDisplay, is24HourFormat, isDisabled, isInvalid, isReadOnly, isRequired, locale, markToday, millisecondIncrement, minuteIncrement, mode, precision, secondIncrement, start, weekStart])
+  }), [end, initialDisplay, is24HourFormat, isDisabled, isInvalid, isReadOnly, isRequired, locale, markToday, millisecondIncrement, minuteIncrement, mode, precision, secondIncrement, start, weekStart, id])
   const contextValue = useDateStateMachine({
     state,
     transition: dateTimePickerStateTransition,

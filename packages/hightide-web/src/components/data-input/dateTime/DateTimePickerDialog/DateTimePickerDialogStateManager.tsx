@@ -1,6 +1,6 @@
 import type { ReactNode } from 'react'
 import { useMemo } from 'react'
-import type { InputStateMangerProps } from '@helpwave/hightide-utils/interfaces'
+import type { DOMInputStateMangerProps } from '../../domInput'
 import type { DateTimeFormat, DateTimePrecision, Weekday } from '@helpwave/hightide-utils/utils'
 import { dateInputConfig, useDateStateMachine } from '../useDateStateMachine'
 import type { WheelLoopingBehaviour } from '../TimeWheelPicker'
@@ -16,7 +16,7 @@ import {
   type DateTimePickerDialogState
 } from './DateTimePickerDialogState'
 
-export type DateTimePickerDialogStateManagerProps = InputStateMangerProps<DateTimePickerDialogState, DateTimePickerDialogEvent> & {
+export type DateTimePickerDialogStateManagerProps = DOMInputStateMangerProps<DateTimePickerDialogState, DateTimePickerDialogEvent> & {
   children?: ReactNode,
   mode?: DateTimeFormat,
   allowRemove?: boolean,
@@ -43,6 +43,7 @@ export function DateTimePickerDialogStateManager({
   isDisabled,
   isReadOnly,
   isRequired,
+  id,
   mode = 'date',
   allowRemove = true,
   label,
@@ -61,7 +62,7 @@ export function DateTimePickerDialogStateManager({
   children,
 }: DateTimePickerDialogStateManagerProps) {
   const config = useMemo<DateTimePickerDialogContextConfig>(() => ({
-    ...dateInputConfig({ isInvalid, isDisabled, isReadOnly, isRequired }),
+    ...dateInputConfig({ isInvalid, isDisabled, isReadOnly, isRequired, id }),
     mode,
     allowRemove,
     label,
@@ -77,7 +78,7 @@ export function DateTimePickerDialogStateManager({
     secondIncrement,
     millisecondIncrement,
     precision,
-  }), [allowRemove, end, is24HourFormat, isDisabled, isInvalid, isLooping, isReadOnly, isRequired, label, labelId, loopingBehaviour, markToday, millisecondIncrement, minuteIncrement, mode, precision, secondIncrement, start, weekStart])
+  }), [allowRemove, end, is24HourFormat, isDisabled, isInvalid, isLooping, isReadOnly, isRequired, label, labelId, loopingBehaviour, markToday, millisecondIncrement, minuteIncrement, mode, precision, secondIncrement, start, weekStart, id])
   const contextValue = useDateStateMachine({
     state,
     transition: dateTimePickerDialogStateTransition,

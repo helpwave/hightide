@@ -4,7 +4,6 @@ import { useId, useMemo, useState } from 'react'
 import { faker } from '@faker-js/faker'
 import { range } from '@helpwave/hightide-utils/utils'
 import { Table } from '../../../src/components/layout/Table/Table'
-import { TableColumn } from '../../../src/components/layout/Table/TableColumn'
 import { TableCell } from '../../../src/components/layout/Table/TableCell'
 import { useHightideTranslation } from '@helpwave/hightide-utils/context/translation'
 import { FilterList } from '../../../src/components/interaction/data/FilterList'
@@ -72,28 +71,26 @@ const AgeFilterPopUp = ({ value, onValueChange, onRemove, name, onClose: close, 
       <Visibility isVisible={needsRangeInput}>
         <div className="flex-col-1">
           <label htmlFor={ids.range} className="typography-label-md">{translation('min')}</label>
-          <Select<[number, number]>
+          <Select<[number, number] | null>
             triggerProps={{ id: ids.range }}
             value={parameter.numberMin !== undefined && parameter.numberMax !== undefined ? [parameter.numberMin, parameter.numberMax] : null}
             onValueChange={(newRange) => {
-              onValueChange({ ...value, parameter: { ...parameter, numberMin: newRange[0], numberMax: newRange[1] } })
+              if(newRange != null)
+                onValueChange({ ...value, parameter: { ...parameter, numberMin: newRange[0], numberMax: newRange[1] } })
             }}
             compareFunction={(a, b) => {
               if (a === null || b === null) return false
               return a[0] === b[0] && a[1] === b[1]
             }}
-          >
-            {range(ageRange.length - 1).map(i => (
-              <Select.Option
-                key={i}
-                value={[ageRange[i], ageRange[i + 1]] as [number, number]}
-                valueId={`${ageRange[i]}-${ageRange[i + 1]}`}
-                label={`${ageRange[i]} - ${ageRange[i + 1]}`}
-              >
-                {ageRange[i]} - {ageRange[i + 1]}
-              </Select.Option>
-            ))}
-          </Select>
+            options={range(ageRange.length - 1).map(i => ({
+              id: `${ageRange[i]}-${ageRange[i + 1]}`,
+              value: [ageRange[i], ageRange[i + 1]] as [number, number],
+              label: `${ageRange[i]} - ${ageRange[i + 1]}`,
+              visual: {
+                content: `${ageRange[i]} - ${ageRange[i + 1]}`,
+              },
+            }))}
+          />
         </div>
       </Visibility>
       <Visibility isVisible={!needsRangeInput && needsParameterInput}>
@@ -225,6 +222,46 @@ export const filterListTable: Story = {
           initialState: {
             pagination: { pageSize: 10 },
           },
+          columns: [
+            {
+              id: 'name',
+              header: translation('name'),
+              accessorKey: 'name',
+              minSize: 150,
+              size: 200,
+            },
+            {
+              id: 'age',
+              header: translation('age'),
+              accessorKey: 'age',
+              minSize: 100,
+              size: 120,
+            },
+            {
+              id: 'entryDate',
+              header: translation('entryDate'),
+              accessorKey: 'entryDate',
+              cell: ({ cell }) => (
+                <TableCell>
+                  {DateUtils.toInputString(cell.getValue() as Date, 'date')}
+                </TableCell>
+              ),
+              minSize: 140,
+              size: 160,
+            },
+            {
+              id: 'hasChildren',
+              header: 'Has Children',
+              accessorKey: 'hasChildren',
+              cell: ({ cell }) => (
+                <TableCell>
+                  {cell.getValue() ? translation('yes') : translation('no')}
+                </TableCell>
+              ),
+              minSize: 100,
+              size: 120,
+            },
+          ],
         }}
         header={(
           <div className="flex-col-2 w-full">
@@ -249,46 +286,7 @@ export const filterListTable: Story = {
             />
           </div>
         )}
-      >
-        <TableColumn
-          id="name"
-          header={translation('name')}
-          accessorKey="name"
-          minSize={150}
-          size={200}
-        />
-        <TableColumn
-          id="age"
-          header={translation('age')}
-          accessorKey="age"
-          minSize={100}
-          size={120}
-        />
-        <TableColumn
-          id="entryDate"
-          header={translation('entryDate')}
-          accessorKey="entryDate"
-          cell={({ cell }) => (
-            <TableCell>
-              {DateUtils.toInputString(cell.getValue() as Date, 'date')}
-            </TableCell>
-          )}
-          minSize={140}
-          size={160}
-        />
-        <TableColumn
-          id="hasChildren"
-          header="Has Children"
-          accessorKey="hasChildren"
-          cell={({ cell }) => (
-            <TableCell>
-              {cell.getValue() ? translation('yes') : translation('no')}
-            </TableCell>
-          )}
-          minSize={100}
-          size={120}
-        />
-      </Table>
+      />
     )
   },
 }

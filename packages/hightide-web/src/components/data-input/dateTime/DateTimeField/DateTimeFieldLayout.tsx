@@ -209,6 +209,7 @@ export const DateTimeFieldLayout = forwardRef<HTMLDivElement, DateTimeFieldLayou
     <div
       {...props}
       ref={forwardedRef}
+      id={config.id ?? props.id}
       role="group"
       onBlur={onFieldBlur}
       onMouseDown={(event) => {

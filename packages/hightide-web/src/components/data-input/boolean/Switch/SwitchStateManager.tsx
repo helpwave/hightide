@@ -1,11 +1,11 @@
 import type { ReactNode } from 'react'
 import { useCallback, useMemo } from 'react'
-import type { InputStateMangerProps } from '@helpwave/hightide-utils/interfaces'
+import type { DOMInputStateMangerProps } from '../../domInput'
 import { useStableEvent, useStateMachine } from '@helpwave/hightide-utils/hooks'
 import { SwitchContext, type SwitchContextValue } from './SwitchContext'
 import { switchStateTransition, type SwitchEvent, type SwitchState } from './SwitchState'
 
-export type SwitchStateManagerProps = InputStateMangerProps<SwitchState, SwitchEvent>
+export type SwitchStateManagerProps = DOMInputStateMangerProps<SwitchState, SwitchEvent>
   & {
     children?: ReactNode,
   }
@@ -18,6 +18,7 @@ export function SwitchStateManager({
   isDisabled = false,
   isReadOnly = false,
   isRequired = false,
+  id,
   children,
 }: SwitchStateManagerProps) {
   const machine = useStateMachine<SwitchState, SwitchEvent>({
@@ -37,7 +38,8 @@ export function SwitchStateManager({
     isDisabled,
     isReadOnly,
     isRequired,
-  }), [isDisabled, isInvalid, isReadOnly, isRequired])
+    id,
+  }), [isDisabled, isInvalid, isReadOnly, isRequired, id])
 
   const contextValue = useMemo<SwitchContextValue>(() => ({
     state: machine.state,

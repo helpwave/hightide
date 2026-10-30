@@ -1,6 +1,6 @@
 import type { ComponentRef, Ref } from 'react'
 import { useCallback } from 'react'
-import type { ControllableInputProps } from '@helpwave/hightide-utils/interfaces'
+import type { ControllableDOMInputProps } from '../../domInput'
 import { useControlledState, useStateMachineBinding } from '@helpwave/hightide-utils/hooks'
 import { ReactUtils } from '@helpwave/hightide-utils/utils'
 import { NumberInputContext } from './NumberInputContext'
@@ -8,7 +8,7 @@ import { NumberInputInput, type NumberInputInputProps } from './NumberInputInput
 import { NumberInputStateManager } from './NumberInputStateManager'
 import type { NumberInputEvent, NumberInputState } from './NumberInputState'
 
-export type NumberInputProps = ControllableInputProps<number, NumberInputEvent> & {
+export type NumberInputProps = ControllableDOMInputProps<number, NumberInputEvent> & {
   minimum?: number,
   maximum?: number,
   approximateMaxCharacters?: number,
@@ -27,6 +27,7 @@ const NumberInputComponent = ({
   isDisabled,
   isReadOnly,
   isRequired,
+  id,
   minimum,
   maximum,
   approximateMaxCharacters,
@@ -56,6 +57,7 @@ const NumberInputComponent = ({
       isDisabled={isDisabled}
       isReadOnly={isReadOnly}
       isRequired={isRequired}
+      id={id}
     >
       <NumberInputInput
         ref={ReactUtils.assingRefsBuilder([inputRef])}

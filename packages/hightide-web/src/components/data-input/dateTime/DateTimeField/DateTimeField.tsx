@@ -1,6 +1,6 @@
 import type { ComponentRef, Ref } from 'react'
 import { useCallback, useMemo } from 'react'
-import type { ControllableInputProps } from '@helpwave/hightide-utils/interfaces'
+import type { ControllableDOMInputProps } from '../../domInput'
 import { useControlledState, useStateMachineBinding } from '@helpwave/hightide-utils/hooks'
 import type { DateTimeFormat, DateTimePrecision } from '@helpwave/hightide-utils/utils'
 import { ReactUtils } from '@helpwave/hightide-utils/utils'
@@ -11,7 +11,7 @@ import { DateTimeFieldLayout, type DateTimeFieldLayoutProps } from './DateTimeFi
 import { DateTimeFieldStateManager } from './DateTimeFieldStateManager'
 import type { DateTimeFieldEvent, DateTimeFieldState } from './DateTimeFieldState'
 
-export type DateTimeFieldProps = ControllableInputProps<Date | null, DateTimeFieldEvent> & {
+export type DateTimeFieldProps = ControllableDOMInputProps<Date | null, DateTimeFieldEvent> & {
   mode?: DateTimeFormat,
   precision?: DateTimePrecision,
   is24HourFormat?: boolean,
@@ -29,6 +29,7 @@ const DateTimeFieldComponent = ({
   isDisabled,
   isReadOnly,
   isRequired,
+  id,
   mode = 'date',
   precision = 'minute',
   is24HourFormat,
@@ -73,6 +74,7 @@ const DateTimeFieldComponent = ({
       isDisabled={isDisabled}
       isReadOnly={isReadOnly}
       isRequired={isRequired}
+      id={id}
     >
       <DateTimeFieldLayout
         {...layoutProps}

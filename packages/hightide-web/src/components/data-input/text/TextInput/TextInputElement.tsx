@@ -21,6 +21,7 @@ export const TextInputElement = forwardRef<HTMLInputElement, TextInputElementPro
       {...props}
       value={state.value}
       ref={forwardedRef}
+      id={config.id ?? props.id}
       disabled={isDisabled}
       readOnly={isReadOnly}
       required={isRequired}

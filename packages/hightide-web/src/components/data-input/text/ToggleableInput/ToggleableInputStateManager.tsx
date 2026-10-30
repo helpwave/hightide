@@ -1,6 +1,6 @@
 import type { ReactNode } from 'react'
 import { useCallback, useMemo } from 'react'
-import type { InputStateMangerProps } from '@helpwave/hightide-utils/interfaces'
+import type { DOMInputStateMangerProps } from '../../domInput'
 import { useStableEvent, useStateMachine } from '@helpwave/hightide-utils/hooks'
 import { ToggleableInputContext, type ToggleableInputContextValue } from './ToggleableInputContext'
 import {
@@ -9,7 +9,7 @@ import {
   type ToggleableInputState
 } from './ToggleableInputState'
 
-export type ToggleableInputStateManagerProps = InputStateMangerProps<ToggleableInputState, ToggleableInputEvent> & {
+export type ToggleableInputStateManagerProps = DOMInputStateMangerProps<ToggleableInputState, ToggleableInputEvent> & {
   children?: ReactNode,
 }
 
@@ -21,6 +21,7 @@ export function ToggleableInputStateManager({
   isDisabled = false,
   isReadOnly = false,
   isRequired = false,
+  id,
   children,
 }: ToggleableInputStateManagerProps) {
   const machine = useStateMachine<ToggleableInputState, ToggleableInputEvent>({
@@ -38,7 +39,8 @@ export function ToggleableInputStateManager({
     isDisabled,
     isReadOnly,
     isRequired,
-  }), [isDisabled, isInvalid, isReadOnly, isRequired])
+    id,
+  }), [isDisabled, isInvalid, isReadOnly, isRequired, id])
   const contextValue = useMemo<ToggleableInputContextValue>(() => ({
     state: machine.state,
     dispatch,

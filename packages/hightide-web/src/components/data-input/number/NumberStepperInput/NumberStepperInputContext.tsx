@@ -1,8 +1,8 @@
 import { createContext, useContext } from 'react'
-import type { InputConfig, InputContextValue } from '@helpwave/hightide-utils/interfaces'
+import type { DOMInputConfig, DOMInputContextValue } from '../../domInput'
 import type { NumberStepperInputEvent, NumberStepperInputState } from './NumberStepperInputState'
 
-export type NumberStepperInputContextValue = InputContextValue<NumberStepperInputState, NumberStepperInputEvent, InputConfig>
+export type NumberStepperInputContextValue = DOMInputContextValue<NumberStepperInputState, NumberStepperInputEvent, DOMInputConfig>
 
 export const NumberStepperInputContext = createContext<NumberStepperInputContextValue | null>(null)
 
