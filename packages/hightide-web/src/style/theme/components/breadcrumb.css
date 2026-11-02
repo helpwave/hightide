@@ -16,4 +16,8 @@
   .breadcrumb-divider {
     @apply px-1 text-description;
   }
+
+  .breadcrumb-item:last-child .breadcrumb-divider {
+    @apply hidden;
+  }
 }
