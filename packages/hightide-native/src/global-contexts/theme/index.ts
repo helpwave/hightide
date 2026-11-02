@@ -3,6 +3,7 @@ export * from './ThemeProvider'
 export {
   useCreateThemeConfig,
   type ThemeInformation,
+  type ThemeConfig,
   type ThemeConfigValue,
   type SystemTheme,
   type UseCreateThemeConfigProps,

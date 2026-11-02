@@ -47,7 +47,7 @@ const frenchTranslations = {
 
 const demoSupportedLocales = {
   ...HightideConfigUtils.defaultSupportedLocales,
-  'fr-FR': { localName: 'Français' },
+  'fr-FR': { localeName: 'Français' },
 }
 
 const LocaleSelect = () => {
@@ -60,7 +60,7 @@ const LocaleSelect = () => {
   const options = useMemo(
     () => Object.entries(supportedLocales).map(([id, info]) => ({
       id,
-      label: info.localName,
+      label: info.localeName,
     })),
     [supportedLocales]
   )

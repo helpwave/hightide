@@ -17,6 +17,8 @@
   "chooseLanguage": "Dilinizi seçin",
   "chooseTheme": "Tercih ettiğiniz renk temasını seçin.",
   "system": "Sistem",
+  "themeNameLight": "Açık",
+  "themeNameDark": "Koyu",
   "chooseSlide": "Gösterilecek slaytı seçin",
   "clear": "Temizle",
   "removeProperty": "Özelliği kaldır",
@@ -61,19 +63,22 @@
   "maximumNumberOfFiles": "Maksimum dosya sayısı: {count}",
   "@maximumNumberOfFiles": {
     "placeholders": {
-      "count": { "type": "number" }
+      "count": {
+        "type": "int"
+      }
     }
   },
   "allowedFileTypes": "İzin verilen dosya türleri: {types}",
   "@allowedFileTypes": {
     "placeholders": {
-      "types": { "type": "string" }
+      "types": {
+        "type": "string"
+      }
     }
   },
   "menu": "Menü",
   "minLengthError": "Minimum uzunluğa ulaşılmadı.",
   "more": "Daha fazla",
-  "next": "Sonraki",
   "no": "Hayır",
   "noColumn": "Sütun yok",
   "noData": "Veri yok",
@@ -83,19 +88,22 @@
   "nResultsFound": "{count, plural, =1{# sonuç bulundu} other{# sonuç bulundu}}",
   "@nResultsFound": {
     "placeholders": {
-      "count": { "type": "number" }
+      "count": {
+        "type": "int"
+      }
     }
   },
   "nMoreFiles": "+ {count, plural, =1{# dosya daha} other{# dosya daha}}",
   "@nMoreFiles": {
     "placeholders": {
-      "count": { "type": "number" }
+      "count": {
+        "type": "int"
+      }
     }
   },
   "of": "/",
   "optional": "İsteğe bağlı",
   "pleaseWait": "Lütfen bekleyin...",
-  "previous": "Önceki",
   "remove": "Kaldır",
   "removeFilter": "Filtreyi kaldır",
   "required": "Zorunlu",
@@ -103,75 +111,103 @@
   "rBetween": "{value1} ile {value2} arasında",
   "@rBetween": {
     "placeholders": {
-      "value1": {},
-      "value2": {}
+      "value1": {
+        "type": "string"
+      },
+      "value2": {
+        "type": "string"
+      }
     }
   },
   "rContains": "{value} içerir",
   "@rContains": {
     "placeholders": {
-      "value": {}
+      "value": {
+        "type": "string"
+      }
     }
   },
   "rEndsWith": "{value} ile biter",
   "@rEndsWith": {
     "placeholders": {
-      "value": {}
+      "value": {
+        "type": "string"
+      }
     }
   },
   "rEquals": "{value} değerine eşit",
   "@rEquals": {
     "placeholders": {
-      "value": {}
+      "value": {
+        "type": "string"
+      }
     }
   },
   "rGreaterThan": "{value} değerinden büyük",
   "@rGreaterThan": {
     "placeholders": {
-      "value": {}
+      "value": {
+        "type": "string"
+      }
     }
   },
   "rGreaterThanOrEqual": "{value} değerinden büyük veya eşit",
   "@rGreaterThanOrEqual": {
     "placeholders": {
-      "value": {}
+      "value": {
+        "type": "string"
+      }
     }
   },
   "rLessThan": "{value} değerinden küçük",
   "@rLessThan": {
     "placeholders": {
-      "value": {}
+      "value": {
+        "type": "string"
+      }
     }
   },
   "rLessThanOrEqual": "{value} değerinden küçük veya eşit",
   "@rLessThanOrEqual": {
     "placeholders": {
-      "value": {}
+      "value": {
+        "type": "string"
+      }
     }
   },
   "rNotBetween": "{value1} ile {value2} arasında değil",
   "@rNotBetween": {
     "placeholders": {
-      "value1": {},
-      "value2": {}
+      "value1": {
+        "type": "string"
+      },
+      "value2": {
+        "type": "string"
+      }
     }
   },
   "rNotContains": "{value} içermez",
   "@rNotContains": {
     "placeholders": {
-      "value": {}
+      "value": {
+        "type": "string"
+      }
     }
   },
   "rNotEquals": "{value} değerine eşit değil",
   "@rNotEquals": {
     "placeholders": {
-      "value": {}
+      "value": {
+        "type": "string"
+      }
     }
   },
   "rStartsWith": "{value} ile başlar",
   "@rStartsWith": {
     "placeholders": {
-      "value": {}
+      "value": {
+        "type": "string"
+      }
     }
   },
   "save": "Kaydet",
@@ -188,7 +224,7 @@
   "@showSlide": {
     "placeholders": {
       "index": {
-        "type": "number"
+        "type": "int"
       }
     }
   },
@@ -197,10 +233,10 @@
   "@slideOf": {
     "placeholders": {
       "index": {
-        "type": "number"
+        "type": "int"
       },
       "length": {
-        "type": "number"
+        "type": "int"
       }
     }
   },
@@ -212,13 +248,17 @@
   "pThemes": "{count, plural, =1{Tema} other{Temalar}}",
   "@pThemes": {
     "placeholders": {
-      "count": { "type":  "number" }
+      "count": {
+        "type": "int"
+      }
     }
   },
   "sDateTimeSelect": "{datetimeMode, select, time{Saat seçin} date{Tarih seçin} dateTime{Tarih ve saat seçin}}",
   "@sDateTimeSelect": {
     "placeholders": {
-      "datetimeMode": {}
+      "datetimeMode": {
+        "type": "string"
+      }
     }
   },
   "update": "Güncelle",
@@ -247,8 +287,8 @@
   "playTrace": "İzlemeyi oynat",
   "startDate": "Başlangıç",
   "startsWith": "İle başlar",
-  "notEmpty": "Bu alan boş bırakılamaz.",
-  "invalidEmail": "E-posta adresi geçerli değil.",
+  "validationErrorNotEmpty": "Bu alan boş bırakılamaz.",
+  "validationErrorInvalidEmail": "E-posta adresi geçerli değil.",
   "isFalse": "Yanlış",
   "isTrue": "Doğru",
   "isUndefined": "Tanımsız",
@@ -259,49 +299,69 @@
   "before": "Önce",
   "onOrAfter": "Sonra veya eşit",
   "onOrBefore": "Önce veya eşit",
-  "tooShort": "Değer en az {min} karakter içermelidir.",
-  "@tooShort": {
+  "validationErrorTooShort": "Değer en az {min} karakter içermelidir.",
+  "@validationErrorTooShort": {
     "placeholders": {
-      "min": { "type": "number" }
+      "min": {
+        "type": "float"
+      }
     }
   },
-  "tooLong": "Değer {max} karakterden az olmalıdır.",
-  "@tooLong": {
+  "validationErrorTooLong": "Değer {max} karakterden az olmalıdır.",
+  "@validationErrorTooLong": {
     "placeholders": {
-      "max": { "type": "number" }
+      "max": {
+        "type": "float"
+      }
     }
   },
-  "outOfRangeString": "Değer {min} ile {max} karakter arasında olmalıdır.",
-  "@outOfRangeString": {
+  "validationErrorOutOfRangeString": "Değer {min} ile {max} karakter arasında olmalıdır.",
+  "@validationErrorOutOfRangeString": {
     "placeholders": {
-      "min": { "type": "number" },
-      "max": { "type": "number" }
+      "min": {
+        "type": "float"
+      },
+      "max": {
+        "type": "float"
+      }
     }
   },
-  "outOfRangeNumber": "Değer {min} ile {max} arasında olmalıdır.",
-  "@outOfRangeNumber": {
+  "validationErrorOutOfRangeNumber": "Değer {min} ile {max} arasında olmalıdır.",
+  "@validationErrorOutOfRangeNumber": {
     "placeholders": {
-      "min": { "type": "number" },
-      "max": { "type": "number" }
+      "min": {
+        "type": "float"
+      },
+      "max": {
+        "type": "float"
+      }
     }
   },
-  "outOfRangeSelectionItems": "{min} ile {max} arasında öğe seçilmelidir.",
-  "@outOfRangeSelectionItems": {
+  "validationErrorOutOfRangeSelectionItems": "{min} ile {max} arasında öğe seçilmelidir.",
+  "@validationErrorOutOfRangeSelectionItems": {
     "placeholders": {
-      "min": { "type": "number" },
-      "max": { "type": "number" }
+      "min": {
+        "type": "float"
+      },
+      "max": {
+        "type": "float"
+      }
     }
   },
-  "tooFewSelectionItems": "En az {min} öğe seçin.",
-  "@tooFewSelectionItems": {
+  "validationErrorTooFewSelectionItems": "En az {min} öğe seçin.",
+  "@validationErrorTooFewSelectionItems": {
     "placeholders": {
-      "min": { "type": "number" }
+      "min": {
+        "type": "float"
+      }
     }
   },
-  "tooManySelectionItems": "En fazla {max} öğe seçin.",
-  "@tooManySelectionItems": {
+  "validationErrorTooManySelectionItems": "En fazla {max} öğe seçin.",
+  "@validationErrorTooManySelectionItems": {
     "placeholders": {
-      "max": { "type": "number" }
+      "max": {
+        "type": "float"
+      }
     }
   },
   "age": "Yaş",
@@ -314,7 +374,9 @@
   "sGender": "{gender, select, male{Erkek} female{Kadın} other{Diğer}}",
   "@sGender": {
     "placeholders": {
-      "gender": {}
+      "gender": {
+        "type": "string"
+      }
     }
   },
   "goodToSeeYou": "Sizi görmek güzel",
@@ -323,7 +385,9 @@
   "rSortingOrderAfter": "{otherSortings, plural, =0{İlk sıralama olarak} =1{# diğer sıralamadan sonra} other{# diğer sıralamadan sonra}} uygulandı",
   "@rSortingOrderAfter": {
     "placeholders": {
-      "otherSortings": { "type": "number" }
+      "otherSortings": {
+        "type": "int"
+      }
     }
   },
   "columnPicker": "Sütun seçici",
@@ -356,7 +420,9 @@
   "sSortingState": "{sortDirection, select, asc{Sıralama (Şu an artan)} desc{Sıralama (Şu an azalan)} other{Sıralama (Şu an yok)}}",
   "@sSortingState": {
     "placeholders": {
-      "sortDirection": {}
+      "sortDirection": {
+        "type": "string"
+      }
     }
   }
 }

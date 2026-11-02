@@ -1,5 +1,7 @@
 import { type PropsWithChildren, type ReactNode } from 'react'
 import clsx from 'clsx'
+import type { HightideTranslationEntries } from '@helpwave/hightide-utils/i18n'
+import { ThemeUtils } from '@helpwave/hightide-utils/context/theme'
 import { useHightideTranslation } from '@helpwave/hightide-utils/context/translation'
 
 import { useLocalization } from '../../../../global-contexts/localization/forward-exports'
@@ -46,7 +48,11 @@ export const ThemeSelect = ({ ...props }: ThemeSelectProps) => {
           },
         },
         ...Object.entries(supportedThemes).map(([themeMode, themeInformation]) => {
-          const label = themeInformation.nameTranslations[locale] ?? `{{ThemeModal.themeInformation.nameTranslations:${locale}}}`
+          const label = ThemeUtils.resolveThemeInformationLabel(
+            themeInformation,
+            locale,
+            (key) => translation(key as keyof HightideTranslationEntries)
+          )
           return {
             id: themeMode,
             value: themeMode,

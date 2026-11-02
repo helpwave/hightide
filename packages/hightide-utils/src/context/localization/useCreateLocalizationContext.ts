@@ -146,8 +146,8 @@ export const useCreateLocalizationContext = ({
   const localeDefaults = supportedLocales[resolvedLocale]
 
   const resolvedTimeZone = useMemo(() => {
-    return timeZone ?? storedTimeZone ?? localeDefaults?.defaultTimeZone ?? fallbackTimeZone
-  }, [timeZone, storedTimeZone, localeDefaults?.defaultTimeZone, fallbackTimeZone])
+    return timeZone ?? storedTimeZone ?? fallbackTimeZone
+  }, [timeZone, storedTimeZone, fallbackTimeZone])
 
   useEffect(() => {
     if (timeZone === undefined) return

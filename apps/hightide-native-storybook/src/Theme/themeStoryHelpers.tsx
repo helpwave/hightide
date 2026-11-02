@@ -9,6 +9,10 @@ import {
   ThemedText
 } from '@helpwave/hightide-native/components'
 import { useTheme } from '@helpwave/hightide-native/global-contexts'
+import { useLocalization } from '@helpwave/hightide-utils/context/localization'
+import type { HightideTranslationEntries } from '@helpwave/hightide-utils/i18n'
+import { ThemeUtils } from '@helpwave/hightide-utils/context/theme'
+import { useHightideTranslation } from '@helpwave/hightide-utils/context/translation'
 
 export const ThemeSelect = () => {
   const {
@@ -16,13 +20,19 @@ export const ThemeSelect = () => {
     setTheme,
     supportedThemes,
   } = useTheme()
+  const { locale } = useLocalization()
+  const translation = useHightideTranslation()
 
   const options = useMemo(
     () => Object.entries(supportedThemes).map(([id, info]) => ({
       id,
-      label: info.nameTranslations['en-US'] ?? id,
+      label: ThemeUtils.resolveThemeInformationLabel(
+        info,
+        locale,
+        (key) => translation(key as keyof HightideTranslationEntries),
+      ),
     })),
-    [supportedThemes]
+    [locale, supportedThemes, translation]
   )
 
   return (

@@ -2,18 +2,45 @@ import { useCallback, useEffect, useMemo } from 'react'
 import { useStableEvent } from '../../hooks/useStableEvent'
 import type { SimpleValueStore } from '../../hooks/useSimpleStoreSyncedValue'
 import { useSimpleStoreSyncedValue } from '../../hooks/useSimpleStoreSyncedValue'
-import type { Locale } from '../localization/LocalizationContext'
 
 export type SystemTheme = 'dark' | 'light'
 
 export type ThemeMode = SystemTheme | string
 
 export type ThemeInformation<T = unknown> = {
-  nameTranslations: Record<Locale, string>,
-  theme: T,
+  name: string,
+  isDark: boolean,
+  translationKey?: string,
+  nameTranslations?: Record<string, string>,
+  theme?: T,
 }
 
-export type SupportedThemesConfig<T> =  Record<SystemTheme, ThemeInformation<T>> & Record<ThemeMode, ThemeInformation<T>>
+const hasThemeInformationLabelSource = (themeInformation: ThemeInformation): boolean => {
+  if (themeInformation.translationKey) return true
+  return themeInformation.nameTranslations !== undefined && Object.keys(themeInformation.nameTranslations).length > 0
+}
+
+export const ThemeUtils = {
+  resolveThemeInformationLabel: (
+    themeInformation: ThemeInformation,
+    locale: string,
+    translation: (key: string) => string,
+  ): string => {
+    if (themeInformation.translationKey) {
+      return translation(themeInformation.translationKey)
+    }
+    return themeInformation.nameTranslations?.[locale]
+      ?? themeInformation.nameTranslations?.['en-US']
+      ?? themeInformation.name
+  },
+}
+
+export type SupportedThemesConfig<T = unknown> = Record<SystemTheme, ThemeInformation<T>> & Record<ThemeMode, ThemeInformation<T>>
+
+export type ThemeConfig<T = unknown> = {
+  initialTheme: string,
+  supportedThemes: SupportedThemesConfig<T>,
+}
 
 export type ThemeConfigValue<T> = {
   themeMode: ThemeMode,
@@ -43,6 +70,14 @@ export const useCreateThemeConfig = <T>({
   if(Object.keys(supportedThemes).length === 0) {
     throw new Error('useCreateThemeConfig: supportedThemes must contain at least one theme')
   }
+
+  useEffect(() => {
+    for (const [themeMode, themeInformation] of Object.entries(supportedThemes)) {
+      if (!hasThemeInformationLabelSource(themeInformation)) {
+        console.warn(`useCreateThemeConfig: theme "${themeMode}" has neither translationKey nor nameTranslations`)
+      }
+    }
+  }, [supportedThemes])
 
   const {
     value: storedTheme,
@@ -80,7 +115,7 @@ export const useCreateThemeConfig = <T>({
     return Object.keys(supportedThemes)[0]
   }, [fallbackTheme, preferredThemeMode, supportedThemes, systemTheme])
 
-  const resolvedTheme: T = useMemo(() => supportedThemes[resolvedThemeMode].theme, [resolvedThemeMode, supportedThemes])
+  const resolvedTheme: T = useMemo(() => supportedThemes[resolvedThemeMode].theme as T, [resolvedThemeMode, supportedThemes])
 
   useEffect(() => {
     if (theme === undefined) return

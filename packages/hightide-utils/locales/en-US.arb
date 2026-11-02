@@ -17,6 +17,8 @@
   "chooseLanguage": "Choose your language",
   "chooseTheme": "Choose your preferred color theme.",
   "system": "System",
+  "themeNameLight": "Light",
+  "themeNameDark": "Dark",
   "chooseSlide": "Choose slide to display",
   "clear": "Clear",
   "removeProperty": "Remove Property",

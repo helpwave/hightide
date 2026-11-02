@@ -1,9 +1,16 @@
 import { createContext, type PropsWithChildren, useContext, useState } from 'react'
+import type {
+  HightideConfig as UtilsHightideConfig,
+  LocalizationConfig,
+  ThemeConfig
+} from '@helpwave/hightide-utils/context'
 import type { DeepPartial } from '@helpwave/hightide-utils/utils'
 
 import type { SupportedLocalesConfig } from '../localization/forward-exports'
 import { type SupportedThemesConfig } from '../theme/ThemeProvider'
 import { HightideConfigUtils } from './HightideConfigUtils'
+
+export type { LocalizationConfig, ThemeConfig }
 
 export type TooltipConfig = {
   appearDelay: number,
@@ -11,20 +18,8 @@ export type TooltipConfig = {
   screenPadding: number,
 }
 
-export type ThemeConfig = {
-  initialTheme: string,
-  supportedThemes: SupportedThemesConfig,
-}
-
-export type LocalizationConfig = {
-  fallbackLocale: string,
-  supportedLocales: SupportedLocalesConfig,
-}
-
-export type HightideConfig = {
+export type HightideConfig = UtilsHightideConfig & {
   tooltip: TooltipConfig,
-  theme: ThemeConfig,
-  localization: LocalizationConfig,
 }
 
 const defaultConfig: HightideConfig = {
@@ -51,17 +46,16 @@ const mergeSupportedThemesConfig = (config: SupportedThemesConfig, overwrite: De
     result[themeMode] = {
       ...(result[themeMode] ?? {}),
       ...info,
+      name: info?.name ?? result[themeMode]?.name ?? themeMode,
+      isDark: info?.isDark ?? result[themeMode]?.isDark ?? false,
+      translationKey: info?.translationKey ?? result[themeMode]?.translationKey,
       nameTranslations: {
         ...(result[themeMode]?.nameTranslations ?? {}),
-        ...(((partialTranslation: Record<string, string | undefined> | undefined): Record<string, string> => {
-          if (partialTranslation === undefined) return {}
-          const translations: Record<string, string> = {}
-          for (const key in partialTranslation) {
-            if (partialTranslation[key] !== undefined) translations[key] = partialTranslation[key]
-          }
-          return translations
-        })(info?.nameTranslations) ?? {}),
-      }
+        ...Object.fromEntries(
+          Object.entries(info?.nameTranslations ?? {}).filter((entry): entry is [string, string] => entry[1] !== undefined)
+        ),
+      },
+      theme: info?.theme ?? result[themeMode]?.theme,
     }
   }
   return result
@@ -78,7 +72,7 @@ const mergeSupportedLocalesConfig = (
     result[locale] = {
       ...(result[locale] ?? {}),
       ...info,
-      localName: info?.localName ?? result[locale]?.localName ?? locale,
+      localeName: info?.localeName ?? result[locale]?.localeName ?? locale,
     }
   }
   return result

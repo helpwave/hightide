@@ -26,10 +26,10 @@ export const LanguageSelect = ({ ...props }: LanguageSelectProps) => {
         ...props.triggerProps,
         className: clsx('min-w-40 w-fit', props.triggerProps?.className),
       }}
-      options={Object.entries(supportedLocales).map(([supportedLocale, { localName }]) => ({
+      options={Object.entries(supportedLocales).map(([supportedLocale, { localeName }]) => ({
         value: supportedLocale,
-        label: localName,
-        visual: { content: localName },
+        label: localeName,
+        visual: { content: localeName },
       }))}
     />
   )

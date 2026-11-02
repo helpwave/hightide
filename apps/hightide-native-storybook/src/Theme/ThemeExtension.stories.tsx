@@ -46,6 +46,8 @@ const oceanTheme = createHightideTheme(createLightThemeTokens({
 const oceanSupportedThemes = {
   ...HightideConfigUtils.defaultSupportedThemes,
   ocean: {
+    name: 'Ocean',
+    isDark: false,
     nameTranslations: {
       'de-DE': 'Ozean',
       'en-US': 'Ocean',

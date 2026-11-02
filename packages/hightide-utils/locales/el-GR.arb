@@ -17,6 +17,8 @@
   "chooseLanguage": "Επιλέξτε τη γλώσσα σας",
   "chooseTheme": "Επιλέξτε το θέμα χρωμάτων που προτιμάτε.",
   "system": "Σύστημα",
+  "themeNameLight": "Φωτεινό",
+  "themeNameDark": "Σκοτεινό",
   "chooseSlide": "Επιλέξτε διαφάνεια για εμφάνιση",
   "clear": "Εκκαθάριση",
   "removeProperty": "Αφαίρεση ιδιότητας",
@@ -61,19 +63,22 @@
   "maximumNumberOfFiles": "Μέγιστος αριθμός αρχείων: {count}",
   "@maximumNumberOfFiles": {
     "placeholders": {
-      "count": { "type": "number" }
+      "count": {
+        "type": "int"
+      }
     }
   },
   "allowedFileTypes": "Επιτρεπόμενοι τύποι αρχείων: {types}",
   "@allowedFileTypes": {
     "placeholders": {
-      "types": { "type": "string" }
+      "types": {
+        "type": "string"
+      }
     }
   },
   "menu": "Μενού",
   "minLengthError": "Δεν επιτεύχθηκε το ελάχιστο μήκος.",
   "more": "Περισσότερα",
-  "next": "Επόμενο",
   "no": "Όχι",
   "noColumn": "Καμία στήλη",
   "noData": "Δεν υπάρχουν δεδομένα",
@@ -83,19 +88,22 @@
   "nResultsFound": "{count, plural, =1{Βρέθηκε # αποτέλεσμα} other{Βρέθηκαν # αποτελέσματα}}",
   "@nResultsFound": {
     "placeholders": {
-      "count": { "type": "number" }
+      "count": {
+        "type": "int"
+      }
     }
   },
   "nMoreFiles": "+ {count, plural, =1{# ακόμη αρχείο} other{# ακόμη αρχεία}}",
   "@nMoreFiles": {
     "placeholders": {
-      "count": { "type": "number" }
+      "count": {
+        "type": "int"
+      }
     }
   },
   "of": "από",
   "optional": "Προαιρετικό",
   "pleaseWait": "Περιμένετε...",
-  "previous": "Προηγούμενο",
   "remove": "Αφαίρεση",
   "removeFilter": "Αφαίρεση φίλτρου",
   "required": "Υποχρεωτικό",
@@ -103,75 +111,103 @@
   "rBetween": "Μεταξύ {value1} και {value2}",
   "@rBetween": {
     "placeholders": {
-      "value1": {},
-      "value2": {}
+      "value1": {
+        "type": "string"
+      },
+      "value2": {
+        "type": "string"
+      }
     }
   },
   "rContains": "Περιέχει {value}",
   "@rContains": {
     "placeholders": {
-      "value": {}
+      "value": {
+        "type": "string"
+      }
     }
   },
   "rEndsWith": "Τελειώνει σε {value}",
   "@rEndsWith": {
     "placeholders": {
-      "value": {}
+      "value": {
+        "type": "string"
+      }
     }
   },
   "rEquals": "Ίσο με {value}",
   "@rEquals": {
     "placeholders": {
-      "value": {}
+      "value": {
+        "type": "string"
+      }
     }
   },
   "rGreaterThan": "Μεγαλύτερο από {value}",
   "@rGreaterThan": {
     "placeholders": {
-      "value": {}
+      "value": {
+        "type": "string"
+      }
     }
   },
   "rGreaterThanOrEqual": "Μεγαλύτερο ή ίσο με {value}",
   "@rGreaterThanOrEqual": {
     "placeholders": {
-      "value": {}
+      "value": {
+        "type": "string"
+      }
     }
   },
   "rLessThan": "Μικρότερο από {value}",
   "@rLessThan": {
     "placeholders": {
-      "value": {}
+      "value": {
+        "type": "string"
+      }
     }
   },
   "rLessThanOrEqual": "Μικρότερο ή ίσο με {value}",
   "@rLessThanOrEqual": {
     "placeholders": {
-      "value": {}
+      "value": {
+        "type": "string"
+      }
     }
   },
   "rNotBetween": "Όχι μεταξύ {value1} και {value2}",
   "@rNotBetween": {
     "placeholders": {
-      "value1": {},
-      "value2": {}
+      "value1": {
+        "type": "string"
+      },
+      "value2": {
+        "type": "string"
+      }
     }
   },
   "rNotContains": "Δεν περιέχει {value}",
   "@rNotContains": {
     "placeholders": {
-      "value": {}
+      "value": {
+        "type": "string"
+      }
     }
   },
   "rNotEquals": "Διάφορο από {value}",
   "@rNotEquals": {
     "placeholders": {
-      "value": {}
+      "value": {
+        "type": "string"
+      }
     }
   },
   "rStartsWith": "Ξεκινά με {value}",
   "@rStartsWith": {
     "placeholders": {
-      "value": {}
+      "value": {
+        "type": "string"
+      }
     }
   },
   "save": "Αποθήκευση",
@@ -188,7 +224,7 @@
   "@showSlide": {
     "placeholders": {
       "index": {
-        "type": "number"
+        "type": "int"
       }
     }
   },
@@ -197,10 +233,10 @@
   "@slideOf": {
     "placeholders": {
       "index": {
-        "type": "number"
+        "type": "int"
       },
       "length": {
-        "type": "number"
+        "type": "int"
       }
     }
   },
@@ -212,13 +248,17 @@
   "pThemes": "{count, plural, =1{Θέμα} other{Θέματα}}",
   "@pThemes": {
     "placeholders": {
-      "count": { "type":  "number" }
+      "count": {
+        "type": "int"
+      }
     }
   },
   "sDateTimeSelect": "{datetimeMode, select, time{Επιλογή ώρας} date{Επιλογή ημερομηνίας} dateTime{Επιλογή ημερομηνίας και ώρας}}",
   "@sDateTimeSelect": {
     "placeholders": {
-      "datetimeMode": {}
+      "datetimeMode": {
+        "type": "string"
+      }
     }
   },
   "update": "Ενημέρωση",
@@ -247,8 +287,8 @@
   "playTrace": "Αναπαραγωγή ίχνους",
   "startDate": "Έναρξη",
   "startsWith": "Ξεκινά με",
-  "notEmpty": "Το πεδίο δεν μπορεί να είναι κενό.",
-  "invalidEmail": "Το email δεν είναι έγκυρο.",
+  "validationErrorNotEmpty": "Το πεδίο δεν μπορεί να είναι κενό.",
+  "validationErrorInvalidEmail": "Το email δεν είναι έγκυρο.",
   "isFalse": "Είναι ψευδές",
   "isTrue": "Είναι αληθές",
   "isUndefined": "Δεν έχει οριστεί",
@@ -259,49 +299,69 @@
   "before": "Πριν",
   "onOrAfter": "Μετά ή ίσο",
   "onOrBefore": "Πριν ή ίσο",
-  "tooShort": "Η τιμή απαιτεί τουλάχιστον {min} χαρακτήρες.",
-  "@tooShort": {
+  "validationErrorTooShort": "Η τιμή απαιτεί τουλάχιστον {min} χαρακτήρες.",
+  "@validationErrorTooShort": {
     "placeholders": {
-      "min": { "type": "number" }
+      "min": {
+        "type": "float"
+      }
     }
   },
-  "tooLong": "Η τιμή πρέπει να έχει λιγότερους από {max} χαρακτήρες.",
-  "@tooLong": {
+  "validationErrorTooLong": "Η τιμή πρέπει να έχει λιγότερους από {max} χαρακτήρες.",
+  "@validationErrorTooLong": {
     "placeholders": {
-      "max": { "type": "number" }
+      "max": {
+        "type": "float"
+      }
     }
   },
-  "outOfRangeString": "Η τιμή πρέπει να έχει από {min} έως {max} χαρακτήρες.",
-  "@outOfRangeString": {
+  "validationErrorOutOfRangeString": "Η τιμή πρέπει να έχει από {min} έως {max} χαρακτήρες.",
+  "@validationErrorOutOfRangeString": {
     "placeholders": {
-      "min": { "type": "number" },
-      "max": { "type": "number" }
+      "min": {
+        "type": "float"
+      },
+      "max": {
+        "type": "float"
+      }
     }
   },
-  "outOfRangeNumber": "Η τιμή πρέπει να είναι μεταξύ {min} και {max}.",
-  "@outOfRangeNumber": {
+  "validationErrorOutOfRangeNumber": "Η τιμή πρέπει να είναι μεταξύ {min} και {max}.",
+  "@validationErrorOutOfRangeNumber": {
     "placeholders": {
-      "min": { "type": "number" },
-      "max": { "type": "number" }
+      "min": {
+        "type": "float"
+      },
+      "max": {
+        "type": "float"
+      }
     }
   },
-  "outOfRangeSelectionItems": "Πρέπει να επιλεγούν από {min} έως {max} στοιχεία.",
-  "@outOfRangeSelectionItems": {
+  "validationErrorOutOfRangeSelectionItems": "Πρέπει να επιλεγούν από {min} έως {max} στοιχεία.",
+  "@validationErrorOutOfRangeSelectionItems": {
     "placeholders": {
-      "min": { "type": "number" },
-      "max": { "type": "number" }
+      "min": {
+        "type": "float"
+      },
+      "max": {
+        "type": "float"
+      }
     }
   },
-  "tooFewSelectionItems": "Επιλέξτε τουλάχιστον {min} στοιχεία.",
-  "@tooFewSelectionItems": {
+  "validationErrorTooFewSelectionItems": "Επιλέξτε τουλάχιστον {min} στοιχεία.",
+  "@validationErrorTooFewSelectionItems": {
     "placeholders": {
-      "min": { "type": "number" }
+      "min": {
+        "type": "float"
+      }
     }
   },
-  "tooManySelectionItems": "Επιλέξτε το πολύ {max} στοιχεία.",
-  "@tooManySelectionItems": {
+  "validationErrorTooManySelectionItems": "Επιλέξτε το πολύ {max} στοιχεία.",
+  "@validationErrorTooManySelectionItems": {
     "placeholders": {
-      "max": { "type": "number" }
+      "max": {
+        "type": "float"
+      }
     }
   },
   "age": "Ηλικία",
@@ -314,7 +374,9 @@
   "sGender": "{gender, select, male{Άνδρας} female{Γυναίκα} other{Άλλο}}",
   "@sGender": {
     "placeholders": {
-      "gender": {}
+      "gender": {
+        "type": "string"
+      }
     }
   },
   "goodToSeeYou": "Χαιρόμαστε που σας βλέπουμε",
@@ -323,7 +385,9 @@
   "rSortingOrderAfter": "Εφαρμόζεται {otherSortings, plural, =0{ως η πρώτη ταξινόμηση} =1{μετά από # άλλη ταξινόμηση} other{μετά από # άλλες ταξινομήσεις}}",
   "@rSortingOrderAfter": {
     "placeholders": {
-      "otherSortings": { "type": "number" }
+      "otherSortings": {
+        "type": "int"
+      }
     }
   },
   "columnPicker": "Επιλογέας στηλών",
@@ -356,7 +420,9 @@
   "sSortingState": "{sortDirection, select, asc{Ταξινόμηση (τρέχουσα: αύξουσα)} desc{Ταξινόμηση (τρέχουσα: φθίνουσα)} other{Ταξινόμηση (τρέχουσα: καμία)}}",
   "@sSortingState": {
     "placeholders": {
-      "sortDirection": {}
+      "sortDirection": {
+        "type": "string"
+      }
     }
   }
 }

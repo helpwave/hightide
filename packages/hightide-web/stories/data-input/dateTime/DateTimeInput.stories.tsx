@@ -49,8 +49,8 @@ export const dateTimeInput: Story = {
         locale: 'de-DE',
         setLocale: () => {},
         supportedLocales: {
-          'de-DE': { localName: 'Deutsch' },
-          'en-US': { localName: 'English (US)' },
+          'de-DE': { localeName: 'Deutsch' },
+          'en-US': { localeName: 'English (US)' },
         },
         is24HourFormat,
         setIs24HourFormat: () => {},

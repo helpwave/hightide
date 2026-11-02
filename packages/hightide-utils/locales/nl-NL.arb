@@ -17,6 +17,8 @@
   "chooseLanguage": "Kies je taal",
   "chooseTheme": "Kies je voorkeurskleurenthema.",
   "system": "Systeem",
+  "themeNameLight": "Licht",
+  "themeNameDark": "Donker",
   "chooseSlide": "Kies de dia die je wilt weergeven",
   "clear": "Wissen",
   "removeProperty": "Eigenschap verwijderen",
@@ -61,19 +63,22 @@
   "maximumNumberOfFiles": "Maximaal aantal bestanden: {count}",
   "@maximumNumberOfFiles": {
     "placeholders": {
-      "count": { "type": "number" }
+      "count": {
+        "type": "int"
+      }
     }
   },
   "allowedFileTypes": "Toegestane bestandstypen: {types}",
   "@allowedFileTypes": {
     "placeholders": {
-      "types": { "type": "string" }
+      "types": {
+        "type": "string"
+      }
     }
   },
   "menu": "Menu",
   "minLengthError": "Minimale lengte niet bereikt.",
   "more": "Meer",
-  "next": "Volgende",
   "no": "Nee",
   "noColumn": "Geen kolom",
   "noData": "Geen gegevens",
@@ -83,19 +88,22 @@
   "nResultsFound": "{count, plural, =1{# resultaat gevonden} other{# resultaten gevonden}}",
   "@nResultsFound": {
     "placeholders": {
-      "count": { "type": "number" }
+      "count": {
+        "type": "int"
+      }
     }
   },
   "nMoreFiles": "+ {count, plural, =1{# ander bestand} other{# andere bestanden}}",
   "@nMoreFiles": {
     "placeholders": {
-      "count": { "type": "number" }
+      "count": {
+        "type": "int"
+      }
     }
   },
   "of": "van",
   "optional": "Optioneel",
   "pleaseWait": "Even geduld...",
-  "previous": "Vorige",
   "remove": "Verwijderen",
   "removeFilter": "Filter verwijderen",
   "required": "Verplicht",
@@ -103,75 +111,103 @@
   "rBetween": "Tussen {value1} en {value2}",
   "@rBetween": {
     "placeholders": {
-      "value1": {},
-      "value2": {}
+      "value1": {
+        "type": "string"
+      },
+      "value2": {
+        "type": "string"
+      }
     }
   },
   "rContains": "Bevat {value}",
   "@rContains": {
     "placeholders": {
-      "value": {}
+      "value": {
+        "type": "string"
+      }
     }
   },
   "rEndsWith": "Eindigt op {value}",
   "@rEndsWith": {
     "placeholders": {
-      "value": {}
+      "value": {
+        "type": "string"
+      }
     }
   },
   "rEquals": "Gelijk aan {value}",
   "@rEquals": {
     "placeholders": {
-      "value": {}
+      "value": {
+        "type": "string"
+      }
     }
   },
   "rGreaterThan": "Groter dan {value}",
   "@rGreaterThan": {
     "placeholders": {
-      "value": {}
+      "value": {
+        "type": "string"
+      }
     }
   },
   "rGreaterThanOrEqual": "Groter dan of gelijk aan {value}",
   "@rGreaterThanOrEqual": {
     "placeholders": {
-      "value": {}
+      "value": {
+        "type": "string"
+      }
     }
   },
   "rLessThan": "Kleiner dan {value}",
   "@rLessThan": {
     "placeholders": {
-      "value": {}
+      "value": {
+        "type": "string"
+      }
     }
   },
   "rLessThanOrEqual": "Kleiner dan of gelijk aan {value}",
   "@rLessThanOrEqual": {
     "placeholders": {
-      "value": {}
+      "value": {
+        "type": "string"
+      }
     }
   },
   "rNotBetween": "Niet tussen {value1} en {value2}",
   "@rNotBetween": {
     "placeholders": {
-      "value1": {},
-      "value2": {}
+      "value1": {
+        "type": "string"
+      },
+      "value2": {
+        "type": "string"
+      }
     }
   },
   "rNotContains": "Bevat geen {value}",
   "@rNotContains": {
     "placeholders": {
-      "value": {}
+      "value": {
+        "type": "string"
+      }
     }
   },
   "rNotEquals": "Niet gelijk aan {value}",
   "@rNotEquals": {
     "placeholders": {
-      "value": {}
+      "value": {
+        "type": "string"
+      }
     }
   },
   "rStartsWith": "Begint met {value}",
   "@rStartsWith": {
     "placeholders": {
-      "value": {}
+      "value": {
+        "type": "string"
+      }
     }
   },
   "save": "Opslaan",
@@ -188,7 +224,7 @@
   "@showSlide": {
     "placeholders": {
       "index": {
-        "type": "number"
+        "type": "int"
       }
     }
   },
@@ -197,10 +233,10 @@
   "@slideOf": {
     "placeholders": {
       "index": {
-        "type": "number"
+        "type": "int"
       },
       "length": {
-        "type": "number"
+        "type": "int"
       }
     }
   },
@@ -209,16 +245,20 @@
   "submit": "Verzenden",
   "success": "Gelukt",
   "text": "Tekst",
-  "pThemes": "{count, plural, =1{Thema} other{Thema's}}",
+  "pThemes": "{count, plural, =1{Thema} other{Thema''s}}",
   "@pThemes": {
     "placeholders": {
-      "count": { "type":  "number" }
+      "count": {
+        "type": "int"
+      }
     }
   },
   "sDateTimeSelect": "{datetimeMode, select, time{Tijd selecteren} date{Datum selecteren} dateTime{Datum en tijd selecteren}}",
   "@sDateTimeSelect": {
     "placeholders": {
-      "datetimeMode": {}
+      "datetimeMode": {
+        "type": "string"
+      }
     }
   },
   "update": "Bijwerken",
@@ -247,8 +287,8 @@
   "playTrace": "Trace afspelen",
   "startDate": "Begin",
   "startsWith": "Begint met",
-  "notEmpty": "Het veld mag niet leeg zijn.",
-  "invalidEmail": "Het e-mailadres is ongeldig.",
+  "validationErrorNotEmpty": "Het veld mag niet leeg zijn.",
+  "validationErrorInvalidEmail": "Het e-mailadres is ongeldig.",
   "isFalse": "Is onwaar",
   "isTrue": "Is waar",
   "isUndefined": "Is niet gedefinieerd",
@@ -259,49 +299,69 @@
   "before": "Voor",
   "onOrAfter": "Op of na",
   "onOrBefore": "Op of voor",
-  "tooShort": "De waarde moet minimaal {min} tekens bevatten.",
-  "@tooShort": {
+  "validationErrorTooShort": "De waarde moet minimaal {min} tekens bevatten.",
+  "@validationErrorTooShort": {
     "placeholders": {
-      "min": { "type": "number" }
+      "min": {
+        "type": "float"
+      }
     }
   },
-  "tooLong": "De waarde moet minder dan {max} tekens bevatten.",
-  "@tooLong": {
+  "validationErrorTooLong": "De waarde moet minder dan {max} tekens bevatten.",
+  "@validationErrorTooLong": {
     "placeholders": {
-      "max": { "type": "number" }
+      "max": {
+        "type": "float"
+      }
     }
   },
-  "outOfRangeString": "De waarde moet tussen {min} en {max} tekens bevatten.",
-  "@outOfRangeString": {
+  "validationErrorOutOfRangeString": "De waarde moet tussen {min} en {max} tekens bevatten.",
+  "@validationErrorOutOfRangeString": {
     "placeholders": {
-      "min": { "type": "number" },
-      "max": { "type": "number" }
+      "min": {
+        "type": "float"
+      },
+      "max": {
+        "type": "float"
+      }
     }
   },
-  "outOfRangeNumber": "De waarde moet tussen {min} en {max} liggen.",
-  "@outOfRangeNumber": {
+  "validationErrorOutOfRangeNumber": "De waarde moet tussen {min} en {max} liggen.",
+  "@validationErrorOutOfRangeNumber": {
     "placeholders": {
-      "min": { "type": "number" },
-      "max": { "type": "number" }
+      "min": {
+        "type": "float"
+      },
+      "max": {
+        "type": "float"
+      }
     }
   },
-  "outOfRangeSelectionItems": "Er moeten tussen {min} en {max} items worden geselecteerd.",
-  "@outOfRangeSelectionItems": {
+  "validationErrorOutOfRangeSelectionItems": "Er moeten tussen {min} en {max} items worden geselecteerd.",
+  "@validationErrorOutOfRangeSelectionItems": {
     "placeholders": {
-      "min": { "type": "number" },
-      "max": { "type": "number" }
+      "min": {
+        "type": "float"
+      },
+      "max": {
+        "type": "float"
+      }
     }
   },
-  "tooFewSelectionItems": "Selecteer minimaal {min} items.",
-  "@tooFewSelectionItems": {
+  "validationErrorTooFewSelectionItems": "Selecteer minimaal {min} items.",
+  "@validationErrorTooFewSelectionItems": {
     "placeholders": {
-      "min": { "type": "number" }
+      "min": {
+        "type": "float"
+      }
     }
   },
-  "tooManySelectionItems": "Selecteer maximaal {max} items.",
-  "@tooManySelectionItems": {
+  "validationErrorTooManySelectionItems": "Selecteer maximaal {max} items.",
+  "@validationErrorTooManySelectionItems": {
     "placeholders": {
-      "max": { "type": "number" }
+      "max": {
+        "type": "float"
+      }
     }
   },
   "age": "Leeftijd",
@@ -314,7 +374,9 @@
   "sGender": "{gender, select, male{Man} female{Vrouw} other{Anders}}",
   "@sGender": {
     "placeholders": {
-      "gender": {}
+      "gender": {
+        "type": "string"
+      }
     }
   },
   "goodToSeeYou": "Fijn je te zien",
@@ -323,7 +385,9 @@
   "rSortingOrderAfter": "Toegepast {otherSortings, plural, =0{als eerste sortering} =1{na # andere sortering} other{na # andere sorteringen}}",
   "@rSortingOrderAfter": {
     "placeholders": {
-      "otherSortings": { "type": "number" }
+      "otherSortings": {
+        "type": "int"
+      }
     }
   },
   "columnPicker": "Kolomkiezer",
@@ -356,7 +420,9 @@
   "sSortingState": "{sortDirection, select, asc{Sortering (momenteel oplopend)} desc{Sortering (momenteel aflopend)} other{Sortering (momenteel geen)}}",
   "@sSortingState": {
     "placeholders": {
-      "sortDirection": {}
+      "sortDirection": {
+        "type": "string"
+      }
     }
   }
 }

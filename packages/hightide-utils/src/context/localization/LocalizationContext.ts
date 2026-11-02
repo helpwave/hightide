@@ -8,14 +8,18 @@ export type TimeZone = string
 export type { Weekday, CalendarType }
 
 export type LocaleInformation = {
-  localName: string,
-  defaultTimeZone?: TimeZone,
+  localeName: string,
   defaultIs24HourFormat?: boolean,
   defaultStartingWeekday?: Weekday,
   defaultCalendarType?: CalendarType,
 }
 
 export type SupportedLocalesConfig = Record<string, LocaleInformation>
+
+export type LocalizationConfig = {
+  fallbackLocale: string,
+  supportedLocales: SupportedLocalesConfig,
+}
 
 export type LocalizationContextValue = {
   locale: Locale,

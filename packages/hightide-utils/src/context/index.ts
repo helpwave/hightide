@@ -1,4 +1,5 @@
 export * from './debug'
+export * from './hightide-config'
 export * from './localization'
 export * from './theme'
 export * from './translation'

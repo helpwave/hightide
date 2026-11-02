@@ -16,6 +16,8 @@
   "chooseLanguage": "Wähle deine bevorzugte Sprache",
   "chooseTheme": "Wähle dein bevorzugtes Farbschema.",
   "system": "System",
+  "themeNameLight": "Hell",
+  "themeNameDark": "Dunkel",
   "chooseSlide": "Wähle die angezeigte Slide aus",
   "clear": "Löschen",
   "removeProperty": "Eigenschaft entfernen",

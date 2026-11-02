@@ -6,6 +6,7 @@ export {
   useDateTimeFormat,
   type LocalizationContextValue,
   type LocaleInformation,
+  type LocalizationConfig,
   type SupportedLocalesConfig,
   type Weekday,
   type CalendarType,

@@ -51,6 +51,8 @@ const bluePrimaryDarkTheme = createHightideTheme(createDarkThemeTokens({
 const bluePrimarySupportedThemes = {
   ...HightideConfigUtils.defaultSupportedThemes,
   'blue-primary': {
+    name: 'Blue Primary',
+    isDark: false,
     nameTranslations: {
       'de-DE': 'Blau Primary',
       'en-US': 'Blue Primary',
@@ -58,6 +60,8 @@ const bluePrimarySupportedThemes = {
     theme: bluePrimaryTheme,
   },
   'blue-primary-dark': {
+    name: 'Blue Primary Dark',
+    isDark: true,
     nameTranslations: {
       'de-DE': 'Blau Primary Dunkel',
       'en-US': 'Blue Primary Dark',

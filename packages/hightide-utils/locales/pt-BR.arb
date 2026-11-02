@@ -17,6 +17,8 @@
   "chooseLanguage": "Escolha seu idioma",
   "chooseTheme": "Escolha seu tema de cores preferido.",
   "system": "Sistema",
+  "themeNameLight": "Claro",
+  "themeNameDark": "Escuro",
   "chooseSlide": "Escolha o slide a ser exibido",
   "clear": "Limpar",
   "removeProperty": "Remover propriedade",
@@ -61,19 +63,22 @@
   "maximumNumberOfFiles": "Número máximo de arquivos: {count}",
   "@maximumNumberOfFiles": {
     "placeholders": {
-      "count": { "type": "number" }
+      "count": {
+        "type": "int"
+      }
     }
   },
   "allowedFileTypes": "Tipos de arquivo permitidos: {types}",
   "@allowedFileTypes": {
     "placeholders": {
-      "types": { "type": "string" }
+      "types": {
+        "type": "string"
+      }
     }
   },
   "menu": "Menu",
   "minLengthError": "Comprimento mínimo não atingido.",
   "more": "Mais",
-  "next": "Próximo",
   "no": "Não",
   "noColumn": "Nenhuma coluna",
   "noData": "Sem dados",
@@ -83,19 +88,22 @@
   "nResultsFound": "{count, plural, =1{# resultado encontrado} other{# resultados encontrados}}",
   "@nResultsFound": {
     "placeholders": {
-      "count": { "type": "number" }
+      "count": {
+        "type": "int"
+      }
     }
   },
   "nMoreFiles": "+ {count, plural, =1{# arquivo a mais} other{# arquivos a mais}}",
   "@nMoreFiles": {
     "placeholders": {
-      "count": { "type": "number" }
+      "count": {
+        "type": "int"
+      }
     }
   },
   "of": "de",
   "optional": "Opcional",
   "pleaseWait": "Aguarde...",
-  "previous": "Anterior",
   "remove": "Remover",
   "removeFilter": "Remover filtro",
   "required": "Obrigatório",
@@ -103,75 +111,103 @@
   "rBetween": "Entre {value1} e {value2}",
   "@rBetween": {
     "placeholders": {
-      "value1": {},
-      "value2": {}
+      "value1": {
+        "type": "string"
+      },
+      "value2": {
+        "type": "string"
+      }
     }
   },
   "rContains": "Contém {value}",
   "@rContains": {
     "placeholders": {
-      "value": {}
+      "value": {
+        "type": "string"
+      }
     }
   },
   "rEndsWith": "Termina com {value}",
   "@rEndsWith": {
     "placeholders": {
-      "value": {}
+      "value": {
+        "type": "string"
+      }
     }
   },
   "rEquals": "Igual a {value}",
   "@rEquals": {
     "placeholders": {
-      "value": {}
+      "value": {
+        "type": "string"
+      }
     }
   },
   "rGreaterThan": "Maior que {value}",
   "@rGreaterThan": {
     "placeholders": {
-      "value": {}
+      "value": {
+        "type": "string"
+      }
     }
   },
   "rGreaterThanOrEqual": "Maior ou igual a {value}",
   "@rGreaterThanOrEqual": {
     "placeholders": {
-      "value": {}
+      "value": {
+        "type": "string"
+      }
     }
   },
   "rLessThan": "Menor que {value}",
   "@rLessThan": {
     "placeholders": {
-      "value": {}
+      "value": {
+        "type": "string"
+      }
     }
   },
   "rLessThanOrEqual": "Menor ou igual a {value}",
   "@rLessThanOrEqual": {
     "placeholders": {
-      "value": {}
+      "value": {
+        "type": "string"
+      }
     }
   },
   "rNotBetween": "Não está entre {value1} e {value2}",
   "@rNotBetween": {
     "placeholders": {
-      "value1": {},
-      "value2": {}
+      "value1": {
+        "type": "string"
+      },
+      "value2": {
+        "type": "string"
+      }
     }
   },
   "rNotContains": "Não contém {value}",
   "@rNotContains": {
     "placeholders": {
-      "value": {}
+      "value": {
+        "type": "string"
+      }
     }
   },
   "rNotEquals": "Diferente de {value}",
   "@rNotEquals": {
     "placeholders": {
-      "value": {}
+      "value": {
+        "type": "string"
+      }
     }
   },
   "rStartsWith": "Começa com {value}",
   "@rStartsWith": {
     "placeholders": {
-      "value": {}
+      "value": {
+        "type": "string"
+      }
     }
   },
   "save": "Salvar",
@@ -188,7 +224,7 @@
   "@showSlide": {
     "placeholders": {
       "index": {
-        "type": "number"
+        "type": "int"
       }
     }
   },
@@ -197,10 +233,10 @@
   "@slideOf": {
     "placeholders": {
       "index": {
-        "type": "number"
+        "type": "int"
       },
       "length": {
-        "type": "number"
+        "type": "int"
       }
     }
   },
@@ -212,13 +248,17 @@
   "pThemes": "{count, plural, =1{Tema} other{Temas}}",
   "@pThemes": {
     "placeholders": {
-      "count": { "type":  "number" }
+      "count": {
+        "type": "int"
+      }
     }
   },
   "sDateTimeSelect": "{datetimeMode, select, time{Selecionar horário} date{Selecionar data} dateTime{Selecionar data e horário}}",
   "@sDateTimeSelect": {
     "placeholders": {
-      "datetimeMode": {}
+      "datetimeMode": {
+        "type": "string"
+      }
     }
   },
   "update": "Atualizar",
@@ -247,8 +287,8 @@
   "playTrace": "Reproduzir rastreamento",
   "startDate": "Início",
   "startsWith": "Começa com",
-  "notEmpty": "O campo não pode ficar vazio.",
-  "invalidEmail": "O e-mail não é válido.",
+  "validationErrorNotEmpty": "O campo não pode ficar vazio.",
+  "validationErrorInvalidEmail": "O e-mail não é válido.",
   "isFalse": "É falso",
   "isTrue": "É verdadeiro",
   "isUndefined": "Não está definido",
@@ -259,49 +299,69 @@
   "before": "Antes de",
   "onOrAfter": "Em ou depois de",
   "onOrBefore": "Em ou antes de",
-  "tooShort": "O valor deve ter pelo menos {min} caracteres.",
-  "@tooShort": {
+  "validationErrorTooShort": "O valor deve ter pelo menos {min} caracteres.",
+  "@validationErrorTooShort": {
     "placeholders": {
-      "min": { "type": "number" }
+      "min": {
+        "type": "float"
+      }
     }
   },
-  "tooLong": "O valor deve ter menos de {max} caracteres.",
-  "@tooLong": {
+  "validationErrorTooLong": "O valor deve ter menos de {max} caracteres.",
+  "@validationErrorTooLong": {
     "placeholders": {
-      "max": { "type": "number" }
+      "max": {
+        "type": "float"
+      }
     }
   },
-  "outOfRangeString": "O valor deve ter entre {min} e {max} caracteres.",
-  "@outOfRangeString": {
+  "validationErrorOutOfRangeString": "O valor deve ter entre {min} e {max} caracteres.",
+  "@validationErrorOutOfRangeString": {
     "placeholders": {
-      "min": { "type": "number" },
-      "max": { "type": "number" }
+      "min": {
+        "type": "float"
+      },
+      "max": {
+        "type": "float"
+      }
     }
   },
-  "outOfRangeNumber": "O valor deve estar entre {min} e {max}.",
-  "@outOfRangeNumber": {
+  "validationErrorOutOfRangeNumber": "O valor deve estar entre {min} e {max}.",
+  "@validationErrorOutOfRangeNumber": {
     "placeholders": {
-      "min": { "type": "number" },
-      "max": { "type": "number" }
+      "min": {
+        "type": "float"
+      },
+      "max": {
+        "type": "float"
+      }
     }
   },
-  "outOfRangeSelectionItems": "Selecione entre {min} e {max} itens.",
-  "@outOfRangeSelectionItems": {
+  "validationErrorOutOfRangeSelectionItems": "Selecione entre {min} e {max} itens.",
+  "@validationErrorOutOfRangeSelectionItems": {
     "placeholders": {
-      "min": { "type": "number" },
-      "max": { "type": "number" }
+      "min": {
+        "type": "float"
+      },
+      "max": {
+        "type": "float"
+      }
     }
   },
-  "tooFewSelectionItems": "Selecione pelo menos {min} itens.",
-  "@tooFewSelectionItems": {
+  "validationErrorTooFewSelectionItems": "Selecione pelo menos {min} itens.",
+  "@validationErrorTooFewSelectionItems": {
     "placeholders": {
-      "min": { "type": "number" }
+      "min": {
+        "type": "float"
+      }
     }
   },
-  "tooManySelectionItems": "Selecione no máximo {max} itens.",
-  "@tooManySelectionItems": {
+  "validationErrorTooManySelectionItems": "Selecione no máximo {max} itens.",
+  "@validationErrorTooManySelectionItems": {
     "placeholders": {
-      "max": { "type": "number" }
+      "max": {
+        "type": "float"
+      }
     }
   },
   "age": "Idade",
@@ -314,7 +374,9 @@
   "sGender": "{gender, select, male{Masculino} female{Feminino} other{Outro}}",
   "@sGender": {
     "placeholders": {
-      "gender": {}
+      "gender": {
+        "type": "string"
+      }
     }
   },
   "goodToSeeYou": "Que bom ver você",
@@ -323,7 +385,9 @@
   "rSortingOrderAfter": "Aplicada {otherSortings, plural, =0{como a primeira ordenação} =1{após # outra ordenação} other{após # outras ordenações}}",
   "@rSortingOrderAfter": {
     "placeholders": {
-      "otherSortings": { "type": "number" }
+      "otherSortings": {
+        "type": "int"
+      }
     }
   },
   "columnPicker": "Seletor de colunas",
@@ -356,7 +420,9 @@
   "sSortingState": "{sortDirection, select, asc{Ordenação (atualmente crescente)} desc{Ordenação (atualmente decrescente)} other{Ordenação (atualmente nenhuma)}}",
   "@sSortingState": {
     "placeholders": {
-      "sortDirection": {}
+      "sortDirection": {
+        "type": "string"
+      }
     }
   }
 }

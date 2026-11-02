@@ -38,6 +38,8 @@ and adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
 ### Changed
 
+- `ThemeConfig`, `LocalizationConfig`, and the base `HightideConfig` come from `@helpwave/hightide-utils/context`. Web `HightideConfig` adds `tooltip`
+- Default locales and theme metadata use `HightideSupportedLocaleInformation` and `HightideSupportedThemeInformation`. Theme labels use `themeNameLight` / `themeNameDark`
 - `Table` and `TableWithSelection` take columns only through `columns`. `TableColumn` and column registration are removed
 - `FileInput` is an aggregate with `FileInput.StateManager`, `FileInput.Layout`, `FileInput.Input`, `FileInput.Trigger`, and `FileInput.Menu`. `FileInput.Layout` places the file input and the trigger together
 - Data-input aggregates, including `Select`, `MultiSelect`, `Combobox`, `FileInput`, and `LabelledCheckbox`, use `value`, `initialValue`, `onValueChange`, and `onStateEvent`. Completion dispatches `{ type: 'commit', value }`. `isInvalid`, `isDisabled`, `isReadOnly`, and `isRequired` replace `invalid`, `disabled`, `readOnly`, and `required`. `NumberStepperInput` uses `isLooping`, `incrementProps.className`, and `decrementProps.className`

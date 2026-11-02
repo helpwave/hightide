@@ -7,7 +7,11 @@ import { ReactUtils } from '@helpwave/hightide-utils/utils'
 import { NumberStepperInputContext } from './NumberStepperInputContext'
 import { NumberStepperInputField, type NumberStepperInputFieldProps } from './NumberStepperInputField'
 import { NumberStepperHold } from './NumberStepperInputHold'
-import { NumberStepperInputLayout, type NumberStepperInputLayoutMode, type NumberStepperInputLayoutProps } from './NumberStepperInputLayout'
+import {
+  NumberStepperInputLayout as NumberStepperInputLayoutComponent,
+  type NumberStepperInputLayoutMode,
+  type NumberStepperInputLayoutProps
+} from './NumberStepperInputLayout'
 import { NumberStepperInputStateManager } from './NumberStepperInputStateManager'
 import {
   NumberStepperInputDecrement,
@@ -29,7 +33,7 @@ export type NumberStepperInputProps = ControllableDOMInputProps<number, NumberSt
   formatDisplayedValue?: (value: number) => string,
   parseDisplayedValue?: (rawValue: string) => number | undefined,
   onLooped?: (event: StepperLoopEvent) => void,
-  layoutRef?: Ref<ComponentRef<typeof NumberStepperInputLayout>>,
+  layoutRef?: Ref<ComponentRef<typeof NumberStepperInputLayoutComponent>>,
   layoutProps?: NumberStepperInputLayoutProps,
   decrementRef?: Ref<ComponentRef<typeof NumberStepperInputDecrement>>,
   decrementProps?: Omit<NumberStepperInputStepButtonProps, 'direction'>,
@@ -99,7 +103,7 @@ const NumberStepperInputComponent = ({
         changeRateCurveProps={changeRateCurveProps}
         onLooped={onLooped}
       >
-        <NumberStepperInputLayout
+        <NumberStepperInputLayoutComponent
           {...layoutProps}
           ref={ReactUtils.assingRefsBuilder([layoutRef])}
           layout={layout}
@@ -123,7 +127,7 @@ const NumberStepperInputComponent = ({
             ref={ReactUtils.assingRefsBuilder([incrementRef])}
             layout={layout}
           />
-        </NumberStepperInputLayout>
+        </NumberStepperInputLayoutComponent>
       </NumberStepperHold>
     </NumberStepperInputStateManager>
   )
@@ -131,7 +135,7 @@ const NumberStepperInputComponent = ({
 
 export const NumberStepperInput = Object.assign(NumberStepperInputComponent, {
   StateManager: NumberStepperInputStateManager,
-  Layout: NumberStepperInputLayout,
+  Layout: NumberStepperInputLayoutComponent,
   Decrement: NumberStepperInputDecrement,
   Field: NumberStepperInputField,
   Increment: NumberStepperInputIncrement,
