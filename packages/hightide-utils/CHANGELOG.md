@@ -21,6 +21,12 @@ and adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
 - `EmailValidationUtils` and the standalone `validateEmail` export. Email checks go through `FormValidationUtils.email`
 
+## [0.1.9] - 2026-10-13
+
+### Added
+
+- Translations for Portuguese (Brazil) (`pt-BR`), Spanish (`es-ES`), French (`fr-FR`), Dutch (`nl-NL`), Italian (`it-IT`), Polish (`pl-PL`), Turkish (`tr-TR`), Romanian (`ro-RO`), Greek (`el-GR`), and Russian (`ru-RU`)
+
 ## [0.1.8] - 2026-09-21
 
 ### Added

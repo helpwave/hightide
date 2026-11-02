@@ -36,10 +36,6 @@ and adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 - `text-description`, which sets the text color from the active foreground and background
 - Added a `ModalPanel` component for the modal panel
 
-### Removed
-
-- `useTranslatedValidators`. Form validation returns error codes from `FormValidationUtils` without translating them
-
 ### Changed
 
 - `Table` and `TableWithSelection` take columns only through `columns`. `TableColumn` and column registration are removed
@@ -103,7 +99,7 @@ and adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 - updated `Modal` parts stylings
 
 ### Removed
-
+- `useTranslatedValidators`. Form validation returns error codes from `FormValidationUtils` without translating them
 - `ExpandableRoot`'s `allowContainerToggle`
 - Root import `@helpwave/hightide` (`src/index.ts`)
 - `ActionCard`, `NavigationCard`, `AvatarWithStatus`, and `AvatarWithLabel`
@@ -125,6 +121,13 @@ and adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 - `backgroundClassName` and `containerClassName` on `Modal`. Use `backgroundProps` and `containerProps`
 - `ConfirmDialog`, `DiscardChangesDialog`, `InputDialog`, `LanguageDialog`, and `ThemeDialog`
 - `coloring-*` classNames in favor of the new coloring data attributes
+
+## [0.18.0] - 2026-10-13
+
+### Added
+
+- Default supported locales and theme name translations for Portuguese (Brazil) (`pt-BR`), Spanish (`es-ES`), French (`fr-FR`), Dutch (`nl-NL`), Italian (`it-IT`), Polish (`pl-PL`), Turkish (`tr-TR`), Romanian (`ro-RO`), Greek (`el-GR`), and Russian (`ru-RU`)
+- Localized date segment placeholders for the new locales
 
 ## [0.17.2] - 2026-09-23
 

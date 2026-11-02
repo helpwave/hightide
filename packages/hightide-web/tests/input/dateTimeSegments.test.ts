@@ -109,6 +109,10 @@ describe('dateTimeSegments formatting', () => {
   test('shows localized placeholders while empty', () => {
     expect(formatSegment('day', {}, null, 'de-DE')).toBe('TT')
     expect(formatSegment('year', {}, null, 'de-DE')).toBe('JJJJ')
+    expect(formatSegment('day', {}, null, 'fr-FR')).toBe('JJ')
+    expect(formatSegment('year', {}, null, 'ru-RU')).toBe('ГГГГ')
+    expect(formatSegment('day', {}, null, 'en-US')).toBe('DD')
+    expect(formatSegment('year', {}, null, 'xx-XX')).toBe('YYYY')
   })
 
   test('pads committed values', () => {
