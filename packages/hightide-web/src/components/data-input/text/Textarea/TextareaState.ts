@@ -6,8 +6,6 @@ export type TextareaEvent =
   | { type: 'change', value: string }
   | { type: 'focus' }
   | { type: 'blur' }
-  | { type: 'compositionStart' }
-  | { type: 'compositionEnd' }
 
 export const textareaStateTransition = (state: TextareaState, event: TextareaEvent): TextareaState => {
   switch (event.type) {
@@ -15,8 +13,6 @@ export const textareaStateTransition = (state: TextareaState, event: TextareaEve
     return { value: event.value }
   case 'focus':
   case 'blur':
-  case 'compositionStart':
-  case 'compositionEnd':
     return state
   }
 }

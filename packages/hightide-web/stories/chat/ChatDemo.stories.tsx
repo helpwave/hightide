@@ -328,9 +328,10 @@ export const chatDemo: Story = {
                 <ChatQuickReplyChip onClick={action('onQuickReply')}>Überweisung senden</ChatQuickReplyChip>
               </div>
               <ChatMessageComposer
-                placeholder={`Nachricht an ${selected.name} schreiben`}
-                sendLabel="Senden"
                 onSend={sendMessage}
+                layoutProps={{ className: 'bg-surface text-on-surface' }}
+                textareaProps={{ placeholder: `Nachricht an ${selected.name} schreiben` }}
+                sendButtonProps={{ tooltip: 'Senden' }}
                 actions={(
                   <>
                     <IconButton
@@ -353,7 +354,6 @@ export const chatDemo: Story = {
                     </IconButton>
                   </>
                 )}
-                className="bg-surface text-on-surface"
               />
             </>
           </div>

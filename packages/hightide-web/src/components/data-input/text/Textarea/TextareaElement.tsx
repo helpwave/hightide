@@ -33,14 +33,6 @@ export const TextareaElement = forwardRef<HTMLTextAreaElement, TextareaElementPr
         props.onBlur?.(event)
         dispatch({ type: 'blur' })
       }}
-      onCompositionStart={event => {
-        props.onCompositionStart?.(event)
-        dispatch({ type: 'compositionStart' })
-      }}
-      onCompositionEnd={event => {
-        props.onCompositionEnd?.(event)
-        dispatch({ type: 'compositionEnd' })
-      }}
       onChange={event => {
         props.onChange?.(event)
         dispatch({ type: 'change', value: event.target.value })

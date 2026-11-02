@@ -6,8 +6,6 @@ export type TextInputEvent =
   | { type: 'change', value: string }
   | { type: 'focus' }
   | { type: 'blur' }
-  | { type: 'compositionStart' }
-  | { type: 'compositionEnd' }
 
 export const textInputStateTransition = (state: TextInputState, event: TextInputEvent): TextInputState => {
   switch (event.type) {
@@ -15,8 +13,6 @@ export const textInputStateTransition = (state: TextInputState, event: TextInput
     return { value: event.value }
   case 'focus':
   case 'blur':
-  case 'compositionStart':
-  case 'compositionEnd':
     return state
   }
 }
