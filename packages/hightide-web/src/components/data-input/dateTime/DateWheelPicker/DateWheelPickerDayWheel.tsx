@@ -1,4 +1,4 @@
-import { WheelPicker } from '../../../interaction/WheelPicker'
+import { WheelPicker } from '../../selection/WheelPicker'
 import { useDateWheelPickerContext } from './DateWheelPickerContext'
 
 export function DateWheelPickerDayWheel() {
@@ -9,9 +9,10 @@ export function DateWheelPickerDayWheel() {
     <WheelPicker
       value={state.value.getDate()}
       isLooping={config.isLooping}
-      disabled={isLocked}
+      isDisabled={config.isDisabled}
+      isReadOnly={config.isReadOnly}
       onValueChange={(day) => {
-        if (!isLocked) {
+        if (!isLocked && day !== undefined) {
           dispatch({ type: 'setDay', day })
         }
       }}

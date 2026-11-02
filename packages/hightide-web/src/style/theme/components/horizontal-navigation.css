@@ -1,0 +1,26 @@
+@layer components {
+  .horizontal-navigation-bar {
+    @apply min-w-0 overflow-x-auto;
+  }
+
+  .horizontal-navigation-bar-item-list {
+    @apply flex-row-2 items-center flex-nowrap list-none m-0 p-0;
+
+    .vertical-navigation-item {
+      @apply shrink-0;
+    }
+
+    .vertical-navigation-item-link,
+    .vertical-navigation-item-label {
+      @apply w-auto whitespace-nowrap;
+    }
+  }
+
+  .horizontal-navigation-bar-dropdown {
+    @apply flex-col-0 p-1 min-w-max rounded-md bg-surface text-on-surface shadow-side shadow-hw-bottom;
+  }
+
+  .horizontal-navigation-bar-dropdown-list {
+    @apply flex-col-0 list-none m-0 p-0;
+  }
+}

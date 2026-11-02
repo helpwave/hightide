@@ -1,12 +1,12 @@
 import type { Meta, StoryObj } from '@storybook/react-vite'
 import { Bell, File, Folder, Package, Settings } from 'lucide-react'
-import type { AppPageNavigationItem } from '../../../src/components/layout/app/AppPage'
 import { AppPage } from '../../../src/components/layout/app/AppPage'
+import type { NavigationItemData } from '../../../src/components/interaction/navigation/types'
 import { HelpwaveBadge } from '../../../src/components/branding/visualization/HelpwaveBadge'
 import { IconButton } from '../../../src/components/interaction/IconButton'
 import { useEffect, useState } from 'react'
 
-const initialNavigationItems: AppPageNavigationItem[] = [
+const initialNavigationItems: NavigationItemData[] = [
   {
     id: 'products',
     label: 'Products',
@@ -57,7 +57,7 @@ const initialNavigationItems: AppPageNavigationItem[] = [
   },
 ]
 
-const additionalNavigationItems: AppPageNavigationItem[] = [
+const additionalNavigationItems: NavigationItemData[] = [
   ...Array.from({ length: 5 }, (_, sectionIndex) => ({
     id: `section-${sectionIndex}`,
     label: `Section ${sectionIndex + 1}`,

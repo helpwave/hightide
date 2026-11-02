@@ -1,19 +1,12 @@
-import type { ElementType, HTMLAttributeAnchorTarget, ReactNode } from 'react'
+import type { ElementType } from 'react'
 import { useId } from 'react'
 import { ExternalLink } from 'lucide-react'
 import { Icon } from '../../../visualization/Icon'
 import { ExpansionIcon } from '../../../visualization/ExpansionIcon'
-import { useNavigationItem } from './NavigationContext'
-import type { NavigationItemData } from './types'
+import type { NavigationItemData, NavigationLinkComponentProps } from '../types'
+import { useVerticalNavigationMenuItem } from './VerticalNavigationMenuContext'
 
-export interface LinkComponentProps {
-  'className'?: string,
-  'href': string,
-  'target'?: HTMLAttributeAnchorTarget | undefined,
-  'rel'?: string | undefined,
-  'aria-current'?: 'page' | undefined,
-  'children'?: ReactNode,
-}
+export type LinkComponentProps = NavigationLinkComponentProps
 
 export type VerticalNavigationMenuItemProps = NavigationItemData & {
   depth?: number,
@@ -26,6 +19,7 @@ const DefaultLink: ElementType<LinkComponentProps> = 'a'
 export function VerticalNavigationMenuItem({
   id,
   label,
+  icon,
   depth = 0,
   forceMountDepth = 2,
   LinkComponent = DefaultLink,
@@ -36,7 +30,7 @@ export function VerticalNavigationMenuItem({
     expanded,
     isActive,
     toggleExpansion,
-  } = useNavigationItem(id)
+  } = useVerticalNavigationMenuItem(id)
 
   const childItems = 'items' in item && item.items != null ? item.items : undefined
   const url = 'url' in item ? item.url : undefined
@@ -52,6 +46,11 @@ export function VerticalNavigationMenuItem({
       rel={external ? 'noopener noreferrer' : undefined}
     >
       <div className="vertical-navigation-item-label">
+        {icon && (
+          <span className="size-5">
+            {icon}
+          </span>
+        )}
         {label}
         {external && (
           <Icon icon={ExternalLink} size="sm" className="vertical-navigation-item-link-external-icon" />
@@ -60,6 +59,11 @@ export function VerticalNavigationMenuItem({
     </LinkComponent>
   ) : (
     <div className="vertical-navigation-item-label">
+      {icon && (
+        <span className="size-5">
+          {icon}
+        </span>
+      )}
       {label}
     </div>
   )
@@ -71,6 +75,7 @@ export function VerticalNavigationMenuItem({
     <li
       data-depth={depth}
       data-expanded={expanded ? '' : undefined}
+      data-active={isActive ? '' : undefined}
       className="vertical-navigation-item"
     >
       {hasChildren ? (

@@ -1,0 +1,9 @@
+@layer components {
+  .full-screen-vertical-navigation-panel {
+    @apply flex-col-4 items-stretch justify-start fixed inset-0 p-8 w-screen h-screen overflow-y-auto bg-surface text-on-surface;
+  }
+
+  .full-screen-vertical-navigation-close-button {
+    @apply self-end;
+  }
+}

@@ -2,7 +2,7 @@ import type { HTMLAttributes, ReactElement, ReactNode } from 'react'
 import { createContext, useContext, useLayoutEffect, useMemo, useRef } from 'react'
 import clsx from 'clsx'
 
-import { useWheelPickerContext } from './WheelPickerContext'
+import { useWheelPickerContext, useWheelPickerListContext } from './WheelPickerContext'
 
 const WheelPickerPreviewContext = createContext(false)
 
@@ -46,10 +46,12 @@ function WheelPickerOptionImpl<T>({
   ...props
 }: WheelPickerOptionProps<T>) {
   const isPreview = useContext(WheelPickerPreviewContext)
-  const { disabled: rootDisabled, value: selected, registerOption, selectValue } = useWheelPickerContext<T>()
+  const { state, config } = useWheelPickerContext<T>()
+  const { registerOption, selectValue } = useWheelPickerListContext<T>()
+  const isLocked = config.isDisabled || config.isReadOnly
   const ref = useRef<HTMLDivElement>(null)
   const identity = useMemo(() => toIdentity(value, valueId), [value, valueId])
-  const isSelected = !isPreview && Object.is(selected, value)
+  const isSelected = !isPreview && Object.is(state.value, value)
 
   useLayoutEffect(() => {
     if (isPreview) {
@@ -73,7 +75,7 @@ function WheelPickerOptionImpl<T>({
       className={clsx('wheel-picker-option', className)}
       onClick={(event) => {
         onClick?.(event)
-        if (event.defaultPrevented || rootDisabled) {
+        if (event.defaultPrevented || isLocked) {
           return
         }
         selectValue(value)

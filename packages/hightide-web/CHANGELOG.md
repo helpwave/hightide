@@ -14,7 +14,9 @@ and adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 - `TabSwitcher` `variant` `'underline' | 'segmented-chips'`, default `'underline'`. The list and each item set `data-style-variant` to that value
 - `ExpandableHeader` `triggerProps` for the header toggle button
 - `ExpandableContent` `isClosingOnClick` to collapse when the content is clicked
-- `NavigationItemList` `onClose` so Escape on items can close the parent menu
+- `HorizontalNavigationBar` and `FullScreenVerticalNavigation` aggregates. The bar is a horizontally scrolling row with dropdown groups. Fullscreen navigation is a `StateManager` overlay (`open` / `close` / `toggle`) wrapping `VerticalNavigationMenu`
+- `VerticalNavigationMenu` is a folder under `navigation/` (`Item`, `Context`, `Provider`, `Consumer`). Tree expansion context lives with that aggregate; shared item types stay in `navigation/types.ts`
+- Navigation styles split into `horizontal-navigation.css`, `vertical-navigation.css`, and `full-screen-vertical-navigation.css`
 - Subpath package exports: `@helpwave/hightide/components`, `@helpwave/hightide/global-contexts`, `@helpwave/hightide/hooks`, and `@helpwave/hightide/utils`, each with types
 - `Pressable` for colored buttons, with `coloringStyle` (`filled` | `foreground`), `colorVariant` (`normal` | `tonal` | `transparent`), `bordered`, `elevated`, and `processingIndicator`
 - `Button` and `IconButton` `variant`: `elevated`, `filled`, `tonal`, `outlined` (`Button` only), and `foreground`
@@ -26,7 +28,7 @@ and adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 - `ExpandableSection`, `ExpandableSectionHeader`, and `ExpandableSectionContent` for the previous combined expandable layout
 - Compound `Avatar`: `Avatar.Root`, `Avatar.Image`, `Avatar.Fallback`, `Avatar.Name`, `Avatar.StatusIndicator`, and `Avatar.Context`. The combined `Avatar` accepts `status`, `hasStatusIndicator`, and slot props
 - Compound `AvatarGroup`: `AvatarGroup.Container`, `AvatarGroup.Overlap`, and `AvatarGroup.AdditionalText`
-- Compound `WheelPicker`: `WheelPicker.Root`, `WheelPicker.Option`, `WheelPicker.Bar`, and `WheelPicker.Context`, with `value` / `defaultValue`, `onValueChange`, `onLoop`, `isLooping`, and `visibleRows`
+- Compound `WheelPicker` under `data-input/selection`: `WheelPicker.StateManager`, `WheelPicker.Root`, `WheelPicker.Option`, `WheelPicker.Bar`, and `WheelPicker.Context`, with `value` / `initialValue`, `onValueChange`, `onStateEvent`, `onLoop`, `isLooping`, and `visibleRows`
 - `DateWheelPicker`, `TimeWheelPicker`, and `DateTimeWheelPicker`
 - `ChatAttachmentMessageBubble`, a `ChatMessageBubble` specialization for a file name, metadata, and optional download action
 - `ColoringUtils` with `build` (defaults: mode `static`, color variant `normal`, coloring style `filled`) and setters `dataColor`, `dataColoringMode`, `dataColorVariant`, `dataColoringStyle`, `dataBordered`, and `dataElevated`
@@ -48,17 +50,18 @@ and adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 - `TabSwitcher` is an aggregate with `TabSwitcher.StateManager`, `TabSwitcher.Layout`, `TabSwitcher.TabList`, `TabSwitcher.TabPanel`, `TabSwitcher.Context`, `TabSwitcher.Provider`, and `TabSwitcher.Consumer`. `TabView` and the panel portal are removed. `activeId`, `onActiveIdChange`, and `initialActiveId` stay the same
 - `segmented-chips` uses fully rounded outer corners, slightly rounded inner corners, a primary active item, and neutral inactive items. `underline` keeps the current bottom border
 - Form creation and validation use `@helpwave/hightide-utils/form`. `FormField` keeps its current props and bag
-- Click and keyboard handlers no longer call `event.stopPropagation` (`Button`, `IconButton`, `Select`, `MultiSelect`, `FileInput`, `Navigation`, `Expandable`, and `PropsUtil` helpers)
+- Click and keyboard handlers no longer call `event.stopPropagation` (`Button`, `IconButton`, `Select`, `MultiSelect`, `FileInput`, `HorizontalNavigationBar`, `Expandable`, and `PropsUtil` helpers)
 - `Button` no longer stops click bubbling; `allowClickEventPropagation` has no effect
 - `Expandable` header is a `<button>`; `allowContainerToggle` is removed
 - `FAQSection` uses `isClosingOnClick` instead of container toggle
-- `Navigation` handles Escape on the focused control instead of a capturing menu handler
+- `Navigation` is replaced by `HorizontalNavigationBar` and `FullScreenVerticalNavigation`. Links use `url` instead of `link`, and every item requires `id`. Horizontal items reuse the vertical row, hover, focus, icon, and external-link treatment. `AppPage` mobile uses fullscreen vertical navigation; desktop keeps `AppSidebar` with `VerticalNavigationMenu`
+- `VerticalNavigationMenu` moved from `navigation-menus/` to `navigation/VerticalNavigationMenu/`. `NavigationProvider`, `useNavigationContext`, and `useNavigationItem` are `VerticalNavigationMenu.Provider`, `useVerticalNavigationMenuContext`, and `useVerticalNavigationMenuItem`
 - `MultiSelectChipDisplayTrigger` uses an overlay click target so chip remove buttons do not need to stop propagation
 - The package is `"type": "module"` and no longer publishes a root `.` export. Import from the subpath exports above
 - Component styling uses class names instead of `data-name`
 - `Button` and `IconButton` take `variant` instead of `coloringStyle` (`solid`, `outline`, `text`, `tonal`, `tonal-outline`). `Button` children are a string, with `leading` and `trailing` icon components. Processing shows a spinner in place of an icon
 - `Card` is a sized container. Title, description, leading, and trailing content are composed by the caller
-- `NavigationItemData` is a link, a group, or a label. A link cannot also have child items. External links render an external icon, and nested groups can force-mount up to a depth
+- `NavigationItemData` is shared by `HorizontalNavigationBar`, `FullScreenVerticalNavigation`, and `VerticalNavigationMenu`: a link (`url`, optional `external`), a group (`items`), or a label, each with optional `icon`
 - `Expandable` is the compound primitive. The previous combined component is `ExpandableSection`
 - `DatePicker` is `CalendarDatePicker` and `DayPicker` is `CalendarDayPicker`. Date, year-month, and time selection use wheel pickers. `DateTimePicker` `timeInputProps` configures `TimeWheelPicker`
 - Interactive color no longer uses dedicated hover tokens. Hover and press are a foreground state layer, or the same mix on elements that cannot paint a pseudo-element (native inputs and table rows)
@@ -73,6 +76,7 @@ and adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 - `Select` and `MultiSelect` show the search field when the option count is at least `searchableThreshold` (default `6`)
 - `Select` and `MultiSelect` menu options use interactive foreground coloring with `surface-inverse` instead of a primary highlight
 - Input elements no longer set coloring data attributes. `Select` and `MultiSelect` triggers use the input hover and press background
+- `WheelPicker` moved from `interaction` to `data-input/selection`. It uses `ControllableDOMInputProps` (`initialValue`, `isDisabled`, `isInvalid`, `isReadOnly`, `isRequired`, `onStateEvent`) and dispatches `change`, `commit`, and `loop`
 - Clicking a looped `WheelPicker` value selects it, including the repeated value past the end of the list
 - `DateTimePickerDialog` centers its wheels horizontally
 - `date-time-input-dialog-popup` sets `data-time-format` (`12h` or `24h`). A 12-hour `dateTime` popup uses a larger tablet minimum width
@@ -127,6 +131,8 @@ and adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 - `backgroundClassName` and `containerClassName` on `Modal`. Use `backgroundProps` and `containerProps`
 - `ConfirmDialog`, `DiscardChangesDialog`, `InputDialog`, `LanguageDialog`, and `ThemeDialog`
 - `coloring-*` classNames in favor of the new coloring data attributes
+- `Navigation`, `NavigationItemList`, `NavigationItemType`, and `AppPageNavigationItem`
+- `navigation-menus/` folder. Use `VerticalNavigationMenu/` and `navigation/types.ts`
 
 ## [0.18.0] - 2026-10-13
 

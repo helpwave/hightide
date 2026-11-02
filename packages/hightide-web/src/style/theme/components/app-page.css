@@ -120,12 +120,4 @@
   .app-page-main-spacer {
     @apply min-h-4;
   }
-
-  .app-page-navigation-item-label {
-    @apply flex-row-2 items-center w-full;
-
-    &[data-active-page] {
-      @apply text-primary;
-    }
-  }
 }

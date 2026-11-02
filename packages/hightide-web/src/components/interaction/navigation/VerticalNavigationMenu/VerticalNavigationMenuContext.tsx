@@ -1,42 +1,39 @@
-import type { TreeItem } from '@helpwave/hightide-utils/hooks'
-import { TreeUtilities } from '@helpwave/hightide-utils/hooks'
-import type { TreeExpansionOptions } from '@helpwave/hightide-utils/hooks'
-import { useTreeExpansion } from '@helpwave/hightide-utils/hooks'
+import type { TreeExpansionOptions, TreeItem } from '@helpwave/hightide-utils/hooks'
+import { TreeUtilities, useTreeExpansion } from '@helpwave/hightide-utils/hooks'
 import type { ReactNode } from 'react'
 import { createContext, useCallback, useContext, useEffect, useMemo, useState } from 'react'
 
-
-export interface NavigationItemState {
+export interface VerticalNavigationMenuItemState {
   expanded: boolean,
   isActive: boolean,
   isOnActivePath: boolean,
   path: ReadonlyArray<string>,
 }
 
-export interface NavigationContextActions {
+export interface VerticalNavigationMenuContextActions {
   toggleExpansion: ReturnType<typeof useTreeExpansion>['toggleExpansion'],
 }
 
-export interface NavigationContextType extends NavigationContextActions {
+export interface VerticalNavigationMenuContextValue extends VerticalNavigationMenuContextActions {
   activeId: string | null,
   activePath: ReadonlyArray<string> | null,
   allItems: ReadonlyArray<TreeItem>,
-  getItemState: (id: string) => NavigationItemState | null,
+  getItemState: (id: string) => VerticalNavigationMenuItemState | null,
 }
 
-const NavigationContext = createContext<NavigationContextType | null>(null)
+export const VerticalNavigationMenuContext = createContext<VerticalNavigationMenuContextValue | null>(null)
 
-export interface NavigationProviderProps extends TreeExpansionOptions {
+export interface VerticalNavigationMenuProviderProps extends TreeExpansionOptions {
   children: ReactNode,
   activeId?: string | null,
 }
 
-export function NavigationProvider({
+export function VerticalNavigationMenuProvider({
   children,
   activeId = null,
   nodes,
   ...expansionOptions
-}: NavigationProviderProps) {
+}: VerticalNavigationMenuProviderProps) {
   const expansion = useTreeExpansion({ nodes, ...expansionOptions })
 
   const index = useMemo(() => TreeUtilities.buildTreeIndex(nodes), [nodes])
@@ -57,7 +54,7 @@ export function NavigationProvider({
   }, [activeId, activePath, allItems, expandForPath, hasExpandedForActiveId])
 
   const itemStateById = useMemo(() => {
-    const map = new Map<string, NavigationItemState>()
+    const map = new Map<string, VerticalNavigationMenuItemState>()
 
     for (const item of expansion.allItems) {
       map.set(item.id, {
@@ -75,7 +72,7 @@ export function NavigationProvider({
     return itemStateById.get(id) ?? null
   }, [itemStateById])
 
-  const value = useMemo((): NavigationContextType => ({
+  const value = useMemo((): VerticalNavigationMenuContextValue => ({
     activeId,
     activePath,
     allItems: expansion.allItems,
@@ -90,26 +87,26 @@ export function NavigationProvider({
   ])
 
   return (
-    <NavigationContext.Provider value={value}>
+    <VerticalNavigationMenuContext.Provider value={value}>
       {children}
-    </NavigationContext.Provider>
+    </VerticalNavigationMenuContext.Provider>
   )
 }
 
-export function useNavigationContext(): NavigationContextType {
-  const context = useContext(NavigationContext)
+export function useVerticalNavigationMenuContext(): VerticalNavigationMenuContextValue {
+  const context = useContext(VerticalNavigationMenuContext)
   if (context == null) {
-    throw new Error('useNavigationContext must be used within NavigationProvider')
+    throw new Error('useVerticalNavigationMenuContext must be used inside a VerticalNavigationMenu.Provider')
   }
   return context
 }
 
-export function useNavigationItem(id: string) {
-  const context = useNavigationContext()
+export function useVerticalNavigationMenuItem(id: string) {
+  const context = useVerticalNavigationMenuContext()
   const state = context.getItemState(id)
 
   if (state == null) {
-    throw new Error(`useNavigationItem could not resolve state for id "${id}"`)
+    throw new Error(`useVerticalNavigationMenuItem could not resolve state for id "${id}"`)
   }
 
   return useMemo(() => ({

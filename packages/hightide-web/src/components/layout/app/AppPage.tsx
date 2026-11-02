@@ -1,15 +1,15 @@
 import clsx from 'clsx'
 import type { ElementType } from 'react'
-import { useCallback, useMemo, useRef, useState, type HTMLAttributes, type ReactNode } from 'react'
+import { useMemo, useRef, useState, type HTMLAttributes, type ReactNode } from 'react'
 import { IconButton } from '../../interaction/IconButton'
 import { useHightideTranslation } from '@helpwave/hightide-utils/context/translation'
-import { MenuIcon, X } from 'lucide-react'
+import { X } from 'lucide-react'
 import { Icon } from '../../visualization/Icon'
 import { useOverlayRegistry } from '@helpwave/hightide-utils/hooks'
 import { PropsUtil } from '../../../utils/propsUtil'
-import type { LinkComponentProps } from '../../interaction/navigation/navigation-menus/VerticalNavigationMenu'
-import { VerticalNavigationMenu, type NavigationItemData } from '../../interaction/navigation/navigation-menus/VerticalNavigationMenu'
-import type { NavigationGroupItem, NavigationLinkItem, NavigationLabelItem } from '../../interaction/navigation/navigation-menus/types'
+import { FullScreenVerticalNavigation } from '../../interaction/navigation/FullScreenVerticalNavigation'
+import { VerticalNavigationMenu, type LinkComponentProps } from '../../interaction/navigation/VerticalNavigationMenu'
+import { findActiveIdByUrl, type NavigationItemData } from '../../interaction/navigation/types'
 import { FocusTrap } from '../../interaction/FocusTrap'
 
 export interface AppSidebarProps extends HTMLAttributes<HTMLDivElement> {
@@ -112,48 +112,11 @@ export const AppPageSidebarWithNavigation = ({
   )
 }
 
-type AppPageNavigationItemBase = {
-  id: string,
-  label: ReactNode,
-  icon?: ReactNode,
-}
-
-export type AppPageNavigationItem =
-  | (AppPageNavigationItemBase & {
-    url: string,
-    external?: boolean,
-    items?: never,
-  })
-  | (AppPageNavigationItemBase & {
-    items: AppPageNavigationItem[],
-    url?: never,
-    external?: never,
-  })
-  | (AppPageNavigationItemBase & {
-    url?: never,
-    external?: never,
-    items?: never,
-  })
-
-function findActiveIdByUrl(
-  items: ReadonlyArray<AppPageNavigationItem>,
-  activeUrl: string
-): string | null {
-  for (const item of items) {
-    if ('url' in item && item.url === activeUrl) return item.id
-    if ('items' in item && item.items != null) {
-      const found = findActiveIdByUrl(item.items, activeUrl)
-      if (found != null) return found
-    }
-  }
-  return null
-}
-
 export interface AppPageSidebarProps {
   activeId?: string | null,
   activeUrl?: string,
   header?: ReactNode,
-  items?: AppPageNavigationItem[],
+  items?: NavigationItemData[],
   contentOverwrite?: ReactNode,
   footer?: ReactNode,
   LinkComponent?: ElementType<LinkComponentProps>,
@@ -173,8 +136,7 @@ export const AppPage = ({
   noScrolling = false,
   hasSpacer = true,
   ...props }: AppPageProps) => {
-  const translation = useHightideTranslation()
-  const [isSidebarOpen, setIsSidebarOpen] = useState(false)
+  const [isMobileNavOpen, setIsMobileNavOpen] = useState(false)
 
   const resolvedActiveId = useMemo(() => {
     if (sidebarProps.activeId !== undefined) return sidebarProps.activeId
@@ -182,81 +144,42 @@ export const AppPage = ({
     return findActiveIdByUrl(sidebarProps.items, sidebarProps.activeUrl)
   }, [sidebarProps.activeId, sidebarProps.activeUrl, sidebarProps.items])
 
-  const toNavigationItems = useCallback((items?: AppPageNavigationItem[]): NavigationItemData[] | undefined => {
-    return items?.map((item) => {
-      const isActive = item.id === resolvedActiveId
-      const label = (
-        <span className="app-page-navigation-item-label" data-active-page={isActive ? '' : undefined}>
-          {item.icon && (
-            <span className="size-5">
-              {item.icon}
-            </span>
-          )}
-          {item.label}
-        </span>
-      )
-      if ('items' in item && item.items != null) {
-        const group: NavigationGroupItem = {
-          id: item.id,
-          label,
-          items: toNavigationItems(item.items) ?? [],
-        }
-        return group
-      }
-      if ('url' in item && item.url != null) {
-        const link: NavigationLinkItem = {
-          id: item.id,
-          label,
-          url: item.url,
-          external: item.external,
-        }
-        return link
-      }
-      const labelItem: NavigationLabelItem = {
-        id: item.id,
-        label,
-      }
-      return labelItem
-    }) ?? undefined
-  }, [resolvedActiveId])
-
-  const navigationItems = useMemo(() => toNavigationItems(
-    sidebarProps.items
-  ), [sidebarProps.items, toNavigationItems])
+  const navigationItems = sidebarProps.items ?? []
 
   return (
     <div
       {...props}
       className={clsx('app-page', props.className)}>
-      <AppPageSidebarWithNavigation
-        isOpen={isSidebarOpen}
-        onClose={() => setIsSidebarOpen(false)}
-        header={sidebarProps.header}
-        footer={sidebarProps.footer}
-        navigationItems={navigationItems}
-        contentOverwrite={sidebarProps.contentOverwrite}
-        activeId={resolvedActiveId}
+      <FullScreenVerticalNavigation
+        items={navigationItems}
         LinkComponent={sidebarProps.LinkComponent}
-      />
-      <div className="app-page-body">
-        <header className="app-page-header">
-          <IconButton
-            className="app-page-menu-button"
-            tooltip={translation('menu')}
-            onClick={() => setIsSidebarOpen(prev => !prev)}
-            variant="foreground"
-          >
-            <Icon icon={MenuIcon} />
-          </IconButton>
-          {headerActions}
-        </header>
-        <div className="app-page-content" data-no-scrolling={noScrolling ? '' : undefined}>
-          <main className="app-page-main-content" data-outer-no-scrolling={noScrolling ? '' : undefined}>
-            {children}
-            {hasSpacer && (<div className="app-page-main-spacer" />)}
-          </main>
+        activeId={resolvedActiveId}
+        isOpen={isMobileNavOpen}
+        onIsOpenChange={setIsMobileNavOpen}
+      >
+        <AppPageSidebarWithNavigation
+          isOpen={false}
+          header={sidebarProps.header}
+          footer={sidebarProps.footer}
+          navigationItems={sidebarProps.items}
+          contentOverwrite={sidebarProps.contentOverwrite}
+          activeId={resolvedActiveId}
+          LinkComponent={sidebarProps.LinkComponent}
+        />
+        <div className="app-page-body">
+          <header className="app-page-header">
+            <FullScreenVerticalNavigation.Trigger className="app-page-menu-button" />
+            {headerActions}
+          </header>
+          <div className="app-page-content" data-no-scrolling={noScrolling ? '' : undefined}>
+            <main className="app-page-main-content" data-outer-no-scrolling={noScrolling ? '' : undefined}>
+              {children}
+              {hasSpacer && (<div className="app-page-main-spacer" />)}
+            </main>
+          </div>
         </div>
-      </div>
+        <FullScreenVerticalNavigation.Panel className="desktop:hidden" />
+      </FullScreenVerticalNavigation>
     </div>
   )
 }

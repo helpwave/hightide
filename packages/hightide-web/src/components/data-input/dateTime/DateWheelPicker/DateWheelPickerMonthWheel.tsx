@@ -1,4 +1,4 @@
-import { WheelPicker } from '../../../interaction/WheelPicker'
+import { WheelPicker } from '../../selection/WheelPicker'
 import { useDateWheelPickerContext } from './DateWheelPickerContext'
 
 export function DateWheelPickerMonthWheel() {
@@ -9,9 +9,10 @@ export function DateWheelPickerMonthWheel() {
     <WheelPicker
       value={state.value.getMonth()}
       isLooping={config.isLooping}
-      disabled={isLocked}
+      isDisabled={config.isDisabled}
+      isReadOnly={config.isReadOnly}
       onValueChange={(month) => {
-        if (!isLocked) {
+        if (!isLocked && month !== undefined) {
           dispatch({ type: 'setMonth', month })
         }
       }}

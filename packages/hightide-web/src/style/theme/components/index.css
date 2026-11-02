@@ -14,7 +14,9 @@
 @import "./toggleable-intput.css";
 @import "./table.css";
 @import "./scrollbar.css";
-@import "./navigation.css";
+@import "./horizontal-navigation.css";
+@import "./vertical-navigation.css";
+@import "./full-screen-vertical-navigation.css";
 @import "./avatar.css";
 @import "./chip.css";
 @import "./breadcrumb.css";
@@ -39,7 +41,6 @@
 @import "./combobox.css";
 @import "./date-time-input.css";
 @import "./process-model.css";
-@import "./vertical-navigation.css";
 @import "./app-page.css";
 @import "./scrollable-list.css";
 @import "./wheel-picker.css";

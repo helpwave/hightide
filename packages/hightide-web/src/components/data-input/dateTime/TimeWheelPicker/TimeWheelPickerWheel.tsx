@@ -1,5 +1,5 @@
 import { closestMatch } from '@helpwave/hightide-utils/utils'
-import { WheelPicker } from '../../../interaction/WheelPicker'
+import { WheelPicker } from '../../selection/WheelPicker'
 import { useTimeWheelPickerContext } from './TimeWheelPickerContext'
 import { toTimeWheelHour } from './TimeWheelPickerState'
 
@@ -38,9 +38,10 @@ export function TimeWheelPickerWheel({ unit }: TimeWheelPickerWheelProps) {
     <WheelPicker
       value={selected}
       isLooping={config.isLooping}
-      disabled={isLocked}
+      isDisabled={config.isDisabled}
+      isReadOnly={config.isReadOnly}
       onValueChange={(next) => {
-        if (isLocked) {
+        if (isLocked || next === undefined) {
           return
         }
         dispatch(unit === 'hour'

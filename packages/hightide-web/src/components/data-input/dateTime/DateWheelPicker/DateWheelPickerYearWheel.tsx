@@ -1,4 +1,4 @@
-import { WheelPicker } from '../../../interaction/WheelPicker'
+import { WheelPicker } from '../../selection/WheelPicker'
 import { useDateWheelPickerContext } from './DateWheelPickerContext'
 
 export function DateWheelPickerYearWheel() {
@@ -9,9 +9,10 @@ export function DateWheelPickerYearWheel() {
     <WheelPicker
       value={state.value.getFullYear()}
       isLooping={config.isLooping}
-      disabled={isLocked}
+      isDisabled={config.isDisabled}
+      isReadOnly={config.isReadOnly}
       onValueChange={(year) => {
-        if (!isLocked) {
+        if (!isLocked && year !== undefined) {
           dispatch({ type: 'setYear', year })
         }
       }}

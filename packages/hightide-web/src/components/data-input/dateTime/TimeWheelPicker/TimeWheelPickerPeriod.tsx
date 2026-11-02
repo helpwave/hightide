@@ -1,4 +1,4 @@
-import { WheelPicker } from '../../../interaction/WheelPicker'
+import { WheelPicker } from '../../selection/WheelPicker'
 import { useTimeWheelPickerContext } from './TimeWheelPickerContext'
 
 export function TimeWheelPickerPeriod() {
@@ -12,9 +12,10 @@ export function TimeWheelPickerPeriod() {
   return (
     <WheelPicker<'am' | 'pm'>
       value={period}
-      disabled={isLocked}
+      isDisabled={config.isDisabled}
+      isReadOnly={config.isReadOnly}
       onValueChange={(nextPeriod) => {
-        if (!isLocked) {
+        if (!isLocked && nextPeriod !== undefined) {
           dispatch({ type: 'setPeriod', period: nextPeriod })
         }
       }}
