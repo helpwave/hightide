@@ -115,9 +115,9 @@
     &[data-outer-no-scrolling] {
       @apply overflow-hidden grow;
     }
-  }
 
-  .app-page-main-spacer {
-    @apply min-h-4;
+    &[data-bottom-spacer] {
+      @apply pb-4;
+    }
   }
 }
