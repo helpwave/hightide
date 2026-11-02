@@ -20,7 +20,7 @@ type StoryArgs = {
 }
 
 const meta: Meta<StoryArgs> = {
-  component: ListActionItem,
+  component: ListActionItem as Meta<StoryArgs>['component'],
   argTypes: {
     contentOrder: {
       control: 'select',

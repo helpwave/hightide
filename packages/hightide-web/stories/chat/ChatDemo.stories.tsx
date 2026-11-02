@@ -6,7 +6,10 @@ import { CalendarDays, Camera, ChevronLeft, Paperclip, Phone, Pill, Plus, UserRo
 import { action } from 'storybook/actions'
 import type { AvatarStatus } from '../../src/components/visualization/Avatar/AvatarTypes'
 import { ChatConversationList } from '../../src/components/chat/layout/ChatConversationList'
-import { ChatConversationRow, type ChatConversationSentIndicator } from '../../src/components/chat/interaction/ChatConversationRow'
+import {
+  ChatConversationRow,
+  type ChatConversationSentIndicator
+} from '../../src/components/chat/interaction/ChatConversationRow'
 import { ChatThreadHeader } from '../../src/components/chat/layout/ChatThreadHeader'
 import { ChatMessageList } from '../../src/components/chat/layout/ChatMessageList'
 import { ChatMessageBubble, type ChatMessageDirection, type ChatMessageStatus } from '../../src/components/chat/visualization/ChatMessageBubble'
@@ -362,3 +365,4 @@ export const chatDemo: Story = {
     )
   },
 }
+

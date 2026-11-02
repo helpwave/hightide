@@ -1,4 +1,5 @@
 import type { ButtonHTMLAttributes } from 'react'
+import { forwardRef } from 'react'
 import clsx from 'clsx'
 
 import { ColoringUtils } from '../../../utils/coloring'
@@ -11,7 +12,7 @@ export type ListActionItemProps = Omit<ButtonHTMLAttributes<HTMLButtonElement>, 
   color?: ListItemColor,
 }
 
-export function ListActionItem({
+export const ListActionItem = forwardRef<HTMLButtonElement, ListActionItemProps>(function ListActionItem({
   title,
   subtitle,
   content,
@@ -23,10 +24,11 @@ export function ListActionItem({
   className,
   type,
   ...props
-}: ListActionItemProps) {
+}, forwardedRef) {
   return (
     <button
       {...props}
+      ref={forwardedRef}
       type={type ?? 'button'}
       disabled={disabled}
       className={clsx('list-action-item', className)}
@@ -45,4 +47,4 @@ export function ListActionItem({
       />
     </button>
   )
-}
+})

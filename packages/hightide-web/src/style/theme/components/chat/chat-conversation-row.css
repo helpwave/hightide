@@ -1,6 +1,6 @@
 @layer components {
   .chat-conversation-row {
-    @apply flex-row-3 shrink-0 items-center w-full px-3.5 py-3 text-left bg-transparent cursor-pointer;
+    @apply shrink-0 w-full px-3.5 py-3 text-left bg-transparent cursor-pointer;
     --coloring-on-base: var(--color-on-surface);
     @apply border-2 border-transparent focus-style-none focus-style-border outline-none;
     transition: var(--focus-transitions);
@@ -11,6 +11,10 @@
 
     &[data-selected] {
       @apply bg-background border-l-primary border-l-4 pl-3.25;
+    }
+
+    .list-item-leading {
+      @apply me-3;
     }
   }
 
@@ -39,7 +43,7 @@
   }
 
   .chat-conversation-row-bottom {
-    @apply flex-row-2 items-center justify-between min-w-0 w-full ;
+    @apply flex-row-2 items-center justify-between min-w-0 w-full;
   }
 
   .chat-conversation-row-preview {
@@ -50,7 +54,7 @@
     @apply block min-w-0 max-w-full text-sm text-description truncate;
   }
 
-  .chat-conversation-row[data-unread] & {
+  .chat-conversation-row[data-unread] .chat-conversation-row-preview-text {
     @apply text-on-surface;
   }
 
@@ -68,7 +72,7 @@
     &::before {
       inset: -2px;
     }
-    
+
     &[data-selected]::before {
       left: -4px;
     }
