@@ -93,37 +93,37 @@ export function colorInputStateTransition(
   event: ColorInputEvent
 ): ColorInputState {
   switch (event.type) {
-    case 'textChange':
-      return applyTextChange(state, event.text)
-    case 'commitText':
-    case 'blur':
-      return applyCommit(state)
-    case 'pickSaturation':
-      return applyChannels(state, {
-        ...channelsOf(state),
-        saturation: clampUnit(event.saturation),
-        valueLevel: clampUnit(event.valueLevel),
-      }, true)
-    case 'pickHue':
-      return applyChannels(state, {
-        ...channelsOf(state),
-        hue: clampUnit(event.hue),
-      }, true)
-    case 'pickAlpha':
-      return applyChannels(state, {
-        ...channelsOf(state),
-        alphaLevel: clampUnit(event.alphaLevel),
-      }, true)
-    case 'sync':
-      return applyHex(state, event.value, true, true)
-    case 'resetAlpha':
-      return applyResetAlpha(state)
-    case 'open':
-      return { ...state, isOpen: true }
-    case 'close':
-      return { ...state, isOpen: false }
-    case 'focus':
-      return state
+  case 'textChange':
+    return applyTextChange(state, event.text)
+  case 'commitText':
+  case 'blur':
+    return applyCommit(state)
+  case 'pickSaturation':
+    return applyChannels(state, {
+      ...channelsOf(state),
+      saturation: clampUnit(event.saturation),
+      valueLevel: clampUnit(event.valueLevel),
+    }, true)
+  case 'pickHue':
+    return applyChannels(state, {
+      ...channelsOf(state),
+      hue: clampUnit(event.hue),
+    }, true)
+  case 'pickAlpha':
+    return applyChannels(state, {
+      ...channelsOf(state),
+      alphaLevel: clampUnit(event.alphaLevel),
+    }, true)
+  case 'sync':
+    return applyHex(state, event.value, true, true)
+  case 'resetAlpha':
+    return applyResetAlpha(state)
+  case 'open':
+    return { ...state, isOpen: true }
+  case 'close':
+    return { ...state, isOpen: false }
+  case 'focus':
+    return state
   }
 }
 

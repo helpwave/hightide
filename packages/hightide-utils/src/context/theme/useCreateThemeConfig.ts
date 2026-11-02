@@ -24,7 +24,7 @@ export const ThemeUtils = {
   resolveThemeInformationLabel: (
     themeInformation: ThemeInformation,
     locale: string,
-    translation: (key: string) => string,
+    translation: (key: string) => string
   ): string => {
     if (themeInformation.translationKey) {
       return translation(themeInformation.translationKey)

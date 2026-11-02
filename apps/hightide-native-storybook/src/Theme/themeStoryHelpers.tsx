@@ -29,7 +29,7 @@ export const ThemeSelect = () => {
       label: ThemeUtils.resolveThemeInformationLabel(
         info,
         locale,
-        (key) => translation(key as keyof HightideTranslationEntries),
+        (key) => translation(key as keyof HightideTranslationEntries)
       ),
     })),
     [locale, supportedThemes, translation]
