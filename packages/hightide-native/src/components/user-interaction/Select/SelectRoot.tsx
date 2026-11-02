@@ -2,7 +2,7 @@ import type { ReactNode } from 'react'
 import { useCallback, useMemo, useState } from 'react'
 
 import type { ColorPairToken } from '@helpwave/hightide-design/theme-tokens'
-import { useEventCallbackStabilizer } from '@helpwave/hightide-utils/hooks'
+import { useStableEvent } from '@helpwave/hightide-utils/hooks'
 
 import { useSelect } from '../../../hooks/useSelect'
 import type {
@@ -92,9 +92,9 @@ export function SelectRoot<T>({
     return Object.values(idToOptionMap).find((option) => compare(option.value.value, initialValue))?.value.id ?? null
   }, [compare, idToOptionMap, initialValue])
 
-  const onValueChangeStable = useEventCallbackStabilizer(onValueChange)
-  const onEditCompleteStable = useEventCallbackStabilizer(onEditComplete)
-  const onIsOpenChangeStable = useEventCallbackStabilizer(onIsOpenChange)
+  const onValueChangeStable = useStableEvent(onValueChange)
+  const onEditCompleteStable = useStableEvent(onEditComplete)
+  const onIsOpenChangeStable = useStableEvent(onIsOpenChange)
 
   const onValueChangeWrapper = useCallback((id: string) => {
     const option = idToOptionMap[id]

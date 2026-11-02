@@ -12,7 +12,6 @@ See [conventions](../../conventions/README.md) for how Utils objects, deprecatio
 | [curve.ts](./curve.ts) | `CurveBuilderUtil` | Easing and rate curves including cubic bezier and exponential builders |
 | [date.ts](./date.ts) | `DateUtils` | Date/time parsing, formatting, time zones, calendars, and duration arithmetic |
 | [duration.ts](./duration.ts) | `DurationUtils` | Immutable duration value object with date arithmetic |
-| [emailValidation.ts](./emailValidation.ts) | `EmailValidationUtils` | Email address format validation |
 | [loopingArray.ts](./loopingArray.ts) | `LoopingArrayUtils` | Circular array position, distance, and direction calculations |
 | [match.ts](./match.ts) | `MatchUtils` | Key lookup against a record map |
 | [math.ts](./math.ts) | `MathUtil` | Clamping, step ranges, and looping numeric bounds |

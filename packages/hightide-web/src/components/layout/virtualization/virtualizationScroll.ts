@@ -35,7 +35,7 @@ export function findScrollableAncestor(element: HTMLElement | null): HTMLElement
 }
 
 /** Marks the {@link AppPage} content area — the scroll container for `'page'` mode. */
-export const APP_PAGE_CONTENT_SELECTOR = '[data-name="app-page-content"]'
+export const APP_PAGE_CONTENT_SELECTOR = '.app-page-content'
 
 /**
  * Resolves the scroll container for the `'page'` virtualization mode. Prefers the

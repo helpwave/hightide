@@ -1,6 +1,6 @@
 import { useCallback, useEffect, useState } from 'react'
 import { useControlledState } from './useControlledState'
-import { useEventCallbackStabilizer } from './useEventCallbackStabelizer'
+import { useStableEvent } from './useStableEvent'
 
 export interface KeyValueStore<TSchema extends Record<string, unknown>> {
   getValue<K extends keyof TSchema>(key: K): TSchema[K],
@@ -81,7 +81,7 @@ export function useSimpleStoreSyncedValue<T>({
     store.isInitialized,
   ])
 
-  const encodeStable = useEventCallbackStabilizer(encode)
+  const encodeStable = useStableEvent(encode)
   useEffect(() => {
     if (!store.isInitialized || !hasRead) return
 

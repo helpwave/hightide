@@ -1,6 +1,6 @@
 import { useMemo } from 'react'
 import { MultiSearchWithMapping } from '../utils/simpleSearch'
-import { useEventCallbackStabilizer } from './useEventCallbackStabelizer'
+import { useStableEvent } from './useStableEvent'
 
 export interface UseSearchOptions<T> {
   items: ReadonlyArray<T>,
@@ -22,7 +22,7 @@ export function useSearch<T>({
   toTags,
 }: UseSearchOptions<T>): UseSearchReturn<T> {
   const toTagsResolved = toTags ?? defaultToTags
-  const toTagsStable = useEventCallbackStabilizer(toTagsResolved)
+  const toTagsStable = useStableEvent(toTagsResolved)
 
   const searchResult = useMemo(() => {
     const q = searchQuery.trim().toLowerCase()

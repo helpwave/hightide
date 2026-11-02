@@ -1,13 +1,29 @@
 @layer components {
-  .date-picker {
+  .calendar-date-picker {
     @apply flex-col-3 grow;
   }
 
-  .date-picker-content {
+  .calendar-date-picker-content {
     @apply h-60 max-h-60;
   }
 
-  .date-picker-header {
+  .calendar-date-picker-header {
     @apply flex-row-2 items-center justify-between;
+  }
+
+  .calendar-date-picker-selectors {
+    @apply flex-row-2 items-center;
+  }
+
+  .calendar-date-picker-time {
+    @apply flex items-center justify-center;
+  }
+
+  .year-month-picker {
+    @apply flex-row-4 items-center justify-center;
+  }
+
+  .date-wheel-picker {
+    @apply flex-row-2 items-center justify-center;
   }
 }

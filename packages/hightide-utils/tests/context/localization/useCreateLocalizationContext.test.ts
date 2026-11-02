@@ -7,8 +7,8 @@ import type { SupportedLocalesConfig } from '../../../src/context/localization/L
 
 describe('useCreateLocalizationContext', () => {
   const supportedLocales: SupportedLocalesConfig = {
-    'en-US': { localName: 'English (US)' },
-    'de-DE': { localName: 'Deutsch' },
+    'en-US': { localeName: 'English (US)' },
+    'de-DE': { localeName: 'Deutsch' },
   }
 
   test('resolves locale from controlled prop', () => {
@@ -110,13 +110,13 @@ describe('useCreateLocalizationContext', () => {
     const store = useMemoryKeyValueStore()
     const localesWithDefaults: SupportedLocalesConfig = {
       'en-US': {
-        localName: 'English (US)',
+        localeName: 'English (US)',
         defaultStartingWeekday: 'sunday',
         defaultCalendarType: 'Gregorian',
         defaultIs24HourFormat: false,
       },
       'de-DE': {
-        localName: 'Deutsch',
+        localeName: 'Deutsch',
         defaultStartingWeekday: 'monday',
         defaultIs24HourFormat: true,
       },
@@ -136,7 +136,7 @@ describe('useCreateLocalizationContext', () => {
     const store = useMemoryKeyValueStore()
     const localesWithDefaults: SupportedLocalesConfig = {
       'en-US': {
-        localName: 'English (US)',
+        localeName: 'English (US)',
         defaultStartingWeekday: 'sunday',
       },
     }

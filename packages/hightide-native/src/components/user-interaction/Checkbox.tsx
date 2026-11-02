@@ -8,7 +8,7 @@ import {
 } from 'react-native'
 import {
   useControlledState,
-  useEventCallbackStabilizer
+  useStableEvent
 } from '@helpwave/hightide-utils/hooks'
 
 import type { ColorPairToken } from '@helpwave/hightide-design/theme-tokens'
@@ -74,8 +74,8 @@ export const Checkbox = ({
   const interactive = !disabled && !readOnly
   const [isPressed, setIsPressed] = useState(false)
 
-  const onEditCompleteStable = useEventCallbackStabilizer(onEditComplete)
-  const onValueChangeStable = useEventCallbackStabilizer(onValueChange)
+  const onEditCompleteStable = useStableEvent(onEditComplete)
+  const onValueChangeStable = useStableEvent(onValueChange)
 
   const onChangeWrapper = useCallback((nextValue: boolean) => {
     onValueChangeStable(nextValue)

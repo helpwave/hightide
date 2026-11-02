@@ -1,4 +1,6 @@
 {
+  "@@locale": "ru-RU",
+  "@@prefix": "time",
   "january": "Январь",
   "february": "Февраль",
   "march": "Март",
@@ -15,7 +17,7 @@
   "@century": {
     "placeholders": {
       "count": {
-        "type": "number"
+        "type": "int"
       }
     }
   },
@@ -23,7 +25,7 @@
   "@decade": {
     "placeholders": {
       "count": {
-        "type": "number"
+        "type": "int"
       }
     }
   },
@@ -31,7 +33,7 @@
   "@year": {
     "placeholders": {
       "count": {
-        "type": "number"
+        "type": "int"
       }
     }
   },
@@ -39,7 +41,7 @@
   "@month": {
     "placeholders": {
       "count": {
-        "type": "number"
+        "type": "int"
       }
     }
   },
@@ -49,7 +51,7 @@
   "@day": {
     "placeholders": {
       "count": {
-        "type": "number"
+        "type": "int"
       }
     }
   },
@@ -57,7 +59,7 @@
   "@hour": {
     "placeholders": {
       "count": {
-        "type": "number"
+        "type": "int"
       }
     }
   },
@@ -65,7 +67,7 @@
   "@minute": {
     "placeholders": {
       "count": {
-        "type": "number"
+        "type": "int"
       }
     }
   },
@@ -73,7 +75,7 @@
   "@second": {
     "placeholders": {
       "count": {
-        "type": "number"
+        "type": "int"
       }
     }
   },
@@ -81,7 +83,7 @@
   "@millisecond": {
     "placeholders": {
       "count": {
-        "type": "number"
+        "type": "int"
       }
     }
   },
@@ -89,7 +91,7 @@
   "@microsecond": {
     "placeholders": {
       "count": {
-        "type": "number"
+        "type": "int"
       }
     }
   },
@@ -97,7 +99,7 @@
   "@nanosecond": {
     "placeholders": {
       "count": {
-        "type": "number"
+        "type": "int"
       }
     }
   },
@@ -110,7 +112,7 @@
   "@inDays": {
     "placeholders": {
       "days": {
-        "type": "number"
+        "type": "int"
       }
     }
   },
@@ -118,20 +120,24 @@
   "@agoDays": {
     "placeholders": {
       "days": {
-        "type": "number"
+        "type": "int"
       }
     }
   },
   "sMonthLong": "{month, select, january{Январь} february{Февраль} march{Март} april{Апрель} may{Май} june{Июнь} july{Июль} august{Август} september{Сентябрь} october{Октябрь} november{Ноябрь} december{Декабрь} other{Неизвестный месяц}}",
   "@sMonthLong": {
     "placeholders": {
-      "month": {}
+      "month": {
+        "type": "string"
+      }
     }
   },
   "sMonthShort": "{month, select, january{Янв} february{Фев} march{Мар} april{Апр} may{Май} june{Июн} july{Июл} august{Авг} september{Сен} october{Окт} november{Ноя} december{Дек} other{???}}",
   "@sMonthShort": {
     "placeholders": {
-      "month": {}
+      "month": {
+        "type": "string"
+      }
     }
   }
 }

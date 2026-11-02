@@ -5,28 +5,142 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/)
 and adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [0.19.0] - unpublished
+
+### Added
+
+- Data-input components are grouped by the value they capture: `boolean`, `text`, `number`, `file`, `selection`, and `dateTime`. Stories use the same folders. `InputComponentInterface` is removed. Every data-input aggregate uses `ControllableInputProps`, every data-input state manager uses `InputStateMangerProps`, and other state managers use `StateManagerProps`
+- Each of those inputs is an aggregate with `StateManager`, parts, `Context`, `Provider`, and `Consumer`. Folder indexes export the aggregate and types only
+- `TabSwitcher` `variant` `'underline' | 'segmented-chips'`, default `'underline'`. The list and each item set `data-style-variant` to that value
+- `ExpandableHeader` `triggerProps` for the header toggle button
+- `ExpandableContent` `isClosingOnClick` to collapse when the content is clicked
+- `HorizontalNavigationBar` and `FullScreenVerticalNavigation` aggregates. The bar is a horizontally scrolling row with dropdown groups. Fullscreen navigation is a `StateManager` overlay (`open` / `close` / `toggle`) wrapping `VerticalNavigationMenu`
+- `VerticalNavigationMenu` is a folder under `navigation/` (`Item`, `Context`, `Provider`, `Consumer`). Tree expansion context lives with that aggregate; shared item types stay in `navigation/types.ts`
+- Navigation styles split into `horizontal-navigation.css`, `vertical-navigation.css`, and `full-screen-vertical-navigation.css`
+- Subpath package exports: `@helpwave/hightide/components`, `@helpwave/hightide/global-contexts`, `@helpwave/hightide/hooks`, and `@helpwave/hightide/utils`, each with types
+- `Pressable` for colored buttons, with `coloringStyle` (`filled` | `foreground`), `colorVariant` (`normal` | `tonal` | `transparent`), `bordered`, `elevated`, and `processingIndicator`
+- `Button` and `IconButton` `variant`: `elevated`, `filled`, `tonal`, `outlined` (`Button` only), and `foreground`
+- `surfaceInverse` button color
+- `Icon` for a sized icon element (`xs` through `xl`)
+- `Divider` with `direction` `horizontal` or `vertical`
+- `ListItem`, `ListActionItem`, and `ListNavigationItem` (`href`, `onClick`, or `LinkComponent`; external links show an external icon)
+- Compound `Expandable`: `Expandable.Root`, `Expandable.Trigger` (render prop with toggle props), `Expandable.Content`, `Expandable.Context`, and `Expandable.Consumer`
+- `ExpandableSection`, `ExpandableSectionHeader`, and `ExpandableSectionContent` for the previous combined expandable layout
+- Compound `Avatar`: `Avatar.Root`, `Avatar.Image`, `Avatar.Fallback`, `Avatar.Name`, `Avatar.StatusIndicator`, and `Avatar.Context`. The combined `Avatar` accepts `status`, `hasStatusIndicator`, and slot props
+- Compound `AvatarGroup`: `AvatarGroup.Container`, `AvatarGroup.Overlap`, and `AvatarGroup.AdditionalText`
+- Compound `WheelPicker` under `data-input/selection`: `WheelPicker.StateManager`, `WheelPicker.Root`, `WheelPicker.Option`, `WheelPicker.Bar`, and `WheelPicker.Context`, with `value` / `initialValue`, `onValueChange`, `onStateEvent`, `onLoop`, `isLooping`, and `visibleRows`
+- `DateWheelPicker`, `TimeWheelPicker`, and `DateTimeWheelPicker`
+- `ChatAttachmentMessageBubble`, a `ChatMessageBubble` specialization for a file name, metadata, and optional download action
+- `ColoringUtils` with `build` (defaults: mode `static`, color variant `normal`, coloring style `filled`) and setters `dataColor`, `dataColoringMode`, `dataColorVariant`, `dataColoringStyle`, `dataBordered`, and `dataElevated`
+- Coloring attributes `data-coloring-mode` (`static` | `interactive`), `data-color`, `data-color-variant`, `data-coloring-style`, `data-bordered`, and `data-elevated`. Hover (8%) and press (16%) state layers apply only when mode is `interactive`
+- `--coloring-state-hover` and `--coloring-state-press`
+- `--appearance-subtle` (`70%`)
+- `text-description`, which sets the text color from the active foreground and background
+- Added a `ModalPanel` component for the modal panel
+
+### Changed
+
+- `ThemeConfig`, `LocalizationConfig`, and the base `HightideConfig` come from `@helpwave/hightide-utils/context`. Web `HightideConfig` adds `tooltip`
+- Default locales and theme metadata use `HightideSupportedLocaleInformation` and `HightideSupportedThemeInformation`. Theme labels use `themeNameLight` / `themeNameDark`
+- `Table` and `TableWithSelection` take columns only through `columns`. `TableColumn` and column registration are removed
+- `FileInput` is an aggregate with `FileInput.StateManager`, `FileInput.Layout`, `FileInput.Input`, `FileInput.Trigger`, and `FileInput.Menu`. `FileInput.Layout` places the file input and the trigger together
+- Data-input aggregates, including `Select`, `MultiSelect`, `Combobox`, `FileInput`, and `LabelledCheckbox`, use `value`, `initialValue`, `onValueChange`, and `onStateEvent`. Completion dispatches `{ type: 'commit', value }`. `isInvalid`, `isDisabled`, `isReadOnly`, and `isRequired` replace `invalid`, `disabled`, `readOnly`, and `required`. `NumberStepperInput` uses `isLooping`, `incrementProps.className`, and `decrementProps.className`
+- Property fields (`PropertyBase`, `TextProperty`, `NumberProperty`, `DateProperty`, `CheckboxProperty`, `SingleSelectProperty`, and `MultiSelectProperty`) use `ControllableInputProps`. `required` and `readOnly` are removed. `isRequired` and `isReadOnly` apply to the shell and the input. `isDisabled` or `isReadOnly` locks clear and remove. A field is invalid when `isInvalid` is set, or when it is required and empty. `TextProperty`, `DateProperty`, `SingleSelectProperty`, and `MultiSelectProperty` forward `value`, `initialValue`, `onValueChange`, and `onStateEvent`. `NumberProperty` emits `change` and `commit`. `CheckboxProperty` emits `toggle` and can start from `initialValue`. `PropertyBase` children receive `isRequired` instead of `required`
+- `Menu` is a compound component: `Menu.StateManager`, `Menu.Trigger`, `Menu.Content`, `Menu.Item`, `Menu.NavigationItem`, `Menu.Context`, `Menu.Provider`, and `Menu.Consumer`. `Menu.Item` is the action tile and closes the menu when `isClosingOnClick` is set. Open, close, and toggle go through the state manager
+- `TabSwitcher` is an aggregate with `TabSwitcher.StateManager`, `TabSwitcher.Layout`, `TabSwitcher.TabList`, `TabSwitcher.TabPanel`, `TabSwitcher.Context`, `TabSwitcher.Provider`, and `TabSwitcher.Consumer`. `TabView` and the panel portal are removed. `activeId`, `onActiveIdChange`, and `initialActiveId` stay the same
+- `segmented-chips` uses fully rounded outer corners, slightly rounded inner corners, a primary active item, and neutral inactive items. `underline` keeps the current bottom border
+- Form creation and validation use `@helpwave/hightide-utils/form`. `FormField` keeps its current props and bag
+- Click and keyboard handlers no longer call `event.stopPropagation` (`Button`, `IconButton`, `Select`, `MultiSelect`, `FileInput`, `HorizontalNavigationBar`, `Expandable`, and `PropsUtil` helpers)
+- `Button` no longer stops click bubbling; `allowClickEventPropagation` has no effect
+- `Expandable` header is a `<button>`; `allowContainerToggle` is removed
+- `FAQSection` uses `isClosingOnClick` instead of container toggle
+- `Navigation` is replaced by `HorizontalNavigationBar` and `FullScreenVerticalNavigation`. Links use `url` instead of `link`, and every item requires `id`. Horizontal items reuse the vertical row, hover, focus, icon, and external-link treatment. `AppPage` mobile uses fullscreen vertical navigation; desktop keeps `AppSidebar` with `VerticalNavigationMenu`
+- `VerticalNavigationMenu` moved from `navigation-menus/` to `navigation/VerticalNavigationMenu/`. `NavigationProvider`, `useNavigationContext`, and `useNavigationItem` are `VerticalNavigationMenu.Provider`, `useVerticalNavigationMenuContext`, and `useVerticalNavigationMenuItem`
+- `MultiSelectChipDisplayTrigger` uses an overlay click target so chip remove buttons do not need to stop propagation
+- The package is `"type": "module"` and no longer publishes a root `.` export. Import from the subpath exports above
+- Component styling uses class names instead of `data-name`
+- `Button` and `IconButton` take `variant` instead of `coloringStyle` (`solid`, `outline`, `text`, `tonal`, `tonal-outline`). `Button` children are a string, with `leading` and `trailing` icon components. Processing shows a spinner in place of an icon
+- `Card` is a sized container. Title, description, leading, and trailing content are composed by the caller
+- `NavigationItemData` is shared by `HorizontalNavigationBar`, `FullScreenVerticalNavigation`, and `VerticalNavigationMenu`: a link (`url`, optional `external`), a group (`items`), or a label, each with optional `icon`
+- `Expandable` is the compound primitive. The previous combined component is `ExpandableSection`
+- `DatePicker` is `CalendarDatePicker` and `DayPicker` is `CalendarDayPicker`. Date, year-month, and time selection use wheel pickers. `DateTimePicker` `timeInputProps` configures `TimeWheelPicker`
+- Interactive color no longer uses dedicated hover tokens. Hover and press are a foreground state layer, or the same mix on elements that cannot paint a pseudo-element (native inputs and table rows)
+- Interactive controls no longer animate color transitions
+- `ChatMessageBubble` requires `direction` and takes `timestamp` as a `Date` and `status` (`sending` | `sent` | `received` | `read`), matching native. String children render as message text; other children render inside the bubble
+- `ChatMessageBubble` uses static coloring (`primary` outgoing, `neutral` incoming). Its timestamp and status icon use `text-description`
+- Palette colors are `oklch`, with the hex value declared first so older browsers keep a color. The gray scale uses even lightness steps
+- `color-mix` interpolates in `oklch` (coloring, focus, inputs, tables, properties, and the process-model active fill)
+- Description text is no longer a fixed gray. `text-description` mixes `--coloring-foreground` (otherwise `--color-on-surface`) into `--coloring-color` (otherwise `--color-surface`) at `--appearance-subtle`
+- Dark theme background is `gray-800`, surface is `gray-700`, surface variant is `gray-750`, and primary stays `purple-500`
+- Coloring custom properties start as `initial` instead of `transparent`
+- `Select` and `MultiSelect` show the search field when the option count is at least `searchableThreshold` (default `6`)
+- `Select` and `MultiSelect` menu options use interactive foreground coloring with `surface-inverse` instead of a primary highlight
+- Input elements no longer set coloring data attributes. `Select` and `MultiSelect` triggers use the input hover and press background
+- `WheelPicker` moved from `interaction` to `data-input/selection`. It uses `ControllableDOMInputProps` (`initialValue`, `isDisabled`, `isInvalid`, `isReadOnly`, `isRequired`, `onStateEvent`) and dispatches `change`, `commit`, and `loop`
+- Clicking a looped `WheelPicker` value selects it, including the repeated value past the end of the list
+- `DateTimePickerDialog` centers its wheels horizontally
+- `date-time-input-dialog-popup` sets `data-time-format` (`12h` or `24h`). A 12-hour `dateTime` popup uses a larger tablet minimum width
+- Value callbacks use `ControllableInputProps`, including optional `initialValue`, `isInvalid`, `isDisabled`, `isReadOnly`, and `isRequired`. Form fields keep `FormFieldDataHandling` for their required `value`, `onValueChange`, and `onStateEvent` props
+- Components are grouped into `layout`, `interaction`, `data-input`, and `visualization`. Feature folders such as `chat` and `branding` use the same grouping
+- `TabSwitcher`, `ListActionItem`, and `ListNavigationItem` live in `layout`
+- `ChatConversationRow` is an aggregate wrapping `ListActionItem`, with `Layout`, `Avatar`, `Content`, `Header`, `Title`, `Timestamp`, `Body`, `Preview`, `SentIndicator`, `UnreadCount`, `Context`, `Provider`, and `Consumer`. The combined component takes `layoutRef` / `layoutProps` and matching `*Ref` / `*Props` for each part
+- `BreadCrumbs` is an aggregate with `Layout`, `Item`, `Link`, `Divider`, `Context`, `Provider`, and `Consumer`. The combined component takes `crumbs`, `LinkElement`, `divider`, `layoutRef` / `layoutProps`, `itemProps`, `linkProps`, and `dividerProps`. Each crumb can set `className` and `style`
+- `AppPage` is an aggregate with `StateManager`, `Layout`, `Sidebar`, `SidebarHeader`, `SidebarNav`, `SidebarFooter`, `Body`, `Header`, `MenuButton`, `Content`, `Main`, `Context`, `Provider`, and `Consumer`. It owns fullscreen-nav `isOpen` (`open` / `close` / `toggle`) and composes `FullScreenVerticalNavigation.StateManager` and `FullScreenVerticalNavigation.Panel`. `hasSpacer` sets `data-bottom-spacer` on `Main`
+- `ListActionItem` forwards a ref to its button
+- `ChatMessageComposer` is an aggregate with `StateManager`, `Layout`, `ActionLayout`, `Textarea`, `SendButton`, `Context`, `Provider`, and `Consumer`. The combined component takes `layoutRef` / `layoutProps`, `actionLayoutRef` / `actionLayoutProps`, `textareaRef` / `textareaProps`, and `sendButtonRef` / `sendButtonProps`. `placeholder` is set through `textareaProps`, send tooltip through `sendButtonProps`. Events are `change`, `blur`, and `send`. `isDisabled`, `isReadOnly`, `isInvalid`, and `isRequired` apply to the textarea, not the layout. It uses `ControllableInputProps` and lives in `chat/data-input`
+- `TextInput` and `Textarea` no longer dispatch `compositionStart` or `compositionEnd`
+- `properties` is its own component folder. A folder that holds one aggregate uses that aggregate's name, including `Drawer`, `PopUp`, and `Table`. Stories follow the same folders
+- `Select`, `MultiSelect`, and `Combobox` take an `options` array on the state manager. A string value can omit `id` and `label`; both default to that string. Any other value requires `id` and `label`. An option can set `disabled` and `visual` (`className`, `style`, `content`)
+- `Select` and `MultiSelect` parts are `StateManager`, `Trigger`, `PopUp`, `Searchbar`, `List`, `Context`, `Provider`, and `Consumer`. `MultiSelect.ChipDisplayTrigger` remains. The combined components take `triggerRef`, `popupRef`, `searchbarRef`, and `listRef`, with `triggerProps`, `popupProps`, `searchbarProps`, and `listProps`
+- `Combobox` parts are `StateManager`, `Searchbar`, `PopUp`, `List`, `ListItemElement`, `Context`, `Provider`, and `Consumer`. The search field stays outside the popup. The combined component takes `searchbarRef`, `popupRef`, and `listRef`. Placeholder is set through `searchbarProps`. `isAllowingNewValue` and `onNewValueAdded` offer a value that is not already in `options`
+- `Select.List`, `MultiSelect.List`, and `Combobox.List` render `options` and take `listElement` for a custom row. The state manager owns the list ref and option refs, and scrolls the highlighted row into view
+- Selection state managers use `ControllableDOMInputProps`. Optional `id` is set on the `Select` and `MultiSelect` trigger, and on the `Combobox` search input
+- `Select` and `MultiSelect` values are no longer `T | null`. An empty selection is omitted
+- Readonly `.input` text, border, and focus use 80% opacity
+- `Carousel` is a compound component: `Carousel.Root`, `Carousel.Container`, `Carousel.Slide`, `Carousel.Arrows`, `Carousel.FadeLayover`, `Carousel.Stepper`, `Carousel.Context`, and `Carousel.Consumer`. The combined `Carousel` still composes them from `children`, `hintNext`, `arrows`, `dots`, and `blurColor`
+- `Modal` is a compound component: `Modal.Root`, `Modal.Container`, `Modal.Background`, `Modal.Content`, `Modal.Title`, `Modal.Description`, `Modal.CloseButton`, `Modal.Opener`, `Modal.Context`, and `Modal.Consumer`. The combined `Modal` takes `titleElement`, `description`, `position`, `isClosable`, and slot props `containerProps`, `backgroundProps`, `contentProps`, `titleProps`, `descriptionProps`, and `closeButtonProps`
+- `isClosable` (default `true`) hides the close button and ignores close requests when `false`
+- `Modal.Container` closes on Escape when the event default has not been prevented
+- `ConfirmDialog` is `ConfirmModal`, `DiscardChangesDialog` is `DiscardChangesModal`, `InputDialog` is `InputModal`, `LanguageDialog` is `LanguageModal`, and `ThemeDialog` is `ThemeModal`
+- `Modal` content max width is `calc(min(100vw - 1rem, 60rem))` by default, `calc(min(100vw - 2rem, 80rem))` from the tablet breakpoint, and `calc(min(100vw - 4rem, 120rem))` from the desktop breakpoint
+- `Modal` content min height is `calc(min(64rem, 100vh - 1rem))` by default, `calc(min(64rem, 100vh - 2rem))` from the tablet breakpoint, and `calc(min(64rem, 100vh - 4rem))` from the desktop breakpoint
+- `ConfirmModal` and `DiscardChangesModal` action buttons stack in a column below the tablet breakpoint
+- `input-element` to a component className instead of a tailwind utility
+- default element sizes to match hightide-design
+- updated `Modal` parts stylings
+
+### Removed
+- `useTranslatedValidators`. Form validation returns error codes from `FormValidationUtils` without translating them
+- `ExpandableRoot`'s `allowContainerToggle`
+- Root import `@helpwave/hightide` (`src/index.ts`)
+- `ActionCard`, `NavigationCard`, `AvatarWithStatus`, and `AvatarWithLabel`
+- `ScrollPicker`
+- `TimeInput`
+- `ExpandableHeader`
+- `coloringStyle` values `solid`, `outline`, `text`, and `tonal-outline` on `Button` and `IconButton`
+- CSS class `coloring` and the hover color tokens `--color-primary-hover`, `--color-secondary-hover`, `--color-positive-hover`, `--color-warning-hover`, `--color-negative-hover`, `--color-surface-hover`, `--color-neutral-hover`, `--color-neutral-text-hover`, and `--color-neutral-outline-hover` (light and dark)
+- `ChatMessageCard` and `ChatAttachmentCard`. Structured messages are composed with `ChatMessageBubble`; file messages use `ChatAttachmentMessageBubble`. `ChatMessageBubble` `readReceipt` is replaced by `status`
+- Fixed `--color-description` tokens (`gray-600` in light, `gray-400` in dark)
+- `showSearch` on `Select` and `MultiSelect`
+- `Select.Root`, `Select.Content`, `Select.Option`, `MultiSelect.Root`, `MultiSelect.Content`, `MultiSelect.Option`, `Combobox.Root`, `Combobox.Input`, and `Combobox.Option`. Options are data on the state manager. The menu is `PopUp`, `Searchbar`, and `List`
+- `contentProps` on combined `Select` and `MultiSelect`. Use `popupProps`
+- Standalone `CarouselTabs` and `CarouselSlide`. Use `Carousel.Stepper` and `Carousel.Slide`
+- Unused `Carousel` prop `overScrollThreshold`
+- `Dialog`, `DialogRoot`, and `DialogOpenerWrapper`. Use `Modal`
+- CSS classes `dialog-container`, `dialog-background`, and `dialog-content`. Use `modal-container`, `modal-background`, and `modal-content`
+- `isModal` on `Modal`. A modal is always a modal
+- `backgroundClassName` and `containerClassName` on `Modal`. Use `backgroundProps` and `containerProps`
+- `ConfirmDialog`, `DiscardChangesDialog`, `InputDialog`, `LanguageDialog`, and `ThemeDialog`
+- `coloring-*` classNames in favor of the new coloring data attributes
+- `Navigation`, `NavigationItemList`, `NavigationItemType`, and `AppPageNavigationItem`
+- `navigation-menus/` folder. Use `VerticalNavigationMenu/` and `navigation/types.ts`
+
 ## [0.18.0] - 2026-10-13
 
 ### Added
 
-- `ExpandableHeader` `triggerProps` for the header toggle button
-- `ExpandableContent` `isClosingOnClick` to collapse when the content is clicked
-- `NavigationItemList` `onClose` so Escape on items can close the parent menu
 - Default supported locales and theme name translations for Portuguese (Brazil) (`pt-BR`), Spanish (`es-ES`), French (`fr-FR`), Dutch (`nl-NL`), Italian (`it-IT`), Polish (`pl-PL`), Turkish (`tr-TR`), Romanian (`ro-RO`), Greek (`el-GR`), and Russian (`ru-RU`)
 - Localized date segment placeholders for the new locales
-
-### Changed
-
-- Click and keyboard handlers no longer call `event.stopPropagation` (`Button`, `IconButton`, `Select`, `MultiSelect`, `FileInput`, `Navigation`, `Expandable`, and `PropsUtil` helpers)
-- `Button` no longer stops click bubbling; `allowClickEventPropagation` has no effect
-- `Expandable` header is a `<button>`; `allowContainerToggle` is removed
-- `FAQSection` uses `isClosingOnClick` instead of container toggle
-- `Navigation` handles Escape on the focused control instead of a capturing menu handler
-- `MultiSelectChipDisplayTrigger` uses an overlay click target so chip remove buttons do not need to stop propagation
-
-### Removed
-
-- `ExpandableRoot`'s `allowContainerToggle`
 
 ## [0.17.2] - 2026-09-23
 

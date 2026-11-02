@@ -1,0 +1,9 @@
+@layer components {
+  .time-wheel-picker {
+    @apply flex-row-2 items-center justify-center flex-wrap select-none;
+  }
+
+  .time-wheel-picker-separator {
+    @apply typography-title-md font-semibold text-on-background;
+  }
+}

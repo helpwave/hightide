@@ -5,6 +5,30 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/)
 and adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [0.2.0] - unpublished
+
+### Added
+
+- `createFormStore` takes `initialValues`, `initialTouchedValues`, and a fixed `validation` list of `FormValidator` objects. Field errors are `string[]`. Async checks use `validationRunnerError` (`ValidationRunnerState`). `FormValidationUtils` groups checks by `string`, `number`, and `selection`, each with `mapTranslation`. `FormValidationErrorTypeUtils` lives in `utils/form-validation`. Validation messages use `validationError*` translation keys
+- `useStateMachine` and `useStateMachineBinding` hooks
+- Compiled translations for `el-GR`, `es-ES`, `fr-FR`, `it-IT`, `nl-NL`, `pl-PL`, `pt-BR`, `ro-RO`, `ru-RU`, and `tr-TR`
+- `HightideSupportedLocaleInformation` and `HightideSupportedThemeInformation` shared locale and theme metadata
+- `ThemeConfig`, `LocalizationConfig`, and `HightideConfig` config types
+- `themeNameLight` and `themeNameDark` translation keys
+- `ThemeUtils.resolveThemeInformationLabel` for theme display names
+
+### Changed
+
+- Renamed `useEventCallbackStabilizer` to `useStableEvent`
+- updated to `@helpwave/internationalization` to `0.5.0`
+- Renamed `LocaleInformation.localName` to `localeName`
+- `ThemeInformation` is `{ name, isDark, translationKey?, nameTranslations?, theme? }`. Labels prefer `translationKey` over `nameTranslations`
+- Removed `defaultTimeZone` from `LocaleInformation`. Time zone still resolves from the controlled value, store, or `fallbackTimeZone`
+
+### Removed
+
+- `EmailValidationUtils` and the standalone `validateEmail` export. Email checks go through `FormValidationUtils.email`
+
 ## [0.1.9] - 2026-10-13
 
 ### Added

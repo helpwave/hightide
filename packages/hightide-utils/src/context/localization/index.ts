@@ -1,4 +1,5 @@
 export * from './LocalizationContext'
+export * from './HightideSupportedLocaleInformation'
 export * from './LocalizationProvider'
 export * from './useCreateLocalizationContext'
 export * from './useDateTimeFormat'

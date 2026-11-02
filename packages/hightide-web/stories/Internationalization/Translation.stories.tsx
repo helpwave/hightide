@@ -1,4 +1,4 @@
-import type { Meta, StoryObj } from '@storybook/nextjs-vite'
+import type { Meta, StoryObj } from '@storybook/react-vite'
 import { useHightideTranslation } from '@helpwave/hightide-utils/context/translation'
 
 type StoryArgs = {
@@ -30,7 +30,9 @@ export const translation: Story = {
         <br/>
         {translation('sGender', { gender }) + '. '}
         <br/>
-        {translation('outOfRangeString', { min, max })}
+        {translation('nResultsFound', { count: min })}
+        {' '}
+        {translation('nMoreFiles', { count: max })}
       </p>
     )
   },
@@ -47,7 +49,9 @@ return (
     <br/>
     {translation('gender', { gender }) + '. '}
     <br/>
-    {translation('outOfRangeString', { min, max })}
+    {translation('nResultsFound', { count: min })}
+    {' '}
+    {translation('nMoreFiles', { count: max })}
   </p>
 )
         `.trim(),

@@ -42,7 +42,7 @@
     }
   }
 
-  [data-name="drawer-background"] {
+  .drawer-background {
     @apply fixed inset-0 w-screen h-screen bg-overlay-shadow;
     &[data-state="opening"] {
       animation-duration: var(--animation-duration-in);

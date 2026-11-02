@@ -8,3 +8,7 @@ function compareDocumentPosition(a: Node | null | undefined, b: Node | null | un
 export const DOMUtils = {
   compareDocumentPosition,
 }
+
+export type DataAttributes = {
+  [K in `data-${string}`]?: string | number | boolean
+}

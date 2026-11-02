@@ -4,7 +4,7 @@ import { useCallback, useMemo } from 'react'
 import type { ColorPairToken } from '@helpwave/hightide-design/theme-tokens'
 import {
   useControlledState,
-  useEventCallbackStabilizer
+  useStableEvent
 } from '@helpwave/hightide-utils/hooks'
 
 import type {
@@ -65,10 +65,10 @@ export function FileInputRoot({
     defaultValue: resolveFileInputMaxFiles(maxFiles) === 1 ? false : initialIsOpen,
   })
 
-  const onEditCompleteStable = useEventCallbackStabilizer(onEditComplete)
-  const onCloseStable = useEventCallbackStabilizer(onClose)
-  const onIsOpenChangeStable = useEventCallbackStabilizer(onIsOpenChange)
-  const pickFilesStable = useEventCallbackStabilizer(pickFiles)
+  const onEditCompleteStable = useStableEvent(onEditComplete)
+  const onCloseStable = useStableEvent(onClose)
+  const onIsOpenChangeStable = useStableEvent(onIsOpenChange)
+  const pickFilesStable = useStableEvent(pickFiles)
 
   const commitFiles = useCallback((next: readonly FileInputItem[]) => {
     setFiles(next)

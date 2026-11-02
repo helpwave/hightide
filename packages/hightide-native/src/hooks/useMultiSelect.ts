@@ -6,7 +6,7 @@ import {
 } from 'react'
 
 import {
-  useEventCallbackStabilizer,
+  useStableEvent,
   useListNavigation,
   useMultiSelection,
   useSearch,
@@ -89,8 +89,8 @@ export function useMultiSelect({
     isControlled: controlledValue !== undefined,
   })
 
-  const editCompleteStable = useEventCallbackStabilizer(onEditComplete)
-  const onCloseStable = useEventCallbackStabilizer(onClose)
+  const editCompleteStable = useStableEvent(onEditComplete)
+  const onCloseStable = useStableEvent(onClose)
 
   const { searchResult: visibleOptions } = useSearch({
     items: options,

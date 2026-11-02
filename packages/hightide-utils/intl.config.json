@@ -1,0 +1,22 @@
+{
+  "supportedLocales": [
+    "en-US",
+    "de-DE",
+    "el-GR",
+    "es-ES",
+    "fr-FR",
+    "it-IT",
+    "nl-NL",
+    "pl-PL",
+    "pt-BR",
+    "ro-RO",
+    "ru-RU",
+    "tr-TR"
+  ],
+  "compileTo": "typescript",
+  "name": "hightideTranslation",
+  "outputFile": "./src/i18n/translations.ts",
+  "translationFiles": [
+    "./locales"
+  ]
+}

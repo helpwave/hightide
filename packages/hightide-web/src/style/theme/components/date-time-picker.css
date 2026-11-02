@@ -2,4 +2,8 @@
   .date-time-picker {
     @apply flex-col-3;
   }
+
+  .date-time-wheel-picker {
+    @apply flex-row-4 items-center justify-center flex-wrap;
+  }
 }

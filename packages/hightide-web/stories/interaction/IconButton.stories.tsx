@@ -1,0 +1,31 @@
+import type { Meta, StoryObj } from '@storybook/react-vite'
+import { StorybookStyling } from '../../src/storybook/styling'
+import { action } from 'storybook/actions'
+import { IconButton } from '../../src/components/interaction/IconButton'
+import { MinusIcon } from 'lucide-react'
+
+const meta = {
+  component: IconButton,
+  argTypes: {
+    color: {
+      control: 'select',
+      options: StorybookStyling.colors,
+    },
+  },
+} satisfies Meta<typeof IconButton>
+
+export default meta
+type Story = StoryObj<typeof meta>;
+
+export const iconButton: Story = {
+  args: {
+    disabled: false,
+    isProcessing: false,
+    color: 'primary',
+    size: 'md',
+    variant: 'filled',
+    tooltip: 'Subtract',
+    onClick: action('Clicked'),
+    icon: MinusIcon,
+  },
+}

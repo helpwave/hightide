@@ -1,5 +1,5 @@
-import { ProcessModelLayoutUtilities } from '../../src/components/display-and-visualization/process-model/layoutProcessModel'
-import type { ProcessModelGraph } from '../../src/components/display-and-visualization/process-model/types'
+import { ProcessModelLayoutUtilities } from '../../src/components/visualization/process-model/layoutProcessModel'
+import type { ProcessModelGraph } from '../../src/components/visualization/process-model/types'
 
 const verticalTwoNodeGraph: ProcessModelGraph = {
   nodes: [

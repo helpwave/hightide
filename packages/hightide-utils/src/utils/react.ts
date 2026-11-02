@@ -9,7 +9,7 @@ function assignForwardRef<T>(element: T | null, ref?: ForwardedRef<T>) {
   }
 }
 
-function assingRefsBuilder<T>(refs: ForwardedRef<T>[]) : (el: T | null) => void {
+function assingRefsBuilder<T>(refs: (ForwardedRef<T> | undefined)[]) : (el: T | null) => void {
   return (element) => {
     refs.forEach(ref => {
       assignForwardRef(element, ref)

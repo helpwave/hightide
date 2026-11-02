@@ -1,9 +1,9 @@
 import type {
   Meta,
   StoryObj
-} from '@storybook/nextjs-vite'
+} from '@storybook/react-vite'
 
-import { LanguageSelect } from '../../src/components/layout/dialog/premade/LanguageDialog'
+import { LanguageSelect } from '../../src/components/layout/Modal/premade/LanguageModal'
 import { HightideProvider } from '../../src/global-contexts/HightideProvider'
 import { HightideConfigUtils } from '../../src/global-contexts/hightide-config/HightideConfigUtils'
 import {
@@ -35,7 +35,7 @@ const frenchTranslations = {
 
 const demoSupportedLocales = {
   ...HightideConfigUtils.defaultSupportedLocales,
-  'fr-FR': { localName: 'Français' },
+  'fr-FR': { localeName: 'Français' },
 }
 
 const DemoStrings = () => {
@@ -126,7 +126,7 @@ const useExtendedTranslation = () => {
     fallbackLocale: 'fr-FR',
     supportedLocales: {
       ...HightideConfigUtils.defaultSupportedLocales,
-      'fr-FR': { localName: 'Français' },
+      'fr-FR': { localeName: 'Français' },
     },
   }}
   translation={{ translation: [demoTranslations, frenchTranslations] }}

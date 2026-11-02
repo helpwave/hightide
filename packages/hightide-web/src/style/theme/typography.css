@@ -3,25 +3,25 @@
    * text
    */
   --text-xs: calc(12 / 16 * 1rem);
-  --text-xs--line-height: calc(15 / 12);
+  --text-xs--line-height: calc(16 / 12);
 
   --text-sm: calc(14 / 16 * 1rem);
-  --text-sm--line-height: calc(17 / 14);
+  --text-sm--line-height: calc(18 / 14);
 
   --text-base: 1rem;
-  --text-base--line-height: calc(19 / 16);
+  --text-base--line-height: calc(20 / 16);
 
   --text-lg: calc(18 / 16 * 1rem);
-  --text-lg--line-height: calc(23 / 18);
+  --text-lg--line-height: calc(24 / 18);
 
   --text-xl: calc(20 / 16 * 1rem);
-  --text-xl--line-height: calc(26 / 20);
+  --text-xl--line-height: calc(28 / 20);
 
   --text-2xl: calc(22 / 16 * 1rem);
   --text-2xl--line-height: calc(28 / 22);
 
   --text-3xl: calc(24 / 16 * 1rem);
-  --text-3xl--line-height: calc(30 / 24);
+  --text-3xl--line-height: calc(32 / 24);
 
   --text-4xl: calc(32 / 16 * 1rem);
   --text-4xl--line-height: calc(40 / 32);

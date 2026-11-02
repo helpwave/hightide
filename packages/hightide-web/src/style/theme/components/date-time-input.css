@@ -1,6 +1,11 @@
 @layer components {
-  [data-name="date-time-input"] {
-    @apply input-element flex-row-2 items-center justify-between w-full px-3 h-element-md rounded-md;
+  .date-time-input-container {
+    @apply relative w-full;
+  }
+
+
+  .date-time-input {
+    @apply flex-row-2 items-center justify-between w-full px-3 h-element-md rounded-md;
 
     &:focus-within {
       box-shadow: var(--focus-box-shadow);
@@ -8,15 +13,15 @@
     }
 
     &[data-has-actions] {
-      @apply pr-0.5;
+      padding-inline-end: calc(var(--spacing) * (3 + var(--action-count, 0) * 9))
     }
   }
 
-  [data-name="date-time-field"] {
+  .date-time-field {
     @apply flex-row-0 items-center min-w-0 grow overflow-hidden;
   }
 
-  [data-name="date-time-segment"] {
+  .date-time-segment {
     @apply rounded-sm px-0.5 text-center tabular-nums cursor-text focus-style-none;
 
     &:focus-visible {
@@ -28,16 +33,22 @@
     }
   }
 
-  [data-name="date-time-separator"] {
-    @apply px-px;
+  .date-time-separator {
+  }
+
+  .data-time-actions-container {
+    @apply absolute right-1 flex-row-1 items-center;
   }
 
   .date-time-input-dialog-popup {
-    @apply flex-col-0 min-w-96;
-    min-width: calc(min(100vw - 4 * var(--spacing), 96 * var(--spacing)));
+    @apply flex-col-0 w-fit min-w-64;
 
     &[data-mode="dateTime"] {
-      @apply tablet:min-w-180;
+      @apply tablet:min-w-100;
+    }
+
+    &[data-mode="dateTime"][data-time-format="12h"] {
+      @apply tablet:min-w-120;
     }
   }
 

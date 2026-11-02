@@ -1,4 +1,6 @@
 {
+  "@@locale": "es-ES",
+  "@@prefix": "time",
   "january": "Enero",
   "february": "Febrero",
   "march": "Marzo",
@@ -15,7 +17,7 @@
   "@century": {
     "placeholders": {
       "count": {
-        "type": "number"
+        "type": "int"
       }
     }
   },
@@ -23,7 +25,7 @@
   "@decade": {
     "placeholders": {
       "count": {
-        "type": "number"
+        "type": "int"
       }
     }
   },
@@ -31,7 +33,7 @@
   "@year": {
     "placeholders": {
       "count": {
-        "type": "number"
+        "type": "int"
       }
     }
   },
@@ -39,7 +41,7 @@
   "@month": {
     "placeholders": {
       "count": {
-        "type": "number"
+        "type": "int"
       }
     }
   },
@@ -49,7 +51,7 @@
   "@day": {
     "placeholders": {
       "count": {
-        "type": "number"
+        "type": "int"
       }
     }
   },
@@ -57,7 +59,7 @@
   "@hour": {
     "placeholders": {
       "count": {
-        "type": "number"
+        "type": "int"
       }
     }
   },
@@ -65,7 +67,7 @@
   "@minute": {
     "placeholders": {
       "count": {
-        "type": "number"
+        "type": "int"
       }
     }
   },
@@ -73,7 +75,7 @@
   "@second": {
     "placeholders": {
       "count": {
-        "type": "number"
+        "type": "int"
       }
     }
   },
@@ -81,7 +83,7 @@
   "@millisecond": {
     "placeholders": {
       "count": {
-        "type": "number"
+        "type": "int"
       }
     }
   },
@@ -89,7 +91,7 @@
   "@microsecond": {
     "placeholders": {
       "count": {
-        "type": "number"
+        "type": "int"
       }
     }
   },
@@ -97,7 +99,7 @@
   "@nanosecond": {
     "placeholders": {
       "count": {
-        "type": "number"
+        "type": "int"
       }
     }
   },
@@ -110,7 +112,7 @@
   "@inDays": {
     "placeholders": {
       "days": {
-        "type": "number"
+        "type": "int"
       }
     }
   },
@@ -118,20 +120,24 @@
   "@agoDays": {
     "placeholders": {
       "days": {
-        "type": "number"
+        "type": "int"
       }
     }
   },
   "sMonthLong": "{month, select, january{Enero} february{Febrero} march{Marzo} april{Abril} may{Mayo} june{Junio} july{Julio} august{Agosto} september{Septiembre} october{Octubre} november{Noviembre} december{Diciembre} other{Mes desconocido}}",
   "@sMonthLong": {
     "placeholders": {
-      "month": {}
+      "month": {
+        "type": "string"
+      }
     }
   },
   "sMonthShort": "{month, select, january{Ene} february{Feb} march{Mar} april{Abr} may{May} june{Jun} july{Jul} august{Ago} september{Sept} october{Oct} november{Nov} december{Dic} other{???}}",
   "@sMonthShort": {
     "placeholders": {
-      "month": {}
+      "month": {
+        "type": "string"
+      }
     }
   }
 }

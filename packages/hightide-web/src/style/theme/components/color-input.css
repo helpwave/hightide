@@ -1,0 +1,98 @@
+@layer components {
+  .color-input-container {
+    @apply relative w-full;
+  }
+
+  .color-input {
+    @apply flex-row-2 items-center w-full px-3 h-element-md rounded-md;
+    padding-inline-end: calc(var(--spacing) * 12);
+
+    &:focus-within {
+      box-shadow: var(--focus-box-shadow);
+      border-color: var(--focus-border-color);
+    }
+  }
+
+  .color-input-field {
+    @apply min-w-0 grow border-0 bg-transparent p-0 text-inherit outline-none focus-style-none placeholder:text-placeholder;
+  }
+
+  .color-input-actions {
+    @apply absolute right-1 flex-row-1 items-center;
+  }
+
+  .color-input-swatch {
+    @apply relative size-6 overflow-hidden rounded-full border border-black;
+    @variant dark {
+      @apply border-white;
+    }
+    background-color: #ffffff;
+    background-image:
+      linear-gradient(45deg, #c8c8c8 25%, transparent 25%),
+      linear-gradient(-45deg, #c8c8c8 25%, transparent 25%),
+      linear-gradient(45deg, transparent 75%, #c8c8c8 75%),
+      linear-gradient(-45deg, transparent 75%, #c8c8c8 75%);
+    background-size: 8px 8px;
+    background-position: 0 0, 0 4px, 4px -4px, -4px 0;
+  }
+
+  .color-input-swatch-fill {
+    @apply absolute inset-0;
+  }
+
+  .color-input-dialog {
+    @apply flex-col-3 w-56 p-3;
+  }
+
+  .color-input-plane {
+    @apply relative aspect-square w-full rounded-md touch-none;
+  }
+
+  .color-input-slider {
+    @apply relative h-3 w-full rounded-full touch-none;
+  }
+
+  .color-input-hue {
+    background-image: linear-gradient(
+      to right,
+      hsl(0 100% 50%),
+      hsl(60 100% 50%),
+      hsl(120 100% 50%),
+      hsl(180 100% 50%),
+      hsl(240 100% 50%),
+      hsl(300 100% 50%),
+      hsl(359 100% 50%)
+    );
+  }
+
+  .color-input-alpha {
+    background-color: #ffffff;
+    background-image:
+      linear-gradient(45deg, #c8c8c8 25%, transparent 25%),
+      linear-gradient(-45deg, #c8c8c8 25%, transparent 25%),
+      linear-gradient(45deg, transparent 75%, #c8c8c8 75%),
+      linear-gradient(-45deg, transparent 75%, #c8c8c8 75%);
+    background-size: 8px 8px;
+    background-position: 0 0, 0 4px, 4px -4px, -4px 0;
+  }
+
+  .color-input-alpha::before {
+    content: "";
+    position: absolute;
+    inset: 0;
+    border-radius: inherit;
+    pointer-events: none;
+    background-image: linear-gradient(to right, transparent, var(--color-input-opaque, transparent));
+  }
+
+  .color-input-marker {
+    @apply absolute size-3 rounded-full border-2 border-white pointer-events-none;
+    z-index: 1;
+    transform: translate(-50%, -50%);
+    box-shadow: 0 0 0 1px rgb(0 0 0 / 0.4);
+  }
+
+  .color-input-slider .color-input-marker {
+    top: 50%;
+  }
+}

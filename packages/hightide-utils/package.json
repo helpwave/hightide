@@ -10,7 +10,7 @@
     "access": "public"
   },
   "license": "AGPL-3.0-only",
-  "version": "0.1.9",
+  "version": "0.2.0",
   "type": "module",
   "files": [
     "dist",
@@ -42,6 +42,11 @@
       "require": "./dist/context/debug/index.cjs",
       "import": "./dist/context/debug/index.js"
     },
+    "./form": {
+      "types": "./dist/form/index.d.ts",
+      "require": "./dist/form/index.cjs",
+      "import": "./dist/form/index.js"
+    },
     "./hooks": {
       "types": "./dist/hooks/index.d.ts",
       "require": "./dist/hooks/index.cjs",
@@ -51,6 +56,11 @@
       "types": "./dist/i18n/index.d.ts",
       "require": "./dist/i18n/index.cjs",
       "import": "./dist/i18n/index.js"
+    },
+    "./interfaces": {
+      "types": "./dist/interfaces/index.d.ts",
+      "require": "./dist/interfaces/index.cjs",
+      "import": "./dist/interfaces/index.js"
     },
     "./utils": {
       "types": "./dist/utils/index.d.ts",
@@ -63,7 +73,7 @@
   },
   "scripts": {
     "clean": "rm -rf dist node_modules",
-    "build-intl": "build-intl --force -i ./locales -o ./src/i18n/translations.ts -n hightideTranslation",
+    "build-intl": "build-intl -c intl.config.json",
     "init": "pnpm run build-intl",
     "build": "tsup",
     "dev": "tsup --watch",
@@ -71,7 +81,8 @@
     "test": "jest"
   },
   "dependencies": {
-    "@helpwave/internationalization": "0.4.0"
+    "@helpwave/internationalization": "0.5.0",
+    "zustand": "5.0.15"
   },
   "peerDependencies": {
     "react": "^19.0.0"

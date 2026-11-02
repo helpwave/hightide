@@ -1,7 +1,12 @@
 import { defineConfig } from 'tsup'
 
 export default defineConfig({
-  entry: ['src/index.ts'],
+  entry: {
+    'components/index': 'src/components/index.ts',
+    'global-contexts/index': 'src/global-contexts/index.ts',
+    'hooks/index': 'src/hooks/index.ts',
+    'utils/index': 'src/utils/index.ts',
+  },
   format: ['cjs', 'esm'],
   outDir: 'dist',
   dts: true,
@@ -17,7 +22,6 @@ export default defineConfig({
     '@tanstack/react-table',
     '@tanstack/react-virtual',
     'lucide-react',
-    '@helpwave/internationalization',
     '@helpwave/hightide-utils',
   ],
   cjsInterop: true,

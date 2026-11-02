@@ -4,8 +4,8 @@
 import { useEffect, useState } from 'react'
 import { act, fireEvent, render, screen } from '@testing-library/react'
 import { TestHightideProvider } from '../setup/TestHightideProvider'
-import { DateTimeField, type DateTimeFieldProps } from '../../src/components/user-interaction/input/DateTimeField'
-import { DateTimeInput } from '../../src/components/user-interaction/input/DateTimeInput'
+import { DateTimeField, type DateTimeFieldProps } from '../../src/components/data-input/dateTime/DateTimeField'
+import { DateTimeInput } from '../../src/components/data-input/dateTime/DateTimeInput'
 
 
 const renderField = (props?: Partial<DateTimeFieldProps>) => {
@@ -139,7 +139,11 @@ describe('DateTimeField', () => {
     })
     try {
       const onEditComplete = jest.fn()
-      renderField({ onEditComplete })
+      renderField({
+        onStateEvent: (event) => {
+          if (event.type === 'commit') onEditComplete(event.value)
+        },
+      })
       const [day, month] = screen.getAllByRole('spinbutton')
 
       act(() => day.focus())
@@ -311,7 +315,7 @@ describe('DateTimeInput clear button', () => {
         <TestHightideProvider locale="de-DE">
           <DateTimeInput
             mode="date"
-            required={props.required}
+            isRequired={props.required}
             allowClear={props.allowClear}
             value={value}
             onValueChange={(next) => {

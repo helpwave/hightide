@@ -1,4 +1,5 @@
 {
+  "@@locale": "fr-FR",
   "add": "Ajouter",
   "addFilter": "Ajouter un filtre",
   "addSorting": "Ajouter un tri",
@@ -12,10 +13,12 @@
   "carousel": "Carrousel",
   "contains": "Contient",
   "change": "Modifier",
-  "changeColumnDisplay": "Modifier l'affichage des colonnes",
+  "changeColumnDisplay": "Modifier l''affichage des colonnes",
   "chooseLanguage": "Choisissez votre langue",
   "chooseTheme": "Choisissez votre thème de couleurs préféré.",
   "system": "Système",
+  "themeNameLight": "Clair",
+  "themeNameDark": "Sombre",
   "chooseSlide": "Choisir la diapositive à afficher",
   "clear": "Effacer",
   "removeProperty": "Supprimer la propriété",
@@ -41,7 +44,7 @@
   "editFilter": "Modifier le filtre",
   "enterText": "Saisissez du texte ici",
   "error": "Erreur",
-  "errorOccurred": "Une erreur s'est produite",
+  "errorOccurred": "Une erreur s''est produite",
   "exit": "Quitter",
   "filterOptions": "Options de filtre",
   "fieldRequiredError": "Ce champ est obligatoire.",
@@ -60,19 +63,22 @@
   "maximumNumberOfFiles": "Nombre maximal de fichiers : {count}",
   "@maximumNumberOfFiles": {
     "placeholders": {
-      "count": { "type": "number" }
+      "count": {
+        "type": "int"
+      }
     }
   },
   "allowedFileTypes": "Types de fichiers autorisés : {types}",
   "@allowedFileTypes": {
     "placeholders": {
-      "types": { "type": "string" }
+      "types": {
+        "type": "string"
+      }
     }
   },
   "menu": "Menu",
   "minLengthError": "Longueur minimale non atteinte.",
   "more": "Plus",
-  "next": "Suivant",
   "no": "Non",
   "noColumn": "Aucune colonne",
   "noData": "Aucune donnée",
@@ -82,19 +88,22 @@
   "nResultsFound": "{count, plural, =1{# résultat trouvé} other{# résultats trouvés}}",
   "@nResultsFound": {
     "placeholders": {
-      "count": { "type": "number" }
+      "count": {
+        "type": "int"
+      }
     }
   },
   "nMoreFiles": "+ {count, plural, =1{# autre fichier} other{# autres fichiers}}",
   "@nMoreFiles": {
     "placeholders": {
-      "count": { "type": "number" }
+      "count": {
+        "type": "int"
+      }
     }
   },
   "of": "sur",
   "optional": "Facultatif",
   "pleaseWait": "Veuillez patienter...",
-  "previous": "Précédent",
   "remove": "Retirer",
   "removeFilter": "Retirer le filtre",
   "required": "Obligatoire",
@@ -102,75 +111,103 @@
   "rBetween": "Entre {value1} et {value2}",
   "@rBetween": {
     "placeholders": {
-      "value1": {},
-      "value2": {}
+      "value1": {
+        "type": "string"
+      },
+      "value2": {
+        "type": "string"
+      }
     }
   },
   "rContains": "Contient {value}",
   "@rContains": {
     "placeholders": {
-      "value": {}
+      "value": {
+        "type": "string"
+      }
     }
   },
   "rEndsWith": "Se termine par {value}",
   "@rEndsWith": {
     "placeholders": {
-      "value": {}
+      "value": {
+        "type": "string"
+      }
     }
   },
   "rEquals": "Égal à {value}",
   "@rEquals": {
     "placeholders": {
-      "value": {}
+      "value": {
+        "type": "string"
+      }
     }
   },
   "rGreaterThan": "Supérieur à {value}",
   "@rGreaterThan": {
     "placeholders": {
-      "value": {}
+      "value": {
+        "type": "string"
+      }
     }
   },
   "rGreaterThanOrEqual": "Supérieur ou égal à {value}",
   "@rGreaterThanOrEqual": {
     "placeholders": {
-      "value": {}
+      "value": {
+        "type": "string"
+      }
     }
   },
   "rLessThan": "Inférieur à {value}",
   "@rLessThan": {
     "placeholders": {
-      "value": {}
+      "value": {
+        "type": "string"
+      }
     }
   },
   "rLessThanOrEqual": "Inférieur ou égal à {value}",
   "@rLessThanOrEqual": {
     "placeholders": {
-      "value": {}
+      "value": {
+        "type": "string"
+      }
     }
   },
   "rNotBetween": "Pas entre {value1} et {value2}",
   "@rNotBetween": {
     "placeholders": {
-      "value1": {},
-      "value2": {}
+      "value1": {
+        "type": "string"
+      },
+      "value2": {
+        "type": "string"
+      }
     }
   },
   "rNotContains": "Ne contient pas {value}",
   "@rNotContains": {
     "placeholders": {
-      "value": {}
+      "value": {
+        "type": "string"
+      }
     }
   },
   "rNotEquals": "Différent de {value}",
   "@rNotEquals": {
     "placeholders": {
-      "value": {}
+      "value": {
+        "type": "string"
+      }
     }
   },
   "rStartsWith": "Commence par {value}",
   "@rStartsWith": {
     "placeholders": {
-      "value": {}
+      "value": {
+        "type": "string"
+      }
     }
   },
   "save": "Enregistrer",
@@ -187,7 +224,7 @@
   "@showSlide": {
     "placeholders": {
       "index": {
-        "type": "number"
+        "type": "int"
       }
     }
   },
@@ -196,10 +233,10 @@
   "@slideOf": {
     "placeholders": {
       "index": {
-        "type": "number"
+        "type": "int"
       },
       "length": {
-        "type": "number"
+        "type": "int"
       }
     }
   },
@@ -211,13 +248,17 @@
   "pThemes": "{count, plural, =1{Thème} other{Thèmes}}",
   "@pThemes": {
     "placeholders": {
-      "count": { "type":  "number" }
+      "count": {
+        "type": "int"
+      }
     }
   },
-  "sDateTimeSelect": "{datetimeMode, select, time{Sélectionner l'heure} date{Sélectionner la date} dateTime{Sélectionner la date et l'heure}}",
+  "sDateTimeSelect": "{datetimeMode, select, time{Sélectionner l''heure} date{Sélectionner la date} dateTime{Sélectionner la date et l''heure}}",
   "@sDateTimeSelect": {
     "placeholders": {
-      "datetimeMode": {}
+      "datetimeMode": {
+        "type": "string"
+      }
     }
   },
   "update": "Mettre à jour",
@@ -246,11 +287,11 @@
   "playTrace": "Lire la trace",
   "startDate": "Début",
   "startsWith": "Commence par",
-  "notEmpty": "Le champ ne peut pas être vide.",
-  "invalidEmail": "L'adresse e-mail n'est pas valide.",
+  "validationErrorNotEmpty": "Le champ ne peut pas être vide.",
+  "validationErrorInvalidEmail": "L''adresse e-mail n''est pas valide.",
   "isFalse": "Est faux",
   "isTrue": "Est vrai",
-  "isUndefined": "N'est pas défini",
+  "isUndefined": "N''est pas défini",
   "isNotUndefined": "Est défini",
   "lessThan": "Inférieur à",
   "lessThanOrEqual": "Inférieur ou égal à",
@@ -258,53 +299,73 @@
   "before": "Avant",
   "onOrAfter": "Le ou après",
   "onOrBefore": "Le ou avant",
-  "tooShort": "La valeur doit contenir au moins {min} caractères.",
-  "@tooShort": {
+  "validationErrorTooShort": "La valeur doit contenir au moins {min} caractères.",
+  "@validationErrorTooShort": {
     "placeholders": {
-      "min": { "type": "number" }
+      "min": {
+        "type": "float"
+      }
     }
   },
-  "tooLong": "La valeur doit contenir moins de {max} caractères.",
-  "@tooLong": {
+  "validationErrorTooLong": "La valeur doit contenir moins de {max} caractères.",
+  "@validationErrorTooLong": {
     "placeholders": {
-      "max": { "type": "number" }
+      "max": {
+        "type": "float"
+      }
     }
   },
-  "outOfRangeString": "La valeur doit contenir entre {min} et {max} caractères.",
-  "@outOfRangeString": {
+  "validationErrorOutOfRangeString": "La valeur doit contenir entre {min} et {max} caractères.",
+  "@validationErrorOutOfRangeString": {
     "placeholders": {
-      "min": { "type": "number" },
-      "max": { "type": "number" }
+      "min": {
+        "type": "float"
+      },
+      "max": {
+        "type": "float"
+      }
     }
   },
-  "outOfRangeNumber": "La valeur doit être comprise entre {min} et {max}.",
-  "@outOfRangeNumber": {
+  "validationErrorOutOfRangeNumber": "La valeur doit être comprise entre {min} et {max}.",
+  "@validationErrorOutOfRangeNumber": {
     "placeholders": {
-      "min": { "type": "number" },
-      "max": { "type": "number" }
+      "min": {
+        "type": "float"
+      },
+      "max": {
+        "type": "float"
+      }
     }
   },
-  "outOfRangeSelectionItems": "Vous devez sélectionner entre {min} et {max} éléments.",
-  "@outOfRangeSelectionItems": {
+  "validationErrorOutOfRangeSelectionItems": "Vous devez sélectionner entre {min} et {max} éléments.",
+  "@validationErrorOutOfRangeSelectionItems": {
     "placeholders": {
-      "min": { "type": "number" },
-      "max": { "type": "number" }
+      "min": {
+        "type": "float"
+      },
+      "max": {
+        "type": "float"
+      }
     }
   },
-  "tooFewSelectionItems": "Sélectionnez au moins {min} éléments.",
-  "@tooFewSelectionItems": {
+  "validationErrorTooFewSelectionItems": "Sélectionnez au moins {min} éléments.",
+  "@validationErrorTooFewSelectionItems": {
     "placeholders": {
-      "min": { "type": "number" }
+      "min": {
+        "type": "float"
+      }
     }
   },
-  "tooManySelectionItems": "Sélectionnez au maximum {max} éléments.",
-  "@tooManySelectionItems": {
+  "validationErrorTooManySelectionItems": "Sélectionnez au maximum {max} éléments.",
+  "@validationErrorTooManySelectionItems": {
     "placeholders": {
-      "max": { "type": "number" }
+      "max": {
+        "type": "float"
+      }
     }
   },
   "age": "Âge",
-  "entryDate": "Date d'entrée",
+  "entryDate": "Date d''entrée",
   "identifier": "Identifiant",
   "name": "Nom",
   "street": "Rue",
@@ -313,7 +374,9 @@
   "sGender": "{gender, select, male{Masculin} female{Féminin} other{Autre}}",
   "@sGender": {
     "placeholders": {
-      "gender": {}
+      "gender": {
+        "type": "string"
+      }
     }
   },
   "goodToSeeYou": "Ravi de vous revoir",
@@ -322,7 +385,9 @@
   "rSortingOrderAfter": "Appliqué {otherSortings, plural, =0{comme premier tri} =1{après # autre tri} other{après # autres tris}}",
   "@rSortingOrderAfter": {
     "placeholders": {
-      "otherSortings": { "type": "number" }
+      "otherSortings": {
+        "type": "int"
+      }
     }
   },
   "columnPicker": "Sélecteur de colonnes",
@@ -340,7 +405,7 @@
   "pinLeft": "Épingler à gauche",
   "pinRight": "Épingler à droite",
   "changeVisibility": "Modifier la visibilité",
-  "changePinning": "Modifier l'épinglage",
+  "changePinning": "Modifier l''épinglage",
   "changeSelection": "Modifier la sélection",
   "pinToRight": "Épingler à droite",
   "pinToLeft": "Épingler à gauche",
@@ -355,7 +420,9 @@
   "sSortingState": "{sortDirection, select, asc{Tri (actuellement croissant)} desc{Tri (actuellement décroissant)} other{Tri (actuellement aucun)}}",
   "@sSortingState": {
     "placeholders": {
-      "sortDirection": {}
+      "sortDirection": {
+        "type": "string"
+      }
     }
   }
 }

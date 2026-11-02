@@ -1,4 +1,5 @@
 {
+  "@@locale": "ru-RU",
   "add": "Добавить",
   "addFilter": "Добавить фильтр",
   "addSorting": "Добавить сортировку",
@@ -16,6 +17,8 @@
   "chooseLanguage": "Выберите язык",
   "chooseTheme": "Выберите предпочитаемую цветовую тему.",
   "system": "Системная",
+  "themeNameLight": "Светлая",
+  "themeNameDark": "Тёмная",
   "chooseSlide": "Выберите слайд для отображения",
   "clear": "Очистить",
   "removeProperty": "Удалить свойство",
@@ -60,19 +63,22 @@
   "maximumNumberOfFiles": "Максимальное количество файлов: {count}",
   "@maximumNumberOfFiles": {
     "placeholders": {
-      "count": { "type": "number" }
+      "count": {
+        "type": "int"
+      }
     }
   },
   "allowedFileTypes": "Допустимые типы файлов: {types}",
   "@allowedFileTypes": {
     "placeholders": {
-      "types": { "type": "string" }
+      "types": {
+        "type": "string"
+      }
     }
   },
   "menu": "Меню",
   "minLengthError": "Не достигнута минимальная длина.",
   "more": "Ещё",
-  "next": "Следующая",
   "no": "Нет",
   "noColumn": "Нет столбца",
   "noData": "Нет данных",
@@ -82,19 +88,22 @@
   "nResultsFound": "{count, plural, =0{Найдено # результатов} =1{Найден # результат} =2{Найдено # результата} few{Найдено # результата} many{Найдено # результатов} other{Найдено # результата}}",
   "@nResultsFound": {
     "placeholders": {
-      "count": { "type": "number" }
+      "count": {
+        "type": "int"
+      }
     }
   },
   "nMoreFiles": "+ {count, plural, =0{ещё # файлов} =1{ещё # файл} =2{ещё # файла} few{ещё # файла} many{ещё # файлов} other{ещё # файла}}",
   "@nMoreFiles": {
     "placeholders": {
-      "count": { "type": "number" }
+      "count": {
+        "type": "int"
+      }
     }
   },
   "of": "из",
   "optional": "Необязательно",
   "pleaseWait": "Пожалуйста, подождите...",
-  "previous": "Предыдущая",
   "remove": "Удалить",
   "removeFilter": "Удалить фильтр",
   "required": "Обязательно",
@@ -102,75 +111,103 @@
   "rBetween": "Между {value1} и {value2}",
   "@rBetween": {
     "placeholders": {
-      "value1": {},
-      "value2": {}
+      "value1": {
+        "type": "string"
+      },
+      "value2": {
+        "type": "string"
+      }
     }
   },
   "rContains": "Содержит {value}",
   "@rContains": {
     "placeholders": {
-      "value": {}
+      "value": {
+        "type": "string"
+      }
     }
   },
   "rEndsWith": "Заканчивается на {value}",
   "@rEndsWith": {
     "placeholders": {
-      "value": {}
+      "value": {
+        "type": "string"
+      }
     }
   },
   "rEquals": "Равно {value}",
   "@rEquals": {
     "placeholders": {
-      "value": {}
+      "value": {
+        "type": "string"
+      }
     }
   },
   "rGreaterThan": "Больше {value}",
   "@rGreaterThan": {
     "placeholders": {
-      "value": {}
+      "value": {
+        "type": "string"
+      }
     }
   },
   "rGreaterThanOrEqual": "Больше или равно {value}",
   "@rGreaterThanOrEqual": {
     "placeholders": {
-      "value": {}
+      "value": {
+        "type": "string"
+      }
     }
   },
   "rLessThan": "Меньше {value}",
   "@rLessThan": {
     "placeholders": {
-      "value": {}
+      "value": {
+        "type": "string"
+      }
     }
   },
   "rLessThanOrEqual": "Меньше или равно {value}",
   "@rLessThanOrEqual": {
     "placeholders": {
-      "value": {}
+      "value": {
+        "type": "string"
+      }
     }
   },
   "rNotBetween": "Не между {value1} и {value2}",
   "@rNotBetween": {
     "placeholders": {
-      "value1": {},
-      "value2": {}
+      "value1": {
+        "type": "string"
+      },
+      "value2": {
+        "type": "string"
+      }
     }
   },
   "rNotContains": "Не содержит {value}",
   "@rNotContains": {
     "placeholders": {
-      "value": {}
+      "value": {
+        "type": "string"
+      }
     }
   },
   "rNotEquals": "Не равно {value}",
   "@rNotEquals": {
     "placeholders": {
-      "value": {}
+      "value": {
+        "type": "string"
+      }
     }
   },
   "rStartsWith": "Начинается с {value}",
   "@rStartsWith": {
     "placeholders": {
-      "value": {}
+      "value": {
+        "type": "string"
+      }
     }
   },
   "save": "Сохранить",
@@ -187,7 +224,7 @@
   "@showSlide": {
     "placeholders": {
       "index": {
-        "type": "number"
+        "type": "int"
       }
     }
   },
@@ -196,10 +233,10 @@
   "@slideOf": {
     "placeholders": {
       "index": {
-        "type": "number"
+        "type": "int"
       },
       "length": {
-        "type": "number"
+        "type": "int"
       }
     }
   },
@@ -211,13 +248,17 @@
   "pThemes": "{count, plural, =1{Тема} =2{Темы} few{Темы} many{Тем} other{Темы}}",
   "@pThemes": {
     "placeholders": {
-      "count": { "type":  "number" }
+      "count": {
+        "type": "int"
+      }
     }
   },
   "sDateTimeSelect": "{datetimeMode, select, time{Выберите время} date{Выберите дату} dateTime{Выберите дату и время}}",
   "@sDateTimeSelect": {
     "placeholders": {
-      "datetimeMode": {}
+      "datetimeMode": {
+        "type": "string"
+      }
     }
   },
   "update": "Обновить",
@@ -246,8 +287,8 @@
   "playTrace": "Воспроизвести трассировку",
   "startDate": "Начало",
   "startsWith": "Начинается с",
-  "notEmpty": "Поле не может быть пустым.",
-  "invalidEmail": "Некорректный адрес электронной почты.",
+  "validationErrorNotEmpty": "Поле не может быть пустым.",
+  "validationErrorInvalidEmail": "Некорректный адрес электронной почты.",
   "isFalse": "Ложно",
   "isTrue": "Истинно",
   "isUndefined": "Не определено",
@@ -258,49 +299,69 @@
   "before": "До",
   "onOrAfter": "Не ранее",
   "onOrBefore": "Не позднее",
-  "tooShort": "Значение должно содержать не менее {min} символов.",
-  "@tooShort": {
+  "validationErrorTooShort": "Значение должно содержать не менее {min} символов.",
+  "@validationErrorTooShort": {
     "placeholders": {
-      "min": { "type": "number" }
+      "min": {
+        "type": "float"
+      }
     }
   },
-  "tooLong": "Значение должно содержать менее {max} символов.",
-  "@tooLong": {
+  "validationErrorTooLong": "Значение должно содержать менее {max} символов.",
+  "@validationErrorTooLong": {
     "placeholders": {
-      "max": { "type": "number" }
+      "max": {
+        "type": "float"
+      }
     }
   },
-  "outOfRangeString": "Значение должно содержать от {min} до {max} символов.",
-  "@outOfRangeString": {
+  "validationErrorOutOfRangeString": "Значение должно содержать от {min} до {max} символов.",
+  "@validationErrorOutOfRangeString": {
     "placeholders": {
-      "min": { "type": "number" },
-      "max": { "type": "number" }
+      "min": {
+        "type": "float"
+      },
+      "max": {
+        "type": "float"
+      }
     }
   },
-  "outOfRangeNumber": "Значение должно быть в диапазоне от {min} до {max}.",
-  "@outOfRangeNumber": {
+  "validationErrorOutOfRangeNumber": "Значение должно быть в диапазоне от {min} до {max}.",
+  "@validationErrorOutOfRangeNumber": {
     "placeholders": {
-      "min": { "type": "number" },
-      "max": { "type": "number" }
+      "min": {
+        "type": "float"
+      },
+      "max": {
+        "type": "float"
+      }
     }
   },
-  "outOfRangeSelectionItems": "Необходимо выбрать от {min} до {max} элементов.",
-  "@outOfRangeSelectionItems": {
+  "validationErrorOutOfRangeSelectionItems": "Необходимо выбрать от {min} до {max} элементов.",
+  "@validationErrorOutOfRangeSelectionItems": {
     "placeholders": {
-      "min": { "type": "number" },
-      "max": { "type": "number" }
+      "min": {
+        "type": "float"
+      },
+      "max": {
+        "type": "float"
+      }
     }
   },
-  "tooFewSelectionItems": "Выберите не менее {min} элементов.",
-  "@tooFewSelectionItems": {
+  "validationErrorTooFewSelectionItems": "Выберите не менее {min} элементов.",
+  "@validationErrorTooFewSelectionItems": {
     "placeholders": {
-      "min": { "type": "number" }
+      "min": {
+        "type": "float"
+      }
     }
   },
-  "tooManySelectionItems": "Выберите не более {max} элементов.",
-  "@tooManySelectionItems": {
+  "validationErrorTooManySelectionItems": "Выберите не более {max} элементов.",
+  "@validationErrorTooManySelectionItems": {
     "placeholders": {
-      "max": { "type": "number" }
+      "max": {
+        "type": "float"
+      }
     }
   },
   "age": "Возраст",
@@ -313,7 +374,9 @@
   "sGender": "{gender, select, male{Мужской} female{Женский} other{Другой}}",
   "@sGender": {
     "placeholders": {
-      "gender": {}
+      "gender": {
+        "type": "string"
+      }
     }
   },
   "goodToSeeYou": "Рады вас видеть",
@@ -322,7 +385,9 @@
   "rSortingOrderAfter": "Применяется {otherSortings, plural, =0{как первая сортировка} =1{после # другой сортировки} =2{после # других сортировок} few{после # других сортировок} many{после # других сортировок} other{после # других сортировок}}",
   "@rSortingOrderAfter": {
     "placeholders": {
-      "otherSortings": { "type": "number" }
+      "otherSortings": {
+        "type": "int"
+      }
     }
   },
   "columnPicker": "Выбор столбцов",
@@ -355,7 +420,9 @@
   "sSortingState": "{sortDirection, select, asc{Сортировка (сейчас по возрастанию)} desc{Сортировка (сейчас по убыванию)} other{Сортировка (сейчас отключена)}}",
   "@sSortingState": {
     "placeholders": {
-      "sortDirection": {}
+      "sortDirection": {
+        "type": "string"
+      }
     }
   }
 }
