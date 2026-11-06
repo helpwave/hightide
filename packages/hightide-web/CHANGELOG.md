@@ -5,6 +5,20 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/)
 and adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [0.19.0] - unpublished
+
+### Added
+
+- `CookieUtils` with `get`, `set`, `remove` and `resolveRegistrableDomain` to find the registrable domain (eTLD+1) of a host
+- `useCookieKeyValueStore` storing values in prefixed cookies on a shared domain, with an optional `fallbackStore` for reading and syncing legacy values; the domain is resolved after mounting to stay hydration safe
+- `preferenceStorage` config (`shareAcrossSubdomains`, `cookieDomain`, `cookiePrefix`) on `HightideConfig`
+- `usePreferenceStore` returning the store used for persisting user preferences
+- `ThemeProvider` `store` prop to override the store used for the theme
+
+### Changed
+
+- Theme and localization preferences are stored in cookies on the registrable domain by default (e.g. `helpwave.de`), so all subdomains share them; localStorage is kept as fallback and migrated automatically. Disable with `preferenceStorage.shareAcrossSubdomains: false`
+
 ## [0.18.0] - 2026-10-13
 
 ### Added

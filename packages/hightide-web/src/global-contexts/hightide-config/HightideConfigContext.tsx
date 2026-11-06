@@ -21,10 +21,17 @@ export type LocalizationConfig = {
   supportedLocales: SupportedLocalesConfig,
 }
 
+export type PreferenceStorageConfig = {
+  shareAcrossSubdomains: boolean,
+  cookieDomain?: string,
+  cookiePrefix: string,
+}
+
 export type HightideConfig = {
   tooltip: TooltipConfig,
   theme: ThemeConfig,
   localization: LocalizationConfig,
+  preferenceStorage: PreferenceStorageConfig,
 }
 
 const defaultConfig: HightideConfig = {
@@ -40,6 +47,10 @@ const defaultConfig: HightideConfig = {
   localization: {
     fallbackLocale: 'en-US',
     supportedLocales: HightideConfigUtils.defaultSupportedLocales,
+  },
+  preferenceStorage: {
+    shareAcrossSubdomains: true,
+    cookiePrefix: 'hightide-',
   },
 }
 
@@ -102,6 +113,10 @@ function mergeConfig(config: HightideConfig, overwrite: DeepPartial<HightideConf
         config.localization.supportedLocales,
         overwrite.localization?.supportedLocales
       ),
+    },
+    preferenceStorage: {
+      ...config.preferenceStorage,
+      ...overwrite.preferenceStorage,
     },
   }
 }

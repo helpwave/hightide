@@ -1,6 +1,7 @@
 export * from './focus'
 export * from './forward-exports'
 export * from './useAnchoredPosition'
+export * from './useCookieKeyValueStore'
 export * from './useHandleRefs'
 export * from './useIsMounted'
 export * from './useOutsideClick'

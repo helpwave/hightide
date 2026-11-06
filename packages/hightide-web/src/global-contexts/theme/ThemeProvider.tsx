@@ -1,8 +1,9 @@
 import type { PropsWithChildren } from 'react'
 import { useEffect, useMemo } from 'react'
-import { useBrowserKeyValueStore } from '@helpwave/hightide-utils/hooks'
+import type { SimpleValueStore } from '@helpwave/hightide-utils/hooks'
 import type { ThemeConfig as HightideThemeConfig } from '../hightide-config/HightideConfigContext'
 import { useHightideConfig } from '../hightide-config/HightideConfigContext'
+import { usePreferenceStore } from '../hightide-config/usePreferenceStore'
 import { useWebSystemTheme } from '../../hooks/useWebSystemTheme'
 import type {
   ThemeMode,
@@ -21,6 +22,7 @@ export type ThemeProviderProps = PropsWithChildren & Partial<HightideThemeConfig
   theme?: ThemeMode | null,
   supportedThemes?: SupportedThemesConfig,
   onChangedTheme?: (theme: string) => void,
+  store?: SimpleValueStore,
 }
 
 export const ThemeProvider = ({
@@ -29,9 +31,11 @@ export const ThemeProvider = ({
   initialTheme,
   supportedThemes,
   onChangedTheme,
+  store: storeOverride,
 }: ThemeProviderProps) => {
   const { config } = useHightideConfig()
-  const store = useBrowserKeyValueStore()
+  const preferenceStore = usePreferenceStore()
+  const store = storeOverride ?? preferenceStore
   const systemTheme = useWebSystemTheme()
   const resolvedSupportedThemes = supportedThemes ?? config.theme.supportedThemes
   const mappedSupportedThemes = useMemo(() => {

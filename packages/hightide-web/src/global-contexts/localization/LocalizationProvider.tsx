@@ -4,10 +4,10 @@ import {
   type SupportedLocalesConfig,
   type LocalizationProviderProps as LocalizationProviderPropsBase
 } from '@helpwave/hightide-utils/context/localization'
-import { useBrowserKeyValueStore } from '@helpwave/hightide-utils/hooks'
 import { LocalizationUtils } from '@helpwave/hightide-utils/utils'
 import { useEffect, useState } from 'react'
 import { useHightideConfig } from '../hightide-config/HightideConfigContext'
+import { usePreferenceStore } from '../hightide-config/usePreferenceStore'
 import { SafeGlobals } from '../../utils/safeGlobals'
 
 export type LocalizationProviderProps = PropsWithChildren
@@ -51,8 +51,8 @@ export const LocalizationProvider = ({
   store: storeOverride,
   ...rest
 }: LocalizationProviderProps) => {
-  const browserStore = useBrowserKeyValueStore()
-  const store = storeOverride ?? browserStore
+  const preferenceStore = usePreferenceStore()
+  const store = storeOverride ?? preferenceStore
   const { config } = useHightideConfig()
   const resolvedSupportedLocales = supportedLocales ?? config.localization.supportedLocales
   const detectedSystemLocale = useWebSystemLocale(resolvedSupportedLocales)
