@@ -1,22 +1,12 @@
 import { SafeGlobals } from './safeGlobals'
 
 export type CookieWriteOptions = {
-  /**
-   * The domain the cookie is scoped to (e.g. `helpwave.de`).
-   * `undefined` creates a host-only cookie that is only sent to the current host.
-   */
   domain?: string,
   path?: string,
-  /** Lifetime in seconds. `undefined` creates a session cookie. */
   maxAgeSeconds?: number,
   sameSite?: 'Lax' | 'Strict' | 'None',
-  /** Defaults to `true` when the page is served via https. */
   secure?: boolean,
 }
-
-/*
- * All functions access DOM globals and must only be called in safe locations like `useEffect` or event handlers.
- */
 
 const get = (name: string): string | null => {
   const doc = SafeGlobals.document('CookieUtils.get')
@@ -60,17 +50,6 @@ const isIpAddress = (hostname: string) => /^[\d.]+$/.test(hostname) || hostname.
 
 const registrableDomainCache = new Map<string, string | undefined>()
 
-/**
- * Finds the broadest domain a cookie can be set on for the given hostname, i.e. the registrable
- * domain (eTLD+1), so for `tasks.helpwave.de` this returns `helpwave.de` and for `app.thisismydomain.co.uk`
- * it returns `thisismydomain.co.uk`.
- *
- * Instead of shipping the public suffix list this probes the browser: it tries to set a test cookie on
- * increasingly specific domains, the browser rejects public suffixes, so the first accepted domain wins.
- *
- * Returns `undefined` for `localhost`, IP addresses, single-label hosts or outside the browser,
- * in which case a host-only cookie should be used.
- */
 const resolveRegistrableDomain = (hostname?: string): string | undefined => {
   hostname ??= SafeGlobals.window('CookieUtils.resolveRegistrableDomain')?.location.hostname
   if (!hostname) return undefined

@@ -22,7 +22,6 @@ export type ThemeProviderProps = PropsWithChildren & Partial<HightideThemeConfig
   theme?: ThemeMode | null,
   supportedThemes?: SupportedThemesConfig,
   onChangedTheme?: (theme: string) => void,
-  /** Overrides the store used to persist the theme. Defaults to the preference store from the config. */
   store?: SimpleValueStore,
 }
 
