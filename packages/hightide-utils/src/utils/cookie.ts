@@ -1,0 +1,97 @@
+export type CookieWriteOptions = {
+  /**
+   * The domain the cookie is scoped to (e.g. `helpwave.de`).
+   * `undefined` creates a host-only cookie that is only sent to the current host.
+   */
+  domain?: string,
+  path?: string,
+  /** Lifetime in seconds. `undefined` creates a session cookie. */
+  maxAgeSeconds?: number,
+  sameSite?: 'Lax' | 'Strict' | 'None',
+  /** Defaults to `true` when the page is served via https. */
+  secure?: boolean,
+}
+
+const hasDocument = () => typeof document !== 'undefined'
+
+const isSecureContext = () => typeof location !== 'undefined' && location.protocol === 'https:'
+
+const get = (name: string): string | null => {
+  if (!hasDocument()) return null
+  const encodedName = encodeURIComponent(name)
+  for (const part of document.cookie.split(';')) {
+    const separatorIndex = part.indexOf('=')
+    if (separatorIndex === -1) continue
+    if (part.slice(0, separatorIndex).trim() !== encodedName) continue
+    try {
+      return decodeURIComponent(part.slice(separatorIndex + 1).trim())
+    } catch {
+      return null
+    }
+  }
+  return null
+}
+
+const set = (name: string, value: string, {
+  domain,
+  path = '/',
+  maxAgeSeconds,
+  sameSite = 'Lax',
+  secure = isSecureContext(),
+}: CookieWriteOptions = {}) => {
+  if (!hasDocument()) return
+  const parts = [`${encodeURIComponent(name)}=${encodeURIComponent(value)}`, `Path=${path}`, `SameSite=${sameSite}`]
+  if (domain) parts.push(`Domain=${domain}`)
+  if (maxAgeSeconds !== undefined) parts.push(`Max-Age=${Math.floor(maxAgeSeconds)}`)
+  if (secure || sameSite === 'None') parts.push('Secure')
+  document.cookie = parts.join('; ')
+}
+
+const remove = (name: string, options: Omit<CookieWriteOptions, 'maxAgeSeconds'> = {}) => {
+  set(name, '', { ...options, maxAgeSeconds: 0 })
+}
+
+const isIpAddress = (hostname: string) => /^[\d.]+$/.test(hostname) || hostname.includes(':')
+
+const registrableDomainCache = new Map<string, string | undefined>()
+
+/**
+ * Finds the broadest domain a cookie can be set on for the given hostname, i.e. the registrable
+ * domain (eTLD+1), so for `tasks.helpwave.de` this returns `helpwave.de` and for `app.thisismydomain.co.uk`
+ * it returns `thisismydomain.co.uk`.
+ *
+ * Instead of shipping the public suffix list this probes the browser: it tries to set a test cookie on
+ * increasingly specific domains, the browser rejects public suffixes, so the first accepted domain wins.
+ *
+ * Returns `undefined` for `localhost`, IP addresses, single-label hosts or outside the browser,
+ * in which case a host-only cookie should be used.
+ */
+const resolveRegistrableDomain = (hostname: string | undefined = typeof location !== 'undefined' ? location.hostname : undefined): string | undefined => {
+  if (!hasDocument() || !hostname) return undefined
+  hostname = hostname.toLowerCase().replace(/\.$/, '')
+  if (registrableDomainCache.has(hostname)) return registrableDomainCache.get(hostname)
+
+  let result: string | undefined = undefined
+  const labels = hostname.split('.')
+  if (!isIpAddress(hostname) && labels.length >= 2) {
+    const probeName = `__hightide_domain_probe_${Math.random().toString(36).slice(2)}`
+    for (let count = 2; count <= labels.length; count++) {
+      const candidate = labels.slice(-count).join('.')
+      set(probeName, '1', { domain: candidate, maxAgeSeconds: 10 })
+      if (get(probeName) === '1') {
+        remove(probeName, { domain: candidate })
+        result = candidate
+        break
+      }
+    }
+  }
+  registrableDomainCache.set(hostname, result)
+  return result
+}
+
+export const CookieUtils = {
+  get,
+  set,
+  remove,
+  resolveRegistrableDomain,
+}

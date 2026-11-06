@@ -1,6 +1,7 @@
 export * from './trees'
 export * from './useBrowserKeyValueStore'
 export * from './useChangingNumber'
+export * from './useCookieKeyValueStore'
 export * from './useControlledState'
 export * from './useDebouncer'
 export * from './useDelay'

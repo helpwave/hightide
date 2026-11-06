@@ -21,10 +21,27 @@ export type LocalizationConfig = {
   supportedLocales: SupportedLocalesConfig,
 }
 
+export type PreferenceStorageConfig = {
+  /**
+   * Whether user preferences (theme, locale, ...) are stored in cookies on the registrable domain
+   * (e.g. `helpwave.de`), so all subdomains like `tasks.helpwave.de` and `id.helpwave.de` share them.
+   * When disabled, preferences are only stored in the localStorage of the current origin.
+   */
+  shareAcrossSubdomains: boolean,
+  /**
+   * Overrides the automatically detected cookie domain, e.g. `helpwave.de`.
+   * Only used when `shareAcrossSubdomains` is enabled.
+   */
+  cookieDomain?: string,
+  /** Prefix for the cookie names. */
+  cookiePrefix: string,
+}
+
 export type HightideConfig = {
   tooltip: TooltipConfig,
   theme: ThemeConfig,
   localization: LocalizationConfig,
+  preferenceStorage: PreferenceStorageConfig,
 }
 
 const defaultConfig: HightideConfig = {
@@ -40,6 +57,10 @@ const defaultConfig: HightideConfig = {
   localization: {
     fallbackLocale: 'en-US',
     supportedLocales: HightideConfigUtils.defaultSupportedLocales,
+  },
+  preferenceStorage: {
+    shareAcrossSubdomains: true,
+    cookiePrefix: 'hightide-',
   },
 }
 
@@ -102,6 +123,10 @@ function mergeConfig(config: HightideConfig, overwrite: DeepPartial<HightideConf
         config.localization.supportedLocales,
         overwrite.localization?.supportedLocales
       ),
+    },
+    preferenceStorage: {
+      ...config.preferenceStorage,
+      ...overwrite.preferenceStorage,
     },
   }
 }

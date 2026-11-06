@@ -5,6 +5,13 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/)
 and adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [0.1.10] - unpublished
+
+### Added
+
+- `CookieUtils` with `get`, `set`, `remove` and `resolveRegistrableDomain` to find the registrable domain (eTLD+1) of a host
+- `useCookieKeyValueStore` storing values in prefixed cookies on a shared domain, with an optional `fallbackStore` for reading and syncing legacy values
+
 ## [0.1.9] - 2026-10-13
 
 ### Added
