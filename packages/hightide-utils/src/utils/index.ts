@@ -1,7 +1,6 @@
 export * from './array'
 export * from './bagFunctions'
 export * from './builder'
-export * from './cookie'
 export * from './curve'
 export * from './date'
 export * from './duration'

@@ -1,5 +1,6 @@
 import type { SimpleValueStore } from '@helpwave/hightide-utils/hooks'
-import { useBrowserKeyValueStore, useCookieKeyValueStore } from '@helpwave/hightide-utils/hooks'
+import { useBrowserKeyValueStore } from '@helpwave/hightide-utils/hooks'
+import { useCookieKeyValueStore } from '../../hooks/useCookieKeyValueStore'
 import { useHightideConfig } from './HightideConfigContext'
 
 /**

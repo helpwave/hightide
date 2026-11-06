@@ -9,6 +9,8 @@ and adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
 ### Added
 
+- `CookieUtils` with `get`, `set`, `remove` and `resolveRegistrableDomain` to find the registrable domain (eTLD+1) of a host
+- `useCookieKeyValueStore` storing values in prefixed cookies on a shared domain, with an optional `fallbackStore` for reading and syncing legacy values; the domain is resolved after mounting to stay hydration safe
 - `preferenceStorage` config (`shareAcrossSubdomains`, `cookieDomain`, `cookiePrefix`) on `HightideConfig`
 - `usePreferenceStore` returning the store used for persisting user preferences
 - `ThemeProvider` `store` prop to override the store used for the theme

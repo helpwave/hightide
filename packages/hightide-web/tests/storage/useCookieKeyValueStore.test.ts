@@ -3,10 +3,12 @@
  * @jest-environment-options {"url": "https://tasks.helpwave.de/"}
  */
 
+import { createElement } from 'react'
+import { renderToString } from 'react-dom/server'
 import { renderHook } from '@testing-library/react'
+import { useBrowserKeyValueStore } from '@helpwave/hightide-utils/hooks'
 import { useCookieKeyValueStore } from '../../src/hooks/useCookieKeyValueStore'
-import { useBrowserKeyValueStore } from '../../src/hooks/useBrowserKeyValueStore'
-import { CookieUtils } from '../../src/utils/cookie'
+import { CookieUtils } from '../../src/utils/cookies'
 
 const clearCookies = () => {
   for (const part of document.cookie.split(';')) {
@@ -32,6 +34,32 @@ describe('useCookieKeyValueStore', () => {
   beforeEach(() => {
     clearCookies()
     window.localStorage.clear()
+  })
+
+  test('is not initialized and does not touch cookies before mounting', () => {
+    const getSpy = jest.spyOn(CookieUtils, 'get')
+    const resolveSpy = jest.spyOn(CookieUtils, 'resolveRegistrableDomain')
+    const states: boolean[] = []
+    const Probe = () => {
+      const store = useCookieKeyValueStore()
+      states.push(store.isInitialized)
+      store.getValue('theme')
+      return null
+    }
+
+    renderToString(createElement(Probe))
+
+    expect(states).toEqual([false])
+    expect(getSpy).not.toHaveBeenCalled()
+    expect(resolveSpy).not.toHaveBeenCalled()
+    getSpy.mockRestore()
+    resolveSpy.mockRestore()
+  })
+
+  test('is initialized after mounting', () => {
+    const { result } = renderHook(() => useCookieKeyValueStore())
+
+    expect(result.current.isInitialized).toBe(true)
   })
 
   test('writes prefixed cookies on the shared domain', () => {

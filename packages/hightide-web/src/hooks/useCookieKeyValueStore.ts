@@ -1,6 +1,8 @@
-import { useMemo } from 'react'
-import type { SimpleValueStore } from './useSimpleStoreSyncedValue'
-import { CookieUtils } from '../utils/cookie'
+'use client'
+
+import { useEffect, useMemo, useState } from 'react'
+import type { SimpleValueStore } from '@helpwave/hightide-utils/hooks'
+import { CookieUtils } from '../utils/cookies'
 
 export type UseCookieKeyValueStoreProps = {
   /**
@@ -24,21 +26,28 @@ export type UseCookieKeyValueStoreProps = {
 
 const ONE_YEAR_IN_SECONDS = 60 * 60 * 24 * 365
 
+/**
+ * A store persisting values in cookies.
+ *
+ * The cookie domain is resolved after mounting, until then `isInitialized` is `false`,
+ * so consumers like `useSimpleStoreSyncedValue` do not read or write during rendering and hydration.
+ */
 export const useCookieKeyValueStore = ({
   domain = 'auto',
   prefix = 'hightide-',
   maxAgeSeconds = ONE_YEAR_IN_SECONDS,
   fallbackStore,
 }: UseCookieKeyValueStoreProps = {}): SimpleValueStore => {
-  const isClient = typeof document !== 'undefined'
+  const [resolved, setResolved] = useState<{ domain: string | undefined } | null>(null)
 
-  const resolvedDomain = useMemo(() => {
-    if (!isClient || domain === null) return undefined
-    if (domain === 'auto') return CookieUtils.resolveRegistrableDomain()
-    return domain
-  }, [domain, isClient])
+  useEffect(() => {
+    setResolved({
+      domain: domain === 'auto' ? CookieUtils.resolveRegistrableDomain() : (domain ?? undefined),
+    })
+  }, [domain])
 
   return useMemo(() => {
+    const resolvedDomain = resolved?.domain
     const cookieName = (key: string) => `${prefix}${key}`
     const deleteValue = (key: string) => {
       CookieUtils.remove(cookieName(key), { domain: resolvedDomain })
@@ -48,13 +57,15 @@ export const useCookieKeyValueStore = ({
     }
 
     return {
-      isInitialized: isClient && (fallbackStore?.isInitialized ?? true),
+      isInitialized: resolved !== null && (fallbackStore?.isInitialized ?? true),
       getValue: (key: string) => {
+        if (resolved === null) return null
         const value = CookieUtils.get(cookieName(key))
         if (value !== null) return value
         return fallbackStore?.getValue(key) ?? null
       },
       setValue: (key: string, value: string | null) => {
+        if (resolved === null) return
         if (value === null) {
           deleteValue(key)
           return
@@ -62,7 +73,10 @@ export const useCookieKeyValueStore = ({
         CookieUtils.set(cookieName(key), value, { domain: resolvedDomain, maxAgeSeconds })
         fallbackStore?.setValue(key, value)
       },
-      deleteValue,
+      deleteValue: (key: string) => {
+        if (resolved === null) return
+        deleteValue(key)
+      },
     }
-  }, [fallbackStore, isClient, maxAgeSeconds, prefix, resolvedDomain])
+  }, [fallbackStore, maxAgeSeconds, prefix, resolved])
 }

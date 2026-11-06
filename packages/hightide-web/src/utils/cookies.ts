@@ -1,3 +1,5 @@
+import { SafeGlobals } from './safeGlobals'
+
 export type CookieWriteOptions = {
   /**
    * The domain the cookie is scoped to (e.g. `helpwave.de`).
@@ -12,14 +14,15 @@ export type CookieWriteOptions = {
   secure?: boolean,
 }
 
-const hasDocument = () => typeof document !== 'undefined'
-
-const isSecureContext = () => typeof location !== 'undefined' && location.protocol === 'https:'
+/*
+ * All functions access DOM globals and must only be called in safe locations like `useEffect` or event handlers.
+ */
 
 const get = (name: string): string | null => {
-  if (!hasDocument()) return null
+  const doc = SafeGlobals.document('CookieUtils.get')
+  if (!doc) return null
   const encodedName = encodeURIComponent(name)
-  for (const part of document.cookie.split(';')) {
+  for (const part of doc.cookie.split(';')) {
     const separatorIndex = part.indexOf('=')
     if (separatorIndex === -1) continue
     if (part.slice(0, separatorIndex).trim() !== encodedName) continue
@@ -37,14 +40,16 @@ const set = (name: string, value: string, {
   path = '/',
   maxAgeSeconds,
   sameSite = 'Lax',
-  secure = isSecureContext(),
+  secure,
 }: CookieWriteOptions = {}) => {
-  if (!hasDocument()) return
+  const doc = SafeGlobals.document('CookieUtils.set')
+  if (!doc) return
+  const isSecure = secure ?? doc.location?.protocol === 'https:'
   const parts = [`${encodeURIComponent(name)}=${encodeURIComponent(value)}`, `Path=${path}`, `SameSite=${sameSite}`]
   if (domain) parts.push(`Domain=${domain}`)
   if (maxAgeSeconds !== undefined) parts.push(`Max-Age=${Math.floor(maxAgeSeconds)}`)
-  if (secure || sameSite === 'None') parts.push('Secure')
-  document.cookie = parts.join('; ')
+  if (isSecure || sameSite === 'None') parts.push('Secure')
+  doc.cookie = parts.join('; ')
 }
 
 const remove = (name: string, options: Omit<CookieWriteOptions, 'maxAgeSeconds'> = {}) => {
@@ -66,8 +71,9 @@ const registrableDomainCache = new Map<string, string | undefined>()
  * Returns `undefined` for `localhost`, IP addresses, single-label hosts or outside the browser,
  * in which case a host-only cookie should be used.
  */
-const resolveRegistrableDomain = (hostname: string | undefined = typeof location !== 'undefined' ? location.hostname : undefined): string | undefined => {
-  if (!hasDocument() || !hostname) return undefined
+const resolveRegistrableDomain = (hostname?: string): string | undefined => {
+  hostname ??= SafeGlobals.window('CookieUtils.resolveRegistrableDomain')?.location.hostname
+  if (!hostname) return undefined
   hostname = hostname.toLowerCase().replace(/\.$/, '')
   if (registrableDomainCache.has(hostname)) return registrableDomainCache.get(hostname)
 
