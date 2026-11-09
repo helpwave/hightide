@@ -1,20 +1,13 @@
-import type { ReactNode } from 'react'
 import { useMemo } from 'react'
-import type { DOMInputStateMangerProps } from '../../../data-input/domInput'
-import { useStateMachineController } from '@helpwave/hightide-utils/hooks'
+import { useStateMachine } from '@helpwave/hightide-utils/hooks'
 import { TextFilterContext, type TextFilterContextValue } from './TextFilterContext'
 import type { FilterOperatorText } from '../../filter-operator'
-import { filterStateTransition, type FilterEvent, type FilterState } from '../filter-value'
+import { filterStateTransition, type FilterStateManagerProps } from '../filter-value'
 
-export type TextFilterStateManagerProps = DOMInputStateMangerProps<FilterState<FilterOperatorText>, FilterEvent<FilterOperatorText>>
-  & {
-    operatorOverrides?: FilterOperatorText[],
-    children?: ReactNode,
-  }
+export type TextFilterStateManagerProps = FilterStateManagerProps<FilterOperatorText>
 
 export function TextFilterStateManager({
   state,
-  initialState,
   onStateChange,
   onStateEvent,
   isInvalid = false,
@@ -25,19 +18,12 @@ export function TextFilterStateManager({
   operatorOverrides,
   children,
 }: TextFilterStateManagerProps) {
-  const machine = useStateMachineController<FilterState<FilterOperatorText>, FilterEvent<FilterOperatorText>>(state
-    ? {
-      state,
-      transition: filterStateTransition,
-      onStateChange,
-      onStateEvent,
-    }
-    : {
-      initialState,
-      transition: filterStateTransition,
-      onStateChange,
-      onStateEvent,
-    })
+  const machine = useStateMachine({
+    state,
+    transition: filterStateTransition,
+    onStateChange,
+    onStateEvent,
+  })
 
   const config = useMemo(() => ({
     isInvalid,

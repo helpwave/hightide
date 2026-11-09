@@ -1,19 +1,16 @@
-import type { ReactNode } from 'react'
 import { useEffect, useMemo, useRef } from 'react'
 import type { DOMInputStateMangerProps } from '../../domInput'
-import { useStateMachineController } from '@helpwave/hightide-utils/hooks'
+import { useStateMachine } from '@helpwave/hightide-utils/hooks'
 import { ColorInputContext, type ColorInputContextValue } from './ColorInputContext'
 import { colorInputStateTransition, type ColorInputEvent, type ColorInputState } from './ColorInputState'
 
 export type ColorInputStateManagerProps = DOMInputStateMangerProps<ColorInputState, ColorInputEvent> & {
   hasAlpha?: boolean,
   isCapitalized?: boolean,
-  children?: ReactNode,
 }
 
 export function ColorInputStateManager({
   state,
-  initialState,
   onStateChange,
   onStateEvent,
   isInvalid = false,
@@ -25,19 +22,12 @@ export function ColorInputStateManager({
   isCapitalized = false,
   children,
 }: ColorInputStateManagerProps) {
-  const machine = useStateMachineController<ColorInputState, ColorInputEvent>(state
-    ? {
-      state,
-      transition: colorInputStateTransition,
-      onStateChange,
-      onStateEvent,
-    }
-    : {
-      initialState,
-      transition: colorInputStateTransition,
-      onStateChange,
-      onStateEvent,
-    })
+  const machine = useStateMachine({
+    state,
+    transition: colorInputStateTransition,
+    onStateChange,
+    onStateEvent,
+  })
 
   const hasAlphaRef = useRef<boolean | null>(null)
   useEffect(() => {

@@ -1,5 +1,6 @@
 import { useSyncExternalStore } from 'react'
-import { useControllableStateStore, useStateStoreBinding } from '@helpwave/hightide-utils/hooks'
+import { useStateStore, useStateStoreBindings } from '@helpwave/hightide-utils/hooks'
+import type { DOMInputStateMangerProps } from '../../data-input/domInput'
 import type { FilterOperator } from '../filter-operator'
 import type { FilterParameter } from '../filter-functions'
 
@@ -15,6 +16,11 @@ export type FilterState<O extends FilterOperator = FilterOperator> = {
 export type FilterEvent<O extends FilterOperator = FilterOperator> = {
   type: 'change',
   value: FilterInputValue<O>,
+}
+
+export interface FilterStateManagerProps<Operator extends FilterOperator>
+  extends DOMInputStateMangerProps<FilterState<Operator>, FilterEvent<Operator>> {
+  operatorOverrides?: Operator[],
 }
 
 export const filterStateTransition = <O extends FilterOperator>(
@@ -38,16 +44,14 @@ export function useFilterState<O extends FilterOperator>({
   onValueChange?: (value: FilterInputValue<O>) => void,
   defaultValue: FilterInputValue<O>,
 }) {
-  const { store, onStateChange } = useControllableStateStore<FilterState<O>>({
-    initialState: {
-      value: initialValue ?? defaultValue,
-    },
+  const store = useStateStore<FilterState<O>>({
+    value: value ?? initialValue ?? defaultValue,
   })
-  useStateStoreBinding({
+  const onStateChange = useStateStoreBindings({
     store,
-    key: 'value',
-    value,
-    onValueChange,
+    bindings: {
+      value: { value, onValueChange },
+    },
   })
   const state = useSyncExternalStore(store.subscribe, store.getSnapshot, store.getSnapshot)
 

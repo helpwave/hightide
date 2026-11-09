@@ -1,20 +1,13 @@
-import type { ReactNode } from 'react'
 import { useMemo } from 'react'
-import type { DOMInputStateMangerProps } from '../../../data-input/domInput'
-import { useStateMachineController } from '@helpwave/hightide-utils/hooks'
+import { useStateMachine } from '@helpwave/hightide-utils/hooks'
 import { NumberFilterContext, type NumberFilterContextValue } from './NumberFilterContext'
 import type { FilterOperatorNumber } from '../../filter-operator'
-import { filterStateTransition, type FilterEvent, type FilterState } from '../filter-value'
+import { filterStateTransition, type FilterStateManagerProps } from '../filter-value'
 
-export type NumberFilterStateManagerProps = DOMInputStateMangerProps<FilterState<FilterOperatorNumber>, FilterEvent<FilterOperatorNumber>>
-  & {
-    operatorOverrides?: FilterOperatorNumber[],
-    children?: ReactNode,
-  }
+export type NumberFilterStateManagerProps = FilterStateManagerProps<FilterOperatorNumber>
 
 export function NumberFilterStateManager({
   state,
-  initialState,
   onStateChange,
   onStateEvent,
   isInvalid = false,
@@ -25,19 +18,12 @@ export function NumberFilterStateManager({
   operatorOverrides,
   children,
 }: NumberFilterStateManagerProps) {
-  const machine = useStateMachineController<FilterState<FilterOperatorNumber>, FilterEvent<FilterOperatorNumber>>(state
-    ? {
-      state,
-      transition: filterStateTransition,
-      onStateChange,
-      onStateEvent,
-    }
-    : {
-      initialState,
-      transition: filterStateTransition,
-      onStateChange,
-      onStateEvent,
-    })
+  const machine = useStateMachine({
+    state,
+    transition: filterStateTransition,
+    onStateChange,
+    onStateEvent,
+  })
 
   const config = useMemo(() => ({
     isInvalid,

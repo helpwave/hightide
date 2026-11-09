@@ -1,10 +1,9 @@
-import type { ReactNode } from 'react'
 import { useMemo } from 'react'
 import type { DOMInputStateMangerProps } from '../../domInput'
 import type { DateTimePrecision } from '@helpwave/hightide-utils/utils'
 import { range } from '@helpwave/hightide-utils/utils'
 import { useDateTimeFormat } from '../../../../global-contexts/localization/forward-exports'
-import { useStateMachineController } from '@helpwave/hightide-utils/hooks'
+import { useStateMachine } from '@helpwave/hightide-utils/hooks'
 import { dateInputConfig } from '../useDateStateMachine'
 import { TimePickerContext, type TimePickerContextConfig } from './TimePickerContext'
 import type {
@@ -52,7 +51,6 @@ const millisecondStep: Record<TimePickerMillisecondIncrement, number> = {
 }
 
 export type TimePickerStateManagerProps = DOMInputStateMangerProps<TimePickerState, TimePickerEvent> & {
-  children?: ReactNode,
   is24HourFormat?: boolean,
   precision?: DateTimePrecision,
   minuteIncrement?: TimePickerMinuteIncrement,
@@ -62,7 +60,6 @@ export type TimePickerStateManagerProps = DOMInputStateMangerProps<TimePickerSta
 
 export function TimePickerStateManager({
   state,
-  initialState,
   onStateChange,
   onStateEvent,
   isInvalid,
@@ -91,19 +88,12 @@ export function TimePickerStateManager({
     seconds: stepped(60, secondStep[secondIncrement]),
     milliseconds: stepped(1000, millisecondStep[millisecondIncrement]),
   }), [is24HourFormat, isDisabled, isInvalid, isReadOnly, isRequired, millisecondIncrement, minuteIncrement, precision, secondIncrement, id])
-  const machine = useStateMachineController(state
-    ? {
-      state,
-      transition,
-      onStateChange,
-      onStateEvent,
-    }
-    : {
-      initialState,
-      transition,
-      onStateChange,
-      onStateEvent,
-    })
+  const machine = useStateMachine({
+    state,
+    transition,
+    onStateChange,
+    onStateEvent,
+  })
   const contextValue = useMemo(() => ({
     state: machine.state,
     dispatch: machine.dispatch,

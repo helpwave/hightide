@@ -1,20 +1,13 @@
-import type { ReactNode } from 'react'
 import { useMemo } from 'react'
-import type { DOMInputStateMangerProps } from '../../../data-input/domInput'
-import { useStateMachineController } from '@helpwave/hightide-utils/hooks'
+import { useStateMachine } from '@helpwave/hightide-utils/hooks'
 import { DateTimeFilterContext, type DateTimeFilterContextValue } from './DateTimeFilterContext'
 import type { FilterOperatorDatetime } from '../../filter-operator'
-import { filterStateTransition, type FilterEvent, type FilterState } from '../filter-value'
+import { filterStateTransition, type FilterStateManagerProps } from '../filter-value'
 
-export type DateTimeFilterStateManagerProps = DOMInputStateMangerProps<FilterState<FilterOperatorDatetime>, FilterEvent<FilterOperatorDatetime>>
-  & {
-    operatorOverrides?: FilterOperatorDatetime[],
-    children?: ReactNode,
-  }
+export type DateTimeFilterStateManagerProps = FilterStateManagerProps<FilterOperatorDatetime>
 
 export function DateTimeFilterStateManager({
   state,
-  initialState,
   onStateChange,
   onStateEvent,
   isInvalid = false,
@@ -25,19 +18,12 @@ export function DateTimeFilterStateManager({
   operatorOverrides,
   children,
 }: DateTimeFilterStateManagerProps) {
-  const machine = useStateMachineController<FilterState<FilterOperatorDatetime>, FilterEvent<FilterOperatorDatetime>>(state
-    ? {
-      state,
-      transition: filterStateTransition,
-      onStateChange,
-      onStateEvent,
-    }
-    : {
-      initialState,
-      transition: filterStateTransition,
-      onStateChange,
-      onStateEvent,
-    })
+  const machine = useStateMachine({
+    state,
+    transition: filterStateTransition,
+    onStateChange,
+    onStateEvent,
+  })
 
   const config = useMemo(() => ({
     isInvalid,

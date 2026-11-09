@@ -1,6 +1,5 @@
-import type { ReactNode } from 'react'
 import { useCallback, useEffect, useMemo, useState } from 'react'
-import { useStateMachineController } from '@helpwave/hightide-utils/hooks'
+import { useStateMachine } from '@helpwave/hightide-utils/hooks'
 import type { StateManagerProps } from '@helpwave/hightide-utils/interfaces'
 import { TabSwitcherContext, type TabInfo } from './TabSwitcherContext'
 import {
@@ -23,31 +22,22 @@ function sortByDomOrder(infos: TabInfo[]): TabInfo[] {
 
 export type TabSwitcherStateManagerProps = StateManagerProps<TabSwitcherState, TabSwitcherEvent> & {
   variant?: TabSwitcherVariant,
-  children?: ReactNode,
 }
 
 export function TabSwitcherStateManager({
   state,
-  initialState,
   onStateChange,
   onStateEvent,
   variant = 'underline',
   children,
 }: TabSwitcherStateManagerProps) {
   const [tabInfos, setTabInfos] = useState<TabInfo[]>([])
-  const machine = useStateMachineController<TabSwitcherState, TabSwitcherEvent>(state
-    ? {
-      state,
-      transition: tabSwitcherStateTransition,
-      onStateChange,
-      onStateEvent,
-    }
-    : {
-      initialState,
-      transition: tabSwitcherStateTransition,
-      onStateChange,
-      onStateEvent,
-    })
+  const machine = useStateMachine({
+    state,
+    transition: tabSwitcherStateTransition,
+    onStateChange,
+    onStateEvent,
+  })
 
   const unsubscribe = useCallback((id: string) => {
     setTabInfos((previous) => previous.filter((tab) => tab.id !== id))

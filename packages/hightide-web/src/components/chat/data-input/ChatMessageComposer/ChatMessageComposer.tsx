@@ -1,6 +1,6 @@
 import type { ComponentRef, ReactNode, Ref } from 'react'
 import type { ControllableDOMInputProps } from '../../../data-input/domInput'
-import { useControllableStateStore, useStateStoreBinding } from '@helpwave/hightide-utils/hooks'
+import { useStateStore, useStateStoreBindings } from '@helpwave/hightide-utils/hooks'
 import { ReactUtils } from '@helpwave/hightide-utils/utils'
 import {
   ChatMessageComposerActionLayout,
@@ -16,7 +16,7 @@ import {
   type ChatMessageComposerSendButtonProps
 } from './ChatMessageComposerSendButton'
 import { ChatMessageComposerStateManager } from './ChatMessageComposerStateManager'
-import type { ChatMessageComposerEvent, ChatMessageComposerState } from './ChatMessageComposerState'
+import { type ChatMessageComposerEvent, type ChatMessageComposerState } from './ChatMessageComposerState'
 import {
   ChatMessageComposerTextarea,
   type ChatMessageComposerTextareaProps
@@ -58,14 +58,14 @@ const ChatMessageComposerComponent = ({
   sendButtonRef,
   sendButtonProps,
 }: ChatMessageComposerProps) => {
-  const { store, onStateChange } = useControllableStateStore<ChatMessageComposerState>({
-    initialState: { value: initialValue ?? '' },
+  const store = useStateStore<ChatMessageComposerState>({
+    value: value ?? initialValue ?? '',
   })
-  useStateStoreBinding({
+  const onStateChange = useStateStoreBindings({
     store,
-    key: 'value',
-    value,
-    onValueChange,
+    bindings: {
+      value: { value, onValueChange },
+    },
   })
 
   return (

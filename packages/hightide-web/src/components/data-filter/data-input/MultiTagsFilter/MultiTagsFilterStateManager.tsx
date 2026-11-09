@@ -1,21 +1,15 @@
-import type { ReactNode } from 'react'
 import { useMemo } from 'react'
-import type { DOMInputStateMangerProps } from '../../../data-input/domInput'
-import { useStateMachineController } from '@helpwave/hightide-utils/hooks'
+import { useStateMachine } from '@helpwave/hightide-utils/hooks'
 import { MultiTagsFilterContext, type MultiTagsFilterContextValue, type FilterTagOption } from './MultiTagsFilterContext'
 import type { FilterOperatorTags } from '../../filter-operator'
-import { filterStateTransition, type FilterEvent, type FilterState } from '../filter-value'
+import { filterStateTransition, type FilterStateManagerProps } from '../filter-value'
 
-export type MultiTagsFilterStateManagerProps = DOMInputStateMangerProps<FilterState<FilterOperatorTags>, FilterEvent<FilterOperatorTags>>
-  & {
-    tags?: ReadonlyArray<FilterTagOption>,
-    operatorOverrides?: FilterOperatorTags[],
-    children?: ReactNode,
-  }
+export type MultiTagsFilterStateManagerProps = FilterStateManagerProps<FilterOperatorTags> & {
+  tags?: ReadonlyArray<FilterTagOption>,
+}
 
 export function MultiTagsFilterStateManager({
   state,
-  initialState,
   onStateChange,
   onStateEvent,
   isInvalid = false,
@@ -27,19 +21,12 @@ export function MultiTagsFilterStateManager({
   operatorOverrides,
   children,
 }: MultiTagsFilterStateManagerProps) {
-  const machine = useStateMachineController<FilterState<FilterOperatorTags>, FilterEvent<FilterOperatorTags>>(state
-    ? {
-      state,
-      transition: filterStateTransition,
-      onStateChange,
-      onStateEvent,
-    }
-    : {
-      initialState,
-      transition: filterStateTransition,
-      onStateChange,
-      onStateEvent,
-    })
+  const machine = useStateMachine({
+    state,
+    transition: filterStateTransition,
+    onStateChange,
+    onStateEvent,
+  })
 
   const config = useMemo(() => ({
     isInvalid,

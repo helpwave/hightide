@@ -4,7 +4,7 @@ import type { ControllableDOMInputProps } from '../../domInput'
 import type { DateTimeFormat, DateTimePrecision, Weekday } from '@helpwave/hightide-utils/utils'
 import { ReactUtils } from '@helpwave/hightide-utils/utils'
 import { useDateTimeFormat, useLocalization } from '../../../../global-contexts/localization/forward-exports'
-import { useControllableStateStore, useStateStoreBinding } from '@helpwave/hightide-utils/hooks'
+import { useStateStore, useStateStoreBindings } from '@helpwave/hightide-utils/hooks'
 import type {
   TimePickerMillisecondIncrement,
   TimePickerMinuteIncrement,
@@ -17,7 +17,7 @@ import { DateTimeInputField, type DateTimeInputFieldProps } from './DateTimeInpu
 import { DateTimeInputLayout, type DateTimeInputLayoutProps } from './DateTimeInputLayout'
 import { DateTimeInputPopup, type DateTimeInputPopupProps } from './DateTimeInputPopup'
 import { DateTimeInputStateManager } from './DateTimeInputStateManager'
-import type { DateTimeInputEvent, DateTimeInputState } from './DateTimeInputState'
+import { type DateTimeInputEvent, type DateTimeInputState } from './DateTimeInputState'
 
 export type DateTimeInputProps = ControllableDOMInputProps<Date | null, DateTimeInputEvent> & {
   allowRemove?: boolean,
@@ -88,18 +88,16 @@ const DateTimeInputComponent = ({
   }), [generatedId])
   const anchorRef = useRef<HTMLDivElement>(null)
   const initialDate = value !== undefined ? value : (initialValue ?? null)
-  const { store, onStateChange } = useControllableStateStore<DateTimeInputState>({
-    initialState: {
-      value: initialDate,
-      dialogValue: initialDate,
-      isOpen: false,
-    },
+  const store = useStateStore<DateTimeInputState>({
+    value: initialDate,
+    dialogValue: initialDate,
+    isOpen: false,
   })
-  useStateStoreBinding({
+  const onStateChange = useStateStoreBindings({
     store,
-    key: 'value',
-    value,
-    onValueChange,
+    bindings: {
+      value: { value, onValueChange },
+    },
   })
   const hasClear = !isRequired && allowClear && !isReadOnly && !isDisabled
   const hasTimePicker = !isReadOnly && !isDisabled

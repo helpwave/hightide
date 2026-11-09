@@ -1,7 +1,7 @@
 import type { ComponentRef, Ref, RefObject } from 'react'
 import { useId, useMemo, useRef } from 'react'
 import type { ControllableDOMInputProps } from '../../domInput'
-import { useControllableStateStore, useStateStoreBinding } from '@helpwave/hightide-utils/hooks'
+import { useStateStore, useStateStoreBindings } from '@helpwave/hightide-utils/hooks'
 import { ReactUtils } from '@helpwave/hightide-utils/utils'
 import type { HexColor } from './hexColor'
 import { defaultHex } from './hexColor'
@@ -47,13 +47,14 @@ const ColorInputComponent = ({
   const generatedId = useId()
   const popupId = useMemo(() => `color-input-popup-${generatedId}`, [generatedId])
   const anchorRef = useRef<HTMLDivElement>(null)
-  const { store, onStateChange } = useControllableStateStore<ColorInputState>({
-    initialState: colorInputStateFromHex(value ?? initialValue ?? defaultHex(true)),
-  })
-  useStateStoreBinding({
+  const store = useStateStore<ColorInputState>(
+    colorInputStateFromHex(value ?? initialValue ?? defaultHex(true))
+  )
+  const onStateChange = useStateStoreBindings({
     store,
-    key: 'value',
-    onValueChange,
+    bindings: {
+      value: { value, onValueChange },
+    },
   })
 
   return (

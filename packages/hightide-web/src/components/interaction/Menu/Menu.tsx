@@ -1,10 +1,10 @@
 import type { ReactNode } from 'react'
-import { useControllableStateStore, useStateStoreBinding } from '@helpwave/hightide-utils/hooks'
+import { useStateStore, useStateStoreBindings } from '@helpwave/hightide-utils/hooks'
 import { MenuContent, type MenuContentProps } from './MenuContent'
 import { MenuContext } from './MenuContext'
 import { MenuItem } from './MenuItem'
 import { MenuNavigationItem } from './MenuNavigationItem'
-import type { MenuEvent, MenuState } from './MenuState'
+import { type MenuEvent, type MenuState } from './MenuState'
 import { MenuStateManager } from './MenuStateManager'
 import { MenuTrigger, type MenuTriggerProps } from './MenuTrigger'
 
@@ -12,7 +12,7 @@ export type MenuProps = {
   children?: ReactNode,
   isOpen?: boolean,
   initialIsOpen?: boolean,
-  onStateChange?: (state: MenuState) => void,
+  onIsOpenChange?: (isOpen: boolean) => void,
   onStateEvent?: (event: MenuEvent) => void,
   disabled?: boolean,
   trigger: MenuTriggerProps['children'],
@@ -24,27 +24,27 @@ const MenuComponent = ({
   children,
   isOpen,
   initialIsOpen = false,
-  onStateChange,
+  onIsOpenChange,
   onStateEvent,
   disabled = false,
   trigger,
   triggerProps,
   contentProps,
 }: MenuProps) => {
-  const { store, onStateChange: commitState } = useControllableStateStore<MenuState>({
-    initialState: { isOpen: initialIsOpen },
-    onStateChange,
+  const store = useStateStore<MenuState>({
+    isOpen: isOpen ?? initialIsOpen,
   })
-  useStateStoreBinding({
+  const commitBindings = useStateStoreBindings({
     store,
-    key: 'isOpen',
-    value: isOpen,
+    bindings: {
+      isOpen: { value: isOpen, onValueChange: onIsOpenChange },
+    },
   })
 
   return (
     <MenuStateManager
       state={store}
-      onStateChange={commitState}
+      onStateChange={commitBindings}
       onStateEvent={onStateEvent}
       disabled={disabled}
     >

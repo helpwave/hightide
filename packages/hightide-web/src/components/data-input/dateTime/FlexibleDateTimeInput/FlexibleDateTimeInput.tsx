@@ -1,7 +1,7 @@
 import type { ReactNode } from 'react'
 import { DateUtils } from '@helpwave/hightide-utils/utils'
 import type { ControllableDOMInputProps } from '../../domInput'
-import { useControllableStateStore, useStateStoreBinding } from '@helpwave/hightide-utils/hooks'
+import { useStateStore, useStateStoreBindings } from '@helpwave/hightide-utils/hooks'
 import { useLocalization } from '../../../../global-contexts/localization/forward-exports'
 import type { DateTimeInputProps } from '../DateTimeInput'
 import { DateTimeInput } from '../DateTimeInput'
@@ -9,7 +9,7 @@ import { FlexibleDateTimeInputContext } from './FlexibleDateTimeInputContext'
 import { FlexibleDateTimeInputInput } from './FlexibleDateTimeInputInput'
 import { FlexibleDateTimeInputModeButton } from './FlexibleDateTimeInputModeButton'
 import { FlexibleDateTimeInputStateManager } from './FlexibleDateTimeInputStateManager'
-import type { FlexibleDateTimeInputEvent, FlexibleDateTimeInputState, FlexibleDateTimeMode } from './FlexibleDateTimeInputState'
+import { type FlexibleDateTimeInputEvent, type FlexibleDateTimeInputState, type FlexibleDateTimeMode } from './FlexibleDateTimeInputState'
 
 export type FlexibleDateTimeInputProps = Omit<DateTimeInputProps, 'mode' | 'actions' | 'onStateEvent' | 'onValueChange'>
   & ControllableDOMInputProps<Date | null, FlexibleDateTimeInputEvent>
@@ -41,17 +41,15 @@ const FlexibleDateTimeInputComponent = ({
   const zoned = (date: Date) => DateUtils.toZonedDate(date, timeZone)
   const hasFixedTime = (date: Date) => DateUtils.sameTime(zoned(date), fixedTime, true, true)
   const initialMode: FlexibleDateTimeMode = initialValue && !hasFixedTime(initialValue) ? 'dateTime' : defaultMode
-  const { store, onStateChange } = useControllableStateStore<FlexibleDateTimeInputState>({
-    initialState: {
-      value: initialValue ?? null,
-      mode: initialMode,
-    },
+  const store = useStateStore<FlexibleDateTimeInputState>({
+    value: value !== undefined ? value : (initialValue ?? null),
+    mode: initialMode,
   })
-  useStateStoreBinding({
+  const onStateChange = useStateStoreBindings({
     store,
-    key: 'value',
-    value,
-    onValueChange,
+    bindings: {
+      value: { value, onValueChange },
+    },
   })
 
   return (

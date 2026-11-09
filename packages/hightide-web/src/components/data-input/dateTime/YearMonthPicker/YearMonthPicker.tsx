@@ -1,7 +1,7 @@
 import type { ComponentRef, Ref } from 'react'
 import type { ControllableDOMInputProps } from '../../domInput'
 import { ReactUtils } from '@helpwave/hightide-utils/utils'
-import { useControllableStateStore, useStateStoreBinding } from '@helpwave/hightide-utils/hooks'
+import { useStateStore, useStateStoreBindings } from '@helpwave/hightide-utils/hooks'
 import { YearMonthPickerContext } from './YearMonthPickerContext'
 import { YearMonthPickerLayout, type YearMonthPickerLayoutProps } from './YearMonthPickerLayout'
 import { YearMonthPickerMonthWheel } from './YearMonthPickerMonthWheel'
@@ -31,16 +31,14 @@ const YearMonthPickerComponent = ({
   layoutRef,
   layoutProps,
 }: YearMonthPickerProps) => {
-  const { store, onStateChange } = useControllableStateStore<YearMonthPickerState>({
-    initialState: {
-      value: value ?? initialValue,
-    },
+  const store = useStateStore<YearMonthPickerState>({
+    value: value ?? initialValue,
   })
-  useStateStoreBinding({
+  const onStateChange = useStateStoreBindings({
     store,
-    key: 'value',
-    value,
-    onValueChange,
+    bindings: {
+      value: { value, onValueChange },
+    },
   })
 
   return (

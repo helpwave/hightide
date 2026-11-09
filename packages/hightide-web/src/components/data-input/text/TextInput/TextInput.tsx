@@ -1,10 +1,10 @@
 import type { ComponentRef, Ref } from 'react'
 import type { ControllableDOMInputProps } from '../../domInput'
-import { useControllableStateStore, useStateStoreBinding } from '@helpwave/hightide-utils/hooks'
+import { useStateStore, useStateStoreBindings } from '@helpwave/hightide-utils/hooks'
 import { ReactUtils } from '@helpwave/hightide-utils/utils'
 import { TextInputElement, type TextInputElementProps } from './TextInputElement'
 import { TextInputStateManager } from './TextInputStateManager'
-import type { TextInputEvent, TextInputState } from './TextInputState'
+import { type TextInputEvent, type TextInputState } from './TextInputState'
 import { TextInputContext } from './TextInputContext'
 
 export type TextInputProps = ControllableDOMInputProps<string, TextInputEvent>
@@ -26,14 +26,14 @@ const TextInputComponent = ({
   inputRef,
   inputProps,
 }: TextInputProps) => {
-  const { store, onStateChange } = useControllableStateStore<TextInputState>({
-    initialState: { value: initialValue ?? '' },
+  const store = useStateStore<TextInputState>({
+    value: value ?? initialValue ?? '',
   })
-  useStateStoreBinding({
+  const onStateChange = useStateStoreBindings({
     store,
-    key: 'value',
-    value,
-    onValueChange,
+    bindings: {
+      value: { value, onValueChange },
+    },
   })
 
   return (

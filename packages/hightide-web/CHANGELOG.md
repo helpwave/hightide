@@ -42,6 +42,9 @@ and adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
 ### Changed
 
+- Filter state managers share `FilterStateManagerProps`
+- `Menu`, `FullScreenVerticalNavigation`, and `AppPage` report open changes through `onIsOpenChange` instead of `onStateChange`
+- Data-input state managers take `DOMInputStateMangerProps` and `children` only for state ownership. `initialState` is removed. Aggregates keep that state in `useStateStore` and commit it with `useStateStoreBindings`, so uncontrolled keys stay in the store and controlled keys are reported through `onValueChange`
 - `ThemeConfig`, `LocalizationConfig`, and the base `HightideConfig` come from `@helpwave/hightide-utils/context`. Web `HightideConfig` adds `tooltip`
 - Default locales and theme metadata use `HightideSupportedLocaleInformation` and `HightideSupportedThemeInformation`. Theme labels use `themeNameLight` / `themeNameDark`
 - `Table` and `TableWithSelection` take columns only through `columns`. `TableColumn` and column registration are removed

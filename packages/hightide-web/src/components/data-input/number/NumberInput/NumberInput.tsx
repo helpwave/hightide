@@ -1,11 +1,11 @@
 import type { ComponentRef, Ref } from 'react'
 import type { ControllableDOMInputProps } from '../../domInput'
-import { useControllableStateStore, useStateStoreBinding } from '@helpwave/hightide-utils/hooks'
+import { useStateStore, useStateStoreBindings } from '@helpwave/hightide-utils/hooks'
 import { ReactUtils } from '@helpwave/hightide-utils/utils'
 import { NumberInputContext } from './NumberInputContext'
 import { NumberInputInput, type NumberInputInputProps } from './NumberInputInput'
 import { NumberInputStateManager } from './NumberInputStateManager'
-import type { NumberInputEvent, NumberInputState } from './NumberInputState'
+import { type NumberInputEvent, type NumberInputState } from './NumberInputState'
 
 export type NumberInputProps = ControllableDOMInputProps<number, NumberInputEvent> & {
   minimum?: number,
@@ -35,14 +35,14 @@ const NumberInputComponent = ({
   inputRef,
   inputProps,
 }: NumberInputProps) => {
-  const { store, onStateChange } = useControllableStateStore<NumberInputState>({
-    initialState: { value: initialValue ?? 0 },
+  const store = useStateStore<NumberInputState>({
+    value: value ?? initialValue ?? 0,
   })
-  useStateStoreBinding({
+  const onStateChange = useStateStoreBindings({
     store,
-    key: 'value',
-    value,
-    onValueChange,
+    bindings: {
+      value: { value, onValueChange },
+    },
   })
 
   return (

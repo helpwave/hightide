@@ -1,11 +1,11 @@
 import type { ComponentRef, Ref } from 'react'
 import type { ControllableDOMInputProps } from '../../domInput'
-import { useControllableStateStore, useStateStoreBinding } from '@helpwave/hightide-utils/hooks'
+import { useStateStore, useStateStoreBindings } from '@helpwave/hightide-utils/hooks'
 import { ReactUtils } from '@helpwave/hightide-utils/utils'
 import { CheckboxIcon, type CheckboxIconProps } from './CheckboxIcon'
 import { CheckboxStateManager } from './CheckboxStateManager'
 import { CheckboxTrigger, type CheckboxSize, type CheckboxTriggerProps } from './CheckboxTrigger'
-import type { CheckboxEvent, CheckboxState } from './CheckboxState'
+import { type CheckboxEvent, type CheckboxState } from './CheckboxState'
 
 export type CheckboxProps = ControllableDOMInputProps<boolean, CheckboxEvent>
   & {
@@ -38,14 +38,14 @@ const CheckboxComponent = ({
   iconRef,
   iconProps,
 }: CheckboxProps) => {
-  const { store, onStateChange } = useControllableStateStore<CheckboxState>({
-    initialState: { value: initialValue ?? false },
+  const store = useStateStore<CheckboxState>({
+    value: value ?? initialValue ?? false,
   })
-  useStateStoreBinding({
+  const onStateChange = useStateStoreBindings({
     store,
-    key: 'value',
-    value,
-    onValueChange,
+    bindings: {
+      value: { value, onValueChange },
+    },
   })
 
   return (

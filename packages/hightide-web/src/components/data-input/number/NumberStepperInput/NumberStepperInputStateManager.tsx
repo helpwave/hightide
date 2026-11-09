@@ -1,7 +1,6 @@
-import type { ReactNode } from 'react'
 import { useMemo } from 'react'
 import type { DOMInputStateMangerProps } from '../../domInput'
-import { useStateMachineController } from '@helpwave/hightide-utils/hooks'
+import { useStateMachine } from '@helpwave/hightide-utils/hooks'
 import { NumberStepperInputContext, type NumberStepperInputContextValue } from './NumberStepperInputContext'
 import {
   numberStepperInputStateTransition,
@@ -9,13 +8,10 @@ import {
   type NumberStepperInputState
 } from './NumberStepperInputState'
 
-export type NumberStepperInputStateManagerProps = DOMInputStateMangerProps<NumberStepperInputState, NumberStepperInputEvent> & {
-  children?: ReactNode,
-}
+export type NumberStepperInputStateManagerProps = DOMInputStateMangerProps<NumberStepperInputState, NumberStepperInputEvent>
 
 export function NumberStepperInputStateManager({
   state,
-  initialState,
   onStateChange,
   onStateEvent,
   isInvalid = false,
@@ -25,19 +21,12 @@ export function NumberStepperInputStateManager({
   id,
   children,
 }: NumberStepperInputStateManagerProps) {
-  const machine = useStateMachineController<NumberStepperInputState, NumberStepperInputEvent>(state
-    ? {
-      state,
-      transition: numberStepperInputStateTransition,
-      onStateChange,
-      onStateEvent,
-    }
-    : {
-      initialState,
-      transition: numberStepperInputStateTransition,
-      onStateChange,
-      onStateEvent,
-    })
+  const machine = useStateMachine({
+    state,
+    transition: numberStepperInputStateTransition,
+    onStateChange,
+    onStateEvent,
+  })
   const config = useMemo(() => ({
     isInvalid,
     isDisabled,

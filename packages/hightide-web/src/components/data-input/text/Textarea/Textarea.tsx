@@ -1,11 +1,11 @@
 import type { ComponentRef, Ref } from 'react'
 import type { ControllableDOMInputProps } from '../../domInput'
-import { useControllableStateStore, useStateStoreBinding } from '@helpwave/hightide-utils/hooks'
+import { useStateStore, useStateStoreBindings } from '@helpwave/hightide-utils/hooks'
 import { ReactUtils } from '@helpwave/hightide-utils/utils'
 import { TextareaContext } from './TextareaContext'
 import { TextareaElement, type TextareaElementProps } from './TextareaElement'
 import { TextareaStateManager } from './TextareaStateManager'
-import type { TextareaEvent, TextareaState } from './TextareaState'
+import { type TextareaEvent, type TextareaState } from './TextareaState'
 
 export type TextareaProps = ControllableDOMInputProps<string, TextareaEvent>
   & {
@@ -26,14 +26,14 @@ const TextareaComponent = ({
   inputRef,
   inputProps,
 }: TextareaProps) => {
-  const { store, onStateChange } = useControllableStateStore<TextareaState>({
-    initialState: { value: initialValue ?? '' },
+  const store = useStateStore<TextareaState>({
+    value: value ?? initialValue ?? '',
   })
-  useStateStoreBinding({
+  const onStateChange = useStateStoreBindings({
     store,
-    key: 'value',
-    value,
-    onValueChange,
+    bindings: {
+      value: { value, onValueChange },
+    },
   })
 
   return (

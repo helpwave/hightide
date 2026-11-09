@@ -1,21 +1,15 @@
-import type { ReactNode } from 'react'
 import { useMemo } from 'react'
-import type { DOMInputStateMangerProps } from '../../../data-input/domInput'
-import { useStateMachineController } from '@helpwave/hightide-utils/hooks'
+import { useStateMachine } from '@helpwave/hightide-utils/hooks'
 import { SingleTagFilterContext, type SingleTagFilterContextValue, type FilterTagOption } from './SingleTagFilterContext'
 import type { FilterOperatorTagsSingle } from '../../filter-operator'
-import { filterStateTransition, type FilterEvent, type FilterState } from '../filter-value'
+import { filterStateTransition, type FilterStateManagerProps } from '../filter-value'
 
-export type SingleTagFilterStateManagerProps = DOMInputStateMangerProps<FilterState<FilterOperatorTagsSingle>, FilterEvent<FilterOperatorTagsSingle>>
-  & {
-    tags?: ReadonlyArray<FilterTagOption>,
-    operatorOverrides?: FilterOperatorTagsSingle[],
-    children?: ReactNode,
-  }
+export type SingleTagFilterStateManagerProps = FilterStateManagerProps<FilterOperatorTagsSingle> & {
+  tags?: ReadonlyArray<FilterTagOption>,
+}
 
 export function SingleTagFilterStateManager({
   state,
-  initialState,
   onStateChange,
   onStateEvent,
   isInvalid = false,
@@ -27,19 +21,12 @@ export function SingleTagFilterStateManager({
   operatorOverrides,
   children,
 }: SingleTagFilterStateManagerProps) {
-  const machine = useStateMachineController<FilterState<FilterOperatorTagsSingle>, FilterEvent<FilterOperatorTagsSingle>>(state
-    ? {
-      state,
-      transition: filterStateTransition,
-      onStateChange,
-      onStateEvent,
-    }
-    : {
-      initialState,
-      transition: filterStateTransition,
-      onStateChange,
-      onStateEvent,
-    })
+  const machine = useStateMachine({
+    state,
+    transition: filterStateTransition,
+    onStateChange,
+    onStateEvent,
+  })
 
   const config = useMemo(() => ({
     isInvalid,

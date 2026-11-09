@@ -1,6 +1,6 @@
 import type { ComponentRef, Ref } from 'react'
 import type { ControllableDOMInputProps } from '../../domInput'
-import { useControllableStateStore, useStateStoreBinding } from '@helpwave/hightide-utils/hooks'
+import { useStateStore, useStateStoreBindings } from '@helpwave/hightide-utils/hooks'
 import { ReactUtils } from '@helpwave/hightide-utils/utils'
 import type { TextInputElementProps } from '../TextInput'
 import { ToggleableInputContext } from './ToggleableInputContext'
@@ -8,7 +8,7 @@ import { ToggleableInputDisplay } from './ToggleableInputDisplay'
 import { ToggleableInputField, type ToggleableInputEditOptions, type ToggleableInputFieldProps } from './ToggleableInputField'
 import { ToggleableInputLayout, type ToggleableInputLayoutProps } from './ToggleableInputLayout'
 import { ToggleableInputStateManager } from './ToggleableInputStateManager'
-import type { ToggleableInputEvent, ToggleableInputState } from './ToggleableInputState'
+import { type ToggleableInputEvent, type ToggleableInputState } from './ToggleableInputState'
 
 export type ToggleableInputProps = ControllableDOMInputProps<string, ToggleableInputEvent> & {
   initialEditingState?: 'editing' | 'display',
@@ -36,17 +36,15 @@ const ToggleableInputComponent = ({
   inputRef,
   inputProps,
 }: ToggleableInputProps) => {
-  const { store, onStateChange } = useControllableStateStore<ToggleableInputState>({
-    initialState: {
-      value: initialValue ?? '',
-      isEditing: initialEditingState !== 'display',
-    },
+  const store = useStateStore<ToggleableInputState>({
+    value: value ?? initialValue ?? '',
+    isEditing: initialEditingState !== 'display',
   })
-  useStateStoreBinding({
+  const onStateChange = useStateStoreBindings({
     store,
-    key: 'value',
-    value,
-    onValueChange,
+    bindings: {
+      value: { value, onValueChange },
+    },
   })
 
   return (

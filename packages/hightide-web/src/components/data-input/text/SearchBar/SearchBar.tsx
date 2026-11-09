@@ -1,13 +1,13 @@
 import type { ComponentRef, Ref } from 'react'
 import type { ControllableDOMInputProps } from '../../domInput'
-import { useControllableStateStore, useStateStoreBinding } from '@helpwave/hightide-utils/hooks'
+import { useStateStore, useStateStoreBindings } from '@helpwave/hightide-utils/hooks'
 import { ReactUtils } from '@helpwave/hightide-utils/utils'
 import { SearchBarContext } from './SearchBarContext'
 import { SearchBarField, type SearchBarFieldProps } from './SearchBarField'
 import { SearchBarLayout, type SearchBarLayoutProps } from './SearchBarLayout'
 import { SearchBarSearchButton, type SearchBarSearchButtonProps } from './SearchBarSearchButton'
 import { SearchBarStateManager } from './SearchBarStateManager'
-import type { SearchBarEvent, SearchBarState } from './SearchBarState'
+import { type SearchBarEvent, type SearchBarState } from './SearchBarState'
 
 export type SearchBarProps = ControllableDOMInputProps<string, SearchBarEvent> & {
   onSearch: (value: string) => void,
@@ -37,14 +37,14 @@ const SearchBarComponent = ({
   searchButtonRef,
   searchButtonProps,
 }: SearchBarProps) => {
-  const { store, onStateChange } = useControllableStateStore<SearchBarState>({
-    initialState: { value: initialValue ?? '' },
+  const store = useStateStore<SearchBarState>({
+    value: value ?? initialValue ?? '',
   })
-  useStateStoreBinding({
+  const onStateChange = useStateStoreBindings({
     store,
-    key: 'value',
-    value,
-    onValueChange,
+    bindings: {
+      value: { value, onValueChange },
+    },
   })
 
   return (

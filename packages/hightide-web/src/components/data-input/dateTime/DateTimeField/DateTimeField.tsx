@@ -1,7 +1,7 @@
 import type { ComponentRef, Ref } from 'react'
 import { useMemo } from 'react'
 import type { ControllableDOMInputProps } from '../../domInput'
-import { useControllableStateStore, useStateStoreBinding } from '@helpwave/hightide-utils/hooks'
+import { useStateStore, useStateStoreBindings } from '@helpwave/hightide-utils/hooks'
 import type { DateTimeFormat, DateTimePrecision } from '@helpwave/hightide-utils/utils'
 import { ReactUtils } from '@helpwave/hightide-utils/utils'
 import { useLocalization } from '../../../../global-contexts/localization/forward-exports'
@@ -9,7 +9,7 @@ import { buildSegmentLayout, decomposeDate } from '../dateTimeSegments'
 import { DateTimeFieldContext } from './DateTimeFieldContext'
 import { DateTimeFieldLayout, type DateTimeFieldLayoutProps } from './DateTimeFieldLayout'
 import { DateTimeFieldStateManager } from './DateTimeFieldStateManager'
-import type { DateTimeFieldEvent, DateTimeFieldState } from './DateTimeFieldState'
+import { type DateTimeFieldEvent, type DateTimeFieldState } from './DateTimeFieldState'
 
 export type DateTimeFieldProps = ControllableDOMInputProps<Date | null, DateTimeFieldEvent> & {
   mode?: DateTimeFormat,
@@ -44,21 +44,20 @@ const DateTimeFieldComponent = ({
     () => buildSegmentLayout({ locale, mode, precision, is24HourFormat: is24Hour }),
     [is24Hour, locale, mode, precision]
   )
-  const { store, onStateChange } = useControllableStateStore<DateTimeFieldState>({
-    initialState: {
-      value: initialValue ?? null,
-      edit: {
-        values: initialValue ? decomposeDate(initialValue, initialLayout, is24Hour) : {},
-        buffer: null,
-      },
-      focusedType: null,
+  const resolvedValue = value !== undefined ? value : (initialValue ?? null)
+  const store = useStateStore<DateTimeFieldState>({
+    value: resolvedValue,
+    edit: {
+      values: resolvedValue ? decomposeDate(resolvedValue, initialLayout, is24Hour) : {},
+      buffer: null,
     },
+    focusedType: null,
   })
-  useStateStoreBinding({
+  const onStateChange = useStateStoreBindings({
     store,
-    key: 'value',
-    value,
-    onValueChange,
+    bindings: {
+      value: { value, onValueChange },
+    },
   })
 
   return (

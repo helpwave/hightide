@@ -1,7 +1,6 @@
-import type { ReactNode } from 'react'
 import { useMemo } from 'react'
 import type { DOMInputStateMangerProps } from '../../domInput'
-import { useStateMachineController } from '@helpwave/hightide-utils/hooks'
+import { useStateMachine } from '@helpwave/hightide-utils/hooks'
 import { WheelPickerContext, type WheelPickerContextConfig, type WheelPickerContextValue } from './WheelPickerContext'
 import {
   wheelPickerStateTransition,
@@ -13,12 +12,10 @@ export type WheelPickerStateManagerProps<T> = DOMInputStateMangerProps<WheelPick
   & {
     isLooping?: boolean,
     visibleRows?: number,
-    children?: ReactNode,
   }
 
 export function WheelPickerStateManager<T>({
   state,
-  initialState,
   onStateChange,
   onStateEvent,
   isInvalid = false,
@@ -30,19 +27,12 @@ export function WheelPickerStateManager<T>({
   visibleRows = 1,
   children,
 }: WheelPickerStateManagerProps<T>) {
-  const machine = useStateMachineController<WheelPickerState<T>, WheelPickerEvent<T>>(state
-    ? {
-      state,
-      transition: wheelPickerStateTransition,
-      onStateChange,
-      onStateEvent,
-    }
-    : {
-      initialState,
-      transition: wheelPickerStateTransition,
-      onStateChange,
-      onStateEvent,
-    })
+  const machine = useStateMachine({
+    state,
+    transition: wheelPickerStateTransition,
+    onStateChange,
+    onStateEvent,
+  })
 
   const config = useMemo<WheelPickerContextConfig>(() => ({
     isInvalid,

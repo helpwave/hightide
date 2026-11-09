@@ -1,7 +1,7 @@
 import type { ElementType, ReactNode } from 'react'
 import { useMemo } from 'react'
 import type { StateManagerProps } from '@helpwave/hightide-utils/interfaces'
-import { useStateMachineController } from '@helpwave/hightide-utils/hooks'
+import { useStateMachine } from '@helpwave/hightide-utils/hooks'
 import type { NavigationItemData } from '../../../interaction/navigation/types'
 import type { LinkComponentProps } from '../../../interaction/navigation/VerticalNavigationMenu'
 import { AppPageContext, type AppPageContextValue } from './AppPageContext'
@@ -12,7 +12,6 @@ import {
 } from './AppPageState'
 
 export type AppPageStateManagerProps = StateManagerProps<AppPageState, AppPageEvent> & {
-  children?: ReactNode,
   items?: NavigationItemData[],
   LinkComponent?: ElementType<LinkComponentProps>,
   activeId?: string | null,
@@ -23,7 +22,6 @@ export type AppPageStateManagerProps = StateManagerProps<AppPageState, AppPageEv
 
 export function AppPageStateManager({
   state,
-  initialState,
   onStateChange,
   onStateEvent,
   children,
@@ -34,19 +32,12 @@ export function AppPageStateManager({
   noScrolling = false,
   hasSpacer = true,
 }: AppPageStateManagerProps) {
-  const machine = useStateMachineController<AppPageState, AppPageEvent>(state
-    ? {
-      state,
-      transition: appPageStateTransition,
-      onStateChange,
-      onStateEvent,
-    }
-    : {
-      initialState,
-      transition: appPageStateTransition,
-      onStateChange,
-      onStateEvent,
-    })
+  const machine = useStateMachine({
+    state,
+    transition: appPageStateTransition,
+    onStateChange,
+    onStateEvent,
+  })
 
   const contextValue = useMemo((): AppPageContextValue => ({
     state: machine.state,

@@ -1,9 +1,8 @@
-import type { ReactNode } from 'react'
 import { useMemo } from 'react'
 import type { DOMInputStateMangerProps } from '../../domInput'
 import { range, type DateTimePrecision } from '@helpwave/hightide-utils/utils'
 import { useDateTimeFormat } from '../../../../global-contexts/localization/forward-exports'
-import { useStateMachineController } from '@helpwave/hightide-utils/hooks'
+import { useStateMachine } from '@helpwave/hightide-utils/hooks'
 import { dateInputConfig } from '../useDateStateMachine'
 import { TimeWheelPickerContext, type TimeWheelPickerContextConfig } from './TimeWheelPickerContext'
 import type {
@@ -29,7 +28,6 @@ import {
 const stepped = (length: number, step: number) => range(length).filter((value) => value % step === 0)
 
 export type TimeWheelPickerStateManagerProps = DOMInputStateMangerProps<TimeWheelPickerState, TimeWheelPickerEvent> & {
-  children?: ReactNode,
   is24HourFormat?: boolean,
   isLooping?: boolean,
   loopingBehaviour?: WheelLoopingBehaviour,
@@ -41,7 +39,6 @@ export type TimeWheelPickerStateManagerProps = DOMInputStateMangerProps<TimeWhee
 
 export function TimeWheelPickerStateManager({
   state,
-  initialState,
   onStateChange,
   onStateEvent,
   isInvalid,
@@ -77,19 +74,12 @@ export function TimeWheelPickerStateManager({
     seconds: stepped(60, timeWheelSecondStep[secondIncrement]),
     milliseconds: stepped(1000, timeWheelMillisecondStep[millisecondIncrement]),
   }), [is24HourFormat, isDisabled, isInvalid, isLooping, isReadOnly, isRequired, loopingBehaviour, millisecondIncrement, minuteIncrement, precision, secondIncrement, id])
-  const machine = useStateMachineController(state
-    ? {
-      state,
-      transition,
-      onStateChange,
-      onStateEvent,
-    }
-    : {
-      initialState,
-      transition,
-      onStateChange,
-      onStateEvent,
-    })
+  const machine = useStateMachine({
+    state,
+    transition,
+    onStateChange,
+    onStateEvent,
+  })
   const contextValue = useMemo(() => ({
     state: machine.state,
     dispatch: machine.dispatch,

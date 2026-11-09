@@ -1,7 +1,7 @@
-import type { ElementType, ReactNode } from 'react'
+import type { ElementType } from 'react'
 import { useMemo } from 'react'
 import type { StateManagerProps } from '@helpwave/hightide-utils/interfaces'
-import { useStateMachineController } from '@helpwave/hightide-utils/hooks'
+import { useStateMachine } from '@helpwave/hightide-utils/hooks'
 import type { NavigationItemData, NavigationLinkComponentProps } from '../types'
 import {
   FullScreenVerticalNavigationContext,
@@ -15,7 +15,6 @@ import {
 
 export type FullScreenVerticalNavigationStateManagerProps =
   StateManagerProps<FullScreenVerticalNavigationState, FullScreenVerticalNavigationEvent> & {
-    children?: ReactNode,
     items?: NavigationItemData[],
     LinkComponent?: ElementType<NavigationLinkComponentProps>,
     activeId?: string | null,
@@ -23,7 +22,6 @@ export type FullScreenVerticalNavigationStateManagerProps =
 
 export function FullScreenVerticalNavigationStateManager({
   state,
-  initialState,
   onStateChange,
   onStateEvent,
   children,
@@ -31,19 +29,12 @@ export function FullScreenVerticalNavigationStateManager({
   LinkComponent,
   activeId = null,
 }: FullScreenVerticalNavigationStateManagerProps) {
-  const machine = useStateMachineController<FullScreenVerticalNavigationState, FullScreenVerticalNavigationEvent>(state
-    ? {
-      state,
-      transition: fullScreenVerticalNavigationStateTransition,
-      onStateChange,
-      onStateEvent,
-    }
-    : {
-      initialState,
-      transition: fullScreenVerticalNavigationStateTransition,
-      onStateChange,
-      onStateEvent,
-    })
+  const machine = useStateMachine({
+    state,
+    transition: fullScreenVerticalNavigationStateTransition,
+    onStateChange,
+    onStateEvent,
+  })
 
   const contextValue = useMemo((): FullScreenVerticalNavigationContextValue => ({
     state: machine.state,

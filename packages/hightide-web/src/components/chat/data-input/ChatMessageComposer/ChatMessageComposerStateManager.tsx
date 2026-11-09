@@ -1,7 +1,6 @@
-import type { ReactNode } from 'react'
 import { useCallback, useMemo } from 'react'
 import type { DOMInputStateMangerProps } from '../../../data-input/domInput'
-import { useStableEvent, useStateMachineController } from '@helpwave/hightide-utils/hooks'
+import { useStableEvent, useStateMachine } from '@helpwave/hightide-utils/hooks'
 import { ChatMessageComposerContext, type ChatMessageComposerContextValue } from './ChatMessageComposerContext'
 import {
   chatMessageComposerStateTransition,
@@ -14,12 +13,10 @@ export type ChatMessageComposerStateManagerProps = DOMInputStateMangerProps<
   ChatMessageComposerEvent
 > & {
   onSend: (value: string) => void,
-  children?: ReactNode,
 }
 
 export function ChatMessageComposerStateManager({
   state,
-  initialState,
   onStateChange,
   onStateEvent,
   onSend,
@@ -30,19 +27,12 @@ export function ChatMessageComposerStateManager({
   id,
   children,
 }: ChatMessageComposerStateManagerProps) {
-  const machine = useStateMachineController<ChatMessageComposerState, ChatMessageComposerEvent>(state
-    ? {
-      state,
-      transition: chatMessageComposerStateTransition,
-      onStateChange,
-      onStateEvent,
-    }
-    : {
-      initialState,
-      transition: chatMessageComposerStateTransition,
-      onStateChange,
-      onStateEvent,
-    })
+  const machine = useStateMachine({
+    state,
+    transition: chatMessageComposerStateTransition,
+    onStateChange,
+    onStateEvent,
+  })
   const onSendStable = useStableEvent(onSend)
   const dispatch = useCallback((event: ChatMessageComposerEvent) => {
     machine.dispatch(event)

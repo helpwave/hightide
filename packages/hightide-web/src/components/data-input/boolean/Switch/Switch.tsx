@@ -1,12 +1,12 @@
 import type { ComponentRef, Ref } from 'react'
 import type { ControllableDOMInputProps } from '../../domInput'
-import { useControllableStateStore, useStateStoreBinding } from '@helpwave/hightide-utils/hooks'
+import { useStateStore, useStateStoreBindings } from '@helpwave/hightide-utils/hooks'
 import { ReactUtils } from '@helpwave/hightide-utils/utils'
 import { SwitchStateManager } from './SwitchStateManager'
 import { SwitchThumb, type SwitchThumbProps } from './SwitchThumb'
 import { SwitchTrack, type SwitchTrackProps } from './SwitchTrack'
 import { SwitchTrigger, type SwitchTriggerProps } from './SwitchTrigger'
-import type { SwitchEvent, SwitchState } from './SwitchState'
+import { type SwitchEvent, type SwitchState } from './SwitchState'
 
 export type SwitchProps = ControllableDOMInputProps<boolean, SwitchEvent>
   & {
@@ -35,14 +35,14 @@ const SwitchComponent = ({
   thumbRef,
   thumbProps,
 }: SwitchProps) => {
-  const { store, onStateChange } = useControllableStateStore<SwitchState>({
-    initialState: { value: initialValue ?? false },
+  const store = useStateStore<SwitchState>({
+    value: value ?? initialValue ?? false,
   })
-  useStateStoreBinding({
+  const onStateChange = useStateStoreBindings({
     store,
-    key: 'value',
-    value,
-    onValueChange,
+    bindings: {
+      value: { value, onValueChange },
+    },
   })
 
   return (

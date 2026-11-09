@@ -1,11 +1,11 @@
 /** @jest-environment jsdom */
 
+import { useState } from 'react'
 import { act, renderHook } from '@testing-library/react'
 import { createStateStore } from '../../src/hooks/state-machine/StateStore'
 import { useStateMachine } from '../../src/hooks/state-machine/useStateMachine'
-import { useStateMachineController } from '../../src/hooks/state-machine/useStateMachineController'
 import { useStateStore } from '../../src/hooks/state-machine/useStateStore'
-import { useStateStoreBinding } from '../../src/hooks/state-machine/useStateStoreBinding'
+import { useStateStoreBindings } from '../../src/hooks/state-machine/useStateStoreBindings'
 
 type CountState = {
   count: number,
@@ -175,194 +175,197 @@ describe('useStateMachine', () => {
   })
 })
 
-describe('useStateMachineController', () => {
-  test('commits an owned store before the next dispatch in the same turn', () => {
-    const onStateChange = jest.fn()
-    const onStateEvent = jest.fn()
-    const { result } = renderHook(() => useStateMachineController({
-      initialState: { count: 1 },
-      transition: incrementTransition,
-      onStateChange,
-      onStateEvent,
-    }))
-
-    act(() => {
-      result.current.dispatch(incrementEvent)
-      result.current.dispatch({ type: 'add', amount: 4 })
-    })
-
-    expect(onStateChange.mock.calls.map((call) => call[0])).toEqual([
-      { count: 2 },
-      { count: 6 },
-    ])
-    expect(onStateEvent.mock.calls.map((call) => call[0])).toEqual([
-      incrementEvent,
-      { type: 'add', amount: 4 },
-    ])
-    expect(result.current.state).toEqual({ count: 6 })
-  })
-
-  test('leaves a provided store unchanged until the caller writes it', () => {
-    const suggestions: number[] = []
-    const { result } = renderHook(() => {
-      const store = useStateStore<CountState>({ count: 2 })
-      const machine = useStateMachineController({
-        state: store,
-        transition: doubleTransition,
-        onStateChange: (next) => {
-          suggestions.push(next.count)
-        },
-      })
-      return { store, machine }
-    })
-
-    act(() => {
-      result.current.machine.dispatch(incrementEvent)
-      result.current.machine.dispatch(incrementEvent)
-    })
-
-    expect(suggestions).toEqual([4, 4])
-    expect(result.current.store.getSnapshot()).toEqual({ count: 2 })
-
-    act(() => {
-      result.current.store.set({ count: suggestions[0] })
-      result.current.machine.dispatch(incrementEvent)
-    })
-
-    expect(result.current.store.getSnapshot()).toEqual({ count: 4 })
-    expect(suggestions).toEqual([4, 4, 8])
-    expect(result.current.machine.state).toEqual({ count: 4 })
-  })
-
-  test('applies a caller commit before the following dispatch', () => {
-    const { result } = renderHook(() => {
-      const store = useStateStore<CountState>({ count: 2 })
-      const machine = useStateMachineController({
-        state: store,
-        transition: doubleTransition,
-        onStateChange: (next) => {
-          store.set(next)
-        },
-      })
-      return { store, machine }
-    })
-
-    act(() => {
-      result.current.machine.dispatch(incrementEvent)
-      result.current.machine.dispatch(incrementEvent)
-    })
-
-    expect(result.current.store.getSnapshot()).toEqual({ count: 8 })
-    expect(result.current.machine.state).toEqual({ count: 8 })
-  })
-})
-
-describe('useStateStoreBinding', () => {
-  test('writes one key and reports each value during a burst', () => {
+describe('useStateStoreBindings', () => {
+  test('writes an uncontrolled key and reports each value during a burst', () => {
     const onValueChange = jest.fn()
     const { result } = renderHook(() => {
       const store = useStateStore<LabelledState>({ count: 0, label: 'start' })
-      const count = useStateStoreBinding({
+      const onStateChange = useStateStoreBindings({
         store,
-        key: 'count',
-        onValueChange,
+        bindings: {
+          count: { onValueChange },
+        },
       })
-      return { store, count }
+      return { store, onStateChange }
     })
 
     act(() => {
-      result.current.count.set(1)
-      result.current.count.set(2)
-      result.current.count.set(2)
+      result.current.onStateChange({ count: 1, label: 'start' })
+      result.current.onStateChange({ count: 2, label: 'start' })
+      result.current.onStateChange({ count: 2, label: 'start' })
     })
 
     expect(onValueChange.mock.calls.map((call) => call[0])).toEqual([1, 2])
-    expect(result.current.count.getSnapshot()).toBe(2)
     expect(result.current.store.getSnapshot()).toEqual({ count: 2, label: 'start' })
   })
 
-  test('keeps both keys when two bindings write in one turn', () => {
+  test('keeps both keys when one bindings object commits them together', () => {
     const onCountChange = jest.fn()
     const onLabelChange = jest.fn()
     const { result } = renderHook(() => {
       const store = useStateStore<LabelledState>({ count: 0, label: 'a' })
-      const count = useStateStoreBinding({
+      const onStateChange = useStateStoreBindings({
         store,
-        key: 'count',
-        onValueChange: onCountChange,
+        bindings: {
+          count: { onValueChange: onCountChange },
+          label: { onValueChange: onLabelChange },
+        },
       })
-      const label = useStateStoreBinding({
-        store,
-        key: 'label',
-        onValueChange: onLabelChange,
-      })
-      return { store, count, label }
+      return { store, onStateChange }
     })
 
     act(() => {
-      result.current.count.set(4)
-      result.current.label.set('b')
-      result.current.count.set(5)
+      result.current.onStateChange({ count: 4, label: 'b' })
+      result.current.onStateChange({ count: 5, label: 'b' })
     })
 
     expect(result.current.store.getSnapshot()).toEqual({ count: 5, label: 'b' })
-    expect(result.current.count.getSnapshot()).toBe(5)
-    expect(result.current.label.getSnapshot()).toBe('b')
     expect(onCountChange.mock.calls.map((call) => call[0])).toEqual([4, 5])
     expect(onLabelChange).toHaveBeenCalledWith('b')
   })
 
-  test('follows parent writes and skips the callback for a controlled value', () => {
-    const onValueChange = jest.fn()
+  test('drops a key when onValueChange returns false and commits it otherwise', () => {
+    const onValueChange = jest.fn<boolean | undefined, [number]>(() => false)
     const { result, rerender } = renderHook(({ value }: { value?: number }) => {
       const store = useStateStore<LabelledState>({ count: 1, label: 'a' })
-      const count = useStateStoreBinding({
+      const onStateChange = useStateStoreBindings({
         store,
-        key: 'count',
-        value,
-        onValueChange,
+        bindings: {
+          count: { value, onValueChange },
+        },
       })
-      return { store, count }
+      return { store, onStateChange }
     }, {
-      initialProps: { value: undefined as number | undefined },
+      initialProps: { value: 1 as number | undefined },
     })
 
     act(() => {
-      result.current.store.set({ count: 6, label: 'a' })
+      result.current.onStateChange({ count: 6, label: 'next' })
     })
 
-    expect(result.current.count.getSnapshot()).toBe(6)
     expect(onValueChange).toHaveBeenCalledTimes(1)
     expect(onValueChange).toHaveBeenCalledWith(6)
+    expect(result.current.store.getSnapshot()).toEqual({ count: 1, label: 'next' })
+
+    onValueChange.mockReturnValue(undefined)
+    act(() => {
+      result.current.onStateChange({ count: 8, label: 'next' })
+    })
+
+    expect(result.current.store.getSnapshot()).toEqual({ count: 8, label: 'next' })
+
+    onValueChange.mockReturnValue(true)
+    act(() => {
+      result.current.onStateChange({ count: 4, label: 'kept' })
+    })
+
+    expect(result.current.store.getSnapshot()).toEqual({ count: 4, label: 'kept' })
 
     rerender({ value: 9 })
 
-    expect(result.current.store.getSnapshot()).toEqual({ count: 9, label: 'a' })
-    expect(result.current.count.getSnapshot()).toBe(9)
-    expect(onValueChange).toHaveBeenCalledTimes(1)
+    expect(result.current.store.getSnapshot()).toEqual({ count: 9, label: 'kept' })
+    expect(onValueChange).toHaveBeenCalledTimes(3)
   })
 
-  test('keeps the current value when a controlled value becomes undefined', () => {
+  test('keeps the original mode when a value switches between defined and undefined', () => {
     const error = jest.spyOn(console, 'error').mockImplementation(() => {})
-    const { result, rerender } = renderHook(({ value }: { value?: number }) => {
-      const store = useStateStore<CountState>({ count: 0 })
-      const count = useStateStoreBinding({
+    const onControlledChange = jest.fn()
+    const onUncontrolledChange = jest.fn()
+    const { result, rerender } = renderHook(({
+      controlled,
+      uncontrolled,
+    }: {
+      controlled?: number,
+      uncontrolled?: string,
+    }) => {
+      const store = useStateStore<LabelledState>({ count: 0, label: 'a' })
+      const onStateChange = useStateStoreBindings({
         store,
-        key: 'count',
-        value,
+        bindings: {
+          count: { value: controlled, onValueChange: onControlledChange },
+          label: { value: uncontrolled, onValueChange: onUncontrolledChange },
+        },
       })
-      return { store, count }
+      return { store, onStateChange }
     }, {
-      initialProps: { value: 3 as number | undefined },
+      initialProps: {
+        controlled: 3 as number | undefined,
+        uncontrolled: undefined as string | undefined,
+      },
     })
 
-    expect(result.current.store.getSnapshot()).toEqual({ count: 3 })
+    expect(result.current.store.getSnapshot()).toEqual({ count: 3, label: 'a' })
 
-    rerender({ value: undefined })
+    rerender({ controlled: undefined, uncontrolled: 'kept' })
 
-    expect(error).toHaveBeenCalled()
-    expect(result.current.store.getSnapshot()).toEqual({ count: 3 })
-    expect(result.current.count.getSnapshot()).toBe(3)
+    expect(error).toHaveBeenCalledTimes(2)
+    expect(result.current.store.getSnapshot()).toEqual({ count: 3, label: 'a' })
+
+    act(() => {
+      result.current.onStateChange({ count: 7, label: 'b' })
+    })
+
+    expect(result.current.store.getSnapshot()).toEqual({ count: 7, label: 'b' })
+    expect(onControlledChange).toHaveBeenCalledWith(7)
+    expect(onUncontrolledChange).toHaveBeenCalledWith('b')
     error.mockRestore()
+  })
+
+  test('useState + useStateMachineBinding', () => {
+    const { result } = renderHook(() => {
+      const [count, setCount] = useState(0)
+      const store = useStateStore({ count })
+      const onStateChange = useStateStoreBindings({
+        store,
+        bindings: {
+          count: { value: count, onValueChange: setCount },
+        },
+      })
+      const machine = useStateMachine({
+        state: store,
+        transition: incrementTransition,
+        onStateChange,
+      })
+      return { count, machine }
+    })
+
+    act(() => {
+      result.current.machine.dispatch(incrementEvent)
+      result.current.machine.dispatch(incrementEvent)
+    })
+
+    expect(result.current.count).toBe(2)
+  })
+
+  test('useState + useStateMachineBinding', () => {
+    const { result } = renderHook(() => {
+      const [count, setCount] = useState(0)
+      const store = useStateStore({ count })
+      const onStateChange = useStateStoreBindings({
+        store,
+        bindings: {
+          count: {
+            value: count,
+            onValueChange: (next) => {
+              setCount(next)
+              return false
+            },
+          },
+        },
+      })
+      const machine = useStateMachine({
+        state: store,
+        transition: incrementTransition,
+        onStateChange,
+      })
+      return { count, machine }
+    })
+
+    act(() => {
+      result.current.machine.dispatch(incrementEvent)
+      result.current.machine.dispatch(incrementEvent)
+    })
+
+    expect(result.current.count).toBe(1)
   })
 })

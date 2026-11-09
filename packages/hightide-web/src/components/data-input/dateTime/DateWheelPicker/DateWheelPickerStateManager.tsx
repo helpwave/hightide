@@ -1,9 +1,8 @@
-import type { ReactNode } from 'react'
 import { useMemo } from 'react'
 import type { DOMInputStateMangerProps } from '../../domInput'
 import { DateUtils } from '@helpwave/hightide-utils/utils'
 import { useLocalization } from '../../../../global-contexts/localization/forward-exports'
-import { useStateMachineController } from '@helpwave/hightide-utils/hooks'
+import { useStateMachine } from '@helpwave/hightide-utils/hooks'
 import { dateInputConfig } from '../useDateStateMachine'
 import type { WheelLoopingBehaviour } from '../TimeWheelPicker'
 import { defaultWheelLoopingBehaviour } from '../TimeWheelPicker/TimeWheelPickerState'
@@ -19,7 +18,6 @@ const defaultPickerStart = DateUtils.subtractDuration(new Date(), { years: 100 }
 const defaultPickerEnd = DateUtils.addDuration(new Date(), { years: 100 })
 
 export type DateWheelPickerStateManagerProps = DOMInputStateMangerProps<DateWheelPickerState, DateWheelPickerEvent> & {
-  children?: ReactNode,
   start?: Date,
   end?: Date,
   isLooping?: boolean,
@@ -28,7 +26,6 @@ export type DateWheelPickerStateManagerProps = DOMInputStateMangerProps<DateWhee
 
 export function DateWheelPickerStateManager({
   state,
-  initialState,
   onStateChange,
   onStateEvent,
   isInvalid,
@@ -55,19 +52,12 @@ export function DateWheelPickerStateManager({
       loopingBehaviour,
     })
   }, [bounds, loopingBehaviour])
-  const machine = useStateMachineController(state
-    ? {
-      state,
-      transition,
-      onStateChange,
-      onStateEvent,
-    }
-    : {
-      initialState,
-      transition,
-      onStateChange,
-      onStateEvent,
-    })
+  const machine = useStateMachine({
+    state,
+    transition,
+    onStateChange,
+    onStateEvent,
+  })
   const months = useMemo(
     () => DateUtils.monthsForYear(machine.state.value.getFullYear(), bounds.minTimestamp, bounds.maxTimestamp),
     [bounds.maxTimestamp, bounds.minTimestamp, machine.state.value]

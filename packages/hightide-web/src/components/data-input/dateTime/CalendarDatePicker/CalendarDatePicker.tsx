@@ -1,6 +1,6 @@
 import type { ComponentRef, Ref } from 'react'
 import type { ControllableDOMInputProps } from '../../domInput'
-import { useControllableStateStore, useStateStoreBinding } from '@helpwave/hightide-utils/hooks'
+import { useStateStore, useStateStoreBindings } from '@helpwave/hightide-utils/hooks'
 import type { Weekday } from '@helpwave/hightide-utils/utils'
 import { ReactUtils } from '@helpwave/hightide-utils/utils'
 import { CalendarDatePickerContext } from './CalendarDatePickerContext'
@@ -10,11 +10,7 @@ import { CalendarDatePickerLayout, type CalendarDatePickerLayoutProps } from './
 import type { CalendarDayPickerLayout, CalendarDayPickerLayoutProps } from '../CalendarDayPicker'
 import type { YearMonthPickerLayout, YearMonthPickerLayoutProps } from '../YearMonthPicker'
 import { CalendarDatePickerStateManager } from './CalendarDatePickerStateManager'
-import type {
-  CalendarDatePickerEvent,
-  CalendarDatePickerState,
-  CalendarDisplayMode
-} from './CalendarDatePickerState'
+import { type CalendarDatePickerEvent, type CalendarDatePickerState, type CalendarDisplayMode } from './CalendarDatePickerState'
 
 export type CalendarDatePickerProps = ControllableDOMInputProps<Date, CalendarDatePickerEvent> & {
   initialDisplay?: CalendarDisplayMode,
@@ -58,18 +54,17 @@ const CalendarDatePickerComponent = ({
   calendarDayPickerRef,
   calendarDayPickerProps,
 }: CalendarDatePickerProps) => {
-  const { store, onStateChange } = useControllableStateStore<CalendarDatePickerState>({
-    initialState: {
-      value: value ?? initialValue,
-      displayedMonth: new Date((value ?? initialValue).getFullYear(), (value ?? initialValue).getMonth(), 1),
-      displayMode: initialDisplay,
-    },
+  const resolvedValue = value ?? initialValue
+  const store = useStateStore<CalendarDatePickerState>({
+    value: resolvedValue,
+    displayedMonth: new Date(resolvedValue.getFullYear(), resolvedValue.getMonth(), 1),
+    displayMode: initialDisplay,
   })
-  useStateStoreBinding({
+  const onStateChange = useStateStoreBindings({
     store,
-    key: 'value',
-    value,
-    onValueChange,
+    bindings: {
+      value: { value, onValueChange },
+    },
   })
 
   return (

@@ -1,6 +1,6 @@
 import type { ComponentRef, ElementType, ReactNode, Ref } from 'react'
 import { useMemo } from 'react'
-import { useControllableStateStore, useStateStoreBinding } from '@helpwave/hightide-utils/hooks'
+import { useControllableStateStore, useStateStore, useStateStoreBindings } from '@helpwave/hightide-utils/hooks'
 import { ReactUtils } from '@helpwave/hightide-utils/utils'
 import { FullScreenVerticalNavigation } from '../../../interaction/navigation/FullScreenVerticalNavigation'
 import { findActiveIdByUrl, type NavigationItemData } from '../../../interaction/navigation/types'
@@ -17,7 +17,7 @@ import { AppPageSidebarFooter, type AppPageSidebarFooterProps } from './AppPageS
 import { AppPageSidebarHeader, type AppPageSidebarHeaderProps } from './AppPageSidebarHeader'
 import { AppPageSidebarNav, type AppPageSidebarNavProps } from './AppPageSidebarNav'
 import { AppPageStateManager } from './AppPageStateManager'
-import type { AppPageEvent, AppPageState } from './AppPageState'
+import { type AppPageEvent, type AppPageState } from './AppPageState'
 
 export type AppPageSidebarProps = {
   activeId?: string | null,
@@ -38,7 +38,6 @@ export type AppPageProps = {
   isOpen?: boolean,
   initialIsOpen?: boolean,
   onIsOpenChange?: (isOpen: boolean) => void,
-  onStateChange?: (state: AppPageState) => void,
   onStateEvent?: (event: AppPageEvent) => void,
   layoutRef?: Ref<ComponentRef<typeof AppPageLayout>>,
   layoutProps?: AppPageLayoutProps,
@@ -64,7 +63,7 @@ export type AppPageProps = {
 
 type AppPageViewProps = Omit<
   AppPageProps,
-  'sidebarProps' | 'noScrolling' | 'hasSpacer' | 'isOpen' | 'initialIsOpen' | 'onIsOpenChange' | 'onStateChange' | 'onStateEvent'
+  'sidebarProps' | 'noScrolling' | 'hasSpacer' | 'isOpen' | 'initialIsOpen' | 'onIsOpenChange' | 'onStateEvent'
 > & {
   header?: ReactNode,
   footer?: ReactNode,
@@ -180,19 +179,17 @@ const AppPageComponent = ({
   isOpen,
   initialIsOpen = false,
   onIsOpenChange,
-  onStateChange,
   onStateEvent,
   ...viewProps
 }: AppPageProps) => {
-  const { store, onStateChange: commitState } = useControllableStateStore<AppPageState>({
-    initialState: { isOpen: initialIsOpen },
-    onStateChange,
+  const store = useStateStore<AppPageState>({
+    isOpen: isOpen ?? initialIsOpen,
   })
-  useStateStoreBinding({
+  const commitBindings = useStateStoreBindings({
     store,
-    key: 'isOpen',
-    value: isOpen,
-    onValueChange: onIsOpenChange,
+    bindings: {
+      isOpen: { value: isOpen, onValueChange: onIsOpenChange },
+    },
   })
 
   const resolvedActiveId = useMemo(() => {
@@ -204,7 +201,7 @@ const AppPageComponent = ({
   return (
     <AppPageStateManager
       state={store}
-      onStateChange={commitState}
+      onStateChange={commitBindings}
       onStateEvent={onStateEvent}
       items={sidebarProps.items}
       LinkComponent={sidebarProps.LinkComponent}

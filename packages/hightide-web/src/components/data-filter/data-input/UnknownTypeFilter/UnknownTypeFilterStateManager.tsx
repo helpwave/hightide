@@ -1,20 +1,13 @@
-import type { ReactNode } from 'react'
 import { useMemo } from 'react'
-import type { DOMInputStateMangerProps } from '../../../data-input/domInput'
-import { useStateMachineController } from '@helpwave/hightide-utils/hooks'
+import { useStateMachine } from '@helpwave/hightide-utils/hooks'
 import { UnknownTypeFilterContext, type UnknownTypeFilterContextValue } from './UnknownTypeFilterContext'
 import type { FilterOperatorUnknownType } from '../../filter-operator'
-import { filterStateTransition, type FilterEvent, type FilterState } from '../filter-value'
+import { filterStateTransition, type FilterStateManagerProps } from '../filter-value'
 
-export type UnknownTypeFilterStateManagerProps = DOMInputStateMangerProps<FilterState<FilterOperatorUnknownType>, FilterEvent<FilterOperatorUnknownType>>
-  & {
-    operatorOverrides?: FilterOperatorUnknownType[],
-    children?: ReactNode,
-  }
+export type UnknownTypeFilterStateManagerProps = FilterStateManagerProps<FilterOperatorUnknownType>
 
 export function UnknownTypeFilterStateManager({
   state,
-  initialState,
   onStateChange,
   onStateEvent,
   isInvalid = false,
@@ -25,19 +18,12 @@ export function UnknownTypeFilterStateManager({
   operatorOverrides,
   children,
 }: UnknownTypeFilterStateManagerProps) {
-  const machine = useStateMachineController<FilterState<FilterOperatorUnknownType>, FilterEvent<FilterOperatorUnknownType>>(state
-    ? {
-      state,
-      transition: filterStateTransition,
-      onStateChange,
-      onStateEvent,
-    }
-    : {
-      initialState,
-      transition: filterStateTransition,
-      onStateChange,
-      onStateEvent,
-    })
+  const machine = useStateMachine({
+    state,
+    transition: filterStateTransition,
+    onStateChange,
+    onStateEvent,
+  })
 
   const config = useMemo(() => ({
     isInvalid,

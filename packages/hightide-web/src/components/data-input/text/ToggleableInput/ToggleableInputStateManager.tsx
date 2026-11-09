@@ -1,7 +1,6 @@
-import type { ReactNode } from 'react'
 import { useMemo } from 'react'
 import type { DOMInputStateMangerProps } from '../../domInput'
-import { useStateMachineController } from '@helpwave/hightide-utils/hooks'
+import { useStateMachine } from '@helpwave/hightide-utils/hooks'
 import { ToggleableInputContext, type ToggleableInputContextValue } from './ToggleableInputContext'
 import {
   toggleableInputStateTransition,
@@ -9,13 +8,10 @@ import {
   type ToggleableInputState
 } from './ToggleableInputState'
 
-export type ToggleableInputStateManagerProps = DOMInputStateMangerProps<ToggleableInputState, ToggleableInputEvent> & {
-  children?: ReactNode,
-}
+export type ToggleableInputStateManagerProps = DOMInputStateMangerProps<ToggleableInputState, ToggleableInputEvent>
 
 export function ToggleableInputStateManager({
   state,
-  initialState,
   onStateChange,
   onStateEvent,
   isInvalid = false,
@@ -25,19 +21,12 @@ export function ToggleableInputStateManager({
   id,
   children,
 }: ToggleableInputStateManagerProps) {
-  const machine = useStateMachineController<ToggleableInputState, ToggleableInputEvent>(state
-    ? {
-      state,
-      transition: toggleableInputStateTransition,
-      onStateChange,
-      onStateEvent,
-    }
-    : {
-      initialState,
-      transition: toggleableInputStateTransition,
-      onStateChange,
-      onStateEvent,
-    })
+  const machine = useStateMachine({
+    state,
+    transition: toggleableInputStateTransition,
+    onStateChange,
+    onStateEvent,
+  })
   const config = useMemo(() => ({
     isInvalid,
     isDisabled,

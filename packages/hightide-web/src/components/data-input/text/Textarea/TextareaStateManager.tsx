@@ -1,18 +1,13 @@
-import type { ReactNode } from 'react'
 import { useMemo } from 'react'
 import type { DOMInputStateMangerProps } from '../../domInput'
-import { useStateMachineController } from '@helpwave/hightide-utils/hooks'
+import { useStateMachine } from '@helpwave/hightide-utils/hooks'
 import { TextareaContext, type TextareaContextValue } from './TextareaContext'
 import { textareaStateTransition, type TextareaEvent, type TextareaState } from './TextareaState'
 
 export type TextareaStateManagerProps = DOMInputStateMangerProps<TextareaState, TextareaEvent>
-  & {
-    children?: ReactNode,
-  }
 
 export function TextareaStateManager({
   state,
-  initialState,
   onStateChange,
   onStateEvent,
   isInvalid = false,
@@ -22,19 +17,12 @@ export function TextareaStateManager({
   id,
   children,
 }: TextareaStateManagerProps) {
-  const machine = useStateMachineController<TextareaState, TextareaEvent>(state
-    ? {
-      state,
-      transition: textareaStateTransition,
-      onStateChange,
-      onStateEvent,
-    }
-    : {
-      initialState,
-      transition: textareaStateTransition,
-      onStateChange,
-      onStateEvent,
-    })
+  const machine = useStateMachine({
+    state,
+    transition: textareaStateTransition,
+    onStateChange,
+    onStateEvent,
+  })
 
   const config = useMemo(() => ({
     isInvalid,

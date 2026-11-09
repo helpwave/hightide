@@ -1,18 +1,13 @@
-import type { ReactNode } from 'react'
 import { useMemo } from 'react'
 import type { DOMInputStateMangerProps } from '../../domInput'
-import { useStateMachineController } from '@helpwave/hightide-utils/hooks'
+import { useStateMachine } from '@helpwave/hightide-utils/hooks'
 import { TextInputContext, type TextInputContextValue } from './TextInputContext'
 import { textInputStateTransition, type TextInputEvent, type TextInputState } from './TextInputState'
 
 export type TextInputStateManagerProps = DOMInputStateMangerProps<TextInputState, TextInputEvent>
-  & {
-    children?: ReactNode,
-  }
 
 export function TextInputStateManager({
   state,
-  initialState,
   onStateChange,
   onStateEvent,
   isInvalid = false,
@@ -22,19 +17,12 @@ export function TextInputStateManager({
   id,
   children,
 }: TextInputStateManagerProps) {
-  const machine = useStateMachineController<TextInputState, TextInputEvent>(state
-    ? {
-      state,
-      transition: textInputStateTransition,
-      onStateChange,
-      onStateEvent,
-    }
-    : {
-      initialState,
-      transition: textInputStateTransition,
-      onStateChange,
-      onStateEvent,
-    })
+  const machine = useStateMachine({
+    state,
+    transition: textInputStateTransition,
+    onStateChange,
+    onStateEvent,
+  })
 
   const config = useMemo(() => ({
     isInvalid,

@@ -2,7 +2,7 @@ import type { ComponentRef, Ref } from 'react'
 import type { ControllableDOMInputProps } from '../../domInput'
 import type { DateTimePrecision } from '@helpwave/hightide-utils/utils'
 import { ReactUtils } from '@helpwave/hightide-utils/utils'
-import { useControllableStateStore, useStateStoreBinding } from '@helpwave/hightide-utils/hooks'
+import { useStateStore, useStateStoreBindings } from '@helpwave/hightide-utils/hooks'
 import type { WheelLoopingBehaviour } from '../TimeWheelPicker'
 import type {
   TimePickerMillisecondIncrement,
@@ -15,7 +15,7 @@ import { DateTimeWheelPickerContext } from './DateTimeWheelPickerContext'
 import { DateTimeWheelPickerLayout, type DateTimeWheelPickerLayoutProps } from './DateTimeWheelPickerLayout'
 import { DateTimeWheelPickerWheels } from './DateTimeWheelPickerWheels'
 import { DateTimeWheelPickerStateManager } from './DateTimeWheelPickerStateManager'
-import type { DateTimeWheelPickerEvent, DateTimeWheelPickerState } from './DateTimeWheelPickerState'
+import { type DateTimeWheelPickerEvent, type DateTimeWheelPickerState } from './DateTimeWheelPickerState'
 
 export type DateTimeWheelPickerProps = ControllableDOMInputProps<Date, DateTimeWheelPickerEvent> & {
   start?: Date,
@@ -61,16 +61,14 @@ const DateTimeWheelPickerComponent = ({
   timeWheelPickerRef,
   timeWheelPickerProps,
 }: DateTimeWheelPickerProps) => {
-  const { store, onStateChange } = useControllableStateStore<DateTimeWheelPickerState>({
-    initialState: {
-      value: value ?? initialValue,
-    },
+  const store = useStateStore<DateTimeWheelPickerState>({
+    value: value ?? initialValue,
   })
-  useStateStoreBinding({
+  const onStateChange = useStateStoreBindings({
     store,
-    key: 'value',
-    value,
-    onValueChange,
+    bindings: {
+      value: { value, onValueChange },
+    },
   })
 
   return (

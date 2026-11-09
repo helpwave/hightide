@@ -1,9 +1,12 @@
 import type { PropsWithChildren } from 'react'
-import { useControllableStateStore, useStateStoreBinding } from '@helpwave/hightide-utils/hooks'
+import { useStateStore, useStateStoreBindings } from '@helpwave/hightide-utils/hooks'
 import { TabSwitcherContext } from './TabSwitcherContext'
 import { TabSwitcherLayout } from './TabSwitcherLayout'
 import { TabSwitcherStateManager } from './TabSwitcherStateManager'
-import type { TabSwitcherState, TabSwitcherVariant } from './TabSwitcherState'
+import {
+  type TabSwitcherState,
+  type TabSwitcherVariant
+} from './TabSwitcherState'
 import { TabSwitcherTabList } from './TabSwitcherTabList'
 import { TabSwitcherTabPanel } from './TabSwitcherTabPanel'
 
@@ -21,14 +24,14 @@ const TabSwitcherComponent = ({
   initialActiveId,
   variant = 'underline',
 }: TabSwitcherProps) => {
-  const { store, onStateChange } = useControllableStateStore<TabSwitcherState>({
-    initialState: { activeId: initialActiveId ?? null },
+  const store = useStateStore<TabSwitcherState>({
+    activeId: activeId ?? initialActiveId ?? null,
   })
-  useStateStoreBinding({
+  const onStateChange = useStateStoreBindings({
     store,
-    key: 'activeId',
-    value: activeId,
-    onValueChange: onActiveIdChange,
+    bindings: {
+      activeId: { value: activeId, onValueChange: onActiveIdChange },
+    },
   })
 
   return (

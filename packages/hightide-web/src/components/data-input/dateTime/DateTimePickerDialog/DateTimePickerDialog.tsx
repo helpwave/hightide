@@ -1,7 +1,7 @@
 import type { ComponentRef, ReactNode, Ref } from 'react'
 import { useEffect, useRef } from 'react'
 import type { ControllableDOMInputProps } from '../../domInput'
-import { useControllableStateStore, useStateStoreBinding } from '@helpwave/hightide-utils/hooks'
+import { useStateStore, useStateStoreBindings } from '@helpwave/hightide-utils/hooks'
 import type { DateTimeFormat, DateTimePrecision, Weekday } from '@helpwave/hightide-utils/utils'
 import { ReactUtils } from '@helpwave/hightide-utils/utils'
 import type { DateWheelPickerLayout, DateWheelPickerLayoutProps } from '../DateWheelPicker'
@@ -17,10 +17,7 @@ import { DateTimePickerDialogBody, type DateTimePickerDialogBodyProps } from './
 import { DateTimePickerDialogHeader, type DateTimePickerDialogHeaderProps } from './DateTimePickerDialogHeader'
 import { DateTimePickerDialogLayout, type DateTimePickerDialogLayoutProps } from './DateTimePickerDialogLayout'
 import { DateTimePickerDialogStateManager } from './DateTimePickerDialogStateManager'
-import type {
-  DateTimePickerDialogEvent,
-  DateTimePickerDialogState
-} from './DateTimePickerDialogState'
+import { type DateTimePickerDialogEvent, type DateTimePickerDialogState } from './DateTimePickerDialogState'
 
 export type DateTimePickerDialogProps = ControllableDOMInputProps<Date | null, DateTimePickerDialogEvent> & {
   allowRemove?: boolean,
@@ -91,18 +88,16 @@ const DateTimePickerDialogComponent = ({
   timeWheelPickerProps,
 }: DateTimePickerDialogProps) => {
   const resolvedValue = value === undefined ? initialValue : value
-  const { store, onStateChange } = useControllableStateStore<DateTimePickerDialogState>({
-    initialState: {
-      value: resolvedValue,
-      pickerValue: resolvedValue ?? new Date(),
-      step: 'date',
-    },
+  const store = useStateStore<DateTimePickerDialogState>({
+    value: resolvedValue,
+    pickerValue: resolvedValue ?? new Date(),
+    step: 'date',
   })
-  useStateStoreBinding({
+  const onStateChange = useStateStoreBindings({
     store,
-    key: 'value',
-    value,
-    onValueChange,
+    bindings: {
+      value: { value, onValueChange },
+    },
   })
   const valueTime = value === undefined ? undefined : value === null ? null : value.getTime()
   const previousTimeRef = useRef(valueTime)

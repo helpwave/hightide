@@ -15,11 +15,13 @@ and adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 - `HightideSupportedLocaleInformation` and `HightideSupportedThemeInformation` shared locale and theme metadata
 - `ThemeConfig`, `LocalizationConfig`, and `HightideConfig` config types
 - `themeNameLight` and `themeNameDark` translation keys
+- `useStateStoreBindings` commits one snapshot into a `useStateStore`. `onValueChange` returns `boolean | undefined`. `false` leaves that key out of the store write. `undefined` or `true` stores the proposed value. A later controlled value is written into the store without another callback. The controlled or uncontrolled mode stays fixed after the first render
 - The `locales` folder is copied into `dist` during the build and exported as `@helpwave/hightide-utils/locales/*`
 - `ThemeUtils.resolveThemeInformationLabel` for theme display names
 
 ### Changed
 
+- `StateManagerProps` includes `children`
 - Renamed `useEventCallbackStabilizer` to `useStableEvent`
 - updated to `@helpwave/internationalization` to `0.5.0`
 - Renamed `LocaleInformation.localName` to `localeName`
@@ -28,6 +30,7 @@ and adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
 ### Removed
 
+- `useStateMachineController`. A state machine reads a `useStateStore`, and the caller writes that store from `onStateChange`
 - `EmailValidationUtils` and the standalone `validateEmail` export. Email checks go through `FormValidationUtils.email`
 
 ## [0.1.9] - 2026-10-13

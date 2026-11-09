@@ -4,7 +4,7 @@ import { useRef, useState, useSyncExternalStore } from 'react'
 
 import { Button } from '../../../src/components/interaction/Button'
 import {
-  useStateMachineController,
+  useStateMachine,
   useStateStore
 } from '@helpwave/hightide-utils/hooks'
 
@@ -39,14 +39,18 @@ function OwnedDemo() {
   const onOwnedStateEvent = action('owned.onStateEvent')
   const onSharedStateChange = action('shared.onStateChange')
   const onSharedStateEvent = action('shared.onStateEvent')
+  const ownedStore = useStateStore<CounterState>({ count: 0 })
   const shared = useStateStore<CounterState>({ count: 0 })
-  const owned = useStateMachineController<CounterState, CounterEvent>({
-    initialState: { count: 0 },
+  const owned = useStateMachine<CounterState, CounterEvent>({
+    state: ownedStore,
     transition: counterTransition,
-    onStateChange: onOwnedStateChange,
+    onStateChange: (next) => {
+      ownedStore.set(next)
+      onOwnedStateChange(next)
+    },
     onStateEvent: onOwnedStateEvent,
   })
-  const sharedMachine = useStateMachineController<CounterState, CounterEvent>({
+  const sharedMachine = useStateMachine<CounterState, CounterEvent>({
     state: shared,
     transition: counterTransition,
     onStateChange: (next) => {
@@ -104,7 +108,7 @@ function ProvidedStoreDemo() {
   const [suggestion, setSuggestion] = useState<CounterState>({ count: 0 })
   const [doubleSuggest, setDoubleSuggest] = useState('none')
   const collectorRef = useRef<((next: CounterState) => void) | null>(null)
-  const machine = useStateMachineController<CounterState, CounterEvent>({
+  const machine = useStateMachine<CounterState, CounterEvent>({
     state: store,
     transition: counterTransition,
     onStateChange: (next) => {

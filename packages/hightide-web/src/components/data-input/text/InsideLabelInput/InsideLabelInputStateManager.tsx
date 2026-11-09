@@ -1,7 +1,6 @@
-import type { ReactNode } from 'react'
 import { useMemo } from 'react'
 import type { DOMInputStateMangerProps } from '../../domInput'
-import { useStateMachineController } from '@helpwave/hightide-utils/hooks'
+import { useStateMachine } from '@helpwave/hightide-utils/hooks'
 import { InsideLabelInputContext, type InsideLabelInputContextValue } from './InsideLabelInputContext'
 import {
   insideLabelInputStateTransition,
@@ -9,13 +8,10 @@ import {
   type InsideLabelInputState
 } from './InsideLabelInputState'
 
-export type InsideLabelInputStateManagerProps = DOMInputStateMangerProps<InsideLabelInputState, InsideLabelInputEvent> & {
-  children?: ReactNode,
-}
+export type InsideLabelInputStateManagerProps = DOMInputStateMangerProps<InsideLabelInputState, InsideLabelInputEvent>
 
 export function InsideLabelInputStateManager({
   state,
-  initialState,
   onStateChange,
   onStateEvent,
   isInvalid = false,
@@ -25,19 +21,12 @@ export function InsideLabelInputStateManager({
   id,
   children,
 }: InsideLabelInputStateManagerProps) {
-  const machine = useStateMachineController<InsideLabelInputState, InsideLabelInputEvent>(state
-    ? {
-      state,
-      transition: insideLabelInputStateTransition,
-      onStateChange,
-      onStateEvent,
-    }
-    : {
-      initialState,
-      transition: insideLabelInputStateTransition,
-      onStateChange,
-      onStateEvent,
-    })
+  const machine = useStateMachine({
+    state,
+    transition: insideLabelInputStateTransition,
+    onStateChange,
+    onStateEvent,
+  })
   const config = useMemo(() => ({
     isInvalid,
     isDisabled,

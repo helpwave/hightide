@@ -1,7 +1,7 @@
 import type { ComponentRef, Ref } from 'react'
 import type { ChangeRateCurveProps, StepperLoopEvent } from '@helpwave/hightide-utils/hooks'
 import type { ControllableDOMInputProps } from '../../domInput'
-import { useControllableStateStore, useStateStoreBinding } from '@helpwave/hightide-utils/hooks'
+import { useStateStore, useStateStoreBindings } from '@helpwave/hightide-utils/hooks'
 import { ReactUtils } from '@helpwave/hightide-utils/utils'
 import { NumberStepperInputContext } from './NumberStepperInputContext'
 import { NumberStepperInputField, type NumberStepperInputFieldProps } from './NumberStepperInputField'
@@ -17,7 +17,7 @@ import {
   NumberStepperInputIncrement,
   type NumberStepperInputStepButtonProps
 } from './NumberStepperInputStepButton'
-import type { NumberStepperInputEvent, NumberStepperInputState } from './NumberStepperInputState'
+import { type NumberStepperInputEvent, type NumberStepperInputState } from './NumberStepperInputState'
 
 export type NumberStepperInputLayout = NumberStepperInputLayoutMode
 
@@ -71,14 +71,14 @@ const NumberStepperInputComponent = ({
   fieldRef,
   fieldProps,
 }: NumberStepperInputProps) => {
-  const { store, onStateChange } = useControllableStateStore<NumberStepperInputState>({
-    initialState: { value: initialValue ?? 0 },
+  const store = useStateStore<NumberStepperInputState>({
+    value: value ?? initialValue ?? 0,
   })
-  useStateStoreBinding({
+  const onStateChange = useStateStoreBindings({
     store,
-    key: 'value',
-    value,
-    onValueChange,
+    bindings: {
+      value: { value, onValueChange },
+    },
   })
 
   return (

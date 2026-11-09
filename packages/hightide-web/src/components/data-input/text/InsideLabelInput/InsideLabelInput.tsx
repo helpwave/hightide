@@ -1,7 +1,7 @@
 import type { ComponentRef, ReactNode, Ref } from 'react'
 import { useId } from 'react'
 import type { ControllableDOMInputProps } from '../../domInput'
-import { useControllableStateStore, useStateStoreBinding } from '@helpwave/hightide-utils/hooks'
+import { useStateStore, useStateStoreBindings } from '@helpwave/hightide-utils/hooks'
 import { ReactUtils } from '@helpwave/hightide-utils/utils'
 import type { TextInput, TextInputElementProps } from '../TextInput'
 import { InsideLabelInputContext } from './InsideLabelInputContext'
@@ -9,7 +9,7 @@ import { InsideLabelInputField } from './InsideLabelInputField'
 import { InsideLabelInputLabel, type InsideLabelInputLabelProps } from './InsideLabelInputLabel'
 import { InsideLabelInputLayout, type InsideLabelInputLayoutProps } from './InsideLabelInputLayout'
 import { InsideLabelInputStateManager } from './InsideLabelInputStateManager'
-import type { InsideLabelInputEvent, InsideLabelInputState } from './InsideLabelInputState'
+import { type InsideLabelInputEvent, type InsideLabelInputState } from './InsideLabelInputState'
 
 export type InsideLabelInputProps = ControllableDOMInputProps<string, InsideLabelInputEvent> & {
   id?: string,
@@ -43,14 +43,15 @@ const InsideLabelInputComponent = ({
   const generatedId = useId()
   const id = customId ?? generatedId
   const labelId = id + '-label'
-  const { store, onStateChange } = useControllableStateStore<InsideLabelInputState>({
-    initialState: { value: initialValue ?? '', isFocused: false },
+  const store = useStateStore<InsideLabelInputState>({
+    value: value ?? initialValue ?? '',
+    isFocused: false,
   })
-  useStateStoreBinding({
+  const onStateChange = useStateStoreBindings({
     store,
-    key: 'value',
-    value,
-    onValueChange,
+    bindings: {
+      value: { value, onValueChange },
+    },
   })
 
   return (

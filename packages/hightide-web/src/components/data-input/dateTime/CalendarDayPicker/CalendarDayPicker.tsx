@@ -1,6 +1,6 @@
 import type { ComponentRef, Ref } from 'react'
 import type { ControllableDOMInputProps } from '../../domInput'
-import { useControllableStateStore, useStateStoreBinding } from '@helpwave/hightide-utils/hooks'
+import { useStateStore, useStateStoreBindings } from '@helpwave/hightide-utils/hooks'
 import type { Weekday } from '@helpwave/hightide-utils/utils'
 import { ReactUtils } from '@helpwave/hightide-utils/utils'
 import { CalendarDayPickerContext } from './CalendarDayPickerContext'
@@ -43,23 +43,16 @@ const CalendarDayPickerComponent = ({
   layoutRef,
   layoutProps,
 }: CalendarDayPickerProps) => {
-  const { store, onStateChange } = useControllableStateStore<CalendarDayPickerState>({
-    initialState: {
-      value: value ?? initialValue,
-      displayedMonth: displayedMonth ?? initialDisplayedMonth ?? initialValue,
+  const store = useStateStore<CalendarDayPickerState>({
+    value: value ?? initialValue,
+    displayedMonth: displayedMonth ?? initialDisplayedMonth ?? initialValue,
+  })
+  const onStateChange = useStateStoreBindings({
+    store,
+    bindings: {
+      value: { value, onValueChange },
+      displayedMonth: { value: displayedMonth, onValueChange: changeDisplayedMonth },
     },
-  })
-  useStateStoreBinding({
-    store,
-    key: 'displayedMonth',
-    value: displayedMonth,
-    onValueChange: changeDisplayedMonth,
-  })
-  useStateStoreBinding({
-    store,
-    key: 'value',
-    value,
-    onValueChange,
   })
 
   return (

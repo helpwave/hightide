@@ -1,9 +1,8 @@
-import type { ReactNode } from 'react'
 import { useMemo } from 'react'
 import type { DOMInputStateMangerProps } from '../../domInput'
 import type { Weekday } from '@helpwave/hightide-utils/utils'
 import { useLocalization } from '../../../../global-contexts/localization/forward-exports'
-import { useStateMachineController } from '@helpwave/hightide-utils/hooks'
+import { useStateMachine } from '@helpwave/hightide-utils/hooks'
 import { dateInputConfig } from '../useDateStateMachine'
 import { CalendarDatePickerContext, type CalendarDatePickerContextConfig } from './CalendarDatePickerContext'
 import {
@@ -13,7 +12,6 @@ import {
 } from './CalendarDatePickerState'
 
 export type CalendarDatePickerStateManagerProps = DOMInputStateMangerProps<CalendarDatePickerState, CalendarDatePickerEvent> & {
-  children?: ReactNode,
   start?: Date,
   end?: Date,
   weekStart?: Weekday,
@@ -22,7 +20,6 @@ export type CalendarDatePickerStateManagerProps = DOMInputStateMangerProps<Calen
 
 export function CalendarDatePickerStateManager({
   state,
-  initialState,
   onStateChange,
   onStateEvent,
   isInvalid,
@@ -45,19 +42,12 @@ export function CalendarDatePickerStateManager({
     markToday,
     locale,
   }), [end, isDisabled, isInvalid, isReadOnly, isRequired, locale, markToday, start, weekStart, id])
-  const machine = useStateMachineController(state
-    ? {
-      state,
-      transition: calendarDatePickerStateTransition,
-      onStateChange,
-      onStateEvent,
-    }
-    : {
-      initialState,
-      transition: calendarDatePickerStateTransition,
-      onStateChange,
-      onStateEvent,
-    })
+  const machine = useStateMachine({
+    state,
+    transition: calendarDatePickerStateTransition,
+    onStateChange,
+    onStateEvent,
+  })
   const contextValue = useMemo(() => ({
     state: machine.state,
     dispatch: machine.dispatch,
