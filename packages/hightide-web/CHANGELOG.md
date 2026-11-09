@@ -38,6 +38,7 @@ and adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 - `--appearance-subtle` (`70%`)
 - `text-description`, which sets the text color from the active foreground and background
 - Added a `ModalPanel` component for the modal panel
+- The hightide-utils `locales` folder is copied into `dist` during the build and exported as `@helpwave/hightide/locales/*`
 
 ### Changed
 

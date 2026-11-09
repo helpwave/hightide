@@ -15,6 +15,7 @@ and adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 - `HightideSupportedLocaleInformation` and `HightideSupportedThemeInformation` shared locale and theme metadata
 - `ThemeConfig`, `LocalizationConfig`, and `HightideConfig` config types
 - `themeNameLight` and `themeNameDark` translation keys
+- The `locales` folder is copied into `dist` during the build and exported as `@helpwave/hightide-utils/locales/*`
 - `ThemeUtils.resolveThemeInformationLabel` for theme display names
 
 ### Changed

@@ -13,7 +13,8 @@
   "version": "0.10.3",
   "type": "module",
   "files": [
-    "src"
+    "src",
+    "dist"
   ],
   "exports": {
     "./components": "./src/components/index.ts",
@@ -22,12 +23,13 @@
     "./icons": "./src/icons/index.ts",
     "./theme": "./src/theme/index.ts",
     "./types": "./src/types/index.ts",
-    "./utils": "./src/utils/index.ts"
+    "./utils": "./src/utils/index.ts",
+    "./locales/*": "./dist/locales/*"
   },
   "scripts": {
     "clean": "rm -rf node_modules",
     "init": "node -e \"process.exit(0)\"",
-    "build": "tsc --noEmit",
+    "build": "tsc --noEmit && rm -rf dist/locales && mkdir -p dist && cp -R ../hightide-utils/locales dist/locales",
     "dev": "node -e \"process.exit(0)\"",
     "lint": "eslint .",
     "test": "node -e \"process.exit(0)\""

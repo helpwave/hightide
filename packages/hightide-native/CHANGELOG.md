@@ -7,6 +7,10 @@ and adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
 ## [0.10.4] - unpublished
 
+### Added
+
+- The hightide-utils `locales` folder is copied into `dist` during the build and exported as `@helpwave/hightide-native/locales/*`
+
 ### Changed
 
 - Default locales and theme metadata use `HightideSupportedLocaleInformation` and `HightideSupportedThemeInformation` from hightide-utils. Theme labels use `themeNameLight` / `themeNameDark`

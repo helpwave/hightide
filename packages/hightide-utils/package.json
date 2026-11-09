@@ -66,7 +66,8 @@
       "types": "./dist/utils/index.d.ts",
       "require": "./dist/utils/index.cjs",
       "import": "./dist/utils/index.js"
-    }
+    },
+    "./locales/*": "./dist/locales/*"
   },
   "bin": {
     "barrel": "scripts/barrel.js"
@@ -75,7 +76,7 @@
     "clean": "rm -rf dist node_modules",
     "build-intl": "build-intl -c intl.config.json",
     "init": "pnpm run build-intl",
-    "build": "tsup",
+    "build": "tsup && cp -R locales dist/locales",
     "dev": "tsup --watch",
     "lint": "eslint .",
     "test": "jest"
